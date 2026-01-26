@@ -2,7 +2,7 @@
 
 ## North Star
 
-> **NovaNET — Network solutions that just work.**
+> **NovaNET · Network solutions that just work.**
 
 ---
 
@@ -36,16 +36,16 @@ flowchart TD
     E --> I[Multi-Region Support]:::info
 ```
 
-- **99.99% uptime** — Reliability is non-negotiable
-- **Zero-configuration deployment** — From zero to production in under 5 minutes
-- **Sub-10ms latency** — Real-time performance for all connections
-- **Global infrastructure** — Multi-region support out of the box
+- **99.99% uptime** · Reliability is non-negotiable
+- **Zero-configuration deployment** · From zero to production in under 5 minutes
+- **Sub-10ms latency** · Real-time performance for all connections
+- **Global infrastructure** · Multi-region support out of the box
 
 ---
 
 ## Non-Negotiables
 
-- **Reliability first** — It must work, always
-- **Simple to use** — Complexity hidden behind clean APIs
-- **Performance by default** — Speed is a feature, not an optimization
-- **Transparent monitoring** — Full visibility into network health
+- **Reliability first** · It must work, always
+- **Simple to use** · Complexity hidden behind clean APIs
+- **Performance by default** · Speed is a feature, not an optimization
+- **Transparent monitoring** · Full visibility into network health

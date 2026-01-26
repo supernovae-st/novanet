@@ -49,7 +49,7 @@ flowchart TB
 
 | Repository | Description | Status |
 |------------|-------------|--------|
-| *Coming soon* | — | — |
+| *Coming soon* | · | · |
 
 ---
 
@@ -57,4 +57,4 @@ flowchart TB
 
 | Repository | Description | Status |
 |------------|-------------|--------|
-| *Coming soon* | — | — |
+| *Coming soon* | · | · |
