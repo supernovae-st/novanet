@@ -6,9 +6,19 @@
 
 Central orchestration point for Neo4j graph models, visualization tools, and infrastructure.
 
+[![🎨 Studio](https://img.shields.io/badge/🎨_Studio-Visualization-6366f1?style=flat-square)](./studio/README.md)
+[![📦 Core](https://img.shields.io/badge/📦_Core-Models-06b6d4?style=flat-square)](./core/README.md)
+[![🐳 Infra](https://img.shields.io/badge/🐳_Infra-Docker-10b981?style=flat-square)](./infra/README.md)
+
+<br>
+
 [![Private](https://img.shields.io/badge/Status-Private-64748b?style=flat-square)](https://github.com/supernovae-ai/novanet-hq)
 [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://typescriptlang.org)
 [![Neo4j](https://img.shields.io/badge/Neo4j-018bff?style=flat-square&logo=neo4j&logoColor=white)](https://neo4j.com)
+
+---
+
+**Part of [SuperNovae Studio](https://github.com/supernovae-st)** · [NovaNET Public](https://github.com/supernovae-st/novanet)
 
 </div>
 
@@ -146,6 +156,12 @@ The `.claude/` directory contains AI assistant configurations:
 
 <div align="center">
 
-**Part of [SuperNovae Studio](https://supernovae.studio)**
+**Quick Navigation**
+
+[🏢 HQ](./README.md) · [🎨 Studio](./studio/README.md) · [📦 Core](./core/README.md) · [🐳 Infra](./infra/README.md)
+
+---
+
+**Part of [SuperNovae Studio](https://github.com/supernovae-st)** · [NovaNET Public](https://github.com/supernovae-st/novanet)
 
 </div>
