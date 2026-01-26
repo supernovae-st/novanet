@@ -1,0 +1,14 @@
+# Sub-repositories (cloned separately, NOT submodules)
+core/
+studio/
+infra/
+
+# Dependencies
+node_modules/
+
+# Environment
+.env
+.env.local
+
+# OS
+.DS_Store
