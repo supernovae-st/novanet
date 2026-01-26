@@ -7,7 +7,8 @@
 [![Building](https://img.shields.io/badge/Status-Building-f59e0b?style=for-the-badge)](https://github.com/supernovae-ai/novanet)
 
 [![SuperNovae](https://img.shields.io/badge/SuperNovae-Studio-8b5cf6?style=flat-square&logo=github)](https://github.com/supernovae-ai)
-[![Hub](https://img.shields.io/badge/📚-Hub-64748b?style=flat-square)](https://github.com/supernovae-ai/hub)
+[![Hub](https://img.shields.io/badge/⚓-Hub-64748b?style=flat-square)](https://github.com/supernovae-ai/hub)
+[![Neo4j](https://img.shields.io/badge/Neo4j-018bff?style=flat-square&logo=neo4j&logoColor=white)](https://neo4j.com)
 
 </div>
 
@@ -46,10 +47,6 @@ As shown in the architecture diagram above, NovaNET acts as the central connecti
 |--|--|
 | 🎯 | [Vision](./VISION.md) |
 | 🔗 | [Ecosystem](./ECOSYSTEM.md) |
-
----
-
-<sub>Part of [SuperNovae](https://github.com/supernovae-ai) · Built with 💜</sub>
 
 ---
 
