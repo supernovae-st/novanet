@@ -1,6 +1,6 @@
 <div align="center">
 
-# NovaNET HQ
+# 🏢 NovaNET HQ
 
 **Development workspace for the NovaNET ecosystem**
 
