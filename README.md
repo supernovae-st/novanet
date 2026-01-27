@@ -132,11 +132,11 @@ flowchart TB
 
 | Repository | Description | Status |
 |------------|-------------|--------|
-| **novanet** | Public showcase (this repo) | Public |
-| **novanet-core** | Neo4j models & TypeScript types | Private |
-| **novanet-studio** | Interactive graph visualization | Private |
-| **novanet-infra** | Docker configurations | Private |
-| **novanet-hq** | Development workspace | Private |
+| [**novanet**](https://github.com/supernovae-st/novanet) | Public showcase (this repo) | Public |
+| [**novanet-core**](https://github.com/supernovae-st/novanet-core) | Neo4j models & TypeScript types | Private |
+| [**novanet-studio**](https://github.com/supernovae-st/novanet-studio) | Interactive graph visualization | Private |
+| [**novanet-infra**](https://github.com/supernovae-st/novanet-infra) | Docker configurations | Private |
+| [**novanet-hq**](https://github.com/supernovae-st/novanet-hq) | Development workspace | Private |
 
 ---
 
