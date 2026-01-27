@@ -1,7 +1,8 @@
 # Sub-repositories (cloned separately, NOT submodules)
-core/
-studio/
-infra/
+novanet-core/
+novanet-studio/
+novanet-infra/
+novanet-public-repo/
 
 # Dependencies
 node_modules/
