@@ -12,7 +12,7 @@ Central orchestration point for Neo4j graph models, visualization tools, and inf
 
 <br>
 
-[![Private](https://img.shields.io/badge/Status-Private-64748b?style=flat-square)](https://github.com/supernovae-ai/novanet-hq)
+[![Private](https://img.shields.io/badge/Status-Private-64748b?style=flat-square)](https://github.com/supernovae-st/novanet-hq)
 [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://typescriptlang.org)
 [![Neo4j](https://img.shields.io/badge/Neo4j-018bff?style=flat-square&logo=neo4j&logoColor=white)](https://neo4j.com)
 
@@ -57,11 +57,11 @@ flowchart TB
 
 | Repo | Description | Status |
 |------|-------------|--------|
-| [novanet](https://github.com/supernovae-ai/novanet) | Public showcase | Public |
+| [novanet](https://github.com/supernovae-st/novanet) | Public showcase | Public |
 | **novanet-hq** | Dev workspace (this repo) | Private |
-| [novanet-core](https://github.com/supernovae-ai/novanet-core) | Neo4j models & TypeScript | Private |
-| [novanet-studio](https://github.com/supernovae-ai/novanet-studio) | Graph visualization | Private |
-| [novanet-infra](https://github.com/supernovae-ai/novanet-infra) | Docker configs | Private |
+| [novanet-core](https://github.com/supernovae-st/novanet-core) | Neo4j models & TypeScript | Private |
+| [novanet-studio](https://github.com/supernovae-st/novanet-studio) | Graph visualization | Private |
+| [novanet-infra](https://github.com/supernovae-st/novanet-infra) | Docker configs | Private |
 
 ---
 
@@ -69,13 +69,13 @@ flowchart TB
 
 ```bash
 # Clone the workspace
-git clone git@github.com:supernovae-ai/novanet-hq.git
+git clone git@github.com:supernovae-st/novanet-hq.git
 cd novanet-hq
 
 # Clone sub-repositories
-git clone git@github.com:supernovae-ai/novanet-core.git core
-git clone git@github.com:supernovae-ai/novanet-studio.git studio
-git clone git@github.com:supernovae-ai/novanet-infra.git infra
+git clone git@github.com:supernovae-st/novanet-core.git core
+git clone git@github.com:supernovae-st/novanet-studio.git studio
+git clone git@github.com:supernovae-st/novanet-infra.git infra
 
 # Install dependencies
 npm install
