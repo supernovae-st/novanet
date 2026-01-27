@@ -6,9 +6,9 @@
 
 Central orchestration point for Neo4j graph models, visualization tools, and infrastructure.
 
-[![🎨 Studio](https://img.shields.io/badge/🎨_Studio-Visualization-6366f1?style=flat-square)](./studio/README.md)
-[![📦 Core](https://img.shields.io/badge/📦_Core-Models-06b6d4?style=flat-square)](./core/README.md)
-[![🐳 Infra](https://img.shields.io/badge/🐳_Infra-Docker-10b981?style=flat-square)](./infra/README.md)
+[![🎨 Studio](https://img.shields.io/badge/🎨_Studio-Visualization-6366f1?style=flat-square)](https://github.com/supernovae-st/novanet-studio)
+[![📦 Core](https://img.shields.io/badge/📦_Core-Models-06b6d4?style=flat-square)](https://github.com/supernovae-st/novanet-core)
+[![🐳 Infra](https://img.shields.io/badge/🐳_Infra-Docker-10b981?style=flat-square)](https://github.com/supernovae-st/novanet-infra)
 
 <br>
 
@@ -73,9 +73,10 @@ git clone git@github.com:supernovae-st/novanet-hq.git
 cd novanet-hq
 
 # Clone sub-repositories
-git clone git@github.com:supernovae-st/novanet-core.git core
-git clone git@github.com:supernovae-st/novanet-studio.git studio
-git clone git@github.com:supernovae-st/novanet-infra.git infra
+git clone git@github.com:supernovae-st/novanet-core.git novanet-core
+git clone git@github.com:supernovae-st/novanet-studio.git novanet-studio
+git clone git@github.com:supernovae-st/novanet-infra.git novanet-infra
+git clone git@github.com:supernovae-st/novanet.git novanet-public-repo
 
 # Install dependencies
 npm install
@@ -84,7 +85,7 @@ npm install
 npm run infra:up
 
 # Seed database
-cd core/neo4j && ./seed.sh && cd ../..
+cd novanet-core/neo4j && ./seed.sh && cd ../..
 
 # Start development
 npm run dev
@@ -105,9 +106,10 @@ novanet-hq/
 ├── package.json          # npm workspaces orchestration
 ├── docs/                 # Planning documents
 │   └── plans/
-├── core/                 # → novanet-core (git clone)
-├── studio/               # → novanet-studio (git clone)
-└── infra/                # → novanet-infra (git clone)
+├── novanet-core/         # → novanet-core (git clone)
+├── novanet-studio/       # → novanet-studio (git clone)
+├── novanet-infra/        # → novanet-infra (git clone)
+└── novanet-public-repo/  # → novanet (git clone)
 ```
 
 ---
@@ -158,7 +160,7 @@ The `.claude/` directory contains AI assistant configurations:
 
 **Quick Navigation**
 
-[🏢 HQ](./README.md) · [🎨 Studio](./studio/README.md) · [📦 Core](./core/README.md) · [🐳 Infra](./infra/README.md)
+[🏢 HQ](https://github.com/supernovae-st/novanet-hq) · [🎨 Studio](https://github.com/supernovae-st/novanet-studio) · [📦 Core](https://github.com/supernovae-st/novanet-core) · [🐳 Infra](https://github.com/supernovae-st/novanet-infra)
 
 ---
 
