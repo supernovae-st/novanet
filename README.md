@@ -6,17 +6,53 @@
 
 Generate culturally-authentic content across 200+ locales — not translation, but true localization from semantic concepts.
 
-[![Building](https://img.shields.io/badge/Status-Building-f59e0b?style=flat-square)](https://github.com/supernovae-st/novanet)
-[![Neo4j](https://img.shields.io/badge/Neo4j-5.26-018bff?style=flat-square&logo=neo4j&logoColor=white)](https://neo4j.com)
+[![Status](https://img.shields.io/badge/Status-Private_Development-64748b?style=flat-square)](https://github.com/supernovae-st/novanet)
+[![Locales](https://img.shields.io/badge/Locales-200+-10b981?style=flat-square)](https://github.com/supernovae-st/novanet)
+[![Graph](https://img.shields.io/badge/Graph-19k_nodes-018bff?style=flat-square&logo=neo4j&logoColor=white)](https://neo4j.com)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://typescriptlang.org)
 
 <br>
 
 **Part of [SuperNovae Studio](https://github.com/supernovae-st)**
 
-[Why NovaNet?](#why-novanet) · [How It Works](#how-it-works) · [Features](#features) · [Architecture](#architecture) · [Ecosystem](#ecosystem)
-
 </div>
+
+---
+
+## Table of Contents
+
+- [Philosophy](#philosophy)
+- [Why NovaNet?](#why-novanet)
+- [How It Works](#how-it-works)
+- [Use Cases](#use-cases)
+- [Comparison](#comparison)
+- [Features](#features)
+- [Architecture](#architecture)
+- [Tech Stack](#tech-stack)
+- [Status](#status)
+- [Links](#links)
+
+---
+
+## Philosophy
+
+> **We don't translate. We generate natively.**
+
+This isn't a marketing slogan. It's a fundamental architectural choice that shapes every decision in NovaNet.
+
+```
+❌ Traditional:  Source → Translate → Target
+                         ↓
+              Context lost, meaning diluted
+
+✅ NovaNet:     Concept (invariant) → Generate natively → L10n
+                         ↓
+              Context preserved, meaning amplified
+```
+
+Traditional localization treats content as strings to be converted. NovaNet treats content as **semantic concepts** to be expressed — each locale gets content that was *born* in that language, not translated into it.
+
+**Read more:** [VISION.md](./VISION.md)
 
 ---
 
@@ -25,11 +61,6 @@ Generate culturally-authentic content across 200+ locales — not translation, b
 Traditional translation pipelines lose context. They translate words, not meaning.
 
 NovaNet builds a **knowledge graph** of your content — understanding relationships, terminology, and cultural context — then generates native-quality content that preserves meaning across languages.
-
-```
-❌ Traditional:  Source → Translate → Target
-✅ NovaNet:      Concept (invariant) → Generate natively → L10n (localized)
-```
 
 | Problem | NovaNet Solution |
 |---------|------------------|
@@ -90,6 +121,35 @@ flowchart LR
 1. **Invariant Layer** — Define concepts, pages, and blocks in a language-neutral way
 2. **Locale Knowledge** — Each locale has its own voice, cultural references, expressions, and formatting rules
 3. **Generated Output** — Content is generated *natively* for each locale, not translated
+
+---
+
+## Use Cases
+
+| Use Case | Description |
+|----------|-------------|
+| **Multilingual SaaS** | Generate native content for 200+ locales from a single concept graph |
+| **SEO Localization** | Domain-specific keyword generation with locale-aware expressions |
+| **AI Content Orchestration** | Claude-powered generation with cultural knowledge context |
+| **Brand Consistency** | Maintain voice and terminology across all markets |
+| **Knowledge Graph Visualization** | Explore semantic relationships in interactive 2D/3D |
+
+### Target Application
+
+NovaNet powers **[QR Code AI](https://qrcode-ai.com)** — generating native content across 200+ locales for the world's most advanced QR code platform.
+
+---
+
+## Comparison
+
+| Aspect | Traditional Translation | NovaNet |
+|--------|------------------------|---------|
+| **Approach** | Source → Target | Concept → Native Generation |
+| **Context** | Lost between languages | Preserved in knowledge graph |
+| **Quality** | Robotic, generic | Native, culturally-aware |
+| **Terminology** | Inconsistent across locales | Centralized concept mapping |
+| **Scalability** | Linear (per locale) | Parallel (all locales) |
+| **Cultural Fit** | Surface-level adaptation | Deep locale knowledge layers |
 
 ---
 
@@ -168,25 +228,6 @@ flowchart TB
 
 ---
 
-## Ecosystem
-
-### Active Repositories
-
-| Repository | Description | Access |
-|------------|-------------|--------|
-| [**novanet**](https://github.com/supernovae-st/novanet) | Public showcase (this repo) | Public |
-| [**novanet-hq**](https://github.com/supernovae-st/novanet-hq) | Turborepo monorepo (main development) | Private |
-
-### Legacy *(migrated to monorepo)*
-
-| Repository | Migrated To |
-|------------|-------------|
-| [novanet-core](https://github.com/supernovae-st/novanet-core) | `novanet-hq/packages/core` |
-| [novanet-studio](https://github.com/supernovae-st/novanet-studio) | `novanet-hq/apps/studio` |
-| [novanet-infra](https://github.com/supernovae-st/novanet-infra) | `novanet-hq/packages/db` |
-
----
-
 ## Tech Stack
 
 | Layer | Technologies |
@@ -200,9 +241,39 @@ flowchart TB
 
 ---
 
-## Target Application
+## Status
 
-NovaNet powers **[QR Code AI](https://qrcode-ai.com)** — generating native content across 200+ locales for the world's most advanced QR code platform.
+<table>
+<tr>
+<td width="120"><strong>Development</strong></td>
+<td>Private — Active development by SuperNovae Studio</td>
+</tr>
+<tr>
+<td><strong>This Repo</strong></td>
+<td>Public showcase & documentation</td>
+</tr>
+<tr>
+<td><strong>Production</strong></td>
+<td>Powering <a href="https://qrcode-ai.com">QR Code AI</a> with 200+ locales</td>
+</tr>
+</table>
+
+### Ecosystem
+
+| Repository | Description | Access |
+|------------|-------------|--------|
+| [**novanet**](https://github.com/supernovae-st/novanet) | Public showcase (this repo) | Public |
+| [**novanet-hq**](https://github.com/supernovae-st/novanet-hq) | Turborepo monorepo (main development) | Private |
+
+*Legacy repositories (novanet-core, novanet-studio, novanet-infra) have been migrated to the monorepo.*
+
+### Interested?
+
+This project is currently in private development. For inquiries:
+
+- Star this repo to follow updates
+- Visit [SuperNovae Studio](https://github.com/supernovae-st)
+- Contact via [supernovae.studio](https://supernovae.studio)
 
 ---
 
@@ -211,7 +282,7 @@ NovaNet powers **[QR Code AI](https://qrcode-ai.com)** — generating native con
 | Resource | Description |
 |----------|-------------|
 | [Vision](./VISION.md) | Product vision and philosophy |
-| [Ecosystem](./ECOSYSTEM.md) | Repository structure |
+| [Ecosystem](./ECOSYSTEM.md) | Repository structure and packages |
 
 ---
 
