@@ -16,6 +16,7 @@ flowchart TB
     subgraph MONOREPO["novanet-hq (Turborepo)"]
         CORE["@novanet/core<br/>Types · Schemas · Filters"]
         DB["@novanet/db<br/>Docker · Seeds"]
+        CLI["@novanet/cli<br/>Validation · Generation"]
         STUDIO["@novanet/studio<br/>Visualization"]
     end
 
@@ -29,16 +30,19 @@ flowchart TB
 
     NOVANET -.-> MONOREPO
     CORE --> STUDIO
+    CORE --> CLI
     DB -.-> NEO4J
     STUDIO --> NEO4J
 
     classDef public fill:#10b981,stroke:#059669,color:#fff
     classDef mono fill:#6366f1,stroke:#4f46e5,color:#fff
+    classDef cli fill:#f59e0b,stroke:#d97706,color:#fff
     classDef legacy fill:#64748b,stroke:#475569,color:#fff
     classDef db fill:#018bff,stroke:#0284c7,color:#fff
 
     class NOVANET public
     class CORE,DB,STUDIO mono
+    class CLI cli
     class CORE_OLD,STUDIO_OLD,INFRA_OLD legacy
     class NEO4J db
 
@@ -64,6 +68,7 @@ flowchart TB
 |---------|---------|-------------|
 | **@novanet/core** | 8.1.0 | TypeScript types, Zod schemas, NovaNetFilter API, Cypher generators |
 | **@novanet/db** | 1.0.0 | Neo4j Docker infrastructure, Cypher seeds, migrations |
+| **@novanet/cli** | 1.0.0 | Validation and generation tools *(in development)* |
 | **@novanet/studio** | 0.1.0 | Interactive 2D/3D graph visualization with AI chat |
 
 ### Legacy (Deprecated)
@@ -102,7 +107,7 @@ novanet-hq/
 ```
 @novanet/core ←── @novanet/studio
       ↑
-@novanet/cli (future)
+@novanet/cli
 
 @novanet/db (standalone, manages Neo4j)
 ```

@@ -129,23 +129,28 @@ flowchart LR
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': {'lineColor': '#64748b'}}}%%
 flowchart TB
-    subgraph MONO["NovaNet Monorepo"]
-        CORE["@novanet/core\nTypes · Schemas · Filters"]
-        DB["@novanet/db\nDocker · Seeds"]
-        STUDIO["@novanet/studio\nNext.js · React · 2D/3D"]
+    subgraph MONO["NovaNet Monorepo (novanet-hq)"]
+        direction TB
+        CORE["@novanet/core v8.1.0\nTypes · Schemas · Filters"]
+        DB["@novanet/db v1.0.0\nDocker · Seeds"]
+        CLI["@novanet/cli v1.0.0\nValidation · Generation"]
+        STUDIO["@novanet/studio v0.1.0\nNext.js · React · 2D/3D"]
     end
 
-    NEO4J[("Neo4j 5.26\nKnowledge Graph")]
+    NEO4J[("Neo4j 5.26\n~19,000 nodes")]
 
     CORE --> STUDIO
+    CORE --> CLI
     DB -.-> NEO4J
     STUDIO --> NEO4J
 
     classDef pkg fill:#06b6d4,stroke:#0891b2,color:#fff
+    classDef cli fill:#f59e0b,stroke:#d97706,color:#fff
     classDef app fill:#8b5cf6,stroke:#7c3aed,color:#fff
     classDef db fill:#018bff,stroke:#0284c7,color:#fff
 
     class CORE,DB pkg
+    class CLI cli
     class STUDIO app
     class NEO4J db
 
@@ -154,23 +159,31 @@ flowchart TB
 
 ### Packages
 
-| Package | Description |
-|---------|-------------|
-| **@novanet/core** | TypeScript types, Zod schemas, NovaNetFilter API, Cypher generators |
-| **@novanet/db** | Neo4j Docker infrastructure, Cypher seeds, migrations |
-| **@novanet/studio** | Interactive graph visualization with AI-powered queries |
+| Package | Version | Description |
+|---------|---------|-------------|
+| **@novanet/core** | 8.1.0 | TypeScript types, Zod schemas, NovaNetFilter API, Cypher generators |
+| **@novanet/db** | 1.0.0 | Neo4j Docker infrastructure, Cypher seeds, migrations |
+| **@novanet/cli** | 1.0.0 | Validation and generation tools *(in development)* |
+| **@novanet/studio** | 0.1.0 | Interactive graph visualization with AI-powered queries |
 
 ---
 
 ## Ecosystem
 
-| Repository | Description | Status |
+### Active Repositories
+
+| Repository | Description | Access |
 |------------|-------------|--------|
 | [**novanet**](https://github.com/supernovae-st/novanet) | Public showcase (this repo) | Public |
-| [**novanet-hq**](https://github.com/supernovae-st/novanet-hq) | Turborepo monorepo (development) | Private |
-| [**novanet-core**](https://github.com/supernovae-st/novanet-core) | Core library (types, schemas, filters) | Private |
-| [**novanet-studio**](https://github.com/supernovae-st/novanet-studio) | Graph visualization app | Private |
-| [**novanet-infra**](https://github.com/supernovae-st/novanet-infra) | Docker configurations | Private |
+| [**novanet-hq**](https://github.com/supernovae-st/novanet-hq) | Turborepo monorepo (main development) | Private |
+
+### Legacy *(migrated to monorepo)*
+
+| Repository | Migrated To |
+|------------|-------------|
+| [novanet-core](https://github.com/supernovae-st/novanet-core) | `novanet-hq/packages/core` |
+| [novanet-studio](https://github.com/supernovae-st/novanet-studio) | `novanet-hq/apps/studio` |
+| [novanet-infra](https://github.com/supernovae-st/novanet-infra) | `novanet-hq/packages/db` |
 
 ---
 
