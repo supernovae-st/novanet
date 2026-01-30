@@ -207,6 +207,15 @@ See [`packages/core/models/_index.yaml`](packages/core/models/_index.yaml) for c
 
 **NovaNet Studio** is a web-based graph visualization tool:
 
+<div align="center">
+
+<!-- TODO: Replace with actual screenshot -->
+<img src="docs/assets/studio-preview.png" alt="NovaNet Studio" width="800" />
+
+*Interactive 2D/3D graph visualization with AI-powered queries*
+
+</div>
+
 - **Dual View Mode** — Toggle between 2D (React Flow) and 3D (force-graph) with `V`
 - **10 Filter Presets** — Quick views via `1-9, 0` keys
 - **AI Chat** — Natural language to Cypher with `⌘J`
@@ -255,6 +264,12 @@ ANTHROPIC_API_KEY=sk-ant-xxx
 ## Target Application
 
 NovaNet powers **[QR Code AI](https://qrcode-ai.com)** — generating native content across 200+ locales for the world's most advanced QR code platform.
+
+---
+
+## License
+
+This project is **proprietary software** owned by [SuperNovae Studio](https://github.com/supernovae-st). All rights reserved.
 
 ---
 
