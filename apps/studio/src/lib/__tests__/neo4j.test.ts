@@ -95,19 +95,18 @@ describe('neo4j transformations', () => {
 
       const result = transformNode(neo4jNode as never);
 
+      // v8.1.0: icon, priority, freshness are no longer top-level properties
+      // They now go into the data field as deprecated/extra properties
       expect(result).toEqual({
         id: '4:abc:123',
         type: 'Concept',
         key: 'free-tier',
         displayName: 'Free Tier',
         description: 'A free tier concept',
-        icon: 'gift',
         llmContext: undefined,
-        priority: undefined,
-        freshness: undefined,
         createdAt: undefined,
         updatedAt: undefined,
-        data: {},
+        data: { icon: 'gift' },
       });
     });
 
