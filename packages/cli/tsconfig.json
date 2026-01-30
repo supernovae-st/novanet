@@ -5,12 +5,16 @@
     "moduleResolution": "NodeNext",
     "declaration": true,
     "declarationMap": true,
+    "sourceMap": true,
+    "resolveJsonModule": true,
     "outDir": "dist",
     "rootDir": "src",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]

@@ -93,18 +93,19 @@ pnpm test            # Tests
 | `⇧R` | Radial layout (circular) |
 | `⇧F` | Force-directed layout |
 
-**Quick Views (Presets)**
+**Quick Views (Presets v8.2.0)**
 | Key | Action |
 |-----|--------|
-| `1` | Project Structure |
-| `2` | Generation Chain |
-| `3` | Locale Knowledge |
-| `4` | Concept Network |
-| `5` | Prompts & Rules |
-| `6` | SEO & GEO |
-| `7` | High Priority |
-| `8` | Realtime Content |
-| `0` | All Nodes |
+| `1` | Project Overview - Core structure (Project, Pages, Blocks, Concepts) |
+| `2` | Full Graph - All 35 node types |
+| `3` | Core + Concepts - Project structure with ConceptL10n |
+| `4` | All Locales - Locale nodes only |
+| `5` | Concepts - Concept + ConceptL10n |
+| `6` | Current Locale - Selected locale with all knowledge |
+| `7` | Locale + Expressions - Current locale with expressions |
+| `8` | Locale Knowledge - Identity, Voice, Culture, Market, Lexicon |
+| `9` | Expressions - Expression + LocaleLexicon |
+| `0` | Clear Filters - Reset to default view |
 
 **Graph Interaction**
 | Action | Description |
