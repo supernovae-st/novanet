@@ -65,7 +65,7 @@ docs:
 
     - name: Global - Knowledge
       nodes: [LocaleIdentity, LocaleVoice, LocaleCulture, LocaleCultureReferences, LocaleMarket, LocaleLexicon, LocaleRulesAdaptation, LocaleRulesFormatting, LocaleRulesSlug, Expression, Reference, Metaphor, Constraint, Pattern]
-      color: violet
+      color: purple
       description: 14 Locale Knowledge nodes
 
     # 📦 PROJECT SCOPE (14 nodes)
@@ -86,7 +86,7 @@ docs:
 
     - name: Project - Instruction
       nodes: [PagePrompt, BlockPrompt, BlockRules]
-      color: yellow
+      color: orange
       description: Generation instructions
 
     - name: Project - Output
@@ -102,7 +102,7 @@ docs:
 
     - name: Shared - GEO
       nodes: [GEOSeedL10n, GEOSeedMetrics, GEOMiningRun]
-      color: slate
+      color: gray
       description: GEO question mining
 
   examples:
