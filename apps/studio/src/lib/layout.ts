@@ -1,0 +1,165 @@
+/**
+ * Graph Layout Utilities (v7.2.7)
+ *
+ * Uses dagre for automatic graph layout with intelligent positioning.
+ * Supports hierarchical layouts for knowledge graphs.
+ *
+ * Features:
+ * - Variable node sizes based on type for accurate spacing
+ * - Increased margins for better visual hierarchy
+ * - Type-aware collision detection
+ */
+
+import dagre from '@dagrejs/dagre';
+import type { Node, Edge } from '@xyflow/react';
+
+export interface LayoutOptions {
+  /** Layout direction: TB (top-bottom), BT, LR (left-right), RL */
+  direction?: 'TB' | 'BT' | 'LR' | 'RL';
+  /** Default node width for layout calculation */
+  nodeWidth?: number;
+  /** Default node height for layout calculation */
+  nodeHeight?: number;
+  /** Horizontal spacing between ranks (levels) */
+  ranksep?: number;
+  /** Vertical spacing between nodes in same rank */
+  nodesep?: number;
+  /** Layout algorithm */
+  ranker?: 'network-simplex' | 'tight-tree' | 'longest-path';
+  /** Use variable node sizes based on type */
+  useVariableSizes?: boolean;
+}
+
+const DEFAULT_OPTIONS: Required<LayoutOptions> = {
+  direction: 'TB',
+  nodeWidth: 200,
+  nodeHeight: 100,
+  ranksep: 120, // Increased from 80 for better vertical spacing
+  nodesep: 80,  // Increased from 40 for better horizontal spacing
+  ranker: 'network-simplex',
+  useVariableSizes: true,
+};
+
+/**
+ * Node dimensions based on type (matches actual component sizes)
+ * Includes padding for visual breathing room
+ */
+const NODE_DIMENSIONS: Record<string, { width: number; height: number }> = {
+  // Project node - largest, most prominent
+  Project: { width: 320, height: 180 },
+
+  // Structural nodes - medium sized cards
+  Page: { width: 240, height: 140 },
+  Locale: { width: 230, height: 130 },
+  Concept: { width: 225, height: 130 },
+  Block: { width: 205, height: 120 },
+  BlockType: { width: 195, height: 115 },
+  BrandIdentity: { width: 210, height: 120 },
+  ProjectL10n: { width: 210, height: 120 },
+
+  // Locale knowledge nodes - circular, smaller
+  LocaleIdentity: { width: 110, height: 110 },
+  LocaleVoice: { width: 100, height: 100 },
+  LocaleCulture: { width: 95, height: 95 },
+  LocaleMarket: { width: 100, height: 100 },
+  LocaleLexicon: { width: 90, height: 90 },
+  Expression: { width: 85, height: 85 },
+
+  // Generation nodes
+  PagePrompt: { width: 200, height: 110 },
+  BlockPrompt: { width: 190, height: 105 },
+  BlockRules: { width: 190, height: 105 },
+  PageOutput: { width: 200, height: 110 },
+  BlockOutput: { width: 190, height: 105 },
+
+  // SEO/GEO nodes
+  SEOKeyword: { width: 180, height: 100 },
+  SEOVariation: { width: 170, height: 95 },
+  GEOSeed: { width: 180, height: 100 },
+  GEOReformulation: { width: 180, height: 100 },
+
+  // Default fallback
+  default: { width: 200, height: 100 },
+};
+
+/**
+ * Get dimensions for a specific node type
+ */
+export function getNodeDimensions(nodeType: string): { width: number; height: number } {
+  return NODE_DIMENSIONS[nodeType] || NODE_DIMENSIONS.default;
+}
+
+/**
+ * Apply dagre layout to nodes and edges
+ * Returns new node array with updated positions
+ *
+ * Now supports variable node sizes for accurate layout
+ */
+export function applyDagreLayout<T extends Node>(
+  nodes: T[],
+  edges: Edge[],
+  options: LayoutOptions = {}
+): T[] {
+  const opts = { ...DEFAULT_OPTIONS, ...options };
+
+  // Create a new dagre graph
+  const g = new dagre.graphlib.Graph();
+  g.setDefaultEdgeLabel(() => ({}));
+
+  // Set graph options with increased margins
+  g.setGraph({
+    rankdir: opts.direction,
+    ranksep: opts.ranksep,
+    nodesep: opts.nodesep,
+    ranker: opts.ranker,
+    marginx: 80,  // Increased from 50
+    marginy: 80,  // Increased from 50
+  });
+
+  // Build a map of node dimensions for position calculation
+  const nodeSizes = new Map<string, { width: number; height: number }>();
+
+  // Add nodes to the graph with variable sizes
+  nodes.forEach((node) => {
+    let width = opts.nodeWidth;
+    let height = opts.nodeHeight;
+
+    if (opts.useVariableSizes && node.data && typeof node.data === 'object' && 'type' in node.data) {
+      const nodeType = node.data.type as string;
+      const dims = getNodeDimensions(nodeType);
+      width = dims.width;
+      height = dims.height;
+    }
+
+    nodeSizes.set(node.id, { width, height });
+    g.setNode(node.id, { width, height });
+  });
+
+  // Add edges to the graph
+  edges.forEach((edge) => {
+    g.setEdge(edge.source, edge.target);
+  });
+
+  // Run the layout algorithm
+  dagre.layout(g);
+
+  // Apply the calculated positions to nodes
+  return nodes.map((node) => {
+    const nodeWithPosition = g.node(node.id);
+    const size = nodeSizes.get(node.id) || { width: opts.nodeWidth, height: opts.nodeHeight };
+
+    // dagre returns center position, we need top-left
+    return {
+      ...node,
+      position: {
+        x: nodeWithPosition.x - size.width / 2,
+        y: nodeWithPosition.y - size.height / 2,
+      },
+    };
+  });
+}
+
+/**
+ * Export node dimensions for use in other modules
+ */
+export { NODE_DIMENSIONS };

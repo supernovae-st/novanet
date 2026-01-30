@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Validate schemas
+        run: npm run validate:schema
+
+      - name: Validate version consistency
+        run: npm run validate:version
+
+      - name: Validate relation registry
+        run: npm run validate:relations
+
+      - name: Validate documentation
+        run: npm run validate:docs
+
+      - name: Run tests
+        run: npm test

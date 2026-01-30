@@ -1,0 +1,45 @@
+# NovaNet Docker Configuration
+# Single source of truth for all Docker services
+
+name: novanet
+
+services:
+  neo4j:
+    image: neo4j:5.26.0-community
+    container_name: novanet-neo4j
+    ports:
+      - "7474:7474"   # Browser HTTP
+      - "7687:7687"   # Bolt
+    environment:
+      - NEO4J_AUTH=neo4j/novanetpassword
+      - NEO4J_PLUGINS=["apoc"]
+      - NEO4J_apoc_export_file_enabled=true
+      - NEO4J_apoc_import_file_enabled=true
+      - NEO4J_apoc_import_file_use__neo4j__config=true
+      - NEO4J_dbms_security_procedures_unrestricted=apoc.*
+      - NEO4J_dbms_security_procedures_allowlist=apoc.*
+    volumes:
+      - novanet_neo4j_data:/data
+      - novanet_neo4j_logs:/logs
+      - novanet_neo4j_plugins:/plugins
+      - ../core/neo4j/seed:/import
+    networks:
+      - novanet-network
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:7474 || exit 1"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+      start_period: 30s
+
+volumes:
+  novanet_neo4j_data:
+    name: novanet_neo4j_data
+  novanet_neo4j_logs:
+    name: novanet_neo4j_logs
+  novanet_neo4j_plugins:
+    name: novanet_neo4j_plugins
+
+networks:
+  novanet-network:
+    driver: bridge

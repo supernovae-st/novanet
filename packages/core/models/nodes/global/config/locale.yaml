@@ -1,0 +1,175 @@
+# models/nodes/locale/locale.yaml
+# Locale - Graph-native locale node with fallback chains and knowledge links
+
+node:
+  name: Locale
+  category: locale
+  icon: "🔷"
+  description: "First-class locale node (BCP 47) with fallback chains and knowledge graph connections"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # STANDARD PROPERTIES (v7.1.0)
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  standard_properties:
+    key:
+      type: string
+      required: true
+      description: "BCP 47 locale code"
+      pattern: "^[a-z]{2}-[A-Z]{2}$"
+      examples:
+        - "fr-FR"
+        - "en-US"
+        - "ja-JP"
+        - "es-MX"
+
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable name in English"
+      example: "French (France)"
+
+    description:
+      type: string
+      required: true
+      description: "One-line description of the locale"
+      example: "French locale for France market"
+
+    llm_context:
+      type: string
+      required: true
+      description: "LLM generation hints. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation].'"
+      example: "USE: for French content targeting France. TRIGGERS: fr-FR, français, france. NOT: Quebec French (use fr-CA)."
+
+    created_at:
+      type: datetime
+      required: true
+
+    updated_at:
+      type: datetime
+      required: true
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # LOCALE-SPECIFIC PROPERTIES
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  properties:
+    language_code:
+      type: string
+      required: true
+      description: "ISO 639-1 language code"
+      pattern: "^[a-z]{2}$"
+      example: "fr"
+
+    country_code:
+      type: string
+      required: true
+      description: "ISO 3166-1 alpha-2 country code"
+      pattern: "^[A-Z]{2}$"
+      example: "FR"
+
+    name_native:
+      type: string
+      required: true
+      description: "Locale name in the native language"
+      example: "Français (France)"
+
+    is_primary:
+      type: boolean
+      required: false
+      description: "True if this is the primary locale for the language"
+      example: true
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # RELATIONS (FROM this node)
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  relations:
+    FALLBACK_TO:
+      to: Locale
+      cardinality: "N:1"
+      description: "Fallback chain for content resolution (e.g., fr-CA → fr-FR → en-US)"
+
+    HAS_IDENTITY:
+      to: LocaleIdentity
+      cardinality: "1:1"
+      description: "Script, geographic, and technical identity"
+
+    HAS_VOICE:
+      to: LocaleVoice
+      cardinality: "1:1"
+      description: "Formality, directness, warmth, humor guidelines"
+
+    HAS_CULTURE:
+      to: LocaleCulture
+      cardinality: "1:1"
+      description: "Values, taboos, sensitivities"
+
+    HAS_MARKET:
+      to: LocaleMarket
+      cardinality: "1:1"
+      description: "Business, demographics, digital maturity data"
+
+    HAS_LEXICON:
+      to: LocaleLexicon
+      cardinality: "1:1"
+      description: "Expression library and vocabulary rules"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # INCOMING RELATIONS (TO this node)
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  incoming_relations:
+    FOR_LOCALE:
+      from: "[ConceptL10n, BlockL10n, PageL10n, SEOKeywordL10n, GEOSeedL10n, ProjectL10n]"
+      description: "Content nodes targeting this locale (v7.8.2: SEOKeyword → SEOKeywordL10n, GEOSeed → GEOSeedL10n)"
+
+    SUPPORTS_LOCALE:
+      from: Project
+      description: "Projects that support this locale"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # EXAMPLE
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  example:
+    data:
+      key: "fr-FR"
+      display_name: "French (France)"
+      icon: "🇫🇷"
+      description: "French locale for France market"
+      llm_context: "USE: for French content targeting France. TRIGGERS: fr-FR, français, france. NOT: Quebec French (use fr-CA)."
+      priority: "high"
+      freshness: "static"
+      language_code: "fr"
+      country_code: "FR"
+      name_native: "Français (France)"
+      is_primary: true
+
+    cypher: |
+      // Get locale with all knowledge nodes
+      MATCH (l:Locale {key: $key})
+      OPTIONAL MATCH (l)-[:HAS_IDENTITY]->(li:LocaleIdentity)
+      OPTIONAL MATCH (l)-[:HAS_VOICE]->(lv:LocaleVoice)
+      OPTIONAL MATCH (l)-[:HAS_CULTURE]->(lc:LocaleCulture)
+      OPTIONAL MATCH (l)-[:HAS_MARKET]->(lm:LocaleMarket)
+      OPTIONAL MATCH (l)-[:HAS_LEXICON]->(ll:LocaleLexicon)
+      OPTIONAL MATCH (ll)-[:HAS_EXPRESSION]->(e:Expression)
+      RETURN l, li, lv, lc, lm, ll, collect(e) AS expressions
+
+      // Get fallback chain for a locale
+      MATCH (l:Locale {key: $key})-[:FALLBACK_TO*0..3]->(fallback)
+      RETURN fallback.key AS locale
+      ORDER BY length((l)-[:FALLBACK_TO*]->(fallback))
+
+      // Create fallback chain
+      MATCH (frCA:Locale {key: "fr-CA"})
+      MATCH (frFR:Locale {key: "fr-FR"})
+      MATCH (enUS:Locale {key: "en-US"})
+      MERGE (frCA)-[:FALLBACK_TO]->(frFR)
+      MERGE (frFR)-[:FALLBACK_TO]->(enUS)
+
+      // Get all content for a locale
+      MATCH (l:Locale {key: $key})<-[:FOR_LOCALE]-(content)
+      RETURN labels(content)[0] AS type, count(*) AS count
+      ORDER BY count DESC

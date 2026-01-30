@@ -1,0 +1,102 @@
+# models/views/block-generation.yaml
+id: block-generation
+name: Block Generation Context
+description: Full context for sub-agent to generate a single block
+version: "8.0.0"
+
+root:
+  type: Block
+
+include:
+  - relation: HAS_PROMPT
+    direction: outgoing
+
+  - relation: OF_TYPE
+    direction: outgoing
+    include:
+      - relation: HAS_RULES
+        direction: outgoing
+
+  - relation: USES_CONCEPT
+    direction: outgoing
+    depth: 2
+    include:
+      - relation: HAS_L10N
+        direction: outgoing
+      - relation: SEMANTIC_LINK
+        direction: outgoing
+
+  - relation: HAS_OUTPUT
+    direction: outgoing
+
+filters:
+  locale: $locale
+
+docs:
+  title: "Block Generation Context"
+  category: generation
+  description: |
+    Context loading for sub-agent when generating a single block.
+    This is the core view for native content generation, providing:
+    - Block definition with type and rules
+    - Block-specific prompt instructions
+    - Related concepts with localized content
+    - Spreading activation for semantic context
+
+  layers:
+    - name: Block Layer
+      nodes: [Block, BlockPrompt, BlockType, BlockRules]
+      color: blue
+      description: Block definition and generation instructions
+
+    - name: Concept Layer
+      nodes: [Concept, ConceptL10n]
+      color: green
+      description: Semantic concepts used by the block
+
+    - name: Output Layer
+      nodes: [BlockL10n]
+      color: purple
+      description: Generated block output
+
+  examples:
+    - name: Load block context for generation
+      description: Complete context for sub-agent to generate a block
+      query: |
+        MATCH (b:Block {key: $blockKey})
+        MATCH (b)-[:HAS_PROMPT]->(bp:BlockPrompt)
+        MATCH (b)-[:OF_TYPE]->(bt:BlockType)
+        OPTIONAL MATCH (bt)-[:HAS_RULES]->(br:BlockRules)
+        OPTIONAL MATCH (b)-[:USES_CONCEPT]->(c:Concept)
+        OPTIONAL MATCH (c)-[:HAS_L10N]->(cl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+        RETURN b.key AS block,
+               bp.instructions AS instructions,
+               bt.name AS blockType,
+               br.rules AS rules,
+               collect(DISTINCT {key: c.key, title: cl.title, definition: cl.definition}) AS concepts
+      params:
+        blockKey: "hero-pricing"
+        locale: "fr-FR"
+
+    - name: Block with spreading activation
+      description: Get related concepts through semantic links
+      query: |
+        MATCH (b:Block {key: $blockKey})-[:USES_CONCEPT]->(c:Concept)
+        MATCH (c)-[sl:SEMANTIC_LINK*1..2]->(related:Concept)
+        WHERE ALL(r IN sl WHERE r.temperature >= 0.3)
+        WITH related, reduce(a = 1.0, r IN sl | a * r.temperature) AS activation
+        WHERE activation >= 0.3
+        MATCH (related)-[:HAS_L10N]->(rl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+        RETURN related.key AS concept,
+               rl.title AS title,
+               activation
+        ORDER BY activation DESC
+        LIMIT 10
+      params:
+        blockKey: "hero-pricing"
+        locale: "fr-FR"
+
+  notes:
+    - "Sub-agents receive this context to generate ONE block natively"
+    - "The LLM context is entirely in the target locale"
+    - "Spreading activation provides related concepts for richer context"

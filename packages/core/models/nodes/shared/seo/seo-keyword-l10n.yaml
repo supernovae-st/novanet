@@ -1,0 +1,128 @@
+# models/nodes/seo/seo-keyword-l10n.yaml
+# SEOKeywordL10n - Target keyword with metrics (LOCALIZED - has FOR_LOCALE)
+#
+# v7.8.2: Renamed from SEOKeyword to SEOKeywordL10n
+#         - Follows *L10n convention for all LOCALIZED nodes (nodes with FOR_LOCALE)
+#         - Consistent with: ProjectL10n, ConceptL10n, PageL10n, BlockL10n
+
+node:
+  name: SEOKeywordL10n
+  category: seo
+  icon: "🔍"
+  description: "Target keyword with metrics for SEO optimization (locale-specific)"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # STANDARD PROPERTIES (v7.1.0)
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  standard_properties:
+    key:
+      type: string
+      required: true
+      description: "Unique identifier"
+      example: "seo-creer-qr-code-gratuit-fr"
+
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable name"
+      example: "créer qr code gratuit"
+
+
+    description:
+      type: string
+      required: false
+      description: "Short description"
+
+    llm_context:
+      type: string
+      required: false
+      description: "Format: USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]."
+
+
+
+    created_at:
+      type: datetime
+      required: false
+
+    updated_at:
+      type: datetime
+      required: false
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # NODE-SPECIFIC PROPERTIES
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  properties:
+    value:
+      type: string
+      required: true
+      description: "The keyword"
+      example: "créer qr code gratuit"
+
+    volume:
+      type: int
+      required: false
+      description: "Monthly searches"
+      example: 12100
+
+    difficulty:
+      type: int
+      required: false
+      description: "SEO difficulty (0-100)"
+      example: 35
+
+    cpc:
+      type: float
+      required: false
+      description: "Cost per click"
+      example: 0.85
+
+    intent:
+      type: string
+      required: false
+      description: "transactional | informational | navigational"
+      example: "transactional"
+
+    platform:
+      type: string
+      required: false
+      description: "google | bing | youtube"
+      example: "google"
+
+    source:
+      type: string
+      required: false
+      description: "Data source: ahrefs | semrush"
+      example: "ahrefs"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # RELATIONS
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  relations:
+    - relation: FOR_LOCALE
+      to: Locale
+      direction: outgoing
+      description: "Keyword is for this locale"
+
+    - relation: HAS_SNAPSHOT
+      to: SEOSnapshot
+      direction: outgoing
+      description: "Historical ranking snapshots"
+
+  # NOTE: SEOVariation REMOVED in v7.8.4
+  # Variations are just other SEOKeywordL10n nodes linked to the same Concept
+  # Use TARGETS_SEO relation with is_primary/variation_type properties instead
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # EXAMPLE
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  example:
+    description: "Get top keywords by volume for a locale"
+    cypher: |
+      MATCH (c:Concept)-[:TARGETS_SEO]->(kw:SEOKeywordL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+      RETURN c.key AS concept, kw.value AS keyword, kw.volume, kw.difficulty
+      ORDER BY kw.volume DESC
+      LIMIT 20

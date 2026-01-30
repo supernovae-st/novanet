@@ -1,0 +1,258 @@
+# models/nodes/project/project-l10n.yaml
+# ProjectL10n - Localized identity and messaging for Project
+#
+# GRAPH POSITION:
+#   Project ──[:HAS_L10N]──> ProjectL10n ──[:FOR_LOCALE]──> Locale
+#                                │
+#                                └──[:L10N_OF]──> Project (inverse, v7.8.0)
+#
+# NOTE: BrandL10n fields (CTAs, meta, SEO keywords) merged here in v7.2.2
+#
+# PURPOSE:
+#   Localized identity and messaging for a Project.
+#   Contains what (descriptions), how (pitches), and voice guidelines.
+#
+# IDENTIFICATION:
+#   No key property - identified by relation chain:
+#   (Project)--[:HAS_L10N]-->(ProjectL10n)--[:FOR_LOCALE]-->(Locale)
+
+node:
+  name: ProjectL10n
+  category: project
+  icon: "🟢"
+  description: "Localized identity and messaging for a Project"
+
+  # ===========================================================================
+  # STANDARD PROPERTIES (L10n nodes - no key, relation-identified)
+  # ===========================================================================
+
+  standard_properties:
+    display_name:
+      type: string
+      required: true
+      description: "Localized display name with locale suffix"
+      example: "QR Code AI (fr-FR)"
+
+    description:
+      type: string
+      required: true
+      description: "Short description of this localization"
+      example: "French localization for QR Code AI"
+
+    llm_context:
+      type: string
+      required: true
+      description: "Format: USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]."
+      example: "USE: for French market messaging. TRIGGERS: fr-FR, french project. NOT: other locales."
+
+    created_at:
+      type: datetime
+      required: true
+
+    updated_at:
+      type: datetime
+      required: true
+
+  # ===========================================================================
+  # PROJECTL10N-SPECIFIC PROPERTIES
+  # ===========================================================================
+
+  properties:
+    # -------------------------------------------------------------------------
+    # Identity - What is it (various lengths)
+    # -------------------------------------------------------------------------
+
+    what_short:
+      type: string
+      required: true
+      description: "50 words - for cards/previews"
+      example: "QR Code AI est la plateforme de creation de QR codes personnalises propulsee par l'IA."
+
+    what_medium:
+      type: string
+      required: true
+      description: "100 words - for landing sections"
+      example: "QR Code AI combine intelligence artificielle et design pour creer des QR codes uniques qui refletent votre marque."
+
+    what_long:
+      type: string
+      required: true
+      description: "200+ words - for about pages"
+      example: "QR Code AI est la plateforme leader de creation de QR codes personnalises..."
+
+    # -------------------------------------------------------------------------
+    # Messaging - How we say it
+    # -------------------------------------------------------------------------
+
+    tagline:
+      type: string
+      required: true
+      description: "3-7 words, memorable"
+      example: "Des QR codes qui vous ressemblent"
+
+    pitch_one_liner:
+      type: string
+      required: true
+      description: "1 sentence, <15 words"
+      example: "Creez des QR codes uniques en 30 secondes avec l'IA."
+
+    pitch_elevator:
+      type: string
+      required: true
+      description: "2-3 sentences, ~30 seconds to read"
+      example: "QR Code AI combine design IA et personnalisation marque pour creer des QR codes qui convertissent."
+
+    pitch_detailed:
+      type: string
+      required: true
+      description: "1 paragraph, ~100 words"
+      example: "..."
+
+    # -------------------------------------------------------------------------
+    # Voice - Tone guidelines
+    # -------------------------------------------------------------------------
+
+    voice_personality:
+      type: string[]
+      required: true
+      description: "3-5 adjectives describing voice personality"
+      example: ["Professionnel", "Amical", "Innovant", "Clair"]
+
+    voice_tone:
+      type: object
+      required: true
+      description: "Spectrums (1-10) for tone calibration"
+      properties:
+        formal_casual:
+          type: int
+          description: "1=very formal, 10=very casual"
+        serious_playful:
+          type: int
+          description: "1=very serious, 10=very playful"
+        technical_simple:
+          type: int
+          description: "1=very technical, 10=very simple"
+        reserved_enthusiastic:
+          type: int
+          description: "1=very reserved, 10=very enthusiastic"
+      example:
+        formal_casual: 6
+        serious_playful: 5
+        technical_simple: 7
+        reserved_enthusiastic: 6
+
+    voice_do:
+      type: string[]
+      required: true
+      description: "What we DO in communication"
+      example: ["Utiliser la voix active", "Commencer par les benefices"]
+
+    voice_dont:
+      type: string[]
+      required: true
+      description: "What we NEVER do"
+      example: ["Utiliser du jargon", "Sonner desespere"]
+
+    # -------------------------------------------------------------------------
+    # CTAs - Call to Actions (merged from BrandL10n v7.2.2)
+    # -------------------------------------------------------------------------
+
+    cta_primary:
+      type: string
+      required: true
+      description: "Main CTA"
+      example: "Creer mon QR code"
+
+    cta_secondary:
+      type: string
+      required: true
+      description: "Secondary CTA"
+      example: "Voir les exemples"
+
+    cta_tertiary:
+      type: string
+      required: false
+      description: "Soft CTA"
+      example: "En savoir plus"
+
+    # -------------------------------------------------------------------------
+    # SEO - Meta and Keywords (merged from BrandL10n v7.2.2)
+    # -------------------------------------------------------------------------
+
+    meta_description:
+      type: string
+      required: true
+      description: "SEO meta description, <160 chars"
+      example: "Creez des QR codes personnalises avec l'IA. Design unique, analytics, marque."
+
+    primary_keywords:
+      type: string[]
+      required: false
+      description: "Main SEO targets"
+      example: ["generateur QR code", "creer QR code"]
+
+    secondary_keywords:
+      type: string[]
+      required: false
+      description: "Supporting keywords"
+      example: ["QR code personnalise", "QR code design"]
+
+  # ===========================================================================
+  # RELATIONS
+  # ===========================================================================
+
+  relations:
+    - relation: FOR_LOCALE
+      to: Locale
+      direction: outgoing
+      cardinality: "N:1"
+      description: "Links to the locale this content is for"
+
+    # NOTE: ValuePropL10n and SocialProofL10n removed in v7.8.0
+    # Value props and social proof are now inline properties if needed
+
+  # ===========================================================================
+  # INCOMING RELATIONS
+  # ===========================================================================
+
+  incoming_relations:
+    - relation: HAS_L10N
+      from: Project
+      cardinality: "1:N"
+      description: "Parent project that owns this localization"
+
+    - relation: BELONGS_TO_PROJECT_L10N
+      from: PageL10n
+      cardinality: "1:N"
+      description: "PageL10n nodes generated for this project locale"
+
+  # ===========================================================================
+  # EXAMPLE
+  # ===========================================================================
+
+  example:
+    display_name: "QR Code AI (fr-FR)"
+    icon: "🌐"
+    description: "French localization for QR Code AI"
+    llm_context: "USE: for French market messaging. TRIGGERS: fr-FR, french project. NOT: other locales."
+    what_short: "QR Code AI est la plateforme de creation de QR codes personnalises propulsee par l'IA."
+    what_medium: "QR Code AI combine intelligence artificielle et design pour creer des QR codes uniques qui refletent votre marque."
+    what_long: "QR Code AI est la plateforme leader de creation de QR codes personnalises..."
+    tagline: "Des QR codes qui vous ressemblent"
+    pitch_one_liner: "Creez des QR codes uniques en 30 secondes avec l'IA."
+    pitch_elevator: "QR Code AI combine design IA et personnalisation marque pour creer des QR codes qui convertissent."
+    pitch_detailed: "..."
+    voice_personality: ["Professionnel", "Amical", "Innovant", "Clair"]
+    voice_tone:
+      formal_casual: 6
+      serious_playful: 5
+      technical_simple: 7
+      reserved_enthusiastic: 6
+    voice_do: ["Utiliser la voix active", "Commencer par les benefices"]
+    voice_dont: ["Utiliser du jargon", "Sonner desespere"]
+    cta_primary: "Creer mon QR code"
+    cta_secondary: "Voir les exemples"
+    cta_tertiary: "En savoir plus"
+    meta_description: "Creez des QR codes personnalises avec l'IA. Design unique, analytics, marque."
+    primary_keywords: ["generateur QR code", "creer QR code"]
+    secondary_keywords: ["QR code personnalise", "QR code design"]

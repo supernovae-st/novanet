@@ -1,0 +1,45 @@
+{
+  "project": "novanet-studio",
+  "version": "0.1.0",
+  "description": "Knowledge graph visualization for NovaNet localization orchestrator",
+  "commands": {
+    "start": "/novanet",
+    "end": "/novanet-bye"
+  },
+  "skills": [
+    "react-flow-patterns",
+    "force-graph-patterns",
+    "zustand-patterns",
+    "neo4j-patterns"
+  ],
+  "rules": [
+    "novanet-terminology",
+    "novanet-decisions"
+  ],
+  "relatedProjects": {
+    "core": "../core"
+  },
+  "techStack": {
+    "framework": "Next.js 15",
+    "ui": "React 19 + Tailwind CSS",
+    "graph2d": "@xyflow/react",
+    "graph3d": "react-force-graph-3d",
+    "state": "Zustand 5",
+    "database": "Neo4j",
+    "ai": "Claude API"
+  },
+  "conventions": {
+    "formatting": {
+      "indentation": 2,
+      "lineWidth": 100,
+      "quotes": "single",
+      "semicolons": true
+    },
+    "naming": {
+      "components": "PascalCase",
+      "functions": "camelCase",
+      "constants": "UPPER_SNAKE_CASE"
+    },
+    "commits": "conventional"
+  }
+}

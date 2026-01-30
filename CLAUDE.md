@@ -1,6 +1,6 @@
-# NovaNet HQ
+# NovaNet
 
-Development workspace with Git submodules for NovaNet ecosystem.
+Turborepo monorepo for NovaNet - knowledge graph localization orchestrator.
 
 ---
 
@@ -19,73 +19,66 @@ Concept (invariant) -> Generate natively -> ConceptL10n (local)  <-- RIGHT
 
 ---
 
-## Submodule Architecture
+## Monorepo Structure
 
 ```
-novanet-hq/                          # This repo (orchestrator)
+novanet/
+├── turbo.json              # Turborepo pipeline config
+├── pnpm-workspace.yaml     # Workspace definitions
 ├── packages/
-│   ├── core/                        # Submodule → supernovae-st/novanet-core
-│   ├── db/                          # Submodule → supernovae-st/novanet-db
-│   └── cli/                         # Submodule → supernovae-st/novanet-cli
-├── apps/
-│   └── studio/                      # Submodule → supernovae-st/novanet-studio
-└── docs/                            # Local docs & plans
-```
-
-Each package/app is a **separate Git repo** linked as a submodule.
-
----
-
-## Submodule Commands
-
-```bash
-# Clone with submodules
-git clone --recurse-submodules git@github.com:supernovae-st/novanet-hq.git
-
-# Initialize submodules (if cloned without --recurse-submodules)
-npm run submodules:init
-
-# Update submodules to latest
-npm run submodules:update
-
-# Work in a submodule
-cd packages/core
-git checkout main
-git pull
-# make changes, commit, push
+│   ├── core/               # @novanet/core - types, schemas, filters
+│   ├── db/                 # @novanet/db - Neo4j infrastructure
+│   └── cli/                # @novanet/cli - dev tools
+└── apps/
+    └── studio/             # @novanet/studio - web visualization
 ```
 
 ---
 
-## Workspace Commands
+## Commands
 
 ```bash
 # Development
-npm run dev              # Start studio dev server
-npm run build            # Build studio
-npm run lint             # Lint all workspaces
-npm run type-check       # Type check all workspaces
-npm run test             # Test all workspaces
+pnpm dev                   # Start studio dev server
+pnpm build                 # Build all packages
+pnpm lint                  # Lint all packages
+pnpm type-check            # Type check all packages
+pnpm test                  # Test all packages
 
 # Infrastructure (Neo4j)
-npm run infra:up         # Start Neo4j
-npm run infra:down       # Stop Neo4j
-npm run infra:logs       # View logs
+pnpm infra:up              # Start Neo4j
+pnpm infra:down            # Stop Neo4j
+pnpm infra:seed            # Seed database
+pnpm infra:reset           # Reset database
 
-# Database seed
-cd packages/db && ./seed.sh
+# Turbo filters
+pnpm build --filter=@novanet/core       # Build only core
+pnpm test --filter=@novanet/studio      # Test only studio
+pnpm build --filter=...[HEAD^1]         # Build only changed packages
 ```
 
 ---
 
-## Repos
+## Packages
 
-| Package | Repo | Description |
-|---------|------|-------------|
-| @novanet/core | [novanet-core](https://github.com/supernovae-st/novanet-core) | Types, schemas, filters |
-| @novanet/db | [novanet-db](https://github.com/supernovae-st/novanet-db) | Neo4j infrastructure |
-| @novanet/cli | [novanet-cli](https://github.com/supernovae-st/novanet-cli) | Dev tools |
-| @novanet/studio | [novanet-studio](https://github.com/supernovae-st/novanet-studio) | Web visualization |
+| Package | Description |
+|---------|-------------|
+| @novanet/core | Types, schemas, filters, generators |
+| @novanet/db | Neo4j Docker, seeds, migrations |
+| @novanet/cli | Validation and generation tools |
+| @novanet/studio | Web-based graph visualization |
+
+---
+
+## Dependencies
+
+```
+@novanet/core ←── @novanet/cli
+      ↑
+@novanet/studio
+
+@novanet/db (standalone)
+```
 
 ---
 
@@ -100,17 +93,29 @@ cd packages/db && ./seed.sh
 ## Quick Start
 
 ```bash
-# 1. Clone with submodules
-git clone --recurse-submodules git@github.com:supernovae-st/novanet-hq.git
+# 1. Clone
+git clone git@github.com:supernovae-st/novanet-hq.git
 cd novanet-hq
 
-# 2. Install dependencies
-npm install
+# 2. Install (requires pnpm)
+pnpm install
 
 # 3. Start Neo4j + seed
-npm run infra:up
-cd packages/db && ./seed.sh
+pnpm infra:up
+pnpm infra:seed
 
 # 4. Start development
-npm run dev    # → http://localhost:3000
+pnpm dev    # → http://localhost:3000
 ```
+
+---
+
+## Conventions
+
+| Aspect | Convention |
+|--------|------------|
+| **Package Manager** | pnpm (required) |
+| **Build Tool** | Turborepo |
+| **Naming** | `novanet` (packages), `NovaNet` (classes/types) |
+| **Formatting** | 2 spaces, 100 chars, single quotes, semicolons |
+| **Commits** | Conventional Commits |

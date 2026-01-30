@@ -1,0 +1,148 @@
+# models/views/shared-layer.yaml
+# Shared scope: SEO and GEO targeting (6 nodes)
+id: shared-layer
+name: Shared Layer
+description: SEO keywords and GEO seeds independent of projects
+version: "8.0.0"
+
+# Root is Locale since SEO/GEO nodes are per-locale
+# For detailed SEO/GEO queries, use seo-pipeline.yaml or geo-pipeline.yaml
+root:
+  type: Locale
+
+include:
+  # SEO nodes
+  - relation: FOR_LOCALE
+    direction: incoming
+    targetTypes: [SEOKeywordL10n]
+    include:
+      - relation: HAS_METRICS
+        direction: outgoing
+        targetTypes: [SEOKeywordMetrics]
+  - relation: FOR_LOCALE
+    direction: incoming
+    targetTypes: [SEOMiningRun]
+
+  # GEO nodes
+  - relation: FOR_LOCALE
+    direction: incoming
+    targetTypes: [GEOSeedL10n]
+    include:
+      - relation: HAS_METRICS
+        direction: outgoing
+        targetTypes: [GEOSeedMetrics]
+  - relation: FOR_LOCALE
+    direction: incoming
+    targetTypes: [GEOMiningRun]
+
+docs:
+  title: "Shared Layer View"
+  category: mining
+  description: |
+    The Shared scope contains nodes that are independent of specific projects
+    but still locale-specific. These are reusable across multiple projects.
+
+    **6 nodes organized by domain:**
+    - **SEO (3)**: SEOKeywordL10n, SEOKeywordMetrics, SEOMiningRun
+    - **GEO (3)**: GEOSeedL10n, GEOSeedMetrics, GEOMiningRun
+
+    **Key insight:**
+    Shared nodes bridge global locale knowledge and project content.
+    A keyword like "QR code generator" can be targeted by multiple projects.
+
+    **SEO vs GEO:**
+    - SEO: Traditional search engine optimization (Google, Bing)
+    - GEO: Generative Engine Optimization (AI answer engines: Perplexity, ChatGPT)
+
+  layers:
+    - name: SEO Keywords
+      nodes: [SEOKeywordL10n]
+      color: blue
+      description: Localized SEO keywords with search intent
+
+    - name: SEO Metrics
+      nodes: [SEOKeywordMetrics]
+      color: green
+      description: Search volume, difficulty, trends
+
+    - name: SEO Mining
+      nodes: [SEOMiningRun]
+      color: gray
+      description: Keyword discovery job tracking
+
+    - name: GEO Seeds
+      nodes: [GEOSeedL10n]
+      color: purple
+      description: AI question seeds for citation optimization
+
+    - name: GEO Metrics
+      nodes: [GEOSeedMetrics]
+      color: orange
+      description: Citation count, visibility score
+
+    - name: GEO Mining
+      nodes: [GEOMiningRun]
+      color: gray
+      description: Question discovery job tracking
+
+  examples:
+    - name: Top keywords by volume
+      description: Get highest-volume SEO keywords for a locale
+      query: |
+        MATCH (kw:SEOKeywordL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+        MATCH (kw)-[:HAS_METRICS]->(m:SEOKeywordMetrics)
+        RETURN kw.keyword AS keyword,
+               kw.intent AS intent,
+               m.search_volume AS volume,
+               m.difficulty AS difficulty
+        ORDER BY m.search_volume DESC
+        LIMIT 20
+      params:
+        locale: "fr-FR"
+
+    - name: Keywords targeted by concept
+      description: Find all keywords a concept targets
+      query: |
+        MATCH (c:Concept {key: $conceptKey})-[:TARGETS_SEO]->(kw:SEOKeywordL10n)
+        MATCH (kw)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+        OPTIONAL MATCH (kw)-[:HAS_METRICS]->(m:SEOKeywordMetrics)
+        RETURN kw.keyword AS keyword,
+               m.search_volume AS volume
+        ORDER BY m.search_volume DESC
+      params:
+        conceptKey: "qr-code-generator"
+        locale: "en-US"
+
+    - name: GEO opportunities
+      description: High-volume questions with low citation count
+      query: |
+        MATCH (seed:GEOSeedL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+        MATCH (seed)-[:HAS_METRICS]->(m:GEOSeedMetrics)
+        WHERE m.search_volume > 500 AND m.citation_count < 3
+        RETURN seed.question AS question,
+               m.search_volume AS volume,
+               m.citation_count AS citations
+        ORDER BY m.search_volume DESC
+        LIMIT 10
+      params:
+        locale: "en-US"
+
+    - name: Mining job status
+      description: Check recent mining runs
+      query: |
+        MATCH (run:SEOMiningRun)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+        RETURN run.id AS runId,
+               run.status AS status,
+               run.keywords_found AS found,
+               run.started_at AS started
+        ORDER BY run.started_at DESC
+        LIMIT 5
+      params:
+        locale: "fr-FR"
+
+  notes:
+    - "Shared nodes are project-independent but locale-specific"
+    - "SEO keywords can be targeted by multiple projects' concepts"
+    - "GEO seeds track questions asked to AI answer engines"
+    - "Metrics are time-series - always use latest for current state"
+    - "Mining runs track discovery jobs for both SEO and GEO"

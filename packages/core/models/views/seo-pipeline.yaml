@@ -1,0 +1,121 @@
+# models/views/seo-pipeline.yaml
+id: seo-pipeline
+name: SEO Pipeline
+description: SEO keyword mining and internal linking workflow
+version: "8.0.0"
+
+# Root is Locale - SEO nodes are queried via incoming FOR_LOCALE
+root:
+  type: Locale
+
+include:
+  # SEO Keywords
+  - relation: FOR_LOCALE
+    direction: incoming
+    targetTypes: [SEOKeywordL10n]
+    include:
+      - relation: HAS_METRICS
+        direction: outgoing
+        targetTypes: [SEOKeywordMetrics]
+      - relation: TARGETS_SEO
+        direction: incoming
+        targetTypes: [Concept]
+
+  # Mining Runs
+  - relation: FOR_LOCALE
+    direction: incoming
+    targetTypes: [SEOMiningRun]
+
+docs:
+  title: "SEO Pipeline View"
+  category: mining
+  description: |
+    SEO keyword mining and optimization workflow.
+
+    **Pipeline stages:**
+    1. **Mining**: SEOMiningRun discovers keywords per locale
+    2. **Targeting**: Concepts target SEOKeywordL10n
+    3. **Metrics**: SEOKeywordMetrics tracks performance
+    4. **Linking**: Pages link via LINKS_TO with SEO weight
+
+    **Node types:**
+    - SEOKeywordL10n: Localized keyword (locale-specific)
+    - SEOKeywordMetrics: Performance metrics (search volume, difficulty)
+    - SEOMiningRun: Mining job metadata
+
+  layers:
+    - name: Keywords
+      nodes: [SEOKeywordL10n]
+      color: blue
+      description: Localized SEO keywords
+
+    - name: Metrics
+      nodes: [SEOKeywordMetrics]
+      color: green
+      description: Keyword performance data
+
+    - name: Mining
+      nodes: [SEOMiningRun]
+      color: gray
+      description: Mining job tracking
+
+    - name: Targeting
+      nodes: [Concept]
+      color: orange
+      description: Concepts targeting keywords
+
+  examples:
+    - name: Keywords with metrics
+      description: Get keywords with their performance metrics
+      query: |
+        MATCH (kw:SEOKeywordL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+        OPTIONAL MATCH (kw)-[:HAS_METRICS]->(m:SEOKeywordMetrics)
+        RETURN kw.keyword AS keyword,
+               kw.intent AS intent,
+               m.search_volume AS volume,
+               m.difficulty AS difficulty,
+               m.updated_at AS lastUpdate
+        ORDER BY m.search_volume DESC
+        LIMIT 50
+      params:
+        locale: "fr-FR"
+
+    - name: Concept keyword coverage
+      description: Which concepts target which keywords
+      query: |
+        MATCH (c:Concept)-[:TARGETS_SEO]->(kw:SEOKeywordL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+        RETURN c.key AS concept,
+               collect(kw.keyword) AS targetedKeywords
+        ORDER BY size(collect(kw.keyword)) DESC
+      params:
+        locale: "fr-FR"
+
+    - name: Internal linking opportunities
+      description: Pages that could link based on shared SEO targets
+      query: |
+        MATCH (p1:Page)-[:USES_CONCEPT]->(c:Concept)-[:TARGETS_SEO]->(kw:SEOKeywordL10n)
+        MATCH (p2:Page)-[:USES_CONCEPT]->(c2:Concept)-[:TARGETS_SEO]->(kw)
+        WHERE p1 <> p2
+        AND NOT EXISTS { (p1)-[:LINKS_TO]->(p2) }
+        RETURN p1.key AS sourcePage,
+               p2.key AS targetPage,
+               kw.keyword AS sharedKeyword
+        LIMIT 20
+
+    - name: Recent mining runs
+      description: Get recent SEO mining job results
+      query: |
+        MATCH (run:SEOMiningRun)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+        RETURN run.id AS runId,
+               run.status AS status,
+               run.keywords_found AS found,
+               run.started_at AS started
+        ORDER BY run.started_at DESC
+        LIMIT 10
+      params:
+        locale: "fr-FR"
+
+  notes:
+    - "SEOKeywordL10n is locale-specific (keyword varies by locale)"
+    - "Metrics are time-series - use latest for current state"
+    - "LINKS_TO relation includes seo_weight for link juice optimization"

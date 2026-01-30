@@ -1,25 +1,26 @@
 {
-  "name": "novanet-hq",
+  "name": "novanet",
   "version": "0.1.0",
   "private": true,
-  "description": "NovaNet HQ - Development workspace with submodules",
-  "workspaces": [
-    "packages/*",
-    "apps/*"
-  ],
+  "description": "NovaNet - Knowledge graph localization orchestrator",
+  "packageManager": "pnpm@9.15.0",
   "scripts": {
-    "dev": "npm run dev --workspace=@novanet/studio",
-    "build": "npm run build --workspace=@novanet/studio",
-    "lint": "npm run lint --workspaces --if-present",
-    "type-check": "npm run type-check --workspaces --if-present",
-    "test": "npm run test --workspaces --if-present",
-    "infra:up": "docker compose -f packages/db/docker-compose.yml up -d",
-    "infra:down": "docker compose -f packages/db/docker-compose.yml down",
-    "infra:logs": "docker compose -f packages/db/docker-compose.yml logs -f",
-    "submodules:update": "git submodule update --remote --merge",
-    "submodules:init": "git submodule update --init --recursive"
+    "dev": "turbo run dev --filter=@novanet/studio",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "type-check": "turbo run type-check",
+    "test": "turbo run test",
+    "test:watch": "turbo run test:watch --filter=@novanet/studio",
+    "infra:up": "pnpm --filter=@novanet/db up",
+    "infra:down": "pnpm --filter=@novanet/db down",
+    "infra:seed": "pnpm --filter=@novanet/db seed",
+    "infra:reset": "pnpm --filter=@novanet/db reset"
+  },
+  "devDependencies": {
+    "turbo": "^2.3.4"
   },
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
   }
 }

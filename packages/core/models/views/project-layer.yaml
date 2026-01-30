@@ -1,0 +1,167 @@
+# models/views/project-layer.yaml
+# Project scope: All per-project nodes (14 nodes)
+id: project-layer
+name: Project Layer
+description: Per-project nodes from foundation to generated output
+version: "8.0.0"
+
+root:
+  type: Project
+
+include:
+  # Foundation
+  - relation: HAS_BRAND_IDENTITY
+    direction: outgoing
+  - relation: HAS_L10N
+    direction: outgoing
+  - relation: SUPPORTS_LOCALE
+    direction: outgoing
+  - relation: DEFAULT_LOCALE
+    direction: outgoing
+
+  # Structure
+  - relation: HAS_PAGE
+    direction: outgoing
+    include:
+      - relation: OF_TYPE
+        direction: outgoing
+      - relation: HAS_PROMPT
+        direction: outgoing
+      - relation: HAS_OUTPUT
+        direction: outgoing
+      - relation: HAS_BLOCK
+        direction: outgoing
+        include:
+          - relation: OF_TYPE
+            direction: outgoing
+          - relation: HAS_PROMPT
+            direction: outgoing
+          - relation: HAS_OUTPUT
+            direction: outgoing
+
+  # Semantic
+  - relation: HAS_CONCEPT
+    direction: outgoing
+    include:
+      - relation: HAS_L10N
+        direction: outgoing
+      - relation: SEMANTIC_LINK
+        direction: outgoing
+
+docs:
+  title: "Project Layer View"
+  category: overview
+  description: |
+    The Project scope contains all nodes specific to a single project.
+    This is where content generation happens.
+
+    **14 nodes organized by category:**
+    - **Foundation (3)**: Project, BrandIdentity, ProjectL10n
+    - **Structure (2)**: Page, Block
+    - **Semantic (2)**: Concept, ConceptL10n
+    - **Instruction (5)**: PageType, PagePrompt, BlockType, BlockPrompt, BlockRules
+    - **Output (2)**: PageL10n, BlockL10n
+
+    **Key insight:**
+    The Project layer is where invariant structure meets localized output.
+    Pages and Blocks are invariant scaffolding; PageL10n and BlockL10n are generated.
+
+  layers:
+    - name: Foundation
+      nodes: [Project, BrandIdentity, ProjectL10n]
+      color: blue
+      description: Project root, branding, and localized metadata
+
+    - name: Structure
+      nodes: [Page, Block]
+      color: cyan
+      description: Content scaffolding (invariant)
+
+    - name: Semantic
+      nodes: [Concept, ConceptL10n]
+      color: green
+      description: Meaning and knowledge (invariant + localized)
+
+    - name: Instruction
+      nodes: [PageType, PagePrompt, BlockType, BlockPrompt, BlockRules]
+      color: orange
+      description: AI generation directives (invariant)
+
+    - name: Output
+      nodes: [PageL10n, BlockL10n]
+      color: purple
+      description: LLM-generated content (localized)
+
+  examples:
+    - name: Project overview
+      description: Get project with all pages and locale support
+      query: |
+        MATCH (p:Project {key: $projectKey})
+        OPTIONAL MATCH (p)-[:HAS_BRAND_IDENTITY]->(bi:BrandIdentity)
+        OPTIONAL MATCH (p)-[:SUPPORTS_LOCALE]->(l:Locale)
+        OPTIONAL MATCH (p)-[:DEFAULT_LOCALE]->(dl:Locale)
+        OPTIONAL MATCH (p)-[:HAS_PAGE]->(page:Page)
+        RETURN p.key AS project,
+               p.name AS name,
+               bi.primary_color AS brandColor,
+               dl.key AS defaultLocale,
+               collect(DISTINCT l.key) AS supportedLocales,
+               collect(DISTINCT page.key) AS pages
+      params:
+        projectKey: "qrcode-ai"
+
+    - name: Page with blocks
+      description: Get page structure with all blocks
+      query: |
+        MATCH (p:Project {key: $projectKey})-[:HAS_PAGE]->(page:Page {key: $pageKey})
+        OPTIONAL MATCH (page)-[:HAS_BLOCK]->(b:Block)
+        OPTIONAL MATCH (b)-[:OF_TYPE]->(bt:BlockType)
+        RETURN page.key AS page,
+               collect({
+                 key: b.key,
+                 type: bt.name,
+                 position: b.position
+               }) AS blocks
+        ORDER BY b.position
+      params:
+        projectKey: "qrcode-ai"
+        pageKey: "page-pricing"
+
+    - name: Generation context
+      description: Load full context for generating a page
+      query: |
+        MATCH (p:Project {key: $projectKey})-[:HAS_PAGE]->(page:Page {key: $pageKey})
+        MATCH (page)-[:HAS_PROMPT]->(pp:PagePrompt)
+        OPTIONAL MATCH (page)-[:HAS_BLOCK]->(b:Block)
+        OPTIONAL MATCH (b)-[:USES_CONCEPT]->(c:Concept)
+        OPTIONAL MATCH (c)-[:HAS_L10N]->(cl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+        RETURN page.key AS page,
+               pp.instructions AS instructions,
+               collect(DISTINCT b.key) AS blocks,
+               collect(DISTINCT {concept: c.key, title: cl.title}) AS concepts
+      params:
+        projectKey: "qrcode-ai"
+        pageKey: "page-pricing"
+        locale: "fr-FR"
+
+    - name: Concept network
+      description: Get concepts with semantic links
+      query: |
+        MATCH (p:Project {key: $projectKey})-[:HAS_CONCEPT]->(c:Concept)
+        OPTIONAL MATCH (c)-[sl:SEMANTIC_LINK]->(related:Concept)
+        WHERE sl.temperature >= 0.3
+        RETURN c.key AS concept,
+               collect({
+                 related: related.key,
+                 type: sl.type,
+                 temperature: sl.temperature
+               }) AS links
+      params:
+        projectKey: "qrcode-ai"
+
+  notes:
+    - "Project nodes are per-project - each project has its own instances"
+    - "Invariant nodes (Page, Block, Concept) are defined once per project"
+    - "Localized nodes (*L10n) are generated for each supported locale"
+    - "The orchestrator uses this view to coordinate generation"
+    - "Output nodes (PageL10n, BlockL10n) are LLM-generated, not human-written"

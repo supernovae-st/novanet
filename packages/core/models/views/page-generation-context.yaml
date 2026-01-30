@@ -1,0 +1,96 @@
+# models/views/page-generation-context.yaml
+id: page-generation-context
+name: Page Generation Context
+description: Full context for orchestrator to generate a page
+version: "8.0.0"
+
+root:
+  type: Page
+
+include:
+  - relation: HAS_BLOCK
+    direction: outgoing
+    depth: 1
+
+  - relation: HAS_PROMPT
+    direction: outgoing
+    filters:
+      active: true
+
+  - relation: USES_CONCEPT
+    direction: outgoing
+    depth: 2  # spreading activation
+
+  - relation: HAS_OUTPUT
+    direction: outgoing
+
+filters:
+  priority: [critical, high, medium]
+  locale: $locale
+
+docs:
+  title: "Page Generation Context"
+  category: generation
+  description: |
+    Context loading for the orchestrator agent when generating a complete page.
+    This view retrieves:
+    - The page definition and its prompt
+    - All blocks with their positions
+    - Related concepts via spreading activation
+    - Locale-specific knowledge for native generation
+
+  layers:
+    - name: Page Layer
+      nodes: [Page, PagePrompt]
+      color: blue
+      description: Page definition and generation instructions
+
+    - name: Block Layer
+      nodes: [Block, BlockType]
+      color: green
+      description: Page blocks in position order
+
+    - name: Concept Layer
+      nodes: [Concept, ConceptL10n]
+      color: orange
+      description: Semantic concepts used by the page
+
+    - name: Output Layer
+      nodes: [PageL10n]
+      color: purple
+      description: Generated page output
+
+  examples:
+    - name: Load page context for generation
+      description: Complete context for orchestrator to generate a page
+      query: |
+        MATCH (p:Page {key: $pageKey})
+        MATCH (p)-[:HAS_PROMPT]->(pp:PagePrompt)
+        OPTIONAL MATCH (p)-[:HAS_BLOCK]->(b:Block)
+        OPTIONAL MATCH (p)-[:USES_CONCEPT]->(c:Concept)
+        OPTIONAL MATCH (c)-[:HAS_L10N]->(cl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+        RETURN p, pp,
+               collect(DISTINCT b) AS blocks,
+               collect(DISTINCT {concept: c.key, title: cl.title}) AS concepts
+      params:
+        pageKey: "page-pricing"
+        locale: "fr-FR"
+
+    - name: Load page with locale knowledge
+      description: Get page context with full locale knowledge for generation
+      query: |
+        MATCH (p:Page {key: $pageKey})
+        MATCH (l:Locale {key: $locale})
+        OPTIONAL MATCH (l)-[:HAS_VOICE]->(lv:LocaleVoice)
+        OPTIONAL MATCH (l)-[:HAS_CULTURE]->(lc:LocaleCulture)
+        RETURN p.key AS page,
+               lv.formality_score AS formality,
+               lc.cultural_values AS values
+      params:
+        pageKey: "page-pricing"
+        locale: "fr-FR"
+
+  notes:
+    - "The orchestrator uses this context to dispatch block generation tasks"
+    - "Spreading activation depth is 2 for related concepts"
+    - "Only active prompts are included"

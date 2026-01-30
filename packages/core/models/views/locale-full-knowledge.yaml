@@ -1,0 +1,101 @@
+# models/views/locale-full-knowledge.yaml
+id: locale-full-knowledge
+name: Locale Full Knowledge
+description: Complete locale knowledge for LLM context
+version: "8.0.0"
+
+root:
+  type: Locale
+
+include:
+  - relation: HAS_IDENTITY
+    direction: outgoing
+
+  - relation: HAS_VOICE
+    direction: outgoing
+
+  - relation: HAS_CULTURE
+    direction: outgoing
+
+  - relation: HAS_MARKET
+    direction: outgoing
+
+  - relation: HAS_LEXICON
+    direction: outgoing
+    depth: 2  # includes Expressions
+
+filters:
+  priority: [critical, high]
+
+docs:
+  title: "Locale Knowledge View"
+  category: localization
+  description: |
+    Complete locale knowledge system for native content generation.
+    The LocaleKnowledge nodes provide cultural and linguistic context
+    that enables LLMs to generate content natively in each locale.
+
+    **14 LocaleKnowledge nodes organized by domain:**
+    - Identity: locale code, name, region, script
+    - Voice: formality, tone, directness, humor
+    - Culture: values, taboos, holidays, heroes
+    - Market: currency, payment methods, competitors
+    - Lexicon: domain-specific expressions and idioms
+
+  layers:
+    - name: Locale Config
+      nodes: [Locale]
+      color: blue
+      description: Locale definition and configuration
+
+    - name: Identity & Voice
+      nodes: [LocaleIdentity, LocaleVoice]
+      color: green
+      description: Language identity and communication style
+
+    - name: Culture & Market
+      nodes: [LocaleCulture, LocaleMarket]
+      color: orange
+      description: Cultural values and market specifics
+
+    - name: Lexicon
+      nodes: [LocaleLexicon, Expression]
+      color: purple
+      description: Domain-specific vocabulary and expressions
+
+  examples:
+    - name: Load complete locale knowledge
+      description: Get all locale knowledge for a specific locale
+      query: |
+        MATCH (l:Locale {key: $locale})
+        OPTIONAL MATCH (l)-[:HAS_IDENTITY]->(li:LocaleIdentity)
+        OPTIONAL MATCH (l)-[:HAS_VOICE]->(lv:LocaleVoice)
+        OPTIONAL MATCH (l)-[:HAS_CULTURE]->(lc:LocaleCulture)
+        OPTIONAL MATCH (l)-[:HAS_MARKET]->(lm:LocaleMarket)
+        RETURN l.key AS locale,
+               li.display_name AS name,
+               lv.formality_score AS formality,
+               lc.cultural_values AS values,
+               lm.currency_code AS currency
+      params:
+        locale: "fr-FR"
+
+    - name: Load expressions by semantic field
+      description: Get domain-specific expressions for content generation
+      query: |
+        MATCH (l:Locale {key: $locale})-[:HAS_LEXICON]->(lex:LocaleLexicon)
+        MATCH (lex)-[:HAS_EXPRESSION]->(e:Expression)
+        WHERE e.semantic_field IN $fields
+        RETURN e.text AS expression,
+               e.semantic_field AS field,
+               e.register AS register,
+               e.usage_context AS context
+        ORDER BY e.semantic_field, e.priority DESC
+      params:
+        locale: "fr-FR"
+        fields: ["urgency", "value", "trust"]
+
+  notes:
+    - "LocaleKnowledge is GLOBAL - shared across all projects"
+    - "Expressions are filtered by semantic_field for relevant context"
+    - "Priority filters ensure only high-value knowledge is included"

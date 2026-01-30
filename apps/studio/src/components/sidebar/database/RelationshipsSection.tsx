@@ -1,0 +1,226 @@
+'use client';
+
+/**
+ * RelationshipsSection - Relationship types explorer
+ *
+ * Features:
+ * - List of relationship types with counts
+ * - Tri-state checkbox for bulk selection
+ * - Progress bars showing counts
+ * - Execute query button
+ */
+
+import { memo, useMemo, useState } from 'react';
+import { cn } from '@/lib/utils';
+import { GRAPH_ICONS, ICON_COLORS, ACTION_ICONS, STATUS_ICONS, NAV_ICONS } from '@/config/iconSystem';
+import { TriStateCheckbox, type CheckboxState } from '@/components/ui/TriStateCheckbox';
+import { ProgressBar } from '@/components/ui/ProgressBar';
+import { getRelationshipColor } from '@/config/relationshipColors';
+import { calculateCheckboxState } from '@/hooks';
+import type { RelationType } from '@/hooks';
+
+// Design system icons
+const LoaderIcon = STATUS_ICONS.loading;
+const PlayIcon = ACTION_ICONS.execute;
+const ChevronDownIcon = NAV_ICONS.chevronDown;
+const CheckIcon = STATUS_ICONS.success;
+
+// =============================================================================
+// RELATIONSHIP ROW
+// =============================================================================
+
+interface RelationshipRowProps {
+  type: string;
+  count: number;
+  maxCount: number;
+  isSelected: boolean;
+  onToggle: () => void;
+  disabled?: boolean;
+}
+
+const RelationshipRow = memo(function RelationshipRow({
+  type,
+  count,
+  maxCount,
+  isSelected,
+  onToggle,
+  disabled,
+}: RelationshipRowProps) {
+  const color = getRelationshipColor(type);
+
+  return (
+    <button
+      onClick={onToggle}
+      disabled={disabled}
+      role="checkbox"
+      aria-checked={isSelected}
+      aria-label={`${type} (${count} relationships)`}
+      className={cn(
+        'group w-full flex items-center gap-3 py-1.5 px-2 -mx-2 rounded-lg transition-all duration-200',
+        'hover:bg-white/[0.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-novanet-500/50',
+        isSelected && 'bg-white/[0.06]',
+        disabled && 'opacity-50 cursor-not-allowed'
+      )}
+    >
+      {/* Checkbox */}
+      <div
+        className={cn(
+          'w-3.5 h-3.5 rounded border-[1.5px] flex items-center justify-center transition-all duration-200',
+          isSelected ? 'border-transparent' : 'border-white/20'
+        )}
+        style={{
+          backgroundColor: isSelected ? `${color}30` : 'transparent',
+          borderColor: isSelected ? color : undefined,
+        }}
+      >
+        {isSelected && <CheckIcon className="w-2.5 h-2.5" style={{ color }} />}
+      </div>
+
+      {/* Label */}
+      <span
+        className={cn(
+          'text-[11px] font-mono transition-colors duration-200 min-w-[120px] text-left truncate',
+          isSelected ? 'text-white' : 'text-white/60 group-hover:text-white/80'
+        )}
+      >
+        {type}
+      </span>
+
+      {/* Progress bar */}
+      <ProgressBar value={count} max={maxCount} color={color} />
+
+      {/* Count */}
+      <span
+        className={cn(
+          'text-[11px] font-mono w-8 text-right transition-colors duration-200',
+          isSelected ? 'text-white/80' : 'text-white/40'
+        )}
+      >
+        {count > 999 ? `${(count / 1000).toFixed(1)}k` : count}
+      </span>
+    </button>
+  );
+});
+
+// =============================================================================
+// MAIN SECTION COMPONENT
+// =============================================================================
+
+export interface RelationshipsSectionProps {
+  /** Total relationships in database */
+  totalRelationships: number;
+  /** Relationship types with counts */
+  relationshipTypes: RelationType[];
+  /** Maximum count for progress bars */
+  maxCount: number;
+  /** Currently selected relationship types */
+  selectedRelTypes: Set<string>;
+  /** Callback when relationship type is toggled */
+  onToggleRelType: (type: string) => void;
+  /** Callback when all relationships toggled */
+  onToggleAllRelTypes: () => void;
+  /** Callback to execute query */
+  onExecuteQuery: () => void;
+  /** Whether query is executing */
+  isExecuting?: boolean;
+}
+
+export const RelationshipsSection = memo(function RelationshipsSection({
+  totalRelationships,
+  relationshipTypes,
+  maxCount,
+  selectedRelTypes,
+  onToggleRelType,
+  onToggleAllRelTypes,
+  onExecuteQuery,
+  isExecuting = false,
+}: RelationshipsSectionProps) {
+  const [isExpanded, setIsExpanded] = useState(true);
+
+  // Calculate checkbox state
+  const checkboxState = useMemo((): CheckboxState => {
+    if (!relationshipTypes.length) return 'none';
+    return calculateCheckboxState(
+      relationshipTypes.map((r) => r.type),
+      selectedRelTypes
+    );
+  }, [relationshipTypes, selectedRelTypes]);
+
+  return (
+    <section>
+      {/* Section Header */}
+      <div className="flex items-center justify-between px-1 mb-2">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            aria-expanded={isExpanded}
+            aria-label={`${isExpanded ? 'Collapse' : 'Expand'} relationships section`}
+            className="p-0.5 -m-0.5 rounded transition-colors hover:bg-white/[0.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-novanet-500/50"
+          >
+            <ChevronDownIcon
+              className={cn(
+                'w-3.5 h-3.5 text-white/40 transition-transform duration-200',
+                !isExpanded && '-rotate-90'
+              )}
+            />
+          </button>
+          <TriStateCheckbox
+            state={checkboxState}
+            onClick={onToggleAllRelTypes}
+            color={ICON_COLORS.relationship.primary}
+            disabled={isExecuting}
+            label="Select all relationships"
+          />
+          <GRAPH_ICONS.relationship className={cn('w-3.5 h-3.5', ICON_COLORS.relationship.muted)} />
+          <span className="text-xs font-semibold text-white/70">Relationships</span>
+          <span className="text-[10px] text-white/40">
+            ({totalRelationships.toLocaleString()})
+          </span>
+          {selectedRelTypes.size > 0 && (
+            <span className="px-1.5 py-0.5 rounded-full bg-violet-500/20 text-violet-400 text-[10px] font-semibold animate-in fade-in duration-200">
+              {selectedRelTypes.size} selected
+            </span>
+          )}
+        </div>
+        <button
+          onClick={onExecuteQuery}
+          disabled={selectedRelTypes.size === 0 || isExecuting}
+          aria-label={`Execute query for ${selectedRelTypes.size} selected relationship types`}
+          className={cn(
+            'p-1.5 rounded-lg transition-all duration-200',
+            selectedRelTypes.size > 0
+              ? 'text-violet-400 hover:text-violet-300 hover:bg-violet-500/10 hover:scale-110'
+              : 'text-white/20 cursor-not-allowed'
+          )}
+          title="Execute query for selected relationships"
+        >
+          {isExecuting ? (
+            <LoaderIcon className="w-4 h-4 animate-spin" />
+          ) : (
+            <PlayIcon className="w-4 h-4" />
+          )}
+        </button>
+      </div>
+
+      {/* Relationship List */}
+      <div
+        className={cn(
+          'ml-6 pl-3 border-l border-white/[0.06] overflow-hidden transition-all duration-300',
+          isExpanded ? 'max-h-[600px] opacity-100' : 'max-h-0 opacity-0'
+        )}
+      >
+        {relationshipTypes.map((item) => (
+          <RelationshipRow
+            key={item.type}
+            type={item.type}
+            count={item.count}
+            maxCount={maxCount}
+            isSelected={selectedRelTypes.has(item.type)}
+            onToggle={() => onToggleRelType(item.type)}
+            disabled={isExecuting}
+          />
+        ))}
+      </div>
+    </section>
+  );
+});

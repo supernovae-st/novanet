@@ -1,0 +1,678 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom scrollbar */
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+
+}
+
+/* ============================================================================
+   GLASS MORPHISM - Premium Components
+   ============================================================================ */
+@layer components {
+  .glass {
+    @apply backdrop-blur-xl rounded-xl;
+    background: hsl(var(--surface-1));
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .glass-floating {
+    @apply backdrop-blur-xl rounded-2xl;
+    background: hsl(var(--surface-2));
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow:
+      0 25px 50px -12px rgba(0, 0, 0, 0.7),
+      0 0 0 1px rgba(255, 255, 255, 0.06) inset,
+      0 1px 0 0 rgba(255, 255, 255, 0.1) inset;
+  }
+
+  /* Keyboard shortcuts - crisp and visible */
+  kbd {
+    @apply inline-flex items-center justify-center min-w-[1.5rem] h-6 px-1.5;
+    @apply border rounded text-xs font-mono;
+    background: hsl(var(--surface-3));
+    border-color: rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.9);
+  }
+}
+
+/* React Flow customization - New Age dark canvas with grid and gradient glow */
+.react-flow {
+  /* Base dark background with New Age gradient glow - Blue/Orange theme */
+  background:
+    /* Grid pattern - subtle lines */
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    /* Blue glow from bottom-left */
+    radial-gradient(ellipse at 0% 100%, rgba(94, 106, 210, 0.18) 0%, transparent 50%),
+    /* Orange glow from top-right */
+    radial-gradient(ellipse at 100% 0%, rgba(242, 153, 74, 0.15) 0%, transparent 50%),
+    /* Subtle blue accent from top-left */
+    radial-gradient(ellipse at 0% 0%, rgba(94, 106, 210, 0.10) 0%, transparent 40%),
+    /* Subtle orange accent from bottom-right */
+    radial-gradient(ellipse at 100% 100%, rgba(242, 153, 74, 0.08) 0%, transparent 40%),
+    /* Center subtle vignette */
+    radial-gradient(ellipse at 50% 50%, rgba(12, 12, 18, 0) 0%, rgba(5, 5, 8, 0.5) 100%),
+    /* Base color */
+    #0a0a0f;
+  background-size:
+    40px 40px,
+    40px 40px,
+    100% 100%,
+    100% 100%,
+    100% 100%,
+    100% 100%,
+    100% 100%,
+    100% 100%;
+}
+
+/* Hide default React Flow background since we use custom */
+.react-flow__background {
+  display: none !important;
+}
+
+.react-flow__minimap {
+  background-color: rgba(0, 0, 0, 0.8) !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.react-flow__controls {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.react-flow__controls-button {
+  background: rgba(0, 0, 0, 0.6) !important;
+  backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 8px !important;
+  color: white !important;
+  margin-bottom: 4px !important;
+}
+
+.react-flow__controls-button:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Focus visible styles - exclude inputs for clean design */
+:focus-visible:not(input):not(textarea) {
+  @apply outline-none ring-2 ring-novanet-500/50 ring-offset-2 ring-offset-black;
+}
+
+/* Inputs: no focus rings, subtle border change only */
+input:focus,
+textarea:focus,
+input:focus-visible,
+textarea:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Body styles */
+body {
+  @apply bg-black text-white antialiased;
+  font-feature-settings: 'rlig' 1, 'calt' 1;
+}
+
+/* Selection color */
+::selection {
+  @apply bg-novanet-500/30;
+}
+
+/* ============================================================================
+   Nika-style Animations
+   ============================================================================ */
+
+/* Breathing pulse for selected/running states - faster for snappier UX */
+@keyframes breathing {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}
+
+.animate-breathing {
+  animation: breathing 1.5s ease-in-out infinite;
+}
+
+/* Slow spin for selected elements */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 6s linear infinite;
+}
+
+/* Shine beam effect (partial rotation) */
+@keyframes shine-beam {
+  0% {
+    transform: rotate(-60deg);
+  }
+  50% {
+    transform: rotate(60deg);
+  }
+  100% {
+    transform: rotate(-60deg);
+  }
+}
+
+.animate-shine-beam {
+  animation: shine-beam 4s ease-in-out infinite;
+}
+
+/* Glow pulse for hover/active states */
+@keyframes glow-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+/* Floating animation for panels */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Stagger fade in for lists */
+@keyframes stagger-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-stagger-fade-in {
+  animation: stagger-fade-in 0.3s ease-out forwards;
+}
+
+/* Slide in from right for panels */
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.3s ease-out;
+}
+
+/* Scale in for modals */
+@keyframes scale-in {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-scale-in {
+  animation: scale-in 0.2s ease-out;
+}
+
+.animate-in {
+  animation-fill-mode: both;
+}
+
+/* State-specific animations (GlowingBorder states) */
+@keyframes pulse-fast {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 0.4; }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+  20%, 40%, 60%, 80% { transform: translateX(2px); }
+}
+
+@keyframes success-flash {
+  0% {
+    box-shadow: 0 0 30px rgba(16, 185, 129, 0.8);
+    transform: scale(1.02);
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
+    transform: scale(1);
+  }
+}
+
+.animate-pulse-fast {
+  animation: pulse-fast 0.8s ease-in-out infinite;
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 2s ease-in-out infinite;
+}
+
+.animate-shake {
+  animation: shake 0.4s ease-in-out;
+}
+
+.animate-success-flash {
+  animation: success-flash 0.6s ease-out;
+}
+
+/* Shimmer effect for skeleton loaders */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+/* NOTE: Unused utility classes removed in v7.3.0 cleanup:
+   - .action-btn, .action-btn-active (never used)
+   - .surface-0 through .surface-4, .surface-hover (CSS vars used instead)
+   - .text-*-high utilities (never used)
+   - .animate-float-1/2/3 (ProjectNode redesigned without particles)
+*/
+
+/* ============================================================================
+   Edge Flow Animation - Animated dashes for data flow visualization
+   ============================================================================ */
+
+/* Flow animation - dashes moving along edges (source to target) */
+@keyframes edge-flow {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: -40;
+  }
+}
+
+.animate-edge-flow {
+  animation: edge-flow 1.5s linear infinite;
+}
+
+/* Slow flow for less important/dimmed edges */
+.animate-edge-flow-slow {
+  animation: edge-flow 3s linear infinite;
+}
+
+/* Fast flow for highlighted/selected edges */
+.animate-edge-flow-fast {
+  animation: edge-flow 0.8s linear infinite;
+}
+
+/* Reverse flow animation (target to source) */
+@keyframes edge-flow-reverse {
+  0% {
+    stroke-dashoffset: -40;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-edge-flow-reverse {
+  animation: edge-flow-reverse 1.5s linear infinite;
+}
+
+/* Edge hover glow pulse */
+@keyframes edge-hover-glow {
+  0%, 100% {
+    stroke-opacity: 0.7;
+  }
+  50% {
+    stroke-opacity: 1;
+  }
+}
+
+.animate-edge-hover-glow {
+  animation: edge-hover-glow 1s ease-in-out infinite;
+}
+
+/* Gradient border rotation for selected nodes */
+@keyframes gradient-rotate {
+  0% {
+    background: linear-gradient(0deg, var(--tw-gradient-stops));
+  }
+  25% {
+    background: linear-gradient(90deg, var(--tw-gradient-stops));
+  }
+  50% {
+    background: linear-gradient(180deg, var(--tw-gradient-stops));
+  }
+  75% {
+    background: linear-gradient(270deg, var(--tw-gradient-stops));
+  }
+  100% {
+    background: linear-gradient(360deg, var(--tw-gradient-stops));
+  }
+}
+
+.animate-gradient-rotate {
+  animation: gradient-rotate 3s linear infinite;
+}
+
+/* ============================================================================
+   NODE MICRO-INTERACTIONS - Hover, Press, Tooltip
+   ============================================================================ */
+
+/* Scale utilities for hover effects */
+.scale-102 {
+  transform: scale(1.02);
+}
+
+.scale-103 {
+  transform: scale(1.03);
+}
+
+.scale-105 {
+  transform: scale(1.05);
+}
+
+/* Node hover effect - subtle scale up with enhanced glow */
+@keyframes node-hover-glow {
+  0%, 100% {
+    filter: brightness(1) drop-shadow(0 0 8px var(--glow-color, currentColor));
+  }
+  50% {
+    filter: brightness(1.05) drop-shadow(0 0 12px var(--glow-color, currentColor));
+  }
+}
+
+.animate-node-hover-glow {
+  animation: node-hover-glow 1.5s ease-in-out infinite;
+}
+
+/* Node press effect - quick scale down and bounce back */
+@keyframes node-press {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.98);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.node-pressable {
+  transition: transform 200ms ease-out;
+}
+
+.node-pressable:active {
+  transform: scale(0.98);
+}
+
+/* Tooltip fade in animation with delay */
+@keyframes tooltip-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-tooltip-fade-in {
+  animation: tooltip-fade-in 150ms ease-out forwards;
+  animation-delay: 300ms;
+  opacity: 0;
+}
+
+/* Tooltip styles for nodes */
+.node-tooltip {
+  @apply absolute z-50 px-3 py-2 rounded-lg;
+  @apply text-xs font-medium text-white;
+  @apply pointer-events-none;
+  background: rgba(0, 0, 0, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+}
+
+/* Hover highlight state for connected nodes/edges */
+.hover-connected {
+  opacity: 1 !important;
+}
+
+.hover-dimmed {
+  opacity: 0.25 !important;
+  transition: opacity 200ms ease-out;
+}
+
+.hover-dimmed-edge {
+  opacity: 0.15 !important;
+  transition: opacity 200ms ease-out;
+}
+
+/* Node highlight ring on hover connection */
+@keyframes connection-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 var(--ring-color, rgba(59, 130, 246, 0.5));
+  }
+  50% {
+    box-shadow: 0 0 0 4px var(--ring-color, rgba(59, 130, 246, 0.3));
+  }
+}
+
+.connection-highlight {
+  animation: connection-pulse 1s ease-in-out infinite;
+}
+
+@layer base {
+  /* ============================================================================
+     NOVANET DARK THEME - Premium Glass Morphism
+     ============================================================================
+
+     Inspired by: Nika Draft, Linear, Raycast, Vercel Geist
+
+     SURFACE HIERARCHY (visible steps):
+     ┌────────────────────────────────────────────────────────────────────────────┐
+     │  Background   #000000  (0% - pure black, like Nika)                        │
+     │  Surface 1    #0D0D10  (5% - cards, sidebars)                              │
+     │  Surface 2    #141418  (8% - elevated panels, dialogs)                     │
+     │  Surface 3    #1C1C22  (12% - hover states)                                │
+     │  Surface 4    #24242C  (16% - active/pressed states)                       │
+     └────────────────────────────────────────────────────────────────────────────┘
+
+     TEXT OPACITY (high contrast):
+     - Primary:   95%  (headings, important)
+     - Secondary: 80%  (body text)
+     - Muted:     60%  (captions, hints)
+     - Disabled:  40%  (non-interactive)
+
+     BORDER OPACITY:
+     - Default:   12%
+     - Hover:     20%
+     - Active:    30%
+
+   ============================================================================ */
+  :root {
+    /* Base - Pure black like Nika */
+    --background: 0 0% 0%;
+    --foreground: 0 0% 95%;
+
+    /* Card - First surface level (5% lightness) */
+    --card: 240 8% 5%;
+    --card-foreground: 0 0% 95%;
+
+    /* Popover - Second surface level (8% lightness) */
+    --popover: 240 6% 8%;
+    --popover-foreground: 0 0% 95%;
+
+    /* Primary - NovaNet Cyan (boosted saturation + brightness) */
+    --primary: 187 100% 50%;
+    --primary-foreground: 0 0% 0%;
+
+    /* Secondary - Third surface level for contrast */
+    --secondary: 240 6% 12%;
+    --secondary-foreground: 0 0% 90%;
+
+    /* Muted - Readable subtle text */
+    --muted: 240 6% 16%;
+    --muted-foreground: 0 0% 65%;
+
+    /* Accent - Clear interactive states */
+    --accent: 240 6% 18%;
+    --accent-foreground: 0 0% 95%;
+
+    /* Destructive - Vivid coral red (like Raycast) */
+    --destructive: 0 85% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Success - Bright emerald */
+    --success: 160 85% 45%;
+    --success-foreground: 0 0% 100%;
+
+    /* Warning - Vivid amber */
+    --warning: 38 100% 55%;
+    --warning-foreground: 0 0% 0%;
+
+    /* Border - Visible but subtle */
+    --border: 240 10% 18%;
+    --input: 240 8% 12%;
+    --ring: 187 100% 50%;
+
+    /* Radius */
+    --radius: 0.75rem;
+
+    /* ========================================
+       GLASS TOKENS (boosted for visibility)
+       Research: Linear/Raycast use 10-12% border opacity
+       ======================================== */
+    --glass-bg: 240 8% 8%;           /* Boosted from 5% for card visibility */
+    --glass-bg-hover: 240 6% 12%;    /* Boosted from 10% */
+    --glass-border: 0 0% 100% / 15%; /* Boosted from 12% */
+    --glass-border-hover: 0 0% 100% / 22%;
+    --glass-border-active: 0 0% 100% / 35%;
+    --glass-blur: 16px;
+    --glass-highlight: 0 0% 100% / 8%; /* Boosted from 6% */
+
+    /* ========================================
+       SURFACE LAYERS (5% minimum step hierarchy)
+       Research: Linear uses 4% bg → 8% cards (4% jump)
+       Raycast uses 4% bg → 9% cards (5% jump)
+       ======================================== */
+    --surface-0: 0 0% 0%;            /* #000000 - pure black background */
+    --surface-1: 240 8% 8%;          /* #121216 - cards (was 5%, +3%) */
+    --surface-2: 240 7% 12%;         /* #1C1C22 - elevated (was 8%, +4%) */
+    --surface-3: 240 6% 16%;         /* #262630 - hover (was 12%, +4%) */
+    --surface-4: 240 5% 21%;         /* #323240 - active (was 16%, +5%) */
+
+    /* Legacy aliases */
+    --surface-hover: 240 6% 16%;
+
+    /* ========================================
+       CHART COLORS (vibrant, saturated)
+       ======================================== */
+    --chart-1: 187 100% 50%;   /* NovaNet Cyan */
+    --chart-2: 160 85% 45%;    /* Emerald */
+    --chart-3: 38 100% 55%;    /* Amber */
+    --chart-4: 265 90% 65%;    /* Purple */
+    --chart-5: 0 85% 60%;      /* Coral */
+
+    /* Extended palette for graphs */
+    --chart-6: 200 95% 50%;    /* Sky blue */
+    --chart-7: 330 90% 60%;    /* Pink */
+    --chart-8: 45 100% 50%;    /* Yellow */
+
+    /* ========================================
+       ACCENT COLORS
+       ======================================== */
+    --accent-blue: 235 66% 60%;      /* #5E6AD2 - Primary buttons, badges */
+    --accent-orange: 30 89% 62%;     /* #F2994A - Build, accents */
+    --accent-green: 145 48% 69%;     /* #6FCF97 - Success, online */
+    --accent-red: 4 82% 63%;         /* #EB5757 - Danger, canceled */
+    --accent-yellow: 45 87% 62%;     /* #F2C94C - In Progress */
+    --accent-purple: 271 76% 53%;    /* #9B51E0 - Premium accents */
+
+    /* ========================================
+       TEXT OPACITY SCALE
+       ======================================== */
+    --text-primary: 0 0% 95%;
+    --text-secondary: 0 0% 80%;
+    --text-muted: 0 0% 65%;
+    --text-disabled: 0 0% 45%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+
+  }
+  body {
+    @apply bg-background text-foreground;
+
+  }
+
+}
+

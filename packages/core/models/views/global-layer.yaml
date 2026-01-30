@@ -1,0 +1,138 @@
+# models/views/global-layer.yaml
+# Global scope: Locale configuration and knowledge (15 nodes)
+id: global-layer
+name: Global Layer
+description: Locale configuration and knowledge nodes shared across all projects
+version: "8.0.0"
+
+root:
+  type: Locale
+
+include:
+  # Locale identity and voice
+  - relation: HAS_IDENTITY
+    direction: outgoing
+  - relation: HAS_VOICE
+    direction: outgoing
+
+  # Culture and market
+  - relation: HAS_CULTURE
+    direction: outgoing
+    include:
+      - relation: HAS_REFERENCE
+        direction: outgoing
+  - relation: HAS_MARKET
+    direction: outgoing
+
+  # Lexicon with expressions
+  - relation: HAS_LEXICON
+    direction: outgoing
+    include:
+      - relation: HAS_EXPRESSION
+        direction: outgoing
+      - relation: HAS_METAPHOR
+        direction: outgoing
+      - relation: HAS_PATTERN
+        direction: outgoing
+      - relation: HAS_CONSTRAINT
+        direction: outgoing
+
+  # Rules
+  - relation: HAS_RULES_ADAPTATION
+    direction: outgoing
+  - relation: HAS_RULES_FORMATTING
+    direction: outgoing
+  - relation: HAS_RULES_SLUG
+    direction: outgoing
+
+  # Locale hierarchy
+  - relation: FALLBACK_TO
+    direction: outgoing
+
+docs:
+  title: "Global Layer View"
+  category: localization
+  description: |
+    The Global scope contains nodes shared across ALL projects.
+    This is the foundation for native content generation.
+
+    **15 nodes organized by category:**
+    - **Config (1)**: Locale - the root configuration node
+    - **Knowledge (14)**: LocaleIdentity, LocaleVoice, LocaleCulture, LocaleMarket,
+      LocaleLexicon, and supporting data nodes (Expression, Reference, etc.)
+
+    **Key insight:**
+    Global nodes are NEVER project-specific. They represent knowledge ABOUT locales,
+    not content IN locales. This knowledge enables LLMs to generate natively.
+
+  layers:
+    - name: Config
+      nodes: [Locale]
+      color: cyan
+      description: Locale root configuration (language, region, script)
+
+    - name: Identity & Voice
+      nodes: [LocaleIdentity, LocaleVoice]
+      color: blue
+      description: Naming conventions and communication style
+
+    - name: Culture & Market
+      nodes: [LocaleCulture, LocaleCultureReferences, LocaleMarket]
+      color: green
+      description: Cultural context and market specifics
+
+    - name: Rules
+      nodes: [LocaleRulesAdaptation, LocaleRulesFormatting, LocaleRulesSlug]
+      color: orange
+      description: Locale-specific adaptation rules
+
+    - name: Lexicon
+      nodes: [LocaleLexicon, Expression, Reference, Metaphor, Pattern, Constraint]
+      color: purple
+      description: Domain-specific vocabulary and expressions
+
+  examples:
+    - name: Load complete locale knowledge
+      description: Get all knowledge for native generation in a locale
+      query: |
+        MATCH (l:Locale {key: $locale})
+        OPTIONAL MATCH (l)-[:HAS_IDENTITY]->(li:LocaleIdentity)
+        OPTIONAL MATCH (l)-[:HAS_VOICE]->(lv:LocaleVoice)
+        OPTIONAL MATCH (l)-[:HAS_CULTURE]->(lc:LocaleCulture)
+        OPTIONAL MATCH (l)-[:HAS_MARKET]->(lm:LocaleMarket)
+        OPTIONAL MATCH (l)-[:HAS_LEXICON]->(lex:LocaleLexicon)
+        RETURN l.key AS locale,
+               li.display_name AS name,
+               lv.formality_score AS formality,
+               lc.cultural_values AS values,
+               lm.currency_code AS currency
+      params:
+        locale: "fr-FR"
+
+    - name: Get expressions for semantic field
+      description: Load domain expressions for content generation
+      query: |
+        MATCH (l:Locale {key: $locale})-[:HAS_LEXICON]->(lex:LocaleLexicon)
+        MATCH (lex)-[:HAS_EXPRESSION]->(e:Expression)
+        WHERE e.semantic_field IN $fields
+        RETURN e.text AS expression,
+               e.semantic_field AS field,
+               e.register AS register
+        ORDER BY e.priority DESC
+      params:
+        locale: "fr-FR"
+        fields: ["urgency", "value", "trust"]
+
+    - name: Locale fallback chain
+      description: Get fallback locales for a given locale
+      query: |
+        MATCH path = (l:Locale {key: $locale})-[:FALLBACK_TO*1..3]->(fallback:Locale)
+        RETURN [n IN nodes(path) | n.key] AS fallbackChain
+      params:
+        locale: "fr-CA"
+
+  notes:
+    - "Global nodes are shared across ALL projects - never duplicated"
+    - "LocaleKnowledge enables native generation, not translation"
+    - "Expressions are filtered by semantic_field for relevant context"
+    - "Fallback chain: fr-CA → fr-FR → en-US (example)"

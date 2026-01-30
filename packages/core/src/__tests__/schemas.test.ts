@@ -1,0 +1,526 @@
+// NovaNet Core - Schema Tests v7.0.0
+// TDD: Verify Zod schemas validate correctly
+
+import { describe, it, expect } from 'vitest';
+import {
+  LocaleSchema,
+  LocaleVoiceSchema,
+  ExpressionSchema,
+} from '../schemas/locale-knowledge.schema.js';
+import { RelationType } from '../schemas/relations.schema.js';
+
+describe('Locale Knowledge Schemas', () => {
+  describe('LocaleSchema', () => {
+    it('should validate valid locale data with all required fields', () => {
+      const validLocale = {
+        code: 'fr-FR',
+        language_code: 'fr',
+        country_code: 'FR',
+        name_english: 'French (France)',
+        name_native: 'Français (France)',
+        is_primary: true,
+        fallback_chain: ['en-US'],
+        created_at: new Date(),
+        updated_at: new Date(),
+      };
+
+      const result = LocaleSchema.safeParse(validLocale);
+      expect(result.success).toBe(true);
+    });
+
+    it('should reject invalid locale code format', () => {
+      const invalidLocale = {
+        code: 'invalid',  // Should be xx-XX format
+        language_code: 'fr',
+        country_code: 'FR',
+        name_english: 'French',
+        name_native: 'Français',
+        is_primary: true,
+        fallback_chain: [],
+        created_at: new Date(),
+        updated_at: new Date(),
+      };
+
+      const result = LocaleSchema.safeParse(invalidLocale);
+      expect(result.success).toBe(false);
+    });
+
+    it('should reject missing required fields', () => {
+      const incompleteLocale = {
+        code: 'fr-FR',
+        language_code: 'fr',
+        // Missing other required fields
+      };
+
+      const result = LocaleSchema.safeParse(incompleteLocale);
+      expect(result.success).toBe(false);
+    });
+  });
+
+  describe('LocaleVoiceSchema', () => {
+    it('should validate voice characteristics with flat structure', () => {
+      const voice = {
+        formality_score: 75,
+        default_formality: 'formal' as const,
+        default_pronoun: 'vous',
+        pronoun_rules: { b2b: 'vous' },
+        directness_score: 45,
+        directness_style: 'indirect' as const,
+        softening_patterns: { command: 'Pourriez-vous...' },
+        warmth_score: 60,
+        warmth_by_stage: { awareness: 50 },
+        humor_score: 50,
+        humor_types: { wordplay: 'occasional' },
+        avg_sentence_length: 20,
+        preferred_voice: 'active' as const,
+        rhythm_style: 'balanced',
+        punctuation_rules: { colon: 'space before' },
+        created_at: new Date(),
+        updated_at: new Date(),
+      };
+
+      const result = LocaleVoiceSchema.safeParse(voice);
+      expect(result.success).toBe(true);
+    });
+
+    it('should enforce formality score range 0-100', () => {
+      const invalidVoice = {
+        formality_score: 150, // Invalid: > 100
+        default_formality: 'formal',
+        default_pronoun: null,
+        pronoun_rules: {},
+        directness_score: 50,
+        directness_style: 'direct',
+        softening_patterns: {},
+        warmth_score: 50,
+        warmth_by_stage: {},
+        humor_score: 50,
+        humor_types: {},
+        avg_sentence_length: 15,
+        preferred_voice: 'active',
+        rhythm_style: 'balanced',
+        punctuation_rules: {},
+        created_at: new Date(),
+        updated_at: new Date(),
+      };
+
+      const result = LocaleVoiceSchema.safeParse(invalidVoice);
+      expect(result.success).toBe(false);
+    });
+  });
+
+  describe('ExpressionSchema', () => {
+    it('should validate expression with all required fields', () => {
+      const expression = {
+        semantic_field: 'success',
+        intention: 'encouragement',
+        text: "C'est parti !",
+        register: 'casual' as const,
+        context: 'CTA buttons, onboarding',
+        example_sentence: 'Votre QR code est prêt. C\'est parti !',
+        created_at: new Date(),
+        updated_at: new Date(),
+      };
+
+      const result = ExpressionSchema.safeParse(expression);
+      expect(result.success).toBe(true);
+    });
+
+    it('should enforce register enum values', () => {
+      const expression = {
+        semantic_field: 'success',
+        intention: 'encouragement',
+        text: "C'est parti !",
+        register: 'invalid', // Invalid: not formal/semi-formal/casual
+        context: 'CTA buttons',
+        example_sentence: 'Example',
+        created_at: new Date(),
+        updated_at: new Date(),
+      };
+
+      const result = ExpressionSchema.safeParse(expression);
+      expect(result.success).toBe(false);
+    });
+
+    it('should reject expression with missing text', () => {
+      const expression = {
+        semantic_field: 'success',
+        intention: 'encouragement',
+        register: 'casual',
+        context: 'CTA buttons',
+        example_sentence: 'Example',
+        created_at: new Date(),
+        updated_at: new Date(),
+        // Missing text field
+      };
+
+      const result = ExpressionSchema.safeParse(expression);
+      expect(result.success).toBe(false);
+    });
+  });
+});
+
+describe('Relation Registry', () => {
+  describe('RelationType enum', () => {
+    it('should have all v7.0.0 core relations', () => {
+      // Project root
+      expect(RelationType.HAS_CONCEPT).toBe('HAS_CONCEPT');
+      expect(RelationType.HAS_PAGE).toBe('HAS_PAGE');
+      expect(RelationType.SUPPORTS_LOCALE).toBe('SUPPORTS_LOCALE');
+
+      // Locale
+      expect(RelationType.FALLBACK_TO).toBe('FALLBACK_TO');
+      expect(RelationType.FOR_LOCALE).toBe('FOR_LOCALE');
+
+      // Locale Knowledge
+      expect(RelationType.HAS_IDENTITY).toBe('HAS_IDENTITY');
+      expect(RelationType.HAS_VOICE).toBe('HAS_VOICE');
+      expect(RelationType.HAS_CULTURE).toBe('HAS_CULTURE');
+      expect(RelationType.HAS_MARKET).toBe('HAS_MARKET');
+      expect(RelationType.HAS_LEXICON).toBe('HAS_LEXICON');
+
+      // v7.0.0 unified relations
+      expect(RelationType.HAS_L10N).toBe('HAS_L10N');
+      expect(RelationType.HAS_OUTPUT).toBe('HAS_OUTPUT');
+      expect(RelationType.USES_CONCEPT).toBe('USES_CONCEPT');
+
+      // SEO/GEO
+      expect(RelationType.TARGETS_SEO).toBe('TARGETS_SEO');
+      expect(RelationType.TARGETS_GEO).toBe('TARGETS_GEO');
+    });
+
+    it('should use UPPER_SNAKE_CASE naming convention', () => {
+      const relations = Object.keys(RelationType);
+
+      relations.forEach((rel) => {
+        expect(rel).toMatch(/^[A-Z][A-Z0-9_]*$/);
+      });
+    });
+
+    it('should have mining relations prefixed consistently', () => {
+      expect(RelationType.SEO_MINES).toBe('SEO_MINES');
+      expect(RelationType.GEO_MINES).toBe('GEO_MINES');
+      // REMOVED v7.8.4: SEO_DISCOVERED_BY (SEOVariation deleted)
+      // REMOVED v7.8.4: GEO_DISCOVERED_BY (GEOReformulation deleted)
+    });
+
+    it('should have provenance relations', () => {
+      expect(RelationType.INFLUENCED_BY).toBe('INFLUENCED_BY');
+      // REMOVED v7.9.0: USED_SEO_KEYWORD, USED_GEO_SEED (SEO/GEO is at ConceptL10n level)
+      expect(RelationType.GENERATED_FROM).toBe('GENERATED_FROM');
+    });
+  });
+
+  describe('Relation Naming Conventions', () => {
+    it('should use HAS_* for ownership/composition', () => {
+      const hasRelations = Object.keys(RelationType).filter((r) => r.startsWith('HAS_'));
+
+      expect(hasRelations).toContain('HAS_CONCEPT');
+      expect(hasRelations).toContain('HAS_PAGE');
+      expect(hasRelations).toContain('HAS_BLOCK');
+      expect(hasRelations).toContain('HAS_L10N');
+      expect(hasRelations).toContain('HAS_OUTPUT');
+      expect(hasRelations).toContain('HAS_IDENTITY');
+      expect(hasRelations).toContain('HAS_VOICE');
+      expect(hasRelations.length).toBeGreaterThan(10);
+    });
+
+    it('should use TARGETS_* for targeting relations', () => {
+      const targetsRelations = Object.keys(RelationType).filter((r) => r.startsWith('TARGETS_'));
+
+      expect(targetsRelations).toContain('TARGETS_SEO');
+      expect(targetsRelations).toContain('TARGETS_GEO');
+    });
+
+    it('should use *_MINES for mining job relations', () => {
+      const minesRelations = Object.keys(RelationType).filter((r) => r.endsWith('_MINES'));
+
+      expect(minesRelations).toContain('SEO_MINES');
+      expect(minesRelations).toContain('GEO_MINES');
+    });
+
+    it('should not have inconsistent verb tenses', () => {
+      const relations = Object.keys(RelationType);
+
+      // Check for mixed tenses (e.g., USES vs USED)
+      const usesVariants = relations.filter((r) => r.includes('USE'));
+      // USES_CONCEPT is active (v7.9.0: USED_SEO_KEYWORD/USED_GEO_SEED removed)
+      expect(usesVariants).toContain('USES_CONCEPT');
+    });
+  });
+});
+
+describe('Relation Naming Conventions', () => {
+  it('should use HAS_* for ownership/composition', () => {
+    const hasRelations = Object.keys(RelationType).filter((r) => r.startsWith('HAS_'));
+
+    expect(hasRelations).toContain('HAS_CONCEPT');
+    expect(hasRelations).toContain('HAS_PAGE');
+    expect(hasRelations).toContain('HAS_BLOCK');
+    expect(hasRelations).toContain('HAS_L10N');
+    expect(hasRelations).toContain('HAS_OUTPUT');
+    expect(hasRelations).toContain('HAS_IDENTITY');
+    expect(hasRelations).toContain('HAS_VOICE');
+  });
+
+  it('should use TARGETS_* for targeting relations', () => {
+    const targetsRelations = Object.keys(RelationType).filter((r) => r.startsWith('TARGETS_'));
+
+    expect(targetsRelations).toContain('TARGETS_SEO');
+    expect(targetsRelations).toContain('TARGETS_GEO');
+  });
+
+  it('should use *_MINES for mining job relations', () => {
+    expect(RelationType.SEO_MINES).toBe('SEO_MINES');
+    expect(RelationType.GEO_MINES).toBe('GEO_MINES');
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// PROMPT SCHEMAS (v7.2.0)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+import { PagePromptSchema, BlockPromptSchema, BlockRulesSchema } from '../schemas/prompts.schema.js';
+
+describe('Prompt Schemas (v7.2.0)', () => {
+  describe('PagePromptSchema', () => {
+    it('validates valid PagePrompt', () => {
+      const valid = {
+        display_name: 'Pricing Page Prompt v1.0',
+        icon: '📝',
+        description: 'Instructions for pricing page generation',
+        llm_context: 'USE: orchestration. TRIGGERS: page. NOT: blocks.',
+        priority: 'high',
+        freshness: 'static',
+        prompt: '[GENERATE] Create conversion-focused pricing page',
+        version: '1.0',
+        active: true,
+        created_at: new Date(),
+        updated_at: new Date(),
+      };
+      expect(PagePromptSchema.parse(valid)).toBeDefined();
+    });
+
+    it('rejects empty prompt', () => {
+      const invalid = {
+        display_name: 'Test',
+        icon: '📝',
+        description: 'Test',
+        llm_context: 'USE: x. TRIGGERS: y. NOT: z.',
+        priority: 'high',
+        freshness: 'static',
+        prompt: '',
+        version: '1.0',
+        active: true,
+        created_at: new Date(),
+        updated_at: new Date(),
+      };
+      expect(() => PagePromptSchema.parse(invalid)).toThrow();
+    });
+
+    it('rejects invalid llm_context format', () => {
+      const invalid = {
+        display_name: 'Test',
+        icon: '📝',
+        description: 'Test',
+        llm_context: 'Invalid format without USE/TRIGGERS/NOT',
+        priority: 'high',
+        freshness: 'static',
+        prompt: '[GENERATE] Test',
+        version: '1.0',
+        active: true,
+        created_at: new Date(),
+        updated_at: new Date(),
+      };
+      expect(() => PagePromptSchema.parse(invalid)).toThrow();
+    });
+
+    it('rejects invalid version format', () => {
+      const invalid = {
+        display_name: 'Test',
+        icon: '📝',
+        description: 'Test',
+        llm_context: 'USE: x. TRIGGERS: y. NOT: z.',
+        priority: 'high',
+        freshness: 'static',
+        prompt: '[GENERATE] Test',
+        version: 'invalid-version',
+        active: true,
+        created_at: new Date(),
+        updated_at: new Date(),
+      };
+      expect(() => PagePromptSchema.parse(invalid)).toThrow();
+    });
+
+    it('accepts valid semver versions', () => {
+      const validVersions = ['1.0', '1.1.0', '2.0', '10.20.30'];
+      validVersions.forEach((version) => {
+        const valid = {
+          display_name: 'Test',
+          icon: '📝',
+          description: 'Test',
+          llm_context: 'USE: x. TRIGGERS: y. NOT: z.',
+          priority: 'high',
+          freshness: 'static',
+          prompt: '[GENERATE] Test',
+          version,
+          active: true,
+          created_at: new Date(),
+          updated_at: new Date(),
+        };
+        expect(PagePromptSchema.parse(valid)).toBeDefined();
+      });
+    });
+  });
+
+  describe('BlockPromptSchema', () => {
+    it('validates valid BlockPrompt', () => {
+      const valid = {
+        display_name: 'Hero Prompt v1.0',
+        icon: '📝',
+        description: 'Instructions for hero generation',
+        llm_context: 'USE: hero. TRIGGERS: block. NOT: other.',
+        priority: 'high',
+        freshness: 'static',
+        prompt: '[GENERATE] Hero highlighting @tier-pro',
+        version: '1.0',
+        active: true,
+        created_at: new Date(),
+        updated_at: new Date(),
+      };
+      expect(BlockPromptSchema.parse(valid)).toBeDefined();
+    });
+
+    it('rejects empty prompt', () => {
+      const invalid = {
+        display_name: 'Test',
+        icon: '📝',
+        description: 'Test',
+        llm_context: 'USE: x. TRIGGERS: y. NOT: z.',
+        priority: 'high',
+        freshness: 'static',
+        prompt: '',
+        version: '1.0',
+        active: true,
+        created_at: new Date(),
+        updated_at: new Date(),
+      };
+      expect(() => BlockPromptSchema.parse(invalid)).toThrow();
+    });
+  });
+
+  describe('BlockRulesSchema', () => {
+    it('validates valid BlockRules', () => {
+      const valid = {
+        display_name: 'Hero Rules v1.0',
+        icon: '📏',
+        description: 'Generation rules for hero',
+        llm_context: 'USE: rules. TRIGGERS: hero. NOT: other.',
+        priority: 'high',
+        freshness: 'static',
+        rules: 'Title: action verb. Subtitle: value prop.',
+        version: '1.0',
+        active: true,
+        created_at: new Date(),
+        updated_at: new Date(),
+      };
+      expect(BlockRulesSchema.parse(valid)).toBeDefined();
+    });
+
+    it('rejects empty rules', () => {
+      const invalid = {
+        display_name: 'Test',
+        icon: '📏',
+        description: 'Test',
+        llm_context: 'USE: x. TRIGGERS: y. NOT: z.',
+        priority: 'high',
+        freshness: 'static',
+        rules: '',
+        version: '1.0',
+        active: true,
+        created_at: new Date(),
+        updated_at: new Date(),
+      };
+      expect(() => BlockRulesSchema.parse(invalid)).toThrow();
+    });
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// RELATIONS v7.2.0 - Prompt relations
+// ═══════════════════════════════════════════════════════════════════════════════
+
+import { RelationRegistry } from '../schemas/relations.schema.js';
+
+describe('Relations v7.2.0', () => {
+  describe('HAS_PROMPT relation', () => {
+    it('exists in RelationType and RelationRegistry', () => {
+      expect(RelationType.HAS_PROMPT).toBe('HAS_PROMPT');
+      expect(RelationRegistry[RelationType.HAS_PROMPT]).toBeDefined();
+    });
+
+    it('links Page and Block to PagePrompt and BlockPrompt', () => {
+      const rel = RelationRegistry[RelationType.HAS_PROMPT];
+      expect(rel.from).toContain('Page');
+      expect(rel.from).toContain('Block');
+      expect(rel.to).toContain('PagePrompt');
+      expect(rel.to).toContain('BlockPrompt');
+    });
+
+    it('has 1:N cardinality for versioning', () => {
+      const rel = RelationRegistry[RelationType.HAS_PROMPT];
+      expect(rel.cardinality).toBe('1:N');
+    });
+  });
+
+  describe('HAS_RULES relation', () => {
+    it('exists in RelationType and RelationRegistry', () => {
+      expect(RelationType.HAS_RULES).toBe('HAS_RULES');
+      expect(RelationRegistry[RelationType.HAS_RULES]).toBeDefined();
+    });
+
+    it('links BlockType to BlockRules', () => {
+      const rel = RelationRegistry[RelationType.HAS_RULES];
+      expect(rel.from).toBe('BlockType');
+      expect(rel.to).toBe('BlockRules');
+    });
+
+    it('has 1:N cardinality for versioning', () => {
+      const rel = RelationRegistry[RelationType.HAS_RULES];
+      expect(rel.cardinality).toBe('1:N');
+    });
+  });
+
+  describe('GENERATED relation', () => {
+    it('exists in RelationType and RelationRegistry', () => {
+      expect(RelationType.GENERATED).toBe('GENERATED');
+      expect(RelationRegistry[RelationType.GENERATED]).toBeDefined();
+    });
+
+    it('links PagePrompt/BlockPrompt to PageL10n/BlockL10n', () => {
+      const rel = RelationRegistry[RelationType.GENERATED];
+      expect(rel.from).toContain('PagePrompt');
+      expect(rel.from).toContain('BlockPrompt');
+      expect(rel.to).toContain('PageL10n');
+      expect(rel.to).toContain('BlockL10n');
+    });
+
+    it('has N:M cardinality for provenance', () => {
+      const rel = RelationRegistry[RelationType.GENERATED];
+      expect(rel.cardinality).toBe('N:M');
+    });
+
+    it('has generated_at property for timestamp', () => {
+      const rel = RelationRegistry[RelationType.GENERATED];
+      expect(rel.props).toBeDefined();
+    });
+  });
+
+  describe('Naming conventions', () => {
+    it('should include HAS_PROMPT in HAS_* relations', () => {
+      const hasRelations = Object.keys(RelationType).filter((r) => r.startsWith('HAS_'));
+      expect(hasRelations).toContain('HAS_PROMPT');
+      expect(hasRelations).toContain('HAS_RULES');
+    });
+  });
+});

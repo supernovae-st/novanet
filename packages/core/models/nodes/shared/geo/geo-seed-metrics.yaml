@@ -1,0 +1,138 @@
+# models/nodes/geo/geo-seed-metrics.yaml
+# GEOSeedMetrics - Citation/visibility observation for a GEO seed (v7.8.5)
+#
+# v7.8.5: Renamed from GEOCitation for unified metrics pattern
+# - Relation: HAS_METRICS (unified with PageMetrics, SEOKeywordMetrics)
+# - Timestamp: observed_at (standardized)
+
+node:
+  name: GEOSeedMetrics
+  category: geo
+  icon: "📑"
+  description: "Citation/visibility observation from AI engine responses"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # STANDARD PROPERTIES (v7.1.0)
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  standard_properties:
+    key:
+      type: string
+      required: true
+      description: "Unique identifier"
+      example: "geometrics-comment-creer-qr-perplexity-2024-01-15"
+
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable name"
+      example: "Perplexity - Comment créer QR - 2024-01-15"
+
+
+    description:
+      type: string
+      required: false
+      description: "Short description"
+
+    llm_context:
+      type: string
+      required: false
+      description: "LLM generation hints (not used in spreading activation)"
+
+
+
+    created_at:
+      type: datetime
+      required: false
+
+    updated_at:
+      type: datetime
+      required: false
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # NODE-SPECIFIC PROPERTIES
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  properties:
+    observed_at:
+      type: datetime
+      required: true
+      description: "When this observation was made"
+      example: "2024-01-15T10:30:00Z"
+
+    platform:
+      type: string
+      required: true
+      description: "AI platform: chatgpt | perplexity | gemini | copilot | claude"
+      example: "perplexity"
+
+    cited:
+      type: boolean
+      required: true
+      description: "Whether we were cited in the response"
+      example: true
+
+    position:
+      type: int
+      required: false
+      description: "Position in response citations (1 = first)"
+      example: 1
+
+    sentiment:
+      type: string
+      required: false
+      description: "Sentiment of citation: positive | neutral | negative"
+      example: "positive"
+
+    url:
+      type: string
+      required: false
+      description: "Cited URL"
+      example: "https://qrcode-ai.com/pricing"
+
+    snippet:
+      type: string
+      required: false
+      description: "Citation snippet from AI response"
+      example: "According to QR Code AI, the best way to..."
+
+    competitors:
+      type: string
+      required: false
+      description: "Competitors cited in same response (comma-separated)"
+      example: "qr-code-generator.com, qrcode-monkey.com"
+
+    model:
+      type: string
+      required: false
+      description: "AI model version"
+      example: "gpt-4-turbo"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # RELATIONS
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  relations: []
+  # Incoming: GEOSeedL10n -[:HAS_METRICS]-> GEOSeedMetrics
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # SPREADING ACTIVATION NOTE
+  # ═══════════════════════════════════════════════════════════════════════════════
+  #
+  # HAS_METRICS is an AUXILIARY relation (not semantic).
+  # It is EXCLUDED from spreading activation and LLM context retrieval.
+  # Metrics are queried directly for analytics, not discovered via traversal.
+  #
+  # See relations.yaml for semantic vs auxiliary relation classification.
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # EXAMPLE
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  example:
+    description: "Get citation history by platform"
+    cypher: |
+      MATCH (gs:GEOSeedL10n)-[:HAS_METRICS]->(m:GEOSeedMetrics)
+      WHERE m.platform = $platform
+      RETURN gs.value AS query, m.cited, m.position, m.observed_at
+      ORDER BY m.observed_at DESC

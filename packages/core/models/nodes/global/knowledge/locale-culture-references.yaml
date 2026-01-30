@@ -1,0 +1,205 @@
+# models/nodes/locale/locale-culture-references.yaml
+# LocaleCultureReferences - WHICH concrete references to use (food, sports, places)
+#
+# Stability: Low-Medium - Update biannually for pop culture, annually for brands/places.
+
+node:
+  name: LocaleCultureReferences
+  category: locale
+  icon: "🎯"
+  description: "Concrete cultural references for content adaptation"
+
+  # ===========================================================================
+  # STANDARD PROPERTIES (no key - relation-identified) v7.1.0
+  # ===========================================================================
+
+  standard_properties:
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable name"
+      example: "French (France) Culture References"
+
+    description:
+      type: string
+      required: true
+      description: "Short description"
+      example: "Concrete cultural references for fr-FR content"
+
+    llm_context:
+      type: string
+      required: true
+      description: "LLM generation hints. Format: USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]."
+      example: "USE: when replacing ILLUSTRATIONS. TRIGGERS: example, metaphor, reference, food, sports. NOT: values/taboos."
+
+
+
+    created_at:
+      type: datetime
+      required: true
+      description: "Creation timestamp"
+
+    updated_at:
+      type: datetime
+      required: true
+      description: "Last update timestamp"
+
+  # ===========================================================================
+  # LOCALECULTUREREFERENCES-SPECIFIC PROPERTIES
+  # ===========================================================================
+
+  properties:
+    # Food & Cuisine
+    emblematic_dishes:
+      type: json
+      required: false
+      description: "Nationally recognized dishes"
+      example:
+        - dish: "Baguette"
+          recognition: 0.99
+          usage_context: "Quotidien, tout contexte"
+          symbolism: "Tradition, simplicite"
+        - dish: "Croissant"
+          recognition: 0.98
+          usage_context: "Petit-dejeuner, plaisir"
+          symbolism: "Raffinement, douceur de vivre"
+
+    food_metaphors:
+      type: json
+      required: false
+      description: "Food-based idiomatic expressions"
+      example:
+        - concept: "Easy as..."
+          local_reference: "Simple comme bonjour"
+          example_usage: "C'est simple comme bonjour a configurer"
+
+    # Sports
+    major_sports:
+      type: json
+      required: false
+      description: "Popular sports and their cultural weight"
+      example:
+        - sport: "Football"
+          recognition: 0.95
+          safe_references: ["Coupe du monde", "Ligue 1"]
+        - sport: "Rugby"
+          recognition: 0.75
+          regional_strength: ["Sud-Ouest"]
+
+    sports_metaphors:
+      type: json
+      required: false
+      description: "Sports-based idiomatic expressions"
+      example:
+        - concept: "Working together"
+          local_reference: "Jouer collectif"
+          example_usage: "On joue collectif pour ce projet"
+
+    # Geography & Places
+    landmark_cities:
+      type: json
+      required: false
+      description: "Nationally recognized cities"
+      example:
+        - city: "Paris"
+          recognition: 0.99
+          associations: ["elegance", "culture", "business"]
+        - city: "Lyon"
+          recognition: 0.85
+          associations: ["gastronomie", "innovation"]
+
+    landmark_places:
+      type: json
+      required: false
+      description: "Famous landmarks"
+      example:
+        - place: "Tour Eiffel"
+          recognition: 0.99
+          usage: "Universal French symbol"
+
+    # Entertainment
+    entertainment_references:
+      type: json
+      required: false
+      description: "Safe entertainment references"
+      example:
+        - type: "Cinema"
+          safe_references: ["comedies francaises", "Cesar"]
+        - type: "Music"
+          safe_references: ["variete francaise", "festivals"]
+
+    # Celebrities (high-recognition, non-controversial)
+    safe_celebrities:
+      type: json
+      required: false
+      description: "Non-controversial public figures"
+      example:
+        - name: "Thomas Pesquet"
+          domain: "Science/Space"
+          recognition: 0.90
+          safe_for: ["all contexts"]
+
+    celebrities_to_avoid:
+      type: json
+      required: false
+      description: "Public figures to avoid referencing"
+      example:
+        - category: "Politicians"
+          reason: "Polarizing, stay neutral"
+
+    # Calendar & Events
+    national_holidays:
+      type: json
+      required: false
+      description: "National holidays and events"
+      example:
+        - holiday: "14 juillet"
+          name: "Fete nationale"
+          sentiment: "Pride, celebration"
+        - holiday: "11 novembre"
+          name: "Armistice"
+          sentiment: "Solemn, respectful"
+
+    commercial_events:
+      type: json
+      required: false
+      description: "Commercial calendar events"
+      example:
+        - event: "French Days"
+          timing: "September"
+          equivalent_to: "Prime Day"
+        - event: "Soldes"
+          timing: "January, June"
+          notes: "Legally regulated dates"
+
+    # Brands & Companies
+    trusted_brands:
+      type: json
+      required: false
+      description: "Locally trusted brands by category"
+      example:
+        - category: "Retail"
+          brands: ["Decathlon", "Fnac", "Carrefour"]
+        - category: "Tech"
+          brands: ["OVH", "Dassault", "BlaBlaCar"]
+
+    brand_comparisons:
+      type: json
+      required: false
+      description: "How to reference competitor equivalents"
+      example:
+        - global: "Amazon"
+          local_comparison: "Cdiscount, Fnac.com"
+        - global: "Uber"
+          local_comparison: "BlaBlaCar (for ridesharing)"
+
+  # ===========================================================================
+  # RELATIONS
+  # ===========================================================================
+
+  relations:
+    incoming:
+      - type: HAS_CULTURE_REFERENCES
+        from: LocaleCulture
+        cardinality: "1:1"
+        description: "Culture node has exactly one set of references"
