@@ -80,16 +80,14 @@ export function NodeDetailsPanel({ node }: NodeDetailsPanelProps) {
   const colors = getCategoryColors(config.category);
 
   // Build all properties in JSON order
+  // Note: icon, priority, freshness removed in v8.2.0 (YAML v7.11.0 alignment)
   const mainProps = [
     { key: 'id', value: node.id },
     { key: 'type', value: node.type },
     { key: 'key', value: node.key },
     { key: 'displayName', value: node.displayName },
-    { key: 'icon', value: node.icon },
     { key: 'description', value: node.description },
     { key: 'llmContext', value: node.llmContext },
-    { key: 'priority', value: node.priority },
-    { key: 'freshness', value: node.freshness },
     { key: 'createdAt', value: node.createdAt },
     { key: 'updatedAt', value: node.updatedAt },
   ].filter((p) => p.value !== undefined);

@@ -231,19 +231,15 @@ export function transformNode(node: Neo4jNode): GraphNode {
     type,
     key,
     displayName,
-    icon: props.icon?.toString(),
     description: props.description?.toString(),
     llmContext: props.llm_context?.toString(),
-    // Context management (v7.1.0)
-    priority: props.priority as GraphNode['priority'],
-    freshness: props.freshness as GraphNode['freshness'],
     createdAt: props.created_at?.toString(),
     updatedAt: props.updated_at?.toString(),
     // Include all other properties in a generic data field
     data: Object.fromEntries(
       Object.entries(props).filter(
         ([k]) =>
-          !['key', 'display_name', 'name', 'label', 'icon', 'description', 'llm_context', 'priority', 'freshness', 'created_at', 'updated_at'].includes(k)
+          !['key', 'display_name', 'name', 'label', 'description', 'llm_context', 'created_at', 'updated_at'].includes(k)
       )
     ),
   };
