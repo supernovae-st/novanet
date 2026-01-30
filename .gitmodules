@@ -1,0 +1,12 @@
+[submodule "packages/core"]
+	path = packages/core
+	url = git@github.com:supernovae-st/novanet-core.git
+[submodule "packages/db"]
+	path = packages/db
+	url = git@github.com:supernovae-st/novanet-db.git
+[submodule "packages/cli"]
+	path = packages/cli
+	url = git@github.com:supernovae-st/novanet-cli.git
+[submodule "apps/studio"]
+	path = apps/studio
+	url = git@github.com:supernovae-st/novanet-studio.git
