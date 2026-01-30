@@ -121,3 +121,33 @@ pnpm dev    # → http://localhost:3000
 | **Naming** | `novanet` (packages), `NovaNet` (classes/types) |
 | **Formatting** | 2 spaces, 100 chars, single quotes, semicolons |
 | **Commits** | Conventional Commits |
+
+---
+
+## Claude Code DX
+
+See `.claude/README.md` for full documentation.
+
+### Key Commands
+
+| Command | Description |
+|---------|-------------|
+| `/novanet-arch` | Architecture diagrams (ASCII) |
+| `/novanet-sync` | Schema validation/regeneration |
+| `/schema:add-node <name>` | Add new node type |
+| `/schema:edit-node <name>` | Modify existing node |
+| `/schema:add-relation <REL>` | Add new relationship |
+
+### Schema Management Workflow
+
+```
+1. /schema:add-node MyNode     # Socratic discovery
+   ↓
+2. YAML created                # packages/core/models/nodes/.../my-node.yaml
+   ↓
+3. pnpm schema:generate        # Regenerate TypeScript + Mermaid
+   ↓
+4. pnpm schema:validate        # Validate sync
+   ↓
+5. pnpm infra:seed             # Update Neo4j
+```
