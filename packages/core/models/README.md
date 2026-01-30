@@ -1,4 +1,4 @@
-# NovaNet Models v8.0.0
+# 🪽 NovaNet Models v8.1.0
 
 YAML schema definitions for Neo4j graph database.
 
@@ -46,13 +46,14 @@ NovaNet uses a **3-layer scope architecture**:
 | **DERIVED** | ⚪ | Inherits locale from parent | SEOKeywordMetrics, GEOSeedMetrics |
 | **JOB** | ⚙️ | Background jobs, no locale | SEOMiningRun, GEOMiningRun |
 
-## Nomenclature v8.0.0
+## Nomenclature v8.1.0
 
 ```
 *L10n suffix    = ALL localized content (human OR LLM generated)
 :HAS_L10N       = human-curated content (ConceptL10n, ProjectL10n)
 :HAS_OUTPUT     = LLM-generated content (PageL10n, BlockL10n)
 Locale*         = Locale Knowledge nodes (LocaleVoice, LocaleCulture, etc.)
+*Metrics        = Time-series observations (SEOKeywordMetrics, GEOSeedMetrics)
 ```
 
 ## Core Pattern: Invariant -> Localized
