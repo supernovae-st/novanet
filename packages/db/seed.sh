@@ -6,11 +6,12 @@
 #   1. Start Neo4j: pnpm infra:up
 #   2. Run seed:    pnpm infra:seed
 
-set -e
+set -euo pipefail
 
-NEO4J_USER="neo4j"
-NEO4J_PASSWORD="novanetpassword"
-CONTAINER="novanet-neo4j"
+# SECURITY: Use environment variables with defaults for dev only
+NEO4J_USER="${NEO4J_USER:-neo4j}"
+NEO4J_PASSWORD="${NEO4J_PASSWORD:-novanetpassword}"
+CONTAINER="${CONTAINER:-novanet-neo4j}"
 SEED_DIR="$(dirname "$0")/seed"
 
 # Couleurs
@@ -37,7 +38,7 @@ echo ""
 echo -e "${YELLOW}[2/3] Attente que Neo4j soit prêt...${NC}"
 MAX_ATTEMPTS=30
 ATTEMPT=0
-while ! docker exec $CONTAINER cypher-shell -u $NEO4J_USER -p $NEO4J_PASSWORD "RETURN 1" > /dev/null 2>&1; do
+while ! docker exec "${CONTAINER}" cypher-shell -u "${NEO4J_USER}" -p "${NEO4J_PASSWORD}" "RETURN 1" > /dev/null 2>&1; do
     ATTEMPT=$((ATTEMPT + 1))
     if [ $ATTEMPT -ge $MAX_ATTEMPTS ]; then
         echo -e "${RED}✗ Neo4j n'est pas prêt après ${MAX_ATTEMPTS} tentatives${NC}"
@@ -53,17 +54,18 @@ echo ""
 echo -e "${YELLOW}[3/3] Exécution du seed...${NC}"
 echo ""
 
-for file in $(ls -1 "$SEED_DIR"/*.cypher | sort); do
+for file in "$SEED_DIR"/*.cypher; do
+    [ -f "$file" ] || continue
     filename=$(basename "$file")
     echo -e "  ${YELLOW}→ $filename${NC}"
 
-    if cat "$file" | docker exec -i $CONTAINER cypher-shell -u $NEO4J_USER -p $NEO4J_PASSWORD > /dev/null 2>&1; then
+    if docker exec -i "${CONTAINER}" cypher-shell -u "${NEO4J_USER}" -p "${NEO4J_PASSWORD}" < "$file" > /dev/null 2>&1; then
         echo -e "    ${GREEN}✓ OK${NC}"
     else
         echo -e "    ${RED}✗ Erreur${NC}"
         echo ""
         echo "Détails de l'erreur:"
-        cat "$file" | docker exec -i $CONTAINER cypher-shell -u $NEO4J_USER -p $NEO4J_PASSWORD
+        docker exec -i "${CONTAINER}" cypher-shell -u "${NEO4J_USER}" -p "${NEO4J_PASSWORD}" < "$file"
         exit 1
     fi
 done
@@ -72,25 +74,30 @@ echo ""
 
 # Exécuter les migrations (si présentes)
 MIGRATION_DIR="$(dirname "$0")/migrations"
-if [ -d "$MIGRATION_DIR" ] && [ "$(ls -A "$MIGRATION_DIR"/*.cypher 2>/dev/null)" ]; then
-    echo -e "${YELLOW}[4/4] Exécution des migrations...${NC}"
-    echo ""
+if [ -d "$MIGRATION_DIR" ]; then
+    shopt -s nullglob
+    migration_files=("$MIGRATION_DIR"/*.cypher)
+    shopt -u nullglob
+    if [ ${#migration_files[@]} -gt 0 ]; then
+        echo -e "${YELLOW}[4/4] Exécution des migrations...${NC}"
+        echo ""
 
-    for file in $(ls -1 "$MIGRATION_DIR"/*.cypher | sort); do
-        filename=$(basename "$file")
-        echo -e "  ${YELLOW}→ $filename${NC}"
+        for file in "${migration_files[@]}"; do
+            filename=$(basename "$file")
+            echo -e "  ${YELLOW}→ $filename${NC}"
 
-        if cat "$file" | docker exec -i $CONTAINER cypher-shell -u $NEO4J_USER -p $NEO4J_PASSWORD > /dev/null 2>&1; then
-            echo -e "    ${GREEN}✓ OK${NC}"
-        else
-            echo -e "    ${RED}✗ Erreur${NC}"
-            echo ""
-            echo "Détails de l'erreur:"
-            cat "$file" | docker exec -i $CONTAINER cypher-shell -u $NEO4J_USER -p $NEO4J_PASSWORD
-            exit 1
-        fi
-    done
-    echo ""
+            if docker exec -i "${CONTAINER}" cypher-shell -u "${NEO4J_USER}" -p "${NEO4J_PASSWORD}" < "$file" > /dev/null 2>&1; then
+                echo -e "    ${GREEN}✓ OK${NC}"
+            else
+                echo -e "    ${RED}✗ Erreur${NC}"
+                echo ""
+                echo "Détails de l'erreur:"
+                docker exec -i "${CONTAINER}" cypher-shell -u "${NEO4J_USER}" -p "${NEO4J_PASSWORD}" < "$file"
+                exit 1
+            fi
+        done
+        echo ""
+    fi
 fi
 
 echo -e "${GREEN}═══════════════════════════════════════════════════════════════${NC}"
@@ -98,10 +105,10 @@ echo -e "${GREEN}  ✓ Seed terminé avec succès !${NC}"
 echo -e "${GREEN}═══════════════════════════════════════════════════════════════${NC}"
 echo ""
 echo "Ouvrir Neo4j Browser: http://localhost:7474"
-echo "Credentials: neo4j / novanetpassword"
+echo "Credentials: \$NEO4J_USER / \$NEO4J_PASSWORD (see environment)"
 echo ""
 
 # Stats rapides
 echo -e "${YELLOW}Stats:${NC}"
-docker exec $CONTAINER cypher-shell -u $NEO4J_USER -p $NEO4J_PASSWORD \
+docker exec "${CONTAINER}" cypher-shell -u "${NEO4J_USER}" -p "${NEO4J_PASSWORD}" \
     "MATCH (n) RETURN labels(n)[0] AS label, count(*) AS count ORDER BY count DESC" 2>/dev/null | tail -n +2
