@@ -1,0 +1,73 @@
+'use client';
+
+/**
+ * ModalHeader - Unified modal header component
+ *
+ * Design: Linear-dark style with icon + title + close button
+ * Extracted from KeyboardShortcuts, CypherEditModal, QuerySidebar
+ */
+
+import { memo, type ReactNode } from 'react';
+import { X } from 'lucide-react';
+import { cn } from '@/lib/utils';
+
+export interface ModalHeaderProps {
+  /** Title text */
+  title: string;
+  /** Optional subtitle/description */
+  subtitle?: string;
+  /** Icon element (component instance, not component type) */
+  icon?: ReactNode;
+  /** Callback when close button is clicked */
+  onClose: () => void;
+  /** Additional className for the container */
+  className?: string;
+  /** Whether to show border bottom (default: true) */
+  showBorder?: boolean;
+}
+
+export const ModalHeader = memo(function ModalHeader({
+  title,
+  subtitle,
+  icon,
+  onClose,
+  className,
+  showBorder = true,
+}: ModalHeaderProps) {
+  return (
+    <div
+      className={cn(
+        'flex items-center justify-between px-5 py-4',
+        showBorder && 'border-b border-white/[0.08]',
+        className
+      )}
+    >
+      <div className="flex items-center gap-3">
+        {icon && (
+          <div className="w-9 h-9 rounded-xl bg-white/[0.06] border border-white/[0.08] flex items-center justify-center text-white/60">
+            {icon}
+          </div>
+        )}
+        <div>
+          <h2 className="text-base font-semibold text-white">{title}</h2>
+          {subtitle && (
+            <p className="text-xs text-white/40 mt-0.5">{subtitle}</p>
+          )}
+        </div>
+      </div>
+
+      <button
+        onClick={onClose}
+        aria-label="Close"
+        className={cn(
+          'p-2 rounded-lg transition-all duration-150',
+          'text-white/40 hover:text-white/80',
+          'hover:bg-white/[0.06] active:bg-white/[0.08]',
+          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20'
+        )}
+      >
+        <X className="w-5 h-5" />
+      </button>
+    </div>
+  );
+});

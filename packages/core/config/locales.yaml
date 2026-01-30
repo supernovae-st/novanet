@@ -1,0 +1,606 @@
+# Supported Locales Registry
+# 200 BCP 47 locale codes
+# Source: ath-know-l10n/outputs/localization-data/
+# Last updated: 2026-01-22
+
+version: "1.0"
+total_count: 200
+
+# Grouped by language code (ISO 639-1)
+by_language:
+  af: [af-ZA]
+  ar: [ar-AE, ar-BH, ar-DZ, ar-EG, ar-IQ, ar-JO, ar-KW, ar-LB, ar-LY, ar-MA, ar-OM, ar-QA, ar-SA, ar-TN]
+  as: [as-IN]
+  az: [az-AZ]
+  be: [be-BY]
+  bg: [bg-BG]
+  bn: [bn-BD, bn-IN]
+  bs: [bs-BA]
+  ca: [ca-AD, ca-ES]
+  ceb: [ceb-PH]
+  cs: [cs-CZ]
+  cy: [cy-GB]
+  da: [da-DK]
+  de: [de-AT, de-CH, de-DE, de-LU]
+  el: [el-CY, el-GR]
+  en: [en-AE, en-AU, en-BB, en-BW, en-CA, en-CY, en-FJ, en-GB, en-GH, en-HK, en-IE, en-IN, en-JM, en-KE, en-KY, en-MU, en-MY, en-NG, en-NZ, en-PH, en-PK, en-SA, en-SG, en-TT, en-TZ, en-UG, en-US, en-VN, en-ZA, en-ZM, en-ZW]
+  es: [es-AR, es-BO, es-CL, es-CO, es-CR, es-CU, es-DO, es-EC, es-ES, es-GT, es-HN, es-MX, es-NI, es-PA, es-PE, es-PR, es-PY, es-SV, es-UY, es-VE]
+  et: [et-EE]
+  eu: [eu-ES]
+  fa: [fa-IR]
+  fi: [fi-FI]
+  fr: [fr-BE, fr-BF, fr-CA, fr-CD, fr-CH, fr-CI, fr-CM, fr-DZ, fr-FR, fr-LU, fr-MA, fr-MG, fr-RW, fr-SN, fr-TN]
+  ga: [ga-IE]
+  gl: [gl-ES]
+  gn: [gn-PY]
+  gu: [gu-IN]
+  ha: [ha-NG]
+  he: [he-IL]
+  hi: [hi-IN]
+  hr: [hr-HR]
+  ht: [ht-HT]
+  hu: [hu-HU]
+  hy: [hy-AM]
+  id: [id-ID]
+  ig: [ig-NG]
+  is: [is-IS]
+  it: [it-CH, it-IT]
+  ja: [ja-JP]
+  jv: [jv-ID]
+  ka: [ka-GE]
+  kk: [kk-KZ]
+  km: [km-KH]
+  kn: [kn-IN]
+  ko: [ko-KR]
+  ku: [ku-TR]
+  ky: [ky-KG]
+  ln: [ln-CD]
+  lt: [lt-LT]
+  lv: [lv-LV]
+  mg: [mg-MG]
+  mi: [mi-NZ]
+  mk: [mk-MK]
+  ml: [ml-IN]
+  mn: [mn-MN]
+  mr: [mr-IN]
+  ms: [ms-BN, ms-MY, ms-SG]
+  mt: [mt-MT]
+  my: [my-MM]
+  ne: [ne-NP]
+  nl: [nl-BE, nl-NL]
+  no: [no-NO]
+  ny: [ny-MW]
+  pa: [pa-IN, pa-PK]
+  pl: [pl-PL]
+  ps: [ps-AF]
+  pt: [pt-AO, pt-BR, pt-CH, pt-MZ, pt-PT]
+  qu: [qu-PE]
+  ro: [ro-MD, ro-RO]
+  ru: [ru-BY, ru-IL, ru-KG, ru-KZ, ru-MD, ru-RU]
+  rw: [rw-RW]
+  sd: [sd-PK]
+  si: [si-LK]
+  sk: [sk-SK]
+  sl: [sl-SI]
+  sn: [sn-ZW]
+  so: [so-SO]
+  sq: [sq-AL]
+  sr: [sr-RS]
+  su: [su-ID]
+  sv: [sv-SE]
+  sw: [sw-KE, sw-TZ]
+  ta: [ta-IN, ta-LK]
+  te: [te-IN]
+  tg: [tg-TJ]
+  th: [th-TH]
+  tk: [tk-TM]
+  tl: [tl-PH]
+  tr: [tr-TR]
+  uk: [uk-UA]
+  ur: [ur-PK]
+  uz: [uz-UZ]
+  vi: [vi-VN]
+  wo: [wo-SN]
+  xh: [xh-ZA]
+  yo: [yo-NG]
+  zh: [zh-CN, zh-HK, zh-SG, zh-TH, zh-TW]
+  zu: [zu-ZA]
+
+# Primary locales (major markets)
+primary:
+  - en-US   # English - United States
+  - fr-FR   # French - France
+  - de-DE   # German - Germany
+  - es-ES   # Spanish - Spain
+  - it-IT   # Italian - Italy
+  - pt-BR   # Portuguese - Brazil
+  - ja-JP   # Japanese - Japan
+  - ko-KR   # Korean - South Korea
+  - zh-CN   # Chinese - China (Simplified)
+  - zh-TW   # Chinese - Taiwan (Traditional)
+  - ar-SA   # Arabic - Saudi Arabia
+  - ru-RU   # Russian - Russia
+  - nl-NL   # Dutch - Netherlands
+  - pl-PL   # Polish - Poland
+  - tr-TR   # Turkish - Turkey
+  - vi-VN   # Vietnamese - Vietnam
+  - th-TH   # Thai - Thailand
+  - id-ID   # Indonesian - Indonesia
+  - hi-IN   # Hindi - India
+
+# All 200 locales by language family
+locales:
+  # Afrikaans
+  afrikaans:
+    - af-ZA   # South Africa
+
+  # Arabic (15 variants)
+  arabic:
+    - ar-AE   # United Arab Emirates
+    - ar-BH   # Bahrain
+    - ar-DZ   # Algeria
+    - ar-EG   # Egypt
+    - ar-IQ   # Iraq
+    - ar-JO   # Jordan
+    - ar-KW   # Kuwait
+    - ar-LB   # Lebanon
+    - ar-LY   # Libya
+    - ar-MA   # Morocco
+    - ar-OM   # Oman
+    - ar-QA   # Qatar
+    - ar-SA   # Saudi Arabia
+    - ar-TN   # Tunisia
+
+  # South Asian
+  south_asian:
+    - as-IN   # Assamese - India
+    - bn-BD   # Bengali - Bangladesh
+    - bn-IN   # Bengali - India
+    - gu-IN   # Gujarati - India
+    - hi-IN   # Hindi - India
+    - kn-IN   # Kannada - India
+    - ml-IN   # Malayalam - India
+    - mr-IN   # Marathi - India
+    - ne-NP   # Nepali - Nepal
+    - pa-IN   # Punjabi - India
+    - pa-PK   # Punjabi - Pakistan
+    - sd-PK   # Sindhi - Pakistan
+    - si-LK   # Sinhala - Sri Lanka
+    - ta-IN   # Tamil - India
+    - ta-LK   # Tamil - Sri Lanka
+    - te-IN   # Telugu - India
+    - ur-PK   # Urdu - Pakistan
+
+  # Turkic
+  turkic:
+    - az-AZ   # Azerbaijani
+    - kk-KZ   # Kazakh
+    - ky-KG   # Kyrgyz
+    - tk-TM   # Turkmen
+    - tr-TR   # Turkish
+    - uz-UZ   # Uzbek
+
+  # Slavic
+  slavic:
+    - be-BY   # Belarusian
+    - bg-BG   # Bulgarian
+    - bs-BA   # Bosnian
+    - cs-CZ   # Czech
+    - hr-HR   # Croatian
+    - mk-MK   # Macedonian
+    - pl-PL   # Polish
+    - ru-BY   # Russian - Belarus
+    - ru-IL   # Russian - Israel
+    - ru-KG   # Russian - Kyrgyzstan
+    - ru-KZ   # Russian - Kazakhstan
+    - ru-MD   # Russian - Moldova
+    - ru-RU   # Russian - Russia
+    - sk-SK   # Slovak
+    - sl-SI   # Slovenian
+    - sr-RS   # Serbian
+    - uk-UA   # Ukrainian
+
+  # Romance
+  romance:
+    - ca-AD   # Catalan - Andorra
+    - ca-ES   # Catalan - Spain
+    - es-AR   # Spanish - Argentina
+    - es-BO   # Spanish - Bolivia
+    - es-CL   # Spanish - Chile
+    - es-CO   # Spanish - Colombia
+    - es-CR   # Spanish - Costa Rica
+    - es-CU   # Spanish - Cuba
+    - es-DO   # Spanish - Dominican Republic
+    - es-EC   # Spanish - Ecuador
+    - es-ES   # Spanish - Spain
+    - es-GT   # Spanish - Guatemala
+    - es-HN   # Spanish - Honduras
+    - es-MX   # Spanish - Mexico
+    - es-NI   # Spanish - Nicaragua
+    - es-PA   # Spanish - Panama
+    - es-PE   # Spanish - Peru
+    - es-PR   # Spanish - Puerto Rico
+    - es-PY   # Spanish - Paraguay
+    - es-SV   # Spanish - El Salvador
+    - es-UY   # Spanish - Uruguay
+    - es-VE   # Spanish - Venezuela
+    - fr-BE   # French - Belgium
+    - fr-BF   # French - Burkina Faso
+    - fr-CA   # French - Canada
+    - fr-CD   # French - Congo DRC
+    - fr-CH   # French - Switzerland
+    - fr-CI   # French - Ivory Coast
+    - fr-CM   # French - Cameroon
+    - fr-DZ   # French - Algeria
+    - fr-FR   # French - France
+    - fr-LU   # French - Luxembourg
+    - fr-MA   # French - Morocco
+    - fr-MG   # French - Madagascar
+    - fr-RW   # French - Rwanda
+    - fr-SN   # French - Senegal
+    - fr-TN   # French - Tunisia
+    - gl-ES   # Galician - Spain
+    - it-CH   # Italian - Switzerland
+    - it-IT   # Italian - Italy
+    - pt-AO   # Portuguese - Angola
+    - pt-BR   # Portuguese - Brazil
+    - pt-CH   # Portuguese - Switzerland
+    - pt-MZ   # Portuguese - Mozambique
+    - pt-PT   # Portuguese - Portugal
+    - ro-MD   # Romanian - Moldova
+    - ro-RO   # Romanian - Romania
+
+  # Germanic
+  germanic:
+    - da-DK   # Danish
+    - de-AT   # German - Austria
+    - de-CH   # German - Switzerland
+    - de-DE   # German - Germany
+    - de-LU   # German - Luxembourg
+    - en-AE   # English - UAE
+    - en-AU   # English - Australia
+    - en-BB   # English - Barbados
+    - en-BW   # English - Botswana
+    - en-CA   # English - Canada
+    - en-CY   # English - Cyprus
+    - en-FJ   # English - Fiji
+    - en-GB   # English - United Kingdom
+    - en-GH   # English - Ghana
+    - en-HK   # English - Hong Kong
+    - en-IE   # English - Ireland
+    - en-IN   # English - India
+    - en-JM   # English - Jamaica
+    - en-KE   # English - Kenya
+    - en-KY   # English - Cayman Islands
+    - en-MU   # English - Mauritius
+    - en-MY   # English - Malaysia
+    - en-NG   # English - Nigeria
+    - en-NZ   # English - New Zealand
+    - en-PH   # English - Philippines
+    - en-PK   # English - Pakistan
+    - en-SA   # English - Saudi Arabia
+    - en-SG   # English - Singapore
+    - en-TT   # English - Trinidad and Tobago
+    - en-TZ   # English - Tanzania
+    - en-UG   # English - Uganda
+    - en-US   # English - United States
+    - en-VN   # English - Vietnam
+    - en-ZA   # English - South Africa
+    - en-ZM   # English - Zambia
+    - en-ZW   # English - Zimbabwe
+    - is-IS   # Icelandic
+    - nl-BE   # Dutch - Belgium
+    - nl-NL   # Dutch - Netherlands
+    - no-NO   # Norwegian
+    - sv-SE   # Swedish
+
+  # Celtic
+  celtic:
+    - cy-GB   # Welsh
+    - ga-IE   # Irish
+
+  # Greek
+  greek:
+    - el-CY   # Greek - Cyprus
+    - el-GR   # Greek - Greece
+
+  # Baltic
+  baltic:
+    - lt-LT   # Lithuanian
+    - lv-LV   # Latvian
+
+  # Uralic
+  uralic:
+    - et-EE   # Estonian
+    - fi-FI   # Finnish
+    - hu-HU   # Hungarian
+
+  # Basque
+  basque:
+    - eu-ES   # Basque - Spain
+
+  # Iranian
+  iranian:
+    - fa-IR   # Persian - Iran
+    - ku-TR   # Kurdish - Turkey
+    - ps-AF   # Pashto - Afghanistan
+    - tg-TJ   # Tajik
+
+  # Armenian
+  armenian:
+    - hy-AM   # Armenian
+
+  # Georgian
+  georgian:
+    - ka-GE   # Georgian
+
+  # Semitic (non-Arabic)
+  semitic:
+    - he-IL   # Hebrew
+
+  # East Asian
+  east_asian:
+    - ja-JP   # Japanese
+    - ko-KR   # Korean
+    - mn-MN   # Mongolian
+    - zh-CN   # Chinese - Simplified
+    - zh-HK   # Chinese - Hong Kong
+    - zh-SG   # Chinese - Singapore
+    - zh-TH   # Chinese - Thailand
+    - zh-TW   # Chinese - Traditional
+
+  # Southeast Asian
+  southeast_asian:
+    - ceb-PH  # Cebuano - Philippines
+    - id-ID   # Indonesian
+    - jv-ID   # Javanese - Indonesia
+    - km-KH   # Khmer - Cambodia
+    - ms-BN   # Malay - Brunei
+    - ms-MY   # Malay - Malaysia
+    - ms-SG   # Malay - Singapore
+    - my-MM   # Burmese - Myanmar
+    - su-ID   # Sundanese - Indonesia
+    - th-TH   # Thai
+    - tl-PH   # Tagalog - Philippines
+    - vi-VN   # Vietnamese
+
+  # African
+  african:
+    - ha-NG   # Hausa - Nigeria
+    - ig-NG   # Igbo - Nigeria
+    - ln-CD   # Lingala - Congo DRC
+    - mg-MG   # Malagasy - Madagascar
+    - ny-MW   # Chichewa - Malawi
+    - rw-RW   # Kinyarwanda - Rwanda
+    - sn-ZW   # Shona - Zimbabwe
+    - so-SO   # Somali
+    - sw-KE   # Swahili - Kenya
+    - sw-TZ   # Swahili - Tanzania
+    - wo-SN   # Wolof - Senegal
+    - xh-ZA   # Xhosa - South Africa
+    - yo-NG   # Yoruba - Nigeria
+    - zu-ZA   # Zulu - South Africa
+
+  # Austronesian (Pacific)
+  austronesian:
+    - mi-NZ   # Maori - New Zealand
+
+  # Creole
+  creole:
+    - ht-HT   # Haitian Creole
+
+  # Native American
+  native_american:
+    - gn-PY   # Guarani - Paraguay
+    - qu-PE   # Quechua - Peru
+
+  # Albanian
+  albanian:
+    - sq-AL   # Albanian
+
+  # Maltese
+  maltese:
+    - mt-MT   # Maltese
+
+# Flat list for quick iteration
+all:
+  - af-ZA
+  - ar-AE
+  - ar-BH
+  - ar-DZ
+  - ar-EG
+  - ar-IQ
+  - ar-JO
+  - ar-KW
+  - ar-LB
+  - ar-LY
+  - ar-MA
+  - ar-OM
+  - ar-QA
+  - ar-SA
+  - ar-TN
+  - as-IN
+  - az-AZ
+  - be-BY
+  - bg-BG
+  - bn-BD
+  - bn-IN
+  - bs-BA
+  - ca-AD
+  - ca-ES
+  - ceb-PH
+  - cs-CZ
+  - cy-GB
+  - da-DK
+  - de-AT
+  - de-CH
+  - de-DE
+  - de-LU
+  - el-CY
+  - el-GR
+  - en-AE
+  - en-AU
+  - en-BB
+  - en-BW
+  - en-CA
+  - en-CY
+  - en-FJ
+  - en-GB
+  - en-GH
+  - en-HK
+  - en-IE
+  - en-IN
+  - en-JM
+  - en-KE
+  - en-KY
+  - en-MU
+  - en-MY
+  - en-NG
+  - en-NZ
+  - en-PH
+  - en-PK
+  - en-SA
+  - en-SG
+  - en-TT
+  - en-TZ
+  - en-UG
+  - en-US
+  - en-VN
+  - en-ZA
+  - en-ZM
+  - en-ZW
+  - es-AR
+  - es-BO
+  - es-CL
+  - es-CO
+  - es-CR
+  - es-CU
+  - es-DO
+  - es-EC
+  - es-ES
+  - es-GT
+  - es-HN
+  - es-MX
+  - es-NI
+  - es-PA
+  - es-PE
+  - es-PR
+  - es-PY
+  - es-SV
+  - es-UY
+  - es-VE
+  - et-EE
+  - eu-ES
+  - fa-IR
+  - fi-FI
+  - fr-BE
+  - fr-BF
+  - fr-CA
+  - fr-CD
+  - fr-CH
+  - fr-CI
+  - fr-CM
+  - fr-DZ
+  - fr-FR
+  - fr-LU
+  - fr-MA
+  - fr-MG
+  - fr-RW
+  - fr-SN
+  - fr-TN
+  - ga-IE
+  - gl-ES
+  - gn-PY
+  - gu-IN
+  - ha-NG
+  - he-IL
+  - hi-IN
+  - hr-HR
+  - ht-HT
+  - hu-HU
+  - hy-AM
+  - id-ID
+  - ig-NG
+  - is-IS
+  - it-CH
+  - it-IT
+  - ja-JP
+  - jv-ID
+  - ka-GE
+  - kk-KZ
+  - km-KH
+  - kn-IN
+  - ko-KR
+  - ku-TR
+  - ky-KG
+  - ln-CD
+  - lt-LT
+  - lv-LV
+  - mg-MG
+  - mi-NZ
+  - mk-MK
+  - ml-IN
+  - mn-MN
+  - mr-IN
+  - ms-BN
+  - ms-MY
+  - ms-SG
+  - mt-MT
+  - my-MM
+  - ne-NP
+  - nl-BE
+  - nl-NL
+  - no-NO
+  - ny-MW
+  - pa-IN
+  - pa-PK
+  - pl-PL
+  - ps-AF
+  - pt-AO
+  - pt-BR
+  - pt-CH
+  - pt-MZ
+  - pt-PT
+  - qu-PE
+  - ro-MD
+  - ro-RO
+  - ru-BY
+  - ru-IL
+  - ru-KG
+  - ru-KZ
+  - ru-MD
+  - ru-RU
+  - rw-RW
+  - sd-PK
+  - si-LK
+  - sk-SK
+  - sl-SI
+  - sn-ZW
+  - so-SO
+  - sq-AL
+  - sr-RS
+  - su-ID
+  - sv-SE
+  - sw-KE
+  - sw-TZ
+  - ta-IN
+  - ta-LK
+  - te-IN
+  - tg-TJ
+  - th-TH
+  - tk-TM
+  - tl-PH
+  - tr-TR
+  - uk-UA
+  - ur-PK
+  - uz-UZ
+  - vi-VN
+  - wo-SN
+  - xh-ZA
+  - yo-NG
+  - zh-CN
+  - zh-HK
+  - zh-SG
+  - zh-TH
+  - zh-TW
+  - zu-ZA

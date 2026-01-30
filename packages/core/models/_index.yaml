@@ -1,0 +1,378 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# NOVANET DATA MODELS INDEX v8.1.0
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# WHAT: Native content generation system using Neo4j graph database
+# WHY:  Generate culturally-authentic content per locale (NOT translation)
+# HOW:  Orchestrator dispatches to sub-agents, each generates a Block natively
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+# MULTI-TENANT ARCHITECTURE (v7.9.0 - scope-based)
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+#   ┌─────────────────────────────────────────────────────────────────────────────┐
+#   │                              SCOPE HIERARCHY                                 │
+#   ├─────────────────────────────────────────────────────────────────────────────┤
+#   │                                                                             │
+#   │  ┌───────────────────────────────────────────────────────────────────────┐  │
+#   │  │  🌍 GLOBAL (15 nodes) - Single instance, shared by ALL projects       │  │
+#   │  │  └─ config/    Locale                                                 │  │
+#   │  │  └─ knowledge/ 14 LocaleKnowledge nodes                               │  │
+#   │  └───────────────────────────────────────────────────────────────────────┘  │
+#   │                                                                             │
+#   │  ┌───────────────────────────────────────────────────────────────────────┐  │
+#   │  │  🎯 SHARED (6 nodes) - Independent of projects, reusable              │  │
+#   │  │  └─ seo/  SEOKeywordL10n, SEOKeywordMetrics, SEOMiningRun             │  │
+#   │  │  └─ geo/  GEOSeedL10n, GEOSeedMetrics, GEOMiningRun                   │  │
+#   │  └───────────────────────────────────────────────────────────────────────┘  │
+#   │                                                                             │
+#   │  ┌───────────────────────────────────────────────────────────────────────┐  │
+#   │  │  📦 PROJECT (14 nodes) - Per-project instances                        │  │
+#   │  │  └─ foundation/  🏢 Project, BrandIdentity, ProjectL10n               │  │
+#   │  │  └─ structure/   🔧 Page, Block                                       │  │
+#   │  │  └─ semantic/    💡 Concept, ConceptL10n                              │  │
+#   │  │  └─ instruction/ 📝 PageType, PagePrompt, BlockPrompt, BlockType, BlockRules │  │
+#   │  │  └─ output/      📤 PageL10n, BlockL10n                               │  │
+#   │  └───────────────────────────────────────────────────────────────────────┘  │
+#   │                                                                             │
+#   └─────────────────────────────────────────────────────────────────────────────┘
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+# GRAPH STRUCTURE
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+#   Project ──┬─[:SUPPORTS_LOCALE {status}]───┐
+#             │                                v
+#             ├─[:DEFAULT_LOCALE]───────────> Locale ─[:HAS_*]──> LocaleKnowledge*
+#             │
+#             ├─[:HAS_BRAND_IDENTITY]─> BrandIdentity
+#             │
+#             ├─[:HAS_L10N]─> ProjectL10n ──:FOR_LOCALE──> Locale
+#             │
+#             ├─[:HAS_CONCEPT]─> Concept ──[:HAS_L10N]──> ConceptL10n ──:FOR_LOCALE──> Locale
+#             │                     │
+#             │                     ├──[:SEMANTIC_LINK {temperature}]──> Concept
+#             │                     ├──[:TARGETS_SEO]──> SEOKeywordL10n ──:FOR_LOCALE──> Locale
+#             │                     │                         │
+#             │                     │                   :HAS_METRICS
+#             │                     │                         v
+#             │                     │                   SEOKeywordMetrics
+#             │                     └──[:TARGETS_GEO]──> GEOSeedL10n ──:FOR_LOCALE──> Locale
+#             │                                               │
+#             │                                         :HAS_METRICS
+#             │                                               v
+#             │                                         GEOSeedMetrics
+#             │
+#             └─[:HAS_PAGE]─> Page ──┬─[:HAS_BLOCK {position}]─> Block ──:OF_TYPE──> BlockType
+#                               │    │                            │
+#                               │    │                     :USES_CONCEPT
+#                               │    │                            v
+#                               │    │                         Concept
+#                               │    │
+#                               │    └──:HAS_OUTPUT──> BlockL10n ──:FOR_LOCALE──> Locale
+#                               │
+#                               ├──:USES_CONCEPT──> Concept
+#                               │
+#                               ├──:LINKS_TO {concept_key, context, seo_weight, anchor_type, nofollow}──> Page (v8.0.0)
+#                               │
+#                               ├──:SUBTOPIC_OF──> Page (pillar-cluster hierarchy, v7.12.0)
+#                               │
+#                               └──:HAS_OUTPUT──> PageL10n ──:FOR_LOCALE──> Locale
+#                                                     │
+#                                               :PREVIOUS_VERSION
+#                                                     v
+#                                               PageL10n (history)
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+# RELATION CLASSIFICATION (v7.8.5)
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+#   SEMANTIC RELATIONS (used in spreading activation, LLM context):
+#     - SEMANTIC_LINK (temperature: 0.0-1.0)
+#     - USES_CONCEPT (temperature: 0.0-1.0)
+#
+#   AUXILIARY RELATIONS (structural, excluded from spreading activation):
+#     - HAS_METRICS (time-series observations, no temperature)
+#     - PREVIOUS_VERSION (version history chain)
+#     - LINKS_TO, SUBTOPIC_OF (page relationships, v7.12.0)
+#     - HAS_BLOCK, HAS_PAGE, OF_TYPE, FOR_LOCALE, etc.
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+# STANDARD NODE PROPERTIES v7.11.0 (simplified from v7.1.0)
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+#   key: string              # Semantic prefix + identifier (unique per label)
+#   display_name: string     # Human-readable name
+#   description: string      # One-line purpose description
+#   llm_context: string      # "USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]."
+#   created_at: datetime
+#   updated_at: datetime
+#
+#   REMOVED v7.11.0: icon (UI concern), priority (YAGNI), freshness (YAGNI)
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+# NAMING CONVENTIONS (Neo4j official)
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+#   NODE LABELS:      CamelCase, uppercase first (ConceptL10n, PageL10n)
+#   RELATIONSHIPS:    UPPER_SNAKE_CASE (HAS_L10N, FOR_LOCALE)
+#   PROPERTIES:       snake_case (display_name, llm_context)
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+# NOMENCLATURE v7.8.0
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+#   *L10n suffix  → ALL localized content (human OR LLM generated)
+#   :HAS_L10N     → human-curated content (ConceptL10n, ProjectL10n)
+#   :HAS_OUTPUT   → LLM-generated content (PageL10n, BlockL10n)
+#   *Metrics      → Time-series observations (SEOKeywordMetrics, GEOSeedMetrics)
+#   Locale*       → Locale Knowledge nodes (LocaleVoice, LocaleCulture, etc.)
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+# CHANGES v8.0.0 (from v7.12.0)
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# SEO Anchor Optimization for LINKS_TO:
+#   - ADDED: anchor_type (exact_match | partial_match | branded | generic)
+#            - exact_match: anchor = ConceptL10n.title exactly (5× traffic, max 10%)
+#            - partial_match: anchor includes concept keywords (default)
+#            - branded: anchor = brand name (QR Code AI)
+#            - generic: anchor = "click here" (low SEO value)
+#   - ADDED: nofollow (boolean, default false)
+#            - Set true for login/legal pages to prevent link equity flow
+#
+# Statistics: 35 nodes, 50 relations (unchanged)
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+# CHANGES v7.12.0 (from v7.11.0)
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# Page-to-Page Relationships for SEO:
+#   - ADDED: LINKS_TO (Page → Page) for explicit internal linking
+#            Props: concept_key (anchor from ConceptL10n.title), context, seo_weight
+#   - ADDED: SUBTOPIC_OF (Page → Page) for pillar-cluster hierarchy
+#   - UPDATED: PageType.category to include "pillar" | "cluster" values
+#
+# Statistics: 35 nodes, 63 relations (+2)
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+# CHANGES v7.11.0 (from v7.10.0)
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# Simplification + Versioning:
+#   - REMOVED: priority, freshness, icon from standard properties (YAGNI)
+#   - REMOVED: PageMetrics node (query GA/PostHog with date ranges instead)
+#   - ADDED: PREVIOUS_VERSION relation for BlockL10n, PageL10n history chain
+#   - ADDED: version, published_at, replaced_at properties on L10n nodes
+#
+# Statistics: 35 nodes (-1), 61 relations (+1)
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+# CHANGES v7.10.0 (from v7.9.0)
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# PageType node (mirrors BlockType pattern):
+#   - ADDED: PageType node in instruction layer
+#   - ADDED: Page -[:OF_TYPE]-> PageType relation
+#   - REMOVED: Page.page_type enum property
+#   - REMOVED: Page.generation_priority (redundant with priority)
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+# CHANGES v7.9.0 (from v7.8.5)
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# Folder Restructure (scope-based, aligned with GRAPH-DETAILED.md):
+#   - RESTRUCTURED: nodes/ now organized by scope (global/, shared/, project/)
+#   - NEW: nodes/global/config/ for Locale configuration
+#   - NEW: nodes/global/knowledge/ for 14 LocaleKnowledge nodes
+#   - NEW: nodes/shared/seo/ and nodes/shared/geo/ for SHARED scope
+#   - NEW: nodes/project/{role}/ for PROJECT scope by functional role
+#   - NEW: models/schema/nodes.schema.json for JSON Schema validation
+#
+# Functional Role Sub-folders (within project/):
+#   - foundation/  🏢 Project, BrandIdentity, ProjectL10n
+#   - structure/   🔧 Page, Block
+#   - semantic/    💡 Concept, ConceptL10n
+#   - instruction/ 📝 PagePrompt, BlockPrompt, BlockType, BlockRules
+#   - output/      📤 PageL10n, BlockL10n, PageMetrics
+#
+# Benefits:
+#   - Perfect alignment with GRAPH-DETAILED.md scope architecture
+#   - Clear separation: GLOBAL (shared) vs SHARED (reusable) vs PROJECT (per-tenant)
+#   - Easy to understand multi-tenant boundaries
+#   - JSON Schema enables programmatic validation
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+# CHANGES v7.8.5 (Unified Metrics Pattern)
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# Unified HAS_METRICS relation for all time-series observations:
+#   - RENAMED: SEOSnapshot → SEOKeywordMetrics
+#   - RENAMED: GEOCitation → GEOSeedMetrics
+#   - REMOVED: HAS_SNAPSHOT (replaced by HAS_METRICS)
+#   - REMOVED: HAS_CITATION (replaced by HAS_METRICS)
+#
+# Semantic vs Auxiliary relation classification documented.
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+
+files:
+  # ═══════════════════════════════════════════════════════════════════════════
+  # 🌍 GLOBAL SCOPE (15 nodes) - Shared by ALL projects
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  global:
+    # Locale configuration (1 node)
+    config:
+      - nodes/global/config/locale.yaml
+
+    # Locale knowledge (14 nodes)
+    knowledge:
+      # Core knowledge nodes
+      - nodes/global/knowledge/locale-identity.yaml
+      - nodes/global/knowledge/locale-voice.yaml
+      - nodes/global/knowledge/locale-culture.yaml
+      - nodes/global/knowledge/locale-culture-references.yaml
+      - nodes/global/knowledge/locale-market.yaml
+      - nodes/global/knowledge/locale-lexicon.yaml
+      # Rules nodes (v7.2.4)
+      - nodes/global/knowledge/locale-rules-adaptation.yaml
+      - nodes/global/knowledge/locale-rules-formatting.yaml
+      - nodes/global/knowledge/locale-rules-slug.yaml
+      # Data nodes (graph-native v7.2.4)
+      - nodes/global/knowledge/expression.yaml
+      - nodes/global/knowledge/reference.yaml
+      - nodes/global/knowledge/metaphor.yaml
+      - nodes/global/knowledge/pattern.yaml
+      - nodes/global/knowledge/constraint.yaml
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # 🎯 SHARED SCOPE (6 nodes) - Independent of projects, reusable
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  shared:
+    # SEO targeting + metrics + jobs (3 nodes)
+    seo:
+      - nodes/shared/seo/seo-keyword-l10n.yaml
+      - nodes/shared/seo/seo-keyword-metrics.yaml
+      - nodes/shared/seo/seo-mining-run.yaml
+
+    # GEO targeting + metrics + jobs (3 nodes)
+    geo:
+      - nodes/shared/geo/geo-seed-l10n.yaml
+      - nodes/shared/geo/geo-seed-metrics.yaml
+      - nodes/shared/geo/geo-mining-run.yaml
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # 📦 PROJECT SCOPE (14 nodes) - Per-project instances
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  project:
+    # 🏢 FOUNDATION (3 nodes) - Project root & identity
+    foundation:
+      - nodes/project/foundation/project.yaml
+      - nodes/project/foundation/brand-identity.yaml
+      - nodes/project/foundation/project-l10n.yaml
+
+    # 🔧 STRUCTURE (2 nodes) - Content scaffolding
+    structure:
+      - nodes/project/structure/page.yaml
+      - nodes/project/structure/block.yaml
+
+    # 💡 SEMANTIC (2 nodes) - Meaning & concepts
+    semantic:
+      - nodes/project/semantic/concept.yaml
+      - nodes/project/semantic/concept-l10n.yaml
+
+    # 📝 INSTRUCTION (5 nodes) - AI generation directives (v7.10.0: +PageType)
+    instruction:
+      - nodes/project/instruction/page-type.yaml
+      - nodes/project/instruction/page-prompt.yaml
+      - nodes/project/instruction/block-prompt.yaml
+      - nodes/project/instruction/block-type.yaml
+      - nodes/project/instruction/block-rules.yaml
+
+    # 📤 OUTPUT (2 nodes) - LLM-generated content (v7.11.0: removed PageMetrics)
+    output:
+      - nodes/project/output/page-l10n.yaml
+      - nodes/project/output/block-l10n.yaml
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # REFERENCE FILES
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  relations: relations.yaml           # All Neo4j relations
+  views: views/                       # YAML view definitions
+  schema: schema/nodes.schema.json    # JSON Schema for validation (v7.9.0)
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# NODES BY LOCALE BEHAVIOR (for Mermaid styling)
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+#   🔵 invariant:       Language-independent, defined once
+#   🟢 localized:       Per-locale content, has :FOR_LOCALE
+#   🟣 localeKnowledge: Knowledge ABOUT a locale
+#   ⚪ derived:         Inherits locale from parent
+#   ⚙️ job:             Background jobs, no locale
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+
+nodes_by_locale_behavior:
+  invariant:
+    - Project
+    - BrandIdentity
+    - Concept
+    - Page
+    - Block
+    - PageType
+    - BlockType
+    - PagePrompt
+    - BlockPrompt
+    - BlockRules
+    - Locale
+  localized:
+    - ProjectL10n
+    - ConceptL10n
+    - PageL10n
+    - BlockL10n
+    - SEOKeywordL10n
+    - GEOSeedL10n
+  localeKnowledge:
+    - LocaleIdentity
+    - LocaleVoice
+    - LocaleCulture
+    - LocaleMarket
+    - LocaleLexicon
+    - LocaleRulesAdaptation
+    - LocaleRulesFormatting
+    - LocaleRulesSlug
+    - LocaleCultureReferences
+    - Expression
+    - Reference
+    - Metaphor
+    - Pattern
+    - Constraint
+  derived:
+    - SEOKeywordMetrics
+    - GEOSeedMetrics
+  job:
+    - SEOMiningRun
+    - GEOMiningRun
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# STATISTICS v7.12.0
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# By Scope:
+#   🌍 GLOBAL:  15 nodes (Locale + 14 LocaleKnowledge)
+#   🎯 SHARED:   6 nodes (SEO 3 + GEO 3)
+#   📦 PROJECT: 14 nodes (Foundation 3 + Structure 2 + Semantic 2 + Instruction 5 + Output 2)
+#   TOTAL:      35 nodes
+#
+# By Locale Behavior:
+#   🔵 INVARIANT:        11 (Project, BrandIdentity, Concept, Page, Block, PageType, BlockType, PagePrompt, BlockPrompt, BlockRules, Locale)
+#   🟢 LOCALIZED:         6 (ProjectL10n, ConceptL10n, PageL10n, BlockL10n, SEOKeywordL10n, GEOSeedL10n)
+#   🟣 LOCALE_KNOWLEDGE: 14 (LocaleIdentity, LocaleVoice, etc.)
+#   ⚪ DERIVED:           2 (SEOKeywordMetrics, GEOSeedMetrics)
+#   ⚙️ JOB:               2 (SEOMiningRun, GEOMiningRun)
+#

@@ -1,0 +1,174 @@
+# models/nodes/content/concept.yaml
+# Concept - Invariant semantic unit (action, object, feature, tier, brand)
+
+node:
+  name: Concept
+  category: content
+  icon: "🔷"
+  description: "Invariant semantic unit representing actions, objects, features, tiers, or brand elements"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # STANDARD PROPERTIES (v7.1.0)
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  standard_properties:
+    key:
+      type: string
+      required: true
+      description: "Semantic prefix + identifier. Format: {semantic-role}-{identifier}"
+      pattern: "^(action|product|feature|tier|brand)-[a-z0-9-]+$"
+      examples:
+        - "action-create-qr"
+        - "product-generator"
+        - "feature-analytics"
+        - "tier-pro"
+
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable UI name"
+      example: "Create QR Code"
+
+    description:
+      type: string
+      required: true
+      description: "One-line description of the concept"
+      example: "Action of creating a QR code from URL, text, or contact"
+
+    llm_context:
+      type: string
+      required: true
+      description: "LLM generation hints. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation].'"
+      example: "USE: when user wants to create/generate a new QR code. TRIGGERS: create, generate, make, créer, erstellen, 作成. NOT: viewing or editing existing codes."
+
+    created_at:
+      type: datetime
+      required: true
+
+    updated_at:
+      type: datetime
+      required: true
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # VECTOR EMBEDDING (v7.8.0 - Hybrid OntologyRAG)
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  embedding_properties:
+    embedding:
+      type: vector
+      dimensions: 1536
+      required: false
+      description: "OpenAI text-embedding-3-small vector for semantic search"
+
+    embedding_source:
+      type: string
+      required: false
+      description: "Text used to generate embedding (for debugging)"
+
+    embedding_updated_at:
+      type: datetime
+      required: false
+      description: "Timestamp of last embedding update"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # CONCEPT-SPECIFIC PROPERTIES
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  properties:
+    feature_category:
+      type: string
+      required: false
+      enum: [core, analytics, design, integration, api]
+      description: "Product catalog category"
+      example: "core"
+
+    feature_priority:
+      type: int
+      required: false
+      description: "Feature importance 1-10 (1 = highest priority)"
+      example: 1
+
+    is_core:
+      type: boolean
+      required: false
+      description: "True if this is a must-mention feature in marketing"
+      example: true
+
+    is_premium:
+      type: boolean
+      required: false
+      description: "True if this feature is paid tier only"
+      example: false
+
+    search_intent:
+      type: string
+      required: false
+      enum: [transactional, informational, navigational]
+      description: "Primary SEO search intent"
+      example: "transactional"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # RELATIONS (FROM this node)
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  relations:
+    HAS_L10N:
+      to: ConceptL10n
+      cardinality: "1:N"
+      description: "Localized definitions for this concept (one per locale)"
+
+    SEMANTIC_LINK:
+      to: Concept
+      cardinality: "N:N"
+      props:
+        temperature:
+          type: float
+          description: "Activation strength 0.0-1.0"
+        link_type:
+          type: string
+          enum: [is_action_on, includes, type_of, used_for, contrasts_with]
+          description: "Type of semantic relationship"
+      description: "Spreading activation links to related concepts"
+
+    TARGETS_SEO:
+      to: SEOKeywordL10n
+      cardinality: "1:N"
+      description: "SEO keywords targeting this concept (v7.8.2: SEOKeyword → SEOKeywordL10n)"
+
+    TARGETS_GEO:
+      to: GEOSeedL10n
+      cardinality: "1:N"
+      description: "GEO seeds targeting this concept"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # EXAMPLE
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  example:
+    data:
+      key: "action-create-qr"
+      display_name: "Create QR Code"
+      icon: "💡"
+      description: "Action of creating a QR code from URL, text, or contact"
+      llm_context: "USE: when user wants to create/generate a new QR code. TRIGGERS: create, generate, make, créer, erstellen, 作成. NOT: viewing or editing existing codes."
+      priority: "critical"
+      freshness: "static"
+      feature_category: "core"
+      feature_priority: 1
+      is_core: true
+      is_premium: false
+      search_intent: "transactional"
+
+    cypher: |
+      // Get concept with localized definitions
+      MATCH (c:Concept {key: $key})
+      OPTIONAL MATCH (c)-[:HAS_L10N]->(cl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale)
+      RETURN c, collect({locale: l.key, title: cl.title, definition: cl.definition}) AS localizations
+
+      // Spreading activation from concept (2 hops, threshold 0.3)
+      MATCH (c:Concept {key: $key})-[r:SEMANTIC_LINK*1..2]->(related:Concept)
+      WHERE ALL(rel IN r WHERE rel.temperature >= 0.3)
+      WITH related, reduce(activation = 1.0, rel IN r | activation * rel.temperature) AS score
+      WHERE score >= 0.3
+      RETURN related.key, related.display_name, score
+      ORDER BY score DESC

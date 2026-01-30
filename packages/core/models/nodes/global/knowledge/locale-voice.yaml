@@ -1,0 +1,185 @@
+# models/nodes/locale/locale-voice.yaml
+# LocaleVoice - HOW to speak for a locale
+#
+# Stability: Medium - update quarterly for trends
+
+node:
+  name: LocaleVoice
+  category: locale
+  icon: "🎭"
+  description: "Formality, directness, warmth, humor guidelines for a locale"
+
+  # ===========================================================================
+  # STANDARD PROPERTIES (no key - relation-identified) v7.1.0
+  # ===========================================================================
+
+  standard_properties:
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable name"
+      example: "French (France) Voice"
+
+    description:
+      type: string
+      required: true
+      description: "Short description"
+      example: "Formality, directness, warmth, humor guidelines"
+
+    llm_context:
+      type: string
+      required: true
+      description: "LLM generation hints. Format: USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]."
+      example: "USE: for tone/formality decisions. TRIGGERS: vous/tu, formal. NOT: script aspects."
+
+
+
+    created_at:
+      type: datetime
+      required: true
+      description: "Creation timestamp"
+
+    updated_at:
+      type: datetime
+      required: true
+      description: "Last update timestamp"
+
+  # ===========================================================================
+  # LOCALEVOICE-SPECIFIC PROPERTIES
+  # ===========================================================================
+
+  properties:
+    # Formality
+    formality_score:
+      type: int
+      required: true
+      description: "Formality level 0-100 (72 for fr-FR = formal)"
+      example: 72
+
+    default_formality:
+      type: string
+      required: true
+      enum: [formal, casual, mixed]
+      description: "Default formality level"
+      example: "formal"
+
+    default_pronoun:
+      type: string
+      required: false
+      description: "Default pronoun (vous, tu, Sie, du, etc.)"
+      example: "vous"
+
+    pronoun_rules:
+      type: json
+      required: false
+      description: "Rules for pronoun usage by context"
+      example:
+        formal: "vous"
+        casual: "tu"
+        switch_triggers: ["established relationship", "explicit permission"]
+
+    # Directness
+    directness_score:
+      type: int
+      required: true
+      description: "Directness level 0-100 (45 for fr-FR = indirect)"
+      example: 45
+
+    directness_style:
+      type: string
+      required: true
+      enum: [direct, indirect, balanced]
+      description: "Overall directness style"
+      example: "indirect"
+
+    softening_patterns:
+      type: json
+      required: false
+      description: "Patterns for softening direct statements"
+      example:
+        requests: "Pourriez-vous..."
+        negatives: "Difficile"
+
+    # Warmth
+    warmth_score:
+      type: int
+      required: false
+      description: "Overall warmth level 0-100"
+      example: 55
+
+    warmth_by_stage:
+      type: json
+      required: false
+      description: "Warmth levels by relationship stage"
+      example:
+        initial: 45
+        established: 60
+        longterm: 70
+
+    # Humor
+    humor_score:
+      type: int
+      required: false
+      description: "Humor acceptance level 0-100"
+      example: 40
+
+    humor_types:
+      type: json
+      required: false
+      description: "Acceptability of different humor types"
+      example:
+        wordplay: "acceptable"
+        irony: "subtle"
+        slapstick: "avoid"
+
+    # Sentence style
+    avg_sentence_length:
+      type: int
+      required: false
+      description: "Average sentence length in words"
+      example: 18
+
+    preferred_voice:
+      type: string
+      required: false
+      enum: [active, passive, mixed]
+      description: "Preferred grammatical voice"
+      example: "mixed"
+
+    rhythm_style:
+      type: string
+      required: false
+      description: "Writing rhythm style"
+      example: "sophisticated"
+
+    # Punctuation
+    punctuation_rules:
+      type: json
+      required: false
+      description: "Punctuation conventions"
+      example:
+        colon: "space_before"
+        exclamation: "rare"
+        quotes: "guillemets"
+
+    # Honorifics
+    honorific_system:
+      type: json
+      required: false
+      description: "Honorific system (for cultures with complex systems)"
+      example:
+        levels: ["san", "sama", "kun", "chan"]
+        usage:
+          business: "san"
+          formal: "sama"
+
+  # ===========================================================================
+  # RELATIONS
+  # ===========================================================================
+
+  relations:
+    incoming:
+      - type: HAS_VOICE
+        from: Locale
+        cardinality: "1:1"
+        description: "Locale has exactly one voice"

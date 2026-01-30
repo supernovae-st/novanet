@@ -1,0 +1,22 @@
+# models/views/project-overview.yaml
+id: project-overview
+name: Project Overview
+description: Project dashboard with pages, brand identity, and concepts
+version: "1.1"
+
+root:
+  type: Project
+
+include:
+  - relation: HAS_PAGE
+    direction: outgoing
+
+  - relation: HAS_BRAND_IDENTITY
+    direction: outgoing
+
+  - relation: HAS_CONCEPT
+    direction: outgoing
+    depth: 1
+
+filters:
+  priority: [critical, high]

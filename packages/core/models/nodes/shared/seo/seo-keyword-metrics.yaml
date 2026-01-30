@@ -1,0 +1,126 @@
+# models/nodes/seo/seo-keyword-metrics.yaml
+# SEOKeywordMetrics - Historical metrics snapshot for a keyword (v7.8.5)
+#
+# v7.8.5: Renamed from SEOSnapshot for unified metrics pattern
+# - Relation: HAS_METRICS (unified with PageMetrics, GEOSeedMetrics)
+# - Timestamp: observed_at (standardized)
+
+node:
+  name: SEOKeywordMetrics
+  category: seo
+  icon: "📸"
+  description: "Historical metrics snapshot for an SEO keyword"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # STANDARD PROPERTIES (v7.1.0)
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  standard_properties:
+    key:
+      type: string
+      required: true
+      description: "Unique identifier"
+      example: "seometrics-creer-qr-code-fr-2024-01-15"
+
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable name"
+      example: "créer qr code - 2024-01-15"
+
+
+    description:
+      type: string
+      required: false
+      description: "Short description"
+
+    llm_context:
+      type: string
+      required: false
+      description: "LLM generation hints (not used in spreading activation)"
+
+
+
+    created_at:
+      type: datetime
+      required: false
+
+    updated_at:
+      type: datetime
+      required: false
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # NODE-SPECIFIC PROPERTIES
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  properties:
+    observed_at:
+      type: datetime
+      required: true
+      description: "When these metrics were observed/scraped"
+      example: "2024-01-15T10:30:00Z"
+
+    volume:
+      type: int
+      required: false
+      description: "Monthly search volume at time of observation"
+      example: 12000
+
+    difficulty:
+      type: float
+      required: false
+      description: "Keyword difficulty (0-100)"
+      example: 45.5
+
+    cpc:
+      type: float
+      required: false
+      description: "Cost per click at time of observation"
+      example: 0.85
+
+    position:
+      type: float
+      required: false
+      description: "Our ranking position for this keyword"
+      example: 8.5
+
+    url:
+      type: string
+      required: false
+      description: "Our ranking URL"
+      example: "https://qrcode-ai.com/create"
+
+    source:
+      type: string
+      required: true
+      description: "Data source: semrush | ahrefs | google_search_console"
+      example: "semrush"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # RELATIONS
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  relations: []
+  # Incoming: SEOKeywordL10n -[:HAS_METRICS]-> SEOKeywordMetrics
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # SPREADING ACTIVATION NOTE
+  # ═══════════════════════════════════════════════════════════════════════════════
+  #
+  # HAS_METRICS is an AUXILIARY relation (not semantic).
+  # It is EXCLUDED from spreading activation and LLM context retrieval.
+  # Metrics are queried directly for analytics, not discovered via traversal.
+  #
+  # See relations.yaml for semantic vs auxiliary relation classification.
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # EXAMPLE
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  example:
+    description: "Get metrics history for a keyword"
+    cypher: |
+      MATCH (kw:SEOKeywordL10n {key: $keyword_key})-[:HAS_METRICS]->(m:SEOKeywordMetrics)
+      RETURN m.observed_at, m.volume, m.difficulty, m.position
+      ORDER BY m.observed_at DESC
+      LIMIT 30

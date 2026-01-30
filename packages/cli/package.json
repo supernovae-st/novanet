@@ -1,0 +1,21 @@
+{
+  "name": "@novanet/cli",
+  "version": "1.0.0",
+  "private": true,
+  "description": "NovaNet CLI - validation, generation, and development tools",
+  "bin": {
+    "novanet": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "validate": "tsx src/commands/validate.ts",
+    "generate:docs": "tsx src/commands/generate-docs.ts"
+  },
+  "dependencies": {
+    "@novanet/core": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0",
+    "tsx": "^4.19.0"
+  }
+}

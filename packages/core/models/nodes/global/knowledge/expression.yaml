@@ -1,0 +1,145 @@
+# models/nodes/locale/expression.yaml
+# Expression - Individual native expression for a locale
+#
+# One node per expression, linked to LocaleLexicon
+# ~80-120 expressions per locale
+
+node:
+  name: Expression
+  category: locale
+  icon: "💭"
+  description: "Individual native expression for localized content generation"
+
+  # ===========================================================================
+  # STANDARD PROPERTIES (no key - relation-identified) v7.1.0
+  # ===========================================================================
+
+  standard_properties:
+    display_name:
+      type: string
+      required: true
+      description: "The expression text itself"
+      example: "n'attendez plus"
+
+    description:
+      type: string
+      required: true
+      description: "Short description of expression usage"
+      example: "Urgency expression for CTAs"
+
+    llm_context:
+      type: string
+      required: true
+      description: "LLM generation hints. Format: USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]."
+      example: "USE: for CTAs. TRIGGERS: action, urgency. NOT: formal legal contexts."
+
+
+
+    created_at:
+      type: datetime
+      required: true
+      description: "Creation timestamp"
+
+    updated_at:
+      type: datetime
+      required: true
+      description: "Last update timestamp"
+
+  # ===========================================================================
+  # EXPRESSION-SPECIFIC PROPERTIES
+  # ===========================================================================
+
+  properties:
+    semantic_field:
+      type: string
+      required: true
+      description: "Semantic category"
+      enum: [success, speed, simplicity, quality, urgency, trust, value, innovation, expertise]
+      example: "urgency"
+
+    intention:
+      type: string
+      required: true
+      description: "The intention or meaning conveyed"
+      example: "Act now"
+
+    text:
+      type: string
+      required: true
+      description: "The actual expression text"
+      example: "n'attendez plus"
+
+    register:
+      type: string
+      required: true
+      enum: [formal, semi-formal, casual]
+      description: "Formality register"
+      example: "formal"
+
+    context:
+      type: string
+      required: true
+      description: "When/where to use this expression"
+      example: "CTAs, promotions"
+
+    example_sentence:
+      type: string
+      required: true
+      description: "Example usage in a sentence"
+      example: "N'attendez plus pour profiter de cette offre."
+
+    # Vector RAG support (v7.2.0)
+    embedding:
+      type: vector
+      required: false
+      dimensions: 768
+      description: "LaBSE embedding of intention field for cross-locale semantic search"
+      example: "[0.023, -0.156, ...]"
+
+    # Sparse property for complex honorific systems (v7.2.0)
+    # Only needed for ja-JP (keigo), ko-KR (jondaenmal), etc.
+    formality_variants:
+      type: json
+      required: false
+      description: "Formality level variants for languages with complex honorific systems"
+      example:
+        teineigo: "お待ちしております"
+        sonkeigo: "お待ちになっております"
+        kenjougo: "お待ち申し上げております"
+
+    # Provenance tracking (v7.2.0)
+    source_metadata:
+      type: json
+      required: false
+      description: "Source and version information for tracking data provenance"
+      example:
+        source: "ath-know-l10n"
+        version: "2024-01"
+        last_verified: "2024-01-15"
+
+  # ===========================================================================
+  # RELATIONS
+  # ===========================================================================
+
+  relations:
+    incoming:
+      - type: HAS_EXPRESSION
+        from: LocaleLexicon
+        cardinality: "N:1"
+        description: "Expression belongs to exactly one lexicon"
+
+  # ===========================================================================
+  # NEO4J INDEXES
+  # ===========================================================================
+
+  neo4j:
+    indexes:
+      - "CREATE INDEX expression_semantic IF NOT EXISTS FOR (e:Expression) ON (e.semantic_field)"
+      - "CREATE INDEX expression_register IF NOT EXISTS FOR (e:Expression) ON (e.register)"
+      - "CREATE INDEX expression_intention IF NOT EXISTS FOR (e:Expression) ON (e.intention)"
+    vector_indexes:
+      - name: expression_embedding
+        property: embedding
+        dimensions: 768
+        similarity: cosine
+        comment: "HNSW index for cross-locale semantic search via LaBSE embeddings"

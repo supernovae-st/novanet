@@ -1,0 +1,114 @@
+# models/views/block-semantic-network.yaml
+id: block-semantic-network
+name: Spreading Activation
+description: Block with concepts and spreading activation (2 hops)
+version: "8.0.0"
+
+root:
+  type: Block
+
+include:
+  - relation: HAS_PROMPT
+    direction: outgoing
+    filters:
+      active: true
+
+  - relation: OF_TYPE
+    direction: outgoing
+
+  - relation: USES_CONCEPT
+    direction: outgoing
+    depth: 2
+
+filters:
+  locale: $locale
+
+docs:
+  title: "Spreading Activation View"
+  category: semantic
+  description: |
+    Demonstrates the spreading activation algorithm for semantic context retrieval.
+
+    **How it works:**
+    1. Start from a Block's USES_CONCEPT relationships
+    2. Follow SEMANTIC_LINK edges with temperature >= threshold
+    3. Multiply temperatures along path to compute activation
+    4. Return concepts with activation >= minimum threshold
+
+    **Temperature-based traversal:**
+    - temperature 1.0 = strong semantic link
+    - temperature 0.5 = moderate link
+    - temperature < 0.3 = weak link (often pruned)
+
+  layers:
+    - name: Block Layer
+      nodes: [Block, BlockPrompt]
+      color: blue
+      description: Starting point for activation
+
+    - name: Direct Concepts
+      nodes: [Concept]
+      color: green
+      description: Directly linked concepts (USES_CONCEPT)
+
+    - name: Semantic Network
+      nodes: [Concept, ConceptL10n]
+      color: orange
+      description: Related concepts via SEMANTIC_LINK
+
+  examples:
+    - name: Basic spreading activation
+      description: Get related concepts with minimum activation 0.3
+      query: |
+        MATCH (b:Block {key: $blockKey})-[:USES_CONCEPT]->(c:Concept)
+        MATCH (c)-[sl:SEMANTIC_LINK*1..2]->(related:Concept)
+        WHERE ALL(r IN sl WHERE r.temperature >= 0.3)
+        WITH related, reduce(a = 1.0, r IN sl | a * r.temperature) AS activation
+        WHERE activation >= 0.3
+        RETURN DISTINCT related.key AS concept, activation
+        ORDER BY activation DESC
+      params:
+        blockKey: "hero-pricing"
+
+    - name: Spreading with localized content
+      description: Get activated concepts with their localized content
+      query: |
+        MATCH (b:Block {key: $blockKey})-[:USES_CONCEPT]->(c:Concept)
+        MATCH (c)-[sl:SEMANTIC_LINK*1..2]->(related:Concept)
+        WHERE ALL(r IN sl WHERE r.temperature >= $minTemp)
+        WITH related, reduce(a = 1.0, r IN sl | a * r.temperature) AS activation
+        WHERE activation >= $minActivation
+        MATCH (related)-[:HAS_L10N]->(rl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+        RETURN related.key AS concept,
+               rl.title AS title,
+               rl.definition AS definition,
+               activation
+        ORDER BY activation DESC
+        LIMIT 10
+      params:
+        blockKey: "hero-pricing"
+        locale: "fr-FR"
+        minTemp: 0.3
+        minActivation: 0.3
+
+    - name: Activation path analysis
+      description: Show the path and temperature at each hop
+      query: |
+        MATCH (b:Block {key: $blockKey})-[:USES_CONCEPT]->(c:Concept)
+        MATCH path = (c)-[sl:SEMANTIC_LINK*1..2]->(related:Concept)
+        WITH related, path, [r IN sl | r.temperature] AS temps
+        RETURN c.key AS source,
+               related.key AS target,
+               length(path) AS hops,
+               temps,
+               reduce(a = 1.0, t IN temps | a * t) AS activation
+        ORDER BY activation DESC
+        LIMIT 20
+      params:
+        blockKey: "hero-pricing"
+
+  notes:
+    - "Temperature threshold of 0.3 is the default minimum"
+    - "Activation = product of temperatures along path"
+    - "Maximum depth is typically 2 hops to avoid noise"
+    - "Used by sub-agents to enrich generation context"

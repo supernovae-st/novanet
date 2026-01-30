@@ -1,0 +1,157 @@
+# models/nodes/locale/locale-rules-slug.yaml
+# LocaleRulesSlug - URL slug generation rules, stopwords, character handling
+#
+# Stability: High - Changes only on standard updates.
+
+node:
+  name: LocaleRulesSlug
+  category: locale
+  icon: "🔗"
+  description: "URL slug generation rules for a locale"
+
+  # ===========================================================================
+  # STANDARD PROPERTIES (no key - relation-identified) v7.1.0
+  # ===========================================================================
+
+  standard_properties:
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable name"
+      example: "French (France) Slug Rules"
+
+    description:
+      type: string
+      required: true
+      description: "Short description"
+      example: "URL slug generation rules for fr-FR"
+
+    llm_context:
+      type: string
+      required: true
+      description: "LLM generation hints. Format: USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]."
+      example: "USE: when generating URL slugs. TRIGGERS: slug, url, path. NOT: page structure."
+
+
+
+    created_at:
+      type: datetime
+      required: true
+      description: "Creation timestamp"
+
+    updated_at:
+      type: datetime
+      required: true
+      description: "Last update timestamp"
+
+  # ===========================================================================
+  # LOCALERULESSLUG-SPECIFIC PROPERTIES
+  # ===========================================================================
+
+  properties:
+    # Base rule
+    slug_rule:
+      type: string
+      required: true
+      description: "Base slug rule type"
+      example: "latin_preserve"
+      # Values: latin_preserve, latin_transliterate, script_preserve, script_romanize
+
+    # Character handling
+    diacritics_handling:
+      type: string
+      required: true
+      enum: [preserve, strip, transliterate]
+      description: "How to handle diacritical marks"
+      example: "preserve"
+
+    non_latin_handling:
+      type: string
+      required: false
+      enum: [preserve, romanize, remove]
+      description: "How to handle non-Latin scripts"
+      example: "N/A"
+
+    case_handling:
+      type: string
+      required: true
+      enum: [lowercase, preserve, uppercase]
+      description: "Case transformation rule"
+      example: "lowercase"
+
+    space_handling:
+      type: string
+      required: true
+      description: "Character to replace spaces"
+      example: "hyphen"
+
+    special_chars_handling:
+      type: string
+      required: true
+      enum: [removed, encoded, preserved]
+      description: "How to handle special characters"
+      example: "removed"
+
+    # Normalization
+    unicode_normalization:
+      type: string
+      required: false
+      description: "Unicode normalization form"
+      example: "NFC"
+
+    max_length:
+      type: int
+      required: false
+      description: "Maximum slug length"
+      example: 80
+
+    # Stopwords
+    stopwords:
+      type: json
+      required: true
+      description: "Words to remove from slugs"
+      example:
+        articles: ["le", "la", "les", "un", "une", "des"]
+        prepositions: ["de", "du", "a", "au", "aux", "en"]
+        pronouns: ["je", "tu", "il", "elle", "nous", "vous"]
+        conjunctions: ["et", "ou", "mais", "donc"]
+
+    # Character mappings
+    character_map:
+      type: json
+      required: false
+      description: "Custom character replacements"
+      example:
+        "&": "et"
+        "@": "a"
+        "+": "plus"
+
+    ligature_handling:
+      type: json
+      required: false
+      description: "How to handle ligatures"
+      example:
+        "œ": "oe"
+        "æ": "ae"
+
+    # Processing examples
+    examples:
+      type: json
+      required: false
+      description: "Example slug transformations"
+      example:
+        - input: "Comment créer un QR code gratuit"
+          output: "comment-creer-qr-code-gratuit"
+        - input: "Les meilleures applications de QR codes"
+          output: "meilleures-applications-qr-codes"
+
+  # ===========================================================================
+  # RELATIONS
+  # ===========================================================================
+
+  relations:
+    incoming:
+      - type: HAS_RULES_SLUG
+        from: Locale
+        cardinality: "1:1"
+        description: "Locale has exactly one set of slug rules"

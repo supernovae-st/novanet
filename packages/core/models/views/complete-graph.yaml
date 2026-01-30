@@ -1,0 +1,118 @@
+# models/views/complete-graph.yaml
+# Complete graph view showing all 28 nodes and 50 relations
+id: complete-graph
+name: Complete Graph
+description: Full NovaNet graph with all nodes and relations
+version: "8.0.0"
+
+root:
+  type: Project
+
+include:
+  # Project foundation
+  - relation: HAS_BRAND_IDENTITY
+    direction: outgoing
+  - relation: HAS_L10N
+    direction: outgoing
+  - relation: SUPPORTS_LOCALE
+    direction: outgoing
+  - relation: DEFAULT_LOCALE
+    direction: outgoing
+
+  # Pages and blocks
+  - relation: HAS_PAGE
+    direction: outgoing
+    include:
+      - relation: HAS_BLOCK
+        direction: outgoing
+      - relation: HAS_PROMPT
+        direction: outgoing
+      - relation: HAS_OUTPUT
+        direction: outgoing
+      - relation: LINKS_TO
+        direction: outgoing
+      - relation: SUBTOPIC_OF
+        direction: outgoing
+
+  # Concepts
+  - relation: HAS_CONCEPT
+    direction: outgoing
+    include:
+      - relation: SEMANTIC_LINK
+        direction: outgoing
+      - relation: HAS_L10N
+        direction: outgoing
+      - relation: TARGETS_SEO
+        direction: outgoing
+      - relation: TARGETS_GEO
+        direction: outgoing
+
+docs:
+  title: "Complete Graph View"
+  category: overview
+  description: |
+    The complete NovaNet graph showing all 28 node types organized into three scopes:
+    - **Global (15 nodes)**: Locale + 14 LocaleKnowledge nodes, shared across all projects
+    - **Shared (6 nodes)**: SEO/GEO nodes, independent of projects
+    - **Project (14 nodes)**: Per-project foundation, structure, semantic, and output nodes
+
+  layers:
+    - name: Global Layer
+      nodes: [Locale, LocaleIdentity, LocaleVoice, LocaleCulture, LocaleMarket, LocaleLexicon, Expression]
+      color: purple
+      description: Shared locale configuration and knowledge
+
+    - name: Project Layer
+      nodes: [Project, BrandIdentity, ProjectL10n]
+      color: blue
+      description: Project foundation and branding
+
+    - name: Content Layer
+      nodes: [Page, Block, BlockType, Concept, ConceptL10n]
+      color: green
+      description: Semantic content structure
+
+    - name: Generation Layer
+      nodes: [PagePrompt, BlockPrompt, BlockRules, PageL10n, BlockL10n]
+      color: orange
+      description: Prompts and generated outputs
+
+    - name: Mining Layer
+      nodes: [SEOKeywordL10n, SEOKeywordMetrics, SEOMiningRun, GEOSeedL10n, GEOSeedMetrics, GEOMiningRun]
+      color: gray
+      description: SEO and GEO mining data
+
+  examples:
+    - name: Count all nodes by type
+      description: Get node counts for each label in the graph
+      query: |
+        MATCH (n)
+        RETURN labels(n)[0] AS label, count(*) AS count
+        ORDER BY count DESC
+
+    - name: Get project with all pages
+      description: Load a project and its page structure
+      query: |
+        MATCH (p:Project {key: $projectKey})
+        OPTIONAL MATCH (p)-[:HAS_PAGE]->(page:Page)
+        RETURN p.key AS project,
+               collect(page.key) AS pages
+      params:
+        projectKey: "qrcode-ai"
+
+    - name: Full graph statistics
+      description: Overview of all node and relationship counts
+      query: |
+        CALL {
+          MATCH (n) RETURN count(n) AS nodeCount
+        }
+        CALL {
+          MATCH ()-[r]->() RETURN count(r) AS relCount
+        }
+        RETURN nodeCount, relCount
+
+  notes:
+    - "This view is for documentation and understanding the full schema"
+    - "For generation tasks, use more specific views like page-generation or block-generation"
+    - "The graph follows a scope hierarchy: Global > Shared > Project"
+    - "Mermaid diagram is auto-generated from relations.yaml via MermaidGenerator"

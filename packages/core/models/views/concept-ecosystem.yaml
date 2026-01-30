@@ -1,0 +1,95 @@
+# models/views/concept-ecosystem.yaml
+id: concept-ecosystem
+name: Concept Network
+description: Concept with all related data (L10n, SEO, GEO, semantic links)
+version: "8.0.0"
+
+root:
+  type: Concept
+
+include:
+  - relation: HAS_L10N
+    direction: outgoing
+
+  - relation: TARGETS_SEO
+    direction: outgoing
+
+  - relation: TARGETS_GEO
+    direction: outgoing
+
+  - relation: SEMANTIC_LINK
+    direction: both
+    depth: 2
+
+filters:
+  locale: $locale
+
+docs:
+  title: "Concept Network View"
+  category: localization
+  description: |
+    The concept network showing semantic relationships between concepts.
+    Concepts are the core semantic building blocks of NovaNet:
+    - Each Concept has localized versions (ConceptL10n) per locale
+    - Concepts connect via SEMANTIC_LINK with temperature weights
+    - Concepts can target SEO keywords and GEO seeds
+
+  layers:
+    - name: Concept Core
+      nodes: [Concept]
+      color: blue
+      description: Invariant concept definitions
+
+    - name: Localization
+      nodes: [ConceptL10n]
+      color: green
+      description: Localized concept content
+
+    - name: SEO/GEO Targets
+      nodes: [SEOKeywordL10n, GEOSeedL10n]
+      color: orange
+      description: SEO and GEO targeting
+
+  examples:
+    - name: Concept with all localizations
+      description: Get a concept with all its localized versions
+      query: |
+        MATCH (c:Concept {key: $conceptKey})
+        OPTIONAL MATCH (c)-[:HAS_L10N]->(cl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale)
+        RETURN c.key AS concept,
+               c.llm_context AS context,
+               collect({locale: l.key, title: cl.title, definition: cl.definition}) AS localizations
+      params:
+        conceptKey: "tier-pro"
+
+    - name: Concept semantic network
+      description: Get related concepts via semantic links
+      query: |
+        MATCH (c:Concept {key: $conceptKey})
+        OPTIONAL MATCH (c)-[sl:SEMANTIC_LINK]-(related:Concept)
+        RETURN c.key AS concept,
+               collect({
+                 related: related.key,
+                 temperature: sl.temperature,
+                 direction: CASE WHEN startNode(sl) = c THEN 'outgoing' ELSE 'incoming' END
+               }) AS semanticLinks
+      params:
+        conceptKey: "tier-pro"
+
+    - name: Concept SEO/GEO targets
+      description: Get SEO keywords and GEO seeds targeted by a concept
+      query: |
+        MATCH (c:Concept {key: $conceptKey})
+        OPTIONAL MATCH (c)-[:TARGETS_SEO]->(seo:SEOKeywordL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+        OPTIONAL MATCH (c)-[:TARGETS_GEO]->(geo:GEOSeedL10n)-[:FOR_LOCALE]->(l2:Locale {key: $locale})
+        RETURN c.key AS concept,
+               collect(DISTINCT seo.keyword) AS seoKeywords,
+               collect(DISTINCT geo.question) AS geoQuestions
+      params:
+        conceptKey: "tier-pro"
+        locale: "fr-FR"
+
+  notes:
+    - "Concepts are INVARIANT - they exist independently of locale"
+    - "ConceptL10n provides locale-specific title, definition, examples"
+    - "SEMANTIC_LINK temperature controls spreading activation strength"

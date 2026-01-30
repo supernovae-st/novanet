@@ -1,0 +1,635 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# RELATIONS - All Neo4j relationships v8.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# See _index.yaml for full graph diagram.
+#
+# v7.12.1 CHANGES (from v7.12.0):
+#   - ADDED: anchor_type property to LINKS_TO (exact_match | partial_match | branded | generic)
+#   - ADDED: nofollow property to LINKS_TO (boolean, default false)
+#
+# v7.12.0 CHANGES (from v7.11.0):
+#   - ADDED: LINKS_TO (Page → Page) for explicit internal linking with concept-based anchors
+#   - ADDED: SUBTOPIC_OF (Page → Page) for pillar-cluster hierarchy
+#   - UPDATED: PageType.category to include "pillar" | "cluster" values
+#
+# v7.11.0 CHANGES (from v7.10.0):
+#   - ADDED: PREVIOUS_VERSION (BlockL10n → BlockL10n, PageL10n → PageL10n)
+#   - REMOVED: PageL10n → PageMetrics from HAS_METRICS (query GA/PostHog with date ranges)
+#   - REMOVED: PageMetrics node entirely (YAGNI)
+#
+# v7.10.0 CHANGES (from v7.9.0):
+#   - UPDATED: OF_TYPE now supports Page → PageType (mirrors Block → BlockType)
+#
+# v7.9.0 CHANGES (from v7.8.5):
+#   - REMOVED: USED_SEO_KEYWORD (BlockL10n → SEOKeywordL10n)
+#   - REMOVED: USED_GEO_SEED (BlockL10n → GEOSeedL10n)
+#   - WHY: SEO/GEO targeting is conceptual, not block-level
+#   - Provenance is implicit via: BlockL10n -[:INFLUENCED_BY]-> ConceptL10n -[:HAS_*_TARGET]-> SEO/GEO
+#
+# v7.8.5 CHANGES (from v7.8.4):
+#   - UNIFIED: HAS_METRICS for all time-series observations
+#     - SEOKeywordL10n → SEOKeywordMetrics (renamed from SEOSnapshot)
+#     - GEOSeedL10n → GEOSeedMetrics (renamed from GEOCitation)
+#     - NOTE v7.11.0: PageL10n → PageMetrics REMOVED (query GA with date ranges)
+#   - REMOVED: HAS_SNAPSHOT (replaced by HAS_METRICS)
+#   - REMOVED: HAS_CITATION (replaced by HAS_METRICS)
+#   - ADDED: Semantic vs Auxiliary relation classification documentation
+#
+# RELATION CLASSIFICATION (v7.8.5):
+#   SEMANTIC RELATIONS (used in spreading activation, LLM context):
+#     - SEMANTIC_LINK (temperature: 0.0-1.0)
+#     - USES_CONCEPT (temperature: 0.0-1.0)
+#     - INFLUENCED_BY (weight: 0.0-1.0)
+#     - HAS_L10N, HAS_OUTPUT, FOR_LOCALE, HAS_*_TARGET
+#
+#   AUXILIARY RELATIONS (excluded from spreading activation):
+#     - HAS_METRICS (time-series observations, no temperature)
+#     - PREVIOUS_VERSION (version history chain, v7.11.0)
+#     - LINKS_TO, SUBTOPIC_OF (page relationships, v7.12.0)
+#     - HAS_BLOCK (structural, has position)
+#     - HAS_PROMPT, HAS_RULES (structural)
+#     - BELONGS_TO_* (structural)
+#     - *_MINES (mining provenance)
+#
+# v7.8.0 CHANGES (from v7.7.0):
+#   - ADDED: L10N_OF (inverse of HAS_L10N)
+#   - ADDED: OUTPUT_OF (inverse of HAS_OUTPUT)
+#   - ADDED: BLOCK_OF (inverse of HAS_BLOCK)
+#   - ADDED: USED_BY (inverse of USES_CONCEPT)
+#   - ADDED: HAS_LOCALIZED_CONTENT (inverse of FOR_LOCALE)
+#   - Ontological improvement: bidirectional queries without full scans
+#
+# NOMENCLATURE v7.8.2:
+#   - *L10n suffix for ALL localized content (human OR LLM generated)
+#   - :HAS_L10N → human-curated content (ConceptL10n, ProjectL10n)
+#   - :HAS_OUTPUT → LLM-generated content (PageL10n, BlockL10n)
+#   - :HAS_IDENTITY, :HAS_VOICE, :HAS_CULTURE, :HAS_MARKET, :HAS_LEXICON → Locale Knowledge
+#   - :HAS_METRICS → time-series observations (SEOKeywordMetrics, GEOSeedMetrics)
+#   - :INFLUENCED_BY → provenance tracking
+#   - :USES_CONCEPT → simplified from PAGE_USES_CONCEPT/BLOCK_USES_CONCEPT
+#   - :HAS_SEO_TARGET → locale-aligned SEO targeting (ConceptL10n → SEOKeywordL10n)
+#   - :HAS_GEO_TARGET → locale-aligned GEO targeting (ConceptL10n → GEOSeedL10n)
+#
+# v7.8.2 CHANGES (from v7.8.0):
+#   - RENAMED: SEOKeyword → SEOKeywordL10n (consistency: all LOCALIZED nodes use *L10n suffix)
+#
+# v7.7.0 CHANGES (from v7.6.0):
+#   - ADDED: HAS_SEO_TARGET (ConceptL10n → SEOKeywordL10n) - primary locale-aligned targeting
+#   - ADDED: HAS_GEO_TARGET (ConceptL10n → GEOSeedL10n) - primary locale-aligned targeting
+#   - KEPT: TARGETS_SEO/GEO (Concept → SEO/GEO) as cross-locale shortcuts
+#   - Ontological improvement: localized entities now link to localized entities
+#
+# v7.1.0 CHANGES (from v7.0.0):
+#   - ADDED: priority/freshness fields to all nodes for context budgeting
+#   - ADDED: Standardized llm_context format: "USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]."
+#
+# v7.0.0 CHANGES (from v6.x):
+#   - RENAMED: HAS_PAGE_OUTPUT → HAS_OUTPUT (simplified)
+#   - RENAMED: HAS_BLOCK_OUTPUT → HAS_OUTPUT (simplified)
+#   - RENAMED: PAGE_USES_CONCEPT → USES_CONCEPT (simplified)
+#   - RENAMED: BLOCK_USES_CONCEPT → USES_CONCEPT (simplified)
+#   - RENAMED: HAS_PROJECT_L10N → HAS_L10N (consistent)
+#   - RENAMED: HAS_AUDIENCE_L10N → HAS_L10N (consistent)
+#
+# ───────────────────────────────────────────────────────────────────────────────
+
+relations:
+  # ─────────────────────────────────────────────────────────────────────────────
+  # PROJECT ROOT
+  # ─────────────────────────────────────────────────────────────────────────────
+  HAS_CONCEPT:
+    from: Project
+    to: Concept
+    description: "Project owns its semantic concepts. LLM: use to load all concepts for a project."
+
+  HAS_PAGE:
+    from: Project
+    to: Page
+    description: "Project owns its page structures. LLM: use to enumerate pages for generation."
+
+  HAS_BRAND_IDENTITY:
+    from: Project
+    to: BrandIdentity
+    description: "Project has exactly one brand identity. LLM: use for visual/tone consistency."
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # LOCALE (graph-native localization)
+  # ─────────────────────────────────────────────────────────────────────────────
+  SUPPORTS_LOCALE: { from: Project, to: Locale, props: [status] }
+  # status: "active" | "pending" | "disabled"
+  # A project can support multiple locales with different activation states
+
+  DEFAULT_LOCALE: { from: Project, to: Locale }
+  # Exactly ONE per project - the primary/fallback locale
+  # Constraint: Project can only have one DEFAULT_LOCALE relationship
+
+  FALLBACK_TO: { from: Locale, to: Locale }
+  # Fallback chain: (fr-CA)-[:FALLBACK_TO]->(fr-FR)-[:FALLBACK_TO]->(en-US)
+
+  FOR_LOCALE: { from: "*", to: Locale }
+  # All localized content nodes point to their target Locale
+  # Used by: ConceptL10n, ProjectL10n, BlockL10n, PageL10n, SEOKeywordL10n, GEOSeedL10n
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # LOCALIZATION (L10n nodes)
+  # v7.1.0: Unified to HAS_L10N for all *L10n nodes
+  # ─────────────────────────────────────────────────────────────────────────────
+  HAS_L10N:
+    from: "[Concept, Project]"
+    to: "[ConceptL10n, ProjectL10n]"
+    description: "Links invariant to its localized definitions (v7.1.0: unified)"
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # LOCALE KNOWLEDGE (replaces L10NCategory/L10NContent)
+  # LLM: These provide cultural/linguistic context for native generation
+  # ─────────────────────────────────────────────────────────────────────────────
+  HAS_IDENTITY:
+    from: Locale
+    to: LocaleIdentity
+    description: "Locale's basic identity. LLM: language name, native endonym, script info."
+
+  HAS_VOICE:
+    from: Locale
+    to: LocaleVoice
+    description: "Locale's communication style. LLM: formality (0-1), directness, emotional range."
+
+  HAS_CULTURE:
+    from: Locale
+    to: LocaleCulture
+    description: "Locale's cultural norms. LLM: taboos, sensitivities, Hofstede dimensions."
+
+  HAS_MARKET:
+    from: Locale
+    to: LocaleMarket
+    description: "Locale's market context. LLM: currency, payment preferences, trust signals."
+
+  HAS_LEXICON:
+    from: Locale
+    to: LocaleLexicon
+    description: "Locale's vocabulary. LLM: domain-specific terms, semantic field expressions."
+
+  HAS_EXPRESSION:
+    from: LocaleLexicon
+    to: Expression
+    description: "Lexicon contains expressions. LLM: urgency/value/action phrases for CTAs."
+
+  # v7.2.0: Locale Rules (adaptation, formatting, slug)
+  HAS_RULES_ADAPTATION:
+    from: Locale
+    to: LocaleRulesAdaptation
+    description: "Content adaptation rules. LLM: measurement units, date formats, honorifics."
+
+  HAS_RULES_FORMATTING:
+    from: Locale
+    to: LocaleRulesFormatting
+    description: "Text formatting rules. LLM: number formats, currency placement, patterns."
+
+  HAS_RULES_SLUG:
+    from: Locale
+    to: LocaleRulesSlug
+    description: "URL slug rules. LLM: character transliteration, word separators."
+
+  # v7.2.0: Culture References (separate from LocaleCulture norms)
+  HAS_CULTURE_REFERENCES:
+    from: LocaleCulture
+    to: LocaleCultureReferences
+    description: "Cultural touchpoints. LLM: celebrities, events, idioms for relatability."
+
+  # v7.2.0: Graph-native data nodes (extracted from JSON)
+  HAS_REFERENCE:
+    from: LocaleCultureReferences
+    to: Reference
+    description: "Cultural reference entity. LLM: person, event, or brand for localization."
+
+  HAS_METAPHOR:
+    from: LocaleCultureReferences
+    to: Metaphor
+    description: "Cultural metaphor. LLM: locale-specific imagery and comparisons."
+
+  HAS_PATTERN:
+    from: LocaleRulesFormatting
+    to: Pattern
+    description: "Formatting pattern. LLM: regex/template for dates, numbers, addresses."
+
+  HAS_CONSTRAINT:
+    from: LocaleCulture
+    to: Constraint
+    description: "Cultural constraint. LLM: topics to avoid, sensitivities, legal restrictions."
+
+  # v7.2.0: Regional locale variants
+  VARIANT_OF:
+    from: Locale
+    to: Locale
+    description: "Regional variant relationship. LLM: (en-AU)-[:VARIANT_OF]->(en-GB) for inheritance."
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # OUTPUT (generated content)
+  # v7.1.0: Unified to HAS_OUTPUT for all *Output nodes
+  # ─────────────────────────────────────────────────────────────────────────────
+  HAS_OUTPUT:
+    from: "[Page, Block]"
+    to: "[PageL10n, BlockL10n]"
+    description: "Links structure to its generated output"
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # PROMPTS (v7.2.0 - AI instructions with versioning)
+  # ─────────────────────────────────────────────────────────────────────────────
+  HAS_PROMPT:
+    from: "[Page, Block]"
+    to: "[PagePrompt, BlockPrompt]"
+    description: "Links structure nodes to their AI prompts"
+
+  HAS_RULES:
+    from: BlockType
+    to: BlockRules
+    description: "Links BlockType to generation rules"
+
+  GENERATED:
+    from: "[PagePrompt, BlockPrompt]"
+    to: "[PageL10n, BlockL10n]"
+    props: [generated_at]
+    description: "Provenance tracking: which prompt generated which output"
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # METRICS (time-series observations) - v7.8.5 unified pattern
+  # ─────────────────────────────────────────────────────────────────────────────
+  # AUXILIARY RELATION: Not used in spreading activation.
+  # Metrics are queried directly for analytics, not discovered via traversal.
+  # No temperature property - this is structural/observational data.
+  HAS_METRICS:
+    from: "[SEOKeywordL10n, GEOSeedL10n]"
+    to: "[SEOKeywordMetrics, GEOSeedMetrics]"
+    description: "Time-series observation link (v7.11.0: removed PageL10n → PageMetrics)"
+    # SEOKeywordL10n → SEOKeywordMetrics (keyword ranking/volume history)
+    # GEOSeedL10n → GEOSeedMetrics (AI citation observations)
+    # REMOVED v7.11.0: PageL10n → PageMetrics (query GA/PostHog with date ranges instead)
+
+  ASSEMBLES: { from: PageL10n, to: BlockL10n, props: [position] }
+  # PageL10n assembles BlockL10ns with position for ordering
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # VERSION HISTORY (v7.11.0)
+  # ─────────────────────────────────────────────────────────────────────────────
+  # AUXILIARY RELATION: Not used in spreading activation.
+  # Version chain for history tracking, comparison, and rollback.
+  PREVIOUS_VERSION:
+    from: "[BlockL10n, PageL10n]"
+    to: "[BlockL10n, PageL10n]"
+    description: "Links to previous version in history chain (v7.11.0)"
+    # BlockL10n → BlockL10n (block content versioning)
+    # PageL10n → PageL10n (page content + structure versioning)
+    # HAS_OUTPUT always points to current version (replaced_at IS NULL)
+    # Query history: MATCH (current)-[:PREVIOUS_VERSION*]->(old)
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # PAGE RELATIONSHIPS (v7.12.0)
+  # Internal linking and pillar-cluster hierarchy for SEO topical authority
+  # ─────────────────────────────────────────────────────────────────────────────
+
+  LINKS_TO:
+    from: Page
+    to: Page
+    props: [concept_key, context, seo_weight, anchor_type, nofollow]
+    description: "Explicit internal link for SEO (v7.12.0, props extended v7.12.1)"
+    # concept_key: key of Concept - anchor text derived from ConceptL10n.title at generation time
+    # context: "cta" | "body" | "related" | "nav" - where the link appears
+    # seo_weight: 0.0-1.0 - link importance for SEO
+    # anchor_type: "exact_match" | "partial_match" | "branded" | "generic" (v7.12.1)
+    #   - exact_match: anchor = ConceptL10n.title exactly (5× traffic, use sparingly max 10%)
+    #   - partial_match: anchor includes concept keywords
+    #   - branded: anchor = brand name (QR Code AI)
+    #   - generic: anchor = "click here", "learn more" (low SEO value)
+    # nofollow: boolean (default false) - set true for login/legal pages to prevent equity flow
+    # NOTE: Page is INVARIANT, anchor text is LOCALIZED via Concept → ConceptL10n
+    # LLM: use to determine internal links to generate in content
+
+  SUBTOPIC_OF:
+    from: Page
+    to: Page
+    description: "Cluster page is subtopic of pillar page (v7.12.0)"
+    # Pillar-Cluster hierarchy for SEO topical authority
+    # cluster_page -[:SUBTOPIC_OF]-> pillar_page
+    # Use with PageType.category: "pillar" | "cluster"
+    # LLM: use to understand page hierarchy and topical structure
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # PAGE STRUCTURE
+  # ─────────────────────────────────────────────────────────────────────────────
+  HAS_BLOCK: { from: Page, to: Block, props: [position] }
+  # position: display order (Block can be reused across pages)
+
+  OF_TYPE:
+    from: "[Page, Block]"
+    to: "[PageType, BlockType]"
+  # v7.10.0: Page uses PageType, Block uses BlockType (consistent pattern)
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # CONCEPT USAGE
+  # v7.1.0: Simplified from PAGE_USES_CONCEPT/BLOCK_USES_CONCEPT
+  # ─────────────────────────────────────────────────────────────────────────────
+  USES_CONCEPT:
+    from: "[Page, Block]"
+    to: Concept
+    props: [purpose, temperature]
+    description: "Page/Block references concepts for generation context"
+    # purpose: "primary" | "secondary" | "contextual"
+    # temperature: 1.0 = direct use, 0.5 = contextual
+
+  SEMANTIC_LINK: { from: Concept, to: Concept, props: [type, temperature] }
+  # type: semantic relationship type (see semantic_link_types below)
+  # temperature: link strength (0.0-1.0), cutoff at 0.3, max 2 hops
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # SEO/GEO TARGETING
+  # v7.7.0: Dual-linking pattern for ontological correctness + query performance
+  #
+  # PRIMARY (locale-aligned): ConceptL10n → SEOKeywordL10n/GEOSeedL10n
+  #   - Ontologically correct: localized → localized
+  #   - Direct query: one hop, no locale filtering needed
+  #   - Use for generation pipeline
+  #
+  # SHORTCUT (cross-locale): Concept → SEOKeywordL10n/GEOSeedL10n
+  #   - Management view: all keywords across locales
+  #   - Kept for backward compatibility and reporting
+  # ─────────────────────────────────────────────────────────────────────────────
+
+  # PRIMARY: Locale-aligned targeting (v7.7.0)
+  HAS_SEO_TARGET:
+    from: ConceptL10n
+    to: SEOKeywordL10n
+    props: [role, priority]
+    description: "Primary SEO targeting - locale-aligned (ConceptL10n and SEOKeywordL10n share same locale)"
+    # role: "primary" | "secondary" | "long-tail"
+    # priority: 1-10 (1 = highest)
+    # CONSTRAINT: ConceptL10n.locale == SEOKeywordL10n.locale (validated by application/SHACL)
+
+  HAS_GEO_TARGET:
+    from: ConceptL10n
+    to: GEOSeedL10n
+    props: [role, priority]
+    description: "Primary GEO targeting - locale-aligned (ConceptL10n and GEOSeedL10n share same locale)"
+    # role: "primary" | "contextual"
+    # priority: 1-10 (1 = highest)
+    # CONSTRAINT: ConceptL10n.locale == GEOSeedL10n.locale (validated by application/SHACL)
+
+  # SHORTCUT: Cross-locale view (kept for management/reporting)
+  TARGETS_SEO: { from: Concept, to: SEOKeywordL10n, props: [status, priority] }
+  # status: "active" | "paused" | "archived"
+  # priority: 1-10 (1 = highest)
+  # USE: cross-locale reporting, "all keywords for concept X"
+
+  TARGETS_GEO: { from: Concept, to: GEOSeedL10n, props: [status, priority] }
+  # status: "active" | "monitoring" | "archived"
+  # USE: cross-locale reporting, "all seeds for concept X"
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # REMOVED in v7.8.1: PAGE_TARGETS_SEO and PAGE_TARGETS_GEO
+  # WHY: Direct Page → SEO/GEO targeting bypasses semantic grouping.
+  #      Correct flow: Page → Concept → ConceptL10n → SEOKeywordL10n/GEOSeedL10n
+  #      Use HAS_SEO_TARGET / HAS_GEO_TARGET from ConceptL10n instead.
+  # ─────────────────────────────────────────────────────────────────────────────
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # SEO MINING (v7.8.5: HAS_SNAPSHOT → HAS_METRICS)
+  # ─────────────────────────────────────────────────────────────────────────────
+  SEO_MINES: { from: SEOMiningRun, to: SEOKeywordL10n }
+  # v7.8.5: SEOKeywordL10n -[:HAS_METRICS]-> SEOKeywordMetrics (unified pattern)
+  # REMOVED in v7.8.5: HAS_SNAPSHOT (replaced by HAS_METRICS)
+
+  # REMOVED in v7.8.4: SEOVariation node and related relations
+  # - HAS_VARIATION (SEOKeywordL10n → SEOVariation)
+  # - SEO_DISCOVERED_BY (SEOVariation → SEOMiningRun)
+  # - VARIATES (SEOVariation → SEOKeywordL10n)
+  # WHY: Variations are just other SEOKeywordL10n nodes linked to same Concept
+  # Use: Concept -[:TARGETS_SEO {is_primary, variation_type}]-> SEOKeywordL10n
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # GEO MINING (v7.8.5: HAS_CITATION → HAS_METRICS)
+  # ─────────────────────────────────────────────────────────────────────────────
+  GEO_MINES: { from: GEOMiningRun, to: GEOSeedL10n }
+  # v7.8.5: GEOSeedL10n -[:HAS_METRICS]-> GEOSeedMetrics (unified pattern)
+  # REMOVED in v7.8.5: HAS_CITATION (replaced by HAS_METRICS)
+
+  # REMOVED in v7.8.4: GEOReformulation node and related relations
+  # - GEO_DISCOVERED_BY (GEOReformulation → GEOMiningRun)
+  # - HAS_REFORMULATION (GEOSeedL10n → GEOReformulation)
+  # - REFORMULATES (GEOReformulation → GEOSeedL10n)
+  # WHY: Reformulations are just other GEOSeedL10n nodes linked to same Concept
+  # Use: Concept -[:TARGETS_GEO {source: 'mining'}]-> GEOSeedL10n
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # PROVENANCE (output tracking)
+  # ─────────────────────────────────────────────────────────────────────────────
+  INFLUENCED_BY: { from: BlockL10n, to: ConceptL10n, props: [weight, concept_version] }
+  # weight: 0.0-1.0 (concept importance in output)
+  # concept_version: version of ConceptL10n at generation time
+
+  # REMOVED v7.9.0: USED_SEO_KEYWORD, USED_GEO_SEED
+  # WHY: SEO/GEO are conceptual, not block-level
+  # Provenance is implicit via: BlockL10n -[:INFLUENCED_BY]-> ConceptL10n -[:HAS_*_TARGET]-> SEO/GEO
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # INVERSE RELATIONSHIPS (v7.8.0)
+  # Explicit inverses for bidirectional queries without full scans
+  # ─────────────────────────────────────────────────────────────────────────────
+  L10N_OF:
+    from: "[ConceptL10n, ProjectL10n]"
+    to: "[Concept, Project]"
+    inverse_of: HAS_L10N
+    description: "Inverse of HAS_L10N - localized content points to parent"
+
+  OUTPUT_OF:
+    from: "[PageL10n, BlockL10n]"
+    to: "[Page, Block]"
+    inverse_of: HAS_OUTPUT
+    description: "Inverse of HAS_OUTPUT - generated content points to structure"
+
+  BLOCK_OF:
+    from: Block
+    to: Page
+    inverse_of: HAS_BLOCK
+    props: [position]
+    description: "Inverse of HAS_BLOCK - block points to its page"
+
+  USED_BY:
+    from: Concept
+    to: "[Page, Block]"
+    inverse_of: USES_CONCEPT
+    description: "Inverse of USES_CONCEPT - concept knows who uses it"
+
+  HAS_LOCALIZED_CONTENT:
+    from: Locale
+    to: "[ProjectL10n, ConceptL10n, PageL10n, BlockL10n, SEOKeywordL10n, GEOSeedL10n]"
+    inverse_of: FOR_LOCALE
+    description: "Inverse of FOR_LOCALE - locale knows all its content"
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # OPTIMIZATION RELATIONS
+  # ─────────────────────────────────────────────────────────────────────────────
+  GENERATED_FROM:     { from: BlockL10n, to: BlockType }
+  # Direct link for fast structure validation
+
+  BELONGS_TO_PROJECT_L10N: { from: PageL10n, to: ProjectL10n }
+  # Locale-aligned: PageL10n (fr-FR) → ProjectL10n (fr-FR)
+  # Provides generation context (voice, tagline, CTAs) in same locale
+  # CONSTRAINT: PageL10n.locale == ProjectL10n.locale (validated by application/SHACL)
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# SEMANTIC_LINK TYPES
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# Defines how two concepts are semantically linked.
+# temperature = link strength (0.0-1.0) for spreading activation.
+#
+# SPREADING ACTIVATION:
+#   MATCH (c:Concept {key: $key})-[r:SEMANTIC_LINK*1..2]->(c2:Concept)
+#   WHERE ALL(rel IN r WHERE rel.temperature >= 0.3)
+#   WITH c2, reduce(a = 1.0, rel IN r | a * rel.temperature) AS activation
+#   WHERE activation >= 0.3
+#   RETURN c2.key, activation ORDER BY activation DESC
+
+semantic_link_types:
+  # Verb pairs (action relationships)
+  - is_action_on    # A is an action on B (0.95 default temp)
+                    # Ex: (create-qr-code)-[:is_action_on]->(qr-code-generator)
+  - has_action      # B has A as action (inverse of is_action_on, 0.90 default)
+                    # Ex: (qr-code-generator)-[:has_action]->(create-qr-code)
+
+  # Container pairs (composition)
+  - includes        # A includes B as feature (0.85 default temp)
+                    # Ex: (tier-pro)-[:includes]->(analytics)
+  - included_in     # B is included in A (inverse of includes, 0.80 default)
+                    # Ex: (analytics)-[:included_in]->(tier-pro)
+
+  # Taxonomy pairs (classification)
+  - type_of         # A is a type/variant of B (0.90 default temp)
+                    # Ex: (tier-free)-[:type_of]->(pricing-tier)
+  - has_type        # B has A as variant (inverse of type_of, 0.85 default)
+                    # Ex: (pricing-tier)-[:has_type]->(tier-free)
+
+  # Dependency pairs (requirements)
+  - requires        # A requires B to function (0.80 default temp)
+                    # Ex: (scan-qr-code)-[:requires]->(qr-code)
+  - required_by     # B is required by A (inverse of requires, 0.75 default)
+                    # Ex: (qr-code)-[:required_by]->(scan-qr-code)
+
+  # Generic/contrast (symmetric)
+  - related         # A and B are loosely related (0.60 default temp, symmetric)
+                    # Ex: (marketing)-[:related]->(analytics)
+  - opposite        # A and B are contrasting alternatives (0.40 default temp)
+                    # Ex: (tier-free)-[:opposite]->(tier-pro)
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# EXAMPLES
+# ═══════════════════════════════════════════════════════════════════════════════
+
+examples:
+  uses_concept:
+    description: "Page/Block uses a concept"
+    cypher: |
+      MATCH (p:Page {key:'pricing'})
+      MATCH (c:Concept {key:'tier-pro'})
+      CREATE (p)-[:USES_CONCEPT {purpose: "primary", temperature: 1.0}]->(c)
+
+  semantic_link:
+    description: "Create semantic link between concepts"
+    cypher: |
+      MATCH (c1:Concept {key:'create-qr-code'})
+      MATCH (c2:Concept {key:'qr-code-generator'})
+      CREATE (c1)-[:SEMANTIC_LINK {type: "is_action_on", temperature: 0.95}]->(c2)
+
+  targets_seo:
+    description: "Concept targets SEO keyword (cross-locale shortcut)"
+    cypher: |
+      MATCH (c:Concept {key:'action-create-qr'})
+      MATCH (kw:SEOKeywordL10n {key:'seo-creer-qr-code-gratuit-fr'})-[:FOR_LOCALE]->(l:Locale {key:'fr-FR'})
+      CREATE (c)-[:TARGETS_SEO {status: "active", priority: 1}]->(kw)
+
+  has_seo_target:
+    description: "ConceptL10n targets SEO keyword (locale-aligned primary, v7.7.0)"
+    cypher: |
+      // Find ConceptL10n and SEOKeywordL10n that share the same locale
+      MATCH (c:Concept {key:'action-create-qr'})-[:HAS_L10N]->(cl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale {key:'fr-FR'})
+      MATCH (kw:SEOKeywordL10n {key:'seo-creer-qr-code-gratuit-fr'})-[:FOR_LOCALE]->(l)
+      CREATE (cl)-[:HAS_SEO_TARGET {role: "primary", priority: 1}]->(kw)
+
+  has_geo_target:
+    description: "ConceptL10n targets GEO seed (locale-aligned primary, v7.7.0)"
+    cypher: |
+      // Find ConceptL10n and GEOSeedL10n that share the same locale
+      MATCH (c:Concept {key:'action-create-qr'})-[:HAS_L10N]->(cl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale {key:'fr-FR'})
+      MATCH (gs:GEOSeedL10n {key:'geo-comment-creer-qr-code-fr'})-[:FOR_LOCALE]->(l)
+      CREATE (cl)-[:HAS_GEO_TARGET {role: "primary", priority: 1}]->(gs)
+
+  locale_aligned_query:
+    description: "Get all SEO keywords for a ConceptL10n (efficient v7.7.0 pattern)"
+    cypher: |
+      // Direct traversal - no locale filtering needed
+      MATCH (cl:ConceptL10n)-[:HAS_SEO_TARGET]->(sk:SEOKeywordL10n)
+      WHERE cl.title = 'Creer un QR Code'
+      RETURN cl.title, sk.value AS keyword, sk.volume
+      ORDER BY sk.volume DESC
+
+  locale_knowledge:
+    description: "Get locale knowledge for LLM context"
+    cypher: |
+      MATCH (l:Locale {key:'fr-FR'})-[:HAS_VOICE]->(v:LocaleVoice)
+      MATCH (l)-[:HAS_LEXICON]->(lex:LocaleLexicon)-[:HAS_EXPRESSION]->(e:Expression)
+      WHERE e.semantic_field = 'urgency'
+      RETURN v.formality_score, collect(e.text) AS urgency_expressions
+
+  provenance:
+    description: "Get output provenance"
+    cypher: |
+      MATCH (bo:BlockL10n)-[:FOR_LOCALE]->(l:Locale {key: 'fr-FR'})
+      MATCH (bo)-[:INFLUENCED_BY]->(cl:ConceptL10n)
+      RETURN bo.generated, collect(cl.title) AS concepts_used
+
+  spreading_activation:
+    description: "Get related concepts via spreading activation"
+    cypher: |
+      MATCH (c:Concept {key: $key})-[r:SEMANTIC_LINK*1..2]->(c2:Concept)
+      WHERE ALL(rel IN r WHERE rel.temperature >= 0.3)
+      WITH c2, reduce(a = 1.0, rel IN r | a * rel.temperature) AS activation
+      WHERE activation >= 0.3
+      RETURN c2.key, activation ORDER BY activation DESC
+
+  links_to:
+    description: "Create internal link between pages (v7.12.0)"
+    cypher: |
+      // Pricing page links to Pro tier page using tier-pro concept for anchor
+      MATCH (source:Page {key:'pricing'})
+      MATCH (target:Page {key:'tier-pro'})
+      CREATE (source)-[:LINKS_TO {
+        concept_key: "tier-pro",
+        context: "cta",
+        seo_weight: 0.9
+      }]->(target)
+
+  subtopic_of:
+    description: "Create pillar-cluster hierarchy (v7.12.0)"
+    cypher: |
+      // Cluster page is subtopic of pillar page
+      MATCH (cluster:Page {key:'how-to-create-qr-code'})
+      MATCH (pillar:Page {key:'qr-code-guide'})
+      CREATE (cluster)-[:SUBTOPIC_OF]->(pillar)
+
+  internal_links_for_generation:
+    description: "Get all internal links for a page with localized anchors (v7.12.0)"
+    cypher: |
+      MATCH (page:Page {key: $key})-[link:LINKS_TO]->(target:Page)
+      MATCH (c:Concept {key: link.concept_key})-[:HAS_L10N]->(cl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+      RETURN target.key AS target_page,
+             cl.title AS anchor_text,
+             link.context AS link_context,
+             link.seo_weight AS weight
+      ORDER BY link.seo_weight DESC
+
+  pillar_cluster_structure:
+    description: "Get pillar page with all its cluster pages"
+    cypher: |
+      MATCH (pillar:Page)-[:OF_TYPE]->(pt:PageType {category: 'pillar'})
+      MATCH (cluster:Page)-[:SUBTOPIC_OF]->(pillar)
+      RETURN pillar.key AS pillar,
+             collect(cluster.key) AS clusters

@@ -1,0 +1,104 @@
+# models/nodes/seo/seo-mining-run.yaml
+# SEOMiningRun - SEO mining job orchestration
+
+node:
+  name: SEOMiningRun
+  category: seo
+  icon: "⚙️"
+  description: "Mining job for SEO keyword variations"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # STANDARD PROPERTIES (v7.1.0 - UUID-identified, no key)
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  standard_properties:
+    key:
+      type: string
+      required: false
+      description: "Optional - UUID-identified"
+
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable name"
+      example: "SEO Mining 2024-01-15 10:00"
+
+
+    description:
+      type: string
+      required: false
+      description: "Short description"
+
+    llm_context:
+      type: string
+      required: false
+      description: "Job metadata for debugging/auditing"
+
+
+
+    created_at:
+      type: datetime
+      required: false
+
+    updated_at:
+      type: datetime
+      required: false
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # NODE-SPECIFIC PROPERTIES
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  properties:
+    status:
+      type: string
+      required: true
+      description: "running | completed | failed"
+      example: "completed"
+
+    sources:
+      type: "string[]"
+      required: false
+      description: "Data sources used"
+      example: '["ahrefs", "semrush"]'
+
+    started_at:
+      type: datetime
+      required: false
+      description: "Job start time"
+
+    completed_at:
+      type: datetime
+      required: false
+      description: "Job completion time"
+
+    total_variations:
+      type: int
+      required: false
+      description: "Total variations found"
+
+    unique_variations:
+      type: int
+      required: false
+      description: "New unique (non-duplicate) variations"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # RELATIONS
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  relations:
+    - relation: MINES
+      to: SEOKeywordL10n
+      direction: outgoing
+      description: "Keywords mined by this run (v7.8.2: SEOKeyword → SEOKeywordL10n)"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # EXAMPLE
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  example:
+    description: "Get recent SEO mining runs"
+    cypher: |
+      MATCH (smr:SEOMiningRun)
+      RETURN smr.display_name, smr.status, smr.total_variations, smr.unique_variations
+      ORDER BY smr.started_at DESC
+      LIMIT 10

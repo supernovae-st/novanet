@@ -1,0 +1,165 @@
+# models/nodes/locale/locale-identity.yaml
+# LocaleIdentity - WHO/WHAT/WHERE data for a locale
+#
+# Stability: High - changes only on ISO updates or geopolitical events
+
+node:
+  name: LocaleIdentity
+  category: locale
+  icon: "🆔"
+  description: "Script, geographic, and technical identity for a locale"
+
+  # ===========================================================================
+  # STANDARD PROPERTIES (no key - relation-identified) v7.1.0
+  # ===========================================================================
+
+  standard_properties:
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable name"
+      example: "French (France) Identity"
+
+    description:
+      type: string
+      required: true
+      description: "Short description"
+      example: "Script, geographic, and technical identity"
+
+    llm_context:
+      type: string
+      required: true
+      description: "LLM generation hints. Format: USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]."
+      example: "USE: for script/encoding decisions. TRIGGERS: accents, AZERTY. NOT: voice aspects."
+
+
+
+    created_at:
+      type: datetime
+      required: true
+      description: "Creation timestamp"
+
+    updated_at:
+      type: datetime
+      required: true
+      description: "Last update timestamp"
+
+  # ===========================================================================
+  # LOCALEIDENTITY-SPECIFIC PROPERTIES
+  # ===========================================================================
+
+  properties:
+    # Script & Writing
+    script_code:
+      type: string
+      required: true
+      description: "ISO 15924 script code"
+      example: "Latn"
+
+    script_name:
+      type: string
+      required: false
+      description: "Human-readable script name"
+      example: "Latin"
+
+    script_direction:
+      type: string
+      required: true
+      enum: [ltr, rtl]
+      description: "Text direction"
+      example: "ltr"
+
+    has_case:
+      type: boolean
+      required: false
+      description: "Whether script has upper/lower case"
+      example: true
+
+    special_characters:
+      type: string
+      required: false
+      description: "Special characters used in locale"
+      example: "a, a, ae, c, e..."
+
+    diacritics:
+      type: boolean
+      required: false
+      description: "Whether locale uses diacritics"
+
+    ligatures:
+      type: boolean
+      required: false
+      description: "Whether locale uses ligatures"
+
+    # Geographic
+    continent:
+      type: string
+      required: false
+      description: "Geographic continent"
+      example: "Europe"
+
+    region:
+      type: string
+      required: false
+      description: "Geographic region"
+      example: "Western Europe"
+
+    capital:
+      type: string
+      required: false
+      description: "Capital city"
+      example: "Paris"
+
+    timezone:
+      type: string
+      required: true
+      description: "IANA timezone identifier"
+      example: "Europe/Paris"
+
+    utc_offset:
+      type: string
+      required: false
+      description: "UTC offset"
+      example: "UTC+1"
+
+    dst_observed:
+      type: boolean
+      required: false
+      description: "Whether daylight saving time is observed"
+
+    # Technical
+    keyboard_layout:
+      type: string
+      required: false
+      description: "Common keyboard layout"
+      example: "AZERTY"
+
+    encoding:
+      type: string
+      required: false
+      description: "Character encoding"
+      default: "UTF-8"
+
+    # Language family
+    language_family:
+      type: string
+      required: false
+      description: "Language family hierarchy"
+      example: "Indo-European > Romance > Gallo-Romance"
+
+    related_languages:
+      type: string[]
+      required: false
+      description: "Related languages"
+      example: ["Italian", "Spanish", "Portuguese"]
+
+  # ===========================================================================
+  # RELATIONS
+  # ===========================================================================
+
+  relations:
+    incoming:
+      - type: HAS_IDENTITY
+        from: Locale
+        cardinality: "1:1"
+        description: "Locale has exactly one identity"
