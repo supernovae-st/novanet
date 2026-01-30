@@ -33,7 +33,7 @@ WHERE e.semantic_field IN $fields
 RETURN e.text AS expression,
        e.semantic_field AS field,
        e.register AS register
-ORDER BY e.priority DESC
+ORDER BY e.semantic_field
 
 // ======================================================================
 // Query: Locale fallback chain

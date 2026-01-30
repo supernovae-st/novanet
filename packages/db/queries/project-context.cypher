@@ -26,9 +26,8 @@ RETURN p.key AS project,
 
 MATCH (p:Project {key: $projectKey})-[:HAS_PAGE]->(page:Page)
 RETURN page.key AS pageKey,
-       page.status AS status,
-       page.priority AS priority
-ORDER BY page.priority DESC, page.key
+       page.status AS status
+ORDER BY page.key
 
 // ======================================================================
 // Query: Multi-project overview

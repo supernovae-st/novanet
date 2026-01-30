@@ -33,4 +33,4 @@ RETURN e.text AS expression,
        e.semantic_field AS field,
        e.register AS register,
        e.usage_context AS context
-ORDER BY e.semantic_field, e.priority DESC
+ORDER BY e.semantic_field

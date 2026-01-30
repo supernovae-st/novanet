@@ -78,7 +78,7 @@ export class VectorSearchService {
         RETURN c.key AS key,
                score,
                'Concept' AS nodeType,
-               c { .key, .display_name, .description, .llm_context, .priority, .freshness } AS properties
+               c { .key, .display_name, .description, .llm_context } AS properties
         ORDER BY score DESC
       `,
         { limit, threshold, embedding }
@@ -128,7 +128,7 @@ export class VectorSearchService {
         RETURN c.key + '-' + l.key AS key,
                score,
                'ConceptL10n' AS nodeType,
-               cl { .title, .definition, .summary, .purpose, .priority, concept_key: c.key, locale_key: l.key } AS properties
+               cl { .title, .definition, .summary, .purpose, concept_key: c.key, locale_key: l.key } AS properties
         ORDER BY score DESC
         LIMIT $limit
       `,
@@ -173,7 +173,7 @@ export class VectorSearchService {
         RETURN p.key AS key,
                score,
                'Page' AS nodeType,
-               p { .key, .display_name, .description, .llm_context, .priority } AS properties
+               p { .key, .display_name, .description, .llm_context } AS properties
         ORDER BY score DESC
       `,
         { limit, threshold, embedding }
