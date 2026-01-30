@@ -1,13 +1,17 @@
-// NovaNet Core - v7.1.0 Convention Tests
-// TDD: Verify key naming, llm_context format, priority, freshness
+// NovaNet Core - v8.2.0 Convention Tests
+// TDD: Verify key naming, llm_context format
 //
-// These tests query Neo4j to verify actual data matches v7.1.0 conventions
+// These tests query Neo4j to verify actual data matches v8.2.0 conventions
+//
+// v8.2.0 CHANGES:
+// - REMOVED: icon, priority, freshness properties (YAGNI)
+// - Standard properties are now: key, display_name, description, llm_context, created_at, updated_at
 
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { type Session } from 'neo4j-driver';
 import { getDriver, closeDriver } from '../db/client.js';
 
-// v7.1.0 CONVENTIONS
+// v8.2.0 CONVENTIONS
 const KEY_PREFIXES: Record<string, string[] | null> = {
   Concept: ['action-', 'product-', 'feature-', 'tier-'],
   Page: ['page-'],
@@ -17,13 +21,10 @@ const KEY_PREFIXES: Record<string, string[] | null> = {
   Locale: null, // BCP 47 format (en-US, fr-FR, etc.)
 };
 
-const VALID_PRIORITIES = ['critical', 'high', 'medium', 'low'];
-const VALID_FRESHNESS = ['realtime', 'hourly', 'daily', 'static'];
-
 // llm_context format: "USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]."
 const LLM_CONTEXT_PATTERN = /^USE:.*\. TRIGGERS:.*\. NOT:.*\.$/;
 
-describe('v7.1.0 Conventions', () => {
+describe('v8.2.0 Conventions', () => {
   let session: Session;
 
   beforeAll(async () => {
@@ -196,100 +197,8 @@ describe('v7.1.0 Conventions', () => {
   });
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // PRIORITY & FRESHNESS TESTS
+  // v8.2.0 REMOVED: Priority & Freshness tests (YAGNI - moved to application layer)
   // ═══════════════════════════════════════════════════════════════════════════
-
-  describe('Priority Field', () => {
-    it('All nodes with key should have valid priority', async () => {
-      const result = await session.run(`
-        MATCH (n)
-        WHERE n.key IS NOT NULL
-        RETURN labels(n)[0] AS label, n.key AS key, n.priority AS priority
-      `);
-
-      const invalidPriorities: Array<{ label: string; key: string; priority: string | null }> = [];
-
-      for (const record of result.records) {
-        const label = record.get('label') as string;
-        const key = record.get('key') as string;
-        const priority = record.get('priority') as string | null;
-
-        if (!priority || !VALID_PRIORITIES.includes(priority)) {
-          invalidPriorities.push({ label, key, priority });
-        }
-      }
-
-      expect(invalidPriorities).toEqual([]);
-    });
-
-    it('Locale Knowledge nodes should have valid priority', async () => {
-      const result = await session.run(`
-        MATCH (n)
-        WHERE n:LocaleIdentity OR n:LocaleVoice OR n:LocaleCulture OR n:LocaleMarket OR n:LocaleLexicon OR n:Expression
-        RETURN labels(n)[0] AS label, n.display_name AS name, n.priority AS priority
-      `);
-
-      const invalidPriorities: Array<{ label: string; name: string; priority: string | null }> = [];
-
-      for (const record of result.records) {
-        const label = record.get('label') as string;
-        const name = record.get('name') as string;
-        const priority = record.get('priority') as string | null;
-
-        if (!priority || !VALID_PRIORITIES.includes(priority)) {
-          invalidPriorities.push({ label, name, priority });
-        }
-      }
-
-      expect(invalidPriorities).toEqual([]);
-    });
-  });
-
-  describe('Freshness Field', () => {
-    it('All nodes with key should have valid freshness', async () => {
-      const result = await session.run(`
-        MATCH (n)
-        WHERE n.key IS NOT NULL
-        RETURN labels(n)[0] AS label, n.key AS key, n.freshness AS freshness
-      `);
-
-      const invalidFreshness: Array<{ label: string; key: string; freshness: string | null }> = [];
-
-      for (const record of result.records) {
-        const label = record.get('label') as string;
-        const key = record.get('key') as string;
-        const freshness = record.get('freshness') as string | null;
-
-        if (!freshness || !VALID_FRESHNESS.includes(freshness)) {
-          invalidFreshness.push({ label, key, freshness });
-        }
-      }
-
-      expect(invalidFreshness).toEqual([]);
-    });
-
-    it('Locale Knowledge nodes should have valid freshness', async () => {
-      const result = await session.run(`
-        MATCH (n)
-        WHERE n:LocaleIdentity OR n:LocaleVoice OR n:LocaleCulture OR n:LocaleMarket OR n:LocaleLexicon OR n:Expression
-        RETURN labels(n)[0] AS label, n.display_name AS name, n.freshness AS freshness
-      `);
-
-      const invalidFreshness: Array<{ label: string; name: string; freshness: string | null }> = [];
-
-      for (const record of result.records) {
-        const label = record.get('label') as string;
-        const name = record.get('name') as string;
-        const freshness = record.get('freshness') as string | null;
-
-        if (!freshness || !VALID_FRESHNESS.includes(freshness)) {
-          invalidFreshness.push({ label, name, freshness });
-        }
-      }
-
-      expect(invalidFreshness).toEqual([]);
-    });
-  });
 
   // ═══════════════════════════════════════════════════════════════════════════
   // CONSISTENCY TESTS
@@ -411,15 +320,7 @@ describe('v7.1.0 Conventions', () => {
       expect(result.records.length).toBe(0);
     });
 
-    it('All keyed nodes should have icon', async () => {
-      const result = await session.run(`
-        MATCH (n)
-        WHERE n.key IS NOT NULL AND n.icon IS NULL
-        RETURN labels(n)[0] AS label, n.key AS key
-      `);
-
-      expect(result.records.length).toBe(0);
-    });
+    // v8.2.0 REMOVED: icon property test (YAGNI - icons moved to presentation layer)
 
     it('All keyed nodes should have description', async () => {
       const result = await session.run(`

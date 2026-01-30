@@ -1,16 +1,16 @@
-// NovaNet Core - v7.2.0 Convention Tests
+// NovaNet Core - v8.2.0 Convention Tests
 // Verify Prompt nodes and provenance tracking
 //
-// These tests query Neo4j to verify actual data matches v7.2.0 conventions
+// These tests query Neo4j to verify actual data matches v8.2.0 conventions
 // Note: Tests will fail until migration (Task 8) runs to create Prompt nodes
+//
+// v8.2.0 CHANGES:
+// - REMOVED: icon, priority, freshness properties (YAGNI)
+// - Standard properties are now: key, display_name, description, llm_context, created_at, updated_at
 
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { type Session } from 'neo4j-driver';
 import { getDriver, closeDriver } from '../db/client.js';
-
-// v7.2.0 CONVENTIONS
-const VALID_PRIORITIES = ['critical', 'high', 'medium', 'low'];
-const VALID_FRESHNESS = ['realtime', 'hourly', 'daily', 'static'];
 
 // Version format: semver (1.0, 1.0.0, 2.1, 2.1.3)
 const VERSION_PATTERN = /^\d+\.\d+(\.\d+)?$/;
@@ -18,7 +18,7 @@ const VERSION_PATTERN = /^\d+\.\d+(\.\d+)?$/;
 // llm_context format: "USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]."
 const LLM_CONTEXT_PATTERN = /^USE:.*\. TRIGGERS:.*\. NOT:.*\.$/;
 
-describe('v7.2.0 Conventions', () => {
+describe('v8.2.0 Prompt Conventions', () => {
   let session: Session;
 
   beforeAll(async () => {
@@ -257,16 +257,7 @@ describe('v7.2.0 Conventions', () => {
       expect(result.records.length).toBe(0);
     });
 
-    it('All Prompt nodes should have icon', async () => {
-      const result = await session.run(`
-        MATCH (n)
-        WHERE (n:PagePrompt OR n:BlockPrompt OR n:BlockRules)
-          AND n.icon IS NULL
-        RETURN labels(n)[0] AS type, n.display_name AS name
-      `);
-
-      expect(result.records.length).toBe(0);
-    });
+    // v8.2.0 REMOVED: icon property test (YAGNI - icons moved to presentation layer)
 
     it('All Prompt nodes should have description', async () => {
       const result = await session.run(`
@@ -290,47 +281,8 @@ describe('v7.2.0 Conventions', () => {
       expect(result.records.length).toBe(0);
     });
 
-    it('All Prompt nodes should have valid priority', async () => {
-      const result = await session.run(`
-        MATCH (n)
-        WHERE n:PagePrompt OR n:BlockPrompt OR n:BlockRules
-        RETURN labels(n)[0] AS type, n.display_name AS name, n.priority AS priority
-      `);
-
-      const invalidPriorities = result.records
-        .filter(r => {
-          const priority = r.get('priority') as string | null;
-          return !priority || !VALID_PRIORITIES.includes(priority);
-        })
-        .map(r => ({
-          type: r.get('type') as string,
-          name: r.get('name') as string,
-          priority: r.get('priority') as string | null,
-        }));
-
-      expect(invalidPriorities).toEqual([]);
-    });
-
-    it('All Prompt nodes should have valid freshness', async () => {
-      const result = await session.run(`
-        MATCH (n)
-        WHERE n:PagePrompt OR n:BlockPrompt OR n:BlockRules
-        RETURN labels(n)[0] AS type, n.display_name AS name, n.freshness AS freshness
-      `);
-
-      const invalidFreshness = result.records
-        .filter(r => {
-          const freshness = r.get('freshness') as string | null;
-          return !freshness || !VALID_FRESHNESS.includes(freshness);
-        })
-        .map(r => ({
-          type: r.get('type') as string,
-          name: r.get('name') as string,
-          freshness: r.get('freshness') as string | null,
-        }));
-
-      expect(invalidFreshness).toEqual([]);
-    });
+    // v8.2.0 REMOVED: priority property test (YAGNI - moved to application layer if needed)
+    // v8.2.0 REMOVED: freshness property test (YAGNI - moved to application layer if needed)
 
     it('PagePrompt and BlockPrompt should have prompt property', async () => {
       const result = await session.run(`
