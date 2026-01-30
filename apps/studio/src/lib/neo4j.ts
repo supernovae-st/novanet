@@ -24,7 +24,20 @@ import { logger } from '@/lib/logger';
 
 const NEO4J_URI = process.env.NEO4J_URI || 'bolt://localhost:7687';
 const NEO4J_USER = process.env.NEO4J_USER || 'neo4j';
-const NEO4J_PASSWORD = process.env.NEO4J_PASSWORD || 'novanetpassword';
+
+// SECURITY: Require password from environment - no hardcoded fallback
+function getRequiredEnv(name: string): string {
+  const value = process.env[name];
+  if (!value) {
+    throw new Error(
+      `${name} environment variable is required. ` +
+      'Set it in .env.local for development or in your deployment environment.'
+    );
+  }
+  return value;
+}
+
+const NEO4J_PASSWORD = getRequiredEnv('NEO4J_PASSWORD');
 
 /**
  * Query timeout in milliseconds (30 seconds)
