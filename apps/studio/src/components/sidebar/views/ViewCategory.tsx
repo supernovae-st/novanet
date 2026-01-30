@@ -8,49 +8,10 @@
  */
 
 import { memo } from 'react';
-import {
-  Crosshair,
-  Sparkles,
-  BookOpen,
-  FolderKanban,
-  Pickaxe,
-  Grid3x3,
-  type LucideIcon,
-} from 'lucide-react';
+import { Grid3x3 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { ViewCategory as ViewCategoryType } from '@novanet/core/filters';
-
-// Map category IDs to icons and display names
-const CATEGORY_CONFIG: Record<
-  ViewCategoryType,
-  { icon: LucideIcon; label: string; color: string }
-> = {
-  scope: {
-    icon: Crosshair,
-    label: 'Scope',
-    color: 'text-emerald-400',
-  },
-  generation: {
-    icon: Sparkles,
-    label: 'Generation',
-    color: 'text-amber-400',
-  },
-  knowledge: {
-    icon: BookOpen,
-    label: 'Knowledge',
-    color: 'text-violet-400',
-  },
-  project: {
-    icon: FolderKanban,
-    label: 'Project',
-    color: 'text-blue-400',
-  },
-  mining: {
-    icon: Pickaxe,
-    label: 'Mining',
-    color: 'text-rose-400',
-  },
-};
+import { VIEW_CATEGORIES } from '@/config/viewCategories';
 
 interface ViewCategorySectionProps {
   categoryId: ViewCategoryType;
@@ -65,20 +26,18 @@ export const ViewCategorySection = memo(function ViewCategorySection({
   className,
   children,
 }: ViewCategorySectionProps) {
-  const config = CATEGORY_CONFIG[categoryId] || {
-    icon: Grid3x3,
-    label: categoryId,
-    color: 'text-white/60',
-  };
-  const Icon = config.icon;
+  const config = VIEW_CATEGORIES[categoryId];
+  const Icon = config?.icon || Grid3x3;
+  const label = config?.label || categoryId;
+  const color = config?.color || 'text-white/60';
 
   return (
     <div className={cn('space-y-2', className)}>
       {/* Category Header */}
       <div className="flex items-center gap-2 px-1">
-        <Icon className={cn('w-3.5 h-3.5', config.color)} />
+        <Icon className={cn('w-3.5 h-3.5', color)} />
         <span className="text-[10px] uppercase tracking-wider font-medium text-white/40">
-          {config.label}
+          {label}
         </span>
         {viewCount !== undefined && (
           <span className="text-[9px] text-white/25">({viewCount})</span>
