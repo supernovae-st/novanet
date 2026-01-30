@@ -15,11 +15,11 @@
 // LOCALE NODES (v8.2.0 - YAML-aligned Property Order)
 // ═══════════════════════════════════════════════════════════════════════════════
 //
-// PROPERTY ORDER:
+// PROPERTY ORDER (YAML v7.11.0):
 //   1. IDENTIFICATION     → key, display_name
 //   2. DOCUMENTATION      → description, llm_context
-//   3. LOCALE-SPECIFIC    → language_code, country_code, currency, timezone
-//   4. FORMATTING         → date_format, number_format, rtl
+//   3. LOCALE-SPECIFIC    → language_code, country_code, name_native, is_primary
+//   4. LEGACY             → currency, timezone, date_format, number_format, rtl (canonical: LocaleRulesFormatting)
 //   5. TIMESTAMPS         → created_at, updated_at
 //
 // ───────────────────────────────────────────────────────────────────────────────
@@ -32,12 +32,14 @@ CREATE (:Locale {
   // 2. DOCUMENTATION
   description: "American English locale for United States market",
   llm_context: "USE: primary English locale, default fallback. TRIGGERS: english, US, american, en. NOT: British English (use en-GB).",
-  // 3. LOCALE-SPECIFIC
+  // 3. LOCALE-SPECIFIC (YAML v7.11.0)
   language_code: "en",
   country_code: "US",
+  name_native: "English (United States)",
+  is_primary: true,
+  // 4. LEGACY (kept for compatibility, canonical location: LocaleRulesFormatting)
   currency: "USD",
   timezone: "America/New_York",
-  // 4. FORMATTING
   date_format: "MM/DD/YYYY",
   number_format: "1,234.56",
   rtl: false,
@@ -54,6 +56,9 @@ CREATE (:Locale {
   llm_context: "USE: French content for France. TRIGGERS: french, français, france, fr-FR. NOT: Canadian French (use fr-CA).",
   language_code: "fr",
   country_code: "FR",
+  name_native: "Français (France)",
+  is_primary: true,
+  // LEGACY (canonical location: LocaleRulesFormatting)
   currency: "EUR",
   timezone: "Europe/Paris",
   date_format: "DD/MM/YYYY",
@@ -71,6 +76,9 @@ CREATE (:Locale {
   llm_context: "USE: French content for Canada/Quebec. TRIGGERS: quebec, canadien, fr-CA. NOT: France French (use fr-FR).",
   language_code: "fr",
   country_code: "CA",
+  name_native: "Français (Canada)",
+  is_primary: false,
+  // LEGACY (canonical location: LocaleRulesFormatting)
   currency: "CAD",
   timezone: "America/Montreal",
   date_format: "YYYY-MM-DD",
@@ -88,6 +96,9 @@ CREATE (:Locale {
   llm_context: "USE: Spanish content for Spain. TRIGGERS: spanish, español, spain, es-ES. NOT: Latin American Spanish.",
   language_code: "es",
   country_code: "ES",
+  name_native: "Español (España)",
+  is_primary: true,
+  // LEGACY (canonical location: LocaleRulesFormatting)
   currency: "EUR",
   timezone: "Europe/Madrid",
   date_format: "DD/MM/YYYY",
@@ -105,6 +116,9 @@ CREATE (:Locale {
   llm_context: "USE: German content for Germany. TRIGGERS: german, deutsch, de-DE. NOT: Austrian or Swiss German.",
   language_code: "de",
   country_code: "DE",
+  name_native: "Deutsch (Deutschland)",
+  is_primary: true,
+  // LEGACY (canonical location: LocaleRulesFormatting)
   currency: "EUR",
   timezone: "Europe/Berlin",
   date_format: "DD.MM.YYYY",
@@ -122,6 +136,9 @@ CREATE (:Locale {
   llm_context: "USE: Japanese content for Japan. TRIGGERS: japanese, 日本語, ja-JP. NOT: other Asian languages.",
   language_code: "ja",
   country_code: "JP",
+  name_native: "日本語（日本）",
+  is_primary: true,
+  // LEGACY (canonical location: LocaleRulesFormatting)
   currency: "JPY",
   timezone: "Asia/Tokyo",
   date_format: "YYYY/MM/DD",

@@ -256,11 +256,13 @@ Add a new relationship type between nodes.
 **Naming Conventions:**
 | Pattern | Use For | Examples |
 |---------|---------|----------|
-| `HAS_*` | Ownership | HAS_PAGE, HAS_BLOCK |
-| `*_OF` | Inverse of HAS_* | L10N_OF, BLOCK_OF |
+| `HAS_*` | Ownership/containment | HAS_PAGE, HAS_BLOCK, HAS_CONCEPT |
+| `HAS_L10N` | Localized content (human-curated) | Concept→ConceptL10n, Project→ProjectL10n |
+| `HAS_OUTPUT` | Localized content (LLM-generated) | Page→PageL10n, Block→BlockL10n |
+| `*_OF` | Inverse of HAS_* | L10N_OF, BLOCK_OF, OUTPUT_OF |
 | `FOR_*` | Target association | FOR_LOCALE |
 | `USES_*` | Reference/usage | USES_CONCEPT |
-| `TARGETS_*` | Cross-scope targeting | TARGETS_SEO |
+| `TARGETS_*` | Cross-scope targeting | TARGETS_SEO, TARGETS_GEO |
 
 **Example:**
 ```bash
