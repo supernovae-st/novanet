@@ -1,12 +1,12 @@
-# NovaNet
+# NovaNet HQ
 
-Knowledge graph localization orchestrator for native multilingual content generation.
+Development workspace with Git submodules for NovaNet ecosystem.
 
 ---
 
 ## Overview
 
-NovaNet uses Neo4j to orchestrate **native content generation** (NOT translation) across 200+ locales. An orchestrator dispatches content tasks to specialized sub-agents, each generating content natively in the target locale.
+NovaNet uses Neo4j to orchestrate **native content generation** (NOT translation) across 200+ locales.
 
 **Target Application**: QR Code AI (https://qrcode-ai.com)
 
@@ -19,26 +19,45 @@ Concept (invariant) -> Generate natively -> ConceptL10n (local)  <-- RIGHT
 
 ---
 
-## Monorepo Structure
+## Submodule Architecture
 
 ```
-novanet/
-├── core/                 # Core library (TypeScript)
-│   ├── models/           # YAML schema definitions (35 node types)
-│   ├── src/              # NovaNetFilter, parsers, schemas
-│   ├── neo4j/            # Seed scripts
-│   └── CLAUDE.md         # Core-specific context
-│
-├── studio/               # Visualization app (Next.js 15)
-│   ├── src/              # React Flow, force-graph, Zustand
-│   └── CLAUDE.md         # Studio-specific context
-│
-└── infra/                # Infrastructure (Docker, Neo4j)
+novanet-hq/                          # This repo (orchestrator)
+├── packages/
+│   ├── core/                        # Submodule → supernovae-st/novanet-core
+│   ├── db/                          # Submodule → supernovae-st/novanet-db
+│   └── cli/                         # Submodule → supernovae-st/novanet-cli
+├── apps/
+│   └── studio/                      # Submodule → supernovae-st/novanet-studio
+└── docs/                            # Local docs & plans
+```
+
+Each package/app is a **separate Git repo** linked as a submodule.
+
+---
+
+## Submodule Commands
+
+```bash
+# Clone with submodules
+git clone --recurse-submodules git@github.com:supernovae-st/novanet-hq.git
+
+# Initialize submodules (if cloned without --recurse-submodules)
+npm run submodules:init
+
+# Update submodules to latest
+npm run submodules:update
+
+# Work in a submodule
+cd packages/core
+git checkout main
+git pull
+# make changes, commit, push
 ```
 
 ---
 
-## Commands
+## Workspace Commands
 
 ```bash
 # Development
@@ -54,8 +73,19 @@ npm run infra:down       # Stop Neo4j
 npm run infra:logs       # View logs
 
 # Database seed
-cd core/neo4j && ./seed.sh
+cd packages/db && ./seed.sh
 ```
+
+---
+
+## Repos
+
+| Package | Repo | Description |
+|---------|------|-------------|
+| @novanet/core | [novanet-core](https://github.com/supernovae-st/novanet-core) | Types, schemas, filters |
+| @novanet/db | [novanet-db](https://github.com/supernovae-st/novanet-db) | Neo4j infrastructure |
+| @novanet/cli | [novanet-cli](https://github.com/supernovae-st/novanet-cli) | Dev tools |
+| @novanet/studio | [novanet-studio](https://github.com/supernovae-st/novanet-studio) | Web visualization |
 
 ---
 
@@ -67,35 +97,20 @@ cd core/neo4j && ./seed.sh
 
 ---
 
-## Conventions
-
-| Aspect | Convention |
-|--------|------------|
-| **Naming** | `novanet` (packages), `NovaNet` (classes/types) |
-| **Formatting** | 2 spaces, 100 chars, single quotes, semicolons |
-| **Components** | PascalCase |
-| **Functions** | camelCase |
-| **Constants** | UPPER_SNAKE_CASE |
-| **Commits** | Conventional Commits |
-
----
-
-## Workspace Details
-
-| Workspace | Focus | See |
-|-----------|-------|-----|
-| **core** | Neo4j, schemas, filters, parsers | `core/CLAUDE.md` |
-| **studio** | Visualization, React, Zustand | `studio/CLAUDE.md` |
-
----
-
 ## Quick Start
 
 ```bash
-# 1. Start services
-npm run infra:up
-cd core/neo4j && ./seed.sh
+# 1. Clone with submodules
+git clone --recurse-submodules git@github.com:supernovae-st/novanet-hq.git
+cd novanet-hq
 
-# 2. Start development
-npm run dev              # http://localhost:3000
+# 2. Install dependencies
+npm install
+
+# 3. Start Neo4j + seed
+npm run infra:up
+cd packages/db && ./seed.sh
+
+# 4. Start development
+npm run dev    # → http://localhost:3000
 ```

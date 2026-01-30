@@ -1,21 +1,23 @@
 {
-  "name": "novanet",
+  "name": "novanet-hq",
   "version": "0.1.0",
   "private": true,
-  "description": "NovaNet - Knowledge graph localization orchestrator",
+  "description": "NovaNet HQ - Development workspace with submodules",
   "workspaces": [
-    "core",
-    "studio"
+    "packages/*",
+    "apps/*"
   ],
   "scripts": {
-    "dev": "npm run dev --workspace=studio",
-    "build": "npm run build --workspace=studio",
+    "dev": "npm run dev --workspace=@novanet/studio",
+    "build": "npm run build --workspace=@novanet/studio",
     "lint": "npm run lint --workspaces --if-present",
     "type-check": "npm run type-check --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
-    "infra:up": "docker compose -f infra/docker-compose.yml up -d",
-    "infra:down": "docker compose -f infra/docker-compose.yml down",
-    "infra:logs": "docker compose -f infra/docker-compose.yml logs -f"
+    "infra:up": "docker compose -f packages/db/docker-compose.yml up -d",
+    "infra:down": "docker compose -f packages/db/docker-compose.yml down",
+    "infra:logs": "docker compose -f packages/db/docker-compose.yml logs -f",
+    "submodules:update": "git submodule update --remote --merge",
+    "submodules:init": "git submodule update --init --recursive"
   },
   "engines": {
     "node": ">=20.0.0"
