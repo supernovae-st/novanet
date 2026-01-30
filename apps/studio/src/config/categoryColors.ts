@@ -34,7 +34,6 @@ const CATEGORY_COLORS: Record<NodeCategory, GradientColors> = {
   generation: { primary: '#3b82f6', secondary: '#06b6d4' }, // Blue → Cyan
   seo: { primary: '#ec4899', secondary: '#f43f5e' },       // Pink → Rose
   geo: { primary: '#6366f1', secondary: '#8b5cf6' },       // Indigo → Violet
-  analytics: { primary: '#14b8a6', secondary: '#10b981' }, // Teal → Emerald
 };
 
 const DEFAULT_CATEGORY_COLORS: GradientColors = { primary: '#6366f1', secondary: '#8b5cf6' };

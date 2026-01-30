@@ -1,15 +1,64 @@
-import type { NodeType } from '@/types';
+// =============================================================================
+// NODE TYPE CONFIGURATION (v8.1.0)
+// =============================================================================
+// Visual configuration for all 35 NovaNet node types
+// NodeType is imported from @novanet/core (Single Source of Truth)
+
+import type { NodeType } from '@novanet/core/types';
+import { NODE_TYPES } from '@novanet/core/types';
+
+// =============================================================================
+// NODE CATEGORIES (v8.1.0 - 6 categories, 35 nodes)
+// =============================================================================
 
 /**
- * Node type configuration
- * Categories aligned with novanet-core v7.2.5:
- * - project: Business definition nodes (3 nodes)
- * - content: Semantic content structure (Concept, Page, Block + ConceptL10n)
- * - locale: Locale + all knowledge nodes
- * - generation: AI prompts + generated output
- * - seo: SEO keywords + mining
- * - geo: GEO seeds + mining
- * - analytics: External metrics (GA/Ahrefs)
+ * Node category type (6 categories in v8.1.0)
+ * Used for grouping nodes in UI and filtering
+ */
+export type NodeCategory = 'project' | 'content' | 'locale' | 'generation' | 'seo' | 'geo';
+
+/**
+ * Node categories with their types (v8.1.0 - 35 nodes across 6 categories)
+ * Re-exported for convenience - also available from @/lib/filterAdapter
+ */
+export const NODE_CATEGORIES: Record<NodeCategory, NodeType[]> = {
+  // Project category (3 nodes)
+  project: ['Project', 'BrandIdentity', 'ProjectL10n'],
+  // Content category (6 nodes)
+  content: ['Concept', 'ConceptL10n', 'Page', 'PageType', 'Block', 'BlockType'],
+  // Locale category (15 nodes - Locale + 14 LocaleKnowledge)
+  locale: [
+    'Locale',
+    'LocaleIdentity',
+    'LocaleVoice',
+    'LocaleCulture',
+    'LocaleCultureReferences',
+    'LocaleMarket',
+    'LocaleLexicon',
+    'LocaleRulesAdaptation',
+    'LocaleRulesFormatting',
+    'LocaleRulesSlug',
+    'Expression',
+    'Reference',
+    'Metaphor',
+    'Pattern',
+    'Constraint',
+  ],
+  // Generation category (5 nodes)
+  generation: ['PagePrompt', 'BlockPrompt', 'BlockRules', 'PageL10n', 'BlockL10n'],
+  // SEO category (3 nodes)
+  seo: ['SEOKeywordL10n', 'SEOKeywordMetrics', 'SEOMiningRun'],
+  // GEO category (3 nodes)
+  geo: ['GEOSeedL10n', 'GEOSeedMetrics', 'GEOMiningRun'],
+};
+
+// =============================================================================
+// NODE TYPE VISUAL CONFIG
+// =============================================================================
+
+/**
+ * Node type visual configuration
+ * Used for rendering in React Flow and force-graph
  */
 export interface NodeTypeConfig {
   type: NodeType;
@@ -18,18 +67,16 @@ export interface NodeTypeConfig {
   color: string;
   colorClass: string;
   size: number;
-  category: 'project' | 'content' | 'locale' | 'generation' | 'seo' | 'geo' | 'analytics';
+  category: NodeCategory;
 }
 
 /**
- * All node type configurations (v7.2.5)
- * Aligned with novanet-core/models/_index.yaml
+ * All node type configurations (v8.1.0 - 35 nodes)
+ * Aligned with @novanet/core NODE_TYPES
  */
 export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   // ==========================================================================
-  // CATEGORY: PROJECT (📦) - Business definition (3 nodes)
-  // Note: Audience merged into ProjectL10n.target_audience (v7.2.5)
-  // Note: ValuePropL10n + SocialProofL10n removed (v7.2.5)
+  // PROJECT CATEGORY (3 nodes)
   // ==========================================================================
   Project: {
     type: 'Project',
@@ -49,8 +96,6 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     size: 18,
     category: 'project',
   },
-  // Note: Audience merged into ProjectL10n.target_audience (v7.2.5)
-  // Note: ValuePropL10n + SocialProofL10n removed (v7.2.5)
   ProjectL10n: {
     type: 'ProjectL10n',
     label: 'Project L10n',
@@ -62,7 +107,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   },
 
   // ==========================================================================
-  // CATEGORY: CONTENT (💡) - Semantic content structure (5 nodes)
+  // CONTENT CATEGORY (6 nodes)
   // ==========================================================================
   Concept: {
     type: 'Concept',
@@ -91,6 +136,15 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     size: 20,
     category: 'content',
   },
+  PageType: {
+    type: 'PageType',
+    label: 'Page Type',
+    icon: '📐',
+    color: '#2563eb',
+    colorClass: 'bg-blue-600',
+    size: 16,
+    category: 'content',
+  },
   Block: {
     type: 'Block',
     label: 'Block',
@@ -106,12 +160,12 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     icon: '📋',
     color: '#14b8a6',
     colorClass: 'bg-teal-500',
-    size: 18,
+    size: 16,
     category: 'content',
   },
 
   // ==========================================================================
-  // CATEGORY: LOCALE (🌍) - Locale + knowledge nodes (7 nodes)
+  // LOCALE CATEGORY (15 nodes - Locale + 14 LocaleKnowledge)
   // ==========================================================================
   Locale: {
     type: 'Locale',
@@ -149,6 +203,15 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     size: 14,
     category: 'locale',
   },
+  LocaleCultureReferences: {
+    type: 'LocaleCultureReferences',
+    label: 'Culture Refs',
+    icon: '🎭',
+    color: '#bbf7d0',
+    colorClass: 'bg-green-200',
+    size: 12,
+    category: 'locale',
+  },
   LocaleMarket: {
     type: 'LocaleMarket',
     label: 'Market',
@@ -167,6 +230,33 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     size: 16,
     category: 'locale',
   },
+  LocaleRulesAdaptation: {
+    type: 'LocaleRulesAdaptation',
+    label: 'Adaptation Rules',
+    icon: '🔄',
+    color: '#059669',
+    colorClass: 'bg-emerald-600',
+    size: 12,
+    category: 'locale',
+  },
+  LocaleRulesFormatting: {
+    type: 'LocaleRulesFormatting',
+    label: 'Formatting Rules',
+    icon: '📝',
+    color: '#047857',
+    colorClass: 'bg-emerald-700',
+    size: 12,
+    category: 'locale',
+  },
+  LocaleRulesSlug: {
+    type: 'LocaleRulesSlug',
+    label: 'Slug Rules',
+    icon: '🔗',
+    color: '#065f46',
+    colorClass: 'bg-emerald-800',
+    size: 12,
+    category: 'locale',
+  },
   Expression: {
     type: 'Expression',
     label: 'Expression',
@@ -176,9 +266,45 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     size: 10,
     category: 'locale',
   },
+  Reference: {
+    type: 'Reference',
+    label: 'Reference',
+    icon: '📍',
+    color: '#f472b6',
+    colorClass: 'bg-pink-400',
+    size: 10,
+    category: 'locale',
+  },
+  Metaphor: {
+    type: 'Metaphor',
+    label: 'Metaphor',
+    icon: '🎨',
+    color: '#f9a8d4',
+    colorClass: 'bg-pink-300',
+    size: 10,
+    category: 'locale',
+  },
+  Pattern: {
+    type: 'Pattern',
+    label: 'Pattern',
+    icon: '🔣',
+    color: '#fbcfe8',
+    colorClass: 'bg-pink-200',
+    size: 10,
+    category: 'locale',
+  },
+  Constraint: {
+    type: 'Constraint',
+    label: 'Constraint',
+    icon: '⚠️',
+    color: '#fda4af',
+    colorClass: 'bg-rose-300',
+    size: 10,
+    category: 'locale',
+  },
 
   // ==========================================================================
-  // CATEGORY: GENERATION (🤖) - AI prompts + generated output (5 nodes)
+  // GENERATION CATEGORY (5 nodes)
   // ==========================================================================
   PagePrompt: {
     type: 'PagePrompt',
@@ -207,18 +333,18 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     size: 12,
     category: 'generation',
   },
-  PageOutput: {
-    type: 'PageOutput',
-    label: 'Page Output',
+  PageL10n: {
+    type: 'PageL10n',
+    label: 'Page L10n',
     icon: '📃',
     color: '#f97316',
     colorClass: 'bg-orange-500',
     size: 16,
     category: 'generation',
   },
-  BlockOutput: {
-    type: 'BlockOutput',
-    label: 'Block Output',
+  BlockL10n: {
+    type: 'BlockL10n',
+    label: 'Block L10n',
     icon: '📝',
     color: '#fb923c',
     colorClass: 'bg-orange-400',
@@ -227,10 +353,10 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   },
 
   // ==========================================================================
-  // CATEGORY: SEO (🔍) - SEO keywords + mining (4 nodes)
+  // SEO CATEGORY (3 nodes)
   // ==========================================================================
-  SEOKeyword: {
-    type: 'SEOKeyword',
+  SEOKeywordL10n: {
+    type: 'SEOKeywordL10n',
     label: 'SEO Keyword',
     icon: '🔍',
     color: '#ef4444',
@@ -238,21 +364,12 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     size: 16,
     category: 'seo',
   },
-  SEOVariation: {
-    type: 'SEOVariation',
-    label: 'SEO Variation',
-    icon: '🔀',
+  SEOKeywordMetrics: {
+    type: 'SEOKeywordMetrics',
+    label: 'SEO Metrics',
+    icon: '📊',
     color: '#f87171',
     colorClass: 'bg-red-400',
-    size: 12,
-    category: 'seo',
-  },
-  SEOSnapshot: {
-    type: 'SEOSnapshot',
-    label: 'SEO Snapshot',
-    icon: '📸',
-    color: '#fca5a5',
-    colorClass: 'bg-red-300',
     size: 10,
     category: 'seo',
   },
@@ -260,17 +377,17 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     type: 'SEOMiningRun',
     label: 'SEO Mining',
     icon: '⚙️',
-    color: '#fecaca',
-    colorClass: 'bg-red-200',
+    color: '#fca5a5',
+    colorClass: 'bg-red-300',
     size: 10,
     category: 'seo',
   },
 
   // ==========================================================================
-  // CATEGORY: GEO (🎯) - GEO seeds + mining (4 nodes)
+  // GEO CATEGORY (3 nodes)
   // ==========================================================================
-  GEOSeed: {
-    type: 'GEOSeed',
+  GEOSeedL10n: {
+    type: 'GEOSeedL10n',
     label: 'GEO Seed',
     icon: '🤖',
     color: '#a855f7',
@@ -278,21 +395,12 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     size: 16,
     category: 'geo',
   },
-  GEOReformulation: {
-    type: 'GEOReformulation',
-    label: 'GEO Reformulation',
-    icon: '🔄',
+  GEOSeedMetrics: {
+    type: 'GEOSeedMetrics',
+    label: 'GEO Metrics',
+    icon: '📊',
     color: '#c084fc',
     colorClass: 'bg-purple-400',
-    size: 12,
-    category: 'geo',
-  },
-  GEOCitation: {
-    type: 'GEOCitation',
-    label: 'GEO Citation',
-    icon: '📍',
-    color: '#d8b4fe',
-    colorClass: 'bg-purple-300',
     size: 10,
     category: 'geo',
   },
@@ -300,23 +408,10 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     type: 'GEOMiningRun',
     label: 'GEO Mining',
     icon: '⚙️',
-    color: '#e9d5ff',
-    colorClass: 'bg-purple-200',
+    color: '#d8b4fe',
+    colorClass: 'bg-purple-300',
     size: 10,
     category: 'geo',
-  },
-
-  // ==========================================================================
-  // CATEGORY: ANALYTICS (📊) - External metrics (1 node)
-  // ==========================================================================
-  PageMetrics: {
-    type: 'PageMetrics',
-    label: 'Page Metrics',
-    icon: '📊',
-    color: '#93c5fd',
-    colorClass: 'bg-blue-300',
-    size: 12,
-    category: 'analytics',
   },
 };
 
@@ -330,12 +425,12 @@ export function getNodeTypesByCategory(category: NodeTypeConfig['category']): No
 }
 
 /**
- * All node types array
+ * All node types array (from Core - Single Source of Truth)
  */
-export const ALL_NODE_TYPES: NodeType[] = Object.keys(nodeTypeConfigs) as NodeType[];
+export const ALL_NODE_TYPES: readonly NodeType[] = NODE_TYPES;
 
 /**
- * Locale types - Locale + knowledge (v7.2.5)
+ * Locale types - Locale + all 14 knowledge nodes
  */
 export const LOCALE_TYPES: NodeType[] = getNodeTypesByCategory('locale');
 
@@ -359,10 +454,10 @@ export const NODE_TYPE_CONFIG = nodeTypeConfigs;
 /**
  * Category configuration for hierarchical display
  */
-export type NodeCategory = NodeTypeConfig['category'];
+export type VisualNodeCategory = NodeTypeConfig['category'];
 
 export interface CategoryConfig {
-  id: NodeCategory;
+  id: VisualNodeCategory;
   label: string;
   icon: string;
   color: string;
@@ -373,7 +468,7 @@ export interface CategoryConfig {
 /**
  * All categories with their configuration (ordered for display)
  */
-export const NODE_CATEGORIES: CategoryConfig[] = [
+export const NODE_VISUAL_CATEGORIES: CategoryConfig[] = [
   {
     id: 'project',
     label: 'Project',
@@ -422,21 +517,13 @@ export const NODE_CATEGORIES: CategoryConfig[] = [
     colorLight: '#c084fc',
     nodeTypes: getNodeTypesByCategory('geo'),
   },
-  {
-    id: 'analytics',
-    label: 'Analytics',
-    icon: '📊',
-    color: '#06b6d4',
-    colorLight: '#22d3ee',
-    nodeTypes: getNodeTypesByCategory('analytics'),
-  },
 ];
 
 /**
  * Get category config by id
  */
-export function getCategoryConfig(categoryId: NodeCategory): CategoryConfig | undefined {
-  return NODE_CATEGORIES.find((c) => c.id === categoryId);
+export function getCategoryConfig(categoryId: VisualNodeCategory): CategoryConfig | undefined {
+  return NODE_VISUAL_CATEGORIES.find((c) => c.id === categoryId);
 }
 
 /**
@@ -446,3 +533,11 @@ export function getCategoryForNodeType(nodeType: NodeType): CategoryConfig | und
   const config = nodeTypeConfigs[nodeType];
   return config ? getCategoryConfig(config.category) : undefined;
 }
+
+// =============================================================================
+// VALIDATION: Ensure nodeTypeConfigs covers all NODE_TYPES from Core
+// =============================================================================
+
+// This will cause a TypeScript error if nodeTypeConfigs is missing any NodeType
+const _validateCoverage: Record<NodeType, NodeTypeConfig> = nodeTypeConfigs;
+void _validateCoverage; // Prevent unused variable warning

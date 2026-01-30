@@ -158,26 +158,32 @@ export async function executeWrite<T>(
 }
 ```
 
-## Common Cypher Patterns for NovaNet
+## Common Cypher Patterns for NovaNet (v8.2.0)
 
 ```cypher
--- Get project overview
-MATCH (p:Project)-[:HAS_LOCALE]->(l:Locale)
-RETURN p.name, collect(l.code) as locales
+-- Get project overview (35 node types, 3 scopes)
+MATCH (p:Project)-[:SUPPORTS_LOCALE]->(l:Locale)
+RETURN p.key, p.display_name, collect(l.key) as locales
 
--- Get translation chain
-MATCH path = (s:Source)-[:HAS_UNIT]->(tu:TranslationUnit)
-  -[:HAS_TRANSLATION]->(t)
-WHERE t:AITranslation OR t:HumanTranslation
-RETURN s, tu, t, relationships(path)
+-- Get page structure with blocks
+MATCH (p:Project {key: "qrcode-ai"})-[:HAS_PAGE]->(page:Page)-[:HAS_BLOCK]->(b:Block)
+OPTIONAL MATCH (b)-[:OF_TYPE]->(bt:BlockType)
+RETURN page.key, collect({block: b.key, type: bt.key}) as blocks
 
--- Find concepts used by expressions
-MATCH (e:Expression)-[:USES_CONCEPT]->(c:Concept)
-RETURN e.value, c.name, c.llm_context
+-- Get concept with localized content
+MATCH (c:Concept)-[:HAS_L10N]->(cl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale)
+WHERE l.key = "fr-FR"
+RETURN c.key, cl.title, cl.definition
 
--- Get pipeline with outputs
-MATCH (p:Pipeline)-[:HAS_OUTPUT]->(o:PlatformOutput)
-RETURN p.name, collect(o.format) as formats
+-- Find expressions for locale lexicon
+MATCH (l:Locale {key: "fr-FR"})-[:HAS_LEXICON]->(lex:LocaleLexicon)-[:HAS_EXPRESSION]->(e:Expression)
+RETURN l.key, e.text, e.semantic_field
+
+-- Get block generation context
+MATCH (b:Block {key: "hero-pricing"})-[:USES_CONCEPT]->(c:Concept)
+OPTIONAL MATCH (c)-[:HAS_L10N]->(cl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale {key: "fr-FR"})
+OPTIONAL MATCH (b)-[:HAS_OUTPUT]->(bl:BlockL10n)-[:FOR_LOCALE]->(l)
+RETURN b.key, c.key, cl.title, bl.content
 ```
 
 ## Error Handling

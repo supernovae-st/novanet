@@ -14,10 +14,12 @@
     "infra:up": "pnpm --filter=@novanet/db up",
     "infra:down": "pnpm --filter=@novanet/db down",
     "infra:seed": "pnpm --filter=@novanet/db seed",
-    "infra:reset": "pnpm --filter=@novanet/db reset"
+    "infra:reset": "pnpm --filter=@novanet/db reset",
+    "validate:types": "npx tsx scripts/validate-types.ts"
   },
   "devDependencies": {
     "@turbo/gen": "^2.8.0",
+    "tsx": "^4.19.0",
     "turbo": "^2.3.4"
   },
   "engines": {

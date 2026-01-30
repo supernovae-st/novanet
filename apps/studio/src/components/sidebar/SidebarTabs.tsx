@@ -4,14 +4,17 @@
  * SidebarTabs - Tabbed sidebar with Database and Filters panels
  *
  * Uses NovaNet Icon Design System for consistent icons.
+ * Shows SchemaFilterPanel when in schema mode (v8.3.0).
  */
 
-import { useState, memo } from 'react';
+import { useState, useEffect, memo } from 'react';
 import { SlidersHorizontal } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GRAPH_ICONS, ICON_SIZES } from '@/config/iconSystem';
+import { useUIStore, selectDataMode } from '@/stores/uiStore';
 import { DatabaseInfoPanel } from './DatabaseInfoPanel';
 import { FilterPanel } from './FilterPanel';
+import { SchemaFilterPanel } from './SchemaFilterPanel';
 
 type TabId = 'database' | 'filters';
 
@@ -31,6 +34,14 @@ const TABS: Tab[] = [
 
 export const SidebarTabs = memo(function SidebarTabs() {
   const [activeTab, setActiveTab] = useState<TabId>('database');
+  const dataMode = useUIStore(selectDataMode);
+
+  // Auto-switch to filters tab when entering schema mode
+  useEffect(() => {
+    if (dataMode === 'schema') {
+      setActiveTab('filters');
+    }
+  }, [dataMode]);
 
   return (
     <div className="h-full flex flex-col">
@@ -65,7 +76,9 @@ export const SidebarTabs = memo(function SidebarTabs() {
       {/* Tab Content */}
       <div className="flex-1 overflow-hidden">
         {activeTab === 'database' && <DatabaseInfoPanel />}
-        {activeTab === 'filters' && <FilterPanel />}
+        {activeTab === 'filters' && (
+          dataMode === 'schema' ? <SchemaFilterPanel /> : <FilterPanel />
+        )}
       </div>
     </div>
   );

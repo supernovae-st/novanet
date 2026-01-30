@@ -23,7 +23,6 @@ import {
   Loader2,
   AlertCircle,
   RefreshCw,
-  Crosshair,
   Sparkles,
   BookOpen,
   FolderKanban,
@@ -33,7 +32,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useViewStore, type ViewParams } from '@/stores/viewStore';
-import type { ViewCategoryGroup, ViewRegistryEntry, ViewCategory } from '@novanet/core/filters';
+import type { ViewRegistryEntry } from '@novanet/core/filters';
 import { ViewCard } from './ViewCard';
 import { ViewCategorySection } from './ViewCategory';
 

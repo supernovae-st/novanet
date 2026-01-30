@@ -1,188 +1,84 @@
 // =============================================================================
-// NOVANET VISUALIZER TYPES
+// NOVANET STUDIO TYPES
 // =============================================================================
-// Re-export from novanet-core + visualization-specific types
+// Re-export from @novanet/core (Single Source of Truth) + Studio-specific types
 
 // -----------------------------------------------------------------------------
-// RE-EXPORT FROM NOVANET-CORE (Single Source of Truth)
+// RE-EXPORT FROM @NOVANET/CORE (v8.1.0)
 // -----------------------------------------------------------------------------
 
-// To import from novanet-core (requires build):
-// export {
-//   StandardNodeProperties,
-//   Concept,
-//   ConceptL10n,
-//   Page,
-//   PageOutput,
-//   Block,
-//   BlockType,
-//   BlockOutput,
-//   Locale,
-//   LocaleIdentity,
-//   LocaleVoice,
-//   LocaleCulture,
-//   LocaleMarket,
-//   LocaleLexicon,
-//   Expression,
-//   Project,
-// } from '@novanet-core/types';
+// Node types - Single Source of Truth
+export {
+  NODE_TYPES,
+  type NodeType,
+  type NodeCategory,
+  NODE_CATEGORIES,
+  type LocaleBehavior,
+  NODE_BEHAVIORS,
+  type Scope,
+  NODE_SCOPES,
+} from '@novanet/core/types';
 
-// Local definitions (aligned with novanet-core v7.2.4)
+// Standard properties and domain types
+export type {
+  StandardNodeProperties,
+  // Nodes
+  Project,
+  ProjectL10n,
+  BrandIdentity,
+  Concept,
+  ConceptL10n,
+  Page,
+  PageType,
+  PageL10n,
+  Block,
+  BlockType,
+  BlockL10n,
+  Locale,
+  LocaleIdentity,
+  LocaleVoice,
+  LocaleCulture,
+  LocaleMarket,
+  LocaleLexicon,
+  Expression,
+  SEOKeywordL10n,
+  SEOKeywordMetrics,
+  SEOMiningRun,
+  GEOSeedL10n,
+  GEOSeedMetrics,
+  GEOMiningRun,
+  // Prompts
+  PagePrompt,
+  BlockPrompt,
+  BlockRules,
+  // Relation props
+  SemanticLinkProps,
+  UsesConceptProps,
+  HasBlockProps,
+  LinksToProps,
+} from '@novanet/core/types';
 
-/**
- * Standard properties for all v7.2.4 nodes
- */
-export interface StandardNodeProperties {
-  key: string;
-  display_name: string;
-  icon: string;
-  description: string;
-  llm_context: string;
-  // Context management (v7.1.0)
-  priority: 'critical' | 'high' | 'medium' | 'low';
-  freshness: 'realtime' | 'hourly' | 'daily' | 'static';
-  created_at: Date;
-  updated_at: Date;
-}
-
-/**
- * All node types in the NovaNet knowledge graph (v7.2.5)
- * Aligned with novanet-core/models/_index.yaml
- *
- * Categories (7):
- * - project (📦): Business definition + brand L10n
- * - content (💡): Semantic content structure
- * - locale (🌍): Locale + knowledge nodes
- * - generation (🤖): AI prompts + output
- * - seo (🔍): SEO keywords + mining
- * - geo (🎯): GEO seeds + mining
- * - analytics (📊): External metrics
- */
-export type NodeType =
-  // ==========================================================================
-  // CATEGORY: PROJECT (📦) - Business definition (3 nodes)
-  // Note: Audience merged into ProjectL10n.target_audience (v7.2.5)
-  // Note: ValuePropL10n + SocialProofL10n removed (v7.2.5)
-  // ==========================================================================
-  | 'Project'
-  | 'BrandIdentity'
-  | 'ProjectL10n'
-  // ==========================================================================
-  // CATEGORY: CONTENT (💡) - Semantic structure (5 nodes)
-  // ==========================================================================
-  | 'Concept'
-  | 'ConceptL10n'
-  | 'Page'
-  | 'Block'
-  | 'BlockType'
-  // ==========================================================================
-  // CATEGORY: LOCALE (🌍) - Locale + knowledge (7 nodes)
-  // ==========================================================================
-  | 'Locale'
-  | 'LocaleIdentity'
-  | 'LocaleVoice'
-  | 'LocaleCulture'
-  | 'LocaleMarket'
-  | 'LocaleLexicon'
-  | 'Expression'
-  // ==========================================================================
-  // CATEGORY: GENERATION (🤖) - Prompts + output (5 nodes)
-  // ==========================================================================
-  | 'PagePrompt'
-  | 'BlockPrompt'
-  | 'BlockRules'
-  | 'PageOutput'
-  | 'BlockOutput'
-  // ==========================================================================
-  // CATEGORY: SEO (🔍) - Keywords + mining (4 nodes)
-  // ==========================================================================
-  | 'SEOKeyword'
-  | 'SEOVariation'
-  | 'SEOSnapshot'
-  | 'SEOMiningRun'
-  // ==========================================================================
-  // CATEGORY: GEO (🎯) - Seeds + mining (4 nodes)
-  // ==========================================================================
-  | 'GEOSeed'
-  | 'GEOReformulation'
-  | 'GEOCitation'
-  | 'GEOMiningRun'
-  // ==========================================================================
-  // CATEGORY: ANALYTICS (📊) - External metrics (1 node)
-  // ==========================================================================
-  | 'PageMetrics';
-
-/**
- * Active relationship types (v7.1.0)
- * Aligned with novanet-core/models/relations.yaml + Neo4j db.relationshipTypes()
- */
-export type RelationType =
-  // Project relations
-  | 'HAS_CONCEPT'
-  | 'HAS_PAGE'
-  | 'SUPPORTS_LOCALE'
-  | 'HAS_AUDIENCE'
-  | 'HAS_BRAND_IDENTITY'
-  | 'HAS_L10N'
-  // Page/Block relations
-  | 'HAS_BLOCK'
-  | 'OF_TYPE'
-  | 'USES_CONCEPT'
-  | 'HAS_OUTPUT'
-  | 'HAS_METRICS'
-  | 'ASSEMBLES'
-  // ProjectL10n sub-relations
-  | 'HAS_VALUE_PROP'
-  | 'HAS_SOCIAL_PROOF'
-  | 'HAS_VOICE_EXAMPLE'
-  // Concept relations
-  | 'SEMANTIC_LINK'
-  | 'FOR_LOCALE'
-  | 'INFLUENCED_BY'
-  | 'TARGETS_SEO'
-  | 'TARGETS_GEO'
-  // Page-level SEO/GEO targeting (in Neo4j)
-  | 'PAGE_TARGETS_SEO'
-  | 'PAGE_TARGETS_GEO'
-  // Locale Knowledge relations
-  | 'HAS_IDENTITY'
-  | 'HAS_VOICE'
-  | 'HAS_CULTURE'
-  | 'HAS_MARKET'
-  | 'HAS_LEXICON'
-  | 'FALLBACK_TO'
-  // Lexicon relations
-  | 'HAS_EXPRESSION'
-  // Output provenance (in Neo4j)
-  | 'USED_SEO_KEYWORD'
-  | 'USED_GEO_SEED'
-  // SEO relations
-  | 'HAS_VARIATION'
-  | 'HAS_SNAPSHOT'
-  | 'MINED_BY'
-  // GEO relations
-  | 'HAS_REFORMULATION'
-  | 'HAS_CITATION';
+// Relation types from schema
+export { RelationType } from '@novanet/core/schemas';
 
 // -----------------------------------------------------------------------------
-// VISUALIZATION TYPES
+// STUDIO-SPECIFIC TYPES
 // -----------------------------------------------------------------------------
 
+import type { NodeType } from '@novanet/core/types';
+
 /**
- * Normalized node for visualization (v7.1.0)
+ * Normalized node for visualization
  * Aligned with neo4j.ts transformNode output
+ * v8.2.0: Removed icon, priority, freshness (YAML v7.11.0 alignment)
  */
 export interface GraphNode {
   id: string;
   type: NodeType;
   key: string;
   displayName: string;
-  icon?: string;
   description?: string;
   llmContext?: string;
-  // Context management (v7.1.0)
-  priority?: 'critical' | 'high' | 'medium' | 'low';
-  freshness?: 'realtime' | 'hourly' | 'daily' | 'static';
   createdAt?: string;
   updatedAt?: string;
   /** Additional properties not in standard fields */
@@ -195,7 +91,7 @@ export interface GraphNode {
  */
 export interface GraphEdge {
   id: string;
-  type: RelationType;
+  type: string;  // RelationType from core
   source: string;
   target: string;
   /** Additional relationship properties */
@@ -216,8 +112,8 @@ export interface GraphData {
 export interface NodeDetail {
   node: GraphNode;
   relations: {
-    incoming: Array<{ type: RelationType; node: GraphNode }>;
-    outgoing: Array<{ type: RelationType; node: GraphNode }>;
+    incoming: Array<{ type: string; node: GraphNode }>;
+    outgoing: Array<{ type: string; node: GraphNode }>;
   };
 }
 

@@ -112,7 +112,7 @@ export { useEffectPool, useEffectPoolStats, usePrewarmEffectPool } from './hooks
 // Utilities
 // =============================================================================
 
-export { formatRelationType, getNodeIntersection, generateCurvedPath } from './EdgeUtils';
+export { formatRelationType, getNodeIntersection, generateCurvedPath, isValidPosition } from './EdgeUtils';
 
 // =============================================================================
 // Visibility Management

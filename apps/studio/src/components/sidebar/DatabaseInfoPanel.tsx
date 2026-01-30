@@ -16,7 +16,7 @@ import { useState, useCallback, useEffect, memo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { GRAPH_ICONS, ACTION_ICONS } from '@/config/iconSystem';
 import { cn } from '@/lib/utils';
-import { NODE_CATEGORIES, ALL_NODE_TYPES } from '@/config/nodeTypes';
+import { NODE_VISUAL_CATEGORIES, ALL_NODE_TYPES } from '@/config/nodeTypes';
 import { DEFAULT_FETCH_LIMIT } from '@/config/constants';
 import { useQueryStore, QueryBuilder } from '@/stores/queryStore';
 import { useFilterStore } from '@/stores/filterStore';
@@ -97,7 +97,7 @@ export const DatabaseInfoPanel = memo(function DatabaseInfoPanel() {
     setSelectedLabels((prev) => {
       const next = new Set(prev);
       // First remove all types from this category
-      NODE_CATEGORIES.find((c) => c.id === categoryId)?.nodeTypes.forEach((t) =>
+      NODE_VISUAL_CATEGORIES.find((c) => c.id === categoryId)?.nodeTypes.forEach((t) =>
         next.delete(t)
       );
       // Then add the specified types
@@ -174,7 +174,7 @@ export const DatabaseInfoPanel = memo(function DatabaseInfoPanel() {
       query = `MATCH (n)-[r]->(m) WHERE type(r) IN [${typeList}] RETURN n, r, m LIMIT ${DEFAULT_FETCH_LIMIT}`;
     }
 
-    setEnabledNodeTypes(ALL_NODE_TYPES);
+    setEnabledNodeTypes([...ALL_NODE_TYPES]);
     executeQuery(query);
   }, [selectedRelTypes, executeQuery, setEnabledNodeTypes]);
 
@@ -204,7 +204,7 @@ export const DatabaseInfoPanel = memo(function DatabaseInfoPanel() {
               Database Explorer
             </h2>
             <p className="text-[11px] text-white/40 mt-0.5">
-              {schema ? `${schema.totalNodes.toLocaleString()} nodes · ${schema.totalRelationships.toLocaleString()} relationships` : 'Loading...'}
+              {schema?.totalNodes !== undefined ? `${schema.totalNodes.toLocaleString()} nodes · ${schema.totalRelationships?.toLocaleString() ?? 0} relationships` : 'Loading...'}
             </p>
           </div>
 

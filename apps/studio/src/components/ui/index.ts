@@ -15,6 +15,7 @@ export { IconButton } from './IconButton';
 export { RefreshButton } from './RefreshButton';
 export { Kbd } from './Kbd';
 export { CategoryIcon, getCategoryIconComponent } from './CategoryIcon';
+export { DataModeToggle } from './DataModeToggle';
 
 // Existing components
 export { ErrorBoundary } from './ErrorBoundary';

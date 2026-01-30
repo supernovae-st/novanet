@@ -1,4 +1,4 @@
-# NovaNet Terminology (v8.1.0)
+# NovaNet Terminology (v8.2.0)
 
 ## Core Concepts
 
@@ -46,17 +46,18 @@
 | **LocaleRulesSlug** | URL slug generation rules |
 | **Pattern** | Reusable formatting patterns |
 
-## Standard Properties (all nodes)
+## Standard Properties (all nodes - v8.2.0)
 
 | Property | Type | Description |
 |----------|------|-------------|
 | `key` | string | Unique identifier with semantic prefix |
 | `display_name` | string | Human-readable name |
+| `description` | string | Human-readable description |
 | `llm_context` | string | AI hints: "USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]." |
-| `priority` | enum | 'critical' \| 'high' \| 'medium' \| 'low' |
-| `freshness` | enum | 'realtime' \| 'hourly' \| 'daily' \| 'static' |
 | `created_at` | date | Creation timestamp |
 | `updated_at` | date | Last update timestamp |
+
+> **Note (v8.2.0):** Removed `icon`, `priority`, `freshness` properties (YAGNI - moved to application layer if needed)
 
 ## Key Relationships
 

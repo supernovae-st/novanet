@@ -25,7 +25,7 @@
 - Common workflows need quick access
 - Keyboard-first design philosophy
 
-**Presets (v8.1.0):**
+**Presets (v8.2.0):**
 1. Project Overview - Core structure (Project, Pages, Blocks, Concepts)
 2. Full Graph - All 35 node types
 3. Core + Concepts - Project structure with ConceptL10n

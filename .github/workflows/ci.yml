@@ -83,5 +83,8 @@ jobs:
       - name: Type Check
         run: pnpm type-check
 
+      - name: Validate Type Sync
+        run: pnpm validate:types
+
       - name: Test
         run: pnpm test

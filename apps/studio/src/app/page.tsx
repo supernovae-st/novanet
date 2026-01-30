@@ -16,13 +16,13 @@
  * - Stable action references via useShallow
  */
 
-import { useCallback, useEffect, useMemo, lazy, Suspense } from 'react';
+import { useCallback, useEffect, useMemo, useRef, lazy, Suspense } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { Box, PanelLeft, Keyboard, X, Network, Table2, Code, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { DEFAULT_FETCH_LIMIT } from '@/config/constants';
 import { useUIStore, useFilterStore, useGraphStore } from '@/stores';
-import { useGraphData, useFilteredGraph } from '@/hooks';
+import { useGraphData, useFilteredGraph, UrlSyncComponent } from '@/hooks';
 import { ContextPicker } from '@/components/sidebar/ContextPicker';
 import { isInputFocused, matchesKeyCombo } from '@/lib/keyboard';
 import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
@@ -33,7 +33,7 @@ const Graph2D = lazy(() =>
   import('@/components/graph').then((mod) => ({ default: mod.Graph2D }))
 );
 import { GraphErrorBoundary } from '@/components/ui/ErrorBoundary';
-import { StatsCounter, Pill, Divider, RefreshButton, CategoryIcon } from '@/components/ui';
+import { StatsCounter, Pill, Divider, RefreshButton, CategoryIcon, DataModeToggle } from '@/components/ui';
 import { SidebarTabs } from '@/components/sidebar/SidebarTabs';
 import { NodeDetailsPanel } from '@/components/sidebar/NodeDetailsPanel';
 import { EdgeDetailsPanel } from '@/components/sidebar/EdgeDetailsPanel';
@@ -118,7 +118,7 @@ export default function HomePage() {
   const { visibleNodeCount, visibleEdgeCount } = useFilteredGraph();
 
   // Graph data fetching
-  const { fetchData, executeQuery, isLoading: isFetching } = useGraphData();
+  const { fetchData, fetchSchemaData, executeQuery, dataMode, isLoading: isFetching } = useGraphData();
 
   // Keyboard shortcuts modal
   const { isOpen: shortcutsOpen, open: openShortcuts, close: closeShortcuts } = useKeyboardShortcuts();
@@ -156,6 +156,9 @@ export default function HomePage() {
     return { sourceNode, targetNode, colors: theme.colors };
   }, [hoveredEdge, getNodeById]);
 
+  // Note: URL sync is rendered as a component (see render section) to handle
+  // Next.js Suspense requirements for useSearchParams
+
   // ═══════════════════════════════════════════════════════════════════════════
   // EFFECTS
   // ═══════════════════════════════════════════════════════════════════════════
@@ -168,12 +171,28 @@ export default function HomePage() {
     }
   }, [filterState.enabledNodeTypes, filterState.activePresetId, filterActions, queryActions]);
 
-  // Fetch initial data
+  // Track previous dataMode to detect changes
+  const prevDataModeRef = useRef<typeof dataMode | null>(null);
+
+  // Fetch initial data OR re-fetch when dataMode changes (e.g., from URL sync)
   useEffect(() => {
-    if (totalNodes === 0 && !isFetching) {
-      fetchData({ limit: DEFAULT_FETCH_LIMIT });
+    if (isFetching) return;
+
+    // Check if this is a mode change (vs initial load)
+    const isInitialLoad = totalNodes === 0;
+    const modeChanged = prevDataModeRef.current !== null && prevDataModeRef.current !== dataMode;
+
+    // Fetch on initial load OR mode change
+    if (isInitialLoad || modeChanged) {
+      if (dataMode === 'schema') {
+        fetchSchemaData();
+      } else {
+        fetchData({ limit: DEFAULT_FETCH_LIMIT });
+      }
     }
-  }, [totalNodes, isFetching, fetchData]);
+
+    prevDataModeRef.current = dataMode;
+  }, [totalNodes, isFetching, fetchData, fetchSchemaData, dataMode]);
 
   // Global keyboard handler
   useEffect(() => {
@@ -283,8 +302,15 @@ export default function HomePage() {
 
   // Refresh data
   const handleRefresh = useCallback(() => {
-    fetchData({ limit: DEFAULT_FETCH_LIMIT });
-  }, [fetchData]);
+    if (dataMode === 'schema') {
+      fetchSchemaData();
+    } else {
+      fetchData({ limit: DEFAULT_FETCH_LIMIT });
+    }
+  }, [fetchData, fetchSchemaData, dataMode]);
+
+  // Note: Data mode changes are handled by the effect above
+  // The toggle only updates the store, the effect fetches the data
 
   // Run current query
   const handleRunQuery = useCallback(() => {
@@ -344,6 +370,9 @@ export default function HomePage() {
 
   return (
     <div className="h-screen w-screen flex flex-col bg-black overflow-hidden">
+      {/* URL Sync - Suspense-wrapped for Next.js compatibility (v8.2.0) */}
+      <UrlSyncComponent />
+
       {/* Main Content */}
       <div className="flex-1 flex overflow-hidden">
         {/* Left Sidebar - Filters & Database Info (Linear-dark) */}
@@ -443,6 +472,8 @@ export default function HomePage() {
                         <ResultsOverview />
                       </>
                     )}
+                    <Divider />
+                    <DataModeToggle />
                     <Divider />
                     <RefreshButton onClick={handleRefresh} isLoading={isFetching} />
                   </Pill>

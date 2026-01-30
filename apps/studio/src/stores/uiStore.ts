@@ -6,6 +6,9 @@ import type { ViewMode, UIState, SelectionState } from '@/types';
 // Layout types for graph arrangement
 export type LayoutDirection = 'TB' | 'LR' | 'dagre' | 'radial' | 'force';
 
+// Data mode: real instances vs ontological schema
+export type DataMode = 'data' | 'schema';
+
 interface UIStoreState extends UIState, SelectionState {
   // Dialog state
   activeDialogs: string[];
@@ -30,9 +33,14 @@ interface UIStoreState extends UIState, SelectionState {
   /** Counter to force re-layout even when direction unchanged */
   layoutVersion: number;
 
+  // Data mode: real instances vs ontological schema
+  dataMode: DataMode;
+
   // View actions
   setViewMode: (mode: ViewMode) => void;
   toggleViewMode: () => void;
+  setDataMode: (mode: DataMode) => void;
+  toggleDataMode: () => void;
   toggleSidebar: () => void;
   togglePanel: () => void;
   toggleFocusMode: () => void;
@@ -73,6 +81,7 @@ export const useUIStore = create<UIStoreState>()(
       showEdgeLabels: true,
       layoutDirection: 'TB' as LayoutDirection,
       layoutVersion: 0,
+      dataMode: 'data' as DataMode,
 
       // Selection state
       selectedNodeId: null,
@@ -97,6 +106,18 @@ export const useUIStore = create<UIStoreState>()(
       toggleViewMode: () => {
         set((state) => {
           state.viewMode = state.viewMode === '2d' ? '3d' : '2d';
+        });
+      },
+
+      setDataMode: (mode) => {
+        set((state) => {
+          state.dataMode = mode;
+        });
+      },
+
+      toggleDataMode: () => {
+        set((state) => {
+          state.dataMode = state.dataMode === 'data' ? 'schema' : 'data';
         });
       },
 
@@ -255,6 +276,7 @@ export const useUIStore = create<UIStoreState>()(
         minimapVisible: state.minimapVisible,
         showEdgeLabels: state.showEdgeLabels,
         layoutDirection: state.layoutDirection,
+        dataMode: state.dataMode,
       }),
     }
   )
@@ -280,3 +302,4 @@ export const selectHoveredConnectedNodeIds = (state: UIStoreState) => state.hove
 export const selectHighlightedNodeIds = (state: UIStoreState) => state.highlightedNodeIds;
 export const selectCommandPaletteOpen = (state: UIStoreState) => state.commandPaletteOpen;
 export const selectAiChatOpen = (state: UIStoreState) => state.aiChatOpen;
+export const selectDataMode = (state: UIStoreState) => state.dataMode;

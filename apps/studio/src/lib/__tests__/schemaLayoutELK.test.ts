@@ -247,7 +247,7 @@ describe('schemaLayoutELK', () => {
       const firstEdge = result.edges[0];
       expect(firstEdge.source).toBe('schema-Project');
       expect(firstEdge.target).toBe('schema-Page');
-      expect(firstEdge.type).toBe('schemaEdge');
+      expect(firstEdge.type).toBe('floating');
       expect(firstEdge.data?.relationType).toBe('HAS_PAGE');
     });
 

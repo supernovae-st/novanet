@@ -11,7 +11,7 @@
 
 export const RELATIONSHIP_COLORS: Record<string, string> = {
   // Locale & Identity (emerald/green)
-  HAS_LOCALE: '#10b981',
+  SUPPORTS_LOCALE: '#10b981',
   HAS_IDENTITY: '#22c55e',
   HAS_VOICE: '#4ade80',
   HAS_CULTURE: '#86efac',

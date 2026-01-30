@@ -1,12 +1,12 @@
 'use client';
 
 /**
- * CategoryIcon - Memory-efficient SVG icon system using Lucide
+ * CategoryIcon - Memory-efficient SVG icon system using Lucide (v8.1.0)
  *
  * Features:
  * - Tree-shakeable (only imports used icons)
  * - No memory leaks (pure React components)
- * - One icon per category (7 total)
+ * - One icon per category (6 categories in v8.1.0)
  * - Consistent styling with glow effects
  *
  * Categories:
@@ -16,7 +16,6 @@
  * - generation: AI/magic (sparkles)
  * - seo: Search optimization
  * - geo: Target/geolocation
- * - analytics: Charts/metrics
  */
 
 import { memo, useMemo } from 'react';
@@ -27,7 +26,6 @@ import {
   Sparkles,
   Search,
   Target,
-  BarChart3,
   type LucideProps,
 } from 'lucide-react';
 import type { NodeCategory } from '@/config/nodeTypes';
@@ -37,18 +35,17 @@ import type { NodeCategory } from '@/config/nodeTypes';
 // =============================================================================
 
 /**
- * Category to Lucide icon component mapping
+ * Category to Lucide icon component mapping (v8.1.0 - 6 categories)
  * Each category has ONE representative icon
  */
-const CATEGORY_ICONS = {
+const CATEGORY_ICONS: Record<NodeCategory, React.ComponentType<LucideProps>> = {
   project: Package,
   content: Lightbulb,
   locale: Globe,
   generation: Sparkles,
   seo: Search,
   geo: Target,
-  analytics: BarChart3,
-} as const;
+};
 
 // =============================================================================
 // Component Props

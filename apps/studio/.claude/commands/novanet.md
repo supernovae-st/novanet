@@ -12,9 +12,9 @@ Starts a NovaNet Studio development session.
 
 2. **Check Status**
    ```bash
-   cd /Users/thibaut/Projects/traduction_ai/novanet/studio
+   cd /Users/thibaut/supernovae-st/novanet-hq/apps/studio
    git status
-   npm run type-check
+   pnpm type-check
    ```
 
 3. **Load Context**
@@ -25,13 +25,18 @@ Starts a NovaNet Studio development session.
 4. **Show Quick Actions**
    ```
    ╔═══════════════════════════════════════════════════════════════╗
-   ║  🎯 NOVANET STUDIO                                             ║
+   ║  🎯 NOVANET STUDIO v8.2.0                                     ║
    ╠═══════════════════════════════════════════════════════════════╣
    ║                                                               ║
    ║  Quick Actions:                                               ║
-   ║  • npm run dev      → Start dev server                        ║
-   ║  • npm run build    → Production build                        ║
-   ║  • npm test         → Run tests                               ║
+   ║  • pnpm dev        → Start dev server (localhost:3000)        ║
+   ║  • pnpm build      → Production build                         ║
+   ║  • pnpm test       → Run Jest tests                           ║
+   ║  • pnpm e2e        → Run Playwright E2E tests                 ║
+   ║                                                               ║
+   ║  From monorepo root:                                          ║
+   ║  • pnpm infra:up   → Start Neo4j                              ║
+   ║  • pnpm infra:seed → Seed database                            ║
    ║                                                               ║
    ║  Skills:                                                      ║
    ║  • react-flow-patterns.md                                     ║
@@ -46,6 +51,7 @@ Starts a NovaNet Studio development session.
 
 ## Notes
 
-- Always check `npm run type-check` before starting work
+- Always check `pnpm type-check` before starting work
+- Use `pnpm` (not npm) for all package operations
 - Reference skills for implementation patterns
 - Use TodoWrite for multi-step tasks
