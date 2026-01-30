@@ -9,21 +9,30 @@ YAML schema definitions for Neo4j graph database.
 
 ```
 models/
-├── _index.yaml            # Graph overview + file index
-├── relations.yaml         # All Neo4j relationships (50)
-├── README.md              # This file
-├── nodes/                 # ONE FILE PER NODE TYPE (35 files)
-│   ├── project/           # 📦 Foundation (3)
-│   ├── content/           # 💡 Structure + Semantic (5)
-│   ├── locale/            # 🌍 Locale + Knowledge (15)
-│   ├── generation/        # ⚡ Prompts + Output (5)
-│   ├── seo/               # 🔍 SEO nodes (3)
-│   └── geo/               # 🎯 GEO nodes (3)
-├── views/                 # View definitions (YAML)
+├── _index.yaml              # Graph overview + file index
+├── relations.yaml           # All Neo4j relationships (50)
+├── README.md                # This file
+├── nodes/                   # ONE FILE PER NODE TYPE (35 files)
+│   ├── global/              # 🌍 GLOBAL scope (15 nodes)
+│   │   ├── config/          #    Locale
+│   │   └── knowledge/       #    14 LocaleKnowledge nodes
+│   ├── project/             # 📦 PROJECT scope (14 nodes)
+│   │   ├── foundation/      #    Project, BrandIdentity
+│   │   ├── structure/       #    Page, Block, BlockType
+│   │   ├── semantic/        #    Concept, ConceptL10n
+│   │   ├── instruction/     #    PagePrompt, BlockPrompt, BlockRules
+│   │   └── output/          #    PageL10n, BlockL10n
+│   └── shared/              # 🎯 SHARED scope (6 nodes)
+│       ├── seo/             #    SEOKeywordL10n, SEOKeywordMetrics, SEOMiningRun
+│       └── geo/             #    GEOSeedL10n, GEOSeedMetrics, GEOMiningRun
+├── views/                   # View definitions (YAML)
 │   ├── _registry.yaml
 │   └── *.yaml
-└── docs/views/            # Auto-generated view docs (MD)
-    └── VIEW-*.md
+├── docs/views/              # Auto-generated view docs (MD)
+│   └── VIEW-*.md
+├── config/                  # Configuration files
+├── schema/                  # JSON schemas
+└── archive/                 # Deprecated files
 ```
 
 ## Multi-Tenant Architecture
