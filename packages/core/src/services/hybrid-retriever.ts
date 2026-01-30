@@ -14,7 +14,7 @@
 import type { Driver } from 'neo4j-driver';
 import { VectorSearchService, type VectorSearchOptions } from './vector-search.js';
 import { GraphTraversalService, type SpreadingActivationOptions, type SpreadingActivationResult } from './graph-traversal.js';
-import type { TaskType, Priority } from '../types/task-types.js';
+import type { TaskType } from '../types/task-types.js';
 
 // =============================================================================
 // Types
@@ -68,7 +68,6 @@ export interface HybridMatch {
     display_name?: string;
     description?: string;
     llm_context?: string;
-    priority?: Priority;
   };
   /** Localized content (if locale specified) */
   l10n?: {
@@ -212,7 +211,6 @@ export class HybridRetriever {
           display_name: vr.properties.display_name as string,
           description: vr.properties.description as string,
           llm_context: vr.properties.llm_context as string,
-          priority: vr.properties.priority as Priority,
         },
       });
     }
