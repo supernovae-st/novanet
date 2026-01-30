@@ -27,7 +27,7 @@
 
 **Presets (v8.1.0):**
 1. Project Overview - Core structure (Project, Pages, Blocks, Concepts)
-2. Full Graph - All 33 node types
+2. Full Graph - All 35 node types
 3. Core + Concepts - Project structure with ConceptL10n
 4. All Locales - Locale nodes only
 5. Concepts - Concept + ConceptL10n

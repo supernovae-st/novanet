@@ -13,20 +13,19 @@ This package contains:
 ## Commands
 
 ```bash
-# Start Neo4j
-npm run up
+# From monorepo root (recommended)
+pnpm infra:up      # Start Neo4j
+pnpm infra:down    # Stop Neo4j
+pnpm infra:logs    # View logs
+pnpm infra:seed    # Seed database
+pnpm infra:reset   # Reset (down + up + seed)
 
-# Stop Neo4j
-npm run down
-
-# View logs
-npm run logs
-
-# Seed database
-npm run seed
-
-# Reset (wipe + reseed)
-npm run reset
+# Or from this package
+pnpm up
+pnpm down
+pnpm logs
+pnpm seed
+pnpm reset
 ```
 
 ## Neo4j Credentials

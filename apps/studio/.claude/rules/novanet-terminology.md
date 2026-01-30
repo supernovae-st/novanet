@@ -11,17 +11,13 @@
 | **Locale** | Language/region code (BCP 47, e.g., "fr-FR", "en-US") |
 | **Expression** | Specific phrase/word variant in a locale's lexicon |
 
-## Node Categories (7)
+## Node Scopes (3 scopes, 35 nodes)
 
-| Category | Purpose | Node Types |
-|----------|---------|------------|
-| **project** | Business definition | Project, BrandIdentity, Audience, ProjectL10n, AudienceL10n, ValuePropL10n, SocialProofL10n |
-| **content** | Semantic structure | Concept, ConceptL10n, Page, Block, BlockType |
-| **locale** | Language knowledge | Locale, LocaleIdentity, LocaleVoice, LocaleCulture, LocaleMarket, LocaleLexicon, Expression |
-| **generation** | AI prompts & outputs | PagePrompt, BlockPrompt, BlockRules, PageOutput, BlockOutput |
-| **seo** | Search optimization | SEOKeyword, SEOVariation, SEOSnapshot, SEOMiningRun |
-| **geo** | Generative engine optimization | GEOSeed, GEOReformulation, GEOCitation, GEOMiningRun |
-| **analytics** | Performance metrics | PageMetrics |
+| Scope | Count | Node Types |
+|-------|-------|------------|
+| **🌍 Global** | 15 | Locale, LocaleIdentity, LocaleVoice, LocaleCulture, LocaleCultureReferences, LocaleMarket, LocaleLexicon, LocaleRulesAdaptation, LocaleRulesFormatting, LocaleRulesSlug, Expression, Reference, Metaphor, Constraint, Pattern |
+| **📦 Project** | 14 | Project, BrandIdentity, ProjectL10n, Page, Block, BlockType, PageType, Concept, ConceptL10n, PagePrompt, BlockPrompt, BlockRules, PageL10n, BlockL10n |
+| **🎯 Shared** | 6 | SEOKeywordL10n, SEOKeywordMetrics, SEOMiningRun, GEOSeedL10n, GEOSeedMetrics, GEOMiningRun |
 
 ## Localization Pattern
 
@@ -31,15 +27,24 @@
 | Project | ProjectL10n | `HAS_L10N` |
 | Audience | AudienceL10n | `HAS_L10N` |
 
-## Locale Knowledge Structure
+## Locale Knowledge Structure (14 nodes)
 
 | Node | Purpose |
 |------|---------|
 | **LocaleIdentity** | Script, timezone, technical characteristics |
 | **LocaleVoice** | Formality, tone, pronunciation rules |
-| **LocaleCulture** | Cultural norms, taboos, references |
+| **LocaleCulture** | Cultural norms, taboos |
+| **LocaleCultureReferences** | Cultural references container |
+| **Reference** | Specific cultural references |
+| **Metaphor** | Cultural metaphors |
+| **Constraint** | Cultural constraints |
 | **LocaleMarket** | Market data, demographics, platforms |
 | **LocaleLexicon** | Vocabulary preferences per locale |
+| **Expression** | Specific phrase variants |
+| **LocaleRulesAdaptation** | Content adaptation rules |
+| **LocaleRulesFormatting** | Format rules (dates, numbers) |
+| **LocaleRulesSlug** | URL slug generation rules |
+| **Pattern** | Reusable formatting patterns |
 
 ## Standard Properties (all nodes)
 
@@ -66,8 +71,11 @@
 | `USES_CONCEPT` | Page/Block → Concept | Content references concept |
 | `HAS_OUTPUT` | Page/Block → Output | Generated content |
 | `HAS_PROMPT` | Page/Block → Prompt | AI generation instructions |
-| `TARGETS_SEO` | Concept → SEOKeyword | SEO targeting |
-| `TARGETS_GEO` | Concept → GEOSeed | GEO targeting |
+| `TARGETS_SEO` | Concept → SEOKeywordL10n | SEO targeting |
+| `TARGETS_GEO` | Concept → GEOSeedL10n | GEO targeting |
+| `HAS_SEO_TARGET` | ConceptL10n → SEOKeywordL10n | Locale-aligned SEO |
+| `HAS_GEO_TARGET` | ConceptL10n → GEOSeedL10n | Locale-aligned GEO |
+| `FOR_LOCALE` | L10n → Locale | Locale assignment |
 
 ## Abbreviations
 

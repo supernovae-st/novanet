@@ -9,8 +9,8 @@ Knowledge graph visualization for the NovaNet localization orchestrator.
 
 ## Project Context
 
-**What:** Interactive 2D/3D graph visualization for ~19,000 nodes across 33 types (7 categories), 200 locales
-**Stack:** Next.js 15 + React 19 + TypeScript 5.7 + Tailwind CSS
+**What:** Interactive 2D/3D graph visualization for ~19,000 nodes across 35 types (3 scopes), 200 locales
+**Stack:** Next.js 16 + React 19 + TypeScript 5.9 + Tailwind CSS
 **Graph:** @xyflow/react (2D) + react-force-graph-3d (3D)
 **State:** Zustand 5 with persist/immer
 **DB:** Neo4j (bolt://localhost:7687)
@@ -45,11 +45,11 @@ src/
 ## Commands
 
 ```bash
-npm run dev          # Dev server (localhost:3000)
-npm run build        # Production build
-npm run lint         # ESLint
-npm run type-check   # TypeScript
-npm test             # Tests
+pnpm dev             # Dev server (localhost:3000)
+pnpm build           # Production build
+pnpm lint            # ESLint
+pnpm type-check      # TypeScript
+pnpm test            # Tests
 ```
 
 ---
@@ -127,35 +127,23 @@ npm test             # Tests
 
 ## Neo4j Schema (v8.1.0)
 
-### Node Types (33 across 7 categories)
+### Node Types (35 across 3 scopes)
 
-| Category | Types |
-|----------|-------|
-| **project** (7) | Project, BrandIdentity, Audience, ProjectL10n, AudienceL10n, ValuePropL10n, SocialProofL10n |
-| **content** (5) | Concept, ConceptL10n, Page, Block, BlockType |
-| **locale** (7) | Locale, LocaleIdentity, LocaleVoice, LocaleCulture, LocaleMarket, LocaleLexicon, Expression |
-| **generation** (5) | PagePrompt, BlockPrompt, BlockRules, PageOutput, BlockOutput |
-| **seo** (4) | SEOKeyword, SEOVariation, SEOSnapshot, SEOMiningRun |
-| **geo** (4) | GEOSeed, GEOReformulation, GEOCitation, GEOMiningRun |
-| **analytics** (1) | PageMetrics |
+| Scope | Nodes | Types |
+|-------|-------|-------|
+| **🌍 Global** | 15 | Locale, LocaleIdentity, LocaleVoice, LocaleCulture, LocaleCultureReferences, LocaleMarket, LocaleLexicon, LocaleRulesAdaptation, LocaleRulesFormatting, LocaleRulesSlug, Expression, Reference, Metaphor, Constraint, Pattern |
+| **📦 Project** | 14 | Project, BrandIdentity, ProjectL10n, Page, Block, BlockType, PageType, Concept, ConceptL10n, PagePrompt, BlockPrompt, BlockRules, PageL10n, BlockL10n |
+| **🎯 Shared** | 6 | SEOKeywordL10n, SEOKeywordMetrics, SEOMiningRun, GEOSeedL10n, GEOSeedMetrics, GEOMiningRun |
 
 ### Key Relations
-- `HAS_CONCEPT` / `HAS_PAGE` / `HAS_AUDIENCE` - Project structure
-- `SUPPORTS_LOCALE` - Project → Locale (with `default` flag)
-- `HAS_L10N` - Invariant → L10n nodes (unified)
+- `HAS_CONCEPT` / `HAS_PAGE` - Project structure
+- `SUPPORTS_LOCALE` / `DEFAULT_LOCALE` - Project → Locale
+- `HAS_L10N` / `HAS_OUTPUT` - Invariant → L10n nodes (curated vs generated)
 - `HAS_BLOCK` - Page → Block (with `position`)
 - `USES_CONCEPT` - Page/Block → Concept (with `purpose`, `temperature`)
-- `HAS_OUTPUT` - Page/Block → Output
-- `HAS_PROMPT` / `HAS_RULES` - Prompt system (v7.2.0)
-- `TARGETS_SEO` / `TARGETS_GEO` - Concept → Keywords/Seeds
-
-### Standard Properties (all nodes)
-- `key` - Unique identifier with semantic prefix
-- `display_name` - Human-readable name
-- `llm_context` - AI hints: "USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]."
-- `priority` - 'critical' | 'high' | 'medium' | 'low'
-- `freshness` - 'realtime' | 'hourly' | 'daily' | 'static'
-- `created_at` / `updated_at` - Timestamps
+- `SEMANTIC_LINK` - Concept → Concept (spreading activation)
+- `HAS_SEO_TARGET` / `HAS_GEO_TARGET` - ConceptL10n → Keywords/Seeds
+- `FOR_LOCALE` - L10n nodes → Locale
 
 ---
 
@@ -197,6 +185,5 @@ When generating Cypher queries:
 
 ## Related Projects
 
-- `../core` - Core types and utilities (package: novanet-core)
-- `novanet-api` - Backend API
-- `nika-studio` - Reference for DX patterns
+- `../../packages/core` - Core types, schemas, filters (@novanet/core)
+- `../../packages/db` - Neo4j infrastructure (@novanet/db)
