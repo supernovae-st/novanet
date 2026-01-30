@@ -17,7 +17,7 @@ const nextConfig: NextConfig = {
               "default-src 'self'",
               "script-src 'self' 'unsafe-eval' 'unsafe-inline'",
               "style-src 'self' 'unsafe-inline'",
-              "img-src 'self' data: blob:",
+              "img-src 'self' data: blob: https://pbs.twimg.com https://abs.twimg.com",
               "font-src 'self' data:",
               "connect-src 'self' bolt://localhost:7687 ws://localhost:* wss://localhost:*",
               "frame-ancestors 'none'",

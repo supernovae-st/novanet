@@ -15,7 +15,7 @@ import { cn } from '@/lib/utils';
 import { GRAPH_ICONS, ICON_COLORS, ACTION_ICONS, STATUS_ICONS, NAV_ICONS } from '@/config/iconSystem';
 import { TriStateCheckbox, type CheckboxState } from '@/components/ui/TriStateCheckbox';
 import { ProgressBar } from '@/components/ui/ProgressBar';
-import { NODE_TYPE_CONFIG, NODE_CATEGORIES, type CategoryConfig } from '@/config/nodeTypes';
+import { NODE_TYPE_CONFIG, NODE_VISUAL_CATEGORIES, type CategoryConfig } from '@/config/nodeTypes';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import { calculateCheckboxState } from '@/hooks';
 import type { NodeType } from '@/types';
@@ -59,6 +59,7 @@ const NodeTypeRow = memo(function NodeTypeRow({
       role="checkbox"
       aria-checked={isSelected}
       aria-label={`${label} (${count} nodes)`}
+      data-selected={isSelected}
       className={cn(
         'group w-full flex items-center gap-2.5 py-2 px-2.5 -mx-2 rounded-xl transition-all duration-200',
         'hover:bg-white/[0.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-novanet-500/50',
@@ -312,6 +313,7 @@ export const NodeLabelsSection = memo(function NodeLabelsSection({
           onClick={onExecuteQuery}
           disabled={selectedLabels.size === 0 || isExecuting}
           aria-label={`Execute query for ${selectedLabels.size} selected node types`}
+          data-testid="execute-node-query"
           className={cn(
             'p-1.5 rounded-lg transition-all duration-200',
             selectedLabels.size > 0
@@ -329,8 +331,8 @@ export const NodeLabelsSection = memo(function NodeLabelsSection({
       </div>
 
       {/* Category Tree */}
-      <div className="space-y-0.5">
-        {NODE_CATEGORIES.map((category) => (
+      <div className="space-y-0.5" data-testid="node-labels-container">
+        {NODE_VISUAL_CATEGORIES.map((category) => (
           <CategorySection
             key={category.id}
             category={category}
