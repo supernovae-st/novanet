@@ -81,11 +81,34 @@ export interface CypherQuery {
 // VIEW REGISTRY
 // =============================================================================
 
+/**
+ * View categories for UI grouping.
+ * - scope: Layer views (complete, global, shared, project)
+ * - generation: Orchestrator and sub-agent context views
+ * - knowledge: Locale and concept views
+ * - project: Project structure views
+ * - mining: SEO and GEO pipeline views
+ */
+export type ViewCategory = 'scope' | 'generation' | 'knowledge' | 'project' | 'mining';
+
+export interface ViewRegistryEntry {
+  id: string;
+  file: string;
+  description: string;
+  category: ViewCategory;
+}
+
 export interface ViewRegistry {
   version: string;
-  views: Array<{
-    id: string;
-    file: string;
-    description: string;
-  }>;
+  description?: string;
+  views: ViewRegistryEntry[];
+}
+
+/**
+ * Grouped view category for UI rendering.
+ */
+export interface ViewCategoryGroup {
+  id: ViewCategory;
+  name: string;
+  views: ViewRegistryEntry[];
 }

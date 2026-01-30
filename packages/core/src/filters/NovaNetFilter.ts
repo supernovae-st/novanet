@@ -302,6 +302,161 @@ export class NovaNetFilter {
     return this;
   }
 
+  /**
+   * Includes localized content via FOR_LOCALE relation.
+   * Used to connect L10n nodes to their Locale.
+   */
+  includeForLocale(): this {
+    this.state.includes.push({
+      relation: 'FOR_LOCALE',
+      direction: 'outgoing',
+    });
+    return this;
+  }
+
+  /**
+   * Includes supported locales via SUPPORTS_LOCALE.
+   * Typically used with fromProject().
+   */
+  includeSupportedLocales(): this {
+    this.state.includes.push({
+      relation: 'SUPPORTS_LOCALE',
+      direction: 'outgoing',
+    });
+    return this;
+  }
+
+  /**
+   * Includes default locale via DEFAULT_LOCALE.
+   * Typically used with fromProject().
+   */
+  includeDefaultLocale(): this {
+    this.state.includes.push({
+      relation: 'DEFAULT_LOCALE',
+      direction: 'outgoing',
+    });
+    return this;
+  }
+
+  /**
+   * Includes fallback locale via FALLBACK_TO.
+   * Typically used with fromLocale().
+   */
+  includeFallbackLocale(): this {
+    this.state.includes.push({
+      relation: 'FALLBACK_TO',
+      direction: 'outgoing',
+    });
+    return this;
+  }
+
+  /**
+   * Includes metrics via HAS_METRICS.
+   * Used for SEOKeywordMetrics and GEOSeedMetrics.
+   */
+  includeMetrics(): this {
+    this.state.includes.push({
+      relation: 'HAS_METRICS',
+      direction: 'outgoing',
+    });
+    return this;
+  }
+
+  /**
+   * Includes page links via LINKS_TO.
+   * Typically used with fromPage().
+   */
+  includePageLinks(): this {
+    this.state.includes.push({
+      relation: 'LINKS_TO',
+      direction: 'outgoing',
+    });
+    return this;
+  }
+
+  /**
+   * Includes subtopic hierarchy via SUBTOPIC_OF.
+   * Used for pillar-cluster page relationships.
+   */
+  includeSubtopics(): this {
+    this.state.includes.push({
+      relation: 'SUBTOPIC_OF',
+      direction: 'outgoing',
+    });
+    return this;
+  }
+
+  /**
+   * Includes all locale rules nodes (Adaptation, Formatting, Slug).
+   * Typically used with fromLocale().
+   */
+  includeLocaleRules(): this {
+    const rulesRelations = ['HAS_RULES_ADAPTATION', 'HAS_RULES_FORMATTING', 'HAS_RULES_SLUG'];
+    for (const relation of rulesRelations) {
+      this.state.includes.push({
+        relation,
+        direction: 'outgoing',
+      });
+    }
+    return this;
+  }
+
+  /**
+   * Includes lexicon details (Expression nodes) via HAS_EXPRESSION.
+   * Typically used after includeKnowledge() with a Locale root.
+   */
+  includeExpressions(): this {
+    this.state.includes.push({
+      relation: 'HAS_EXPRESSION',
+      direction: 'outgoing',
+    });
+    return this;
+  }
+
+  /**
+   * Includes culture references via HAS_REFERENCE.
+   */
+  includeCultureReferences(): this {
+    this.state.includes.push({
+      relation: 'HAS_REFERENCE',
+      direction: 'outgoing',
+    });
+    return this;
+  }
+
+  /**
+   * Includes metaphors via HAS_METAPHOR.
+   */
+  includeMetaphors(): this {
+    this.state.includes.push({
+      relation: 'HAS_METAPHOR',
+      direction: 'outgoing',
+    });
+    return this;
+  }
+
+  /**
+   * Includes formatting patterns via HAS_PATTERN.
+   */
+  includePatterns(): this {
+    this.state.includes.push({
+      relation: 'HAS_PATTERN',
+      direction: 'outgoing',
+    });
+    return this;
+  }
+
+  /**
+   * Includes cultural constraints via HAS_CONSTRAINT.
+   */
+  includeConstraints(): this {
+    this.state.includes.push({
+      relation: 'HAS_CONSTRAINT',
+      direction: 'outgoing',
+    });
+    return this;
+  }
+
   // =============================================================================
   // FILTERING
   // =============================================================================

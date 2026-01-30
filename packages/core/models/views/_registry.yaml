@@ -1,6 +1,13 @@
 # models/views/_registry.yaml
-version: "8.0.0"
+version: "8.1.0"
 description: NovaNet Core View Definitions
+
+# Categories for UI grouping:
+# - scope: Layer views (complete, global, shared, project)
+# - generation: Orchestrator and sub-agent context views
+# - knowledge: Locale and concept views
+# - project: Project structure views
+# - mining: SEO and GEO pipeline views
 
 # =============================================================================
 # SCOPE LAYER VIEWS (extracted from complete-graph)
@@ -10,19 +17,23 @@ views:
   - id: complete-graph
     file: complete-graph.yaml
     description: Full NovaNet graph with all nodes and relations
+    category: scope
 
   # Scope layers (derived from complete-graph)
   - id: global-layer
     file: global-layer.yaml
     description: Locale configuration and knowledge (15 nodes)
+    category: scope
 
   - id: shared-layer
     file: shared-layer.yaml
     description: SEO keywords and GEO seeds (6 nodes)
+    category: scope
 
   - id: project-layer
     file: project-layer.yaml
     description: Per-project nodes from foundation to output (14 nodes)
+    category: scope
 
 # =============================================================================
 # GENERATION VIEWS (for orchestrator and sub-agents)
@@ -31,14 +42,17 @@ views:
   - id: page-generation-context
     file: page-generation-context.yaml
     description: Full context for orchestrator to generate a page
+    category: generation
 
   - id: block-generation
     file: block-generation.yaml
     description: Full context for sub-agent to generate a block
+    category: generation
 
   - id: block-semantic-network
     file: block-semantic-network.yaml
     description: Block with concepts and spreading activation
+    category: generation
 
 # =============================================================================
 # KNOWLEDGE VIEWS (locale and concepts)
@@ -47,10 +61,12 @@ views:
   - id: locale-full-knowledge
     file: locale-full-knowledge.yaml
     description: Complete locale knowledge (Identity, Voice, Culture, Market, Lexicon)
+    category: knowledge
 
   - id: concept-ecosystem
     file: concept-ecosystem.yaml
     description: Concept with L10n, SEO keywords, GEO seeds, semantic links
+    category: knowledge
 
 # =============================================================================
 # PROJECT VIEWS (project structure)
@@ -59,10 +75,12 @@ views:
   - id: project-context
     file: project-context.yaml
     description: Project with supported locales and page inventory
+    category: project
 
   - id: project-overview
     file: project-overview.yaml
     description: Project dashboard with pages, brand identity, and concepts
+    category: project
 
 # =============================================================================
 # MINING VIEWS (SEO and GEO pipelines)
@@ -71,7 +89,9 @@ views:
   - id: seo-pipeline
     file: seo-pipeline.yaml
     description: SEO keyword mining and optimization workflow
+    category: mining
 
   - id: geo-pipeline
     file: geo-pipeline.yaml
     description: GEO question mining and citation workflow
+    category: mining

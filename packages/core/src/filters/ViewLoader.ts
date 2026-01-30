@@ -197,6 +197,60 @@ export class ViewLoader {
         filter.includeProjectConcepts({ depth: include.depth });
         break;
 
+      case 'FOR_LOCALE':
+        filter.includeForLocale();
+        break;
+
+      case 'SUPPORTS_LOCALE':
+        filter.includeSupportedLocales();
+        break;
+
+      case 'DEFAULT_LOCALE':
+        filter.includeDefaultLocale();
+        break;
+
+      case 'FALLBACK_TO':
+        filter.includeFallbackLocale();
+        break;
+
+      case 'HAS_METRICS':
+        filter.includeMetrics();
+        break;
+
+      case 'LINKS_TO':
+        filter.includePageLinks();
+        break;
+
+      case 'SUBTOPIC_OF':
+        filter.includeSubtopics();
+        break;
+
+      case 'HAS_RULES_ADAPTATION':
+      case 'HAS_RULES_FORMATTING':
+      case 'HAS_RULES_SLUG':
+        filter.includeLocaleRules();
+        break;
+
+      case 'HAS_EXPRESSION':
+        filter.includeExpressions();
+        break;
+
+      case 'HAS_REFERENCE':
+        filter.includeCultureReferences();
+        break;
+
+      case 'HAS_METAPHOR':
+        filter.includeMetaphors();
+        break;
+
+      case 'HAS_PATTERN':
+        filter.includePatterns();
+        break;
+
+      case 'HAS_CONSTRAINT':
+        filter.includeConstraints();
+        break;
+
       default:
         // For unknown relations, log a warning but don't fail
         console.warn(`Unknown relation in view include: ${include.relation}`);
