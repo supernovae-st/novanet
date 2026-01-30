@@ -75,13 +75,13 @@ async function main() {
     )
   );
 
-  // Validate Mermaid
+  // Validate Mermaid (uses generateMarkdown for proper markdown wrapper)
   const mermaidPath = path.join(MODELS_DIR, 'docs/views/VIEW-COMPLETE-GRAPH.md');
   results.push(
     await validateFile(
       'VIEW-COMPLETE-GRAPH.md',
       'packages/core/models/docs/views/VIEW-COMPLETE-GRAPH.md',
-      () => MermaidGenerator.generate({ modelsDir: MODELS_DIR }),
+      () => MermaidGenerator.generateMarkdown({ modelsDir: MODELS_DIR }),
       mermaidPath
     )
   );
