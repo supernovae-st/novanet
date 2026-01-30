@@ -428,4 +428,132 @@ describe('filterStore', () => {
       }
     });
   });
+
+  // ==========================================================================
+  // Schema Mode - Collapsed Groups State (Task 3.1)
+  // ==========================================================================
+
+  describe('schema mode collapsed groups', () => {
+    beforeEach(() => {
+      // Reset collapsed state for each test
+      useFilterStore.setState({
+        collapsedScopes: [],
+        collapsedSubcategories: [],
+      });
+    });
+
+    describe('toggleScopeCollapsed', () => {
+      it('should add scope to collapsedScopes when not present', () => {
+        useFilterStore.getState().toggleScopeCollapsed('Project');
+
+        const state = useFilterStore.getState();
+        expect(state.collapsedScopes).toContain('Project');
+      });
+
+      it('should remove scope from collapsedScopes when already present', () => {
+        useFilterStore.setState({ collapsedScopes: ['Project'] });
+
+        useFilterStore.getState().toggleScopeCollapsed('Project');
+
+        const state = useFilterStore.getState();
+        expect(state.collapsedScopes).not.toContain('Project');
+      });
+
+      it('should handle multiple scopes independently', () => {
+        useFilterStore.getState().toggleScopeCollapsed('Project');
+        useFilterStore.getState().toggleScopeCollapsed('Global');
+
+        const state = useFilterStore.getState();
+        expect(state.collapsedScopes).toContain('Project');
+        expect(state.collapsedScopes).toContain('Global');
+        expect(state.collapsedScopes).not.toContain('Shared');
+      });
+    });
+
+    describe('toggleSubcategoryCollapsed', () => {
+      it('should add subcategory key to collapsedSubcategories when not present', () => {
+        useFilterStore.getState().toggleSubcategoryCollapsed('Project', 'foundation');
+
+        const state = useFilterStore.getState();
+        expect(state.collapsedSubcategories).toContain('Project-foundation');
+      });
+
+      it('should remove subcategory key from collapsedSubcategories when already present', () => {
+        useFilterStore.setState({ collapsedSubcategories: ['Project-foundation'] });
+
+        useFilterStore.getState().toggleSubcategoryCollapsed('Project', 'foundation');
+
+        const state = useFilterStore.getState();
+        expect(state.collapsedSubcategories).not.toContain('Project-foundation');
+      });
+
+      it('should handle multiple subcategories independently', () => {
+        useFilterStore.getState().toggleSubcategoryCollapsed('Project', 'foundation');
+        useFilterStore.getState().toggleSubcategoryCollapsed('Project', 'structure');
+        useFilterStore.getState().toggleSubcategoryCollapsed('Global', 'knowledge');
+
+        const state = useFilterStore.getState();
+        expect(state.collapsedSubcategories).toContain('Project-foundation');
+        expect(state.collapsedSubcategories).toContain('Project-structure');
+        expect(state.collapsedSubcategories).toContain('Global-knowledge');
+      });
+    });
+
+    describe('isScopeCollapsed', () => {
+      it('should return false when scope is not collapsed', () => {
+        expect(useFilterStore.getState().isScopeCollapsed('Project')).toBe(false);
+      });
+
+      it('should return true when scope is collapsed', () => {
+        useFilterStore.getState().toggleScopeCollapsed('Project');
+
+        expect(useFilterStore.getState().isScopeCollapsed('Project')).toBe(true);
+      });
+    });
+
+    describe('isSubcategoryCollapsed', () => {
+      it('should return false when subcategory is not collapsed', () => {
+        expect(useFilterStore.getState().isSubcategoryCollapsed('Project', 'foundation')).toBe(false);
+      });
+
+      it('should return true when subcategory is collapsed', () => {
+        useFilterStore.getState().toggleSubcategoryCollapsed('Project', 'foundation');
+
+        expect(useFilterStore.getState().isSubcategoryCollapsed('Project', 'foundation')).toBe(true);
+      });
+    });
+
+    describe('resetSchemaFilters', () => {
+      it('should reset collapsedScopes to empty array', () => {
+        useFilterStore.setState({ collapsedScopes: ['Project', 'Global'] });
+
+        useFilterStore.getState().resetSchemaFilters();
+
+        expect(useFilterStore.getState().collapsedScopes).toEqual([]);
+      });
+
+      it('should reset collapsedSubcategories to empty array', () => {
+        useFilterStore.setState({
+          collapsedSubcategories: ['Project-foundation', 'Global-knowledge'],
+        });
+
+        useFilterStore.getState().resetSchemaFilters();
+
+        expect(useFilterStore.getState().collapsedSubcategories).toEqual([]);
+      });
+
+      it('should reset both collapsedScopes and collapsedSubcategories', () => {
+        useFilterStore.setState({
+          collapsedScopes: ['Project', 'Global'],
+          collapsedSubcategories: ['Project-foundation', 'Global-knowledge'],
+        });
+
+        useFilterStore.getState().resetSchemaFilters();
+
+        const state = useFilterStore.getState();
+        expect(state.collapsedScopes).toEqual([]);
+        expect(state.collapsedSubcategories).toEqual([]);
+      });
+    });
+  });
 });

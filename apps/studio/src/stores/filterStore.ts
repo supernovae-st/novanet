@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import type { NodeType, FilterPreset } from '@/types';
+import type { NodeType, FilterPreset, Scope } from '@/types';
 import { CORE_TYPES, ALL_NODE_TYPES } from '@/config/nodeTypes';
 import { DEFAULT_PRESET } from '@/config/presets';
 import type { Priority, Freshness, NodeCategory } from '@/lib/filterAdapter';
@@ -27,6 +27,10 @@ interface ExtendedFilterState {
   categoryFilter: NodeCategory[];
   activeOnly: boolean;
   localeFamily: string | null;
+
+  // Schema mode collapsed groups (Task 3.1)
+  collapsedScopes: Scope[];
+  collapsedSubcategories: string[]; // Format: "Scope-subcategory"
 }
 
 interface FilterStoreState extends ExtendedFilterState {
@@ -61,6 +65,13 @@ interface FilterStoreState extends ExtendedFilterState {
   customPresets: FilterPreset[];
   addCustomPreset: (preset: FilterPreset) => void;
   removeCustomPreset: (id: string) => void;
+
+  // Schema mode collapsed groups actions (Task 3.1)
+  toggleScopeCollapsed: (scope: Scope) => void;
+  toggleSubcategoryCollapsed: (scope: Scope, subcategory: string) => void;
+  isScopeCollapsed: (scope: Scope) => boolean;
+  isSubcategoryCollapsed: (scope: Scope, subcategory: string) => boolean;
+  resetSchemaFilters: () => void;
 }
 
 export const useFilterStore = create<FilterStoreState>()(
@@ -81,6 +92,10 @@ export const useFilterStore = create<FilterStoreState>()(
       categoryFilter: [],
       activeOnly: false,
       localeFamily: null,
+
+      // Schema mode collapsed groups initial state (Task 3.1)
+      collapsedScopes: [],
+      collapsedSubcategories: [],
 
       // Actions
       setEnabledNodeTypes: (types) => {
@@ -313,6 +328,46 @@ export const useFilterStore = create<FilterStoreState>()(
           state.customPresets = state.customPresets.filter((p) => p.id !== id);
         });
       },
+
+      // Schema mode collapsed groups actions (Task 3.1)
+      toggleScopeCollapsed: (scope) => {
+        set((state) => {
+          const idx = state.collapsedScopes.indexOf(scope);
+          if (idx >= 0) {
+            state.collapsedScopes.splice(idx, 1);
+          } else {
+            state.collapsedScopes.push(scope);
+          }
+        });
+      },
+
+      toggleSubcategoryCollapsed: (scope, subcategory) => {
+        set((state) => {
+          const key = `${scope}-${subcategory}`;
+          const idx = state.collapsedSubcategories.indexOf(key);
+          if (idx >= 0) {
+            state.collapsedSubcategories.splice(idx, 1);
+          } else {
+            state.collapsedSubcategories.push(key);
+          }
+        });
+      },
+
+      isScopeCollapsed: (scope) => {
+        return get().collapsedScopes.includes(scope);
+      },
+
+      isSubcategoryCollapsed: (scope, subcategory) => {
+        const key = `${scope}-${subcategory}`;
+        return get().collapsedSubcategories.includes(key);
+      },
+
+      resetSchemaFilters: () => {
+        set((state) => {
+          state.collapsedScopes = [];
+          state.collapsedSubcategories = [];
+        });
+      },
     })),
     {
       name: 'novanet-filters',
@@ -369,6 +424,9 @@ export const useFilterStore = create<FilterStoreState>()(
         categoryFilter: state.categoryFilter,
         activeOnly: state.activeOnly,
         localeFamily: state.localeFamily,
+        // Schema mode collapsed groups (Task 3.1)
+        collapsedScopes: state.collapsedScopes,
+        collapsedSubcategories: state.collapsedSubcategories,
       }) as FilterStoreState,
     }
   )
@@ -404,3 +462,9 @@ export const selectFreshnessFilter = (state: FilterStoreState) => state.freshnes
 
 /** Select category filter */
 export const selectCategoryFilter = (state: FilterStoreState) => state.categoryFilter;
+
+/** Select collapsed scopes (Schema mode Task 3.1) */
+export const selectCollapsedScopes = (state: FilterStoreState) => state.collapsedScopes;
+
+/** Select collapsed subcategories (Schema mode Task 3.1) */
+export const selectCollapsedSubcategories = (state: FilterStoreState) => state.collapsedSubcategories;
