@@ -18,8 +18,7 @@ import { getDriver, closeDriver } from '../db/client.js';
 import { NODE_TYPES } from '../types/nodes.js';
 import fs from 'fs';
 import path from 'path';
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-import yaml from 'js-yaml';
+import { parse as parseYaml } from 'yaml';
 
 // Expected counts from YAML source of truth
 const EXPECTED_NODE_TYPES = 35;
@@ -52,7 +51,7 @@ describe('Schema Synchronization - Binary Tests', () => {
     it('NODE_TYPES matches YAML _index.yaml count', async () => {
       const indexPath = path.resolve(__dirname, '../../models/_index.yaml');
       const content = fs.readFileSync(indexPath, 'utf-8');
-      const index = yaml.load(content) as { graph_structure?: { node_counts?: Record<string, number> } };
+      const index = parseYaml(content) as { graph_structure?: { node_counts?: Record<string, number> } };
 
       const yamlCounts = index.graph_structure?.node_counts;
       if (yamlCounts) {

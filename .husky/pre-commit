@@ -1,0 +1,29 @@
+#!/usr/bin/env sh
+
+# Schema sync validation - runs when YAML models are changed
+# Ensures generated artifacts stay in sync with YAML source of truth
+
+# Check if YAML models changed in this commit
+if git diff --cached --name-only | grep -q "packages/core/models/"; then
+  echo "📋 YAML models changed - validating sync..."
+
+  # Run schema validation
+  pnpm schema:validate
+
+  if [ $? -ne 0 ]; then
+    echo ""
+    echo "════════════════════════════════════════════════════════════"
+    echo "❌ Schema sync validation failed!"
+    echo ""
+    echo "To fix, run:"
+    echo "  pnpm schema:generate"
+    echo ""
+    echo "Then stage the regenerated files:"
+    echo "  git add packages/core/src/graph/subcategories.ts"
+    echo "  git add packages/core/models/docs/views/VIEW-COMPLETE-GRAPH.md"
+    echo "════════════════════════════════════════════════════════════"
+    exit 1
+  fi
+
+  echo "✅ Schema sync validated"
+fi

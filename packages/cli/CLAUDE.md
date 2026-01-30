@@ -2,24 +2,23 @@
 
 Command-line tools for NovaNet development.
 
-## Overview
+## Status
 
-This package contains development tools and generators:
+**Coming soon** - This package is a placeholder for future CLI tools.
+
+## Planned Features
+
 - **validate**: Schema and relations validation
 - **generate**: Documentation and Cypher generators
 - **inspect**: Graph inspection tools
 
-## Commands
+## Current State
 
-```bash
-# From monorepo root
-pnpm --filter=@novanet/cli validate        # Validate schemas
-pnpm --filter=@novanet/cli generate:docs   # Generate documentation
+The CLI currently only contains a stub entry point. Actual implementation is planned for a future release.
 
-# Or from this package
-pnpm validate
-pnpm generate:docs
-```
+For now, use the scripts in individual packages:
+- `@novanet/core` - `pnpm --filter=@novanet/core validate:docs`
+- `@novanet/schema-tools` - `pnpm --filter=@novanet/schema-tools validate:sync`
 
 ## Dependencies
 

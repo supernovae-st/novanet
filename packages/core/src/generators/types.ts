@@ -2,7 +2,7 @@
 // Unified View System types for documentation generation
 // v8.0.0
 
-import type { NodeType, NodeCategory, ViewDefinition } from '../filters/types.js';
+import type { NodeType, ViewDefinition } from '../filters/types.js';
 import { LAYER_COLORS as _LAYER_COLORS } from './colors.js';
 
 // =============================================================================
@@ -92,11 +92,6 @@ export interface MarkdownGeneratorOptions {
   includeMermaid?: boolean;
   includeCypher?: boolean;
   includeNodeTables?: boolean;
-  baseUrl?: string;  // For cross-references
-  // MermaidGenerator integration
-  relationsPath?: string;  // path to relations.yaml (for useFullGraphMermaid)
-  indexPath?: string;      // path to _index.yaml (for useFullGraphMermaid)
-  useFullGraphMermaid?: boolean;  // use MermaidGenerator for complete diagram
 }
 
 export interface CypherExporterOptions {
@@ -123,15 +118,3 @@ export const LAYER_COLORS: Record<NonNullable<DocLayer['color']>, string> = {
   cyan: _LAYER_COLORS.cyan.fill,
 };
 
-// =============================================================================
-// NODE CATEGORY DISPLAY INFO
-// =============================================================================
-
-export const CATEGORY_DISPLAY: Record<NodeCategory, { label: string; emoji: string }> = {
-  project: { label: 'Project', emoji: '🏢' },
-  content: { label: 'Content', emoji: '📄' },
-  locale: { label: 'Locale', emoji: '🌍' },
-  generation: { label: 'Generation', emoji: '⚡' },
-  seo: { label: 'SEO', emoji: '🔍' },
-  geo: { label: 'GEO', emoji: '📍' },
-};

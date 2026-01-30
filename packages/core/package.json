@@ -13,13 +13,11 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "eslint src scripts --ext .ts",
-    "validate": "npm run validate:schema && npm run validate:version && npm run validate:relations && npm run validate:subcategories",
+    "validate": "npm run validate:schema && npm run validate:version && npm run validate:relations",
     "validate:schema": "tsx scripts/validate-schema.ts",
     "validate:version": "tsx scripts/validate-version.ts",
     "validate:relations": "tsx scripts/validate-relations.ts",
-    "validate:subcategories": "tsx scripts/validate-subcategories.ts",
     "generate:docs": "tsx scripts/generate-docs.ts",
-    "generate:subcategories": "tsx scripts/generate-subcategories.ts",
     "validate:docs": "tsx scripts/validate-docs.ts",
     "prepare": "husky install"
   },
@@ -31,7 +29,6 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
-    "@types/js-yaml": "^4.0.9",
     "@types/node": "^22.10.0",
     "@typescript-eslint/eslint-plugin": "^8.53.1",
     "@typescript-eslint/parser": "^8.53.1",
