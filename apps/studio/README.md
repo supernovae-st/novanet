@@ -1,68 +1,72 @@
 <div align="center">
 
-# 🎨 NovaNet Studio
+# 🪽 NovaNet Studio
 
-**Interactive 2D/3D knowledge graph visualization with React Flow and force-graph**
+**Interactive 2D/3D knowledge graph visualization with AI-powered queries**
 
-[![← HQ](https://img.shields.io/badge/←_HQ-64748b?style=flat-square)](https://github.com/supernovae-st/novanet-hq)
-[![🏢 HQ](https://img.shields.io/badge/🏢_HQ-8b5cf6?style=flat-square)](https://github.com/supernovae-st/novanet-hq)
-[![📦 Core →](https://img.shields.io/badge/📦_Core_→-6366f1?style=flat-square)](https://github.com/supernovae-st/novanet-core)
-
-<br>
-
-[![Next.js](https://img.shields.io/badge/Next.js-15-black?style=flat-square&logo=next.js&logoColor=white)](https://nextjs.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-16-000000?style=flat-square&logo=next.js&logoColor=white)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Tailwind](https://img.shields.io/badge/Tailwind-3.x-06b6d4?style=flat-square&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind](https://img.shields.io/badge/Tailwind-3.4-06b6d4?style=flat-square&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 
 ---
 
-*Part of the [NovaNET Ecosystem](https://github.com/supernovae-st/novanet-hq)*
+*Part of the [🪽 NovaNet Monorepo](../../README.md)*
 
 </div>
 
 ---
 
-## 📋 Overview
+## Overview
 
 NovaNet Studio provides interactive visualization for the NovaNet knowledge graph:
 
-- **Dual View Mode** - 2D (React Flow) + 3D (force-graph) visualization
-- **AI-Powered Search** - Natural language to Cypher via Claude
-- **Keyboard-First** - Full navigation with shortcuts
-- **Filter Presets** - Quick views for 19k+ nodes
-- **DX-First Design** - Copy anything, inspect everything
+- **Dual View Mode** — 2D (React Flow) + 3D (force-graph) visualization
+- **AI-Powered Search** — Natural language to Cypher via Claude
+- **Keyboard-First** — Full navigation with 40+ shortcuts
+- **Filter Presets** — Quick views for ~19,000 nodes
+- **DX-First Design** — Copy anything (JSON/TS/YAML), inspect everything
 
-## ✨ Features
+---
+
+## Features
 
 | Feature | Description |
 |---------|-------------|
-| 🔀 **2D/3D Toggle** | Switch views with `V` key |
-| 🤖 **AI Chat** | Ask questions in natural language (`⌘J`) |
-| ⌨️ **Keyboard Nav** | Command palette (`⌘K`), presets (`1-9`) |
-| 🎯 **Quick Views** | 10 built-in filter presets |
-| 📋 **Copy Anything** | JSON/TypeScript/YAML export |
-| 🌍 **Locale Filter** | Browse by language/region |
+| **2D/3D Toggle** | Switch views with `V` key |
+| **AI Chat** | Ask questions in natural language (`⌘J`) |
+| **Keyboard Nav** | Command palette (`⌘K`), presets (`1-9`) |
+| **Quick Views** | 10 built-in filter presets |
+| **Copy Anything** | JSON/TypeScript/YAML export |
+| **Locale Filter** | Browse by language/region |
 
-## 🚀 Quick Start
+---
+
+## Quick Start
 
 ```bash
-# Install dependencies
-npm install
+# From monorepo root
+pnpm install
 
 # Configure environment
-cp .env.example .env.local
-# Edit with Neo4j and Anthropic credentials
+cp apps/studio/.env.example apps/studio/.env.local
+# Set NEO4J_PASSWORD and ANTHROPIC_API_KEY
+
+# Start Neo4j + seed
+pnpm infra:up && pnpm infra:seed
 
 # Start development
-npm run dev
+pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000)
 
-## ⌨️ Keyboard Shortcuts
+---
+
+## Keyboard Shortcuts
 
 ### Navigation
+
 | Key | Action |
 |-----|--------|
 | `⌘K` | Command palette |
@@ -71,20 +75,23 @@ Open [http://localhost:3000](http://localhost:3000)
 | `F` | Fit view |
 | `?` | Show shortcuts |
 
-### Quick Views
+### Quick Views (Presets)
+
 | Key | View |
 |-----|------|
-| `1` | Project Structure |
-| `2` | Generation Chain |
-| `3` | Locale Knowledge |
-| `4` | Concept Network |
-| `5` | Prompts & Rules |
-| `6` | SEO & GEO |
-| `7` | High Priority |
-| `8` | Realtime Content |
-| `0` | All Nodes |
+| `1` | Project Overview |
+| `2` | Full Graph |
+| `3` | Core + Concepts |
+| `4` | All Locales |
+| `5` | Concepts |
+| `6` | Current Locale |
+| `7` | Locale + Expressions |
+| `8` | Locale Knowledge |
+| `9` | Expressions |
+| `0` | Clear Filters |
 
 ### Layout
+
 | Key | Layout |
 |-----|--------|
 | `⇧H` | Horizontal |
@@ -93,71 +100,71 @@ Open [http://localhost:3000](http://localhost:3000)
 | `⇧R` | Radial |
 | `⇧F` | Force |
 
-## 📁 Structure
+---
+
+## Structure
 
 ```
-src/
-├── app/                # Next.js App Router
-│   ├── api/chat/       # Claude AI endpoint
-│   └── page.tsx        # Main visualization
-├── components/
-│   ├── chat/           # AI chat interface
-│   ├── graph/          # React Flow + force-graph
-│   ├── sidebar/        # Filters, details panel
-│   └── ui/             # Base components
-├── config/             # Presets, shortcuts, node types
-├── hooks/              # Custom React hooks
-├── lib/                # Utilities
-├── stores/             # Zustand state
-└── types/              # TypeScript types
+studio/
+├── src/
+│   ├── app/                # Next.js App Router
+│   │   ├── api/chat/       # Claude AI endpoint
+│   │   ├── api/graph/      # Neo4j graph endpoints
+│   │   └── page.tsx        # Main visualization
+│   ├── components/
+│   │   ├── chat/           # AI chat interface
+│   │   ├── graph/          # React Flow + force-graph
+│   │   ├── sidebar/        # Filters, details panel
+│   │   └── ui/             # Base components (Radix UI)
+│   ├── config/             # Presets, shortcuts, node types
+│   ├── hooks/              # Custom React hooks
+│   ├── lib/                # Utilities (auth, rate-limit, neo4j)
+│   ├── stores/             # Zustand state management
+│   └── types/              # TypeScript types
+└── .env.example            # Environment template
 ```
 
-## 🛠️ Tech Stack
+---
+
+## Tech Stack
 
 | Technology | Purpose |
 |------------|---------|
-| **Next.js 15** | App Router + Turbopack |
+| **Next.js 16** | App Router + Turbopack |
 | **React 19** | UI framework |
-| **TypeScript 5.7** | Type safety |
+| **TypeScript 5.9** | Type safety |
 | **Tailwind CSS** | Styling |
-| **Zustand 5** | State management |
-| **@xyflow/react** | 2D graph |
-| **react-force-graph-3d** | 3D graph |
+| **Zustand 5** | State management (persist + immer) |
+| **@xyflow/react** | 2D graph visualization |
+| **react-force-graph-3d** | 3D graph visualization |
 | **neo4j-driver** | Database client |
 | **@anthropic-ai/sdk** | AI integration |
 
-## 🧪 Development
+---
+
+## Development
 
 ```bash
-npm run dev          # Start dev server
-npm run build        # Production build
-npm run lint         # ESLint
-npm run type-check   # TypeScript check
-npm test             # Run tests
+pnpm dev                              # Start dev server
+pnpm build --filter=@novanet/studio   # Production build
+pnpm lint --filter=@novanet/studio    # ESLint
+pnpm type-check --filter=@novanet/studio  # TypeScript check
+pnpm test --filter=@novanet/studio    # Run tests
 ```
 
-## 🔗 Related
+---
 
-- [novanet-hq](https://github.com/supernovae-st/novanet-hq) - Dev workspace
-- [novanet-core](https://github.com/supernovae-st/novanet-core) - Core library
-- [novanet-infra](https://github.com/supernovae-st/novanet-infra) - Docker
+## Related Packages
+
+| Package | Description |
+|---------|-------------|
+| [@novanet/core](../../packages/core/) | Types, schemas, filters |
+| [@novanet/db](../../packages/db/) | Neo4j Docker infrastructure |
 
 ---
 
 <div align="center">
 
-**Navigate**
-
-[![← HQ](https://img.shields.io/badge/←_HQ-64748b?style=flat-square)](https://github.com/supernovae-st/novanet-hq)
-[![🏢 HQ](https://img.shields.io/badge/🏢_HQ-8b5cf6?style=flat-square)](https://github.com/supernovae-st/novanet-hq)
-[![📦 Core →](https://img.shields.io/badge/📦_Core_→-6366f1?style=flat-square)](https://github.com/supernovae-st/novanet-core)
-
----
-
-[🏢 HQ](https://github.com/supernovae-st/novanet-hq) · [🎨 Studio](./README.md) · [📦 Core](https://github.com/supernovae-st/novanet-core) · [🐳 Infra](https://github.com/supernovae-st/novanet-infra)
-
----
-
-**Part of [SuperNovae Studio](https://github.com/supernovae-st)** · [NovaNET Public](https://github.com/supernovae-st/novanet)
+**[🪽 NovaNet](../../README.md)** · [SuperNovae Studio](https://github.com/supernovae-st)
 
 </div>
