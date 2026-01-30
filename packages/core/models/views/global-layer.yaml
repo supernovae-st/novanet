@@ -118,7 +118,7 @@ docs:
         RETURN e.text AS expression,
                e.semantic_field AS field,
                e.register AS register
-        ORDER BY e.priority DESC
+        ORDER BY e.semantic_field
       params:
         locale: "fr-FR"
         fields: ["urgency", "value", "trust"]

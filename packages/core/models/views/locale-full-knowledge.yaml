@@ -24,9 +24,6 @@ include:
     direction: outgoing
     depth: 2  # includes Expressions
 
-filters:
-  priority: [critical, high]
-
 docs:
   title: "Locale Knowledge View"
   category: localization
@@ -90,7 +87,7 @@ docs:
                e.semantic_field AS field,
                e.register AS register,
                e.usage_context AS context
-        ORDER BY e.semantic_field, e.priority DESC
+        ORDER BY e.semantic_field, e.text
       params:
         locale: "fr-FR"
         fields: ["urgency", "value", "trust"]
@@ -98,4 +95,4 @@ docs:
   notes:
     - "LocaleKnowledge is GLOBAL - shared across all projects"
     - "Expressions are filtered by semantic_field for relevant context"
-    - "Priority filters ensure only high-value knowledge is included"
+    - "Semantic field filters ensure relevant knowledge is included"

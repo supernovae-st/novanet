@@ -18,5 +18,3 @@ include:
     direction: outgoing
     depth: 1
 
-filters:
-  priority: [critical, high]
