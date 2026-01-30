@@ -2,10 +2,6 @@
 import { describe, it, expect } from 'vitest';
 import { MarkdownGenerator } from '../../generators/MarkdownGenerator.js';
 import type { ExtendedViewDefinition } from '../../generators/types.js';
-import * as path from 'path';
-
-const RELATIONS_PATH = path.join(process.cwd(), 'models/relations.yaml');
-const INDEX_PATH = path.join(process.cwd(), 'models/_index.yaml');
 
 const testView: ExtendedViewDefinition = {
   id: 'test-view',
@@ -158,137 +154,35 @@ describe('MarkdownGenerator', () => {
   });
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // MERMAID GENERATOR INTEGRATION
+  // GENERATE ASYNC (v8.2.0 - MermaidGenerator moved to @novanet/schema-tools)
   // ═══════════════════════════════════════════════════════════════════════════
 
-  describe('MermaidGenerator integration', () => {
-    describe('generateAsync with useFullGraphMermaid=true', () => {
-      it('should use MermaidGenerator output when useFullGraphMermaid is true', async () => {
-        const result = await MarkdownGenerator.generateAsync(testView, {
-          useFullGraphMermaid: true,
-          relationsPath: RELATIONS_PATH,
-          indexPath: INDEX_PATH,
-        });
+  describe('generateAsync', () => {
+    it('should use layer-based Mermaid by default', async () => {
+      const result = await MarkdownGenerator.generateAsync(testView);
 
-        // Should contain MermaidGenerator's output characteristics
-        expect(result.content).toContain('```mermaid');
-        expect(result.content).toContain('flowchart TB');
-        // MermaidGenerator uses locale behavior classes
-        expect(result.content).toContain('classDef invariant');
-        expect(result.content).toContain('classDef localized');
-        // MermaidGenerator uses scope subgraphs with _LAYER suffix
-        expect(result.content).toContain('subgraph GLOBAL_LAYER');
-        expect(result.content).toContain('subgraph PROJECT_LAYER');
-      });
-
-      it('should include all 35 nodes from relations.yaml', async () => {
-        const result = await MarkdownGenerator.generateAsync(testView, {
-          useFullGraphMermaid: true,
-          relationsPath: RELATIONS_PATH,
-          indexPath: INDEX_PATH,
-        });
-
-        // Check for some key nodes from each scope
-        expect(result.content).toContain('Locale');
-        expect(result.content).toContain('Project');
-        expect(result.content).toContain('Page');
-        expect(result.content).toContain('Block');
-        expect(result.content).toContain('Concept');
-        expect(result.content).toContain('SEOKeywordL10n');
-      });
-
-      it('should include relationship edges', async () => {
-        const result = await MarkdownGenerator.generateAsync(testView, {
-          useFullGraphMermaid: true,
-          relationsPath: RELATIONS_PATH,
-          indexPath: INDEX_PATH,
-        });
-
-        // MermaidGenerator renders edges with labels
-        expect(result.content).toContain('-->|HAS_PAGE|');
-        expect(result.content).toContain('-->|HAS_BLOCK|');
-        expect(result.content).toContain('-->|HAS_CONCEPT|');
-      });
+      expect(result.content).toContain('```mermaid');
+      expect(result.content).toContain('Page Layer');
+      expect(result.viewId).toBe('test-view');
     });
 
-    describe('generateAsync with useFullGraphMermaid=false', () => {
-      it('should use existing generateMermaid when useFullGraphMermaid is false', async () => {
-        const result = await MarkdownGenerator.generateAsync(testView, {
-          useFullGraphMermaid: false,
-        });
+    it('should be equivalent to sync generate()', async () => {
+      const syncResult = MarkdownGenerator.generate(testView);
+      const asyncResult = await MarkdownGenerator.generateAsync(testView);
 
-        // Should use the layer-based generateMermaid
-        expect(result.content).toContain('```mermaid');
-        expect(result.content).toContain('Page Layer');
-        expect(result.content).toContain('Block Layer');
-        // Should NOT contain MermaidGenerator scope subgraphs
-        expect(result.content).not.toContain('subgraph Global');
-        expect(result.content).not.toContain('subgraph Shared');
-      });
-
-      it('should use generateMermaid by default (without option)', async () => {
-        const result = await MarkdownGenerator.generateAsync(testView);
-
-        // Default behavior: use layer-based Mermaid
-        expect(result.content).toContain('Page Layer');
-        expect(result.content).not.toContain('subgraph Global');
-      });
+      // Content should match (ignoring timestamp)
+      expect(asyncResult.viewId).toBe(syncResult.viewId);
+      // Both should have the same structure
+      expect(asyncResult.content).toContain('Page Layer');
+      expect(syncResult.content).toContain('Page Layer');
     });
 
-    describe('generateAsync error handling', () => {
-      it('should throw if useFullGraphMermaid=true but relationsPath missing', async () => {
-        await expect(
-          MarkdownGenerator.generateAsync(testView, {
-            useFullGraphMermaid: true,
-            indexPath: INDEX_PATH,
-            // relationsPath missing
-          })
-        ).rejects.toThrow('relationsPath is required when useFullGraphMermaid is true');
-      });
+    it('should continue working with existing behavior', () => {
+      const result = MarkdownGenerator.generate(testView);
 
-      it('should throw if useFullGraphMermaid=true but indexPath missing', async () => {
-        await expect(
-          MarkdownGenerator.generateAsync(testView, {
-            useFullGraphMermaid: true,
-            relationsPath: RELATIONS_PATH,
-            // indexPath missing
-          })
-        ).rejects.toThrow('indexPath is required when useFullGraphMermaid is true');
-      });
-
-      it('should propagate MermaidGenerator errors with context', async () => {
-        await expect(
-          MarkdownGenerator.generateAsync(testView, {
-            useFullGraphMermaid: true,
-            relationsPath: '/nonexistent/relations.yaml',
-            indexPath: INDEX_PATH,
-          })
-        ).rejects.toThrow(/Failed to generate full graph Mermaid/);
-      });
-    });
-
-    describe('sync generate() backward compatibility', () => {
-      it('should continue working with existing behavior', () => {
-        // Sync generate should not be affected by new options
-        const result = MarkdownGenerator.generate(testView);
-
-        expect(result.content).toContain('```mermaid');
-        expect(result.content).toContain('Page Layer');
-        expect(result.viewId).toBe('test-view');
-      });
-
-      it('should ignore useFullGraphMermaid in sync mode', () => {
-        // Sync generate cannot use MermaidGenerator (it's async)
-        // It should fall back to existing behavior
-        const result = MarkdownGenerator.generate(testView, {
-          useFullGraphMermaid: true,  // ignored in sync mode
-          relationsPath: RELATIONS_PATH,
-          indexPath: INDEX_PATH,
-        });
-
-        // Should still use layer-based Mermaid (not MermaidGenerator)
-        expect(result.content).toContain('Page Layer');
-      });
+      expect(result.content).toContain('```mermaid');
+      expect(result.content).toContain('Page Layer');
+      expect(result.viewId).toBe('test-view');
     });
   });
 });

@@ -15,8 +15,8 @@ type ViewWithDocs = ExtendedViewDefinition & { docs: ViewDocs };
 
 const VIEWS_DIR = path.join(process.cwd(), 'models/views');
 const OUTPUT_DIR = path.join(process.cwd(), 'models/docs/views');
-const RELATIONS_PATH = path.join(process.cwd(), 'models/relations.yaml');
-const INDEX_PATH = path.join(process.cwd(), 'models/_index.yaml');
+
+// v8.2.0: RELATIONS_PATH and INDEX_PATH removed - useFullGraphMermaid moved to @novanet/schema-tools
 
 interface ValidationResult {
   viewId: string;
@@ -67,17 +67,9 @@ function normalizeContent(content: string): string {
  * Generate expected content for a view.
  * Uses same logic as generate-docs.ts: async generation for complete-graph.
  */
-async function generateExpectedContent(view: ViewWithDocs): Promise<string> {
-  // Use generateAsync with full graph Mermaid for complete-graph view
-  const result = view.id === 'complete-graph'
-    ? await MarkdownGenerator.generateAsync(view, {
-        useFullGraphMermaid: true,
-        relationsPath: RELATIONS_PATH,
-        indexPath: INDEX_PATH,
-        includeTimestamp: false,
-      })
-    : MarkdownGenerator.generate(view, { includeTimestamp: false });
-
+function generateExpectedContent(view: ViewWithDocs): string {
+  // v8.2.0: generateAsync deprecated, useFullGraphMermaid moved to schema-tools
+  const result = MarkdownGenerator.generate(view, { includeTimestamp: false });
   return result.content;
 }
 
@@ -99,8 +91,6 @@ async function validateDocs(options: ValidateOptions): Promise<void> {
 
   console.log(`📁 Source files:`);
   console.log(`   • ${VIEWS_DIR}/*.yaml (view definitions)`);
-  console.log(`   • ${RELATIONS_PATH} (relation definitions)`);
-  console.log(`   • ${INDEX_PATH} (node index)`);
   console.log(`📂 Output: ${OUTPUT_DIR}`);
   console.log(`📊 Found ${viewsWithDocs.length} view(s) with docs\n`);
 
@@ -114,7 +104,7 @@ async function validateDocs(options: ValidateOptions): Promise<void> {
     if (!await fileExists(filePath)) {
       if (options.fix) {
         // Generate missing file
-        const expected = await generateExpectedContent(view);
+        const expected = generateExpectedContent(view);
         await fs.mkdir(OUTPUT_DIR, { recursive: true });
         await fs.writeFile(filePath, expected, 'utf-8');
         results.push({
@@ -134,8 +124,8 @@ async function validateDocs(options: ValidateOptions): Promise<void> {
       continue;
     }
 
-    // Generate expected content (using same async method as generate-docs.ts)
-    const expected = await generateExpectedContent(view);
+    // Generate expected content (using same sync method as generate-docs.ts)
+    const expected = generateExpectedContent(view);
 
     // Read committed content
     const committed = await fs.readFile(filePath, 'utf-8');

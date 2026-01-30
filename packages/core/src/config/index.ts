@@ -1,5 +1,5 @@
 /**
- * NovaNet Configuration Module (v7.8.0)
+ * NovaNet Configuration Module (v8.2.0)
  */
 
 export {
@@ -7,10 +7,8 @@ export {
   getTaskModifier,
   getSemanticLinkDefault,
   calculateBoostedTemperature,
-  clearConfigCache,
   getPriorityScore,
   matchesPriorityFilter,
-  TaskTypes,
   PRIORITY_SCORES,
   type TaskType,
   type Priority,

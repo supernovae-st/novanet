@@ -3,8 +3,10 @@
 // v8.1.0: Added semantic edge styling with EdgeCategory
 
 import * as fs from 'fs/promises';
+import * as path from 'path';
 import * as yaml from 'yaml';
-import { RelationsParser, RelationEdge } from './RelationsParser.js';
+import { RelationsParser, type RelationEdge } from '../parsers/RelationsParser.js';
+import { filePathToNodeName } from '../utils/filePathToNodeName.js';
 import {
   BEHAVIOR_STYLE,
   BEHAVIOR_EMOJI,
@@ -14,7 +16,7 @@ import {
   EDGE_COLORS,
   type LocaleBehavior,
   type EdgeCategory,
-} from './colors.js';
+} from '../config/colors.js';
 
 // =============================================================================
 // TYPES
@@ -24,8 +26,10 @@ import {
  * Configuration for MermaidGenerator
  */
 export interface MermaidGeneratorConfig {
-  relationsPath: string;  // path to relations.yaml
-  indexPath: string;      // path to _index.yaml
+  /** Path to models/ directory (contains relations.yaml and _index.yaml) */
+  modelsDir: string;
+  /** Optional output path for writeToFile */
+  outputPath?: string;
 }
 
 /**
@@ -109,31 +113,31 @@ export class MermaidGenerator {
    */
   static async generate(config: MermaidGeneratorConfig): Promise<string> {
     // Validate config
-    if (!config.relationsPath) {
-      throw new Error('MermaidGenerator: relationsPath cannot be empty');
+    if (!config.modelsDir) {
+      throw new Error('MermaidGenerator: modelsDir cannot be empty');
     }
-    if (!config.indexPath) {
-      throw new Error('MermaidGenerator: indexPath cannot be empty');
-    }
+
+    const relationsPath = path.join(config.modelsDir, 'relations.yaml');
+    const indexPath = path.join(config.modelsDir, '_index.yaml');
 
     // Load relations
     let edges: RelationEdge[];
     try {
-      edges = await RelationsParser.loadFromFile(config.relationsPath);
+      edges = await RelationsParser.loadFromFile(relationsPath);
     } catch (error) {
       throw new Error(
-        `MermaidGenerator: Failed to load relations from ${config.relationsPath}: ${error instanceof Error ? error.message : 'Unknown error'}`
+        `MermaidGenerator: Failed to load relations from ${relationsPath}: ${error instanceof Error ? error.message : 'Unknown error'}`
       );
     }
 
     // Load index
     let indexData: IndexYaml;
     try {
-      const content = await fs.readFile(config.indexPath, 'utf-8');
+      const content = await fs.readFile(indexPath, 'utf-8');
       indexData = yaml.parse(content) as IndexYaml;
     } catch (error) {
       throw new Error(
-        `MermaidGenerator: Failed to load index from ${config.indexPath}: ${error instanceof Error ? error.message : 'Unknown error'}`
+        `MermaidGenerator: Failed to load index from ${indexPath}: ${error instanceof Error ? error.message : 'Unknown error'}`
       );
     }
 
@@ -147,38 +151,23 @@ export class MermaidGenerator {
     // Generate Mermaid output
     return generateMermaid(edges, allNodes, nodeMetadata, nodeToBehavior);
   }
+
+  /**
+   * Generate and write to file
+   */
+  static async writeToFile(config: MermaidGeneratorConfig): Promise<void> {
+    if (!config.outputPath) {
+      throw new Error('MermaidGenerator: outputPath is required for writeToFile');
+    }
+
+    const content = await this.generate(config);
+    await fs.writeFile(config.outputPath, content, 'utf-8');
+  }
 }
 
 // =============================================================================
 // HELPER FUNCTIONS
 // =============================================================================
-
-/**
- * Convert kebab-case filename to PascalCase node name
- * @example "locale-identity.yaml" → "LocaleIdentity"
- * @example "seo-keyword-l10n.yaml" → "SEOKeywordL10n"
- */
-function filePathToNodeName(filePath: string): string {
-  // Extract filename from path: "nodes/global/knowledge/locale-identity.yaml" → "locale-identity"
-  const filename = filePath.split('/').pop()?.replace('.yaml', '') || '';
-
-  // Handle special cases for acronyms and abbreviations
-  return filename
-    .split('-')
-    .map((part) => {
-      // Full acronyms → ALL CAPS
-      if (['seo', 'geo', 'ai'].includes(part)) {
-        return part.toUpperCase();
-      }
-      // l10n is special: L10n (not L10N)
-      if (part === 'l10n') {
-        return 'L10n';
-      }
-      // PascalCase for normal parts
-      return part.charAt(0).toUpperCase() + part.slice(1);
-    })
-    .join('');
-}
 
 /**
  * Extract nodes from a scope with their category

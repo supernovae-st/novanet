@@ -4,12 +4,16 @@
 
 import * as fs from 'fs/promises';
 import * as path from 'path';
-import type { Scope } from '../types/nodes.js';
-// Note: NodeType and Subcategory types are used in the generated output, not imported here
+import { filePathToNodeName } from '../utils/filePathToNodeName.js';
 
 // =============================================================================
 // TYPES
 // =============================================================================
+
+/**
+ * Scope classification (defined locally to avoid circular dependency)
+ */
+type Scope = 'Global' | 'Shared' | 'Project';
 
 /**
  * Configuration for SubcategoryGenerator
@@ -200,7 +204,7 @@ export class SubcategoryGenerator {
     lines.push('// NODE_SUBCATEGORIES mapping all 35 node types to their subcategories');
     lines.push('// AUTO-GENERATED from models/nodes/ folder structure');
     lines.push(`// Generated: ${timestamp}`);
-    lines.push('// Run: npm run generate:subcategories');
+    lines.push('// Run: pnpm schema:generate');
     lines.push('');
     lines.push("import type { NodeType } from '../types/nodes.js';");
     lines.push("import type { Subcategory } from './types.js';");
@@ -287,39 +291,3 @@ export class SubcategoryGenerator {
     return lines.join('\n');
   }
 }
-
-// =============================================================================
-// HELPER FUNCTIONS
-// =============================================================================
-
-/**
- * Convert kebab-case filename to PascalCase node name.
- * Handles special cases: seo → SEO, geo → GEO, ai → AI, l10n → L10n
- *
- * @example
- * filePathToNodeName('locale-identity.yaml') // → 'LocaleIdentity'
- * filePathToNodeName('seo-keyword-l10n.yaml') // → 'SEOKeywordL10n'
- */
-function filePathToNodeName(filePath: string): string {
-  // Extract filename without extension
-  const filename = filePath.split('/').pop()?.replace('.yaml', '') || '';
-
-  return filename
-    .split('-')
-    .map((part) => {
-      // Full acronyms → ALL CAPS
-      if (['seo', 'geo', 'ai'].includes(part)) {
-        return part.toUpperCase();
-      }
-      // l10n is special: L10n (not L10N)
-      if (part === 'l10n') {
-        return 'L10n';
-      }
-      // PascalCase for normal parts
-      return part.charAt(0).toUpperCase() + part.slice(1);
-    })
-    .join('');
-}
-
-// Export helper for testing
-export { filePathToNodeName };

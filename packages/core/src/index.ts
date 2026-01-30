@@ -69,17 +69,12 @@ export * as config from './config/index.js';
 export * as schemas from './schemas/index.js';
 
 // =============================================================================
-// SERVICES (v8.0.0)
+// SERVICES (RESERVED - v8.2.0)
 // =============================================================================
 
-/**
- * Core services for Hybrid OntologyRAG:
- * - VectorSearchService: Semantic search using embeddings
- * - GraphTraversalService: Spreading activation over concept graph
- * - HybridRetriever: Combined vector + graph retrieval
- * Use: `import { services } from 'novanet-core'`
- */
-export * as services from './services/index.js';
+// NOTE: Services module (VectorSearchService, GraphTraversalService, HybridRetriever)
+// is reserved for future Hybrid OntologyRAG implementation.
+// Currently not exported - import directly from './services/' if needed for development.
 
 // =============================================================================
 // GENERATORS (v8.0.0)

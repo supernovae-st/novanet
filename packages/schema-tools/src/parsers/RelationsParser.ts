@@ -1,4 +1,4 @@
-// src/generators/RelationsParser.ts
+// src/parsers/RelationsParser.ts
 // Parser for models/relations.yaml - extracts relation edges for Mermaid generation
 // v8.0.0
 

@@ -109,20 +109,33 @@ describe('SchemaFilterPanel', () => {
     it('renders node count in parentheses for each subcategory', () => {
       render(<SchemaFilterPanel />);
 
-      // Multiple subcategories have 3 nodes (Foundation, Instruction, SEO, GEO)
-      // Use getAllByText for values that appear multiple times
+      // Correct counts from models/nodes/ folder structure:
+      // - foundation: 3 nodes (BrandIdentity, Project, ProjectL10n)
+      // - instruction: 5 nodes (BlockPrompt, BlockRules, BlockType, PagePrompt, PageType)
+      // - output: 2 nodes (BlockL10n, PageL10n)
+      // - semantic: 2 nodes (Concept, ConceptL10n)
+      // - structure: 2 nodes (Block, Page)
+      // - config: 1 node (Locale)
+      // - knowledge: 14 nodes
+      // - geo: 3 nodes
+      // - seo: 3 nodes
+
+      // Foundation, SEO, GEO have 3 nodes each
       const threeNodes = screen.getAllByText('(3)');
-      expect(threeNodes.length).toBeGreaterThanOrEqual(1);
+      expect(threeNodes.length).toBeGreaterThanOrEqual(3);
 
-      // Structure has 4 nodes
-      expect(screen.getByText('(4)')).toBeInTheDocument();
-
-      // Semantic and Output have 2 nodes each
+      // Structure, Semantic, Output have 2 nodes each
       const twoNodes = screen.getAllByText('(2)');
-      expect(twoNodes.length).toBeGreaterThanOrEqual(1);
+      expect(twoNodes.length).toBeGreaterThanOrEqual(3);
+
+      // Instruction has 5 nodes (unique count)
+      expect(screen.getByText('(5)')).toBeInTheDocument();
 
       // Knowledge has 14 nodes (unique count)
       expect(screen.getByText('(14)')).toBeInTheDocument();
+
+      // Config has 1 node (unique count)
+      expect(screen.getByText('(1)')).toBeInTheDocument();
     });
 
     it('renders the header with Schema Filters title', () => {

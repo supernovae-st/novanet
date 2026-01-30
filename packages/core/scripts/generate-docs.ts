@@ -13,6 +13,8 @@ const VIEWS_DIR = path.join(process.cwd(), 'models/views');
 const OUTPUT_DIR = path.join(process.cwd(), 'models/docs/views');
 const CYPHER_OUTPUT_DIR = path.join(process.cwd(), 'neo4j/queries');
 
+// v8.2.0: RELATIONS_PATH and INDEX_PATH removed - useFullGraphMermaid moved to @novanet/schema-tools
+
 interface GenerateOptions {
   viewId?: string;
   outputDir?: string;
@@ -112,20 +114,11 @@ async function generateDocs(options: GenerateOptions): Promise<void> {
   let generated = 0;
   let failed = 0;
 
-  const RELATIONS_PATH = path.join(process.cwd(), 'models/relations.yaml');
-  const INDEX_PATH = path.join(process.cwd(), 'models/_index.yaml');
-
   for (const view of viewsToGenerate) {
     try {
       // Generate Markdown
-      // Use generateAsync with full graph Mermaid for complete-graph view
-      const mdResult = view.id === 'complete-graph'
-        ? await MarkdownGenerator.generateAsync(view, {
-            useFullGraphMermaid: true,
-            relationsPath: RELATIONS_PATH,
-            indexPath: INDEX_PATH,
-          })
-        : MarkdownGenerator.generate(view);
+      // Generate markdown (v8.2.0: generateAsync deprecated, useFullGraphMermaid moved to schema-tools)
+      const mdResult = MarkdownGenerator.generate(view);
       const mdFilename = `VIEW-${view.id.toUpperCase()}.md`;
       const mdPath = path.join(options.outputDir!, mdFilename);
 

@@ -2,7 +2,7 @@
 // NODE_SUBCATEGORIES mapping all 35 node types to their subcategories
 // AUTO-GENERATED from models/nodes/ folder structure
 // Generated: 2026-01-30
-// Run: npm run generate:subcategories
+// Run: pnpm schema:generate
 
 import type { NodeType } from '../types/nodes.js';
 import type { Subcategory } from './types.js';

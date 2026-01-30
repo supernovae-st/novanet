@@ -15,10 +15,14 @@
     "infra:down": "pnpm --filter=@novanet/db down",
     "infra:seed": "pnpm --filter=@novanet/db seed",
     "infra:reset": "pnpm --filter=@novanet/db reset",
-    "validate:types": "npx tsx scripts/validate-types.ts"
+    "validate:types": "npx tsx scripts/validate-types.ts",
+    "schema:generate": "pnpm --filter=@novanet/schema-tools generate:all",
+    "schema:validate": "pnpm --filter=@novanet/schema-tools validate:sync",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@turbo/gen": "^2.8.0",
+    "husky": "^9.1.0",
     "tsx": "^4.19.0",
     "turbo": "^2.3.4"
   },

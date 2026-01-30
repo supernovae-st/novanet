@@ -1,6 +1,6 @@
 // src/generators/MarkdownGenerator.ts
 // Generate Markdown documentation from view definitions
-// v8.0.0
+// v8.2.0 - Removed MermaidGenerator integration (moved to schema-tools)
 
 import type {
   ExtendedViewDefinition,
@@ -8,7 +8,6 @@ import type {
   MarkdownGeneratorOptions,
 } from './types.js';
 import { ViewParser } from './ViewParser.js';
-import { MermaidGenerator } from './MermaidGenerator.js';
 import { LAYER_COLORS, type LayerColor } from './colors.js';
 
 const DEFAULT_OPTIONS: MarkdownGeneratorOptions = {
@@ -149,152 +148,18 @@ export class MarkdownGenerator {
   }
 
   /**
-   * Async version of generate() that supports MermaidGenerator integration.
-   * Use this when you need the full graph Mermaid diagram from relations.yaml.
+   * Async version of generate() for future async extensions.
    *
-   * @throws {Error} if useFullGraphMermaid=true but paths are missing
+   * @deprecated Use generate() instead. This method will be removed in v9.0.0.
+   * For full graph Mermaid diagrams, use @novanet/schema-tools MermaidGenerator directly.
+   *
    * @throws {Error} if view has no docs section
    */
   static async generateAsync(
     view: ExtendedViewDefinition,
     options: MarkdownGeneratorOptions = {}
   ): Promise<GeneratedMarkdown> {
-    if (!ViewParser.hasDocs(view)) {
-      throw new Error(`View "${view.id}" has no docs section. Cannot generate documentation.`);
-    }
-
-    // Validate required paths when useFullGraphMermaid is true
-    if (options.useFullGraphMermaid) {
-      if (!options.relationsPath) {
-        throw new Error('relationsPath is required when useFullGraphMermaid is true');
-      }
-      if (!options.indexPath) {
-        throw new Error('indexPath is required when useFullGraphMermaid is true');
-      }
-    }
-
-    const opts = { ...DEFAULT_OPTIONS, ...options };
-    const lines: string[] = [];
-
-    // Header
-    lines.push(`# ${view.docs!.title}`);
-    lines.push('');
-    lines.push(`> Generated from \`models/views/${view.id}.yaml\``);
-    if (opts.includeTimestamp) {
-      lines.push(`> Last updated: ${new Date().toISOString().split('T')[0]}`);
-    }
-    lines.push('');
-
-    // Overview
-    lines.push('## Overview');
-    lines.push('');
-    lines.push(view.docs!.description);
-    lines.push('');
-
-    // Mermaid diagram
-    if (opts.includeMermaid) {
-      let mermaidContent: string | null = null;
-
-      if (opts.useFullGraphMermaid && opts.relationsPath && opts.indexPath) {
-        // Use MermaidGenerator for complete graph diagram
-        try {
-          mermaidContent = await MermaidGenerator.generate({
-            relationsPath: opts.relationsPath,
-            indexPath: opts.indexPath,
-          });
-        } catch (error) {
-          throw new Error(
-            `Failed to generate full graph Mermaid: ${error instanceof Error ? error.message : 'Unknown error'}`
-          );
-        }
-      } else {
-        // Fall back to existing behavior: custom mermaid or auto-generate from layers
-        mermaidContent = view.docs!.mermaid ?? (
-          view.docs!.layers.length > 0 ? this.generateMermaid(view) : null
-        );
-      }
-
-      if (mermaidContent) {
-        lines.push('## Graph Diagram');
-        lines.push('');
-        lines.push('```mermaid');
-        lines.push(mermaidContent.trim());
-        lines.push('```');
-        lines.push('');
-      }
-    }
-
-    // Nodes table
-    if (opts.includeNodeTables && view.docs!.layers.length > 0) {
-      lines.push('## Nodes');
-      lines.push('');
-      lines.push('| Node | Layer |');
-      lines.push('|------|-------|');
-      for (const layer of view.docs!.layers) {
-        for (const node of layer.nodes) {
-          lines.push(`| ${node} | ${layer.name} |`);
-        }
-      }
-      lines.push('');
-    }
-
-    // Relations table
-    if (view.include.length > 0) {
-      lines.push('## Relations');
-      lines.push('');
-      lines.push('| Relation | Direction |');
-      lines.push('|----------|-----------|');
-      for (const rule of view.include) {
-        lines.push(`| ${rule.relation} | ${rule.direction} |`);
-      }
-      lines.push('');
-    }
-
-    // Cypher queries
-    if (opts.includeCypher && view.docs!.examples && view.docs!.examples.length > 0) {
-      lines.push('## Cypher Queries');
-      lines.push('');
-      for (const example of view.docs!.examples) {
-        lines.push(`### ${example.name}`);
-        lines.push('');
-        if (example.description) {
-          lines.push(example.description);
-          lines.push('');
-        }
-        lines.push('```cypher');
-        lines.push(example.query.trim());
-        lines.push('```');
-        lines.push('');
-        if (example.params && Object.keys(example.params).length > 0) {
-          lines.push('**Parameters:**');
-          for (const [key, value] of Object.entries(example.params)) {
-            lines.push(`- \`${key}\`: ${JSON.stringify(value)}`);
-          }
-          lines.push('');
-        }
-      }
-    }
-
-    // Notes
-    if (view.docs!.notes && view.docs!.notes.length > 0) {
-      lines.push('## Notes');
-      lines.push('');
-      for (const note of view.docs!.notes) {
-        lines.push(`- ${note}`);
-      }
-      lines.push('');
-    }
-
-    // Footer
-    lines.push('---');
-    lines.push('');
-    lines.push('*Generated by NovaNet Unified View System v8.0.0*');
-
-    return {
-      viewId: view.id,
-      content: lines.join('\n'),
-      generatedAt: new Date(),
-    };
+    return this.generate(view, options);
   }
 
   /**
