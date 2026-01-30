@@ -5,7 +5,8 @@ module.exports = {
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
-    '^@novanet-core/(.*)$': '<rootDir>/../core/src/$1',
+    '^@novanet/core/(.*)$': '<rootDir>/../../packages/core/src/$1',
+    '^@novanet/core$': '<rootDir>/../../packages/core/src',
   },
   testMatch: ['**/__tests__/**/*.test.ts', '**/__tests__/**/*.test.tsx'],
   transform: {
