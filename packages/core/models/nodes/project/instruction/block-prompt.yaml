@@ -98,11 +98,8 @@ node:
 
   example:
     display_name: "Pricing Hero Prompt v1.0"
-    icon: "📝"
     description: "Sub-agent instructions for pricing hero generation"
     llm_context: "USE: generate pricing hero block. TRIGGERS: block-pricing-hero. NOT: other blocks."
-    priority: "high"
-    freshness: "static"
     prompt: "[GENERATE] Hero for pricing page, highlight @tier-pro benefits with urgency CTA"
     version: "1.0"
     active: true

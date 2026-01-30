@@ -232,7 +232,6 @@ node:
 
   example:
     display_name: "QR Code AI (fr-FR)"
-    icon: "🌐"
     description: "French localization for QR Code AI"
     llm_context: "USE: for French market messaging. TRIGGERS: fr-FR, french project. NOT: other locales."
     what_short: "QR Code AI est la plateforme de creation de QR codes personnalises propulsee par l'IA."

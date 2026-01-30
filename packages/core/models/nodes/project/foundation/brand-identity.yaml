@@ -224,11 +224,8 @@ node:
     data:
       key: "brand-qrcodeai"
       display_name: "QR Code AI Brand Identity"
-      icon: "🎨"
       description: "Visual and artistic direction for QR Code AI"
       llm_context: "USE: for image generation prompts. TRIGGERS: brand, colors, style. NOT: copywriting aspects."
-      priority: "high"
-      freshness: "static"
       color_primary: "#6366F1"
       color_secondary: "#EC4899"
       color_accent: "#10B981"

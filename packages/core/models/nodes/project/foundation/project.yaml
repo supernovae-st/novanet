@@ -138,11 +138,8 @@ node:
     data:
       key: "project-qrcode-ai"
       display_name: "QR Code AI"
-      icon: "📦"
       description: "AI-powered QR code management platform"
       llm_context: "USE: root context for QR Code AI. TRIGGERS: project, brand, qrcode-ai. NOT: other projects."
-      priority: "critical"
-      freshness: "static"
       brand_name: "QR Code AI"
       brand_name_legal: "QRCode AI SAS"
       founding_year: 2024

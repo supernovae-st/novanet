@@ -145,7 +145,6 @@ node:
 
   example:
     display_name: "Pricing Hero (fr-FR)"
-    icon: "📝"
     description: "Hero tarifs généré pour le marché français"
     llm_context: "USE: display generated hero content. TRIGGERS: pricing hero, fr-FR output. NOT: regeneration trigger."
     generated:

@@ -98,11 +98,8 @@ node:
 
   example:
     display_name: "Pricing Page Prompt v1.0"
-    icon: "📝"
     description: "Orchestration instructions for pricing page generation"
     llm_context: "USE: orchestrate pricing page. TRIGGERS: page-pricing. NOT: individual blocks."
-    priority: "critical"
-    freshness: "static"
     prompt: "[GENERATE] Create conversion-focused pricing page comparing tiers with urgency CTAs"
     version: "1.0"
     active: true
