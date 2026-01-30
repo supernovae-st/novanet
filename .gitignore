@@ -32,3 +32,4 @@ coverage/
 # Docker
 *.pid
 novanet-public-repo/
+.worktrees/
