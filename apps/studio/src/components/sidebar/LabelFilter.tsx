@@ -17,7 +17,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { cn } from '@/lib/utils';
 import { useGraphStore } from '@/stores/graphStore';
 import { useFilterStore } from '@/stores/filterStore';
-import { NODE_TYPE_CONFIG, NODE_CATEGORIES, type CategoryConfig } from '@/config/nodeTypes';
+import { NODE_TYPE_CONFIG, NODE_VISUAL_CATEGORIES, type CategoryConfig } from '@/config/nodeTypes';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import type { NodeType } from '@/types';
 
@@ -260,7 +260,7 @@ export const LabelFilter = memo(function LabelFilter({ className }: LabelFilterP
 
       {/* Category Groups */}
       <div className="space-y-3">
-        {NODE_CATEGORIES.map((category) => (
+        {NODE_VISUAL_CATEGORIES.map((category) => (
           <CategoryGroup
             key={category.id}
             category={category}

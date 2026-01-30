@@ -26,7 +26,7 @@ export const FILTER_PRESETS: FilterPreset[] = [
     description: 'All node types (may be slow)',
     icon: 'Globe',
     shortcut: '2',
-    nodeTypes: ALL_NODE_TYPES,
+    nodeTypes: [...ALL_NODE_TYPES],
     locale: null,
   },
 

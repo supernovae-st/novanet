@@ -125,7 +125,7 @@ pnpm test            # Tests
 
 ---
 
-## Neo4j Schema (v8.1.0)
+## Neo4j Schema (v8.2.0)
 
 ### Node Types (35 across 3 scopes)
 

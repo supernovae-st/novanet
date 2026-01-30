@@ -28,18 +28,18 @@ export const NODE_SUBCATEGORIES: Record<NodeType, Subcategory> = {
   BrandIdentity: 'foundation',
   ProjectL10n: 'foundation',
 
-  // structure (4 nodes)
+  // structure (2 nodes) - matches models/nodes/project/structure/
   Page: 'structure',
   Block: 'structure',
-  BlockType: 'structure',
-  PageType: 'structure',
 
-  // semantic (2 nodes)
+  // semantic (2 nodes) - matches models/nodes/project/semantic/
   Concept: 'semantic',
   ConceptL10n: 'semantic',
 
-  // instruction (3 nodes)
+  // instruction (5 nodes) - matches models/nodes/project/instruction/
+  PageType: 'instruction',
   PagePrompt: 'instruction',
+  BlockType: 'instruction',
   BlockPrompt: 'instruction',
   BlockRules: 'instruction',
 

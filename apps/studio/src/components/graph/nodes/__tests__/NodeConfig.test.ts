@@ -1,5 +1,5 @@
 /**
- * NodeConfig Tests
+ * NodeConfig Tests (v8.1.0)
  *
  * Tests for pre-computed node configuration lookup tables.
  * These tables provide O(1) access to node sizes and colors,
@@ -15,51 +15,16 @@ import {
   type NodeSize,
   type NodeColors,
 } from '../NodeConfig';
-import type { NodeType } from '@/types';
+import type { NodeType } from '@novanet/core/types';
+import { NODE_TYPES } from '@novanet/core/types';
 
-// All 29 node types in v7.2.5
-const ALL_NODE_TYPES: NodeType[] = [
-  // Project (3)
-  'Project',
-  'BrandIdentity',
-  'ProjectL10n',
-  // Content (5)
-  'Concept',
-  'ConceptL10n',
-  'Page',
-  'Block',
-  'BlockType',
-  // Locale (7)
-  'Locale',
-  'LocaleIdentity',
-  'LocaleVoice',
-  'LocaleCulture',
-  'LocaleMarket',
-  'LocaleLexicon',
-  'Expression',
-  // Generation (5)
-  'PagePrompt',
-  'BlockPrompt',
-  'BlockRules',
-  'PageOutput',
-  'BlockOutput',
-  // SEO (4)
-  'SEOKeyword',
-  'SEOVariation',
-  'SEOSnapshot',
-  'SEOMiningRun',
-  // GEO (4)
-  'GEOSeed',
-  'GEOReformulation',
-  'GEOCitation',
-  'GEOMiningRun',
-  // Analytics (1)
-  'PageMetrics',
-];
+// All 35 node types in v8.1.0 (from Core - Single Source of Truth)
+const ALL_NODE_TYPES: NodeType[] = [...NODE_TYPES];
 
 describe('NodeConfig', () => {
   describe('NODE_SIZES lookup table', () => {
-    it('should have predefined sizes for all 29 node types', () => {
+    it('should have predefined sizes for all 35 node types', () => {
+      expect(Object.keys(NODE_SIZES)).toHaveLength(35);
       ALL_NODE_TYPES.forEach((type) => {
         expect(NODE_SIZES[type]).toBeDefined();
         expect(NODE_SIZES[type].width).toBeGreaterThan(0);
@@ -81,14 +46,16 @@ describe('NodeConfig', () => {
       expect(NODE_SIZES.Concept.width).toBeGreaterThanOrEqual(200);
     });
 
-    it('should have smaller sizes for auxiliary nodes (Expression, Snapshot)', () => {
+    it('should have smaller sizes for auxiliary nodes (Expression, mining nodes)', () => {
       expect(NODE_SIZES.Expression.width).toBeLessThanOrEqual(180);
-      expect(NODE_SIZES.SEOSnapshot.width).toBeLessThanOrEqual(180);
+      expect(NODE_SIZES.SEOMiningRun.width).toBeLessThanOrEqual(180);
+      expect(NODE_SIZES.GEOMiningRun.width).toBeLessThanOrEqual(180);
     });
   });
 
   describe('NODE_COLORS lookup table', () => {
-    it('should have predefined colors for all 29 node types', () => {
+    it('should have predefined colors for all 35 node types', () => {
+      expect(Object.keys(NODE_COLORS)).toHaveLength(35);
       ALL_NODE_TYPES.forEach((type) => {
         expect(NODE_COLORS[type]).toBeDefined();
         expect(NODE_COLORS[type].primary).toBeDefined();
@@ -111,12 +78,12 @@ describe('NodeConfig', () => {
     });
 
     it('should have distinct colors for different categories', () => {
-      // Project category (violet)
+      // Project category (violet) vs Content category (amber)
       expect(NODE_COLORS.Project.primary).not.toBe(NODE_COLORS.Concept.primary);
-      // Locale category (green)
-      expect(NODE_COLORS.Locale.primary).not.toBe(NODE_COLORS.SEOKeyword.primary);
-      // SEO category (red)
-      expect(NODE_COLORS.SEOKeyword.primary).not.toBe(NODE_COLORS.GEOSeed.primary);
+      // Locale category (green) vs SEO category (red)
+      expect(NODE_COLORS.Locale.primary).not.toBe(NODE_COLORS.SEOKeywordL10n.primary);
+      // SEO category (red) vs GEO category (purple)
+      expect(NODE_COLORS.SEOKeywordL10n.primary).not.toBe(NODE_COLORS.GEOSeedL10n.primary);
     });
   });
 

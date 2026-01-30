@@ -8,7 +8,7 @@ NovaNet is a **native content generation system** (NOT translation) using Neo4j 
 
 **Target Application**: QR Code AI (https://qrcode-ai.com) - a multilingual SaaS for QR code generation.
 **Supported Locales**: 200+ locales (fr-FR, en-US, es-MX, ja-JP, etc.)
-**Current Version**: v8.1.0
+**Current Version**: v8.2.0
 
 ## CRITICAL: Generation, NOT Translation
 
@@ -84,7 +84,7 @@ WHERE activation >= 0.3
 RETURN c2.key, activation ORDER BY activation DESC;
 ```
 
-## File Structure (v8.1.0)
+## File Structure (v8.2.0)
 
 ```
 core/
@@ -117,7 +117,7 @@ core/
 └── docs/                      # Additional documentation
 ```
 
-## Nomenclature v8.1.0
+## Nomenclature v8.2.0
 
 ```
 *L10n suffix    = ALL localized content (human OR LLM generated)
@@ -127,11 +127,11 @@ Locale*         = Locale Knowledge nodes (LocaleVoice, LocaleCulture, etc.)
 *Metrics        = Time-series observations (SEOKeywordMetrics, GEOSeedMetrics)
 ```
 
-**v8.1.0 Breaking Changes:**
-- Removed: PageMetrics, SEOVariation, GEOReformulation (YAGNI)
-- Removed: Deprecated type aliases (PageOutput, BlockOutput, etc.)
-- Added: 17 missing relations from YAML to TypeScript
-- Exposed: config, schemas, services modules from main export
+**v8.2.0 Breaking Changes:**
+- Removed: icon, priority, freshness properties from all nodes (YAGNI)
+- Standard properties now: key, display_name, description, llm_context, created_at, updated_at
+- Added: Binary schema sync tests (YAML ↔ TypeScript ↔ Neo4j)
+- Validated: All 35 node types across 3 scopes
 
 ## Language Convention
 

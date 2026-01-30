@@ -1,32 +1,54 @@
 /**
- * FilterAdapter - novanet-core v7.2.3 compatible filter system
+ * FilterAdapter - novanet-core v8.1.0 compatible filter system
  *
  * Mirrors the NovaNetFilter fluent API and CypherGenerator from novanet-core
  * for use in the visualizer without importing the full library.
  */
 
-import type { NodeType } from '@/types';
+import type { NodeType } from '@novanet/core/types';
 import { DEFAULT_FETCH_LIMIT } from '@/config/constants';
 
 // =============================================================================
-// TYPES (aligned with novanet-core/src/filters/types.ts v7.2.3)
+// TYPES (aligned with novanet-core/src/filters/types.ts v8.1.0)
 // =============================================================================
 
 export type Priority = 'critical' | 'high' | 'medium' | 'low';
 export type Freshness = 'realtime' | 'hourly' | 'daily' | 'static';
-export type NodeCategory = 'project' | 'content' | 'locale' | 'generation' | 'seo' | 'geo' | 'analytics';
+export type NodeCategory = 'project' | 'content' | 'locale' | 'generation' | 'seo' | 'geo';
 export type RelationDirection = 'outgoing' | 'incoming' | 'both';
 
+/**
+ * Node categories with their types (v8.1.0 - 35 nodes across 6 categories)
+ */
 export const NODE_CATEGORIES: Record<NodeCategory, NodeType[]> = {
-  // Note: Audience merged into ProjectL10n.target_audience (v7.2.4)
-  // Note: ValuePropL10n + SocialProofL10n removed (v7.2.5)
+  // Project category (3 nodes)
   project: ['Project', 'BrandIdentity', 'ProjectL10n'],
-  content: ['Concept', 'ConceptL10n', 'Page', 'Block', 'BlockType'],
-  locale: ['Locale', 'LocaleIdentity', 'LocaleVoice', 'LocaleCulture', 'LocaleMarket', 'LocaleLexicon', 'Expression'],
-  generation: ['PagePrompt', 'BlockPrompt', 'BlockRules', 'PageOutput', 'BlockOutput'],
-  seo: ['SEOKeyword', 'SEOVariation', 'SEOSnapshot', 'SEOMiningRun'],
-  geo: ['GEOSeed', 'GEOReformulation', 'GEOCitation', 'GEOMiningRun'],
-  analytics: ['PageMetrics'],
+  // Content category (6 nodes)
+  content: ['Concept', 'ConceptL10n', 'Page', 'PageType', 'Block', 'BlockType'],
+  // Locale category (15 nodes - Locale + 14 LocaleKnowledge)
+  locale: [
+    'Locale',
+    'LocaleIdentity',
+    'LocaleVoice',
+    'LocaleCulture',
+    'LocaleCultureReferences',
+    'LocaleMarket',
+    'LocaleLexicon',
+    'LocaleRulesAdaptation',
+    'LocaleRulesFormatting',
+    'LocaleRulesSlug',
+    'Expression',
+    'Reference',
+    'Metaphor',
+    'Pattern',
+    'Constraint',
+  ],
+  // Generation category (5 nodes)
+  generation: ['PagePrompt', 'BlockPrompt', 'BlockRules', 'PageL10n', 'BlockL10n'],
+  // SEO category (3 nodes)
+  seo: ['SEOKeywordL10n', 'SEOKeywordMetrics', 'SEOMiningRun'],
+  // GEO category (3 nodes)
+  geo: ['GEOSeedL10n', 'GEOSeedMetrics', 'GEOMiningRun'],
 };
 
 export interface FilterCriteria {
@@ -64,7 +86,7 @@ export interface CypherQuery {
 }
 
 // =============================================================================
-// RELATION MAPPINGS (from novanet-core CypherGenerator)
+// RELATION MAPPINGS (from novanet-core CypherGenerator v8.1.0)
 // =============================================================================
 
 const RELATION_ALIAS_MAP: Record<string, string> = {
@@ -72,18 +94,25 @@ const RELATION_ALIAS_MAP: Record<string, string> = {
   HAS_PROMPT: 'prompt',
   HAS_RULES: 'rules',
   USES_CONCEPT: 'concept',
-  HAS_OUTPUT: 'output',
   HAS_L10N: 'l10n',
+  HAS_OUTPUT: 'output',
   HAS_IDENTITY: 'identity',
   HAS_VOICE: 'voice',
   HAS_CULTURE: 'culture',
+  HAS_CULTURE_REFS: 'cultureRefs',
   HAS_MARKET: 'market',
   HAS_LEXICON: 'lexicon',
+  HAS_RULES_ADAPTATION: 'adaptationRules',
+  HAS_RULES_FORMATTING: 'formattingRules',
+  HAS_RULES_SLUG: 'slugRules',
+  HAS_SEO_TARGET: 'seoKeyword',
+  HAS_GEO_TARGET: 'geoSeed',
   TARGETS_SEO: 'seoKeyword',
   TARGETS_GEO: 'geoSeed',
   HAS_PAGE: 'page',
   HAS_CONCEPT: 'concept',
   SUPPORTS_LOCALE: 'locale',
+  FOR_LOCALE: 'locale',
 };
 
 const RELATION_TARGET_TYPE_MAP: Record<string, string> = {
@@ -91,18 +120,25 @@ const RELATION_TARGET_TYPE_MAP: Record<string, string> = {
   HAS_PROMPT: 'PagePrompt',
   HAS_RULES: 'BlockRules',
   USES_CONCEPT: 'Concept',
-  HAS_OUTPUT: 'PageOutput',
   HAS_L10N: 'ConceptL10n',
+  HAS_OUTPUT: 'PageL10n',
   HAS_IDENTITY: 'LocaleIdentity',
   HAS_VOICE: 'LocaleVoice',
   HAS_CULTURE: 'LocaleCulture',
+  HAS_CULTURE_REFS: 'LocaleCultureReferences',
   HAS_MARKET: 'LocaleMarket',
   HAS_LEXICON: 'LocaleLexicon',
-  TARGETS_SEO: 'SEOKeyword',
-  TARGETS_GEO: 'GEOSeed',
+  HAS_RULES_ADAPTATION: 'LocaleRulesAdaptation',
+  HAS_RULES_FORMATTING: 'LocaleRulesFormatting',
+  HAS_RULES_SLUG: 'LocaleRulesSlug',
+  HAS_SEO_TARGET: 'SEOKeywordL10n',
+  HAS_GEO_TARGET: 'GEOSeedL10n',
+  TARGETS_SEO: 'SEOKeywordL10n',
+  TARGETS_GEO: 'GEOSeedL10n',
   HAS_PAGE: 'Page',
   HAS_CONCEPT: 'Concept',
   SUPPORTS_LOCALE: 'Locale',
+  FOR_LOCALE: 'Locale',
 };
 
 // =============================================================================
@@ -213,7 +249,17 @@ export class NovaNetFilter {
   }
 
   includeKnowledge(): this {
-    const knowledgeRelations = ['HAS_IDENTITY', 'HAS_VOICE', 'HAS_CULTURE', 'HAS_MARKET', 'HAS_LEXICON'];
+    const knowledgeRelations = [
+      'HAS_IDENTITY',
+      'HAS_VOICE',
+      'HAS_CULTURE',
+      'HAS_CULTURE_REFS',
+      'HAS_MARKET',
+      'HAS_LEXICON',
+      'HAS_RULES_ADAPTATION',
+      'HAS_RULES_FORMATTING',
+      'HAS_RULES_SLUG',
+    ];
     for (const relation of knowledgeRelations) {
       this.state.includes.push({
         relation,
@@ -242,7 +288,7 @@ export class NovaNetFilter {
 
   includeSEO(): this {
     this.state.includes.push({
-      relation: 'TARGETS_SEO',
+      relation: 'HAS_SEO_TARGET',
       direction: 'outgoing',
     });
     return this;
@@ -250,7 +296,7 @@ export class NovaNetFilter {
 
   includeGEO(): this {
     this.state.includes.push({
-      relation: 'TARGETS_GEO',
+      relation: 'HAS_GEO_TARGET',
       direction: 'outgoing',
     });
     return this;
@@ -481,7 +527,7 @@ export class CypherGenerator {
 }
 
 // =============================================================================
-// PRESET DEFINITIONS (using ViewDefinition-compatible structure) v7.2.3
+// PRESET DEFINITIONS (using ViewDefinition-compatible structure) v8.1.0
 // =============================================================================
 
 export interface ViewPreset {
@@ -507,11 +553,11 @@ export const VIEW_PRESETS: ViewPreset[] = [
   {
     id: 'generation-chain',
     name: 'Generation Chain',
-    description: 'Concepts with L10n and outputs',
+    description: 'Concepts with L10n outputs',
     icon: '🔗',
     shortcut: '2',
     filter: () => NovaNetFilter.create()
-      .byTypes('Concept', 'ConceptL10n', 'PageOutput', 'BlockOutput')
+      .byTypes('Concept', 'ConceptL10n', 'PageL10n', 'BlockL10n')
       .byCategory('generation'),
   },
   {

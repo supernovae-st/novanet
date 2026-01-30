@@ -7,6 +7,8 @@ module.exports = {
     '^@/(.*)$': '<rootDir>/src/$1',
     '^@novanet/core/(.*)$': '<rootDir>/../../packages/core/src/$1',
     '^@novanet/core$': '<rootDir>/../../packages/core/src',
+    // Handle .js extensions in Core ESM imports (TypeScript compiled style)
+    '^(\\.{1,2}/.*)\\.js$': '$1',
   },
   testMatch: ['**/__tests__/**/*.test.ts', '**/__tests__/**/*.test.tsx'],
   transform: {

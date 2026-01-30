@@ -12,6 +12,7 @@
 import { useCallback, useState, useRef } from 'react';
 import { useGraphStore } from '@/stores/graphStore';
 import { useFilterStore } from '@/stores/filterStore';
+import { useUIStore, selectDataMode, type DataMode } from '@/stores/uiStore';
 import { DEFAULT_FETCH_LIMIT } from '@/config/constants';
 import { logger } from '@/lib/logger';
 import { fetchJSON, postJSON, getErrorMessage } from '@/lib/fetchClient';
@@ -45,12 +46,16 @@ export interface FetchOptions {
 }
 
 export interface UseGraphDataReturn {
-  /** Fetch graph data from API */
+  /** Fetch graph data from API (or schema based on dataMode) */
   fetchData: (options?: FetchOptions) => Promise<GraphDataResponse>;
+  /** Fetch schema graph (ontology) */
+  fetchSchemaData: () => Promise<GraphDataResponse>;
   /** Execute a custom Cypher query */
   executeQuery: (cypher: string) => Promise<GraphDataResponse>;
   /** Fetch graph statistics */
   fetchStats: () => Promise<Record<string, number> | null>;
+  /** Current data mode */
+  dataMode: DataMode;
   /** Loading state */
   isLoading: boolean;
   /** Error message */
@@ -81,6 +86,9 @@ export function useGraphData(options: UseGraphDataOptions = {}): UseGraphDataRet
   const enabledNodeTypes = useFilterStore((state) => state.enabledNodeTypes);
   const selectedLocale = useFilterStore((state) => state.selectedLocale);
   const searchQuery = useFilterStore((state) => state.searchQuery);
+
+  // Data mode (data vs schema)
+  const dataMode = useUIStore(selectDataMode);
 
   /**
    * Fetch graph data from API
@@ -134,6 +142,40 @@ export function useGraphData(options: UseGraphDataOptions = {}): UseGraphDataRet
     },
     // Note: setIsLoading and setError are stable (useState setters) but included for consistency
     [enabledNodeTypes, selectedLocale, searchQuery, setGraphData, setLoading, setStoreError, setIsLoading, setError]
+  );
+
+  /**
+   * Fetch schema graph (ontology) - 35 node types and their relationships
+   */
+  const fetchSchemaData = useCallback(
+    async (): Promise<GraphDataResponse> => {
+      setIsLoading(true);
+      setLoading(true);
+      setError(null);
+
+      try {
+        const data = await fetchJSON<GraphDataResponse>('/api/graph/ontology');
+
+        // Update store with schema data
+        if (data.success && data.data) {
+          setGraphData(data.data);
+        } else if (!data.success) {
+          throw new Error(data.error || 'Failed to fetch schema graph');
+        }
+
+        setIsLoading(false);
+        setLoading(false);
+        return data;
+      } catch (err) {
+        const errorMessage = getErrorMessage(err);
+        setError(errorMessage);
+        setStoreError(errorMessage);
+        setIsLoading(false);
+        setLoading(false);
+        return { success: false, error: errorMessage };
+      }
+    },
+    [setGraphData, setLoading, setStoreError, setIsLoading, setError]
   );
 
   /**
@@ -226,8 +268,10 @@ export function useGraphData(options: UseGraphDataOptions = {}): UseGraphDataRet
 
   return {
     fetchData,
+    fetchSchemaData,
     executeQuery,
     fetchStats,
+    dataMode,
     isLoading,
     error,
     clearError,

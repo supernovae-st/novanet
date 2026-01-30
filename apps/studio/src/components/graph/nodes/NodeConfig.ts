@@ -1,5 +1,5 @@
 /**
- * NodeConfig - Pre-computed Lookup Tables for O(1) Access
+ * NodeConfig - Pre-computed Lookup Tables for O(1) Access (v8.1.0)
  *
  * Provides instant access to node sizes and colors without runtime computation.
  * This eliminates the performance overhead of computing styles on every render,
@@ -16,7 +16,7 @@
  * const { primary, glow } = config.colors;
  */
 
-import type { NodeType } from '@/types';
+import type { NodeType } from '@novanet/core/types';
 
 // =============================================================================
 // Types
@@ -44,94 +44,95 @@ export interface NodeConfig {
 }
 
 // =============================================================================
-// Size Lookup Table
+// Size Lookup Table (v8.1.0 - 35 nodes)
 // =============================================================================
 
 /**
- * Pre-computed sizes for all 29 node types (v7.2.5)
+ * Pre-computed sizes for all 35 node types (v8.1.0)
  *
  * Size categories:
  * - Large (280x140): Project root nodes
  * - Medium-Large (240x120): Page, Concept, main content nodes
- * - Medium (220x110): Translations, outputs, prompts
+ * - Medium (220x110): Core L10n, prompts
  * - Medium-Small (200x100): Standard nodes
  * - Small (180x90): Auxiliary nodes
- * - Extra-Small (160x80): Mining, snapshot nodes
+ * - Extra-Small (160x80): Mining, metrics nodes
  */
 export const NODE_SIZES: Record<NodeType, NodeSize> = {
   // ==========================================================================
-  // PROJECT CATEGORY - Business definition (3 nodes)
+  // PROJECT CATEGORY (3 nodes)
   // ==========================================================================
   Project: { width: 280, height: 140 },
   BrandIdentity: { width: 220, height: 110 },
   ProjectL10n: { width: 220, height: 110 },
 
   // ==========================================================================
-  // CONTENT CATEGORY - Semantic structure (5 nodes)
+  // CONTENT CATEGORY (6 nodes)
   // ==========================================================================
   Concept: { width: 240, height: 120 },
   ConceptL10n: { width: 200, height: 100 },
   Page: { width: 240, height: 120 },
+  PageType: { width: 200, height: 100 },
   Block: { width: 200, height: 100 },
   BlockType: { width: 200, height: 100 },
 
   // ==========================================================================
-  // LOCALE CATEGORY - Locale + knowledge (7 nodes)
+  // LOCALE CATEGORY (15 nodes - Locale + 14 LocaleKnowledge)
   // ==========================================================================
   Locale: { width: 220, height: 110 },
   LocaleIdentity: { width: 180, height: 90 },
   LocaleVoice: { width: 180, height: 90 },
   LocaleCulture: { width: 180, height: 90 },
+  LocaleCultureReferences: { width: 180, height: 90 },
   LocaleMarket: { width: 180, height: 90 },
   LocaleLexicon: { width: 200, height: 100 },
+  LocaleRulesAdaptation: { width: 160, height: 80 },
+  LocaleRulesFormatting: { width: 160, height: 80 },
+  LocaleRulesSlug: { width: 160, height: 80 },
   Expression: { width: 160, height: 80 },
+  Reference: { width: 160, height: 80 },
+  Metaphor: { width: 160, height: 80 },
+  Pattern: { width: 160, height: 80 },
+  Constraint: { width: 160, height: 80 },
 
   // ==========================================================================
-  // GENERATION CATEGORY - AI prompts + output (5 nodes)
+  // GENERATION CATEGORY (5 nodes)
   // ==========================================================================
   PagePrompt: { width: 200, height: 100 },
   BlockPrompt: { width: 180, height: 90 },
   BlockRules: { width: 180, height: 90 },
-  PageOutput: { width: 220, height: 110 },
-  BlockOutput: { width: 200, height: 100 },
+  PageL10n: { width: 220, height: 110 },
+  BlockL10n: { width: 200, height: 100 },
 
   // ==========================================================================
-  // SEO CATEGORY - Keywords + mining (4 nodes)
+  // SEO CATEGORY (3 nodes)
   // ==========================================================================
-  SEOKeyword: { width: 200, height: 100 },
-  SEOVariation: { width: 180, height: 90 },
-  SEOSnapshot: { width: 160, height: 80 },
+  SEOKeywordL10n: { width: 200, height: 100 },
+  SEOKeywordMetrics: { width: 160, height: 80 },
   SEOMiningRun: { width: 160, height: 80 },
 
   // ==========================================================================
-  // GEO CATEGORY - Seeds + mining (4 nodes)
+  // GEO CATEGORY (3 nodes)
   // ==========================================================================
-  GEOSeed: { width: 200, height: 100 },
-  GEOReformulation: { width: 180, height: 90 },
-  GEOCitation: { width: 160, height: 80 },
+  GEOSeedL10n: { width: 200, height: 100 },
+  GEOSeedMetrics: { width: 160, height: 80 },
   GEOMiningRun: { width: 160, height: 80 },
-
-  // ==========================================================================
-  // ANALYTICS CATEGORY - External metrics (1 node)
-  // ==========================================================================
-  PageMetrics: { width: 180, height: 90 },
 };
 
 // =============================================================================
-// Color Lookup Table
+// Color Lookup Table (v8.1.0 - 35 nodes)
 // =============================================================================
 
 /**
- * Pre-computed colors for all 29 node types (v7.2.5)
+ * Pre-computed colors for all 35 node types (v8.1.0)
  *
  * Color palette aligned with categoryColors.ts and nodeTypes.ts:
  * - Project: Violet (#8b5cf6 family)
- * - Content: Amber/Orange (#f59e0b family)
- * - Locale: Emerald/Green (#10b981 family)
- * - Generation: Blue (#3b82f6 family)
+ * - Content: Amber/Blue/Cyan (#f59e0b, #3b82f6, #06b6d4 family)
+ * - Locale: Emerald/Green/Pink (#10b981, #22c55e, #ec4899 family)
+ * - Generation: Blue/Orange (#3b82f6, #f97316 family)
  * - SEO: Red (#ef4444 family)
  * - GEO: Purple (#a855f7 family)
- * - Analytics: Cyan (#06b6d4 family)
  */
 export const NODE_COLORS: Record<NodeType, NodeColors> = {
   // ==========================================================================
@@ -157,7 +158,7 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
   },
 
   // ==========================================================================
-  // CONTENT CATEGORY - Amber/Orange tones
+  // CONTENT CATEGORY - Amber/Blue/Cyan tones
   // ==========================================================================
   Concept: {
     primary: '#f59e0b',
@@ -177,6 +178,12 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
     tertiary: '#60a5fa',
     glow: '#3b82f640',
   },
+  PageType: {
+    primary: '#2563eb',
+    secondary: '#3b82f6',
+    tertiary: '#60a5fa',
+    glow: '#2563eb40',
+  },
   Block: {
     primary: '#06b6d4',
     secondary: '#14b8a6',
@@ -191,7 +198,7 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
   },
 
   // ==========================================================================
-  // LOCALE CATEGORY - Emerald/Green tones
+  // LOCALE CATEGORY - Emerald/Green/Pink tones
   // ==========================================================================
   Locale: {
     primary: '#10b981',
@@ -217,6 +224,12 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
     tertiary: '#bbf7d0',
     glow: '#86efac40',
   },
+  LocaleCultureReferences: {
+    primary: '#bbf7d0',
+    secondary: '#86efac',
+    tertiary: '#dcfce7',
+    glow: '#bbf7d040',
+  },
   LocaleMarket: {
     primary: '#6ee7b7',
     secondary: '#34d399',
@@ -229,15 +242,57 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
     tertiary: '#6ee7b7',
     glow: '#34d39940',
   },
+  LocaleRulesAdaptation: {
+    primary: '#059669',
+    secondary: '#10b981',
+    tertiary: '#34d399',
+    glow: '#05966940',
+  },
+  LocaleRulesFormatting: {
+    primary: '#047857',
+    secondary: '#059669',
+    tertiary: '#10b981',
+    glow: '#04785740',
+  },
+  LocaleRulesSlug: {
+    primary: '#065f46',
+    secondary: '#047857',
+    tertiary: '#059669',
+    glow: '#065f4640',
+  },
   Expression: {
     primary: '#ec4899',
     secondary: '#f472b6',
     tertiary: '#f9a8d4',
     glow: '#ec489940',
   },
+  Reference: {
+    primary: '#f472b6',
+    secondary: '#ec4899',
+    tertiary: '#f9a8d4',
+    glow: '#f472b640',
+  },
+  Metaphor: {
+    primary: '#f9a8d4',
+    secondary: '#f472b6',
+    tertiary: '#fbcfe8',
+    glow: '#f9a8d440',
+  },
+  Pattern: {
+    primary: '#fbcfe8',
+    secondary: '#f9a8d4',
+    tertiary: '#fce7f3',
+    glow: '#fbcfe840',
+  },
+  Constraint: {
+    primary: '#fda4af',
+    secondary: '#fb7185',
+    tertiary: '#fecdd3',
+    glow: '#fda4af40',
+  },
 
   // ==========================================================================
-  // GENERATION CATEGORY - Blue tones
+  // GENERATION CATEGORY - Blue/Orange tones
   // ==========================================================================
   PagePrompt: {
     primary: '#3b82f6',
@@ -257,13 +312,13 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
     tertiary: '#bfdbfe',
     glow: '#93c5fd40',
   },
-  PageOutput: {
+  PageL10n: {
     primary: '#f97316',
     secondary: '#ef4444',
     tertiary: '#fb923c',
     glow: '#f9731640',
   },
-  BlockOutput: {
+  BlockL10n: {
     primary: '#fb923c',
     secondary: '#f97316',
     tertiary: '#fdba74',
@@ -273,67 +328,45 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
   // ==========================================================================
   // SEO CATEGORY - Red tones
   // ==========================================================================
-  SEOKeyword: {
+  SEOKeywordL10n: {
     primary: '#ef4444',
     secondary: '#f87171',
     tertiary: '#fca5a5',
     glow: '#ef444440',
   },
-  SEOVariation: {
+  SEOKeywordMetrics: {
     primary: '#f87171',
     secondary: '#ef4444',
     tertiary: '#fca5a5',
     glow: '#f8717140',
   },
-  SEOSnapshot: {
+  SEOMiningRun: {
     primary: '#fca5a5',
     secondary: '#f87171',
     tertiary: '#fecaca',
     glow: '#fca5a540',
   },
-  SEOMiningRun: {
-    primary: '#fecaca',
-    secondary: '#fca5a5',
-    tertiary: '#fee2e2',
-    glow: '#fecaca40',
-  },
 
   // ==========================================================================
   // GEO CATEGORY - Purple tones
   // ==========================================================================
-  GEOSeed: {
+  GEOSeedL10n: {
     primary: '#a855f7',
     secondary: '#c084fc',
     tertiary: '#d8b4fe',
     glow: '#a855f740',
   },
-  GEOReformulation: {
+  GEOSeedMetrics: {
     primary: '#c084fc',
     secondary: '#a855f7',
     tertiary: '#d8b4fe',
     glow: '#c084fc40',
   },
-  GEOCitation: {
+  GEOMiningRun: {
     primary: '#d8b4fe',
     secondary: '#c084fc',
     tertiary: '#e9d5ff',
     glow: '#d8b4fe40',
-  },
-  GEOMiningRun: {
-    primary: '#e9d5ff',
-    secondary: '#d8b4fe',
-    tertiary: '#f3e8ff',
-    glow: '#e9d5ff40',
-  },
-
-  // ==========================================================================
-  // ANALYTICS CATEGORY - Cyan tones
-  // ==========================================================================
-  PageMetrics: {
-    primary: '#06b6d4',
-    secondary: '#22d3ee',
-    tertiary: '#67e8f9',
-    glow: '#06b6d440',
   },
 };
 
@@ -411,3 +444,13 @@ export function clearConfigCache(): void {
 export function getConfigCacheStats(): { size: number } {
   return { size: configCache.size };
 }
+
+// =============================================================================
+// VALIDATION: Ensure lookup tables cover all NodeTypes from Core
+// =============================================================================
+
+// TypeScript compile-time validation - will error if any NodeType is missing
+const _validateSizes: Record<NodeType, NodeSize> = NODE_SIZES;
+const _validateColors: Record<NodeType, NodeColors> = NODE_COLORS;
+void _validateSizes;
+void _validateColors;

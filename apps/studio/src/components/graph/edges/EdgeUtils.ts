@@ -122,15 +122,38 @@ export function getNodeIntersection(
 }
 
 /**
+ * Check if a position has valid (non-NaN, finite) coordinates
+ */
+export function isValidPosition(pos: { x: number; y: number }): boolean {
+  return (
+    typeof pos.x === 'number' &&
+    typeof pos.y === 'number' &&
+    Number.isFinite(pos.x) &&
+    Number.isFinite(pos.y)
+  );
+}
+
+/**
  * Generate a curved path between two points
+ * Returns empty string if positions are invalid to prevent SVG NaN errors
  */
 export function generateCurvedPath(
   source: { x: number; y: number },
   target: { x: number; y: number }
 ): string {
+  // Validate positions to prevent NaN in SVG path
+  if (!isValidPosition(source) || !isValidPosition(target)) {
+    return '';
+  }
+
   const dx = target.x - source.x;
   const dy = target.y - source.y;
   const distance = Math.sqrt(dx * dx + dy * dy);
+
+  // Handle zero distance - return straight line to prevent NaN from division
+  if (distance === 0) {
+    return `M ${source.x} ${source.y} L ${target.x} ${target.y}`;
+  }
 
   const curveOffset = Math.min(distance * 0.25, 60);
   const perpX = -dy / distance;
@@ -149,11 +172,17 @@ export function generateCurvedPath(
 /**
  * Generate REVERSED curved path (for animation flowing toward dependency)
  * Animation particles will flow from source → target visually
+ * Returns empty string if positions are invalid to prevent SVG NaN errors
  */
 export function generateReversedPath(
   source: { x: number; y: number },
   target: { x: number; y: number }
 ): string {
+  // Validate positions to prevent NaN in SVG path
+  if (!isValidPosition(source) || !isValidPosition(target)) {
+    return '';
+  }
+
   // Swap source and target for reversed animation direction
   const dx = source.x - target.x;
   const dy = source.y - target.y;

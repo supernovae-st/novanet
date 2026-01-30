@@ -14,6 +14,7 @@
 import { useMemo } from 'react';
 import { useGraphStore } from '@/stores/graphStore';
 import { useFilterStore } from '@/stores/filterStore';
+import { useUIStore, selectDataMode } from '@/stores/uiStore';
 import { ALL_NODE_TYPES } from '@/config/nodeTypes';
 import type { GraphNode, GraphEdge } from '@/types';
 
@@ -43,6 +44,10 @@ export function useFilteredGraph(): FilteredGraphResult {
   const selectedLocale = useFilterStore((state) => state.selectedLocale);
   const searchQuery = useFilterStore((state) => state.searchQuery);
 
+  // Data mode: schema mode bypasses filters to show all 35 types
+  const dataMode = useUIStore(selectDataMode);
+  const isSchemaMode = dataMode === 'schema';
+
   // Chained memos for optimal performance:
   // Each filter stage only recalculates when its dependencies change
 
@@ -52,21 +57,25 @@ export function useFilteredGraph(): FilteredGraphResult {
     return allNodes.filter((node) => !hiddenNodeIds.has(node.id));
   }, [allNodes, hiddenNodeIds]);
 
-  // Stage 2: Filter by node type
+  // Stage 2: Filter by node type (bypassed in schema mode to show all 35 types)
   const typeFilteredNodes = useMemo(() => {
+    // In schema mode, show all types regardless of filter settings
+    if (isSchemaMode) return unhiddenNodes;
     if (enabledNodeTypes.size === 0) return unhiddenNodes;
     return unhiddenNodes.filter((node) => enabledNodeTypes.has(node.type));
-  }, [unhiddenNodes, enabledNodeTypes]);
+  }, [unhiddenNodes, enabledNodeTypes, isSchemaMode]);
 
-  // Stage 3: Filter by locale
+  // Stage 3: Filter by locale (bypassed in schema mode - schema nodes have no locale)
   const localeFilteredNodes = useMemo(() => {
+    // In schema mode, skip locale filtering (schema nodes don't have locales)
+    if (isSchemaMode) return typeFilteredNodes;
     if (!selectedLocale) return typeFilteredNodes;
     return typeFilteredNodes.filter((node) => {
       // Include nodes that match the locale or don't have a locale (global nodes)
       const nodeLocale = node.data?.locale_code || node.data?.code;
       return !nodeLocale || nodeLocale === selectedLocale;
     });
-  }, [typeFilteredNodes, selectedLocale]);
+  }, [typeFilteredNodes, selectedLocale, isSchemaMode]);
 
   // Stage 4: Filter by search query
   const filteredNodes = useMemo(() => {
@@ -93,15 +102,22 @@ export function useFilteredGraph(): FilteredGraphResult {
     );
   }, [allEdges, visibleNodeIds]);
 
-  // Check if any filters are active
+  // Check if any filters are active (in schema mode, type/locale filters are bypassed)
   const isFiltered = useMemo(() => {
+    // In schema mode, only search affects visible nodes
+    if (isSchemaMode) {
+      return (
+        hiddenNodeIds.size > 0 ||
+        (searchQuery !== null && searchQuery.trim() !== '')
+      );
+    }
     return (
       hiddenNodeIds.size > 0 ||
       enabledNodeTypes.size !== ALL_NODE_TYPES.length ||
       selectedLocale !== null ||
       (searchQuery !== null && searchQuery.trim() !== '')
     );
-  }, [hiddenNodeIds, enabledNodeTypes, selectedLocale, searchQuery]);
+  }, [hiddenNodeIds, enabledNodeTypes, selectedLocale, searchQuery, isSchemaMode]);
 
   return {
     nodes: filteredNodes,

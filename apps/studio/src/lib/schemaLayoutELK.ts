@@ -336,13 +336,24 @@ function convertElkToReactFlow(
     });
   });
 
-  // Convert edges
+  // Build set of valid node IDs for edge validation
+  const validNodeIds = new Set(nodes.map((n) => n.id));
+
+  // Convert edges - only include edges where both source and target exist
   hierarchy.edges.forEach((edge, index) => {
+    const sourceId = `schema-${edge.sourceType}`;
+    const targetId = `schema-${edge.targetType}`;
+
+    // Skip edges where source or target node doesn't exist (filtered/hidden)
+    if (!validNodeIds.has(sourceId) || !validNodeIds.has(targetId)) {
+      return;
+    }
+
     edges.push({
       id: `edge-${index}`,
-      source: `schema-${edge.sourceType}`,
-      target: `schema-${edge.targetType}`,
-      type: 'schemaEdge',
+      source: sourceId,
+      target: targetId,
+      type: 'floating', // Use floating edge type which is properly registered
       data: {
         relationType: edge.relationType,
         label: edge.label,
@@ -390,12 +401,24 @@ function fallbackGridLayout(hierarchy: HierarchicalSchemaData): SchemaLayoutResu
     });
   });
 
+  // Build set of valid node IDs for edge validation
+  const validNodeIds = new Set(nodes.map((n) => n.id));
+
+  // Convert edges - only include edges where both source and target exist
   hierarchy.edges.forEach((edge, index) => {
+    const sourceId = `schema-${edge.sourceType}`;
+    const targetId = `schema-${edge.targetType}`;
+
+    // Skip edges where source or target node doesn't exist
+    if (!validNodeIds.has(sourceId) || !validNodeIds.has(targetId)) {
+      return;
+    }
+
     edges.push({
       id: `edge-${index}`,
-      source: `schema-${edge.sourceType}`,
-      target: `schema-${edge.targetType}`,
-      type: 'schemaEdge',
+      source: sourceId,
+      target: targetId,
+      type: 'floating', // Use floating edge type which is properly registered
       data: {
         relationType: edge.relationType,
         label: edge.label,

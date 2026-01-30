@@ -45,23 +45,42 @@ Master Neo4j graph database patterns for NovaNet's content generation system.
 -[:HAS_OUTPUT {locale: "fr-FR", version: 2}]->  -- for Page/Block
 ```
 
-### NovaNet-Specific Patterns (v7.0.0)
+### NovaNet-Specific Patterns (v8.2.0)
 
 ```
+35 Node Types across 3 Scopes:
+  🌍 Global (15): Locale + 14 LocaleKnowledge nodes
+  📦 Project (14): Foundation, Structure, Semantic, Instruction, Output
+  🎯 Shared (6): SEO/GEO mining nodes
+
 Entity → Content Pattern:
   (Page)-[:HAS_OUTPUT]->(PageL10n)-[:FOR_LOCALE]->(Locale)
   (Block)-[:HAS_OUTPUT]->(BlockL10n)-[:FOR_LOCALE]->(Locale)
   (Concept)-[:HAS_L10N]->(ConceptL10n)-[:FOR_LOCALE]->(Locale)
 
 Hierarchy Pattern:
-  (Page)-[:HAS_BLOCK {position}]->(Block)-[:OF_TYPE]->(BlockType)
+  (Project)-[:HAS_PAGE]->(Page)-[:HAS_BLOCK {position}]->(Block)-[:OF_TYPE]->(BlockType)
+
+Locale Knowledge Pattern (14 nodes):
+  (Locale)-[:HAS_IDENTITY]->(LocaleIdentity)
+  (Locale)-[:HAS_VOICE]->(LocaleVoice)
+  (Locale)-[:HAS_CULTURE]->(LocaleCulture)-[:HAS_CULTURE_REFS]->(LocaleCultureReferences)
+  (LocaleCultureReferences)-[:HAS_REFERENCE]->(Reference)
+  (LocaleCultureReferences)-[:HAS_METAPHOR]->(Metaphor)
+  (LocaleCultureReferences)-[:HAS_CONSTRAINT]->(Constraint)
+  (Locale)-[:HAS_MARKET]->(LocaleMarket)
+  (Locale)-[:HAS_LEXICON]->(LocaleLexicon)-[:HAS_EXPRESSION]->(Expression)
+  (Locale)-[:HAS_RULES_ADAPTATION]->(LocaleRulesAdaptation)
+  (Locale)-[:HAS_RULES_FORMATTING]->(LocaleRulesFormatting)-[:HAS_PATTERN]->(Pattern)
+  (Locale)-[:HAS_RULES_SLUG]->(LocaleRulesSlug)
 
 SEO/GEO Pattern:
   (Concept)-[:TARGETS_SEO]->(SEOKeywordL10n)-[:FOR_LOCALE]->(Locale)
   (Concept)-[:TARGETS_GEO]->(GEOSeedL10n)-[:FOR_LOCALE]->(Locale)
 
-Standard Properties (all nodes):
-  key, display_name, icon, description, llm_context, created_at, updated_at
+Standard Properties (all nodes - v8.2.0):
+  key, display_name, description, llm_context, created_at, updated_at
+  (NOTE: icon, priority, freshness REMOVED in v8.2.0 - YAGNI)
 ```
 
 ## Query Optimization
