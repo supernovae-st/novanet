@@ -21,7 +21,7 @@
 **Decision:** 10 built-in presets accessible via 1-9 and 0 keys
 
 **Rationale:**
-- 19k nodes too large to show at once
+- ~19k instances projected at full deployment - too large to show at once
 - Common workflows need quick access
 - Keyboard-first design philosophy
 
@@ -65,12 +65,15 @@
 - Persist filters across sessions
 - Immer for immutable updates
 
-**Stores:**
+**Stores (8 total):**
 - `graphStore` - No persist (fetched data)
 - `filterStore` - Persist (user preferences)
 - `uiStore` - Partial persist (layout prefs)
 - `chatStore` - No persist (session only)
 - `queryStore` - No persist (Cypher query state)
+- `viewStore` - Persist (saved views)
+- `aiQueryStore` - No persist (AI-assisted query state)
+- `animationStore` - No persist (graph animation controls)
 
 ---
 
