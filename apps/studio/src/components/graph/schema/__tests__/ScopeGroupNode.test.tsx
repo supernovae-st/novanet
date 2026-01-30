@@ -39,6 +39,9 @@ describe('ScopeGroupNode', () => {
     positionAbsoluteX: 0,
     positionAbsoluteY: 0,
     zIndex: 1,
+    selectable: true,
+    deletable: true,
+    draggable: true,
   };
 
   it('should render scope label with icon', () => {
@@ -127,6 +130,7 @@ describe('SubcategoryGroupNode', () => {
     id: 'subcat-Project-foundation',
     type: 'subcategoryGroup' as const,
     data: {
+      scope: 'Project' as const,
       subcategory: 'foundation',
       label: 'Foundation',
       icon: '🏛️',
@@ -138,6 +142,9 @@ describe('SubcategoryGroupNode', () => {
     positionAbsoluteX: 0,
     positionAbsoluteY: 0,
     zIndex: 1,
+    selectable: true,
+    deletable: true,
+    draggable: true,
   };
 
   it('should render subcategory label with icon', () => {
@@ -189,6 +196,9 @@ describe('SchemaNode', () => {
     positionAbsoluteX: 0,
     positionAbsoluteY: 0,
     zIndex: 1,
+    selectable: true,
+    deletable: true,
+    draggable: true,
   };
 
   it('should render node label and nodeType', () => {

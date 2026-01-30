@@ -21,6 +21,8 @@ import {
   useReactFlow,
   type NodeMouseHandler,
   type EdgeMouseHandler,
+  type Node as ReactFlowNode,
+  type Edge as ReactFlowEdge,
   ConnectionMode,
   BackgroundVariant,
   ReactFlowProvider,
@@ -60,15 +62,28 @@ import { NodeContextMenu } from './NodeContextMenu';
 import { GraphToolbar } from './GraphToolbar';
 import type { GraphNode as GraphNodeType, GraphEdge as GraphEdgeType } from '@/types';
 
+// Schema mode imports (Task 3.2)
+import { ScopeGroupNode, SubcategoryGroupNode, SchemaNode } from './schema';
+import { SchemaErrorBoundary } from './SchemaErrorBoundary';
+import { applySchemaLayout } from '@/lib/schemaLayoutELK';
+import { getSchemaHierarchy } from '@novanet/core/graph';
+import { useFilterStore } from '@/stores/filterStore';
+import type { Scope } from '@novanet/core/types';
+
 // =============================================================================
 // Node & Edge Types - MUST be defined outside component for performance
 // =============================================================================
 
 const nodeTypes = {
+  // Data mode node types
   turbo: TurboNode,
   structural: StructuralNode,
   localeKnowledge: LocaleKnowledgeNode,
   project: ProjectNode,
+  // Schema mode node types (Task 3.2)
+  scopeGroup: ScopeGroupNode,
+  subcategoryGroup: SubcategoryGroupNode,
+  schemaNode: SchemaNode,
 } as const;
 
 const edgeTypes = {
@@ -194,6 +209,7 @@ function Graph2DInner({
     clearSelection,
     sidebarOpen,
     focusMode,
+    dataMode, // Schema mode toggle (Task 3.2)
   } = useUIStore(
     useShallow((state) => ({
       minimapVisible: state.minimapVisible,
@@ -209,6 +225,15 @@ function Graph2DInner({
       clearSelection: state.clearSelection,
       sidebarOpen: state.sidebarOpen,
       focusMode: state.focusMode,
+      dataMode: state.dataMode, // Schema mode toggle (Task 3.2)
+    }))
+  );
+
+  // Filter store - collapsed state for schema mode (Task 3.2)
+  const { collapsedScopes, collapsedSubcategories } = useFilterStore(
+    useShallow((state) => ({
+      collapsedScopes: state.collapsedScopes,
+      collapsedSubcategories: state.collapsedSubcategories,
     }))
   );
 
@@ -283,6 +308,107 @@ function Graph2DInner({
     nodeId: string;
     position: { x: number; y: number };
   } | null>(null);
+
+  // =========================================================================
+  // SCHEMA MODE STATE (Task 3.2)
+  // =========================================================================
+  // Schema mode displays the ontology hierarchy (35 node types) instead of
+  // real data instances. Uses ELK layout for hierarchical grouped visualization.
+  // =========================================================================
+  const [schemaNodes, setSchemaNodes] = useState<ReactFlowNode[]>([]);
+  const [schemaEdges, setSchemaEdges] = useState<ReactFlowEdge[]>([]);
+  const [isSchemaLayouting, setIsSchemaLayouting] = useState(false);
+  const [schemaLayoutError, setSchemaLayoutError] = useState<Error | null>(null);
+
+  // Track previous dataMode to detect changes
+  const prevDataModeRef = useRef(dataMode);
+
+  // Load schema graph with ELK layout and collapsed state filtering
+  const loadSchemaGraph = useCallback(async () => {
+    setIsSchemaLayouting(true);
+    setSchemaLayoutError(null);
+
+    try {
+      const hierarchy = getSchemaHierarchy();
+      const { nodes: layoutedNodes, edges: layoutedEdges } = await applySchemaLayout(hierarchy);
+
+      // Apply collapsed state filtering (Task 3.2)
+      // Build lookup maps for parent relationships
+      const nodeMap = new Map(layoutedNodes.map((n) => [n.id, n]));
+
+      const visibleNodes = layoutedNodes.filter((node) => {
+        // Check if scope is collapsed
+        if (node.type === 'scopeGroup') {
+          const scope = node.data?.scope as Scope | undefined;
+          return scope ? !collapsedScopes.includes(scope) : true;
+        }
+
+        // Check if subcategory is collapsed
+        if (node.type === 'subcategoryGroup') {
+          // Check parent scope first
+          const parentScope = nodeMap.get(node.parentId as string);
+          const parentScopeData = parentScope?.data?.scope as Scope | undefined;
+          if (parentScopeData && collapsedScopes.includes(parentScopeData)) {
+            return false;
+          }
+          const nodeScope = node.data?.scope as string | undefined;
+          const nodeSubcat = node.data?.subcategory as string | undefined;
+          if (nodeScope && nodeSubcat) {
+            const key = `${nodeScope}-${nodeSubcat}`;
+            return !collapsedSubcategories.includes(key);
+          }
+          return true;
+        }
+
+        // Schema nodes: check both parent subcategory and grandparent scope
+        if (node.type === 'schemaNode') {
+          const parentSubcat = nodeMap.get(node.parentId as string);
+          if (!parentSubcat) return true;
+
+          // Check grandparent scope
+          const grandparentScope = nodeMap.get(parentSubcat.parentId as string);
+          const grandparentScopeData = grandparentScope?.data?.scope as Scope | undefined;
+          if (grandparentScopeData && collapsedScopes.includes(grandparentScopeData)) {
+            return false;
+          }
+
+          // Check parent subcategory
+          const parentScope = parentSubcat.data?.scope as string | undefined;
+          const parentSubcatName = parentSubcat.data?.subcategory as string | undefined;
+          if (parentScope && parentSubcatName) {
+            const key = `${parentScope}-${parentSubcatName}`;
+            if (collapsedSubcategories.includes(key)) {
+              return false;
+            }
+          }
+        }
+
+        return true;
+      });
+
+      // Filter edges to only include those with visible source and target
+      const visibleNodeIds = new Set(visibleNodes.map((n) => n.id));
+      const visibleEdges = layoutedEdges.filter(
+        (edge) => visibleNodeIds.has(edge.source) && visibleNodeIds.has(edge.target)
+      );
+
+      setSchemaNodes(visibleNodes);
+      setSchemaEdges(visibleEdges);
+    } catch (error) {
+      console.error('[Graph2D] Schema layout failed:', error);
+      setSchemaLayoutError(error as Error);
+    } finally {
+      setIsSchemaLayouting(false);
+    }
+  }, [collapsedScopes, collapsedSubcategories]);
+
+  // Load schema graph when dataMode changes to 'schema' or collapsed state changes
+  useEffect(() => {
+    if (dataMode === 'schema') {
+      loadSchemaGraph();
+    }
+    prevDataModeRef.current = dataMode;
+  }, [dataMode, loadSchemaGraph]);
 
   // PERFORMANCE: Split layout (expensive) from dimming (cheap)
   // Step 1: Compute layout ONLY when graph data or layout direction changes (expensive)
@@ -783,7 +909,127 @@ function Graph2DInner({
      
   }, [nodes.length]);
 
-  // Empty state
+  // =========================================================================
+  // SCHEMA MODE RENDER (Task 3.2)
+  // =========================================================================
+  // When in schema mode, render the hierarchical schema visualization
+  // with ELK layout and group nodes. Wrapped in SchemaErrorBoundary.
+  // =========================================================================
+  if (dataMode === 'schema') {
+    return (
+      <SchemaErrorBoundary>
+        <div className={cn('h-full w-full', className)} data-testid="react-flow-wrapper-schema">
+          <ReactFlow
+            nodes={schemaNodes}
+            edges={schemaEdges}
+            nodeTypes={nodeTypes}
+            edgeTypes={edgeTypes}
+            onPaneClick={handlePaneClick}
+            connectionMode={ConnectionMode.Loose}
+            fitView
+            fitViewOptions={{ padding: 0.2 }}
+            minZoom={0.05}
+            maxZoom={2}
+            proOptions={{
+              hideAttribution: true,
+            }}
+            // Schema mode: limited interaction
+            nodesDraggable={false}
+            nodesConnectable={false}
+            elementsSelectable={true}
+            selectNodesOnDrag={false}
+            panOnScroll={true}
+            zoomOnScroll={true}
+            zoomOnPinch={true}
+            // Style
+            colorMode="dark"
+          >
+            {/* Background - subtle dot grid */}
+            <Background
+              variant={BackgroundVariant.Dots}
+              color="rgba(255, 255, 255, 0.03)"
+              gap={24}
+              size={1}
+            />
+
+            {/* Minimap for schema mode */}
+            {showMinimap && minimapVisible && (
+              <MiniMap
+                className={cn(
+                  '!bg-black/70 !backdrop-blur-xl',
+                  '!border !border-white/[0.08]',
+                  '!rounded-xl',
+                  '[&_.react-flow__minimap-edge]:hidden'
+                )}
+                style={{ height: MINIMAP_HEIGHT }}
+                nodeColor={(node) => {
+                  // Color by scope for schema nodes
+                  const scope = node.data?.scope;
+                  if (scope === 'Project') return '#8b5cf6cc'; // violet
+                  if (scope === 'Global') return '#10b981cc'; // emerald
+                  if (scope === 'Shared') return '#f59e0bcc'; // amber
+                  return '#666';
+                }}
+                nodeStrokeWidth={0}
+                nodeBorderRadius={4}
+                maskColor="rgba(0, 0, 0, 0.85)"
+                pannable
+                zoomable
+                position="bottom-right"
+              />
+            )}
+
+            {/* GraphToolbar - positioned above minimap */}
+            {showControls && (
+              <div
+                className="absolute z-10 right-3"
+                style={{
+                  bottom: showMinimap && minimapVisible ? `${TOOLBAR_BOTTOM_OFFSET}px` : '12px',
+                }}
+              >
+                <GraphToolbar />
+              </div>
+            )}
+          </ReactFlow>
+
+          {/* Loading indicator during ELK layout */}
+          {isSchemaLayouting && (
+            <div
+              className={cn(
+                'absolute inset-0 flex items-center justify-center',
+                'bg-black/60 backdrop-blur-sm',
+                'z-50'
+              )}
+              data-testid="schema-loading-indicator"
+            >
+              <div className="flex flex-col items-center gap-3">
+                <div className="w-8 h-8 border-2 border-white/30 border-t-white/90 rounded-full animate-spin" />
+                <span className="text-sm text-white/70">Layouting schema...</span>
+              </div>
+            </div>
+          )}
+
+          {/* Schema stats overlay */}
+          <div
+            className={cn(
+              'absolute bottom-4 left-4',
+              'px-3 py-2 rounded-lg',
+              'bg-black/70 backdrop-blur-xl',
+              'border border-white/[0.08]',
+              'text-xs text-white/60'
+            )}
+          >
+            {schemaNodes.length} nodes · {schemaEdges.length} edges
+          </div>
+        </div>
+      </SchemaErrorBoundary>
+    );
+  }
+
+  // =========================================================================
+  // DATA MODE RENDER (default)
+  // =========================================================================
+  // Empty state for data mode
   if (graphNodes.length === 0) {
     return (
       <div className={cn('h-full', className)}>

@@ -16,19 +16,22 @@
  */
 
 import { memo } from 'react';
-import { type NodeProps, NodeResizer } from '@xyflow/react';
+import { type NodeProps, type Node, NodeResizer } from '@xyflow/react';
 import { cn } from '@/lib/utils';
 import type { Scope } from '@novanet/core/types';
 
 /**
  * Data interface for ScopeGroupNode
  */
-export interface ScopeGroupData {
+export interface ScopeGroupData extends Record<string, unknown> {
   scope: Scope;
   label: string;
   icon: string;
   nodeCount: number;
 }
+
+/** Node type for ScopeGroupNode */
+export type ScopeGroupNodeType = Node<ScopeGroupData, 'scopeGroup'>;
 
 /**
  * Scope color mapping - matches plan requirements
@@ -58,7 +61,7 @@ const SCOPE_COLORS: Record<Scope, { border: string; bg: string }> = {
 export const ScopeGroupNode = memo(function ScopeGroupNode({
   data,
   selected,
-}: NodeProps<ScopeGroupData>) {
+}: NodeProps<ScopeGroupNodeType>) {
   const colorConfig = SCOPE_COLORS[data.scope] || {
     border: 'border-gray-500/50',
     bg: 'bg-gray-500/5',

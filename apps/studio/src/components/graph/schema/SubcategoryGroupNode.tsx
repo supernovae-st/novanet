@@ -16,18 +16,23 @@
  */
 
 import { memo } from 'react';
-import { type NodeProps } from '@xyflow/react';
+import { type NodeProps, type Node } from '@xyflow/react';
 import { cn } from '@/lib/utils';
+import type { Scope } from '@novanet/core/types';
 
 /**
  * Data interface for SubcategoryGroupNode
  */
-export interface SubcategoryGroupData {
+export interface SubcategoryGroupData extends Record<string, unknown> {
+  scope: Scope;
   subcategory: string;
   label: string;
   icon: string;
   nodeCount: number;
 }
+
+/** Node type for SubcategoryGroupNode */
+export type SubcategoryGroupNodeType = Node<SubcategoryGroupData, 'subcategoryGroup'>;
 
 /**
  * SubcategoryGroupNode - Nested container within a scope
@@ -38,7 +43,7 @@ export interface SubcategoryGroupData {
 export const SubcategoryGroupNode = memo(function SubcategoryGroupNode({
   data,
   selected,
-}: NodeProps<SubcategoryGroupData>) {
+}: NodeProps<SubcategoryGroupNodeType>) {
   return (
     <div
       className={cn(
