@@ -15,6 +15,7 @@ export { ContextPicker } from './ContextPicker';
 export { FilterPanel } from './FilterPanel';
 export { LabelFilter } from './LabelFilter';
 export { ViewPresetSelector } from './ViewPresetSelector';
+export { SchemaFilterPanel } from './SchemaFilterPanel';
 
 // YAML Views (replacing hardcoded presets)
 export { ViewCard, ViewCategorySection, ViewSelector } from './views';
