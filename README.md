@@ -189,7 +189,7 @@ NovaNet powers **[QR Code AI](https://qrcode-ai.com)** — generating native con
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': {'lineColor': '#64748b'}}}%%
 flowchart TB
-    subgraph MONO["NovaNet Monorepo (novanet-hq)"]
+    subgraph MONO["NovaNet Monorepo (novanet-dev)"]
         direction TB
         CORE["@novanet/core v8.1.0\nTypes · Schemas · Filters"]
         DB["@novanet/db v1.0.0\nDocker · Seeds"]
@@ -263,7 +263,7 @@ flowchart TB
 | Repository | Description | Access |
 |------------|-------------|--------|
 | [**novanet**](https://github.com/supernovae-st/novanet) | Public showcase (this repo) | Public |
-| [**novanet-hq**](https://github.com/supernovae-st/novanet-hq) | Turborepo monorepo (main development) | Private |
+| [**novanet-dev**](https://github.com/supernovae-st/novanet-dev) | Turborepo monorepo (main development) | Private |
 
 *Legacy repositories (novanet-core, novanet-studio, novanet-infra) have been migrated to the monorepo.*
 

@@ -13,7 +13,7 @@ flowchart TB
         NOVANET[novanet<br/>Public Showcase]
     end
 
-    subgraph MONOREPO["novanet-hq (Turborepo)"]
+    subgraph MONOREPO["novanet-dev (Turborepo)"]
         CORE["@novanet/core<br/>Types · Schemas · Filters"]
         DB["@novanet/db<br/>Docker · Seeds"]
         CLI["@novanet/cli<br/>Validation · Generation"]
@@ -60,9 +60,9 @@ flowchart TB
 | Repository | Description | Status | Access |
 |------------|-------------|--------|--------|
 | [**novanet**](https://github.com/supernovae-st/novanet) | Public showcase & documentation | Active | Public |
-| [**novanet-hq**](https://github.com/supernovae-st/novanet-hq) | Turborepo monorepo (main development) | Active | Private |
+| [**novanet-dev**](https://github.com/supernovae-st/novanet-dev) | Turborepo monorepo (main development) | Active | Private |
 
-### Monorepo Packages (novanet-hq)
+### Monorepo Packages (novanet-dev)
 
 | Package | Version | Description |
 |---------|---------|-------------|
@@ -75,16 +75,16 @@ flowchart TB
 
 | Repository | Migrated To | Notes |
 |------------|-------------|-------|
-| [novanet-core](https://github.com/supernovae-st/novanet-core) | `novanet-hq/packages/core` | Standalone repo → monorepo |
-| [novanet-studio](https://github.com/supernovae-st/novanet-studio) | `novanet-hq/apps/studio` | Standalone repo → monorepo |
-| [novanet-infra](https://github.com/supernovae-st/novanet-infra) | `novanet-hq/packages/db` | Merged into db package |
+| [novanet-core](https://github.com/supernovae-st/novanet-core) | `novanet-dev/packages/core` | Standalone repo → monorepo |
+| [novanet-studio](https://github.com/supernovae-st/novanet-studio) | `novanet-dev/apps/studio` | Standalone repo → monorepo |
+| [novanet-infra](https://github.com/supernovae-st/novanet-infra) | `novanet-dev/packages/db` | Merged into db package |
 
 ---
 
 ## Monorepo Structure
 
 ```
-novanet-hq/
+novanet-dev/
 ├── turbo.json              # Turborepo pipeline
 ├── pnpm-workspace.yaml     # Workspace definitions
 ├── packages/
@@ -130,12 +130,12 @@ novanet-hq/
 
 ## Getting Started
 
-All development happens in `novanet-hq`:
+All development happens in `novanet-dev`:
 
 ```bash
 # Clone the monorepo
-git clone git@github.com:supernovae-st/novanet-hq.git
-cd novanet-hq
+git clone git@github.com:supernovae-st/novanet-dev.git
+cd novanet-dev
 
 # Install dependencies
 pnpm install
