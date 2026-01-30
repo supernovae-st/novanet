@@ -93,3 +93,18 @@ export * as services from './services/index.js';
  * Use: `import { generators } from 'novanet-core'`
  */
 export * as generators from './generators/index.js';
+
+// =============================================================================
+// GRAPH (v8.2.0)
+// =============================================================================
+
+/**
+ * Graph module for schema visualization:
+ * - generateSchemaGraph(): Flat 35 nodes + ~89 edges
+ * - getSchemaHierarchy(): Grouped by scope/subcategory
+ * - SCOPE_HIERARCHY: Scope definitions with subcategories
+ * - NODE_SUBCATEGORIES: NodeType to subcategory mapping
+ * Use: `import { graph } from 'novanet-core'` or `import { generateSchemaGraph } from 'novanet-core'`
+ */
+export * as graph from './graph/index.js';
+export { generateSchemaGraph, getSchemaHierarchy } from './graph/index.js';
