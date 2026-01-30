@@ -9,7 +9,7 @@ Knowledge graph visualization for the NovaNet localization orchestrator.
 
 ## Project Context
 
-**What:** Interactive 2D/3D graph visualization for ~19,000 nodes across 35 types (3 scopes), 200 locales
+**What:** Interactive 2D/3D graph visualization for 35 node types (3 scopes), 200 locales (~19,000 instances projected at full deployment)
 **Stack:** Next.js 16 + React 19 + TypeScript 5.9 + Tailwind CSS
 **Graph:** @xyflow/react (2D) + react-force-graph-3d (3D)
 **State:** Zustand 5 with persist/immer
@@ -116,12 +116,26 @@ pnpm test            # Tests
 | ⇧Tab | Previous connected node |
 | Delete | Hide node from view |
 
-### Zustand Stores
+### API Routes (9 routes)
+- `/api/chat` - Claude AI endpoint
+- `/api/graph` - Main graph data
+- `/api/graph/expand` - Expand node neighbors
+- `/api/graph/ontology` - Ontology metadata
+- `/api/graph/query` - Execute Cypher queries
+- `/api/graph/schema` - Schema information
+- `/api/graph/stats` - Graph statistics
+- `/api/views` - Saved views CRUD
+- `/api/views/[id]` - Individual view operations
+
+### Zustand Stores (8 stores)
 - `graphStore` - Nodes, edges, loading state
 - `filterStore` - Node types, locale, presets (persisted)
 - `uiStore` - View mode, panels, selection
 - `chatStore` - AI chat messages, streaming
 - `queryStore` - Cypher query state, history
+- `viewStore` - Saved views management
+- `aiQueryStore` - AI-assisted query state
+- `animationStore` - Graph animation controls
 
 ---
 
