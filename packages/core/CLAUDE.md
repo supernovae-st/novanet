@@ -8,7 +8,7 @@ NovaNet is a **native content generation system** (NOT translation) using Neo4j 
 
 **Target Application**: QR Code AI (https://qrcode-ai.com) - a multilingual SaaS for QR code generation.
 **Supported Locales**: 200+ locales (fr-FR, en-US, es-MX, ja-JP, etc.)
-**Current Version**: v8.0.0
+**Current Version**: v8.1.0
 
 ## CRITICAL: Generation, NOT Translation
 
@@ -84,20 +84,26 @@ WHERE activation >= 0.3
 RETURN c2.key, activation ORDER BY activation DESC;
 ```
 
-## File Structure (v8.0.0)
+## File Structure (v8.1.0)
 
 ```
 core/
 ├── models/                    # YAML schema definitions
 │   ├── _index.yaml            # MODEL INDEX (graph structure, node categories, changes)
 │   ├── relations.yaml         # All 50 Neo4j relationships
-│   ├── nodes/                 # ONE FILE PER NODE TYPE (37 files)
-│   │   ├── project/           # 3 nodes: Project, BrandIdentity, ProjectL10n
-│   │   ├── content/           # 5 nodes: Concept, ConceptL10n, Page, Block, BlockType
-│   │   ├── locale/            # 15 nodes: Locale + all LocaleKnowledge nodes
-│   │   ├── generation/        # 5 nodes: PagePrompt, BlockPrompt, BlockRules, PageL10n, BlockL10n
-│   │   ├── seo/               # 3 nodes: SEOKeywordL10n, SEOKeywordMetrics, SEOMiningRun
-│   │   └── geo/               # 3 nodes: GEOSeedL10n, GEOSeedMetrics, GEOMiningRun
+│   ├── nodes/                 # ONE FILE PER NODE TYPE (35 files)
+│   │   ├── global/            # 🌍 GLOBAL scope (15 nodes)
+│   │   │   ├── config/        #    Locale
+│   │   │   └── knowledge/     #    14 LocaleKnowledge nodes
+│   │   ├── project/           # 📦 PROJECT scope (14 nodes)
+│   │   │   ├── foundation/    #    Project, BrandIdentity, ProjectL10n
+│   │   │   ├── structure/     #    Page, Block, BlockType, PageType
+│   │   │   ├── semantic/      #    Concept, ConceptL10n
+│   │   │   ├── instruction/   #    PagePrompt, BlockPrompt, BlockRules
+│   │   │   └── output/        #    PageL10n, BlockL10n
+│   │   └── shared/            # 🎯 SHARED scope (6 nodes)
+│   │       ├── seo/           #    SEOKeywordL10n, SEOKeywordMetrics, SEOMiningRun
+│   │       └── geo/           #    GEOSeedL10n, GEOSeedMetrics, GEOMiningRun
 │   └── views/                 # YAML view definitions
 ├── src/                       # TypeScript source
 │   ├── db/                    # Neo4j connection (client.ts)
@@ -111,7 +117,7 @@ core/
 └── docs/                      # Additional documentation
 ```
 
-## Nomenclature v8.0.0
+## Nomenclature v8.1.0
 
 ```
 *L10n suffix    = ALL localized content (human OR LLM generated)
@@ -121,7 +127,7 @@ Locale*         = Locale Knowledge nodes (LocaleVoice, LocaleCulture, etc.)
 *Metrics        = Time-series observations (SEOKeywordMetrics, GEOSeedMetrics)
 ```
 
-**v8.0.0 Breaking Changes:**
+**v8.1.0 Breaking Changes:**
 - Removed: PageMetrics, SEOVariation, GEOReformulation (YAGNI)
 - Removed: Deprecated type aliases (PageOutput, BlockOutput, etc.)
 - Added: 17 missing relations from YAML to TypeScript

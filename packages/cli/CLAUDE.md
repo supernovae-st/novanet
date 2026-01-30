@@ -12,14 +12,15 @@ This package contains development tools and generators:
 ## Commands
 
 ```bash
-# Validate schemas
-npm run validate
+# From monorepo root
+pnpm --filter=@novanet/cli validate        # Validate schemas
+pnpm --filter=@novanet/cli generate:docs   # Generate documentation
 
-# Generate documentation
-npm run generate:docs
+# Or from this package
+pnpm validate
+pnpm generate:docs
 ```
 
 ## Dependencies
 
 - Uses `@novanet/core` for types, schemas, and generators
-- Uses `@novanet/db` for database operations
