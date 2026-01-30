@@ -3,8 +3,9 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import type { ViewCategory, ViewCategoryGroup, ViewRegistryEntry } from '@novanet/core/filters';
+import type { ViewCategoryGroup, ViewRegistryEntry } from '@novanet/core/filters';
 import { logger } from '@/lib/logger';
+import { useQueryStore } from './queryStore';
 
 // ============================================================================
 // TYPES
@@ -22,11 +23,13 @@ interface ViewStoreState {
   activeViewId: string | null;
   params: ViewParams;
   loading: boolean;
+  executing: boolean;
   error: string | null;
 
   // Actions
   loadRegistry: () => Promise<void>;
   selectView: (id: string, params?: ViewParams) => void;
+  executeView: (id: string, params?: ViewParams) => Promise<void>;
   setParams: (params: Partial<ViewParams>) => void;
   clearView: () => void;
 
@@ -51,6 +54,7 @@ export const useViewStore = create<ViewStoreState>()(
       activeViewId: null,
       params: {},
       loading: false,
+      executing: false,
       error: null,
 
       // Load registry from API
@@ -88,7 +92,7 @@ export const useViewStore = create<ViewStoreState>()(
         }
       },
 
-      // Select a view
+      // Select a view (just sets state, doesn't execute)
       selectView: (id, params) => {
         set((state) => {
           state.activeViewId = id;
@@ -97,6 +101,56 @@ export const useViewStore = create<ViewStoreState>()(
           }
         });
         logger.info('ViewStore', 'View selected', { id, params });
+      },
+
+      // Select and execute a view (fetches Cypher and runs query)
+      executeView: async (id, params) => {
+        // First select the view
+        set((state) => {
+          state.activeViewId = id;
+          state.executing = true;
+          state.error = null;
+          if (params) {
+            state.params = params;
+          }
+        });
+
+        logger.info('ViewStore', 'Executing view', { id, params });
+
+        try {
+          // Build query params for the API
+          const queryParams = new URLSearchParams();
+          const viewParams = params || get().params;
+          if (viewParams.key) queryParams.set('key', viewParams.key);
+          if (viewParams.locale) queryParams.set('locale', viewParams.locale);
+          if (viewParams.project) queryParams.set('project', viewParams.project);
+
+          const url = `/api/views/${id}${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
+          const res = await fetch(url);
+          const json = await res.json();
+
+          if (!json.success) {
+            throw new Error(json.error || 'Failed to load view');
+          }
+
+          // Extract the Cypher query from the view
+          const cypher = json.data.cypher?.query;
+          if (!cypher) {
+            throw new Error('View did not return a Cypher query');
+          }
+
+          logger.debug('ViewStore', 'View Cypher loaded', { id, cypher: cypher.substring(0, 100) + '...' });
+
+          // Execute the query via queryStore
+          await useQueryStore.getState().executeQuery(cypher);
+
+          set({ executing: false });
+          logger.info('ViewStore', 'View executed successfully', { id });
+        } catch (error) {
+          const message = error instanceof Error ? error.message : 'Unknown error';
+          set({ error: message, executing: false });
+          logger.error('ViewStore', 'View execution failed', { id, error: message });
+        }
       },
 
       // Update params

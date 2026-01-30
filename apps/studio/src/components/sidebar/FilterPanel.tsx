@@ -16,7 +16,7 @@ import { SlidersHorizontal } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAiQueryStore } from '@/stores/aiQueryStore';
 import { AiSearchInput } from './AiSearchInput';
-import { ViewPresetSelector } from './ViewPresetSelector';
+import { ViewSelector } from './views';
 import { LabelFilter } from './LabelFilter';
 
 export interface FilterPanelProps {
@@ -100,8 +100,8 @@ export const FilterPanel = memo(function FilterPanel({ className }: FilterPanelP
           {/* Divider */}
           <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
-          {/* View Preset Selector - Quick Views with keyboard shortcuts */}
-          <ViewPresetSelector />
+          {/* YAML View Selector - Quick Views with keyboard shortcuts */}
+          <ViewSelector />
 
           {/* Divider */}
           <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
