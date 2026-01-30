@@ -175,6 +175,11 @@ Comprehensive audit of YAML → TypeScript → Neo4j synchronization.
 
 Commands for editing the NovaNet knowledge graph schema (ontology).
 
+**Source Files:**
+- Node YAMLs: `packages/core/models/nodes/{scope}/{subcategory}/{node-name}.yaml`
+- Relations: `packages/core/models/relations.yaml`
+- Generated Types: `packages/core/src/types/`
+
 ### `/schema` - Schema Overview
 
 Master command for schema management.
