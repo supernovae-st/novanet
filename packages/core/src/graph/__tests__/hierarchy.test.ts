@@ -68,11 +68,12 @@ describe('graph/hierarchy', () => {
   });
 
   it('should have correct node counts per subcategory', () => {
-    // Project scope: foundation (3), structure (4), semantic (2), instruction (3), output (2) = 14
+    // Project scope: foundation (3), structure (2), semantic (2), instruction (5), output (2) = 14
+    // Source of truth: models/nodes/project/ folder structure
     expect(SCOPE_HIERARCHY.Project.subcategories.foundation.nodeTypes).toHaveLength(3);
-    expect(SCOPE_HIERARCHY.Project.subcategories.structure.nodeTypes).toHaveLength(4);
+    expect(SCOPE_HIERARCHY.Project.subcategories.structure.nodeTypes).toHaveLength(2);  // Page, Block
     expect(SCOPE_HIERARCHY.Project.subcategories.semantic.nodeTypes).toHaveLength(2);
-    expect(SCOPE_HIERARCHY.Project.subcategories.instruction.nodeTypes).toHaveLength(3);
+    expect(SCOPE_HIERARCHY.Project.subcategories.instruction.nodeTypes).toHaveLength(5);  // PageType, PagePrompt, BlockType, BlockPrompt, BlockRules
     expect(SCOPE_HIERARCHY.Project.subcategories.output.nodeTypes).toHaveLength(2);
 
     // Global scope: config (1), knowledge (14) = 15
