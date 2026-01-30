@@ -18,3 +18,5 @@ export {
   type TaskModifier,
   type SpreadingActivationConfig,
 } from './spreading-activation.js';
+
+export { NODE_ICONS, getNodeIcon } from './nodeIcons.js';
