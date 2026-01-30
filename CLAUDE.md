@@ -28,7 +28,8 @@ novanet/
 ├── packages/
 │   ├── core/               # @novanet/core - types, schemas, filters
 │   ├── db/                 # @novanet/db - Neo4j infrastructure
-│   └── cli/                # @novanet/cli - dev tools
+│   ├── cli/                # @novanet/cli - dev tools
+│   └── schema-tools/       # @novanet/schema-tools - schema validation
 └── apps/
     └── studio/             # @novanet/studio - web visualization
 ```
@@ -66,6 +67,7 @@ pnpm build --filter=...[HEAD^1]         # Build only changed packages
 | @novanet/core | Types, schemas, filters, generators |
 | @novanet/db | Neo4j Docker, seeds, migrations |
 | @novanet/cli | Validation and generation tools |
+| @novanet/schema-tools | Schema validation and sync tools |
 | @novanet/studio | Web-based graph visualization |
 
 ---
