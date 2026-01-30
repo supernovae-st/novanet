@@ -1,5 +1,5 @@
 # ═══════════════════════════════════════════════════════════════════════════════
-# NOVANET DATA MODELS INDEX v8.1.0
+# NOVANET DATA MODELS INDEX v8.2.0
 # ═══════════════════════════════════════════════════════════════════════════════
 #
 # WHAT: Native content generation system using Neo4j graph database
@@ -127,6 +127,22 @@
 #   :HAS_OUTPUT   → LLM-generated content (PageL10n, BlockL10n)
 #   *Metrics      → Time-series observations (SEOKeywordMetrics, GEOSeedMetrics)
 #   Locale*       → Locale Knowledge nodes (LocaleVoice, LocaleCulture, etc.)
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+# CHANGES v8.2.0 (from v8.1.0)
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# YAML v7.11.0 Alignment Complete:
+#   - REMOVED: icon, priority, freshness from ALL TypeScript interfaces
+#   - REMOVED: Priority, Freshness type definitions
+#   - REMOVED: icon, priority, freshness from ALL Neo4j seeds
+#   - ADDED: NODE_ICONS config in presentation layer
+#   - ADDED: Migration script 004-remove-deprecated-properties.cypher
+#
+# Standard properties (6 total):
+#   key, display_name, description, llm_context, created_at, updated_at
+#
+# Statistics: 35 nodes (unchanged), 50 relations (unchanged)
 #
 # ═══════════════════════════════════════════════════════════════════════════════
 # CHANGES v8.0.0 (from v7.12.0)
