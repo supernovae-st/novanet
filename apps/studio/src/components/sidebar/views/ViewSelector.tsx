@@ -16,7 +16,7 @@
  * @see useViewStore for state management
  */
 
-import { memo, useCallback, useEffect } from 'react';
+import { memo, useCallback, useEffect, useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import {
   Grid3x3,
@@ -97,8 +97,11 @@ export const ViewSelector = memo(function ViewSelector({
     [executeView, onSelect]
   );
 
-  // Flatten views for shortcut indexing
-  const allViews = categories.flatMap((cat) => cat.views);
+  // Flatten views for shortcut indexing (memoized for performance)
+  const allViews = useMemo(
+    () => categories.flatMap((cat) => cat.views),
+    [categories]
+  );
 
   // Register keyboard shortcuts
   useEffect(() => {

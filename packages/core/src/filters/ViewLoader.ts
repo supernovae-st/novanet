@@ -5,6 +5,10 @@ import { parse as parseYaml } from 'yaml';
 import type { ViewDefinition, ViewRegistry, IncludeRule } from './types.js';
 import type { Priority } from '../types/index.js';
 import { NovaNetFilter } from './NovaNetFilter.js';
+import {
+  validateViewDefinition,
+  validateViewRegistry,
+} from '../schemas/view.schema.js';
 
 /**
  * ViewLoader - Loads YAML view definitions and converts them to NovaNetFilter instances.
@@ -28,7 +32,11 @@ export class ViewLoader {
   static async loadView(viewId: string, viewsDir: string): Promise<ViewDefinition> {
     const filePath = path.join(viewsDir, `${viewId}.yaml`);
     const content = await fs.readFile(filePath, 'utf-8');
-    return parseYaml(content) as ViewDefinition;
+    const parsed = parseYaml(content);
+
+    // Validate with Zod schema (throws ZodError if invalid)
+    const validated = validateViewDefinition(parsed);
+    return validated as ViewDefinition;
   }
 
   /**
@@ -40,7 +48,11 @@ export class ViewLoader {
   static async loadRegistry(viewsDir: string): Promise<ViewRegistry> {
     const filePath = path.join(viewsDir, '_registry.yaml');
     const content = await fs.readFile(filePath, 'utf-8');
-    return parseYaml(content) as ViewRegistry;
+    const parsed = parseYaml(content);
+
+    // Validate with Zod schema (throws ZodError if invalid)
+    const validated = validateViewRegistry(parsed);
+    return validated as ViewRegistry;
   }
 
   /**
@@ -252,8 +264,8 @@ export class ViewLoader {
         break;
 
       default:
-        // For unknown relations, log a warning but don't fail
-        console.warn(`Unknown relation in view include: ${include.relation}`);
+        // Unknown relations are schema errors - fail fast for debugging
+        throw new Error(`Unknown relation in view include: ${include.relation}. Update ViewLoader.applyInclude() to handle this relation.`);
     }
   }
 }

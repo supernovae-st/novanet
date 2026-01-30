@@ -4,3 +4,4 @@
 export * from './locale-knowledge.schema.js';
 export * from './relations.schema.js';
 export * from './prompts.schema.js';
+export * from './view.schema.js';
