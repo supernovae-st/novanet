@@ -1,3 +1,48 @@
 packages:
   - "packages/*"
   - "apps/*"
+
+# =============================================================================
+# DEPENDENCY CATALOGS
+# =============================================================================
+# Centralized version management for shared dependencies.
+# Usage in package.json: "zod": "catalog:"
+# =============================================================================
+
+catalog:
+  # Core dependencies (shared across packages)
+  typescript: ^5.9.3
+  zod: ^3.24.0
+  yaml: ^2.7.0
+
+  # Database
+  neo4j-driver: ^5.27.0
+
+  # AI/LLM
+  openai: ^6.17.0
+
+  # Testing
+  vitest: ^2.1.0
+
+  # Build tools
+  tsx: ^4.19.0
+
+  # Linting
+  eslint: ^9.39.2
+  "@typescript-eslint/eslint-plugin": ^8.53.1
+  "@typescript-eslint/parser": ^8.53.1
+
+catalogs:
+  # React 19 ecosystem (for apps/studio)
+  react19:
+    react: ^19.0.0
+    react-dom: ^19.0.0
+    next: ^15.1.0
+    "@types/react": ^19.0.0
+    "@types/react-dom": ^19.0.0
+
+  # Testing utilities
+  testing:
+    vitest: ^2.1.0
+    "@testing-library/react": ^16.0.0
+    "@testing-library/jest-dom": ^6.6.0
