@@ -3,7 +3,8 @@ import * as fs from 'fs/promises';
 import * as path from 'path';
 import { parse as parseYaml } from 'yaml';
 import type { ViewDefinition, ViewRegistry, IncludeRule } from './types.js';
-import type { Priority } from '../types/index.js';
+// REMOVED v8.2.0: Priority no longer exists in types (YAML v7.11.0 alignment)
+// import type { Priority } from '../types/index.js';
 import { NovaNetFilter } from './NovaNetFilter.js';
 import {
   validateViewDefinition,
@@ -106,10 +107,10 @@ export class ViewLoader {
         filter.forLocale(view.filters.locale);
       }
 
-      // Handle priority
-      if (view.filters.priority && view.filters.priority.length > 0) {
-        filter.withPriority(...(view.filters.priority as Priority[]));
-      }
+      // REMOVED v8.2.0: priority/freshness filtering (YAML v7.11.0 alignment)
+      // if (view.filters.priority && view.filters.priority.length > 0) {
+      //   filter.withPriority(...(view.filters.priority as Priority[]));
+      // }
 
       // Handle maxDepth
       if (view.filters.maxDepth !== undefined) {
@@ -121,10 +122,10 @@ export class ViewLoader {
         filter.byCategory(...view.filters.categories);
       }
 
-      // Handle freshness
-      if (view.filters.freshness && view.filters.freshness.length > 0) {
-        filter.withFreshness(...view.filters.freshness);
-      }
+      // REMOVED v8.2.0: freshness filtering (YAML v7.11.0 alignment)
+      // if (view.filters.freshness && view.filters.freshness.length > 0) {
+      //   filter.withFreshness(...view.filters.freshness);
+      // }
     }
 
     return filter;

@@ -1,23 +1,23 @@
 // novanet-core/src/types/locale-knowledge.ts
-// Locale Knowledge types v7.1.0
+// Locale Knowledge types v8.2.0
 //
-// v7.1.0 STANDARD PROPERTIES (all nodes):
-//   key, display_name, icon, description, llm_context, priority, freshness, created_at, updated_at
+// v8.2.0 CHANGES:
+//   - REMOVED: icon, priority, freshness from all interfaces (YAML v7.11.0 alignment)
+//   - Standard properties now: key, display_name, description, llm_context, created_at, updated_at
+//
+// v7.11.0 STANDARD PROPERTIES (all nodes):
+//   key, display_name, description, llm_context, created_at, updated_at
 
-export type Priority = 'critical' | 'high' | 'medium' | 'low';
-export type Freshness = 'realtime' | 'hourly' | 'daily' | 'static';
+// REMOVED v8.2.0: Priority and Freshness types (never implemented, YAGNI)
+// export type Priority = 'critical' | 'high' | 'medium' | 'low';
+// export type Freshness = 'realtime' | 'hourly' | 'daily' | 'static';
 
 export interface Locale {
-  // Standard properties (v7.1.0)
+  // Standard properties (v8.2.0)
   key: string;               // BCP 47: "fr-FR"
   display_name: string;      // "French (France)"
-  icon: string;              // "🇫🇷"
   description: string;       // "French locale for France market"
   llm_context: string;       // "USE: French content. TRIGGERS: fr-FR. NOT: Canadian French."
-
-  // Context management (v7.1.0)
-  priority: Priority;        // critical | high | medium | low
-  freshness: Freshness;      // realtime | hourly | daily | static
 
   // Locale-specific
   language_code: string;     // ISO 639-1: "fr"
@@ -30,15 +30,10 @@ export interface Locale {
 }
 
 export interface LocaleIdentity {
-  // Standard properties (v7.1.0 - no key, linked via HAS_IDENTITY)
+  // Standard properties (v8.2.0 - no key, linked via HAS_IDENTITY)
   display_name: string;      // "French Identity"
-  icon: string;              // "🪪"
   description: string;       // "Identity characteristics for fr-FR"
-  llm_context: string;       // "USE: script/encoding decisions. TRIGGERS: charset, encoding. NOT: voice aspects."
-
-  // Context management (v7.1.0)
-  priority: Priority;
-  freshness: Freshness;
+  llm_context: string;       // "USE: script/encoding decisions."
 
   // Script & Writing
   script_code: string;
@@ -70,15 +65,10 @@ export interface LocaleIdentity {
 }
 
 export interface LocaleVoice {
-  // Standard properties (v7.1.0 - no key, linked via HAS_VOICE)
+  // Standard properties (v8.2.0 - no key, linked via HAS_VOICE)
   display_name: string;      // "French Voice"
-  icon: string;              // "🗣️"
   description: string;       // "Voice characteristics for fr-FR"
-  llm_context: string;       // "USE: tone/formality decisions. TRIGGERS: voice, tone, formality. NOT: cultural norms."
-
-  // Context management (v7.1.0)
-  priority: Priority;
-  freshness: Freshness;
+  llm_context: string;       // "USE: tone/formality decisions."
 
   // Voice characteristics
   formality_score: number;      // 0-100
@@ -108,15 +98,10 @@ export interface LocaleVoice {
 }
 
 export interface LocaleCulture {
-  // Standard properties (v7.1.0 - no key, linked via HAS_CULTURE)
+  // Standard properties (v8.2.0 - no key, linked via HAS_CULTURE)
   display_name: string;      // "French Culture"
-  icon: string;              // "🎭"
   description: string;       // "Cultural norms for fr-FR"
-  llm_context: string;       // "USE: cultural sensitivity. TRIGGERS: culture, norms, taboos. NOT: voice/market aspects."
-
-  // Context management (v7.1.0)
-  priority: Priority;
-  freshness: Freshness;
+  llm_context: string;       // "USE: cultural sensitivity."
 
   // Culture characteristics
   dominant_values: Array<{ value: string; importance: string; marketing_angle: string }>;
@@ -145,15 +130,10 @@ export interface LocaleCulture {
 }
 
 export interface LocaleMarket {
-  // Standard properties (v7.1.0 - no key, linked via HAS_MARKET)
+  // Standard properties (v8.2.0 - no key, linked via HAS_MARKET)
   display_name: string;      // "French Market"
-  icon: string;              // "📈"
   description: string;       // "Market data for fr-FR"
-  llm_context: string;       // "USE: market positioning. TRIGGERS: market, competition, ROI. NOT: cultural aspects."
-
-  // Context management (v7.1.0)
-  priority: Priority;
-  freshness: Freshness;
+  llm_context: string;       // "USE: market positioning."
 
   // Market characteristics
   population: number;
@@ -195,15 +175,10 @@ export interface LocaleMarket {
 }
 
 export interface LocaleLexicon {
-  // Standard properties (v7.1.0 - no key, linked via HAS_LEXICON)
+  // Standard properties (v8.2.0 - no key, linked via HAS_LEXICON)
   display_name: string;      // "French Lexicon"
-  icon: string;              // "📖"
   description: string;       // "Lexicon rules for fr-FR"
-  llm_context: string;       // "USE: vocabulary choices. TRIGGERS: words, terms, expressions. NOT: grammar rules."
-
-  // Context management (v7.1.0)
-  priority: Priority;
-  freshness: Freshness;
+  llm_context: string;       // "USE: vocabulary choices."
 
   // Lexicon characteristics
   expression_density: string;
@@ -224,15 +199,10 @@ export interface LocaleLexicon {
 }
 
 export interface Expression {
-  // Standard properties (v7.1.0 - no key, linked via HAS_EXPRESSION)
+  // Standard properties (v8.2.0 - no key, linked via HAS_EXPRESSION)
   display_name: string;      // "Gratuit"
-  icon: string;              // "💬"
   description: string;       // "Expression for value semantic field"
-  llm_context: string;       // "USE: expression selection. TRIGGERS: specific semantic field. NOT: generic phrases."
-
-  // Context management (v7.1.0)
-  priority: Priority;
-  freshness: Freshness;
+  llm_context: string;       // "USE: expression selection."
 
   // Expression-specific
   semantic_field: string;

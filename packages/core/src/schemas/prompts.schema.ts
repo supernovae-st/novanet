@@ -1,26 +1,25 @@
 // novanet-core/src/schemas/prompts.schema.ts
-// Zod schemas for Prompt nodes v7.2.0
+// Zod schemas for Prompt nodes v8.2.0
+// v8.2.0: Removed icon, priority, freshness (YAML v7.11.0 alignment)
 
 import { z } from 'zod';
-import { PrioritySchema, FreshnessSchema } from './locale-knowledge.schema.js';
+// REMOVED v8.2.0: Priority and Freshness no longer exist
+// import { PrioritySchema, FreshnessSchema } from './locale-knowledge.schema.js';
 
 // =============================================================================
-// BASE PROMPT SCHEMA
+// BASE PROMPT SCHEMA (v8.2.0 - no icon/priority/freshness)
 // =============================================================================
 
 const PromptBaseSchema = z.object({
   // Standard properties (no key - linked via relations)
   display_name: z.string().min(1),
-  icon: z.string().min(1),
   description: z.string().min(1),
   llm_context: z.string().regex(
     /^USE:.*\. TRIGGERS:.*\. NOT:.*\.$/,
     'llm_context must follow format: "USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]."'
   ),
 
-  // Context management
-  priority: PrioritySchema,
-  freshness: FreshnessSchema,
+  // REMOVED v8.2.0: icon, priority, freshness (YAML v7.11.0 alignment)
 
   // Versioning (v7.2.0)
   version: z.string().regex(/^\d+\.\d+(\.\d+)?$/, 'version must be semver format'),

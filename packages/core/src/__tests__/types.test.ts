@@ -1,5 +1,6 @@
-// NovaNet Core - Type Tests v7.1.0
+// NovaNet Core - Type Tests v8.2.0
 // TDD: Verify type exports and structure
+// v8.2.0: Removed icon, priority, freshness from all interfaces (YAML v7.11.0 alignment)
 
 import { describe, it, expect } from 'vitest';
 import type {
@@ -28,39 +29,34 @@ import type {
 
 describe('Type Exports', () => {
   describe('StandardNodeProperties', () => {
-    it('should have v7.1.0 required properties', () => {
+    it('should have v8.2.0 required properties (no icon/priority/freshness)', () => {
       // Type assertion test - compile-time verification
+      // v8.2.0: Removed icon, priority, freshness (YAML v7.11.0 alignment)
       const props: StandardNodeProperties = {
         key: 'test-key',
         display_name: 'Test Key',
-        icon: '🔷',
         description: 'Test description',
         llm_context: 'USE: testing. TRIGGERS: test. NOT: production.',
-        priority: 'medium',
-        freshness: 'static',
         created_at: new Date(),
         updated_at: new Date(),
       };
 
       expect(props.key).toBe('test-key');
       expect(props.display_name).toBe('Test Key');
-      expect(props.icon).toBe('🔷');
       expect(props.llm_context).toBeDefined();
-      expect(props.priority).toBe('medium');
-      expect(props.freshness).toBe('static');
+      expect(props.created_at).toBeDefined();
+      expect(props.updated_at).toBeDefined();
     });
   });
 
   describe('Core Entities', () => {
-    it('Concept should extend StandardNodeProperties', () => {
+    it('Concept should extend StandardNodeProperties (v8.2.0)', () => {
+      // v8.2.0: Removed icon, priority, freshness (YAML v7.11.0 alignment)
       const concept: Concept = {
         key: 'action-create-qr',
         display_name: 'Create QR Code',
-        icon: '💡',
         description: 'Core QR code concept',
         llm_context: 'USE: creating QR codes. TRIGGERS: create, generate. NOT: editing.',
-        priority: 'critical',
-        freshness: 'static',
         created_at: new Date(),
         updated_at: new Date(),
         feature_category: 'core',
@@ -69,17 +65,15 @@ describe('Type Exports', () => {
 
       expect(concept.key).toBe('action-create-qr');
       expect(concept.feature_category).toBe('core');
-      expect(concept.priority).toBe('critical');
+      expect(concept.is_core).toBe(true);
     });
 
-    it('ConceptL10n should have required localization fields (v7.1.0)', () => {
+    it('ConceptL10n should have required localization fields (v8.2.0)', () => {
+      // v8.2.0: Removed icon, priority, freshness (YAML v7.11.0 alignment)
       const l10n: ConceptL10n = {
         display_name: 'QR Code',
-        icon: '💬',
         description: 'Localized concept',
         llm_context: 'USE: French QR code content. TRIGGERS: fr-FR. NOT: translation.',
-        priority: 'high',
-        freshness: 'static',
         title: 'Code QR',
         definition: 'Un code-barres 2D',
         version: 1,
@@ -90,62 +84,56 @@ describe('Type Exports', () => {
 
       expect(l10n.title).toBe('Code QR');
       expect(l10n.version).toBe(1);
-      expect(l10n.priority).toBe('high');
+      expect(l10n.definition).toBe('Un code-barres 2D');
     });
 
-    it('PageL10n should have priority/freshness (v7.1.0) and version (v7.11.0)', () => {
+    it('PageL10n should have version (v8.2.0 - no icon/priority/freshness)', () => {
+      // v8.2.0: Removed icon, priority, freshness (YAML v7.11.0 alignment)
       const output: PageL10n = {
         display_name: 'Pricing Output',
-        icon: '📃',
         description: 'Generated pricing page',
         llm_context: 'USE: assembled page content. TRIGGERS: render. NOT: regeneration.',
-        priority: 'medium',
-        freshness: 'daily',
         assembled: { hero: {}, pricing: {} },
         assembled_at: new Date(),
         assembler_version: '1.0.0',
         created_at: new Date(),
         updated_at: new Date(),
-        version: 1, // v7.11.0
+        version: 1,
       };
 
       expect(output.updated_at).toBeDefined();
-      expect(output.priority).toBe('medium');
       expect(output.version).toBe(1);
+      expect(output.assembler_version).toBe('1.0.0');
     });
 
-    it('BlockL10n should have priority/freshness (v7.1.0) and version (v7.11.0)', () => {
+    it('BlockL10n should have version (v8.2.0 - no icon/priority/freshness)', () => {
+      // v8.2.0: Removed icon, priority, freshness (YAML v7.11.0 alignment)
       const output: BlockL10n = {
         display_name: 'Hero Output',
-        icon: '📝',
         description: 'Generated hero block',
         llm_context: 'USE: hero section content. TRIGGERS: render hero. NOT: regeneration.',
-        priority: 'medium',
-        freshness: 'daily',
         generated: { title: 'Welcome' },
         generated_at: new Date(),
         generator_version: '1.0.0',
         created_at: new Date(),
         updated_at: new Date(),
-        version: 1, // v7.11.0
+        version: 1,
       };
 
       expect(output.updated_at).toBeDefined();
-      expect(output.priority).toBe('medium');
       expect(output.version).toBe(1);
+      expect(output.generator_version).toBe('1.0.0');
     });
   });
 
-  describe('Locale Knowledge (v7.1.0)', () => {
-    it('Locale should have standard properties with priority/freshness', () => {
+  describe('Locale Knowledge (v8.2.0)', () => {
+    it('Locale should have standard properties (no icon/priority/freshness)', () => {
+      // v8.2.0: Removed icon, priority, freshness (YAML v7.11.0 alignment)
       const locale: Locale = {
         key: 'fr-FR',
         display_name: 'French (France)',
-        icon: '🇫🇷',
         description: 'Metropolitan French',
         llm_context: 'USE: French content. TRIGGERS: fr-FR. NOT: Canadian French.',
-        priority: 'high',
-        freshness: 'static',
         language_code: 'fr',
         country_code: 'FR',
         name_native: 'Français (France)',
@@ -157,17 +145,15 @@ describe('Type Exports', () => {
 
       expect(locale.key).toBe('fr-FR');
       expect(locale.language_code).toBe('fr');
-      expect(locale.priority).toBe('high');
+      expect(locale.is_primary).toBe(true);
     });
 
-    it('LocaleVoice should have formality settings with priority/freshness', () => {
+    it('LocaleVoice should have formality settings (no icon/priority/freshness)', () => {
+      // v8.2.0: Removed icon, priority, freshness (YAML v7.11.0 alignment)
       const voice: LocaleVoice = {
         display_name: 'French Voice',
-        icon: '🗣️',
         description: 'Voice characteristics',
         llm_context: 'USE: tone/formality decisions. TRIGGERS: voice, tone. NOT: cultural norms.',
-        priority: 'high',
-        freshness: 'static',
         formality_score: 75,
         default_formality: 'formal',
         default_pronoun: 'vous',
@@ -189,20 +175,18 @@ describe('Type Exports', () => {
 
       expect(voice.formality_score).toBe(75);
       expect(voice.default_pronoun).toBe('vous');
-      expect(voice.priority).toBe('high');
+      expect(voice.default_formality).toBe('formal');
     });
   });
 
-  describe('SEO/GEO Types (v7.8.2: SEOKeyword → SEOKeywordL10n)', () => {
-    it('SEOKeywordL10n should extend StandardNodeProperties with priority/freshness', () => {
+  describe('SEO/GEO Types (v8.2.0)', () => {
+    it('SEOKeywordL10n should extend StandardNodeProperties (no icon/priority/freshness)', () => {
+      // v8.2.0: Removed icon, priority, freshness (YAML v7.11.0 alignment)
       const keyword: SEOKeywordL10n = {
         key: 'creer-qr-code-fr',
         display_name: 'créer qr code',
-        icon: '🔍',
         description: 'Main SEO keyword',
         llm_context: 'USE: SEO targeting. TRIGGERS: keyword research. NOT: GEO seeds.',
-        priority: 'high',
-        freshness: 'daily',
         created_at: new Date(),
         updated_at: new Date(),
         value: 'créer qr code gratuit',
@@ -215,20 +199,18 @@ describe('Type Exports', () => {
       };
 
       expect(keyword.volume).toBe(12100);
-      expect(keyword.priority).toBe('high');
+      expect(keyword.value).toBe('créer qr code gratuit');
     });
 
     // REMOVED v8.0.0: PageMetrics (query GA/PostHog directly with date ranges)
 
-    it('GEOSeedMetrics should track AI citations (v7.8.5)', () => {
+    it('GEOSeedMetrics should track AI citations (v8.2.0 - no icon/priority/freshness)', () => {
+      // v8.2.0: Removed icon, priority, freshness (YAML v7.11.0 alignment)
       const metrics: GEOSeedMetrics = {
         key: 'geometrics-comment-creer-qr-chatgpt-2024-01',
         display_name: 'Citation ChatGPT',
-        icon: '📍',
         description: 'Citation check',
         llm_context: 'USE: for citation tracking. TRIGGERS: cited, AI mention. NOT: SEO metrics.',
-        priority: 'medium',
-        freshness: 'realtime',
         cited: true,
         position: 2,
         sentiment: 'positive',
@@ -241,7 +223,7 @@ describe('Type Exports', () => {
 
       expect(metrics.cited).toBe(true);
       expect(metrics.sentiment).toBe('positive');
-      expect(metrics.priority).toBe('medium');
+      expect(metrics.platform).toBe('chatgpt');
     });
   });
 
@@ -280,15 +262,13 @@ describe('Type Exports', () => {
 
 import type { PagePrompt, BlockPrompt, BlockRules } from '../types/prompts.js';
 
-describe('Prompt Types (v7.2.0)', () => {
+describe('Prompt Types (v8.2.0 - no icon/priority/freshness)', () => {
   it('PagePrompt has required properties', () => {
+    // v8.2.0: Removed icon, priority, freshness (YAML v7.11.0 alignment)
     const prompt: PagePrompt = {
       display_name: 'Pricing Page Prompt v1.0',
-      icon: '📝',
       description: 'Instructions for pricing page generation',
       llm_context: 'USE: orchestration. TRIGGERS: page. NOT: blocks.',
-      priority: 'high',
-      freshness: 'static',
       prompt: '[GENERATE] Create conversion-focused pricing page',
       version: '1.0',
       active: true,
@@ -301,13 +281,11 @@ describe('Prompt Types (v7.2.0)', () => {
   });
 
   it('BlockPrompt has required properties', () => {
+    // v8.2.0: Removed icon, priority, freshness (YAML v7.11.0 alignment)
     const prompt: BlockPrompt = {
       display_name: 'Pricing Hero Prompt v1.0',
-      icon: '📝',
       description: 'Instructions for pricing hero generation',
       llm_context: 'USE: hero generation. TRIGGERS: block hero. NOT: other blocks.',
-      priority: 'high',
-      freshness: 'static',
       prompt: '[GENERATE] Hero highlighting @tier-pro benefits',
       version: '1.0',
       active: true,
@@ -318,13 +296,11 @@ describe('Prompt Types (v7.2.0)', () => {
   });
 
   it('BlockRules has required properties', () => {
+    // v8.2.0: Removed icon, priority, freshness (YAML v7.11.0 alignment)
     const rules: BlockRules = {
       display_name: 'Hero Rules v1.0',
-      icon: '📏',
       description: 'Generation rules for hero block type',
       llm_context: 'USE: rule validation. TRIGGERS: hero rules. NOT: other types.',
-      priority: 'high',
-      freshness: 'static',
       rules: 'Title: action verb. Subtitle: value prop. CTA: urgency.',
       version: '1.0',
       active: true,

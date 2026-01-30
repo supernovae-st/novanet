@@ -178,15 +178,15 @@ describe('Filter System Integration Tests', () => {
         return;
       }
 
+      // v8.2.0: Removed withPriority (YAML v7.11.0 alignment)
       const filter = NovaNetFilter.create()
         .fromProject('qrcode-ai')
-        .withPriority('critical', 'high');
+        .includePages();
 
       const { query, params } = CypherGenerator.generate(filter);
 
       expect(query).toContain('MATCH (root:Project {key: $rootKey})');
-      expect(query).toContain('WHERE');
-      expect(query).toContain('root.priority IN $priorities');
+      expect(query).toContain('HAS_PAGE');
 
       const driver = getDriver();
       const session = driver.session();

@@ -4,14 +4,14 @@
 import { z } from 'zod';
 
 // =============================================================================
-// COMMON ENUMS (v7.1.0)
+// COMMON ENUMS (REMOVED v8.2.0 - YAML v7.11.0 alignment)
 // =============================================================================
 
-export const PrioritySchema = z.enum(['critical', 'high', 'medium', 'low']);
-export const FreshnessSchema = z.enum(['realtime', 'hourly', 'daily', 'static']);
-
-export type Priority = z.infer<typeof PrioritySchema>;
-export type Freshness = z.infer<typeof FreshnessSchema>;
+// REMOVED v8.2.0: Priority and Freshness never implemented at YAML level
+// export const PrioritySchema = z.enum(['critical', 'high', 'medium', 'low']);
+// export const FreshnessSchema = z.enum(['realtime', 'hourly', 'daily', 'static']);
+// export type Priority = z.infer<typeof PrioritySchema>;
+// export type Freshness = z.infer<typeof FreshnessSchema>;
 
 // =============================================================================
 // LOCALE

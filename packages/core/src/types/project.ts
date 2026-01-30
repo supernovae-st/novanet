@@ -3,9 +3,7 @@
 //
 // v7.2.2: BrandL10n merged into ProjectL10n (CTAs, meta, SEO keywords)
 // v7.1.0 STANDARD PROPERTIES:
-//   key, display_name, icon, description, llm_context, priority, freshness, created_at, updated_at
-
-import type { Priority, Freshness } from './locale-knowledge.js';
+//   key, display_name, description, llm_context, created_at, updated_at
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // PROJECT (invariant) - v7.1.0
@@ -15,11 +13,8 @@ export interface Project {
   // Standard properties (v7.1.0)
   key: string;
   display_name: string;
-  icon: string;
   description: string;
   llm_context: string;
-  priority: Priority;
-  freshness: Freshness;
 
   // Project-specific properties
   brand_name: string;
@@ -48,11 +43,8 @@ export interface VoiceTone {
 export interface ProjectL10n {
   // Standard properties (v7.1.0 - L10n nodes don't have key)
   display_name: string;
-  icon: string;
   description: string;
   llm_context: string;
-  priority: Priority;
-  freshness: Freshness;
 
   // v7.1.0: Locale is linked via :FOR_LOCALE relation, not stored as property
 
@@ -108,11 +100,8 @@ export interface BrandIdentity {
   // Standard properties (v7.1.0)
   key: string;
   display_name: string;
-  icon: string;
   description: string;
   llm_context: string;
-  priority: Priority;
-  freshness: Freshness;
 
   // Colors
   color_primary: string;
