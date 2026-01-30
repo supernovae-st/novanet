@@ -1,9 +1,9 @@
 # models/views/complete-graph.yaml
-# Complete graph view showing all 28 nodes and 50 relations
+# Complete graph view showing all 35 nodes and 50 relations
 id: complete-graph
 name: Complete Graph
 description: Full NovaNet graph with all nodes and relations
-version: "8.0.0"
+version: "8.2.0"
 
 root:
   type: Project
@@ -51,36 +51,59 @@ docs:
   title: "Complete Graph View"
   category: overview
   description: |
-    The complete NovaNet graph showing all 28 node types organized into three scopes:
+    The complete NovaNet graph showing all 35 node types organized into three scopes:
     - **Global (15 nodes)**: Locale + 14 LocaleKnowledge nodes, shared across all projects
     - **Shared (6 nodes)**: SEO/GEO nodes, independent of projects
     - **Project (14 nodes)**: Per-project foundation, structure, semantic, and output nodes
 
   layers:
-    - name: Global Layer
-      nodes: [Locale, LocaleIdentity, LocaleVoice, LocaleCulture, LocaleMarket, LocaleLexicon, Expression]
+    # 🌍 GLOBAL SCOPE (15 nodes)
+    - name: Global - Config
+      nodes: [Locale]
       color: purple
-      description: Shared locale configuration and knowledge
+      description: Locale configuration (BCP-47)
 
-    - name: Project Layer
+    - name: Global - Knowledge
+      nodes: [LocaleIdentity, LocaleVoice, LocaleCulture, LocaleCultureReferences, LocaleMarket, LocaleLexicon, LocaleRulesAdaptation, LocaleRulesFormatting, LocaleRulesSlug, Expression, Reference, Metaphor, Constraint, Pattern]
+      color: violet
+      description: 14 Locale Knowledge nodes
+
+    # 📦 PROJECT SCOPE (14 nodes)
+    - name: Project - Foundation
       nodes: [Project, BrandIdentity, ProjectL10n]
       color: blue
       description: Project foundation and branding
 
-    - name: Content Layer
-      nodes: [Page, Block, BlockType, Concept, ConceptL10n]
+    - name: Project - Structure
+      nodes: [Page, Block, BlockType, PageType]
+      color: cyan
+      description: Page and block structure
+
+    - name: Project - Semantic
+      nodes: [Concept, ConceptL10n]
       color: green
-      description: Semantic content structure
+      description: Semantic concepts
 
-    - name: Generation Layer
-      nodes: [PagePrompt, BlockPrompt, BlockRules, PageL10n, BlockL10n]
+    - name: Project - Instruction
+      nodes: [PagePrompt, BlockPrompt, BlockRules]
+      color: yellow
+      description: Generation instructions
+
+    - name: Project - Output
+      nodes: [PageL10n, BlockL10n]
       color: orange
-      description: Prompts and generated outputs
+      description: Generated content outputs
 
-    - name: Mining Layer
-      nodes: [SEOKeywordL10n, SEOKeywordMetrics, SEOMiningRun, GEOSeedL10n, GEOSeedMetrics, GEOMiningRun]
+    # 🎯 SHARED SCOPE (6 nodes)
+    - name: Shared - SEO
+      nodes: [SEOKeywordL10n, SEOKeywordMetrics, SEOMiningRun]
       color: gray
-      description: SEO and GEO mining data
+      description: SEO keyword mining
+
+    - name: Shared - GEO
+      nodes: [GEOSeedL10n, GEOSeedMetrics, GEOMiningRun]
+      color: slate
+      description: GEO question mining
 
   examples:
     - name: Count all nodes by type
