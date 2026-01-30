@@ -10,6 +10,6 @@
  * @see docs/plans/2026-01-30-schema-mode-v2.md Task 2.2
  */
 
-export { ScopeGroupNode, type ScopeGroupData } from './ScopeGroupNode';
-export { SubcategoryGroupNode, type SubcategoryGroupData } from './SubcategoryGroupNode';
-export { SchemaNode, type SchemaNodeData } from './SchemaNode';
+export { ScopeGroupNode, type ScopeGroupData, type ScopeGroupNodeType } from './ScopeGroupNode';
+export { SubcategoryGroupNode, type SubcategoryGroupData, type SubcategoryGroupNodeType } from './SubcategoryGroupNode';
+export { SchemaNode, type SchemaNodeData, type SchemaNodeType } from './SchemaNode';

@@ -16,20 +16,23 @@
  */
 
 import { memo } from 'react';
-import { type NodeProps, Handle, Position } from '@xyflow/react';
+import { type NodeProps, type Node, Handle, Position } from '@xyflow/react';
 import { cn } from '@/lib/utils';
 import type { Scope } from '@novanet/core/types';
 
 /**
  * Data interface for SchemaNode
  */
-export interface SchemaNodeData {
+export interface SchemaNodeData extends Record<string, unknown> {
   nodeType: string;
   label: string;
   description: string;
   scope: Scope;
   subcategory: string;
 }
+
+/** Node type for SchemaNode */
+export type SchemaNodeType = Node<SchemaNodeData, 'schemaNode'>;
 
 /**
  * Scope accent color mapping for left border
@@ -50,7 +53,7 @@ const SCOPE_ACCENT: Record<Scope, string> = {
 export const SchemaNode = memo(function SchemaNode({
   data,
   selected,
-}: NodeProps<SchemaNodeData>) {
+}: NodeProps<SchemaNodeType>) {
   const accentClass = SCOPE_ACCENT[data.scope] || 'border-l-gray-500';
 
   return (
