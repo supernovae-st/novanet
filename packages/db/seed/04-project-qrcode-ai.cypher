@@ -1,13 +1,15 @@
-// NovaNet Project Data v7.2.5 - QRCode-AI Complete Setup
+// NovaNet Project Data v8.2.0 - QRCode-AI Complete Setup
+// YAML v7.11.0 alignment - icon, priority, freshness removed (managed in YAML views)
 //
 // Creates project-specific nodes:
 // - BrandIdentity (invariant)
 // - ProjectL10n (localized identity + CTAs + SEO + target_audience)
 //
 // Removed in v7.2.5: Audience, AudienceL10n, ValuePropL10n, SocialProofL10n
+// Removed in v8.2.0: icon, priority, freshness (now in YAML views)
 //
-// v7.1.0 STANDARD PROPERTIES:
-//   key, display_name, icon, description, llm_context, priority, freshness, created_at, updated_at
+// STANDARD PROPERTIES:
+//   key, display_name, description, llm_context, created_at, updated_at
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // BRAND IDENTITY (invariant - visual/artistic direction)
@@ -18,14 +20,10 @@ CREATE (p)-[:HAS_BRAND_IDENTITY]->(bi:BrandIdentity {
   // 1. IDENTIFICATION
   key: "brand-qrcode-ai",
   display_name: "QR Code AI Brand",
-  icon: "🎨",
   // 2. DOCUMENTATION
   description: "Visual identity and design system for QR Code AI",
   llm_context: "USE: when generating visual content, images, or style decisions. TRIGGERS: brand, colors, fonts, style. NOT: text content (use ProjectL10n).",
-  // 3. CONTEXT MANAGEMENT
-  priority: "high",
-  freshness: "static",
-  // 4. COLORS
+  // 3. COLORS
   color_primary: "#6366F1",
   color_secondary: "#8B5CF6",
   color_accent: "#F59E0B",
@@ -63,14 +61,10 @@ MATCH (p:Project {key: "project-qrcode-ai"}), (l:Locale {key: "en-US"})
 CREATE (p)-[:HAS_L10N]->(pl:ProjectL10n {
   // 1. IDENTIFICATION
   display_name: "QR Code AI",
-  icon: "📱",
   // 2. DOCUMENTATION
   description: "English localization for QR Code AI project identity",
   llm_context: "USE: native English brand messaging. TRIGGERS: en-US project content. NOT: translation.",
-  // 3. CONTEXT MANAGEMENT
-  priority: "critical",
-  freshness: "static",
-  // 4. IDENTITY
+  // 3. IDENTITY
   what_short: "AI-powered QR code generator",
   what_medium: "Create customizable QR codes with built-in analytics and AI design suggestions",
   what_long: "QR Code AI is a comprehensive platform for creating, managing, and tracking QR codes. Generate custom designs, track scans in real-time, and leverage AI to optimize your codes for maximum engagement.",
@@ -104,11 +98,8 @@ CREATE (pl)-[:FOR_LOCALE]->(l);
 MATCH (p:Project {key: "project-qrcode-ai"}), (l:Locale {key: "fr-FR"})
 CREATE (p)-[:HAS_L10N]->(pl:ProjectL10n {
   display_name: "QR Code AI",
-  icon: "📱",
   description: "Localisation française de l'identité QR Code AI",
   llm_context: "USE: messaging de marque français natif. TRIGGERS: fr-FR contenu projet. NOT: traduction.",
-  priority: "critical",
-  freshness: "static",
   what_short: "Générateur de QR codes propulsé par l'IA",
   what_medium: "Créez des QR codes personnalisables avec analytics intégrées et suggestions de design IA",
   what_long: "QR Code AI est une plateforme complète pour créer, gérer et suivre vos QR codes. Générez des designs sur mesure, suivez les scans en temps réel, et utilisez l'IA pour optimiser l'engagement.",

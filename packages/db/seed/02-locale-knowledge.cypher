@@ -1,4 +1,4 @@
-// NovaNet Locale Knowledge Seed v7.1.0
+// NovaNet Locale Knowledge Seed v8.2.0
 //
 // Creates Locale Knowledge nodes for existing locales:
 //   - LocaleIdentity: Script, timezone, encoding
@@ -7,24 +7,18 @@
 //   - LocaleMarket: Demographics, ecommerce
 //   - LocaleLexicon: Vocabulary, idioms
 //
-// v7.1.0 STANDARD PROPERTIES:
-//   llm_context: "USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]."
-//   priority: critical | high | medium | low
-//   freshness: realtime | hourly | daily | static
+// Aligned with YAML v7.11.0 - icon, priority, freshness removed (view-layer only)
 
 // =============================================================================
-// LOCALE IDENTITY - Script & Technical Characteristics (v7.1.0)
+// LOCALE IDENTITY - Script & Technical Characteristics
 // =============================================================================
 
 // en-US Identity
 MATCH (l:Locale {key: "en-US"})
 CREATE (l)-[:HAS_IDENTITY]->(:LocaleIdentity {
   display_name: "American English Identity",
-  icon: "🪪",
   description: "Technical identity characteristics for en-US locale",
   llm_context: "USE: for script/encoding decisions. TRIGGERS: character set, keyboard, encoding. NOT: voice or cultural aspects.",
-  priority: "high",
-  freshness: "static",
   script_code: "Latn",
   script_name: "Latin",
   script_direction: "ltr",
@@ -42,11 +36,8 @@ CREATE (l)-[:HAS_IDENTITY]->(:LocaleIdentity {
 MATCH (l:Locale {key: "fr-FR"})
 CREATE (l)-[:HAS_IDENTITY]->(:LocaleIdentity {
   display_name: "French (France) Identity",
-  icon: "🪪",
   description: "Technical identity characteristics for fr-FR locale",
   llm_context: "USE: for script/encoding decisions. TRIGGERS: accents, diacritics, AZERTY. NOT: voice or cultural aspects.",
-  priority: "high",
-  freshness: "static",
   script_code: "Latn",
   script_name: "Latin",
   script_direction: "ltr",
@@ -65,11 +56,8 @@ CREATE (l)-[:HAS_IDENTITY]->(:LocaleIdentity {
 MATCH (l:Locale {key: "ja-JP"})
 CREATE (l)-[:HAS_IDENTITY]->(:LocaleIdentity {
   display_name: "Japanese Identity",
-  icon: "🪪",
   description: "Technical identity characteristics for ja-JP locale",
   llm_context: "USE: for script/encoding decisions. TRIGGERS: kanji, hiragana, katakana, JIS. NOT: voice or cultural aspects.",
-  priority: "high",
-  freshness: "static",
   script_code: "Jpan",
   script_name: "Japanese (Hiragana + Katakana + Kanji)",
   script_direction: "ltr",
@@ -84,18 +72,15 @@ CREATE (l)-[:HAS_IDENTITY]->(:LocaleIdentity {
 });
 
 // =============================================================================
-// LOCALE VOICE - Formality & Tone (v7.1.0)
+// LOCALE VOICE - Formality & Tone
 // =============================================================================
 
 // en-US Voice
 MATCH (l:Locale {key: "en-US"})
 CREATE (l)-[:HAS_VOICE]->(:LocaleVoice {
   display_name: "American English Voice",
-  icon: "🗣️",
   description: "Voice characteristics for en-US",
   llm_context: "USE: for tone/formality decisions in content. TRIGGERS: casual, direct, contractions, first-name. NOT: script or cultural norms.",
-  priority: "critical",
-  freshness: "static",
   formality_score: 30,
   default_formality: "casual",
   directness_score: 85,
@@ -112,11 +97,8 @@ CREATE (l)-[:HAS_VOICE]->(:LocaleVoice {
 MATCH (l:Locale {key: "fr-FR"})
 CREATE (l)-[:HAS_VOICE]->(:LocaleVoice {
   display_name: "French (France) Voice",
-  icon: "🗣️",
   description: "Voice characteristics for fr-FR",
   llm_context: "USE: for tone/formality decisions. TRIGGERS: vous/tu, formal, indirect, elegant. NOT: script or cultural norms.",
-  priority: "critical",
-  freshness: "static",
   formality_score: 75,
   default_formality: "formal",
   default_pronoun: "vous",
@@ -134,11 +116,8 @@ CREATE (l)-[:HAS_VOICE]->(:LocaleVoice {
 MATCH (l:Locale {key: "ja-JP"})
 CREATE (l)-[:HAS_VOICE]->(:LocaleVoice {
   display_name: "Japanese Voice",
-  icon: "🗣️",
   description: "Voice characteristics for ja-JP",
   llm_context: "USE: for tone/formality decisions. TRIGGERS: keigo, honorifics, humble, indirect, 敬語. NOT: script or cultural norms.",
-  priority: "critical",
-  freshness: "static",
   formality_score: 90,
   default_formality: "formal",
   directness_score: 20,
@@ -152,18 +131,15 @@ CREATE (l)-[:HAS_VOICE]->(:LocaleVoice {
 });
 
 // =============================================================================
-// LOCALE CULTURE - Values & Sensitivities (v7.1.0)
+// LOCALE CULTURE - Values & Sensitivities
 // =============================================================================
 
 // en-US Culture
 MATCH (l:Locale {key: "en-US"})
 CREATE (l)-[:HAS_CULTURE]->(:LocaleCulture {
   display_name: "American Culture",
-  icon: "🎭",
   description: "Cultural norms for en-US",
   llm_context: "USE: for culturally appropriate content. TRIGGERS: values, norms, sensitivities, taboos. NOT: voice/tone or technical aspects.",
-  priority: "high",
-  freshness: "static",
   context_level: "low",
   hierarchy_sensitivity: "low",
   values: ["individuality", "innovation", "success", "optimism"],
@@ -176,11 +152,8 @@ CREATE (l)-[:HAS_CULTURE]->(:LocaleCulture {
 MATCH (l:Locale {key: "fr-FR"})
 CREATE (l)-[:HAS_CULTURE]->(:LocaleCulture {
   display_name: "French Culture",
-  icon: "🎭",
   description: "Cultural norms for fr-FR",
   llm_context: "USE: for culturally appropriate content. TRIGGERS: culture, norms, valeurs, sensibilités. NOT: voice/tone or technical aspects.",
-  priority: "high",
-  freshness: "static",
   context_level: "high",
   hierarchy_sensitivity: "medium",
   values: ["quality", "tradition", "art de vivre", "intellectual debate"],
@@ -193,11 +166,8 @@ CREATE (l)-[:HAS_CULTURE]->(:LocaleCulture {
 MATCH (l:Locale {key: "ja-JP"})
 CREATE (l)-[:HAS_CULTURE]->(:LocaleCulture {
   display_name: "Japanese Culture",
-  icon: "🎭",
   description: "Cultural norms for ja-JP",
   llm_context: "USE: for culturally appropriate content. TRIGGERS: 文化, harmony, hierarchy, wa, 和. NOT: voice/tone or technical aspects.",
-  priority: "high",
-  freshness: "static",
   context_level: "high",
   hierarchy_sensitivity: "high",
   values: ["harmony (wa)", "respect", "group consensus", "attention to detail"],
@@ -207,18 +177,15 @@ CREATE (l)-[:HAS_CULTURE]->(:LocaleCulture {
 });
 
 // =============================================================================
-// LOCALE MARKET - Demographics & E-commerce (v7.1.0)
+// LOCALE MARKET - Demographics & E-commerce
 // =============================================================================
 
 // en-US Market
 MATCH (l:Locale {key: "en-US"})
 CREATE (l)-[:HAS_MARKET]->(:LocaleMarket {
   display_name: "US Market",
-  icon: "📈",
   description: "Market data for en-US",
   llm_context: "USE: for market-specific content (pricing, features). TRIGGERS: market, demographics, ecommerce, payment. NOT: voice or cultural aspects.",
-  priority: "medium",
-  freshness: "daily",
   population: 330000000,
   internet_penetration: 92,
   mobile_penetration: 85,
@@ -232,11 +199,8 @@ CREATE (l)-[:HAS_MARKET]->(:LocaleMarket {
 MATCH (l:Locale {key: "fr-FR"})
 CREATE (l)-[:HAS_MARKET]->(:LocaleMarket {
   display_name: "France Market",
-  icon: "📈",
   description: "Market data for fr-FR",
   llm_context: "USE: for market-specific content. TRIGGERS: marché, démographie, paiement, e-commerce. NOT: voice or cultural aspects.",
-  priority: "medium",
-  freshness: "daily",
   population: 67000000,
   internet_penetration: 93,
   mobile_penetration: 82,
@@ -250,11 +214,8 @@ CREATE (l)-[:HAS_MARKET]->(:LocaleMarket {
 MATCH (l:Locale {key: "ja-JP"})
 CREATE (l)-[:HAS_MARKET]->(:LocaleMarket {
   display_name: "Japan Market",
-  icon: "📈",
   description: "Market data for ja-JP",
   llm_context: "USE: for market-specific content. TRIGGERS: 市場, ecommerce, payment, QR code origin. NOT: voice or cultural aspects.",
-  priority: "medium",
-  freshness: "daily",
   population: 125000000,
   internet_penetration: 94,
   mobile_penetration: 90,
@@ -266,18 +227,15 @@ CREATE (l)-[:HAS_MARKET]->(:LocaleMarket {
 });
 
 // =============================================================================
-// LOCALE LEXICON - Vocabulary & Idioms (v7.1.0)
+// LOCALE LEXICON - Vocabulary & Idioms
 // =============================================================================
 
 // en-US Lexicon
 MATCH (l:Locale {key: "en-US"})
 CREATE (l)-[:HAS_LEXICON]->(:LocaleLexicon {
   display_name: "American English Lexicon",
-  icon: "📖",
   description: "Lexicon rules for en-US",
   llm_context: "USE: for vocabulary/word choice decisions. TRIGGERS: wording, vocabulary, terms, expressions. NOT: tone or grammar.",
-  priority: "high",
-  freshness: "static",
   loanwords_policy: "english_ok",
   register_matching: true,
   style_notes: "Tech terms OK. Action verbs preferred. Short words over long.",
@@ -289,11 +247,8 @@ CREATE (l)-[:HAS_LEXICON]->(:LocaleLexicon {
 MATCH (l:Locale {key: "fr-FR"})
 CREATE (l)-[:HAS_LEXICON]->(:LocaleLexicon {
   display_name: "French Lexicon",
-  icon: "📖",
   description: "Lexicon rules for fr-FR",
   llm_context: "USE: for vocabulary/word choice decisions. TRIGGERS: vocabulaire, termes, expressions, anglicismes. NOT: tone or grammar.",
-  priority: "high",
-  freshness: "static",
   loanwords_policy: "native_only",
   register_matching: true,
   style_notes: "Prefer native terms. Avoid anglicisms when French equivalent exists.",
@@ -305,11 +260,8 @@ CREATE (l)-[:HAS_LEXICON]->(:LocaleLexicon {
 MATCH (l:Locale {key: "ja-JP"})
 CREATE (l)-[:HAS_LEXICON]->(:LocaleLexicon {
   display_name: "Japanese Lexicon",
-  icon: "📖",
   description: "Lexicon rules for ja-JP",
   llm_context: "USE: for vocabulary/word choice decisions. TRIGGERS: 語彙, katakana, loanwords, 用語. NOT: tone or grammar.",
-  priority: "high",
-  freshness: "static",
   loanwords_policy: "mixed",
   register_matching: true,
   style_notes: "Mix Japanese + English loanwords (katakana). Tech terms often in English.",
@@ -318,17 +270,14 @@ CREATE (l)-[:HAS_LEXICON]->(:LocaleLexicon {
 });
 
 // =============================================================================
-// SAMPLE EXPRESSIONS (for fr-FR Lexicon) (v7.1.0)
+// SAMPLE EXPRESSIONS (for fr-FR Lexicon)
 // =============================================================================
 
 MATCH (l:Locale {key: "fr-FR"})-[:HAS_LEXICON]->(ll:LocaleLexicon)
 CREATE (ll)-[:HAS_EXPRESSION]->(:Expression {
   display_name: "C'est parti !",
-  icon: "💬",
   description: "Expression for action semantic field",
   llm_context: "USE: for CTAs and action buttons. TRIGGERS: action, go, start, commencer. NOT: formal contexts.",
-  priority: "medium",
-  freshness: "static",
   semantic_field: "success",
   intention: "encouragement",
   text: "C'est parti !",
@@ -342,11 +291,8 @@ CREATE (ll)-[:HAS_EXPRESSION]->(:Expression {
 MATCH (l:Locale {key: "fr-FR"})-[:HAS_LEXICON]->(ll:LocaleLexicon)
 CREATE (ll)-[:HAS_EXPRESSION]->(:Expression {
   display_name: "En un clin d'œil",
-  icon: "💬",
   description: "Expression for speed semantic field",
   llm_context: "USE: to emphasize quick processes. TRIGGERS: fast, quick, instant, rapide. NOT: formal legal contexts.",
-  priority: "medium",
-  freshness: "static",
   semantic_field: "speed",
   intention: "reassurance",
   text: "En un clin d'œil",
@@ -360,11 +306,8 @@ CREATE (ll)-[:HAS_EXPRESSION]->(:Expression {
 MATCH (l:Locale {key: "fr-FR"})-[:HAS_LEXICON]->(ll:LocaleLexicon)
 CREATE (ll)-[:HAS_EXPRESSION]->(:Expression {
   display_name: "Sans prise de tête",
-  icon: "💬",
   description: "Expression for simplicity semantic field",
   llm_context: "USE: to emphasize ease of use. TRIGGERS: easy, simple, no hassle, facile. NOT: formal or professional contexts.",
-  priority: "medium",
-  freshness: "static",
   semantic_field: "simplicity",
   intention: "reassurance",
   text: "Sans prise de tête",
