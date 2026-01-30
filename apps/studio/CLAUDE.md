@@ -125,7 +125,7 @@ npm test             # Tests
 
 ---
 
-## Neo4j Schema (v7.2.3)
+## Neo4j Schema (v8.1.0)
 
 ### Node Types (33 across 7 categories)
 
@@ -163,13 +163,13 @@ npm test             # Tests
 
 Types are imported via path alias:
 ```typescript
-import { Project, Concept, Page, Locale } from '@novanet-core/types';
-import type { NodeType, NodeCategory, RelationType } from '@novanet-core/types';
+import { Project, Concept, Page, Locale } from '@novanet/core/types';
+import type { NodeType, NodeCategory, RelationType } from '@novanet/core/types';
 ```
 
 Path configured in tsconfig.json:
 ```json
-"@novanet-core/*": ["../novanet-core/src/*"]
+"@novanet/core/*": ["../../packages/core/src/*"]
 ```
 
 ---

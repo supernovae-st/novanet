@@ -10,8 +10,8 @@ const nextConfig: NextConfig = {
   // Turbopack configuration (Next.js 16+)
   turbopack: {},
 
-  // Transpile novanet-core for imports
-  transpilePackages: ['novanet-core'],
+  // Transpile @novanet/core for imports
+  transpilePackages: ['@novanet/core'],
 
   // Webpack configuration for Neo4j driver
   webpack: (config, { isServer }) => {

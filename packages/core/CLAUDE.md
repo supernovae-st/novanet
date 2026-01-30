@@ -29,13 +29,13 @@ For complete graph schema, node categories, and relations, see: **`models/_index
 
 ```bash
 # From monorepo root:
-npm run infra:up              # Start Neo4j
-cd core/neo4j && ./seed.sh    # Run seed (constraints + data)
+pnpm infra:up              # Start Neo4j
+pnpm infra:seed    # Run seed (constraints + data)
 
 # Reset database
-npm run infra:down
+pnpm infra:down
 docker volume rm novanet_neo4j_data
-npm run infra:up && cd core/neo4j && ./seed.sh
+pnpm infra:up && pnpm infra:seed
 
 # Cypher shell
 docker exec -it novanet-neo4j cypher-shell -u neo4j -p novanetpassword
@@ -198,7 +198,7 @@ Project-specific skills in `.claude/skills/`:
 
 ```bash
 # Start dev environment (from monorepo root)
-npm run infra:up && cd core/neo4j && ./seed.sh
+pnpm infra:up && pnpm infra:seed
 
 # Test MCP connection
 # Use: mcp__neo4j__get_neo4j_schema(sample_size=100)

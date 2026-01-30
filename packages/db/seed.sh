@@ -3,8 +3,8 @@
 # Exécute tous les fichiers .cypher dans l'ordre
 #
 # Usage (from monorepo root):
-#   1. Start Neo4j: npm run infra:up
-#   2. Run seed:    cd core/neo4j && ./seed.sh
+#   1. Start Neo4j: pnpm infra:up
+#   2. Run seed:    pnpm infra:seed
 
 set -e
 
@@ -27,7 +27,7 @@ echo ""
 # Vérifier que Neo4j est lancé
 echo -e "${YELLOW}[1/3] Vérification de Neo4j...${NC}"
 if ! docker ps --format '{{.Names}}' | grep -q "^${CONTAINER}$"; then
-    echo -e "${RED}✗ Neo4j n'est pas lancé. Lance 'npm run infra:up' depuis la racine du monorepo.${NC}"
+    echo -e "${RED}✗ Neo4j n'est pas lancé. Lance 'pnpm infra:up' depuis la racine du monorepo.${NC}"
     exit 1
 fi
 echo -e "${GREEN}✓ Neo4j est lancé${NC}"
