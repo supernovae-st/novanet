@@ -1,6 +1,6 @@
 <div align="center">
 
-# NovaNet
+# 🪽 NovaNet
 
 **Native content generation engine powered by Neo4j knowledge graphs**
 
