@@ -27,8 +27,8 @@ test.describe('DatabaseInfoPanel - Multi-select Query Execution', () => {
     const labelsContainer = page.locator('[data-testid="node-labels-container"]');
     await expect(labelsContainer).toBeVisible({ timeout: 30000 });
 
-    // Click the first available label button
-    const firstLabel = labelsContainer.locator('button').first();
+    // Click the first node type button (has data-selected attribute, not category expand buttons)
+    const firstLabel = labelsContainer.locator('button[data-selected]').first();
     await expect(firstLabel).toBeVisible();
 
     // Click to select
@@ -43,8 +43,8 @@ test.describe('DatabaseInfoPanel - Multi-select Query Execution', () => {
     const labelsContainer = page.locator('[data-testid="node-labels-container"]');
     await expect(labelsContainer).toBeVisible({ timeout: 30000 });
 
-    // Click the first label to select it
-    const firstLabel = labelsContainer.locator('button').first();
+    // Click the first node type button (has data-selected attribute, not category expand buttons)
+    const firstLabel = labelsContainer.locator('button[data-selected]').first();
     await expect(firstLabel).toBeVisible();
     await firstLabel.click();
     await expect(firstLabel).toHaveAttribute('data-selected', 'true');
@@ -78,20 +78,21 @@ test.describe('DatabaseInfoPanel - Multi-select Query Execution', () => {
     const labelsContainer = page.locator('[data-testid="node-labels-container"]');
     await expect(labelsContainer).toBeVisible({ timeout: 30000 });
 
-    const buttons = labelsContainer.locator('button');
-    const buttonCount = await buttons.count();
+    // Get only node type buttons (have data-selected attribute), not category expand buttons
+    const nodeTypeButtons = labelsContainer.locator('button[data-selected]');
+    const buttonCount = await nodeTypeButtons.count();
 
     if (buttonCount >= 2) {
       // Select first label
-      await buttons.nth(0).click();
-      await expect(buttons.nth(0)).toHaveAttribute('data-selected', 'true');
+      await nodeTypeButtons.nth(0).click();
+      await expect(nodeTypeButtons.nth(0)).toHaveAttribute('data-selected', 'true');
 
       // Select second label (should be additive, not replace)
-      await buttons.nth(1).click();
-      await expect(buttons.nth(1)).toHaveAttribute('data-selected', 'true');
+      await nodeTypeButtons.nth(1).click();
+      await expect(nodeTypeButtons.nth(1)).toHaveAttribute('data-selected', 'true');
 
       // First should still be selected
-      await expect(buttons.nth(0)).toHaveAttribute('data-selected', 'true');
+      await expect(nodeTypeButtons.nth(0)).toHaveAttribute('data-selected', 'true');
     }
   });
 
@@ -100,7 +101,8 @@ test.describe('DatabaseInfoPanel - Multi-select Query Execution', () => {
     const labelsContainer = page.locator('[data-testid="node-labels-container"]');
     await expect(labelsContainer).toBeVisible({ timeout: 30000 });
 
-    const firstLabel = labelsContainer.locator('button').first();
+    // Get only node type buttons (have data-selected attribute), not category expand buttons
+    const firstLabel = labelsContainer.locator('button[data-selected]').first();
     await expect(firstLabel).toBeVisible();
 
     // Select
