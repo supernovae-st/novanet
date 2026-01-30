@@ -38,11 +38,18 @@ Add a new relationship type between nodes in the NovaNet ontology.
 
 | Pattern | Use For | Examples |
 |---------|---------|----------|
-| `HAS_*` | Ownership/containment | HAS_PAGE, HAS_BLOCK, HAS_L10N |
-| `*_OF` | Inverse of HAS_* | L10N_OF, BLOCK_OF |
+| `HAS_*` | Ownership/containment | HAS_PAGE, HAS_BLOCK, HAS_CONCEPT |
+| `HAS_L10N` | Localized content (human-curated) | Concept→ConceptL10n |
+| `HAS_OUTPUT` | Localized content (LLM-generated) | Page→PageL10n |
+| `*_OF` | Inverse of HAS_* | L10N_OF, BLOCK_OF, OUTPUT_OF |
 | `FOR_*` | Target association | FOR_LOCALE |
 | `USES_*` | Reference/usage | USES_CONCEPT |
 | `TARGETS_*` | Cross-scope targeting | TARGETS_SEO, TARGETS_GEO |
+
+## Naming Requirements
+
+- **Relation names**: UPPER_SNAKE_CASE (e.g., `HAS_HUMOR`, `FOR_LOCALE`)
+- **Node names in from/to**: PascalCase (e.g., `LocaleLexicon`, `ConceptL10n`)
 
 ## Example
 

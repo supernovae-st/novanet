@@ -34,6 +34,12 @@ Modify an existing node type in the NovaNet ontology.
    - Create migration in `packages/db/migrations/`
    - Update seed files if needed
 
+## Naming Requirements
+
+- **Node names**: PascalCase (e.g., `Concept`, `LocaleVoice`)
+- **Property names**: snake_case (e.g., `display_name`, `llm_context`)
+- **New properties**: Follow existing patterns in the node's YAML
+
 ## Safety Rules
 
 - **NEVER** remove properties without explicit confirmation
