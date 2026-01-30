@@ -136,11 +136,8 @@ node:
     data:
       key: "fr-FR"
       display_name: "French (France)"
-      icon: "🇫🇷"
       description: "French locale for France market"
       llm_context: "USE: for French content targeting France. TRIGGERS: fr-FR, français, france. NOT: Quebec French (use fr-CA)."
-      priority: "high"
-      freshness: "static"
       language_code: "fr"
       country_code: "FR"
       name_native: "Français (France)"

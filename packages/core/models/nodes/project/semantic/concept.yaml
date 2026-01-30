@@ -148,11 +148,8 @@ node:
     data:
       key: "action-create-qr"
       display_name: "Create QR Code"
-      icon: "💡"
       description: "Action of creating a QR code from URL, text, or contact"
       llm_context: "USE: when user wants to create/generate a new QR code. TRIGGERS: create, generate, make, créer, erstellen, 作成. NOT: viewing or editing existing codes."
-      priority: "critical"
-      freshness: "static"
       feature_category: "core"
       feature_priority: 1
       is_core: true

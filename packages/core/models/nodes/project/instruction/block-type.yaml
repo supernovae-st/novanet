@@ -92,11 +92,8 @@ node:
     data:
       key: "blocktype-hero"
       display_name: "Hero Section"
-      icon: "📋"
       description: "Full-width hero with title, subtitle, and CTA"
       llm_context: "USE: generate attention-grabbing hero sections. TRIGGERS: hero, header, banner, above-fold. NOT: body or footer content."
-      priority: "high"
-      freshness: "static"
       category: "header"
       structure: "schemas/hero.json"
       rules: "Title: action verb. Subtitle: value prop. CTA: urgency."

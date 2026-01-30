@@ -173,11 +173,8 @@ node:
 
   example:
     display_name: "Creer un QR Code"
-    icon: "💡"
     description: "Action de creer un QR code a partir d'une URL, texte ou contact"
     llm_context: "USE: native French title/definition for generation. TRIGGERS: fr-FR content needed. NOT: Quebec French."
-    priority: "critical"
-    freshness: "static"
     title: "Creer un QR Code"
     definition: "Generer un QR code a partir d'une URL, texte ou contact."
     purpose: "Convertir une information en format scannable par smartphone."

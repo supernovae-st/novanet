@@ -173,11 +173,8 @@ node:
     data:
       key: "page-pricing"
       display_name: "Pricing Page"
-      icon: "📄"
       description: "Main pricing page with tier comparison and CTAs"
       llm_context: "USE: orchestrate pricing page generation. TRIGGERS: pricing, tarifs, plans, abonnement. NOT: individual block generation."
-      priority: "critical"
-      freshness: "static"
       instructions: "[GENERATE] Create conversion-focused pricing page comparing tiers"
 
     cypher: |

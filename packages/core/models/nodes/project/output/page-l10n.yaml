@@ -146,7 +146,6 @@ node:
 
   example:
     display_name: "Page Tarifs (fr-FR)"
-    icon: "📃"
     description: "Page tarifs assemblée pour le marché français"
     llm_context: "USE: display assembled page content. TRIGGERS: pricing page, fr-FR output. NOT: regeneration trigger."
     assembled:

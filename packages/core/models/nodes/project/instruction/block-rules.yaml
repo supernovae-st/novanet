@@ -91,11 +91,8 @@ node:
 
   example:
     display_name: "Hero Rules v1.0"
-    icon: "📏"
     description: "Generation rules for hero block type"
     llm_context: "USE: validate hero generation. TRIGGERS: blocktype-hero rules. NOT: other block types."
-    priority: "high"
-    freshness: "static"
     rules: "Title: action verb, max 8 words. Subtitle: value prop, max 15 words. CTA: urgency, single action."
     version: "1.0"
     active: true
