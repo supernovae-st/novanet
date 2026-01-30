@@ -1,6 +1,7 @@
 // src/filters/types.ts
-// v8.1.0: NodeType and NodeCategory imported from single source of truth
-import type { Priority, Freshness } from '../types/index.js';
+// v8.2.0: NodeType and NodeCategory imported from single source of truth
+// REMOVED v8.2.0: Priority and Freshness no longer exist in types (YAML v7.11.0 alignment)
+// import type { Priority, Freshness } from '../types/index.js';
 import { NODE_CATEGORIES, type NodeType, type NodeCategory } from '../types/nodes.js';
 
 // Re-export for backwards compatibility
@@ -21,9 +22,9 @@ export interface FilterCriteria {
   locale?: string;
   localeFamily?: string;
 
-  // Property filtering
-  priority?: Priority[];
-  freshness?: Freshness[];
+  // Property filtering (v8.2.0: priority/freshness removed - YAML v7.11.0 alignment)
+  // priority?: Priority[];
+  // freshness?: Freshness[];
   active?: boolean;
 
   // Search

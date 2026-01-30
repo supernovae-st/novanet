@@ -159,15 +159,15 @@ export class CypherGenerator {
     // 3. WHERE clauses
     const whereConditions: string[] = [];
 
-    if (criteria.filters.priority?.length) {
-      whereConditions.push('root.priority IN $priorities');
-      params.priorities = criteria.filters.priority;
-    }
-
-    if (criteria.filters.freshness?.length) {
-      whereConditions.push('root.freshness IN $freshness');
-      params.freshness = criteria.filters.freshness;
-    }
+    // REMOVED v8.2.0: priority and freshness filtering (YAML v7.11.0 alignment)
+    // if (criteria.filters.priority?.length) {
+    //   whereConditions.push('root.priority IN $priorities');
+    //   params.priorities = criteria.filters.priority;
+    // }
+    // if (criteria.filters.freshness?.length) {
+    //   whereConditions.push('root.freshness IN $freshness');
+    //   params.freshness = criteria.filters.freshness;
+    // }
 
     if (criteria.filters.locale) {
       params.locale = criteria.filters.locale;

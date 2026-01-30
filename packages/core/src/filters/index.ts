@@ -30,4 +30,7 @@ export type {
   NodeType,
   RelationDirection,
   ViewRegistry,
+  ViewRegistryEntry,
+  ViewCategory,
+  ViewCategoryGroup,
 } from './types.js';

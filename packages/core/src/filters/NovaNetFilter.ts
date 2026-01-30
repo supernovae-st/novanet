@@ -5,7 +5,8 @@ import type {
   FilterCriteria,
   IncludeRule,
 } from './types.js';
-import type { Priority, Freshness } from '../types/index.js';
+// REMOVED v8.2.0: Priority and Freshness no longer exist in types (YAML v7.11.0 alignment)
+// import type { Priority, Freshness } from '../types/index.js';
 
 /**
  * State for the NovaNetFilter builder.
@@ -470,23 +471,8 @@ export class NovaNetFilter {
     return this;
   }
 
-  /**
-   * Filters by priority levels.
-   * @param priorities - One or more priority levels
-   */
-  withPriority(...priorities: Priority[]): this {
-    this.state.filters.priority = priorities;
-    return this;
-  }
-
-  /**
-   * Filters by freshness levels.
-   * @param freshness - One or more freshness levels
-   */
-  withFreshness(...freshness: Freshness[]): this {
-    this.state.filters.freshness = freshness;
-    return this;
-  }
+  // REMOVED v8.2.0: withPriority and withFreshness (YAML v7.11.0 alignment)
+  // Priority/Freshness fields never implemented at YAML level
 
   /**
    * Filters by node categories.

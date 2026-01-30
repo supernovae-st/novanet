@@ -212,17 +212,9 @@ describe('NovaNetFilter', () => {
       expect(criteria.filters.locale).toBe('fr-FR');
     });
 
-    it('withPriority() sets priority filter', () => {
-      const filter = NovaNetFilter.create().withPriority('critical', 'high');
-      const criteria = filter.getCriteria();
-      expect(criteria.filters.priority).toEqual(['critical', 'high']);
-    });
-
-    it('withFreshness() sets freshness filter', () => {
-      const filter = NovaNetFilter.create().withFreshness('static', 'daily');
-      const criteria = filter.getCriteria();
-      expect(criteria.filters.freshness).toEqual(['static', 'daily']);
-    });
+    // REMOVED v8.2.0: withPriority and withFreshness tests (YAML v7.11.0 alignment)
+    // it('withPriority() sets priority filter', () => { ... });
+    // it('withFreshness() sets freshness filter', () => { ... });
 
     it('byCategory() sets category filter', () => {
       const filter = NovaNetFilter.create().byCategory('project', 'content');
@@ -264,13 +256,13 @@ describe('NovaNetFilter', () => {
 
   describe('chaining', () => {
     it('supports fluent chaining of multiple methods', () => {
+      // v8.2.0: Removed withPriority (YAML v7.11.0 alignment)
       const filter = NovaNetFilter.create()
         .fromPage('page-pricing')
         .includeBlocks()
         .includeConcepts({ spreading: true })
         .includePrompts({ activeOnly: true })
         .forLocale('fr-FR')
-        .withPriority('critical', 'high')
         .maxDepth(2);
 
       const criteria = filter.getCriteria();
@@ -278,7 +270,6 @@ describe('NovaNetFilter', () => {
       expect(criteria.root).toEqual({ type: 'Page', key: 'page-pricing' });
       expect(criteria.includes).toHaveLength(3);
       expect(criteria.filters.locale).toBe('fr-FR');
-      expect(criteria.filters.priority).toEqual(['critical', 'high']);
       expect(criteria.filters.maxDepth).toBe(2);
     });
   });
@@ -316,27 +307,9 @@ describe('CypherGenerator', () => {
       expect(result.params.locale).toBe('fr-FR');
     });
 
-    it('generates WHERE for priority filter with $priorities param', () => {
-      const filter = NovaNetFilter.create()
-        .fromPage('page-pricing')
-        .withPriority('critical', 'high');
-      const result = CypherGenerator.generate(filter);
-
-      expect(result.query).toContain('WHERE');
-      expect(result.query).toContain('root.priority IN $priorities');
-      expect(result.params.priorities).toEqual(['critical', 'high']);
-    });
-
-    it('generates WHERE for freshness filter with $freshness param', () => {
-      const filter = NovaNetFilter.create()
-        .fromPage('page-pricing')
-        .withFreshness('static', 'daily');
-      const result = CypherGenerator.generate(filter);
-
-      expect(result.query).toContain('WHERE');
-      expect(result.query).toContain('root.freshness IN $freshness');
-      expect(result.params.freshness).toEqual(['static', 'daily']);
-    });
+    // REMOVED v8.2.0: priority and freshness WHERE clause tests (YAML v7.11.0 alignment)
+    // it('generates WHERE for priority filter with $priorities param', () => { ... });
+    // it('generates WHERE for freshness filter with $freshness param', () => { ... });
 
     it('generates WHERE for byTypes filter', () => {
       const filter = NovaNetFilter.create()
@@ -483,13 +456,13 @@ describe('CypherGenerator', () => {
 
   describe('complex queries', () => {
     it('generates full page-generation-context query', () => {
+      // v8.2.0: Removed withPriority (YAML v7.11.0 alignment)
       const filter = NovaNetFilter.create()
         .fromPage('page-pricing')
         .includeBlocks()
         .includeConcepts({ spreading: true })
         .includePrompts({ activeOnly: true })
-        .forLocale('fr-FR')
-        .withPriority('critical', 'high');
+        .forLocale('fr-FR');
 
       const result = CypherGenerator.generate(filter);
 
@@ -505,16 +478,12 @@ describe('CypherGenerator', () => {
       // Should have spreading activation
       expect(result.query).toContain('SEMANTIC_LINK');
 
-      // Should have WHERE
-      expect(result.query).toContain('WHERE');
-
       // Should have RETURN
       expect(result.query).toContain('RETURN');
 
       // Should have all params
       expect(result.params.rootKey).toBe('page-pricing');
       expect(result.params.locale).toBe('fr-FR');
-      expect(result.params.priorities).toEqual(['critical', 'high']);
     });
 
     it('generates locale knowledge query', () => {
@@ -564,7 +533,7 @@ describe('ViewLoader', () => {
       const view = await ViewLoader.loadView('page-generation-context', viewsDir);
 
       expect(view.filters).toBeDefined();
-      expect(view.filters?.priority).toEqual(['critical', 'high', 'medium']);
+      // v8.2.0: priority removed from YAML views (YAML v7.11.0 alignment)
       expect(view.filters?.locale).toBe('$locale');
     });
 
@@ -590,13 +559,8 @@ describe('ViewLoader', () => {
       expect(criteria.filters.locale).toBe('fr-FR');
     });
 
-    it('applies priority filter from view definition', async () => {
-      const view = await ViewLoader.loadView('page-generation-context', viewsDir);
-      const filter = ViewLoader.toFilter(view, { key: 'page-pricing' });
-
-      const criteria = filter.getCriteria();
-      expect(criteria.filters.priority).toEqual(['critical', 'high', 'medium']);
-    });
+    // REMOVED v8.2.0: priority filter from view definition test (YAML v7.11.0 alignment)
+    // it('applies priority filter from view definition', async () => { ... });
 
     it('applies include rules from view definition', async () => {
       const view = await ViewLoader.loadView('page-generation-context', viewsDir);

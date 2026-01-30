@@ -1,4 +1,10 @@
-// NovaNet Core Types v8.1.0 - Nodable Project Architecture
+// NovaNet Core Types v8.2.0 - Nodable Project Architecture
+//
+// v8.2.0 CHANGES (YAML v7.11.0 alignment):
+//   - REMOVED: icon, priority, freshness from all interfaces
+//   - REMOVED: Priority, Freshness type definitions
+//   - UPDATED: StandardNodeProperties (6 props instead of 9)
+//   - NOTE: Use NODE_ICONS config for icon display instead
 //
 // v8.0.0 CHANGES:
 //   - ADDED: anchor_type property to LinksToProps (exact_match | partial_match | branded | generic)
@@ -15,7 +21,6 @@
 //   - ADDED: version, published_at, replaced_at to BlockL10n, PageL10n (versioning)
 //   - ADDED: PREVIOUS_VERSION relation for L10n history chains
 //   - REMOVED: PageMetrics (query GA/PostHog with date ranges instead)
-//   - NOTE: priority/freshness/icon deprecated in YAML but kept in TS for compatibility
 //
 // v7.10.0 CHANGES:
 //   - ADDED: PageType (mirrors BlockType pattern: Page -[:OF_TYPE]-> PageType)
@@ -37,14 +42,11 @@
 //   - ADDED: EmbeddableNode interface for vector search support
 //   - UPDATED: Concept, ConceptL10n, Page to include embedding properties
 //
-// v7.1.0 STANDARD PROPERTIES (all nodes):
+// v8.2.0 STANDARD PROPERTIES (all nodes):
 //   key: string           - Unique identifier (with semantic prefix)
 //   display_name: string  - Human-readable name
-//   icon: string          - Emoji icon
 //   description: string   - Short description
 //   llm_context: string   - "USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]."
-//   priority: string      - critical | high | medium | low
-//   freshness: string     - realtime | hourly | daily | static
 //   created_at: datetime
 //   updated_at: datetime
 
@@ -67,22 +69,25 @@ export {
 // CONTEXT MANAGEMENT TYPES (v7.1.0)
 // =============================================================================
 
-export type { Priority, Freshness } from './locale-knowledge.js';
+// REMOVED v8.2.0: Priority and Freshness types (YAML v7.11.0 alignment)
+// export type { Priority, Freshness } from './locale-knowledge.js';
 
 // =============================================================================
 // STANDARD PROPERTIES BASE
 // =============================================================================
 
-import type { Priority, Freshness } from './locale-knowledge.js';
+// REMOVED v8.2.0: Priority and Freshness types no longer needed
+// import type { Priority, Freshness } from './locale-knowledge.js';
 
+/**
+ * Standard properties for all nodes (v8.2.0 - YAML v7.11.0 aligned)
+ * REMOVED: icon, priority, freshness (presentation layer / YAGNI)
+ */
 export interface StandardNodeProperties {
   key: string;
   display_name: string;
-  icon: string;
   description: string;
   llm_context: string;
-  priority: Priority;
-  freshness: Freshness;
   created_at: Date;
   updated_at: Date;
 }
@@ -146,13 +151,10 @@ export interface Concept extends StandardNodeProperties, EmbeddableNode {
 }
 
 export interface ConceptL10n extends EmbeddableNode {
-  // Standard properties (v7.1.0 - L10n nodes don't have key)
+  // Standard properties (v8.2.0 - L10n nodes don't have key, no icon/priority/freshness)
   display_name: string;
-  icon: string;
   description: string;
   llm_context: string;
-  priority: Priority;
-  freshness: Freshness;
 
   // ConceptL10n-specific
   title: string;
@@ -217,13 +219,10 @@ export interface PageType extends StandardNodeProperties {
 }
 
 export interface PageL10n {
-  // Standard properties (v7.6.0 - L10n nodes don't have key)
+  // Standard properties (v8.2.0 - L10n nodes don't have key, no icon/priority/freshness)
   display_name: string;
-  icon: string;
   description: string;
   llm_context: string;
-  priority: Priority;
-  freshness: Freshness;
 
   // PageL10n-specific (v7.6.0: renamed from PageOutput)
   assembled: Record<string, unknown>;
@@ -263,13 +262,10 @@ export interface BlockType extends StandardNodeProperties {
 export type Block = StandardNodeProperties;
 
 export interface BlockL10n {
-  // Standard properties (v7.6.0 - L10n nodes don't have key)
+  // Standard properties (v8.2.0 - L10n nodes don't have key, no icon/priority/freshness)
   display_name: string;
-  icon: string;
   description: string;
   llm_context: string;
-  priority: Priority;
-  freshness: Freshness;
 
   // BlockL10n-specific (v7.6.0: renamed from BlockOutput)
   generated: Record<string, unknown>;
@@ -331,14 +327,11 @@ export interface SEOKeywordL10n extends StandardNodeProperties {
  * Unified metrics pattern: SEOKeywordL10n -[:HAS_METRICS]-> SEOKeywordMetrics
  */
 export interface SEOKeywordMetrics {
-  // Standard properties (v7.8.5)
+  // Standard properties (v8.2.0 - no icon/priority/freshness)
   key: string;             // "seometrics-creer-qr-code-fr-2024-01-15"
   display_name: string;    // "créer qr code - 2024-01-15"
-  icon: string;            // "📸"
   description: string;     // "Metrics snapshot for tracking"
   llm_context: string;     // Not used in spreading activation
-  priority: Priority;
-  freshness: Freshness;
 
   // SEOKeywordMetrics-specific (v7.8.5)
   observed_at: Date;       // When these metrics were observed
@@ -353,13 +346,10 @@ export interface SEOKeywordMetrics {
 }
 
 export interface SEOMiningRun {
-  // Standard properties (v7.1.0 - no key, UUID-identified)
+  // Standard properties (v8.2.0 - no key, UUID-identified, no icon/priority/freshness)
   display_name: string;    // "SEO Mining 2024-01-15 10:00"
-  icon: string;            // "⚙️"
   description: string;     // "Mining run for keyword variations"
   llm_context: string;     // "USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]."
-  priority: Priority;
-  freshness: Freshness;
 
   // SEOMiningRun-specific
   status: 'running' | 'completed' | 'failed';
@@ -396,14 +386,11 @@ export interface GEOSeedL10n extends StandardNodeProperties {
  * Unified metrics pattern: GEOSeedL10n -[:HAS_METRICS]-> GEOSeedMetrics
  */
 export interface GEOSeedMetrics {
-  // Standard properties (v7.8.5)
+  // Standard properties (v8.2.0 - no icon/priority/freshness)
   key: string;             // "geometrics-comment-creer-qr-perplexity-2024-01-15"
   display_name: string;    // "Perplexity - Comment créer QR - 2024-01-15"
-  icon: string;            // "📑"
   description: string;     // "Citation observation for GEO seed"
   llm_context: string;     // Not used in spreading activation
-  priority: Priority;
-  freshness: Freshness;
 
   // GEOSeedMetrics-specific (v7.8.5)
   observed_at: Date;       // When this observation was made
@@ -420,13 +407,10 @@ export interface GEOSeedMetrics {
 }
 
 export interface GEOMiningRun {
-  // Standard properties (v7.1.0 - no key, UUID-identified)
+  // Standard properties (v8.2.0 - no key, UUID-identified, no icon/priority/freshness)
   display_name: string;    // "GEO Mining 2024-01-15 10:00"
-  icon: string;            // "⚙️"
   description: string;     // "Mining run for GEO reformulations"
   llm_context: string;     // "USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]."
-  priority: Priority;
-  freshness: Freshness;
 
   // GEOMiningRun-specific
   status: 'running' | 'completed' | 'failed';

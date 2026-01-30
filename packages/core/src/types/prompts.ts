@@ -6,8 +6,6 @@
 // - BlockPrompt: Sub-agent instructions (extracted from Block.instructions)
 // - BlockRules: Template rules (extracted from BlockType.rules)
 
-import type { Priority, Freshness } from './locale-knowledge.js';
-
 // ═══════════════════════════════════════════════════════════════════════════════
 // COMMON PROMPT PROPERTIES
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -15,13 +13,8 @@ import type { Priority, Freshness } from './locale-knowledge.js';
 interface PromptBase {
   // Standard properties (v7.1.0 - no key, linked via :HAS_PROMPT/:HAS_RULES)
   display_name: string;      // "Pricing Hero Prompt v1.0"
-  icon: string;              // "📝"
   description: string;       // "Instructions for pricing hero generation"
   llm_context: string;       // "USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]."
-
-  // Context management (v7.1.0)
-  priority: Priority;
-  freshness: Freshness;
 
   // Versioning (v7.2.0)
   version: string;           // "1.0", "1.1", "2.0"
