@@ -1,4 +1,4 @@
-// NovaNet Constraints v7.8.5
+// NovaNet Constraints v8.2.0
 //
 // Schema definitions for Neo4j graph database.
 // Uses IF NOT EXISTS for idempotent execution.
@@ -36,8 +36,7 @@ CREATE INDEX projectl10n_updated IF NOT EXISTS FOR (pl:ProjectL10n) ON (pl.updat
 
 CREATE CONSTRAINT page_key IF NOT EXISTS FOR (p:Page) REQUIRE p.key IS UNIQUE;
 CREATE INDEX po_date IF NOT EXISTS FOR (po:PageL10n) ON (po.assembled_at);
-CREATE INDEX pm_date IF NOT EXISTS FOR (pm:PageMetrics) ON (pm.date);
-// v7.8.5: PageL10n replaces PageOutput
+// v8.1.0 REMOVED: PageMetrics (YAGNI - no time-series metrics needed)
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // BLOCK STRUCTURE
