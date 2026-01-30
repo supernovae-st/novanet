@@ -1,6 +1,8 @@
 // packages/core/src/graph/subcategories.ts
 // NODE_SUBCATEGORIES mapping all 35 node types to their subcategories
-// v1.0.0
+// AUTO-GENERATED from models/nodes/ folder structure
+// Generated: 2026-01-30
+// Run: npm run generate:subcategories
 
 import type { NodeType } from '../types/nodes.js';
 import type { Subcategory } from './types.js';
@@ -11,7 +13,7 @@ import type { Subcategory } from './types.js';
 
 /**
  * Maps each NodeType to its subcategory within its scope.
- * This hierarchy matches the structure in models/_index.yaml
+ * AUTO-GENERATED from models/nodes/ folder structure.
  *
  * Subcategories by scope:
  * - Project: foundation, structure, semantic, instruction, output
@@ -23,66 +25,67 @@ export const NODE_SUBCATEGORIES: Record<NodeType, Subcategory> = {
   // PROJECT SCOPE (14 nodes)
   // ═══════════════════════════════════════════════════════════════════════════
 
-  // foundation (3 nodes)
-  Project: 'foundation',
+  // foundation (3 nodes) - matches models/nodes/project/foundation/
   BrandIdentity: 'foundation',
+  Project: 'foundation',
   ProjectL10n: 'foundation',
 
-  // structure (2 nodes) - matches models/nodes/project/structure/
-  Page: 'structure',
-  Block: 'structure',
+  // instruction (5 nodes) - matches models/nodes/project/instruction/
+  BlockPrompt: 'instruction',
+  BlockRules: 'instruction',
+  BlockType: 'instruction',
+  PagePrompt: 'instruction',
+  PageType: 'instruction',
+
+  // output (2 nodes) - matches models/nodes/project/output/
+  BlockL10n: 'output',
+  PageL10n: 'output',
 
   // semantic (2 nodes) - matches models/nodes/project/semantic/
   Concept: 'semantic',
   ConceptL10n: 'semantic',
 
-  // instruction (5 nodes) - matches models/nodes/project/instruction/
-  PageType: 'instruction',
-  PagePrompt: 'instruction',
-  BlockType: 'instruction',
-  BlockPrompt: 'instruction',
-  BlockRules: 'instruction',
-
-  // output (2 nodes)
-  PageL10n: 'output',
-  BlockL10n: 'output',
+  // structure (2 nodes) - matches models/nodes/project/structure/
+  Block: 'structure',
+  Page: 'structure',
 
   // ═══════════════════════════════════════════════════════════════════════════
   // GLOBAL SCOPE (15 nodes)
   // ═══════════════════════════════════════════════════════════════════════════
 
-  // config (1 node)
+  // config (1 node) - matches models/nodes/global/config/
   Locale: 'config',
 
-  // knowledge (14 nodes)
-  LocaleIdentity: 'knowledge',
-  LocaleVoice: 'knowledge',
+  // knowledge (14 nodes) - matches models/nodes/global/knowledge/
+  Constraint: 'knowledge',
+  Expression: 'knowledge',
   LocaleCulture: 'knowledge',
   LocaleCultureReferences: 'knowledge',
-  LocaleMarket: 'knowledge',
+  LocaleIdentity: 'knowledge',
   LocaleLexicon: 'knowledge',
+  LocaleMarket: 'knowledge',
   LocaleRulesAdaptation: 'knowledge',
   LocaleRulesFormatting: 'knowledge',
   LocaleRulesSlug: 'knowledge',
-  Expression: 'knowledge',
-  Reference: 'knowledge',
+  LocaleVoice: 'knowledge',
   Metaphor: 'knowledge',
   Pattern: 'knowledge',
-  Constraint: 'knowledge',
+  Reference: 'knowledge',
 
   // ═══════════════════════════════════════════════════════════════════════════
   // SHARED SCOPE (6 nodes)
   // ═══════════════════════════════════════════════════════════════════════════
 
-  // seo (3 nodes)
+  // geo (3 nodes) - matches models/nodes/shared/geo/
+  GEOMiningRun: 'geo',
+  GEOSeedL10n: 'geo',
+  GEOSeedMetrics: 'geo',
+
+  // seo (3 nodes) - matches models/nodes/shared/seo/
   SEOKeywordL10n: 'seo',
   SEOKeywordMetrics: 'seo',
   SEOMiningRun: 'seo',
 
-  // geo (3 nodes)
-  GEOSeedL10n: 'geo',
-  GEOSeedMetrics: 'geo',
-  GEOMiningRun: 'geo',
 };
 
 // =============================================================================

@@ -14,11 +14,11 @@ import type { RelationType } from '../schemas/relations.schema.js';
  * Each NodeType belongs to exactly one subcategory
  */
 export type Subcategory =
-  // Project scope (5 subcategories)
+  // Project scope (5 subcategories) - source: models/nodes/project/
   | 'foundation'   // Project, BrandIdentity, ProjectL10n
-  | 'structure'    // Page, Block, BlockType, PageType
+  | 'structure'    // Page, Block
   | 'semantic'     // Concept, ConceptL10n
-  | 'instruction'  // PagePrompt, BlockPrompt, BlockRules
+  | 'instruction'  // PageType, PagePrompt, BlockType, BlockPrompt, BlockRules
   | 'output'       // PageL10n, BlockL10n
   // Global scope (2 subcategories)
   | 'config'       // Locale

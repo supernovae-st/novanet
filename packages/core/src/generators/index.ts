@@ -28,3 +28,4 @@ export { MarkdownGenerator } from './MarkdownGenerator.js';
 export { CypherExporter } from './CypherExporter.js';
 export { RelationsParser, type RelationEdge } from './RelationsParser.js';
 export { MermaidGenerator, type MermaidGeneratorConfig } from './MermaidGenerator.js';
+export { SubcategoryGenerator, type SubcategoryGeneratorConfig, filePathToNodeName } from './SubcategoryGenerator.js';
