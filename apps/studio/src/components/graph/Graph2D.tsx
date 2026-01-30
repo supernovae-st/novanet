@@ -35,7 +35,7 @@ import { EmptyState } from '@/components/ui/EmptyState';
 import { useFilteredGraph, useFocusMode, useHoverHighlight, useNodeExpansion, useCenterOnNode, useSmartFitView } from '@/hooks';
 import { useUIStore } from '@/stores/uiStore';
 import { useGraphStore } from '@/stores/graphStore';
-import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
+import { NODE_TYPE_CONFIG, nodeTypeConfigs } from '@/config/nodeTypes';
 import { MINIMAP_HEIGHT, TOOLBAR_BOTTOM_OFFSET } from '@/config/layoutConstants';
 import {
   DAGRE_CONFIG,
@@ -138,7 +138,7 @@ function toTurboNode(node: GraphNodeType): TurboNodeType {
       type: node.type,
       key: node.key,
       displayName: node.displayName,
-      icon: node.icon,
+      icon: nodeTypeConfigs[node.type]?.icon,
       description: node.description,
       category: config.category,
     },
