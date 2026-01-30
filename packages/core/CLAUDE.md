@@ -90,7 +90,7 @@ RETURN c2.key, activation ORDER BY activation DESC;
 core/
 ├── models/                    # YAML schema definitions
 │   ├── _index.yaml            # MODEL INDEX (graph structure, node categories, changes)
-│   ├── relations.yaml         # All 50 Neo4j relationships
+│   ├── relations.yaml         # All 47 Neo4j relationships
 │   ├── nodes/                 # ONE FILE PER NODE TYPE (35 files)
 │   │   ├── global/            # 🌍 GLOBAL scope (15 nodes)
 │   │   │   ├── config/        #    Locale
