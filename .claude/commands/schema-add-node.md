@@ -30,12 +30,20 @@ Add a new node type to the NovaNet ontology using Socratic discovery.
    - Create migration file if needed
    - Update seed files
 
+## Naming Requirements
+
+- **Node names**: PascalCase (e.g., `LocaleHumor`, `ConceptL10n`)
+- **YAML filename**: kebab-case (e.g., `locale-humor.yaml`, `concept-l10n.yaml`)
+- **Property names**: snake_case (e.g., `display_name`, `llm_context`)
+
 ## Nomenclature Rules
 
-- `*L10n` suffix = localized content (ConceptL10n, PageL10n)
-- `Locale*` prefix = locale knowledge (LocaleVoice, LocaleCulture)
-- `*Metrics` suffix = time-series data (SEOKeywordMetrics)
-- `*MiningRun` suffix = batch operations (SEOMiningRun)
+| Pattern | Use For | Examples |
+|---------|---------|----------|
+| `*L10n` | Localized content | ConceptL10n, PageL10n, BlockL10n, ProjectL10n |
+| `Locale*` | Locale knowledge | LocaleVoice, LocaleCulture, LocaleLexicon |
+| `*Metrics` | Time-series data | SEOKeywordMetrics, GEOSeedMetrics |
+| `*MiningRun` | Batch operations | SEOMiningRun, GEOMiningRun |
 
 ## Example
 
