@@ -14,7 +14,7 @@ import { useState, useMemo, useCallback, useEffect, useRef, memo, useDeferredVal
 import { createPortal } from 'react-dom';
 import { Search, X, FolderOpen, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { glassClasses, modalClasses, iconSizes } from '@/design/tokens';
+import { glassClasses, modalClasses, iconSizes, gapTokens } from '@/design/tokens';
 import { Kbd } from '@/components/ui';
 import { useFilterStore } from '@/stores/filterStore';
 import {
@@ -63,7 +63,8 @@ const ProjectCard = memo(function ProjectCard({
       aria-selected={isSelected}
       aria-label={isAllCard ? `All projects (${totalCount})` : project?.name}
       className={cn(
-        'flex flex-col items-center justify-center gap-2 p-4 rounded-xl',
+        'flex flex-col items-center justify-center p-4 rounded-xl',
+        gapTokens.default,
         'border transition-all duration-150 relative',
         'min-h-[100px]',
         'hover:scale-[1.02] active:scale-[0.98]',
@@ -197,7 +198,7 @@ export const ProjectPicker = memo(function ProjectPicker({
       >
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.06]">
-          <div className="flex items-center gap-3">
+          <div className={cn('flex items-center', gapTokens.spacious)}>
             <div className="w-9 h-9 rounded-lg bg-[#111118] border border-white/10 flex items-center justify-center">
               <FolderOpen className={`${iconSizes.lg} text-white/70`} />
             </div>
@@ -218,7 +219,7 @@ export const ProjectPicker = memo(function ProjectPicker({
         </div>
 
         {/* Search */}
-        <div className="flex items-center gap-3 px-6 py-4 border-b border-white/[0.06]">
+        <div className={cn('flex items-center px-6 py-4 border-b border-white/[0.06]', gapTokens.spacious)}>
           <Search className={`${iconSizes.lg} text-white/40 shrink-0`} />
           <input
             ref={searchRef}
@@ -250,7 +251,7 @@ export const ProjectPicker = memo(function ProjectPicker({
         >
           <div
             ref={gridRef}
-            className="grid grid-cols-3 gap-3"
+            className={cn('grid grid-cols-3', gapTokens.spacious)}
           >
             {/* All Projects card */}
             <ProjectCard
@@ -287,16 +288,16 @@ export const ProjectPicker = memo(function ProjectPicker({
         {/* Footer */}
         <div className="px-6 py-3 border-t border-white/[0.06] flex items-center justify-between text-xs text-white/30">
           <span>{filteredProjects.length} projects</span>
-          <div className="flex items-center gap-4">
-            <span className="flex items-center gap-1.5">
+          <div className={cn('flex items-center', gapTokens.large)}>
+            <span className={cn('flex items-center', gapTokens.compact)}>
               <Kbd>↑↓←→</Kbd>
               <span>Navigate</span>
             </span>
-            <span className="flex items-center gap-1.5">
+            <span className={cn('flex items-center', gapTokens.compact)}>
               <Kbd>↵</Kbd>
               <span>Select</span>
             </span>
-            <span className="flex items-center gap-1.5">
+            <span className={cn('flex items-center', gapTokens.compact)}>
               <Kbd>Esc</Kbd>
               <span>Close</span>
             </span>
