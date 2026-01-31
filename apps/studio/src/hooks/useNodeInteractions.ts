@@ -77,12 +77,12 @@ export function useNodeInteractions({
   const containerClassName = useMemo(() => {
     return cn(
       'group relative node-pressable',
-      // Full dimming (focus mode)
-      isDimmed && `opacity-${Math.round(NODE_DESIGN.opacity.dimmed * 100)} ${isCircular ? 'scale-75' : 'scale-90'} grayscale pointer-events-none`,
+      // Full dimming (focus mode) - scale and grayscale via className, opacity via style
+      isDimmed && `${isCircular ? 'scale-75' : 'scale-90'} grayscale pointer-events-none`,
       // Lighter dimming (hover highlight mode)
       isHoverDimmed && !isDimmed && 'hover-dimmed',
       // Enhanced hover effect
-      isHovered && !isDimmed && !isHoverDimmed && !selected && (isCircular ? 'scale-103' : 'scale-103'),
+      isHovered && !isDimmed && !isHoverDimmed && !selected && 'scale-103',
       // Press feedback
       isPressed && !isDimmed && (isCircular ? 'scale-[0.96]' : 'scale-[0.98]'),
       // Selection scale
@@ -90,10 +90,11 @@ export function useNodeInteractions({
     );
   }, [isDimmed, isHoverDimmed, isHovered, isPressed, selected, isCircular]);
 
-  // Container style for transitions
+  // Container style for transitions (opacity moved here for dynamic values)
   const containerStyle = useMemo<React.CSSProperties>(() => ({
     transition: `transform ${NODE_DESIGN.timing.transform}ms ease-out, opacity ${NODE_DESIGN.timing.transform}ms ease-out`,
-  }), []);
+    opacity: isDimmed ? NODE_DESIGN.opacity.dimmed : 1,
+  }), [isDimmed]);
 
   return {
     isHovered,

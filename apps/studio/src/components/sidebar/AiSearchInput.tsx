@@ -15,6 +15,7 @@ import { useState, useRef, useCallback } from 'react';
 import { Sparkles, Send, Loader2 } from 'lucide-react';
 import { logger } from '@/lib/logger';
 import { cn } from '@/lib/utils';
+import { Kbd } from '@/components/ui/Kbd';
 
 interface AiSearchInputProps {
   onSubmit: (query: string) => Promise<void>;
@@ -120,16 +121,9 @@ export function AiSearchInput({
               <Send className="w-3.5 h-3.5 text-novanet-400" />
             </button>
           ) : (
-            <kbd
-              className={cn(
-                'px-1.5 py-0.5 rounded text-[10px] font-medium',
-                'bg-white/[0.06] text-white/40 border border-white/[0.08]',
-                'transition-opacity duration-200',
-                isFocused ? 'opacity-0' : 'opacity-100'
-              )}
-            >
+            <Kbd className={cn('transition-opacity duration-200', isFocused ? 'opacity-0' : 'opacity-100')}>
               ⌘J
-            </kbd>
+            </Kbd>
           )}
         </div>
       </div>

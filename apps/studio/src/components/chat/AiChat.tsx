@@ -7,6 +7,7 @@ import { postJSON, getErrorMessage } from '@/lib/fetchClient';
 import { useChatStore } from '@/stores/chatStore';
 import { CypherViewer } from '@/components/dx/CodeViewer';
 import { useCopyFeedback } from '@/hooks';
+import { Kbd } from '@/components/ui/Kbd';
 import {
   ACTION_ICONS,
   STATUS_ICONS,
@@ -275,9 +276,7 @@ export const AiChat = memo(function AiChat({
           <p className="text-[10px] text-white/30">
             Enter to send · Shift+Enter for new line
           </p>
-          <kbd className="text-[9px] text-white/20 bg-white/5 px-1.5 py-0.5 rounded border border-white/5">
-            ⌘J
-          </kbd>
+          <Kbd>⌘J</Kbd>
         </div>
       </div>
     </div>

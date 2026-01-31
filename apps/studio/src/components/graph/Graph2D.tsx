@@ -1131,12 +1131,12 @@ function Graph2DInner({
             </div>
           )}
 
-          {/* Schema stats overlay */}
+          {/* Schema stats overlay - offset to avoid keyboard shortcut button */}
           <div
             className={cn(
-              'absolute bottom-4 left-4',
+              'absolute bottom-4 left-16',
               'px-3 py-2 rounded-lg',
-              'bg-black/70 backdrop-blur-xl',
+              'bg-black/70',
               'border border-white/[0.08]',
               'text-xs text-white/60'
             )}
