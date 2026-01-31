@@ -23,9 +23,15 @@ import type { Node as ReactFlowNode, Edge as ReactFlowEdge } from '@xyflow/react
 // =============================================================================
 
 export const Z_INDEX = {
-  /** Container nodes (scope groups, subcategory groups) */
-  CONTAINER: 0,
-  /** Regular nodes base level */
+  /** Scope containers - layered by scope (Shared < Global < Project) */
+  SCOPE_SHARED: 10,
+  SCOPE_GLOBAL: 20,
+  SCOPE_PROJECT: 30,
+  /** Subcategory containers - slightly above their parent scope */
+  SUBCAT_SHARED: 15,
+  SUBCAT_GLOBAL: 25,
+  SUBCAT_PROJECT: 35,
+  /** Regular nodes base level (always above containers) */
   BASE: 1000,
   /** Nodes connected to hovered edge */
   EDGE_CONNECTED: 8000,
@@ -65,13 +71,36 @@ export interface UseGraphInteractionsReturn {
 // =============================================================================
 
 /**
- * Get base z-index for a node based on its type
+ * Get base z-index for a node based on its type and scope
+ *
+ * Container hierarchy (back to front):
+ * - Shared scope (-300) < Global scope (-200) < Project scope (-100)
+ * - Subcategories slightly above their parent scope
+ * - Regular nodes always on top (1000+)
  */
 function getBaseZIndex(node: ReactFlowNode): number {
-  // Container nodes stay in background
-  if (node.id.startsWith('scope-') || node.id.startsWith('subcat-')) {
-    return Z_INDEX.CONTAINER;
+  const id = node.id;
+
+  // Scope containers: scope-{Scope}
+  if (id.startsWith('scope-')) {
+    const scope = id.replace('scope-', '');
+    if (scope === 'Shared') return Z_INDEX.SCOPE_SHARED;
+    if (scope === 'Global') return Z_INDEX.SCOPE_GLOBAL;
+    if (scope === 'Project') return Z_INDEX.SCOPE_PROJECT;
+    return Z_INDEX.SCOPE_SHARED; // fallback
   }
+
+  // Subcategory containers: subcat-{Scope}-{SubcategoryName}
+  if (id.startsWith('subcat-')) {
+    const parts = id.replace('subcat-', '').split('-');
+    const scope = parts[0];
+    if (scope === 'Shared') return Z_INDEX.SUBCAT_SHARED;
+    if (scope === 'Global') return Z_INDEX.SUBCAT_GLOBAL;
+    if (scope === 'Project') return Z_INDEX.SUBCAT_PROJECT;
+    return Z_INDEX.SUBCAT_SHARED; // fallback
+  }
+
+  // Regular nodes - always above containers
   return Z_INDEX.BASE;
 }
 
@@ -84,9 +113,15 @@ export function useGraphInteractions<T extends ReactFlowNode = ReactFlowNode>({
 }: UseGraphInteractionsOptions<T>): UseGraphInteractionsReturn {
   /**
    * Bring a node to front (selected z-index)
+   * IMPORTANT: Containers (scope, subcat) should NOT be brought to front
+   * They must stay behind regular nodes to maintain the layering hierarchy
    */
   const bringToFront = useCallback(
     (nodeId: string) => {
+      // Skip z-index change for containers - they should stay in their layer
+      const isContainer = nodeId.startsWith('scope-') || nodeId.startsWith('subcat-');
+      if (isContainer) return;
+
       setNodes((nodes) =>
         nodes.map((node) => ({
           ...node,
@@ -99,9 +134,15 @@ export function useGraphInteractions<T extends ReactFlowNode = ReactFlowNode>({
 
   /**
    * Set node to hover z-index (slightly below selected)
+   * IMPORTANT: Containers (scope, subcat) should NOT be brought to front on hover
+   * They must stay behind regular nodes to maintain the layering hierarchy
    */
   const setHoverZIndex = useCallback(
     (nodeId: string) => {
+      // Skip z-index change for containers - they should stay in their layer
+      const isContainer = nodeId.startsWith('scope-') || nodeId.startsWith('subcat-');
+      if (isContainer) return;
+
       setNodes((nodes) =>
         nodes.map((node) => {
           if (node.id === nodeId) {

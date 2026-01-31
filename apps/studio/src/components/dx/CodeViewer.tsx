@@ -1,9 +1,13 @@
 'use client';
 
-import { useMemo, memo } from 'react';
-import { Highlight, themes } from 'prism-react-renderer';
+import { useMemo, memo, useEffect } from 'react';
+import { Highlight, themes, Prism } from 'prism-react-renderer';
 import { cn } from '@/lib/utils';
 import { CopyButton } from './CopyButton';
+import { registerCypher } from '@/lib/prism/cypher';
+
+// Register Cypher language grammar once
+registerCypher(Prism);
 
 export interface CodeViewerProps {
   /** Code content */
@@ -20,10 +24,17 @@ export interface CodeViewerProps {
   title?: string;
   /** Additional class names */
   className?: string;
+  /** ID for ARIA labelling */
+  id?: string;
 }
 
 /**
  * Code viewer with syntax highlighting and copy functionality
+ *
+ * Accessibility:
+ * - Focusable container for keyboard users
+ * - Copy button visible on hover AND focus-within
+ * - Proper ARIA labels
  */
 export const CodeViewer = memo(function CodeViewer({
   code,
@@ -33,7 +44,10 @@ export const CodeViewer = memo(function CodeViewer({
   showCopy = true,
   title,
   className,
+  id,
 }: CodeViewerProps) {
+  const codeId = id || `code-viewer-${Math.random().toString(36).slice(2, 9)}`;
+
   // Format JSON if needed
   const formattedCode = useMemo(() => {
     if (language === 'json') {
@@ -48,10 +62,11 @@ export const CodeViewer = memo(function CodeViewer({
   }, [code, language]);
 
   // Map language to Prism language
+  // Note: Cypher grammar is registered in module scope above
   const prismLanguage = useMemo(() => {
     switch (language) {
       case 'cypher':
-        return 'sql'; // Cypher is similar to SQL
+        return 'cypher'; // Custom Cypher grammar registered above
       case 'typescript':
         return 'typescript';
       case 'javascript':
@@ -64,19 +79,38 @@ export const CodeViewer = memo(function CodeViewer({
   }, [language]);
 
   return (
-    <div className={cn('relative group rounded-lg overflow-hidden', className)}>
+    <div
+      className={cn(
+        'relative rounded-lg overflow-hidden',
+        // Focus-within and hover both show copy button
+        'group focus-within:ring-2 focus-within:ring-novanet-accent/50',
+        className
+      )}
+    >
       {/* Header */}
       {title && (
         <div className="flex items-center justify-between px-3 py-2 bg-white/5 border-b border-white/10">
-          <span className="text-xs font-medium text-white/60">{title}</span>
+          <span id={`${codeId}-title`} className="text-xs font-medium text-white/60">
+            {title}
+          </span>
           {showCopy && (
-            <CopyButton text={formattedCode} className="opacity-0 group-hover:opacity-100 transition-all" />
+            <CopyButton
+              text={formattedCode}
+              label={`Copy ${title || language} code`}
+              className="opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity"
+            />
           )}
         </div>
       )}
 
-      {/* Code block */}
-      <div className={cn('overflow-auto scrollbar-thin', maxHeight)}>
+      {/* Code block - focusable for keyboard navigation */}
+      <div
+        className={cn('overflow-auto scrollbar-thin', maxHeight)}
+        tabIndex={0}
+        role="region"
+        aria-label={title ? `${title} code block` : `${language} code block`}
+        aria-describedby={title ? `${codeId}-title` : undefined}
+      >
         <Highlight
           theme={themes.nightOwl}
           code={formattedCode}
@@ -84,6 +118,7 @@ export const CodeViewer = memo(function CodeViewer({
         >
           {({ className: highlightClass, style, tokens, getLineProps, getTokenProps }) => (
             <pre
+              id={codeId}
               className={cn(
                 highlightClass,
                 'text-xs p-3 bg-black/40 m-0',
@@ -108,11 +143,12 @@ export const CodeViewer = memo(function CodeViewer({
         </Highlight>
       </div>
 
-      {/* Floating copy button if no title */}
+      {/* Floating copy button if no title - visible on hover OR focus-within */}
       {!title && showCopy && (
         <CopyButton
           text={formattedCode}
-          className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-all"
+          label={`Copy ${language} code`}
+          className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity"
         />
       )}
     </div>

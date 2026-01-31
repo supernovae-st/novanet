@@ -92,6 +92,9 @@ export const selectHoveredEdgeId = (state: UIStoreState) => state.hoveredEdgeId;
 /** Selector for selectedNodeId - use with useUIStore(selectSelectedNodeId) */
 export const selectSelectedNodeId = (state: UIStoreState) => state.selectedNodeId;
 
+/** Selector for selectedEdgeId - use with useUIStore(selectSelectedEdgeId) */
+export const selectSelectedEdgeId = (state: UIStoreState) => state.selectedEdgeId;
+
 /** Selector for hoveredConnectedNodeIds - use with useUIStore(selectHoveredConnectedNodeIds) */
 export const selectHoveredConnectedNodeIds = (state: UIStoreState) => state.hoveredConnectedNodeIds;
 

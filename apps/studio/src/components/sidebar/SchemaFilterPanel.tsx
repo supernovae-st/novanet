@@ -7,9 +7,11 @@
  * - Same header structure
  * - Same body padding (p-3)
  * - Same row heights and spacing
+ *
+ * Now unified with Data Explorer: AI Search + Tabs (Types | Rels)
  */
 
-import { memo, useCallback, useMemo } from 'react';
+import { memo, useCallback, useMemo, useState } from 'react';
 import {
   Boxes,
   Landmark,
@@ -29,13 +31,19 @@ import {
 import { useShallow } from 'zustand/react/shallow';
 import { SCOPE_HIERARCHY } from '@novanet/core/graph';
 import type { Subcategory } from '@novanet/core/graph';
-import type { Scope } from '@/types';
+import { RelationType, type Scope } from '@/types';
 import { useFilterStore } from '@/stores/filterStore';
+import { useAiQueryStore } from '@/stores/aiQueryStore';
 import { cn } from '@/lib/utils';
-import { scopeAccents, iconSizes, gapTokens } from '@/design/tokens';
+import { scopeAccents, iconSizes } from '@/design/tokens';
 import { calculateCheckboxState } from '@/hooks';
 import type { CheckboxState } from '@/components/ui/TriStateCheckbox';
+import { SegmentedTabs } from '@/components/ui/SegmentedTabs';
 import { Sidebar } from './SidebarContent';
+import { AiSearchInput } from './AiSearchInput';
+
+// Tab definitions
+type SchemaTabId = 'types' | 'rels';
 
 // Scope to Lucide icon mapping
 const SCOPE_ICONS: Record<Scope, LucideIcon> = {
@@ -74,6 +82,8 @@ export interface SchemaFilterPanelProps {
 export const SchemaFilterPanel = memo(function SchemaFilterPanel({
   className,
 }: SchemaFilterPanelProps) {
+  const [activeTab, setActiveTab] = useState<SchemaTabId>('types');
+
   const {
     toggleSubcategoryCollapsed,
     isSubcategoryCollapsed,
@@ -85,6 +95,30 @@ export const SchemaFilterPanel = memo(function SchemaFilterPanel({
       setSubcategoryCollapsed: state.setSubcategoryCollapsed,
     }))
   );
+
+  // AI Query state
+  const { submitAiQuery, isProcessing } = useAiQueryStore(
+    useShallow((state) => ({
+      submitAiQuery: state.submitAiQuery,
+      isProcessing: state.isProcessing,
+    }))
+  );
+
+  // Handle AI search
+  const handleAiSubmit = useCallback(async (question: string) => {
+    await submitAiQuery(question);
+  }, [submitAiQuery]);
+
+  // Relationship count
+  const relCount = useMemo(() => {
+    return Object.keys(RelationType).length;
+  }, []);
+
+  // Tab definitions
+  const tabs = useMemo(() => [
+    { id: 'types' as const, label: 'Types', count: 35 },
+    { id: 'rels' as const, label: 'Rels', count: relCount },
+  ], [relCount]);
 
   // Memoize scope data
   const scopeData = useMemo(() => {
@@ -153,6 +187,53 @@ export const SchemaFilterPanel = memo(function SchemaFilterPanel({
     [getScopeCheckboxState, setSubcategoryCollapsed]
   );
 
+  // Render Types tab content
+  const renderTypesContent = () => (
+    <Sidebar.Tree showProgressBars={false} maxCount={35}>
+      {scopeData.map(({ scope, scopeDef, accent, subcategories, nodeCount }) => {
+        const ScopeIcon = SCOPE_ICONS[scope];
+        return (
+          <Sidebar.Section
+            key={scope}
+            id={scope.toLowerCase()}
+            label={scopeDef.label}
+            icon={<ScopeIcon className={iconSizes.sm} />}
+            color={accent.color}
+            checkboxState={getScopeCheckboxState(scope)}
+            onCheckboxClick={() => handleScopeCheckboxClick(scope)}
+            count={nodeCount}
+            defaultExpanded
+          >
+            {subcategories.map(([subcatName, subcatMeta]) => {
+              const isVisible = !isSubcategoryCollapsed(scope, subcatName);
+              const SubcatIcon = SUBCATEGORY_ICONS[subcatName];
+
+              return (
+                <Sidebar.Row
+                  key={subcatName}
+                  id={`${scope}-${subcatName}`}
+                  label={subcatMeta.label}
+                  icon={<SubcatIcon className={iconSizes.xs} />}
+                  color={accent.color}
+                  isSelected={isVisible}
+                  onToggle={() => toggleSubcategoryCollapsed(scope, subcatName)}
+                  count={subcatMeta.nodeTypes.length}
+                />
+              );
+            })}
+          </Sidebar.Section>
+        );
+      })}
+    </Sidebar.Tree>
+  );
+
+  // Render Rels tab content (placeholder for now)
+  const renderRelsContent = () => (
+    <div className="flex items-center justify-center h-32 text-white/40 text-sm">
+      Relationships browser coming soon
+    </div>
+  );
+
   return (
     <Sidebar.Content
       testId="schema-filter-panel"
@@ -163,52 +244,28 @@ export const SchemaFilterPanel = memo(function SchemaFilterPanel({
         title: 'Schema Browser',
         subtitle: '35 node types · 3 scopes',
       }}
-      footer={
-        <div className={cn('flex items-center justify-center', gapTokens.spacious)}>
-          <span className="text-[10px] text-violet-400/60">📦 Project</span>
-          <span className="text-white/40">·</span>
-          <span className="text-[10px] text-emerald-400/60">🌍 Global</span>
-          <span className="text-white/40">·</span>
-          <span className="text-[10px] text-amber-400/60">🎯 Shared</span>
-        </div>
+      toolbar={
+        <>
+          {/* AI Search */}
+          <div className="px-3 pt-3">
+            <AiSearchInput
+              onSubmit={handleAiSubmit}
+              isLoading={isProcessing}
+              placeholder="Ask AI about the schema..."
+            />
+          </div>
+          {/* Segmented Tabs */}
+          <div className="px-3 py-3">
+            <SegmentedTabs
+              tabs={tabs}
+              activeTab={activeTab}
+              onTabChange={(id) => setActiveTab(id as SchemaTabId)}
+            />
+          </div>
+        </>
       }
     >
-      <Sidebar.Tree showProgressBars={false} maxCount={35}>
-        {scopeData.map(({ scope, scopeDef, accent, subcategories, nodeCount }) => {
-          const ScopeIcon = SCOPE_ICONS[scope];
-          return (
-            <Sidebar.Section
-              key={scope}
-              id={scope.toLowerCase()}
-              label={scopeDef.label}
-              icon={<ScopeIcon className={iconSizes.md} />}
-              color={accent.color}
-              checkboxState={getScopeCheckboxState(scope)}
-              onCheckboxClick={() => handleScopeCheckboxClick(scope)}
-              count={nodeCount}
-              defaultExpanded
-            >
-              {subcategories.map(([subcatName, subcatMeta]) => {
-                const isVisible = !isSubcategoryCollapsed(scope, subcatName);
-                const SubcatIcon = SUBCATEGORY_ICONS[subcatName];
-
-                return (
-                  <Sidebar.Row
-                    key={subcatName}
-                    id={`${scope}-${subcatName}`}
-                    label={subcatMeta.label}
-                    icon={<SubcatIcon className={iconSizes.sm} />}
-                    color={accent.color}
-                    isSelected={isVisible}
-                    onToggle={() => toggleSubcategoryCollapsed(scope, subcatName)}
-                    count={subcatMeta.nodeTypes.length}
-                  />
-                );
-              })}
-            </Sidebar.Section>
-          );
-        })}
-      </Sidebar.Tree>
+      {activeTab === 'types' ? renderTypesContent() : renderRelsContent()}
     </Sidebar.Content>
   );
 });

@@ -10,6 +10,7 @@ export { EdgeDetailsPanel } from './EdgeDetailsPanel';
 export { LocalePicker } from './LocalePicker';
 export { ProjectPicker } from './ProjectPicker';
 export { ContextPicker } from './ContextPicker';
+export { ViewPicker } from './ViewPicker';
 
 // Filter components
 export { FilterPanel } from './FilterPanel';

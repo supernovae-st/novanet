@@ -13,7 +13,7 @@
 import { memo } from 'react';
 import { cn } from '@/lib/utils';
 import { gapTokens } from '@/design/tokens';
-import { CopyButton } from './CopyButton';
+import { CopyButton } from '@/components/dx/CopyButton';
 
 export interface JsonViewProps {
   data: unknown;

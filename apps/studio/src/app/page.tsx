@@ -24,7 +24,7 @@ import { iconSizes, gapTokens } from '@/design/tokens';
 import { DEFAULT_FETCH_LIMIT } from '@/config/constants';
 import { useUIStore, useFilterStore, useGraphStore } from '@/stores';
 import { useGraphData, useFilteredGraph, UrlSyncComponent } from '@/hooks';
-import { ContextPicker } from '@/components/sidebar/ContextPicker';
+import { ContextPicker, ViewPicker } from '@/components/sidebar';
 import { isInputFocused, matchesKeyCombo } from '@/lib/keyboard';
 import { NODE_TYPE_CONFIG, type NodeTypeConfig } from '@/config/nodeTypes';
 import type { GraphNode, HoverNodeInfo, SchemaGroupNode, NodeType, SchemaGroupType } from '@/types';
@@ -544,7 +544,7 @@ export default function HomePage() {
                     <RefreshButton onClick={handleRefresh} isLoading={isFetching} />
                   </Pill>
                   <Pill size="md">
-                    <ContextPicker />
+                    {dataMode === 'schema' ? <ViewPicker /> : <ContextPicker />}
                   </Pill>
                 </div>
               </div>
