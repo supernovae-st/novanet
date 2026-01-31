@@ -11,6 +11,8 @@
  */
 
 import { useState, useMemo } from 'react';
+import { useShallow } from 'zustand/react/shallow';
+import { cn } from '@/lib/utils';
 import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
 import { getCategoryColors } from '@/config/categoryColors';
 import { useGraphStore } from '@/stores/graphStore';
@@ -24,7 +26,7 @@ import {
   JsonView,
 } from '@/components/ui/detail-panel';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
-import { panelClasses, iconSizes } from '@/design/tokens';
+import { panelClasses, iconSizes, gapTokens } from '@/design/tokens';
 import type { GraphNode } from '@/types';
 
 interface NodeDetailsPanelProps {
@@ -36,7 +38,12 @@ export function NodeDetailsPanel({ node }: NodeDetailsPanelProps) {
     new Set(['main', 'data', 'relations'])
   );
 
-  const { edges, nodes: allNodes } = useGraphStore();
+  const { edges, nodes: allNodes } = useGraphStore(
+    useShallow((state) => ({
+      edges: state.edges,
+      nodes: state.nodes,
+    }))
+  );
   const { setSelectedNode } = useUIStore();
   const { copiedField, copyField } = useCopyFieldFeedback();
 
@@ -111,7 +118,7 @@ export function NodeDetailsPanel({ node }: NodeDetailsPanelProps) {
       >
         {/* Type badge */}
         <div
-          className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold mb-4 border"
+          className={cn('inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold mb-4 border', gapTokens.default)}
           style={{
             background: `linear-gradient(135deg, ${colors.primary}35, ${colors.secondary}25)`,
             borderColor: `${colors.primary}50`,
@@ -132,7 +139,7 @@ export function NodeDetailsPanel({ node }: NodeDetailsPanelProps) {
         <h2 className="text-xl font-bold text-white mb-2">{node.displayName}</h2>
 
         {/* Key with copy */}
-        <div className="flex items-center gap-2 text-sm">
+        <div className={cn('flex items-center text-sm', gapTokens.default)}>
           <span className="text-white/40">#</span>
           <span className="font-mono text-white/60 flex-1 truncate">
             {node.key}

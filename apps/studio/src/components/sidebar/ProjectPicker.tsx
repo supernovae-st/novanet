@@ -23,6 +23,7 @@ import {
   useModalAutoFocus,
   useGridNavigation,
   useTimeoutFn,
+  useFocusTrap,
 } from '@/hooks';
 import { TRANSITION_DURATION_MS } from '@/config/constants';
 
@@ -165,6 +166,7 @@ export const ProjectPicker = memo(function ProjectPicker({
   // Modal utilities
   useBodyScrollLock(isOpen);
   useOutsideClick(containerRef, onClose, isOpen);
+  useFocusTrap(containerRef, isOpen);
   useModalAutoFocus(searchRef, isOpen, {
     delay: 50,
     onReset: () => {
@@ -228,7 +230,7 @@ export const ProjectPicker = memo(function ProjectPicker({
             onChange={(e) => setSearchInput(e.target.value)}
             placeholder="Search projects..."
             aria-label="Search projects"
-            className="flex-1 bg-transparent text-white placeholder-white/30 text-sm outline-none border-none ring-0 focus:outline-none focus:ring-0"
+            className="flex-1 bg-transparent text-white placeholder-white/40 text-sm outline-none border-none ring-0 focus:outline-none focus:ring-0"
             autoComplete="off"
             spellCheck={false}
           />
@@ -286,7 +288,7 @@ export const ProjectPicker = memo(function ProjectPicker({
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-3 border-t border-white/[0.06] flex items-center justify-between text-xs text-white/30">
+        <div className="px-6 py-3 border-t border-white/[0.06] flex items-center justify-between text-xs text-white/40">
           <span>{filteredProjects.length} projects</span>
           <div className={cn('flex items-center', gapTokens.large)}>
             <span className={cn('flex items-center', gapTokens.compact)}>

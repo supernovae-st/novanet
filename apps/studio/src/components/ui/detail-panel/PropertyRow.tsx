@@ -12,6 +12,7 @@
 import { memo, type ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import { ACTION_ICONS, STATUS_ICONS, ICON_SIZES } from '@/config/iconSystem';
+import { gapTokens } from '@/design/tokens';
 
 const CopyIcon = ACTION_ICONS.copy;
 const CheckIcon = STATUS_ICONS.success;
@@ -39,15 +40,16 @@ export const PropertyRow = memo(function PropertyRow({
   return (
     <div
       className={cn(
-        'group flex gap-4 py-2.5 px-3 -mx-3 rounded-lg hover:bg-white/6 transition-colors',
-        isLongValue && 'flex-col gap-1.5',
+        'group flex py-2.5 px-3 -mx-3 rounded-lg hover:bg-white/6 transition-colors',
+        gapTokens.large,
+        isLongValue && ['flex-col', gapTokens.compact],
         className
       )}
     >
       <span className="text-xs text-white/60 shrink-0 min-w-[100px] font-mono">
         {label}
       </span>
-      <div className="flex-1 flex items-start gap-2 min-w-0">
+      <div className={cn('flex-1 flex items-start min-w-0', gapTokens.default)}>
         <span
           className={cn(
             'text-sm text-white/95 flex-1',

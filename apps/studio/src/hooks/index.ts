@@ -24,18 +24,7 @@ export { useModal, type UseModalOptions, type UseModalReturn } from './useModal'
 // UI utilities
 export { useTimeout, useTimeoutFn } from './useTimeout';
 export { useAutoFocus } from './useAutoFocus';
-export { useCollapsibleSections, type UseCollapsibleSectionsReturn } from './useCollapsibleSections';
 export { useDebouncedValue } from './useDebouncedValue';
-
-// Keyboard utilities
-export { useKeyboardHandler, type KeyHandler, type UseKeyboardHandlerOptions } from './useKeyboardHandler';
-
-// Animation utilities
-export {
-  useAnimationShortcut,
-  ANIMATION_MODE_LABELS,
-  getAnimationModeToast,
-} from './useAnimationShortcut';
 
 // Ref utilities
 export { useLatestRef } from './useLatestRef';

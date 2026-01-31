@@ -1,34 +1,39 @@
 'use client';
 
 /**
- * CollapsibleSection - Unified collapsible section for sidebar filters
+ * CollapsibleSection - Unified collapsible section for sidebar panels
  *
- * Design System Component - Use this for ALL collapsible sections:
- * - Views tab (ViewCategorySection)
- * - Nodes tab (FilterTree.Section)
- * - Schema tab (FilterSection)
+ * CANONICAL COMPONENT - Use this for collapsible sections in detail panels:
+ * - NodeDetailsPanel (properties, relationships)
+ * - EdgeDetailsPanel (edge details)
+ *
+ * NOTE: For filter lists (Views, Nodes, Rels, Schema tabs), use FilterTree
+ * instead which provides more specialized features (tri-state checkboxes,
+ * progress bars, keyboard navigation).
  *
  * Features:
  * - Icon + Label + Count on the left
  * - Chevron on the RIGHT (unified design)
- * - Optional tri-state checkbox
- * - Smooth expand/collapse animation
+ * - Optional tri-state checkbox (showCheckbox prop)
+ * - Smooth expand/collapse animation (max-h transition)
  * - Keyboard navigation (Arrow keys, Enter, Space)
- * - WCAG accessible
+ * - WCAG AA accessible (4.5:1 contrast)
+ *
+ * Uses useControllableState for controlled/uncontrolled pattern.
  */
 
 import {
   memo,
-  useState,
   useCallback,
   useRef,
   type ReactNode,
   type KeyboardEvent,
 } from 'react';
-import { ChevronDown, Check, Minus } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { iconSizes, gapTokens } from '@/design/tokens';
-import type { CheckboxState } from './FilterSection';
+import { iconSizes, gapTokens, glowEffects, defaultColors } from '@/design/tokens';
+import { useControllableState } from '@/hooks/useControllableState';
+import { TriStateCheckbox, type CheckboxState } from './TriStateCheckbox';
 
 export type { CheckboxState };
 
@@ -71,7 +76,7 @@ export const CollapsibleSection = memo(function CollapsibleSection({
   id,
   label,
   icon,
-  color = '#8b8b8b',
+  color = defaultColors.neutral,
   count,
   children,
   defaultExpanded = true,
@@ -83,26 +88,18 @@ export const CollapsibleSection = memo(function CollapsibleSection({
   showIndentLine = false,
   className,
 }: CollapsibleSectionProps) {
-  // Use controlled or uncontrolled state
-  const [internalExpanded, setInternalExpanded] = useState(defaultExpanded);
-  const isExpanded = controlledExpanded !== undefined ? controlledExpanded : internalExpanded;
+  // Use controllable state hook for cleaner controlled/uncontrolled pattern
+  const [isExpanded, setIsExpanded] = useControllableState(
+    controlledExpanded,
+    defaultExpanded,
+    onExpandedChange
+  );
 
   const headerRef = useRef<HTMLButtonElement>(null);
 
-  const setExpanded = useCallback(
-    (value: boolean | ((prev: boolean) => boolean)) => {
-      const newValue = typeof value === 'function' ? value(isExpanded) : value;
-      if (controlledExpanded === undefined) {
-        setInternalExpanded(newValue);
-      }
-      onExpandedChange?.(newValue);
-    },
-    [isExpanded, controlledExpanded, onExpandedChange]
-  );
-
   const handleToggle = useCallback(() => {
-    setExpanded((prev) => !prev);
-  }, [setExpanded]);
+    setIsExpanded((prev) => !prev);
+  }, [setIsExpanded]);
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent<HTMLButtonElement>) => {
@@ -110,13 +107,13 @@ export const CollapsibleSection = memo(function CollapsibleSection({
         case 'ArrowLeft':
           if (isExpanded) {
             e.preventDefault();
-            setExpanded(false);
+            setIsExpanded(false);
           }
           break;
         case 'ArrowRight':
           if (!isExpanded) {
             e.preventDefault();
-            setExpanded(true);
+            setIsExpanded(true);
           }
           break;
         case 'Enter':
@@ -126,89 +123,103 @@ export const CollapsibleSection = memo(function CollapsibleSection({
           break;
       }
     },
-    [isExpanded, setExpanded, handleToggle]
+    [isExpanded, setIsExpanded, handleToggle]
   );
 
-  const handleCheckboxClick = useCallback(
-    (e: React.MouseEvent) => {
-      e.stopPropagation();
-      onCheckboxClick?.();
-    },
-    [onCheckboxClick]
-  );
+  // Check if any items are selected for glow effect
+  const hasSelection = checkboxState !== 'none';
 
   return (
     <div className={cn('space-y-3', className)}>
-      {/* Section Header */}
-      <button
-        ref={headerRef}
-        onClick={handleToggle}
-        onKeyDown={handleKeyDown}
-        aria-expanded={isExpanded}
-        aria-controls={`collapsible-section-${id}`}
-        aria-label={`${isExpanded ? 'Collapse' : 'Expand'} ${label}`}
-        className={cn('flex items-center w-full group py-0.5', gapTokens.comfortable)}
+      {/* Section Header - with wow effects matching FilterTree.Section */}
+      <div
+        className={cn(
+          'flex items-center w-full py-1 px-1 group rounded-lg',
+          'transition-all duration-300',
+          'hover:bg-white/[0.03]',
+          gapTokens.comfortable
+        )}
+        style={{
+          // Subtle glow when items are selected - uses design token
+          boxShadow: hasSelection ? glowEffects.section(color) : undefined,
+        }}
       >
-        {/* Tri-state Checkbox (optional) */}
-        {showCheckbox && (
-          <div
-            onClick={handleCheckboxClick}
-            role="checkbox"
-            aria-checked={checkboxState === 'all' ? true : checkboxState === 'partial' ? 'mixed' : false}
-            aria-label={`Select all ${label}`}
-            className={cn(
-              'flex-shrink-0 flex items-center justify-center',
-              'w-5 h-5 rounded-md',
-              'border-[1.5px] transition-all duration-200',
-              'hover:scale-105 cursor-pointer',
-              checkboxState === 'none'
-                ? 'border-white/25 bg-transparent'
-                : 'border-transparent'
-            )}
+        {/* Tri-state Checkbox (optional) - uses shared component for consistency */}
+        {showCheckbox && onCheckboxClick && (
+          <TriStateCheckbox
+            state={checkboxState}
+            onClick={onCheckboxClick}
+            color={color}
+            label={`Select all ${label}`}
+          />
+        )}
+
+        {/* Expand/Collapse button */}
+        <button
+          ref={headerRef}
+          onClick={handleToggle}
+          onKeyDown={handleKeyDown}
+          aria-expanded={isExpanded}
+          aria-controls={`collapsible-section-${id}`}
+          aria-label={`${isExpanded ? 'Collapse' : 'Expand'} ${label}`}
+          className={cn(
+            'flex items-center flex-1 min-w-0',
+            'active:scale-[0.99]',
+            'transition-transform duration-150',
+            gapTokens.comfortable
+          )}
+        >
+          {/* Icon with glow effect */}
+          <span
+            className="flex-shrink-0 transition-all duration-300 group-hover:scale-110"
             style={{
-              backgroundColor: checkboxState !== 'none' ? `${color}25` : undefined,
-              borderColor: checkboxState !== 'none' ? color : undefined,
+              color,
+              filter: hasSelection ? `drop-shadow(0 0 4px ${color}60)` : undefined,
             }}
           >
-            {checkboxState === 'all' && (
-              <Check className={iconSizes.xs} style={{ color }} strokeWidth={2.5} />
+            {icon}
+          </span>
+
+          {/* Label */}
+          <span
+            className={cn(
+              'text-[11px] uppercase tracking-wider font-semibold',
+              'transition-all duration-300'
             )}
-            {checkboxState === 'partial' && (
-              <Minus className={iconSizes.xs} style={{ color }} strokeWidth={2.5} />
-            )}
-          </div>
-        )}
+            style={{
+              color,
+              textShadow: hasSelection ? `0 0 8px ${color}40` : undefined,
+            }}
+          >
+            {label}
+          </span>
 
-        {/* Icon */}
-        <span className="flex-shrink-0" style={{ color }}>
-          {icon}
-        </span>
-
-        {/* Label */}
-        <span
-          className="text-[11px] uppercase tracking-wider font-semibold text-white/45"
-          style={{ color }}
-        >
-          {label}
-        </span>
-
-        {/* Count */}
-        {count !== undefined && (
-          <span className="text-[10px] tabular-nums text-white/25">({count})</span>
-        )}
-
-        {/* Chevron - RIGHT aligned */}
-        <ChevronDown
-          className={cn(
-            'ml-auto',
-            iconSizes.md,
-            'text-white/30',
-            'transition-transform duration-200',
-            'group-hover:text-white/50',
-            !isExpanded && '-rotate-90'
+          {/* Count with glow */}
+          {count !== undefined && (
+            <span
+              className={cn(
+                'text-[10px] tabular-nums',
+                'transition-colors duration-300',
+                hasSelection ? 'text-white/50' : 'text-white/40'
+              )}
+            >
+              ({count})
+            </span>
           )}
-        />
-      </button>
+
+          {/* Chevron - RIGHT aligned */}
+          <ChevronDown
+            className={cn(
+              'ml-auto',
+              iconSizes.md,
+              'text-white/40',
+              'transition-all duration-200',
+              'group-hover:text-white/50',
+              !isExpanded && '-rotate-90'
+            )}
+          />
+        </button>
+      </div>
 
       {/* Collapsible Content */}
       <div

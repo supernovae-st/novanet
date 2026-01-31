@@ -10,7 +10,7 @@
 import { memo, type ReactNode } from 'react';
 import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { iconSizes } from '@/design/tokens';
+import { iconSizes, gapTokens } from '@/design/tokens';
 
 export interface ModalHeaderProps {
   /** Title text */
@@ -43,7 +43,7 @@ export const ModalHeader = memo(function ModalHeader({
         className
       )}
     >
-      <div className="flex items-center gap-3">
+      <div className={cn('flex items-center', gapTokens.spacious)}>
         {icon && (
           // opacity.bg.medium (0.06) + opacity.border.light (0.08) + opacity.text.muted (0.60)
           <div className="w-9 h-9 rounded-xl bg-white/[0.06] border border-white/[0.08] flex items-center justify-center text-white/60">

@@ -12,6 +12,7 @@
 
 import { memo } from 'react';
 import { cn } from '@/lib/utils';
+import { gapTokens } from '@/design/tokens';
 import { CopyButton } from './CopyButton';
 
 export interface JsonViewProps {
@@ -82,7 +83,7 @@ export const JsonToggleSection = memo(function JsonToggleSection({
       <button
         onClick={onToggle}
         className={cn(
-          'w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-medium',
+          cn('w-full flex items-center justify-center px-4 py-2.5 rounded-xl text-xs font-medium', gapTokens.default),
           'transition-all duration-200',
           isOpen
             ? 'bg-primary/20 text-primary border border-primary/35'

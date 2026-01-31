@@ -7,7 +7,9 @@
  */
 
 import { useMemo, memo } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import { cn } from '@/lib/utils';
+import { gapTokens } from '@/design/tokens';
 import { hexToRgba, OPACITY } from '@/lib/colorUtils';
 import { useGraphStore } from '@/stores/graphStore';
 import { NODE_TYPE_CONFIG, type NodeCategory } from '@/config/nodeTypes';
@@ -28,7 +30,12 @@ export const ResultsOverview = memo(function ResultsOverview({
   className,
   maxTypes = 6,
 }: ResultsOverviewProps) {
-  const { nodes, totalNodes } = useGraphStore();
+  const { nodes, totalNodes } = useGraphStore(
+    useShallow((state) => ({
+      nodes: state.nodes,
+      totalNodes: state.totalNodes,
+    }))
+  );
 
   // Calculate node type breakdown - single pass for both counts and total types
   const { typeCounts, totalTypes } = useMemo(() => {
@@ -68,19 +75,19 @@ export const ResultsOverview = memo(function ResultsOverview({
   // Show empty state if no nodes
   if (totalNodes === 0) {
     return (
-      <div className={cn('flex items-center gap-2 text-white/40 text-xs', className)}>
+      <div className={cn('flex items-center text-white/40 text-xs', gapTokens.default, className)}>
         <span>No results</span>
       </div>
     );
   }
 
   return (
-    <div className={cn('flex items-center gap-1.5', className)}>
+    <div className={cn('flex items-center', gapTokens.compact, className)}>
       {/* Node type badges - compact with hover expansion */}
       {typeCounts.map((item) => (
         <span
           key={item.type}
-          className="group flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium whitespace-nowrap transition-all duration-200 cursor-default"
+          className={cn('group flex items-center px-2 py-1 rounded-lg text-xs font-medium whitespace-nowrap transition-all duration-200 cursor-default', gapTokens.tight)}
           style={{
             backgroundColor: hexToRgba(item.color, OPACITY.MEDIUM),
             color: item.color,
@@ -110,7 +117,7 @@ export const ResultsOverview = memo(function ResultsOverview({
       {/* Show remaining count if there are more types */}
       {remainingCount > 0 && (
         <span
-          className="text-[10px] text-white/30 whitespace-nowrap px-1"
+          className="text-[10px] text-white/40 whitespace-nowrap px-1"
           title={`${remainingCount} more node types`}
         >
           +{remainingCount}

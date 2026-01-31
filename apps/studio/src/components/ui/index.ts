@@ -15,7 +15,6 @@ export { IconButton } from './IconButton';
 export { RefreshButton } from './RefreshButton';
 export { Kbd } from './Kbd';
 export { CategoryIcon, getCategoryIconComponent } from './CategoryIcon';
-export { DataModeToggle } from './DataModeToggle';
 
 // Existing components
 export { ErrorBoundary } from './ErrorBoundary';
@@ -34,3 +33,20 @@ export {
   NodeSkeleton,
   PanelSkeleton,
 } from './Skeleton';
+
+// Filter components - Design system for sidebar filters
+export { FilterCard } from './FilterCard';
+export { FilterSection } from './FilterSection';
+export { CollapsibleSection } from './CollapsibleSection';
+export { TriStateCheckbox, type CheckboxState } from './TriStateCheckbox';
+export { ProgressBar } from './ProgressBar';
+export { FilterTree } from './FilterTree';
+
+// Modal components
+export { Modal } from './Modal';
+export { ModalHeader } from './ModalHeader';
+export { CommandPalette } from './CommandPalette';
+
+// Layout components
+export { EmptyState } from './EmptyState';
+export { SegmentedTabs } from './SegmentedTabs';

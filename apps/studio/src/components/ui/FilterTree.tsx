@@ -28,7 +28,7 @@ import {
   type KeyboardEvent,
 } from 'react';
 import { cn } from '@/lib/utils';
-import { filterTreeClasses as ftc, iconSizes, gapTokens } from '@/design/tokens';
+import { filterTreeClasses as ftc, iconSizes, gapTokens, glowEffects } from '@/design/tokens';
 import { TriStateCheckbox, type CheckboxState } from './TriStateCheckbox';
 import { ProgressBar } from './ProgressBar';
 import { NAV_ICONS, STATUS_ICONS } from '@/config/iconSystem';
@@ -156,9 +156,11 @@ export interface FilterTreeSectionProps {
   /** Accent color (hex) */
   color: string;
   /** Checkbox state for the section */
-  checkboxState: CheckboxState;
+  checkboxState?: CheckboxState;
   /** Callback when checkbox is clicked */
-  onCheckboxClick: () => void;
+  onCheckboxClick?: () => void;
+  /** Show checkbox (default: true) - set to false for mutually exclusive items like Views */
+  showCheckbox?: boolean;
   /** Total count for the section */
   count?: number;
   /** Children (rows) */
@@ -178,8 +180,9 @@ const FilterTreeSection = memo(function FilterTreeSection({
   label,
   icon,
   color,
-  checkboxState,
+  checkboxState = 'none',
   onCheckboxClick,
+  showCheckbox = true,
   count,
   children,
   isExpanded: controlledExpanded,
@@ -232,18 +235,34 @@ const FilterTreeSection = memo(function FilterTreeSection({
     [isExpanded, setIsExpanded, handleToggle]
   );
 
+  // Check if any items are selected for glow effect
+  const hasSelection = showCheckbox && checkboxState !== 'none';
+
   return (
     <div className={cn('mb-1', className)} role="treeitem" aria-expanded={isExpanded} aria-labelledby={`section-label-${id}`}>
       {/* Section Header - Unified design: checkbox | icon | label | count | chevron (right) */}
-      <div className={cn('flex items-center w-full py-0.5 group', gapTokens.comfortable)}>
-        {/* Tri-state Checkbox - separate clickable */}
-        <TriStateCheckbox
-          state={checkboxState}
-          onClick={onCheckboxClick}
-          color={color}
-          disabled={disabled}
-          label={`Select all ${label}`}
-        />
+      <div
+        className={cn(
+          'flex items-center w-full py-1 px-1 group rounded-lg',
+          'transition-all duration-300',
+          'hover:bg-white/[0.03]',
+          gapTokens.comfortable
+        )}
+        style={{
+          // Subtle glow when items are selected - uses design token
+          boxShadow: hasSelection ? glowEffects.section(color) : undefined,
+        }}
+      >
+        {/* Tri-state Checkbox - optional, hidden for mutually exclusive items like Views */}
+        {showCheckbox && onCheckboxClick && (
+          <TriStateCheckbox
+            state={checkboxState}
+            onClick={onCheckboxClick}
+            color={color}
+            disabled={disabled}
+            label={`Select all ${label}`}
+          />
+        )}
 
         {/* Expand/Collapse area - icon | label | count | chevron */}
         <button
@@ -254,23 +273,50 @@ const FilterTreeSection = memo(function FilterTreeSection({
           aria-expanded={isExpanded}
           aria-controls={`filter-section-${id}`}
           aria-label={`${isExpanded ? 'Collapse' : 'Expand'} ${label}`}
-          className={cn('flex items-center flex-1 min-w-0', gapTokens.comfortable)}
+          className={cn(
+            'flex items-center flex-1 min-w-0',
+            'active:scale-[0.99]',
+            'transition-transform duration-150',
+            gapTokens.comfortable
+          )}
         >
-          {/* Icon */}
-          <span className="flex-shrink-0" style={{ color }}>{icon}</span>
+          {/* Icon with glow effect */}
+          <span
+            className="flex-shrink-0 transition-all duration-300 group-hover:scale-110"
+            style={{
+              color,
+              filter: hasSelection ? `drop-shadow(0 0 4px ${color}60)` : undefined,
+            }}
+          >
+            {icon}
+          </span>
 
           {/* Label */}
           <span
             id={`section-label-${id}`}
-            className="text-[11px] uppercase tracking-wider font-semibold"
-            style={{ color }}
+            className={cn(
+              'text-[11px] uppercase tracking-wider font-semibold',
+              'transition-all duration-300'
+            )}
+            style={{
+              color,
+              textShadow: hasSelection ? `0 0 8px ${color}40` : undefined,
+            }}
           >
             {label}
           </span>
 
-          {/* Count */}
+          {/* Count with glow */}
           {count !== undefined && (
-            <span className="text-[10px] tabular-nums text-white/25">({formatCount(count)})</span>
+            <span
+              className={cn(
+                'text-[10px] tabular-nums',
+                'transition-colors duration-300',
+                hasSelection ? 'text-white/50' : 'text-white/40'
+              )}
+            >
+              ({formatCount(count)})
+            </span>
           )}
 
           {/* Chevron - RIGHT aligned */}
@@ -278,8 +324,8 @@ const FilterTreeSection = memo(function FilterTreeSection({
             className={cn(
               'ml-auto',
               iconSizes.md,
-              'text-white/30',
-              'transition-transform duration-200',
+              'text-white/40',
+              'transition-all duration-200',
               'group-hover:text-white/50',
               !isExpanded && '-rotate-90'
             )}
@@ -322,6 +368,10 @@ export interface FilterTreeRowProps {
   onToggle: () => void;
   /** Count for the item */
   count?: number;
+  /** Show checkbox (default: true) - set to false for Views */
+  showCheckbox?: boolean;
+  /** Keyboard shortcut to display (e.g., "1", "2") */
+  shortcut?: string;
   /** Additional class names */
   className?: string;
 }
@@ -334,6 +384,8 @@ const FilterTreeRow = memo(function FilterTreeRow({
   isSelected,
   onToggle,
   count,
+  showCheckbox = true,
+  shortcut,
   className,
 }: FilterTreeRowProps) {
   const { showProgressBars, maxCount, disabled } = useContext(FilterTreeContext);
@@ -360,41 +412,65 @@ const FilterTreeRow = memo(function FilterTreeRow({
       onKeyDown={handleKeyDown}
       disabled={disabled}
       tabIndex={tabIndex}
-      role="checkbox"
-      aria-checked={isSelected}
-      aria-label={`${label}${count !== undefined ? ` (${count})` : ''}`}
+      role={showCheckbox ? 'checkbox' : 'button'}
+      aria-checked={showCheckbox ? isSelected : undefined}
+      aria-pressed={!showCheckbox ? isSelected : undefined}
+      aria-label={`${label}${count !== undefined ? ` (${count})` : ''}${shortcut ? ` (${shortcut})` : ''}`}
       data-selected={isSelected}
       className={cn(
         ftc.row,
         isSelected && ftc.rowSelected,
         disabled && ftc.rowDisabled,
+        // Wow effects
+        'active:scale-[0.98]',
         className
       )}
+      style={{
+        // Colored row background - always tinted with item color
+        backgroundColor: isSelected ? `${color}18` : `${color}0a`,
+        // Ring color when selected
+        borderColor: isSelected ? `${color}30` : undefined,
+        // Glow effect when selected - uses design token
+        boxShadow: isSelected ? glowEffects.row(color) : undefined,
+      }}
     >
-      {/* Checkbox - matches TriStateCheckbox styling */}
-      <div
-        className={cn(
-          ftc.checkbox,
-          isSelected ? ftc.checkboxChecked : ftc.checkboxUnchecked
-        )}
-        style={{
-          backgroundColor: isSelected ? `${color}20` : 'transparent',
-          borderColor: isSelected ? color : 'rgba(255,255,255,0.2)',
-        }}
-      >
-        {isSelected && <CheckIcon className={iconSizes.xs} style={{ color }} />}
-      </div>
+      {/* Checkbox - matches TriStateCheckbox styling with glow */}
+      {showCheckbox && (
+        <div
+          className={cn(
+            ftc.checkbox,
+            isSelected ? ftc.checkboxChecked : ftc.checkboxUnchecked,
+            'transition-all duration-300'
+          )}
+          style={{
+            backgroundColor: isSelected ? `${color}25` : 'transparent',
+            borderColor: isSelected ? color : 'rgb(255 255 255 / 0.2)',
+            boxShadow: isSelected ? glowEffects.checkbox(color) : undefined,
+          }}
+        >
+          {isSelected && <CheckIcon className={iconSizes.xs} style={{ color }} />}
+        </div>
+      )}
 
-      {/* Icon with background - matches ViewCard */}
+      {/* Icon with colored background - always tinted, brighter when selected */}
       <div
         className={cn(
           'flex-shrink-0 flex items-center justify-center',
           'w-8 h-8 rounded-lg',
-          'transition-all duration-200',
-          isSelected ? 'bg-white/[0.10]' : 'bg-white/[0.05] group-hover:bg-white/[0.08]'
+          'transition-all duration-300'
         )}
+        style={{
+          // Always show colored tint, brighter when selected
+          backgroundColor: isSelected ? `${color}25` : `${color}15`,
+          boxShadow: isSelected ? glowEffects.iconBox(color) : undefined,
+        }}
       >
-        <span style={{ color }}>{icon}</span>
+        <span
+          className="transition-transform duration-200 group-hover:scale-110"
+          style={{ color }}
+        >
+          {icon}
+        </span>
       </div>
 
       {/* Label */}
@@ -424,6 +500,24 @@ const FilterTreeRow = memo(function FilterTreeRow({
           )}
         >
           {formatCount(count, true)}
+        </span>
+      )}
+
+      {/* Keyboard shortcut badge */}
+      {shortcut && (
+        <span
+          className={cn(
+            'flex-shrink-0',
+            'min-w-[28px] px-2 py-0.5 rounded-full',
+            'text-[10px] font-semibold text-center tabular-nums',
+            'transition-all duration-300'
+          )}
+          style={{
+            backgroundColor: isSelected ? `${color}30` : `${color}15`,
+            color: isSelected ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.5)',
+          }}
+        >
+          {shortcut}
         </span>
       )}
     </button>

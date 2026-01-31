@@ -15,6 +15,7 @@
 
 import { memo, type ReactNode } from 'react';
 import { cn } from '@/lib/utils';
+import { gapTokens } from '@/design/tokens';
 
 export interface KeyboardKeyProps {
   /** Key label or children */
@@ -108,7 +109,7 @@ export const KeyboardShortcut = memo(function KeyboardShortcut({
   className,
 }: KeyboardShortcutProps) {
   return (
-    <span className={cn('inline-flex items-center gap-1', className)}>
+    <span className={cn('inline-flex items-center', gapTokens.tight, className)}>
       {keys.map((key, index) => (
         <KeyboardKey key={index} size={size}>
           {key}

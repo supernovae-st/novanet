@@ -2,29 +2,29 @@ import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
-import { glassClasses } from "@/design/tokens"
+import { glassClasses, opacity } from "@/design/tokens"
 
 const cardVariants = cva(
   "rounded-xl border text-card-foreground transition-all duration-200",
   {
     variants: {
       variant: {
-        // Default - Surface-1 (5% lightness)
+        // Default - Surface-1 (5% lightness) with token-based borders
         default:
-          "bg-[hsl(240,8%,5%)] border-white/12 hover:bg-[hsl(240,6%,8%)] hover:border-white/18",
+          `bg-[hsl(240,8%,5%)] border-${opacity.border.medium} hover:bg-[hsl(240,6%,8%)] hover:border-${opacity.border.heavy}`,
         // Glass - Surface-2 with backdrop blur
         glass: glassClasses.light,
         // Floating - Elevated with premium shadow
         floating: glassClasses.floating,
-        // Outline - Transparent with visible border
+        // Outline - Transparent with visible border (uses strong border token)
         outline:
-          "bg-transparent border-white/15 hover:border-white/25 hover:bg-white/5",
-        // Solid - Opaque surface-1
+          `bg-transparent border-${opacity.border.strong} hover:border-${opacity.border.heavy} hover:bg-${opacity.bg.light}`,
+        // Solid - Opaque surface-1 with token-based border
         solid:
-          "bg-[hsl(240,8%,5%)] border-white/12",
+          `bg-[hsl(240,8%,5%)] border-${opacity.border.medium}`,
         // Interactive - Clear hover feedback (surface-1 → surface-3)
         interactive:
-          "bg-[hsl(240,8%,5%)] border-white/12 hover:bg-[hsl(240,5%,12%)] hover:border-white/20 hover:shadow-lg hover:shadow-black/40 cursor-pointer",
+          `bg-[hsl(240,8%,5%)] border-${opacity.border.medium} hover:bg-[hsl(240,5%,12%)] hover:border-${opacity.border.heavy} hover:shadow-lg hover:shadow-black/40 cursor-pointer`,
       },
     },
     defaultVariants: {
@@ -100,7 +100,7 @@ const CardFooter = React.forwardRef<
     ref={ref}
     className={cn(
       "flex items-center p-5 pt-0",
-      "border-t border-white/[0.06] mt-4 pt-4",
+      `border-t border-${opacity.border.subtle} mt-4 pt-4`,
       className
     )}
     {...props}

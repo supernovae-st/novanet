@@ -15,7 +15,7 @@
 import * as React from 'react';
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
 import { cn } from '@/lib/utils';
-import { glassClasses } from '@/design/tokens';
+import { glassClasses, opacity } from '@/design/tokens';
 
 // =============================================================================
 // Provider - Wrap app root for global tooltip config
@@ -77,7 +77,7 @@ const TooltipShortcut = ({ children }: TooltipShortcutProps) => (
   <kbd
     className={cn(
       'ml-1.5 px-1 py-0.5 rounded',
-      'bg-white/10 border border-white/10',
+      `bg-${opacity.bg.heavy} border border-${opacity.bg.heavy}`,
       'text-[9px] text-white/60 font-mono'
     )}
   >

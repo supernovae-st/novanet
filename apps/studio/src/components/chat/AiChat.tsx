@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect, useCallback, memo } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import { cn } from '@/lib/utils';
 import { logger } from '@/lib/logger';
 import { postJSON, getErrorMessage } from '@/lib/fetchClient';
@@ -67,7 +68,17 @@ export const AiChat = memo(function AiChat({
     setLoading,
     setError,
     clearMessages,
-  } = useChatStore();
+  } = useChatStore(
+    useShallow((state) => ({
+      messages: state.messages,
+      isLoading: state.isLoading,
+      error: state.error,
+      addMessage: state.addMessage,
+      setLoading: state.setLoading,
+      setError: state.setError,
+      clearMessages: state.clearMessages,
+    }))
+  );
 
   // Auto-focus input when opened
   useEffect(() => {
@@ -192,7 +203,7 @@ export const AiChat = memo(function AiChat({
             <p className="text-white/60 text-sm mb-1">
               Ask me anything about your graph
             </p>
-            <p className="text-white/30 text-xs mb-6">
+            <p className="text-white/40 text-xs mb-6">
               I&apos;ll translate your question to Cypher
             </p>
             <div className="space-y-2">
@@ -260,7 +271,7 @@ export const AiChat = memo(function AiChat({
                 // opacity.border.light = white/[0.10]
                 'w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3',
                 'text-sm resize-none focus:outline-none focus:border-novanet-500/50 focus:bg-white/[0.08]',
-                'placeholder:text-white/30 transition-all duration-150'
+                'placeholder:text-white/40 transition-all duration-150'
               )}
               style={{ minHeight: '48px', maxHeight: '120px' }}
             />
@@ -272,14 +283,14 @@ export const AiChat = memo(function AiChat({
               'p-3 rounded-xl transition-all duration-150 border',
               input.trim() && !isLoading
                 ? 'bg-novanet-500/20 text-novanet-400 border-novanet-500/30 hover:bg-novanet-500/30'
-                : 'bg-white/5 text-white/20 border-white/10 cursor-not-allowed'
+                : 'bg-white/5 text-white/40 border-white/10 cursor-not-allowed'
             )}
           >
             <SendIcon className={iconSizes.md} />
           </button>
         </div>
         <div className="flex items-center justify-between mt-2 px-1">
-          <p className="text-[10px] text-white/30">
+          <p className="text-[10px] text-white/40">
             Enter to send · Shift+Enter for new line
           </p>
           <Kbd>⌘J</Kbd>
@@ -387,7 +398,7 @@ const ChatMessage = memo(function ChatMessage({
 
           {/* Stats */}
           {(message.metadata.nodeCount !== undefined || message.metadata.duration !== undefined) && (
-            <div className={cn('flex items-center text-[10px] text-white/30 px-1', gapTokens.spacious)}>
+            <div className={cn('flex items-center text-[10px] text-white/40 px-1', gapTokens.spacious)}>
               {message.metadata.nodeCount !== undefined && (
                 <span className={cn('flex items-center', gapTokens.tight)}>
                   <span className="w-1.5 h-1.5 rounded-full bg-indigo-400/50" />
@@ -432,7 +443,7 @@ const SuggestionButton = memo(function SuggestionButton({
         'transition-all duration-150'
       )}
     >
-      <span className="mr-2 text-white/20">→</span>
+      <span className="mr-2 text-white/40">→</span>
       {text}
     </button>
   );

@@ -3,10 +3,10 @@
 /**
  * FilterSection - Collapsible section header for filter groups
  *
- * Design: Matches ViewCategorySection for consistency
- * - Chevron expand/collapse
- * - Tri-state checkbox for bulk select
- * - Icon + label + count
+ * Design: Unified with FilterTree.Section for consistency
+ * - Chevron expand/collapse (right-aligned)
+ * - Tri-state checkbox for bulk select (uses TriStateCheckbox component)
+ * - Icon + label + count with glow effects
  * - Animated expand/collapse
  */
 
@@ -17,12 +17,14 @@ import {
   type ReactNode,
   type KeyboardEvent,
 } from 'react';
-import { ChevronDown, Check, Minus } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { iconSizes } from '@/design/tokens';
+import { iconSizes, gapTokens, glowEffects } from '@/design/tokens';
 import { useControllableState } from '@/hooks/useControllableState';
+import { TriStateCheckbox, type CheckboxState } from './TriStateCheckbox';
 
-export type CheckboxState = 'all' | 'partial' | 'none';
+// Re-export for backwards compatibility
+export type { CheckboxState };
 
 export interface FilterSectionProps {
   /** Section identifier */
@@ -93,11 +95,33 @@ export const FilterSection = memo(function FilterSection({
     [isExpanded, setIsExpanded, handleToggle]
   );
 
+  // Check if any items are selected for glow effect
+  const hasSelection = checkboxState !== 'none';
+
   return (
     <div className={cn('space-y-3', className)}>
-      {/* Section Header */}
-      <div className="flex items-center gap-2.5 py-1">
-        {/* Expand/Collapse Button */}
+      {/* Section Header - Unified: checkbox | icon | label | count | chevron (right) */}
+      <div
+        className={cn(
+          'flex items-center w-full py-1 px-1 group rounded-lg',
+          'transition-all duration-300',
+          'hover:bg-white/[0.03]',
+          gapTokens.comfortable
+        )}
+        style={{
+          // Subtle glow when items are selected - uses design token
+          boxShadow: hasSelection ? glowEffects.section(accentColor) : undefined,
+        }}
+      >
+        {/* Tri-state Checkbox - separate from expand button */}
+        <TriStateCheckbox
+          state={checkboxState}
+          onClick={onCheckboxClick}
+          color={accentColor}
+          label={`Select all ${label}`}
+        />
+
+        {/* Expand/Collapse area - icon | label | count | chevron */}
         <button
           ref={headerRef}
           onClick={handleToggle}
@@ -106,64 +130,61 @@ export const FilterSection = memo(function FilterSection({
           aria-controls={`filter-section-${id}`}
           aria-label={`${isExpanded ? 'Collapse' : 'Expand'} ${label}`}
           className={cn(
-            'p-1 -m-1 rounded-lg',
-            'transition-colors duration-200',
-            'hover:bg-white/[0.06]',
-            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-novanet-500/50'
+            'flex items-center flex-1 min-w-0',
+            'active:scale-[0.99]',
+            'transition-transform duration-150',
+            gapTokens.comfortable
           )}
         >
-          <ChevronDown
-            className={cn(
-              iconSizes.md,
-              'text-white/40',
-              'transition-transform duration-200',
-              !isExpanded && '-rotate-90'
-            )}
-          />
-        </button>
-
-        {/* Tri-state Checkbox */}
-        <button
-          onClick={onCheckboxClick}
-          aria-label={`Select all ${label}`}
-          className={cn(
-            'flex-shrink-0 flex items-center justify-center',
-            'w-5 h-5 rounded-md',
-            'border-[1.5px] transition-all duration-200',
-            'hover:scale-105',
-            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-novanet-500/50',
-            checkboxState === 'none'
-              ? 'border-white/25 bg-transparent'
-              : 'border-transparent'
-          )}
-          style={{
-            backgroundColor: checkboxState !== 'none' ? `${accentColor}25` : undefined,
-            borderColor: checkboxState !== 'none' ? accentColor : undefined,
-          }}
-        >
-          {checkboxState === 'all' && (
-            <Check className={iconSizes.xs} style={{ color: accentColor }} strokeWidth={2.5} />
-          )}
-          {checkboxState === 'partial' && (
-            <Minus className={iconSizes.xs} style={{ color: accentColor }} strokeWidth={2.5} />
-          )}
-        </button>
-
-        {/* Icon + Label (clickable to expand) */}
-        <button
-          onClick={handleToggle}
-          className="flex items-center gap-2 flex-1 min-w-0"
-        >
-          <span className="flex-shrink-0 text-base">{icon}</span>
+          {/* Icon with glow effect */}
           <span
-            className="text-[11px] font-bold uppercase tracking-wider"
-            style={{ color: accentColor }}
+            className="flex-shrink-0 transition-all duration-300 group-hover:scale-110"
+            style={{
+              color: accentColor,
+              filter: hasSelection ? `drop-shadow(0 0 4px ${accentColor}60)` : undefined,
+            }}
+          >
+            {icon}
+          </span>
+
+          {/* Label */}
+          <span
+            className={cn(
+              'text-[11px] uppercase tracking-wider font-semibold',
+              'transition-all duration-300'
+            )}
+            style={{
+              color: accentColor,
+              textShadow: hasSelection ? `0 0 8px ${accentColor}40` : undefined,
+            }}
           >
             {label}
           </span>
+
+          {/* Count with glow */}
           {count !== undefined && (
-            <span className="text-[10px] tabular-nums text-white/30">({count})</span>
+            <span
+              className={cn(
+                'text-[10px] tabular-nums',
+                'transition-colors duration-300',
+                hasSelection ? 'text-white/50' : 'text-white/40'
+              )}
+            >
+              ({count})
+            </span>
           )}
+
+          {/* Chevron - RIGHT aligned */}
+          <ChevronDown
+            className={cn(
+              'ml-auto',
+              iconSizes.md,
+              'text-white/40',
+              'transition-all duration-200',
+              'group-hover:text-white/50',
+              !isExpanded && '-rotate-90'
+            )}
+          />
         </button>
       </div>
 
@@ -178,7 +199,7 @@ export const FilterSection = memo(function FilterSection({
         role="group"
         aria-label={`${label} items`}
       >
-        <div className="flex flex-col gap-2.5 py-2.5">{children}</div>
+        <div className={cn('flex flex-col py-2.5', gapTokens.comfortable)}>{children}</div>
       </div>
     </div>
   );
