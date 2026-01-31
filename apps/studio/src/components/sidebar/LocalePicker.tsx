@@ -14,7 +14,7 @@ import { useState, useMemo, useCallback, useEffect, useRef, memo, useDeferredVal
 import { createPortal } from 'react-dom';
 import { Search, X, Globe, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { glassClasses, modalClasses, iconSizes } from '@/design/tokens';
+import { glassClasses, modalClasses, iconSizes, gapTokens } from '@/design/tokens';
 import { Kbd } from '@/components/ui';
 import { useFilterStore } from '@/stores/filterStore';
 import {
@@ -66,7 +66,8 @@ const LocaleCard = memo(function LocaleCard({
       aria-selected={isSelected}
       aria-label={isAllLocales ? `All languages (${totalCount})` : `${info.name} (${code})`}
       className={cn(
-        'flex flex-col items-center justify-center gap-2 p-4 rounded-xl',
+        'flex flex-col items-center justify-center p-4 rounded-xl',
+        gapTokens.default,
         'border transition-all duration-150 relative',
         'min-h-[110px]',
         'hover:scale-[1.02] active:scale-[0.98]',
@@ -223,7 +224,7 @@ export const LocalePicker = memo(function LocalePicker({
       >
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.06]">
-          <div className="flex items-center gap-3">
+          <div className={cn('flex items-center', gapTokens.spacious)}>
             <div className="w-9 h-9 rounded-lg bg-[#111118] border border-white/10 flex items-center justify-center">
               <Globe className="w-4.5 h-4.5 text-white/70" />
             </div>
@@ -244,7 +245,7 @@ export const LocalePicker = memo(function LocalePicker({
         </div>
 
         {/* Search Header - CommandPalette style */}
-        <div className="flex items-center gap-3 p-4 border-b border-white/[0.06]">
+        <div className={cn('flex items-center p-4 border-b border-white/[0.06]', gapTokens.spacious)}>
           <Search className="w-5 h-5 text-white/40 shrink-0" />
           <input
             ref={searchRef}
@@ -276,7 +277,7 @@ export const LocalePicker = memo(function LocalePicker({
         >
           <div
             ref={gridRef}
-            className="grid grid-cols-4 gap-3"
+            className={cn('grid grid-cols-4', gapTokens.spacious)}
           >
             {/* All Languages card */}
             <LocaleCard
@@ -319,16 +320,16 @@ export const LocalePicker = memo(function LocalePicker({
         <div className="p-3 border-t border-white/[0.06] bg-black/20">
           <div className="flex items-center justify-between text-xs text-white/50">
             <span>{filteredLocales.length + 1} languages</span>
-            <div className="flex items-center gap-4">
-              <span className="flex items-center gap-1.5">
+            <div className={cn('flex items-center', gapTokens.large)}>
+              <span className={cn('flex items-center', gapTokens.compact)}>
                 <Kbd>↑↓←→</Kbd>
                 <span>Navigate</span>
               </span>
-              <span className="flex items-center gap-1.5">
+              <span className={cn('flex items-center', gapTokens.compact)}>
                 <Kbd>↵</Kbd>
                 <span>Select</span>
               </span>
-              <span className="flex items-center gap-1.5">
+              <span className={cn('flex items-center', gapTokens.compact)}>
                 <Kbd>Esc</Kbd>
                 <span>Close</span>
               </span>
