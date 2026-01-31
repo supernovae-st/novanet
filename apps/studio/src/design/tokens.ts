@@ -563,52 +563,52 @@ export const modalClasses = {
  */
 export const sidebarTokens = {
   // ─────────────────────────────────────────────────────────────────────────
-  // ROW - Unified row styling for all sidebar items
+  // ROW - Linear Style: flat by default, left-accent when selected
   // ─────────────────────────────────────────────────────────────────────────
   row: {
-    /** Base row - consistent across all tabs */
+    /** Base row - FLAT by default, minimal styling */
     base: [
-      'group w-full flex items-center',
-      'h-11 px-3 gap-3 rounded-xl', // 44px height, 12px padding, 12px gap
-      // Glass effect
-      'backdrop-blur-md',
-      'ring-1 ring-inset ring-white/[0.06]',
-      'bg-white/[0.03]',
+      'group relative w-full flex items-center',
+      'h-10 px-3 gap-2.5 rounded-lg', // 40px height, 12px padding, 10px gap, 8px radius
+      // Transparent by default
+      'bg-transparent',
+      // Left border placeholder (invisible by default)
+      'border-l-[3px] border-transparent',
       // Transitions
-      'transition-all duration-200',
-      // Hover
-      'hover:bg-white/[0.06] hover:ring-white/[0.10]',
+      'transition-all duration-150',
+      // Hover: subtle highlight
+      'hover:bg-white/[0.04]',
       // Focus
-      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-novanet-500/60',
+      'focus-visible:outline-none focus-visible:bg-white/[0.06]',
       // Active press
-      'active:scale-[0.98]',
+      'active:bg-white/[0.08]',
     ].join(' '),
-    /** Selected state */
-    selected: 'bg-white/[0.08] ring-white/[0.12] shadow-lg shadow-black/20',
+    /** Selected state - left accent border + tinted background */
+    selected: 'border-l-current bg-white/[0.06]',
     /** Disabled state */
     disabled: 'opacity-50 cursor-not-allowed pointer-events-none',
   },
 
   // ─────────────────────────────────────────────────────────────────────────
-  // ICON BOX - Unified icon container styling
+  // ICON BOX - Simplified, no heavy backgrounds
   // ─────────────────────────────────────────────────────────────────────────
   iconBox: {
-    /** Standard icon box: 32x32px */
-    base: 'flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-lg transition-all duration-200',
-    /** Small icon box: 28x28px (for compact rows) */
-    sm: 'flex-shrink-0 flex items-center justify-center w-7 h-7 rounded-md transition-all duration-200',
-    /** Large icon box: 40x40px (for headers) */
-    lg: 'flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-xl transition-all duration-200',
+    /** Standard icon box: 28x28px - subtle background */
+    base: 'flex-shrink-0 flex items-center justify-center w-7 h-7 rounded-md transition-all duration-150',
+    /** Small icon box: 24x24px */
+    sm: 'flex-shrink-0 flex items-center justify-center w-6 h-6 rounded transition-all duration-150',
+    /** Large icon box: 36x36px (for headers) */
+    lg: 'flex-shrink-0 flex items-center justify-center w-9 h-9 rounded-lg transition-all duration-150',
   },
 
   // ─────────────────────────────────────────────────────────────────────────
-  // CHECKBOX - Unified checkbox styling
+  // CHECKBOX - Cleaner, smaller
   // ─────────────────────────────────────────────────────────────────────────
   checkbox: {
     /** Checkbox container */
-    base: 'w-4 h-4 rounded border-2 flex items-center justify-center transition-all duration-200 flex-shrink-0',
+    base: 'w-4 h-4 rounded border flex items-center justify-center transition-all duration-150 flex-shrink-0',
     /** Unchecked state */
-    unchecked: 'border-white/20 bg-transparent',
+    unchecked: 'border-white/25 bg-transparent',
     /** Checked state (color set via style) */
     checked: 'border-transparent',
     /** Spacer when checkbox is hidden (maintains alignment) */
@@ -620,27 +620,27 @@ export const sidebarTokens = {
   // ─────────────────────────────────────────────────────────────────────────
   label: {
     /** Row label text */
-    base: 'text-[13px] font-medium transition-colors duration-200 flex-1 text-left truncate',
+    base: 'text-[13px] font-medium transition-colors duration-150 flex-1 text-left truncate',
     /** Selected state */
     selected: 'text-white',
     /** Unselected state */
-    unselected: 'text-white/70 group-hover:text-white/90',
+    unselected: 'text-white/60 group-hover:text-white/80',
     /** Section label (category header) */
-    section: 'text-[11px] font-bold uppercase tracking-wider',
+    section: 'text-[11px] font-semibold uppercase tracking-wider',
   },
 
   // ─────────────────────────────────────────────────────────────────────────
-  // BADGE - Unified badge/count styling
+  // BADGE - Cleaner, less prominent
   // ─────────────────────────────────────────────────────────────────────────
   badge: {
-    /** Count badge: min-w-7 (28px), pill shape */
-    count: 'min-w-7 px-2 py-0.5 rounded-full text-[11px] font-semibold tabular-nums text-center flex-shrink-0 transition-all duration-200',
+    /** Count badge: compact pill */
+    count: 'min-w-6 px-1.5 py-0.5 rounded-md text-[11px] font-medium tabular-nums text-center flex-shrink-0 transition-all duration-150',
     /** Count selected state */
-    countSelected: 'text-white/90 bg-white/[0.12]',
+    countSelected: 'text-white/80 bg-white/[0.10]',
     /** Count unselected state */
-    countUnselected: 'text-white/50 bg-white/[0.05] group-hover:bg-white/[0.08] group-hover:text-white/70',
+    countUnselected: 'text-white/40 bg-transparent group-hover:text-white/60',
     /** Shortcut badge: keyboard shortcut indicator */
-    shortcut: 'min-w-7 px-2 py-0.5 rounded-full text-[10px] font-semibold tabular-nums text-center flex-shrink-0 transition-all duration-200',
+    shortcut: 'min-w-5 px-1.5 py-0.5 rounded text-[10px] font-medium tabular-nums text-center flex-shrink-0 transition-all duration-150',
   },
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -648,18 +648,18 @@ export const sidebarTokens = {
   // ─────────────────────────────────────────────────────────────────────────
   section: {
     /** Section container */
-    container: 'mb-1',
+    container: 'mb-2',
     /** Section header row */
     header: [
-      'flex items-center w-full py-1.5 px-1 gap-2.5',
-      'rounded-lg',
-      'transition-all duration-200',
+      'flex items-center w-full py-1.5 px-2 gap-2',
+      'rounded-md',
+      'transition-all duration-150',
       'hover:bg-white/[0.03]',
     ].join(' '),
-    /** Section content wrapper */
-    content: 'mt-1 space-y-2 overflow-hidden transition-all duration-300',
+    /** Section content wrapper - minimal gap between items */
+    content: 'mt-0.5 space-y-0.5 overflow-hidden transition-all duration-200',
     /** Content expanded state */
-    contentExpanded: 'max-h-[800px] opacity-100 py-2',
+    contentExpanded: 'max-h-[600px] opacity-100',
     /** Content collapsed state */
     contentCollapsed: 'max-h-0 opacity-0',
     /** Section count text */
@@ -671,7 +671,7 @@ export const sidebarTokens = {
   // ─────────────────────────────────────────────────────────────────────────
   chevron: {
     /** Chevron icon */
-    base: 'w-4 h-4 text-white/40 transition-transform duration-200 ml-auto',
+    base: 'w-4 h-4 text-white/30 transition-transform duration-150 ml-auto',
     /** Collapsed state (rotated) */
     collapsed: '-rotate-90',
   },

@@ -62,8 +62,6 @@ export type TurboNodeType = Node<TurboNodeData>;
  */
 export const TurboNode = memo(function TurboNode(props: NodeProps<TurboNodeType>) {
   const { data, selected } = props;
-  const [isHovered, setIsHovered] = useState(false);
-  const [isPressed, setIsPressed] = useState(false);
 
   // O(1) lookups via pre-computed tables
   const typeConfig = NODE_TYPE_CONFIG[data.type] || NODE_TYPE_CONFIG.Project;
@@ -73,14 +71,16 @@ export const TurboNode = memo(function TurboNode(props: NodeProps<TurboNodeType>
   const isDimmed = data.dimmed === true;
   const isHoverDimmed = data.hoverDimmed === true;
 
-  const handleMouseEnter = useCallback(() => {
-    setIsHovered(true);
-  }, []);
-
-  const handleMouseLeave = useCallback(() => {
-    setIsHovered(false);
-    setIsPressed(false);
-  }, []);
+  // Shared interaction state management (same as SchemaNode)
+  const {
+    isHovered,
+    handleMouseEnter,
+    handleMouseLeave,
+    handleMouseDown,
+    handleMouseUp,
+    containerClassName,
+    containerStyle,
+  } = useNodeInteractions({ selected: !!selected, isDimmed, isHoverDimmed });
 
   // Use memoized style factories - returns cached references for identical inputs
   const gradientBorderStyle = getGradientBorderStyle(colors.primary, colors.secondary, !!selected, isHovered);
@@ -89,24 +89,12 @@ export const TurboNode = memo(function TurboNode(props: NodeProps<TurboNodeType>
 
   return (
     <div
-      className={cn(
-        'group relative node-pressable',
-        // Full dimming (focus mode)
-        isDimmed && 'opacity-15 scale-90 grayscale pointer-events-none',
-        // Lighter dimming (hover highlight mode)
-        isHoverDimmed && !isDimmed && 'hover-dimmed',
-        // Enhanced hover effect
-        isHovered && !isDimmed && !isHoverDimmed && !selected && 'scale-103',
-        // Press feedback
-        isPressed && !isDimmed && 'scale-[0.98]',
-        // Selection already has its own scale
-        selected && 'scale-105'
-      )}
-      style={ROOT_TRANSITION_STYLE}
+      className={containerClassName}
+      style={containerStyle}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      onMouseDown={() => setIsPressed(true)}
-      onMouseUp={() => setIsPressed(false)}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
     >
       {/* Gradient border wrapper */}
       <div
