@@ -44,7 +44,11 @@ export function applySwimlaneLayout(
     if (!scopeDef) continue;
 
     const scopeId = `scope-${scope}`;
-    const config = SCOPE_CONFIGS.find(c => c.scope === scope)!;
+    const config = SCOPE_CONFIGS.find(c => c.scope === scope);
+    if (!config) {
+      console.error(`[swimlanes] Missing config for scope: ${scope}`);
+      continue;
+    }
 
     // Collect all nodes for this scope
     const scopeNodes: string[] = [];

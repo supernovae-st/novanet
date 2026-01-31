@@ -15,6 +15,7 @@
 import { useMemo, memo, useCallback } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { cn } from '@/lib/utils';
+import { gapTokens } from '@/design/tokens';
 import { useGraphStore } from '@/stores/graphStore';
 import { useFilterStore } from '@/stores/filterStore';
 import { NODE_TYPE_CONFIG, NODE_VISUAL_CATEGORIES, type CategoryConfig } from '@/config/nodeTypes';
@@ -60,14 +61,15 @@ const LabelButton = memo(function LabelButton({
       aria-label={`${label}: ${count} nodes. ${isSelected ? 'Selected' : 'Not selected'}. Shift+click to select only this type.`}
       aria-pressed={isSelected}
       className={cn(
-        'flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-lg',
+        'flex items-center justify-between px-2.5 py-1.5 rounded-lg',
+        gapTokens.default,
         'text-sm transition-all duration-200',
         isSelected
           ? 'bg-white/10 text-white'
           : 'text-white/60 hover:bg-white/5 hover:text-white/80'
       )}
     >
-      <span className="flex items-center gap-2 min-w-0">
+      <span className={cn('flex items-center min-w-0', gapTokens.default)}>
         <CategoryIcon
           category={category}
           size={14}
@@ -123,7 +125,7 @@ const CategoryGroup = memo(function CategoryGroup({
   return (
     <div className="space-y-1">
       {/* Category Header */}
-      <div className="flex items-center gap-2 px-1 py-1">
+      <div className={cn('flex items-center px-1 py-1', gapTokens.default)}>
         <CategoryIcon
           category={category.id}
           size={14}
@@ -253,7 +255,7 @@ export const LabelFilter = memo(function LabelFilter({ className }: LabelFilterP
         {selectedCount > 0 && (
           <p className="text-[10px] text-white/40 mt-1">
             {selectedCount} type{selectedCount !== 1 ? 's' : ''} selected
-            <span className="ml-2 text-white/30">Shift+click for exclusive</span>
+            <span className="ml-2 text-white/40">Shift+click for exclusive</span>
           </p>
         )}
       </div>

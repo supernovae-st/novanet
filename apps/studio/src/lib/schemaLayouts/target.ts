@@ -1,6 +1,6 @@
 // src/lib/schemaLayouts/target.ts
 import type { Node, Edge } from '@xyflow/react';
-import type { HierarchicalSchemaData } from '@novanet/core/graph';
+import type { HierarchicalSchemaData, SubcategoryMeta } from '@novanet/core/graph';
 import type { SchemaLayoutResult } from './types';
 import { SCOPE_CONFIGS, NODE_WIDTH, NODE_HEIGHT, SCOPE_GAP, PHI } from './types';
 import type { Scope } from '@novanet/core/types';
@@ -68,7 +68,7 @@ export function applyTargetLayout(
       const subcatEntries = Object.entries(scopeDef.subcategories)
         .filter(([_, meta]) => meta.nodeTypes.length > 0);
 
-      let allNodes: { nodeType: string; subcatName: string; subcatMeta: any }[] = [];
+      let allNodes: { nodeType: string; subcatName: string; subcatMeta: SubcategoryMeta }[] = [];
       for (const [subcatName, subcatMeta] of subcatEntries) {
         for (const nodeType of subcatMeta.nodeTypes) {
           allNodes.push({ nodeType, subcatName, subcatMeta });

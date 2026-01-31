@@ -35,7 +35,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { logger } from '@/lib/logger';
-import { glassClasses } from '@/design/tokens';
+import { glassClasses, gapTokens } from '@/design/tokens';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { useFilteredGraph, useFocusMode, useHoverHighlight, useNodeExpansion, useCenterOnNode, useSmartFitView, useContainerConstraint } from '@/hooks';
 import { useUIStore } from '@/stores/uiStore';
@@ -1144,7 +1144,7 @@ function Graph2DInner({
               )}
               data-testid="schema-loading-indicator"
             >
-              <div className="flex flex-col items-center gap-3">
+              <div className={cn('flex flex-col items-center', gapTokens.spacious)}>
                 <div className="w-8 h-8 border-2 border-white/30 border-t-white/90 rounded-full animate-spin" />
                 <span className="text-sm text-white/70">Layouting schema...</span>
               </div>

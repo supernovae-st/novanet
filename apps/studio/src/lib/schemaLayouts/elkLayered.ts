@@ -92,14 +92,20 @@ const ELK_OPTIONS: LayoutOptions = {
 export async function applyElkLayeredLayout(
   hierarchy: HierarchicalSchemaData
 ): Promise<SchemaLayoutResult> {
-  // Build ELK graph from hierarchy
-  const elkGraph = buildElkGraph(hierarchy);
+  try {
+    // Build ELK graph from hierarchy
+    const elkGraph = buildElkGraph(hierarchy);
 
-  // Run ELK layout
-  const layoutedGraph = await elk.layout(elkGraph);
+    // Run ELK layout
+    const layoutedGraph = await elk.layout(elkGraph);
 
-  // Convert back to React Flow format
-  return convertToReactFlow(layoutedGraph, hierarchy);
+    // Convert back to React Flow format
+    return convertToReactFlow(layoutedGraph, hierarchy);
+  } catch (error) {
+    console.error('[ELK Layout] Failed to compute layout, falling back to grid:', error);
+    // Fallback to synchronous edge-aware layout
+    return applyEdgeAwareGridLayout(hierarchy);
+  }
 }
 
 /**
@@ -348,8 +354,8 @@ function applyEdgeAwareGridLayout(
       for (const target of targets) {
         if (!adjacency.has(source)) adjacency.set(source, new Set());
         if (!adjacency.has(target)) adjacency.set(target, new Set());
-        adjacency.get(source)!.add(target);
-        adjacency.get(target)!.add(source);
+        adjacency.get(source)?.add(target);
+        adjacency.get(target)?.add(source);
       }
     }
   }
@@ -377,7 +383,8 @@ function applyEdgeAwareGridLayout(
   }
 
   const scopeLayouts: ScopeLayout[] = [];
-  const MAX_COLS = 6;
+  const MAX_COLS = 6;               // Max nodes per row in subcategory
+  const MAX_SUBCATS_PER_ROW = 4;    // Max subcategories per row in scope
 
   for (const scope of ['Project', 'Global', 'Shared'] as Scope[]) {
     const scopeDef = hierarchy.scopes[scope];
@@ -445,6 +452,8 @@ function applyEdgeAwareGridLayout(
   // PHASE 3: Position scopes on canvas
   // ===========================================================================
 
+  const MAX_ROW_WIDTH = 3000;  // Maximum width before wrapping to next row
+  let maxHeightInRow = 0;      // Track tallest scope in current row
   let scopeX = LAYOUT_MARGIN;
   let scopeY = LAYOUT_MARGIN;
 
@@ -480,7 +489,6 @@ function applyEdgeAwareGridLayout(
     // PHASE 4: Position subcategories within scope (HORIZONTALLY)
     // ===========================================================================
 
-    const MAX_SUBCATS_PER_ROW = 4;
     const subcatColsInScope = Math.min(subcategories.length, MAX_SUBCATS_PER_ROW);
     let subcatX = SCOPE_PAD;
     let subcatY = SCOPE_PAD + SCOPE_HEADER;
@@ -669,14 +677,14 @@ function orderNodesByBarycenter(
       if (count > 0) {
         barycenters.set(nodeType, sum / count);
       } else {
-        barycenters.set(nodeType, positions.get(nodeType)!);
+        barycenters.set(nodeType, positions.get(nodeType) ?? 0);
       }
     }
 
     // Sort by barycenter
     order = [...order].sort((a, b) => {
-      const ba = barycenters.get(a)!;
-      const bb = barycenters.get(b)!;
+      const ba = barycenters.get(a) ?? positions.get(a) ?? 0;
+      const bb = barycenters.get(b) ?? positions.get(b) ?? 0;
       return ba - bb;
     });
   }

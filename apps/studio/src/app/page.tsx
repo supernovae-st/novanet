@@ -20,7 +20,7 @@ import { useCallback, useEffect, useMemo, useRef, lazy, Suspense } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { Box, PanelLeft, Keyboard, X, Network, Table2, Code, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { iconSizes } from '@/design/tokens';
+import { iconSizes, gapTokens } from '@/design/tokens';
 import { DEFAULT_FETCH_LIMIT } from '@/config/constants';
 import { useUIStore, useFilterStore, useGraphStore } from '@/stores';
 import { useGraphData, useFilteredGraph, UrlSyncComponent } from '@/hooks';
@@ -425,7 +425,7 @@ export default function HomePage() {
                 <Suspense
                   fallback={
                     <div className="absolute inset-0 flex items-center justify-center bg-black">
-                      <div className="flex flex-col items-center gap-4">
+                      <div className={cn('flex flex-col items-center', gapTokens.large)}>
                         <Loader2 className={cn('text-novanet-400 animate-spin', 'w-8 h-8')} />
                         <span className="text-sm text-white/50">Loading graph...</span>
                       </div>
@@ -446,7 +446,7 @@ export default function HomePage() {
               <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-black via-zinc-950 to-black">
                 <div className="text-center">
                   <div className="w-20 h-20 rounded-2xl bg-white/5 flex items-center justify-center mx-auto mb-6">
-                    <Box className="w-10 h-10 text-white/20" />
+                    <Box className="w-10 h-10 text-white/40" />
                   </div>
                   <h1 className="text-2xl font-semibold text-white/70 mb-2">3D Graph View</h1>
                   <p className="text-sm text-white/40 mb-6 max-w-md">
@@ -464,11 +464,11 @@ export default function HomePage() {
 
             {/* Top Bar: Unified layout with 2 rows */}
             {!uiState.focusMode && (
-              <div className="absolute top-4 left-4 right-4 z-30 flex flex-col gap-3">
+              <div className={cn('absolute top-4 left-4 right-4 z-30 flex flex-col', gapTokens.spacious)}>
                 {/* Row 1: QueryPill (full-width) - PRIMARY ACTION */}
                 <QueryPill className="w-full" onRun={handleRunQuery} />
                 {/* Row 2: Stats (left) + Context Picker (right) */}
-                <div className="flex items-center justify-between gap-4">
+                <div className={cn('flex items-center justify-between', gapTokens.large)}>
                   <Pill size="md">
                     <StatsCounter
                       nodeCount={visibleNodeCount}
@@ -494,7 +494,7 @@ export default function HomePage() {
             {/* Bottom left - Keyboard shortcuts */}
             <button
               onClick={openShortcuts}
-              className="absolute bottom-4 left-4 px-3 py-2 rounded-xl bg-[#0d0d12] border border-white/10 hover:bg-accent-blue/15 hover:border-accent-blue/30 transition-all text-white/40 hover:text-accent-blue shadow-lg shadow-black/40 flex items-center gap-2"
+              className={cn('absolute bottom-4 left-4 px-3 py-2 rounded-xl bg-[#0d0d12] border border-white/10 hover:bg-accent-blue/15 hover:border-accent-blue/30 transition-all text-white/40 hover:text-accent-blue shadow-lg shadow-black/40 flex items-center', gapTokens.default)}
               title="Keyboard shortcuts (/)"
             >
               <Keyboard className={iconSizes.md} />
@@ -502,11 +502,11 @@ export default function HomePage() {
             </button>
 
             {/* Bottom center - View controls + hover info + shortcut hint */}
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-1">
+            <div className={cn('absolute bottom-4 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center', gapTokens.tight)}>
               {/* Hover info - shows node/edge details on hover */}
               {(hoveredNode || hoveredEdge) && (
                 <div
-                  className="glass px-4 py-2 rounded-xl animate-fade-in flex items-center gap-3 text-xs"
+                  className={cn('glass px-4 py-2 rounded-xl animate-fade-in flex items-center text-xs', gapTokens.spacious)}
                   style={{
                     borderColor: hoveredEdge && hoveredEdgeNodes
                       ? `${hoveredEdgeNodes.colors.primary}50`
@@ -518,7 +518,7 @@ export default function HomePage() {
                 >
                   {hoveredNode ? (
                     <>
-                      <div className="flex items-center gap-2">
+                      <div className={cn('flex items-center', gapTokens.default)}>
                         <CategoryIcon
                           category={NODE_TYPE_CONFIG[hoveredNode.type]?.category || 'project'}
                           size={16}
@@ -542,7 +542,7 @@ export default function HomePage() {
                   ) : hoveredEdge && hoveredEdgeNodes ? (
                     <>
                       {/* Source Node */}
-                      <div className="flex items-center gap-1.5">
+                      <div className={cn('flex items-center', gapTokens.compact)}>
                         <CategoryIcon
                           category={NODE_TYPE_CONFIG[hoveredEdgeNodes.sourceNode.type]?.category || 'project'}
                           size={18}
@@ -558,7 +558,7 @@ export default function HomePage() {
                       </div>
 
                       {/* Arrow + Relation Type */}
-                      <div className="flex items-center gap-1.5">
+                      <div className={cn('flex items-center', gapTokens.compact)}>
                         <span
                           className="text-sm"
                           style={{ color: hoveredEdgeNodes.colors.primary }}
@@ -584,7 +584,7 @@ export default function HomePage() {
                       </div>
 
                       {/* Target Node */}
-                      <div className="flex items-center gap-1.5">
+                      <div className={cn('flex items-center', gapTokens.compact)}>
                         <CategoryIcon
                           category={NODE_TYPE_CONFIG[hoveredEdgeNodes.targetNode.type]?.category || 'project'}
                           size={18}
@@ -603,7 +603,7 @@ export default function HomePage() {
                 </div>
               )}
               {/* Shortcut hint - concise */}
-              <span className="text-[10px] text-white/25 select-none pointer-events-none">
+              <span className="text-[10px] text-white/40 select-none pointer-events-none">
                 click inspect · dbl-click expand
               </span>
             <Pill size="sm">
@@ -615,7 +615,8 @@ export default function HomePage() {
                     if (uiState.viewMode !== '2d') uiActions.toggleViewMode();
                   }}
                   className={cn(
-                    'flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium transition-all duration-150',
+                    'flex items-center px-2.5 py-1.5 rounded-md text-xs font-medium transition-all duration-150',
+                    gapTokens.compact,
                     queryState.viewMode === 'graph' && uiState.viewMode === '2d'
                       ? 'bg-accent-blue/30 text-white border border-accent-blue/50 shadow-sm shadow-accent-blue/20'
                       : 'text-white/50 hover:text-white/80 hover:bg-white/8'
@@ -631,7 +632,8 @@ export default function HomePage() {
                     if (uiState.viewMode !== '3d') uiActions.toggleViewMode();
                   }}
                   className={cn(
-                    'flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium transition-all duration-150',
+                    'flex items-center px-2.5 py-1.5 rounded-md text-xs font-medium transition-all duration-150',
+                    gapTokens.compact,
                     queryState.viewMode === 'graph' && uiState.viewMode === '3d'
                       ? 'bg-accent-blue/30 text-white border border-accent-blue/50 shadow-sm shadow-accent-blue/20'
                       : 'text-white/50 hover:text-white/80 hover:bg-white/8'
@@ -644,7 +646,8 @@ export default function HomePage() {
                 <button
                   onClick={() => handleSetQueryViewMode('table')}
                   className={cn(
-                    'flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium transition-all duration-150',
+                    'flex items-center px-2.5 py-1.5 rounded-md text-xs font-medium transition-all duration-150',
+                    gapTokens.compact,
                     queryState.viewMode === 'table'
                       ? 'bg-accent-blue/30 text-white border border-accent-blue/50 shadow-sm shadow-accent-blue/20'
                       : 'text-white/50 hover:text-white/80 hover:bg-white/8'
@@ -657,7 +660,8 @@ export default function HomePage() {
                 <button
                   onClick={() => handleSetQueryViewMode('raw')}
                   className={cn(
-                    'flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium transition-all duration-150',
+                    'flex items-center px-2.5 py-1.5 rounded-md text-xs font-medium transition-all duration-150',
+                    gapTokens.compact,
                     queryState.viewMode === 'raw'
                       ? 'bg-accent-blue/30 text-white border border-accent-blue/50 shadow-sm shadow-accent-blue/20'
                       : 'text-white/50 hover:text-white/80 hover:bg-white/8'
@@ -673,7 +677,7 @@ export default function HomePage() {
 
             {/* Focus mode indicator */}
             {uiState.focusMode && (
-              <div className="absolute top-4 left-1/2 -translate-x-1/2 glass px-4 py-2.5 flex items-center gap-3 text-sm">
+              <div className={cn('absolute top-4 left-1/2 -translate-x-1/2 glass px-4 py-2.5 flex items-center text-sm', gapTokens.spacious)}>
                 <div className="w-2 h-2 rounded-full bg-novanet-400 animate-pulse" />
                 <span className="text-white/70">Focus Mode</span>
                 <span className="text-white/40">Press</span>

@@ -18,4 +18,4 @@ export { ViewPresetSelector } from './ViewPresetSelector';
 export { SchemaFilterPanel } from './SchemaFilterPanel';
 
 // YAML Views (replacing hardcoded presets)
-export { ViewCard, ViewCategorySection, ViewSelector } from './views';
+export { ViewSelector } from './views';

@@ -16,15 +16,10 @@ import { memo, useCallback, useMemo } from 'react';
 import { NODE_TYPE_CONFIG, NODE_VISUAL_CATEGORIES } from '@/config/nodeTypes';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import { FilterTree } from '@/components/ui/FilterTree';
-import { SelectionHeader } from '@/components/ui/SelectionHeader';
-import { calculateCheckboxState } from '@/hooks';
 import { iconSizes } from '@/design/tokens';
-import { ACTION_ICONS, STATUS_ICONS } from '@/config/iconSystem';
+import { calculateCheckboxState } from '@/hooks';
 import type { CheckboxState } from '@/components/ui/TriStateCheckbox';
 import type { NodeType } from '@/types';
-
-const PlayIcon = ACTION_ICONS.execute;
-const LoaderIcon = STATUS_ICONS.loading;
 
 // =============================================================================
 // MAIN SECTION COMPONENT
@@ -52,23 +47,13 @@ export interface NodeLabelsSectionProps {
 }
 
 export const NodeLabelsSection = memo(function NodeLabelsSection({
-  totalNodes,
   labelCounts,
   maxCount,
   selectedLabels,
   onToggleLabel,
   onToggleCategoryLabels,
-  onToggleAllNodes,
-  onExecuteQuery,
   isExecuting = false,
 }: NodeLabelsSectionProps) {
-  // Calculate nodes checkbox state
-  const nodesCheckboxState = useMemo((): CheckboxState => {
-    const allLabels = Array.from(labelCounts.keys());
-    if (allLabels.length === 0) return 'none';
-    return calculateCheckboxState(allLabels, selectedLabels);
-  }, [labelCounts, selectedLabels]);
-
   // Memoize category data
   const categoryData = useMemo(() => {
     return NODE_VISUAL_CATEGORIES.map((category) => {
@@ -100,16 +85,6 @@ export const NodeLabelsSection = memo(function NodeLabelsSection({
 
   return (
     <section data-testid="node-labels-container">
-      <SelectionHeader
-        label="All Nodes"
-        totalCount={totalNodes}
-        selectedCount={selectedLabels.size}
-        checkboxState={nodesCheckboxState}
-        onToggleAll={onToggleAllNodes}
-        onExecute={onExecuteQuery}
-        isExecuting={isExecuting}
-      />
-
       <FilterTree.Root showProgressBars={false} maxCount={maxCount} disabled={isExecuting}>
         {/* Category Tree */}
         {categoryData.map(({ category, totalCount, checkboxState }) => (
@@ -120,8 +95,7 @@ export const NodeLabelsSection = memo(function NodeLabelsSection({
             icon={
               <CategoryIcon
                 category={category.id}
-                size={16}
-                strokeWidth={2}
+                className={iconSizes.md}
                 style={{ color: category.color }}
               />
             }
@@ -148,9 +122,7 @@ export const NodeLabelsSection = memo(function NodeLabelsSection({
                   icon={
                     <CategoryIcon
                       category={nodeCategory}
-                      size={14}
-                      strokeWidth={2}
-                      className="flex-shrink-0"
+                      className={`${iconSizes.sm} flex-shrink-0`}
                       style={{ color }}
                     />
                   }

@@ -94,7 +94,7 @@ export const CodeViewer = memo(function CodeViewer({
               {tokens.map((line, i) => (
                 <div key={i} {...getLineProps({ line })}>
                   {showLineNumbers && (
-                    <span className="inline-block w-8 text-white/30 select-none text-right mr-4">
+                    <span className="inline-block w-8 text-white/40 select-none text-right mr-4">
                       {i + 1}
                     </span>
                   )}

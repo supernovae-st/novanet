@@ -16,7 +16,7 @@
 
 import { useCallback, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
-import { glassClasses, iconSizes } from '@/design/tokens';
+import { glassClasses, iconSizes, gapTokens } from '@/design/tokens';
 import { ACTION_ICONS } from '@/config/iconSystem';
 import { useNodeExpansion, useLatestRef } from '@/hooks';
 import { useGraphStore } from '@/stores/graphStore';
@@ -54,7 +54,7 @@ function MenuItem({
     <button
       onClick={onClick}
       className={cn(
-        'w-full flex items-center gap-3 px-3 py-2 text-sm text-left',
+        cn('w-full flex items-center px-3 py-2 text-sm text-left', gapTokens.spacious),
         'text-white/80 hover:bg-white/10 hover:text-white',
         'transition-colors',
         className

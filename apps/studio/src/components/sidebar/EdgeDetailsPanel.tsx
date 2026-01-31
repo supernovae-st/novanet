@@ -10,7 +10,7 @@
  * - Copy functionality
  */
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, memo } from 'react';
 import { cn } from '@/lib/utils';
 import { getRelationColors } from '@/config/categoryColors';
 import { ACTION_ICONS, NAV_ICONS, CONTENT_ICONS, GRAPH_ICONS, ICON_COLORS } from '@/config/iconSystem';
@@ -39,7 +39,7 @@ interface EdgeDetailsPanelProps {
   onClose?: () => void;
 }
 
-export function EdgeDetailsPanel({ edge, onClose }: EdgeDetailsPanelProps) {
+export const EdgeDetailsPanel = memo(function EdgeDetailsPanel({ edge, onClose }: EdgeDetailsPanelProps) {
   const [showJson, setShowJson] = useState(false);
   const [expandedSections, setExpandedSections] = useState<Set<string>>(
     new Set(['nodes', 'properties'])
@@ -236,7 +236,7 @@ export function EdgeDetailsPanel({ edge, onClose }: EdgeDetailsPanelProps) {
       />
     </div>
   );
-}
+});
 
 // =============================================================================
 // Helpers

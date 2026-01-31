@@ -26,7 +26,7 @@ import { BlueprintOverlay } from './BlueprintOverlay';
 import { NODE_BG, NODE_DESIGN } from '@/config/constants';
 import { useNodeInteractions } from '@/hooks';
 import { SelectionPulseRing, GlassmorphismEffects, NodeHandles } from './effects';
-import { glassClasses } from '@/design/tokens';
+import { glassClasses, gapTokens } from '@/design/tokens';
 
 export type StructuralNodeType = Node<BaseNodeData>;
 
@@ -150,7 +150,7 @@ export const StructuralNode = memo(function StructuralNode(props: NodeProps<Stru
           <div className="relative px-4 py-3">
             {/* Header: Icon + Badge */}
             <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
+              <div className={cn('flex items-center', gapTokens.default)}>
                 <CategoryIcon
                   category={config.category}
                   size={20}
@@ -196,7 +196,7 @@ export const StructuralNode = memo(function StructuralNode(props: NodeProps<Stru
 
             {/* Category badge */}
             <div
-              className="mt-2.5 inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-[9px] font-semibold uppercase tracking-wider border"
+              className={cn('mt-2.5 inline-flex items-center px-2 py-1 rounded-full text-[9px] font-semibold uppercase tracking-wider border', gapTokens.compact)}
               style={{
                 background: `${colors.primary}15`,
                 borderColor: `${colors.primary}35`,

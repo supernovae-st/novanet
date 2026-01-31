@@ -27,7 +27,7 @@ import { ICON_COLORS } from '@/config/iconSystem';
 import { NODE_BG, NODE_DESIGN } from '@/config/constants';
 import { useNodeInteractions } from '@/hooks';
 import { SelectionPulseRing, GlassmorphismEffects, NodeHandles } from './effects';
-import { glassClasses } from '@/design/tokens';
+import { glassClasses, gapTokens } from '@/design/tokens';
 
 // NovaNet logo URL
 const NOVANET_LOGO_URL = 'https://pbs.twimg.com/profile_images/1788187862883598336/q8u1VSz3_400x400.jpg';
@@ -181,7 +181,7 @@ export const ProjectNode = memo(function ProjectNode(props: NodeProps<ProjectNod
 
               {/* Type Badge */}
               <div
-                className="flex items-center gap-2 px-3 py-1.5 rounded-full border"
+                className={cn('flex items-center px-3 py-1.5 rounded-full border', gapTokens.default)}
                 style={{
                   background: `${PRIMARY}15`,
                   borderColor: `${PRIMARY}40`,

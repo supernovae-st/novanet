@@ -13,6 +13,7 @@
 import { memo, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { cn } from '@/lib/utils';
+import { gapTokens } from '@/design/tokens';
 import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import type { NodeType } from '@/types';
@@ -66,9 +67,9 @@ export const NodeTooltip = memo(function NodeTooltip({
       )}
     >
       {/* Type badge */}
-      <div className="flex items-center gap-2">
+      <div className={cn('flex items-center', gapTokens.default)}>
         <span
-          className="inline-flex items-center gap-1.5"
+          className={cn('inline-flex items-center', gapTokens.compact)}
           style={{ color: accentColor }}
         >
           <CategoryIcon
