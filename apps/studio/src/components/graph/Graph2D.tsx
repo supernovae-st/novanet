@@ -485,48 +485,47 @@ function Graph2DInner({
       const nodeWidth = node.measured?.width ?? 180;
       const nodeHeight = node.measured?.height ?? 90;
 
-      // Use double RAF to ensure ELK layout and measurement are complete
-      // (more reliable than setTimeout for schema nodes due to async layout)
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          // CRITICAL: Get nodes from React Flow instance, NOT from state
-          // React Flow nodes have computed internals.positionAbsolute for nested nodes
-          // State nodes (schemaNodes) don't have these computed internals
-          const flowNodes = getNodes();
-          const currentNode = flowNodes.find(n => n.id === node.id);
+      // Small delay to ensure state is fully propagated before centering
+      // This ensures the panel width is accounted for in the center calculation
+      // (same timing as data mode for consistent animation behavior)
+      setTimeout(() => {
+        // CRITICAL: Get nodes from React Flow instance, NOT from state
+        // React Flow nodes have computed internals.positionAbsolute for nested nodes
+        // State nodes (schemaNodes) don't have these computed internals
+        const flowNodes = getNodes();
+        const currentNode = flowNodes.find(n => n.id === node.id);
 
-          if (!currentNode) {
-            // Fallback: use original node if not found in React Flow
-            // This shouldn't happen but provides robustness
-            centerOnNode(
-              node.position.x,
-              node.position.y,
-              nodeWidth,
-              nodeHeight,
-              { zoom: GRAPH_ANIMATION.NODE_DOUBLE_CLICK_ZOOM, duration: GRAPH_ANIMATION.FIT_VIEW_DURATION }
-            );
-            return;
-          }
-
-          const finalWidth = currentNode.measured?.width ?? nodeWidth;
-          const finalHeight = currentNode.measured?.height ?? nodeHeight;
-
-          // IMPORTANT: Schema nodes are nested in group nodes, so we need absolute position
-          // node.position is relative to parent, internals.positionAbsolute is absolute
-          // Type assertion needed as internals is not exposed in public Node type
-          const nodeInternals = (currentNode as unknown as { internals?: { positionAbsolute?: { x: number; y: number } } }).internals;
-          const finalX = nodeInternals?.positionAbsolute?.x ?? currentNode.position.x;
-          const finalY = nodeInternals?.positionAbsolute?.y ?? currentNode.position.y;
-
+        if (!currentNode) {
+          // Fallback: use original node if not found in React Flow
+          // This shouldn't happen but provides robustness
           centerOnNode(
-            finalX,
-            finalY,
-            finalWidth,
-            finalHeight,
+            node.position.x,
+            node.position.y,
+            nodeWidth,
+            nodeHeight,
             { zoom: GRAPH_ANIMATION.NODE_DOUBLE_CLICK_ZOOM, duration: GRAPH_ANIMATION.FIT_VIEW_DURATION }
           );
-        });
-      });
+          return;
+        }
+
+        const finalWidth = currentNode.measured?.width ?? nodeWidth;
+        const finalHeight = currentNode.measured?.height ?? nodeHeight;
+
+        // IMPORTANT: Schema nodes are nested in group nodes, so we need absolute position
+        // node.position is relative to parent, internals.positionAbsolute is absolute
+        // Type assertion needed as internals is not exposed in public Node type
+        const nodeInternals = (currentNode as unknown as { internals?: { positionAbsolute?: { x: number; y: number } } }).internals;
+        const finalX = nodeInternals?.positionAbsolute?.x ?? currentNode.position.x;
+        const finalY = nodeInternals?.positionAbsolute?.y ?? currentNode.position.y;
+
+        centerOnNode(
+          finalX,
+          finalY,
+          finalWidth,
+          finalHeight,
+          { zoom: GRAPH_ANIMATION.NODE_DOUBLE_CLICK_ZOOM, duration: GRAPH_ANIMATION.FIT_VIEW_DURATION }
+        );
+      }, 50);
     },
     [setSelectedNode, centerOnNode, getNodes]
   );

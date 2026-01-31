@@ -1,15 +1,12 @@
 'use client';
 
 /**
- * SchemaFilterPanel - Hierarchical filter UI for Schema Mode
+ * SchemaFilterPanel - Schema Browser using unified Sidebar components
  *
- * Design: Premium glassmorphism matching Data View style
- *
- * Features:
- * - Uses unified FilterTree design system
- * - Tri-state checkboxes for hierarchical selection
- * - Collapsible sections with smooth animations
- * - ARIA accessibility
+ * Uses Sidebar.Content for consistent skeleton across all tabs:
+ * - Same header structure
+ * - Same body padding (p-3)
+ * - Same row heights and spacing
  */
 
 import { memo, useCallback, useMemo } from 'react';
@@ -35,19 +32,19 @@ import type { Subcategory } from '@novanet/core/graph';
 import type { Scope } from '@/types';
 import { useFilterStore } from '@/stores/filterStore';
 import { cn } from '@/lib/utils';
-import { scopeAccents, panelClasses, iconSizes, gapTokens } from '@/design/tokens';
-import { FilterTree } from '@/components/ui/FilterTree';
+import { scopeAccents, iconSizes, gapTokens } from '@/design/tokens';
 import { calculateCheckboxState } from '@/hooks';
 import type { CheckboxState } from '@/components/ui/TriStateCheckbox';
+import { Sidebar } from './SidebarContent';
 
-// Scope to Lucide icon mapping (matches CategoryIcon pattern)
+// Scope to Lucide icon mapping
 const SCOPE_ICONS: Record<Scope, LucideIcon> = {
   Project: Package,
   Global: Globe,
   Shared: Target,
 };
 
-// Subcategory to Lucide icon mapping (matches CategoryIcon pattern)
+// Subcategory to Lucide icon mapping
 const SUBCATEGORY_ICONS: Record<Subcategory, LucideIcon> = {
   foundation: Landmark,
   structure: Layers,
@@ -157,42 +154,30 @@ export const SchemaFilterPanel = memo(function SchemaFilterPanel({
   );
 
   return (
-    <div
-      className={cn('flex flex-col h-full', className)}
-      data-testid="schema-filter-panel"
-      role="region"
-      aria-label="Schema filters"
-    >
-      {/* Header - Premium Glassmorphism */}
-      <div className={cn('relative', panelClasses.header)}>
-        <div className="absolute inset-0 bg-gradient-to-br from-violet-500/5 via-transparent to-emerald-500/5 pointer-events-none" />
-
-        <div className={cn('relative flex items-center', gapTokens.spacious)}>
-          <div className="relative">
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-violet-400 to-emerald-500 opacity-20 blur-lg" />
-            <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500/20 to-emerald-500/20 flex items-center justify-center border border-white/10 shadow-lg shadow-black/20">
-              <Boxes className={cn(iconSizes.md, 'text-violet-400')} />
-            </div>
-          </div>
-
-          <div className="flex-1 min-w-0">
-            <h2 className="text-sm font-semibold text-white tracking-tight">
-              Schema Browser
-            </h2>
-            <p className="text-[10px] text-white/40 mt-0.5">
-              35 node types · 3 scopes
-            </p>
-          </div>
+    <Sidebar.Content
+      testId="schema-filter-panel"
+      className={className}
+      header={{
+        icon: <Boxes className={cn(iconSizes.md, 'text-violet-400')} />,
+        iconGradient: { from: '#a78bfa', to: '#10b981' },
+        title: 'Schema Browser',
+        subtitle: '35 node types · 3 scopes',
+      }}
+      footer={
+        <div className={cn('flex items-center justify-center', gapTokens.spacious)}>
+          <span className="text-[10px] text-violet-400/60">📦 Project</span>
+          <span className="text-white/40">·</span>
+          <span className="text-[10px] text-emerald-400/60">🌍 Global</span>
+          <span className="text-white/40">·</span>
+          <span className="text-[10px] text-amber-400/60">🎯 Shared</span>
         </div>
-      </div>
-
-      {/* Content - Unified FilterTree Components */}
-      <div className={cn(panelClasses.body)}>
-        <FilterTree.Root showProgressBars={false} maxCount={35}>
-          {scopeData.map(({ scope, scopeDef, accent, subcategories, nodeCount }) => {
-            const ScopeIcon = SCOPE_ICONS[scope];
-            return (
-            <FilterTree.Section
+      }
+    >
+      <Sidebar.Tree showProgressBars={false} maxCount={35}>
+        {scopeData.map(({ scope, scopeDef, accent, subcategories, nodeCount }) => {
+          const ScopeIcon = SCOPE_ICONS[scope];
+          return (
+            <Sidebar.Section
               key={scope}
               id={scope.toLowerCase()}
               label={scopeDef.label}
@@ -208,7 +193,7 @@ export const SchemaFilterPanel = memo(function SchemaFilterPanel({
                 const SubcatIcon = SUBCATEGORY_ICONS[subcatName];
 
                 return (
-                  <FilterTree.Row
+                  <Sidebar.Row
                     key={subcatName}
                     id={`${scope}-${subcatName}`}
                     label={subcatMeta.label}
@@ -220,22 +205,10 @@ export const SchemaFilterPanel = memo(function SchemaFilterPanel({
                   />
                 );
               })}
-            </FilterTree.Section>
+            </Sidebar.Section>
           );
-          })}
-        </FilterTree.Root>
-      </div>
-
-      {/* Footer */}
-      <div className={cn(panelClasses.footer, 'bg-black/20')}>
-        <div className={cn('flex items-center justify-center', gapTokens.spacious)}>
-          <span className="text-[10px] text-violet-400/60">📦 Project</span>
-          <span className="text-white/40">·</span>
-          <span className="text-[10px] text-emerald-400/60">🌍 Global</span>
-          <span className="text-white/40">·</span>
-          <span className="text-[10px] text-amber-400/60">🎯 Shared</span>
-        </div>
-      </div>
-    </div>
+        })}
+      </Sidebar.Tree>
+    </Sidebar.Content>
   );
 });

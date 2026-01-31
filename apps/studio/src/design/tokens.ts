@@ -546,94 +546,207 @@ export const modalClasses = {
 } as const;
 
 // ============================================================================
-// FILTER TREE - Unified hierarchical filter design
+// UNIFIED SIDEBAR DESIGN SYSTEM
 // ============================================================================
 
 /**
- * Filter tree design tokens - Unified system for Schema Browser & Data View
+ * Sidebar design tokens - Unified system for all sidebar tabs
  *
- * Design principles (based on Data View style):
- * - Flat tree structure with border-left connectors
- * - Tri-state checkboxes for hierarchical selection
- * - Chevrons for expand/collapse
- * - Category-colored icons
- * - Counts aligned right
- * - Progress bars (optional, for data counts)
+ * Based on shadcn/ui sidebar patterns and Tailwind best practices:
+ * - Consistent row height: h-11 (44px) - WCAG 2.1 AA touch target
+ * - Consistent gaps: gap-3 (12px) between elements
+ * - Consistent padding: px-3 (12px) horizontal
+ * - Consistent icon box: w-8 h-8 (32px) rounded-lg
+ * - Consistent badge: min-w-7 (28px) rounded-full
  *
- * Variants:
- * - default: Standard filter tree (Schema Browser)
- * - data: With progress bars (Data View / Node filters)
+ * Used by: Schema Browser, Views, Nodes, Relationships tabs
+ */
+export const sidebarTokens = {
+  // ─────────────────────────────────────────────────────────────────────────
+  // ROW - Unified row styling for all sidebar items
+  // ─────────────────────────────────────────────────────────────────────────
+  row: {
+    /** Base row - consistent across all tabs */
+    base: [
+      'group w-full flex items-center',
+      'h-11 px-3 gap-3 rounded-xl', // 44px height, 12px padding, 12px gap
+      // Glass effect
+      'backdrop-blur-md',
+      'ring-1 ring-inset ring-white/[0.06]',
+      'bg-white/[0.03]',
+      // Transitions
+      'transition-all duration-200',
+      // Hover
+      'hover:bg-white/[0.06] hover:ring-white/[0.10]',
+      // Focus
+      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-novanet-500/60',
+      // Active press
+      'active:scale-[0.98]',
+    ].join(' '),
+    /** Selected state */
+    selected: 'bg-white/[0.08] ring-white/[0.12] shadow-lg shadow-black/20',
+    /** Disabled state */
+    disabled: 'opacity-50 cursor-not-allowed pointer-events-none',
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // ICON BOX - Unified icon container styling
+  // ─────────────────────────────────────────────────────────────────────────
+  iconBox: {
+    /** Standard icon box: 32x32px */
+    base: 'flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-lg transition-all duration-200',
+    /** Small icon box: 28x28px (for compact rows) */
+    sm: 'flex-shrink-0 flex items-center justify-center w-7 h-7 rounded-md transition-all duration-200',
+    /** Large icon box: 40x40px (for headers) */
+    lg: 'flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-xl transition-all duration-200',
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // CHECKBOX - Unified checkbox styling
+  // ─────────────────────────────────────────────────────────────────────────
+  checkbox: {
+    /** Checkbox container */
+    base: 'w-4 h-4 rounded border-2 flex items-center justify-center transition-all duration-200 flex-shrink-0',
+    /** Unchecked state */
+    unchecked: 'border-white/20 bg-transparent',
+    /** Checked state (color set via style) */
+    checked: 'border-transparent',
+    /** Spacer when checkbox is hidden (maintains alignment) */
+    spacer: 'w-4 flex-shrink-0',
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // LABEL - Unified text styling
+  // ─────────────────────────────────────────────────────────────────────────
+  label: {
+    /** Row label text */
+    base: 'text-[13px] font-medium transition-colors duration-200 flex-1 text-left truncate',
+    /** Selected state */
+    selected: 'text-white',
+    /** Unselected state */
+    unselected: 'text-white/70 group-hover:text-white/90',
+    /** Section label (category header) */
+    section: 'text-[11px] font-bold uppercase tracking-wider',
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // BADGE - Unified badge/count styling
+  // ─────────────────────────────────────────────────────────────────────────
+  badge: {
+    /** Count badge: min-w-7 (28px), pill shape */
+    count: 'min-w-7 px-2 py-0.5 rounded-full text-[11px] font-semibold tabular-nums text-center flex-shrink-0 transition-all duration-200',
+    /** Count selected state */
+    countSelected: 'text-white/90 bg-white/[0.12]',
+    /** Count unselected state */
+    countUnselected: 'text-white/50 bg-white/[0.05] group-hover:bg-white/[0.08] group-hover:text-white/70',
+    /** Shortcut badge: keyboard shortcut indicator */
+    shortcut: 'min-w-7 px-2 py-0.5 rounded-full text-[10px] font-semibold tabular-nums text-center flex-shrink-0 transition-all duration-200',
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // SECTION - Unified section (category) styling
+  // ─────────────────────────────────────────────────────────────────────────
+  section: {
+    /** Section container */
+    container: 'mb-1',
+    /** Section header row */
+    header: [
+      'flex items-center w-full py-1.5 px-1 gap-2.5',
+      'rounded-lg',
+      'transition-all duration-200',
+      'hover:bg-white/[0.03]',
+    ].join(' '),
+    /** Section content wrapper */
+    content: 'mt-1 space-y-2 overflow-hidden transition-all duration-300',
+    /** Content expanded state */
+    contentExpanded: 'max-h-[800px] opacity-100 py-2',
+    /** Content collapsed state */
+    contentCollapsed: 'max-h-0 opacity-0',
+    /** Section count text */
+    count: 'text-[10px] tabular-nums text-white/40',
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // CHEVRON - Unified expand/collapse indicator
+  // ─────────────────────────────────────────────────────────────────────────
+  chevron: {
+    /** Chevron icon */
+    base: 'w-4 h-4 text-white/40 transition-transform duration-200 ml-auto',
+    /** Collapsed state (rotated) */
+    collapsed: '-rotate-90',
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // TREE - Container styling
+  // ─────────────────────────────────────────────────────────────────────────
+  tree: {
+    /** Tree container */
+    container: 'space-y-2',
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // PROGRESS BAR - For data counts
+  // ─────────────────────────────────────────────────────────────────────────
+  progressBar: {
+    /** Progress bar container */
+    container: 'w-10 flex-shrink-0',
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // HEADER - Action bar with execute button
+  // ─────────────────────────────────────────────────────────────────────────
+  header: {
+    /** Header container */
+    container: 'flex items-center justify-between px-1 mb-2',
+    /** Title container */
+    title: 'flex items-center gap-2',
+    /** Selection badge */
+    selectionBadge: 'px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-semibold animate-in fade-in duration-200',
+    /** Execute button base */
+    executeButton: 'p-1.5 rounded-lg transition-all duration-200',
+    /** Execute button enabled */
+    executeEnabled: 'text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 hover:scale-110',
+    /** Execute button disabled */
+    executeDisabled: 'text-white/40 cursor-not-allowed',
+  },
+} as const;
+
+// ============================================================================
+// FILTER TREE - Legacy aliases (for backward compatibility)
+// ============================================================================
+
+/**
+ * @deprecated Use sidebarTokens instead. These are legacy aliases.
  */
 export const filterTreeClasses = {
-  /** Container for the filter tree */
-  container: 'space-y-2',
-
-  /** Section header row (category level) - Premium style (matches FilterSection) */
-  sectionHeader: [
-    'flex items-center gap-2.5',
-    'py-1 rounded-xl',
-    'transition-all duration-200',
-    'cursor-pointer select-none',
-  ].join(' '),
-
-  /** Section content (nested items) - full width like Views */
-  sectionContent: 'mt-1 space-y-2.5 overflow-hidden transition-all duration-300',
-  sectionContentExpanded: 'max-h-[800px] opacity-100 py-2',
-  sectionContentCollapsed: 'max-h-0 opacity-0',
-
-  /** Individual row (item level) - Premium frosted glass (matches FilterCard) */
-  row: [
-    'group w-full flex items-center gap-3',
-    'h-12 px-3.5 rounded-xl', // 48px height for WCAG tap targets
-    // Frosted glass base
-    'backdrop-blur-md',
-    'ring-1 ring-inset ring-white/[0.06]',
-    'bg-white/[0.03]',
-    // Transitions
-    'transition-all duration-200',
-    // Hover
-    'hover:bg-white/[0.06] hover:ring-white/[0.10]',
-    // Focus
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-novanet-500/60 focus-visible:ring-offset-1 focus-visible:ring-offset-black/50',
-  ].join(' '),
-  rowSelected: 'bg-white/[0.08] ring-white/[0.12] shadow-lg shadow-black/20',
-  rowDisabled: 'opacity-50 cursor-not-allowed',
-
-  /** Chevron for expand/collapse */
-  chevron: 'w-3.5 h-3.5 text-white/40 transition-transform duration-200',
-  chevronCollapsed: '-rotate-90',
-
-  /** Checkbox container - matches TriStateCheckbox for consistency */
-  checkbox: 'w-4 h-4 rounded border-2 flex items-center justify-center transition-all duration-200 flex-shrink-0',
-  checkboxUnchecked: 'border-white/20 bg-transparent',
-  checkboxChecked: 'border-transparent', // Color set dynamically via style prop
-
-  /** Label text - truncate to prevent wrapping */
-  label: 'text-[13px] font-medium transition-colors duration-200 flex-1 text-left truncate',
-  labelSelected: 'text-white',
-  labelUnselected: 'text-white/70 group-hover:text-white/90',
-
-  /** Section label (category) - Uppercase accent */
-  sectionLabel: 'text-[11px] font-bold uppercase tracking-wider', // Color set dynamically
-
-  /** Count display - Pill style (matches FilterCard) */
-  count: 'text-[11px] font-semibold tabular-nums transition-all duration-200 flex-shrink-0 min-w-[32px] text-center py-1 px-2.5 rounded-full',
-  countSelected: 'text-white/90 bg-white/[0.12]',
-  countUnselected: 'text-white/50 bg-white/[0.05] group-hover:bg-white/[0.08] group-hover:text-white/70',
+  container: sidebarTokens.tree.container,
+  sectionHeader: sidebarTokens.section.header,
+  sectionContent: sidebarTokens.section.content,
+  sectionContentExpanded: sidebarTokens.section.contentExpanded,
+  sectionContentCollapsed: sidebarTokens.section.contentCollapsed,
+  row: sidebarTokens.row.base,
+  rowSelected: sidebarTokens.row.selected,
+  rowDisabled: sidebarTokens.row.disabled,
+  chevron: sidebarTokens.chevron.base,
+  chevronCollapsed: sidebarTokens.chevron.collapsed,
+  checkbox: sidebarTokens.checkbox.base,
+  checkboxUnchecked: sidebarTokens.checkbox.unchecked,
+  checkboxChecked: sidebarTokens.checkbox.checked,
+  label: sidebarTokens.label.base,
+  labelSelected: sidebarTokens.label.selected,
+  labelUnselected: sidebarTokens.label.unselected,
+  sectionLabel: sidebarTokens.label.section,
+  count: sidebarTokens.badge.count,
+  countSelected: sidebarTokens.badge.countSelected,
+  countUnselected: sidebarTokens.badge.countUnselected,
   countMuted: 'text-white/40',
-
-  /** Progress bar container (data variant) - compact to allow full labels */
-  progressBar: 'w-10 flex-shrink-0',
-
-  /** Header with total and execute button */
-  header: 'flex items-center justify-between px-1 mb-2',
-  headerTitle: 'flex items-center gap-2',
-  headerBadge: 'px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-semibold animate-in fade-in duration-200',
-
-  /** Execute button */
-  executeButton: 'p-1.5 rounded-lg transition-all duration-200',
-  executeButtonEnabled: 'text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 hover:scale-110',
-  executeButtonDisabled: 'text-white/40 cursor-not-allowed',
+  progressBar: sidebarTokens.progressBar.container,
+  header: sidebarTokens.header.container,
+  headerTitle: sidebarTokens.header.title,
+  headerBadge: sidebarTokens.header.selectionBadge,
+  executeButton: sidebarTokens.header.executeButton,
+  executeButtonEnabled: sidebarTokens.header.executeEnabled,
+  executeButtonDisabled: sidebarTokens.header.executeDisabled,
 } as const;
 
 /**
@@ -688,7 +801,9 @@ export const tokens = {
   colors,
   glassClasses,
   modalClasses,
-  filterTreeClasses,
+  // Sidebar design system
+  sidebarTokens,
+  filterTreeClasses, // Legacy alias
   scopeAccents,
   badgeClasses,
   iconButtonClasses,
