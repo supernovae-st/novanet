@@ -324,7 +324,7 @@ export const LocalePicker = memo(function LocalePicker({
         </div>
 
         {/* Footer - CommandPalette style */}
-        <div className="p-3 border-t border-white/[0.06] bg-black/20">
+        <div className="px-6 py-3 border-t border-white/[0.06] bg-black/20">
           <div className="flex items-center justify-between text-xs text-white/50">
             <span>{filteredLocales.length + 1} languages</span>
             <div className={cn('flex items-center', gapTokens.large)}>

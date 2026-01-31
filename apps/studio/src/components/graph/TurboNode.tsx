@@ -99,7 +99,7 @@ export const TurboNode = memo(function TurboNode(props: NodeProps<TurboNodeType>
       {/* Gradient border wrapper */}
       <div
         className={cn(
-          'relative p-[2px] rounded-[14px] transition-all duration-300',
+          'relative p-0.5 rounded-[14px] transition-all duration-300',
           selected && 'animate-gradient-rotate',
           isHovered && !selected && 'animate-glow-pulse'
         )}
