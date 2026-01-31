@@ -11,6 +11,7 @@ import * as path from 'path';
 import { fileURLToPath } from 'url';
 import { MermaidGenerator } from '../generators/MermaidGenerator.js';
 import { SubcategoryGenerator } from '../generators/SubcategoryGenerator.js';
+import { OrganizingPrinciplesGenerator } from '../generators/OrganizingPrinciplesGenerator.js';
 
 // =============================================================================
 // PATH SETUP
@@ -19,6 +20,7 @@ import { SubcategoryGenerator } from '../generators/SubcategoryGenerator.js';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const SCHEMA_TOOLS_ROOT = path.join(__dirname, '../..');
 const CORE_DIR = path.join(SCHEMA_TOOLS_ROOT, '../core');
+const DB_DIR = path.join(SCHEMA_TOOLS_ROOT, '../db');
 const MODELS_DIR = path.join(CORE_DIR, 'models');
 
 // =============================================================================
@@ -114,6 +116,42 @@ describe('YAML → Artifact Synchronization', () => {
       const nodeEntries = (generated.match(/^\s+\w+:\s+'[a-z]+',$/gm) || []).length;
 
       expect(nodeEntries).toBe(yamlFiles);
+    });
+  });
+
+  describe('Organizing Principles (00.5-organizing-principles.cypher)', () => {
+    it('committed file matches generated content from organizing-principles.yaml', async () => {
+      const committedPath = path.join(DB_DIR, 'seed/00.5-organizing-principles.cypher');
+
+      // Generate fresh content
+      const generated = await OrganizingPrinciplesGenerator.generate({
+        organizingPrinciplesPath: path.join(MODELS_DIR, 'organizing-principles.yaml'),
+        modelsDir: path.join(MODELS_DIR, 'nodes'),
+      });
+
+      // Read committed file
+      const committed = await fs.readFile(committedPath, 'utf-8');
+
+      // Normalize and compare (ignore timestamp line)
+      const normalizeContent = (content: string) => {
+        return content
+          .trim()
+          .replace(/\r\n/g, '\n')
+          .replace(/^\/\/ Generated: \d{4}-\d{2}-\d{2}$/m, '// Generated: DATE');
+      };
+
+      expect(normalizeContent(generated)).toBe(normalizeContent(committed));
+    });
+
+    it('includes all scopes from organizing-principles.yaml', async () => {
+      const generated = await OrganizingPrinciplesGenerator.generate({
+        organizingPrinciplesPath: path.join(MODELS_DIR, 'organizing-principles.yaml'),
+        modelsDir: path.join(MODELS_DIR, 'nodes'),
+      });
+
+      expect(generated).toContain("key: 'global'");
+      expect(generated).toContain("key: 'project'");
+      expect(generated).toContain("key: 'shared'");
     });
   });
 });
