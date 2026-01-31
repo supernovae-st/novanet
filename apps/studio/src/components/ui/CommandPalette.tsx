@@ -34,7 +34,7 @@ import {
 import { cn } from '@/lib/utils';
 import { fuzzyMatch } from '@/lib/fuzzySearch';
 import { useAutoFocus, useDebouncedValue } from '@/hooks';
-import { glassClasses } from '@/design/tokens';
+import { modalClasses } from '@/design/tokens';
 import { KeyboardKey } from './KeyboardKey';
 import { Kbd } from './Kbd';
 
@@ -172,14 +172,18 @@ export function CommandPalette({ isOpen, onClose, commands }: CommandPaletteProp
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh]">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200"
+        className={cn(modalClasses.backdrop, 'animate-in fade-in duration-200')}
         onClick={onClose}
+        aria-hidden="true"
       />
 
       {/* Modal */}
       <div
-        className={cn('relative w-full max-w-lg m-4 animate-scale-in overflow-hidden', glassClasses.modal)}
+        className={cn('relative w-full max-w-lg m-4 animate-scale-in overflow-hidden', modalClasses.content)}
         onKeyDown={handleKeyDown}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Command palette"
       >
         {/* Search Header */}
         <div className="flex items-center gap-3 p-4 border-b border-white/[0.08]">

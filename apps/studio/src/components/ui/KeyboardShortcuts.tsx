@@ -14,8 +14,7 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { cn } from '@/lib/utils';
-import { isInputFocused } from '@/lib/keyboard';
-import { glassClasses } from '@/design/tokens';
+import { modalClasses } from '@/design/tokens';
 import { ACTION_ICONS, NAV_ICONS, CONTENT_ICONS, ICON_SIZES } from '@/config/iconSystem';
 import { Kbd } from './Kbd';
 
@@ -143,42 +142,39 @@ export function KeyboardShortcuts({ isOpen, onClose }: KeyboardShortcutsProps) {
   const currentCategory = SHORTCUT_CATEGORIES.find((c) => c.id === activeCategory);
 
   return createPortal(
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      {/* Backdrop - matches Dialog component */}
+    <div className={modalClasses.container}>
+      {/* Backdrop */}
       <div
-        className={cn(
-          'absolute inset-0 bg-black/80 backdrop-blur-sm',
-          'animate-in fade-in duration-200'
-        )}
+        className={cn(modalClasses.backdrop, 'animate-in fade-in duration-200')}
         onClick={onClose}
+        aria-hidden="true"
       />
 
       {/* Modal - unified design token */}
       <div
         className={cn(
           'relative w-full max-w-2xl max-h-[80vh] m-4 overflow-hidden',
-          glassClasses.modal,
+          modalClasses.content,
           'animate-in zoom-in-95 fade-in duration-200'
         )}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="keyboard-shortcuts-title"
       >
-        {/* Header - compact like QueryPill */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-white/[0.08]">
+        {/* Header */}
+        <div className={modalClasses.header}>
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
               <KeyboardIcon className="w-4 h-4 text-primary" />
             </div>
-            <div>
-              <h2 className="text-sm font-semibold text-white">Keyboard Shortcuts</h2>
-            </div>
+            <h2 id="keyboard-shortcuts-title" className="text-sm font-semibold text-white">
+              Keyboard Shortcuts
+            </h2>
           </div>
           <button
             onClick={onClose}
             aria-label="Close keyboard shortcuts"
-            className={cn(
-              'w-8 h-8 rounded-lg flex items-center justify-center',
-              'text-white/40 hover:text-white/80',
-              'hover:bg-white/[0.06] transition-colors duration-150'
-            )}
+            className={modalClasses.closeButton}
           >
             <CloseIcon className="w-4 h-4" />
           </button>
