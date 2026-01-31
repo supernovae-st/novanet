@@ -441,7 +441,7 @@ Architecture Decision Records (ADRs):
 | Relations | 47 |
 | Scopes | 3 (Global, Shared, Project) |
 | Locale Knowledge nodes | 14 |
-| Seed files | 7 |
+| Seed files | 9 |
 | Migrations | 6 |
 | API routes | 9 |
 | Zustand stores | 8 |
