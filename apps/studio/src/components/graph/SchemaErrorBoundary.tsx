@@ -20,6 +20,7 @@
 import { Component, type ReactNode, type ErrorInfo } from 'react';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { glassClasses } from '@/design/tokens';
 
 /**
  * Props for SchemaErrorBoundary
@@ -151,9 +152,7 @@ export class SchemaErrorBoundary extends Component<
         <div
           className={cn(
             'max-w-lg w-full p-6 rounded-xl',
-            'bg-black/70 backdrop-blur-xl',
-            // opacity.border.subtle = white/[0.08]
-            'border border-white/[0.08]',
+            glassClasses.modal,
             'shadow-2xl'
           )}
         >

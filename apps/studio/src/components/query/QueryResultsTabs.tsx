@@ -19,6 +19,7 @@ import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import { EmptyState, LoadingState } from '@/components/ui/EmptyState';
 import { ACCENT_COLORS } from '@/config/constants';
+import { iconSizes } from '@/design/tokens';
 
 /**
  * TableView - Linear-style data table with rich formatting
@@ -89,7 +90,7 @@ export const TableView = memo(function TableView() {
       <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 bg-[hsl(240,8%,6%)]">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-accent-blue/15 flex items-center justify-center border border-accent-blue/30">
-            <Table2 className="w-4 h-4 text-accent-blue" />
+            <Table2 className={cn(iconSizes.md, 'text-accent-blue')} />
           </div>
           <div>
             <span className="text-sm font-medium text-white/90">Table View</span>
@@ -100,7 +101,7 @@ export const TableView = memo(function TableView() {
         </div>
         {result.duration > 0 && (
           <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/5 text-xs text-white/50">
-            <Clock className="w-3 h-3" />
+            <Clock className={iconSizes.xs} />
             {result.duration}ms
           </div>
         )}
@@ -197,7 +198,7 @@ export const TableView = memo(function TableView() {
       {/* Footer */}
       <div className="flex items-center justify-between px-5 py-3 bg-[hsl(240,8%,6%)] border-t border-white/10">
         <div className="flex items-center gap-2 text-xs text-white/50">
-          <GRAPH_ICONS.node className={cn('w-3.5 h-3.5', ICON_COLORS.node.muted)} />
+          <GRAPH_ICONS.node className={cn(iconSizes.sm, ICON_COLORS.node.muted)} />
           <span>Showing <span className="text-white/80 font-medium">{result.nodes.length}</span> of {result.totalNodes} nodes</span>
         </div>
         <div className="text-xs text-white/40">
@@ -336,7 +337,7 @@ export const RawView = memo(function RawView() {
       <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 bg-[hsl(240,8%,6%)]">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-accent-purple/15 flex items-center justify-center border border-accent-purple/30">
-            <FileJson className="w-4 h-4 text-accent-purple" />
+            <FileJson className={cn(iconSizes.md, 'text-accent-purple')} />
           </div>
           <div>
             <span className="text-sm font-medium text-white/90">Raw JSON</span>
@@ -348,7 +349,7 @@ export const RawView = memo(function RawView() {
         <div className="flex items-center gap-2">
           {result.duration > 0 && (
             <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/5 text-xs text-white/50">
-              <Clock className="w-3 h-3" />
+              <Clock className={iconSizes.xs} />
               {result.duration}ms
             </div>
           )}
@@ -361,7 +362,7 @@ export const RawView = memo(function RawView() {
                 : 'text-white/60 hover:text-white/90 bg-white/5 hover:bg-white/10 border-white/10 hover:border-white/20'
             )}
           >
-            {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+            {copied ? <Check className={iconSizes.sm} /> : <Copy className={iconSizes.sm} />}
             <span>{copied ? 'Copied!' : 'Copy JSON'}</span>
           </button>
         </div>
@@ -375,7 +376,7 @@ export const RawView = memo(function RawView() {
       {/* Footer */}
       <div className="flex items-center justify-between px-5 py-3 bg-[hsl(240,8%,6%)] border-t border-white/10">
         <div className="flex items-center gap-2 text-xs text-white/50">
-          <Code className="w-3.5 h-3.5" />
+          <Code className={iconSizes.sm} />
           <span>JSON format</span>
         </div>
         <div className="text-xs text-white/40">

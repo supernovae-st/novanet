@@ -19,6 +19,7 @@
 import { memo, useMemo } from 'react';
 import { type Node, type NodeProps } from '@xyflow/react';
 import { cn } from '@/lib/utils';
+import { glassClasses } from '@/design/tokens';
 import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
 import { getLocaleKnowledgeColors } from '@/config/categoryColors';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
@@ -123,7 +124,8 @@ export const LocaleKnowledgeNode = memo(function LocaleKnowledgeNode(props: Node
         <div
           className={cn(
             'flex flex-col items-center justify-center rounded-full',
-            selected && 'backdrop-blur-xl animate-float'
+            selected && glassClasses.modal,
+            selected && 'animate-float'
           )}
           style={{
             width: selected ? size - 2 : size,

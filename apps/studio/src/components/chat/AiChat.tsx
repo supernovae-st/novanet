@@ -7,7 +7,7 @@ import { postJSON, getErrorMessage } from '@/lib/fetchClient';
 import { useChatStore } from '@/stores/chatStore';
 import { CypherViewer } from '@/components/dx/CodeViewer';
 import { useCopyFeedback } from '@/hooks';
-import { glassClasses } from '@/design/tokens';
+import { glassClasses, iconSizes } from '@/design/tokens';
 import { Kbd } from '@/components/ui/Kbd';
 import {
   ACTION_ICONS,
@@ -148,7 +148,7 @@ export const AiChat = memo(function AiChat({
         {/* opacity.border.subtle = white/[0.08] */}
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-novanet-400 to-novanet-600 flex items-center justify-center shadow-lg shadow-novanet-500/20">
-            <SparklesIcon className="w-4 h-4 text-white" />
+            <SparklesIcon className={cn(iconSizes.md, 'text-white')} />
           </div>
           <div className="flex flex-col">
             <span className="font-semibold text-white text-sm">AI Search</span>
@@ -166,7 +166,7 @@ export const AiChat = memo(function AiChat({
             )}
             title="Clear chat"
           >
-            <ResetIcon className="w-4 h-4" />
+            <ResetIcon className={iconSizes.md} />
           </button>
           <button
             onClick={onClose}
@@ -177,7 +177,7 @@ export const AiChat = memo(function AiChat({
             )}
             title="Close (Esc)"
           >
-            <CloseIcon className="w-4 h-4" />
+            <CloseIcon className={iconSizes.md} />
           </button>
         </div>
       </div>
@@ -187,7 +187,7 @@ export const AiChat = memo(function AiChat({
         {messages.length === 0 && (
           <div className="text-center py-6">
             <div className="w-12 h-12 rounded-xl bg-novanet-500/10 border border-novanet-500/20 flex items-center justify-center mx-auto mb-4">
-              <SparklesIcon className="w-6 h-6 text-novanet-400" />
+              <SparklesIcon className={cn(iconSizes['2xl'], 'text-novanet-400')} />
             </div>
             <p className="text-white/60 text-sm mb-1">
               Ask me anything about your graph
@@ -229,7 +229,7 @@ export const AiChat = memo(function AiChat({
             aria-live="polite"
             className="flex items-center gap-2.5 text-novanet-400 animate-in fade-in duration-200 px-1"
           >
-            <LoaderIcon className="w-4 h-4 animate-spin" />
+            <LoaderIcon className={cn(iconSizes.md, 'animate-spin')} />
             <span className="text-sm">Generating query...</span>
           </div>
         )}
@@ -275,7 +275,7 @@ export const AiChat = memo(function AiChat({
                 : 'bg-white/5 text-white/20 border-white/10 cursor-not-allowed'
             )}
           >
-            <SendIcon className="w-4 h-4" />
+            <SendIcon className={iconSizes.md} />
           </button>
         </div>
         <div className="flex items-center justify-between mt-2 px-1">
@@ -366,7 +366,7 @@ const ChatMessage = memo(function ChatMessage({
                 'hover:bg-emerald-500/30 transition-colors'
               )}
             >
-              <PlayIcon className="w-3 h-3" />
+              <PlayIcon className={iconSizes.xs} />
               Execute
             </button>
             <button
@@ -377,7 +377,7 @@ const ChatMessage = memo(function ChatMessage({
                 'hover:bg-white/10 hover:text-white/70 transition-colors'
               )}
             >
-              {copiedQuery ? <CheckIcon className="w-3 h-3" /> : <CopyIcon className="w-3 h-3" />}
+              {copiedQuery ? <CheckIcon className={iconSizes.xs} /> : <CopyIcon className={iconSizes.xs} />}
               {copiedQuery ? 'Copied' : 'Copy'}
             </button>
           </div>

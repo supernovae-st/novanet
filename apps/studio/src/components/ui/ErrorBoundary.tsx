@@ -15,6 +15,7 @@
 import { Component, type ReactNode, type ErrorInfo } from 'react';
 import { cn } from '@/lib/utils';
 import { logger } from '@/lib/logger';
+import { iconSizes } from '@/design/tokens';
 import { STATUS_ICONS, ACTION_ICONS } from '@/config/iconSystem';
 
 // Design system icons
@@ -121,7 +122,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
               'transition-colors'
             )}
           >
-            <RefreshIcon className="w-4 h-4" />
+            <RefreshIcon className={iconSizes.md} />
             Try Again
           </button>
         </div>
@@ -156,7 +157,7 @@ export function ChatErrorBoundary({ children }: { children: ReactNode }) {
               'transition-colors'
             )}
           >
-            <RefreshIcon className="w-3 h-3" />
+            <RefreshIcon className={iconSizes.xs} />
             Reload
           </button>
         </div>
@@ -193,7 +194,7 @@ export function GraphErrorBoundary({ children }: { children: ReactNode }) {
               'transition-colors'
             )}
           >
-            <RefreshIcon className="w-4 h-4" />
+            <RefreshIcon className={iconSizes.md} />
             Reload Page
           </button>
         </div>
