@@ -6,7 +6,7 @@
  * Design: Premium glassmorphism matching Data View style
  *
  * Features:
- * - Uses unified FilterSection + FilterCard design system
+ * - Uses unified FilterTree design system
  * - Tri-state checkboxes for hierarchical selection
  * - Collapsible sections with smooth animations
  * - ARIA accessibility
@@ -21,8 +21,11 @@ import type { Scope } from '@/types';
 import { useFilterStore } from '@/stores/filterStore';
 import { cn } from '@/lib/utils';
 import { scopeAccents, panelClasses, iconSizes } from '@/design/tokens';
-import { FilterSection, type CheckboxState } from '@/components/ui/FilterSection';
+import { FilterTree } from '@/components/ui/FilterTree';
+import { FilterSection } from '@/components/ui/FilterSection';
 import { FilterCard } from '@/components/ui/FilterCard';
+import { calculateCheckboxState } from '@/hooks';
+import type { CheckboxState } from '@/components/ui/TriStateCheckbox';
 
 // Ordered scopes for consistent rendering
 const SCOPE_ORDER: Scope[] = ['Project', 'Global', 'Shared'];
@@ -78,20 +81,31 @@ export const SchemaFilterPanel = memo(function SchemaFilterPanel({
     });
   }, []);
 
+  // Get visible subcategories as a Set for checkbox state calculation
+  const getVisibleSubcategories = useCallback(
+    (scope: Scope): Set<string> => {
+      const scopeDef = SCOPE_HIERARCHY[scope];
+      const subcatNames = Object.keys(scopeDef.subcategories) as Subcategory[];
+      const visible = new Set<string>();
+      subcatNames.forEach((name) => {
+        if (!isSubcategoryCollapsed(scope, name)) {
+          visible.add(name);
+        }
+      });
+      return visible;
+    },
+    [isSubcategoryCollapsed]
+  );
+
   // Calculate checkbox state for a scope
   const getScopeCheckboxState = useCallback(
     (scope: Scope): CheckboxState => {
       const scopeDef = SCOPE_HIERARCHY[scope];
       const subcatNames = Object.keys(scopeDef.subcategories) as Subcategory[];
-      const visibleCount = subcatNames.filter(
-        (name) => !isSubcategoryCollapsed(scope, name)
-      ).length;
-
-      if (visibleCount === 0) return 'none';
-      if (visibleCount === subcatNames.length) return 'all';
-      return 'partial';
+      const visible = getVisibleSubcategories(scope);
+      return calculateCheckboxState(subcatNames, visible);
     },
-    [isSubcategoryCollapsed]
+    [getVisibleSubcategories]
   );
 
   // Handle scope checkbox click
@@ -139,39 +153,40 @@ export const SchemaFilterPanel = memo(function SchemaFilterPanel({
         </div>
       </div>
 
-      {/* Content - Unified Filter Components */}
-      <div className={cn(panelClasses.body, 'space-y-4')}>
-        {scopeData.map(({ scope, scopeDef, accent, subcategories, nodeCount }) => (
-          <FilterSection
-            key={scope}
-            id={scope.toLowerCase()}
-            label={scopeDef.label}
-            icon={<span className="text-base">{scopeDef.icon}</span>}
-            accentColor={accent.color}
-            checkboxState={getScopeCheckboxState(scope)}
-            onCheckboxClick={() => handleScopeCheckboxClick(scope)}
-            count={nodeCount}
-            defaultExpanded={true}
-          >
-            {subcategories.map(([subcatName, subcatMeta]) => {
-              const isHidden = isSubcategoryCollapsed(scope, subcatName);
+      {/* Content - Unified FilterTree Components */}
+      <div className={cn(panelClasses.body)}>
+        <FilterTree.Root showProgressBars={false} maxCount={35}>
+          {scopeData.map(({ scope, scopeDef, accent, subcategories, nodeCount }) => (
+            <FilterTree.Section
+              key={scope}
+              id={scope.toLowerCase()}
+              label={scopeDef.label}
+              icon={<span className="text-base">{scopeDef.icon}</span>}
+              color={accent.color}
+              checkboxState={getScopeCheckboxState(scope)}
+              onCheckboxClick={() => handleScopeCheckboxClick(scope)}
+              count={nodeCount}
+              defaultExpanded
+            >
+              {subcategories.map(([subcatName, subcatMeta]) => {
+                const isVisible = !isSubcategoryCollapsed(scope, subcatName);
 
-              return (
-                <FilterCard
-                  key={subcatName}
-                  id={`${scope}-${subcatName}`}
-                  label={subcatMeta.label}
-                  icon={<span className="text-sm">{subcatMeta.icon}</span>}
-                  accentColor={accent.color}
-                  isSelected={!isHidden}
-                  onToggle={() => toggleSubcategoryCollapsed(scope, subcatName)}
-                  count={subcatMeta.nodeTypes.length}
-                  compact
-                />
-              );
-            })}
-          </FilterSection>
-        ))}
+                return (
+                  <FilterTree.Row
+                    key={subcatName}
+                    id={`${scope}-${subcatName}`}
+                    label={subcatMeta.label}
+                    icon={<span className="text-sm">{subcatMeta.icon}</span>}
+                    color={accent.color}
+                    isSelected={isVisible}
+                    onToggle={() => toggleSubcategoryCollapsed(scope, subcatName)}
+                    count={subcatMeta.nodeTypes.length}
+                  />
+                );
+              })}
+            </FilterTree.Section>
+          ))}
+        </FilterTree.Root>
       </div>
 
       {/* Footer */}
