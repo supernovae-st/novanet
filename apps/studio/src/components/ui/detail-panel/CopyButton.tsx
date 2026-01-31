@@ -12,6 +12,7 @@
 import { memo } from 'react';
 import { cn } from '@/lib/utils';
 import { ACTION_ICONS, STATUS_ICONS } from '@/config/iconSystem';
+import { iconSizes } from '@/design/tokens';
 
 const CopyIcon = ACTION_ICONS.copy;
 const CheckIcon = STATUS_ICONS.success;
@@ -31,10 +32,10 @@ const sizeClasses = {
   lg: 'p-2.5',
 };
 
-const iconSizes = {
-  sm: 'w-3 h-3',
-  default: 'w-3.5 h-3.5',
-  lg: 'w-4 h-4',
+const localIconSizes = {
+  sm: iconSizes.xs,
+  default: iconSizes.sm,
+  lg: iconSizes.md,
 };
 
 export const CopyButton = memo(function CopyButton({
@@ -63,9 +64,9 @@ export const CopyButton = memo(function CopyButton({
       className={cn(baseClasses, variantClasses, className)}
     >
       {isCopied ? (
-        <CheckIcon className={iconSizes[size]} />
+        <CheckIcon className={localIconSizes[size]} />
       ) : (
-        <CopyIcon className={iconSizes[size]} />
+        <CopyIcon className={localIconSizes[size]} />
       )}
     </button>
   );

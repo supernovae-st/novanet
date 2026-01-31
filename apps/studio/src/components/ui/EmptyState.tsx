@@ -49,9 +49,11 @@ const variantStyles: Record<EmptyStateVariant, {
   titleColor: string;
 }> = {
   default: {
+    // opacity.bg.strong (0.08) + opacity.border.medium (0.12)
     iconBg: 'bg-white/[0.08]',
     iconBorder: 'border-white/[0.12]',
     iconColor: 'text-white/30',
+    // opacity.text.secondary (0.70)
     titleColor: 'text-white/70',
   },
   loading: {

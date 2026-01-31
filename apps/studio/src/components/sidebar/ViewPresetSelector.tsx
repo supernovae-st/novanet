@@ -87,7 +87,7 @@ export const ViewPresetSelector = memo(function ViewPresetSelector({
               'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-novanet-500/50',
               activeId === preset.id
                 ? 'bg-white/[0.1] border border-white/[0.15] text-white'
-                : 'bg-white/[0.03] border border-transparent text-white/60 hover:bg-white/[0.06] hover:text-white/80'
+                : 'bg-white/[0.03] border border-white/[0.06] text-white/60 hover:bg-white/[0.06] hover:text-white/80'
             )}
           >
             {/* Icon */}

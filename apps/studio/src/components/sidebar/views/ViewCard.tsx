@@ -63,7 +63,7 @@ export const ViewCard = memo(function ViewCard({
         // States with glassmorphism
         isActive
           ? [
-              'bg-white/[0.10]',
+              'bg-white/[0.1]',
               'ring-white/[0.15]',
               'shadow-lg shadow-black/25',
               'shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]',
@@ -71,7 +71,7 @@ export const ViewCard = memo(function ViewCard({
             ]
           : [
               'bg-white/[0.04]',
-              'ring-white/[0.08]',
+              'ring-white/[0.06]',
               'shadow-md shadow-black/10',
               'text-white/60',
               'hover:bg-white/[0.08]',

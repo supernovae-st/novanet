@@ -59,8 +59,11 @@ export const KeyboardKey = memo(function KeyboardKey({
         'inline-flex items-center justify-center',
         'font-mono font-medium tracking-tight',
         // Skeuomorphic dark styling
+        // opacity.bg.heavy (0.10) + opacity.bg.light (0.04)
         'bg-gradient-to-b from-white/[0.10] to-white/[0.04]',
+        // opacity.border.medium (0.12) + opacity.border.light (0.08)
         'border border-white/[0.12] border-b-white/[0.08]',
+        // opacity.text.secondary (0.70)
         'text-white/70',
         // 3D depth shadows
         'shadow-[0_1px_2px_rgba(0,0,0,0.4),0_0_0_1px_rgba(0,0,0,0.2),inset_0_1px_0_rgba(255,255,255,0.08)]',
@@ -70,8 +73,11 @@ export const KeyboardKey = memo(function KeyboardKey({
         interactive && [
           'cursor-pointer',
           'transition-all duration-100',
+          // opacity.bg.intense (0.15) + opacity.bg.medium (0.06)
           'hover:bg-gradient-to-b hover:from-white/[0.14] hover:to-white/[0.06]',
+          // opacity.text.strong (0.90) + opacity.border.strong (0.18)
           'hover:text-white/90 hover:border-white/[0.18]',
+          // opacity.bg.medium (0.06) + opacity.bg.heavy (0.10)
           'active:bg-gradient-to-b active:from-white/[0.06] active:to-white/[0.10]',
           'active:shadow-[0_0_1px_rgba(0,0,0,0.4),inset_0_1px_2px_rgba(0,0,0,0.2)]',
           'active:translate-y-[1px]',

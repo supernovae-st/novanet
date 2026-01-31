@@ -18,6 +18,7 @@ import { cn } from '@/lib/utils';
 import { useFilterStore } from '@/stores/filterStore';
 import { useGraphStore } from '@/stores/graphStore';
 import { getLocaleInfo, ALL_LOCALES } from '@/config/locales';
+import { iconSizes } from '@/design/tokens';
 import { Divider } from '@/components/ui/Divider';
 import { LocalePicker } from './LocalePicker';
 import { ProjectPicker } from './ProjectPicker';
@@ -54,7 +55,8 @@ const SelectorButton = memo(function SelectorButton({
       )}
     >
       <Icon className={cn(
-        'w-4 h-4 shrink-0',
+        iconSizes.md,
+        'shrink-0',
         disabled ? 'text-white/30' : 'text-white/50'
       )} />
       <div className="flex flex-col items-start">

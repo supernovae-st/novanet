@@ -222,7 +222,7 @@ export const LocalePicker = memo(function LocalePicker({
         )}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.08]">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.06]">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-lg bg-[#111118] border border-white/10 flex items-center justify-center">
               <Globe className="w-4.5 h-4.5 text-white/70" />
@@ -244,7 +244,7 @@ export const LocalePicker = memo(function LocalePicker({
         </div>
 
         {/* Search Header - CommandPalette style */}
-        <div className="flex items-center gap-3 p-4 border-b border-white/[0.08]">
+        <div className="flex items-center gap-3 p-4 border-b border-white/[0.06]">
           <Search className="w-5 h-5 text-white/40 shrink-0" />
           <input
             ref={searchRef}
@@ -316,7 +316,7 @@ export const LocalePicker = memo(function LocalePicker({
         </div>
 
         {/* Footer - CommandPalette style */}
-        <div className="p-3 border-t border-white/[0.08] bg-black/20">
+        <div className="p-3 border-t border-white/[0.06] bg-black/20">
           <div className="flex items-center justify-between text-xs text-white/50">
             <span>{filteredLocales.length + 1} languages</span>
             <div className="flex items-center gap-4">

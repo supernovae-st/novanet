@@ -12,6 +12,7 @@
 import { memo, type ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import { NAV_ICONS } from '@/config/iconSystem';
+import { iconSizes } from '@/design/tokens';
 
 const ChevronRight = NAV_ICONS.chevronRight;
 
@@ -44,7 +45,8 @@ export const CollapsibleSection = memo(function CollapsibleSection({
       >
         <ChevronRight
           className={cn(
-            'w-4 h-4 text-white/60 transition-transform duration-200',
+            iconSizes.md,
+            'text-white/60 transition-transform duration-200',
             isExpanded && 'rotate-90'
           )}
         />
