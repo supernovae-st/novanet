@@ -14,7 +14,7 @@ import { useState, useMemo, useCallback, useEffect, useRef, memo, useDeferredVal
 import { createPortal } from 'react-dom';
 import { Search, X, Globe, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { glassClasses, iconSizes } from '@/design/tokens';
+import { glassClasses, modalClasses, iconSizes } from '@/design/tokens';
 import { Kbd } from '@/components/ui';
 import { useFilterStore } from '@/stores/filterStore';
 import {
@@ -206,7 +206,7 @@ export const LocalePicker = memo(function LocalePicker({
       role="presentation"
     >
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200" aria-hidden="true" />
+      <div className={cn(modalClasses.backdrop, 'animate-in fade-in duration-200')} aria-hidden="true" />
 
       {/* Modal - glass-floating style (matches CommandPalette) */}
       <div
