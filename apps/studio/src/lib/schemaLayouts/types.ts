@@ -34,6 +34,15 @@ export interface SchemaLayoutResult {
 /** Layout direction from UI store */
 export type LayoutDirection = 'LR' | 'TB' | 'dagre' | 'radial' | 'force';
 
+/** Schema layout type - includes special layouts like magnetic */
+export type SchemaLayoutType =
+  | 'swimlanes'
+  | 'stacked'
+  | 'elkLayered'
+  | 'target'
+  | 'forceClusters'
+  | 'magnetic';
+
 /** Scope visual config */
 export interface ScopeConfig {
   scope: Scope;
