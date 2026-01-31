@@ -7,19 +7,17 @@
  * - Category tabs for organization
  * - Beautiful glass panel with animations
  * - Keyboard key styling
- * - Portal-based rendering
- * - Escape to close
+ * - Uses Modal compound component
+ * - Focus trap for accessibility (WCAG 2.1 AA)
  */
 
-import { useEffect, useState } from 'react';
-import { createPortal } from 'react-dom';
+import { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { modalClasses } from '@/design/tokens';
 import { ACTION_ICONS, NAV_ICONS, CONTENT_ICONS, ICON_SIZES } from '@/config/iconSystem';
 import { Kbd } from './Kbd';
+import { Modal } from './Modal';
 
 // Design system icons
-const CloseIcon = ACTION_ICONS.close;
 const KeyboardIcon = NAV_ICONS.keyboard;
 const CommandIcon = NAV_ICONS.command;
 const ShowIcon = ACTION_ICONS.show;
@@ -118,67 +116,22 @@ interface KeyboardShortcutsProps {
 }
 
 export function KeyboardShortcuts({ isOpen, onClose }: KeyboardShortcutsProps) {
-  const [mounted, setMounted] = useState(false);
   const [activeCategory, setActiveCategory] = useState('navigation');
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  // Handle escape key
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) {
-        onClose();
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose]);
-
-  if (!mounted || !isOpen) return null;
 
   const currentCategory = SHORTCUT_CATEGORIES.find((c) => c.id === activeCategory);
 
-  return createPortal(
-    <div className={modalClasses.container}>
-      {/* Backdrop */}
-      <div
-        className={cn(modalClasses.backdrop, 'animate-in fade-in duration-200')}
-        onClick={onClose}
-        aria-hidden="true"
-      />
-
-      {/* Modal - unified design token */}
-      <div
-        className={cn(
-          'relative w-full max-w-2xl max-h-[80vh] m-4 overflow-hidden',
-          modalClasses.content,
-          'animate-in zoom-in-95 fade-in duration-200'
-        )}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="keyboard-shortcuts-title"
-      >
+  return (
+    <Modal.Root isOpen={isOpen} onClose={onClose}>
+      <Modal.Content size="lg" ariaLabelledBy="keyboard-shortcuts-title" className="max-h-[80vh]">
         {/* Header */}
-        <div className={modalClasses.header}>
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
-              <KeyboardIcon className="w-4 h-4 text-primary" />
-            </div>
-            <h2 id="keyboard-shortcuts-title" className="text-sm font-semibold text-white">
-              Keyboard Shortcuts
-            </h2>
-          </div>
-          <button
-            onClick={onClose}
-            aria-label="Close keyboard shortcuts"
-            className={modalClasses.closeButton}
+        <Modal.Header titleId="keyboard-shortcuts-title">
+          <Modal.Title
+            id="keyboard-shortcuts-title"
+            icon={<KeyboardIcon className="w-4 h-4 text-primary" />}
           >
-            <CloseIcon className="w-4 h-4" />
-          </button>
-        </div>
+            Keyboard Shortcuts
+          </Modal.Title>
+        </Modal.Header>
 
         {/* Category Tabs - horizontal scroll, compact */}
         <div className="flex gap-1 px-3 py-2 border-b border-white/[0.08] overflow-x-auto scrollbar-thin">
@@ -208,56 +161,57 @@ export function KeyboardShortcuts({ isOpen, onClose }: KeyboardShortcutsProps) {
         </div>
 
         {/* Shortcuts List - clean rows */}
-        <div className="p-2 overflow-y-auto max-h-[calc(80vh-160px)] scrollbar-thin">
-          {currentCategory && (
-            <div className="space-y-0.5">
-              {currentCategory.shortcuts.map((shortcut) => (
-                <div
-                  key={shortcut.description}
-                  className={cn(
-                    'flex items-center justify-between py-2.5 px-3 rounded-lg',
-                    'hover:bg-white/[0.04] transition-colors group'
-                  )}
-                >
-                  <span className="text-sm text-white/60 group-hover:text-white/80 transition-colors">
-                    {shortcut.description}
-                  </span>
-                  <div className="flex items-center gap-1">
-                    {shortcut.keys.map((key, keyIdx) => (
-                      <span key={keyIdx} className="flex items-center">
-                        <kbd
-                          className={cn(
-                            'inline-flex items-center justify-center min-w-[26px] h-6 px-1.5',
-                            'bg-white/[0.06] border border-white/[0.08] rounded-md',
-                            'text-[11px] font-mono text-white/70',
-                            'group-hover:bg-white/[0.10] group-hover:border-white/[0.15] transition-colors'
+        <Modal.Body>
+          <div className="p-2">
+            {currentCategory && (
+              <div className="space-y-0.5">
+                {currentCategory.shortcuts.map((shortcut) => (
+                  <div
+                    key={shortcut.description}
+                    className={cn(
+                      'flex items-center justify-between py-2.5 px-3 rounded-lg',
+                      'hover:bg-white/[0.04] transition-colors group'
+                    )}
+                  >
+                    <span className="text-sm text-white/60 group-hover:text-white/80 transition-colors">
+                      {shortcut.description}
+                    </span>
+                    <div className="flex items-center gap-1">
+                      {shortcut.keys.map((key, keyIdx) => (
+                        <span key={keyIdx} className="flex items-center">
+                          <kbd
+                            className={cn(
+                              'inline-flex items-center justify-center min-w-[26px] h-6 px-1.5',
+                              'bg-white/[0.06] border border-white/[0.08] rounded-md',
+                              'text-[11px] font-mono text-white/70',
+                              'group-hover:bg-white/[0.10] group-hover:border-white/[0.15] transition-colors'
+                            )}
+                          >
+                            {key}
+                          </kbd>
+                          {keyIdx < shortcut.keys.length - 1 && (
+                            <span className="text-white/30 mx-0.5 text-[10px]">+</span>
                           )}
-                        >
-                          {key}
-                        </kbd>
-                        {keyIdx < shortcut.keys.length - 1 && (
-                          <span className="text-white/30 mx-0.5 text-[10px]">+</span>
-                        )}
-                      </span>
-                    ))}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </Modal.Body>
 
         {/* Footer - subtle hint */}
-        <div className="px-4 py-2.5 border-t border-white/[0.08]">
+        <Modal.Footer className="px-4 py-2.5">
           <div className="flex items-center justify-center gap-2 text-[11px] text-white/40">
             <span>Press</span>
             <Kbd>/</Kbd>
             <span>anytime to show this dialog</span>
           </div>
-        </div>
-      </div>
-    </div>,
-    document.body
+        </Modal.Footer>
+      </Modal.Content>
+    </Modal.Root>
   );
 }
 

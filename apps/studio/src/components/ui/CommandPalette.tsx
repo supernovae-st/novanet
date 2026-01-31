@@ -7,12 +7,12 @@
  * - Fuzzy search across all commands
  * - Keyboard navigation (↑/↓, Enter, Escape)
  * - Categorized commands
- * - Portal-based rendering
+ * - Uses Modal compound component
+ * - Focus trap for accessibility (WCAG 2.1 AA)
  * - Auto-focus search input
  */
 
 import { useEffect, useState, useCallback, useMemo, useRef } from 'react';
-import { createPortal } from 'react-dom';
 import {
   X,
   Search,
@@ -34,9 +34,9 @@ import {
 import { cn } from '@/lib/utils';
 import { fuzzyMatch } from '@/lib/fuzzySearch';
 import { useAutoFocus, useDebouncedValue } from '@/hooks';
-import { modalClasses } from '@/design/tokens';
 import { KeyboardKey } from './KeyboardKey';
 import { Kbd } from './Kbd';
+import { Modal } from './Modal';
 
 // =============================================================================
 // Types
@@ -63,15 +63,10 @@ interface CommandPaletteProps {
 // =============================================================================
 
 export function CommandPalette({ isOpen, onClose, commands }: CommandPaletteProps) {
-  const [mounted, setMounted] = useState(false);
   const [query, setQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   // Auto-focus input when opened
   useAutoFocus(inputRef, isOpen);
@@ -164,35 +159,32 @@ export function CommandPalette({ isOpen, onClose, commands }: CommandPaletteProp
     setSelectedIndex(0);
   }, [debouncedQuery]);
 
-  if (!mounted || !isOpen) return null;
-
   let globalIndex = 0;
 
-  return createPortal(
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh]">
-      {/* Backdrop */}
-      <div
-        className={cn(modalClasses.backdrop, 'animate-in fade-in duration-200')}
-        onClick={onClose}
-        aria-hidden="true"
-      />
-
-      {/* Modal */}
-      <div
-        className={cn('relative w-full max-w-lg m-4 animate-scale-in overflow-hidden', modalClasses.content)}
-        onKeyDown={handleKeyDown}
-        role="dialog"
-        aria-modal="true"
-        aria-label="Command palette"
+  return (
+    <Modal.Root
+      isOpen={isOpen}
+      onClose={onClose}
+      closeOnEscape={false} // We handle Escape in handleKeyDown
+      containerClassName="items-start pt-[15vh]"
+    >
+      <Modal.Content
+        size="md"
+        ariaLabel="Command palette"
+        className="animate-scale-in"
       >
         {/* Search Header */}
-        <div className="flex items-center gap-3 p-4 border-b border-white/[0.08]">
+        <div
+          className="flex items-center gap-3 p-4 border-b border-white/[0.08]"
+          onKeyDown={handleKeyDown}
+        >
           <Search className="w-5 h-5 text-white/40 shrink-0" />
           <input
             ref={inputRef}
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={handleKeyDown}
             placeholder="Search commands..."
             className="flex-1 bg-transparent text-white placeholder-white/40 text-base outline-none border-none ring-0 focus:outline-none focus:ring-0"
             autoComplete="off"
@@ -211,86 +203,88 @@ export function CommandPalette({ isOpen, onClose, commands }: CommandPaletteProp
         </div>
 
         {/* Commands List */}
-        <div ref={listRef} className="max-h-[50vh] overflow-y-auto p-2 scrollbar-thin">
-          {flatCommands.length === 0 ? (
-            <div className="py-8 text-center text-white/40 text-sm">No commands found</div>
-          ) : (
-            Object.entries(groupedCommands).map(([category, cmds]) => (
-              <div key={category} className="mb-2">
-                {/* Category Header */}
-                <div className="px-3 py-2 text-xs font-medium text-white/40 uppercase tracking-wider">
-                  {category}
-                </div>
-                {/* Commands */}
-                {cmds.map((cmd) => {
-                  const currentIndex = globalIndex++;
-                  const isSelected = currentIndex === selectedIndex;
+        <Modal.Body maxHeight="50vh">
+          <div ref={listRef} className="p-2">
+            {flatCommands.length === 0 ? (
+              <div className="py-8 text-center text-white/40 text-sm">No commands found</div>
+            ) : (
+              Object.entries(groupedCommands).map(([category, cmds]) => (
+                <div key={category} className="mb-2">
+                  {/* Category Header */}
+                  <div className="px-3 py-2 text-xs font-medium text-white/40 uppercase tracking-wider">
+                    {category}
+                  </div>
+                  {/* Commands */}
+                  {cmds.map((cmd) => {
+                    const currentIndex = globalIndex++;
+                    const isSelected = currentIndex === selectedIndex;
 
-                  return (
-                    <button
-                      key={cmd.id}
-                      data-index={currentIndex}
-                      onClick={() => {
-                        cmd.action();
-                        onClose();
-                      }}
-                      onMouseEnter={() => setSelectedIndex(currentIndex)}
-                      className={cn(
-                        'w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all',
-                        'outline-none ring-0 focus:outline-none focus:ring-0',
-                        isSelected
-                          ? 'bg-novanet-500/20 border border-novanet-500/30'
-                          : 'hover:bg-white/[0.04] border border-transparent'
-                      )}
-                    >
-                      {/* Icon */}
-                      <div
+                    return (
+                      <button
+                        key={cmd.id}
+                        data-index={currentIndex}
+                        onClick={() => {
+                          cmd.action();
+                          onClose();
+                        }}
+                        onMouseEnter={() => setSelectedIndex(currentIndex)}
                         className={cn(
-                          'w-8 h-8 rounded-lg flex items-center justify-center shrink-0',
-                          isSelected ? 'bg-novanet-500/30 text-novanet-400' : 'bg-white/[0.06] text-white/50'
+                          'w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all',
+                          'outline-none ring-0 focus:outline-none focus:ring-0',
+                          isSelected
+                            ? 'bg-novanet-500/20 border border-novanet-500/30'
+                            : 'hover:bg-white/[0.04] border border-transparent'
                         )}
                       >
-                        {cmd.icon}
-                      </div>
-
-                      {/* Text */}
-                      <div className="flex-1 text-left min-w-0">
+                        {/* Icon */}
                         <div
                           className={cn(
-                            'text-sm font-medium truncate',
-                            isSelected ? 'text-white' : 'text-white/80'
+                            'w-8 h-8 rounded-lg flex items-center justify-center shrink-0',
+                            isSelected ? 'bg-novanet-500/30 text-novanet-400' : 'bg-white/[0.06] text-white/50'
                           )}
                         >
-                          {cmd.title}
+                          {cmd.icon}
                         </div>
-                        {cmd.description && (
-                          <div className="text-xs text-white/40 truncate">{cmd.description}</div>
-                        )}
-                      </div>
 
-                      {/* Shortcut */}
-                      {cmd.shortcut && (
-                        <div className="flex items-center gap-0.5 shrink-0">
-                          {cmd.shortcut.map((key, keyIdx) => (
-                            <span key={`${cmd.id}-key-${keyIdx}`} className="flex items-center">
-                              <KeyboardKey size="sm">{key}</KeyboardKey>
-                              {cmd.shortcut && keyIdx < cmd.shortcut.length - 1 && (
-                                <span className="text-white/20 mx-0.5 text-[10px]">+</span>
-                              )}
-                            </span>
-                          ))}
+                        {/* Text */}
+                        <div className="flex-1 text-left min-w-0">
+                          <div
+                            className={cn(
+                              'text-sm font-medium truncate',
+                              isSelected ? 'text-white' : 'text-white/80'
+                            )}
+                          >
+                            {cmd.title}
+                          </div>
+                          {cmd.description && (
+                            <div className="text-xs text-white/40 truncate">{cmd.description}</div>
+                          )}
                         </div>
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
-            ))
-          )}
-        </div>
+
+                        {/* Shortcut */}
+                        {cmd.shortcut && (
+                          <div className="flex items-center gap-0.5 shrink-0">
+                            {cmd.shortcut.map((key, keyIdx) => (
+                              <span key={`${cmd.id}-key-${keyIdx}`} className="flex items-center">
+                                <KeyboardKey size="sm">{key}</KeyboardKey>
+                                {cmd.shortcut && keyIdx < cmd.shortcut.length - 1 && (
+                                  <span className="text-white/20 mx-0.5 text-[10px]">+</span>
+                                )}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              ))
+            )}
+          </div>
+        </Modal.Body>
 
         {/* Footer */}
-        <div className="p-3 border-t border-white/[0.08] bg-black/20">
+        <Modal.Footer className="p-3 bg-black/20">
           <div className="flex items-center justify-center gap-4 text-xs text-white/50">
             <span className="flex items-center gap-1.5">
               <Kbd>↑↓</Kbd>
@@ -305,10 +299,9 @@ export function CommandPalette({ isOpen, onClose, commands }: CommandPaletteProp
               <span>Close</span>
             </span>
           </div>
-        </div>
-      </div>
-    </div>,
-    document.body
+        </Modal.Footer>
+      </Modal.Content>
+    </Modal.Root>
   );
 }
 

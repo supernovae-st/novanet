@@ -365,25 +365,17 @@ export const useUIStore = create<UIStoreState>()(
         });
       },
 
-      // Modal actions - exclusive
+      // Modal actions - exclusive (pure state updates, no DOM side effects)
+      // Body scroll lock is handled by useModal/useBodyScrollLock hooks in components
       openModal: (modal) => {
         set((state) => {
-          // Close any existing modal first
           state.activeModal = modal;
-          // Lock body scroll when modal opens
-          if (modal && typeof document !== 'undefined') {
-            document.body.style.overflow = 'hidden';
-          }
         });
       },
 
       closeModal: () => {
         set((state) => {
           state.activeModal = null;
-          // Restore body scroll
-          if (typeof document !== 'undefined') {
-            document.body.style.overflow = '';
-          }
         });
       },
 
