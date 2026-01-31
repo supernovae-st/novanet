@@ -20,6 +20,7 @@ import { useCallback, useEffect, useMemo, useRef, lazy, Suspense } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { Box, PanelLeft, Keyboard, X, Network, Table2, Code, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { iconSizes } from '@/design/tokens';
 import { DEFAULT_FETCH_LIMIT } from '@/config/constants';
 import { useUIStore, useFilterStore, useGraphStore } from '@/stores';
 import { useGraphData, useFilteredGraph, UrlSyncComponent } from '@/hooks';
@@ -385,7 +386,7 @@ export default function HomePage() {
       <div className="flex-1 flex overflow-hidden">
         {/* Left Sidebar - Filters & Database Info (Linear-dark) */}
         {!uiState.focusMode && uiState.sidebarOpen && (
-          <aside className="w-72 border-r border-white/8 shrink-0 overflow-hidden z-30 bg-[#0d0d12]">
+          <aside className="w-80 border-r border-white/8 shrink-0 overflow-hidden z-30 bg-[#0d0d12]">
             <SidebarTabs />
           </aside>
         )}
@@ -399,11 +400,11 @@ export default function HomePage() {
               'p-2 bg-[#0d0d12] border border-white/10',
               'hover:bg-accent-blue/15 hover:border-accent-blue/30 transition-all duration-200',
               'shadow-lg shadow-black/50 text-white/50 hover:text-accent-blue',
-              uiState.sidebarOpen ? 'left-[284px] rounded-r-lg' : 'left-0 rounded-r-lg'
+              uiState.sidebarOpen ? 'left-[304px] rounded-r-lg' : 'left-0 rounded-r-lg'
             )}
             title="Toggle sidebar ([)"
           >
-            <PanelLeft className={cn('w-4 h-4', !uiState.sidebarOpen && 'rotate-180')} />
+            <PanelLeft className={cn(iconSizes.md, !uiState.sidebarOpen && 'rotate-180')} />
           </button>
         )}
 
@@ -425,7 +426,7 @@ export default function HomePage() {
                   fallback={
                     <div className="absolute inset-0 flex items-center justify-center bg-black">
                       <div className="flex flex-col items-center gap-4">
-                        <Loader2 className="w-8 h-8 text-novanet-400 animate-spin" />
+                        <Loader2 className={cn('text-novanet-400 animate-spin', 'w-8 h-8')} />
                         <span className="text-sm text-white/50">Loading graph...</span>
                       </div>
                     </div>
@@ -496,7 +497,7 @@ export default function HomePage() {
               className="absolute bottom-4 left-4 px-3 py-2 rounded-xl bg-[#0d0d12] border border-white/10 hover:bg-accent-blue/15 hover:border-accent-blue/30 transition-all text-white/40 hover:text-accent-blue shadow-lg shadow-black/40 flex items-center gap-2"
               title="Keyboard shortcuts (/)"
             >
-              <Keyboard className="w-4 h-4" />
+              <Keyboard className={iconSizes.md} />
               <kbd className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-white/10 border border-white/10">/</kbd>
             </button>
 
@@ -505,7 +506,7 @@ export default function HomePage() {
               {/* Hover info - shows node/edge details on hover */}
               {(hoveredNode || hoveredEdge) && (
                 <div
-                  className="glass px-4 py-2 rounded-xl animate-fade-in flex items-center gap-3 text-xs backdrop-blur-xl"
+                  className="glass px-4 py-2 rounded-xl animate-fade-in flex items-center gap-3 text-xs"
                   style={{
                     borderColor: hoveredEdge && hoveredEdgeNodes
                       ? `${hoveredEdgeNodes.colors.primary}50`
@@ -621,7 +622,7 @@ export default function HomePage() {
                   )}
                   title="2D Graph view"
                 >
-                  <Network className="w-3.5 h-3.5" />
+                  <Network className={iconSizes.sm} />
                   <span className="hidden sm:inline">2D Graph</span>
                 </button>
                 <button
@@ -637,7 +638,7 @@ export default function HomePage() {
                   )}
                   title="3D Graph view"
                 >
-                  <Box className="w-3.5 h-3.5" />
+                  <Box className={iconSizes.sm} />
                   <span className="hidden sm:inline">3D Graph</span>
                 </button>
                 <button
@@ -650,7 +651,7 @@ export default function HomePage() {
                   )}
                   title="Table view"
                 >
-                  <Table2 className="w-3.5 h-3.5" />
+                  <Table2 className={iconSizes.sm} />
                   <span className="hidden sm:inline">Table</span>
                 </button>
                 <button
@@ -663,7 +664,7 @@ export default function HomePage() {
                   )}
                   title="Raw JSON view"
                 >
-                  <Code className="w-3.5 h-3.5" />
+                  <Code className={iconSizes.sm} />
                   <span className="hidden sm:inline">Raw</span>
                 </button>
               </div>
@@ -696,7 +697,7 @@ export default function HomePage() {
                 className="p-1.5 rounded-lg hover:bg-white/10 text-white/40 hover:text-white/60 transition-colors"
                 title="Close (] or Esc)"
               >
-                <X className="w-4 h-4" />
+                <X className={iconSizes.md} />
               </button>
             </div>
 

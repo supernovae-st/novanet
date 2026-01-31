@@ -31,6 +31,7 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { iconSizes } from '@/design/tokens';
 import { useViewStore, type ViewParams } from '@/stores/viewStore';
 import type { ViewRegistryEntry } from '@novanet/core/filters';
 import { ViewCard } from './ViewCard';
@@ -140,7 +141,7 @@ export const ViewSelector = memo(function ViewSelector({
     return (
       <div className={cn('space-y-1', className)}>
         <div className="flex items-center gap-2 px-3 py-2 text-xs text-white/40">
-          <Loader2 className="w-3.5 h-3.5 animate-spin" />
+          <Loader2 className={cn(iconSizes.sm, 'animate-spin')} />
           <span className="uppercase tracking-wider font-medium">Loading Views...</span>
         </div>
       </div>
@@ -152,14 +153,14 @@ export const ViewSelector = memo(function ViewSelector({
     return (
       <div className={cn('space-y-2 px-3 py-2', className)}>
         <div className="flex items-center gap-2 text-xs text-red-400">
-          <AlertCircle className="w-3.5 h-3.5" />
+          <AlertCircle className={iconSizes.sm} />
           <span>Failed to load views</span>
         </div>
         <button
           onClick={() => loadRegistry()}
           className="flex items-center gap-1.5 text-[10px] text-white/40 hover:text-white/60 transition-colors"
         >
-          <RefreshCw className="w-3 h-3" />
+          <RefreshCw className={iconSizes.xs} />
           Retry
         </button>
       </div>
@@ -171,7 +172,7 @@ export const ViewSelector = memo(function ViewSelector({
     return (
       <div className={cn('space-y-1', className)}>
         <div className="flex items-center gap-2 px-3 py-2 text-xs text-white/40">
-          <Grid3x3 className="w-3.5 h-3.5" />
+          <Grid3x3 className={iconSizes.sm} />
           <span className="uppercase tracking-wider font-medium">No Views Available</span>
         </div>
       </div>
