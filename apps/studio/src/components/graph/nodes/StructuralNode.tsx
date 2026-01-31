@@ -11,16 +11,21 @@
  * - Enhanced hover effects (scale, glow)
  * - Press feedback (scale down on mousedown)
  * - Hover info displayed in centralized bottom pill (via uiStore.hoveredNodeId)
+ *
+ * Uses shared design system components from effects/ directory.
  */
 
-import { memo, useState, useCallback, useMemo } from 'react';
-import { Handle, Position, type Node, type NodeProps } from '@xyflow/react';
+import { memo, useMemo } from 'react';
+import { type Node, type NodeProps } from '@xyflow/react';
 import { cn } from '@/lib/utils';
 import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
 import { getStructuralColors } from '@/config/categoryColors';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import type { BaseNodeData } from './BaseNodeWrapper';
-import { NODE_BG } from '@/config/constants';
+import { BlueprintOverlay } from './BlueprintOverlay';
+import { NODE_BG, NODE_DESIGN } from '@/config/constants';
+import { useNodeInteractions } from '@/hooks';
+import { SelectionPulseRing, GlassmorphismEffects, NodeHandles } from './effects';
 
 export type StructuralNodeType = Node<BaseNodeData>;
 
@@ -42,36 +47,37 @@ function getCardWidth(type: string): number {
  * StructuralNode - Gradient Edge Design
  */
 export const StructuralNode = memo(function StructuralNode(props: NodeProps<StructuralNodeType>) {
-  const { data, selected } = props;
-  const [isHovered, setIsHovered] = useState(false);
-  const [isPressed, setIsPressed] = useState(false);
+  const { data, selected = false } = props;
   const config = NODE_TYPE_CONFIG[data.type] || NODE_TYPE_CONFIG.Project;
   const colors = getStructuralColors(data.type);
   const width = getCardWidth(data.type);
   const isDimmed = data.dimmed === true;
   const isHoverDimmed = data.hoverDimmed === true;
+  const isSchemaMode = data.isSchemaMode === true;
 
-  const handleMouseEnter = useCallback(() => {
-    setIsHovered(true);
-  }, []);
-
-  const handleMouseLeave = useCallback(() => {
-    setIsHovered(false);
-    setIsPressed(false);
-  }, []);
+  // Shared interaction state management
+  const {
+    isHovered,
+    handleMouseEnter,
+    handleMouseLeave,
+    handleMouseDown,
+    handleMouseUp,
+    containerClassName,
+    containerStyle,
+  } = useNodeInteractions({ selected, isDimmed, isHoverDimmed });
 
   // Memoize gradient border style to prevent re-renders
   const gradientBorderStyle = useMemo(() => ({
     background: selected
-      ? `linear-gradient(135deg, ${colors.primary}, ${colors.secondary}, ${colors.primary})`
+      ? NODE_DESIGN.gradients.borderSelected(colors.primary, colors.secondary)
       : isHovered
-        ? `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})`
-        : `linear-gradient(135deg, ${colors.primary}, ${colors.secondary}90)`,
+        ? NODE_DESIGN.gradients.borderHover(colors.primary, colors.secondary)
+        : NODE_DESIGN.gradients.borderDefault(colors.primary, colors.secondary),
     boxShadow: selected
-      ? `0 0 40px 8px ${colors.primary}70, 0 0 80px 16px ${colors.primary}40, 0 0 120px 24px ${colors.primary}20`
+      ? NODE_DESIGN.shadows.glowSelected(colors.primary)
       : isHovered
-        ? `0 0 30px 6px ${colors.primary}50, 0 0 60px 12px ${colors.primary}25`
-        : `0 0 20px 4px ${colors.primary}40, 0 0 40px 8px ${colors.primary}20`,
+        ? NODE_DESIGN.shadows.glowHover(colors.primary)
+        : NODE_DESIGN.shadows.glow(colors.primary),
   }), [colors.primary, colors.secondary, selected, isHovered]);
 
   // Memoize icon style to prevent re-renders
@@ -82,55 +88,64 @@ export const StructuralNode = memo(function StructuralNode(props: NodeProps<Stru
 
   return (
     <div
-      className={cn(
-        'group relative node-pressable',
-        // Full dimming (focus mode)
-        isDimmed && 'opacity-15 scale-90 grayscale pointer-events-none',
-        // Lighter dimming (hover highlight mode)
-        isHoverDimmed && !isDimmed && 'hover-dimmed',
-        // Enhanced hover effect
-        isHovered && !isDimmed && !isHoverDimmed && !selected && 'scale-103',
-        // Press feedback
-        isPressed && !isDimmed && 'scale-[0.98]',
-        // Selection already has its own scale
-        selected && 'scale-105'
-      )}
-      style={{
-        transition: 'transform 200ms ease-out, opacity 200ms ease-out',
-      }}
+      className={containerClassName}
+      style={containerStyle}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      onMouseDown={() => setIsPressed(true)}
-      onMouseUp={() => setIsPressed(false)}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
     >
-      {/* Gradient border wrapper - 2px */}
+      {/* Selection pulse ring effect - WOW animation */}
+      {selected && (
+        <SelectionPulseRing color={colors.primary} borderRadius={16} />
+      )}
+
+      {/* Gradient border wrapper - 2px (3px when selected) */}
       <div
         className={cn(
-          'relative p-[2px] rounded-[14px] transition-all duration-300',
+          'relative transition-all duration-300',
+          `rounded-[${NODE_DESIGN.radius.outer}px]`,
+          selected ? `p-[${NODE_DESIGN.border.selected}px]` : `p-[${NODE_DESIGN.border.default}px]`,
           selected && 'animate-gradient-rotate',
           isHovered && !selected && 'animate-glow-pulse'
         )}
-        style={gradientBorderStyle}
+        style={{
+          borderRadius: NODE_DESIGN.radius.outer,
+          padding: selected ? NODE_DESIGN.border.selected : NODE_DESIGN.border.default,
+          ...gradientBorderStyle,
+        }}
       >
-        {/* Inner card */}
+        {/* Inner card - Glassmorphism + Skeuomorphism when selected */}
         <div
-          className="relative rounded-[12px] overflow-hidden transition-colors duration-300"
+          className={cn(
+            'relative overflow-hidden transition-all duration-500 ease-out',
+            selected ? 'backdrop-blur-xl' : '',
+            selected && 'animate-float'
+          )}
           style={{
             width,
-            backgroundColor: selected ? NODE_BG.selected : NODE_BG.default,
+            borderRadius: selected ? NODE_DESIGN.radius.innerSelected : NODE_DESIGN.radius.inner,
+            backgroundColor: selected ? NODE_DESIGN.selectedBg : NODE_BG.default,
+            border: selected ? `${NODE_DESIGN.border.innerSelected}px solid ${colors.primary}` : 'none',
+            boxShadow: selected ? NODE_DESIGN.shadows.skeuomorphic(colors.primary) : undefined,
           }}
         >
-          {/* Target Handle - SOLID (incoming) */}
-          <Handle
-            type="target"
-            position={Position.Top}
-            className="!w-3 !h-3 !rounded-full !border-2 !-top-1.5 transition-all duration-200"
-            style={{
-              backgroundColor: colors.primary,
-              borderColor: colors.primary,
-              boxShadow: selected ? `0 0 8px ${colors.primary}` : undefined,
-            }}
-          />
+          {/* Glassmorphism effects (bevel, reflection, shimmer) */}
+          {selected && (
+            <GlassmorphismEffects borderRadius={NODE_DESIGN.radius.innerSelected} />
+          )}
+
+          {/* Blueprint overlay for schema mode */}
+          {isSchemaMode && (
+            <BlueprintOverlay
+              color={colors.primary}
+              selected={selected}
+              borderRadius={selected ? NODE_DESIGN.radius.innerSelected : NODE_DESIGN.radius.inner}
+            />
+          )}
+
+          {/* Handles - vertical layout (top/bottom) */}
+          <NodeHandles color={colors.primary} selected={selected} layout="vertical" />
 
           {/* Content */}
           <div className="relative px-4 py-3">
@@ -166,9 +181,7 @@ export const StructuralNode = memo(function StructuralNode(props: NodeProps<Stru
             </div>
 
             {/* Display Name */}
-            <h3
-              className="text-base font-bold text-white truncate"
-            >
+            <h3 className="text-base font-bold text-white truncate">
               {data.displayName}
             </h3>
 
@@ -201,21 +214,8 @@ export const StructuralNode = memo(function StructuralNode(props: NodeProps<Stru
               {config.category}
             </div>
           </div>
-
-          {/* Source Handle - HOLLOW (outgoing) */}
-          <Handle
-            type="source"
-            position={Position.Bottom}
-            className="!w-3 !h-3 !rounded-full !border-2 !-bottom-1.5 transition-all duration-200"
-            style={{
-              backgroundColor: 'transparent',
-              borderColor: colors.primary,
-              boxShadow: selected ? `0 0 8px ${colors.primary}` : undefined,
-            }}
-          />
         </div>
       </div>
-
     </div>
   );
 });

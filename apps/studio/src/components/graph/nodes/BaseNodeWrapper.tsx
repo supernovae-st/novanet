@@ -38,6 +38,8 @@ export interface BaseNodeData extends Record<string, unknown> {
   dimmed?: boolean;
   /** Whether this node is lightly dimmed (hover mode - 25% opacity) */
   hoverDimmed?: boolean;
+  /** Whether this node is in schema mode (blueprint styling) */
+  isSchemaMode?: boolean;
 }
 
 export interface BaseNodeWrapperProps {

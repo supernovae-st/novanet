@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * DatabaseInfoPanel - Hierarchical database explorer with categories
+ * DatabaseInfoPanel - Data Explorer with hierarchical node/relationship browser
  *
  * Features:
  * - Hierarchical tree view grouped by category
@@ -201,7 +201,7 @@ export const DatabaseInfoPanel = memo(function DatabaseInfoPanel() {
 
           <div className="flex-1">
             <h2 className="text-[15px] font-semibold text-white tracking-tight">
-              Database Explorer
+              Data Explorer
             </h2>
             <p className="text-[11px] text-white/40 mt-0.5">
               {schema?.totalNodes !== undefined ? `${schema.totalNodes.toLocaleString()} nodes · ${schema.totalRelationships?.toLocaleString() ?? 0} relationships` : 'Loading...'}

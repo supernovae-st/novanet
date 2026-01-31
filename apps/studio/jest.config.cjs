@@ -22,7 +22,7 @@ module.exports = {
     }],
   },
   transformIgnorePatterns: [
-    'node_modules/(?!(zustand|@xyflow)/)',
+    'node_modules/(?!(zustand|@xyflow|d3-force|d3-dispatch|d3-quadtree|d3-timer)/)',
   ],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
 };

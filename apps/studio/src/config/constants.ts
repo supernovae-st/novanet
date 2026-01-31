@@ -142,3 +142,136 @@ export const ANIMATION = {
     opacity: 'transition-opacity duration-150',
   },
 } as const;
+
+// =============================================================================
+// NODE DESIGN SYSTEM
+// =============================================================================
+
+/**
+ * Shared design tokens for all node components
+ * Provides consistency across StructuralNode, LocaleKnowledgeNode, SchemaNode, ProjectNode
+ */
+export const NODE_DESIGN = {
+  /** Border radius values */
+  radius: {
+    /** Outer wrapper radius */
+    outer: 14,
+    /** Inner card default radius */
+    inner: 12,
+    /** Inner card selected radius */
+    innerSelected: 10,
+    /** Circular nodes (LocaleKnowledge) */
+    circular: 9999,
+  },
+
+  /** Border widths */
+  border: {
+    /** Default gradient border */
+    default: 2,
+    /** Selected gradient border */
+    selected: 3,
+    /** Inner card border when selected */
+    innerSelected: 3,
+  },
+
+  /** Scale transforms */
+  scale: {
+    /** Hover scale */
+    hover: 1.03,
+    /** Selected scale */
+    selected: 1.05,
+    /** Circular node selected scale */
+    circularSelected: 1.10,
+    /** Press feedback scale */
+    pressed: 0.98,
+    /** Circular press scale */
+    circularPressed: 0.96,
+    /** Dimmed scale */
+    dimmed: 0.90,
+    /** Circular dimmed scale */
+    circularDimmed: 0.75,
+  },
+
+  /** Opacity values */
+  opacity: {
+    /** Dimmed node opacity */
+    dimmed: 0.15,
+  },
+
+  /** Handle sizes */
+  handle: {
+    /** Default handle size */
+    size: 12,
+    /** Small handle size (circular nodes) */
+    small: 10,
+    /** Handle border width */
+    border: 2,
+  },
+
+  /** Selected state background with glassmorphism */
+  selectedBg: 'rgba(18, 16, 30, 0.92)',
+
+  /** Box shadow configurations */
+  shadows: {
+    /** Glow shadow for unselected state */
+    glow: (color: string) =>
+      `0 0 20px 4px ${color}40, 0 0 40px 8px ${color}20`,
+    /** Hover glow shadow */
+    glowHover: (color: string) =>
+      `0 0 30px 6px ${color}50, 0 0 60px 12px ${color}25`,
+    /** Selected glow shadow (intense) */
+    glowSelected: (color: string) =>
+      `0 0 40px 8px ${color}70, 0 0 80px 16px ${color}40, 0 0 120px 24px ${color}20`,
+    /** Selection pulse shadow */
+    selectionPulse: (color: string) => `0 0 20px ${color}60`,
+    /** Selection pulse shadow (delayed) */
+    selectionPulseDelayed: (color: string) => `0 0 15px ${color}40`,
+    /** Skeuomorphic inner card shadow */
+    skeuomorphic: (color: string) => `
+      inset 0 2px 0 0 rgba(255, 255, 255, 0.15),
+      inset 0 -2px 0 0 rgba(0, 0, 0, 0.4),
+      inset 0 0 30px ${color}25,
+      0 12px 40px rgba(0, 0, 0, 0.5),
+      0 4px 12px rgba(0, 0, 0, 0.4),
+      0 0 0 1px rgba(255, 255, 255, 0.05)
+    `,
+    /** Handle glow when selected */
+    handleGlow: (color: string) => `0 0 8px ${color}`,
+  },
+
+  /** Gradient configurations */
+  gradients: {
+    /** Gradient border for selected state */
+    borderSelected: (primary: string, secondary: string) =>
+      `linear-gradient(135deg, ${primary}, ${secondary}, ${primary})`,
+    /** Gradient border for hover state */
+    borderHover: (primary: string, secondary: string) =>
+      `linear-gradient(135deg, ${primary}, ${secondary})`,
+    /** Gradient border for default state */
+    borderDefault: (primary: string, secondary: string) =>
+      `linear-gradient(135deg, ${primary}, ${secondary}90)`,
+    /** Shimmer effect gradient */
+    shimmer: `linear-gradient(
+      115deg,
+      transparent 30%,
+      rgba(255, 255, 255, 0.03) 45%,
+      rgba(255, 255, 255, 0.06) 50%,
+      rgba(255, 255, 255, 0.03) 55%,
+      transparent 70%
+    )`,
+    /** Top bevel highlight */
+    bevelHighlight: 'linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent)',
+    /** Top glass reflection */
+    glassReflection: 'linear-gradient(to bottom, rgba(255, 255, 255, 0.05), transparent)',
+  },
+
+  /** Animation durations (ms) */
+  timing: {
+    /** Transform transitions */
+    transform: 200,
+    /** All property transitions */
+    all: 300,
+    /** Complex transitions */
+    complex: 500,
+  },
+} as const;

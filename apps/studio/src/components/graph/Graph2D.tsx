@@ -19,10 +19,12 @@ import {
   useNodesState,
   useEdgesState,
   useReactFlow,
+  applyNodeChanges,
   type NodeMouseHandler,
   type EdgeMouseHandler,
   type Node as ReactFlowNode,
   type Edge as ReactFlowEdge,
+  type NodeChange,
   ConnectionMode,
   BackgroundVariant,
   ReactFlowProvider,
@@ -34,7 +36,7 @@ import { Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { logger } from '@/lib/logger';
 import { EmptyState } from '@/components/ui/EmptyState';
-import { useFilteredGraph, useFocusMode, useHoverHighlight, useNodeExpansion, useCenterOnNode, useSmartFitView } from '@/hooks';
+import { useFilteredGraph, useFocusMode, useHoverHighlight, useNodeExpansion, useCenterOnNode, useSmartFitView, useContainerConstraint } from '@/hooks';
 import { useUIStore } from '@/stores/uiStore';
 import { useGraphStore } from '@/stores/graphStore';
 import { NODE_TYPE_CONFIG, nodeTypeConfigs } from '@/config/nodeTypes';
@@ -255,7 +257,7 @@ function Graph2DInner({
   const { expandNode } = useNodeExpansion();
 
   // React Flow instance for programmatic control (centering, zooming)
-  const { setCenter, getZoom } = useReactFlow();
+  const { setCenter, getZoom, getNodes } = useReactFlow();
 
   // Center on node with offset compensation for UI panels
   const { centerOnNode } = useCenterOnNode();
@@ -324,13 +326,14 @@ function Graph2DInner({
   const prevDataModeRef = useRef(dataMode);
 
   // Load schema graph with ELK layout and collapsed state filtering
+  // Responds to layoutDirection and layoutVersion changes (like data mode)
   const loadSchemaGraph = useCallback(async () => {
     setIsSchemaLayouting(true);
     setSchemaLayoutError(null);
 
     try {
       const hierarchy = getSchemaHierarchy();
-      const { nodes: layoutedNodes, edges: layoutedEdges } = await applySchemaLayout(hierarchy);
+      const { nodes: layoutedNodes, edges: layoutedEdges } = await applySchemaLayout(hierarchy, layoutDirection);
 
       // Apply collapsed state filtering (Task 3.2)
       // Build lookup maps for parent relationships
@@ -400,15 +403,130 @@ function Graph2DInner({
     } finally {
       setIsSchemaLayouting(false);
     }
-  }, [collapsedScopes, collapsedSubcategories]);
+  }, [collapsedScopes, collapsedSubcategories, layoutDirection]);
 
-  // Load schema graph when dataMode changes to 'schema' or collapsed state changes
+  // Load schema graph when:
+  // - dataMode changes to 'schema'
+  // - collapsed state changes (via loadSchemaGraph dependency)
+  // - layout direction changes (via loadSchemaGraph dependency)
+  // - layoutVersion changes (user clicked layout button)
   useEffect(() => {
     if (dataMode === 'schema') {
       loadSchemaGraph();
     }
     prevDataModeRef.current = dataMode;
-  }, [dataMode, loadSchemaGraph]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- layoutVersion forces re-layout on button click
+  }, [dataMode, loadSchemaGraph, layoutVersion]);
+
+  // =========================================================================
+  // SCHEMA NODE DRAG HANDLERS (Task 1 & 3: Schema Node Dragging + Constraints)
+  // =========================================================================
+  // Handle schema node position changes during drag operations.
+  // Uses applyNodeChanges from React Flow for smooth position updates.
+  // Container constraint hook manages dynamic container resizing.
+  // =========================================================================
+  const handleSchemaNodesChange = useCallback(
+    (changes: NodeChange<ReactFlowNode>[]) => {
+      setSchemaNodes((nds) => applyNodeChanges(changes, nds));
+    },
+    [setSchemaNodes]
+  );
+
+  // Container constraint hook for dynamic container resizing (Task 3)
+  const { handleNodeDrag: containerHandleNodeDrag, handleNodeDragStop: containerHandleNodeDragStop } =
+    useContainerConstraint({
+      edgeThreshold: 50,
+      minPadding: 40,
+      animationDuration: 200,
+      expansionStep: 50,
+    });
+
+  // Schema node drag handler - calls container constraint hook
+  const handleSchemaNodeDrag = useCallback(
+    (_event: React.MouseEvent, node: ReactFlowNode) => {
+      containerHandleNodeDrag(node, schemaNodes, setSchemaNodes);
+    },
+    [containerHandleNodeDrag, schemaNodes, setSchemaNodes]
+  );
+
+  // Schema node drag stop handler - triggers container shrinking
+  const handleSchemaNodeDragStop = useCallback(
+    (_event: React.MouseEvent, node: ReactFlowNode) => {
+      containerHandleNodeDragStop(node, schemaNodes, setSchemaNodes);
+    },
+    [containerHandleNodeDragStop, schemaNodes, setSchemaNodes]
+  );
+
+  // =========================================================================
+  // SCHEMA CLICK HANDLERS (Task 4: Click Interactions for Schema Details)
+  // =========================================================================
+  // Clicking schema nodes/edges shows their details in the right panel.
+  // Uses uiStore selectedNodeId/selectedEdgeId to drive the panel.
+  // =========================================================================
+  const handleSchemaNodeClick = useCallback(
+    (_event: React.MouseEvent, node: ReactFlowNode) => {
+      // Set selected node for schema details panel
+      // Note: Schema nodes have different data structure than data nodes
+      setSelectedNode(node.id);
+
+      // Zoom/center on node (same behavior as data mode)
+      // Schema nodes are 180px wide, ~90px height based on padding
+      const nodeWidth = node.measured?.width ?? 180;
+      const nodeHeight = node.measured?.height ?? 90;
+
+      // Use double RAF to ensure ELK layout and measurement are complete
+      // (more reliable than setTimeout for schema nodes due to async layout)
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          // CRITICAL: Get nodes from React Flow instance, NOT from state
+          // React Flow nodes have computed internals.positionAbsolute for nested nodes
+          // State nodes (schemaNodes) don't have these computed internals
+          const flowNodes = getNodes();
+          const currentNode = flowNodes.find(n => n.id === node.id);
+
+          if (!currentNode) {
+            // Fallback: use original node if not found in React Flow
+            // This shouldn't happen but provides robustness
+            centerOnNode(
+              node.position.x,
+              node.position.y,
+              nodeWidth,
+              nodeHeight,
+              { zoom: GRAPH_ANIMATION.NODE_DOUBLE_CLICK_ZOOM, duration: GRAPH_ANIMATION.FIT_VIEW_DURATION }
+            );
+            return;
+          }
+
+          const finalWidth = currentNode.measured?.width ?? nodeWidth;
+          const finalHeight = currentNode.measured?.height ?? nodeHeight;
+
+          // IMPORTANT: Schema nodes are nested in group nodes, so we need absolute position
+          // node.position is relative to parent, internals.positionAbsolute is absolute
+          // Type assertion needed as internals is not exposed in public Node type
+          const nodeInternals = (currentNode as unknown as { internals?: { positionAbsolute?: { x: number; y: number } } }).internals;
+          const finalX = nodeInternals?.positionAbsolute?.x ?? currentNode.position.x;
+          const finalY = nodeInternals?.positionAbsolute?.y ?? currentNode.position.y;
+
+          centerOnNode(
+            finalX,
+            finalY,
+            finalWidth,
+            finalHeight,
+            { zoom: GRAPH_ANIMATION.NODE_DOUBLE_CLICK_ZOOM, duration: GRAPH_ANIMATION.FIT_VIEW_DURATION }
+          );
+        });
+      });
+    },
+    [setSelectedNode, centerOnNode, getNodes]
+  );
+
+  const handleSchemaEdgeClick = useCallback(
+    (_event: React.MouseEvent, edge: ReactFlowEdge) => {
+      // Set selected edge for schema relation details
+      setSelectedEdge(edge.id);
+    },
+    [setSelectedEdge]
+  );
 
   // PERFORMANCE: Split layout (expensive) from dimming (cheap)
   // Step 1: Compute layout ONLY when graph data or layout direction changes (expensive)
@@ -638,32 +756,28 @@ function Graph2DInner({
 
   // ==========================================================================
   // Click Handling
-  // - Click: No action (just visual feedback)
-  // - ⌘+Click: Select node + open panel + zoom/center
+  // - Click: Select node + open panel + zoom/center (same as schema mode)
   // - Double-click: Zoom/center + expand neighbors
   // ==========================================================================
   const handleNodeClick: NodeMouseHandler<TurboNodeType> = useCallback(
-    (event, node) => {
-      // ⌘+Click (Mac) or Ctrl+Click (Windows): select, open panel, zoom/center
-      if (event.metaKey || event.ctrlKey) {
-        setSelectedNode(node.id);
+    (_, node) => {
+      // Click: select, open panel, zoom/center
+      setSelectedNode(node.id);
 
-        const nodeWidth = node.measured?.width ?? DAGRE_CONFIG.NODE_WIDTH;
-        const nodeHeight = node.measured?.height ?? DAGRE_CONFIG.NODE_HEIGHT;
+      const nodeWidth = node.measured?.width ?? DAGRE_CONFIG.NODE_WIDTH;
+      const nodeHeight = node.measured?.height ?? DAGRE_CONFIG.NODE_HEIGHT;
 
-        // Small delay to ensure state is fully propagated before centering
-        // This ensures the panel width is accounted for in the center calculation
-        setTimeout(() => {
-          centerOnNode(
-            node.position.x,
-            node.position.y,
-            nodeWidth,
-            nodeHeight,
-            { zoom: GRAPH_ANIMATION.NODE_DOUBLE_CLICK_ZOOM, duration: GRAPH_ANIMATION.FIT_VIEW_DURATION }
-          );
-        }, 50);
-      }
-      // Regular click: no action (drag still works, hover effects still work)
+      // Small delay to ensure state is fully propagated before centering
+      // This ensures the panel width is accounted for in the center calculation
+      setTimeout(() => {
+        centerOnNode(
+          node.position.x,
+          node.position.y,
+          nodeWidth,
+          nodeHeight,
+          { zoom: GRAPH_ANIMATION.NODE_DOUBLE_CLICK_ZOOM, duration: GRAPH_ANIMATION.FIT_VIEW_DURATION }
+        );
+      }, 50);
 
       // Forward to external callback
       onNodeClick?.(node.id);
@@ -924,6 +1038,11 @@ function Graph2DInner({
             edges={schemaEdges}
             nodeTypes={nodeTypes}
             edgeTypes={edgeTypes}
+            onNodesChange={handleSchemaNodesChange}
+            onNodeDrag={handleSchemaNodeDrag}
+            onNodeDragStop={handleSchemaNodeDragStop}
+            onNodeClick={handleSchemaNodeClick}
+            onEdgeClick={handleSchemaEdgeClick}
             onPaneClick={handlePaneClick}
             connectionMode={ConnectionMode.Loose}
             fitView
@@ -933,14 +1052,17 @@ function Graph2DInner({
             proOptions={{
               hideAttribution: true,
             }}
-            // Schema mode: limited interaction
-            nodesDraggable={false}
+            // Schema mode: Interactive (Tasks 1, 3, 4)
+            nodesDraggable={true}
             nodesConnectable={false}
             elementsSelectable={true}
             selectNodesOnDrag={false}
             panOnScroll={true}
             zoomOnScroll={true}
             zoomOnPinch={true}
+            // Accessibility (Context7 best practices)
+            nodesFocusable={true}
+            edgesFocusable={true}
             // Style
             colorMode="dark"
           >
@@ -1080,6 +1202,9 @@ function Graph2DInner({
           panOnScroll={true}
           zoomOnScroll={true}
           zoomOnPinch={true}
+          // Accessibility (Context7 best practices)
+          nodesFocusable={true}
+          edgesFocusable={true}
           // Style
           colorMode="dark"
         >

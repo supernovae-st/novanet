@@ -19,6 +19,9 @@ export { LocaleKnowledgeNode, type LocaleKnowledgeNodeType } from './LocaleKnowl
 // TurboNode for default/generic display
 export { TurboNode, type TurboNodeData, type TurboNodeType } from '../TurboNode';
 
+// Blueprint overlay for schema mode
+export { BlueprintOverlay, type BlueprintOverlayProps } from './BlueprintOverlay';
+
 // Node effect components
 export { NodeOrbitEffect, type NodeOrbitEffectProps } from './NodeOrbitEffect';
 export {

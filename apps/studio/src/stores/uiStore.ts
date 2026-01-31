@@ -2,6 +2,11 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 import type { ViewMode, UIState, SelectionState } from '@/types';
+import {
+  type SpacingPreset,
+  DEFAULT_SPACING_PRESET,
+  SPACING_PRESETS,
+} from '@/lib/forceSimulation';
 
 // Layout types for graph arrangement
 export type LayoutDirection = 'TB' | 'LR' | 'dagre' | 'radial' | 'force';
@@ -33,6 +38,13 @@ interface UIStoreState extends UIState, SelectionState {
   /** Counter to force re-layout even when direction unchanged */
   layoutVersion: number;
 
+  // Spacing preset for force simulation
+  spacingPreset: SpacingPreset;
+  /** Custom spacing value (0-100, maps to interpolation between compact-spacious) */
+  spacingValue: number;
+  /** Counter to force re-layout when spacing changes */
+  spacingVersion: number;
+
   // Data mode: real instances vs ontological schema
   dataMode: DataMode;
 
@@ -49,6 +61,14 @@ interface UIStoreState extends UIState, SelectionState {
   setLayoutDirection: (direction: LayoutDirection) => void;
   /** Trigger layout recalculation (always runs, even if same direction) */
   triggerLayout: (direction?: LayoutDirection) => void;
+
+  // Spacing actions
+  setSpacingPreset: (preset: SpacingPreset) => void;
+  setSpacingValue: (value: number) => void;
+  /** Cycle through spacing presets: compact → normal → spacious */
+  cycleSpacingPreset: () => void;
+  /** Get interpolated spacing options based on current value */
+  getSpacingOptions: () => { chargeStrength: number; linkDistance: number; collisionRadius: number };
 
   // Selection actions
   setSelectedNode: (id: string | null) => void;
@@ -81,6 +101,9 @@ export const useUIStore = create<UIStoreState>()(
       showEdgeLabels: true,
       layoutDirection: 'TB' as LayoutDirection,
       layoutVersion: 0,
+      spacingPreset: DEFAULT_SPACING_PRESET,
+      spacingValue: 100, // 0=compact, 50=normal, 100=spacious
+      spacingVersion: 0,
       dataMode: 'data' as DataMode,
 
       // Selection state
@@ -170,6 +193,66 @@ export const useUIStore = create<UIStoreState>()(
           // Always increment to force re-layout even if same direction
           state.layoutVersion += 1;
         });
+      },
+
+      // Spacing actions
+      setSpacingPreset: (preset) => {
+        set((state) => {
+          state.spacingPreset = preset;
+          // Map preset to value: compact=0, normal=50, spacious=100
+          const presetToValue: Record<SpacingPreset, number> = {
+            compact: 0,
+            normal: 50,
+            spacious: 100,
+          };
+          state.spacingValue = presetToValue[preset];
+          state.spacingVersion += 1;
+        });
+      },
+
+      setSpacingValue: (value) => {
+        set((state) => {
+          state.spacingValue = Math.max(0, Math.min(100, value));
+          // Auto-update preset based on value ranges
+          if (value <= 25) {
+            state.spacingPreset = 'compact';
+          } else if (value <= 75) {
+            state.spacingPreset = 'normal';
+          } else {
+            state.spacingPreset = 'spacious';
+          }
+          state.spacingVersion += 1;
+        });
+      },
+
+      cycleSpacingPreset: () => {
+        set((state) => {
+          const presets: SpacingPreset[] = ['compact', 'normal', 'spacious'];
+          const currentIndex = presets.indexOf(state.spacingPreset);
+          const nextIndex = (currentIndex + 1) % presets.length;
+          state.spacingPreset = presets[nextIndex];
+          const presetToValue: Record<SpacingPreset, number> = {
+            compact: 0,
+            normal: 50,
+            spacious: 100,
+          };
+          state.spacingValue = presetToValue[state.spacingPreset];
+          state.spacingVersion += 1;
+        });
+      },
+
+      getSpacingOptions: () => {
+        const { spacingValue } = get();
+        // Interpolate between compact and spacious based on value (0-100)
+        const t = spacingValue / 100; // 0 to 1
+        const compact = SPACING_PRESETS.compact;
+        const spacious = SPACING_PRESETS.spacious;
+
+        return {
+          chargeStrength: compact.chargeStrength + (spacious.chargeStrength - compact.chargeStrength) * t,
+          linkDistance: compact.linkDistance + (spacious.linkDistance - compact.linkDistance) * t,
+          collisionRadius: compact.collisionRadius + (spacious.collisionRadius - compact.collisionRadius) * t,
+        };
       },
 
       // Selection actions
@@ -276,6 +359,8 @@ export const useUIStore = create<UIStoreState>()(
         minimapVisible: state.minimapVisible,
         showEdgeLabels: state.showEdgeLabels,
         layoutDirection: state.layoutDirection,
+        spacingPreset: state.spacingPreset,
+        spacingValue: state.spacingValue,
         dataMode: state.dataMode,
       }),
     }
@@ -294,6 +379,9 @@ export const selectMinimapVisible = (state: UIStoreState) => state.minimapVisibl
 export const selectShowEdgeLabels = (state: UIStoreState) => state.showEdgeLabels;
 export const selectLayoutDirection = (state: UIStoreState) => state.layoutDirection;
 export const selectLayoutVersion = (state: UIStoreState) => state.layoutVersion;
+export const selectSpacingPreset = (state: UIStoreState) => state.spacingPreset;
+export const selectSpacingValue = (state: UIStoreState) => state.spacingValue;
+export const selectSpacingVersion = (state: UIStoreState) => state.spacingVersion;
 export const selectSelectedNodeId = (state: UIStoreState) => state.selectedNodeId;
 export const selectSelectedEdgeId = (state: UIStoreState) => state.selectedEdgeId;
 export const selectHoveredNodeId = (state: UIStoreState) => state.hoveredNodeId;
