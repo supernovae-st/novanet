@@ -517,16 +517,6 @@ export const glassClasses = {
 } as const;
 
 /**
- * Shadow utility classes - Tailwind shadow presets with black opacity
- */
-export const shadowTokens = {
-  sm: 'shadow-sm shadow-black/10',
-  md: 'shadow-md shadow-black/20',
-  lg: 'shadow-lg shadow-black/30',
-  xl: 'shadow-xl shadow-black/40',
-} as const;
-
-/**
  * Modal/Dialog classes - Unified modal system
  *
  * Best practices:
@@ -553,33 +543,6 @@ export const modalClasses = {
   footer: 'px-4 py-3 border-t border-white/[0.08]',
   /** Close button style */
   closeButton: 'w-8 h-8 rounded-lg flex items-center justify-center text-white/40 hover:text-white/80 hover:bg-white/[0.06] transition-colors duration-150',
-} as const;
-
-/**
- * Common button variant classes - HIGH CONTRAST
- */
-export const buttonClasses = {
-  base: 'inline-flex items-center justify-center rounded-lg font-medium transition-all duration-200',
-  ghost: 'text-white/60 hover:bg-white/10 hover:text-white',
-  outline: 'border border-white/20 bg-white/8 hover:bg-white/15 text-white/90',
-  primary: 'bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/30',
-} as const;
-
-/**
- * Text opacity utilities - Premium contrast levels
- *
- * Based on research from Nika Draft, Linear, Raycast:
- * - Primary: 95% (headings, important content)
- * - Secondary: 80% (body text, readable)
- * - Muted: 65% (captions, hints)
- * - Disabled: 45% (non-interactive)
- */
-export const textOpacity = {
-  disabled: 'text-white/45',
-  muted: 'text-white/65',
-  secondary: 'text-white/80',
-  primary: 'text-white/95',
-  full: 'text-white',
 } as const;
 
 // ============================================================================
@@ -706,7 +669,6 @@ export const tokens = {
   spacing,
   radius,
   shadows,
-  shadowTokens,
   zIndex,
   durations,
   easing,
@@ -726,8 +688,6 @@ export const tokens = {
   colors,
   glassClasses,
   modalClasses,
-  buttonClasses,
-  textOpacity,
   filterTreeClasses,
   scopeAccents,
   badgeClasses,

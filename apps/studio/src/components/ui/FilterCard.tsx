@@ -34,8 +34,6 @@ export interface FilterCardProps {
   onToggle: () => void;
   /** Optional count badge */
   count?: number;
-  /** Optional keyboard shortcut badge */
-  shortcut?: string;
   /** Compact variant (smaller height) */
   compact?: boolean;
   /** Disabled state */
