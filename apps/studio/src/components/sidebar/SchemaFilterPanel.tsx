@@ -53,13 +53,29 @@ export const SchemaFilterPanel = memo(function SchemaFilterPanel({
     }))
   );
 
-  // Compute total node count for a scope
-  const getScopeNodeCount = useCallback((scope: Scope): number => {
-    const scopeDef = SCOPE_HIERARCHY[scope];
-    return Object.values(scopeDef.subcategories).reduce(
-      (sum, subcat) => sum + subcat.nodeTypes.length,
-      0
-    );
+  // Memoize scope data to avoid recomputing on each render
+  const scopeData = useMemo(() => {
+    return SCOPE_ORDER.map((scope) => {
+      const scopeDef = SCOPE_HIERARCHY[scope];
+      const accentKey = SCOPE_ACCENT_MAP[scope];
+      const accent = scopeAccents[accentKey];
+      const subcategories = Object.entries(scopeDef.subcategories) as [
+        Subcategory,
+        (typeof scopeDef.subcategories)[Subcategory],
+      ][];
+      const nodeCount = subcategories.reduce(
+        (sum, [, subcat]) => sum + subcat.nodeTypes.length,
+        0
+      );
+
+      return {
+        scope,
+        scopeDef,
+        accent,
+        subcategories,
+        nodeCount,
+      };
+    });
   }, []);
 
   // Calculate checkbox state for a scope (all subcategories visible vs some vs none)
@@ -114,48 +130,36 @@ export const SchemaFilterPanel = memo(function SchemaFilterPanel({
       {/* Content - FilterTree */}
       <div className="flex-1 overflow-y-auto scrollbar-thin p-3">
         <FilterTree.Root>
-          {SCOPE_ORDER.map((scope) => {
-            const scopeDef = SCOPE_HIERARCHY[scope];
-            const nodeCount = getScopeNodeCount(scope);
-            const accentKey = SCOPE_ACCENT_MAP[scope];
-            const accent = scopeAccents[accentKey];
-            const subcategories = Object.entries(scopeDef.subcategories) as [
-              Subcategory,
-              (typeof scopeDef.subcategories)[Subcategory],
-            ][];
+          {scopeData.map(({ scope, scopeDef, accent, subcategories, nodeCount }) => (
+            <FilterTree.Section
+              key={scope}
+              id={scope.toLowerCase()}
+              label={scopeDef.label}
+              icon={<span className="text-base">{scopeDef.icon}</span>}
+              color={accent.color}
+              checkboxState={getScopeCheckboxState(scope)}
+              onCheckboxClick={() => handleScopeCheckboxClick(scope)}
+              count={nodeCount}
+              defaultExpanded={true}
+            >
+              {subcategories.map(([subcatName, subcatMeta]) => {
+                const isHidden = isSubcategoryCollapsed(scope, subcatName);
 
-            return (
-              <FilterTree.Section
-                key={scope}
-                id={scope.toLowerCase()}
-                label={scopeDef.label}
-                icon={<span className="text-base">{scopeDef.icon}</span>}
-                color={accent.color}
-                checkboxState={getScopeCheckboxState(scope)}
-                onCheckboxClick={() => handleScopeCheckboxClick(scope)}
-                count={nodeCount}
-                defaultExpanded={true}
-              >
-                {subcategories.map(([subcatName, subcatMeta]) => {
-                  const isHidden = isSubcategoryCollapsed(scope, subcatName);
-                  const count = subcatMeta.nodeTypes.length;
-
-                  return (
-                    <FilterTree.Row
-                      key={subcatName}
-                      id={`${scope}-${subcatName}`}
-                      label={subcatMeta.label}
-                      icon={<span className="text-sm">{subcatMeta.icon}</span>}
-                      color={accent.color}
-                      isSelected={!isHidden}
-                      onToggle={() => toggleSubcategoryCollapsed(scope, subcatName)}
-                      count={count}
-                    />
-                  );
-                })}
-              </FilterTree.Section>
-            );
-          })}
+                return (
+                  <FilterTree.Row
+                    key={subcatName}
+                    id={`${scope}-${subcatName}`}
+                    label={subcatMeta.label}
+                    icon={<span className="text-sm">{subcatMeta.icon}</span>}
+                    color={accent.color}
+                    isSelected={!isHidden}
+                    onToggle={() => toggleSubcategoryCollapsed(scope, subcatName)}
+                    count={subcatMeta.nodeTypes.length}
+                  />
+                );
+              })}
+            </FilterTree.Section>
+          ))}
         </FilterTree.Root>
       </div>
 

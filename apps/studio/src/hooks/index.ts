@@ -91,3 +91,15 @@ export {
   type UseNodeInteractionsOptions,
   type NodeInteractionsResult,
 } from './useNodeInteractions';
+
+// Controlled/uncontrolled state pattern
+export { useControllableState } from './useControllableState';
+
+// Roving tabindex for keyboard navigation
+export {
+  useRovingTabindexRoot,
+  useRovingTabindexItem,
+  useRovingKeyboardHandler,
+  RovingTabindexProvider,
+  type RovingTabindexContextValue,
+} from './useRovingTabindex';
