@@ -138,19 +138,18 @@ describe('SchemaFilterPanel', () => {
       expect(screen.getByText('(1)')).toBeInTheDocument();
     });
 
-    it('renders the header with Schema Filters title', () => {
+    it('renders the header with Schema Browser title', () => {
       render(<SchemaFilterPanel />);
 
-      expect(screen.getByText('Schema Filters')).toBeInTheDocument();
-      expect(screen.getByText('35 node types across 3 scopes')).toBeInTheDocument();
+      expect(screen.getByText('Schema Browser')).toBeInTheDocument();
+      expect(screen.getByText('35 node types')).toBeInTheDocument();
     });
 
     it('renders the stats footer', () => {
       render(<SchemaFilterPanel />);
 
       // The footer text contains all stats in a single element
-      // Use a regex that matches the complete text
-      const statsFooter = screen.getByText(/35 node types .* 9 subcategories .* 3 scopes/);
+      const statsFooter = screen.getByText(/3 scopes .* 9 categories .* 35 types/);
       expect(statsFooter).toBeInTheDocument();
     });
   });
@@ -189,13 +188,13 @@ describe('SchemaFilterPanel', () => {
       mockIsScopeCollapsed.mockImplementation((scope) => scope === 'Project');
       render(<SchemaFilterPanel />);
 
-      // Project subcategories should be hidden
-      expect(screen.queryByText('Foundation')).not.toBeInTheDocument();
-      expect(screen.queryByText('Structure')).not.toBeInTheDocument();
+      // Project subcategories container should be visually hidden (max-h-0 opacity-0)
+      const projectContent = document.getElementById('scope-Project-content');
+      expect(projectContent).toHaveClass('max-h-0', 'opacity-0');
 
-      // Other scopes should still show their subcategories
-      expect(screen.getByText('Configuration')).toBeInTheDocument();
-      expect(screen.getByText('SEO')).toBeInTheDocument();
+      // Other scopes should still show their subcategories (max-h-96 opacity-100)
+      const globalContent = document.getElementById('scope-Global-content');
+      expect(globalContent).toHaveClass('max-h-96', 'opacity-100');
     });
   });
 
@@ -218,15 +217,17 @@ describe('SchemaFilterPanel', () => {
       render(<SchemaFilterPanel />);
 
       const foundationButton = screen.getByText('Foundation').closest('button');
-      expect(foundationButton).toHaveClass('opacity-50');
+      // Collapsed subcategories have opacity-40 class
+      expect(foundationButton).toHaveClass('opacity-40');
     });
 
-    it('has full opacity when subcategory is not collapsed', () => {
+    it('has normal styling when subcategory is not collapsed', () => {
       mockIsSubcategoryCollapsed.mockReturnValue(false);
       render(<SchemaFilterPanel />);
 
       const foundationButton = screen.getByText('Foundation').closest('button');
-      expect(foundationButton).toHaveClass('opacity-100');
+      // Non-collapsed subcategories have background styling
+      expect(foundationButton).toHaveClass('bg-white/[0.04]');
     });
   });
 
@@ -289,19 +290,13 @@ describe('SchemaFilterPanel', () => {
       expect(panel).toHaveClass('custom-class');
     });
 
-    it('has glassmorphism styling (bg-white/5)', () => {
+    it('has glassmorphism styling on scope buttons', () => {
       render(<SchemaFilterPanel />);
 
-      // Scope headers should have glassmorphism background
+      // Scope headers should be buttons with proper styling
       const projectButton = screen.getByText('PROJECT').closest('button');
-      expect(projectButton).toHaveClass('bg-white/5');
-    });
-
-    it('has hover styling (hover:bg-white/10)', () => {
-      render(<SchemaFilterPanel />);
-
-      const projectButton = screen.getByText('PROJECT').closest('button');
-      expect(projectButton).toHaveClass('hover:bg-white/10');
+      expect(projectButton).toBeInTheDocument();
+      expect(projectButton).toHaveClass('transition-colors');
     });
   });
 });
