@@ -15,6 +15,7 @@ import { useState, useRef, useCallback } from 'react';
 import { Sparkles, Send, Loader2 } from 'lucide-react';
 import { logger } from '@/lib/logger';
 import { cn } from '@/lib/utils';
+import { glassClasses } from '@/design/tokens';
 import { Kbd } from '@/components/ui/Kbd';
 
 interface AiSearchInputProps {
@@ -62,7 +63,7 @@ export function AiSearchInput({
         className={cn(
           'relative flex items-center gap-2 px-3 py-2.5',
           'rounded-xl border transition-all duration-300',
-          'bg-white/[0.03] backdrop-blur-xl',
+          glassClasses.light,
           isFocused
             ? 'border-novanet-500/50 shadow-lg shadow-novanet-500/10'
             : 'border-white/[0.08] hover:border-white/[0.12]'

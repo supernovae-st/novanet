@@ -35,6 +35,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { logger } from '@/lib/logger';
+import { glassClasses } from '@/design/tokens';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { useFilteredGraph, useFocusMode, useHoverHighlight, useNodeExpansion, useCenterOnNode, useSmartFitView, useContainerConstraint } from '@/hooks';
 import { useUIStore } from '@/stores/uiStore';
@@ -1106,9 +1107,7 @@ function Graph2DInner({
             {showMinimap && minimapVisible && (
               <MiniMap
                 className={cn(
-                  '!bg-black/70 !backdrop-blur-xl',
-                  '!border !border-white/[0.08]',
-                  '!rounded-xl',
+                  glassClasses.heavy,
                   '[&_.react-flow__minimap-edge]:hidden'
                 )}
                 style={{ height: MINIMAP_HEIGHT }}
@@ -1140,7 +1139,7 @@ function Graph2DInner({
             <div
               className={cn(
                 'absolute inset-0 flex items-center justify-center',
-                'bg-black/60 backdrop-blur-sm',
+                glassClasses.medium,
                 'z-50'
               )}
               data-testid="schema-loading-indicator"
@@ -1237,10 +1236,7 @@ function Graph2DInner({
           {showMinimap && minimapVisible && (
             <MiniMap
               className={cn(
-                // Glass styling matching toolbar
-                '!bg-black/70 !backdrop-blur-xl',
-                '!border !border-white/[0.08]',
-                '!rounded-xl',
+                glassClasses.heavy,
                 // Hide edges for cleaner minimal look
                 '[&_.react-flow__minimap-edge]:hidden'
               )}

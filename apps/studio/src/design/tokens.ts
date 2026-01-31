@@ -461,43 +461,62 @@ export const textOpacity = {
  */
 export const filterTreeClasses = {
   /** Container for the filter tree */
-  container: 'space-y-0.5',
+  container: 'space-y-2',
 
-  /** Section header row (category level) */
-  sectionHeader: 'flex items-center gap-2 py-2 px-1 rounded-lg transition-all duration-200 hover:bg-white/[0.03] cursor-pointer select-none',
+  /** Section header row (category level) - Premium style */
+  sectionHeader: [
+    'flex items-center gap-2.5',
+    'py-2.5 px-2 rounded-xl',
+    'transition-all duration-200',
+    'hover:bg-white/[0.04]',
+    'cursor-pointer select-none',
+  ].join(' '),
 
   /** Section content (nested items) */
-  sectionContent: 'ml-6 pl-3 border-l border-white/[0.06] overflow-hidden transition-all duration-300',
-  sectionContentExpanded: 'max-h-[500px] opacity-100',
+  sectionContent: 'ml-5 pl-3 mt-1 space-y-1.5 border-l-2 border-white/[0.08] overflow-hidden transition-all duration-300',
+  sectionContentExpanded: 'max-h-[600px] opacity-100 pb-2',
   sectionContentCollapsed: 'max-h-0 opacity-0',
 
-  /** Individual row (item level) */
-  row: 'group w-full flex items-center gap-2.5 py-2 px-2.5 -mx-2 rounded-xl transition-all duration-200 hover:bg-white/[0.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-novanet-500/50',
-  rowSelected: 'bg-white/[0.06]',
+  /** Individual row (item level) - Premium frosted glass */
+  row: [
+    'group w-full flex items-center gap-2.5',
+    'h-[44px] px-3 rounded-xl',
+    // Frosted glass base
+    'backdrop-blur-sm',
+    'ring-1 ring-inset ring-white/[0.06]',
+    'bg-white/[0.02]',
+    // Transitions
+    'transition-all duration-200',
+    // Hover
+    'hover:bg-white/[0.06] hover:ring-white/[0.10]',
+    // Focus
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-novanet-500/50',
+  ].join(' '),
+  rowSelected: 'bg-white/[0.08] ring-white/[0.12] shadow-sm shadow-black/10',
   rowDisabled: 'opacity-50 cursor-not-allowed',
 
   /** Chevron for expand/collapse */
   chevron: 'w-3.5 h-3.5 text-white/40 transition-transform duration-200',
   chevronCollapsed: '-rotate-90',
 
-  /** Checkbox container */
-  checkbox: 'w-4 h-4 rounded-md border-[1.5px] flex items-center justify-center transition-all duration-200 flex-shrink-0',
-  checkboxUnchecked: 'border-white/20 bg-transparent',
-  checkboxChecked: 'border-transparent', // Color set dynamically
+  /** Checkbox container - Premium style */
+  checkbox: 'w-5 h-5 rounded-lg border-[1.5px] flex items-center justify-center transition-all duration-200 flex-shrink-0',
+  checkboxUnchecked: 'border-white/20 bg-white/[0.03]',
+  checkboxChecked: 'border-transparent shadow-sm', // Color set dynamically
 
   /** Label text */
-  label: 'text-[12px] font-medium transition-colors duration-200 flex-1 text-left truncate',
+  label: 'text-[13px] font-medium transition-colors duration-200 flex-1 text-left truncate',
   labelSelected: 'text-white',
-  labelUnselected: 'text-white/60 group-hover:text-white/80',
+  labelUnselected: 'text-white/70 group-hover:text-white/90',
 
-  /** Section label (category) */
-  sectionLabel: 'text-[13px] font-semibold', // Color set dynamically
+  /** Section label (category) - Uppercase accent */
+  sectionLabel: 'text-[11px] font-bold uppercase tracking-wider', // Color set dynamically
 
-  /** Count display */
-  count: 'text-[11px] tabular-nums transition-colors duration-200 flex-shrink-0',
-  countSelected: 'text-white/80',
-  countUnselected: 'text-white/40',
-  countMuted: 'text-white/30',
+  /** Count display - Badge style */
+  count: 'text-[11px] tabular-nums transition-colors duration-200 flex-shrink-0 min-w-[28px] text-center py-0.5 px-2 rounded-md',
+  countSelected: 'text-white/90 bg-white/[0.08]',
+  countUnselected: 'text-white/50 bg-white/[0.04]',
+  countMuted: 'text-white/40',
 
   /** Progress bar container (data variant) */
   progressBar: 'w-16 flex-shrink-0',

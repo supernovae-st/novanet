@@ -51,7 +51,7 @@ export const ViewCard = memo(function ViewCard({
         'group relative flex items-center',
         'h-[52px] w-full rounded-xl',
         'gap-3 px-4',
-        // Frosted Glass base
+        // Frosted Glass base - backdrop-blur-md matches glass.blur.md (12px)
         'backdrop-blur-md',
         'ring-1 ring-inset',
         // Transitions
