@@ -361,6 +361,7 @@ export const QueryPill = memo(function QueryPill({ className, onRun }: QueryPill
             <div
               role="button"
               tabIndex={0}
+              aria-label="Edit Cypher query"
               onClick={startEditing}
               onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && startEditing()}
               className={cn(

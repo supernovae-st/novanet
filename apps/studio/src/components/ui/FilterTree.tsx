@@ -28,7 +28,7 @@ import {
   type KeyboardEvent,
 } from 'react';
 import { cn } from '@/lib/utils';
-import { filterTreeClasses as ftc, iconSizes, gapTokens, glowEffects } from '@/design/tokens';
+import { sidebarTokens as st, iconSizes, gapTokens, glowEffects, filterTreeClasses as ftc } from '@/design/tokens';
 import { TriStateCheckbox, type CheckboxState } from './TriStateCheckbox';
 import { ProgressBar } from './ProgressBar';
 import { NAV_ICONS, STATUS_ICONS } from '@/config/iconSystem';
@@ -131,7 +131,7 @@ function FilterTreeRoot({
     <FilterTreeContext.Provider value={contextValue}>
       <RovingTabindexProvider value={enableKeyboardNav ? rovingContext : null}>
         <div
-          className={cn(ftc.container, className)}
+          className={cn(st.tree.container, className)}
           role="tree"
           onKeyDown={handleKeyDown}
         >
@@ -239,14 +239,12 @@ const FilterTreeSection = memo(function FilterTreeSection({
   const hasSelection = showCheckbox && checkboxState !== 'none';
 
   return (
-    <div className={cn('mb-1', className)} role="treeitem" aria-expanded={isExpanded} aria-labelledby={`section-label-${id}`}>
+    <div className={cn(st.section.container, className)} role="treeitem" aria-expanded={isExpanded} aria-labelledby={`section-label-${id}`}>
       {/* Section Header - Unified design: checkbox | icon | label | count | chevron (right) */}
       <div
         className={cn(
-          'flex items-center w-full py-1 px-1 group rounded-lg',
-          'transition-all duration-300',
-          'hover:bg-white/[0.03]',
-          gapTokens.comfortable
+          st.section.header,
+          'group'
         )}
         style={{
           // Subtle glow when items are selected - uses design token
@@ -264,7 +262,7 @@ const FilterTreeSection = memo(function FilterTreeSection({
             label={`Select all ${label}`}
           />
         ) : (
-          <div className="w-4 flex-shrink-0" aria-hidden="true" />
+          <div className={st.checkbox.spacer} aria-hidden="true" />
         )}
 
         {/* Expand/Collapse area - icon | label | count | chevron */}
@@ -325,12 +323,9 @@ const FilterTreeSection = memo(function FilterTreeSection({
           {/* Chevron - RIGHT aligned */}
           <ChevronDownIcon
             className={cn(
-              'ml-auto',
-              iconSizes.md,
-              'text-white/40',
-              'transition-all duration-200',
+              st.chevron.base,
               'group-hover:text-white/50',
-              !isExpanded && '-rotate-90'
+              !isExpanded && st.chevron.collapsed
             )}
           />
         </button>
@@ -340,8 +335,8 @@ const FilterTreeSection = memo(function FilterTreeSection({
       <div
         id={`filter-section-${id}`}
         className={cn(
-          ftc.sectionContent,
-          isExpanded ? ftc.sectionContentExpanded : ftc.sectionContentCollapsed
+          st.section.content,
+          isExpanded ? st.section.contentExpanded : st.section.contentCollapsed
         )}
         role="group"
         aria-label={`${label} items`}
@@ -421,11 +416,9 @@ const FilterTreeRow = memo(function FilterTreeRow({
       aria-label={`${label}${count !== undefined ? ` (${count})` : ''}${shortcut ? ` (${shortcut})` : ''}`}
       data-selected={isSelected}
       className={cn(
-        ftc.row,
-        isSelected && ftc.rowSelected,
-        disabled && ftc.rowDisabled,
-        // Wow effects
-        'active:scale-[0.98]',
+        st.row.base,
+        isSelected && st.row.selected,
+        disabled && st.row.disabled,
         className
       )}
       style={{
@@ -442,9 +435,8 @@ const FilterTreeRow = memo(function FilterTreeRow({
       {showCheckbox ? (
         <div
           className={cn(
-            ftc.checkbox,
-            isSelected ? ftc.checkboxChecked : ftc.checkboxUnchecked,
-            'transition-all duration-300'
+            st.checkbox.base,
+            isSelected ? st.checkbox.checked : st.checkbox.unchecked
           )}
           style={{
             backgroundColor: isSelected ? `${color}25` : 'transparent',
@@ -455,16 +447,12 @@ const FilterTreeRow = memo(function FilterTreeRow({
           {isSelected && <CheckIcon className={iconSizes.xs} style={{ color }} />}
         </div>
       ) : (
-        <div className="w-4 flex-shrink-0" aria-hidden="true" />
+        <div className={st.checkbox.spacer} aria-hidden="true" />
       )}
 
-      {/* Icon with colored background - always tinted, brighter when selected */}
+      {/* Icon box - uses sidebarTokens.iconBox.base (32x32px) */}
       <div
-        className={cn(
-          'flex-shrink-0 flex items-center justify-center',
-          'w-8 h-8 rounded-lg',
-          'transition-all duration-300'
-        )}
+        className={st.iconBox.base}
         style={{
           // Always show colored tint, brighter when selected
           backgroundColor: isSelected ? `${color}25` : `${color}15`,
@@ -482,8 +470,8 @@ const FilterTreeRow = memo(function FilterTreeRow({
       {/* Label */}
       <span
         className={cn(
-          ftc.label,
-          isSelected ? ftc.labelSelected : ftc.labelUnselected
+          st.label.base,
+          isSelected ? st.label.selected : st.label.unselected
         )}
       >
         {label}
@@ -491,18 +479,17 @@ const FilterTreeRow = memo(function FilterTreeRow({
 
       {/* Progress bar (if enabled) */}
       {showProgressBars && count !== undefined && (
-        <div className={ftc.progressBar}>
+        <div className={st.progressBar.container}>
           <ProgressBar value={count} max={maxCount} color={color} />
         </div>
       )}
 
-      {/* Count */}
+      {/* Count badge */}
       {count !== undefined && (
         <span
           className={cn(
-            ftc.count,
-            isSelected ? ftc.countSelected : ftc.countUnselected,
-            'w-7 text-right font-mono'
+            st.badge.count,
+            isSelected ? st.badge.countSelected : st.badge.countUnselected
           )}
         >
           {formatCount(count, true)}
@@ -513,10 +500,7 @@ const FilterTreeRow = memo(function FilterTreeRow({
       {shortcut && (
         <span
           className={cn(
-            'flex-shrink-0',
-            'min-w-[28px] px-2 py-0.5 rounded-full',
-            'text-[10px] font-semibold text-center tabular-nums',
-            'transition-all duration-300'
+            st.badge.shortcut
           )}
           style={{
             backgroundColor: isSelected ? `${color}30` : `${color}15`,
@@ -569,8 +553,8 @@ const FilterTreeHeader = memo(function FilterTreeHeader({
   const { disabled } = useContext(FilterTreeContext);
 
   return (
-    <div className={cn(ftc.header, className)}>
-      <div className={ftc.headerTitle}>
+    <div className={cn(st.header.container, className)}>
+      <div className={st.header.title}>
         <TriStateCheckbox
           state={checkboxState}
           onClick={onCheckboxClick}
@@ -580,11 +564,11 @@ const FilterTreeHeader = memo(function FilterTreeHeader({
         />
         <span className="flex-shrink-0 text-white/50">{icon}</span>
         <span className="text-xs font-semibold text-white/70">{title}</span>
-        <span className="text-[10px] text-white/40">
+        <span className={st.section.count}>
           ({totalCount.toLocaleString()})
         </span>
         {selectedCount !== undefined && selectedCount > 0 && (
-          <span className={ftc.headerBadge}>{selectedCount} selected</span>
+          <span className={st.header.selectionBadge}>{selectedCount} selected</span>
         )}
       </div>
       {executeButton}

@@ -1,22 +1,23 @@
 'use client';
 
 /**
- * DatabaseInfoPanel - Data Explorer with tabbed interface
+ * DatabaseInfoPanel - Data Explorer using unified Sidebar components
  *
- * Design: A+B Hybrid (Segmented Tabs + Minimal Content)
+ * Uses Sidebar.Content for consistent skeleton across all tabs:
+ * - Same header structure as Schema Browser
+ * - Same body padding (p-3)
+ * - Same row heights and spacing
  *
  * Features:
- * - AI Search input always visible at top
- * - Segmented tabs: Views | Nodes | Rels (with counts)
- * - Views tab: YAML view presets (primary entry point)
- * - Nodes tab: Hierarchical node type browser
- * - Rels tab: Relationship type browser
- * - Premium glassmorphism design
+ * - AI Search input in toolbar
+ * - Segmented tabs: Views | Nodes | Rels
+ * - Each tab uses Sidebar.Tree with Sidebar.Section/Row
  */
 
 import { useState, useCallback, useEffect, memo, useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { GRAPH_ICONS, ACTION_ICONS } from '@/config/iconSystem';
+import { RefreshCw } from 'lucide-react';
+import { GRAPH_ICONS } from '@/config/iconSystem';
 import { cn } from '@/lib/utils';
 import { NODE_VISUAL_CATEGORIES, ALL_NODE_TYPES } from '@/config/nodeTypes';
 import { DEFAULT_FETCH_LIMIT } from '@/config/constants';
@@ -28,18 +29,58 @@ import { useDatabaseSchema } from '@/hooks';
 import { LoadingState } from '@/components/ui/EmptyState';
 import { SegmentedTabs } from '@/components/ui/SegmentedTabs';
 import { formatTime } from '@/lib/formatters';
-import { panelClasses, iconSizes, iconButtonClasses, gapTokens } from '@/design/tokens';
+import { iconSizes, iconButtonClasses } from '@/design/tokens';
 import { NodeLabelsSection } from './database/NodeLabelsSection';
 import { RelationshipsSection } from './database/RelationshipsSection';
 import { AiSearchInput } from './AiSearchInput';
 import { ViewSelector } from './views';
+import { Sidebar } from './SidebarContent';
 import type { NodeType } from '@/types';
-
-// Design system icons
-const RefreshIcon = ACTION_ICONS.refresh;
 
 // Tab definitions
 type TabId = 'views' | 'nodes' | 'rels';
+
+// =============================================================================
+// TOOLBAR COMPONENT
+// =============================================================================
+
+interface ToolbarProps {
+  activeTab: TabId;
+  onTabChange: (tab: TabId) => void;
+  onAiSubmit: (question: string) => Promise<void>;
+  isAiProcessing: boolean;
+  tabs: Array<{ id: TabId; label: string; count?: number }>;
+}
+
+const Toolbar = memo(function Toolbar({
+  activeTab,
+  onTabChange,
+  onAiSubmit,
+  isAiProcessing,
+  tabs,
+}: ToolbarProps) {
+  return (
+    <>
+      {/* AI Search */}
+      <div className="px-3 pt-3">
+        <AiSearchInput
+          onSubmit={onAiSubmit}
+          isLoading={isAiProcessing}
+          placeholder="Ask AI to query the graph..."
+        />
+      </div>
+
+      {/* Segmented Tabs */}
+      <div className="px-3 py-3">
+        <SegmentedTabs
+          tabs={tabs}
+          activeTab={activeTab}
+          onTabChange={(id) => onTabChange(id as TabId)}
+        />
+      </div>
+    </>
+  );
+});
 
 // =============================================================================
 // MAIN COMPONENT
@@ -203,59 +244,117 @@ export const DatabaseInfoPanel = memo(function DatabaseInfoPanel() {
     executeQuery(query);
   }, [selectedRelTypes, executeQuery, setEnabledNodeTypes]);
 
-  // Build tabs with counts (no icons - cleaner design)
+  // Build tabs with counts
   const tabs = useMemo(
     () => [
-      {
-        id: 'views' as const,
-        label: 'Views',
-        count: viewCount || undefined,
-      },
-      {
-        id: 'nodes' as const,
-        label: 'Nodes',
-        count: schema?.totalNodes,
-      },
-      {
-        id: 'rels' as const,
-        label: 'Rels',
-        count: schema?.totalRelationships,
-      },
+      { id: 'views' as const, label: 'Views', count: viewCount || undefined },
+      { id: 'nodes' as const, label: 'Nodes', count: schema?.totalNodes },
+      { id: 'rels' as const, label: 'Rels', count: schema?.totalRelationships },
     ],
     [viewCount, schema?.totalNodes, schema?.totalRelationships]
   );
 
+  // Render tab content
+  const renderContent = () => {
+    if (activeTab === 'views') {
+      return <ViewSelector />;
+    }
+
+    if (activeTab === 'nodes') {
+      if (isLoading && !schema) {
+        return (
+          <LoadingState
+            title="Loading schema"
+            description="Fetching database structure..."
+            size="sm"
+          />
+        );
+      }
+      if (error) {
+        return (
+          <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 text-center">
+            <p className="text-sm text-red-300">{error}</p>
+            <button
+              onClick={fetchSchema}
+              className="mt-3 px-4 py-2 bg-red-500/20 hover:bg-red-500/30 rounded-lg text-xs text-red-300 transition-colors"
+            >
+              Retry
+            </button>
+          </div>
+        );
+      }
+      if (schema) {
+        return (
+          <NodeLabelsSection
+            totalNodes={schema.totalNodes}
+            labelCounts={labelCounts}
+            maxCount={maxNodeCount}
+            selectedLabels={selectedLabels}
+            onToggleLabel={toggleLabel}
+            onToggleCategoryLabels={toggleCategoryLabels}
+            onToggleAllNodes={toggleAllNodes}
+            onExecuteQuery={executeNodeQuery}
+            isExecuting={isExecuting}
+          />
+        );
+      }
+      return null;
+    }
+
+    if (activeTab === 'rels') {
+      if (isLoading && !schema) {
+        return (
+          <LoadingState
+            title="Loading schema"
+            description="Fetching database structure..."
+            size="sm"
+          />
+        );
+      }
+      if (error) {
+        return (
+          <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 text-center">
+            <p className="text-sm text-red-300">{error}</p>
+            <button
+              onClick={fetchSchema}
+              className="mt-3 px-4 py-2 bg-red-500/20 hover:bg-red-500/30 rounded-lg text-xs text-red-300 transition-colors"
+            >
+              Retry
+            </button>
+          </div>
+        );
+      }
+      if (schema) {
+        return (
+          <RelationshipsSection
+            totalRelationships={schema.totalRelationships}
+            relationshipTypes={schema.relationshipTypes}
+            maxCount={maxRelCount}
+            selectedRelTypes={selectedRelTypes}
+            onToggleRelType={toggleRelType}
+            onToggleAllRelTypes={toggleAllRelTypes}
+            onExecuteQuery={executeRelQuery}
+            isExecuting={isExecuting}
+          />
+        );
+      }
+      return null;
+    }
+
+    return null;
+  };
+
   return (
-    <div
-      className={cn(
-        'h-full',
-        panelClasses.container
-      )}
-      data-testid="database-info-panel"
-    >
-      {/* Header - Premium Glassmorphism */}
-      <div className={cn('relative', panelClasses.header)}>
-        <div className="absolute inset-0 bg-gradient-to-br from-novanet-500/5 via-transparent to-emerald-500/5 pointer-events-none" />
-
-        <div className={cn('relative flex items-center', gapTokens.spacious)}>
-          <div className="relative">
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-novanet-400 to-emerald-500 opacity-20 blur-lg" />
-            <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-novanet-500/20 to-emerald-500/20 flex items-center justify-center border border-white/10 shadow-lg shadow-black/20">
-              <GRAPH_ICONS.database className={cn(iconSizes.md, 'text-novanet-400')} />
-            </div>
-          </div>
-
-          <div className="flex-1 min-w-0">
-            <h2 className="text-sm font-semibold text-white tracking-tight">
-              Data Explorer
-            </h2>
-            <p className="text-[10px] text-white/40 mt-0.5 truncate">
-              {schema?.totalNodes !== undefined
-                ? `${schema.totalNodes.toLocaleString()} nodes · ${schema.totalRelationships?.toLocaleString() ?? 0} rels`
-                : 'Loading...'}
-            </p>
-          </div>
-
+    <Sidebar.Content
+      testId="database-info-panel"
+      header={{
+        icon: <GRAPH_ICONS.database className={cn(iconSizes.md, 'text-novanet-400')} />,
+        iconGradient: { from: '#22d3ee', to: '#10b981' },
+        title: 'Data Explorer',
+        subtitle: schema?.totalNodes !== undefined
+          ? `${schema.totalNodes.toLocaleString()} nodes · ${schema.totalRelationships?.toLocaleString() ?? 0} rels`
+          : 'Loading...',
+        action: (
           <button
             onClick={fetchSchema}
             disabled={isLoading}
@@ -266,109 +365,28 @@ export const DatabaseInfoPanel = memo(function DatabaseInfoPanel() {
             title="Refresh schema"
             aria-label="Refresh database schema"
           >
-            <RefreshIcon className={cn(iconSizes.sm, isLoading && 'animate-spin')} />
+            <RefreshCw className={cn(iconSizes.sm, isLoading && 'animate-spin')} />
           </button>
-        </div>
-      </div>
-
-      {/* AI Search - Always visible */}
-      <div className="px-4 pt-4">
-        <AiSearchInput
-          onSubmit={handleAiSubmit}
-          isLoading={isAiProcessing}
-          placeholder="Ask AI to query the graph…"
-        />
-      </div>
-
-      {/* Segmented Tabs */}
-      <div className="px-4 py-4">
-        <SegmentedTabs
-          tabs={tabs}
+        ),
+      }}
+      toolbar={
+        <Toolbar
           activeTab={activeTab}
-          onTabChange={(id) => setActiveTab(id as TabId)}
+          onTabChange={setActiveTab}
+          onAiSubmit={handleAiSubmit}
+          isAiProcessing={isAiProcessing}
+          tabs={tabs}
         />
-      </div>
-
-      {/* Tab Content - Same padding as SchemaFilterPanel (p-3 from panelClasses.body) */}
-      <div className={panelClasses.body}>
-        {activeTab === 'views' && <ViewSelector />}
-
-        {activeTab === 'nodes' && (
-          <>
-            {isLoading && !schema ? (
-              <LoadingState
-                title="Loading schema"
-                description="Fetching database structure…"
-                size="sm"
-              />
-            ) : error ? (
-              <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 text-center">
-                <p className="text-sm text-red-300">{error}</p>
-                <button
-                  onClick={fetchSchema}
-                  className="mt-3 px-4 py-2 bg-red-500/20 hover:bg-red-500/30 rounded-lg text-xs text-red-300 transition-colors"
-                >
-                  Retry
-                </button>
-              </div>
-            ) : schema ? (
-              <NodeLabelsSection
-                totalNodes={schema.totalNodes}
-                labelCounts={labelCounts}
-                maxCount={maxNodeCount}
-                selectedLabels={selectedLabels}
-                onToggleLabel={toggleLabel}
-                onToggleCategoryLabels={toggleCategoryLabels}
-                onToggleAllNodes={toggleAllNodes}
-                onExecuteQuery={executeNodeQuery}
-                isExecuting={isExecuting}
-              />
-            ) : null}
-          </>
-        )}
-
-        {activeTab === 'rels' && (
-          <>
-            {isLoading && !schema ? (
-              <LoadingState
-                title="Loading schema"
-                description="Fetching database structure…"
-                size="sm"
-              />
-            ) : error ? (
-              <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 text-center">
-                <p className="text-sm text-red-300">{error}</p>
-                <button
-                  onClick={fetchSchema}
-                  className="mt-3 px-4 py-2 bg-red-500/20 hover:bg-red-500/30 rounded-lg text-xs text-red-300 transition-colors"
-                >
-                  Retry
-                </button>
-              </div>
-            ) : schema ? (
-              <RelationshipsSection
-                totalRelationships={schema.totalRelationships}
-                relationshipTypes={schema.relationshipTypes}
-                maxCount={maxRelCount}
-                selectedRelTypes={selectedRelTypes}
-                onToggleRelType={toggleRelType}
-                onToggleAllRelTypes={toggleAllRelTypes}
-                onExecuteQuery={executeRelQuery}
-                isExecuting={isExecuting}
-              />
-            ) : null}
-          </>
-        )}
-      </div>
-
-      {/* Footer - Subtle status bar */}
-      {lastUpdate && (
-        <div className={cn(panelClasses.footer, 'bg-black/20')}>
-          <span className={panelClasses.footerText}>
+      }
+      footer={
+        lastUpdate ? (
+          <span className="text-[11px] text-white/40 text-center">
             Updated {formatTime(lastUpdate)}
           </span>
-        </div>
-      )}
-    </div>
+        ) : undefined
+      }
+    >
+      {renderContent()}
+    </Sidebar.Content>
   );
 });
