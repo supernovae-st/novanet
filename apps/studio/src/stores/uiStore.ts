@@ -7,6 +7,9 @@ import { type SpacingPreset, DEFAULT_SPACING_PRESET } from '@/lib/forceSimulatio
 // Layout types for graph arrangement
 export type LayoutDirection = 'TB' | 'LR' | 'dagre' | 'radial' | 'force';
 
+// Layout mode: containers (hardcoded groups) vs magnetic (Neo4j-driven attractors)
+export type LayoutMode = 'containers' | 'magnetic';
+
 // Data mode: real instances vs ontological schema
 export type DataMode = 'data' | 'schema';
 
@@ -25,6 +28,9 @@ export interface SelectedEdgeData {
 interface UIStoreState extends UIState, SelectionState {
   // Minimap visibility
   minimapVisible: boolean;
+
+  // Layout mode: containers (hardcoded) vs magnetic (Neo4j-driven)
+  layoutMode: LayoutMode;
 
   // Modal state - exclusive (only one at a time)
   activeModal: ModalType;
@@ -71,6 +77,8 @@ interface UIStoreState extends UIState, SelectionState {
   setLayoutDirection: (direction: LayoutDirection) => void;
   /** Trigger layout recalculation (always runs, even if same direction) */
   triggerLayout: (direction?: LayoutDirection) => void;
+  setLayoutMode: (mode: LayoutMode) => void;
+  toggleLayoutMode: () => void;
 
   // Spacing actions
   setSpacingPreset: (preset: SpacingPreset) => void;
@@ -121,6 +129,9 @@ export const selectLayoutDirection = (state: UIStoreState) => state.layoutDirect
 /** Selector for layoutVersion - use with useUIStore(selectLayoutVersion) */
 export const selectLayoutVersion = (state: UIStoreState) => state.layoutVersion;
 
+/** Selector for layoutMode - use with useUIStore(selectLayoutMode) */
+export const selectLayoutMode = (state: UIStoreState) => state.layoutMode;
+
 // =============================================================================
 // Store Implementation
 // =============================================================================
@@ -138,6 +149,7 @@ export const useUIStore = create<UIStoreState>()(
       showEdgeLabels: true,
       layoutDirection: 'TB' as LayoutDirection,
       layoutVersion: 0,
+      layoutMode: 'containers' as LayoutMode,
       spacingPreset: DEFAULT_SPACING_PRESET,
       spacingValue: 100, // 0=compact, 50=normal, 100=spacious
       spacingVersion: 0,
@@ -228,6 +240,18 @@ export const useUIStore = create<UIStoreState>()(
           }
           // Always increment to force re-layout even if same direction
           state.layoutVersion += 1;
+        });
+      },
+
+      setLayoutMode: (mode) => {
+        set((state) => {
+          state.layoutMode = mode;
+        });
+      },
+
+      toggleLayoutMode: () => {
+        set((state) => {
+          state.layoutMode = state.layoutMode === 'containers' ? 'magnetic' : 'containers';
         });
       },
 
@@ -344,6 +368,7 @@ export const useUIStore = create<UIStoreState>()(
         minimapVisible: state.minimapVisible,
         showEdgeLabels: state.showEdgeLabels,
         layoutDirection: state.layoutDirection,
+        layoutMode: state.layoutMode,
         spacingPreset: state.spacingPreset,
         spacingValue: state.spacingValue,
         dataMode: state.dataMode,

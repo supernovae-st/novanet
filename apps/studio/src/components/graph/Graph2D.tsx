@@ -39,6 +39,7 @@ import { glassClasses, gapTokens } from '@/design/tokens';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { useFilteredGraph, useFocusMode, useHoverHighlight, useNodeExpansion, useCenterOnNode, useSmartFitView, useContainerConstraint, useGraphInteractions, Z_INDEX } from '@/hooks';
 import { useUIStore } from '@/stores/uiStore';
+import { useAnimationStore } from '@/stores/animationStore';
 import { useGraphStore } from '@/stores/graphStore';
 import { NODE_TYPE_CONFIG, nodeTypeConfigs } from '@/config/nodeTypes';
 import { MINIMAP_HEIGHT, TOOLBAR_BOTTOM_OFFSET } from '@/config/layoutConstants';
@@ -57,10 +58,12 @@ import {
   StructuralNode,
   LocaleKnowledgeNode,
   ProjectNode,
+  ScopeAttractorNode,
+  SubcategoryAttractorNode,
   type TurboNodeData,
   type TurboNodeType,
 } from './nodes';
-import { FloatingEdge, type FloatingEdgeType, EdgeVisibilityProvider } from './edges';
+import { FloatingEdge, MagneticEdge, type FloatingEdgeType, EdgeVisibilityProvider } from './edges';
 import { NodeContextMenu } from './NodeContextMenu';
 import { GraphToolbar } from './GraphToolbar';
 import type { GraphNode as GraphNodeType, GraphEdge as GraphEdgeType } from '@/types';
@@ -87,10 +90,15 @@ const nodeTypes = {
   scopeGroup: ScopeGroupNode,
   subcategoryGroup: SubcategoryGroupNode,
   schemaNode: SchemaNode,
+  // Magnetic grouping attractor nodes (Task 10)
+  scopeAttractor: ScopeAttractorNode,
+  subcategoryAttractor: SubcategoryAttractorNode,
 } as const;
 
 const edgeTypes = {
   floating: FloatingEdge,
+  // Magnetic grouping edge type (Task 10)
+  magnetic: MagneticEdge,
 } as const;
 
 // =============================================================================
@@ -239,6 +247,12 @@ function Graph2DInner({
       collapsedSubcategories: state.collapsedSubcategories,
     }))
   );
+
+  // Animation store - Matrix transition state
+  const transitionPhase = useAnimationStore((state) => state.transitionPhase);
+
+  // Compute graph opacity based on transition phase (dissolve = fade out, reform = fade in)
+  const graphOpacity = transitionPhase === 'dissolve' || transitionPhase === 'fetch' ? 0 : 1;
 
   // Focus mode for selection-based dimming
   const { isNodeDimmed, isEdgeDimmed, selectedId: focusSelectedId, connectedIds } = useFocusMode(graphEdges);
@@ -1201,7 +1215,11 @@ function Graph2DInner({
   if (dataMode === 'schema') {
     return (
       <SchemaErrorBoundary>
-        <div className={cn('h-full w-full', className)} data-testid="react-flow-wrapper-schema">
+        <div
+          className={cn('h-full w-full transition-opacity duration-400 ease-out', className)}
+          style={{ opacity: graphOpacity }}
+          data-testid="react-flow-wrapper-schema"
+        >
           <ReactFlow
             nodes={schemaNodes}
             edges={schemaEdges}
@@ -1319,7 +1337,11 @@ function Graph2DInner({
 
   return (
     <EdgeVisibilityProvider>
-      <div className={cn('h-full w-full', className)} data-testid="react-flow-wrapper">
+      <div
+        className={cn('h-full w-full transition-opacity duration-400 ease-out', className)}
+        style={{ opacity: graphOpacity }}
+        data-testid="react-flow-wrapper"
+      >
         <ReactFlow
           nodes={nodes}
           edges={edges}
