@@ -9,7 +9,7 @@
 import { memo } from 'react';
 import { cn } from '@/lib/utils';
 import { ACTION_ICONS, ICON_SIZES } from '@/config/iconSystem';
-import { gapTokens } from '@/design/tokens';
+import { gapTokens, iconButtonClasses } from '@/design/tokens';
 
 interface RefreshButtonProps {
   /** Click handler */
@@ -32,9 +32,9 @@ export const RefreshButton = memo(function RefreshButton({
       onClick={onClick}
       disabled={isLoading}
       className={cn(
-        'group flex items-center p-1.5 rounded-lg transition-colors',
+        'group flex items-center',
+        iconButtonClasses.ghost,
         gapTokens.compact,
-        'text-white/40 hover:text-white/70 hover:bg-white/10',
         'disabled:opacity-50',
         className
       )}

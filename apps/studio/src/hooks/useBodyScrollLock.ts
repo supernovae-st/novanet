@@ -17,6 +17,12 @@ import { useEffect } from 'react';
 // Supports multiple concurrent modals without conflicts
 let lockCount = 0;
 
+// HMR safety: if module re-initializes with lockCount=0 but body is still locked,
+// reset the stale scroll lock left over from the previous module instance
+if (typeof document !== 'undefined' && lockCount === 0 && document.body.style.overflow === 'hidden') {
+  document.body.style.overflow = '';
+}
+
 /**
  * Lock body scroll when condition is true
  *

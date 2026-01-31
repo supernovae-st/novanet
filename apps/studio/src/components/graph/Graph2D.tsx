@@ -11,7 +11,7 @@
  * - Category-based color coding
  */
 
-import { useCallback, useMemo, useEffect, useState, useRef } from 'react';
+import { useCallback, useMemo, useEffect, useState, useRef, memo } from 'react';
 import {
   ReactFlow,
   Background,
@@ -1425,10 +1425,10 @@ function Graph2DInner({
 /**
  * Graph2D with ReactFlowProvider wrapper
  */
-export function Graph2D(props: Graph2DProps) {
+export const Graph2D = memo(function Graph2D(props: Graph2DProps) {
   return (
     <ReactFlowProvider>
       <Graph2DInner {...props} />
     </ReactFlowProvider>
   );
-}
+});

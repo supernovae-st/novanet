@@ -12,7 +12,7 @@
  * - Auto-focus search input
  */
 
-import { useEffect, useState, useCallback, useMemo, useRef } from 'react';
+import { useEffect, useState, useCallback, useMemo, useRef, memo } from 'react';
 import {
   X,
   Search,
@@ -32,7 +32,7 @@ import {
   Box,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { iconSizes, gapTokens, overlayClasses } from '@/design/tokens';
+import { iconSizes, gapTokens, overlayClasses, iconButtonClasses } from '@/design/tokens';
 import { fuzzyMatch } from '@/lib/fuzzySearch';
 import { useAutoFocus, useDebouncedValue } from '@/hooks';
 import { KeyboardKey } from './KeyboardKey';
@@ -63,7 +63,7 @@ interface CommandPaletteProps {
 // Component
 // =============================================================================
 
-export function CommandPalette({ isOpen, onClose, commands }: CommandPaletteProps) {
+export const CommandPalette = memo(function CommandPalette({ isOpen, onClose, commands }: CommandPaletteProps) {
   const [query, setQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -149,7 +149,7 @@ export function CommandPalette({ isOpen, onClose, commands }: CommandPaletteProp
 
   // Scroll selected item into view
   useEffect(() => {
-    if (listRef.current && flatCommands.length > 0) {
+    if (listRef.current && selectedIndex >= 0 && selectedIndex < flatCommands.length) {
       const selectedEl = listRef.current.querySelector(`[data-index="${selectedIndex}"]`);
       selectedEl?.scrollIntoView({ block: 'nearest' });
     }
@@ -196,7 +196,7 @@ export function CommandPalette({ isOpen, onClose, commands }: CommandPaletteProp
             <button
               onClick={() => setQuery('')}
               aria-label="Clear search"
-              className="p-1.5 hover:bg-white/10 rounded-lg transition-colors text-white/40 hover:text-white/60"
+              className={iconButtonClasses.ghost}
             >
               <X className={iconSizes.md} />
             </button>
@@ -305,7 +305,7 @@ export function CommandPalette({ isOpen, onClose, commands }: CommandPaletteProp
       </Modal.Content>
     </Modal.Root>
   );
-}
+});
 
 // =============================================================================
 // Hook - Creates command list from app state

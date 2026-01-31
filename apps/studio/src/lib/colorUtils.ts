@@ -55,66 +55,6 @@ export function hexToRgba(hex: string, alpha: number): string {
   return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
 }
 
-/**
- * Add opacity to hex color (returns hex with alpha channel)
- *
- * @example
- * withOpacity('#8b5cf6', 0.15) // '#8b5cf626' (15% opacity)
- * withOpacity('#8b5cf6', 0.25) // '#8b5cf640' (25% opacity)
- */
-export function withOpacity(hex: string, opacity: number): string {
-  // Clamp opacity to 0-1
-  const clampedOpacity = Math.max(0, Math.min(1, opacity));
-
-  // Convert opacity to hex (0-255 range, then to hex)
-  const alphaHex = Math.round(clampedOpacity * 255)
-    .toString(16)
-    .padStart(2, '0');
-
-  // Remove existing alpha if present (8-char hex)
-  const baseHex = hex.replace(/^#/, '').slice(0, 6);
-
-  return `#${baseHex}${alphaHex}`;
-}
-
-// =============================================================================
-// STYLE HELPERS
-// =============================================================================
-
-/**
- * Create background + border style object with consistent opacity
- *
- * @example
- * coloredBadgeStyle('#8b5cf6')
- * // { backgroundColor: 'rgba(139, 92, 246, 0.15)', borderColor: 'rgba(139, 92, 246, 0.25)' }
- */
-export function coloredBadgeStyle(color: string): {
-  backgroundColor: string;
-  borderColor: string;
-} {
-  return {
-    backgroundColor: hexToRgba(color, 0.15),
-    borderColor: hexToRgba(color, 0.25),
-  };
-}
-
-/**
- * Create text + background style for chips/tags
- *
- * @example
- * coloredChipStyle('#8b5cf6')
- * // { color: '#8b5cf6', backgroundColor: 'rgba(139, 92, 246, 0.1)' }
- */
-export function coloredChipStyle(color: string): {
-  color: string;
-  backgroundColor: string;
-} {
-  return {
-    color,
-    backgroundColor: hexToRgba(color, 0.1),
-  };
-}
-
 // =============================================================================
 // OPACITY PRESETS (common values used in the app)
 // =============================================================================
