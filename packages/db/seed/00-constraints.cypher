@@ -102,3 +102,12 @@ CREATE INDEX infl_weight IF NOT EXISTS FOR ()-[r:INFLUENCED_BY]-() ON (r.weight)
 // REMOVED v7.9.0: USED_SEO_KEYWORD, USED_GEO_SEED indexes (relations removed)
 // SEO/GEO provenance is implicit via: BlockL10n → INFLUENCED_BY → ConceptL10n → HAS_*_TARGET → SEO/GEO
 CREATE INDEX gen_date IF NOT EXISTS FOR ()-[r:GENERATED]-() ON (r.generated_at);
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// ORGANIZING PRINCIPLES (v8.3.0)
+// Meta-schema nodes that describe the taxonomy structure
+// ═══════════════════════════════════════════════════════════════════════════════
+
+CREATE CONSTRAINT scope_key IF NOT EXISTS FOR (s:Scope) REQUIRE s.key IS UNIQUE;
+CREATE CONSTRAINT subcategory_key IF NOT EXISTS FOR (sub:Subcategory) REQUIRE sub.key IS UNIQUE;
+CREATE CONSTRAINT nodetypemeta_label IF NOT EXISTS FOR (ntm:NodeTypeMeta) REQUIRE ntm.label IS UNIQUE;
