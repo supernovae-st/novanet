@@ -26,11 +26,13 @@ import {
   Atom,
   ChevronUp,
   ChevronDown,
+  Magnet,
+  Box,
 } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
 import { cn } from '@/lib/utils';
 import { useUIStore } from '@/stores';
-import type { LayoutDirection } from '@/stores/uiStore';
+import type { LayoutDirection, LayoutMode } from '@/stores/uiStore';
 import { MINIMAP_WIDTH } from '@/config/layoutConstants';
 import { controls, easing, durations, gapTokens } from '@/design/tokens';
 import {
@@ -247,10 +249,12 @@ export const GraphToolbar = memo(function GraphToolbar() {
   const { zoomIn, zoomOut } = useReactFlow();
   const { smartFitView } = useSmartFitView();
 
-  const { triggerLayout, dataMode } = useUIStore(
+  const { triggerLayout, dataMode, layoutMode, toggleLayoutMode } = useUIStore(
     useShallow((state) => ({
       triggerLayout: state.triggerLayout,
       dataMode: state.dataMode,
+      layoutMode: state.layoutMode,
+      toggleLayoutMode: state.toggleLayoutMode,
     }))
   );
 
@@ -279,6 +283,11 @@ export const GraphToolbar = memo(function GraphToolbar() {
     },
     [triggerLayout]
   );
+
+  const handleToggleLayoutMode = useCallback(() => {
+    triggerHaptic();
+    toggleLayoutMode();
+  }, [toggleLayoutMode]);
 
   return (
     <div className="flex flex-col items-end" style={{ gap: GAP }}>
@@ -328,6 +337,69 @@ export const GraphToolbar = memo(function GraphToolbar() {
           shortcut="⇧F"
           onClick={() => handleSetLayout('force')}
         />
+        {/* Separator */}
+        <div className="w-full h-px bg-white/10 my-1" />
+        {/* Layout Mode Toggle */}
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              onClick={handleToggleLayoutMode}
+              className={cn(
+                'group relative flex items-center',
+                gapTokens.default,
+                'rounded-xl px-2.5',
+                'transition',
+                layoutMode === 'magnetic'
+                  ? 'bg-violet-500/20 text-violet-300 border border-violet-500/40'
+                  : 'bg-white/[0.04] text-white/60 border border-white/[0.08]',
+                'hover:bg-white/[0.10] hover:border-white/[0.15] hover:scale-105',
+                'active:scale-95 active:bg-white/[0.15]',
+                'focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/50'
+              )}
+              style={{
+                height: BUTTON_SIZE,
+                transitionDuration: `${TRANSITION_DURATION}ms`,
+                transitionTimingFunction: SPRING_EASE,
+              }}
+              aria-label="Toggle magnetic grouping (Shift+M)"
+            >
+              <span
+                className={cn(
+                  'transition-colors',
+                  layoutMode === 'magnetic' ? 'text-violet-400' : 'text-white/50',
+                  'group-hover:text-white/90'
+                )}
+                style={{
+                  transitionDuration: `${TRANSITION_DURATION}ms`,
+                  transitionTimingFunction: SPRING_EASE,
+                }}
+              >
+                {layoutMode === 'magnetic' ? (
+                  <Magnet size={ICON_SIZE} />
+                ) : (
+                  <Box size={ICON_SIZE} />
+                )}
+              </span>
+              <kbd
+                className={cn(
+                  'inline-flex items-center justify-center',
+                  'min-w-[28px] h-5 px-1.5',
+                  layoutMode === 'magnetic'
+                    ? 'bg-violet-500/20 border border-violet-500/30 text-violet-300'
+                    : 'bg-white/[0.06] border border-white/[0.10] text-white/50',
+                  'rounded text-[10px] font-mono',
+                  'group-hover:bg-white/[0.12] group-hover:text-white/80 group-hover:border-white/[0.20]',
+                  'transition-colors'
+                )}
+              >
+                ⇧M
+              </kbd>
+            </button>
+          </TooltipTrigger>
+          <TooltipContent side="left">
+            {layoutMode === 'magnetic' ? 'Magnetic' : 'Containers'}
+          </TooltipContent>
+        </Tooltip>
       </div>
 
       {/* ═══════════════════════════════════════════════════════════════════════

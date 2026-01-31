@@ -22,7 +22,7 @@ import { Box, PanelLeft, Keyboard, X, Network, Table2, Code, Loader2 } from 'luc
 import { cn } from '@/lib/utils';
 import { iconSizes, gapTokens } from '@/design/tokens';
 import { DEFAULT_FETCH_LIMIT } from '@/config/constants';
-import { useUIStore, useFilterStore, useGraphStore } from '@/stores';
+import { useUIStore, useFilterStore, useGraphStore, useAnimationStore } from '@/stores';
 import { useGraphData, useFilteredGraph, UrlSyncComponent } from '@/hooks';
 import { ContextPicker, ViewPicker } from '@/components/sidebar';
 import { isInputFocused, matchesKeyCombo } from '@/lib/keyboard';
@@ -44,14 +44,15 @@ const Graph2D = lazy(() =>
   import('@/components/graph').then((mod) => ({ default: mod.Graph2D }))
 );
 import { GraphErrorBoundary } from '@/components/ui/ErrorBoundary';
-import { StatsCounter, Pill, Divider, RefreshButton, CategoryIcon } from '@/components/ui';
+import { StatsCounter, Pill, Divider, RefreshButton, CategoryIcon, MatrixRainOverlay } from '@/components/ui';
 import { SidebarTabs } from '@/components/sidebar/SidebarTabs';
 import { NodeDetailsPanel } from '@/components/sidebar/NodeDetailsPanel';
 import { EdgeDetailsPanel } from '@/components/sidebar/EdgeDetailsPanel';
 import { KeyboardHelpPanel } from '@/components/dx/KeyboardHelpPanel';
 import { CommandPalette, useCommandPalette, useCommandPaletteState } from '@/components/ui/CommandPalette';
 import { AiSearchOverlay } from '@/components/chat/AiSearchOverlay';
-import { QueryPill, ResultsOverview, TableView, RawView } from '@/components/query';
+import { QueryPill, ResultsOverview, ExpandedBreakdown, TableView, RawView } from '@/components/query';
+import type { ExpandedViewType } from '@/components/query/ResultsOverview';
 import { useQueryStore, QueryBuilder } from '@/stores/queryStore';
 
 export default function HomePage() {
@@ -85,6 +86,7 @@ export default function HomePage() {
       toggleEdgeLabels: state.toggleEdgeLabels,
       setLayoutDirection: state.setLayoutDirection,
       triggerLayout: state.triggerLayout,
+      toggleLayoutMode: state.toggleLayoutMode,
       setSelectedNode: state.setSelectedNode,
       setSelectedEdge: state.setSelectedEdge,
       clearSelection: state.clearSelection,
@@ -124,18 +126,54 @@ export default function HomePage() {
     useShallow((state) => ({
       setViewMode: state.setViewMode,
       setQuery: state.setQuery,
+      executeQuery: state.executeQuery,
     }))
   );
+
+  // Animation Store - Matrix transition state
+  const transitionState = useAnimationStore(
+    useShallow((state) => ({
+      isTransitioning: state.isTransitioning,
+      transitionPhase: state.transitionPhase,
+      targetMode: state.targetMode,
+    }))
+  );
+  const transitionActions = useAnimationStore(
+    useShallow((state) => ({
+      setTransitionPhase: state.setTransitionPhase,
+      endTransition: state.endTransition,
+    }))
+  );
+
+  // UI action for data mode (used by transition orchestration)
+  const setDataMode = useUIStore((state) => state.setDataMode);
 
   // ═══════════════════════════════════════════════════════════════════════════
   // DERIVED STATE & HOOKS
   // ═══════════════════════════════════════════════════════════════════════════
 
-  // Filtered graph stats
-  const { visibleNodeCount, visibleEdgeCount } = useFilteredGraph();
+  // Filtered graph stats (schema mode shows distinct relation types, not edges)
+  const { visibleNodeCount, visibleEdgeCount, isSchemaMode, distinctRelationTypes } = useFilteredGraph();
 
   // Graph data fetching
   const { fetchData, fetchSchemaData, executeQuery, dataMode, isLoading: isFetching } = useGraphData();
+
+  // Stats pill expansion (hover nodes/relations to see type breakdown)
+  const [expandedView, setExpandedView] = useState<ExpandedViewType>(null);
+  const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+
+  const openExpanded = useCallback((view: ExpandedViewType) => {
+    if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+    setExpandedView(view);
+  }, []);
+
+  const scheduleCloseExpanded = useCallback(() => {
+    hoverTimeoutRef.current = setTimeout(() => setExpandedView(null), 150);
+  }, []);
+
+  const cancelCloseExpanded = useCallback(() => {
+    if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+  }, []);
 
   // Keyboard shortcuts modal
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
@@ -269,6 +307,53 @@ export default function HomePage() {
     prevDataModeRef.current = dataMode;
   }, [totalNodes, isFetching, fetchData, fetchSchemaData, dataMode]);
 
+  // ═══════════════════════════════════════════════════════════════════════════
+  // MATRIX TRANSITION ORCHESTRATION
+  // ═══════════════════════════════════════════════════════════════════════════
+  //
+  // Phase flow: dissolve (400ms) → fetch (variable) → reform (400ms)
+  // - dissolve: fade out graph, show matrix rain
+  // - fetch: load new data in background
+  // - reform: fade in new graph, hide matrix rain
+  //
+  useEffect(() => {
+    if (!transitionState.isTransitioning) return;
+
+    const { transitionPhase, targetMode } = transitionState;
+
+    // Phase 1: DISSOLVE - wait 400ms, then switch mode and fetch data
+    if (transitionPhase === 'dissolve' && targetMode) {
+      const timer = setTimeout(() => {
+        // Switch to fetch phase and update data mode
+        transitionActions.setTransitionPhase('fetch');
+        setDataMode(targetMode);
+        // Data fetch is triggered automatically by the dataMode change effect above
+      }, 400);
+      return () => clearTimeout(timer);
+    }
+
+    // Phase 2: FETCH - wait for data to load, then move to reform
+    // We detect when fetch completes by watching isFetching go from true to false
+    if (transitionPhase === 'fetch' && !isFetching) {
+      transitionActions.setTransitionPhase('reform');
+    }
+
+    // Phase 3: REFORM - wait 400ms, then end transition
+    if (transitionPhase === 'reform') {
+      const timer = setTimeout(() => {
+        transitionActions.endTransition();
+      }, 400);
+      return () => clearTimeout(timer);
+    }
+  }, [
+    transitionState.isTransitioning,
+    transitionState.transitionPhase,
+    transitionState.targetMode,
+    isFetching,
+    setDataMode,
+    transitionActions,
+  ]);
+
   // Global keyboard handler
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -323,7 +408,7 @@ export default function HomePage() {
         return;
       }
 
-      // Layout shortcuts (Shift + H/V/D/R/F) - must use triggerLayout to increment layoutVersion
+      // Layout shortcuts (Shift + H/V/D/R/F/M) - must use triggerLayout to increment layoutVersion
       if (e.shiftKey && !e.metaKey && !e.ctrlKey) {
         switch (e.key) {
           case 'H':
@@ -345,6 +430,10 @@ export default function HomePage() {
           case 'F':
             e.preventDefault();
             uiActions.triggerLayout('force');
+            return;
+          case 'M':
+            e.preventDefault();
+            uiActions.toggleLayoutMode();
             return;
         }
       }
@@ -401,12 +490,12 @@ export default function HomePage() {
   // Note: Data mode changes are handled by the effect above
   // The toggle only updates the store, the effect fetches the data
 
-  // Run current query
+  // Run current query (uses queryStore.executeQuery for matrix animation)
   const handleRunQuery = useCallback(() => {
     if (queryState.currentQuery && !queryState.isExecuting) {
-      executeQuery(queryState.currentQuery);
+      queryActions.executeQuery(queryState.currentQuery);
     }
-  }, [queryState.currentQuery, queryState.isExecuting, executeQuery]);
+  }, [queryState.currentQuery, queryState.isExecuting, queryActions]);
 
   // Expand node (double-click in graph) - Neo4j Browser-style
   const handleExpandNode = useCallback(
@@ -542,27 +631,55 @@ export default function HomePage() {
               </div>
             )}
 
+            {/* Matrix Rain Overlay - shows during Data ↔ Schema transitions */}
+            <MatrixRainOverlay
+              visible={transitionState.isTransitioning}
+              phase={transitionState.transitionPhase}
+            />
+
             {/* Top Bar: Unified layout with 2 rows */}
             {!uiState.focusMode && (
               <div className={cn('absolute top-4 left-4 right-4 z-30 flex flex-col', gapTokens.spacious)}>
-                {/* Row 1: QueryPill (full-width) - PRIMARY ACTION */}
-                <QueryPill className="w-full" onRun={handleRunQuery} />
+                {/* Row 1: QueryPill (full-width) - only in Data mode */}
+                {dataMode === 'data' && (
+                  <QueryPill className="w-full" onRun={handleRunQuery} />
+                )}
                 {/* Row 2: Stats (left) + Context Picker (right) */}
-                <div className={cn('flex items-center justify-between', gapTokens.large)}>
-                  <Pill size="md">
-                    <StatsCounter
-                      nodeCount={visibleNodeCount}
-                      edgeCount={visibleEdgeCount}
-                      isLoading={queryState.isExecuting}
-                    />
-                    {totalNodes > 0 && (
-                      <>
+                <div className={cn('flex items-start justify-between', gapTokens.large)}>
+                  <Pill size="md" className="items-stretch py-3" glow={queryState.isExecuting || transitionState.isTransitioning} glowColor={transitionState.isTransitioning ? 'novanet' : 'emerald'}>
+                    <div className="relative z-10 flex flex-col w-full">
+                      {/* Main row */}
+                      <div className={cn('flex items-center', gapTokens.default)}>
+                        <StatsCounter
+                          nodeCount={visibleNodeCount}
+                          edgeCount={isSchemaMode ? distinctRelationTypes : visibleEdgeCount}
+                          isLoading={queryState.isExecuting}
+                          expandedView={expandedView}
+                          onHoverNodes={() => openExpanded('nodes')}
+                          onHoverRelations={() => openExpanded('relations')}
+                          onHoverLeave={scheduleCloseExpanded}
+                          isSchemaMode={isSchemaMode}
+                        />
+                        {visibleNodeCount > 0 && (
+                          <>
+                            <Divider />
+                            <ResultsOverview
+                              expandedView={expandedView}
+                              onHoverOverflow={() => openExpanded('all')}
+                              onHoverLeave={scheduleCloseExpanded}
+                            />
+                          </>
+                        )}
                         <Divider />
-                        <ResultsOverview />
-                      </>
-                    )}
-                    <Divider />
-                    <RefreshButton onClick={handleRefresh} isLoading={isFetching} />
+                        <RefreshButton onClick={handleRefresh} isLoading={isFetching} />
+                      </div>
+                      {/* Expanded breakdown - animates in/out */}
+                      <ExpandedBreakdown
+                        view={expandedView}
+                        onMouseEnter={cancelCloseExpanded}
+                        onMouseLeave={scheduleCloseExpanded}
+                      />
+                    </div>
                   </Pill>
                   <Pill size="md">
                     {dataMode === 'schema' ? <ViewPicker /> : <ContextPicker />}
