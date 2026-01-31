@@ -154,27 +154,12 @@ export const QueryBuilder = {
   matchNodesByLabel: (label: string) =>
     `MATCH (n:${label}) RETURN n LIMIT ${DEFAULT_QUERY_LIMIT}`,
 
-  // Returns nodes with their relationships (for expanded view)
-  matchNodesByLabelWithRelations: (label: string) =>
-    `MATCH (n:${label})-[r]-(m) RETURN n, r, m LIMIT ${DEFAULT_QUERY_LIMIT}`,
-
-  // Returns just relationships of a type
-  matchRelationshipsByType: (type: string) =>
-    `MATCH ()-[r:${type}]->() RETURN r LIMIT ${DEFAULT_QUERY_LIMIT}`,
-
   // Returns relationships with their connected nodes
   matchRelationshipsByTypeWithNodes: (type: string) =>
     `MATCH (n)-[r:${type}]->(m) RETURN n, r, m LIMIT ${DEFAULT_QUERY_LIMIT}`,
 
-  // Returns all nodes (sample)
-  matchAll: () => `MATCH (n) RETURN n LIMIT ${DEFAULT_QUERY_LIMIT}`,
-
   // Expand node: get this node with all its direct relationships (Neo4j Browser double-click)
   expandNode: (nodeId: string) =>
     `MATCH (n)-[r]-(m) WHERE elementId(n) = '${nodeId}' RETURN n, r, m LIMIT ${EXPAND_QUERY_LIMIT}`,
-
-  // Focus on node: get just this node
-  focusNode: (nodeId: string) =>
-    `MATCH (n) WHERE elementId(n) = '${nodeId}' RETURN n`,
 };
 

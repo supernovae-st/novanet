@@ -31,7 +31,7 @@ import {
 } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { iconSizes, gapTokens, glowEffects, defaultColors } from '@/design/tokens';
+import { iconSizes, gapTokens, defaultColors } from '@/design/tokens';
 import { useControllableState } from '@/hooks/useControllableState';
 import { TriStateCheckbox, type CheckboxState } from './TriStateCheckbox';
 
@@ -126,23 +126,16 @@ export const CollapsibleSection = memo(function CollapsibleSection({
     [isExpanded, setIsExpanded, handleToggle]
   );
 
-  // Check if any items are selected for glow effect
-  const hasSelection = checkboxState !== 'none';
-
   return (
     <div className={cn('space-y-3', className)}>
-      {/* Section Header - with wow effects matching FilterTree.Section */}
+      {/* Section Header - Linear style: flat, minimal */}
       <div
         className={cn(
-          'flex items-center w-full py-1 px-1 group rounded-lg',
-          'transition-all duration-300',
-          'hover:bg-white/[0.03]',
-          gapTokens.comfortable
+          'flex items-center w-full py-1.5 px-2 group rounded-md',
+          gapTokens.default,
+          'transition-all duration-150',
+          'hover:bg-white/[0.03]'
         )}
-        style={{
-          // Subtle glow when items are selected - uses design token
-          boxShadow: hasSelection ? glowEffects.section(color) : undefined,
-        }}
       >
         {/* Tri-state Checkbox (optional) - uses shared component for consistency */}
         {showCheckbox && onCheckboxClick && (
@@ -169,40 +162,25 @@ export const CollapsibleSection = memo(function CollapsibleSection({
             gapTokens.comfortable
           )}
         >
-          {/* Icon with glow effect */}
+          {/* Icon - clean, colored */}
           <span
-            className="flex-shrink-0 transition-all duration-300 group-hover:scale-110"
-            style={{
-              color,
-              filter: hasSelection ? `drop-shadow(0 0 4px ${color}60)` : undefined,
-            }}
+            className="flex-shrink-0 transition-colors duration-150"
+            style={{ color }}
           >
             {icon}
           </span>
 
-          {/* Label */}
+          {/* Label - clean, colored */}
           <span
-            className={cn(
-              'text-[11px] uppercase tracking-wider font-semibold',
-              'transition-all duration-300'
-            )}
-            style={{
-              color,
-              textShadow: hasSelection ? `0 0 8px ${color}40` : undefined,
-            }}
+            className="text-[11px] uppercase tracking-wider font-semibold transition-colors duration-150"
+            style={{ color }}
           >
             {label}
           </span>
 
-          {/* Count with glow */}
+          {/* Count */}
           {count !== undefined && (
-            <span
-              className={cn(
-                'text-[10px] tabular-nums',
-                'transition-colors duration-300',
-                hasSelection ? 'text-white/50' : 'text-white/40'
-              )}
-            >
+            <span className="text-[10px] tabular-nums text-white/40">
               ({count})
             </span>
           )}

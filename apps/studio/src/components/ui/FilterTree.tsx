@@ -28,7 +28,7 @@ import {
   type KeyboardEvent,
 } from 'react';
 import { cn } from '@/lib/utils';
-import { sidebarTokens as st, iconSizes, gapTokens, glowEffects } from '@/design/tokens';
+import { sidebarTokens as st, iconSizes, gapTokens } from '@/design/tokens';
 import { TriStateCheckbox, type CheckboxState } from './TriStateCheckbox';
 import { ProgressBar } from './ProgressBar';
 import { NAV_ICONS, STATUS_ICONS } from '@/config/iconSystem';
@@ -235,21 +235,14 @@ const FilterTreeSection = memo(function FilterTreeSection({
     [isExpanded, setIsExpanded, handleToggle]
   );
 
-  // Check if any items are selected for glow effect
-  const hasSelection = showCheckbox && checkboxState !== 'none';
-
   return (
     <div className={cn(st.section.container, className)} role="treeitem" aria-expanded={isExpanded} aria-labelledby={`section-label-${id}`}>
-      {/* Section Header - Unified design: checkbox | icon | label | count | chevron (right) */}
+      {/* Section Header - Linear style: flat, minimal, no glow */}
       <div
         className={cn(
           st.section.header,
           'group'
         )}
-        style={{
-          // Subtle glow when items are selected - uses design token
-          boxShadow: hasSelection ? glowEffects.section(color) : undefined,
-        }}
       >
         {/* Tri-state Checkbox - optional, hidden for mutually exclusive items like Views */}
         {/* When hidden, add spacer to maintain horizontal alignment across all tabs */}
@@ -281,41 +274,26 @@ const FilterTreeSection = memo(function FilterTreeSection({
             gapTokens.comfortable
           )}
         >
-          {/* Icon with glow effect */}
+          {/* Icon - clean, colored */}
           <span
-            className="flex-shrink-0 transition-all duration-300 group-hover:scale-110"
-            style={{
-              color,
-              filter: hasSelection ? `drop-shadow(0 0 4px ${color}60)` : undefined,
-            }}
+            className="flex-shrink-0 transition-colors duration-150"
+            style={{ color }}
           >
             {icon}
           </span>
 
-          {/* Label */}
+          {/* Label - clean, colored */}
           <span
             id={`section-label-${id}`}
-            className={cn(
-              'text-[11px] uppercase tracking-wider font-semibold',
-              'transition-all duration-300'
-            )}
-            style={{
-              color,
-              textShadow: hasSelection ? `0 0 8px ${color}40` : undefined,
-            }}
+            className="text-[11px] uppercase tracking-wider font-semibold transition-colors duration-150"
+            style={{ color }}
           >
             {label}
           </span>
 
-          {/* Count with glow */}
+          {/* Count */}
           {count !== undefined && (
-            <span
-              className={cn(
-                'text-[10px] tabular-nums',
-                'transition-colors duration-300',
-                hasSelection ? 'text-white/50' : 'text-white/40'
-              )}
-            >
+            <span className="text-[10px] tabular-nums text-white/40">
               ({formatCount(count)})
             </span>
           )}
@@ -422,17 +400,11 @@ const FilterTreeRow = memo(function FilterTreeRow({
         className
       )}
       style={{
-        // Colored row background - always tinted with item color
-        // Unselected: 12 (7%) visible tint, Selected: 22 (13%) stronger
-        backgroundColor: isSelected ? `${color}22` : `${color}12`,
-        // Ring color - always visible, stronger when selected
-        borderColor: isSelected ? `${color}40` : `${color}20`,
-        // Glow effect when selected - uses design token
-        boxShadow: isSelected ? glowEffects.row(color) : undefined,
+        // Left accent border color when selected (Linear style)
+        borderLeftColor: isSelected ? color : undefined,
       }}
     >
-      {/* Checkbox - matches TriStateCheckbox styling with glow */}
-      {/* When hidden, add spacer to maintain horizontal alignment across all tabs */}
+      {/* Checkbox - clean, minimal */}
       {showCheckbox ? (
         <div
           className={cn(
@@ -440,9 +412,8 @@ const FilterTreeRow = memo(function FilterTreeRow({
             isSelected ? st.checkbox.checked : st.checkbox.unchecked
           )}
           style={{
-            backgroundColor: isSelected ? `${color}25` : 'transparent',
-            borderColor: isSelected ? color : 'rgb(255 255 255 / 0.2)',
-            boxShadow: isSelected ? glowEffects.checkbox(color) : undefined,
+            backgroundColor: isSelected ? `${color}20` : 'transparent',
+            borderColor: isSelected ? color : undefined,
           }}
         >
           {isSelected && <CheckIcon className={iconSizes.xs} style={{ color }} />}
@@ -451,19 +422,14 @@ const FilterTreeRow = memo(function FilterTreeRow({
         <div className={st.checkbox.spacer} aria-hidden="true" />
       )}
 
-      {/* Icon box - uses sidebarTokens.iconBox.base (32x32px) */}
+      {/* Icon box - subtle tinted background */}
       <div
         className={st.iconBox.base}
         style={{
-          // Always show colored tint, stronger when selected
-          backgroundColor: isSelected ? `${color}30` : `${color}20`,
-          boxShadow: isSelected ? glowEffects.iconBox(color) : undefined,
+          backgroundColor: isSelected ? `${color}18` : `${color}10`,
         }}
       >
-        <span
-          className="transition-transform duration-200 group-hover:scale-110"
-          style={{ color }}
-        >
+        <span style={{ color }}>
           {icon}
         </span>
       </div>
@@ -492,6 +458,10 @@ const FilterTreeRow = memo(function FilterTreeRow({
             st.badge.count,
             isSelected ? st.badge.countSelected : st.badge.countUnselected
           )}
+          style={{
+            backgroundColor: isSelected ? `${color}15` : undefined,
+            color: isSelected ? color : undefined,
+          }}
         >
           {formatCount(count, true)}
         </span>
@@ -500,12 +470,10 @@ const FilterTreeRow = memo(function FilterTreeRow({
       {/* Keyboard shortcut badge */}
       {shortcut && (
         <span
-          className={cn(
-            st.badge.shortcut
-          )}
+          className={st.badge.shortcut}
           style={{
-            backgroundColor: isSelected ? `${color}35` : `${color}25`,
-            color: isSelected ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.6)',
+            backgroundColor: `${color}15`,
+            color: isSelected ? color : `${color}90`,
           }}
         >
           {shortcut}

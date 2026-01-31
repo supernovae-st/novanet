@@ -2,11 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 import type { ViewMode, UIState, SelectionState } from '@/types';
-import {
-  type SpacingPreset,
-  DEFAULT_SPACING_PRESET,
-  SPACING_PRESETS,
-} from '@/lib/forceSimulation';
+import { type SpacingPreset, DEFAULT_SPACING_PRESET } from '@/lib/forceSimulation';
 
 // Layout types for graph arrangement
 export type LayoutDirection = 'TB' | 'LR' | 'dagre' | 'radial' | 'force';
@@ -18,10 +14,7 @@ export type DataMode = 'data' | 'schema';
 export type ModalType = 'command-palette' | 'keyboard-shortcuts' | 'ai-chat' | 'cypher-editor' | 'locale-picker' | 'project-picker' | null;
 
 interface UIStoreState extends UIState, SelectionState {
-  // Dialog state (legacy)
-  activeDialogs: string[];
-  commandPaletteOpen: boolean;
-  aiChatOpen: boolean;
+  // Minimap visibility
   minimapVisible: boolean;
 
   // Modal state - exclusive (only one at a time)
@@ -71,10 +64,6 @@ interface UIStoreState extends UIState, SelectionState {
   // Spacing actions
   setSpacingPreset: (preset: SpacingPreset) => void;
   setSpacingValue: (value: number) => void;
-  /** Cycle through spacing presets: compact → normal → spacious */
-  cycleSpacingPreset: () => void;
-  /** Get interpolated spacing options based on current value */
-  getSpacingOptions: () => { chargeStrength: number; linkDistance: number; collisionRadius: number };
 
   // Selection actions
   setSelectedNode: (id: string | null) => void;
@@ -82,16 +71,7 @@ interface UIStoreState extends UIState, SelectionState {
   setHoveredNode: (id: string | null) => void;
   setHoveredEdge: (id: string | null) => void;
   setHoveredConnections: (ids: Set<string>) => void;
-  setHighlightedNodes: (ids: string[]) => void;
   clearSelection: () => void;
-
-  // Dialog actions (legacy)
-  openDialog: (id: string) => void;
-  closeDialog: (id: string) => void;
-  closeTopDialog: () => void;
-  isDialogOpen: (id: string) => boolean;
-  setCommandPaletteOpen: (open: boolean) => void;
-  setAiChatOpen: (open: boolean) => void;
 
   // Modal actions - exclusive (closes any open modal before opening new one)
   openModal: (modal: ModalType) => void;
@@ -153,11 +133,6 @@ export const useUIStore = create<UIStoreState>()(
       hoveredEdgeId: null,
       hoveredConnectedNodeIds: new Set(),
       highlightedNodeIds: new Set(),
-
-      // Dialog state (legacy)
-      activeDialogs: [],
-      commandPaletteOpen: false,
-      aiChatOpen: false,
 
       // Modal state - exclusive
       activeModal: null as ModalType,
@@ -268,36 +243,6 @@ export const useUIStore = create<UIStoreState>()(
         });
       },
 
-      cycleSpacingPreset: () => {
-        set((state) => {
-          const presets: SpacingPreset[] = ['compact', 'normal', 'spacious'];
-          const currentIndex = presets.indexOf(state.spacingPreset);
-          const nextIndex = (currentIndex + 1) % presets.length;
-          state.spacingPreset = presets[nextIndex];
-          const presetToValue: Record<SpacingPreset, number> = {
-            compact: 0,
-            normal: 50,
-            spacious: 100,
-          };
-          state.spacingValue = presetToValue[state.spacingPreset];
-          state.spacingVersion += 1;
-        });
-      },
-
-      getSpacingOptions: () => {
-        const { spacingValue } = get();
-        // Interpolate between compact and spacious based on value (0-100)
-        const t = spacingValue / 100; // 0 to 1
-        const compact = SPACING_PRESETS.compact;
-        const spacious = SPACING_PRESETS.spacious;
-
-        return {
-          chargeStrength: compact.chargeStrength + (spacious.chargeStrength - compact.chargeStrength) * t,
-          linkDistance: compact.linkDistance + (spacious.linkDistance - compact.linkDistance) * t,
-          collisionRadius: compact.collisionRadius + (spacious.collisionRadius - compact.collisionRadius) * t,
-        };
-      },
-
       // Selection actions
       setSelectedNode: (id) => {
         set((state) => {
@@ -341,12 +286,6 @@ export const useUIStore = create<UIStoreState>()(
         });
       },
 
-      setHighlightedNodes: (ids) => {
-        set((state) => {
-          state.highlightedNodeIds = new Set(ids);
-        });
-      },
-
       clearSelection: () => {
         set((state) => {
           state.selectedNodeId = null;
@@ -354,43 +293,6 @@ export const useUIStore = create<UIStoreState>()(
           state.hoveredNodeId = null;
           state.hoveredEdgeId = null;
           state.highlightedNodeIds = new Set();
-        });
-      },
-
-      // Dialog actions
-      openDialog: (id) => {
-        set((state) => {
-          if (!state.activeDialogs.includes(id)) {
-            state.activeDialogs.push(id);
-          }
-        });
-      },
-
-      closeDialog: (id) => {
-        set((state) => {
-          state.activeDialogs = state.activeDialogs.filter((d) => d !== id);
-        });
-      },
-
-      closeTopDialog: () => {
-        set((state) => {
-          state.activeDialogs.pop();
-        });
-      },
-
-      isDialogOpen: (id) => {
-        return get().activeDialogs.includes(id);
-      },
-
-      setCommandPaletteOpen: (open) => {
-        set((state) => {
-          state.commandPaletteOpen = open;
-        });
-      },
-
-      setAiChatOpen: (open) => {
-        set((state) => {
-          state.aiChatOpen = open;
         });
       },
 
