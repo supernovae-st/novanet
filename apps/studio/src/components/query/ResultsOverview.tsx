@@ -82,12 +82,12 @@ export const ResultsOverview = memo(function ResultsOverview({
   }
 
   return (
-    <div className={cn('flex items-center', gapTokens.compact, className)}>
+    <div className={cn('flex items-center gap-2', className)}>
       {/* Node type badges - compact with hover expansion */}
       {typeCounts.map((item) => (
         <span
           key={item.type}
-          className={cn('group flex items-center px-2 py-1 rounded-lg text-xs font-medium whitespace-nowrap transition-all duration-200 cursor-default', gapTokens.tight)}
+          className="group flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all duration-200 cursor-default"
           style={{
             backgroundColor: hexToRgba(item.color, OPACITY.MEDIUM),
             color: item.color,
@@ -106,7 +106,7 @@ export const ResultsOverview = memo(function ResultsOverview({
             {item.type}
           </span>
           <span
-            className="px-1 py-0.5 rounded text-[10px] font-bold min-w-[18px] text-center"
+            className="px-1.5 py-0.5 rounded text-[10px] font-bold min-w-[20px] text-center"
             style={{ backgroundColor: hexToRgba(item.color, OPACITY.BORDER) }}
           >
             {item.count}

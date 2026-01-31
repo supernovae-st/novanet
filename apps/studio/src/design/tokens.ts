@@ -553,11 +553,12 @@ export const modalClasses = {
  * Sidebar design tokens - Unified system for all sidebar tabs
  *
  * Based on shadcn/ui sidebar patterns and Tailwind best practices:
- * - Consistent row height: h-11 (44px) - WCAG 2.1 AA touch target
- * - Consistent gaps: gap-3 (12px) between elements
- * - Consistent padding: px-3 (12px) horizontal
- * - Consistent icon box: w-8 h-8 (32px) rounded-lg
- * - Consistent badge: min-w-7 (28px) rounded-full
+ * - Row height: h-10 (40px) - comfortable touch target
+ * - Row gap: gap-3 (12px) between elements
+ * - Row padding: px-3 (12px) horizontal
+ * - Icon box: w-6 h-6 (24px) - clear visual weight
+ * - Badge: min-w-7 (28px) rounded-md
+ * - Row radius: rounded-lg (8px)
  *
  * Used by: Schema Browser, Views, Nodes, Relationships tabs
  */
@@ -569,7 +570,7 @@ export const sidebarTokens = {
     /** Base row - transparent, hover reveals interaction */
     base: [
       'group relative w-full flex items-center',
-      'h-9 px-2 gap-2 rounded-md', // 36px height, 8px padding, 8px gap, 6px radius
+      'h-10 px-3 gap-3 rounded-lg', // 40px height, 12px padding, 12px gap, 8px radius
       // Transparent by default (Notion style)
       'bg-transparent',
       // Left border placeholder
@@ -593,26 +594,26 @@ export const sidebarTokens = {
   // ICON BOX - Minimal, small, no backgrounds (Notion style)
   // ─────────────────────────────────────────────────────────────────────────
   iconBox: {
-    /** Standard icon box: 20x20px - no background, just icon */
-    base: 'flex-shrink-0 flex items-center justify-center w-5 h-5 transition-colors duration-100',
-    /** Small icon box: 16x16px */
-    sm: 'flex-shrink-0 flex items-center justify-center w-4 h-4 transition-colors duration-100',
-    /** Large icon box: 24x24px (for headers) */
-    lg: 'flex-shrink-0 flex items-center justify-center w-6 h-6 transition-colors duration-100',
+    /** Standard icon box: 24x24px - clear visual weight */
+    base: 'flex-shrink-0 flex items-center justify-center w-6 h-6 transition-colors duration-100',
+    /** Small icon box: 20x20px */
+    sm: 'flex-shrink-0 flex items-center justify-center w-5 h-5 transition-colors duration-100',
+    /** Large icon box: 28x28px (for headers) */
+    lg: 'flex-shrink-0 flex items-center justify-center w-7 h-7 transition-colors duration-100',
   },
 
   // ─────────────────────────────────────────────────────────────────────────
   // CHECKBOX - Cleaner, smaller
   // ─────────────────────────────────────────────────────────────────────────
   checkbox: {
-    /** Checkbox container */
-    base: 'w-4 h-4 rounded border flex items-center justify-center transition-all duration-150 flex-shrink-0',
+    /** Checkbox container: 18x18px */
+    base: 'w-[18px] h-[18px] rounded border flex items-center justify-center transition-all duration-150 flex-shrink-0',
     /** Unchecked state */
     unchecked: 'border-white/25 bg-transparent',
     /** Checked state (color set via style) */
     checked: 'border-transparent',
     /** Spacer when checkbox is hidden (maintains alignment) */
-    spacer: 'w-4 flex-shrink-0',
+    spacer: 'w-[18px] flex-shrink-0',
   },
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -633,14 +634,14 @@ export const sidebarTokens = {
   // BADGE - Cleaner, less prominent
   // ─────────────────────────────────────────────────────────────────────────
   badge: {
-    /** Count badge: compact pill */
-    count: 'min-w-6 px-1.5 py-0.5 rounded-md text-[11px] font-medium tabular-nums text-center flex-shrink-0 transition-all duration-150',
+    /** Count badge: comfortable pill */
+    count: 'min-w-7 px-2 py-0.5 rounded-md text-[11px] font-medium tabular-nums text-center flex-shrink-0 transition-all duration-150',
     /** Count selected state */
     countSelected: 'text-white/80 bg-white/[0.10]',
     /** Count unselected state */
     countUnselected: 'text-white/40 bg-transparent group-hover:text-white/60',
     /** Shortcut badge: keyboard shortcut indicator */
-    shortcut: 'min-w-5 px-1.5 py-0.5 rounded text-[10px] font-medium tabular-nums text-center flex-shrink-0 transition-all duration-150',
+    shortcut: 'min-w-6 px-2 py-0.5 rounded-md text-[10px] font-medium tabular-nums text-center flex-shrink-0 transition-all duration-150',
   },
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -648,16 +649,16 @@ export const sidebarTokens = {
   // ─────────────────────────────────────────────────────────────────────────
   section: {
     /** Section container - spacing creates hierarchy, no borders */
-    container: 'mt-5 first:mt-0',
+    container: 'mt-6 first:mt-0',
     /** Section header row */
     header: [
-      'flex items-center w-full py-1.5 px-2 gap-2',
-      'rounded-md',
+      'flex items-center w-full py-2 px-3 gap-2.5',
+      'rounded-lg',
       'transition-all duration-100',
       'hover:bg-white/[0.03]',
     ].join(' '),
-    /** Section content wrapper - compact 6px gap */
-    content: 'mt-1 space-y-1.5 overflow-hidden transition-all duration-150',
+    /** Section content wrapper - comfortable spacing with taller rows */
+    content: 'mt-1.5 space-y-0.5 overflow-hidden transition-all duration-150',
     /** Content expanded state */
     contentExpanded: 'max-h-[600px] opacity-100',
     /** Content collapsed state */

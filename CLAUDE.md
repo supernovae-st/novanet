@@ -66,7 +66,7 @@ pnpm build --filter=...[HEAD^1]         # Build only changed packages
 |---------|-------------|
 | @novanet/core | Types, schemas, filters, generators |
 | @novanet/db | Neo4j Docker, seeds, migrations |
-| @novanet/cli | Dev tools (coming soon) |
+| @novanet/cli | Validation and generation CLI tools |
 | @novanet/schema-tools | Schema validation and sync tools |
 | @novanet/studio | Web-based graph visualization |
 
@@ -77,7 +77,7 @@ pnpm build --filter=...[HEAD^1]         # Build only changed packages
 ```
                     @novanet/core
                     ↑     ↑     ↑
-    @novanet/schema-tools │     @novanet/cli (coming soon)
+    @novanet/schema-tools │     @novanet/cli
                           │
                    @novanet/studio
 
