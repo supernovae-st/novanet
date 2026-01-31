@@ -7,7 +7,7 @@ import { postJSON, getErrorMessage } from '@/lib/fetchClient';
 import { useChatStore } from '@/stores/chatStore';
 import { CypherViewer } from '@/components/dx/CodeViewer';
 import { useCopyFeedback } from '@/hooks';
-import { glassClasses, iconSizes } from '@/design/tokens';
+import { glassClasses, iconSizes, gapTokens } from '@/design/tokens';
 import { Kbd } from '@/components/ui/Kbd';
 import {
   ACTION_ICONS,
@@ -146,7 +146,7 @@ export const AiChat = memo(function AiChat({
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-white/[0.08]">
         {/* opacity.border.subtle = white/[0.08] */}
-        <div className="flex items-center gap-3">
+        <div className={cn('flex items-center', gapTokens.spacious)}>
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-novanet-400 to-novanet-600 flex items-center justify-center shadow-lg shadow-novanet-500/20">
             <SparklesIcon className={cn(iconSizes.md, 'text-white')} />
           </div>
@@ -155,7 +155,7 @@ export const AiChat = memo(function AiChat({
             <span className="text-[10px] text-white/40">Natural language → Cypher</span>
           </div>
         </div>
-        <div className="flex items-center gap-1">
+        <div className={cn('flex items-center', gapTokens.tight)}>
           <button
             onClick={clearMessages}
             aria-label="Clear chat"
@@ -227,7 +227,7 @@ export const AiChat = memo(function AiChat({
           <div
             role="status"
             aria-live="polite"
-            className="flex items-center gap-2.5 text-novanet-400 animate-in fade-in duration-200 px-1"
+            className={cn('flex items-center text-novanet-400 animate-in fade-in duration-200 px-1', gapTokens.comfortable)}
           >
             <LoaderIcon className={cn(iconSizes.md, 'animate-spin')} />
             <span className="text-sm">Generating query...</span>
@@ -246,7 +246,7 @@ export const AiChat = memo(function AiChat({
       {/* Input */}
       <div className="p-4 border-t border-white/[0.08] bg-black/40">
         {/* opacity.border.subtle = white/[0.08] */}
-        <div className="flex items-end gap-2">
+        <div className={cn('flex items-end', gapTokens.default)}>
           <div className="flex-1 relative">
             <textarea
               ref={inputRef}
@@ -327,7 +327,8 @@ const ChatMessage = memo(function ChatMessage({
   return (
     <div
       className={cn(
-        'flex flex-col gap-2 animate-stagger-fade-in',
+        'flex flex-col animate-stagger-fade-in',
+        gapTokens.default,
         message.role === 'user' ? 'items-end' : 'items-start'
       )}
       style={style}
@@ -352,7 +353,7 @@ const ChatMessage = memo(function ChatMessage({
             className="text-xs"
           />
 
-          <div className="flex items-center gap-2">
+          <div className={cn('flex items-center', gapTokens.default)}>
             <button
               onClick={() => {
                 // Re-check inside callback (TypeScript can't narrow across closures)
@@ -361,7 +362,8 @@ const ChatMessage = memo(function ChatMessage({
                 }
               }}
               className={cn(
-                'flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg',
+                'flex items-center text-xs px-3 py-1.5 rounded-lg',
+                gapTokens.compact,
                 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30',
                 'hover:bg-emerald-500/30 transition-colors'
               )}
@@ -372,7 +374,8 @@ const ChatMessage = memo(function ChatMessage({
             <button
               onClick={handleCopyQuery}
               className={cn(
-                'flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg',
+                'flex items-center text-xs px-3 py-1.5 rounded-lg',
+                gapTokens.compact,
                 'bg-white/5 text-white/50 border border-white/10',
                 'hover:bg-white/10 hover:text-white/70 transition-colors'
               )}
@@ -384,15 +387,15 @@ const ChatMessage = memo(function ChatMessage({
 
           {/* Stats */}
           {(message.metadata.nodeCount !== undefined || message.metadata.duration !== undefined) && (
-            <div className="flex items-center gap-3 text-[10px] text-white/30 px-1">
+            <div className={cn('flex items-center text-[10px] text-white/30 px-1', gapTokens.spacious)}>
               {message.metadata.nodeCount !== undefined && (
-                <span className="flex items-center gap-1">
+                <span className={cn('flex items-center', gapTokens.tight)}>
                   <span className="w-1.5 h-1.5 rounded-full bg-indigo-400/50" />
                   {message.metadata.nodeCount} nodes
                 </span>
               )}
               {message.metadata.duration !== undefined && (
-                <span className="flex items-center gap-1">
+                <span className={cn('flex items-center', gapTokens.tight)}>
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400/50" />
                   {message.metadata.duration}ms
                 </span>
