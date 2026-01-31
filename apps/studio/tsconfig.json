@@ -28,10 +28,10 @@
         "./src/*"
       ],
       "@novanet/core": [
-        "../../packages/core/dist/index"
+        "../../packages/core/src/index"
       ],
       "@novanet/core/*": [
-        "../../packages/core/dist/*"
+        "../../packages/core/src/*"
       ]
     }
   },
