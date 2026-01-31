@@ -42,10 +42,15 @@ describe('SchemaFilterPanel', () => {
     it('renders scope emojis', () => {
       render(<SchemaFilterPanel />);
 
-      // Emojis are rendered as text
-      expect(screen.getByText(/📦/)).toBeInTheDocument(); // Project
-      expect(screen.getByText(/🌍/)).toBeInTheDocument(); // Global
-      expect(screen.getByText(/🎯/)).toBeInTheDocument(); // Shared
+      // Emojis are rendered in both header sections and footer
+      const projectEmojis = screen.getAllByText(/📦/);
+      const globalEmojis = screen.getAllByText(/🌍/);
+      const sharedEmojis = screen.getAllByText(/🎯/);
+
+      // Each emoji appears at least once (in section header)
+      expect(projectEmojis.length).toBeGreaterThanOrEqual(1);
+      expect(globalEmojis.length).toBeGreaterThanOrEqual(1);
+      expect(sharedEmojis.length).toBeGreaterThanOrEqual(1);
     });
 
     it('renders node count for each scope in parentheses', () => {
@@ -84,42 +89,47 @@ describe('SchemaFilterPanel', () => {
       expect(screen.getByText('GEO')).toBeInTheDocument();
     });
 
-    it('renders subcategory icons', () => {
+    it('renders subcategory labels with icons (Lucide SVG)', () => {
       render(<SchemaFilterPanel />);
 
-      // Subcategory icons
-      expect(screen.getByText(/🏛️/)).toBeInTheDocument(); // Foundation
-      expect(screen.getByText(/🧱/)).toBeInTheDocument(); // Structure
-      expect(screen.getByText(/💡/)).toBeInTheDocument(); // Semantic
-      expect(screen.getByText(/📝/)).toBeInTheDocument(); // Instruction
-      expect(screen.getByText(/📄/)).toBeInTheDocument(); // Output
-      expect(screen.getByText(/⚙️/)).toBeInTheDocument(); // Configuration
-      expect(screen.getByText(/🧠/)).toBeInTheDocument(); // Knowledge
-      expect(screen.getByText(/🔍/)).toBeInTheDocument(); // SEO
-      expect(screen.getByText(/🤖/)).toBeInTheDocument(); // GEO
+      // Subcategory labels are rendered - icons are Lucide SVGs (not emojis)
+      expect(screen.getByText('Foundation')).toBeInTheDocument();
+      expect(screen.getByText('Structure')).toBeInTheDocument();
+      expect(screen.getByText('Semantic')).toBeInTheDocument();
+      expect(screen.getByText('Instruction')).toBeInTheDocument();
+      expect(screen.getByText('Output')).toBeInTheDocument();
+      expect(screen.getByText('Configuration')).toBeInTheDocument();
+      expect(screen.getByText('Knowledge')).toBeInTheDocument();
+      expect(screen.getByText('SEO')).toBeInTheDocument();
+      expect(screen.getByText('GEO')).toBeInTheDocument();
+
+      // Lucide icons render as SVG elements
+      const svgIcons = document.querySelectorAll('svg');
+      expect(svgIcons.length).toBeGreaterThan(0);
     });
 
     it('renders the header with Schema Browser title', () => {
       render(<SchemaFilterPanel />);
 
       expect(screen.getByText('Schema Browser')).toBeInTheDocument();
-      expect(screen.getByText('35 node types')).toBeInTheDocument();
+      expect(screen.getByText(/35 node types/)).toBeInTheDocument();
     });
 
-    it('renders the stats footer', () => {
+    it('renders the stats footer with scope indicators', () => {
       render(<SchemaFilterPanel />);
 
-      // The footer text contains all stats
-      const statsFooter = screen.getByText(/3 scopes .* 9 categories .* 35 types/);
-      expect(statsFooter).toBeInTheDocument();
+      // The footer shows scope icons/labels
+      expect(screen.getByText('📦 Project')).toBeInTheDocument();
+      expect(screen.getByText('🌍 Global')).toBeInTheDocument();
+      expect(screen.getByText('🎯 Shared')).toBeInTheDocument();
     });
   });
 
-  describe('FilterTree Section Behavior', () => {
+  describe('FilterSection Behavior', () => {
     it('has expand/collapse chevron buttons with aria-label', () => {
       render(<SchemaFilterPanel />);
 
-      // FilterTree.Section has chevron buttons with aria-label
+      // FilterSection has chevron buttons with aria-label
       const collapseButtons = screen.getAllByRole('button', { name: /Collapse/ });
       expect(collapseButtons.length).toBeGreaterThanOrEqual(3); // 3 scopes
     });
@@ -127,17 +137,17 @@ describe('SchemaFilterPanel', () => {
     it('sections default to expanded (aria-expanded=true)', () => {
       render(<SchemaFilterPanel />);
 
-      // FilterTree sections have aria-expanded on the treeitem
-      const treeItems = screen.getAllByRole('treeitem');
-      treeItems.forEach((item) => {
-        expect(item).toHaveAttribute('aria-expanded', 'true');
+      // FilterSection buttons have aria-expanded
+      const expandButtons = screen.getAllByRole('button', { name: /Collapse/ });
+      expandButtons.forEach((button) => {
+        expect(button).toHaveAttribute('aria-expanded', 'true');
       });
     });
 
     it('has tri-state checkboxes for scopes', () => {
       render(<SchemaFilterPanel />);
 
-      // FilterTree.Section has TriStateCheckbox with role="checkbox"
+      // FilterSection has checkboxes with role="checkbox"
       const checkboxes = screen.getAllByRole('checkbox');
       expect(checkboxes.length).toBeGreaterThanOrEqual(3); // At least 3 scopes
     });
@@ -154,13 +164,14 @@ describe('SchemaFilterPanel', () => {
       expect(mockToggleSubcategoryCollapsed).toHaveBeenCalledWith('Project', 'foundation');
     });
 
-    it('renders subcategory checkboxes', () => {
+    it('renders subcategory checkboxes with checked state', () => {
       render(<SchemaFilterPanel />);
 
-      // FilterTree.Row renders checkbox-like elements
-      // The subcategory rows have check icons when selected
-      const checkboxes = screen.getAllByRole('checkbox');
-      expect(checkboxes.length).toBeGreaterThanOrEqual(9); // 9 subcategories + 3 scopes
+      // FilterTree.Row renders checkboxes with aria-checked for toggle state
+      // Find all checkboxes (3 scope checkboxes + 9 subcategory checkboxes = 12)
+      const checkboxes = screen.getAllByRole('checkbox', { checked: true });
+      // 3 scope checkboxes + 9 subcategory checkboxes = 12 checked by default
+      expect(checkboxes.length).toBeGreaterThanOrEqual(12);
     });
   });
 
@@ -172,24 +183,31 @@ describe('SchemaFilterPanel', () => {
       expect(panel).toBeInTheDocument();
     });
 
-    it('has tree role on FilterTree root', () => {
+    it('has section buttons with aria-expanded', () => {
       render(<SchemaFilterPanel />);
 
-      const tree = screen.getByRole('tree');
-      expect(tree).toBeInTheDocument();
+      // FilterSection uses buttons with aria-expanded instead of tree/treeitem
+      const sectionButtons = screen.getAllByRole('button', { name: /Collapse/ });
+      expect(sectionButtons.length).toBe(3); // 3 scopes
+      sectionButtons.forEach((button) => {
+        expect(button).toHaveAttribute('aria-expanded');
+      });
     });
 
-    it('sections have treeitem role', () => {
+    it('sections have proper aria-controls', () => {
       render(<SchemaFilterPanel />);
 
-      const treeItems = screen.getAllByRole('treeitem');
-      expect(treeItems.length).toBe(3); // 3 scopes
+      // FilterSection buttons have aria-controls pointing to content
+      const sectionButtons = screen.getAllByRole('button', { name: /Collapse/ });
+      sectionButtons.forEach((button) => {
+        expect(button).toHaveAttribute('aria-controls');
+      });
     });
 
     it('section content has group role', () => {
       render(<SchemaFilterPanel />);
 
-      // FilterTree.Section content has role="group"
+      // FilterSection content has role="group"
       const groups = screen.getAllByRole('group');
       expect(groups.length).toBeGreaterThanOrEqual(3); // 3 scope groups
     });

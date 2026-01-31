@@ -6,7 +6,7 @@ import { logger } from '@/lib/logger';
 import { copyToClipboard, copyNodeProperties } from '@/lib/clipboard';
 import { COPY_FEEDBACK_MS } from '@/config/constants';
 import { ACTION_ICONS, STATUS_ICONS, CONTENT_ICONS } from '@/config/iconSystem';
-import { iconSizes } from '@/design/tokens';
+import { iconSizes, gapTokens } from '@/design/tokens';
 
 // Design system icons
 const CheckIcon = STATUS_ICONS.success;
@@ -98,7 +98,8 @@ export const CopyButton = memo(function CopyButton({
     <button
       onClick={handleCopy}
       className={cn(
-        'inline-flex items-center gap-1.5 rounded transition-all',
+        'inline-flex items-center rounded transition-all',
+        gapTokens.compact,
         buttonSize,
         copied
           ? 'bg-emerald-500/20 text-emerald-400'
@@ -135,7 +136,7 @@ export const CopyButtonGroup = memo(function CopyButtonGroup({
   className,
 }: CopyButtonGroupProps) {
   return (
-    <div className={cn('flex items-center gap-1', className)}>
+    <div className={cn('flex items-center', gapTokens.tight, className)}>
       <CopyButton
         json={properties}
         format="json"

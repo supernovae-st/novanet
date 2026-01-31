@@ -159,9 +159,10 @@ describe('SchemaErrorBoundary', () => {
       </SchemaErrorBoundary>
     );
 
-    // Check for glassmorphism classes on the error card
+    // Check for glassmorphism classes on the error card (uses glassClasses.modal from design tokens)
+    // glassClasses.modal = 'bg-[#0d0d12] border border-white/[0.12] rounded-2xl shadow-2xl shadow-black/60'
     const container = screen.getByTestId('schema-error-boundary');
-    const card = container.querySelector('.bg-black\\/70.backdrop-blur-xl');
+    const card = container.querySelector('.rounded-2xl.shadow-2xl');
     expect(card).toBeInTheDocument();
   });
 });

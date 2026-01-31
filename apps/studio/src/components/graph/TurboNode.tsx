@@ -20,7 +20,7 @@
 import { memo, useState, useCallback } from 'react';
 import { Handle, Position, type Node, type NodeProps } from '@xyflow/react';
 import { cn } from '@/lib/utils';
-import { iconSizes } from '@/design/tokens';
+import { iconSizes, gapTokens } from '@/design/tokens';
 import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import { getNodeConfig } from './nodes/NodeConfig';
@@ -135,7 +135,7 @@ export const TurboNode = memo(function TurboNode(props: NodeProps<TurboNodeType>
 
           {/* Header: Icon + Type label */}
           <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-3">
+            <div className={cn('flex items-center', gapTokens.spacious)}>
               {/* Icon - SVG from Lucide (memory-efficient) */}
               <div
                 className={cn(
@@ -195,7 +195,7 @@ export const TurboNode = memo(function TurboNode(props: NodeProps<TurboNodeType>
 
           {/* Category badge */}
           <div
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider border"
+            className={cn('inline-flex items-center px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider border', gapTokens.default)}
             style={getCategoryBadgeStyle(colors.primary)}
           >
             <span

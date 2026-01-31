@@ -64,9 +64,9 @@ export function applyTreemapLayout(
   const scopeRects: Map<Scope, { x: number; y: number; width: number; height: number }> = new Map();
 
   if (sortedScopes.length >= 2) {
-    const firstScopeRatio = scopeNodeCounts.get(sortedScopes[0])! / totalNodes;
-    const secondScopeRatio = scopeNodeCounts.get(sortedScopes[1])! / totalNodes;
-    const thirdScopeRatio = sortedScopes[2] ? scopeNodeCounts.get(sortedScopes[2])! / totalNodes : 0;
+    const firstScopeRatio = (scopeNodeCounts.get(sortedScopes[0]) ?? 0) / totalNodes;
+    const secondScopeRatio = (scopeNodeCounts.get(sortedScopes[1]) ?? 0) / totalNodes;
+    const thirdScopeRatio = sortedScopes[2] ? (scopeNodeCounts.get(sortedScopes[2]) ?? 0) / totalNodes : 0;
 
     // Top row: first two scopes side by side
     const topHeight = availableHeight * (1 - thirdScopeRatio);
@@ -103,7 +103,11 @@ export function applyTreemapLayout(
     if (!scopeDef) continue;
 
     const scopeId = `scope-${scope}`;
-    const config = SCOPE_CONFIGS.find(c => c.scope === scope)!;
+    const config = SCOPE_CONFIGS.find(c => c.scope === scope);
+    if (!config) {
+      console.error(`[treemap] Missing config for scope: ${scope}`);
+      continue;
+    }
 
     // Scope group node
     nodes.push({

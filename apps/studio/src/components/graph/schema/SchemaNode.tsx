@@ -26,7 +26,7 @@ import { BlueprintOverlay } from '../nodes/BlueprintOverlay';
 import { NODE_BG, NODE_DESIGN } from '@/config/constants';
 import { useNodeInteractions } from '@/hooks';
 import { SelectionPulseRing, GlassmorphismEffects, NodeHandles } from '../nodes/effects';
-import { glassClasses } from '@/design/tokens';
+import { glassClasses, gapTokens } from '@/design/tokens';
 import type { Scope } from '@novanet/core/types';
 
 /**
@@ -146,7 +146,7 @@ export const SchemaNode = memo(function SchemaNode({
           <div className="relative px-4 py-3">
             {/* Header: Icon + Badge */}
             <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
+              <div className={cn('flex items-center', gapTokens.default)}>
                 {config && (
                   <CategoryIcon
                     category={config.category}

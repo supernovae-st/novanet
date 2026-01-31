@@ -58,8 +58,8 @@ export const BOTTOM_BAR_HEIGHT = VIEW_CONTROLS_HEIGHT + BOTTOM_BAR_PADDING + BOT
 // Sidebar Dimensions
 // =============================================================================
 
-/** Left sidebar width: w-72 = 18rem = 288px */
-export const SIDEBAR_WIDTH = 288;
+/** Left sidebar width: w-80 = 20rem = 320px (shadcn standard for content-rich sidebars) */
+export const SIDEBAR_WIDTH = 320;
 
 // =============================================================================
 // Details Panel Dimensions

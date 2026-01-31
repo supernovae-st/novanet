@@ -34,8 +34,8 @@ import { cn } from '@/lib/utils';
 import { iconSizes, gapTokens } from '@/design/tokens';
 import { useViewStore, type ViewParams } from '@/stores/viewStore';
 import type { ViewRegistryEntry } from '@novanet/core/filters';
-import { ViewCard } from './ViewCard';
-import { ViewCategorySection } from './ViewCategory';
+import { FilterTree } from '@/components/ui/FilterTree';
+import { VIEW_CATEGORIES } from '@/config/viewCategories';
 
 // Map view IDs to icons (fallback to Eye for unknown views)
 const VIEW_ICONS: Record<string, LucideIcon> = {
@@ -180,30 +180,42 @@ export const ViewSelector = memo(function ViewSelector({
   }
 
   return (
-    <div className={cn('space-y-4', className)}>
-      {/* Categories - no executing indicator to prevent layout shift */}
-      <div className="space-y-6">
-        {categories.map((category) => (
-          <ViewCategorySection
+    <FilterTree.Root className={className} enableKeyboardNav={true}>
+      {/* Categories - no checkbox needed, views are mutually exclusive */}
+      {categories.map((category) => {
+        const config = VIEW_CATEGORIES[category.id];
+        const Icon = config?.icon || Grid3x3;
+        const color = config?.color || '#6b7280';
+
+        return (
+          <FilterTree.Section
             key={category.id}
-            categoryId={category.id}
-            viewCount={category.views.length}
+            id={category.id}
+            label={config?.label || category.id}
+            icon={<Icon className={iconSizes.md} />}
+            color={color}
+            count={category.views.length}
+            showCheckbox={false}
           >
-            {category.views.map((view) => (
-              <ViewCard
-                key={view.id}
-                id={view.id}
-                name={view.description || view.id}
-                description={view.description}
-                shortcut={getShortcut(view.id)}
-                icon={getIcon(view.id)}
-                isActive={activeViewId === view.id}
-                onClick={() => handleSelect(view)}
-              />
-            ))}
-          </ViewCategorySection>
-        ))}
-      </div>
-    </div>
+            {category.views.map((view) => {
+              const ViewIcon = getIcon(view.id);
+              return (
+                <FilterTree.Row
+                  key={view.id}
+                  id={view.id}
+                  label={view.description?.split(' ')[0] || view.id}
+                  icon={<ViewIcon className={iconSizes.md} />}
+                  color={color}
+                  isSelected={activeViewId === view.id}
+                  onToggle={() => handleSelect(view)}
+                  showCheckbox={false}
+                  shortcut={getShortcut(view.id)}
+                />
+              );
+            })}
+          </FilterTree.Section>
+        );
+      })}
+    </FilterTree.Root>
   );
 });

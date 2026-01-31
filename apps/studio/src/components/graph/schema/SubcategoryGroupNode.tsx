@@ -14,6 +14,7 @@
 import { memo, useState, useCallback } from 'react';
 import { type NodeProps, type Node } from '@xyflow/react';
 import { cn } from '@/lib/utils';
+import { gapTokens } from '@/design/tokens';
 import type { Scope } from '@novanet/core/types';
 
 /**
@@ -105,7 +106,8 @@ export const SubcategoryGroupNode = memo(function SubcategoryGroupNode({
       {/* Label badge positioned above the container */}
       <div
         className={cn(
-          'absolute -top-5 left-3 flex items-center gap-2',
+          'absolute -top-5 left-3 flex items-center',
+          gapTokens.default,
           'px-2.5 py-1 rounded-lg',
           'border bg-black/70',
           'transition-all duration-200',

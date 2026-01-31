@@ -13,19 +13,52 @@
  */
 
 import { memo, useCallback, useMemo } from 'react';
-import { Boxes } from 'lucide-react';
+import {
+  Boxes,
+  Landmark,
+  Layers,
+  Lightbulb,
+  FileText,
+  FileOutput,
+  Settings,
+  Brain,
+  Search,
+  Globe2,
+  Package,
+  Globe,
+  Target,
+  type LucideIcon,
+} from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
 import { SCOPE_HIERARCHY } from '@novanet/core/graph';
 import type { Subcategory } from '@novanet/core/graph';
 import type { Scope } from '@/types';
 import { useFilterStore } from '@/stores/filterStore';
 import { cn } from '@/lib/utils';
-import { scopeAccents, panelClasses, iconSizes } from '@/design/tokens';
+import { scopeAccents, panelClasses, iconSizes, gapTokens } from '@/design/tokens';
 import { FilterTree } from '@/components/ui/FilterTree';
-import { FilterSection } from '@/components/ui/FilterSection';
-import { FilterCard } from '@/components/ui/FilterCard';
 import { calculateCheckboxState } from '@/hooks';
 import type { CheckboxState } from '@/components/ui/TriStateCheckbox';
+
+// Scope to Lucide icon mapping (matches CategoryIcon pattern)
+const SCOPE_ICONS: Record<Scope, LucideIcon> = {
+  Project: Package,
+  Global: Globe,
+  Shared: Target,
+};
+
+// Subcategory to Lucide icon mapping (matches CategoryIcon pattern)
+const SUBCATEGORY_ICONS: Record<Subcategory, LucideIcon> = {
+  foundation: Landmark,
+  structure: Layers,
+  semantic: Lightbulb,
+  instruction: FileText,
+  output: FileOutput,
+  config: Settings,
+  knowledge: Brain,
+  seo: Search,
+  geo: Globe2,
+};
 
 // Ordered scopes for consistent rendering
 const SCOPE_ORDER: Scope[] = ['Project', 'Global', 'Shared'];
@@ -134,7 +167,7 @@ export const SchemaFilterPanel = memo(function SchemaFilterPanel({
       <div className={cn('relative', panelClasses.header)}>
         <div className="absolute inset-0 bg-gradient-to-br from-violet-500/5 via-transparent to-emerald-500/5 pointer-events-none" />
 
-        <div className="relative flex items-center gap-3">
+        <div className={cn('relative flex items-center', gapTokens.spacious)}>
           <div className="relative">
             <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-violet-400 to-emerald-500 opacity-20 blur-lg" />
             <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500/20 to-emerald-500/20 flex items-center justify-center border border-white/10 shadow-lg shadow-black/20">
@@ -156,12 +189,14 @@ export const SchemaFilterPanel = memo(function SchemaFilterPanel({
       {/* Content - Unified FilterTree Components */}
       <div className={cn(panelClasses.body)}>
         <FilterTree.Root showProgressBars={false} maxCount={35}>
-          {scopeData.map(({ scope, scopeDef, accent, subcategories, nodeCount }) => (
+          {scopeData.map(({ scope, scopeDef, accent, subcategories, nodeCount }) => {
+            const ScopeIcon = SCOPE_ICONS[scope];
+            return (
             <FilterTree.Section
               key={scope}
               id={scope.toLowerCase()}
               label={scopeDef.label}
-              icon={<span className="text-base">{scopeDef.icon}</span>}
+              icon={<ScopeIcon className={iconSizes.md} />}
               color={accent.color}
               checkboxState={getScopeCheckboxState(scope)}
               onCheckboxClick={() => handleScopeCheckboxClick(scope)}
@@ -170,13 +205,14 @@ export const SchemaFilterPanel = memo(function SchemaFilterPanel({
             >
               {subcategories.map(([subcatName, subcatMeta]) => {
                 const isVisible = !isSubcategoryCollapsed(scope, subcatName);
+                const SubcatIcon = SUBCATEGORY_ICONS[subcatName];
 
                 return (
                   <FilterTree.Row
                     key={subcatName}
                     id={`${scope}-${subcatName}`}
                     label={subcatMeta.label}
-                    icon={<span className="text-sm">{subcatMeta.icon}</span>}
+                    icon={<SubcatIcon className={iconSizes.sm} />}
                     color={accent.color}
                     isSelected={isVisible}
                     onToggle={() => toggleSubcategoryCollapsed(scope, subcatName)}
@@ -185,17 +221,18 @@ export const SchemaFilterPanel = memo(function SchemaFilterPanel({
                 );
               })}
             </FilterTree.Section>
-          ))}
+          );
+          })}
         </FilterTree.Root>
       </div>
 
       {/* Footer */}
       <div className={cn(panelClasses.footer, 'bg-black/20')}>
-        <div className="flex items-center justify-center gap-3">
+        <div className={cn('flex items-center justify-center', gapTokens.spacious)}>
           <span className="text-[10px] text-violet-400/60">📦 Project</span>
-          <span className="text-white/20">·</span>
+          <span className="text-white/40">·</span>
           <span className="text-[10px] text-emerald-400/60">🌍 Global</span>
-          <span className="text-white/20">·</span>
+          <span className="text-white/40">·</span>
           <span className="text-[10px] text-amber-400/60">🎯 Shared</span>
         </div>
       </div>

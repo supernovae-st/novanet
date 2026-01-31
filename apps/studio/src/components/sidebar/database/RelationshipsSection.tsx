@@ -1,106 +1,28 @@
 'use client';
 
 /**
- * RelationshipsSection - Relationship types explorer
+ * RelationshipsSection - Hierarchical relationship types explorer
  *
  * Features:
- * - List of relationship types with counts
- * - Tri-state checkbox for bulk selection
+ * - Category-grouped relationship types using FilterTree
+ * - Tri-state checkboxes for selection
  * - Progress bars showing counts
- * - Execute query button
+ *
+ * Uses FilterTree design system for consistent UI with NodeLabelsSection
  */
 
-import { memo, useMemo } from 'react';
-import { cn } from '@/lib/utils';
-import { ACTION_ICONS, STATUS_ICONS } from '@/config/iconSystem';
-import { iconSizes } from '@/design/tokens';
-import type { CheckboxState } from '@/components/ui/TriStateCheckbox';
-import { ProgressBar } from '@/components/ui/ProgressBar';
-import { getRelationshipColor } from '@/config/relationshipColors';
+import { memo, useCallback, useMemo } from 'react';
+import { ArrowRight } from 'lucide-react';
+import {
+  RELATIONSHIP_VISUAL_CATEGORIES,
+  relationshipTypeConfigs,
+  type RelationshipCategory,
+} from '@/config/relationshipTypes';
+import { FilterTree } from '@/components/ui/FilterTree';
 import { calculateCheckboxState } from '@/hooks';
+import type { CheckboxState } from '@/components/ui/TriStateCheckbox';
 import type { RelationType } from '@/hooks';
-
-// Design system icons
-const LoaderIcon = STATUS_ICONS.loading;
-const PlayIcon = ACTION_ICONS.execute;
-const CheckIcon = STATUS_ICONS.success;
-
-// =============================================================================
-// RELATIONSHIP ROW
-// =============================================================================
-
-interface RelationshipRowProps {
-  type: string;
-  count: number;
-  maxCount: number;
-  isSelected: boolean;
-  onToggle: () => void;
-  disabled?: boolean;
-}
-
-const RelationshipRow = memo(function RelationshipRow({
-  type,
-  count,
-  maxCount,
-  isSelected,
-  onToggle,
-  disabled,
-}: RelationshipRowProps) {
-  const color = getRelationshipColor(type);
-
-  return (
-    <button
-      onClick={onToggle}
-      disabled={disabled}
-      role="checkbox"
-      aria-checked={isSelected}
-      aria-label={`${type} (${count} relationships)`}
-      className={cn(
-        'group w-full flex items-center gap-3 py-1.5 px-2 -mx-2 rounded-lg transition-all duration-200',
-        'hover:bg-white/[0.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-novanet-500/50',
-        isSelected && 'bg-white/[0.06]',
-        disabled && 'opacity-50 cursor-not-allowed'
-      )}
-    >
-      {/* Checkbox */}
-      <div
-        className={cn(
-          'w-3.5 h-3.5 rounded border-[1.5px] flex items-center justify-center transition-all duration-200',
-          isSelected ? 'border-transparent' : 'border-white/[0.06]'
-        )}
-        style={{
-          backgroundColor: isSelected ? `${color}30` : 'transparent',
-          borderColor: isSelected ? color : undefined,
-        }}
-      >
-        {isSelected && <CheckIcon className={iconSizes.xs} style={{ color }} />}
-      </div>
-
-      {/* Label */}
-      <span
-        className={cn(
-          'text-[11px] font-mono transition-colors duration-200 min-w-[120px] text-left truncate',
-          isSelected ? 'text-white' : 'text-white/60 group-hover:text-white/80'
-        )}
-      >
-        {type}
-      </span>
-
-      {/* Progress bar */}
-      <ProgressBar value={count} max={maxCount} color={color} />
-
-      {/* Count */}
-      <span
-        className={cn(
-          'text-[11px] font-mono w-8 text-right transition-colors duration-200',
-          isSelected ? 'text-white/80' : 'text-white/40'
-        )}
-      >
-        {count > 999 ? `${(count / 1000).toFixed(1)}k` : count}
-      </span>
-    </button>
-  );
-});
+import { iconSizes } from '@/design/tokens';
 
 // =============================================================================
 // MAIN SECTION COMPONENT
@@ -117,6 +39,8 @@ export interface RelationshipsSectionProps {
   selectedRelTypes: Set<string>;
   /** Callback when relationship type is toggled */
   onToggleRelType: (type: string) => void;
+  /** Callback when category relationship types are toggled */
+  onToggleCategoryRelTypes?: (categoryId: string, types: string[]) => void;
   /** Callback when all relationships toggled */
   onToggleAllRelTypes: () => void;
   /** Callback to execute query */
@@ -130,75 +54,100 @@ export const RelationshipsSection = memo(function RelationshipsSection({
   maxCount,
   selectedRelTypes,
   onToggleRelType,
-  onToggleAllRelTypes,
-  onExecuteQuery,
+  onToggleCategoryRelTypes,
   isExecuting = false,
 }: RelationshipsSectionProps) {
-  // Calculate checkbox state
-  const checkboxState = useMemo((): CheckboxState => {
-    if (!relationshipTypes.length) return 'none';
-    return calculateCheckboxState(
-      relationshipTypes.map((r) => r.type),
-      selectedRelTypes
-    );
-  }, [relationshipTypes, selectedRelTypes]);
+  // Create a map of type -> count for quick lookup
+  const typeCountMap = useMemo(() => {
+    const map = new Map<string, number>();
+    relationshipTypes.forEach((r) => map.set(r.type, r.count));
+    return map;
+  }, [relationshipTypes]);
 
-  // Execute button component
-  const executeButton = (
-    <button
-      onClick={onExecuteQuery}
-      disabled={selectedRelTypes.size === 0 || isExecuting}
-      aria-label={`Execute query for ${selectedRelTypes.size} selected relationship types`}
-      className={cn(
-        'p-1.5 rounded-lg transition-all duration-200',
-        selectedRelTypes.size > 0
-          ? 'text-violet-400 hover:text-violet-300 hover:bg-violet-500/10 hover:scale-110'
-          : 'text-white/20 cursor-not-allowed'
-      )}
-      title="Execute query for selected relationships"
-    >
-      {isExecuting ? (
-        <LoaderIcon className={`${iconSizes.md} animate-spin`} />
-      ) : (
-        <PlayIcon className={iconSizes.md} />
-      )}
-    </button>
+  // Memoize category data
+  const categoryData = useMemo(() => {
+    return RELATIONSHIP_VISUAL_CATEGORIES.map((category) => {
+      // Filter to only include relation types that exist in the database
+      const existingTypes = category.relationTypes.filter((type) => typeCountMap.has(type));
+      const totalCount = existingTypes.reduce(
+        (sum, type) => sum + (typeCountMap.get(type) || 0),
+        0
+      );
+      const checkboxState = calculateCheckboxState(existingTypes, selectedRelTypes);
+
+      return {
+        category,
+        existingTypes,
+        totalCount,
+        checkboxState,
+      };
+    }).filter((data) => data.existingTypes.length > 0); // Only show categories with data
+  }, [typeCountMap, selectedRelTypes]);
+
+  // Handle category checkbox click
+  const handleCategoryClick = useCallback(
+    (categoryId: RelationshipCategory, relationTypes: string[], currentState: CheckboxState) => {
+      if (onToggleCategoryRelTypes) {
+        if (currentState === 'all') {
+          onToggleCategoryRelTypes(categoryId, []);
+        } else {
+          onToggleCategoryRelTypes(categoryId, relationTypes);
+        }
+      } else {
+        // Fallback: toggle each type individually
+        relationTypes.forEach((type) => {
+          const isSelected = selectedRelTypes.has(type);
+          if (currentState === 'all' && isSelected) {
+            onToggleRelType(type);
+          } else if (currentState !== 'all' && !isSelected) {
+            onToggleRelType(type);
+          }
+        });
+      }
+    },
+    [onToggleCategoryRelTypes, onToggleRelType, selectedRelTypes]
   );
 
   return (
     <section data-testid="relationships-container">
-      {/* Compact action bar */}
-      <div className="flex items-center justify-between px-1 py-1.5 mb-2">
-        <button
-          onClick={onToggleAllRelTypes}
-          className="text-[10px] text-white/40 hover:text-white/60 transition-colors"
-        >
-          {checkboxState === 'all' ? 'Deselect all' : 'Select all'}
-        </button>
-        <div className="flex items-center gap-2">
-          {selectedRelTypes.size > 0 && (
-            <span className="text-[10px] text-white/30">
-              {selectedRelTypes.size} selected
-            </span>
-          )}
-          {executeButton}
-        </div>
-      </div>
+      <FilterTree.Root showProgressBars={true} maxCount={maxCount} disabled={isExecuting}>
+        {/* Category Tree */}
+        {categoryData.map(({ category, existingTypes, totalCount, checkboxState }) => (
+          <FilterTree.Section
+            key={category.id}
+            id={category.id}
+            label={category.label}
+            icon={<span className="text-sm">{category.icon}</span>}
+            color={category.color}
+            checkboxState={checkboxState}
+            onCheckboxClick={() =>
+              handleCategoryClick(category.id, existingTypes, checkboxState)
+            }
+            count={totalCount}
+            defaultExpanded
+          >
+            {existingTypes.map((relType) => {
+              const config = relationshipTypeConfigs[relType];
+              const color = config?.color || '#6b7280';
+              const label = config?.label || relType;
+              const count = typeCountMap.get(relType) || 0;
 
-      {/* Relationship List */}
-      <div className="space-y-0.5">
-        {relationshipTypes.map((item) => (
-          <RelationshipRow
-            key={item.type}
-            type={item.type}
-            count={item.count}
-            maxCount={maxCount}
-            isSelected={selectedRelTypes.has(item.type)}
-            onToggle={() => onToggleRelType(item.type)}
-            disabled={isExecuting}
-          />
+              return (
+                <FilterTree.Row
+                  key={relType}
+                  id={relType}
+                  label={label}
+                  icon={<ArrowRight className={iconSizes.sm} />}
+                  color={color}
+                  isSelected={selectedRelTypes.has(relType)}
+                  onToggle={() => onToggleRelType(relType)}
+                  count={count}
+                />
+              );
+            })}
+          </FilterTree.Section>
         ))}
-      </div>
+      </FilterTree.Root>
     </section>
   );
 });

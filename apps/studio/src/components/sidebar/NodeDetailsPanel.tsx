@@ -10,7 +10,7 @@
  * - Consistent spacing aligned with rest of UI
  */
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, memo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { cn } from '@/lib/utils';
 import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
@@ -33,7 +33,7 @@ interface NodeDetailsPanelProps {
   node: GraphNode | null;
 }
 
-export function NodeDetailsPanel({ node }: NodeDetailsPanelProps) {
+export const NodeDetailsPanel = memo(function NodeDetailsPanel({ node }: NodeDetailsPanelProps) {
   const [expandedSections, setExpandedSections] = useState<Set<string>>(
     new Set(['main', 'data', 'relations'])
   );
@@ -241,4 +241,4 @@ export function NodeDetailsPanel({ node }: NodeDetailsPanelProps) {
       </div>
     </div>
   );
-}
+});

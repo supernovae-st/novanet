@@ -20,7 +20,7 @@
 import { Component, type ReactNode, type ErrorInfo } from 'react';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { glassClasses, iconSizes } from '@/design/tokens';
+import { glassClasses, iconSizes, gapTokens } from '@/design/tokens';
 
 /**
  * Props for SchemaErrorBoundary
@@ -157,7 +157,7 @@ export class SchemaErrorBoundary extends Component<
           )}
         >
           {/* Error icon and title */}
-          <div className="flex items-center justify-center gap-3 mb-4">
+          <div className={cn('flex items-center justify-center mb-4', gapTokens.spacious)}>
             <div
               className={cn(
                 'p-2 rounded-lg',
@@ -224,7 +224,7 @@ export class SchemaErrorBoundary extends Component<
           <button
             onClick={this.handleRetry}
             className={cn(
-              'flex items-center justify-center gap-2',
+              cn('flex items-center justify-center', gapTokens.default),
               'w-full px-4 py-3 rounded-lg',
               'bg-white/10 hover:bg-white/15',
               // opacity.border.light = white/[0.08]

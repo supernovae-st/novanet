@@ -18,6 +18,7 @@
 import { memo, useState, useCallback } from 'react';
 import { type NodeProps, type Node, NodeResizer } from '@xyflow/react';
 import { cn } from '@/lib/utils';
+import { gapTokens } from '@/design/tokens';
 import type { Scope } from '@novanet/core/types';
 
 /**
@@ -130,7 +131,8 @@ export const ScopeGroupNode = memo(function ScopeGroupNode({
       {/* Label badge positioned above the container */}
       <div
         className={cn(
-          'absolute -top-8 left-4 flex items-center gap-3',
+          'absolute -top-8 left-4 flex items-center',
+          gapTokens.spacious,
           'px-4 py-2 rounded-xl',
           'border bg-black/80',
           'transition-all duration-300',

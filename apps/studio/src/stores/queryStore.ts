@@ -40,7 +40,7 @@ export interface QueryState {
   clear: () => void;
 
   // Execute query - returns result for caller to capture (avoids race condition)
-  executeQuery: (query: string) => Promise<QueryResult | null>;
+  executeQuery: (query: string, params?: Record<string, unknown>) => Promise<QueryResult | null>;
 }
 
 // AbortController for cancelling in-flight queries
@@ -67,7 +67,7 @@ export const useQueryStore = create<QueryState>((set) => ({
       isExecuting: false,
     }),
 
-  executeQuery: async (query: string): Promise<QueryResult | null> => {
+  executeQuery: async (query: string, params?: Record<string, unknown>): Promise<QueryResult | null> => {
     // Cancel any in-flight query to prevent race conditions
     if (currentAbortController) {
       currentAbortController.abort();
@@ -90,7 +90,7 @@ export const useQueryStore = create<QueryState>((set) => ({
 
       const data = await postJSON<QueryResponse>(
         '/api/graph/query',
-        { cypher: query },
+        { cypher: query, params },
         { signal: abortController.signal }
       );
 

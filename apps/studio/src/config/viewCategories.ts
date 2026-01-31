@@ -32,35 +32,35 @@ export const VIEW_CATEGORIES: Record<ViewCategory, CategoryConfig> = {
     id: 'scope',
     label: 'Scope Layers',
     icon: Crosshair,
-    color: 'text-emerald-400',
+    color: '#34d399', // emerald-400
     description: 'Filter by scope and visibility',
   },
   generation: {
     id: 'generation',
     label: 'Generation',
     icon: Sparkles,
-    color: 'text-amber-400',
+    color: '#fbbf24', // amber-400
     description: 'Content generation workflows',
   },
   knowledge: {
     id: 'knowledge',
     label: 'Knowledge',
     icon: BookOpen,
-    color: 'text-violet-400',
+    color: '#a78bfa', // violet-400
     description: 'Knowledge graph exploration',
   },
   project: {
     id: 'project',
     label: 'Project',
     icon: FolderKanban,
-    color: 'text-blue-400',
+    color: '#60a5fa', // blue-400
     description: 'Project-specific views',
   },
   mining: {
     id: 'mining',
     label: 'Mining',
     icon: Pickaxe,
-    color: 'text-rose-400',
+    color: '#fb7185', // rose-400
     description: 'SEO/GEO mining operations',
   },
 };

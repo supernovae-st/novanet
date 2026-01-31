@@ -261,6 +261,46 @@ export const opacity = {
 } as const;
 
 // ============================================================================
+// GLOW EFFECTS - Consistent glow patterns for selected/active states
+// ============================================================================
+
+/**
+ * Glow effect tokens for UI elements
+ *
+ * Usage: Replace hardcoded boxShadow glow values with these functions
+ * Example: `boxShadow: glowEffects.row(color)` or `boxShadow: glowEffects.novanet.card`
+ */
+export const glowEffects = {
+  /** Dynamic color glows - use with item's accent color */
+  row: (color: string) => `0 0 20px ${color}20, 0 4px 12px rgba(0,0,0,0.3)`,
+  iconBox: (color: string) => `0 0 12px ${color}30`,
+  checkbox: (color: string) => `0 0 8px ${color}40`,
+  section: (color: string) => `0 0 12px ${color}10`,
+
+  /** Static novanet brand glows - for brand-themed elements, buttons, etc. */
+  novanet: {
+    /** novanet-500 = #8b5cf6 (violet) */
+    card: '0 0 20px rgba(139, 92, 246, 0.15), 0 4px 12px rgba(0,0,0,0.3)',
+    iconBox: '0 0 12px rgba(139, 92, 246, 0.30)',
+    subtle: '0 0 8px rgba(139, 92, 246, 0.20)',
+  },
+} as const;
+
+// ============================================================================
+// DEFAULT COLORS - Fallback colors for components
+// ============================================================================
+
+/**
+ * Default/fallback colors for components when no color prop is provided
+ */
+export const defaultColors = {
+  /** Neutral gray for unspecified categories */
+  neutral: '#8b8b8b',
+  /** Muted text color */
+  muted: '#6b7280',
+} as const;
+
+// ============================================================================
 // ICON SIZES - Consistent icon dimensions
 // ============================================================================
 
@@ -313,7 +353,7 @@ export const panelClasses = {
 
   /** Panel footer - stats/actions */
   footer: 'px-4 py-3 border-t border-white/[0.06]',
-  footerText: 'text-[11px] text-white/30 text-center',
+  footerText: 'text-[11px] text-white/40 text-center',
 
   /** Section divider */
   divider: 'border-b border-white/[0.06]',
@@ -468,6 +508,22 @@ export const glassClasses = {
   floating: 'bg-[hsl(240,6%,8%)] backdrop-blur-xl border border-white/15 rounded-2xl shadow-2xl shadow-black/50 ring-1 ring-white/4 ring-inset',
   /** Modal variant - fully opaque dark background for better perf and consistency */
   modal: 'bg-[#0d0d12] border border-white/[0.12] rounded-2xl shadow-2xl shadow-black/60',
+
+  // Hover variants for interactive elements
+  subtleHover: 'hover:bg-white/[0.04] hover:border-white/[0.08]',
+  lightHover: 'hover:bg-white/[0.06] hover:border-white/[0.10]',
+  mediumHover: 'hover:bg-white/[0.08] hover:border-white/[0.12]',
+  heavyHover: 'hover:bg-white/[0.12] hover:border-white/[0.15]',
+} as const;
+
+/**
+ * Shadow utility classes - Tailwind shadow presets with black opacity
+ */
+export const shadowTokens = {
+  sm: 'shadow-sm shadow-black/10',
+  md: 'shadow-md shadow-black/20',
+  lg: 'shadow-lg shadow-black/30',
+  xl: 'shadow-xl shadow-black/40',
 } as const;
 
 /**
@@ -557,9 +613,9 @@ export const filterTreeClasses = {
     'cursor-pointer select-none',
   ].join(' '),
 
-  /** Section content (nested items) - matches FilterSection */
-  sectionContent: 'ml-6 pl-4 mt-1 space-y-2.5 border-l-2 border-white/[0.08] overflow-hidden transition-all duration-300',
-  sectionContentExpanded: 'max-h-[800px] opacity-100 py-2.5',
+  /** Section content (nested items) - full width like Views */
+  sectionContent: 'mt-1 space-y-2.5 overflow-hidden transition-all duration-300',
+  sectionContentExpanded: 'max-h-[800px] opacity-100 py-2',
   sectionContentCollapsed: 'max-h-0 opacity-0',
 
   /** Individual row (item level) - Premium frosted glass (matches FilterCard) */
@@ -589,8 +645,8 @@ export const filterTreeClasses = {
   checkboxUnchecked: 'border-white/20 bg-transparent',
   checkboxChecked: 'border-transparent', // Color set dynamically via style prop
 
-  /** Label text - no truncate for full labels */
-  label: 'text-[13px] font-medium transition-colors duration-200 flex-1 text-left',
+  /** Label text - truncate to prevent wrapping */
+  label: 'text-[13px] font-medium transition-colors duration-200 flex-1 text-left truncate',
   labelSelected: 'text-white',
   labelUnselected: 'text-white/70 group-hover:text-white/90',
 
@@ -604,7 +660,7 @@ export const filterTreeClasses = {
   countMuted: 'text-white/40',
 
   /** Progress bar container (data variant) - compact to allow full labels */
-  progressBar: 'w-12 flex-shrink-0',
+  progressBar: 'w-10 flex-shrink-0',
 
   /** Header with total and execute button */
   header: 'flex items-center justify-between px-1 mb-2',
@@ -614,7 +670,7 @@ export const filterTreeClasses = {
   /** Execute button */
   executeButton: 'p-1.5 rounded-lg transition-all duration-200',
   executeButtonEnabled: 'text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 hover:scale-110',
-  executeButtonDisabled: 'text-white/20 cursor-not-allowed',
+  executeButtonDisabled: 'text-white/40 cursor-not-allowed',
 } as const;
 
 /**
@@ -650,12 +706,15 @@ export const tokens = {
   spacing,
   radius,
   shadows,
+  shadowTokens,
   zIndex,
   durations,
   easing,
   transitions,
   controls,
   opacity,
+  glowEffects,
+  defaultColors,
   iconSizes,
   // Semantic spacing tokens
   gapTokens,

@@ -133,16 +133,21 @@ export const useViewStore = create<ViewStoreState>()(
             throw new Error(json.error || 'Failed to load view');
           }
 
-          // Extract the Cypher query from the view
-          const cypher = json.data.cypher?.query;
-          if (!cypher) {
+          // Extract the Cypher query and params from the view
+          const cypherQuery = json.data.cypher?.query;
+          const cypherParams = json.data.cypher?.params || {};
+          if (!cypherQuery) {
             throw new Error('View did not return a Cypher query');
           }
 
-          logger.debug('ViewStore', 'View Cypher loaded', { id, cypher: cypher.substring(0, 100) + '...' });
+          logger.debug('ViewStore', 'View Cypher loaded', {
+            id,
+            cypher: cypherQuery.substring(0, 100) + '...',
+            params: cypherParams,
+          });
 
-          // Execute the query via queryStore
-          await useQueryStore.getState().executeQuery(cypher);
+          // Execute the query via queryStore with params
+          await useQueryStore.getState().executeQuery(cypherQuery, cypherParams);
 
           set({ executing: false });
           logger.info('ViewStore', 'View executed successfully', { id });

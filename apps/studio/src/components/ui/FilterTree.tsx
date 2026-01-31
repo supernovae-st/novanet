@@ -254,7 +254,8 @@ const FilterTreeSection = memo(function FilterTreeSection({
         }}
       >
         {/* Tri-state Checkbox - optional, hidden for mutually exclusive items like Views */}
-        {showCheckbox && onCheckboxClick && (
+        {/* When hidden, add spacer to maintain horizontal alignment across all tabs */}
+        {showCheckbox && onCheckboxClick ? (
           <TriStateCheckbox
             state={checkboxState}
             onClick={onCheckboxClick}
@@ -262,6 +263,8 @@ const FilterTreeSection = memo(function FilterTreeSection({
             disabled={disabled}
             label={`Select all ${label}`}
           />
+        ) : (
+          <div className="w-4 flex-shrink-0" aria-hidden="true" />
         )}
 
         {/* Expand/Collapse area - icon | label | count | chevron */}
@@ -435,7 +438,8 @@ const FilterTreeRow = memo(function FilterTreeRow({
       }}
     >
       {/* Checkbox - matches TriStateCheckbox styling with glow */}
-      {showCheckbox && (
+      {/* When hidden, add spacer to maintain horizontal alignment across all tabs */}
+      {showCheckbox ? (
         <div
           className={cn(
             ftc.checkbox,
@@ -450,6 +454,8 @@ const FilterTreeRow = memo(function FilterTreeRow({
         >
           {isSelected && <CheckIcon className={iconSizes.xs} style={{ color }} />}
         </div>
+      ) : (
+        <div className="w-4 flex-shrink-0" aria-hidden="true" />
       )}
 
       {/* Icon with colored background - always tinted, brighter when selected */}

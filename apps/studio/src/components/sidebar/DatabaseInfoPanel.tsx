@@ -28,7 +28,7 @@ import { useDatabaseSchema } from '@/hooks';
 import { LoadingState } from '@/components/ui/EmptyState';
 import { SegmentedTabs } from '@/components/ui/SegmentedTabs';
 import { formatTime } from '@/lib/formatters';
-import { panelClasses, glassClasses, iconSizes, iconButtonClasses } from '@/design/tokens';
+import { panelClasses, glassClasses, iconSizes, iconButtonClasses, gapTokens } from '@/design/tokens';
 import { NodeLabelsSection } from './database/NodeLabelsSection';
 import { RelationshipsSection } from './database/RelationshipsSection';
 import { AiSearchInput } from './AiSearchInput';
@@ -237,7 +237,7 @@ export const DatabaseInfoPanel = memo(function DatabaseInfoPanel() {
       <div className={cn('relative', panelClasses.header)}>
         <div className="absolute inset-0 bg-gradient-to-br from-novanet-500/5 via-transparent to-emerald-500/5 pointer-events-none" />
 
-        <div className="relative flex items-center gap-3">
+        <div className={cn('relative flex items-center', gapTokens.spacious)}>
           <div className="relative">
             <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-novanet-400 to-emerald-500 opacity-20 blur-lg" />
             <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-novanet-500/20 to-emerald-500/20 flex items-center justify-center border border-white/10 shadow-lg shadow-black/20">
@@ -261,7 +261,7 @@ export const DatabaseInfoPanel = memo(function DatabaseInfoPanel() {
             disabled={isLoading}
             className={cn(
               iconButtonClasses.ghost,
-              isLoading && 'text-white/20 cursor-not-allowed'
+              isLoading && 'text-white/40 cursor-not-allowed'
             )}
             title="Refresh schema"
             aria-label="Refresh database schema"
