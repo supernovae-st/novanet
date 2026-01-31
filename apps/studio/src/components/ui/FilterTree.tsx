@@ -28,7 +28,7 @@ import {
   type KeyboardEvent,
 } from 'react';
 import { cn } from '@/lib/utils';
-import { filterTreeClasses as ftc } from '@/design/tokens';
+import { filterTreeClasses as ftc, iconSizes } from '@/design/tokens';
 import { TriStateCheckbox, type CheckboxState } from './TriStateCheckbox';
 import { ProgressBar } from './ProgressBar';
 import { NAV_ICONS, STATUS_ICONS } from '@/config/iconSystem';
@@ -234,48 +234,57 @@ const FilterTreeSection = memo(function FilterTreeSection({
 
   return (
     <div className={cn('mb-1', className)} role="treeitem" aria-expanded={isExpanded} aria-labelledby={`section-label-${id}`}>
-      {/* Section Header */}
-      <div className={ftc.sectionHeader}>
-        {/* Expand/Collapse Button - Main focusable element */}
-        <button
-          ref={headerRef}
-          onClick={handleToggle}
-          onKeyDown={handleKeyDown}
-          tabIndex={tabIndex}
-          aria-expanded={isExpanded}
-          aria-controls={`filter-section-${id}`}
-          aria-label={`${isExpanded ? 'Collapse' : 'Expand'} ${label}`}
-          className="p-0.5 -m-0.5 rounded transition-colors hover:bg-white/[0.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-novanet-500/50"
-        >
-          <ChevronDownIcon
-            className={cn(ftc.chevron, !isExpanded && ftc.chevronCollapsed)}
-          />
-        </button>
-
+      {/* Section Header - Unified design: checkbox | icon | label | count | chevron (right) */}
+      <button
+        ref={headerRef}
+        onClick={handleToggle}
+        onKeyDown={handleKeyDown}
+        tabIndex={tabIndex}
+        aria-expanded={isExpanded}
+        aria-controls={`filter-section-${id}`}
+        aria-label={`${isExpanded ? 'Collapse' : 'Expand'} ${label}`}
+        className="flex items-center gap-2.5 w-full py-0.5 group"
+      >
         {/* Tri-state Checkbox */}
-        <TriStateCheckbox
-          state={checkboxState}
-          onClick={onCheckboxClick}
-          color={color}
-          disabled={disabled}
-          label={`Select all ${label}`}
-        />
-
-        {/* Icon + Label (clickable to expand/collapse, not focusable) */}
-        <div
-          id={`section-label-${id}`}
-          onClick={handleToggle}
-          className="flex items-center gap-2 flex-1 min-w-0 cursor-pointer"
-        >
-          <span className="flex-shrink-0">{icon}</span>
-          <span className={ftc.sectionLabel} style={{ color }}>
-            {label}
-          </span>
-          {count !== undefined && (
-            <span className={ftc.countMuted}>({formatCount(count)})</span>
-          )}
+        <div onClick={(e) => { e.stopPropagation(); onCheckboxClick(); }}>
+          <TriStateCheckbox
+            state={checkboxState}
+            onClick={onCheckboxClick}
+            color={color}
+            disabled={disabled}
+            label={`Select all ${label}`}
+          />
         </div>
-      </div>
+
+        {/* Icon */}
+        <span className="flex-shrink-0" style={{ color }}>{icon}</span>
+
+        {/* Label */}
+        <span
+          id={`section-label-${id}`}
+          className="text-[11px] uppercase tracking-wider font-semibold"
+          style={{ color }}
+        >
+          {label}
+        </span>
+
+        {/* Count */}
+        {count !== undefined && (
+          <span className="text-[10px] tabular-nums text-white/25">({formatCount(count)})</span>
+        )}
+
+        {/* Chevron - RIGHT aligned */}
+        <ChevronDownIcon
+          className={cn(
+            'ml-auto',
+            iconSizes.md,
+            'text-white/30',
+            'transition-transform duration-200',
+            'group-hover:text-white/50',
+            !isExpanded && '-rotate-90'
+          )}
+        />
+      </button>
 
       {/* Section Content */}
       <div
