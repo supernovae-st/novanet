@@ -73,22 +73,41 @@ export function useNodeInteractions({
     setIsPressed(false);
   }, []);
 
+  // Compute scale class based on state priority
+  // Single scale value prevents class conflicts (e.g., scale-[0.98] + scale-105)
+  const scaleClass = useMemo(() => {
+    if (isDimmed) {
+      return isCircular ? 'scale-75' : 'scale-90';
+    }
+    if (isPressed) {
+      // Press feedback: reduce current scale by ~2%
+      if (selected) {
+        // 1.05 * 0.98 ≈ 1.03 - maintains press feedback on selected nodes
+        return isCircular ? 'scale-[1.08]' : 'scale-[1.03]';
+      }
+      return isCircular ? 'scale-[0.96]' : 'scale-[0.98]';
+    }
+    if (selected) {
+      return isCircular ? 'scale-110' : 'scale-105';
+    }
+    if (isHovered && !isHoverDimmed) {
+      return 'scale-103';
+    }
+    return '';
+  }, [isDimmed, isPressed, selected, isHovered, isHoverDimmed, isCircular]);
+
   // Compute container className based on state
   const containerClassName = useMemo(() => {
     return cn(
       'group relative node-pressable',
-      // Full dimming (focus mode) - scale and grayscale via className, opacity via style
-      isDimmed && `${isCircular ? 'scale-75' : 'scale-90'} grayscale pointer-events-none`,
+      // Full dimming (focus mode) - grayscale via className, opacity via style
+      isDimmed && 'grayscale pointer-events-none',
       // Lighter dimming (hover highlight mode)
       isHoverDimmed && !isDimmed && 'hover-dimmed',
-      // Enhanced hover effect
-      isHovered && !isDimmed && !isHoverDimmed && !selected && 'scale-103',
-      // Press feedback
-      isPressed && !isDimmed && (isCircular ? 'scale-[0.96]' : 'scale-[0.98]'),
-      // Selection scale
-      selected && (isCircular ? 'scale-110' : 'scale-105')
+      // Single scale class (computed above to prevent conflicts)
+      scaleClass
     );
-  }, [isDimmed, isHoverDimmed, isHovered, isPressed, selected, isCircular]);
+  }, [isDimmed, isHoverDimmed, scaleClass]);
 
   // Container style for transitions (opacity moved here for dynamic values)
   const containerStyle = useMemo<React.CSSProperties>(() => ({

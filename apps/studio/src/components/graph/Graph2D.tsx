@@ -258,7 +258,7 @@ function Graph2DInner({
   const { expandNode } = useNodeExpansion();
 
   // React Flow instance for programmatic control (centering, zooming)
-  const { setCenter, getZoom, getNodes } = useReactFlow();
+  const { setCenter, getZoom, getNodes, getInternalNode } = useReactFlow();
 
   // Center on node with offset compensation for UI panels
   const { centerOnNode } = useCenterOnNode();
@@ -489,13 +489,11 @@ function Graph2DInner({
       // This ensures the panel width is accounted for in the center calculation
       // (same timing as data mode for consistent animation behavior)
       setTimeout(() => {
-        // CRITICAL: Get nodes from React Flow instance, NOT from state
-        // React Flow nodes have computed internals.positionAbsolute for nested nodes
-        // State nodes (schemaNodes) don't have these computed internals
-        const flowNodes = getNodes();
-        const currentNode = flowNodes.find(n => n.id === node.id);
+        // Use getInternalNode for reliable access to positionAbsolute
+        // This is the official React Flow API for nested/grouped nodes
+        const internalNode = getInternalNode(node.id);
 
-        if (!currentNode) {
+        if (!internalNode) {
           // Fallback: use original node if not found in React Flow
           // This shouldn't happen but provides robustness
           centerOnNode(
@@ -508,15 +506,14 @@ function Graph2DInner({
           return;
         }
 
-        const finalWidth = currentNode.measured?.width ?? nodeWidth;
-        const finalHeight = currentNode.measured?.height ?? nodeHeight;
+        // Get measured dimensions from internal node
+        const finalWidth = internalNode.measured?.width ?? nodeWidth;
+        const finalHeight = internalNode.measured?.height ?? nodeHeight;
 
-        // IMPORTANT: Schema nodes are nested in group nodes, so we need absolute position
-        // node.position is relative to parent, internals.positionAbsolute is absolute
-        // Type assertion needed as internals is not exposed in public Node type
-        const nodeInternals = (currentNode as unknown as { internals?: { positionAbsolute?: { x: number; y: number } } }).internals;
-        const finalX = nodeInternals?.positionAbsolute?.x ?? currentNode.position.x;
-        const finalY = nodeInternals?.positionAbsolute?.y ?? currentNode.position.y;
+        // CRITICAL: Use positionAbsolute for nested nodes (inside group containers)
+        // node.position is relative to parent, positionAbsolute is canvas-absolute
+        const finalX = internalNode.internals.positionAbsolute.x;
+        const finalY = internalNode.internals.positionAbsolute.y;
 
         centerOnNode(
           finalX,
@@ -527,7 +524,7 @@ function Graph2DInner({
         );
       }, 50);
     },
-    [setSelectedNode, centerOnNode, getNodes]
+    [setSelectedNode, centerOnNode, getInternalNode]
   );
 
   const handleSchemaEdgeClick = useCallback(

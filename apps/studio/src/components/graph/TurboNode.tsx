@@ -17,12 +17,13 @@
  * - Hover info displayed in centralized bottom pill (via uiStore.hoveredNodeId)
  */
 
-import { memo, useState, useCallback } from 'react';
+import { memo } from 'react';
 import { Handle, Position, type Node, type NodeProps } from '@xyflow/react';
 import { cn } from '@/lib/utils';
 import { iconSizes, gapTokens } from '@/design/tokens';
 import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
+import { useNodeInteractions } from '@/hooks';
 import { getNodeConfig } from './nodes/NodeConfig';
 import {
   getGradientBorderStyle,
@@ -33,7 +34,6 @@ import {
   getCategoryBadgeStyle,
   getStatusDotStyle,
   getInnerCardStyle,
-  ROOT_TRANSITION_STYLE,
   DISPLAY_NAME_CONTAINER_STYLE,
 } from './nodes/NodeStyles';
 import type { NodeType } from '@/types';

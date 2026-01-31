@@ -115,7 +115,7 @@ export const SchemaNode = memo(function SchemaNode({
         {/* Inner card - Glassmorphism + Skeuomorphism when selected */}
         <div
           className={cn(
-            'relative overflow-hidden transition-all duration-500 ease-out',
+            'relative overflow-hidden transition-colors duration-300',
             selected && glassClasses.medium,
             selected && 'animate-float'
           )}

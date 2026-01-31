@@ -28,7 +28,7 @@ import {
   type KeyboardEvent,
 } from 'react';
 import { cn } from '@/lib/utils';
-import { sidebarTokens as st, iconSizes, gapTokens, glowEffects, filterTreeClasses as ftc } from '@/design/tokens';
+import { sidebarTokens as st, iconSizes, gapTokens, glowEffects } from '@/design/tokens';
 import { TriStateCheckbox, type CheckboxState } from './TriStateCheckbox';
 import { ProgressBar } from './ProgressBar';
 import { NAV_ICONS, STATUS_ICONS } from '@/config/iconSystem';
@@ -423,9 +423,10 @@ const FilterTreeRow = memo(function FilterTreeRow({
       )}
       style={{
         // Colored row background - always tinted with item color
-        backgroundColor: isSelected ? `${color}18` : `${color}0a`,
-        // Ring color when selected
-        borderColor: isSelected ? `${color}30` : undefined,
+        // Unselected: 12 (7%) visible tint, Selected: 22 (13%) stronger
+        backgroundColor: isSelected ? `${color}22` : `${color}12`,
+        // Ring color - always visible, stronger when selected
+        borderColor: isSelected ? `${color}40` : `${color}20`,
         // Glow effect when selected - uses design token
         boxShadow: isSelected ? glowEffects.row(color) : undefined,
       }}
@@ -454,8 +455,8 @@ const FilterTreeRow = memo(function FilterTreeRow({
       <div
         className={st.iconBox.base}
         style={{
-          // Always show colored tint, brighter when selected
-          backgroundColor: isSelected ? `${color}25` : `${color}15`,
+          // Always show colored tint, stronger when selected
+          backgroundColor: isSelected ? `${color}30` : `${color}20`,
           boxShadow: isSelected ? glowEffects.iconBox(color) : undefined,
         }}
       >
@@ -503,8 +504,8 @@ const FilterTreeRow = memo(function FilterTreeRow({
             st.badge.shortcut
           )}
           style={{
-            backgroundColor: isSelected ? `${color}30` : `${color}15`,
-            color: isSelected ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.5)',
+            backgroundColor: isSelected ? `${color}35` : `${color}25`,
+            color: isSelected ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.6)',
           }}
         >
           {shortcut}
