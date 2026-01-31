@@ -15,7 +15,7 @@
  * - Glassmorphism design matching CommandPalette
  */
 
-import { useState, useRef, useCallback, useEffect, memo } from 'react';
+import { useState, useRef, useCallback, useEffect, memo, type RefObject } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { cn } from '@/lib/utils';
 import { logger } from '@/lib/logger';
@@ -23,6 +23,7 @@ import { postJSON, getErrorMessage } from '@/lib/fetchClient';
 import { useChatStore } from '@/stores/chatStore';
 import { CypherViewer } from '@/components/dx/CodeViewer';
 import { useCopyFeedback, useAutoFocus } from '@/hooks';
+import { useGridNavigation } from '@/hooks/useGridNavigation';
 import { iconSizes, gapTokens, overlayClasses } from '@/design/tokens';
 import { KeyboardKey } from '@/components/ui/KeyboardKey';
 import { Kbd } from '@/components/ui/Kbd';
@@ -78,6 +79,7 @@ export const AiSearchOverlay = memo(function AiSearchOverlay({
   const [input, setInput] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const suggestionsRef = useRef<HTMLDivElement>(null);
   const isMountedRef = useRef(true);
 
   // Chat store
@@ -172,6 +174,17 @@ export const AiSearchOverlay = memo(function AiSearchOverlay({
 
   const hasMessages = messages.length > 0;
 
+  // Grid navigation for suggestion buttons (2 columns, 6 items)
+  const showSuggestions = !hasMessages && !isLoading;
+  const { focusedIndex: sugFocused, handleKeyDown: sugKeyDown } = useGridNavigation({
+    columns: 2,
+    totalItems: AI_SUGGESTIONS.length,
+    gridRef: suggestionsRef as RefObject<HTMLElement>,
+    onSelect: (index) => handleSend(AI_SUGGESTIONS[index].query),
+    onEscape: () => inputRef.current?.focus(),
+    enabled: showSuggestions && isOpen,
+  });
+
   return (
     <Modal.Root
       isOpen={isOpen}
@@ -234,7 +247,7 @@ export const AiSearchOverlay = memo(function AiSearchOverlay({
 
         {/* Body */}
         <Modal.Body maxHeight={overlayClasses.bodyMaxHeight}>
-          <div className="p-3">
+          <div className={cn('p-3', overlayClasses.contentAnimation)}>
             {/* Empty state: suggestions */}
             {!hasMessages && !isLoading && (
               <div className="space-y-3">
@@ -243,23 +256,35 @@ export const AiSearchOverlay = memo(function AiSearchOverlay({
                   Suggestions
                 </div>
 
-                {/* Suggestion grid */}
-                <div className="grid grid-cols-2 gap-2">
-                  {AI_SUGGESTIONS.map((suggestion) => (
-                    <button
-                      key={suggestion.text}
-                      onClick={() => handleSend(suggestion.query)}
-                      className={cn(
-                        'text-left text-sm px-3.5 py-3 rounded-xl',
-                        'bg-white/[0.03] text-white/60 border border-white/[0.06]',
-                        'hover:bg-novanet-500/10 hover:text-novanet-300 hover:border-novanet-500/20',
-                        'transition-colors duration-150',
-                      )}
-                    >
-                      <span className="text-white/30 mr-1.5">→</span>
-                      {suggestion.text}
-                    </button>
-                  ))}
+                {/* Suggestion grid with arrow key navigation */}
+                <div
+                  ref={suggestionsRef}
+                  role="grid"
+                  aria-label="AI query suggestions"
+                  onKeyDown={sugKeyDown}
+                  className="grid grid-cols-2 gap-2"
+                >
+                  {AI_SUGGESTIONS.map((suggestion, index) => {
+                    const isFocused = sugFocused === index;
+                    return (
+                      <button
+                        key={suggestion.text}
+                        tabIndex={isFocused ? 0 : -1}
+                        onClick={() => handleSend(suggestion.query)}
+                        className={cn(
+                          'text-left text-sm px-3.5 py-3 rounded-xl',
+                          'transition-colors duration-150',
+                          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-novanet-500/50',
+                          isFocused
+                            ? 'bg-novanet-500/10 text-novanet-300 border border-novanet-500/20'
+                            : 'bg-white/[0.03] text-white/60 border border-white/[0.06] hover:bg-novanet-500/10 hover:text-novanet-300 hover:border-novanet-500/20',
+                        )}
+                      >
+                        <span className="text-white/30 mr-1.5">→</span>
+                        {suggestion.text}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             )}
@@ -416,6 +441,7 @@ const OverlayMessage = memo(function OverlayMessage({
                   onExecuteQuery?.(message.metadata.cypherQuery);
                 }
               }}
+              aria-label="Execute Cypher query"
               className={cn(
                 'flex items-center text-xs px-3 py-1.5 rounded-lg',
                 gapTokens.compact,
@@ -428,6 +454,7 @@ const OverlayMessage = memo(function OverlayMessage({
             </button>
             <button
               onClick={handleCopyQuery}
+              aria-label={copiedQuery ? 'Query copied' : 'Copy Cypher query'}
               className={cn(
                 'flex items-center text-xs px-3 py-1.5 rounded-lg',
                 gapTokens.compact,

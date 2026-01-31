@@ -279,6 +279,7 @@ export const AiChat = memo(function AiChat({
           <button
             onClick={handleSend}
             disabled={!input.trim() || isLoading}
+            aria-label="Send message"
             className={cn(
               'p-3 rounded-xl transition-colors duration-150 border',
               input.trim() && !isLoading
@@ -372,6 +373,7 @@ const ChatMessage = memo(function ChatMessage({
                   onExecuteQuery?.(message.metadata.cypherQuery);
                 }
               }}
+              aria-label="Execute Cypher query"
               className={cn(
                 'flex items-center text-xs px-3 py-1.5 rounded-lg',
                 gapTokens.compact,
@@ -384,6 +386,7 @@ const ChatMessage = memo(function ChatMessage({
             </button>
             <button
               onClick={handleCopyQuery}
+              aria-label={copiedQuery ? 'Query copied' : 'Copy Cypher query'}
               className={cn(
                 'flex items-center text-xs px-3 py-1.5 rounded-lg',
                 gapTokens.compact,

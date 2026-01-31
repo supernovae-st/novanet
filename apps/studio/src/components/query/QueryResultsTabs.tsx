@@ -141,7 +141,7 @@ export const TableView = memo(function TableView() {
                 <tr
                   key={node.id}
                   className={cn(
-                    'transition-colors group cursor-pointer',
+                    'transition-colors group',
                     'hover:bg-accent-blue/8',
                     rowIdx % 2 === 0 ? 'bg-[hsl(240,8%,5%)]' : 'bg-[hsl(240,8%,4%)]'
                   )}
