@@ -6,6 +6,7 @@ import { logger } from '@/lib/logger';
 import { copyToClipboard, copyNodeProperties } from '@/lib/clipboard';
 import { COPY_FEEDBACK_MS } from '@/config/constants';
 import { ACTION_ICONS, STATUS_ICONS, CONTENT_ICONS } from '@/config/iconSystem';
+import { iconSizes } from '@/design/tokens';
 
 // Design system icons
 const CheckIcon = STATUS_ICONS.success;
@@ -88,7 +89,7 @@ export const CopyButton = memo(function CopyButton({
     }
   }, [text, json, format]);
 
-  const iconSize = size === 'sm' ? 'w-4 h-4' : 'w-5 h-5';
+  const iconSize = size === 'sm' ? iconSizes.md : iconSizes.xl;
   const buttonSize = size === 'sm' ? 'p-2' : 'p-2.5'; // Min 44px touch target
 
   const Icon = format === 'typescript' ? CodeIcon : format === 'json' ? JsonIcon : CopyIcon;

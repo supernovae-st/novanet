@@ -65,7 +65,7 @@ const RelationshipRow = memo(function RelationshipRow({
       <div
         className={cn(
           'w-3.5 h-3.5 rounded border-[1.5px] flex items-center justify-center transition-all duration-200',
-          isSelected ? 'border-transparent' : 'border-white/20'
+          isSelected ? 'border-transparent' : 'border-white/[0.06]'
         )}
         style={{
           backgroundColor: isSelected ? `${color}30` : 'transparent',

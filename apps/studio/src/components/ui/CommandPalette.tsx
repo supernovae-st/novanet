@@ -173,7 +173,7 @@ export function CommandPalette({ isOpen, onClose, commands }: CommandPaletteProp
         ariaLabel="Command palette"
         className="animate-scale-in"
       >
-        {/* Search Header */}
+        {/* Search Header - opacity.border.light (0.08) */}
         <div
           className="flex items-center gap-3 p-4 border-b border-white/[0.08]"
           onKeyDown={handleKeyDown}
@@ -233,10 +233,10 @@ export function CommandPalette({ isOpen, onClose, commands }: CommandPaletteProp
                           'outline-none ring-0 focus:outline-none focus:ring-0',
                           isSelected
                             ? 'bg-novanet-500/20 border border-novanet-500/30'
-                            : 'hover:bg-white/[0.04] border border-transparent'
+                            : 'hover:bg-white/[0.04] border border-transparent' // opacity.bg.light (0.04) on hover
                         )}
                       >
-                        {/* Icon */}
+                        {/* Icon - opacity.bg.medium (0.06) when not selected */}
                         <div
                           className={cn(
                             'w-8 h-8 rounded-lg flex items-center justify-center shrink-0',

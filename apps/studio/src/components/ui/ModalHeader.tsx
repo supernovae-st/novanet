@@ -38,12 +38,13 @@ export const ModalHeader = memo(function ModalHeader({
     <div
       className={cn(
         'flex items-center justify-between px-5 py-4',
-        showBorder && 'border-b border-white/[0.08]',
+        showBorder && 'border-b border-white/[0.08]', // opacity.border.light (0.08)
         className
       )}
     >
       <div className="flex items-center gap-3">
         {icon && (
+          // opacity.bg.medium (0.06) + opacity.border.light (0.08) + opacity.text.muted (0.60)
           <div className="w-9 h-9 rounded-xl bg-white/[0.06] border border-white/[0.08] flex items-center justify-center text-white/60">
             {icon}
           </div>
@@ -62,7 +63,7 @@ export const ModalHeader = memo(function ModalHeader({
         className={cn(
           'p-2 rounded-lg transition-all duration-150',
           'text-white/40 hover:text-white/80',
-          'hover:bg-white/[0.06] active:bg-white/[0.08]',
+          'hover:bg-white/[0.06] active:bg-white/[0.08]', // opacity.bg.medium (0.06) + opacity.bg.strong (0.08)
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20'
         )}
       >

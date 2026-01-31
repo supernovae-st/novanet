@@ -87,6 +87,8 @@ const ToolbarButton = memo(function ToolbarButton({
             'group relative flex items-center justify-center',
             'rounded-xl',
             'transition-all', // Duration + easing set via style for token consistency
+            // opacity.bg.light = white/[0.04]
+            // opacity.border.subtle = white/[0.08]
             'bg-white/[0.04] border border-white/[0.08]',
             'hover:bg-white/[0.10] hover:border-white/[0.15] hover:scale-105',
             isActive && [
@@ -159,6 +161,8 @@ const LayoutButton = memo(function LayoutButton({
             'group relative flex items-center gap-2',
             'rounded-xl px-2.5',
             'transition-all',
+            // opacity.bg.light = white/[0.04]
+            // opacity.border.subtle = white/[0.08]
             'bg-white/[0.04] border border-white/[0.08]',
             'hover:bg-white/[0.10] hover:border-white/[0.15] hover:scale-105',
             'active:scale-95 active:bg-white/[0.15]',
@@ -192,6 +196,8 @@ const LayoutButton = memo(function LayoutButton({
               className={cn(
                 'inline-flex items-center justify-center',
                 'min-w-[28px] h-5 px-1.5',
+                // opacity.bg.medium = white/[0.06]
+                // opacity.border.light = white/[0.10]
                 'bg-white/[0.06] border border-white/[0.10] rounded',
                 'text-[10px] font-mono text-white/50',
                 'group-hover:bg-white/[0.12] group-hover:text-white/80 group-hover:border-white/[0.20]',

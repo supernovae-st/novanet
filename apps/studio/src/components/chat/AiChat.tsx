@@ -145,6 +145,7 @@ export const AiChat = memo(function AiChat({
     >
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-white/[0.08]">
+        {/* opacity.border.subtle = white/[0.08] */}
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-novanet-400 to-novanet-600 flex items-center justify-center shadow-lg shadow-novanet-500/20">
             <SparklesIcon className="w-4 h-4 text-white" />
@@ -160,6 +161,7 @@ export const AiChat = memo(function AiChat({
             aria-label="Clear chat"
             className={cn(
               'p-2 rounded-lg transition-all border',
+              // opacity.border.light = white/[0.10]
               'text-white/40 hover:text-white/70 hover:bg-white/5 border-transparent hover:border-white/10'
             )}
             title="Clear chat"
@@ -243,6 +245,7 @@ export const AiChat = memo(function AiChat({
 
       {/* Input */}
       <div className="p-4 border-t border-white/[0.08] bg-black/40">
+        {/* opacity.border.subtle = white/[0.08] */}
         <div className="flex items-end gap-2">
           <div className="flex-1 relative">
             <textarea
@@ -253,6 +256,8 @@ export const AiChat = memo(function AiChat({
               placeholder="Describe what you're looking for..."
               rows={1}
               className={cn(
+                // opacity.bg.medium = white/[0.05]
+                // opacity.border.light = white/[0.10]
                 'w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3',
                 'text-sm resize-none focus:outline-none focus:border-novanet-500/50 focus:bg-white/[0.07]',
                 'placeholder:text-white/30 transition-all duration-150'
@@ -417,6 +422,8 @@ const SuggestionButton = memo(function SuggestionButton({
       onClick={onClick}
       className={cn(
         'w-full text-left text-xs px-3.5 py-2.5 rounded-xl',
+        // opacity.bg.light = white/[0.03]
+        // opacity.border.subtle = white/[0.06]
         'bg-white/[0.03] text-white/50 border border-white/[0.06]',
         'hover:bg-novanet-500/10 hover:text-novanet-300 hover:border-novanet-500/20',
         'transition-all duration-150'

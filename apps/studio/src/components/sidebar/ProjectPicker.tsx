@@ -196,7 +196,7 @@ export const ProjectPicker = memo(function ProjectPicker({
         )}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.06]">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-lg bg-[#111118] border border-white/10 flex items-center justify-center">
               <FolderOpen className="w-4.5 h-4.5 text-white/70" />
@@ -218,7 +218,7 @@ export const ProjectPicker = memo(function ProjectPicker({
         </div>
 
         {/* Search */}
-        <div className="flex items-center gap-3 px-6 py-4 border-b border-white/10">
+        <div className="flex items-center gap-3 px-6 py-4 border-b border-white/[0.06]">
           <Search className="w-4.5 h-4.5 text-white/40 shrink-0" />
           <input
             ref={searchRef}
@@ -285,7 +285,7 @@ export const ProjectPicker = memo(function ProjectPicker({
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-3 border-t border-white/10 flex items-center justify-between text-xs text-white/30">
+        <div className="px-6 py-3 border-t border-white/[0.06] flex items-center justify-between text-xs text-white/30">
           <span>{filteredProjects.length} projects</span>
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1.5">

@@ -152,6 +152,7 @@ export class SchemaErrorBoundary extends Component<
           className={cn(
             'max-w-lg w-full p-6 rounded-xl',
             'bg-black/70 backdrop-blur-xl',
+            // opacity.border.subtle = white/[0.08]
             'border border-white/[0.08]',
             'shadow-2xl'
           )}
@@ -188,6 +189,7 @@ export class SchemaErrorBoundary extends Component<
                 className={cn(
                   'p-3 rounded-lg',
                   'bg-black/50',
+                  // opacity.border.subtle = white/[0.05] (reserved for future use)
                   'border border-white/[0.05]',
                   'text-left'
                 )}
@@ -208,6 +210,7 @@ export class SchemaErrorBoundary extends Component<
               className={cn(
                 'p-3 rounded-lg',
                 'bg-black/50',
+                // opacity.border.subtle = white/[0.05] (reserved for future use)
                 'border border-white/[0.05]',
                 'text-left overflow-auto max-h-32'
               )}
@@ -225,6 +228,7 @@ export class SchemaErrorBoundary extends Component<
               'flex items-center justify-center gap-2',
               'w-full px-4 py-3 rounded-lg',
               'bg-white/10 hover:bg-white/15',
+              // opacity.border.light = white/[0.08]
               'border border-white/[0.08] hover:border-white/[0.15]',
               'text-white/90 text-sm font-medium',
               'transition-all duration-200',
