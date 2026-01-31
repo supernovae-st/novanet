@@ -12,10 +12,11 @@
 
 import { memo } from 'react';
 import { Boxes, Database } from 'lucide-react';
+import { useShallow } from 'zustand/react/shallow';
 import { cn } from '@/lib/utils';
-import { opacity, glassClasses } from '@/design/tokens';
+import { opacity, glassClasses, gapTokens } from '@/design/tokens';
 import { ICON_SIZES } from '@/config/iconSystem';
-import { useUIStore, selectDataMode } from '@/stores/uiStore';
+import { useUIStore } from '@/stores/uiStore';
 import { DatabaseInfoPanel } from './DatabaseInfoPanel';
 import { FilterPanel } from './FilterPanel';
 import { SchemaFilterPanel } from './SchemaFilterPanel';
@@ -34,8 +35,12 @@ const TABS: Tab[] = [
 ];
 
 export const SidebarTabs = memo(function SidebarTabs() {
-  const dataMode = useUIStore(selectDataMode);
-  const setDataMode = useUIStore((s) => s.setDataMode);
+  const { dataMode, setDataMode } = useUIStore(
+    useShallow((s) => ({
+      dataMode: s.dataMode,
+      setDataMode: s.setDataMode,
+    }))
+  );
 
   // Derive active tab from dataMode
   const activeTab: TabId = dataMode === 'schema' ? 'schema' : 'data';
@@ -53,7 +58,7 @@ export const SidebarTabs = memo(function SidebarTabs() {
             key={tab.id}
             onClick={() => handleTabClick(tab.id)}
             className={cn(
-              'flex-1 flex items-center justify-center gap-2 px-4 py-3.5',
+              cn('flex-1 flex items-center justify-center px-4 py-3.5', gapTokens.default),
               'text-xs font-medium transition-all duration-200',
               'border-b-2 -mb-px',
               activeTab === tab.id

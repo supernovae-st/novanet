@@ -13,6 +13,7 @@
 import { useState, useMemo, useCallback, useEffect, useRef, memo, useDeferredValue } from 'react';
 import { createPortal } from 'react-dom';
 import { Search, X, Globe, Check } from 'lucide-react';
+import { useShallow } from 'zustand/react/shallow';
 import { cn } from '@/lib/utils';
 import { glassClasses, modalClasses, iconSizes, gapTokens } from '@/design/tokens';
 import { Kbd } from '@/components/ui';
@@ -23,6 +24,7 @@ import {
   useModalAutoFocus,
   useGridNavigation,
   useTimeoutFn,
+  useFocusTrap,
 } from '@/hooks';
 import { TRANSITION_DURATION_MS } from '@/config/constants';
 import {
@@ -112,8 +114,12 @@ export const LocalePicker = memo(function LocalePicker({
   isOpen,
   onClose,
 }: LocalePickerProps) {
-  const selectedLocale = useFilterStore((state) => state.selectedLocale);
-  const setSelectedLocale = useFilterStore((state) => state.setSelectedLocale);
+  const { selectedLocale, setSelectedLocale } = useFilterStore(
+    useShallow((state) => ({
+      selectedLocale: state.selectedLocale,
+      setSelectedLocale: state.setSelectedLocale,
+    }))
+  );
 
   const [searchInput, setSearchInput] = useState('');
   const search = useDeferredValue(searchInput);
@@ -191,6 +197,7 @@ export const LocalePicker = memo(function LocalePicker({
   // Modal utilities
   useBodyScrollLock(isOpen);
   useOutsideClick(containerRef, onClose, isOpen);
+  useFocusTrap(containerRef, isOpen);
   useModalAutoFocus(searchRef, isOpen, {
     delay: 50,
     onReset: () => {
@@ -226,7 +233,7 @@ export const LocalePicker = memo(function LocalePicker({
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.06]">
           <div className={cn('flex items-center', gapTokens.spacious)}>
             <div className="w-9 h-9 rounded-lg bg-[#111118] border border-white/10 flex items-center justify-center">
-              <Globe className="w-4.5 h-4.5 text-white/70" />
+              <Globe className={cn(iconSizes.lg, 'text-white/70')} />
             </div>
             <div>
               <h2 id="locale-picker-title" className="text-base font-semibold text-white">
@@ -240,13 +247,13 @@ export const LocalePicker = memo(function LocalePicker({
             aria-label="Close"
             className="p-2 rounded-lg hover:bg-white/10 transition-colors text-white/60 hover:text-white"
           >
-            <X className="w-5 h-5" />
+            <X className={iconSizes.xl} />
           </button>
         </div>
 
         {/* Search Header - CommandPalette style */}
         <div className={cn('flex items-center p-4 border-b border-white/[0.06]', gapTokens.spacious)}>
-          <Search className="w-5 h-5 text-white/40 shrink-0" />
+          <Search className={cn(iconSizes.xl, 'text-white/40 shrink-0')} />
           <input
             ref={searchRef}
             type="text"

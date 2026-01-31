@@ -14,6 +14,7 @@
 import { useState, useCallback, useMemo, memo } from 'react';
 import { motion } from 'motion/react';
 import { FolderOpen, Globe, ChevronDown } from 'lucide-react';
+import { useShallow } from 'zustand/react/shallow';
 import { cn } from '@/lib/utils';
 import { useFilterStore } from '@/stores/filterStore';
 import { useGraphStore } from '@/stores/graphStore';
@@ -89,8 +90,12 @@ export const ContextPicker = memo(function ContextPicker({ className }: ContextP
   const [isLocalePickerOpen, setLocalePickerOpen] = useState(false);
 
   // Store state
-  const selectedProject = useFilterStore((s) => s.selectedProject);
-  const selectedLocale = useFilterStore((s) => s.selectedLocale);
+  const { selectedProject, selectedLocale } = useFilterStore(
+    useShallow((s) => ({
+      selectedProject: s.selectedProject,
+      selectedLocale: s.selectedLocale,
+    }))
+  );
 
   // Get available projects from graph nodes
   const nodes = useGraphStore((s) => s.nodes);
