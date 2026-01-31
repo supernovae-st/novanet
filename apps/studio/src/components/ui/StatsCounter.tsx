@@ -2,6 +2,7 @@
 
 import { memo } from 'react';
 import { cn } from '@/lib/utils';
+import { iconSizes } from '@/design/tokens';
 import { GRAPH_ICONS, ICON_COLORS } from '@/config/iconSystem';
 
 interface StatsCounterProps {
@@ -41,7 +42,7 @@ export const StatsCounter = memo(function StatsCounter({
       {/* Nodes - Emerald theme */}
       <span className="flex items-center gap-1.5">
         <NodeIcon className={cn(
-          'w-4 h-4',
+          iconSizes.md,
           ICON_COLORS.node.muted,
           isLoading && 'animate-pulse'
         )} />
@@ -55,7 +56,7 @@ export const StatsCounter = memo(function StatsCounter({
 
       {/* Relations - Violet theme */}
       <span className="flex items-center gap-1.5">
-        <RelIcon className={cn('w-4 h-4', ICON_COLORS.relationship.muted)} />
+        <RelIcon className={cn(iconSizes.md, ICON_COLORS.relationship.muted)} />
         <span className="text-white font-semibold tabular-nums">
           {edgeCount.toLocaleString()}
         </span>

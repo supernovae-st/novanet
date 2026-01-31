@@ -5,7 +5,7 @@ import * as DialogPrimitive from "@radix-ui/react-dialog"
 import { X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
-import { glassClasses } from "@/design/tokens"
+import { glassClasses, iconSizes } from "@/design/tokens"
 
 const Dialog = DialogPrimitive.Root
 
@@ -70,7 +70,7 @@ const DialogContent = React.forwardRef<
           "disabled:pointer-events-none"
         )}
       >
-        <X className="h-4 w-4" />
+        <X className={iconSizes.md} />
         <span className="sr-only">Close</span>
       </DialogPrimitive.Close>
     </DialogPrimitive.Content>

@@ -13,6 +13,7 @@
 import { memo, useState } from 'react';
 import { Handle, Position } from '@xyflow/react';
 import { cn } from '@/lib/utils';
+import { glassClasses } from '@/design/tokens';
 import { GlowingBorder } from '@/components/ui/GlowingBorder';
 import { SelectionHalo } from '../SelectionHalo';
 import {
@@ -125,10 +126,9 @@ export const BaseNodeWrapper = memo(function BaseNodeWrapper({
         <div
           className={cn(
             'relative transition-all duration-300',
-            'bg-black/90 backdrop-blur-xl',
+            glassClasses.modal,
             SIZE_CLASSES[size],
-            shapeClass,
-            selected && 'bg-black/95'
+            shapeClass
           )}
         >
           {/* Selection Halo - Pulsing ring for selected nodes */}

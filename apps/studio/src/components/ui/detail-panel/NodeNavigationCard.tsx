@@ -15,6 +15,7 @@ import { cn } from '@/lib/utils';
 import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
 import { ACTION_ICONS } from '@/config/iconSystem';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
+import { iconSizes } from '@/design/tokens';
 import type { GraphNode } from '@/types';
 
 const TargetIcon = ACTION_ICONS.target;
@@ -77,7 +78,7 @@ export const NodeNavigationCard = memo(function NodeNavigationCard({
             {node.type}
           </div>
         </div>
-        <TargetIcon className="w-4 h-4 text-white/40 group-hover:text-white/70 transition-colors" />
+        <TargetIcon className={cn(iconSizes.md, 'text-white/40 group-hover:text-white/70 transition-colors')} />
       </button>
     );
   }
@@ -137,7 +138,7 @@ export const NodeNavigationCard = memo(function NodeNavigationCard({
       </div>
 
       {/* Arrow */}
-      <TargetIcon className="w-4 h-4 text-white/40 group-hover:text-white/70 transition-colors shrink-0" />
+      <TargetIcon className={cn(iconSizes.md, 'text-white/40 group-hover:text-white/70 transition-colors shrink-0')} />
     </button>
   );
 });
@@ -193,7 +194,7 @@ export const RelationNavigationCard = memo(function RelationNavigationCard({
           <span className="font-mono">{edgeType}</span>
         </div>
       </div>
-      <TargetIcon className="w-4 h-4 text-white/40 group-hover:text-white/70 transition-colors" />
+      <TargetIcon className={cn(iconSizes.md, 'text-white/40 group-hover:text-white/70 transition-colors')} />
     </button>
   );
 });

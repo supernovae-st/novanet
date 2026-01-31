@@ -16,7 +16,7 @@
 
 import { useCallback, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
-import { glassClasses } from '@/design/tokens';
+import { glassClasses, iconSizes } from '@/design/tokens';
 import { ACTION_ICONS } from '@/config/iconSystem';
 import { useNodeExpansion, useLatestRef } from '@/hooks';
 import { useGraphStore } from '@/stores/graphStore';
@@ -60,7 +60,7 @@ function MenuItem({
         className
       )}
     >
-      <Icon className="w-4 h-4 text-white/60" />
+      <Icon className={cn(iconSizes.md, 'text-white/60')} />
       <span>{label}</span>
     </button>
   );

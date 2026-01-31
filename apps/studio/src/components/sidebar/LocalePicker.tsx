@@ -14,7 +14,7 @@ import { useState, useMemo, useCallback, useEffect, useRef, memo, useDeferredVal
 import { createPortal } from 'react-dom';
 import { Search, X, Globe, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { glassClasses } from '@/design/tokens';
+import { glassClasses, iconSizes } from '@/design/tokens';
 import { Kbd } from '@/components/ui';
 import { useFilterStore } from '@/stores/filterStore';
 import {
@@ -82,7 +82,7 @@ const LocaleCard = memo(function LocaleCard({
       {/* Selection indicator */}
       {isSelected && (
         <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-novanet-500 flex items-center justify-center">
-          <Check className="w-3 h-3 text-white" strokeWidth={3} />
+          <Check className={cn(iconSizes.xs, 'text-white')} strokeWidth={3} />
         </div>
       )}
 
@@ -263,7 +263,7 @@ export const LocalePicker = memo(function LocalePicker({
               aria-label="Clear search"
               className="p-1.5 hover:bg-white/10 rounded-lg transition-colors text-white/40 hover:text-white/60"
             >
-              <X className="w-4 h-4" />
+              <X className={iconSizes.md} />
             </button>
           )}
         </div>

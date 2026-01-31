@@ -3,12 +3,13 @@
 /**
  * SchemaFilterPanel - Hierarchical filter UI for Schema Mode
  *
+ * Design: Premium glassmorphism matching Data View style
+ *
  * Features:
- * - Shows all 3 scopes with their subcategories
- * - Uses unified FilterTree design system
- * - Tri-state checkboxes for visibility toggling
- * - Flat tree structure with border-left connectors
- * - ARIA accessibility attributes for screen readers
+ * - Uses unified FilterSection + FilterCard design system
+ * - Tri-state checkboxes for hierarchical selection
+ * - Collapsible sections with smooth animations
+ * - ARIA accessibility
  */
 
 import { memo, useCallback, useMemo } from 'react';
@@ -19,10 +20,9 @@ import type { Subcategory } from '@novanet/core/graph';
 import type { Scope } from '@/types';
 import { useFilterStore } from '@/stores/filterStore';
 import { cn } from '@/lib/utils';
-import { scopeAccents, panelClasses } from '@/design/tokens';
-import { FilterTree } from '@/components/ui/FilterTree';
-import { calculateCheckboxState } from '@/hooks';
-import type { CheckboxState } from '@/components/ui/TriStateCheckbox';
+import { scopeAccents, panelClasses, iconSizes } from '@/design/tokens';
+import { FilterSection, type CheckboxState } from '@/components/ui/FilterSection';
+import { FilterCard } from '@/components/ui/FilterCard';
 
 // Ordered scopes for consistent rendering
 const SCOPE_ORDER: Scope[] = ['Project', 'Global', 'Shared'];
@@ -53,7 +53,7 @@ export const SchemaFilterPanel = memo(function SchemaFilterPanel({
     }))
   );
 
-  // Memoize scope data to avoid recomputing on each render
+  // Memoize scope data
   const scopeData = useMemo(() => {
     return SCOPE_ORDER.map((scope) => {
       const scopeDef = SCOPE_HIERARCHY[scope];
@@ -78,27 +78,29 @@ export const SchemaFilterPanel = memo(function SchemaFilterPanel({
     });
   }, []);
 
-  // Calculate checkbox state for a scope (all subcategories visible vs some vs none)
+  // Calculate checkbox state for a scope
   const getScopeCheckboxState = useCallback(
     (scope: Scope): CheckboxState => {
       const scopeDef = SCOPE_HIERARCHY[scope];
       const subcatNames = Object.keys(scopeDef.subcategories) as Subcategory[];
-      const visibleSet = new Set(
-        subcatNames.filter((name) => !isSubcategoryCollapsed(scope, name))
-      );
-      return calculateCheckboxState(subcatNames, visibleSet);
+      const visibleCount = subcatNames.filter(
+        (name) => !isSubcategoryCollapsed(scope, name)
+      ).length;
+
+      if (visibleCount === 0) return 'none';
+      if (visibleCount === subcatNames.length) return 'all';
+      return 'partial';
     },
     [isSubcategoryCollapsed]
   );
 
-  // Handle scope checkbox click (toggle all subcategories in scope)
+  // Handle scope checkbox click
   const handleScopeCheckboxClick = useCallback(
     (scope: Scope) => {
       const scopeDef = SCOPE_HIERARCHY[scope];
       const subcatNames = Object.keys(scopeDef.subcategories) as Subcategory[];
       const currentState = getScopeCheckboxState(scope);
 
-      // If all or partial visible, collapse all. If none visible, show all.
       const shouldCollapse = currentState !== 'none';
       subcatNames.forEach((name) => {
         setSubcategoryCollapsed(scope, name, shouldCollapse);
@@ -114,60 +116,73 @@ export const SchemaFilterPanel = memo(function SchemaFilterPanel({
       role="region"
       aria-label="Schema filters"
     >
-      {/* Header - Matching Data View style */}
-      <div className={panelClasses.header}>
-        <div className={panelClasses.headerContent}>
-          <div className={panelClasses.headerIconBox}>
-            <Boxes className={panelClasses.headerIcon} />
+      {/* Header - Premium Glassmorphism */}
+      <div className={cn('relative', panelClasses.header)}>
+        <div className="absolute inset-0 bg-gradient-to-br from-violet-500/5 via-transparent to-emerald-500/5 pointer-events-none" />
+
+        <div className="relative flex items-center gap-3">
+          <div className="relative">
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-violet-400 to-emerald-500 opacity-20 blur-lg" />
+            <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500/20 to-emerald-500/20 flex items-center justify-center border border-white/10 shadow-lg shadow-black/20">
+              <Boxes className={cn(iconSizes.md, 'text-violet-400')} />
+            </div>
           </div>
-          <div>
-            <h2 className={panelClasses.headerTitle}>Schema Browser</h2>
-            <p className={panelClasses.headerSubtitle}>35 node types</p>
+
+          <div className="flex-1 min-w-0">
+            <h2 className="text-sm font-semibold text-white tracking-tight">
+              Schema Browser
+            </h2>
+            <p className="text-[10px] text-white/40 mt-0.5">
+              35 node types · 3 scopes
+            </p>
           </div>
         </div>
       </div>
 
-      {/* Content - FilterTree */}
-      <div className={panelClasses.body}>
-        <FilterTree.Root>
-          {scopeData.map(({ scope, scopeDef, accent, subcategories, nodeCount }) => (
-            <FilterTree.Section
-              key={scope}
-              id={scope.toLowerCase()}
-              label={scopeDef.label}
-              icon={<span className="text-base">{scopeDef.icon}</span>}
-              color={accent.color}
-              checkboxState={getScopeCheckboxState(scope)}
-              onCheckboxClick={() => handleScopeCheckboxClick(scope)}
-              count={nodeCount}
-              defaultExpanded={true}
-            >
-              {subcategories.map(([subcatName, subcatMeta]) => {
-                const isHidden = isSubcategoryCollapsed(scope, subcatName);
+      {/* Content - Unified Filter Components */}
+      <div className={cn(panelClasses.body, 'space-y-4')}>
+        {scopeData.map(({ scope, scopeDef, accent, subcategories, nodeCount }) => (
+          <FilterSection
+            key={scope}
+            id={scope.toLowerCase()}
+            label={scopeDef.label}
+            icon={<span className="text-base">{scopeDef.icon}</span>}
+            accentColor={accent.color}
+            checkboxState={getScopeCheckboxState(scope)}
+            onCheckboxClick={() => handleScopeCheckboxClick(scope)}
+            count={nodeCount}
+            defaultExpanded={true}
+          >
+            {subcategories.map(([subcatName, subcatMeta]) => {
+              const isHidden = isSubcategoryCollapsed(scope, subcatName);
 
-                return (
-                  <FilterTree.Row
-                    key={subcatName}
-                    id={`${scope}-${subcatName}`}
-                    label={subcatMeta.label}
-                    icon={<span className="text-sm">{subcatMeta.icon}</span>}
-                    color={accent.color}
-                    isSelected={!isHidden}
-                    onToggle={() => toggleSubcategoryCollapsed(scope, subcatName)}
-                    count={subcatMeta.nodeTypes.length}
-                  />
-                );
-              })}
-            </FilterTree.Section>
-          ))}
-        </FilterTree.Root>
+              return (
+                <FilterCard
+                  key={subcatName}
+                  id={`${scope}-${subcatName}`}
+                  label={subcatMeta.label}
+                  icon={<span className="text-sm">{subcatMeta.icon}</span>}
+                  accentColor={accent.color}
+                  isSelected={!isHidden}
+                  onToggle={() => toggleSubcategoryCollapsed(scope, subcatName)}
+                  count={subcatMeta.nodeTypes.length}
+                  compact
+                />
+              );
+            })}
+          </FilterSection>
+        ))}
       </div>
 
-      {/* Footer Stats - Minimal */}
-      <div className={panelClasses.footer}>
-        <p className={panelClasses.footerText}>
-          3 scopes &middot; 9 categories &middot; 35 types
-        </p>
+      {/* Footer */}
+      <div className={cn(panelClasses.footer, 'bg-black/20')}>
+        <div className="flex items-center justify-center gap-3">
+          <span className="text-[10px] text-violet-400/60">📦 Project</span>
+          <span className="text-white/20">·</span>
+          <span className="text-[10px] text-emerald-400/60">🌍 Global</span>
+          <span className="text-white/20">·</span>
+          <span className="text-[10px] text-amber-400/60">🎯 Shared</span>
+        </div>
       </div>
     </div>
   );

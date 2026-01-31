@@ -28,7 +28,7 @@ import { useDatabaseSchema } from '@/hooks';
 import { LoadingState } from '@/components/ui/EmptyState';
 import { SegmentedTabs } from '@/components/ui/SegmentedTabs';
 import { formatTime } from '@/lib/formatters';
-import { panelClasses, glassClasses } from '@/design/tokens';
+import { panelClasses, glassClasses, iconSizes } from '@/design/tokens';
 import { NodeLabelsSection } from './database/NodeLabelsSection';
 import { RelationshipsSection } from './database/RelationshipsSection';
 import { AiSearchInput } from './AiSearchInput';
@@ -241,7 +241,7 @@ export const DatabaseInfoPanel = memo(function DatabaseInfoPanel() {
           <div className="relative">
             <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-novanet-400 to-emerald-500 opacity-20 blur-lg" />
             <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-novanet-500/20 to-emerald-500/20 flex items-center justify-center border border-white/10 shadow-lg shadow-black/20">
-              <GRAPH_ICONS.database className="w-4.5 h-4.5 text-novanet-400" />
+              <GRAPH_ICONS.database className={cn(iconSizes.md, 'text-novanet-400')} />
             </div>
           </div>
 
@@ -268,7 +268,7 @@ export const DatabaseInfoPanel = memo(function DatabaseInfoPanel() {
             title="Refresh schema"
             aria-label="Refresh database schema"
           >
-            <RefreshIcon className={cn('w-3.5 h-3.5', isLoading && 'animate-spin')} />
+            <RefreshIcon className={cn(iconSizes.sm, isLoading && 'animate-spin')} />
           </button>
         </div>
       </div>

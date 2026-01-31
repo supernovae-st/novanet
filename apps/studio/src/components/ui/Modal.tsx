@@ -21,7 +21,7 @@ import { createContext, useContext, useRef, type ReactNode, type RefObject } fro
 import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { modalClasses, zIndex } from '@/design/tokens';
+import { modalClasses, zIndex, iconSizes } from '@/design/tokens';
 import { useModal, useFocusTrap } from '@/hooks';
 
 // =============================================================================
@@ -193,7 +193,7 @@ function ModalHeader({ children, className, showClose = true, titleId }: ModalHe
           aria-label="Close modal"
           className={modalClasses.closeButton}
         >
-          <X className="w-4 h-4" />
+          <X className={iconSizes.md} />
         </button>
       )}
     </div>
