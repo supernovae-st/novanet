@@ -30,12 +30,15 @@ export interface LayoutOptions {
   useVariableSizes?: boolean;
 }
 
+/**
+ * AGGRESSIVE SPACING for clear edge visibility
+ */
 const DEFAULT_OPTIONS: Required<LayoutOptions> = {
   direction: 'TB',
   nodeWidth: 200,
   nodeHeight: 100,
-  ranksep: 120, // Increased from 80 for better vertical spacing
-  nodesep: 80,  // Increased from 40 for better horizontal spacing
+  ranksep: 500,  // HUGE vertical spacing between ranks (was ~291)
+  nodesep: 350,  // HUGE horizontal spacing between nodes (was ~194)
   ranker: 'network-simplex',
   useVariableSizes: true,
 };
@@ -106,14 +109,14 @@ export function applyDagreLayout<T extends Node>(
   const g = new dagre.graphlib.Graph();
   g.setDefaultEdgeLabel(() => ({}));
 
-  // Set graph options with increased margins
+  // Set graph options with AGGRESSIVE margins for edge visibility
   g.setGraph({
     rankdir: opts.direction,
     ranksep: opts.ranksep,
     nodesep: opts.nodesep,
     ranker: opts.ranker,
-    marginx: 80,  // Increased from 50
-    marginy: 80,  // Increased from 50
+    marginx: 200,  // Generous margins
+    marginy: 200,  // Generous margins
   });
 
   // Build a map of node dimensions for position calculation

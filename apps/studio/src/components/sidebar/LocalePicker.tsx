@@ -14,6 +14,7 @@ import { useState, useMemo, useCallback, useEffect, useRef, memo, useDeferredVal
 import { createPortal } from 'react-dom';
 import { Search, X, Globe, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { glassClasses } from '@/design/tokens';
 import { Kbd } from '@/components/ui';
 import { useFilterStore } from '@/stores/filterStore';
 import {
@@ -214,7 +215,11 @@ export const LocalePicker = memo(function LocalePicker({
         aria-modal="true"
         aria-labelledby="locale-picker-title"
         onKeyDown={handleKeyDown}
-        className="relative w-full max-w-4xl max-h-[85vh] overflow-hidden flex flex-col glass-floating animate-scale-in"
+        className={cn(
+          'relative w-full max-w-4xl max-h-[85vh] overflow-hidden flex flex-col',
+          glassClasses.floating,
+          'animate-scale-in'
+        )}
       >
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.08]">

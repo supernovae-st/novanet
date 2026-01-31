@@ -2,7 +2,7 @@
 import type { Node, Edge } from '@xyflow/react';
 import type { HierarchicalSchemaData } from '@novanet/core/graph';
 import type { SchemaLayoutResult } from './types';
-import { SCOPE_CONFIGS, NODE_WIDTH, NODE_HEIGHT, GROUP_PADDING } from './types';
+import { SCOPE_CONFIGS, NODE_WIDTH, NODE_HEIGHT, GROUP_PADDING, NODE_GAP, SCOPE_GAP } from './types';
 import type { Scope } from '@novanet/core/types';
 
 /**
@@ -17,15 +17,16 @@ export function applyForceClusterLayout(
   const nodes: Node[] = [];
   const edges: Edge[] = [];
 
-  // Cluster centers for each scope
+  // Cluster centers for each scope (spaced using SCOPE_GAP × 3 for clear separation)
+  const CLUSTER_SPACING = SCOPE_GAP * 3;  // ~879px between cluster centers
   const CLUSTER_CENTERS: Record<Scope, { x: number; y: number }> = {
-    Project: { x: 600, y: 600 },
-    Global: { x: 1400, y: 400 },
-    Shared: { x: 1000, y: 1000 },
+    Project: { x: 800, y: 800 },
+    Global: { x: 800 + CLUSTER_SPACING, y: 500 },
+    Shared: { x: 800 + CLUSTER_SPACING / 2, y: 800 + CLUSTER_SPACING * 0.7 },
   };
 
-  const CLUSTER_RADIUS = 400;
-  const NODE_REPULSION = 150;
+  const CLUSTER_RADIUS = SCOPE_GAP * 2;    // ~586px radius (was 400)
+  const NODE_REPULSION = NODE_GAP * 1.5;   // ~168px repulsion factor (was 150)
 
   const scopeOrder: Scope[] = ['Project', 'Global', 'Shared'];
 

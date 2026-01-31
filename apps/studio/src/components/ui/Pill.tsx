@@ -11,6 +11,7 @@
 
 import { memo } from 'react';
 import { cn } from '@/lib/utils';
+import { glassClasses } from '@/design/tokens';
 
 interface PillProps {
   children: React.ReactNode;
@@ -36,11 +37,11 @@ export const Pill = memo(function Pill({
   glow = false,
   glowColor = 'emerald',
 }: PillProps) {
-  // Linear-dark design system (#0d0d12 base)
+  // Glass effect variants mapped to design tokens
   const glassStyles = {
-    light: 'bg-[#0d0d12]/90 backdrop-blur-sm border-white/8 hover:bg-[#0d0d12]/95 hover:border-white/12',
-    medium: 'bg-[#0d0d12]/95 backdrop-blur-md border-white/10 hover:bg-[#0d0d12] hover:border-white/15',
-    heavy: 'bg-[#0d0d12] backdrop-blur-xl border-white/10 hover:bg-[#111118] hover:border-white/18',
+    light: cn(glassClasses.subtle, 'hover:bg-[hsl(240,8%,5%)] hover:border-white/12'),
+    medium: cn(glassClasses.light, 'hover:bg-[hsl(240,6%,8%)] hover:border-white/15'),
+    heavy: cn(glassClasses.medium, 'hover:bg-[hsl(240,5%,12%)] hover:border-white/18'),
   };
 
   const sizeStyles = {

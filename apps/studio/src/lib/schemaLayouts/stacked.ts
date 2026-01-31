@@ -2,7 +2,15 @@
 import type { Node, Edge } from '@xyflow/react';
 import type { HierarchicalSchemaData } from '@novanet/core/graph';
 import type { SchemaLayoutResult } from './types';
-import { SCOPE_CONFIGS, NODE_WIDTH, NODE_HEIGHT, GROUP_PADDING } from './types';
+import {
+  SCOPE_CONFIGS,
+  NODE_WIDTH,
+  NODE_HEIGHT,
+  GROUP_PADDING,
+  NODE_GAP,
+  SCOPE_GAP,
+  SUBCAT_GAP,
+} from './types';
 import type { Scope } from '@novanet/core/types';
 
 /**
@@ -33,11 +41,12 @@ export function applyStackedLayout(
   const nodes: Node[] = [];
   const edges: Edge[] = [];
 
-  const SCOPE_WIDTH = 1800;
-  const SCOPE_MARGIN = 80;
-  const SUBCAT_MARGIN = 30;
-  const NODE_SPACING = 30;
-  const NODES_PER_ROW = 8;
+  // Using Golden Ratio spacing system
+  const SCOPE_WIDTH = 3000;            // Wider to accommodate larger spacing
+  const SCOPE_MARGIN = SCOPE_GAP;      // 293px between scopes (was 80)
+  const SUBCAT_MARGIN = SUBCAT_GAP;    // 181px between subcategories (was 30)
+  const NODE_SPACING = NODE_GAP;       // 112px between nodes (was 30)
+  const NODES_PER_ROW = 5;             // Fewer per row for wider spacing (was 8)
 
   const scopeOrder: Scope[] = ['Project', 'Global', 'Shared'];
   let currentY = 0;

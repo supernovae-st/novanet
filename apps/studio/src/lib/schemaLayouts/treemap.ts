@@ -2,7 +2,18 @@
 import type { Node, Edge } from '@xyflow/react';
 import type { HierarchicalSchemaData } from '@novanet/core/graph';
 import type { SchemaLayoutResult, ScopeConfig } from './types';
-import { SCOPE_CONFIGS, NODE_WIDTH, NODE_HEIGHT, GROUP_PADDING } from './types';
+import {
+  SCOPE_CONFIGS,
+  NODE_WIDTH,
+  NODE_HEIGHT,
+  GROUP_PADDING,
+  NODE_GAP,
+  INNER_PADDING,
+  SUBCAT_GAP,
+  CANVAS_WIDTH,
+  CANVAS_HEIGHT,
+  CANVAS_MARGIN,
+} from './types';
 import type { Scope } from '@novanet/core/types';
 
 /**
@@ -35,10 +46,8 @@ export function applyTreemapLayout(
     totalNodes += count;
   }
 
-  // Canvas dimensions
-  const CANVAS_WIDTH = 2400;
-  const CANVAS_HEIGHT = 1600;
-  const MARGIN = 40;
+  // Canvas dimensions (using Golden Ratio scaled constants)
+  const MARGIN = CANVAS_MARGIN;
 
   // Sort scopes by node count (largest first for better treemap)
   const sortedScopes = [...scopeNodeCounts.entries()]
@@ -120,7 +129,8 @@ export function applyTreemapLayout(
     const innerHeight = rect.height - innerPadding * 2;
 
     let subcatY = innerPadding;
-    const subcatHeight = (innerHeight - (subcatEntries.length - 1) * 20) / subcatEntries.length;
+    // Use SUBCAT_GAP for spacing between subcategories (Golden Ratio: 181px)
+    const subcatHeight = (innerHeight - (subcatEntries.length - 1) * SUBCAT_GAP) / subcatEntries.length;
 
     for (const [subcatName, subcatMeta] of subcatEntries) {
       const subcatId = `subcat-${scope}-${subcatName}`;
@@ -143,9 +153,8 @@ export function applyTreemapLayout(
       });
 
       // Layout nodes within subcategory in a grid
-      const nodeInnerPadding = 30;
-      const nodeSpacing = 20;
-      const nodesPerRow = Math.max(1, Math.floor((innerWidth - nodeInnerPadding * 2) / (NODE_WIDTH + nodeSpacing)));
+      // Using Golden Ratio spacing: NODE_GAP = 112px (was 20px - 5.6× increase!)
+      const nodesPerRow = Math.max(1, Math.floor((innerWidth - INNER_PADDING * 2) / (NODE_WIDTH + NODE_GAP)));
 
       subcatMeta.nodeTypes.forEach((nodeType, idx) => {
         const row = Math.floor(idx / nodesPerRow);
@@ -159,8 +168,8 @@ export function applyTreemapLayout(
           extent: 'parent',
           draggable: true,
           position: {
-            x: nodeInnerPadding + col * (NODE_WIDTH + nodeSpacing),
-            y: nodeInnerPadding + row * (NODE_HEIGHT + nodeSpacing),
+            x: INNER_PADDING + col * (NODE_WIDTH + NODE_GAP),
+            y: INNER_PADDING + row * (NODE_HEIGHT + NODE_GAP),
           },
           data: {
             nodeType,
@@ -172,14 +181,15 @@ export function applyTreemapLayout(
         });
       });
 
-      subcatY += subcatHeight + 20;
+      subcatY += subcatHeight + SUBCAT_GAP;
     }
   }
 
   // Fallback: if no nodes created from hierarchy (broken scopes), create nodes directly
   if (nodes.length === 0 && hierarchy.nodes.length > 0) {
-    const FALLBACK_SPACING = 200;
-    const FALLBACK_COLS = 6;
+    // Use Golden Ratio spacing for fallback: NODE_WIDTH + NODE_GAP = 252px
+    const FALLBACK_SPACING = NODE_WIDTH + NODE_GAP;
+    const FALLBACK_COLS = 5; // Fewer columns for wider spacing
 
     hierarchy.nodes.forEach((schemaNode, idx) => {
       const col = idx % FALLBACK_COLS;
@@ -190,8 +200,8 @@ export function applyTreemapLayout(
         type: 'schemaNode',
         draggable: true,
         position: {
-          x: 50 + col * FALLBACK_SPACING,
-          y: 50 + row * FALLBACK_SPACING,
+          x: CANVAS_MARGIN + col * FALLBACK_SPACING,
+          y: CANVAS_MARGIN + row * FALLBACK_SPACING,
         },
         data: {
           nodeType: schemaNode.nodeType,

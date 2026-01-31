@@ -233,7 +233,7 @@ const FilterTreeSection = memo(function FilterTreeSection({
   );
 
   return (
-    <div className={cn('mb-1', className)} role="group" aria-labelledby={`section-label-${id}`}>
+    <div className={cn('mb-1', className)} role="treeitem" aria-expanded={isExpanded} aria-labelledby={`section-label-${id}`}>
       {/* Section Header */}
       <div className={ftc.sectionHeader}>
         {/* Expand/Collapse Button - Main focusable element */}

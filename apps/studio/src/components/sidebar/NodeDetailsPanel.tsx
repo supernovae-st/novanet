@@ -24,6 +24,7 @@ import {
   JsonView,
 } from '@/components/ui/detail-panel';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
+import { panelClasses, iconSizes } from '@/design/tokens';
 import type { GraphNode } from '@/types';
 
 interface NodeDetailsPanelProps {
@@ -100,10 +101,10 @@ export function NodeDetailsPanel({ node }: NodeDetailsPanelProps) {
     : [];
 
   return (
-    <div className="h-full flex flex-col overflow-hidden">
+    <div className={panelClasses.container}>
       {/* Header Card */}
       <div
-        className="p-5 border-b border-white/12"
+        className="p-5 border-b border-white/[0.06]"
         style={{
           background: `linear-gradient(135deg, ${colors.primary}15, ${colors.secondary}08)`,
         }}

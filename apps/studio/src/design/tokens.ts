@@ -135,6 +135,114 @@ export const controls = {
 } as const;
 
 // ============================================================================
+// OPACITY PRIMITIVES - White opacity scale for consistent transparency
+// ============================================================================
+
+/**
+ * White opacity scale - semantic naming for consistent transparency
+ *
+ * Usage: Replace hardcoded `white/[0.xx]` with these tokens
+ * Example: `text-white/40` → `opacity.text.muted`
+ */
+export const opacity = {
+  /** Background opacities */
+  bg: {
+    subtle: 'white/[0.03]',   // Hover states, very subtle
+    light: 'white/[0.04]',    // Light backgrounds
+    medium: 'white/[0.06]',   // Card backgrounds, selected states
+    strong: 'white/[0.08]',   // Elevated elements
+    heavy: 'white/[0.10]',    // Strong emphasis
+    intense: 'white/[0.15]',  // Maximum emphasis
+  },
+  /** Border opacities */
+  border: {
+    subtle: 'white/[0.06]',   // Panel dividers
+    light: 'white/[0.08]',    // Card borders
+    medium: 'white/[0.12]',   // Modal borders
+    strong: 'white/[0.15]',   // Active borders
+    heavy: 'white/[0.20]',    // High emphasis borders
+  },
+  /** Text opacities */
+  text: {
+    disabled: 'white/[0.20]', // Disabled text
+    muted: 'white/[0.30]',    // Very muted (counts, hints)
+    subtle: 'white/[0.40]',   // Secondary text
+    secondary: 'white/[0.60]',// Body text, labels
+    primary: 'white/[0.80]',  // Important text
+    strong: 'white/[0.90]',   // Headings
+    full: 'white',            // Maximum contrast
+  },
+} as const;
+
+// ============================================================================
+// ICON SIZES - Consistent icon dimensions
+// ============================================================================
+
+/**
+ * Icon size tokens - Tailwind class pairs for width/height
+ *
+ * Usage: Replace `w-4 h-4` patterns with `iconSizes.md`
+ */
+export const iconSizes = {
+  /** 12px - Tiny icons (badges, compact UI) */
+  xs: 'w-3 h-3',
+  /** 14px - Small icons (inline, filters) */
+  sm: 'w-3.5 h-3.5',
+  /** 16px - Medium icons (default, buttons) */
+  md: 'w-4 h-4',
+  /** 18px - Large icons (headers, actions) */
+  lg: 'w-4.5 h-4.5',
+  /** 20px - Extra large icons (feature icons) */
+  xl: 'w-5 h-5',
+  /** 24px - Hero icons (empty states) */
+  '2xl': 'w-6 h-6',
+} as const;
+
+// ============================================================================
+// PANEL CLASSES - Consistent sidebar/panel styling
+// ============================================================================
+
+/**
+ * Panel design tokens - Unified sidebar/panel system
+ *
+ * Based on NodeLabelsSection gold standard:
+ * - Consistent padding: px-4 py-3/4
+ * - Border: border-white/[0.06]
+ * - Headers: icon box + title + subtitle
+ */
+export const panelClasses = {
+  /** Panel container */
+  container: 'flex flex-col h-full',
+
+  /** Panel header - icon box + title pattern */
+  header: 'px-4 py-4 border-b border-white/[0.06]',
+  headerContent: 'flex items-center gap-3',
+  headerIconBox: 'w-9 h-9 rounded-xl bg-gradient-to-br from-white/10 to-white/5 border border-white/10 flex items-center justify-center',
+  headerIcon: 'w-4 h-4 text-white/60',
+  headerTitle: 'text-sm font-medium text-white/90',
+  headerSubtitle: 'text-[11px] text-white/40',
+
+  /** Panel body - scrollable content */
+  body: 'flex-1 overflow-y-auto scrollbar-thin p-3',
+
+  /** Panel footer - stats/actions */
+  footer: 'px-4 py-3 border-t border-white/[0.06]',
+  footerText: 'text-[11px] text-white/30 text-center',
+
+  /** Section divider */
+  divider: 'border-b border-white/[0.06]',
+
+  /** Action bar - compact button row */
+  actionBar: 'flex items-center justify-between px-1 py-1.5 mb-2',
+  actionButton: 'text-[10px] text-white/40 hover:text-white/60 transition-colors',
+
+  /** Collapsible section header */
+  sectionHeader: 'flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-white/[0.02] transition-colors',
+  sectionTitle: 'text-xs font-medium text-white/70',
+  sectionCount: 'text-xs text-white/40',
+} as const;
+
+// ============================================================================
 // GLASS MORPHISM - Premium Nika-Inspired System
 // ============================================================================
 
@@ -442,10 +550,14 @@ export const tokens = {
   easing,
   transitions,
   controls,
+  opacity,
+  iconSizes,
+  panelClasses,
   glass,
   typography,
   colors,
   glassClasses,
+  modalClasses,
   buttonClasses,
   textOpacity,
   filterTreeClasses,

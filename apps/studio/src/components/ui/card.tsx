@@ -2,6 +2,7 @@ import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
+import { glassClasses } from "@/design/tokens"
 
 const cardVariants = cva(
   "rounded-xl border text-card-foreground transition-all duration-200",
@@ -12,11 +13,9 @@ const cardVariants = cva(
         default:
           "bg-[hsl(240,8%,5%)] border-white/12 hover:bg-[hsl(240,6%,8%)] hover:border-white/18",
         // Glass - Surface-2 with backdrop blur
-        glass:
-          "bg-[hsl(240,6%,8%)] backdrop-blur-xl border-white/12 shadow-lg shadow-black/40",
+        glass: glassClasses.light,
         // Floating - Elevated with premium shadow
-        floating:
-          "bg-[hsl(240,6%,8%)] backdrop-blur-xl border-white/15 rounded-2xl shadow-2xl shadow-black/50 ring-1 ring-white/4 ring-inset",
+        floating: glassClasses.floating,
         // Outline - Transparent with visible border
         outline:
           "bg-transparent border-white/15 hover:border-white/25 hover:bg-white/5",

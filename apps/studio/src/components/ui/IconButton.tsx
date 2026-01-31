@@ -5,7 +5,7 @@
  *
  * Consolidates 3+ button patterns into single component:
  * - ghost: Default transparent button
- * - success: Green/emerald action button
+ * - success: Green/emerald action button (with Matrix glow when loading)
  * - danger: Red destructive button
  * - primary: NovaNet brand color button
  */
@@ -64,12 +64,17 @@ export const IconButton = memo(function IconButton({
 
       case 'success':
         if (loading) {
-          return 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30 animate-pulse';
+          // Matrix-style glow when executing
+          return [
+            'bg-emerald-500/30 text-emerald-300 border-emerald-400/50',
+            'shadow-[0_0_20px_rgba(52,211,153,0.4),inset_0_0_10px_rgba(52,211,153,0.2)]',
+            'animate-pulse',
+          ];
         }
         if (disabled) {
           return 'bg-white/5 text-white/40 border-white/10';
         }
-        return 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/30 hover:scale-105';
+        return 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/30 hover:scale-105 active:scale-95';
 
       case 'danger':
         if (disabled) {
@@ -96,14 +101,27 @@ export const IconButton = memo(function IconButton({
       disabled={disabled || loading}
       title={title}
       className={cn(
-        'rounded-lg transition-all border',
+        'relative rounded-lg transition-all duration-200 border',
         sizeStyles[size],
         getVariantStyles(),
         'disabled:cursor-not-allowed',
         className
       )}
     >
-      <DisplayIcon className={cn('w-4 h-4', loading && 'animate-spin')} />
+      {/* Matrix glow ring when loading success */}
+      {loading && variant === 'success' && (
+        <span
+          className="absolute inset-0 rounded-lg border-2 border-emerald-400/60 animate-ping"
+          style={{ animationDuration: '1s' }}
+        />
+      )}
+      <DisplayIcon
+        className={cn(
+          'w-4 h-4 relative z-10',
+          loading && 'animate-spin',
+          loading && variant === 'success' && 'drop-shadow-[0_0_8px_rgba(52,211,153,0.8)]'
+        )}
+      />
     </button>
   );
 });
