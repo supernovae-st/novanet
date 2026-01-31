@@ -15,7 +15,7 @@ import { cn } from '@/lib/utils';
 import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
 import { ACTION_ICONS } from '@/config/iconSystem';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
-import { iconSizes } from '@/design/tokens';
+import { iconSizes, gapTokens } from '@/design/tokens';
 import type { GraphNode } from '@/types';
 
 const TargetIcon = ACTION_ICONS.target;
@@ -57,7 +57,8 @@ export const NodeNavigationCard = memo(function NodeNavigationCard({
       <button
         onClick={onClick}
         className={cn(
-          'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm',
+          'w-full flex items-center px-3 py-2.5 rounded-lg text-sm',
+          gapTokens.spacious,
           'bg-white/6 hover:bg-white/10 border border-white/10 hover:border-white/18',
           'transition-all text-left group',
           className
@@ -87,7 +88,8 @@ export const NodeNavigationCard = memo(function NodeNavigationCard({
     <button
       onClick={onClick}
       className={cn(
-        'w-full flex items-center gap-3 p-3 rounded-xl text-left',
+        'w-full flex items-center p-3 rounded-xl text-left',
+        gapTokens.spacious,
         'bg-white/6 hover:bg-white/10 border border-white/10 hover:border-white/18',
         'transition-all duration-200 group',
         className
@@ -111,7 +113,7 @@ export const NodeNavigationCard = memo(function NodeNavigationCard({
       {/* Content */}
       <div className="flex-1 min-w-0">
         {label && (
-          <div className="flex items-center gap-2 mb-0.5">
+          <div className={cn('flex items-center mb-0.5', gapTokens.default)}>
             <span
               className="text-[10px] font-bold uppercase tracking-wider"
               style={{ color: labelColor }}
@@ -170,7 +172,8 @@ export const RelationNavigationCard = memo(function RelationNavigationCard({
     <button
       onClick={onClick}
       className={cn(
-        'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm',
+        'w-full flex items-center px-3 py-2.5 rounded-lg text-sm',
+        gapTokens.spacious,
         'bg-white/6 hover:bg-white/10 border border-white/10 hover:border-white/18',
         'transition-all text-left group',
         className
@@ -187,7 +190,7 @@ export const RelationNavigationCard = memo(function RelationNavigationCard({
         <div className="text-white/95 font-medium truncate">
           {relatedNode?.displayName || 'Unknown'}
         </div>
-        <div className="text-xs text-white/60 flex items-center gap-1.5 mt-0.5">
+        <div className={cn('text-xs text-white/60 flex items-center mt-0.5', gapTokens.compact)}>
           <span className={isSource ? 'text-primary' : 'text-orange-400'}>
             {isSource ? '→' : '←'}
           </span>

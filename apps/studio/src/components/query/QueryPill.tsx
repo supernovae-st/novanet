@@ -17,7 +17,7 @@ import { cn } from '@/lib/utils';
 import { useQueryStore } from '@/stores/queryStore';
 import { useCopyFeedback, useAutoFocus } from '@/hooks';
 import { FOCUS_DELAY_MS } from '@/config/constants';
-import { glassClasses, modalClasses } from '@/design/tokens';
+import { glassClasses, modalClasses, gapTokens } from '@/design/tokens';
 import { IconButton, Kbd } from '@/components/ui';
 
 // Matrix-style characters for animation
@@ -315,7 +315,7 @@ export const QueryPill = memo(function QueryPill({ className, onRun }: QueryPill
           </>
         )}
         {/* Prompt with Matrix animation */}
-        <div className="flex items-center gap-2 shrink-0 select-none relative z-10">
+        <div className={cn('flex items-center shrink-0 select-none relative z-10', gapTokens.default)}>
           <span className={cn(
             'font-mono text-xs font-bold transition-all duration-300',
             isExecuting
@@ -434,7 +434,7 @@ export const QueryPill = memo(function QueryPill({ className, onRun }: QueryPill
           >
             {/* Header */}
             <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
-              <div className="flex items-center gap-3">
+              <div className={cn('flex items-center', gapTokens.spacious)}>
                 <span className={cn(
                   'font-mono text-sm font-medium select-none transition-colors',
                   isExecuting ? 'text-emerald-400' : 'text-emerald-500/70'
@@ -443,7 +443,7 @@ export const QueryPill = memo(function QueryPill({ className, onRun }: QueryPill
                 </span>
                 <span className="text-white/40 text-sm">Cypher Editor</span>
               </div>
-              <div className="flex items-center gap-1">
+              <div className={cn('flex items-center', gapTokens.tight)}>
                 <IconButton
                   icon={isExecuting ? Loader2 : Play}
                   onClick={() => {
