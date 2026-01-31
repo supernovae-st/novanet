@@ -52,21 +52,7 @@ export {
   type UseSmartFitViewReturn,
 } from './useSmartFitView';
 
-// Drag interaction utilities
-export {
-  useMagneticForce,
-  type MagneticForceOptions,
-  type UseMagneticForceReturn,
-} from './useMagneticForce';
-
-export {
-  useGroupDrag,
-  type GroupDragOptions,
-  type UseGroupDragReturn,
-  type NodePosition,
-  type EdgeConnection,
-} from './useGroupDrag';
-
+// Container constraint utilities
 export {
   useContainerConstraint,
   type ContainerConstraintOptions,
