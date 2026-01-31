@@ -19,7 +19,6 @@ export { CategoryIcon, getCategoryIconComponent } from './CategoryIcon';
 // Existing components
 export { ErrorBoundary } from './ErrorBoundary';
 export { GlowingBorder } from './GlowingBorder';
-export { KeyboardShortcuts, useKeyboardShortcuts } from './KeyboardShortcuts';
 export { StatsCounter } from './StatsCounter';
 export { Toaster } from './Toaster';
 

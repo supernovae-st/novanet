@@ -16,7 +16,7 @@
  * - Stable action references via useShallow
  */
 
-import { useCallback, useEffect, useMemo, useRef, lazy, Suspense } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, lazy, Suspense } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { Box, PanelLeft, Keyboard, X, Network, Table2, Code, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -48,7 +48,7 @@ import { StatsCounter, Pill, Divider, RefreshButton, CategoryIcon } from '@/comp
 import { SidebarTabs } from '@/components/sidebar/SidebarTabs';
 import { NodeDetailsPanel } from '@/components/sidebar/NodeDetailsPanel';
 import { EdgeDetailsPanel } from '@/components/sidebar/EdgeDetailsPanel';
-import { KeyboardShortcuts, useKeyboardShortcuts } from '@/components/ui/KeyboardShortcuts';
+import { KeyboardHelpPanel } from '@/components/dx/KeyboardHelpPanel';
 import { CommandPalette, useCommandPalette, useCommandPaletteState } from '@/components/ui/CommandPalette';
 import { QueryPill, ResultsOverview, TableView, RawView } from '@/components/query';
 import { useQueryStore, QueryBuilder } from '@/stores/queryStore';
@@ -134,7 +134,9 @@ export default function HomePage() {
   const { fetchData, fetchSchemaData, executeQuery, dataMode, isLoading: isFetching } = useGraphData();
 
   // Keyboard shortcuts modal
-  const { isOpen: shortcutsOpen, open: openShortcuts, close: closeShortcuts } = useKeyboardShortcuts();
+  const [shortcutsOpen, setShortcutsOpen] = useState(false);
+  const openShortcuts = useCallback(() => setShortcutsOpen(true), []);
+  const closeShortcuts = useCallback(() => setShortcutsOpen(false), []);
 
   // Command palette (⌘K)
   const { isOpen: paletteOpen, open: openPalette, close: closePalette } = useCommandPaletteState();
@@ -786,7 +788,7 @@ export default function HomePage() {
       </div>
 
       {/* Keyboard Shortcuts Modal */}
-      <KeyboardShortcuts isOpen={shortcutsOpen} onClose={closeShortcuts} />
+      <KeyboardHelpPanel isOpen={shortcutsOpen} onClose={closeShortcuts} />
 
       {/* Command Palette (⌘K) */}
       <CommandPalette isOpen={paletteOpen} onClose={closePalette} commands={commands} />
