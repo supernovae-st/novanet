@@ -178,12 +178,3 @@ export const QueryBuilder = {
     `MATCH (n) WHERE elementId(n) = '${nodeId}' RETURN n`,
 };
 
-// =============================================================================
-// SELECTORS - Use these for optimized subscriptions
-// =============================================================================
-
-export const selectCurrentQuery = (state: QueryState) => state.currentQuery;
-export const selectIsExecuting = (state: QueryState) => state.isExecuting;
-export const selectQueryError = (state: QueryState) => state.error;
-export const selectResult = (state: QueryState) => state.result;
-export const selectResultViewMode = (state: QueryState) => state.viewMode;

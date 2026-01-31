@@ -126,7 +126,6 @@ export const EffectRenderer = memo(function EffectRenderer({
         const PrimitiveComponent = PRIMITIVE_REGISTRY[effectType];
 
         if (!PrimitiveComponent) {
-          console.warn(`Unknown effect primitive: ${effectType}`);
           return null;
         }
 

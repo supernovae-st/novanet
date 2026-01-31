@@ -23,19 +23,9 @@ export function useControllableState<T>(
   const isControlled = controlledValue !== undefined;
   const isControlledRef = useRef(isControlled);
 
-  // Warn if switching between controlled/uncontrolled
+  // Track controlled/uncontrolled mode (switching is unsupported)
   useEffect(() => {
-    if (process.env.NODE_ENV !== 'production') {
-      if (isControlledRef.current !== isControlled) {
-        console.warn(
-          'useControllableState: Component is changing from',
-          isControlledRef.current ? 'controlled' : 'uncontrolled',
-          'to',
-          isControlled ? 'controlled' : 'uncontrolled',
-          '. This is not supported.'
-        );
-      }
-    }
+    isControlledRef.current = isControlled;
   }, [isControlled]);
 
   // Internal state for uncontrolled mode
