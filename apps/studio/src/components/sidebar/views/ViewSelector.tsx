@@ -31,7 +31,7 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { iconSizes } from '@/design/tokens';
+import { iconSizes, gapTokens } from '@/design/tokens';
 import { useViewStore, type ViewParams } from '@/stores/viewStore';
 import type { ViewRegistryEntry } from '@novanet/core/filters';
 import { ViewCard } from './ViewCard';
@@ -140,7 +140,7 @@ export const ViewSelector = memo(function ViewSelector({
   if (loading && categories.length === 0) {
     return (
       <div className={cn('space-y-1', className)}>
-        <div className="flex items-center gap-2 px-3 py-2 text-xs text-white/40">
+        <div className={cn('flex items-center px-3 py-2 text-xs text-white/40', gapTokens.default)}>
           <Loader2 className={cn(iconSizes.sm, 'animate-spin')} />
           <span className="uppercase tracking-wider font-medium">Loading Views...</span>
         </div>
@@ -152,13 +152,13 @@ export const ViewSelector = memo(function ViewSelector({
   if (error) {
     return (
       <div className={cn('space-y-2 px-3 py-2', className)}>
-        <div className="flex items-center gap-2 text-xs text-red-400">
+        <div className={cn('flex items-center text-xs text-red-400', gapTokens.default)}>
           <AlertCircle className={iconSizes.sm} />
           <span>Failed to load views</span>
         </div>
         <button
           onClick={() => loadRegistry()}
-          className="flex items-center gap-1.5 text-[10px] text-white/40 hover:text-white/60 transition-colors"
+          className={cn('flex items-center text-[10px] text-white/40 hover:text-white/60 transition-colors', gapTokens.compact)}
         >
           <RefreshCw className={iconSizes.xs} />
           Retry
@@ -171,7 +171,7 @@ export const ViewSelector = memo(function ViewSelector({
   if (categories.length === 0) {
     return (
       <div className={cn('space-y-1', className)}>
-        <div className="flex items-center gap-2 px-3 py-2 text-xs text-white/40">
+        <div className={cn('flex items-center px-3 py-2 text-xs text-white/40', gapTokens.default)}>
           <Grid3x3 className={iconSizes.sm} />
           <span className="uppercase tracking-wider font-medium">No Views Available</span>
         </div>
