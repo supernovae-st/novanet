@@ -8,6 +8,7 @@
 
 export { MermaidGenerator, type MermaidGeneratorConfig } from './generators/MermaidGenerator.js';
 export { SubcategoryGenerator, type SubcategoryGeneratorConfig } from './generators/SubcategoryGenerator.js';
+export { OrganizingPrinciplesGenerator, type OrganizingPrinciplesGeneratorConfig } from './generators/OrganizingPrinciplesGenerator.js';
 
 // =============================================================================
 // PUBLIC API - PARSERS
