@@ -7,18 +7,19 @@
  * Tab switching syncs with dataMode in uiStore.
  *
  * - Schema tab: Ontological schema view (SchemaFilterPanel)
- * - Data tab: Instance data explorer (DatabaseInfoPanel + FilterPanel)
+ * - Data tab: Instance data explorer (DatabaseInfoPanel)
+ *
+ * Both panels share the same skeleton: container → header → body → footer
  */
 
 import { memo } from 'react';
 import { Boxes, Database } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
 import { cn } from '@/lib/utils';
-import { opacity, glassClasses, gapTokens } from '@/design/tokens';
+import { gapTokens } from '@/design/tokens';
 import { ICON_SIZES } from '@/config/iconSystem';
 import { useUIStore } from '@/stores/uiStore';
 import { DatabaseInfoPanel } from './DatabaseInfoPanel';
-import { FilterPanel } from './FilterPanel';
 import { SchemaFilterPanel } from './SchemaFilterPanel';
 
 type TabId = 'schema' | 'data';
@@ -79,17 +80,10 @@ export const SidebarTabs = memo(function SidebarTabs() {
         ))}
       </div>
 
-      {/* Tab Content */}
+      {/* Tab Content - Unified skeleton for Schema and Data */}
       <div className="flex-1 overflow-hidden">
         {activeTab === 'schema' && <SchemaFilterPanel />}
-        {activeTab === 'data' && (
-          <div className="h-full flex flex-col overflow-hidden">
-            <DatabaseInfoPanel />
-            <div className="border-t border-white/[0.06]">
-              <FilterPanel />
-            </div>
-          </div>
-        )}
+        {activeTab === 'data' && <DatabaseInfoPanel />}
       </div>
     </div>
   );

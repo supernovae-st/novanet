@@ -6,7 +6,7 @@
  */
 
 import { cn } from '@/lib/utils';
-import { iconSizes, gapTokens } from '@/design/tokens';
+import { gapTokens } from '@/design/tokens';
 
 // =============================================================================
 // Base Skeleton

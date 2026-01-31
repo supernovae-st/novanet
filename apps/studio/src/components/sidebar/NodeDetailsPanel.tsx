@@ -26,7 +26,7 @@ import {
   JsonView,
 } from '@/components/ui/detail-panel';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
-import { panelClasses, iconSizes, gapTokens } from '@/design/tokens';
+import { panelClasses, gapTokens } from '@/design/tokens';
 import type { GraphNode } from '@/types';
 
 interface NodeDetailsPanelProps {

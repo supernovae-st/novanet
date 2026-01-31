@@ -28,7 +28,7 @@ import { useDatabaseSchema } from '@/hooks';
 import { LoadingState } from '@/components/ui/EmptyState';
 import { SegmentedTabs } from '@/components/ui/SegmentedTabs';
 import { formatTime } from '@/lib/formatters';
-import { panelClasses, glassClasses, iconSizes, iconButtonClasses, gapTokens } from '@/design/tokens';
+import { panelClasses, iconSizes, iconButtonClasses, gapTokens } from '@/design/tokens';
 import { NodeLabelsSection } from './database/NodeLabelsSection';
 import { RelationshipsSection } from './database/RelationshipsSection';
 import { AiSearchInput } from './AiSearchInput';

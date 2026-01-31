@@ -10,7 +10,7 @@
  */
 
 import { NODE_TYPES, NODE_SCOPES, NODE_BEHAVIORS, type NodeType, type Scope } from '@novanet/core/types';
-import { RelationRegistry, type RelationType as RelationTypeValue } from '@novanet/core/schemas';
+import { RelationRegistry } from '@novanet/core/schemas';
 import { nodeTypeConfigs } from '@/config/nodeTypes';
 import type { GraphNode, GraphEdge } from '@/types';
 

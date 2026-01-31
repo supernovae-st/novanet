@@ -1,7 +1,7 @@
 // src/lib/schemaLayouts/treemap.ts
 import type { Node, Edge } from '@xyflow/react';
 import type { HierarchicalSchemaData } from '@novanet/core/graph';
-import type { SchemaLayoutResult, ScopeConfig } from './types';
+import type { SchemaLayoutResult } from './types';
 import {
   SCOPE_CONFIGS,
   NODE_WIDTH,
