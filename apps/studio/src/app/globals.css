@@ -327,16 +327,6 @@ body {
   animation: success-flash 0.6s ease-out;
 }
 
-/* Shimmer effect for skeleton loaders */
-@keyframes shimmer {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(100%);
-  }
-}
-
 .animate-shimmer {
   animation: shimmer 1.5s ease-in-out infinite;
 }
@@ -360,48 +350,6 @@ body {
   100% {
     stroke-dashoffset: -40;
   }
-}
-
-.animate-edge-flow {
-  animation: edge-flow 1.5s linear infinite;
-}
-
-/* Slow flow for less important/dimmed edges */
-.animate-edge-flow-slow {
-  animation: edge-flow 3s linear infinite;
-}
-
-/* Fast flow for highlighted/selected edges */
-.animate-edge-flow-fast {
-  animation: edge-flow 0.8s linear infinite;
-}
-
-/* Reverse flow animation (target to source) */
-@keyframes edge-flow-reverse {
-  0% {
-    stroke-dashoffset: -40;
-  }
-  100% {
-    stroke-dashoffset: 0;
-  }
-}
-
-.animate-edge-flow-reverse {
-  animation: edge-flow-reverse 1.5s linear infinite;
-}
-
-/* Edge hover glow pulse */
-@keyframes edge-hover-glow {
-  0%, 100% {
-    stroke-opacity: 0.7;
-  }
-  50% {
-    stroke-opacity: 1;
-  }
-}
-
-.animate-edge-hover-glow {
-  animation: edge-hover-glow 1s ease-in-out infinite;
 }
 
 /* Gradient border rotation for selected nodes */
@@ -452,10 +400,6 @@ body {
   50% {
     filter: brightness(1.05) drop-shadow(0 0 12px var(--glow-color, currentColor));
   }
-}
-
-.animate-node-hover-glow {
-  animation: node-hover-glow 1.5s ease-in-out infinite;
 }
 
 /* Node press effect - quick scale down and bounce back */
@@ -515,11 +459,6 @@ body {
 
 .hover-dimmed {
   opacity: 0.25 !important;
-  transition: opacity 200ms ease-out;
-}
-
-.hover-dimmed-edge {
-  opacity: 0.15 !important;
   transition: opacity 200ms ease-out;
 }
 
