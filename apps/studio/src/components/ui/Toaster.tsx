@@ -23,7 +23,7 @@
  */
 
 import { Toaster as SonnerToaster } from 'sonner';
-import { zIndex } from '@/design/tokens';
+import { zIndex, glassClasses } from '@/design/tokens';
 
 export interface ToasterProps {
   /** Position of toast container */
@@ -62,9 +62,7 @@ export function Toaster({
           toast: [
             // Glass morphism base
             'group toast',
-            'bg-[hsl(240,6%,8%)]',
-            'backdrop-blur-xl',
-            'border border-white/15',
+            glassClasses.heavy,
             'rounded-xl',
             'shadow-2xl shadow-black/50',
             'ring-1 ring-white/5 ring-inset',

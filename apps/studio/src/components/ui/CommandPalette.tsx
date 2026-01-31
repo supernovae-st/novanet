@@ -32,6 +32,7 @@ import {
   Box,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { iconSizes } from '@/design/tokens';
 import { fuzzyMatch } from '@/lib/fuzzySearch';
 import { useAutoFocus, useDebouncedValue } from '@/hooks';
 import { KeyboardKey } from './KeyboardKey';
@@ -178,7 +179,7 @@ export function CommandPalette({ isOpen, onClose, commands }: CommandPaletteProp
           className="flex items-center gap-3 p-4 border-b border-white/[0.08]"
           onKeyDown={handleKeyDown}
         >
-          <Search className="w-5 h-5 text-white/40 shrink-0" />
+          <Search className={cn(iconSizes.xl, 'text-white/40 shrink-0')} />
           <input
             ref={inputRef}
             type="text"
@@ -196,7 +197,7 @@ export function CommandPalette({ isOpen, onClose, commands }: CommandPaletteProp
               aria-label="Clear search"
               className="p-1.5 hover:bg-white/10 rounded-lg transition-colors text-white/40 hover:text-white/60"
             >
-              <X className="w-4 h-4" />
+              <X className={iconSizes.md} />
             </button>
           )}
           <KeyboardKey size="md" className="hidden sm:inline-flex">⌘K</KeyboardKey>
@@ -342,7 +343,7 @@ export function useCommandPalette(options: UseCommandPaletteOptions): CommandIte
         title: 'Show Keyboard Shortcuts',
         description: 'View all available shortcuts',
         shortcut: ['/'],
-        icon: <Keyboard className="w-4 h-4" />,
+        icon: <Keyboard className={iconSizes.md} />,
         category: 'Navigation',
         action: openShortcuts,
       },
@@ -350,7 +351,7 @@ export function useCommandPalette(options: UseCommandPaletteOptions): CommandIte
         id: 'refresh',
         title: 'Refresh Data',
         description: 'Reload data from Neo4j',
-        icon: <RefreshCw className="w-4 h-4" />,
+        icon: <RefreshCw className={iconSizes.md} />,
         category: 'Navigation',
         action: onRefresh,
       },
@@ -359,7 +360,7 @@ export function useCommandPalette(options: UseCommandPaletteOptions): CommandIte
         title: 'Clear Selection',
         description: 'Deselect current node/edge',
         shortcut: ['Esc'],
-        icon: <X className="w-4 h-4" />,
+        icon: <X className={iconSizes.md} />,
         category: 'Navigation',
         action: clearSelection,
       },
@@ -370,7 +371,7 @@ export function useCommandPalette(options: UseCommandPaletteOptions): CommandIte
         title: 'Toggle 2D/3D View',
         description: 'Switch between visualization modes',
         shortcut: ['V'],
-        icon: <Box className="w-4 h-4" />,
+        icon: <Box className={iconSizes.md} />,
         category: 'View',
         action: toggleViewMode,
       },
@@ -379,7 +380,7 @@ export function useCommandPalette(options: UseCommandPaletteOptions): CommandIte
         title: 'Toggle Focus Mode',
         description: 'Hide UI for distraction-free viewing',
         shortcut: ['G'],
-        icon: <Maximize2 className="w-4 h-4" />,
+        icon: <Maximize2 className={iconSizes.md} />,
         category: 'View',
         action: toggleFocusMode,
       },
@@ -388,7 +389,7 @@ export function useCommandPalette(options: UseCommandPaletteOptions): CommandIte
         title: 'Toggle Minimap',
         description: 'Show/hide the navigation minimap',
         shortcut: ['M'],
-        icon: <Map className="w-4 h-4" />,
+        icon: <Map className={iconSizes.md} />,
         category: 'View',
         action: toggleMinimap,
       },
@@ -397,7 +398,7 @@ export function useCommandPalette(options: UseCommandPaletteOptions): CommandIte
         title: 'Toggle Edge Labels',
         description: 'Show/hide relationship labels',
         shortcut: ['L'],
-        icon: <Tag className="w-4 h-4" />,
+        icon: <Tag className={iconSizes.md} />,
         category: 'View',
         action: toggleEdgeLabels,
       },
@@ -406,7 +407,7 @@ export function useCommandPalette(options: UseCommandPaletteOptions): CommandIte
         title: 'Toggle Sidebar',
         description: 'Show/hide the left sidebar',
         shortcut: ['['],
-        icon: <PanelLeft className="w-4 h-4" />,
+        icon: <PanelLeft className={iconSizes.md} />,
         category: 'View',
         action: toggleSidebar,
       },
@@ -417,7 +418,7 @@ export function useCommandPalette(options: UseCommandPaletteOptions): CommandIte
         title: 'Project Structure',
         description: 'Show project organization',
         shortcut: ['1'],
-        icon: <LayoutGrid className="w-4 h-4" />,
+        icon: <LayoutGrid className={iconSizes.md} />,
         category: 'Quick Views',
         action: () => applyViewPresetByShortcut('1'),
       },
@@ -426,7 +427,7 @@ export function useCommandPalette(options: UseCommandPaletteOptions): CommandIte
         title: 'Translation Chain',
         description: 'Show translation workflow',
         shortcut: ['2'],
-        icon: <Layers className="w-4 h-4" />,
+        icon: <Layers className={iconSizes.md} />,
         category: 'Quick Views',
         action: () => applyViewPresetByShortcut('2'),
       },
@@ -435,7 +436,7 @@ export function useCommandPalette(options: UseCommandPaletteOptions): CommandIte
         title: 'Locale Knowledge',
         description: 'Show locale-related nodes',
         shortcut: ['3'],
-        icon: <Globe className="w-4 h-4" />,
+        icon: <Globe className={iconSizes.md} />,
         category: 'Quick Views',
         action: () => applyViewPresetByShortcut('3'),
       },
@@ -444,7 +445,7 @@ export function useCommandPalette(options: UseCommandPaletteOptions): CommandIte
         title: 'Concept Network',
         description: 'Show concept relationships',
         shortcut: ['4'],
-        icon: <Hash className="w-4 h-4" />,
+        icon: <Hash className={iconSizes.md} />,
         category: 'Quick Views',
         action: () => applyViewPresetByShortcut('4'),
       },
@@ -453,7 +454,7 @@ export function useCommandPalette(options: UseCommandPaletteOptions): CommandIte
         title: 'Prompts & Rules',
         description: 'Show generation prompts',
         shortcut: ['5'],
-        icon: <Command className="w-4 h-4" />,
+        icon: <Command className={iconSizes.md} />,
         category: 'Quick Views',
         action: () => applyViewPresetByShortcut('5'),
       },
@@ -462,7 +463,7 @@ export function useCommandPalette(options: UseCommandPaletteOptions): CommandIte
         title: 'SEO & GEO',
         description: 'Show SEO/GEO nodes',
         shortcut: ['6'],
-        icon: <Eye className="w-4 h-4" />,
+        icon: <Eye className={iconSizes.md} />,
         category: 'Quick Views',
         action: () => applyViewPresetByShortcut('6'),
       },
@@ -471,7 +472,7 @@ export function useCommandPalette(options: UseCommandPaletteOptions): CommandIte
         title: 'Show All Nodes',
         description: 'Clear filters, show everything',
         shortcut: ['0'],
-        icon: <PanelRight className="w-4 h-4" />,
+        icon: <PanelRight className={iconSizes.md} />,
         category: 'Quick Views',
         action: () => applyViewPresetByShortcut('0'),
       },

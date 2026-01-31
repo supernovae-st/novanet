@@ -12,6 +12,7 @@
 import { memo } from 'react';
 import { Grid3x3 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { iconSizes } from '@/design/tokens';
 import type { ViewCategory as ViewCategoryType } from '@novanet/core/filters';
 import { VIEW_CATEGORIES } from '@/config/viewCategories';
 
@@ -37,7 +38,7 @@ export const ViewCategorySection = memo(function ViewCategorySection({
     <div className={cn('space-y-3', className)}>
       {/* Category Header */}
       <div className="flex items-center gap-2.5">
-        <Icon className={cn('w-4 h-4', color)} />
+        <Icon className={cn(iconSizes.md, color)} />
         <span className="text-[11px] uppercase tracking-wider font-semibold text-white/45">
           {label}
         </span>

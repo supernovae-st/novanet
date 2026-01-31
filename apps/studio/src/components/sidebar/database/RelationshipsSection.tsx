@@ -13,6 +13,7 @@
 import { memo, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import { ACTION_ICONS, STATUS_ICONS } from '@/config/iconSystem';
+import { iconSizes } from '@/design/tokens';
 import type { CheckboxState } from '@/components/ui/TriStateCheckbox';
 import { ProgressBar } from '@/components/ui/ProgressBar';
 import { getRelationshipColor } from '@/config/relationshipColors';
@@ -72,7 +73,7 @@ const RelationshipRow = memo(function RelationshipRow({
           borderColor: isSelected ? color : undefined,
         }}
       >
-        {isSelected && <CheckIcon className="w-2.5 h-2.5" style={{ color }} />}
+        {isSelected && <CheckIcon className={iconSizes.xs} style={{ color }} />}
       </div>
 
       {/* Label */}
@@ -157,9 +158,9 @@ export const RelationshipsSection = memo(function RelationshipsSection({
       title="Execute query for selected relationships"
     >
       {isExecuting ? (
-        <LoaderIcon className="w-4 h-4 animate-spin" />
+        <LoaderIcon className={`${iconSizes.md} animate-spin`} />
       ) : (
-        <PlayIcon className="w-4 h-4" />
+        <PlayIcon className={iconSizes.md} />
       )}
     </button>
   );

@@ -15,7 +15,7 @@ import { useState, useRef, useCallback } from 'react';
 import { Sparkles, Send, Loader2 } from 'lucide-react';
 import { logger } from '@/lib/logger';
 import { cn } from '@/lib/utils';
-import { glassClasses } from '@/design/tokens';
+import { glassClasses, iconSizes } from '@/design/tokens';
 import { Kbd } from '@/components/ui/Kbd';
 
 interface AiSearchInputProps {
@@ -80,7 +80,7 @@ export function AiSearchInput({
           />
           <Sparkles
             className={cn(
-              'relative w-4 h-4 transition-all duration-300',
+              `relative ${iconSizes.md} transition-all duration-300`,
               isFocused || hasQuery
                 ? 'text-novanet-400 ai-sparkle-glow'
                 : 'text-white/40'
@@ -109,7 +109,7 @@ export function AiSearchInput({
         {/* Right side: Loading / Send / Shortcut */}
         <div className="flex items-center gap-1.5 flex-shrink-0">
           {isLoading ? (
-            <Loader2 className="w-4 h-4 text-novanet-400 animate-spin" />
+            <Loader2 className={`${iconSizes.md} text-novanet-400 animate-spin`} />
           ) : hasQuery ? (
             <button
               onClick={handleSubmit}

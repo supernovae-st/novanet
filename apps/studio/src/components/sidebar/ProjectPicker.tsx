@@ -14,7 +14,7 @@ import { useState, useMemo, useCallback, useEffect, useRef, memo, useDeferredVal
 import { createPortal } from 'react-dom';
 import { Search, X, FolderOpen, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { glassClasses } from '@/design/tokens';
+import { glassClasses, iconSizes } from '@/design/tokens';
 import { Kbd } from '@/components/ui';
 import { useFilterStore } from '@/stores/filterStore';
 import {
@@ -77,14 +77,14 @@ const ProjectCard = memo(function ProjectCard({
     >
       {/* Selection indicator */}
       {isSelected && (
-        <div className="absolute top-2.5 right-2.5 w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center">
-          <Check className="w-3 h-3 text-white" strokeWidth={3} />
+        <div className={`absolute top-2.5 right-2.5 ${iconSizes.xl} rounded-full bg-emerald-500 flex items-center justify-center`}>
+          <Check className={`${iconSizes.xs} text-white`} strokeWidth={3} />
         </div>
       )}
 
       {/* Icon */}
       <FolderOpen className={cn(
-        'w-8 h-8',
+        iconSizes['2xl'],
         isAllCard ? 'opacity-60 text-white/60' : isSelected ? 'text-emerald-400' : 'text-white/60'
       )} />
 
@@ -199,7 +199,7 @@ export const ProjectPicker = memo(function ProjectPicker({
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.06]">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-lg bg-[#111118] border border-white/10 flex items-center justify-center">
-              <FolderOpen className="w-4.5 h-4.5 text-white/70" />
+              <FolderOpen className={`${iconSizes.lg} text-white/70`} />
             </div>
             <div>
               <h2 id="project-picker-title" className="text-base font-semibold text-white">
@@ -213,13 +213,13 @@ export const ProjectPicker = memo(function ProjectPicker({
             aria-label="Close"
             className="p-2 rounded-lg hover:bg-white/10 transition-colors text-white/50 hover:text-white"
           >
-            <X className="w-5 h-5" />
+            <X className={iconSizes.xl} />
           </button>
         </div>
 
         {/* Search */}
         <div className="flex items-center gap-3 px-6 py-4 border-b border-white/[0.06]">
-          <Search className="w-4.5 h-4.5 text-white/40 shrink-0" />
+          <Search className={`${iconSizes.lg} text-white/40 shrink-0`} />
           <input
             ref={searchRef}
             type="text"
@@ -237,7 +237,7 @@ export const ProjectPicker = memo(function ProjectPicker({
               aria-label="Clear search"
               className="p-1.5 hover:bg-white/10 rounded-lg transition-colors text-white/40 hover:text-white/60"
             >
-              <X className="w-4 h-4" />
+              <X className={iconSizes.md} />
             </button>
           )}
         </div>
@@ -277,7 +277,7 @@ export const ProjectPicker = memo(function ProjectPicker({
           {/* No results */}
           {filteredProjects.length === 0 && (
             <div className="text-center py-12 text-white/40">
-              <Search className="w-10 h-10 mx-auto mb-3 opacity-30" />
+              <Search className={`${iconSizes['2xl']} mx-auto mb-3 opacity-30`} />
               <p className="text-sm font-medium">No projects found</p>
               <p className="text-xs opacity-60 mt-1">Try a different search term</p>
             </div>

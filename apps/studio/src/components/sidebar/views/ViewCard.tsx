@@ -10,6 +10,7 @@
 import { memo, useState, useCallback } from 'react';
 import { type LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { glassClasses } from '@/design/tokens';
 
 interface ViewCardProps {
   id: string;
@@ -51,9 +52,8 @@ export const ViewCard = memo(function ViewCard({
         'group relative flex items-center',
         'h-[52px] w-full rounded-xl',
         'gap-3 px-4',
-        // Frosted Glass base - backdrop-blur-md matches glass.blur.md (12px)
-        'backdrop-blur-md',
-        'ring-1 ring-inset',
+        // Frosted Glass base - using glassClasses.light which includes backdrop-blur-md
+        glassClasses.light,
         // Transitions
         'transition-all duration-200',
         // Focus - visible ring
