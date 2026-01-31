@@ -1,22 +1,25 @@
 'use client';
 
 /**
- * SidebarTabs - Tabbed sidebar with Database and Filters panels
+ * SidebarTabs - Tabbed sidebar with Schema and Data panels
  *
  * Uses NovaNet Icon Design System for consistent icons.
- * Shows SchemaFilterPanel when in schema mode (v8.3.0).
+ * Tab switching syncs with dataMode in uiStore.
+ *
+ * - Schema tab: Ontological schema view (SchemaFilterPanel)
+ * - Data tab: Instance data explorer (DatabaseInfoPanel + FilterPanel)
  */
 
-import { useState, useEffect, memo } from 'react';
-import { SlidersHorizontal } from 'lucide-react';
+import { memo } from 'react';
+import { Boxes, Database } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { GRAPH_ICONS, ICON_SIZES } from '@/config/iconSystem';
+import { ICON_SIZES } from '@/config/iconSystem';
 import { useUIStore, selectDataMode } from '@/stores/uiStore';
 import { DatabaseInfoPanel } from './DatabaseInfoPanel';
 import { FilterPanel } from './FilterPanel';
 import { SchemaFilterPanel } from './SchemaFilterPanel';
 
-type TabId = 'database' | 'filters';
+type TabId = 'schema' | 'data';
 
 interface Tab {
   id: TabId;
@@ -24,24 +27,21 @@ interface Tab {
   icon: React.ReactNode;
 }
 
-// Use design system icons
-const DatabaseIcon = GRAPH_ICONS.database;
-
 const TABS: Tab[] = [
-  { id: 'database', label: 'Database', icon: <DatabaseIcon className={ICON_SIZES.md} /> },
-  { id: 'filters', label: 'Views', icon: <SlidersHorizontal className={ICON_SIZES.md} /> },
+  { id: 'schema', label: 'Schema', icon: <Boxes className={ICON_SIZES.md} /> },
+  { id: 'data', label: 'Data', icon: <Database className={ICON_SIZES.md} /> },
 ];
 
 export const SidebarTabs = memo(function SidebarTabs() {
-  const [activeTab, setActiveTab] = useState<TabId>('database');
   const dataMode = useUIStore(selectDataMode);
+  const setDataMode = useUIStore((s) => s.setDataMode);
 
-  // Auto-switch to filters tab when entering schema mode
-  useEffect(() => {
-    if (dataMode === 'schema') {
-      setActiveTab('filters');
-    }
-  }, [dataMode]);
+  // Derive active tab from dataMode
+  const activeTab: TabId = dataMode === 'schema' ? 'schema' : 'data';
+
+  const handleTabClick = (tabId: TabId) => {
+    setDataMode(tabId === 'schema' ? 'schema' : 'data');
+  };
 
   return (
     <div className="h-full flex flex-col">
@@ -50,7 +50,7 @@ export const SidebarTabs = memo(function SidebarTabs() {
         {TABS.map((tab) => (
           <button
             key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
+            onClick={() => handleTabClick(tab.id)}
             className={cn(
               'flex-1 flex items-center justify-center gap-2 px-4 py-3.5',
               'text-xs font-medium transition-all duration-200',
@@ -75,9 +75,14 @@ export const SidebarTabs = memo(function SidebarTabs() {
 
       {/* Tab Content */}
       <div className="flex-1 overflow-hidden">
-        {activeTab === 'database' && <DatabaseInfoPanel />}
-        {activeTab === 'filters' && (
-          dataMode === 'schema' ? <SchemaFilterPanel /> : <FilterPanel />
+        {activeTab === 'schema' && <SchemaFilterPanel />}
+        {activeTab === 'data' && (
+          <div className="h-full flex flex-col overflow-hidden">
+            <DatabaseInfoPanel />
+            <div className="border-t border-white/8">
+              <FilterPanel />
+            </div>
+          </div>
         )}
       </div>
     </div>

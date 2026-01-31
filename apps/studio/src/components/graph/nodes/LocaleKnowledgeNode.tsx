@@ -12,16 +12,21 @@
  * - Enhanced hover effects (scale, glow)
  * - Press feedback (scale down on mousedown)
  * - Hover info displayed in centralized bottom pill (via uiStore.hoveredNodeId)
+ *
+ * Uses shared design system components from effects/ directory.
  */
 
-import { memo, useState, useCallback, useMemo } from 'react';
-import { Handle, Position, type Node, type NodeProps } from '@xyflow/react';
+import { memo, useMemo } from 'react';
+import { type Node, type NodeProps } from '@xyflow/react';
 import { cn } from '@/lib/utils';
 import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
 import { getLocaleKnowledgeColors } from '@/config/categoryColors';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import type { BaseNodeData } from './BaseNodeWrapper';
-import { NODE_BG } from '@/config/constants';
+import { BlueprintOverlay } from './BlueprintOverlay';
+import { NODE_BG, NODE_DESIGN } from '@/config/constants';
+import { useNodeInteractions } from '@/hooks';
+import { SelectionPulseRing, GlassmorphismEffects, NodeHandles } from './effects';
 
 export type LocaleKnowledgeNodeType = Node<BaseNodeData>;
 
@@ -49,31 +54,32 @@ function getCircleSize(type: string, connectionCount?: number): number {
  * LocaleKnowledgeNode - Circular Gradient Ring Design
  */
 export const LocaleKnowledgeNode = memo(function LocaleKnowledgeNode(props: NodeProps<LocaleKnowledgeNodeType>) {
-  const { data, selected } = props;
-  const [isHovered, setIsHovered] = useState(false);
-  const [isPressed, setIsPressed] = useState(false);
+  const { data, selected = false } = props;
   const config = NODE_TYPE_CONFIG[data.type] || NODE_TYPE_CONFIG.Expression;
   const colors = getLocaleKnowledgeColors(data.type);
   const size = getCircleSize(data.type, data.connectionCount);
   const isDimmed = data.dimmed === true;
   const isHoverDimmed = data.hoverDimmed === true;
+  const isSchemaMode = data.isSchemaMode === true;
 
-  const handleMouseEnter = useCallback(() => {
-    setIsHovered(true);
-  }, []);
-
-  const handleMouseLeave = useCallback(() => {
-    setIsHovered(false);
-    setIsPressed(false);
-  }, []);
+  // Shared interaction state management (circular variant)
+  const {
+    isHovered,
+    handleMouseEnter,
+    handleMouseLeave,
+    handleMouseDown,
+    handleMouseUp,
+    containerClassName,
+    containerStyle,
+  } = useNodeInteractions({ selected, isDimmed, isHoverDimmed, isCircular: true });
 
   // Memoize gradient ring style to prevent re-renders
   const gradientRingStyle = useMemo(() => ({
     background: selected
-      ? `linear-gradient(135deg, ${colors.primary}, ${colors.secondary}, ${colors.primary})`
+      ? NODE_DESIGN.gradients.borderSelected(colors.primary, colors.secondary)
       : isHovered
-        ? `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})`
-        : `linear-gradient(135deg, ${colors.primary}, ${colors.secondary}90)`,
+        ? NODE_DESIGN.gradients.borderHover(colors.primary, colors.secondary)
+        : NODE_DESIGN.gradients.borderDefault(colors.primary, colors.secondary),
     boxShadow: selected
       ? `0 0 35px 8px ${colors.primary}70, 0 0 70px 14px ${colors.primary}40, 0 0 100px 20px ${colors.primary}20`
       : isHovered
@@ -89,56 +95,69 @@ export const LocaleKnowledgeNode = memo(function LocaleKnowledgeNode(props: Node
 
   return (
     <div
-      className={cn(
-        'group relative node-pressable',
-        // Full dimming (focus mode)
-        isDimmed && 'opacity-15 scale-75 grayscale pointer-events-none',
-        // Lighter dimming (hover highlight mode)
-        isHoverDimmed && !isDimmed && 'hover-dimmed',
-        // Enhanced hover effect
-        isHovered && !isDimmed && !isHoverDimmed && !selected && 'scale-103',
-        // Press feedback
-        isPressed && !isDimmed && 'scale-[0.96]',
-        // Selection already has its own scale
-        selected && 'scale-110'
-      )}
-      style={{
-        transition: 'transform 200ms ease-out, opacity 200ms ease-out',
-      }}
+      className={containerClassName}
+      style={containerStyle}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      onMouseDown={() => setIsPressed(true)}
-      onMouseUp={() => setIsPressed(false)}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
     >
-      {/* Gradient ring wrapper - 2px */}
+      {/* Selection pulse ring effect - WOW animation (circular) */}
+      {selected && (
+        <SelectionPulseRing color={colors.primary} borderRadius={NODE_DESIGN.radius.circular} />
+      )}
+
+      {/* Gradient ring wrapper - 2px (3px when selected) */}
       <div
         className={cn(
-          'relative p-[2px] rounded-full transition-all duration-300',
+          'relative rounded-full transition-all duration-300',
           selected && 'animate-spin-slow',
           isHovered && !selected && 'animate-glow-pulse'
         )}
-        style={gradientRingStyle}
+        style={{
+          padding: selected ? NODE_DESIGN.border.selected : NODE_DESIGN.border.default,
+          ...gradientRingStyle,
+        }}
       >
-        {/* Inner circle */}
+        {/* Inner circle - Glassmorphism + Skeuomorphism when selected */}
         <div
-          className="flex flex-col items-center justify-center rounded-full"
+          className={cn(
+            'flex flex-col items-center justify-center rounded-full',
+            selected && 'backdrop-blur-xl animate-float'
+          )}
           style={{
-            width: size,
-            height: size,
-            backgroundColor: selected ? NODE_BG.selected : NODE_BG.default,
+            width: selected ? size - 2 : size,
+            height: selected ? size - 2 : size,
+            backgroundColor: selected ? NODE_DESIGN.selectedBg : NODE_BG.default,
+            border: selected ? `2px solid ${colors.primary}` : 'none',
+            boxShadow: selected
+              ? `
+                inset 0 2px 0 0 rgba(255, 255, 255, 0.15),
+                inset 0 -2px 0 0 rgba(0, 0, 0, 0.4),
+                inset 0 0 20px ${colors.primary}25,
+                0 8px 30px rgba(0, 0, 0, 0.5),
+                0 4px 12px rgba(0, 0, 0, 0.4)
+              `
+              : undefined,
           }}
         >
-          {/* Target Handle - SOLID (incoming) */}
-          <Handle
-            type="target"
-            position={Position.Top}
-            className="!w-2.5 !h-2.5 !rounded-full !border-2 !-top-1 transition-all duration-200"
-            style={{
-              backgroundColor: colors.primary,
-              borderColor: colors.primary,
-              boxShadow: selected ? `0 0 6px ${colors.primary}` : undefined,
-            }}
-          />
+          {/* Glassmorphism effects (circular variant) */}
+          {selected && (
+            <GlassmorphismEffects isCircular />
+          )}
+
+          {/* Blueprint overlay for schema mode (circular) */}
+          {isSchemaMode && (
+            <BlueprintOverlay
+              color={colors.primary}
+              selected={selected}
+              borderRadius={NODE_DESIGN.radius.circular}
+              showBadge={false}
+            />
+          )}
+
+          {/* Handles - vertical layout, small size for circular nodes */}
+          <NodeHandles color={colors.primary} selected={selected} layout="vertical" size="small" />
 
           {/* Icon - SVG from Lucide */}
           <CategoryIcon
@@ -164,21 +183,8 @@ export const LocaleKnowledgeNode = memo(function LocaleKnowledgeNode(props: Node
               ? data.displayName.slice(0, 8) + '...'
               : data.displayName}
           </span>
-
-          {/* Source Handle - HOLLOW (outgoing) */}
-          <Handle
-            type="source"
-            position={Position.Bottom}
-            className="!w-2.5 !h-2.5 !rounded-full !border-2 !-bottom-1 transition-all duration-200"
-            style={{
-              backgroundColor: 'transparent',
-              borderColor: colors.primary,
-              boxShadow: selected ? `0 0 6px ${colors.primary}` : undefined,
-            }}
-          />
         </div>
       </div>
-
     </div>
   );
 });

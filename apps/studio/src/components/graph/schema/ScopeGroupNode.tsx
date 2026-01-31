@@ -1,21 +1,21 @@
 'use client';
 
 /**
- * ScopeGroupNode - Container node for scope groups in Schema Mode
+ * ScopeGroupNode - Glass container for scope groups in Schema Mode
  *
- * Features:
- * - Dashed border with scope-specific color (violet/emerald/amber)
- * - Scope label with emoji and node count badge
- * - NodeResizer for resizable groups
- * - Glassmorphism styling matching NovaNet design
+ * Features (Task 5: TurboNode styling):
+ * - Glass effect with scope-colored border glow
+ * - Animated border on selection
+ * - Premium label badge with glow
+ * - NodeResizer for interactive resizing
  *
- * Scope Colors:
- * - Project: violet (📦)
- * - Global: emerald (🌍)
- * - Shared: amber (🎯)
+ * Scope Colors (hex values):
+ * - Project: violet (#8b5cf6) - 📦
+ * - Global: emerald (#10b981) - 🌍
+ * - Shared: amber (#f59e0b) - 🎯
  */
 
-import { memo } from 'react';
+import { memo, useState, useCallback } from 'react';
 import { type NodeProps, type Node, NodeResizer } from '@xyflow/react';
 import { cn } from '@/lib/utils';
 import type { Scope } from '@novanet/core/types';
@@ -34,63 +34,144 @@ export interface ScopeGroupData extends Record<string, unknown> {
 export type ScopeGroupNodeType = Node<ScopeGroupData, 'scopeGroup'>;
 
 /**
- * Scope color mapping - matches plan requirements
- * Project = violet, Global = emerald, Shared = amber
+ * Scope color configuration for glass effect
  */
-const SCOPE_COLORS: Record<Scope, { border: string; bg: string }> = {
+const SCOPE_COLORS: Record<Scope, {
+  primary: string;
+  secondary: string;
+  glow: string;
+  bgGlow: string;
+}> = {
   Project: {
-    border: 'border-violet-500/50',
-    bg: 'bg-violet-500/5',
+    primary: '#8b5cf6',
+    secondary: '#a78bfa',
+    glow: 'rgba(139, 92, 246, 0.3)',
+    bgGlow: 'rgba(139, 92, 246, 0.05)',
   },
   Global: {
-    border: 'border-emerald-500/50',
-    bg: 'bg-emerald-500/5',
+    primary: '#10b981',
+    secondary: '#34d399',
+    glow: 'rgba(16, 185, 129, 0.3)',
+    bgGlow: 'rgba(16, 185, 129, 0.05)',
   },
   Shared: {
-    border: 'border-amber-500/50',
-    bg: 'bg-amber-500/5',
+    primary: '#f59e0b',
+    secondary: '#fbbf24',
+    glow: 'rgba(245, 158, 11, 0.3)',
+    bgGlow: 'rgba(245, 158, 11, 0.05)',
   },
 };
 
 /**
- * ScopeGroupNode - Top-level container for scope hierarchy
- *
- * Used in Schema Mode to group subcategories and nodes by scope.
- * Features NodeResizer for manual size adjustment when selected.
+ * ScopeGroupNode - Premium glass container for scope hierarchy
  */
 export const ScopeGroupNode = memo(function ScopeGroupNode({
   data,
   selected,
 }: NodeProps<ScopeGroupNodeType>) {
-  const colorConfig = SCOPE_COLORS[data.scope] || {
-    border: 'border-gray-500/50',
-    bg: 'bg-gray-500/5',
+  const [isHovered, setIsHovered] = useState(false);
+
+  const colors = SCOPE_COLORS[data.scope] || SCOPE_COLORS.Project;
+
+  const handleMouseEnter = useCallback(() => setIsHovered(true), []);
+  const handleMouseLeave = useCallback(() => setIsHovered(false), []);
+
+  // Container style with glass effect
+  const containerStyle = {
+    backgroundColor: colors.bgGlow,
+    borderColor: selected
+      ? colors.primary
+      : isHovered
+        ? `${colors.primary}80`
+        : `${colors.primary}40`,
+    boxShadow: selected
+      ? `0 0 30px ${colors.glow}, inset 0 0 60px ${colors.bgGlow}`
+      : isHovered
+        ? `0 0 20px ${colors.glow}, inset 0 0 40px ${colors.bgGlow}`
+        : `inset 0 0 30px ${colors.bgGlow}`,
+  };
+
+  // Label badge style
+  const labelStyle = {
+    background: `linear-gradient(135deg, ${colors.primary}20, ${colors.secondary}20)`,
+    borderColor: `${colors.primary}60`,
+    boxShadow: selected ? `0 0 15px ${colors.glow}` : 'none',
   };
 
   return (
     <div
       className={cn(
-        'w-full h-full rounded-xl border-2 border-dashed',
-        colorConfig.border,
-        colorConfig.bg,
-        selected && 'ring-2 ring-white/20'
+        'w-full h-full rounded-2xl border-2 transition-all duration-300',
+        'backdrop-blur-sm',
+        selected && 'border-solid',
+        !selected && 'border-dashed'
       )}
+      style={containerStyle}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       {/* Resizer - visible only when selected */}
       <NodeResizer
         isVisible={selected}
-        minWidth={200}
-        minHeight={100}
-        lineClassName="border-white/20"
-        handleClassName="w-2 h-2 bg-white/50 border border-white/20"
+        minWidth={250}
+        minHeight={150}
+        lineClassName={cn('!border-2', `!border-[${colors.primary}]`)}
+        handleClassName={cn(
+          'w-3 h-3 rounded-full',
+          'border-2',
+          'transition-all duration-200'
+        )}
+        handleStyle={{
+          backgroundColor: colors.primary,
+          borderColor: colors.secondary,
+          boxShadow: `0 0 8px ${colors.glow}`,
+        }}
       />
 
       {/* Label badge positioned above the container */}
-      <div className="absolute -top-7 left-3 flex items-center gap-2 px-2 py-1 rounded-md bg-black/80 backdrop-blur-sm">
-        <span className="text-sm font-semibold text-white/90">
-          {data.icon} {data.label}
+      <div
+        className={cn(
+          'absolute -top-8 left-4 flex items-center gap-3',
+          'px-4 py-2 rounded-xl',
+          'border backdrop-blur-md',
+          'transition-all duration-300',
+          selected && 'scale-105'
+        )}
+        style={labelStyle}
+      >
+        {/* Scope icon */}
+        <span className="text-lg">{data.icon}</span>
+
+        {/* Scope label */}
+        <span
+          className="text-sm font-bold tracking-wide"
+          style={{ color: colors.primary }}
+        >
+          {data.label}
         </span>
-        <span className="text-xs text-white/50">{data.nodeCount} types</span>
+
+        {/* Node count badge */}
+        <span
+          className="px-2 py-0.5 rounded-full text-xs font-semibold"
+          style={{
+            backgroundColor: `${colors.primary}30`,
+            color: colors.secondary,
+          }}
+        >
+          {data.nodeCount} types
+        </span>
+
+        {/* Status dot */}
+        <div
+          className={cn(
+            'w-2 h-2 rounded-full',
+            selected && 'animate-pulse'
+          )}
+          style={{
+            backgroundColor: colors.primary,
+            boxShadow: `0 0 6px ${colors.glow}`,
+          }}
+        />
       </div>
     </div>
   );

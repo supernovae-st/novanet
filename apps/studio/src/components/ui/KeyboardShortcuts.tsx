@@ -142,51 +142,68 @@ export function KeyboardShortcuts({ isOpen, onClose }: KeyboardShortcutsProps) {
 
   return createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      {/* Backdrop */}
+      {/* Backdrop - matches Dialog component */}
       <div
-        className="absolute inset-0 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200"
+        className={cn(
+          'absolute inset-0 bg-black/80 backdrop-blur-sm',
+          'animate-in fade-in duration-200'
+        )}
         onClick={onClose}
       />
 
-      {/* Modal */}
-      <div className="relative w-full max-w-xl max-h-[80vh] m-4 glass-floating animate-scale-in overflow-hidden">
-        {/* Header */}
-        <div className="flex items-center justify-between p-5 border-b border-white/12">
+      {/* Modal - explicit dark styling matching Dialog/QueryPill */}
+      <div
+        className={cn(
+          'relative w-full max-w-2xl max-h-[80vh] m-4 overflow-hidden',
+          // Glass morphism styling (explicit, not relying on CSS vars)
+          'bg-[#0d0d12]/95 backdrop-blur-xl',
+          'border border-white/[0.08] rounded-2xl',
+          'shadow-2xl shadow-black/50',
+          // Animation
+          'animate-in zoom-in-95 fade-in duration-200'
+        )}
+      >
+        {/* Header - compact like QueryPill */}
+        <div className="flex items-center justify-between px-4 py-3 border-b border-white/[0.08]">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center shadow-lg shadow-primary/30">
-              <KeyboardIcon className={ICON_SIZES.lg} />
+            <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
+              <KeyboardIcon className="w-4 h-4 text-primary" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white">Keyboard Shortcuts</h2>
-              <p className="text-xs text-white/55">Quick actions and navigation</p>
+              <h2 className="text-sm font-semibold text-white">Keyboard Shortcuts</h2>
             </div>
           </div>
           <button
             onClick={onClose}
             aria-label="Close keyboard shortcuts"
-            className="p-2 hover:bg-white/12 rounded-xl transition-colors text-white/60 hover:text-white/90 border border-transparent hover:border-white/15"
+            className={cn(
+              'w-8 h-8 rounded-lg flex items-center justify-center',
+              'text-white/40 hover:text-white/80',
+              'hover:bg-white/[0.06] transition-colors duration-150'
+            )}
           >
-            <CloseIcon className={ICON_SIZES.lg} />
+            <CloseIcon className="w-4 h-4" />
           </button>
         </div>
 
-        {/* Category Tabs */}
-        <div className="flex gap-1 p-3 border-b border-white/12 bg-[hsl(240,8%,4%)]">
+        {/* Category Tabs - horizontal scroll, compact */}
+        <div className="flex gap-1 px-3 py-2 border-b border-white/[0.08] overflow-x-auto scrollbar-thin">
           {SHORTCUT_CATEGORIES.map((category) => (
             <button
               key={category.id}
               onClick={() => setActiveCategory(category.id)}
               className={cn(
-                'flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200',
+                'flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap',
+                'transition-all duration-150',
                 activeCategory === category.id
                   ? 'bg-primary/15 text-white border border-primary/30'
-                  : 'text-white/60 hover:text-white/80 hover:bg-white/8 border border-transparent hover:border-white/12'
+                  : 'text-white/50 hover:text-white/70 hover:bg-white/[0.04] border border-transparent'
               )}
             >
               <span
                 className={cn(
                   'transition-colors',
-                  activeCategory === category.id ? 'text-primary' : 'text-white/50'
+                  activeCategory === category.id ? 'text-primary' : 'text-white/40'
                 )}
               >
                 {category.icon}
@@ -196,22 +213,19 @@ export function KeyboardShortcuts({ isOpen, onClose }: KeyboardShortcutsProps) {
           ))}
         </div>
 
-        {/* Shortcuts List */}
-        <div className="p-4 overflow-y-auto max-h-[calc(80vh-200px)] scrollbar-thin">
+        {/* Shortcuts List - clean rows */}
+        <div className="p-2 overflow-y-auto max-h-[calc(80vh-160px)] scrollbar-thin">
           {currentCategory && (
-            <div className="space-y-1">
-              {currentCategory.shortcuts.map((shortcut, idx) => (
+            <div className="space-y-0.5">
+              {currentCategory.shortcuts.map((shortcut) => (
                 <div
                   key={shortcut.description}
                   className={cn(
-                    'flex items-center justify-between py-3 px-4 rounded-xl',
+                    'flex items-center justify-between py-2.5 px-3 rounded-lg',
                     'hover:bg-white/[0.04] transition-colors group'
                   )}
-                  style={{
-                    animationDelay: `${idx * 30}ms`,
-                  }}
                 >
-                  <span className="text-sm text-white/70 group-hover:text-white/90 transition-colors">
+                  <span className="text-sm text-white/60 group-hover:text-white/80 transition-colors">
                     {shortcut.description}
                   </span>
                   <div className="flex items-center gap-1">
@@ -219,17 +233,16 @@ export function KeyboardShortcuts({ isOpen, onClose }: KeyboardShortcutsProps) {
                       <span key={keyIdx} className="flex items-center">
                         <kbd
                           className={cn(
-                            'inline-flex items-center justify-center min-w-[28px] h-7 px-2',
-                            'bg-white/10 border border-white/18 rounded-lg',
-                            'text-xs font-mono text-white/85',
-                            'group-hover:bg-white/15 group-hover:border-white/25 transition-colors',
-                            'shadow-sm shadow-black/30'
+                            'inline-flex items-center justify-center min-w-[26px] h-6 px-1.5',
+                            'bg-white/[0.06] border border-white/[0.08] rounded-md',
+                            'text-[11px] font-mono text-white/70',
+                            'group-hover:bg-white/[0.10] group-hover:border-white/[0.15] transition-colors'
                           )}
                         >
                           {key}
                         </kbd>
                         {keyIdx < shortcut.keys.length - 1 && (
-                          <span className="text-white/35 mx-1 text-xs">+</span>
+                          <span className="text-white/30 mx-0.5 text-[10px]">+</span>
                         )}
                       </span>
                     ))}
@@ -240,11 +253,11 @@ export function KeyboardShortcuts({ isOpen, onClose }: KeyboardShortcutsProps) {
           )}
         </div>
 
-        {/* Footer */}
-        <div className="p-4 border-t border-white/12 bg-[hsl(240,8%,4%)]">
-          <div className="flex items-center justify-center gap-2 text-xs text-white/50">
+        {/* Footer - subtle hint */}
+        <div className="px-4 py-2.5 border-t border-white/[0.08]">
+          <div className="flex items-center justify-center gap-2 text-[11px] text-white/40">
             <span>Press</span>
-            <kbd className="px-2 py-1 bg-white/10 rounded-lg text-[10px] font-mono text-white/70 border border-white/15 shadow-sm shadow-black/30">
+            <kbd className="px-1.5 py-0.5 bg-white/[0.06] rounded text-[10px] font-mono text-white/60 border border-white/[0.08]">
               ?
             </kbd>
             <span>anytime to show this dialog</span>

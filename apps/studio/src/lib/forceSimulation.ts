@@ -1,5 +1,5 @@
 /**
- * Force Simulation Utilities (v7.2.7)
+ * Force Simulation Utilities (v8.0.0)
  *
  * D3-force physics simulation for dynamic graph layout.
  * Uses velocity Verlet numerical integration for smooth animations.
@@ -9,6 +9,8 @@
  * - Category-based clustering
  * - Viewport-aware scaling
  * - Type-aware collision detection for accurate spacing
+ * - Spacing presets (compact, normal, spacious)
+ * - Default: SPACIOUS (+100% spacing)
  */
 
 import {
@@ -26,6 +28,45 @@ import {
 import type { Node, Edge } from '@xyflow/react';
 import { getNodeDimensions } from './layout';
 
+// ============================================================================
+// SPACING PRESETS - TDD-defined values for consistent layout
+// ============================================================================
+
+export type SpacingPreset = 'compact' | 'normal' | 'spacious';
+
+export interface SpacingPresetValues {
+  chargeStrength: number;
+  linkDistance: number;
+  collisionRadius: number;
+}
+
+/**
+ * Spacing presets for graph layout
+ * - compact: Dense layout for overview mode
+ * - normal: Balanced layout (previous default)
+ * - spacious: Generous spacing for detailed exploration (+100%)
+ */
+export const SPACING_PRESETS: Record<SpacingPreset, SpacingPresetValues> = {
+  compact: {
+    chargeStrength: -800,
+    linkDistance: 200,
+    collisionRadius: 2.0,
+  },
+  normal: {
+    chargeStrength: -1200,
+    linkDistance: 320,
+    collisionRadius: 2.5,
+  },
+  spacious: {
+    chargeStrength: -2400,  // 2x normal
+    linkDistance: 640,      // 2x normal
+    collisionRadius: 4.0,   // ~1.6x normal
+  },
+};
+
+/** Default spacing preset - SPACIOUS for better readability */
+export const DEFAULT_SPACING_PRESET: SpacingPreset = 'spacious';
+
 export interface ForceNode extends SimulationNodeDatum {
   id: string;
   x: number;
@@ -42,11 +83,13 @@ export interface ForceLink extends SimulationLinkDatum<ForceNode> {
 }
 
 export interface ForceOptions {
-  /** Strength of node repulsion (-100 to -2000, more negative = stronger) */
+  /** Spacing preset - overrides chargeStrength, linkDistance, collisionRadius */
+  preset?: SpacingPreset;
+  /** Strength of node repulsion (-100 to -2400, more negative = stronger) */
   chargeStrength?: number;
-  /** Link distance (100-500) */
+  /** Link distance (100-640) */
   linkDistance?: number;
-  /** Collision radius multiplier (1.5-3.0) */
+  /** Collision radius multiplier (1.5-4.0) */
   collisionRadius?: number;
   /** Center force strength (0-0.1) */
   centerStrength?: number;
@@ -64,11 +107,15 @@ export interface ForceOptions {
   nodeCount?: number;
 }
 
+// Use spacious preset values as defaults for better readability
+const spaciousPreset = SPACING_PRESETS[DEFAULT_SPACING_PRESET];
+
 const DEFAULT_OPTIONS: Required<ForceOptions> = {
-  chargeStrength: -1200, // Strong repulsion for clear separation
-  linkDistance: 320,     // Larger link distance for breathing room
-  collisionRadius: 2.5,  // Generous collision radius
-  centerStrength: 0.02,  // Gentle center pull
+  preset: DEFAULT_SPACING_PRESET,
+  chargeStrength: spaciousPreset.chargeStrength, // -2400 (2x stronger repulsion)
+  linkDistance: spaciousPreset.linkDistance,     // 640 (2x link distance)
+  collisionRadius: spaciousPreset.collisionRadius, // 4.0 (~1.6x collision radius)
+  centerStrength: 0.015,  // Slightly reduced center pull for spacious layout
   clusterByCategory: true,
   alphaDecay: 0.012,     // Slower decay for better convergence
   velocityDecay: 0.25,   // Lower velocity decay for more movement
@@ -125,20 +172,33 @@ export function createForceSimulation<N extends Node, E extends Edge>(
   edges: E[],
   options: ForceOptions = {}
 ): Simulation<ForceNode, ForceLink> {
-  const opts = { ...DEFAULT_OPTIONS, ...options };
+  // Resolve preset values first, then apply explicit overrides
+  const presetKey = options.preset ?? DEFAULT_SPACING_PRESET;
+  const presetValues = SPACING_PRESETS[presetKey];
+
+  const opts = {
+    ...DEFAULT_OPTIONS,
+    // Apply preset values
+    chargeStrength: presetValues.chargeStrength,
+    linkDistance: presetValues.linkDistance,
+    collisionRadius: presetValues.collisionRadius,
+    // Allow explicit overrides
+    ...options,
+  };
+
   const nodeCount = nodes.length;
 
-  // Get adaptive parameters
+  // Get adaptive parameters (for cluster scaling)
   const adaptive = getAdaptiveParams(
     nodeCount,
     opts.viewportWidth,
     opts.viewportHeight
   );
 
-  // Use adaptive or manual settings
-  const chargeStrength = opts.chargeStrength || adaptive.chargeStrength;
-  const linkDistance = opts.linkDistance || adaptive.linkDistance;
-  const collisionMultiplier = opts.collisionRadius || adaptive.collisionMultiplier;
+  // Use preset/override values (no fallback to adaptive for main params)
+  const chargeStrength = opts.chargeStrength;
+  const linkDistance = opts.linkDistance;
+  const collisionMultiplier = opts.collisionRadius;
   const clusterScale = adaptive.clusterScale;
 
   // Convert to force nodes

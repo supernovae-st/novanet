@@ -32,6 +32,8 @@ const iconContainerCache = new Map<string, CSSProperties>();
 const handleCache = new Map<string, CSSProperties>();
 const badgeCache = new Map<string, CSSProperties>();
 const innerCardCache = new Map<string, CSSProperties>();
+const depthShadowCache = new Map<string, CSSProperties>();
+const glowTrailCache = new Map<string, CSSProperties>();
 
 /**
  * Creates a unique cache key from input arguments.
@@ -300,6 +302,140 @@ export function getInnerCardStyle(isSelected: boolean): CSSProperties {
 }
 
 // =============================================================================
+// Depth Shadow & Glow Trail Styles (v8.0.0)
+// =============================================================================
+
+/**
+ * Gets a memoized 3D depth shadow style for nodes.
+ * Creates a lifted/floating appearance with layered shadows.
+ *
+ * @param primaryColor - Primary color for shadow tint
+ * @param elevation - Elevation level (1-3, default: 2)
+ * @param isHovered - Whether the node is hovered
+ * @param isSelected - Whether the node is selected
+ * @returns Cached CSSProperties object
+ */
+export function getDepthShadowStyle(
+  primaryColor: string,
+  elevation: 1 | 2 | 3 = 2,
+  isHovered: boolean = false,
+  isSelected: boolean = false
+): CSSProperties {
+  const key = cacheKey('depth', primaryColor, elevation, isHovered, isSelected);
+
+  if (!depthShadowCache.has(key)) {
+    // Base shadow layers for depth effect
+    const baseShadow = [
+      // Ambient shadow (large, soft)
+      `0 ${4 * elevation}px ${16 * elevation}px rgba(0, 0, 0, 0.3)`,
+      // Key shadow (smaller, sharper)
+      `0 ${2 * elevation}px ${8 * elevation}px rgba(0, 0, 0, 0.4)`,
+      // Color tint shadow (subtle glow)
+      `0 ${2 * elevation}px ${12 * elevation}px ${primaryColor}15`,
+    ];
+
+    // Enhanced shadows for hover/selected states
+    const interactiveShadow = isSelected
+      ? [
+          ...baseShadow,
+          `0 0 ${30 * elevation}px ${primaryColor}40`,
+          `0 0 ${60 * elevation}px ${primaryColor}20`,
+        ]
+      : isHovered
+        ? [
+            ...baseShadow,
+            `0 0 ${20 * elevation}px ${primaryColor}30`,
+          ]
+        : baseShadow;
+
+    depthShadowCache.set(key, {
+      boxShadow: interactiveShadow.join(', '),
+      transform: isHovered ? `translateY(-${elevation}px) scale(1.01)` : undefined,
+      transition: 'box-shadow 0.2s ease, transform 0.2s ease',
+    });
+  }
+
+  return depthShadowCache.get(key)!;
+}
+
+/**
+ * Gets a memoized glow trail style for drag effects.
+ * Creates a trailing glow effect when nodes are being dragged.
+ *
+ * @param primaryColor - Primary color for the glow
+ * @param intensity - Glow intensity (0-1, default: 0.5)
+ * @param isDragging - Whether the node is currently being dragged
+ * @returns Cached CSSProperties object
+ */
+/**
+ * Helper to convert opacity (0-1) to hex alpha suffix
+ * @param opacity - Opacity value 0-1
+ * @returns 2-character hex string (00-ff)
+ */
+function opacityToHex(opacity: number): string {
+  const clamped = Math.max(0, Math.min(1, opacity));
+  return Math.round(clamped * 255).toString(16).padStart(2, '0');
+}
+
+export function getGlowTrailStyle(
+  primaryColor: string,
+  intensity: number = 0.5,
+  isDragging: boolean = false
+): CSSProperties {
+  const key = cacheKey('trail', primaryColor, Math.round(intensity * 10), isDragging);
+
+  if (!glowTrailCache.has(key)) {
+    const glowSize = 30 * intensity;
+    const opacity = isDragging ? intensity : intensity * 0.3;
+
+    glowTrailCache.set(key, {
+      boxShadow: isDragging
+        ? [
+            `0 0 ${glowSize}px ${glowSize / 2}px ${primaryColor}${opacityToHex(opacity)}`,
+            `0 0 ${glowSize * 2}px ${glowSize}px ${primaryColor}${opacityToHex(opacity * 0.5)}`,
+            `0 0 ${glowSize * 3}px ${glowSize * 1.5}px ${primaryColor}${opacityToHex(opacity * 0.25)}`,
+          ].join(', ')
+        : 'none',
+      transition: isDragging ? 'none' : 'box-shadow 0.3s ease-out',
+    });
+  }
+
+  return glowTrailCache.get(key)!;
+}
+
+/**
+ * Gets a memoized neon glow style for edges or UI elements.
+ *
+ * @param color - Glow color
+ * @param intensity - Glow intensity (0-1)
+ * @param animated - Whether to include animation
+ * @returns Cached CSSProperties object
+ */
+export function getNeonGlowStyle(
+  color: string,
+  intensity: number = 0.7,
+  animated: boolean = false
+): CSSProperties {
+  const key = cacheKey('neon', color, Math.round(intensity * 10), animated);
+
+  if (!glowTrailCache.has(key)) {
+    const glowSize = 20 * intensity;
+
+    glowTrailCache.set(key, {
+      boxShadow: [
+        `0 0 ${glowSize / 2}px ${color}`,
+        `0 0 ${glowSize}px ${color}90`,
+        `0 0 ${glowSize * 1.5}px ${color}60`,
+        `0 0 ${glowSize * 2}px ${color}30`,
+      ].join(', '),
+      animation: animated ? 'neon-pulse 2s ease-in-out infinite' : undefined,
+    });
+  }
+
+  return glowTrailCache.get(key)!;
+}
+
+// =============================================================================
 // Static Styles (no parameters, constant references)
 // =============================================================================
 
@@ -342,6 +478,8 @@ export function clearStyleCaches(): void {
   handleCache.clear();
   badgeCache.clear();
   innerCardCache.clear();
+  depthShadowCache.clear();
+  glowTrailCache.clear();
 }
 
 /**
@@ -357,11 +495,14 @@ export function getStyleCacheStats(): {
   handle: number;
   badge: number;
   innerCard: number;
+  depthShadow: number;
+  glowTrail: number;
   total: number;
 } {
   const total = containerCache.size + headerCache.size + contentCache.size +
     gradientBorderCache.size + iconCache.size + iconContainerCache.size +
-    handleCache.size + badgeCache.size + innerCardCache.size;
+    handleCache.size + badgeCache.size + innerCardCache.size +
+    depthShadowCache.size + glowTrailCache.size;
 
   return {
     container: containerCache.size,
@@ -373,6 +514,8 @@ export function getStyleCacheStats(): {
     handle: handleCache.size,
     badge: badgeCache.size,
     innerCard: innerCardCache.size,
+    depthShadow: depthShadowCache.size,
+    glowTrail: glowTrailCache.size,
     total,
   };
 }

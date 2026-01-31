@@ -61,3 +61,32 @@ export {
   type SmartFitViewOptions,
   type UseSmartFitViewReturn,
 } from './useSmartFitView';
+
+// Drag interaction utilities
+export {
+  useMagneticForce,
+  type MagneticForceOptions,
+  type UseMagneticForceReturn,
+} from './useMagneticForce';
+
+export {
+  useGroupDrag,
+  type GroupDragOptions,
+  type UseGroupDragReturn,
+  type NodePosition,
+  type EdgeConnection,
+} from './useGroupDrag';
+
+export {
+  useContainerConstraint,
+  type ContainerConstraintOptions,
+  type UseContainerConstraintReturn,
+  type ContainerBounds,
+} from './useContainerConstraint';
+
+// Node interaction utilities
+export {
+  useNodeInteractions,
+  type UseNodeInteractionsOptions,
+  type NodeInteractionsResult,
+} from './useNodeInteractions';

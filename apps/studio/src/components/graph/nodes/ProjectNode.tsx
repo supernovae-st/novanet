@@ -13,15 +13,19 @@
  * - Hover info displayed in centralized bottom pill (via uiStore.hoveredNodeId)
  *
  * Uses NovaNet Icon Design System for consistent colors.
+ * Uses shared design system components from effects/ directory.
  */
 
-import { memo, useState, useCallback } from 'react';
-import { Handle, Position, type Node, type NodeProps } from '@xyflow/react';
+import { memo, useMemo } from 'react';
+import { type Node, type NodeProps } from '@xyflow/react';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import type { BaseNodeData } from './BaseNodeWrapper';
+import { BlueprintOverlay } from './BlueprintOverlay';
 import { ICON_COLORS } from '@/config/iconSystem';
-import { NODE_BG } from '@/config/constants';
+import { NODE_BG, NODE_DESIGN } from '@/config/constants';
+import { useNodeInteractions } from '@/hooks';
+import { SelectionPulseRing, GlassmorphismEffects, NodeHandles } from './effects';
 
 // NovaNet logo URL
 const NOVANET_LOGO_URL = 'https://pbs.twimg.com/profile_images/1788187862883598336/q8u1VSz3_400x400.jpg';
@@ -36,72 +40,96 @@ export type ProjectNodeType = Node<BaseNodeData>;
  * ProjectNode - Premium Gradient Edge Design
  */
 export const ProjectNode = memo(function ProjectNode(props: NodeProps<ProjectNodeType>) {
-  const { data, selected } = props;
-  const [isHovered, setIsHovered] = useState(false);
-  const [isPressed, setIsPressed] = useState(false);
+  const { data, selected = false } = props;
   const isDimmed = data.dimmed === true;
   const isHoverDimmed = data.hoverDimmed === true;
+  const isSchemaMode = data.isSchemaMode === true;
 
-  const handleMouseEnter = useCallback(() => {
-    setIsHovered(true);
-  }, []);
+  // Shared interaction state management
+  const {
+    isHovered,
+    handleMouseEnter,
+    handleMouseLeave,
+    handleMouseDown,
+    handleMouseUp,
+    containerClassName,
+    containerStyle,
+  } = useNodeInteractions({ selected, isDimmed, isHoverDimmed });
 
-  const handleMouseLeave = useCallback(() => {
-    setIsHovered(false);
-    setIsPressed(false);
-  }, []);
+  // Memoize gradient border style (ProjectNode uses slightly stronger glow)
+  const gradientBorderStyle = useMemo(() => ({
+    background: selected
+      ? NODE_DESIGN.gradients.borderSelected(PRIMARY, SECONDARY)
+      : isHovered
+        ? NODE_DESIGN.gradients.borderHover(PRIMARY, SECONDARY)
+        : NODE_DESIGN.gradients.borderDefault(PRIMARY, SECONDARY),
+    boxShadow: selected
+      ? `0 0 45px 10px ${PRIMARY}70, 0 0 90px 18px ${PRIMARY}40, 0 0 130px 26px ${PRIMARY}20`
+      : isHovered
+        ? `0 0 35px 7px ${PRIMARY}55, 0 0 70px 14px ${PRIMARY}30`
+        : `0 0 25px 5px ${PRIMARY}45, 0 0 50px 10px ${PRIMARY}22`,
+  }), [selected, isHovered]);
 
   return (
     <div
-      className={cn(
-        'group relative node-pressable',
-        // Full dimming (focus mode)
-        isDimmed && 'opacity-15 scale-90 grayscale pointer-events-none',
-        // Lighter dimming (hover highlight mode)
-        isHoverDimmed && !isDimmed && 'hover-dimmed',
-        // Enhanced hover effect
-        isHovered && !isDimmed && !isHoverDimmed && !selected && 'scale-103',
-        // Press feedback
-        isPressed && !isDimmed && 'scale-[0.98]',
-        // Selection already has its own scale
-        selected && 'scale-105'
-      )}
-      style={{
-        transition: 'transform 200ms ease-out, opacity 200ms ease-out',
-      }}
+      className={containerClassName}
+      style={containerStyle}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      onMouseDown={() => setIsPressed(true)}
-      onMouseUp={() => setIsPressed(false)}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
     >
-      {/* Gradient border wrapper - 2px */}
+      {/* Selection pulse ring effect - WOW animation */}
+      {selected && (
+        <SelectionPulseRing color={PRIMARY} borderRadius={16} />
+      )}
+
+      {/* Gradient border wrapper - 2px (3px when selected) */}
       <div
         className={cn(
-          'relative p-[2px] rounded-2xl transition-all duration-300',
+          'relative rounded-2xl transition-all duration-300',
           selected && 'animate-gradient-rotate',
           isHovered && !selected && 'animate-glow-pulse'
         )}
         style={{
-          background: selected
-            ? `linear-gradient(135deg, ${PRIMARY}, ${SECONDARY}, ${PRIMARY})`
-            : isHovered
-              ? `linear-gradient(135deg, ${PRIMARY}, ${SECONDARY})`
-              : `linear-gradient(135deg, ${PRIMARY}, ${SECONDARY}90)`,
-          boxShadow: selected
-            ? `0 0 45px 10px ${PRIMARY}70, 0 0 90px 18px ${PRIMARY}40, 0 0 130px 26px ${PRIMARY}20`
-            : isHovered
-              ? `0 0 35px 7px ${PRIMARY}55, 0 0 70px 14px ${PRIMARY}30`
-              : `0 0 25px 5px ${PRIMARY}45, 0 0 50px 10px ${PRIMARY}22`,
+          padding: selected ? NODE_DESIGN.border.selected : NODE_DESIGN.border.default,
+          ...gradientBorderStyle,
         }}
       >
-        {/* Inner card */}
+        {/* Inner card - Glassmorphism + Skeuomorphism when selected */}
         <div
-          className="relative w-[280px] rounded-[14px] overflow-hidden"
-          style={{ backgroundColor: selected ? NODE_BG.selected : NODE_BG.default }}
+          className={cn(
+            'relative w-[280px] overflow-hidden transition-all duration-500 ease-out',
+            selected ? 'backdrop-blur-xl' : '',
+            selected && 'animate-float'
+          )}
+          style={{
+            borderRadius: selected ? NODE_DESIGN.radius.inner : NODE_DESIGN.radius.outer,
+            backgroundColor: selected ? NODE_DESIGN.selectedBg : NODE_BG.default,
+            border: selected ? `${NODE_DESIGN.border.innerSelected}px solid ${PRIMARY}` : 'none',
+            boxShadow: selected ? NODE_DESIGN.shadows.skeuomorphic(PRIMARY) : undefined,
+          }}
         >
-          {/* Grid background pattern */}
+          {/* Glassmorphism effects (bevel, reflection, shimmer) */}
+          {selected && (
+            <GlassmorphismEffects borderRadius={NODE_DESIGN.radius.inner} />
+          )}
+
+          {/* Blueprint overlay for schema mode */}
+          {isSchemaMode && (
+            <BlueprintOverlay
+              color={PRIMARY}
+              selected={selected}
+              borderRadius={selected ? NODE_DESIGN.radius.inner : NODE_DESIGN.radius.outer}
+            />
+          )}
+
+          {/* Grid background pattern (Project-specific decoration) */}
           <div
-            className="absolute inset-0 opacity-[0.03]"
+            className={cn(
+              'absolute inset-0 pointer-events-none',
+              selected ? 'opacity-[0.05]' : 'opacity-[0.03]'
+            )}
             style={{
               backgroundImage: `
                 linear-gradient(rgba(139, 92, 246, 0.5) 1px, transparent 1px),
@@ -111,17 +139,8 @@ export const ProjectNode = memo(function ProjectNode(props: NodeProps<ProjectNod
             }}
           />
 
-          {/* Target Handle - SOLID (incoming) */}
-          <Handle
-            type="target"
-            position={Position.Top}
-            className="!w-3 !h-3 !rounded-full !border-2 !-top-1.5 transition-all duration-200"
-            style={{
-              backgroundColor: PRIMARY,
-              borderColor: PRIMARY,
-              boxShadow: selected ? `0 0 8px ${PRIMARY}` : undefined,
-            }}
-          />
+          {/* Handles - vertical layout (top/bottom) */}
+          <NodeHandles color={PRIMARY} selected={selected} layout="vertical" />
 
           {/* Content */}
           <div className="relative p-5">
@@ -172,9 +191,7 @@ export const ProjectNode = memo(function ProjectNode(props: NodeProps<ProjectNod
             </div>
 
             {/* Row 2: Name + Key */}
-            <h2
-              className="text-xl font-extrabold text-white truncate leading-tight"
-            >
+            <h2 className="text-xl font-extrabold text-white truncate leading-tight">
               {data.displayName}
             </h2>
 
@@ -187,21 +204,8 @@ export const ProjectNode = memo(function ProjectNode(props: NodeProps<ProjectNod
               </p>
             )}
           </div>
-
-          {/* Source Handle - HOLLOW (outgoing) */}
-          <Handle
-            type="source"
-            position={Position.Bottom}
-            className="!w-3 !h-3 !rounded-full !border-2 !-bottom-1.5 transition-all duration-200"
-            style={{
-              backgroundColor: 'transparent',
-              borderColor: PRIMARY,
-              boxShadow: selected ? `0 0 8px ${PRIMARY}` : undefined,
-            }}
-          />
         </div>
       </div>
-
     </div>
   );
 });

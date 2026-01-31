@@ -70,6 +70,7 @@ export default function HomePage() {
       toggleMinimap: state.toggleMinimap,
       toggleEdgeLabels: state.toggleEdgeLabels,
       setLayoutDirection: state.setLayoutDirection,
+      triggerLayout: state.triggerLayout,
       setSelectedNode: state.setSelectedNode,
       setSelectedEdge: state.setSelectedEdge,
       clearSelection: state.clearSelection,
@@ -234,28 +235,28 @@ export default function HomePage() {
         return;
       }
 
-      // Layout shortcuts (Shift + H/V/D/R/F)
+      // Layout shortcuts (Shift + H/V/D/R/F) - must use triggerLayout to increment layoutVersion
       if (e.shiftKey && !e.metaKey && !e.ctrlKey) {
         switch (e.key) {
           case 'H':
             e.preventDefault();
-            uiActions.setLayoutDirection('LR');
+            uiActions.triggerLayout('LR');
             return;
           case 'V':
             e.preventDefault();
-            uiActions.setLayoutDirection('TB');
+            uiActions.triggerLayout('TB');
             return;
           case 'D':
             e.preventDefault();
-            uiActions.setLayoutDirection('dagre');
+            uiActions.triggerLayout('dagre');
             return;
           case 'R':
             e.preventDefault();
-            uiActions.setLayoutDirection('radial');
+            uiActions.triggerLayout('radial');
             return;
           case 'F':
             e.preventDefault();
-            uiActions.setLayoutDirection('force');
+            uiActions.triggerLayout('force');
             return;
         }
       }
@@ -596,7 +597,7 @@ export default function HomePage() {
               )}
               {/* Shortcut hint - concise */}
               <span className="text-[10px] text-white/25 select-none pointer-events-none">
-                ⌘+click inspect · dbl-click expand
+                click inspect · dbl-click expand
               </span>
             <Pill size="sm">
               {/* 2D Graph / 3D Graph / Table / Raw - Linear-style segmented control */}

@@ -19,11 +19,11 @@ import {
   Plus,
   Minus,
   Maximize2,
-  ArrowRight,
-  ArrowDown,
+  Rows3,
+  Layers,
   LayoutGrid,
-  Circle,
-  Sparkles,
+  Target,
+  Atom,
   ChevronUp,
   ChevronDown,
 } from 'lucide-react';
@@ -156,25 +156,25 @@ const LayoutButton = memo(function LayoutButton({
         <button
           onClick={handleClick}
           className={cn(
-            'group relative flex items-center justify-center',
-            'rounded-xl',
-            'transition-all', // Duration + easing set via style for token consistency
+            'group relative flex items-center gap-2',
+            'rounded-xl px-2.5',
+            'transition-all',
             'bg-white/[0.04] border border-white/[0.08]',
             'hover:bg-white/[0.10] hover:border-white/[0.15] hover:scale-105',
-            'active:scale-90 active:bg-white/[0.15]',
+            'active:scale-95 active:bg-white/[0.15]',
             'focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-blue/50'
           )}
           style={{
-            width: BUTTON_SIZE,
             height: BUTTON_SIZE,
             transitionDuration: `${TRANSITION_DURATION}ms`,
             transitionTimingFunction: SPRING_EASE,
           }}
           aria-label={shortcut ? `${label} (${shortcut})` : label}
         >
+          {/* Icon */}
           <span
             className={cn(
-              'transition-all', // Duration + easing set via style
+              'transition-all',
               'text-white/50',
               'group-hover:text-white/90',
               'group-active:text-white'
@@ -186,11 +186,25 @@ const LayoutButton = memo(function LayoutButton({
           >
             {icon}
           </span>
+          {/* Shortcut kbd - prominent styling */}
+          {shortcut && (
+            <kbd
+              className={cn(
+                'inline-flex items-center justify-center',
+                'min-w-[28px] h-5 px-1.5',
+                'bg-white/[0.06] border border-white/[0.10] rounded',
+                'text-[10px] font-mono text-white/50',
+                'group-hover:bg-white/[0.12] group-hover:text-white/80 group-hover:border-white/[0.20]',
+                'transition-all'
+              )}
+            >
+              {shortcut}
+            </kbd>
+          )}
         </button>
       </TooltipTrigger>
       <TooltipContent side="left">
         {label}
-        {shortcut && <TooltipShortcut>{shortcut}</TooltipShortcut>}
       </TooltipContent>
     </Tooltip>
   );
@@ -200,12 +214,36 @@ const LayoutButton = memo(function LayoutButton({
 // GraphToolbar
 // =============================================================================
 
+// =============================================================================
+// Layout Labels - Dynamic based on data mode
+// =============================================================================
+
+const SCHEMA_LABELS = {
+  LR: 'Swimlanes',
+  TB: 'Stacked',
+  dagre: 'Treemap',
+  radial: 'Target',
+  force: 'Force',
+} as const;
+
+const DATA_LABELS = {
+  LR: 'Horizontal',
+  TB: 'Vertical',
+  dagre: 'Dagre',
+  radial: 'Radial',
+  force: 'Force',
+} as const;
+
 export const GraphToolbar = memo(function GraphToolbar() {
   const [isExpanded, setIsExpanded] = useState(false);
   const { zoomIn, zoomOut } = useReactFlow();
   const { smartFitView } = useSmartFitView();
 
   const triggerLayout = useUIStore((state) => state.triggerLayout);
+  const dataMode = useUIStore((state) => state.dataMode);
+
+  // Pick labels based on current mode
+  const labels = dataMode === 'schema' ? SCHEMA_LABELS : DATA_LABELS;
 
   const toggleExpanded = useCallback(() => {
     setIsExpanded((prev) => !prev);
@@ -249,32 +287,32 @@ export const GraphToolbar = memo(function GraphToolbar() {
         }}
       >
         <LayoutButton
-          icon={<ArrowRight size={ICON_SIZE} />}
-          label="Horizontal"
+          icon={<Rows3 size={ICON_SIZE} />}
+          label={labels.LR}
           shortcut="⇧H"
           onClick={() => handleSetLayout('LR')}
         />
         <LayoutButton
-          icon={<ArrowDown size={ICON_SIZE} />}
-          label="Vertical"
+          icon={<Layers size={ICON_SIZE} />}
+          label={labels.TB}
           shortcut="⇧V"
           onClick={() => handleSetLayout('TB')}
         />
         <LayoutButton
           icon={<LayoutGrid size={ICON_SIZE} />}
-          label="Dagre"
+          label={labels.dagre}
           shortcut="⇧D"
           onClick={() => handleSetLayout('dagre')}
         />
         <LayoutButton
-          icon={<Circle size={ICON_SIZE} />}
-          label="Radial"
+          icon={<Target size={ICON_SIZE} />}
+          label={labels.radial}
           shortcut="⇧R"
           onClick={() => handleSetLayout('radial')}
         />
         <LayoutButton
-          icon={<Sparkles size={ICON_SIZE} />}
-          label="Force"
+          icon={<Atom size={ICON_SIZE} />}
+          label={labels.force}
           shortcut="⇧F"
           onClick={() => handleSetLayout('force')}
         />

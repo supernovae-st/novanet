@@ -1,23 +1,31 @@
 'use client';
 
 /**
- * SchemaNode - Individual node type card in Schema Mode
+ * SchemaNode - Premium card for schema visualization with blueprint styling
  *
- * Features:
- * - Node card with scope-colored left border accent
- * - Label and nodeType display
- * - Source and target handles for edge connections
- * - Glassmorphism styling matching NovaNet design
+ * Synchronized design with data mode nodes (StructuralNode):
+ * - Same gradient border with node type colors
+ * - Same skeuomorphism and glassmorphism effects
+ * - Same animations (ping, shimmer, float)
  *
- * Scope Accent Colors:
- * - Project: violet left border
- * - Global: emerald left border
- * - Shared: amber left border
+ * Blueprint differentiation:
+ * - Grid pattern overlay (6% opacity)
+ * - Dashed border indicator
+ * - Diamond badge in corner
+ *
+ * Uses shared design system components from effects/ directory.
  */
 
-import { memo } from 'react';
-import { type NodeProps, type Node, Handle, Position } from '@xyflow/react';
+import { memo, useMemo } from 'react';
+import { type NodeProps, type Node } from '@xyflow/react';
 import { cn } from '@/lib/utils';
+import { getNodeTypeColors } from '@/config/categoryColors';
+import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
+import { CategoryIcon } from '@/components/ui/CategoryIcon';
+import { BlueprintOverlay } from '../nodes/BlueprintOverlay';
+import { NODE_BG, NODE_DESIGN } from '@/config/constants';
+import { useNodeInteractions } from '@/hooks';
+import { SelectionPulseRing, GlassmorphismEffects, NodeHandles } from '../nodes/effects';
 import type { Scope } from '@novanet/core/types';
 
 /**
@@ -35,55 +43,154 @@ export interface SchemaNodeData extends Record<string, unknown> {
 export type SchemaNodeType = Node<SchemaNodeData, 'schemaNode'>;
 
 /**
- * Scope accent color mapping for left border
- * Matches ScopeGroupNode color scheme
- */
-const SCOPE_ACCENT: Record<Scope, string> = {
-  Project: 'border-l-violet-500',
-  Global: 'border-l-emerald-500',
-  Shared: 'border-l-amber-500',
-};
-
-/**
- * SchemaNode - Individual node type representation
- *
- * Used in Schema Mode to display a single node type (e.g., Project, Concept, Locale).
- * Features scope-colored left border accent and connection handles.
+ * SchemaNode - Premium design with blueprint styling
  */
 export const SchemaNode = memo(function SchemaNode({
   data,
-  selected,
+  selected = false,
 }: NodeProps<SchemaNodeType>) {
-  const accentClass = SCOPE_ACCENT[data.scope] || 'border-l-gray-500';
+  // Use node type colors (same as data mode) instead of scope colors
+  const colors = getNodeTypeColors(data.nodeType);
+  const config = NODE_TYPE_CONFIG[data.nodeType as keyof typeof NODE_TYPE_CONFIG];
+
+  // Shared interaction state management
+  const {
+    isHovered,
+    handleMouseEnter,
+    handleMouseLeave,
+    handleMouseDown,
+    handleMouseUp,
+    containerClassName,
+    containerStyle,
+  } = useNodeInteractions({ selected });
+
+  // Memoize gradient border style to prevent re-renders
+  const gradientBorderStyle = useMemo(() => ({
+    background: selected
+      ? NODE_DESIGN.gradients.borderSelected(colors.primary, colors.secondary)
+      : isHovered
+        ? NODE_DESIGN.gradients.borderHover(colors.primary, colors.secondary)
+        : NODE_DESIGN.gradients.borderDefault(colors.primary, colors.secondary),
+    boxShadow: selected
+      ? NODE_DESIGN.shadows.glowSelected(colors.primary)
+      : isHovered
+        ? NODE_DESIGN.shadows.glowHover(colors.primary)
+        : NODE_DESIGN.shadows.glow(colors.primary),
+  }), [colors.primary, colors.secondary, selected, isHovered]);
+
+  // Memoize icon style to prevent re-renders
+  const iconStyle = useMemo(() => ({
+    color: colors.primary,
+    filter: `drop-shadow(0 0 ${selected ? '10px' : '6px'} ${colors.primary}80)`,
+  }), [colors.primary, selected]);
 
   return (
     <div
-      className={cn(
-        'px-3 py-2 rounded-md bg-black/80 backdrop-blur-sm border border-white/10',
-        'border-l-4',
-        accentClass,
-        selected && 'ring-2 ring-white/30'
-      )}
+      className={containerClassName}
+      style={containerStyle}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
     >
-      {/* Target handle - left side (incoming connections) */}
-      <Handle
-        type="target"
-        position={Position.Left}
-        className="w-2 h-2 !bg-white/50"
-      />
+      {/* Selection pulse ring effect - WOW animation */}
+      {selected && (
+        <SelectionPulseRing color={colors.primary} borderRadius={NODE_DESIGN.radius.outer} />
+      )}
 
-      {/* Node content */}
-      <div className="text-sm font-medium text-white/90">{data.label}</div>
-      <div className="text-xs text-white/50 truncate max-w-[120px]">
-        {data.nodeType}
+      {/* Gradient border wrapper - 2px (3px when selected) */}
+      <div
+        className={cn(
+          'relative transition-all duration-300',
+          selected && 'animate-gradient-rotate',
+          isHovered && !selected && 'animate-glow-pulse'
+        )}
+        style={{
+          borderRadius: NODE_DESIGN.radius.outer,
+          padding: selected ? NODE_DESIGN.border.selected : NODE_DESIGN.border.default,
+          ...gradientBorderStyle,
+        }}
+      >
+        {/* Inner card - Glassmorphism + Skeuomorphism when selected */}
+        <div
+          className={cn(
+            'relative overflow-hidden transition-all duration-500 ease-out',
+            selected ? 'backdrop-blur-xl' : '',
+            selected && 'animate-float'
+          )}
+          style={{
+            width: 180,
+            borderRadius: selected ? NODE_DESIGN.radius.innerSelected : NODE_DESIGN.radius.inner,
+            backgroundColor: selected ? NODE_DESIGN.selectedBg : NODE_BG.default,
+            border: selected ? `${NODE_DESIGN.border.innerSelected}px solid ${colors.primary}` : 'none',
+            boxShadow: selected ? NODE_DESIGN.shadows.skeuomorphic(colors.primary) : undefined,
+          }}
+        >
+          {/* Glassmorphism effects (bevel, reflection, shimmer) */}
+          {selected && (
+            <GlassmorphismEffects borderRadius={NODE_DESIGN.radius.innerSelected} />
+          )}
+
+          {/* Blueprint overlay - schema mode indicator (always on) */}
+          <BlueprintOverlay
+            color={colors.primary}
+            selected={selected}
+            borderRadius={selected ? NODE_DESIGN.radius.innerSelected : NODE_DESIGN.radius.inner}
+          />
+
+          {/* Handles - horizontal layout (left/right) for schema */}
+          <NodeHandles color={colors.primary} selected={selected} layout="horizontal" />
+
+          {/* Content */}
+          <div className="relative px-4 py-3">
+            {/* Header: Icon + Badge */}
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2">
+                {config && (
+                  <CategoryIcon
+                    category={config.category}
+                    size={18}
+                    strokeWidth={2}
+                    className={cn(
+                      'transition-transform duration-200',
+                      (selected || isHovered) && 'scale-110'
+                    )}
+                    style={iconStyle}
+                  />
+                )}
+                <span
+                  className="text-[9px] font-bold uppercase tracking-wider"
+                  style={{ color: colors.primary }}
+                >
+                  {data.subcategory}
+                </span>
+              </div>
+
+              {/* Status dot */}
+              <div
+                className={cn('w-2 h-2 rounded-full', selected && 'animate-pulse')}
+                style={{
+                  background: colors.primary,
+                  boxShadow: `0 0 8px ${colors.primary}`,
+                }}
+              />
+            </div>
+
+            {/* Display Name */}
+            <h3 className="text-sm font-bold text-white truncate">
+              {data.label}
+            </h3>
+
+            {/* Node type */}
+            <p
+              className="text-[10px] font-mono truncate mt-0.5"
+              style={{ color: `${colors.primary}70` }}
+            >
+              {data.nodeType}
+            </p>
+          </div>
+        </div>
       </div>
-
-      {/* Source handle - right side (outgoing connections) */}
-      <Handle
-        type="source"
-        position={Position.Right}
-        className="w-2 h-2 !bg-white/50"
-      />
     </div>
   );
 });

@@ -99,7 +99,12 @@ const config: Config = {
   			glow: 'glow 2s ease-in-out infinite alternate',
   			shake: 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both',
   			'toast-enter': 'toast-enter 0.3s ease-out',
-  			'toast-exit': 'toast-exit 0.3s ease-in forwards'
+  			'toast-exit': 'toast-exit 0.3s ease-in forwards',
+  			'selection-ping': 'selection-ping 3s cubic-bezier(0, 0, 0.2, 1) infinite',
+  			'selection-ping-delayed': 'selection-ping 3s cubic-bezier(0, 0, 0.2, 1) infinite 1s',
+  			'shimmer': 'shimmer 8s ease-in-out infinite',
+  			'float': 'float 6s ease-in-out infinite',
+  			'glow-pulse-selected': 'glow-pulse-selected 4s ease-in-out infinite'
   		},
   		keyframes: {
   			glow: {
@@ -142,6 +147,46 @@ const config: Config = {
   				'100%': {
   					opacity: '0',
   					transform: 'translateY(-10px) scale(0.95)'
+  				}
+  			},
+  			'selection-ping': {
+  				'0%': {
+  					transform: 'scale(1)',
+  					opacity: '0.5'
+  				},
+  				'50%': {
+  					transform: 'scale(1.08)',
+  					opacity: '0.25'
+  				},
+  				'100%': {
+  					transform: 'scale(1.15)',
+  					opacity: '0'
+  				}
+  			},
+  			'shimmer': {
+  				'0%': {
+  					backgroundPosition: '-200% 0'
+  				},
+  				'100%': {
+  					backgroundPosition: '200% 0'
+  				}
+  			},
+  			'float': {
+  				'0%, 100%': {
+  					transform: 'translateY(0)'
+  				},
+  				'50%': {
+  					transform: 'translateY(-2px)'
+  				}
+  			},
+  			'glow-pulse-selected': {
+  				'0%, 100%': {
+  					opacity: '0.7',
+  					transform: 'scale(1)'
+  				},
+  				'50%': {
+  					opacity: '1',
+  					transform: 'scale(1.01)'
   				}
   			}
   		},
