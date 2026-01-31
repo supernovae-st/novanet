@@ -13,7 +13,7 @@ import { getDriver, closeDriver } from '../db/client.js';
 
 // v8.2.0 CONVENTIONS
 const KEY_PREFIXES: Record<string, string[] | null> = {
-  Concept: ['action-', 'product-', 'feature-', 'tier-'],
+  Concept: ['action-', 'product-', 'feature-', 'tier-', 'benefit-', 'usecase-'],
   Page: ['page-'],
   Block: ['block-'],
   BlockType: ['blocktype-'],
@@ -41,7 +41,7 @@ describe('v8.2.0 Conventions', () => {
   // ═══════════════════════════════════════════════════════════════════════════
 
   describe('Key Naming Convention', () => {
-    it('Concept keys should have semantic prefix (action-, product-, feature-, tier-)', async () => {
+    it('Concept keys should have semantic prefix (action-, product-, feature-, tier-, benefit-, usecase-)', async () => {
       const result = await session.run(`
         MATCH (c:Concept)
         RETURN c.key AS key

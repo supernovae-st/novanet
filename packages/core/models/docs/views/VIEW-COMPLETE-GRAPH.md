@@ -1,7 +1,7 @@
 # NovaNet Complete Graph
 
 > Auto-generated from YAML models. Do not edit manually.
-> Last updated: 2026-01-30
+> Last updated: 2026-01-31
 
 ## Overview
 

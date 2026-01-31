@@ -284,7 +284,7 @@ describe('Schema Synchronization - Binary Tests', () => {
         { label: 'Page', prefix: 'page-' },
         { label: 'Block', prefix: 'block-' },
         { label: 'BlockType', prefix: 'blocktype-' },
-        { label: 'Concept', prefixes: ['action-', 'product-', 'feature-', 'tier-'] },
+        { label: 'Concept', prefixes: ['action-', 'product-', 'feature-', 'tier-', 'benefit-', 'usecase-'] },
       ];
 
       const violations: { label: string; key: string }[] = [];

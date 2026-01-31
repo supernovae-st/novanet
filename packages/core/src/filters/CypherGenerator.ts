@@ -132,8 +132,14 @@ export class CypherGenerator {
 
     // 1. MATCH root node
     if (criteria.root) {
-      lines.push(`MATCH (root:${criteria.root.type} {key: $rootKey})`);
-      params.rootKey = criteria.root.key;
+      // If a specific key is provided, match that node
+      // Otherwise, match all nodes of the specified type
+      if (criteria.root.key) {
+        lines.push(`MATCH (root:${criteria.root.type} {key: $rootKey})`);
+        params.rootKey = criteria.root.key;
+      } else {
+        lines.push(`MATCH (root:${criteria.root.type})`);
+      }
     }
 
     // 2. OPTIONAL MATCH for includes
