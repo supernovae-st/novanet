@@ -10,6 +10,7 @@
 import { memo, useState, useCallback } from 'react';
 import { type LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { iconSizes } from '@/design/tokens';
 
 interface ViewCardProps {
   id: string;
@@ -94,7 +95,7 @@ export const ViewCard = memo(function ViewCard({
       >
         <Icon
           className={cn(
-            'w-4 h-4',
+            iconSizes.md,
             'transition-all duration-200',
             isClicking && 'scale-110',
             isActive
