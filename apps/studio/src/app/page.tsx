@@ -207,6 +207,13 @@ export default function HomePage() {
         return;
       }
 
+      // Keyboard shortcuts (/)
+      if (e.key === '/' && !e.metaKey && !e.ctrlKey) {
+        e.preventDefault();
+        openShortcuts();
+        return;
+      }
+
       // View toggle
       if (e.key === 'v' && !e.metaKey && !e.ctrlKey) {
         e.preventDefault();
@@ -487,10 +494,10 @@ export default function HomePage() {
             <button
               onClick={openShortcuts}
               className="absolute bottom-4 left-4 px-3 py-2 rounded-xl bg-[#0d0d12] border border-white/10 hover:bg-accent-blue/15 hover:border-accent-blue/30 transition-all text-white/40 hover:text-accent-blue shadow-lg shadow-black/40 flex items-center gap-2"
-              title="Keyboard shortcuts (?)"
+              title="Keyboard shortcuts (/)"
             >
               <Keyboard className="w-4 h-4" />
-              <kbd className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-white/10 border border-white/10">?</kbd>
+              <kbd className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-white/10 border border-white/10">/</kbd>
             </button>
 
             {/* Bottom center - View controls + hover info + shortcut hint */}

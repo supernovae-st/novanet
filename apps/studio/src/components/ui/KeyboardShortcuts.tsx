@@ -15,6 +15,7 @@ import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { cn } from '@/lib/utils';
 import { isInputFocused } from '@/lib/keyboard';
+import { glassClasses } from '@/design/tokens';
 import { ACTION_ICONS, NAV_ICONS, CONTENT_ICONS, ICON_SIZES } from '@/config/iconSystem';
 import { Kbd } from './Kbd';
 
@@ -50,7 +51,7 @@ const SHORTCUT_CATEGORIES: ShortcutCategory[] = [
       { keys: ['='], description: 'Zoom in' },
       { keys: ['-'], description: 'Zoom out' },
       { keys: ['Esc'], description: 'Close dialog / Clear selection' },
-      { keys: ['?'], description: 'Show keyboard shortcuts' },
+      { keys: ['/'], description: 'Show keyboard shortcuts' },
     ],
   },
   {
@@ -152,15 +153,11 @@ export function KeyboardShortcuts({ isOpen, onClose }: KeyboardShortcutsProps) {
         onClick={onClose}
       />
 
-      {/* Modal - explicit dark styling matching Dialog/QueryPill */}
+      {/* Modal - unified design token */}
       <div
         className={cn(
           'relative w-full max-w-2xl max-h-[80vh] m-4 overflow-hidden',
-          // Glass morphism styling (explicit, not relying on CSS vars)
-          'bg-[#0d0d12]/95 backdrop-blur-xl',
-          'border border-white/[0.08] rounded-2xl',
-          'shadow-2xl shadow-black/50',
-          // Animation
+          glassClasses.modal,
           'animate-in zoom-in-95 fade-in duration-200'
         )}
       >
@@ -258,7 +255,7 @@ export function KeyboardShortcuts({ isOpen, onClose }: KeyboardShortcutsProps) {
         <div className="px-4 py-2.5 border-t border-white/[0.08]">
           <div className="flex items-center justify-center gap-2 text-[11px] text-white/40">
             <span>Press</span>
-            <Kbd>?</Kbd>
+            <Kbd>/</Kbd>
             <span>anytime to show this dialog</span>
           </div>
         </div>
@@ -274,19 +271,6 @@ export function KeyboardShortcuts({ isOpen, onClose }: KeyboardShortcutsProps) {
 export function useKeyboardShortcuts() {
   const [isOpen, setIsOpen] = useState(false);
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (isInputFocused()) return;
-
-      if (e.key === '?' || (e.shiftKey && e.key === '/')) {
-        e.preventDefault();
-        setIsOpen(true);
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
 
   return {
     isOpen,

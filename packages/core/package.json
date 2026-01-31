@@ -19,7 +19,7 @@
     "validate:relations": "tsx scripts/validate-relations.ts",
     "generate:docs": "tsx scripts/generate-docs.ts",
     "validate:docs": "tsx scripts/validate-docs.ts",
-    "prepare": "husky install"
+    "prepare": "husky"
   },
   "dependencies": {
     "neo4j-driver": "^5.28.1",
