@@ -38,8 +38,8 @@ describe('YAML → Artifact Synchronization', () => {
     it('committed file matches generated content from relations.yaml + _index.yaml', async () => {
       const committedPath = path.join(MODELS_DIR, 'docs/views/VIEW-COMPLETE-GRAPH.md');
 
-      // Generate fresh content from YAML sources
-      const generated = await MermaidGenerator.generate({
+      // Generate fresh content from YAML sources (as Markdown with wrapper)
+      const generated = await MermaidGenerator.generateMarkdown({
         modelsDir: MODELS_DIR,
       });
 

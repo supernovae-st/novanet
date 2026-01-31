@@ -289,13 +289,9 @@ export const DatabaseInfoPanel = memo(function DatabaseInfoPanel() {
         />
       </div>
 
-      {/* Tab Content */}
+      {/* Tab Content - Same padding as SchemaFilterPanel (p-3 from panelClasses.body) */}
       <div className={panelClasses.body}>
-        {activeTab === 'views' && (
-          <div className="px-4 pb-6">
-            <ViewSelector />
-          </div>
-        )}
+        {activeTab === 'views' && <ViewSelector />}
 
         {activeTab === 'nodes' && (
           <>
@@ -306,31 +302,27 @@ export const DatabaseInfoPanel = memo(function DatabaseInfoPanel() {
                 size="sm"
               />
             ) : error ? (
-              <div className="px-4 pb-4">
-                <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 text-center">
-                  <p className="text-sm text-red-300">{error}</p>
-                  <button
-                    onClick={fetchSchema}
-                    className="mt-3 px-4 py-2 bg-red-500/20 hover:bg-red-500/30 rounded-lg text-xs text-red-300 transition-colors"
-                  >
-                    Retry
-                  </button>
-                </div>
+              <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 text-center">
+                <p className="text-sm text-red-300">{error}</p>
+                <button
+                  onClick={fetchSchema}
+                  className="mt-3 px-4 py-2 bg-red-500/20 hover:bg-red-500/30 rounded-lg text-xs text-red-300 transition-colors"
+                >
+                  Retry
+                </button>
               </div>
             ) : schema ? (
-              <div className="px-4 pb-6">
-                <NodeLabelsSection
-                  totalNodes={schema.totalNodes}
-                  labelCounts={labelCounts}
-                  maxCount={maxNodeCount}
-                  selectedLabels={selectedLabels}
-                  onToggleLabel={toggleLabel}
-                  onToggleCategoryLabels={toggleCategoryLabels}
-                  onToggleAllNodes={toggleAllNodes}
-                  onExecuteQuery={executeNodeQuery}
-                  isExecuting={isExecuting}
-                />
-              </div>
+              <NodeLabelsSection
+                totalNodes={schema.totalNodes}
+                labelCounts={labelCounts}
+                maxCount={maxNodeCount}
+                selectedLabels={selectedLabels}
+                onToggleLabel={toggleLabel}
+                onToggleCategoryLabels={toggleCategoryLabels}
+                onToggleAllNodes={toggleAllNodes}
+                onExecuteQuery={executeNodeQuery}
+                isExecuting={isExecuting}
+              />
             ) : null}
           </>
         )}
@@ -344,30 +336,26 @@ export const DatabaseInfoPanel = memo(function DatabaseInfoPanel() {
                 size="sm"
               />
             ) : error ? (
-              <div className="px-4 pb-4">
-                <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 text-center">
-                  <p className="text-sm text-red-300">{error}</p>
-                  <button
-                    onClick={fetchSchema}
-                    className="mt-3 px-4 py-2 bg-red-500/20 hover:bg-red-500/30 rounded-lg text-xs text-red-300 transition-colors"
-                  >
-                    Retry
-                  </button>
-                </div>
+              <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 text-center">
+                <p className="text-sm text-red-300">{error}</p>
+                <button
+                  onClick={fetchSchema}
+                  className="mt-3 px-4 py-2 bg-red-500/20 hover:bg-red-500/30 rounded-lg text-xs text-red-300 transition-colors"
+                >
+                  Retry
+                </button>
               </div>
             ) : schema ? (
-              <div className="px-4 pb-6">
-                <RelationshipsSection
-                  totalRelationships={schema.totalRelationships}
-                  relationshipTypes={schema.relationshipTypes}
-                  maxCount={maxRelCount}
-                  selectedRelTypes={selectedRelTypes}
-                  onToggleRelType={toggleRelType}
-                  onToggleAllRelTypes={toggleAllRelTypes}
-                  onExecuteQuery={executeRelQuery}
-                  isExecuting={isExecuting}
-                />
-              </div>
+              <RelationshipsSection
+                totalRelationships={schema.totalRelationships}
+                relationshipTypes={schema.relationshipTypes}
+                maxCount={maxRelCount}
+                selectedRelTypes={selectedRelTypes}
+                onToggleRelType={toggleRelType}
+                onToggleAllRelTypes={toggleAllRelTypes}
+                onExecuteQuery={executeRelQuery}
+                isExecuting={isExecuting}
+              />
             ) : null}
           </>
         )}

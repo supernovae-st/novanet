@@ -41,8 +41,8 @@ const nextConfig: NextConfig = {
   // Turbopack configuration (Next.js 16+)
   turbopack: {},
 
-  // Transpile @novanet/core for imports
-  transpilePackages: ['@novanet/core'],
+  // Note: @novanet/core uses ESM exports in package.json
+  // No transpilePackages needed - dist/ files are used directly
 
   // Webpack configuration for Neo4j driver
   webpack: (config, { isServer }) => {

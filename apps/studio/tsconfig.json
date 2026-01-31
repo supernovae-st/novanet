@@ -26,12 +26,6 @@
     "paths": {
       "@/*": [
         "./src/*"
-      ],
-      "@novanet/core": [
-        "../../packages/core/src/index"
-      ],
-      "@novanet/core/*": [
-        "../../packages/core/src/*"
       ]
     }
   },
