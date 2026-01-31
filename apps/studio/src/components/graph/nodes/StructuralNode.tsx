@@ -26,6 +26,7 @@ import { BlueprintOverlay } from './BlueprintOverlay';
 import { NODE_BG, NODE_DESIGN } from '@/config/constants';
 import { useNodeInteractions } from '@/hooks';
 import { SelectionPulseRing, GlassmorphismEffects, NodeHandles } from './effects';
+import { glassClasses } from '@/design/tokens';
 
 export type StructuralNodeType = Node<BaseNodeData>;
 
@@ -117,7 +118,7 @@ export const StructuralNode = memo(function StructuralNode(props: NodeProps<Stru
         <div
           className={cn(
             'relative overflow-hidden transition-all duration-500 ease-out',
-            selected ? 'backdrop-blur-xl' : '',
+            selected && glassClasses.medium,
             selected && 'animate-float'
           )}
           style={{

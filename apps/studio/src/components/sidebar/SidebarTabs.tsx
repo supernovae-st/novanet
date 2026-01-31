@@ -13,6 +13,7 @@
 import { memo } from 'react';
 import { Boxes, Database } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { opacity, glassClasses } from '@/design/tokens';
 import { ICON_SIZES } from '@/config/iconSystem';
 import { useUIStore, selectDataMode } from '@/stores/uiStore';
 import { DatabaseInfoPanel } from './DatabaseInfoPanel';
@@ -46,7 +47,7 @@ export const SidebarTabs = memo(function SidebarTabs() {
   return (
     <div className="h-full flex flex-col">
       {/* Tab Navigation - Linear style */}
-      <div className="flex border-b border-white/8 bg-[#0d0d12]">
+      <div className="flex border-b border-white/[0.06] bg-[#0d0d12]">
         {TABS.map((tab) => (
           <button
             key={tab.id}
@@ -79,7 +80,7 @@ export const SidebarTabs = memo(function SidebarTabs() {
         {activeTab === 'data' && (
           <div className="h-full flex flex-col overflow-hidden">
             <DatabaseInfoPanel />
-            <div className="border-t border-white/8">
+            <div className="border-t border-white/[0.06]">
               <FilterPanel />
             </div>
           </div>

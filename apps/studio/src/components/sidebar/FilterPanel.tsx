@@ -12,6 +12,7 @@
 
 import { memo } from 'react';
 import { cn } from '@/lib/utils';
+import { glassClasses } from '@/design/tokens';
 import { LabelFilter } from './LabelFilter';
 
 export interface FilterPanelProps {
@@ -22,7 +23,8 @@ export const FilterPanel = memo(function FilterPanel({ className }: FilterPanelP
   return (
     <div
       className={cn(
-        'h-full flex flex-col bg-gradient-to-b from-black/60 to-black/40 backdrop-blur-xl',
+        'h-full flex flex-col',
+        glassClasses.medium,
         className
       )}
       data-testid="filter-panel"

@@ -27,6 +27,7 @@ import { ICON_COLORS } from '@/config/iconSystem';
 import { NODE_BG, NODE_DESIGN } from '@/config/constants';
 import { useNodeInteractions } from '@/hooks';
 import { SelectionPulseRing, GlassmorphismEffects, NodeHandles } from './effects';
+import { glassClasses } from '@/design/tokens';
 
 // NovaNet logo URL
 const NOVANET_LOGO_URL = 'https://pbs.twimg.com/profile_images/1788187862883598336/q8u1VSz3_400x400.jpg';
@@ -102,7 +103,7 @@ export const ProjectNode = memo(function ProjectNode(props: NodeProps<ProjectNod
         <div
           className={cn(
             'relative w-[280px] overflow-hidden transition-all duration-500 ease-out',
-            selected ? 'backdrop-blur-xl' : '',
+            selected && glassClasses.medium,
             selected && 'animate-float'
           )}
           style={{
