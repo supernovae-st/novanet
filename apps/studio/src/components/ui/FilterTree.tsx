@@ -444,9 +444,13 @@ const FilterTreeRow = memo(function FilterTreeRow({
         </div>
       )}
 
-      {/* Count badge - minimal */}
+      {/* Count badge - uses sidebarTokens */}
       {count !== undefined && (
-        <span className="text-[11px] tabular-nums text-white/40 ml-auto">
+        <span className={cn(
+          st.badge.count,
+          'ml-auto',
+          isSelected ? st.badge.countSelected : st.badge.countUnselected
+        )}>
           {formatCount(count, true)}
         </span>
       )}

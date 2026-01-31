@@ -22,25 +22,20 @@ import {
   SCOPE_CONFIGS,
   NODE_WIDTH,
   NODE_HEIGHT,
+  NODE_GAP,
+  SUBCAT_GAP,
+  SUBCAT_PADDING,
+  SUBCAT_HEADER,
+  SCOPE_GAP,
+  SCOPE_PADDING,
+  SCOPE_HEADER,
+  EDGE_NODE_GAP,
+  EDGE_EDGE_GAP,
+  CANVAS_MARGIN,
+  MAX_NODES_PER_ROW,
+  MAX_SUBCATS_PER_ROW,
+  MAX_ROW_WIDTH,
 } from './types';
-
-// =============================================================================
-// LOCAL SPACING CONSTANTS - Clean semantics for bottom-up grid layout
-// =============================================================================
-
-// Internal spacing (tight - inside containers)
-const SUBCAT_PAD = 16;            // Padding inside subcategory container
-const SUBCAT_HEADER = 28;         // Height for subcategory label
-const SCOPE_PAD = 32;             // Padding inside scope container
-const SCOPE_HEADER = 44;          // Height for scope label
-const NODE_CELL_GAP = 12;         // Gap between nodes in grid
-
-// External spacing (wide - between containers for edge visibility)
-const SUBCAT_SPACING = 60;        // Gap between subcategories
-const SCOPE_SPACING = 120;        // Gap between scopes
-
-// Canvas
-const LAYOUT_MARGIN = 40;         // Margin around entire layout
 import type { Scope } from '@novanet/core/types';
 
 // Initialize ELK
@@ -66,11 +61,11 @@ const ELK_OPTIONS: LayoutOptions = {
   'elk.edgeRouting': 'ORTHOGONAL',
   'elk.layered.unnecessaryBendpoints': 'true',
 
-  // Spacing - tight within, wide between
-  'elk.spacing.nodeNode': String(SUBCAT_SPACING),
-  'elk.layered.spacing.nodeNodeBetweenLayers': String(SCOPE_SPACING),
-  'elk.spacing.edgeNode': String(30),
-  'elk.spacing.edgeEdge': String(20),
+  // Spacing - unified from types.ts
+  'elk.spacing.nodeNode': String(SUBCAT_GAP),
+  'elk.layered.spacing.nodeNodeBetweenLayers': String(SCOPE_GAP),
+  'elk.spacing.edgeNode': String(EDGE_NODE_GAP),
+  'elk.spacing.edgeEdge': String(EDGE_EDGE_GAP),
 
   // Hierarchy handling
   'elk.hierarchyHandling': 'INCLUDE_CHILDREN',
@@ -154,7 +149,7 @@ function buildElkGraph(hierarchy: HierarchicalSchemaData): ElkNode {
         id: `subcat-${scope}-${subcatName}`,
         children: nodeChildren,
         layoutOptions: {
-          'elk.padding': `[top=${SUBCAT_PAD + SUBCAT_HEADER},left=${SUBCAT_PAD},bottom=${SUBCAT_PAD},right=${SUBCAT_PAD}]`,
+          'elk.padding': `[top=${SUBCAT_PADDING + SUBCAT_HEADER},left=${SUBCAT_PADDING},bottom=${SUBCAT_PADDING},right=${SUBCAT_PADDING}]`,
         },
       });
     }
@@ -164,7 +159,7 @@ function buildElkGraph(hierarchy: HierarchicalSchemaData): ElkNode {
         id: `scope-${scope}`,
         children: subcatChildren,
         layoutOptions: {
-          'elk.padding': `[top=${SCOPE_PAD + SCOPE_HEADER},left=${SCOPE_PAD},bottom=${SCOPE_PAD},right=${SCOPE_PAD}]`,
+          'elk.padding': `[top=${SCOPE_PADDING + SCOPE_HEADER},left=${SCOPE_PADDING},bottom=${SCOPE_PADDING},right=${SCOPE_PADDING}]`,
         },
       });
     }
@@ -251,6 +246,7 @@ function convertToReactFlow(
         type: 'subcategoryGroup',
         parentId: scopeId,
         extent: 'parent',
+        draggable: true,
         position: { x: subcatNode.x || 0, y: subcatNode.y || 0 },
         style: {
           width: subcatNode.width || 200,
@@ -383,8 +379,7 @@ function applyEdgeAwareGridLayout(
   }
 
   const scopeLayouts: ScopeLayout[] = [];
-  const MAX_COLS = 6;               // Max nodes per row in subcategory
-  const MAX_SUBCATS_PER_ROW = 4;    // Max subcategories per row in scope
+  const MAX_COLS = MAX_NODES_PER_ROW;
 
   for (const scope of ['Project', 'Global', 'Shared'] as Scope[]) {
     const scopeDef = hierarchy.scopes[scope];
@@ -401,10 +396,10 @@ function applyEdgeAwareGridLayout(
       const rows = Math.ceil(nodeCount / cols);
 
       // Calculate dimensions using local constants
-      const contentWidth = cols * NODE_WIDTH + (cols - 1) * NODE_CELL_GAP;
-      const contentHeight = rows * NODE_HEIGHT + (rows - 1) * NODE_CELL_GAP;
-      const width = contentWidth + SUBCAT_PAD * 2;
-      const height = contentHeight + SUBCAT_PAD * 2 + SUBCAT_HEADER;
+      const contentWidth = cols * NODE_WIDTH + (cols - 1) * NODE_GAP;
+      const contentHeight = rows * NODE_HEIGHT + (rows - 1) * NODE_GAP;
+      const width = contentWidth + SUBCAT_PADDING * 2;
+      const height = contentHeight + SUBCAT_PADDING * 2 + SUBCAT_HEADER;
 
       subcatLayouts.push({ subcatName, meta, orderedNodes, cols, rows, width, height });
     }
@@ -415,7 +410,6 @@ function applyEdgeAwareGridLayout(
     // PHASE 2: Calculate scope dimensions from subcategories
     // ===========================================================================
 
-    const MAX_SUBCATS_PER_ROW = 4;
     const subcatCols = Math.min(subcatLayouts.length, MAX_SUBCATS_PER_ROW);
     const subcatRows = Math.ceil(subcatLayouts.length / subcatCols);
 
@@ -431,7 +425,7 @@ function applyEdgeAwareGridLayout(
         if (idx >= subcatLayouts.length) break;
 
         const subcat = subcatLayouts[idx];
-        rowWidth += subcat.width + (c > 0 ? SUBCAT_SPACING : 0);
+        rowWidth += subcat.width + (c > 0 ? SUBCAT_GAP : 0);
         maxHeight = Math.max(maxHeight, subcat.height);
       }
 
@@ -440,10 +434,10 @@ function applyEdgeAwareGridLayout(
     }
 
     const totalContentWidth = Math.max(...maxRowWidths);
-    const totalContentHeight = rowHeights.reduce((a, b) => a + b, 0) + (subcatRows - 1) * SUBCAT_SPACING;
+    const totalContentHeight = rowHeights.reduce((a, b) => a + b, 0) + (subcatRows - 1) * SUBCAT_GAP;
 
-    const totalWidth = totalContentWidth + SCOPE_PAD * 2;
-    const totalHeight = totalContentHeight + SCOPE_PAD * 2 + SCOPE_HEADER;
+    const totalWidth = totalContentWidth + SCOPE_PADDING * 2;
+    const totalHeight = totalContentHeight + SCOPE_PADDING * 2 + SCOPE_HEADER;
 
     scopeLayouts.push({ scope, scopeDef, subcategories: subcatLayouts, totalWidth, totalHeight });
   }
@@ -452,18 +446,17 @@ function applyEdgeAwareGridLayout(
   // PHASE 3: Position scopes on canvas
   // ===========================================================================
 
-  const MAX_ROW_WIDTH = 3000;  // Maximum width before wrapping to next row
   let maxHeightInRow = 0;      // Track tallest scope in current row
-  let scopeX = LAYOUT_MARGIN;
-  let scopeY = LAYOUT_MARGIN;
+  let scopeX = CANVAS_MARGIN;
+  let scopeY = CANVAS_MARGIN;
 
   for (const scopeLayout of scopeLayouts) {
     const { scope, scopeDef, subcategories, totalWidth, totalHeight } = scopeLayout;
 
     // Wrap to next row if needed
-    if (scopeX + totalWidth > MAX_ROW_WIDTH + LAYOUT_MARGIN && scopeX > LAYOUT_MARGIN) {
-      scopeX = LAYOUT_MARGIN;
-      scopeY += maxHeightInRow + SCOPE_SPACING;
+    if (scopeX + totalWidth > MAX_ROW_WIDTH + CANVAS_MARGIN && scopeX > CANVAS_MARGIN) {
+      scopeX = CANVAS_MARGIN;
+      scopeY += maxHeightInRow + SCOPE_GAP;
       maxHeightInRow = 0;
     }
 
@@ -490,8 +483,8 @@ function applyEdgeAwareGridLayout(
     // ===========================================================================
 
     const subcatColsInScope = Math.min(subcategories.length, MAX_SUBCATS_PER_ROW);
-    let subcatX = SCOPE_PAD;
-    let subcatY = SCOPE_PAD + SCOPE_HEADER;
+    let subcatX = SCOPE_PADDING;
+    let subcatY = SCOPE_PADDING + SCOPE_HEADER;
     let colIndex = 0;
     let rowMaxHeight = 0;
 
@@ -504,6 +497,7 @@ function applyEdgeAwareGridLayout(
         type: 'subcategoryGroup',
         parentId: scopeId,
         extent: 'parent',
+        draggable: true,
         position: { x: subcatX, y: subcatY },
         width: subcat.width,
         height: subcat.height,
@@ -533,8 +527,8 @@ function applyEdgeAwareGridLayout(
           extent: 'parent',
           draggable: true,
           position: {
-            x: SUBCAT_PAD + col * (NODE_WIDTH + NODE_CELL_GAP),
-            y: SUBCAT_PAD + SUBCAT_HEADER + row * (NODE_HEIGHT + NODE_CELL_GAP),
+            x: SUBCAT_PADDING + col * (NODE_WIDTH + NODE_GAP),
+            y: SUBCAT_PADDING + SUBCAT_HEADER + row * (NODE_HEIGHT + NODE_GAP),
           },
           data: {
             nodeType,
@@ -552,18 +546,18 @@ function applyEdgeAwareGridLayout(
 
       if (colIndex >= subcatColsInScope) {
         // Move to next row (wrap)
-        subcatX = SCOPE_PAD;
-        subcatY += rowMaxHeight + SUBCAT_SPACING;
+        subcatX = SCOPE_PADDING;
+        subcatY += rowMaxHeight + SUBCAT_GAP;
         colIndex = 0;
         rowMaxHeight = 0;
       } else {
         // Move to next column (horizontal)
-        subcatX += subcat.width + SUBCAT_SPACING;
+        subcatX += subcat.width + SUBCAT_GAP;
       }
     }
 
     // Move scope position for next scope
-    scopeX += totalWidth + SCOPE_SPACING;
+    scopeX += totalWidth + SCOPE_GAP;
     maxHeightInRow = Math.max(maxHeightInRow, totalHeight);
   }
 
@@ -583,8 +577,8 @@ function applyEdgeAwareGridLayout(
         type: 'schemaNode',
         draggable: true,
         position: {
-          x: LAYOUT_MARGIN + col * (NODE_WIDTH + NODE_CELL_GAP),
-          y: LAYOUT_MARGIN + row * (NODE_HEIGHT + NODE_CELL_GAP),
+          x: CANVAS_MARGIN + col * (NODE_WIDTH + NODE_GAP),
+          y: CANVAS_MARGIN + row * (NODE_HEIGHT + NODE_GAP),
         },
         data: {
           nodeType: schemaNode.nodeType,

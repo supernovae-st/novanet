@@ -2,14 +2,21 @@
 import type { Node, Edge } from '@xyflow/react';
 import type { HierarchicalSchemaData } from '@novanet/core/graph';
 import type { SchemaLayoutResult } from './types';
-import { NODE_WIDTH, NODE_HEIGHT, GROUP_PADDING, NODE_GAP, SCOPE_GAP } from './types';
+import { NODE_WIDTH, NODE_HEIGHT, SCOPE_PADDING, NODE_GAP, SCOPE_GAP } from './types';
 import type { Scope } from '@novanet/core/types';
 
 /**
  * Force Clusters Layout - Physics-based with scope clustering
  *
- * Uses a simple force simulation to cluster nodes by scope
- * with repulsion between different scopes.
+ * Uses unified spacing from types.ts (Golden Ratio system).
+ * Cluster centers derived from SCOPE_GAP; spiral spacing from NODE_GAP.
+ *
+ * Visual structure (triangular cluster arrangement):
+ *
+ *      [PROJECT]          [GLOBAL]
+ *            \            /
+ *             \          /
+ *              [SHARED]
  */
 export function applyForceClusterLayout(
   hierarchy: HierarchicalSchemaData
@@ -17,16 +24,16 @@ export function applyForceClusterLayout(
   const nodes: Node[] = [];
   const edges: Edge[] = [];
 
-  // Cluster centers for each scope (spaced using SCOPE_GAP × 3 for clear separation)
-  const CLUSTER_SPACING = SCOPE_GAP * 3;  // ~879px between cluster centers
+  // Derived from unified constants
+  const BASE_OFFSET = SCOPE_GAP * 2;               // ~1100px from origin
+  const CLUSTER_SPACING = SCOPE_GAP * 3;            // ~1650px between cluster centers
   const CLUSTER_CENTERS: Record<Scope, { x: number; y: number }> = {
-    Project: { x: 800, y: 800 },
-    Global: { x: 800 + CLUSTER_SPACING, y: 500 },
-    Shared: { x: 800 + CLUSTER_SPACING / 2, y: 800 + CLUSTER_SPACING * 0.7 },
+    Project: { x: BASE_OFFSET, y: BASE_OFFSET },
+    Global:  { x: BASE_OFFSET + CLUSTER_SPACING, y: BASE_OFFSET - CLUSTER_SPACING * 0.3 },
+    Shared:  { x: BASE_OFFSET + CLUSTER_SPACING / 2, y: BASE_OFFSET + CLUSTER_SPACING * 0.7 },
   };
 
-  const CLUSTER_RADIUS = SCOPE_GAP * 2;    // ~586px radius (was 400)
-  const NODE_REPULSION = NODE_GAP * 1.5;   // ~168px repulsion factor (was 150)
+  const NODE_REPULSION = NODE_GAP * 1.5;            // ~120px spiral spacing
 
   const scopeOrder: Scope[] = ['Project', 'Global', 'Shared'];
 
@@ -64,10 +71,10 @@ export function applyForceClusterLayout(
 
     // Calculate bounding box for scope group
     if (nodePositions.length > 0) {
-      const minX = Math.min(...nodePositions.map(p => p.x)) - GROUP_PADDING - NODE_WIDTH / 2;
-      const maxX = Math.max(...nodePositions.map(p => p.x)) + GROUP_PADDING + NODE_WIDTH / 2;
-      const minY = Math.min(...nodePositions.map(p => p.y)) - GROUP_PADDING - NODE_HEIGHT / 2;
-      const maxY = Math.max(...nodePositions.map(p => p.y)) + GROUP_PADDING + NODE_HEIGHT / 2;
+      const minX = Math.min(...nodePositions.map(p => p.x)) - SCOPE_PADDING - NODE_WIDTH / 2;
+      const maxX = Math.max(...nodePositions.map(p => p.x)) + SCOPE_PADDING + NODE_WIDTH / 2;
+      const minY = Math.min(...nodePositions.map(p => p.y)) - SCOPE_PADDING - NODE_HEIGHT / 2;
+      const maxY = Math.max(...nodePositions.map(p => p.y)) + SCOPE_PADDING + NODE_HEIGHT / 2;
 
       // Scope group node
       nodes.push({

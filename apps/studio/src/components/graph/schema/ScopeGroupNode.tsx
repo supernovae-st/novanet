@@ -102,7 +102,8 @@ export const ScopeGroupNode = memo(function ScopeGroupNode({
   return (
     <div
       className={cn(
-        'w-full h-full rounded-2xl border-2 transition-all duration-300',
+        'w-full h-full rounded-2xl border-2',
+        'transition-[border-color,box-shadow,background-color] duration-300',
         selected && 'border-solid',
         !selected && 'border-dashed'
       )}
@@ -135,7 +136,7 @@ export const ScopeGroupNode = memo(function ScopeGroupNode({
           gapTokens.spacious,
           'px-4 py-2 rounded-xl',
           'border bg-black/80',
-          'transition-all duration-300',
+          'transition-[border-color,box-shadow,background-color,transform] duration-300',
           selected && 'scale-105'
         )}
         style={labelStyle}

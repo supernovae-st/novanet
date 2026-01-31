@@ -133,12 +133,12 @@ export function InteractiveGraph({ data }: Props) { /* ... */ }
 'use client';
 
 import { useGraphStore } from '@/stores/graphStore';
-import { PropertyInspector } from './PropertyInspector';  // can be server
+import { NodeDetailsPanel } from './NodeDetailsPanel';  // can be server
 
 export function NodeDetails() {
   const selectedNode = useGraphStore((s) => s.selectedNode);
   if (!selectedNode) return null;
-  return <PropertyInspector node={selectedNode} />;
+  return <NodeDetailsPanel node={selectedNode} />;
 }
 ```
 

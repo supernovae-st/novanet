@@ -8,13 +8,14 @@
  * - Source and target node navigation
  * - Edge properties display
  * - Copy functionality
+ * - Unified design with NodeDetailsPanel
  */
 
 import { useState, useMemo, memo } from 'react';
 import { cn } from '@/lib/utils';
 import { getRelationColors } from '@/config/categoryColors';
-import { ACTION_ICONS, NAV_ICONS, CONTENT_ICONS, GRAPH_ICONS, ICON_COLORS } from '@/config/iconSystem';
-import { iconSizes, glassClasses, gapTokens } from '@/design/tokens';
+import { ACTION_ICONS, CONTENT_ICONS, GRAPH_ICONS, ICON_COLORS } from '@/config/iconSystem';
+import { iconSizes, panelClasses, gapTokens } from '@/design/tokens';
 import { useGraphStore } from '@/stores/graphStore';
 import { useUIStore } from '@/stores/uiStore';
 import { useCopyFieldFeedback } from '@/hooks';
@@ -23,26 +24,23 @@ import {
   PropertyRow,
   NodeNavigationCard,
   CopyButton,
-  JsonToggleSection,
+  JsonView,
   formatValueString,
 } from '@/components/ui/detail-panel';
 import type { GraphEdge } from '@/types';
 
 // Design system icons
-const CloseIcon = ACTION_ICONS.close;
 const HashIcon = CONTENT_ICONS.id;
-const ArrowRightIcon = NAV_ICONS.arrowRight;
+const ArrowRightIcon = ACTION_ICONS.target;
 const LinkIcon = GRAPH_ICONS.link;
 
 interface EdgeDetailsPanelProps {
   edge: GraphEdge | null;
-  onClose?: () => void;
 }
 
-export const EdgeDetailsPanel = memo(function EdgeDetailsPanel({ edge, onClose }: EdgeDetailsPanelProps) {
-  const [showJson, setShowJson] = useState(false);
+export const EdgeDetailsPanel = memo(function EdgeDetailsPanel({ edge }: EdgeDetailsPanelProps) {
   const [expandedSections, setExpandedSections] = useState<Set<string>>(
-    new Set(['nodes', 'properties'])
+    new Set(['nodes', 'properties', 'json'])
   );
 
   const getNodeById = useGraphStore((state) => state.getNodeById);
@@ -72,18 +70,8 @@ export const EdgeDetailsPanel = memo(function EdgeDetailsPanel({ edge, onClose }
 
   if (!edge) {
     return (
-      <div className={`h-full flex flex-col ${glassClasses.floating} animate-slide-in-right`}>
-        <div className="flex-1 flex flex-col items-center justify-center p-8 text-center">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-white/[0.08] to-white/[0.02] border border-white/[0.08] flex items-center justify-center mb-4 animate-float">
-            <LinkIcon className="w-8 h-8 text-white/40" />
-          </div>
-          <h3 className="text-sm font-semibold text-white/70 mb-2">
-            No Relation Selected
-          </h3>
-          <p className="text-xs text-white/40 max-w-[200px] leading-relaxed">
-            Click on a relation line in the graph to view its details
-          </p>
-        </div>
+      <div className="h-full flex items-center justify-center p-8">
+        <p className="text-sm text-white/40">No relation selected</p>
       </div>
     );
   }
@@ -92,74 +80,50 @@ export const EdgeDetailsPanel = memo(function EdgeDetailsPanel({ edge, onClose }
   const dataEntries = edge.data ? Object.entries(edge.data) : [];
 
   return (
-    <div className={`h-full flex flex-col ${glassClasses.floating} animate-slide-in-right`}>
-      {/* Header with gradient */}
-      <div className="relative overflow-hidden">
-        {/* Gradient background */}
+    <div className={panelClasses.container}>
+      {/* Header - matches NodeDetailsPanel structure */}
+      <div
+        className="p-5 border-b border-white/[0.06]"
+        style={{
+          background: `linear-gradient(135deg, ${colors.primary}15, ${colors.secondary}08)`,
+        }}
+      >
+        {/* Type badge */}
         <div
-          className="absolute inset-0 opacity-25"
+          className={cn('inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold mb-4 border', gapTokens.default)}
           style={{
-            background: `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})`,
+            background: `linear-gradient(135deg, ${colors.primary}35, ${colors.secondary}25)`,
+            borderColor: `${colors.primary}50`,
+            color: colors.primary,
+            boxShadow: `0 0 12px ${colors.primary}30`,
           }}
-        />
+        >
+          <LinkIcon className={iconSizes.sm} />
+          Relation
+        </div>
 
-        {/* Glow effect */}
-        <div
-          className="absolute inset-0 opacity-20 blur-2xl"
-          style={{
-            background: `radial-gradient(circle at 30% 30%, ${colors.primary}, transparent 60%)`,
-          }}
-        />
+        {/* Relation Type */}
+        <h2 className="text-xl font-bold text-white mb-2">
+          {formatRelationType(edge.type)}
+        </h2>
 
-        {/* Content */}
-        <div className="relative p-4">
-          {/* Close button */}
-          {onClose && (
-            <button
-              onClick={onClose}
-              className="absolute top-3 right-3 p-1.5 rounded-lg bg-black/30 hover:bg-black/50 text-white/50 hover:text-white/80 transition-colors"
-              aria-label="Close edge details panel"
-            >
-              <CloseIcon className={iconSizes.md} />
-            </button>
-          )}
-
-          {/* Type badge */}
-          <div
-            className={cn('inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold mb-3 shadow-lg', gapTokens.default)}
-            style={{
-              background: `linear-gradient(135deg, ${colors.primary}40, ${colors.secondary}30)`,
-              color: colors.primary,
-              boxShadow: `0 4px 12px ${colors.primary}20`,
-            }}
-          >
-            <LinkIcon className={iconSizes.sm} />
-            Relation
-          </div>
-
-          {/* Relation Type */}
-          <h2 className="text-lg font-bold text-white mb-2 pr-8">
-            {formatRelationType(edge.type)}
-          </h2>
-
-          {/* ID with copy */}
-          <div className={cn('flex items-center text-xs', gapTokens.default)}>
-            <HashIcon className={cn(iconSizes.xs, 'text-white/40')} />
-            <span className="font-mono text-white/60 truncate flex-1">
-              {edge.id}
-            </span>
-            <CopyButton
-              onCopy={() => copyToClipboard(edge.id, 'id')}
-              isCopied={copiedField === 'id'}
-              label="Copy ID to clipboard"
-              size="sm"
-            />
-          </div>
+        {/* ID with copy */}
+        <div className={cn('flex items-center text-sm', gapTokens.default)}>
+          <HashIcon className={cn(iconSizes.xs, 'text-white/40')} />
+          <span className="font-mono text-white/60 truncate flex-1">
+            {edge.id}
+          </span>
+          <CopyButton
+            onCopy={() => copyToClipboard(edge.id, 'id')}
+            isCopied={copiedField === 'id'}
+            label="Copy ID to clipboard"
+            size="sm"
+          />
         </div>
       </div>
 
-      {/* Content */}
-      <div className="flex-1 overflow-y-auto scrollbar-thin">
+      {/* Scrollable Content */}
+      <div className="flex-1 overflow-y-auto scrollbar-thin scroll-smooth">
         {/* Connected Nodes Section */}
         <CollapsibleSection
           title="Connected Nodes"
@@ -179,9 +143,10 @@ export const EdgeDetailsPanel = memo(function EdgeDetailsPanel({ edge, onClose }
             {/* Arrow */}
             <div className="flex items-center justify-center py-2">
               <div
-                className={cn('flex items-center px-3 py-1.5 rounded-full text-[10px] font-semibold', gapTokens.default)}
+                className={cn('flex items-center px-3 py-1.5 rounded-full text-[10px] font-semibold border', gapTokens.default)}
                 style={{
                   background: `linear-gradient(135deg, ${colors.primary}20, ${colors.secondary}20)`,
+                  borderColor: `${colors.primary}35`,
                   color: colors.primary,
                 }}
               >
@@ -224,16 +189,20 @@ export const EdgeDetailsPanel = memo(function EdgeDetailsPanel({ edge, onClose }
             </div>
           </CollapsibleSection>
         )}
-      </div>
 
-      {/* Footer - JSON Toggle */}
-      <JsonToggleSection
-        data={edge}
-        isOpen={showJson}
-        onToggle={() => setShowJson(!showJson)}
-        onCopy={() => copyToClipboard(JSON.stringify(edge, null, 2), 'json')}
-        isCopied={copiedField === 'json'}
-      />
+        {/* Raw JSON Section */}
+        <CollapsibleSection
+          title="JSON"
+          isExpanded={expandedSections.has('json')}
+          onToggle={() => toggleSection('json')}
+        >
+          <JsonView
+            data={edge}
+            onCopy={() => copyToClipboard(JSON.stringify(edge, null, 2), 'json')}
+            isCopied={copiedField === 'json'}
+          />
+        </CollapsibleSection>
+      </div>
     </div>
   );
 });

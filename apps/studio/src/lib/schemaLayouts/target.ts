@@ -2,11 +2,22 @@
 import type { Node, Edge } from '@xyflow/react';
 import type { HierarchicalSchemaData, SubcategoryMeta } from '@novanet/core/graph';
 import type { SchemaLayoutResult } from './types';
-import { NODE_WIDTH, NODE_HEIGHT, SCOPE_GAP, PHI } from './types';
+import {
+  NODE_WIDTH,
+  NODE_HEIGHT,
+  SCOPE_GAP,
+  SCOPE_PADDING,
+  PHI,
+  CANVAS_WIDTH,
+  CANVAS_HEIGHT,
+} from './types';
 import type { Scope } from '@novanet/core/types';
 
 /**
  * Target/Bullseye Layout - Concentric rings by scope
+ *
+ * Uses unified spacing from types.ts (Golden Ratio system).
+ * Ring spacing = SCOPE_GAP × φ for dramatic separation.
  *
  * Visual structure:
  *         ╭───────────────────────╮
@@ -26,11 +37,11 @@ export function applyTargetLayout(
   const nodes: Node[] = [];
   const edges: Edge[] = [];
 
-  // Using Golden Ratio spacing: rings expand by φ factor
-  const CENTER_X = 1600;
-  const CENTER_Y = 1200;
-  const RING_SPACING = Math.floor(SCOPE_GAP * PHI);  // ~474px between rings (was 350)
-  const MIN_RADIUS = SCOPE_GAP;                       // 293px minimum radius (was 200)
+  // Derived from unified constants
+  const CENTER_X = Math.round(CANVAS_WIDTH / 4);     // Canvas quarter = center
+  const CENTER_Y = Math.round(CANVAS_HEIGHT / 4);
+  const RING_SPACING = Math.round(SCOPE_GAP * PHI);  // φ × scope gap between rings
+  const MIN_RADIUS = SCOPE_GAP;                       // Minimum inner radius
 
   // Scope order from center outward
   const scopeOrder: Scope[] = ['Project', 'Global', 'Shared'];
@@ -41,7 +52,7 @@ export function applyTargetLayout(
 
     const scopeId = `scope-${scope}`;
     const radius = MIN_RADIUS + ringIndex * RING_SPACING;
-    const ringWidth = RING_SPACING - 50;
+    const ringWidth = RING_SPACING - SCOPE_PADDING;
 
     // For center (Project), use a circle; for others, use a ring
     if (ringIndex === 0) {
@@ -103,12 +114,15 @@ export function applyTargetLayout(
     } else {
       // Outer rings - approximate with large rectangle
       const outerRadius = radius + ringWidth / 2;
-      const size = outerRadius * 2 + 100;
+      const size = outerRadius * 2 + SCOPE_PADDING;
 
       nodes.push({
         id: scopeId,
         type: 'scopeGroup',
-        position: { x: CENTER_X - outerRadius - 50, y: CENTER_Y - outerRadius - 50 },
+        position: {
+          x: CENTER_X - outerRadius - SCOPE_PADDING / 2,
+          y: CENTER_Y - outerRadius - SCOPE_PADDING / 2,
+        },
         style: {
           width: size,
           height: size,
@@ -137,7 +151,7 @@ export function applyTargetLayout(
         const schemaNode = hierarchy.nodes.find(n => n.nodeType === item.nodeType);
 
         // Position relative to scope group
-        const groupOffset = outerRadius + 50;
+        const groupOffset = outerRadius + SCOPE_PADDING / 2;
         nodes.push({
           id: `schema-${item.nodeType}`,
           type: 'schemaNode',

@@ -3,16 +3,18 @@
 /**
  * SubcategoryGroupNode - Nested glass container for subcategory groups
  *
- * Features (Task 5: TurboNode styling):
+ * Features:
  * - Subtle glass effect inheriting parent scope color
  * - Compact label with hover interaction
+ * - NodeResizer for interactive resizing (like ScopeGroupNode)
+ * - Draggable within parent scope container
  * - Smooth transitions
  *
  * Nested inside ScopeGroupNode - inherits scope coloring
  */
 
 import { memo, useState, useCallback } from 'react';
-import { type NodeProps, type Node } from '@xyflow/react';
+import { type NodeProps, type Node, NodeResizer } from '@xyflow/react';
 import { cn } from '@/lib/utils';
 import { gapTokens } from '@/design/tokens';
 import type { Scope } from '@novanet/core/types';
@@ -36,18 +38,22 @@ export type SubcategoryGroupNodeType = Node<SubcategoryGroupData, 'subcategoryGr
  */
 const SCOPE_COLORS: Record<Scope, {
   primary: string;
+  secondary: string;
   glow: string;
 }> = {
   Project: {
     primary: '#8b5cf6',
+    secondary: '#a78bfa',
     glow: 'rgba(139, 92, 246, 0.2)',
   },
   Global: {
     primary: '#10b981',
+    secondary: '#34d399',
     glow: 'rgba(16, 185, 129, 0.2)',
   },
   Shared: {
     primary: '#f59e0b',
+    secondary: '#fbbf24',
     glow: 'rgba(245, 158, 11, 0.2)',
   },
 };
@@ -77,9 +83,9 @@ export const SubcategoryGroupNode = memo(function SubcategoryGroupNode({
         ? `${colors.primary}40`
         : 'rgba(255, 255, 255, 0.08)',
     boxShadow: selected
-      ? `inset 0 0 20px ${colors.glow}`
+      ? `0 0 20px ${colors.glow}, inset 0 0 20px ${colors.glow}`
       : isHovered
-        ? `inset 0 0 15px ${colors.glow}`
+        ? `0 0 12px ${colors.glow}, inset 0 0 15px ${colors.glow}`
         : 'none',
   };
 
@@ -97,12 +103,31 @@ export const SubcategoryGroupNode = memo(function SubcategoryGroupNode({
   return (
     <div
       className={cn(
-        'w-full h-full rounded-xl border transition-all duration-200'
+        'w-full h-full rounded-xl border',
+        'transition-[border-color,box-shadow,background-color] duration-200'
       )}
       style={containerStyle}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
+      {/* Resizer - visible only when selected */}
+      <NodeResizer
+        isVisible={selected}
+        minWidth={200}
+        minHeight={100}
+        lineClassName="!border-[1.5px]"
+        handleClassName={cn(
+          'w-2.5 h-2.5 rounded-full',
+          'border-2',
+          'transition-all duration-200'
+        )}
+        handleStyle={{
+          backgroundColor: colors.primary,
+          borderColor: colors.secondary,
+          boxShadow: `0 0 6px ${colors.glow}`,
+        }}
+      />
+
       {/* Label badge positioned above the container */}
       <div
         className={cn(

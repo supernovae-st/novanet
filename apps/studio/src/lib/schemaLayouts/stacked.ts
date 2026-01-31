@@ -6,15 +6,21 @@ import {
   SCOPE_CONFIGS,
   NODE_WIDTH,
   NODE_HEIGHT,
-  GROUP_PADDING,
   NODE_GAP,
-  SCOPE_GAP,
   SUBCAT_GAP,
+  SUBCAT_PADDING,
+  SUBCAT_HEADER,
+  SCOPE_GAP,
+  SCOPE_PADDING,
+  SCOPE_HEADER,
+  MAX_NODES_PER_ROW,
 } from './types';
 import type { Scope } from '@novanet/core/types';
 
 /**
  * Stacked Layout - Vertical stacked scopes
+ *
+ * Uses unified spacing from types.ts (Golden Ratio system).
  *
  * Visual structure:
  * ┌─────────────────────────────┐
@@ -30,23 +36,12 @@ import type { Scope } from '@novanet/core/types';
  * │  │Node │ │Node │ │Node │   │
  * │  └─────┘ └─────┘ └─────┘   │
  * └─────────────────────────────┘
- *              ↓
- * ┌─────────────────────────────┐
- * │          SHARED             │
- * └─────────────────────────────┘
  */
 export function applyStackedLayout(
   hierarchy: HierarchicalSchemaData
 ): SchemaLayoutResult {
   const nodes: Node[] = [];
   const edges: Edge[] = [];
-
-  // Using Golden Ratio spacing system
-  const SCOPE_WIDTH = 3000;            // Wider to accommodate larger spacing
-  const SCOPE_MARGIN = SCOPE_GAP;      // 293px between scopes (was 80)
-  const SUBCAT_MARGIN = SUBCAT_GAP;    // 181px between subcategories (was 30)
-  const NODE_SPACING = NODE_GAP;       // 112px between nodes (was 30)
-  const NODES_PER_ROW = 5;             // Fewer per row for wider spacing (was 8)
 
   const scopeOrder: Scope[] = ['Project', 'Global', 'Shared'];
   let currentY = 0;
@@ -63,19 +58,24 @@ export function applyStackedLayout(
       .filter(([_, meta]) => meta.nodeTypes.length > 0);
 
     for (const [_, subcatMeta] of subcatEntries) {
-      const rows = Math.ceil(subcatMeta.nodeTypes.length / NODES_PER_ROW);
-      const height = rows * (NODE_HEIGHT + NODE_SPACING) + GROUP_PADDING * 2;
+      const rows = Math.ceil(subcatMeta.nodeTypes.length / MAX_NODES_PER_ROW);
+      const height = rows * (NODE_HEIGHT + NODE_GAP) + SUBCAT_PADDING * 2 + SUBCAT_HEADER;
       maxSubcatHeight = Math.max(maxSubcatHeight, height);
     }
 
-    const scopeHeight = maxSubcatHeight + GROUP_PADDING * 2 + 40; // Extra for label
+    // Scope dimensions: content + padding + header
+    const scopeHeight = maxSubcatHeight + SCOPE_PADDING * 2 + SCOPE_HEADER;
+    const scopeWidth = Math.max(
+      4000,
+      subcatEntries.length * 1200 + (subcatEntries.length - 1) * SUBCAT_GAP + SCOPE_PADDING * 2
+    );
 
     // Scope group node
     nodes.push({
       id: scopeId,
       type: 'scopeGroup',
       position: { x: 0, y: currentY },
-      style: { width: SCOPE_WIDTH, height: scopeHeight },
+      style: { width: scopeWidth, height: scopeHeight },
       data: {
         scope,
         label: scopeDef.label,
@@ -85,14 +85,14 @@ export function applyStackedLayout(
     });
 
     // Layout subcategories side by side
-    let subcatX = GROUP_PADDING;
-    const subcatY = GROUP_PADDING + 20; // Below label
-    const subcatWidth = (SCOPE_WIDTH - GROUP_PADDING * 2 - (subcatEntries.length - 1) * SUBCAT_MARGIN) / subcatEntries.length;
+    let subcatX = SCOPE_PADDING;
+    const subcatY = SCOPE_PADDING + SCOPE_HEADER;
+    const subcatWidth = (scopeWidth - SCOPE_PADDING * 2 - (subcatEntries.length - 1) * SUBCAT_GAP) / subcatEntries.length;
 
     for (const [subcatName, subcatMeta] of subcatEntries) {
       const subcatId = `subcat-${scope}-${subcatName}`;
-      const rows = Math.ceil(subcatMeta.nodeTypes.length / NODES_PER_ROW);
-      const subcatHeight = rows * (NODE_HEIGHT + NODE_SPACING) + GROUP_PADDING;
+      const rows = Math.ceil(subcatMeta.nodeTypes.length / MAX_NODES_PER_ROW);
+      const subcatHeight = rows * (NODE_HEIGHT + NODE_GAP) + SUBCAT_PADDING * 2 + SUBCAT_HEADER;
 
       // Subcategory group
       nodes.push({
@@ -100,6 +100,7 @@ export function applyStackedLayout(
         type: 'subcategoryGroup',
         parentId: scopeId,
         extent: 'parent',
+        draggable: true,
         position: { x: subcatX, y: subcatY },
         style: { width: subcatWidth, height: subcatHeight },
         data: {
@@ -112,7 +113,10 @@ export function applyStackedLayout(
       });
 
       // Layout nodes in grid
-      const nodesPerRow = Math.min(NODES_PER_ROW, Math.floor((subcatWidth - GROUP_PADDING) / (NODE_WIDTH + NODE_SPACING)));
+      const nodesPerRow = Math.min(
+        MAX_NODES_PER_ROW,
+        Math.floor((subcatWidth - SUBCAT_PADDING * 2) / (NODE_WIDTH + NODE_GAP))
+      );
 
       subcatMeta.nodeTypes.forEach((nodeType, idx) => {
         const row = Math.floor(idx / nodesPerRow);
@@ -126,8 +130,8 @@ export function applyStackedLayout(
           extent: 'parent',
           draggable: true,
           position: {
-            x: GROUP_PADDING / 2 + col * (NODE_WIDTH + NODE_SPACING),
-            y: GROUP_PADDING / 2 + row * (NODE_HEIGHT + NODE_SPACING),
+            x: SUBCAT_PADDING + col * (NODE_WIDTH + NODE_GAP),
+            y: SUBCAT_PADDING + SUBCAT_HEADER + row * (NODE_HEIGHT + NODE_GAP),
           },
           data: {
             nodeType,
@@ -139,10 +143,10 @@ export function applyStackedLayout(
         });
       });
 
-      subcatX += subcatWidth + SUBCAT_MARGIN;
+      subcatX += subcatWidth + SUBCAT_GAP;
     }
 
-    currentY += scopeHeight + SCOPE_MARGIN;
+    currentY += scopeHeight + SCOPE_GAP;
   }
 
   // Create edges
