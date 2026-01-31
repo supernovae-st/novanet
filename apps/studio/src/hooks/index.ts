@@ -67,6 +67,14 @@ export {
   type NodeInteractionsResult,
 } from './useNodeInteractions';
 
+// Graph-level interaction utilities (z-index, edge interactions)
+export {
+  useGraphInteractions,
+  Z_INDEX,
+  type UseGraphInteractionsOptions,
+  type UseGraphInteractionsReturn,
+} from './useGraphInteractions';
+
 // Controlled/uncontrolled state pattern
 export { useControllableState } from './useControllableState';
 

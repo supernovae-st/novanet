@@ -401,7 +401,7 @@ Domain vocabulary reference:
 ### `novanet-decisions.md`
 
 Architecture Decision Records (ADRs):
-- **ADR-001:** Dual View Mode (2D/3D)
+- **ADR-001:** 2D Graph Visualization
 - **ADR-002:** Filter Presets with Keyboard Shortcuts
 - **ADR-003:** AI Chat for Natural Language Queries
 - **ADR-004:** Zustand with Persist + Immer

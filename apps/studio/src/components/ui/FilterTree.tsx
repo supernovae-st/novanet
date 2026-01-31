@@ -422,17 +422,10 @@ const FilterTreeRow = memo(function FilterTreeRow({
         <div className={st.checkbox.spacer} aria-hidden="true" />
       )}
 
-      {/* Icon box - subtle tinted background */}
-      <div
-        className={st.iconBox.base}
-        style={{
-          backgroundColor: isSelected ? `${color}18` : `${color}10`,
-        }}
-      >
-        <span style={{ color }}>
-          {icon}
-        </span>
-      </div>
+      {/* Icon - inline colored, no background (Notion style) */}
+      <span className={st.iconBox.base} style={{ color }}>
+        {icon}
+      </span>
 
       {/* Label */}
       <span
@@ -451,18 +444,9 @@ const FilterTreeRow = memo(function FilterTreeRow({
         </div>
       )}
 
-      {/* Count badge */}
+      {/* Count badge - minimal */}
       {count !== undefined && (
-        <span
-          className={cn(
-            st.badge.count,
-            isSelected ? st.badge.countSelected : st.badge.countUnselected
-          )}
-          style={{
-            backgroundColor: isSelected ? `${color}15` : undefined,
-            color: isSelected ? color : undefined,
-          }}
-        >
+        <span className="text-[11px] tabular-nums text-white/40 ml-auto">
           {formatCount(count, true)}
         </span>
       )}
