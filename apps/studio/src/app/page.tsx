@@ -67,6 +67,7 @@ export default function HomePage() {
       minimapVisible: state.minimapVisible,
       selectedNodeId: state.selectedNodeId,
       selectedEdgeId: state.selectedEdgeId,
+      selectedEdgeData: state.selectedEdgeData,
       hoveredNodeId: state.hoveredNodeId,
       hoveredEdgeId: state.hoveredEdgeId,
     }))
@@ -143,9 +144,11 @@ export default function HomePage() {
     () => (uiState.selectedNodeId ? getNodeById(uiState.selectedNodeId) : null),
     [uiState.selectedNodeId, getNodeById]
   );
+  // Use selectedEdgeData from store (supports both data and schema modes)
+  // Fallback to getEdgeById for backwards compatibility
   const selectedEdge = useMemo(
-    () => (uiState.selectedEdgeId ? getEdgeById(uiState.selectedEdgeId) : null),
-    [uiState.selectedEdgeId, getEdgeById]
+    () => uiState.selectedEdgeData ?? (uiState.selectedEdgeId ? getEdgeById(uiState.selectedEdgeId) : null),
+    [uiState.selectedEdgeData, uiState.selectedEdgeId, getEdgeById]
   );
 
   // Get hovered node/edge data (memoized) for centralized hover info

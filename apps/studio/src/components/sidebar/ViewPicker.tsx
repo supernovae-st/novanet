@@ -13,7 +13,19 @@
 import { useState, useCallback, useMemo, useEffect, useRef, memo, useDeferredValue } from 'react';
 import { createPortal } from 'react-dom';
 import { motion } from 'motion/react';
-import { LayoutGrid, ChevronDown, Check, Search, X } from 'lucide-react';
+import {
+  LayoutGrid,
+  ChevronDown,
+  Check,
+  Search,
+  X,
+  Layers,
+  Sparkles,
+  Brain,
+  FolderOpen,
+  TrendingUp,
+  type LucideIcon,
+} from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
 import { cn } from '@/lib/utils';
 import { useViewStore } from '@/stores/viewStore';
@@ -34,12 +46,12 @@ import type { ViewRegistryEntry } from '@novanet/core/filters';
 const GRID_COLUMNS = 3;
 
 // Category colors and icons
-const CATEGORY_CONFIG: Record<string, { color: string; label: string }> = {
-  scope: { color: '#a78bfa', label: 'Scope Layers' },
-  generation: { color: '#34d399', label: 'Generation' },
-  knowledge: { color: '#60a5fa', label: 'Knowledge' },
-  project: { color: '#fbbf24', label: 'Project' },
-  mining: { color: '#f472b6', label: 'Mining' },
+const CATEGORY_CONFIG: Record<string, { color: string; label: string; icon: LucideIcon }> = {
+  scope: { color: '#a78bfa', label: 'Scope', icon: Layers },
+  generation: { color: '#34d399', label: 'Generation', icon: Sparkles },
+  knowledge: { color: '#60a5fa', label: 'Knowledge', icon: Brain },
+  project: { color: '#fbbf24', label: 'Project', icon: FolderOpen },
+  mining: { color: '#f472b6', label: 'Mining', icon: TrendingUp },
 };
 
 interface ViewPickerProps {
@@ -58,7 +70,8 @@ const ViewCard = memo(function ViewCard({
   isFocused: boolean;
   onSelect: () => void;
 }) {
-  const config = CATEGORY_CONFIG[view.category] || { color: '#a78bfa', label: 'View' };
+  const config = CATEGORY_CONFIG[view.category] || { color: '#a78bfa', label: 'View', icon: Layers };
+  const IconComponent = config.icon;
 
   return (
     <button
@@ -88,12 +101,13 @@ const ViewCard = memo(function ViewCard({
 
       {/* Category badge */}
       <span
-        className="text-[11px] font-semibold uppercase tracking-wide px-2.5 py-1 rounded-lg"
+        className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide px-2.5 py-1 rounded-lg"
         style={{
           backgroundColor: `${config.color}20`,
           color: config.color,
         }}
       >
+        <IconComponent className="w-3.5 h-3.5" />
         {config.label}
       </span>
 
@@ -351,30 +365,22 @@ export const ViewPicker = memo(function ViewPicker({ className }: ViewPickerProp
         whileTap={{ scale: 0.97 }}
         onClick={handleOpen}
         className={cn(
-          'flex items-center px-3 py-2 rounded-xl',
-          gapTokens.default,
+          'flex items-center gap-3 px-3 py-2 rounded-xl',
           'transition-all duration-150',
           'hover:bg-white/8 active:bg-white/10',
           className
         )}
       >
-        <LayoutGrid
-          className={cn(iconSizes.md, 'shrink-0 text-violet-400')}
-        />
-        <div className="flex flex-col items-start">
+        <LayoutGrid className="w-5 h-5 shrink-0 text-violet-400" />
+        <div className="flex flex-col items-start gap-0.5">
           <span className="text-sm font-medium text-white/90 truncate max-w-[160px]">
             {activeView?.description ?? 'Select View'}
           </span>
-          <span className="text-[10px] leading-tight text-white/50">
+          <span className="text-[11px] leading-tight text-white/50">
             {views.length} views available
           </span>
         </div>
-        <ChevronDown
-          className={cn(
-            iconSizes.sm,
-            'ml-1 text-white/50'
-          )}
-        />
+        <ChevronDown className="w-4 h-4 ml-1 text-white/50" />
       </motion.button>
 
       {/* Modal */}

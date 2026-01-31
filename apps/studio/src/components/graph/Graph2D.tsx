@@ -591,8 +591,16 @@ function Graph2DInner({
 
   const handleSchemaEdgeClick = useCallback(
     (_event: React.MouseEvent, edge: ReactFlowEdge) => {
-      // Set selected edge for schema relation details
-      setSelectedEdge(edge.id);
+      // Set selected edge with data for schema relation details panel
+      // Extract relation type from edge data (schema edges store it in data.relationType)
+      const edgeData = edge.data as { relationType?: string } | undefined;
+      setSelectedEdge(edge.id, {
+        id: edge.id,
+        type: edgeData?.relationType ?? edge.id.split('_')[0] ?? 'UNKNOWN',
+        source: edge.source,
+        target: edge.target,
+        data: edgeData,
+      });
 
       // Bring source and target nodes to front (z-index)
       bringSchemaEdgeNodesToFront(edge);
@@ -931,7 +939,14 @@ function Graph2DInner({
 
   const handleEdgeClick: EdgeMouseHandler<FloatingEdgeType> = useCallback(
     (_, edge) => {
-      setSelectedEdge(edge.id);
+      // Set selected edge with data for details panel
+      setSelectedEdge(edge.id, {
+        id: edge.id,
+        type: edge.data?.relationType ?? 'UNKNOWN',
+        source: edge.source,
+        target: edge.target,
+        data: edge.data,
+      });
 
       // Bring source and target nodes to front (z-index)
       bringDataEdgeNodesToFront(edge);

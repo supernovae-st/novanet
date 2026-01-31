@@ -13,6 +13,15 @@ export type DataMode = 'data' | 'schema';
 // Modal types - only one can be open at a time
 export type ModalType = 'command-palette' | 'keyboard-shortcuts' | 'ai-chat' | 'cypher-editor' | 'locale-picker' | 'project-picker' | null;
 
+// Selected edge data - unified format for both data and schema modes
+export interface SelectedEdgeData {
+  id: string;
+  type: string; // Relation type (HAS_PAGE, etc.)
+  source: string;
+  target: string;
+  data?: Record<string, unknown>;
+}
+
 interface UIStoreState extends UIState, SelectionState {
   // Minimap visibility
   minimapVisible: boolean;
@@ -22,6 +31,8 @@ interface UIStoreState extends UIState, SelectionState {
 
   // Edge selection
   selectedEdgeId: string | null;
+  /** Edge data for display - stored directly to support both data and schema modes */
+  selectedEdgeData: SelectedEdgeData | null;
 
   // Edge hover state
   hoveredEdgeId: string | null;
@@ -67,7 +78,7 @@ interface UIStoreState extends UIState, SelectionState {
 
   // Selection actions
   setSelectedNode: (id: string | null) => void;
-  setSelectedEdge: (id: string | null) => void;
+  setSelectedEdge: (id: string | null, edgeData?: SelectedEdgeData) => void;
   setHoveredNode: (id: string | null) => void;
   setHoveredEdge: (id: string | null) => void;
   setHoveredConnections: (ids: Set<string>) => void;
@@ -94,6 +105,9 @@ export const selectSelectedNodeId = (state: UIStoreState) => state.selectedNodeI
 
 /** Selector for selectedEdgeId - use with useUIStore(selectSelectedEdgeId) */
 export const selectSelectedEdgeId = (state: UIStoreState) => state.selectedEdgeId;
+
+/** Selector for selectedEdgeData - use with useUIStore(selectSelectedEdgeData) */
+export const selectSelectedEdgeData = (state: UIStoreState) => state.selectedEdgeData;
 
 /** Selector for hoveredConnectedNodeIds - use with useUIStore(selectHoveredConnectedNodeIds) */
 export const selectHoveredConnectedNodeIds = (state: UIStoreState) => state.hoveredConnectedNodeIds;
@@ -132,6 +146,7 @@ export const useUIStore = create<UIStoreState>()(
       // Selection state
       selectedNodeId: null,
       selectedEdgeId: null,
+      selectedEdgeData: null,
       hoveredNodeId: null,
       hoveredEdgeId: null,
       hoveredConnectedNodeIds: new Set(),
@@ -252,6 +267,7 @@ export const useUIStore = create<UIStoreState>()(
           state.selectedNodeId = id;
           // Clear edge selection when selecting a node
           state.selectedEdgeId = null;
+          state.selectedEdgeData = null;
           // Auto-open panel when node selected
           if (id && !state.focusMode) {
             state.panelOpen = true;
@@ -259,9 +275,11 @@ export const useUIStore = create<UIStoreState>()(
         });
       },
 
-      setSelectedEdge: (id) => {
+      setSelectedEdge: (id, edgeData) => {
         set((state) => {
           state.selectedEdgeId = id;
+          // Store edge data for display (supports both data and schema modes)
+          state.selectedEdgeData = edgeData ?? null;
           // Clear node selection when selecting an edge
           state.selectedNodeId = null;
           // Auto-open panel when edge selected
@@ -293,6 +311,7 @@ export const useUIStore = create<UIStoreState>()(
         set((state) => {
           state.selectedNodeId = null;
           state.selectedEdgeId = null;
+          state.selectedEdgeData = null;
           state.hoveredNodeId = null;
           state.hoveredEdgeId = null;
           state.highlightedNodeIds = new Set();

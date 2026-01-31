@@ -27,7 +27,8 @@ Claude Code configuration for the NovaNet monorepo.
 ║   SKILLS (automatic context)                                                                      ║
 ║   ├── novanet-architecture       → ASCII architecture diagrams                                    ║
 ║   ├── novanet-sync               → YAML ↔ TypeScript ↔ Mermaid sync                               ║
-║   └── codebase-audit             → Parallel codebase health analysis                              ║
+║   ├── codebase-audit             → Parallel codebase health analysis                              ║
+║   └── token-audit                → Design system token adoption                                   ║
 ║                                                                                                   ║
 ║   AGENTS (specialized subagents)                                                                  ║
 ║   ├── neo4j-architect            → Cypher queries, schema design                                  ║
@@ -57,7 +58,9 @@ Claude Code configuration for the NovaNet monorepo.
 │   │   └── SKILL.md
 │   ├── novanet-sync/
 │   │   └── SKILL.md
-│   └── codebase-audit/
+│   ├── codebase-audit/
+│   │   └── SKILL.md
+│   └── token-audit/
 │       └── SKILL.md
 └── agents/                      ← Subagent definitions
     ├── neo4j-architect.md
@@ -323,6 +326,25 @@ Add a new relationship type between nodes.
 - Documentation Accuracy
 - Test Health
 - Index Exports
+
+---
+
+### `token-audit`
+
+**Trigger:** Design system consistency checks, gap/spacing verification
+
+**Provides:**
+- Gap/spacing token adoption analysis
+- Non-tokenized pattern detection
+- Design system consistency report
+
+**Arguments:**
+
+| Argument | Description |
+|----------|-------------|
+| `gaps` | Audit gap/spacing tokens only |
+| `all` | Full token audit |
+| `summary` | Quick summary |
 
 ---
 
