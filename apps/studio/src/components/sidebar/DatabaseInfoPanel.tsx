@@ -23,7 +23,6 @@ import { NODE_VISUAL_CATEGORIES, ALL_NODE_TYPES } from '@/config/nodeTypes';
 import { DEFAULT_FETCH_LIMIT } from '@/config/constants';
 import { useQueryStore, QueryBuilder } from '@/stores/queryStore';
 import { useFilterStore } from '@/stores/filterStore';
-import { useAiQueryStore } from '@/stores/aiQueryStore';
 import { useViewStore } from '@/stores/viewStore';
 import { useDatabaseSchema } from '@/hooks';
 import { LoadingState } from '@/components/ui/EmptyState';
@@ -47,31 +46,23 @@ type TabId = 'views' | 'nodes' | 'rels';
 interface ToolbarProps {
   activeTab: TabId;
   onTabChange: (tab: TabId) => void;
-  onAiSubmit: (question: string) => Promise<void>;
-  isAiProcessing: boolean;
   tabs: Array<{ id: TabId; label: string; count?: number }>;
 }
 
 const Toolbar = memo(function Toolbar({
   activeTab,
   onTabChange,
-  onAiSubmit,
-  isAiProcessing,
   tabs,
 }: ToolbarProps) {
   return (
     <>
-      {/* AI Search */}
+      {/* AI Search - self-contained, opens overlay via uiStore */}
       <div className="px-3 pt-3">
-        <AiSearchInput
-          onSubmit={onAiSubmit}
-          isLoading={isAiProcessing}
-          placeholder="Ask AI to query the graph..."
-        />
+        <AiSearchInput placeholder="Ask AI to query the graph…" />
       </div>
 
       {/* Segmented Tabs */}
-      <div className="px-3 py-3">
+      <div className="px-3 pt-3 pb-1">
         <SegmentedTabs
           tabs={tabs}
           activeTab={activeTab}
@@ -105,21 +96,6 @@ export const DatabaseInfoPanel = memo(function DatabaseInfoPanel() {
   // View store for count
   const viewCount = useViewStore(
     useShallow((state) => state.categories.flatMap((c) => c.views).length)
-  );
-
-  // AI query handling
-  const { submitAiQuery, isProcessing: isAiProcessing } = useAiQueryStore(
-    useShallow((state) => ({
-      submitAiQuery: state.submitAiQuery,
-      isProcessing: state.isProcessing,
-    }))
-  );
-
-  const handleAiSubmit = useCallback(
-    async (question: string) => {
-      await submitAiQuery(question);
-    },
-    [submitAiQuery]
   );
 
   // Multi-select state
@@ -373,8 +349,6 @@ export const DatabaseInfoPanel = memo(function DatabaseInfoPanel() {
         <Toolbar
           activeTab={activeTab}
           onTabChange={setActiveTab}
-          onAiSubmit={handleAiSubmit}
-          isAiProcessing={isAiProcessing}
           tabs={tabs}
         />
       }

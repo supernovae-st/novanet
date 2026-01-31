@@ -1,15 +1,14 @@
 'use client';
 
 /**
- * KeyboardKey - Skeuomorphic keyboard shortcut display
+ * KeyboardKey - Premium skeuomorphic keyboard key
  *
- * Design: Dark skeuomorphic style with depth, shadows, and subtle gradients
- * Inspired by macOS keyboard keys with glass morphism accents
- *
- * Features:
- * - 3D depth with inner/outer shadows
- * - Subtle top highlight for light reflection
- * - Hover/active states with press feedback
+ * Hyper-realistic dark keyboard key with multi-layer depth:
+ * - Raised key cap with concave surface gradient
+ * - 4-layer shadow stack (ambient + drop + ring + inner highlight)
+ * - Bright top-edge catchlight (light reflecting off key lip)
+ * - Dark bottom bevel (key sits in a well)
+ * - Active state: key physically presses down (translate + shadow inversion)
  * - Three sizes: sm, md, lg
  */
 
@@ -29,13 +28,27 @@ export interface KeyboardKeyProps {
 }
 
 const sizeStyles = {
-  sm: 'px-1.5 py-0.5 text-[10px] min-w-[20px] h-5 rounded',
-  md: 'px-2 py-0.5 text-[11px] min-w-[24px] h-6 rounded-md',
-  lg: 'px-2.5 py-1 text-xs min-w-[28px] h-7 rounded-md',
+  sm: 'px-1.5 py-[3px] text-[10px] min-w-[20px] h-5 rounded-[4px]',
+  md: 'px-2 py-1 text-[11px] min-w-[24px] h-6 rounded-[5px]',
+  lg: 'px-2.5 py-1 text-xs min-w-[28px] h-7 rounded-[6px]',
 };
 
+// Multi-layer shadow for realistic key depth (CSS values, applied via style prop):
+// 1. Ambient shadow (soft spread underneath)
+// 2. Drop shadow (hard edge, key is raised)
+// 3. Dark ring (key well / bezel)
+// 4. Inner top highlight (catchlight from above)
+// 5. Inner bottom shadow (concave surface)
+const KEY_SHADOW = [
+  '0 2px 4px rgba(0,0,0,0.5)',
+  '0 1px 1px rgba(0,0,0,0.6)',
+  '0 0 0 1px rgba(0,0,0,0.35)',
+  'inset 0 1px 0 rgba(255,255,255,0.12)',
+  'inset 0 -1px 0 rgba(0,0,0,0.15)',
+].join(', ');
+
 /**
- * Keyboard key display component - Skeuomorphic dark design
+ * Keyboard key display component - Premium skeuomorphic dark design
  *
  * @example
  * <KeyboardKey>⌘</KeyboardKey>
@@ -55,33 +68,33 @@ export const KeyboardKey = memo(function KeyboardKey({
 }: KeyboardKeyProps) {
   return (
     <kbd
+      style={{ boxShadow: KEY_SHADOW }}
       className={cn(
         // Layout
         'inline-flex items-center justify-center',
-        'font-mono font-medium tracking-tight',
-        // Skeuomorphic dark styling
-        // opacity.bg.heavy (0.10) + opacity.bg.light (0.04)
-        'bg-gradient-to-b from-white/[0.10] to-white/[0.04]',
-        // opacity.border.medium (0.12) + opacity.border.light (0.08)
-        'border border-white/[0.12] border-b-white/[0.08]',
-        // opacity.text.secondary (0.70)
-        'text-white/70',
-        // 3D depth shadows
-        'shadow-[0_1px_2px_rgba(0,0,0,0.4),0_0_0_1px_rgba(0,0,0,0.2),inset_0_1px_0_rgba(255,255,255,0.08)]',
+        'font-mono font-semibold tracking-tight leading-none',
+        // Key cap surface: concave gradient (lighter top → darker bottom)
+        'bg-gradient-to-b from-white/[0.14] via-white/[0.07] to-white/[0.03]',
+        // Border: bright top lip, darker sides, dark bottom bevel
+        'border border-t-white/[0.18] border-x-white/[0.10] border-b-white/[0.05]',
+        // Text: crisp, slightly brighter than surroundings
+        'text-white/75',
         // Size
         sizeStyles[size],
         // Interactive states
         interactive && [
           'cursor-pointer',
-          'transition-all duration-100',
-          // opacity.bg.intense (0.15) + opacity.bg.medium (0.06)
-          'hover:bg-gradient-to-b hover:from-white/[0.15] hover:to-white/[0.06]',
-          // opacity.text.strong (0.90) + opacity.border.strong (0.15)
-          'hover:text-white/90 hover:border-white/[0.15]',
-          // opacity.bg.medium (0.06) + opacity.bg.heavy (0.10)
-          'active:bg-gradient-to-b active:from-white/[0.06] active:to-white/[0.10]',
-          'active:shadow-[0_0_1px_rgba(0,0,0,0.4),inset_0_1px_2px_rgba(0,0,0,0.2)]',
+          'transition-all duration-75 ease-out',
+          // Hover: lift up, brighter surface + catchlight
+          'hover:from-white/[0.18] hover:via-white/[0.09] hover:to-white/[0.05]',
+          'hover:text-white/90',
+          'hover:border-t-white/[0.22]',
+          'hover:-translate-y-[0.5px]',
+          // Active: press down into well (gradient inverts)
+          'active:from-white/[0.04] active:via-white/[0.06] active:to-white/[0.08]',
           'active:translate-y-[1px]',
+          'active:border-t-white/[0.08]',
+          'active:text-white/60',
         ],
         className
       )}
