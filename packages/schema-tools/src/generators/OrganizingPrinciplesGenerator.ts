@@ -172,7 +172,8 @@ export class OrganizingPrinciplesGenerator {
         lines.push(`  sub_${sub.key}.llm_context = '${llmContext}',`);
         lines.push(`  sub_${sub.key}.updated_at = datetime();`);
         lines.push('');
-        lines.push(`MERGE (s_${scope.key})-[:HAS_SUBCATEGORY]->(sub_${sub.key});`);
+        lines.push(`MATCH (s:Scope {key: '${scope.key}'}), (sub:Subcategory {key: '${sub.key}'})`);
+        lines.push('MERGE (s)-[:HAS_SUBCATEGORY]->(sub);');
         lines.push('');
       }
     }
@@ -199,7 +200,8 @@ export class OrganizingPrinciplesGenerator {
           lines.push('ON MATCH SET');
           lines.push(`  ${varName}.updated_at = datetime();`);
           lines.push('');
-          lines.push(`MERGE (sub_${sub.key})-[:DEFINES_TYPE]->(${varName});`);
+          lines.push(`MATCH (sub:Subcategory {key: '${sub.key}'}), (t:NodeTypeMeta {label: '${nodeType}'})`);
+          lines.push('MERGE (sub)-[:DEFINES_TYPE]->(t);');
           lines.push('');
         }
       }
