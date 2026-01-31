@@ -13,6 +13,7 @@
 import { memo } from 'react';
 import { LucideIcon, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { iconSizes } from '@/design/tokens';
 
 interface IconButtonProps {
   /** Lucide icon component */
@@ -117,7 +118,8 @@ export const IconButton = memo(function IconButton({
       )}
       <DisplayIcon
         className={cn(
-          'w-4 h-4 relative z-10',
+          iconSizes.md,
+          'relative z-10',
           loading && 'animate-spin',
           loading && variant === 'success' && 'drop-shadow-[0_0_8px_rgba(52,211,153,0.8)]'
         )}

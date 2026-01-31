@@ -10,6 +10,7 @@
 import { memo, type ReactNode } from 'react';
 import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { iconSizes } from '@/design/tokens';
 
 export interface ModalHeaderProps {
   /** Title text */
@@ -67,7 +68,7 @@ export const ModalHeader = memo(function ModalHeader({
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20'
         )}
       >
-        <X className="w-5 h-5" />
+        <X className={iconSizes.xl} />
       </button>
     </div>
   );

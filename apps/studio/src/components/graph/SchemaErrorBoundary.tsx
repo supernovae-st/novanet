@@ -20,7 +20,7 @@
 import { Component, type ReactNode, type ErrorInfo } from 'react';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { glassClasses } from '@/design/tokens';
+import { glassClasses, iconSizes } from '@/design/tokens';
 
 /**
  * Props for SchemaErrorBoundary
@@ -235,7 +235,7 @@ export class SchemaErrorBoundary extends Component<
             )}
             aria-label="Retry rendering schema graph"
           >
-            <RefreshCw className="w-4 h-4" aria-hidden="true" />
+            <RefreshCw className={iconSizes.md} aria-hidden="true" />
             Retry
           </button>
 
