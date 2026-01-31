@@ -14,7 +14,7 @@
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { ACTION_ICONS, NAV_ICONS, CONTENT_ICONS, ICON_SIZES } from '@/config/iconSystem';
-import { iconSizes } from '@/design/tokens';
+import { iconSizes, paddingTokens, gapTokens } from '@/design/tokens';
 import { Kbd } from './Kbd';
 import { Modal } from './Modal';
 
@@ -141,7 +141,8 @@ export function KeyboardShortcuts({ isOpen, onClose }: KeyboardShortcutsProps) {
               key={category.id}
               onClick={() => setActiveCategory(category.id)}
               className={cn(
-                'flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap',
+                'flex items-center rounded-lg text-xs font-medium whitespace-nowrap',
+                gapTokens.default, paddingTokens.standard,
                 'transition-all duration-150',
                 activeCategory === category.id
                   ? 'bg-primary/15 text-white border border-primary/30'

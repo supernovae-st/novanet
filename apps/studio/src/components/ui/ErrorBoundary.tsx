@@ -15,7 +15,7 @@
 import { Component, type ReactNode, type ErrorInfo } from 'react';
 import { cn } from '@/lib/utils';
 import { logger } from '@/lib/logger';
-import { iconSizes } from '@/design/tokens';
+import { iconSizes, paddingTokens, gapTokens } from '@/design/tokens';
 import { STATUS_ICONS, ACTION_ICONS } from '@/config/iconSystem';
 
 // Design system icons
@@ -151,7 +151,8 @@ export function ChatErrorBoundary({ children }: { children: ReactNode }) {
           <button
             onClick={() => window.location.reload()}
             className={cn(
-              'flex items-center gap-2 px-3 py-1.5 rounded-lg',
+              'flex items-center rounded-lg',
+              gapTokens.default, paddingTokens.standard,
               'bg-novanet-500 hover:bg-novanet-600',
               'text-white text-xs font-medium',
               'transition-colors'
