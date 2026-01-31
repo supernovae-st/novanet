@@ -1,18 +1,20 @@
 # Architecture Decisions
 
-## ADR-001: Dual View Mode (2D/3D)
+## ADR-001: 2D Graph Visualization
 
-**Decision:** Support both 2D (React Flow) and 3D (force-graph) visualization
+**Decision:** Focus on 2D visualization with React Flow
 
 **Rationale:**
-- 2D for precise editing and relationship navigation
-- 3D for exploring clusters and discovering patterns
-- User preference varies by task
+- 2D provides precise editing and relationship navigation
+- Schema layouts (treemap, swimlanes, target, force) cover all visualization needs
+- Simplified codebase without 3D dependency overhead
 
 **Implementation:**
-- `viewMode` state in uiStore: `'2d' | '3d'`
-- Toggle with `V` key
-- Same data source, different renderers
+- `@xyflow/react` for all graph rendering
+- Multiple layout algorithms via ELK.js
+- `V` key reserved for future layout features
+
+**Note:** 3D support (react-force-graph-3d) was deprecated in v8.2.1 for reduced bundle size.
 
 ---
 

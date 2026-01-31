@@ -9,9 +9,9 @@ Knowledge graph visualization for the NovaNet localization orchestrator.
 
 ## Project Context
 
-**What:** Interactive 2D/3D graph visualization for 35 node types (3 scopes), 200 locales (~19,000 instances projected at full deployment)
+**What:** Interactive 2D graph visualization for 35 node types (3 scopes), 200 locales (~19,000 instances projected at full deployment)
 **Stack:** Next.js 16 + React 19 + TypeScript 5.9 + Tailwind CSS
-**Graph:** @xyflow/react (2D) + react-force-graph-3d (3D)
+**Graph:** @xyflow/react
 **State:** Zustand 5 with persist/immer
 **DB:** Neo4j (bolt://localhost:7687)
 **AI:** Claude API for natural language → Cypher
@@ -28,8 +28,7 @@ src/
 ├── components/
 │   ├── chat/         # AI chat (⌘J)
 │   ├── dx/           # DX tools (copy, code viewer, inspector)
-│   ├── graph/        # React Flow + force-graph components
-│   ├── panels/       # Control panels
+│   ├── graph/        # React Flow components
 │   ├── query/        # Query builder components
 │   ├── sidebar/      # Node details, filters
 │   └── ui/           # Base UI components
@@ -76,7 +75,7 @@ pnpm test            # Tests
 **View**
 | Key | Action |
 |-----|--------|
-| `V` | Toggle 2D/3D view |
+| `V` | Reserved (layout toggle) |
 | `G` | Focus mode (Zen) |
 | `M` | Toggle minimap |
 | `L` | Toggle edge labels |
