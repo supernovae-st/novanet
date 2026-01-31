@@ -74,9 +74,9 @@ export const KeyboardKey = memo(function KeyboardKey({
           'cursor-pointer',
           'transition-all duration-100',
           // opacity.bg.intense (0.15) + opacity.bg.medium (0.06)
-          'hover:bg-gradient-to-b hover:from-white/[0.14] hover:to-white/[0.06]',
-          // opacity.text.strong (0.90) + opacity.border.strong (0.18)
-          'hover:text-white/90 hover:border-white/[0.18]',
+          'hover:bg-gradient-to-b hover:from-white/[0.15] hover:to-white/[0.06]',
+          // opacity.text.strong (0.90) + opacity.border.strong (0.15)
+          'hover:text-white/90 hover:border-white/[0.15]',
           // opacity.bg.medium (0.06) + opacity.bg.heavy (0.10)
           'active:bg-gradient-to-b active:from-white/[0.06] active:to-white/[0.10]',
           'active:shadow-[0_0_1px_rgba(0,0,0,0.4),inset_0_1px_2px_rgba(0,0,0,0.2)]',

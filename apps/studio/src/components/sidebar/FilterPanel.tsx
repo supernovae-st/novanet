@@ -12,7 +12,7 @@
 
 import { memo } from 'react';
 import { cn } from '@/lib/utils';
-import { glassClasses } from '@/design/tokens';
+import { glassClasses, panelClasses } from '@/design/tokens';
 import { LabelFilter } from './LabelFilter';
 
 export interface FilterPanelProps {
@@ -22,18 +22,12 @@ export interface FilterPanelProps {
 export const FilterPanel = memo(function FilterPanel({ className }: FilterPanelProps) {
   return (
     <div
-      className={cn(
-        'h-full flex flex-col',
-        glassClasses.medium,
-        className
-      )}
+      className={cn(panelClasses.container, glassClasses.medium, className)}
       data-testid="filter-panel"
     >
       {/* Content - Label Filter only */}
-      <div className="flex-1 overflow-y-auto scrollbar-thin">
-        <div className="p-3">
-          <LabelFilter />
-        </div>
+      <div className={panelClasses.body}>
+        <LabelFilter />
       </div>
     </div>
   );

@@ -135,6 +135,92 @@ export const controls = {
 } as const;
 
 // ============================================================================
+// SEMANTIC GAP TOKENS - Consistent spacing by purpose
+// ============================================================================
+
+/**
+ * Gap tokens - semantic naming for flex/grid gaps
+ *
+ * Usage: Replace hardcoded `gap-X` with semantic tokens
+ */
+export const gapTokens = {
+  /** 4px - Icon pairs, tight badges */
+  tight: 'gap-1',
+  /** 6px - Buttons, filter rows, compact lists */
+  compact: 'gap-1.5',
+  /** 8px - Default for most flex layouts */
+  default: 'gap-2',
+  /** 10px - Filter sections, elevated panels */
+  comfortable: 'gap-2.5',
+  /** 12px - Headers, section content */
+  spacious: 'gap-3',
+  /** 16px - Large sections, panel spacing */
+  large: 'gap-4',
+} as const;
+
+// ============================================================================
+// SEMANTIC PADDING TOKENS - Consistent padding by purpose
+// ============================================================================
+
+/**
+ * Padding tokens - semantic naming for padding patterns
+ */
+export const paddingTokens = {
+  /** Compact buttons, badges */
+  compact: 'px-2.5 py-1',
+  /** Standard buttons, filter rows */
+  standard: 'px-3 py-1.5',
+  /** Large buttons, panel sections */
+  large: 'px-4 py-2',
+  /** Panel headers, elevated content */
+  panel: 'px-4 py-3',
+  /** Spacious headers (modals) */
+  spacious: 'px-4 py-4',
+} as const;
+
+// ============================================================================
+// COMPONENT PATTERN TOKENS - Ready-to-use class combinations
+// ============================================================================
+
+/**
+ * Badge/pill pattern tokens - unified badge styling
+ */
+export const badgeClasses = {
+  /** Compact badge - counts, status */
+  compact: 'inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-medium',
+  /** Standard badge - labels, tags */
+  standard: 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium',
+  /** Large badge - prominent status */
+  large: 'inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium',
+} as const;
+
+/**
+ * Icon button pattern tokens - unified icon button styling
+ *
+ * Consolidates repeating icon button patterns across the codebase.
+ */
+export const iconButtonClasses = {
+  /** Ghost variant - default icon button (no background) */
+  ghost: 'p-1.5 rounded-lg transition-all duration-150 text-white/50 hover:text-white/70 hover:bg-white/[0.06]',
+  /** Action variant - with success feedback */
+  action: 'p-1.5 rounded-lg transition-all duration-150 text-white/50 hover:text-white/70 hover:bg-white/[0.06] active:text-emerald-400 active:bg-emerald-500/20',
+  /** Close variant - for dismiss/close buttons */
+  close: 'w-8 h-8 rounded-lg flex items-center justify-center text-white/40 hover:text-white/80 hover:bg-white/[0.06] transition-colors duration-150',
+  /** Copy variant - with copied state */
+  copy: 'p-1.5 rounded-lg opacity-50 group-hover:opacity-100 transition-all duration-150 text-white/60 hover:text-white/90 hover:bg-white/[0.06]',
+} as const;
+
+/**
+ * Section header tokens - unified section styling
+ */
+export const sectionHeaderClasses = {
+  /** Standard section header */
+  standard: 'flex items-center gap-2 text-xs uppercase tracking-wider font-semibold text-white/40',
+  /** Elevated section header (with background) */
+  elevated: 'flex items-center gap-2.5 px-4 py-3 text-xs uppercase tracking-wider font-semibold text-white/40 border-b border-white/[0.06]',
+} as const;
+
+// ============================================================================
 // OPACITY PRIMITIVES - White opacity scale for consistent transparency
 // ============================================================================
 
@@ -463,63 +549,62 @@ export const filterTreeClasses = {
   /** Container for the filter tree */
   container: 'space-y-2',
 
-  /** Section header row (category level) - Premium style */
+  /** Section header row (category level) - Premium style (matches FilterSection) */
   sectionHeader: [
     'flex items-center gap-2.5',
-    'py-2.5 px-2 rounded-xl',
+    'py-1 rounded-xl',
     'transition-all duration-200',
-    'hover:bg-white/[0.04]',
     'cursor-pointer select-none',
   ].join(' '),
 
-  /** Section content (nested items) */
-  sectionContent: 'ml-5 pl-3 mt-1 space-y-1.5 border-l-2 border-white/[0.08] overflow-hidden transition-all duration-300',
-  sectionContentExpanded: 'max-h-[600px] opacity-100 pb-2',
+  /** Section content (nested items) - matches FilterSection */
+  sectionContent: 'ml-6 pl-4 mt-1 space-y-2.5 border-l-2 border-white/[0.08] overflow-hidden transition-all duration-300',
+  sectionContentExpanded: 'max-h-[800px] opacity-100 py-2.5',
   sectionContentCollapsed: 'max-h-0 opacity-0',
 
-  /** Individual row (item level) - Premium frosted glass */
+  /** Individual row (item level) - Premium frosted glass (matches FilterCard) */
   row: [
-    'group w-full flex items-center gap-2.5',
-    'h-[44px] px-3 rounded-xl',
+    'group w-full flex items-center gap-3',
+    'h-12 px-3.5 rounded-xl', // 48px height for WCAG tap targets
     // Frosted glass base
-    'backdrop-blur-sm',
+    'backdrop-blur-md',
     'ring-1 ring-inset ring-white/[0.06]',
-    'bg-white/[0.02]',
+    'bg-white/[0.03]',
     // Transitions
     'transition-all duration-200',
     // Hover
     'hover:bg-white/[0.06] hover:ring-white/[0.10]',
     // Focus
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-novanet-500/50',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-novanet-500/60 focus-visible:ring-offset-1 focus-visible:ring-offset-black/50',
   ].join(' '),
-  rowSelected: 'bg-white/[0.08] ring-white/[0.12] shadow-sm shadow-black/10',
+  rowSelected: 'bg-white/[0.08] ring-white/[0.12] shadow-lg shadow-black/20',
   rowDisabled: 'opacity-50 cursor-not-allowed',
 
   /** Chevron for expand/collapse */
   chevron: 'w-3.5 h-3.5 text-white/40 transition-transform duration-200',
   chevronCollapsed: '-rotate-90',
 
-  /** Checkbox container - Premium style */
-  checkbox: 'w-5 h-5 rounded-lg border-[1.5px] flex items-center justify-center transition-all duration-200 flex-shrink-0',
-  checkboxUnchecked: 'border-white/20 bg-white/[0.03]',
-  checkboxChecked: 'border-transparent shadow-sm', // Color set dynamically
+  /** Checkbox container - matches TriStateCheckbox for consistency */
+  checkbox: 'w-4 h-4 rounded border-2 flex items-center justify-center transition-all duration-200 flex-shrink-0',
+  checkboxUnchecked: 'border-white/20 bg-transparent',
+  checkboxChecked: 'border-transparent', // Color set dynamically via style prop
 
-  /** Label text */
-  label: 'text-[13px] font-medium transition-colors duration-200 flex-1 text-left truncate',
+  /** Label text - no truncate for full labels */
+  label: 'text-[13px] font-medium transition-colors duration-200 flex-1 text-left',
   labelSelected: 'text-white',
   labelUnselected: 'text-white/70 group-hover:text-white/90',
 
   /** Section label (category) - Uppercase accent */
   sectionLabel: 'text-[11px] font-bold uppercase tracking-wider', // Color set dynamically
 
-  /** Count display - Badge style */
-  count: 'text-[11px] tabular-nums transition-colors duration-200 flex-shrink-0 min-w-[28px] text-center py-0.5 px-2 rounded-md',
-  countSelected: 'text-white/90 bg-white/[0.08]',
-  countUnselected: 'text-white/50 bg-white/[0.04]',
+  /** Count display - Pill style (matches FilterCard) */
+  count: 'text-[11px] font-semibold tabular-nums transition-all duration-200 flex-shrink-0 min-w-[32px] text-center py-1 px-2.5 rounded-full',
+  countSelected: 'text-white/90 bg-white/[0.12]',
+  countUnselected: 'text-white/50 bg-white/[0.05] group-hover:bg-white/[0.08] group-hover:text-white/70',
   countMuted: 'text-white/40',
 
-  /** Progress bar container (data variant) */
-  progressBar: 'w-16 flex-shrink-0',
+  /** Progress bar container (data variant) - compact to allow full labels */
+  progressBar: 'w-12 flex-shrink-0',
 
   /** Header with total and execute button */
   header: 'flex items-center justify-between px-1 mb-2',
@@ -561,6 +646,7 @@ export const scopeAccents = {
 // ============================================================================
 
 export const tokens = {
+  // Core design tokens
   spacing,
   radius,
   shadows,
@@ -571,6 +657,10 @@ export const tokens = {
   controls,
   opacity,
   iconSizes,
+  // Semantic spacing tokens
+  gapTokens,
+  paddingTokens,
+  // Component class tokens
   panelClasses,
   glass,
   typography,
@@ -581,6 +671,9 @@ export const tokens = {
   textOpacity,
   filterTreeClasses,
   scopeAccents,
+  badgeClasses,
+  iconButtonClasses,
+  sectionHeaderClasses,
 } as const;
 
 export default tokens;

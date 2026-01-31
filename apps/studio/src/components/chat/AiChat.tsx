@@ -259,7 +259,7 @@ export const AiChat = memo(function AiChat({
                 // opacity.bg.medium = white/[0.05]
                 // opacity.border.light = white/[0.10]
                 'w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3',
-                'text-sm resize-none focus:outline-none focus:border-novanet-500/50 focus:bg-white/[0.07]',
+                'text-sm resize-none focus:outline-none focus:border-novanet-500/50 focus:bg-white/[0.08]',
                 'placeholder:text-white/30 transition-all duration-150'
               )}
               style={{ minHeight: '48px', maxHeight: '120px' }}
