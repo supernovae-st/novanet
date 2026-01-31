@@ -69,7 +69,8 @@ ON MATCH SET
   sub_config.llm_context = 'Core configuration nodes. Locale definitions with their properties (language code, region, writing direction). Entry point for all locale-specific knowledge traversal.',
   sub_config.updated_at = datetime();
 
-MERGE (s_global)-[:HAS_SUBCATEGORY]->(sub_config);
+MATCH (s:Scope {key: 'global'}), (sub:Subcategory {key: 'config'})
+MERGE (s)-[:HAS_SUBCATEGORY]->(sub);
 
 MERGE (sub_knowledge:Subcategory {key: 'knowledge'})
 ON CREATE SET
@@ -83,7 +84,8 @@ ON MATCH SET
   sub_knowledge.llm_context = 'Deep locale-specific knowledge for native content generation. Cultural norms, linguistic patterns, voice guidelines, idiomatic expressions, formatting conventions. This is what makes generated content feel NATIVE rather than translated.',
   sub_knowledge.updated_at = datetime();
 
-MERGE (s_global)-[:HAS_SUBCATEGORY]->(sub_knowledge);
+MATCH (s:Scope {key: 'global'}), (sub:Subcategory {key: 'knowledge'})
+MERGE (s)-[:HAS_SUBCATEGORY]->(sub);
 
 // Project subcategories
 MERGE (sub_foundation:Subcategory {key: 'foundation'})
@@ -98,7 +100,8 @@ ON MATCH SET
   sub_foundation.llm_context = 'Core project identity. Brand voice, visual identity, value proposition. These nodes anchor ALL content generation for the project - every generated block must align with foundation.',
   sub_foundation.updated_at = datetime();
 
-MERGE (s_project)-[:HAS_SUBCATEGORY]->(sub_foundation);
+MATCH (s:Scope {key: 'project'}), (sub:Subcategory {key: 'foundation'})
+MERGE (s)-[:HAS_SUBCATEGORY]->(sub);
 
 MERGE (sub_structure:Subcategory {key: 'structure'})
 ON CREATE SET
@@ -112,7 +115,8 @@ ON MATCH SET
   sub_structure.llm_context = 'Information architecture. Pages, blocks, and their types. Defines the SKELETON of the website - what pages exist, what blocks compose each page, and the rules for each block type.',
   sub_structure.updated_at = datetime();
 
-MERGE (s_project)-[:HAS_SUBCATEGORY]->(sub_structure);
+MATCH (s:Scope {key: 'project'}), (sub:Subcategory {key: 'structure'})
+MERGE (s)-[:HAS_SUBCATEGORY]->(sub);
 
 MERGE (sub_semantic:Subcategory {key: 'semantic'})
 ON CREATE SET
@@ -126,7 +130,8 @@ ON MATCH SET
   sub_semantic.llm_context = 'Meaning and concepts. Invariant ideas (Concept) that get localized per locale (ConceptL10n). The WHAT of content - pricing tiers, features, benefits, use cases. Concepts link via SEMANTIC_LINK for spreading activation during generation.',
   sub_semantic.updated_at = datetime();
 
-MERGE (s_project)-[:HAS_SUBCATEGORY]->(sub_semantic);
+MATCH (s:Scope {key: 'project'}), (sub:Subcategory {key: 'semantic'})
+MERGE (s)-[:HAS_SUBCATEGORY]->(sub);
 
 MERGE (sub_instruction:Subcategory {key: 'instruction'})
 ON CREATE SET
@@ -140,7 +145,8 @@ ON MATCH SET
   sub_instruction.llm_context = 'Generation directives. Prompts and rules that guide the LLM during content generation. PagePrompt for page-level guidance, BlockPrompt for block-specific instructions, BlockRules for constraints.',
   sub_instruction.updated_at = datetime();
 
-MERGE (s_project)-[:HAS_SUBCATEGORY]->(sub_instruction);
+MATCH (s:Scope {key: 'project'}), (sub:Subcategory {key: 'instruction'})
+MERGE (s)-[:HAS_SUBCATEGORY]->(sub);
 
 MERGE (sub_output:Subcategory {key: 'output'})
 ON CREATE SET
@@ -154,7 +160,8 @@ ON MATCH SET
   sub_output.llm_context = 'LLM-generated content. The final localized pages and blocks ready for rendering. These are the RESULTS of the generation pipeline - created by combining foundation, structure, semantic, and instruction nodes with locale knowledge.',
   sub_output.updated_at = datetime();
 
-MERGE (s_project)-[:HAS_SUBCATEGORY]->(sub_output);
+MATCH (s:Scope {key: 'project'}), (sub:Subcategory {key: 'output'})
+MERGE (s)-[:HAS_SUBCATEGORY]->(sub);
 
 // Shared subcategories
 MERGE (sub_seo:Subcategory {key: 'seo'})
@@ -169,7 +176,8 @@ ON MATCH SET
   sub_seo.llm_context = 'Search engine optimization data. Keywords with their localized forms, search volume metrics, and mining run history. Used to inject relevant keywords into generated content for organic search visibility.',
   sub_seo.updated_at = datetime();
 
-MERGE (s_shared)-[:HAS_SUBCATEGORY]->(sub_seo);
+MATCH (s:Scope {key: 'shared'}), (sub:Subcategory {key: 'seo'})
+MERGE (s)-[:HAS_SUBCATEGORY]->(sub);
 
 MERGE (sub_geo:Subcategory {key: 'geo'})
 ON CREATE SET
@@ -183,7 +191,8 @@ ON MATCH SET
   sub_geo.llm_context = 'Geographic/local SEO data. Location-based seeds with their localized forms, metrics, and mining history. Used for local business visibility and location-specific content generation.',
   sub_geo.updated_at = datetime();
 
-MERGE (s_shared)-[:HAS_SUBCATEGORY]->(sub_geo);
+MATCH (s:Scope {key: 'shared'}), (sub:Subcategory {key: 'geo'})
+MERGE (s)-[:HAS_SUBCATEGORY]->(sub);
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // NODE TYPE META (35)
@@ -198,7 +207,8 @@ ON CREATE SET
 ON MATCH SET
   t_locale.updated_at = datetime();
 
-MERGE (sub_config)-[:DEFINES_TYPE]->(t_locale);
+MATCH (sub:Subcategory {key: 'config'}), (t:NodeTypeMeta {label: 'Locale'})
+MERGE (sub)-[:DEFINES_TYPE]->(t);
 
 // Locale Knowledge (14 types)
 MERGE (t_constraint:NodeTypeMeta {label: 'Constraint'})
@@ -209,7 +219,8 @@ ON CREATE SET
 ON MATCH SET
   t_constraint.updated_at = datetime();
 
-MERGE (sub_knowledge)-[:DEFINES_TYPE]->(t_constraint);
+MATCH (sub:Subcategory {key: 'knowledge'}), (t:NodeTypeMeta {label: 'Constraint'})
+MERGE (sub)-[:DEFINES_TYPE]->(t);
 
 MERGE (t_expression:NodeTypeMeta {label: 'Expression'})
 ON CREATE SET
@@ -219,7 +230,8 @@ ON CREATE SET
 ON MATCH SET
   t_expression.updated_at = datetime();
 
-MERGE (sub_knowledge)-[:DEFINES_TYPE]->(t_expression);
+MATCH (sub:Subcategory {key: 'knowledge'}), (t:NodeTypeMeta {label: 'Expression'})
+MERGE (sub)-[:DEFINES_TYPE]->(t);
 
 MERGE (t_localeculture:NodeTypeMeta {label: 'LocaleCulture'})
 ON CREATE SET
@@ -229,7 +241,8 @@ ON CREATE SET
 ON MATCH SET
   t_localeculture.updated_at = datetime();
 
-MERGE (sub_knowledge)-[:DEFINES_TYPE]->(t_localeculture);
+MATCH (sub:Subcategory {key: 'knowledge'}), (t:NodeTypeMeta {label: 'LocaleCulture'})
+MERGE (sub)-[:DEFINES_TYPE]->(t);
 
 MERGE (t_localeculturereferences:NodeTypeMeta {label: 'LocaleCultureReferences'})
 ON CREATE SET
@@ -239,7 +252,8 @@ ON CREATE SET
 ON MATCH SET
   t_localeculturereferences.updated_at = datetime();
 
-MERGE (sub_knowledge)-[:DEFINES_TYPE]->(t_localeculturereferences);
+MATCH (sub:Subcategory {key: 'knowledge'}), (t:NodeTypeMeta {label: 'LocaleCultureReferences'})
+MERGE (sub)-[:DEFINES_TYPE]->(t);
 
 MERGE (t_localeidentity:NodeTypeMeta {label: 'LocaleIdentity'})
 ON CREATE SET
@@ -249,7 +263,8 @@ ON CREATE SET
 ON MATCH SET
   t_localeidentity.updated_at = datetime();
 
-MERGE (sub_knowledge)-[:DEFINES_TYPE]->(t_localeidentity);
+MATCH (sub:Subcategory {key: 'knowledge'}), (t:NodeTypeMeta {label: 'LocaleIdentity'})
+MERGE (sub)-[:DEFINES_TYPE]->(t);
 
 MERGE (t_localelexicon:NodeTypeMeta {label: 'LocaleLexicon'})
 ON CREATE SET
@@ -259,7 +274,8 @@ ON CREATE SET
 ON MATCH SET
   t_localelexicon.updated_at = datetime();
 
-MERGE (sub_knowledge)-[:DEFINES_TYPE]->(t_localelexicon);
+MATCH (sub:Subcategory {key: 'knowledge'}), (t:NodeTypeMeta {label: 'LocaleLexicon'})
+MERGE (sub)-[:DEFINES_TYPE]->(t);
 
 MERGE (t_localemarket:NodeTypeMeta {label: 'LocaleMarket'})
 ON CREATE SET
@@ -269,7 +285,8 @@ ON CREATE SET
 ON MATCH SET
   t_localemarket.updated_at = datetime();
 
-MERGE (sub_knowledge)-[:DEFINES_TYPE]->(t_localemarket);
+MATCH (sub:Subcategory {key: 'knowledge'}), (t:NodeTypeMeta {label: 'LocaleMarket'})
+MERGE (sub)-[:DEFINES_TYPE]->(t);
 
 MERGE (t_localerulesadaptation:NodeTypeMeta {label: 'LocaleRulesAdaptation'})
 ON CREATE SET
@@ -279,7 +296,8 @@ ON CREATE SET
 ON MATCH SET
   t_localerulesadaptation.updated_at = datetime();
 
-MERGE (sub_knowledge)-[:DEFINES_TYPE]->(t_localerulesadaptation);
+MATCH (sub:Subcategory {key: 'knowledge'}), (t:NodeTypeMeta {label: 'LocaleRulesAdaptation'})
+MERGE (sub)-[:DEFINES_TYPE]->(t);
 
 MERGE (t_localerulesformatting:NodeTypeMeta {label: 'LocaleRulesFormatting'})
 ON CREATE SET
@@ -289,7 +307,8 @@ ON CREATE SET
 ON MATCH SET
   t_localerulesformatting.updated_at = datetime();
 
-MERGE (sub_knowledge)-[:DEFINES_TYPE]->(t_localerulesformatting);
+MATCH (sub:Subcategory {key: 'knowledge'}), (t:NodeTypeMeta {label: 'LocaleRulesFormatting'})
+MERGE (sub)-[:DEFINES_TYPE]->(t);
 
 MERGE (t_localerulesslug:NodeTypeMeta {label: 'LocaleRulesSlug'})
 ON CREATE SET
@@ -299,7 +318,8 @@ ON CREATE SET
 ON MATCH SET
   t_localerulesslug.updated_at = datetime();
 
-MERGE (sub_knowledge)-[:DEFINES_TYPE]->(t_localerulesslug);
+MATCH (sub:Subcategory {key: 'knowledge'}), (t:NodeTypeMeta {label: 'LocaleRulesSlug'})
+MERGE (sub)-[:DEFINES_TYPE]->(t);
 
 MERGE (t_localevoice:NodeTypeMeta {label: 'LocaleVoice'})
 ON CREATE SET
@@ -309,7 +329,8 @@ ON CREATE SET
 ON MATCH SET
   t_localevoice.updated_at = datetime();
 
-MERGE (sub_knowledge)-[:DEFINES_TYPE]->(t_localevoice);
+MATCH (sub:Subcategory {key: 'knowledge'}), (t:NodeTypeMeta {label: 'LocaleVoice'})
+MERGE (sub)-[:DEFINES_TYPE]->(t);
 
 MERGE (t_metaphor:NodeTypeMeta {label: 'Metaphor'})
 ON CREATE SET
@@ -319,7 +340,8 @@ ON CREATE SET
 ON MATCH SET
   t_metaphor.updated_at = datetime();
 
-MERGE (sub_knowledge)-[:DEFINES_TYPE]->(t_metaphor);
+MATCH (sub:Subcategory {key: 'knowledge'}), (t:NodeTypeMeta {label: 'Metaphor'})
+MERGE (sub)-[:DEFINES_TYPE]->(t);
 
 MERGE (t_pattern:NodeTypeMeta {label: 'Pattern'})
 ON CREATE SET
@@ -329,7 +351,8 @@ ON CREATE SET
 ON MATCH SET
   t_pattern.updated_at = datetime();
 
-MERGE (sub_knowledge)-[:DEFINES_TYPE]->(t_pattern);
+MATCH (sub:Subcategory {key: 'knowledge'}), (t:NodeTypeMeta {label: 'Pattern'})
+MERGE (sub)-[:DEFINES_TYPE]->(t);
 
 MERGE (t_reference:NodeTypeMeta {label: 'Reference'})
 ON CREATE SET
@@ -339,7 +362,8 @@ ON CREATE SET
 ON MATCH SET
   t_reference.updated_at = datetime();
 
-MERGE (sub_knowledge)-[:DEFINES_TYPE]->(t_reference);
+MATCH (sub:Subcategory {key: 'knowledge'}), (t:NodeTypeMeta {label: 'Reference'})
+MERGE (sub)-[:DEFINES_TYPE]->(t);
 
 // Foundation (3 types)
 MERGE (t_brandidentity:NodeTypeMeta {label: 'BrandIdentity'})
@@ -350,7 +374,8 @@ ON CREATE SET
 ON MATCH SET
   t_brandidentity.updated_at = datetime();
 
-MERGE (sub_foundation)-[:DEFINES_TYPE]->(t_brandidentity);
+MATCH (sub:Subcategory {key: 'foundation'}), (t:NodeTypeMeta {label: 'BrandIdentity'})
+MERGE (sub)-[:DEFINES_TYPE]->(t);
 
 MERGE (t_project:NodeTypeMeta {label: 'Project'})
 ON CREATE SET
@@ -360,7 +385,8 @@ ON CREATE SET
 ON MATCH SET
   t_project.updated_at = datetime();
 
-MERGE (sub_foundation)-[:DEFINES_TYPE]->(t_project);
+MATCH (sub:Subcategory {key: 'foundation'}), (t:NodeTypeMeta {label: 'Project'})
+MERGE (sub)-[:DEFINES_TYPE]->(t);
 
 MERGE (t_projectl10n:NodeTypeMeta {label: 'ProjectL10n'})
 ON CREATE SET
@@ -370,7 +396,8 @@ ON CREATE SET
 ON MATCH SET
   t_projectl10n.updated_at = datetime();
 
-MERGE (sub_foundation)-[:DEFINES_TYPE]->(t_projectl10n);
+MATCH (sub:Subcategory {key: 'foundation'}), (t:NodeTypeMeta {label: 'ProjectL10n'})
+MERGE (sub)-[:DEFINES_TYPE]->(t);
 
 // Structure (2 types)
 MERGE (t_block:NodeTypeMeta {label: 'Block'})
@@ -381,7 +408,8 @@ ON CREATE SET
 ON MATCH SET
   t_block.updated_at = datetime();
 
-MERGE (sub_structure)-[:DEFINES_TYPE]->(t_block);
+MATCH (sub:Subcategory {key: 'structure'}), (t:NodeTypeMeta {label: 'Block'})
+MERGE (sub)-[:DEFINES_TYPE]->(t);
 
 MERGE (t_page:NodeTypeMeta {label: 'Page'})
 ON CREATE SET
@@ -391,7 +419,8 @@ ON CREATE SET
 ON MATCH SET
   t_page.updated_at = datetime();
 
-MERGE (sub_structure)-[:DEFINES_TYPE]->(t_page);
+MATCH (sub:Subcategory {key: 'structure'}), (t:NodeTypeMeta {label: 'Page'})
+MERGE (sub)-[:DEFINES_TYPE]->(t);
 
 // Semantic Layer (2 types)
 MERGE (t_concept:NodeTypeMeta {label: 'Concept'})
@@ -402,7 +431,8 @@ ON CREATE SET
 ON MATCH SET
   t_concept.updated_at = datetime();
 
-MERGE (sub_semantic)-[:DEFINES_TYPE]->(t_concept);
+MATCH (sub:Subcategory {key: 'semantic'}), (t:NodeTypeMeta {label: 'Concept'})
+MERGE (sub)-[:DEFINES_TYPE]->(t);
 
 MERGE (t_conceptl10n:NodeTypeMeta {label: 'ConceptL10n'})
 ON CREATE SET
@@ -412,7 +442,8 @@ ON CREATE SET
 ON MATCH SET
   t_conceptl10n.updated_at = datetime();
 
-MERGE (sub_semantic)-[:DEFINES_TYPE]->(t_conceptl10n);
+MATCH (sub:Subcategory {key: 'semantic'}), (t:NodeTypeMeta {label: 'ConceptL10n'})
+MERGE (sub)-[:DEFINES_TYPE]->(t);
 
 // Instructions (5 types)
 MERGE (t_blockprompt:NodeTypeMeta {label: 'BlockPrompt'})
@@ -423,7 +454,8 @@ ON CREATE SET
 ON MATCH SET
   t_blockprompt.updated_at = datetime();
 
-MERGE (sub_instruction)-[:DEFINES_TYPE]->(t_blockprompt);
+MATCH (sub:Subcategory {key: 'instruction'}), (t:NodeTypeMeta {label: 'BlockPrompt'})
+MERGE (sub)-[:DEFINES_TYPE]->(t);
 
 MERGE (t_blockrules:NodeTypeMeta {label: 'BlockRules'})
 ON CREATE SET
@@ -433,7 +465,8 @@ ON CREATE SET
 ON MATCH SET
   t_blockrules.updated_at = datetime();
 
-MERGE (sub_instruction)-[:DEFINES_TYPE]->(t_blockrules);
+MATCH (sub:Subcategory {key: 'instruction'}), (t:NodeTypeMeta {label: 'BlockRules'})
+MERGE (sub)-[:DEFINES_TYPE]->(t);
 
 MERGE (t_blocktype:NodeTypeMeta {label: 'BlockType'})
 ON CREATE SET
@@ -443,7 +476,8 @@ ON CREATE SET
 ON MATCH SET
   t_blocktype.updated_at = datetime();
 
-MERGE (sub_instruction)-[:DEFINES_TYPE]->(t_blocktype);
+MATCH (sub:Subcategory {key: 'instruction'}), (t:NodeTypeMeta {label: 'BlockType'})
+MERGE (sub)-[:DEFINES_TYPE]->(t);
 
 MERGE (t_pageprompt:NodeTypeMeta {label: 'PagePrompt'})
 ON CREATE SET
@@ -453,7 +487,8 @@ ON CREATE SET
 ON MATCH SET
   t_pageprompt.updated_at = datetime();
 
-MERGE (sub_instruction)-[:DEFINES_TYPE]->(t_pageprompt);
+MATCH (sub:Subcategory {key: 'instruction'}), (t:NodeTypeMeta {label: 'PagePrompt'})
+MERGE (sub)-[:DEFINES_TYPE]->(t);
 
 MERGE (t_pagetype:NodeTypeMeta {label: 'PageType'})
 ON CREATE SET
@@ -463,7 +498,8 @@ ON CREATE SET
 ON MATCH SET
   t_pagetype.updated_at = datetime();
 
-MERGE (sub_instruction)-[:DEFINES_TYPE]->(t_pagetype);
+MATCH (sub:Subcategory {key: 'instruction'}), (t:NodeTypeMeta {label: 'PageType'})
+MERGE (sub)-[:DEFINES_TYPE]->(t);
 
 // Generated Output (2 types)
 MERGE (t_blockl10n:NodeTypeMeta {label: 'BlockL10n'})
@@ -474,7 +510,8 @@ ON CREATE SET
 ON MATCH SET
   t_blockl10n.updated_at = datetime();
 
-MERGE (sub_output)-[:DEFINES_TYPE]->(t_blockl10n);
+MATCH (sub:Subcategory {key: 'output'}), (t:NodeTypeMeta {label: 'BlockL10n'})
+MERGE (sub)-[:DEFINES_TYPE]->(t);
 
 MERGE (t_pagel10n:NodeTypeMeta {label: 'PageL10n'})
 ON CREATE SET
@@ -484,7 +521,8 @@ ON CREATE SET
 ON MATCH SET
   t_pagel10n.updated_at = datetime();
 
-MERGE (sub_output)-[:DEFINES_TYPE]->(t_pagel10n);
+MATCH (sub:Subcategory {key: 'output'}), (t:NodeTypeMeta {label: 'PageL10n'})
+MERGE (sub)-[:DEFINES_TYPE]->(t);
 
 // SEO Intelligence (3 types)
 MERGE (t_seokeywordl10n:NodeTypeMeta {label: 'SEOKeywordL10n'})
@@ -495,7 +533,8 @@ ON CREATE SET
 ON MATCH SET
   t_seokeywordl10n.updated_at = datetime();
 
-MERGE (sub_seo)-[:DEFINES_TYPE]->(t_seokeywordl10n);
+MATCH (sub:Subcategory {key: 'seo'}), (t:NodeTypeMeta {label: 'SEOKeywordL10n'})
+MERGE (sub)-[:DEFINES_TYPE]->(t);
 
 MERGE (t_seokeywordmetrics:NodeTypeMeta {label: 'SEOKeywordMetrics'})
 ON CREATE SET
@@ -505,7 +544,8 @@ ON CREATE SET
 ON MATCH SET
   t_seokeywordmetrics.updated_at = datetime();
 
-MERGE (sub_seo)-[:DEFINES_TYPE]->(t_seokeywordmetrics);
+MATCH (sub:Subcategory {key: 'seo'}), (t:NodeTypeMeta {label: 'SEOKeywordMetrics'})
+MERGE (sub)-[:DEFINES_TYPE]->(t);
 
 MERGE (t_seominingrun:NodeTypeMeta {label: 'SEOMiningRun'})
 ON CREATE SET
@@ -515,7 +555,8 @@ ON CREATE SET
 ON MATCH SET
   t_seominingrun.updated_at = datetime();
 
-MERGE (sub_seo)-[:DEFINES_TYPE]->(t_seominingrun);
+MATCH (sub:Subcategory {key: 'seo'}), (t:NodeTypeMeta {label: 'SEOMiningRun'})
+MERGE (sub)-[:DEFINES_TYPE]->(t);
 
 // GEO Intelligence (3 types)
 MERGE (t_geominingrun:NodeTypeMeta {label: 'GEOMiningRun'})
@@ -526,7 +567,8 @@ ON CREATE SET
 ON MATCH SET
   t_geominingrun.updated_at = datetime();
 
-MERGE (sub_geo)-[:DEFINES_TYPE]->(t_geominingrun);
+MATCH (sub:Subcategory {key: 'geo'}), (t:NodeTypeMeta {label: 'GEOMiningRun'})
+MERGE (sub)-[:DEFINES_TYPE]->(t);
 
 MERGE (t_geoseedl10n:NodeTypeMeta {label: 'GEOSeedL10n'})
 ON CREATE SET
@@ -536,7 +578,8 @@ ON CREATE SET
 ON MATCH SET
   t_geoseedl10n.updated_at = datetime();
 
-MERGE (sub_geo)-[:DEFINES_TYPE]->(t_geoseedl10n);
+MATCH (sub:Subcategory {key: 'geo'}), (t:NodeTypeMeta {label: 'GEOSeedL10n'})
+MERGE (sub)-[:DEFINES_TYPE]->(t);
 
 MERGE (t_geoseedmetrics:NodeTypeMeta {label: 'GEOSeedMetrics'})
 ON CREATE SET
@@ -546,4 +589,5 @@ ON CREATE SET
 ON MATCH SET
   t_geoseedmetrics.updated_at = datetime();
 
-MERGE (sub_geo)-[:DEFINES_TYPE]->(t_geoseedmetrics);
+MATCH (sub:Subcategory {key: 'geo'}), (t:NodeTypeMeta {label: 'GEOSeedMetrics'})
+MERGE (sub)-[:DEFINES_TYPE]->(t);
