@@ -16,10 +16,11 @@
  */
 
 // =============================================================================
-// Main Component
+// Main Components
 // =============================================================================
 
 export { FloatingEdge, type FloatingEdgeData, type FloatingEdgeType } from './FloatingEdge';
+export { MagneticEdge } from './MagneticEdge';
 
 // =============================================================================
 // Type System
