@@ -15,6 +15,7 @@
 import { memo, useCallback, useMemo } from 'react';
 import { ACTION_ICONS, STATUS_ICONS } from '@/config/iconSystem';
 import { NODE_TYPE_CONFIG, NODE_VISUAL_CATEGORIES } from '@/config/nodeTypes';
+import { iconSizes } from '@/design/tokens';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import { FilterTree } from '@/components/ui/FilterTree';
 import { calculateCheckboxState } from '@/hooks';
@@ -112,9 +113,9 @@ export const NodeLabelsSection = memo(function NodeLabelsSection({
       title="Execute query for selected labels"
     >
       {isExecuting ? (
-        <LoaderIcon className="w-4 h-4 animate-spin" />
+        <LoaderIcon className={`${iconSizes.md} animate-spin`} />
       ) : (
-        <PlayIcon className="w-4 h-4" />
+        <PlayIcon className={iconSizes.md} />
       )}
     </button>
   );

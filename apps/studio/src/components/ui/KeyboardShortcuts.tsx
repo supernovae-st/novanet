@@ -14,6 +14,7 @@
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { ACTION_ICONS, NAV_ICONS, CONTENT_ICONS, ICON_SIZES } from '@/config/iconSystem';
+import { iconSizes } from '@/design/tokens';
 import { Kbd } from './Kbd';
 import { Modal } from './Modal';
 
@@ -127,7 +128,7 @@ export function KeyboardShortcuts({ isOpen, onClose }: KeyboardShortcutsProps) {
         <Modal.Header titleId="keyboard-shortcuts-title">
           <Modal.Title
             id="keyboard-shortcuts-title"
-            icon={<KeyboardIcon className="w-4 h-4 text-primary" />}
+            icon={<KeyboardIcon className={cn(iconSizes.md, 'text-primary')} />}
           >
             Keyboard Shortcuts
           </Modal.Title>

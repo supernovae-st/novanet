@@ -4,6 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { Loader2 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { glassClasses } from "@/design/tokens"
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
@@ -30,7 +31,7 @@ const buttonVariants = cva(
           "text-primary hover:text-primary/80 underline-offset-4 hover:underline",
         // Glass - Premium glass with inner glow
         glass:
-          "bg-[hsl(240,6%,8%)] backdrop-blur-xl border border-white/12 text-white/95 hover:bg-[hsl(240,5%,12%)] hover:border-white/20 shadow-lg shadow-black/40",
+          `${glassClasses.medium} text-white/95 hover:bg-[hsl(240,5%,12%)] hover:border-white/20 shadow-lg shadow-black/40`,
         // Success - Bright emerald
         success:
           "bg-emerald-500/15 text-emerald-400 border border-emerald-500/25 hover:bg-emerald-500/25 hover:border-emerald-500/40 hover:text-emerald-300",

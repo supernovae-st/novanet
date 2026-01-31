@@ -13,6 +13,7 @@
 import { useState, useMemo } from 'react';
 import { getRelationColors } from '@/config/categoryColors';
 import { ACTION_ICONS, NAV_ICONS, CONTENT_ICONS, GRAPH_ICONS, ICON_COLORS } from '@/config/iconSystem';
+import { iconSizes, glassClasses } from '@/design/tokens';
 import { useGraphStore } from '@/stores/graphStore';
 import { useUIStore } from '@/stores/uiStore';
 import { useCopyFieldFeedback } from '@/hooks';
@@ -70,7 +71,7 @@ export function EdgeDetailsPanel({ edge, onClose }: EdgeDetailsPanelProps) {
 
   if (!edge) {
     return (
-      <div className="h-full flex flex-col glass-floating animate-slide-in-right">
+      <div className={`h-full flex flex-col ${glassClasses.floating} animate-slide-in-right`}>
         <div className="flex-1 flex flex-col items-center justify-center p-8 text-center">
           <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-white/[0.08] to-white/[0.02] border border-white/[0.08] flex items-center justify-center mb-4 animate-float">
             <LinkIcon className="w-8 h-8 text-white/25" />
@@ -90,7 +91,7 @@ export function EdgeDetailsPanel({ edge, onClose }: EdgeDetailsPanelProps) {
   const dataEntries = edge.data ? Object.entries(edge.data) : [];
 
   return (
-    <div className="h-full flex flex-col glass-floating animate-slide-in-right">
+    <div className={`h-full flex flex-col ${glassClasses.floating} animate-slide-in-right`}>
       {/* Header with gradient */}
       <div className="relative overflow-hidden">
         {/* Gradient background */}
@@ -118,7 +119,7 @@ export function EdgeDetailsPanel({ edge, onClose }: EdgeDetailsPanelProps) {
               className="absolute top-3 right-3 p-1.5 rounded-lg bg-black/30 hover:bg-black/50 text-white/50 hover:text-white/80 transition-colors"
               aria-label="Close edge details panel"
             >
-              <CloseIcon className="w-4 h-4" />
+              <CloseIcon className={iconSizes.md} />
             </button>
           )}
 
@@ -131,7 +132,7 @@ export function EdgeDetailsPanel({ edge, onClose }: EdgeDetailsPanelProps) {
               boxShadow: `0 4px 12px ${colors.primary}20`,
             }}
           >
-            <LinkIcon className="w-3.5 h-3.5" />
+            <LinkIcon className={iconSizes.sm} />
             Relation
           </div>
 
@@ -161,7 +162,7 @@ export function EdgeDetailsPanel({ edge, onClose }: EdgeDetailsPanelProps) {
         {/* Connected Nodes Section */}
         <CollapsibleSection
           title="Connected Nodes"
-          icon={<ArrowRightIcon className="w-4 h-4" />}
+          icon={<ArrowRightIcon className={iconSizes.md} />}
           isExpanded={expandedSections.has('nodes')}
           onToggle={() => toggleSection('nodes')}
         >
@@ -183,7 +184,7 @@ export function EdgeDetailsPanel({ edge, onClose }: EdgeDetailsPanelProps) {
                   color: colors.primary,
                 }}
               >
-                <ArrowRightIcon className="w-3 h-3" />
+                <ArrowRightIcon className={iconSizes.xs} />
                 {edge.type}
               </div>
             </div>
@@ -202,7 +203,7 @@ export function EdgeDetailsPanel({ edge, onClose }: EdgeDetailsPanelProps) {
         {dataEntries.length > 0 && (
           <CollapsibleSection
             title="Properties"
-            icon={<HashIcon className="w-4 h-4" />}
+            icon={<HashIcon className={iconSizes.md} />}
             count={dataEntries.length}
             isExpanded={expandedSections.has('properties')}
             onToggle={() => toggleSection('properties')}
