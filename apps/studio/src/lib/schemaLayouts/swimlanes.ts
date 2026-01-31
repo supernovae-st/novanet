@@ -2,7 +2,14 @@
 import type { Node, Edge } from '@xyflow/react';
 import type { HierarchicalSchemaData } from '@novanet/core/graph';
 import type { SchemaLayoutResult } from './types';
-import { SCOPE_CONFIGS, NODE_WIDTH, NODE_HEIGHT, GROUP_PADDING } from './types';
+import {
+  SCOPE_CONFIGS,
+  NODE_WIDTH,
+  NODE_HEIGHT,
+  GROUP_PADDING,
+  NODE_GAP,
+  SCOPE_GAP,
+} from './types';
 import type { Scope } from '@novanet/core/types';
 
 /**
@@ -23,10 +30,11 @@ export function applySwimlaneLayout(
   const nodes: Node[] = [];
   const edges: Edge[] = [];
 
-  const LANE_HEIGHT = 400;
-  const LANE_MARGIN = 40;
-  const NODE_SPACING_X = 200;
-  const NODE_SPACING_Y = 100;
+  // Using Golden Ratio spacing system
+  const LANE_HEIGHT = 500;                        // Taller lanes for better visibility
+  const LANE_MARGIN = SCOPE_GAP;                  // 293px between lanes (was 40)
+  const NODE_SPACING_X = NODE_WIDTH + NODE_GAP;   // 252px horizontal (was 200)
+  const NODE_SPACING_Y = NODE_HEIGHT + NODE_GAP;  // 162px vertical (was 100)
 
   const scopeOrder: Scope[] = ['Project', 'Global', 'Shared'];
   let currentY = 0;

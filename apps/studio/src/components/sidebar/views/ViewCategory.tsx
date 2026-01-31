@@ -5,6 +5,8 @@
  *
  * Displays category name with icon and optional description.
  * Groups related views in the ViewSelector.
+ *
+ * Design: Consistent spacing, proper grid gap
  */
 
 import { memo } from 'react';
@@ -32,20 +34,20 @@ export const ViewCategorySection = memo(function ViewCategorySection({
   const color = config?.color || 'text-white/60';
 
   return (
-    <div className={cn('space-y-2', className)}>
+    <div className={cn('space-y-3', className)}>
       {/* Category Header */}
-      <div className="flex items-center gap-2 px-1">
-        <Icon className={cn('w-3.5 h-3.5', color)} />
-        <span className="text-[10px] uppercase tracking-wider font-medium text-white/40">
+      <div className="flex items-center gap-2.5">
+        <Icon className={cn('w-4 h-4', color)} />
+        <span className="text-[11px] uppercase tracking-wider font-semibold text-white/45">
           {label}
         </span>
         {viewCount !== undefined && (
-          <span className="text-[9px] text-white/25">({viewCount})</span>
+          <span className="text-[10px] tabular-nums text-white/25">({viewCount})</span>
         )}
       </div>
 
-      {/* View Cards Grid */}
-      <div className="grid grid-cols-3 gap-1">{children}</div>
+      {/* View Cards - single column for horizontal layout */}
+      <div className="flex flex-col gap-2">{children}</div>
     </div>
   );
 });

@@ -2,7 +2,7 @@
 import type { Node, Edge } from '@xyflow/react';
 import type { HierarchicalSchemaData } from '@novanet/core/graph';
 import type { SchemaLayoutResult } from './types';
-import { SCOPE_CONFIGS, NODE_WIDTH, NODE_HEIGHT } from './types';
+import { SCOPE_CONFIGS, NODE_WIDTH, NODE_HEIGHT, SCOPE_GAP, PHI } from './types';
 import type { Scope } from '@novanet/core/types';
 
 /**
@@ -26,10 +26,11 @@ export function applyTargetLayout(
   const nodes: Node[] = [];
   const edges: Edge[] = [];
 
-  const CENTER_X = 1200;
-  const CENTER_Y = 1000;
-  const RING_SPACING = 350;
-  const MIN_RADIUS = 200;
+  // Using Golden Ratio spacing: rings expand by φ factor
+  const CENTER_X = 1600;
+  const CENTER_Y = 1200;
+  const RING_SPACING = Math.floor(SCOPE_GAP * PHI);  // ~474px between rings (was 350)
+  const MIN_RADIUS = SCOPE_GAP;                       // 293px minimum radius (was 200)
 
   // Scope order from center outward
   const scopeOrder: Scope[] = ['Project', 'Global', 'Shared'];

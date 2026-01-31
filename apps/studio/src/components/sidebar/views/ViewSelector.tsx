@@ -66,7 +66,6 @@ export const ViewSelector = memo(function ViewSelector({
     categories,
     activeViewId,
     loading,
-    executing,
     error,
     loadRegistry,
     executeView,
@@ -75,7 +74,6 @@ export const ViewSelector = memo(function ViewSelector({
       categories: state.categories,
       activeViewId: state.activeViewId,
       loading: state.loading,
-      executing: state.executing,
       error: state.error,
       loadRegistry: state.loadRegistry,
       executeView: state.executeView,
@@ -182,19 +180,8 @@ export const ViewSelector = memo(function ViewSelector({
 
   return (
     <div className={cn('space-y-4', className)}>
-      {/* Header */}
-      <div className="flex items-center gap-2 px-3 py-2 text-xs text-white/40">
-        {executing ? (
-          <Loader2 className="w-3.5 h-3.5 animate-spin text-novanet-400" />
-        ) : (
-          <Grid3x3 className="w-3.5 h-3.5" />
-        )}
-        <span className="uppercase tracking-wider font-medium">YAML Views</span>
-        <span className="text-white/25 ml-auto">{allViews.length} views</span>
-      </div>
-
-      {/* Categories */}
-      <div className="space-y-4 px-2">
+      {/* Categories - no executing indicator to prevent layout shift */}
+      <div className="space-y-6">
         {categories.map((category) => (
           <ViewCategorySection
             key={category.id}

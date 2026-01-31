@@ -16,6 +16,7 @@
 
 import { useCallback, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
+import { glassClasses } from '@/design/tokens';
 import { ACTION_ICONS } from '@/config/iconSystem';
 import { useNodeExpansion, useLatestRef } from '@/hooks';
 import { useGraphStore } from '@/stores/graphStore';
@@ -138,10 +139,8 @@ export function NodeContextMenu({ nodeId, position, onClose }: NodeContextMenuPr
     <div
       ref={menuRef}
       className={cn(
-        'fixed z-[100] min-w-[160px]',
-        'bg-black/90 backdrop-blur-xl',
-        'border border-white/10 rounded-lg shadow-2xl',
-        'py-1',
+        'fixed z-[100] min-w-[160px] py-1 rounded-lg',
+        glassClasses.heavy,
         'animate-in fade-in-0 zoom-in-95 duration-100'
       )}
       style={{

@@ -1,13 +1,13 @@
 'use client';
 
 /**
- * ViewCard - Individual view card with keyboard shortcut badge
+ * ViewCard - Individual view card with horizontal layout
  *
- * Displays a single YAML view definition from the registry.
- * Part of the ViewSelector grid layout.
+ * Design: Icon left | Label center | Shortcut right
+ * Features: Frosted glass, hover animations, click pulse, SVG transforms
  */
 
-import { memo } from 'react';
+import { memo, useState, useCallback } from 'react';
 import { type LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -23,7 +23,6 @@ interface ViewCardProps {
 
 export const ViewCard = memo(function ViewCard({
   name,
-  description,
   shortcut,
   icon: Icon,
   isActive,
@@ -32,37 +31,110 @@ export const ViewCard = memo(function ViewCard({
   // Extract first word for compact display
   const displayName = name.split(' ')[0] || name;
 
+  // Click animation state
+  const [isClicking, setIsClicking] = useState(false);
+
+  const handleClick = useCallback(() => {
+    setIsClicking(true);
+    onClick();
+    // Reset after animation
+    setTimeout(() => setIsClicking(false), 400);
+  }, [onClick]);
+
   return (
     <button
-      onClick={onClick}
+      onClick={handleClick}
       aria-pressed={isActive}
-      aria-label={description ? `${name}: ${description}` : name}
+      aria-label={name}
       className={cn(
-        'flex flex-col items-center gap-1.5 px-2 py-2.5 rounded-lg text-center',
+        // Layout - horizontal with icon left, kbd right
+        'group relative flex items-center',
+        'h-[52px] w-full rounded-xl',
+        'gap-3 px-4',
+        // Frosted Glass base
+        'backdrop-blur-md',
+        'ring-1 ring-inset',
+        // Transitions
         'transition-all duration-200',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-novanet-500/50',
+        // Focus - visible ring
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-novanet-500/60 focus-visible:ring-offset-1 focus-visible:ring-offset-black/50',
+        // Click animation
+        isClicking && 'scale-[0.97] ring-novanet-500/40',
+        // States with glassmorphism
         isActive
-          ? 'bg-white/[0.1] border border-white/[0.15] text-white'
-          : 'bg-white/[0.03] border border-transparent text-white/60 hover:bg-white/[0.06] hover:text-white/80'
+          ? [
+              'bg-white/[0.10]',
+              'ring-white/[0.15]',
+              'shadow-lg shadow-black/25',
+              'shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]',
+              'text-white',
+            ]
+          : [
+              'bg-white/[0.04]',
+              'ring-white/[0.08]',
+              'shadow-md shadow-black/10',
+              'text-white/60',
+              'hover:bg-white/[0.08]',
+              'hover:ring-white/[0.12]',
+              'hover:text-white/90',
+              'hover:shadow-lg',
+              'active:scale-[0.97]',
+            ]
       )}
     >
-      {/* Icon */}
-      <Icon
+      {/* Icon - left with hover/click animation */}
+      <div
         className={cn(
-          'w-5 h-5 transition-transform duration-200',
-          isActive && 'scale-110'
+          'flex-shrink-0 flex items-center justify-center',
+          'w-8 h-8 rounded-lg',
+          'transition-all duration-300',
+          isActive
+            ? 'bg-white/[0.1]'
+            : 'bg-white/[0.04] group-hover:bg-white/[0.08]',
+          // Click pulse effect
+          isClicking && 'bg-novanet-500/20'
         )}
-        strokeWidth={2}
-      />
+      >
+        <Icon
+          className={cn(
+            'w-4 h-4',
+            'transition-all duration-300',
+            // SVG animation on hover
+            'group-hover:scale-110',
+            // Click animation - rotate + scale
+            isClicking && 'scale-125 rotate-12 text-novanet-400',
+            isActive
+              ? 'opacity-100 text-novanet-400'
+              : 'opacity-60 group-hover:opacity-100'
+          )}
+          strokeWidth={1.75}
+        />
+      </div>
 
-      {/* Display name (compact) */}
-      <span className="text-[10px] font-medium leading-tight truncate w-full">
+      {/* Label - center flex-grow */}
+      <span
+        className={cn(
+          'flex-1 text-left',
+          'text-[12px] font-medium leading-tight truncate',
+          'transition-all duration-200'
+        )}
+      >
         {displayName}
       </span>
 
-      {/* Keyboard shortcut badge */}
+      {/* Keyboard shortcut - right */}
       {shortcut && (
-        <kbd className="text-[9px] px-1.5 py-0.5 bg-white/[0.08] rounded text-white/40 font-mono">
+        <kbd
+          className={cn(
+            'flex-shrink-0',
+            'text-[10px] min-w-[24px] px-2 py-1 rounded-md',
+            'font-mono text-center tabular-nums',
+            'transition-all duration-200',
+            isActive
+              ? 'bg-white/[0.12] text-white/70 ring-1 ring-inset ring-white/[0.1]'
+              : 'bg-white/[0.05] text-white/35 group-hover:bg-white/[0.08] group-hover:text-white/50'
+          )}
+        >
           {shortcut}
         </kbd>
       )}

@@ -14,6 +14,7 @@ import { useState, useMemo, useCallback, useEffect, useRef, memo, useDeferredVal
 import { createPortal } from 'react-dom';
 import { Search, X, FolderOpen, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { glassClasses } from '@/design/tokens';
 import { Kbd } from '@/components/ui';
 import { useFilterStore } from '@/stores/filterStore';
 import {
@@ -181,7 +182,7 @@ export const ProjectPicker = memo(function ProjectPicker({
       {/* Backdrop */}
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" aria-hidden="true" />
 
-      {/* Modal - Linear-dark design */}
+      {/* Modal - glass morphism design */}
       <div
         ref={containerRef}
         role="dialog"
@@ -189,9 +190,8 @@ export const ProjectPicker = memo(function ProjectPicker({
         aria-labelledby="project-picker-title"
         onKeyDown={handleKeyDown}
         className={cn(
-          'relative w-full max-w-3xl max-h-[70vh] overflow-hidden flex flex-col',
-          'bg-[#0d0d12] rounded-2xl',
-          'border border-white/15 shadow-2xl shadow-black/60',
+          'relative w-full max-w-3xl max-h-[70vh] overflow-hidden flex flex-col rounded-2xl',
+          glassClasses.modal,
           'animate-in zoom-in-95 slide-in-from-bottom-4 duration-300'
         )}
       >

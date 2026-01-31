@@ -5,6 +5,7 @@ import * as DialogPrimitive from "@radix-ui/react-dialog"
 import { X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { glassClasses } from "@/design/tokens"
 
 const Dialog = DialogPrimitive.Root
 
@@ -42,9 +43,7 @@ const DialogContent = React.forwardRef<
       className={cn(
         "fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%]",
         // Glass morphism styling
-        "bg-[#0d0d12]/95 backdrop-blur-xl",
-        "border border-white/[0.08] rounded-2xl",
-        "shadow-2xl shadow-black/50",
+        glassClasses.modal,
         // Spacing
         "gap-4 p-6",
         // Animations

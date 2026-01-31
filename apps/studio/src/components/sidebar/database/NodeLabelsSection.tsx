@@ -12,8 +12,8 @@
  * Uses FilterTree design system for consistent UI with SchemaFilterPanel
  */
 
-import { memo, useCallback, useMemo, useState } from 'react';
-import { GRAPH_ICONS, ICON_COLORS, ACTION_ICONS, STATUS_ICONS } from '@/config/iconSystem';
+import { memo, useCallback, useMemo } from 'react';
+import { ACTION_ICONS, STATUS_ICONS } from '@/config/iconSystem';
 import { NODE_TYPE_CONFIG, NODE_VISUAL_CATEGORIES } from '@/config/nodeTypes';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import { FilterTree } from '@/components/ui/FilterTree';
@@ -51,7 +51,7 @@ export interface NodeLabelsSectionProps {
 }
 
 export const NodeLabelsSection = memo(function NodeLabelsSection({
-  totalNodes,
+  // totalNodes - available via tab count
   labelCounts,
   maxCount,
   selectedLabels,
@@ -121,20 +121,25 @@ export const NodeLabelsSection = memo(function NodeLabelsSection({
 
   return (
     <section data-testid="node-labels-container">
-      <FilterTree.Root showProgressBars maxCount={maxCount} disabled={isExecuting}>
-        {/* Header with execute button */}
-        <FilterTree.Header
-          icon={<GRAPH_ICONS.node className={`w-3.5 h-3.5 ${ICON_COLORS.node.muted}`} />}
-          title="Nodes"
-          totalCount={totalNodes}
-          checkboxState={nodesCheckboxState}
-          onCheckboxClick={onToggleAllNodes}
-          color={ICON_COLORS.node.primary}
-          selectedCount={selectedLabels.size}
-          executeButton={executeButton}
-          className="px-1 mb-2"
-        />
+      {/* Compact action bar */}
+      <div className="flex items-center justify-between px-1 py-1.5 mb-2">
+        <button
+          onClick={onToggleAllNodes}
+          className="text-[10px] text-white/40 hover:text-white/60 transition-colors"
+        >
+          {nodesCheckboxState === 'all' ? 'Deselect all' : 'Select all'}
+        </button>
+        <div className="flex items-center gap-2">
+          {selectedLabels.size > 0 && (
+            <span className="text-[10px] text-white/30">
+              {selectedLabels.size} selected
+            </span>
+          )}
+          {executeButton}
+        </div>
+      </div>
 
+      <FilterTree.Root showProgressBars maxCount={maxCount} disabled={isExecuting}>
         {/* Category Tree */}
         {categoryData.map(({ category, totalCount, checkboxState }) => (
           <FilterTree.Section

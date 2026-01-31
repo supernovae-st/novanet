@@ -7,6 +7,7 @@ import { postJSON, getErrorMessage } from '@/lib/fetchClient';
 import { useChatStore } from '@/stores/chatStore';
 import { CypherViewer } from '@/components/dx/CodeViewer';
 import { useCopyFeedback } from '@/hooks';
+import { glassClasses } from '@/design/tokens';
 import { Kbd } from '@/components/ui/Kbd';
 import {
   ACTION_ICONS,
@@ -136,8 +137,8 @@ export const AiChat = memo(function AiChat({
     <div
       className={cn(
         'fixed bottom-4 right-4 w-[calc(100vw-2rem)] sm:w-[420px] max-h-[600px]',
-        'bg-black/80 backdrop-blur-xl border border-white/[0.08] rounded-2xl',
-        'flex flex-col shadow-2xl shadow-black/50',
+        'flex flex-col rounded-2xl',
+        glassClasses.floating,
         'animate-in slide-in-from-bottom-4 fade-in duration-300',
         className
       )}

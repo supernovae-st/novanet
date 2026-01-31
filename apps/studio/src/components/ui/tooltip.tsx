@@ -15,6 +15,7 @@
 import * as React from 'react';
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
 import { cn } from '@/lib/utils';
+import { glassClasses } from '@/design/tokens';
 
 // =============================================================================
 // Provider - Wrap app root for global tooltip config
@@ -42,15 +43,12 @@ const TooltipContent = React.forwardRef<
       ref={ref}
       sideOffset={sideOffset}
       className={cn(
-        // Glassmorphism
+        // Glassmorphism with tokens
         'z-50 overflow-hidden rounded-lg',
-        'bg-black/90 backdrop-blur-xl',
-        'border border-white/10',
+        glassClasses.heavy,
         'px-2.5 py-1.5',
         // Typography
         'text-[11px] text-white/90 font-medium',
-        // Shadow
-        'shadow-xl shadow-black/50',
         // Animations
         'animate-in fade-in-0 zoom-in-95',
         'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95',

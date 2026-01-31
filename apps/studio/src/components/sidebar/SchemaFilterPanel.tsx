@@ -19,7 +19,7 @@ import type { Subcategory } from '@novanet/core/graph';
 import type { Scope } from '@/types';
 import { useFilterStore } from '@/stores/filterStore';
 import { cn } from '@/lib/utils';
-import { scopeAccents } from '@/design/tokens';
+import { scopeAccents, panelClasses } from '@/design/tokens';
 import { FilterTree } from '@/components/ui/FilterTree';
 import { calculateCheckboxState } from '@/hooks';
 import type { CheckboxState } from '@/components/ui/TriStateCheckbox';
@@ -115,20 +115,20 @@ export const SchemaFilterPanel = memo(function SchemaFilterPanel({
       aria-label="Schema filters"
     >
       {/* Header - Matching Data View style */}
-      <div className="px-4 py-4 border-b border-white/[0.06]">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-white/10 to-white/5 border border-white/10 flex items-center justify-center">
-            <Boxes className="w-4 h-4 text-white/60" />
+      <div className={panelClasses.header}>
+        <div className={panelClasses.headerContent}>
+          <div className={panelClasses.headerIconBox}>
+            <Boxes className={panelClasses.headerIcon} />
           </div>
           <div>
-            <h2 className="text-sm font-medium text-white/90">Schema Browser</h2>
-            <p className="text-[11px] text-white/40">35 node types</p>
+            <h2 className={panelClasses.headerTitle}>Schema Browser</h2>
+            <p className={panelClasses.headerSubtitle}>35 node types</p>
           </div>
         </div>
       </div>
 
       {/* Content - FilterTree */}
-      <div className="flex-1 overflow-y-auto scrollbar-thin p-3">
+      <div className={panelClasses.body}>
         <FilterTree.Root>
           {scopeData.map(({ scope, scopeDef, accent, subcategories, nodeCount }) => (
             <FilterTree.Section
@@ -164,8 +164,8 @@ export const SchemaFilterPanel = memo(function SchemaFilterPanel({
       </div>
 
       {/* Footer Stats - Minimal */}
-      <div className="px-4 py-3 border-t border-white/[0.06]">
-        <p className="text-[11px] text-white/30 text-center">
+      <div className={panelClasses.footer}>
+        <p className={panelClasses.footerText}>
           3 scopes &middot; 9 categories &middot; 35 types
         </p>
       </div>
