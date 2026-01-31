@@ -15,7 +15,7 @@
  * - Glassmorphism design matching CommandPalette
  */
 
-import { useState, useRef, useCallback, useEffect, memo, type RefObject } from 'react';
+import { useState, useRef, useCallback, useEffect, memo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { cn } from '@/lib/utils';
 import { logger } from '@/lib/logger';
@@ -179,7 +179,7 @@ export const AiSearchOverlay = memo(function AiSearchOverlay({
   const { focusedIndex: sugFocused, handleKeyDown: sugKeyDown } = useGridNavigation({
     columns: 2,
     totalItems: AI_SUGGESTIONS.length,
-    gridRef: suggestionsRef as RefObject<HTMLElement>,
+    gridRef: suggestionsRef,
     onSelect: (index) => handleSend(AI_SUGGESTIONS[index].query),
     onEscape: () => inputRef.current?.focus(),
     enabled: showSuggestions && isOpen,
@@ -337,7 +337,7 @@ export const AiSearchOverlay = memo(function AiSearchOverlay({
 
                 {/* Error */}
                 {error && (
-                  <div className="text-red-400 text-sm bg-red-500/10 border border-red-500/20 px-3 py-2 rounded-lg animate-in fade-in slide-in-from-bottom-2 duration-200">
+                  <div role="alert" className="text-red-400 text-sm bg-red-500/10 border border-red-500/20 px-3 py-2 rounded-lg animate-in fade-in slide-in-from-bottom-2 duration-200">
                     {error}
                   </div>
                 )}
