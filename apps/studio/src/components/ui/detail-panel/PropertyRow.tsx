@@ -61,7 +61,7 @@ export const PropertyRow = memo(function PropertyRow({
         {showCopyButton && onCopy && (
           <button
             onClick={onCopy}
-            aria-label={`Copy ${label} to clipboard`}
+            aria-label={isCopied ? `${label} copied` : `Copy ${label}`}
             className={cn(
               'p-2 rounded opacity-50 group-hover:opacity-100 transition shrink-0 -mr-1',
               isCopied

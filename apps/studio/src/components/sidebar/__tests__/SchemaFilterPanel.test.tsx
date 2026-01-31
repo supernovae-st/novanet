@@ -102,20 +102,12 @@ describe('SchemaFilterPanel', () => {
       expect(svgIcons.length).toBeGreaterThan(0);
     });
 
-    it('renders the header with Schema Browser title', () => {
+    it('renders segmented tabs for Types and Rels', () => {
       render(<SchemaFilterPanel />);
 
-      expect(screen.getByText('Schema Browser')).toBeInTheDocument();
-      // Stats badges split "35" and "node types" across elements
-      expect(screen.getByText('node types')).toBeInTheDocument();
-    });
-
-    it('renders header stats badges', () => {
-      render(<SchemaFilterPanel />);
-
-      // Header shows stats badges: "35 node types" and "3 scopes"
-      expect(screen.getByText(/node types/)).toBeInTheDocument();
-      expect(screen.getByText(/scopes/)).toBeInTheDocument();
+      // Tab bar provides identity (no header needed)
+      expect(screen.getByText('Types')).toBeInTheDocument();
+      expect(screen.getByText('Rels')).toBeInTheDocument();
     });
   });
 
@@ -173,7 +165,8 @@ describe('SchemaFilterPanel', () => {
     it('has region role with aria-label', () => {
       render(<SchemaFilterPanel />);
 
-      const panel = screen.getByRole('region', { name: 'Schema Browser' });
+      // No header passed → aria-label falls back to 'Sidebar panel'
+      const panel = screen.getByRole('region', { name: 'Sidebar panel' });
       expect(panel).toBeInTheDocument();
     });
 

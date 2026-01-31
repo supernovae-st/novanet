@@ -12,6 +12,11 @@ jest.mock('@/stores/filterStore', () => ({
 const mockApplyViewPreset = jest.fn();
 const mockUseFilterStore = useFilterStore as jest.MockedFunction<typeof useFilterStore>;
 
+// JSDOM doesn't implement scrollIntoView - mock for useGridNavigation
+beforeAll(() => {
+  Element.prototype.scrollIntoView = jest.fn();
+});
+
 describe('ViewPresetSelector', () => {
   beforeEach(() => {
     jest.clearAllMocks();

@@ -52,7 +52,7 @@ const SelectorButton = memo(function SelectorButton({
         'transition-colors duration-150',
         disabled
           ? 'opacity-40 cursor-not-allowed'
-          : 'hover:bg-white/8 active:bg-white/10'
+          : 'hover:bg-white/[0.08] active:bg-white/[0.10]'
       )}
     >
       <Icon className={cn(
