@@ -14,12 +14,18 @@ export type LayoutDirection = 'TB' | 'LR' | 'dagre' | 'radial' | 'force';
 // Data mode: real instances vs ontological schema
 export type DataMode = 'data' | 'schema';
 
+// Modal types - only one can be open at a time
+export type ModalType = 'command-palette' | 'keyboard-shortcuts' | 'ai-chat' | 'cypher-editor' | 'locale-picker' | 'project-picker' | null;
+
 interface UIStoreState extends UIState, SelectionState {
-  // Dialog state
+  // Dialog state (legacy)
   activeDialogs: string[];
   commandPaletteOpen: boolean;
   aiChatOpen: boolean;
   minimapVisible: boolean;
+
+  // Modal state - exclusive (only one at a time)
+  activeModal: ModalType;
 
   // Edge selection
   selectedEdgeId: string | null;
@@ -79,13 +85,18 @@ interface UIStoreState extends UIState, SelectionState {
   setHighlightedNodes: (ids: string[]) => void;
   clearSelection: () => void;
 
-  // Dialog actions
+  // Dialog actions (legacy)
   openDialog: (id: string) => void;
   closeDialog: (id: string) => void;
   closeTopDialog: () => void;
   isDialogOpen: (id: string) => boolean;
   setCommandPaletteOpen: (open: boolean) => void;
   setAiChatOpen: (open: boolean) => void;
+
+  // Modal actions - exclusive (closes any open modal before opening new one)
+  openModal: (modal: ModalType) => void;
+  closeModal: () => void;
+  isModalOpen: (modal: ModalType) => boolean;
 }
 
 export const useUIStore = create<UIStoreState>()(
@@ -114,10 +125,13 @@ export const useUIStore = create<UIStoreState>()(
       hoveredConnectedNodeIds: new Set(),
       highlightedNodeIds: new Set(),
 
-      // Dialog state
+      // Dialog state (legacy)
       activeDialogs: [],
       commandPaletteOpen: false,
       aiChatOpen: false,
+
+      // Modal state - exclusive
+      activeModal: null as ModalType,
 
       // View actions
       setViewMode: (mode) => {
@@ -350,6 +364,32 @@ export const useUIStore = create<UIStoreState>()(
           state.aiChatOpen = open;
         });
       },
+
+      // Modal actions - exclusive
+      openModal: (modal) => {
+        set((state) => {
+          // Close any existing modal first
+          state.activeModal = modal;
+          // Lock body scroll when modal opens
+          if (modal && typeof document !== 'undefined') {
+            document.body.style.overflow = 'hidden';
+          }
+        });
+      },
+
+      closeModal: () => {
+        set((state) => {
+          state.activeModal = null;
+          // Restore body scroll
+          if (typeof document !== 'undefined') {
+            document.body.style.overflow = '';
+          }
+        });
+      },
+
+      isModalOpen: (modal) => {
+        return get().activeModal === modal;
+      },
     })),
     {
       name: 'novanet-ui',
@@ -391,3 +431,4 @@ export const selectHighlightedNodeIds = (state: UIStoreState) => state.highlight
 export const selectCommandPaletteOpen = (state: UIStoreState) => state.commandPaletteOpen;
 export const selectAiChatOpen = (state: UIStoreState) => state.aiChatOpen;
 export const selectDataMode = (state: UIStoreState) => state.dataMode;
+export const selectActiveModal = (state: UIStoreState) => state.activeModal;

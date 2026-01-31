@@ -277,6 +277,27 @@ export const glassClasses = {
 } as const;
 
 /**
+ * Modal/Dialog classes - Unified modal system
+ * Best practices: opaque background, no backdrop-blur on content, focus trap
+ */
+export const modalClasses = {
+  /** Backdrop overlay - darkens and blurs background */
+  backdrop: 'fixed inset-0 z-50 bg-black/70 backdrop-blur-sm',
+  /** Modal container - centers content */
+  container: 'fixed inset-0 z-50 flex items-center justify-center',
+  /** Modal content - the actual dialog box */
+  content: 'bg-[#0d0d12] border border-white/[0.12] rounded-2xl shadow-2xl shadow-black/60',
+  /** Modal header - title area with close button */
+  header: 'flex items-center justify-between px-4 py-3 border-b border-white/[0.08]',
+  /** Modal body - scrollable content area */
+  body: 'overflow-y-auto',
+  /** Modal footer - action buttons area */
+  footer: 'px-4 py-3 border-t border-white/[0.08]',
+  /** Close button style */
+  closeButton: 'w-8 h-8 rounded-lg flex items-center justify-center text-white/40 hover:text-white/80 hover:bg-white/[0.06] transition-colors duration-150',
+} as const;
+
+/**
  * Common button variant classes - HIGH CONTRAST
  */
 export const buttonClasses = {
