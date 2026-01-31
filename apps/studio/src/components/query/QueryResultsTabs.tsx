@@ -20,7 +20,7 @@ import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import { EmptyState, LoadingState } from '@/components/ui/EmptyState';
 import { ACCENT_COLORS } from '@/config/constants';
-import { iconSizes, gapTokens, paddingTokens, badgeClasses } from '@/design/tokens';
+import { iconSizes, gapTokens, paddingTokens } from '@/design/tokens';
 
 /**
  * TableView - Linear-style data table with rich formatting

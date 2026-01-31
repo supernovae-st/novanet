@@ -2,7 +2,7 @@
 import type { Node, Edge } from '@xyflow/react';
 import type { HierarchicalSchemaData } from '@novanet/core/graph';
 import type { SchemaLayoutResult } from './types';
-import { SCOPE_CONFIGS, NODE_WIDTH, NODE_HEIGHT, GROUP_PADDING, NODE_GAP, SCOPE_GAP } from './types';
+import { NODE_WIDTH, NODE_HEIGHT, GROUP_PADDING, NODE_GAP, SCOPE_GAP } from './types';
 import type { Scope } from '@novanet/core/types';
 
 /**
