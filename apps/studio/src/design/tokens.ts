@@ -563,28 +563,28 @@ export const modalClasses = {
  */
 export const sidebarTokens = {
   // ─────────────────────────────────────────────────────────────────────────
-  // ROW - Linear Style: flat by default, left-accent when selected
+  // ROW - Strong Card Style: visible bg, left-accent when selected
   // ─────────────────────────────────────────────────────────────────────────
   row: {
-    /** Base row - FLAT by default, minimal styling */
+    /** Base row - Strong Card with visible background */
     base: [
       'group relative w-full flex items-center',
       'h-10 px-3 gap-2.5 rounded-lg', // 40px height, 12px padding, 10px gap, 8px radius
-      // Transparent by default
-      'bg-transparent',
+      // Visible background (Strong Card style)
+      'bg-white/[0.05]',
       // Left border placeholder (invisible by default)
       'border-l-[3px] border-transparent',
       // Transitions
       'transition-all duration-150',
-      // Hover: subtle highlight
-      'hover:bg-white/[0.04]',
+      // Hover: stronger highlight
+      'hover:bg-white/[0.08]',
       // Focus
-      'focus-visible:outline-none focus-visible:bg-white/[0.06]',
+      'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/20',
       // Active press
-      'active:bg-white/[0.08]',
+      'active:bg-white/[0.10]',
     ].join(' '),
-    /** Selected state - left accent border + tinted background */
-    selected: 'border-l-current bg-white/[0.06]',
+    /** Selected state - left accent border + strong background */
+    selected: 'border-l-current bg-white/[0.12]',
     /** Disabled state */
     disabled: 'opacity-50 cursor-not-allowed pointer-events-none',
   },
@@ -644,20 +644,20 @@ export const sidebarTokens = {
   },
 
   // ─────────────────────────────────────────────────────────────────────────
-  // SECTION - Unified section (category) styling
+  // SECTION - Unified section (category) styling with dividers
   // ─────────────────────────────────────────────────────────────────────────
   section: {
-    /** Section container */
-    container: 'mb-2',
+    /** Section container - with top divider for visual separation */
+    container: 'pt-4 mt-2 border-t border-white/10 first:border-t-0 first:pt-0 first:mt-0',
     /** Section header row */
     header: [
-      'flex items-center w-full py-1.5 px-2 gap-2',
+      'flex items-center w-full py-2 px-2 gap-2',
       'rounded-md',
       'transition-all duration-150',
       'hover:bg-white/[0.03]',
     ].join(' '),
-    /** Section content wrapper - minimal gap between items */
-    content: 'mt-0.5 space-y-0.5 overflow-hidden transition-all duration-200',
+    /** Section content wrapper - 12px gap between items (aéré) */
+    content: 'mt-2 space-y-3 overflow-hidden transition-all duration-200',
     /** Content expanded state */
     contentExpanded: 'max-h-[600px] opacity-100',
     /** Content collapsed state */

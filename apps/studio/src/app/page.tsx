@@ -26,8 +26,18 @@ import { useUIStore, useFilterStore, useGraphStore } from '@/stores';
 import { useGraphData, useFilteredGraph, UrlSyncComponent } from '@/hooks';
 import { ContextPicker } from '@/components/sidebar/ContextPicker';
 import { isInputFocused, matchesKeyCombo } from '@/lib/keyboard';
-import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
+import { NODE_TYPE_CONFIG, type NodeTypeConfig } from '@/config/nodeTypes';
+import type { GraphNode, HoverNodeInfo, SchemaGroupNode, NodeType, SchemaGroupType } from '@/types';
 import { resolveThemeCached } from '@/components/graph/edges';
+
+// Helper to safely get node config for hover tooltips (handles both real nodes and schema groups)
+function getHoverNodeConfig(node: HoverNodeInfo): NodeTypeConfig | null {
+  // Schema groups don't have a config entry
+  if (node.type === 'ScopeGroup' || node.type === 'SubcategoryGroup') {
+    return null;
+  }
+  return NODE_TYPE_CONFIG[node.type as NodeType] || null;
+}
 
 // Lazy load Graph2D - saves ~400KB from initial bundle
 const Graph2D = lazy(() =>
@@ -139,10 +149,59 @@ export default function HomePage() {
   );
 
   // Get hovered node/edge data (memoized) for centralized hover info
-  const hoveredNode = useMemo(
-    () => (uiState.hoveredNodeId ? getNodeById(uiState.hoveredNodeId) : null),
-    [uiState.hoveredNodeId, getNodeById]
-  );
+  // Supports both data mode (full node data) and schema mode (synthetic from node id)
+  const hoveredNode = useMemo((): HoverNodeInfo | null => {
+    if (!uiState.hoveredNodeId) return null;
+
+    // Data mode: look up in graphStore
+    const node = getNodeById(uiState.hoveredNodeId);
+    if (node) return node;
+
+    // Schema mode: handle different node id formats
+    if (dataMode === 'schema') {
+      const nodeId = uiState.hoveredNodeId;
+
+      // Scope containers: scope-{Scope} (e.g., scope-Global, scope-Project)
+      if (nodeId.startsWith('scope-')) {
+        const scope = nodeId.replace('scope-', '');
+        const scopeEmoji = scope === 'Global' ? '🌍' : scope === 'Project' ? '📦' : '🎯';
+        return {
+          id: nodeId,
+          type: 'ScopeGroup',
+          key: scope,
+          displayName: `${scopeEmoji} ${scope} Scope`,
+        } as SchemaGroupNode;
+      }
+
+      // Subcategory containers: subcat-{Scope}-{SubcatName}
+      if (nodeId.startsWith('subcat-')) {
+        const parts = nodeId.replace('subcat-', '').split('-');
+        const subcatName = parts.slice(1).join('-');
+        return {
+          id: nodeId,
+          type: 'SubcategoryGroup',
+          key: subcatName,
+          displayName: subcatName.charAt(0).toUpperCase() + subcatName.slice(1),
+        } as SchemaGroupNode;
+      }
+
+      // Schema nodes: schema-{NodeType}
+      if (nodeId.startsWith('schema-')) {
+        const nodeType = nodeId.replace('schema-', '');
+        const config = NODE_TYPE_CONFIG[nodeType as keyof typeof NODE_TYPE_CONFIG];
+        if (config) {
+          return {
+            id: nodeId,
+            type: nodeType,
+            key: nodeType,
+            displayName: config.label,
+          } as GraphNode;
+        }
+      }
+    }
+
+    return null;
+  }, [uiState.hoveredNodeId, getNodeById, dataMode]);
   const hoveredEdge = useMemo(
     () => (uiState.hoveredEdgeId ? getEdgeById(uiState.hoveredEdgeId) : null),
     [uiState.hoveredEdgeId, getEdgeById]
@@ -517,28 +576,34 @@ export default function HomePage() {
                   }}
                 >
                   {hoveredNode ? (
-                    <>
-                      <div className={cn('flex items-center', gapTokens.default)}>
-                        <CategoryIcon
-                          category={NODE_TYPE_CONFIG[hoveredNode.type]?.category || 'project'}
-                          size={16}
-                          strokeWidth={2}
-                          style={{
-                            color: NODE_TYPE_CONFIG[hoveredNode.type]?.color || '#888',
-                            filter: `drop-shadow(0 0 4px ${NODE_TYPE_CONFIG[hoveredNode.type]?.color || '#888'}80)`,
-                          }}
-                        />
-                        <span
-                          className="font-bold uppercase text-[10px] tracking-wider"
-                          style={{ color: NODE_TYPE_CONFIG[hoveredNode.type]?.color || '#888' }}
-                        >
-                          {NODE_TYPE_CONFIG[hoveredNode.type]?.label || hoveredNode.type}
-                        </span>
-                      </div>
-                      <span className="text-white/70 font-mono truncate max-w-[200px]">
-                        {hoveredNode.displayName || hoveredNode.key}
-                      </span>
-                    </>
+                    (() => {
+                      const config = getHoverNodeConfig(hoveredNode);
+                      const color = config?.color || '#888';
+                      return (
+                        <>
+                          <div className={cn('flex items-center', gapTokens.default)}>
+                            <CategoryIcon
+                              category={config?.category || 'project'}
+                              size={16}
+                              strokeWidth={2}
+                              style={{
+                                color,
+                                filter: `drop-shadow(0 0 4px ${color}80)`,
+                              }}
+                            />
+                            <span
+                              className="font-bold uppercase text-[10px] tracking-wider"
+                              style={{ color }}
+                            >
+                              {config?.label || hoveredNode.type}
+                            </span>
+                          </div>
+                          <span className="text-white/70 font-mono truncate max-w-[200px]">
+                            {hoveredNode.displayName || hoveredNode.key}
+                          </span>
+                        </>
+                      );
+                    })()
                   ) : hoveredEdge && hoveredEdgeNodes ? (
                     <>
                       {/* Source Node */}

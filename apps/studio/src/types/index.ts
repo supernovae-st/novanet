@@ -86,6 +86,27 @@ export interface GraphNode {
 }
 
 /**
+ * Schema mode synthetic group types (containers in schema visualization)
+ */
+export type SchemaGroupType = 'ScopeGroup' | 'SubcategoryGroup';
+
+/**
+ * Synthetic node info for schema mode containers (scope groups, subcategories)
+ * Used for hover tooltips in schema visualization
+ */
+export interface SchemaGroupNode {
+  id: string;
+  type: SchemaGroupType;
+  key: string;
+  displayName: string;
+}
+
+/**
+ * Union type for hover info - can be real GraphNode or synthetic schema group
+ */
+export type HoverNodeInfo = GraphNode | SchemaGroupNode;
+
+/**
  * Normalized edge for visualization
  * Aligned with neo4j.ts transformRelationship output
  */

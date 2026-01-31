@@ -257,8 +257,8 @@ function Graph2DInner({
   // Node expansion (double-click to expand neighbors)
   const { expandNode } = useNodeExpansion();
 
-  // React Flow instance for programmatic control (centering, zooming)
-  const { setCenter, getZoom, getNodes, getInternalNode } = useReactFlow();
+  // React Flow instance for programmatic control (centering, zooming, fitting)
+  const { setCenter, getZoom, getNodes, getInternalNode, fitView } = useReactFlow();
 
   // Center on node with offset compensation for UI panels
   const { centerOnNode } = useCenterOnNode();
@@ -480,51 +480,78 @@ function Graph2DInner({
       // Note: Schema nodes have different data structure than data nodes
       setSelectedNode(node.id);
 
-      // Zoom/center on node (same behavior as data mode)
-      // Schema nodes are 180px wide, ~90px height based on padding
-      const nodeWidth = node.measured?.width ?? 180;
-      const nodeHeight = node.measured?.height ?? 90;
+      // Check if this is a container node (scope or subcategory group)
+      const isContainer = node.id.startsWith('scope-') || node.id.startsWith('subcat-');
 
-      // Small delay to ensure state is fully propagated before centering
-      // This ensures the panel width is accounted for in the center calculation
-      // (same timing as data mode for consistent animation behavior)
+      // Small delay to ensure state is fully propagated before view adjustment
+      // This ensures the panel width is accounted for in the calculation
       setTimeout(() => {
-        // Use getInternalNode for reliable access to positionAbsolute
-        // This is the official React Flow API for nested/grouped nodes
-        const internalNode = getInternalNode(node.id);
+        if (isContainer) {
+          // CONTAINER: FitView to show the entire container and its children
+          // Get all nodes that are children of this container
+          const allNodes = getNodes();
+          const containerAndChildren = allNodes.filter(
+            n => n.id === node.id || n.parentId === node.id
+          );
 
-        if (!internalNode) {
-          // Fallback: use original node if not found in React Flow
-          // This shouldn't happen but provides robustness
+          // If this is a scope container, also include subcategory children
+          if (node.id.startsWith('scope-')) {
+            const subcatNodes = allNodes.filter(n => n.parentId === node.id);
+            for (const subcat of subcatNodes) {
+              const subcatChildren = allNodes.filter(n => n.parentId === subcat.id);
+              containerAndChildren.push(...subcatChildren);
+            }
+          }
+
+          // FitView to the container and all its children with padding
+          fitView({
+            nodes: containerAndChildren,
+            duration: GRAPH_ANIMATION.FIT_VIEW_DURATION,
+            padding: 0.15,
+            maxZoom: 1.5,
+            minZoom: 0.1,
+          });
+        } else {
+          // LEAF NODE: Center on node (same behavior as data mode)
+          const nodeWidth = node.measured?.width ?? 180;
+          const nodeHeight = node.measured?.height ?? 90;
+
+          // Use getInternalNode for reliable access to positionAbsolute
+          // This is the official React Flow API for nested/grouped nodes
+          const internalNode = getInternalNode(node.id);
+
+          if (!internalNode) {
+            // Fallback: use original node if not found in React Flow
+            centerOnNode(
+              node.position.x,
+              node.position.y,
+              nodeWidth,
+              nodeHeight,
+              { zoom: GRAPH_ANIMATION.NODE_DOUBLE_CLICK_ZOOM, duration: GRAPH_ANIMATION.FIT_VIEW_DURATION }
+            );
+            return;
+          }
+
+          // Get measured dimensions from internal node
+          const finalWidth = internalNode.measured?.width ?? nodeWidth;
+          const finalHeight = internalNode.measured?.height ?? nodeHeight;
+
+          // CRITICAL: Use positionAbsolute for nested nodes (inside group containers)
+          // node.position is relative to parent, positionAbsolute is canvas-absolute
+          const finalX = internalNode.internals.positionAbsolute.x;
+          const finalY = internalNode.internals.positionAbsolute.y;
+
           centerOnNode(
-            node.position.x,
-            node.position.y,
-            nodeWidth,
-            nodeHeight,
+            finalX,
+            finalY,
+            finalWidth,
+            finalHeight,
             { zoom: GRAPH_ANIMATION.NODE_DOUBLE_CLICK_ZOOM, duration: GRAPH_ANIMATION.FIT_VIEW_DURATION }
           );
-          return;
         }
-
-        // Get measured dimensions from internal node
-        const finalWidth = internalNode.measured?.width ?? nodeWidth;
-        const finalHeight = internalNode.measured?.height ?? nodeHeight;
-
-        // CRITICAL: Use positionAbsolute for nested nodes (inside group containers)
-        // node.position is relative to parent, positionAbsolute is canvas-absolute
-        const finalX = internalNode.internals.positionAbsolute.x;
-        const finalY = internalNode.internals.positionAbsolute.y;
-
-        centerOnNode(
-          finalX,
-          finalY,
-          finalWidth,
-          finalHeight,
-          { zoom: GRAPH_ANIMATION.NODE_DOUBLE_CLICK_ZOOM, duration: GRAPH_ANIMATION.FIT_VIEW_DURATION }
-        );
       }, 50);
     },
-    [setSelectedNode, centerOnNode, getInternalNode]
+    [setSelectedNode, centerOnNode, getInternalNode, getNodes, fitView]
   );
 
   const handleSchemaEdgeClick = useCallback(
@@ -841,14 +868,15 @@ function Graph2DInner({
   );
 
   // Edge hover handlers
-  const handleEdgeMouseEnter: EdgeMouseHandler<FloatingEdgeType> = useCallback(
-    (_, edge) => {
+  // Generic type to work with both data edges and schema edges
+  const handleEdgeMouseEnter = useCallback(
+    (_: React.MouseEvent, edge: { id: string }) => {
       setHoveredEdge(edge.id);
     },
     [setHoveredEdge]
   );
 
-  const handleEdgeMouseLeave: EdgeMouseHandler<FloatingEdgeType> = useCallback(
+  const handleEdgeMouseLeave = useCallback(
     () => {
       setHoveredEdge(null);
     },
@@ -856,14 +884,15 @@ function Graph2DInner({
   );
 
   // Node hover handlers for connection highlighting
-  const handleNodeMouseEnter: NodeMouseHandler<TurboNodeType> = useCallback(
-    (_, node) => {
+  // Generic type to work with both data nodes (TurboNode) and schema nodes
+  const handleNodeMouseEnter = useCallback(
+    (_: React.MouseEvent, node: { id: string }) => {
       setHoveredNode(node.id);
     },
     [setHoveredNode]
   );
 
-  const handleNodeMouseLeave: NodeMouseHandler<TurboNodeType> = useCallback(
+  const handleNodeMouseLeave = useCallback(
     () => {
       setHoveredNode(null);
     },
@@ -1067,7 +1096,11 @@ function Graph2DInner({
             onNodeDrag={handleSchemaNodeDrag}
             onNodeDragStop={handleSchemaNodeDragStop}
             onNodeClick={handleSchemaNodeClick}
+            onNodeMouseEnter={handleNodeMouseEnter}
+            onNodeMouseLeave={handleNodeMouseLeave}
             onEdgeClick={handleSchemaEdgeClick}
+            onEdgeMouseEnter={handleEdgeMouseEnter}
+            onEdgeMouseLeave={handleEdgeMouseLeave}
             onPaneClick={handlePaneClick}
             connectionMode={ConnectionMode.Loose}
             fitView
