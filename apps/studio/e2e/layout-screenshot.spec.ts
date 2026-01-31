@@ -1,11 +1,15 @@
 import { test, expect } from '@playwright/test';
+import { waitForGraphLoaded } from './helpers';
 
 test.describe('Layout Visual Test', () => {
+  // Increase timeout for screenshot tests (graph loading can be slow)
+  test.setTimeout(60000);
+
   test('capture current layout for review', async ({ page }) => {
     await page.goto('/');
 
-    // Wait for the page to fully load
-    await page.waitForSelector('.react-flow', { timeout: 10000 });
+    // Wait for lazy-loaded graph to finish loading
+    await waitForGraphLoaded(page);
     await page.waitForTimeout(2000);
 
     // Take a full page screenshot
@@ -21,14 +25,17 @@ test.describe('Layout Visual Test', () => {
 
   test('verify QueryPill height is 80px (h-20)', async ({ page }) => {
     await page.goto('/');
-    await page.waitForSelector('.react-flow', { timeout: 10000 });
+    await waitForGraphLoaded(page);
 
-    // Find the QueryPill by the neo4j$ prompt
-    const queryPill = page.locator('text=neo4j$').locator('..');
-    await expect(queryPill).toBeVisible();
+    // Find the QueryPill container - it's the rounded-2xl element with h-20
+    // Navigate up from neo4j$ text to find the actual pill container
+    const queryPillContainer = page.locator('.rounded-2xl').filter({
+      has: page.locator('text=neo4j$')
+    }).first();
+    await expect(queryPillContainer).toBeVisible();
 
     // Get the computed height
-    const box = await queryPill.boundingBox();
+    const box = await queryPillContainer.boundingBox();
     if (box) {
       console.log(`QueryPill height: ${box.height}px`);
       // h-20 = 80px
@@ -38,7 +45,7 @@ test.describe('Layout Visual Test', () => {
 
   test('expand button opens modal editor', async ({ page }) => {
     await page.goto('/');
-    await page.waitForSelector('.react-flow', { timeout: 10000 });
+    await waitForGraphLoaded(page);
 
     // Find and click the expand button (has title "Expand editor")
     const expandButton = page.getByTitle('Expand editor (for complex queries)');

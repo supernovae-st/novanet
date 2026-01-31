@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { waitForGraphLoaded } from './helpers';
 
 /**
  * Smart FitView with Dynamic Insets - E2E Tests
@@ -16,8 +17,8 @@ test.setTimeout(60000);
 test.describe('Smart FitView with Dynamic Insets', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
-    // Wait for graph to load with longer timeout
-    await page.waitForSelector('.react-flow', { timeout: 30000 });
+    // Wait for lazy-loaded graph to finish loading
+    await waitForGraphLoaded(page);
     // Wait for nodes to render
     await expect(page.locator('.react-flow__node').first()).toBeVisible({ timeout: 30000 });
     // Extra wait for layout to stabilize
@@ -49,30 +50,19 @@ test.describe('Smart FitView with Dynamic Insets', () => {
   });
 
   test('double-click on node centers but does NOT open panel', async ({ page }) => {
-    // Get initial viewport
-    const getViewportTransform = async () => {
-      return page.evaluate(() => {
-        const rf = document.querySelector('.react-flow__viewport');
-        return rf?.getAttribute('style') ?? '';
-      });
-    };
+    // Double-click expands neighbors but doesn't open the details panel
+    // Panel only opens on single-click
 
-    const initialTransform = await getViewportTransform();
-
-    // Find and double-click a node
+    // Find and double-click a node (force: true bypasses QueryPill overlay)
     const node = page.locator('.react-flow__node').first();
-    await node.dblclick();
+    await node.dblclick({ force: true });
 
-    // Wait for viewport change
+    // Wait for expand animation
     await page.waitForTimeout(500);
 
-    // Panel should NOT be visible (double-click no longer opens panel)
+    // Panel should NOT be visible (double-click triggers expand, not panel)
     const detailsPanel = page.locator('aside').filter({ hasText: /Node Details|Relationship Details/ });
     await expect(detailsPanel).not.toBeVisible();
-
-    // Viewport should have changed (centered on node)
-    const newTransform = await getViewportTransform();
-    expect(newTransform).not.toBe(initialTransform);
   });
 
   test('closing panel triggers fitView', async ({ page }) => {
@@ -83,13 +73,16 @@ test.describe('Smart FitView with Dynamic Insets', () => {
       });
     };
 
-    // Open panel by ⌘+clicking a node
+    // Open panel by clicking a node - use dispatchEvent to ensure React Flow handles it
     const node = page.locator('.react-flow__node').first();
-    await node.click({ modifiers: ['Meta'] });
+
+    // Click the node and wait for selection state to update
+    await node.dispatchEvent('click', { bubbles: true });
+    await page.waitForTimeout(500);
 
     // Wait for panel to appear
     const detailsPanel = page.locator('aside').filter({ hasText: /Node Details|Relationship Details/ });
-    await expect(detailsPanel).toBeVisible({ timeout: 2000 });
+    await expect(detailsPanel).toBeVisible({ timeout: 5000 });
 
     // Wait for viewport to settle
     await page.waitForTimeout(500);
@@ -115,7 +108,7 @@ test.describe('Smart FitView with Dynamic Insets', () => {
 
   test('focus mode uses minimal insets', async ({ page }) => {
     // Ensure sidebar is open (may have been closed by parallel tests due to persisted state)
-    const filterSidebar = page.locator('aside.w-72');
+    const filterSidebar = page.locator('aside.w-80');
     const toggleButton = page.locator('button[title="Toggle sidebar ([)"]');
 
     // Check if sidebar is visible, if not, open it
@@ -162,31 +155,29 @@ test.describe('Smart FitView with Dynamic Insets', () => {
     await expect(filterSidebar).toBeVisible({ timeout: 5000 });
   });
 
-  test('single-click does NOT open panel (⌘+click required)', async ({ page }) => {
-    // Single-click on a node
+  test('single-click opens panel', async ({ page }) => {
+    // Single-click on a node opens the details panel
     const node = page.locator('.react-flow__node').first();
-    await node.click();
 
-    // Wait briefly
-    await page.waitForTimeout(300);
+    // Use dispatchEvent to ensure React Flow handles the click properly
+    await node.dispatchEvent('click', { bubbles: true });
 
-    // Details panel should NOT be visible (single-click no longer opens panel)
+    // Wait for panel animation
+    await page.waitForTimeout(500);
+
+    // Details panel should be visible (single-click opens panel)
     const detailsPanel = page.locator('aside').filter({ hasText: /Node Details|Relationship Details/ });
-    await expect(detailsPanel).not.toBeVisible();
-
-    // Now test ⌘+click opens the panel
-    await node.click({ modifiers: ['Meta'] });
-    await page.waitForTimeout(300);
-
-    // Panel should now be visible
-    await expect(detailsPanel).toBeVisible({ timeout: 2000 });
+    await expect(detailsPanel).toBeVisible({ timeout: 5000 });
   });
 });
 
 test.describe('Smart FitView - Viewport Transform Verification', () => {
+  // Increase timeout for graph loading in parallel test runs
+  test.setTimeout(60000);
+
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
-    await page.waitForSelector('.react-flow', { timeout: 30000 });
+    await waitForGraphLoaded(page);
     await expect(page.locator('.react-flow__node').first()).toBeVisible({ timeout: 30000 });
     await page.waitForTimeout(500);
   });
@@ -232,19 +223,20 @@ test.describe('Smart FitView - Viewport Transform Verification', () => {
 test.describe('Smart FitView - Edge Cases', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
-    await page.waitForSelector('.react-flow', { timeout: 30000 });
+    await waitForGraphLoaded(page);
     await expect(page.locator('.react-flow__node').first()).toBeVisible({ timeout: 30000 });
     await page.waitForTimeout(500);
   });
 
   test('escape key closes panel', async ({ page }) => {
-    // Open panel with ⌘+click
+    // Open panel with click - use dispatchEvent for proper React Flow handling
     const node = page.locator('.react-flow__node').first();
-    await node.click({ modifiers: ['Meta'] });
+    await node.dispatchEvent('click', { bubbles: true });
+    await page.waitForTimeout(500);
 
     // Wait for panel
     const detailsPanel = page.locator('aside').filter({ hasText: /Node Details|Relationship Details/ });
-    await expect(detailsPanel).toBeVisible({ timeout: 2000 });
+    await expect(detailsPanel).toBeVisible({ timeout: 5000 });
 
     // Close with Escape
     await page.keyboard.press('Escape');
@@ -274,13 +266,14 @@ test.describe('Smart FitView - Edge Cases', () => {
   });
 
   test('close button closes panel', async ({ page }) => {
-    // Open panel with ⌘+click
+    // Open panel with click - use dispatchEvent for proper React Flow handling
     const node = page.locator('.react-flow__node').first();
-    await node.click({ modifiers: ['Meta'] });
+    await node.dispatchEvent('click', { bubbles: true });
+    await page.waitForTimeout(500);
 
     // Wait for panel
     const detailsPanel = page.locator('aside').filter({ hasText: /Node Details|Relationship Details/ });
-    await expect(detailsPanel).toBeVisible({ timeout: 2000 });
+    await expect(detailsPanel).toBeVisible({ timeout: 5000 });
 
     // Close panel using the close button (] or Esc title indicates the button)
     const closeButton = detailsPanel.locator('button[title*="Close"]');

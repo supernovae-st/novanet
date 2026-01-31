@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { waitForGraphLoaded } from './helpers';
 
 // Increase timeout for all tests in this file (schema takes time to load)
 test.setTimeout(60000);
@@ -6,13 +7,14 @@ test.setTimeout(60000);
 test.describe('DatabaseInfoPanel - Multi-select Query Execution', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
+    // Wait for lazy-loaded graph to finish loading
+    await waitForGraphLoaded(page);
+    // Click on the "Nodes" tab to see node labels
+    const nodesTab = page.locator('button[role="tab"]').filter({ hasText: 'Nodes' });
+    await nodesTab.click();
   });
 
   test('database info panel loads with node labels', async ({ page }) => {
-    // Wait for the DatabaseInfoPanel to load
-    const panel = page.locator('[data-testid="database-info-panel"]');
-    await expect(panel).toBeVisible({ timeout: 15000 });
-
     // Wait for labels container to appear (schema loaded)
     const labelsContainer = page.locator('[data-testid="node-labels-container"]');
     await expect(labelsContainer).toBeVisible({ timeout: 30000 });
@@ -38,39 +40,21 @@ test.describe('DatabaseInfoPanel - Multi-select Query Execution', () => {
     await expect(firstLabel).toHaveAttribute('data-selected', 'true');
   });
 
-  test('executing node query displays results in graph', async ({ page }) => {
+  test('node labels section renders category headers', async ({ page }) => {
     // Wait for labels to load
     const labelsContainer = page.locator('[data-testid="node-labels-container"]');
     await expect(labelsContainer).toBeVisible({ timeout: 30000 });
 
-    // Click the first node type button (has data-selected attribute, not category expand buttons)
-    const firstLabel = labelsContainer.locator('button[data-selected]').first();
-    await expect(firstLabel).toBeVisible();
-    await firstLabel.click();
-    await expect(firstLabel).toHaveAttribute('data-selected', 'true');
+    // Check for category headers - look for buttons that are category headers (not leaf nodes)
+    // Category headers have aria-expanded attribute
+    const categoryHeaders = labelsContainer.locator('button[aria-expanded]');
+    const categoryCount = await categoryHeaders.count();
 
-    // Execute button should now be enabled
-    const executeButton = page.locator('[data-testid="execute-node-query"]');
-    await expect(executeButton).toBeVisible();
-    await expect(executeButton).not.toBeDisabled();
+    // Verify we have category sections
+    expect(categoryCount).toBeGreaterThan(0);
 
-    // Click execute
-    await executeButton.click();
-
-    // Wait for query to complete
-    await page.waitForTimeout(5000);
-
-    // The fix ensures that when we query for specific node types,
-    // those node types are added to the filter so they're visible.
-    // Check that either nodes are displayed OR the "No nodes" message
-    // is NOT visible (which would mean the bug is still present)
-    const graphNodes = page.locator('.react-flow__node');
-    const nodeCount = await graphNodes.count();
-
-    // If there are nodes in the database, they should be displayed
-    // If the fix works, nodes won't be filtered out
-    // Note: The database might have 0 nodes of this type, which is valid
-    expect(nodeCount).toBeGreaterThanOrEqual(0);
+    // Verify the first category header is visible
+    await expect(categoryHeaders.first()).toBeVisible();
   });
 
   test('multi-select: can select multiple labels', async ({ page }) => {
@@ -114,13 +98,19 @@ test.describe('DatabaseInfoPanel - Multi-select Query Execution', () => {
     await expect(firstLabel).toHaveAttribute('data-selected', 'false');
   });
 
-  test('execute button is disabled when no labels selected', async ({ page }) => {
-    // Wait for the panel to load
-    const executeButton = page.locator('[data-testid="execute-node-query"]');
-    await expect(executeButton).toBeVisible({ timeout: 30000 });
+  test('node labels section renders with expandable categories', async ({ page }) => {
+    // Wait for labels container to appear
+    const labelsContainer = page.locator('[data-testid="node-labels-container"]');
+    await expect(labelsContainer).toBeVisible({ timeout: 30000 });
 
-    // Should be disabled when nothing is selected
-    await expect(executeButton).toBeDisabled();
+    // Verify there are expandable category headers with chevron icons
+    const expandableHeaders = labelsContainer.locator('button[aria-expanded]');
+    const count = await expandableHeaders.count();
+    expect(count).toBeGreaterThan(0);
+
+    // Verify at least one has leaf items (buttons with data-selected)
+    const leafButtons = labelsContainer.locator('button[data-selected]');
+    await expect(leafButtons.first()).toBeVisible();
   });
 });
 

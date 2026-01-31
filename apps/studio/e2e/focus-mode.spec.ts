@@ -1,18 +1,19 @@
 import { test, expect } from '@playwright/test';
+import { waitForGraphLoaded } from './helpers';
 
 test.describe('Focus Mode - Node Selection Visibility', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
-    // Wait for graph to load
-    await page.waitForSelector('.react-flow', { timeout: 10000 });
+    // Wait for lazy-loaded graph to finish loading
+    await waitForGraphLoaded(page);
     // Wait for nodes to render
     await expect(page.locator('.react-flow__node').first()).toBeVisible({ timeout: 15000 });
   });
 
   test('selecting a node should dim unconnected nodes', async ({ page }) => {
-    // Click a node to select it
+    // Click a node to select it (force: true bypasses QueryPill overlay)
     const firstNode = page.locator('.react-flow__node').first();
-    await firstNode.click();
+    await firstNode.click({ force: true });
 
     // Wait for dimming to apply
     await page.waitForTimeout(300);
@@ -58,9 +59,9 @@ test.describe('Focus Mode - Node Selection Visibility', () => {
   });
 
   test('clicking pane should clear selection and restore full opacity', async ({ page }) => {
-    // First select a node
+    // First select a node (force: true bypasses QueryPill overlay)
     const anyNode = page.locator('.react-flow__node').first();
-    await anyNode.click();
+    await anyNode.click({ force: true });
     await page.waitForTimeout(300);
 
     // Now click the pane to deselect
@@ -101,9 +102,9 @@ test.describe('Focus Mode - Node Selection Visibility', () => {
         test.skip();
         return;
       }
-      await altConceptNode.click();
+      await altConceptNode.click({ force: true });
     } else {
-      await conceptNode.click();
+      await conceptNode.click({ force: true });
     }
 
     // Wait for dimming to apply

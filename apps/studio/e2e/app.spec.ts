@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { waitForGraphLoaded } from './helpers';
 
 test.describe('NovaNet Visualizer - Core Functionality', () => {
   test.beforeEach(async ({ page }) => {
@@ -14,9 +15,10 @@ test.describe('NovaNet Visualizer - Core Functionality', () => {
   });
 
   test('graph container renders', async ({ page }) => {
-    // Wait for React Flow container
+    // Wait for lazy-loaded graph component to finish loading
+    await waitForGraphLoaded(page);
     const graphContainer = page.locator('.react-flow');
-    await expect(graphContainer).toBeVisible({ timeout: 10000 });
+    await expect(graphContainer).toBeVisible();
   });
 
   test('sidebar is visible', async ({ page }) => {
@@ -85,8 +87,8 @@ test.describe('NovaNet Visualizer - Graph Interaction', () => {
   test('nodes are rendered in the graph', async ({ page }) => {
     await page.goto('/');
 
-    // Wait for graph to load
-    await page.waitForSelector('.react-flow', { timeout: 10000 });
+    // Wait for lazy-loaded graph to finish loading
+    await waitForGraphLoaded(page);
 
     // Check for nodes (TurboNode renders as react-flow__node)
     const nodes = page.locator('.react-flow__node');
@@ -102,8 +104,8 @@ test.describe('NovaNet Visualizer - Graph Interaction', () => {
   test('edges are rendered between nodes', async ({ page }) => {
     await page.goto('/');
 
-    // Wait for graph
-    await page.waitForSelector('.react-flow', { timeout: 10000 });
+    // Wait for lazy-loaded graph to finish loading
+    await waitForGraphLoaded(page);
 
     // Check for edges
     const edges = page.locator('.react-flow__edge');
@@ -119,15 +121,19 @@ test.describe('NovaNet Visualizer - Graph Interaction', () => {
   test('graph can be zoomed', async ({ page }) => {
     await page.goto('/');
 
-    await page.waitForSelector('.react-flow', { timeout: 10000 });
+    // Wait for lazy-loaded graph to finish loading
+    await waitForGraphLoaded(page);
 
     const graphContainer = page.locator('.react-flow');
+
+    // Wait for graph container to be visible
+    await expect(graphContainer).toBeVisible({ timeout: 10000 });
 
     // Get initial transform
     const _viewport = page.locator('.react-flow__viewport');
 
-    // Zoom using keyboard
-    await graphContainer.click();
+    // Zoom using keyboard (focus the container first)
+    await graphContainer.click({ force: true });
     await page.keyboard.press('Control++');
 
     // Graph should still be visible (no crash)
@@ -151,8 +157,8 @@ test.describe('NovaNet Visualizer - No Console Errors', () => {
 
     await page.goto('/');
 
-    // Wait for app to fully load
-    await page.waitForSelector('.react-flow', { timeout: 15000 });
+    // Wait for lazy-loaded graph to finish loading
+    await waitForGraphLoaded(page);
     await page.waitForTimeout(2000);
 
     // Filter out known acceptable errors (like Neo4j connection issues in dev)
