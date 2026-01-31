@@ -46,6 +46,11 @@ export const ProgressBar = memo(function ProgressBar({
 
   return (
     <div
+      role="progressbar"
+      aria-valuenow={value}
+      aria-valuemin={0}
+      aria-valuemax={max}
+      aria-label={`${Math.round(percentage)}% complete`}
       className={cn(
         'flex-1 bg-white/[0.06] rounded-full overflow-hidden',
         sizeClasses[size],

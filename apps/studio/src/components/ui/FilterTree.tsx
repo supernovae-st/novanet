@@ -9,7 +9,8 @@
  * - Collapsible sections with chevron
  * - Category-colored icons
  * - Optional progress bars (for data counts)
- * - WCAG 2.1 AA accessible
+ * - WCAG 2.1 AA accessible with roving tabindex
+ * - Controlled/uncontrolled expand state pattern
  *
  * Used by:
  * - SchemaFilterPanel (Schema Browser)
@@ -19,18 +20,44 @@
 import {
   createContext,
   useContext,
-  useState,
+  useMemo,
+  useCallback,
+  useRef,
   memo,
   type ReactNode,
+  type KeyboardEvent,
 } from 'react';
 import { cn } from '@/lib/utils';
 import { filterTreeClasses as ftc } from '@/design/tokens';
 import { TriStateCheckbox, type CheckboxState } from './TriStateCheckbox';
 import { ProgressBar } from './ProgressBar';
 import { NAV_ICONS, STATUS_ICONS } from '@/config/iconSystem';
+import { useControllableState } from '@/hooks/useControllableState';
+import {
+  useRovingTabindexRoot,
+  useRovingTabindexItem,
+  useRovingKeyboardHandler,
+  RovingTabindexProvider,
+} from '@/hooks/useRovingTabindex';
 
 const ChevronDownIcon = NAV_ICONS.chevronDown;
 const CheckIcon = STATUS_ICONS.success;
+
+// =============================================================================
+// Utilities
+// =============================================================================
+
+/**
+ * Format count for display - uses compact notation for large numbers
+ * @param count - The count to format
+ * @param compact - Whether to use compact notation (1.2k) for large numbers
+ */
+function formatCount(count: number, compact = false): string {
+  if (compact && count > 999) {
+    return `${(count / 1000).toFixed(1)}k`;
+  }
+  return count.toLocaleString();
+}
 
 // =============================================================================
 // Context
@@ -63,6 +90,8 @@ export interface FilterTreeRootProps {
   maxCount?: number;
   /** Disable all interactions */
   disabled?: boolean;
+  /** Enable keyboard navigation (default: true) */
+  enableKeyboardNav?: boolean;
   /** Additional class names */
   className?: string;
 }
@@ -72,13 +101,43 @@ function FilterTreeRoot({
   showProgressBars = false,
   maxCount = 100,
   disabled = false,
+  enableKeyboardNav = true,
   className,
 }: FilterTreeRootProps) {
+  // Initialize roving tabindex for keyboard navigation
+  const rovingContext = useRovingTabindexRoot();
+  const keyboardHandler = useRovingKeyboardHandler(enableKeyboardNav ? rovingContext : null);
+
+  // Memoize context value to prevent unnecessary re-renders
+  const contextValue = useMemo<FilterTreeContextValue>(
+    () => ({
+      showProgressBars,
+      maxCount,
+      disabled,
+    }),
+    [showProgressBars, maxCount, disabled]
+  );
+
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent<HTMLDivElement>) => {
+      if (enableKeyboardNav) {
+        keyboardHandler(e);
+      }
+    },
+    [enableKeyboardNav, keyboardHandler]
+  );
+
   return (
-    <FilterTreeContext.Provider value={{ showProgressBars, maxCount, disabled }}>
-      <div className={cn(ftc.container, className)} role="tree">
-        {children}
-      </div>
+    <FilterTreeContext.Provider value={contextValue}>
+      <RovingTabindexProvider value={enableKeyboardNav ? rovingContext : null}>
+        <div
+          className={cn(ftc.container, className)}
+          role="tree"
+          onKeyDown={handleKeyDown}
+        >
+          {children}
+        </div>
+      </RovingTabindexProvider>
     </FilterTreeContext.Provider>
   );
 }
@@ -104,7 +163,11 @@ export interface FilterTreeSectionProps {
   count?: number;
   /** Children (rows) */
   children: ReactNode;
-  /** Default expanded state */
+  /** Controlled expanded state */
+  isExpanded?: boolean;
+  /** Callback when expanded state changes */
+  onExpandedChange?: (expanded: boolean) => void;
+  /** Default expanded state (uncontrolled mode) */
   defaultExpanded?: boolean;
   /** Additional class names */
   className?: string;
@@ -119,20 +182,68 @@ const FilterTreeSection = memo(function FilterTreeSection({
   onCheckboxClick,
   count,
   children,
+  isExpanded: controlledExpanded,
+  onExpandedChange,
   defaultExpanded = true,
   className,
 }: FilterTreeSectionProps) {
-  const [isExpanded, setIsExpanded] = useState(defaultExpanded);
+  // Controlled/uncontrolled expand state
+  const [isExpanded, setIsExpanded] = useControllableState(
+    controlledExpanded,
+    defaultExpanded,
+    onExpandedChange
+  );
+
   const { disabled } = useContext(FilterTreeContext);
 
+  // Ref for roving tabindex on the section header
+  const headerRef = useRef<HTMLButtonElement>(null);
+  const { tabIndex } = useRovingTabindexItem(`section-${id}`, headerRef);
+
+  const handleToggle = useCallback(() => {
+    setIsExpanded((prev) => !prev);
+  }, [setIsExpanded]);
+
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent<HTMLButtonElement>) => {
+      switch (e.key) {
+        case 'ArrowLeft':
+          if (isExpanded) {
+            e.preventDefault();
+            e.stopPropagation();
+            setIsExpanded(false);
+          }
+          break;
+        case 'ArrowRight':
+          if (!isExpanded) {
+            e.preventDefault();
+            e.stopPropagation();
+            setIsExpanded(true);
+          }
+          break;
+        case 'Enter':
+        case ' ':
+          e.preventDefault();
+          e.stopPropagation();
+          handleToggle();
+          break;
+      }
+    },
+    [isExpanded, setIsExpanded, handleToggle]
+  );
+
   return (
-    <div className={cn('mb-1', className)} role="treeitem" aria-expanded={isExpanded}>
+    <div className={cn('mb-1', className)} role="group" aria-labelledby={`section-label-${id}`}>
       {/* Section Header */}
       <div className={ftc.sectionHeader}>
-        {/* Expand/Collapse */}
+        {/* Expand/Collapse Button - Main focusable element */}
         <button
-          onClick={() => setIsExpanded(!isExpanded)}
+          ref={headerRef}
+          onClick={handleToggle}
+          onKeyDown={handleKeyDown}
+          tabIndex={tabIndex}
           aria-expanded={isExpanded}
+          aria-controls={`filter-section-${id}`}
           aria-label={`${isExpanded ? 'Collapse' : 'Expand'} ${label}`}
           className="p-0.5 -m-0.5 rounded transition-colors hover:bg-white/[0.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-novanet-500/50"
         >
@@ -150,19 +261,20 @@ const FilterTreeSection = memo(function FilterTreeSection({
           label={`Select all ${label}`}
         />
 
-        {/* Icon + Label (clickable to expand/collapse) */}
-        <button
-          onClick={() => setIsExpanded(!isExpanded)}
-          className="flex items-center gap-2 flex-1 min-w-0"
+        {/* Icon + Label (clickable to expand/collapse, not focusable) */}
+        <div
+          id={`section-label-${id}`}
+          onClick={handleToggle}
+          className="flex items-center gap-2 flex-1 min-w-0 cursor-pointer"
         >
           <span className="flex-shrink-0">{icon}</span>
           <span className={ftc.sectionLabel} style={{ color }}>
             {label}
           </span>
           {count !== undefined && (
-            <span className={ftc.countMuted}>({count.toLocaleString()})</span>
+            <span className={ftc.countMuted}>({formatCount(count)})</span>
           )}
-        </button>
+        </div>
       </div>
 
       {/* Section Content */}
@@ -216,10 +328,28 @@ const FilterTreeRow = memo(function FilterTreeRow({
 }: FilterTreeRowProps) {
   const { showProgressBars, maxCount, disabled } = useContext(FilterTreeContext);
 
+  // Ref for roving tabindex
+  const rowRef = useRef<HTMLButtonElement>(null);
+  const { tabIndex } = useRovingTabindexItem(`row-${id}`, rowRef);
+
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent<HTMLButtonElement>) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        e.stopPropagation();
+        onToggle();
+      }
+    },
+    [onToggle]
+  );
+
   return (
     <button
+      ref={rowRef}
       onClick={onToggle}
+      onKeyDown={handleKeyDown}
       disabled={disabled}
+      tabIndex={tabIndex}
       role="checkbox"
       aria-checked={isSelected}
       aria-label={`${label}${count !== undefined ? ` (${count})` : ''}`}
@@ -276,7 +406,7 @@ const FilterTreeRow = memo(function FilterTreeRow({
             'w-7 text-right font-mono'
           )}
         >
-          {count > 999 ? `${(count / 1000).toFixed(1)}k` : count}
+          {formatCount(count, true)}
         </span>
       )}
     </button>
