@@ -24,6 +24,9 @@ const KEY_PREFIXES: Record<string, string[] | null> = {
 // llm_context format: "USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]."
 const LLM_CONTEXT_PATTERN = /^USE:.*\. TRIGGERS:.*\. NOT:.*\.$/;
 
+// Meta-schema labels (organizing principles) - excluded from business property requirements
+const META_SCHEMA_LABELS = ['Scope', 'Subcategory', 'NodeTypeMeta'];
+
 describe('v8.2.0 Conventions', () => {
   let session: Session;
 
@@ -322,22 +325,24 @@ describe('v8.2.0 Conventions', () => {
 
     // v8.2.0 REMOVED: icon property test (YAGNI - icons moved to presentation layer)
 
-    it('All keyed nodes should have description', async () => {
+    it('All keyed nodes should have description (excluding meta-schema)', async () => {
       const result = await session.run(`
         MATCH (n)
         WHERE n.key IS NOT NULL AND n.description IS NULL
+          AND NOT any(l IN labels(n) WHERE l IN $metaLabels)
         RETURN labels(n)[0] AS label, n.key AS key
-      `);
+      `, { metaLabels: META_SCHEMA_LABELS });
 
       expect(result.records.length).toBe(0);
     });
 
-    it('All keyed nodes should have created_at and updated_at', async () => {
+    it('All keyed nodes should have created_at and updated_at (excluding meta-schema)', async () => {
       const result = await session.run(`
         MATCH (n)
         WHERE n.key IS NOT NULL AND (n.created_at IS NULL OR n.updated_at IS NULL)
+          AND NOT any(l IN labels(n) WHERE l IN $metaLabels)
         RETURN labels(n)[0] AS label, n.key AS key
-      `);
+      `, { metaLabels: META_SCHEMA_LABELS });
 
       expect(result.records.length).toBe(0);
     });
