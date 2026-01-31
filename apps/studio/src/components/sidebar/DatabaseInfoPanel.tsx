@@ -28,7 +28,7 @@ import { useDatabaseSchema } from '@/hooks';
 import { LoadingState } from '@/components/ui/EmptyState';
 import { SegmentedTabs } from '@/components/ui/SegmentedTabs';
 import { formatTime } from '@/lib/formatters';
-import { panelClasses, glassClasses, iconSizes } from '@/design/tokens';
+import { panelClasses, glassClasses, iconSizes, iconButtonClasses } from '@/design/tokens';
 import { NodeLabelsSection } from './database/NodeLabelsSection';
 import { RelationshipsSection } from './database/RelationshipsSection';
 import { AiSearchInput } from './AiSearchInput';
@@ -260,10 +260,8 @@ export const DatabaseInfoPanel = memo(function DatabaseInfoPanel() {
             onClick={fetchSchema}
             disabled={isLoading}
             className={cn(
-              'p-1.5 rounded-lg transition-all duration-200',
-              isLoading
-                ? 'text-white/20 cursor-not-allowed'
-                : 'text-white/40 hover:text-white/70 hover:bg-white/[0.06]'
+              iconButtonClasses.ghost,
+              isLoading && 'text-white/20 cursor-not-allowed'
             )}
             title="Refresh schema"
             aria-label="Refresh database schema"
