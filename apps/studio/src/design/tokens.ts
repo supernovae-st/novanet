@@ -563,42 +563,42 @@ export const modalClasses = {
  */
 export const sidebarTokens = {
   // ─────────────────────────────────────────────────────────────────────────
-  // ROW - Strong Card Style: visible bg, left-accent when selected
+  // ROW - Notion Style: transparent, minimal, hover/select only
   // ─────────────────────────────────────────────────────────────────────────
   row: {
-    /** Base row - Strong Card with visible background */
+    /** Base row - transparent, hover reveals interaction */
     base: [
       'group relative w-full flex items-center',
-      'h-10 px-3 gap-2.5 rounded-lg', // 40px height, 12px padding, 10px gap, 8px radius
-      // Visible background (Strong Card style)
-      'bg-white/[0.05]',
-      // Left border placeholder (invisible by default)
-      'border-l-[3px] border-transparent',
+      'h-9 px-2 gap-2 rounded-md', // 36px height, 8px padding, 8px gap, 6px radius
+      // Transparent by default (Notion style)
+      'bg-transparent',
+      // Left border placeholder
+      'border-l-2 border-transparent',
       // Transitions
-      'transition-all duration-150',
-      // Hover: stronger highlight
-      'hover:bg-white/[0.08]',
+      'transition-all duration-100',
+      // Hover: subtle reveal
+      'hover:bg-white/[0.04]',
       // Focus
-      'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/20',
+      'focus-visible:outline-none focus-visible:bg-white/[0.06]',
       // Active press
-      'active:bg-white/[0.10]',
+      'active:bg-white/[0.08]',
     ].join(' '),
-    /** Selected state - left accent border + strong background */
-    selected: 'border-l-current bg-white/[0.12]',
+    /** Selected state - left accent + subtle background */
+    selected: 'border-l-current bg-white/[0.06]',
     /** Disabled state */
     disabled: 'opacity-50 cursor-not-allowed pointer-events-none',
   },
 
   // ─────────────────────────────────────────────────────────────────────────
-  // ICON BOX - Simplified, no heavy backgrounds
+  // ICON BOX - Minimal, small, no backgrounds (Notion style)
   // ─────────────────────────────────────────────────────────────────────────
   iconBox: {
-    /** Standard icon box: 28x28px - subtle background */
-    base: 'flex-shrink-0 flex items-center justify-center w-7 h-7 rounded-md transition-all duration-150',
-    /** Small icon box: 24x24px */
-    sm: 'flex-shrink-0 flex items-center justify-center w-6 h-6 rounded transition-all duration-150',
-    /** Large icon box: 36x36px (for headers) */
-    lg: 'flex-shrink-0 flex items-center justify-center w-9 h-9 rounded-lg transition-all duration-150',
+    /** Standard icon box: 20x20px - no background, just icon */
+    base: 'flex-shrink-0 flex items-center justify-center w-5 h-5 transition-colors duration-100',
+    /** Small icon box: 16x16px */
+    sm: 'flex-shrink-0 flex items-center justify-center w-4 h-4 transition-colors duration-100',
+    /** Large icon box: 24x24px (for headers) */
+    lg: 'flex-shrink-0 flex items-center justify-center w-6 h-6 transition-colors duration-100',
   },
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -644,20 +644,20 @@ export const sidebarTokens = {
   },
 
   // ─────────────────────────────────────────────────────────────────────────
-  // SECTION - Unified section (category) styling with dividers
+  // SECTION - Notion style: spacing only, no dividers
   // ─────────────────────────────────────────────────────────────────────────
   section: {
-    /** Section container - with top divider for visual separation */
-    container: 'pt-4 mt-2 border-t border-white/10 first:border-t-0 first:pt-0 first:mt-0',
+    /** Section container - spacing creates hierarchy, no borders */
+    container: 'mt-5 first:mt-0',
     /** Section header row */
     header: [
-      'flex items-center w-full py-2 px-2 gap-2',
+      'flex items-center w-full py-1.5 px-2 gap-2',
       'rounded-md',
-      'transition-all duration-150',
+      'transition-all duration-100',
       'hover:bg-white/[0.03]',
     ].join(' '),
-    /** Section content wrapper - 12px gap between items (aéré) */
-    content: 'mt-2 space-y-3 overflow-hidden transition-all duration-200',
+    /** Section content wrapper - compact 6px gap */
+    content: 'mt-1 space-y-1.5 overflow-hidden transition-all duration-150',
     /** Content expanded state */
     contentExpanded: 'max-h-[600px] opacity-100',
     /** Content collapsed state */

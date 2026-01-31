@@ -12,7 +12,6 @@
 
 import { memo, useCallback, useId } from 'react';
 import { cn } from '@/lib/utils';
-import { gapTokens } from '@/design/tokens';
 
 export interface SegmentedTab {
   id: string;
@@ -86,7 +85,7 @@ export const SegmentedTabs = memo(function SegmentedTabs({
             onKeyDown={(e) => handleKeyDown(e, index)}
             className={cn(
               // Layout - minimum hit target 44px for touch
-              cn('flex-1 flex items-center justify-center', gapTokens.compact),
+              'flex-1 flex items-center justify-center gap-1.5',
               'min-h-[36px] rounded-lg',
               // Typography
               'text-xs font-medium',

@@ -37,7 +37,7 @@ import { cn } from '@/lib/utils';
 import { logger } from '@/lib/logger';
 import { glassClasses, gapTokens } from '@/design/tokens';
 import { EmptyState } from '@/components/ui/EmptyState';
-import { useFilteredGraph, useFocusMode, useHoverHighlight, useNodeExpansion, useCenterOnNode, useSmartFitView, useContainerConstraint } from '@/hooks';
+import { useFilteredGraph, useFocusMode, useHoverHighlight, useNodeExpansion, useCenterOnNode, useSmartFitView, useContainerConstraint, useGraphInteractions } from '@/hooks';
 import { useUIStore } from '@/stores/uiStore';
 import { useGraphStore } from '@/stores/graphStore';
 import { NODE_TYPE_CONFIG, nodeTypeConfigs } from '@/config/nodeTypes';
@@ -331,6 +331,14 @@ function Graph2DInner({
   const schemaNodesRef = useRef(schemaNodes);
   schemaNodesRef.current = schemaNodes;
 
+  // Z-index management for schema mode (must be before handleSchemaNodeClick)
+  const {
+    bringToFront: bringSchemaNodeToFront,
+    setHoverZIndex: setSchemaHoverZIndex,
+    resetZIndex: resetSchemaZIndex,
+    bringEdgeNodesToFront: bringSchemaEdgeNodesToFront,
+  } = useGraphInteractions({ setNodes: setSchemaNodes });
+
   // Load schema graph with ELK layout and collapsed state filtering
   // Responds to layoutDirection and layoutVersion changes (like data mode)
   const loadSchemaGraph = useCallback(async () => {
@@ -480,6 +488,9 @@ function Graph2DInner({
       // Note: Schema nodes have different data structure than data nodes
       setSelectedNode(node.id);
 
+      // Bring clicked node to front (z-index)
+      bringSchemaNodeToFront(node.id);
+
       // Check if this is a container node (scope or subcategory group)
       const isContainer = node.id.startsWith('scope-') || node.id.startsWith('subcat-');
 
@@ -551,15 +562,35 @@ function Graph2DInner({
         }
       }, 50);
     },
-    [setSelectedNode, centerOnNode, getInternalNode, getNodes, fitView]
+    [setSelectedNode, centerOnNode, getInternalNode, getNodes, fitView, bringSchemaNodeToFront]
   );
 
   const handleSchemaEdgeClick = useCallback(
     (_event: React.MouseEvent, edge: ReactFlowEdge) => {
       // Set selected edge for schema relation details
       setSelectedEdge(edge.id);
+
+      // Bring source and target nodes to front (z-index)
+      bringSchemaEdgeNodesToFront(edge);
+
+      // FitView to show both source and target nodes
+      setTimeout(() => {
+        const allNodes = getNodes();
+        const edgeNodes = allNodes.filter(
+          n => n.id === edge.source || n.id === edge.target
+        );
+        if (edgeNodes.length > 0) {
+          fitView({
+            nodes: edgeNodes,
+            duration: GRAPH_ANIMATION.FIT_VIEW_DURATION,
+            padding: 0.2,
+            maxZoom: 1.5,
+            minZoom: 0.1,
+          });
+        }
+      }, 50);
     },
-    [setSelectedEdge]
+    [setSelectedEdge, bringSchemaEdgeNodesToFront, getNodes, fitView]
   );
 
   // PERFORMANCE: Split layout (expensive) from dimming (cheap)
@@ -725,6 +756,17 @@ function Graph2DInner({
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
+  // ==========================================================================
+  // Z-INDEX MANAGEMENT - Data mode (schema mode hook is above, near setSchemaNodes)
+  // ==========================================================================
+  // Brings clicked/hovered nodes to front to handle overlapping nodes
+  const {
+    bringToFront: bringDataNodeToFront,
+    setHoverZIndex: setDataHoverZIndex,
+    resetZIndex: resetDataZIndex,
+    bringEdgeNodesToFront: bringDataEdgeNodesToFront,
+  } = useGraphInteractions({ setNodes: setNodes as React.Dispatch<React.SetStateAction<ReactFlowNode[]>> });
+
   // Keep refs updated for keyboard handler (avoids re-registering event listeners)
   nodesRef.current = nodes;
   getZoomRef.current = getZoom;
@@ -816,6 +858,9 @@ function Graph2DInner({
       // Click: select, open panel, zoom/center
       setSelectedNode(node.id);
 
+      // Bring clicked node to front (z-index)
+      bringDataNodeToFront(node.id);
+
       const nodeWidth = node.measured?.width ?? DAGRE_CONFIG.NODE_WIDTH;
       const nodeHeight = node.measured?.height ?? DAGRE_CONFIG.NODE_HEIGHT;
 
@@ -834,7 +879,7 @@ function Graph2DInner({
       // Forward to external callback
       onNodeClick?.(node.id);
     },
-    [setSelectedNode, centerOnNode, onNodeClick]
+    [setSelectedNode, centerOnNode, onNodeClick, bringDataNodeToFront]
   );
 
   const handleNodeDoubleClick: NodeMouseHandler<TurboNodeType> = useCallback(
@@ -863,8 +908,27 @@ function Graph2DInner({
   const handleEdgeClick: EdgeMouseHandler<FloatingEdgeType> = useCallback(
     (_, edge) => {
       setSelectedEdge(edge.id);
+
+      // Bring source and target nodes to front (z-index)
+      bringDataEdgeNodesToFront(edge);
+
+      // FitView to show both source and target nodes
+      setTimeout(() => {
+        const edgeNodes = nodes.filter(
+          n => n.id === edge.source || n.id === edge.target
+        );
+        if (edgeNodes.length > 0) {
+          fitView({
+            nodes: edgeNodes,
+            duration: GRAPH_ANIMATION.FIT_VIEW_DURATION,
+            padding: 0.2,
+            maxZoom: 1.5,
+            minZoom: 0.1,
+          });
+        }
+      }, 50);
     },
-    [setSelectedEdge]
+    [setSelectedEdge, bringDataEdgeNodesToFront, nodes, fitView]
   );
 
   // Edge hover handlers
@@ -883,20 +947,41 @@ function Graph2DInner({
     [setHoveredEdge]
   );
 
-  // Node hover handlers for connection highlighting
-  // Generic type to work with both data nodes (TurboNode) and schema nodes
-  const handleNodeMouseEnter = useCallback(
+  // Node hover handlers for connection highlighting + z-index management
+  // Separate handlers for data and schema modes to use correct z-index functions
+
+  // DATA MODE hover handlers
+  const handleDataNodeMouseEnter = useCallback(
     (_: React.MouseEvent, node: { id: string }) => {
       setHoveredNode(node.id);
+      setDataHoverZIndex(node.id);
     },
-    [setHoveredNode]
+    [setHoveredNode, setDataHoverZIndex]
   );
 
-  const handleNodeMouseLeave = useCallback(
-    () => {
+  const handleDataNodeMouseLeave = useCallback(
+    (_: React.MouseEvent, node: { id: string }) => {
       setHoveredNode(null);
+      resetDataZIndex(node.id);
     },
-    [setHoveredNode]
+    [setHoveredNode, resetDataZIndex]
+  );
+
+  // SCHEMA MODE hover handlers
+  const handleSchemaNodeMouseEnter = useCallback(
+    (_: React.MouseEvent, node: { id: string }) => {
+      setHoveredNode(node.id);
+      setSchemaHoverZIndex(node.id);
+    },
+    [setHoveredNode, setSchemaHoverZIndex]
+  );
+
+  const handleSchemaNodeMouseLeave = useCallback(
+    (_: React.MouseEvent, node: { id: string }) => {
+      setHoveredNode(null);
+      resetSchemaZIndex(node.id);
+    },
+    [setHoveredNode, resetSchemaZIndex]
   );
 
   const handlePaneClick = useCallback(() => {
@@ -1096,8 +1181,8 @@ function Graph2DInner({
             onNodeDrag={handleSchemaNodeDrag}
             onNodeDragStop={handleSchemaNodeDragStop}
             onNodeClick={handleSchemaNodeClick}
-            onNodeMouseEnter={handleNodeMouseEnter}
-            onNodeMouseLeave={handleNodeMouseLeave}
+            onNodeMouseEnter={handleSchemaNodeMouseEnter}
+            onNodeMouseLeave={handleSchemaNodeMouseLeave}
             onEdgeClick={handleSchemaEdgeClick}
             onEdgeMouseEnter={handleEdgeMouseEnter}
             onEdgeMouseLeave={handleEdgeMouseLeave}
@@ -1213,8 +1298,8 @@ function Graph2DInner({
           onNodeClick={handleNodeClick}
           onNodeDoubleClick={handleNodeDoubleClick}
           onNodeContextMenu={handleNodeContextMenu}
-          onNodeMouseEnter={handleNodeMouseEnter}
-          onNodeMouseLeave={handleNodeMouseLeave}
+          onNodeMouseEnter={handleDataNodeMouseEnter}
+          onNodeMouseLeave={handleDataNodeMouseLeave}
           onEdgeClick={handleEdgeClick}
           onEdgeMouseEnter={handleEdgeMouseEnter}
           onEdgeMouseLeave={handleEdgeMouseLeave}

@@ -20,10 +20,9 @@
     "core": "../core"
   },
   "techStack": {
-    "framework": "Next.js 15",
+    "framework": "Next.js 16",
     "ui": "React 19 + Tailwind CSS",
-    "graph2d": "@xyflow/react",
-    "graph3d": "react-force-graph-3d",
+    "graph": "@xyflow/react",
     "state": "Zustand 5",
     "database": "Neo4j",
     "ai": "Claude API"

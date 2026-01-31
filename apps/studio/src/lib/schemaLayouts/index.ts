@@ -6,7 +6,6 @@
  */
 
 export * from './types';
-export { applyTreemapLayout } from './treemap';
 export { applySwimlaneLayout } from './swimlanes';
 export { applyStackedLayout } from './stacked';
 export { applyTargetLayout } from './target';
@@ -15,7 +14,6 @@ export { applyElkLayeredLayout, applyElkLayeredLayoutSync } from './elkLayered';
 
 import type { HierarchicalSchemaData } from '@novanet/core/graph';
 import type { LayoutDirection, SchemaLayoutResult } from './types';
-import { applyTreemapLayout } from './treemap';
 import { applySwimlaneLayout } from './swimlanes';
 import { applyStackedLayout } from './stacked';
 import { applyTargetLayout } from './target';
