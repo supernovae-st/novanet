@@ -86,3 +86,9 @@ export {
   RovingTabindexProvider,
   type RovingTabindexContextValue,
 } from './useRovingTabindex';
+
+// d3-force magnetic simulation for magnetic grouping layout
+export {
+  useMagneticSimulation,
+  type UseMagneticSimulationOptions,
+} from './useMagneticSimulation';
