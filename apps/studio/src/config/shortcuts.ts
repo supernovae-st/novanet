@@ -312,6 +312,16 @@ export const SHORTCUTS: Shortcut[] = [
     when: ['input-not-focused'],
     action: 'novanet:layout:force',
   },
+  {
+    id: 'layout-magnetic',
+    keys: 'shift+m',
+    label: 'Toggle Magnetic Layout',
+    description: 'Toggle between containers and magnetic grouping',
+    category: 'layout',
+    icon: 'Magnet',
+    when: ['input-not-focused'],
+    action: 'novanet:layout:magnetic',
+  },
 
   // Help
   {
