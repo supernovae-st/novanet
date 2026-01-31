@@ -9,26 +9,21 @@ jest.mock('@/stores/filterStore', () => ({
   useFilterStore: jest.fn(),
 }));
 
-const mockToggleScopeCollapsed = jest.fn();
 const mockToggleSubcategoryCollapsed = jest.fn();
-const mockIsScopeCollapsed = jest.fn();
 const mockIsSubcategoryCollapsed = jest.fn();
+const mockSetSubcategoryCollapsed = jest.fn();
 const mockUseFilterStore = useFilterStore as jest.MockedFunction<typeof useFilterStore>;
 
 describe('SchemaFilterPanel', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    mockIsScopeCollapsed.mockReturnValue(false);
     mockIsSubcategoryCollapsed.mockReturnValue(false);
 
     mockUseFilterStore.mockImplementation((selector) => {
       const state = {
-        collapsedScopes: [],
-        collapsedSubcategories: [],
-        toggleScopeCollapsed: mockToggleScopeCollapsed,
         toggleSubcategoryCollapsed: mockToggleSubcategoryCollapsed,
-        isScopeCollapsed: mockIsScopeCollapsed,
         isSubcategoryCollapsed: mockIsSubcategoryCollapsed,
+        setSubcategoryCollapsed: mockSetSubcategoryCollapsed,
       };
       return selector ? selector(state as never) : state;
     });
@@ -53,15 +48,13 @@ describe('SchemaFilterPanel', () => {
       expect(screen.getByText(/🎯/)).toBeInTheDocument(); // Shared
     });
 
-    it('renders node count for each scope', () => {
+    it('renders node count for each scope in parentheses', () => {
       render(<SchemaFilterPanel />);
 
-      // Project scope has 14 node types
-      expect(screen.getByText('14')).toBeInTheDocument();
-      // Global scope has 15 node types
-      expect(screen.getByText('15')).toBeInTheDocument();
-      // Shared scope has 6 node types
-      expect(screen.getByText('6')).toBeInTheDocument();
+      // Scope counts are in parentheses: (14), (15), (6)
+      expect(screen.getByText('(14)')).toBeInTheDocument(); // Project
+      expect(screen.getByText('(15)')).toBeInTheDocument(); // Global
+      expect(screen.getByText('(6)')).toBeInTheDocument(); // Shared
     });
 
     it('renders subcategories for Project scope', () => {
@@ -106,38 +99,6 @@ describe('SchemaFilterPanel', () => {
       expect(screen.getByText(/🤖/)).toBeInTheDocument(); // GEO
     });
 
-    it('renders node count in parentheses for each subcategory', () => {
-      render(<SchemaFilterPanel />);
-
-      // Correct counts from models/nodes/ folder structure:
-      // - foundation: 3 nodes (BrandIdentity, Project, ProjectL10n)
-      // - instruction: 5 nodes (BlockPrompt, BlockRules, BlockType, PagePrompt, PageType)
-      // - output: 2 nodes (BlockL10n, PageL10n)
-      // - semantic: 2 nodes (Concept, ConceptL10n)
-      // - structure: 2 nodes (Block, Page)
-      // - config: 1 node (Locale)
-      // - knowledge: 14 nodes
-      // - geo: 3 nodes
-      // - seo: 3 nodes
-
-      // Foundation, SEO, GEO have 3 nodes each
-      const threeNodes = screen.getAllByText('(3)');
-      expect(threeNodes.length).toBeGreaterThanOrEqual(3);
-
-      // Structure, Semantic, Output have 2 nodes each
-      const twoNodes = screen.getAllByText('(2)');
-      expect(twoNodes.length).toBeGreaterThanOrEqual(3);
-
-      // Instruction has 5 nodes (unique count)
-      expect(screen.getByText('(5)')).toBeInTheDocument();
-
-      // Knowledge has 14 nodes (unique count)
-      expect(screen.getByText('(14)')).toBeInTheDocument();
-
-      // Config has 1 node (unique count)
-      expect(screen.getByText('(1)')).toBeInTheDocument();
-    });
-
     it('renders the header with Schema Browser title', () => {
       render(<SchemaFilterPanel />);
 
@@ -148,86 +109,58 @@ describe('SchemaFilterPanel', () => {
     it('renders the stats footer', () => {
       render(<SchemaFilterPanel />);
 
-      // The footer text contains all stats in a single element
+      // The footer text contains all stats
       const statsFooter = screen.getByText(/3 scopes .* 9 categories .* 35 types/);
       expect(statsFooter).toBeInTheDocument();
     });
   });
 
-  describe('Collapse/Expand Behavior', () => {
-    it('calls toggleScopeCollapsed when scope header is clicked', () => {
+  describe('FilterTree Section Behavior', () => {
+    it('has expand/collapse chevron buttons with aria-label', () => {
       render(<SchemaFilterPanel />);
 
-      // Click on Project scope header
-      const projectButton = screen.getByText('PROJECT').closest('button');
-      expect(projectButton).toBeInTheDocument();
-      fireEvent.click(projectButton!);
-
-      expect(mockToggleScopeCollapsed).toHaveBeenCalledWith('Project');
+      // FilterTree.Section has chevron buttons with aria-label
+      const collapseButtons = screen.getAllByRole('button', { name: /Collapse/ });
+      expect(collapseButtons.length).toBeGreaterThanOrEqual(3); // 3 scopes
     });
 
-    it('shows ChevronDown when scope is expanded', () => {
-      mockIsScopeCollapsed.mockReturnValue(false);
+    it('sections default to expanded (aria-expanded=true)', () => {
       render(<SchemaFilterPanel />);
 
-      // When expanded, aria-expanded should be true
-      const projectButton = screen.getByText('PROJECT').closest('button');
-      expect(projectButton).toHaveAttribute('aria-expanded', 'true');
+      // FilterTree sections have aria-expanded on the treeitem
+      const treeItems = screen.getAllByRole('treeitem');
+      treeItems.forEach((item) => {
+        expect(item).toHaveAttribute('aria-expanded', 'true');
+      });
     });
 
-    it('shows ChevronRight when scope is collapsed', () => {
-      mockIsScopeCollapsed.mockImplementation((scope) => scope === 'Project');
+    it('has tri-state checkboxes for scopes', () => {
       render(<SchemaFilterPanel />);
 
-      // When collapsed, aria-expanded should be false
-      const projectButton = screen.getByText('PROJECT').closest('button');
-      expect(projectButton).toHaveAttribute('aria-expanded', 'false');
-    });
-
-    it('hides subcategories when scope is collapsed', () => {
-      mockIsScopeCollapsed.mockImplementation((scope) => scope === 'Project');
-      render(<SchemaFilterPanel />);
-
-      // Project subcategories container should be visually hidden (max-h-0 opacity-0)
-      const projectContent = document.getElementById('scope-Project-content');
-      expect(projectContent).toHaveClass('max-h-0', 'opacity-0');
-
-      // Other scopes should still show their subcategories (max-h-96 opacity-100)
-      const globalContent = document.getElementById('scope-Global-content');
-      expect(globalContent).toHaveClass('max-h-96', 'opacity-100');
+      // FilterTree.Section has TriStateCheckbox with role="checkbox"
+      const checkboxes = screen.getAllByRole('checkbox');
+      expect(checkboxes.length).toBeGreaterThanOrEqual(3); // At least 3 scopes
     });
   });
 
   describe('Subcategory Toggle Behavior', () => {
-    it('calls toggleSubcategoryCollapsed when subcategory is clicked', () => {
+    it('calls toggleSubcategoryCollapsed when subcategory row is clicked', () => {
       render(<SchemaFilterPanel />);
 
-      // Click on Foundation subcategory
-      const foundationButton = screen.getByText('Foundation').closest('button');
-      expect(foundationButton).toBeInTheDocument();
-      fireEvent.click(foundationButton!);
+      // Click on Foundation subcategory row
+      const foundationText = screen.getByText('Foundation');
+      fireEvent.click(foundationText);
 
       expect(mockToggleSubcategoryCollapsed).toHaveBeenCalledWith('Project', 'foundation');
     });
 
-    it('applies opacity when subcategory is collapsed', () => {
-      mockIsSubcategoryCollapsed.mockImplementation(
-        (scope, subcat) => scope === 'Project' && subcat === 'foundation'
-      );
+    it('renders subcategory checkboxes', () => {
       render(<SchemaFilterPanel />);
 
-      const foundationButton = screen.getByText('Foundation').closest('button');
-      // Collapsed subcategories have opacity-40 class
-      expect(foundationButton).toHaveClass('opacity-40');
-    });
-
-    it('has normal styling when subcategory is not collapsed', () => {
-      mockIsSubcategoryCollapsed.mockReturnValue(false);
-      render(<SchemaFilterPanel />);
-
-      const foundationButton = screen.getByText('Foundation').closest('button');
-      // Non-collapsed subcategories have background styling
-      expect(foundationButton).toHaveClass('bg-white/[0.04]');
+      // FilterTree.Row renders checkbox-like elements
+      // The subcategory rows have check icons when selected
+      const checkboxes = screen.getAllByRole('checkbox');
+      expect(checkboxes.length).toBeGreaterThanOrEqual(9); // 9 subcategories + 3 scopes
     });
   });
 
@@ -239,46 +172,26 @@ describe('SchemaFilterPanel', () => {
       expect(panel).toBeInTheDocument();
     });
 
-    it('scope buttons have aria-expanded attribute', () => {
+    it('has tree role on FilterTree root', () => {
       render(<SchemaFilterPanel />);
 
-      const projectButton = screen.getByText('PROJECT').closest('button');
-      expect(projectButton).toHaveAttribute('aria-expanded');
+      const tree = screen.getByRole('tree');
+      expect(tree).toBeInTheDocument();
     });
 
-    it('scope buttons have aria-controls attribute', () => {
+    it('sections have treeitem role', () => {
       render(<SchemaFilterPanel />);
 
-      const projectButton = screen.getByText('PROJECT').closest('button');
-      expect(projectButton).toHaveAttribute('aria-controls', 'scope-Project-content');
+      const treeItems = screen.getAllByRole('treeitem');
+      expect(treeItems.length).toBe(3); // 3 scopes
     });
 
-    it('subcategory buttons have aria-pressed attribute', () => {
+    it('section content has group role', () => {
       render(<SchemaFilterPanel />);
 
-      const foundationButton = screen.getByText('Foundation').closest('button');
-      expect(foundationButton).toHaveAttribute('aria-pressed');
-    });
-
-    it('subcategory buttons have descriptive aria-label', () => {
-      render(<SchemaFilterPanel />);
-
-      const foundationButton = screen.getByText('Foundation').closest('button');
-      expect(foundationButton).toHaveAttribute(
-        'aria-label',
-        expect.stringContaining('Foundation')
-      );
-      expect(foundationButton).toHaveAttribute(
-        'aria-label',
-        expect.stringContaining('node types')
-      );
-    });
-
-    it('subcategory content regions have role group', () => {
-      render(<SchemaFilterPanel />);
-
-      const projectSubcats = screen.getByRole('group', { name: 'PROJECT subcategories' });
-      expect(projectSubcats).toBeInTheDocument();
+      // FilterTree.Section content has role="group"
+      const groups = screen.getAllByRole('group');
+      expect(groups.length).toBeGreaterThanOrEqual(3); // 3 scope groups
     });
   });
 
@@ -290,13 +203,13 @@ describe('SchemaFilterPanel', () => {
       expect(panel).toHaveClass('custom-class');
     });
 
-    it('has glassmorphism styling on scope buttons', () => {
+    it('has proper FilterTree structure for scopes', () => {
       render(<SchemaFilterPanel />);
 
-      // Scope headers should be buttons with proper styling
-      const projectButton = screen.getByText('PROJECT').closest('button');
-      expect(projectButton).toBeInTheDocument();
-      expect(projectButton).toHaveClass('transition-colors');
+      // FilterTree.Section renders scope labels
+      expect(screen.getByText('PROJECT')).toBeInTheDocument();
+      expect(screen.getByText('GLOBAL')).toBeInTheDocument();
+      expect(screen.getByText('SHARED')).toBeInTheDocument();
     });
   });
 });

@@ -69,6 +69,7 @@ interface FilterStoreState extends ExtendedFilterState {
   // Schema mode collapsed groups actions (Task 3.1)
   toggleScopeCollapsed: (scope: Scope) => void;
   toggleSubcategoryCollapsed: (scope: Scope, subcategory: string) => void;
+  setSubcategoryCollapsed: (scope: Scope, subcategory: string, collapsed: boolean) => void;
   isScopeCollapsed: (scope: Scope) => boolean;
   isSubcategoryCollapsed: (scope: Scope, subcategory: string) => boolean;
   resetSchemaFilters: () => void;
@@ -349,6 +350,18 @@ export const useFilterStore = create<FilterStoreState>()(
             state.collapsedSubcategories.splice(idx, 1);
           } else {
             state.collapsedSubcategories.push(key);
+          }
+        });
+      },
+
+      setSubcategoryCollapsed: (scope, subcategory, collapsed) => {
+        set((state) => {
+          const key = `${scope}-${subcategory}`;
+          const idx = state.collapsedSubcategories.indexOf(key);
+          if (collapsed && idx < 0) {
+            state.collapsedSubcategories.push(key);
+          } else if (!collapsed && idx >= 0) {
+            state.collapsedSubcategories.splice(idx, 1);
           }
         });
       },

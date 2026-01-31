@@ -278,13 +278,21 @@ export const glassClasses = {
 
 /**
  * Modal/Dialog classes - Unified modal system
- * Best practices: opaque background, no backdrop-blur on content, focus trap
+ *
+ * Best practices:
+ * - Opaque background (no backdrop-blur on content for performance)
+ * - Focus trap for accessibility (WCAG 2.1 AA)
+ * - Body scroll lock when open
+ * - Escape key to close
+ *
+ * Note: z-index uses Tailwind z-50 for legacy compatibility.
+ * New Modal component uses zIndex.modal (450) via inline styles.
  */
 export const modalClasses = {
   /** Backdrop overlay - darkens and blurs background */
-  backdrop: 'fixed inset-0 z-50 bg-black/70 backdrop-blur-sm',
+  backdrop: 'fixed inset-0 bg-black/70 backdrop-blur-sm',
   /** Modal container - centers content */
-  container: 'fixed inset-0 z-50 flex items-center justify-center',
+  container: 'fixed inset-0 flex items-center justify-center',
   /** Modal content - the actual dialog box */
   content: 'bg-[#0d0d12] border border-white/[0.12] rounded-2xl shadow-2xl shadow-black/60',
   /** Modal header - title area with close button */
@@ -325,6 +333,103 @@ export const textOpacity = {
 } as const;
 
 // ============================================================================
+// FILTER TREE - Unified hierarchical filter design
+// ============================================================================
+
+/**
+ * Filter tree design tokens - Unified system for Schema Browser & Data View
+ *
+ * Design principles (based on Data View style):
+ * - Flat tree structure with border-left connectors
+ * - Tri-state checkboxes for hierarchical selection
+ * - Chevrons for expand/collapse
+ * - Category-colored icons
+ * - Counts aligned right
+ * - Progress bars (optional, for data counts)
+ *
+ * Variants:
+ * - default: Standard filter tree (Schema Browser)
+ * - data: With progress bars (Data View / Node filters)
+ */
+export const filterTreeClasses = {
+  /** Container for the filter tree */
+  container: 'space-y-0.5',
+
+  /** Section header row (category level) */
+  sectionHeader: 'flex items-center gap-2 py-2 px-1 rounded-lg transition-all duration-200 hover:bg-white/[0.03] cursor-pointer select-none',
+
+  /** Section content (nested items) */
+  sectionContent: 'ml-6 pl-3 border-l border-white/[0.06] overflow-hidden transition-all duration-300',
+  sectionContentExpanded: 'max-h-[500px] opacity-100',
+  sectionContentCollapsed: 'max-h-0 opacity-0',
+
+  /** Individual row (item level) */
+  row: 'group w-full flex items-center gap-2.5 py-2 px-2.5 -mx-2 rounded-xl transition-all duration-200 hover:bg-white/[0.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-novanet-500/50',
+  rowSelected: 'bg-white/[0.06]',
+  rowDisabled: 'opacity-50 cursor-not-allowed',
+
+  /** Chevron for expand/collapse */
+  chevron: 'w-3.5 h-3.5 text-white/40 transition-transform duration-200',
+  chevronCollapsed: '-rotate-90',
+
+  /** Checkbox container */
+  checkbox: 'w-4 h-4 rounded-md border-[1.5px] flex items-center justify-center transition-all duration-200 flex-shrink-0',
+  checkboxUnchecked: 'border-white/20 bg-transparent',
+  checkboxChecked: 'border-transparent', // Color set dynamically
+
+  /** Label text */
+  label: 'text-[12px] font-medium transition-colors duration-200 flex-1 text-left truncate',
+  labelSelected: 'text-white',
+  labelUnselected: 'text-white/60 group-hover:text-white/80',
+
+  /** Section label (category) */
+  sectionLabel: 'text-[13px] font-semibold', // Color set dynamically
+
+  /** Count display */
+  count: 'text-[11px] tabular-nums transition-colors duration-200 flex-shrink-0',
+  countSelected: 'text-white/80',
+  countUnselected: 'text-white/40',
+  countMuted: 'text-white/30',
+
+  /** Progress bar container (data variant) */
+  progressBar: 'w-16 flex-shrink-0',
+
+  /** Header with total and execute button */
+  header: 'flex items-center justify-between px-1 mb-2',
+  headerTitle: 'flex items-center gap-2',
+  headerBadge: 'px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-semibold animate-in fade-in duration-200',
+
+  /** Execute button */
+  executeButton: 'p-1.5 rounded-lg transition-all duration-200',
+  executeButtonEnabled: 'text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 hover:scale-110',
+  executeButtonDisabled: 'text-white/20 cursor-not-allowed',
+} as const;
+
+/**
+ * Scope-specific accent colors - used for both Schema and Data modes
+ */
+export const scopeAccents = {
+  project: {
+    color: '#8b5cf6', // violet-500
+    bg: 'bg-violet-500/20',
+    text: 'text-violet-400',
+    border: 'border-violet-500/30',
+  },
+  global: {
+    color: '#10b981', // emerald-500
+    bg: 'bg-emerald-500/20',
+    text: 'text-emerald-400',
+    border: 'border-emerald-500/30',
+  },
+  shared: {
+    color: '#f59e0b', // amber-500
+    bg: 'bg-amber-500/20',
+    text: 'text-amber-400',
+    border: 'border-amber-500/30',
+  },
+} as const;
+
+// ============================================================================
 // EXPORT ALL
 // ============================================================================
 
@@ -343,6 +448,8 @@ export const tokens = {
   glassClasses,
   buttonClasses,
   textOpacity,
+  filterTreeClasses,
+  scopeAccents,
 } as const;
 
 export default tokens;

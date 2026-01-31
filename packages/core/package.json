@@ -18,8 +18,7 @@
     "validate:version": "tsx scripts/validate-version.ts",
     "validate:relations": "tsx scripts/validate-relations.ts",
     "generate:docs": "tsx scripts/generate-docs.ts",
-    "validate:docs": "tsx scripts/validate-docs.ts",
-    "prepare": "husky"
+    "validate:docs": "tsx scripts/validate-docs.ts"
   },
   "dependencies": {
     "neo4j-driver": "^5.28.1",
@@ -28,15 +27,13 @@
     "zod": "^3.24.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.2",
-    "@types/node": "^22.10.0",
-    "@typescript-eslint/eslint-plugin": "^8.53.1",
-    "@typescript-eslint/parser": "^8.53.1",
-    "eslint": "^9.39.2",
-    "husky": "^9.1.0",
-    "tsx": "^4.19.0",
-    "typescript": "^5.9.3",
-    "typescript-eslint": "^8.53.1",
-    "vitest": "^2.1.0"
+    "@eslint/js": "catalog:",
+    "@types/node": "catalog:",
+    "@typescript-eslint/eslint-plugin": "catalog:",
+    "@typescript-eslint/parser": "catalog:",
+    "eslint": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   }
 }

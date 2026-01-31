@@ -325,6 +325,11 @@ function Graph2DInner({
   // Track previous dataMode to detect changes
   const prevDataModeRef = useRef(dataMode);
 
+  // PERF: Ref for schemaNodes to avoid callback re-creation during drag
+  // Callbacks use ref.current to always get latest nodes without re-running
+  const schemaNodesRef = useRef(schemaNodes);
+  schemaNodesRef.current = schemaNodes;
+
   // Load schema graph with ELK layout and collapsed state filtering
   // Responds to layoutDirection and layoutVersion changes (like data mode)
   const loadSchemaGraph = useCallback(async () => {
@@ -429,7 +434,8 @@ function Graph2DInner({
     (changes: NodeChange<ReactFlowNode>[]) => {
       setSchemaNodes((nds) => applyNodeChanges(changes, nds));
     },
-    [setSchemaNodes]
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- setState callbacks are stable
+    []
   );
 
   // Container constraint hook for dynamic container resizing (Task 3)
@@ -442,19 +448,23 @@ function Graph2DInner({
     });
 
   // Schema node drag handler - calls container constraint hook
+  // PERF: Uses schemaNodesRef to avoid re-creating callback on every node move
   const handleSchemaNodeDrag = useCallback(
     (_event: React.MouseEvent, node: ReactFlowNode) => {
-      containerHandleNodeDrag(node, schemaNodes, setSchemaNodes);
+      containerHandleNodeDrag(node, schemaNodesRef.current, setSchemaNodes);
     },
-    [containerHandleNodeDrag, schemaNodes, setSchemaNodes]
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- schemaNodesRef.current provides latest nodes
+    [containerHandleNodeDrag]
   );
 
   // Schema node drag stop handler - triggers container shrinking
+  // PERF: Uses schemaNodesRef to avoid re-creating callback on every node move
   const handleSchemaNodeDragStop = useCallback(
     (_event: React.MouseEvent, node: ReactFlowNode) => {
-      containerHandleNodeDragStop(node, schemaNodes, setSchemaNodes);
+      containerHandleNodeDragStop(node, schemaNodesRef.current, setSchemaNodes);
     },
-    [containerHandleNodeDragStop, schemaNodes, setSchemaNodes]
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- schemaNodesRef.current provides latest nodes
+    [containerHandleNodeDragStop]
   );
 
   // =========================================================================
@@ -753,6 +763,24 @@ function Graph2DInner({
   useEffect(() => {
     setEdges(initialEdges);
   }, [initialEdges, setEdges]);
+
+  // ==========================================================================
+  // PERF: Memoized MiniMap nodeColor callbacks to avoid re-creating functions
+  // ==========================================================================
+  const schemaMinimapNodeColor = useCallback((node: ReactFlowNode) => {
+    // Color by scope for schema nodes
+    const scope = node.data?.scope;
+    if (scope === 'Project') return '#8b5cf6cc'; // violet
+    if (scope === 'Global') return '#10b981cc'; // emerald
+    if (scope === 'Shared') return '#f59e0bcc'; // amber
+    return '#666';
+  }, []);
+
+  const dataMinimapNodeColor = useCallback((node: ReactFlowNode) => {
+    const config = NODE_TYPE_CONFIG[(node.data as TurboNodeData)?.type];
+    // Softer colors with transparency for dots
+    return config?.color ? `${config.color}cc` : '#666';
+  }, []);
 
   // ==========================================================================
   // Click Handling
@@ -1084,14 +1112,7 @@ function Graph2DInner({
                   '[&_.react-flow__minimap-edge]:hidden'
                 )}
                 style={{ height: MINIMAP_HEIGHT }}
-                nodeColor={(node) => {
-                  // Color by scope for schema nodes
-                  const scope = node.data?.scope;
-                  if (scope === 'Project') return '#8b5cf6cc'; // violet
-                  if (scope === 'Global') return '#10b981cc'; // emerald
-                  if (scope === 'Shared') return '#f59e0bcc'; // amber
-                  return '#666';
-                }}
+                nodeColor={schemaMinimapNodeColor}
                 nodeStrokeWidth={0}
                 nodeBorderRadius={4}
                 maskColor="rgba(0, 0, 0, 0.85)"
@@ -1224,11 +1245,7 @@ function Graph2DInner({
                 '[&_.react-flow__minimap-edge]:hidden'
               )}
               style={{ height: MINIMAP_HEIGHT }}
-              nodeColor={(node) => {
-                const config = NODE_TYPE_CONFIG[(node.data as TurboNodeData)?.type];
-                // Softer colors with transparency for dots
-                return config?.color ? `${config.color}cc` : '#666';
-              }}
+              nodeColor={dataMinimapNodeColor}
               nodeStrokeWidth={0}
               nodeBorderRadius={50}
               maskColor="rgba(0, 0, 0, 0.85)"

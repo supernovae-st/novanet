@@ -14,6 +14,7 @@ export { useTriStateSelection, calculateCheckboxState, type UseTriStateSelection
 
 // Modal utilities
 export { useBodyScrollLock } from './useBodyScrollLock';
+export { useFocusTrap } from './useFocusTrap';
 export { useOutsideClick } from './useOutsideClick';
 export { useModalAutoFocus } from './useModalAutoFocus';
 export { useGridNavigation, type UseGridNavigationReturn } from './useGridNavigation';
