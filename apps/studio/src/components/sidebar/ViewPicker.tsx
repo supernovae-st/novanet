@@ -279,7 +279,7 @@ const ViewPickerModal = memo(function ViewPickerModal({
         >
           <div
             ref={gridRef}
-            className="grid grid-cols-3 gap-5"
+            className={cn('grid grid-cols-3', gapTokens.xl)}
           >
             {filteredViews.map((view, index) => (
               <ViewCard
@@ -365,7 +365,8 @@ export const ViewPicker = memo(function ViewPicker({ className }: ViewPickerProp
         whileTap={{ scale: 0.97 }}
         onClick={handleOpen}
         className={cn(
-          'flex items-center gap-3 px-3 py-2 rounded-xl',
+          'flex items-center px-3 py-2 rounded-xl',
+          gapTokens.spacious,
           'transition-all duration-150',
           'hover:bg-white/8 active:bg-white/10',
           className

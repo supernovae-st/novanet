@@ -69,10 +69,10 @@ export interface UseContainerConstraintReturn {
 // =============================================================================
 
 const DEFAULT_OPTIONS: Required<ContainerConstraintOptions> = {
-  edgeThreshold: 50,
-  minPadding: 40,
-  animationDuration: 200,
-  expansionStep: 50,
+  edgeThreshold: 100,    // Detect earlier for smoother expansion (was 50)
+  minPadding: 80,        // More breathing room (was 40)
+  animationDuration: 150, // Faster response (was 200)
+  expansionStep: 100,    // Bigger steps = fewer expansions = less jitter (was 50)
 };
 
 /** Node type identifiers for container nodes */

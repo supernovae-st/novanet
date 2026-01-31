@@ -295,7 +295,7 @@ function Graph2DInner({
   // Refs to track previous UI state for auto-fitView on changes
   const prevSidebarOpenRef = useRef(sidebarOpen);
   const prevFocusModeRef = useRef(focusMode);
-  const prevHasSelectionRef = useRef(false);
+  // prevHasSelectionRef removed - no longer tracking selection close for fitView
   const prevLayoutVersionRef = useRef(layoutVersion);
 
   // Track if initial fitView has been performed
@@ -473,12 +473,7 @@ function Graph2DInner({
 
   // Container constraint hook for dynamic container resizing (Task 3)
   const { handleNodeDrag: containerHandleNodeDrag, handleNodeDragStop: containerHandleNodeDragStop } =
-    useContainerConstraint({
-      edgeThreshold: 50,
-      minPadding: 40,
-      animationDuration: 200,
-      expansionStep: 50,
-    });
+    useContainerConstraint();
 
   // Schema node drag handler - calls container constraint hook
   // PERF: Uses schemaNodesRef to avoid re-creating callback on every node move
@@ -1154,23 +1149,19 @@ function Graph2DInner({
   // Note: Don't trigger when panel OPENS (that's handled by centerOnNode in double-click)
   // ==========================================================================
   useEffect(() => {
-    const hasSelection = selectedNodeId !== null;
-    const prevHasSelection = prevHasSelectionRef.current;
-
     // Check if any relevant state changed
     const sidebarChanged = prevSidebarOpenRef.current !== sidebarOpen;
     const focusModeChanged = prevFocusModeRef.current !== focusMode;
-    const selectionClosed = prevHasSelection && !hasSelection;
     const layoutChanged = prevLayoutVersionRef.current !== layoutVersion;
 
     // Update refs
     prevSidebarOpenRef.current = sidebarOpen;
     prevFocusModeRef.current = focusMode;
-    prevHasSelectionRef.current = hasSelection;
     prevLayoutVersionRef.current = layoutVersion;
 
-    // Trigger fitView on relevant changes (not when panel opens)
-    if (sidebarChanged || focusModeChanged || selectionClosed || layoutChanged) {
+    // Trigger fitView on relevant changes (not when panel opens or selection clears)
+    // selectionClosed removed: clicking outside shouldn't cause jarring dezoom
+    if (sidebarChanged || focusModeChanged || layoutChanged) {
       // Small delay to let CSS animations start
       const timeoutId = setTimeout(() => {
         smartFitViewRef.current({ duration: GRAPH_ANIMATION.FIT_VIEW_DURATION });
@@ -1180,7 +1171,7 @@ function Graph2DInner({
     }
     // PERF: smartFitView accessed via ref to avoid effect re-registration
 
-  }, [sidebarOpen, focusMode, selectedNodeId, layoutVersion]);
+  }, [sidebarOpen, focusMode, layoutVersion]);
 
   // ==========================================================================
   // Initial FitView on Mount

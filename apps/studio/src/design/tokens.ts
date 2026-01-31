@@ -350,8 +350,8 @@ export const panelClasses = {
   headerTitle: 'text-sm font-medium text-white/90',
   headerSubtitle: 'text-[11px] text-white/40',
 
-  /** Panel body - scrollable content */
-  body: 'flex-1 overflow-y-auto scrollbar-thin p-3',
+  /** Panel body - scrollable content (16px padding matches shadcn sidebar-group p-4) */
+  body: 'flex-1 overflow-y-auto scrollbar-thin p-4',
 
   /** Panel footer - stats/actions */
   footer: 'px-4 py-3 border-t border-white/[0.06]',
@@ -665,8 +665,8 @@ export const sidebarTokens = {
       'transition-all duration-100',
       'hover:bg-white/[0.03]',
     ].join(' '),
-    /** Section content wrapper - 4px gap between 40px rows */
-    content: 'mt-1.5 space-y-1 overflow-hidden transition-all duration-150',
+    /** Section content wrapper - 4px gap, 8px left indent for hierarchy (shadcn SidebarMenuSub) */
+    content: 'mt-1.5 pl-2 space-y-1 overflow-hidden transition-all duration-150',
     /** Content expanded state */
     contentExpanded: 'max-h-[600px] opacity-100',
     /** Content collapsed state */

@@ -82,7 +82,7 @@ export const ResultsOverview = memo(function ResultsOverview({
   }
 
   return (
-    <div className={cn('flex items-center gap-2', className)}>
+    <div className={cn('flex items-center', gapTokens.default, className)}>
       {/* Node type badges - compact with hover expansion */}
       {typeCounts.map((item) => (
         <span

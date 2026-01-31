@@ -12,12 +12,12 @@
  * Structure: container → header → toolbar? → body (FilterTree) → footer?
  *
  * Design System (sidebarTokens):
- * - Row height: h-11 (44px) - WCAG 2.1 AA touch targets
+ * - Row height: h-10 (40px) comfortable touch targets
  * - Row gaps: gap-3 (12px) between elements
  * - Row padding: px-3 (12px) horizontal
- * - Icon box: 32x32px (base), 40x40px (header)
- * - Badge: min-w-7 (28px) pill shape
- * - Section spacing: space-y-2
+ * - Icon box: 24x24px (base), 28x28px (header)
+ * - Badge: min-w-7 (28px) rounded-md
+ * - Section spacing: mt-6 between sections, space-y-1 between rows
  */
 
 import { memo, type ReactNode } from 'react';

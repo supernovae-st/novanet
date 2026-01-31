@@ -6,14 +6,20 @@ import {
   SCOPE_CONFIGS,
   NODE_WIDTH,
   NODE_HEIGHT,
-  GROUP_PADDING,
   NODE_GAP,
+  SUBCAT_GAP,
+  SUBCAT_PADDING,
+  SUBCAT_HEADER,
   SCOPE_GAP,
+  SCOPE_PADDING,
+  SCOPE_HEADER,
 } from './types';
 import type { Scope } from '@novanet/core/types';
 
 /**
  * Swimlanes Layout - Horizontal bands per scope
+ *
+ * Uses unified spacing from types.ts (Golden Ratio system).
  *
  * Visual structure:
  * ┌─────────────────────────────────────────────────────┐
@@ -30,11 +36,9 @@ export function applySwimlaneLayout(
   const nodes: Node[] = [];
   const edges: Edge[] = [];
 
-  // Using Golden Ratio spacing system
-  const LANE_HEIGHT = 500;                        // Taller lanes for better visibility
-  const LANE_MARGIN = SCOPE_GAP;                  // 293px between lanes (was 40)
-  const NODE_SPACING_X = NODE_WIDTH + NODE_GAP;   // 252px horizontal (was 200)
-  const NODE_SPACING_Y = NODE_HEIGHT + NODE_GAP;  // 162px vertical (was 100)
+  // Derived spacing from unified constants
+  const NODE_STEP_X = NODE_WIDTH + NODE_GAP;     // Horizontal step between nodes
+  const NODE_STEP_Y = NODE_HEIGHT + NODE_GAP;    // Vertical step between nodes
 
   const scopeOrder: Scope[] = ['Project', 'Global', 'Shared'];
   let currentY = 0;
@@ -56,14 +60,19 @@ export function applySwimlaneLayout(
       scopeNodes.push(...subcatMeta.nodeTypes);
     }
 
-    const laneWidth = Math.max(1200, scopeNodes.length * NODE_SPACING_X + GROUP_PADDING * 2);
+    // Lane dimensions from unified constants
+    const laneWidth = Math.max(4000, scopeNodes.length * NODE_STEP_X + SCOPE_PADDING * 2);
+    const laneHeight = Math.max(
+      800,
+      NODE_HEIGHT + SUBCAT_PADDING * 2 + SUBCAT_HEADER + SCOPE_PADDING * 2 + SCOPE_HEADER
+    );
 
     // Scope group node (swimlane)
     nodes.push({
       id: scopeId,
       type: 'scopeGroup',
       position: { x: 0, y: currentY },
-      style: { width: laneWidth, height: LANE_HEIGHT },
+      style: { width: laneWidth, height: laneHeight },
       data: {
         scope,
         label: scopeDef.label,
@@ -73,15 +82,15 @@ export function applySwimlaneLayout(
     });
 
     // Layout subcategories horizontally within the lane
-    let currentX = GROUP_PADDING;
-    let subcatY = GROUP_PADDING;
+    let currentX = SCOPE_PADDING;
+    let subcatY = SCOPE_PADDING + SCOPE_HEADER;
 
     for (const [subcatName, subcatMeta] of Object.entries(scopeDef.subcategories)) {
       if (subcatMeta.nodeTypes.length === 0) continue;
 
       const subcatId = `subcat-${scope}-${subcatName}`;
-      const subcatWidth = subcatMeta.nodeTypes.length * NODE_SPACING_X + GROUP_PADDING;
-      const subcatHeight = LANE_HEIGHT - GROUP_PADDING * 2;
+      const subcatWidth = subcatMeta.nodeTypes.length * NODE_STEP_X + SUBCAT_PADDING * 2;
+      const subcatHeight = laneHeight - SCOPE_PADDING * 2 - SCOPE_HEADER;
 
       // Subcategory group
       nodes.push({
@@ -89,6 +98,7 @@ export function applySwimlaneLayout(
         type: 'subcategoryGroup',
         parentId: scopeId,
         extent: 'parent',
+        draggable: true,
         position: { x: currentX, y: subcatY },
         style: { width: subcatWidth, height: subcatHeight },
         data: {
@@ -101,8 +111,8 @@ export function applySwimlaneLayout(
       });
 
       // Layout nodes horizontally within subcategory
-      let nodeX = GROUP_PADDING / 2;
-      const nodeY = (subcatHeight - NODE_HEIGHT) / 2;
+      let nodeX = SUBCAT_PADDING;
+      const nodeY = SUBCAT_PADDING + SUBCAT_HEADER + (subcatHeight - SUBCAT_PADDING * 2 - SUBCAT_HEADER - NODE_HEIGHT) / 2;
 
       for (const nodeType of subcatMeta.nodeTypes) {
         const schemaNode = hierarchy.nodes.find(n => n.nodeType === nodeType);
@@ -123,13 +133,13 @@ export function applySwimlaneLayout(
           },
         });
 
-        nodeX += NODE_SPACING_X;
+        nodeX += NODE_STEP_X;
       }
 
-      currentX += subcatWidth + LANE_MARGIN;
+      currentX += subcatWidth + SUBCAT_GAP;
     }
 
-    currentY += LANE_HEIGHT + LANE_MARGIN;
+    currentY += laneHeight + SCOPE_GAP;
   }
 
   // Create edges
