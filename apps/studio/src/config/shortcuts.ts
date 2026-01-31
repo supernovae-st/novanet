@@ -313,6 +313,18 @@ export const SHORTCUTS: Shortcut[] = [
     action: 'novanet:layout:force',
   },
 
+  // Help
+  {
+    id: 'show-help',
+    keys: '?',
+    label: 'Keyboard Shortcuts',
+    description: 'Show keyboard shortcuts help',
+    category: 'action',
+    icon: 'HelpCircle',
+    when: ['input-not-focused'],
+    action: 'novanet:show-help',
+  },
+
   // Actions
   {
     id: 'copy-properties',

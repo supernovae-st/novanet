@@ -37,7 +37,7 @@ import { cn } from '@/lib/utils';
 import { logger } from '@/lib/logger';
 import { glassClasses, gapTokens } from '@/design/tokens';
 import { EmptyState } from '@/components/ui/EmptyState';
-import { useFilteredGraph, useFocusMode, useHoverHighlight, useNodeExpansion, useCenterOnNode, useSmartFitView, useContainerConstraint, useGraphInteractions } from '@/hooks';
+import { useFilteredGraph, useFocusMode, useHoverHighlight, useNodeExpansion, useCenterOnNode, useSmartFitView, useContainerConstraint, useGraphInteractions, Z_INDEX } from '@/hooks';
 import { useUIStore } from '@/stores/uiStore';
 import { useGraphStore } from '@/stores/graphStore';
 import { NODE_TYPE_CONFIG, nodeTypeConfigs } from '@/config/nodeTypes';
@@ -409,7 +409,31 @@ function Graph2DInner({
         (edge) => visibleNodeIds.has(edge.source) && visibleNodeIds.has(edge.target)
       );
 
-      setSchemaNodes(visibleNodes);
+      // Apply initial z-index based on node type and scope
+      // Hierarchy: Shared(10) < Global(20) < Project(30) < Nodes(1000)
+      const nodesWithZIndex = visibleNodes.map((node) => {
+        let zIndex: number = Z_INDEX.BASE;
+
+        // Scope containers: scope-{Scope}
+        if (node.id.startsWith('scope-')) {
+          const scope = node.id.replace('scope-', '');
+          if (scope === 'Shared') zIndex = Z_INDEX.SCOPE_SHARED;
+          else if (scope === 'Global') zIndex = Z_INDEX.SCOPE_GLOBAL;
+          else if (scope === 'Project') zIndex = Z_INDEX.SCOPE_PROJECT;
+        }
+        // Subcategory containers: subcat-{Scope}-{SubcategoryName}
+        else if (node.id.startsWith('subcat-')) {
+          const parts = node.id.replace('subcat-', '').split('-');
+          const scope = parts[0];
+          if (scope === 'Shared') zIndex = Z_INDEX.SUBCAT_SHARED;
+          else if (scope === 'Global') zIndex = Z_INDEX.SUBCAT_GLOBAL;
+          else if (scope === 'Project') zIndex = Z_INDEX.SUBCAT_PROJECT;
+        }
+
+        return { ...node, zIndex };
+      });
+
+      setSchemaNodes(nodesWithZIndex);
       setSchemaEdges(visibleEdges);
     } catch (error) {
       console.error('[Graph2D] Schema layout failed:', error);

@@ -13,7 +13,7 @@
 
 import { memo, useMemo, useEffect, useRef } from 'react';
 import { useInternalNode, useStore, type Edge, type EdgeProps } from '@xyflow/react';
-import { useUIStore, selectHoveredEdgeId, selectHoveredNodeId, selectSelectedNodeId } from '@/stores/uiStore';
+import { useUIStore, selectHoveredEdgeId, selectHoveredNodeId, selectSelectedNodeId, selectSelectedEdgeId } from '@/stores/uiStore';
 import { useEdgeVisibility } from './EdgeVisibilityManager';
 
 // New modular system
@@ -87,15 +87,17 @@ export const FloatingEdge = memo(function FloatingEdge({
   // Get zoom for LOD and label scaling
   const zoom = useStore((state) => state.transform[2]);
 
-  // Direct store subscriptions for hover state
+  // Direct store subscriptions for hover and selection state
   const hoveredEdgeId = useUIStore(selectHoveredEdgeId);
   const hoveredNodeId = useUIStore(selectHoveredNodeId);
   const selectedNodeId = useUIStore(selectSelectedNodeId);
+  const selectedEdgeId = useUIStore(selectSelectedEdgeId);
 
   // Compute local state
   const isDimmed = data?.dimmed === true;
   const isAnimated = data?.animated !== false;
-  const isSelected = selected || data?.selected;
+  // Use store-based selection for reliable state (React Flow's selected prop can be unreliable)
+  const isSelected = selected || data?.selected || selectedEdgeId === id;
   const showLabel = data?.showLabel !== false;
   const relationType = data?.relationType || '';
 
@@ -266,6 +268,48 @@ export const FloatingEdge = memo(function FloatingEdge({
           opacity={0.9}
           style={{ mixBlendMode: 'screen' }}
         />
+      )}
+
+      {/* Selection pulse effect - animated glow when edge is selected */}
+      {isSelected && (
+        <>
+          {/* Outer pulse glow */}
+          <path
+            d={edgePath}
+            fill="none"
+            stroke={theme.colors.glow}
+            strokeWidth={finalStrokeWidth + 12}
+            strokeLinecap="round"
+            style={{
+              opacity: 0.4,
+              filter: 'blur(8px)',
+              animation: 'edgePulse 1.5s ease-in-out infinite',
+            }}
+          />
+          {/* Inner bright pulse */}
+          <path
+            d={edgePath}
+            fill="none"
+            stroke="#ffffff"
+            strokeWidth={finalStrokeWidth + 4}
+            strokeLinecap="round"
+            style={{
+              opacity: 0.6,
+              filter: 'blur(3px)',
+              animation: 'edgePulse 1.5s ease-in-out infinite',
+              animationDelay: '0.1s',
+            }}
+          />
+          {/* CSS keyframes injected via style tag */}
+          <style>
+            {`
+              @keyframes edgePulse {
+                0%, 100% { opacity: 0.3; }
+                50% { opacity: 0.7; }
+              }
+            `}
+          </style>
+        </>
       )}
 
       {/* Effect renderer */}

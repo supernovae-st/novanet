@@ -113,6 +113,12 @@ function formatAsTypeScript(properties: Record<string, unknown>): string {
 
 /**
  * Format properties as YAML
+ *
+ * Supports:
+ * - Nested objects
+ * - Arrays (both primitive and object items)
+ * - Multi-line strings (block scalar)
+ * - Special characters (quoted)
  */
 function formatAsYaml(properties: Record<string, unknown>, indent = 0): string {
   const lines: string[] = [];
@@ -125,30 +131,66 @@ function formatAsYaml(properties: Record<string, unknown>, indent = 0): string {
       lines.push(`${prefix}${key}:`);
       lines.push(formatAsYaml(value as Record<string, unknown>, indent + 1));
     } else if (Array.isArray(value)) {
-      lines.push(`${prefix}${key}:`);
-      value.forEach((item) => {
-        if (typeof item === 'object') {
-          lines.push(`${prefix}  -`);
-          lines.push(formatAsYaml(item as Record<string, unknown>, indent + 2));
-        } else {
-          lines.push(`${prefix}  - ${formatYamlValue(item)}`);
-        }
-      });
+      if (value.length === 0) {
+        lines.push(`${prefix}${key}: []`);
+      } else {
+        lines.push(`${prefix}${key}:`);
+        value.forEach((item) => {
+          if (item !== null && typeof item === 'object') {
+            lines.push(`${prefix}  -`);
+            lines.push(formatAsYaml(item as Record<string, unknown>, indent + 2));
+          } else {
+            lines.push(`${prefix}  - ${formatYamlValue(item, indent + 1)}`);
+          }
+        });
+      }
     } else {
-      lines.push(`${prefix}${key}: ${formatYamlValue(value)}`);
+      const formatted = formatYamlValue(value, indent);
+      lines.push(`${prefix}${key}: ${formatted}`);
     }
   }
 
   return lines.join('\n');
 }
 
-function formatYamlValue(value: unknown): string {
+/**
+ * Format a value for YAML output
+ *
+ * Handles:
+ * - Multi-line strings with block scalar (|)
+ * - Strings with special characters (quoted)
+ * - Numbers, booleans, null
+ */
+function formatYamlValue(value: unknown, indent = 0): string {
   if (typeof value === 'string') {
+    // Multi-line strings use block scalar
+    if (value.includes('\n')) {
+      const prefix = '  '.repeat(indent + 1);
+      const lines = value.split('\n');
+      return `|\n${lines.map((line) => `${prefix}${line}`).join('\n')}`;
+    }
     // Quote strings with special characters
-    if (value.includes('\n') || value.includes(':') || value.includes('#')) {
-      return `"${value.replace(/"/g, '\\"')}"`;
+    if (
+      value.includes(':') ||
+      value.includes('#') ||
+      value.includes("'") ||
+      value.includes('"') ||
+      value.startsWith(' ') ||
+      value.endsWith(' ') ||
+      value === '' ||
+      // YAML reserved words
+      /^(true|false|null|yes|no|on|off)$/i.test(value)
+    ) {
+      // Use single quotes, escape single quotes by doubling
+      return `'${value.replace(/'/g, "''")}'`;
     }
     return value;
+  }
+  if (typeof value === 'boolean') {
+    return value ? 'true' : 'false';
+  }
+  if (value === null || value === undefined) {
+    return 'null';
   }
   return String(value);
 }

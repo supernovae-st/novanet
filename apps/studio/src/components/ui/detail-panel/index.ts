@@ -13,5 +13,6 @@ export {
   type NodeNavigationCardProps,
   type RelationNavigationCardProps,
 } from './NodeNavigationCard';
-export { CopyButton, type CopyButtonProps } from './CopyButton';
+// Re-export from dx for backwards compatibility
+export { CopyButton, type CopyButtonProps } from '@/components/dx/CopyButton';
 export { JsonView, JsonToggleSection, type JsonViewProps, type JsonToggleSectionProps } from './JsonView';
