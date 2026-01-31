@@ -17,7 +17,7 @@ import { cn } from '@/lib/utils';
 import { useQueryStore } from '@/stores/queryStore';
 import { useCopyFeedback, useAutoFocus } from '@/hooks';
 import { FOCUS_DELAY_MS } from '@/config/constants';
-import { glassClasses } from '@/design/tokens';
+import { glassClasses, modalClasses } from '@/design/tokens';
 import { IconButton, Kbd } from '@/components/ui';
 
 // Matrix-style characters for animation
@@ -422,7 +422,7 @@ export const QueryPill = memo(function QueryPill({ className, onRun }: QueryPill
           }}
         >
           {/* Backdrop */}
-          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
+          <div className={modalClasses.backdrop} />
 
           {/* Modal Content */}
           <div

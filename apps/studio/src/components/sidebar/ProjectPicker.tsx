@@ -14,7 +14,7 @@ import { useState, useMemo, useCallback, useEffect, useRef, memo, useDeferredVal
 import { createPortal } from 'react-dom';
 import { Search, X, FolderOpen, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { glassClasses, iconSizes } from '@/design/tokens';
+import { glassClasses, modalClasses, iconSizes } from '@/design/tokens';
 import { Kbd } from '@/components/ui';
 import { useFilterStore } from '@/stores/filterStore';
 import {
@@ -180,7 +180,7 @@ export const ProjectPicker = memo(function ProjectPicker({
       role="presentation"
     >
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" aria-hidden="true" />
+      <div className={modalClasses.backdrop} aria-hidden="true" />
 
       {/* Modal - glass morphism design */}
       <div
