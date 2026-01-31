@@ -10,7 +10,7 @@
 import { memo, useState, useCallback } from 'react';
 import { type LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { iconSizes } from '@/design/tokens';
+import { iconSizes, gapTokens } from '@/design/tokens';
 
 interface ViewCardProps {
   id: string;
@@ -51,7 +51,7 @@ export const ViewCard = memo(function ViewCard({
         // Layout - matches FilterCard (48px height for WCAG)
         'group relative flex items-center',
         'h-12 w-full rounded-xl',
-        'gap-3 px-3.5',
+        gapTokens.spacious, 'px-3.5',
         // Frosted Glass base - matches FilterCard
         'backdrop-blur-sm',
         'ring-1 ring-inset',

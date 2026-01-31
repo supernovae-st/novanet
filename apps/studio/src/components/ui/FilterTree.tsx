@@ -28,7 +28,7 @@ import {
   type KeyboardEvent,
 } from 'react';
 import { cn } from '@/lib/utils';
-import { filterTreeClasses as ftc, iconSizes } from '@/design/tokens';
+import { filterTreeClasses as ftc, iconSizes, gapTokens } from '@/design/tokens';
 import { TriStateCheckbox, type CheckboxState } from './TriStateCheckbox';
 import { ProgressBar } from './ProgressBar';
 import { NAV_ICONS, STATUS_ICONS } from '@/config/iconSystem';
@@ -235,56 +235,57 @@ const FilterTreeSection = memo(function FilterTreeSection({
   return (
     <div className={cn('mb-1', className)} role="treeitem" aria-expanded={isExpanded} aria-labelledby={`section-label-${id}`}>
       {/* Section Header - Unified design: checkbox | icon | label | count | chevron (right) */}
-      <button
-        ref={headerRef}
-        onClick={handleToggle}
-        onKeyDown={handleKeyDown}
-        tabIndex={tabIndex}
-        aria-expanded={isExpanded}
-        aria-controls={`filter-section-${id}`}
-        aria-label={`${isExpanded ? 'Collapse' : 'Expand'} ${label}`}
-        className="flex items-center gap-2.5 w-full py-0.5 group"
-      >
-        {/* Tri-state Checkbox */}
-        <div onClick={(e) => { e.stopPropagation(); onCheckboxClick(); }}>
-          <TriStateCheckbox
-            state={checkboxState}
-            onClick={onCheckboxClick}
-            color={color}
-            disabled={disabled}
-            label={`Select all ${label}`}
-          />
-        </div>
-
-        {/* Icon */}
-        <span className="flex-shrink-0" style={{ color }}>{icon}</span>
-
-        {/* Label */}
-        <span
-          id={`section-label-${id}`}
-          className="text-[11px] uppercase tracking-wider font-semibold"
-          style={{ color }}
-        >
-          {label}
-        </span>
-
-        {/* Count */}
-        {count !== undefined && (
-          <span className="text-[10px] tabular-nums text-white/25">({formatCount(count)})</span>
-        )}
-
-        {/* Chevron - RIGHT aligned */}
-        <ChevronDownIcon
-          className={cn(
-            'ml-auto',
-            iconSizes.md,
-            'text-white/30',
-            'transition-transform duration-200',
-            'group-hover:text-white/50',
-            !isExpanded && '-rotate-90'
-          )}
+      <div className={cn('flex items-center w-full py-0.5 group', gapTokens.comfortable)}>
+        {/* Tri-state Checkbox - separate clickable */}
+        <TriStateCheckbox
+          state={checkboxState}
+          onClick={onCheckboxClick}
+          color={color}
+          disabled={disabled}
+          label={`Select all ${label}`}
         />
-      </button>
+
+        {/* Expand/Collapse area - icon | label | count | chevron */}
+        <button
+          ref={headerRef}
+          onClick={handleToggle}
+          onKeyDown={handleKeyDown}
+          tabIndex={tabIndex}
+          aria-expanded={isExpanded}
+          aria-controls={`filter-section-${id}`}
+          aria-label={`${isExpanded ? 'Collapse' : 'Expand'} ${label}`}
+          className={cn('flex items-center flex-1 min-w-0', gapTokens.comfortable)}
+        >
+          {/* Icon */}
+          <span className="flex-shrink-0" style={{ color }}>{icon}</span>
+
+          {/* Label */}
+          <span
+            id={`section-label-${id}`}
+            className="text-[11px] uppercase tracking-wider font-semibold"
+            style={{ color }}
+          >
+            {label}
+          </span>
+
+          {/* Count */}
+          {count !== undefined && (
+            <span className="text-[10px] tabular-nums text-white/25">({formatCount(count)})</span>
+          )}
+
+          {/* Chevron - RIGHT aligned */}
+          <ChevronDownIcon
+            className={cn(
+              'ml-auto',
+              iconSizes.md,
+              'text-white/30',
+              'transition-transform duration-200',
+              'group-hover:text-white/50',
+              !isExpanded && '-rotate-90'
+            )}
+          />
+        </button>
+      </div>
 
       {/* Section Content */}
       <div
@@ -370,24 +371,31 @@ const FilterTreeRow = memo(function FilterTreeRow({
         className
       )}
     >
-      {/* Checkbox */}
+      {/* Checkbox - matches TriStateCheckbox styling */}
       <div
         className={cn(
           ftc.checkbox,
           isSelected ? ftc.checkboxChecked : ftc.checkboxUnchecked
         )}
         style={{
-          backgroundColor: isSelected ? `${color}30` : 'transparent',
-          borderColor: isSelected ? color : undefined,
+          backgroundColor: isSelected ? `${color}20` : 'transparent',
+          borderColor: isSelected ? color : 'rgba(255,255,255,0.2)',
         }}
       >
-        {isSelected && <CheckIcon className="w-2.5 h-2.5" style={{ color }} />}
+        {isSelected && <CheckIcon className={iconSizes.xs} style={{ color }} />}
       </div>
 
-      {/* Icon */}
-      <span className="flex-shrink-0" style={{ color }}>
-        {icon}
-      </span>
+      {/* Icon with background - matches ViewCard */}
+      <div
+        className={cn(
+          'flex-shrink-0 flex items-center justify-center',
+          'w-8 h-8 rounded-lg',
+          'transition-all duration-200',
+          isSelected ? 'bg-white/[0.10]' : 'bg-white/[0.05] group-hover:bg-white/[0.08]'
+        )}
+      >
+        <span style={{ color }}>{icon}</span>
+      </div>
 
       {/* Label */}
       <span

@@ -27,7 +27,7 @@ import {
 } from 'react';
 import { ChevronDown, Check, Minus } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { iconSizes } from '@/design/tokens';
+import { iconSizes, gapTokens } from '@/design/tokens';
 import type { CheckboxState } from './FilterSection';
 
 export type { CheckboxState };
@@ -147,7 +147,7 @@ export const CollapsibleSection = memo(function CollapsibleSection({
         aria-expanded={isExpanded}
         aria-controls={`collapsible-section-${id}`}
         aria-label={`${isExpanded ? 'Collapse' : 'Expand'} ${label}`}
-        className="flex items-center gap-2.5 w-full group py-0.5"
+        className={cn('flex items-center w-full group py-0.5', gapTokens.comfortable)}
       >
         {/* Tri-state Checkbox (optional) */}
         {showCheckbox && (
@@ -221,7 +221,7 @@ export const CollapsibleSection = memo(function CollapsibleSection({
         role="group"
         aria-label={`${label} items`}
       >
-        <div className="flex flex-col gap-2.5 py-1">{children}</div>
+        <div className={cn('flex flex-col py-1', gapTokens.comfortable)}>{children}</div>
       </div>
     </div>
   );
