@@ -13,18 +13,18 @@
  */
 
 import { memo, useCallback, useMemo } from 'react';
-import { ACTION_ICONS, STATUS_ICONS } from '@/config/iconSystem';
 import { NODE_TYPE_CONFIG, NODE_VISUAL_CATEGORIES } from '@/config/nodeTypes';
-import { iconSizes } from '@/design/tokens';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import { FilterTree } from '@/components/ui/FilterTree';
+import { SelectionHeader } from '@/components/ui/SelectionHeader';
 import { calculateCheckboxState } from '@/hooks';
+import { iconSizes } from '@/design/tokens';
+import { ACTION_ICONS, STATUS_ICONS } from '@/config/iconSystem';
 import type { CheckboxState } from '@/components/ui/TriStateCheckbox';
 import type { NodeType } from '@/types';
 
-// Design system icons
-const LoaderIcon = STATUS_ICONS.loading;
 const PlayIcon = ACTION_ICONS.execute;
+const LoaderIcon = STATUS_ICONS.loading;
 
 // =============================================================================
 // MAIN SECTION COMPONENT
@@ -52,7 +52,7 @@ export interface NodeLabelsSectionProps {
 }
 
 export const NodeLabelsSection = memo(function NodeLabelsSection({
-  // totalNodes - available via tab count
+  totalNodes,
   labelCounts,
   maxCount,
   selectedLabels,
@@ -98,49 +98,19 @@ export const NodeLabelsSection = memo(function NodeLabelsSection({
     [onToggleCategoryLabels]
   );
 
-  // Execute button component
-  const executeButton = (
-    <button
-      onClick={onExecuteQuery}
-      disabled={selectedLabels.size === 0 || isExecuting}
-      aria-label={`Execute query for ${selectedLabels.size} selected node types`}
-      data-testid="execute-node-query"
-      className={`p-1.5 rounded-lg transition-all duration-200 ${
-        selectedLabels.size > 0
-          ? 'text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 hover:scale-110'
-          : 'text-white/20 cursor-not-allowed'
-      }`}
-      title="Execute query for selected labels"
-    >
-      {isExecuting ? (
-        <LoaderIcon className={`${iconSizes.md} animate-spin`} />
-      ) : (
-        <PlayIcon className={iconSizes.md} />
-      )}
-    </button>
-  );
-
   return (
     <section data-testid="node-labels-container">
-      {/* Compact action bar */}
-      <div className="flex items-center justify-between px-1 py-1.5 mb-2">
-        <button
-          onClick={onToggleAllNodes}
-          className="text-[10px] text-white/40 hover:text-white/60 transition-colors"
-        >
-          {nodesCheckboxState === 'all' ? 'Deselect all' : 'Select all'}
-        </button>
-        <div className="flex items-center gap-2">
-          {selectedLabels.size > 0 && (
-            <span className="text-[10px] text-white/30">
-              {selectedLabels.size} selected
-            </span>
-          )}
-          {executeButton}
-        </div>
-      </div>
+      <SelectionHeader
+        label="All Nodes"
+        totalCount={totalNodes}
+        selectedCount={selectedLabels.size}
+        checkboxState={nodesCheckboxState}
+        onToggleAll={onToggleAllNodes}
+        onExecute={onExecuteQuery}
+        isExecuting={isExecuting}
+      />
 
-      <FilterTree.Root showProgressBars maxCount={maxCount} disabled={isExecuting}>
+      <FilterTree.Root showProgressBars={false} maxCount={maxCount} disabled={isExecuting}>
         {/* Category Tree */}
         {categoryData.map(({ category, totalCount, checkboxState }) => (
           <FilterTree.Section
