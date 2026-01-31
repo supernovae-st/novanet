@@ -23,6 +23,9 @@ import { parse as parseYaml } from 'yaml';
 // Expected counts from YAML source of truth
 const EXPECTED_NODE_TYPES = 35;
 
+// Meta-schema labels (organizing principles) - not business data, excluded from NODE_TYPES
+const META_SCHEMA_LABELS = ['Scope', 'Subcategory', 'NodeTypeMeta'];
+
 // Note: These constants document the v8.2.0 schema but tests validate via Neo4j queries
 // Standard properties: key, display_name, description, llm_context, created_at, updated_at
 // Deprecated (v8.2.0): icon, priority, freshness
@@ -131,12 +134,12 @@ describe('Schema Synchronization - Binary Tests', () => {
   // ===========================================================================
 
   describe('Neo4j ↔ TypeScript Sync', () => {
-    it('Neo4j has exactly 35 labels', async () => {
-      const result = await session.run('CALL db.labels() YIELD label RETURN count(label) AS count');
-      const count = result.records[0].get('count');
-      const countValue = typeof count === 'object' && 'low' in count ? count.low : count;
+    it('Neo4j has exactly 35 business labels (excluding meta-schema)', async () => {
+      const result = await session.run('CALL db.labels() YIELD label RETURN collect(label) AS labels');
+      const allLabels = result.records[0].get('labels') as string[];
+      const businessLabels = allLabels.filter(label => !META_SCHEMA_LABELS.includes(label));
 
-      expect(countValue).toBe(EXPECTED_NODE_TYPES);
+      expect(businessLabels.length).toBe(EXPECTED_NODE_TYPES);
     });
 
     it('All TypeScript NODE_TYPES exist as Neo4j labels', async () => {
@@ -150,11 +153,13 @@ describe('Schema Synchronization - Binary Tests', () => {
       expect(missingInNeo4j.length).toBeLessThanOrEqual(8); // Allow up to 8 empty labels
     });
 
-    it('No extra labels in Neo4j beyond NODE_TYPES', async () => {
+    it('No extra labels in Neo4j beyond NODE_TYPES (excluding meta-schema)', async () => {
       const result = await session.run('CALL db.labels() YIELD label RETURN collect(label) AS labels');
       const neo4jLabels = result.records[0].get('labels') as string[];
 
-      const extraLabels = neo4jLabels.filter(label => !NODE_TYPES.includes(label as typeof NODE_TYPES[number]));
+      // Filter out meta-schema labels before comparing
+      const businessLabels = neo4jLabels.filter(label => !META_SCHEMA_LABELS.includes(label));
+      const extraLabels = businessLabels.filter(label => !NODE_TYPES.includes(label as typeof NODE_TYPES[number]));
 
       expect(extraLabels).toEqual([]);
     });
@@ -249,10 +254,11 @@ describe('Schema Synchronization - Binary Tests', () => {
   // ===========================================================================
 
   describe('Structural Integrity', () => {
-    it('All keyed nodes have required standard properties', async () => {
+    it('All keyed nodes have required standard properties (excluding meta-schema)', async () => {
       const result = await session.run(`
         MATCH (n)
         WHERE n.key IS NOT NULL
+          AND NOT any(l IN labels(n) WHERE l IN $metaLabels)
         WITH labels(n)[0] AS label, n
         WHERE n.display_name IS NULL
            OR n.created_at IS NULL
@@ -262,7 +268,7 @@ describe('Schema Synchronization - Binary Tests', () => {
                n.created_at IS NULL AS missing_created_at,
                n.updated_at IS NULL AS missing_updated_at
         LIMIT 10
-      `);
+      `, { metaLabels: META_SCHEMA_LABELS });
 
       const invalidNodes = result.records.map(r => ({
         label: r.get('label'),
