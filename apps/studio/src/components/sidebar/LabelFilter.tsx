@@ -63,7 +63,7 @@ const LabelButton = memo(function LabelButton({
       className={cn(
         'flex items-center justify-between px-2.5 py-1.5 rounded-lg',
         gapTokens.default,
-        'text-sm transition-all duration-200',
+        'text-sm transition-colors duration-200',
         isSelected
           ? 'bg-white/10 text-white'
           : 'text-white/60 hover:bg-white/5 hover:text-white/80'

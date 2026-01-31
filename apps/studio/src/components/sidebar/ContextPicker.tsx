@@ -49,7 +49,7 @@ const SelectorButton = memo(function SelectorButton({
       disabled={disabled}
       className={cn(
         cn('flex items-center px-3 py-2 rounded-xl', gapTokens.default),
-        'transition-all duration-150',
+        'transition-colors duration-150',
         disabled
           ? 'opacity-40 cursor-not-allowed'
           : 'hover:bg-white/8 active:bg-white/10'

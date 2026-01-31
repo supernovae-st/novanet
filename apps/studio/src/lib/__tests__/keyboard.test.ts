@@ -2,67 +2,7 @@
  * Keyboard utilities tests
  */
 
-import { handleViewPresetShortcut, parseKeyCombo, matchesKeyCombo, isInputFocused } from '../keyboard';
-
-describe('handleViewPresetShortcut', () => {
-  it('maps 1 to project-structure preset', () => {
-    const result = handleViewPresetShortcut('1');
-    expect(result).toBe('project-structure');
-  });
-
-  it('maps 2 to generation-chain preset', () => {
-    const result = handleViewPresetShortcut('2');
-    expect(result).toBe('generation-chain');
-  });
-
-  it('maps 3 to locale-knowledge preset', () => {
-    const result = handleViewPresetShortcut('3');
-    expect(result).toBe('locale-knowledge');
-  });
-
-  it('maps 4 to concept-network preset', () => {
-    const result = handleViewPresetShortcut('4');
-    expect(result).toBe('concept-network');
-  });
-
-  it('maps 5 to prompts-rules preset', () => {
-    const result = handleViewPresetShortcut('5');
-    expect(result).toBe('prompts-rules');
-  });
-
-  it('maps 6 to seo-geo preset', () => {
-    const result = handleViewPresetShortcut('6');
-    expect(result).toBe('seo-geo');
-  });
-
-  it('maps 7 to high-priority preset', () => {
-    const result = handleViewPresetShortcut('7');
-    expect(result).toBe('high-priority');
-  });
-
-  it('maps 8 to realtime preset', () => {
-    const result = handleViewPresetShortcut('8');
-    expect(result).toBe('realtime');
-  });
-
-  it('maps 0 to all-nodes preset', () => {
-    const result = handleViewPresetShortcut('0');
-    expect(result).toBe('all-nodes');
-  });
-
-  it('returns null for non-shortcut keys', () => {
-    expect(handleViewPresetShortcut('a')).toBeNull();
-    expect(handleViewPresetShortcut('9')).toBeNull();
-    expect(handleViewPresetShortcut('')).toBeNull();
-    expect(handleViewPresetShortcut('Enter')).toBeNull();
-  });
-
-  it('returns null for special characters', () => {
-    expect(handleViewPresetShortcut('!')).toBeNull();
-    expect(handleViewPresetShortcut('@')).toBeNull();
-    expect(handleViewPresetShortcut(' ')).toBeNull();
-  });
-});
+import { parseKeyCombo, matchesKeyCombo, isInputFocused } from '../keyboard';
 
 describe('parseKeyCombo', () => {
   it('parses simple key', () => {

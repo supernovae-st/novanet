@@ -291,10 +291,13 @@ export const QueryPill = memo(function QueryPill({ className, onRun }: QueryPill
       {/* Compact Pill */}
       <div
         className={cn(
-          // Glass morphism with tokens
+          // Solid dark - matches Pill component
           'relative flex items-center gap-5 px-6 h-20 rounded-2xl',
-          glassClasses.floating,
-          'transition-all duration-300',
+          'bg-[#0a0a0f] border border-white/[0.10]',
+          'shadow-2xl shadow-black/60',
+          'ring-1 ring-white/[0.03] ring-inset',
+          'hover:border-white/[0.18]',
+          'transition duration-300 ease-out',
           // Executing state - intense Matrix glow
           isExecuting && [
             'border-emerald-400/60',
@@ -325,7 +328,7 @@ export const QueryPill = memo(function QueryPill({ className, onRun }: QueryPill
         {/* Prompt with Matrix animation */}
         <div className={cn('flex items-center shrink-0 select-none relative z-10', gapTokens.default)}>
           <span className={cn(
-            'font-mono text-xs font-bold transition-all duration-300',
+            'font-mono text-xs font-bold transition duration-300',
             isExecuting
               ? 'text-emerald-400 drop-shadow-[0_0_12px_rgba(52,211,153,0.8)] animate-pulse'
               : 'text-emerald-500/50'
@@ -365,7 +368,7 @@ export const QueryPill = memo(function QueryPill({ className, onRun }: QueryPill
               onClick={startEditing}
               onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && startEditing()}
               className={cn(
-                'font-mono text-sm cursor-text truncate transition-all duration-200',
+                'font-mono text-sm cursor-text truncate transition duration-200',
                 hasQuery ? 'text-white/80' : 'text-white/40',
                 // Matrix glow effect when executing
                 isExecuting && 'text-emerald-300 drop-shadow-[0_0_10px_rgba(52,211,153,0.6)]'

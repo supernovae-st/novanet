@@ -11,13 +11,14 @@
  *
  * Structure: container → header → toolbar? → body (FilterTree) → footer?
  *
- * Design System (sidebarTokens):
- * - Row height: h-10 (40px) comfortable touch targets
- * - Row gaps: gap-3 (12px) between elements
- * - Row padding: px-3 (12px) horizontal
- * - Icon box: 24x24px (base), 28x28px (header)
- * - Badge: min-w-7 (28px) rounded-md
- * - Section spacing: mt-6 between sections, space-y-1 between rows
+ * Design System (sidebarTokens) — shadcn-inspired compact:
+ * - Row height: h-8 (32px) compact rows
+ * - Row gaps: gap-2 (8px) between elements
+ * - Row padding: px-2 (8px) horizontal
+ * - Icon box: 16x16px (base), 40x40px (header)
+ * - Badge: plain text, no pill background
+ * - Section spacing: mt-4 between sections, space-y-px between rows
+ * - Section indent: pl-4 (shadcn SidebarMenuSub pattern)
  */
 
 import { memo, type ReactNode } from 'react';
@@ -30,17 +31,29 @@ import type { CheckboxState } from '@/components/ui/TriStateCheckbox';
 // TYPES
 // =============================================================================
 
+/** Individual stat pill displayed in the header */
+export interface HeaderStat {
+  label: string;
+  value?: string | number;
+  color?: string;
+}
+
 export interface SidebarContentProps {
   /** Test ID for the container */
   testId?: string;
   /** Additional class names */
   className?: string;
-  /** Header configuration */
-  header: {
+  /** Header configuration (optional - omit when tab bar handles identity) */
+  header?: {
     icon: ReactNode;
     iconGradient?: { from: string; to: string };
     title: string;
+    /** Plain subtitle text (legacy) */
     subtitle?: string;
+    /** Stat pills - replaces subtitle with rich badges */
+    stats?: HeaderStat[];
+    /** Live status indicator: 'live' = green pulse, 'loading' = amber pulse */
+    status?: 'live' | 'loading';
     action?: ReactNode;
   };
   /** Toolbar content between header and body (e.g., AI search, tabs) */
@@ -107,6 +120,8 @@ export const SidebarContent = memo(function SidebarContent({
   footer,
   children,
 }: SidebarContentProps) {
+  const accentColor = header.iconGradient?.from || '#888';
+
   return (
     <div
       className={cn(panelClasses.container, className)}
@@ -114,55 +129,98 @@ export const SidebarContent = memo(function SidebarContent({
       role="region"
       aria-label={header.title}
     >
-      {/* Header - Premium Glassmorphism */}
-      <div className={cn('relative', panelClasses.header)}>
-        {/* Background gradient */}
-        <div
-          className="absolute inset-0 pointer-events-none opacity-5"
-          style={{
-            background: header.iconGradient
-              ? `linear-gradient(to bottom right, ${header.iconGradient.from}, transparent, ${header.iconGradient.to})`
-              : undefined,
-          }}
-        />
+      {/* Header - Premium Glassmorphism (A-E improvements) */}
+      <div className="relative group/header overflow-hidden px-4 py-3.5 border-b border-white/[0.04]">
+        {/* C: Gradient accent background - stronger presence */}
+        {header.iconGradient && (
+          <div
+            className="absolute inset-0 pointer-events-none opacity-[0.07] group-hover/header:opacity-[0.12] transition-opacity duration-300"
+            style={{
+              background: `linear-gradient(135deg, ${header.iconGradient.from}, transparent 60%, ${header.iconGradient.to}40)`,
+            }}
+          />
+        )}
 
         <div className={cn('relative flex items-center', gapTokens.spacious)}>
-          {/* Icon box with glow - uses sidebarTokens.iconBox.lg (40x40px) */}
-          <div className="relative">
+          {/* A: Enlarged icon box (w-10 h-10) with stronger glow + colored ring */}
+          <div className="relative flex-shrink-0">
+            {/* Glow - stronger opacity + wider blur */}
             {header.iconGradient && (
               <div
-                className="absolute inset-0 rounded-2xl opacity-20 blur-lg"
+                className="absolute -inset-1 rounded-2xl opacity-30 blur-xl group-hover/header:opacity-50 transition-opacity duration-300"
                 style={{
                   background: `linear-gradient(to bottom right, ${header.iconGradient.from}, ${header.iconGradient.to})`,
                 }}
               />
             )}
+            {/* D: Icon box with hover scale */}
             <div
               className={cn(
-                'relative',
-                sidebarTokens.iconBox.lg, // Unified: 40x40px, rounded-xl
-                'border border-white/10 shadow-lg shadow-black/20'
+                'relative flex items-center justify-center',
+                'w-10 h-10 rounded-xl',
+                'shadow-lg shadow-black/30',
+                'transition-transform duration-200 ease-out',
+                'group-hover/header:scale-105',
               )}
               style={{
                 background: header.iconGradient
-                  ? `linear-gradient(to bottom right, ${header.iconGradient.from}20, ${header.iconGradient.to}20)`
+                  ? `linear-gradient(to bottom right, ${header.iconGradient.from}25, ${header.iconGradient.to}25)`
                   : 'rgba(255,255,255,0.05)',
+                border: `1px solid ${accentColor}30`,
+                boxShadow: `0 0 12px ${accentColor}15, 0 4px 12px rgba(0,0,0,0.3)`,
               }}
             >
               {header.icon}
             </div>
           </div>
 
-          {/* Title and subtitle */}
+          {/* B: Title + stat pills (stronger hierarchy) */}
           <div className="flex-1 min-w-0">
-            <h2 className="text-sm font-semibold text-white tracking-tight">
-              {header.title}
-            </h2>
-            {header.subtitle && (
+            <div className={cn('flex items-center', gapTokens.default)}>
+              <h2 className="text-[15px] font-semibold text-white/90 tracking-tight">
+                {header.title}
+              </h2>
+              {/* E: Live status badge */}
+              {header.status === 'live' && (
+                <span className="flex items-center gap-1">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                  </span>
+                </span>
+              )}
+              {header.status === 'loading' && (
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500" />
+                </span>
+              )}
+            </div>
+
+            {/* B: Stat pills or legacy subtitle */}
+            {header.stats && header.stats.length > 0 ? (
+              <div className={cn('flex items-center mt-1', gapTokens.compact)}>
+                {header.stats.map((stat, i) => (
+                  <span
+                    key={i}
+                    className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-medium tabular-nums"
+                    style={{
+                      color: stat.color || 'rgba(255,255,255,0.55)',
+                      backgroundColor: stat.color ? `${stat.color}15` : 'rgba(255,255,255,0.06)',
+                    }}
+                  >
+                    {stat.value !== undefined && (
+                      <span className="font-semibold">{stat.value}</span>
+                    )}
+                    {stat.label}
+                  </span>
+                ))}
+              </div>
+            ) : header.subtitle ? (
               <p className="text-[10px] text-white/40 mt-0.5 truncate">
                 {header.subtitle}
               </p>
-            )}
+            ) : null}
           </div>
 
           {/* Action button (optional) */}

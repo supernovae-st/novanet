@@ -32,7 +32,7 @@ import {
   Box,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { iconSizes, gapTokens } from '@/design/tokens';
+import { iconSizes, gapTokens, overlayClasses } from '@/design/tokens';
 import { fuzzyMatch } from '@/lib/fuzzySearch';
 import { useAutoFocus, useDebouncedValue } from '@/hooks';
 import { KeyboardKey } from './KeyboardKey';
@@ -167,16 +167,16 @@ export function CommandPalette({ isOpen, onClose, commands }: CommandPaletteProp
       isOpen={isOpen}
       onClose={onClose}
       closeOnEscape={false} // We handle Escape in handleKeyDown
-      containerClassName="items-start pt-[15vh]"
+      containerClassName={overlayClasses.position}
     >
       <Modal.Content
-        size="md"
+        size={overlayClasses.size}
         ariaLabel="Command palette"
-        className="animate-scale-in"
+        className={overlayClasses.animation}
       >
-        {/* Search Header - opacity.border.light (0.08) */}
+        {/* Search Header */}
         <div
-          className={cn('flex items-center p-4 border-b border-white/[0.08]', gapTokens.spacious)}
+          className={cn(overlayClasses.searchHeader, gapTokens.spacious)}
           onKeyDown={handleKeyDown}
         >
           <Search className={cn(iconSizes.xl, 'text-white/40 shrink-0')} />
@@ -186,9 +186,9 @@ export function CommandPalette({ isOpen, onClose, commands }: CommandPaletteProp
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Search commands..."
+            placeholder="Search commands…"
             aria-label="Search commands"
-            className="flex-1 bg-transparent text-white placeholder-white/40 text-base outline-none border-none ring-0 focus:outline-none focus:ring-0"
+            className={overlayClasses.searchInput}
             autoComplete="off"
             spellCheck={false}
           />
@@ -205,7 +205,7 @@ export function CommandPalette({ isOpen, onClose, commands }: CommandPaletteProp
         </div>
 
         {/* Commands List */}
-        <Modal.Body maxHeight="50vh">
+        <Modal.Body maxHeight={overlayClasses.bodyMaxHeight}>
           <div ref={listRef} className="p-2">
             {flatCommands.length === 0 ? (
               <div className="py-8 text-center text-white/40 text-sm">No commands found</div>
@@ -213,7 +213,7 @@ export function CommandPalette({ isOpen, onClose, commands }: CommandPaletteProp
               Object.entries(groupedCommands).map(([category, cmds]) => (
                 <div key={category} className="mb-2">
                   {/* Category Header */}
-                  <div className="px-3 py-2 text-xs font-medium text-white/40 uppercase tracking-wider">
+                  <div className={overlayClasses.sectionHeader}>
                     {category}
                   </div>
                   {/* Commands */}
@@ -231,19 +231,18 @@ export function CommandPalette({ isOpen, onClose, commands }: CommandPaletteProp
                         }}
                         onMouseEnter={() => setSelectedIndex(currentIndex)}
                         className={cn(
-                          'w-full flex items-center px-3 py-2.5 rounded-xl transition-all',
+                          overlayClasses.rowBase,
                           gapTokens.spacious,
-                          'outline-none ring-0 focus:outline-none focus:ring-0',
                           isSelected
-                            ? 'bg-novanet-500/20 border border-novanet-500/30'
-                            : 'hover:bg-white/[0.04] border border-transparent' // opacity.bg.light (0.04) on hover
+                            ? overlayClasses.rowSelected
+                            : overlayClasses.rowIdle,
                         )}
                       >
-                        {/* Icon - opacity.bg.medium (0.06) when not selected */}
+                        {/* Icon */}
                         <div
                           className={cn(
-                            'w-8 h-8 rounded-lg flex items-center justify-center shrink-0',
-                            isSelected ? 'bg-novanet-500/30 text-novanet-400' : 'bg-white/[0.06] text-white/50'
+                            overlayClasses.rowIconBase,
+                            isSelected ? overlayClasses.rowIconSelected : overlayClasses.rowIconIdle,
                           )}
                         >
                           {cmd.icon}
@@ -287,8 +286,8 @@ export function CommandPalette({ isOpen, onClose, commands }: CommandPaletteProp
         </Modal.Body>
 
         {/* Footer */}
-        <Modal.Footer className="p-3 bg-black/20">
-          <div className={cn('flex items-center justify-center text-xs text-white/50', gapTokens.large)}>
+        <Modal.Footer className={overlayClasses.footer}>
+          <div className={cn(overlayClasses.footerContent, gapTokens.large)}>
             <span className={cn('flex items-center', gapTokens.compact)}>
               <Kbd>↑↓</Kbd>
               <span>Navigate</span>

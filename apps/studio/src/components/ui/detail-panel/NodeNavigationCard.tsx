@@ -60,7 +60,7 @@ export const NodeNavigationCard = memo(function NodeNavigationCard({
           'w-full flex items-center px-3 py-2.5 rounded-lg text-sm',
           gapTokens.spacious,
           'bg-white/6 hover:bg-white/10 border border-white/10 hover:border-white/18',
-          'transition-all text-left group',
+          'transition-colors text-left group',
           className
         )}
       >
@@ -91,7 +91,7 @@ export const NodeNavigationCard = memo(function NodeNavigationCard({
         'w-full flex items-center p-3 rounded-xl text-left',
         gapTokens.spacious,
         'bg-white/6 hover:bg-white/10 border border-white/10 hover:border-white/18',
-        'transition-all duration-200 group',
+        'transition-colors duration-200 group',
         className
       )}
     >
@@ -175,7 +175,7 @@ export const RelationNavigationCard = memo(function RelationNavigationCard({
         'w-full flex items-center px-3 py-2.5 rounded-lg text-sm',
         gapTokens.spacious,
         'bg-white/6 hover:bg-white/10 border border-white/10 hover:border-white/18',
-        'transition-all text-left group',
+        'transition-colors text-left group',
         className
       )}
     >

@@ -119,7 +119,7 @@ export const SubcategoryGroupNode = memo(function SubcategoryGroupNode({
         handleClassName={cn(
           'w-2.5 h-2.5 rounded-full',
           'border-2',
-          'transition-all duration-200'
+          'transition duration-200'
         )}
         handleStyle={{
           backgroundColor: colors.primary,
@@ -135,7 +135,7 @@ export const SubcategoryGroupNode = memo(function SubcategoryGroupNode({
           gapTokens.default,
           'px-2.5 py-1 rounded-lg',
           'border bg-black/70',
-          'transition-all duration-200',
+          'transition duration-200',
           selected && 'scale-105'
         )}
         style={labelStyle}

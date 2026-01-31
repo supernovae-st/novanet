@@ -192,7 +192,7 @@ export const ViewSelector = memo(function ViewSelector({
             key={category.id}
             id={category.id}
             label={config?.label || category.id}
-            icon={<Icon className={iconSizes.md} />}
+            icon={<Icon className={iconSizes.sm} />}
             color={color}
             count={category.views.length}
             showCheckbox={false}
@@ -204,7 +204,7 @@ export const ViewSelector = memo(function ViewSelector({
                   key={view.id}
                   id={view.id}
                   label={view.description?.split(' ')[0] || view.id}
-                  icon={<ViewIcon className={iconSizes.md} />}
+                  icon={<ViewIcon className={iconSizes.sm} />}
                   color={color}
                   isSelected={activeViewId === view.id}
                   onToggle={() => handleSelect(view)}

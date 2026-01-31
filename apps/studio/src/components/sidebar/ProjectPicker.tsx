@@ -67,7 +67,7 @@ const ProjectCard = memo(function ProjectCard({
       className={cn(
         'flex flex-col items-center justify-center p-4 rounded-xl',
         gapTokens.default,
-        'border transition-all duration-150 relative',
+        'border transition duration-150 relative',
         'min-h-[100px]',
         'hover:scale-[1.02] active:scale-[0.98]',
         isSelected

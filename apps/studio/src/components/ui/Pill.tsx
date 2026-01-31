@@ -3,22 +3,24 @@
 /**
  * Pill - Unified floating container for stats, controls, and action groups
  *
- * Features:
- * - Glassmorphism with hover effects
- * - Subtle shadow and border animations
- * - Glow effect for active states
+ * Solid dark design (no glass/blur):
+ * - Opaque dark background for maximum contrast
+ * - Inner ring highlight for depth perception
+ * - Deep shadow for floating effect
+ * - Hover: border brightens
+ * - Glow variants for active states
  */
 
 import { memo } from 'react';
 import { cn } from '@/lib/utils';
-import { glassClasses, gapTokens, opacity } from '@/design/tokens';
+import { gapTokens } from '@/design/tokens';
 
 interface PillProps {
   children: React.ReactNode;
   className?: string;
   /** Size variant affecting padding and height */
   size?: 'sm' | 'md' | 'lg';
-  /** Glass intensity for backdrop effect */
+  /** @deprecated Kept for API compat. */
   glass?: 'light' | 'medium' | 'heavy';
   /** Absolute positioning preset */
   position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'bottom-center' | null;
@@ -32,25 +34,16 @@ export const Pill = memo(function Pill({
   children,
   className,
   size = 'md',
-  glass = 'medium',
   position = null,
   glow = false,
   glowColor = 'emerald',
 }: PillProps) {
-  // Glass effect variants mapped to design tokens
-  const glassStyles = {
-    light: cn(glassClasses.subtle, `hover:bg-[hsl(240,8%,5%)] hover:border-${opacity.border.medium}`),
-    medium: cn(glassClasses.light, `hover:bg-[hsl(240,6%,8%)] hover:border-${opacity.border.strong}`),
-    heavy: cn(glassClasses.medium, `hover:bg-[hsl(240,5%,12%)] hover:border-${opacity.border.heavy}`),
-  };
-
   const sizeStyles = {
     sm: cn('px-3 py-2', gapTokens.default),
     md: cn('px-4 h-14', gapTokens.default),
     lg: cn('px-5 h-16', gapTokens.large),
   };
 
-  // Position styles for absolute positioning (bottom controls only)
   const positionStyles = position
     ? {
         'top-left': 'absolute top-4 left-4 z-30',
@@ -72,14 +65,19 @@ export const Pill = memo(function Pill({
   return (
     <div
       className={cn(
-        // Base styles
-        'flex items-center rounded-2xl border',
-        // Shadow and depth
-        'shadow-xl shadow-black/40',
-        // Smooth transitions
-        'transition-all duration-300 ease-out',
-        // Glass effect
-        glassStyles[glass],
+        // Layout
+        'flex items-center rounded-2xl',
+        // Solid dark - opaque, no blur
+        'bg-[#0a0a0f]',
+        'border border-white/[0.10]',
+        // Deep shadow for float
+        'shadow-2xl shadow-black/60',
+        // Inner highlight for depth
+        'ring-1 ring-white/[0.03] ring-inset',
+        // Hover: border brightens
+        'hover:border-white/[0.18]',
+        // Transitions
+        'transition duration-300 ease-out',
         // Size
         sizeStyles[size],
         // Position

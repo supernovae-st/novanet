@@ -52,25 +52,25 @@ export const SidebarTabs = memo(function SidebarTabs() {
 
   return (
     <div className="h-full flex flex-col">
-      {/* Tab Navigation - Linear style */}
-      <div className="flex border-b border-white/[0.06] bg-[#0d0d12]">
+      {/* Tab Navigation - Refined minimal style */}
+      <div className="flex bg-[#0d0d12] px-2 pt-1.5 pb-0">
         {TABS.map((tab) => (
           <button
             key={tab.id}
             onClick={() => handleTabClick(tab.id)}
             className={cn(
-              cn('flex-1 flex items-center justify-center px-4 py-3.5', gapTokens.default),
-              'text-xs font-medium transition-all duration-200',
-              'border-b-2 -mb-px',
+              'flex-1 flex items-center justify-center px-3 py-2.5 rounded-lg',
+              gapTokens.compact,
+              'text-xs font-medium transition-colors duration-200',
               activeTab === tab.id
-                ? 'text-white border-accent-blue bg-accent-blue/8'
-                : 'text-white/50 border-transparent hover:text-white/70 hover:bg-white/[0.04]'
+                ? 'text-white/90 bg-white/[0.08]'
+                : 'text-white/40 hover:text-white/60 hover:bg-white/[0.04]'
             )}
           >
             <span
               className={cn(
-                'transition-colors',
-                activeTab === tab.id ? 'text-accent-blue' : 'text-white/40'
+                'transition-colors duration-200',
+                activeTab === tab.id ? 'text-white/70' : 'text-white/30'
               )}
             >
               {tab.icon}

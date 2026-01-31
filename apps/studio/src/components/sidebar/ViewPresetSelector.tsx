@@ -90,7 +90,7 @@ export const ViewPresetSelector = memo(function ViewPresetSelector({
             className={cn(
               'flex flex-col items-center px-2 py-2.5 rounded-lg text-center',
               gapTokens.compact,
-              'transition-all duration-200',
+              'transition-colors duration-200',
               'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-novanet-500/50',
               activeId === preset.id
                 ? 'bg-white/[0.1] border border-white/[0.15] text-white'

@@ -55,7 +55,7 @@ export const TriStateCheckbox = memo(function TriStateCheckbox({
       aria-checked={state === 'all' ? true : state === 'partial' ? 'mixed' : false}
       aria-label={label || 'Toggle selection'}
       className={cn(
-        'w-4 h-4 rounded border-2 flex items-center justify-center transition-all duration-200',
+        'w-4 h-4 rounded border-2 flex items-center justify-center transition-colors duration-200',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-novanet-500/50',
         disabled && 'opacity-50 cursor-not-allowed',
         className

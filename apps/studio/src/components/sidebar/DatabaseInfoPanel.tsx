@@ -55,21 +55,14 @@ const Toolbar = memo(function Toolbar({
   tabs,
 }: ToolbarProps) {
   return (
-    <>
-      {/* AI Search - self-contained, opens overlay via uiStore */}
-      <div className="px-3 pt-3">
-        <AiSearchInput placeholder="Ask AI to query the graph…" />
-      </div>
-
-      {/* Segmented Tabs */}
-      <div className="px-3 pt-3 pb-1">
-        <SegmentedTabs
-          tabs={tabs}
-          activeTab={activeTab}
-          onTabChange={(id) => onTabChange(id as TabId)}
-        />
-      </div>
-    </>
+    <div className="flex flex-col gap-2 px-3 py-2.5">
+      <AiSearchInput placeholder="Ask AI to query the graph…" />
+      <SegmentedTabs
+        tabs={tabs}
+        activeTab={activeTab}
+        onTabChange={(id) => onTabChange(id as TabId)}
+      />
+    </div>
   );
 });
 
@@ -324,12 +317,17 @@ export const DatabaseInfoPanel = memo(function DatabaseInfoPanel() {
     <Sidebar.Content
       testId="database-info-panel"
       header={{
-        icon: <GRAPH_ICONS.database className={cn(iconSizes.md, 'text-novanet-400')} />,
+        icon: <GRAPH_ICONS.database className={cn(iconSizes.lg, 'text-novanet-400')} />,
         iconGradient: { from: '#22d3ee', to: '#10b981' },
         title: 'Data Explorer',
-        subtitle: schema?.totalNodes !== undefined
-          ? `${schema.totalNodes.toLocaleString()} nodes · ${schema.totalRelationships?.toLocaleString() ?? 0} rels`
-          : 'Loading...',
+        status: isLoading ? 'loading' : schema?.totalNodes !== undefined ? 'live' : undefined,
+        stats: schema?.totalNodes !== undefined
+          ? [
+              { label: 'nodes', value: schema.totalNodes.toLocaleString(), color: '#22d3ee' },
+              { label: 'rels', value: (schema.totalRelationships ?? 0).toLocaleString(), color: '#10b981' },
+            ]
+          : undefined,
+        subtitle: schema?.totalNodes === undefined ? 'Loading...' : undefined,
         action: (
           <button
             onClick={fetchSchema}

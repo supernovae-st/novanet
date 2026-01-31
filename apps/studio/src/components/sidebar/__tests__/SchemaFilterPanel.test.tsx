@@ -39,18 +39,12 @@ describe('SchemaFilterPanel', () => {
       expect(screen.getByText('SHARED')).toBeInTheDocument();
     });
 
-    it('renders scope emojis', () => {
+    it('renders scope icons as Lucide SVGs', () => {
       render(<SchemaFilterPanel />);
 
-      // Emojis are rendered in both header sections and footer
-      const projectEmojis = screen.getAllByText(/📦/);
-      const globalEmojis = screen.getAllByText(/🌍/);
-      const sharedEmojis = screen.getAllByText(/🎯/);
-
-      // Each emoji appears at least once (in section header)
-      expect(projectEmojis.length).toBeGreaterThanOrEqual(1);
-      expect(globalEmojis.length).toBeGreaterThanOrEqual(1);
-      expect(sharedEmojis.length).toBeGreaterThanOrEqual(1);
+      // Scope icons are Lucide SVGs (Package, Globe, Target), not emojis
+      const svgIcons = document.querySelectorAll('svg');
+      expect(svgIcons.length).toBeGreaterThan(0);
     });
 
     it('renders node count for each scope in parentheses', () => {
@@ -112,16 +106,16 @@ describe('SchemaFilterPanel', () => {
       render(<SchemaFilterPanel />);
 
       expect(screen.getByText('Schema Browser')).toBeInTheDocument();
-      expect(screen.getByText(/35 node types/)).toBeInTheDocument();
+      // Stats badges split "35" and "node types" across elements
+      expect(screen.getByText('node types')).toBeInTheDocument();
     });
 
-    it('renders the stats footer with scope indicators', () => {
+    it('renders header stats badges', () => {
       render(<SchemaFilterPanel />);
 
-      // The footer shows scope icons/labels
-      expect(screen.getByText('📦 Project')).toBeInTheDocument();
-      expect(screen.getByText('🌍 Global')).toBeInTheDocument();
-      expect(screen.getByText('🎯 Shared')).toBeInTheDocument();
+      // Header shows stats badges: "35 node types" and "3 scopes"
+      expect(screen.getByText(/node types/)).toBeInTheDocument();
+      expect(screen.getByText(/scopes/)).toBeInTheDocument();
     });
   });
 
@@ -179,7 +173,7 @@ describe('SchemaFilterPanel', () => {
     it('has region role with aria-label', () => {
       render(<SchemaFilterPanel />);
 
-      const panel = screen.getByRole('region', { name: 'Schema filters' });
+      const panel = screen.getByRole('region', { name: 'Schema Browser' });
       expect(panel).toBeInTheDocument();
     });
 

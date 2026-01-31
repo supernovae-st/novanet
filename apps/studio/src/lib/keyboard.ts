@@ -3,8 +3,6 @@
  * Adapted from Nika Studio pattern
  */
 
-import { getViewPresetByShortcut } from './filterAdapter';
-
 export interface ParsedKeyCombo {
   mod: boolean;   // ⌘ on Mac, Ctrl on Windows
   shift: boolean;
@@ -84,14 +82,3 @@ export interface Shortcut {
   action: string;
 }
 
-/**
- * Handle VIEW_PRESET keyboard shortcuts (1-8, 0)
- * Returns the preset ID if the key matches a preset shortcut, null otherwise
- *
- * @param key - The keyboard key pressed ('0', '1', '2', etc.)
- * @returns The preset ID or null if not found
- */
-export function handleViewPresetShortcut(key: string): string | null {
-  const preset = getViewPresetByShortcut(key);
-  return preset?.id ?? null;
-}

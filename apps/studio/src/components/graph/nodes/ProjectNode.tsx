@@ -152,7 +152,7 @@ export const ProjectNode = memo(function ProjectNode(props: NodeProps<ProjectNod
               {/* Logo */}
               <div
                 className={cn(
-                  'w-14 h-14 rounded-xl overflow-hidden ring-2 transition-all duration-200',
+                  'w-14 h-14 rounded-xl overflow-hidden ring-2 transition duration-200',
                   selected ? 'ring-white/40' : 'ring-white/20'
                 )}
                 style={{

@@ -107,7 +107,7 @@ export const BaseNodeWrapper = memo(function BaseNodeWrapper({
   return (
     <div
       className={cn(
-        'relative transition-all duration-200',
+        'relative transition duration-200',
         effectiveDimmed && 'scale-95 pointer-events-none',
         isDimmed && 'grayscale'
       )}
@@ -125,7 +125,7 @@ export const BaseNodeWrapper = memo(function BaseNodeWrapper({
       >
         <div
           className={cn(
-            'relative transition-all duration-300',
+            'relative transition duration-300',
             glassClasses.modal,
             SIZE_CLASSES[size],
             shapeClass

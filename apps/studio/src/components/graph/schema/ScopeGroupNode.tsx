@@ -120,7 +120,7 @@ export const ScopeGroupNode = memo(function ScopeGroupNode({
         handleClassName={cn(
           'w-3 h-3 rounded-full',
           'border-2',
-          'transition-all duration-200'
+          'transition duration-200'
         )}
         handleStyle={{
           backgroundColor: colors.primary,

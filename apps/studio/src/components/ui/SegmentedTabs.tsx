@@ -64,8 +64,7 @@ export const SegmentedTabs = memo(function SegmentedTabs({
       role="tablist"
       aria-label="Content tabs"
       className={cn(
-        // opacity.bg.subtle (0.03) + opacity.border.subtle (0.06)
-        'flex rounded-xl bg-white/[0.03] border border-white/[0.06] p-1',
+        'flex rounded-lg bg-white/[0.03] p-0.5',
         className
       )}
     >
@@ -84,19 +83,19 @@ export const SegmentedTabs = memo(function SegmentedTabs({
             onClick={() => onTabChange(tab.id)}
             onKeyDown={(e) => handleKeyDown(e, index)}
             className={cn(
-              // Layout - minimum hit target 44px for touch
+              // Layout
               'flex-1 flex items-center justify-center gap-1.5',
-              'min-h-[36px] rounded-lg',
+              'min-h-[32px] rounded-md',
               // Typography
               'text-xs font-medium',
               // Transitions
-              'transition-all duration-150',
-              // Focus - visible ring
+              'transition duration-150',
+              // Focus
               'focus:outline-none focus-visible:ring-2 focus-visible:ring-novanet-500/60 focus-visible:ring-offset-1 focus-visible:ring-offset-black/50',
               // States
               isActive
-                ? 'bg-white/[0.1] text-white shadow-sm' // opacity.bg.heavy (0.10)
-                : 'text-white/40 hover:text-white/60 hover:bg-white/[0.04]' // opacity.bg.light (0.04) on hover
+                ? 'bg-white/[0.08] text-white/90 shadow-sm'
+                : 'text-white/40 hover:text-white/60 hover:bg-white/[0.04]'
             )}
           >
             <span>{tab.label}</span>
@@ -104,7 +103,7 @@ export const SegmentedTabs = memo(function SegmentedTabs({
               <span
                 className={cn(
                   'tabular-nums text-[10px]',
-                  isActive ? 'text-white/60' : 'text-white/40'
+                  isActive ? 'text-white/50' : 'text-white/30'
                 )}
               >
                 {tab.count.toLocaleString()}

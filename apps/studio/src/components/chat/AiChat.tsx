@@ -171,7 +171,7 @@ export const AiChat = memo(function AiChat({
             onClick={clearMessages}
             aria-label="Clear chat"
             className={cn(
-              'p-2 rounded-lg transition-all border',
+              'p-2 rounded-lg transition-colors border',
               // opacity.border.light = white/[0.10]
               'text-white/40 hover:text-white/70 hover:bg-white/5 border-transparent hover:border-white/10'
             )}
@@ -183,7 +183,7 @@ export const AiChat = memo(function AiChat({
             onClick={onClose}
             aria-label="Close chat (Escape)"
             className={cn(
-              'p-2 rounded-lg transition-all border',
+              'p-2 rounded-lg transition-colors border',
               'text-white/40 hover:text-red-400 hover:bg-red-500/10 border-transparent hover:border-red-500/20'
             )}
             title="Close (Esc)"
@@ -271,7 +271,7 @@ export const AiChat = memo(function AiChat({
                 // opacity.border.light = white/[0.10]
                 'w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3',
                 'text-sm resize-none focus:outline-none focus:border-novanet-500/50 focus:bg-white/[0.08]',
-                'placeholder:text-white/40 transition-all duration-150'
+                'placeholder:text-white/40 transition-colors duration-150'
               )}
               style={{ minHeight: '48px', maxHeight: '120px' }}
             />
@@ -280,7 +280,7 @@ export const AiChat = memo(function AiChat({
             onClick={handleSend}
             disabled={!input.trim() || isLoading}
             className={cn(
-              'p-3 rounded-xl transition-all duration-150 border',
+              'p-3 rounded-xl transition-colors duration-150 border',
               input.trim() && !isLoading
                 ? 'bg-novanet-500/20 text-novanet-400 border-novanet-500/30 hover:bg-novanet-500/30'
                 : 'bg-white/5 text-white/40 border-white/10 cursor-not-allowed'
@@ -440,7 +440,7 @@ const SuggestionButton = memo(function SuggestionButton({
         // opacity.border.subtle = white/[0.06]
         'bg-white/[0.03] text-white/50 border border-white/[0.06]',
         'hover:bg-novanet-500/10 hover:text-novanet-300 hover:border-novanet-500/20',
-        'transition-all duration-150'
+        'transition-colors duration-150'
       )}
     >
       <span className="mr-2 text-white/40">→</span>
