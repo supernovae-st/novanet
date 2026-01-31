@@ -350,8 +350,8 @@ export const panelClasses = {
   headerTitle: 'text-sm font-medium text-white/90',
   headerSubtitle: 'text-[11px] text-white/40',
 
-  /** Panel body - scrollable content (16px padding matches shadcn sidebar-group p-4) */
-  body: 'flex-1 overflow-y-auto scrollbar-thin p-4',
+  /** Panel body - scrollable content (horizontal padding only, sections handle vertical) */
+  body: 'flex-1 overflow-y-auto scrollbar-thin px-4',
 
   /** Panel footer - stats/actions */
   footer: 'px-4 py-3 border-t border-white/[0.06]',
@@ -689,8 +689,8 @@ export const sidebarTokens = {
   // TREE - Container styling
   // ─────────────────────────────────────────────────────────────────────────
   tree: {
-    /** Tree container */
-    container: 'space-y-3',
+    /** Tree container - bottom padding for scroll clearance */
+    container: 'space-y-3 pb-4',
   },
 
   // ─────────────────────────────────────────────────────────────────────────

@@ -100,20 +100,3 @@ export function generateSchemaGraph(): SchemaGraphResult {
   return { nodes, edges };
 }
 
-/**
- * Get node types grouped by scope
- */
-export function getNodeTypesByScope(): Record<Scope, NodeType[]> {
-  const result: Record<Scope, NodeType[]> = {
-    Global: [],
-    Shared: [],
-    Project: [],
-  };
-
-  for (const nodeType of NODE_TYPES) {
-    const scope = NODE_SCOPES[nodeType];
-    result[scope].push(nodeType);
-  }
-
-  return result;
-}

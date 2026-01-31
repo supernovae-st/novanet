@@ -6,7 +6,7 @@
  * Calculates appropriate LOD tier based on distance, zoom, and edge state
  */
 
-import { useMemo, useCallback, useEffect } from 'react';
+import { useMemo, useCallback } from 'react';
 import type { LODTier, EffectPrimitive } from '../system/types';
 import {
   calculateLODTier,
@@ -107,31 +107,3 @@ export function useLODStats() {
   return lodManager.getStats();
 }
 
-/**
- * Hook to register an edge with the LOD manager
- * Properly cleans up on unmount to prevent memory leaks
- */
-export function useRegisterEdgeLOD(
-  edgeId: string,
-  tier: LODTier,
-  options?: UseEdgeLODOptions
-) {
-  // Register edge with manager and cleanup on unmount
-  useEffect(() => {
-    if (options) {
-      lodManager.updateEdge(edgeId, {
-        distance: options.distanceFromCenter,
-        zoom: options.zoom,
-        isSelected: options.isSelected,
-        isHovered: options.isHighlighted,
-        isConnected: options.isConnectedToSelected,
-      });
-    }
-
-    return () => {
-      lodManager.removeEdge(edgeId);
-    };
-  }, [edgeId, options]);
-
-  return tier;
-}

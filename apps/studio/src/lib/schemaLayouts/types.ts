@@ -111,16 +111,6 @@ export const SCOPE_PADDING = Math.round(BASE_UNIT * PHI_SQ); // 209px → 210px
 export const SCOPE_HEADER = Math.round(BASE_UNIT * 0.875);   // 70px
 
 // =============================================================================
-// LEGACY ALIASES (for backward compatibility during migration)
-// =============================================================================
-
-/** @deprecated Use SUBCAT_PADDING */
-export const INNER_PADDING = SUBCAT_PADDING;
-
-/** @deprecated Use SCOPE_PADDING */
-export const GROUP_PADDING = SCOPE_PADDING;
-
-// =============================================================================
 // Canvas dimensions
 // =============================================================================
 

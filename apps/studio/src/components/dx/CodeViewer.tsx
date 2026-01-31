@@ -156,41 +156,6 @@ export const CodeViewer = memo(function CodeViewer({
 });
 
 /**
- * JSON Viewer - convenience wrapper
- */
-export interface JsonViewerProps {
-  data: unknown;
-  maxHeight?: string;
-  title?: string;
-  className?: string;
-}
-
-export const JsonViewer = memo(function JsonViewer({
-  data,
-  maxHeight = 'max-h-64',
-  title,
-  className,
-}: JsonViewerProps) {
-  const code = useMemo(() => {
-    try {
-      return JSON.stringify(data, null, 2);
-    } catch {
-      return String(data);
-    }
-  }, [data]);
-
-  return (
-    <CodeViewer
-      code={code}
-      language="json"
-      maxHeight={maxHeight}
-      title={title}
-      className={className}
-    />
-  );
-});
-
-/**
  * Cypher Query Viewer
  */
 export interface CypherViewerProps {
