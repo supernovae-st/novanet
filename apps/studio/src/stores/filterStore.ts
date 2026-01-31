@@ -445,39 +445,3 @@ export const useFilterStore = create<FilterStoreState>()(
   )
 );
 
-// =============================================================================
-// SELECTORS - Use these for optimal re-render performance
-// =============================================================================
-
-/** Select enabled node types */
-export const selectEnabledNodeTypes = (state: FilterStoreState) => state.enabledNodeTypes;
-
-/** Select selected project */
-export const selectSelectedProject = (state: FilterStoreState) => state.selectedProject;
-
-/** Select selected locale */
-export const selectSelectedLocale = (state: FilterStoreState) => state.selectedLocale;
-
-/** Select search query */
-export const selectSearchQuery = (state: FilterStoreState) => state.searchQuery;
-
-/** Select active preset ID */
-export const selectActivePresetId = (state: FilterStoreState) => state.activePresetId;
-
-/** Select depth limit */
-export const selectDepthLimit = (state: FilterStoreState) => state.depthLimit;
-
-/** Select priority filter */
-export const selectPriorityFilter = (state: FilterStoreState) => state.priorityFilter;
-
-/** Select freshness filter */
-export const selectFreshnessFilter = (state: FilterStoreState) => state.freshnessFilter;
-
-/** Select category filter */
-export const selectCategoryFilter = (state: FilterStoreState) => state.categoryFilter;
-
-/** Select collapsed scopes (Schema mode Task 3.1) */
-export const selectCollapsedScopes = (state: FilterStoreState) => state.collapsedScopes;
-
-/** Select collapsed subcategories (Schema mode Task 3.1) */
-export const selectCollapsedSubcategories = (state: FilterStoreState) => state.collapsedSubcategories;

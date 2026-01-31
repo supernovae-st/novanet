@@ -121,11 +121,3 @@ export const useChatStore = create<ChatStoreState>()(
   }))
 );
 
-// =============================================================================
-// SELECTORS - Use these for optimized subscriptions
-// =============================================================================
-
-export const selectMessages = (state: ChatStoreState) => state.messages;
-export const selectIsLoading = (state: ChatStoreState) => state.isLoading;
-export const selectChatError = (state: ChatStoreState) => state.error;
-export const selectStreamingMessageId = (state: ChatStoreState) => state.streamingMessageId;

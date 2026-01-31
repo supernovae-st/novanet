@@ -254,36 +254,3 @@ export const useGraphStore = create<GraphState>()(
   }))
 );
 
-// =============================================================================
-// SELECTORS - Use these for optimal re-render performance
-// =============================================================================
-
-/** Select nodes array */
-export const selectNodes = (state: GraphState) => state.nodes;
-
-/** Select edges array */
-export const selectEdges = (state: GraphState) => state.edges;
-
-/** Select loading state */
-export const selectIsLoading = (state: GraphState) => state.isLoading;
-
-/** Select error state */
-export const selectError = (state: GraphState) => state.error;
-
-/** Select total counts */
-export const selectTotals = (state: GraphState) => ({
-  nodes: state.totalNodes,
-  edges: state.totalEdges,
-});
-
-/** Select node type counts */
-export const selectNodeTypeCounts = (state: GraphState) => state.nodeTypeCounts;
-
-/** Select hidden node IDs */
-export const selectHiddenNodeIds = (state: GraphState) => state.hiddenNodeIds;
-
-/** Select graph data (nodes + edges) */
-export const selectGraphData = (state: GraphState) => ({
-  nodes: state.nodes,
-  edges: state.edges,
-});

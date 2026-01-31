@@ -99,6 +99,35 @@ interface UIStoreState extends UIState, SelectionState {
   isModalOpen: (modal: ModalType) => boolean;
 }
 
+// =============================================================================
+// Memoized Selectors (stable references for direct subscription)
+// =============================================================================
+
+/** Selector for hoveredNodeId - use with useUIStore(selectHoveredNodeId) */
+export const selectHoveredNodeId = (state: UIStoreState) => state.hoveredNodeId;
+
+/** Selector for hoveredEdgeId - use with useUIStore(selectHoveredEdgeId) */
+export const selectHoveredEdgeId = (state: UIStoreState) => state.hoveredEdgeId;
+
+/** Selector for selectedNodeId - use with useUIStore(selectSelectedNodeId) */
+export const selectSelectedNodeId = (state: UIStoreState) => state.selectedNodeId;
+
+/** Selector for hoveredConnectedNodeIds - use with useUIStore(selectHoveredConnectedNodeIds) */
+export const selectHoveredConnectedNodeIds = (state: UIStoreState) => state.hoveredConnectedNodeIds;
+
+/** Selector for dataMode - use with useUIStore(selectDataMode) */
+export const selectDataMode = (state: UIStoreState) => state.dataMode;
+
+/** Selector for layoutDirection - use with useUIStore(selectLayoutDirection) */
+export const selectLayoutDirection = (state: UIStoreState) => state.layoutDirection;
+
+/** Selector for layoutVersion - use with useUIStore(selectLayoutVersion) */
+export const selectLayoutVersion = (state: UIStoreState) => state.layoutVersion;
+
+// =============================================================================
+// Store Implementation
+// =============================================================================
+
 export const useUIStore = create<UIStoreState>()(
   persist(
     immer((set, get) => ({
@@ -399,28 +428,3 @@ export const useUIStore = create<UIStoreState>()(
   )
 );
 
-// =============================================================================
-// SELECTORS - Use these for optimized subscriptions
-// =============================================================================
-
-export const selectViewMode = (state: UIStoreState) => state.viewMode;
-export const selectSidebarOpen = (state: UIStoreState) => state.sidebarOpen;
-export const selectPanelOpen = (state: UIStoreState) => state.panelOpen;
-export const selectFocusMode = (state: UIStoreState) => state.focusMode;
-export const selectMinimapVisible = (state: UIStoreState) => state.minimapVisible;
-export const selectShowEdgeLabels = (state: UIStoreState) => state.showEdgeLabels;
-export const selectLayoutDirection = (state: UIStoreState) => state.layoutDirection;
-export const selectLayoutVersion = (state: UIStoreState) => state.layoutVersion;
-export const selectSpacingPreset = (state: UIStoreState) => state.spacingPreset;
-export const selectSpacingValue = (state: UIStoreState) => state.spacingValue;
-export const selectSpacingVersion = (state: UIStoreState) => state.spacingVersion;
-export const selectSelectedNodeId = (state: UIStoreState) => state.selectedNodeId;
-export const selectSelectedEdgeId = (state: UIStoreState) => state.selectedEdgeId;
-export const selectHoveredNodeId = (state: UIStoreState) => state.hoveredNodeId;
-export const selectHoveredEdgeId = (state: UIStoreState) => state.hoveredEdgeId;
-export const selectHoveredConnectedNodeIds = (state: UIStoreState) => state.hoveredConnectedNodeIds;
-export const selectHighlightedNodeIds = (state: UIStoreState) => state.highlightedNodeIds;
-export const selectCommandPaletteOpen = (state: UIStoreState) => state.commandPaletteOpen;
-export const selectAiChatOpen = (state: UIStoreState) => state.aiChatOpen;
-export const selectDataMode = (state: UIStoreState) => state.dataMode;
-export const selectActiveModal = (state: UIStoreState) => state.activeModal;

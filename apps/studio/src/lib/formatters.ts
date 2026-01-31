@@ -79,13 +79,13 @@ export function formatNumber(num: number): string {
 }
 
 /**
- * Format a number as a compact string (K, M, B)
- * @example formatCompact(1234) // "1.2K"
+ * Format a number in compact notation (1.2k, 3.4M, etc.)
+ * @example formatCompact(1234) // "1.2k"
  * @example formatCompact(1234567) // "1.2M"
  */
 export function formatCompact(num: number): string {
   if (num < 1000) return String(num);
-  if (num < 1000000) return `${(num / 1000).toFixed(1)}K`;
+  if (num < 1000000) return `${(num / 1000).toFixed(1)}k`;
   if (num < 1000000000) return `${(num / 1000000).toFixed(1)}M`;
   return `${(num / 1000000000).toFixed(1)}B`;
 }
