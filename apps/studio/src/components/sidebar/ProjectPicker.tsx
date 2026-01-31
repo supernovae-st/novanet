@@ -13,6 +13,7 @@
 import { useState, useMemo, useCallback, useEffect, useRef, memo, useDeferredValue } from 'react';
 import { createPortal } from 'react-dom';
 import { Search, X, FolderOpen, Check } from 'lucide-react';
+import { useShallow } from 'zustand/react/shallow';
 import { cn } from '@/lib/utils';
 import { glassClasses, modalClasses, iconSizes, gapTokens } from '@/design/tokens';
 import { Kbd } from '@/components/ui';
@@ -111,8 +112,12 @@ export const ProjectPicker = memo(function ProjectPicker({
   onClose,
   projects,
 }: ProjectPickerProps) {
-  const selectedProject = useFilterStore((state) => state.selectedProject);
-  const setSelectedProject = useFilterStore((state) => state.setSelectedProject);
+  const { selectedProject, setSelectedProject } = useFilterStore(
+    useShallow((state) => ({
+      selectedProject: state.selectedProject,
+      setSelectedProject: state.setSelectedProject,
+    }))
+  );
 
   const [searchInput, setSearchInput] = useState('');
   const search = useDeferredValue(searchInput);

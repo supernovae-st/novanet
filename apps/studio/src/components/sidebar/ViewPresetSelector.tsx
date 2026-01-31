@@ -25,8 +25,9 @@ import {
   Grid3x3,
   type LucideIcon,
 } from 'lucide-react';
+import { useShallow } from 'zustand/react/shallow';
 import { cn } from '@/lib/utils';
-import { iconSizes } from '@/design/tokens';
+import { iconSizes, gapTokens } from '@/design/tokens';
 import { VIEW_PRESETS, type ViewPreset } from '@/lib/filterAdapter';
 import { useFilterStore } from '@/stores/filterStore';
 
@@ -54,8 +55,12 @@ export const ViewPresetSelector = memo(function ViewPresetSelector({
   onSelect,
   activePresetId,
 }: ViewPresetSelectorProps) {
-  const applyViewPreset = useFilterStore((state) => state.applyViewPreset);
-  const storeActiveId = useFilterStore((state) => state.activePresetId);
+  const { applyViewPreset, activePresetId: storeActiveId } = useFilterStore(
+    useShallow((state) => ({
+      applyViewPreset: state.applyViewPreset,
+      activePresetId: state.activePresetId,
+    }))
+  );
   const activeId = activePresetId ?? storeActiveId;
 
   const handleSelect = useCallback(
@@ -69,13 +74,13 @@ export const ViewPresetSelector = memo(function ViewPresetSelector({
   return (
     <div className={cn('space-y-1', className)}>
       {/* Header */}
-      <div className="flex items-center gap-2 px-3 py-2 text-xs text-white/40">
+      <div className={cn('flex items-center px-3 py-2 text-xs text-white/40', gapTokens.default)}>
         <Grid3x3 className={iconSizes.sm} />
         <span className="uppercase tracking-wider font-medium">Quick Views</span>
       </div>
 
       {/* 3-column grid of presets */}
-      <div className="grid grid-cols-3 gap-1 px-2">
+      <div className={cn('grid grid-cols-3 px-2', gapTokens.tight)}>
         {VIEW_PRESETS.map((preset) => (
           <button
             key={preset.id}
@@ -83,7 +88,8 @@ export const ViewPresetSelector = memo(function ViewPresetSelector({
             aria-pressed={activeId === preset.id}
             aria-label={`${preset.name}: ${preset.description}`}
             className={cn(
-              'flex flex-col items-center gap-1.5 px-2 py-2.5 rounded-lg text-center',
+              'flex flex-col items-center px-2 py-2.5 rounded-lg text-center',
+              gapTokens.compact,
               'transition-all duration-200',
               'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-novanet-500/50',
               activeId === preset.id

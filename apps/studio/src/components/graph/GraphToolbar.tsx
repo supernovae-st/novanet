@@ -27,11 +27,12 @@ import {
   ChevronUp,
   ChevronDown,
 } from 'lucide-react';
+import { useShallow } from 'zustand/react/shallow';
 import { cn } from '@/lib/utils';
 import { useUIStore } from '@/stores';
 import type { LayoutDirection } from '@/stores/uiStore';
 import { MINIMAP_WIDTH } from '@/config/layoutConstants';
-import { controls, easing, durations } from '@/design/tokens';
+import { controls, easing, durations, gapTokens } from '@/design/tokens';
 import {
   Tooltip,
   TooltipTrigger,
@@ -158,7 +159,8 @@ const LayoutButton = memo(function LayoutButton({
         <button
           onClick={handleClick}
           className={cn(
-            'group relative flex items-center gap-2',
+            'group relative flex items-center',
+            gapTokens.default,
             'rounded-xl px-2.5',
             'transition-all',
             // opacity.bg.light = white/[0.04]
@@ -245,8 +247,12 @@ export const GraphToolbar = memo(function GraphToolbar() {
   const { zoomIn, zoomOut } = useReactFlow();
   const { smartFitView } = useSmartFitView();
 
-  const triggerLayout = useUIStore((state) => state.triggerLayout);
-  const dataMode = useUIStore((state) => state.dataMode);
+  const { triggerLayout, dataMode } = useUIStore(
+    useShallow((state) => ({
+      triggerLayout: state.triggerLayout,
+      dataMode: state.dataMode,
+    }))
+  );
 
   // Pick labels based on current mode
   const labels = dataMode === 'schema' ? SCHEMA_LABELS : DATA_LABELS;
