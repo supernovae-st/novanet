@@ -15,6 +15,7 @@
 
 import * as React from 'react';
 import { cn } from '@/lib/utils';
+import { iconSizes } from '@/design/tokens';
 import { useUIStore, selectSpacingPreset, selectSpacingValue } from '@/stores/uiStore';
 import type { SpacingPreset } from '@/lib/forceSimulation';
 import { Minimize2, Maximize2, Grid3X3 } from 'lucide-react';
@@ -30,9 +31,9 @@ interface SpacingSliderProps {
 }
 
 const PRESET_CONFIG: Record<SpacingPreset, { icon: React.ReactNode; label: string; value: number }> = {
-  compact: { icon: <Minimize2 className="w-3.5 h-3.5" />, label: 'Compact', value: 0 },
-  normal: { icon: <Grid3X3 className="w-3.5 h-3.5" />, label: 'Normal', value: 50 },
-  spacious: { icon: <Maximize2 className="w-3.5 h-3.5" />, label: 'Spacious', value: 100 },
+  compact: { icon: <Minimize2 className={iconSizes.sm} />, label: 'Compact', value: 0 },
+  normal: { icon: <Grid3X3 className={iconSizes.sm} />, label: 'Normal', value: 50 },
+  spacious: { icon: <Maximize2 className={iconSizes.sm} />, label: 'Spacious', value: 100 },
 };
 
 export function SpacingSlider({

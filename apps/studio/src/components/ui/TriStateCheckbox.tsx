@@ -12,6 +12,7 @@
 
 import { memo } from 'react';
 import { cn } from '@/lib/utils';
+import { iconSizes } from '@/design/tokens';
 import { STATUS_ICONS } from '@/config/iconSystem';
 
 // Design system icons
@@ -64,8 +65,8 @@ export const TriStateCheckbox = memo(function TriStateCheckbox({
         backgroundColor: state === 'none' ? 'transparent' : `${color}20`,
       }}
     >
-      {state === 'all' && <CheckIcon className="w-3 h-3" style={{ color }} />}
-      {state === 'partial' && <Minus className="w-3 h-3" style={{ color }} />}
+      {state === 'all' && <CheckIcon className={iconSizes.xs} style={{ color }} />}
+      {state === 'partial' && <Minus className={iconSizes.xs} style={{ color }} />}
     </button>
   );
 });

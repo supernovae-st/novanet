@@ -6,6 +6,7 @@
  */
 
 import { cn } from '@/lib/utils';
+import { iconSizes } from '@/design/tokens';
 
 // =============================================================================
 // Base Skeleton

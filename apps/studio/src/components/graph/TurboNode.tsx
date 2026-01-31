@@ -20,6 +20,7 @@
 import { memo, useState, useCallback } from 'react';
 import { Handle, Position, type Node, type NodeProps } from '@xyflow/react';
 import { cn } from '@/lib/utils';
+import { iconSizes } from '@/design/tokens';
 import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import { getNodeConfig } from './nodes/NodeConfig';
@@ -128,7 +129,7 @@ export const TurboNode = memo(function TurboNode(props: NodeProps<TurboNodeType>
           <Handle
             type="target"
             position={Position.Top}
-            className="!w-3 !h-3 !rounded-full !border-2 !-top-1.5 transition-all duration-200"
+            className={cn(iconSizes.xs, '!rounded-full !border-2 !-top-1.5 transition-all duration-200')}
             style={getHandleStyle(colors.primary, !!selected, true)}
           />
 
@@ -208,7 +209,7 @@ export const TurboNode = memo(function TurboNode(props: NodeProps<TurboNodeType>
           <Handle
             type="source"
             position={Position.Bottom}
-            className="!w-3 !h-3 !rounded-full !border-2 !-bottom-1.5 transition-all duration-200"
+            className={cn(iconSizes.xs, '!rounded-full !border-2 !-bottom-1.5 transition-all duration-200')}
             style={getHandleStyle(colors.primary, !!selected, false)}
           />
         </div>

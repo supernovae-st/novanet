@@ -26,6 +26,7 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { iconSizes } from '@/design/tokens';
 import { VIEW_PRESETS, type ViewPreset } from '@/lib/filterAdapter';
 import { useFilterStore } from '@/stores/filterStore';
 
@@ -69,7 +70,7 @@ export const ViewPresetSelector = memo(function ViewPresetSelector({
     <div className={cn('space-y-1', className)}>
       {/* Header */}
       <div className="flex items-center gap-2 px-3 py-2 text-xs text-white/40">
-        <Grid3x3 className="w-3.5 h-3.5" />
+        <Grid3x3 className={iconSizes.sm} />
         <span className="uppercase tracking-wider font-medium">Quick Views</span>
       </div>
 
@@ -96,7 +97,8 @@ export const ViewPresetSelector = memo(function ViewPresetSelector({
               return (
                 <IconComponent
                   className={cn(
-                    'w-5 h-5 transition-transform duration-200',
+                    iconSizes.xl,
+                    'transition-transform duration-200',
                     activeId === preset.id && 'scale-110'
                   )}
                   strokeWidth={2}
