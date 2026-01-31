@@ -1,0 +1,9 @@
+# IN_SUBCATEGORY - Links instance nodes to their taxonomy position
+name: IN_SUBCATEGORY
+description: Connects any instance node to its Subcategory for taxonomy grouping
+from:
+  - "*"  # Any node type
+to:
+  - Subcategory
+properties: []  # No properties needed
+cardinality: "N:1"  # Many instances to one subcategory
