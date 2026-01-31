@@ -56,6 +56,12 @@ export const IconButton = memo(function IconButton({
     lg: 'p-2.5',
   };
 
+  const iconSizeMap = {
+    sm: iconSizes.sm,
+    md: iconSizes.md,
+    lg: iconSizes.md,
+  };
+
   const getVariantStyles = () => {
     switch (variant) {
       case 'ghost':
@@ -118,7 +124,7 @@ export const IconButton = memo(function IconButton({
       )}
       <DisplayIcon
         className={cn(
-          iconSizes.md,
+          iconSizeMap[size],
           'relative z-10',
           loading && 'animate-spin',
           loading && variant === 'success' && 'drop-shadow-[0_0_8px_rgba(52,211,153,0.8)]'
