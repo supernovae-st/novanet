@@ -32,7 +32,7 @@ import {
   Box,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { iconSizes } from '@/design/tokens';
+import { iconSizes, gapTokens } from '@/design/tokens';
 import { fuzzyMatch } from '@/lib/fuzzySearch';
 import { useAutoFocus, useDebouncedValue } from '@/hooks';
 import { KeyboardKey } from './KeyboardKey';
@@ -176,7 +176,7 @@ export function CommandPalette({ isOpen, onClose, commands }: CommandPaletteProp
       >
         {/* Search Header - opacity.border.light (0.08) */}
         <div
-          className="flex items-center gap-3 p-4 border-b border-white/[0.08]"
+          className={cn('flex items-center p-4 border-b border-white/[0.08]', gapTokens.spacious)}
           onKeyDown={handleKeyDown}
         >
           <Search className={cn(iconSizes.xl, 'text-white/40 shrink-0')} />
@@ -230,7 +230,8 @@ export function CommandPalette({ isOpen, onClose, commands }: CommandPaletteProp
                         }}
                         onMouseEnter={() => setSelectedIndex(currentIndex)}
                         className={cn(
-                          'w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all',
+                          'w-full flex items-center px-3 py-2.5 rounded-xl transition-all',
+                          gapTokens.spacious,
                           'outline-none ring-0 focus:outline-none focus:ring-0',
                           isSelected
                             ? 'bg-novanet-500/20 border border-novanet-500/30'
@@ -286,16 +287,16 @@ export function CommandPalette({ isOpen, onClose, commands }: CommandPaletteProp
 
         {/* Footer */}
         <Modal.Footer className="p-3 bg-black/20">
-          <div className="flex items-center justify-center gap-4 text-xs text-white/50">
-            <span className="flex items-center gap-1.5">
+          <div className={cn('flex items-center justify-center text-xs text-white/50', gapTokens.large)}>
+            <span className={cn('flex items-center', gapTokens.compact)}>
               <Kbd>↑↓</Kbd>
               <span>Navigate</span>
             </span>
-            <span className="flex items-center gap-1.5">
+            <span className={cn('flex items-center', gapTokens.compact)}>
               <Kbd>↵</Kbd>
               <span>Select</span>
             </span>
-            <span className="flex items-center gap-1.5">
+            <span className={cn('flex items-center', gapTokens.compact)}>
               <Kbd>Esc</Kbd>
               <span>Close</span>
             </span>
