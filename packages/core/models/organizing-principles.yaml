@@ -1,0 +1,120 @@
+# packages/core/models/organizing-principles.yaml
+# Source of truth for NovaNet taxonomy structure
+# v8.3.0 - Organizing Principles as Neo4j nodes
+#
+# This file defines:
+# - 3 Scopes (Global, Project, Shared)
+# - 9 Subcategories
+# - Metadata for each level (llm_context, emoji, color)
+#
+# Generated artifacts:
+# - packages/db/seed/00.5-organizing-principles.cypher
+# - Optionally: hierarchy.ts (future)
+
+version: "8.3.0"
+
+scopes:
+  - key: global
+    display_name: Global
+    emoji: "🌍"
+    color: "#2aa198"
+    llm_context: |
+      Shared across ALL projects. Locale-specific knowledge that applies
+      universally: cultural norms, linguistic patterns, voice guidelines,
+      idiomatic expressions. These nodes are READ-ONLY at project level.
+      Changes here affect all projects using that locale.
+    subcategories:
+      - key: config
+        display_name: Configuration
+        emoji: "⚙️"
+        llm_context: |
+          Core configuration nodes. Locale definitions with their properties
+          (language code, region, writing direction). Entry point for all
+          locale-specific knowledge traversal.
+
+      - key: knowledge
+        display_name: Locale Knowledge
+        emoji: "📚"
+        llm_context: |
+          Deep locale-specific knowledge for native content generation.
+          Cultural norms, linguistic patterns, voice guidelines, idiomatic
+          expressions, formatting conventions. This is what makes generated
+          content feel NATIVE rather than translated.
+
+  - key: project
+    display_name: Project
+    emoji: "📦"
+    color: "#6c71c4"
+    llm_context: |
+      Business-specific nodes for a single project. Contains brand identity,
+      page structure, semantic concepts, generation prompts, and localized
+      outputs. These nodes define WHAT content to generate and HOW to
+      structure it for this specific product/service.
+    subcategories:
+      - key: foundation
+        display_name: Foundation
+        emoji: "🏛️"
+        llm_context: |
+          Core project identity. Brand voice, visual identity, value
+          proposition. These nodes anchor ALL content generation for the
+          project - every generated block must align with foundation.
+
+      - key: structure
+        display_name: Structure
+        emoji: "🏗️"
+        llm_context: |
+          Information architecture. Pages, blocks, and their types. Defines
+          the SKELETON of the website - what pages exist, what blocks compose
+          each page, and the rules for each block type.
+
+      - key: semantic
+        display_name: Semantic Layer
+        emoji: "💡"
+        llm_context: |
+          Meaning and concepts. Invariant ideas (Concept) that get localized
+          per locale (ConceptL10n). The WHAT of content - pricing tiers,
+          features, benefits, use cases. Concepts link via SEMANTIC_LINK
+          for spreading activation during generation.
+
+      - key: instruction
+        display_name: Instructions
+        emoji: "📝"
+        llm_context: |
+          Generation directives. Prompts and rules that guide the LLM during
+          content generation. PagePrompt for page-level guidance, BlockPrompt
+          for block-specific instructions, BlockRules for constraints.
+
+      - key: output
+        display_name: Generated Output
+        emoji: "✨"
+        llm_context: |
+          LLM-generated content. The final localized pages and blocks ready
+          for rendering. These are the RESULTS of the generation pipeline -
+          created by combining foundation, structure, semantic, and
+          instruction nodes with locale knowledge.
+
+  - key: shared
+    display_name: Shared
+    emoji: "🎯"
+    color: "#cb4b16"
+    llm_context: |
+      Cross-project resources that can be linked to multiple projects.
+      SEO keywords and GEO seeds with their metrics. These enable
+      competitive intelligence sharing across the portfolio.
+    subcategories:
+      - key: seo
+        display_name: SEO Intelligence
+        emoji: "🔍"
+        llm_context: |
+          Search engine optimization data. Keywords with their localized
+          forms, search volume metrics, and mining run history. Used to
+          inject relevant keywords into generated content for organic
+          search visibility.
+
+      - key: geo
+        display_name: GEO Intelligence
+        emoji: "📍"
+        llm_context: |
+          Geographic/local SEO data. Location-based seeds with their
+          localized forms, metrics, and mining history. Used for local
+          business visibility and location-specific content generation.
