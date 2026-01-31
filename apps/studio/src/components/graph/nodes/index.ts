@@ -30,3 +30,7 @@ export {
   type NodeHoverEffectProps,
   type NodeImpactBounceProps,
 } from './NodeHoverEffect';
+
+// Attractor nodes for magnetic grouping layout
+export { ScopeAttractorNode, type ScopeAttractorData, type ScopeAttractorNodeType } from './ScopeAttractorNode';
+export { SubcategoryAttractorNode, type SubcategoryAttractorData, type SubcategoryAttractorNodeType } from './SubcategoryAttractorNode';
