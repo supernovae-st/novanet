@@ -33,7 +33,6 @@ import { SCOPE_HIERARCHY } from '@novanet/core/graph';
 import type { Subcategory } from '@novanet/core/graph';
 import { RelationType, type Scope } from '@/types';
 import { useFilterStore } from '@/stores/filterStore';
-import { useAiQueryStore } from '@/stores/aiQueryStore';
 import { cn } from '@/lib/utils';
 import { scopeAccents, iconSizes } from '@/design/tokens';
 import { calculateCheckboxState } from '@/hooks';
@@ -95,19 +94,6 @@ export const SchemaFilterPanel = memo(function SchemaFilterPanel({
       setSubcategoryCollapsed: state.setSubcategoryCollapsed,
     }))
   );
-
-  // AI Query state
-  const { submitAiQuery, isProcessing } = useAiQueryStore(
-    useShallow((state) => ({
-      submitAiQuery: state.submitAiQuery,
-      isProcessing: state.isProcessing,
-    }))
-  );
-
-  // Handle AI search
-  const handleAiSubmit = useCallback(async (question: string) => {
-    await submitAiQuery(question);
-  }, [submitAiQuery]);
 
   // Relationship count
   const relCount = useMemo(() => {
@@ -248,14 +234,10 @@ export const SchemaFilterPanel = memo(function SchemaFilterPanel({
         <>
           {/* AI Search */}
           <div className="px-3 pt-3">
-            <AiSearchInput
-              onSubmit={handleAiSubmit}
-              isLoading={isProcessing}
-              placeholder="Ask AI about the schema..."
-            />
+            <AiSearchInput placeholder="Ask AI about the schema…" />
           </div>
           {/* Segmented Tabs */}
-          <div className="px-3 py-3">
+          <div className="px-3 pt-3 pb-1">
             <SegmentedTabs
               tabs={tabs}
               activeTab={activeTab}

@@ -50,6 +50,7 @@ import { NodeDetailsPanel } from '@/components/sidebar/NodeDetailsPanel';
 import { EdgeDetailsPanel } from '@/components/sidebar/EdgeDetailsPanel';
 import { KeyboardHelpPanel } from '@/components/dx/KeyboardHelpPanel';
 import { CommandPalette, useCommandPalette, useCommandPaletteState } from '@/components/ui/CommandPalette';
+import { AiSearchOverlay } from '@/components/chat/AiSearchOverlay';
 import { QueryPill, ResultsOverview, TableView, RawView } from '@/components/query';
 import { useQueryStore, QueryBuilder } from '@/stores/queryStore';
 
@@ -70,6 +71,7 @@ export default function HomePage() {
       selectedEdgeData: state.selectedEdgeData,
       hoveredNodeId: state.hoveredNodeId,
       hoveredEdgeId: state.hoveredEdgeId,
+      activeModal: state.activeModal,
     }))
   );
 
@@ -86,6 +88,8 @@ export default function HomePage() {
       setSelectedNode: state.setSelectedNode,
       setSelectedEdge: state.setSelectedEdge,
       clearSelection: state.clearSelection,
+      openModal: state.openModal,
+      closeModal: state.closeModal,
     }))
   );
 
@@ -140,6 +144,11 @@ export default function HomePage() {
 
   // Command palette (⌘K)
   const { isOpen: paletteOpen, open: openPalette, close: closePalette } = useCommandPaletteState();
+
+  // AI search overlay (⌘J) - uses uiStore exclusive modal system
+  const openAiSearch = useCallback(() => uiActions.openModal('ai-chat'), [uiActions]);
+  const closeAiSearch = useCallback(() => uiActions.closeModal(), [uiActions]);
+  const aiSearchOpen = uiState.activeModal === 'ai-chat';
 
   // Get selected node/edge data (memoized)
   const selectedNode = useMemo(
@@ -272,6 +281,13 @@ export default function HomePage() {
         return;
       }
 
+      // AI search overlay
+      if (matchesKeyCombo(e, 'mod+j')) {
+        e.preventDefault();
+        openAiSearch();
+        return;
+      }
+
       // Keyboard shortcuts (/)
       if (e.key === '/' && !e.metaKey && !e.ctrlKey) {
         e.preventDefault();
@@ -367,7 +383,7 @@ export default function HomePage() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [uiActions, filterActions, shortcutsOpen, closeShortcuts, openPalette]);
+  }, [uiActions, filterActions, shortcutsOpen, closeShortcuts, openPalette, openAiSearch]);
 
   // ═══════════════════════════════════════════════════════════════════════════
   // MEMOIZED HANDLERS
@@ -792,6 +808,13 @@ export default function HomePage() {
 
       {/* Command Palette (⌘K) */}
       <CommandPalette isOpen={paletteOpen} onClose={closePalette} commands={commands} />
+
+      {/* AI Search Overlay (⌘J) */}
+      <AiSearchOverlay
+        isOpen={aiSearchOpen}
+        onClose={closeAiSearch}
+        onExecuteQuery={executeQuery}
+      />
     </div>
   );
 }

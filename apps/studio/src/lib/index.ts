@@ -67,30 +67,16 @@ export {
 
 export {
   fuzzyMatch,
-  fuzzySearch,
   type FuzzyMatch,
-  type FuzzySearchOptions,
 } from './fuzzySearch';
 
 // =============================================================================
-// Formatting
+// Color Utilities
 // =============================================================================
-
-export {
-  formatDuration,
-  formatNumber,
-  formatFileSize,
-  formatRelativeTime,
-  formatDateTime,
-  formatCompact,
-  formatPercent,
-} from './formatters';
 
 export {
   hexToRgb,
   hexToRgba,
-  withOpacity,
-  coloredBadgeStyle,
   OPACITY,
   type HexColor,
 } from './colorUtils';
@@ -100,7 +86,6 @@ export {
 // =============================================================================
 
 export {
-  parseKeyCombo,
   matchesKeyCombo,
   isInputFocused,
   type ParsedKeyCombo,
