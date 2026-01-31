@@ -117,7 +117,7 @@ export const TurboNode = memo(function TurboNode(props: NodeProps<TurboNodeType>
           <Handle
             type="target"
             position={Position.Top}
-            className={cn(iconSizes.xs, '!rounded-full !border-2 !-top-1.5 transition-all duration-200')}
+            className={cn(iconSizes.xs, '!rounded-full !border-2 !-top-1.5 transition duration-200')}
             style={getHandleStyle(colors.primary, !!selected, true)}
           />
 
@@ -197,7 +197,7 @@ export const TurboNode = memo(function TurboNode(props: NodeProps<TurboNodeType>
           <Handle
             type="source"
             position={Position.Bottom}
-            className={cn(iconSizes.xs, '!rounded-full !border-2 !-bottom-1.5 transition-all duration-200')}
+            className={cn(iconSizes.xs, '!rounded-full !border-2 !-bottom-1.5 transition duration-200')}
             style={getHandleStyle(colors.primary, !!selected, false)}
           />
         </div>

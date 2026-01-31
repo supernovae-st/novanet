@@ -369,7 +369,7 @@ export const RawView = memo(function RawView() {
           <button
             onClick={handleCopy}
             className={cn(
-              'flex items-center rounded-lg text-xs font-medium transition-all duration-150 border',
+              'flex items-center rounded-lg text-xs font-medium transition-colors duration-150 border',
               gapTokens.compact, paddingTokens.standard,
               copied
                 ? 'text-accent-green bg-accent-green/15 border-accent-green/30'

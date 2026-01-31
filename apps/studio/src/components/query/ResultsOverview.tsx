@@ -3,14 +3,15 @@
 /**
  * ResultsOverview - Compact node type badges with hover expansion
  *
- * Shows emoji + count by default, expands to show type name on hover.
+ * Unified glass design: all badges share the same dark glass background.
+ * Color identity comes from the icon only - no per-type colored backgrounds.
+ * Shows icon + count by default, expands to show type name on hover.
  */
 
 import { useMemo, memo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { cn } from '@/lib/utils';
 import { gapTokens } from '@/design/tokens';
-import { hexToRgba, OPACITY } from '@/lib/colorUtils';
 import { useGraphStore } from '@/stores/graphStore';
 import { NODE_TYPE_CONFIG, type NodeCategory } from '@/config/nodeTypes';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
@@ -24,7 +25,7 @@ interface ResultsOverviewProps {
 }
 
 /**
- * Compact node type breakdown - emoji + count, name on hover
+ * Compact node type breakdown - icon + count, name on hover
  */
 export const ResultsOverview = memo(function ResultsOverview({
   className,
@@ -83,16 +84,20 @@ export const ResultsOverview = memo(function ResultsOverview({
 
   return (
     <div className={cn('flex items-center', gapTokens.default, className)}>
-      {/* Node type badges - compact with hover expansion */}
+      {/* Node type badges - dark bg, colored icon with hover glow */}
       {typeCounts.map((item) => (
         <span
           key={item.type}
-          className="group flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all duration-200 cursor-default"
+          className={cn(
+            'group flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap cursor-default',
+            'bg-white/[0.06] border border-white/[0.08]',
+            'hover:bg-white/[0.10] hover:border-white/[0.15]',
+            'transition-colors duration-200'
+          )}
           style={{
-            backgroundColor: hexToRgba(item.color, OPACITY.MEDIUM),
-            color: item.color,
-            borderWidth: 1,
-            borderColor: hexToRgba(item.color, OPACITY.BORDER),
+            // CSS custom prop for dynamic hover glow via Tailwind
+            ['--badge-glow' as string]: `${item.color}25`,
+            ['--badge-glow-strong' as string]: `${item.color}40`,
           }}
           title={`${item.type}: ${item.count} nodes`}
         >
@@ -100,15 +105,16 @@ export const ResultsOverview = memo(function ResultsOverview({
             category={item.category}
             size={14}
             strokeWidth={2}
-            style={{ color: item.color }}
+            className="transition duration-200 group-hover:scale-110"
+            style={{
+              color: item.color,
+              filter: `drop-shadow(0 0 4px ${item.color}50)`,
+            }}
           />
-          <span className="max-w-0 overflow-hidden group-hover:max-w-[80px] transition-all duration-200 ease-out">
+          <span className="max-w-0 overflow-hidden group-hover:max-w-[80px] transition-all duration-200 ease-out text-white/60 group-hover:text-white/80">
             {item.type}
           </span>
-          <span
-            className="px-1.5 py-0.5 rounded text-[10px] font-bold min-w-[20px] text-center"
-            style={{ backgroundColor: hexToRgba(item.color, OPACITY.BORDER) }}
-          >
+          <span className="text-white/70 text-[10px] font-bold tabular-nums min-w-[20px] text-center">
             {item.count}
           </span>
         </span>

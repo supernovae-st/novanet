@@ -54,7 +54,7 @@ export const SmartHandle = memo(function SmartHandle({
       position={position}
       className={cn(
         sizeClasses,
-        '!rounded-full !border-2 transition-all duration-200',
+        '!rounded-full !border-2 transition duration-200',
         selected && '!opacity-0 !pointer-events-none',
         className
       )}

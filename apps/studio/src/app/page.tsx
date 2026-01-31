@@ -478,7 +478,7 @@ export default function HomePage() {
             className={cn(
               'absolute top-1/2 -translate-y-1/2 z-20',
               'p-2 bg-[#0d0d12] border border-white/10',
-              'hover:bg-accent-blue/15 hover:border-accent-blue/30 transition-all duration-200',
+              'hover:bg-accent-blue/15 hover:border-accent-blue/30 transition-colors duration-200',
               'shadow-lg shadow-black/50 text-white/50 hover:text-accent-blue',
               uiState.sidebarOpen ? 'left-[304px] rounded-r-lg' : 'left-0 rounded-r-lg'
             )}
@@ -574,7 +574,7 @@ export default function HomePage() {
             {/* Bottom left - Keyboard shortcuts */}
             <button
               onClick={openShortcuts}
-              className={cn('absolute bottom-4 left-4 px-3 py-2 rounded-xl bg-[#0d0d12] border border-white/10 hover:bg-accent-blue/15 hover:border-accent-blue/30 transition-all text-white/40 hover:text-accent-blue shadow-lg shadow-black/40 flex items-center', gapTokens.default)}
+              className={cn('absolute bottom-4 left-4 px-3 py-2 rounded-xl bg-[#0d0d12] border border-white/10 hover:bg-accent-blue/15 hover:border-accent-blue/30 transition-colors text-white/40 hover:text-accent-blue shadow-lg shadow-black/40 flex items-center', gapTokens.default)}
               title="Keyboard shortcuts (/)"
             >
               <Keyboard className={iconSizes.md} />
@@ -693,19 +693,19 @@ export default function HomePage() {
                 click inspect · dbl-click expand
               </span>
             <Pill size="sm">
-              {/* 2D Graph / 3D Graph / Table / Raw - Linear-style segmented control */}
-              <div className="flex items-center bg-white/[0.06] rounded-lg p-0.5 border border-white/10">
+              {/* 2D Graph / 3D Graph / Table / Raw - Unified glass segmented control */}
+              <div className="flex items-center rounded-lg p-0.5">
                 <button
                   onClick={() => {
                     handleSetQueryViewMode('graph');
                     if (uiState.viewMode !== '2d') uiActions.toggleViewMode();
                   }}
                   className={cn(
-                    'flex items-center px-2.5 py-1.5 rounded-md text-xs font-medium transition-all duration-150',
+                    'flex items-center px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors duration-150',
                     gapTokens.compact,
                     queryState.viewMode === 'graph' && uiState.viewMode === '2d'
-                      ? 'bg-accent-blue/30 text-white border border-accent-blue/50 shadow-sm shadow-accent-blue/20'
-                      : 'text-white/50 hover:text-white/80 hover:bg-white/8'
+                      ? 'bg-white/[0.10] text-white/90 border border-white/[0.15]'
+                      : 'text-white/40 border border-transparent hover:text-white/70 hover:bg-white/[0.06]'
                   )}
                   title="2D Graph view"
                 >
@@ -718,11 +718,11 @@ export default function HomePage() {
                     if (uiState.viewMode !== '3d') uiActions.toggleViewMode();
                   }}
                   className={cn(
-                    'flex items-center px-2.5 py-1.5 rounded-md text-xs font-medium transition-all duration-150',
+                    'flex items-center px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors duration-150',
                     gapTokens.compact,
                     queryState.viewMode === 'graph' && uiState.viewMode === '3d'
-                      ? 'bg-accent-blue/30 text-white border border-accent-blue/50 shadow-sm shadow-accent-blue/20'
-                      : 'text-white/50 hover:text-white/80 hover:bg-white/8'
+                      ? 'bg-white/[0.10] text-white/90 border border-white/[0.15]'
+                      : 'text-white/40 border border-transparent hover:text-white/70 hover:bg-white/[0.06]'
                   )}
                   title="3D Graph view"
                 >
@@ -732,11 +732,11 @@ export default function HomePage() {
                 <button
                   onClick={() => handleSetQueryViewMode('table')}
                   className={cn(
-                    'flex items-center px-2.5 py-1.5 rounded-md text-xs font-medium transition-all duration-150',
+                    'flex items-center px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors duration-150',
                     gapTokens.compact,
                     queryState.viewMode === 'table'
-                      ? 'bg-accent-blue/30 text-white border border-accent-blue/50 shadow-sm shadow-accent-blue/20'
-                      : 'text-white/50 hover:text-white/80 hover:bg-white/8'
+                      ? 'bg-white/[0.10] text-white/90 border border-white/[0.15]'
+                      : 'text-white/40 border border-transparent hover:text-white/70 hover:bg-white/[0.06]'
                   )}
                   title="Table view"
                 >
@@ -746,11 +746,11 @@ export default function HomePage() {
                 <button
                   onClick={() => handleSetQueryViewMode('raw')}
                   className={cn(
-                    'flex items-center px-2.5 py-1.5 rounded-md text-xs font-medium transition-all duration-150',
+                    'flex items-center px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors duration-150',
                     gapTokens.compact,
                     queryState.viewMode === 'raw'
-                      ? 'bg-accent-blue/30 text-white border border-accent-blue/50 shadow-sm shadow-accent-blue/20'
-                      : 'text-white/50 hover:text-white/80 hover:bg-white/8'
+                      ? 'bg-white/[0.10] text-white/90 border border-white/[0.15]'
+                      : 'text-white/40 border border-transparent hover:text-white/70 hover:bg-white/[0.06]'
                   )}
                   title="Raw JSON view"
                 >

@@ -23,7 +23,7 @@ import { postJSON, getErrorMessage } from '@/lib/fetchClient';
 import { useChatStore } from '@/stores/chatStore';
 import { CypherViewer } from '@/components/dx/CodeViewer';
 import { useCopyFeedback, useAutoFocus } from '@/hooks';
-import { iconSizes, gapTokens } from '@/design/tokens';
+import { iconSizes, gapTokens, overlayClasses } from '@/design/tokens';
 import { KeyboardKey } from '@/components/ui/KeyboardKey';
 import { Kbd } from '@/components/ui/Kbd';
 import { Modal } from '@/components/ui/Modal';
@@ -177,16 +177,16 @@ export const AiSearchOverlay = memo(function AiSearchOverlay({
       isOpen={isOpen}
       onClose={onClose}
       closeOnEscape={false}
-      containerClassName="items-start pt-[12vh]"
+      containerClassName={overlayClasses.position}
     >
       <Modal.Content
-        size="lg"
+        size={overlayClasses.size}
         ariaLabel="AI Search"
-        className="animate-scale-in"
+        className={overlayClasses.animation}
       >
         {/* Search Header */}
         <div className={cn(
-          'flex items-center p-4 border-b border-white/[0.08]',
+          overlayClasses.searchHeader,
           gapTokens.spacious,
         )}>
           {/* Sparkle icon with gradient glow */}
@@ -209,7 +209,7 @@ export const AiSearchOverlay = memo(function AiSearchOverlay({
             onKeyDown={handleKeyDown}
             placeholder="Ask AI about the graph…"
             aria-label="AI search query"
-            className="flex-1 bg-transparent text-white placeholder-white/40 text-base outline-none border-none ring-0 focus:outline-none focus:ring-0"
+            className={overlayClasses.searchInput}
             autoComplete="off"
             spellCheck={false}
           />
@@ -233,13 +233,13 @@ export const AiSearchOverlay = memo(function AiSearchOverlay({
         </div>
 
         {/* Body */}
-        <Modal.Body maxHeight="55vh">
+        <Modal.Body maxHeight={overlayClasses.bodyMaxHeight}>
           <div className="p-3">
             {/* Empty state: suggestions */}
             {!hasMessages && !isLoading && (
               <div className="space-y-3">
                 {/* Suggestions header */}
-                <div className="px-2 py-1.5 text-xs font-medium text-white/40 uppercase tracking-wider">
+                <div className={overlayClasses.sectionHeader}>
                   Suggestions
                 </div>
 
@@ -253,7 +253,7 @@ export const AiSearchOverlay = memo(function AiSearchOverlay({
                         'text-left text-sm px-3.5 py-3 rounded-xl',
                         'bg-white/[0.03] text-white/60 border border-white/[0.06]',
                         'hover:bg-novanet-500/10 hover:text-novanet-300 hover:border-novanet-500/20',
-                        'transition-all duration-150',
+                        'transition-colors duration-150',
                       )}
                     >
                       <span className="text-white/30 mr-1.5">→</span>
@@ -269,7 +269,7 @@ export const AiSearchOverlay = memo(function AiSearchOverlay({
               <div className="space-y-3">
                 {/* Clear button */}
                 <div className="flex items-center justify-between px-2">
-                  <span className="text-xs font-medium text-white/40 uppercase tracking-wider">
+                  <span className={overlayClasses.sectionHeader}>
                     Conversation
                   </span>
                   <button
@@ -324,7 +324,7 @@ export const AiSearchOverlay = memo(function AiSearchOverlay({
         </Modal.Body>
 
         {/* Footer */}
-        <Modal.Footer className="p-3 bg-black/20">
+        <Modal.Footer className={overlayClasses.footer}>
           <div className={cn('flex items-center justify-between text-xs text-white/50')}>
             <span className="text-white/30">
               Natural language → Cypher

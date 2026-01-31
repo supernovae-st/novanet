@@ -87,7 +87,7 @@ const ToolbarButton = memo(function ToolbarButton({
           className={cn(
             'group relative flex items-center justify-center',
             'rounded-xl',
-            'transition-all', // Duration + easing set via style for token consistency
+            'transition', // Duration + easing set via style for token consistency
             // opacity.bg.light = white/[0.04]
             // opacity.border.subtle = white/[0.08]
             'bg-white/[0.04] border border-white/[0.08]',
@@ -109,7 +109,7 @@ const ToolbarButton = memo(function ToolbarButton({
         >
           <span
             className={cn(
-              'transition-all', // Duration + easing set via style
+              'transition-colors', // Duration + easing set via style
               isActive ? 'text-accent-blue' : 'text-white/50',
               'group-hover:text-white/90',
               'group-active:text-white'
@@ -162,7 +162,7 @@ const LayoutButton = memo(function LayoutButton({
             'group relative flex items-center',
             gapTokens.default,
             'rounded-xl px-2.5',
-            'transition-all',
+            'transition',
             // opacity.bg.light = white/[0.04]
             // opacity.border.subtle = white/[0.08]
             'bg-white/[0.04] border border-white/[0.08]',
@@ -180,7 +180,7 @@ const LayoutButton = memo(function LayoutButton({
           {/* Icon */}
           <span
             className={cn(
-              'transition-all',
+              'transition-colors',
               'text-white/50',
               'group-hover:text-white/90',
               'group-active:text-white'
@@ -203,7 +203,7 @@ const LayoutButton = memo(function LayoutButton({
                 'bg-white/[0.06] border border-white/[0.10] rounded',
                 'text-[10px] font-mono text-white/50',
                 'group-hover:bg-white/[0.12] group-hover:text-white/80 group-hover:border-white/[0.20]',
-                'transition-all'
+                'transition-colors'
               )}
             >
               {shortcut}

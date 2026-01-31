@@ -230,7 +230,7 @@ export class SchemaErrorBoundary extends Component<
               // opacity.border.light = white/[0.08]
               'border border-white/[0.08] hover:border-white/[0.15]',
               'text-white/90 text-sm font-medium',
-              'transition-all duration-200',
+              'transition-colors duration-200',
               'focus:outline-none focus:ring-2 focus:ring-white/20 focus:ring-offset-2 focus:ring-offset-black'
             )}
             aria-label="Retry rendering schema graph"

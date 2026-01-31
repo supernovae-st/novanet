@@ -152,7 +152,7 @@ export const CopyButton = memo(function CopyButton({
         onClick={handleCopy}
         className={cn(
           // Base styles
-          'inline-flex items-center justify-center rounded-lg transition-all duration-200',
+          'inline-flex items-center justify-center rounded-lg transition duration-200',
           // Focus visible ring (keyboard navigation)
           'focus:outline-none focus-visible:ring-2 focus-visible:ring-novanet-accent focus-visible:ring-offset-2 focus-visible:ring-offset-black',
           gapTokens.compact,

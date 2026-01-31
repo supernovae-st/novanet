@@ -1,24 +1,29 @@
 'use client';
 
 /**
- * KeyboardHelpPanel - Modal showing all keyboard shortcuts
+ * KeyboardHelpPanel - Modal showing all keyboard shortcuts (?)
+ *
+ * Uses Modal compound component + overlayClasses for unified design
+ * with CommandPalette (⌘K) and AiSearchOverlay (⌘J).
  *
  * Features:
- * - Grouped by category
- * - Searchable
- * - Accessible (focus trap, escape to close)
- * - Shows platform-specific modifier keys
+ * - Inline search header (same pattern as ⌘K/⌘J)
+ * - Grouped by category with unified section headers
+ * - Keyboard navigation (Escape to close)
+ * - Focus trap via Modal.Root
+ * - animate-scale-in entrance
  */
 
-import { memo, useState, useEffect, useRef, useMemo, useCallback } from 'react';
+import { memo, useState, useEffect, useRef, useMemo } from 'react';
+import { Search, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { SHORTCUTS } from '@/config/shortcuts';
 import { KeyboardKey, KeyboardShortcut } from '@/components/ui/KeyboardKey';
-import { ACTION_ICONS } from '@/config/iconSystem';
-import { glassClasses, gapTokens, iconSizes } from '@/design/tokens';
+import { Kbd } from '@/components/ui/Kbd';
+import { Modal } from '@/components/ui/Modal';
+import { overlayClasses, gapTokens, iconSizes } from '@/design/tokens';
+import { useAutoFocus } from '@/hooks';
 import type { Shortcut } from '@/lib/keyboard';
-
-const CloseIcon = ACTION_ICONS.close;
 
 export interface KeyboardHelpPanelProps {
   isOpen: boolean;
@@ -93,17 +98,22 @@ function groupByCategory(shortcuts: Shortcut[]): Map<string, Shortcut[]> {
 }
 
 /**
- * Shortcut row component
+ * Shortcut row - matches overlayClasses.rowBase styling
  */
 const ShortcutRow = memo(function ShortcutRow({ shortcut }: { shortcut: Shortcut }) {
   const keyParts = formatKeyCombo(shortcut.keys);
 
   return (
-    <div className="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-white/5 transition-colors">
-      <div className="flex flex-col gap-0.5">
-        <span className="text-sm text-white/90">{shortcut.label}</span>
+    <div className={cn(
+      overlayClasses.rowBase,
+      overlayClasses.rowIdle,
+      'justify-between',
+      gapTokens.spacious,
+    )}>
+      <div className="flex flex-col gap-0.5 min-w-0">
+        <span className="text-sm font-medium text-white/80 truncate">{shortcut.label}</span>
         {shortcut.description && (
-          <span className="text-xs text-white/50">{shortcut.description}</span>
+          <span className="text-xs text-white/40 truncate">{shortcut.description}</span>
         )}
       </div>
       <KeyboardShortcut keys={keyParts} size="sm" />
@@ -112,7 +122,7 @@ const ShortcutRow = memo(function ShortcutRow({ shortcut }: { shortcut: Shortcut
 });
 
 /**
- * Category section component
+ * Category section - uses unified overlayClasses.sectionHeader
  */
 const CategorySection = memo(function CategorySection({
   category,
@@ -124,10 +134,10 @@ const CategorySection = memo(function CategorySection({
   const config = CATEGORY_CONFIG[category] || { label: category, order: 99 };
 
   return (
-    <div className="space-y-1">
-      <h3 className="text-xs font-semibold text-white/60 uppercase tracking-wider px-3 py-2">
+    <div className="mb-2">
+      <div className={overlayClasses.sectionHeader}>
         {config.label}
-      </h3>
+      </div>
       <div className="space-y-0.5">
         {shortcuts.map((shortcut) => (
           <ShortcutRow key={shortcut.id} shortcut={shortcut} />
@@ -138,41 +148,24 @@ const CategorySection = memo(function CategorySection({
 });
 
 /**
- * Keyboard Help Panel
+ * Keyboard Help Panel - unified overlay modal
  */
 export const KeyboardHelpPanel = memo(function KeyboardHelpPanel({
   isOpen,
   onClose,
 }: KeyboardHelpPanelProps) {
   const [search, setSearch] = useState('');
-  const panelRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  // Focus search input when panel opens
+  // Auto-focus search input when opened
+  useAutoFocus(searchInputRef, isOpen);
+
+  // Reset search when opened
   useEffect(() => {
-    if (isOpen && searchInputRef.current) {
-      // Small delay to ensure panel is rendered
-      const timer = setTimeout(() => {
-        searchInputRef.current?.focus();
-      }, 50);
-      return () => clearTimeout(timer);
+    if (isOpen) {
+      setSearch('');
     }
   }, [isOpen]);
-
-  // Handle escape key
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        e.preventDefault();
-        onClose();
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose]);
 
   // Filter shortcuts by search
   const filteredShortcuts = useMemo(() => {
@@ -198,92 +191,82 @@ export const KeyboardHelpPanel = memo(function KeyboardHelpPanel({
     });
   }, [filteredShortcuts]);
 
-  // Handle click outside
-  const handleBackdropClick = useCallback(
-    (e: React.MouseEvent) => {
-      if (e.target === e.currentTarget) {
-        onClose();
-      }
-    },
-    [onClose]
-  );
-
-  if (!isOpen) return null;
+  // Handle key press in search
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      onClose();
+    }
+  };
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
-      onClick={handleBackdropClick}
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="keyboard-help-title"
+    <Modal.Root
+      isOpen={isOpen}
+      onClose={onClose}
+      closeOnEscape={false}
+      containerClassName={overlayClasses.position}
     >
-      <div
-        ref={panelRef}
-        className={cn(
-          'w-full max-w-2xl max-h-[80vh] m-4 overflow-hidden rounded-2xl',
-          glassClasses.modal,
-          'border border-white/15 shadow-2xl'
-        )}
+      <Modal.Content
+        size={overlayClasses.size}
+        ariaLabel="Keyboard shortcuts"
+        className={overlayClasses.animation}
       >
-        {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-white/10">
-          <h2 id="keyboard-help-title" className="text-lg font-semibold text-white">
-            Keyboard Shortcuts
-          </h2>
-          <button
-            onClick={onClose}
-            className={cn(
-              'p-2 rounded-lg transition-colors',
-              'text-white/50 hover:text-white hover:bg-white/10',
-              'focus:outline-none focus-visible:ring-2 focus-visible:ring-novanet-accent'
-            )}
-            aria-label="Close keyboard shortcuts"
-          >
-            <CloseIcon className={iconSizes.md} />
-          </button>
-        </div>
-
-        {/* Search */}
-        <div className="p-4 border-b border-white/10">
+        {/* Search Header - unified inline search */}
+        <div className={cn(overlayClasses.searchHeader, gapTokens.spacious)}>
+          <Search className={cn(iconSizes.xl, 'text-white/40 shrink-0')} />
           <input
             ref={searchInputRef}
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search shortcuts..."
-            className={cn(
-              'w-full px-4 py-2.5 rounded-xl',
-              'bg-white/5 border border-white/10',
-              'text-white placeholder:text-white/40',
-              'focus:outline-none focus:ring-2 focus:ring-novanet-accent focus:border-transparent',
-              'transition-colors'
-            )}
+            onKeyDown={handleKeyDown}
+            placeholder="Search shortcuts…"
+            aria-label="Search shortcuts"
+            className={overlayClasses.searchInput}
+            autoComplete="off"
+            spellCheck={false}
           />
-        </div>
-
-        {/* Shortcuts list */}
-        <div className={cn('overflow-y-auto p-4', gapTokens.spacious, 'max-h-[calc(80vh-140px)]')}>
-          {groupedShortcuts.length === 0 ? (
-            <div className="text-center py-8 text-white/50">
-              No shortcuts found for "{search}"
-            </div>
-          ) : (
-            <div className={cn('space-y-6')}>
-              {groupedShortcuts.map(([category, shortcuts]) => (
-                <CategorySection key={category} category={category} shortcuts={shortcuts} />
-              ))}
-            </div>
+          {search && (
+            <button
+              onClick={() => setSearch('')}
+              aria-label="Clear search"
+              className="p-1.5 hover:bg-white/10 rounded-lg transition-colors text-white/40 hover:text-white/60"
+            >
+              <X className={iconSizes.md} />
+            </button>
           )}
+          <KeyboardKey size="md" className="hidden sm:inline-flex">?</KeyboardKey>
         </div>
 
-        {/* Footer hint */}
-        <div className="px-4 py-3 border-t border-white/10 text-center">
-          <span className="text-xs text-white/40">
-            Press <KeyboardKey size="sm">Esc</KeyboardKey> to close
-          </span>
-        </div>
-      </div>
-    </div>
+        {/* Shortcuts List */}
+        <Modal.Body maxHeight={overlayClasses.bodyMaxHeight}>
+          <div className="p-2">
+            {groupedShortcuts.length === 0 ? (
+              <div className="py-8 text-center text-white/40 text-sm">
+                No shortcuts found for &ldquo;{search}&rdquo;
+              </div>
+            ) : (
+              groupedShortcuts.map(([category, shortcuts]) => (
+                <CategorySection key={category} category={category} shortcuts={shortcuts} />
+              ))
+            )}
+          </div>
+        </Modal.Body>
+
+        {/* Footer - unified dark bar with keyboard hints */}
+        <Modal.Footer className={overlayClasses.footer}>
+          <div className={cn(overlayClasses.footerContent, gapTokens.large)}>
+            <span className={cn('flex items-center', gapTokens.compact)}>
+              <Kbd>↑↓</Kbd>
+              <span>Navigate</span>
+            </span>
+            <span className={cn('flex items-center', gapTokens.compact)}>
+              <Kbd>Esc</Kbd>
+              <span>Close</span>
+            </span>
+          </div>
+        </Modal.Footer>
+      </Modal.Content>
+    </Modal.Root>
   );
 });

@@ -102,7 +102,7 @@ export const IconButton = memo(function IconButton({
       disabled={disabled || loading}
       title={title}
       className={cn(
-        'relative rounded-lg transition-all duration-200 border',
+        'relative rounded-lg transition duration-200 border',
         sizeStyles[size],
         getVariantStyles(),
         'disabled:cursor-not-allowed',

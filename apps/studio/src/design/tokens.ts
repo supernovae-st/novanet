@@ -203,13 +203,13 @@ export const badgeClasses = {
  */
 export const iconButtonClasses = {
   /** Ghost variant - default icon button (no background) */
-  ghost: 'p-1.5 rounded-lg transition-all duration-150 text-white/50 hover:text-white/70 hover:bg-white/[0.06]',
+  ghost: 'p-1.5 rounded-lg transition-colors duration-150 text-white/50 hover:text-white/70 hover:bg-white/[0.06]',
   /** Action variant - with success feedback */
-  action: 'p-1.5 rounded-lg transition-all duration-150 text-white/50 hover:text-white/70 hover:bg-white/[0.06] active:text-emerald-400 active:bg-emerald-500/20',
+  action: 'p-1.5 rounded-lg transition-colors duration-150 text-white/50 hover:text-white/70 hover:bg-white/[0.06] active:text-emerald-400 active:bg-emerald-500/20',
   /** Close variant - for dismiss/close buttons */
   close: 'w-8 h-8 rounded-lg flex items-center justify-center text-white/40 hover:text-white/80 hover:bg-white/[0.06] transition-colors duration-150',
   /** Copy variant - with copied state */
-  copy: 'p-1.5 rounded-lg opacity-50 group-hover:opacity-100 transition-all duration-150 text-white/60 hover:text-white/90 hover:bg-white/[0.06]',
+  copy: 'p-1.5 rounded-lg opacity-50 group-hover:opacity-100 transition duration-150 text-white/60 hover:text-white/90 hover:bg-white/[0.06]',
 } as const;
 
 /**
@@ -350,8 +350,8 @@ export const panelClasses = {
   headerTitle: 'text-sm font-medium text-white/90',
   headerSubtitle: 'text-[11px] text-white/40',
 
-  /** Panel body - scrollable content (horizontal padding only, sections handle vertical) */
-  body: 'flex-1 overflow-y-auto scrollbar-thin px-4',
+  /** Panel body - scrollable content (px-3 matches toolbar padding for alignment) */
+  body: 'flex-1 overflow-y-auto scrollbar-thin px-3',
 
   /** Panel footer - stats/actions */
   footer: 'px-4 py-3 border-t border-white/[0.06]',
@@ -554,82 +554,134 @@ export const modalClasses = {
 } as const;
 
 // ============================================================================
+// OVERLAY / COMMAND PALETTE DESIGN SYSTEM
+// ============================================================================
+
+/**
+ * Overlay design tokens - Unified system for command palette–style modals
+ *
+ * Used by: CommandPalette (⌘K), AiSearchOverlay (⌘J), KeyboardHelpPanel (?)
+ *
+ * All three modals share:
+ * - Top-aligned positioning (pt-[12vh])
+ * - Inline search header (icon + transparent input + shortcut badge)
+ * - Category section headers (uppercase, muted)
+ * - Dark footer bar with keyboard hints
+ * - 55vh max body height
+ * - animate-scale-in entrance
+ */
+export const overlayClasses = {
+  /** Container position - vertically centered */
+  position: 'items-center',
+  /** Modal size - all overlays use xl (max-w-4xl = 896px) */
+  size: 'xl' as const,
+  /** Search header row - subtle bottom border, comfortable padding */
+  searchHeader: 'flex items-center p-3 sm:p-4 border-b border-white/[0.08]',
+  /** Search input - transparent inline, no borders/rings */
+  searchInput: [
+    'flex-1 bg-transparent text-white placeholder-white/40',
+    'text-sm sm:text-base outline-none border-none ring-0',
+    'focus:outline-none focus:ring-0',
+  ].join(' '),
+  /** Category/section header in command list */
+  sectionHeader: 'px-3 py-2 text-xs font-medium text-white/40 uppercase tracking-wider',
+  /** Command row - base layout */
+  rowBase: [
+    'w-full flex items-center px-3 py-2 sm:py-2.5 rounded-xl',
+    'transition-colors duration-150',
+    'outline-none ring-0 focus:outline-none focus:ring-0',
+  ].join(' '),
+  /** Row idle/hover state */
+  rowIdle: 'hover:bg-white/[0.04] border border-transparent',
+  /** Row selected/active state (novanet accent) */
+  rowSelected: 'bg-novanet-500/15 border border-novanet-500/25 shadow-[0_0_12px_rgba(139,92,246,0.08)]',
+  /** Row icon container - base */
+  rowIconBase: 'w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-colors duration-150',
+  /** Row icon idle */
+  rowIconIdle: 'bg-white/[0.05] text-white/50',
+  /** Row icon selected */
+  rowIconSelected: 'bg-novanet-500/25 text-novanet-400',
+  /** Unified body maxHeight - generous for centered modal */
+  bodyMaxHeight: '60vh',
+  /** Footer - subtle dark bar with top border for separation */
+  footer: 'p-2.5 sm:p-3 bg-black/20 border-t border-white/[0.04]',
+  /** Footer content - centered keyboard hint row */
+  footerContent: 'flex items-center justify-center text-xs text-white/40',
+  /** Entrance animation class */
+  animation: 'animate-scale-in',
+} as const;
+
+// ============================================================================
 // UNIFIED SIDEBAR DESIGN SYSTEM
 // ============================================================================
 
 /**
  * Sidebar design tokens - Unified system for all sidebar tabs
  *
- * Based on shadcn/ui sidebar patterns and Tailwind best practices:
- * - Row height: h-10 (40px) - comfortable touch target
- * - Row gap: gap-3 (12px) between elements
- * - Row padding: px-3 (12px) horizontal
- * - Icon box: w-6 h-6 (24px) - clear visual weight
- * - Badge: min-w-7 (28px) rounded-md
- * - Row radius: rounded-lg (8px)
+ * shadcn/ui sidebar-inspired compact layout:
+ * - Row height: h-8 (32px) - shadcn SidebarMenuButton standard
+ * - Row gap: gap-2 (8px) between elements
+ * - Row padding: px-2 (8px) horizontal
+ * - Icon: w-4 h-4 (16px) inline, no box
+ * - Badge: plain text, no pill
+ * - Row radius: rounded-md (6px)
+ * - Section indent: pl-4 (16px) - shadcn SidebarMenuSub
  *
  * Used by: Schema Browser, Views, Nodes, Relationships tabs
  */
 export const sidebarTokens = {
   // ─────────────────────────────────────────────────────────────────────────
-  // ROW - Notion Style: transparent, minimal, hover/select only
+  // ROW - shadcn compact: h-8, px-2, gap-2, rounded-md
   // ─────────────────────────────────────────────────────────────────────────
   row: {
-    /** Base row - transparent, hover reveals interaction */
+    /** Base row - minimal, compact */
     base: [
       'group relative w-full flex items-center',
-      'h-10 px-3 gap-3 rounded-lg', // 40px height, 12px padding, 12px gap, 8px radius
-      // Transparent by default (Notion style)
+      'h-8 px-2 gap-2 rounded-md',
       'bg-transparent',
-      // Left border placeholder
-      'border-l-2 border-transparent',
-      // Transitions
-      'transition-all duration-100',
-      // Hover: subtle reveal
+      'transition-colors duration-100',
       'hover:bg-white/[0.04]',
-      // Focus
       'focus-visible:outline-none focus-visible:bg-white/[0.06]',
-      // Active press
-      'active:bg-white/[0.08]',
+      'active:bg-white/[0.06]',
     ].join(' '),
-    /** Selected state - left accent + subtle background */
-    selected: 'border-l-current bg-white/[0.06]',
+    /** Selected state - subtle background only, no border accent */
+    selected: 'bg-white/[0.06]',
     /** Disabled state */
     disabled: 'opacity-50 cursor-not-allowed pointer-events-none',
   },
 
   // ─────────────────────────────────────────────────────────────────────────
-  // ICON BOX - Minimal, small, no backgrounds (Notion style)
+  // ICON BOX - Inline 14px, matches iconSizes.sm
   // ─────────────────────────────────────────────────────────────────────────
   iconBox: {
-    /** Standard icon box: 24x24px - clear visual weight */
-    base: 'flex-shrink-0 flex items-center justify-center w-6 h-6 transition-colors duration-100',
-    /** Small icon box: 20x20px */
-    sm: 'flex-shrink-0 flex items-center justify-center w-5 h-5 transition-colors duration-100',
-    /** Large icon box: 28x28px (for headers) */
-    lg: 'flex-shrink-0 flex items-center justify-center w-7 h-7 transition-colors duration-100',
+    /** Standard: 14x14px inline icon (matches iconSizes.sm) */
+    base: 'flex-shrink-0 flex items-center justify-center w-3.5 h-3.5 transition-colors duration-100',
+    /** Small: 12x12px */
+    sm: 'flex-shrink-0 flex items-center justify-center w-3 h-3 transition-colors duration-100',
+    /** Large: 40x40px (panel headers only) */
+    lg: 'flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-xl transition-colors duration-100',
   },
 
   // ─────────────────────────────────────────────────────────────────────────
-  // CHECKBOX - Cleaner, smaller
+  // CHECKBOX - Compact 14px
   // ─────────────────────────────────────────────────────────────────────────
   checkbox: {
-    /** Checkbox container: 16x16px - aligns to 4px grid with h-10 rows */
-    base: 'w-4 h-4 rounded border flex items-center justify-center transition-all duration-150 flex-shrink-0',
+    /** Checkbox: 14x14px - proportional to h-8 rows */
+    base: 'w-3.5 h-3.5 rounded border flex items-center justify-center transition-colors duration-150 flex-shrink-0',
     /** Unchecked state */
     unchecked: 'border-white/25 bg-transparent',
     /** Checked state (color set via style) */
     checked: 'border-transparent',
-    /** Spacer when checkbox is hidden (maintains alignment) */
-    spacer: 'w-4 flex-shrink-0',
+    /** Spacer when checkbox is hidden */
+    spacer: 'w-3.5 flex-shrink-0',
   },
 
   // ─────────────────────────────────────────────────────────────────────────
-  // LABEL - Unified text styling
+  // LABEL - text-sm standard
   // ─────────────────────────────────────────────────────────────────────────
   label: {
     /** Row label text */
-    base: 'text-[13px] font-medium transition-colors duration-150 flex-1 text-left truncate',
+    base: 'text-sm font-medium transition-colors duration-150 flex-1 text-left truncate',
     /** Selected state */
     selected: 'text-white',
     /** Unselected state */
@@ -639,36 +691,36 @@ export const sidebarTokens = {
   },
 
   // ─────────────────────────────────────────────────────────────────────────
-  // BADGE - Cleaner, less prominent
+  // BADGE - Plain text, no pill background
   // ─────────────────────────────────────────────────────────────────────────
   badge: {
-    /** Count badge: comfortable pill */
-    count: 'min-w-7 px-2 py-0.5 rounded-md text-[11px] font-medium tabular-nums text-center flex-shrink-0 transition-all duration-150',
-    /** Count selected state */
-    countSelected: 'text-white/80 bg-white/[0.10]',
-    /** Count unselected state */
-    countUnselected: 'text-white/40 bg-transparent group-hover:text-white/60',
-    /** Shortcut badge: keyboard shortcut indicator */
-    shortcut: 'min-w-6 px-2 py-0.5 rounded-md text-[10px] font-medium tabular-nums text-center flex-shrink-0 transition-all duration-150',
+    /** Count: plain text, right-aligned */
+    count: 'text-[10px] tabular-nums flex-shrink-0 transition-colors duration-150',
+    /** Count selected */
+    countSelected: 'text-white/60',
+    /** Count unselected */
+    countUnselected: 'text-white/30 group-hover:text-white/50',
+    /** Shortcut badge: plain colored text, same weight as count */
+    shortcut: 'text-[10px] font-medium tabular-nums flex-shrink-0 transition-colors duration-150',
   },
 
   // ─────────────────────────────────────────────────────────────────────────
-  // SECTION - Notion style: spacing only, no dividers
+  // SECTION - Compact with shadcn indent
   // ─────────────────────────────────────────────────────────────────────────
   section: {
-    /** Section container - spacing creates hierarchy, no borders */
-    container: 'mt-6 first:mt-0',
-    /** Section header row */
+    /** Section container - tighter spacing between sections */
+    container: 'mt-4 first:mt-0',
+    /** Section header row - compact */
     header: [
-      'flex items-center w-full py-2 px-3 gap-2.5',
-      'rounded-lg',
-      'transition-all duration-100',
+      'flex items-center w-full py-1 px-2 gap-2',
+      'rounded-md',
+      'transition-colors duration-100',
       'hover:bg-white/[0.03]',
     ].join(' '),
-    /** Section content wrapper - 4px gap, 8px left indent for hierarchy (shadcn SidebarMenuSub) */
-    content: 'mt-1.5 pl-2 space-y-1 overflow-hidden transition-all duration-150',
+    /** Section content - shadcn SidebarMenuSub indent (pl-4), minimal row gap */
+    content: 'mt-0.5 pl-4 space-y-px overflow-hidden transition-all duration-150',
     /** Content expanded state */
-    contentExpanded: 'max-h-[600px] opacity-100',
+    contentExpanded: 'max-h-[2000px] opacity-100',
     /** Content collapsed state */
     contentCollapsed: 'max-h-0 opacity-0',
     /** Section count text */
@@ -676,21 +728,21 @@ export const sidebarTokens = {
   },
 
   // ─────────────────────────────────────────────────────────────────────────
-  // CHEVRON - Unified expand/collapse indicator
+  // CHEVRON - Standard 16px
   // ─────────────────────────────────────────────────────────────────────────
   chevron: {
     /** Chevron icon */
-    base: 'w-[18px] h-[18px] text-white/30 transition-transform duration-150 ml-auto',
+    base: 'w-4 h-4 text-white/30 transition-transform duration-150 ml-auto',
     /** Collapsed state (rotated) */
     collapsed: '-rotate-90',
   },
 
   // ─────────────────────────────────────────────────────────────────────────
-  // TREE - Container styling
+  // TREE - Tight section spacing
   // ─────────────────────────────────────────────────────────────────────────
   tree: {
-    /** Tree container - bottom padding for scroll clearance */
-    container: 'space-y-3 pb-4',
+    /** Tree container - compact */
+    container: 'space-y-1 pb-3',
   },
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -698,7 +750,7 @@ export const sidebarTokens = {
   // ─────────────────────────────────────────────────────────────────────────
   progressBar: {
     /** Progress bar container */
-    container: 'w-10 flex-shrink-0',
+    container: 'w-12 flex-shrink-0',
   },
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -706,13 +758,13 @@ export const sidebarTokens = {
   // ─────────────────────────────────────────────────────────────────────────
   header: {
     /** Header container */
-    container: 'flex items-center justify-between px-2 mb-3',
+    container: 'flex items-center justify-between px-2 mb-2',
     /** Title container */
-    title: 'flex items-center gap-2.5',
+    title: 'flex items-center gap-2',
     /** Selection badge */
     selectionBadge: 'px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-semibold animate-in fade-in duration-200',
     /** Execute button base */
-    executeButton: 'p-1.5 rounded-lg transition-all duration-200',
+    executeButton: 'p-1.5 rounded-md transition duration-200',
     /** Execute button enabled */
     executeEnabled: 'text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 hover:scale-110',
     /** Execute button disabled */
@@ -810,6 +862,7 @@ export const tokens = {
   colors,
   glassClasses,
   modalClasses,
+  overlayClasses,
   // Sidebar design system
   sidebarTokens,
   filterTreeClasses, // Legacy alias

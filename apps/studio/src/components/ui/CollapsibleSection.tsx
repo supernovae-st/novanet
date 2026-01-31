@@ -133,7 +133,7 @@ export const CollapsibleSection = memo(function CollapsibleSection({
         className={cn(
           'flex items-center w-full py-1.5 px-2 group rounded-md',
           gapTokens.default,
-          'transition-all duration-150',
+          'transition-colors duration-150',
           'hover:bg-white/[0.03]'
         )}
       >
@@ -191,7 +191,7 @@ export const CollapsibleSection = memo(function CollapsibleSection({
               'ml-auto',
               iconSizes.md,
               'text-white/40',
-              'transition-all duration-200',
+              'transition duration-200',
               'group-hover:text-white/50',
               !isExpanded && '-rotate-90'
             )}

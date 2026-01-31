@@ -62,7 +62,7 @@ export const ModalHeader = memo(function ModalHeader({
         onClick={onClose}
         aria-label="Close"
         className={cn(
-          'p-2 rounded-lg transition-all duration-150',
+          'p-2 rounded-lg transition-colors duration-150',
           'text-white/40 hover:text-white/80',
           'hover:bg-white/[0.06] active:bg-white/[0.08]', // opacity.bg.medium (0.06) + opacity.bg.strong (0.08)
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20'

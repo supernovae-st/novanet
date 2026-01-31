@@ -32,7 +32,7 @@ export const RefreshButton = memo(function RefreshButton({
       onClick={onClick}
       disabled={isLoading}
       className={cn(
-        'group flex items-center p-1.5 rounded-lg transition-all',
+        'group flex items-center p-1.5 rounded-lg transition-colors',
         gapTokens.compact,
         'text-white/40 hover:text-white/70 hover:bg-white/10',
         'disabled:opacity-50',

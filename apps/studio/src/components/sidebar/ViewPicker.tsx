@@ -82,7 +82,7 @@ const ViewCard = memo(function ViewCard({
       className={cn(
         // Layout: generous padding, comfortable gap
         'flex flex-col items-start p-5 rounded-2xl text-left gap-3',
-        'border transition-all duration-150 relative',
+        'border transition duration-150 relative',
         'min-h-[130px]',
         'hover:scale-[1.02] active:scale-[0.98]',
         isSelected
@@ -367,7 +367,7 @@ export const ViewPicker = memo(function ViewPicker({ className }: ViewPickerProp
         className={cn(
           'flex items-center px-3 py-2 rounded-xl',
           gapTokens.spacious,
-          'transition-all duration-150',
+          'transition-colors duration-150',
           'hover:bg-white/8 active:bg-white/10',
           className
         )}

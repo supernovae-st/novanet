@@ -84,7 +84,7 @@ export const KeyboardKey = memo(function KeyboardKey({
         // Interactive states
         interactive && [
           'cursor-pointer',
-          'transition-all duration-75 ease-out',
+          'transition duration-75 ease-out',
           // Hover: lift up, brighter surface + catchlight
           'hover:from-white/[0.18] hover:via-white/[0.09] hover:to-white/[0.05]',
           'hover:text-white/90',

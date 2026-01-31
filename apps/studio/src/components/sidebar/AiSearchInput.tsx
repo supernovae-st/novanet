@@ -10,7 +10,7 @@
 import { Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useUIStore } from '@/stores/uiStore';
-import { glassClasses, iconSizes, gapTokens } from '@/design/tokens';
+import { iconSizes, gapTokens } from '@/design/tokens';
 import { Kbd } from '@/components/ui/Kbd';
 
 interface AiSearchInputProps {
@@ -30,12 +30,11 @@ export function AiSearchInput({
       onClick={() => openModal('ai-chat')}
       aria-label="Open AI search (⌘J)"
       className={cn(
-        'relative w-full flex items-center px-3 py-2.5',
+        'relative w-full flex items-center px-3 py-2',
         gapTokens.default,
-        'rounded-xl border transition-all duration-200 text-left',
-        glassClasses.light,
-        'border-white/[0.08] hover:border-white/[0.15]',
-        'hover:shadow-lg hover:shadow-novanet-500/5',
+        'rounded-lg transition-colors duration-200 text-left',
+        'bg-white/[0.03] border border-white/[0.06]',
+        'hover:bg-white/[0.06] hover:border-white/[0.10]',
         'group cursor-pointer',
         className,
       )}

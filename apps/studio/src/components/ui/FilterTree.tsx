@@ -271,7 +271,7 @@ const FilterTreeSection = memo(function FilterTreeSection({
             'flex items-center flex-1 min-w-0',
             'active:scale-[0.99]',
             'transition-transform duration-150',
-            gapTokens.comfortable
+            gapTokens.default
           )}
         >
           {/* Icon - clean, colored */}
@@ -399,10 +399,6 @@ const FilterTreeRow = memo(function FilterTreeRow({
         disabled && st.row.disabled,
         className
       )}
-      style={{
-        // Left accent border color when selected (Linear style)
-        borderLeftColor: isSelected ? color : undefined,
-      }}
     >
       {/* Checkbox - clean, minimal */}
       {showCheckbox ? (
@@ -455,14 +451,11 @@ const FilterTreeRow = memo(function FilterTreeRow({
         </span>
       )}
 
-      {/* Keyboard shortcut badge */}
+      {/* Keyboard shortcut badge - plain colored text, same weight as count */}
       {shortcut && (
         <span
           className={st.badge.shortcut}
-          style={{
-            backgroundColor: `${color}15`,
-            color: isSelected ? color : `${color}90`,
-          }}
+          style={{ color: isSelected ? color : `${color}70` }}
         >
           {shortcut}
         </span>

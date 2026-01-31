@@ -95,7 +95,7 @@ export const NodeLabelsSection = memo(function NodeLabelsSection({
             icon={
               <CategoryIcon
                 category={category.id}
-                className={iconSizes.md}
+                className={iconSizes.sm}
                 style={{ color: category.color }}
               />
             }
