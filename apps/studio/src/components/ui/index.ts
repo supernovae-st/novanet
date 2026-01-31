@@ -35,8 +35,6 @@ export {
 } from './Skeleton';
 
 // Filter components - Design system for sidebar filters
-export { FilterCard } from './FilterCard';
-export { FilterSection } from './FilterSection';
 export { CollapsibleSection } from './CollapsibleSection';
 export { TriStateCheckbox, type CheckboxState } from './TriStateCheckbox';
 export { ProgressBar } from './ProgressBar';

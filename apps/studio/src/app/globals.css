@@ -338,20 +338,6 @@ body {
    - .animate-float-1/2/3 (ProjectNode redesigned without particles)
 */
 
-/* ============================================================================
-   Edge Flow Animation - Animated dashes for data flow visualization
-   ============================================================================ */
-
-/* Flow animation - dashes moving along edges (source to target) */
-@keyframes edge-flow {
-  0% {
-    stroke-dashoffset: 0;
-  }
-  100% {
-    stroke-dashoffset: -40;
-  }
-}
-
 /* Gradient border rotation for selected nodes */
 @keyframes gradient-rotate {
   0% {
@@ -380,26 +366,12 @@ body {
    ============================================================================ */
 
 /* Scale utilities for hover effects */
-.scale-102 {
-  transform: scale(1.02);
-}
-
 .scale-103 {
   transform: scale(1.03);
 }
 
 .scale-105 {
   transform: scale(1.05);
-}
-
-/* Node hover effect - subtle scale up with enhanced glow */
-@keyframes node-hover-glow {
-  0%, 100% {
-    filter: brightness(1) drop-shadow(0 0 8px var(--glow-color, currentColor));
-  }
-  50% {
-    filter: brightness(1.05) drop-shadow(0 0 12px var(--glow-color, currentColor));
-  }
 }
 
 /* Node press effect - quick scale down and bounce back */
@@ -423,57 +395,10 @@ body {
   transform: scale(0.98);
 }
 
-/* Tooltip fade in animation with delay */
-@keyframes tooltip-fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-tooltip-fade-in {
-  animation: tooltip-fade-in 150ms ease-out forwards;
-  animation-delay: 300ms;
-  opacity: 0;
-}
-
-/* Tooltip styles for nodes */
-.node-tooltip {
-  @apply absolute z-50 px-3 py-2 rounded-lg;
-  @apply text-xs font-medium text-white;
-  @apply pointer-events-none;
-  background: rgba(0, 0, 0, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(8px);
-}
-
 /* Hover highlight state for connected nodes/edges */
-.hover-connected {
-  opacity: 1 !important;
-}
-
 .hover-dimmed {
   opacity: 0.25 !important;
   transition: opacity 200ms ease-out;
-}
-
-/* Node highlight ring on hover connection */
-@keyframes connection-pulse {
-  0%, 100% {
-    box-shadow: 0 0 0 0 var(--ring-color, rgba(59, 130, 246, 0.5));
-  }
-  50% {
-    box-shadow: 0 0 0 4px var(--ring-color, rgba(59, 130, 246, 0.3));
-  }
-}
-
-.connection-highlight {
-  animation: connection-pulse 1s ease-in-out infinite;
 }
 
 @layer base {

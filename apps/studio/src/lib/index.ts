@@ -41,7 +41,7 @@ export {
 // Graph Layout
 // =============================================================================
 
-export { applyDagreLayout, getNodeDimensions, type LayoutOptions } from './layout';
+export { applyDagreLayout, type LayoutOptions } from './layout';
 
 export {
   createForceSimulation,
@@ -68,7 +68,6 @@ export {
 export {
   fuzzyMatch,
   fuzzySearch,
-  highlightMatches,
   type FuzzyMatch,
   type FuzzySearchOptions,
 } from './fuzzySearch';
@@ -104,7 +103,6 @@ export {
   parseKeyCombo,
   matchesKeyCombo,
   isInputFocused,
-  handleViewPresetShortcut,
   type ParsedKeyCombo,
   type Shortcut,
 } from './keyboard';
@@ -113,8 +111,8 @@ export {
 // Database (use sparingly - prefer API routes)
 // =============================================================================
 
-export { getDriver, closeDriver } from './neo4j';
-export { getSchema, refreshSchema, formatSchemaForPrompt } from './schemaCache';
+export { getDriver } from './neo4j';
+export { getSchema, formatSchemaForPrompt } from './schemaCache';
 
 // =============================================================================
 // Filter Adapter (Cypher generation)
