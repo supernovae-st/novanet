@@ -156,6 +156,8 @@ export const gapTokens = {
   spacious: 'gap-3',
   /** 16px - Large sections, panel spacing */
   large: 'gap-4',
+  /** 20px - Modal grids, spacious layouts */
+  xl: 'gap-5',
 } as const;
 
 // ============================================================================
@@ -317,7 +319,7 @@ export const iconSizes = {
   /** 16px - Medium icons (default, buttons) */
   md: 'w-4 h-4',
   /** 18px - Large icons (headers, actions) */
-  lg: 'w-4.5 h-4.5',
+  lg: 'w-[18px] h-[18px]',
   /** 20px - Extra large icons (feature icons) */
   xl: 'w-5 h-5',
   /** 24px - Hero icons (empty states) */
@@ -535,12 +537,18 @@ export const modalClasses = {
   container: 'fixed inset-0 flex items-center justify-center',
   /** Modal content - the actual dialog box */
   content: 'bg-[#0d0d12] border border-white/[0.12] rounded-2xl shadow-2xl shadow-black/60',
-  /** Modal header - title area with close button */
+  /** Modal header - title area with close button (standard: 16px/12px) */
   header: 'flex items-center justify-between px-4 py-3 border-b border-white/[0.08]',
+  /** Modal header - large picker modals (24px/16px) */
+  headerLg: 'flex items-center justify-between px-6 py-4 border-b border-white/[0.06]',
   /** Modal body - scrollable content area */
   body: 'overflow-y-auto',
-  /** Modal footer - action buttons area */
+  /** Modal body - large picker modals with padding */
+  bodyLg: 'overflow-y-auto p-6',
+  /** Modal footer - action buttons area (standard: 16px/12px) */
   footer: 'px-4 py-3 border-t border-white/[0.08]',
+  /** Modal footer - large picker modals (24px/12px) */
+  footerLg: 'px-6 py-3 border-t border-white/[0.06]',
   /** Close button style */
   closeButton: 'w-8 h-8 rounded-lg flex items-center justify-center text-white/40 hover:text-white/80 hover:bg-white/[0.06] transition-colors duration-150',
 } as const;
@@ -606,14 +614,14 @@ export const sidebarTokens = {
   // CHECKBOX - Cleaner, smaller
   // ─────────────────────────────────────────────────────────────────────────
   checkbox: {
-    /** Checkbox container: 18x18px */
-    base: 'w-[18px] h-[18px] rounded border flex items-center justify-center transition-all duration-150 flex-shrink-0',
+    /** Checkbox container: 16x16px - aligns to 4px grid with h-10 rows */
+    base: 'w-4 h-4 rounded border flex items-center justify-center transition-all duration-150 flex-shrink-0',
     /** Unchecked state */
     unchecked: 'border-white/25 bg-transparent',
     /** Checked state (color set via style) */
     checked: 'border-transparent',
     /** Spacer when checkbox is hidden (maintains alignment) */
-    spacer: 'w-[18px] flex-shrink-0',
+    spacer: 'w-4 flex-shrink-0',
   },
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -657,8 +665,8 @@ export const sidebarTokens = {
       'transition-all duration-100',
       'hover:bg-white/[0.03]',
     ].join(' '),
-    /** Section content wrapper - comfortable spacing with taller rows */
-    content: 'mt-1.5 space-y-0.5 overflow-hidden transition-all duration-150',
+    /** Section content wrapper - 4px gap between 40px rows */
+    content: 'mt-1.5 space-y-1 overflow-hidden transition-all duration-150',
     /** Content expanded state */
     contentExpanded: 'max-h-[600px] opacity-100',
     /** Content collapsed state */
@@ -672,7 +680,7 @@ export const sidebarTokens = {
   // ─────────────────────────────────────────────────────────────────────────
   chevron: {
     /** Chevron icon */
-    base: 'w-4 h-4 text-white/30 transition-transform duration-150 ml-auto',
+    base: 'w-[18px] h-[18px] text-white/30 transition-transform duration-150 ml-auto',
     /** Collapsed state (rotated) */
     collapsed: '-rotate-90',
   },
@@ -682,7 +690,7 @@ export const sidebarTokens = {
   // ─────────────────────────────────────────────────────────────────────────
   tree: {
     /** Tree container */
-    container: 'space-y-2',
+    container: 'space-y-3',
   },
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -698,9 +706,9 @@ export const sidebarTokens = {
   // ─────────────────────────────────────────────────────────────────────────
   header: {
     /** Header container */
-    container: 'flex items-center justify-between px-1 mb-2',
+    container: 'flex items-center justify-between px-2 mb-3',
     /** Title container */
-    title: 'flex items-center gap-2',
+    title: 'flex items-center gap-2.5',
     /** Selection badge */
     selectionBadge: 'px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-semibold animate-in fade-in duration-200',
     /** Execute button base */

@@ -80,7 +80,7 @@ const ProjectCard = memo(function ProjectCard({
     >
       {/* Selection indicator */}
       {isSelected && (
-        <div className={`absolute top-2.5 right-2.5 ${iconSizes.xl} rounded-full bg-emerald-500 flex items-center justify-center`}>
+        <div className={`absolute top-3 right-3 ${iconSizes.xl} rounded-full bg-emerald-500 flex items-center justify-center`}>
           <Check className={`${iconSizes.xs} text-white`} strokeWidth={3} />
         </div>
       )}
