@@ -34,6 +34,7 @@ import {
 import { cn } from '@/lib/utils';
 import { fuzzyMatch } from '@/lib/fuzzySearch';
 import { useAutoFocus, useDebouncedValue } from '@/hooks';
+import { glassClasses } from '@/design/tokens';
 import { KeyboardKey } from './KeyboardKey';
 import { Kbd } from './Kbd';
 
@@ -177,7 +178,7 @@ export function CommandPalette({ isOpen, onClose, commands }: CommandPaletteProp
 
       {/* Modal */}
       <div
-        className="relative w-full max-w-lg m-4 glass-floating animate-scale-in overflow-hidden"
+        className={cn('relative w-full max-w-lg m-4 animate-scale-in overflow-hidden', glassClasses.modal)}
         onKeyDown={handleKeyDown}
       >
         {/* Search Header */}
@@ -343,7 +344,7 @@ export function useCommandPalette(options: UseCommandPaletteOptions): CommandIte
         id: 'shortcuts',
         title: 'Show Keyboard Shortcuts',
         description: 'View all available shortcuts',
-        shortcut: ['?'],
+        shortcut: ['/'],
         icon: <Keyboard className="w-4 h-4" />,
         category: 'Navigation',
         action: openShortcuts,

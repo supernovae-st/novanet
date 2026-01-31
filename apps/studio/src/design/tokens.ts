@@ -272,6 +272,8 @@ export const glassClasses = {
   medium: 'bg-[hsl(240,6%,8%)] backdrop-blur-xl border border-white/12',
   heavy: 'bg-[hsl(240,5%,12%)] backdrop-blur-xl border border-white/15',
   floating: 'bg-[hsl(240,6%,8%)] backdrop-blur-xl border border-white/15 rounded-2xl shadow-2xl shadow-black/50 ring-1 ring-white/4 ring-inset',
+  /** Modal variant - fully opaque dark background for better perf and consistency */
+  modal: 'bg-[#0d0d12] border border-white/[0.12] rounded-2xl shadow-2xl shadow-black/60',
 } as const;
 
 /**

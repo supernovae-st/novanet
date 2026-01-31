@@ -16,7 +16,7 @@ catalog:
   yaml: ^2.7.0
 
   # Database
-  neo4j-driver: ^5.27.0
+  neo4j-driver: ^5.28.1
 
   # AI/LLM
   openai: ^6.17.0
