@@ -116,7 +116,8 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
           <button
             onClick={this.handleReset}
             className={cn(
-              'flex items-center gap-2 px-4 py-2 rounded-lg',
+              'flex items-center px-4 py-2 rounded-lg',
+              gapTokens.default,
               'bg-red-500/20 hover:bg-red-500/30',
               'text-red-400 text-sm font-medium',
               'transition-colors'
@@ -189,7 +190,8 @@ export function GraphErrorBoundary({ children }: { children: ReactNode }) {
           <button
             onClick={() => window.location.reload()}
             className={cn(
-              'flex items-center gap-2 px-4 py-2 rounded-lg',
+              'flex items-center px-4 py-2 rounded-lg',
+              gapTokens.default,
               'bg-novanet-500 hover:bg-novanet-600',
               'text-white text-sm font-medium',
               'transition-colors'

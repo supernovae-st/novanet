@@ -12,6 +12,7 @@
 import { memo, type ReactNode, type ComponentType } from 'react';
 import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { gapTokens } from '@/design/tokens';
 
 // =============================================================================
 // TYPES
@@ -52,7 +53,7 @@ const variantStyles: Record<EmptyStateVariant, {
     // opacity.bg.strong (0.08) + opacity.border.medium (0.12)
     iconBg: 'bg-white/[0.08]',
     iconBorder: 'border-white/[0.12]',
-    iconColor: 'text-white/30',
+    iconColor: 'text-white/40',
     // opacity.text.secondary (0.70)
     titleColor: 'text-white/70',
   },
@@ -72,21 +73,21 @@ const variantStyles: Record<EmptyStateVariant, {
 
 const sizeStyles = {
   sm: {
-    container: 'gap-3',
+    container: gapTokens.spacious, // gap-3 = 12px
     iconBox: 'w-10 h-10 rounded-xl',
     icon: 'w-5 h-5',
     title: 'text-xs',
     description: 'text-[10px]',
   },
   md: {
-    container: 'gap-4',
+    container: gapTokens.large, // gap-4 = 16px
     iconBox: 'w-14 h-14 rounded-xl',
     icon: 'w-7 h-7',
     title: 'text-sm',
     description: 'text-xs',
   },
   lg: {
-    container: 'gap-5',
+    container: 'gap-5', // 20px - no token equivalent
     iconBox: 'w-16 h-16 rounded-2xl',
     icon: 'w-8 h-8',
     title: 'text-base',

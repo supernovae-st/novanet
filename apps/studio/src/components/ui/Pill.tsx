@@ -11,7 +11,7 @@
 
 import { memo } from 'react';
 import { cn } from '@/lib/utils';
-import { glassClasses } from '@/design/tokens';
+import { glassClasses, gapTokens, opacity } from '@/design/tokens';
 
 interface PillProps {
   children: React.ReactNode;
@@ -39,15 +39,15 @@ export const Pill = memo(function Pill({
 }: PillProps) {
   // Glass effect variants mapped to design tokens
   const glassStyles = {
-    light: cn(glassClasses.subtle, 'hover:bg-[hsl(240,8%,5%)] hover:border-white/12'),
-    medium: cn(glassClasses.light, 'hover:bg-[hsl(240,6%,8%)] hover:border-white/15'),
-    heavy: cn(glassClasses.medium, 'hover:bg-[hsl(240,5%,12%)] hover:border-white/18'),
+    light: cn(glassClasses.subtle, `hover:bg-[hsl(240,8%,5%)] hover:border-${opacity.border.medium}`),
+    medium: cn(glassClasses.light, `hover:bg-[hsl(240,6%,8%)] hover:border-${opacity.border.strong}`),
+    heavy: cn(glassClasses.medium, `hover:bg-[hsl(240,5%,12%)] hover:border-${opacity.border.heavy}`),
   };
 
   const sizeStyles = {
-    sm: 'px-3 py-2 gap-2',
-    md: 'px-4 h-14 gap-2',
-    lg: 'px-5 h-16 gap-4',
+    sm: cn('px-3 py-2', gapTokens.default),
+    md: cn('px-4 h-14', gapTokens.default),
+    lg: cn('px-5 h-16', gapTokens.large),
   };
 
   // Position styles for absolute positioning (bottom controls only)

@@ -3,7 +3,7 @@
 /**
  * FilterCard - Premium filter item with glassmorphism design
  *
- * Design: Matches ViewCard style for consistency across sidebars
+ * Design: Unified sidebar design with FilterTree components
  * - Frosted glass background
  * - Checkbox with accent color
  * - Icon with subtle background
@@ -17,7 +17,7 @@
 import { memo, useCallback, useState } from 'react';
 import { Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { glassClasses } from '@/design/tokens';
+import { glassClasses, gapTokens, iconSizes } from '@/design/tokens';
 
 export interface FilterCardProps {
   /** Unique identifier */
@@ -34,6 +34,8 @@ export interface FilterCardProps {
   onToggle: () => void;
   /** Optional count badge */
   count?: number;
+  /** Optional keyboard shortcut badge */
+  shortcut?: string;
   /** Compact variant (smaller height) */
   compact?: boolean;
   /** Disabled state */
@@ -72,7 +74,7 @@ export const FilterCard = memo(function FilterCard({
       className={cn(
         // Layout - minimum 48px for accessibility (WCAG tap targets)
         'group relative flex items-center w-full',
-        compact ? 'h-12 gap-3 px-3.5' : 'h-14 gap-3.5 px-4',
+        compact ? cn('h-12 px-3.5', gapTokens.spacious) : 'h-14 gap-3.5 px-4',
         'rounded-xl',
         // Frosted Glass base - light variant for filter cards
         glassClasses.light,
@@ -119,7 +121,7 @@ export const FilterCard = memo(function FilterCard({
       >
         {isSelected && (
           <Check
-            className="w-3 h-3 transition-transform duration-200"
+            className={cn(iconSizes.xs, 'transition-transform duration-200')}
             style={{ color: accentColor }}
             strokeWidth={2.5}
           />

@@ -15,7 +15,7 @@ import { useState, useRef, useCallback } from 'react';
 import { Sparkles, Send, Loader2 } from 'lucide-react';
 import { logger } from '@/lib/logger';
 import { cn } from '@/lib/utils';
-import { glassClasses, iconSizes } from '@/design/tokens';
+import { glassClasses, iconSizes, gapTokens } from '@/design/tokens';
 import { Kbd } from '@/components/ui/Kbd';
 
 interface AiSearchInputProps {
@@ -61,7 +61,8 @@ export function AiSearchInput({
       {/* Input container with glassmorphism */}
       <div
         className={cn(
-          'relative flex items-center gap-2 px-3 py-2.5',
+          'relative flex items-center px-3 py-2.5',
+          gapTokens.default,
           'rounded-xl border transition-all duration-300',
           glassClasses.light,
           isFocused
@@ -99,15 +100,16 @@ export function AiSearchInput({
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
           disabled={isLoading}
+          aria-label="Natural language query"
           className={cn(
-            'flex-1 bg-transparent text-sm text-white/90 placeholder:text-white/30',
+            'flex-1 bg-transparent text-sm text-white/90 placeholder:text-white/40',
             'outline-none border-none ring-0 focus:outline-none focus:ring-0',
             'disabled:opacity-50 disabled:cursor-not-allowed'
           )}
         />
 
         {/* Right side: Loading / Send / Shortcut */}
-        <div className="flex items-center gap-1.5 flex-shrink-0">
+        <div className={cn('flex items-center flex-shrink-0', gapTokens.compact)}>
           {isLoading ? (
             <Loader2 className={`${iconSizes.md} text-novanet-400 animate-spin`} />
           ) : hasQuery ? (
@@ -119,7 +121,7 @@ export function AiSearchInput({
               )}
               aria-label="Send query"
             >
-              <Send className="w-3.5 h-3.5 text-novanet-400" />
+              <Send className={`${iconSizes.sm} text-novanet-400`} />
             </button>
           ) : (
             <Kbd className={cn('transition-opacity duration-200', isFocused ? 'opacity-0' : 'opacity-100')}>

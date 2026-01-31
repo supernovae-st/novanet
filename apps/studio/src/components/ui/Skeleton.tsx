@@ -6,7 +6,7 @@
  */
 
 import { cn } from '@/lib/utils';
-import { iconSizes } from '@/design/tokens';
+import { iconSizes, gapTokens } from '@/design/tokens';
 
 // =============================================================================
 // Base Skeleton
@@ -95,7 +95,7 @@ export function SkeletonCard({ className }: SkeletonCardProps) {
         className
       )}
     >
-      <div className="flex items-center gap-3">
+      <div className={cn('flex items-center', gapTokens.spacious)}>
         <SkeletonCircle size="sm" />
         <div className="flex-1 space-y-2">
           <Skeleton className="h-4 w-1/3" />
@@ -146,7 +146,7 @@ export function NodeSkeleton({ className }: NodeSkeletonProps) {
         className
       )}
     >
-      <div className="flex items-center gap-2 mb-2">
+      <div className={cn('flex items-center mb-2', gapTokens.default)}>
         <Skeleton className="w-6 h-6 rounded" />
         <Skeleton className="h-4 flex-1" />
       </div>
@@ -167,7 +167,7 @@ export function PanelSkeleton({ className }: PanelSkeletonProps) {
   return (
     <div className={cn('space-y-4 p-4', className)}>
       {/* Header */}
-      <div className="flex items-center gap-3">
+      <div className={cn('flex items-center', gapTokens.spacious)}>
         <SkeletonCircle size="md" />
         <div className="flex-1 space-y-2">
           <Skeleton className="h-5 w-1/2" />

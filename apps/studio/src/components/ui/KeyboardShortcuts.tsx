@@ -135,7 +135,7 @@ export function KeyboardShortcuts({ isOpen, onClose }: KeyboardShortcutsProps) {
         </Modal.Header>
 
         {/* Category Tabs - horizontal scroll, compact */}
-        <div className="flex gap-1 px-3 py-2 border-b border-white/[0.08] overflow-x-auto scrollbar-thin">
+        <div className={cn('flex px-3 py-2 border-b border-white/[0.08] overflow-x-auto scrollbar-thin', gapTokens.tight)}>
           {SHORTCUT_CATEGORIES.map((category) => (
             <button
               key={category.id}
@@ -178,7 +178,7 @@ export function KeyboardShortcuts({ isOpen, onClose }: KeyboardShortcutsProps) {
                     <span className="text-sm text-white/60 group-hover:text-white/80 transition-colors">
                       {shortcut.description}
                     </span>
-                    <div className="flex items-center gap-1">
+                    <div className={cn('flex items-center', gapTokens.tight)}>
                       {shortcut.keys.map((key, keyIdx) => (
                         <span key={keyIdx} className="flex items-center">
                           <kbd
@@ -192,7 +192,7 @@ export function KeyboardShortcuts({ isOpen, onClose }: KeyboardShortcutsProps) {
                             {key}
                           </kbd>
                           {keyIdx < shortcut.keys.length - 1 && (
-                            <span className="text-white/30 mx-0.5 text-[10px]">+</span>
+                            <span className="text-white/40 mx-0.5 text-[10px]">+</span>
                           )}
                         </span>
                       ))}
@@ -206,7 +206,7 @@ export function KeyboardShortcuts({ isOpen, onClose }: KeyboardShortcutsProps) {
 
         {/* Footer - subtle hint */}
         <Modal.Footer className="px-4 py-2.5">
-          <div className="flex items-center justify-center gap-2 text-[11px] text-white/40">
+          <div className={cn('flex items-center justify-center text-[11px] text-white/40', gapTokens.default)}>
             <span>Press</span>
             <Kbd>/</Kbd>
             <span>anytime to show this dialog</span>

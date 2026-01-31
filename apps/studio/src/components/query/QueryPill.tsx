@@ -12,6 +12,7 @@
  */
 
 import { useState, useCallback, useRef, useEffect, memo } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import { Play, Copy, X, Check, Loader2, Expand, Minimize2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useQueryStore } from '@/stores/queryStore';
@@ -187,7 +188,14 @@ interface QueryPillProps {
 }
 
 export const QueryPill = memo(function QueryPill({ className, onRun }: QueryPillProps) {
-  const { currentQuery, isExecuting, setQuery, clear } = useQueryStore();
+  const { currentQuery, isExecuting, setQuery, clear } = useQueryStore(
+    useShallow((state) => ({
+      currentQuery: state.currentQuery,
+      isExecuting: state.isExecuting,
+      setQuery: state.setQuery,
+      clear: state.clear,
+    }))
+  );
   const { copied, copy } = useCopyFeedback();
 
   // Matrix animations when executing
@@ -344,7 +352,7 @@ export const QueryPill = memo(function QueryPill({ className, onRun }: QueryPill
                 if (editValue.trim()) setQuery(editValue.trim());
                 setIsEditing(false);
               }}
-              className="w-full bg-transparent font-mono text-sm text-white/90 placeholder:text-white/25 outline-none border-none ring-0 focus:ring-0 focus:outline-none"
+              className="w-full bg-transparent font-mono text-sm text-white/90 placeholder:text-white/40 outline-none border-none ring-0 focus:ring-0 focus:outline-none"
               placeholder="Enter Cypher query..."
               spellCheck={false}
               autoComplete="off"
@@ -357,7 +365,7 @@ export const QueryPill = memo(function QueryPill({ className, onRun }: QueryPill
               onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && startEditing()}
               className={cn(
                 'font-mono text-sm cursor-text truncate transition-all duration-200',
-                hasQuery ? 'text-white/80' : 'text-white/25',
+                hasQuery ? 'text-white/80' : 'text-white/40',
                 // Matrix glow effect when executing
                 isExecuting && 'text-emerald-300 drop-shadow-[0_0_10px_rgba(52,211,153,0.6)]'
               )}
@@ -497,7 +505,7 @@ export const QueryPill = memo(function QueryPill({ className, onRun }: QueryPill
                   'w-full h-64 resize-none',
                   'bg-[#111118] rounded-xl p-4',
                   'font-mono text-sm text-white/90 leading-relaxed',
-                  'placeholder:text-white/25',
+                  'placeholder:text-white/40',
                   'border border-white/10 focus:border-white/20',
                   'outline-none ring-0 focus:ring-0',
                   'transition-colors duration-200'
@@ -509,7 +517,7 @@ export const QueryPill = memo(function QueryPill({ className, onRun }: QueryPill
             </div>
 
             {/* Footer hint */}
-            <div className="px-6 pb-4 flex items-center justify-between text-xs text-white/30">
+            <div className="px-6 pb-4 flex items-center justify-between text-xs text-white/40">
               <span>Press <Kbd>Esc</Kbd> to close</span>
               <span>Press <Kbd>Cmd+Enter</Kbd> to run</span>
             </div>

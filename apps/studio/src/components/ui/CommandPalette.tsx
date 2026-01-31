@@ -187,6 +187,7 @@ export function CommandPalette({ isOpen, onClose, commands }: CommandPaletteProp
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Search commands..."
+            aria-label="Search commands"
             className="flex-1 bg-transparent text-white placeholder-white/40 text-base outline-none border-none ring-0 focus:outline-none focus:ring-0"
             autoComplete="off"
             spellCheck={false}
@@ -270,7 +271,7 @@ export function CommandPalette({ isOpen, onClose, commands }: CommandPaletteProp
                               <span key={`${cmd.id}-key-${keyIdx}`} className="flex items-center">
                                 <KeyboardKey size="sm">{key}</KeyboardKey>
                                 {cmd.shortcut && keyIdx < cmd.shortcut.length - 1 && (
-                                  <span className="text-white/20 mx-0.5 text-[10px]">+</span>
+                                  <span className="text-white/40 mx-0.5 text-[10px]">+</span>
                                 )}
                               </span>
                             ))}

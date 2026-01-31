@@ -21,7 +21,7 @@ import { createContext, useContext, useRef, type ReactNode, type RefObject } fro
 import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { modalClasses, zIndex, iconSizes } from '@/design/tokens';
+import { modalClasses, zIndex, iconSizes, gapTokens } from '@/design/tokens';
 import { useModal, useFocusTrap } from '@/hooks';
 
 // =============================================================================
@@ -184,7 +184,7 @@ function ModalHeader({ children, className, showClose = true, titleId }: ModalHe
 
   return (
     <div className={cn(modalClasses.header, className)}>
-      <div id={titleId} className="flex items-center gap-3 min-w-0">
+      <div id={titleId} className={cn('flex items-center min-w-0', gapTokens.spacious)}>
         {children}
       </div>
       {showClose && (
@@ -248,7 +248,7 @@ export interface ModalTitleProps {
 
 function ModalTitle({ children, className, id, icon }: ModalTitleProps) {
   return (
-    <div className="flex items-center gap-3">
+    <div className={cn('flex items-center', gapTokens.spacious)}>
       {icon && (
         <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center shrink-0">
           {icon}

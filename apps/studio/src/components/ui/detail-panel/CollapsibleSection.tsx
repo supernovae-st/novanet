@@ -12,7 +12,7 @@
 import { memo, type ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import { NAV_ICONS } from '@/config/iconSystem';
-import { iconSizes } from '@/design/tokens';
+import { iconSizes, gapTokens } from '@/design/tokens';
 
 const ChevronRight = NAV_ICONS.chevronRight;
 
@@ -41,7 +41,7 @@ export const CollapsibleSection = memo(function CollapsibleSection({
         onClick={onToggle}
         aria-expanded={isExpanded}
         aria-label={`${isExpanded ? 'Collapse' : 'Expand'} ${title} section`}
-        className="w-full flex items-center gap-2 px-5 py-3.5 hover:bg-white/6 transition-colors"
+        className={cn('w-full flex items-center px-5 py-3.5 hover:bg-white/6 transition-colors', gapTokens.default)}
       >
         <ChevronRight
           className={cn(

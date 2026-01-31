@@ -11,9 +11,10 @@
  */
 
 import { useState, useMemo } from 'react';
+import { cn } from '@/lib/utils';
 import { getRelationColors } from '@/config/categoryColors';
 import { ACTION_ICONS, NAV_ICONS, CONTENT_ICONS, GRAPH_ICONS, ICON_COLORS } from '@/config/iconSystem';
-import { iconSizes, glassClasses } from '@/design/tokens';
+import { iconSizes, glassClasses, gapTokens } from '@/design/tokens';
 import { useGraphStore } from '@/stores/graphStore';
 import { useUIStore } from '@/stores/uiStore';
 import { useCopyFieldFeedback } from '@/hooks';
@@ -44,7 +45,7 @@ export function EdgeDetailsPanel({ edge, onClose }: EdgeDetailsPanelProps) {
     new Set(['nodes', 'properties'])
   );
 
-  const { getNodeById } = useGraphStore();
+  const getNodeById = useGraphStore((state) => state.getNodeById);
   const { setSelectedNode } = useUIStore();
   const { copiedField, copyField: copyToClipboard } = useCopyFieldFeedback();
 
@@ -74,7 +75,7 @@ export function EdgeDetailsPanel({ edge, onClose }: EdgeDetailsPanelProps) {
       <div className={`h-full flex flex-col ${glassClasses.floating} animate-slide-in-right`}>
         <div className="flex-1 flex flex-col items-center justify-center p-8 text-center">
           <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-white/[0.08] to-white/[0.02] border border-white/[0.08] flex items-center justify-center mb-4 animate-float">
-            <LinkIcon className="w-8 h-8 text-white/25" />
+            <LinkIcon className="w-8 h-8 text-white/40" />
           </div>
           <h3 className="text-sm font-semibold text-white/70 mb-2">
             No Relation Selected
@@ -125,7 +126,7 @@ export function EdgeDetailsPanel({ edge, onClose }: EdgeDetailsPanelProps) {
 
           {/* Type badge */}
           <div
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold mb-3 shadow-lg"
+            className={cn('inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold mb-3 shadow-lg', gapTokens.default)}
             style={{
               background: `linear-gradient(135deg, ${colors.primary}40, ${colors.secondary}30)`,
               color: colors.primary,
@@ -142,8 +143,8 @@ export function EdgeDetailsPanel({ edge, onClose }: EdgeDetailsPanelProps) {
           </h2>
 
           {/* ID with copy */}
-          <div className="flex items-center gap-2 text-xs">
-            <HashIcon className="w-3 h-3 text-white/40" />
+          <div className={cn('flex items-center text-xs', gapTokens.default)}>
+            <HashIcon className={cn(iconSizes.xs, 'text-white/40')} />
             <span className="font-mono text-white/60 truncate flex-1">
               {edge.id}
             </span>
@@ -178,7 +179,7 @@ export function EdgeDetailsPanel({ edge, onClose }: EdgeDetailsPanelProps) {
             {/* Arrow */}
             <div className="flex items-center justify-center py-2">
               <div
-                className="flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] font-semibold"
+                className={cn('flex items-center px-3 py-1.5 rounded-full text-[10px] font-semibold', gapTokens.default)}
                 style={{
                   background: `linear-gradient(135deg, ${colors.primary}20, ${colors.secondary}20)`,
                   color: colors.primary,

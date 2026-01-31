@@ -18,7 +18,7 @@ import { cn } from '@/lib/utils';
 import { useFilterStore } from '@/stores/filterStore';
 import { useGraphStore } from '@/stores/graphStore';
 import { getLocaleInfo, ALL_LOCALES } from '@/config/locales';
-import { iconSizes } from '@/design/tokens';
+import { iconSizes, gapTokens } from '@/design/tokens';
 import { Divider } from '@/components/ui/Divider';
 import { LocalePicker } from './LocalePicker';
 import { ProjectPicker } from './ProjectPicker';
@@ -47,7 +47,7 @@ const SelectorButton = memo(function SelectorButton({
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        'flex items-center gap-2 px-3 py-2 rounded-xl',
+        cn('flex items-center px-3 py-2 rounded-xl', gapTokens.default),
         'transition-all duration-150',
         disabled
           ? 'opacity-40 cursor-not-allowed'
@@ -57,7 +57,7 @@ const SelectorButton = memo(function SelectorButton({
       <Icon className={cn(
         iconSizes.md,
         'shrink-0',
-        disabled ? 'text-white/30' : 'text-white/50'
+        disabled ? 'text-white/40' : 'text-white/50'
       )} />
       <div className="flex flex-col items-start">
         <span className={cn(
@@ -69,15 +69,16 @@ const SelectorButton = memo(function SelectorButton({
         {sublabel && (
           <span className={cn(
             'text-[10px] leading-tight',
-            disabled ? 'text-white/20' : 'text-white/40'
+            disabled ? 'text-white/40' : 'text-white/50'
           )}>
             {sublabel}
           </span>
         )}
       </div>
       <ChevronDown className={cn(
-        'w-3.5 h-3.5 ml-1',
-        disabled ? 'text-white/20' : 'text-white/30'
+        iconSizes.sm,
+        'ml-1',
+        disabled ? 'text-white/40' : 'text-white/50'
       )} />
     </motion.button>
   );

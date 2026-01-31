@@ -10,6 +10,7 @@
  */
 
 import { memo, useCallback, useMemo } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import { Table2, Code, Copy, Check, AlertCircle, FileJson, Clock } from 'lucide-react';
 import { GRAPH_ICONS, ICON_COLORS } from '@/config/iconSystem';
 import { cn } from '@/lib/utils';
@@ -25,7 +26,13 @@ import { iconSizes, gapTokens, paddingTokens, badgeClasses } from '@/design/toke
  * TableView - Linear-style data table with rich formatting
  */
 export const TableView = memo(function TableView() {
-  const { result, isExecuting, error } = useQueryStore();
+  const { result, isExecuting, error } = useQueryStore(
+    useShallow((state) => ({
+      result: state.result,
+      isExecuting: state.isExecuting,
+      error: state.error,
+    }))
+  );
 
   // Get all unique property keys from nodes (memoized for large datasets)
   // Must be before early returns to satisfy rules-of-hooks
@@ -165,7 +172,7 @@ export const TableView = memo(function TableView() {
                       >
                         {isType ? (
                           <span
-                            className="inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-[10px] font-semibold border"
+                            className={cn('inline-flex items-center px-2 py-1 rounded-md text-[10px] font-semibold border', gapTokens.compact)}
                             style={{
                               backgroundColor: `${config.color}20`,
                               borderColor: `${config.color}40`,
@@ -197,7 +204,7 @@ export const TableView = memo(function TableView() {
 
       {/* Footer */}
       <div className="flex items-center justify-between px-5 py-3 bg-[hsl(240,8%,6%)] border-t border-white/10">
-        <div className="flex items-center gap-2 text-xs text-white/50">
+        <div className={cn('flex items-center text-xs text-white/50', gapTokens.default)}>
           <GRAPH_ICONS.node className={cn(iconSizes.sm, ICON_COLORS.node.muted)} />
           <span>Showing <span className="text-white/80 font-medium">{result.nodes.length}</span> of {result.totalNodes} nodes</span>
         </div>
@@ -283,7 +290,13 @@ const JsonSyntaxHighlight = memo(function JsonSyntaxHighlight({ data }: { data: 
  * RawView - Linear-style JSON viewer with syntax highlighting
  */
 export const RawView = memo(function RawView() {
-  const { result, isExecuting, error } = useQueryStore();
+  const { result, isExecuting, error } = useQueryStore(
+    useShallow((state) => ({
+      result: state.result,
+      isExecuting: state.isExecuting,
+      error: state.error,
+    }))
+  );
   const { copied, copy } = useCopyFeedback();
 
   const handleCopy = useCallback(async () => {
