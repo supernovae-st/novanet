@@ -89,9 +89,9 @@
 - Reduce friction in exploration workflow
 
 **Components:**
-- `CopyButton` - JSON/TS/YAML formats
-- `CodeViewer` - Syntax highlighting + copy
-- `PropertyInspector` - Expandable tree + copy
+- `CopyButton` - JSON/TS/YAML formats (self-contained + controlled modes)
+- `CodeViewer` - Syntax highlighting + copy (with Cypher grammar)
+- `KeyboardHelpPanel` - Searchable keyboard shortcuts modal
 
 ---
 

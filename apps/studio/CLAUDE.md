@@ -56,9 +56,9 @@ pnpm test            # Tests
 ## Key Patterns
 
 ### DX Components
-- `CopyButton` - Copy with JSON/TypeScript/YAML formats
-- `CodeViewer` - Syntax highlighting (Prism)
-- `PropertyInspector` - Expandable property tree
+- `CopyButton` - Copy with JSON/TypeScript/YAML formats (self-contained + controlled modes)
+- `CodeViewer` - Syntax highlighting (Prism) with Cypher grammar
+- `KeyboardHelpPanel` - Searchable keyboard shortcuts modal (`?`)
 
 ### Keyboard Shortcuts
 
