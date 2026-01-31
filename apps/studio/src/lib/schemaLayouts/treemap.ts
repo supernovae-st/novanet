@@ -176,6 +176,34 @@ export function applyTreemapLayout(
     }
   }
 
+  // Fallback: if no nodes created from hierarchy (broken scopes), create nodes directly
+  if (nodes.length === 0 && hierarchy.nodes.length > 0) {
+    const FALLBACK_SPACING = 200;
+    const FALLBACK_COLS = 6;
+
+    hierarchy.nodes.forEach((schemaNode, idx) => {
+      const col = idx % FALLBACK_COLS;
+      const row = Math.floor(idx / FALLBACK_COLS);
+
+      nodes.push({
+        id: `schema-${schemaNode.nodeType}`,
+        type: 'schemaNode',
+        draggable: true,
+        position: {
+          x: 50 + col * FALLBACK_SPACING,
+          y: 50 + row * FALLBACK_SPACING,
+        },
+        data: {
+          nodeType: schemaNode.nodeType,
+          label: schemaNode.label,
+          description: schemaNode.description || '',
+          scope: schemaNode.scope,
+          subcategory: schemaNode.subcategory,
+        },
+      });
+    });
+  }
+
   // Create edges
   const validNodeIds = new Set(nodes.map(n => n.id));
   hierarchy.edges.forEach((edge, index) => {
