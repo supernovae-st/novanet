@@ -206,7 +206,7 @@ export function CommandPalette({ isOpen, onClose, commands }: CommandPaletteProp
 
         {/* Commands List */}
         <Modal.Body maxHeight={overlayClasses.bodyMaxHeight}>
-          <div ref={listRef} className="p-2">
+          <div ref={listRef} className={cn('p-2', overlayClasses.contentAnimation)}>
             {flatCommands.length === 0 ? (
               <div className="py-8 text-center text-white/40 text-sm">No commands found</div>
             ) : (
@@ -234,7 +234,7 @@ export function CommandPalette({ isOpen, onClose, commands }: CommandPaletteProp
                           overlayClasses.rowBase,
                           gapTokens.spacious,
                           isSelected
-                            ? overlayClasses.rowSelected
+                            ? cn(overlayClasses.rowSelected, 'ring-1 ring-novanet-500/40')
                             : overlayClasses.rowIdle,
                         )}
                       >
