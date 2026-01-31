@@ -12,7 +12,6 @@
 
 import { memo } from 'react';
 import { cn } from '@/lib/utils';
-import { gapTokens } from '@/design/tokens';
 import { CopyButton } from '@/components/dx/CopyButton';
 
 export interface JsonViewProps {
@@ -57,53 +56,3 @@ export const JsonView = memo(function JsonView({
   );
 });
 
-// =============================================================================
-// Compact JSON Toggle Section
-// =============================================================================
-
-export interface JsonToggleSectionProps {
-  data: unknown;
-  isOpen: boolean;
-  onToggle: () => void;
-  onCopy?: () => void;
-  isCopied?: boolean;
-  className?: string;
-}
-
-export const JsonToggleSection = memo(function JsonToggleSection({
-  data,
-  isOpen,
-  onToggle,
-  onCopy,
-  isCopied = false,
-  className,
-}: JsonToggleSectionProps) {
-  return (
-    <div className={cn('p-4 border-t border-white/12', className)}>
-      <button
-        onClick={onToggle}
-        className={cn(
-          cn('w-full flex items-center justify-center px-4 py-2.5 rounded-xl text-xs font-medium', gapTokens.default),
-          'transition-all duration-200',
-          isOpen
-            ? 'bg-primary/20 text-primary border border-primary/35'
-            : 'bg-white/6 text-white/80 hover:bg-white/10 border border-white/12'
-        )}
-      >
-        <span className="font-mono">{'{}'}</span>
-        {isOpen ? 'Hide JSON' : 'View JSON'}
-      </button>
-
-      {isOpen && (
-        <div className="mt-3">
-          <JsonView
-            data={data}
-            onCopy={onCopy}
-            isCopied={isCopied}
-            maxHeight="200px"
-          />
-        </div>
-      )}
-    </div>
-  );
-});

@@ -221,38 +221,3 @@ export function fuzzySearch<T>(
     .sort((a, b) => b.score - a.score);
 }
 
-/**
- * Highlight matched characters in text (returns array of segments)
- */
-export function highlightMatches(
-  text: string,
-  matchedIndices: number[]
-): Array<{ text: string; highlighted: boolean }> {
-  if (matchedIndices.length === 0) {
-    return [{ text, highlighted: false }];
-  }
-
-  const indexSet = new Set(matchedIndices);
-  const segments: Array<{ text: string; highlighted: boolean }> = [];
-  let currentSegment = '';
-  let currentHighlighted = indexSet.has(0);
-
-  for (let i = 0; i < text.length; i++) {
-    const isHighlighted = indexSet.has(i);
-    if (isHighlighted !== currentHighlighted) {
-      if (currentSegment) {
-        segments.push({ text: currentSegment, highlighted: currentHighlighted });
-      }
-      currentSegment = text[i];
-      currentHighlighted = isHighlighted;
-    } else {
-      currentSegment += text[i];
-    }
-  }
-
-  if (currentSegment) {
-    segments.push({ text: currentSegment, highlighted: currentHighlighted });
-  }
-
-  return segments;
-}

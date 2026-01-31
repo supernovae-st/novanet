@@ -187,38 +187,3 @@ export const CopyButton = memo(function CopyButton({
   );
 });
 
-/**
- * Copy button group with multiple format options
- */
-export interface CopyButtonGroupProps {
-  properties: Record<string, unknown>;
-  className?: string;
-}
-
-export const CopyButtonGroup = memo(function CopyButtonGroup({
-  properties,
-  className,
-}: CopyButtonGroupProps) {
-  return (
-    <div className={cn('flex items-center', gapTokens.tight, className)}>
-      <CopyButton
-        json={properties}
-        format="json"
-        label="JSON"
-        size="sm"
-      />
-      <CopyButton
-        json={properties}
-        format="typescript"
-        label="TypeScript"
-        size="sm"
-      />
-      <CopyButton
-        json={properties}
-        format="yaml"
-        label="YAML"
-        size="sm"
-      />
-    </div>
-  );
-});

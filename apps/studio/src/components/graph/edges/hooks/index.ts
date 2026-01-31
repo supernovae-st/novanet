@@ -17,7 +17,6 @@ export type { UseEdgeThemeOptions, UseEdgeThemeResult } from './useEdgeTheme';
 export {
   useEdgeLOD,
   useLODStats,
-  useRegisterEdgeLOD,
 } from './useEdgeLOD';
 export type { UseEdgeLODOptions, UseEdgeLODResult } from './useEdgeLOD';
 

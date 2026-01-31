@@ -129,9 +129,17 @@
   background: rgba(255, 255, 255, 0.1) !important;
 }
 
-/* Focus visible styles - exclude inputs for clean design */
-:focus-visible:not(input):not(textarea) {
+/* Focus visible styles - exclude inputs and React Flow nodes */
+:focus-visible:not(input):not(textarea):not(.react-flow__node):not(.react-flow__edge) {
   @apply outline-none ring-2 ring-novanet-500/50 ring-offset-2 ring-offset-black;
+}
+
+/* React Flow: remove default selection outlines (we use custom selection styling) */
+.react-flow__node:focus,
+.react-flow__node:focus-visible,
+.react-flow__node.selected {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 /* Inputs: no focus rings, subtle border change only */
