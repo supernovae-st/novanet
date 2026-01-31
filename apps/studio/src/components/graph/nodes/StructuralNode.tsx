@@ -104,8 +104,6 @@ export const StructuralNode = memo(function StructuralNode(props: NodeProps<Stru
       <div
         className={cn(
           'relative transition-all duration-300',
-          `rounded-[${NODE_DESIGN.radius.outer}px]`,
-          selected ? `p-[${NODE_DESIGN.border.selected}px]` : `p-[${NODE_DESIGN.border.default}px]`,
           selected && 'animate-gradient-rotate',
           isHovered && !selected && 'animate-glow-pulse'
         )}

@@ -102,7 +102,6 @@ export const ScopeGroupNode = memo(function ScopeGroupNode({
     <div
       className={cn(
         'w-full h-full rounded-2xl border-2 transition-all duration-300',
-        'backdrop-blur-sm',
         selected && 'border-solid',
         !selected && 'border-dashed'
       )}
@@ -133,7 +132,7 @@ export const ScopeGroupNode = memo(function ScopeGroupNode({
         className={cn(
           'absolute -top-8 left-4 flex items-center gap-3',
           'px-4 py-2 rounded-xl',
-          'border backdrop-blur-md',
+          'border bg-black/80',
           'transition-all duration-300',
           selected && 'scale-105'
         )}

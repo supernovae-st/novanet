@@ -33,7 +33,7 @@ const Graph2D = lazy(() =>
   import('@/components/graph').then((mod) => ({ default: mod.Graph2D }))
 );
 import { GraphErrorBoundary } from '@/components/ui/ErrorBoundary';
-import { StatsCounter, Pill, Divider, RefreshButton, CategoryIcon, DataModeToggle } from '@/components/ui';
+import { StatsCounter, Pill, Divider, RefreshButton, CategoryIcon } from '@/components/ui';
 import { SidebarTabs } from '@/components/sidebar/SidebarTabs';
 import { NodeDetailsPanel } from '@/components/sidebar/NodeDetailsPanel';
 import { EdgeDetailsPanel } from '@/components/sidebar/EdgeDetailsPanel';
@@ -474,8 +474,6 @@ export default function HomePage() {
                       </>
                     )}
                     <Divider />
-                    <DataModeToggle />
-                    <Divider />
                     <RefreshButton onClick={handleRefresh} isLoading={isFetching} />
                   </Pill>
                   <Pill size="md">
@@ -488,10 +486,11 @@ export default function HomePage() {
             {/* Bottom left - Keyboard shortcuts */}
             <button
               onClick={openShortcuts}
-              className="absolute bottom-4 left-4 p-2.5 rounded-xl bg-[#0d0d12] border border-white/10 hover:bg-accent-blue/15 hover:border-accent-blue/30 transition-all text-white/40 hover:text-accent-blue shadow-lg shadow-black/40"
+              className="absolute bottom-4 left-4 px-3 py-2 rounded-xl bg-[#0d0d12] border border-white/10 hover:bg-accent-blue/15 hover:border-accent-blue/30 transition-all text-white/40 hover:text-accent-blue shadow-lg shadow-black/40 flex items-center gap-2"
               title="Keyboard shortcuts (?)"
             >
               <Keyboard className="w-4 h-4" />
+              <kbd className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-white/10 border border-white/10">?</kbd>
             </button>
 
             {/* Bottom center - View controls + hover info + shortcut hint */}

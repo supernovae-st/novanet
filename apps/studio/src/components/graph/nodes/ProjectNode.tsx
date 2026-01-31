@@ -16,10 +16,11 @@
  * Uses shared design system components from effects/ directory.
  */
 
-import { memo, useMemo } from 'react';
+import { memo, useMemo, useState } from 'react';
 import { type Node, type NodeProps } from '@xyflow/react';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
+import { Briefcase } from 'lucide-react';
 import type { BaseNodeData } from './BaseNodeWrapper';
 import { BlueprintOverlay } from './BlueprintOverlay';
 import { ICON_COLORS } from '@/config/iconSystem';
@@ -44,6 +45,7 @@ export const ProjectNode = memo(function ProjectNode(props: NodeProps<ProjectNod
   const isDimmed = data.dimmed === true;
   const isHoverDimmed = data.hoverDimmed === true;
   const isSchemaMode = data.isSchemaMode === true;
+  const [imageError, setImageError] = useState(false);
 
   // Shared interaction state management
   const {
@@ -156,14 +158,24 @@ export const ProjectNode = memo(function ProjectNode(props: NodeProps<ProjectNod
                   boxShadow: selected ? `0 0 15px ${PRIMARY}40` : undefined,
                 }}
               >
-                <Image
-                  src={NOVANET_LOGO_URL}
-                  alt="Project"
-                  width={56}
-                  height={56}
-                  className="object-cover w-full h-full"
-                  unoptimized
-                />
+                {!imageError ? (
+                  <Image
+                    src={NOVANET_LOGO_URL}
+                    alt="Project"
+                    width={56}
+                    height={56}
+                    className="object-cover w-full h-full"
+                    unoptimized
+                    onError={() => setImageError(true)}
+                  />
+                ) : (
+                  <div
+                    className="w-full h-full flex items-center justify-center"
+                    style={{ background: `${PRIMARY}20` }}
+                  >
+                    <Briefcase size={28} style={{ color: PRIMARY }} />
+                  </div>
+                )}
               </div>
 
               {/* Type Badge */}

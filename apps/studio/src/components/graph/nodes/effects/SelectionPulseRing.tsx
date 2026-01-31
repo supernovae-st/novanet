@@ -9,7 +9,7 @@
  * Used by: StructuralNode, LocaleKnowledgeNode, SchemaNode, ProjectNode
  */
 
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import { NODE_DESIGN } from '@/config/constants';
 
 export interface SelectionPulseRingProps {
@@ -26,25 +26,30 @@ export const SelectionPulseRing = memo(function SelectionPulseRing({
   color,
   borderRadius = NODE_DESIGN.radius.outer + 2,
 }: SelectionPulseRingProps) {
+  // Memoize styles to prevent object recreation on every render
+  const primaryStyle = useMemo(() => ({
+    borderRadius,
+    border: `2px solid ${color}`,
+    boxShadow: NODE_DESIGN.shadows.selectionPulse(color),
+  }), [borderRadius, color]);
+
+  const secondaryStyle = useMemo(() => ({
+    borderRadius,
+    border: `2px solid ${color}`,
+    boxShadow: NODE_DESIGN.shadows.selectionPulseDelayed(color),
+  }), [borderRadius, color]);
+
   return (
     <>
       {/* Primary pulse ring */}
       <div
         className="absolute inset-0 animate-selection-ping pointer-events-none"
-        style={{
-          borderRadius,
-          border: `2px solid ${color}`,
-          boxShadow: NODE_DESIGN.shadows.selectionPulse(color),
-        }}
+        style={primaryStyle}
       />
       {/* Secondary delayed pulse ring */}
       <div
         className="absolute inset-0 animate-selection-ping-delayed pointer-events-none"
-        style={{
-          borderRadius,
-          border: `2px solid ${color}`,
-          boxShadow: NODE_DESIGN.shadows.selectionPulseDelayed(color),
-        }}
+        style={secondaryStyle}
       />
     </>
   );

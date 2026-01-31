@@ -34,6 +34,8 @@ import {
 import { cn } from '@/lib/utils';
 import { fuzzyMatch } from '@/lib/fuzzySearch';
 import { useAutoFocus, useDebouncedValue } from '@/hooks';
+import { KeyboardKey } from './KeyboardKey';
+import { Kbd } from './Kbd';
 
 // =============================================================================
 // Types
@@ -200,9 +202,7 @@ export function CommandPalette({ isOpen, onClose, commands }: CommandPaletteProp
               <X className="w-4 h-4" />
             </button>
           )}
-          <kbd className="hidden sm:inline-flex px-2 py-1 bg-white/[0.06] rounded-lg text-xs font-mono text-white/40 border border-white/[0.08]">
-            ⌘K
-          </kbd>
+          <KeyboardKey size="md" className="hidden sm:inline-flex">⌘K</KeyboardKey>
         </div>
 
         {/* Commands List */}
@@ -265,18 +265,10 @@ export function CommandPalette({ isOpen, onClose, commands }: CommandPaletteProp
 
                       {/* Shortcut */}
                       {cmd.shortcut && (
-                        <div className="flex items-center gap-1 shrink-0">
+                        <div className="flex items-center gap-0.5 shrink-0">
                           {cmd.shortcut.map((key, keyIdx) => (
                             <span key={`${cmd.id}-key-${keyIdx}`} className="flex items-center">
-                              <kbd
-                                className={cn(
-                                  'inline-flex items-center justify-center min-w-[24px] h-6 px-1.5',
-                                  'bg-white/[0.06] border border-white/[0.1] rounded-md',
-                                  'text-[10px] font-mono text-white/50'
-                                )}
-                              >
-                                {key}
-                              </kbd>
+                              <KeyboardKey size="sm">{key}</KeyboardKey>
                               {cmd.shortcut && keyIdx < cmd.shortcut.length - 1 && (
                                 <span className="text-white/20 mx-0.5 text-[10px]">+</span>
                               )}
@@ -296,15 +288,15 @@ export function CommandPalette({ isOpen, onClose, commands }: CommandPaletteProp
         <div className="p-3 border-t border-white/[0.08] bg-black/20">
           <div className="flex items-center justify-center gap-4 text-xs text-white/50">
             <span className="flex items-center gap-1.5">
-              <kbd className="px-1.5 py-0.5 bg-white/[0.06] rounded text-[10px] font-mono">↑↓</kbd>
+              <Kbd>↑↓</Kbd>
               <span>Navigate</span>
             </span>
             <span className="flex items-center gap-1.5">
-              <kbd className="px-1.5 py-0.5 bg-white/[0.06] rounded text-[10px] font-mono">↵</kbd>
+              <Kbd>↵</Kbd>
               <span>Select</span>
             </span>
             <span className="flex items-center gap-1.5">
-              <kbd className="px-1.5 py-0.5 bg-white/[0.06] rounded text-[10px] font-mono">Esc</kbd>
+              <Kbd>Esc</Kbd>
               <span>Close</span>
             </span>
           </div>

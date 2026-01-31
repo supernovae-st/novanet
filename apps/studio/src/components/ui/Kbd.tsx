@@ -1,10 +1,12 @@
 'use client';
 
 /**
- * Kbd - Keyboard shortcut badge component
+ * Kbd - Keyboard shortcut badge component (Skeuomorphic)
  *
  * Used in modal footers to display keyboard hints.
- * Matches glass design system styling.
+ * Dark skeuomorphic design with 3D depth.
+ *
+ * For more control, use KeyboardKey component instead.
  */
 
 import { memo } from 'react';
@@ -19,7 +21,16 @@ export const Kbd = memo(function Kbd({ children, className }: KbdProps) {
   return (
     <kbd
       className={cn(
-        'px-1.5 py-0.5 bg-white/10 rounded text-white/50 font-mono text-xs',
+        // Layout
+        'inline-flex items-center justify-center',
+        'px-1.5 py-0.5 min-w-[20px] h-5',
+        'font-mono text-[10px] font-medium tracking-tight',
+        // Skeuomorphic dark styling
+        'bg-gradient-to-b from-white/[0.10] to-white/[0.04]',
+        'border border-white/[0.12] border-b-white/[0.08]',
+        'rounded text-white/60',
+        // 3D depth shadows
+        'shadow-[0_1px_2px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.06)]',
         className
       )}
     >

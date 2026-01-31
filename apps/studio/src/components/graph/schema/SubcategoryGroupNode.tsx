@@ -96,8 +96,7 @@ export const SubcategoryGroupNode = memo(function SubcategoryGroupNode({
   return (
     <div
       className={cn(
-        'w-full h-full rounded-xl border transition-all duration-200',
-        'backdrop-blur-[2px]'
+        'w-full h-full rounded-xl border transition-all duration-200'
       )}
       style={containerStyle}
       onMouseEnter={handleMouseEnter}
@@ -108,7 +107,7 @@ export const SubcategoryGroupNode = memo(function SubcategoryGroupNode({
         className={cn(
           'absolute -top-5 left-3 flex items-center gap-2',
           'px-2.5 py-1 rounded-lg',
-          'border backdrop-blur-sm',
+          'border bg-black/70',
           'transition-all duration-200',
           selected && 'scale-105'
         )}

@@ -16,6 +16,7 @@ import { createPortal } from 'react-dom';
 import { cn } from '@/lib/utils';
 import { isInputFocused } from '@/lib/keyboard';
 import { ACTION_ICONS, NAV_ICONS, CONTENT_ICONS, ICON_SIZES } from '@/config/iconSystem';
+import { Kbd } from './Kbd';
 
 // Design system icons
 const CloseIcon = ACTION_ICONS.close;
@@ -257,9 +258,7 @@ export function KeyboardShortcuts({ isOpen, onClose }: KeyboardShortcutsProps) {
         <div className="px-4 py-2.5 border-t border-white/[0.08]">
           <div className="flex items-center justify-center gap-2 text-[11px] text-white/40">
             <span>Press</span>
-            <kbd className="px-1.5 py-0.5 bg-white/[0.06] rounded text-[10px] font-mono text-white/60 border border-white/[0.08]">
-              ?
-            </kbd>
+            <Kbd>?</Kbd>
             <span>anytime to show this dialog</span>
           </div>
         </div>
