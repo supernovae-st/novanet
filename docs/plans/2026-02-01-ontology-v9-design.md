@@ -1,4 +1,4 @@
-# NovaNet Ontology Roadmap: v9 → v10 → v11
+# NovaNet Ontology Roadmap: v9 → v10 → v11 → v12
 
 **Date**: 2026-02-01
 **Status**: Draft
@@ -9,7 +9,7 @@
 
 | Milestone | Version | TrustGraph Level | Phases | Detail |
 |-----------|---------|------------------|--------|--------|
-| **1 — Self-Describing Context Graph** | v9.0 | Level 5 | 0–8 (+ 9 stretch) | Detailed tasks, file-level |
+| **1 — Self-Describing Context Graph** | v9.0 | Level 5 | 0–8 | Detailed tasks, file-level |
 | **2 — Dynamic Retrieval** | v10.0 | Level 6 | 10–12 | High-level objectives + success criteria |
 | **3 — Autonomous Learning** | v11.0 | Level 7 | 13–15 | High-level objectives + success criteria |
 | **4 — Content Pipeline** | v12.0 | Level 8 | 16 | Placeholder — CLI-driven generation |
@@ -1028,36 +1028,47 @@ RETURN labels(instance)[0] AS type, count(*) AS count
 
 ### CLI-First Architecture
 
-The CLI is the **universal interface** — the source of truth for all graph operations.
-Studio (web GUI) and TUI (Rust terminal) are presentation layers on top of CLI
-capabilities. If it works in CLI, it works everywhere.
+**Boundary rule**: TypeScript generates code artifacts (types, Cypher files, Mermaid).
+Rust executes graph operations at runtime (read, write, query, assemble).
+Studio keeps its own Neo4j JS driver (web API routes = separate concern).
 
 ```
-CLI = universal interface
-├── Studio  = web GUI on top
-├── TUI     = interactive terminal on top (stretch)
-└── AI Agent = programmatic consumer (v10+)
+novanet (Rust binary) = universal interface for graph operations
+├── CLI mode   novanet data / meta / query / node create ...
+├── TUI mode   novanet tui (interactive terminal)
+├── AI agent   calls novanet query --format=json programmatically (v10+)
+└── v10-v12    context assemble / eval / content generate
+
+pnpm (TS monorepo) = code generation + web UI
+├── pnpm schema:generate    YAML → TypeScript types (must be TS)
+├── pnpm schema:validate    YAML ↔ TS ↔ Neo4j sync
+├── pnpm dev                Studio web app (Next.js)
+└── pnpm build/lint/test    Monorepo dev tools
 ```
 
-An AI orchestrator can call CLI commands to discover and assemble its own context:
-`pnpm graph:query --kind=Page --trait=localized --format=json` → the agent knows
-what to generate before it generates. This is the "self-describing context graph"
-in action.
+An AI orchestrator calls `novanet query --kind=Page --trait=localized --format=json`
+to discover what to generate before generating. ~5ms startup (vs ~200ms Node.js).
+This is the "self-describing context graph" in action.
 
-### TS CLI (`@novanet/cli`) — scripts & CI
+**No @novanet/cli package** — the Rust binary IS the CLI. Root package.json can
+alias `"graph:data": "novanet data"` for convenience, but no TS wrapper code.
 
-Lives in the monorepo, shares types with `@novanet/core`.
+### Rust Binary (`novanet`) — CLI + TUI
 
-#### Read Commands (v9)
+Single crate binary for all graph operations. CLI subcommands and interactive TUI
+share the same code (Neo4j client, Cypher builder, facet logic, output formatters).
+Lives in `tools/novanet/` outside the pnpm monorepo.
+
+#### Read Commands
 
 | Command | Description | Output |
 |---------|------------|--------|
-| `pnpm graph:data` | Mode 1: Data only | Node/edge counts by type |
-| `pnpm graph:meta` | Mode 2: Meta only | Taxonomy tree (Realm > Layer > Kind) |
-| `pnpm graph:overlay` | Mode 3: Data + Meta | Combined stats |
-| `pnpm graph:query` | Mode 4: Facet filters | Filtered subgraph |
+| `novanet data` | Mode 1: Data only | Node/edge counts by type |
+| `novanet meta` | Mode 2: Meta only | Taxonomy tree (Realm > Layer > Kind) |
+| `novanet overlay` | Mode 3: Data + Meta | Combined stats |
+| `novanet query` | Mode 4: Facet filters | Filtered subgraph |
 
-**`pnpm graph:query` options:**
+**`novanet query` options:**
 
 | Flag | Values | Description |
 |------|--------|-------------|
@@ -1070,35 +1081,88 @@ Lives in the monorepo, shares types with `@novanet/core`.
 
 All flags are composable: `--realm=project --trait=localized` returns the intersection.
 
-#### Write Commands (v9)
+#### Write Commands
 
 | Command | Description | Example |
 |---------|------------|---------|
-| `pnpm node:create` | Create a data node | `--kind=Page --key=about --props='{"display_name":"About"}'` |
-| `pnpm node:edit` | Edit node properties | `--key=about --set='{"display_name":"About Us"}'` |
-| `pnpm node:delete` | Delete a data node | `--key=about --confirm` |
-| `pnpm relation:create` | Create a relationship | `--from=about --to=pricing --type=SEMANTIC_LINK` |
-| `pnpm relation:delete` | Delete a relationship | `--from=about --to=pricing --type=SEMANTIC_LINK` |
+| `novanet node create` | Create a data node | `--kind=Page --key=about --props='{"display_name":"About"}'` |
+| `novanet node edit` | Edit node properties | `--key=about --set='{"display_name":"About Us"}'` |
+| `novanet node delete` | Delete a data node | `--key=about --confirm` |
+| `novanet relation create` | Create a relationship | `--from=about --to=pricing --type=SEMANTIC_LINK` |
+| `novanet relation delete` | Delete a relationship | `--from=about --to=pricing --type=SEMANTIC_LINK` |
 
-Write commands validate against the meta-graph: `node:create --kind=Page` checks
-that `Page` is a valid Kind, applies the correct Realm/Layer/Trait, and wires
+Write commands validate against the meta-graph: `novanet node create --kind=Page`
+checks that `Page` is a valid Kind, applies the correct Realm/Layer/Trait, and wires
 `OF_KIND` automatically.
 
-#### Management Commands (v9, already planned)
+#### Utility Commands
 
 | Command | Description |
 |---------|------------|
-| `pnpm schema:generate` | Run all 7 generators |
-| `pnpm schema:validate` | Validate YAML ↔ TS ↔ Neo4j sync |
+| `novanet schema validate` | Validate Neo4j state matches YAML definitions |
+| `novanet tui` | Launch interactive TUI mode |
 
-### Rust TUI (`novanet-tui`) — interactive exploration
+#### Crate Structure (single crate)
 
-Standalone binary for interactive graph exploration. Built with
-[ratatui](https://ratatui.rs/) + [neo4rs](https://docs.rs/neo4rs) (Bolt driver).
+```
+tools/novanet/
+├── Cargo.toml
+└── src/
+    ├── main.rs             clap: data/meta/query/node/relation/tui subcommands
+    ├── db.rs               Neo4j connection pool (neo4rs, async)
+    ├── cypher.rs           Cypher query builder (facet → WHERE clauses)
+    ├── facets.rs           Realm/Layer/Trait/EdgeFamily filter logic
+    ├── meta.rs             Meta-graph types (Kind, EdgeKind, etc.)
+    ├── output.rs           Formatters: table (tabled), json (serde), cypher (raw)
+    ├── validate.rs         Schema validation (Neo4j ↔ YAML)
+    ├── commands/
+    │   ├── mod.rs
+    │   ├── data.rs         Mode 1: WHERE NOT n:Meta
+    │   ├── meta.rs         Mode 2: MATCH (n:Meta)
+    │   ├── overlay.rs      Mode 3: MATCH (n)
+    │   ├── query.rs        Mode 4: facet-driven
+    │   ├── node.rs         node create/edit/delete
+    │   └── relation.rs     relation create/delete
+    └── tui/
+        ├── mod.rs
+        ├── app.rs          App state machine (mode, selection, filters)
+        ├── ui.rs           Layout: left tree + right detail + status bar
+        ├── events.rs       Keyboard/mouse event handling
+        ├── tree.rs         Taxonomy tree widget (Realm > Layer > Kind)
+        └── detail.rs       Kind detail pane (facets, edges, instances)
+```
 
-Lives in `tools/novanet-tui/` outside the pnpm monorepo.
+No feature flags, no workspace. Single `cargo build` produces the `novanet` binary
+with CLI + TUI. Split into workspace if crate grows past v10.
 
-#### Layout
+#### Dependencies
+
+| Crate | Purpose |
+|-------|---------|
+| `clap` + `clap_derive` | CLI argument parsing, subcommands |
+| `ratatui` | Terminal UI framework |
+| `crossterm` | Cross-platform terminal backend |
+| `neo4rs` | Neo4j Bolt driver (async) |
+| `tokio` | Async runtime (multi-thread) |
+| `serde` + `serde_json` | Neo4j result deserialization, JSON output |
+| `tabled` | Table output formatting |
+| `nucleo` | Fuzzy search (TUI `/` key) |
+| `color-eyre` | Error reporting with context |
+| `tracing` | Structured logging |
+
+#### Connection
+
+```bash
+# Default (same as Docker dev)
+novanet data
+novanet tui
+
+# Custom connection
+novanet --uri bolt://localhost:7687 --user neo4j --password novanetpassword data
+novanet --uri bolt://remote:7687 --user neo4j --password secret tui
+```
+
+#### TUI Layout
 
 ```
 ╔══════════════════════════════════════════════════════════════════════════════╗
@@ -1152,28 +1216,10 @@ The TUI **must** support the same interface as the CLI:
 - Same `--format` options for export (`table`, `json`, `cypher`)
 
 UI details (layout, keybindings, animation) are implementation decisions
-for Phase 9. The contract ensures feature parity with CLI.
+for Phase 7. The contract ensures feature parity with CLI.
 
-#### Tech Stack
-
-| Crate | Purpose |
-|-------|---------|
-| `ratatui` | Terminal UI framework |
-| `crossterm` | Cross-platform terminal backend |
-| `neo4rs` | Neo4j Bolt driver (async) |
-| `tokio` | Async runtime |
-| `clap` | CLI argument parsing (--uri, --user, --password) |
-| `serde` / `serde_json` | Neo4j result deserialization |
-
-#### Connection
-
-```bash
-# Default (same as Docker dev)
-novanet-tui
-
-# Custom connection
-novanet-tui --uri bolt://localhost:7687 --user neo4j --password novanetpassword
-```
+Tech stack and connection details are defined in the unified Rust binary
+section above (Dependencies, Connection).
 
 ### Studio Implementation
 
@@ -1449,7 +1495,7 @@ Target latencies for the 4 navigation modes (on local Neo4j with seed data):
 | Generator tests | 100% (all generated artifacts match YAML) |
 | Schema sync tests | 100% (YAML ↔ TS ↔ Neo4j roundtrip) |
 | Studio navigation modes | 100% (all 4 modes) |
-| TS CLI commands | 100% (all 4 graph commands) |
+| Rust CLI commands | 100% (all 4 navigation modes + node/relation CRUD) |
 
 ## Migration Strategy
 
@@ -1685,29 +1731,31 @@ Total: ~130 files across 5 packages + 1 Rust tool + docs + Claude config. Groupe
 | `src/config/layerColors.ts` | Create | 9 Layer colors (replaces `categoryColors.ts` with 6) |
 | `src/config/traitStyles.ts` | Create | 5 Trait border styles (solid/dashed/double/dotted/thin) |
 
-#### @novanet/cli (TS graph commands)
+#### tools/novanet (Rust CLI + TUI binary)
 
 | File | Action | Description |
 |------|--------|-------------|
-| `src/commands/graph-data.ts` | Create | Mode 1: Data-only node/edge counts |
-| `src/commands/graph-meta.ts` | Create | Mode 2: Meta-only taxonomy tree |
-| `src/commands/graph-overlay.ts` | Create | Mode 3: Combined data+meta stats |
-| `src/commands/graph-query.ts` | Create | Mode 4: Facet filter with --realm/--layer/--trait/--edge-family/--kind/--format |
-
-#### tools/novanet-tui (Rust interactive TUI)
-
-| File | Action | Description |
-|------|--------|-------------|
-| `Cargo.toml` | Create | Dependencies: ratatui, crossterm, neo4rs, tokio, clap, serde |
-| `src/main.rs` | Create | Entry point, Bolt connection, clap args |
-| `src/app.rs` | Create | App state: active mode, selected Kind, facet filters |
-| `src/ui/mod.rs` | Create | Layout: left tree + right detail + status bar |
-| `src/ui/taxonomy_tree.rs` | Create | Realm > Layer > Kind collapsible tree widget |
-| `src/ui/kind_detail.rs` | Create | Kind facets, edges, instance list panel |
-| `src/ui/facet_filter.rs` | Create | Popup with Realm/Layer/Trait/EdgeFamily checkboxes |
-| `src/ui/mode_bar.rs` | Create | Top bar with Data/Meta/Overlay/Query toggle |
-| `src/db/mod.rs` | Create | Neo4j queries: meta-graph, data counts, filtered views |
-| `src/db/queries.rs` | Create | Cypher query builder for the 4 modes + facet combos |
+| `Cargo.toml` | Create | Single crate: clap, ratatui, crossterm, neo4rs, tokio, serde, tabled, nucleo, color-eyre, tracing |
+| `src/main.rs` | Create | clap: data/meta/query/node/relation/tui subcommands |
+| `src/db.rs` | Create | Neo4j connection pool (neo4rs, async) |
+| `src/cypher.rs` | Create | Cypher query builder (facet → WHERE clauses) |
+| `src/facets.rs` | Create | Realm/Layer/Trait/EdgeFamily filter logic |
+| `src/meta.rs` | Create | Meta-graph types (Kind, EdgeKind, etc.) |
+| `src/output.rs` | Create | Formatters: table (tabled), json (serde), cypher (raw) |
+| `src/validate.rs` | Create | Schema validation (Neo4j ↔ YAML) |
+| `src/commands/mod.rs` | Create | Command module re-exports |
+| `src/commands/data.rs` | Create | Mode 1: WHERE NOT n:Meta |
+| `src/commands/meta.rs` | Create | Mode 2: MATCH (n:Meta) |
+| `src/commands/overlay.rs` | Create | Mode 3: MATCH (n) |
+| `src/commands/query.rs` | Create | Mode 4: facet-driven |
+| `src/commands/node.rs` | Create | node create/edit/delete (validate against meta-graph) |
+| `src/commands/relation.rs` | Create | relation create/delete |
+| `src/tui/mod.rs` | Create | TUI module entry point |
+| `src/tui/app.rs` | Create | App state machine (mode, selection, filters) |
+| `src/tui/ui.rs` | Create | Layout: left tree + right detail + status bar |
+| `src/tui/events.rs` | Create | Keyboard/mouse event handling |
+| `src/tui/tree.rs` | Create | Taxonomy tree widget (Realm > Layer > Kind) |
+| `src/tui/detail.rs` | Create | Kind detail pane (facets, edges, instances) |
 
 #### Turbo Generators (scaffolding templates)
 
@@ -1858,19 +1906,22 @@ no dead code remains, and DX is clean.
 
 **Gate**: Ralph Wiggum #6 — all 4 navigation modes work, facet filters are dynamic from meta-graph, ViewPicker context-aware
 
-#### Phase 7: CLI + Documentation
+#### Phase 7: Rust CLI + TUI + Documentation
 
 | # | Task | Description |
 |---|------|-------------|
-| 7.1 | Create TS CLI read commands | `graph:data`, `graph:meta`, `graph:overlay`, `graph:query` |
-| 7.1b | Create TS CLI write commands | `node:create/edit/delete`, `relation:create/delete` — validate against meta-graph (Kind exists, correct Realm/Layer/Trait, auto-wire OF_KIND) |
-| 7.2 | Update Claude skills | `novanet-architecture`, `novanet-sync` — v9 terminology |
-| 7.3 | Update Claude commands | `novanet-arch`, `novanet-sync` — v9 references |
-| 7.4 | Update CLAUDE.md files | Root, core, studio — v9 terminology and version |
-| 7.5 | Update docs | NOVANET-PITCH, plan docs, _index.yaml, README |
-| 7.6 | Update turbo generators | Scaffold templates with v9 fields |
+| 7.1 | Scaffold `tools/novanet` Rust crate | `Cargo.toml` with clap, neo4rs, tokio, serde, tabled, color-eyre, tracing. `main.rs` with clap subcommands. |
+| 7.2 | Implement read commands | `novanet data`, `novanet meta`, `novanet overlay`, `novanet query` — 4 navigation modes with `--realm/--layer/--trait/--edge-family/--kind/--format` flags |
+| 7.3 | Implement write commands | `novanet node create/edit/delete`, `novanet relation create/delete` — validate against meta-graph (Kind exists, correct Realm/Layer/Trait, auto-wire OF_KIND) |
+| 7.4 | Implement `novanet schema validate` | Validate Neo4j state matches YAML definitions |
+| 7.5 | Add ratatui TUI mode | `novanet tui` — taxonomy tree, mode toggle (1/2/3/4), facet filter (f), search (/), kind detail, node CRUD (n/d/r keys) |
+| 7.6 | Update Claude skills | `novanet-architecture`, `novanet-sync` — v9 terminology |
+| 7.7 | Update Claude commands | `novanet-arch`, `novanet-sync` — v9 references |
+| 7.8 | Update CLAUDE.md files | Root, core, studio — v9 terminology and version |
+| 7.9 | Update docs | NOVANET-PITCH, plan docs, _index.yaml, README |
+| 7.10 | Update turbo generators | Scaffold templates with v9 fields |
 
-**Gate**: Ralph Wiggum #7 — CLI commands work, all docs reference v9, no stale v8 terminology anywhere
+**Gate**: Ralph Wiggum #7 — `novanet data/meta/query/node` commands work, `novanet tui` launches with taxonomy tree, all docs reference v9, no stale v8 terminology anywhere
 
 #### Phase 8: Final Verification
 
@@ -1885,13 +1936,6 @@ no dead code remains, and DX is clean.
 | 8.7 | PR creation | `spn-powers:finishing-a-development-branch` — merge to main |
 
 **Gate**: All tests pass, all audits clean, PR approved
-
-#### Phase 9: Stretch Goals
-
-| # | Task | Description |
-|---|------|-------------|
-| 9.1 | Build Rust TUI | `tools/novanet-tui` — ratatui + neo4rs, taxonomy tree, mode toggle |
-| 9.2 | Additional navigation | Edge explorer, Cypher preview, fuzzy search |
 
 ---
 
@@ -2013,12 +2057,12 @@ generation tasks via CLI commands, not internal API calls.
 
 **Objective**: Make content generation a first-class CLI operation.
 
-- `pnpm content:generate --page=pricing --locale=fr-FR` — generate a full page
-- `pnpm content:status --locale=ja-JP` — check generation status across all pages
-- `pnpm content:diff --page=pricing --locale=fr-FR` — show what changed since last generation
-- `pnpm content:approve --page=pricing --locale=fr-FR` — mark output as approved
-- Orchestrator consumes CLI commands programmatically (AI-driven pipeline)
-- TUI wraps all content commands with interactive review UI
+- `novanet content generate --page=pricing --locale=fr-FR` — generate a full page
+- `novanet content status --locale=ja-JP` — check generation status across all pages
+- `novanet content diff --page=pricing --locale=fr-FR` — show what changed since last generation
+- `novanet content approve --page=pricing --locale=fr-FR` — mark output as approved
+- Orchestrator consumes `novanet` commands programmatically (AI-driven pipeline)
+- `novanet tui` wraps all content commands with interactive review UI
 
 **Success**: An AI agent can generate, review, and approve content for any
 page/locale combination using only CLI commands. No Studio or direct API required.
