@@ -185,18 +185,6 @@ export const paddingTokens = {
 // ============================================================================
 
 /**
- * Badge/pill pattern tokens - unified badge styling
- */
-export const badgeClasses = {
-  /** Compact badge - counts, status */
-  compact: 'inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-medium',
-  /** Standard badge - labels, tags */
-  standard: 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium',
-  /** Large badge - prominent status */
-  large: 'inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium',
-} as const;
-
-/**
  * Icon button pattern tokens - unified icon button styling
  *
  * Consolidates repeating icon button patterns across the codebase.
@@ -210,16 +198,6 @@ export const iconButtonClasses = {
   close: 'w-8 h-8 rounded-lg flex items-center justify-center text-white/40 hover:text-white/80 hover:bg-white/[0.06] transition-colors duration-150',
   /** Copy variant - with copied state */
   copy: 'p-1.5 rounded-lg opacity-50 group-hover:opacity-100 transition duration-150 text-white/60 hover:text-white/90 hover:bg-white/[0.06]',
-} as const;
-
-/**
- * Section header tokens - unified section styling
- */
-export const sectionHeaderClasses = {
-  /** Standard section header */
-  standard: 'flex items-center gap-2 text-xs uppercase tracking-wider font-semibold text-white/40',
-  /** Elevated section header (with background) */
-  elevated: 'flex items-center gap-2.5 px-4 py-3 text-xs uppercase tracking-wider font-semibold text-white/40 border-b border-white/[0.06]',
 } as const;
 
 // ============================================================================
@@ -259,32 +237,6 @@ export const opacity = {
     primary: 'white/[0.80]',  // Important text
     strong: 'white/[0.90]',   // Headings
     full: 'white',            // Maximum contrast
-  },
-} as const;
-
-// ============================================================================
-// GLOW EFFECTS - Consistent glow patterns for selected/active states
-// ============================================================================
-
-/**
- * Glow effect tokens for UI elements
- *
- * Usage: Replace hardcoded boxShadow glow values with these functions
- * Example: `boxShadow: glowEffects.row(color)` or `boxShadow: glowEffects.novanet.card`
- */
-export const glowEffects = {
-  /** Dynamic color glows - use with item's accent color */
-  row: (color: string) => `0 0 20px ${color}20, 0 4px 12px rgba(0,0,0,0.3)`,
-  iconBox: (color: string) => `0 0 12px ${color}30`,
-  checkbox: (color: string) => `0 0 8px ${color}40`,
-  section: (color: string) => `0 0 12px ${color}10`,
-
-  /** Static novanet brand glows - for brand-themed elements, buttons, etc. */
-  novanet: {
-    /** novanet-500 = #8b5cf6 (violet) */
-    card: '0 0 20px rgba(139, 92, 246, 0.15), 0 4px 12px rgba(0,0,0,0.3)',
-    iconBox: '0 0 12px rgba(139, 92, 246, 0.30)',
-    subtle: '0 0 8px rgba(139, 92, 246, 0.20)',
   },
 } as const;
 
@@ -563,53 +515,142 @@ export const modalClasses = {
  * Used by: CommandPalette (⌘K), AiSearchOverlay (⌘J), KeyboardHelpPanel (?)
  *
  * All three modals share:
- * - Top-aligned positioning (pt-[12vh])
+ * - Vertically centered positioning
+ * - Raycast-style width: max-w-2xl (672px)
  * - Inline search header (icon + transparent input + shortcut badge)
  * - Category section headers (uppercase, muted)
  * - Dark footer bar with keyboard hints
- * - 55vh max body height
+ * - 65vh max body height
  * - animate-scale-in entrance
  */
 export const overlayClasses = {
-  /** Container position - vertically centered */
-  position: 'items-center',
-  /** Modal size - all overlays use xl (max-w-4xl = 896px) */
-  size: 'xl' as const,
-  /** Search header row - subtle bottom border, comfortable padding */
-  searchHeader: 'flex items-center p-3 sm:p-4 border-b border-white/[0.08]',
-  /** Search input - transparent inline, no borders/rings */
+  /** Container position - centered both horizontally and vertically */
+  position: 'items-center justify-center',
+  /** Modal size - Raycast-style: max-w-2xl = 672px */
+  size: 'lg' as const,
+  /** Max width class for direct use (shared with pickers) */
+  maxWidth: 'max-w-2xl',
+  /** Search header row - generous padding, stronger border */
+  searchHeader: 'flex items-center px-4 sm:px-5 py-3.5 sm:py-4 border-b border-white/[0.10]',
+  /** Search input - transparent inline, larger text for bold presence */
   searchInput: [
-    'flex-1 bg-transparent text-white placeholder-white/40',
-    'text-sm sm:text-base outline-none border-none ring-0',
+    'flex-1 bg-transparent text-white placeholder-white/35',
+    'text-base sm:text-lg outline-none border-none ring-0',
     'focus:outline-none focus:ring-0',
   ].join(' '),
   /** Category/section header in command list */
-  sectionHeader: 'px-3 py-2 text-xs font-medium text-white/40 uppercase tracking-wider',
-  /** Command row - base layout */
+  sectionHeader: 'px-3 py-2.5 text-[11px] font-semibold text-white/45 uppercase tracking-widest',
+  /** Command row - base layout with generous sizing */
   rowBase: [
-    'w-full flex items-center px-3 py-2 sm:py-2.5 rounded-xl',
-    'transition-colors duration-150',
+    'w-full flex items-center px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl',
+    'transition-all duration-150',
     'outline-none ring-0 focus:outline-none focus:ring-0',
   ].join(' '),
   /** Row idle/hover state */
   rowIdle: 'hover:bg-white/[0.04] border border-transparent',
-  /** Row selected/active state (novanet accent) */
-  rowSelected: 'bg-novanet-500/15 border border-novanet-500/25 shadow-[0_0_12px_rgba(139,92,246,0.08)]',
-  /** Row icon container - base */
-  rowIconBase: 'w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-colors duration-150',
+  /** Row selected/active state - bold novanet accent with glow */
+  rowSelected: 'bg-novanet-500/15 border border-novanet-500/30 shadow-[0_0_20px_rgba(139,92,246,0.12)]',
+  /** Row icon container - base (larger for bold layout) */
+  rowIconBase: 'w-9 h-9 rounded-lg flex items-center justify-center shrink-0 transition-colors duration-150',
   /** Row icon idle */
   rowIconIdle: 'bg-white/[0.05] text-white/50',
-  /** Row icon selected */
-  rowIconSelected: 'bg-novanet-500/25 text-novanet-400',
-  /** Unified body maxHeight - generous for centered modal */
-  bodyMaxHeight: '60vh',
-  /** Footer - subtle dark bar with top border for separation */
-  footer: 'p-2.5 sm:p-3 bg-black/20 border-t border-white/[0.04]',
+  /** Row icon selected - stronger accent */
+  rowIconSelected: 'bg-novanet-500/25 text-novanet-300',
+  /** Unified body maxHeight - generous for bold centered modal */
+  bodyMaxHeight: '65vh',
+  /** Footer - subtle dark bar with top border */
+  footer: 'px-4 sm:px-5 py-3 bg-black/25 border-t border-white/[0.06]',
   /** Footer content - centered keyboard hint row */
   footerContent: 'flex items-center justify-center text-xs text-white/40',
-  /** Entrance animation class */
-  animation: 'animate-scale-in',
+  /** Entrance animation - Raycast-style spring */
+  animation: 'animate-overlay-enter',
+  /** Body content staggered entrance */
+  contentAnimation: 'animate-overlay-content',
 } as const;
+
+// ============================================================================
+// PICKER MODAL DESIGN SYSTEM
+// ============================================================================
+
+/**
+ * Picker design tokens - Unified system for grid-based picker modals
+ *
+ * Used by: ViewPicker, LocalePicker, ProjectPicker
+ *
+ * All three pickers share:
+ * - Full-width centered layout with consistent sizing
+ * - Icon box + title + subtitle header
+ * - Inline search bar
+ * - Grid of cards with keyboard navigation
+ * - Keyboard hints footer
+ * - Raycast-style spring animation
+ */
+export const pickerClasses = {
+  /** Container - full-screen centered with padding */
+  container: 'fixed inset-0 z-50 flex items-center justify-center p-4',
+  /** Backdrop - Raycast-style blur ramp */
+  backdrop: 'fixed inset-0 bg-black/60 animate-overlay-backdrop',
+  /** Modal shell - glass morphism with spring entrance */
+  shell: [
+    'relative w-full overflow-hidden flex flex-col rounded-2xl',
+    'bg-[#0d0d12] border border-white/[0.12] shadow-2xl shadow-black/60',
+    'animate-overlay-enter',
+  ].join(' '),
+  /** Default size - Raycast-style: max-w-2xl = 672px (same as overlays) */
+  sizeDefault: 'max-w-2xl',
+  /** Compact size for simpler pickers */
+  sizeCompact: 'max-w-xl',
+  /** Max height */
+  maxHeight: 'max-h-[80vh]',
+  /** Header row - icon box + title + close button */
+  header: 'flex items-center justify-between px-5 sm:px-6 py-4 border-b border-white/[0.08]',
+  /** Header icon box */
+  headerIconBox: 'w-10 h-10 rounded-xl border border-white/[0.10] flex items-center justify-center',
+  /** Header title */
+  headerTitle: 'text-base font-semibold text-white',
+  /** Header subtitle */
+  headerSubtitle: 'text-xs text-white/40 mt-0.5',
+  /** Close button */
+  closeButton: 'p-2 rounded-lg hover:bg-white/10 transition-colors text-white/50 hover:text-white',
+  /** Search bar row */
+  searchBar: 'flex items-center gap-3 px-5 sm:px-6 py-3.5 border-b border-white/[0.08]',
+  /** Search input (shared with overlayClasses pattern) */
+  searchInput: 'flex-1 bg-transparent text-white placeholder-white/35 text-base outline-none border-none ring-0 focus:outline-none focus:ring-0',
+  /** Grid container */
+  grid: 'flex-1 overflow-y-auto scrollbar-thin p-5 sm:p-6 animate-overlay-content',
+  /** Card base */
+  cardBase: [
+    'flex flex-col items-center justify-center p-4 sm:p-5 rounded-xl',
+    'gap-2 border transition-all duration-150 relative',
+    'hover:scale-[1.02] active:scale-[0.98]',
+  ].join(' '),
+  /** Card idle state */
+  cardIdle: 'bg-white/[0.02] border-white/[0.08] hover:bg-white/[0.05] hover:border-white/[0.15] text-white/90 hover:text-white',
+  /** Card focused state (keyboard navigation) */
+  cardFocused: 'bg-white/[0.06] border-white/20 text-white',
+  /** Card "all" variant (dashed border) */
+  cardAll: 'border-dashed border-white/15',
+  /** Card entrance animation */
+  cardAnimation: 'animate-picker-card',
+  /** Empty state */
+  emptyState: 'text-center py-12 text-white/40',
+  /** Footer bar - count + keyboard hints */
+  footer: 'px-5 sm:px-6 py-3 border-t border-white/[0.06] bg-black/25',
+  /** Footer content layout */
+  footerContent: 'flex items-center justify-between text-xs text-white/50',
+} as const;
+
+/** Max cards that receive stagger delay (first 6 get 30ms increments) */
+const MAX_STAGGER = 6;
+
+/**
+ * Get stagger class for picker card animation
+ * Cards 0-5 get incremental delay (30ms each), cards 6+ animate immediately
+ */
+export function getCardStagger(index: number): string {
+  if (index < 0 || index >= MAX_STAGGER) return '';
+  return `stagger-${index + 1}`;
+}
 
 // ============================================================================
 // UNIFIED SIDEBAR DESIGN SYSTEM
@@ -772,65 +813,27 @@ export const sidebarTokens = {
   },
 } as const;
 
-// ============================================================================
-// FILTER TREE - Legacy aliases (for backward compatibility)
-// ============================================================================
-
-/**
- * @deprecated Use sidebarTokens instead. These are legacy aliases.
- */
-export const filterTreeClasses = {
-  container: sidebarTokens.tree.container,
-  sectionHeader: sidebarTokens.section.header,
-  sectionContent: sidebarTokens.section.content,
-  sectionContentExpanded: sidebarTokens.section.contentExpanded,
-  sectionContentCollapsed: sidebarTokens.section.contentCollapsed,
-  row: sidebarTokens.row.base,
-  rowSelected: sidebarTokens.row.selected,
-  rowDisabled: sidebarTokens.row.disabled,
-  chevron: sidebarTokens.chevron.base,
-  chevronCollapsed: sidebarTokens.chevron.collapsed,
-  checkbox: sidebarTokens.checkbox.base,
-  checkboxUnchecked: sidebarTokens.checkbox.unchecked,
-  checkboxChecked: sidebarTokens.checkbox.checked,
-  label: sidebarTokens.label.base,
-  labelSelected: sidebarTokens.label.selected,
-  labelUnselected: sidebarTokens.label.unselected,
-  sectionLabel: sidebarTokens.label.section,
-  count: sidebarTokens.badge.count,
-  countSelected: sidebarTokens.badge.countSelected,
-  countUnselected: sidebarTokens.badge.countUnselected,
-  countMuted: 'text-white/40',
-  progressBar: sidebarTokens.progressBar.container,
-  header: sidebarTokens.header.container,
-  headerTitle: sidebarTokens.header.title,
-  headerBadge: sidebarTokens.header.selectionBadge,
-  executeButton: sidebarTokens.header.executeButton,
-  executeButtonEnabled: sidebarTokens.header.executeEnabled,
-  executeButtonDisabled: sidebarTokens.header.executeDisabled,
-} as const;
-
 /**
  * Scope-specific accent colors - used for both Schema and Data modes
  */
 export const scopeAccents = {
   project: {
-    color: '#8b5cf6', // violet-500
-    bg: 'bg-violet-500/20',
-    text: 'text-violet-400',
-    border: 'border-violet-500/30',
+    color: '#6c71c4', // solarized violet
+    bg: 'bg-[#6c71c4]/20',
+    text: 'text-[#6c71c4]',
+    border: 'border-[#6c71c4]/30',
   },
   global: {
-    color: '#10b981', // emerald-500
-    bg: 'bg-emerald-500/20',
-    text: 'text-emerald-400',
-    border: 'border-emerald-500/30',
+    color: '#2aa198', // solarized cyan
+    bg: 'bg-[#2aa198]/20',
+    text: 'text-[#2aa198]',
+    border: 'border-[#2aa198]/30',
   },
   shared: {
-    color: '#f59e0b', // amber-500
-    bg: 'bg-amber-500/20',
-    text: 'text-amber-400',
-    border: 'border-amber-500/30',
+    color: '#cb4b16', // solarized orange
+    bg: 'bg-[#cb4b16]/20',
+    text: 'text-[#cb4b16]',
+    border: 'border-[#cb4b16]/30',
   },
 } as const;
 
@@ -849,7 +852,6 @@ export const tokens = {
   transitions,
   controls,
   opacity,
-  glowEffects,
   defaultColors,
   iconSizes,
   // Semantic spacing tokens
@@ -863,13 +865,11 @@ export const tokens = {
   glassClasses,
   modalClasses,
   overlayClasses,
+  pickerClasses,
   // Sidebar design system
   sidebarTokens,
-  filterTreeClasses, // Legacy alias
   scopeAccents,
-  badgeClasses,
   iconButtonClasses,
-  sectionHeaderClasses,
 } as const;
 
 export default tokens;

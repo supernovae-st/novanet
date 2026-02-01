@@ -23,15 +23,7 @@ export { StatsCounter } from './StatsCounter';
 export { Toaster } from './Toaster';
 
 // Loading components
-export {
-  Skeleton,
-  SkeletonText,
-  SkeletonCircle,
-  SkeletonCard,
-  ShimmerLoader,
-  NodeSkeleton,
-  PanelSkeleton,
-} from './Skeleton';
+export { Skeleton } from './Skeleton';
 
 // Filter components - Design system for sidebar filters
 export { CollapsibleSection } from './CollapsibleSection';
@@ -47,3 +39,6 @@ export { CommandPalette } from './CommandPalette';
 // Layout components
 export { EmptyState } from './EmptyState';
 export { SegmentedTabs } from './SegmentedTabs';
+
+// Animation components
+export { MatrixRainOverlay } from './MatrixRainOverlay';

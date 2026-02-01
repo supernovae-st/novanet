@@ -116,11 +116,12 @@ pnpm test            # Tests
 | ⇧Tab | Previous connected node |
 | Delete | Hide node from view |
 
-### API Routes (9 routes)
+### API Routes (10 routes)
 - `/api/chat` - Claude AI endpoint
 - `/api/graph` - Main graph data
 - `/api/graph/expand` - Expand node neighbors
 - `/api/graph/ontology` - Ontology metadata
+- `/api/graph/organizing-principles` - Organizing principles (scopes, subcategories)
 - `/api/graph/query` - Execute Cypher queries
 - `/api/graph/schema` - Schema information
 - `/api/graph/stats` - Graph statistics
