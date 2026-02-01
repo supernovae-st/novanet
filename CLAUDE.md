@@ -36,9 +36,9 @@ Axis 4 — LINKS?  :EdgeKind  (47 relationship types in 5 families)
 
 **New concepts:** Trait, EdgeFamily, EdgeKind, OF_KIND instance bridge, :Meta double-label
 
-**Rust binary:** `tools/novanet/` — single crate for CLI + TUI (neo4rs, ratatui, clap)
+**Rust binary (PLANNED):** `tools/novanet/` — single crate for CLI + TUI (neo4rs, ratatui, clap). Not yet implemented.
 
-**Boundary rule:** TypeScript generates code artifacts. Rust executes at runtime.
+**Boundary rule (v9 target):** TypeScript generates code artifacts. Rust executes at runtime.
 
 ---
 
@@ -51,9 +51,9 @@ novanet/
 ├── packages/
 │   ├── core/               # @novanet/core - types, schemas, filters
 │   ├── db/                 # @novanet/db - Neo4j infrastructure
-│   └── schema-tools/       # @novanet/schema-tools - TS code generation (eliminated in v9)
-├── tools/
-│   └── novanet/            # Rust binary (CLI + TUI) — v9+
+│   └── schema-tools/       # @novanet/schema-tools - TS code generation (replaced by Rust in v9)
+├── tools/                  # PLANNED: Rust binary (not yet created)
+│   └── novanet/            # PLANNED: CLI + TUI — v9+
 └── apps/
     └── studio/             # @novanet/studio - web visualization
 ```
@@ -76,15 +76,15 @@ pnpm infra:down            # Stop Neo4j
 pnpm infra:seed            # Seed database
 pnpm infra:reset           # Reset database
 
-# Schema (TypeScript generators)
+# Schema (TypeScript generators — current)
 pnpm schema:generate       # Regenerate TS + Mermaid from YAML
 pnpm schema:validate       # Validate sync (CI check)
 
-# Rust binary (v9+)
-cargo run -- data kinds     # List all Kinds
-cargo run -- meta realms    # Show Realm hierarchy
-cargo run -- schema validate --strict  # Authoritative validation
-cargo run -- tui            # Interactive TUI explorer
+# Rust binary (PLANNED — not yet implemented)
+# cargo run -- data kinds     # List all Kinds
+# cargo run -- meta realms    # Show Realm hierarchy
+# cargo run -- schema validate --strict  # Authoritative validation
+# cargo run -- tui            # Interactive TUI explorer
 
 # Turbo filters
 pnpm build --filter=@novanet/core       # Build only core
@@ -99,7 +99,7 @@ pnpm test --filter=@novanet/studio      # Test only studio
 |---------|-------------|
 | @novanet/core | Types, schemas, filters, generators |
 | @novanet/db | Neo4j Docker, seeds, migrations |
-| @novanet/schema-tools | TS code generation (eliminated in v9 by Rust binary) |
+| @novanet/schema-tools | TS code generation (replaced by Rust binary in v9) |
 | @novanet/studio | Web-based graph visualization |
 
 ---
@@ -114,7 +114,7 @@ pnpm test --filter=@novanet/studio      # Test only studio
                          @novanet/studio
 
 @novanet/db (standalone)
-tools/novanet (Rust, standalone — reads YAML + Neo4j directly)
+tools/novanet (PLANNED: Rust, standalone — reads YAML + Neo4j directly)
 ```
 
 ---
@@ -156,7 +156,7 @@ pnpm dev    # → http://localhost:3000
 | **Naming** | `novanet` (packages), `NovaNet` (classes/types) |
 | **Formatting** | 2 spaces, 100 chars, single quotes, semicolons |
 | **Commits** | Conventional Commits |
-| **Rust** | `cargo fmt`, `cargo clippy`, edition 2024 |
+| **Rust (v9)** | `cargo fmt`, `cargo clippy`, edition 2024 |
 
 ---
 
