@@ -1,9 +1,21 @@
-# NovaNet Ontology v9: Realm / Layer / Kind / Trait
+# NovaNet Ontology Roadmap: v9 → v10 → v11
 
 **Date**: 2026-02-01
 **Status**: Draft
 **Author**: Thibaut + Claude
 **Supersedes**: 2026-01-31-organizing-principles.md (v8.3.0)
+
+## Milestones Overview
+
+| Milestone | Version | TrustGraph Level | Phases | Detail |
+|-----------|---------|------------------|--------|--------|
+| **1 — Self-Describing Context Graph** | v9.0 | Level 5 | 0–8 (+ 9 stretch) | Detailed tasks, file-level |
+| **2 — Dynamic Retrieval** | v10.0 | Level 6 | 10–12 | High-level objectives + success criteria |
+| **3 — Autonomous Learning** | v11.0 | Level 7 | 13–15 | High-level objectives + success criteria |
+
+v9 builds the foundation — a self-describing meta-graph that AI agents can discover
+autonomously. v10 makes context assembly dynamic. v11 closes the feedback loop so the
+meta-graph learns from its own outputs.
 
 ## Summary
 
@@ -1541,6 +1553,8 @@ Before starting implementation:
 
 ### Implementation Phases
 
+#### Milestone 1: v9.0 — Self-Describing Context Graph (TrustGraph Level 5)
+
 The migration is organized into 8 phases (+ 1 stretch goal). Each phase ends with
 a **Ralph Wiggum codebase audit** (`/codebase-audit`) to verify nothing was missed,
 no dead code remains, and DX is clean.
@@ -1671,6 +1685,113 @@ no dead code remains, and DX is clean.
 | 9.1 | Build Rust TUI | `tools/novanet-tui` — ratatui + neo4rs, taxonomy tree, mode toggle |
 | 9.2 | Additional navigation | Edge explorer, Cypher preview, fuzzy search |
 
+---
+
+#### Milestone 2: v10.0 — Dynamic Retrieval (TrustGraph Level 6)
+
+**Prereq**: Milestone 1 (v9.0) complete and stable. Release tag `v9.0.0`.
+
+v9 bakes in 3 nullable properties that v10 populates: `traversal_depth` (Kind),
+`default_traversal` (EdgeFamily), `temperature_threshold` (EdgeKind). No schema
+migration needed — v10 activates what v9 already carries.
+
+#### Phase 10: Context Assembly Engine
+
+**Objective**: Build an engine that reads the meta-graph to assemble token-aware
+context windows autonomously.
+
+- Populate `traversal_depth` on all 35 Kind nodes
+- Populate `default_traversal` on all 5 EdgeFamily nodes (`always` / `conditional` / `on_demand`)
+- Populate `temperature_threshold` on semantic/mining EdgeKinds
+- Build `ContextAssembler` service that traverses the meta-graph to decide what to
+  include per Kind + EdgeFamily traversal rules
+
+**Success**: Given a Block + Locale, the engine produces a context window without
+hardcoded traversal logic. All traversal decisions come from the meta-graph.
+
+#### Phase 11: Dynamic Budget System
+
+**Objective**: Replace static `context_budget` with a dynamic system that adapts
+per prompt type, locale complexity, and concept density.
+
+- Add `retrieval_strategy` to Kind (`'expand'` | `'summary'` | `'key_only'`)
+- Build budget calculator: locale complexity x concept count → token budget
+- Implement token counting + truncation strategy per budget tier
+
+**Success**: Same graph, different context windows depending on task type.
+**Benchmark**: context assembly < 200ms, token waste < 10%.
+
+#### Phase 12: Orchestrator Integration
+
+**Objective**: Wire the context assembly engine into the LLM orchestrator pipeline
+(block generation workflow).
+
+- Replace hardcoded Cypher context queries with `ContextAssembler`
+- A/B testing: old static context vs new dynamic context
+- Benchmark: latency, token efficiency, output quality delta
+
+**Success**: Orchestrator uses meta-graph-driven context for all generation tasks.
+No hardcoded traversal patterns remain.
+
+**Gate**: Ralph Wiggum — no static traversal logic, all context assembly driven
+by meta-graph properties. Release tag `v10.0.0`.
+
+---
+
+#### Milestone 3: v11.0 — Autonomous Learning (TrustGraph Level 7)
+
+**Prereq**: Milestone 2 (v10.0) complete and stable. Release tag `v10.0.0`.
+
+v9 bakes in 3 nullable properties that v11 populates: `generation_count` (Kind),
+`quality_score` (PageL10n/BlockL10n), `prompt_fingerprint` (PageL10n/BlockL10n).
+No schema migration needed — v11 activates what v9 already carries.
+
+#### Phase 13: Evaluation Pipeline
+
+**Objective**: Build a system that scores generated content and tracks which
+prompts produced which outputs.
+
+- Populate `quality_score` (0.0–1.0) on PageL10n/BlockL10n after generation
+- Populate `prompt_fingerprint` (SHA-256/16) on each output
+- Increment `generation_count` on Kind after each generation cycle
+- Build `EvaluationService`: automated scoring + human review UI
+
+**Success**: Every generated output has a `quality_score` and a
+`prompt_fingerprint`. `generation_count` reflects actual usage.
+
+#### Phase 14: Feedback Loops
+
+**Objective**: Close the loop — quality scores feed back into context assembly
+to improve future generations.
+
+- `quality_score` → auto-adjust `context_budget` on Kind
+  (low scores → increase budget, high scores → reduce budget)
+- `prompt_fingerprint` → cache invalidation when prompts change
+- Locale x concept x block type analysis dashboards
+
+**Success**: After N generation cycles, `context_budget` values have been
+auto-adjusted for at least 5 Kinds. Measurable quality improvement on
+re-generation of low-scoring outputs.
+
+#### Phase 15: Self-Tuning Meta-Graph
+
+**Objective**: The meta-graph evolves autonomously based on generation patterns
+and quality signals.
+
+- Pattern discovery: best concept combos per locale →
+  auto-suggest `SEMANTIC_LINK` temperature adjustments
+- Trait reclassification: Kind marked `low` budget but consistently needs more
+  context → auto-promote to `medium`
+- Meta-graph update loop: orchestrator writes back to meta-graph after
+  evaluation, closing the learning cycle
+
+**Success**: Meta-graph has been updated at least once by the autonomous pipeline
+without human intervention. Quality trend is measurably positive across 3+
+consecutive cycles.
+
+**Gate**: Ralph Wiggum — feedback loop is functional, no manual tuning required
+for steady-state operation. Release tag `v11.0.0`.
+
 ### Quality Gates: Ralph Wiggum Audit Protocol
 
 Each phase ends with a `/codebase-audit` (Ralph Wiggum loop). The audit checks:
@@ -1741,20 +1862,3 @@ Tools available for the v9 implementation:
 7. Mark phase complete → proceed to next
 ```
 
-### v10/v11 Preparations Baked Into v9
-
-Six nullable properties are included in the v9 schema at zero cost. They are ignored by
-the v9 orchestrator but avoid future schema migrations when v10/v11 activate them.
-
-| Property | Node | Version | Purpose |
-|----------|------|---------|---------|
-| `traversal_depth` | `:Kind` | v10 | Max hops to follow from this Kind |
-| `default_traversal` | `:EdgeFamily` | v10 | `always` / `conditional` / `on_demand` |
-| `temperature_threshold` | `:EdgeKind` | v10 | Min temperature for conditional traversal |
-| `generation_count` | `:Kind` | v11 | Incremented on each generation cycle |
-| `quality_score` | `PageL10n`, `BlockL10n` | v11 | 0.0–1.0 quality rating from evaluation |
-| `prompt_fingerprint` | `PageL10n`, `BlockL10n` | v11 | SHA-256 hash (16 chars) of assembled prompt |
-
-**Implementation rule**: Generators must create these properties as `null` (meta-nodes)
-or omit them (data nodes). No v9 code should read or write these properties. This
-ensures they exist in the schema but have no runtime impact.
