@@ -1018,7 +1018,7 @@ Show only business data — no meta-graph noise. This is the **default view**.
 | **Shows** | Pages, Blocks, Concepts, Locales, L10n content, SEO/GEO data |
 | **Hides** | Realm, Layer, Kind, Trait, EdgeFamily, EdgeKind + all meta-relationships |
 | **Use case** | Day-to-day content work, generation pipeline debugging |
-| **CLI** | `pnpm graph:data` |
+| **CLI** | `novanet data` |
 | **Studio** | Toggle "Data Only" (default) |
 
 ### Mode 2: Meta Only
@@ -1031,7 +1031,7 @@ Show only the ontology schema — the "schema of the schema".
 | **Shows** | 3 Realms, 9 Layers, 35 Kinds, 5 Traits, 5 EdgeFamilies, 47 EdgeKinds (~104 nodes) |
 | **Hides** | All data instances and data relationships |
 | **Use case** | Schema exploration, ontology documentation, LLM context assembly |
-| **CLI** | `pnpm graph:meta` |
+| **CLI** | `novanet meta` |
 | **Studio** | Toggle "Meta Only" |
 
 ### Mode 3: Data + Meta Overlay
@@ -1045,7 +1045,7 @@ relationships connect data instances to their Kind nodes.
 | **Shows** | All data + all meta + OF_KIND bridges |
 | **Hides** | Nothing |
 | **Use case** | Understanding how data maps to schema, debugging OF_KIND wiring |
-| **CLI** | `pnpm graph:overlay` |
+| **CLI** | `novanet overlay` |
 | **Studio** | Toggle "Overlay" |
 
 ### Mode 4: Query-Driven Views
@@ -1096,7 +1096,7 @@ MATCH (k)<-[:OF_KIND]-(instance)-[:FOR_LOCALE|HAS_CULTURE|HAS_IDENTITY|HAS_LEXIC
 RETURN labels(instance)[0] AS type, count(*) AS count
 ```
 
-| **CLI** | `pnpm graph:query --realm=global --trait=knowledge` |
+| **CLI** | `novanet query --realm=global --trait=knowledge` |
 |---------|-----|
 | **Studio** | Facet Filter Panel (checkboxes per axis) |
 
@@ -1240,7 +1240,7 @@ flowchart TB
     RELS["relations.yaml"]
   end
 
-  subgraph GENERATORS["Generators (schema-tools)"]
+  subgraph GENERATORS["Generators (novanet binary)"]
     G1["OrganizingPrinciplesGenerator"]
     G2["KindGenerator"]
     G3["EdgeSchemaGenerator"]
@@ -1273,7 +1273,7 @@ flowchart TB
   style OUTPUT fill:#6c71c4,color:#fff
 ```
 
-`generate-all.ts` orchestrates them in dependency order.
+`novanet schema generate` orchestrates them in dependency order.
 
 ---
 
@@ -1344,25 +1344,23 @@ Unchecking a facet filters out matching nodes/edges in real-time.
 
 ## CLI Integration
 
-Two complementary tools for the 4 navigation modes:
+Single `novanet` Rust binary handles all navigation modes, schema operations, and
+interactive exploration. See ADR-010/011 for the Rust-first architecture decision.
 
 | Tool | Language | Purpose | Location |
 |------|----------|---------|----------|
-| **TS CLI** | TypeScript | Scripts, CI, quick checks | `@novanet/cli` (monorepo) |
-| **Rust TUI** | Rust | Interactive exploration | `tools/novanet-tui/` (standalone) |
+| **novanet** | Rust | All schema, graph, and TUI operations | `tools/novanet/` |
 
-### TS CLI (`@novanet/cli`)
-
-Simple pnpm commands for automation and CI. Shares types with `@novanet/core`.
+### CLI Commands
 
 | Command | Mode | Output |
 |---------|------|--------|
-| `pnpm graph:data` | 1 — Data only | Node/edge counts by type |
-| `pnpm graph:meta` | 2 — Meta only | Taxonomy tree (Realm > Layer > Kind) |
-| `pnpm graph:overlay` | 3 — Overlay | Combined stats |
-| `pnpm graph:query` | 4 — Query | Filtered subgraph |
+| `novanet data` | 1 — Data only | Node/edge counts by type |
+| `novanet meta` | 2 — Meta only | Taxonomy tree (Realm > Layer > Kind) |
+| `novanet overlay` | 3 — Overlay | Combined stats |
+| `novanet query` | 4 — Query | Filtered subgraph |
 
-**`pnpm graph:query` options:**
+**`novanet query` options:**
 
 | Flag | Values | Description |
 |------|--------|-------------|
@@ -1377,19 +1375,19 @@ All flags are **composable**: `--realm=project --trait=localized` returns the in
 
 ```bash
 # Show all data node counts
-pnpm graph:data
+novanet data
 
 # Show the full ontology tree
-pnpm graph:meta
+novanet meta
 
 # Find all localized content in the project realm
-pnpm graph:query --realm=project --trait=localized
+novanet query --realm=project --trait=localized
 
 # Explore the generation pipeline edges
-pnpm graph:query --edge-family=generation --format=json
+novanet query --edge-family=generation --format=json
 ```
 
-### Rust TUI (`novanet-tui`)
+### Interactive TUI (`novanet tui`)
 
 Interactive terminal UI for graph exploration. Built with
 [ratatui](https://ratatui.rs/) + [neo4rs](https://docs.rs/neo4rs).
@@ -1444,10 +1442,10 @@ Interactive terminal UI for graph exploration. Built with
 
 ```bash
 # Default connection (Docker dev)
-novanet-tui
+novanet tui
 
 # Custom
-novanet-tui --uri bolt://localhost:7687 --user neo4j --password novanetpassword
+novanet tui --uri bolt://localhost:7687 --user neo4j --password novanetpassword
 ```
 
 ---
@@ -1461,18 +1459,18 @@ All dev data lives in seed files, so a clean rebuild is safe and simple.
 
 ```bash
 # 1. Stop and destroy
-pnpm infra:down
+novanet db down
 docker volume rm novanet_neo4j_data
 
 # 2. Update source files (YAML, generators, Studio)
 # ... (implementation work)
 
 # 3. Regenerate artifacts
-pnpm schema:generate
+novanet schema generate
 
 # 4. Rebuild and seed
-pnpm infra:up
-pnpm infra:seed
+novanet db up
+novanet db seed
 
 # 5. Verify
 # Run meta-graph integrity queries
@@ -1492,10 +1490,10 @@ pnpm infra:seed
 2. **Full rewrite** of `relations.yaml` (dict→list format + `family` + multi-source/target)
 3. Rewrite `organizing-principles.yaml` to v9 format
 4. Rewrite generators (split into 7)
-5. Run `pnpm schema:generate` to regenerate Cypher + TypeScript
+5. Run `novanet schema generate` to regenerate Cypher + TypeScript
 6. Update `00-constraints.cypher` (drop old, add new)
 7. Rename `99-autowire-subcategories.cypher` → `99-autowire-kinds.cypher`
-8. Clean rebuild: `pnpm infra:down && docker volume rm ... && pnpm infra:up && pnpm infra:seed`
+8. Clean rebuild: `novanet db reset`
 9. Run meta-graph integrity tests
 10. **PascalCase→lowercase audit**: `'Global'`→`'global'`, `'Project'`→`'project'`, `'Shared'`→`'shared'`, `'localeKnowledge'`→`'knowledge'` (~140 string literals)
 11. Update Studio API + components (rename Scope → Realm, Subcategory → Layer)
@@ -1503,8 +1501,8 @@ pnpm infra:seed
 13. Implement navigation mode toggle in Studio (NavigationModeToggle, navigationStore)
 14. Implement facet filter panel in Studio (FacetFilterPanel, useNavigationMode)
 15. Add navigation API endpoint (`/api/graph/navigation/route.ts`)
-16. Implement TS CLI graph commands (`graph:data`, `graph:meta`, `graph:overlay`, `graph:query`)
-17. Build Rust TUI (`tools/novanet-tui`) — **STRETCH GOAL**: ratatui + neo4rs, taxonomy tree, mode toggle, facet filters
+16. Build `novanet` Rust binary (`tools/novanet/`) — schema, db, data, meta, overlay, query, tui commands
+17. Build TUI module (`novanet tui`) — ratatui + neo4rs, taxonomy tree, mode toggle, facet filters
 18. Run full test suite
 
 ### TypeScript Migration
@@ -1729,11 +1727,9 @@ Target latencies (local Neo4j with seed data):
 | Package | Files | Key Changes |
 |---------|-------|-------------|
 | `@novanet/core` | ~24 | YAML migration (35 nodes + relations + organizing-principles), TypeScript types (KIND_META), graph module, filters (kill NodeCategory, ViewCategory rename) |
-| `@novanet/schema-tools` | ~12 | 7 generators (split from 1 + 4 new incl. HierarchyGenerator), RelationsParser, colors, tests |
 | `@novanet/db` | ~8 | Constraints, seeds, autowire, queries audit |
 | `@novanet/studio` | ~48 | Component renames (SchemaNode, tokens), API queries, hooks, stores, filters, 6 layout algorithms, kill NodeCategory (filterAdapter + nodeTypes + categoryColors), ViewCategory rename (viewStore, views/route, view.schema), tailwind, ELK test, e2e tests, navigation modes (5 new) |
-| `@novanet/cli` | ~4 | TS graph commands (graph:data, graph:meta, graph:overlay, graph:query) |
-| `tools/novanet-tui` | ~10 | Rust interactive TUI (STRETCH GOAL): ratatui + neo4rs |
+| `tools/novanet` | ~25 | Single Rust binary: 7 generators, parsers, schema/db/data/meta/overlay/query/tui commands, filters, search |
 | `turbo/generators` | ~3 | Scaffold templates with v9 terminology |
 | Documentation + Claude | ~17 | CLAUDE.md files, generated view docs, Claude skills + commands, plan docs, terminology rules, NOVANET-PITCH |
 

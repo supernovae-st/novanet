@@ -1,5 +1,8 @@
 # Magnetic Grouping Implementation Plan
 
+> **Superseded by v9**: This plan uses v8 terminology (Scope/Subcategory/IN_SUBCATEGORY/NodeTypeMeta).
+> In v9, this becomes Realm/Layer/OF_KIND. See [`2026-02-01-ontology-v9-design.md`](2026-02-01-ontology-v9-design.md).
+
 > **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
 **Goal:** Replace hardcoded UI containers with Neo4j-driven magnetic grouping where nodes gravitate toward their Scope/Subcategory via IN_SUBCATEGORY relationships.

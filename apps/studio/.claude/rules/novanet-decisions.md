@@ -184,7 +184,7 @@
 
 **Implementation:**
 - Single crate at `tools/novanet/`
-- Dependencies: clap, ratatui, crossterm, neo4rs, tokio, serde_yaml, tera
+- Dependencies: clap, ratatui, crossterm, neo4rs, tokio, serde_yml, minijinja, petgraph, rayon, indicatif
 - Modules: commands/, generators/, parsers/, search/, filter/, tui/
 - 13 subcommands: schema, db, locale, doc, search, filter, data/meta/overlay/query, node, relation, tui
 
@@ -200,10 +200,10 @@
 
 | Concern | Owner | Rationale |
 |---------|-------|-----------|
-| YAML -> TypeScript types | Rust (novanet) via Tera templates | Generates .ts files from Rust |
+| YAML -> TypeScript types | Rust (novanet) via MiniJinja templates | Generates .ts files from Rust |
 | YAML -> Mermaid diagrams | Rust (novanet) | String generation, no TS needed |
 | YAML -> Cypher seeds/migrations | Rust (novanet) | String generation, no TS needed |
-| YAML -> layers.ts / hierarchy.ts | Rust (novanet) via Tera templates | Replaces schema-tools generators |
+| YAML -> layers.ts / hierarchy.ts | Rust (novanet) via MiniJinja templates | Replaces schema-tools generators |
 | YAML <-> Neo4j validation | Rust (novanet) | Single authoritative validator |
 | Graph read queries | Rust (novanet) | Runtime performance |
 | Graph write (CRUD) | Rust (novanet) | Meta-graph validation at write time |
