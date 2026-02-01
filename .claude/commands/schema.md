@@ -42,7 +42,7 @@ Show current schema statistics:
 find packages/core/models/nodes -name "*.yaml" | wc -l
 
 # Validate sync
-pnpm schema:validate
+novanet schema validate
 
 # Show Neo4j node counts
 ```
@@ -66,26 +66,29 @@ Redirect to `/schema:edit-node <name>`
 
 Redirect to `/schema:add-relation <NAME>`
 
-## Current Schema (v8.2.0)
+## Current Schema (v9.0.0)
 
-**35 Node Types** across 3 scopes:
+**35 Kind Types** across 3 Realms:
 - **Global (15)**: Locale + 14 LocaleKnowledge nodes
 - **Project (14)**: Project structure, concepts, prompts, outputs
 - **Shared (6)**: SEO/GEO targeting and metrics
 
-**47 Relationships** in 2 categories:
-- **Semantic**: Used in spreading activation (SEMANTIC_LINK, USES_CONCEPT, INFLUENCED_BY)
-- **Auxiliary**: Structural/provenance (HAS_BLOCK, HAS_PROMPT, HAS_METRICS)
+**47 Relationships** in 5 EdgeFamilies:
+- **Ownership**: HAS_CONCEPT, HAS_PAGE, HAS_BLOCK, OF_TYPE
+- **Localization**: HAS_L10N, FOR_LOCALE
+- **Semantic**: SEMANTIC_LINK, USES_CONCEPT
+- **Generation**: HAS_OUTPUT, HAS_PROMPT
+- **Mining**: HAS_SEO_TARGET, HAS_GEO_TARGET
 
 ## Validation Commands
 
 ```bash
-# Validate YAML ↔ TypeScript sync
-pnpm schema:validate
+# Validate YAML ↔ generated files sync
+novanet schema validate
 
 # Regenerate from YAML
-pnpm schema:generate
+novanet schema generate
 
 # Full database reset
-pnpm infra:reset
+novanet db reset
 ```

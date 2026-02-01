@@ -9,10 +9,10 @@ allowed-tools: Bash
 Before displaying architecture, validate the source of truth is synchronized:
 
 ```bash
-pnpm schema:validate
+novanet schema validate
 ```
 
-If validation fails, run `pnpm schema:generate` to fix, then continue.
+If validation fails, run `novanet schema generate` to fix, then continue.
 
 ---
 

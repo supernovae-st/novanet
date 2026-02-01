@@ -9,8 +9,8 @@ Add a new node type to the NovaNet ontology using Socratic discovery.
 ## Workflow
 
 1. **Discovery Phase**: Ask clarifying questions about the node:
-   - What scope? (global, project, shared)
-   - What subcategory? (existing or new)
+   - What realm? (global, project, shared)
+   - What layer? (existing or new)
    - What is its purpose in the graph?
    - What properties does it need?
    - What relationships does it have?
@@ -21,10 +21,10 @@ Add a new node type to the NovaNet ontology using Socratic discovery.
    - Does it follow NovaNet nomenclature?
 
 3. **Creation Phase**:
-   - Create YAML file in `packages/core/models/nodes/{scope}/{subcategory}/{node-name}.yaml`
+   - Create YAML file in `packages/core/models/nodes/{realm}/{layer}/{node-name}.yaml`
    - Update `relations.yaml` if new relationships
-   - Run `pnpm schema:generate`
-   - Run `pnpm schema:validate`
+   - Run `novanet schema generate`
+   - Run `novanet schema validate`
 
 4. **Seed Phase** (optional):
    - Create migration file if needed

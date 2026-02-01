@@ -27,8 +27,8 @@ Modify an existing node type in the NovaNet ontology.
 4. **Modification Phase**:
    - Update YAML file
    - Update `relations.yaml` if relationships changed
-   - Run `pnpm schema:generate`
-   - Run `pnpm schema:validate`
+   - Run `novanet schema generate`
+   - Run `novanet schema validate`
 
 5. **Migration Phase** (if breaking):
    - Create migration in `packages/db/migrations/`

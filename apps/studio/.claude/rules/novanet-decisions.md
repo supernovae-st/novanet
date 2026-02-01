@@ -171,44 +171,47 @@
 
 ---
 
-## ADR-010: CLI-First Architecture (v9)
+## ADR-010: Rust-First Architecture (v9)
 
-**Decision:** Single Rust binary `novanet` for all graph operations (CLI + TUI)
+**Decision:** Single Rust binary `novanet` handles ALL schema and graph operations (generation, validation, queries, TUI, search, filters, db seeding)
 
 **Rationale:**
 - ~5ms startup vs ~800ms for Node.js
 - Single binary, zero runtime dependencies
+- Eliminates `@novanet/schema-tools` and `@novanet/cli` entirely (~7k lines TS)
 - TUI for interactive exploration (ratatui)
 - CLI for scripting and CI/CD
 
 **Implementation:**
 - Single crate at `tools/novanet/`
-- Dependencies: clap, ratatui, crossterm, neo4rs, tokio
-- ~27 source files across CLI commands and TUI modules
-- 4 navigation modes: data, meta, overlay, query
+- Dependencies: clap, ratatui, crossterm, neo4rs, tokio, serde_yaml, tera
+- Modules: commands/, generators/, parsers/, search/, filter/, tui/
+- 13 subcommands: schema, db, locale, doc, search, filter, data/meta/overlay/query, node, relation, tui
 
-**Boundary rule:** TypeScript generates code artifacts. Rust executes at runtime.
+**Architecture rule:** Single `novanet` Rust binary handles ALL schema and graph operations. TypeScript limited to: Studio web app, core/types, core/schemas (Zod).
 
 ---
 
-## ADR-011: TS/Rust Boundary Rule (v9)
+## ADR-011: Rust-First Architecture Decision (v9)
 
-**Decision:** TypeScript generates code artifacts (types, Cypher, Mermaid). Rust executes graph operations at runtime.
+**Decision:** Single `novanet` Rust binary owns ALL schema and graph operations. `@novanet/schema-tools` and `@novanet/cli` are eliminated entirely.
 
 **Ownership:**
 
 | Concern | Owner | Rationale |
 |---------|-------|-----------|
-| YAML -> TypeScript types | TS (schema-tools) | Output IS TypeScript code |
-| YAML -> Mermaid diagrams | TS (schema-tools) | Build-time documentation |
-| YAML -> Cypher seeds | TS (schema-tools) | Build-time DDL generation |
+| YAML -> TypeScript types | Rust (novanet) via Tera templates | Generates .ts files from Rust |
+| YAML -> Mermaid diagrams | Rust (novanet) | String generation, no TS needed |
+| YAML -> Cypher seeds/migrations | Rust (novanet) | String generation, no TS needed |
+| YAML -> layers.ts / hierarchy.ts | Rust (novanet) via Tera templates | Replaces schema-tools generators |
 | YAML <-> Neo4j validation | Rust (novanet) | Single authoritative validator |
 | Graph read queries | Rust (novanet) | Runtime performance |
 | Graph write (CRUD) | Rust (novanet) | Meta-graph validation at write time |
 | Interactive TUI | Rust (novanet) | Native terminal, ~5ms startup |
+| Cypher filter building | Rust (novanet filter build) | Studio calls via subprocess |
 | Web visualization | TS (Studio) | Separate web concern |
 
-**Consolidation:** Remove validation from schema-tools; `novanet schema validate --strict` is the single authority.
+**Eliminated:** `@novanet/schema-tools` (~2,038 lines), `@novanet/cli` (~5 lines), `core/scripts/`, `core/parsers/`, `core/services/`, `core/generators/`, `core/db/client.ts` (~6,743 lines total)
 
 ---
 
