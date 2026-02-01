@@ -104,7 +104,8 @@ const config: Config = {
   			'selection-ping-delayed': 'selection-ping 3s cubic-bezier(0, 0, 0.2, 1) infinite 1s',
   			'shimmer': 'shimmer 8s ease-in-out infinite',
   			'float': 'float 6s ease-in-out infinite',
-  			'glow-pulse-selected': 'glow-pulse-selected 4s ease-in-out infinite'
+  			'glow-pulse-selected': 'glow-pulse-selected 4s ease-in-out infinite',
+  			'badge-in': 'badgeIn 200ms ease-out both'
   		},
   		keyframes: {
   			glow: {
@@ -187,6 +188,16 @@ const config: Config = {
   				'50%': {
   					opacity: '1',
   					transform: 'scale(1.01)'
+  				}
+  			},
+  			badgeIn: {
+  				'0%': {
+  					opacity: '0',
+  					transform: 'translateX(-8px) scale(0.95)'
+  				},
+  				'100%': {
+  					opacity: '1',
+  					transform: 'translateX(0) scale(1)'
   				}
   			}
   		},

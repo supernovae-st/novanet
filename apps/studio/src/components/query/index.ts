@@ -1,3 +1,3 @@
 export { QueryPill } from './QueryPill';
-export { ResultsOverview } from './ResultsOverview';
+export { ResultsOverview, ExpandedBreakdown } from './ResultsOverview';
 export { TableView, RawView } from './QueryResultsTabs';

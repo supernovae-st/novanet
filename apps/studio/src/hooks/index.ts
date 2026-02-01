@@ -92,3 +92,12 @@ export {
   useMagneticSimulation,
   type UseMagneticSimulationOptions,
 } from './useMagneticSimulation';
+
+// Magnetic layout data fetching
+export {
+  useMagneticData,
+  type ScopeData,
+  type SubcategoryData,
+  type OrganizingPrinciples,
+  type UseMagneticDataReturn,
+} from './useMagneticData';

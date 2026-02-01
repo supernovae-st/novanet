@@ -13,7 +13,6 @@
 
 import { memo, useCallback, useMemo, useState } from 'react';
 import {
-  Boxes,
   Landmark,
   Layers,
   Lightbulb,
@@ -224,15 +223,6 @@ export const SchemaFilterPanel = memo(function SchemaFilterPanel({
     <Sidebar.Content
       testId="schema-filter-panel"
       className={className}
-      header={{
-        icon: <Boxes className={cn(iconSizes.lg, 'text-violet-400')} />,
-        iconGradient: { from: '#a78bfa', to: '#10b981' },
-        title: 'Schema Browser',
-        stats: [
-          { label: 'node types', value: 35, color: '#a78bfa' },
-          { label: 'scopes', value: 3, color: '#10b981' },
-        ],
-      }}
       toolbar={
         <div className="flex flex-col gap-2 px-3 py-2.5">
           <AiSearchInput placeholder="Ask AI about the schema…" />

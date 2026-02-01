@@ -16,7 +16,19 @@ import { useGraphStore } from '@/stores/graphStore';
 import { useFilterStore } from '@/stores/filterStore';
 import { useUIStore, selectDataMode } from '@/stores/uiStore';
 import { ALL_NODE_TYPES } from '@/config/nodeTypes';
-import type { GraphNode, GraphEdge } from '@/types';
+import { NODE_SCOPES, type Scope } from '@novanet/core/types';
+import { NODE_SUBCATEGORIES, type Subcategory } from '@novanet/core/graph';
+import type { GraphNode, GraphEdge, NodeType } from '@/types';
+
+/** Scope counts for schema mode breakdown */
+export interface ScopeCounts {
+  Global: number;
+  Project: number;
+  Shared: number;
+}
+
+/** Subcategory counts for schema mode breakdown */
+export type SubcategoryCounts = Record<Subcategory, number>;
 
 export interface FilteredGraphResult {
   /** Filtered nodes based on enabled types and locale */
@@ -33,6 +45,14 @@ export interface FilteredGraphResult {
   visibleNodeCount: number;
   /** Count of visible edges */
   visibleEdgeCount: number;
+  /** Number of distinct relation types (for schema mode stats) */
+  distinctRelationTypes: number;
+  /** Node counts by scope (for schema mode breakdown) */
+  scopeCounts: ScopeCounts;
+  /** Node counts by subcategory (for schema mode breakdown) */
+  subcategoryCounts: SubcategoryCounts;
+  /** Whether currently in schema mode */
+  isSchemaMode: boolean;
 }
 
 export function useFilteredGraph(): FilteredGraphResult {
@@ -119,6 +139,39 @@ export function useFilteredGraph(): FilteredGraphResult {
     );
   }, [hiddenNodeIds, enabledNodeTypes, selectedLocale, searchQuery, isSchemaMode]);
 
+  // Compute distinct relation types count
+  const distinctRelationTypes = useMemo(() => {
+    const types = new Set(filteredEdges.map((edge) => edge.type));
+    return types.size;
+  }, [filteredEdges]);
+
+  // Compute scope counts (for schema mode breakdown)
+  const scopeCounts = useMemo((): ScopeCounts => {
+    const counts: ScopeCounts = { Global: 0, Project: 0, Shared: 0 };
+    for (const node of filteredNodes) {
+      const scope = NODE_SCOPES[node.type as NodeType];
+      if (scope && scope in counts) {
+        counts[scope]++;
+      }
+    }
+    return counts;
+  }, [filteredNodes]);
+
+  // Compute subcategory counts (for schema mode breakdown)
+  const subcategoryCounts = useMemo((): SubcategoryCounts => {
+    const counts: SubcategoryCounts = {
+      foundation: 0, structure: 0, semantic: 0, instruction: 0, output: 0,
+      config: 0, knowledge: 0, seo: 0, geo: 0,
+    };
+    for (const node of filteredNodes) {
+      const subcategory = NODE_SUBCATEGORIES[node.type as NodeType];
+      if (subcategory && subcategory in counts) {
+        counts[subcategory]++;
+      }
+    }
+    return counts;
+  }, [filteredNodes]);
+
   return {
     nodes: filteredNodes,
     edges: filteredEdges,
@@ -127,5 +180,9 @@ export function useFilteredGraph(): FilteredGraphResult {
     isFiltered,
     visibleNodeCount: filteredNodes.length,
     visibleEdgeCount: filteredEdges.length,
+    distinctRelationTypes,
+    scopeCounts,
+    subcategoryCounts,
+    isSchemaMode,
   };
 }

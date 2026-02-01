@@ -17,18 +17,16 @@
 import { useState, useCallback, useEffect, memo, useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { RefreshCw } from 'lucide-react';
-import { GRAPH_ICONS } from '@/config/iconSystem';
 import { cn } from '@/lib/utils';
 import { NODE_VISUAL_CATEGORIES, ALL_NODE_TYPES } from '@/config/nodeTypes';
 import { DEFAULT_FETCH_LIMIT } from '@/config/constants';
 import { useQueryStore, QueryBuilder } from '@/stores/queryStore';
 import { useFilterStore } from '@/stores/filterStore';
 import { useViewStore } from '@/stores/viewStore';
-import { useDatabaseSchema } from '@/hooks';
+import type { UseDatabaseSchemaReturn } from '@/hooks';
 import { LoadingState } from '@/components/ui/EmptyState';
 import { SegmentedTabs } from '@/components/ui/SegmentedTabs';
 import { formatTime } from '@/lib/formatters';
-import { iconSizes, iconButtonClasses } from '@/design/tokens';
 import { NodeLabelsSection } from './database/NodeLabelsSection';
 import { RelationshipsSection } from './database/RelationshipsSection';
 import { AiSearchInput } from './AiSearchInput';
@@ -47,16 +45,39 @@ interface ToolbarProps {
   activeTab: TabId;
   onTabChange: (tab: TabId) => void;
   tabs: Array<{ id: TabId; label: string; count?: number }>;
+  onRefresh: () => void;
+  isLoading: boolean;
 }
 
 const Toolbar = memo(function Toolbar({
   activeTab,
   onTabChange,
   tabs,
+  onRefresh,
+  isLoading,
 }: ToolbarProps) {
   return (
     <div className="flex flex-col gap-2 px-3 py-2.5">
-      <AiSearchInput placeholder="Ask AI to query the graph…" />
+      <div className="flex items-center gap-2">
+        <div className="flex-1">
+          <AiSearchInput placeholder="Ask AI to query the graph…" />
+        </div>
+        <button
+          onClick={onRefresh}
+          disabled={isLoading}
+          className={cn(
+            'p-2 rounded-lg flex-shrink-0',
+            'bg-white/[0.03] border border-white/[0.06]',
+            'text-white/30 hover:text-white/60 hover:bg-white/[0.06] hover:border-white/[0.10]',
+            'transition-all duration-200',
+            isLoading && 'text-white/20 cursor-not-allowed'
+          )}
+          title="Refresh schema"
+          aria-label="Refresh database schema"
+        >
+          <RefreshCw className={cn('w-3.5 h-3.5', isLoading && 'animate-spin')} />
+        </button>
+      </div>
       <SegmentedTabs
         tabs={tabs}
         activeTab={activeTab}
@@ -70,11 +91,18 @@ const Toolbar = memo(function Toolbar({
 // MAIN COMPONENT
 // =============================================================================
 
-export const DatabaseInfoPanel = memo(function DatabaseInfoPanel() {
+interface DatabaseInfoPanelProps {
+  /** Schema data lifted from SidebarTabs to avoid double-fetching */
+  schemaData: UseDatabaseSchemaReturn;
+}
+
+export const DatabaseInfoPanel = memo(function DatabaseInfoPanel({
+  schemaData,
+}: DatabaseInfoPanelProps) {
   // Active tab state
   const [activeTab, setActiveTab] = useState<TabId>('views');
 
-  // Database schema from hook
+  // Database schema from props (lifted to SidebarTabs)
   const {
     schema,
     isLoading,
@@ -84,7 +112,7 @@ export const DatabaseInfoPanel = memo(function DatabaseInfoPanel() {
     labelCounts,
     maxNodeCount,
     maxRelCount,
-  } = useDatabaseSchema();
+  } = schemaData;
 
   // View store for count
   const viewCount = useViewStore(
@@ -316,38 +344,13 @@ export const DatabaseInfoPanel = memo(function DatabaseInfoPanel() {
   return (
     <Sidebar.Content
       testId="database-info-panel"
-      header={{
-        icon: <GRAPH_ICONS.database className={cn(iconSizes.lg, 'text-novanet-400')} />,
-        iconGradient: { from: '#22d3ee', to: '#10b981' },
-        title: 'Data Explorer',
-        status: isLoading ? 'loading' : schema?.totalNodes !== undefined ? 'live' : undefined,
-        stats: schema?.totalNodes !== undefined
-          ? [
-              { label: 'nodes', value: schema.totalNodes.toLocaleString(), color: '#22d3ee' },
-              { label: 'rels', value: (schema.totalRelationships ?? 0).toLocaleString(), color: '#10b981' },
-            ]
-          : undefined,
-        subtitle: schema?.totalNodes === undefined ? 'Loading...' : undefined,
-        action: (
-          <button
-            onClick={fetchSchema}
-            disabled={isLoading}
-            className={cn(
-              iconButtonClasses.ghost,
-              isLoading && 'text-white/40 cursor-not-allowed'
-            )}
-            title="Refresh schema"
-            aria-label="Refresh database schema"
-          >
-            <RefreshCw className={cn(iconSizes.sm, isLoading && 'animate-spin')} />
-          </button>
-        ),
-      }}
       toolbar={
         <Toolbar
           activeTab={activeTab}
           onTabChange={setActiveTab}
           tabs={tabs}
+          onRefresh={fetchSchema}
+          isLoading={isLoading}
         />
       }
       footer={

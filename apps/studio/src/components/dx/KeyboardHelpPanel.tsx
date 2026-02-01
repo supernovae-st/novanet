@@ -11,7 +11,7 @@
  * - Grouped by category with unified section headers
  * - Keyboard navigation (Escape to close)
  * - Focus trap via Modal.Root
- * - animate-scale-in entrance
+ * - Raycast-style spring animation (animate-overlay-enter)
  */
 
 import { memo, useState, useEffect, useRef, useMemo } from 'react';
@@ -240,7 +240,7 @@ export const KeyboardHelpPanel = memo(function KeyboardHelpPanel({
 
         {/* Shortcuts List */}
         <Modal.Body maxHeight={overlayClasses.bodyMaxHeight}>
-          <div className="p-2">
+          <div className={cn('p-2', overlayClasses.contentAnimation)}>
             {groupedShortcuts.length === 0 ? (
               <div className="py-8 text-center text-white/40 text-sm">
                 No shortcuts found for &ldquo;{search}&rdquo;

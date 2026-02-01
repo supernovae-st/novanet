@@ -15,7 +15,7 @@ import { createPortal } from 'react-dom';
 import { Search, X, FolderOpen, Check } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
 import { cn } from '@/lib/utils';
-import { glassClasses, modalClasses, iconSizes, gapTokens } from '@/design/tokens';
+import { pickerClasses, iconSizes, gapTokens, getCardStagger } from '@/design/tokens';
 import { Kbd } from '@/components/ui';
 import { useFilterStore } from '@/stores/filterStore';
 import {
@@ -42,7 +42,7 @@ interface ProjectPickerProps {
   projects: ProjectInfo[];
 }
 
-// Project Card component - Linear-dark design
+// Project Card component - uses pickerClasses tokens + stagger animation
 const ProjectCard = memo(function ProjectCard({
   project,
   isSelected,
@@ -50,6 +50,7 @@ const ProjectCard = memo(function ProjectCard({
   onSelect,
   isAllCard = false,
   totalCount,
+  index,
 }: {
   project: ProjectInfo | null;
   isSelected: boolean;
@@ -57,6 +58,7 @@ const ProjectCard = memo(function ProjectCard({
   onSelect: () => void;
   isAllCard?: boolean;
   totalCount?: number;
+  index: number;
 }) {
   return (
     <button
@@ -65,23 +67,22 @@ const ProjectCard = memo(function ProjectCard({
       aria-selected={isSelected}
       aria-label={isAllCard ? `All projects (${totalCount})` : project?.name}
       className={cn(
-        'flex flex-col items-center justify-center p-4 rounded-xl',
-        gapTokens.default,
-        'border transition duration-150 relative',
+        pickerClasses.cardBase,
         'min-h-[100px]',
-        'hover:scale-[1.02] active:scale-[0.98]',
         isSelected
           ? 'bg-emerald-500/15 border-emerald-500/40 text-white'
           : isFocused
-            ? 'bg-white/[0.06] border-white/20 text-white'
-            : 'bg-[#111118] border-white/[0.08] hover:bg-[#16161f] hover:border-white/15 text-white/90 hover:text-white',
-        isAllCard && !isSelected && 'border-dashed border-white/15'
+            ? pickerClasses.cardFocused
+            : pickerClasses.cardIdle,
+        isAllCard && !isSelected && pickerClasses.cardAll,
+        pickerClasses.cardAnimation,
+        getCardStagger(index),
       )}
     >
       {/* Selection indicator */}
       {isSelected && (
-        <div className={`absolute top-3 right-3 ${iconSizes.xl} rounded-full bg-emerald-500 flex items-center justify-center`}>
-          <Check className={`${iconSizes.xs} text-white`} strokeWidth={3} />
+        <div className={cn('absolute top-3 right-3', iconSizes.xl, 'rounded-full bg-emerald-500 flex items-center justify-center')}>
+          <Check className={cn(iconSizes.xs, 'text-white')} strokeWidth={3} />
         </div>
       )}
 
@@ -183,62 +184,53 @@ export const ProjectPicker = memo(function ProjectPicker({
   if (!mounted || !isOpen) return null;
 
   const content = (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-6 animate-in fade-in duration-200"
-      role="presentation"
-    >
-      {/* Backdrop */}
-      <div className={modalClasses.backdrop} aria-hidden="true" />
+    <div className={pickerClasses.container} role="presentation">
+      {/* Backdrop - Raycast blur ramp */}
+      <div className={pickerClasses.backdrop} aria-hidden="true" />
 
-      {/* Modal - glass morphism design */}
+      {/* Modal shell - compact size for fewer items */}
       <div
         ref={containerRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby="project-picker-title"
         onKeyDown={handleKeyDown}
-        className={cn(
-          'relative w-full max-w-3xl max-h-[70vh] overflow-hidden flex flex-col rounded-2xl',
-          glassClasses.modal,
-          'animate-in zoom-in-95 slide-in-from-bottom-4 duration-300'
-        )}
+        className={cn(pickerClasses.shell, pickerClasses.sizeCompact, pickerClasses.maxHeight)}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.06]">
+        <div className={pickerClasses.header}>
           <div className={cn('flex items-center', gapTokens.spacious)}>
-            <div className="w-9 h-9 rounded-lg bg-[#111118] border border-white/10 flex items-center justify-center">
-              <FolderOpen className={`${iconSizes.lg} text-white/70`} />
+            <div className={cn(pickerClasses.headerIconBox, 'bg-white/[0.04]')}>
+              <FolderOpen className={cn(iconSizes.lg, 'text-white/70')} />
             </div>
             <div>
-              <h2 id="project-picker-title" className="text-base font-semibold text-white">
+              <h2 id="project-picker-title" className={pickerClasses.headerTitle}>
                 Select Project
               </h2>
-              <p className="text-xs text-white/40">Choose a project to filter by</p>
+              <p className={pickerClasses.headerSubtitle}>Choose a project to filter by</p>
             </div>
           </div>
-          <button
-            onClick={onClose}
-            aria-label="Close"
-            className="p-2 rounded-lg hover:bg-white/10 transition-colors text-white/50 hover:text-white"
-          >
+          <button onClick={onClose} aria-label="Close" className={pickerClasses.closeButton}>
             <X className={iconSizes.xl} />
           </button>
         </div>
 
         {/* Search */}
-        <div className={cn('flex items-center px-6 py-4 border-b border-white/[0.06]', gapTokens.spacious)}>
-          <Search className={`${iconSizes.lg} text-white/40 shrink-0`} />
+        <div className={pickerClasses.searchBar}>
+          <Search className={cn(iconSizes.lg, 'text-white/40 shrink-0')} />
           <input
             ref={searchRef}
             type="text"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            placeholder="Search projects..."
+            placeholder="Search projects\u2026"
             aria-label="Search projects"
-            className="flex-1 bg-transparent text-white placeholder-white/40 text-sm outline-none border-none ring-0 focus:outline-none focus:ring-0"
+            aria-describedby="project-picker-hint"
+            className={pickerClasses.searchInput}
             autoComplete="off"
             spellCheck={false}
           />
+          <span id="project-picker-hint" className="sr-only">Type to filter available projects</span>
           {searchInput && (
             <button
               onClick={() => setSearchInput('')}
@@ -252,7 +244,7 @@ export const ProjectPicker = memo(function ProjectPicker({
 
         {/* Grid */}
         <div
-          className="flex-1 overflow-y-auto p-5"
+          className={pickerClasses.grid}
           role="listbox"
           aria-label="Available projects"
         >
@@ -268,6 +260,7 @@ export const ProjectPicker = memo(function ProjectPicker({
               onSelect={() => handleSelect(null)}
               isAllCard
               totalCount={projects.length}
+              index={0}
             />
 
             {/* Project cards */}
@@ -278,14 +271,15 @@ export const ProjectPicker = memo(function ProjectPicker({
                 isSelected={selectedProject === project.id}
                 isFocused={focusedIndex === index + 1}
                 onSelect={() => handleSelect(project.id)}
+                index={index + 1}
               />
             ))}
           </div>
 
           {/* No results */}
           {filteredProjects.length === 0 && (
-            <div className="text-center py-12 text-white/40">
-              <Search className={`${iconSizes['2xl']} mx-auto mb-3 opacity-30`} />
+            <div className={pickerClasses.emptyState}>
+              <Search className={cn(iconSizes['2xl'], 'mx-auto mb-3 opacity-30')} />
               <p className="text-sm font-medium">No projects found</p>
               <p className="text-xs opacity-60 mt-1">Try a different search term</p>
             </div>
@@ -293,21 +287,23 @@ export const ProjectPicker = memo(function ProjectPicker({
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-3 border-t border-white/[0.06] flex items-center justify-between text-xs text-white/40">
-          <span>{filteredProjects.length} projects</span>
-          <div className={cn('flex items-center', gapTokens.large)}>
-            <span className={cn('flex items-center', gapTokens.compact)}>
-              <Kbd>↑↓←→</Kbd>
-              <span>Navigate</span>
-            </span>
-            <span className={cn('flex items-center', gapTokens.compact)}>
-              <Kbd>↵</Kbd>
-              <span>Select</span>
-            </span>
-            <span className={cn('flex items-center', gapTokens.compact)}>
-              <Kbd>Esc</Kbd>
-              <span>Close</span>
-            </span>
+        <div className={pickerClasses.footer}>
+          <div className={pickerClasses.footerContent}>
+            <span>{filteredProjects.length} projects</span>
+            <div className={cn('flex items-center', gapTokens.large)}>
+              <span className={cn('flex items-center', gapTokens.compact)}>
+                <Kbd>↑↓←→</Kbd>
+                <span>Navigate</span>
+              </span>
+              <span className={cn('flex items-center', gapTokens.compact)}>
+                <Kbd>↵</Kbd>
+                <span>Select</span>
+              </span>
+              <span className={cn('flex items-center', gapTokens.compact)}>
+                <Kbd>Esc</Kbd>
+                <span>Close</span>
+              </span>
+            </div>
           </div>
         </div>
       </div>
