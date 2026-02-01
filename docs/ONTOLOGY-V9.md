@@ -1,6 +1,6 @@
-# NovaNet Ontology v9.0.0 — Technical Specification
+# NovaNet Ontology v9–v11 — Technical Specification
 
-> **Status**: Draft | **Version**: 9.0.0 | **Supersedes**: v8.3.0
+> **Status**: Draft | **Versions**: 9.0.0 → 10.0.0 → 11.0.0 | **Supersedes**: v8.3.0
 > **Design source**: [`docs/plans/2026-02-01-ontology-v9-design.md`](plans/2026-02-01-ontology-v9-design.md)
 
 ---
@@ -26,7 +26,7 @@
 17. [Nomenclature & Conventions](#nomenclature--conventions)
 18. [Testing Strategy](#testing-strategy)
 19. [File Inventory](#file-inventory)
-20. [Future Considerations](#future-considerations)
+20. [Future Considerations & Evolution Roadmap](#future-considerations--evolution-roadmap)
 
 ---
 
@@ -1739,72 +1739,36 @@ Target latencies (local Neo4j with seed data):
 
 ---
 
-## Future Considerations
+## Future Considerations & Evolution Roadmap
 
 ### TrustGraph Evolution Path
 
-NovaNet v9 positions the system at **Level 5** on the TrustGraph RAG Progression
+NovaNet's roadmap follows the TrustGraph RAG Progression
 (TrustGraph Context Graph Manifesto, Dec 2025):
 
-| Level | Name | NovaNet Status |
-|-------|------|---------------|
+| Level | Name | NovaNet Version |
+|-------|------|-----------------|
 | 1 | RAG — text chunks + vector search | Foundational |
 | 2 | GraphRAG — entities as nodes, relations as edges | v8.x |
 | 3 | OntologyRAG — structured ontologies for precision | v8.x |
 | 4 | Context Graph — self-describing, operational metadata | v9.0 |
-| 5 | **Self-describing information stores** | **v9.0 target** |
-| 6 | Dynamic retrieval strategies | v10+ |
-| 7 | Autonomous learning | v11+ |
+| 5 | **Self-describing information stores** | **v9.0** |
+| 6 | **Dynamic retrieval strategies** | **v10.0** |
+| 7 | **Autonomous learning** | **v11.0** |
 
 v9 achieves Level 5 through `schema_hint`, `cypher_pattern`, and `context_budget`
 on meta-nodes — the schema carries enough information for an AI agent to discover
 and query the graph without external documentation.
 
-**v9 preparations baked in for v10/v11:**
+v9 also bakes in 6 nullable properties (zero runtime cost) that v10 and v11 will
+activate without schema migrations. These are documented in the individual
+meta-node and data-node sections of this spec. The full implementation roadmap
+(Phases 0–15 across 3 milestones) is in the
+[design plan](plans/2026-02-01-ontology-v9-design.md).
 
-Six nullable properties are included in v9 at zero cost (ignored by the v9 orchestrator)
-to avoid future schema migrations:
-
-| Property | Node | Version | Purpose |
-|----------|------|---------|---------|
-| `traversal_depth` | `:Kind` | v10 | Max hops to follow from this Kind |
-| `default_traversal` | `:EdgeFamily` | v10 | `always` / `conditional` / `on_demand` |
-| `temperature_threshold` | `:EdgeKind` | v10 | Min temperature for conditional traversal |
-| `generation_count` | `:Kind` | v11 | Incremented on each generation cycle |
-| `quality_score` | `PageL10n`, `BlockL10n` | v11 | 0.0–1.0 quality rating from evaluation |
-| `prompt_fingerprint` | `PageL10n`, `BlockL10n` | v11 | SHA-256 hash (16 chars) of assembled prompt |
-
-**Path to Level 6 — Dynamic retrieval strategies (v10+):**
-
-The architecture supports this without structural changes. The v9 schema already
-includes the nullable properties that v10 will activate:
-- `context_budget` is currently static (`high`/`medium`/`low`/`minimal`) — v10 makes
-  it **dynamic** based on prompt type, locale complexity, and concept density
-- `traversal_depth` on Kind: defines per-Kind hop limits (already in v9, nullable)
-- `default_traversal` on EdgeFamily: classifies traversal strategy (already in v9, nullable)
-- `temperature_threshold` on EdgeKind: gates conditional edges (already in v9, nullable)
-- Add a `retrieval_strategy` field to Kind (extends KindMeta) with rules like
-  "expand related Concepts when generating output" vs "fetch summary only"
-- No schema migration needed — v10 populates existing nullable properties
-
-**Path to Level 7 — Autonomous learning (v11+):**
-
-Requires a feedback collection and evaluation pipeline. The v9 schema already
-includes the nullable properties that v11 will populate:
-- `quality_score` on PageL10n/BlockL10n: evaluation scores (already in v9, nullable)
-- `prompt_fingerprint` on PageL10n/BlockL10n: prompt hashes for A/B analysis (already in v9, nullable)
-- `generation_count` on Kind: frequency tracking (already in v9, default 0)
-- **Feedback loops**: quality scores → auto-adjust `context_budget`
-  (high-quality outputs → reduce context, poor-quality → increase context)
-- **Pattern discovery**: which Concept combinations produce the best content per locale
-  → auto-suggest `SEMANTIC_LINK` temperature adjustments
-- **Self-tuning Traits**: reclassify Kinds based on generation outcomes (e.g., a Kind
-  marked `low` budget consistently needs more context → auto-promote to `medium`)
-- **Meta-graph update loop**: orchestrator writes back to meta-graph after evaluation,
-  closing the learning cycle
-
-The faceted ontology makes this achievable: each learning signal maps to a specific
-axis (Trait for behavior, Kind for priority, EdgeFamily for traversal depth).
+The faceted ontology makes this evolution achievable: each learning signal maps
+to a specific axis (Trait for behavior, Kind for priority, EdgeFamily for
+traversal depth).
 
 ### LinkML Compatibility
 
@@ -1826,5 +1790,5 @@ naturally compatible with LinkML's model.
 
 ---
 
-*Generated for NovaNet v9.0.0 ontology migration.*
+*Generated for NovaNet v9–v11 ontology roadmap.*
 *Design source: [`docs/plans/2026-02-01-ontology-v9-design.md`](plans/2026-02-01-ontology-v9-design.md)*
