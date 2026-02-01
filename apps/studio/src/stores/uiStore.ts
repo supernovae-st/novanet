@@ -11,6 +11,7 @@ export type LayoutDirection = 'TB' | 'LR' | 'dagre' | 'radial' | 'force';
 export type LayoutMode = 'containers' | 'magnetic';
 
 // Data mode: real instances vs ontological schema
+// TODO(v9): Rename DataMode -> NavigationMode, expand to 'data'|'meta'|'overlay'|'query'
 export type DataMode = 'data' | 'schema';
 
 // Modal types - only one can be open at a time

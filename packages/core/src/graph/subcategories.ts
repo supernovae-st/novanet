@@ -1,7 +1,7 @@
 // packages/core/src/graph/subcategories.ts
 // NODE_SUBCATEGORIES mapping all 35 node types to their subcategories
 // AUTO-GENERATED from models/nodes/ folder structure
-// Generated: 2026-01-31
+// Generated: 2026-02-01
 // Run: pnpm schema:generate
 
 import type { NodeType } from '../types/nodes.js';

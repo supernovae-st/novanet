@@ -51,8 +51,7 @@ novanet/
 ├── packages/
 │   ├── core/               # @novanet/core - types, schemas, filters
 │   ├── db/                 # @novanet/db - Neo4j infrastructure
-│   ├── cli/                # @novanet/cli - dev tools (deprecated in v9 -> Rust)
-│   └── schema-tools/       # @novanet/schema-tools - TS code generation
+│   └── schema-tools/       # @novanet/schema-tools - TS code generation (eliminated in v9)
 ├── tools/
 │   └── novanet/            # Rust binary (CLI + TUI) — v9+
 └── apps/
@@ -100,8 +99,7 @@ pnpm test --filter=@novanet/studio      # Test only studio
 |---------|-------------|
 | @novanet/core | Types, schemas, filters, generators |
 | @novanet/db | Neo4j Docker, seeds, migrations |
-| @novanet/cli | Dev tools (deprecated in v9 — replaced by Rust) |
-| @novanet/schema-tools | TS code generation (Mermaid, Layer mapping) |
+| @novanet/schema-tools | TS code generation (eliminated in v9 by Rust binary) |
 | @novanet/studio | Web-based graph visualization |
 
 ---
@@ -110,10 +108,10 @@ pnpm test --filter=@novanet/studio      # Test only studio
 
 ```
                     @novanet/core
-                    ↑     ↑     ↑
-    @novanet/schema-tools │     @novanet/cli (deprecated v9)
-                          │
-                   @novanet/studio
+                    ↑           ↑
+    @novanet/schema-tools       │
+                                │
+                         @novanet/studio
 
 @novanet/db (standalone)
 tools/novanet (Rust, standalone — reads YAML + Neo4j directly)

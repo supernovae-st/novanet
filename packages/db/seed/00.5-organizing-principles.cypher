@@ -1,6 +1,6 @@
 // Organizing Principles Seed v8.3.0
 // AUTO-GENERATED from organizing-principles.yaml
-// Generated: 2026-01-31
+// Generated: 2026-02-01
 // Run: pnpm schema:generate
 //
 // Creates: Scope, Subcategory, NodeTypeMeta nodes

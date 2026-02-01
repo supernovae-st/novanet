@@ -8,6 +8,8 @@ import { getNodeTypesBySubcategory } from './subcategories.js';
 
 // =============================================================================
 // SCOPE_HIERARCHY - Complete scope hierarchy definition
+// TODO(v9): Rename SCOPE_HIERARCHY -> REALM_HIERARCHY
+// TODO(v9): Properties: scope->realm, subcategories->layers
 // =============================================================================
 
 /**

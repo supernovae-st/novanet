@@ -52,14 +52,14 @@ Generate culturally-native content across 200+ locales — not translation, but 
 flowchart TB
     subgraph MONO["NovaNet Monorepo"]
         direction TB
-        CORE["@novanet/core v8.1.0\nTypes · Schemas · Filters · Services"]
+        CORE["@novanet/core v8.1.0\nTypes · Schemas · Filters"]
         DB["@novanet/db v1.0.0\nDocker · Seeds · Migrations"]
-        CLI["@novanet/cli v1.0.0\nValidation · Generation"]
-        STUDIO["@novanet/studio v0.1.0\nNext.js 16 · React 19 · 2D/3D"]
+        ST["@novanet/schema-tools v1.0.0\nValidation · Sync"]
+        STUDIO["@novanet/studio v0.1.0\nNext.js 16 · React 19"]
     end
 
     CORE --> STUDIO
-    CORE --> CLI
+    CORE --> ST
 
     NEO4J[("Neo4j 5.26\n~19,000 nodes")]
     DB -.-> NEO4J
@@ -67,7 +67,7 @@ flowchart TB
 
     style CORE fill:#06b6d4,stroke:#0891b2,color:#fff
     style DB fill:#10b981,stroke:#059669,color:#fff
-    style CLI fill:#f59e0b,stroke:#d97706,color:#fff
+    style ST fill:#f59e0b,stroke:#d97706,color:#fff
     style STUDIO fill:#8b5cf6,stroke:#7c3aed,color:#fff
     style NEO4J fill:#018bff,stroke:#0284c7,color:#fff
 ```
@@ -121,7 +121,7 @@ novanet-hq/
 │   │   ├── docker-compose.yml # Neo4j 5.26 + APOC
 │   │   ├── seed/              # Cypher seed scripts
 │   │   └── seed.sh            # Seed runner
-│   └── cli/                   # @novanet/cli — dev tools (stub)
+│   └── schema-tools/          # @novanet/schema-tools — schema validation & sync
 └── apps/
     └── studio/                # @novanet/studio — web visualization
         ├── src/app/           # Next.js App Router
@@ -136,9 +136,9 @@ novanet-hq/
 
 | Package | Version | Description |
 |---------|---------|-------------|
-| **@novanet/core** | `8.1.0` | Types, Zod schemas, NovaNetFilter API, Cypher generators, Hybrid OntologyRAG services |
+| **@novanet/core** | `8.1.0` | Types, Zod schemas, NovaNetFilter API, Cypher generators |
 | **@novanet/db** | `1.0.0` | Docker Compose for Neo4j, Cypher seeds, migrations |
-| **@novanet/cli** | `1.0.0` | Validation and generation tools (in development) |
+| **@novanet/schema-tools** | `1.0.0` | Schema validation and sync tools |
 | **@novanet/studio** | `0.1.0` | Interactive graph visualization with AI chat |
 
 ---
