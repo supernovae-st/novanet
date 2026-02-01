@@ -927,7 +927,7 @@ Show only business data — no meta-graph noise.
 | Pages, Blocks, Concepts, Locales, L10n content, SEO/GEO data | Realm, Layer, Kind, Trait, EdgeFamily, EdgeKind |
 | HAS_PAGE, SEMANTIC_LINK, FOR_LOCALE, etc. | HAS_LAYER, IN_REALM, EXHIBITS, FROM_KIND, etc. |
 
-**CLI**: `pnpm graph:data`
+**CLI**: `novanet data`
 **Studio**: Toggle button "Data Only" (default view)
 
 ### Mode 2: Meta Only
@@ -941,7 +941,7 @@ Show only the ontology schema — the "schema of the schema".
 | 3 Realms, 9 Layers, 35 Kinds, 5 Traits, 5 EdgeFamilies, 47 EdgeKinds | All data instances |
 | HAS_LAYER, HAS_KIND, IN_REALM, EXHIBITS, FROM_KIND, TO_KIND, IN_FAMILY | All data relationships |
 
-**CLI**: `pnpm graph:meta`
+**CLI**: `novanet meta`
 **Studio**: Toggle button "Meta Only"
 
 ### Mode 3: Data + Meta Overlay
@@ -957,7 +957,7 @@ relationships connect data instances to their Kind nodes.
 | All data relationships + all meta-relationships + OF_KIND bridges |
 | ~104 meta-nodes + ~386 meta-rels + data + OF_KIND |
 
-**CLI**: `pnpm graph:overlay`
+**CLI**: `novanet overlay`
 **Studio**: Toggle button "Show Meta" (overlays meta-graph on current data view)
 
 **Visual distinction**: Meta-nodes render as **ghost style** — semi-transparent
@@ -980,7 +980,7 @@ MATCH (k)<-[:OF_KIND]-(instance)
 RETURN instance
 ```
 
-**CLI**: `pnpm graph:query --realm=project`
+**CLI**: `novanet query --realm=project`
 
 #### Filter by Trait
 
@@ -991,7 +991,7 @@ MATCH (k)<-[:OF_KIND]-(instance)
 RETURN instance
 ```
 
-**CLI**: `pnpm graph:query --trait=localized`
+**CLI**: `novanet query --trait=localized`
 
 #### Filter by Layer
 
@@ -1002,7 +1002,7 @@ MATCH (k)<-[:OF_KIND]-(instance)
 RETURN instance
 ```
 
-**CLI**: `pnpm graph:query --layer=semantic`
+**CLI**: `novanet query --layer=semantic`
 
 #### Filter by EdgeFamily
 
@@ -1012,7 +1012,7 @@ MATCH (ek:EdgeKind)-[:IN_FAMILY]->(:EdgeFamily {key: 'generation'})
 RETURN ek.key AS edge, ek.llm_context AS description
 ```
 
-**CLI**: `pnpm graph:query --edge-family=generation`
+**CLI**: `novanet query --edge-family=generation`
 
 #### Combo Filters
 
@@ -1024,7 +1024,7 @@ MATCH (k)<-[:OF_KIND]-(instance)
 RETURN labels(instance)[0] AS type, count(*) AS count
 ```
 
-**CLI**: `pnpm graph:query --realm=global --trait=knowledge`
+**CLI**: `novanet query --realm=global --trait=knowledge`
 
 ### CLI-First Architecture
 
