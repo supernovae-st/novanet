@@ -127,11 +127,10 @@ Validate or regenerate TypeScript/Mermaid from YAML sources.
 /novanet-sync generate     # Regenerate all artifacts
 ```
 
-**Underlying commands:**
+**Underlying commands (Rust-first):**
 ```bash
-pnpm schema:validate                   # TS: CI sync validation
-pnpm schema:generate                   # TS: Regenerate files
-cargo run -- schema validate --strict  # Rust: YAML <-> Neo4j check (authoritative)
+novanet schema validate                # YAML <-> Neo4j consistency (authoritative)
+novanet schema generate                # YAML → all artifacts (layers.ts, Mermaid, Cypher, hierarchy.ts)
 ```
 
 ---
@@ -214,7 +213,7 @@ Add a new node type using Socratic discovery workflow.
 1. **Discovery** - Ask clarifying questions (realm, layer, trait, purpose, properties, relations)
 2. **Validation** - Check for conflicts and nomenclature compliance
 3. **Creation** - Create YAML file, update relations.yaml
-4. **Sync** - Run `pnpm schema:generate` + `pnpm schema:validate`
+4. **Sync** - Run `novanet schema generate` + `novanet schema validate`
 5. **Seed** - Create migration if needed
 
 **Nomenclature Rules:**
@@ -405,7 +404,7 @@ RETURN related.key, activation ORDER BY activation DESC
 3. **Security** - Credentials, injection, XSS
 4. **NovaNet Conventions** - Generation NOT translation, imports
 5. **v9 Meta-Graph Conventions** - Realm/Layer/Kind terminology, NavigationMode, `:Meta` label
-6. **TS/Rust Boundary Rule** - TS generates, Rust executes
+6. **Rust-First Architecture** - Single `novanet` binary for all operations, TS limited to Studio + types
 7. **Testing** - Coverage, edge cases, mocks
 
 **Output format:**
@@ -485,27 +484,27 @@ Architecture Decision Records (ADRs):
 
 ## Workflow Commands
 
-### Schema Sync Pipeline
+### Schema Sync Pipeline (Rust-first)
 
 ```bash
-# TS: Validate (CI check)
-pnpm schema:validate
+# Validate YAML <-> Neo4j consistency
+novanet schema validate
 
-# TS: Regenerate from YAML
-pnpm schema:generate
+# Regenerate all artifacts from YAML
+novanet schema generate
 
-# Rust: Validate YAML <-> Neo4j (authoritative)
-cargo run -- schema validate --strict
+# Seed database
+novanet db seed
 
 # Full reset
-pnpm infra:reset
+pnpm infra:down && pnpm infra:up && novanet db seed
 ```
 
 ### Development
 
 ```bash
 # Start Neo4j + seed
-pnpm infra:up && pnpm infra:seed
+pnpm infra:up && novanet db seed
 
 # Start Studio
 pnpm dev
@@ -568,5 +567,5 @@ This README should be updated when:
 | `/packages/core/CLAUDE.md` | Core package (types, schemas, YAML, v9 terminology) |
 | `/packages/db/CLAUDE.md` | Database infrastructure |
 | `/apps/studio/CLAUDE.md` | Studio application (NavigationMode, visual encoding) |
-| `/packages/schema-tools/CLAUDE.md` | Schema validation tools (4 generators) |
+| `/tools/novanet/` | Rust binary — CLI + TUI + generators (replaces schema-tools) |
 | `/docs/plans/2026-02-01-ontology-v9-design.md` | v9 migration plan (complete) |

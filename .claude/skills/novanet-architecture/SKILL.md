@@ -175,7 +175,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
   ┌──────────────┐   ┌──────────────┐   ┌──────────────┐   ┌──────────────┐   ┌──────────────────┐
   │  📊 Mermaid  │   │  📝 Layer    │   │  🏷️ Kind    │   │  🔗 Edge     │   │  🗄️ Manual       │
   │  Generator   │   │  Generator   │   │  Generator   │   │  Schema Gen  │   │  Cypher Seeds    │
-  │  schema-tools│   │  schema-tools│   │  schema-tools│   │  schema-tools│   │  packages/db/    │
+  │  tools/novanet│   │ tools/novanet│   │ tools/novanet│   │ tools/novanet│   │  packages/db/    │
   └──────┬───────┘   └──────┬───────┘   └──────┬───────┘   └──────┬───────┘   └────────┬─────────┘
          │                  │                  │                  │                     │
          ▼                  ▼                  ▼                  ▼                     ▼
@@ -198,9 +198,9 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
   └──────────────────────────────────────────────────────────────────────────────────────────────┘
 
   ═════════════════════════════════════════════════════════════════════════════════════════════════
-   TS VALIDATION:   pnpm schema:validate              (CI checks TS + Mermaid sync with YAML)
-   TS REGENERATE:   pnpm schema:generate              (Rebuilds generated files from YAML)
-   RUST VALIDATE:   cargo run -- schema validate      (Authoritative YAML <-> Neo4j check)
+   RUST VALIDATE:   novanet schema validate            (YAML <-> Neo4j consistency check)
+   RUST GENERATE:   novanet schema generate            (Rebuilds all artifacts from YAML)
+   RUST SEED:       novanet db seed                    (Execute seed Cypher files)
   ═════════════════════════════════════════════════════════════════════════════════════════════════
 ```
 
@@ -393,20 +393,22 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 ║              ┌──────────────┼──────────────┐                                                      ║
 ║              │              │              │                                                      ║
 ║              ▼              ▼              ▼                                                      ║
-║   ┌──────────────────┐ ┌──────────────────┐ ┌──────────────────┐                                  ║
-║   │  @novanet/cli    │ │ @novanet/studio  │ │ @novanet/        │                                  ║
-║   │  (⚠ deprecated)  │ │ (visualization)  │ │ schema-tools     │                                  ║
-║   └──────────────────┘ └──────────────────┘ └──────────────────┘                                  ║
-║                                               ├─ MermaidGenerator                                 ║
-║   ┌──────────────────┐                        ├─ LayerGenerator (v9, was Subcategory)             ║
-║   │  @novanet/db     │                        ├─ KindGenerator (v9)                               ║
-║   │  (infrastructure)│  ← Standalone          ├─ EdgeSchemaGenerator (v9)                         ║
-║   └──────────────────┘                        └─ validate-sync.ts                                 ║
+║              ┌──────────────────┐  ┌──────────────────┐                                          ║
+║              │ @novanet/studio  │  │  @novanet/db     │                                          ║
+║              │ (visualization)  │  │  (infrastructure)│  ← Standalone (Cypher files only)         ║
+║              └──────────────────┘  └──────────────────┘                                          ║
 ║                                                                                                   ║
-║   ┌──────────────────┐                                                                            ║
-║   │  tools/novanet/  │  ← Rust binary (standalone)                                                ║
-║   │  (CLI + TUI)     │     clap, ratatui, neo4rs, tokio                                           ║
-║   └──────────────────┘                                                                            ║
+║   ┌──────────────────────────────────────────────────────────────────────────────────────┐        ║
+║   │  tools/novanet/  ← Rust binary (CLI + TUI + generators)                              │        ║
+║   │  ├─ generators/  MermaidGen, LayerGen, KindGen, EdgeSchemaGen, AutowireGen, ...      │        ║
+║   │  ├─ parsers/     YAML nodes, relations, locale markdown                              │        ║
+║   │  ├─ commands/    schema, db, locale, search, filter, data/meta/overlay/query         │        ║
+║   │  ├─ search/      Hybrid vector + graph search                                        │        ║
+║   │  ├─ filter/      Cypher filter builder (Studio subprocess)                           │        ║
+║   │  └─ tui/         Interactive terminal (ratatui)                                      │        ║
+║   └──────────────────────────────────────────────────────────────────────────────────────┘        ║
+║                                                                                                   ║
+║   ⚠ ELIMINATED: @novanet/schema-tools, @novanet/cli (absorbed into Rust binary)                   ║
 ║                                                                                                   ║
 ╚═══════════════════════════════════════════════════════════════════════════════════════════════════╝
 ```
@@ -478,17 +480,17 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 ## Commands
 
 ```bash
-# TS: Validate schema sync
-pnpm schema:validate
+# Validate YAML <-> Neo4j consistency
+novanet schema validate
 
-# TS: Regenerate from YAML
-pnpm schema:generate
+# Regenerate all artifacts from YAML
+novanet schema generate
 
-# Rust: Validate YAML <-> Neo4j
-cargo run -- schema validate --strict
+# Seed database
+novanet db seed
 
 # Reset database
-pnpm infra:reset
+pnpm infra:down && pnpm infra:up && novanet db seed
 
 # View in browser
 open http://localhost:7474

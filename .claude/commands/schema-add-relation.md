@@ -27,8 +27,8 @@ Add a new relationship type between nodes in the NovaNet ontology.
 4. **Creation Phase**:
    - Add to `packages/core/models/relations.yaml`
    - Update source node YAML with relation reference
-   - Run `pnpm schema:generate`
-   - Run `pnpm schema:validate`
+   - Run `novanet schema generate`
+   - Run `novanet schema validate`
 
 5. **Seed Phase** (optional):
    - Create migration to add relationship to existing data

@@ -1056,32 +1056,32 @@ RETURN labels(instance)[0] AS type, count(*) AS count
 
 **CLI**: `novanet query --realm=global --trait=knowledge`
 
-### CLI-First Architecture
+### Rust-First Architecture
 
-**Boundary rule**: TypeScript generates code artifacts (types, Cypher files, Mermaid).
-Rust executes graph operations at runtime (read, write, query, assemble).
-Studio keeps its own Neo4j JS driver (web API routes = separate concern).
+**Architecture rule**: Single `novanet` Rust binary handles ALL schema and graph
+operations. TypeScript is limited to: Studio web app, `core/types` (consumed by
+Studio), `core/schemas` (Zod for runtime validation + type inference).
 
 ```
-novanet (Rust binary) = universal interface for graph operations
-├── CLI mode   novanet data / meta / query / node create ...
+novanet (Rust binary) = universal interface for ALL graph + schema operations
+├── CLI mode   novanet schema / db / locale / doc / filter / graph ...
 ├── TUI mode   novanet tui (interactive terminal)
 ├── AI agent   calls novanet query --format=json programmatically (v10+)
 └── v10-v12    context assemble / eval / content generate
 
-pnpm (TS monorepo) = code generation + web UI
-├── pnpm schema:generate    YAML → TypeScript types (must be TS)
-├── pnpm schema:validate    YAML ↔ TS ↔ Neo4j sync
+pnpm (TS monorepo) = web UI only
 ├── pnpm dev                Studio web app (Next.js)
-└── pnpm build/lint/test    Monorepo dev tools
+├── pnpm build/lint/test    Monorepo dev tools
+└── @novanet/core           Types + Zod schemas (consumed by Studio)
 ```
 
-An AI orchestrator calls `novanet query --kind=Page --trait=localized --format=json`
-to discover what to generate before generating. ~5ms startup (vs ~200ms Node.js).
-This is the "self-describing context graph" in action.
+~5ms startup (vs ~800ms Node.js). An AI orchestrator calls
+`novanet query --kind=Page --trait=localized --format=json` to discover what to
+generate. This is the "self-describing context graph" in action.
 
-**No @novanet/cli package** — the Rust binary IS the CLI. Root package.json can
-alias `"graph:data": "novanet data"` for convenience, but no TS wrapper code.
+**Eliminated packages**: `@novanet/schema-tools` and `@novanet/cli` are fully
+absorbed into the Rust binary. See [TS Elimination Table](#ts-elimination-table)
+for the ~7,000 lines of TypeScript replaced by Rust.
 
 ### Rust Binary (`novanet`) — CLI + TUI
 
@@ -1125,11 +1125,41 @@ Write commands validate against the meta-graph: `novanet node create --kind=Page
 checks that `Page` is a valid Kind, applies the correct Realm/Layer/Trait, and wires
 `OF_KIND` automatically.
 
-#### Utility Commands
+#### Schema & Generation Commands
+
+| Command | Description | Output |
+|---------|------------|--------|
+| `novanet schema generate` | YAML → all artifacts | `layers.ts`, Mermaid, Cypher seeds, `hierarchy.ts` |
+| `novanet schema validate` | YAML ↔ Neo4j consistency check | Pass/fail with diff details |
+| `novanet doc generate` | Generate documentation views | Mermaid diagrams, view markdown files |
+| `novanet doc validate` | Validate doc sync | Pass/fail |
+
+#### Database Commands
 
 | Command | Description |
 |---------|------------|
-| `novanet schema validate` | Validate Neo4j state matches YAML definitions |
+| `novanet db seed` | Execute seed Cypher files against Neo4j |
+| `novanet db migrate` | Run migration scripts |
+| `novanet db reset` | Drop all data + reseed (with `--confirm`) |
+
+#### Locale Knowledge Commands
+
+| Command | Description |
+|---------|------------|
+| `novanet locale parse` | Parse markdown locale knowledge → structured JSON |
+| `novanet locale import` | Import parsed locale data into Neo4j |
+
+#### Search & Filter Commands
+
+| Command | Description |
+|---------|------------|
+| `novanet search --hybrid` | Hybrid vector + graph search |
+| `novanet filter build` | Build Cypher from JSON filter spec (for Studio subprocess) |
+
+#### Interactive
+
+| Command | Description |
+|---------|------------|
 | `novanet tui` | Launch interactive TUI mode |
 
 #### Crate Structure (single crate)
@@ -1147,7 +1177,6 @@ tools/novanet/
     ├── facets.rs           Realm/Layer/Trait/EdgeFamily filter logic
     ├── meta.rs             Meta-graph types (Kind, EdgeKind, etc.)
     ├── output.rs           Formatters: table (tabled), json (serde), cypher (raw)
-    ├── validate.rs         Schema validation (Neo4j ↔ YAML)
     ├── commands/
     │   ├── mod.rs
     │   ├── data.rs         Mode 1: WHERE NOT n:Meta
@@ -1155,7 +1184,35 @@ tools/novanet/
     │   ├── overlay.rs      Mode 3: MATCH (n)
     │   ├── query.rs        Mode 4: facet-driven
     │   ├── node.rs         node create/edit/delete
-    │   └── relation.rs     relation create/delete
+    │   ├── relation.rs     relation create/delete
+    │   ├── schema.rs       schema generate / validate
+    │   ├── db_cmd.rs       db seed / migrate / reset
+    │   ├── locale.rs       locale parse / import
+    │   ├── doc.rs          doc generate / validate
+    │   ├── filter.rs       filter build (for Studio subprocess)
+    │   └── search.rs       search --hybrid
+    ├── generators/
+    │   ├── mod.rs           Generator trait + orchestration
+    │   ├── mermaid.rs       YAML → Mermaid flowchart (replaces MermaidGenerator.ts)
+    │   ├── layer.rs         YAML → layers.ts (replaces SubcategoryGenerator.ts)
+    │   ├── kind.rs          YAML → Kind Cypher (replaces KindGenerator.ts)
+    │   ├── edge_schema.rs   YAML → EdgeKind Cypher (replaces EdgeSchemaGenerator.ts)
+    │   ├── autowire.rs      YAML → OF_KIND wiring (replaces AutowireGenerator.ts)
+    │   ├── hierarchy.rs     YAML → hierarchy.ts (replaces HierarchyGenerator.ts)
+    │   └── organizing.rs    YAML → meta-graph Cypher (replaces OrganizingPrinciplesGenerator.ts)
+    ├── parsers/
+    │   ├── mod.rs           Parser trait + file discovery
+    │   ├── yaml_node.rs     Parse YAML node definitions (35 files)
+    │   ├── relations.rs     Parse relations.yaml (list format + family)
+    │   └── locale_md.rs     Parse markdown locale knowledge (7 parsers: voice, culture, identity, market, lexicon, rules, references)
+    ├── search/
+    │   ├── mod.rs
+    │   ├── hybrid.rs        Hybrid vector + graph search
+    │   ├── traversal.rs     Graph traversal service
+    │   └── vector.rs        Vector similarity search
+    ├── filter/
+    │   ├── mod.rs
+    │   └── build.rs         JSON filter spec → Cypher (for Studio subprocess)
     └── tui/
         ├── mod.rs
         ├── app.rs          App state machine (mode, selection, filters, loading)
@@ -1181,7 +1238,8 @@ with CLI + TUI. Split into workspace if crate grows past v10.
 | `neo4rs` | Neo4j Bolt driver (async) — pin exact minor version |
 | `tokio` | Async runtime (`features = ["full"]`) |
 | `serde` + `serde_json` | Neo4j result deserialization, JSON output |
-| `serde_yaml` | YAML parsing for schema validation (`validate.rs`) |
+| `serde_yaml` | YAML parsing for schema validation + generators |
+| `tera` | Template engine for TypeScript code generation (`layers.ts`, `hierarchy.ts`) |
 | `tabled` | Table output formatting |
 | `nucleo` | Fuzzy search (TUI `/` key) |
 | `thiserror` | Structured error enum (`NovaNetError`) for matching |
@@ -1770,24 +1828,79 @@ cargo watch -x 'clippy -- -D warnings' -x test -x 'run -- data'
 cargo fmt && cargo clippy -- -D warnings && cargo test
 ```
 
-#### TS/Rust Boundary (Architecture Decision)
+#### Rust-First Architecture Decision
 
-**Boundary rule**: TypeScript generates code artifacts. Rust executes at runtime.
+**Architecture rule**: Single `novanet` binary owns ALL schema and graph operations.
+Even TypeScript code generation (`layers.ts`) is just string templating — Rust
+writes `.ts` files via `writeln!()` / Tera templates trivially.
 
 | Concern | Owner | Rationale |
 |---------|-------|-----------|
-| YAML → TypeScript types | **TS** (schema-tools) | Output IS TypeScript code |
-| YAML → Mermaid diagrams | **TS** (schema-tools) | Build-time documentation |
-| YAML → Cypher seeds | **TS** (schema-tools) | Build-time DDL generation |
+| YAML → TypeScript types (`layers.ts`) | **Rust** (`novanet schema generate`) | String templating, no TS compiler needed |
+| YAML → Mermaid diagrams | **Rust** (`novanet doc generate`) | String templating |
+| YAML → Cypher seeds | **Rust** (`novanet schema generate`) | String templating |
 | YAML ↔ Neo4j validation | **Rust** (`novanet schema validate`) | Single authoritative validator |
+| Locale markdown parsing | **Rust** (`novanet locale parse`) | Performance, streaming |
+| Graph traversal + hybrid search | **Rust** (`novanet search --hybrid`) | Performance, neo4rs native driver |
 | Graph read queries (4 modes) | **Rust** (`novanet data/meta/overlay/query`) | Runtime performance (~5ms) |
 | Graph write (CRUD) | **Rust** (`novanet node/relation`) | Meta-graph validation at write time |
+| Database seeding + migration | **Rust** (`novanet db seed/migrate`) | Direct Cypher execution |
+| Cypher filter generation | **Rust** (`novanet filter build`) | Studio calls via subprocess |
 | Interactive TUI | **Rust** (`novanet tui`) | ~5ms startup, native terminal |
 | Web visualization | **TS** (Studio / Next.js) | Separate web concern, neo4j-driver JS |
+| TypeScript types | **TS** (`@novanet/core/types`) | Consumed by Studio at build time |
+| Zod schemas | **TS** (`@novanet/core/schemas`) | Runtime validation + type inference |
 
-Schema validation consolidation: remove validation logic from `schema-tools`.
-`novanet schema validate --strict` becomes the single source of truth for
-YAML↔Neo4j consistency. Schema-tools only generates, never validates.
+**Eliminated**: `@novanet/schema-tools` (~2,038 lines) and `@novanet/cli` (~5 lines)
+are fully absorbed into the Rust binary. See [TS Elimination Table](#ts-elimination-table).
+
+#### Studio Filter Subprocess Pattern
+
+Studio's 2 API routes that need Cypher filter generation (`/api/graph`,
+`/api/graph/navigation`) call the Rust binary as a subprocess:
+
+```typescript
+// Studio API route (thin TS wrapper)
+import { execFile } from 'child_process';
+
+async function buildCypher(filterSpec: FilterSpec): Promise<string> {
+  const { stdout } = await execFile('novanet', [
+    'filter', 'build', '--format=cypher', '--input=-'
+  ], { input: JSON.stringify(filterSpec) });
+  return stdout;
+}
+
+// Usage in route handler
+const cypher = await buildCypher(filterStore.getActiveFilters());
+const result = await neo4jDriver.executeQuery(cypher);
+```
+
+~5ms subprocess overhead is negligible vs Neo4j roundtrip (~50-200ms).
+No code duplication — single Cypher generation logic in Rust.
+
+#### TS Elimination Table
+
+~7,000 lines of TypeScript eliminated by Rust-first architecture:
+
+| Package / Area | Lines | Rust Replacement |
+|---------------|-------|-----------------|
+| `@novanet/schema-tools` (all generators + parsers) | ~2,038 | `novanet schema generate` + `novanet doc generate` |
+| `@novanet/cli` (empty stub) | ~5 | Deleted (was already empty) |
+| `core/scripts/` (seed, validate, import scripts) | ~1,154 | `novanet db seed` / `novanet schema validate` |
+| `core/src/parsers/` (7 markdown locale parsers) | ~1,550 | `novanet locale parse` |
+| `core/src/generators/` (ViewParser, MarkdownGenerator, CypherExporter) | ~823 | `novanet doc generate` |
+| `core/src/services/` (graph-traversal, hybrid-retriever, vector-search) | ~1,058 | `novanet search --hybrid` |
+| `core/src/db/client.ts` (Neo4j singleton wrapper) | ~115 | `neo4rs` in Rust (`db.rs`) |
+| **Total** | **~6,743** | |
+
+**What stays in TypeScript:**
+
+| Package / Area | Lines | Rationale |
+|---------------|-------|-----------|
+| `core/src/types/` | ~400 | Consumed by Studio at build time |
+| `core/src/schemas/` (Zod) | ~1,228 | Runtime validation + type inference in Studio |
+| `core/src/filters/` (types only) | ~200 | TypeScript filter type definitions for Studio |
+| `apps/studio/` | ~15,000+ | Next.js web application |
 
 ### Studio Implementation
 
@@ -2227,22 +2340,42 @@ Total: ~130 files across 5 packages + 1 Rust tool + docs + Claude config. Groupe
 | `src/__tests__/schema-sync.test.ts` | Update | Sync tests for v9 fields |
 | `src/__tests__/v710-conventions.test.ts` | Update | Convention tests for new terms |
 
-#### @novanet/schema-tools (generators + parsers)
+#### @novanet/schema-tools — ELIMINATED
 
-| File | Action | Description |
-|------|--------|-------------|
-| `src/generators/OrganizingPrinciplesGenerator.ts` | Rewrite | Generate v9 Cypher for all 6 meta-node types |
-| `src/generators/SubcategoryGenerator.ts` | Rename → `LayerGenerator.ts` | Generate Layer mapping TypeScript |
-| `src/generators/MermaidGenerator.ts` | Update | scope→realm, category→layer in node coloring |
-| `src/parsers/RelationsParser.ts` | Restructure | Parse new list format + `family` field |
-| `src/config/colors.ts` | Update | `localeKnowledge`→`knowledge` in all color maps |
-| `src/generators/KindGenerator.ts` | Create | New generator for Kind nodes + facet rels |
-| `src/generators/EdgeSchemaGenerator.ts` | Create | New generator for EdgeKind + FROM_KIND/TO_KIND |
-| `src/generators/AutowireGenerator.ts` | Create | New generator for OF_KIND statements |
-| `src/generators/HierarchyGenerator.ts` | Create | New generator: organizing-principles.yaml → hierarchy.ts (realm→layer tree) |
-| `src/index.ts` | Update exports | New generator/parser names |
-| `src/__tests__/organizing-principles.test.ts` | Rewrite | v9 generator output assertions |
-| `src/__tests__/sync.test.ts` | Update | v9 schema sync checks |
+**Absorbed into Rust binary.** All generators and parsers move to `tools/novanet/src/generators/`
+and `tools/novanet/src/parsers/`. The entire `packages/schema-tools/` directory is deleted.
+
+| TS File (deleted) | Rust Replacement |
+|-------------------|-----------------|
+| `OrganizingPrinciplesGenerator.ts` | `generators/organizing.rs` |
+| `SubcategoryGenerator.ts` → was `LayerGenerator.ts` | `generators/layer.rs` |
+| `MermaidGenerator.ts` | `generators/mermaid.rs` |
+| `KindGenerator.ts` | `generators/kind.rs` |
+| `EdgeSchemaGenerator.ts` | `generators/edge_schema.rs` |
+| `AutowireGenerator.ts` | `generators/autowire.rs` |
+| `HierarchyGenerator.ts` | `generators/hierarchy.rs` |
+| `RelationsParser.ts` | `parsers/relations.rs` |
+| `validate-sync.ts` | `commands/schema.rs` (validate subcommand) |
+| `generate-all.ts` | `commands/schema.rs` (generate subcommand) |
+| `colors.ts` | Inline in `generators/mermaid.rs` |
+
+#### @novanet/cli — ELIMINATED
+
+Empty stub package (~5 lines). Delete `packages/cli/` entirely.
+
+#### core/scripts/, core/src/parsers/, core/src/services/, core/src/db/client.ts — ELIMINATED
+
+| TS Area (deleted) | Rust Replacement |
+|-------------------|-----------------|
+| `core/scripts/seed.ts` | `commands/db_cmd.rs` (seed subcommand) |
+| `core/scripts/validate.ts` | `commands/schema.rs` (validate subcommand) |
+| `core/scripts/import-locale.ts` | `commands/locale.rs` (import subcommand) |
+| `core/src/parsers/*.ts` (7 parsers) | `parsers/locale_md.rs` |
+| `core/src/services/graph-traversal.ts` | `search/traversal.rs` |
+| `core/src/services/hybrid-retriever.ts` | `search/hybrid.rs` |
+| `core/src/services/vector-search.ts` | `search/vector.rs` |
+| `core/src/generators/*.ts` (3 files) | `generators/` (various) |
+| `core/src/db/client.ts` | `db.rs` (neo4rs connection pool) |
 
 #### @novanet/db (seeds + queries)
 
@@ -2315,21 +2448,22 @@ Total: ~130 files across 5 packages + 1 Rust tool + docs + Claude config. Groupe
 | `src/config/layerColors.ts` | Create | 9 Layer colors (replaces `categoryColors.ts` with 6) |
 | `src/config/traitStyles.ts` | Create | 5 Trait border styles (solid/dashed/double/dotted/thin) |
 
-#### tools/novanet (Rust CLI + TUI binary)
+#### tools/novanet (Rust binary — CLI + TUI + generators)
 
 | File | Action | Description |
 |------|--------|-------------|
-| `Cargo.toml` | Create | Single crate: clap, ratatui, crossterm, neo4rs, tokio, serde, serde_json, serde_yaml, tabled, nucleo, thiserror, color-eyre, tracing, tracing-subscriber |
+| `Cargo.toml` | Create | Single crate: clap, ratatui, crossterm, neo4rs, tokio, serde, serde_json, serde_yaml, tera, tabled, nucleo, thiserror, color-eyre, tracing, tracing-subscriber |
+| **Core modules** | | |
 | `src/lib.rs` | Create | Public API: query, facets, meta types, cypher builder (enables integration tests) |
 | `src/main.rs` | Create | Thin entry: clap parsing → calls lib, formats output, exits |
-| `src/error.rs` | Create | `NovaNetError` enum (thiserror): NotFound, ValidationFailed, Neo4jError, YamlParseError |
+| `src/error.rs` | Create | `NovaNetError` enum (thiserror): NotFound, ValidationFailed, Neo4jError, YamlParseError, GeneratorError |
 | `src/config.rs` | Create | Connection config struct, env var fallbacks (`NOVANET_URI`, `NOVANET_PASSWORD`) |
 | `src/db.rs` | Create | Neo4j connection pool (neo4rs, async) |
 | `src/cypher.rs` | Create | Cypher query builder (facet → WHERE clauses) |
 | `src/facets.rs` | Create | Realm/Layer/Trait/EdgeFamily filter logic |
 | `src/meta.rs` | Create | Meta-graph types (Kind, EdgeKind, etc.) |
 | `src/output.rs` | Create | Formatters: table (tabled), json (serde), cypher (raw) |
-| `src/validate.rs` | Create | Schema validation (Neo4j ↔ YAML via serde_yaml) |
+| **Commands** (~12 subcommands) | | |
 | `src/commands/mod.rs` | Create | Command module re-exports |
 | `src/commands/data.rs` | Create | Mode 1: WHERE NOT n:Meta |
 | `src/commands/meta.rs` | Create | Mode 2: MATCH (n:Meta) |
@@ -2337,6 +2471,35 @@ Total: ~130 files across 5 packages + 1 Rust tool + docs + Claude config. Groupe
 | `src/commands/query.rs` | Create | Mode 4: facet-driven |
 | `src/commands/node.rs` | Create | node create/edit/delete (validate against meta-graph) |
 | `src/commands/relation.rs` | Create | relation create/delete |
+| `src/commands/schema.rs` | Create | `schema generate` (YAML → all artifacts) + `schema validate` (YAML ↔ Neo4j) |
+| `src/commands/db_cmd.rs` | Create | `db seed` / `db migrate` / `db reset` |
+| `src/commands/locale.rs` | Create | `locale parse` (markdown → JSON) + `locale import` (JSON → Neo4j) |
+| `src/commands/doc.rs` | Create | `doc generate` (Mermaid, views) + `doc validate` |
+| `src/commands/filter.rs` | Create | `filter build` (JSON → Cypher, for Studio subprocess) |
+| `src/commands/search.rs` | Create | `search --hybrid` (vector + graph) |
+| **Generators** (replaces @novanet/schema-tools) | | |
+| `src/generators/mod.rs` | Create | `Generator` trait + orchestration (generate-all, validate-sync) |
+| `src/generators/mermaid.rs` | Create | YAML → Mermaid flowchart with Realm/Layer coloring |
+| `src/generators/layer.rs` | Create | YAML → `layers.ts` (Tera template → TypeScript code) |
+| `src/generators/kind.rs` | Create | YAML → Kind Cypher + `schema_hint` + `context_budget` + facet rels |
+| `src/generators/edge_schema.rs` | Create | YAML → EdgeKind Cypher + `cypher_pattern` + FROM/TO_KIND |
+| `src/generators/autowire.rs` | Create | YAML → OF_KIND wiring Cypher statements |
+| `src/generators/hierarchy.rs` | Create | YAML → `hierarchy.ts` (Tera template) |
+| `src/generators/organizing.rs` | Create | YAML → meta-graph seed Cypher (Realm, Layer, Trait, EdgeFamily) |
+| **Parsers** (replaces core/parsers + schema-tools/parsers) | | |
+| `src/parsers/mod.rs` | Create | `Parser` trait + file discovery |
+| `src/parsers/yaml_node.rs` | Create | Parse 35 YAML node definitions |
+| `src/parsers/relations.rs` | Create | Parse `relations.yaml` (list format + family field) |
+| `src/parsers/locale_md.rs` | Create | Parse markdown locale knowledge (7 parsers: voice, culture, identity, market, lexicon, rules, references) |
+| **Search** (replaces core/services) | | |
+| `src/search/mod.rs` | Create | Search module entry |
+| `src/search/hybrid.rs` | Create | Hybrid vector + graph search |
+| `src/search/traversal.rs` | Create | Graph traversal service |
+| `src/search/vector.rs` | Create | Vector similarity search |
+| **Filter** (replaces core/filters CypherGenerator) | | |
+| `src/filter/mod.rs` | Create | Filter module entry |
+| `src/filter/build.rs` | Create | JSON filter spec → Cypher string (stdin → stdout for subprocess) |
+| **TUI** | | |
 | `src/tui/mod.rs` | Create | TUI module entry point |
 | `src/tui/app.rs` | Create | App state machine (mode, selection, filters, Loading/Ready) |
 | `src/tui/ui.rs` | Create | Layout: left tree + right detail + status bar |
@@ -2415,24 +2578,34 @@ no dead code remains, and DX is clean.
 
 **Gate**: Ralph Wiggum #1 — all 35 YAMLs have `locale_behavior`, no `category` field, relations.yaml valid
 
-#### Phase 2: Generator Architecture (~schema-tools)
+#### Phase 2: Rust Generator Architecture (~tools/novanet)
+
+Phase 2 now builds the Rust generators that replace `@novanet/schema-tools`.
+This is the first Rust code written — scaffold the crate, then implement generators.
 
 | # | Task | Description |
 |---|------|-------------|
-| 2.1 | Rewrite `OrganizingPrinciplesGenerator.ts` | v9 Cypher for Realm, Layer, Trait, EdgeFamily |
-| 2.2 | Restructure `RelationsParser.ts` | List format + `family` + multi-source/target. **Must complete before generators that consume relations.yaml** |
-| 2.3 | Rename `SubcategoryGenerator` → `LayerGenerator` | Layer mapping TypeScript |
-| 2.4 | Create `KindGenerator.ts` | Kind nodes + `schema_hint`, `context_budget` + facet rels. **MUST fail-fast** if any YAML is missing `locale_behavior` — no silent defaults, throw with file path |
-| 2.5 | Create `EdgeSchemaGenerator.ts` | EdgeKind nodes + `cypher_pattern` + FROM/TO_KIND (depends on 2.2) |
-| 2.6 | Create `AutowireGenerator.ts` | OF_KIND wiring statements |
-| 2.7 | Create `HierarchyGenerator.ts` | organizing-principles.yaml → hierarchy.ts |
-| 2.8 | Update `MermaidGenerator.ts` | Realm/Layer/Trait coloring |
-| 2.9 | Update `generate-all.ts` + `validate-sync.ts` | New generator imports, order: OrganizingPrinciples → Kind → EdgeSchema → Layer → Mermaid → Autowire → Hierarchy |
-| 2.10 | Run `pnpm schema:generate` | Validate all 7 generators produce correct output, run generated Cypher against test Neo4j |
+| 2.1 | Scaffold `tools/novanet/` Rust crate | `Cargo.toml` with all deps. `lib.rs` + thin `main.rs` with clap subcommands. `error.rs` with `NovaNetError` enum. `config.rs` with connection config. `db.rs` with neo4rs pool. |
+| 2.2 | Implement `parsers/yaml_node.rs` | Parse 35 YAML node definitions with `locale_behavior` validation. **MUST fail-fast** if any YAML is missing `locale_behavior` — no silent defaults, bail with file path. |
+| 2.3 | Implement `parsers/relations.rs` | Parse `relations.yaml` (list format + `family` + multi-source/target). **Must complete before generators that consume relations.** |
+| 2.4 | Implement `generators/organizing.rs` | v9 Cypher for Realm, Layer, Trait, EdgeFamily |
+| 2.5 | Implement `generators/layer.rs` | YAML → `layers.ts` via Tera template |
+| 2.6 | Implement `generators/kind.rs` | Kind nodes + `schema_hint`, `context_budget` + facet rels |
+| 2.7 | Implement `generators/edge_schema.rs` | EdgeKind nodes + `cypher_pattern` + FROM/TO_KIND (depends on 2.3) |
+| 2.8 | Implement `generators/autowire.rs` | OF_KIND wiring Cypher statements |
+| 2.9 | Implement `generators/hierarchy.rs` | organizing-principles.yaml → `hierarchy.ts` via Tera template |
+| 2.10 | Implement `generators/mermaid.rs` | Mermaid flowchart with Realm/Layer/Trait coloring |
+| 2.11 | Implement `commands/schema.rs` | `novanet schema generate` (orchestrates all 7 generators in order) + `novanet schema validate` (YAML ↔ Neo4j) |
+| 2.12 | Run `novanet schema generate` | Validate all 7 generators produce correct output, run generated Cypher against test Neo4j |
+| 2.13 | Delete `packages/schema-tools/` | Remove the entire TS package (absorbed into Rust) |
+| 2.14 | Delete `packages/cli/` | Remove the empty stub package |
+| 2.15 | Update root `package.json` + `pnpm-workspace.yaml` | Remove schema-tools and cli from workspace, alias `novanet` commands |
 
-**Parallelization**: After 2.1–2.3 (foundation), tasks 2.4–2.8 are independent — use `spn-powers:dispatching-parallel-agents`.
+**Generator execution order**: Organizing → Kind → EdgeSchema → Layer → Mermaid → Autowire → Hierarchy
 
-**Gate**: Ralph Wiggum #2 — all generators produce valid output, EdgeKind count by family matches spec (23+7+7+6+2+2=47), no v8 generator logic remains
+**Parallelization**: After 2.1–2.3 (foundation), tasks 2.4–2.10 are independent — use `spn-powers:dispatching-parallel-agents`.
+
+**Gate**: Ralph Wiggum #2 — `novanet schema generate` produces all 7 outputs, `novanet schema validate` passes, EdgeKind count by family matches spec (23+7+7+6+2+2=47), `packages/schema-tools/` deleted, `packages/cli/` deleted
 
 #### Phase 3: TypeScript Types + Core (~core/src)
 
@@ -2440,12 +2613,18 @@ no dead code remains, and DX is clean.
 |---|------|-------------|
 | 3.1 | Generate `KIND_META` + derived maps | Single record replaces 4 separate classification systems |
 | 3.2 | Kill `NodeCategory` | Delete from core, update `filters/types.ts` to use Layer directly |
-| 3.3 | Update filters | `CypherGenerator.ts`, `NovaNetFilter.ts` — kill NodeCategory expansion |
+| 3.3 | Update filters | `NovaNetFilter.ts` — kill NodeCategory expansion. CypherGenerator moves to Rust (`filter/build.rs`), keep thin TS types for Studio |
 | 3.4 | Update graph module | `layers.ts`, `hierarchy.ts`, `types.ts` — Realm/Layer/Trait types |
 | 3.5 | PascalCase→lowercase audit | ~140 string literals: `'Global'`→`'global'`, `'localeKnowledge'`→`'knowledge'` |
 | 3.6 | Update tests | Schema sync, hierarchy, generator, convention tests |
 
-**Gate**: Ralph Wiggum #3 — `pnpm type-check` + `pnpm test --filter=@novanet/core` pass, no `NodeCategory` refs in `packages/core/**` (Studio keeps NodeCategory until Phase 5)
+| 3.7 | Delete `core/scripts/` | All scripts absorbed into `novanet` subcommands (db seed, schema validate, locale import) |
+| 3.8 | Delete `core/src/parsers/` | Absorbed into `parsers/locale_md.rs` in Rust |
+| 3.9 | Delete `core/src/services/` | Absorbed into `search/` module in Rust |
+| 3.10 | Delete `core/src/generators/` | Absorbed into `generators/` module in Rust |
+| 3.11 | Delete `core/src/db/client.ts` | Replaced by `db.rs` (neo4rs) in Rust |
+
+**Gate**: Ralph Wiggum #3 — `pnpm type-check` + `pnpm test --filter=@novanet/core` pass, no `NodeCategory` refs in `packages/core/**` (Studio keeps NodeCategory until Phase 5), eliminated TS areas deleted
 
 #### Phase 4: Neo4j Migration (~db)
 
@@ -2454,7 +2633,7 @@ no dead code remains, and DX is clean.
 | 4.1 | Update `00-constraints.cypher` | Drop v8 meta constraints, add v9 (6 types) |
 | 4.2 | Regenerate seeds | Output of Phase 2 generators |
 | 4.3 | Rename autowire | `99-autowire-subcategories.cypher` → `99-autowire-kinds.cypher` |
-| 4.4 | Clean rebuild | `pnpm infra:down && docker volume rm ... && pnpm infra:up && pnpm infra:seed` |
+| 4.4 | Clean rebuild | `pnpm infra:down && docker volume rm ... && pnpm infra:up && novanet db seed` |
 | 4.5 | Run integrity tests | Meta-graph integrity queries (all 3 checks) |
 | 4.6 | Audit query files | `queries/*.cypher` — update Scope/Subcategory references |
 
@@ -2488,35 +2667,47 @@ no dead code remains, and DX is clean.
 | 6.0 | Migrate `DataMode` → `NavigationMode` | In `uiStore.ts`: replace `DataMode = 'data' \| 'schema'` with `NavigationMode = 'data' \| 'meta' \| 'overlay' \| 'query'`, update all consumers (`GraphToolbar`, `ApiRoutes`, `useGraphData`), update persist partialize |
 | 6.1 | Create `NavigationModeToggle.tsx` | Toolbar: Data/Meta/Overlay/Query mode buttons |
 | 6.2 | Create `navigationStore.ts` | Active mode + selected facets state |
-| 6.3 | Create `useNavigationMode.ts` | Mode-aware Cypher query builder |
+| 6.3 | Create `useNavigationMode.ts` | Mode-aware query builder (calls `novanet filter build` subprocess) |
 | 6.4 | Create `FacetFilterPanel.tsx` | Sidebar: Realm/Layer/Trait/EdgeFamily checkboxes (populated from `MATCH (n:Meta)`) |
-| 6.5 | Create navigation API | `/api/graph/navigation/route.ts` |
-| 6.6 | Context-aware ViewPicker | Data/Query mode → show YAML views as filtered subgraphs; Meta mode → show ontology views (taxonomy tree, edge schema) |
-| 6.7 | New keyboard presets | `T` = Trait cycle, `E` = EdgeFamily filter, update `?` help modal |
+| 6.5 | Create navigation API | `/api/graph/navigation/route.ts` — uses `novanet filter build` subprocess for Cypher generation |
+| 6.6 | Create `lib/novanetBridge.ts` | Thin subprocess wrapper: `execFile('novanet', ['filter', 'build', ...])` — shared by graph + navigation routes |
+| 6.7 | Context-aware ViewPicker | Data/Query mode → show YAML views as filtered subgraphs; Meta mode → show ontology views (taxonomy tree, edge schema) |
+| 6.8 | New keyboard presets | `T` = Trait cycle, `E` = EdgeFamily filter, update `?` help modal |
 
-**Gate**: Ralph Wiggum #6 — all 4 navigation modes work, facet filters are dynamic from meta-graph, ViewPicker context-aware
+**Gate**: Ralph Wiggum #6 — all 4 navigation modes work, facet filters are dynamic from meta-graph, ViewPicker context-aware, `novanet filter build` subprocess integration working
 
-#### Phase 7: Rust CLI + TUI + Documentation
+#### Phase 7: Rust Advanced CLI + TUI + Documentation
+
+Crate scaffolding and generators were completed in Phase 2. Phase 7 builds
+the runtime CLI commands (read/write/search/filter/locale/db), TUI, and documentation.
 
 | # | Task | Description |
 |---|------|-------------|
-| 7.1 | Scaffold `tools/novanet` Rust crate | `Cargo.toml` with all deps (see Dependencies table). `lib.rs` + thin `main.rs` with clap subcommands. `error.rs` with `NovaNetError` enum. `config.rs` with connection config + env fallbacks. |
-| 7.2 | Implement read commands | `novanet data`, `novanet meta`, `novanet overlay`, `novanet query` — 4 navigation modes with `--realm/--layer/--trait/--edge-family/--kind/--format` flags |
-| 7.2b | Add unit tests for core modules | Unit tests for `cypher.rs` (query builder → correct Cypher for facet combinations), `facets.rs` (filter intersection logic), `meta.rs` (type mapping). Integration tests with Neo4j testcontainer for end-to-end command output. |
-| 7.3 | Implement write commands | `novanet node create/edit/delete`, `novanet relation create/delete` — validate against meta-graph (Kind exists, correct Realm/Layer/Trait, auto-wire OF_KIND) |
-| 7.4 | Implement `novanet schema validate` | Validate Neo4j state matches YAML definitions (via `serde_yaml`) |
-| 7.5a | TUI scaffold | App state machine (`Loading`/`Ready` variants), basic layout (tree + detail + status bar), mode toggle (1/2/3/4), async channel bridge (`runtime.rs`) |
-| 7.5b | TUI taxonomy tree | Tree widget with Realm > Layer > Kind hierarchy, collapse/expand, arrow key navigation |
-| 7.5c | TUI async + filters | Async Neo4j queries via mpsc channel bridge, loading states, facet filter popup (`f` key) |
-| 7.5d | TUI search + detail | Nucleo fuzzy search (`search.rs`, `/` key), Kind detail pane, edge explorer (`e` key) |
-| 7.5e | TUI CRUD dialogs | Input forms for node create/edit/delete (`dialogs.rs`, `n`/`d` keys), relation CRUD (`r` key), confirmation prompts, Cypher preview (`c` key) |
-| 7.6 | Update Claude skills | `novanet-architecture`, `novanet-sync` — v9 terminology |
-| 7.7 | Update Claude commands | `novanet-arch`, `novanet-sync` — v9 references |
-| 7.8 | Update CLAUDE.md files | Root, core, studio — v9 terminology and version |
-| 7.9 | Update docs | NOVANET-PITCH, plan docs, _index.yaml, README |
-| 7.10 | Update turbo generators | Scaffold templates with v9 fields |
+| **Runtime CLI commands** | | |
+| 7.1 | Implement read commands | `novanet data`, `novanet meta`, `novanet overlay`, `novanet query` — 4 navigation modes with `--realm/--layer/--trait/--edge-family/--kind/--format` flags |
+| 7.1b | Add unit tests for core modules | Unit tests for `cypher.rs` (query builder → correct Cypher for facet combinations), `facets.rs` (filter intersection logic), `meta.rs` (type mapping). Integration tests with Neo4j testcontainer for end-to-end command output. |
+| 7.2 | Implement write commands | `novanet node create/edit/delete`, `novanet relation create/delete` — validate against meta-graph (Kind exists, correct Realm/Layer/Trait, auto-wire OF_KIND) |
+| 7.3 | Implement `novanet db seed/migrate/reset` | Execute Cypher files from `packages/db/seed/` and `packages/db/migrations/` |
+| 7.4 | Implement `novanet locale parse/import` | Parse markdown locale knowledge files → structured JSON → Neo4j import |
+| 7.5 | Implement `novanet search --hybrid` | Hybrid vector + graph search (graph traversal + vector similarity) |
+| 7.6 | Implement `novanet filter build` | JSON filter spec → Cypher string (stdin → stdout for Studio subprocess) |
+| 7.7 | Implement `novanet doc generate/validate` | Generate Mermaid views, validate doc sync |
+| **TUI** | | |
+| 7.8a | TUI scaffold | App state machine (`Loading`/`Ready` variants), basic layout (tree + detail + status bar), mode toggle (1/2/3/4), async channel bridge (`runtime.rs`) |
+| 7.8b | TUI taxonomy tree | Tree widget with Realm > Layer > Kind hierarchy, collapse/expand, arrow key navigation |
+| 7.8c | TUI async + filters | Async Neo4j queries via mpsc channel bridge, loading states, facet filter popup (`f` key) |
+| 7.8d | TUI search + detail | Nucleo fuzzy search (`search.rs`, `/` key), Kind detail pane, edge explorer (`e` key) |
+| 7.8e | TUI CRUD dialogs | Input forms for node create/edit/delete (`dialogs.rs`, `n`/`d` keys), relation CRUD (`r` key), confirmation prompts, Cypher preview (`c` key) |
+| **Documentation** | | |
+| 7.9 | Update Claude skills | `novanet-architecture`, `novanet-sync` — v9 terminology |
+| 7.10 | Update Claude commands | `novanet-arch`, `novanet-sync` — v9 references |
+| 7.11 | Update CLAUDE.md files | Root, core, studio — v9 terminology and version |
+| 7.12 | Update docs | NOVANET-PITCH, plan docs, _index.yaml, README |
+| 7.13 | Update turbo generators | Scaffold templates with v9 fields |
 
-**Gate**: Ralph Wiggum #7 — `novanet data/meta/query/node` commands work, unit tests pass, `novanet tui` launches with taxonomy tree + async queries, all docs reference v9, no stale v8 terminology anywhere
+**Parallelization**: Runtime CLI commands (7.1–7.7) are largely independent — use `spn-powers:dispatching-parallel-agents`. TUI tasks (7.8a–7.8e) are sequential.
+
+**Gate**: Ralph Wiggum #7 — all `novanet` subcommands work (`data/meta/query/node/schema/db/locale/filter/search/doc`), unit tests pass, `novanet tui` launches with taxonomy tree + async queries, all docs reference v9, no stale v8 terminology anywhere
 
 #### Phase 8: Final Verification
 

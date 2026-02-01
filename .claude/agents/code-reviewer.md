@@ -43,10 +43,11 @@ You are a senior code reviewer for the NovaNet project.
 - `:Meta` double-label for meta-nodes
 - `OF_KIND` for instance bridge (not `IN_SUBCATEGORY`)
 
-### 6. TS/Rust Boundary Rule (v9)
-- TypeScript generates code artifacts (types, Cypher, Mermaid)
-- Rust executes at runtime (graph queries, validation, TUI)
-- Validation logic belongs in Rust (`novanet schema validate`), not schema-tools
+### 6. Rust-First Architecture (v9)
+- Single `novanet` Rust binary handles ALL operations (generation, validation, queries, TUI)
+- `@novanet/schema-tools` eliminated — generators live in `tools/novanet/src/generators/`
+- TypeScript limited to: Studio web app, core/types (consumed by Studio), core/schemas (Zod)
+- Studio filter routes use `novanet filter build` subprocess for Cypher generation
 - No runtime graph operations in TypeScript packages (except Studio via neo4j-driver)
 
 ### 7. Testing
