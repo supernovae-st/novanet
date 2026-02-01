@@ -1125,6 +1125,49 @@ Write commands validate against the meta-graph: `novanet node create --kind=Page
 checks that `Page` is a valid Kind, applies the correct Realm/Layer/Trait, and wires
 `OF_KIND` automatically.
 
+**Node CRUD Cypher patterns** (`src/commands/node.rs`):
+
+```cypher
+-- node create: validate Kind exists, create node, auto-wire OF_KIND
+MATCH (k:Kind {label: $kind})
+CREATE (n {key: $key})
+SET n += $props, n:$kind
+CREATE (n)-[:OF_KIND]->(k)
+RETURN n.key AS key, labels(n) AS labels
+
+-- node edit: update properties (merge, not replace)
+MATCH (n {key: $key})
+SET n += $props
+RETURN n.key AS key, properties(n) AS props
+
+-- node delete: remove node and all relationships (requires --confirm)
+MATCH (n {key: $key})
+DETACH DELETE n
+RETURN count(*) AS deleted
+```
+
+**Relation CRUD Cypher patterns** (`src/commands/relation.rs`):
+
+```cypher
+-- relation create: validate EdgeKind exists, create relationship
+MATCH (ek:EdgeKind {key: $rel_type})
+MATCH (from {key: $from_key}), (to {key: $to_key})
+CALL apoc.create.relationship(from, $rel_type, {}, to) YIELD rel
+RETURN type(rel) AS type, startNode(rel).key AS from, endNode(rel).key AS to
+
+-- relation delete: remove specific relationship
+MATCH (from {key: $from_key})-[r]->(to {key: $to_key})
+WHERE type(r) = $rel_type
+DELETE r
+RETURN count(*) AS deleted
+```
+
+> **Note**: Node creation uses dynamic labels via `SET n:$kind` (requires APOC
+> `apoc.create.setLabels` in practice). The Rust implementation should validate
+> the Kind label against the meta-graph before executing. Relation creation uses
+> `apoc.create.relationship` for dynamic relationship types; fallback to string
+> interpolation with parameterized keys if APOC is unavailable.
+
 #### Schema & Generation Commands
 
 | Command | Description | Output |
@@ -1225,8 +1268,16 @@ tools/novanet/
         └── dialogs.rs      Input forms for node/relation CRUD (n/d/r keys)
 ```
 
-No feature flags, no workspace. Single `cargo build` produces the `novanet` binary
-with CLI + TUI. Split into workspace if crate grows past v10.
+Single `cargo build` produces the `novanet` binary with CLI + TUI.
+Split into workspace if crate grows past v10.
+
+**Feature gate**: TUI is behind a feature flag so CI can build without terminal deps:
+```toml
+[features]
+default = ["tui"]
+tui = ["dep:ratatui", "dep:crossterm"]
+```
+Use `cargo build --no-default-features` for headless/CI builds (CLI-only).
 
 #### Dependencies
 
@@ -1237,6 +1288,8 @@ with CLI + TUI. Split into workspace if crate grows past v10.
 | `crossterm` | Cross-platform terminal backend |
 | `neo4rs` | Neo4j Bolt driver (async) — pin exact minor version |
 | `tokio` | Async runtime (`features = ["full"]`) |
+| `tokio-util` | `CancellationToken` for graceful TUI shutdown |
+| `futures` | `StreamExt` for crossterm `EventStream` integration |
 | `serde` + `serde_json` | Neo4j result deserialization, JSON output |
 | `serde_yml` | YAML parsing for schema validation + generators (`serde_yaml` is deprecated) |
 | `minijinja` | Template engine for TypeScript code generation (1 dep, by Jinja2 creator Armin Ronacher) |
@@ -1248,6 +1301,7 @@ with CLI + TUI. Split into workspace if crate grows past v10.
 | `indicatif` | Progress bars for long operations (generation, seeding) |
 | `petgraph` | In-memory graph for dependency ordering in generators |
 | `rayon` | Parallel YAML file processing for faster validation |
+| `walkdir` | Recursive YAML file discovery (scan `models/nodes/` tree) |
 
 #### Connection
 
@@ -1363,9 +1417,9 @@ rust-version = "1.85"  # Minimum supported (edition 2024)
 # CLI
 clap = { version = "4", features = ["derive", "env"] }
 
-# TUI
-ratatui = "0.29"
-crossterm = { version = "0.28", features = ["event-stream"] }
+# TUI (feature-gated, see [features] below)
+ratatui = { version = "0.29", optional = true }
+crossterm = { version = "0.28", features = ["event-stream"], optional = true }
 
 # Async
 tokio = { version = "1.43", features = ["full"] }
@@ -1393,6 +1447,7 @@ nucleo = "0.5"                # Fuzzy search (TUI `/` key)
 # Graph
 petgraph = "0.7"              # In-memory graph for generator dependency ordering
 rayon = "1.10"                # Parallel YAML processing
+walkdir = "2"                 # Recursive YAML file discovery
 
 # Error handling
 thiserror = "2"               # Library-style errors (NovaNetError enum)
@@ -1402,12 +1457,31 @@ color-eyre = "0.6"            # Rich error reports with context
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 
+[features]
+default = ["tui"]
+tui = ["dep:ratatui", "dep:crossterm"]
+
 [dev-dependencies]
 assert_cmd = "2"              # CLI integration tests (binary invocation)
 predicates = "3"              # Output assertion matchers
 insta = { version = "1", features = ["yaml"] } # Snapshot testing
 tokio-test = "0.4"            # Async test utilities
+
+[profile.release]
+strip = true                  # Strip symbols (smaller binary)
+lto = "thin"                  # Link-time optimization
+codegen-units = 1             # Better optimization
+opt-level = 3
+
+[profile.dev.package."*"]
+opt-level = 2                 # Optimize deps in dev mode (faster builds)
 ```
+
+> **Context7 verification (2026-02-01)**: All 288 packages resolved and compiled
+> with `cargo check` on rustc 1.92.0. Cargo correctly locks ratatui to 0.29.0
+> (0.30.0 requires Rust 1.86.0, incompatible with rust-version = "1.85").
+> All crate APIs verified via Context7: neo4rs 0.8, thiserror 2, minijinja 2,
+> serde_yml 0.0.12, clap 4 derive. No version conflicts detected.
 
 #### Error Handling Pattern (thiserror + color-eyre)
 
@@ -1462,6 +1536,10 @@ use clap::{Parser, Subcommand, ValueEnum};
 #[derive(Parser)]
 #[command(name = "novanet", version, about = "NovaNet context graph CLI")]
 struct Cli {
+    /// Monorepo root (auto-detected: walks up to find pnpm-workspace.yaml)
+    #[arg(long, env = "NOVANET_ROOT")]
+    root: Option<std::path::PathBuf>,
+
     /// Neo4j URI
     #[arg(long, env = "NEO4J_URI", default_value = "bolt://localhost:7687")]
     uri: String,
@@ -1544,6 +1622,46 @@ enum SchemaAction {
     },
 }
 ```
+
+#### Project Root Discovery
+
+`src/config.rs` — resolve the monorepo root for YAML model access:
+
+```rust
+use std::path::{Path, PathBuf};
+
+/// Resolve the monorepo root directory.
+/// Priority: 1) --root flag  2) NOVANET_ROOT env  3) walk up to pnpm-workspace.yaml
+pub fn resolve_root(explicit: Option<&Path>) -> crate::Result<PathBuf> {
+    if let Some(root) = explicit {
+        return Ok(root.to_path_buf());
+    }
+
+    // Walk up from current directory to find pnpm-workspace.yaml
+    let mut dir = std::env::current_dir()
+        .map_err(|e| crate::NovaNetError::Io(e))?;
+    loop {
+        if dir.join("pnpm-workspace.yaml").exists() {
+            return Ok(dir);
+        }
+        if !dir.pop() {
+            return Err(crate::NovaNetError::Validation(
+                "Could not find monorepo root (no pnpm-workspace.yaml in parent directories). \
+                 Use --root or set NOVANET_ROOT.".to_string()
+            ));
+        }
+    }
+}
+
+/// Derived paths from the monorepo root
+pub fn models_dir(root: &Path) -> PathBuf { root.join("packages/core/models") }
+pub fn nodes_dir(root: &Path) -> PathBuf { root.join("packages/core/models/nodes") }
+pub fn relations_path(root: &Path) -> PathBuf { root.join("packages/core/models/relations.yaml") }
+pub fn seed_dir(root: &Path) -> PathBuf { root.join("packages/db/seed") }
+```
+
+All commands that need YAML access call `resolve_root()` first. Commands that only
+query Neo4j (e.g., `data`, `meta`, `overlay`) do not need it.
 
 #### Neo4j Connection (neo4rs + Arc)
 
@@ -1716,16 +1834,29 @@ pub async fn run_tui(db: Db) -> color_eyre::Result<()> {
     )?;
 
     let mut app = AppState::new(action_tx);
+    let mut should_redraw = true; // dirty-flag: only redraw when state changed
 
-    // Main render loop
-    while let Some(event) = event_rx.recv().await {
-        match event {
-            Event::Render => terminal.draw(|f| app.render(f))?,
-            Event::Key(k) => app.handle_key(k),
-            Event::QueryResult(payload) => app.apply_result(payload),
-            Event::Tick => app.tick(),
-            _ => {}
-        };
+    // Main render loop (TEA: Event → Update → View)
+    loop {
+        // VIEW: only redraw when dirty
+        if should_redraw {
+            terminal.draw(|f| app.render(f))?;
+            should_redraw = false;
+        }
+
+        // UPDATE: process next event
+        tokio::select! {
+            Some(event) = event_rx.recv() => {
+                match event {
+                    Event::Key(k) => { app.handle_key(k); should_redraw = true; },
+                    Event::QueryResult(payload) => { app.apply_result(payload); should_redraw = true; },
+                    Event::Tick => { app.tick(); should_redraw = true; },
+                    Event::Resize(_, _) => { should_redraw = true; },
+                    _ => {}
+                };
+            }
+            else => break,
+        }
         if app.should_quit { break; }
     }
 
@@ -1837,6 +1968,68 @@ cargo watch -x 'clippy -- -D warnings' -x test -x 'run -- data'
 
 # Pre-commit checklist
 cargo fmt && cargo clippy -- -D warnings && cargo test
+```
+
+#### CI/CD Integration
+
+The Rust binary is **NOT** managed by Turborepo (it lives in `tools/`, not `packages/`).
+CI should run Rust checks separately from the pnpm/turbo pipeline:
+
+```yaml
+# .github/workflows/rust.yml (simplified)
+name: Rust CI
+on:
+  push:
+    paths: ['tools/novanet/**']
+  pull_request:
+    paths: ['tools/novanet/**']
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.85
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: tools/novanet
+      - run: cargo fmt --check
+        working-directory: tools/novanet
+      - run: cargo clippy -- -D warnings
+        working-directory: tools/novanet
+      - run: cargo test
+        working-directory: tools/novanet
+
+  integration:
+    runs-on: ubuntu-latest
+    needs: check
+    services:
+      neo4j:
+        image: neo4j:5-community
+        env:
+          NEO4J_AUTH: neo4j/novanetpassword
+        ports: ['7687:7687']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.85
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: tools/novanet
+      - run: cargo test -- --ignored
+        working-directory: tools/novanet
+        env:
+          NEO4J_URI: bolt://localhost:7687
+```
+
+**Monorepo root `package.json`** should include convenience scripts:
+```json
+{
+  "scripts": {
+    "rust:check": "cd tools/novanet && cargo check",
+    "rust:test": "cd tools/novanet && cargo test",
+    "rust:build": "cd tools/novanet && cargo build --release"
+  }
+}
 ```
 
 #### Rust-First Architecture Decision
@@ -2559,6 +2752,27 @@ Before starting implementation:
 - All work happens on the feature branch — `main` stays on v8.3.0
 - If migration fails mid-implementation: `git checkout main` restores v8.3.0
 
+### Expert Review Findings (2026-02-01)
+
+Four specialized reviews were conducted against this plan:
+
+| Domain | Reviewer | Score | Verdict |
+|--------|----------|-------|---------|
+| Rust Architecture | `spn-rust:rust-architect` | 9/10 | Pipeline validated. walkdir missing, TUI needs feature gate. |
+| Neo4j Meta-Graph | `neo4j-architect` | 9/10 | Faceted classification validated. 8 property indexes missing. |
+| Architecture Coherence | `feature-dev:code-architect` | 8/10 | Phase dependencies have 3 circular issues. |
+| TUI Async | `spn-rust:rust-async-expert` | 8/10 | Channel bridge correct. Dirty-flag render missing. Split TUI to v9.5. |
+
+**7 findings applied to this plan:**
+
+1. Meta-graph design validated (no changes)
+2. YAML → Rust → templates → output pipeline validated (no changes)
+3. TUI main loop: added dirty-flag `should_redraw` + `tokio::select!` pattern (line ~1719)
+4. Phase 7 split into 7A (v9.0: CLI + basic TUI) and 7B (v9.5: advanced TUI + galaxy theme)
+5. Added `walkdir` crate + TUI `[features]` gate (`dep:ratatui`, `dep:crossterm`)
+6. Added 8 Neo4j facet property indexes in Phase 4.1b (Kind, EdgeKind, L10n quality/fingerprint)
+7. Fixed 3 phase dependency issues: Phase 2.12 → dry-run only, Phase 5.0 → version-aware zustand migration, Phase 2 gate → YAML-only validation
+
 ### Implementation Phases
 
 #### Milestone 1: v9.0 — Self-Describing Context Graph (TrustGraph Level 5)
@@ -2596,7 +2810,7 @@ This is the first Rust code written — scaffold the crate, then implement gener
 
 | # | Task | Description |
 |---|------|-------------|
-| 2.1 | Scaffold `tools/novanet/` Rust crate | `Cargo.toml` with all deps. `lib.rs` + thin `main.rs` with clap subcommands. `error.rs` with `NovaNetError` enum. `config.rs` with connection config. `db.rs` with neo4rs pool. |
+| 2.1 | Scaffold `tools/novanet/` Rust crate | `Cargo.toml` with all deps. `lib.rs` + thin `main.rs` with clap subcommands. `error.rs` with `NovaNetError` enum. `config.rs` with connection config + root discovery (`resolve_root()`). `db.rs` with neo4rs pool. |
 | 2.2 | Implement `parsers/yaml_node.rs` | Parse 35 YAML node definitions with `locale_behavior` validation. **MUST fail-fast** if any YAML is missing `locale_behavior` — no silent defaults, bail with file path. |
 | 2.3 | Implement `parsers/relations.rs` | Parse `relations.yaml` (list format + `family` + multi-source/target). **Must complete before generators that consume relations.** |
 | 2.4 | Implement `generators/organizing.rs` | v9 Cypher for Realm, Layer, Trait, EdgeFamily |
@@ -2607,7 +2821,7 @@ This is the first Rust code written — scaffold the crate, then implement gener
 | 2.9 | Implement `generators/hierarchy.rs` | organizing-principles.yaml → `hierarchy.ts` via MiniJinja template |
 | 2.10 | Implement `generators/mermaid.rs` | Mermaid flowchart with Realm/Layer/Trait coloring |
 | 2.11 | Implement `commands/schema.rs` | `novanet schema generate` (orchestrates all 7 generators in order) + `novanet schema validate` (YAML ↔ Neo4j) |
-| 2.12 | Run `novanet schema generate` | Validate all 7 generators produce correct output, run generated Cypher against test Neo4j |
+| 2.12 | Run `novanet schema generate` | Validate all 7 generators produce correct output. **Dry-run only**: verify Cypher syntax (parse check), TypeScript compiles, Mermaid renders. Actual Neo4j execution deferred to Phase 4 (avoids circular dependency). |
 | 2.13 | Delete `packages/schema-tools/` | Remove the entire TS package (absorbed into Rust) |
 | 2.14 | Delete `packages/cli/` | Remove the empty stub package |
 | 2.15 | Update root `package.json` + `pnpm-workspace.yaml` | Remove schema-tools and cli from workspace, alias `novanet` commands |
@@ -2616,7 +2830,7 @@ This is the first Rust code written — scaffold the crate, then implement gener
 
 **Parallelization**: After 2.1–2.3 (foundation), tasks 2.4–2.10 are independent — use `spn-powers:dispatching-parallel-agents`.
 
-**Gate**: Ralph Wiggum #2 — `novanet schema generate` produces all 7 outputs, `novanet schema validate` passes, EdgeKind count by family matches spec (23+7+7+6+2+2=47), `packages/schema-tools/` deleted, `packages/cli/` deleted
+**Gate**: Ralph Wiggum #2 — `novanet schema generate` produces all 7 outputs (dry-run: Cypher parses, TS compiles, Mermaid renders), `novanet schema validate` passes (YAML-only, no Neo4j), EdgeKind count by family matches spec (23+7+7+6+2+2=47), `packages/schema-tools/` deleted, `packages/cli/` deleted
 
 #### Phase 3: TypeScript Types + Core (~core/src)
 
@@ -2641,20 +2855,41 @@ This is the first Rust code written — scaffold the crate, then implement gener
 
 | # | Task | Description |
 |---|------|-------------|
-| 4.1 | Update `00-constraints.cypher` | Drop v8 meta constraints, add v9 (6 types) |
+| 4.1a | Update `00-constraints.cypher` | Drop v8 meta constraints, add v9 (6 types) |
+| 4.1b | Add facet property indexes | 8 indexes for faceted query performance (see below) |
 | 4.2 | Regenerate seeds | Output of Phase 2 generators |
 | 4.3 | Rename autowire | `99-autowire-subcategories.cypher` → `99-autowire-kinds.cypher` |
 | 4.4 | Clean rebuild | `novanet db reset` |
 | 4.5 | Run integrity tests | Meta-graph integrity queries (all 3 checks) |
 | 4.6 | Audit query files | `queries/*.cypher` — update Scope/Subcategory references |
 
-**Gate**: Ralph Wiggum #4 — all integrity tests pass, Neo4j schema matches YAML, no v8 labels in DB
+**Task 4.1b — Facet property indexes** (8 indexes for faceted navigation performance):
+
+```cypher
+// Kind facet properties (used by novanet query --kind filtering)
+CREATE INDEX kind_context_budget IF NOT EXISTS FOR (k:Kind) ON (k.context_budget);
+CREATE INDEX kind_traversal_depth IF NOT EXISTS FOR (k:Kind) ON (k.traversal_depth);
+CREATE INDEX kind_generation_count IF NOT EXISTS FOR (k:Kind) ON (k.generation_count);
+
+// EdgeKind facet properties (used by edge family filtering)
+CREATE INDEX edgekind_temperature IF NOT EXISTS FOR (ek:EdgeKind) ON (ek.temperature_threshold);
+
+// Output quality indexes (used by quality-score sorting/filtering)
+CREATE INDEX pagel10n_quality IF NOT EXISTS FOR (n:PageL10n) ON (n.quality_score);
+CREATE INDEX blockl10n_quality IF NOT EXISTS FOR (n:BlockL10n) ON (n.quality_score);
+
+// Prompt fingerprint indexes (used by generation deduplication)
+CREATE INDEX pagel10n_fingerprint IF NOT EXISTS FOR (n:PageL10n) ON (n.prompt_fingerprint);
+CREATE INDEX blockl10n_fingerprint IF NOT EXISTS FOR (n:BlockL10n) ON (n.prompt_fingerprint);
+```
+
+**Gate**: Ralph Wiggum #4 — all integrity tests pass, Neo4j schema matches YAML, no v8 labels in DB, all 8 facet indexes exist (`SHOW INDEXES`)
 
 #### Phase 5: Studio Migration (~studio, existing features)
 
 | # | Task | Description |
 |---|------|-------------|
-| 5.0 | localStorage migration | Clear persisted `novanet-ui` and `novanet-filter` stores on v9 boot — v8 keys (`collapsedScopes`, `dataMode`) contain dead values. Add version check in `partialize` or init logic. **Do first** to avoid fighting stale state during development. |
+| 5.0 | localStorage migration | Version-aware migration: add `schemaVersion: 9` field to both zustand stores (`novanet-ui`, `novanet-filter`). On init, check version — if missing or < 9, clear store and re-initialize with v9 defaults. This replaces v8 dead keys (`collapsedScopes`, `dataMode`) cleanly. Use zustand `version` field in `persist()` config + `migrate()` callback. **Do first** to avoid fighting stale state during development. |
 | 5.1 | Visual system | Define 3-channel encoding: create `layerColors.ts` (9 Layer fill colors), create `traitStyles.ts` (5 Trait border styles: solid/dashed/double/dotted/thin), update layouts for Realm spatial zones. **Defines the replacement before removing the old system.** |
 | 5.2 | Kill NodeCategory in Studio | `filterAdapter.ts` (remove NodeCategory type + imports), `nodeTypes.ts` (import Layer from core), delete `categoryColors.ts` (replaced by `layerColors.ts`) |
 | 5.3 | View presets migration | Rewrite 9 `VIEW_PRESETS` from `NodeCategory` to v9 facets (Realm×Layer×Trait), drop dead presets 7-8 (priority/freshness deleted in v8.2) |
@@ -2687,10 +2922,11 @@ This is the first Rust code written — scaffold the crate, then implement gener
 
 **Gate**: Ralph Wiggum #6 — all 4 navigation modes work, facet filters are dynamic from meta-graph, ViewPicker context-aware, `novanet filter build` subprocess integration working
 
-#### Phase 7: Rust Advanced CLI + TUI + Documentation
+#### Phase 7A: Rust Runtime CLI + Basic TUI + Documentation (v9.0)
 
-Crate scaffolding and generators were completed in Phase 2. Phase 7 builds
-the runtime CLI commands (read/write/search/filter/locale/db), TUI, and documentation.
+Crate scaffolding and generators were completed in Phase 2. Phase 7A builds
+the runtime CLI commands (read/write/search/filter/locale/db), a basic functional TUI,
+and documentation. **Advanced TUI features are deferred to Phase 7B (v9.5).**
 
 | # | Task | Description |
 |---|------|-------------|
@@ -2703,12 +2939,10 @@ the runtime CLI commands (read/write/search/filter/locale/db), TUI, and document
 | 7.5 | Implement `novanet search --hybrid` | Hybrid vector + graph search (graph traversal + vector similarity) |
 | 7.6 | Implement `novanet filter build` | JSON filter spec → Cypher string (stdin → stdout for Studio subprocess) |
 | 7.7 | Implement `novanet doc generate/validate` | Generate Mermaid views, validate doc sync |
-| **TUI** | | |
-| 7.8a | TUI scaffold | App state machine (`Loading`/`Ready` variants), basic layout (tree + detail + status bar), mode toggle (1/2/3/4), async channel bridge (`runtime.rs`) |
+| **Basic TUI (v9.0 scope)** | | |
+| 7.8a | TUI scaffold | App state machine (`Loading`/`Ready` variants), basic layout (tree + detail + status bar), mode toggle (1/2/3/4), async channel bridge (`runtime.rs`), dirty-flag render loop |
 | 7.8b | TUI taxonomy tree | Tree widget with Realm > Layer > Kind hierarchy, collapse/expand, arrow key navigation |
 | 7.8c | TUI async + filters | Async Neo4j queries via mpsc channel bridge, loading states, facet filter popup (`f` key) |
-| 7.8d | TUI search + detail | Nucleo fuzzy search (`search.rs`, `/` key), Kind detail pane, edge explorer (`e` key) |
-| 7.8e | TUI CRUD dialogs | Input forms for node create/edit/delete (`dialogs.rs`, `n`/`d` keys), relation CRUD (`r` key), confirmation prompts, Cypher preview (`c` key) |
 | **Documentation** | | |
 | 7.9 | Update Claude skills | `novanet-architecture`, `novanet-sync` — v9 terminology |
 | 7.10 | Update Claude commands | `novanet-arch`, `novanet-sync` — v9 references |
@@ -2716,9 +2950,1419 @@ the runtime CLI commands (read/write/search/filter/locale/db), TUI, and document
 | 7.12 | Update docs | NOVANET-PITCH, plan docs, _index.yaml, README |
 | 7.13 | Update turbo generators | Scaffold templates with v9 fields |
 
-**Parallelization**: Runtime CLI commands (7.1–7.7) are largely independent — use `spn-powers:dispatching-parallel-agents`. TUI tasks (7.8a–7.8e) are sequential.
+**Parallelization**: Runtime CLI commands (7.1–7.7) are largely independent — use `spn-powers:dispatching-parallel-agents`. TUI tasks (7.8a–7.8c) are sequential.
 
-**Gate**: Ralph Wiggum #7 — all `novanet` subcommands work (`data/meta/query/node/schema/db/locale/filter/search/doc`), unit tests pass, `novanet tui` launches with taxonomy tree + async queries, all docs reference v9, no stale v8 terminology anywhere
+**Gate**: Ralph Wiggum #7A — all `novanet` subcommands work (`data/meta/query/node/schema/db/locale/filter/search/doc`), unit tests pass, `novanet tui` launches with taxonomy tree + async queries, all docs reference v9, no stale v8 terminology anywhere
+
+#### Phase 7B: Advanced TUI — SuperNovae Galaxy (v9.5, deferred)
+
+> **Scope**: All advanced TUI features below are a separate project (v9.5).
+> They depend on Phase 7A's basic TUI scaffold being stable.
+> Add crates `ratatui-macros`, `tui-tree-widget`, `directories` when starting 7B.
+
+| # | Task | Description |
+|---|------|-------------|
+| 7.8d | TUI search + detail | Nucleo fuzzy search (`search.rs`, `/` key), Kind detail pane, edge explorer (`e` key) |
+| 7.8e | TUI CRUD dialogs | Input forms for node create/edit/delete (`dialogs.rs`, `n`/`d` keys), relation CRUD (`r` key), confirmation prompts, Cypher preview (`c` key) |
+| 7.8f | TUI visual theme | SuperNovae Galaxy theme: deep space palette, matrix rain canvas, sparklines, gauges, BigText header, animated transitions (see **TUI Visual Design** below) |
+| 7.8g | TUI dashboard mode | Mission control dashboard with live Neo4j stats: node/edge counts per Realm, sparkline history, gauge health indicators, edge traffic heatmap |
+| 7.8h | TUI animations | Boot sequence (matrix rain → logo fade-in → dashboard), typing effects on status bar, pulsing cursor on active panel, starfield background on idle |
+| 7.8i | TUI ASCII logo & branding | Saturn-graph animated logo, SuperNovae Studio + NovaNet branding, BigText variants, compact/full/animated modes, boot integration (see **TUI Logo & Branding** below) |
+| 7.8j | TUI onboarding flow | First-run detection (`~/.novanet/init`), welcome screen, Neo4j connection wizard, schema discovery, guided 5-step tour, quick-reference card (see **TUI Onboarding** below) |
+| 7.8k | TUI command palette & UX | `:` command palette (fuzzy via nucleo), contextual `?`/`??` help, breadcrumbs, toast notifications, action menus, clipboard yank, bookmarks (see **TUI Enhanced UX** below) |
+| 7.8l | TUI wow effects | Particle burst on CRUD, CRT scanlines, screen shake on delete, glitch transitions, nebula pulse, aurora idle, heatmap glow, data stream, warp speed, constellation lines (see **TUI Wow Effects** below) |
+
+**Parallelization**: 7.8d-7.8e are sequential (search before CRUD). 7.8f-7.8l are largely independent visual features.
+
+**Gate**: Ralph Wiggum #7B — all advanced TUI features work, boot animation completes, galaxy theme renders on 80x24+, no regressions on 7A features
+
+---
+
+### TUI Visual Design: SuperNovae Galaxy Theme
+
+The `novanet tui` is NOT a boring data viewer. It's a **mission control cockpit** for
+the NovaNet context graph — inspired by NASA flight control screens, 90s terminal
+aesthetics (Hackers, War Games, Ghost in the Shell), and the Matrix digital rain.
+Every pixel counts. Real data, real animations, zero placeholder energy.
+
+#### Color Palette: Deep Space
+
+All colors use true RGB (`Color::Rgb`). The palette evokes a dark nebula with
+electric accents — purple/blue dominant, cyan highlights, supernova bursts of color.
+
+```
+BACKGROUND LAYER (deep space)
+  bg_void:        Rgb(8, 10, 18)      // #080a12  almost-black deep blue
+  bg_panel:       Rgb(13, 17, 30)     // #0d111e  panel background
+  bg_active:      Rgb(20, 25, 45)     // #14192d  active panel highlight
+  bg_hover:       Rgb(30, 35, 60)     // #1e233c  hover state
+
+ACCENT LAYER (nebula glow)
+  nebula_purple:  Rgb(139, 92, 246)   // #8b5cf6  primary purple
+  nebula_violet:  Rgb(124, 58, 237)   // #7c3aed  deep violet
+  nebula_indigo:  Rgb(99, 102, 241)   // #6366f1  indigo accent
+  nebula_blue:    Rgb(59, 130, 246)   // #3b82f6  electric blue
+
+SIGNAL LAYER (data highlights)
+  cyber_cyan:     Rgb(34, 211, 238)   // #22d3ee  primary data color
+  cyber_teal:     Rgb(20, 184, 166)   // #14b8a6  secondary data
+  matrix_green:   Rgb(34, 197, 94)    // #22c55a  matrix rain / success
+  plasma_pink:    Rgb(236, 72, 153)   // #ec4899  hot data / alerts
+  solar_amber:    Rgb(245, 158, 11)   // #f59e0b  warnings / warm accents
+  nova_white:     Rgb(226, 232, 240)  // #e2e8f0  primary text
+  star_dim:       Rgb(100, 116, 139)  // #64748b  secondary text
+
+REALM COLORS (spatial zones in taxonomy tree)
+  realm_global:   Rgb(42, 161, 152)   // #2aa198  solarized cyan
+  realm_project:  Rgb(108, 113, 196)  // #6c71c4  solarized violet
+  realm_shared:   Rgb(203, 75, 22)    // #cb4b16  solarized orange
+
+TRAIT BORDERS (locale behavior encoding)
+  trait_invariant:  solid line,  cyber_cyan
+  trait_localized:  dashed line, matrix_green
+  trait_knowledge:  double line, nebula_purple
+  trait_derived:    dotted line, star_dim
+  trait_job:        thin line,   solar_amber
+```
+
+#### Typography
+
+```
+HEADER      tui-big-text (PixelSize::Quadrant), nebula_purple, BOLD
+PANEL TITLE Block::bordered().title(), cyber_cyan, BOLD
+BODY TEXT   nova_white, normal
+DIM TEXT    star_dim, DIM modifier
+HIGHLIGHT   bg_active background + cyber_cyan foreground + BOLD
+SELECTED    plasma_pink background + bg_void foreground + BOLD
+SEARCH HIT  solar_amber + UNDERLINED
+```
+
+#### Layout: Mission Control
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  ███╗   ██╗ ██████╗ ██╗   ██╗ █████╗ ███╗   ██╗███████╗████████╗         │
+│  ████╗  ██║██╔═══██╗██║   ██║██╔══██╗████╗  ██║██╔════╝╚══██╔══╝         │
+│  ██╔██╗ ██║██║   ██║██║   ██║███████║██╔██╗ ██║█████╗     ██║            │
+│  ██║╚██╗██║██║   ██║╚██╗ ██╔╝██╔══██║██║╚██╗██║██╔══╝     ██║            │
+│  ██║ ╚████║╚██████╔╝ ╚████╔╝ ██║  ██║██║ ╚████║███████╗   ██║            │
+│  ╚═╝  ╚═══╝ ╚═════╝   ╚═══╝  ╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝   ╚═╝            │
+│                                                        v9.0.0 | mission ctrl │
+├──────────────────────┬──────────────────────────────────────────────────────┤
+│  TAXONOMY            │  KIND DETAIL                                         │
+│  ─────────           │  ──────────                                          │
+│  🌍 global           │  ┌─ Page ──────────────────────────────────────────┐ │
+│  ├── ⚙️ config        │  │ Realm:    project         Layer: structure      │ │
+│  │   └── Locale      │  │ Trait:    invariant        Edges: 12 in / 8 out │ │
+│  ├── 📚 knowledge     │  │ Budget:   2048 tokens     Hint: "Core page..." │ │
+│  │   ├── Constraint  │  ├────────────────────────────────────────────────┤ │
+│  │   ├── Expression  │  │ EDGES IN        │ EDGES OUT                    │ │
+│  │   ├── Locale...   │  │ ──────────      │ ──────────                   │ │
+│  │   └── ...         │  │ HAS_PAGE (own)  │ HAS_BLOCK (own)             │ │
+│  📦 project           │  │ LINKS_TO (sem)  │ HAS_OUTPUT (l10n)           │ │
+│  ├── 🏗️ foundation    │  │ SUBTOPIC (own)  │ HAS_PROMPT (gen)            │ │
+│  │   ├── Project     │  │                 │ USES_CONCEPT (sem)          │ │
+│  │   ├── BrandId     │  │                 │ OF_TYPE (own)               │ │
+│  │   └── ProjectL10n │  └────────────────────────────────────────────────┘ │
+│  ├── 📐 structure     │                                                     │
+│  │   ├── ► Page      │  CYPHER PREVIEW                                     │
+│  │   └── Block       │  ──────────────                                     │
+│  ├── 💡 semantic      │  MATCH (k:Kind {key: 'Page'})                       │
+│  │   ├── Concept     │  OPTIONAL MATCH (k)-[:IN_REALM]->(r:Realm)          │
+│  │   └── ConceptL10n │  OPTIONAL MATCH (k)-[:IN_LAYER]->(l:Layer)          │
+│  └── ...             │  RETURN k, r, l                                     │
+│  🎯 shared            │                                                     │
+│  └── ...             │                                                     │
+├──────────────────────┴──────────────────────────────────────────────────────┤
+│  DASHBOARD                                                                  │
+│  ─────────                                                                  │
+│  Nodes by Realm          Edges by Family          Schema Health             │
+│  ▁▂▃▅▇█▇▅▃▂▁ global:14  ████░░░ own:23 (34%)     ████████░░ 82%           │
+│  ▂▃▅▇█▇▅▃▂▁▂ project:16 █████░░ sem:18 (27%)     ▁▂▃▅▇█▇▅▃ history       │
+│  ▁▁▂▃▅▃▂▁▁▁▁ shared:5   ███░░░░ l10n:14 (21%)                             │
+│                          ██░░░░░ gen:8 (12%)      Jobs: 2 running          │
+│                          █░░░░░░ mine:4 (6%)      Last seed: 3m ago        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ [1]Data [2]Meta [3]Overlay [4]Query │ /search │ f:filter │ ?:help │ q:quit │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+#### Widgets Inventory
+
+| Widget | Crate | Use |
+|--------|-------|-----|
+| `BigText` | `tui-big-text` | NOVANET logo header (PixelSize::Quadrant) |
+| `Sparkline` | ratatui built-in | Node counts over time, schema health history |
+| `Gauge` / `LineGauge` | ratatui built-in | Schema health %, generation progress |
+| `BarChart` | ratatui built-in | Edge family distribution |
+| `Chart` (Line) | ratatui built-in | Query latency trends |
+| `Table` | ratatui built-in | Kind detail, edge lists |
+| `Tree` | custom widget | Realm > Layer > Kind hierarchy |
+| `Tabs` | ratatui built-in | Navigation mode selector |
+| `Canvas` | ratatui built-in | Matrix rain, starfield, connection graph |
+| `Popup` | `tui-popup` | Filter panel, CRUD dialogs, help modal |
+| `ScrollView` | `tui-scrollview` | Long Cypher preview, edge lists |
+| `Paragraph` | ratatui built-in | Detail panes, status messages |
+| Custom `StatusBar` | Widget trait | Bottom bar with mode/search/hints |
+| Custom `Chip` | Widget trait | Realm/Layer/Trait tag pills |
+| Custom `MatrixRain` | Canvas + Widget | Background animation |
+| Custom `StarField` | Canvas + Widget | Idle screen animation |
+
+#### Custom Widgets
+
+##### Chip (Tag Pill)
+
+Small rounded tag showing Realm/Layer/Trait values with semantic coloring:
+
+```
+ ┌──────────┐  ┌───────────┐  ┌────────────┐
+ │ 🌍 global │  │ 📐 struct  │  │ ● invariant│
+ └──────────┘  └───────────┘  └────────────┘
+  realm_global   Layer color    Trait + dot
+  bg + text      bg + text      border style
+```
+
+Implementation: Custom `Widget` trait. Each chip is a 1-row `Block` with colored
+background, emoji prefix, and text. Chips are composable in horizontal `Layout`.
+
+```rust
+struct Chip {
+    label: String,
+    emoji: String,
+    fg: Color,
+    bg: Color,
+    border: BorderType,  // encodes Trait
+}
+
+impl Widget for Chip {
+    fn render(self, area: Rect, buf: &mut Buffer) {
+        let block = Block::bordered()
+            .border_type(self.border)
+            .border_style(Style::new().fg(self.fg))
+            .style(Style::new().bg(self.bg));
+        let inner = block.inner(area);
+        block.render(area, buf);
+        Line::from(vec![
+            Span::raw(&self.emoji),
+            Span::raw(" "),
+            Span::styled(&self.label, Style::new().fg(self.fg).bold()),
+        ]).render(inner, buf);
+    }
+}
+```
+
+##### MatrixRain
+
+Canvas-based digital rain effect for boot screen and idle state:
+
+```rust
+struct MatrixRain {
+    columns: Vec<RainColumn>,
+    tick: u64,
+}
+
+struct RainColumn {
+    x: f64,
+    drops: Vec<RainDrop>,
+}
+
+struct RainDrop {
+    y: f64,
+    speed: f64,
+    char: char,
+    brightness: u8,  // 255=head, fades to 0
+}
+
+impl Widget for MatrixRain {
+    fn render(self, area: Rect, buf: &mut Buffer) {
+        // Canvas with Braille markers for high-res rain
+        let canvas = Canvas::default()
+            .x_bounds([0.0, area.width as f64])
+            .y_bounds([0.0, area.height as f64])
+            .paint(|ctx| {
+                for col in &self.columns {
+                    for drop in &col.drops {
+                        let green = (drop.brightness as f64 * 0.77) as u8;
+                        ctx.print(
+                            col.x, drop.y,
+                            Line::styled(
+                                drop.char.to_string(),
+                                Style::new().fg(Color::Rgb(0, green, 0))
+                            )
+                        );
+                    }
+                }
+            });
+        canvas.render(area, buf);
+    }
+}
+```
+
+Characters: mix of katakana (U+30A0–U+30FF), latin, digits, NovaNet-specific
+glyphs (`⊕ ⊗ ◈ ◉ ▣ ⬡`). Head drops are `matrix_green` bright, trail fades
+through dim green to `bg_void`. Speed varies per column (0.5–2.0 cells/frame).
+
+##### StarField
+
+Idle animation showing drifting stars with parallax depth:
+
+```rust
+struct StarField {
+    stars: Vec<Star>,
+    tick: u64,
+}
+
+struct Star {
+    x: f64, y: f64,
+    depth: u8,  // 1=near (bright, fast), 3=far (dim, slow)
+}
+```
+
+Near stars: `nova_white` + BOLD, move 2px/frame.
+Mid stars: `star_dim`, move 1px/frame.
+Far stars: `Rgb(40, 50, 70)`, move 0.5px/frame.
+
+#### Animations
+
+##### Boot Sequence (2-3 seconds)
+
+```
+Frame 0-30:   Matrix rain fills screen, characters cascade
+Frame 30-45:  Rain slows, center clears in circle
+Frame 45-60:  NOVANET BigText fades in (char by char, purple glow)
+Frame 60-75:  Subtitle types in: "Context Graph Mission Control v9.0"
+Frame 75-90:  Dashboard panels slide in from edges
+Frame 90+:    Normal operation, matrix rain fades to starfield
+```
+
+##### Panel Transitions
+
+- **Panel focus**: Border color transitions from `star_dim` to `cyber_cyan` over
+  5 frames. Active panel border glows (BOLD modifier toggle).
+- **Mode switch**: Current panels fade (DIM), new panels slide in from bottom.
+- **Search activation**: Search bar expands from status bar, background dims.
+- **Data loading**: Gauge widget with animated fill + throbber character cycle
+  (`⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏` braille spinner, `cyber_cyan`).
+
+##### Status Bar Effects
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│ ◉ CONNECTED  bolt://localhost:7687  │  35 Kinds  66 Edges  3 Realms   │
+│ ▂▃▅▇▅▃▂ 4ms │ ⣀⣤⣶⣿⣶⣤⣀ mem: 142MB  │  ⠋ syncing...                    │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+- Connection dot: pulsing green (`●` ↔ `◉` every 30 frames)
+- Latency sparkline: last 20 query times, auto-scales
+- Memory braille block: current heap usage
+- Spinner: braille rotation during async operations
+
+#### Keyboard Map (90s Hacker Feel)
+
+```
+NAVIGATION                       ACTIONS                        MODES
+───────────                      ───────                        ─────
+↑↓  / j k   Tree nav             n   Create node               1  Data mode
+←→  / h l   Panel switch         d   Delete (shake + confirm)  2  Meta mode
+Enter       Select / action menu  e   Edge explorer             3  Overlay mode
+Space       Toggle select         r   Relation CRUD             4  Query mode
+Tab         Next panel            c   Cypher preview
+Backspace   Go up level           u   Undo last action          DISPLAY
+                                                                ───────
+SEARCH & FILTER                  CLIPBOARD                      t  Toggle tree
+───────────────                  ─────────                      s  Toggle stats
+/           Fuzzy search          y   Yank (copy to clip)       b  Toggle borders
+:           Command palette       p   Paste Cypher query        m  Toggle matrix bg
+f           Facet filters         B   Set bookmark              |  Split view
+R           Realm filter          '   Jump to bookmark
+L           Layer filter          x   Export view to file       EFFECTS
+T           Trait filter                                        ───────
+E           Edge filter          SYSTEM                         Ctrl+R  CRT scanlines
+                                 ──────                         Ctrl+M  Mouse toggle
+HELP                             F5   Refresh (warp effect)
+────                             F11  Fullscreen toggle         MOUSE (opt-in)
+?           Quick help (1-line)  q    Quit                      ─────
+??          Full reference card                                 Click   Focus panel
+                                                                Scroll  Scroll list
+                                                                Drag    Resize borders
+                                                                DblClk  Expand/collapse
+```
+
+#### Crate Dependencies (TUI-specific, Phase 7B additions)
+
+These crates extend the v9.0 Cargo.toml (§ Phase 1) for the Phase 7B galaxy-themed TUI.
+`ratatui`, `crossterm`, and `nucleo` are already declared in v9.0; the rest are new additions:
+
+> **ratatui 0.30 upgrade note**: ratatui 0.30.0 (requires Rust 1.86+) introduces
+> breaking changes: `ratatui::init()`/`restore()` replace manual terminal setup,
+> `block::Title` removed (use `Line`), `Marker::Block` renamed to `Bar`,
+> terminal module made private, `Table::new()` requires column widths.
+> Consider upgrading from 0.29 → 0.30 at Phase 7B start (bump rust-version to 1.86).
+> All Phase 7A code patterns remain valid on 0.29.
+
+```toml
+# Cargo.toml additions for Phase 7B TUI
+[dependencies]
+# Already in v9.0 Cargo.toml:
+# ratatui = { version = "0.29", optional = true, features = ["all-widgets"] }
+# crossterm = { version = "0.28", optional = true, features = ["event-stream"] }
+# nucleo = "0.5"
+
+# Phase 7B additions (optional, gated behind `tui` feature)
+tui-big-text = { version = "0.7", optional = true }
+tui-popup = { version = "0.7", optional = true }
+tui-scrollview = { version = "0.6", optional = true }
+rand = "0.8"                 # matrix rain / glitch randomness
+unicode-width = "0.2"        # correct CJK character widths
+dirs = "5"                   # home directory detection (onboarding)
+chrono = "0.4"               # onboarding timestamp
+
+[features]
+tui = [
+    "dep:ratatui", "dep:crossterm",
+    "dep:tui-big-text", "dep:tui-popup", "dep:tui-scrollview",
+]
+```
+
+#### File Structure
+
+```
+tools/novanet/src/tui/
+├── mod.rs                       # TUI entry point + app state machine
+├── theme.rs                     # SuperNovae Galaxy palette + styles
+├── layout.rs                    # Mission control layout builder
+├── runtime.rs                   # Async channel bridge (mpsc)
+├── widgets/
+│   ├── mod.rs
+│   ├── tree.rs                  # Taxonomy tree (Realm > Layer > Kind)
+│   ├── detail.rs                # Kind detail pane
+│   ├── chip.rs                  # Realm/Layer/Trait tag pills
+│   ├── dashboard.rs             # Stats dashboard (sparklines, gauges)
+│   ├── matrix_rain.rs           # Matrix digital rain effect
+│   ├── starfield.rs             # Parallax star background
+│   ├── status_bar.rs            # Bottom status with sparkline + spinner
+│   ├── search.rs                # Nucleo fuzzy search overlay
+│   ├── cypher_preview.rs        # Syntax-highlighted Cypher viewer
+│   ├── breadcrumb.rs            # Navigation breadcrumb bar
+│   ├── toast.rs                 # Auto-dismiss notification toasts
+│   └── constellation.rs         # Inline edge lines on tree hover
+├── dialogs/
+│   ├── mod.rs
+│   ├── node_form.rs             # Create/edit node dialog
+│   ├── relation_form.rs         # Create/edit relation dialog
+│   ├── confirm.rs               # Delete confirmation
+│   ├── filter_panel.rs          # Facet filter checkboxes
+│   └── help.rs                  # Quick reference card modal
+├── animations/
+│   ├── mod.rs
+│   ├── boot.rs                  # Boot sequence orchestrator
+│   ├── transitions.rs           # Panel focus/mode transitions
+│   ├── ticker.rs                # Frame-based animation timer
+│   └── effects.rs               # Particle burst, screen shake, glitch
+├── onboarding/
+│   ├── mod.rs
+│   ├── welcome.rs               # Welcome screen + schema discovery
+│   ├── connection.rs            # Neo4j connection wizard
+│   ├── tour.rs                  # 5-step guided panel tour
+│   └── quick_ref.rs             # Keyboard reference card
+├── branding/
+│   ├── mod.rs
+│   ├── logo.rs                  # Saturn-graph ASCII logo widget
+│   ├── bigtext.rs               # BigText NOVANET header
+│   └── splash.rs                # Full splash screen compositor
+└── ux/
+    ├── mod.rs
+    ├── command_palette.rs       # Fuzzy-searchable command palette
+    ├── action_menu.rs           # Context-sensitive action menus
+    ├── clipboard.rs             # Yank/paste Cypher queries
+    ├── bookmarks.rs             # Kind bookmarks + jump
+    └── session.rs               # History, undo, export
+```
+
+---
+
+#### TUI Logo & Branding
+
+##### The NovaNet Logo: Saturn Context Graph
+
+The logo represents NovaNet's core identity: a **context graph** visualized as a
+Saturn-like planet with orbiting, connected nodes. The central planet contains
+"NOVANET", the horizontal ring represents edge connections, and 8 orbiting nodes
+represent the graph's layers — all connected by visible edges.
+
+**Design concept**:
+- Central body = NovaNet core (rounded box, `nebula_purple` border)
+- Horizontal ring = edge connections (`═══╳` double lines, `cyber_cyan`)
+- 8 orbit nodes = graph layers (`◉` symbols, realm-colored)
+- Edges between nodes = graph relationships (`──` `╱` `╲` lines)
+- Stars = deep space atmosphere (`· ✦ ★`, `star_dim`)
+- Branding = "SuperNovae Studio" below
+
+##### Full Logo (boot splash, help screen, about dialog)
+
+```
+                        .    ✦    .
+                 ✦                       ✦
+             ·        ◉ ─ ─ ─ ◉        ·
+           ◉─────── ╱           ╲ ───────◉
+          ╱       ╱  ╭─────────╮  ╲       ╲
+    ◉────╱──────╱    │ N O V A │    ╲──────╲────◉
+  ════════════════╳  │  N E T  │  ╳════════════════
+  ════════════════╳  │    ◉    │  ╳════════════════
+    ◉────╲──────╲    │         │    ╱──────╱────◉
+          ╲       ╲  ╰─────────╯  ╱       ╱
+           ◉─────── ╲           ╱ ───────◉
+             ·        ◉ ─ ─ ─ ◉        ·
+                 ✦                       ✦
+                        .    ✦    .
+
+                 SuperNovae Studio
+              context graph engine v9.0
+```
+
+Colors per element:
+```
+Stars (· ✦)     : star_dim Rgb(100, 116, 139)
+Orbit nodes (◉) : top pair realm_global, left/right realm_project, bottom realm_shared
+Edges (── ╱ ╲)  : nebula_indigo Rgb(99, 102, 241), DIM
+Ring (═══╳)     : cyber_cyan Rgb(34, 211, 238), BOLD
+Planet border    : nebula_purple Rgb(139, 92, 246)
+Planet text      : nova_white Rgb(226, 232, 240), BOLD
+Center dot (◉)  : plasma_pink Rgb(236, 72, 153), pulsing animation
+Branding line 1  : star_dim → nova_white (typewriter)
+Branding line 2  : star_dim, DIM
+```
+
+##### Compact Logo (status bar corner, 3 lines)
+
+```
+◉─╮╭──╮╭─◉
+═══╳│◉N│╳═══
+◉─╯╰──╯╰─◉
+```
+
+Used in status bar left corner when dashboard is minimized. Colors: `cyber_cyan`
+ring, `nebula_purple` planet, `plasma_pink` center dot.
+
+##### Inline Logo (tab bar, window title, exports)
+
+```
+◉═╳◉╳═◉ NOVANET
+```
+
+Single line. `cyber_cyan` symbols, `nova_white` text, BOLD.
+
+##### Boot Animation: Logo Reveal (3 seconds, 90 frames at 30fps)
+
+The logo builds itself piece by piece — each element materializes as if emerging
+from deep space. 6 stages:
+
+```
+STAGE 1: STARFIELD (frames 0-15)
+─────────────────────────────────
+Stars blink into existence across the full terminal.
+Each starts as star_dim, some pulse to nova_white.
+
+        ·              ✦
+   ✦          ·                ·
+         ·        ✦       ·
+    ·         ·               ✦
+              ✦        ·   ·     ✦
+              ·
+
+STAGE 2: NODES MATERIALIZE (frames 15-30)
+──────────────────────────────────────────
+8 orbit nodes (◉) appear one by one with matrix_green flash.
+Each starts bright green, settles to its realm color.
+Order: top-left → clockwise.
+
+                        ·    ✦    ·
+                 ✦                       ✦
+             ·        ◉           ◉        ·
+           ◉                                 ◉
+
+    ◉                                             ◉
+
+           ◉                                 ◉
+             ·        ◉           ◉        ·
+
+STAGE 3: EDGES CONNECT (frames 30-45)
+──────────────────────────────────────
+Lines draw from node to node — each edge animates source → target.
+Color: nebula_indigo, starts bright then settles to normal.
+
+             ·        ◉ ─ ─ ─ ◉        ·
+           ◉─────── ╱           ╲ ───────◉
+          ╱       ╱                ╲       ╲
+    ◉────╱──────╱                    ╲──────╲────◉
+
+    ◉────╲──────╲                    ╱──────╱────◉
+          ╲       ╲                ╱       ╱
+           ◉─────── ╲           ╱ ───────◉
+             ·        ◉ ─ ─ ─ ◉        ·
+
+STAGE 4: PLANET FORMS (frames 45-55)
+─────────────────────────────────────
+Central box draws itself: top-left corner → clockwise border → fill.
+Border: nebula_purple. Interior: bg_panel.
+
+                     ╭─────────╮
+                     │         │
+                     │    ◉    │
+                     │         │
+                     ╰─────────╯
+
+STAGE 5: RING SWEEPS (frames 55-70)
+────────────────────────────────────
+═══╳ characters race outward from center in both directions.
+Color: cyber_cyan, bright head with dimming trail.
+
+              ════════╳         ╳════════
+              ════════╳         ╳════════
+
+STAGE 6: TEXT + BRANDING (frames 70-90)
+────────────────────────────────────────
+"N O V A" types char by char, line 1 (nova_white, BOLD).
+"N E T" types char by char, line 2 (nova_white, BOLD).
+Center ◉ starts pulsing (plasma_pink).
+"SuperNovae Studio" typewriter below (star_dim).
+"context graph engine v9.0" fades in (star_dim, DIM).
+
+    → Final state = full logo (as shown above)
+
+TRANSITION TO DASHBOARD (frames 90+)
+─────────────────────────────────────
+Logo shrinks upward into BigText header position.
+Dashboard panels slide in from left/right/bottom.
+Matrix rain residue clears with a downward sweep.
+```
+
+##### Branding Guidelines
+
+```
+PRODUCT NAME     : NovaNet (PascalCase, one word)
+                   "NOVANET" in all-caps for headers/logos
+                   "novanet" lowercase for CLI binary
+
+COMPANY          : SuperNovae Studio (two words, PascalCase each)
+                   Never: "Supernovae", "Super Novae", "SuperNova"
+                   Never: "SuperNovae Studio™" (no TM symbol)
+
+TAGLINE          : "context graph engine"
+
+VERSION FORMAT   : v9.0.0 (semver with v prefix)
+
+COMBINED MARKS   : "NovaNet v9 — context graph engine"
+                   "NovaNet by SuperNovae Studio"
+                   "NOVANET | SuperNovae Studio"
+
+CLI BINARY       : novanet (lowercase, no dash)
+                   Usage: novanet [command] [flags]
+
+CONFIG DIR       : ~/.novanet/
+```
+
+##### Rust Implementation: Logo Widget
+
+```rust
+/// Logo display modes
+enum LogoMode {
+    Full,                // Full Saturn graph (16 lines, boot splash)
+    Compact,             // 3-line mini (status bar corner)
+    Inline,              // 1-line (tab headers)
+    Animated(LogoStage), // Boot animation
+}
+
+/// Boot animation stages
+enum LogoStage {
+    Stars { tick: u16 },
+    Nodes { revealed: u8, tick: u16 },
+    Edges { progress: f32 },
+    Planet { draw_pct: f32 },
+    Ring { sweep_pct: f32 },
+    Text { chars_shown: u8 },
+    Complete,
+}
+
+struct Logo {
+    mode: LogoMode,
+    frame: u64,
+}
+
+/// Branding constants
+const BRAND_PRODUCT: &str = "NOVANET";
+const BRAND_STUDIO: &str = "SuperNovae Studio";
+const BRAND_TAGLINE: &str = "context graph engine";
+
+impl Logo {
+    fn advance(&mut self) -> bool {
+        self.frame += 1;
+        match &mut self.mode {
+            LogoMode::Animated(stage) => {
+                // Transition between stages based on frame count
+                let next = match stage {
+                    LogoStage::Stars { tick } if *tick >= 15 =>
+                        Some(LogoStage::Nodes { revealed: 0, tick: 0 }),
+                    LogoStage::Nodes { revealed, .. } if *revealed >= 8 =>
+                        Some(LogoStage::Edges { progress: 0.0 }),
+                    LogoStage::Edges { progress } if *progress >= 1.0 =>
+                        Some(LogoStage::Planet { draw_pct: 0.0 }),
+                    LogoStage::Planet { draw_pct } if *draw_pct >= 1.0 =>
+                        Some(LogoStage::Ring { sweep_pct: 0.0 }),
+                    LogoStage::Ring { sweep_pct } if *sweep_pct >= 1.0 =>
+                        Some(LogoStage::Text { chars_shown: 0 }),
+                    LogoStage::Text { chars_shown } if *chars_shown as usize
+                        >= BRAND_PRODUCT.len() + BRAND_STUDIO.len() =>
+                        Some(LogoStage::Complete),
+                    LogoStage::Complete => return false, // animation done
+                    _ => None,
+                };
+                if let Some(n) = next { *stage = n; }
+                true // still animating
+            }
+            _ => false,
+        }
+    }
+}
+
+impl Widget for Logo {
+    fn render(self, area: Rect, buf: &mut Buffer) {
+        match self.mode {
+            LogoMode::Full => render_full_logo(area, buf),
+            LogoMode::Compact => render_compact_logo(area, buf),
+            LogoMode::Inline => render_inline_logo(area, buf),
+            LogoMode::Animated(stage) => render_animated_logo(area, buf, stage),
+        }
+    }
+}
+```
+
+---
+
+#### TUI Onboarding Experience
+
+First-time users see a guided welcome flow instead of the raw dashboard.
+Onboarding runs once and stores completion state in `~/.novanet/init`.
+
+##### First-Run Detection
+
+```rust
+fn is_first_run() -> bool {
+    dirs::home_dir()
+        .map(|h| !h.join(".novanet/init").exists())
+        .unwrap_or(true) // No home dir → treat as first run
+}
+
+fn mark_onboarding_complete() -> std::io::Result<()> {
+    let home = dirs::home_dir().ok_or_else(|| {
+        std::io::Error::new(std::io::ErrorKind::NotFound, "no home directory")
+    })?;
+    let path = home.join(".novanet/init");
+    std::fs::create_dir_all(path.parent().expect("path has parent"))?;
+    std::fs::write(&path, chrono::Utc::now().to_rfc3339())
+}
+```
+
+##### Welcome Screen
+
+After boot animation completes, first-run users see the welcome overlay.
+Each status check animates with a braille spinner (⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏) before
+showing result. Failed checks show `✗` in plasma_pink with a troubleshooting hint.
+
+```
+╔═══════════════════════════════════════════════════════════════════════╗
+║                                                                       ║
+║      ◉ ─ ─ ◉          ◉ ─ ─ ◉                                        ║
+║      ═══╳│◉ NOVANET│╳═══                                              ║
+║      ◉ ─ ─ ◉          ◉ ─ ─ ◉                                        ║
+║                                                                       ║
+║      Welcome to NovaNet — context graph engine                        ║
+║      by SuperNovae Studio                                             ║
+║                                                                       ║
+╠═══════════════════════════════════════════════════════════════════════╣
+║                                                                       ║
+║      ◉ Checking Neo4j connection...                                   ║
+║        ├── bolt://localhost:7687 ─────── ● CONNECTED                  ║
+║        ├── Database: neo4j ──────────── ● OK                          ║
+║        └── APOC plugin ─────────────── ● LOADED                      ║
+║                                                                       ║
+║      ◉ Discovering schema...                                          ║
+║        ├── 35 Kinds across 3 Realms                                   ║
+║        ├── 47 EdgeKinds in 5 Families                                 ║
+║        ├── 9 Layers                                                   ║
+║        └── 5 Traits                                                   ║
+║                                                                       ║
+║      ◉ Ready!                                                         ║
+║                                                                       ║
+║      Press [Enter] to start guided tour                               ║
+║      Press [Esc] to skip to dashboard                                 ║
+║      Press [?] for keyboard shortcuts                                 ║
+║                                                                       ║
+╚═══════════════════════════════════════════════════════════════════════╝
+```
+
+Connection failure state:
+```
+║      ◉ Checking Neo4j connection...                                   ║
+║        ├── bolt://localhost:7687 ─────── ✗ REFUSED                    ║
+║        │   └── Hint: run `pnpm infra:up` from monorepo root          ║
+║        └── Retrying in 3s... (⠹)                                     ║
+```
+
+##### Guided Tour (5 steps)
+
+If user presses [Enter], a highlight overlay walks through each panel.
+Each step highlights the target panel (cyber_cyan border glow, rest dimmed to 40%)
+and shows a tooltip popup with explanation + [Next]/[Skip] navigation.
+
+```
+STEP 1/5: TAXONOMY TREE
+────────────────────────
+┌─ HIGHLIGHTED ────────────┐  ╭──────────────────────────────────╮
+│  🌍 global               │  │ This is the taxonomy tree.        │
+│  ├── ⚙ config            │  │ All 35 Kinds organized by         │
+│  │   └── Locale          │  │ Realm > Layer hierarchy.          │
+│  ├── 📚 knowledge        │  │                                   │
+│  │   ├── Constraint      │  │ Navigate: ↑↓ or j/k              │
+│  │   └── ...             │  │ Expand:   → or Enter              │
+│  📦 project              │  │ Collapse: ← or Backspace          │
+│  └── ...                 │  │                                   │
+└──────────────────────────┘  │         [Next →]  [Skip tour]     │
+                              ╰──────────────────────────────────╯
+
+STEP 2/5: KIND DETAIL
+─────────────────────
+Properties, edges in/out, Realm/Layer/Trait chips, token budget.
+"Select any Kind to see its full profile here."
+
+STEP 3/5: CYPHER PREVIEW
+─────────────────────────
+Live Cypher query generated for the currently selected Kind.
+"Press c to copy, or modify the query in Query mode (4)."
+
+STEP 4/5: DASHBOARD
+────────────────────
+Sparklines, gauges, bar charts — live Neo4j stats.
+"Real data, updating every 5 seconds."
+
+STEP 5/5: STATUS BAR & MODES
+─────────────────────────────
+Navigation modes (1-4), search (/), command palette (:), help (?).
+"Press : to open the command palette — it knows every action."
+```
+
+##### Quick Reference Card
+
+At end of tour (or via `?` key → then `?` again for full card):
+
+```
+╔═══════════════════════════════════════════════════════════════════════╗
+║  NOVANET QUICK REFERENCE                                              ║
+╠═══════════════════════════════════════════════════════════════════════╣
+║                                                                       ║
+║  NAVIGATE              │ ACTIONS              │ VIEWS                  ║
+║  ↑↓ jk   Tree nav      │ n   Create node      │ 1  Data mode          ║
+║  ←→ hl   Panel focus   │ d   Delete            │ 2  Meta mode          ║
+║  Enter   Select/menu   │ e   Edge explorer     │ 3  Overlay mode       ║
+║  Tab     Next panel    │ r   Relation CRUD     │ 4  Query mode         ║
+║  Bksp    Go up level   │ c   Cypher preview    │ t  Toggle tree        ║
+║                        │ u   Undo              │ s  Toggle stats       ║
+║  SEARCH & FILTER       │ y   Yank (copy)       │ b  Toggle borders     ║
+║  /  Fuzzy search       │ B   Bookmark          │ m  Toggle matrix      ║
+║  :  Command palette    │ '   Jump bookmark     │ |  Split view         ║
+║  f  Facet filters      │ x   Export view       │                       ║
+║                        │                       │ EFFECTS               ║
+║  HELP                  │ SYSTEM                │ Ctrl+R CRT scanlines  ║
+║  ?  Quick help         │ F5  Refresh           │ Ctrl+M Mouse toggle   ║
+║  ?? Full reference     │ q   Quit              │                       ║
+║                                                                       ║
+║  [Esc] Close                                     SuperNovae Studio     ║
+╚═══════════════════════════════════════════════════════════════════════╝
+```
+
+---
+
+#### TUI Enhanced UX
+
+##### Command Palette (`:` key)
+
+VS Code-style fuzzy-searchable command palette. Triggered by `:` (colon), appears
+as a centered overlay with input field + ranked results. Uses `nucleo` for fuzzy
+matching (already in TUI dependencies).
+
+```
+╭──────────────────────────────────────────────────────╮
+│ : seed█                                              │
+├──────────────────────────────────────────────────────┤
+│   db seed          Run database seed scripts         │
+│ → db seed:reset    Reset database and re-seed        │
+│   search seeds     Search for GEO/SEO seeds          │
+│                                                      │
+│ 3 commands · Tab select · Enter run · Esc close      │
+╰──────────────────────────────────────────────────────╯
+```
+
+Implementation: Commands are registered in a `CommandRegistry` and scored by
+nucleo on every keystroke:
+
+```rust
+struct Command {
+    key: &'static str,           // "db.seed"
+    label: &'static str,         // "db seed"
+    description: &'static str,   // "Run database seed scripts"
+    action: CommandAction,
+    shortcut: Option<&'static str>, // "F5"
+    category: CommandCategory,   // Navigation, Action, View, Filter, System
+}
+
+enum CommandAction {
+    SwitchMode(NavigationMode),
+    OpenDialog(DialogKind),
+    RunQuery(String),
+    TogglePanel(PanelId),
+    ApplyFilter(FacetFilter),
+    SystemCommand(SystemCmd),
+}
+```
+
+Full command list (30+ commands):
+
+| Command | Description | Category |
+|---------|-------------|----------|
+| `data mode` | Switch to Data navigation | Navigation |
+| `meta mode` | Switch to Meta navigation | Navigation |
+| `overlay mode` | Switch to Overlay navigation | Navigation |
+| `query mode` | Switch to Query navigation | Navigation |
+| `create node` | Open node creation dialog | Action |
+| `create relation` | Open relation creation dialog | Action |
+| `delete` | Delete selected item (with confirm) | Action |
+| `edge explorer` | Open edge explorer for selected Kind | Action |
+| `cypher preview` | Show Cypher query for current view | Action |
+| `filter realm [name]` | Filter by Realm | Filter |
+| `filter layer [name]` | Filter by Layer | Filter |
+| `filter trait [name]` | Filter by Trait | Filter |
+| `filter edge [family]` | Filter by EdgeFamily | Filter |
+| `clear filters` | Remove all active filters | Filter |
+| `toggle tree` | Show/hide taxonomy tree | View |
+| `toggle stats` | Show/hide dashboard stats | View |
+| `toggle borders` | Show/hide panel borders | View |
+| `toggle matrix` | Toggle matrix rain background | View |
+| `toggle crt` | Toggle CRT scanline effect | View |
+| `split view` | Toggle split detail pane | View |
+| `db seed` | Run seed scripts | System |
+| `db reset` | Reset and re-seed | System |
+| `db status` | Show connection info | System |
+| `refresh` | Refresh all data (warp effect) | System |
+| `export text` | Export view as text file | System |
+| `export yaml` | Export schema as YAML | System |
+| `export cypher` | Export current Cypher query | System |
+| `bookmarks` | Show bookmark list | System |
+| `history` | Show command history | System |
+| `help` | Show keyboard reference | System |
+| `mouse toggle` | Toggle mouse support | System |
+| `quit` | Exit application | System |
+
+##### Contextual Help (`?` key)
+
+Pressing `?` shows help relevant to the currently focused panel.
+Appears as a 1-line tooltip above the status bar (auto-dismiss after 5s):
+
+```
+Focus = Tree      → "Navigate ↑↓, expand →, collapse ←, search /"
+Focus = Detail    → "Press e edges, c Cypher, n create, y yank YAML"
+Focus = Dashboard → "Sparklines show 24h, gauges = live health"
+Focus = Cypher    → "Edit query, Enter to execute, y to copy"
+Focus = Search    → "Type to filter, Enter select, Esc cancel"
+```
+
+Press `??` (double question mark) for the full Quick Reference Card modal.
+
+##### Breadcrumb Navigation
+
+Top bar shows current navigation path, updating live as user navigates.
+Each segment is color-coded by realm:
+
+```
+┌────────────────────────────────────────────────────────────────────┐
+│ ◉ NOVANET │ Meta Mode │ 📦 project > 📐 structure > Page          │
+└────────────────────────────────────────────────────────────────────┘
+```
+
+- `Backspace` = go up one level
+- Click on any segment = jump to that level (mouse mode)
+- Realm emoji + color matches taxonomy tree
+- Mode indicator uses navigation mode name + number
+
+```rust
+struct Breadcrumb {
+    segments: Vec<BreadcrumbSegment>,
+    mode: NavigationMode,
+}
+
+struct BreadcrumbSegment {
+    label: String,
+    emoji: String,
+    color: Color,      // realm or layer color
+    level: BreadcrumbLevel,
+}
+
+enum BreadcrumbLevel {
+    Root,              // "NOVANET"
+    Mode,              // "Meta Mode"
+    Realm(String),     // "📦 project"
+    Layer(String),     // "📐 structure"
+    Kind(String),      // "Page"
+}
+```
+
+##### Toast Notifications
+
+Auto-dismiss messages at bottom-right corner. Severity levels with colors:
+
+```
+SUCCESS (matrix_green):    ┌────────────────────────────┐
+                           │ ✓ Node created: Block      │
+                           └────────────────────────────┘
+
+WARNING (solar_amber):     ┌────────────────────────────┐
+                           │ ⚠ 3 Kinds have no edges    │
+                           └────────────────────────────┘
+
+ERROR (plasma_pink):       ┌────────────────────────────┐
+                           │ ✗ Neo4j connection lost     │
+                           └────────────────────────────┘
+
+INFO (cyber_cyan):         ┌────────────────────────────┐
+                           │ ◉ Schema refreshed (4ms)   │
+                           └────────────────────────────┘
+```
+
+- Stack up to 3 visible, newest on top
+- Auto-dismiss: 3s for success/info, 5s for warning, persist until Esc for error
+- Animation: slide in from right (5 frames), fade out left (5 frames)
+- Sound: terminal bell on error only (configurable)
+
+```rust
+struct Toast {
+    message: String,
+    severity: Severity,
+    created_at: Instant,
+    ttl: Duration,
+    animation: ToastAnimation,
+}
+
+enum ToastAnimation {
+    SlideIn { frame: u8 },
+    Visible,
+    FadeOut { frame: u8 },
+    Done,
+}
+```
+
+##### Action Menus
+
+Press `Enter` on any item to open a context-sensitive action menu:
+
+```
+On Kind "Page":               On EdgeKind "HAS_BLOCK":
+┌───────────────────┐         ┌───────────────────────┐
+│ ◉ View detail     │         │ ◉ View source Kind    │
+│ ✎ Edit Kind       │         │ ◉ View target Kind    │
+│ + Create instance  │         │ ✎ Edit EdgeKind      │
+│ 🔗 Edge explorer  │         │ ⌘ Run traversal       │
+│ ⌘ Cypher query    │         │ ⌘ Cypher query        │
+│ 📋 Copy as YAML   │         │ 📋 Copy as YAML       │
+│ 🔖 Bookmark       │         │                       │
+│ ✗ Delete          │         │ ✗ Delete              │
+└───────────────────┘         └───────────────────────┘
+```
+
+Arrow keys navigate, Enter selects, Esc closes. Actions are context-dependent —
+different item types surface different menus. Destructive actions (`✗`) are
+always last and require confirmation dialog.
+
+##### Clipboard & Bookmarks
+
+**Clipboard (`y` key)**: Yanks current selection to system clipboard.
+- On Kind → copies YAML definition
+- On Cypher preview → copies the full query
+- On edge → copies edge pattern `(a:Kind)-[:EDGE]->(b:Kind)`
+- Feedback: toast "Copied to clipboard" + brief flash on source element
+
+**Bookmarks (`B` to set, `'` to jump)**:
+- `B` on any Kind → toggles bookmark (max 10, shown in status bar)
+- `'` → opens bookmark jump list (fuzzy searchable)
+- Bookmarks persist in `~/.novanet/bookmarks.json`
+
+Status bar with bookmarks:
+```
+│ 🔖 Page · Block · Concept · Locale │ 4 bookmarks │
+```
+
+##### Mouse Support (opt-in)
+
+Disabled by default. Toggle with `Ctrl+M` or `:mouse toggle`.
+
+| Mouse Action | Effect |
+|-------------|--------|
+| Left click | Focus panel, select item |
+| Scroll | Scroll list in focused panel |
+| Drag border | Resize panel split ratios |
+| Right click | Open action menu (same as Enter) |
+| Double click | Expand/collapse tree node |
+
+##### Session Management
+
+**Undo (`u` key)**: Undo last CRUD action (1 level deep). Stores previous state
+of created/edited/deleted nodes. Shows confirmation toast.
+
+**History**: Last 50 commands stored in `~/.novanet/history.json`. Accessible via
+`:history` in command palette. Arrow-up in command palette cycles history.
+
+**Export (`x` key)**: Snapshot current view to file.
+- Default: `~/.novanet/exports/novanet-{timestamp}.txt`
+- `:export yaml` → schema dump
+- `:export cypher` → current Cypher query
+- `:export text` → rendered terminal view (stripped of control codes)
+
+---
+
+#### TUI Wow Effects & Animations
+
+Every interaction should feel **alive**. Inspired by 90s sci-fi terminals
+(Hackers, WarGames, Ghost in the Shell), cyberpunk dashboards, and the Matrix
+digital rain — but applied tastefully, never blocking the user.
+
+##### Particle Burst on Actions
+
+When a CRUD action completes, a brief particle burst radiates from the action
+location. Particles are single characters with velocity and fade:
+
+```rust
+struct ParticleBurst {
+    origin: (u16, u16),       // screen coordinates
+    particles: Vec<Particle>,
+    lifetime: u8,             // frames remaining (max 15)
+}
+
+struct Particle {
+    x: f64, y: f64,
+    vx: f64, vy: f64,        // velocity (cells/frame)
+    char: char,               // ✦ · ★ ◉ ⊕
+    color: Color,
+    age: u8,                  // increments each frame, dims with age
+}
+```
+
+| Action | Color | Chars | Pattern |
+|--------|-------|-------|---------|
+| Create | matrix_green | `✦ ◉ + ·` | Expanding ring outward |
+| Delete | plasma_pink | `· ✗ ░ ▒` | Imploding scatter inward |
+| Edit | solar_amber | `✎ ◈ ★ ·` | Gentle shimmer in place |
+| Connect | cyber_cyan | `─ ═ ╳ ◉` | Line traces to target |
+
+Lifetime: 15 frames (~0.5s at 30fps). Particles stay within panel boundaries.
+
+##### CRT Scanline Mode
+
+Toggle-able retro CRT effect that adds horizontal scanlines across the terminal:
+
+```rust
+fn apply_crt_scanlines(buf: &mut Buffer, tick: u64) {
+    for y in 0..buf.area.height {
+        let scanline_intensity = if y % 2 == 0 { 0.85 } else { 1.0 };
+        // Phosphor flicker: subtle brightness variance per frame
+        let flicker = 1.0 - (((tick + y as u64) % 7) as f32 * 0.01);
+        let factor = scanline_intensity * flicker;
+
+        for x in 0..buf.area.width {
+            if let Some(cell) = buf.cell_mut((x, y)) {
+                if let Color::Rgb(r, g, b) = cell.fg() {
+                    cell.set_fg(Color::Rgb(
+                        (r as f32 * factor) as u8,
+                        (g as f32 * factor) as u8,
+                        (b as f32 * factor) as u8,
+                    ));
+                }
+            }
+        }
+    }
+}
+```
+
+Toggle with `Ctrl+R` or `:toggle crt`. Adds subtle phosphor persistence where
+bright text leaves a faint ghost on the next frame. Performance: O(width*height)
+per frame, negligible on modern terminals.
+
+##### Screen Shake on Delete
+
+When a destructive action (delete node/relation) is confirmed, the entire frame
+shifts by 1-2 cells for 3 frames, simulating physical impact:
+
+```rust
+struct ScreenShake {
+    frames_remaining: u8,             // 3
+    offsets: [(i16, i16); 3],         // [(-1, 0), (1, 1), (0, -1)]
+}
+
+fn apply_shake(area: &mut Rect, shake: &ScreenShake) {
+    let idx = (3 - shake.frames_remaining) as usize;
+    let (dx, dy) = shake.offsets[idx];
+    area.x = (area.x as i16 + dx).max(0) as u16;
+    area.y = (area.y as i16 + dy).max(0) as u16;
+}
+```
+
+Duration: 3 frames (~100ms). Makes destructive actions feel weighty and
+deliberate. Combines with particle burst for full delete feedback.
+
+##### Glitch Transition on Mode Switch
+
+When switching navigation modes (1/2/3/4), a brief digital glitch effect
+distorts the outgoing view before the incoming view slides in:
+
+```
+Frame 0 (current):    Normal display
+Frame 1 (glitch):     Random cells replaced with ░▒▓█ blocks
+Frame 2 (peak):       30% of cells corrupted, colors shifted to purple
+Frame 3 (resolving):  New view starts appearing through static
+Frame 4 (clean):      New view fully rendered
+```
+
+```rust
+use rand::Rng;
+
+fn apply_glitch(buf: &mut Buffer, intensity: f32) {
+    let mut rng = rand::thread_rng();
+    let glitch_chars = ['░', '▒', '▓', '█', '╳', '┃', '━', '╋'];
+    for y in 0..buf.area.height {
+        for x in 0..buf.area.width {
+            if rng.gen::<f32>() < intensity {
+                if let Some(cell) = buf.cell_mut((x, y)) {
+                    cell.set_char(glitch_chars[rng.gen_range(0..glitch_chars.len())]);
+                    cell.set_fg(Color::Rgb(
+                        rng.gen_range(80..200),
+                        rng.gen_range(0..60),
+                        rng.gen_range(120..255),
+                    ));
+                }
+            }
+        }
+    }
+}
+```
+
+Intensity curve over 4 frames: `[0.05, 0.30, 0.15, 0.0]`.
+
+##### Nebula Pulse on Panel Focus
+
+When a panel receives focus, its border cycles through the accent palette
+over 8 frames (~0.27s) before settling at the focused color:
+
+```rust
+fn border_pulse_color(frame: u8) -> Color {
+    const PULSE: [Color; 6] = [
+        Color::Rgb(100, 116, 139), // star_dim (unfocused)
+        Color::Rgb(99, 102, 241),  // nebula_indigo
+        Color::Rgb(124, 58, 237),  // nebula_violet
+        Color::Rgb(139, 92, 246),  // nebula_purple
+        Color::Rgb(59, 130, 246),  // nebula_blue
+        Color::Rgb(34, 211, 238),  // cyber_cyan (focused steady)
+    ];
+    PULSE[frame.min(5) as usize]
+}
+```
+
+The border also gains a BOLD modifier at the peak (frame 3) and keeps it
+for the active state. Unfocused panels return to `star_dim` over 3 frames.
+
+##### Aurora Borealis Idle
+
+When the TUI is idle for 30+ seconds, slow aurora bands drift across the
+background — bands of color moving top-to-bottom through `bg_void` cells only:
+
+```rust
+struct Aurora {
+    bands: Vec<AuroraBand>,
+    tick: u64,
+}
+
+struct AuroraBand {
+    y_center: f64,              // vertical position
+    width: f64,                 // band thickness
+    speed: f64,                 // cells per frame (0.05-0.15)
+    hue: AuroraHue,            // color family
+}
+
+enum AuroraHue {
+    Purple,  // nebula_purple → nebula_violet gradient
+    Blue,    // nebula_blue → nebula_indigo gradient
+    Cyan,    // cyber_cyan → cyber_teal gradient
+    Green,   // matrix_green at 20% opacity
+}
+```
+
+Very subtle — only affects background cells (those showing `bg_void`), never
+overwrites text or panel content. Disappears instantly on any keypress.
+3-5 bands visible at a time, each moving at different speeds for parallax.
+
+##### Heatmap Glow on Data
+
+In the dashboard and tree, high-traffic/high-count data glows warmer:
+
+```
+Low activity:    cyber_cyan      Rgb(34, 211, 238)    (cool)
+Medium activity: nebula_blue     Rgb(59, 130, 246)    (warm)
+High activity:   nebula_purple   Rgb(139, 92, 246)    (hot)
+Peak activity:   plasma_pink     Rgb(236, 72, 153)    (critical)
+```
+
+Applied to: sparkline peaks, bar chart bars, gauge fill color, tree node
+labels for Kinds with high edge counts. Updates in real-time as Neo4j stats
+refresh. Thresholds calculated from min/max of visible data range.
+
+##### Typewriter Effect
+
+All text appearing during onboarding, boot, and status messages uses a
+typewriter effect — characters appear one by one:
+
+```rust
+struct Typewriter {
+    full_text: String,
+    chars_visible: usize,
+    delay_ms: u16,           // base delay between chars (30-80ms)
+    variance: f32,           // 0.0-1.0, randomizes timing
+    cursor_char: char,       // '█' while typing, ' ' after done
+    sound: bool,             // terminal bell on each char (off by default)
+}
+
+impl Typewriter {
+    fn tick(&mut self) -> bool {
+        if self.chars_visible < self.full_text.len() {
+            self.chars_visible += 1;
+            true  // still typing
+        } else {
+            false // done
+        }
+    }
+
+    fn visible(&self) -> String {
+        format!(
+            "{}{}",
+            &self.full_text[..self.chars_visible],
+            if self.chars_visible < self.full_text.len() {
+                self.cursor_char.to_string()
+            } else {
+                String::new()
+            }
+        )
+    }
+}
+```
+
+Used for: boot branding text, welcome screen messages, toast notifications,
+status bar hints, mode switch labels.
+
+##### Data Stream Effect
+
+In the Cypher preview panel, incoming query results animate as a data stream —
+characters cascade from noise into the actual result text:
+
+```
+Frame 0:  ▓▒░░ ▓▒░ ▒░░▓ ▓░░▒ ░▒▓▒ ░░▓▒  (all noise)
+Frame 1:  ▓▒░░ MA░ ▒░░▓ (k:░ ░▒nd▒ ░░▓▒  (25% resolved)
+Frame 2:  MATC░ (k:░ ind ░{ke░ ░'Pa▒ e'}░  (60% resolved)
+Frame 3:  MATCH (k:Kind {key: 'Page'})       (100% clean)
+```
+
+Each character independently transitions from a random block character
+(`░▒▓█`) to its final value. Resolution progresses left-to-right with some
+randomness. Color: noise chars are `star_dim`, resolved chars are `matrix_green`
+then settle to `nova_white`.
+
+##### Warp Speed on Refresh
+
+When `F5` (refresh all) is pressed, all sparklines show a "warp speed" effect —
+values stretch into horizontal trails before snapping to new data:
+
+```
+Before refresh:  ▁▂▃▅▇█▇▅▃▂▁            (normal data)
+During warp:     ▁▂▃▅▇████████████▇▅▃▂▁  (trails extend right)
+After refresh:   ▂▃▅▇█▇▅▃▂▁▂            (new data)
+```
+
+Duration: 10 frames. Color shifts from `cyber_cyan` to `nova_white` during
+warp, then back to normal. Gauge widgets fill rapidly to 100% then snap to
+new value.
+
+##### Constellation Lines on Tree Hover
+
+When focusing a Kind in the taxonomy tree, dotted lines connect it to
+related Kinds that are also visible in the tree — showing edges inline:
+
+```
+  📦 project
+  ├── 📐 structure
+  │   ├── Page ··············◌  (HAS_BLOCK →)
+  │   └── Block ←···········╯
+  ├── 💡 semantic
+  │   ├── Concept ···········◌  (USES_CONCEPT →)
+  │   └── ConceptL10n
+  └── 📝 output
+      └── PageL10n ←·········╯  (HAS_OUTPUT →)
+```
+
+Dotted lines (`·`) connect related Kinds within the visible tree.
+Color: `nebula_indigo` with DIM modifier. Lines appear after 300ms focus
+delay and disappear when focus moves. Direction arrows (`→` `←`) show edge
+direction. Max 5 constellation lines visible at once to avoid clutter.
+
+##### Effect Configuration
+
+All effects are configurable via `~/.novanet/config.toml`:
+
+```toml
+[effects]
+crt_scanlines = false        # CRT mode off by default
+particle_bursts = true       # CRUD particle effects
+screen_shake = true          # delete shake
+glitch_transitions = true    # mode switch glitch
+nebula_pulse = true          # focus border animation
+aurora_idle = true           # idle background aurora
+aurora_idle_delay_s = 30     # seconds before aurora starts
+heatmap_glow = true          # data temperature coloring
+typewriter = true            # text typing effect
+data_stream = true           # Cypher result cascade
+warp_speed = true            # refresh sparkline warp
+constellation_lines = true   # tree edge preview
+
+[effects.animation]
+fps = 30                     # target frame rate
+boot_animation = true        # show boot sequence
+boot_skip_key = "Escape"     # key to skip boot
+```
+
+Users who prefer a clean, no-animation experience can disable everything:
+```toml
+[effects]
+crt_scanlines = false
+particle_bursts = false
+screen_shake = false
+glitch_transitions = false
+nebula_pulse = false
+aurora_idle = false
+heatmap_glow = false
+typewriter = false
+data_stream = false
+warp_speed = false
+constellation_lines = false
+
+[effects.animation]
+boot_animation = false
+```
+
+---
 
 #### Phase 8: Final Verification
 
@@ -2732,7 +4376,10 @@ the runtime CLI commands (read/write/search/filter/locale/db), TUI, and document
 | 8.6 | Code review | `spn-powers:requesting-code-review` — full implementation review |
 | 8.7 | PR creation | `spn-powers:finishing-a-development-branch` — merge to main |
 
-**Gate**: All tests pass, all audits clean, PR approved
+**Ralph Wiggum #8**: All tests pass, all audits clean, PR approved
+
+> **Note**: There is no Phase 9 — v9.0 completes at Phase 8. Phase numbers
+> align with milestone versions: Phases 0-8 = v9.0, Phases 10-12 = v10.0, etc.
 
 ---
 
