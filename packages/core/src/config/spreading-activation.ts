@@ -3,6 +3,11 @@
  *
  * Loads and caches the spreading activation configuration from YAML.
  * Used by GraphTraversalService for task-aware semantic retrieval.
+ *
+ * TODO(v9): DEAD CODE — GraphTraversalService was deleted with services/.
+ * All exports from this file are unused. Keep types (Priority, TaskType,
+ * SpreadingActivationConfig) if needed by Rust binary, otherwise delete
+ * entire file + config/index.ts re-exports during v9 migration.
  */
 
 import { readFileSync } from 'fs';
