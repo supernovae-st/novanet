@@ -9,6 +9,8 @@ Turborepo monorepo for NovaNet - knowledge graph localization orchestrator.
 NovaNet uses Neo4j to orchestrate **native content generation** (NOT translation) across 200+ locales.
 
 **Target Application**: QR Code AI (https://qrcode-ai.com)
+**Current Version**: v8.2.0 (migrating to v9.0.0)
+**Migration Plan**: `docs/plans/2026-02-01-ontology-v9-design.md`
 
 ```
 CRITICAL: Generation, NOT Translation
@@ -16,6 +18,27 @@ CRITICAL: Generation, NOT Translation
 Source -> Translate -> Target        <-- WRONG
 Concept (invariant) -> Generate natively -> ConceptL10n (local)  <-- RIGHT
 ```
+
+---
+
+## v9 Migration Context
+
+v9 refactors the meta-graph from a flat tree (Scope > Subcategory > NodeTypeMeta) to a **self-describing context graph** with faceted classification:
+
+```
+Axis 1 — WHERE?  :Realm     (global / project / shared)
+Axis 2 — WHAT?   :Layer     (9 functional layers)
+Axis 3 — HOW?    :Trait     (invariant / localized / knowledge / derived / job)
+Axis 4 — LINKS?  :EdgeKind  (47 relationship types in 5 families)
+```
+
+**Key renames:** Scope -> Realm, Subcategory -> Layer, NodeTypeMeta -> Kind, DataMode -> NavigationMode
+
+**New concepts:** Trait, EdgeFamily, EdgeKind, OF_KIND instance bridge, :Meta double-label
+
+**Rust binary:** `tools/novanet/` — single crate for CLI + TUI (neo4rs, ratatui, clap)
+
+**Boundary rule:** TypeScript generates code artifacts. Rust executes at runtime.
 
 ---
 
@@ -28,8 +51,10 @@ novanet/
 ├── packages/
 │   ├── core/               # @novanet/core - types, schemas, filters
 │   ├── db/                 # @novanet/db - Neo4j infrastructure
-│   ├── cli/                # @novanet/cli - dev tools
-│   └── schema-tools/       # @novanet/schema-tools - schema validation
+│   ├── cli/                # @novanet/cli - dev tools (deprecated in v9 -> Rust)
+│   └── schema-tools/       # @novanet/schema-tools - TS code generation
+├── tools/
+│   └── novanet/            # Rust binary (CLI + TUI) — v9+
 └── apps/
     └── studio/             # @novanet/studio - web visualization
 ```
@@ -52,10 +77,19 @@ pnpm infra:down            # Stop Neo4j
 pnpm infra:seed            # Seed database
 pnpm infra:reset           # Reset database
 
+# Schema (TypeScript generators)
+pnpm schema:generate       # Regenerate TS + Mermaid from YAML
+pnpm schema:validate       # Validate sync (CI check)
+
+# Rust binary (v9+)
+cargo run -- data kinds     # List all Kinds
+cargo run -- meta realms    # Show Realm hierarchy
+cargo run -- schema validate --strict  # Authoritative validation
+cargo run -- tui            # Interactive TUI explorer
+
 # Turbo filters
 pnpm build --filter=@novanet/core       # Build only core
 pnpm test --filter=@novanet/studio      # Test only studio
-pnpm build --filter=...[HEAD^1]         # Build only changed packages
 ```
 
 ---
@@ -66,8 +100,8 @@ pnpm build --filter=...[HEAD^1]         # Build only changed packages
 |---------|-------------|
 | @novanet/core | Types, schemas, filters, generators |
 | @novanet/db | Neo4j Docker, seeds, migrations |
-| @novanet/cli | Validation and generation CLI tools |
-| @novanet/schema-tools | Schema validation and sync tools |
+| @novanet/cli | Dev tools (deprecated in v9 — replaced by Rust) |
+| @novanet/schema-tools | TS code generation (Mermaid, Layer mapping) |
 | @novanet/studio | Web-based graph visualization |
 
 ---
@@ -77,11 +111,12 @@ pnpm build --filter=...[HEAD^1]         # Build only changed packages
 ```
                     @novanet/core
                     ↑     ↑     ↑
-    @novanet/schema-tools │     @novanet/cli
+    @novanet/schema-tools │     @novanet/cli (deprecated v9)
                           │
                    @novanet/studio
 
 @novanet/db (standalone)
+tools/novanet (Rust, standalone — reads YAML + Neo4j directly)
 ```
 
 ---
@@ -123,6 +158,7 @@ pnpm dev    # → http://localhost:3000
 | **Naming** | `novanet` (packages), `NovaNet` (classes/types) |
 | **Formatting** | 2 spaces, 100 chars, single quotes, semicolons |
 | **Commits** | Conventional Commits |
+| **Rust** | `cargo fmt`, `cargo clippy`, edition 2024 |
 
 ---
 

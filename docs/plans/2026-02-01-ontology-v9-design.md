@@ -1283,6 +1283,512 @@ for Phase 7. The contract ensures feature parity with CLI.
 Tech stack and connection details are defined in the unified Rust binary
 section above (Dependencies, Connection).
 
+### Rust DX Reference (Implementation Patterns)
+
+This section provides exact code patterns, verified against Context7/docs.rs (2026-02),
+for every crate in the dependency table. Implementors should copy-paste these patterns
+rather than inventing from scratch.
+
+#### Cargo.toml (exact)
+
+```toml
+[package]
+name = "novanet"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"  # Minimum supported (edition 2024)
+
+[dependencies]
+# CLI
+clap = { version = "4", features = ["derive", "env"] }
+
+# TUI
+ratatui = "0.29"
+crossterm = { version = "0.28", features = ["event-stream"] }
+
+# Async
+tokio = { version = "1.43", features = ["full"] }
+tokio-util = "0.7"            # CancellationToken for graceful shutdown
+futures = "0.3"               # StreamExt for crossterm EventStream
+
+# Neo4j
+neo4rs = "0.8"                # Pin minor: breaking changes between 0.x
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+serde_yaml = "0.9"
+
+# Output
+tabled = "0.17"
+
+# Search
+nucleo = "0.5"                # Fuzzy search (TUI `/` key)
+
+# Error handling
+thiserror = "2"               # Library-style errors (NovaNetError enum)
+color-eyre = "0.6"            # Rich error reports with context
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+[dev-dependencies]
+assert_cmd = "2"              # CLI integration tests (binary invocation)
+predicates = "3"              # Output assertion matchers
+insta = { version = "1", features = ["yaml"] } # Snapshot testing
+tokio-test = "0.4"            # Async test utilities
+```
+
+#### Error Handling Pattern (thiserror + color-eyre)
+
+`src/error.rs` — structured errors for matching + rich context for display:
+
+```rust
+use thiserror::Error;
+
+#[derive(Error, Debug)]
+pub enum NovaNetError {
+    #[error("Neo4j connection failed: {uri}")]
+    Connection { uri: String, #[source] source: neo4rs::Error },
+
+    #[error("query failed: {query}")]
+    Query { query: String, #[source] source: neo4rs::Error },
+
+    #[error("no Kind found for label '{0}'")]
+    UnknownKind(String),
+
+    #[error("meta-graph integrity: {0}")]
+    MetaIntegrity(String),
+
+    #[error("YAML schema error in {path}")]
+    Schema { path: String, #[source] source: serde_yaml::Error },
+
+    #[error("validation failed: {0}")]
+    Validation(String),
+
+    #[error(transparent)]
+    Io(#[from] std::io::Error),
+}
+
+pub type Result<T> = std::result::Result<T, NovaNetError>;
+```
+
+Application entry uses `color_eyre::install()` in main.rs for rich backtraces:
+
+```rust
+fn main() -> color_eyre::Result<()> {
+    color_eyre::install()?;
+    // ... clap parse, dispatch
+}
+```
+
+#### CLI Structure (clap derive)
+
+`src/main.rs` — thin entry point:
+
+```rust
+use clap::{Parser, Subcommand, ValueEnum};
+
+#[derive(Parser)]
+#[command(name = "novanet", version, about = "NovaNet context graph CLI")]
+struct Cli {
+    /// Neo4j URI
+    #[arg(long, env = "NEO4J_URI", default_value = "bolt://localhost:7687")]
+    uri: String,
+
+    /// Neo4j user
+    #[arg(long, env = "NEO4J_USER", default_value = "neo4j")]
+    user: String,
+
+    /// Neo4j password
+    #[arg(long, env = "NEO4J_PASSWORD", default_value = "novanetpassword")]
+    password: String,
+
+    #[command(subcommand)]
+    command: Commands,
+}
+
+#[derive(Subcommand)]
+enum Commands {
+    /// Mode 1: Data nodes only (WHERE NOT n:Meta)
+    Data {
+        #[arg(long, value_enum, default_value_t = OutputFormat::Table)]
+        format: OutputFormat,
+    },
+    /// Mode 2: Meta-graph only (MATCH (n:Meta))
+    Meta {
+        #[arg(long, value_enum, default_value_t = OutputFormat::Table)]
+        format: OutputFormat,
+    },
+    /// Mode 3: Data + Meta overlay
+    Overlay {
+        #[arg(long, value_enum, default_value_t = OutputFormat::Table)]
+        format: OutputFormat,
+    },
+    /// Mode 4: Facet-driven query
+    Query(QueryArgs),
+    /// CRUD: node operations
+    Node {
+        #[command(subcommand)]
+        action: NodeAction,
+    },
+    /// CRUD: relation operations
+    Relation {
+        #[command(subcommand)]
+        action: RelationAction,
+    },
+    /// Schema validation (YAML ↔ Neo4j)
+    Schema {
+        #[command(subcommand)]
+        action: SchemaAction,
+    },
+    /// Interactive terminal UI
+    Tui,
+}
+
+#[derive(clap::Args)]
+struct QueryArgs {
+    #[arg(long)] realm: Option<String>,
+    #[arg(long)] layer: Option<String>,
+    #[arg(long, name = "trait")] trait_filter: Option<String>,
+    #[arg(long)] edge_family: Option<String>,
+    #[arg(long)] kind: Option<String>,
+    #[arg(long, value_enum, default_value_t = OutputFormat::Table)]
+    format: OutputFormat,
+}
+
+#[derive(ValueEnum, Clone, Copy)]
+enum OutputFormat { Table, Json, Cypher }
+
+#[derive(Subcommand)]
+enum NodeAction { Create { /* ... */ }, Edit { /* ... */ }, Delete { /* ... */ } }
+
+#[derive(Subcommand)]
+enum RelationAction { Create { /* ... */ }, Delete { /* ... */ } }
+
+#[derive(Subcommand)]
+enum SchemaAction {
+    /// Validate YAML matches Neo4j state
+    Validate {
+        #[arg(long)] strict: bool,
+    },
+}
+```
+
+#### Neo4j Connection (neo4rs + Arc)
+
+`src/db.rs` — shared connection pool:
+
+```rust
+use neo4rs::{Graph, query};
+use std::sync::Arc;
+
+#[derive(Clone)]
+pub struct Db {
+    graph: Arc<Graph>,
+}
+
+impl Db {
+    pub async fn connect(uri: &str, user: &str, pass: &str) -> crate::Result<Self> {
+        let graph = Graph::new(uri, user, pass).await
+            .map_err(|e| crate::NovaNetError::Connection {
+                uri: uri.to_string(), source: e,
+            })?;
+        Ok(Self { graph: Arc::new(graph) })
+    }
+
+    /// Execute a read query, return rows
+    pub async fn execute(&self, cypher: &str, params: Vec<(&str, impl Into<neo4rs::BoltType>)>)
+        -> crate::Result<Vec<neo4rs::Row>>
+    {
+        let mut q = query(cypher);
+        for (k, v) in params { q = q.param(k, v); }
+        let mut result = self.graph.execute(q).await
+            .map_err(|e| crate::NovaNetError::Query {
+                query: cypher.to_string(), source: e,
+            })?;
+        let mut rows = Vec::new();
+        while let Some(row) = result.next().await
+            .map_err(|e| crate::NovaNetError::Query {
+                query: cypher.to_string(), source: e,
+            })?
+        {
+            rows.push(row);
+        }
+        Ok(rows)
+    }
+
+    /// Run a write transaction (CRUD)
+    pub async fn write_txn(&self, statements: &[&str]) -> crate::Result<()> {
+        let mut txn = self.graph.start_txn().await
+            .map_err(|e| crate::NovaNetError::Query {
+                query: "START TRANSACTION".to_string(), source: e,
+            })?;
+        txn.run_queries(statements.iter().map(|s| *s)).await
+            .map_err(|e| crate::NovaNetError::Query {
+                query: "TRANSACTION BODY".to_string(), source: e,
+            })?;
+        txn.commit().await
+            .map_err(|e| crate::NovaNetError::Query {
+                query: "COMMIT".to_string(), source: e,
+            })?;
+        Ok(())
+    }
+
+    /// Concurrent query execution (Graph.clone() is cheap — Arc internally)
+    pub fn graph(&self) -> &Graph { &self.graph }
+}
+```
+
+**Key pattern**: `Graph::new()` creates an internal connection pool. Clone `Graph`
+(or `Db`) freely across tasks — it's `Arc`-based internally. Never create multiple
+`Graph` instances for the same database.
+
+#### TUI Async Architecture (ratatui + tokio)
+
+`src/tui/runtime.rs` — the async bridge between sync TUI and async Neo4j:
+
+The pattern uses **three concurrent streams** merged via `tokio::select!`:
+1. **Crossterm events** → keyboard/mouse/resize (via `EventStream`)
+2. **Tick interval** → periodic state refresh
+3. **Render interval** → frame rate control
+
+```rust
+use crossterm::event::{EventStream, KeyEventKind};
+use futures::StreamExt;
+use tokio::sync::mpsc;
+use tokio_util::sync::CancellationToken;
+use std::time::Duration;
+
+/// Events flowing from input/timer → app
+#[derive(Clone, Debug)]
+pub enum Event {
+    Key(crossterm::event::KeyEvent),
+    Mouse(crossterm::event::MouseEvent),
+    Resize(u16, u16),
+    Tick,
+    Render,
+    /// Async query result arrived
+    QueryResult(QueryPayload),
+    Error,
+}
+
+/// Actions flowing from app → async runtime
+#[derive(Clone, Debug)]
+pub enum Action {
+    RunQuery(String),        // Cypher query to execute
+    Navigate(NavigationMode),
+    SetFilter(FacetFilter),
+    Quit,
+}
+
+pub async fn event_loop(
+    event_tx: mpsc::UnboundedSender<Event>,
+    cancel: CancellationToken,
+) {
+    let mut events = EventStream::new();
+    let mut tick = tokio::time::interval(Duration::from_millis(250));
+    let mut render = tokio::time::interval(Duration::from_millis(33)); // ~30fps
+
+    loop {
+        let event = tokio::select! {
+            _ = cancel.cancelled() => break,
+            _ = tick.tick() => Event::Tick,
+            _ = render.tick() => Event::Render,
+            ev = events.next() => match ev {
+                Some(Ok(crossterm::event::Event::Key(k)))
+                    if k.kind == KeyEventKind::Press => Event::Key(k),
+                Some(Ok(crossterm::event::Event::Mouse(m))) => Event::Mouse(m),
+                Some(Ok(crossterm::event::Event::Resize(w, h))) => Event::Resize(w, h),
+                Some(Err(_)) => Event::Error,
+                None => break,
+                _ => continue,
+            },
+        };
+        if event_tx.send(event).is_err() { break; }
+    }
+    cancel.cancel();
+}
+```
+
+Main TUI loop in `src/tui/app.rs`:
+
+```rust
+pub async fn run_tui(db: Db) -> color_eyre::Result<()> {
+    let (event_tx, mut event_rx) = mpsc::unbounded_channel::<Event>();
+    let (action_tx, mut action_rx) = mpsc::unbounded_channel::<Action>();
+    let cancel = CancellationToken::new();
+
+    // Spawn event loop
+    let cancel_clone = cancel.clone();
+    tokio::spawn(async move { event_loop(event_tx, cancel_clone).await });
+
+    // Spawn async worker (Neo4j queries)
+    let db_clone = db.clone();
+    let worker_tx = action_tx.clone(); // for sending results back
+    tokio::spawn(async move {
+        while let Some(action) = action_rx.recv().await {
+            match action {
+                Action::RunQuery(cypher) => {
+                    let rows = db_clone.execute(&cypher, vec![]).await;
+                    // Send result back as Event::QueryResult
+                },
+                Action::Quit => break,
+                _ => {}
+            }
+        }
+    });
+
+    // Terminal setup
+    crossterm::terminal::enable_raw_mode()?;
+    let mut terminal = ratatui::Terminal::new(
+        ratatui::backend::CrosstermBackend::new(std::io::stderr())
+    )?;
+
+    let mut app = AppState::new(action_tx);
+
+    // Main render loop
+    while let Some(event) = event_rx.recv().await {
+        match event {
+            Event::Render => terminal.draw(|f| app.render(f))?,
+            Event::Key(k) => app.handle_key(k),
+            Event::QueryResult(payload) => app.apply_result(payload),
+            Event::Tick => app.tick(),
+            _ => {}
+        };
+        if app.should_quit { break; }
+    }
+
+    // Cleanup
+    cancel.cancel();
+    crossterm::terminal::disable_raw_mode()?;
+    crossterm::execute!(std::io::stderr(),
+        crossterm::terminal::LeaveAlternateScreen)?;
+    Ok(())
+}
+```
+
+**Key patterns** (from ratatui docs + Context7):
+- `CancellationToken` for graceful shutdown (not raw booleans)
+- `EventStream` + `tokio::select!` (not `crossterm::event::poll` blocking)
+- `UnboundedSender<Action>` stored in App for spawning async work
+- Render only on `Event::Render`, not every event (30fps cap)
+- `stderr()` for terminal output (stdout reserved for CLI piping)
+
+#### Testing Strategy (Rust)
+
+```
+tests/
+├── cli_integration.rs     # assert_cmd: invoke binary, check output
+├── cypher_builder.rs      # Unit: facet → Cypher string
+├── meta_types.rs          # Unit: Kind/EdgeKind deserialization
+└── neo4j_integration.rs   # Testcontainers: real Neo4j queries
+```
+
+**Unit tests** (no Neo4j needed):
+```rust
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn cypher_builder_single_realm() {
+        let filter = FacetFilter { realm: Some("global".into()), ..Default::default() };
+        let cypher = build_facet_query(&filter);
+        assert_eq!(cypher, "MATCH (:Realm {key: 'global'})<-[:IN_REALM]-(k:Kind) RETURN k");
+    }
+
+    #[test]
+    fn cypher_builder_combo() {
+        let filter = FacetFilter {
+            realm: Some("project".into()),
+            trait_filter: Some("localized".into()),
+            ..Default::default()
+        };
+        let cypher = build_facet_query(&filter);
+        insta::assert_snapshot!(cypher); // Snapshot test for complex queries
+    }
+}
+```
+
+**CLI integration tests** (binary invocation):
+```rust
+use assert_cmd::Command;
+use predicates::prelude::*;
+
+#[test]
+fn data_command_outputs_table() {
+    Command::cargo_bin("novanet").unwrap()
+        .args(["data", "--format", "json"])
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("\"type\""));
+}
+
+#[test]
+fn query_unknown_realm_fails() {
+    Command::cargo_bin("novanet").unwrap()
+        .args(["query", "--realm", "nonexistent"])
+        .assert()
+        .failure()
+        .stderr(predicate::str::contains("UnknownKind"));
+}
+```
+
+**Neo4j integration tests** (testcontainers — Phase 7.2b):
+```rust
+// Requires running Neo4j (CI uses docker-compose or testcontainers)
+#[tokio::test]
+#[ignore] // Run with: cargo test -- --ignored
+async fn meta_graph_has_3_realms() {
+    let db = Db::connect("bolt://localhost:7687", "neo4j", "novanetpassword").await.unwrap();
+    let rows = db.execute("MATCH (r:Realm) RETURN r.key AS key", vec![]).await.unwrap();
+    assert_eq!(rows.len(), 3);
+}
+```
+
+#### Development Workflow
+
+```bash
+# Build + run
+cargo build                    # Debug build (~2s incremental)
+cargo run -- data              # Run CLI
+cargo run -- tui               # Run TUI
+cargo run -- query --realm=project --format=json
+
+# Quality
+cargo clippy -- -D warnings    # Zero warnings policy
+cargo fmt --check              # Formatting check
+cargo test                     # Unit + integration
+cargo test -- --ignored        # Neo4j integration tests
+
+# Watch mode (install: cargo install cargo-watch)
+cargo watch -x 'clippy -- -D warnings' -x test -x 'run -- data'
+
+# Pre-commit checklist
+cargo fmt && cargo clippy -- -D warnings && cargo test
+```
+
+#### TS/Rust Boundary (Architecture Decision)
+
+**Boundary rule**: TypeScript generates code artifacts. Rust executes at runtime.
+
+| Concern | Owner | Rationale |
+|---------|-------|-----------|
+| YAML → TypeScript types | **TS** (schema-tools) | Output IS TypeScript code |
+| YAML → Mermaid diagrams | **TS** (schema-tools) | Build-time documentation |
+| YAML → Cypher seeds | **TS** (schema-tools) | Build-time DDL generation |
+| YAML ↔ Neo4j validation | **Rust** (`novanet schema validate`) | Single authoritative validator |
+| Graph read queries (4 modes) | **Rust** (`novanet data/meta/overlay/query`) | Runtime performance (~5ms) |
+| Graph write (CRUD) | **Rust** (`novanet node/relation`) | Meta-graph validation at write time |
+| Interactive TUI | **Rust** (`novanet tui`) | ~5ms startup, native terminal |
+| Web visualization | **TS** (Studio / Next.js) | Separate web concern, neo4j-driver JS |
+
+Schema validation consolidation: remove validation logic from `schema-tools`.
+`novanet schema validate --strict` becomes the single source of truth for
+YAML↔Neo4j consistency. Schema-tools only generates, never validates.
+
 ### Studio Implementation
 
 Studio gains a **navigation panel** with mode toggles and facet filters.

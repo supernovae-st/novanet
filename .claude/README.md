@@ -8,7 +8,7 @@ Claude Code configuration for the NovaNet monorepo.
 
 ```
 ╔═══════════════════════════════════════════════════════════════════════════════════════════════════╗
-║                              NOVANET DX - v8.2.0                                                  ║
+║                              NOVANET DX - v9.0.0                                                  ║
 ╠═══════════════════════════════════════════════════════════════════════════════════════════════════╣
 ║                                                                                                   ║
 ║   COMMANDS (slash commands)                                                                       ║
@@ -25,14 +25,14 @@ Claude Code configuration for the NovaNet monorepo.
 ║   └── /schema:add-relation <REL> → Add new relationship                                           ║
 ║                                                                                                   ║
 ║   SKILLS (automatic context)                                                                      ║
-║   ├── novanet-architecture       → ASCII architecture diagrams                                    ║
-║   ├── novanet-sync               → YAML ↔ TypeScript ↔ Mermaid sync                               ║
+║   ├── novanet-architecture       → ASCII architecture diagrams (v9 meta-graph + Rust)             ║
+║   ├── novanet-sync               → YAML ↔ TypeScript ↔ Mermaid sync (v9 generators)              ║
 ║   ├── codebase-audit             → Parallel codebase health analysis                              ║
 ║   └── token-audit                → Design system token adoption                                   ║
 ║                                                                                                   ║
 ║   AGENTS (specialized subagents)                                                                  ║
-║   ├── neo4j-architect            → Cypher queries, schema design                                  ║
-║   └── code-reviewer              → Code quality, security review                                  ║
+║   ├── neo4j-architect            → Cypher queries, meta-graph design, v9 patterns                 ║
+║   └── code-reviewer              → Code quality, security, TS/Rust review                         ║
 ║                                                                                                   ║
 ╚═══════════════════════════════════════════════════════════════════════════════════════════════════╝
 ```
@@ -71,8 +71,8 @@ apps/studio/.claude/
 │   ├── novanet.md               ← /novanet (session start)
 │   └── novanet-bye.md           ← /novanet-bye (session end)
 ├── rules/
-│   ├── novanet-terminology.md   ← Domain vocabulary
-│   └── novanet-decisions.md     ← Architecture decisions (ADRs)
+│   ├── novanet-terminology.md   ← Domain vocabulary (v9 meta-graph)
+│   └── novanet-decisions.md     ← Architecture decisions (ADR-001 to ADR-014)
 └── settings.json
 
 packages/core/.claude/
@@ -91,19 +91,22 @@ Display NovaNet architecture in ASCII format.
 | Argument | Description |
 |----------|-------------|
 | `source`, `yaml` | YAML source of truth structure |
+| `meta`, `facets` | Meta-Graph (v9 faceted classification) |
 | `pipeline`, `sync` | Source of Truth sync pipeline |
 | `locale`, `knowledge` | Locale Knowledge node structure (14 types) |
 | `infra`, `neo4j` | Infrastructure (Docker, seeds, migrations) |
-| `studio` | Studio web app (API routes, stores) |
-| `packages`, `deps` | Packages dependency graph |
+| `studio` | Studio web app (API routes, stores, NavigationMode) |
+| `packages`, `deps` | Packages dependency graph (includes Rust) |
 | `flow`, `generation` | LLM generation pipeline |
+| `rust`, `cli` | Rust binary architecture (`tools/novanet/`) |
 | _(empty)_ | Complete architecture |
 
 **Examples:**
 ```bash
 /novanet-arch              # Full architecture
+/novanet-arch meta         # v9 faceted classification
 /novanet-arch pipeline     # How YAML propagates to Neo4j
-/novanet-arch locale       # Locale Knowledge structure
+/novanet-arch rust         # Rust binary structure
 ```
 
 ---
@@ -126,8 +129,9 @@ Validate or regenerate TypeScript/Mermaid from YAML sources.
 
 **Underlying commands:**
 ```bash
-pnpm schema:validate       # CI validation
-pnpm schema:generate       # Regenerate files
+pnpm schema:validate                   # TS: CI sync validation
+pnpm schema:generate                   # TS: Regenerate files
+cargo run -- schema validate --strict  # Rust: YAML <-> Neo4j check (authoritative)
 ```
 
 ---
@@ -179,8 +183,9 @@ Comprehensive audit of YAML → TypeScript → Neo4j synchronization.
 Commands for editing the NovaNet knowledge graph schema (ontology).
 
 **Source Files:**
-- Node YAMLs: `packages/core/models/nodes/{scope}/{subcategory}/{node-name}.yaml`
+- Node YAMLs: `packages/core/models/nodes/{realm}/{layer}/{node-name}.yaml`
 - Relations: `packages/core/models/relations.yaml`
+- Organizing Principles: `packages/core/models/organizing-principles.yaml`
 - Generated Types: `packages/core/src/types/`
 
 ### `/schema` - Schema Overview
@@ -196,7 +201,7 @@ Master command for schema management.
 
 **Example:**
 ```bash
-/schema status     # Show current schema stats (35 nodes, 47 relations)
+/schema status     # Show current schema stats (35 Kinds, 47 EdgeKinds, 3 Realms, 9 Layers)
 ```
 
 ---
@@ -206,7 +211,7 @@ Master command for schema management.
 Add a new node type using Socratic discovery workflow.
 
 **Workflow:**
-1. **Discovery** - Ask clarifying questions (scope, subcategory, purpose, properties, relations)
+1. **Discovery** - Ask clarifying questions (realm, layer, trait, purpose, properties, relations)
 2. **Validation** - Check for conflicts and nomenclature compliance
 3. **Creation** - Create YAML file, update relations.yaml
 4. **Sync** - Run `pnpm schema:generate` + `pnpm schema:validate`
@@ -255,22 +260,23 @@ Modify an existing node type with impact analysis.
 Add a new relationship type between nodes.
 
 **Workflow:**
-1. **Discovery** - Ask about from/to nodes, cardinality, properties
-2. **Classification** - Determine if semantic or auxiliary
+1. **Discovery** - Ask about from/to Kinds, cardinality, properties, EdgeFamily
+2. **Classification** - Assign to EdgeFamily (ownership/localization/semantic/generation/mining)
 3. **Bidirectionality** - Check if inverse relation needed
-4. **Creation** - Add to relations.yaml, update node YAMLs
+4. **Creation** - Add to relations.yaml with `family` field, update node YAMLs
 5. **Sync** - Validate and seed
 
 **Naming Conventions:**
-| Pattern | Use For | Examples |
-|---------|---------|----------|
-| `HAS_*` | Ownership/containment | HAS_PAGE, HAS_BLOCK, HAS_CONCEPT |
-| `HAS_L10N` | Localized content (human-curated) | Concept→ConceptL10n, Project→ProjectL10n |
-| `HAS_OUTPUT` | Localized content (LLM-generated) | Page→PageL10n, Block→BlockL10n |
-| `*_OF` | Inverse of HAS_* | L10N_OF, BLOCK_OF, OUTPUT_OF |
-| `FOR_*` | Target association | FOR_LOCALE |
-| `USES_*` | Reference/usage | USES_CONCEPT |
-| `TARGETS_*` | Cross-scope targeting | TARGETS_SEO, TARGETS_GEO |
+| Pattern | EdgeFamily | Examples |
+|---------|-----------|----------|
+| `HAS_*` | ownership | HAS_PAGE, HAS_BLOCK, HAS_CONCEPT |
+| `HAS_L10N` | localization | Concept→ConceptL10n, Project→ProjectL10n |
+| `HAS_OUTPUT` | generation | Page→PageL10n, Block→BlockL10n |
+| `*_OF` | ownership (inverse) | L10N_OF, BLOCK_OF, OUTPUT_OF |
+| `FOR_*` | localization | FOR_LOCALE |
+| `USES_*` | semantic | USES_CONCEPT |
+| `SEMANTIC_LINK` | semantic | Concept→Concept |
+| `TARGETS_*` | mining | TARGETS_SEO, TARGETS_GEO |
 
 **Example:**
 ```bash
@@ -283,16 +289,18 @@ Add a new relationship type between nodes.
 
 ### `novanet-architecture`
 
-**Trigger:** Questions about architecture, system overview, codebase structure
+**Trigger:** Questions about architecture, system overview, codebase structure, meta-graph
 
 **Provides:**
 - Full architecture ASCII diagram
+- v9 Meta-Graph (faceted classification with Realm/Layer/Kind/Trait/EdgeFamily)
 - Source of Truth structure
-- Pipeline sync diagram
+- Pipeline sync diagram (4 generators + Rust validation)
 - Locale Knowledge structure
 - Infrastructure details
-- Package dependencies
+- Package dependencies (includes Rust binary)
 - Generation pipeline
+- Rust binary architecture (`tools/novanet/`)
 
 ---
 
@@ -301,10 +309,11 @@ Add a new relationship type between nodes.
 **Trigger:** YAML changes, sync validation, schema questions
 
 **Provides:**
-- Source of Truth documentation
-- Generated artifacts mapping
-- Validation commands
+- Source of Truth documentation (v9 terminology)
+- Generated artifacts mapping (4 generators: Mermaid, Layer, Kind, EdgeSchema)
+- Validation commands (TS sync + Rust authoritative)
 - CI integration details
+- v9 validation section (dual: TS sync check + Rust YAML<->Neo4j)
 - Troubleshooting guide
 
 ---
@@ -357,23 +366,30 @@ Add a new relationship type between nodes.
 
 **Specialization:**
 - Graph schema design for AI context
-- Efficient Cypher queries
+- v9 Meta-Graph navigation (Realm/Layer/Kind/Trait/EdgeFamily)
+- Efficient Cypher queries (data + meta-graph)
 - Performance optimization
 - Spreading activation patterns
 
 **Key patterns:**
 ```cypher
+-- v9: Navigate meta-graph taxonomy
+MATCH (r:Realm {key: $realm})-[:HAS_LAYER]->(l:Layer)-[:HAS_KIND]->(k:Kind)
+RETURN r.key AS realm, l.key AS layer, collect(k.label) AS kinds
+
+-- v9: Full Kind context assembly
+MATCH (k:Kind {label: $kindLabel})
+MATCH (k)-[:IN_REALM]->(r:Realm)
+MATCH (k)-[:IN_LAYER]->(l:Layer)
+MATCH (k)-[:HAS_TRAIT]->(t:Trait)
+RETURN k.label, k.schema_hint, r.key AS realm, l.key AS layer, t.key AS trait
+
 -- Spreading activation
 MATCH (c:Concept {key: $key})-[r:SEMANTIC_LINK*1..2]->(related)
 WHERE ALL(rel IN r WHERE rel.temperature >= 0.3)
 WITH related, reduce(a = 1.0, rel IN r | a * rel.temperature) AS activation
 WHERE activation >= 0.3
 RETURN related.key, activation ORDER BY activation DESC
-
--- Context loading
-MATCH (b:Block {key: $blockKey})
-MATCH (b)-[:USES_CONCEPT]->(c:Concept)-[:HAS_L10N]->(cl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
-RETURN b.instructions, c.key, cl.title
 ```
 
 ---
@@ -383,11 +399,14 @@ RETURN b.instructions, c.key, cl.title
 **Model:** sonnet
 **Tools:** Read, Grep, Glob
 
-**Review focus:**
-1. **Code Quality** - TypeScript best practices, naming, error handling
-2. **Security** - Credentials, injection, XSS
-3. **NovaNet Conventions** - Generation NOT translation, imports
-4. **Testing** - Coverage, edge cases, mocks
+**Review focus (7 areas):**
+1. **Code Quality (TypeScript)** - Best practices, naming, error handling, no `any`
+2. **Code Quality (Rust)** - Ownership, `thiserror`/`color-eyre`, no `.unwrap()`, clippy
+3. **Security** - Credentials, injection, XSS
+4. **NovaNet Conventions** - Generation NOT translation, imports
+5. **v9 Meta-Graph Conventions** - Realm/Layer/Kind terminology, NavigationMode, `:Meta` label
+6. **TS/Rust Boundary Rule** - TS generates, Rust executes
+7. **Testing** - Coverage, edge cases, mocks
 
 **Output format:**
 ```
@@ -411,13 +430,15 @@ Located in `apps/studio/.claude/rules/`:
 
 ### `novanet-terminology.md`
 
-Domain vocabulary reference:
-- Core concepts (Project, Concept, Page, Block, Locale)
-- Node scopes (35 nodes across 3 scopes)
-- Localization patterns
+Domain vocabulary reference (v9.0.0):
+- Core concepts (Project, Concept, Page, Block, Locale, Context Graph)
+- Meta-Graph: 6 meta-node types (Realm, Layer, Kind, Trait, EdgeFamily, EdgeKind)
+- Full Kind Inventory (35 Kinds across 3 Realms)
+- Meta-Graph relations (hierarchy, facets, edge schema, instance bridge)
+- Key data relations (grouped by EdgeFamily)
+- v8 → v9 rename mapping
 - Locale Knowledge structure (14 nodes)
 - Standard properties
-- Key relationships
 - Abbreviations
 
 ### `novanet-decisions.md`
@@ -430,23 +451,35 @@ Architecture Decision Records (ADRs):
 - **ADR-005:** DX-First Component Design
 - **ADR-006:** Type Sharing with novanet-core
 - **ADR-007:** Glassmorphism UI Theme
+- **ADR-008:** Faceted Classification (v9)
+- **ADR-009:** Self-Describing Meta-Graph (v9)
+- **ADR-010:** CLI-First Architecture (v9) — Rust binary
+- **ADR-011:** TS/Rust Boundary Rule (v9)
+- **ADR-012:** NavigationMode (v9) — 4 modes
+- **ADR-013:** OF_KIND Instance Bridge (v9)
+- **ADR-014:** Trait-Based Visual Encoding (v9)
 
 ---
 
-## Key Numbers (v8.2.0)
+## Key Numbers (v9.0.0)
 
 | Metric | Value |
 |--------|-------|
-| Node types | 35 |
-| Relations | 47 |
-| Scopes | 3 (Global, Shared, Project) |
+| Kind (node types) | 35 |
+| EdgeKind (relations) | 47 |
+| Realms | 3 (global, project, shared) |
+| Layers | 9 |
+| Traits | 5 |
+| EdgeFamilies | 5 |
+| Meta-node total | ~105 |
 | Locale Knowledge nodes | 14 |
-| Seed files | 9 |
+| Seed files | 7 |
 | Migrations | 6 |
-| API routes | 9 |
+| API routes (Studio) | 10 |
 | Zustand stores | 8 |
 | Filter presets | 10 |
 | Locales supported | 200+ |
+| ADRs | 14 |
 
 ---
 
@@ -455,11 +488,14 @@ Architecture Decision Records (ADRs):
 ### Schema Sync Pipeline
 
 ```bash
-# Validate (CI check)
+# TS: Validate (CI check)
 pnpm schema:validate
 
-# Regenerate from YAML
+# TS: Regenerate from YAML
 pnpm schema:generate
+
+# Rust: Validate YAML <-> Neo4j (authoritative)
+cargo run -- schema validate --strict
 
 # Full reset
 pnpm infra:reset
@@ -512,7 +548,8 @@ This README should be updated when:
 1. **Commands change** - New commands, renamed, removed
 2. **Skills updated** - New sections, new triggers
 3. **Agents modified** - New tools, changed prompts
-4. **Schema version bumps** - New node types, relations, metrics
+4. **Schema version bumps** - New Kinds, EdgeKinds, Realms, Layers
+5. **v9 migration milestones** - Rust binary additions, meta-graph changes
 
 **Validation:**
 ```bash
@@ -527,8 +564,9 @@ This README should be updated when:
 
 | File | Purpose |
 |------|---------|
-| `/CLAUDE.md` | Monorepo overview |
-| `/packages/core/CLAUDE.md` | Core package (types, schemas, YAML) |
+| `/CLAUDE.md` | Monorepo overview (v9 migration context) |
+| `/packages/core/CLAUDE.md` | Core package (types, schemas, YAML, v9 terminology) |
 | `/packages/db/CLAUDE.md` | Database infrastructure |
-| `/apps/studio/CLAUDE.md` | Studio application |
-| `/packages/schema-tools/CLAUDE.md` | Schema validation tools |
+| `/apps/studio/CLAUDE.md` | Studio application (NavigationMode, visual encoding) |
+| `/packages/schema-tools/CLAUDE.md` | Schema validation tools (4 generators) |
+| `/docs/plans/2026-02-01-ontology-v9-design.md` | v9 migration plan (complete) |

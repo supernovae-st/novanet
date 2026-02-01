@@ -8,7 +8,7 @@ NovaNet is a **native content generation system** (NOT translation) using Neo4j 
 
 **Target Application**: QR Code AI (https://qrcode-ai.com) - a multilingual SaaS for QR code generation.
 **Supported Locales**: 200+ locales (fr-FR, en-US, es-MX, ja-JP, etc.)
-**Current Version**: v8.2.0
+**Current Version**: v8.2.0 (migrating to v9.0.0)
 
 ## CRITICAL: Generation, NOT Translation
 
@@ -23,6 +23,21 @@ Each locale content is **generated natively** from the invariant Concept, NOT tr
 
 For complete graph schema, node categories, and relations, see: **`models/_index.yaml`**
 
+## v9 Migration Context
+
+v9 refactors the meta-graph to a **self-describing context graph** with faceted classification:
+
+| v8 Term | v9 Term |
+|---------|---------|
+| Scope | **Realm** (global / project / shared) |
+| Subcategory | **Layer** (9 functional layers) |
+| NodeTypeMeta | **Kind** (35 node types, 1:1 with Neo4j labels) |
+| _(new)_ | **Trait** (invariant / localized / knowledge / derived / job) |
+| _(new)_ | **EdgeFamily** (ownership / localization / semantic / generation / mining) |
+| _(new)_ | **EdgeKind** (47 relationship types) |
+
+**Boundary rule:** TypeScript (this package) generates code artifacts. Rust (`tools/novanet/`) executes at runtime.
+
 ## Commands
 
 ### Neo4j Setup
@@ -30,7 +45,7 @@ For complete graph schema, node categories, and relations, see: **`models/_index
 ```bash
 # From monorepo root:
 pnpm infra:up              # Start Neo4j
-pnpm infra:seed    # Run seed (constraints + data)
+pnpm infra:seed            # Run seed (constraints + data)
 
 # Reset database
 pnpm infra:down
@@ -45,16 +60,16 @@ docker exec -it novanet-neo4j cypher-shell -u neo4j -p novanetpassword
 
 ```bash
 # Build TypeScript
-npm run build
+pnpm build
 
 # Run tests
-npm test
+pnpm test
 
 # Lint
-npm run lint
+pnpm lint
 
 # Validate schemas
-npm run validate
+pnpm schema:validate
 ```
 
 ### Useful Cypher Queries
@@ -76,34 +91,42 @@ MATCH (l)-[:HAS_LEXICON]->(lex:LocaleLexicon)-[:HAS_EXPRESSION]->(e:Expression)
 WHERE e.semantic_field IN ['urgency', 'value']
 RETURN b.instructions, c.key, cl.title, bt.rules, v.formality_score, collect(e.text) AS expressions;
 
--- Spreading activation from a concept
-MATCH (c:Concept {key: "tier-pro"})-[r:SEMANTIC_LINK*1..2]->(c2:Concept)
-WHERE ALL(rel IN r WHERE rel.temperature >= 0.3)
-WITH c2, reduce(a = 1.0, rel IN r | a * rel.temperature) AS activation
-WHERE activation >= 0.3
-RETURN c2.key, activation ORDER BY activation DESC;
+-- v9: Navigate meta-graph (Realm -> Layer -> Kind)
+MATCH (r:Realm {key: "project"})-[:HAS_LAYER]->(l:Layer)-[:HAS_KIND]->(k:Kind)
+RETURN r.key, l.key, collect(k.label) AS kinds;
+
+-- v9: Find all Kinds with a specific Trait
+MATCH (k:Kind)-[:HAS_TRAIT]->(t:Trait {key: "localized"})
+RETURN k.label, t.key;
+
+-- v9: Edge schema for a Kind
+MATCH (ek:EdgeKind)-[:FROM_KIND]->(k:Kind {label: "Block"})
+MATCH (ek)-[:TO_KIND]->(target:Kind)
+MATCH (ek)-[:IN_FAMILY]->(ef:EdgeFamily)
+RETURN ek.key, ef.key AS family, target.label AS target_kind;
 ```
 
-## File Structure (v8.2.0)
+## File Structure
 
 ```
 core/
-├── models/                    # YAML schema definitions
+├── models/                    # YAML schema definitions (SOURCE OF TRUTH)
 │   ├── _index.yaml            # MODEL INDEX (graph structure, node categories, changes)
-│   ├── relations.yaml         # All 47 Neo4j relationships
+│   ├── relations.yaml         # All 47 Neo4j relationships (with family field in v9)
+│   ├── organizing-principles.yaml  # v9: Realm/Layer/Trait/EdgeFamily definitions
 │   ├── nodes/                 # ONE FILE PER NODE TYPE (35 files)
-│   │   ├── global/            # 🌍 GLOBAL scope (15 nodes)
-│   │   │   ├── config/        #    Locale
-│   │   │   └── knowledge/     #    14 LocaleKnowledge nodes
-│   │   ├── project/           # 📦 PROJECT scope (14 nodes)
-│   │   │   ├── foundation/    #    Project, BrandIdentity, ProjectL10n
-│   │   │   ├── structure/     #    Page, Block, BlockType, PageType
-│   │   │   ├── semantic/      #    Concept, ConceptL10n
-│   │   │   ├── instruction/   #    PagePrompt, BlockPrompt, BlockRules
-│   │   │   └── output/        #    PageL10n, BlockL10n
-│   │   └── shared/            # 🎯 SHARED scope (6 nodes)
-│   │       ├── seo/           #    SEOKeywordL10n, SEOKeywordMetrics, SEOMiningRun
-│   │       └── geo/           #    GEOSeedL10n, GEOSeedMetrics, GEOMiningRun
+│   │   ├── global/            # Realm: global (15 nodes)
+│   │   │   ├── config/        #   Layer: config (Locale)
+│   │   │   └── knowledge/     #   Layer: knowledge (14 nodes)
+│   │   ├── project/           # Realm: project (14 nodes)
+│   │   │   ├── foundation/    #   Layer: foundation (Project, BrandIdentity, ProjectL10n)
+│   │   │   ├── structure/     #   Layer: structure (Page, Block, PageType, BlockType)
+│   │   │   ├── semantic/      #   Layer: semantic (Concept, ConceptL10n)
+│   │   │   ├── instruction/   #   Layer: instruction (PagePrompt, BlockPrompt, BlockRules)
+│   │   │   └── output/        #   Layer: output (PageL10n, BlockL10n)
+│   │   └── shared/            # Realm: shared (6 nodes)
+│   │       ├── seo/           #   Layer: seo (SEOKeywordL10n, SEOKeywordMetrics, SEOMiningRun)
+│   │       └── geo/           #   Layer: geo (GEOSeedL10n, GEOSeedMetrics, GEOMiningRun)
 │   └── views/                 # YAML view definitions
 ├── src/                       # TypeScript source
 │   ├── db/                    # Neo4j connection (client.ts)
@@ -117,7 +140,7 @@ core/
 └── docs/                      # Additional documentation
 ```
 
-## Nomenclature v8.2.0
+## Nomenclature
 
 ```
 *L10n suffix    = ALL localized content (human OR LLM generated)
@@ -125,13 +148,21 @@ core/
 :HAS_OUTPUT     = LLM-generated content (PageL10n, BlockL10n)
 Locale*         = Locale Knowledge nodes (LocaleVoice, LocaleCulture, etc.)
 *Metrics        = Time-series observations (SEOKeywordMetrics, GEOSeedMetrics)
+*MiningRun      = Batch operations (SEOMiningRun, GEOMiningRun)
 ```
 
-**v8.2.0 Breaking Changes:**
-- Removed: icon, priority, freshness properties from all nodes (YAGNI)
-- Standard properties now: key, display_name, description, llm_context, created_at, updated_at
-- Added: Binary schema sync tests (YAML ↔ TypeScript ↔ Neo4j)
-- Validated: All 35 node types across 3 scopes
+**v9 meta-graph terminology:**
+```
+Realm           = WHERE? (global / project / shared) — replaces "Scope"
+Layer           = WHAT? (9 functional layers) — replaces "Subcategory"
+Kind            = Neo4j label as meta-node — replaces "NodeTypeMeta"
+Trait           = HOW? (invariant / localized / knowledge / derived / job) — NEW
+EdgeFamily      = Relationship classification (ownership / localization / ...) — NEW
+EdgeKind        = Individual relationship type as meta-node — NEW
+:Meta           = Double-label on all meta-nodes — NEW
+OF_KIND         = Instance -> Kind bridge — replaces "IN_SUBCATEGORY"
+NavigationMode  = 4 modes (data / meta / overlay / query) — replaces "DataMode"
+```
 
 ## Language Convention
 
@@ -169,15 +200,6 @@ Project-level MCP servers are defined in `.mcp.json`:
     "neo4j-cypher": { ... },
     "neo4j-memory": { ... }
   }
-}
-```
-
-### Enable MCP Servers
-
-Add to `~/.claude/settings.json`:
-```json
-{
-  "enableAllProjectMcpServers": true
 }
 ```
 

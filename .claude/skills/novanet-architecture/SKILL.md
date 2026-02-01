@@ -1,6 +1,6 @@
 ---
 name: novanet-architecture
-description: Display the complete NovaNet architecture diagram in ASCII. Use when user asks about architecture, system overview, how components connect, or wants to understand the codebase structure.
+description: Display the complete NovaNet architecture diagram in ASCII. Use when user asks about architecture, system overview, how components connect, meta-graph structure, or wants to understand the codebase structure.
 disable-model-invocation: false
 user-invocable: true
 ---
@@ -9,8 +9,10 @@ user-invocable: true
 
 Display the complete NovaNet architecture diagram showing:
 - Source of truth (YAML models)
-- Generators (Mermaid, Subcategory)
+- v9 Meta-Graph (faceted classification)
+- Generators (Mermaid, Layer, Kind, EdgeSchema)
 - Neo4j infrastructure
+- Rust binary (`tools/novanet/`)
 - Studio visualization
 - Source of Truth Pipeline
 
@@ -19,12 +21,14 @@ Display the complete NovaNet architecture diagram showing:
 Based on the `$ARGUMENTS` provided, display the appropriate section:
 
 - **"source"** or **"yaml"** - Show Source de Verite section only
+- **"meta"** or **"facets"** - Show Meta-Graph (v9 faceted classification)
 - **"infra"** or **"neo4j"** - Show Infrastructure section only
 - **"studio"** - Show Studio section only
 - **"packages"** or **"deps"** - Show Packages Dependency Graph
 - **"flow"** or **"generation"** - Show Data Flow (Generation Pipeline)
 - **"pipeline"** or **"sync"** - Show Source of Truth Pipeline
 - **"locale"** or **"knowledge"** - Show Locale Knowledge Structure
+- **"rust"** or **"cli"** - Show Rust Binary Architecture
 - **"all"** or empty - Show the complete architecture (default)
 
 ---
@@ -41,29 +45,111 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 ├─────────────────────────────────────────────────────────────────────────────────────────────────────┤
 │                                                                                                     │
 │   packages/core/models/                                                                             │
-│   ├── _index.yaml                     ← Index du graphe (structure, changelog)                      │
-│   ├── nodes/                          ← 35 fichiers YAML (1 par NodeType)                           │
-│   │   ├── global/config/              ← Locale                                                      │
-│   │   ├── global/knowledge/           ← 14 LocaleKnowledge nodes                                    │
-│   │   │   ├── locale-identity.yaml    ← Endonym, script, direction                                  │
-│   │   │   ├── locale-voice.yaml       ← Formality, directness, emotion                              │
-│   │   │   ├── locale-culture.yaml     ← Taboos, sensitivities, Hofstede                             │
-│   │   │   ├── locale-market.yaml      ← Currency, payments, trust signals                           │
-│   │   │   ├── locale-lexicon.yaml     ← Domain vocabulary                                           │
-│   │   │   ├── locale-rules-*.yaml     ← Adaptation, Formatting, Slug rules                          │
-│   │   │   └── expression.yaml, etc.   ← Reference, Metaphor, Pattern, Constraint                    │
-│   │   ├── project/foundation/         ← Project, BrandIdentity, ProjectL10n                         │
-│   │   ├── project/structure/          ← Page, Block, PageType, BlockType                            │
-│   │   ├── project/semantic/           ← Concept, ConceptL10n                                        │
-│   │   ├── project/instruction/        ← PagePrompt, BlockPrompt, BlockRules                         │
-│   │   ├── project/output/             ← PageL10n, BlockL10n                                         │
-│   │   ├── shared/seo/                 ← SEOKeywordL10n, SEOKeywordMetrics, SEOMiningRun             │
-│   │   └── shared/geo/                 ← GEOSeedL10n, GEOSeedMetrics, GEOMiningRun                   │
+│   ├── _index.yaml                          ← Index du graphe (structure, changelog)                 │
+│   ├── organizing-principles.yaml           ← v9: Realm/Layer/Trait/EdgeFamily definitions           │
+│   ├── nodes/                               ← 35 fichiers YAML (1 par Kind)                         │
+│   │   ├── global/                          ← Realm: global                                          │
+│   │   │   ├── config/                      ←   Layer: config (Locale)                               │
+│   │   │   └── knowledge/                   ←   Layer: knowledge (14 nodes)                          │
+│   │   │       ├── locale-identity.yaml     ← Endonym, script, direction                             │
+│   │   │       ├── locale-voice.yaml        ← Formality, directness, emotion                         │
+│   │   │       ├── locale-culture.yaml      ← Taboos, sensitivities, Hofstede                        │
+│   │   │       ├── locale-market.yaml       ← Currency, payments, trust signals                      │
+│   │   │       ├── locale-lexicon.yaml      ← Domain vocabulary                                      │
+│   │   │       ├── locale-rules-*.yaml      ← Adaptation, Formatting, Slug rules                     │
+│   │   │       └── expression.yaml, etc.    ← Reference, Metaphor, Pattern, Constraint               │
+│   │   ├── project/                         ← Realm: project                                         │
+│   │   │   ├── foundation/                  ←   Layer: foundation (Project, BrandIdentity, ProjectL10n)│
+│   │   │   ├── structure/                   ←   Layer: structure (Page, Block, PageType, BlockType)   │
+│   │   │   ├── semantic/                    ←   Layer: semantic (Concept, ConceptL10n)                │
+│   │   │   ├── instruction/                 ←   Layer: instruction (Prompts, Rules)                   │
+│   │   │   └── output/                      ←   Layer: output (PageL10n, BlockL10n)                   │
+│   │   └── shared/                          ← Realm: shared                                          │
+│   │       ├── seo/                         ←   Layer: seo (Keyword, Metrics, MiningRun)              │
+│   │       └── geo/                         ←   Layer: geo (Seed, Metrics, MiningRun)                 │
 │   │                                                                                                 │
-│   ├── relations.yaml                  ← 47 types de relations Neo4j                                 │
-│   └── views/                          ← Definitions de vues YAML                                    │
+│   ├── relations.yaml                       ← 47 types de relations Neo4j (with family field)        │
+│   └── views/                               ← Definitions de vues YAML                               │
 │                                                                                                     │
 └─────────────────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Section: META-GRAPH (v9 Faceted Classification)
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════════════════════════╗
+║                    META-GRAPH (v9) — Self-Describing Context Graph                                ║
+╚═══════════════════════════════════════════════════════════════════════════════════════════════════╝
+
+  Each Kind sits at the intersection of 4 classification axes:
+
+  ┌──────────────────────────────────────────────────────────────────────────────────────────────┐
+  │                                                                                              │
+  │   Axis 1 — WHERE?   :Realm       (3)  global / project / shared                             │
+  │   Axis 2 — WHAT?    :Layer       (9)  config, knowledge, foundation, structure, semantic,    │
+  │                                        instruction, output, seo, geo                         │
+  │   Axis 3 — HOW?     :Trait       (5)  invariant / localized / knowledge / derived / job      │
+  │   Axis 4 — LINKS?   :EdgeKind   (47)  grouped into 5 EdgeFamilies                           │
+  │                                                                                              │
+  └──────────────────────────────────────────────────────────────────────────────────────────────┘
+
+  6 Meta-Node Types (all carry :Meta double-label):
+
+  ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
+  │  Realm (3)  │───▶│  Layer (9)  │───▶│  Kind (35)  │
+  │  WHERE?     │    │  WHAT?      │    │  1:1 label  │
+  │  HAS_LAYER  │    │  HAS_KIND   │    │             │
+  └─────────────┘    └─────────────┘    └──────┬──────┘
+                                               │
+                     ┌─────────────────────────┼─────────────────────────┐
+                     │                         │                         │
+                     ▼                         ▼                         ▼
+              ┌─────────────┐           ┌─────────────┐          ┌──────────────┐
+              │  IN_REALM   │           │  IN_LAYER   │          │  HAS_TRAIT   │
+              │  (facet)    │           │  (facet)    │          │  (facet)     │
+              └─────────────┘           └─────────────┘          └──────┬───────┘
+                                                                       │
+                                                                       ▼
+                                                                ┌─────────────┐
+                                                                │  Trait (5)  │
+                                                                │  HOW?       │
+                                                                └─────────────┘
+
+  Edge Schema (OWL-inspired):
+
+  ┌────────────────┐    FROM_KIND    ┌─────────────┐    TO_KIND     ┌────────────────┐
+  │  EdgeKind (47) │───────────────▶│  Kind (35)  │◀──────────────│  EdgeKind (47) │
+  │  1:1 rel type  │                └─────────────┘               │                │
+  └───────┬────────┘                                              └────────────────┘
+          │
+          │ IN_FAMILY
+          ▼
+  ┌────────────────┐
+  │EdgeFamily (5)  │
+  │  ownership     │
+  │  localization  │
+  │  semantic      │
+  │  generation    │
+  │  mining        │
+  └────────────────┘
+
+  Instance Bridge (every data node links to its Kind):
+
+  ┌────────────────┐    OF_KIND     ┌─────────────┐
+  │  DataNode      │──────────────▶│  Kind :Meta  │
+  │  (e.g. Block)  │               │  label:Block │
+  └────────────────┘               └─────────────┘
+
+  NavigationMode (4 modes):
+
+  ┌─────────────────────────────────────────────────────────────────────────────┐
+  │  data     │  Real instances only (default)                                  │
+  │  meta     │  Meta-graph only (Realm/Layer/Kind/Trait/EdgeFamily)            │
+  │  overlay  │  Data + meta combined (debugging)                               │
+  │  query    │  Faceted filter results (targeted exploration)                  │
+  └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -78,30 +164,31 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
      ┌─────────────────────────────────────────────────────────────────────────────────────────────┐
      │                        📁 YAML (Single Source of Truth)                                     │
      │                        packages/core/models/                                                │
-     │                        ├── nodes/           ← 35 NodeTypes                                  │
-     │                        └── relations.yaml   ← 47 Relations                                  │
+     │                        ├── nodes/                    ← 35 Kinds                             │
+     │                        ├── relations.yaml            ← 47 Relations (with family)           │
+     │                        └── organizing-principles.yaml← Realm/Layer/Trait/EdgeFamily defs    │
      └─────────────────────────────────────────────┬───────────────────────────────────────────────┘
                                                    │
-            ┌──────────────────────────────────────┼──────────────────────────────────────┐
-            │                                      │                                      │
-            ▼                                      ▼                                      ▼
-  ┌─────────────────────────┐         ┌─────────────────────────┐         ┌─────────────────────────┐
-  │   📊 MermaidGenerator   │         │  📝 SubcategoryGenerator │         │   🗄️ Manual Cypher     │
-  │   @novanet/schema-tools │         │   @novanet/schema-tools  │         │   packages/db/seed/     │
-  └───────────┬─────────────┘         └───────────┬─────────────┘         └───────────┬─────────────┘
-              │                                   │                                   │
-              ▼                                   ▼                                   ▼
-  ┌─────────────────────────┐         ┌─────────────────────────┐         ┌─────────────────────────┐
-  │  VIEW-COMPLETE-GRAPH.md │         │   subcategories.ts      │         │   00-constraints.cypher │
-  │  models/docs/views/     │         │   src/graph/            │         │   01-concepts-mvp.cypher│
-  └─────────────────────────┘         └─────────────────────────┘         │   02-locale-knowledge   │
-                                                                          │   02-vector-indexes     │
-                                                                          │   03-prompts-v720       │
-                                                                          │   04-project-qrcode-ai  │
-                                                                          │   05-missing-nodes      │
-                                                                          └───────────┬─────────────┘
-                                                                                      │
-     ┌────────────────────────────────────────────────────────────────────────────────┘
+         ┌─────────────────────────────────────────┼─────────────────────────────────────────┐
+         │                    │                    │                    │                     │
+         ▼                    ▼                    ▼                    ▼                     ▼
+  ┌──────────────┐   ┌──────────────┐   ┌──────────────┐   ┌──────────────┐   ┌──────────────────┐
+  │  📊 Mermaid  │   │  📝 Layer    │   │  🏷️ Kind    │   │  🔗 Edge     │   │  🗄️ Manual       │
+  │  Generator   │   │  Generator   │   │  Generator   │   │  Schema Gen  │   │  Cypher Seeds    │
+  │  schema-tools│   │  schema-tools│   │  schema-tools│   │  schema-tools│   │  packages/db/    │
+  └──────┬───────┘   └──────┬───────┘   └──────┬───────┘   └──────┬───────┘   └────────┬─────────┘
+         │                  │                  │                  │                     │
+         ▼                  ▼                  ▼                  ▼                     ▼
+  ┌──────────────┐   ┌──────────────┐   ┌──────────────┐   ┌──────────────┐   ┌──────────────────┐
+  │ VIEW-COMPLETE│   │  layers.ts   │   │ Kind :Meta   │   │ EdgeKind     │   │ 00-constraints   │
+  │ -GRAPH.md    │   │  src/graph/  │   │ nodes w/     │   │ :Meta nodes  │   │ 01-concepts-mvp  │
+  │              │   │              │   │ schema_hint  │   │ w/ cypher_   │   │ 02-locale-know.  │
+  │              │   │              │   │              │   │ pattern      │   │ 03-prompts       │
+  └──────────────┘   └──────────────┘   └──────────────┘   └──────────────┘   │ 04-project       │
+                                                                              │ 05-missing-nodes │
+                                                                              └────────┬─────────┘
+                                                                                       │
+     ┌─────────────────────────────────────────────────────────────────────────────────┘
      │
      ▼
   ┌──────────────────────────────────────────────────────────────────────────────────────────────┐
@@ -111,9 +198,46 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
   └──────────────────────────────────────────────────────────────────────────────────────────────┘
 
   ═════════════════════════════════════════════════════════════════════════════════════════════════
-   VALIDATION: pnpm schema:validate    (CI checks TypeScript + Mermaid sync with YAML)
-   REGENERATE: pnpm schema:generate    (Rebuilds generated files from YAML)
+   TS VALIDATION:   pnpm schema:validate              (CI checks TS + Mermaid sync with YAML)
+   TS REGENERATE:   pnpm schema:generate              (Rebuilds generated files from YAML)
+   RUST VALIDATE:   cargo run -- schema validate      (Authoritative YAML <-> Neo4j check)
   ═════════════════════════════════════════════════════════════════════════════════════════════════
+```
+
+---
+
+## Section: RUST (Binary Architecture)
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════════════════════════╗
+║                    RUST BINARY — tools/novanet/ (v9)                                              ║
+╚═══════════════════════════════════════════════════════════════════════════════════════════════════╝
+
+  ┌─────────────────────────────────────────────────────────────────────────────────────────────┐
+  │  Single crate: tools/novanet/                                                               │
+  │                                                                                             │
+  │  Dependencies:                                                                              │
+  │  ├── clap (derive)      ← CLI argument parsing                                             │
+  │  ├── neo4rs             ← Neo4j Bolt protocol driver                                        │
+  │  ├── ratatui            ← Terminal UI framework                                             │
+  │  ├── crossterm          ← Terminal backend                                                  │
+  │  ├── tokio              ← Async runtime                                                     │
+  │  ├── serde + serde_yaml ← YAML deserialization                                              │
+  │  ├── thiserror          ← Library error types                                               │
+  │  └── color-eyre         ← Application error reporting                                       │
+  │                                                                                             │
+  │  Commands:                                                                                  │
+  │  ├── novanet schema validate [--strict]    ← YAML <-> Neo4j validation                     │
+  │  ├── novanet schema diff                   ← Show drift between YAML and Neo4j             │
+  │  ├── novanet graph explore                 ← TUI graph explorer (ratatui)                   │
+  │  ├── novanet graph query <cypher>          ← Execute Cypher and display results             │
+  │  └── novanet graph stats                   ← Node/edge counts and health check             │
+  │                                                                                             │
+  │  Boundary Rule:                                                                             │
+  │  ├── TypeScript → generates code artifacts (types, Cypher, Mermaid)                         │
+  │  └── Rust       → executes at runtime (graph ops, validation, TUI)                          │
+  │                                                                                             │
+  └─────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -210,33 +334,42 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 
 ┌─────────────────────────────────────────────────────────────────────────────────────────────────────┐
 │   ┌─────────────────────────────────────────────────────────────────────────────────────────────┐   │
-│   │  API ROUTES (9)                                    │  ZUSTAND STORES (8)                    │   │
+│   │  API ROUTES (10)                                  │  ZUSTAND STORES (8)                    │   │
 │   ├────────────────────────────────────────────────────┼────────────────────────────────────────┤   │
 │   │                                                    │                                        │   │
 │   │  /api/chat          → Claude AI                    │  graphStore      → nodes, edges       │   │
 │   │  /api/graph         → main data                    │  filterStore     → types, presets     │   │
 │   │  /api/graph/expand  → neighbors                    │  uiStore         → panels, selection  │   │
 │   │  /api/graph/ontology→ metadata                     │  chatStore       → AI messages        │   │
-│   │  /api/graph/query   → Cypher exec                  │  queryStore      → Cypher state       │   │
-│   │  /api/graph/schema  → schema info                  │  viewStore       → saved views        │   │
-│   │  /api/graph/stats   → statistics                   │  aiQueryStore    → AI query state     │   │
-│   │  /api/views         → CRUD views                   │  animationStore  → animations         │   │
+│   │  /api/graph/organizing-principles                  │  queryStore      → Cypher state       │   │
+│   │  /api/graph/query   → Cypher exec                  │  viewStore       → saved views        │   │
+│   │  /api/graph/schema  → schema info                  │  aiQueryStore    → AI query state     │   │
+│   │  /api/graph/stats   → statistics                   │  animationStore  → animations         │   │
+│   │  /api/views         → CRUD views                   │                                        │   │
 │   │  /api/views/[id]    → single view                  │                                        │   │
 │   │                                                    │                                        │   │
 │   └────────────────────────────────────────────────────┴────────────────────────────────────────┘   │
 │                                                                                                     │
 │   ┌─────────────────────────────────────────────────────────────────────────────────────────────┐   │
-│   │  VISUALIZATION                                                                              │   │
+│   │  VISUALIZATION — NavigationMode (v9)                                                       │   │
 │   ├─────────────────────────────────────────────────────────────────────────────────────────────┤   │
 │   │                                                                                             │   │
-│   │  ┌─────────────────────────────┐    ┌─────────────────────────────┐                         │   │
-│   │  │  SCHEMA MODE               │    │  DATA MODE                  │                         │   │
-│   │  │  (35 NodeTypes)            │    │  (~19k instances projected) │                         │   │
-│   │  │                            │    │                             │                         │   │
-│   │  │  React Flow + ELK          │    │  React Flow / Force-Graph   │                         │   │
-│   │  │  Hierarchical layout       │    │  Force-directed layout      │                         │   │
-│   │  │  Grouped by Scope          │    │  Real Neo4j data            │                         │   │
-│   │  └─────────────────────────────┘    └─────────────────────────────┘                         │   │
+│   │  ┌─────────────────────┐  ┌─────────────────────┐  ┌─────────────────────┐                 │   │
+│   │  │  DATA MODE         │  │  META MODE          │  │  OVERLAY MODE      │                 │   │
+│   │  │  (~19k instances)  │  │  (105 meta-nodes)   │  │  Data + Meta       │                 │   │
+│   │  │                    │  │                     │  │                    │                 │   │
+│   │  │  Real Neo4j data   │  │  Realm/Layer/Kind   │  │  Architecture      │                 │   │
+│   │  │  Force-directed    │  │  Trait/EdgeFamily    │  │  debugging         │                 │   │
+│   │  │  Grouped by Realm  │  │  Hierarchical       │  │                    │                 │   │
+│   │  └─────────────────────┘  └─────────────────────┘  └─────────────────────┘                 │   │
+│   │                                                                                             │   │
+│   │  ┌─────────────────────┐                                                                    │   │
+│   │  │  QUERY MODE        │  Visual Encoding (v9):                                             │   │
+│   │  │  Faceted filters   │  ├── Fill color   → Layer (9 colors)                               │   │
+│   │  │                    │  ├── Border style  → Trait (5 styles)                               │   │
+│   │  │  Realm + Layer +   │  ├── Spatial group → Realm (3 zones)                               │   │
+│   │  │  Trait combos      │  └── Edge color    → EdgeFamily (5 colors)                         │   │
+│   │  └─────────────────────┘                                                                    │   │
 │   │                                                                                             │   │
 │   └─────────────────────────────────────────────────────────────────────────────────────────────┘   │
 │                                                                                                     │
@@ -255,19 +388,24 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 ║                    ┌──────────────────┐                                                           ║
 ║                    │  @novanet/core   │  ← Types, schemas, generators, filters                    ║
 ║                    │  (source truth)  │     models/nodes/*.yaml + relations.yaml                  ║
-║                    └────────┬─────────┘                                                           ║
+║                    └────────┬─────────┘     + organizing-principles.yaml                         ║
 ║                             │                                                                     ║
 ║              ┌──────────────┼──────────────┐                                                      ║
 ║              │              │              │                                                      ║
 ║              ▼              ▼              ▼                                                      ║
 ║   ┌──────────────────┐ ┌──────────────────┐ ┌──────────────────┐                                  ║
 ║   │  @novanet/cli    │ │ @novanet/studio  │ │ @novanet/        │                                  ║
-║   │  (validation)    │ │ (visualization)  │ │ schema-tools     │                                  ║
+║   │  (⚠ deprecated)  │ │ (visualization)  │ │ schema-tools     │                                  ║
 ║   └──────────────────┘ └──────────────────┘ └──────────────────┘                                  ║
 ║                                               ├─ MermaidGenerator                                 ║
-║   ┌──────────────────┐                        ├─ SubcategoryGenerator                             ║
-║   │  @novanet/db     │                        └─ validate-sync.ts                                 ║
-║   │  (infrastructure)│  ← Standalone (Docker, seeds, migrations)                                  ║
+║   ┌──────────────────┐                        ├─ LayerGenerator (v9, was Subcategory)             ║
+║   │  @novanet/db     │                        ├─ KindGenerator (v9)                               ║
+║   │  (infrastructure)│  ← Standalone          ├─ EdgeSchemaGenerator (v9)                         ║
+║   └──────────────────┘                        └─ validate-sync.ts                                 ║
+║                                                                                                   ║
+║   ┌──────────────────┐                                                                            ║
+║   │  tools/novanet/  │  ← Rust binary (standalone)                                                ║
+║   │  (CLI + TUI)     │     clap, ratatui, neo4rs, tokio                                           ║
 ║   └──────────────────┘                                                                            ║
 ║                                                                                                   ║
 ╚═══════════════════════════════════════════════════════════════════════════════════════════════════╝
@@ -317,19 +455,22 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 
 ---
 
-## Key Numbers (Verified v8.2.0)
+## Key Numbers (v9.0.0)
 
 | Metric | Value |
 |--------|-------|
-| Node types | 35 |
-| Relations | 47 |
-| Scopes | 3 (Global, Shared, Project) |
-| Subcategories | 9 |
+| Kind (node types) | 35 |
+| EdgeKind (relations) | 47 |
+| Realms | 3 (global, project, shared) |
+| Layers | 9 |
+| Traits | 5 |
+| EdgeFamilies | 5 |
+| Meta-node total | 105 (3+9+35+5+5+47+1 bridge type) |
 | Locale Knowledge nodes | 14 |
 | Seed files | 7 |
 | Migrations | 6 |
 | Locales supported | 200+ |
-| API routes | 9 |
+| API routes (Studio) | 10 |
 | Zustand stores | 8 |
 
 ---
@@ -337,11 +478,14 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 ## Commands
 
 ```bash
-# Validate schema sync
+# TS: Validate schema sync
 pnpm schema:validate
 
-# Regenerate from YAML
+# TS: Regenerate from YAML
 pnpm schema:generate
+
+# Rust: Validate YAML <-> Neo4j
+cargo run -- schema validate --strict
 
 # Reset database
 pnpm infra:reset
@@ -357,9 +501,11 @@ open http://localhost:7474
 User can invoke with:
 - `/novanet-arch` or `/novanet-architecture`
 - `/novanet-arch source` - YAML source only
+- `/novanet-arch meta` - Meta-Graph (v9 faceted classification)
 - `/novanet-arch pipeline` - Source of Truth Pipeline
 - `/novanet-arch locale` - Locale Knowledge Structure
 - `/novanet-arch infra` - Infrastructure only
 - `/novanet-arch studio` - Studio only
 - `/novanet-arch packages` - Package dependencies
 - `/novanet-arch flow` - Generation pipeline
+- `/novanet-arch rust` - Rust binary architecture
