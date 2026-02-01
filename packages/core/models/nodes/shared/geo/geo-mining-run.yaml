@@ -1,9 +1,9 @@
-# models/nodes/geo/geo-mining-run.yaml
+# models/nodes/shared/geo/geo-mining-run.yaml
 # GEOMiningRun - GEO mining job orchestration
 
 node:
   name: GEOMiningRun
-  category: geo
+  locale_behavior: job
   icon: "⚙️"
   description: "Mining job for GEO reformulations"
 

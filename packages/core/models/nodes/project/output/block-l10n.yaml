@@ -1,4 +1,4 @@
-# models/nodes/generation/block-l10n.yaml
+# models/nodes/project/output/block-l10n.yaml
 # BlockL10n - LLM-generated localized content for a block (v7.11.0)
 #
 # v7.11.0 CHANGES:
@@ -12,7 +12,7 @@
 
 node:
   name: BlockL10n
-  category: generation
+  locale_behavior: localized
   icon: "🟠"
   description: "LLM-generated localized content for a block"
 

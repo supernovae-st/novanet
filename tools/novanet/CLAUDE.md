@@ -11,8 +11,10 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 
 ## Current Status
 
-**Scaffold only** — `src/main.rs` prints a version banner. All modules below are
-planned (see design plan Phase 2). Cargo.toml has all dependencies locked.
+**Phase 2 complete** — All parsers and generators implemented. `novanet schema generate`
+produces 7 artifacts (4 Cypher seeds, 2 TypeScript, 1 Mermaid). `novanet schema validate`
+checks YAML coherence. 68 tests pass. Remaining commands (data, meta, query, node, db, tui)
+are Phase 7 stubs.
 
 ## Commands
 
@@ -37,7 +39,7 @@ cargo fmt && cargo clippy -- -D warnings && cargo test
 
 ## Architecture
 
-Planned module structure (Phase 2 deliverables):
+Module structure:
 
 ```
 src/

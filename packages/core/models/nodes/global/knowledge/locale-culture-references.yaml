@@ -1,11 +1,11 @@
-# models/nodes/locale/locale-culture-references.yaml
+# models/nodes/global/knowledge/locale-culture-references.yaml
 # LocaleCultureReferences - WHICH concrete references to use (food, sports, places)
 #
 # Stability: Low-Medium - Update biannually for pop culture, annually for brands/places.
 
 node:
   name: LocaleCultureReferences
-  category: locale
+  locale_behavior: knowledge
   icon: "🎯"
   description: "Concrete cultural references for content adaptation"
 

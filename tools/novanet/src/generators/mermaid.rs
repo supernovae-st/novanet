@@ -1,0 +1,777 @@
+//! Generate Mermaid flowchart with Realm/Layer/Trait coloring.
+//!
+//! Reads all 35 node YAMLs, `relations.yaml`, and `organizing-principles.yaml`
+//! to produce a complete graph diagram with:
+//! - Subgraphs grouped by Realm → Layer
+//! - Node styling by locale_behavior (Trait)
+//! - Edge styling by EdgeFamily (arrow style + color)
+//!
+//! Output target: `packages/core/models/docs/complete-graph.md` (Markdown wrapper)
+
+use crate::parsers::organizing::{self, OrganizingDoc};
+use crate::parsers::relations::{self, EdgeFamily, RelationDef};
+use crate::parsers::yaml_node::{self, ParsedNode};
+use std::collections::BTreeMap;
+use std::fmt::Write;
+use std::path::Path;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Constants
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Trait (locale_behavior) → Mermaid classDef fill + stroke + text color.
+/// Colors sourced from `organizing-principles.yaml` traits section.
+const TRAIT_STYLES: &[(&str, &str, &str)] = &[
+    ("invariant", "#3b82f6", "#1d4ed8"),
+    ("localized", "#22c55e", "#16a34a"),
+    ("knowledge", "#8b5cf6", "#7c3aed"),
+    ("derived", "#9ca3af", "#6b7280"),
+    ("job", "#6b7280", "#4b5563"),
+];
+
+/// Trait → emoji for node labels.
+const TRAIT_EMOJI: &[(&str, &str)] = &[
+    ("invariant", "\u{1F535}"),  // 🔵
+    ("localized", "\u{1F7E2}"),  // 🟢
+    ("knowledge", "\u{1F7E3}"),  // 🟣
+    ("derived", "\u{26AA}"),     // ⚪
+    ("job", "\u{2699}\u{FE0F}"), // ⚙️
+];
+
+/// Edge family → Mermaid arrow syntax.
+/// Sourced from `organizing-principles.yaml` edge_families section.
+const FAMILY_ARROWS: &[(&str, &str)] = &[
+    ("ownership", "-->"),
+    ("localization", "-.->"),
+    ("semantic", "-.->"),
+    ("generation", "==>"),
+    ("mining", "--o"),
+];
+
+/// Edge family → stroke color for linkStyle.
+/// Sourced from `organizing-principles.yaml` edge_families section.
+const FAMILY_COLORS: &[(&str, &str)] = &[
+    ("ownership", "#3b82f6"),
+    ("localization", "#22c55e"),
+    ("semantic", "#f97316"),
+    ("generation", "#8b5cf6"),
+    ("mining", "#ec4899"),
+];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Helpers
+// ─────────────────────────────────────────────────────────────────────────────
+
+fn trait_emoji(behavior: &str) -> &str {
+    for &(key, emoji) in TRAIT_EMOJI {
+        if key == behavior {
+            return emoji;
+        }
+    }
+    "\u{26AA}" // fallback: white circle
+}
+
+fn family_arrow(family: EdgeFamily) -> &'static str {
+    let key = match family {
+        EdgeFamily::Ownership => "ownership",
+        EdgeFamily::Localization => "localization",
+        EdgeFamily::Semantic => "semantic",
+        EdgeFamily::Generation => "generation",
+        EdgeFamily::Mining => "mining",
+    };
+    for &(k, arrow) in FAMILY_ARROWS {
+        if k == key {
+            return arrow;
+        }
+    }
+    "-->" // fallback
+}
+
+fn family_color(family: EdgeFamily) -> &'static str {
+    let key = match family {
+        EdgeFamily::Ownership => "ownership",
+        EdgeFamily::Localization => "localization",
+        EdgeFamily::Semantic => "semantic",
+        EdgeFamily::Generation => "generation",
+        EdgeFamily::Mining => "mining",
+    };
+    for &(k, color) in FAMILY_COLORS {
+        if k == key {
+            return color;
+        }
+    }
+    "#6b7280" // fallback: gray
+}
+
+/// Realm key → emoji (from organizing-principles.yaml).
+fn realm_emoji(key: &str, doc: &OrganizingDoc) -> String {
+    for realm in &doc.realms {
+        if realm.key == key {
+            return realm.emoji.clone();
+        }
+    }
+    "\u{1F4E6}".to_string() // fallback: 📦
+}
+
+/// Layer key → display_name (from organizing-principles.yaml).
+fn layer_display_name(key: &str, doc: &OrganizingDoc) -> String {
+    for realm in &doc.realms {
+        for layer in &realm.layers {
+            if layer.key == key {
+                return layer.display_name.clone();
+            }
+        }
+    }
+    key.to_string()
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Expanded edge (after multi-source/target expansion)
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// A single concrete from→to edge (after expanding multi-source/target).
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
+struct ExpandedEdge {
+    from: String,
+    rel_type: String,
+    to: String,
+    family: EdgeFamily,
+}
+
+/// Expand multi-source/target relations into concrete edges, filtering wildcards.
+fn expand_edges(relations: &[RelationDef]) -> Vec<ExpandedEdge> {
+    let mut edges = Vec::new();
+    for rel in relations {
+        let sources = rel.source.labels();
+        let targets = rel.target.labels();
+        for &src in &sources {
+            if src == "*" {
+                continue;
+            }
+            for &tgt in &targets {
+                if tgt == "*" {
+                    continue;
+                }
+                edges.push(ExpandedEdge {
+                    from: src.to_string(),
+                    rel_type: rel.rel_type.clone(),
+                    to: tgt.to_string(),
+                    family: rel.family,
+                });
+            }
+        }
+    }
+    edges.sort();
+    edges
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Generator
+// ─────────────────────────────────────────────────────────────────────────────
+
+pub struct MermaidGenerator;
+
+impl super::Generator for MermaidGenerator {
+    fn name(&self) -> &'static str {
+        "mermaid"
+    }
+
+    fn generate(&self, root: &Path) -> crate::Result<String> {
+        let nodes = yaml_node::load_all_nodes(root)?;
+        let rels_doc = relations::load_relations(root)?;
+        let org_doc = organizing::load_organizing(root)?;
+        render_mermaid(&nodes, &rels_doc.relations, &org_doc)
+    }
+}
+
+fn render_mermaid(
+    nodes: &[ParsedNode],
+    relations: &[RelationDef],
+    org_doc: &OrganizingDoc,
+) -> crate::Result<String> {
+    let edges = expand_edges(relations);
+
+    // Group nodes by realm → layer (using BTreeMap for deterministic order)
+    let mut realm_layer_nodes: BTreeMap<String, BTreeMap<String, Vec<&ParsedNode>>> =
+        BTreeMap::new();
+    for node in nodes {
+        realm_layer_nodes
+            .entry(node.realm.clone())
+            .or_default()
+            .entry(node.layer.clone())
+            .or_default()
+            .push(node);
+    }
+
+    // Sort nodes within each layer by name
+    for layers in realm_layer_nodes.values_mut() {
+        for node_list in layers.values_mut() {
+            node_list.sort_by_key(|n| &n.def.name);
+        }
+    }
+
+    let edge_count = edges.len();
+    let node_count = nodes.len();
+
+    let mut out = String::with_capacity(8192);
+
+    // ── Header ────────────────────────────────────────────────────────────
+    writeln!(out, "flowchart TB").unwrap();
+    writeln!(out, "  %% NovaNet Graph v9.0.0").unwrap();
+    writeln!(
+        out,
+        "  %% Generated: {node_count} nodes, {edge_count} edges"
+    )
+    .unwrap();
+    writeln!(
+        out,
+        "  %% Source: 35 node YAMLs + relations.yaml + organizing-principles.yaml"
+    )
+    .unwrap();
+    writeln!(out).unwrap();
+
+    // ── classDef — Trait-based node styling ────────────────────────────────
+    writeln!(out, "  %% Trait styling (locale_behavior)").unwrap();
+    for &(behavior, fill, stroke) in TRAIT_STYLES {
+        writeln!(
+            out,
+            "  classDef {behavior} fill:{fill},stroke:{stroke},color:#fff"
+        )
+        .unwrap();
+    }
+    writeln!(out).unwrap();
+
+    // ── Subgraphs — Realm > Layer > Nodes ─────────────────────────────────
+    // Use ordering from organizing-principles.yaml for realm/layer order
+    for realm_def in &org_doc.realms {
+        let Some(layer_map) = realm_layer_nodes.get(&realm_def.key) else {
+            continue;
+        };
+
+        let emoji = realm_emoji(&realm_def.key, org_doc);
+        let realm_id = format!("{}_REALM", realm_def.key.to_uppercase());
+        writeln!(
+            out,
+            "  subgraph {realm_id}[\"{emoji} {}\"]",
+            realm_def.key.to_uppercase()
+        )
+        .unwrap();
+        writeln!(out, "    direction TB").unwrap();
+
+        for layer_def in &realm_def.layers {
+            let Some(node_list) = layer_map.get(&layer_def.key) else {
+                continue;
+            };
+            if node_list.is_empty() {
+                continue;
+            }
+
+            let display = layer_display_name(&layer_def.key, org_doc);
+            let layer_id = format!("{}_{}", realm_def.key.to_uppercase(), layer_def.key);
+            writeln!(out, "    subgraph {layer_id}[\"{display}\"]").unwrap();
+
+            for node in node_list {
+                let behavior = node.def.locale_behavior.to_string();
+                let emoji = trait_emoji(&behavior);
+                writeln!(
+                    out,
+                    "      {}[\"{} {}\"]",
+                    node.def.name, emoji, node.def.name
+                )
+                .unwrap();
+            }
+            writeln!(out, "    end").unwrap();
+        }
+
+        writeln!(out, "  end").unwrap();
+        writeln!(out).unwrap();
+    }
+
+    // ── Edges — styled by EdgeFamily ──────────────────────────────────────
+    writeln!(out, "  %% Relationships (styled by edge family)").unwrap();
+
+    // Track edge indices for linkStyle coloring
+    let mut edge_indices_by_family: BTreeMap<String, Vec<usize>> = BTreeMap::new();
+
+    for (i, edge) in edges.iter().enumerate() {
+        let arrow = family_arrow(edge.family);
+        writeln!(
+            out,
+            "  {} {}|{}| {}",
+            edge.from, arrow, edge.rel_type, edge.to
+        )
+        .unwrap();
+        edge_indices_by_family
+            .entry(edge.family.to_string())
+            .or_default()
+            .push(i);
+    }
+    writeln!(out).unwrap();
+
+    // ── linkStyle — edge coloring by family ───────────────────────────────
+    writeln!(out, "  %% Edge colors by family").unwrap();
+    for (family_str, indices) in &edge_indices_by_family {
+        let family = match family_str.as_str() {
+            "ownership" => EdgeFamily::Ownership,
+            "localization" => EdgeFamily::Localization,
+            "semantic" => EdgeFamily::Semantic,
+            "generation" => EdgeFamily::Generation,
+            "mining" => EdgeFamily::Mining,
+            _ => continue,
+        };
+        let color = family_color(family);
+        let idx_str: Vec<String> = indices.iter().map(|i| i.to_string()).collect();
+        writeln!(
+            out,
+            "  linkStyle {} stroke:{color},stroke-width:2px",
+            idx_str.join(",")
+        )
+        .unwrap();
+    }
+    writeln!(out).unwrap();
+
+    // ── class assignments ─────────────────────────────────────────────────
+    writeln!(out, "  %% Class assignments").unwrap();
+    let mut sorted_nodes: Vec<&ParsedNode> = nodes.iter().collect();
+    sorted_nodes.sort_by_key(|n| &n.def.name);
+    for node in &sorted_nodes {
+        writeln!(
+            out,
+            "  class {} {}",
+            node.def.name, node.def.locale_behavior
+        )
+        .unwrap();
+    }
+
+    Ok(out)
+}
+
+/// Wrap Mermaid code in a Markdown document.
+pub fn wrap_in_markdown(mermaid_code: &str) -> String {
+    let mut out = String::with_capacity(mermaid_code.len() + 1024);
+
+    writeln!(out, "# NovaNet Complete Graph").unwrap();
+    writeln!(out).unwrap();
+    writeln!(
+        out,
+        "> Auto-generated by novanet v9.0.0. Do not edit manually."
+    )
+    .unwrap();
+    writeln!(out).unwrap();
+    writeln!(out, "## Overview").unwrap();
+    writeln!(out).unwrap();
+    writeln!(
+        out,
+        "This diagram shows the complete NovaNet graph schema with all 35 node types and their relationships."
+    )
+    .unwrap();
+    writeln!(out).unwrap();
+    writeln!(out, "### Legend").unwrap();
+    writeln!(out).unwrap();
+    writeln!(out, "| Color | Trait | Description |").unwrap();
+    writeln!(out, "|-------|-------|-------------|").unwrap();
+    writeln!(
+        out,
+        "| \u{1F535} Blue | Invariant | Nodes that don't change between locales |"
+    )
+    .unwrap();
+    writeln!(
+        out,
+        "| \u{1F7E2} Green | Localized | Nodes with locale-specific content |"
+    )
+    .unwrap();
+    writeln!(
+        out,
+        "| \u{1F7E3} Purple | Knowledge | Cultural/linguistic knowledge per locale |"
+    )
+    .unwrap();
+    writeln!(
+        out,
+        "| \u{26AA} Gray | Derived | Computed/aggregated data |"
+    )
+    .unwrap();
+    writeln!(
+        out,
+        "| \u{2699}\u{FE0F} Gray | Job | Background processing tasks |"
+    )
+    .unwrap();
+    writeln!(out).unwrap();
+    writeln!(out, "### Realms").unwrap();
+    writeln!(out).unwrap();
+    writeln!(
+        out,
+        "- **\u{1F30D} GLOBAL** — Locale configuration and knowledge (shared across all projects)"
+    )
+    .unwrap();
+    writeln!(
+        out,
+        "- **\u{1F4E6} PROJECT** — Project-specific content structure and generation"
+    )
+    .unwrap();
+    writeln!(
+        out,
+        "- **\u{1F3AF} SHARED** — SEO/GEO optimization data (shared across projects)"
+    )
+    .unwrap();
+    writeln!(out).unwrap();
+    writeln!(out, "## Graph Diagram").unwrap();
+    writeln!(out).unwrap();
+    writeln!(out, "```mermaid").unwrap();
+    write!(out, "{mermaid_code}").unwrap();
+    writeln!(out, "```").unwrap();
+    writeln!(out).unwrap();
+    writeln!(out, "## Edge Families").unwrap();
+    writeln!(out).unwrap();
+    writeln!(out, "| Arrow | Family | Description |").unwrap();
+    writeln!(out, "|-------|--------|-------------|").unwrap();
+    writeln!(
+        out,
+        "| `-->` | Ownership | Parent-child structural relationships |"
+    )
+    .unwrap();
+    writeln!(
+        out,
+        "| `.->` | Localization | Locale-specific content links |"
+    )
+    .unwrap();
+    writeln!(
+        out,
+        "| `.->` | Semantic | Meaning and concept connections |"
+    )
+    .unwrap();
+    writeln!(out, "| `==>` | Generation | LLM generation flow |").unwrap();
+    writeln!(out, "| `--o` | Mining | SEO/GEO data extraction |").unwrap();
+    writeln!(out).unwrap();
+    writeln!(out, "---").unwrap();
+    writeln!(out).unwrap();
+    writeln!(out, "*Generated by novanet MermaidGenerator*").unwrap();
+
+    out
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Tests
+// ─────────────────────────────────────────────────────────────────────────────
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::generators::Generator;
+    use crate::parsers::organizing::{EdgeFamilyDef, LayerDef, RealmDef, TraitDef};
+    use crate::parsers::relations::{Cardinality, NodeRef, RelationDef};
+    use crate::parsers::yaml_node::{LocaleBehavior, NodeDef, ParsedNode};
+    use std::path::PathBuf;
+
+    fn make_node(name: &str, realm: &str, layer: &str, behavior: LocaleBehavior) -> ParsedNode {
+        ParsedNode {
+            def: NodeDef {
+                name: name.to_string(),
+                locale_behavior: behavior,
+                icon: None,
+                description: format!("{name} description"),
+                standard_properties: None,
+                properties: None,
+                relations: None,
+                incoming_relations: None,
+                neo4j: None,
+                example: None,
+            },
+            realm: realm.to_string(),
+            layer: layer.to_string(),
+            source_path: PathBuf::from(format!("nodes/{realm}/{layer}/{name}.yaml")),
+        }
+    }
+
+    fn make_rel(rel_type: &str, family: EdgeFamily, source: &str, target: &str) -> RelationDef {
+        RelationDef {
+            rel_type: rel_type.to_string(),
+            family,
+            source: NodeRef::Single(source.to_string()),
+            target: NodeRef::Single(target.to_string()),
+            cardinality: Cardinality::OneToMany,
+            llm_context: format!("{rel_type} context"),
+            properties: None,
+            is_self_referential: None,
+            inverse_of: None,
+        }
+    }
+
+    fn make_org_doc() -> OrganizingDoc {
+        OrganizingDoc {
+            version: "9.0.0".to_string(),
+            realms: vec![
+                RealmDef {
+                    key: "global".to_string(),
+                    display_name: "Global".to_string(),
+                    emoji: "\u{1F30D}".to_string(),
+                    color: "#2aa198".to_string(),
+                    llm_context: "Global context.".to_string(),
+                    layers: vec![LayerDef {
+                        key: "config".to_string(),
+                        display_name: "Configuration".to_string(),
+                        emoji: "\u{2699}\u{FE0F}".to_string(),
+                        color: "#64748b".to_string(),
+                        llm_context: "Config layer.".to_string(),
+                    }],
+                },
+                RealmDef {
+                    key: "project".to_string(),
+                    display_name: "Project".to_string(),
+                    emoji: "\u{1F4E6}".to_string(),
+                    color: "#6c71c4".to_string(),
+                    llm_context: "Project context.".to_string(),
+                    layers: vec![LayerDef {
+                        key: "foundation".to_string(),
+                        display_name: "Foundation".to_string(),
+                        emoji: "\u{1F3DB}\u{FE0F}".to_string(),
+                        color: "#3b82f6".to_string(),
+                        llm_context: "Foundation layer.".to_string(),
+                    }],
+                },
+            ],
+            traits: vec![
+                TraitDef {
+                    key: "invariant".to_string(),
+                    display_name: "Invariant".to_string(),
+                    color: "#3b82f6".to_string(),
+                    llm_context: "Invariant.".to_string(),
+                },
+                TraitDef {
+                    key: "localized".to_string(),
+                    display_name: "Localized".to_string(),
+                    color: "#22c55e".to_string(),
+                    llm_context: "Localized.".to_string(),
+                },
+            ],
+            edge_families: vec![EdgeFamilyDef {
+                key: "ownership".to_string(),
+                display_name: "Ownership".to_string(),
+                color: "#3b82f6".to_string(),
+                arrow_style: "-->".to_string(),
+                llm_context: "Ownership.".to_string(),
+            }],
+        }
+    }
+
+    #[test]
+    fn expand_edges_filters_wildcards() {
+        let rels = vec![
+            make_rel("HAS_PAGE", EdgeFamily::Ownership, "Project", "Page"),
+            make_rel("WILDCARD", EdgeFamily::Semantic, "*", "Page"),
+        ];
+        let expanded = expand_edges(&rels);
+        assert_eq!(expanded.len(), 1);
+        assert_eq!(expanded[0].from, "Project");
+        assert_eq!(expanded[0].to, "Page");
+    }
+
+    #[test]
+    fn expand_edges_multi_source_target() {
+        let rel = RelationDef {
+            rel_type: "HAS_OUTPUT".to_string(),
+            family: EdgeFamily::Generation,
+            source: NodeRef::Multiple(vec!["Page".to_string(), "Block".to_string()]),
+            target: NodeRef::Multiple(vec!["PageL10n".to_string(), "BlockL10n".to_string()]),
+            cardinality: Cardinality::OneToMany,
+            llm_context: "output".to_string(),
+            properties: None,
+            is_self_referential: None,
+            inverse_of: None,
+        };
+        let expanded = expand_edges(&[rel]);
+        assert_eq!(expanded.len(), 4); // 2 sources × 2 targets
+    }
+
+    #[test]
+    fn render_small_mermaid() {
+        let nodes = vec![
+            make_node("Locale", "global", "config", LocaleBehavior::Invariant),
+            make_node(
+                "Project",
+                "project",
+                "foundation",
+                LocaleBehavior::Invariant,
+            ),
+            make_node(
+                "ProjectL10n",
+                "project",
+                "foundation",
+                LocaleBehavior::Localized,
+            ),
+        ];
+
+        let rels = vec![
+            make_rel(
+                "HAS_L10N",
+                EdgeFamily::Localization,
+                "Project",
+                "ProjectL10n",
+            ),
+            make_rel(
+                "FOR_LOCALE",
+                EdgeFamily::Localization,
+                "ProjectL10n",
+                "Locale",
+            ),
+        ];
+
+        let org_doc = make_org_doc();
+        let output = render_mermaid(&nodes, &rels, &org_doc).unwrap();
+
+        // Header
+        assert!(output.contains("flowchart TB"));
+        assert!(output.contains("NovaNet Graph v9.0.0"));
+        assert!(output.contains("3 nodes, 2 edges"));
+
+        // classDef
+        assert!(output.contains("classDef invariant fill:#3b82f6,stroke:#1d4ed8,color:#fff"));
+        assert!(output.contains("classDef localized fill:#22c55e,stroke:#16a34a,color:#fff"));
+
+        // Subgraphs — Realm order from organizing doc
+        assert!(output.contains("GLOBAL_REALM"));
+        assert!(output.contains("PROJECT_REALM"));
+        assert!(output.contains("GLOBAL_config"));
+        assert!(output.contains("PROJECT_foundation"));
+
+        // Realm labels with emoji
+        assert!(output.contains("\"\u{1F30D} GLOBAL\""));
+        assert!(output.contains("\"\u{1F4E6} PROJECT\""));
+
+        // Layer display names
+        assert!(output.contains("\"Configuration\""));
+        assert!(output.contains("\"Foundation\""));
+
+        // Node labels with emoji
+        assert!(output.contains("Locale[\"\u{1F535} Locale\"]"));
+        assert!(output.contains("Project[\"\u{1F535} Project\"]"));
+        assert!(output.contains("ProjectL10n[\"\u{1F7E2} ProjectL10n\"]"));
+
+        // Edges
+        assert!(output.contains("Project -.->|HAS_L10N| ProjectL10n"));
+        assert!(output.contains("ProjectL10n -.->|FOR_LOCALE| Locale"));
+
+        // linkStyle
+        assert!(output.contains("stroke:#22c55e,stroke-width:2px"));
+
+        // Class assignments
+        assert!(output.contains("class Locale invariant"));
+        assert!(output.contains("class Project invariant"));
+        assert!(output.contains("class ProjectL10n localized"));
+    }
+
+    #[test]
+    fn render_edge_families_distinct_arrows() {
+        let nodes = vec![
+            make_node("A", "global", "config", LocaleBehavior::Invariant),
+            make_node("B", "global", "config", LocaleBehavior::Localized),
+            make_node("C", "global", "config", LocaleBehavior::Derived),
+        ];
+
+        let rels = vec![
+            make_rel("OWN", EdgeFamily::Ownership, "A", "B"),
+            make_rel("GEN", EdgeFamily::Generation, "A", "C"),
+            make_rel("MINE", EdgeFamily::Mining, "B", "C"),
+        ];
+
+        let org_doc = make_org_doc();
+        let output = render_mermaid(&nodes, &rels, &org_doc).unwrap();
+
+        // Different arrow styles
+        assert!(output.contains("A -->|OWN| B"));
+        assert!(output.contains("A ==>|GEN| C"));
+        assert!(output.contains("B --o|MINE| C"));
+
+        // Different linkStyle colors
+        assert!(output.contains("stroke:#3b82f6")); // ownership
+        assert!(output.contains("stroke:#8b5cf6")); // generation
+        assert!(output.contains("stroke:#ec4899")); // mining
+    }
+
+    #[test]
+    fn wrap_in_markdown_includes_structure() {
+        let markdown = wrap_in_markdown("flowchart TB\n  A --> B\n");
+
+        assert!(markdown.contains("# NovaNet Complete Graph"));
+        assert!(markdown.contains("Auto-generated by novanet v9.0.0"));
+        assert!(markdown.contains("```mermaid"));
+        assert!(markdown.contains("flowchart TB"));
+        assert!(markdown.contains("A --> B"));
+        assert!(markdown.contains("```"));
+        assert!(markdown.contains("## Edge Families"));
+        assert!(markdown.contains("| `-->` | Ownership"));
+        assert!(markdown.contains("| `==>` | Generation"));
+        assert!(markdown.contains("| `--o` | Mining"));
+    }
+
+    #[test]
+    fn generate_mermaid_integration() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .parent()
+            .and_then(|p| p.parent());
+
+        let Some(root) = root else { return };
+        if !root.join("pnpm-workspace.yaml").exists() {
+            return;
+        }
+
+        let generator = MermaidGenerator;
+        let output = generator
+            .generate(root)
+            .expect("should generate Mermaid diagram");
+
+        // Header
+        assert!(output.contains("flowchart TB"));
+        assert!(output.contains("NovaNet Graph v9.0.0"));
+        assert!(output.contains("35 nodes"));
+
+        // All 3 realms
+        assert!(output.contains("GLOBAL_REALM"));
+        assert!(output.contains("PROJECT_REALM"));
+        assert!(output.contains("SHARED_REALM"));
+
+        // Sample layer subgraphs
+        assert!(output.contains("GLOBAL_config"));
+        assert!(output.contains("GLOBAL_knowledge"));
+        assert!(output.contains("PROJECT_foundation"));
+        assert!(output.contains("PROJECT_structure"));
+        assert!(output.contains("PROJECT_semantic"));
+        assert!(output.contains("PROJECT_instruction"));
+        assert!(output.contains("PROJECT_output"));
+        assert!(output.contains("SHARED_seo"));
+        assert!(output.contains("SHARED_geo"));
+
+        // All 5 classDef trait styles
+        assert!(output.contains("classDef invariant"));
+        assert!(output.contains("classDef localized"));
+        assert!(output.contains("classDef knowledge"));
+        assert!(output.contains("classDef derived"));
+        assert!(output.contains("classDef job"));
+
+        // Spot checks — some known nodes
+        assert!(output.contains("Locale["));
+        assert!(output.contains("Project["));
+        assert!(output.contains("Page["));
+        assert!(output.contains("Block["));
+        assert!(output.contains("Concept["));
+        assert!(output.contains("ConceptL10n["));
+        assert!(output.contains("PageL10n["));
+        assert!(output.contains("BlockL10n["));
+
+        // Edges exist (at least some)
+        assert!(output.contains("|HAS_PAGE|"));
+        assert!(output.contains("|HAS_BLOCK|"));
+
+        // linkStyle with edge family colors
+        assert!(output.contains("stroke:#3b82f6")); // ownership
+        assert!(output.contains("stroke:#22c55e")); // localization
+
+        // Class assignments
+        assert!(output.contains("class Locale invariant"));
+        assert!(output.contains("class Project invariant"));
+        assert!(output.contains("class PageL10n localized"));
+
+        // No v8 terms
+        assert!(!output.contains("SCOPE_HIERARCHY"));
+        assert!(!output.contains("Subcategory"));
+    }
+}

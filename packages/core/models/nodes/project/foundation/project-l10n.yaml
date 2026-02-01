@@ -1,4 +1,4 @@
-# models/nodes/project/project-l10n.yaml
+# models/nodes/project/foundation/project-l10n.yaml
 # ProjectL10n - Localized identity and messaging for Project
 #
 # GRAPH POSITION:
@@ -18,7 +18,7 @@
 
 node:
   name: ProjectL10n
-  category: project
+  locale_behavior: localized
   icon: "🟢"
   description: "Localized identity and messaging for a Project"
 
