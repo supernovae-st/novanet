@@ -782,6 +782,120 @@ The meta-graph enables a new filter dimension: "show only localized nodes",
 "show only invariant nodes", etc. This can be added to filterStore as a
 Trait-based filter.
 
+### Studio Visual System v9
+
+v8 has **4 competing color systems** (Scope, Subcategory, NodeCategory, NodeType).
+v9 replaces them with a single **3-channel encoding** that uses orthogonal visual
+channels — each axis is readable independently.
+
+#### Channel 1: COLOR → Layer (9 distinct colors)
+
+Node fill color comes from its Layer. All 9 Layers have a unique hex color
+(defined in `organizing-principles.yaml`). This replaces:
+- v8 `SCOPE_COLORS` (3 colors) → subsumed by Realm spatial zones
+- v8 `NodeCategory` colors (6 colors) → replaced by Layer colors (9 colors)
+- v8 `NodeType` colors (35 individual) → individual accent via border only
+
+#### Channel 2: SHAPE / BORDER → Trait (5 distinct styles)
+
+Node border style encodes locale behavior (Trait). No color collision with Layer:
+
+| Trait | Border Style | Description |
+|-------|-------------|-------------|
+| `invariant` | Solid 2px | Stable, structural nodes |
+| `localized` | Dashed 2px | Generated per locale |
+| `knowledge` | Double border | Cultural/linguistic expertise |
+| `derived` | Dotted 1px | Computed aggregates |
+| `job` | Thin + badge | Background tasks |
+
+#### Channel 3: GROUPING / POSITION → Realm (3 spatial zones)
+
+Realm controls spatial arrangement — not color. The 3 Realms map to visual zones
+in the graph layout (top/left/right, or nested subgraphs). This preserves the
+v8 scope-based grouping while freeing color for Layer.
+
+#### Migration from v8
+
+| v8 System | v9 Replacement | Where |
+|-----------|---------------|-------|
+| `SCOPE_COLORS` | Realm spatial zones (no color needed) | `tokens.ts`, layouts |
+| `NODE_CATEGORY_COLORS` (6) | 9 Layer colors from meta-graph | `categoryColors.ts` → `layerColors.ts` |
+| `NodeType` colors (35) | Layer color + Trait border | `NodeConfig.ts` simplified |
+| `Trait.color` in YAML | Border accent only | `organizing-principles.yaml` |
+
+### Studio Views System v9
+
+v8 has 2 modes (`data` | `schema`) and 9 filter presets using dead `NodeCategory`.
+v9 **subsumes** data/schema into 4 navigation modes and rewrites presets with facets.
+
+#### DataMode → NavigationMode
+
+```typescript
+// v8
+type DataMode = 'data' | 'schema';
+
+// v9
+type NavigationMode = 'data' | 'meta' | 'overlay' | 'query';
+// data    = v8 'data' mode (WHERE NOT n:Meta)
+// meta    = v8 'schema' mode (MATCH n:Meta)
+// overlay = NEW: data + meta combined
+// query   = NEW: faceted filtering
+```
+
+`uiStore.dataMode` → `uiStore.navigationMode`. Matrix Rain transition stays.
+
+#### Filter Presets Migration
+
+v8 presets use `NodeCategory` (dead). v9 presets use `Realm × Layer × Trait`:
+
+| v8 Preset | v9 Replacement |
+|-----------|---------------|
+| 1: Project Structure | `realm:project, layer:foundation+structure` |
+| 2: Generation Chain | `layer:semantic+output, trait:localized` |
+| 3: Locale Knowledge | `realm:global, trait:knowledge` |
+| 4: Concept Network | `layer:semantic` |
+| 5: Prompts & Rules | `layer:instruction` |
+| 6: SEO & GEO | `realm:shared` |
+| 7: High Priority | **REMOVED** (priority property deleted in v8.2) |
+| 8: Realtime | **REMOVED** (freshness property deleted in v8.2) |
+| 0: All Nodes | No filter (unchanged) |
+
+New presets enabled by v9:
+- `T`: Trait toggle — cycle through invariant/localized/knowledge/derived/job
+- `E`: Edge Family filter — show only edges of a given family
+
+#### YAML Views
+
+14 YAML views stay but category `'scope'` → `'overview'`. Views become
+preset queries usable in any navigation mode. ViewPicker becomes
+context-aware: shows YAML views in Data/Query mode, ontology views in Meta mode.
+
+### Faceted Filter Strategy
+
+v8 filter system: rigid tree (Scope → Subcategory → NodeCategory) with collapse/expand.
+v9 filter system: **independent facettes** with AND logic.
+
+#### filterStore Migration
+
+| v8 Field | v9 Replacement |
+|----------|---------------|
+| `collapsedScopes: Set<Scope>` | `collapsedRealms: Set<Realm>` |
+| `collapsedSubcategories: Set<string>` | `collapsedLayers: Set<Layer>` |
+| `categoryFilter: Set<NodeCategory>` | **DELETED** → facet checkboxes |
+| `typeFilter: Set<NodeType>` | Stays (individual type toggle) |
+
+#### FacetFilterPanel (new component)
+
+Replaces the v8 SchemaFilterPanel tree with independent checkbox groups:
+- **Realm** (3): global, project, shared
+- **Layer** (9): config, knowledge, foundation, ...
+- **Trait** (5): invariant, localized, knowledge, derived, job
+- **EdgeFamily** (5): ownership, localization, semantic, generation, mining
+
+All groups are populated dynamically from `MATCH (n:Meta)` — not hardcoded.
+Unchecking a facet generates `WHERE NOT` clauses in the Cypher query.
+Multiple unchecked facets compose with AND logic (intersection).
+
 ## Navigation Modes (CLI + Studio)
 
 The `:Meta` double-labeling enables **4 distinct navigation modes** for exploring the graph.
@@ -1265,10 +1379,15 @@ Target latencies for the 4 navigation modes (on local Neo4j with seed data):
 
 ## Migration Strategy
 
-### Approach: Clean slate
+### Approach: Clean slate (no backward compatibility)
 
 This is a **breaking change** (v8.3 → v9.0). No incremental migration.
 All dev data lives in seed files, so a clean rebuild is safe and simple.
+
+**Clean break**: No v8→v9 compatibility layer. No gradual migration. No runtime
+detection of old vs new schema. All consumers (Studio, CLI, tests) are updated
+atomically on the feature branch. v8 types (`Scope`, `NodeCategory`,
+`LocaleBehavior`) are deleted — not deprecated, not aliased. If it compiles, it's v9.
 
 ```bash
 # 1. Stop and destroy
@@ -1375,7 +1494,7 @@ Since this is a clean-slate migration, the casing change can be applied atomical
 
 ### Files to Create / Modify
 
-Total: ~125 files across 5 packages + 1 Rust tool + docs + Claude config. Grouped by package.
+Total: ~130 files across 5 packages + 1 Rust tool + docs + Claude config. Grouped by package.
 
 #### @novanet/core (YAML + types + filters)
 
@@ -1479,7 +1598,7 @@ Total: ~125 files across 5 packages + 1 Rust tool + docs + Claude config. Groupe
 | `src/lib/__tests__/schemaLayoutELK.test.ts` | Update | Subcategory, localeKnowledge, PascalCase scope fixtures |
 | `e2e/schema-mode.spec.ts` | Update | Scope/Subcategory assertions (3 Scopes, GLOBAL, etc.) |
 
-##### Navigation Modes (new files)
+##### Navigation Modes + Visual System (new files)
 
 | File | Action | Description |
 |------|--------|-------------|
@@ -1488,6 +1607,8 @@ Total: ~125 files across 5 packages + 1 Rust tool + docs + Claude config. Groupe
 | `src/stores/navigationStore.ts` | Create | Active mode + selected facets state |
 | `src/hooks/useNavigationMode.ts` | Create | Mode-aware Cypher query builder |
 | `src/app/api/graph/navigation/route.ts` | Create | API endpoint for filtered subgraph queries |
+| `src/config/layerColors.ts` | Create | 9 Layer colors (replaces `categoryColors.ts` with 6) |
+| `src/config/traitStyles.ts` | Create | 5 Trait border styles (solid/dashed/double/dotted/thin) |
 
 #### @novanet/cli (TS graph commands)
 
@@ -1586,7 +1707,7 @@ no dead code remains, and DX is clean.
 | # | Task | Description |
 |---|------|-------------|
 | 2.1 | Rewrite `OrganizingPrinciplesGenerator.ts` | v9 Cypher for Realm, Layer, Trait, EdgeFamily |
-| 2.2 | Create `KindGenerator.ts` | Kind nodes + `schema_hint`, `context_budget` + facette rels |
+| 2.2 | Create `KindGenerator.ts` | Kind nodes + `schema_hint`, `context_budget` + facette rels. **MUST fail-fast** if any YAML is missing `locale_behavior` — no silent defaults, throw with file path |
 | 2.3 | Create `EdgeSchemaGenerator.ts` | EdgeKind nodes + `cypher_pattern` + FROM/TO_KIND |
 | 2.4 | Create `AutowireGenerator.ts` | OF_KIND wiring statements |
 | 2.5 | Create `HierarchyGenerator.ts` | organizing-principles.yaml → hierarchy.ts |
@@ -1627,17 +1748,21 @@ no dead code remains, and DX is clean.
 
 | # | Task | Description |
 |---|------|-------------|
-| 5.1 | Component renames | ScopeGroupNode→Realm, SubcategoryGroupNode→Layer, attractors |
-| 5.2 | Kill NodeCategory in Studio | `filterAdapter.ts`, `nodeTypes.ts`, `categoryColors.ts` |
+| 5.1 | Component renames | ScopeGroupNode→Realm, SubcategoryGroupNode→Layer, ScopeAttractor→RealmAttractor, SubcategoryAttractor→LayerAttractor, LocaleKnowledgeNode (`localeKnowledge`→`knowledge`), **Graph2D.tsx** (23 refs — highest density, critical path), **ResultsOverview.tsx** |
+| 5.2 | Kill NodeCategory in Studio | `filterAdapter.ts` (rewrite presets with v9 facets), `nodeTypes.ts` (import Layer from core), `categoryColors.ts` (6→9 Layer colors) |
 | 5.3 | ViewCategory rename | `'scope'`→`'overview'` in viewStore, views/route, view.schema |
 | 5.4 | Update API queries | `organizing-principles/route.ts` — Realm/Layer/Kind/Trait Cypher |
 | 5.5 | Update hooks | `useMagneticData`, `useMagneticSimulation`, `useFilteredGraph` |
 | 5.6 | Update stores | `filterStore.ts` — collapsedScopes→collapsedRealms |
 | 5.7 | Update layouts | 6 layout algorithms — Scope→Realm, Subcategory→Layer |
 | 5.8 | Update misc | SchemaNode, tokens, page.tsx, tailwind.config, schemaGenerator |
+| 5.8b | Visual system | Implement 3-channel encoding: Layer→fill color, Trait→border style, Realm→spatial zone |
+| 5.8c | View presets migration | Rewrite 9 `VIEW_PRESETS` from `NodeCategory` to v9 facets (Realm×Layer×Trait), drop dead presets 7-8 |
+| 5.8d | DataMode → NavigationMode | Replace `uiStore.dataMode` ('data'\|'schema') with `uiStore.navigationMode` ('data'\|'meta'\|'overlay'\|'query') |
 | 5.9 | Update tests | Unit tests + e2e/schema-mode.spec.ts |
+| 5.10 | localStorage migration | Clear persisted `novanet-ui` and `novanet-filter` stores on v9 boot — v8 keys (`collapsedScopes`, `dataMode`) contain dead values. Add version check in `partialize` or init logic. |
 
-**Gate**: Ralph Wiggum #5 — `pnpm test --filter=@novanet/studio` passes, `pnpm dev` renders correctly, no v8 terms
+**Gate**: Ralph Wiggum #5 — `pnpm test --filter=@novanet/studio` passes, `pnpm dev` renders correctly, no v8 terms, localStorage loads cleanly
 
 #### Phase 6: Studio Navigation (new features)
 
@@ -1646,10 +1771,12 @@ no dead code remains, and DX is clean.
 | 6.1 | Create `NavigationModeToggle.tsx` | Toolbar: Data/Meta/Overlay/Query mode buttons |
 | 6.2 | Create `navigationStore.ts` | Active mode + selected facets state |
 | 6.3 | Create `useNavigationMode.ts` | Mode-aware Cypher query builder |
-| 6.4 | Create `FacetFilterPanel.tsx` | Sidebar: Realm/Layer/Trait/EdgeFamily checkboxes |
+| 6.4 | Create `FacetFilterPanel.tsx` | Sidebar: Realm/Layer/Trait/EdgeFamily checkboxes (populated from `MATCH (n:Meta)`) |
 | 6.5 | Create navigation API | `/api/graph/navigation/route.ts` |
+| 6.6 | Context-aware ViewPicker | Data/Query mode → show YAML views as filtered subgraphs; Meta mode → show ontology views (taxonomy tree, edge schema) |
+| 6.7 | New keyboard presets | `T` = Trait cycle, `E` = EdgeFamily filter, update `?` help modal |
 
-**Gate**: Ralph Wiggum #6 — all 4 navigation modes work, facet filters are dynamic from meta-graph
+**Gate**: Ralph Wiggum #6 — all 4 navigation modes work, facet filters are dynamic from meta-graph, ViewPicker context-aware
 
 #### Phase 7: CLI + Documentation
 
