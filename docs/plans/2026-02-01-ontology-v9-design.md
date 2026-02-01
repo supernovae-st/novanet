@@ -12,10 +12,11 @@
 | **1 — Self-Describing Context Graph** | v9.0 | Level 5 | 0–8 (+ 9 stretch) | Detailed tasks, file-level |
 | **2 — Dynamic Retrieval** | v10.0 | Level 6 | 10–12 | High-level objectives + success criteria |
 | **3 — Autonomous Learning** | v11.0 | Level 7 | 13–15 | High-level objectives + success criteria |
+| **4 — Content Pipeline** | v12.0 | Level 8 | 16 | Placeholder — CLI-driven generation |
 
 v9 builds the foundation — a self-describing meta-graph that AI agents can discover
 autonomously. v10 makes context assembly dynamic. v11 closes the feedback loop so the
-meta-graph learns from its own outputs.
+meta-graph learns from its own outputs. v12 exposes the full content pipeline through CLI.
 
 ## Summary
 
@@ -870,6 +871,20 @@ New presets enabled by v9:
 preset queries usable in any navigation mode. ViewPicker becomes
 context-aware: shows YAML views in Data/Query mode, ontology views in Meta mode.
 
+**Meta mode ontology views (5):**
+
+| # | View Name | Cypher | Description |
+|---|-----------|--------|-------------|
+| M1 | Full Ontology | `MATCH (n:Meta) RETURN n` | All ~104 meta-nodes — the big picture (default Meta view) |
+| M2 | Realms | `MATCH (r:Realm)<-[:IN_REALM]-(k:Kind) RETURN r, k` | 3 Realms + their Kinds, grouped |
+| M3 | Layers | `MATCH (l:Layer)<-[:IN_LAYER]-(k:Kind) RETURN l, k` | 9 Layers + their Kinds |
+| M4 | Traits | `MATCH (t:Trait)<-[:EXHIBITS]-(k:Kind) RETURN t, k` | 5 Traits + which Kinds exhibit them |
+| M5 | Edge Schema | `MATCH (ef:EdgeFamily)<-[:IN_FAMILY]-(ek:EdgeKind) RETURN ef, ek` | 5 Families + 47 EdgeKinds with FROM/TO |
+
+Data/Query mode: shows the 14 YAML data views.
+Meta mode: shows M1–M5.
+Overlay mode: shows both combined.
+
 ### Faceted Filter Strategy
 
 v8 filter system: rigid tree (Scope → Subcategory → NodeCategory) with collapse/expand.
@@ -945,6 +960,12 @@ relationships connect data instances to their Kind nodes.
 **CLI**: `pnpm graph:overlay`
 **Studio**: Toggle button "Show Meta" (overlays meta-graph on current data view)
 
+**Visual distinction**: Meta-nodes render as **ghost style** — semi-transparent
+(opacity 0.4), dashed border, 70% size. Data nodes keep full 3-channel encoding
+(Layer fill + Trait border + Realm zone). The meta-graph becomes a subtle
+"background map" showing where data lives in the taxonomy. Ghost style is
+CSS-only (conditional on `node.data.isMeta`), no custom React Flow shapes needed.
+
 ### Mode 4: Query-Driven Views
 
 Combine facets (Realm, Layer, Trait) to create custom subgraph views.
@@ -1005,10 +1026,29 @@ RETURN labels(instance)[0] AS type, count(*) AS count
 
 **CLI**: `pnpm graph:query --realm=global --trait=knowledge`
 
+### CLI-First Architecture
+
+The CLI is the **universal interface** — the source of truth for all graph operations.
+Studio (web GUI) and TUI (Rust terminal) are presentation layers on top of CLI
+capabilities. If it works in CLI, it works everywhere.
+
+```
+CLI = universal interface
+├── Studio  = web GUI on top
+├── TUI     = interactive terminal on top (stretch)
+└── AI Agent = programmatic consumer (v10+)
+```
+
+An AI orchestrator can call CLI commands to discover and assemble its own context:
+`pnpm graph:query --kind=Page --trait=localized --format=json` → the agent knows
+what to generate before it generates. This is the "self-describing context graph"
+in action.
+
 ### TS CLI (`@novanet/cli`) — scripts & CI
 
-Simple pnpm commands for automation, CI pipelines, and quick checks.
 Lives in the monorepo, shares types with `@novanet/core`.
+
+#### Read Commands (v9)
 
 | Command | Description | Output |
 |---------|------------|--------|
@@ -1029,6 +1069,27 @@ Lives in the monorepo, shares types with `@novanet/core`.
 | `--format` | `table`, `json`, `cypher` | Output format (default: `table`) |
 
 All flags are composable: `--realm=project --trait=localized` returns the intersection.
+
+#### Write Commands (v9)
+
+| Command | Description | Example |
+|---------|------------|---------|
+| `pnpm node:create` | Create a data node | `--kind=Page --key=about --props='{"display_name":"About"}'` |
+| `pnpm node:edit` | Edit node properties | `--key=about --set='{"display_name":"About Us"}'` |
+| `pnpm node:delete` | Delete a data node | `--key=about --confirm` |
+| `pnpm relation:create` | Create a relationship | `--from=about --to=pricing --type=SEMANTIC_LINK` |
+| `pnpm relation:delete` | Delete a relationship | `--from=about --to=pricing --type=SEMANTIC_LINK` |
+
+Write commands validate against the meta-graph: `node:create --kind=Page` checks
+that `Page` is a valid Kind, applies the correct Realm/Layer/Trait, and wires
+`OF_KIND` automatically.
+
+#### Management Commands (v9, already planned)
+
+| Command | Description |
+|---------|------------|
+| `pnpm schema:generate` | Run all 7 generators |
+| `pnpm schema:validate` | Validate YAML ↔ TS ↔ Neo4j sync |
 
 ### Rust TUI (`novanet-tui`) — interactive exploration
 
@@ -1079,6 +1140,19 @@ Lives in `tools/novanet-tui/` outside the pnpm monorepo.
 | **Instance drill-down** | `Enter` on a Kind shows its data instances |
 | **Edge explorer** | `e` key: browse EdgeKind → FROM_KIND/TO_KIND schema |
 | **Cypher preview** | `c` key: show the Cypher query behind the current view |
+| **Node CRUD** | `n` key: create node, `d` key: delete node (wraps CLI write commands) |
+| **Relation CRUD** | `r` key: create relation between selected nodes |
+
+#### TUI Contract
+
+The TUI **must** support the same interface as the CLI:
+- All 4 navigation modes (1/2/3/4 keys)
+- All facet flags (`--realm`, `--layer`, `--trait`, `--edge-family`, `--kind`)
+- All write operations (`node:create/edit/delete`, `relation:create/delete`)
+- Same `--format` options for export (`table`, `json`, `cypher`)
+
+UI details (layout, keybindings, animation) are implementation decisions
+for Phase 9. The contract ensures feature parity with CLI.
 
 #### Tech Stack
 
@@ -1788,7 +1862,8 @@ no dead code remains, and DX is clean.
 
 | # | Task | Description |
 |---|------|-------------|
-| 7.1 | Create TS CLI commands | `graph:data`, `graph:meta`, `graph:overlay`, `graph:query` |
+| 7.1 | Create TS CLI read commands | `graph:data`, `graph:meta`, `graph:overlay`, `graph:query` |
+| 7.1b | Create TS CLI write commands | `node:create/edit/delete`, `relation:create/delete` — validate against meta-graph (Kind exists, correct Realm/Layer/Trait, auto-wire OF_KIND) |
 | 7.2 | Update Claude skills | `novanet-architecture`, `novanet-sync` — v9 terminology |
 | 7.3 | Update Claude commands | `novanet-arch`, `novanet-sync` — v9 references |
 | 7.4 | Update CLAUDE.md files | Root, core, studio — v9 terminology and version |
@@ -1924,6 +1999,32 @@ consecutive cycles.
 
 **Gate**: Ralph Wiggum — feedback loop is functional, no manual tuning required
 for steady-state operation. Release tag `v11.0.0`.
+
+---
+
+#### Milestone 4: v12.0 — Content Pipeline (placeholder)
+
+**Prereq**: Milestone 3 (v11.0) complete and stable. Release tag `v11.0.0`.
+
+Full content generation pipeline exposed through CLI. The orchestrator dispatches
+generation tasks via CLI commands, not internal API calls.
+
+#### Phase 16: CLI Content Pipeline
+
+**Objective**: Make content generation a first-class CLI operation.
+
+- `pnpm content:generate --page=pricing --locale=fr-FR` — generate a full page
+- `pnpm content:status --locale=ja-JP` — check generation status across all pages
+- `pnpm content:diff --page=pricing --locale=fr-FR` — show what changed since last generation
+- `pnpm content:approve --page=pricing --locale=fr-FR` — mark output as approved
+- Orchestrator consumes CLI commands programmatically (AI-driven pipeline)
+- TUI wraps all content commands with interactive review UI
+
+**Success**: An AI agent can generate, review, and approve content for any
+page/locale combination using only CLI commands. No Studio or direct API required.
+
+**Note**: Detailed design deferred until v11 feedback loop proves the meta-graph
+is stable enough for autonomous content operations.
 
 ### Quality Gates: Ralph Wiggum Audit Protocol
 
