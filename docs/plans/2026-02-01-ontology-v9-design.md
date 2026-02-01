@@ -112,6 +112,7 @@ Properties:
 key:          string  (PK, unique)
 display_name: string
 emoji:        string
+color:        string  (hex color for Studio fills, e.g., '#3B82F6')
 llm_context:  string
 created_at:   datetime
 updated_at:   datetime
@@ -147,6 +148,9 @@ uses this to decide how much of a Kind's data to include when building prompts:
 - `medium`: key properties (e.g., BlockType, LocaleVoice)
 - `low`: summary only (e.g., SEOKeywordMetrics, GEOSeedMetrics)
 - `minimal`: key + display_name only (e.g., SEOMiningRun, GEOMiningRun)
+
+Note: `context_budget` is a soft constraint (validated by generators, not by Neo4j).
+No database-level enum constraint — values are enforced in KindGenerator + schema validate.
 
 `traversal_depth` — **v10 preparation**. Nullable in v9 (ignored by orchestrator).
 In v10, defines how many relationship hops to follow from instances of this Kind
@@ -493,8 +497,35 @@ not on `:Meta`. The `:Meta` label is purely for grouping/filtering.
 ### Indexes
 
 Neo4j automatically creates a backing index for each UNIQUE constraint,
-so the 6 constraints above provide 6 indexes for free. No additional
-indexes are needed for meta-node lookups.
+so the 6 constraints above provide 6 indexes for free.
+
+#### Meta-graph relationship indexes (new)
+
+Facet queries and hierarchy traversals need relationship indexes to avoid full scans.
+Without these, combo queries (Mode 4) degrade from ~5ms to ~50ms at production volume.
+
+```cypher
+-- Facet filter indexes (Mode 4 queries)
+CREATE INDEX kind_in_realm IF NOT EXISTS FOR ()-[r:IN_REALM]-() ON ();
+CREATE INDEX kind_in_layer IF NOT EXISTS FOR ()-[r:IN_LAYER]-() ON ();
+CREATE INDEX kind_exhibits IF NOT EXISTS FOR ()-[r:EXHIBITS]-() ON ();
+
+-- Edge schema indexes
+CREATE INDEX edge_from_kind IF NOT EXISTS FOR ()-[r:FROM_KIND]-() ON ();
+CREATE INDEX edge_to_kind IF NOT EXISTS FOR ()-[r:TO_KIND]-() ON ();
+
+-- Instance bridge (critical — ~5,000-10,000 rels at production)
+CREATE INDEX of_kind IF NOT EXISTS FOR ()-[r:OF_KIND]-() ON ();
+
+-- Hierarchy traversal indexes
+CREATE INDEX realm_has_layer IF NOT EXISTS FOR ()-[r:HAS_LAYER]-() ON ();
+CREATE INDEX layer_has_kind IF NOT EXISTS FOR ()-[r:HAS_KIND]-() ON ();
+
+-- EdgeKind property index
+CREATE INDEX edge_kind_self_ref IF NOT EXISTS FOR (ek:EdgeKind) ON (ek.is_self_referential);
+```
+
+#### Existing data indexes (unchanged)
 
 Existing data node indexes (00-constraints.cypher) remain unchanged:
 - 7 uniqueness constraints on data nodes (locale_key, project_key, etc.)
@@ -513,8 +544,8 @@ MATCH (k:Kind {label:'Page'})
 MATCH (k)-[:IN_REALM]->(r:Realm)
 MATCH (k)-[:IN_LAYER]->(l:Layer)
 MATCH (k)-[:EXHIBITS]->(t:Trait)
-OPTIONAL MATCH (k)<-[:FROM_KIND]-(ek:EdgeKind)-[:IN_FAMILY]->(f:EdgeFamily)
-OPTIONAL MATCH (ek)-[:TO_KIND]->(target:Kind)
+OPTIONAL MATCH (k)<-[:FROM_KIND]-(ek:EdgeKind)-[:IN_FAMILY]->(f:EdgeFamily),
+               (ek)-[:TO_KIND]->(target:Kind)
 RETURN k, r, l, t,
        collect(DISTINCT {edge: ek.key, family: f.key, targets: target.label}) AS edges
 ```
@@ -1017,9 +1048,8 @@ RETURN ek.key AS edge, ek.llm_context AS description
 #### Combo Filters
 
 ```cypher
--- Knowledge nodes in the global realm (Realm + Trait + Layer combo)
-MATCH (k:Kind)-[:IN_REALM]->(:Realm {key: 'global'})
-MATCH (k)-[:EXHIBITS]->(:Trait {key: 'knowledge'})
+-- Knowledge nodes in the global realm (single path, optimized)
+MATCH (:Realm {key: 'global'})<-[:IN_REALM]-(k:Kind)-[:EXHIBITS]->(:Trait {key: 'knowledge'})
 MATCH (k)<-[:OF_KIND]-(instance)
 RETURN labels(instance)[0] AS type, count(*) AS count
 ```
@@ -1108,7 +1138,10 @@ checks that `Page` is a valid Kind, applies the correct Realm/Layer/Trait, and w
 tools/novanet/
 ├── Cargo.toml
 └── src/
-    ├── main.rs             clap: data/meta/query/node/relation/tui subcommands
+    ├── lib.rs              Public API: query, facets, meta types, cypher builder
+    ├── main.rs             Thin entry: clap parsing → calls lib, formats, exits
+    ├── error.rs            NovaNetError enum (thiserror) + color-eyre setup
+    ├── config.rs           Connection config (--uri/--user/--password + env fallbacks)
     ├── db.rs               Neo4j connection pool (neo4rs, async)
     ├── cypher.rs           Cypher query builder (facet → WHERE clauses)
     ├── facets.rs           Realm/Layer/Trait/EdgeFamily filter logic
@@ -1125,11 +1158,14 @@ tools/novanet/
     │   └── relation.rs     relation create/delete
     └── tui/
         ├── mod.rs
-        ├── app.rs          App state machine (mode, selection, filters)
+        ├── app.rs          App state machine (mode, selection, filters, loading)
         ├── ui.rs           Layout: left tree + right detail + status bar
-        ├── events.rs       Keyboard/mouse event handling
+        ├── events.rs       Crossterm keyboard/mouse events → Action enum
+        ├── runtime.rs      Channel bridge: Action → tokio task → Result → App
         ├── tree.rs         Taxonomy tree widget (Realm > Layer > Kind)
-        └── detail.rs       Kind detail pane (facets, edges, instances)
+        ├── detail.rs       Kind detail pane (facets, edges, instances)
+        ├── search.rs       Nucleo fuzzy search integration (/ key)
+        └── dialogs.rs      Input forms for node/relation CRUD (n/d/r keys)
 ```
 
 No feature flags, no workspace. Single `cargo build` produces the `novanet` binary
@@ -1142,13 +1178,15 @@ with CLI + TUI. Split into workspace if crate grows past v10.
 | `clap` + `clap_derive` | CLI argument parsing, subcommands |
 | `ratatui` | Terminal UI framework |
 | `crossterm` | Cross-platform terminal backend |
-| `neo4rs` | Neo4j Bolt driver (async) |
-| `tokio` | Async runtime (multi-thread) |
+| `neo4rs` | Neo4j Bolt driver (async) — pin exact minor version |
+| `tokio` | Async runtime (`features = ["full"]`) |
 | `serde` + `serde_json` | Neo4j result deserialization, JSON output |
+| `serde_yaml` | YAML parsing for schema validation (`validate.rs`) |
 | `tabled` | Table output formatting |
 | `nucleo` | Fuzzy search (TUI `/` key) |
-| `color-eyre` | Error reporting with context |
-| `tracing` | Structured logging |
+| `thiserror` | Structured error enum (`NovaNetError`) for matching |
+| `color-eyre` | Error reporting with context (wraps `thiserror` errors) |
+| `tracing` + `tracing-subscriber` | Structured logging with env-filter output |
 
 #### Connection
 
@@ -1206,6 +1244,30 @@ novanet --uri bolt://remote:7687 --user neo4j --password secret tui
 | **Cypher preview** | `c` key: show the Cypher query behind the current view |
 | **Node CRUD** | `n` key: create node, `d` key: delete node (wraps CLI write commands) |
 | **Relation CRUD** | `r` key: create relation between selected nodes |
+
+#### TUI Async Architecture
+
+`neo4rs` is async (requires tokio runtime). `ratatui` runs a synchronous event loop
+(blocking on `crossterm::event::poll`). These coexist via **channel bridge** (Pattern B):
+
+```
+┌──────────────────┐     mpsc::Sender<Action>     ┌──────────────────┐
+│  TUI Event Loop  │ ──────────────────────────>   │  Tokio Runtime   │
+│  (main thread)   │                               │  (async tasks)   │
+│                  │     mpsc::Receiver<Result>     │                  │
+│  crossterm poll  │ <──────────────────────────    │  neo4rs queries  │
+│  + try_recv()    │                               │                  │
+└──────────────────┘                               └──────────────────┘
+```
+
+The event loop uses `crossterm::event::poll(Duration::from_millis(50))` (non-blocking)
+combined with `mpsc::try_recv()` on a results channel. This gives:
+- **Responsive UI**: 50ms tick rate, never blocked on I/O
+- **Async Neo4j**: queries run on tokio tasks in the background
+- **Loading state**: `App` state machine has `Loading`/`Ready` variants
+
+Implementation lives in `src/tui/runtime.rs` (channel bridge) and
+`src/tui/events.rs` (crossterm events → Action enum).
 
 #### TUI Contract
 
@@ -1277,9 +1339,11 @@ Unchecking a facet filters out matching nodes/edges dynamically.
 
 ### Performance
 
-Each data instance gets one `OF_KIND` relationship to its Kind node.
+Each data instance gets exactly one `OF_KIND` relationship to its Kind node.
+Cardinality is enforced by integrity tests (see Testing Strategy section).
 Estimated production volume: ~5,000-10,000 OF_KIND relationships
-(200 locales x ~20 knowledge nodes + project/shared instances).
+(200 locales x ~20 knowledge nodes + project/shared instances = ~5,000 rels;
+current seed data has 66 FOR_LOCALE instances across 6 localized types).
 This is negligible for Neo4j.
 
 ### Autowiring strategy
@@ -1459,6 +1523,20 @@ WITH count(k) AS connected
 MATCH (k2:Kind) WITH connected, count(k2) AS total
 WHERE connected <> total
 RETURN 'HIERARCHY BROKEN' AS status, connected, total
+```
+
+```cypher
+-- Every data node has exactly 1 OF_KIND (no orphans, no duplicates)
+MATCH (n) WHERE NOT n:Meta AND NOT exists((n)-[:OF_KIND]->(:Kind))
+RETURN labels(n)[0] AS orphaned_type, count(*) AS count
+```
+
+```cypher
+-- No data node has multiple OF_KIND relationships
+MATCH (n)-[r:OF_KIND]->()
+WITH n, count(r) AS of_kind_count
+WHERE of_kind_count > 1
+RETURN labels(n)[0] AS type, n.key AS key, of_kind_count
 ```
 
 ### 3. Generator tests (adapt existing)
@@ -1735,14 +1813,17 @@ Total: ~130 files across 5 packages + 1 Rust tool + docs + Claude config. Groupe
 
 | File | Action | Description |
 |------|--------|-------------|
-| `Cargo.toml` | Create | Single crate: clap, ratatui, crossterm, neo4rs, tokio, serde, tabled, nucleo, color-eyre, tracing |
-| `src/main.rs` | Create | clap: data/meta/query/node/relation/tui subcommands |
+| `Cargo.toml` | Create | Single crate: clap, ratatui, crossterm, neo4rs, tokio, serde, serde_json, serde_yaml, tabled, nucleo, thiserror, color-eyre, tracing, tracing-subscriber |
+| `src/lib.rs` | Create | Public API: query, facets, meta types, cypher builder (enables integration tests) |
+| `src/main.rs` | Create | Thin entry: clap parsing → calls lib, formats output, exits |
+| `src/error.rs` | Create | `NovaNetError` enum (thiserror): NotFound, ValidationFailed, Neo4jError, YamlParseError |
+| `src/config.rs` | Create | Connection config struct, env var fallbacks (`NOVANET_URI`, `NOVANET_PASSWORD`) |
 | `src/db.rs` | Create | Neo4j connection pool (neo4rs, async) |
 | `src/cypher.rs` | Create | Cypher query builder (facet → WHERE clauses) |
 | `src/facets.rs` | Create | Realm/Layer/Trait/EdgeFamily filter logic |
 | `src/meta.rs` | Create | Meta-graph types (Kind, EdgeKind, etc.) |
 | `src/output.rs` | Create | Formatters: table (tabled), json (serde), cypher (raw) |
-| `src/validate.rs` | Create | Schema validation (Neo4j ↔ YAML) |
+| `src/validate.rs` | Create | Schema validation (Neo4j ↔ YAML via serde_yaml) |
 | `src/commands/mod.rs` | Create | Command module re-exports |
 | `src/commands/data.rs` | Create | Mode 1: WHERE NOT n:Meta |
 | `src/commands/meta.rs` | Create | Mode 2: MATCH (n:Meta) |
@@ -1751,11 +1832,14 @@ Total: ~130 files across 5 packages + 1 Rust tool + docs + Claude config. Groupe
 | `src/commands/node.rs` | Create | node create/edit/delete (validate against meta-graph) |
 | `src/commands/relation.rs` | Create | relation create/delete |
 | `src/tui/mod.rs` | Create | TUI module entry point |
-| `src/tui/app.rs` | Create | App state machine (mode, selection, filters) |
+| `src/tui/app.rs` | Create | App state machine (mode, selection, filters, Loading/Ready) |
 | `src/tui/ui.rs` | Create | Layout: left tree + right detail + status bar |
-| `src/tui/events.rs` | Create | Keyboard/mouse event handling |
+| `src/tui/events.rs` | Create | Crossterm keyboard/mouse events → Action enum |
+| `src/tui/runtime.rs` | Create | Channel bridge: Action → tokio task → Result → App update |
 | `src/tui/tree.rs` | Create | Taxonomy tree widget (Realm > Layer > Kind) |
 | `src/tui/detail.rs` | Create | Kind detail pane (facets, edges, instances) |
+| `src/tui/search.rs` | Create | Nucleo fuzzy search integration (/ key) |
+| `src/tui/dialogs.rs` | Create | Input forms for node/relation CRUD (n/d/r keys) |
 
 #### Turbo Generators (scaffolding templates)
 
@@ -1910,18 +1994,23 @@ no dead code remains, and DX is clean.
 
 | # | Task | Description |
 |---|------|-------------|
-| 7.1 | Scaffold `tools/novanet` Rust crate | `Cargo.toml` with clap, neo4rs, tokio, serde, tabled, color-eyre, tracing. `main.rs` with clap subcommands. |
+| 7.1 | Scaffold `tools/novanet` Rust crate | `Cargo.toml` with all deps (see Dependencies table). `lib.rs` + thin `main.rs` with clap subcommands. `error.rs` with `NovaNetError` enum. `config.rs` with connection config + env fallbacks. |
 | 7.2 | Implement read commands | `novanet data`, `novanet meta`, `novanet overlay`, `novanet query` — 4 navigation modes with `--realm/--layer/--trait/--edge-family/--kind/--format` flags |
+| 7.2b | Add unit tests for core modules | Unit tests for `cypher.rs` (query builder → correct Cypher for facet combinations), `facets.rs` (filter intersection logic), `meta.rs` (type mapping). Integration tests with Neo4j testcontainer for end-to-end command output. |
 | 7.3 | Implement write commands | `novanet node create/edit/delete`, `novanet relation create/delete` — validate against meta-graph (Kind exists, correct Realm/Layer/Trait, auto-wire OF_KIND) |
-| 7.4 | Implement `novanet schema validate` | Validate Neo4j state matches YAML definitions |
-| 7.5 | Add ratatui TUI mode | `novanet tui` — taxonomy tree, mode toggle (1/2/3/4), facet filter (f), search (/), kind detail, node CRUD (n/d/r keys) |
+| 7.4 | Implement `novanet schema validate` | Validate Neo4j state matches YAML definitions (via `serde_yaml`) |
+| 7.5a | TUI scaffold | App state machine (`Loading`/`Ready` variants), basic layout (tree + detail + status bar), mode toggle (1/2/3/4), async channel bridge (`runtime.rs`) |
+| 7.5b | TUI taxonomy tree | Tree widget with Realm > Layer > Kind hierarchy, collapse/expand, arrow key navigation |
+| 7.5c | TUI async + filters | Async Neo4j queries via mpsc channel bridge, loading states, facet filter popup (`f` key) |
+| 7.5d | TUI search + detail | Nucleo fuzzy search (`search.rs`, `/` key), Kind detail pane, edge explorer (`e` key) |
+| 7.5e | TUI CRUD dialogs | Input forms for node create/edit/delete (`dialogs.rs`, `n`/`d` keys), relation CRUD (`r` key), confirmation prompts, Cypher preview (`c` key) |
 | 7.6 | Update Claude skills | `novanet-architecture`, `novanet-sync` — v9 terminology |
 | 7.7 | Update Claude commands | `novanet-arch`, `novanet-sync` — v9 references |
 | 7.8 | Update CLAUDE.md files | Root, core, studio — v9 terminology and version |
 | 7.9 | Update docs | NOVANET-PITCH, plan docs, _index.yaml, README |
 | 7.10 | Update turbo generators | Scaffold templates with v9 fields |
 
-**Gate**: Ralph Wiggum #7 — `novanet data/meta/query/node` commands work, `novanet tui` launches with taxonomy tree, all docs reference v9, no stale v8 terminology anywhere
+**Gate**: Ralph Wiggum #7 — `novanet data/meta/query/node` commands work, unit tests pass, `novanet tui` launches with taxonomy tree + async queries, all docs reference v9, no stale v8 terminology anywhere
 
 #### Phase 8: Final Verification
 
