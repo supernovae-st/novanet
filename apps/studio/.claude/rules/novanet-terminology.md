@@ -1,4 +1,4 @@
-# NovaNet Terminology (v8.2.0)
+# NovaNet Terminology (v9.0.0)
 
 ## Core Concepts
 
@@ -10,22 +10,113 @@
 | **Block** | Section/component within a page, typed by BlockType |
 | **Locale** | Language/region code (BCP 47, e.g., "fr-FR", "en-US") |
 | **Expression** | Specific phrase/word variant in a locale's lexicon |
+| **Context Graph** | Knowledge graph enriched with operational metadata and self-describing schema for AI agents |
 
-## Node Scopes (3 scopes, 35 nodes)
+## Meta-Graph (v9 — Self-Describing Schema)
 
-| Scope | Count | Node Types |
-|-------|-------|------------|
-| **🌍 Global** | 15 | Locale, LocaleIdentity, LocaleVoice, LocaleCulture, LocaleCultureReferences, LocaleMarket, LocaleLexicon, LocaleRulesAdaptation, LocaleRulesFormatting, LocaleRulesSlug, Expression, Reference, Metaphor, Constraint, Pattern |
-| **📦 Project** | 14 | Project, BrandIdentity, ProjectL10n, Page, Block, BlockType, PageType, Concept, ConceptL10n, PagePrompt, BlockPrompt, BlockRules, PageL10n, BlockL10n |
-| **🎯 Shared** | 6 | SEOKeywordL10n, SEOKeywordMetrics, SEOMiningRun, GEOSeedL10n, GEOSeedMetrics, GEOMiningRun |
+v9 introduces a **faceted classification** where each Kind sits at the intersection of 4 axes:
 
-## Localization Pattern
+```
+Axis 1 — WHERE?  :Realm     (global / project / shared)
+Axis 2 — WHAT?   :Layer     (knowledge / structure / semantic / ...)
+Axis 3 — HOW?    :Trait     (invariant / localized / knowledge / derived / job)
+Axis 4 — LINKS?  :EdgeKind  (SEMANTIC_LINK, HAS_OUTPUT, HAS_L10N, ...)
+```
 
-| Invariant Node | L10n Node | Relation |
-|----------------|-----------|----------|
-| Concept | ConceptL10n | `HAS_L10N` |
-| Project | ProjectL10n | `HAS_L10N` |
-| Audience | AudienceL10n | `HAS_L10N` |
+### Meta-Node Types (6 types)
+
+| Meta-Type | Count | Purpose |
+|-----------|-------|---------|
+| **Realm** | 3 | Visibility boundary / data governance zone |
+| **Layer** | 9 | Functional classification / architectural layer |
+| **Kind** | 35 | A node type in the data graph (1:1 with Neo4j labels) |
+| **Trait** | 5 | Locale behavior — how a node type changes across locales |
+| **EdgeFamily** | 5 | Classification of relationship types |
+| **EdgeKind** | 47 | Individual relationship type (1:1 with Neo4j rel types) |
+
+All meta-nodes carry the `:Meta` double-label for easy filtering.
+
+### :Realm (3 nodes)
+
+| Key | Display Name | Emoji |
+|-----|-------------|-------|
+| `global` | Global | `🌍` |
+| `project` | Project | `📦` |
+| `shared` | Shared | `🎯` |
+
+### :Layer (9 nodes)
+
+| Key | Display Name | Emoji | Parent Realm |
+|-----|-------------|-------|-------------|
+| `config` | Configuration | `⚙️` | global |
+| `knowledge` | Locale Knowledge | `📚` | global |
+| `foundation` | Foundation | `🏛️` | project |
+| `structure` | Structure | `🏗️` | project |
+| `semantic` | Semantic Layer | `💡` | project |
+| `instruction` | Instructions | `📝` | project |
+| `output` | Generated Output | `✨` | project |
+| `seo` | SEO Intelligence | `🔍` | shared |
+| `geo` | GEO Intelligence | `📍` | shared |
+
+### :Trait (5 nodes)
+
+| Key | Display Name | Description |
+|-----|-------------|-------------|
+| `invariant` | Invariant | Does not change between locales |
+| `localized` | Localized | Generated natively per locale |
+| `knowledge` | Knowledge | Cultural/linguistic expertise per locale |
+| `derived` | Derived | Computed/aggregated data |
+| `job` | Job | Background processing tasks |
+
+### :EdgeFamily (5 nodes)
+
+| Key | Display Name | Arrow Style |
+|-----|-------------|------------|
+| `ownership` | Ownership | `-->` |
+| `localization` | Localization | `-.->` |
+| `semantic` | Semantic | `-.->` |
+| `generation` | Generation | `==>` |
+| `mining` | Mining | `--o` |
+
+## Kind Inventory (35 across 3 Realms)
+
+| Kind (label) | Realm | Layer | Trait |
+|-------------|-------|-------|-------|
+| Locale | global | config | invariant |
+| LocaleIdentity | global | knowledge | knowledge |
+| LocaleVoice | global | knowledge | knowledge |
+| LocaleCulture | global | knowledge | knowledge |
+| LocaleCultureReferences | global | knowledge | knowledge |
+| LocaleLexicon | global | knowledge | knowledge |
+| LocaleMarket | global | knowledge | knowledge |
+| LocaleRulesAdaptation | global | knowledge | knowledge |
+| LocaleRulesFormatting | global | knowledge | knowledge |
+| LocaleRulesSlug | global | knowledge | knowledge |
+| Expression | global | knowledge | knowledge |
+| Metaphor | global | knowledge | knowledge |
+| Pattern | global | knowledge | knowledge |
+| Reference | global | knowledge | knowledge |
+| Constraint | global | knowledge | knowledge |
+| Project | project | foundation | invariant |
+| BrandIdentity | project | foundation | invariant |
+| ProjectL10n | project | foundation | localized |
+| Page | project | structure | invariant |
+| Block | project | structure | invariant |
+| Concept | project | semantic | invariant |
+| ConceptL10n | project | semantic | localized |
+| PageType | project | instruction | invariant |
+| BlockType | project | instruction | invariant |
+| PagePrompt | project | instruction | invariant |
+| BlockPrompt | project | instruction | invariant |
+| BlockRules | project | instruction | invariant |
+| PageL10n | project | output | localized |
+| BlockL10n | project | output | localized |
+| SEOKeywordL10n | shared | seo | localized |
+| SEOKeywordMetrics | shared | seo | derived |
+| SEOMiningRun | shared | seo | job |
+| GEOSeedL10n | shared | geo | localized |
+| GEOSeedMetrics | shared | geo | derived |
+| GEOMiningRun | shared | geo | job |
 
 ## Locale Knowledge Structure (14 nodes)
 
@@ -46,7 +137,7 @@
 | **LocaleRulesSlug** | URL slug generation rules |
 | **Pattern** | Reusable formatting patterns |
 
-## Standard Properties (all nodes - v8.2.0)
+## Standard Properties (all data nodes)
 
 | Property | Type | Description |
 |----------|------|-------------|
@@ -57,26 +148,63 @@
 | `created_at` | date | Creation timestamp |
 | `updated_at` | date | Last update timestamp |
 
-> **Note (v8.2.0):** Removed `icon`, `priority`, `freshness` properties (YAGNI - moved to application layer if needed)
+## Meta-Graph Relations
 
-## Key Relationships
+### Hierarchy (top-down navigation)
+```
+Realm -[:HAS_LAYER]-> Layer
+Layer -[:HAS_KIND]-> Kind
+EdgeFamily -[:HAS_EDGE_KIND]-> EdgeKind
+```
 
-| Relation | From → To | Description |
-|----------|-----------|-------------|
-| `HAS_CONCEPT` | Project → Concept | Project owns concepts |
-| `HAS_PAGE` | Project → Page | Project owns pages |
-| `SUPPORTS_LOCALE` | Project → Locale | Available locales (with `default` flag) |
-| `HAS_L10N` | Invariant → L10n | Unified localization relation |
-| `HAS_BLOCK` | Page → Block | Page structure (with `position`) |
-| `OF_TYPE` | Block → BlockType | Block template type |
-| `USES_CONCEPT` | Page/Block → Concept | Content references concept |
-| `HAS_OUTPUT` | Page/Block → Output | Generated content |
-| `HAS_PROMPT` | Page/Block → Prompt | AI generation instructions |
-| `TARGETS_SEO` | Concept → SEOKeywordL10n | SEO targeting |
-| `TARGETS_GEO` | Concept → GEOSeedL10n | GEO targeting |
-| `HAS_SEO_TARGET` | ConceptL10n → SEOKeywordL10n | Locale-aligned SEO |
-| `HAS_GEO_TARGET` | ConceptL10n → GEOSeedL10n | Locale-aligned GEO |
-| `FOR_LOCALE` | L10n → Locale | Locale assignment |
+### Facets (Kind-centric)
+```
+Kind -[:IN_REALM]-> Realm
+Kind -[:IN_LAYER]-> Layer
+Kind -[:HAS_TRAIT]-> Trait
+```
+
+### Edge Schema (OWL-inspired)
+```
+EdgeKind -[:FROM_KIND]-> Kind   (source node type)
+EdgeKind -[:TO_KIND]-> Kind     (target node type)
+EdgeKind -[:IN_FAMILY]-> EdgeFamily
+```
+
+### Instance Bridge
+```
+DataNode -[:OF_KIND]-> Kind     (every data node links to its Kind)
+```
+
+## Key Data Relations
+
+| Relation | From -> To | EdgeFamily | Description |
+|----------|-----------|------------|-------------|
+| `HAS_CONCEPT` | Project -> Concept | ownership | Project owns concepts |
+| `HAS_PAGE` | Project -> Page | ownership | Project owns pages |
+| `SUPPORTS_LOCALE` | Project -> Locale | ownership | Available locales |
+| `HAS_L10N` | Invariant -> L10n | localization | Curated localized content |
+| `HAS_OUTPUT` | Page/Block -> L10n | generation | LLM-generated content |
+| `HAS_BLOCK` | Page -> Block | ownership | Page structure (with `position`) |
+| `OF_TYPE` | Block -> BlockType | ownership | Block template type |
+| `USES_CONCEPT` | Page/Block -> Concept | semantic | Content references concept |
+| `SEMANTIC_LINK` | Concept -> Concept | semantic | Spreading activation |
+| `HAS_SEO_TARGET` | ConceptL10n -> SEOKeywordL10n | mining | Locale-aligned SEO |
+| `HAS_GEO_TARGET` | ConceptL10n -> GEOSeedL10n | mining | Locale-aligned GEO |
+| `FOR_LOCALE` | L10n -> Locale | localization | Locale assignment |
+
+## v8 -> v9 Rename Mapping
+
+| v8 Term | v9 Term |
+|---------|---------|
+| Scope | **Realm** |
+| Subcategory | **Layer** |
+| NodeTypeMeta | **Kind** |
+| IN_SUBCATEGORY | **OF_KIND** |
+| _(new)_ | **Trait** |
+| _(new)_ | **EdgeFamily** |
+| _(new)_ | **EdgeKind** |
+| DataMode (data/schema) | **NavigationMode** (data/meta/overlay/query) |
 
 ## Abbreviations
 
@@ -84,3 +212,5 @@
 - **SEO** - Search Engine Optimization
 - **GEO** - Generative Engine Optimization (ChatGPT, Perplexity)
 - **LLM** - Large Language Model (AI context)
+- **TUI** - Terminal User Interface
+- **CLI** - Command Line Interface

@@ -15,19 +15,36 @@ Synchronize generated artifacts with YAML source of truth.
 
 ```
 packages/core/models/
-├── nodes/           ← 35 YAML files (NodeTypes)
-│   ├── global/
-│   ├── project/
-│   └── shared/
-└── relations.yaml   ← 47 relations
+├── nodes/                        ← 35 YAML files (one per Kind)
+│   ├── global/                   ← Realm: global
+│   │   ├── config/               ←   Layer: config
+│   │   └── knowledge/            ←   Layer: knowledge
+│   ├── project/                  ← Realm: project
+│   │   ├── foundation/           ←   Layer: foundation
+│   │   ├── structure/            ←   Layer: structure
+│   │   ├── semantic/             ←   Layer: semantic
+│   │   ├── instruction/          ←   Layer: instruction
+│   │   └── output/               ←   Layer: output
+│   └── shared/                   ← Realm: shared
+│       ├── seo/                  ←   Layer: seo
+│       └── geo/                  ←   Layer: geo
+├── relations.yaml                ← 47 relations (with family field in v9)
+└── organizing-principles.yaml    ← v9: Realm/Layer/Trait/EdgeFamily definitions
 ```
 
 ## Generated Artifacts
 
 | Source | Generator | Output |
 |--------|-----------|--------|
-| models/nodes/ | SubcategoryGenerator | src/graph/subcategories.ts |
+| models/nodes/ | LayerGenerator | src/graph/layers.ts (v9, replaces subcategories.ts) |
 | models/ | MermaidGenerator | models/docs/views/VIEW-COMPLETE-GRAPH.md |
+
+**v9 generators (added):**
+
+| Source | Generator | Output |
+|--------|-----------|--------|
+| models/nodes/ | KindGenerator | Meta-graph Kind nodes with `schema_hint` |
+| models/relations.yaml | EdgeSchemaGenerator | Meta-graph EdgeKind nodes with `cypher_pattern` |
 
 ## Commands
 
@@ -47,7 +64,7 @@ Expected output:
   @novanet/schema-tools - Validate Sync
 ═══════════════════════════════════════════════════════
 Results:
-  ✅ subcategories.ts
+  ✅ layers.ts
   ✅ VIEW-COMPLETE-GRAPH.md
 
   ✅ All files in sync with YAML sources
@@ -92,6 +109,21 @@ When you modify YAML models:
 3. Commit both YAML changes AND generated files
 4. CI will verify sync on PR
 
+## v9 Validation
+
+In v9, authoritative validation moves to the Rust binary:
+
+```bash
+# Rust-based validation (authoritative, v9+)
+cargo run -- schema validate --strict
+
+# TS-based validation (generation sync only)
+pnpm schema:validate
+```
+
+The TS `schema:validate` checks that generated TypeScript/Mermaid matches YAML.
+The Rust `novanet schema validate --strict` checks YAML <-> Neo4j consistency.
+
 ## Troubleshooting
 
 If CI fails with "SYNC FAILED":
@@ -107,19 +139,20 @@ pnpm schema:generate
 git diff
 
 # Commit regenerated files
-git add packages/core/src/graph/subcategories.ts
+git add packages/core/src/graph/layers.ts
 git add packages/core/models/docs/views/VIEW-COMPLETE-GRAPH.md
 git commit -m "chore: regenerate from YAML sources"
 ```
 
 ## Technical Details
 
-**SubcategoryGenerator:**
-- Scans folder structure: `models/nodes/{scope}/{subcategory}/*.yaml`
-- Extracts NodeType from filename (kebab-case → PascalCase)
-- Generates `NODE_SUBCATEGORIES` mapping
+**LayerGenerator (v9, replaces SubcategoryGenerator):**
+- Scans folder structure: `models/nodes/{realm}/{layer}/*.yaml`
+- Extracts Kind label from filename (kebab-case -> PascalCase)
+- Generates `KIND_LAYERS` mapping (Kind -> Layer/Realm/Trait)
 
 **MermaidGenerator:**
 - Reads `models/nodes/` and `models/relations.yaml`
-- Generates Mermaid flowchart with all 35 nodes and 47 relations
-- Groups by scope (Global, Shared, Project)
+- Generates Mermaid flowchart with all 35 Kinds and 47 relations
+- Groups by Realm (Global, Shared, Project)
+- Colors by Layer (9 distinct colors)

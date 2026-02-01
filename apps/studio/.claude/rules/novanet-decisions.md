@@ -39,6 +39,8 @@
 9. Expressions - Expression + LocaleLexicon
 0. Clear Filters - Reset to default view
 
+**v9 Note:** Presets will migrate to faceted filters (Realm/Layer/Trait dimensions).
+
 ---
 
 ## ADR-003: AI Chat for Natural Language Queries
@@ -128,3 +130,138 @@
 - `bg-black` base
 - `glass` utility class (blur + border + transparency)
 - `novanet-*` brand colors for accents
+
+---
+
+## ADR-008: Faceted Classification (v9)
+
+**Decision:** Replace flat tree (Scope > Subcategory > NodeTypeMeta) with faceted classification (Realm + Layer + Trait + EdgeFamily)
+
+**Rationale:**
+- Flat tree only classifies by WHERE > WHAT, missing HOW (locale behavior)
+- No edge metadata — relation families only exist as YAML comments
+- Generic naming ("Scope", "Subcategory") are implementation terms, not domain concepts
+- Single-axis navigation insufficient for AI agent discovery
+
+**Implementation:**
+- 6 meta-node types: Realm (3), Layer (9), Kind (35), Trait (5), EdgeFamily (5), EdgeKind (47)
+- Dual navigation: top-down hierarchy + Kind-centric facets
+- All meta-nodes carry `:Meta` double-label
+- YAML remains source of truth, meta-graph is generated
+
+**Rename mapping:** Scope -> Realm, Subcategory -> Layer, NodeTypeMeta -> Kind
+
+---
+
+## ADR-009: Self-Describing Meta-Graph (v9)
+
+**Decision:** Kind nodes carry `schema_hint`, `context_budget`, `cypher_pattern` for autonomous AI discovery
+
+**Rationale:**
+- LLM orchestrator should discover schema without reading YAML files
+- Token-aware context assembly needs priority hints on each Kind
+- Ready-to-use Cypher patterns enable query construction without schema knowledge
+
+**Key properties:**
+- `schema_hint` on Kind: "key, display_name, instructions (req), locale_behavior"
+- `context_budget` on Kind: high/medium/low/minimal token priority
+- `cypher_pattern` on EdgeKind: "(Page)-[:HAS_BLOCK]->(Block)"
+- `traversal_depth` on Kind: v10 placeholder (nullable)
+- `temperature_threshold` on EdgeKind: v10 placeholder (nullable)
+
+---
+
+## ADR-010: CLI-First Architecture (v9)
+
+**Decision:** Single Rust binary `novanet` for all graph operations (CLI + TUI)
+
+**Rationale:**
+- ~5ms startup vs ~800ms for Node.js
+- Single binary, zero runtime dependencies
+- TUI for interactive exploration (ratatui)
+- CLI for scripting and CI/CD
+
+**Implementation:**
+- Single crate at `tools/novanet/`
+- Dependencies: clap, ratatui, crossterm, neo4rs, tokio
+- ~27 source files across CLI commands and TUI modules
+- 4 navigation modes: data, meta, overlay, query
+
+**Boundary rule:** TypeScript generates code artifacts. Rust executes at runtime.
+
+---
+
+## ADR-011: TS/Rust Boundary Rule (v9)
+
+**Decision:** TypeScript generates code artifacts (types, Cypher, Mermaid). Rust executes graph operations at runtime.
+
+**Ownership:**
+
+| Concern | Owner | Rationale |
+|---------|-------|-----------|
+| YAML -> TypeScript types | TS (schema-tools) | Output IS TypeScript code |
+| YAML -> Mermaid diagrams | TS (schema-tools) | Build-time documentation |
+| YAML -> Cypher seeds | TS (schema-tools) | Build-time DDL generation |
+| YAML <-> Neo4j validation | Rust (novanet) | Single authoritative validator |
+| Graph read queries | Rust (novanet) | Runtime performance |
+| Graph write (CRUD) | Rust (novanet) | Meta-graph validation at write time |
+| Interactive TUI | Rust (novanet) | Native terminal, ~5ms startup |
+| Web visualization | TS (Studio) | Separate web concern |
+
+**Consolidation:** Remove validation from schema-tools; `novanet schema validate --strict` is the single authority.
+
+---
+
+## ADR-012: NavigationMode (v9)
+
+**Decision:** Replace binary DataMode (data/schema) with 4-mode NavigationMode
+
+**Modes:**
+
+| Mode | Content | Use Case |
+|------|---------|----------|
+| `data` | Real instances only | Default exploration |
+| `meta` | Meta-graph only (Realm/Layer/Kind/Trait/EdgeFamily) | Schema understanding |
+| `overlay` | Data + meta-graph combined | Architecture debugging |
+| `query` | Faceted filter results | Targeted exploration |
+
+**Rationale:**
+- Binary data/schema toggle is insufficient for v9's richer meta-graph
+- AI agents need programmatic access to all 4 modes
+- Query mode enables faceted filter combinations (Realm + Trait + Layer)
+
+---
+
+## ADR-013: OF_KIND Instance Bridge (v9)
+
+**Decision:** Replace IN_SUBCATEGORY with OF_KIND — every data node links to its Kind meta-node
+
+**Rationale:**
+- IN_SUBCATEGORY skips the type level (links to subcategory, not type)
+- OF_KIND enables direct Kind -> instance traversal
+- Autowired during seed: for each data node, create OF_KIND to matching Kind
+
+**Performance:**
+- 35 additional relationships per data node instance
+- O(1) lookup: `MATCH (n:Block)-[:OF_KIND]->(k:Kind {label: 'Block'})`
+- Indexed on Kind.label for fast traversal
+
+---
+
+## ADR-014: Trait-Based Visual Encoding (v9)
+
+**Decision:** Map each facet to a distinct visual channel in Studio
+
+**Visual channels:**
+
+| Channel | Facet | Encoding |
+|---------|-------|----------|
+| Fill color | Layer (9 colors) | Node background |
+| Border style | Trait (5 styles) | Solid/dashed/dotted/double/none |
+| Spatial grouping | Realm (3 zones) | Layout position |
+| Edge color | EdgeFamily (5 colors) | Relationship stroke |
+
+**Rationale:**
+- No overloading: each facet maps to exactly one visual channel
+- Colorblind-safe: Trait uses shape/border, not color
+- Familiar: color = functional category, position = governance scope
