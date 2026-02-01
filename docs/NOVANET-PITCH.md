@@ -46,19 +46,18 @@ novanet-hq/
 ├── pnpm-workspace.yaml           # Workspaces pnpm
 │
 ├── packages/
-│   ├── core/                     # @novanet/core - Types, schemas, generateurs
+│   ├── core/                     # @novanet/core - Types, schemas, filtres
 │   │   ├── models/nodes/         # 35 fichiers YAML (SOURCE DE VERITE)
 │   │   ├── models/relations.yaml # 47 types de relations
 │   │   ├── src/types/            # Types TypeScript generes
-│   │   ├── src/graph/            # Hierarchie et subcategories
-│   │   └── src/generators/       # MermaidGenerator, SubcategoryGenerator
+│   │   └── src/graph/            # Hierarchie et layers
 │   │
 │   ├── db/                       # @novanet/db - Infrastructure Neo4j
 │   │   ├── docker-compose.yml    # Neo4j 5.26.0 Community
 │   │   └── seed/                 # 7 fichiers de seed Cypher
 │   │
-│   ├── cli/                      # @novanet/cli - Outils de validation
-│   └── schema-tools/             # Outils de generation de schemas
+├── tools/
+│   └── novanet/                  # Rust binary - schema, db, TUI, generation
 │
 └── apps/
     └── studio/                   # @novanet/studio - Visualisation web
@@ -69,42 +68,42 @@ novanet-hq/
 
 ### 2. Graphe de Connaissances - 35 Types de Noeuds
 
-**Structure hierarchique : 3 Scopes → 9 Subcategories → 35 NodeTypes**
+**Structure hierarchique : 3 Realms → 9 Layers → 35 Kinds**
 
-#### Global Scope (15 nodes)
+#### Global Realm (15 nodes)
 
-| Subcategory | Nodes | Description |
-|-------------|-------|-------------|
+| Layer | Nodes | Description |
+|-------|-------|-------------|
 | **config** | Locale | Configuration des locales |
 | **knowledge** | 14 LocaleKnowledge nodes | Connaissances culturelles |
 
 **LocaleKnowledge nodes (14):**
-- LocaleBrand - Conventions de marque par locale
-- LocaleContent - Styles de contenu
-- LocaleCurrency - Devises et formats
-- LocaleDateTime - Formats date/heure
-- LocaleIdentity - Identite culturelle
-- LocaleMarketing - Approches marketing
-- LocaleMedia - Preferences medias
-- LocaleNumbers - Formats numeriques
-- LocalePayment - Methodes de paiement
-- LocaleSEO - Strategies SEO locales
-- LocaleSocial - Reseaux sociaux
-- LocaleTechnical - Contraintes techniques
-- LocaleTone - Ton et voix
-- LocaleUX - Patterns UX
+- LocaleIdentity - Script, timezone, identite technique
+- LocaleVoice - Formalite, ton, regles de prononciation
+- LocaleCulture - Normes culturelles, tabous
+- LocaleCultureReferences - Conteneur de references culturelles
+- Reference - References culturelles specifiques
+- Metaphor - Metaphores culturelles
+- Constraint - Contraintes culturelles
+- LocaleMarket - Donnees marche, demographics, plateformes
+- LocaleLexicon - Preferences vocabulaire par locale
+- Expression - Variantes de phrases specifiques
+- LocaleRulesAdaptation - Regles d'adaptation de contenu
+- LocaleRulesFormatting - Regles de format (dates, nombres)
+- LocaleRulesSlug - Regles de generation de slugs URL
+- Pattern - Patterns de formatage reutilisables
 
-#### Shared Scope (6 nodes)
+#### Shared Realm (6 nodes)
 
-| Subcategory | Nodes | Description |
-|-------------|-------|-------------|
+| Layer | Nodes | Description |
+|-------|-------|-------------|
 | **seo** | SEOKeywordL10n, SEOKeywordMetrics, SEOMiningRun | Optimisation moteurs de recherche |
 | **geo** | GEOSeedL10n, GEOSeedMetrics, GEOMiningRun | Optimisation moteurs generatifs (ChatGPT, Perplexity) |
 
-#### Project Scope (14 nodes)
+#### Project Realm (14 nodes)
 
-| Subcategory | Nodes | Description |
-|-------------|-------|-------------|
+| Layer | Nodes | Description |
+|-------|-------|-------------|
 | **foundation** | Project, BrandIdentity, ProjectL10n | Base du projet |
 | **structure** | Page, Block | Structure de contenu |
 | **semantic** | Concept, ConceptL10n | Concepts semantiques |
@@ -154,12 +153,12 @@ models/relations.yaml (47 relations)
 
 ### Etape 2: Generateurs
 
-Les generateurs lisent YAML independamment - pas de dependance entre eux :
+Le binaire `novanet` Rust lit les fichiers YAML et genere tous les artefacts :
 
 ```
-YAML ──┬──► MermaidGenerator ──► Diagrammes Mermaid (.md)
-       │
-       └──► SubcategoryGenerator ──► subcategories.ts (TypeScript)
+YAML ──► novanet schema generate ──┬──► Diagrammes Mermaid (.md)
+                                    ├──► layers.ts / hierarchy.ts (TypeScript)
+                                    └──► Seeds Cypher (.cypher)
 ```
 
 ### Etape 3: Neo4j
@@ -219,8 +218,8 @@ Stores Zustand (8):
 ### Schema Mode (Ontologie)
 
 - **Affiche:** Les 35 TYPES de noeuds et leurs relations
-- **Source:** YAML models/nodes/ via SubcategoryGenerator
-- **Layout:** Groupe par Scope → Subcategory (ELK hierarchical)
+- **Source:** YAML models/nodes/ via `novanet schema generate`
+- **Layout:** Groupe par Realm → Layer (ELK hierarchical)
 - **Usage:** Comprendre la structure du graphe
 
 ```
@@ -273,11 +272,11 @@ Noeuds generes nativement par locale.
 
 **Exemples:** PageL10n, BlockL10n, ConceptL10n, ProjectL10n
 
-### 3. LOCALE_KNOWLEDGE (Jaune)
+### 3. KNOWLEDGE (Jaune)
 
 Connaissances culturelles par locale.
 
-**Exemples:** LocaleTone, LocaleSEO, LocaleMarketing...
+**Exemples:** LocaleVoice, LocaleCulture, LocaleLexicon, LocaleMarket...
 
 ### 4. DERIVED (Violet)
 
@@ -298,9 +297,9 @@ Noeuds representant des jobs d'execution.
 ### Infrastructure
 
 ```bash
-pnpm infra:up              # Demarrer Neo4j Docker
-pnpm infra:seed            # Seeder la base de donnees
-pnpm infra:reset           # Reset complet (down + up + seed)
+novanet db up              # Demarrer Neo4j Docker
+novanet db seed            # Seeder la base de donnees
+novanet db reset           # Reset complet (down + up + seed)
 ```
 
 ### Developpement
@@ -312,12 +311,11 @@ pnpm test                  # Tests tous les packages
 pnpm type-check            # Verification TypeScript
 ```
 
-### Generation
+### Schema et Generation
 
 ```bash
-pnpm --filter @novanet/core generate:mermaid        # Generer diagrammes Mermaid
-pnpm --filter @novanet/core generate:subcategories  # Generer subcategories.ts
-pnpm --filter @novanet/core validate                # Valider synchronisation YAML<->TS
+novanet schema generate    # Generer TypeScript, Mermaid, Cypher
+novanet schema validate    # Valider synchronisation YAML <-> artefacts
 ```
 
 ---
@@ -337,8 +335,8 @@ pnpm --filter @novanet/core validate                # Valider synchronisation YA
               │                │                │
               ▼                ▼                ▼
      ┌────────────────┐ ┌────────────────┐ ┌────────────────┐
-     │ MermaidGenerator│ │SubcategoryGen  │ │  Neo4j Seeds   │
-     │                │ │                │ │                │
+     │   novanet      │ │   novanet      │ │   novanet      │
+     │ schema generate│ │ schema generate│ │ schema generate │
      │ → .md diagrams │ │ → .ts types    │ │ → .cypher files│
      └────────────────┘ └────────────────┘ └────────────────┘
               │                │                │
@@ -359,8 +357,8 @@ pnpm --filter @novanet/core validate                # Valider synchronisation YA
 |----------|--------|
 | Types de noeuds | 35 |
 | Types de relations | 47 |
-| Scopes | 3 (Global, Shared, Project) |
-| Subcategories | 9 |
+| Realms | 3 (Global, Shared, Project) |
+| Layers | 9 |
 | Fichiers YAML (nodes) | 35 |
 | Fichiers seed Neo4j | 7 |
 | Routes API | 9 |

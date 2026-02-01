@@ -1,5 +1,9 @@
 # Schema Mode v2 Implementation Plan
 
+> **Superseded by v9**: This plan uses v8 terminology (Scope/Subcategory/NodeTypeMeta/DataMode).
+> In v9, DataMode becomes NavigationMode (data/meta/overlay/query), Scope→Realm, Subcategory→Layer.
+> See [`2026-02-01-ontology-v9-design.md`](2026-02-01-ontology-v9-design.md).
+
 > **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
 **Goal:** Transform Schema Mode from force-directed layout to hierarchical grouped layout matching the Mermaid diagram in VIEW-COMPLETE-GRAPH.md

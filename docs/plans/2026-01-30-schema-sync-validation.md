@@ -1,10 +1,14 @@
 # Schema Sync Validation System
 
+> **Superseded by v9**: `@novanet/schema-tools` is eliminated in v9. All schema validation
+> and generation is handled by the single `novanet` Rust binary (`tools/novanet/`).
+> See [`2026-02-01-ontology-v9-design.md`](2026-02-01-ontology-v9-design.md).
+
 > Design document for ensuring 100% synchronization between YAML sources and derived artifacts.
 
 **Date**: 2026-01-30
-**Status**: Ready for implementation
-**Architecture**: Dedicated `packages/schema-tools` package
+**Status**: Superseded by v9 Rust-first architecture
+**Architecture**: ~~Dedicated `packages/schema-tools` package~~ → `tools/novanet/` Rust binary
 
 ---
 

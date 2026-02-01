@@ -1,7 +1,11 @@
 # NovaNet Monorepo Restructure Design
 
+> **Partially superseded by v9**: The monorepo structure is correct, but `@novanet/cli` and
+> `@novanet/schema-tools` are eliminated in v9. Replaced by single `novanet` Rust binary at
+> `tools/novanet/`. See [`2026-02-01-ontology-v9-design.md`](2026-02-01-ontology-v9-design.md).
+
 > Generated: 2026-01-30
-> Status: Validated
+> Status: Partially superseded (v9 Rust-first architecture)
 
 ## Problem Statement
 

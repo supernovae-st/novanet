@@ -1,7 +1,11 @@
 # Organizing Principles as Neo4j Nodes
 
+> **Superseded by v9**: This plan uses v8 terminology (Scope/Subcategory/NodeTypeMeta).
+> In v9, these become Realm/Layer/Kind with additional meta-types.
+> See [`2026-02-01-ontology-v9-design.md`](2026-02-01-ontology-v9-design.md).
+
 **Date**: 2026-01-31
-**Status**: Approved
+**Status**: Superseded by v9
 **Author**: Thibaut + Claude
 **Reviewed**: Architect Review 2026-01-31
 

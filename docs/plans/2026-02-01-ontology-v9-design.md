@@ -391,9 +391,9 @@ relations.yaml               →  generate  →  EdgeKind/EdgeFamily seed
 
 The flow:
 1. Edit YAML files
-2. Run `pnpm schema:generate`
+2. Run `novanet schema generate`
 3. Generated Cypher seeds, TypeScript, and Mermaid
-4. Run `pnpm infra:seed` to apply to Neo4j
+4. Run `novanet db seed` to apply to Neo4j
 
 ### Generator architecture
 
@@ -1238,13 +1238,16 @@ with CLI + TUI. Split into workspace if crate grows past v10.
 | `neo4rs` | Neo4j Bolt driver (async) — pin exact minor version |
 | `tokio` | Async runtime (`features = ["full"]`) |
 | `serde` + `serde_json` | Neo4j result deserialization, JSON output |
-| `serde_yaml` | YAML parsing for schema validation + generators |
-| `tera` | Template engine for TypeScript code generation (`layers.ts`, `hierarchy.ts`) |
+| `serde_yml` | YAML parsing for schema validation + generators (`serde_yaml` is deprecated) |
+| `minijinja` | Template engine for TypeScript code generation (1 dep, by Jinja2 creator Armin Ronacher) |
 | `tabled` | Table output formatting |
 | `nucleo` | Fuzzy search (TUI `/` key) |
 | `thiserror` | Structured error enum (`NovaNetError`) for matching |
 | `color-eyre` | Error reporting with context (wraps `thiserror` errors) |
 | `tracing` + `tracing-subscriber` | Structured logging with env-filter output |
+| `indicatif` | Progress bars for long operations (generation, seeding) |
+| `petgraph` | In-memory graph for dependency ordering in generators |
+| `rayon` | Parallel YAML file processing for faster validation |
 
 #### Connection
 
@@ -1375,13 +1378,21 @@ neo4rs = "0.8"                # Pin minor: breaking changes between 0.x
 # Serialization
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-serde_yaml = "0.9"
+serde_yml = "0.0.12"          # serde_yaml is deprecated — serde_yml is the maintained fork
+
+# Template engine
+minijinja = "2"               # 1 dep, better errors than tera (15+ deps), by Armin Ronacher
 
 # Output
 tabled = "0.17"
+indicatif = "0.17"            # Progress bars for long operations
 
 # Search
 nucleo = "0.5"                # Fuzzy search (TUI `/` key)
+
+# Graph
+petgraph = "0.7"              # In-memory graph for generator dependency ordering
+rayon = "1.10"                # Parallel YAML processing
 
 # Error handling
 thiserror = "2"               # Library-style errors (NovaNetError enum)
@@ -1420,7 +1431,7 @@ pub enum NovaNetError {
     MetaIntegrity(String),
 
     #[error("YAML schema error in {path}")]
-    Schema { path: String, #[source] source: serde_yaml::Error },
+    Schema { path: String, #[source] source: serde_yml::Error },
 
     #[error("validation failed: {0}")]
     Validation(String),
@@ -1832,7 +1843,7 @@ cargo fmt && cargo clippy -- -D warnings && cargo test
 
 **Architecture rule**: Single `novanet` binary owns ALL schema and graph operations.
 Even TypeScript code generation (`layers.ts`) is just string templating — Rust
-writes `.ts` files via `writeln!()` / Tera templates trivially.
+writes `.ts` files via `writeln!()` / MiniJinja templates trivially.
 
 | Concern | Owner | Rationale |
 |---------|-------|-----------|
@@ -2208,18 +2219,18 @@ atomically on the feature branch. v8 types (`Scope`, `NodeCategory`,
 
 ```bash
 # 1. Stop and destroy
-pnpm infra:down
+novanet db down
 docker volume rm novanet_neo4j_data
 
 # 2. Update source files (YAML, generators, Studio)
 # ... (implementation work)
 
 # 3. Regenerate artifacts
-pnpm schema:generate
+novanet schema generate
 
 # 4. Rebuild and seed
-pnpm infra:up
-pnpm infra:seed
+novanet db up
+novanet db seed
 
 # 5. Verify
 # Run meta-graph integrity queries above
@@ -2452,7 +2463,7 @@ Empty stub package (~5 lines). Delete `packages/cli/` entirely.
 
 | File | Action | Description |
 |------|--------|-------------|
-| `Cargo.toml` | Create | Single crate: clap, ratatui, crossterm, neo4rs, tokio, serde, serde_json, serde_yaml, tera, tabled, nucleo, thiserror, color-eyre, tracing, tracing-subscriber |
+| `Cargo.toml` | Create | Single crate: clap, ratatui, crossterm, neo4rs, tokio, serde, serde_json, serde_yml, minijinja, tabled, nucleo, thiserror, color-eyre, tracing, indicatif, petgraph, rayon |
 | **Core modules** | | |
 | `src/lib.rs` | Create | Public API: query, facets, meta types, cypher builder (enables integration tests) |
 | `src/main.rs` | Create | Thin entry: clap parsing → calls lib, formats output, exits |
@@ -2480,11 +2491,11 @@ Empty stub package (~5 lines). Delete `packages/cli/` entirely.
 | **Generators** (replaces @novanet/schema-tools) | | |
 | `src/generators/mod.rs` | Create | `Generator` trait + orchestration (generate-all, validate-sync) |
 | `src/generators/mermaid.rs` | Create | YAML → Mermaid flowchart with Realm/Layer coloring |
-| `src/generators/layer.rs` | Create | YAML → `layers.ts` (Tera template → TypeScript code) |
+| `src/generators/layer.rs` | Create | YAML → `layers.ts` (MiniJinja template → TypeScript code) |
 | `src/generators/kind.rs` | Create | YAML → Kind Cypher + `schema_hint` + `context_budget` + facet rels |
 | `src/generators/edge_schema.rs` | Create | YAML → EdgeKind Cypher + `cypher_pattern` + FROM/TO_KIND |
 | `src/generators/autowire.rs` | Create | YAML → OF_KIND wiring Cypher statements |
-| `src/generators/hierarchy.rs` | Create | YAML → `hierarchy.ts` (Tera template) |
+| `src/generators/hierarchy.rs` | Create | YAML → `hierarchy.ts` (MiniJinja template) |
 | `src/generators/organizing.rs` | Create | YAML → meta-graph seed Cypher (Realm, Layer, Trait, EdgeFamily) |
 | **Parsers** (replaces core/parsers + schema-tools/parsers) | | |
 | `src/parsers/mod.rs` | Create | `Parser` trait + file discovery |
@@ -2589,11 +2600,11 @@ This is the first Rust code written — scaffold the crate, then implement gener
 | 2.2 | Implement `parsers/yaml_node.rs` | Parse 35 YAML node definitions with `locale_behavior` validation. **MUST fail-fast** if any YAML is missing `locale_behavior` — no silent defaults, bail with file path. |
 | 2.3 | Implement `parsers/relations.rs` | Parse `relations.yaml` (list format + `family` + multi-source/target). **Must complete before generators that consume relations.** |
 | 2.4 | Implement `generators/organizing.rs` | v9 Cypher for Realm, Layer, Trait, EdgeFamily |
-| 2.5 | Implement `generators/layer.rs` | YAML → `layers.ts` via Tera template |
+| 2.5 | Implement `generators/layer.rs` | YAML → `layers.ts` via MiniJinja template |
 | 2.6 | Implement `generators/kind.rs` | Kind nodes + `schema_hint`, `context_budget` + facet rels |
 | 2.7 | Implement `generators/edge_schema.rs` | EdgeKind nodes + `cypher_pattern` + FROM/TO_KIND (depends on 2.3) |
 | 2.8 | Implement `generators/autowire.rs` | OF_KIND wiring Cypher statements |
-| 2.9 | Implement `generators/hierarchy.rs` | organizing-principles.yaml → `hierarchy.ts` via Tera template |
+| 2.9 | Implement `generators/hierarchy.rs` | organizing-principles.yaml → `hierarchy.ts` via MiniJinja template |
 | 2.10 | Implement `generators/mermaid.rs` | Mermaid flowchart with Realm/Layer/Trait coloring |
 | 2.11 | Implement `commands/schema.rs` | `novanet schema generate` (orchestrates all 7 generators in order) + `novanet schema validate` (YAML ↔ Neo4j) |
 | 2.12 | Run `novanet schema generate` | Validate all 7 generators produce correct output, run generated Cypher against test Neo4j |
@@ -2633,7 +2644,7 @@ This is the first Rust code written — scaffold the crate, then implement gener
 | 4.1 | Update `00-constraints.cypher` | Drop v8 meta constraints, add v9 (6 types) |
 | 4.2 | Regenerate seeds | Output of Phase 2 generators |
 | 4.3 | Rename autowire | `99-autowire-subcategories.cypher` → `99-autowire-kinds.cypher` |
-| 4.4 | Clean rebuild | `pnpm infra:down && docker volume rm ... && pnpm infra:up && novanet db seed` |
+| 4.4 | Clean rebuild | `novanet db reset` |
 | 4.5 | Run integrity tests | Meta-graph integrity queries (all 3 checks) |
 | 4.6 | Audit query files | `queries/*.cypher` — update Scope/Subcategory references |
 

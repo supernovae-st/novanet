@@ -1,5 +1,9 @@
 # Organizing Principles Implementation Plan
 
+> **Superseded by v9**: This plan uses v8 terminology (Scope/Subcategory/NodeTypeMeta).
+> In v9, these become Realm/Layer/Kind with 3 additional meta-types (Trait, EdgeFamily, EdgeKind).
+> See [`2026-02-01-ontology-v9-design.md`](2026-02-01-ontology-v9-design.md).
+
 > **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
 **Goal:** Add Scope, Subcategory, and NodeTypeMeta as first-class Neo4j nodes for LLM context, queryable taxonomy, and self-describing graph.

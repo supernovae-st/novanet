@@ -1,5 +1,8 @@
 # Taxonomy Dashboard - 3-Tier Visual Hierarchy Design
 
+> **Superseded by v9**: This plan uses v8 terminology (Scope/Subcategory/Node Types).
+> In v9, these become Realm/Layer/Kind. See [`2026-02-01-ontology-v9-design.md`](2026-02-01-ontology-v9-design.md).
+
 > **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
 **Goal:** Display Scope, Subcategory, and Node Types as 3 visually distinct categories with decreasing size/prominence - both in the sidebar panel and the magnetic graph layout.
