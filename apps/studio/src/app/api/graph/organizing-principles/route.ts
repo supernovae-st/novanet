@@ -61,6 +61,8 @@ export async function GET() {
       scope_key: record.get('scope_key') as string,
     }));
 
+    // TODO(v9): Rename Subcategory->Layer, NodeTypeMeta->Kind, DEFINES_TYPE->HAS_KIND
+    // TODO(v9): Response shape: { realms, layers, nodeTypeMapping } (not scopes/subcategories)
     // Fetch nodeType → subcategory mapping from DEFINES_TYPE relationships
     const mappingResult = await session.run(`
       MATCH (sub:Subcategory)-[:DEFINES_TYPE]->(ntm:NodeTypeMeta)

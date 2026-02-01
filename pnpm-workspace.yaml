@@ -18,9 +18,6 @@ catalog:
   # Database
   neo4j-driver: ^5.28.1
 
-  # AI/LLM
-  openai: ^6.17.0
-
   # Testing
   vitest: ^2.1.0
 

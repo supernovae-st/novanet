@@ -2,6 +2,11 @@
 # Source of truth for NovaNet taxonomy structure
 # v8.3.0 - Organizing Principles as Neo4j nodes
 #
+# TODO(v9): REWRITE THIS FILE — v9 faceted classification replaces flat tree
+# TODO(v9): scopes -> realms (3), subcategories -> layers (9), add traits (5)
+# TODO(v9): Add EdgeFamily (5) and EdgeKind (47) definitions
+# TODO(v9): Version bumps to 9.0.0
+#
 # This file defines:
 # - 3 Scopes (Global, Project, Shared)
 # - 9 Subcategories

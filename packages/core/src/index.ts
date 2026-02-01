@@ -69,14 +69,6 @@ export * as config from './config/index.js';
 export * as schemas from './schemas/index.js';
 
 // =============================================================================
-// SERVICES (RESERVED - v8.2.0)
-// =============================================================================
-
-// NOTE: Services module (VectorSearchService, GraphTraversalService, HybridRetriever)
-// is reserved for future Hybrid OntologyRAG implementation.
-// Currently not exported - import directly from './services/' if needed for development.
-
-// =============================================================================
 // GENERATORS (v8.0.0)
 // =============================================================================
 

@@ -7,6 +7,8 @@ import type { RelationType } from '../schemas/relations.schema.js';
 
 // =============================================================================
 // SUBCATEGORY (9 subcategories across 3 scopes)
+// TODO(v9): Rename Subcategory -> Layer, SubcategoryMeta -> LayerMeta
+// TODO(v9): Rename ScopeDefinition -> RealmDefinition
 // =============================================================================
 
 /**

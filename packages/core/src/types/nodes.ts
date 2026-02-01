@@ -95,6 +95,8 @@ export const NODE_BEHAVIORS: Record<NodeType, LocaleBehavior> = {
 
 // =============================================================================
 // SCOPES
+// TODO(v9): Rename Scope -> Realm, NODE_SCOPES -> NODE_REALMS
+// TODO(v9): Values stay 'Global'|'Shared'|'Project' but type name changes
 // =============================================================================
 
 export type Scope = 'Global' | 'Shared' | 'Project';

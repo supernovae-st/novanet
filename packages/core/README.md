@@ -26,7 +26,6 @@ NovaNet Core provides the foundational layer for the NovaNet knowledge graph sys
 - **NovaNetFilter** — Fluent API for composable graph queries
 - **Zod Schemas** — Runtime validation for locale knowledge
 - **Cypher Generator** — Convert filters to executable queries
-- **Hybrid OntologyRAG** — Vector search + graph traversal services
 
 ---
 
@@ -76,7 +75,6 @@ core/
 │   ├── schemas/               # Zod validation schemas
 │   ├── filters/               # NovaNetFilter, CypherGenerator
 │   ├── parsers/               # Markdown → Neo4j parsers
-│   ├── services/              # Hybrid OntologyRAG services
 │   ├── generators/            # Documentation generators
 │   └── db/                    # Neo4j connection
 └── scripts/                   # Build & validation scripts
@@ -128,7 +126,7 @@ import type {
 } from '@novanet/core';
 
 // Namespaced imports (v8.0.0+)
-import { config, schemas, services } from '@novanet/core';
+import { config, schemas } from '@novanet/core';
 ```
 
 ---
@@ -148,7 +146,7 @@ pnpm --filter=@novanet/core validate       # Schema validation
 | Package | Description |
 |---------|-------------|
 | [@novanet/db](../db/) | Neo4j Docker infrastructure |
-| [@novanet/cli](../cli/) | Validation & generation tools |
+| [@novanet/schema-tools](../schema-tools/) | Schema validation & sync tools |
 | [@novanet/studio](../../apps/studio/) | Graph visualization |
 
 ---
