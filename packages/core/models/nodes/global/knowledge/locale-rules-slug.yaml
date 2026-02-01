@@ -1,11 +1,11 @@
-# models/nodes/locale/locale-rules-slug.yaml
+# models/nodes/global/knowledge/locale-rules-slug.yaml
 # LocaleRulesSlug - URL slug generation rules, stopwords, character handling
 #
 # Stability: High - Changes only on standard updates.
 
 node:
   name: LocaleRulesSlug
-  category: locale
+  locale_behavior: knowledge
   icon: "🔗"
   description: "URL slug generation rules for a locale"
 

@@ -1,4 +1,4 @@
-# models/nodes/locale/pattern.yaml
+# models/nodes/global/knowledge/pattern.yaml
 # Pattern - Formatting patterns with examples for a locale
 #
 # Graph-native extraction of formatting rules from LocaleRulesFormatting
@@ -8,7 +8,7 @@
 
 node:
   name: Pattern
-  category: locale
+  locale_behavior: knowledge
   icon: "📐"
   description: "Formatting pattern with correct/incorrect examples"
 

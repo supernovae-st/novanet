@@ -1,9 +1,9 @@
-# models/nodes/seo/seo-mining-run.yaml
+# models/nodes/shared/seo/seo-mining-run.yaml
 # SEOMiningRun - SEO mining job orchestration
 
 node:
   name: SEOMiningRun
-  category: seo
+  locale_behavior: job
   icon: "⚙️"
   description: "Mining job for SEO keyword variations"
 

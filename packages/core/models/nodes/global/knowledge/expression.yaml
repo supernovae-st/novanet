@@ -1,4 +1,4 @@
-# models/nodes/locale/expression.yaml
+# models/nodes/global/knowledge/expression.yaml
 # Expression - Individual native expression for a locale
 #
 # One node per expression, linked to LocaleLexicon
@@ -6,7 +6,7 @@
 
 node:
   name: Expression
-  category: locale
+  locale_behavior: knowledge
   icon: "💭"
   description: "Individual native expression for localized content generation"
 

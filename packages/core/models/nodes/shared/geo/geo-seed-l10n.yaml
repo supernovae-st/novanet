@@ -1,9 +1,9 @@
-# models/nodes/geo/geo-seed-l10n.yaml
+# models/nodes/shared/geo/geo-seed-l10n.yaml
 # GEOSeedL10n - AI visibility seed query (LOCALIZED - has FOR_LOCALE)
 
 node:
   name: GEOSeedL10n
-  category: geo
+  locale_behavior: localized
   icon: "🤖"
   description: "Base query to monitor on AI platforms"
 

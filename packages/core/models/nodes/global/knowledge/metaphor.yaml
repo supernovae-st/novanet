@@ -1,4 +1,4 @@
-# models/nodes/locale/metaphor.yaml
+# models/nodes/global/knowledge/metaphor.yaml
 # Metaphor - Concept-to-local expression mappings with cross-locale search
 #
 # Maps universal concepts ("easy as pie") to locale-native equivalents
@@ -8,7 +8,7 @@
 
 node:
   name: Metaphor
-  category: locale
+  locale_behavior: knowledge
   icon: "🎭"
   description: "Locale-native metaphor mapping universal concepts to local expressions"
 

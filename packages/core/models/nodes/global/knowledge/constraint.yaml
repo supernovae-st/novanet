@@ -1,4 +1,4 @@
-# models/nodes/locale/constraint.yaml
+# models/nodes/global/knowledge/constraint.yaml
 # Constraint - Cultural constraints, taboos, and restrictions for a locale
 #
 # Graph-native extraction from LocaleCulture for queryable restrictions
@@ -8,7 +8,7 @@
 
 node:
   name: Constraint
-  category: locale
+  locale_behavior: knowledge
   icon: "⚠️"
   description: "Cultural constraint or restriction for content generation"
 

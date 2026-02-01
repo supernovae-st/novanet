@@ -1,9 +1,9 @@
-# models/nodes/generation/block-rules.yaml
+# models/nodes/project/instruction/block-rules.yaml
 # BlockRules - Template generation rules for BlockType (v7.2.0)
 
 node:
   name: BlockRules
-  category: generation
+  locale_behavior: invariant
   icon: "🔵"
   description: "Generation rules extracted from BlockType for versioning and A/B testing"
 

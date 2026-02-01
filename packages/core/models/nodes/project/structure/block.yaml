@@ -1,9 +1,9 @@
-# models/nodes/content/block.yaml
+# models/nodes/project/structure/block.yaml
 # Block - Page section instance with sub-agent instructions
 
 node:
   name: Block
-  category: content
+  locale_behavior: invariant
   icon: "🔷"
   description: "Page section instance containing sub-agent instructions and concept references"
 

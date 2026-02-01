@@ -1,11 +1,11 @@
-# models/nodes/locale/locale-culture.yaml
+# models/nodes/global/knowledge/locale-culture.yaml
 # LocaleCulture - VALUES, TABOOS for a locale
 #
 # Stability: High - core values stable, update annually
 
 node:
   name: LocaleCulture
-  category: locale
+  locale_behavior: knowledge
   icon: "🏛️"
   description: "Values, taboos, sensitivities for a locale"
 
