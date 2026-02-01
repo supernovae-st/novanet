@@ -1494,24 +1494,204 @@ Before starting implementation:
 - All work happens on the feature branch — `main` stays on v8.3.0
 - If migration fails mid-implementation: `git checkout main` restores v8.3.0
 
-### Implementation Steps
+### Implementation Phases
 
-0. **Rollback prep**: `git tag v8.3.0-stable && git checkout -b feat/ontology-v9`
-1. Add `locale_behavior` to all 35 node YAML files (fix inconsistency)
-2. **Full rewrite** of `relations.yaml` (dict→list format + `family` + multi-source/target)
-3. Rewrite `organizing-principles.yaml` to v9 format
-4. Rewrite `OrganizingPrinciplesGenerator.ts` for v9
-5. Run `pnpm schema:generate` to regenerate Cypher + TypeScript
-6. Update `00-constraints.cypher` (drop old, add new)
-7. Rename `99-autowire-subcategories.cypher` → `99-autowire-kinds.cypher`
-8. Clean rebuild: `pnpm infra:down && docker volume rm ... && pnpm infra:up && pnpm infra:seed`
-9. Run meta-graph integrity tests
-10. **PascalCase→lowercase audit**: find-and-replace all `'Global'`→`'global'`, `'Project'`→`'project'`, `'Shared'`→`'shared'`, `'localeKnowledge'`→`'knowledge'` across TS, Cypher, Studio (~140 string literals)
-11. Update Studio API + components (rename ScopeGroup → RealmGroup, etc.)
-12. Align Studio visual categories to 9 Layers
-13. Implement navigation mode toggle in Studio (NavigationModeToggle, navigationStore)
-14. Implement facet filter panel in Studio (FacetFilterPanel, useNavigationMode)
-15. Add navigation API endpoint (`/api/graph/navigation/route.ts`)
-16. Implement TS CLI graph commands (`graph:data`, `graph:meta`, `graph:overlay`, `graph:query`)
-17. Build Rust TUI (`tools/novanet-tui`) — **STRETCH GOAL**: ratatui + neo4rs, taxonomy tree, mode toggle, facet filters
-18. Run full test suite
+The migration is organized into 8 phases (+ 1 stretch goal). Each phase ends with
+a **Ralph Wiggum codebase audit** (`/codebase-audit`) to verify nothing was missed,
+no dead code remains, and DX is clean.
+
+#### Phase 0: Preparation
+
+| # | Task | Description |
+|---|------|-------------|
+| 0.1 | Git tag + branch | `git tag v8.3.0-stable && git checkout -b feat/ontology-v9` |
+| 0.2 | Baseline audit | `/codebase-audit` — snapshot of current state, identify all v8 references |
+| 0.3 | Worktree setup | `spn-powers:using-git-worktrees` — isolated workspace for v9 |
+
+**Gate**: Ralph Wiggum #0 — baseline clean, all v8 references catalogued
+
+#### Phase 1: YAML Foundation (~core/models)
+
+| # | Task | Description |
+|---|------|-------------|
+| 1.1 | Rewrite `organizing-principles.yaml` | v9 format: realms/layers/traits/edge_families |
+| 1.2 | Add `locale_behavior` to 35 node YAMLs | 33/35 missing — add field, remove `category`, fix stale headers |
+| 1.3 | Full rewrite `relations.yaml` | Dict→list format + `family` + multi-source/target |
+| 1.4 | Update `_index.yaml` | Bump version, update scope→realm terminology |
+| 1.5 | Delete `relations/in-subcategory.yaml` | Replaced by OF_KIND (generated) |
+
+**Gate**: Ralph Wiggum #1 — all 35 YAMLs have `locale_behavior`, no `category` field, relations.yaml valid
+
+#### Phase 2: Generator Architecture (~schema-tools)
+
+| # | Task | Description |
+|---|------|-------------|
+| 2.1 | Rewrite `OrganizingPrinciplesGenerator.ts` | v9 Cypher for Realm, Layer, Trait, EdgeFamily |
+| 2.2 | Create `KindGenerator.ts` | Kind nodes + `schema_hint`, `context_budget` + facette rels |
+| 2.3 | Create `EdgeSchemaGenerator.ts` | EdgeKind nodes + `cypher_pattern` + FROM/TO_KIND |
+| 2.4 | Create `AutowireGenerator.ts` | OF_KIND wiring statements |
+| 2.5 | Create `HierarchyGenerator.ts` | organizing-principles.yaml → hierarchy.ts |
+| 2.6 | Rename `SubcategoryGenerator` → `LayerGenerator` | Layer mapping TypeScript |
+| 2.7 | Restructure `RelationsParser.ts` | List format + `family` + multi-source/target |
+| 2.8 | Update `MermaidGenerator.ts` | Realm/Layer/Trait coloring |
+| 2.9 | Run `pnpm schema:generate` | Validate all 7 generators produce correct output |
+
+**Gate**: Ralph Wiggum #2 — all generators produce valid output, no v8 generator logic remains
+
+#### Phase 3: TypeScript Types + Core (~core/src)
+
+| # | Task | Description |
+|---|------|-------------|
+| 3.1 | Generate `KIND_META` + derived maps | Single record replaces 4 separate classification systems |
+| 3.2 | Kill `NodeCategory` | Delete from core, update `filters/types.ts` to use Layer directly |
+| 3.3 | Update filters | `CypherGenerator.ts`, `NovaNetFilter.ts` — kill NodeCategory expansion |
+| 3.4 | Update graph module | `layers.ts`, `hierarchy.ts`, `types.ts` — Realm/Layer/Trait types |
+| 3.5 | PascalCase→lowercase audit | ~140 string literals: `'Global'`→`'global'`, `'localeKnowledge'`→`'knowledge'` |
+| 3.6 | Update tests | Schema sync, hierarchy, generator, convention tests |
+
+**Gate**: Ralph Wiggum #3 — `pnpm type-check` + `pnpm test --filter=@novanet/core` pass, no NodeCategory refs
+
+#### Phase 4: Neo4j Migration (~db)
+
+| # | Task | Description |
+|---|------|-------------|
+| 4.1 | Update `00-constraints.cypher` | Drop v8 meta constraints, add v9 (6 types) |
+| 4.2 | Regenerate seeds | Output of Phase 2 generators |
+| 4.3 | Rename autowire | `99-autowire-subcategories.cypher` → `99-autowire-kinds.cypher` |
+| 4.4 | Clean rebuild | `pnpm infra:down && docker volume rm ... && pnpm infra:up && pnpm infra:seed` |
+| 4.5 | Run integrity tests | Meta-graph integrity queries (all 3 checks) |
+| 4.6 | Audit query files | `queries/*.cypher` — update Scope/Subcategory references |
+
+**Gate**: Ralph Wiggum #4 — all integrity tests pass, Neo4j schema matches YAML, no v8 labels in DB
+
+#### Phase 5: Studio Migration (~studio, existing features)
+
+| # | Task | Description |
+|---|------|-------------|
+| 5.1 | Component renames | ScopeGroupNode→Realm, SubcategoryGroupNode→Layer, attractors |
+| 5.2 | Kill NodeCategory in Studio | `filterAdapter.ts`, `nodeTypes.ts`, `categoryColors.ts` |
+| 5.3 | ViewCategory rename | `'scope'`→`'overview'` in viewStore, views/route, view.schema |
+| 5.4 | Update API queries | `organizing-principles/route.ts` — Realm/Layer/Kind/Trait Cypher |
+| 5.5 | Update hooks | `useMagneticData`, `useMagneticSimulation`, `useFilteredGraph` |
+| 5.6 | Update stores | `filterStore.ts` — collapsedScopes→collapsedRealms |
+| 5.7 | Update layouts | 6 layout algorithms — Scope→Realm, Subcategory→Layer |
+| 5.8 | Update misc | SchemaNode, tokens, page.tsx, tailwind.config, schemaGenerator |
+| 5.9 | Update tests | Unit tests + e2e/schema-mode.spec.ts |
+
+**Gate**: Ralph Wiggum #5 — `pnpm test --filter=@novanet/studio` passes, `pnpm dev` renders correctly, no v8 terms
+
+#### Phase 6: Studio Navigation (new features)
+
+| # | Task | Description |
+|---|------|-------------|
+| 6.1 | Create `NavigationModeToggle.tsx` | Toolbar: Data/Meta/Overlay/Query mode buttons |
+| 6.2 | Create `navigationStore.ts` | Active mode + selected facets state |
+| 6.3 | Create `useNavigationMode.ts` | Mode-aware Cypher query builder |
+| 6.4 | Create `FacetFilterPanel.tsx` | Sidebar: Realm/Layer/Trait/EdgeFamily checkboxes |
+| 6.5 | Create navigation API | `/api/graph/navigation/route.ts` |
+
+**Gate**: Ralph Wiggum #6 — all 4 navigation modes work, facet filters are dynamic from meta-graph
+
+#### Phase 7: CLI + Documentation
+
+| # | Task | Description |
+|---|------|-------------|
+| 7.1 | Create TS CLI commands | `graph:data`, `graph:meta`, `graph:overlay`, `graph:query` |
+| 7.2 | Update Claude skills | `novanet-architecture`, `novanet-sync` — v9 terminology |
+| 7.3 | Update Claude commands | `novanet-arch`, `novanet-sync` — v9 references |
+| 7.4 | Update CLAUDE.md files | Root, core, studio — v9 terminology and version |
+| 7.5 | Update docs | NOVANET-PITCH, plan docs, _index.yaml, README |
+| 7.6 | Update turbo generators | Scaffold templates with v9 fields |
+
+**Gate**: Ralph Wiggum #7 — CLI commands work, all docs reference v9, no stale v8 terminology anywhere
+
+#### Phase 8: Final Verification
+
+| # | Task | Description |
+|---|------|-------------|
+| 8.1 | Full Ralph Wiggum sweep | `/codebase-audit` — comprehensive dead code + legacy pattern scan |
+| 8.2 | Full test suite | `pnpm test` — all packages pass |
+| 8.3 | Type check | `pnpm type-check` — zero errors |
+| 8.4 | Lint | `pnpm lint` — zero warnings |
+| 8.5 | Performance benchmarks | All 4 navigation modes within target latencies |
+| 8.6 | Code review | `spn-powers:requesting-code-review` — full implementation review |
+| 8.7 | PR creation | `spn-powers:finishing-a-development-branch` — merge to main |
+
+**Gate**: All tests pass, all audits clean, PR approved
+
+#### Phase 9: Stretch Goals
+
+| # | Task | Description |
+|---|------|-------------|
+| 9.1 | Build Rust TUI | `tools/novanet-tui` — ratatui + neo4rs, taxonomy tree, mode toggle |
+| 9.2 | Additional navigation | Edge explorer, Cypher preview, fuzzy search |
+
+### Quality Gates: Ralph Wiggum Audit Protocol
+
+Each phase ends with a `/codebase-audit` (Ralph Wiggum loop). The audit checks:
+
+1. **Dead code** — no unused imports, functions, types, or files from v8
+2. **Stale references** — no `Scope`, `Subcategory`, `NodeTypeMeta`, `NodeCategory`,
+   `localeKnowledge`, `IN_SUBCATEGORY` strings anywhere in codebase
+3. **Consistency** — YAML ↔ TypeScript ↔ Neo4j ↔ Mermaid all agree
+4. **DX quality** — imports are clean, naming is consistent, no TODO/FIXME left behind
+5. **Test coverage** — all new/modified code has tests, coverage targets met
+
+**Why 8+ audits instead of 1 final sweep?** Catching drift early is exponentially
+cheaper than fixing it at the end. Each phase builds on the previous — if Phase 2
+introduces a stale reference, Phase 3 will compound it.
+
+### Skills & Agents Inventory
+
+Tools available for the v9 implementation:
+
+#### Claude Code Skills (slash commands)
+
+| Skill | Use When |
+|-------|----------|
+| `/codebase-audit` | **Ralph Wiggum** — dead code, stale refs, legacy patterns (after every phase) |
+| `/novanet-sync` | Validate YAML ↔ TypeScript ↔ Mermaid sync (Phases 1-3) |
+| `/schema:add-node` | Add new node type with Socratic discovery |
+| `/schema:edit-node` | Modify existing node type |
+| `/schema:add-relation` | Add new relationship type |
+| `/novanet-arch` | Display architecture diagram (verification) |
+| `/token-audit` | Verify design token adoption (Phase 5) |
+
+#### Superpowers Skills (workflow enforcement)
+
+| Skill | Use When |
+|-------|----------|
+| `spn-powers:test-driven-development` | Writing generators + tests (Phase 2-3) |
+| `spn-powers:systematic-debugging` | Any test failure or unexpected behavior |
+| `spn-powers:verification-before-completion` | Before marking any phase as complete |
+| `spn-powers:dispatching-parallel-agents` | 3+ independent tasks in a phase |
+| `spn-powers:subagent-driven-development` | Executing phase tasks with review between each |
+| `spn-powers:requesting-code-review` | After completing a major phase |
+| `spn-powers:receiving-code-review` | When acting on review feedback |
+| `spn-powers:using-git-worktrees` | Phase 0 workspace isolation |
+| `spn-powers:writing-plans` | Detailed implementation plans per phase |
+| `spn-powers:executing-plans` | Batch execution with review checkpoints |
+| `spn-powers:finishing-a-development-branch` | Phase 8 final merge |
+| `spn-powers:brainstorming` | Any design decision within a phase |
+
+#### Specialized Agents
+
+| Agent | Use When |
+|-------|----------|
+| `neo4j-architect` | Cypher query optimization, schema design (Phases 2, 4) |
+| `feature-dev:code-architect` | Component architecture decisions (Phase 5-6) |
+| `feature-dev:code-explorer` | Understanding existing code before modifying (all phases) |
+| `feature-dev:code-reviewer` | Post-implementation review (all gates) |
+| `code-reviewer` | NovaNet-specific code quality (all gates) |
+
+#### Workflow Per Phase
+
+```
+1. Read phase tasks → Create TodoWrite items
+2. Use spn-powers:writing-plans for detailed subtasks
+3. Use spn-powers:test-driven-development for each task
+4. Use spn-powers:verification-before-completion before marking done
+5. Run /codebase-audit (Ralph Wiggum gate)
+6. Use spn-powers:requesting-code-review for phase review
+7. Mark phase complete → proceed to next
+```

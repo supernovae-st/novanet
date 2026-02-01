@@ -1687,6 +1687,51 @@ Target latencies (local Neo4j with seed data):
 
 ## Future Considerations
 
+### TrustGraph Evolution Path
+
+NovaNet v9 positions the system at **Level 5** on the TrustGraph RAG Progression
+(TrustGraph Context Graph Manifesto, Dec 2025):
+
+| Level | Name | NovaNet Status |
+|-------|------|---------------|
+| 1 | RAG — text chunks + vector search | Foundational |
+| 2 | GraphRAG — entities as nodes, relations as edges | v8.x |
+| 3 | OntologyRAG — structured ontologies for precision | v8.x |
+| 4 | Context Graph — self-describing, operational metadata | v9.0 |
+| 5 | **Self-describing information stores** | **v9.0 target** |
+| 6 | Dynamic retrieval strategies | v10+ |
+| 7 | Autonomous learning | v11+ |
+
+v9 achieves Level 5 through `schema_hint`, `cypher_pattern`, and `context_budget`
+on meta-nodes — the schema carries enough information for an AI agent to discover
+and query the graph without external documentation.
+
+**Path to Level 6 — Dynamic retrieval strategies (v10+):**
+
+The architecture supports this without structural changes:
+- `context_budget` is currently static (`high`/`medium`/`low`/`minimal`) — v10 makes
+  it **dynamic** based on prompt type, locale complexity, and concept density
+- EdgeFamily-aware traversal depth: `ownership` = always traverse, `semantic` =
+  temperature-gated, `mining` = on-demand
+- Add a `retrieval_strategy` field to Kind (extends KindMeta) with rules like
+  "expand related Concepts when generating output" vs "fetch summary only"
+- No schema migration needed — additive property on existing `:Kind` nodes
+
+**Path to Level 7 — Autonomous learning (v11+):**
+
+Requires a feedback collection and evaluation pipeline:
+- **Feedback loops**: PageL10n/BlockL10n quality scores → auto-adjust `context_budget`
+  (high-quality outputs → reduce context, poor-quality → increase context)
+- **Pattern discovery**: which Concept combinations produce the best content per locale
+  → auto-suggest `SEMANTIC_LINK` temperature adjustments
+- **Self-tuning Traits**: reclassify Kinds based on generation outcomes (e.g., a Kind
+  marked `low` budget consistently needs more context → auto-promote to `medium`)
+- **Meta-graph update loop**: orchestrator writes back to meta-graph after evaluation,
+  closing the learning cycle
+
+The faceted ontology makes this achievable: each learning signal maps to a specific
+axis (Trait for behavior, Kind for priority, EdgeFamily for traversal depth).
+
 ### LinkML Compatibility
 
 [LinkML](https://linkml.io/) is a YAML-based schema language for knowledge graphs
