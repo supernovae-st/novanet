@@ -21,7 +21,7 @@ meta-graph learns from its own outputs.
 
 Refactor the NovaNet meta-graph from a flat tree (Scope > Subcategory > NodeTypeMeta)
 to a **self-describing context graph** with 6 meta-node types and dual navigation
-(hierarchy + facettes).
+(hierarchy + facets).
 
 NovaNet is a **context graph** — a knowledge graph enriched with operational metadata,
 self-describing schema, and token-aware context assembly for AI agents. This positions
@@ -33,7 +33,7 @@ Key changes:
 - Add 2 new meta-types: Trait (locale behavior), EdgeFamily + EdgeKind (relation ontology)
 - Self-describing schema: `schema_hint` on Kind, `cypher_pattern` on EdgeKind, `context_budget` on Kind
 - Instance bridge: replace `IN_SUBCATEGORY` with `OF_KIND`
-- Dual navigation: top-down hierarchy + Kind-centric facettes
+- Dual navigation: top-down hierarchy + Kind-centric facets
 - Edge ontology: OWL-inspired FROM_KIND / TO_KIND multi-hop pattern
 - YAML remains source of truth, Neo4j is generated
 
@@ -212,7 +212,7 @@ Properties:
 key:          string  (PK, unique)
 display_name: string
 llm_context:  string
-color:        string  (hex, for Studio node colors)
+color:        string  (hex, for Studio border accent — NOT fill; fill comes from Layer)
 created_at:   datetime
 updated_at:   datetime
 ```
@@ -402,7 +402,7 @@ Recommended split:
 | Generator | Input | Output |
 |-----------|-------|--------|
 | `OrganizingPrinciplesGenerator` | `organizing-principles.yaml` | Realm, Layer, Trait, EdgeFamily Cypher + HAS_LAYER hierarchy |
-| `KindGenerator` | 35 node YAML files | Kind nodes (+ `schema_hint`, `context_budget`, `traversal_depth`, `generation_count`) + IN_REALM, IN_LAYER, EXHIBITS facettes |
+| `KindGenerator` | 35 node YAML files | Kind nodes (+ `schema_hint`, `context_budget`, `traversal_depth`, `generation_count`) + IN_REALM, IN_LAYER, EXHIBITS facets |
 | `EdgeSchemaGenerator` | `relations.yaml` | EdgeKind nodes (+ `cypher_pattern`, `temperature_threshold`) + FROM_KIND, TO_KIND, IN_FAMILY, HAS_EDGE_KIND |
 | `LayerGenerator` (renamed from `SubcategoryGenerator`) | 35 node YAML files | TypeScript `Record<NodeType, Layer>` mapping |
 | `MermaidGenerator` | All YAML | Updated diagram with Realm/Layer/Trait coloring |
@@ -873,7 +873,7 @@ context-aware: shows YAML views in Data/Query mode, ontology views in Meta mode.
 ### Faceted Filter Strategy
 
 v8 filter system: rigid tree (Scope → Subcategory → NodeCategory) with collapse/expand.
-v9 filter system: **independent facettes** with AND logic.
+v9 filter system: **independent facets** with AND logic.
 
 #### filterStore Migration
 
@@ -1515,6 +1515,7 @@ Total: ~130 files across 5 packages + 1 Rust tool + docs + Claude config. Groupe
 | `src/filters/types.ts` | Update | Kill `NodeCategory` (use Layer directly), rename ViewCategory `'scope'`→`'overview'` |
 | `src/filters/CypherGenerator.ts` | Update | Kill `NodeCategory` expansion logic → use Layer directly |
 | `src/filters/NovaNetFilter.ts` | Update | Kill `NodeCategory` filtering → use Layer directly |
+| `src/filters/index.ts` | Update | Remove `NodeCategory` re-export, add `Layer`/`Trait`/`Realm` exports |
 | `src/graph/__tests__/subcategories.test.ts` | Rename → `layers.test.ts` | Update assertions for Layer mapping |
 | `src/graph/__tests__/hierarchy.test.ts` | Update | Realm/Layer assertions |
 | `src/graph/__tests__/types.test.ts` | Update | New type definitions |
@@ -1531,7 +1532,7 @@ Total: ~130 files across 5 packages + 1 Rust tool + docs + Claude config. Groupe
 | `src/generators/MermaidGenerator.ts` | Update | scope→realm, category→layer in node coloring |
 | `src/parsers/RelationsParser.ts` | Restructure | Parse new list format + `family` field |
 | `src/config/colors.ts` | Update | `localeKnowledge`→`knowledge` in all color maps |
-| `src/generators/KindGenerator.ts` | Create | New generator for Kind nodes + facette rels |
+| `src/generators/KindGenerator.ts` | Create | New generator for Kind nodes + facet rels |
 | `src/generators/EdgeSchemaGenerator.ts` | Create | New generator for EdgeKind + FROM_KIND/TO_KIND |
 | `src/generators/AutowireGenerator.ts` | Create | New generator for OF_KIND statements |
 | `src/generators/HierarchyGenerator.ts` | Create | New generator: organizing-principles.yaml → hierarchy.ts (realm→layer tree) |
@@ -1707,16 +1708,19 @@ no dead code remains, and DX is clean.
 | # | Task | Description |
 |---|------|-------------|
 | 2.1 | Rewrite `OrganizingPrinciplesGenerator.ts` | v9 Cypher for Realm, Layer, Trait, EdgeFamily |
-| 2.2 | Create `KindGenerator.ts` | Kind nodes + `schema_hint`, `context_budget` + facette rels. **MUST fail-fast** if any YAML is missing `locale_behavior` — no silent defaults, throw with file path |
-| 2.3 | Create `EdgeSchemaGenerator.ts` | EdgeKind nodes + `cypher_pattern` + FROM/TO_KIND |
-| 2.4 | Create `AutowireGenerator.ts` | OF_KIND wiring statements |
-| 2.5 | Create `HierarchyGenerator.ts` | organizing-principles.yaml → hierarchy.ts |
-| 2.6 | Rename `SubcategoryGenerator` → `LayerGenerator` | Layer mapping TypeScript |
-| 2.7 | Restructure `RelationsParser.ts` | List format + `family` + multi-source/target |
+| 2.2 | Restructure `RelationsParser.ts` | List format + `family` + multi-source/target. **Must complete before generators that consume relations.yaml** |
+| 2.3 | Rename `SubcategoryGenerator` → `LayerGenerator` | Layer mapping TypeScript |
+| 2.4 | Create `KindGenerator.ts` | Kind nodes + `schema_hint`, `context_budget` + facet rels. **MUST fail-fast** if any YAML is missing `locale_behavior` — no silent defaults, throw with file path |
+| 2.5 | Create `EdgeSchemaGenerator.ts` | EdgeKind nodes + `cypher_pattern` + FROM/TO_KIND (depends on 2.2) |
+| 2.6 | Create `AutowireGenerator.ts` | OF_KIND wiring statements |
+| 2.7 | Create `HierarchyGenerator.ts` | organizing-principles.yaml → hierarchy.ts |
 | 2.8 | Update `MermaidGenerator.ts` | Realm/Layer/Trait coloring |
-| 2.9 | Run `pnpm schema:generate` | Validate all 7 generators produce correct output |
+| 2.9 | Update `generate-all.ts` + `validate-sync.ts` | New generator imports, order: OrganizingPrinciples → Kind → EdgeSchema → Layer → Mermaid → Autowire → Hierarchy |
+| 2.10 | Run `pnpm schema:generate` | Validate all 7 generators produce correct output, run generated Cypher against test Neo4j |
 
-**Gate**: Ralph Wiggum #2 — all generators produce valid output, no v8 generator logic remains
+**Parallelization**: After 2.1–2.3 (foundation), tasks 2.4–2.8 are independent — use `spn-powers:dispatching-parallel-agents`.
+
+**Gate**: Ralph Wiggum #2 — all generators produce valid output, EdgeKind count by family matches spec (23+7+7+6+2+2=47), no v8 generator logic remains
 
 #### Phase 3: TypeScript Types + Core (~core/src)
 
@@ -1729,7 +1733,7 @@ no dead code remains, and DX is clean.
 | 3.5 | PascalCase→lowercase audit | ~140 string literals: `'Global'`→`'global'`, `'localeKnowledge'`→`'knowledge'` |
 | 3.6 | Update tests | Schema sync, hierarchy, generator, convention tests |
 
-**Gate**: Ralph Wiggum #3 — `pnpm type-check` + `pnpm test --filter=@novanet/core` pass, no NodeCategory refs
+**Gate**: Ralph Wiggum #3 — `pnpm type-check` + `pnpm test --filter=@novanet/core` pass, no `NodeCategory` refs in `packages/core/**` (Studio keeps NodeCategory until Phase 5)
 
 #### Phase 4: Neo4j Migration (~db)
 
@@ -1748,26 +1752,28 @@ no dead code remains, and DX is clean.
 
 | # | Task | Description |
 |---|------|-------------|
-| 5.1 | Component renames | ScopeGroupNode→Realm, SubcategoryGroupNode→Layer, ScopeAttractor→RealmAttractor, SubcategoryAttractor→LayerAttractor, LocaleKnowledgeNode (`localeKnowledge`→`knowledge`), **Graph2D.tsx** (23 refs — highest density, critical path), **ResultsOverview.tsx** |
-| 5.2 | Kill NodeCategory in Studio | `filterAdapter.ts` (rewrite presets with v9 facets), `nodeTypes.ts` (import Layer from core), `categoryColors.ts` (6→9 Layer colors) |
-| 5.3 | ViewCategory rename | `'scope'`→`'overview'` in viewStore, views/route, view.schema |
-| 5.4 | Update API queries | `organizing-principles/route.ts` — Realm/Layer/Kind/Trait Cypher |
-| 5.5 | Update hooks | `useMagneticData`, `useMagneticSimulation`, `useFilteredGraph` |
-| 5.6 | Update stores | `filterStore.ts` — collapsedScopes→collapsedRealms |
-| 5.7 | Update layouts | 6 layout algorithms — Scope→Realm, Subcategory→Layer |
-| 5.8 | Update misc | SchemaNode, tokens, page.tsx, tailwind.config, schemaGenerator |
-| 5.8b | Visual system | Implement 3-channel encoding: Layer→fill color, Trait→border style, Realm→spatial zone |
-| 5.8c | View presets migration | Rewrite 9 `VIEW_PRESETS` from `NodeCategory` to v9 facets (Realm×Layer×Trait), drop dead presets 7-8 |
-| 5.8d | DataMode → NavigationMode | Replace `uiStore.dataMode` ('data'\|'schema') with `uiStore.navigationMode` ('data'\|'meta'\|'overlay'\|'query') |
-| 5.9 | Update tests | Unit tests + e2e/schema-mode.spec.ts |
-| 5.10 | localStorage migration | Clear persisted `novanet-ui` and `novanet-filter` stores on v9 boot — v8 keys (`collapsedScopes`, `dataMode`) contain dead values. Add version check in `partialize` or init logic. |
+| 5.0 | localStorage migration | Clear persisted `novanet-ui` and `novanet-filter` stores on v9 boot — v8 keys (`collapsedScopes`, `dataMode`) contain dead values. Add version check in `partialize` or init logic. **Do first** to avoid fighting stale state during development. |
+| 5.1 | Visual system | Define 3-channel encoding: create `layerColors.ts` (9 Layer fill colors), create `traitStyles.ts` (5 Trait border styles: solid/dashed/double/dotted/thin), update layouts for Realm spatial zones. **Defines the replacement before removing the old system.** |
+| 5.2 | Kill NodeCategory in Studio | `filterAdapter.ts` (remove NodeCategory type + imports), `nodeTypes.ts` (import Layer from core), delete `categoryColors.ts` (replaced by `layerColors.ts`) |
+| 5.3 | View presets migration | Rewrite 9 `VIEW_PRESETS` from `NodeCategory` to v9 facets (Realm×Layer×Trait), drop dead presets 7-8 (priority/freshness deleted in v8.2) |
+| 5.4 | Component renames | ScopeGroupNode→Realm, SubcategoryGroupNode→Layer, ScopeAttractor→RealmAttractor, SubcategoryAttractor→LayerAttractor, LocaleKnowledgeNode (`localeKnowledge`→`knowledge`), **Graph2D.tsx** (23 refs — highest density, critical path), **ResultsOverview.tsx** |
+| 5.5 | ViewCategory rename | `'scope'`→`'overview'` in viewStore, views/route, view.schema. Audit YAML view files for `category: scope` |
+| 5.6 | Update API queries | `organizing-principles/route.ts` — Realm/Layer/Kind/Trait Cypher |
+| 5.7 | Update hooks | `useMagneticData`, `useMagneticSimulation`, `useFilteredGraph` |
+| 5.8 | Update stores | `filterStore.ts` — collapsedScopes→collapsedRealms, collapsedSubcategories→collapsedLayers |
+| 5.9 | Update layouts | 6 layout algorithms — Scope→Realm, Subcategory→Layer, apply Realm spatial zones |
+| 5.10 | Update misc | SchemaNode, tokens, page.tsx, tailwind.config, schemaGenerator |
+| 5.11 | Update tests | Unit tests + e2e/schema-mode.spec.ts (includes PascalCase→lowercase fixture updates) |
 
-**Gate**: Ralph Wiggum #5 — `pnpm test --filter=@novanet/studio` passes, `pnpm dev` renders correctly, no v8 terms, localStorage loads cleanly
+**Parallelization**: After 5.0–5.3 (foundation), tasks 5.4–5.10 are largely independent file updates — use parallel agents for component renames (5.4), layouts (5.9), and hooks (5.7).
+
+**Gate**: Ralph Wiggum #5 — `pnpm test --filter=@novanet/studio` passes, `pnpm dev` renders with 9 Layer colors + 5 Trait borders + 3 Realm zones, no v8 terms, localStorage loads cleanly, no console errors
 
 #### Phase 6: Studio Navigation (new features)
 
 | # | Task | Description |
 |---|------|-------------|
+| 6.0 | Migrate `DataMode` → `NavigationMode` | In `uiStore.ts`: replace `DataMode = 'data' \| 'schema'` with `NavigationMode = 'data' \| 'meta' \| 'overlay' \| 'query'`, update all consumers (`GraphToolbar`, `ApiRoutes`, `useGraphData`), update persist partialize |
 | 6.1 | Create `NavigationModeToggle.tsx` | Toolbar: Data/Meta/Overlay/Query mode buttons |
 | 6.2 | Create `navigationStore.ts` | Active mode + selected facets state |
 | 6.3 | Create `useNavigationMode.ts` | Mode-aware Cypher query builder |
