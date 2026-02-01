@@ -23,6 +23,12 @@ import { DEFAULT_ANIMATION_BUDGET } from '@/components/graph/edges/system/consta
 /** Animation mode levels */
 export type AnimationMode = 'full' | 'reduced' | 'off';
 
+/** Mode transition phases */
+export type TransitionPhase = 'dissolve' | 'fetch' | 'reform' | null;
+
+/** Data mode for transitions */
+export type DataMode = 'data' | 'schema';
+
 /** Animation settings state */
 interface AnimationSettings {
   /** Current animation mode */
@@ -113,6 +119,29 @@ interface AnimationStore {
    * Reset settings to defaults
    */
   resetSettings: () => void;
+
+  // ===== MODE TRANSITION =====
+  /** Whether a mode transition is in progress */
+  isTransitioning: boolean;
+  /** Current phase of the transition */
+  transitionPhase: TransitionPhase;
+  /** Target mode we're transitioning to */
+  targetMode: DataMode | null;
+
+  /**
+   * Start a transition to the specified mode
+   */
+  startTransition: (mode: DataMode) => void;
+
+  /**
+   * Update the transition phase
+   */
+  setTransitionPhase: (phase: TransitionPhase) => void;
+
+  /**
+   * End the transition and reset state
+   */
+  endTransition: () => void;
 }
 
 const DEFAULT_SETTINGS: AnimationSettings = {
@@ -275,6 +304,31 @@ export const useAnimationStore = create<AnimationStore>()(
       resetSettings: () => {
         set({ settings: DEFAULT_SETTINGS });
       },
+
+      // ===== MODE TRANSITION STATE & ACTIONS =====
+      isTransitioning: false,
+      transitionPhase: null,
+      targetMode: null,
+
+      startTransition: (mode: DataMode) => {
+        set({
+          isTransitioning: true,
+          transitionPhase: 'dissolve',
+          targetMode: mode,
+        });
+      },
+
+      setTransitionPhase: (phase: TransitionPhase) => {
+        set({ transitionPhase: phase });
+      },
+
+      endTransition: () => {
+        set({
+          isTransitioning: false,
+          transitionPhase: null,
+          targetMode: null,
+        });
+      },
     }),
     {
       name: 'novanet-animation-settings',
@@ -288,3 +342,8 @@ export const useAnimationStore = create<AnimationStore>()(
     }
   )
 );
+
+// ===== SELECTORS =====
+export const selectIsTransitioning = (state: AnimationStore) => state.isTransitioning;
+export const selectTransitionPhase = (state: AnimationStore) => state.transitionPhase;
+export const selectTargetMode = (state: AnimationStore) => state.targetMode;

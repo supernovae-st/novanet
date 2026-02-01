@@ -94,21 +94,23 @@ function ModalRoot({
         style={{ zIndex: zIndex.modal }}
         role="presentation"
       >
-        {/* Backdrop */}
+        {/* Backdrop - Raycast-style blur ramp */}
         <div
-          className={cn(modalClasses.backdrop, 'animate-in fade-in duration-200')}
+          className={cn(
+            'fixed inset-0 bg-black/60 animate-overlay-backdrop',
+          )}
           onClick={closeOnOutsideClick ? onClose : undefined}
           aria-hidden="true"
         />
 
-        {/* Content container */}
+        {/* Content container - spring entrance */}
         <div
           ref={(node) => {
             // Assign to both refs
             (modalRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
             (contentRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
           }}
-          className="relative animate-in zoom-in-95 fade-in duration-200"
+          className="relative w-full px-4"
           role="dialog"
           aria-modal="true"
         >
@@ -128,7 +130,7 @@ export interface ModalContentProps {
   children: ReactNode;
   className?: string;
   /** Width preset */
-  size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
+  size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'full';
   /** ARIA label for dialog */
   ariaLabel?: string;
   /** ARIA labelledby ID */
@@ -140,6 +142,7 @@ const sizeClasses = {
   md: 'max-w-lg',
   lg: 'max-w-2xl',
   xl: 'max-w-4xl',
+  '2xl': 'max-w-6xl',
   full: 'max-w-[95vw]',
 };
 
@@ -153,7 +156,7 @@ function ModalContent({
   return (
     <div
       className={cn(
-        'w-full m-4 overflow-hidden',
+        'w-full mx-auto my-4 overflow-hidden',
         modalClasses.content,
         sizeClasses[size],
         className

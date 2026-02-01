@@ -7,7 +7,7 @@
 import { create } from 'zustand';
 import type { GraphNode, GraphEdge } from '@/types';
 import { useGraphStore } from './graphStore';
-import { DEFAULT_QUERY_LIMIT, EXPAND_QUERY_LIMIT } from '@/config/constants';
+import { DEFAULT_QUERY_LIMIT, EXPAND_QUERY_LIMIT, MIN_EXECUTION_ANIMATION_MS } from '@/config/constants';
 import { postJSON, getErrorMessage } from '@/lib/fetchClient';
 
 export type ResultViewMode = 'graph' | 'table' | 'raw';
@@ -88,11 +88,16 @@ export const useQueryStore = create<QueryState>((set) => ({
         error?: string;
       }
 
-      const data = await postJSON<QueryResponse>(
-        '/api/graph/query',
-        { cypher: query, params },
-        { signal: abortController.signal }
-      );
+      // Run query + minimum animation delay in parallel
+      // so the matrix effect is always visible
+      const [data] = await Promise.all([
+        postJSON<QueryResponse>(
+          '/api/graph/query',
+          { cypher: query, params },
+          { signal: abortController.signal }
+        ),
+        new Promise((r) => setTimeout(r, MIN_EXECUTION_ANIMATION_MS)),
+      ]);
 
       if (!data.success) {
         throw new Error(data.error || 'Query failed');

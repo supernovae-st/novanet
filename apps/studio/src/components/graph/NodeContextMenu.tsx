@@ -70,7 +70,8 @@ export function NodeContextMenu({ nodeId, position, onClose }: NodeContextMenuPr
   const menuRef = useRef<HTMLDivElement>(null);
   const { expandNode } = useNodeExpansion();
   const hideNode = useGraphStore((state) => state.hideNode);
-  const node = useGraphStore((state) => state.nodeMap.get(nodeId));
+  const getNodeById = useGraphStore((state) => state.getNodeById);
+  const node = getNodeById(nodeId);
 
   // Handle expand action
   const handleExpand = useCallback(async () => {

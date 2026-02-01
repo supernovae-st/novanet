@@ -7,9 +7,9 @@
  * acts as a gravitational center for its child nodes.
  *
  * Features:
- * - Circular node (120px) with scope color
- * - Shows emoji, label, and node count
- * - Glowing effect, especially when selected
+ * - Circular node (150px) with scope color
+ * - Shows emoji, label, and dual count (types + loaded)
+ * - Pulsing glow effect, stronger when selected
  * - Hidden handles for edges
  */
 
@@ -22,70 +22,82 @@ export interface ScopeAttractorData extends Record<string, unknown> {
   label: string;
   emoji: string;
   color: string;
-  nodeCount: number;
+  typeCount: number;
+  loadedCount: number;
 }
 
 export type ScopeAttractorNodeType = Node<ScopeAttractorData, 'scopeAttractor'>;
 
-const SCOPE_SIZE = 120;
+const SCOPE_SIZE = 150;
+
+const pulseGlowKeyframes = `
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+`;
 
 export const ScopeAttractorNode = memo(function ScopeAttractorNode({
   data,
   selected,
 }: NodeProps<ScopeAttractorNodeType>) {
   return (
-    <div
-      className={cn(
-        'flex flex-col items-center justify-center rounded-full',
-        'border-4 transition-[transform,border-color,box-shadow] duration-300',
-        selected ? 'scale-110' : 'scale-100'
-      )}
-      style={{
-        width: SCOPE_SIZE,
-        height: SCOPE_SIZE,
-        backgroundColor: `${data.color}20`,
-        borderColor: data.color,
-        boxShadow: selected
-          ? `0 0 40px ${data.color}60, 0 0 80px ${data.color}30`
-          : `0 0 20px ${data.color}40`,
-      }}
-      aria-label={`${data.label} scope with ${data.nodeCount} nodes`}
-    >
-      {/* Emoji */}
-      <span className="text-3xl" aria-hidden="true">{data.emoji}</span>
-
-      {/* Label */}
-      <span
-        className="text-sm font-bold mt-1"
-        style={{ color: data.color }}
-      >
-        {data.label}
-      </span>
-
-      {/* Count badge */}
-      <span
-        className="text-xs mt-1 px-2 py-0.5 rounded-full"
+    <>
+      <style>{pulseGlowKeyframes}</style>
+      <div
+        className={cn(
+          'flex flex-col items-center justify-center rounded-full',
+          'border-[5px] transition-[transform,border-color,box-shadow] duration-300',
+          selected ? 'scale-110' : 'scale-100'
+        )}
         style={{
-          backgroundColor: `${data.color}30`,
-          color: data.color
+          width: SCOPE_SIZE,
+          height: SCOPE_SIZE,
+          backgroundColor: `${data.color}20`,
+          borderColor: data.color,
+          boxShadow: selected
+            ? `0 0 60px ${data.color}60, 0 0 120px ${data.color}30`
+            : `0 0 30px ${data.color}40`,
+          animation: 'pulse-glow 3s ease-in-out infinite',
         }}
+        aria-label={`${data.label} scope: ${data.typeCount} types, ${data.loadedCount} loaded`}
       >
-        {data.nodeCount}
-      </span>
+        {/* Emoji */}
+        <span className="text-4xl" aria-hidden="true">{data.emoji}</span>
 
-      {/* Handles for edges (hidden) */}
-      <Handle
-        type="source"
-        position={Position.Bottom}
-        className="opacity-0"
-        aria-hidden="true"
-      />
-      <Handle
-        type="target"
-        position={Position.Top}
-        className="opacity-0"
-        aria-hidden="true"
-      />
-    </div>
+        {/* Label */}
+        <span
+          className="text-sm font-bold mt-1"
+          style={{ color: data.color }}
+        >
+          {data.label}
+        </span>
+
+        {/* Count badge - dual count */}
+        <span
+          className="text-xs mt-1 px-2 py-0.5 rounded-full text-center leading-tight"
+          style={{
+            backgroundColor: `${data.color}30`,
+            color: data.color,
+          }}
+        >
+          {data.typeCount} types &middot; {data.loadedCount} loaded
+        </span>
+
+        {/* Handles for edges (hidden) */}
+        <Handle
+          type="source"
+          position={Position.Bottom}
+          className="opacity-0"
+          aria-hidden="true"
+        />
+        <Handle
+          type="target"
+          position={Position.Top}
+          className="opacity-0"
+          aria-hidden="true"
+        />
+      </div>
+    </>
   );
 });

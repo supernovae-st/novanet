@@ -4,8 +4,8 @@
  * SubcategoryAttractorNode - Visible subcategory node for magnetic grouping
  *
  * Features:
- * - Smaller circular node (80px)
- * - Shows emoji, label, and node count
+ * - Circular node (90px)
+ * - Shows emoji, label, and dual count (typeCount / loadedCount)
  * - Uses parent scope's color (slightly dimmer)
  * - Hidden handles for edges
  */
@@ -20,12 +20,13 @@ export interface SubcategoryAttractorData extends Record<string, unknown> {
   emoji: string;
   scopeKey: string;
   color: string;
-  nodeCount: number;
+  typeCount: number;
+  loadedCount: number;
 }
 
 export type SubcategoryAttractorNodeType = Node<SubcategoryAttractorData, 'subcategoryAttractor'>;
 
-const SUBCAT_SIZE = 80;
+const SUBCAT_SIZE = 90;
 
 export const SubcategoryAttractorNode = memo(function SubcategoryAttractorNode({
   data,
@@ -47,7 +48,7 @@ export const SubcategoryAttractorNode = memo(function SubcategoryAttractorNode({
           ? `0 0 30px ${data.color}50`
           : `0 0 15px ${data.color}30`,
       }}
-      aria-label={`${data.label} subcategory with ${data.nodeCount} nodes`}
+      aria-label={`${data.label} subcategory: ${data.typeCount} types, ${data.loadedCount} loaded`}
     >
       {/* Emoji */}
       <span className="text-xl" aria-hidden="true">{data.emoji}</span>
@@ -65,7 +66,7 @@ export const SubcategoryAttractorNode = memo(function SubcategoryAttractorNode({
         className="text-[10px]"
         style={{ color: `${data.color}90` }}
       >
-        {data.nodeCount}
+        {data.typeCount} &middot; {data.loadedCount}
       </span>
 
       {/* Handles for edges (hidden) */}

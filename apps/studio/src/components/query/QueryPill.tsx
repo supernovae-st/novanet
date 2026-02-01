@@ -13,13 +13,14 @@
 
 import { useState, useCallback, useRef, useEffect, memo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { Play, Copy, X, Check, Loader2, Expand, Minimize2 } from 'lucide-react';
+import { Play, Copy, X, Check, Loader2, Expand } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useQueryStore } from '@/stores/queryStore';
 import { useCopyFeedback, useAutoFocus } from '@/hooks';
 import { FOCUS_DELAY_MS } from '@/config/constants';
-import { glassClasses, modalClasses, gapTokens } from '@/design/tokens';
-import { IconButton, Kbd } from '@/components/ui';
+import { gapTokens } from '@/design/tokens';
+import { IconButton } from '@/components/ui';
+import { CypherEditorModal } from './CypherEditorModal';
 
 // Matrix-style characters for animation
 const MATRIX_CHARS = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEF';
@@ -102,35 +103,36 @@ function useMatrixTextScramble(text: string, isActive: boolean) {
   return scrambledText;
 }
 
-// Matrix rain component
+// Matrix rain component - intensified
 const MatrixRain = memo(function MatrixRain() {
   const [columns, setColumns] = useState<string[]>([]);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setColumns(
-        Array.from({ length: 12 }, () =>
-          Array.from({ length: 3 }, () =>
+        Array.from({ length: 24 }, () =>
+          Array.from({ length: 4 }, () =>
             MATRIX_CHARS[Math.floor(Math.random() * MATRIX_CHARS.length)]
           ).join('')
         )
       );
-    }, 100);
+    }, 70);
 
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-30" aria-hidden="true">
+    <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-40" aria-hidden="true">
       <div className="flex justify-around h-full">
         {columns.map((col, i) => (
           <span
             key={i}
-            className="font-mono text-[8px] text-emerald-500 writing-mode-vertical animate-pulse"
+            className="font-mono text-[9px] text-emerald-400 writing-mode-vertical animate-pulse"
             style={{
-              animationDelay: `${i * 100}ms`,
+              animationDelay: `${i * 60}ms`,
               writingMode: 'vertical-rl',
               textOrientation: 'upright',
+              textShadow: '0 0 8px rgba(52,211,153,0.6)',
             }}
           >
             {col}
@@ -206,7 +208,6 @@ export const QueryPill = memo(function QueryPill({ className, onRun }: QueryPill
   const [isExpanded, setIsExpanded] = useState(false);
   const [editValue, setEditValue] = useState(currentQuery || '');
   const inputRef = useRef<HTMLInputElement>(null);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   // Ref for editValue to avoid event listener re-registration on every keystroke
   const editValueRef = useRef(editValue);
@@ -216,32 +217,9 @@ export const QueryPill = memo(function QueryPill({ className, onRun }: QueryPill
     if (!isEditing && !isExpanded) setEditValue(currentQuery || '');
   }, [currentQuery, isEditing, isExpanded]);
 
-  // Focus textarea when expanding (using hook for cleanup)
-  useAutoFocus(textareaRef, isExpanded);
-
   // Focus input when editing (using hook for cleanup)
   useAutoFocus(inputRef, isEditing, FOCUS_DELAY_MS);
 
-  // Handle Escape to close expanded mode
-  // Uses ref for editValue to avoid re-registering listener on every keystroke
-  useEffect(() => {
-    if (!isExpanded) return;
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        e.preventDefault();
-        e.stopPropagation();
-        // Use ref for latest value without deps change
-        if (editValueRef.current.trim()) {
-          setQuery(editValueRef.current.trim());
-        }
-        setIsExpanded(false);
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isExpanded, setQuery]);
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -256,18 +234,6 @@ export const QueryPill = memo(function QueryPill({ className, onRun }: QueryPill
       setEditValue(currentQuery || '');
     }
   }, [editValue, currentQuery, setQuery, onRun]);
-
-  const handleExpandedKeyDown = useCallback((e: React.KeyboardEvent) => {
-    // Cmd/Ctrl + Enter to run
-    if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
-      e.preventDefault();
-      if (editValue.trim()) {
-        setQuery(editValue.trim());
-        setIsExpanded(false);
-        onRun?.();
-      }
-    }
-  }, [editValue, setQuery, onRun]);
 
   const startEditing = useCallback(() => {
     setIsEditing(true);
@@ -284,6 +250,14 @@ export const QueryPill = memo(function QueryPill({ className, onRun }: QueryPill
     setIsExpanded(false);
   }, [editValue, setQuery]);
 
+  const handleModalRun = useCallback(() => {
+    if (editValue.trim()) {
+      setQuery(editValue.trim());
+      setIsExpanded(false);
+      onRun?.();
+    }
+  }, [editValue, setQuery, onRun]);
+
   const hasQuery = !!currentQuery;
 
   return (
@@ -298,10 +272,10 @@ export const QueryPill = memo(function QueryPill({ className, onRun }: QueryPill
           'ring-1 ring-white/[0.03] ring-inset',
           'hover:border-white/[0.18]',
           'transition duration-300 ease-out',
-          // Executing state - intense Matrix glow
+          // Executing state - ultra Matrix glow
           isExecuting && [
-            'border-emerald-400/60',
-            'shadow-[0_0_40px_rgba(52,211,153,0.25),0_0_80px_rgba(52,211,153,0.1),inset_0_0_20px_rgba(52,211,153,0.05)]',
+            'border-emerald-400/80',
+            'shadow-[0_0_80px_rgba(52,211,153,0.4),0_0_160px_rgba(52,211,153,0.2),inset_0_0_40px_rgba(52,211,153,0.12)]',
           ],
           className
         )}
@@ -309,20 +283,29 @@ export const QueryPill = memo(function QueryPill({ className, onRun }: QueryPill
         {/* Matrix effects when executing */}
         {isExecuting && (
           <>
+            {/* Emerald ambient background */}
+            <div className="absolute inset-0 rounded-2xl bg-emerald-950/30 pointer-events-none" aria-hidden="true" />
             {/* Matrix rain background */}
             <MatrixRain />
-            {/* Scan line effect */}
+            {/* Horizontal shimmer sweep */}
             <div
               className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none"
               aria-hidden="true"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-emerald-500/15 to-transparent animate-[shimmer_1.5s_infinite]" />
-              <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/5 via-transparent to-emerald-500/5" />
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-emerald-400/20 to-transparent animate-[shimmer_1.2s_infinite]" />
+              <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/8 via-transparent to-emerald-500/8" />
+            </div>
+            {/* Vertical scan line */}
+            <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none" aria-hidden="true">
+              <div
+                className="absolute top-0 bottom-0 w-[2px] bg-gradient-to-b from-transparent via-emerald-400/60 to-transparent animate-[shimmer_2s_infinite]"
+                style={{ filter: 'blur(1px)' }}
+              />
             </div>
             {/* Glowing border pulse */}
-            <div className="absolute inset-0 rounded-2xl border-2 border-emerald-400/50 animate-pulse pointer-events-none" />
-            {/* Ping effect for feedback */}
-            <div className="absolute inset-0 rounded-2xl border border-emerald-400/40 animate-ping pointer-events-none" style={{ animationDuration: '1.5s' }} />
+            <div className="absolute inset-0 rounded-2xl border-2 border-emerald-400/60 animate-pulse pointer-events-none" />
+            {/* Ping ripple effect */}
+            <div className="absolute inset-0 rounded-2xl border border-emerald-400/40 animate-ping pointer-events-none" style={{ animationDuration: '2s' }} />
           </>
         )}
         {/* Prompt with Matrix animation */}
@@ -330,13 +313,13 @@ export const QueryPill = memo(function QueryPill({ className, onRun }: QueryPill
           <span className={cn(
             'font-mono text-xs font-bold transition duration-300',
             isExecuting
-              ? 'text-emerald-400 drop-shadow-[0_0_12px_rgba(52,211,153,0.8)] animate-pulse'
+              ? 'text-emerald-300 drop-shadow-[0_0_16px_rgba(52,211,153,0.9)] animate-pulse'
               : 'text-emerald-500/50'
           )}>
             {isExecuting ? '>>>' : 'neo4j$'}
           </span>
           {isExecuting && (
-            <span className="font-mono text-[9px] text-emerald-400/80 tracking-[0.2em] drop-shadow-[0_0_6px_rgba(52,211,153,0.5)]">
+            <span className="font-mono text-[9px] text-emerald-300/90 tracking-[0.2em] drop-shadow-[0_0_10px_rgba(52,211,153,0.7)]">
               {matrixChars}
             </span>
           )}
@@ -371,7 +354,7 @@ export const QueryPill = memo(function QueryPill({ className, onRun }: QueryPill
                 'font-mono text-sm cursor-text truncate transition duration-200',
                 hasQuery ? 'text-white/80' : 'text-white/40',
                 // Matrix glow effect when executing
-                isExecuting && 'text-emerald-300 drop-shadow-[0_0_10px_rgba(52,211,153,0.6)]'
+                isExecuting && 'text-emerald-200 drop-shadow-[0_0_14px_rgba(52,211,153,0.8)]'
               )}
             >
               {hasQuery
@@ -425,109 +408,15 @@ export const QueryPill = memo(function QueryPill({ className, onRun }: QueryPill
         </div>
       </div>
 
-      {/* Expanded Modal */}
-      {isExpanded && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center animate-in fade-in duration-200"
-          onClick={(e) => {
-            if (e.target === e.currentTarget) closeExpanded();
-          }}
-        >
-          {/* Backdrop */}
-          <div className={modalClasses.backdrop} />
-
-          {/* Modal Content */}
-          <div
-            className={cn(
-              'relative w-[90vw] max-w-4xl',
-              glassClasses.modal,
-              'animate-in zoom-in-95 slide-in-from-bottom-4 duration-300'
-            )}
-          >
-            {/* Header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
-              <div className={cn('flex items-center', gapTokens.spacious)}>
-                <span className={cn(
-                  'font-mono text-sm font-medium select-none transition-colors',
-                  isExecuting ? 'text-emerald-400' : 'text-emerald-500/70'
-                )}>
-                  neo4j$
-                </span>
-                <span className="text-white/40 text-sm">Cypher Editor</span>
-              </div>
-              <div className={cn('flex items-center', gapTokens.tight)}>
-                <IconButton
-                  icon={isExecuting ? Loader2 : Play}
-                  onClick={() => {
-                    if (editValue.trim() && !isExecuting) {
-                      setQuery(editValue.trim());
-                      setIsExpanded(false);
-                      onRun?.();
-                    }
-                  }}
-                  disabled={!editValue.trim() || isExecuting}
-                  loading={isExecuting}
-                  title="Run (Cmd+Enter)"
-                  variant="success"
-                  size="md"
-                />
-                <IconButton
-                  icon={Copy}
-                  onClick={() => editValue.trim() && copy(editValue)}
-                  disabled={!editValue.trim()}
-                  title="Copy"
-                  active={copied}
-                  activeIcon={Check}
-                  size="md"
-                />
-                <IconButton
-                  icon={X}
-                  onClick={() => { setEditValue(''); }}
-                  disabled={!editValue.trim()}
-                  title="Clear"
-                  variant="danger"
-                  size="md"
-                />
-                <div className="w-px h-5 bg-white/10 mx-1" />
-                <IconButton
-                  icon={Minimize2}
-                  onClick={closeExpanded}
-                  title="Collapse (Esc)"
-                  size="md"
-                />
-              </div>
-            </div>
-
-            {/* Editor */}
-            <div className="p-6">
-              <textarea
-                ref={textareaRef}
-                value={editValue}
-                onChange={(e) => setEditValue(e.target.value)}
-                onKeyDown={handleExpandedKeyDown}
-                className={cn(
-                  'w-full h-64 resize-none',
-                  'bg-[#111118] rounded-xl p-4',
-                  'font-mono text-sm text-white/90 leading-relaxed',
-                  'placeholder:text-white/40',
-                  'border border-white/10 focus:border-white/20',
-                  'outline-none ring-0 focus:ring-0',
-                  'transition-colors duration-200'
-                )}
-                placeholder="Enter your Cypher query here...&#10;&#10;Examples:&#10;MATCH (n:Project) RETURN n LIMIT 10&#10;MATCH (p:Project)-[:HAS_LOCALE]->(l:Locale) RETURN p, l"
-                spellCheck={false}
-                autoComplete="off"
-              />
-            </div>
-
-            {/* Footer hint */}
-            <div className="px-6 pb-4 flex items-center justify-between text-xs text-white/40">
-              <span>Press <Kbd>Esc</Kbd> to close</span>
-              <span>Press <Kbd>Cmd+Enter</Kbd> to run</span>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Matrix Terminal Cypher Editor Modal */}
+      <CypherEditorModal
+        isOpen={isExpanded}
+        onClose={closeExpanded}
+        value={editValue}
+        onChange={setEditValue}
+        onRun={handleModalRun}
+        isExecuting={isExecuting}
+      />
     </>
   );
 });

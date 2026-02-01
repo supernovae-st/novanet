@@ -271,7 +271,7 @@ body {
   animation: slide-in-right 0.3s ease-out;
 }
 
-/* Scale in for modals */
+/* Scale in for modals (legacy) */
 @keyframes scale-in {
   from {
     transform: scale(0.95);
@@ -290,6 +290,83 @@ body {
 .animate-in {
   animation-fill-mode: both;
 }
+
+/* ============================================================================
+   RAYCAST-STYLE OVERLAY ENTRANCE SYSTEM
+   Expo-out spring: cubic-bezier(0.16, 1, 0.3, 1) — fast attack, smooth land
+   ============================================================================ */
+
+/* Overlay modal entrance - spring scale + slide from bottom */
+@keyframes overlay-enter {
+  0% {
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-overlay-enter {
+  animation: overlay-enter 320ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Overlay backdrop - blur ramp + darken */
+@keyframes overlay-backdrop {
+  0% {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  100% {
+    opacity: 1;
+    backdrop-filter: blur(20px);
+  }
+}
+
+.animate-overlay-backdrop {
+  animation: overlay-backdrop 400ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Overlay body content - staggered entrance */
+@keyframes overlay-content {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-overlay-content {
+  animation: overlay-content 350ms cubic-bezier(0.16, 1, 0.3, 1) 60ms both;
+}
+
+/* Picker card grid entrance - stagger with scale */
+@keyframes picker-card-enter {
+  0% {
+    opacity: 0;
+    transform: scale(0.95) translateY(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-picker-card {
+  animation: picker-card-enter 300ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Stagger utility for grid items */
+.stagger-1 { animation-delay: 30ms; }
+.stagger-2 { animation-delay: 60ms; }
+.stagger-3 { animation-delay: 90ms; }
+.stagger-4 { animation-delay: 120ms; }
+.stagger-5 { animation-delay: 150ms; }
+.stagger-6 { animation-delay: 180ms; }
 
 /* State-specific animations (GlowingBorder states) */
 @keyframes pulse-fast {
@@ -345,6 +422,255 @@ body {
    - .text-*-high utilities (never used)
    - .animate-float-1/2/3 (ProjectNode redesigned without particles)
 */
+
+/* ============================================================================
+   MATRIX TERMINAL EFFECTS - CypherEditorModal
+   Full CRT immersion: scanlines, glow, flicker, rain, glitch
+   ============================================================================ */
+
+/* CRT Scanline sweep - horizontal band moving down */
+@keyframes matrix-scanline {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+.animate-matrix-scanline {
+  animation: matrix-scanline 3s linear infinite;
+}
+
+/* CRT Flicker - subtle brightness variation */
+@keyframes matrix-flicker {
+  0%, 100% {
+    opacity: 1;
+  }
+  92% {
+    opacity: 1;
+  }
+  93% {
+    opacity: 0.97;
+  }
+  94% {
+    opacity: 1;
+  }
+  97% {
+    opacity: 0.98;
+  }
+  98% {
+    opacity: 1;
+  }
+}
+
+.animate-matrix-flicker {
+  animation: matrix-flicker 0.15s infinite;
+}
+
+/* Matrix rain fall animation */
+@keyframes matrix-rain {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+.animate-matrix-rain {
+  animation: matrix-rain 4s linear infinite;
+}
+
+/* Glitch effect - RGB split + offset */
+@keyframes matrix-glitch {
+  0%, 100% {
+    text-shadow: none;
+    transform: translate(0);
+  }
+  2% {
+    text-shadow: -2px 0 #ff0000, 2px 0 #00ffff;
+    transform: translate(-1px, 1px);
+  }
+  4% {
+    text-shadow: 2px 0 #ff0000, -2px 0 #00ffff;
+    transform: translate(1px, -1px);
+  }
+  6% {
+    text-shadow: none;
+    transform: translate(0);
+  }
+  40% {
+    text-shadow: none;
+    transform: translate(0);
+  }
+  42% {
+    text-shadow: -1px 0 #ff0000, 1px 0 #00ffff;
+    transform: translate(0, 1px);
+  }
+  44% {
+    text-shadow: 1px 0 #ff0000, -1px 0 #00ffff;
+    transform: translate(0, -1px);
+  }
+  46% {
+    text-shadow: none;
+    transform: translate(0);
+  }
+}
+
+.animate-matrix-glitch {
+  animation: matrix-glitch 4s ease-in-out infinite;
+}
+
+/* Intense glitch for headers */
+@keyframes matrix-glitch-intense {
+  0%, 100% {
+    text-shadow: none;
+    transform: translate(0) skewX(0);
+    clip-path: none;
+  }
+  1% {
+    text-shadow: -3px 0 #ff0000, 3px 0 #00ffff;
+    transform: translate(-2px, 1px) skewX(-2deg);
+  }
+  2% {
+    text-shadow: 3px 0 #ff0000, -3px 0 #00ffff;
+    transform: translate(2px, -1px) skewX(2deg);
+    clip-path: inset(30% 0 40% 0);
+  }
+  3% {
+    text-shadow: -2px 0 #ff0000, 2px 0 #00ffff;
+    transform: translate(-1px, 2px) skewX(-1deg);
+    clip-path: inset(60% 0 10% 0);
+  }
+  4% {
+    text-shadow: none;
+    transform: translate(0) skewX(0);
+    clip-path: none;
+  }
+  50% {
+    text-shadow: none;
+    transform: translate(0) skewX(0);
+    clip-path: none;
+  }
+  51% {
+    text-shadow: -2px 0 #ff0000, 2px 0 #00ffff;
+    transform: translate(-1px, -1px) skewX(1deg);
+  }
+  52% {
+    text-shadow: 2px 0 #ff0000, -2px 0 #00ffff;
+    transform: translate(1px, 1px) skewX(-1deg);
+    clip-path: inset(10% 0 80% 0);
+  }
+  53% {
+    text-shadow: none;
+    transform: translate(0) skewX(0);
+    clip-path: none;
+  }
+}
+
+.animate-matrix-glitch-intense {
+  animation: matrix-glitch-intense 5s ease-in-out infinite;
+}
+
+/* Glow pulse for borders */
+@keyframes matrix-glow-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 20px rgba(52, 211, 153, 0.3),
+      0 0 40px rgba(52, 211, 153, 0.2),
+      0 0 60px rgba(52, 211, 153, 0.1),
+      inset 0 0 20px rgba(52, 211, 153, 0.05);
+  }
+  50% {
+    box-shadow:
+      0 0 30px rgba(52, 211, 153, 0.5),
+      0 0 60px rgba(52, 211, 153, 0.3),
+      0 0 90px rgba(52, 211, 153, 0.15),
+      inset 0 0 30px rgba(52, 211, 153, 0.08);
+  }
+}
+
+.animate-matrix-glow-pulse {
+  animation: matrix-glow-pulse 2s ease-in-out infinite;
+}
+
+/* Border glow animation */
+@keyframes matrix-border-glow {
+  0%, 100% {
+    border-color: rgba(52, 211, 153, 0.4);
+  }
+  50% {
+    border-color: rgba(52, 211, 153, 0.8);
+  }
+}
+
+.animate-matrix-border-glow {
+  animation: matrix-border-glow 1.5s ease-in-out infinite;
+}
+
+/* CRT Vignette - static dark edges */
+.matrix-vignette {
+  background: radial-gradient(
+    ellipse at center,
+    transparent 0%,
+    transparent 60%,
+    rgba(0, 0, 0, 0.3) 80%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+  pointer-events: none;
+}
+
+/* CRT Scanlines overlay - horizontal lines */
+.matrix-scanlines {
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 1px,
+    rgba(0, 0, 0, 0.15) 1px,
+    rgba(0, 0, 0, 0.15) 2px
+  );
+  pointer-events: none;
+}
+
+/* Matrix cursor blink */
+@keyframes matrix-cursor-blink {
+  0%, 49% {
+    opacity: 1;
+  }
+  50%, 100% {
+    opacity: 0;
+  }
+}
+
+.animate-matrix-cursor {
+  animation: matrix-cursor-blink 1s step-end infinite;
+}
+
+/* Text glow effect */
+.matrix-text-glow {
+  text-shadow:
+    0 0 4px rgba(52, 211, 153, 0.8),
+    0 0 8px rgba(52, 211, 153, 0.6),
+    0 0 16px rgba(52, 211, 153, 0.4);
+}
+
+/* Strong text glow */
+.matrix-text-glow-strong {
+  text-shadow:
+    0 0 4px rgba(52, 211, 153, 1),
+    0 0 8px rgba(52, 211, 153, 0.8),
+    0 0 16px rgba(52, 211, 153, 0.6),
+    0 0 32px rgba(52, 211, 153, 0.4);
+}
 
 /* Gradient border rotation for selected nodes */
 @keyframes gradient-rotate {

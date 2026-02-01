@@ -34,6 +34,9 @@ export const FOCUS_DELAY_MS = 50;
 /** Animation duration for transitions (ms) */
 export const TRANSITION_DURATION_MS = 150;
 
+/** Minimum time (ms) to show the matrix executing animation for UX feedback */
+export const MIN_EXECUTION_ANIMATION_MS = 2000;
+
 // =============================================================================
 // NODE BACKGROUNDS
 // =============================================================================

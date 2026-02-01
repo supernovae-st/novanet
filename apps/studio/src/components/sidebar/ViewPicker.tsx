@@ -29,7 +29,7 @@ import {
 import { useShallow } from 'zustand/react/shallow';
 import { cn } from '@/lib/utils';
 import { useViewStore } from '@/stores/viewStore';
-import { glassClasses, modalClasses, iconSizes, gapTokens } from '@/design/tokens';
+import { pickerClasses, iconSizes, gapTokens, getCardStagger } from '@/design/tokens';
 import { Kbd } from '@/components/ui';
 import {
   useBodyScrollLock,
@@ -58,17 +58,19 @@ interface ViewPickerProps {
   className?: string;
 }
 
-// View Card component
+// View Card component - uses pickerClasses state tokens + stagger animation
 const ViewCard = memo(function ViewCard({
   view,
   isSelected,
   isFocused,
   onSelect,
+  index,
 }: {
   view: ViewRegistryEntry;
   isSelected: boolean;
   isFocused: boolean;
   onSelect: () => void;
+  index: number;
 }) {
   const config = CATEGORY_CONFIG[view.category] || { color: '#a78bfa', label: 'View', icon: Layers };
   const IconComponent = config.icon;
@@ -80,22 +82,24 @@ const ViewCard = memo(function ViewCard({
       aria-selected={isSelected}
       aria-label={view.description}
       className={cn(
-        // Layout: generous padding, comfortable gap
+        // Custom layout (left-aligned info cards, larger than standard picker cards)
         'flex flex-col items-start p-5 rounded-2xl text-left gap-3',
-        'border transition duration-150 relative',
+        'border transition-all duration-150 relative',
         'min-h-[130px]',
         'hover:scale-[1.02] active:scale-[0.98]',
         isSelected
           ? 'bg-violet-500/15 border-violet-500/40 text-white'
           : isFocused
-            ? 'bg-white/[0.06] border-white/20 text-white'
-            : 'bg-[#111118] border-white/[0.08] hover:bg-[#16161f] hover:border-white/15 text-white/90 hover:text-white'
+            ? pickerClasses.cardFocused
+            : pickerClasses.cardIdle,
+        pickerClasses.cardAnimation,
+        getCardStagger(index),
       )}
     >
       {/* Selection indicator */}
       {isSelected && (
-        <div className="absolute top-3 right-3 w-6 h-6 rounded-full bg-violet-500 flex items-center justify-center">
-          <Check className="w-3.5 h-3.5 text-white" strokeWidth={3} />
+        <div className={cn('absolute top-3 right-3', iconSizes['2xl'], 'rounded-full bg-violet-500 flex items-center justify-center')}>
+          <Check className={cn(iconSizes.sm, 'text-white')} strokeWidth={3} />
         </div>
       )}
 
@@ -107,7 +111,7 @@ const ViewCard = memo(function ViewCard({
           color: config.color,
         }}
       >
-        <IconComponent className="w-3.5 h-3.5" />
+        <IconComponent className={iconSizes.sm} />
         {config.label}
       </span>
 
@@ -204,62 +208,53 @@ const ViewPickerModal = memo(function ViewPickerModal({
   if (!mounted || !isOpen) return null;
 
   const content = (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-6 animate-in fade-in duration-200"
-      role="presentation"
-    >
-      {/* Backdrop */}
-      <div className={modalClasses.backdrop} aria-hidden="true" />
+    <div className={pickerClasses.container} role="presentation">
+      {/* Backdrop - Raycast blur ramp */}
+      <div className={pickerClasses.backdrop} aria-hidden="true" />
 
-      {/* Modal */}
+      {/* Modal shell */}
       <div
         ref={containerRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby="view-picker-title"
         onKeyDown={handleKeyDown}
-        className={cn(
-          'relative w-full max-w-4xl max-h-[80vh] overflow-hidden flex flex-col rounded-2xl',
-          glassClasses.modal,
-          'animate-in zoom-in-95 slide-in-from-bottom-4 duration-300'
-        )}
+        className={cn(pickerClasses.shell, pickerClasses.sizeDefault, pickerClasses.maxHeight)}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.06]">
-          <div className="flex items-center gap-4">
-            <div className="w-10 h-10 rounded-xl bg-violet-500/20 border border-violet-500/30 flex items-center justify-center">
-              <LayoutGrid className="w-5 h-5 text-violet-400" />
+        <div className={pickerClasses.header}>
+          <div className={cn('flex items-center', gapTokens.spacious)}>
+            <div className={cn(pickerClasses.headerIconBox, 'bg-violet-500/20 border-violet-500/30')}>
+              <LayoutGrid className={cn(iconSizes.xl, 'text-violet-400')} />
             </div>
             <div>
-              <h2 id="view-picker-title" className="text-base font-semibold text-white">
+              <h2 id="view-picker-title" className={pickerClasses.headerTitle}>
                 Select View
               </h2>
-              <p className="text-sm text-white/50 mt-0.5">Choose a schema view to display</p>
+              <p className={pickerClasses.headerSubtitle}>Choose a schema view to display</p>
             </div>
           </div>
-          <button
-            onClick={onClose}
-            aria-label="Close"
-            className="p-2 rounded-lg hover:bg-white/10 transition-colors text-white/50 hover:text-white"
-          >
+          <button onClick={onClose} aria-label="Close" className={pickerClasses.closeButton}>
             <X className={iconSizes.xl} />
           </button>
         </div>
 
         {/* Search */}
-        <div className="flex items-center gap-4 px-6 py-4 border-b border-white/[0.06]">
-          <Search className="w-5 h-5 text-white/40 shrink-0" />
+        <div className={pickerClasses.searchBar}>
+          <Search className={cn(iconSizes.xl, 'text-white/40 shrink-0')} />
           <input
             ref={searchRef}
             type="text"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            placeholder="Search views..."
+            placeholder="Search views\u2026"
             aria-label="Search views"
-            className="flex-1 bg-transparent text-white placeholder-white/40 text-sm outline-none border-none ring-0 focus:outline-none focus:ring-0"
+            aria-describedby="view-picker-hint"
+            className={pickerClasses.searchInput}
             autoComplete="off"
             spellCheck={false}
           />
+          <span id="view-picker-hint" className="sr-only">Type to filter saved views</span>
           {searchInput && (
             <button
               onClick={() => setSearchInput('')}
@@ -273,7 +268,7 @@ const ViewPickerModal = memo(function ViewPickerModal({
 
         {/* Grid */}
         <div
-          className="flex-1 overflow-y-auto p-6"
+          className={pickerClasses.grid}
           role="listbox"
           aria-label="Available views"
         >
@@ -288,14 +283,15 @@ const ViewPickerModal = memo(function ViewPickerModal({
                 isSelected={activeViewId === view.id}
                 isFocused={focusedIndex === index}
                 onSelect={() => handleSelect(view.id)}
+                index={index}
               />
             ))}
           </div>
 
           {/* No results */}
           {filteredViews.length === 0 && (
-            <div className="text-center py-12 text-white/40">
-              <Search className={`${iconSizes['2xl']} mx-auto mb-3 opacity-30`} />
+            <div className={pickerClasses.emptyState}>
+              <Search className={cn(iconSizes['2xl'], 'mx-auto mb-3 opacity-30')} />
               <p className="text-sm font-medium">No views found</p>
               <p className="text-xs opacity-60 mt-1">Try a different search term</p>
             </div>
@@ -303,21 +299,23 @@ const ViewPickerModal = memo(function ViewPickerModal({
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-3 border-t border-white/[0.06] flex items-center justify-between text-xs text-white/40">
-          <span>{filteredViews.length} views</span>
-          <div className={cn('flex items-center', gapTokens.large)}>
-            <span className={cn('flex items-center', gapTokens.compact)}>
-              <Kbd>↑↓←→</Kbd>
-              <span>Navigate</span>
-            </span>
-            <span className={cn('flex items-center', gapTokens.compact)}>
-              <Kbd>↵</Kbd>
-              <span>Select</span>
-            </span>
-            <span className={cn('flex items-center', gapTokens.compact)}>
-              <Kbd>Esc</Kbd>
-              <span>Close</span>
-            </span>
+        <div className={pickerClasses.footer}>
+          <div className={pickerClasses.footerContent}>
+            <span>{filteredViews.length} views</span>
+            <div className={cn('flex items-center', gapTokens.large)}>
+              <span className={cn('flex items-center', gapTokens.compact)}>
+                <Kbd>↑↓←→</Kbd>
+                <span>Navigate</span>
+              </span>
+              <span className={cn('flex items-center', gapTokens.compact)}>
+                <Kbd>↵</Kbd>
+                <span>Select</span>
+              </span>
+              <span className={cn('flex items-center', gapTokens.compact)}>
+                <Kbd>Esc</Kbd>
+                <span>Close</span>
+              </span>
+            </div>
           </div>
         </div>
       </div>

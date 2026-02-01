@@ -37,7 +37,7 @@ import { cn } from '@/lib/utils';
 import { logger } from '@/lib/logger';
 import { glassClasses, gapTokens } from '@/design/tokens';
 import { EmptyState } from '@/components/ui/EmptyState';
-import { useFilteredGraph, useFocusMode, useHoverHighlight, useNodeExpansion, useCenterOnNode, useSmartFitView, useContainerConstraint, useGraphInteractions, Z_INDEX } from '@/hooks';
+import { useFilteredGraph, useFocusMode, useHoverHighlight, useNodeExpansion, useCenterOnNode, useSmartFitView, useContainerConstraint, useGraphInteractions, Z_INDEX, useMagneticData } from '@/hooks';
 import { useUIStore } from '@/stores/uiStore';
 import { useAnimationStore } from '@/stores/animationStore';
 import { useGraphStore } from '@/stores/graphStore';
@@ -237,6 +237,7 @@ function Graph2DInner({
       sidebarOpen: state.sidebarOpen,
       focusMode: state.focusMode,
       dataMode: state.dataMode, // Schema mode toggle (Task 3.2)
+      layoutMode: state.layoutMode, // Magnetic grouping toggle
     }))
   );
 
@@ -253,6 +254,12 @@ function Graph2DInner({
 
   // Compute graph opacity based on transition phase (dissolve = fade out, reform = fade in)
   const graphOpacity = transitionPhase === 'dissolve' || transitionPhase === 'fetch' ? 0 : 1;
+
+  // =========================================================================
+  // MAGNETIC LAYOUT DATA (organizing principles)
+  // =========================================================================
+  // When layoutMode is 'magnetic', fetch Scope/Subcategory as attractor nodes
+  const { data: magneticData, isMagneticMode, isLoading: isMagneticLoading } = useMagneticData();
 
   // Focus mode for selection-based dimming
   const { isNodeDimmed, isEdgeDimmed, selectedId: focusSelectedId, connectedIds } = useFocusMode(graphEdges);
@@ -311,6 +318,9 @@ function Graph2DInner({
   const prevFocusModeRef = useRef(focusMode);
   // prevHasSelectionRef removed - no longer tracking selection close for fitView
   const prevLayoutVersionRef = useRef(layoutVersion);
+
+  // Track magnetic mode state for fitView on data arrival / mode exit
+  const prevMagneticDataRef = useRef(magneticData);
 
   // Track if initial fitView has been performed
   const initialFitDoneRef = useRef(false);
@@ -634,6 +644,13 @@ function Graph2DInner({
     [setSelectedEdge, bringSchemaEdgeNodesToFront, getNodes, fitView]
   );
 
+  // =========================================================================
+  // NODE TYPE → SUBCATEGORY MAPPING (from Neo4j via useMagneticData)
+  // =========================================================================
+  // Comes from DEFINES_TYPE relationships in Neo4j, seeded from YAML.
+  // No hardcoded maps - all data flows: YAML → Neo4j → API → here.
+  const nodeTypeToSubcategory = magneticData?.nodeTypeMapping ?? {};
+
   // PERFORMANCE: Split layout (expensive) from dimming (cheap)
   // Step 1: Compute layout ONLY when graph data or layout direction changes (expensive)
   const layoutedNodes = useMemo(() => {
@@ -654,6 +671,129 @@ function Graph2DInner({
     };
 
     try {
+      // =====================================================================
+      // MAGNETIC MODE: Position data nodes around Scope/Subcategory attractors
+      // =====================================================================
+      if (isMagneticMode && magneticData) {
+        // Fixed scope positions (triangular arrangement)
+        const scopePositions: Record<string, { x: number; y: number }> = {
+          project: { x: 0, y: 0 },
+          global: { x: 2000, y: 0 },
+          shared: { x: 1000, y: 1500 },
+        };
+
+        // Subcategory → scope mapping
+        const subcatToScope: Record<string, string> = {};
+        for (const sub of magneticData.subcategories) {
+          subcatToScope[sub.key] = sub.scopeKey;
+        }
+
+        // Compute subcategory positions (circle around scope)
+        const subcatPositions: Record<string, { x: number; y: number }> = {};
+        const subcatsByScope = new Map<string, typeof magneticData.subcategories>();
+        for (const sub of magneticData.subcategories) {
+          const list = subcatsByScope.get(sub.scopeKey) || [];
+          list.push(sub);
+          subcatsByScope.set(sub.scopeKey, list);
+        }
+        for (const [scopeKey, subs] of subcatsByScope) {
+          const scopePos = scopePositions[scopeKey] || { x: 0, y: 0 };
+          const radius = 500;
+          subs.forEach((sub, i) => {
+            const angle = (2 * Math.PI * i) / subs.length - Math.PI / 2;
+            subcatPositions[sub.key] = {
+              x: scopePos.x + radius * Math.cos(angle),
+              y: scopePos.y + radius * Math.sin(angle),
+            };
+          });
+        }
+
+        // Create attractor nodes (Scope and Subcategory)
+        const attractorNodes: TurboNodeType[] = [];
+
+        // Scope attractor nodes
+        for (const scope of magneticData.scopes) {
+          const pos = scopePositions[scope.key];
+          // typeCount = how many nodeTypes belong to this scope (static, from schema)
+          const typeCount = Object.values(nodeTypeToSubcategory)
+            .filter(subcatKey => subcatToScope[subcatKey] === scope.key).length;
+          // loadedCount = how many loaded instances belong to this scope (dynamic)
+          const loadedCount = turboNodes.filter(n => {
+            const subcat = nodeTypeToSubcategory[n.data.type];
+            return subcatToScope[subcat] === scope.key;
+          }).length;
+          attractorNodes.push({
+            id: `scope-${scope.key}`,
+            type: 'scopeAttractor',
+            position: pos,
+            data: {
+              id: `scope-${scope.key}`,
+              type: 'Scope',
+              key: scope.key,
+              label: scope.displayName,
+              displayName: scope.displayName,
+              emoji: scope.emoji,
+              color: scope.color,
+              typeCount,
+              loadedCount,
+              category: 'project',
+            },
+          } as unknown as TurboNodeType);
+        }
+
+        // Subcategory attractor nodes
+        for (const sub of magneticData.subcategories) {
+          const pos = subcatPositions[sub.key];
+          const scope = magneticData.scopes.find(s => s.key === sub.scopeKey);
+          // typeCount = how many nodeTypes map to this subcategory (static)
+          const subTypeCount = Object.values(nodeTypeToSubcategory)
+            .filter(v => v === sub.key).length;
+          // loadedCount = how many loaded instances belong to this subcategory (dynamic)
+          const subLoadedCount = turboNodes
+            .filter(n => nodeTypeToSubcategory[n.data.type] === sub.key).length;
+          attractorNodes.push({
+            id: `subcat-${sub.key}`,
+            type: 'subcategoryAttractor',
+            position: pos,
+            data: {
+              id: `subcat-${sub.key}`,
+              type: 'Subcategory',
+              key: sub.key,
+              label: sub.displayName,
+              displayName: sub.displayName,
+              emoji: sub.emoji,
+              scopeKey: sub.scopeKey,
+              color: scope?.color || '#666',
+              typeCount: subTypeCount,
+              loadedCount: subLoadedCount,
+              category: 'project',
+            },
+          } as unknown as TurboNodeType);
+        }
+
+        // Position data nodes near their subcategory (with seeded jitter)
+        let seed = 12345;
+        const seededRandom = () => {
+          seed = (seed * 1103515245 + 12345) & 0x7fffffff;
+          return seed / 0x7fffffff;
+        };
+
+        const magneticDataNodes = turboNodes.map(node => {
+          const subcatKey = nodeTypeToSubcategory[node.data.type] || 'foundation';
+          const subcatPos = subcatPositions[subcatKey] || { x: 0, y: 0 };
+          return {
+            ...node,
+            position: {
+              x: subcatPos.x + (seededRandom() - 0.5) * 400,
+              y: subcatPos.y + (seededRandom() - 0.5) * 400,
+            },
+          };
+        });
+
+        // Combine attractor nodes with data nodes
+        return [...attractorNodes, ...magneticDataNodes];
+      }
+
       // Determine dagre direction based on layoutDirection
       const dagreDir = layoutDirection === 'LR' ? 'LR' : 'TB';
 
@@ -734,7 +874,7 @@ function Graph2DInner({
       return applyFallbackLayout(turboNodes);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- layoutVersion forces recalculation even when direction unchanged
-  }, [graphNodes, graphEdges, layoutDirection, layoutVersion]);
+  }, [graphNodes, graphEdges, layoutDirection, layoutVersion, isMagneticMode, magneticData]);
 
   // Step 2: Apply dimming state ONLY when focus/hover changes (cheap O(n) operation)
   // Priority: Selection focus mode > Hover highlight > Normal
@@ -773,7 +913,7 @@ function Graph2DInner({
 
   const initialEdges = useMemo(() => {
     // DEFENSIVE: Only include edges where both source and target nodes exist
-    return graphEdges
+    const businessEdges = graphEdges
       .filter((e) => visibleNodeIdSet.has(e.source) && visibleNodeIdSet.has(e.target))
       .map((e) => {
         const dimmed = isEdgeDimmed(e.source, e.target);
@@ -791,7 +931,51 @@ function Graph2DInner({
           },
         };
       });
-  }, [graphEdges, visibleNodeIdSet, isEdgeDimmed, showEdgeLabels]);
+
+    // In magnetic mode, add structural edges (Scope→Subcategory, Node→Subcategory)
+    if (isMagneticMode && magneticData) {
+      const magneticEdges: Array<(typeof businessEdges)[number] | FloatingEdgeType> = [];
+
+      // Scope → Subcategory edges (HAS_SUBCATEGORY)
+      for (const sub of magneticData.subcategories) {
+        magneticEdges.push({
+          id: `edge-scope-${sub.scopeKey}-to-${sub.key}`,
+          source: `scope-${sub.scopeKey}`,
+          target: `subcat-${sub.key}`,
+          type: 'floating' as const,
+          data: {
+            relationType: 'HAS_SUBCATEGORY',
+            dimmed: false,
+            animated: false,
+            showLabel: showEdgeLabels,
+          },
+        });
+      }
+
+      // Data node → Subcategory edges (IN_SUBCATEGORY) - faint magnetic edges
+      for (const node of graphNodes) {
+        const subcatKey = nodeTypeToSubcategory[node.type];
+        if (subcatKey) {
+          magneticEdges.push({
+            id: `edge-${node.id}-in-subcat-${subcatKey}`,
+            source: node.id,
+            target: `subcat-${subcatKey}`,
+            type: 'magnetic',
+            data: {
+              relationType: 'IN_SUBCATEGORY',
+              dimmed: false,
+              animated: false,
+              showLabel: false,
+            },
+          } as unknown as FloatingEdgeType);
+        }
+      }
+
+      return [...businessEdges, ...magneticEdges];
+    }
+
+    return businessEdges;
+  }, [graphEdges, graphNodes, visibleNodeIdSet, isEdgeDimmed, showEdgeLabels, isMagneticMode, magneticData]);
 
   // React Flow state
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
@@ -1186,6 +1370,25 @@ function Graph2DInner({
     // PERF: smartFitView accessed via ref to avoid effect re-registration
 
   }, [sidebarOpen, focusMode, layoutVersion]);
+
+  // ==========================================================================
+  // Magnetic Mode FitView
+  // Refit camera when magnetic data arrives or when leaving magnetic mode.
+  // Separate from auto-fitView because magnetic data loads async (~20ms).
+  // ==========================================================================
+  useEffect(() => {
+    const dataJustArrived = !prevMagneticDataRef.current && magneticData && isMagneticMode;
+    const leftMagnetic = prevMagneticDataRef.current && !isMagneticMode;
+    prevMagneticDataRef.current = magneticData;
+
+    if (dataJustArrived || leftMagnetic) {
+      const timeoutId = setTimeout(() => {
+        smartFitViewRef.current({ duration: GRAPH_ANIMATION.FIT_VIEW_DURATION });
+      }, GRAPH_ANIMATION.UI_CHANGE_DELAY);
+      return () => clearTimeout(timeoutId);
+    }
+    // PERF: smartFitView accessed via ref to avoid effect re-registration
+  }, [isMagneticMode, magneticData]);
 
   // ==========================================================================
   // Initial FitView on Mount

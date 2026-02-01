@@ -9,13 +9,13 @@
 
 import { useState, useCallback, useEffect, type RefObject } from 'react';
 
-interface UseGridNavigationOptions {
+interface UseGridNavigationOptions<T extends HTMLElement = HTMLElement> {
   /** Number of columns in the grid */
   columns: number;
   /** Total number of items in the grid */
   totalItems: number;
   /** Reference to the grid container for scroll management */
-  gridRef: RefObject<HTMLElement | null>;
+  gridRef: RefObject<T | null>;
   /** Callback when an item is selected via Enter key */
   onSelect: (index: number) => void;
   /** Callback when Escape is pressed */
@@ -49,14 +49,14 @@ export interface UseGridNavigationReturn {
  *   enabled: isOpen,
  * });
  */
-export function useGridNavigation({
+export function useGridNavigation<T extends HTMLElement = HTMLElement>({
   columns,
   totalItems,
   gridRef,
   onSelect,
   onEscape,
   enabled = true,
-}: UseGridNavigationOptions): UseGridNavigationReturn {
+}: UseGridNavigationOptions<T>): UseGridNavigationReturn {
   const [focusedIndex, setFocusedIndex] = useState(0);
 
   // Reset focus when disabled (modal closed)

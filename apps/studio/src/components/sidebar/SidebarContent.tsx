@@ -120,113 +120,15 @@ export const SidebarContent = memo(function SidebarContent({
   footer,
   children,
 }: SidebarContentProps) {
-  const accentColor = header.iconGradient?.from || '#888';
-
   return (
     <div
       className={cn(panelClasses.container, className)}
       data-testid={testId}
       role="region"
-      aria-label={header.title}
+      aria-label={header?.title ?? 'Sidebar panel'}
     >
-      {/* Header - Premium Glassmorphism (A-E improvements) */}
-      <div className="relative group/header overflow-hidden px-4 py-3.5 border-b border-white/[0.04]">
-        {/* C: Gradient accent background - stronger presence */}
-        {header.iconGradient && (
-          <div
-            className="absolute inset-0 pointer-events-none opacity-[0.07] group-hover/header:opacity-[0.12] transition-opacity duration-300"
-            style={{
-              background: `linear-gradient(135deg, ${header.iconGradient.from}, transparent 60%, ${header.iconGradient.to}40)`,
-            }}
-          />
-        )}
-
-        <div className={cn('relative flex items-center', gapTokens.spacious)}>
-          {/* A: Enlarged icon box (w-10 h-10) with stronger glow + colored ring */}
-          <div className="relative flex-shrink-0">
-            {/* Glow - stronger opacity + wider blur */}
-            {header.iconGradient && (
-              <div
-                className="absolute -inset-1 rounded-2xl opacity-30 blur-xl group-hover/header:opacity-50 transition-opacity duration-300"
-                style={{
-                  background: `linear-gradient(to bottom right, ${header.iconGradient.from}, ${header.iconGradient.to})`,
-                }}
-              />
-            )}
-            {/* D: Icon box with hover scale */}
-            <div
-              className={cn(
-                'relative flex items-center justify-center',
-                'w-10 h-10 rounded-xl',
-                'shadow-lg shadow-black/30',
-                'transition-transform duration-200 ease-out',
-                'group-hover/header:scale-105',
-              )}
-              style={{
-                background: header.iconGradient
-                  ? `linear-gradient(to bottom right, ${header.iconGradient.from}25, ${header.iconGradient.to}25)`
-                  : 'rgba(255,255,255,0.05)',
-                border: `1px solid ${accentColor}30`,
-                boxShadow: `0 0 12px ${accentColor}15, 0 4px 12px rgba(0,0,0,0.3)`,
-              }}
-            >
-              {header.icon}
-            </div>
-          </div>
-
-          {/* B: Title + stat pills (stronger hierarchy) */}
-          <div className="flex-1 min-w-0">
-            <div className={cn('flex items-center', gapTokens.default)}>
-              <h2 className="text-[15px] font-semibold text-white/90 tracking-tight">
-                {header.title}
-              </h2>
-              {/* E: Live status badge */}
-              {header.status === 'live' && (
-                <span className="flex items-center gap-1">
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-                  </span>
-                </span>
-              )}
-              {header.status === 'loading' && (
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500" />
-                </span>
-              )}
-            </div>
-
-            {/* B: Stat pills or legacy subtitle */}
-            {header.stats && header.stats.length > 0 ? (
-              <div className={cn('flex items-center mt-1', gapTokens.compact)}>
-                {header.stats.map((stat, i) => (
-                  <span
-                    key={i}
-                    className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-medium tabular-nums"
-                    style={{
-                      color: stat.color || 'rgba(255,255,255,0.55)',
-                      backgroundColor: stat.color ? `${stat.color}15` : 'rgba(255,255,255,0.06)',
-                    }}
-                  >
-                    {stat.value !== undefined && (
-                      <span className="font-semibold">{stat.value}</span>
-                    )}
-                    {stat.label}
-                  </span>
-                ))}
-              </div>
-            ) : header.subtitle ? (
-              <p className="text-[10px] text-white/40 mt-0.5 truncate">
-                {header.subtitle}
-              </p>
-            ) : null}
-          </div>
-
-          {/* Action button (optional) */}
-          {header.action}
-        </div>
-      </div>
+      {/* Header (optional - omit when tab bar handles identity) */}
+      {header && <SidebarHeader header={header} />}
 
       {/* Toolbar - AI search, tabs, etc (optional) */}
       {toolbar}
@@ -242,6 +144,108 @@ export const SidebarContent = memo(function SidebarContent({
           {footer}
         </div>
       )}
+    </div>
+  );
+});
+
+/** Internal header component - extracted for cleanliness */
+const SidebarHeader = memo(function SidebarHeader({
+  header,
+}: {
+  header: NonNullable<SidebarContentProps['header']>;
+}) {
+  const accentColor = header.iconGradient?.from || '#888';
+
+  return (
+    <div className="relative group/header overflow-hidden px-4 py-3.5 border-b border-white/[0.04]">
+      {/* Gradient accent background */}
+      {header.iconGradient && (
+        <div
+          className="absolute inset-0 pointer-events-none opacity-[0.07] group-hover/header:opacity-[0.12] transition-opacity duration-300"
+          style={{
+            background: `linear-gradient(135deg, ${header.iconGradient.from}, transparent 60%, ${header.iconGradient.to}40)`,
+          }}
+        />
+      )}
+
+      <div className={cn('relative flex items-center', gapTokens.spacious)}>
+        {/* Icon box with glow */}
+        <div className="relative flex-shrink-0">
+          {header.iconGradient && (
+            <div
+              className="absolute -inset-1 rounded-2xl opacity-30 blur-xl group-hover/header:opacity-50 transition-opacity duration-300"
+              style={{
+                background: `linear-gradient(to bottom right, ${header.iconGradient.from}, ${header.iconGradient.to})`,
+              }}
+            />
+          )}
+          <div
+            className={cn(
+              'relative flex items-center justify-center',
+              'w-10 h-10 rounded-xl',
+              'shadow-lg shadow-black/30',
+              'transition-transform duration-200 ease-out',
+              'group-hover/header:scale-105',
+            )}
+            style={{
+              background: header.iconGradient
+                ? `linear-gradient(to bottom right, ${header.iconGradient.from}25, ${header.iconGradient.to}25)`
+                : 'rgba(255,255,255,0.05)',
+              border: `1px solid ${accentColor}30`,
+              boxShadow: `0 0 12px ${accentColor}15, 0 4px 12px rgba(0,0,0,0.3)`,
+            }}
+          >
+            {header.icon}
+          </div>
+        </div>
+
+        {/* Title + stat pills */}
+        <div className="flex-1 min-w-0">
+          <div className={cn('flex items-center', gapTokens.default)}>
+            <h2 className="text-[15px] font-semibold text-white/90 tracking-tight">
+              {header.title}
+            </h2>
+            {header.status === 'live' && (
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+              </span>
+            )}
+            {header.status === 'loading' && (
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500" />
+              </span>
+            )}
+          </div>
+          {header.stats && header.stats.length > 0 ? (
+            <div className={cn('flex items-center mt-1', gapTokens.compact)}>
+              {header.stats.map((stat, i) => (
+                <span
+                  key={i}
+                  className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-medium tabular-nums"
+                  style={{
+                    color: stat.color || 'rgba(255,255,255,0.55)',
+                    backgroundColor: stat.color ? `${stat.color}15` : 'rgba(255,255,255,0.06)',
+                  }}
+                >
+                  {stat.value !== undefined && (
+                    <span className="font-semibold">{stat.value}</span>
+                  )}
+                  {stat.label}
+                </span>
+              ))}
+            </div>
+          ) : header.subtitle ? (
+            <p className="text-[10px] text-white/40 mt-0.5 truncate">
+              {header.subtitle}
+            </p>
+          ) : null}
+        </div>
+
+        {/* Action button (optional) */}
+        {header.action}
+      </div>
     </div>
   );
 });
