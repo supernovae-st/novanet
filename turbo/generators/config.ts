@@ -159,7 +159,7 @@ Node created! Next steps:
         choices: [
           { name: 'Blocks', value: 'blocks', checked: true },
           { name: 'Concepts', value: 'concepts', checked: true },
-          { name: 'Locale Knowledge', value: 'localeKnowledge', checked: false },
+          { name: 'Locale Knowledge', value: 'knowledge', checked: false },
           { name: 'Prompts & Rules', value: 'prompts', checked: false },
           { name: 'SEO Keywords', value: 'seo', checked: false },
           { name: 'GEO Seeds', value: 'geo', checked: false },

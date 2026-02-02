@@ -5,9 +5,14 @@
 
 pub mod commands;
 pub mod config;
+pub mod cypher;
 pub mod db;
 pub mod error;
+pub mod facets;
 pub mod generators;
+pub mod output;
 pub mod parsers;
+#[cfg(feature = "tui")]
+pub mod tui;
 
 pub use error::{NovaNetError, Result};

@@ -4,7 +4,7 @@
  * useMagneticSimulation - d3-force simulation for magnetic grouping
  *
  * Forces applied:
- * 1. Attraction to subcategory (via IN_SUBCATEGORY)
+ * 1. Attraction to layer (via OF_KIND)
  * 2. Repulsion between same-type nodes
  * 3. Collision detection
  * 4. Center gravity (weak)
@@ -38,7 +38,7 @@ interface SimLink extends SimulationLinkDatum<SimNode> {
 }
 
 export interface UseMagneticSimulationOptions {
-  /** Strength of attraction to subcategory (0-1) */
+  /** Strength of attraction to layer (0-1) */
   attractionStrength?: number;
   /** Strength of repulsion between nodes */
   repulsionStrength?: number;
@@ -81,7 +81,7 @@ export function useMagneticSimulation(
       id: n.id,
       x: n.position.x,
       y: n.position.y,
-      // Fix attractor positions (scopes and subcategories)
+      // Fix attractor positions (realms and layers)
       fx: n.type?.includes('Attractor') ? n.position.x : null,
       fy: n.type?.includes('Attractor') ? n.position.y : null,
       isAttractor: n.type?.includes('Attractor'),
@@ -92,9 +92,9 @@ export function useMagneticSimulation(
     simNodes.forEach(n => nodesRef.current.set(n.id, n));
 
     // Convert edges to simulation links
-    // IN_SUBCATEGORY edges have stronger attraction
+    // OF_KIND edges have stronger attraction
     const simLinks: SimLink[] = edges
-      .filter(e => e.type === 'magnetic' || e.type === 'IN_SUBCATEGORY')
+      .filter(e => e.type === 'magnetic' || e.type === 'OF_KIND')
       .map(e => ({
         source: e.source,
         target: e.target,

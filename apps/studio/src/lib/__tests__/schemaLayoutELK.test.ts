@@ -150,8 +150,8 @@ describe('schemaLayoutELK', () => {
         { id: 'schema-Page', nodeType: 'Page', realm: 'project', layer: 'structure', label: 'Page', description: '', trait: 'invariant' },
         { id: 'schema-Block', nodeType: 'Block', realm: 'project', layer: 'structure', label: 'Block', description: '', trait: 'invariant' },
         { id: 'schema-Locale', nodeType: 'Locale', realm: 'global', layer: 'config', label: 'Locale', description: '', trait: 'invariant' },
-        { id: 'schema-LocaleVoice', nodeType: 'LocaleVoice', realm: 'global', layer: 'knowledge', label: 'Locale Voice', description: '', trait: 'localeKnowledge' },
-        { id: 'schema-LocaleCulture', nodeType: 'LocaleCulture', realm: 'global', layer: 'knowledge', label: 'Locale Culture', description: '', trait: 'localeKnowledge' },
+        { id: 'schema-LocaleVoice', nodeType: 'LocaleVoice', realm: 'global', layer: 'knowledge', label: 'Locale Voice', description: '', trait: 'knowledge' },
+        { id: 'schema-LocaleCulture', nodeType: 'LocaleCulture', realm: 'global', layer: 'knowledge', label: 'Locale Culture', description: '', trait: 'knowledge' },
         { id: 'schema-SEOKeywordL10n', nodeType: 'SEOKeywordL10n', realm: 'shared', layer: 'seo', label: 'SEO Keyword', description: '', trait: 'localized' },
         { id: 'schema-GEOSeedL10n', nodeType: 'GEOSeedL10n', realm: 'shared', layer: 'geo', label: 'GEO Seed', description: '', trait: 'localized' },
       ] as SchemaNode[],
@@ -203,10 +203,10 @@ describe('schemaLayoutELK', () => {
       // 2 (Project) + 2 (Global) + 2 (Shared) = 6
       expect(subGroups).toHaveLength(6);
 
-      // Verify subcategory has parentId (realm group)
+      // Verify layer has parentId (realm group)
       for (const subGroup of subGroups) {
         expect(subGroup.parentId).toBeDefined();
-        expect(subGroup.parentId).toMatch(/^scope-/);
+        expect(subGroup.parentId).toMatch(/^realm-/);
         expect(subGroup.extent).toBe('parent');
       }
     });
@@ -251,8 +251,8 @@ describe('schemaLayoutELK', () => {
       expect(firstEdge.data?.relationType).toBe('HAS_PAGE');
     });
 
-    it('should skip empty subcategories (P1 fix)', async () => {
-      // Add an empty subcategory
+    it('should skip empty layers (P1 fix)', async () => {
+      // Add an empty layer
       const hierarchyWithEmpty: HierarchicalSchemaData = {
         ...mockHierarchy,
         realms: {
@@ -263,7 +263,7 @@ describe('schemaLayoutELK', () => {
               ...mockHierarchy.realms.project.layers,
               empty: {
                 label: 'Empty',
-                description: 'Empty subcategory',
+                description: 'Empty layer',
                 icon: '❌',
                 nodeTypes: [], // No nodes!
               },
@@ -275,10 +275,10 @@ describe('schemaLayoutELK', () => {
       const result = await applySchemaLayout(hierarchyWithEmpty);
 
       // Should NOT create a layer group for the empty one
-      const emptySubcat = result.nodes.find(n =>
+      const emptyLayer = result.nodes.find(n =>
         n.type === 'layerGroup' && n.data.layer === 'empty'
       );
-      expect(emptySubcat).toBeUndefined();
+      expect(emptyLayer).toBeUndefined();
     });
 
     it('should set realm group dimensions from ELK layout', async () => {

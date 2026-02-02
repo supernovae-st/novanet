@@ -37,7 +37,7 @@ For each use case, trace the **complete path** through the graph and verify:
 ```
 Read and parse:
 ├── models/_index.yaml (35 nodes, 3 scopes)
-├── models/relations.yaml (47+ relations)
+├── models/relations.yaml (50 relations)
 └── models/nodes/**/*.yaml (all node definitions)
 ```
 
@@ -90,10 +90,10 @@ For `apps/studio/src/config/`:
 ║  ONTOLOGY AUDIT v8.2.0                                                        ║
 ╠═══════════════════════════════════════════════════════════════════════════════╣
 ║  Source of Truth: packages/core/models/                                       ║
-║  Nodes: 35 | Relations: 47 | Scopes: 3                                        ║
+║  Nodes: 35 | Relations: 50 | Realms: 3                                        ║
 ╠═══════════════════════════════════════════════════════════════════════════════╣
 ║                                                                               ║
-║  ✅ TypeScript Types        35/35 nodes, 47/47 relations                      ║
+║  ✅ TypeScript Types        35/35 nodes, 50/50 relations                      ║
 ║  ❌ Mermaid Diagrams        26/35 nodes, 11 relation errors                   ║
 ║  ✅ Neo4j Seeds             35/35 constraints                                 ║
 ║  ⚠️  Studio Config           33/35 nodes (missing 2)                          ║

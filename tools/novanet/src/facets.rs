@@ -1,0 +1,200 @@
+//! Facet filter parsing and resolution.
+//!
+//! Parses comma-separated CLI flags or JSON (stdin) into a typed `FacetFilter`.
+//! Used by `cypher.rs` to build faceted Cypher queries and by `novanet filter build`
+//! for the Studio subprocess integration.
+
+use serde::{Deserialize, Serialize};
+
+/// Parsed facet filters from CLI flags or JSON stdin.
+///
+/// Each field holds zero or more values. Empty = no restriction on that axis.
+/// Multiple values within a facet are OR-combined; facets are AND-combined.
+///
+/// Example: `realms=["global","project"], layers=["knowledge"]`
+///   → Kinds that are (IN_REALM global OR project) AND (IN_LAYER knowledge)
+#[derive(Debug, Clone, Default, Serialize, Deserialize, PartialEq)]
+pub struct FacetFilter {
+    #[serde(default)]
+    pub realms: Vec<String>,
+    #[serde(default)]
+    pub layers: Vec<String>,
+    #[serde(default, rename = "traits")]
+    pub trait_filters: Vec<String>,
+    #[serde(default)]
+    pub edge_families: Vec<String>,
+    #[serde(default)]
+    pub kinds: Vec<String>,
+}
+
+impl FacetFilter {
+    /// Parse from comma-separated CLI flag values.
+    ///
+    /// ```
+    /// use novanet::facets::FacetFilter;
+    /// let f = FacetFilter::from_cli(
+    ///     Some("global,project"), Some("knowledge"), None, None, None,
+    /// );
+    /// assert_eq!(f.realms, vec!["global", "project"]);
+    /// assert_eq!(f.layers, vec!["knowledge"]);
+    /// assert!(f.trait_filters.is_empty());
+    /// ```
+    pub fn from_cli(
+        realm: Option<&str>,
+        layer: Option<&str>,
+        trait_filter: Option<&str>,
+        edge_family: Option<&str>,
+        kind: Option<&str>,
+    ) -> Self {
+        Self {
+            realms: parse_csv(realm),
+            layers: parse_csv(layer),
+            trait_filters: parse_csv(trait_filter),
+            edge_families: parse_csv(edge_family),
+            kinds: parse_csv(kind),
+        }
+    }
+
+    /// Parse from JSON string (for `novanet filter build` stdin).
+    pub fn from_json(json: &str) -> crate::Result<Self> {
+        serde_json::from_str(json)
+            .map_err(|e| crate::NovaNetError::Validation(format!("invalid filter JSON: {e}")))
+    }
+
+    /// Whether all facets are empty (no filters active).
+    pub fn is_empty(&self) -> bool {
+        self.realms.is_empty()
+            && self.layers.is_empty()
+            && self.trait_filters.is_empty()
+            && self.edge_families.is_empty()
+            && self.kinds.is_empty()
+    }
+
+    /// Count of active facet axes (0–5).
+    pub fn active_count(&self) -> usize {
+        [
+            !self.realms.is_empty(),
+            !self.layers.is_empty(),
+            !self.trait_filters.is_empty(),
+            !self.edge_families.is_empty(),
+            !self.kinds.is_empty(),
+        ]
+        .iter()
+        .filter(|&&v| v)
+        .count()
+    }
+}
+
+/// Split a comma-separated string into trimmed, non-empty values.
+fn parse_csv(input: Option<&str>) -> Vec<String> {
+    match input {
+        Some(s) if !s.is_empty() => s
+            .split(',')
+            .map(|v| v.trim().to_string())
+            .filter(|v| !v.is_empty())
+            .collect(),
+        _ => Vec::new(),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn parse_csv_none() {
+        assert!(parse_csv(None).is_empty());
+    }
+
+    #[test]
+    fn parse_csv_empty() {
+        assert!(parse_csv(Some("")).is_empty());
+    }
+
+    #[test]
+    fn parse_csv_single() {
+        assert_eq!(parse_csv(Some("global")), vec!["global"]);
+    }
+
+    #[test]
+    fn parse_csv_multiple_trimmed() {
+        assert_eq!(
+            parse_csv(Some(" global , project , shared ")),
+            vec!["global", "project", "shared"]
+        );
+    }
+
+    #[test]
+    fn parse_csv_trailing_comma() {
+        assert_eq!(parse_csv(Some("global,")), vec!["global"]);
+    }
+
+    #[test]
+    fn from_cli_mixed() {
+        let f = FacetFilter::from_cli(
+            Some("global,project"),
+            Some("knowledge"),
+            None,
+            None,
+            Some("Locale,Expression"),
+        );
+        assert_eq!(f.realms, vec!["global", "project"]);
+        assert_eq!(f.layers, vec!["knowledge"]);
+        assert!(f.trait_filters.is_empty());
+        assert!(f.edge_families.is_empty());
+        assert_eq!(f.kinds, vec!["Locale", "Expression"]);
+        assert!(!f.is_empty());
+        assert_eq!(f.active_count(), 3);
+    }
+
+    #[test]
+    fn from_cli_empty_is_empty() {
+        let f = FacetFilter::from_cli(None, None, None, None, None);
+        assert!(f.is_empty());
+        assert_eq!(f.active_count(), 0);
+    }
+
+    #[test]
+    fn from_json_full() {
+        let json = r#"{
+            "realms": ["global"],
+            "layers": ["knowledge", "config"],
+            "traits": ["invariant"],
+            "edge_families": [],
+            "kinds": []
+        }"#;
+        let f = FacetFilter::from_json(json).unwrap();
+        assert_eq!(f.realms, vec!["global"]);
+        assert_eq!(f.layers, vec!["knowledge", "config"]);
+        assert_eq!(f.trait_filters, vec!["invariant"]);
+        assert!(f.edge_families.is_empty());
+        assert!(f.kinds.is_empty());
+    }
+
+    #[test]
+    fn from_json_minimal() {
+        let json = r#"{"realms": ["project"]}"#;
+        let f = FacetFilter::from_json(json).unwrap();
+        assert_eq!(f.realms, vec!["project"]);
+        assert!(f.layers.is_empty());
+    }
+
+    #[test]
+    fn from_json_invalid() {
+        assert!(FacetFilter::from_json("not json").is_err());
+    }
+
+    #[test]
+    fn roundtrip_json() {
+        let original = FacetFilter::from_cli(
+            Some("global,shared"),
+            Some("seo"),
+            Some("derived,job"),
+            Some("mining"),
+            None,
+        );
+        let json = serde_json::to_string(&original).unwrap();
+        let parsed = FacetFilter::from_json(&json).unwrap();
+        assert_eq!(original, parsed);
+    }
+}

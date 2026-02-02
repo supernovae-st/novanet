@@ -9,8 +9,8 @@ Turborepo monorepo for NovaNet - knowledge graph localization orchestrator.
 NovaNet uses Neo4j to orchestrate **native content generation** (NOT translation) across 200+ locales.
 
 **Target Application**: QR Code AI (https://qrcode-ai.com)
-**Current Version**: v8.2.0 (migrating to v9.0.0)
-**Migration Plan**: `docs/plans/2026-02-01-ontology-v9-design.md`
+**Current Version**: v9.0.0
+**Design Plan**: `docs/plans/2026-02-01-ontology-v9-design.md`
 
 ```
 CRITICAL: Generation, NOT Translation
@@ -29,7 +29,7 @@ v9 refactors the meta-graph from a flat tree (Scope > Subcategory > NodeTypeMeta
 Axis 1 — WHERE?  :Realm     (global / project / shared)
 Axis 2 — WHAT?   :Layer     (9 functional layers)
 Axis 3 — HOW?    :Trait     (invariant / localized / knowledge / derived / job)
-Axis 4 — LINKS?  :EdgeKind  (47 relationship types in 5 families)
+Axis 4 — LINKS?  :EdgeKind  (50 relationship types in 5 families)
 ```
 
 **Key renames:** Scope -> Realm, Subcategory -> Layer, NodeTypeMeta -> Kind, DataMode -> NavigationMode
@@ -37,7 +37,8 @@ Axis 4 — LINKS?  :EdgeKind  (47 relationship types in 5 families)
 **New concepts:** Trait, EdgeFamily, EdgeKind, OF_KIND instance bridge, :Meta double-label
 
 **Rust binary:** `tools/novanet/` — single crate for CLI + TUI (neo4rs, ratatui, clap).
-Schema generation and doc generation implemented (93 tests). Runtime commands are Phase 7 stubs.
+All commands implemented: data/meta/overlay/query, node/relation CRUD, search, locale, db,
+schema generate/validate, doc generate, filter build, TUI scaffold. 195 tests pass.
 
 **Boundary rule (v9 target):** TypeScript generates code artifacts. Rust executes at runtime.
 
@@ -76,21 +77,20 @@ pnpm infra:down            # Stop Neo4j
 pnpm infra:seed            # Seed database
 pnpm infra:reset           # Reset database
 
-# Schema (TypeScript generators — current)
-pnpm schema:generate       # Regenerate TS + Mermaid from YAML
-pnpm schema:validate       # Validate sync (CI check)
-
-# Rust binary (tools/novanet)
+# Rust binary (tools/novanet) — all commands
 cargo run -- schema generate               # Regenerate all artifacts (7 generators)
-cargo run -- schema generate --dry-run     # Preview without writing
 cargo run -- schema validate               # Validate YAML coherence
-cargo run -- schema validate --strict      # Fail on warnings
 cargo run -- doc generate                  # Generate 12 view Mermaid diagrams
-cargo run -- doc generate --view=<id>      # Single view diagram
-cargo run -- doc generate --dry-run        # Preview without writing
 cargo run -- doc generate --list           # List available views
-# cargo run -- data kinds                  # (Phase 7 stub)
-# cargo run -- tui                         # (Phase 7 stub)
+cargo run -- data --format=table           # Mode 1: Data nodes
+cargo run -- meta --format=json            # Mode 2: Meta-graph
+cargo run -- overlay                       # Mode 3: Data + Meta
+cargo run -- query --realm=project         # Mode 4: Faceted query
+cargo run -- search --query="page"         # Fulltext + property search
+cargo run -- node create --kind=Page --key=my-page  # CRUD
+cargo run -- db seed                       # Execute seed Cypher files
+cargo run -- locale list                   # Locale operations
+cargo run -- tui                           # Interactive terminal UI
 
 # Turbo filters
 pnpm build --filter=@novanet/core       # Build only core
@@ -106,7 +106,7 @@ pnpm test --filter=@novanet/studio      # Test only studio
 | @novanet/core | Types, schemas, filters, generators |
 | @novanet/db | Neo4j Docker, seeds, migrations |
 | @novanet/studio | Web-based graph visualization |
-| tools/novanet | Rust CLI — schema generation, validation, queries |
+| tools/novanet | Rust CLI + TUI — all runtime commands (195 tests) |
 
 ---
 
@@ -182,13 +182,13 @@ See `.claude/README.md` for full documentation.
 ### Schema Management Workflow
 
 ```
-1. /schema:add-node MyNode     # Socratic discovery
+1. /schema:add-node MyNode             # Socratic discovery
    ↓
-2. YAML created                # packages/core/models/nodes/.../my-node.yaml
+2. YAML created                        # packages/core/models/nodes/.../my-node.yaml
    ↓
-3. pnpm schema:generate        # Regenerate TypeScript + Mermaid
+3. cargo run -- schema generate        # Regenerate all artifacts from YAML
    ↓
-4. pnpm schema:validate        # Validate sync
+4. cargo run -- schema validate        # Validate YAML coherence
    ↓
-5. pnpm infra:seed             # Update Neo4j
+5. cargo run -- db seed                # Update Neo4j
 ```

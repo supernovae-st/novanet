@@ -47,9 +47,9 @@ export interface FilteredGraphResult {
   visibleEdgeCount: number;
   /** Number of distinct relation types (for schema mode stats) */
   distinctRelationTypes: number;
-  /** Node counts by scope (for schema mode breakdown) */
+  /** Node counts by realm (for schema mode breakdown) */
   realmCounts: RealmCounts;
-  /** Node counts by subcategory (for schema mode breakdown) */
+  /** Node counts by layer (for schema mode breakdown) */
   layerCounts: LayerCounts;
   /** Whether currently in meta or overlay mode (shows schema nodes) */
   isMetaMode: boolean;
@@ -157,16 +157,16 @@ export function useFilteredGraph(): FilteredGraphResult {
     return counts;
   }, [filteredNodes]);
 
-  // Compute subcategory counts (for schema mode breakdown)
+  // Compute layer counts (for schema mode breakdown)
   const layerCounts = useMemo((): LayerCounts => {
     const counts: LayerCounts = {
       foundation: 0, structure: 0, semantic: 0, instruction: 0, output: 0,
       config: 0, knowledge: 0, seo: 0, geo: 0,
     };
     for (const node of filteredNodes) {
-      const subcategory = NODE_LAYERS[node.type as NodeType];
-      if (subcategory && subcategory in counts) {
-        counts[subcategory]++;
+      const layer = NODE_LAYERS[node.type as NodeType];
+      if (layer && layer in counts) {
+        counts[layer]++;
       }
     }
     return counts;

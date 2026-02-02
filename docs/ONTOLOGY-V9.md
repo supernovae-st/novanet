@@ -54,7 +54,7 @@ Graph Manifesto (Dec 2025). Every node type sits at the intersection of multiple
 classification axes, and every relationship type is a first-class citizen with
 typed source/target constraints.
 
-The data graph itself — the 35 node types and 47 relationship types that hold actual
+The data graph itself — the 35 node types and 50 relationship types that hold actual
 content — does **not** change. Only the meta-graph that describes them is refactored.
 
 ---
@@ -91,7 +91,7 @@ flowchart LR
 |---|---------|--------|
 | 1 | **Generic naming** — "Scope", "Subcategory", "NodeTypeMeta" are implementation terms, not domain concepts | Confusing for new developers and LLMs |
 | 2 | **Missing behavior axis** — locale behavior (`invariant`, `localized`, `knowledge`, `derived`, `job`) exists only in hardcoded TypeScript | Cannot query "all localized types" in Neo4j |
-| 3 | **No edge metadata** — 47 relationship types have no classification, no typed source/target constraints | Cannot query "what edges can come out of Block?" |
+| 3 | **No edge metadata** — 50 relationship types have no classification, no typed source/target constraints | Cannot query "what edges can come out of Block?" |
 | 4 | **Single axis** — the tree only classifies by WHERE (Scope) > WHAT (Subcategory), missing HOW (behavior) and LINKS (edges) | Incomplete classification |
 | 5 | **Weak instance link** — `IN_SUBCATEGORY` skips the type level, linking instances to their Subcategory, not their Kind | Cannot query "all instances of type Page" via meta-graph |
 | 6 | **PascalCase keys** — Scope values use PascalCase (`'Global'`, `'Project'`, `'Shared'`) while Node labels use PascalCase too, creating inconsistency | Mixed conventions across TypeScript and Cypher |
@@ -111,7 +111,7 @@ flowchart TB
     A1["<b>Axis 1 — WHERE?</b>\n:Realm (3)\nglobal · project · shared"]
     A2["<b>Axis 2 — WHAT?</b>\n:Layer (9)\nconfig · knowledge · foundation\nstructure · semantic · instruction\noutput · seo · geo"]
     A3["<b>Axis 3 — HOW?</b>\n:Trait (5)\ninvariant · localized · knowledge\nderived · job"]
-    A4["<b>Axis 4 — LINKS?</b>\n:EdgeKind (47) + :EdgeFamily (5)\nHAS_PAGE · SEMANTIC_LINK · FOR_LOCALE · ..."]
+    A4["<b>Axis 4 — LINKS?</b>\n:EdgeKind (50) + :EdgeFamily (5)\nHAS_PAGE · SEMANTIC_LINK · FOR_LOCALE · ..."]
   end
 
   KIND["<b>:Kind</b>\n35 node types\n(center of the ontology)"]
@@ -137,11 +137,11 @@ flowchart TB
 | `:Kind` | 35 | Node type definition (one per Neo4j label) | `label` |
 | `:Trait` | 5 | Locale behavior — how a type changes across locales | `key` |
 | `:EdgeFamily` | 5 | Relationship family classification | `key` |
-| `:EdgeKind` | 47 | Relationship type definition (one per Neo4j rel type) | `key` |
+| `:EdgeKind` | 50 | Relationship type definition (one per Neo4j rel type) | `key` |
 
 All 6 types receive a secondary **`:Meta`** label for grouping/filtering.
 
-**Totals**: ~104 meta-nodes, ~386 meta-relations.
+**Totals**: ~107 meta-nodes, ~392 meta-relations.
 
 ---
 
@@ -293,7 +293,7 @@ In v10, tells the context assembly engine how to handle edges of this family:
 - `'conditional'`: semantic — follow only if temperature >= threshold
 - `'on_demand'`: mining — follow only when task explicitly requests
 
-### :EdgeKind (47 nodes)
+### :EdgeKind (50 nodes)
 
 Individual relationship type in the data graph. One EdgeKind per Neo4j relationship type.
 
@@ -337,13 +337,13 @@ flowchart TB
   Kind["<b>:Kind</b>\n(35)"]
   Trait["<b>:Trait</b>\n(5)"]
   EF["<b>:EdgeFamily</b>\n(5)"]
-  EK["<b>:EdgeKind</b>\n(47)"]
+  EK["<b>:EdgeKind</b>\n(50)"]
   Data["<b>data node</b>\n(instance)"]
 
   %% Hierarchy (top-down)
   Realm -->|"HAS_LAYER (12)"| Layer
   Layer -->|"HAS_KIND (35)"| Kind
-  EF -->|"HAS_EDGE_KIND (47)"| EK
+  EF -->|"HAS_EDGE_KIND (50)"| EK
 
   %% Facettes (Kind-centric)
   Kind -.->|"IN_REALM (35)"| Realm
@@ -353,7 +353,7 @@ flowchart TB
   %% Edge Schema (OWL)
   EK ==>|"FROM_KIND (~70)"| Kind
   EK ==>|"TO_KIND (~70)"| Kind
-  EK ==>|"IN_FAMILY (47)"| EF
+  EK ==>|"IN_FAMILY (50)"| EF
 
   %% Instance Bridge
   Data -->|"OF_KIND"| Kind
@@ -377,7 +377,7 @@ Navigate from broad categories down to specific types.
 ```
 :Realm ──[:HAS_LAYER]──>      :Layer      (12 rels: 3 realms x avg 3 layers)
 :Layer ──[:HAS_KIND]──>        :Kind       (35 rels: one per Kind)
-:EdgeFamily ──[:HAS_EDGE_KIND]──> :EdgeKind (47 rels: one per EdgeKind)
+:EdgeFamily ──[:HAS_EDGE_KIND]──> :EdgeKind (50 rels: one per EdgeKind)
 ```
 
 #### 2. Facettes (Kind-centric)
@@ -416,11 +416,11 @@ connect to a Block?" without hardcoding.
 | `IN_REALM` | 35 | Kind → Realm |
 | `IN_LAYER` | 35 | Kind → Layer |
 | `EXHIBITS` | 35 | Kind → Trait |
-| `HAS_EDGE_KIND` | 47 | EdgeFamily → EdgeKind |
+| `HAS_EDGE_KIND` | 50 | EdgeFamily → EdgeKind |
 | `FROM_KIND` | ~70 | EdgeKind → Kind (N sources) |
 | `TO_KIND` | ~70 | EdgeKind → Kind (M targets) |
-| `IN_FAMILY` | 47 | EdgeKind → EdgeFamily |
-| **Total** | **~386** | |
+| `IN_FAMILY` | 50 | EdgeKind → EdgeFamily |
+| **Total** | **~392** | |
 
 Instance bridge (`OF_KIND`): proportional to data volume.
 
@@ -969,7 +969,7 @@ CREATE (:Meta:EdgeKind   {key: 'HAS_PAGE', ...})
 ```
 
 Benefits:
-- `MATCH (n:Meta) RETURN n` — returns all ~104 meta-nodes in one query
+- `MATCH (n:Meta) RETURN n` — returns all ~107 meta-nodes in one query
 - `MATCH (n) WHERE NOT n:Meta` — excludes meta-graph from data queries
 - Studio toggle: "show/hide meta-graph" becomes a simple label filter
 - Standard OWL pattern, consistent with neosemantics (n10s) conventions
@@ -1028,7 +1028,7 @@ Show only the ontology schema — the "schema of the schema".
 | Aspect | Details |
 |--------|---------|
 | **Cypher** | `MATCH (n:Meta) RETURN n` |
-| **Shows** | 3 Realms, 9 Layers, 35 Kinds, 5 Traits, 5 EdgeFamilies, 47 EdgeKinds (~104 nodes) |
+| **Shows** | 3 Realms, 9 Layers, 35 Kinds, 5 Traits, 5 EdgeFamilies, 50 EdgeKinds (~107 nodes) |
 | **Hides** | All data instances and data relationships |
 | **Use case** | Schema exploration, ontology documentation, LLM context assembly |
 | **CLI** | `novanet meta` |
@@ -1699,7 +1699,7 @@ Target latencies (local Neo4j with seed data):
 | Query | Target | Description |
 |-------|--------|-------------|
 | Mode 1: Data Only | < 100ms | 10,000 data nodes |
-| Mode 2: Meta Only | < 10ms | ~104 meta-nodes |
+| Mode 2: Meta Only | < 10ms | ~107 meta-nodes |
 | Mode 3: Overlay | < 200ms | All data + meta |
 | Mode 4: Facet (single) | < 100ms | OF_KIND traversal |
 | Mode 4: Facet (combo) | < 200ms | Multi-facet intersection |

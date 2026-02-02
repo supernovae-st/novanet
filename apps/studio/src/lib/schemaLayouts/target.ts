@@ -14,7 +14,7 @@ import {
 import type { Realm } from '@novanet/core/types';
 
 /**
- * Target/Bullseye Layout - Concentric rings by scope
+ * Target/Bullseye Layout - Concentric rings by realm
  *
  * Uses unified spacing from types.ts (Golden Ratio system).
  * Ring spacing = REALM_GAP × φ for dramatic separation.
@@ -40,23 +40,23 @@ export function applyTargetLayout(
   // Derived from unified constants
   const CENTER_X = Math.round(CANVAS_WIDTH / 4);     // Canvas quarter = center
   const CENTER_Y = Math.round(CANVAS_HEIGHT / 4);
-  const RING_SPACING = Math.round(REALM_GAP * PHI);  // φ × scope gap between rings
+  const RING_SPACING = Math.round(REALM_GAP * PHI);  // φ × realm gap between rings
   const MIN_RADIUS = REALM_GAP;                       // Minimum inner radius
 
-  // Scope order from center outward
+  // Realm order from center outward
   const realmOrder: Realm[] = ['project', 'global', 'shared'];
 
-  realmOrder.forEach((scope, ringIndex) => {
-    const realmDef = hierarchy.realms[scope];
+  realmOrder.forEach((realm, ringIndex) => {
+    const realmDef = hierarchy.realms[realm];
     if (!realmDef) return;
 
-    const realmId = `scope-${scope}`;
+    const realmId = `realm-${realm}`;
     const radius = MIN_RADIUS + ringIndex * RING_SPACING;
     const ringWidth = RING_SPACING - REALM_PADDING;
 
     // For center (Project), use a circle; for others, use a ring
     if (ringIndex === 0) {
-      // Center scope - circular group
+      // Center realm - circular group
       const diameter = radius * 2;
       nodes.push({
         id: realmId,
@@ -68,10 +68,10 @@ export function applyTargetLayout(
           borderRadius: '50%',
         },
         data: {
-          scope,
+          realm,
           label: realmDef.label,
           icon: realmDef.icon,
-          nodeCount: hierarchy.stats.nodesByRealm[scope] || 0,
+          nodeCount: hierarchy.stats.nodesByRealm[realm] || 0,
         },
       });
 
@@ -106,8 +106,8 @@ export function applyTargetLayout(
             nodeType: item.nodeType,
             label: schemaNode?.label || item.nodeType,
             description: schemaNode?.description || '',
-            scope,
-            subcategory: item.layerName,
+            realm,
+            layer: item.layerName,
           },
         });
       });
@@ -129,14 +129,14 @@ export function applyTargetLayout(
           borderRadius: '50%',
         },
         data: {
-          scope,
+          realm,
           label: realmDef.label,
           icon: realmDef.icon,
-          nodeCount: hierarchy.stats.nodesByRealm[scope] || 0,
+          nodeCount: hierarchy.stats.nodesByRealm[realm] || 0,
         },
       });
 
-      // Collect all nodes for this scope
+      // Collect all nodes for this realm
       const allNodes: { nodeType: string; layerName: string }[] = [];
       for (const [layerName, layerMeta] of Object.entries(realmDef.layers)) {
         for (const nodeType of layerMeta.nodeTypes) {
@@ -166,8 +166,8 @@ export function applyTargetLayout(
             nodeType: item.nodeType,
             label: schemaNode?.label || item.nodeType,
             description: schemaNode?.description || '',
-            scope,
-            subcategory: item.layerName,
+            realm,
+            layer: item.layerName,
           },
         });
       });

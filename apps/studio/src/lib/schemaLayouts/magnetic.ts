@@ -71,7 +71,7 @@ function computeInitialPositions(input: MagneticLayoutInput): Map<string, { x: n
   // Place realms
   for (const realm of input.realms) {
     const pos = realmPositions[realm.key] || { x: 0, y: 0 };
-    positions.set(`scope-${realm.key}`, pos);
+    positions.set(`realm-${realm.key}`, pos);
   }
 
   // Place layers around their realm
@@ -83,7 +83,7 @@ function computeInitialPositions(input: MagneticLayoutInput): Map<string, { x: n
   }
 
   for (const [realmKey, subs] of layersByRealm) {
-    const realmPos = positions.get(`scope-${realmKey}`) || { x: 0, y: 0 };
+    const realmPos = positions.get(`realm-${realmKey}`) || { x: 0, y: 0 };
     const radius = 400;
 
     subs.forEach((sub, i) => {
@@ -126,9 +126,9 @@ export function applyMagneticLayout(input: MagneticLayoutInput): SchemaLayoutRes
 
   // Create Realm nodes (large, prominent)
   for (const realm of input.realms) {
-    const pos = positions.get(`scope-${realm.key}`)!;
+    const pos = positions.get(`realm-${realm.key}`)!;
     nodes.push({
-      id: `scope-${realm.key}`,
+      id: `realm-${realm.key}`,
       type: 'realmAttractor',  // New node type
       position: pos,
       data: {
@@ -164,8 +164,8 @@ export function applyMagneticLayout(input: MagneticLayoutInput): SchemaLayoutRes
 
     // Edge from Realm to Layer (HAS_LAYER)
     edges.push({
-      id: `edge-scope-${sub.realmKey}-to-${sub.key}`,
-      source: `scope-${sub.realmKey}`,
+      id: `edge-realm-${sub.realmKey}-to-${sub.key}`,
+      source: `realm-${sub.realmKey}`,
       target: `layer-${sub.key}`,
       type: 'floating',
       data: { relationType: 'HAS_LAYER' },

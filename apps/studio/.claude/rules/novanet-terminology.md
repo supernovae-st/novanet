@@ -32,7 +32,7 @@ Axis 4 — LINKS?  :EdgeKind  (SEMANTIC_LINK, HAS_OUTPUT, HAS_L10N, ...)
 | **Kind** | 35 | A node type in the data graph (1:1 with Neo4j labels) |
 | **Trait** | 5 | Locale behavior — how a node type changes across locales |
 | **EdgeFamily** | 5 | Classification of relationship types |
-| **EdgeKind** | 47 | Individual relationship type (1:1 with Neo4j rel types) |
+| **EdgeKind** | 50 | Individual relationship type (1:1 with Neo4j rel types) |
 
 All meta-nodes carry the `:Meta` double-label for easy filtering.
 

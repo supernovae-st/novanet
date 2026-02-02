@@ -203,7 +203,7 @@ Master command for schema management.
 
 **Example:**
 ```bash
-/schema status     # Show current schema stats (35 Kinds, 47 EdgeKinds, 3 Realms, 9 Layers)
+/schema status     # Show current schema stats (35 Kinds, 50 EdgeKinds, 3 Realms, 9 Layers)
 ```
 
 ---
@@ -468,12 +468,12 @@ Architecture Decision Records (ADRs):
 | Metric | Value |
 |--------|-------|
 | Kind (node types) | 35 |
-| EdgeKind (relations) | 47 |
+| EdgeKind (relations) | 50 |
 | Realms | 3 (global, project, shared) |
 | Layers | 9 |
 | Traits | 5 |
 | EdgeFamilies | 5 |
-| Meta-node total | ~105 |
+| Meta-node total | ~108 |
 | Locale Knowledge nodes | 14 |
 | Seed files | 7 |
 | View definitions | 13 (12 + complete-graph) |

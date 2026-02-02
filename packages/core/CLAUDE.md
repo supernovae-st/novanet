@@ -34,7 +34,7 @@ v9 refactors the meta-graph to a **self-describing context graph** with faceted 
 | NodeTypeMeta | **Kind** (35 node types, 1:1 with Neo4j labels) |
 | _(new)_ | **Trait** (invariant / localized / knowledge / derived / job) |
 | _(new)_ | **EdgeFamily** (ownership / localization / semantic / generation / mining) |
-| _(new)_ | **EdgeKind** (47 relationship types) |
+| _(new)_ | **EdgeKind** (50 relationship types) |
 
 **Boundary rule:** TypeScript (this package) generates code artifacts. Rust (`tools/novanet/`) executes at runtime.
 
@@ -112,7 +112,7 @@ RETURN ek.key, ef.key AS family, target.label AS target_kind;
 core/
 ├── models/                    # YAML schema definitions (SOURCE OF TRUTH)
 │   ├── _index.yaml            # MODEL INDEX (graph structure, node categories, changes)
-│   ├── relations.yaml         # All 47 Neo4j relationships (with family field in v9)
+│   ├── relations.yaml         # All 50 Neo4j relationships (with family field in v9)
 │   ├── organizing-principles.yaml  # v9: Realm/Layer/Trait/EdgeFamily definitions
 │   ├── nodes/                 # ONE FILE PER NODE TYPE (35 files)
 │   │   ├── global/            # Realm: global (15 nodes)

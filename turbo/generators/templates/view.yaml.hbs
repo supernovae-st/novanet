@@ -43,7 +43,7 @@ cypher: |
   OPTIONAL MATCH (root)-[:USES_CONCEPT]->(concept:Concept)
   OPTIONAL MATCH (concept)-[:HAS_L10N]->(conceptL10n:ConceptL10n)-[:FOR_LOCALE]->(locale:Locale {key: $locale})
 {{/if}}
-{{#if (includes 'localeKnowledge')}}
+{{#if (includes 'knowledge')}}
   OPTIONAL MATCH (locale)-[:HAS_VOICE]->(voice:LocaleVoice)
   OPTIONAL MATCH (locale)-[:HAS_CULTURE]->(culture:LocaleCulture)
   OPTIONAL MATCH (locale)-[:HAS_LEXICON]->(lexicon:LocaleLexicon)
