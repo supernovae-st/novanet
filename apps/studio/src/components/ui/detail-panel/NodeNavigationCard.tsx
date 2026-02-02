@@ -14,7 +14,7 @@ import { memo } from 'react';
 import { cn } from '@/lib/utils';
 import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
 import { ACTION_ICONS } from '@/config/iconSystem';
-import { CategoryIcon } from '@/components/ui/CategoryIcon';
+import { LayerIcon } from '@/components/ui/CategoryIcon';
 import { iconSizes, gapTokens } from '@/design/tokens';
 import type { GraphNode } from '@/types';
 
@@ -64,8 +64,8 @@ export const NodeNavigationCard = memo(function NodeNavigationCard({
           className
         )}
       >
-        <CategoryIcon
-          category={config.category}
+        <LayerIcon
+          layer={config.layer}
           size={16}
           strokeWidth={2}
           className="group-hover:scale-110 transition-transform"
@@ -102,8 +102,8 @@ export const NodeNavigationCard = memo(function NodeNavigationCard({
           background: `linear-gradient(135deg, ${config.color}25, ${config.color}12)`,
         }}
       >
-        <CategoryIcon
-          category={config.category}
+        <LayerIcon
+          layer={config.layer}
           size={20}
           strokeWidth={2}
           style={{ color: config.color }}
@@ -179,8 +179,8 @@ export const RelationNavigationCard = memo(function RelationNavigationCard({
         className
       )}
     >
-      <CategoryIcon
-        category={config?.category || 'project'}
+      <LayerIcon
+        layer={config?.layer || 'foundation'}
         size={16}
         strokeWidth={2}
         className="group-hover:scale-110 transition-transform"

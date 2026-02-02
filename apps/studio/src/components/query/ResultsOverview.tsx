@@ -13,11 +13,11 @@ import { ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { gapTokens } from '@/design/tokens';
 import { useFilteredGraph, type RealmCounts, type LayerCounts } from '@/hooks/useFilteredGraph';
-import { NODE_TYPE_CONFIG, type NodeCategory } from '@/config/nodeTypes';
+import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
 import { NODE_REALMS } from '@novanet/core/types';
 import { NODE_LAYERS, type Layer } from '@novanet/core/graph';
 import { relationshipTypeConfigs, type RelationshipCategory } from '@/config/relationshipTypes';
-import { CategoryIcon, ProgressBar } from '@/components/ui';
+import { LayerIcon, ProgressBar } from '@/components/ui';
 import { GRAPH_ICONS } from '@/config/iconSystem';
 import type { NodeType } from '@/types';
 
@@ -31,28 +31,28 @@ interface TypeCountItem {
   type: string;
   count: number;
   color: string;
-  category: NodeCategory | RelationshipCategory;
+  category: Layer | RelationshipCategory;
 }
 
-/** Scope config for breakdown display - colors match Neo4j organizing-principles */
+/** Realm config for breakdown display - colors match Neo4j organizing-principles */
 const REALM_CONFIG = {
   global: { emoji: '🌍', color: '#2aa198' },   // solarized cyan
   project: { emoji: '📦', color: '#6c71c4' },  // solarized violet
   shared: { emoji: '🎯', color: '#cb4b16' },   // solarized orange
 } as const;
 
-/** Layer config - color inherited from parent scope */
+/** Layer config - color inherited from parent realm */
 const LAYER_CONFIG: Record<Layer, { emoji: string; realm: keyof typeof REALM_CONFIG }> = {
-  // Project scope (5 subcategories)
+  // Project realm (5 layers)
   foundation: { emoji: '🏛️', realm: 'project' },
   structure: { emoji: '🧱', realm: 'project' },
   semantic: { emoji: '💡', realm: 'project' },
   instruction: { emoji: '📋', realm: 'project' },
   output: { emoji: '📤', realm: 'project' },
-  // Global scope (2 subcategories)
+  // Global realm (2 layers)
   config: { emoji: '⚙️', realm: 'global' },
   knowledge: { emoji: '🧠', realm: 'global' },
-  // Shared scope (2 subcategories)
+  // Shared realm (2 layers)
   seo: { emoji: '🔍', realm: 'shared' },
   geo: { emoji: '🌐', realm: 'shared' },
 } as const;
@@ -81,8 +81,8 @@ function TypeBadge({ item }: { item: TypeCountItem }) {
       )}
       title={`${item.type}: ${item.count} nodes`}
     >
-      <CategoryIcon
-        category={item.category as NodeCategory}
+      <LayerIcon
+        layer={item.category as Layer}
         size={13}
         strokeWidth={2.5}
         className="shrink-0 transition-transform duration-150 group-hover/badge:scale-110"
@@ -126,8 +126,8 @@ function NodeTypePill({ item, index }: { item: TypeCountItem; index: number }) {
       )}
       style={{ animationDelay: `${index * 15}ms` }}
     >
-      <CategoryIcon
-        category={item.category as NodeCategory}
+      <LayerIcon
+        layer={item.category as Layer}
         size={11}
         strokeWidth={2.5}
         className="shrink-0"
@@ -176,10 +176,10 @@ function ExpandedRelationBadge({ item, index, maxCount }: { item: TypeCountItem;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════ */
-/*  Scope hero card (schema mode only)                                        */
+/*  Realm hero card (schema mode only)                                        */
 /* ═══════════════════════════════════════════════════════════════════════════ */
 
-function ScopeHeroCard({ scope, typeCount, loadedCount, maxLoaded, index }: {
+function RealmHeroCard({ scope, typeCount, loadedCount, maxLoaded, index }: {
   scope: keyof typeof REALM_CONFIG;
   typeCount: number;
   loadedCount: number;
@@ -316,9 +316,9 @@ export const ExpandedBreakdown = memo(function ExpandedBreakdown({
       .map(([type, count]): TypeCountItem => {
         const config = NODE_TYPE_CONFIG[type as NodeType] || {
           color: '#6b7280',
-          category: 'project' as NodeCategory,
+          layer: 'foundation' as Layer,
         };
-        return { type, count, color: config.color, category: config.category };
+        return { type, count, color: config.color, category: config.layer };
       });
   }, [nodes]);
 
@@ -362,7 +362,7 @@ export const ExpandedBreakdown = memo(function ExpandedBreakdown({
   }, []);
 
   // Max loaded counts for progress bar scaling
-  const maxScopeLoaded = Math.max(realmCounts.global, realmCounts.project, realmCounts.shared, 1);
+  const maxRealmLoaded = Math.max(realmCounts.global, realmCounts.project, realmCounts.shared, 1);
   const maxLayerLoaded = Math.max(...Object.values(layerCounts), 1);
 
   const showNodes = view === 'nodes' || view === 'all';
@@ -386,12 +386,12 @@ export const ExpandedBreakdown = memo(function ExpandedBreakdown({
             {/* Schema mode: 3-tier visual hierarchy */}
             {isSchemaMode && showNodes && (
               <div className={showRelations ? 'mb-3' : ''}>
-                {/* Level 1: Scope Hero Cards - full-width, stacked */}
-                <SectionHeader icon={NodeIcon} label="scopes" count={3} />
+                {/* Level 1: Realm Hero Cards - full-width, stacked */}
+                <SectionHeader icon={NodeIcon} label="realms" count={3} />
                 <div className="flex flex-col gap-2 mb-3">
-                  <ScopeHeroCard scope="global" typeCount={scopeTypeCounts.global} loadedCount={realmCounts.global} maxLoaded={maxScopeLoaded} index={0} />
-                  <ScopeHeroCard scope="project" typeCount={scopeTypeCounts.project} loadedCount={realmCounts.project} maxLoaded={maxScopeLoaded} index={1} />
-                  <ScopeHeroCard scope="shared" typeCount={scopeTypeCounts.shared} loadedCount={realmCounts.shared} maxLoaded={maxScopeLoaded} index={2} />
+                  <RealmHeroCard scope="global" typeCount={scopeTypeCounts.global} loadedCount={realmCounts.global} maxLoaded={maxRealmLoaded} index={0} />
+                  <RealmHeroCard scope="project" typeCount={scopeTypeCounts.project} loadedCount={realmCounts.project} maxLoaded={maxRealmLoaded} index={1} />
+                  <RealmHeroCard scope="shared" typeCount={scopeTypeCounts.shared} loadedCount={realmCounts.shared} maxLoaded={maxRealmLoaded} index={2} />
                 </div>
 
                 {/* Level 2: Layer Cards - 2-col grid */}
@@ -481,9 +481,9 @@ export const ResultsOverview = memo(function ResultsOverview({
       .map(([type, count]) => {
         const config = NODE_TYPE_CONFIG[type] || {
           color: '#6b7280',
-          category: 'project' as NodeCategory,
+          layer: 'foundation' as Layer,
         };
-        return { type, count, color: config.color, category: config.category };
+        return { type, count, color: config.color, category: config.layer };
       });
 
     return {

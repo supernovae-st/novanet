@@ -374,6 +374,24 @@ export const useUIStore = create<UIStoreState>()(
         spacingValue: state.spacingValue,
         dataMode: state.dataMode,
       }),
+      version: 9,
+      migrate: (persistedState: unknown, version: number) => {
+        if (version < 9) {
+          // v9: clear stale v8 state, reset to defaults
+          return {
+            viewMode: '2d',
+            sidebarOpen: true,
+            minimapVisible: true,
+            showEdgeLabels: true,
+            layoutDirection: 'TB',
+            layoutMode: 'containers',
+            spacingPreset: DEFAULT_SPACING_PRESET,
+            spacingValue: 100,
+            dataMode: 'data',
+          };
+        }
+        return persistedState as UIStoreState;
+      },
     }
   )
 );

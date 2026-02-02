@@ -837,6 +837,10 @@ export const realmAccents = {
   },
 } as const;
 
+// Re-export v9 visual encoding (ADR-014)
+export { LAYER_COLORS, getLayerColor, getLayerHex } from './layerColors';
+export { TRAIT_STYLES, getTraitStyle, getTraitBorderCSS } from './traitStyles';
+
 // ============================================================================
 // EXPORT ALL
 // ============================================================================

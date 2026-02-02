@@ -4,7 +4,7 @@
  * When layoutMode is 'magnetic', this hook fetches from Neo4j:
  * - 3 Realm nodes (global, project, shared) with display metadata
  * - 9 Layer nodes with display metadata
- * - 35 nodeType → layer mappings (from DEFINES_TYPE relationships)
+ * - 35 nodeType → layer mappings (from HAS_KIND relationships)
  *
  * All display metadata (emoji, color) comes from Neo4j,
  * which is seeded from organizing-principles.yaml (the source of truth).
@@ -64,21 +64,21 @@ export function useMagneticData() {
       }
 
       // Transform API response - all display metadata comes from Neo4j
-      const realms: RealmData[] = json.data.scopes.map(
-        (s: { key: string; display_name: string; emoji: string; color: string }) => ({
-          key: s.key,
-          displayName: s.display_name,
-          emoji: s.emoji,
-          color: s.color,
+      const realms: RealmData[] = json.data.realms.map(
+        (r: { key: string; display_name: string; emoji: string; color: string }) => ({
+          key: r.key,
+          displayName: r.display_name,
+          emoji: r.emoji,
+          color: r.color,
         })
       );
 
-      const layers: LayerData[] = json.data.subcategories.map(
-        (sub: { key: string; display_name: string; emoji: string; scope_key: string }) => ({
-          key: sub.key,
-          displayName: sub.display_name,
-          emoji: sub.emoji,
-          realmKey: sub.scope_key,
+      const layers: LayerData[] = json.data.layers.map(
+        (l: { key: string; display_name: string; emoji: string; realm_key: string }) => ({
+          key: l.key,
+          displayName: l.display_name,
+          emoji: l.emoji,
+          realmKey: l.realm_key,
         })
       );
 

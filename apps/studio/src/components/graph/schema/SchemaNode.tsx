@@ -21,7 +21,7 @@ import { type NodeProps, type Node } from '@xyflow/react';
 import { cn } from '@/lib/utils';
 import { getNodeTypeColors } from '@/config/categoryColors';
 import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
-import { CategoryIcon } from '@/components/ui/CategoryIcon';
+import { LayerIcon } from '@/components/ui/CategoryIcon';
 import { BlueprintOverlay } from '../nodes/BlueprintOverlay';
 import { NODE_BG, NODE_DESIGN } from '@/config/constants';
 import { useNodeInteractions } from '@/hooks';
@@ -148,8 +148,8 @@ export const SchemaNode = memo(function SchemaNode({
             <div className="flex items-center justify-between mb-2">
               <div className={cn('flex items-center', gapTokens.default)}>
                 {config && (
-                  <CategoryIcon
-                    category={config.category}
+                  <LayerIcon
+                    layer={config.layer}
                     size={18}
                     strokeWidth={2}
                     className={cn(

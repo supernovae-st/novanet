@@ -1,7 +1,7 @@
 /**
  * Organizing Principles API Route
  *
- * Returns Scope, Subcategory nodes, and nodeType→subcategory mapping
+ * Returns Realm, Layer nodes, and Kind→Layer mapping
  * from Neo4j. All display metadata (emoji, color) comes from the database,
  * which is seeded from organizing-principles.yaml (the source of truth).
  *
@@ -21,19 +21,19 @@ export async function GET() {
   const session = driver.session();
 
   try {
-    // Fetch scopes with full display metadata
-    const scopeResult = await session.run(`
-      MATCH (s:Scope)
+    // Fetch realms with full display metadata
+    const realmResult = await session.run(`
+      MATCH (r:Realm)
       RETURN
-        s.key AS key,
-        s.display_name AS display_name,
-        s.emoji AS emoji,
-        s.color AS color,
-        s.llm_context AS llm_context
-      ORDER BY s.key
+        r.key AS key,
+        r.display_name AS display_name,
+        r.emoji AS emoji,
+        r.color AS color,
+        r.llm_context AS llm_context
+      ORDER BY r.key
     `);
 
-    const scopes = scopeResult.records.map((record) => ({
+    const realms = realmResult.records.map((record) => ({
       key: record.get('key') as string,
       display_name: record.get('display_name') as string,
       emoji: record.get('emoji') as string,
@@ -41,43 +41,41 @@ export async function GET() {
       llm_context: record.get('llm_context') as string | null,
     }));
 
-    // Fetch subcategories with full display metadata
-    const subResult = await session.run(`
-      MATCH (s:Scope)-[:HAS_SUBCATEGORY]->(sub:Subcategory)
+    // Fetch layers with full display metadata
+    const layerResult = await session.run(`
+      MATCH (r:Realm)-[:HAS_LAYER]->(l:Layer)
       RETURN
-        sub.key AS key,
-        sub.display_name AS display_name,
-        sub.emoji AS emoji,
-        sub.llm_context AS llm_context,
-        s.key AS scope_key
-      ORDER BY s.key, sub.key
+        l.key AS key,
+        l.display_name AS display_name,
+        l.emoji AS emoji,
+        l.llm_context AS llm_context,
+        r.key AS realm_key
+      ORDER BY r.key, l.key
     `);
 
-    const subcategories = subResult.records.map((record) => ({
+    const layers = layerResult.records.map((record) => ({
       key: record.get('key') as string,
       display_name: record.get('display_name') as string,
       emoji: record.get('emoji') as string,
       llm_context: record.get('llm_context') as string | null,
-      scope_key: record.get('scope_key') as string,
+      realm_key: record.get('realm_key') as string,
     }));
 
-    // TODO(v9): Rename Subcategory->Layer, NodeTypeMeta->Kind, DEFINES_TYPE->HAS_KIND
-    // TODO(v9): Response shape: { realms, layers, nodeTypeMapping } (not scopes/subcategories)
-    // Fetch nodeType → subcategory mapping from DEFINES_TYPE relationships
+    // Fetch Kind → Layer mapping from HAS_KIND relationships
     const mappingResult = await session.run(`
-      MATCH (sub:Subcategory)-[:DEFINES_TYPE]->(ntm:NodeTypeMeta)
-      RETURN ntm.label AS node_type, sub.key AS subcategory
-      ORDER BY ntm.label
+      MATCH (l:Layer)-[:HAS_KIND]->(k:Kind)
+      RETURN k.label AS node_type, l.key AS layer
+      ORDER BY k.label
     `);
 
     const nodeTypeMapping: Record<string, string> = {};
     for (const record of mappingResult.records) {
-      nodeTypeMapping[record.get('node_type') as string] = record.get('subcategory') as string;
+      nodeTypeMapping[record.get('node_type') as string] = record.get('layer') as string;
     }
 
     return NextResponse.json({
       success: true,
-      data: { scopes, subcategories, nodeTypeMapping },
+      data: { realms, layers, nodeTypeMapping },
     });
   } catch (error) {
     return handleApiError(error, '/graph/organizing-principles GET');

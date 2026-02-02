@@ -14,7 +14,7 @@ import { useState, useMemo, memo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { cn } from '@/lib/utils';
 import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
-import { getCategoryColors } from '@/config/categoryColors';
+import { getLayerGradientColors } from '@/config/categoryColors';
 import { useGraphStore } from '@/stores/graphStore';
 import { useUIStore } from '@/stores/uiStore';
 import { useCopyFieldFeedback } from '@/hooks';
@@ -25,7 +25,7 @@ import {
   CopyButton,
   JsonView,
 } from '@/components/ui/detail-panel';
-import { CategoryIcon } from '@/components/ui/CategoryIcon';
+import { LayerIcon } from '@/components/ui/CategoryIcon';
 import { panelClasses, gapTokens } from '@/design/tokens';
 import type { GraphNode } from '@/types';
 
@@ -85,7 +85,7 @@ export const NodeDetailsPanel = memo(function NodeDetailsPanel({ node }: NodeDet
   }
 
   const config = NODE_TYPE_CONFIG[node.type] || NODE_TYPE_CONFIG.Project;
-  const colors = getCategoryColors(config.category);
+  const colors = getLayerGradientColors(config.layer);
 
   // Build all properties in JSON order
   // Note: icon, priority, freshness removed in v8.2.0 (YAML v7.11.0 alignment)
@@ -126,8 +126,8 @@ export const NodeDetailsPanel = memo(function NodeDetailsPanel({ node }: NodeDet
             boxShadow: `0 0 12px ${colors.primary}30`,
           }}
         >
-          <CategoryIcon
-            category={config.category}
+          <LayerIcon
+            layer={config.layer}
             size={14}
             strokeWidth={2}
             style={{ color: colors.primary }}

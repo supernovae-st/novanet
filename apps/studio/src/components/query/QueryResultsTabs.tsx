@@ -17,7 +17,7 @@ import { cn } from '@/lib/utils';
 import { useQueryStore } from '@/stores/queryStore';
 import { useCopyFeedback } from '@/hooks';
 import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
-import { CategoryIcon } from '@/components/ui/CategoryIcon';
+import { LayerIcon } from '@/components/ui/CategoryIcon';
 import { EmptyState, LoadingState } from '@/components/ui/EmptyState';
 import { ACCENT_COLORS } from '@/config/constants';
 import { iconSizes, gapTokens, paddingTokens } from '@/design/tokens';
@@ -179,8 +179,8 @@ export const TableView = memo(function TableView() {
                               color: config.color,
                             }}
                           >
-                            <CategoryIcon
-                              category={config.category}
+                            <LayerIcon
+                              layer={config.layer}
                               size={12}
                               strokeWidth={2}
                               style={{ color: config.color }}

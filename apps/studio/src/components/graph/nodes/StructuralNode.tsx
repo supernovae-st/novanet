@@ -20,7 +20,7 @@ import { type Node, type NodeProps } from '@xyflow/react';
 import { cn } from '@/lib/utils';
 import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
 import { getStructuralColors } from '@/config/categoryColors';
-import { CategoryIcon } from '@/components/ui/CategoryIcon';
+import { LayerIcon } from '@/components/ui/CategoryIcon';
 import type { BaseNodeData } from './BaseNodeWrapper';
 import { BlueprintOverlay } from './BlueprintOverlay';
 import { NODE_BG, NODE_DESIGN } from '@/config/constants';
@@ -151,8 +151,8 @@ export const StructuralNode = memo(function StructuralNode(props: NodeProps<Stru
             {/* Header: Icon + Badge */}
             <div className="flex items-center justify-between mb-2">
               <div className={cn('flex items-center', gapTokens.default)}>
-                <CategoryIcon
-                  category={config.category}
+                <LayerIcon
+                  layer={config.layer}
                   size={20}
                   strokeWidth={2}
                   className={cn(
@@ -210,7 +210,7 @@ export const StructuralNode = memo(function StructuralNode(props: NodeProps<Stru
                   boxShadow: `0 0 6px ${colors.primary}`,
                 }}
               />
-              {config.category}
+              {config.layer}
             </div>
           </div>
         </div>

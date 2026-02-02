@@ -4,60 +4,24 @@
  * Mirrors the NovaNetFilter fluent API and CypherGenerator from novanet-core
  * for use in the visualizer without importing the full library.
  *
- * Note: NodeCategory here is a studio-specific grouping for filtering,
- * NOT the removed core NodeCategory from v8.
+ * v9: Uses Layer (9 layers) instead of NodeCategory (6 categories) for filtering.
  */
 
-import type { NodeType } from '@novanet/core/types';
+import type { NodeType, Layer } from '@novanet/core/types';
 import { DEFAULT_FETCH_LIMIT } from '@/config/constants';
+import { NODE_LAYERS } from '@/config/nodeTypes';
 
 // =============================================================================
-// TYPES (aligned with novanet-core/src/filters/types.ts v8.1.0)
+// TYPES (aligned with novanet-core v9.0.0)
 // =============================================================================
 
 export type Priority = 'critical' | 'high' | 'medium' | 'low';
 export type Freshness = 'realtime' | 'hourly' | 'daily' | 'static';
-export type NodeCategory = 'project' | 'content' | 'locale' | 'generation' | 'seo' | 'geo';
 export type RelationDirection = 'outgoing' | 'incoming' | 'both';
-
-/**
- * Node categories with their types (v9.0.0 - 35 nodes across 6 categories)
- * Studio-specific grouping for filter presets - unrelated to removed core NodeCategory
- */
-export const NODE_CATEGORIES: Record<NodeCategory, NodeType[]> = {
-  // Project category (3 nodes)
-  project: ['Project', 'BrandIdentity', 'ProjectL10n'],
-  // Content category (6 nodes)
-  content: ['Concept', 'ConceptL10n', 'Page', 'PageType', 'Block', 'BlockType'],
-  // Locale category (15 nodes - Locale + 14 LocaleKnowledge)
-  locale: [
-    'Locale',
-    'LocaleIdentity',
-    'LocaleVoice',
-    'LocaleCulture',
-    'LocaleCultureReferences',
-    'LocaleMarket',
-    'LocaleLexicon',
-    'LocaleRulesAdaptation',
-    'LocaleRulesFormatting',
-    'LocaleRulesSlug',
-    'Expression',
-    'Reference',
-    'Metaphor',
-    'Pattern',
-    'Constraint',
-  ],
-  // Generation category (5 nodes)
-  generation: ['PagePrompt', 'BlockPrompt', 'BlockRules', 'PageL10n', 'BlockL10n'],
-  // SEO category (3 nodes)
-  seo: ['SEOKeywordL10n', 'SEOKeywordMetrics', 'SEOMiningRun'],
-  // GEO category (3 nodes)
-  geo: ['GEOSeedL10n', 'GEOSeedMetrics', 'GEOMiningRun'],
-};
 
 export interface FilterCriteria {
   nodeTypes?: NodeType[];
-  categories?: NodeCategory[];
+  layers?: Layer[];
   excludeTypes?: NodeType[];
   locale?: string;
   localeFamily?: string;
@@ -338,8 +302,8 @@ export class NovaNetFilter {
     return this;
   }
 
-  byCategory(...categories: NodeCategory[]): this {
-    this.state.filters.categories = categories;
+  byLayer(...layers: Layer[]): this {
+    this.state.filters.layers = layers;
     return this;
   }
 
@@ -378,7 +342,7 @@ export class NovaNetFilter {
   }
 
   /**
-   * Get the resolved node types based on categories
+   * Get the resolved node types based on layers
    */
   getResolvedNodeTypes(): NodeType[] {
     const types = new Set<NodeType>();
@@ -388,10 +352,13 @@ export class NovaNetFilter {
       this.state.filters.nodeTypes.forEach(t => types.add(t));
     }
 
-    // Add types from categories
-    if (this.state.filters.categories) {
-      for (const category of this.state.filters.categories) {
-        NODE_CATEGORIES[category].forEach(t => types.add(t));
+    // Add types from layers
+    if (this.state.filters.layers) {
+      for (const layer of this.state.filters.layers) {
+        const layerTypes = NODE_LAYERS[layer];
+        if (layerTypes) {
+          layerTypes.forEach(t => types.add(t));
+        }
       }
     }
 
@@ -537,7 +504,7 @@ export class CypherGenerator {
 }
 
 // =============================================================================
-// PRESET DEFINITIONS (using ViewDefinition-compatible structure) v8.1.0
+// PRESET DEFINITIONS (using ViewDefinition-compatible structure) v9.0.0
 // =============================================================================
 
 export interface ViewPreset {
@@ -557,7 +524,7 @@ export const VIEW_PRESETS: ViewPreset[] = [
     icon: '🏗️',
     shortcut: '1',
     filter: () => NovaNetFilter.create()
-      .byCategory('project', 'content')
+      .byLayer('foundation', 'structure', 'semantic')
       .excludeTypes('ConceptL10n'),
   },
   {
@@ -568,7 +535,7 @@ export const VIEW_PRESETS: ViewPreset[] = [
     shortcut: '2',
     filter: () => NovaNetFilter.create()
       .byTypes('Concept', 'ConceptL10n', 'PageL10n', 'BlockL10n')
-      .byCategory('generation'),
+      .byLayer('instruction', 'output'),
   },
   {
     id: 'locale-knowledge',
@@ -577,7 +544,7 @@ export const VIEW_PRESETS: ViewPreset[] = [
     icon: '🌍',
     shortcut: '3',
     filter: () => NovaNetFilter.create()
-      .byCategory('locale'),
+      .byLayer('config', 'knowledge'),
   },
   {
     id: 'concept-network',
@@ -595,7 +562,7 @@ export const VIEW_PRESETS: ViewPreset[] = [
     icon: '📝',
     shortcut: '5',
     filter: () => NovaNetFilter.create()
-      .byCategory('generation')
+      .byLayer('instruction')
       .byTypes('Page', 'Block'),
   },
   {
@@ -605,7 +572,7 @@ export const VIEW_PRESETS: ViewPreset[] = [
     icon: '🔍',
     shortcut: '6',
     filter: () => NovaNetFilter.create()
-      .byCategory('seo', 'geo'),
+      .byLayer('seo', 'geo'),
   },
   {
     id: 'high-priority',

@@ -44,7 +44,7 @@ const Graph2D = lazy(() =>
   import('@/components/graph').then((mod) => ({ default: mod.Graph2D }))
 );
 import { GraphErrorBoundary } from '@/components/ui/ErrorBoundary';
-import { StatsCounter, Pill, Divider, RefreshButton, CategoryIcon, MatrixRainOverlay } from '@/components/ui';
+import { StatsCounter, Pill, Divider, RefreshButton, LayerIcon, MatrixRainOverlay } from '@/components/ui';
 import { SidebarTabs } from '@/components/sidebar/SidebarTabs';
 import { NodeDetailsPanel } from '@/components/sidebar/NodeDetailsPanel';
 import { EdgeDetailsPanel } from '@/components/sidebar/EdgeDetailsPanel';
@@ -720,8 +720,8 @@ export default function HomePage() {
                       return (
                         <>
                           <div className={cn('flex items-center', gapTokens.default)}>
-                            <CategoryIcon
-                              category={config?.category || 'project'}
+                            <LayerIcon
+                              layer={config?.layer || 'foundation'}
                               size={16}
                               strokeWidth={2}
                               style={{
@@ -746,8 +746,8 @@ export default function HomePage() {
                     <>
                       {/* Source Node */}
                       <div className={cn('flex items-center', gapTokens.compact)}>
-                        <CategoryIcon
-                          category={NODE_TYPE_CONFIG[hoveredEdgeNodes.sourceNode.type]?.category || 'project'}
+                        <LayerIcon
+                          layer={NODE_TYPE_CONFIG[hoveredEdgeNodes.sourceNode.type]?.layer || 'foundation'}
                           size={18}
                           strokeWidth={2}
                           style={{
@@ -788,8 +788,8 @@ export default function HomePage() {
 
                       {/* Target Node */}
                       <div className={cn('flex items-center', gapTokens.compact)}>
-                        <CategoryIcon
-                          category={NODE_TYPE_CONFIG[hoveredEdgeNodes.targetNode.type]?.category || 'project'}
+                        <LayerIcon
+                          layer={NODE_TYPE_CONFIG[hoveredEdgeNodes.targetNode.type]?.layer || 'foundation'}
                           size={18}
                           strokeWidth={2}
                           style={{

@@ -8,7 +8,7 @@
  * - Gradient animated edges
  * - Dagre hierarchical layout
  * - Smooth pan/zoom interactions
- * - Category-based color coding
+ * - Layer-based color coding
  */
 
 import { useCallback, useMemo, useEffect, useState, useRef, memo } from 'react';
@@ -131,27 +131,26 @@ export interface Graph2DProps {
 function toTurboNode(node: GraphNodeType): TurboNodeType {
   const config = NODE_TYPE_CONFIG[node.type] || NODE_TYPE_CONFIG.Project;
 
-  // Select node type based on category
-  // Categories: project, content, locale, generation, seo, geo, analytics
+  // Select node type based on layer (v9)
   let nodeType: string = 'turbo';
 
   // Special case: Project nodes get premium social network card style
   if (node.type === 'Project') {
     nodeType = 'project';
   } else {
-    switch (config.category) {
-      case 'project':
-      case 'content':
-      case 'generation':
+    switch (config.layer) {
+      case 'foundation':
+      case 'structure':
+      case 'semantic':
+      case 'instruction':
+      case 'output':
+      case 'config':
         nodeType = 'structural';
         break;
-      case 'locale':
-        // Locale node itself uses structural, knowledge nodes use localeKnowledge
-        nodeType = ['LocaleIdentity', 'LocaleVoice', 'LocaleCulture', 'LocaleMarket', 'LocaleLexicon', 'Expression'].includes(node.type)
-          ? 'localeKnowledge'
-          : 'structural';
+      case 'knowledge':
+        nodeType = 'localeKnowledge';
         break;
-      // Default to turbo for other categories (seo, geo, analytics)
+      // Default to turbo for seo, geo layers
     }
   }
 
@@ -166,7 +165,7 @@ function toTurboNode(node: GraphNodeType): TurboNodeType {
       displayName: node.displayName,
       icon: nodeTypeConfigs[node.type]?.icon,
       description: node.description,
-      category: config.category,
+      category: config.layer,
     },
   };
 }

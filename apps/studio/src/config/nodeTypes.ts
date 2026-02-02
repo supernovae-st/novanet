@@ -1,56 +1,29 @@
 // =============================================================================
-// NODE TYPE CONFIGURATION (v8.1.0)
+// NODE TYPE CONFIGURATION (v9.0.0)
 // =============================================================================
 // Visual configuration for all 35 NovaNet node types
-// NodeType is imported from @novanet/core (Single Source of Truth)
+// NodeType, Layer, KIND_META imported from @novanet/core (Single Source of Truth)
 
-import type { NodeType } from '@novanet/core/types';
-import { NODE_TYPES } from '@novanet/core/types';
+import type { NodeType, Layer } from '@novanet/core/types';
+import { NODE_TYPES, KIND_META } from '@novanet/core/types';
 
 // =============================================================================
-// NODE CATEGORIES (v8.1.0 - 6 categories, 35 nodes)
+// NODE LAYERS (v9.0.0 - 9 layers, 35 nodes)
+// Derived from KIND_META — single source of truth
 // =============================================================================
 
 /**
- * Node category type (6 categories in v8.1.0)
- * Used for grouping nodes in UI and filtering
+ * Node layers with their types (v9 - 35 nodes across 9 layers)
+ * Derived from KIND_META in @novanet/core
  */
-export type NodeCategory = 'project' | 'content' | 'locale' | 'generation' | 'seo' | 'geo';
-
-/**
- * Node categories with their types (v8.1.0 - 35 nodes across 6 categories)
- * Re-exported for convenience - also available from @/lib/filterAdapter
- */
-export const NODE_CATEGORIES: Record<NodeCategory, NodeType[]> = {
-  // Project category (3 nodes)
-  project: ['Project', 'BrandIdentity', 'ProjectL10n'],
-  // Content category (6 nodes)
-  content: ['Concept', 'ConceptL10n', 'Page', 'PageType', 'Block', 'BlockType'],
-  // Locale category (15 nodes - Locale + 14 LocaleKnowledge)
-  locale: [
-    'Locale',
-    'LocaleIdentity',
-    'LocaleVoice',
-    'LocaleCulture',
-    'LocaleCultureReferences',
-    'LocaleMarket',
-    'LocaleLexicon',
-    'LocaleRulesAdaptation',
-    'LocaleRulesFormatting',
-    'LocaleRulesSlug',
-    'Expression',
-    'Reference',
-    'Metaphor',
-    'Pattern',
-    'Constraint',
-  ],
-  // Generation category (5 nodes)
-  generation: ['PagePrompt', 'BlockPrompt', 'BlockRules', 'PageL10n', 'BlockL10n'],
-  // SEO category (3 nodes)
-  seo: ['SEOKeywordL10n', 'SEOKeywordMetrics', 'SEOMiningRun'],
-  // GEO category (3 nodes)
-  geo: ['GEOSeedL10n', 'GEOSeedMetrics', 'GEOMiningRun'],
-};
+export const NODE_LAYERS: Record<Layer, NodeType[]> = Object.entries(KIND_META).reduce(
+  (acc, [nodeType, meta]) => {
+    if (!acc[meta.layer]) acc[meta.layer] = [];
+    acc[meta.layer].push(nodeType as NodeType);
+    return acc;
+  },
+  {} as Record<Layer, NodeType[]>
+);
 
 // =============================================================================
 // NODE TYPE VISUAL CONFIG
@@ -67,16 +40,16 @@ export interface NodeTypeConfig {
   color: string;
   colorClass: string;
   size: number;
-  category: NodeCategory;
+  layer: Layer;
 }
 
 /**
- * All node type configurations (v8.1.0 - 35 nodes)
+ * All node type configurations (v9.0.0 - 35 nodes)
  * Aligned with @novanet/core NODE_TYPES
  */
 export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   // ==========================================================================
-  // PROJECT CATEGORY (3 nodes)
+  // FOUNDATION LAYER (3 nodes)
   // ==========================================================================
   Project: {
     type: 'Project',
@@ -85,7 +58,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#8b5cf6',
     colorClass: 'bg-violet-500',
     size: 24,
-    category: 'project',
+    layer: 'foundation',
   },
   BrandIdentity: {
     type: 'BrandIdentity',
@@ -94,7 +67,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#6d28d9',
     colorClass: 'bg-violet-700',
     size: 18,
-    category: 'project',
+    layer: 'foundation',
   },
   ProjectL10n: {
     type: 'ProjectL10n',
@@ -103,11 +76,11 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#a78bfa',
     colorClass: 'bg-violet-400',
     size: 18,
-    category: 'project',
+    layer: 'foundation',
   },
 
   // ==========================================================================
-  // CONTENT CATEGORY (6 nodes)
+  // SEMANTIC LAYER (2 nodes)
   // ==========================================================================
   Concept: {
     type: 'Concept',
@@ -116,7 +89,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#f59e0b',
     colorClass: 'bg-amber-500',
     size: 20,
-    category: 'content',
+    layer: 'semantic',
   },
   ConceptL10n: {
     type: 'ConceptL10n',
@@ -125,8 +98,12 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#fbbf24',
     colorClass: 'bg-yellow-400',
     size: 16,
-    category: 'content',
+    layer: 'semantic',
   },
+
+  // ==========================================================================
+  // STRUCTURE LAYER (2 nodes)
+  // ==========================================================================
   Page: {
     type: 'Page',
     label: 'Page',
@@ -134,16 +111,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#3b82f6',
     colorClass: 'bg-blue-500',
     size: 20,
-    category: 'content',
-  },
-  PageType: {
-    type: 'PageType',
-    label: 'Page Type',
-    icon: '📐',
-    color: '#2563eb',
-    colorClass: 'bg-blue-600',
-    size: 16,
-    category: 'content',
+    layer: 'structure',
   },
   Block: {
     type: 'Block',
@@ -152,7 +120,20 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#06b6d4',
     colorClass: 'bg-cyan-500',
     size: 16,
-    category: 'content',
+    layer: 'structure',
+  },
+
+  // ==========================================================================
+  // INSTRUCTION LAYER (5 nodes — types + prompts + rules)
+  // ==========================================================================
+  PageType: {
+    type: 'PageType',
+    label: 'Page Type',
+    icon: '📐',
+    color: '#2563eb',
+    colorClass: 'bg-blue-600',
+    size: 16,
+    layer: 'instruction',
   },
   BlockType: {
     type: 'BlockType',
@@ -161,11 +142,11 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#14b8a6',
     colorClass: 'bg-teal-500',
     size: 16,
-    category: 'content',
+    layer: 'instruction',
   },
 
   // ==========================================================================
-  // LOCALE CATEGORY (15 nodes - Locale + 14 LocaleKnowledge)
+  // CONFIG LAYER (1 node)
   // ==========================================================================
   Locale: {
     type: 'Locale',
@@ -174,8 +155,12 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#10b981',
     colorClass: 'bg-emerald-500',
     size: 20,
-    category: 'locale',
+    layer: 'config',
   },
+
+  // ==========================================================================
+  // KNOWLEDGE LAYER (14 nodes — Locale Knowledge)
+  // ==========================================================================
   LocaleIdentity: {
     type: 'LocaleIdentity',
     label: 'Identity',
@@ -183,7 +168,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#22c55e',
     colorClass: 'bg-green-500',
     size: 14,
-    category: 'locale',
+    layer: 'knowledge',
   },
   LocaleVoice: {
     type: 'LocaleVoice',
@@ -192,7 +177,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#4ade80',
     colorClass: 'bg-green-400',
     size: 14,
-    category: 'locale',
+    layer: 'knowledge',
   },
   LocaleCulture: {
     type: 'LocaleCulture',
@@ -201,7 +186,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#86efac',
     colorClass: 'bg-green-300',
     size: 14,
-    category: 'locale',
+    layer: 'knowledge',
   },
   LocaleCultureReferences: {
     type: 'LocaleCultureReferences',
@@ -210,7 +195,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#bbf7d0',
     colorClass: 'bg-green-200',
     size: 12,
-    category: 'locale',
+    layer: 'knowledge',
   },
   LocaleMarket: {
     type: 'LocaleMarket',
@@ -219,7 +204,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#6ee7b7',
     colorClass: 'bg-emerald-300',
     size: 14,
-    category: 'locale',
+    layer: 'knowledge',
   },
   LocaleLexicon: {
     type: 'LocaleLexicon',
@@ -228,7 +213,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#34d399',
     colorClass: 'bg-emerald-400',
     size: 16,
-    category: 'locale',
+    layer: 'knowledge',
   },
   LocaleRulesAdaptation: {
     type: 'LocaleRulesAdaptation',
@@ -237,7 +222,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#059669',
     colorClass: 'bg-emerald-600',
     size: 12,
-    category: 'locale',
+    layer: 'knowledge',
   },
   LocaleRulesFormatting: {
     type: 'LocaleRulesFormatting',
@@ -246,7 +231,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#047857',
     colorClass: 'bg-emerald-700',
     size: 12,
-    category: 'locale',
+    layer: 'knowledge',
   },
   LocaleRulesSlug: {
     type: 'LocaleRulesSlug',
@@ -255,7 +240,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#065f46',
     colorClass: 'bg-emerald-800',
     size: 12,
-    category: 'locale',
+    layer: 'knowledge',
   },
   Expression: {
     type: 'Expression',
@@ -264,7 +249,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#ec4899',
     colorClass: 'bg-pink-500',
     size: 10,
-    category: 'locale',
+    layer: 'knowledge',
   },
   Reference: {
     type: 'Reference',
@@ -273,7 +258,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#f472b6',
     colorClass: 'bg-pink-400',
     size: 10,
-    category: 'locale',
+    layer: 'knowledge',
   },
   Metaphor: {
     type: 'Metaphor',
@@ -282,7 +267,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#f9a8d4',
     colorClass: 'bg-pink-300',
     size: 10,
-    category: 'locale',
+    layer: 'knowledge',
   },
   Pattern: {
     type: 'Pattern',
@@ -291,7 +276,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#fbcfe8',
     colorClass: 'bg-pink-200',
     size: 10,
-    category: 'locale',
+    layer: 'knowledge',
   },
   Constraint: {
     type: 'Constraint',
@@ -300,12 +285,10 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#fda4af',
     colorClass: 'bg-rose-300',
     size: 10,
-    category: 'locale',
+    layer: 'knowledge',
   },
 
-  // ==========================================================================
-  // GENERATION CATEGORY (5 nodes)
-  // ==========================================================================
+  // (PagePrompt, BlockPrompt, BlockRules already in INSTRUCTION LAYER above)
   PagePrompt: {
     type: 'PagePrompt',
     label: 'Page Prompt',
@@ -313,7 +296,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#3b82f6',
     colorClass: 'bg-blue-500',
     size: 14,
-    category: 'generation',
+    layer: 'instruction',
   },
   BlockPrompt: {
     type: 'BlockPrompt',
@@ -322,7 +305,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#60a5fa',
     colorClass: 'bg-blue-400',
     size: 12,
-    category: 'generation',
+    layer: 'instruction',
   },
   BlockRules: {
     type: 'BlockRules',
@@ -331,8 +314,12 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#93c5fd',
     colorClass: 'bg-blue-300',
     size: 12,
-    category: 'generation',
+    layer: 'instruction',
   },
+
+  // ==========================================================================
+  // OUTPUT LAYER (2 nodes — LLM-generated content)
+  // ==========================================================================
   PageL10n: {
     type: 'PageL10n',
     label: 'Page L10n',
@@ -340,7 +327,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#f97316',
     colorClass: 'bg-orange-500',
     size: 16,
-    category: 'generation',
+    layer: 'output',
   },
   BlockL10n: {
     type: 'BlockL10n',
@@ -349,11 +336,11 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#fb923c',
     colorClass: 'bg-orange-400',
     size: 14,
-    category: 'generation',
+    layer: 'output',
   },
 
   // ==========================================================================
-  // SEO CATEGORY (3 nodes)
+  // SEO LAYER (3 nodes)
   // ==========================================================================
   SEOKeywordL10n: {
     type: 'SEOKeywordL10n',
@@ -362,7 +349,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#ef4444',
     colorClass: 'bg-red-500',
     size: 16,
-    category: 'seo',
+    layer: 'seo',
   },
   SEOKeywordMetrics: {
     type: 'SEOKeywordMetrics',
@@ -371,7 +358,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#f87171',
     colorClass: 'bg-red-400',
     size: 10,
-    category: 'seo',
+    layer: 'seo',
   },
   SEOMiningRun: {
     type: 'SEOMiningRun',
@@ -380,11 +367,11 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#fca5a5',
     colorClass: 'bg-red-300',
     size: 10,
-    category: 'seo',
+    layer: 'seo',
   },
 
   // ==========================================================================
-  // GEO CATEGORY (3 nodes)
+  // GEO LAYER (3 nodes)
   // ==========================================================================
   GEOSeedL10n: {
     type: 'GEOSeedL10n',
@@ -393,7 +380,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#a855f7',
     colorClass: 'bg-purple-500',
     size: 16,
-    category: 'geo',
+    layer: 'geo',
   },
   GEOSeedMetrics: {
     type: 'GEOSeedMetrics',
@@ -402,7 +389,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#c084fc',
     colorClass: 'bg-purple-400',
     size: 10,
-    category: 'geo',
+    layer: 'geo',
   },
   GEOMiningRun: {
     type: 'GEOMiningRun',
@@ -411,16 +398,16 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#d8b4fe',
     colorClass: 'bg-purple-300',
     size: 10,
-    category: 'geo',
+    layer: 'geo',
   },
 };
 
 /**
- * Get all node types by category
+ * Get all node types by layer
  */
-export function getNodeTypesByCategory(category: NodeTypeConfig['category']): NodeType[] {
+export function getNodeTypesByLayer(layer: Layer): NodeType[] {
   return Object.values(nodeTypeConfigs)
-    .filter((config) => config.category === category)
+    .filter((config) => config.layer === layer)
     .map((config) => config.type);
 }
 
@@ -430,9 +417,12 @@ export function getNodeTypesByCategory(category: NodeTypeConfig['category']): No
 export const ALL_NODE_TYPES: readonly NodeType[] = NODE_TYPES;
 
 /**
- * Locale types - Locale + all 14 knowledge nodes
+ * Locale types - config (Locale) + all 14 knowledge nodes
  */
-export const LOCALE_TYPES: NodeType[] = getNodeTypesByCategory('locale');
+export const LOCALE_TYPES: NodeType[] = [
+  ...getNodeTypesByLayer('config'),
+  ...getNodeTypesByLayer('knowledge'),
+];
 
 /**
  * Core types for default filter (structure nodes)
@@ -452,12 +442,10 @@ export const CORE_TYPES: NodeType[] = [
 export const NODE_TYPE_CONFIG = nodeTypeConfigs;
 
 /**
- * Category configuration for hierarchical display
+ * Layer configuration for hierarchical display (v9)
  */
-export type VisualNodeCategory = NodeTypeConfig['category'];
-
-export interface CategoryConfig {
-  id: VisualNodeCategory;
+export interface LayerConfig {
+  id: Layer;
   label: string;
   icon: string;
   color: string;
@@ -466,72 +454,97 @@ export interface CategoryConfig {
 }
 
 /**
- * All categories with their configuration (ordered for display)
+ * All layers with their configuration (ordered for display)
+ * Colors from LAYER_COLORS (Solarized palette, ADR-014)
  */
-export const NODE_VISUAL_CATEGORIES: CategoryConfig[] = [
+export const NODE_VISUAL_LAYERS: LayerConfig[] = [
   {
-    id: 'project',
-    label: 'Project',
-    icon: '📦',
-    color: '#8b5cf6',
+    id: 'foundation',
+    label: 'Foundation',
+    icon: '🏛️',
+    color: '#6c71c4',
     colorLight: '#a78bfa',
-    nodeTypes: getNodeTypesByCategory('project'),
+    nodeTypes: getNodeTypesByLayer('foundation'),
   },
   {
-    id: 'content',
-    label: 'Content',
+    id: 'structure',
+    label: 'Structure',
+    icon: '🏗️',
+    color: '#859900',
+    colorLight: '#a3e635',
+    nodeTypes: getNodeTypesByLayer('structure'),
+  },
+  {
+    id: 'semantic',
+    label: 'Semantic',
     icon: '💡',
-    color: '#f59e0b',
+    color: '#b58900',
     colorLight: '#fbbf24',
-    nodeTypes: getNodeTypesByCategory('content'),
+    nodeTypes: getNodeTypesByLayer('semantic'),
   },
   {
-    id: 'locale',
-    label: 'Locale',
-    icon: '🌍',
-    color: '#10b981',
+    id: 'instruction',
+    label: 'Instruction',
+    icon: '📝',
+    color: '#d33682',
+    colorLight: '#f472b6',
+    nodeTypes: getNodeTypesByLayer('instruction'),
+  },
+  {
+    id: 'output',
+    label: 'Output',
+    icon: '✨',
+    color: '#dc322f',
+    colorLight: '#f87171',
+    nodeTypes: getNodeTypesByLayer('output'),
+  },
+  {
+    id: 'config',
+    label: 'Config',
+    icon: '⚙️',
+    color: '#2aa198',
     colorLight: '#34d399',
-    nodeTypes: getNodeTypesByCategory('locale'),
+    nodeTypes: getNodeTypesByLayer('config'),
   },
   {
-    id: 'generation',
-    label: 'Generation',
-    icon: '🤖',
-    color: '#3b82f6',
+    id: 'knowledge',
+    label: 'Knowledge',
+    icon: '📚',
+    color: '#268bd2',
     colorLight: '#60a5fa',
-    nodeTypes: getNodeTypesByCategory('generation'),
+    nodeTypes: getNodeTypesByLayer('knowledge'),
   },
   {
     id: 'seo',
     label: 'SEO',
     icon: '🔍',
-    color: '#ef4444',
-    colorLight: '#f87171',
-    nodeTypes: getNodeTypesByCategory('seo'),
+    color: '#cb4b16',
+    colorLight: '#fb923c',
+    nodeTypes: getNodeTypesByLayer('seo'),
   },
   {
     id: 'geo',
     label: 'GEO',
-    icon: '🎯',
-    color: '#a855f7',
+    icon: '📍',
+    color: '#93a1a1',
     colorLight: '#c084fc',
-    nodeTypes: getNodeTypesByCategory('geo'),
+    nodeTypes: getNodeTypesByLayer('geo'),
   },
 ];
 
 /**
- * Get category config by id
+ * Get layer config by id
  */
-export function getCategoryConfig(categoryId: VisualNodeCategory): CategoryConfig | undefined {
-  return NODE_VISUAL_CATEGORIES.find((c) => c.id === categoryId);
+export function getLayerConfig(layerId: Layer): LayerConfig | undefined {
+  return NODE_VISUAL_LAYERS.find((c) => c.id === layerId);
 }
 
 /**
- * Get category for a node type
+ * Get layer config for a node type
  */
-export function getCategoryForNodeType(nodeType: NodeType): CategoryConfig | undefined {
+export function getLayerForNodeType(nodeType: NodeType): LayerConfig | undefined {
   const config = nodeTypeConfigs[nodeType];
-  return config ? getCategoryConfig(config.category) : undefined;
+  return config ? getLayerConfig(config.layer) : undefined;
 }
 
 // =============================================================================
