@@ -1,12 +1,12 @@
 'use client';
 
 /**
- * SubcategoryAttractorNode - Visible subcategory node for magnetic grouping
+ * LayerAttractorNode - Visible layer node for magnetic grouping
  *
  * Features:
  * - Circular node (90px)
  * - Shows emoji, label, and dual count (typeCount / loadedCount)
- * - Uses parent scope's color (slightly dimmer)
+ * - Uses parent realm's color (slightly dimmer)
  * - Hidden handles for edges
  */
 
@@ -14,24 +14,24 @@ import { memo } from 'react';
 import { type NodeProps, type Node, Handle, Position } from '@xyflow/react';
 import { cn } from '@/lib/utils';
 
-export interface SubcategoryAttractorData extends Record<string, unknown> {
+export interface LayerAttractorData extends Record<string, unknown> {
   key: string;
   label: string;
   emoji: string;
-  scopeKey: string;
+  realmKey: string;
   color: string;
   typeCount: number;
   loadedCount: number;
 }
 
-export type SubcategoryAttractorNodeType = Node<SubcategoryAttractorData, 'subcategoryAttractor'>;
+export type LayerAttractorNodeType = Node<LayerAttractorData, 'layerAttractor'>;
 
-const SUBCAT_SIZE = 90;
+const LAYER_SIZE = 90;
 
-export const SubcategoryAttractorNode = memo(function SubcategoryAttractorNode({
+export const LayerAttractorNode = memo(function LayerAttractorNode({
   data,
   selected,
-}: NodeProps<SubcategoryAttractorNodeType>) {
+}: NodeProps<LayerAttractorNodeType>) {
   return (
     <div
       className={cn(
@@ -40,15 +40,15 @@ export const SubcategoryAttractorNode = memo(function SubcategoryAttractorNode({
         selected ? 'scale-110' : 'scale-100'
       )}
       style={{
-        width: SUBCAT_SIZE,
-        height: SUBCAT_SIZE,
+        width: LAYER_SIZE,
+        height: LAYER_SIZE,
         backgroundColor: `${data.color}15`,
         borderColor: `${data.color}80`,
         boxShadow: selected
           ? `0 0 30px ${data.color}50`
           : `0 0 15px ${data.color}30`,
       }}
-      aria-label={`${data.label} subcategory: ${data.typeCount} types, ${data.loadedCount} loaded`}
+      aria-label={`${data.label} layer: ${data.typeCount} types, ${data.loadedCount} loaded`}
     >
       {/* Emoji */}
       <span className="text-xl" aria-hidden="true">{data.emoji}</span>

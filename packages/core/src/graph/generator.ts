@@ -1,12 +1,12 @@
 // packages/core/src/graph/generator.ts
 // Schema graph generator - Creates flat and hierarchical schema representations
-// v1.0.0
+// v9.0.0
 
-import { NODE_TYPES, NODE_SCOPES, NODE_BEHAVIORS, type NodeType, type Scope } from '../types/nodes.js';
+import { NODE_TYPES, NODE_REALMS, NODE_TRAITS, type NodeType, type Realm } from '../types/nodes.js';
 import { RelationRegistry } from '../schemas/relations.schema.js';
 import type { SchemaNode, SchemaEdge, SchemaGraphResult, HierarchicalSchemaData } from './types.js';
-import { getSubcategory } from './subcategories.js';
-import { SCOPE_HIERARCHY } from './hierarchy.js';
+import { getLayer } from './layers.js';
+import { REALM_HIERARCHY } from './hierarchy.js';
 
 // =============================================================================
 // NODE DISPLAY LABELS
@@ -17,28 +17,28 @@ import { SCOPE_HIERARCHY } from './hierarchy.js';
  * Can be extended with icons/colors in UI layer.
  */
 const NODE_LABELS: Record<NodeType, string> = {
-  // Project scope - foundation
+  // Project realm - foundation
   Project: 'Project',
   BrandIdentity: 'Brand Identity',
   ProjectL10n: 'Project L10n',
-  // Project scope - structure
+  // Project realm - structure
   Page: 'Page',
   Block: 'Block',
   BlockType: 'Block Type',
   PageType: 'Page Type',
-  // Project scope - semantic
+  // Project realm - semantic
   Concept: 'Concept',
   ConceptL10n: 'Concept L10n',
-  // Project scope - instruction
+  // Project realm - instruction
   PagePrompt: 'Page Prompt',
   BlockPrompt: 'Block Prompt',
   BlockRules: 'Block Rules',
-  // Project scope - output
+  // Project realm - output
   PageL10n: 'Page L10n',
   BlockL10n: 'Block L10n',
-  // Global scope - config
+  // Global realm - config
   Locale: 'Locale',
-  // Global scope - knowledge
+  // Global realm - knowledge
   LocaleIdentity: 'Locale Identity',
   LocaleVoice: 'Locale Voice',
   LocaleCulture: 'Locale Culture',
@@ -53,40 +53,34 @@ const NODE_LABELS: Record<NodeType, string> = {
   Metaphor: 'Metaphor',
   Pattern: 'Pattern',
   Constraint: 'Constraint',
-  // Shared scope - seo
+  // Shared realm - seo
   SEOKeywordL10n: 'SEO Keyword',
   SEOKeywordMetrics: 'SEO Metrics',
   SEOMiningRun: 'SEO Mining',
-  // Shared scope - geo
+  // Shared realm - geo
   GEOSeedL10n: 'GEO Seed',
   GEOSeedMetrics: 'GEO Metrics',
   GEOMiningRun: 'GEO Mining',
 };
 
 // =============================================================================
-// SCOPE DESCRIPTIONS
+// REALM DESCRIPTIONS
 // =============================================================================
 
-/**
- * Scope descriptions for nodes
- */
-const SCOPE_DESCRIPTIONS: Record<Scope, string> = {
-  Global: 'Shared across all projects (Locale knowledge)',
-  Shared: 'Shared across projects (SEO/GEO data)',
-  Project: 'Project-specific content and structure',
+const REALM_DESCRIPTIONS: Record<Realm, string> = {
+  global: 'Shared across all projects (Locale knowledge)',
+  shared: 'Shared across projects (SEO/GEO data)',
+  project: 'Project-specific content and structure',
 };
 
 // =============================================================================
-// BEHAVIOR DESCRIPTIONS
+// TRAIT DESCRIPTIONS
 // =============================================================================
 
-/**
- * Behavior descriptions for nodes
- */
-const BEHAVIOR_DESCRIPTIONS: Record<string, string> = {
+const TRAIT_DESCRIPTIONS: Record<string, string> = {
   invariant: 'Language-independent, same across all locales',
   localized: 'Human-curated localized content',
-  localeKnowledge: 'Locale-specific cultural/linguistic knowledge',
+  knowledge: 'Locale-specific cultural/linguistic knowledge',
   derived: 'Computed from other data (metrics)',
   job: 'Background processing job',
 };
@@ -117,18 +111,18 @@ export function generateSchemaGraph(): SchemaGraphResult {
   // ==========================================================================
 
   for (const nodeType of NODE_TYPES) {
-    const scope = NODE_SCOPES[nodeType];
-    const behavior = NODE_BEHAVIORS[nodeType];
-    const subcategory = getSubcategory(nodeType);
+    const realm = NODE_REALMS[nodeType];
+    const trait = NODE_TRAITS[nodeType];
+    const layer = getLayer(nodeType);
 
     nodes.push({
       id: `schema-${nodeType}`,
       nodeType,
-      scope,
-      subcategory,
+      realm,
+      layer,
       label: NODE_LABELS[nodeType],
-      description: `${SCOPE_DESCRIPTIONS[scope]}. ${BEHAVIOR_DESCRIPTIONS[behavior]}.`,
-      behavior,
+      description: `${REALM_DESCRIPTIONS[realm]}. ${TRAIT_DESCRIPTIONS[trait]}.`,
+      trait,
     });
   }
 
@@ -136,7 +130,6 @@ export function generateSchemaGraph(): SchemaGraphResult {
   // GENERATE EDGES - From RelationRegistry (single source of truth)
   // ==========================================================================
 
-  // P0 FIX: Validate node types exist before creating edges
   const validNodeTypes = new Set<string>(NODE_TYPES);
   let edgeId = 0;
 
@@ -147,9 +140,8 @@ export function generateSchemaGraph(): SchemaGraphResult {
     // Create Cartesian product of edges for multi-type relations
     for (const source of sourceTypes) {
       for (const target of targetTypes) {
-        // P0 FIX: Skip edges with invalid node types
+        // Skip edges with invalid node types
         if (!validNodeTypes.has(source) || !validNodeTypes.has(target)) {
-          // Silently skip - these are likely old/deprecated relations
           continue;
         }
 
@@ -170,40 +162,40 @@ export function generateSchemaGraph(): SchemaGraphResult {
 }
 
 /**
- * Generate hierarchical schema data grouped by scope and subcategory.
+ * Generate hierarchical schema data grouped by realm and layer.
  * Used by visualizers that need grouped layout (like Studio).
  *
- * @returns HierarchicalSchemaData with scopes, nodes, edges, and stats
+ * @returns HierarchicalSchemaData with realms, nodes, edges, and stats
  *
  * @example
  * ```typescript
  * const hierarchy = getSchemaHierarchy();
  * console.log(hierarchy.stats);
- * // Output: { totalNodes: 35, totalEdges: ~89, nodesByScope: { Project: 14, Global: 15, Shared: 6 } }
+ * // Output: { totalNodes: 35, totalEdges: ~89, nodesByRealm: { project: 14, global: 15, shared: 6 } }
  * ```
  */
 export function getSchemaHierarchy(): HierarchicalSchemaData {
   const { nodes, edges } = generateSchemaGraph();
 
-  // Count nodes by scope
-  const nodesByScope: Record<Scope, number> = {
-    Project: 0,
-    Global: 0,
-    Shared: 0,
+  // Count nodes by realm
+  const nodesByRealm: Record<Realm, number> = {
+    project: 0,
+    global: 0,
+    shared: 0,
   };
 
   for (const node of nodes) {
-    nodesByScope[node.scope]++;
+    nodesByRealm[node.realm]++;
   }
 
   return {
-    scopes: SCOPE_HIERARCHY,
+    realms: REALM_HIERARCHY,
     nodes,
     edges,
     stats: {
       totalNodes: nodes.length,
       totalEdges: edges.length,
-      nodesByScope,
+      nodesByRealm,
     },
   };
 }

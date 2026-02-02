@@ -28,12 +28,12 @@ export interface CategoryConfig {
 }
 
 export const VIEW_CATEGORIES: Record<ViewCategory, CategoryConfig> = {
-  scope: {
-    id: 'scope',
-    label: 'Scope Layers',
+  overview: {
+    id: 'overview',
+    label: 'Overview',
     icon: Crosshair,
     color: '#34d399', // emerald-400
-    description: 'Filter by scope and visibility',
+    description: 'Filter by realm and visibility',
   },
   generation: {
     id: 'generation',
@@ -67,7 +67,7 @@ export const VIEW_CATEGORIES: Record<ViewCategory, CategoryConfig> = {
 
 // Ordered list for display
 export const CATEGORY_ORDER: ViewCategory[] = [
-  'scope',
+  'overview',
   'generation',
   'knowledge',
   'project',

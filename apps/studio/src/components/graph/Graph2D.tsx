@@ -58,8 +58,8 @@ import {
   StructuralNode,
   LocaleKnowledgeNode,
   ProjectNode,
-  ScopeAttractorNode,
-  SubcategoryAttractorNode,
+  RealmAttractorNode,
+  LayerAttractorNode,
   type TurboNodeData,
   type TurboNodeType,
 } from './nodes';
@@ -69,12 +69,12 @@ import { GraphToolbar } from './GraphToolbar';
 import type { GraphNode as GraphNodeType, GraphEdge as GraphEdgeType } from '@/types';
 
 // Schema mode imports (Task 3.2)
-import { ScopeGroupNode, SubcategoryGroupNode, SchemaNode } from './schema';
+import { RealmGroupNode, LayerGroupNode, SchemaNode } from './schema';
 import { SchemaErrorBoundary } from './SchemaErrorBoundary';
 import { applySchemaLayout } from '@/lib/schemaLayoutELK';
 import { getSchemaHierarchy } from '@novanet/core/graph';
 import { useFilterStore } from '@/stores/filterStore';
-import type { Scope } from '@novanet/core/types';
+import type { Realm } from '@novanet/core/types';
 
 // =============================================================================
 // Node & Edge Types - MUST be defined outside component for performance
@@ -87,12 +87,12 @@ const nodeTypes = {
   localeKnowledge: LocaleKnowledgeNode,
   project: ProjectNode,
   // Schema mode node types (Task 3.2)
-  scopeGroup: ScopeGroupNode,
-  subcategoryGroup: SubcategoryGroupNode,
+  realmGroup: RealmGroupNode,
+  layerGroup: LayerGroupNode,
   schemaNode: SchemaNode,
   // Magnetic grouping attractor nodes (Task 10)
-  scopeAttractor: ScopeAttractorNode,
-  subcategoryAttractor: SubcategoryAttractorNode,
+  realmAttractor: RealmAttractorNode,
+  layerAttractor: LayerAttractorNode,
 } as const;
 
 const edgeTypes = {
@@ -242,10 +242,10 @@ function Graph2DInner({
   );
 
   // Filter store - collapsed state for schema mode (Task 3.2)
-  const { collapsedScopes, collapsedSubcategories } = useFilterStore(
+  const { collapsedRealms, collapsedLayers } = useFilterStore(
     useShallow((state) => ({
-      collapsedScopes: state.collapsedScopes,
-      collapsedSubcategories: state.collapsedSubcategories,
+      collapsedRealms: state.collapsedRealms,
+      collapsedLayers: state.collapsedLayers,
     }))
   );
 
@@ -378,47 +378,47 @@ function Graph2DInner({
       const nodeMap = new Map(layoutedNodes.map((n) => [n.id, n]));
 
       const visibleNodes = layoutedNodes.filter((node) => {
-        // Check if scope is collapsed
-        if (node.type === 'scopeGroup') {
-          const scope = node.data?.scope as Scope | undefined;
-          return scope ? !collapsedScopes.includes(scope) : true;
+        // Check if realm is collapsed
+        if (node.type === 'realmGroup') {
+          const realm = node.data?.realm as Realm | undefined;
+          return realm ? !collapsedRealms.includes(realm) : true;
         }
 
-        // Check if subcategory is collapsed
-        if (node.type === 'subcategoryGroup') {
-          // Check parent scope first
-          const parentScope = nodeMap.get(node.parentId as string);
-          const parentScopeData = parentScope?.data?.scope as Scope | undefined;
-          if (parentScopeData && collapsedScopes.includes(parentScopeData)) {
+        // Check if layer is collapsed
+        if (node.type === 'layerGroup') {
+          // Check parent realm first
+          const parentRealm = nodeMap.get(node.parentId as string);
+          const parentRealmData = parentRealm?.data?.realm as Realm | undefined;
+          if (parentRealmData && collapsedRealms.includes(parentRealmData)) {
             return false;
           }
-          const nodeScope = node.data?.scope as string | undefined;
-          const nodeSubcat = node.data?.subcategory as string | undefined;
-          if (nodeScope && nodeSubcat) {
-            const key = `${nodeScope}-${nodeSubcat}`;
-            return !collapsedSubcategories.includes(key);
+          const nodeRealm = node.data?.realm as string | undefined;
+          const nodeLayer = node.data?.layer as string | undefined;
+          if (nodeRealm && nodeLayer) {
+            const key = `${nodeRealm}-${nodeLayer}`;
+            return !collapsedLayers.includes(key);
           }
           return true;
         }
 
-        // Schema nodes: check both parent subcategory and grandparent scope
+        // Schema nodes: check both parent layer and grandparent realm
         if (node.type === 'schemaNode') {
-          const parentSubcat = nodeMap.get(node.parentId as string);
-          if (!parentSubcat) return true;
+          const parentLayer = nodeMap.get(node.parentId as string);
+          if (!parentLayer) return true;
 
-          // Check grandparent scope
-          const grandparentScope = nodeMap.get(parentSubcat.parentId as string);
-          const grandparentScopeData = grandparentScope?.data?.scope as Scope | undefined;
-          if (grandparentScopeData && collapsedScopes.includes(grandparentScopeData)) {
+          // Check grandparent realm
+          const grandparentRealm = nodeMap.get(parentLayer.parentId as string);
+          const grandparentRealmData = grandparentRealm?.data?.realm as Realm | undefined;
+          if (grandparentRealmData && collapsedRealms.includes(grandparentRealmData)) {
             return false;
           }
 
-          // Check parent subcategory
-          const parentScope = parentSubcat.data?.scope as string | undefined;
-          const parentSubcatName = parentSubcat.data?.subcategory as string | undefined;
-          if (parentScope && parentSubcatName) {
-            const key = `${parentScope}-${parentSubcatName}`;
-            if (collapsedSubcategories.includes(key)) {
+          // Check parent layer
+          const parentRealm = parentLayer.data?.realm as string | undefined;
+          const parentLayerName = parentLayer.data?.layer as string | undefined;
+          if (parentRealm && parentLayerName) {
+            const key = `${parentRealm}-${parentLayerName}`;
+            if (collapsedLayers.includes(key)) {
               return false;
             }
           }
@@ -465,7 +465,7 @@ function Graph2DInner({
     } finally {
       setIsSchemaLayouting(false);
     }
-  }, [collapsedScopes, collapsedSubcategories, layoutDirection]);
+  }, [collapsedRealms, collapsedLayers, layoutDirection]);
 
   // Load schema graph when:
   // - dataMode changes to 'schema'
@@ -684,17 +684,17 @@ function Graph2DInner({
 
         // Subcategory → scope mapping
         const subcatToScope: Record<string, string> = {};
-        for (const sub of magneticData.subcategories) {
-          subcatToScope[sub.key] = sub.scopeKey;
+        for (const sub of magneticData.layers) {
+          subcatToScope[sub.key] = sub.realmKey;
         }
 
         // Compute subcategory positions (circle around scope)
         const subcatPositions: Record<string, { x: number; y: number }> = {};
-        const subcatsByScope = new Map<string, typeof magneticData.subcategories>();
-        for (const sub of magneticData.subcategories) {
-          const list = subcatsByScope.get(sub.scopeKey) || [];
+        const subcatsByScope = new Map<string, typeof magneticData.layers>();
+        for (const sub of magneticData.layers) {
+          const list = subcatsByScope.get(sub.realmKey) || [];
           list.push(sub);
-          subcatsByScope.set(sub.scopeKey, list);
+          subcatsByScope.set(sub.realmKey, list);
         }
         for (const [scopeKey, subs] of subcatsByScope) {
           const scopePos = scopePositions[scopeKey] || { x: 0, y: 0 };
@@ -712,7 +712,7 @@ function Graph2DInner({
         const attractorNodes: TurboNodeType[] = [];
 
         // Scope attractor nodes
-        for (const scope of magneticData.scopes) {
+        for (const scope of magneticData.realms) {
           const pos = scopePositions[scope.key];
           // typeCount = how many nodeTypes belong to this scope (static, from schema)
           const typeCount = Object.values(nodeTypeToSubcategory)
@@ -723,12 +723,12 @@ function Graph2DInner({
             return subcatToScope[subcat] === scope.key;
           }).length;
           attractorNodes.push({
-            id: `scope-${scope.key}`,
-            type: 'scopeAttractor',
+            id: `realm-${scope.key}`,
+            type: 'realmAttractor',
             position: pos,
             data: {
-              id: `scope-${scope.key}`,
-              type: 'Scope',
+              id: `realm-${scope.key}`,
+              type: 'Realm',
               key: scope.key,
               label: scope.displayName,
               displayName: scope.displayName,
@@ -741,29 +741,29 @@ function Graph2DInner({
           } as unknown as TurboNodeType);
         }
 
-        // Subcategory attractor nodes
-        for (const sub of magneticData.subcategories) {
+        // Layer attractor nodes
+        for (const sub of magneticData.layers) {
           const pos = subcatPositions[sub.key];
-          const scope = magneticData.scopes.find(s => s.key === sub.scopeKey);
-          // typeCount = how many nodeTypes map to this subcategory (static)
+          const parentRealm = magneticData.realms.find(s => s.key === sub.realmKey);
+          // typeCount = how many nodeTypes map to this layer (static)
           const subTypeCount = Object.values(nodeTypeToSubcategory)
             .filter(v => v === sub.key).length;
-          // loadedCount = how many loaded instances belong to this subcategory (dynamic)
+          // loadedCount = how many loaded instances belong to this layer (dynamic)
           const subLoadedCount = turboNodes
             .filter(n => nodeTypeToSubcategory[n.data.type] === sub.key).length;
           attractorNodes.push({
-            id: `subcat-${sub.key}`,
-            type: 'subcategoryAttractor',
+            id: `layer-${sub.key}`,
+            type: 'layerAttractor',
             position: pos,
             data: {
-              id: `subcat-${sub.key}`,
-              type: 'Subcategory',
+              id: `layer-${sub.key}`,
+              type: 'Layer',
               key: sub.key,
               label: sub.displayName,
               displayName: sub.displayName,
               emoji: sub.emoji,
-              scopeKey: sub.scopeKey,
-              color: scope?.color || '#666',
+              realmKey: sub.realmKey,
+              color: parentRealm?.color || '#666',
               typeCount: subTypeCount,
               loadedCount: subLoadedCount,
               category: 'project',
@@ -932,19 +932,19 @@ function Graph2DInner({
         };
       });
 
-    // In magnetic mode, add structural edges (Scope→Subcategory, Node→Subcategory)
+    // In magnetic mode, add structural edges (Realm→Layer, Node→Layer)
     if (isMagneticMode && magneticData) {
       const magneticEdges: Array<(typeof businessEdges)[number] | FloatingEdgeType> = [];
 
-      // Scope → Subcategory edges (HAS_SUBCATEGORY)
-      for (const sub of magneticData.subcategories) {
+      // Realm → Layer edges (HAS_LAYER)
+      for (const sub of magneticData.layers) {
         magneticEdges.push({
-          id: `edge-scope-${sub.scopeKey}-to-${sub.key}`,
-          source: `scope-${sub.scopeKey}`,
-          target: `subcat-${sub.key}`,
+          id: `edge-realm-${sub.realmKey}-to-${sub.key}`,
+          source: `realm-${sub.realmKey}`,
+          target: `layer-${sub.key}`,
           type: 'floating' as const,
           data: {
-            relationType: 'HAS_SUBCATEGORY',
+            relationType: 'HAS_LAYER',
             dimmed: false,
             animated: false,
             showLabel: showEdgeLabels,
@@ -952,17 +952,17 @@ function Graph2DInner({
         });
       }
 
-      // Data node → Subcategory edges (IN_SUBCATEGORY) - faint magnetic edges
+      // Data node → Layer edges (OF_KIND) - faint magnetic edges
       for (const node of graphNodes) {
         const subcatKey = nodeTypeToSubcategory[node.type];
         if (subcatKey) {
           magneticEdges.push({
-            id: `edge-${node.id}-in-subcat-${subcatKey}`,
+            id: `edge-${node.id}-in-layer-${subcatKey}`,
             source: node.id,
-            target: `subcat-${subcatKey}`,
+            target: `layer-${subcatKey}`,
             type: 'magnetic',
             data: {
-              relationType: 'IN_SUBCATEGORY',
+              relationType: 'OF_KIND',
               dimmed: false,
               animated: false,
               showLabel: false,
@@ -1060,7 +1060,7 @@ function Graph2DInner({
   // ==========================================================================
   const schemaMinimapNodeColor = useCallback((node: ReactFlowNode) => {
     // Color by scope for schema nodes
-    const scope = node.data?.scope;
+    const scope = node.data?.realm;
     if (scope === 'Project') return '#8b5cf6cc'; // violet
     if (scope === 'Global') return '#10b981cc'; // emerald
     if (scope === 'Shared') return '#f59e0bcc'; // amber

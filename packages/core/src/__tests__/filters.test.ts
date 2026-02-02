@@ -216,11 +216,7 @@ describe('NovaNetFilter', () => {
     // it('withPriority() sets priority filter', () => { ... });
     // it('withFreshness() sets freshness filter', () => { ... });
 
-    it('byCategory() sets category filter', () => {
-      const filter = NovaNetFilter.create().byCategory('project', 'content');
-      const criteria = filter.getCriteria();
-      expect(criteria.filters.categories).toEqual(['project', 'content']);
-    });
+    // REMOVED v9.0.0: byCategory (NodeCategory killed)
 
     it('byTypes() sets nodeTypes filter', () => {
       const filter = NovaNetFilter.create().byTypes('Page', 'Block');
@@ -355,17 +351,7 @@ describe('CypherGenerator', () => {
       expect(result.query).not.toContain('root.display_name');
     });
 
-    it('generates WHERE for byCategory filter (expands categories)', () => {
-      const filter = NovaNetFilter.create()
-        .fromPage('page-pricing')
-        .byCategory('generation');
-      const result = CypherGenerator.generate(filter);
-
-      expect(result.query).toContain('WHERE');
-      // generation category includes prompts + output
-      expect(result.query).toContain('root:PagePrompt');
-      expect(result.query).toContain('root:PageL10n');
-    });
+    // REMOVED v9.0.0: byCategory CypherGenerator test (NodeCategory killed)
 
     it('generates RETURN with collect(DISTINCT)', () => {
       const filter = NovaNetFilter.create()

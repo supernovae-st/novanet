@@ -12,10 +12,10 @@ import { useMemo, memo } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { gapTokens } from '@/design/tokens';
-import { useFilteredGraph, type ScopeCounts, type SubcategoryCounts } from '@/hooks/useFilteredGraph';
+import { useFilteredGraph, type RealmCounts, type LayerCounts } from '@/hooks/useFilteredGraph';
 import { NODE_TYPE_CONFIG, type NodeCategory } from '@/config/nodeTypes';
-import { NODE_SCOPES } from '@novanet/core/types';
-import { NODE_SUBCATEGORIES, type Subcategory } from '@novanet/core/graph';
+import { NODE_REALMS } from '@novanet/core/types';
+import { NODE_LAYERS, type Layer } from '@novanet/core/graph';
 import { relationshipTypeConfigs, type RelationshipCategory } from '@/config/relationshipTypes';
 import { CategoryIcon, ProgressBar } from '@/components/ui';
 import { GRAPH_ICONS } from '@/config/iconSystem';
@@ -35,26 +35,26 @@ interface TypeCountItem {
 }
 
 /** Scope config for breakdown display - colors match Neo4j organizing-principles */
-const SCOPE_CONFIG = {
-  Global: { emoji: '🌍', color: '#2aa198' },   // solarized cyan
-  Project: { emoji: '📦', color: '#6c71c4' },  // solarized violet
-  Shared: { emoji: '🎯', color: '#cb4b16' },   // solarized orange
+const REALM_CONFIG = {
+  global: { emoji: '🌍', color: '#2aa198' },   // solarized cyan
+  project: { emoji: '📦', color: '#6c71c4' },  // solarized violet
+  shared: { emoji: '🎯', color: '#cb4b16' },   // solarized orange
 } as const;
 
-/** Subcategory config - color inherited from parent scope */
-const SUBCATEGORY_CONFIG: Record<Subcategory, { emoji: string; scope: keyof typeof SCOPE_CONFIG }> = {
+/** Layer config - color inherited from parent scope */
+const LAYER_CONFIG: Record<Layer, { emoji: string; realm: keyof typeof REALM_CONFIG }> = {
   // Project scope (5 subcategories)
-  foundation: { emoji: '🏛️', scope: 'Project' },
-  structure: { emoji: '🧱', scope: 'Project' },
-  semantic: { emoji: '💡', scope: 'Project' },
-  instruction: { emoji: '📋', scope: 'Project' },
-  output: { emoji: '📤', scope: 'Project' },
+  foundation: { emoji: '🏛️', realm: 'project' },
+  structure: { emoji: '🧱', realm: 'project' },
+  semantic: { emoji: '💡', realm: 'project' },
+  instruction: { emoji: '📋', realm: 'project' },
+  output: { emoji: '📤', realm: 'project' },
   // Global scope (2 subcategories)
-  config: { emoji: '⚙️', scope: 'Global' },
-  knowledge: { emoji: '🧠', scope: 'Global' },
+  config: { emoji: '⚙️', realm: 'global' },
+  knowledge: { emoji: '🧠', realm: 'global' },
   // Shared scope (2 subcategories)
-  seo: { emoji: '🔍', scope: 'Shared' },
-  geo: { emoji: '🌐', scope: 'Shared' },
+  seo: { emoji: '🔍', realm: 'shared' },
+  geo: { emoji: '🌐', realm: 'shared' },
 } as const;
 
 interface ResultsOverviewProps {
@@ -180,13 +180,13 @@ function ExpandedRelationBadge({ item, index, maxCount }: { item: TypeCountItem;
 /* ═══════════════════════════════════════════════════════════════════════════ */
 
 function ScopeHeroCard({ scope, typeCount, loadedCount, maxLoaded, index }: {
-  scope: keyof typeof SCOPE_CONFIG;
+  scope: keyof typeof REALM_CONFIG;
   typeCount: number;
   loadedCount: number;
   maxLoaded: number;
   index: number;
 }) {
-  const config = SCOPE_CONFIG[scope];
+  const config = REALM_CONFIG[scope];
   return (
     <div
       className={cn(
@@ -226,19 +226,19 @@ function ScopeHeroCard({ scope, typeCount, loadedCount, maxLoaded, index }: {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════ */
-/*  Subcategory card (schema mode only)                                       */
+/*  Layer card (schema mode only)                                       */
 /* ═══════════════════════════════════════════════════════════════════════════ */
 
-function SubcategoryCard({ subcategory, typeCount, loadedCount, maxLoaded, index }: {
-  subcategory: Subcategory;
+function LayerCard({ layer, typeCount, loadedCount, maxLoaded, index }: {
+  layer: Layer;
   typeCount: number;
   loadedCount: number;
   maxLoaded: number;
   index: number;
 }) {
-  const config = SUBCATEGORY_CONFIG[subcategory];
-  const scopeColor = SCOPE_CONFIG[config.scope].color;
-  const displayName = subcategory.charAt(0).toUpperCase() + subcategory.slice(1);
+  const config = LAYER_CONFIG[layer];
+  const realmColor = REALM_CONFIG[config.realm].color;
+  const displayName = layer.charAt(0).toUpperCase() + layer.slice(1);
   return (
     <div
       className={cn(
@@ -247,25 +247,25 @@ function SubcategoryCard({ subcategory, typeCount, loadedCount, maxLoaded, index
       )}
       style={{
         animationDelay: `${index * 30}ms`,
-        background: `${scopeColor}08`,
+        background: `${realmColor}08`,
         borderWidth: '2px 1px 1px 1px',
         borderStyle: 'solid',
-        borderColor: `${scopeColor}15`,
-        borderTopColor: `${scopeColor}80`,
+        borderColor: `${realmColor}15`,
+        borderTopColor: `${realmColor}80`,
         paddingLeft: '12px',
         paddingRight: '12px',
       }}
     >
       <span className="text-xl shrink-0">{config.emoji}</span>
       <div className="flex-1 min-w-0">
-        <span className="text-xs font-semibold block" style={{ color: scopeColor }}>
+        <span className="text-xs font-semibold block" style={{ color: realmColor }}>
           {displayName}
         </span>
         <div className="flex items-center gap-2 mt-0.5">
           <span className="text-[10px] text-white/40 shrink-0">
             {typeCount} types &middot; {loadedCount}
           </span>
-          <ProgressBar value={loadedCount} max={maxLoaded} color={scopeColor} size="sm" className="w-12" />
+          <ProgressBar value={loadedCount} max={maxLoaded} color={realmColor} size="sm" className="w-12" />
         </div>
       </div>
     </div>
@@ -304,7 +304,7 @@ export const ExpandedBreakdown = memo(function ExpandedBreakdown({
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
 }) {
-  const { nodes, edges, isSchemaMode, scopeCounts, subcategoryCounts } = useFilteredGraph();
+  const { nodes, edges, isSchemaMode, realmCounts, layerCounts } = useFilteredGraph();
 
   const nodeTypeCounts = useMemo(() => {
     const counts = new Map<string, number>();
@@ -345,25 +345,25 @@ export const ExpandedBreakdown = memo(function ExpandedBreakdown({
 
   // Type counts per scope (static: how many distinct node types belong to each scope)
   const scopeTypeCounts = useMemo(() => {
-    const counts: Record<string, number> = { Global: 0, Project: 0, Shared: 0 };
-    for (const scope of Object.values(NODE_SCOPES)) {
+    const counts: Record<string, number> = { global: 0, project: 0, shared: 0 };
+    for (const scope of Object.values(NODE_REALMS)) {
       if (scope in counts) counts[scope]++;
     }
     return counts;
   }, []);
 
   // Type counts per subcategory (static: how many distinct node types per subcategory)
-  const subcategoryTypeCounts = useMemo(() => {
+  const layerTypeCounts = useMemo(() => {
     const counts: Record<string, number> = {};
-    for (const subcat of Object.values(NODE_SUBCATEGORIES)) {
+    for (const subcat of Object.values(NODE_LAYERS)) {
       counts[subcat] = (counts[subcat] || 0) + 1;
     }
     return counts;
   }, []);
 
   // Max loaded counts for progress bar scaling
-  const maxScopeLoaded = Math.max(scopeCounts.Global, scopeCounts.Project, scopeCounts.Shared, 1);
-  const maxSubcategoryLoaded = Math.max(...Object.values(subcategoryCounts), 1);
+  const maxScopeLoaded = Math.max(realmCounts.global, realmCounts.project, realmCounts.shared, 1);
+  const maxLayerLoaded = Math.max(...Object.values(layerCounts), 1);
 
   const showNodes = view === 'nodes' || view === 'all';
   const showRelations = view === 'relations' || view === 'all';
@@ -389,22 +389,22 @@ export const ExpandedBreakdown = memo(function ExpandedBreakdown({
                 {/* Level 1: Scope Hero Cards - full-width, stacked */}
                 <SectionHeader icon={NodeIcon} label="scopes" count={3} />
                 <div className="flex flex-col gap-2 mb-3">
-                  <ScopeHeroCard scope="Global" typeCount={scopeTypeCounts.Global} loadedCount={scopeCounts.Global} maxLoaded={maxScopeLoaded} index={0} />
-                  <ScopeHeroCard scope="Project" typeCount={scopeTypeCounts.Project} loadedCount={scopeCounts.Project} maxLoaded={maxScopeLoaded} index={1} />
-                  <ScopeHeroCard scope="Shared" typeCount={scopeTypeCounts.Shared} loadedCount={scopeCounts.Shared} maxLoaded={maxScopeLoaded} index={2} />
+                  <ScopeHeroCard scope="global" typeCount={scopeTypeCounts.global} loadedCount={realmCounts.global} maxLoaded={maxScopeLoaded} index={0} />
+                  <ScopeHeroCard scope="project" typeCount={scopeTypeCounts.project} loadedCount={realmCounts.project} maxLoaded={maxScopeLoaded} index={1} />
+                  <ScopeHeroCard scope="shared" typeCount={scopeTypeCounts.shared} loadedCount={realmCounts.shared} maxLoaded={maxScopeLoaded} index={2} />
                 </div>
 
-                {/* Level 2: Subcategory Cards - 2-col grid */}
+                {/* Level 2: Layer Cards - 2-col grid */}
                 <div className="h-px bg-white/[0.04] mb-2.5" />
-                <SectionHeader icon={NodeIcon} label="subcategories" count={9} />
+                <SectionHeader icon={NodeIcon} label="layers" count={9} />
                 <div className="grid grid-cols-2 gap-1.5 mb-3">
                   {(['config', 'knowledge', 'foundation', 'structure', 'semantic', 'instruction', 'output', 'seo', 'geo'] as const).map((subcat, i) => (
-                    <SubcategoryCard
+                    <LayerCard
                       key={subcat}
-                      subcategory={subcat}
-                      typeCount={subcategoryTypeCounts[subcat] || 0}
-                      loadedCount={subcategoryCounts[subcat]}
-                      maxLoaded={maxSubcategoryLoaded}
+                      layer={subcat}
+                      typeCount={layerTypeCounts[subcat] || 0}
+                      loadedCount={layerCounts[subcat]}
+                      maxLoaded={maxLayerLoaded}
                       index={i}
                     />
                   ))}

@@ -1,33 +1,12 @@
 // packages/core/src/graph/types.ts
 // NovaNet Graph Module Types - Schema visualization structures
-// v1.0.0
+// v9.0.0
 
-import type { NodeType, Scope } from '../types/nodes.js';
+import type { NodeType, Realm, Layer } from '../types/nodes.js';
 import type { RelationType } from '../schemas/relations.schema.js';
 
-// =============================================================================
-// SUBCATEGORY (9 subcategories across 3 scopes)
-// TODO(v9): Rename Subcategory -> Layer, SubcategoryMeta -> LayerMeta
-// TODO(v9): Rename ScopeDefinition -> RealmDefinition
-// =============================================================================
-
-/**
- * Subcategory within a scope (from _index.yaml hierarchy)
- * Each NodeType belongs to exactly one subcategory
- */
-export type Subcategory =
-  // Project scope (5 subcategories) - source: models/nodes/project/
-  | 'foundation'   // Project, BrandIdentity, ProjectL10n
-  | 'structure'    // Page, Block
-  | 'semantic'     // Concept, ConceptL10n
-  | 'instruction'  // PageType, PagePrompt, BlockType, BlockPrompt, BlockRules
-  | 'output'       // PageL10n, BlockL10n
-  // Global scope (2 subcategories)
-  | 'config'       // Locale
-  | 'knowledge'    // 14 LocaleKnowledge nodes
-  // Shared scope (2 subcategories)
-  | 'seo'          // SEOKeywordL10n, SEOKeywordMetrics, SEOMiningRun
-  | 'geo';         // GEOSeedL10n, GEOSeedMetrics, GEOMiningRun
+// Re-export Layer for auto-generated files that import from here
+export type { Layer } from '../types/nodes.js';
 
 // =============================================================================
 // SCHEMA NODE - Represents a NodeType in the ontology
@@ -42,16 +21,16 @@ export interface SchemaNode {
   id: string;
   /** The NodeType this represents */
   nodeType: NodeType;
-  /** Scope (Global, Shared, Project) */
-  scope: Scope;
-  /** Subcategory within the scope */
-  subcategory: Subcategory;
+  /** Realm (global, shared, project) */
+  realm: Realm;
+  /** Layer within the realm */
+  layer: Layer;
   /** Human-readable label */
   label: string;
   /** Description of this node type */
   description: string;
-  /** Locale behavior (invariant, localized, localeKnowledge, derived, job) */
-  behavior: string;
+  /** Trait (invariant, localized, knowledge, derived, job) */
+  trait: string;
   /** Optional icon for display */
   icon?: string;
   /** Optional color for display */
@@ -84,42 +63,42 @@ export interface SchemaEdge {
 }
 
 // =============================================================================
-// SUBCATEGORY METADATA
+// LAYER METADATA
 // =============================================================================
 
 /**
- * Metadata for a subcategory
+ * Metadata for a layer
  */
-export interface SubcategoryMeta {
+export interface LayerMeta {
   /** Display label */
   label: string;
-  /** Description of this subcategory */
+  /** Description of this layer */
   description: string;
   /** Icon for display */
   icon: string;
-  /** NodeTypes belonging to this subcategory */
+  /** NodeTypes belonging to this layer */
   nodeTypes: NodeType[];
 }
 
 // =============================================================================
-// SCOPE DEFINITION
+// REALM DEFINITION
 // =============================================================================
 
 /**
- * Scope hierarchy definition.
- * Contains all subcategories and their metadata for a scope.
+ * Realm hierarchy definition.
+ * Contains all layers and their metadata for a realm.
  */
-export interface ScopeDefinition {
-  /** The scope name */
-  scope: Scope;
+export interface RealmDefinition {
+  /** The realm name */
+  realm: Realm;
   /** Display label (uppercase) */
   label: string;
   /** Icon for display */
   icon: string;
-  /** Description of this scope */
+  /** Description of this realm */
   description: string;
-  /** Subcategories within this scope */
-  subcategories: Record<Subcategory, SubcategoryMeta>;
+  /** Layers within this realm */
+  layers: Record<Layer, LayerMeta>;
 }
 
 // =============================================================================
@@ -131,8 +110,8 @@ export interface ScopeDefinition {
  * Used by visualizers that need grouped layout (like Studio).
  */
 export interface HierarchicalSchemaData {
-  /** All 3 scope definitions */
-  scopes: Record<Scope, ScopeDefinition>;
+  /** All 3 realm definitions */
+  realms: Record<Realm, RealmDefinition>;
   /** All schema nodes (35 nodes) */
   nodes: SchemaNode[];
   /** All schema edges (~89 edges expanded from 50 relation types) */
@@ -143,8 +122,8 @@ export interface HierarchicalSchemaData {
     totalNodes: number;
     /** Total number of edges */
     totalEdges: number;
-    /** Node counts per scope */
-    nodesByScope: Record<Scope, number>;
+    /** Node counts per realm */
+    nodesByRealm: Record<Realm, number>;
   };
 }
 

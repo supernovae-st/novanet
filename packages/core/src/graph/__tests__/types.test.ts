@@ -1,17 +1,19 @@
 // packages/core/src/graph/__tests__/types.test.ts
+// Tests for graph types — v9.0.0
 import { describe, it, expect } from 'vitest';
-import type { SchemaNode, SchemaEdge, Subcategory, ScopeDefinition } from '../types';
+import type { SchemaNode, SchemaEdge, RealmDefinition } from '../types';
+import type { Layer } from '../../types/nodes';
 
 describe('graph/types', () => {
   it('should export SchemaNode interface', () => {
     const node: SchemaNode = {
       id: 'schema-Project',
       nodeType: 'Project',
-      scope: 'Project',
-      subcategory: 'foundation',
+      realm: 'project',
+      layer: 'foundation',
       label: 'Project',
       description: 'Project node',
-      behavior: 'invariant',
+      trait: 'invariant',
     };
     expect(node.nodeType).toBe('Project');
   });
@@ -29,36 +31,36 @@ describe('graph/types', () => {
     expect(edge.relationType).toBe('HAS_PAGE');
   });
 
-  it('should export Subcategory type with all values', () => {
-    const subcats: Subcategory[] = [
+  it('should export Layer type with all values', () => {
+    const layers: Layer[] = [
       'foundation', 'structure', 'semantic', 'instruction', 'output',
       'config', 'knowledge',
       'seo', 'geo'
     ];
-    expect(subcats).toHaveLength(9);
+    expect(layers).toHaveLength(9);
   });
 
-  it('should export ScopeDefinition interface', () => {
-    const scopeDef: ScopeDefinition = {
-      scope: 'Project',
+  it('should export RealmDefinition interface', () => {
+    const realmDef: RealmDefinition = {
+      realm: 'project',
       label: 'PROJECT',
       icon: '📦',
       description: 'Project-specific content and structure',
-      subcategories: {} as ScopeDefinition['subcategories'],
+      layers: {} as RealmDefinition['layers'],
     };
-    expect(scopeDef.scope).toBe('Project');
-    expect(scopeDef.label).toBe('PROJECT');
+    expect(realmDef.realm).toBe('project');
+    expect(realmDef.label).toBe('PROJECT');
   });
 
   it('should allow optional properties on SchemaNode', () => {
     const node: SchemaNode = {
       id: 'schema-Locale',
       nodeType: 'Locale',
-      scope: 'Global',
-      subcategory: 'config',
+      realm: 'global',
+      layer: 'config',
       label: 'Locale',
       description: 'Locale configuration',
-      behavior: 'invariant',
+      trait: 'invariant',
       icon: '🌍',
       color: '#10b981',
     };

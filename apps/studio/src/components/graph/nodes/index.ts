@@ -32,5 +32,5 @@ export {
 } from './NodeHoverEffect';
 
 // Attractor nodes for magnetic grouping layout
-export { ScopeAttractorNode, type ScopeAttractorData, type ScopeAttractorNodeType } from './ScopeAttractorNode';
-export { SubcategoryAttractorNode, type SubcategoryAttractorData, type SubcategoryAttractorNodeType } from './SubcategoryAttractorNode';
+export { RealmAttractorNode, type RealmAttractorData, type RealmAttractorNodeType } from './RealmAttractorNode';
+export { LayerAttractorNode, type LayerAttractorData, type LayerAttractorNodeType } from './LayerAttractorNode';

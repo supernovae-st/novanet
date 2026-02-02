@@ -28,12 +28,13 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
-import { SCOPE_HIERARCHY } from '@novanet/core/graph';
-import type { Subcategory } from '@novanet/core/graph';
-import { RelationType, type Scope } from '@/types';
+import { REALM_HIERARCHY } from '@novanet/core/graph';
+import type { Layer } from '@novanet/core/graph';
+import { Realm } from '@novanet/core/types';
+import { RelationType } from '@novanet/core/schemas';
 import { useFilterStore } from '@/stores/filterStore';
 import { cn } from '@/lib/utils';
-import { scopeAccents, iconSizes } from '@/design/tokens';
+import { realmAccents, iconSizes } from '@/design/tokens';
 import { calculateCheckboxState } from '@/hooks';
 import type { CheckboxState } from '@/components/ui/TriStateCheckbox';
 import { SegmentedTabs } from '@/components/ui/SegmentedTabs';
@@ -43,15 +44,15 @@ import { AiSearchInput } from './AiSearchInput';
 // Tab definitions
 type SchemaTabId = 'types' | 'rels';
 
-// Scope to Lucide icon mapping
-const SCOPE_ICONS: Record<Scope, LucideIcon> = {
-  Project: Package,
-  Global: Globe,
-  Shared: Target,
+// Realm to Lucide icon mapping
+const REALM_ICONS: Record<Realm, LucideIcon> = {
+  project: Package,
+  global: Globe,
+  shared: Target,
 };
 
-// Subcategory to Lucide icon mapping
-const SUBCATEGORY_ICONS: Record<Subcategory, LucideIcon> = {
+// Layer to Lucide icon mapping
+const LAYER_ICONS: Record<Layer, LucideIcon> = {
   foundation: Landmark,
   structure: Layers,
   semantic: Lightbulb,
@@ -63,14 +64,14 @@ const SUBCATEGORY_ICONS: Record<Subcategory, LucideIcon> = {
   geo: Globe2,
 };
 
-// Ordered scopes for consistent rendering
-const SCOPE_ORDER: Scope[] = ['Project', 'Global', 'Shared'];
+// Ordered realms for consistent rendering
+const REALM_ORDER: Realm[] = ['project', 'global', 'shared'];
 
-// Map scope names to accent keys
-const SCOPE_ACCENT_MAP: Record<Scope, keyof typeof scopeAccents> = {
-  Project: 'project',
-  Global: 'global',
-  Shared: 'shared',
+// Map realm names to accent keys
+const REALM_ACCENT_MAP: Record<Realm, keyof typeof realmAccents> = {
+  project: 'project',
+  global: 'global',
+  shared: 'shared',
 };
 
 export interface SchemaFilterPanelProps {
@@ -83,14 +84,14 @@ export const SchemaFilterPanel = memo(function SchemaFilterPanel({
   const [activeTab, setActiveTab] = useState<SchemaTabId>('types');
 
   const {
-    toggleSubcategoryCollapsed,
-    isSubcategoryCollapsed,
-    setSubcategoryCollapsed,
+    toggleLayerCollapsed,
+    isLayerCollapsed,
+    setLayerCollapsed,
   } = useFilterStore(
     useShallow((state) => ({
-      toggleSubcategoryCollapsed: state.toggleSubcategoryCollapsed,
-      isSubcategoryCollapsed: state.isSubcategoryCollapsed,
-      setSubcategoryCollapsed: state.setSubcategoryCollapsed,
+      toggleLayerCollapsed: state.toggleLayerCollapsed,
+      isLayerCollapsed: state.isLayerCollapsed,
+      setLayerCollapsed: state.setLayerCollapsed,
     }))
   );
 
@@ -105,104 +106,104 @@ export const SchemaFilterPanel = memo(function SchemaFilterPanel({
     { id: 'rels' as const, label: 'Rels', count: relCount },
   ], [relCount]);
 
-  // Memoize scope data
-  const scopeData = useMemo(() => {
-    return SCOPE_ORDER.map((scope) => {
-      const scopeDef = SCOPE_HIERARCHY[scope];
-      const accentKey = SCOPE_ACCENT_MAP[scope];
-      const accent = scopeAccents[accentKey];
-      const subcategories = Object.entries(scopeDef.subcategories) as [
-        Subcategory,
-        (typeof scopeDef.subcategories)[Subcategory],
+  // Memoize realm data
+  const realmData = useMemo(() => {
+    return REALM_ORDER.map((realm) => {
+      const scopeDef = REALM_HIERARCHY[realm];
+      const accentKey = REALM_ACCENT_MAP[realm];
+      const accent = realmAccents[accentKey];
+      const layers = Object.entries(scopeDef.layers) as [
+        Layer,
+        (typeof scopeDef.layers)[Layer],
       ][];
-      const nodeCount = subcategories.reduce(
+      const nodeCount = layers.reduce(
         (sum, [, subcat]) => sum + subcat.nodeTypes.length,
         0
       );
 
       return {
-        scope,
-        scopeDef,
+        realm,
+        realmDef: scopeDef,
         accent,
-        subcategories,
+        layers,
         nodeCount,
       };
     });
   }, []);
 
-  // Get visible subcategories as a Set for checkbox state calculation
-  const getVisibleSubcategories = useCallback(
-    (scope: Scope): Set<string> => {
-      const scopeDef = SCOPE_HIERARCHY[scope];
-      const subcatNames = Object.keys(scopeDef.subcategories) as Subcategory[];
+  // Get visible layers as a Set for checkbox state calculation
+  const getVisibleLayers = useCallback(
+    (realm: Realm): Set<string> => {
+      const realmDef = REALM_HIERARCHY[realm];
+      const layerNames = Object.keys(realmDef.layers) as Layer[];
       const visible = new Set<string>();
-      subcatNames.forEach((name) => {
-        if (!isSubcategoryCollapsed(scope, name)) {
+      layerNames.forEach((name) => {
+        if (!isLayerCollapsed(realm, name)) {
           visible.add(name);
         }
       });
       return visible;
     },
-    [isSubcategoryCollapsed]
+    [isLayerCollapsed]
   );
 
-  // Calculate checkbox state for a scope
-  const getScopeCheckboxState = useCallback(
-    (scope: Scope): CheckboxState => {
-      const scopeDef = SCOPE_HIERARCHY[scope];
-      const subcatNames = Object.keys(scopeDef.subcategories) as Subcategory[];
-      const visible = getVisibleSubcategories(scope);
-      return calculateCheckboxState(subcatNames, visible);
+  // Calculate checkbox state for a realm
+  const getRealmCheckboxState = useCallback(
+    (realm: Realm): CheckboxState => {
+      const realmDef = REALM_HIERARCHY[realm];
+      const layerNames = Object.keys(realmDef.layers) as Layer[];
+      const visible = getVisibleLayers(realm);
+      return calculateCheckboxState(layerNames, visible);
     },
-    [getVisibleSubcategories]
+    [getVisibleLayers]
   );
 
-  // Handle scope checkbox click
-  const handleScopeCheckboxClick = useCallback(
-    (scope: Scope) => {
-      const scopeDef = SCOPE_HIERARCHY[scope];
-      const subcatNames = Object.keys(scopeDef.subcategories) as Subcategory[];
-      const currentState = getScopeCheckboxState(scope);
+  // Handle realm checkbox click
+  const handleRealmCheckboxClick = useCallback(
+    (realm: Realm) => {
+      const realmDef = REALM_HIERARCHY[realm];
+      const layerNames = Object.keys(realmDef.layers) as Layer[];
+      const currentState = getRealmCheckboxState(realm);
 
       const shouldCollapse = currentState !== 'none';
-      subcatNames.forEach((name) => {
-        setSubcategoryCollapsed(scope, name, shouldCollapse);
+      layerNames.forEach((name) => {
+        setLayerCollapsed(realm, name, shouldCollapse);
       });
     },
-    [getScopeCheckboxState, setSubcategoryCollapsed]
+    [getRealmCheckboxState, setLayerCollapsed]
   );
 
   // Render Types tab content
   const renderTypesContent = () => (
     <Sidebar.Tree showProgressBars={false} maxCount={35}>
-      {scopeData.map(({ scope, scopeDef, accent, subcategories, nodeCount }) => {
-        const ScopeIcon = SCOPE_ICONS[scope];
+      {realmData.map(({ realm, realmDef, accent, layers, nodeCount }) => {
+        const RealmIcon = REALM_ICONS[realm];
         return (
           <Sidebar.Section
-            key={scope}
-            id={scope.toLowerCase()}
-            label={scopeDef.label}
-            icon={<ScopeIcon className={iconSizes.sm} />}
+            key={realm}
+            id={realm}
+            label={realmDef.label}
+            icon={<RealmIcon className={iconSizes.sm} />}
             color={accent.color}
-            checkboxState={getScopeCheckboxState(scope)}
-            onCheckboxClick={() => handleScopeCheckboxClick(scope)}
+            checkboxState={getRealmCheckboxState(realm)}
+            onCheckboxClick={() => handleRealmCheckboxClick(realm)}
             count={nodeCount}
             defaultExpanded
           >
-            {subcategories.map(([subcatName, subcatMeta]) => {
-              const isVisible = !isSubcategoryCollapsed(scope, subcatName);
-              const SubcatIcon = SUBCATEGORY_ICONS[subcatName];
+            {layers.map(([layerName, layerMeta]) => {
+              const isVisible = !isLayerCollapsed(realm, layerName);
+              const LayerIcon = LAYER_ICONS[layerName];
 
               return (
                 <Sidebar.Row
-                  key={subcatName}
-                  id={`${scope}-${subcatName}`}
-                  label={subcatMeta.label}
-                  icon={<SubcatIcon className={iconSizes.sm} />}
+                  key={layerName}
+                  id={`${realm}-${layerName}`}
+                  label={layerMeta.label}
+                  icon={<LayerIcon className={iconSizes.sm} />}
                   color={accent.color}
                   isSelected={isVisible}
-                  onToggle={() => toggleSubcategoryCollapsed(scope, subcatName)}
-                  count={subcatMeta.nodeTypes.length}
+                  onToggle={() => toggleLayerCollapsed(realm, layerName)}
+                  count={layerMeta.nodeTypes.length}
                 />
               );
             })}

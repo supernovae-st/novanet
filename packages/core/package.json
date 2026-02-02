@@ -33,18 +33,10 @@
   },
   "scripts": {
     "build": "tsc",
-    "seed": "tsx scripts/seed.ts",
-    "seed:reset": "tsx scripts/seed.ts --reset",
-    "import:locale-knowledge": "tsx scripts/import-locale-knowledge.ts",
+    "type-check": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "lint": "eslint src scripts --ext .ts",
-    "validate": "npm run validate:schema && npm run validate:version && npm run validate:relations",
-    "validate:schema": "tsx scripts/validate-schema.ts",
-    "validate:version": "tsx scripts/validate-version.ts",
-    "validate:relations": "tsx scripts/validate-relations.ts",
-    "generate:docs": "tsx scripts/generate-docs.ts",
-    "validate:docs": "tsx scripts/validate-docs.ts"
+    "lint": "eslint src --ext .ts"
   },
   "dependencies": {
     "neo4j-driver": "^5.28.1",
