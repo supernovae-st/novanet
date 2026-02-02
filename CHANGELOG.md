@@ -7,21 +7,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
-### Changed
-- **Phase 5 complete**: Migrated `config/categoryColors.ts` to `design/nodeColors.ts` — all 5 imports updated, zero legacy references
-- **Phase 6 complete**: Verified ViewPicker context-awareness (13 views with `modes` field), keyboard presets T/E (Trait cycle + EdgeFamily cycle + help modal)
-- **Phase 7B complete**: Advanced TUI — boot animation, effects engine (CRT/shake/glitch/pulse), onboarding (welcome + guided tour)
-- **Phase 8 audit**: Removed dead code (magnetic schemaLayout, neo4j functions), fixed validate-types v9 references
-
-### Removed
-- Dead `schemaLayouts/magnetic.ts` module (220 lines) — magnetic feature uses hooks, not this layout algorithm
-- Dead `closeDriver()` and `verifyConnectionStrict()` from neo4j.ts
-- `NODE_CATEGORIES` references from validate-types.ts (replaced by Layer in v9)
-
-### Pending
-- Phase 8: Performance benchmarks, code review, GitHub Release v9.0.0
-
-## [9.0.0-rc.1] - 2026-02-02
+## [9.0.0] - 2026-02-02
 
 ### Breaking Changes
 - **Ontology v9**: Scope → Realm, Subcategory → Layer, NodeTypeMeta → Kind
@@ -49,6 +35,15 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
   - Taxonomy tree (Realm > Layer > Kind), mode toggle (1/2/3/4)
   - Async Neo4j queries via mpsc channel bridge
   - Deep space color palette, status bar, detail pane
+- **Advanced TUI** (Phase 7B): Mission control cockpit
+  - Search + detail pane (nucleo fuzzy, edge explorer)
+  - CRUD dialogs (node create/edit/delete, relation CRUD)
+  - Galaxy visual theme (deep space palette)
+  - Dashboard mode (Neo4j stats, realm/family charts)
+  - Boot animation (6-stage: matrix rain, logo reveal, fade)
+  - Command palette (fuzzy search, 11 commands, 5 categories)
+  - Onboarding flow (welcome screen, 5-step guided tour)
+  - Wow effects (CRT scanlines, screen shake, glitch transitions, nebula pulse)
 - **3 new meta-node types**: Trait (5 values), EdgeFamily (5 families), EdgeKind (50 relationships)
 - **OF_KIND instance bridge**: Replaces IN_SUBCATEGORY
 - **`:Meta` double-label**: All meta-nodes discoverable via `MATCH (n:Meta)`
@@ -62,6 +57,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - **8 Neo4j facet property indexes** for Kind, EdgeKind, L10n quality/fingerprint
 
 ### Changed
+- Migrated `config/categoryColors.ts` to `design/nodeColors.ts` — all 5 imports updated
 - Studio components renamed: ScopeGroupNode → RealmGroupNode, SubcategoryGroupNode → LayerGroupNode
 - Studio stores: `collapsedScopes` → `collapsedRealms`, `collapsedSubcategories` → `collapsedLayers`
 - ViewCategory: `'scope'` → `'overview'`
@@ -81,6 +77,9 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - `NodeCategory` type — replaced by Layer
 - `IN_SUBCATEGORY` relationship — replaced by OF_KIND
 - v8 meta-labels: Scope, Subcategory, NodeTypeMeta
+- Dead `schemaLayouts/magnetic.ts` module (220 lines)
+- Dead `closeDriver()` and `verifyConnectionStrict()` from neo4j.ts
+- `NODE_CATEGORIES` references from validate-types.ts (replaced by Layer)
 
 ## [8.3.0] - 2026-02-01
 
@@ -149,8 +148,8 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Migrated from git submodules to true monorepo
 - Organization links updated to supernovae-st
 
-[Unreleased]: https://github.com/supernovae-st/novanet-dev/compare/v9.0.0-rc.1...HEAD
-[9.0.0-rc.1]: https://github.com/supernovae-st/novanet-dev/compare/v8.3.0...v9.0.0-rc.1
+[Unreleased]: https://github.com/supernovae-st/novanet-dev/compare/v9.0.0...HEAD
+[9.0.0]: https://github.com/supernovae-st/novanet-dev/compare/v8.3.0...v9.0.0
 [8.3.0]: https://github.com/supernovae-st/novanet-dev/compare/v8.2.0...v8.3.0
 [8.2.0]: https://github.com/supernovae-st/novanet-dev/compare/v8.1.0...v8.2.0
 [8.1.0]: https://github.com/supernovae-st/novanet-dev/compare/v8.0.0...v8.1.0
