@@ -1,4 +1,4 @@
-// NovaNet Constraints v8.2.0
+// NovaNet Constraints v9.0.0
 //
 // Schema definitions for Neo4j graph database.
 // Uses IF NOT EXISTS for idempotent execution.
@@ -104,10 +104,13 @@ CREATE INDEX infl_weight IF NOT EXISTS FOR ()-[r:INFLUENCED_BY]-() ON (r.weight)
 CREATE INDEX gen_date IF NOT EXISTS FOR ()-[r:GENERATED]-() ON (r.generated_at);
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// ORGANIZING PRINCIPLES (v8.3.0)
-// Meta-schema nodes that describe the taxonomy structure
+// META-GRAPH (v9.0.0)
+// Faceted classification: Realm, Layer, Kind, Trait, EdgeFamily, EdgeKind
 // ═══════════════════════════════════════════════════════════════════════════════
 
-CREATE CONSTRAINT scope_key IF NOT EXISTS FOR (s:Scope) REQUIRE s.key IS UNIQUE;
-CREATE CONSTRAINT subcategory_key IF NOT EXISTS FOR (sub:Subcategory) REQUIRE sub.key IS UNIQUE;
-CREATE CONSTRAINT nodetypemeta_label IF NOT EXISTS FOR (ntm:NodeTypeMeta) REQUIRE ntm.label IS UNIQUE;
+CREATE CONSTRAINT realm_key IF NOT EXISTS FOR (r:Realm) REQUIRE r.key IS UNIQUE;
+CREATE CONSTRAINT layer_key IF NOT EXISTS FOR (l:Layer) REQUIRE l.key IS UNIQUE;
+CREATE CONSTRAINT kind_label IF NOT EXISTS FOR (k:Kind) REQUIRE k.label IS UNIQUE;
+CREATE CONSTRAINT trait_key IF NOT EXISTS FOR (t:Trait) REQUIRE t.key IS UNIQUE;
+CREATE CONSTRAINT edgefamily_key IF NOT EXISTS FOR (ef:EdgeFamily) REQUIRE ef.key IS UNIQUE;
+CREATE CONSTRAINT edgekind_type IF NOT EXISTS FOR (ek:EdgeKind) REQUIRE ek.type IS UNIQUE;

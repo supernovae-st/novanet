@@ -27,10 +27,10 @@ export const Z_INDEX = {
   SCOPE_SHARED: 10,
   SCOPE_GLOBAL: 20,
   SCOPE_PROJECT: 30,
-  /** Subcategory containers - slightly above their parent scope */
-  SUBCAT_SHARED: 15,
-  SUBCAT_GLOBAL: 25,
-  SUBCAT_PROJECT: 35,
+  /** Layer containers - slightly above their parent realm */
+  LAYER_SHARED: 15,
+  LAYER_GLOBAL: 25,
+  LAYER_PROJECT: 35,
   /** Regular nodes base level (always above containers) */
   BASE: 1000,
   /** Nodes connected to hovered edge */
@@ -90,14 +90,14 @@ function getBaseZIndex(node: ReactFlowNode): number {
     return Z_INDEX.SCOPE_SHARED; // fallback
   }
 
-  // Subcategory containers: subcat-{Scope}-{SubcategoryName}
-  if (id.startsWith('subcat-')) {
-    const parts = id.replace('subcat-', '').split('-');
+  // Layer containers: layer-{Realm}-{LayerName}
+  if (id.startsWith('layer-')) {
+    const parts = id.replace('layer-', '').split('-');
     const scope = parts[0];
-    if (scope === 'Shared') return Z_INDEX.SUBCAT_SHARED;
-    if (scope === 'Global') return Z_INDEX.SUBCAT_GLOBAL;
-    if (scope === 'Project') return Z_INDEX.SUBCAT_PROJECT;
-    return Z_INDEX.SUBCAT_SHARED; // fallback
+    if (scope === 'Shared') return Z_INDEX.LAYER_SHARED;
+    if (scope === 'Global') return Z_INDEX.LAYER_GLOBAL;
+    if (scope === 'Project') return Z_INDEX.LAYER_PROJECT;
+    return Z_INDEX.LAYER_SHARED; // fallback
   }
 
   // Regular nodes - always above containers
@@ -113,13 +113,13 @@ export function useGraphInteractions<T extends ReactFlowNode = ReactFlowNode>({
 }: UseGraphInteractionsOptions<T>): UseGraphInteractionsReturn {
   /**
    * Bring a node to front (selected z-index)
-   * IMPORTANT: Containers (scope, subcat) should NOT be brought to front
+   * IMPORTANT: Containers (realm, layer) should NOT be brought to front
    * They must stay behind regular nodes to maintain the layering hierarchy
    */
   const bringToFront = useCallback(
     (nodeId: string) => {
       // Skip z-index change for containers - they should stay in their layer
-      const isContainer = nodeId.startsWith('scope-') || nodeId.startsWith('subcat-');
+      const isContainer = nodeId.startsWith('scope-') || nodeId.startsWith('layer-');
       if (isContainer) return;
 
       setNodes((nodes) =>
@@ -134,13 +134,13 @@ export function useGraphInteractions<T extends ReactFlowNode = ReactFlowNode>({
 
   /**
    * Set node to hover z-index (slightly below selected)
-   * IMPORTANT: Containers (scope, subcat) should NOT be brought to front on hover
+   * IMPORTANT: Containers (realm, layer) should NOT be brought to front on hover
    * They must stay behind regular nodes to maintain the layering hierarchy
    */
   const setHoverZIndex = useCallback(
     (nodeId: string) => {
       // Skip z-index change for containers - they should stay in their layer
-      const isContainer = nodeId.startsWith('scope-') || nodeId.startsWith('subcat-');
+      const isContainer = nodeId.startsWith('scope-') || nodeId.startsWith('layer-');
       if (isContainer) return;
 
       setNodes((nodes) =>

@@ -90,11 +90,11 @@ export function applyStackedLayout(
     const layerWidth = (realmWidth - REALM_PADDING * 2 - (layerEntries.length - 1) * LAYER_GAP) / layerEntries.length;
 
     for (const [layerName, layerMeta] of layerEntries) {
-      const layerId = `subcat-${realm}-${layerName}`;
+      const layerId = `layer-${realm}-${layerName}`;
       const rows = Math.ceil(layerMeta.nodeTypes.length / MAX_NODES_PER_ROW);
       const layerHeight = rows * (NODE_HEIGHT + NODE_GAP) + LAYER_PADDING * 2 + LAYER_HEADER;
 
-      // Subcategory group
+      // Layer group
       nodes.push({
         id: layerId,
         type: 'layerGroup',

@@ -104,8 +104,8 @@ pnpm test            # Tests
 | `4` | Concept Network - Concepts and semantic links |
 | `5` | Prompts & Rules - AI instructions and validation rules |
 | `6` | SEO & GEO - Search optimization data |
-| `7` | High Priority - Critical and high priority nodes |
-| `8` | Realtime Content - Nodes requiring frequent updates |
+| `7` | Invariant Types - Nodes that do not change between locales |
+| `8` | Localized Content - Nodes generated natively per locale |
 | `0` | All Nodes - Show everything |
 
 **Graph Interaction**

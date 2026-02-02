@@ -444,13 +444,13 @@ function Graph2DInner({
           else if (scope === 'Global') zIndex = Z_INDEX.SCOPE_GLOBAL;
           else if (scope === 'Project') zIndex = Z_INDEX.SCOPE_PROJECT;
         }
-        // Subcategory containers: subcat-{Scope}-{SubcategoryName}
-        else if (node.id.startsWith('subcat-')) {
-          const parts = node.id.replace('subcat-', '').split('-');
+        // Layer containers: layer-{Realm}-{LayerName}
+        else if (node.id.startsWith('layer-')) {
+          const parts = node.id.replace('layer-', '').split('-');
           const scope = parts[0];
-          if (scope === 'Shared') zIndex = Z_INDEX.SUBCAT_SHARED;
-          else if (scope === 'Global') zIndex = Z_INDEX.SUBCAT_GLOBAL;
-          else if (scope === 'Project') zIndex = Z_INDEX.SUBCAT_PROJECT;
+          if (scope === 'Shared') zIndex = Z_INDEX.LAYER_SHARED;
+          else if (scope === 'Global') zIndex = Z_INDEX.LAYER_GLOBAL;
+          else if (scope === 'Project') zIndex = Z_INDEX.LAYER_PROJECT;
         }
 
         return { ...node, zIndex };
@@ -533,8 +533,8 @@ function Graph2DInner({
       // Bring clicked node to front (z-index)
       bringSchemaNodeToFront(node.id);
 
-      // Check if this is a container node (scope or subcategory group)
-      const isContainer = node.id.startsWith('scope-') || node.id.startsWith('subcat-');
+      // Check if this is a container node (realm or layer group)
+      const isContainer = node.id.startsWith('scope-') || node.id.startsWith('layer-');
 
       // Small delay to ensure state is fully propagated before view adjustment
       // This ensures the panel width is accounted for in the calculation
@@ -644,11 +644,11 @@ function Graph2DInner({
   );
 
   // =========================================================================
-  // NODE TYPE → SUBCATEGORY MAPPING (from Neo4j via useMagneticData)
+  // NODE TYPE → LAYER MAPPING (from Neo4j via useMagneticData)
   // =========================================================================
   // Comes from DEFINES_TYPE relationships in Neo4j, seeded from YAML.
   // No hardcoded maps - all data flows: YAML → Neo4j → API → here.
-  const nodeTypeToSubcategory = magneticData?.nodeTypeMapping ?? {};
+  const nodeTypeToLayer = magneticData?.nodeTypeMapping ?? {};
 
   // PERFORMANCE: Split layout (expensive) from dimming (cheap)
   // Step 1: Compute layout ONLY when graph data or layout direction changes (expensive)
@@ -681,28 +681,28 @@ function Graph2DInner({
           shared: { x: 1000, y: 1500 },
         };
 
-        // Subcategory → scope mapping
-        const subcatToScope: Record<string, string> = {};
+        // Layer → Realm mapping
+        const layerToRealm: Record<string, string> = {};
         for (const sub of magneticData.layers) {
-          subcatToScope[sub.key] = sub.realmKey;
+          layerToRealm[sub.key] = sub.realmKey;
         }
 
-        // Compute subcategory positions (circle around scope)
-        const subcatPositions: Record<string, { x: number; y: number }> = {};
-        const subcatsByScope = new Map<string, typeof magneticData.layers>();
+        // Compute layer positions (circle around realm)
+        const layerPositions: Record<string, { x: number; y: number }> = {};
+        const layersByRealm = new Map<string, typeof magneticData.layers>();
         for (const sub of magneticData.layers) {
-          const list = subcatsByScope.get(sub.realmKey) || [];
+          const list = layersByRealm.get(sub.realmKey) || [];
           list.push(sub);
-          subcatsByScope.set(sub.realmKey, list);
+          layersByRealm.set(sub.realmKey, list);
         }
-        for (const [scopeKey, subs] of subcatsByScope) {
-          const scopePos = scopePositions[scopeKey] || { x: 0, y: 0 };
+        for (const [realmKey, subs] of layersByRealm) {
+          const realmPos = scopePositions[realmKey] || { x: 0, y: 0 };
           const radius = 500;
           subs.forEach((sub, i) => {
             const angle = (2 * Math.PI * i) / subs.length - Math.PI / 2;
-            subcatPositions[sub.key] = {
-              x: scopePos.x + radius * Math.cos(angle),
-              y: scopePos.y + radius * Math.sin(angle),
+            layerPositions[sub.key] = {
+              x: realmPos.x + radius * Math.cos(angle),
+              y: realmPos.y + radius * Math.sin(angle),
             };
           });
         }
@@ -713,13 +713,13 @@ function Graph2DInner({
         // Scope attractor nodes
         for (const scope of magneticData.realms) {
           const pos = scopePositions[scope.key];
-          // typeCount = how many nodeTypes belong to this scope (static, from schema)
-          const typeCount = Object.values(nodeTypeToSubcategory)
-            .filter(subcatKey => subcatToScope[subcatKey] === scope.key).length;
-          // loadedCount = how many loaded instances belong to this scope (dynamic)
+          // typeCount = how many nodeTypes belong to this realm (static, from schema)
+          const typeCount = Object.values(nodeTypeToLayer)
+            .filter(lk => layerToRealm[lk] === scope.key).length;
+          // loadedCount = how many loaded instances belong to this realm (dynamic)
           const loadedCount = turboNodes.filter(n => {
-            const subcat = nodeTypeToSubcategory[n.data.type];
-            return subcatToScope[subcat] === scope.key;
+            const lk = nodeTypeToLayer[n.data.type];
+            return layerToRealm[lk] === scope.key;
           }).length;
           attractorNodes.push({
             id: `realm-${scope.key}`,
@@ -742,14 +742,14 @@ function Graph2DInner({
 
         // Layer attractor nodes
         for (const sub of magneticData.layers) {
-          const pos = subcatPositions[sub.key];
+          const pos = layerPositions[sub.key];
           const parentRealm = magneticData.realms.find(s => s.key === sub.realmKey);
           // typeCount = how many nodeTypes map to this layer (static)
-          const subTypeCount = Object.values(nodeTypeToSubcategory)
+          const subTypeCount = Object.values(nodeTypeToLayer)
             .filter(v => v === sub.key).length;
           // loadedCount = how many loaded instances belong to this layer (dynamic)
           const subLoadedCount = turboNodes
-            .filter(n => nodeTypeToSubcategory[n.data.type] === sub.key).length;
+            .filter(n => nodeTypeToLayer[n.data.type] === sub.key).length;
           attractorNodes.push({
             id: `layer-${sub.key}`,
             type: 'layerAttractor',
@@ -778,13 +778,13 @@ function Graph2DInner({
         };
 
         const magneticDataNodes = turboNodes.map(node => {
-          const subcatKey = nodeTypeToSubcategory[node.data.type] || 'foundation';
-          const subcatPos = subcatPositions[subcatKey] || { x: 0, y: 0 };
+          const layerKey = nodeTypeToLayer[node.data.type] || 'foundation';
+          const layerPos = layerPositions[layerKey] || { x: 0, y: 0 };
           return {
             ...node,
             position: {
-              x: subcatPos.x + (seededRandom() - 0.5) * 400,
-              y: subcatPos.y + (seededRandom() - 0.5) * 400,
+              x: layerPos.x + (seededRandom() - 0.5) * 400,
+              y: layerPos.y + (seededRandom() - 0.5) * 400,
             },
           };
         });
@@ -953,12 +953,12 @@ function Graph2DInner({
 
       // Data node → Layer edges (OF_KIND) - faint magnetic edges
       for (const node of graphNodes) {
-        const subcatKey = nodeTypeToSubcategory[node.type];
-        if (subcatKey) {
+        const layerKey = nodeTypeToLayer[node.type];
+        if (layerKey) {
           magneticEdges.push({
-            id: `edge-${node.id}-in-layer-${subcatKey}`,
+            id: `edge-${node.id}-in-layer-${layerKey}`,
             source: node.id,
-            target: `layer-${subcatKey}`,
+            target: `layer-${layerKey}`,
             type: 'magnetic',
             data: {
               relationType: 'OF_KIND',

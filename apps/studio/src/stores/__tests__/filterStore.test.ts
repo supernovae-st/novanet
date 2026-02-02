@@ -43,8 +43,6 @@ describe('filterStore', () => {
       depthLimit: 2,
       activePresetId: DEFAULT_PRESET.id,
       customPresets: [],
-      priorityFilter: [],
-      freshnessFilter: [],
       layerFilter: [],
       activeOnly: false,
       localeFamily: null,
@@ -71,8 +69,6 @@ describe('filterStore', () => {
       expect(state.selectedProject).toBeNull();
       expect(state.selectedLocale).toBeNull();
       expect(state.searchQuery).toBe('');
-      expect(state.priorityFilter).toEqual([]);
-      expect(state.freshnessFilter).toEqual([]);
       expect(state.layerFilter).toEqual([]);
     });
   });
@@ -184,32 +180,8 @@ describe('filterStore', () => {
   });
 
   // ==========================================================================
-  // v7.2.1 Filter Actions
+  // Layer Filter Actions (v9)
   // ==========================================================================
-
-  describe('setPriorityFilter', () => {
-    it('should set priority filter', () => {
-      useFilterStore.getState().setPriorityFilter(['critical', 'high']);
-
-      expect(useFilterStore.getState().priorityFilter).toEqual(['critical', 'high']);
-    });
-
-    it('should clear active preset', () => {
-      useFilterStore.setState({ activePresetId: 'preset' });
-
-      useFilterStore.getState().setPriorityFilter(['critical']);
-
-      expect(useFilterStore.getState().activePresetId).toBeNull();
-    });
-  });
-
-  describe('setFreshnessFilter', () => {
-    it('should set freshness filter', () => {
-      useFilterStore.getState().setFreshnessFilter(['realtime', 'hourly']);
-
-      expect(useFilterStore.getState().freshnessFilter).toEqual(['realtime', 'hourly']);
-    });
-  });
 
   describe('setLayerFilter', () => {
     it('should set layer filter and update enabled node types', () => {
@@ -281,8 +253,6 @@ describe('filterStore', () => {
         searchQuery: 'test',
         depthLimit: 10,
         activePresetId: null,
-        priorityFilter: ['critical'],
-        freshnessFilter: ['realtime'],
         layerFilter: ['foundation'],
         activeOnly: true,
         localeFamily: 'en',
@@ -297,8 +267,6 @@ describe('filterStore', () => {
       expect(state.searchQuery).toBe('');
       expect(state.depthLimit).toBe(2);
       expect(state.activePresetId).toBe(DEFAULT_PRESET.id);
-      expect(state.priorityFilter).toEqual([]);
-      expect(state.freshnessFilter).toEqual([]);
       expect(state.layerFilter).toEqual([]);
       expect(state.activeOnly).toBe(false);
       expect(state.localeFamily).toBeNull();
