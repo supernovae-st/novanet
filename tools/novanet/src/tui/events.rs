@@ -7,6 +7,8 @@ use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
 
 use crate::tui::app::{ActivePanel, AppState, NavMode};
 use crate::tui::detail::{self, KindDetail};
+use crate::tui::dialogs::{DialogKind, DialogState, FieldKind};
+use crate::tui::palette::{CommandAction, PaletteState};
 use crate::tui::search::SearchState;
 use crate::tui::tree::TreeNodeType;
 
@@ -22,6 +24,10 @@ pub enum Action {
     Fetch,
     /// Trigger an async fetch for Kind detail (label).
     FetchDetail(String),
+    /// Submit the current dialog (validate + spawn mutation).
+    SubmitDialog,
+    /// Close the current dialog without submitting.
+    CloseDialog,
 }
 
 /// Handle a key event against the current app state.
@@ -51,7 +57,60 @@ pub fn handle_key(state: &mut AppState, key: KeyEvent) -> Action {
             kind_detail,
             search,
             edge_explorer_idx,
+            dialog,
+            edge_kind_keys,
+            dashboard_stats: _,
+            show_dashboard,
+            palette,
+            show_help,
         } => {
+            // When dialog overlay is active, intercept all keys
+            if let Some(dlg) = dialog.as_mut() {
+                return handle_dialog_key(dlg, key);
+            }
+
+            // When command palette is active, intercept all keys
+            if let Some(pal) = palette.as_mut() {
+                let result = handle_palette_input(pal, key);
+                match result {
+                    PaletteKeyResult::None => return Action::None,
+                    PaletteKeyResult::Render => return Action::Render,
+                    PaletteKeyResult::Close => {
+                        *palette = None;
+                        *status = format!("Mode: {}", mode.label());
+                        return Action::Render;
+                    }
+                    PaletteKeyResult::Execute(cmd_action) => {
+                        *palette = None;
+                        return execute_palette_action(
+                            cmd_action,
+                            mode,
+                            tree,
+                            status,
+                            dialog,
+                            detail_lines,
+                            kind_detail,
+                            edge_explorer_idx,
+                            show_dashboard,
+                            show_help,
+                            edge_kind_keys,
+                        );
+                    }
+                }
+            }
+
+            // When help overlay is active, only Esc or ? closes it
+            if *show_help {
+                match key.code {
+                    KeyCode::Esc | KeyCode::Char('?') => {
+                        *show_help = false;
+                        *status = format!("Mode: {}", mode.label());
+                        return Action::Render;
+                    }
+                    _ => return Action::None,
+                }
+            }
+
             // When search overlay is active, intercept all keys
             if search.is_some() {
                 return handle_search_key(
@@ -187,6 +246,17 @@ pub fn handle_key(state: &mut AppState, key: KeyEvent) -> Action {
                     Action::Render
                 }
 
+                // Dashboard toggle
+                KeyCode::Char('s') => {
+                    *show_dashboard = !*show_dashboard;
+                    *status = if *show_dashboard {
+                        "Dashboard visible".to_string()
+                    } else {
+                        "Dashboard hidden".to_string()
+                    };
+                    Action::Render
+                }
+
                 // Search overlay
                 KeyCode::Char('/') => {
                     *search = Some(SearchState::new());
@@ -194,11 +264,65 @@ pub fn handle_key(state: &mut AppState, key: KeyEvent) -> Action {
                     Action::Render
                 }
 
-                // Help
+                // Command palette
+                KeyCode::Char(':') => {
+                    *palette = Some(PaletteState::new());
+                    *status = "Command palette (type to filter, Enter to execute)".to_string();
+                    Action::Render
+                }
+
+                // CRUD dialogs
+                KeyCode::Char('n') => {
+                    let kind_labels: Vec<String> =
+                        tree.all_kinds().into_iter().map(|k| k.label).collect();
+                    let mut new_dlg =
+                        DialogState::new(DialogKind::CreateNode, &kind_labels, edge_kind_keys);
+                    // Pre-select Kind from tree selection
+                    if let Some(node) = tree.selected() {
+                        if node.node_type == TreeNodeType::Kind {
+                            if let Some(idx) = new_dlg.fields[0]
+                                .options
+                                .iter()
+                                .position(|o| o == &node.key)
+                            {
+                                new_dlg.fields[0].selected_option = idx;
+                                new_dlg.fields[0].value = node.key.clone();
+                                new_dlg.update_cypher_preview();
+                            }
+                        }
+                    }
+                    *dialog = Some(new_dlg);
+                    *status = "Create Node (Esc: cancel, Ctrl+S: submit)".to_string();
+                    Action::Render
+                }
+                // Edit/Delete gated: requires instance-level data browser (Phase 7C).
+                // Current tree shows Kind meta-nodes; using kd.label as a data node
+                // key would incorrectly target the Kind meta-node itself.
+                KeyCode::Char('E') | KeyCode::F(2) => {
+                    *status = "Edit requires data instance browser (Phase 7C)".to_string();
+                    Action::Render
+                }
+                KeyCode::Char('d') => {
+                    *status = "Delete requires data instance browser (Phase 7C)".to_string();
+                    Action::Render
+                }
+                KeyCode::Char('r') => {
+                    let kind_labels: Vec<String> =
+                        tree.all_kinds().into_iter().map(|k| k.label).collect();
+                    let from = kind_detail.as_ref().map(|kd| kd.label.clone());
+                    *dialog = Some(DialogState::new(
+                        DialogKind::CreateRelation { from_key: from },
+                        &kind_labels,
+                        edge_kind_keys,
+                    ));
+                    *status = "Create Relation (Esc: cancel, Ctrl+S: submit)".to_string();
+                    Action::Render
+                }
+
+                // Help overlay toggle
                 KeyCode::Char('?') => {
-                    *detail_lines = help_text();
-                    *kind_detail = None;
-                    *edge_explorer_idx = None;
+                    *show_help = true;
+                    *status = "Help (? or Esc to close)".to_string();
                     Action::Render
                 }
 
@@ -337,36 +461,202 @@ fn update_detail(
     }
 }
 
-fn help_text() -> Vec<String> {
-    vec![
-        "NovaNet TUI \u{2014} Keyboard Shortcuts".to_string(),
-        "".to_string(),
-        "Navigation:".to_string(),
-        "  1-4        Switch mode (Data/Meta/Overlay/Query)".to_string(),
-        "  Tab        Cycle mode".to_string(),
-        "  Left/Right Cycle panel (Tree/Detail/Cypher)".to_string(),
-        "  Up/Down    Navigate tree".to_string(),
-        "  Enter      Expand/collapse node".to_string(),
-        "  Space      Expand/collapse node".to_string(),
-        "".to_string(),
-        "Filters:".to_string(),
-        "  f          Toggle facet filter (Query mode)".to_string(),
-        "  Esc        Close popup".to_string(),
-        "".to_string(),
-        "Search:".to_string(),
-        "  /          Open fuzzy search".to_string(),
-        "  Esc        Close search".to_string(),
-        "  Enter      Select result".to_string(),
-        "".to_string(),
-        "Edge Explorer:".to_string(),
-        "  e          Toggle edge explorer (when Kind selected)".to_string(),
-        "  Up/Down    Navigate edges (when explorer open)".to_string(),
-        "".to_string(),
-        "Other:".to_string(),
-        "  ?          Show this help".to_string(),
-        "  q          Quit".to_string(),
-        "  Ctrl+C     Quit".to_string(),
-    ]
+/// Internal result from palette key processing.
+enum PaletteKeyResult {
+    None,
+    Render,
+    Close,
+    Execute(CommandAction),
+}
+
+/// Process a key event against the palette state (no access to other state fields).
+fn handle_palette_input(pal: &mut PaletteState, key: KeyEvent) -> PaletteKeyResult {
+    match key.code {
+        KeyCode::Esc => PaletteKeyResult::Close,
+        KeyCode::Enter => {
+            if let Some(action) = pal.selected_action() {
+                PaletteKeyResult::Execute(action.clone())
+            } else {
+                PaletteKeyResult::Close
+            }
+        }
+        KeyCode::Up => {
+            pal.cursor_up();
+            PaletteKeyResult::Render
+        }
+        KeyCode::Down => {
+            pal.cursor_down();
+            PaletteKeyResult::Render
+        }
+        KeyCode::Backspace => {
+            pal.pop_char();
+            PaletteKeyResult::Render
+        }
+        KeyCode::Char(c) => {
+            pal.push_char(c);
+            PaletteKeyResult::Render
+        }
+        _ => PaletteKeyResult::None,
+    }
+}
+
+/// Execute a command action selected from the palette.
+#[allow(clippy::too_many_arguments)]
+fn execute_palette_action(
+    action: CommandAction,
+    mode: &mut NavMode,
+    tree: &crate::tui::tree::TaxonomyTree,
+    status: &mut String,
+    dialog: &mut Option<DialogState>,
+    _detail_lines: &mut Vec<String>,
+    kind_detail: &mut Option<Box<KindDetail>>,
+    edge_explorer_idx: &mut Option<usize>,
+    show_dashboard: &mut bool,
+    show_help: &mut bool,
+    edge_kind_keys: &[String],
+) -> Action {
+    match action {
+        CommandAction::SwitchMode(m) => {
+            *mode = m;
+            *status = format!("Mode: {}", m.label());
+            Action::Fetch
+        }
+        CommandAction::Quit => Action::Quit,
+        CommandAction::ShowHelp => {
+            *show_help = true;
+            *status = "Help (? or Esc to close)".to_string();
+            Action::Render
+        }
+        CommandAction::Refresh => Action::Fetch,
+        CommandAction::ToggleDashboard => {
+            *show_dashboard = !*show_dashboard;
+            *status = if *show_dashboard {
+                "Dashboard visible".to_string()
+            } else {
+                "Dashboard hidden".to_string()
+            };
+            Action::Render
+        }
+        CommandAction::OpenCreateNode => {
+            let kind_labels: Vec<String> = tree.all_kinds().into_iter().map(|k| k.label).collect();
+            let mut new_dlg =
+                DialogState::new(DialogKind::CreateNode, &kind_labels, edge_kind_keys);
+            if let Some(node) = tree.selected() {
+                if node.node_type == TreeNodeType::Kind {
+                    if let Some(idx) = new_dlg.fields[0]
+                        .options
+                        .iter()
+                        .position(|o| o == &node.key)
+                    {
+                        new_dlg.fields[0].selected_option = idx;
+                        new_dlg.fields[0].value = node.key.clone();
+                        new_dlg.update_cypher_preview();
+                    }
+                }
+            }
+            *dialog = Some(new_dlg);
+            *status = "Create Node (Esc: cancel, Ctrl+S: submit)".to_string();
+            Action::Render
+        }
+        CommandAction::OpenCreateRelation => {
+            let kind_labels: Vec<String> = tree.all_kinds().into_iter().map(|k| k.label).collect();
+            let from = kind_detail.as_ref().map(|kd| kd.label.clone());
+            *dialog = Some(DialogState::new(
+                DialogKind::CreateRelation { from_key: from },
+                &kind_labels,
+                edge_kind_keys,
+            ));
+            *status = "Create Relation (Esc: cancel, Ctrl+S: submit)".to_string();
+            Action::Render
+        }
+        CommandAction::ToggleEdgeExplorer => {
+            if let Some(kd) = kind_detail.as_ref() {
+                if edge_explorer_idx.is_some() {
+                    *edge_explorer_idx = None;
+                    *status = format!("Mode: {}", mode.label());
+                } else {
+                    let total = detail::edge_count(kd);
+                    if total > 0 {
+                        *edge_explorer_idx = Some(0);
+                        *status = "Edge Explorer (e to close, Up/Down to navigate)".to_string();
+                    } else {
+                        *status = "No edges to explore".to_string();
+                    }
+                }
+            }
+            Action::Render
+        }
+    }
+}
+
+/// Handle key events when a dialog overlay is active.
+fn handle_dialog_key(dlg: &mut DialogState, key: KeyEvent) -> Action {
+    // Don't accept input while submitting (except Esc to cancel)
+    if dlg.submitting {
+        if key.code == KeyCode::Esc {
+            return Action::CloseDialog;
+        }
+        return Action::None;
+    }
+
+    match key.code {
+        KeyCode::Esc => Action::CloseDialog,
+        KeyCode::Tab => {
+            dlg.focus_next();
+            dlg.update_cypher_preview();
+            Action::Render
+        }
+        KeyCode::BackTab => {
+            dlg.focus_prev();
+            dlg.update_cypher_preview();
+            Action::Render
+        }
+        KeyCode::Up if dlg.focused_field().field_kind == FieldKind::Dropdown => {
+            dlg.focused_field_mut().option_prev();
+            dlg.update_cypher_preview();
+            Action::Render
+        }
+        KeyCode::Down if dlg.focused_field().field_kind == FieldKind::Dropdown => {
+            dlg.focused_field_mut().option_next();
+            dlg.update_cypher_preview();
+            Action::Render
+        }
+        KeyCode::Char('s') if key.modifiers.contains(KeyModifiers::CONTROL) => {
+            if dlg.is_valid() {
+                Action::SubmitDialog
+            } else {
+                Action::Render
+            }
+        }
+        KeyCode::Enter => {
+            if dlg.is_valid() {
+                Action::SubmitDialog
+            } else {
+                Action::Render
+            }
+        }
+        KeyCode::Backspace => {
+            dlg.focused_field_mut().pop_char();
+            dlg.update_cypher_preview();
+            Action::Render
+        }
+        KeyCode::Left => {
+            dlg.focused_field_mut().cursor_left();
+            Action::Render
+        }
+        KeyCode::Right => {
+            dlg.focused_field_mut().cursor_right();
+            Action::Render
+        }
+        KeyCode::Char(c) => {
+            if dlg.focused_field().is_editable() {
+                dlg.focused_field_mut().push_char(c);
+                dlg.update_cypher_preview();
+            }
+            Action::Render
+        }
+        _ => Action::None,
+    }
 }
 
 #[cfg(test)]
@@ -460,11 +750,12 @@ mod tests {
     }
 
     #[test]
-    fn help_shows_shortcuts() {
+    fn help_opens_overlay() {
         let mut state = make_ready_state();
-        handle_key(&mut state, key(KeyCode::Char('?')));
-        if let AppState::Ready { detail_lines, .. } = &state {
-            assert!(detail_lines[0].contains("Keyboard Shortcuts"));
+        let action = handle_key(&mut state, key(KeyCode::Char('?')));
+        assert!(matches!(action, Action::Render));
+        if let AppState::Ready { show_help, .. } = &state {
+            assert!(*show_help);
         }
     }
 
@@ -581,9 +872,23 @@ mod tests {
     }
 
     #[test]
-    fn help_clears_kind_detail() {
+    fn help_overlay_intercepts_keys() {
+        let mut state = make_ready_state();
+        handle_key(&mut state, key(KeyCode::Char('?')));
+        // 'q' should NOT quit when help is open
+        let action = handle_key(&mut state, key(KeyCode::Char('q')));
+        assert!(!matches!(action, Action::Quit));
+        // Esc closes help
+        let action = handle_key(&mut state, key(KeyCode::Esc));
+        assert!(matches!(action, Action::Render));
+        if let AppState::Ready { show_help, .. } = &state {
+            assert!(!*show_help);
+        }
+    }
+
+    #[test]
+    fn help_overlay_preserves_detail() {
         let mut state = make_ready_state_with_kind();
-        // Navigate to Locale and set kind_detail
         handle_key(&mut state, key(KeyCode::Down));
         handle_key(&mut state, key(KeyCode::Down));
         if let AppState::Ready { kind_detail, .. } = &mut state {
@@ -599,10 +904,16 @@ mod tests {
                 edges_out: vec![],
             }));
         }
-        // Press ? for help
+        // Press ? for help — kind_detail should be preserved
         handle_key(&mut state, key(KeyCode::Char('?')));
-        if let AppState::Ready { kind_detail, .. } = &state {
-            assert!(kind_detail.is_none());
+        if let AppState::Ready {
+            kind_detail,
+            show_help,
+            ..
+        } = &state
+        {
+            assert!(*show_help);
+            assert!(kind_detail.is_some());
         }
     }
 
@@ -782,6 +1093,291 @@ mod tests {
             // No edges = explorer doesn't open
             assert!(edge_explorer_idx.is_none());
             assert!(status.contains("No edges"));
+        }
+    }
+
+    // -----------------------------------------------------------------------
+    // CRUD dialog tests
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn n_opens_create_node_dialog() {
+        let mut state = make_ready_state_with_kind();
+        let action = handle_key(&mut state, key(KeyCode::Char('n')));
+        assert!(matches!(action, Action::Render));
+        if let AppState::Ready { dialog, .. } = &state {
+            assert!(dialog.is_some());
+            let dlg = dialog.as_ref().unwrap();
+            assert!(matches!(dlg.kind, DialogKind::CreateNode));
+        }
+    }
+
+    #[test]
+    fn n_preselects_kind_from_tree() {
+        let mut state = make_ready_state_with_kind();
+        // Navigate to Locale Kind
+        handle_key(&mut state, key(KeyCode::Down)); // knowledge
+        handle_key(&mut state, key(KeyCode::Down)); // Locale
+        // Open create dialog
+        handle_key(&mut state, key(KeyCode::Char('n')));
+        if let AppState::Ready { dialog, .. } = &state {
+            let dlg = dialog.as_ref().unwrap();
+            assert_eq!(dlg.field_value("Kind"), Some("Locale"));
+        }
+    }
+
+    #[test]
+    fn d_shows_phase7c_gating_message() {
+        let mut state = make_ready_state_with_kind();
+        handle_key(&mut state, key(KeyCode::Char('d')));
+        if let AppState::Ready { dialog, status, .. } = &state {
+            assert!(dialog.is_none());
+            assert!(status.contains("Phase 7C"));
+        }
+    }
+
+    #[test]
+    fn e_shows_phase7c_gating_message() {
+        let mut state = make_ready_state_with_kind();
+        handle_key(
+            &mut state,
+            KeyEvent::new(KeyCode::Char('E'), KeyModifiers::SHIFT),
+        );
+        if let AppState::Ready { dialog, status, .. } = &state {
+            assert!(dialog.is_none());
+            assert!(status.contains("Phase 7C"));
+        }
+    }
+
+    #[test]
+    fn r_opens_create_relation_dialog() {
+        let mut state = make_ready_state_with_kind();
+        // Set edge_kind_keys for dropdown
+        if let AppState::Ready { edge_kind_keys, .. } = &mut state {
+            *edge_kind_keys = vec!["HAS_BLOCK".to_string(), "OF_KIND".to_string()];
+        }
+        let action = handle_key(&mut state, key(KeyCode::Char('r')));
+        assert!(matches!(action, Action::Render));
+        if let AppState::Ready { dialog, .. } = &state {
+            assert!(dialog.is_some());
+            assert!(matches!(
+                dialog.as_ref().unwrap().kind,
+                DialogKind::CreateRelation { .. }
+            ));
+        }
+    }
+
+    #[test]
+    fn esc_closes_dialog() {
+        let mut state = make_ready_state_with_kind();
+        handle_key(&mut state, key(KeyCode::Char('n')));
+        let action = handle_key(&mut state, key(KeyCode::Esc));
+        assert!(matches!(action, Action::CloseDialog));
+    }
+
+    #[test]
+    fn dialog_intercepts_all_keys() {
+        let mut state = make_ready_state_with_kind();
+        handle_key(&mut state, key(KeyCode::Char('n')));
+        // 'q' should NOT quit when dialog is open
+        let action = handle_key(&mut state, key(KeyCode::Char('q')));
+        assert!(!matches!(action, Action::Quit));
+    }
+
+    #[test]
+    fn dialog_tab_cycles_fields() {
+        let mut state = make_ready_state_with_kind();
+        handle_key(&mut state, key(KeyCode::Char('n')));
+        if let AppState::Ready { dialog, .. } = &state {
+            let initial_focus = dialog.as_ref().unwrap().focused;
+            // Tab moves to next field
+            let _ = handle_key(&mut state, key(KeyCode::Tab));
+            if let AppState::Ready { dialog, .. } = &state {
+                assert_ne!(dialog.as_ref().unwrap().focused, initial_focus);
+            }
+        }
+    }
+
+    #[test]
+    fn dialog_char_input_into_text_field() {
+        let mut state = make_ready_state_with_kind();
+        handle_key(&mut state, key(KeyCode::Char('n')));
+        // Tab to "Key" field (first text field after dropdown)
+        handle_key(&mut state, key(KeyCode::Tab));
+        // Type a character
+        handle_key(&mut state, key(KeyCode::Char('a')));
+        if let AppState::Ready { dialog, .. } = &state {
+            let dlg = dialog.as_ref().unwrap();
+            assert_eq!(dlg.field_value("Key"), Some("a"));
+        }
+    }
+
+    #[test]
+    fn dialog_enter_validates_before_submit() {
+        let mut state = make_ready_state_with_kind();
+        handle_key(&mut state, key(KeyCode::Char('n')));
+        // Tab to "Key" field (required, empty)
+        handle_key(&mut state, key(KeyCode::Tab));
+        // Enter with empty required field should not submit
+        let action = handle_key(&mut state, key(KeyCode::Enter));
+        assert!(!matches!(action, Action::SubmitDialog));
+    }
+
+    #[test]
+    fn dialog_enter_submits_when_valid() {
+        let mut state = make_ready_state_with_kind();
+        handle_key(&mut state, key(KeyCode::Char('n')));
+        // Tab to "Key" field and type a value
+        handle_key(&mut state, key(KeyCode::Tab));
+        handle_key(&mut state, key(KeyCode::Char('m')));
+        handle_key(&mut state, key(KeyCode::Char('y')));
+        // Enter should submit since required field has value
+        let action = handle_key(&mut state, key(KeyCode::Enter));
+        assert!(matches!(action, Action::SubmitDialog));
+    }
+
+    #[test]
+    fn s_toggles_dashboard() {
+        let mut state = make_ready_state();
+        // Dashboard starts visible
+        if let AppState::Ready { show_dashboard, .. } = &state {
+            assert!(*show_dashboard);
+        }
+        // Toggle off
+        handle_key(&mut state, key(KeyCode::Char('s')));
+        if let AppState::Ready {
+            show_dashboard,
+            status,
+            ..
+        } = &state
+        {
+            assert!(!*show_dashboard);
+            assert!(status.contains("hidden"));
+        }
+        // Toggle back on
+        handle_key(&mut state, key(KeyCode::Char('s')));
+        if let AppState::Ready {
+            show_dashboard,
+            status,
+            ..
+        } = &state
+        {
+            assert!(*show_dashboard);
+            assert!(status.contains("visible"));
+        }
+    }
+
+    // -----------------------------------------------------------------------
+    // Command palette tests
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn colon_opens_palette() {
+        let mut state = make_ready_state();
+        let action = handle_key(&mut state, key(KeyCode::Char(':')));
+        assert!(matches!(action, Action::Render));
+        if let AppState::Ready { palette, .. } = &state {
+            assert!(palette.is_some());
+        }
+    }
+
+    #[test]
+    fn palette_intercepts_keys() {
+        let mut state = make_ready_state();
+        handle_key(&mut state, key(KeyCode::Char(':')));
+        // 'q' should NOT quit when palette is open — treated as input
+        let action = handle_key(&mut state, key(KeyCode::Char('q')));
+        assert!(!matches!(action, Action::Quit));
+        if let AppState::Ready { palette, .. } = &state {
+            let pal = palette.as_ref().unwrap();
+            assert_eq!(pal.query, "q");
+        }
+    }
+
+    #[test]
+    fn palette_esc_closes() {
+        let mut state = make_ready_state();
+        handle_key(&mut state, key(KeyCode::Char(':')));
+        let action = handle_key(&mut state, key(KeyCode::Esc));
+        assert!(matches!(action, Action::Render));
+        if let AppState::Ready { palette, .. } = &state {
+            assert!(palette.is_none());
+        }
+    }
+
+    #[test]
+    fn palette_enter_executes_quit() {
+        let mut state = make_ready_state();
+        handle_key(&mut state, key(KeyCode::Char(':')));
+        // Type "quit" to narrow to quit command
+        for c in ['q', 'u', 'i', 't'] {
+            handle_key(&mut state, key(KeyCode::Char(c)));
+        }
+        let action = handle_key(&mut state, key(KeyCode::Enter));
+        assert!(matches!(action, Action::Quit));
+        // Palette should be closed
+        if let AppState::Ready { palette, .. } = &state {
+            assert!(palette.is_none());
+        }
+    }
+
+    #[test]
+    fn palette_enter_switches_mode() {
+        let mut state = make_ready_state();
+        handle_key(&mut state, key(KeyCode::Char(':')));
+        // Type "data" to find "data mode" command
+        for c in ['d', 'a', 't', 'a'] {
+            handle_key(&mut state, key(KeyCode::Char(c)));
+        }
+        let action = handle_key(&mut state, key(KeyCode::Enter));
+        assert!(matches!(action, Action::Fetch));
+        if let AppState::Ready { mode, palette, .. } = &state {
+            assert_eq!(*mode, NavMode::Data);
+            assert!(palette.is_none());
+        }
+    }
+
+    #[test]
+    fn palette_typing_filters_results() {
+        let mut state = make_ready_state();
+        handle_key(&mut state, key(KeyCode::Char(':')));
+        handle_key(&mut state, key(KeyCode::Char('q')));
+        if let AppState::Ready { palette, .. } = &state {
+            let pal = palette.as_ref().unwrap();
+            assert_eq!(pal.query, "q");
+            // "quit" and "query mode" should match
+            assert!(pal.results.len() >= 2);
+        }
+    }
+
+    #[test]
+    fn help_blocks_palette_trigger() {
+        let mut state = make_ready_state();
+        handle_key(&mut state, key(KeyCode::Char('?')));
+        // ':' should be ignored when help is open
+        let action = handle_key(&mut state, key(KeyCode::Char(':')));
+        assert!(matches!(action, Action::None));
+        if let AppState::Ready { palette, .. } = &state {
+            assert!(palette.is_none());
+        }
+    }
+
+    #[test]
+    fn help_question_mark_closes() {
+        let mut state = make_ready_state();
+        handle_key(&mut state, key(KeyCode::Char('?')));
+        assert!(matches!(
+            if let AppState::Ready { show_help, .. } = &state {
+                *show_help
+            } else {
+                false
+            },
+            true
+        ));
+        // Press ? again to close
+        handle_key(&mut state, key(KeyCode::Char('?')));
+        if let AppState::Ready { show_help, .. } = &state {
+            assert!(!*show_help);
         }
     }
 

@@ -39,7 +39,7 @@ Axis 4 — LINKS?  :EdgeKind  (50 relationship types in 5 families)
 
 **Rust binary:** `tools/novanet/` — single crate for CLI + TUI (neo4rs, ratatui, clap).
 All commands implemented: data/meta/overlay/query, node/relation CRUD, search, locale, db,
-schema generate/validate, doc generate, filter build, Galaxy-themed TUI with dashboard. 311 tests pass.
+schema generate/validate, doc generate, filter build, Galaxy-themed TUI with command palette. 335 tests pass.
 
 **Boundary rule (v9 target):** TypeScript generates code artifacts. Rust executes at runtime.
 
@@ -107,7 +107,7 @@ pnpm test --filter=@novanet/studio      # Test only studio
 | @novanet/core | Types, schemas, filters, generators |
 | @novanet/db | Neo4j Docker, seeds, migrations |
 | @novanet/studio | Web-based graph visualization |
-| tools/novanet | Rust CLI + TUI — all runtime commands (311 tests) |
+| tools/novanet | Rust CLI + TUI — all runtime commands (335 tests) |
 
 ---
 

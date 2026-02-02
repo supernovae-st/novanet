@@ -18,15 +18,20 @@ use tokio::sync::mpsc;
 
 use crate::db::Db;
 use crate::tui::app::AppState;
+use crate::tui::dashboard::{self, DashboardStats};
 use crate::tui::detail;
+use crate::tui::dialogs::DialogKind;
 use crate::tui::events::{self, Action};
 use crate::tui::tree::{MetaRow, TaxonomyTree};
 use crate::tui::ui;
 
 /// Messages from background tasks to the render loop.
 enum BgMessage {
-    MetaLoaded(Vec<MetaRow>),
+    MetaLoaded(Vec<MetaRow>, Vec<String>),
     KindDetailLoaded(detail::KindDetail),
+    StatsLoaded(DashboardStats),
+    MutationSuccess(String),
+    MutationError(String),
     Error(String),
 }
 
@@ -59,8 +64,9 @@ async fn run_app(
     // Channel for background tasks
     let (bg_tx, mut bg_rx) = mpsc::channel::<BgMessage>(16);
 
-    // Initial fetch: load meta-graph taxonomy
+    // Initial fetch: load meta-graph taxonomy + dashboard stats
     spawn_meta_fetch(db, bg_tx.clone());
+    spawn_stats_fetch(db, bg_tx.clone());
 
     // Render initial frame
     terminal
@@ -71,9 +77,23 @@ async fn run_app(
         // Check for background messages (non-blocking)
         while let Ok(msg) = bg_rx.try_recv() {
             match msg {
-                BgMessage::MetaLoaded(rows) => {
+                BgMessage::MetaLoaded(rows, edge_keys) => {
                     let tree = TaxonomyTree::from_meta_rows(&rows);
                     state = AppState::ready(tree);
+                    if let AppState::Ready { edge_kind_keys, .. } = &mut state {
+                        *edge_kind_keys = edge_keys;
+                    }
+                }
+                BgMessage::StatsLoaded(stats) => {
+                    if let AppState::Ready {
+                        dashboard_stats,
+                        status,
+                        ..
+                    } = &mut state
+                    {
+                        *status = stats.summary();
+                        *dashboard_stats = Some(stats);
+                    }
                 }
                 BgMessage::KindDetailLoaded(kd) => {
                     if let AppState::Ready {
@@ -84,6 +104,24 @@ async fn run_app(
                     {
                         *detail_lines = detail::format_detail_lines(&kd);
                         *kind_detail = Some(Box::new(kd));
+                    }
+                }
+                BgMessage::MutationSuccess(msg) => {
+                    if let AppState::Ready { dialog, status, .. } = &mut state {
+                        *dialog = None;
+                        *status = msg;
+                    }
+                    // Re-fetch taxonomy + stats to reflect changes
+                    spawn_meta_fetch(db, bg_tx.clone());
+                    spawn_stats_fetch(db, bg_tx.clone());
+                }
+                BgMessage::MutationError(msg) => {
+                    if let AppState::Ready {
+                        dialog: Some(dlg), ..
+                    } = &mut state
+                    {
+                        dlg.submitting = false;
+                        dlg.error = Some(msg);
                     }
                 }
                 BgMessage::Error(e) => {
@@ -118,6 +156,26 @@ async fn run_app(
                             .draw(|f| ui::render(f, &state))
                             .map_err(crate::NovaNetError::Io)?;
                     }
+                    Action::SubmitDialog => {
+                        if let AppState::Ready {
+                            dialog: Some(dlg), ..
+                        } = &mut state
+                        {
+                            dlg.submitting = true;
+                            spawn_mutation(db, bg_tx.clone(), dlg);
+                        }
+                        terminal
+                            .draw(|f| ui::render(f, &state))
+                            .map_err(crate::NovaNetError::Io)?;
+                    }
+                    Action::CloseDialog => {
+                        if let AppState::Ready { dialog, .. } = &mut state {
+                            *dialog = None;
+                        }
+                        terminal
+                            .draw(|f| ui::render(f, &state))
+                            .map_err(crate::NovaNetError::Io)?;
+                    }
                     Action::None => {}
                 }
             }
@@ -132,8 +190,8 @@ fn spawn_meta_fetch(db: &Db, tx: mpsc::Sender<BgMessage>) {
     let db = db.clone();
     tokio::spawn(async move {
         match fetch_taxonomy(&db).await {
-            Ok(rows) => {
-                let _ = tx.send(BgMessage::MetaLoaded(rows)).await;
+            Ok((rows, edge_keys)) => {
+                let _ = tx.send(BgMessage::MetaLoaded(rows, edge_keys)).await;
             }
             Err(e) => {
                 let _ = tx.send(BgMessage::Error(e.to_string())).await;
@@ -157,8 +215,96 @@ fn spawn_detail_fetch(db: &Db, tx: mpsc::Sender<BgMessage>, label: String) {
     });
 }
 
+/// Spawn a background task to execute a CRUD mutation from a dialog.
+fn spawn_mutation(db: &Db, tx: mpsc::Sender<BgMessage>, dlg: &crate::tui::dialogs::DialogState) {
+    let db = db.clone();
+    let kind = dlg.kind.clone();
+    let field_values: Vec<(String, String)> = dlg
+        .fields
+        .iter()
+        .map(|f| (f.label.clone(), f.value.clone()))
+        .collect();
+
+    tokio::spawn(async move {
+        let get_field = |label: &str| -> String {
+            field_values
+                .iter()
+                .find(|(l, _)| l == label)
+                .map(|(_, v)| v.clone())
+                .unwrap_or_default()
+        };
+
+        let result = match kind {
+            DialogKind::CreateNode => {
+                let kind_val = get_field("Kind");
+                let key = get_field("Key");
+                let display_name = get_field("Display Name");
+                let desc = get_field("Description");
+                let mut props = serde_json::Map::new();
+                if !display_name.is_empty() {
+                    props.insert(
+                        "display_name".to_string(),
+                        serde_json::Value::String(display_name),
+                    );
+                }
+                if !desc.is_empty() {
+                    props.insert("description".to_string(), serde_json::Value::String(desc));
+                }
+                let props_json = serde_json::Value::Object(props).to_string();
+                crate::commands::node::run_create(&db, &kind_val, &key, &props_json).await
+            }
+            DialogKind::EditNode { ref key, .. } => {
+                let props_json = get_field("Properties (JSON)");
+                crate::commands::node::run_edit(&db, key, &props_json).await
+            }
+            DialogKind::DeleteNode { ref key, .. } => {
+                crate::commands::node::run_delete(&db, key, true).await
+            }
+            DialogKind::CreateRelation { .. } => {
+                let from = get_field("From Key");
+                let to = get_field("To Key");
+                let rt = get_field("Relation Type");
+                crate::commands::relation::run_create(&db, &from, &to, &rt, "{}").await
+            }
+            DialogKind::DeleteRelation {
+                ref from_key,
+                ref to_key,
+                ref rel_type,
+            } => crate::commands::relation::run_delete(&db, from_key, to_key, rel_type).await,
+        };
+
+        match result {
+            Ok(()) => {
+                let _ = tx
+                    .send(BgMessage::MutationSuccess(
+                        "Operation successful".to_string(),
+                    ))
+                    .await;
+            }
+            Err(e) => {
+                let _ = tx.send(BgMessage::MutationError(e.to_string())).await;
+            }
+        }
+    });
+}
+
+/// Spawn a background task to fetch dashboard statistics from Neo4j.
+fn spawn_stats_fetch(db: &Db, tx: mpsc::Sender<BgMessage>) {
+    let db = db.clone();
+    tokio::spawn(async move {
+        match dashboard::fetch_stats(&db).await {
+            Ok(stats) => {
+                let _ = tx.send(BgMessage::StatsLoaded(stats)).await;
+            }
+            Err(e) => {
+                let _ = tx.send(BgMessage::Error(format!("Stats: {e}"))).await;
+            }
+        }
+    });
+}
+
 /// Fetch the Realm > Layer > Kind hierarchy from Neo4j.
-async fn fetch_taxonomy(db: &Db) -> crate::Result<Vec<MetaRow>> {
+async fn fetch_taxonomy(db: &Db) -> crate::Result<(Vec<MetaRow>, Vec<String>)> {
     let cypher = "\
 MATCH (r:Realm)<-[:IN_REALM]-(k:Kind)-[:IN_LAYER]->(l:Layer)
 RETURN 'Realm' AS type, r.key AS key, r.display_name AS display_name, null AS parent_key
@@ -192,5 +338,20 @@ RETURN 'Kind' AS type, k.label AS key, coalesce(k.display_name, k.label) AS disp
         }
     }
 
-    Ok(meta_rows)
+    // Fetch EdgeKind keys for dialog dropdowns (non-fatal if missing)
+    let edge_kind_keys = match db
+        .execute("MATCH (ek:EdgeKind) RETURN ek.key AS key ORDER BY ek.key")
+        .await
+    {
+        Ok(ek_rows) => ek_rows
+            .iter()
+            .filter_map(|r| {
+                let k: String = r.get("key").ok()?;
+                Some(k)
+            })
+            .collect(),
+        Err(_) => Vec::new(),
+    };
+
+    Ok((meta_rows, edge_kind_keys))
 }

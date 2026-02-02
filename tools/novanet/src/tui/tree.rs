@@ -183,6 +183,18 @@ impl TaxonomyTree {
         }
     }
 
+    /// Find the parent node of a node with the given key.
+    ///
+    /// Returns `None` if the node is a root or not found.
+    pub fn parent_of(&self, key: &str) -> Option<&TreeNode> {
+        for root in &self.roots {
+            if let Some(parent) = find_parent(root, key) {
+                return Some(parent);
+            }
+        }
+        None
+    }
+
     /// Collect all Kind labels from the tree (for search).
     pub fn all_kinds(&self) -> Vec<KindEntry> {
         let mut entries = Vec::new();
@@ -200,6 +212,18 @@ pub struct KindEntry {
     pub display_name: String,
     pub realm: String,
     pub layer: String,
+}
+
+fn find_parent<'a>(node: &'a TreeNode, target_key: &str) -> Option<&'a TreeNode> {
+    for child in &node.children {
+        if child.key == target_key {
+            return Some(node);
+        }
+        if let Some(parent) = find_parent(child, target_key) {
+            return Some(parent);
+        }
+    }
+    None
 }
 
 fn expand_ancestors(node: &mut TreeNode, target_key: &str) -> bool {
@@ -438,6 +462,34 @@ mod tests {
     fn jump_to_nonexistent_key() {
         let mut tree = sample_tree();
         assert!(!tree.jump_to_key("NonExistent"));
+    }
+
+    #[test]
+    fn parent_of_kind_returns_layer() {
+        let tree = sample_tree();
+        let parent = tree.parent_of("Locale").unwrap();
+        assert_eq!(parent.key, "knowledge");
+        assert_eq!(parent.node_type, TreeNodeType::Layer);
+    }
+
+    #[test]
+    fn parent_of_layer_returns_realm() {
+        let tree = sample_tree();
+        let parent = tree.parent_of("knowledge").unwrap();
+        assert_eq!(parent.key, "global");
+        assert_eq!(parent.node_type, TreeNodeType::Realm);
+    }
+
+    #[test]
+    fn parent_of_realm_returns_none() {
+        let tree = sample_tree();
+        assert!(tree.parent_of("global").is_none());
+    }
+
+    #[test]
+    fn parent_of_nonexistent_returns_none() {
+        let tree = sample_tree();
+        assert!(tree.parent_of("nonexistent").is_none());
     }
 
     #[test]

@@ -11,7 +11,7 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 
 ## Current Status
 
-**Phase 7B Batch 1 complete** — Galaxy-themed mission control TUI with search, detail, and edge explorer.
+**Phase 7B Batch 4 complete** — Galaxy-themed mission control TUI with search, detail, edge explorer, CRUD dialogs, dashboard stats, ASCII logo, breadcrumb navigation, command palette, and help overlay.
 
 | Area | Commands | Status |
 |------|----------|--------|
@@ -23,9 +23,9 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 | Locale | `locale list`, `locale import` | Implemented |
 | DB | `db seed`, `db migrate`, `db reset` | Implemented |
 | Filter | `filter build` | Implemented (JSON stdin, Studio subprocess) |
-| TUI | `tui` | Galaxy theme, mission control layout, search, detail, edge explorer |
+| TUI | `tui` | Galaxy theme, mission control, search, detail, edge explorer, CRUD dialogs, dashboard, logo, command palette, help overlay |
 
-**255 tests pass** (`cargo test`). Zero clippy warnings.
+**335 tests pass** (`cargo test`). Zero clippy warnings.
 
 ## Commands
 
@@ -80,7 +80,7 @@ cargo run -- tui                                  # Interactive terminal UI
 # Quality
 cargo clippy -- -D warnings    # Zero warnings policy
 cargo fmt --check              # Formatting check
-cargo test                     # 255 unit tests
+cargo test                     # 335 unit tests
 cargo test -- --ignored        # Neo4j integration tests (requires running Neo4j)
 
 # Pre-commit
@@ -115,14 +115,18 @@ src/
   parsers/        YAML parsers (yaml_node, relations, organizing, views)
   generators/     Code generators (organizing, kind, edge_schema, layer, mermaid, view_mermaid, autowire, hierarchy)
   tui/            Terminal UI (feature-gated behind `tui` feature)
-    app.rs        State machine (NavMode, AppState, ActivePanel, edge_explorer_idx)
-    tree.rs       TaxonomyTree (Realm > Layer > Kind hierarchy + cursor + jump_to_key)
-    events.rs     Keyboard handling (Action dispatch + search + edge explorer)
-    ui.rs         Galaxy-themed mission control layout + Cypher syntax highlighting
-    runtime.rs    Async event loop (crossterm + mpsc channel bridge + detail fetch)
+    app.rs        State machine (NavMode, AppState, ActivePanel, show_help)
+    tree.rs       TaxonomyTree (Realm > Layer > Kind hierarchy + cursor + parent_of)
+    events.rs     Keyboard handling (Action dispatch + overlays: dialog > palette > help > search)
+    ui.rs         Galaxy-themed mission control layout + Cypher syntax highlighting + overlays
+    runtime.rs    Async event loop (crossterm + mpsc channel bridge + detail + mutations)
     theme.rs      SuperNovae Galaxy palette + style helpers (realm/layer/family colors)
     detail.rs     KindDetail struct + Neo4j fetch + styled/explorer rendering
     search.rs     Fuzzy search overlay (nucleo-matcher + SearchState)
+    dialogs.rs    CRUD dialog forms (create/edit/delete node + create/delete relation)
+    dashboard.rs  Dashboard stats (Neo4j metrics, realm/family bar charts)
+    logo.rs       ASCII logo (Saturn-graph full/compact/inline + Galaxy-themed colors)
+    palette.rs    Command palette (fuzzy search, 11 commands, 5 categories)
 ```
 
 ## Key Patterns
