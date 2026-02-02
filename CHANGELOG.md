@@ -10,12 +10,16 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Changed
 - **Phase 5 complete**: Migrated `config/categoryColors.ts` to `design/nodeColors.ts` — all 5 imports updated, zero legacy references
 - **Phase 6 complete**: Verified ViewPicker context-awareness (13 views with `modes` field), keyboard presets T/E (Trait cycle + EdgeFamily cycle + help modal)
+- **Phase 7B complete**: Advanced TUI — boot animation, effects engine (CRT/shake/glitch/pulse), onboarding (welcome + guided tour)
+- **Phase 8 audit**: Removed dead code (magnetic schemaLayout, neo4j functions), fixed validate-types v9 references
 
-### In Progress
-- Phase 7B: Advanced TUI — boot animation + effects engine (compile error in uncommitted work)
+### Removed
+- Dead `schemaLayouts/magnetic.ts` module (220 lines) — magnetic feature uses hooks, not this layout algorithm
+- Dead `closeDriver()` and `verifyConnectionStrict()` from neo4j.ts
+- `NODE_CATEGORIES` references from validate-types.ts (replaced by Layer in v9)
 
 ### Pending
-- Phase 8: Final verification (audit, tests, lint, type-check, benchmarks)
+- Phase 8: Performance benchmarks, code review, GitHub Release v9.0.0
 
 ## [9.0.0-rc.1] - 2026-02-02
 
@@ -29,7 +33,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - **core/scripts/, core/src/parsers/, core/src/services/, core/src/db/ deleted**: Absorbed into Rust
 
 ### Added
-- **Rust CLI binary** (`tools/novanet/`): 9 commands, 8 generators, 4 parsers, 279 tests
+- **Rust CLI binary** (`tools/novanet/`): 13 commands, 8 generators, 4 parsers, 396 tests
   - `novanet schema generate` — orchestrates 7 generators (YAML → Cypher/TS/Mermaid)
   - `novanet schema validate` — YAML coherence checks
   - `novanet data/meta/overlay/query` — 4 navigation modes
