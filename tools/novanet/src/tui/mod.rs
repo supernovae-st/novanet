@@ -1,11 +1,16 @@
 //! Terminal UI for NovaNet context graph.
 //!
-//! Provides an interactive tree-based browser for exploring the meta-graph
-//! (Realm > Layer > Kind hierarchy) and querying data nodes.
+//! Galaxy-themed mission control layout with five areas: mode tabs,
+//! taxonomy tree (Realm > Layer > Kind), Kind detail pane, Cypher preview,
+//! and status bar. Features: fuzzy search (`/`), edge explorer (`e`),
+//! panel cycling, and faceted query filtering.
 
 mod app;
+mod detail;
 mod events;
 mod runtime;
+mod search;
+mod theme;
 mod tree;
 mod ui;
 

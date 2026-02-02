@@ -114,6 +114,9 @@ pub struct ViewRegistryEntry {
     pub file: String,
     pub description: String,
     pub category: String,
+    /// Navigation modes that show this view (data/meta/overlay/query).
+    #[serde(default)]
+    pub modes: Option<Vec<String>>,
 }
 
 /// The `_registry.yaml` document.

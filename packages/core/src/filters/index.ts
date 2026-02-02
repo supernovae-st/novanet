@@ -32,4 +32,5 @@ export type {
   ViewRegistryEntry,
   ViewCategory,
   ViewCategoryGroup,
+  ViewNavigationMode,
 } from './types.js';

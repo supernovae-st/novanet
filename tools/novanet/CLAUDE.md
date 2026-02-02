@@ -11,7 +11,7 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 
 ## Current Status
 
-**Phase 7A complete** — All CLI commands and TUI scaffold implemented.
+**Phase 7B Batch 1 complete** — Galaxy-themed mission control TUI with search, detail, and edge explorer.
 
 | Area | Commands | Status |
 |------|----------|--------|
@@ -23,9 +23,9 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 | Locale | `locale list`, `locale import` | Implemented |
 | DB | `db seed`, `db migrate`, `db reset` | Implemented |
 | Filter | `filter build` | Implemented (JSON stdin, Studio subprocess) |
-| TUI | `tui` | Scaffold complete (ratatui + crossterm) |
+| TUI | `tui` | Galaxy theme, mission control layout, search, detail, edge explorer |
 
-**198 tests pass** (`cargo test`). Zero clippy warnings.
+**255 tests pass** (`cargo test`). Zero clippy warnings.
 
 ## Commands
 
@@ -115,11 +115,14 @@ src/
   parsers/        YAML parsers (yaml_node, relations, organizing, views)
   generators/     Code generators (organizing, kind, edge_schema, layer, mermaid, view_mermaid, autowire, hierarchy)
   tui/            Terminal UI (feature-gated behind `tui` feature)
-    app.rs        State machine (NavMode, AppState, ActivePanel)
-    tree.rs       TaxonomyTree (Realm > Layer > Kind hierarchy + cursor)
-    events.rs     Keyboard handling (Action dispatch)
-    ui.rs         Layout + widgets (ratatui rendering)
-    runtime.rs    Async event loop (crossterm + mpsc channel bridge)
+    app.rs        State machine (NavMode, AppState, ActivePanel, edge_explorer_idx)
+    tree.rs       TaxonomyTree (Realm > Layer > Kind hierarchy + cursor + jump_to_key)
+    events.rs     Keyboard handling (Action dispatch + search + edge explorer)
+    ui.rs         Galaxy-themed mission control layout + Cypher syntax highlighting
+    runtime.rs    Async event loop (crossterm + mpsc channel bridge + detail fetch)
+    theme.rs      SuperNovae Galaxy palette + style helpers (realm/layer/family colors)
+    detail.rs     KindDetail struct + Neo4j fetch + styled/explorer rendering
+    search.rs     Fuzzy search overlay (nucleo-matcher + SearchState)
 ```
 
 ## Key Patterns

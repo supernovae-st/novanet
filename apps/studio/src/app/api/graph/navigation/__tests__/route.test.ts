@@ -1,11 +1,15 @@
 /**
  * Navigation Route Logic Tests
  *
- * Tests the facet resolution and intersection logic used by the navigation route.
- * The route itself is thin glue around these pure functions + fetchGraphData.
+ * Tests input validation logic shared between the old TS route and the current
+ * Rust-bridge route: parseCSV and limit clamping.
  *
- * NextRequest requires Web API polyfills not available in jsdom,
- * so we test the exported resolution helpers directly.
+ * The "facet intersection" section tests the DEPRECATED TypeScript resolution
+ * path (resolveTypesForRealms, resolveTypesForTraits, NODE_LAYERS intersection).
+ * Since v9.0.0 the navigation route calls `buildCypherViaRust()` instead.
+ * These tests are kept as regression coverage for the deprecated helpers.
+ *
+ * Bridge-specific tests live in `src/lib/__tests__/novanetBridge.test.ts`.
  */
 
 import {
@@ -98,10 +102,11 @@ describe('navigation route logic', () => {
   });
 
   // ==========================================================================
-  // Facet intersection (same logic as route)
+  // Facet intersection (DEPRECATED — route now uses Rust bridge)
+  // Tests the old TS resolution path kept in filterAdapter.ts for reference.
   // ==========================================================================
 
-  describe('facet intersection', () => {
+  describe('facet intersection (deprecated TS path)', () => {
     function resolveFacets(
       realms: Realm[],
       layers: Layer[],

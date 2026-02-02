@@ -29,6 +29,7 @@ import {
 import { useShallow } from 'zustand/react/shallow';
 import { cn } from '@/lib/utils';
 import { useViewStore } from '@/stores/viewStore';
+import { useUIStore } from '@/stores/uiStore';
 import { pickerClasses, iconSizes, gapTokens, getCardStagger } from '@/design/tokens';
 import { Kbd } from '@/components/ui';
 import {
@@ -47,7 +48,7 @@ const GRID_COLUMNS = 3;
 
 // Category colors and icons
 const CATEGORY_CONFIG: Record<string, { color: string; label: string; icon: LucideIcon }> = {
-  scope: { color: '#a78bfa', label: 'Scope', icon: Layers },
+  overview: { color: '#a78bfa', label: 'Overview', icon: Layers },
   generation: { color: '#34d399', label: 'Generation', icon: Sparkles },
   knowledge: { color: '#60a5fa', label: 'Knowledge', icon: Brain },
   project: { color: '#fbbf24', label: 'Project', icon: FolderOpen },
@@ -231,7 +232,7 @@ const ViewPickerModal = memo(function ViewPickerModal({
               <h2 id="view-picker-title" className={pickerClasses.headerTitle}>
                 Select View
               </h2>
-              <p className={pickerClasses.headerSubtitle}>Choose a schema view to display</p>
+              <p className={pickerClasses.headerSubtitle}>Choose a view to display</p>
             </div>
           </div>
           <button onClick={onClose} aria-label="Close" className={pickerClasses.closeButton}>
@@ -337,8 +338,13 @@ export const ViewPicker = memo(function ViewPicker({ className }: ViewPickerProp
     }))
   );
 
-  // Flatten categories to get all views
-  const views = useMemo(() => categories.flatMap((cat) => cat.views), [categories]);
+  const navigationMode = useUIStore((s) => s.navigationMode);
+
+  // Flatten categories and filter by current navigation mode
+  const views = useMemo(() => {
+    const all = categories.flatMap((cat) => cat.views);
+    return all.filter((v) => !v.modes || v.modes.includes(navigationMode));
+  }, [categories, navigationMode]);
   const activeView = getActiveView();
 
   const handleOpen = useCallback(() => {

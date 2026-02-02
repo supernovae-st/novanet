@@ -4,6 +4,8 @@
 //! and `Ready` (interactive browsing). Navigation modes mirror the CLI:
 //! Data (1), Meta (2), Overlay (3), Query (4).
 
+use crate::tui::detail::KindDetail;
+use crate::tui::search::SearchState;
 use crate::tui::tree::TaxonomyTree;
 
 /// Navigation mode — mirrors CLI modes 1-4.
@@ -55,11 +57,32 @@ impl NavMode {
     }
 }
 
-/// Active panel in the layout.
+/// Active panel in the mission control layout.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum ActivePanel {
     Tree,
     Detail,
+    CypherPreview,
+}
+
+impl ActivePanel {
+    /// Cycle to the next panel (Tree → Detail → CypherPreview → Tree).
+    pub fn cycle_next(self) -> Self {
+        match self {
+            ActivePanel::Tree => ActivePanel::Detail,
+            ActivePanel::Detail => ActivePanel::CypherPreview,
+            ActivePanel::CypherPreview => ActivePanel::Tree,
+        }
+    }
+
+    /// Cycle to the previous panel (Tree → CypherPreview → Detail → Tree).
+    pub fn cycle_prev(self) -> Self {
+        match self {
+            ActivePanel::Tree => ActivePanel::CypherPreview,
+            ActivePanel::Detail => ActivePanel::Tree,
+            ActivePanel::CypherPreview => ActivePanel::Detail,
+        }
+    }
 }
 
 /// Facet filter state for Query mode.
@@ -74,6 +97,7 @@ pub struct FacetFilterState {
 }
 
 /// Top-level app state.
+#[allow(clippy::large_enum_variant)] // Ready is the hot path; Loading is rare
 pub enum AppState {
     Loading {
         message: String,
@@ -86,6 +110,11 @@ pub enum AppState {
         status: String,
         facets: FacetFilterState,
         node_count: usize,
+        cypher_preview: Vec<String>,
+        kind_detail: Option<Box<KindDetail>>,
+        search: Option<SearchState>,
+        /// Edge explorer cursor. None = normal detail, Some(idx) = focused edge view.
+        edge_explorer_idx: Option<usize>,
     },
 }
 
@@ -106,6 +135,10 @@ impl AppState {
             status: format!("{node_count} node(s) loaded"),
             facets: FacetFilterState::default(),
             node_count,
+            cypher_preview: Vec::new(),
+            kind_detail: None,
+            search: None,
+            edge_explorer_idx: None,
         }
     }
 }
@@ -139,5 +172,19 @@ mod tests {
     fn nav_mode_index() {
         assert_eq!(NavMode::Data.index(), 0);
         assert_eq!(NavMode::Query.index(), 3);
+    }
+
+    #[test]
+    fn panel_cycle_next() {
+        assert_eq!(ActivePanel::Tree.cycle_next(), ActivePanel::Detail);
+        assert_eq!(ActivePanel::Detail.cycle_next(), ActivePanel::CypherPreview);
+        assert_eq!(ActivePanel::CypherPreview.cycle_next(), ActivePanel::Tree);
+    }
+
+    #[test]
+    fn panel_cycle_prev() {
+        assert_eq!(ActivePanel::Tree.cycle_prev(), ActivePanel::CypherPreview);
+        assert_eq!(ActivePanel::Detail.cycle_prev(), ActivePanel::Tree);
+        assert_eq!(ActivePanel::CypherPreview.cycle_prev(), ActivePanel::Detail);
     }
 }
