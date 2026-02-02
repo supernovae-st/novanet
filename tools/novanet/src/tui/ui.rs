@@ -16,15 +16,18 @@
 
 use ratatui::Frame;
 use ratatui::layout::{Constraint, Direction, Layout, Rect};
-use ratatui::style::{Modifier, Style};
+use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
 use ratatui::widgets::{Block, Borders, List, ListItem, Paragraph, Wrap};
 
 use crate::tui::app::{ActivePanel, AppState, NavMode};
+use crate::tui::boot::{BootStage, BootState};
 use crate::tui::dashboard::{self as dash, DashboardStats};
 use crate::tui::detail::{self, KindDetail};
 use crate::tui::dialogs::{DialogKind, DialogState, FieldKind};
+use crate::tui::effects::{self, EffectsState, NebulaPulse};
 use crate::tui::logo;
+use crate::tui::onboarding::{self, OnboardingState, TourTarget};
 use crate::tui::palette::PaletteState;
 use crate::tui::search::SearchState;
 use crate::tui::theme;
@@ -41,6 +44,7 @@ pub fn render(frame: &mut Frame, state: &AppState) {
 
     match state {
         AppState::Loading { message } => render_loading(frame, message),
+        AppState::Booting { boot, .. } => render_booting(frame, boot),
         AppState::Ready {
             mode,
             tree,
@@ -59,25 +63,35 @@ pub fn render(frame: &mut Frame, state: &AppState) {
             show_dashboard,
             palette,
             show_help,
-        } => render_ready(
-            frame,
-            *mode,
-            tree,
-            *active_panel,
-            detail_lines,
-            status,
-            facets.show_popup,
-            *node_count,
-            cypher_preview,
-            kind_detail.as_deref(),
-            search.as_ref(),
-            *edge_explorer_idx,
-            dialog.as_ref(),
-            dashboard_stats.as_ref(),
-            *show_dashboard,
-            palette.as_ref(),
-            *show_help,
-        ),
+            tick,
+            effects,
+            onboarding,
+        } => {
+            render_ready(
+                frame,
+                *mode,
+                tree,
+                *active_panel,
+                detail_lines,
+                status,
+                facets.show_popup,
+                *node_count,
+                cypher_preview,
+                kind_detail.as_deref(),
+                search.as_ref(),
+                *edge_explorer_idx,
+                dialog.as_ref(),
+                dashboard_stats.as_ref(),
+                *show_dashboard,
+                palette.as_ref(),
+                *show_help,
+                effects.pulse.as_ref(),
+                onboarding.as_ref(),
+            );
+
+            // Post-processing effects
+            apply_effects(frame, effects, *tick);
+        }
     }
 }
 
@@ -115,6 +129,137 @@ fn render_loading(frame: &mut Frame, message: &str) {
     frame.render_widget(paragraph, area);
 }
 
+fn render_booting(frame: &mut Frame, boot: &BootState) {
+    let area = frame.area();
+
+    // Step 1: Build rain lines (background fill)
+    let clear_pct = boot.clear_progress();
+    let cx = area.width as f32 / 2.0;
+    let cy = area.height as f32 / 2.0;
+    let max_r = (cx * cx + cy * cy).sqrt();
+    let clear_r = max_r * clear_pct;
+
+    let rain_lines: Vec<Line> = (0..area.height)
+        .map(|y| {
+            let mut spans: Vec<Span> = Vec::new();
+            let mut x = 0u16;
+            while x < area.width {
+                // Clear zone: circular expanding region at center
+                if clear_pct > 0.0 {
+                    let dx = x as f32 - cx;
+                    let dy = y as f32 - cy;
+                    if (dx * dx + dy * dy).sqrt() < clear_r {
+                        spans.push(Span::raw(" "));
+                        x += 1;
+                        continue;
+                    }
+                }
+                // Rain character from MatrixRain simulation
+                if let Some((ch, brightness)) = boot.rain.char_at(x, y) {
+                    spans.push(Span::styled(
+                        ch.to_string(),
+                        Style::default().fg(Color::Rgb(brightness / 8, brightness, brightness / 6)),
+                    ));
+                    x += 2; // rain columns are spaced for double-width chars
+                } else {
+                    spans.push(Span::raw(" "));
+                    x += 1;
+                }
+            }
+            Line::from(spans)
+        })
+        .collect();
+
+    let rain = Paragraph::new(rain_lines).style(Style::default().bg(theme::BG_VOID));
+    frame.render_widget(rain, area);
+
+    // Step 2: Logo overlay (centered, overwrites rain in that region)
+    let show_logo = !matches!(boot.stage, BootStage::MatrixRain | BootStage::RainClear);
+    if show_logo {
+        let all_logo = logo::full_logo_lines();
+        let visible_count = match &boot.stage {
+            BootStage::LogoReveal { lines_visible } => *lines_visible,
+            _ => all_logo.len(),
+        };
+
+        let mut lines: Vec<Line> = all_logo.into_iter().take(visible_count).collect();
+
+        match &boot.stage {
+            BootStage::BrandingType { typewriter } => {
+                lines.push(Line::from(""));
+                lines.push(Line::from(Span::styled(
+                    "SuperNovae Studio",
+                    Style::default()
+                        .fg(theme::NOVA_WHITE)
+                        .add_modifier(Modifier::BOLD),
+                )));
+                let mut spans = vec![Span::styled(
+                    typewriter.visible().to_string(),
+                    Style::default().fg(theme::STAR_DIM),
+                )];
+                if let Some(c) = typewriter.cursor_char() {
+                    spans.push(Span::styled(
+                        c.to_string(),
+                        Style::default().fg(theme::CYBER_CYAN),
+                    ));
+                }
+                lines.push(Line::from(spans));
+            }
+            BootStage::HoldLogo { .. } | BootStage::FadeOut { .. } => {
+                lines.extend(logo::branding_lines());
+            }
+            _ => {}
+        }
+
+        let h = lines.len() as u16;
+        let y = area.y + area.height.saturating_sub(h) / 2;
+        let logo_area = Rect::new(area.x, y, area.width, h.min(area.height));
+
+        let logo_p = Paragraph::new(lines)
+            .centered()
+            .style(Style::default().bg(theme::BG_VOID));
+        frame.render_widget(logo_p, logo_area);
+    }
+
+    // Step 3: Fade dimming during FadeOut stage
+    if let BootStage::FadeOut { .. } = &boot.stage {
+        let fade = boot.fade_progress();
+        let factor = 1.0 - fade;
+        let area = frame.area();
+        let buf = frame.buffer_mut();
+        for y in 0..area.height {
+            for x in 0..area.width {
+                if let Some(cell) = buf.cell_mut((x + area.x, y + area.y)) {
+                    if let Color::Rgb(r, g, b) = cell.fg {
+                        cell.set_fg(Color::Rgb(
+                            (r as f32 * factor) as u8,
+                            (g as f32 * factor) as u8,
+                            (b as f32 * factor) as u8,
+                        ));
+                    }
+                }
+            }
+        }
+    }
+}
+
+/// Apply post-processing visual effects to the rendered frame.
+fn apply_effects(frame: &mut Frame, effects: &EffectsState, tick: u64) {
+    // Screen shake: shift entire buffer content by offset
+    if let Some(ref shake) = effects.shake {
+        let (dx, dy) = shake.current_offset();
+        effects::apply_shake(frame.buffer_mut(), dx, dy);
+    }
+    // CRT scanlines: dim even rows + phosphor flicker
+    if effects.crt_enabled {
+        effects::apply_crt_scanlines(frame.buffer_mut(), tick);
+    }
+    // Glitch: corrupt cells with block characters + purple shift
+    if let Some(ref glitch) = effects.glitch {
+        effects::apply_glitch(frame.buffer_mut(), glitch.current_intensity(), tick);
+    }
+}
+
 #[allow(clippy::too_many_arguments)]
 fn render_ready(
     frame: &mut Frame,
@@ -134,6 +279,8 @@ fn render_ready(
     show_dashboard: bool,
     palette: Option<&PaletteState>,
     show_help: bool,
+    pulse: Option<&NebulaPulse>,
+    onboarding: Option<&OnboardingState>,
 ) {
     let area = frame.area();
 
@@ -159,6 +306,7 @@ fn render_ready(
         edge_explorer_idx,
         dashboard_stats,
         show_dashboard,
+        pulse,
     );
     render_status_bar(frame, vertical[2], mode, status, node_count);
 
@@ -180,6 +328,10 @@ fn render_ready(
 
     if let Some(dlg) = dialog {
         render_dialog(frame, area, dlg);
+    }
+
+    if let Some(ob) = onboarding {
+        render_onboarding_overlay(frame, area, ob);
     }
 }
 
@@ -278,6 +430,7 @@ fn render_main_content(
     edge_explorer_idx: Option<usize>,
     dashboard_stats: Option<&DashboardStats>,
     show_dashboard: bool,
+    pulse: Option<&NebulaPulse>,
 ) {
     // Horizontal: [tree 35% | right pane 65%]
     let horizontal = Layout::default()
@@ -285,11 +438,16 @@ fn render_main_content(
         .constraints([Constraint::Percentage(35), Constraint::Percentage(65)])
         .split(area);
 
+    let tree_active = active_panel == ActivePanel::Tree;
+    let detail_active = active_panel == ActivePanel::Detail;
+    let cypher_active = active_panel == ActivePanel::CypherPreview;
+
     render_tree_panel(
         frame,
         horizontal[0],
         tree,
-        active_panel == ActivePanel::Tree,
+        tree_active,
+        if tree_active { pulse } else { None },
     );
 
     if let (true, Some(stats)) = (show_dashboard, dashboard_stats) {
@@ -307,16 +465,18 @@ fn render_main_content(
             frame,
             right[0],
             detail_lines,
-            active_panel == ActivePanel::Detail,
+            detail_active,
             kind_detail,
             edge_explorer_idx,
+            if detail_active { pulse } else { None },
         );
         render_dashboard_panel(frame, right[1], stats);
         render_cypher_preview(
             frame,
             right[2],
             cypher_preview,
-            active_panel == ActivePanel::CypherPreview,
+            cypher_active,
+            if cypher_active { pulse } else { None },
         );
     } else {
         // Right pane: vertical split [detail 65% | cypher preview 35%]
@@ -329,21 +489,29 @@ fn render_main_content(
             frame,
             right[0],
             detail_lines,
-            active_panel == ActivePanel::Detail,
+            detail_active,
             kind_detail,
             edge_explorer_idx,
+            if detail_active { pulse } else { None },
         );
         render_cypher_preview(
             frame,
             right[1],
             cypher_preview,
-            active_panel == ActivePanel::CypherPreview,
+            cypher_active,
+            if cypher_active { pulse } else { None },
         );
     }
 }
 
-fn render_tree_panel(frame: &mut Frame, area: Rect, tree: &TaxonomyTree, active: bool) {
-    let border = theme::panel_border(active);
+fn render_tree_panel(
+    frame: &mut Frame,
+    area: Rect,
+    tree: &TaxonomyTree,
+    active: bool,
+    pulse: Option<&NebulaPulse>,
+) {
+    let border = theme::panel_border_with_pulse(active, pulse);
     let block = Block::default()
         .title(Span::styled(
             " Taxonomy ",
@@ -404,8 +572,9 @@ fn render_detail_panel(
     active: bool,
     kind_detail: Option<&KindDetail>,
     edge_explorer_idx: Option<usize>,
+    pulse: Option<&NebulaPulse>,
 ) {
-    let border = theme::panel_border(active);
+    let border = theme::panel_border_with_pulse(active, pulse);
 
     let title = if edge_explorer_idx.is_some() {
         " Edge Explorer "
@@ -444,8 +613,14 @@ fn render_detail_panel(
     frame.render_widget(paragraph, area);
 }
 
-fn render_cypher_preview(frame: &mut Frame, area: Rect, lines: &[String], active: bool) {
-    let border = theme::panel_border(active);
+fn render_cypher_preview(
+    frame: &mut Frame,
+    area: Rect,
+    lines: &[String],
+    active: bool,
+    pulse: Option<&NebulaPulse>,
+) {
+    let border = theme::panel_border_with_pulse(active, pulse);
     let block = Block::default()
         .title(Span::styled(
             " Cypher ",
@@ -1127,6 +1302,7 @@ fn render_help_overlay(frame: &mut Frame, area: Rect) {
         Line::from(""),
         section("System"),
         binding("?", "Show/close this help"),
+        binding("Ctrl+R", "Toggle CRT scanlines"),
         binding("q", "Quit"),
         binding("Ctrl+C", "Force quit"),
         Line::from(""),
@@ -1212,6 +1388,158 @@ fn render_facet_popup(frame: &mut Frame, area: Rect) {
     frame.render_widget(clear, popup_area);
 
     let paragraph = Paragraph::new(text).block(block);
+    frame.render_widget(paragraph, popup_area);
+}
+
+fn render_onboarding_overlay(frame: &mut Frame, area: Rect, ob: &OnboardingState) {
+    match ob {
+        OnboardingState::Welcome { checks } => render_welcome_overlay(frame, area, checks),
+        OnboardingState::Tour { step } => render_tour_overlay(frame, area, *step),
+    }
+}
+
+fn render_welcome_overlay(frame: &mut Frame, area: Rect, checks: &[onboarding::CheckResult]) {
+    let popup_width = 56u16.min(area.width.saturating_sub(4));
+    let popup_height = 18u16.min(area.height.saturating_sub(4));
+    let x = (area.width.saturating_sub(popup_width)) / 2;
+    let y = (area.height.saturating_sub(popup_height)) / 2;
+    let popup_area = Rect::new(x, y, popup_width, popup_height);
+
+    let clear = Block::default().style(Style::default().bg(theme::BG_VOID));
+    frame.render_widget(clear, popup_area);
+
+    let block = Block::default()
+        .title(Span::styled(
+            " Welcome to NovaNet ",
+            theme::accent_bold(theme::NEBULA_PURPLE),
+        ))
+        .borders(Borders::ALL)
+        .border_style(Style::default().fg(theme::NEBULA_PURPLE))
+        .style(Style::default().bg(theme::BG_PANEL));
+
+    // Compact logo
+    let mut lines: Vec<Line> = Vec::new();
+    lines.push(Line::from(""));
+    for logo_line in logo::COMPACT_LOGO {
+        lines.push(Line::from(vec![Span::styled(
+            format!("  {logo_line}"),
+            Style::default().fg(theme::NEBULA_PURPLE),
+        )]));
+    }
+    lines.push(Line::from(""));
+
+    // Health checks
+    lines.push(Line::from(Span::styled(
+        "  System Checks:",
+        Style::default()
+            .fg(theme::CYBER_CYAN)
+            .add_modifier(Modifier::BOLD),
+    )));
+
+    for check in checks {
+        let (icon, color) = match &check.status {
+            onboarding::CheckStatus::Checking => ("\u{25cb}", theme::STAR_DIM), // ○
+            onboarding::CheckStatus::Ok(_) => ("\u{25cf}", theme::MATRIX_GREEN), // ●
+            onboarding::CheckStatus::Failed(_) => ("\u{25cf}", theme::PLASMA_PINK), // ●
+        };
+        let detail = match &check.status {
+            onboarding::CheckStatus::Checking => "checking...".to_string(),
+            onboarding::CheckStatus::Ok(msg) => msg.clone(),
+            onboarding::CheckStatus::Failed(msg) => msg.clone(),
+        };
+        lines.push(Line::from(vec![
+            Span::styled(format!("    {icon} "), Style::default().fg(color)),
+            Span::styled(
+                format!("{:<20}", check.label),
+                Style::default().fg(theme::NOVA_WHITE),
+            ),
+            Span::styled(detail, Style::default().fg(color)),
+        ]));
+    }
+
+    lines.push(Line::from(""));
+    lines.push(Line::from(vec![
+        Span::styled("  Enter", theme::accent_bold(theme::MATRIX_GREEN)),
+        Span::styled(": Start tour   ", theme::dim_style()),
+        Span::styled("Esc", Style::default().fg(theme::STAR_DIM)),
+        Span::styled(": Skip to dashboard", theme::dim_style()),
+    ]));
+
+    let paragraph = Paragraph::new(lines).block(block);
+    frame.render_widget(paragraph, popup_area);
+}
+
+fn render_tour_overlay(frame: &mut Frame, area: Rect, step: usize) {
+    let tour_step = match onboarding::TOUR_STEPS.get(step) {
+        Some(s) => s,
+        None => return,
+    };
+
+    // Tooltip popup positioned near the target panel
+    let popup_width = 52u16.min(area.width.saturating_sub(4));
+    let popup_height = (tour_step.body.len() as u16 + 6).min(area.height.saturating_sub(4));
+
+    // Position based on target
+    let (x, y) = match tour_step.target {
+        TourTarget::TreePanel => (2, area.height / 4),
+        TourTarget::DetailPanel => (area.width.saturating_sub(popup_width + 2), area.height / 6),
+        TourTarget::CypherPanel => (area.width.saturating_sub(popup_width + 2), area.height / 2),
+        TourTarget::Dashboard => (area.width.saturating_sub(popup_width + 2), area.height / 3),
+        TourTarget::StatusBar => (
+            (area.width.saturating_sub(popup_width)) / 2,
+            area.height.saturating_sub(popup_height + 2),
+        ),
+    };
+
+    let popup_area = Rect::new(
+        x.min(area.width.saturating_sub(popup_width)),
+        y.min(area.height.saturating_sub(popup_height)),
+        popup_width,
+        popup_height,
+    );
+
+    let clear = Block::default().style(Style::default().bg(theme::BG_VOID));
+    frame.render_widget(clear, popup_area);
+
+    let step_indicator = format!(" Tour ({}/{}) ", step + 1, onboarding::TOUR_STEP_COUNT);
+    let block = Block::default()
+        .title(Span::styled(
+            step_indicator,
+            theme::accent_bold(theme::CYBER_CYAN),
+        ))
+        .borders(Borders::ALL)
+        .border_style(Style::default().fg(theme::CYBER_CYAN))
+        .style(Style::default().bg(theme::BG_PANEL));
+
+    let mut lines: Vec<Line> = Vec::new();
+
+    // Step title
+    lines.push(Line::from(Span::styled(
+        format!("  {}", tour_step.title),
+        Style::default()
+            .fg(theme::NEBULA_PURPLE)
+            .add_modifier(Modifier::BOLD),
+    )));
+    lines.push(Line::from(""));
+
+    // Body text
+    for body_line in tour_step.body {
+        lines.push(Line::from(Span::styled(
+            format!("  {body_line}"),
+            Style::default().fg(theme::NOVA_WHITE),
+        )));
+    }
+
+    lines.push(Line::from(""));
+    lines.push(Line::from(vec![
+        Span::styled(
+            format!("  {}", tour_step.hint),
+            Style::default().fg(theme::STAR_DIM),
+        ),
+        Span::styled("  Esc: Skip", theme::dim_style()),
+    ]));
+
+    let paragraph = Paragraph::new(lines).block(block);
     frame.render_widget(paragraph, popup_area);
 }
 

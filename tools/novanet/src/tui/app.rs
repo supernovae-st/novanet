@@ -1,12 +1,15 @@
 //! App state machine for the TUI.
 //!
-//! Two top-level states: `Loading` (connecting to Neo4j, fetching meta-graph)
-//! and `Ready` (interactive browsing). Navigation modes mirror the CLI:
-//! Data (1), Meta (2), Overlay (3), Query (4).
+//! Three top-level states: `Loading` (connecting to Neo4j), `Booting`
+//! (animated logo reveal), and `Ready` (interactive browsing).
+//! Navigation modes mirror the CLI: Data (1), Meta (2), Overlay (3), Query (4).
 
+use crate::tui::boot::BootState;
 use crate::tui::dashboard::DashboardStats;
 use crate::tui::detail::KindDetail;
 use crate::tui::dialogs::DialogState;
+use crate::tui::effects::EffectsState;
+use crate::tui::onboarding::OnboardingState;
 use crate::tui::palette::PaletteState;
 use crate::tui::search::SearchState;
 use crate::tui::tree::TaxonomyTree;
@@ -100,10 +103,16 @@ pub struct FacetFilterState {
 }
 
 /// Top-level app state.
-#[allow(clippy::large_enum_variant)] // Ready is the hot path; Loading is rare
+#[allow(clippy::large_enum_variant)] // Ready is the hot path; Loading/Booting are rare
 pub enum AppState {
     Loading {
         message: String,
+    },
+    /// Boot animation state — plays between Loading and Ready.
+    Booting {
+        boot: Box<BootState>,
+        tree: TaxonomyTree,
+        edge_kind_keys: Vec<String>,
     },
     Ready {
         mode: NavMode,
@@ -130,6 +139,12 @@ pub enum AppState {
         palette: Option<PaletteState>,
         /// Help reference card overlay (`?` key).
         show_help: bool,
+        /// Animation tick counter (increments each frame when effects active).
+        tick: u64,
+        /// Visual effects state (CRT, shake, glitch, pulse).
+        effects: EffectsState,
+        /// Onboarding overlay (first-run welcome screen + guided tour).
+        onboarding: Option<OnboardingState>,
     },
 }
 
@@ -160,6 +175,23 @@ impl AppState {
             show_dashboard: true,
             palette: None,
             show_help: false,
+            tick: 0,
+            effects: EffectsState::default(),
+            onboarding: None,
+        }
+    }
+
+    /// Create a booting state with the loaded taxonomy and terminal dimensions.
+    pub fn booting(
+        tree: TaxonomyTree,
+        edge_kind_keys: Vec<String>,
+        width: u16,
+        height: u16,
+    ) -> Self {
+        AppState::Booting {
+            boot: Box::new(BootState::new(width, height)),
+            tree,
+            edge_kind_keys,
         }
     }
 }
@@ -207,5 +239,45 @@ mod tests {
         assert_eq!(ActivePanel::Tree.cycle_prev(), ActivePanel::CypherPreview);
         assert_eq!(ActivePanel::Detail.cycle_prev(), ActivePanel::Tree);
         assert_eq!(ActivePanel::CypherPreview.cycle_prev(), ActivePanel::Detail);
+    }
+
+    #[test]
+    fn booting_state_has_boot_and_tree() {
+        use crate::tui::tree::{MetaRow, TaxonomyTree};
+        let rows = vec![MetaRow {
+            label: "Realm".to_string(),
+            key: "global".to_string(),
+            display_name: "Global".to_string(),
+            parent_key: None,
+        }];
+        let tree = TaxonomyTree::from_meta_rows(&rows);
+        let state = AppState::booting(tree, vec!["HAS_BLOCK".to_string()], 80, 24);
+        assert!(matches!(state, AppState::Booting { .. }));
+        if let AppState::Booting {
+            boot,
+            edge_kind_keys,
+            ..
+        } = &state
+        {
+            assert!(!boot.is_complete());
+            assert_eq!(edge_kind_keys.len(), 1);
+        }
+    }
+
+    #[test]
+    fn ready_state_has_effects_and_tick() {
+        use crate::tui::tree::{MetaRow, TaxonomyTree};
+        let rows = vec![MetaRow {
+            label: "Realm".to_string(),
+            key: "global".to_string(),
+            display_name: "Global".to_string(),
+            parent_key: None,
+        }];
+        let tree = TaxonomyTree::from_meta_rows(&rows);
+        let state = AppState::ready(tree);
+        if let AppState::Ready { tick, effects, .. } = &state {
+            assert_eq!(*tick, 0);
+            assert!(!effects.is_animating());
+        }
     }
 }

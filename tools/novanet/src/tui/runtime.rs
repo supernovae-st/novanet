@@ -22,6 +22,7 @@ use crate::tui::dashboard::{self, DashboardStats};
 use crate::tui::detail;
 use crate::tui::dialogs::DialogKind;
 use crate::tui::events::{self, Action};
+use crate::tui::onboarding::{self, OnboardingState};
 use crate::tui::tree::{MetaRow, TaxonomyTree};
 use crate::tui::ui;
 
@@ -79,9 +80,18 @@ async fn run_app(
             match msg {
                 BgMessage::MetaLoaded(rows, edge_keys) => {
                     let tree = TaxonomyTree::from_meta_rows(&rows);
-                    state = AppState::ready(tree);
-                    if let AppState::Ready { edge_kind_keys, .. } = &mut state {
-                        *edge_kind_keys = edge_keys;
+                    if matches!(state, AppState::Loading { .. }) {
+                        // First load → boot animation
+                        let (w, h) = terminal
+                            .size()
+                            .map_or((80u16, 24u16), |r| (r.width, r.height));
+                        state = AppState::booting(tree, edge_keys, w, h);
+                    } else {
+                        // Subsequent loads (refresh) → go directly to Ready
+                        state = AppState::ready(tree);
+                        if let AppState::Ready { edge_kind_keys, .. } = &mut state {
+                            *edge_kind_keys = edge_keys;
+                        }
                     }
                 }
                 BgMessage::StatsLoaded(stats) => {
@@ -107,9 +117,28 @@ async fn run_app(
                     }
                 }
                 BgMessage::MutationSuccess(msg) => {
-                    if let AppState::Ready { dialog, status, .. } = &mut state {
+                    // Trigger screen shake on delete operations
+                    let was_delete = matches!(
+                        &state,
+                        AppState::Ready {
+                            dialog: Some(dlg), ..
+                        } if matches!(
+                            dlg.kind,
+                            DialogKind::DeleteNode { .. } | DialogKind::DeleteRelation { .. }
+                        )
+                    );
+                    if let AppState::Ready {
+                        dialog,
+                        status,
+                        effects,
+                        ..
+                    } = &mut state
+                    {
                         *dialog = None;
                         *status = msg;
+                        if was_delete {
+                            effects.trigger_shake();
+                        }
                     }
                     // Re-fetch taxonomy + stats to reflect changes
                     spawn_meta_fetch(db, bg_tx.clone());
@@ -133,8 +162,16 @@ async fn run_app(
                 .map_err(crate::NovaNetError::Io)?;
         }
 
-        // Poll for keyboard events (100ms timeout for responsiveness)
-        if event::poll(std::time::Duration::from_millis(100)).map_err(crate::NovaNetError::Io)? {
+        // Adaptive poll interval: 33ms (~30fps) during animations, 100ms idle
+        let poll_ms = match &state {
+            AppState::Booting { .. } => 33,
+            AppState::Ready { effects, .. } if effects.is_animating() => 33,
+            _ => 100,
+        };
+
+        if event::poll(std::time::Duration::from_millis(poll_ms))
+            .map_err(crate::NovaNetError::Io)?
+        {
             if let Event::Key(key) = event::read().map_err(crate::NovaNetError::Io)? {
                 match events::handle_key(&mut state, key) {
                     Action::Quit => break,
@@ -178,6 +215,61 @@ async fn run_app(
                     }
                     Action::None => {}
                 }
+            }
+        } else {
+            // Timeout: advance animations (no key event received)
+            let ticked = match &mut state {
+                AppState::Booting { boot, .. } => {
+                    boot.advance();
+                    true
+                }
+                AppState::Ready { effects, tick, .. } => {
+                    if effects.is_animating() {
+                        *tick += 1;
+                        effects.tick();
+                        true
+                    } else {
+                        false
+                    }
+                }
+                _ => false,
+            };
+            if ticked {
+                terminal
+                    .draw(|f| ui::render(f, &state))
+                    .map_err(crate::NovaNetError::Io)?;
+            }
+        }
+
+        // Boot completion → transition Booting to Ready
+        if let AppState::Booting { boot, .. } = &state {
+            if boot.is_complete() {
+                let old = std::mem::replace(&mut state, AppState::loading(""));
+                if let AppState::Booting {
+                    tree,
+                    edge_kind_keys,
+                    ..
+                } = old
+                {
+                    state = AppState::ready(tree);
+                    if let AppState::Ready {
+                        edge_kind_keys: ek,
+                        onboarding: ob,
+                        ..
+                    } = &mut state
+                    {
+                        *ek = edge_kind_keys;
+                        // Show onboarding on first run
+                        if onboarding::is_first_run() {
+                            *ob = Some(OnboardingState::new_welcome());
+                        }
+                    }
+                    // Re-fetch stats for dashboard (may have arrived during boot)
+                    spawn_stats_fetch(db, bg_tx.clone());
+                }
+                terminal
+                    .draw(|f| ui::render(f, &state))
+                    .map_err(crate::NovaNetError::Io)?;
             }
         }
     }

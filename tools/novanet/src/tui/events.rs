@@ -8,6 +8,7 @@ use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
 use crate::tui::app::{ActivePanel, AppState, NavMode};
 use crate::tui::detail::{self, KindDetail};
 use crate::tui::dialogs::{DialogKind, DialogState, FieldKind};
+use crate::tui::onboarding::{self, OnboardingState};
 use crate::tui::palette::{CommandAction, PaletteState};
 use crate::tui::search::SearchState;
 use crate::tui::tree::TreeNodeType;
@@ -45,6 +46,16 @@ pub fn handle_key(state: &mut AppState, key: KeyEvent) -> Action {
                 Action::None
             }
         }
+        AppState::Booting { boot, .. } => {
+            // Esc or q skips boot animation
+            match key.code {
+                KeyCode::Esc | KeyCode::Char('q') => {
+                    boot.skip();
+                    Action::Render
+                }
+                _ => Action::None,
+            }
+        }
         AppState::Ready {
             mode,
             tree,
@@ -63,10 +74,18 @@ pub fn handle_key(state: &mut AppState, key: KeyEvent) -> Action {
             show_dashboard,
             palette,
             show_help,
+            tick: _,
+            effects,
+            onboarding,
         } => {
             // When dialog overlay is active, intercept all keys
             if let Some(dlg) = dialog.as_mut() {
                 return handle_dialog_key(dlg, key);
+            }
+
+            // When onboarding overlay is active, intercept all keys
+            if onboarding.is_some() {
+                return handle_onboarding_key(onboarding, status, key);
             }
 
             // When command palette is active, intercept all keys
@@ -125,6 +144,17 @@ pub fn handle_key(state: &mut AppState, key: KeyEvent) -> Action {
                 );
             }
 
+            // Ctrl+R toggles CRT scanline effect
+            if key.modifiers.contains(KeyModifiers::CONTROL) && key.code == KeyCode::Char('r') {
+                effects.toggle_crt();
+                *status = if effects.crt_enabled {
+                    "CRT scanlines ON".to_string()
+                } else {
+                    "CRT scanlines OFF".to_string()
+                };
+                return Action::Render;
+            }
+
             match key.code {
                 KeyCode::Char('q') => Action::Quit,
 
@@ -133,6 +163,7 @@ pub fn handle_key(state: &mut AppState, key: KeyEvent) -> Action {
                     if let Some(new_mode) = NavMode::from_key(c) {
                         *mode = new_mode;
                         *status = format!("Mode: {}", new_mode.label());
+                        effects.trigger_glitch();
                         Action::Fetch
                     } else {
                         Action::None
@@ -141,16 +172,19 @@ pub fn handle_key(state: &mut AppState, key: KeyEvent) -> Action {
                 KeyCode::Tab => {
                     *mode = mode.cycle();
                     *status = format!("Mode: {}", mode.label());
+                    effects.trigger_glitch();
                     Action::Fetch
                 }
 
                 // Panel switching (cycle through Tree → Detail → CypherPreview)
                 KeyCode::Left => {
                     *active_panel = active_panel.cycle_prev();
+                    effects.trigger_pulse();
                     Action::Render
                 }
                 KeyCode::Right => {
                     *active_panel = active_panel.cycle_next();
+                    effects.trigger_pulse();
                     Action::Render
                 }
 
@@ -586,6 +620,72 @@ fn execute_palette_action(
             }
             Action::Render
         }
+    }
+}
+
+/// Handle key events when the onboarding overlay is active.
+fn handle_onboarding_key(
+    onboarding: &mut Option<OnboardingState>,
+    status: &mut String,
+    key: KeyEvent,
+) -> Action {
+    let Some(ob) = onboarding.as_mut() else {
+        return Action::None;
+    };
+
+    match ob {
+        OnboardingState::Welcome { .. } => match key.code {
+            KeyCode::Enter => {
+                ob.start_tour();
+                *status = "Tour: step 1/5".to_string();
+                Action::Render
+            }
+            KeyCode::Esc => {
+                let _ = onboarding::mark_onboarding_complete();
+                *onboarding = None;
+                *status = "Welcome! Press ? for help.".to_string();
+                Action::Render
+            }
+            _ => Action::None,
+        },
+        OnboardingState::Tour { step } => match key.code {
+            KeyCode::Enter | KeyCode::Right => {
+                let current = *step;
+                if !onboarding::tour_next(ob) {
+                    // Tour complete
+                    let _ = onboarding::mark_onboarding_complete();
+                    *onboarding = None;
+                    *status = "Tour complete! Press ? for help anytime.".to_string();
+                } else {
+                    *status = format!("Tour: step {}/5", current + 2);
+                }
+                Action::Render
+            }
+            KeyCode::Left => {
+                onboarding::tour_prev(ob);
+                if let OnboardingState::Tour { step } = ob {
+                    *status = format!("Tour: step {}/5", *step + 1);
+                }
+                Action::Render
+            }
+            KeyCode::Esc => {
+                let _ = onboarding::mark_onboarding_complete();
+                *onboarding = None;
+                *status = "Tour skipped. Press ? for help.".to_string();
+                Action::Render
+            }
+            KeyCode::Char(c @ '1'..='5') => {
+                let target = (c as usize) - ('1' as usize);
+                if target < onboarding::TOUR_STEP_COUNT {
+                    if let OnboardingState::Tour { step } = ob {
+                        *step = target;
+                        *status = format!("Tour: step {}/5", target + 1);
+                    }
+                }
+                Action::Render
+            }
+            _ => Action::None,
+        },
     }
 }
 
@@ -1378,6 +1478,104 @@ mod tests {
         handle_key(&mut state, key(KeyCode::Char('?')));
         if let AppState::Ready { show_help, .. } = &state {
             assert!(!*show_help);
+        }
+    }
+
+    // -----------------------------------------------------------------------
+    // Boot + effects tests
+    // -----------------------------------------------------------------------
+
+    fn make_booting_state() -> AppState {
+        let rows = vec![
+            MetaRow {
+                label: "Realm".to_string(),
+                key: "global".to_string(),
+                display_name: "Global".to_string(),
+                parent_key: None,
+            },
+            MetaRow {
+                label: "Layer".to_string(),
+                key: "knowledge".to_string(),
+                display_name: "Knowledge".to_string(),
+                parent_key: Some("global".to_string()),
+            },
+        ];
+        let tree = TaxonomyTree::from_meta_rows(&rows);
+        AppState::booting(tree, vec![], 80, 24)
+    }
+
+    #[test]
+    fn booting_esc_skips_boot() {
+        let mut state = make_booting_state();
+        let action = handle_key(&mut state, key(KeyCode::Esc));
+        assert!(matches!(action, Action::Render));
+        // Boot should be marked complete
+        if let AppState::Booting { boot, .. } = &state {
+            assert!(boot.is_complete());
+        }
+    }
+
+    #[test]
+    fn booting_q_skips_boot() {
+        let mut state = make_booting_state();
+        let action = handle_key(&mut state, key(KeyCode::Char('q')));
+        assert!(matches!(action, Action::Render));
+        if let AppState::Booting { boot, .. } = &state {
+            assert!(boot.is_complete());
+        }
+    }
+
+    #[test]
+    fn booting_other_keys_ignored() {
+        let mut state = make_booting_state();
+        let action = handle_key(&mut state, key(KeyCode::Down));
+        assert!(matches!(action, Action::None));
+        let action = handle_key(&mut state, key(KeyCode::Char('1')));
+        assert!(matches!(action, Action::None));
+    }
+
+    #[test]
+    fn ctrl_r_toggles_crt() {
+        let mut state = make_ready_state();
+        // CRT starts disabled
+        if let AppState::Ready { effects, .. } = &state {
+            assert!(!effects.crt_enabled);
+        }
+        // Ctrl+R enables
+        let action = handle_key(
+            &mut state,
+            KeyEvent::new(KeyCode::Char('r'), KeyModifiers::CONTROL),
+        );
+        assert!(matches!(action, Action::Render));
+        if let AppState::Ready { effects, .. } = &state {
+            assert!(effects.crt_enabled);
+        }
+        // Ctrl+R disables
+        handle_key(
+            &mut state,
+            KeyEvent::new(KeyCode::Char('r'), KeyModifiers::CONTROL),
+        );
+        if let AppState::Ready { effects, .. } = &state {
+            assert!(!effects.crt_enabled);
+        }
+    }
+
+    #[test]
+    fn mode_switch_triggers_glitch() {
+        let mut state = make_ready_state();
+        // Switch mode with number key
+        handle_key(&mut state, key(KeyCode::Char('2')));
+        if let AppState::Ready { effects, .. } = &state {
+            assert!(effects.glitch.is_some());
+        }
+    }
+
+    #[test]
+    fn panel_right_triggers_pulse() {
+        let mut state = make_ready_state();
+        handle_key(&mut state, key(KeyCode::Right));
+        if let AppState::Ready { effects, .. } = &state {
+            assert!(effects.pulse.is_some());
         }
     }
 

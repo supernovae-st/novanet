@@ -121,6 +121,26 @@ pub fn panel_border(active: bool) -> Style {
     }
 }
 
+/// Panel border with optional nebula pulse effect.
+///
+/// When a pulse is active on the active panel, the border cycles through
+/// nebula colors with bold at peak intensity.
+pub fn panel_border_with_pulse(
+    active: bool,
+    pulse: Option<&crate::tui::effects::NebulaPulse>,
+) -> Style {
+    match (active, pulse) {
+        (true, Some(p)) => {
+            let mut style = Style::default().fg(p.border_color());
+            if p.is_bold() {
+                style = style.add_modifier(Modifier::BOLD);
+            }
+            style
+        }
+        _ => panel_border(active),
+    }
+}
+
 /// Highlighted selection style for tree items.
 pub fn selected_style(color: Color) -> Style {
     Style::default()

@@ -7,10 +7,12 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+### Changed
+- **Phase 5 complete**: Migrated `config/categoryColors.ts` to `design/nodeColors.ts` — all 5 imports updated, zero legacy references
+- **Phase 6 complete**: Verified ViewPicker context-awareness (13 views with `modes` field), keyboard presets T/E (Trait cycle + EdgeFamily cycle + help modal)
+
 ### In Progress
-- Phase 7B: Advanced TUI — Galaxy theme, CRUD dialogs, search overlay
-- Phase 5 polish: Migrate 5 remaining `categoryColors` imports to `layerColors`
-- Phase 6 polish: ViewPicker context-awareness, keyboard presets
+- Phase 7B: Advanced TUI — boot animation + effects engine (compile error in uncommitted work)
 
 ### Pending
 - Phase 8: Final verification (audit, tests, lint, type-check, benchmarks)

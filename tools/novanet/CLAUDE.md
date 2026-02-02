@@ -11,7 +11,7 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 
 ## Current Status
 
-**Phase 7B Batch 4 complete** — Galaxy-themed mission control TUI with search, detail, edge explorer, CRUD dialogs, dashboard stats, ASCII logo, breadcrumb navigation, command palette, and help overlay.
+**Phase 7B Batch 7 complete** — Galaxy-themed mission control TUI with search, detail, edge explorer, CRUD dialogs, dashboard stats, ASCII logo, breadcrumb navigation, command palette, help overlay, boot animation (matrix rain + logo reveal), effects engine (CRT scanlines, glitch transitions, nebula pulse, screen shake), typewriter effect, and first-run onboarding (welcome screen + guided tour).
 
 | Area | Commands | Status |
 |------|----------|--------|
@@ -23,9 +23,9 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 | Locale | `locale list`, `locale import` | Implemented |
 | DB | `db seed`, `db migrate`, `db reset` | Implemented |
 | Filter | `filter build` | Implemented (JSON stdin, Studio subprocess) |
-| TUI | `tui` | Galaxy theme, mission control, search, detail, edge explorer, CRUD dialogs, dashboard, logo, command palette, help overlay |
+| TUI | `tui` | Galaxy theme, mission control, search, detail, edge explorer, CRUD dialogs, dashboard, logo, command palette, help overlay, boot animation, effects engine, onboarding |
 
-**335 tests pass** (`cargo test`). Zero clippy warnings.
+**396 tests pass** (`cargo test`). Zero clippy warnings.
 
 ## Commands
 
@@ -80,7 +80,7 @@ cargo run -- tui                                  # Interactive terminal UI
 # Quality
 cargo clippy -- -D warnings    # Zero warnings policy
 cargo fmt --check              # Formatting check
-cargo test                     # 335 unit tests
+cargo test                     # 396 unit tests
 cargo test -- --ignored        # Neo4j integration tests (requires running Neo4j)
 
 # Pre-commit
@@ -115,11 +115,11 @@ src/
   parsers/        YAML parsers (yaml_node, relations, organizing, views)
   generators/     Code generators (organizing, kind, edge_schema, layer, mermaid, view_mermaid, autowire, hierarchy)
   tui/            Terminal UI (feature-gated behind `tui` feature)
-    app.rs        State machine (NavMode, AppState, ActivePanel, show_help)
+    app.rs        State machine (NavMode, AppState, ActivePanel, onboarding)
     tree.rs       TaxonomyTree (Realm > Layer > Kind hierarchy + cursor + parent_of)
-    events.rs     Keyboard handling (Action dispatch + overlays: dialog > palette > help > search)
+    events.rs     Keyboard handling (Action dispatch + overlays: dialog > onboarding > palette > help > search)
     ui.rs         Galaxy-themed mission control layout + Cypher syntax highlighting + overlays
-    runtime.rs    Async event loop (crossterm + mpsc channel bridge + detail + mutations)
+    runtime.rs    Async event loop (crossterm + mpsc channel bridge + adaptive tick + boot transitions)
     theme.rs      SuperNovae Galaxy palette + style helpers (realm/layer/family colors)
     detail.rs     KindDetail struct + Neo4j fetch + styled/explorer rendering
     search.rs     Fuzzy search overlay (nucleo-matcher + SearchState)
@@ -127,6 +127,9 @@ src/
     dashboard.rs  Dashboard stats (Neo4j metrics, realm/family bar charts)
     logo.rs       ASCII logo (Saturn-graph full/compact/inline + Galaxy-themed colors)
     palette.rs    Command palette (fuzzy search, 11 commands, 5 categories)
+    boot.rs       Boot sequence (6-stage animation: matrix rain → logo reveal → fade)
+    effects.rs    Effects engine (CRT scanlines, glitch, screen shake, nebula pulse, typewriter)
+    onboarding.rs First-run detection, welcome screen, guided tour (5 steps)
 ```
 
 ## Key Patterns
