@@ -18,8 +18,8 @@ import { cn } from '@/lib/utils';
 import { gapTokens } from '@/design/tokens';
 import { useGraphStore } from '@/stores/graphStore';
 import { useFilterStore } from '@/stores/filterStore';
-import { NODE_TYPE_CONFIG, NODE_VISUAL_CATEGORIES, type CategoryConfig } from '@/config/nodeTypes';
-import { CategoryIcon } from '@/components/ui/CategoryIcon';
+import { NODE_TYPE_CONFIG, NODE_VISUAL_LAYERS, type LayerConfig } from '@/config/nodeTypes';
+import { LayerIcon } from '@/components/ui/CategoryIcon';
 import type { NodeType } from '@/types';
 
 // =============================================================================
@@ -42,7 +42,7 @@ const LabelButton = memo(function LabelButton({
   const config = NODE_TYPE_CONFIG[nodeType];
   const color = config?.color || '#6b7280';
   const label = config?.label || nodeType;
-  const category = config?.category || 'project';
+  const layer = config?.layer || 'foundation';
 
   const handleClick = useCallback(
     (e: React.MouseEvent) => {
@@ -70,8 +70,8 @@ const LabelButton = memo(function LabelButton({
       )}
     >
       <span className={cn('flex items-center min-w-0', gapTokens.default)}>
-        <CategoryIcon
-          category={category}
+        <LayerIcon
+          layer={layer}
           size={14}
           strokeWidth={2}
           className="flex-shrink-0"
@@ -96,23 +96,23 @@ const LabelButton = memo(function LabelButton({
 // CATEGORY GROUP
 // =============================================================================
 
-interface CategoryGroupProps {
-  category: CategoryConfig;
+interface LayerGroupProps {
+  layerConfig: LayerConfig;
   typeCounts: Map<NodeType, number>;
   enabledTypes: Set<NodeType>;
   onToggle: (type: NodeType, exclusive: boolean) => void;
 }
 
-const CategoryGroup = memo(function CategoryGroup({
-  category,
+const LayerGroup = memo(function LayerGroup({
+  layerConfig,
   typeCounts,
   enabledTypes,
   onToggle,
-}: CategoryGroupProps) {
+}: LayerGroupProps) {
   // Filter to types that have nodes in the graph
   const visibleTypes = useMemo(() => {
-    return category.nodeTypes.filter((t) => (typeCounts.get(t) || 0) > 0);
-  }, [category.nodeTypes, typeCounts]);
+    return layerConfig.nodeTypes.filter((t) => (typeCounts.get(t) || 0) > 0);
+  }, [layerConfig.nodeTypes, typeCounts]);
 
   // Calculate total count for this category
   const totalCount = useMemo(() => {
@@ -126,17 +126,17 @@ const CategoryGroup = memo(function CategoryGroup({
     <div className="space-y-1">
       {/* Category Header */}
       <div className={cn('flex items-center px-1 py-1', gapTokens.default)}>
-        <CategoryIcon
-          category={category.id}
+        <LayerIcon
+          layer={layerConfig.id}
           size={14}
           strokeWidth={2}
-          style={{ color: category.color }}
+          style={{ color: layerConfig.color }}
         />
         <span
           className="text-[11px] font-semibold uppercase tracking-wider"
-          style={{ color: category.color }}
+          style={{ color: layerConfig.color }}
         >
-          {category.label}
+          {layerConfig.label}
         </span>
         <span className="text-[10px] text-white/40">
           ({totalCount.toLocaleString()})
@@ -262,10 +262,10 @@ export const LabelFilter = memo(function LabelFilter({ className }: LabelFilterP
 
       {/* Category Groups */}
       <div className="space-y-3">
-        {NODE_VISUAL_CATEGORIES.map((category) => (
-          <CategoryGroup
-            key={category.id}
-            category={category}
+        {NODE_VISUAL_LAYERS.map((layerConfig) => (
+          <LayerGroup
+            key={layerConfig.id}
+            layerConfig={layerConfig}
             typeCounts={typeCounts}
             enabledTypes={enabledNodeTypes}
             onToggle={handleToggle}

@@ -1,48 +1,57 @@
 'use client';
 
 /**
- * CategoryIcon - Memory-efficient SVG icon system using Lucide (v8.1.0)
+ * LayerIcon - Memory-efficient SVG icon system using Lucide (v9.0.0)
  *
  * Features:
  * - Tree-shakeable (only imports used icons)
  * - No memory leaks (pure React components)
- * - One icon per category (6 categories in v8.1.0)
+ * - One icon per layer (9 layers in v9.0.0)
  * - Consistent styling with glow effects
  *
- * Categories:
- * - project: Package/folder structure
- * - content: Semantic content (lightbulb)
- * - locale: Global/languages
- * - generation: AI/magic (sparkles)
- * - seo: Search optimization
- * - geo: Target/geolocation
+ * Layers:
+ * - foundation: Package/project structure
+ * - structure: Layout (pages, blocks)
+ * - semantic: Lightbulb (concepts)
+ * - instruction: FileText (prompts, rules, types)
+ * - output: Sparkles (generated content)
+ * - config: Settings (locale configuration)
+ * - knowledge: BookOpen (locale knowledge)
+ * - seo: Search (search optimization)
+ * - geo: Target (geolocation)
  */
 
 import { memo, useMemo } from 'react';
 import {
   Package,
+  LayoutGrid,
   Lightbulb,
-  Globe,
+  FileText,
   Sparkles,
+  Settings,
+  BookOpen,
   Search,
   Target,
   type LucideProps,
 } from 'lucide-react';
-import type { NodeCategory } from '@/config/nodeTypes';
+import type { Layer } from '@novanet/core/types';
 
 // =============================================================================
 // Icon Map - Statically defined for tree-shaking
 // =============================================================================
 
 /**
- * Category to Lucide icon component mapping (v8.1.0 - 6 categories)
- * Each category has ONE representative icon
+ * Layer to Lucide icon component mapping (v9.0.0 - 9 layers)
+ * Each layer has ONE representative icon
  */
-const CATEGORY_ICONS: Record<NodeCategory, React.ComponentType<LucideProps>> = {
-  project: Package,
-  content: Lightbulb,
-  locale: Globe,
-  generation: Sparkles,
+const LAYER_ICONS: Record<Layer, React.ComponentType<LucideProps>> = {
+  foundation: Package,
+  structure: LayoutGrid,
+  semantic: Lightbulb,
+  instruction: FileText,
+  output: Sparkles,
+  config: Settings,
+  knowledge: BookOpen,
   seo: Search,
   geo: Target,
 };
@@ -51,10 +60,10 @@ const CATEGORY_ICONS: Record<NodeCategory, React.ComponentType<LucideProps>> = {
 // Component Props
 // =============================================================================
 
-export interface CategoryIconProps extends Omit<LucideProps, 'ref'> {
-  /** The node category to display icon for */
-  category: NodeCategory;
-  /** Optional glow effect with category color */
+export interface LayerIconProps extends Omit<LucideProps, 'ref'> {
+  /** The layer to display icon for */
+  layer: Layer;
+  /** Optional glow effect with layer color */
   glow?: boolean;
   /** Glow color (defaults to currentColor) */
   glowColor?: string;
@@ -65,20 +74,20 @@ export interface CategoryIconProps extends Omit<LucideProps, 'ref'> {
 // =============================================================================
 
 /**
- * CategoryIcon - Renders the appropriate Lucide icon for a node category
+ * LayerIcon - Renders the appropriate Lucide icon for a layer
  *
  * @example
- * <CategoryIcon category="content" size={24} className="text-amber-500" />
- * <CategoryIcon category="locale" glow glowColor="#10b981" />
+ * <LayerIcon layer="semantic" size={24} className="text-amber-500" />
+ * <LayerIcon layer="config" glow glowColor="#10b981" />
  */
-export const CategoryIcon = memo(function CategoryIcon({
-  category,
+export const LayerIcon = memo(function LayerIcon({
+  layer,
   glow = false,
   glowColor,
   style,
   ...props
-}: CategoryIconProps) {
-  const IconComponent = CATEGORY_ICONS[category];
+}: LayerIconProps) {
+  const IconComponent = LAYER_ICONS[layer];
 
   // Memoize glow style to prevent re-renders
   const computedStyle = useMemo(() => {
@@ -92,7 +101,7 @@ export const CategoryIcon = memo(function CategoryIcon({
   }, [glow, glowColor, style]);
 
   if (!IconComponent) {
-    // Fallback for unknown category
+    // Fallback for unknown layer
     return <Package style={computedStyle} {...props} />;
   }
 
@@ -104,14 +113,14 @@ export const CategoryIcon = memo(function CategoryIcon({
 // =============================================================================
 
 /**
- * Get the Lucide icon component for a category
+ * Get the Lucide icon component for a layer
  * Useful when you need the component reference, not a rendered element
  */
-export function getCategoryIconComponent(category: NodeCategory) {
-  return CATEGORY_ICONS[category] || Package;
+export function getLayerIconComponent(layer: Layer) {
+  return LAYER_ICONS[layer] || Package;
 }
 
 /**
  * Export icon map for type checking
  */
-export type CategoryIconMap = typeof CATEGORY_ICONS;
+export type LayerIconMap = typeof LAYER_ICONS;

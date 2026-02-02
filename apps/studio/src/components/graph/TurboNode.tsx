@@ -22,7 +22,7 @@ import { Handle, Position, type Node, type NodeProps } from '@xyflow/react';
 import { cn } from '@/lib/utils';
 import { iconSizes, gapTokens } from '@/design/tokens';
 import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
-import { CategoryIcon } from '@/components/ui/CategoryIcon';
+import { LayerIcon } from '@/components/ui/CategoryIcon';
 import { useNodeInteractions } from '@/hooks';
 import { getNodeConfig } from './nodes/NodeConfig';
 import {
@@ -132,8 +132,8 @@ export const TurboNode = memo(function TurboNode(props: NodeProps<TurboNodeType>
                 )}
                 style={iconContainerStyle}
               >
-                <CategoryIcon
-                  category={typeConfig.category}
+                <LayerIcon
+                  layer={typeConfig.layer}
                   size={24}
                   strokeWidth={2}
                   style={iconStyle}
@@ -190,7 +190,7 @@ export const TurboNode = memo(function TurboNode(props: NodeProps<TurboNodeType>
               className={cn('w-2 h-2 rounded-full', selected && 'animate-pulse')}
               style={getStatusDotStyle(colors.primary)}
             />
-            {typeConfig.category}
+            {typeConfig.layer}
           </div>
 
           {/* Source Handle - HOLLOW (outgoing) */}

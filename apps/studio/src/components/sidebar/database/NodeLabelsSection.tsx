@@ -13,8 +13,8 @@
  */
 
 import { memo, useCallback, useMemo } from 'react';
-import { NODE_TYPE_CONFIG, NODE_VISUAL_CATEGORIES } from '@/config/nodeTypes';
-import { CategoryIcon } from '@/components/ui/CategoryIcon';
+import { NODE_TYPE_CONFIG, NODE_VISUAL_LAYERS } from '@/config/nodeTypes';
+import { LayerIcon } from '@/components/ui/CategoryIcon';
 import { FilterTree } from '@/components/ui/FilterTree';
 import { iconSizes } from '@/design/tokens';
 import { calculateCheckboxState } from '@/hooks';
@@ -56,7 +56,7 @@ export const NodeLabelsSection = memo(function NodeLabelsSection({
 }: NodeLabelsSectionProps) {
   // Memoize category data
   const categoryData = useMemo(() => {
-    return NODE_VISUAL_CATEGORIES.map((category) => {
+    return NODE_VISUAL_LAYERS.map((category) => {
       const totalCount = category.nodeTypes.reduce(
         (sum, type) => sum + (labelCounts.get(type) || 0),
         0
@@ -93,8 +93,8 @@ export const NodeLabelsSection = memo(function NodeLabelsSection({
             id={category.id}
             label={category.label}
             icon={
-              <CategoryIcon
-                category={category.id}
+              <LayerIcon
+                layer={category.id}
                 className={iconSizes.sm}
                 style={{ color: category.color }}
               />
@@ -111,7 +111,7 @@ export const NodeLabelsSection = memo(function NodeLabelsSection({
               const config = NODE_TYPE_CONFIG[nodeType];
               const color = config?.color || '#6b7280';
               const label = config?.label || nodeType;
-              const nodeCategory = config?.category || 'project';
+              const nodeLayer = config?.layer || 'foundation';
               const count = labelCounts.get(nodeType) || 0;
 
               return (
@@ -120,8 +120,8 @@ export const NodeLabelsSection = memo(function NodeLabelsSection({
                   id={nodeType}
                   label={label}
                   icon={
-                    <CategoryIcon
-                      category={nodeCategory}
+                    <LayerIcon
+                      layer={nodeLayer}
                       className={`${iconSizes.sm} flex-shrink-0`}
                       style={{ color }}
                     />

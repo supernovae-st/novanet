@@ -45,7 +45,7 @@ describe('filterStore', () => {
       customPresets: [],
       priorityFilter: [],
       freshnessFilter: [],
-      categoryFilter: [],
+      layerFilter: [],
       activeOnly: false,
       localeFamily: null,
     });
@@ -73,7 +73,7 @@ describe('filterStore', () => {
       expect(state.searchQuery).toBe('');
       expect(state.priorityFilter).toEqual([]);
       expect(state.freshnessFilter).toEqual([]);
-      expect(state.categoryFilter).toEqual([]);
+      expect(state.layerFilter).toEqual([]);
     });
   });
 
@@ -211,41 +211,41 @@ describe('filterStore', () => {
     });
   });
 
-  describe('setCategoryFilter', () => {
-    it('should set category filter and update enabled node types', () => {
-      useFilterStore.getState().setCategoryFilter(['project', 'content']);
+  describe('setLayerFilter', () => {
+    it('should set layer filter and update enabled node types', () => {
+      useFilterStore.getState().setLayerFilter(['foundation', 'semantic']);
 
       const state = useFilterStore.getState();
-      expect(state.categoryFilter).toEqual(['project', 'content']);
-      // Should have node types from both categories
+      expect(state.layerFilter).toEqual(['foundation', 'semantic']);
+      // Should have node types from both layers
       expect(state.enabledNodeTypes.has('Project')).toBe(true);
       expect(state.enabledNodeTypes.has('Concept')).toBe(true);
     });
   });
 
-  describe('toggleCategory', () => {
-    it('should add category if not present', () => {
-      useFilterStore.setState({ categoryFilter: [] });
+  describe('toggleLayer', () => {
+    it('should add layer if not present', () => {
+      useFilterStore.setState({ layerFilter: [] });
 
-      useFilterStore.getState().toggleCategory('project');
+      useFilterStore.getState().toggleLayer('foundation');
 
-      expect(useFilterStore.getState().categoryFilter).toContain('project');
+      expect(useFilterStore.getState().layerFilter).toContain('foundation');
     });
 
-    it('should remove category if present', () => {
-      useFilterStore.setState({ categoryFilter: ['project', 'content'] });
+    it('should remove layer if present', () => {
+      useFilterStore.setState({ layerFilter: ['foundation', 'structure'] });
 
-      useFilterStore.getState().toggleCategory('project');
+      useFilterStore.getState().toggleLayer('foundation');
 
       const state = useFilterStore.getState();
-      expect(state.categoryFilter).not.toContain('project');
-      expect(state.categoryFilter).toContain('content');
+      expect(state.layerFilter).not.toContain('foundation');
+      expect(state.layerFilter).toContain('structure');
     });
 
-    it('should reset to CORE_TYPES when all categories removed', () => {
-      useFilterStore.setState({ categoryFilter: ['project'] });
+    it('should reset to CORE_TYPES when all layers removed', () => {
+      useFilterStore.setState({ layerFilter: ['foundation'] });
 
-      useFilterStore.getState().toggleCategory('project');
+      useFilterStore.getState().toggleLayer('foundation');
 
       expect(useFilterStore.getState().enabledNodeTypes).toEqual(new Set(CORE_TYPES));
     });
@@ -283,7 +283,7 @@ describe('filterStore', () => {
         activePresetId: null,
         priorityFilter: ['critical'],
         freshnessFilter: ['realtime'],
-        categoryFilter: ['project'],
+        layerFilter: ['foundation'],
         activeOnly: true,
         localeFamily: 'en',
       });
@@ -299,7 +299,7 @@ describe('filterStore', () => {
       expect(state.activePresetId).toBe(DEFAULT_PRESET.id);
       expect(state.priorityFilter).toEqual([]);
       expect(state.freshnessFilter).toEqual([]);
-      expect(state.categoryFilter).toEqual([]);
+      expect(state.layerFilter).toEqual([]);
       expect(state.activeOnly).toBe(false);
       expect(state.localeFamily).toBeNull();
     });

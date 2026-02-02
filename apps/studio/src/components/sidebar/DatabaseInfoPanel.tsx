@@ -18,7 +18,7 @@ import { useState, useCallback, useEffect, memo, useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { RefreshCw } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { NODE_VISUAL_CATEGORIES, ALL_NODE_TYPES } from '@/config/nodeTypes';
+import { NODE_VISUAL_LAYERS, ALL_NODE_TYPES } from '@/config/nodeTypes';
 import { DEFAULT_FETCH_LIMIT } from '@/config/constants';
 import { useQueryStore, QueryBuilder } from '@/stores/queryStore';
 import { useFilterStore } from '@/stores/filterStore';
@@ -165,7 +165,7 @@ export const DatabaseInfoPanel = memo(function DatabaseInfoPanel({
   const toggleCategoryLabels = useCallback((categoryId: string, types: string[]) => {
     setSelectedLabels((prev) => {
       const next = new Set(prev);
-      NODE_VISUAL_CATEGORIES.find((c) => c.id === categoryId)?.nodeTypes.forEach((t) =>
+      NODE_VISUAL_LAYERS.find((c) => c.id === categoryId)?.nodeTypes.forEach((t) =>
         next.delete(t)
       );
       types.forEach((t) => next.add(t));

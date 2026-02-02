@@ -22,7 +22,7 @@ import { cn } from '@/lib/utils';
 import { glassClasses } from '@/design/tokens';
 import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
 import { getLocaleKnowledgeColors } from '@/config/categoryColors';
-import { CategoryIcon } from '@/components/ui/CategoryIcon';
+import { LayerIcon } from '@/components/ui/CategoryIcon';
 import type { BaseNodeData } from './BaseNodeWrapper';
 import { BlueprintOverlay } from './BlueprintOverlay';
 import { NODE_BG, NODE_DESIGN } from '@/config/constants';
@@ -162,8 +162,8 @@ export const LocaleKnowledgeNode = memo(function LocaleKnowledgeNode(props: Node
           <NodeHandles color={colors.primary} selected={selected} layout="vertical" size="small" />
 
           {/* Icon - SVG from Lucide */}
-          <CategoryIcon
-            category={config.category}
+          <LayerIcon
+            layer={config.layer}
             size={20}
             strokeWidth={2}
             className={cn(

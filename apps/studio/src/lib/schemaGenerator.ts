@@ -65,7 +65,7 @@ export function generateSchemaGraph(): SchemaGraphResult {
         isSchema: true,
         scope: realm,
         behavior,
-        category: config.category,
+        category: config.layer,
         icon: config.icon,
         color: config.color,
       },

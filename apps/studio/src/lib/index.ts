@@ -105,11 +105,9 @@ export { getSchema, formatSchemaForPrompt } from './schemaCache';
 
 export {
   NovaNetFilter,
-  NODE_CATEGORIES,
   type FilterCriteria,
   type NovaNetFilterCriteria,
   type CypherQuery,
   type Priority,
   type Freshness,
-  type NodeCategory,
 } from './filterAdapter';

@@ -12,7 +12,7 @@
  */
 
 import type { NodeType } from '@/types';
-import type { NodeCategory } from '@/lib/filterAdapter';
+import type { Layer } from '@novanet/core/types';
 
 // =============================================================================
 // Color Types
@@ -24,26 +24,29 @@ export interface GradientColors {
 }
 
 // =============================================================================
-// Category Colors (used by TurboNode)
+// Layer Gradient Colors (v9.0.0 - used by TurboNode)
 // =============================================================================
 
-const CATEGORY_COLORS: Record<NodeCategory, GradientColors> = {
-  project: { primary: '#8b5cf6', secondary: '#6366f1' },   // Violet → Indigo
-  content: { primary: '#f59e0b', secondary: '#f97316' },   // Amber → Orange
-  locale: { primary: '#10b981', secondary: '#22c55e' },    // Emerald → Green
-  generation: { primary: '#3b82f6', secondary: '#06b6d4' }, // Blue → Cyan
-  seo: { primary: '#ec4899', secondary: '#f43f5e' },       // Pink → Rose
-  geo: { primary: '#6366f1', secondary: '#8b5cf6' },       // Indigo → Violet
+const LAYER_GRADIENT_COLORS: Record<Layer, GradientColors> = {
+  foundation: { primary: '#6c71c4', secondary: '#6366f1' },   // Solarized violet → Indigo
+  structure: { primary: '#859900', secondary: '#a3e635' },     // Solarized green → Lime
+  semantic: { primary: '#b58900', secondary: '#f59e0b' },      // Solarized yellow → Amber
+  instruction: { primary: '#d33682', secondary: '#ec4899' },   // Solarized magenta → Pink
+  output: { primary: '#dc322f', secondary: '#f97316' },        // Solarized red → Orange
+  config: { primary: '#2aa198', secondary: '#14b8a6' },        // Solarized cyan → Teal
+  knowledge: { primary: '#268bd2', secondary: '#3b82f6' },     // Solarized blue → Blue
+  seo: { primary: '#cb4b16', secondary: '#f97316' },           // Solarized orange → Orange
+  geo: { primary: '#93a1a1', secondary: '#a8a29e' },           // Solarized base1 → Stone
 };
 
-const DEFAULT_CATEGORY_COLORS: GradientColors = { primary: '#6366f1', secondary: '#8b5cf6' };
+const DEFAULT_LAYER_COLORS: GradientColors = { primary: '#6366f1', secondary: '#8b5cf6' };
 
 /**
- * Get gradient colors for a category
+ * Get gradient colors for a layer
  */
-export function getCategoryColors(category: NodeCategory | undefined): GradientColors {
-  if (!category) return DEFAULT_CATEGORY_COLORS;
-  return CATEGORY_COLORS[category] ?? DEFAULT_CATEGORY_COLORS;
+export function getLayerGradientColors(layer: Layer | undefined): GradientColors {
+  if (!layer) return DEFAULT_LAYER_COLORS;
+  return LAYER_GRADIENT_COLORS[layer] ?? DEFAULT_LAYER_COLORS;
 }
 
 // =============================================================================
@@ -110,7 +113,7 @@ export function getNodeTypeColors(type: NodeType | string): GradientColors {
     return LOCALE_KNOWLEDGE_COLORS[type];
   }
   // Default
-  return DEFAULT_CATEGORY_COLORS;
+  return DEFAULT_LAYER_COLORS;
 }
 
 // =============================================================================
@@ -164,8 +167,8 @@ export function getRelationColors(type: string): GradientColors {
 // =============================================================================
 
 export const COLORS = {
-  CATEGORY: CATEGORY_COLORS,
+  LAYER: LAYER_GRADIENT_COLORS,
   STRUCTURAL: STRUCTURAL_COLORS,
   LOCALE_KNOWLEDGE: LOCALE_KNOWLEDGE_COLORS,
-  DEFAULT: DEFAULT_CATEGORY_COLORS,
+  DEFAULT: DEFAULT_LAYER_COLORS,
 } as const;

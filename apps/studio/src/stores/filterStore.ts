@@ -1,18 +1,18 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import type { Realm, NodeType } from '@novanet/core/types';
+import type { Realm, Layer, NodeType } from '@novanet/core/types';
 import type { FilterPreset } from '@/types';
-import { CORE_TYPES, ALL_NODE_TYPES } from '@/config/nodeTypes';
+import { CORE_TYPES, ALL_NODE_TYPES, NODE_LAYERS } from '@/config/nodeTypes';
 import { DEFAULT_PRESET } from '@/config/presets';
-import type { Priority, Freshness, NodeCategory } from '@/lib/filterAdapter';
-import { NovaNetFilter, NODE_CATEGORIES, VIEW_PRESETS, getViewPresetByShortcut } from '@/lib/filterAdapter';
+import type { Priority, Freshness } from '@/lib/filterAdapter';
+import { NovaNetFilter, VIEW_PRESETS, getViewPresetByShortcut } from '@/lib/filterAdapter';
 import { logger } from '@/lib/logger';
 
 // Valid node types (v7.2.1) - used to filter out legacy types from localStorage
 const validNodeTypes = new Set<string>(ALL_NODE_TYPES);
 
-// Extended filter state (aligned with novanet-core v7.2.1)
+// Extended filter state (aligned with v9.0.0)
 interface ExtendedFilterState {
   // Core filters
   enabledNodeTypes: Set<NodeType>;
@@ -22,10 +22,10 @@ interface ExtendedFilterState {
   depthLimit: number;
   activePresetId: string | null;
 
-  // v7.2.1 additions
+  // Faceted filters (v9)
   priorityFilter: Priority[];
   freshnessFilter: Freshness[];
-  categoryFilter: NodeCategory[];
+  layerFilter: Layer[];
   activeOnly: boolean;
   localeFamily: string | null;
 
@@ -43,11 +43,11 @@ interface FilterStoreState extends ExtendedFilterState {
   setSearchQuery: (query: string) => void;
   setDepthLimit: (depth: number) => void;
 
-  // v7.2.1 filter actions
+  // Faceted filter actions (v9)
   setPriorityFilter: (priorities: Priority[]) => void;
   setFreshnessFilter: (freshness: Freshness[]) => void;
-  setCategoryFilter: (categories: NodeCategory[]) => void;
-  toggleCategory: (category: NodeCategory) => void;
+  setLayerFilter: (layers: Layer[]) => void;
+  toggleLayer: (layer: Layer) => void;
   setActiveOnly: (active: boolean) => void;
   setLocaleFamily: (family: string | null) => void;
 
@@ -88,10 +88,10 @@ export const useFilterStore = create<FilterStoreState>()(
       activePresetId: DEFAULT_PRESET.id,
       customPresets: [],
 
-      // v7.2.1 initial state
+      // Faceted filters (v9)
       priorityFilter: [],
       freshnessFilter: [],
-      categoryFilter: [],
+      layerFilter: [],
       activeOnly: false,
       localeFamily: null,
 
@@ -162,13 +162,14 @@ export const useFilterStore = create<FilterStoreState>()(
         });
       },
 
-      setCategoryFilter: (categories) => {
+      setLayerFilter: (layers) => {
         set((state) => {
-          state.categoryFilter = categories;
-          // Update enabled node types based on categories
+          state.layerFilter = layers;
+          // Update enabled node types based on layers
           const types = new Set<NodeType>();
-          for (const category of categories) {
-            NODE_CATEGORIES[category].forEach(t => types.add(t));
+          for (const layer of layers) {
+            const layerTypes = NODE_LAYERS[layer];
+            if (layerTypes) layerTypes.forEach(t => types.add(t));
           }
           if (types.size > 0) {
             state.enabledNodeTypes = types;
@@ -177,18 +178,19 @@ export const useFilterStore = create<FilterStoreState>()(
         });
       },
 
-      toggleCategory: (category) => {
+      toggleLayer: (layer) => {
         set((state) => {
-          const idx = state.categoryFilter.indexOf(category);
+          const idx = state.layerFilter.indexOf(layer);
           if (idx >= 0) {
-            state.categoryFilter.splice(idx, 1);
+            state.layerFilter.splice(idx, 1);
           } else {
-            state.categoryFilter.push(category);
+            state.layerFilter.push(layer);
           }
           // Update enabled node types
           const types = new Set<NodeType>();
-          for (const cat of state.categoryFilter) {
-            NODE_CATEGORIES[cat].forEach(t => types.add(t));
+          for (const l of state.layerFilter) {
+            const layerTypes = NODE_LAYERS[l];
+            if (layerTypes) layerTypes.forEach(t => types.add(t));
           }
           if (types.size > 0) {
             state.enabledNodeTypes = types;
@@ -230,8 +232,8 @@ export const useFilterStore = create<FilterStoreState>()(
             if (criteria.filters.freshness) {
               state.freshnessFilter = criteria.filters.freshness;
             }
-            if (criteria.filters.categories) {
-              state.categoryFilter = criteria.filters.categories;
+            if (criteria.filters.layers) {
+              state.layerFilter = criteria.filters.layers;
             }
             state.activePresetId = presetId;
           });
@@ -253,10 +255,10 @@ export const useFilterStore = create<FilterStoreState>()(
           state.searchQuery = '';
           state.depthLimit = 2;
           state.activePresetId = DEFAULT_PRESET.id;
-          // Reset v7.2.1 filters
+          // Reset faceted filters (v9)
           state.priorityFilter = [];
           state.freshnessFilter = [];
-          state.categoryFilter = [];
+          state.layerFilter = [];
           state.activeOnly = false;
           state.localeFamily = null;
         });
@@ -272,9 +274,9 @@ export const useFilterStore = create<FilterStoreState>()(
           filter = filter.byTypes(...Array.from(state.enabledNodeTypes));
         }
 
-        // Apply categories
-        if (state.categoryFilter.length > 0) {
-          filter = filter.byCategory(...state.categoryFilter);
+        // Apply layers
+        if (state.layerFilter.length > 0) {
+          filter = filter.byLayer(...state.layerFilter);
         }
 
         // Apply locale
@@ -432,16 +434,38 @@ export const useFilterStore = create<FilterStoreState>()(
         depthLimit: state.depthLimit,
         activePresetId: state.activePresetId,
         customPresets: state.customPresets,
-        // v7.2.1 additions
+        // Faceted filters (v9)
         priorityFilter: state.priorityFilter,
         freshnessFilter: state.freshnessFilter,
-        categoryFilter: state.categoryFilter,
+        layerFilter: state.layerFilter,
         activeOnly: state.activeOnly,
         localeFamily: state.localeFamily,
         // Schema mode collapsed groups (Task 3.1)
         collapsedRealms: state.collapsedRealms,
         collapsedLayers: state.collapsedLayers,
       }) as FilterStoreState,
+      version: 9,
+      migrate: (persistedState: unknown, version: number) => {
+        if (version < 9) {
+          // v9: clear stale v8 category-based filters, reset to defaults
+          return {
+            enabledNodeTypes: new Set(CORE_TYPES),
+            selectedProject: null,
+            selectedLocale: null,
+            depthLimit: 2,
+            activePresetId: DEFAULT_PRESET.id,
+            customPresets: [],
+            priorityFilter: [],
+            freshnessFilter: [],
+            layerFilter: [],
+            activeOnly: false,
+            localeFamily: null,
+            collapsedRealms: [],
+            collapsedLayers: [],
+          };
+        }
+        return persistedState as FilterStoreState;
+      },
     }
   )
 );
