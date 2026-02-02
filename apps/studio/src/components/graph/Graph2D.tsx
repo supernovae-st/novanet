@@ -646,7 +646,7 @@ function Graph2DInner({
   // =========================================================================
   // NODE TYPE → LAYER MAPPING (from Neo4j via useMagneticData)
   // =========================================================================
-  // Comes from DEFINES_TYPE relationships in Neo4j, seeded from YAML.
+  // Comes from OF_KIND + IN_LAYER relationships in Neo4j, seeded from YAML.
   // No hardcoded maps - all data flows: YAML → Neo4j → API → here.
   const nodeTypeToLayer = magneticData?.nodeTypeMapping ?? {};
 
