@@ -75,10 +75,13 @@ pnpm test            # Tests
 **View**
 | Key | Action |
 |-----|--------|
+| `N` | Cycle navigation mode (Data → Meta → Overlay → Query) |
 | `V` | Reserved (layout toggle) |
 | `G` | Focus mode (Zen) |
 | `M` | Toggle minimap |
 | `L` | Toggle edge labels |
+| `T` | Cycle trait filter (Invariant → Localized → ... → None) |
+| `E` | Cycle edge family filter (Ownership → ... → None) |
 | `⇧L` | Cycle locale filter |
 | `[` | Toggle left sidebar |
 | `]` | Toggle right panel |
@@ -115,10 +118,11 @@ pnpm test            # Tests
 | ⇧Tab | Previous connected node |
 | Delete | Hide node from view |
 
-### API Routes (10 routes)
+### API Routes (11 routes)
 - `/api/chat` - Claude AI endpoint
 - `/api/graph` - Main graph data
 - `/api/graph/expand` - Expand node neighbors
+- `/api/graph/navigation` - Faceted navigation (realm/layer/trait filters)
 - `/api/graph/ontology` - Ontology metadata
 - `/api/graph/organizing-principles` - Organizing principles (realms, layers)
 - `/api/graph/query` - Execute Cypher queries

@@ -30,27 +30,27 @@ describe('SchemaFilterPanel', () => {
   });
 
   describe('Rendering', () => {
-    it('renders all 3 scopes with icons and labels', () => {
+    it('renders all 3 realms with icons and labels', () => {
       render(<SchemaFilterPanel />);
 
-      // Check scope headers with icons
+      // Check realm headers with icons
       expect(screen.getByText('PROJECT')).toBeInTheDocument();
       expect(screen.getByText('GLOBAL')).toBeInTheDocument();
       expect(screen.getByText('SHARED')).toBeInTheDocument();
     });
 
-    it('renders scope icons as Lucide SVGs', () => {
+    it('renders realm icons as Lucide SVGs', () => {
       render(<SchemaFilterPanel />);
 
-      // Scope icons are Lucide SVGs (Package, Globe, Target), not emojis
+      // Realm icons are Lucide SVGs (Package, Globe, Target), not emojis
       const svgIcons = document.querySelectorAll('svg');
       expect(svgIcons.length).toBeGreaterThan(0);
     });
 
-    it('renders node count for each scope in parentheses', () => {
+    it('renders node count for each realm in parentheses', () => {
       render(<SchemaFilterPanel />);
 
-      // Scope counts are in parentheses: (14), (15), (6)
+      // Realm counts are in parentheses: (14), (15), (6)
       expect(screen.getByText('(14)')).toBeInTheDocument(); // Project
       expect(screen.getByText('(15)')).toBeInTheDocument(); // Global
       expect(screen.getByText('(6)')).toBeInTheDocument(); // Shared
@@ -135,28 +135,28 @@ describe('SchemaFilterPanel', () => {
 
       // FilterSection has checkboxes with role="checkbox"
       const checkboxes = screen.getAllByRole('checkbox');
-      expect(checkboxes.length).toBeGreaterThanOrEqual(3); // At least 3 scopes
+      expect(checkboxes.length).toBeGreaterThanOrEqual(3); // At least 3 realms
     });
   });
 
-  describe('Subcategory Toggle Behavior', () => {
-    it('calls toggleLayerCollapsed when subcategory row is clicked', () => {
+  describe('Layer Toggle Behavior', () => {
+    it('calls toggleLayerCollapsed when layer row is clicked', () => {
       render(<SchemaFilterPanel />);
 
-      // Click on Foundation subcategory row
+      // Click on Foundation layer row
       const foundationText = screen.getByText('Foundation');
       fireEvent.click(foundationText);
 
       expect(mockToggleLayerCollapsed).toHaveBeenCalledWith('project', 'foundation');
     });
 
-    it('renders subcategory checkboxes with checked state', () => {
+    it('renders layer checkboxes with checked state', () => {
       render(<SchemaFilterPanel />);
 
       // FilterTree.Row renders checkboxes with aria-checked for toggle state
-      // Find all checkboxes (3 scope checkboxes + 9 subcategory checkboxes = 12)
+      // Find all checkboxes (3 realm checkboxes + 9 layer checkboxes = 12)
       const checkboxes = screen.getAllByRole('checkbox', { checked: true });
-      // 3 scope checkboxes + 9 subcategory checkboxes = 12 checked by default
+      // 3 realm checkboxes + 9 layer checkboxes = 12 checked by default
       expect(checkboxes.length).toBeGreaterThanOrEqual(12);
     });
   });

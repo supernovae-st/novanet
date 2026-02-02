@@ -106,8 +106,12 @@ export default function HomePage() {
     useShallow((state) => ({
       applyViewPresetByShortcut: state.applyViewPresetByShortcut,
       toCypher: state.toCypher,
+      setTraitFilter: state.setTraitFilter,
+      setEdgeFamilyFilter: state.setEdgeFamilyFilter,
     }))
   );
+  const traitFilter = useFilterStore((s) => s.traitFilter);
+  const edgeFamilyFilter = useFilterStore((s) => s.edgeFamilyFilter);
 
   // Graph Store - state + selectors
   const totalNodes = useGraphStore((state) => state.totalNodes);
@@ -421,6 +425,40 @@ export default function HomePage() {
         return;
       }
 
+      // Cycle trait filter (T) - none → invariant → localized → knowledge → derived → job → none
+      if (e.key === 't' && !e.metaKey && !e.ctrlKey && !e.shiftKey) {
+        e.preventDefault();
+        const traits = ['invariant', 'localized', 'knowledge', 'derived', 'job'] as const;
+        if (traitFilter.length === 0) {
+          filterActions.setTraitFilter([traits[0]]);
+        } else {
+          const idx = traits.indexOf(traitFilter[0] as typeof traits[number]);
+          if (idx >= 0 && idx < traits.length - 1) {
+            filterActions.setTraitFilter([traits[idx + 1]]);
+          } else {
+            filterActions.setTraitFilter([]);
+          }
+        }
+        return;
+      }
+
+      // Cycle edge family filter (E) - none → ownership → localization → semantic → generation → mining → none
+      if (e.key === 'e' && !e.metaKey && !e.ctrlKey && !e.shiftKey) {
+        e.preventDefault();
+        const families = ['ownership', 'localization', 'semantic', 'generation', 'mining'];
+        if (edgeFamilyFilter.length === 0) {
+          filterActions.setEdgeFamilyFilter([families[0]]);
+        } else {
+          const idx = families.indexOf(edgeFamilyFilter[0]);
+          if (idx >= 0 && idx < families.length - 1) {
+            filterActions.setEdgeFamilyFilter([families[idx + 1]]);
+          } else {
+            filterActions.setEdgeFamilyFilter([]);
+          }
+        }
+        return;
+      }
+
       // Layout shortcuts (Shift + H/V/D/R/F/M) - must use triggerLayout to increment layoutVersion
       if (e.shiftKey && !e.metaKey && !e.ctrlKey) {
         switch (e.key) {
@@ -485,7 +523,7 @@ export default function HomePage() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [uiActions, filterActions, shortcutsOpen, closeShortcuts, openPalette, openAiSearch, navigationMode, transitionState.isTransitioning, transitionActions]);
+  }, [uiActions, filterActions, shortcutsOpen, closeShortcuts, openPalette, openAiSearch, navigationMode, transitionState.isTransitioning, transitionActions, traitFilter, edgeFamilyFilter]);
 
   // ═══════════════════════════════════════════════════════════════════════════
   // MEMOIZED HANDLERS

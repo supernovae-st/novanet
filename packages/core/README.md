@@ -7,7 +7,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Neo4j](https://img.shields.io/badge/Neo4j-5.26-018bff?style=flat-square&logo=neo4j&logoColor=white)](https://neo4j.com/)
 [![Zod](https://img.shields.io/badge/Zod-3.24-8b5cf6?style=flat-square)](https://zod.dev/)
-[![Version](https://img.shields.io/badge/v8.1.0-06b6d4?style=flat-square)]()
+[![Version](https://img.shields.io/badge/v9.0.0-06b6d4?style=flat-square)]()
 
 ---
 
@@ -21,7 +21,7 @@
 
 NovaNet Core provides the foundational layer for the NovaNet knowledge graph system:
 
-- **YAML Schema Definitions** — 35 node types across 7 categories
+- **YAML Schema Definitions** — 35 node types across 3 Realms and 9 Layers
 - **TypeScript Types** — Full type safety for Neo4j operations
 - **NovaNetFilter** — Fluent API for composable graph queries
 - **Zod Schemas** — Runtime validation for locale knowledge
@@ -61,38 +61,30 @@ pnpm --filter=@novanet/core validate
 ```
 core/
 ├── models/                    # YAML schema definitions (source of truth)
-│   ├── _index.yaml            # Graph structure overview (35 nodes, 50+ relations)
-│   ├── relations.yaml         # All Neo4j relationships
+│   ├── _index.yaml            # Graph structure overview (35 nodes, 47 relations)
+│   ├── relations.yaml         # All Neo4j relationships (with family field)
+│   ├── organizing-principles.yaml  # v9: Realm/Layer/Trait/EdgeFamily
 │   ├── nodes/                 # One file per node type
-│   │   ├── project/           # Business (3 nodes)
-│   │   ├── content/           # Semantic (5 nodes)
-│   │   ├── locale/            # Locale knowledge (15 nodes)
-│   │   ├── generation/        # Prompts & output (5 nodes)
-│   │   └── shared/            # SEO + GEO (6 nodes)
+│   │   ├── global/            # Realm: global (15 nodes)
+│   │   ├── project/           # Realm: project (14 nodes)
+│   │   └── shared/            # Realm: shared (6 nodes)
 │   └── views/                 # Predefined view definitions
 ├── src/
 │   ├── types/                 # TypeScript definitions
 │   ├── schemas/               # Zod validation schemas
-│   ├── filters/               # NovaNetFilter, CypherGenerator
-│   ├── parsers/               # Markdown → Neo4j parsers
-│   ├── generators/            # Documentation generators
-│   └── db/                    # Neo4j connection
+│   └── filters/               # NovaNetFilter, CypherGenerator
 └── scripts/                   # Build & validation scripts
 ```
 
 ---
 
-## Node Categories
+## Node Types (v9.0.0)
 
-| Category | Nodes | Purpose |
-|----------|-------|---------|
-| **project** | 3 | Business entity, brand identity |
-| **content** | 5 | Concepts, pages, blocks |
-| **locale** | 15 | Language knowledge layer |
-| **generation** | 5 | Prompts, rules, outputs |
-| **seo** | 3 | Search optimization |
-| **geo** | 3 | Generative engine optimization |
-| **analytics** | 1 | Performance metrics |
+| Realm | Nodes | Layers |
+|-------|-------|--------|
+| **Global** | 15 | Configuration (1), Locale Knowledge (14) |
+| **Project** | 14 | Foundation (3), Structure (4), Semantic (2), Instructions (3), Output (2) |
+| **Shared** | 6 | SEO Intelligence (3), GEO Intelligence (3) |
 
 ---
 
@@ -146,7 +138,6 @@ pnpm --filter=@novanet/core validate       # Schema validation
 | Package | Description |
 |---------|-------------|
 | [@novanet/db](../db/) | Neo4j Docker infrastructure |
-| [@novanet/schema-tools](../schema-tools/) | Schema validation & sync tools |
 | [@novanet/studio](../../apps/studio/) | Graph visualization |
 
 ---
