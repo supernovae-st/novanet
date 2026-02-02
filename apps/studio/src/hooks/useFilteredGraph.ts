@@ -16,7 +16,7 @@ import { useGraphStore } from '@/stores/graphStore';
 import { useFilterStore } from '@/stores/filterStore';
 import { useUIStore, selectNavigationMode } from '@/stores/uiStore';
 import { ALL_NODE_TYPES } from '@/config/nodeTypes';
-import { NODE_REALMS, type Realm } from '@novanet/core/types';
+import { NODE_REALMS } from '@novanet/core/types';
 import { NODE_LAYERS, type Layer } from '@novanet/core/graph';
 import type { GraphNode, GraphEdge, NodeType } from '@/types';
 

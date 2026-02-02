@@ -9,7 +9,7 @@
  * with the actual graph schema.
  */
 
-import { NODE_TYPES, NODE_REALMS, NODE_TRAITS, type NodeType, type Realm } from '@novanet/core/types';
+import { NODE_TYPES, NODE_REALMS, NODE_TRAITS, type Realm } from '@novanet/core/types';
 import { RelationRegistry } from '@novanet/core/schemas';
 import { nodeTypeConfigs } from '@/config/nodeTypes';
 import type { GraphNode, GraphEdge } from '@/types';

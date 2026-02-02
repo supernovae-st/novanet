@@ -12,7 +12,7 @@ import { useMemo, memo } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { gapTokens } from '@/design/tokens';
-import { useFilteredGraph, type RealmCounts, type LayerCounts } from '@/hooks/useFilteredGraph';
+import { useFilteredGraph } from '@/hooks/useFilteredGraph';
 import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
 import { NODE_REALMS } from '@novanet/core/types';
 import { NODE_LAYERS, type Layer } from '@novanet/core/graph';

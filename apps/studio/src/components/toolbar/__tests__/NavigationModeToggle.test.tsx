@@ -18,7 +18,7 @@ jest.mock('@/stores/animationStore', () => ({
 // Mock tooltip components to avoid Radix UI complexity in tests
 jest.mock('@/components/ui/tooltip', () => ({
   Tooltip: ({ children }: { children: React.ReactNode }) => <>{children}</>,
-  TooltipTrigger: ({ children, asChild }: { children: React.ReactNode; asChild?: boolean }) => <>{children}</>,
+  TooltipTrigger: ({ children }: { children: React.ReactNode }) => <>{children}</>,
   TooltipContent: ({ children }: { children: React.ReactNode }) => <span data-testid="tooltip">{children}</span>,
   TooltipShortcut: ({ children }: { children: React.ReactNode }) => <kbd>{children}</kbd>,
 }));

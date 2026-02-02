@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, memo, useEffect } from 'react';
+import { useMemo, memo } from 'react';
 import { Highlight, themes, Prism } from 'prism-react-renderer';
 import { cn } from '@/lib/utils';
 import { CopyButton } from './CopyButton';

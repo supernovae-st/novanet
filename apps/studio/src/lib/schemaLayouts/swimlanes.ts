@@ -38,7 +38,7 @@ export function applySwimlaneLayout(
 
   // Derived spacing from unified constants
   const NODE_STEP_X = NODE_WIDTH + NODE_GAP;     // Horizontal step between nodes
-  const NODE_STEP_Y = NODE_HEIGHT + NODE_GAP;    // Vertical step between nodes
+  // const NODE_STEP_Y = NODE_HEIGHT + NODE_GAP; // Vertical step (reserved for multi-row)
 
   const realmOrder: Realm[] = ['project', 'global', 'shared'];
   let currentY = 0;
@@ -83,7 +83,7 @@ export function applySwimlaneLayout(
 
     // Layout layers horizontally within the lane
     let currentX = REALM_PADDING;
-    let layerY = REALM_PADDING + REALM_HEADER;
+    const layerY = REALM_PADDING + REALM_HEADER;
 
     for (const [layerName, layerMeta] of Object.entries(realmDef.layers)) {
       if (layerMeta.nodeTypes.length === 0) continue;

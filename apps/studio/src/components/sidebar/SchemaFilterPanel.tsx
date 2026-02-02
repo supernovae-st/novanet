@@ -33,7 +33,6 @@ import type { Layer } from '@novanet/core/graph';
 import { Realm } from '@novanet/core/types';
 import { RelationType } from '@novanet/core/schemas';
 import { useFilterStore } from '@/stores/filterStore';
-import { cn } from '@/lib/utils';
 import { realmAccents, iconSizes } from '@/design/tokens';
 import { calculateCheckboxState } from '@/hooks';
 import type { CheckboxState } from '@/components/ui/TriStateCheckbox';

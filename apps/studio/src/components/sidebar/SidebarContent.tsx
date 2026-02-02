@@ -23,7 +23,7 @@
 
 import { memo, type ReactNode } from 'react';
 import { cn } from '@/lib/utils';
-import { panelClasses, gapTokens, sidebarTokens } from '@/design/tokens';
+import { panelClasses, gapTokens } from '@/design/tokens';
 import { FilterTree } from '@/components/ui/FilterTree';
 import type { CheckboxState } from '@/components/ui/TriStateCheckbox';
 

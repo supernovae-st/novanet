@@ -258,7 +258,7 @@ function Graph2DInner({
   // MAGNETIC LAYOUT DATA (organizing principles)
   // =========================================================================
   // When layoutMode is 'magnetic', fetch Realm/Layer as attractor nodes
-  const { data: magneticData, isMagneticMode, isLoading: isMagneticLoading } = useMagneticData();
+  const { data: magneticData, isMagneticMode } = useMagneticData();
 
   // Focus mode for selection-based dimming
   const { isNodeDimmed, isEdgeDimmed, selectedId: focusSelectedId, connectedIds } = useFocusMode(graphEdges);
@@ -344,7 +344,7 @@ function Graph2DInner({
   const [schemaNodes, setSchemaNodes] = useState<ReactFlowNode[]>([]);
   const [schemaEdges, setSchemaEdges] = useState<ReactFlowEdge[]>([]);
   const [isSchemaLayouting, setIsSchemaLayouting] = useState(false);
-  const [schemaLayoutError, setSchemaLayoutError] = useState<Error | null>(null);
+  const [, setSchemaLayoutError] = useState<Error | null>(null);
 
   // Track previous navigationMode to detect changes
   const prevNavigationModeRef = useRef(navigationMode);
@@ -476,7 +476,7 @@ function Graph2DInner({
       loadSchemaGraph();
     }
     prevNavigationModeRef.current = navigationMode;
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- layoutVersion forces re-layout on button click
+     
   }, [navigationMode, loadSchemaGraph, layoutVersion]);
 
   // =========================================================================
@@ -490,7 +490,7 @@ function Graph2DInner({
     (changes: NodeChange<ReactFlowNode>[]) => {
       setSchemaNodes((nds) => applyNodeChanges(changes, nds));
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- setState callbacks are stable
+     
     []
   );
 
@@ -504,7 +504,7 @@ function Graph2DInner({
     (_event: React.MouseEvent, node: ReactFlowNode) => {
       containerHandleNodeDrag(node, schemaNodesRef.current, setSchemaNodes);
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- schemaNodesRef.current provides latest nodes
+     
     [containerHandleNodeDrag]
   );
 
@@ -514,7 +514,7 @@ function Graph2DInner({
     (_event: React.MouseEvent, node: ReactFlowNode) => {
       containerHandleNodeDragStop(node, schemaNodesRef.current, setSchemaNodes);
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- schemaNodesRef.current provides latest nodes
+     
     [containerHandleNodeDragStop]
   );
 

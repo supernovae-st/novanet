@@ -79,7 +79,7 @@ export function applyTargetLayout(
       const layerEntries = Object.entries(realmDef.layers)
         .filter(([_, meta]) => meta.nodeTypes.length > 0);
 
-      let allNodes: { nodeType: string; layerName: string; layerMeta: LayerMeta }[] = [];
+      const allNodes: { nodeType: string; layerName: string; layerMeta: LayerMeta }[] = [];
       for (const [layerName, layerMeta] of layerEntries) {
         for (const nodeType of layerMeta.nodeTypes) {
           allNodes.push({ nodeType, layerName, layerMeta });

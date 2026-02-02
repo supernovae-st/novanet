@@ -18,8 +18,8 @@ jest.mock('elkjs/lib/elk.bundled.js', () => {
       children?: Array<{ id: string; children?: Array<{ id: string; children?: unknown[] }> }>;
     }) {
       // Simple mock that returns positions for each node
-      let x = 0;
-      let y = 0;
+      const _x = 0;
+      const _y = 0;
 
       const processChildren = (
         children: Array<{ id: string; children?: Array<{ id: string; children?: unknown[] }> }> | undefined,

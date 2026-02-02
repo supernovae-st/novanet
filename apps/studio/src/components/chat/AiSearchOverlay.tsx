@@ -37,7 +37,6 @@ import {
 // Design system icons
 const SparklesIcon = DOMAIN_ICONS.ai;
 const SendIcon = ACTION_ICONS.send;
-const CloseIcon = ACTION_ICONS.close;
 const ResetIcon = ACTION_ICONS.reset;
 const LoaderIcon = STATUS_ICONS.loading;
 const CopyIcon = ACTION_ICONS.copy;

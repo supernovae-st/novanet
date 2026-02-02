@@ -27,7 +27,7 @@ import { useGraphData, useFilteredGraph, UrlSyncComponent } from '@/hooks';
 import { ContextPicker, ViewPicker } from '@/components/sidebar';
 import { isInputFocused, matchesKeyCombo } from '@/lib/keyboard';
 import { NODE_TYPE_CONFIG, type NodeTypeConfig } from '@/config/nodeTypes';
-import type { GraphNode, HoverNodeInfo, SchemaGroupNode, NodeType, SchemaGroupType } from '@/types';
+import type { GraphNode, HoverNodeInfo, SchemaGroupNode, NodeType } from '@/types';
 import { resolveThemeCached } from '@/components/graph/edges';
 
 // Helper to safely get node config for hover tooltips (handles both real nodes and schema groups)

@@ -32,7 +32,7 @@ import {
 import { useShallow } from 'zustand/react/shallow';
 import { cn } from '@/lib/utils';
 import { useUIStore } from '@/stores';
-import type { LayoutDirection, LayoutMode } from '@/stores/uiStore';
+import type { LayoutDirection } from '@/stores/uiStore';
 import { MINIMAP_WIDTH } from '@/config/layoutConstants';
 import { controls, easing, durations, gapTokens } from '@/design/tokens';
 import {
