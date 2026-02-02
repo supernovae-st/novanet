@@ -17,8 +17,6 @@ import { ALL_NODE_TYPES } from '@/config/nodeTypes';
 // TYPES (aligned with novanet-core v9.0.0)
 // =============================================================================
 
-export type Priority = 'critical' | 'high' | 'medium' | 'low';
-export type Freshness = 'realtime' | 'hourly' | 'daily' | 'static';
 export type RelationDirection = 'outgoing' | 'incoming' | 'both';
 
 export interface FilterCriteria {
@@ -27,8 +25,6 @@ export interface FilterCriteria {
   excludeTypes?: NodeType[];
   locale?: string;
   localeFamily?: string;
-  priority?: Priority[];
-  freshness?: Freshness[];
   active?: boolean;
   searchQuery?: string;
   searchFields?: string[];
@@ -294,16 +290,6 @@ export class NovaNetFilter {
     return this;
   }
 
-  withPriority(...priorities: Priority[]): this {
-    this.state.filters.priority = priorities;
-    return this;
-  }
-
-  withFreshness(...freshness: Freshness[]): this {
-    this.state.filters.freshness = freshness;
-    return this;
-  }
-
   byLayer(...layers: Layer[]): this {
     this.state.filters.layers = layers;
     return this;
@@ -440,16 +426,6 @@ export class CypherGenerator {
 
     // 3. WHERE clauses
     const whereConditions: string[] = [];
-
-    if (criteria.filters.priority?.length) {
-      whereConditions.push('root.priority IN $priorities');
-      params.priorities = criteria.filters.priority;
-    }
-
-    if (criteria.filters.freshness?.length) {
-      whereConditions.push('root.freshness IN $freshness');
-      params.freshness = criteria.filters.freshness;
-    }
 
     if (criteria.filters.locale) {
       whereConditions.push('(root.locale = $locale OR root:Locale {key: $locale})');
@@ -689,22 +665,28 @@ export const VIEW_PRESETS: ViewPreset[] = [
       .byLayer('seo', 'geo'),
   },
   {
-    id: 'high-priority',
-    name: 'High Priority',
-    description: 'Critical and high priority nodes',
-    icon: '🔴',
+    id: 'invariant-types',
+    name: 'Invariant Types',
+    description: 'Nodes that do not change between locales',
+    icon: '🔒',
     shortcut: '7',
     filter: () => NovaNetFilter.create()
-      .withPriority('critical', 'high'),
+      .byTypes(
+        'Locale', 'Project', 'BrandIdentity', 'Page', 'Block', 'Concept',
+        'PageType', 'BlockType', 'PagePrompt', 'BlockPrompt', 'BlockRules',
+      ),
   },
   {
-    id: 'realtime',
-    name: 'Realtime Content',
-    description: 'Nodes requiring frequent updates',
-    icon: '⚡',
+    id: 'localized-content',
+    name: 'Localized Content',
+    description: 'Nodes generated natively per locale',
+    icon: '🌐',
     shortcut: '8',
     filter: () => NovaNetFilter.create()
-      .withFreshness('realtime', 'hourly'),
+      .byTypes(
+        'ProjectL10n', 'ConceptL10n', 'PageL10n', 'BlockL10n',
+        'SEOKeywordL10n', 'GEOSeedL10n',
+      ),
   },
   {
     id: 'all-nodes',

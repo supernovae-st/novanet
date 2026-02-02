@@ -5,7 +5,6 @@ import type { Realm, Layer, Trait, NodeType } from '@novanet/core/types';
 import type { FilterPreset } from '@/types';
 import { CORE_TYPES, ALL_NODE_TYPES, NODE_LAYERS } from '@/config/nodeTypes';
 import { DEFAULT_PRESET } from '@/config/presets';
-import type { Priority, Freshness } from '@/lib/filterAdapter';
 import { NovaNetFilter, VIEW_PRESETS, getViewPresetByShortcut } from '@/lib/filterAdapter';
 import { logger } from '@/lib/logger';
 
@@ -23,8 +22,6 @@ interface ExtendedFilterState {
   activePresetId: string | null;
 
   // Faceted filters (v9)
-  priorityFilter: Priority[];
-  freshnessFilter: Freshness[];
   layerFilter: Layer[];
   activeOnly: boolean;
   localeFamily: string | null;
@@ -49,8 +46,6 @@ interface FilterStoreState extends ExtendedFilterState {
   setDepthLimit: (depth: number) => void;
 
   // Faceted filter actions (v9)
-  setPriorityFilter: (priorities: Priority[]) => void;
-  setFreshnessFilter: (freshness: Freshness[]) => void;
   setLayerFilter: (layers: Layer[]) => void;
   toggleLayer: (layer: Layer) => void;
   setActiveOnly: (active: boolean) => void;
@@ -102,8 +97,6 @@ export const useFilterStore = create<FilterStoreState>()(
       customPresets: [],
 
       // Faceted filters (v9)
-      priorityFilter: [],
-      freshnessFilter: [],
       layerFilter: [],
       activeOnly: false,
       localeFamily: null,
@@ -162,21 +155,6 @@ export const useFilterStore = create<FilterStoreState>()(
       setDepthLimit: (depth) => {
         set((state) => {
           state.depthLimit = depth;
-        });
-      },
-
-      // v7.2.1 filter actions
-      setPriorityFilter: (priorities) => {
-        set((state) => {
-          state.priorityFilter = priorities;
-          state.activePresetId = null;
-        });
-      },
-
-      setFreshnessFilter: (freshness) => {
-        set((state) => {
-          state.freshnessFilter = freshness;
-          state.activePresetId = null;
         });
       },
 
@@ -302,12 +280,6 @@ export const useFilterStore = create<FilterStoreState>()(
               state.enabledNodeTypes = new Set(types);
             }
             // Apply other criteria
-            if (criteria.filters.priority) {
-              state.priorityFilter = criteria.filters.priority;
-            }
-            if (criteria.filters.freshness) {
-              state.freshnessFilter = criteria.filters.freshness;
-            }
             if (criteria.filters.layers) {
               state.layerFilter = criteria.filters.layers;
             }
@@ -332,8 +304,6 @@ export const useFilterStore = create<FilterStoreState>()(
           state.depthLimit = 2;
           state.activePresetId = DEFAULT_PRESET.id;
           // Reset faceted filters (v9)
-          state.priorityFilter = [];
-          state.freshnessFilter = [];
           state.layerFilter = [];
           state.activeOnly = false;
           state.localeFamily = null;
@@ -365,14 +335,6 @@ export const useFilterStore = create<FilterStoreState>()(
         }
         if (state.localeFamily) {
           filter = filter.forLocaleFamily(state.localeFamily);
-        }
-
-        // Apply priority/freshness
-        if (state.priorityFilter.length > 0) {
-          filter = filter.withPriority(...state.priorityFilter);
-        }
-        if (state.freshnessFilter.length > 0) {
-          filter = filter.withFreshness(...state.freshnessFilter);
         }
 
         // Apply search
@@ -515,8 +477,6 @@ export const useFilterStore = create<FilterStoreState>()(
         activePresetId: state.activePresetId,
         customPresets: state.customPresets,
         // Faceted filters (v9)
-        priorityFilter: state.priorityFilter,
-        freshnessFilter: state.freshnessFilter,
         layerFilter: state.layerFilter,
         activeOnly: state.activeOnly,
         localeFamily: state.localeFamily,
@@ -539,8 +499,6 @@ export const useFilterStore = create<FilterStoreState>()(
             depthLimit: 2,
             activePresetId: DEFAULT_PRESET.id,
             customPresets: [],
-            priorityFilter: [],
-            freshnessFilter: [],
             layerFilter: [],
             activeOnly: false,
             localeFamily: null,

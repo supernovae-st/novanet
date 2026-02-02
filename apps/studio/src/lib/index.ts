@@ -108,6 +108,4 @@ export {
   type FilterCriteria,
   type NovaNetFilterCriteria,
   type CypherQuery,
-  type Priority,
-  type Freshness,
 } from './filterAdapter';

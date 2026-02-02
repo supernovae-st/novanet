@@ -20,8 +20,8 @@ import {
   Network,
   FileText,
   Search,
-  AlertCircle,
-  Zap,
+  Lock,
+  Languages,
   Grid3x3,
   type LucideIcon,
 } from 'lucide-react';
@@ -40,8 +40,8 @@ const PRESET_ICONS: Record<string, LucideIcon> = {
   'concept-network': Network,
   'prompts-rules': FileText,
   'seo-geo': Search,
-  'high-priority': AlertCircle,
-  'realtime': Zap,
+  'invariant-types': Lock,
+  'localized-content': Languages,
   'all-nodes': Grid3x3,
 };
 

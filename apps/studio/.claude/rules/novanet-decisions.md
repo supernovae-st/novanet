@@ -34,8 +34,8 @@
 4. Concept Network - Concepts and semantic links (byTypes: Concept, ConceptL10n, Expression)
 5. Prompts & Rules - AI instructions and validation rules (byLayer: instruction + byTypes: Page, Block)
 6. SEO & GEO - Search optimization data (byLayer: seo, geo)
-7. High Priority - Critical and high priority nodes (withPriority: critical, high)
-8. Realtime Content - Nodes requiring frequent updates (withFreshness: realtime, hourly)
+7. Invariant Types - Nodes that do not change between locales (byTypes: invariant trait nodes)
+8. Localized Content - Nodes generated natively per locale (byTypes: localized trait nodes)
 0. All Nodes - Show everything (no filters)
 
 ---

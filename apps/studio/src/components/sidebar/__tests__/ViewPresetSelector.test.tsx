@@ -38,8 +38,8 @@ describe('ViewPresetSelector', () => {
     expect(screen.getByText('Concept')).toBeInTheDocument();    // Concept Network
     expect(screen.getByText('Prompts')).toBeInTheDocument();    // Prompts & Rules
     expect(screen.getByText('SEO')).toBeInTheDocument();        // SEO & GEO
-    expect(screen.getByText('High')).toBeInTheDocument();       // High Priority
-    expect(screen.getByText('Realtime')).toBeInTheDocument();   // Realtime Content
+    expect(screen.getByText('Invariant')).toBeInTheDocument();   // Invariant Types
+    expect(screen.getByText('Localized')).toBeInTheDocument();  // Localized Content
     expect(screen.getByText('All')).toBeInTheDocument();        // All Nodes
   });
 

@@ -230,15 +230,15 @@ export default function HomePage() {
         } as SchemaGroupNode;
       }
 
-      // Subcategory containers: subcat-{Scope}-{SubcatName}
-      if (nodeId.startsWith('subcat-')) {
-        const parts = nodeId.replace('subcat-', '').split('-');
-        const subcatName = parts.slice(1).join('-');
+      // Layer containers: layer-{Realm}-{LayerName}
+      if (nodeId.startsWith('layer-')) {
+        const parts = nodeId.replace('layer-', '').split('-');
+        const layerName = parts.slice(1).join('-');
         return {
           id: nodeId,
           type: 'LayerGroup',
-          key: subcatName,
-          displayName: subcatName.charAt(0).toUpperCase() + subcatName.slice(1),
+          key: layerName,
+          displayName: layerName.charAt(0).toUpperCase() + layerName.slice(1),
         } as SchemaGroupNode;
       }
 
