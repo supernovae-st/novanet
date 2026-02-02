@@ -14,7 +14,7 @@ import { useState, useMemo, memo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { cn } from '@/lib/utils';
 import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
-import { getLayerGradientColors } from '@/config/categoryColors';
+import { getLayerGradientColors } from '@/design/nodeColors';
 import { useGraphStore } from '@/stores/graphStore';
 import { useUIStore } from '@/stores/uiStore';
 import { useCopyFieldFeedback } from '@/hooks';

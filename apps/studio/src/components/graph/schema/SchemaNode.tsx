@@ -19,7 +19,7 @@
 import { memo, useMemo } from 'react';
 import { type NodeProps, type Node } from '@xyflow/react';
 import { cn } from '@/lib/utils';
-import { getNodeTypeColors } from '@/config/categoryColors';
+import { getNodeTypeColors } from '@/design/nodeColors';
 import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
 import { LayerIcon } from '@/components/ui/CategoryIcon';
 import { BlueprintOverlay } from '../nodes/BlueprintOverlay';

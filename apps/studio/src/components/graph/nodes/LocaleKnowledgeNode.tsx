@@ -21,7 +21,7 @@ import { type Node, type NodeProps } from '@xyflow/react';
 import { cn } from '@/lib/utils';
 import { glassClasses } from '@/design/tokens';
 import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
-import { getLocaleKnowledgeColors } from '@/config/categoryColors';
+import { getLocaleKnowledgeColors } from '@/design/nodeColors';
 import { LayerIcon } from '@/components/ui/CategoryIcon';
 import type { BaseNodeData } from './BaseNodeWrapper';
 import { BlueprintOverlay } from './BlueprintOverlay';

@@ -13,7 +13,7 @@
 
 import { useState, useMemo, memo } from 'react';
 import { cn } from '@/lib/utils';
-import { getRelationColors } from '@/config/categoryColors';
+import { getRelationColors } from '@/design/nodeColors';
 import { ACTION_ICONS, CONTENT_ICONS, GRAPH_ICONS, ICON_COLORS } from '@/config/iconSystem';
 import { iconSizes, panelClasses, gapTokens } from '@/design/tokens';
 import { useGraphStore } from '@/stores/graphStore';

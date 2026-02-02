@@ -126,7 +126,7 @@ export const NODE_SIZES: Record<NodeType, NodeSize> = {
 /**
  * Pre-computed colors for all 35 node types (v8.1.0)
  *
- * Color palette aligned with categoryColors.ts and nodeTypes.ts:
+ * Color palette aligned with design/nodeColors.ts and nodeTypes.ts:
  * - Project: Violet (#8b5cf6 family)
  * - Content: Amber/Blue/Cyan (#f59e0b, #3b82f6, #06b6d4 family)
  * - Locale: Emerald/Green/Pink (#10b981, #22c55e, #ec4899 family)
