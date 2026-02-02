@@ -9,8 +9,9 @@ Turborepo monorepo for NovaNet - knowledge graph localization orchestrator.
 NovaNet uses Neo4j to orchestrate **native content generation** (NOT translation) across 200+ locales.
 
 **Target Application**: QR Code AI (https://qrcode-ai.com)
-**Current Version**: v9.0.0
+**Current Version**: v9.0.0-rc.1
 **Design Plan**: `docs/plans/2026-02-01-ontology-v9-design.md`
+**Roadmap**: `ROADMAP.md` | **Changelog**: `CHANGELOG.md`
 
 ```
 CRITICAL: Generation, NOT Translation
@@ -38,7 +39,7 @@ Axis 4 — LINKS?  :EdgeKind  (50 relationship types in 5 families)
 
 **Rust binary:** `tools/novanet/` — single crate for CLI + TUI (neo4rs, ratatui, clap).
 All commands implemented: data/meta/overlay/query, node/relation CRUD, search, locale, db,
-schema generate/validate, doc generate, filter build, Galaxy-themed TUI. 255 tests pass.
+schema generate/validate, doc generate, filter build, Galaxy-themed TUI with dashboard. 311 tests pass.
 
 **Boundary rule (v9 target):** TypeScript generates code artifacts. Rust executes at runtime.
 
@@ -106,7 +107,7 @@ pnpm test --filter=@novanet/studio      # Test only studio
 | @novanet/core | Types, schemas, filters, generators |
 | @novanet/db | Neo4j Docker, seeds, migrations |
 | @novanet/studio | Web-based graph visualization |
-| tools/novanet | Rust CLI + TUI — all runtime commands (255 tests) |
+| tools/novanet | Rust CLI + TUI — all runtime commands (311 tests) |
 
 ---
 
@@ -160,8 +161,33 @@ pnpm dev    # → http://localhost:3000
 | **Build Tool** | Turborepo |
 | **Naming** | `novanet` (packages), `NovaNet` (classes/types) |
 | **Formatting** | 2 spaces, 100 chars, single quotes, semicolons |
-| **Commits** | Conventional Commits |
+| **Commits** | Conventional Commits: `type(scope): description` |
+| **Versioning** | SemVer: `MAJOR.MINOR.PATCH[-prerelease]` |
 | **Rust (v9)** | `cargo fmt`, `cargo clippy`, edition 2024 |
+
+---
+
+## Versioning & Releases
+
+**Strategy**: Semantic Versioning (SemVer) with Conventional Commits.
+
+```
+MAJOR  = Breaking changes (ontology restructure, API changes)
+MINOR  = New features (commands, UI components, generators)
+PATCH  = Bug fixes, documentation, refactoring
+```
+
+**Release process**:
+1. Ensure `pnpm test`, `pnpm lint`, `pnpm type-check`, `cargo test` all pass
+2. Run `./tools/scripts/release-notes.sh <version>` to generate notes
+3. Update `CHANGELOG.md`
+4. Create annotated tag: `git tag -a v<version> -m "v<version>"`
+5. Push tag: `git push origin v<version>`
+6. Create GitHub Release with generated notes
+
+**Files**: `CHANGELOG.md`, `ROADMAP.md`, `.github/RELEASE_TEMPLATE.md`
+
+**GitHub Milestones**: v9.0.0, v9.5.0, v10.0.0
 
 ---
 
