@@ -57,10 +57,3 @@ export const NODE_ICONS: Record<NodeType, string> = {
   GEOSeedMetrics: '📊',
   GEOMiningRun: '⚙️',
 };
-
-/**
- * Get icon for a node type with fallback.
- */
-export function getNodeIcon(type: NodeType): string {
-  return NODE_ICONS[type] ?? '❓';
-}

@@ -69,15 +69,15 @@ db/
 
 ---
 
-## Graph Schema (v8.1.0)
+## Graph Schema (v9.0.0)
 
-| Scope | Nodes | Description |
+| Realm | Nodes | Description |
 |-------|-------|-------------|
 | **🌍 Global** | 15 | Locale + 14 LocaleKnowledge nodes |
 | **📦 Project** | 14 | Project structure, content, generation |
 | **🎯 Shared** | 6 | SEO/GEO targeting nodes |
 
-Total: **35 node types**, **50+ relationships**
+Total: **35 node types**, **50 relationships**, **102 meta-nodes** (Realm/Layer/Kind/Trait/EdgeFamily/EdgeKind)
 
 ---
 

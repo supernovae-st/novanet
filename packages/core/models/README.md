@@ -1,4 +1,4 @@
-# 🪽 NovaNet Models v8.1.0
+# 🪽 NovaNet Models v9.0.0
 
 YAML schema definitions for Neo4j graph database.
 
@@ -37,9 +37,9 @@ models/
 
 ## Multi-Tenant Architecture
 
-NovaNet uses a **3-layer scope architecture**:
+NovaNet uses a **3-realm architecture** (v9 replaces "scope" with "realm"):
 
-| Scope | Count | Description | Examples |
+| Realm | Count | Description | Examples |
 |-------|-------|-------------|----------|
 | 🌍 **GLOBAL** | 15 | Shared locale knowledge | Locale, LocaleVoice, LocaleCulture, Expression |
 | 🎯 **SHARED** | 6 | Reusable targeting data | SEOKeywordL10n, GEOSeedL10n, *Metrics, *MiningRun |
@@ -55,7 +55,7 @@ NovaNet uses a **3-layer scope architecture**:
 | **DERIVED** | ⚪ | Inherits locale from parent | SEOKeywordMetrics, GEOSeedMetrics |
 | **JOB** | ⚙️ | Background jobs, no locale | SEOMiningRun, GEOMiningRun |
 
-## Nomenclature v8.1.0
+## Nomenclature v9.0.0
 
 ```
 *L10n suffix    = ALL localized content (human OR LLM generated)
