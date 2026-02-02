@@ -27,7 +27,7 @@ const REALM_DESCRIPTIONS: Record<Realm, string> = {
 const BEHAVIOR_DESCRIPTIONS: Record<string, string> = {
   invariant: 'Language-independent, same across all locales',
   localized: 'Human-curated localized content',
-  localeKnowledge: 'Locale-specific cultural/linguistic knowledge',
+  knowledge: 'Locale-specific cultural/linguistic knowledge',
   derived: 'Computed from other data (metrics)',
   job: 'Background processing job',
 };

@@ -1,13 +1,13 @@
 // =============================================================================
 // RELATIONSHIP TYPE CONFIGURATION (v8.1.0)
 // =============================================================================
-// Visual configuration for all 47 NovaNet relationship types
+// Visual configuration for all 50 NovaNet relationship types
 // Mirrors nodeTypes.ts pattern for consistency
 
 import { RelationType } from '@novanet/core/schemas/relations.schema';
 
 // =============================================================================
-// RELATIONSHIP CATEGORIES (8 categories, 47 relations)
+// RELATIONSHIP CATEGORIES (8 categories, 50 relations)
 // =============================================================================
 
 /**
@@ -120,7 +120,7 @@ export interface RelationshipTypeConfig {
 }
 
 /**
- * All relationship type configurations (47 relations)
+ * All relationship type configurations (50 relations)
  */
 export const relationshipTypeConfigs: Record<RelationType, RelationshipTypeConfig> = {
   // ==========================================================================

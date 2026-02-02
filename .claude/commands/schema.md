@@ -73,7 +73,7 @@ Redirect to `/schema:add-relation <NAME>`
 - **Project (14)**: Project structure, concepts, prompts, outputs
 - **Shared (6)**: SEO/GEO targeting and metrics
 
-**47 Relationships** in 5 EdgeFamilies:
+**50 Relationships** in 5 EdgeFamilies:
 - **Ownership**: HAS_CONCEPT, HAS_PAGE, HAS_BLOCK, OF_TYPE
 - **Localization**: HAS_L10N, FOR_LOCALE
 - **Semantic**: SEMANTIC_LINK, USES_CONCEPT

@@ -352,11 +352,11 @@ export const ExpandedBreakdown = memo(function ExpandedBreakdown({
     return counts;
   }, []);
 
-  // Type counts per subcategory (static: how many distinct node types per subcategory)
+  // Type counts per layer (static: how many distinct node types per layer)
   const layerTypeCounts = useMemo(() => {
     const counts: Record<string, number> = {};
-    for (const subcat of Object.values(NODE_LAYERS)) {
-      counts[subcat] = (counts[subcat] || 0) + 1;
+    for (const layer of Object.values(NODE_LAYERS)) {
+      counts[layer] = (counts[layer] || 0) + 1;
     }
     return counts;
   }, []);

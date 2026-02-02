@@ -2,7 +2,8 @@
 //!
 //! Thin entry point: clap parsing → dispatch to lib functions → format output → exit.
 
-use clap::{Parser, Subcommand, ValueEnum};
+use clap::{Parser, Subcommand};
+use novanet::output::OutputFormat;
 use std::path::PathBuf;
 
 #[derive(Parser)]
@@ -67,6 +68,30 @@ enum Commands {
         #[command(subcommand)]
         action: DocAction,
     },
+    /// Filter operations (JSON stdin → Cypher stdout for Studio)
+    Filter {
+        #[command(subcommand)]
+        action: FilterAction,
+    },
+    /// Search nodes by text (fulltext + property match)
+    Search {
+        /// Search query string
+        #[arg(long)]
+        query: String,
+        /// Filter by Kind label
+        #[arg(long)]
+        kind: Option<String>,
+        /// Maximum results
+        #[arg(long, default_value_t = 50)]
+        limit: i64,
+        #[arg(long, value_enum, default_value_t = OutputFormat::Table)]
+        format: OutputFormat,
+    },
+    /// Locale operations (list, import)
+    Locale {
+        #[command(subcommand)]
+        action: LocaleAction,
+    },
     /// Database operations (seed, migrate, reset)
     Db {
         #[command(subcommand)]
@@ -93,29 +118,69 @@ struct QueryArgs {
     format: OutputFormat,
 }
 
-#[derive(ValueEnum, Clone, Copy)]
-enum OutputFormat {
-    Table,
-    Json,
-    Cypher,
-}
-
 #[derive(Subcommand)]
 enum NodeAction {
-    /// Create a new node
-    Create,
-    /// Edit an existing node
-    Edit,
-    /// Delete a node
-    Delete,
+    /// Create a new node (auto-wires OF_KIND)
+    Create {
+        /// Kind label (e.g., Page, Concept, Project)
+        #[arg(long)]
+        kind: String,
+        /// Unique key for the node
+        #[arg(long)]
+        key: String,
+        /// JSON properties: '{"display_name":"...", "description":"..."}'
+        #[arg(long, default_value = "{}")]
+        props: String,
+    },
+    /// Edit an existing node (property merge, not replace)
+    Edit {
+        /// Node key to edit
+        #[arg(long)]
+        key: String,
+        /// JSON properties to merge: '{"display_name":"updated"}'
+        #[arg(long, name = "set")]
+        set_props: String,
+    },
+    /// Delete a node (DETACH DELETE — removes all relationships)
+    Delete {
+        /// Node key to delete
+        #[arg(long)]
+        key: String,
+        /// Required confirmation flag for destructive operation
+        #[arg(long)]
+        confirm: bool,
+    },
 }
 
 #[derive(Subcommand)]
 enum RelationAction {
-    /// Create a new relation
-    Create,
-    /// Delete a relation
-    Delete,
+    /// Create a relationship between two nodes
+    Create {
+        /// Source node key
+        #[arg(long)]
+        from: String,
+        /// Target node key
+        #[arg(long)]
+        to: String,
+        /// Relationship type (e.g., FOR_LOCALE, HAS_BLOCK)
+        #[arg(long, name = "type")]
+        rel_type: String,
+        /// Optional JSON properties for the relation
+        #[arg(long, default_value = "{}")]
+        props: String,
+    },
+    /// Delete a specific relationship
+    Delete {
+        /// Source node key
+        #[arg(long)]
+        from: String,
+        /// Target node key
+        #[arg(long)]
+        to: String,
+        /// Relationship type to delete
+        #[arg(long, name = "type")]
+        rel_type: String,
+    },
 }
 
 #[derive(Subcommand)]
@@ -151,6 +216,27 @@ enum DocAction {
 }
 
 #[derive(Subcommand)]
+enum FilterAction {
+    /// Build Cypher from JSON filter (stdin → stdout, for Studio subprocess)
+    Build,
+}
+
+#[derive(Subcommand)]
+enum LocaleAction {
+    /// List locales with their knowledge satellite status
+    List {
+        #[arg(long, value_enum, default_value_t = OutputFormat::Table)]
+        format: OutputFormat,
+    },
+    /// Import locale data from a Cypher file
+    Import {
+        /// Path to Cypher file with locale data
+        #[arg(long)]
+        file: std::path::PathBuf,
+    },
+}
+
+#[derive(Subcommand)]
 enum DbAction {
     /// Seed the database
     Seed,
@@ -160,7 +246,8 @@ enum DbAction {
     Reset,
 }
 
-fn main() -> color_eyre::Result<()> {
+#[tokio::main]
+async fn main() -> color_eyre::Result<()> {
     color_eyre::install()?;
 
     let cli = Cli::parse();
@@ -169,6 +256,35 @@ fn main() -> color_eyre::Result<()> {
     let root = novanet::config::resolve_root(cli.root.as_deref());
 
     match cli.command {
+        // ── Read commands (Neo4j) ────────────────────────────────
+        Commands::Data { format } => {
+            let db = connect_db(&cli).await?;
+            eprintln!("novanet data --format={format:?}");
+            novanet::commands::read::run_data(&db, format).await?;
+        }
+        Commands::Meta { format } => {
+            let db = connect_db(&cli).await?;
+            eprintln!("novanet meta --format={format:?}");
+            novanet::commands::read::run_meta(&db, format).await?;
+        }
+        Commands::Overlay { format } => {
+            let db = connect_db(&cli).await?;
+            eprintln!("novanet overlay --format={format:?}");
+            novanet::commands::read::run_overlay(&db, format).await?;
+        }
+        Commands::Query(ref args) => {
+            let db = connect_db(&cli).await?;
+            let filter = novanet::facets::FacetFilter::from_cli(
+                args.realm.as_deref(),
+                args.layer.as_deref(),
+                args.trait_filter.as_deref(),
+                args.edge_family.as_deref(),
+                args.kind.as_deref(),
+            );
+            novanet::commands::read::run_query(&db, filter, args.format).await?;
+        }
+
+        // ── Schema + Doc (YAML, no Neo4j) ────────────────────────
         Commands::Schema { action } => match action {
             SchemaAction::Generate { dry_run } => {
                 let root = root?;
@@ -278,16 +394,108 @@ fn main() -> color_eyre::Result<()> {
                 }
             }
         },
-        Commands::Data { format: _ } => eprintln!("TODO: Phase 7 — data command"),
-        Commands::Meta { format: _ } => eprintln!("TODO: Phase 7 — meta command"),
-        Commands::Overlay { format: _ } => eprintln!("TODO: Phase 7 — overlay command"),
-        Commands::Query(_) => eprintln!("TODO: Phase 7 — query command"),
-        Commands::Node { action: _ } => eprintln!("TODO: Phase 7 — node command"),
-        Commands::Relation { action: _ } => eprintln!("TODO: Phase 7 — relation command"),
-        Commands::Db { action: _ } => eprintln!("TODO: Phase 7 — db command"),
+
+        // ── Search (Neo4j) ──────────────────────────────────────
+        Commands::Search {
+            ref query,
+            ref kind,
+            limit,
+            format,
+        } => {
+            let db = connect_db(&cli).await?;
+            eprintln!("novanet search --query={query:?}");
+            novanet::commands::search::run_search(&db, query, kind.as_deref(), limit, format)
+                .await?;
+        }
+
+        // ── Filter (Studio subprocess, no Neo4j) ─────────────────
+        Commands::Filter { action } => match action {
+            FilterAction::Build => {
+                eprintln!("novanet filter build (reading JSON from stdin)");
+                novanet::commands::filter::run_filter_build()?;
+            }
+        },
+
+        // ── Write commands (Neo4j) ──────────────────────────────
+        Commands::Node { ref action } => {
+            let db = connect_db(&cli).await?;
+            match action {
+                NodeAction::Create { kind, key, props } => {
+                    eprintln!("novanet node create --kind={kind} --key={key}");
+                    novanet::commands::node::run_create(&db, kind, key, props).await?;
+                }
+                NodeAction::Edit { key, set_props } => {
+                    eprintln!("novanet node edit --key={key}");
+                    novanet::commands::node::run_edit(&db, key, set_props).await?;
+                }
+                NodeAction::Delete { key, confirm } => {
+                    eprintln!("novanet node delete --key={key}");
+                    novanet::commands::node::run_delete(&db, key, *confirm).await?;
+                }
+            }
+        }
+        Commands::Relation { ref action } => {
+            let db = connect_db(&cli).await?;
+            match action {
+                RelationAction::Create {
+                    from,
+                    to,
+                    rel_type,
+                    props,
+                } => {
+                    eprintln!("novanet relation create --from={from} --to={to} --type={rel_type}");
+                    novanet::commands::relation::run_create(&db, from, to, rel_type, props).await?;
+                }
+                RelationAction::Delete { from, to, rel_type } => {
+                    eprintln!("novanet relation delete --from={from} --to={to} --type={rel_type}");
+                    novanet::commands::relation::run_delete(&db, from, to, rel_type).await?;
+                }
+            }
+        }
+        Commands::Locale { ref action } => {
+            let db = connect_db(&cli).await?;
+            match action {
+                LocaleAction::List { format } => {
+                    eprintln!("novanet locale list --format={format:?}");
+                    novanet::commands::locale::run_list(&db, *format).await?;
+                }
+                LocaleAction::Import { file } => {
+                    eprintln!("novanet locale import --file={}", file.display());
+                    novanet::commands::locale::run_import(&db, file).await?;
+                }
+            }
+        }
+        Commands::Db { ref action } => {
+            let db = connect_db(&cli).await?;
+            let root = root?;
+            match action {
+                DbAction::Seed => {
+                    eprintln!("novanet db seed (root: {})", root.display());
+                    novanet::commands::db::run_seed(&db, &root).await?;
+                }
+                DbAction::Migrate => {
+                    eprintln!("novanet db migrate (root: {})", root.display());
+                    novanet::commands::db::run_migrate(&db, &root).await?;
+                }
+                DbAction::Reset => {
+                    eprintln!("novanet db reset (root: {})", root.display());
+                    novanet::commands::db::run_reset(&db, &root).await?;
+                }
+            }
+        }
         #[cfg(feature = "tui")]
-        Commands::Tui => eprintln!("TODO: Phase 7 — TUI"),
+        Commands::Tui => {
+            let db = connect_db(&cli).await?;
+            novanet::tui::run(&db).await?;
+        }
     }
 
     Ok(())
+}
+
+/// Connect to Neo4j (shared by all commands that need database access).
+async fn connect_db(cli: &Cli) -> color_eyre::Result<novanet::db::Db> {
+    eprintln!("Connecting to Neo4j at {}...", cli.uri);
+    let db = novanet::db::Db::connect(&cli.uri, &cli.user, &cli.password).await?;
+    Ok(db)
 }

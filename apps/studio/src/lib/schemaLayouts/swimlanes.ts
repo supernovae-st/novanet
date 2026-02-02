@@ -17,7 +17,7 @@ import {
 import type { Realm } from '@novanet/core/types';
 
 /**
- * Swimlanes Layout - Horizontal bands per scope
+ * Swimlanes Layout - Horizontal bands per realm
  *
  * Uses unified spacing from types.ts (Golden Ratio system).
  *
@@ -47,14 +47,14 @@ export function applySwimlaneLayout(
     const realmDef = hierarchy.realms[realm];
     if (!realmDef) continue;
 
-    const realmId = `scope-${realm}`;
+    const realmId = `realm-${realm}`;
     const config = REALM_CONFIGS.find(c => c.realm === realm);
     if (!config) {
       console.error(`[swimlanes] Missing config for realm: ${realm}`);
       continue;
     }
 
-    // Collect all nodes for this scope
+    // Collect all nodes for this realm
     const realmNodes: string[] = [];
     for (const [_, layerMeta] of Object.entries(realmDef.layers)) {
       realmNodes.push(...layerMeta.nodeTypes);
@@ -67,7 +67,7 @@ export function applySwimlaneLayout(
       NODE_HEIGHT + LAYER_PADDING * 2 + LAYER_HEADER + REALM_PADDING * 2 + REALM_HEADER
     );
 
-    // Scope group node (swimlane)
+    // Realm group node (swimlane)
     nodes.push({
       id: realmId,
       type: 'realmGroup',
@@ -81,7 +81,7 @@ export function applySwimlaneLayout(
       },
     });
 
-    // Layout subcategories horizontally within the lane
+    // Layout layers horizontally within the lane
     let currentX = REALM_PADDING;
     let layerY = REALM_PADDING + REALM_HEADER;
 
@@ -92,7 +92,7 @@ export function applySwimlaneLayout(
       const layerWidth = layerMeta.nodeTypes.length * NODE_STEP_X + LAYER_PADDING * 2;
       const layerHeight = laneHeight - REALM_PADDING * 2 - REALM_HEADER;
 
-      // Subcategory group
+      // Layer group
       nodes.push({
         id: layerId,
         type: 'layerGroup',
@@ -110,7 +110,7 @@ export function applySwimlaneLayout(
         },
       });
 
-      // Layout nodes horizontally within subcategory
+      // Layout nodes horizontally within layer
       let nodeX = LAYER_PADDING;
       const nodeY = LAYER_PADDING + LAYER_HEADER + (layerHeight - LAYER_PADDING * 2 - LAYER_HEADER - NODE_HEIGHT) / 2;
 

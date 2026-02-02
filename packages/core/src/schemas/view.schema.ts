@@ -14,8 +14,6 @@ const FilterCriteriaSchema = z.object({
   nodeTypes: z.array(z.enum(NodeTypeEnum)).optional(),
   locale: z.string().optional(),
   localeFamily: z.string().optional(),
-  priority: z.array(z.enum(['critical', 'high', 'medium', 'low'])).optional(),
-  freshness: z.array(z.enum(['realtime', 'hourly', 'daily', 'static'])).optional(),
   active: z.boolean().optional(),
   categories: z.array(z.enum(['global', 'project', 'shared'])).optional(),
   maxDepth: z.number().int().positive().optional(),
@@ -67,7 +65,7 @@ export type ViewDefinitionParsed = z.infer<typeof ViewDefinitionSchema>;
 // VIEW REGISTRY SCHEMA
 // ============================================================================
 
-export const ViewCategorySchema = z.enum(['scope', 'generation', 'knowledge', 'project', 'mining']);
+export const ViewCategorySchema = z.enum(['overview', 'generation', 'knowledge', 'project', 'mining']);
 
 export const ViewRegistryEntrySchema = z.object({
   id: z.string().min(1).regex(/^[a-z0-9-]+$/),

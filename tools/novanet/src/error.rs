@@ -42,3 +42,42 @@ pub enum NovaNetError {
 }
 
 pub type Result<T> = std::result::Result<T, NovaNetError>;
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn unknown_kind_display() {
+        let err = NovaNetError::UnknownKind("FooBar".to_string());
+        assert_eq!(err.to_string(), "no Kind found for label 'FooBar'");
+    }
+
+    #[test]
+    fn meta_integrity_display() {
+        let err = NovaNetError::MetaIntegrity("missing Realm node".to_string());
+        assert_eq!(err.to_string(), "meta-graph integrity: missing Realm node");
+    }
+
+    #[test]
+    fn validation_display() {
+        let err = NovaNetError::Validation("empty key".to_string());
+        assert_eq!(err.to_string(), "validation failed: empty key");
+    }
+
+    #[test]
+    fn generator_display() {
+        let err = NovaNetError::Generator {
+            generator: "mermaid".to_string(),
+            detail: "missing input".to_string(),
+        };
+        assert_eq!(err.to_string(), "generator failed: mermaid");
+    }
+
+    #[test]
+    fn io_error_transparent() {
+        let io_err = std::io::Error::new(std::io::ErrorKind::NotFound, "file missing");
+        let err: NovaNetError = io_err.into();
+        assert!(err.to_string().contains("file missing"));
+    }
+}

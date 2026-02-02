@@ -50,9 +50,9 @@ export function applyStackedLayout(
     const realmDef = hierarchy.realms[realm];
     if (!realmDef) continue;
 
-    const realmId = `scope-${realm}`;
+    const realmId = `realm-${realm}`;
 
-    // Calculate scope height based on content
+    // Calculate realm height based on content
     let maxLayerHeight = 0;
     const layerEntries = Object.entries(realmDef.layers)
       .filter(([_, meta]) => meta.nodeTypes.length > 0);
@@ -63,14 +63,14 @@ export function applyStackedLayout(
       maxLayerHeight = Math.max(maxLayerHeight, height);
     }
 
-    // Scope dimensions: content + padding + header
+    // Realm dimensions: content + padding + header
     const realmHeight = maxLayerHeight + REALM_PADDING * 2 + REALM_HEADER;
     const realmWidth = Math.max(
       4000,
       layerEntries.length * 1200 + (layerEntries.length - 1) * LAYER_GAP + REALM_PADDING * 2
     );
 
-    // Scope group node
+    // Realm group node
     nodes.push({
       id: realmId,
       type: 'realmGroup',
@@ -84,7 +84,7 @@ export function applyStackedLayout(
       },
     });
 
-    // Layout subcategories side by side
+    // Layout layers side by side
     let layerX = REALM_PADDING;
     const layerY = REALM_PADDING + REALM_HEADER;
     const layerWidth = (realmWidth - REALM_PADDING * 2 - (layerEntries.length - 1) * LAYER_GAP) / layerEntries.length;

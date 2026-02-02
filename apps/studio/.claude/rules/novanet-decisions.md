@@ -141,7 +141,7 @@
 - Single-axis navigation insufficient for AI agent discovery
 
 **Implementation:**
-- 6 meta-node types: Realm (3), Layer (9), Kind (35), Trait (5), EdgeFamily (5), EdgeKind (47)
+- 6 meta-node types: Realm (3), Layer (9), Kind (35), Trait (5), EdgeFamily (5), EdgeKind (50)
 - Dual navigation: top-down hierarchy + Kind-centric facets
 - All meta-nodes carry `:Meta` double-label
 - YAML remains source of truth, meta-graph is generated

@@ -124,14 +124,14 @@ function buildElkGraph(hierarchy: HierarchicalSchemaData): ElkNode {
 
   const realmOrder: Realm[] = ['project', 'global', 'shared'];
 
-  // Create scope groups as compound nodes with subcategory children
+  // Create realm groups as compound nodes with layer children
   for (const realm of realmOrder) {
     const realmDef = hierarchy.realms[realm];
     if (!realmDef) continue;
 
     const layerChildren: ElkNode[] = [];
 
-    // Create subcategory groups
+    // Create layer groups
     for (const [layerName, layerMeta] of Object.entries(realmDef.layers)) {
       if (layerMeta.nodeTypes.length === 0) continue;
 
@@ -156,7 +156,7 @@ function buildElkGraph(hierarchy: HierarchicalSchemaData): ElkNode {
 
     if (layerChildren.length > 0) {
       children.push({
-        id: `scope-${realm}`,
+        id: `realm-${realm}`,
         children: layerChildren,
         layoutOptions: {
           'elk.padding': `[top=${REALM_PADDING + REALM_HEADER},left=${REALM_PADDING},bottom=${REALM_PADDING},right=${REALM_PADDING}]`,
@@ -200,29 +200,29 @@ function convertToReactFlow(
   const nodes: Node[] = [];
   const edges: Edge[] = [];
 
-  // Process scope groups
-  for (const scopeNode of elkGraph.children || []) {
-    const realmId = scopeNode.id;
-    const realm = realmId.replace('scope-', '') as Realm;
+  // Process realm groups
+  for (const realmNode of elkGraph.children || []) {
+    const realmId = realmNode.id;
+    const realm = realmId.replace('realm-', '') as Realm;
     const realmDef = hierarchy.realms[realm];
     const config = REALM_CONFIGS.find(c => c.realm === realm);
 
     if (!realmDef || !config) continue;
 
-    // Count all nodes in this scope
+    // Count all nodes in this realm
     let nodeCount = 0;
-    for (const subcatNode of scopeNode.children || []) {
-      nodeCount += subcatNode.children?.length || 0;
+    for (const layerNode of realmNode.children || []) {
+      nodeCount += layerNode.children?.length || 0;
     }
 
-    // Add scope group node
+    // Add realm group node
     nodes.push({
       id: realmId,
       type: 'realmGroup',
-      position: { x: scopeNode.x || 0, y: scopeNode.y || 0 },
+      position: { x: realmNode.x || 0, y: realmNode.y || 0 },
       style: {
-        width: scopeNode.width || 400,
-        height: scopeNode.height || 300,
+        width: realmNode.width || 400,
+        height: realmNode.height || 300,
       },
       data: {
         realm,
@@ -232,37 +232,37 @@ function convertToReactFlow(
       },
     });
 
-    // Process subcategory groups
-    for (const subcatNode of scopeNode.children || []) {
-      const layerId = subcatNode.id;
+    // Process layer groups
+    for (const layerElkNode of realmNode.children || []) {
+      const layerId = layerElkNode.id;
       const layerName = layerId.replace(`layer-${realm}-`, '');
       const layerMeta = realmDef.layers[layerName as keyof typeof realmDef.layers];
 
       if (!layerMeta) continue;
 
-      // Add subcategory group node
+      // Add layer group node
       nodes.push({
         id: layerId,
         type: 'layerGroup',
         parentId: realmId,
         extent: 'parent',
         draggable: true,
-        position: { x: subcatNode.x || 0, y: subcatNode.y || 0 },
+        position: { x: layerElkNode.x || 0, y: layerElkNode.y || 0 },
         style: {
-          width: subcatNode.width || 200,
-          height: subcatNode.height || 150,
+          width: layerElkNode.width || 200,
+          height: layerElkNode.height || 150,
         },
         data: {
           realm,
           layer: layerName,
           label: layerMeta.label,
           icon: layerMeta.icon,
-          nodeCount: subcatNode.children?.length || 0,
+          nodeCount: layerElkNode.children?.length || 0,
         },
       });
 
       // Add schema nodes
-      for (const schemaNodeElk of subcatNode.children || []) {
+      for (const schemaNodeElk of layerElkNode.children || []) {
         const nodeType = schemaNodeElk.id.replace('schema-', '');
         const schemaNode = hierarchy.nodes.find(n => n.nodeType === nodeType);
 
@@ -324,8 +324,8 @@ function convertToReactFlow(
  * Bottom-Up Hierarchical Grid Layout
  *
  * Uses a bottom-up approach to ensure nodes fit properly within containers:
- * 1. Calculate grid dimensions for each subcategory based on its nodes
- * 2. Calculate scope dimensions from its subcategories
+ * 1. Calculate grid dimensions for each layer based on its nodes
+ * 2. Calculate realm dimensions from its layers
  * 3. Position everything on the canvas
  *
  * This ensures containers are ALWAYS sized to fit their children.
@@ -357,10 +357,10 @@ function applyEdgeAwareGridLayout(
   }
 
   // ===========================================================================
-  // PHASE 1: Calculate subcategory dimensions (bottom-up)
+  // PHASE 1: Calculate layer dimensions (bottom-up)
   // ===========================================================================
 
-  interface SubcatLayout {
+  interface LayerLayout {
     layerName: string;
     meta: { label: string; icon: string; nodeTypes: readonly string[] };
     orderedNodes: string[];
@@ -373,7 +373,7 @@ function applyEdgeAwareGridLayout(
   interface RealmLayout {
     realm: Realm;
     realmDef: typeof hierarchy.realms[Realm];
-    subcategories: SubcatLayout[];
+    layers: LayerLayout[];
     totalWidth: number;
     totalHeight: number;
   }
@@ -385,7 +385,7 @@ function applyEdgeAwareGridLayout(
     const realmDef = hierarchy.realms[realm];
     if (!realmDef) continue;
 
-    const layerLayouts: SubcatLayout[] = [];
+    const layerLayouts: LayerLayout[] = [];
 
     for (const [layerName, meta] of Object.entries(realmDef.layers)) {
       if (meta.nodeTypes.length === 0) continue;
@@ -407,7 +407,7 @@ function applyEdgeAwareGridLayout(
     if (layerLayouts.length === 0) continue;
 
     // ===========================================================================
-    // PHASE 2: Calculate scope dimensions from subcategories
+    // PHASE 2: Calculate realm dimensions from layers
     // ===========================================================================
 
     const layerCols = Math.min(layerLayouts.length, MAX_LAYERS_PER_ROW);
@@ -424,9 +424,9 @@ function applyEdgeAwareGridLayout(
         const idx = r * layerCols + c;
         if (idx >= layerLayouts.length) break;
 
-        const subcat = layerLayouts[idx];
-        rowWidth += subcat.width + (c > 0 ? LAYER_GAP : 0);
-        maxHeight = Math.max(maxHeight, subcat.height);
+        const layer = layerLayouts[idx];
+        rowWidth += layer.width + (c > 0 ? LAYER_GAP : 0);
+        maxHeight = Math.max(maxHeight, layer.height);
       }
 
       maxRowWidths.push(rowWidth);
@@ -439,11 +439,11 @@ function applyEdgeAwareGridLayout(
     const totalWidth = totalContentWidth + REALM_PADDING * 2;
     const totalHeight = totalContentHeight + REALM_PADDING * 2 + REALM_HEADER;
 
-    realmLayouts.push({ realm, realmDef, subcategories: layerLayouts, totalWidth, totalHeight });
+    realmLayouts.push({ realm, realmDef, layers: layerLayouts, totalWidth, totalHeight });
   }
 
   // ===========================================================================
-  // PHASE 3: Position scopes on canvas
+  // PHASE 3: Position realms on canvas
   // ===========================================================================
 
   let maxHeightInRow = 0;      // Track tallest scope in current row
@@ -451,7 +451,7 @@ function applyEdgeAwareGridLayout(
   let realmY = CANVAS_MARGIN;
 
   for (const realmLayout of realmLayouts) {
-    const { realm, realmDef, subcategories, totalWidth, totalHeight } = realmLayout;
+    const { realm, realmDef, layers, totalWidth, totalHeight } = realmLayout;
 
     // Wrap to next row if needed
     if (realmX + totalWidth > MAX_ROW_WIDTH + CANVAS_MARGIN && realmX > CANVAS_MARGIN) {
@@ -460,9 +460,9 @@ function applyEdgeAwareGridLayout(
       maxHeightInRow = 0;
     }
 
-    const realmId = `scope-${realm}`;
+    const realmId = `realm-${realm}`;
 
-    // Create scope group node
+    // Create realm group node
     nodes.push({
       id: realmId,
       type: 'realmGroup',
@@ -474,24 +474,24 @@ function applyEdgeAwareGridLayout(
         realm,
         label: realmDef.label,
         icon: realmDef.icon,
-        nodeCount: subcategories.reduce((sum, s) => sum + s.orderedNodes.length, 0),
+        nodeCount: layers.reduce((sum, s) => sum + s.orderedNodes.length, 0),
       },
     });
 
     // ===========================================================================
-    // PHASE 4: Position subcategories within scope (HORIZONTALLY)
+    // PHASE 4: Position layers within realm (HORIZONTALLY)
     // ===========================================================================
 
-    const layerColsInScope = Math.min(subcategories.length, MAX_LAYERS_PER_ROW);
+    const layerColsInScope = Math.min(layers.length, MAX_LAYERS_PER_ROW);
     let layerX = REALM_PADDING;
     let layerY = REALM_PADDING + REALM_HEADER;
     let colIndex = 0;
     let rowMaxHeight = 0;
 
-    for (const subcat of subcategories) {
-      const layerId = `layer-${realm}-${subcat.layerName}`;
+    for (const layer of layers) {
+      const layerId = `layer-${realm}-${layer.layerName}`;
 
-      // Create subcategory group node
+      // Create layer group node
       nodes.push({
         id: layerId,
         type: 'layerGroup',
@@ -499,25 +499,25 @@ function applyEdgeAwareGridLayout(
         extent: 'parent',
         draggable: true,
         position: { x: layerX, y: layerY },
-        width: subcat.width,
-        height: subcat.height,
-        style: { width: subcat.width, height: subcat.height },
+        width: layer.width,
+        height: layer.height,
+        style: { width: layer.width, height: layer.height },
         data: {
           realm,
-          layer: subcat.layerName,
-          label: subcat.meta.label,
-          icon: subcat.meta.icon,
-          nodeCount: subcat.orderedNodes.length,
+          layer: layer.layerName,
+          label: layer.meta.label,
+          icon: layer.meta.icon,
+          nodeCount: layer.orderedNodes.length,
         },
       });
 
       // ===========================================================================
-      // PHASE 5: Position nodes within subcategory
+      // PHASE 5: Position nodes within layer
       // ===========================================================================
 
-      subcat.orderedNodes.forEach((nodeType, idx) => {
-        const row = Math.floor(idx / subcat.cols);
-        const col = idx % subcat.cols;
+      layer.orderedNodes.forEach((nodeType, idx) => {
+        const row = Math.floor(idx / layer.cols);
+        const col = idx % layer.cols;
         const schemaNode = hierarchy.nodes.find(n => n.nodeType === nodeType);
 
         nodes.push({
@@ -535,13 +535,13 @@ function applyEdgeAwareGridLayout(
             label: schemaNode?.label || nodeType,
             description: schemaNode?.description || '',
             realm,
-            layer: subcat.layerName,
+            layer: layer.layerName,
           },
         });
       });
 
-      // Move to next subcategory position (HORIZONTAL first)
-      rowMaxHeight = Math.max(rowMaxHeight, subcat.height);
+      // Move to next layer position (HORIZONTAL first)
+      rowMaxHeight = Math.max(rowMaxHeight, layer.height);
       colIndex++;
 
       if (colIndex >= layerColsInScope) {
@@ -552,17 +552,17 @@ function applyEdgeAwareGridLayout(
         rowMaxHeight = 0;
       } else {
         // Move to next column (horizontal)
-        layerX += subcat.width + LAYER_GAP;
+        layerX += layer.width + LAYER_GAP;
       }
     }
 
-    // Move scope position for next scope
+    // Move realm position for next realm
     realmX += totalWidth + REALM_GAP;
     maxHeightInRow = Math.max(maxHeightInRow, totalHeight);
   }
 
   // ===========================================================================
-  // FALLBACK: If no nodes created from hierarchy (broken scopes)
+  // FALLBACK: If no nodes created from hierarchy (broken realms)
   // ===========================================================================
 
   if (nodes.length === 0 && hierarchy.nodes.length > 0) {

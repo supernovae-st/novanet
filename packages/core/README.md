@@ -61,7 +61,7 @@ pnpm --filter=@novanet/core validate
 ```
 core/
 ├── models/                    # YAML schema definitions (source of truth)
-│   ├── _index.yaml            # Graph structure overview (35 nodes, 47 relations)
+│   ├── _index.yaml            # Graph structure overview (35 nodes, 50 relations)
 │   ├── relations.yaml         # All Neo4j relationships (with family field)
 │   ├── organizing-principles.yaml  # v9: Realm/Layer/Trait/EdgeFamily
 │   ├── nodes/                 # One file per node type

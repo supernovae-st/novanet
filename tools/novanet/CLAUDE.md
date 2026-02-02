@@ -11,33 +11,76 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 
 ## Current Status
 
-**Phase 7A (Task 7.7) complete** — Schema generators + view-specific doc generators implemented.
-`novanet schema generate` produces 7 artifacts (4 Cypher seeds, 2 TypeScript, 1 Mermaid).
-`novanet schema validate` checks YAML coherence. `novanet doc generate` produces 12
-view-specific Mermaid diagrams from YAML view definitions. 93 tests pass.
-Remaining commands (data, meta, query, node, db, tui) are Phase 7 stubs.
+**Phase 7A complete** — All CLI commands and TUI scaffold implemented.
+
+| Area | Commands | Status |
+|------|----------|--------|
+| Read | `data`, `meta`, `overlay`, `query` | Implemented (faceted Cypher) |
+| Write | `node create/edit/delete`, `relation create/delete` | Implemented (label validation) |
+| Schema | `schema generate`, `schema validate` | Implemented (7 artifacts) |
+| Docs | `doc generate`, `doc generate --list` | Implemented (12 views) |
+| Search | `search --query=... [--kind=...]` | Implemented (fulltext + property) |
+| Locale | `locale list`, `locale import` | Implemented |
+| DB | `db seed`, `db migrate`, `db reset` | Implemented |
+| Filter | `filter build` | Implemented (JSON stdin, Studio subprocess) |
+| TUI | `tui` | Scaffold complete (ratatui + crossterm) |
+
+**195 tests pass** (`cargo test`). Zero clippy warnings.
 
 ## Commands
 
 ```bash
-# Build + run
-cargo build                    # Debug build
-cargo run -- data              # Mode 1: Data nodes only
-cargo run -- meta              # Mode 2: Meta-graph only
-cargo run -- overlay           # Mode 3: Data + Meta overlay
-cargo run -- query --realm=project --format=json  # Mode 4: Faceted query
-cargo run -- tui               # Interactive TUI
+# Build
+cargo build                                       # Debug build
+cargo build --features tui                        # Build with TUI (default)
+cargo build --no-default-features                 # CLI-only (no TUI deps)
 
-# Documentation (view-specific Mermaid diagrams)
-cargo run -- doc generate                        # All 12 views → .md files
+# Read modes (Neo4j)
+cargo run -- data                                 # Mode 1: Data nodes only
+cargo run -- meta                                 # Mode 2: Meta-graph only
+cargo run -- overlay                              # Mode 3: Data + Meta overlay
+cargo run -- query --realm=project --format=json  # Mode 4: Faceted query
+
+# Write operations (Neo4j)
+cargo run -- node create --kind=Page --key=my-page --props='{"display_name":"My Page"}'
+cargo run -- node edit --key=my-page --set='{"description":"Updated"}'
+cargo run -- node delete --key=my-page --confirm
+cargo run -- relation create --from=page1 --to=concept1 --type=USES_CONCEPT
+
+# Search (Neo4j)
+cargo run -- search --query="page" --kind=Page --limit=20
+
+# Locale (Neo4j)
+cargo run -- locale list --format=table
+cargo run -- locale import --file=path/to/locale.cypher
+
+# Database (Neo4j)
+cargo run -- db seed                              # Execute seed Cypher files
+cargo run -- db migrate                           # Run migrations
+cargo run -- db reset                             # Drop + seed
+
+# Schema (YAML, no Neo4j)
+cargo run -- schema generate                      # All 7 artifacts from YAML
+cargo run -- schema generate --dry-run            # Preview without writing
+cargo run -- schema validate                      # Validate YAML coherence
+cargo run -- schema validate --strict             # Fail on warnings
+
+# Documentation (YAML, no Neo4j)
+cargo run -- doc generate                         # All 12 view Mermaid diagrams
 cargo run -- doc generate --view=block-generation # Single view
-cargo run -- doc generate --dry-run              # Preview without writing
-cargo run -- doc generate --list                 # List available views
+cargo run -- doc generate --dry-run               # Preview without writing
+cargo run -- doc generate --list                  # List available views
+
+# Filter (Studio subprocess, no Neo4j)
+echo '{"realms":["project"]}' | cargo run -- filter build
+
+# TUI (Neo4j)
+cargo run -- tui                                  # Interactive terminal UI
 
 # Quality
 cargo clippy -- -D warnings    # Zero warnings policy
 cargo fmt --check              # Formatting check
-cargo test                     # Unit + CLI integration tests
+cargo test                     # 195 unit tests
 cargo test -- --ignored        # Neo4j integration tests (requires running Neo4j)
 
 # Pre-commit
@@ -51,13 +94,32 @@ Module structure:
 ```
 src/
   main.rs         Thin entry point (clap parse + dispatch)
-  config.rs       Root discovery (resolve_root) + connection config
-  db.rs           Neo4j connection pool (neo4rs + Arc)
+  lib.rs          Public API (re-exports all modules)
+  config.rs       Root discovery (resolve_root) + path helpers
+  db.rs           Neo4j connection pool (neo4rs::Graph + Arc)
   error.rs        NovaNetError enum (thiserror) + Result type alias
-  commands/       Subcommand implementations (schema, doc, data, meta, query, node, db)
+  cypher.rs       CypherStatement builder (data/meta/overlay/query/search)
+  facets.rs       FacetFilter (Realm/Layer/Trait/EdgeFamily/Kind) + JSON serde
+  output.rs       OutputFormat (Table/Json/Cypher) + rendering helpers
+  commands/
+    mod.rs        Module registry
+    read.rs       data/meta/overlay/query (CypherStatement → Neo4j → format)
+    node.rs       node create/edit/delete (label validation + Cypher)
+    relation.rs   relation create/delete (rel type validation + Cypher)
+    search.rs     search --query (fulltext + property match)
+    locale.rs     locale list/import
+    db.rs         db seed/migrate/reset (Cypher file execution)
+    schema.rs     schema generate/validate (YAML → artifacts)
+    doc.rs        doc generate/list (YAML views → Mermaid)
+    filter.rs     filter build (JSON stdin → Cypher stdout)
   parsers/        YAML parsers (yaml_node, relations, organizing, views)
   generators/     Code generators (organizing, kind, edge_schema, layer, mermaid, view_mermaid, autowire, hierarchy)
   tui/            Terminal UI (feature-gated behind `tui` feature)
+    app.rs        State machine (NavMode, AppState, ActivePanel)
+    tree.rs       TaxonomyTree (Realm > Layer > Kind hierarchy + cursor)
+    events.rs     Keyboard handling (Action dispatch)
+    ui.rs         Layout + widgets (ratatui rendering)
+    runtime.rs    Async event loop (crossterm + mpsc channel bridge)
 ```
 
 ## Key Patterns

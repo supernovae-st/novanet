@@ -6,7 +6,7 @@ import { NODE_WIDTH, NODE_HEIGHT, REALM_PADDING, NODE_GAP, REALM_GAP } from './t
 import type { Realm } from '@novanet/core/types';
 
 /**
- * Force Clusters Layout - Physics-based with scope clustering
+ * Force Clusters Layout - Physics-based with realm clustering
  *
  * Uses unified spacing from types.ts (Golden Ratio system).
  * Cluster centers derived from REALM_GAP; spiral spacing from NODE_GAP.
@@ -41,10 +41,10 @@ export function applyForceClusterLayout(
     const realmDef = hierarchy.realms[realm];
     if (!realmDef) continue;
 
-    const realmId = `scope-${realm}`;
+    const realmId = `realm-${realm}`;
     const center = CLUSTER_CENTERS[realm];
 
-    // Collect all nodes for this scope
+    // Collect all nodes for this realm
     const allNodes: { nodeType: string; layerName: string }[] = [];
     for (const [layerName, layerMeta] of Object.entries(realmDef.layers)) {
       for (const nodeType of layerMeta.nodeTypes) {
@@ -69,14 +69,14 @@ export function applyForceClusterLayout(
       });
     });
 
-    // Calculate bounding box for scope group
+    // Calculate bounding box for realm group
     if (nodePositions.length > 0) {
       const minX = Math.min(...nodePositions.map(p => p.x)) - REALM_PADDING - NODE_WIDTH / 2;
       const maxX = Math.max(...nodePositions.map(p => p.x)) + REALM_PADDING + NODE_WIDTH / 2;
       const minY = Math.min(...nodePositions.map(p => p.y)) - REALM_PADDING - NODE_HEIGHT / 2;
       const maxY = Math.max(...nodePositions.map(p => p.y)) + REALM_PADDING + NODE_HEIGHT / 2;
 
-      // Scope group node
+      // Realm group node
       nodes.push({
         id: realmId,
         type: 'realmGroup',
@@ -90,7 +90,7 @@ export function applyForceClusterLayout(
         },
       });
 
-      // Create schema nodes (relative to scope group)
+      // Create schema nodes (relative to realm group)
       for (const pos of nodePositions) {
         const schemaNode = hierarchy.nodes.find(n => n.nodeType === pos.nodeType);
 

@@ -68,7 +68,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 │   │       ├── seo/                         ←   Layer: seo (Keyword, Metrics, MiningRun)              │
 │   │       └── geo/                         ←   Layer: geo (Seed, Metrics, MiningRun)                 │
 │   │                                                                                                 │
-│   ├── relations.yaml                       ← 47 types de relations Neo4j (with family field)        │
+│   ├── relations.yaml                       ← 50 types de relations Neo4j (with family field)        │
 │   └── views/                               ← Definitions de vues YAML                               │
 │                                                                                                     │
 └─────────────────────────────────────────────────────────────────────────────────────────────────────┘
@@ -91,7 +91,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
   │   Axis 2 — WHAT?    :Layer       (9)  config, knowledge, foundation, structure, semantic,    │
   │                                        instruction, output, seo, geo                         │
   │   Axis 3 — HOW?     :Trait       (5)  invariant / localized / knowledge / derived / job      │
-  │   Axis 4 — LINKS?   :EdgeKind   (47)  grouped into 5 EdgeFamilies                           │
+  │   Axis 4 — LINKS?   :EdgeKind   (50)  grouped into 5 EdgeFamilies                           │
   │                                                                                              │
   └──────────────────────────────────────────────────────────────────────────────────────────────┘
 
@@ -120,7 +120,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
   Edge Schema (OWL-inspired):
 
   ┌────────────────┐    FROM_KIND    ┌─────────────┐    TO_KIND     ┌────────────────┐
-  │  EdgeKind (47) │───────────────▶│  Kind (35)  │◀──────────────│  EdgeKind (47) │
+  │  EdgeKind (50) │───────────────▶│  Kind (35)  │◀──────────────│  EdgeKind (50) │
   │  1:1 rel type  │                └─────────────┘               │                │
   └───────┬────────┘                                              └────────────────┘
           │
@@ -165,7 +165,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
      │                        📁 YAML (Single Source of Truth)                                     │
      │                        packages/core/models/                                                │
      │                        ├── nodes/                    ← 35 Kinds                             │
-     │                        ├── relations.yaml            ← 47 Relations (with family)           │
+     │                        ├── relations.yaml            ← 50 Relations (with family)           │
      │                        └── organizing-principles.yaml← Realm/Layer/Trait/EdgeFamily defs    │
      └─────────────────────────────────────────────┬───────────────────────────────────────────────┘
                                                    │
@@ -226,16 +226,21 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
   │  ├── thiserror          ← Library error types                                               │
   │  └── color-eyre         ← Application error reporting                                       │
   │                                                                                             │
-  │  Commands:                                                                                  │
-  │  ├── novanet schema validate [--strict]    ← YAML <-> Neo4j validation                     │
-  │  ├── novanet schema diff                   ← Show drift between YAML and Neo4j             │
-  │  ├── novanet graph explore                 ← TUI graph explorer (ratatui)                   │
-  │  ├── novanet graph query <cypher>          ← Execute Cypher and display results             │
-  │  └── novanet graph stats                   ← Node/edge counts and health check             │
+  │  Commands (all implemented, 195 tests):                                                     │
+  │  ├── novanet data/meta/overlay/query       ← 4 navigation modes (faceted Cypher)            │
+  │  ├── novanet node create/edit/delete       ← Node CRUD (label validation)                   │
+  │  ├── novanet relation create/delete        ← Relation CRUD (type validation)                │
+  │  ├── novanet search --query=...            ← Fulltext + property search                     │
+  │  ├── novanet locale list/import            ← Locale operations                              │
+  │  ├── novanet db seed/migrate/reset         ← Database lifecycle                             │
+  │  ├── novanet schema generate/validate      ← YAML → artifacts (7 generators)                │
+  │  ├── novanet doc generate                  ← View-specific Mermaid (12 views)               │
+  │  ├── novanet filter build                  ← JSON stdin → Cypher (Studio subprocess)        │
+  │  └── novanet tui                           ← Interactive terminal (ratatui)                  │
   │                                                                                             │
-  │  Boundary Rule:                                                                             │
-  │  ├── TypeScript → generates code artifacts (types, Cypher, Mermaid)                         │
-  │  └── Rust       → executes at runtime (graph ops, validation, TUI)                          │
+  │  Architecture:                                                                              │
+  │  ├── Rust generates artifacts AND executes at runtime                                       │
+  │  └── TypeScript @novanet/schema-tools eliminated                                             │
   │                                                                                             │
   └─────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -462,12 +467,12 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 | Metric | Value |
 |--------|-------|
 | Kind (node types) | 35 |
-| EdgeKind (relations) | 47 |
+| EdgeKind (relations) | 50 |
 | Realms | 3 (global, project, shared) |
 | Layers | 9 |
 | Traits | 5 |
 | EdgeFamilies | 5 |
-| Meta-node total | 105 (3+9+35+5+5+47+1 bridge type) |
+| Meta-node total | 108 (3+9+35+5+5+50+1 bridge type) |
 | Locale Knowledge nodes | 14 |
 | Seed files | 7 |
 | Migrations | 6 |
@@ -480,20 +485,32 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 ## Commands
 
 ```bash
-# Validate YAML <-> Neo4j consistency
-novanet schema validate
+# Schema & docs (YAML, no Neo4j)
+novanet schema generate            # Regenerate all artifacts from YAML
+novanet schema validate            # Validate YAML coherence
+novanet doc generate               # Generate 12 view Mermaid diagrams
 
-# Regenerate all artifacts from YAML
-novanet schema generate
+# Read modes (Neo4j)
+novanet data                       # Mode 1: Data nodes
+novanet meta                       # Mode 2: Meta-graph
+novanet overlay                    # Mode 3: Data + Meta
+novanet query --realm=project      # Mode 4: Faceted query
 
-# Seed database
-novanet db seed
+# Write (Neo4j)
+novanet node create --kind=Page --key=my-page
+novanet relation create --from=a --to=b --type=USES_CONCEPT
 
-# Reset database
-pnpm infra:down && pnpm infra:up && novanet db seed
+# Database lifecycle
+novanet db seed                    # Execute seed files
+novanet db migrate                 # Run migrations
+novanet db reset                   # Drop + seed
 
-# View in browser
-open http://localhost:7474
+# Search & locale
+novanet search --query="page"      # Fulltext search
+novanet locale list                # Locale operations
+
+# Interactive
+novanet tui                        # Terminal UI (ratatui)
 ```
 
 ---

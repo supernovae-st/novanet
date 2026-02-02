@@ -9,7 +9,7 @@
  * - Works for both data mode and schema mode
  *
  * Z-Index Strategy:
- * - Containers (scope/subcat): 0 (background)
+ * - Containers (realm/layer): 0 (background)
  * - Regular nodes: 1000 (middle layer)
  * - Hovered node: 9000 (front)
  * - Selected node: 10000 (always on top)
@@ -23,10 +23,10 @@ import type { Node as ReactFlowNode, Edge as ReactFlowEdge } from '@xyflow/react
 // =============================================================================
 
 export const Z_INDEX = {
-  /** Scope containers - layered by scope (Shared < Global < Project) */
-  SCOPE_SHARED: 10,
-  SCOPE_GLOBAL: 20,
-  SCOPE_PROJECT: 30,
+  /** Realm containers - layered by realm (Shared < Global < Project) */
+  REALM_SHARED: 10,
+  REALM_GLOBAL: 20,
+  REALM_PROJECT: 30,
   /** Layer containers - slightly above their parent realm */
   LAYER_SHARED: 15,
   LAYER_GLOBAL: 25,
@@ -71,32 +71,32 @@ export interface UseGraphInteractionsReturn {
 // =============================================================================
 
 /**
- * Get base z-index for a node based on its type and scope
+ * Get base z-index for a node based on its type and realm
  *
  * Container hierarchy (back to front):
- * - Shared scope (-300) < Global scope (-200) < Project scope (-100)
- * - Subcategories slightly above their parent scope
+ * - Shared realm (10) < Global realm (20) < Project realm (30)
+ * - Layers slightly above their parent realm
  * - Regular nodes always on top (1000+)
  */
 function getBaseZIndex(node: ReactFlowNode): number {
   const id = node.id;
 
-  // Scope containers: scope-{Scope}
-  if (id.startsWith('scope-')) {
-    const scope = id.replace('scope-', '');
-    if (scope === 'Shared') return Z_INDEX.SCOPE_SHARED;
-    if (scope === 'Global') return Z_INDEX.SCOPE_GLOBAL;
-    if (scope === 'Project') return Z_INDEX.SCOPE_PROJECT;
-    return Z_INDEX.SCOPE_SHARED; // fallback
+  // Realm containers: realm-{Realm}
+  if (id.startsWith('realm-')) {
+    const realm = id.replace('realm-', '');
+    if (realm === 'shared') return Z_INDEX.REALM_SHARED;
+    if (realm === 'global') return Z_INDEX.REALM_GLOBAL;
+    if (realm === 'project') return Z_INDEX.REALM_PROJECT;
+    return Z_INDEX.REALM_SHARED; // fallback
   }
 
   // Layer containers: layer-{Realm}-{LayerName}
   if (id.startsWith('layer-')) {
     const parts = id.replace('layer-', '').split('-');
-    const scope = parts[0];
-    if (scope === 'Shared') return Z_INDEX.LAYER_SHARED;
-    if (scope === 'Global') return Z_INDEX.LAYER_GLOBAL;
-    if (scope === 'Project') return Z_INDEX.LAYER_PROJECT;
+    const realm = parts[0];
+    if (realm === 'shared') return Z_INDEX.LAYER_SHARED;
+    if (realm === 'global') return Z_INDEX.LAYER_GLOBAL;
+    if (realm === 'project') return Z_INDEX.LAYER_PROJECT;
     return Z_INDEX.LAYER_SHARED; // fallback
   }
 
@@ -119,7 +119,7 @@ export function useGraphInteractions<T extends ReactFlowNode = ReactFlowNode>({
   const bringToFront = useCallback(
     (nodeId: string) => {
       // Skip z-index change for containers - they should stay in their layer
-      const isContainer = nodeId.startsWith('scope-') || nodeId.startsWith('layer-');
+      const isContainer = nodeId.startsWith('realm-') || nodeId.startsWith('layer-');
       if (isContainer) return;
 
       setNodes((nodes) =>
@@ -140,7 +140,7 @@ export function useGraphInteractions<T extends ReactFlowNode = ReactFlowNode>({
   const setHoverZIndex = useCallback(
     (nodeId: string) => {
       // Skip z-index change for containers - they should stay in their layer
-      const isContainer = nodeId.startsWith('scope-') || nodeId.startsWith('layer-');
+      const isContainer = nodeId.startsWith('realm-') || nodeId.startsWith('layer-');
       if (isContainer) return;
 
       setNodes((nodes) =>

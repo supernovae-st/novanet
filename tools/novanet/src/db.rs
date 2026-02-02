@@ -82,6 +82,48 @@ impl Db {
         Ok(rows)
     }
 
+    /// Execute a `CypherStatement` with mixed param types (StringList, Int).
+    pub async fn execute_statement(
+        &self,
+        stmt: &crate::cypher::CypherStatement,
+    ) -> crate::Result<Vec<neo4rs::Row>> {
+        let mut q = query(&stmt.cypher);
+        for (name, value) in &stmt.params {
+            match value {
+                crate::cypher::ParamValue::StringList(list) => {
+                    let bolt_list: Vec<neo4rs::BoltType> = list
+                        .iter()
+                        .map(|s| neo4rs::BoltType::from(s.as_str()))
+                        .collect();
+                    q = q.param(name.as_str(), bolt_list);
+                }
+                crate::cypher::ParamValue::Int(n) => {
+                    q = q.param(name.as_str(), *n);
+                }
+            }
+        }
+        let mut result = self
+            .graph
+            .execute(q)
+            .await
+            .map_err(|e| crate::NovaNetError::Query {
+                query: stmt.cypher.clone(),
+                source: e,
+            })?;
+        let mut rows = Vec::new();
+        while let Some(row) = result
+            .next()
+            .await
+            .map_err(|e| crate::NovaNetError::Query {
+                query: stmt.cypher.clone(),
+                source: e,
+            })?
+        {
+            rows.push(row);
+        }
+        Ok(rows)
+    }
+
     /// Access the underlying Graph for advanced operations.
     pub fn graph(&self) -> &Graph {
         &self.graph

@@ -257,7 +257,7 @@ function Graph2DInner({
   // =========================================================================
   // MAGNETIC LAYOUT DATA (organizing principles)
   // =========================================================================
-  // When layoutMode is 'magnetic', fetch Scope/Subcategory as attractor nodes
+  // When layoutMode is 'magnetic', fetch Realm/Layer as attractor nodes
   const { data: magneticData, isMagneticMode, isLoading: isMagneticLoading } = useMagneticData();
 
   // Focus mode for selection-based dimming
@@ -432,25 +432,25 @@ function Graph2DInner({
         (edge) => visibleNodeIds.has(edge.source) && visibleNodeIds.has(edge.target)
       );
 
-      // Apply initial z-index based on node type and scope
+      // Apply initial z-index based on node type and realm
       // Hierarchy: Shared(10) < Global(20) < Project(30) < Nodes(1000)
       const nodesWithZIndex = visibleNodes.map((node) => {
         let zIndex: number = Z_INDEX.BASE;
 
-        // Scope containers: scope-{Scope}
-        if (node.id.startsWith('scope-')) {
-          const scope = node.id.replace('scope-', '');
-          if (scope === 'Shared') zIndex = Z_INDEX.SCOPE_SHARED;
-          else if (scope === 'Global') zIndex = Z_INDEX.SCOPE_GLOBAL;
-          else if (scope === 'Project') zIndex = Z_INDEX.SCOPE_PROJECT;
+        // Realm containers: realm-{Realm}
+        if (node.id.startsWith('realm-')) {
+          const realm = node.id.replace('realm-', '');
+          if (realm === 'shared') zIndex = Z_INDEX.REALM_SHARED;
+          else if (realm === 'global') zIndex = Z_INDEX.REALM_GLOBAL;
+          else if (realm === 'project') zIndex = Z_INDEX.REALM_PROJECT;
         }
         // Layer containers: layer-{Realm}-{LayerName}
         else if (node.id.startsWith('layer-')) {
           const parts = node.id.replace('layer-', '').split('-');
-          const scope = parts[0];
-          if (scope === 'Shared') zIndex = Z_INDEX.LAYER_SHARED;
-          else if (scope === 'Global') zIndex = Z_INDEX.LAYER_GLOBAL;
-          else if (scope === 'Project') zIndex = Z_INDEX.LAYER_PROJECT;
+          const realm = parts[0];
+          if (realm === 'shared') zIndex = Z_INDEX.LAYER_SHARED;
+          else if (realm === 'global') zIndex = Z_INDEX.LAYER_GLOBAL;
+          else if (realm === 'project') zIndex = Z_INDEX.LAYER_PROJECT;
         }
 
         return { ...node, zIndex };
@@ -534,7 +534,7 @@ function Graph2DInner({
       bringSchemaNodeToFront(node.id);
 
       // Check if this is a container node (realm or layer group)
-      const isContainer = node.id.startsWith('scope-') || node.id.startsWith('layer-');
+      const isContainer = node.id.startsWith('realm-') || node.id.startsWith('layer-');
 
       // Small delay to ensure state is fully propagated before view adjustment
       // This ensures the panel width is accounted for in the calculation
@@ -547,12 +547,12 @@ function Graph2DInner({
             n => n.id === node.id || n.parentId === node.id
           );
 
-          // If this is a scope container, also include subcategory children
-          if (node.id.startsWith('scope-')) {
-            const subcatNodes = allNodes.filter(n => n.parentId === node.id);
-            for (const subcat of subcatNodes) {
-              const subcatChildren = allNodes.filter(n => n.parentId === subcat.id);
-              containerAndChildren.push(...subcatChildren);
+          // If this is a realm container, also include layer children
+          if (node.id.startsWith('realm-')) {
+            const layerNodes = allNodes.filter(n => n.parentId === node.id);
+            for (const layerNode of layerNodes) {
+              const layerChildren = allNodes.filter(n => n.parentId === layerNode.id);
+              containerAndChildren.push(...layerChildren);
             }
           }
 
@@ -671,11 +671,11 @@ function Graph2DInner({
 
     try {
       // =====================================================================
-      // MAGNETIC MODE: Position data nodes around Scope/Subcategory attractors
+      // MAGNETIC MODE: Position data nodes around Realm/Layer attractors
       // =====================================================================
       if (isMagneticMode && magneticData) {
-        // Fixed scope positions (triangular arrangement)
-        const scopePositions: Record<string, { x: number; y: number }> = {
+        // Fixed realm positions (triangular arrangement)
+        const realmPositions: Record<string, { x: number; y: number }> = {
           project: { x: 0, y: 0 },
           global: { x: 2000, y: 0 },
           shared: { x: 1000, y: 1500 },
@@ -696,7 +696,7 @@ function Graph2DInner({
           layersByRealm.set(sub.realmKey, list);
         }
         for (const [realmKey, subs] of layersByRealm) {
-          const realmPos = scopePositions[realmKey] || { x: 0, y: 0 };
+          const realmPos = realmPositions[realmKey] || { x: 0, y: 0 };
           const radius = 500;
           subs.forEach((sub, i) => {
             const angle = (2 * Math.PI * i) / subs.length - Math.PI / 2;
@@ -707,32 +707,32 @@ function Graph2DInner({
           });
         }
 
-        // Create attractor nodes (Scope and Subcategory)
+        // Create attractor nodes (Realm and Layer)
         const attractorNodes: TurboNodeType[] = [];
 
-        // Scope attractor nodes
-        for (const scope of magneticData.realms) {
-          const pos = scopePositions[scope.key];
+        // Realm attractor nodes
+        for (const realm of magneticData.realms) {
+          const pos = realmPositions[realm.key];
           // typeCount = how many nodeTypes belong to this realm (static, from schema)
           const typeCount = Object.values(nodeTypeToLayer)
-            .filter(lk => layerToRealm[lk] === scope.key).length;
+            .filter(lk => layerToRealm[lk] === realm.key).length;
           // loadedCount = how many loaded instances belong to this realm (dynamic)
           const loadedCount = turboNodes.filter(n => {
             const lk = nodeTypeToLayer[n.data.type];
-            return layerToRealm[lk] === scope.key;
+            return layerToRealm[lk] === realm.key;
           }).length;
           attractorNodes.push({
-            id: `realm-${scope.key}`,
+            id: `realm-${realm.key}`,
             type: 'realmAttractor',
             position: pos,
             data: {
-              id: `realm-${scope.key}`,
+              id: `realm-${realm.key}`,
               type: 'Realm',
-              key: scope.key,
-              label: scope.displayName,
-              displayName: scope.displayName,
-              emoji: scope.emoji,
-              color: scope.color,
+              key: realm.key,
+              label: realm.displayName,
+              displayName: realm.displayName,
+              emoji: realm.emoji,
+              color: realm.color,
               typeCount,
               loadedCount,
               category: 'project',
@@ -770,7 +770,7 @@ function Graph2DInner({
           } as unknown as TurboNodeType);
         }
 
-        // Position data nodes near their subcategory (with seeded jitter)
+        // Position data nodes near their layer (with seeded jitter)
         let seed = 12345;
         const seededRandom = () => {
           seed = (seed * 1103515245 + 12345) & 0x7fffffff;

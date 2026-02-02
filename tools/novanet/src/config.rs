@@ -64,3 +64,107 @@ pub fn views_dir(root: &Path) -> PathBuf {
 pub fn docs_dir(root: &Path) -> PathBuf {
     root.join("packages/core/models/docs")
 }
+
+pub fn migrations_dir(root: &Path) -> PathBuf {
+    root.join("packages/db/migrations")
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::path::Path;
+
+    #[test]
+    fn models_dir_joins_correctly() {
+        let root = Path::new("/fake/root");
+        assert_eq!(
+            models_dir(root),
+            PathBuf::from("/fake/root/packages/core/models")
+        );
+    }
+
+    #[test]
+    fn nodes_dir_joins_correctly() {
+        let root = Path::new("/fake/root");
+        assert_eq!(
+            nodes_dir(root),
+            PathBuf::from("/fake/root/packages/core/models/nodes")
+        );
+    }
+
+    #[test]
+    fn relations_path_joins_correctly() {
+        let root = Path::new("/fake/root");
+        assert_eq!(
+            relations_path(root),
+            PathBuf::from("/fake/root/packages/core/models/relations.yaml")
+        );
+    }
+
+    #[test]
+    fn organizing_principles_path_joins_correctly() {
+        let root = Path::new("/fake/root");
+        assert_eq!(
+            organizing_principles_path(root),
+            PathBuf::from("/fake/root/packages/core/models/organizing-principles.yaml")
+        );
+    }
+
+    #[test]
+    fn seed_dir_joins_correctly() {
+        let root = Path::new("/fake/root");
+        assert_eq!(seed_dir(root), PathBuf::from("/fake/root/packages/db/seed"));
+    }
+
+    #[test]
+    fn core_src_dir_joins_correctly() {
+        let root = Path::new("/fake/root");
+        assert_eq!(
+            core_src_dir(root),
+            PathBuf::from("/fake/root/packages/core/src")
+        );
+    }
+
+    #[test]
+    fn views_dir_joins_correctly() {
+        let root = Path::new("/fake/root");
+        assert_eq!(
+            views_dir(root),
+            PathBuf::from("/fake/root/packages/core/models/views")
+        );
+    }
+
+    #[test]
+    fn docs_dir_joins_correctly() {
+        let root = Path::new("/fake/root");
+        assert_eq!(
+            docs_dir(root),
+            PathBuf::from("/fake/root/packages/core/models/docs")
+        );
+    }
+
+    #[test]
+    fn migrations_dir_joins_correctly() {
+        let root = Path::new("/fake/root");
+        assert_eq!(
+            migrations_dir(root),
+            PathBuf::from("/fake/root/packages/db/migrations")
+        );
+    }
+
+    #[test]
+    fn resolve_root_explicit_path() {
+        let path = Path::new("/explicit/path");
+        let result = resolve_root(Some(path)).unwrap();
+        assert_eq!(result, PathBuf::from("/explicit/path"));
+    }
+
+    #[test]
+    fn resolve_root_from_cwd() {
+        // Running from within the monorepo should find pnpm-workspace.yaml
+        let result = resolve_root(None);
+        assert!(result.is_ok());
+        let root = result.unwrap();
+        assert!(root.join("pnpm-workspace.yaml").exists());
+    }
+}

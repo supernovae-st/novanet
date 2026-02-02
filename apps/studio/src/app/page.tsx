@@ -46,6 +46,7 @@ const Graph2D = lazy(() =>
 import { GraphErrorBoundary } from '@/components/ui/ErrorBoundary';
 import { StatsCounter, Pill, Divider, RefreshButton, LayerIcon, MatrixRainOverlay } from '@/components/ui';
 import { SidebarTabs } from '@/components/sidebar/SidebarTabs';
+import { NavigationModeToggle } from '@/components/toolbar/NavigationModeToggle';
 import { NodeDetailsPanel } from '@/components/sidebar/NodeDetailsPanel';
 import { EdgeDetailsPanel } from '@/components/sidebar/EdgeDetailsPanel';
 import { KeyboardHelpPanel } from '@/components/dx/KeyboardHelpPanel';
@@ -218,15 +219,16 @@ export default function HomePage() {
     if (navigationMode === 'meta') {
       const nodeId = uiState.hoveredNodeId;
 
-      // Scope containers: scope-{Scope} (e.g., scope-Global, scope-Project)
-      if (nodeId.startsWith('scope-')) {
-        const scope = nodeId.replace('scope-', '');
-        const scopeEmoji = scope === 'Global' ? '🌍' : scope === 'Project' ? '📦' : '🎯';
+      // Realm containers: realm-{Realm} (e.g., realm-global, realm-project)
+      if (nodeId.startsWith('realm-')) {
+        const realm = nodeId.replace('realm-', '');
+        const realmEmoji = realm === 'global' ? '🌍' : realm === 'project' ? '📦' : '🎯';
+        const realmLabel = realm.charAt(0).toUpperCase() + realm.slice(1);
         return {
           id: nodeId,
           type: 'RealmGroup',
-          key: scope,
-          displayName: `${scopeEmoji} ${scope} Scope`,
+          key: realm,
+          displayName: `${realmEmoji} ${realmLabel} Realm`,
         } as SchemaGroupNode;
       }
 
@@ -695,7 +697,7 @@ export default function HomePage() {
                 {navigationMode === 'data' && (
                   <QueryPill className="w-full" onRun={handleRunQuery} />
                 )}
-                {/* Row 2: Stats (left) + Context Picker (right) */}
+                {/* Row 2: Stats (left) + Navigation Mode (center) + Context Picker (right) */}
                 <div className={cn('flex items-start justify-between', gapTokens.large)}>
                   <Pill size="md" className="items-stretch py-3" glow={queryState.isExecuting || transitionState.isTransitioning} glowColor={transitionState.isTransitioning ? 'novanet' : 'emerald'}>
                     <div className="relative z-10 flex flex-col w-full">
@@ -732,6 +734,10 @@ export default function HomePage() {
                       />
                     </div>
                   </Pill>
+                  <NavigationModeToggle
+                    mode={navigationMode}
+                    onModeChange={setNavigationMode}
+                  />
                   <Pill size="md">
                     {navigationMode === 'meta' ? <ViewPicker /> : <ContextPicker />}
                   </Pill>

@@ -1,39 +1,39 @@
 # models/views/_registry.yaml
-version: "8.1.0"
+version: "9.0.0"
 description: NovaNet Core View Definitions
 
 # Categories for UI grouping:
-# - scope: Layer views (complete, global, shared, project)
+# - overview: Layer views (complete, global, shared, project)
 # - generation: Orchestrator and sub-agent context views
 # - knowledge: Locale and concept views
 # - project: Project structure views
 # - mining: SEO and GEO pipeline views
 
 # =============================================================================
-# SCOPE LAYER VIEWS (extracted from complete-graph)
+# OVERVIEW LAYER VIEWS (extracted from complete-graph)
 # =============================================================================
 views:
   # Complete graph (all 35 nodes)
   - id: complete-graph
     file: complete-graph.yaml
     description: Full NovaNet graph with all nodes and relations
-    category: scope
+    category: overview
 
   # Scope layers (derived from complete-graph)
   - id: global-layer
     file: global-layer.yaml
     description: Locale configuration and knowledge (15 nodes)
-    category: scope
+    category: overview
 
   - id: shared-layer
     file: shared-layer.yaml
     description: SEO keywords and GEO seeds (6 nodes)
-    category: scope
+    category: overview
 
   - id: project-layer
     file: project-layer.yaml
     description: Per-project nodes from foundation to output (14 nodes)
-    category: scope
+    category: overview
 
 # =============================================================================
 # GENERATION VIEWS (for orchestrator and sub-agents)

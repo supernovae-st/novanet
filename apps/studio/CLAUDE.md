@@ -156,7 +156,7 @@ v9 introduces faceted classification with 6 meta-node types:
 | **Kind** | 35 | Node type (1:1 with Neo4j labels) — replaces "NodeTypeMeta" |
 | **Trait** | 5 | HOW? (invariant / localized / knowledge / derived / job) |
 | **EdgeFamily** | 5 | Relationship classification |
-| **EdgeKind** | 47 | Individual relationship type |
+| **EdgeKind** | 50 | Individual relationship type |
 
 All meta-nodes carry `:Meta` double-label.
 

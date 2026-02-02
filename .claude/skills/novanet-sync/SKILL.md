@@ -28,23 +28,25 @@ packages/core/models/
 │   └── shared/                   ← Realm: shared
 │       ├── seo/                  ←   Layer: seo
 │       └── geo/                  ←   Layer: geo
-├── relations.yaml                ← 47 relations (with family field in v9)
+├── relations.yaml                ← 50 relations (with family field in v9)
 └── organizing-principles.yaml    ← v9: Realm/Layer/Trait/EdgeFamily definitions
 ```
 
 ## Generated Artifacts
 
+`novanet schema generate` produces 7 artifacts:
+
 | Source | Generator | Output |
 |--------|-----------|--------|
-| models/nodes/ | LayerGenerator | src/graph/layers.ts (v9, replaces subcategories.ts) |
+| models/ | OrganizingGenerator | seed/00.5-organizing-principles.cypher |
+| models/nodes/ | KindGenerator | seed/99-kind-meta-nodes.cypher |
+| models/relations.yaml | EdgeSchemaGenerator | seed/99-edge-schema-meta-nodes.cypher |
+| models/nodes/ | AutowireGenerator | seed/99-autowire-kinds.cypher |
+| models/nodes/ | LayerGenerator | src/graph/layers.ts |
+| models/nodes/ | HierarchyGenerator | src/graph/hierarchy.ts |
 | models/ | MermaidGenerator | models/docs/views/VIEW-COMPLETE-GRAPH.md |
 
-**v9 generators (added):**
-
-| Source | Generator | Output |
-|--------|-----------|--------|
-| models/nodes/ | KindGenerator | Meta-graph Kind nodes with `schema_hint` |
-| models/relations.yaml | EdgeSchemaGenerator | Meta-graph EdgeKind nodes with `cypher_pattern` |
+`novanet doc generate` produces 12 view-specific Mermaid diagrams from `models/views/`.
 
 ## Commands
 
@@ -58,22 +60,7 @@ Check if generated files match YAML sources:
 novanet schema validate
 ```
 
-Expected output:
-```
-═══════════════════════════════════════════════════════
-  novanet schema validate
-═══════════════════════════════════════════════════════
-Results:
-  ✅ layers.ts
-  ✅ hierarchy.ts
-  ✅ VIEW-COMPLETE-GRAPH.md
-  ✅ 00.5-organizing-principles.cypher
-  ✅ 99-autowire-kinds.cypher
-  ✅ Neo4j ↔ YAML consistency
-
-  ✅ All files in sync with YAML sources
-═══════════════════════════════════════════════════════
-```
+Reports errors and warnings about YAML coherence (duplicate keys, missing refs, etc.).
 
 ### `generate` or `fix`
 
@@ -128,8 +115,9 @@ novanet schema generate
 git diff
 
 # Commit regenerated files
-git add packages/core/src/graph/layers.ts
+git add packages/core/src/graph/layers.ts packages/core/src/graph/hierarchy.ts
 git add packages/core/models/docs/views/VIEW-COMPLETE-GRAPH.md
+git add packages/db/seed/00.5-* packages/db/seed/99-*
 git commit -m "chore: regenerate from YAML sources"
 ```
 
@@ -145,6 +133,6 @@ All generators live in `tools/novanet/src/generators/` (Rust-first architecture)
 
 **MermaidGenerator (`generators/mermaid.rs`):**
 - Reads `models/nodes/` and `models/relations.yaml`
-- Generates Mermaid flowchart with all 35 Kinds and 47 relations
+- Generates Mermaid flowchart with all 35 Kinds and 50 relations
 - Groups by Realm (Global, Shared, Project)
 - Colors by Layer (9 distinct colors)

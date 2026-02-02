@@ -48,7 +48,7 @@ novanet-hq/
 ├── packages/
 │   ├── core/                     # @novanet/core - Types, schemas, filtres
 │   │   ├── models/nodes/         # 35 fichiers YAML (SOURCE DE VERITE)
-│   │   ├── models/relations.yaml # 47 types de relations
+│   │   ├── models/relations.yaml # 50 types de relations
 │   │   ├── src/types/            # Types TypeScript generes
 │   │   └── src/graph/            # Hierarchie et layers
 │   │
@@ -110,9 +110,9 @@ novanet-hq/
 | **instruction** | PageType, PagePrompt, BlockType, BlockPrompt, BlockRules | Instructions de generation |
 | **output** | PageL10n, BlockL10n | Contenu genere |
 
-### 3. Relations Neo4j - 47 Types
+### 3. Relations Neo4j - 50 Types
 
-Les 47 types de relations connectent les noeuds selon des patterns precis :
+Les 50 types de relations connectent les noeuds selon des patterns precis :
 
 **Categories de relations:**
 - Hierarchie (CONTAINS, BELONGS_TO, HAS_*)
@@ -148,7 +148,7 @@ models/nodes/
     ├── instruction/*.yaml (5 fichiers)
     └── output/*.yaml (2 fichiers)
 
-models/relations.yaml (47 relations)
+models/relations.yaml (50 relations)
 ```
 
 ### Etape 2: Generateurs
@@ -356,7 +356,7 @@ novanet schema validate    # Valider synchronisation YAML <-> artefacts
 | Metrique | Valeur |
 |----------|--------|
 | Types de noeuds | 35 |
-| Types de relations | 47 |
+| Types de relations | 50 |
 | Realms | 3 (Global, Shared, Project) |
 | Layers | 9 |
 | Fichiers YAML (nodes) | 35 |
