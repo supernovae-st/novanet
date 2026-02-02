@@ -90,7 +90,10 @@ export const StructuralNode = memo(function StructuralNode(props: NodeProps<Stru
   return (
     <div
       className={containerClassName}
-      style={containerStyle}
+      style={{
+        ...containerStyle,
+        ...(isMetaMode && !selected && { opacity: 0.6, filter: 'saturate(0.7)' }),
+      }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onMouseDown={handleMouseDown}

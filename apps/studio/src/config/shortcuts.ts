@@ -117,6 +117,28 @@ export const SHORTCUTS: Shortcut[] = [
     action: 'novanet:cycle-navigation-mode',
   },
 
+  // Facet Cycling
+  {
+    id: 'cycle-trait',
+    keys: 't',
+    label: 'Cycle Trait',
+    description: 'Cycle through Invariant → Localized → Knowledge → Derived → Job → None',
+    category: 'filter',
+    icon: 'Fingerprint',
+    when: ['input-not-focused'],
+    action: 'novanet:cycle-trait',
+  },
+  {
+    id: 'cycle-edge-family',
+    keys: 'e',
+    label: 'Cycle Edge Family',
+    description: 'Cycle through Ownership → Localization → Semantic → Generation → Mining → None',
+    category: 'filter',
+    icon: 'GitBranch',
+    when: ['input-not-focused'],
+    action: 'novanet:cycle-edge-family',
+  },
+
   // Filter / Search
   {
     id: 'cycle-locale',

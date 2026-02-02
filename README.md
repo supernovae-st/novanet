@@ -33,8 +33,8 @@ Generate culturally-native content across 200+ locales — not translation, but 
 |  |  |  |  |
 |:---:|:---:|:---:|:---:|
 | **Knowledge Graph** | **200+ Locales** | **Graph Studio** | **AI-Powered** |
-| 35 node types, 50+ relations | Native generation per locale | Interactive 2D/3D visualization | Claude API for natural language queries |
-| Neo4j with APOC | Locale knowledge layer | React Flow + force-graph | Cypher generation from text |
+| 35 node types, 47 relations | Native generation per locale | Interactive 2D visualization | Claude API for natural language queries |
+| Neo4j with APOC | Locale knowledge layer | React Flow + ELK.js layouts | Cypher generation from text |
 
 ---
 
@@ -52,14 +52,12 @@ Generate culturally-native content across 200+ locales — not translation, but 
 flowchart TB
     subgraph MONO["NovaNet Monorepo"]
         direction TB
-        CORE["@novanet/core v8.1.0\nTypes · Schemas · Filters"]
+        CORE["@novanet/core v9.0.0\nTypes · Schemas · Filters"]
         DB["@novanet/db v1.0.0\nDocker · Seeds · Migrations"]
-        ST["@novanet/schema-tools v1.0.0\nValidation · Sync"]
         STUDIO["@novanet/studio v0.1.0\nNext.js 16 · React 19"]
     end
 
     CORE --> STUDIO
-    CORE --> ST
 
     NEO4J[("Neo4j 5.26\n~19,000 nodes")]
     DB -.-> NEO4J
@@ -67,7 +65,6 @@ flowchart TB
 
     style CORE fill:#06b6d4,stroke:#0891b2,color:#fff
     style DB fill:#10b981,stroke:#059669,color:#fff
-    style ST fill:#f59e0b,stroke:#d97706,color:#fff
     style STUDIO fill:#8b5cf6,stroke:#7c3aed,color:#fff
     style NEO4J fill:#018bff,stroke:#0284c7,color:#fff
 ```
@@ -117,11 +114,10 @@ novanet-hq/
 │   │   │   ├── nodes/         # Node definitions by scope
 │   │   │   └── relations.yaml # Relationship definitions
 │   │   └── src/               # TypeScript implementation
-│   ├── db/                    # @novanet/db — Neo4j infrastructure
-│   │   ├── docker-compose.yml # Neo4j 5.26 + APOC
-│   │   ├── seed/              # Cypher seed scripts
-│   │   └── seed.sh            # Seed runner
-│   └── schema-tools/          # @novanet/schema-tools — schema validation & sync
+│   └── db/                    # @novanet/db — Neo4j infrastructure
+│       ├── docker-compose.yml # Neo4j 5.26 + APOC
+│       ├── seed/              # Cypher seed scripts
+│       └── seed.sh            # Seed runner
 └── apps/
     └── studio/                # @novanet/studio — web visualization
         ├── src/app/           # Next.js App Router
@@ -136,9 +132,8 @@ novanet-hq/
 
 | Package | Version | Description |
 |---------|---------|-------------|
-| **@novanet/core** | `8.1.0` | Types, Zod schemas, NovaNetFilter API, Cypher generators |
+| **@novanet/core** | `9.0.0` | Types, Zod schemas, NovaNetFilter API, Cypher generators |
 | **@novanet/db** | `1.0.0` | Docker Compose for Neo4j, Cypher seeds, migrations |
-| **@novanet/schema-tools** | `1.0.0` | Schema validation and sync tools |
 | **@novanet/studio** | `0.1.0` | Interactive graph visualization with AI chat |
 
 ---
@@ -187,17 +182,15 @@ Password: (see NEO4J_PASSWORD env var)
 
 ## Graph Schema
 
-NovaNet models content as a knowledge graph with **35 node types** across **7 categories**:
+NovaNet models content as a knowledge graph with **35 node types** across **3 Realms** and **9 Layers** (v9.0.0):
 
-| Category | Nodes | Purpose |
-|----------|-------|---------|
-| **Project** | 3 | Business entity, brand identity |
-| **Content** | 5 | Concepts, pages, blocks |
-| **Locale** | 15 | Language knowledge layer |
-| **Generation** | 5 | Prompts, rules, outputs |
-| **SEO** | 3 | Search optimization |
-| **GEO** | 3 | Generative engine optimization |
-| **Analytics** | 1 | Performance metrics |
+| Realm | Nodes | Layers |
+|-------|-------|--------|
+| **Global** | 15 | Configuration, Locale Knowledge |
+| **Project** | 14 | Foundation, Structure, Semantic, Instructions, Output |
+| **Shared** | 6 | SEO Intelligence, GEO Intelligence |
+
+Each node type has a **Trait** (invariant / localized / knowledge / derived / job) and belongs to an **EdgeFamily** classification.
 
 See [`packages/core/models/_index.yaml`](packages/core/models/_index.yaml) for complete schema.
 
@@ -212,12 +205,12 @@ See [`packages/core/models/_index.yaml`](packages/core/models/_index.yaml) for c
 <!-- TODO: Replace with actual screenshot -->
 <img src="docs/assets/studio-preview.png" alt="NovaNet Studio" width="800" />
 
-*Interactive 2D/3D graph visualization with AI-powered queries*
+*Interactive 2D graph visualization with AI-powered queries*
 
 </div>
 
-- **Dual View Mode** — Toggle between 2D (React Flow) and 3D (force-graph) with `V`
-- **10 Filter Presets** — Quick views via `1-9, 0` keys
+- **4 Navigation Modes** — Data, Meta, Overlay, Query (cycle with `N`)
+- **9 Filter Presets** — Quick views via `1-8, 0` keys
 - **AI Chat** — Natural language to Cypher with `⌘J`
 - **40+ Keyboard Shortcuts** — Full keyboard navigation
 - **DX-First** — Every property is copyable (JSON/TS/YAML)
