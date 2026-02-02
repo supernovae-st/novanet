@@ -21,7 +21,7 @@ use std::path::Path;
 
 /// Trait (locale_behavior) → Mermaid classDef fill + stroke + text color.
 /// Colors sourced from `organizing-principles.yaml` traits section.
-const TRAIT_STYLES: &[(&str, &str, &str)] = &[
+pub const TRAIT_STYLES: &[(&str, &str, &str)] = &[
     ("invariant", "#3b82f6", "#1d4ed8"),
     ("localized", "#22c55e", "#16a34a"),
     ("knowledge", "#8b5cf6", "#7c3aed"),
@@ -30,7 +30,7 @@ const TRAIT_STYLES: &[(&str, &str, &str)] = &[
 ];
 
 /// Trait → emoji for node labels.
-const TRAIT_EMOJI: &[(&str, &str)] = &[
+pub const TRAIT_EMOJI: &[(&str, &str)] = &[
     ("invariant", "\u{1F535}"),  // 🔵
     ("localized", "\u{1F7E2}"),  // 🟢
     ("knowledge", "\u{1F7E3}"),  // 🟣
@@ -40,7 +40,7 @@ const TRAIT_EMOJI: &[(&str, &str)] = &[
 
 /// Edge family → Mermaid arrow syntax.
 /// Sourced from `organizing-principles.yaml` edge_families section.
-const FAMILY_ARROWS: &[(&str, &str)] = &[
+pub const FAMILY_ARROWS: &[(&str, &str)] = &[
     ("ownership", "-->"),
     ("localization", "-.->"),
     ("semantic", "-.->"),
@@ -50,7 +50,7 @@ const FAMILY_ARROWS: &[(&str, &str)] = &[
 
 /// Edge family → stroke color for linkStyle.
 /// Sourced from `organizing-principles.yaml` edge_families section.
-const FAMILY_COLORS: &[(&str, &str)] = &[
+pub const FAMILY_COLORS: &[(&str, &str)] = &[
     ("ownership", "#3b82f6"),
     ("localization", "#22c55e"),
     ("semantic", "#f97316"),
@@ -62,7 +62,7 @@ const FAMILY_COLORS: &[(&str, &str)] = &[
 // Helpers
 // ─────────────────────────────────────────────────────────────────────────────
 
-fn trait_emoji(behavior: &str) -> &str {
+pub fn trait_emoji(behavior: &str) -> &str {
     for &(key, emoji) in TRAIT_EMOJI {
         if key == behavior {
             return emoji;
@@ -71,7 +71,7 @@ fn trait_emoji(behavior: &str) -> &str {
     "\u{26AA}" // fallback: white circle
 }
 
-fn family_arrow(family: EdgeFamily) -> &'static str {
+pub fn family_arrow(family: EdgeFamily) -> &'static str {
     let key = match family {
         EdgeFamily::Ownership => "ownership",
         EdgeFamily::Localization => "localization",
@@ -87,7 +87,7 @@ fn family_arrow(family: EdgeFamily) -> &'static str {
     "-->" // fallback
 }
 
-fn family_color(family: EdgeFamily) -> &'static str {
+pub fn family_color(family: EdgeFamily) -> &'static str {
     let key = match family {
         EdgeFamily::Ownership => "ownership",
         EdgeFamily::Localization => "localization",
@@ -104,7 +104,7 @@ fn family_color(family: EdgeFamily) -> &'static str {
 }
 
 /// Realm key → emoji (from organizing-principles.yaml).
-fn realm_emoji(key: &str, doc: &OrganizingDoc) -> String {
+pub fn realm_emoji(key: &str, doc: &OrganizingDoc) -> String {
     for realm in &doc.realms {
         if realm.key == key {
             return realm.emoji.clone();
@@ -114,7 +114,7 @@ fn realm_emoji(key: &str, doc: &OrganizingDoc) -> String {
 }
 
 /// Layer key → display_name (from organizing-principles.yaml).
-fn layer_display_name(key: &str, doc: &OrganizingDoc) -> String {
+pub fn layer_display_name(key: &str, doc: &OrganizingDoc) -> String {
     for realm in &doc.realms {
         for layer in &realm.layers {
             if layer.key == key {
@@ -131,15 +131,15 @@ fn layer_display_name(key: &str, doc: &OrganizingDoc) -> String {
 
 /// A single concrete from→to edge (after expanding multi-source/target).
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
-struct ExpandedEdge {
-    from: String,
-    rel_type: String,
-    to: String,
-    family: EdgeFamily,
+pub struct ExpandedEdge {
+    pub from: String,
+    pub rel_type: String,
+    pub to: String,
+    pub family: EdgeFamily,
 }
 
 /// Expand multi-source/target relations into concrete edges, filtering wildcards.
-fn expand_edges(relations: &[RelationDef]) -> Vec<ExpandedEdge> {
+pub fn expand_edges(relations: &[RelationDef]) -> Vec<ExpandedEdge> {
     let mut edges = Vec::new();
     for rel in relations {
         let sources = rel.source.labels();
@@ -163,6 +163,79 @@ fn expand_edges(relations: &[RelationDef]) -> Vec<ExpandedEdge> {
     }
     edges.sort();
     edges
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Shared write helpers (used by both MermaidGenerator and ViewMermaidGenerator)
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Write Mermaid `classDef` lines for all traits.
+pub fn write_classdefs(out: &mut String) {
+    writeln!(out, "  %% Trait styling (locale_behavior)").unwrap();
+    for &(behavior, fill, stroke) in TRAIT_STYLES {
+        writeln!(
+            out,
+            "  classDef {behavior} fill:{fill},stroke:{stroke},color:#fff"
+        )
+        .unwrap();
+    }
+    writeln!(out).unwrap();
+}
+
+/// Write edges with family-based arrow styles + `linkStyle` coloring.
+pub fn write_edges_and_styles(out: &mut String, edges: &[ExpandedEdge]) {
+    writeln!(out, "  %% Relationships (styled by edge family)").unwrap();
+    let mut edge_indices_by_family: BTreeMap<String, Vec<usize>> = BTreeMap::new();
+    for (i, edge) in edges.iter().enumerate() {
+        let arrow = family_arrow(edge.family);
+        writeln!(
+            out,
+            "  {} {}|{}| {}",
+            edge.from, arrow, edge.rel_type, edge.to
+        )
+        .unwrap();
+        edge_indices_by_family
+            .entry(edge.family.to_string())
+            .or_default()
+            .push(i);
+    }
+    writeln!(out).unwrap();
+
+    writeln!(out, "  %% Edge colors by family").unwrap();
+    for (family_str, indices) in &edge_indices_by_family {
+        let family = match family_str.as_str() {
+            "ownership" => EdgeFamily::Ownership,
+            "localization" => EdgeFamily::Localization,
+            "semantic" => EdgeFamily::Semantic,
+            "generation" => EdgeFamily::Generation,
+            "mining" => EdgeFamily::Mining,
+            _ => continue,
+        };
+        let color = family_color(family);
+        let idx_str: Vec<String> = indices.iter().map(|i| i.to_string()).collect();
+        writeln!(
+            out,
+            "  linkStyle {} stroke:{color},stroke-width:2px",
+            idx_str.join(",")
+        )
+        .unwrap();
+    }
+    writeln!(out).unwrap();
+}
+
+/// Write `class` assignments for all nodes.
+pub fn write_class_assignments(out: &mut String, nodes: &[&ParsedNode]) {
+    writeln!(out, "  %% Class assignments").unwrap();
+    let mut sorted: Vec<&&ParsedNode> = nodes.iter().collect();
+    sorted.sort_by_key(|n| &n.def.name);
+    for node in sorted {
+        writeln!(
+            out,
+            "  class {} {}",
+            node.def.name, node.def.locale_behavior
+        )
+        .unwrap();
+    }
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -231,15 +304,7 @@ fn render_mermaid(
     writeln!(out).unwrap();
 
     // ── classDef — Trait-based node styling ────────────────────────────────
-    writeln!(out, "  %% Trait styling (locale_behavior)").unwrap();
-    for &(behavior, fill, stroke) in TRAIT_STYLES {
-        writeln!(
-            out,
-            "  classDef {behavior} fill:{fill},stroke:{stroke},color:#fff"
-        )
-        .unwrap();
-    }
-    writeln!(out).unwrap();
+    write_classdefs(&mut out);
 
     // ── Subgraphs — Realm > Layer > Nodes ─────────────────────────────────
     // Use ordering from organizing-principles.yaml for realm/layer order
@@ -288,60 +353,11 @@ fn render_mermaid(
     }
 
     // ── Edges — styled by EdgeFamily ──────────────────────────────────────
-    writeln!(out, "  %% Relationships (styled by edge family)").unwrap();
-
-    // Track edge indices for linkStyle coloring
-    let mut edge_indices_by_family: BTreeMap<String, Vec<usize>> = BTreeMap::new();
-
-    for (i, edge) in edges.iter().enumerate() {
-        let arrow = family_arrow(edge.family);
-        writeln!(
-            out,
-            "  {} {}|{}| {}",
-            edge.from, arrow, edge.rel_type, edge.to
-        )
-        .unwrap();
-        edge_indices_by_family
-            .entry(edge.family.to_string())
-            .or_default()
-            .push(i);
-    }
-    writeln!(out).unwrap();
-
-    // ── linkStyle — edge coloring by family ───────────────────────────────
-    writeln!(out, "  %% Edge colors by family").unwrap();
-    for (family_str, indices) in &edge_indices_by_family {
-        let family = match family_str.as_str() {
-            "ownership" => EdgeFamily::Ownership,
-            "localization" => EdgeFamily::Localization,
-            "semantic" => EdgeFamily::Semantic,
-            "generation" => EdgeFamily::Generation,
-            "mining" => EdgeFamily::Mining,
-            _ => continue,
-        };
-        let color = family_color(family);
-        let idx_str: Vec<String> = indices.iter().map(|i| i.to_string()).collect();
-        writeln!(
-            out,
-            "  linkStyle {} stroke:{color},stroke-width:2px",
-            idx_str.join(",")
-        )
-        .unwrap();
-    }
-    writeln!(out).unwrap();
+    write_edges_and_styles(&mut out, &edges);
 
     // ── class assignments ─────────────────────────────────────────────────
-    writeln!(out, "  %% Class assignments").unwrap();
-    let mut sorted_nodes: Vec<&ParsedNode> = nodes.iter().collect();
-    sorted_nodes.sort_by_key(|n| &n.def.name);
-    for node in &sorted_nodes {
-        writeln!(
-            out,
-            "  class {} {}",
-            node.def.name, node.def.locale_behavior
-        )
-        .unwrap();
-    }
+    let node_refs: Vec<&ParsedNode> = nodes.iter().collect();
+    write_class_assignments(&mut out, &node_refs);
 
     Ok(out)
 }

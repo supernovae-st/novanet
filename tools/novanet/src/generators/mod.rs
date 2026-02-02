@@ -14,6 +14,7 @@ pub mod kind;
 pub mod layer;
 pub mod mermaid;
 pub mod organizing;
+pub mod view_mermaid;
 
 use std::path::Path;
 

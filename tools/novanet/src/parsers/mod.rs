@@ -6,4 +6,5 @@
 
 pub mod organizing;
 pub mod relations;
+pub mod views;
 pub mod yaml_node;

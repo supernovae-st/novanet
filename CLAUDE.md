@@ -36,7 +36,8 @@ Axis 4 — LINKS?  :EdgeKind  (47 relationship types in 5 families)
 
 **New concepts:** Trait, EdgeFamily, EdgeKind, OF_KIND instance bridge, :Meta double-label
 
-**Rust binary (PLANNED):** `tools/novanet/` — single crate for CLI + TUI (neo4rs, ratatui, clap). Not yet implemented.
+**Rust binary:** `tools/novanet/` — single crate for CLI + TUI (neo4rs, ratatui, clap).
+Schema generation and doc generation implemented (93 tests). Runtime commands are Phase 7 stubs.
 
 **Boundary rule (v9 target):** TypeScript generates code artifacts. Rust executes at runtime.
 
@@ -79,11 +80,17 @@ pnpm infra:reset           # Reset database
 pnpm schema:generate       # Regenerate TS + Mermaid from YAML
 pnpm schema:validate       # Validate sync (CI check)
 
-# Rust binary (PLANNED — not yet implemented)
-# cargo run -- data kinds     # List all Kinds
-# cargo run -- meta realms    # Show Realm hierarchy
-# cargo run -- schema validate --strict  # Authoritative validation
-# cargo run -- tui            # Interactive TUI explorer
+# Rust binary (tools/novanet)
+cargo run -- schema generate               # Regenerate all artifacts (7 generators)
+cargo run -- schema generate --dry-run     # Preview without writing
+cargo run -- schema validate               # Validate YAML coherence
+cargo run -- schema validate --strict      # Fail on warnings
+cargo run -- doc generate                  # Generate 12 view Mermaid diagrams
+cargo run -- doc generate --view=<id>      # Single view diagram
+cargo run -- doc generate --dry-run        # Preview without writing
+cargo run -- doc generate --list           # List available views
+# cargo run -- data kinds                  # (Phase 7 stub)
+# cargo run -- tui                         # (Phase 7 stub)
 
 # Turbo filters
 pnpm build --filter=@novanet/core       # Build only core
