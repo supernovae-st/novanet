@@ -9,7 +9,7 @@ Knowledge graph visualization for the NovaNet localization orchestrator.
 
 ## Project Context
 
-**What:** Interactive 2D graph visualization for 35 node types (3 scopes), 200 locales (~19,000 instances projected at full deployment)
+**What:** Interactive 2D graph visualization for 35 node types (3 realms), 200 locales (~19,000 instances projected at full deployment)
 **Stack:** Next.js 16 + React 19 + TypeScript 5.9 + Tailwind CSS
 **Graph:** @xyflow/react
 **State:** Zustand 5 with persist/immer
@@ -92,19 +92,18 @@ pnpm test            # Tests
 | `⇧R` | Radial layout (circular) |
 | `⇧F` | Force-directed layout |
 
-**Quick Views (Presets v8.2.0)**
+**Quick Views (Presets v9.0.0)**
 | Key | Action |
 |-----|--------|
-| `1` | Project Overview - Core structure (Project, Pages, Blocks, Concepts) |
-| `2` | Full Graph - All 35 node types |
-| `3` | Core + Concepts - Project structure with ConceptL10n |
-| `4` | All Locales - Locale nodes only |
-| `5` | Concepts - Concept + ConceptL10n |
-| `6` | Current Locale - Selected locale with all knowledge |
-| `7` | Locale + Expressions - Current locale with expressions |
-| `8` | Locale Knowledge - Identity, Voice, Culture, Market, Lexicon |
-| `9` | Expressions - Expression + LocaleLexicon |
-| `0` | Clear Filters - Reset to default view |
+| `1` | Project Structure - Project, Pages, Blocks hierarchy |
+| `2` | Generation Chain - Concepts with L10n outputs |
+| `3` | Locale Knowledge - Locale with all knowledge nodes |
+| `4` | Concept Network - Concepts and semantic links |
+| `5` | Prompts & Rules - AI instructions and validation rules |
+| `6` | SEO & GEO - Search optimization data |
+| `7` | High Priority - Critical and high priority nodes |
+| `8` | Realtime Content - Nodes requiring frequent updates |
+| `0` | All Nodes - Show everything |
 
 **Graph Interaction**
 | Action | Description |
@@ -121,7 +120,7 @@ pnpm test            # Tests
 - `/api/graph` - Main graph data
 - `/api/graph/expand` - Expand node neighbors
 - `/api/graph/ontology` - Ontology metadata
-- `/api/graph/organizing-principles` - Organizing principles (scopes, subcategories)
+- `/api/graph/organizing-principles` - Organizing principles (realms, layers)
 - `/api/graph/query` - Execute Cypher queries
 - `/api/graph/schema` - Schema information
 - `/api/graph/stats` - Graph statistics
