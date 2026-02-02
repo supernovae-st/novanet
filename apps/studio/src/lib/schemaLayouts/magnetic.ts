@@ -3,19 +3,19 @@
  * Magnetic Layout - Force-directed with Neo4j-driven grouping
  *
  * Unlike other layouts, this one:
- * 1. Displays Scope/Subcategory as VISIBLE nodes (not containers)
- * 2. Uses IN_SUBCATEGORY relationships for magnetic attraction
+ * 1. Displays Realm/Layer as VISIBLE nodes (not containers)
+ * 2. Uses OF_KIND relationships for magnetic attraction
  * 3. Runs d3-force simulation with custom forces
  *
  * Visual structure:
  *
- *           Scope:project
+ *           Realm:project
  *          / \
- *         /   \ HAS_SUBCATEGORY
+ *         /   \ HAS_LAYER
  *        /     \
- *   Sub:semantic  Sub:structure
+ *   Layer:semantic  Layer:structure
  *    /\              /\
- *   o o o          o o o   <- attracted via IN_SUBCATEGORY
+ *   o o o          o o o   <- attracted via OF_KIND
  */
 
 import type { Node, Edge } from '@xyflow/react';
@@ -24,24 +24,24 @@ import { NODE_WIDTH, NODE_HEIGHT, NODE_GAP } from './types';
 
 export interface MagneticLayoutInput {
   // Organizing principle nodes from Neo4j
-  scopes: Array<{
+  realms: Array<{
     key: string;
     displayName: string;
     emoji: string;
     color: string;
   }>;
-  subcategories: Array<{
+  layers: Array<{
     key: string;
     displayName: string;
     emoji: string;
-    scopeKey: string;  // Parent scope
+    realmKey: string;  // Parent realm
   }>;
-  // Instance nodes with their subcategory
+  // Instance nodes with their layer
   instances: Array<{
     id: string;
     label: string;
     nodeType: string;
-    subcategoryKey: string;
+    layerKey: string;
     // Original Neo4j properties
     properties: Record<string, unknown>;
   }>;
@@ -55,47 +55,47 @@ export interface MagneticLayoutInput {
 
 /**
  * Initial positions before simulation
- * Places subcategories around their scope in a circle
- * Places instances near their subcategory
+ * Places layers around their realm in a circle
+ * Places instances near their layer
  */
 function computeInitialPositions(input: MagneticLayoutInput): Map<string, { x: number; y: number }> {
   const positions = new Map<string, { x: number; y: number }>();
 
-  // Scope positions (triangular arrangement)
-  const scopePositions: Record<string, { x: number; y: number }> = {
+  // Realm positions (triangular arrangement)
+  const realmPositions: Record<string, { x: number; y: number }> = {
     project: { x: 0, y: 0 },
     global: { x: 2000, y: 0 },
     shared: { x: 1000, y: 1500 },
   };
 
-  // Place scopes
-  for (const scope of input.scopes) {
-    const pos = scopePositions[scope.key] || { x: 0, y: 0 };
-    positions.set(`scope-${scope.key}`, pos);
+  // Place realms
+  for (const realm of input.realms) {
+    const pos = realmPositions[realm.key] || { x: 0, y: 0 };
+    positions.set(`scope-${realm.key}`, pos);
   }
 
-  // Place subcategories around their scope
-  const subcatsByScope = new Map<string, typeof input.subcategories>();
-  for (const sub of input.subcategories) {
-    const list = subcatsByScope.get(sub.scopeKey) || [];
+  // Place layers around their realm
+  const layersByRealm = new Map<string, typeof input.layers>();
+  for (const sub of input.layers) {
+    const list = layersByRealm.get(sub.realmKey) || [];
     list.push(sub);
-    subcatsByScope.set(sub.scopeKey, list);
+    layersByRealm.set(sub.realmKey, list);
   }
 
-  for (const [scopeKey, subs] of subcatsByScope) {
-    const scopePos = positions.get(`scope-${scopeKey}`) || { x: 0, y: 0 };
+  for (const [realmKey, subs] of layersByRealm) {
+    const realmPos = positions.get(`scope-${realmKey}`) || { x: 0, y: 0 };
     const radius = 400;
 
     subs.forEach((sub, i) => {
       const angle = (2 * Math.PI * i) / subs.length - Math.PI / 2;
-      positions.set(`subcat-${sub.key}`, {
-        x: scopePos.x + radius * Math.cos(angle),
-        y: scopePos.y + radius * Math.sin(angle),
+      positions.set(`layer-${sub.key}`, {
+        x: realmPos.x + radius * Math.cos(angle),
+        y: realmPos.y + radius * Math.sin(angle),
       });
     });
   }
 
-  // Place instances near their subcategory (with jitter)
+  // Place instances near their layer (with jitter)
   // Use seeded random for consistent initial positions
   let seed = 12345;
   const seededRandom = () => {
@@ -104,10 +104,10 @@ function computeInitialPositions(input: MagneticLayoutInput): Map<string, { x: n
   };
 
   for (const instance of input.instances) {
-    const subcatPos = positions.get(`subcat-${instance.subcategoryKey}`) || { x: 0, y: 0 };
+    const layerPos = positions.get(`layer-${instance.layerKey}`) || { x: 0, y: 0 };
     positions.set(instance.id, {
-      x: subcatPos.x + (seededRandom() - 0.5) * 300,
-      y: subcatPos.y + (seededRandom() - 0.5) * 300,
+      x: layerPos.x + (seededRandom() - 0.5) * 300,
+      y: layerPos.y + (seededRandom() - 0.5) * 300,
     });
   }
 
@@ -124,59 +124,59 @@ export function applyMagneticLayout(input: MagneticLayoutInput): SchemaLayoutRes
 
   const positions = computeInitialPositions(input);
 
-  // Create Scope nodes (large, prominent)
-  for (const scope of input.scopes) {
-    const pos = positions.get(`scope-${scope.key}`)!;
+  // Create Realm nodes (large, prominent)
+  for (const realm of input.realms) {
+    const pos = positions.get(`scope-${realm.key}`)!;
     nodes.push({
-      id: `scope-${scope.key}`,
-      type: 'scopeAttractor',  // New node type
+      id: `scope-${realm.key}`,
+      type: 'realmAttractor',  // New node type
       position: pos,
       data: {
-        key: scope.key,
-        label: scope.displayName,
-        emoji: scope.emoji,
-        color: scope.color,
+        key: realm.key,
+        label: realm.displayName,
+        emoji: realm.emoji,
+        color: realm.color,
         nodeCount: input.instances.filter(i =>
-          input.subcategories.find(s => s.key === i.subcategoryKey)?.scopeKey === scope.key
+          input.layers.find(s => s.key === i.layerKey)?.realmKey === realm.key
         ).length,
       },
     });
   }
 
-  // Create Subcategory nodes (medium size)
-  for (const sub of input.subcategories) {
-    const pos = positions.get(`subcat-${sub.key}`)!;
-    const scope = input.scopes.find(s => s.key === sub.scopeKey);
+  // Create Layer nodes (medium size)
+  for (const sub of input.layers) {
+    const pos = positions.get(`layer-${sub.key}`)!;
+    const realmNode = input.realms.find(s => s.key === sub.realmKey);
 
     nodes.push({
-      id: `subcat-${sub.key}`,
-      type: 'subcategoryAttractor',  // New node type
+      id: `layer-${sub.key}`,
+      type: 'layerAttractor',  // New node type
       position: pos,
       data: {
         key: sub.key,
         label: sub.displayName,
         emoji: sub.emoji,
-        scopeKey: sub.scopeKey,
-        color: scope?.color || '#666',
-        nodeCount: input.instances.filter(i => i.subcategoryKey === sub.key).length,
+        realmKey: sub.realmKey,
+        color: realmNode?.color || '#666',
+        nodeCount: input.instances.filter(i => i.layerKey === sub.key).length,
       },
     });
 
-    // Edge from Scope to Subcategory (HAS_SUBCATEGORY)
+    // Edge from Realm to Layer (HAS_LAYER)
     edges.push({
-      id: `edge-scope-${sub.scopeKey}-to-${sub.key}`,
-      source: `scope-${sub.scopeKey}`,
-      target: `subcat-${sub.key}`,
+      id: `edge-scope-${sub.realmKey}-to-${sub.key}`,
+      source: `scope-${sub.realmKey}`,
+      target: `layer-${sub.key}`,
       type: 'floating',
-      data: { relationType: 'HAS_SUBCATEGORY' },
+      data: { relationType: 'HAS_LAYER' },
     });
   }
 
   // Create instance nodes
   for (const instance of input.instances) {
     const pos = positions.get(instance.id)!;
-    const sub = input.subcategories.find(s => s.key === instance.subcategoryKey);
-    const scope = input.scopes.find(s => s.key === sub?.scopeKey);
+    const sub = input.layers.find(s => s.key === instance.layerKey);
+    const realmNode = input.realms.find(s => s.key === sub?.realmKey);
 
     nodes.push({
       id: instance.id,
@@ -187,26 +187,26 @@ export function applyMagneticLayout(input: MagneticLayoutInput): SchemaLayoutRes
       data: {
         nodeType: instance.nodeType,
         label: instance.label,
-        scope: scope?.key,
-        subcategory: instance.subcategoryKey,
+        realm: realmNode?.key,
+        layer: instance.layerKey,
         ...instance.properties,
       },
     });
 
-    // Edge from instance to Subcategory (IN_SUBCATEGORY) - rendered faintly
+    // Edge from instance to Layer (OF_KIND) - rendered faintly
     edges.push({
-      id: `edge-${instance.id}-to-subcat-${instance.subcategoryKey}`,
+      id: `edge-${instance.id}-to-layer-${instance.layerKey}`,
       source: instance.id,
-      target: `subcat-${instance.subcategoryKey}`,
+      target: `layer-${instance.layerKey}`,
       type: 'magnetic',  // New edge type (faint, dashed)
-      data: { relationType: 'IN_SUBCATEGORY' },
+      data: { relationType: 'OF_KIND' },
     });
   }
 
   // Add business relationships between instances
   for (const rel of input.relationships) {
-    // Skip IN_SUBCATEGORY (already added above)
-    if (rel.type === 'IN_SUBCATEGORY') continue;
+    // Skip OF_KIND (already added above)
+    if (rel.type === 'OF_KIND') continue;
 
     edges.push({
       id: `edge-${rel.source}-${rel.type}-${rel.target}`,

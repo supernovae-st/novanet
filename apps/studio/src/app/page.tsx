@@ -33,7 +33,7 @@ import { resolveThemeCached } from '@/components/graph/edges';
 // Helper to safely get node config for hover tooltips (handles both real nodes and schema groups)
 function getHoverNodeConfig(node: HoverNodeInfo): NodeTypeConfig | null {
   // Schema groups don't have a config entry
-  if (node.type === 'ScopeGroup' || node.type === 'SubcategoryGroup') {
+  if (node.type === 'RealmGroup' || node.type === 'LayerGroup') {
     return null;
   }
   return NODE_TYPE_CONFIG[node.type as NodeType] || null;
@@ -219,7 +219,7 @@ export default function HomePage() {
         const scopeEmoji = scope === 'Global' ? '🌍' : scope === 'Project' ? '📦' : '🎯';
         return {
           id: nodeId,
-          type: 'ScopeGroup',
+          type: 'RealmGroup',
           key: scope,
           displayName: `${scopeEmoji} ${scope} Scope`,
         } as SchemaGroupNode;
@@ -231,7 +231,7 @@ export default function HomePage() {
         const subcatName = parts.slice(1).join('-');
         return {
           id: nodeId,
-          type: 'SubcategoryGroup',
+          type: 'LayerGroup',
           key: subcatName,
           displayName: subcatName.charAt(0).toUpperCase() + subcatName.slice(1),
         } as SchemaGroupNode;

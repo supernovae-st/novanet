@@ -1,61 +1,61 @@
 'use client';
 
 /**
- * ScopeGroupNode - Glass container for scope groups in Schema Mode
+ * RealmGroupNode - Glass container for realm groups in Schema Mode
  *
  * Features (Task 5: TurboNode styling):
- * - Glass effect with scope-colored border glow
+ * - Glass effect with realm-colored border glow
  * - Animated border on selection
  * - Premium label badge with glow
  * - NodeResizer for interactive resizing
  *
- * Scope Colors (hex values):
+ * Realm Colors (hex values):
  * - Project: violet (#8b5cf6) - 📦
- * - Global: emerald (#10b981) - 🌍
- * - Shared: amber (#f59e0b) - 🎯
+ * - global: emerald (#10b981) - 🌍
+ * - shared: amber (#f59e0b) - 🎯
  */
 
 import { memo, useState, useCallback } from 'react';
 import { type NodeProps, type Node, NodeResizer } from '@xyflow/react';
 import { cn } from '@/lib/utils';
 import { gapTokens } from '@/design/tokens';
-import type { Scope } from '@novanet/core/types';
+import type { Realm } from '@novanet/core/types';
 
 /**
- * Data interface for ScopeGroupNode
+ * Data interface for RealmGroupNode
  */
-export interface ScopeGroupData extends Record<string, unknown> {
-  scope: Scope;
+export interface RealmGroupData extends Record<string, unknown> {
+  realm: Realm;
   label: string;
   icon: string;
   nodeCount: number;
 }
 
-/** Node type for ScopeGroupNode */
-export type ScopeGroupNodeType = Node<ScopeGroupData, 'scopeGroup'>;
+/** Node type for RealmGroupNode */
+export type RealmGroupNodeType = Node<RealmGroupData, 'realmGroup'>;
 
 /**
- * Scope color configuration for glass effect
+ * Realm color configuration for glass effect
  */
-const SCOPE_COLORS: Record<Scope, {
+const REALM_COLORS: Record<Realm, {
   primary: string;
   secondary: string;
   glow: string;
   bgGlow: string;
 }> = {
-  Project: {
+  project: {
     primary: '#8b5cf6',
     secondary: '#a78bfa',
     glow: 'rgba(139, 92, 246, 0.3)',
     bgGlow: 'rgba(139, 92, 246, 0.05)',
   },
-  Global: {
+  global: {
     primary: '#10b981',
     secondary: '#34d399',
     glow: 'rgba(16, 185, 129, 0.3)',
     bgGlow: 'rgba(16, 185, 129, 0.05)',
   },
-  Shared: {
+  shared: {
     primary: '#f59e0b',
     secondary: '#fbbf24',
     glow: 'rgba(245, 158, 11, 0.3)',
@@ -64,15 +64,15 @@ const SCOPE_COLORS: Record<Scope, {
 };
 
 /**
- * ScopeGroupNode - Premium glass container for scope hierarchy
+ * RealmGroupNode - Premium glass container for realm hierarchy
  */
-export const ScopeGroupNode = memo(function ScopeGroupNode({
+export const RealmGroupNode = memo(function RealmGroupNode({
   data,
   selected,
-}: NodeProps<ScopeGroupNodeType>) {
+}: NodeProps<RealmGroupNodeType>) {
   const [isHovered, setIsHovered] = useState(false);
 
-  const colors = SCOPE_COLORS[data.scope] || SCOPE_COLORS.Project;
+  const colors = REALM_COLORS[data.realm] || REALM_COLORS.project;
 
   const handleMouseEnter = useCallback(() => setIsHovered(true), []);
   const handleMouseLeave = useCallback(() => setIsHovered(false), []);
@@ -141,10 +141,10 @@ export const ScopeGroupNode = memo(function ScopeGroupNode({
         )}
         style={labelStyle}
       >
-        {/* Scope icon */}
+        {/* Realm icon */}
         <span className="text-lg">{data.icon}</span>
 
-        {/* Scope label */}
+        {/* Realm label */}
         <span
           className="text-sm font-bold tracking-wide"
           style={{ color: colors.primary }}

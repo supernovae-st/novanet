@@ -1,6 +1,6 @@
 // src/filters/index.ts
 /**
- * NovaNet Filter System v7.2.1
+ * NovaNet Filter System v9.0.0
  *
  * Provides composable filter/view system for generating Cypher queries.
  *
@@ -26,7 +26,6 @@ export type {
   ViewDefinition,
   IncludeRule,
   CypherQuery,
-  NodeCategory,
   NodeType,
   RelationDirection,
   ViewRegistry,

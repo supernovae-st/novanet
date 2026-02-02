@@ -1,4 +1,4 @@
-// NovaNet Core Types v8.2.0 - Nodable Project Architecture
+// NovaNet Core Types v9.0.0 - Nodable Project Architecture
 //
 // v8.2.0 CHANGES (YAML v7.11.0 alignment):
 //   - REMOVED: icon, priority, freshness from all interfaces
@@ -51,18 +51,19 @@
 //   updated_at: datetime
 
 // =============================================================================
-// NODE TYPES (v8.1.0 - Single source of truth)
+// NODE TYPES + v9 TAXONOMY (Realm, Layer, Trait, KIND_META)
 // =============================================================================
 
 export {
   NODE_TYPES,
   type NodeType,
-  type NodeCategory,
-  NODE_CATEGORIES,
-  type LocaleBehavior,
-  NODE_BEHAVIORS,
-  type Scope,
-  NODE_SCOPES,
+  type Realm,
+  type Layer,
+  type Trait,
+  type KindMeta,
+  KIND_META,
+  NODE_REALMS,
+  NODE_TRAITS,
 } from './nodes.js';
 
 // =============================================================================

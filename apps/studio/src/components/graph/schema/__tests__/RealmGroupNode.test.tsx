@@ -1,9 +1,9 @@
-// apps/studio/src/components/graph/schema/__tests__/ScopeGroupNode.test.tsx
+// apps/studio/src/components/graph/schema/__tests__/RealmGroupNode.test.tsx
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { ReactFlowProvider } from '@xyflow/react';
-import { ScopeGroupNode } from '../ScopeGroupNode';
-import { SubcategoryGroupNode } from '../SubcategoryGroupNode';
+import { RealmGroupNode } from '../RealmGroupNode';
+import { LayerGroupNode } from '../LayerGroupNode';
 import { SchemaNode } from '../SchemaNode';
 
 // Mock NodeResizer since it requires internal React Flow context
@@ -23,12 +23,12 @@ jest.mock('@xyflow/react', () => ({
   },
 }));
 
-describe('ScopeGroupNode', () => {
+describe('RealmGroupNode', () => {
   const defaultProps = {
-    id: 'scope-Project',
-    type: 'scopeGroup' as const,
+    id: 'realm-Project',
+    type: 'realmGroup' as const,
     data: {
-      scope: 'Project' as const,
+      realm: 'project' as const,
       label: 'PROJECT',
       icon: '📦',
       nodeCount: 14,
@@ -44,10 +44,10 @@ describe('ScopeGroupNode', () => {
     draggable: true,
   };
 
-  it('should render scope label with icon', () => {
+  it('should render realm label with icon', () => {
     render(
       <ReactFlowProvider>
-        <ScopeGroupNode {...defaultProps} />
+        <RealmGroupNode {...defaultProps} />
       </ReactFlowProvider>
     );
 
@@ -59,7 +59,7 @@ describe('ScopeGroupNode', () => {
   it('should render node count', () => {
     render(
       <ReactFlowProvider>
-        <ScopeGroupNode {...defaultProps} />
+        <RealmGroupNode {...defaultProps} />
       </ReactFlowProvider>
     );
 
@@ -69,7 +69,7 @@ describe('ScopeGroupNode', () => {
   it('should show NodeResizer when selected', () => {
     render(
       <ReactFlowProvider>
-        <ScopeGroupNode {...defaultProps} selected={true} />
+        <RealmGroupNode {...defaultProps} selected={true} />
       </ReactFlowProvider>
     );
 
@@ -79,31 +79,31 @@ describe('ScopeGroupNode', () => {
   it('should not show NodeResizer when not selected', () => {
     render(
       <ReactFlowProvider>
-        <ScopeGroupNode {...defaultProps} selected={false} />
+        <RealmGroupNode {...defaultProps} selected={false} />
       </ReactFlowProvider>
     );
 
     expect(screen.queryByTestId('node-resizer')).not.toBeInTheDocument();
   });
 
-  it('should render with correct scope styling for Project', () => {
+  it('should render with correct realm styling for Project', () => {
     render(
       <ReactFlowProvider>
-        <ScopeGroupNode {...defaultProps} />
+        <RealmGroupNode {...defaultProps} />
       </ReactFlowProvider>
     );
 
-    // Check that scope is rendered with correct label (icon and label are separate)
+    // Check that realm is rendered with correct label (icon and label are separate)
     expect(screen.getByText('📦')).toBeInTheDocument();
     expect(screen.getByText('PROJECT')).toBeInTheDocument();
   });
 
-  it('should render with correct scope styling for Global', () => {
+  it('should render with correct realm styling for Global', () => {
     render(
       <ReactFlowProvider>
-        <ScopeGroupNode
+        <RealmGroupNode
           {...defaultProps}
-          data={{ ...defaultProps.data, scope: 'Global', label: 'GLOBAL', icon: '🌍' }}
+          data={{ ...defaultProps.data, realm: 'global', label: 'GLOBAL', icon: '🌍' }}
         />
       </ReactFlowProvider>
     );
@@ -113,12 +113,12 @@ describe('ScopeGroupNode', () => {
     expect(screen.getByText('GLOBAL')).toBeInTheDocument();
   });
 
-  it('should render with correct scope styling for Shared', () => {
+  it('should render with correct realm styling for Shared', () => {
     render(
       <ReactFlowProvider>
-        <ScopeGroupNode
+        <RealmGroupNode
           {...defaultProps}
-          data={{ ...defaultProps.data, scope: 'Shared', label: 'SHARED', icon: '🎯' }}
+          data={{ ...defaultProps.data, realm: 'shared', label: 'SHARED', icon: '🎯' }}
         />
       </ReactFlowProvider>
     );
@@ -129,13 +129,13 @@ describe('ScopeGroupNode', () => {
   });
 });
 
-describe('SubcategoryGroupNode', () => {
+describe('LayerGroupNode', () => {
   const defaultProps = {
-    id: 'subcat-Project-foundation',
-    type: 'subcategoryGroup' as const,
+    id: 'layer-Project-foundation',
+    type: 'layerGroup' as const,
     data: {
-      scope: 'Project' as const,
-      subcategory: 'foundation',
+      realm: 'project' as const,
+      layer: 'foundation',
       label: 'Foundation',
       icon: '🏛️',
       nodeCount: 3,
@@ -151,10 +151,10 @@ describe('SubcategoryGroupNode', () => {
     draggable: true,
   };
 
-  it('should render subcategory label with icon', () => {
+  it('should render layer label with icon', () => {
     render(
       <ReactFlowProvider>
-        <SubcategoryGroupNode {...defaultProps} />
+        <LayerGroupNode {...defaultProps} />
       </ReactFlowProvider>
     );
 
@@ -166,7 +166,7 @@ describe('SubcategoryGroupNode', () => {
   it('should render node count', () => {
     render(
       <ReactFlowProvider>
-        <SubcategoryGroupNode {...defaultProps} />
+        <LayerGroupNode {...defaultProps} />
       </ReactFlowProvider>
     );
 
@@ -177,7 +177,7 @@ describe('SubcategoryGroupNode', () => {
   it('should render correctly when not selected', () => {
     render(
       <ReactFlowProvider>
-        <SubcategoryGroupNode {...defaultProps} selected={false} />
+        <LayerGroupNode {...defaultProps} selected={false} />
       </ReactFlowProvider>
     );
 
@@ -192,11 +192,11 @@ describe('SchemaNode', () => {
     id: 'schema-Project',
     type: 'schemaNode' as const,
     data: {
-      nodeType: 'Project',
-      label: 'Project',
+      nodeType: 'project',
+      label: 'project',
       description: 'Project node',
-      scope: 'Project' as const,
-      subcategory: 'foundation',
+      realm: 'project' as const,
+      layer: 'foundation',
     },
     selected: false,
     dragging: false,
@@ -217,7 +217,7 @@ describe('SchemaNode', () => {
     );
 
     // Both label and nodeType show "Project" - use getAllByText
-    const projectElements = screen.getAllByText('Project');
+    const projectElements = screen.getAllByText('project');
     expect(projectElements.length).toBe(2); // label + nodeType
   });
 
@@ -240,15 +240,15 @@ describe('SchemaNode', () => {
     );
 
     // Verify the Project label is rendered
-    expect(screen.getAllByText('Project').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText('project').length).toBeGreaterThanOrEqual(1);
   });
 
-  it('should render with Global scope', () => {
+  it('should render with Global realm', () => {
     render(
       <ReactFlowProvider>
         <SchemaNode
           {...defaultProps}
-          data={{ ...defaultProps.data, scope: 'Global', nodeType: 'Locale', label: 'Locale' }}
+          data={{ ...defaultProps.data, realm: 'global', nodeType: 'Locale', label: 'Locale' }}
         />
       </ReactFlowProvider>
     );
@@ -257,12 +257,12 @@ describe('SchemaNode', () => {
     expect(screen.getAllByText('Locale').length).toBeGreaterThanOrEqual(1);
   });
 
-  it('should render with Shared scope', () => {
+  it('should render with Shared realm', () => {
     render(
       <ReactFlowProvider>
         <SchemaNode
           {...defaultProps}
-          data={{ ...defaultProps.data, scope: 'Shared', nodeType: 'SEOKeywordL10n', label: 'SEO Keyword' }}
+          data={{ ...defaultProps.data, realm: 'shared', nodeType: 'SEOKeywordL10n', label: 'SEO Keyword' }}
         />
       </ReactFlowProvider>
     );
@@ -278,6 +278,6 @@ describe('SchemaNode', () => {
     );
 
     // Verify the node still renders correctly when selected
-    expect(screen.getAllByText('Project').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText('project').length).toBeGreaterThanOrEqual(1);
   });
 });

@@ -2,9 +2,9 @@
  * useMagneticData - Fetch organizing principles for magnetic layout
  *
  * When layoutMode is 'magnetic', this hook fetches from Neo4j:
- * - 3 Scope nodes (global, project, shared) with display metadata
- * - 9 Subcategory nodes with display metadata
- * - 35 nodeType → subcategory mappings (from DEFINES_TYPE relationships)
+ * - 3 Realm nodes (global, project, shared) with display metadata
+ * - 9 Layer nodes with display metadata
+ * - 35 nodeType → layer mappings (from DEFINES_TYPE relationships)
  *
  * All display metadata (emoji, color) comes from Neo4j,
  * which is seeded from organizing-principles.yaml (the source of truth).
@@ -16,24 +16,24 @@ import { useUIStore } from '@/stores/uiStore';
 import { logger } from '@/lib/logger';
 
 // Types for organizing principles - all data from Neo4j, no hardcoded metadata
-export interface ScopeData {
+export interface RealmData {
   key: string;
   displayName: string;
   emoji: string;
   color: string;
 }
 
-export interface SubcategoryData {
+export interface LayerData {
   key: string;
   displayName: string;
   emoji: string;
-  scopeKey: string;
+  realmKey: string;
 }
 
 export interface OrganizingPrinciples {
-  scopes: ScopeData[];
-  subcategories: SubcategoryData[];
-  /** nodeType → subcategory key mapping (from DEFINES_TYPE in Neo4j) */
+  realms: RealmData[];
+  layers: LayerData[];
+  /** nodeType → layer key mapping (from OF_KIND in Neo4j) */
   nodeTypeMapping: Record<string, string>;
 }
 
@@ -64,7 +64,7 @@ export function useMagneticData() {
       }
 
       // Transform API response - all display metadata comes from Neo4j
-      const scopes: ScopeData[] = json.data.scopes.map(
+      const realms: RealmData[] = json.data.scopes.map(
         (s: { key: string; display_name: string; emoji: string; color: string }) => ({
           key: s.key,
           displayName: s.display_name,
@@ -73,21 +73,21 @@ export function useMagneticData() {
         })
       );
 
-      const subcategories: SubcategoryData[] = json.data.subcategories.map(
+      const layers: LayerData[] = json.data.subcategories.map(
         (sub: { key: string; display_name: string; emoji: string; scope_key: string }) => ({
           key: sub.key,
           displayName: sub.display_name,
           emoji: sub.emoji,
-          scopeKey: sub.scope_key,
+          realmKey: sub.scope_key,
         })
       );
 
       const nodeTypeMapping: Record<string, string> = json.data.nodeTypeMapping;
 
-      setData({ scopes, subcategories, nodeTypeMapping });
+      setData({ realms, layers, nodeTypeMapping });
       logger.info('MagneticData', 'Organizing principles loaded', {
-        scopes: scopes.length,
-        subcategories: subcategories.length,
+        realms: realms.length,
+        layers: layers.length,
         nodeTypes: Object.keys(nodeTypeMapping).length,
       });
     } catch (err) {

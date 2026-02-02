@@ -117,11 +117,6 @@ export class ViewLoader {
         filter.maxDepth(view.filters.maxDepth);
       }
 
-      // Handle categories
-      if (view.filters.categories && view.filters.categories.length > 0) {
-        filter.byCategory(...view.filters.categories);
-      }
-
       // REMOVED v8.2.0: freshness filtering (YAML v7.11.0 alignment)
       // if (view.filters.freshness && view.filters.freshness.length > 0) {
       //   filter.withFreshness(...view.filters.freshness);

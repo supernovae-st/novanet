@@ -3,22 +3,22 @@ import type { Node, Edge } from '@xyflow/react';
 import type { HierarchicalSchemaData } from '@novanet/core/graph';
 import type { SchemaLayoutResult } from './types';
 import {
-  SCOPE_CONFIGS,
+  REALM_CONFIGS,
   NODE_WIDTH,
   NODE_HEIGHT,
   NODE_GAP,
-  SUBCAT_GAP,
-  SUBCAT_PADDING,
-  SUBCAT_HEADER,
-  SCOPE_GAP,
-  SCOPE_PADDING,
-  SCOPE_HEADER,
+  LAYER_GAP,
+  LAYER_PADDING,
+  LAYER_HEADER,
+  REALM_GAP,
+  REALM_PADDING,
+  REALM_HEADER,
   MAX_NODES_PER_ROW,
 } from './types';
-import type { Scope } from '@novanet/core/types';
+import type { Realm } from '@novanet/core/types';
 
 /**
- * Stacked Layout - Vertical stacked scopes
+ * Stacked Layout - Vertical stacked realms
  *
  * Uses unified spacing from types.ts (Golden Ratio system).
  *
@@ -43,82 +43,82 @@ export function applyStackedLayout(
   const nodes: Node[] = [];
   const edges: Edge[] = [];
 
-  const scopeOrder: Scope[] = ['Project', 'Global', 'Shared'];
+  const realmOrder: Realm[] = ['project', 'global', 'shared'];
   let currentY = 0;
 
-  for (const scope of scopeOrder) {
-    const scopeDef = hierarchy.scopes[scope];
-    if (!scopeDef) continue;
+  for (const realm of realmOrder) {
+    const realmDef = hierarchy.realms[realm];
+    if (!realmDef) continue;
 
-    const scopeId = `scope-${scope}`;
+    const realmId = `scope-${realm}`;
 
     // Calculate scope height based on content
-    let maxSubcatHeight = 0;
-    const subcatEntries = Object.entries(scopeDef.subcategories)
+    let maxLayerHeight = 0;
+    const layerEntries = Object.entries(realmDef.layers)
       .filter(([_, meta]) => meta.nodeTypes.length > 0);
 
-    for (const [_, subcatMeta] of subcatEntries) {
-      const rows = Math.ceil(subcatMeta.nodeTypes.length / MAX_NODES_PER_ROW);
-      const height = rows * (NODE_HEIGHT + NODE_GAP) + SUBCAT_PADDING * 2 + SUBCAT_HEADER;
-      maxSubcatHeight = Math.max(maxSubcatHeight, height);
+    for (const [_, layerMeta] of layerEntries) {
+      const rows = Math.ceil(layerMeta.nodeTypes.length / MAX_NODES_PER_ROW);
+      const height = rows * (NODE_HEIGHT + NODE_GAP) + LAYER_PADDING * 2 + LAYER_HEADER;
+      maxLayerHeight = Math.max(maxLayerHeight, height);
     }
 
     // Scope dimensions: content + padding + header
-    const scopeHeight = maxSubcatHeight + SCOPE_PADDING * 2 + SCOPE_HEADER;
-    const scopeWidth = Math.max(
+    const realmHeight = maxLayerHeight + REALM_PADDING * 2 + REALM_HEADER;
+    const realmWidth = Math.max(
       4000,
-      subcatEntries.length * 1200 + (subcatEntries.length - 1) * SUBCAT_GAP + SCOPE_PADDING * 2
+      layerEntries.length * 1200 + (layerEntries.length - 1) * LAYER_GAP + REALM_PADDING * 2
     );
 
     // Scope group node
     nodes.push({
-      id: scopeId,
-      type: 'scopeGroup',
+      id: realmId,
+      type: 'realmGroup',
       position: { x: 0, y: currentY },
-      style: { width: scopeWidth, height: scopeHeight },
+      style: { width: realmWidth, height: realmHeight },
       data: {
-        scope,
-        label: scopeDef.label,
-        icon: scopeDef.icon,
-        nodeCount: hierarchy.stats.nodesByScope[scope] || 0,
+        realm,
+        label: realmDef.label,
+        icon: realmDef.icon,
+        nodeCount: hierarchy.stats.nodesByRealm[realm] || 0,
       },
     });
 
     // Layout subcategories side by side
-    let subcatX = SCOPE_PADDING;
-    const subcatY = SCOPE_PADDING + SCOPE_HEADER;
-    const subcatWidth = (scopeWidth - SCOPE_PADDING * 2 - (subcatEntries.length - 1) * SUBCAT_GAP) / subcatEntries.length;
+    let layerX = REALM_PADDING;
+    const layerY = REALM_PADDING + REALM_HEADER;
+    const layerWidth = (realmWidth - REALM_PADDING * 2 - (layerEntries.length - 1) * LAYER_GAP) / layerEntries.length;
 
-    for (const [subcatName, subcatMeta] of subcatEntries) {
-      const subcatId = `subcat-${scope}-${subcatName}`;
-      const rows = Math.ceil(subcatMeta.nodeTypes.length / MAX_NODES_PER_ROW);
-      const subcatHeight = rows * (NODE_HEIGHT + NODE_GAP) + SUBCAT_PADDING * 2 + SUBCAT_HEADER;
+    for (const [layerName, layerMeta] of layerEntries) {
+      const layerId = `subcat-${realm}-${layerName}`;
+      const rows = Math.ceil(layerMeta.nodeTypes.length / MAX_NODES_PER_ROW);
+      const layerHeight = rows * (NODE_HEIGHT + NODE_GAP) + LAYER_PADDING * 2 + LAYER_HEADER;
 
       // Subcategory group
       nodes.push({
-        id: subcatId,
-        type: 'subcategoryGroup',
-        parentId: scopeId,
+        id: layerId,
+        type: 'layerGroup',
+        parentId: realmId,
         extent: 'parent',
         draggable: true,
-        position: { x: subcatX, y: subcatY },
-        style: { width: subcatWidth, height: subcatHeight },
+        position: { x: layerX, y: layerY },
+        style: { width: layerWidth, height: layerHeight },
         data: {
-          scope,
-          subcategory: subcatName,
-          label: subcatMeta.label,
-          icon: subcatMeta.icon,
-          nodeCount: subcatMeta.nodeTypes.length,
+          realm,
+          layer: layerName,
+          label: layerMeta.label,
+          icon: layerMeta.icon,
+          nodeCount: layerMeta.nodeTypes.length,
         },
       });
 
       // Layout nodes in grid
       const nodesPerRow = Math.min(
         MAX_NODES_PER_ROW,
-        Math.floor((subcatWidth - SUBCAT_PADDING * 2) / (NODE_WIDTH + NODE_GAP))
+        Math.floor((layerWidth - LAYER_PADDING * 2) / (NODE_WIDTH + NODE_GAP))
       );
 
-      subcatMeta.nodeTypes.forEach((nodeType, idx) => {
+      layerMeta.nodeTypes.forEach((nodeType, idx) => {
         const row = Math.floor(idx / nodesPerRow);
         const col = idx % nodesPerRow;
         const schemaNode = hierarchy.nodes.find(n => n.nodeType === nodeType);
@@ -126,27 +126,27 @@ export function applyStackedLayout(
         nodes.push({
           id: `schema-${nodeType}`,
           type: 'schemaNode',
-          parentId: subcatId,
+          parentId: layerId,
           extent: 'parent',
           draggable: true,
           position: {
-            x: SUBCAT_PADDING + col * (NODE_WIDTH + NODE_GAP),
-            y: SUBCAT_PADDING + SUBCAT_HEADER + row * (NODE_HEIGHT + NODE_GAP),
+            x: LAYER_PADDING + col * (NODE_WIDTH + NODE_GAP),
+            y: LAYER_PADDING + LAYER_HEADER + row * (NODE_HEIGHT + NODE_GAP),
           },
           data: {
             nodeType,
             label: schemaNode?.label || nodeType,
             description: schemaNode?.description || '',
-            scope,
-            subcategory: subcatName,
+            realm,
+            layer: layerName,
           },
         });
       });
 
-      subcatX += subcatWidth + SUBCAT_GAP;
+      layerX += layerWidth + LAYER_GAP;
     }
 
-    currentY += scopeHeight + SCOPE_GAP;
+    currentY += realmHeight + REALM_GAP;
   }
 
   // Create edges

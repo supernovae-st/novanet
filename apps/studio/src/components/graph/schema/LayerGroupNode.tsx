@@ -1,57 +1,57 @@
 'use client';
 
 /**
- * SubcategoryGroupNode - Nested glass container for subcategory groups
+ * LayerGroupNode - Nested glass container for layer groups
  *
  * Features:
- * - Subtle glass effect inheriting parent scope color
+ * - Subtle glass effect inheriting parent realm color
  * - Compact label with hover interaction
- * - NodeResizer for interactive resizing (like ScopeGroupNode)
- * - Draggable within parent scope container
+ * - NodeResizer for interactive resizing (like RealmGroupNode)
+ * - Draggable within parent realm container
  * - Smooth transitions
  *
- * Nested inside ScopeGroupNode - inherits scope coloring
+ * Nested inside RealmGroupNode - inherits realm coloring
  */
 
 import { memo, useState, useCallback } from 'react';
 import { type NodeProps, type Node, NodeResizer } from '@xyflow/react';
 import { cn } from '@/lib/utils';
 import { gapTokens } from '@/design/tokens';
-import type { Scope } from '@novanet/core/types';
+import type { Realm } from '@novanet/core/types';
 
 /**
- * Data interface for SubcategoryGroupNode
+ * Data interface for LayerGroupNode
  */
-export interface SubcategoryGroupData extends Record<string, unknown> {
-  scope: Scope;
-  subcategory: string;
+export interface LayerGroupData extends Record<string, unknown> {
+  realm: Realm;
+  layer: string;
   label: string;
   icon: string;
   nodeCount: number;
 }
 
-/** Node type for SubcategoryGroupNode */
-export type SubcategoryGroupNodeType = Node<SubcategoryGroupData, 'subcategoryGroup'>;
+/** Node type for LayerGroupNode */
+export type LayerGroupNodeType = Node<LayerGroupData, 'layerGroup'>;
 
 /**
- * Scope color configuration (subset of parent colors)
+ * Realm color configuration (subset of parent colors)
  */
-const SCOPE_COLORS: Record<Scope, {
+const REALM_COLORS: Record<Realm, {
   primary: string;
   secondary: string;
   glow: string;
 }> = {
-  Project: {
+  project: {
     primary: '#8b5cf6',
     secondary: '#a78bfa',
     glow: 'rgba(139, 92, 246, 0.2)',
   },
-  Global: {
+  global: {
     primary: '#10b981',
     secondary: '#34d399',
     glow: 'rgba(16, 185, 129, 0.2)',
   },
-  Shared: {
+  shared: {
     primary: '#f59e0b',
     secondary: '#fbbf24',
     glow: 'rgba(245, 158, 11, 0.2)',
@@ -59,15 +59,15 @@ const SCOPE_COLORS: Record<Scope, {
 };
 
 /**
- * SubcategoryGroupNode - Nested container within a scope
+ * LayerGroupNode - Nested container within a realm
  */
-export const SubcategoryGroupNode = memo(function SubcategoryGroupNode({
+export const LayerGroupNode = memo(function LayerGroupNode({
   data,
   selected,
-}: NodeProps<SubcategoryGroupNodeType>) {
+}: NodeProps<LayerGroupNodeType>) {
   const [isHovered, setIsHovered] = useState(false);
 
-  const colors = SCOPE_COLORS[data.scope] || SCOPE_COLORS.Project;
+  const colors = REALM_COLORS[data.realm] || REALM_COLORS.project;
 
   const handleMouseEnter = useCallback(() => setIsHovered(true), []);
   const handleMouseLeave = useCallback(() => setIsHovered(false), []);

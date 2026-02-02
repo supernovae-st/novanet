@@ -1,13 +1,13 @@
 'use client';
 
 /**
- * ScopeAttractorNode - Visible scope node for magnetic grouping
+ * RealmAttractorNode - Visible realm node for magnetic grouping
  *
- * Unlike ScopeGroupNode (container), this is a regular node that
+ * Unlike RealmGroupNode (container), this is a regular node that
  * acts as a gravitational center for its child nodes.
  *
  * Features:
- * - Circular node (150px) with scope color
+ * - Circular node (150px) with realm color
  * - Shows emoji, label, and dual count (types + loaded)
  * - Pulsing glow effect, stronger when selected
  * - Hidden handles for edges
@@ -17,7 +17,7 @@ import { memo } from 'react';
 import { type NodeProps, type Node, Handle, Position } from '@xyflow/react';
 import { cn } from '@/lib/utils';
 
-export interface ScopeAttractorData extends Record<string, unknown> {
+export interface RealmAttractorData extends Record<string, unknown> {
   key: string;
   label: string;
   emoji: string;
@@ -26,9 +26,9 @@ export interface ScopeAttractorData extends Record<string, unknown> {
   loadedCount: number;
 }
 
-export type ScopeAttractorNodeType = Node<ScopeAttractorData, 'scopeAttractor'>;
+export type RealmAttractorNodeType = Node<RealmAttractorData, 'realmAttractor'>;
 
-const SCOPE_SIZE = 150;
+const REALM_SIZE = 150;
 
 const pulseGlowKeyframes = `
 @keyframes pulse-glow {
@@ -37,10 +37,10 @@ const pulseGlowKeyframes = `
 }
 `;
 
-export const ScopeAttractorNode = memo(function ScopeAttractorNode({
+export const RealmAttractorNode = memo(function RealmAttractorNode({
   data,
   selected,
-}: NodeProps<ScopeAttractorNodeType>) {
+}: NodeProps<RealmAttractorNodeType>) {
   return (
     <>
       <style>{pulseGlowKeyframes}</style>
@@ -51,8 +51,8 @@ export const ScopeAttractorNode = memo(function ScopeAttractorNode({
           selected ? 'scale-110' : 'scale-100'
         )}
         style={{
-          width: SCOPE_SIZE,
-          height: SCOPE_SIZE,
+          width: REALM_SIZE,
+          height: REALM_SIZE,
           backgroundColor: `${data.color}20`,
           borderColor: data.color,
           boxShadow: selected
@@ -60,7 +60,7 @@ export const ScopeAttractorNode = memo(function ScopeAttractorNode({
             : `0 0 30px ${data.color}40`,
           animation: 'pulse-glow 3s ease-in-out infinite',
         }}
-        aria-label={`${data.label} scope: ${data.typeCount} types, ${data.loadedCount} loaded`}
+        aria-label={`${data.label} realm: ${data.typeCount} types, ${data.loadedCount} loaded`}
       >
         {/* Emoji */}
         <span className="text-4xl" aria-hidden="true">{data.emoji}</span>

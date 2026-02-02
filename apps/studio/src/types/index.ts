@@ -4,19 +4,20 @@
 // Re-export from @novanet/core (Single Source of Truth) + Studio-specific types
 
 // -----------------------------------------------------------------------------
-// RE-EXPORT FROM @NOVANET/CORE (v8.1.0)
+// RE-EXPORT FROM @NOVANET/CORE (v9.0.0)
 // -----------------------------------------------------------------------------
 
 // Node types - Single Source of Truth
 export {
   NODE_TYPES,
   type NodeType,
-  type NodeCategory,
-  NODE_CATEGORIES,
-  type LocaleBehavior,
-  NODE_BEHAVIORS,
-  type Scope,
-  NODE_SCOPES,
+  type Realm,
+  NODE_REALMS,
+  type Trait,
+  NODE_TRAITS,
+  type Layer,
+  type KindMeta,
+  KIND_META,
 } from '@novanet/core/types';
 
 // Standard properties and domain types
@@ -70,7 +71,7 @@ import type { NodeType } from '@novanet/core/types';
 /**
  * Normalized node for visualization
  * Aligned with neo4j.ts transformNode output
- * v8.2.0: Removed icon, priority, freshness (YAML v7.11.0 alignment)
+ * v9.0.0: Updated to use Realm, Layer, Trait terminology
  */
 export interface GraphNode {
   id: string;
@@ -88,10 +89,10 @@ export interface GraphNode {
 /**
  * Schema mode synthetic group types (containers in schema visualization)
  */
-export type SchemaGroupType = 'ScopeGroup' | 'SubcategoryGroup';
+export type SchemaGroupType = 'RealmGroup' | 'LayerGroup';
 
 /**
- * Synthetic node info for schema mode containers (scope groups, subcategories)
+ * Synthetic node info for schema mode containers (realm groups, layers)
  * Used for hover tooltips in schema visualization
  */
 export interface SchemaGroupNode {
