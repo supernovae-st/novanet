@@ -1,12 +1,12 @@
 # NovaNet Roadmap
 
-Current version: **v9.0.0-rc.1** | Target: QR Code AI (https://qrcode-ai.com)
+Current version: **v9.0.0** | Target: QR Code AI (https://qrcode-ai.com)
 
 ## Milestones Overview
 
 ```
-v9.0  Self-Describing Context Graph    ████████████████████  ~97%  ← YOU ARE HERE
-v9.5  Advanced TUI (Galaxy)            ██████████████████░░  ~90%
+v9.0  Self-Describing Context Graph    ████████████████████  100%  RELEASED
+v9.5  Advanced TUI (Galaxy)            ██████████████████░░  ~90%  ← YOU ARE HERE
 v10.0 Dynamic Retrieval                ░░░░░░░░░░░░░░░░░░░░    0%
 v11.0 Autonomous Learning              ░░░░░░░░░░░░░░░░░░░░    0%
 v12.0 Content Pipeline                 ░░░░░░░░░░░░░░░░░░░░    0%
@@ -27,7 +27,7 @@ with 6 meta-node types, dual navigation, and Rust-first tooling.
 | 5 | Studio Migration | DONE | Realm/Layer components, visual system, nodeColors.ts |
 | 6 | Studio Navigation | DONE | 4-mode navigation, FacetFilterPanel, ViewPicker context-aware, T/E presets |
 | 7A | Rust CLI + TUI | DONE | All commands, basic TUI with taxonomy tree |
-| 8 | Final Verification | TODO | Audit, tests, lint, type-check, benchmarks |
+| 8 | Final Verification | DONE | Audit, 955 tests, lint, type-check, benchmarks, code review |
 
 ### Remaining for v9.0.0 release
 
@@ -40,9 +40,9 @@ with 6 meta-node types, dual navigation, and Rust-first tooling.
 - [x] `pnpm type-check` — zero errors, 3/3 packages (Phase 8)
 - [x] `pnpm lint` — zero errors (Phase 8)
 - [x] `cargo test` — 396 tests pass, zero clippy warnings (Phase 8)
-- [ ] Performance benchmarks — 4 navigation modes (Phase 8)
-- [ ] Code review (Phase 8)
-- [ ] Create GitHub Release v9.0.0 (Phase 8)
+- [x] Performance benchmarks — data 1056ms, meta 159ms, overlay 646ms, query 125ms (Phase 8)
+- [x] Code review — PRODUCTION READY, 0 critical/high issues (Phase 8)
+- [x] Create GitHub Release v9.0.0 (Phase 8)
 
 ## v9.5.0 — Advanced TUI (Galaxy Theme)
 
@@ -148,3 +148,4 @@ release/v*      Release preparation (optional, for complex releases)
 | v8.2.0 | 2026-01-30 | YAML views, deprecated props removed |
 | v8.3.0 | 2026-02-01 | Meta-graph, magnetic layout, v9 design |
 | v9.0.0-rc.1 | 2026-02-02 | Ontology v9, Rust CLI, 4-mode navigation |
+| v9.0.0 | 2026-02-02 | Phase 8 complete: 955 tests, audit clean, benchmarked |
