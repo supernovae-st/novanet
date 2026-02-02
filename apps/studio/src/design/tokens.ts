@@ -814,9 +814,9 @@ export const sidebarTokens = {
 } as const;
 
 /**
- * Scope-specific accent colors - used for both Schema and Data modes
+ * Realm-specific accent colors - used for both Schema and Data modes
  */
-export const scopeAccents = {
+export const realmAccents = {
   project: {
     color: '#6c71c4', // solarized violet
     bg: 'bg-[#6c71c4]/20',
@@ -868,7 +868,7 @@ export const tokens = {
   pickerClasses,
   // Sidebar design system
   sidebarTokens,
-  scopeAccents,
+  realmAccents,
   iconButtonClasses,
 } as const;
 

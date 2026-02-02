@@ -437,122 +437,122 @@ describe('filterStore', () => {
     beforeEach(() => {
       // Reset collapsed state for each test
       useFilterStore.setState({
-        collapsedScopes: [],
-        collapsedSubcategories: [],
+        collapsedRealms: [],
+        collapsedLayers: [],
       });
     });
 
-    describe('toggleScopeCollapsed', () => {
-      it('should add scope to collapsedScopes when not present', () => {
-        useFilterStore.getState().toggleScopeCollapsed('Project');
+    describe('toggleRealmCollapsed', () => {
+      it('should add realm to collapsedRealms when not present', () => {
+        useFilterStore.getState().toggleRealmCollapsed('project');
 
         const state = useFilterStore.getState();
-        expect(state.collapsedScopes).toContain('Project');
+        expect(state.collapsedRealms).toContain('project');
       });
 
-      it('should remove scope from collapsedScopes when already present', () => {
-        useFilterStore.setState({ collapsedScopes: ['Project'] });
+      it('should remove realm from collapsedRealms when already present', () => {
+        useFilterStore.setState({ collapsedRealms: ['project'] });
 
-        useFilterStore.getState().toggleScopeCollapsed('Project');
+        useFilterStore.getState().toggleRealmCollapsed('project');
 
         const state = useFilterStore.getState();
-        expect(state.collapsedScopes).not.toContain('Project');
+        expect(state.collapsedRealms).not.toContain('project');
       });
 
-      it('should handle multiple scopes independently', () => {
-        useFilterStore.getState().toggleScopeCollapsed('Project');
-        useFilterStore.getState().toggleScopeCollapsed('Global');
+      it('should handle multiple realms independently', () => {
+        useFilterStore.getState().toggleRealmCollapsed('project');
+        useFilterStore.getState().toggleRealmCollapsed('global');
 
         const state = useFilterStore.getState();
-        expect(state.collapsedScopes).toContain('Project');
-        expect(state.collapsedScopes).toContain('Global');
-        expect(state.collapsedScopes).not.toContain('Shared');
+        expect(state.collapsedRealms).toContain('project');
+        expect(state.collapsedRealms).toContain('global');
+        expect(state.collapsedRealms).not.toContain('shared');
       });
     });
 
-    describe('toggleSubcategoryCollapsed', () => {
-      it('should add subcategory key to collapsedSubcategories when not present', () => {
-        useFilterStore.getState().toggleSubcategoryCollapsed('Project', 'foundation');
+    describe('toggleLayerCollapsed', () => {
+      it('should add layer key to collapsedLayers when not present', () => {
+        useFilterStore.getState().toggleLayerCollapsed('project', 'foundation');
 
         const state = useFilterStore.getState();
-        expect(state.collapsedSubcategories).toContain('Project-foundation');
+        expect(state.collapsedLayers).toContain('project-foundation');
       });
 
-      it('should remove subcategory key from collapsedSubcategories when already present', () => {
-        useFilterStore.setState({ collapsedSubcategories: ['Project-foundation'] });
+      it('should remove layer key from collapsedLayers when already present', () => {
+        useFilterStore.setState({ collapsedLayers: ['project-foundation'] });
 
-        useFilterStore.getState().toggleSubcategoryCollapsed('Project', 'foundation');
+        useFilterStore.getState().toggleLayerCollapsed('project', 'foundation');
 
         const state = useFilterStore.getState();
-        expect(state.collapsedSubcategories).not.toContain('Project-foundation');
+        expect(state.collapsedLayers).not.toContain('project-foundation');
       });
 
-      it('should handle multiple subcategories independently', () => {
-        useFilterStore.getState().toggleSubcategoryCollapsed('Project', 'foundation');
-        useFilterStore.getState().toggleSubcategoryCollapsed('Project', 'structure');
-        useFilterStore.getState().toggleSubcategoryCollapsed('Global', 'knowledge');
+      it('should handle multiple layers independently', () => {
+        useFilterStore.getState().toggleLayerCollapsed('project', 'foundation');
+        useFilterStore.getState().toggleLayerCollapsed('project', 'structure');
+        useFilterStore.getState().toggleLayerCollapsed('global', 'knowledge');
 
         const state = useFilterStore.getState();
-        expect(state.collapsedSubcategories).toContain('Project-foundation');
-        expect(state.collapsedSubcategories).toContain('Project-structure');
-        expect(state.collapsedSubcategories).toContain('Global-knowledge');
+        expect(state.collapsedLayers).toContain('project-foundation');
+        expect(state.collapsedLayers).toContain('project-structure');
+        expect(state.collapsedLayers).toContain('global-knowledge');
       });
     });
 
-    describe('isScopeCollapsed', () => {
-      it('should return false when scope is not collapsed', () => {
-        expect(useFilterStore.getState().isScopeCollapsed('Project')).toBe(false);
+    describe('isRealmCollapsed', () => {
+      it('should return false when realm is not collapsed', () => {
+        expect(useFilterStore.getState().isRealmCollapsed('project')).toBe(false);
       });
 
-      it('should return true when scope is collapsed', () => {
-        useFilterStore.getState().toggleScopeCollapsed('Project');
+      it('should return true when realm is collapsed', () => {
+        useFilterStore.getState().toggleRealmCollapsed('project');
 
-        expect(useFilterStore.getState().isScopeCollapsed('Project')).toBe(true);
+        expect(useFilterStore.getState().isRealmCollapsed('project')).toBe(true);
       });
     });
 
-    describe('isSubcategoryCollapsed', () => {
-      it('should return false when subcategory is not collapsed', () => {
-        expect(useFilterStore.getState().isSubcategoryCollapsed('Project', 'foundation')).toBe(false);
+    describe('isLayerCollapsed', () => {
+      it('should return false when layer is not collapsed', () => {
+        expect(useFilterStore.getState().isLayerCollapsed('project', 'foundation')).toBe(false);
       });
 
-      it('should return true when subcategory is collapsed', () => {
-        useFilterStore.getState().toggleSubcategoryCollapsed('Project', 'foundation');
+      it('should return true when layer is collapsed', () => {
+        useFilterStore.getState().toggleLayerCollapsed('project', 'foundation');
 
-        expect(useFilterStore.getState().isSubcategoryCollapsed('Project', 'foundation')).toBe(true);
+        expect(useFilterStore.getState().isLayerCollapsed('project', 'foundation')).toBe(true);
       });
     });
 
     describe('resetSchemaFilters', () => {
-      it('should reset collapsedScopes to empty array', () => {
-        useFilterStore.setState({ collapsedScopes: ['Project', 'Global'] });
+      it('should reset collapsedRealms to empty array', () => {
+        useFilterStore.setState({ collapsedRealms: ['project', 'global'] });
 
         useFilterStore.getState().resetSchemaFilters();
 
-        expect(useFilterStore.getState().collapsedScopes).toEqual([]);
+        expect(useFilterStore.getState().collapsedRealms).toEqual([]);
       });
 
-      it('should reset collapsedSubcategories to empty array', () => {
+      it('should reset collapsedLayers to empty array', () => {
         useFilterStore.setState({
-          collapsedSubcategories: ['Project-foundation', 'Global-knowledge'],
+          collapsedLayers: ['project-foundation', 'global-knowledge'],
         });
 
         useFilterStore.getState().resetSchemaFilters();
 
-        expect(useFilterStore.getState().collapsedSubcategories).toEqual([]);
+        expect(useFilterStore.getState().collapsedLayers).toEqual([]);
       });
 
-      it('should reset both collapsedScopes and collapsedSubcategories', () => {
+      it('should reset both collapsedRealms and collapsedLayers', () => {
         useFilterStore.setState({
-          collapsedScopes: ['Project', 'Global'],
-          collapsedSubcategories: ['Project-foundation', 'Global-knowledge'],
+          collapsedRealms: ['project', 'global'],
+          collapsedLayers: ['project-foundation', 'global-knowledge'],
         });
 
         useFilterStore.getState().resetSchemaFilters();
 
         const state = useFilterStore.getState();
-        expect(state.collapsedScopes).toEqual([]);
-        expect(state.collapsedSubcategories).toEqual([]);
+        expect(state.collapsedRealms).toEqual([]);
+        expect(state.collapsedLayers).toEqual([]);
       });
     });
   });

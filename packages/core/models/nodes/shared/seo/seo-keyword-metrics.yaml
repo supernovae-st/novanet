@@ -1,4 +1,4 @@
-# models/nodes/seo/seo-keyword-metrics.yaml
+# models/nodes/shared/seo/seo-keyword-metrics.yaml
 # SEOKeywordMetrics - Historical metrics snapshot for a keyword (v7.8.5)
 #
 # v7.8.5: Renamed from SEOSnapshot for unified metrics pattern
@@ -7,7 +7,7 @@
 
 node:
   name: SEOKeywordMetrics
-  category: seo
+  locale_behavior: derived
   icon: "📸"
   description: "Historical metrics snapshot for an SEO keyword"
 

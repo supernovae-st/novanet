@@ -1,4 +1,4 @@
-# models/nodes/locale/reference.yaml
+# models/nodes/global/knowledge/reference.yaml
 # Reference - Cultural references for a locale (celebrities, brands, landmarks, events)
 #
 # Graph-native node consolidating all named entities from LocaleCultureReferences
@@ -8,7 +8,7 @@
 
 node:
   name: Reference
-  category: locale
+  locale_behavior: knowledge
   icon: "🎯"
   description: "Cultural reference entity for locale-specific content"
 

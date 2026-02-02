@@ -1,9 +1,9 @@
-# models/nodes/project/project.yaml
+# models/nodes/project/foundation/project.yaml
 # Project - Multi-tenant root node with brand and project configuration
 
 node:
   name: Project
-  category: project
+  locale_behavior: invariant
   icon: "🔷"
   description: "Multi-tenant root node containing project configuration and brand info"
 

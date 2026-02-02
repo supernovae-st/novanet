@@ -12,10 +12,7 @@
 
 node:
   name: PageType
-  category: instruction
-  scope: project
   locale_behavior: invariant
-  functional_role: instruction
   icon: "📐"
   description: "Template defining meta requirements, layout rules, and block composition for a type of page"
 

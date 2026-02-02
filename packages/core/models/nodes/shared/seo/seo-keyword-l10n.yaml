@@ -1,4 +1,4 @@
-# models/nodes/seo/seo-keyword-l10n.yaml
+# models/nodes/shared/seo/seo-keyword-l10n.yaml
 # SEOKeywordL10n - Target keyword with metrics (LOCALIZED - has FOR_LOCALE)
 #
 # v7.8.2: Renamed from SEOKeyword to SEOKeywordL10n
@@ -7,7 +7,7 @@
 
 node:
   name: SEOKeywordL10n
-  category: seo
+  locale_behavior: localized
   icon: "🔍"
   description: "Target keyword with metrics for SEO optimization (locale-specific)"
 

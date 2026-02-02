@@ -9,19 +9,19 @@
  * with the actual graph schema.
  */
 
-import { NODE_TYPES, NODE_SCOPES, NODE_BEHAVIORS, type NodeType, type Scope } from '@novanet/core/types';
+import { NODE_TYPES, NODE_REALMS, NODE_TRAITS, type NodeType, type Realm } from '@novanet/core/types';
 import { RelationRegistry } from '@novanet/core/schemas';
 import { nodeTypeConfigs } from '@/config/nodeTypes';
 import type { GraphNode, GraphEdge } from '@/types';
 
 // =============================================================================
-// SCOPE DESCRIPTIONS
+// REALM DESCRIPTIONS
 // =============================================================================
 
-const SCOPE_DESCRIPTIONS: Record<Scope, string> = {
-  Global: 'Shared across all projects (Locale knowledge)',
-  Shared: 'Shared across projects (SEO/GEO data)',
-  Project: 'Project-specific content and structure',
+const REALM_DESCRIPTIONS: Record<Realm, string> = {
+  global: 'Shared across all projects (Locale knowledge)',
+  shared: 'Shared across projects (SEO/GEO data)',
+  project: 'Project-specific content and structure',
 };
 
 const BEHAVIOR_DESCRIPTIONS: Record<string, string> = {
@@ -51,19 +51,19 @@ export function generateSchemaGraph(): SchemaGraphResult {
   // Generate nodes for all 35 node types
   for (const nodeType of NODE_TYPES) {
     const config = nodeTypeConfigs[nodeType];
-    const scope = NODE_SCOPES[nodeType];
-    const behavior = NODE_BEHAVIORS[nodeType];
+    const realm = NODE_REALMS[nodeType];
+    const behavior = NODE_TRAITS[nodeType];
 
     nodes.push({
       id: `schema-${nodeType}`,
       type: nodeType,
       key: nodeType.toLowerCase(),
       displayName: config.label,
-      description: `${SCOPE_DESCRIPTIONS[scope]}. ${BEHAVIOR_DESCRIPTIONS[behavior]}.`,
-      llmContext: `Schema node representing the ${nodeType} type. Scope: ${scope}. Behavior: ${behavior}.`,
+      description: `${REALM_DESCRIPTIONS[realm]}. ${BEHAVIOR_DESCRIPTIONS[behavior]}.`,
+      llmContext: `Schema node representing the ${nodeType} type. Realm: ${realm}. Behavior: ${behavior}.`,
       data: {
         isSchema: true,
-        scope,
+        scope: realm,
         behavior,
         category: config.category,
         icon: config.icon,

@@ -2,14 +2,14 @@
 import type { Node, Edge } from '@xyflow/react';
 import type { HierarchicalSchemaData } from '@novanet/core/graph';
 import type { SchemaLayoutResult } from './types';
-import { NODE_WIDTH, NODE_HEIGHT, SCOPE_PADDING, NODE_GAP, SCOPE_GAP } from './types';
-import type { Scope } from '@novanet/core/types';
+import { NODE_WIDTH, NODE_HEIGHT, REALM_PADDING, NODE_GAP, REALM_GAP } from './types';
+import type { Realm } from '@novanet/core/types';
 
 /**
  * Force Clusters Layout - Physics-based with scope clustering
  *
  * Uses unified spacing from types.ts (Golden Ratio system).
- * Cluster centers derived from SCOPE_GAP; spiral spacing from NODE_GAP.
+ * Cluster centers derived from REALM_GAP; spiral spacing from NODE_GAP.
  *
  * Visual structure (triangular cluster arrangement):
  *
@@ -25,35 +25,35 @@ export function applyForceClusterLayout(
   const edges: Edge[] = [];
 
   // Derived from unified constants
-  const BASE_OFFSET = SCOPE_GAP * 2;               // ~1100px from origin
-  const CLUSTER_SPACING = SCOPE_GAP * 3;            // ~1650px between cluster centers
-  const CLUSTER_CENTERS: Record<Scope, { x: number; y: number }> = {
-    Project: { x: BASE_OFFSET, y: BASE_OFFSET },
-    Global:  { x: BASE_OFFSET + CLUSTER_SPACING, y: BASE_OFFSET - CLUSTER_SPACING * 0.3 },
-    Shared:  { x: BASE_OFFSET + CLUSTER_SPACING / 2, y: BASE_OFFSET + CLUSTER_SPACING * 0.7 },
+  const BASE_OFFSET = REALM_GAP * 2;               // ~1100px from origin
+  const CLUSTER_SPACING = REALM_GAP * 3;            // ~1650px between cluster centers
+  const CLUSTER_CENTERS: Record<Realm, { x: number; y: number }> = {
+    project: { x: BASE_OFFSET, y: BASE_OFFSET },
+    global:  { x: BASE_OFFSET + CLUSTER_SPACING, y: BASE_OFFSET - CLUSTER_SPACING * 0.3 },
+    shared:  { x: BASE_OFFSET + CLUSTER_SPACING / 2, y: BASE_OFFSET + CLUSTER_SPACING * 0.7 },
   };
 
   const NODE_REPULSION = NODE_GAP * 1.5;            // ~120px spiral spacing
 
-  const scopeOrder: Scope[] = ['Project', 'Global', 'Shared'];
+  const realmOrder: Realm[] = ['project', 'global', 'shared'];
 
-  for (const scope of scopeOrder) {
-    const scopeDef = hierarchy.scopes[scope];
-    if (!scopeDef) continue;
+  for (const realm of realmOrder) {
+    const realmDef = hierarchy.realms[realm];
+    if (!realmDef) continue;
 
-    const scopeId = `scope-${scope}`;
-    const center = CLUSTER_CENTERS[scope];
+    const realmId = `scope-${realm}`;
+    const center = CLUSTER_CENTERS[realm];
 
     // Collect all nodes for this scope
-    const allNodes: { nodeType: string; subcatName: string }[] = [];
-    for (const [subcatName, subcatMeta] of Object.entries(scopeDef.subcategories)) {
-      for (const nodeType of subcatMeta.nodeTypes) {
-        allNodes.push({ nodeType, subcatName });
+    const allNodes: { nodeType: string; layerName: string }[] = [];
+    for (const [layerName, layerMeta] of Object.entries(realmDef.layers)) {
+      for (const nodeType of layerMeta.nodeTypes) {
+        allNodes.push({ nodeType, layerName });
       }
     }
 
     // Simple force simulation - place nodes in expanding spiral
-    const nodePositions: { nodeType: string; x: number; y: number; subcatName: string }[] = [];
+    const nodePositions: { nodeType: string; x: number; y: number; layerName: string }[] = [];
 
     allNodes.forEach((item, idx) => {
       // Golden angle spiral for even distribution
@@ -65,27 +65,27 @@ export function applyForceClusterLayout(
         nodeType: item.nodeType,
         x: center.x + radius * Math.cos(angle),
         y: center.y + radius * Math.sin(angle),
-        subcatName: item.subcatName,
+        layerName: item.layerName,
       });
     });
 
     // Calculate bounding box for scope group
     if (nodePositions.length > 0) {
-      const minX = Math.min(...nodePositions.map(p => p.x)) - SCOPE_PADDING - NODE_WIDTH / 2;
-      const maxX = Math.max(...nodePositions.map(p => p.x)) + SCOPE_PADDING + NODE_WIDTH / 2;
-      const minY = Math.min(...nodePositions.map(p => p.y)) - SCOPE_PADDING - NODE_HEIGHT / 2;
-      const maxY = Math.max(...nodePositions.map(p => p.y)) + SCOPE_PADDING + NODE_HEIGHT / 2;
+      const minX = Math.min(...nodePositions.map(p => p.x)) - REALM_PADDING - NODE_WIDTH / 2;
+      const maxX = Math.max(...nodePositions.map(p => p.x)) + REALM_PADDING + NODE_WIDTH / 2;
+      const minY = Math.min(...nodePositions.map(p => p.y)) - REALM_PADDING - NODE_HEIGHT / 2;
+      const maxY = Math.max(...nodePositions.map(p => p.y)) + REALM_PADDING + NODE_HEIGHT / 2;
 
       // Scope group node
       nodes.push({
-        id: scopeId,
-        type: 'scopeGroup',
+        id: realmId,
+        type: 'realmGroup',
         position: { x: minX, y: minY },
         style: { width: maxX - minX, height: maxY - minY },
         data: {
-          scope,
-          label: scopeDef.label,
-          icon: scopeDef.icon,
+          realm,
+          label: realmDef.label,
+          icon: realmDef.icon,
           nodeCount: allNodes.length,
         },
       });
@@ -97,7 +97,7 @@ export function applyForceClusterLayout(
         nodes.push({
           id: `schema-${pos.nodeType}`,
           type: 'schemaNode',
-          parentId: scopeId,
+          parentId: realmId,
           extent: 'parent',
           draggable: true,
           position: {
@@ -108,8 +108,8 @@ export function applyForceClusterLayout(
             nodeType: pos.nodeType,
             label: schemaNode?.label || pos.nodeType,
             description: schemaNode?.description || '',
-            scope,
-            subcategory: pos.subcatName,
+            realm,
+            layer: pos.layerName,
           },
         });
       }

@@ -1,7 +1,8 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import type { NodeType, FilterPreset, Scope } from '@/types';
+import type { Realm, NodeType } from '@novanet/core/types';
+import type { FilterPreset } from '@/types';
 import { CORE_TYPES, ALL_NODE_TYPES } from '@/config/nodeTypes';
 import { DEFAULT_PRESET } from '@/config/presets';
 import type { Priority, Freshness, NodeCategory } from '@/lib/filterAdapter';
@@ -29,8 +30,8 @@ interface ExtendedFilterState {
   localeFamily: string | null;
 
   // Schema mode collapsed groups (Task 3.1)
-  collapsedScopes: Scope[];
-  collapsedSubcategories: string[]; // Format: "Scope-subcategory"
+  collapsedRealms: Realm[];
+  collapsedLayers: string[]; // Format: "Realm-layer"
 }
 
 interface FilterStoreState extends ExtendedFilterState {
@@ -67,11 +68,11 @@ interface FilterStoreState extends ExtendedFilterState {
   removeCustomPreset: (id: string) => void;
 
   // Schema mode collapsed groups actions (Task 3.1)
-  toggleScopeCollapsed: (scope: Scope) => void;
-  toggleSubcategoryCollapsed: (scope: Scope, subcategory: string) => void;
-  setSubcategoryCollapsed: (scope: Scope, subcategory: string, collapsed: boolean) => void;
-  isScopeCollapsed: (scope: Scope) => boolean;
-  isSubcategoryCollapsed: (scope: Scope, subcategory: string) => boolean;
+  toggleRealmCollapsed: (realm: Realm) => void;
+  toggleLayerCollapsed: (realm: Realm, layer: string) => void;
+  setLayerCollapsed: (realm: Realm, layer: string, collapsed: boolean) => void;
+  isRealmCollapsed: (realm: Realm) => boolean;
+  isLayerCollapsed: (realm: Realm, layer: string) => boolean;
   resetSchemaFilters: () => void;
 }
 
@@ -95,8 +96,8 @@ export const useFilterStore = create<FilterStoreState>()(
       localeFamily: null,
 
       // Schema mode collapsed groups initial state (Task 3.1)
-      collapsedScopes: [],
-      collapsedSubcategories: [],
+      collapsedRealms: [],
+      collapsedLayers: [],
 
       // Actions
       setEnabledNodeTypes: (types) => {
@@ -326,59 +327,59 @@ export const useFilterStore = create<FilterStoreState>()(
 
       removeCustomPreset: (id) => {
         set((state) => {
-          state.customPresets = state.customPresets.filter((p) => p.id !== id);
+          state.customPresets = state.customPresets.filter((p: { id: string }) => p.id !== id);
         });
       },
 
       // Schema mode collapsed groups actions (Task 3.1)
-      toggleScopeCollapsed: (scope) => {
+      toggleRealmCollapsed: (realm) => {
         set((state) => {
-          const idx = state.collapsedScopes.indexOf(scope);
+          const idx = state.collapsedRealms.indexOf(realm);
           if (idx >= 0) {
-            state.collapsedScopes.splice(idx, 1);
+            state.collapsedRealms.splice(idx, 1);
           } else {
-            state.collapsedScopes.push(scope);
+            state.collapsedRealms.push(realm);
           }
         });
       },
 
-      toggleSubcategoryCollapsed: (scope, subcategory) => {
+      toggleLayerCollapsed: (realm, layer) => {
         set((state) => {
-          const key = `${scope}-${subcategory}`;
-          const idx = state.collapsedSubcategories.indexOf(key);
+          const key = `${realm}-${layer}`;
+          const idx = state.collapsedLayers.indexOf(key);
           if (idx >= 0) {
-            state.collapsedSubcategories.splice(idx, 1);
+            state.collapsedLayers.splice(idx, 1);
           } else {
-            state.collapsedSubcategories.push(key);
+            state.collapsedLayers.push(key);
           }
         });
       },
 
-      setSubcategoryCollapsed: (scope, subcategory, collapsed) => {
+      setLayerCollapsed: (realm, layer, collapsed) => {
         set((state) => {
-          const key = `${scope}-${subcategory}`;
-          const idx = state.collapsedSubcategories.indexOf(key);
+          const key = `${realm}-${layer}`;
+          const idx = state.collapsedLayers.indexOf(key);
           if (collapsed && idx < 0) {
-            state.collapsedSubcategories.push(key);
+            state.collapsedLayers.push(key);
           } else if (!collapsed && idx >= 0) {
-            state.collapsedSubcategories.splice(idx, 1);
+            state.collapsedLayers.splice(idx, 1);
           }
         });
       },
 
-      isScopeCollapsed: (scope) => {
-        return get().collapsedScopes.includes(scope);
+      isRealmCollapsed: (realm) => {
+        return get().collapsedRealms.includes(realm);
       },
 
-      isSubcategoryCollapsed: (scope, subcategory) => {
-        const key = `${scope}-${subcategory}`;
-        return get().collapsedSubcategories.includes(key);
+      isLayerCollapsed: (realm, layer) => {
+        const key = `${realm}-${layer}`;
+        return get().collapsedLayers.includes(key);
       },
 
       resetSchemaFilters: () => {
         set((state) => {
-          state.collapsedScopes = [];
-          state.collapsedSubcategories = [];
+          state.collapsedRealms = [];
+          state.collapsedLayers = [];
         });
       },
     })),
@@ -438,8 +439,8 @@ export const useFilterStore = create<FilterStoreState>()(
         activeOnly: state.activeOnly,
         localeFamily: state.localeFamily,
         // Schema mode collapsed groups (Task 3.1)
-        collapsedScopes: state.collapsedScopes,
-        collapsedSubcategories: state.collapsedSubcategories,
+        collapsedRealms: state.collapsedRealms,
+        collapsedLayers: state.collapsedLayers,
       }) as FilterStoreState,
     }
   )

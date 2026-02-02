@@ -1,11 +1,11 @@
-# models/nodes/locale/locale-rules-formatting.yaml
+# models/nodes/global/knowledge/locale-rules-formatting.yaml
 # LocaleRulesFormatting - HOW to format factual data (dates, numbers, currency)
 #
 # Stability: High - Changes only on standard updates (CLDR).
 
 node:
   name: LocaleRulesFormatting
-  category: locale
+  locale_behavior: knowledge
   icon: "📐"
   description: "Formatting rules for dates, numbers, currency, addresses"
 

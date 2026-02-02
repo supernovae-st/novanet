@@ -96,8 +96,8 @@ export {
 // Magnetic layout data fetching
 export {
   useMagneticData,
-  type ScopeData,
-  type SubcategoryData,
+  type RealmData,
+  type LayerData,
   type OrganizingPrinciples,
   type UseMagneticDataReturn,
 } from './useMagneticData';

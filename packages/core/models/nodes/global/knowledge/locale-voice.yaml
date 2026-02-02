@@ -1,11 +1,11 @@
-# models/nodes/locale/locale-voice.yaml
+# models/nodes/global/knowledge/locale-voice.yaml
 # LocaleVoice - HOW to speak for a locale
 #
 # Stability: Medium - update quarterly for trends
 
 node:
   name: LocaleVoice
-  category: locale
+  locale_behavior: knowledge
   icon: "🎭"
   description: "Formality, directness, warmth, humor guidelines for a locale"
 

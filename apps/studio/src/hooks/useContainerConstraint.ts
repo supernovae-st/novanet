@@ -76,7 +76,7 @@ const DEFAULT_OPTIONS: Required<ContainerConstraintOptions> = {
 };
 
 /** Node type identifiers for container nodes */
-const CONTAINER_TYPES = ['scopeGroup', 'subcategoryGroup'];
+const CONTAINER_TYPES = ['realmGroup', 'layerGroup'];
 
 // =============================================================================
 // Utility Functions
@@ -273,7 +273,7 @@ export function useContainerConstraint(
         let updatedNodes = expandContainer(node.parentId!, expansion, currentNodes);
 
         // Step 2: Check if the parent container now needs to expand its grandparent
-        // (e.g., subcategoryGroup expanding might push against scopeGroup)
+        // (e.g., layerGroup expanding might push against realmGroup)
         const parentNode = updatedNodes.find((n) => n.id === node.parentId);
         if (parentNode?.parentId) {
           const grandparentContainer = containers.get(parentNode.parentId);

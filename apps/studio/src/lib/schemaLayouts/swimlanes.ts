@@ -3,18 +3,18 @@ import type { Node, Edge } from '@xyflow/react';
 import type { HierarchicalSchemaData } from '@novanet/core/graph';
 import type { SchemaLayoutResult } from './types';
 import {
-  SCOPE_CONFIGS,
+  REALM_CONFIGS,
   NODE_WIDTH,
   NODE_HEIGHT,
   NODE_GAP,
-  SUBCAT_GAP,
-  SUBCAT_PADDING,
-  SUBCAT_HEADER,
-  SCOPE_GAP,
-  SCOPE_PADDING,
-  SCOPE_HEADER,
+  LAYER_GAP,
+  LAYER_PADDING,
+  LAYER_HEADER,
+  REALM_GAP,
+  REALM_PADDING,
+  REALM_HEADER,
 } from './types';
-import type { Scope } from '@novanet/core/types';
+import type { Realm } from '@novanet/core/types';
 
 /**
  * Swimlanes Layout - Horizontal bands per scope
@@ -40,87 +40,87 @@ export function applySwimlaneLayout(
   const NODE_STEP_X = NODE_WIDTH + NODE_GAP;     // Horizontal step between nodes
   const NODE_STEP_Y = NODE_HEIGHT + NODE_GAP;    // Vertical step between nodes
 
-  const scopeOrder: Scope[] = ['Project', 'Global', 'Shared'];
+  const realmOrder: Realm[] = ['project', 'global', 'shared'];
   let currentY = 0;
 
-  for (const scope of scopeOrder) {
-    const scopeDef = hierarchy.scopes[scope];
-    if (!scopeDef) continue;
+  for (const realm of realmOrder) {
+    const realmDef = hierarchy.realms[realm];
+    if (!realmDef) continue;
 
-    const scopeId = `scope-${scope}`;
-    const config = SCOPE_CONFIGS.find(c => c.scope === scope);
+    const realmId = `scope-${realm}`;
+    const config = REALM_CONFIGS.find(c => c.realm === realm);
     if (!config) {
-      console.error(`[swimlanes] Missing config for scope: ${scope}`);
+      console.error(`[swimlanes] Missing config for realm: ${realm}`);
       continue;
     }
 
     // Collect all nodes for this scope
-    const scopeNodes: string[] = [];
-    for (const [_, subcatMeta] of Object.entries(scopeDef.subcategories)) {
-      scopeNodes.push(...subcatMeta.nodeTypes);
+    const realmNodes: string[] = [];
+    for (const [_, layerMeta] of Object.entries(realmDef.layers)) {
+      realmNodes.push(...layerMeta.nodeTypes);
     }
 
     // Lane dimensions from unified constants
-    const laneWidth = Math.max(4000, scopeNodes.length * NODE_STEP_X + SCOPE_PADDING * 2);
+    const laneWidth = Math.max(4000, realmNodes.length * NODE_STEP_X + REALM_PADDING * 2);
     const laneHeight = Math.max(
       800,
-      NODE_HEIGHT + SUBCAT_PADDING * 2 + SUBCAT_HEADER + SCOPE_PADDING * 2 + SCOPE_HEADER
+      NODE_HEIGHT + LAYER_PADDING * 2 + LAYER_HEADER + REALM_PADDING * 2 + REALM_HEADER
     );
 
     // Scope group node (swimlane)
     nodes.push({
-      id: scopeId,
-      type: 'scopeGroup',
+      id: realmId,
+      type: 'realmGroup',
       position: { x: 0, y: currentY },
       style: { width: laneWidth, height: laneHeight },
       data: {
-        scope,
-        label: scopeDef.label,
-        icon: scopeDef.icon,
-        nodeCount: scopeNodes.length,
+        realm,
+        label: realmDef.label,
+        icon: realmDef.icon,
+        nodeCount: realmNodes.length,
       },
     });
 
     // Layout subcategories horizontally within the lane
-    let currentX = SCOPE_PADDING;
-    let subcatY = SCOPE_PADDING + SCOPE_HEADER;
+    let currentX = REALM_PADDING;
+    let layerY = REALM_PADDING + REALM_HEADER;
 
-    for (const [subcatName, subcatMeta] of Object.entries(scopeDef.subcategories)) {
-      if (subcatMeta.nodeTypes.length === 0) continue;
+    for (const [layerName, layerMeta] of Object.entries(realmDef.layers)) {
+      if (layerMeta.nodeTypes.length === 0) continue;
 
-      const subcatId = `subcat-${scope}-${subcatName}`;
-      const subcatWidth = subcatMeta.nodeTypes.length * NODE_STEP_X + SUBCAT_PADDING * 2;
-      const subcatHeight = laneHeight - SCOPE_PADDING * 2 - SCOPE_HEADER;
+      const layerId = `layer-${realm}-${layerName}`;
+      const layerWidth = layerMeta.nodeTypes.length * NODE_STEP_X + LAYER_PADDING * 2;
+      const layerHeight = laneHeight - REALM_PADDING * 2 - REALM_HEADER;
 
       // Subcategory group
       nodes.push({
-        id: subcatId,
-        type: 'subcategoryGroup',
-        parentId: scopeId,
+        id: layerId,
+        type: 'layerGroup',
+        parentId: realmId,
         extent: 'parent',
         draggable: true,
-        position: { x: currentX, y: subcatY },
-        style: { width: subcatWidth, height: subcatHeight },
+        position: { x: currentX, y: layerY },
+        style: { width: layerWidth, height: layerHeight },
         data: {
-          scope,
-          subcategory: subcatName,
-          label: subcatMeta.label,
-          icon: subcatMeta.icon,
-          nodeCount: subcatMeta.nodeTypes.length,
+          realm,
+          layer: layerName,
+          label: layerMeta.label,
+          icon: layerMeta.icon,
+          nodeCount: layerMeta.nodeTypes.length,
         },
       });
 
       // Layout nodes horizontally within subcategory
-      let nodeX = SUBCAT_PADDING;
-      const nodeY = SUBCAT_PADDING + SUBCAT_HEADER + (subcatHeight - SUBCAT_PADDING * 2 - SUBCAT_HEADER - NODE_HEIGHT) / 2;
+      let nodeX = LAYER_PADDING;
+      const nodeY = LAYER_PADDING + LAYER_HEADER + (layerHeight - LAYER_PADDING * 2 - LAYER_HEADER - NODE_HEIGHT) / 2;
 
-      for (const nodeType of subcatMeta.nodeTypes) {
+      for (const nodeType of layerMeta.nodeTypes) {
         const schemaNode = hierarchy.nodes.find(n => n.nodeType === nodeType);
 
         nodes.push({
           id: `schema-${nodeType}`,
           type: 'schemaNode',
-          parentId: subcatId,
+          parentId: layerId,
           extent: 'parent',
           draggable: true,
           position: { x: nodeX, y: nodeY },
@@ -128,18 +128,18 @@ export function applySwimlaneLayout(
             nodeType,
             label: schemaNode?.label || nodeType,
             description: schemaNode?.description || '',
-            scope,
-            subcategory: subcatName,
+            realm,
+            layer: layerName,
           },
         });
 
         nodeX += NODE_STEP_X;
       }
 
-      currentX += subcatWidth + SUBCAT_GAP;
+      currentX += layerWidth + LAYER_GAP;
     }
 
-    currentY += laneHeight + SCOPE_GAP;
+    currentY += laneHeight + REALM_GAP;
   }
 
   // Create edges

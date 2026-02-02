@@ -14,8 +14,7 @@
  * // params: { rootKey: 'page-pricing', locale: 'fr-FR' }
  * ```
  */
-import type { CypherQuery, NodeCategory, NodeType } from './types.js';
-import { NODE_CATEGORIES } from './types.js';
+import type { CypherQuery } from './types.js';
 import { NovaNetFilter } from './NovaNetFilter.js';
 
 // =============================================================================
@@ -165,16 +164,6 @@ export class CypherGenerator {
     // 3. WHERE clauses
     const whereConditions: string[] = [];
 
-    // REMOVED v8.2.0: priority and freshness filtering (YAML v7.11.0 alignment)
-    // if (criteria.filters.priority?.length) {
-    //   whereConditions.push('root.priority IN $priorities');
-    //   params.priorities = criteria.filters.priority;
-    // }
-    // if (criteria.filters.freshness?.length) {
-    //   whereConditions.push('root.freshness IN $freshness');
-    //   params.freshness = criteria.filters.freshness;
-    // }
-
     if (criteria.filters.locale) {
       params.locale = criteria.filters.locale;
     }
@@ -189,15 +178,6 @@ export class CypherGenerator {
     if (criteria.filters.excludeTypes?.length) {
       const excludeConditions = criteria.filters.excludeTypes.map(t => `NOT root:${t}`).join(' AND ');
       whereConditions.push(`(${excludeConditions})`);
-    }
-
-    // Category filtering (expand to node types)
-    if (criteria.filters.categories?.length) {
-      const categoryTypes = this.expandCategories(criteria.filters.categories);
-      if (categoryTypes.length > 0) {
-        const typeConditions = categoryTypes.map(t => `root:${t}`).join(' OR ');
-        whereConditions.push(`(${typeConditions})`);
-      }
     }
 
     // Fulltext search
@@ -251,16 +231,5 @@ export class CypherGenerator {
 
   private static capitalize(str: string): string {
     return str.charAt(0).toUpperCase() + str.slice(1);
-  }
-
-  private static expandCategories(categories: NodeCategory[]): NodeType[] {
-    const types: NodeType[] = [];
-    for (const category of categories) {
-      const categoryTypes = NODE_CATEGORIES[category];
-      if (categoryTypes) {
-        types.push(...categoryTypes);
-      }
-    }
-    return types;
   }
 }

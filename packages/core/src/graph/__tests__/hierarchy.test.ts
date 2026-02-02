@@ -1,110 +1,110 @@
 // packages/core/src/graph/__tests__/hierarchy.test.ts
+// Tests for REALM_HIERARCHY — v9.0.0
 import { describe, it, expect } from 'vitest';
-import { SCOPE_HIERARCHY, getScopeDefinition, getSubcategoryMeta, getSubcategoriesForScope } from '../hierarchy';
-import type { Scope } from '../../types/nodes';
+import { REALM_HIERARCHY, getRealmDefinition, getLayerMeta, getLayersForRealm } from '../hierarchy';
+import type { Realm } from '../../types/nodes';
 
 describe('graph/hierarchy', () => {
-  it('should define all 3 scopes', () => {
-    const scopes = Object.keys(SCOPE_HIERARCHY) as Scope[];
-    expect(scopes).toHaveLength(3);
-    expect(scopes).toContain('Project');
-    expect(scopes).toContain('Global');
-    expect(scopes).toContain('Shared');
+  it('should define all 3 realms', () => {
+    const realms = Object.keys(REALM_HIERARCHY) as Realm[];
+    expect(realms).toHaveLength(3);
+    expect(realms).toContain('project');
+    expect(realms).toContain('global');
+    expect(realms).toContain('shared');
   });
 
-  it('should have correct Project scope structure', () => {
-    const project = SCOPE_HIERARCHY.Project;
+  it('should have correct project realm structure', () => {
+    const project = REALM_HIERARCHY.project;
     expect(project.label).toBe('PROJECT');
     expect(project.icon).toBe('📦');
-    expect(Object.keys(project.subcategories)).toHaveLength(5);
-    expect(project.subcategories.foundation.nodeTypes).toContain('Project');
+    expect(Object.keys(project.layers)).toHaveLength(5);
+    expect(project.layers.foundation.nodeTypes).toContain('Project');
   });
 
-  it('should have correct Global scope structure', () => {
-    const global = SCOPE_HIERARCHY.Global;
+  it('should have correct global realm structure', () => {
+    const global = REALM_HIERARCHY.global;
     expect(global.label).toBe('GLOBAL');
     expect(global.icon).toBe('🌍');
-    expect(Object.keys(global.subcategories)).toHaveLength(2);
-    expect(global.subcategories.config.nodeTypes).toContain('Locale');
-    expect(global.subcategories.knowledge.nodeTypes).toHaveLength(14);
+    expect(Object.keys(global.layers)).toHaveLength(2);
+    expect(global.layers.config.nodeTypes).toContain('Locale');
+    expect(global.layers.knowledge.nodeTypes).toHaveLength(14);
   });
 
-  it('should have correct Shared scope structure', () => {
-    const shared = SCOPE_HIERARCHY.Shared;
+  it('should have correct shared realm structure', () => {
+    const shared = REALM_HIERARCHY.shared;
     expect(shared.label).toBe('SHARED');
     expect(shared.icon).toBe('🎯');
-    expect(Object.keys(shared.subcategories)).toHaveLength(2);
+    expect(Object.keys(shared.layers)).toHaveLength(2);
   });
 
-  it('getScopeDefinition should return scope metadata', () => {
-    const def = getScopeDefinition('Project');
+  it('getRealmDefinition should return realm metadata', () => {
+    const def = getRealmDefinition('project');
     expect(def.label).toBe('PROJECT');
   });
 
-  it('getSubcategoryMeta should return subcategory metadata', () => {
-    const meta = getSubcategoryMeta('Project', 'foundation');
+  it('getLayerMeta should return layer metadata', () => {
+    const meta = getLayerMeta('project', 'foundation');
     expect(meta?.label).toBe('Foundation');
     expect(meta?.nodeTypes).toHaveLength(3);
   });
 
-  it('getSubcategoriesForScope should return all subcategories for a scope', () => {
-    const projectSubcats = getSubcategoriesForScope('Project');
-    expect(projectSubcats).toHaveLength(5);
-    expect(projectSubcats).toContain('foundation');
-    expect(projectSubcats).toContain('structure');
-    expect(projectSubcats).toContain('semantic');
-    expect(projectSubcats).toContain('instruction');
-    expect(projectSubcats).toContain('output');
+  it('getLayersForRealm should return all layers for a realm', () => {
+    const projectLayers = getLayersForRealm('project');
+    expect(projectLayers).toHaveLength(5);
+    expect(projectLayers).toContain('foundation');
+    expect(projectLayers).toContain('structure');
+    expect(projectLayers).toContain('semantic');
+    expect(projectLayers).toContain('instruction');
+    expect(projectLayers).toContain('output');
 
-    const globalSubcats = getSubcategoriesForScope('Global');
-    expect(globalSubcats).toHaveLength(2);
-    expect(globalSubcats).toContain('config');
-    expect(globalSubcats).toContain('knowledge');
+    const globalLayers = getLayersForRealm('global');
+    expect(globalLayers).toHaveLength(2);
+    expect(globalLayers).toContain('config');
+    expect(globalLayers).toContain('knowledge');
 
-    const sharedSubcats = getSubcategoriesForScope('Shared');
-    expect(sharedSubcats).toHaveLength(2);
-    expect(sharedSubcats).toContain('seo');
-    expect(sharedSubcats).toContain('geo');
+    const sharedLayers = getLayersForRealm('shared');
+    expect(sharedLayers).toHaveLength(2);
+    expect(sharedLayers).toContain('seo');
+    expect(sharedLayers).toContain('geo');
   });
 
-  it('should have correct node counts per subcategory', () => {
-    // Project scope: foundation (3), structure (2), semantic (2), instruction (5), output (2) = 14
-    // Source of truth: models/nodes/project/ folder structure
-    expect(SCOPE_HIERARCHY.Project.subcategories.foundation.nodeTypes).toHaveLength(3);
-    expect(SCOPE_HIERARCHY.Project.subcategories.structure.nodeTypes).toHaveLength(2);  // Page, Block
-    expect(SCOPE_HIERARCHY.Project.subcategories.semantic.nodeTypes).toHaveLength(2);
-    expect(SCOPE_HIERARCHY.Project.subcategories.instruction.nodeTypes).toHaveLength(5);  // PageType, PagePrompt, BlockType, BlockPrompt, BlockRules
-    expect(SCOPE_HIERARCHY.Project.subcategories.output.nodeTypes).toHaveLength(2);
+  it('should have correct node counts per layer', () => {
+    // Project realm: foundation (3), structure (2), semantic (2), instruction (5), output (2) = 14
+    expect(REALM_HIERARCHY.project.layers.foundation.nodeTypes).toHaveLength(3);
+    expect(REALM_HIERARCHY.project.layers.structure.nodeTypes).toHaveLength(2);
+    expect(REALM_HIERARCHY.project.layers.semantic.nodeTypes).toHaveLength(2);
+    expect(REALM_HIERARCHY.project.layers.instruction.nodeTypes).toHaveLength(5);
+    expect(REALM_HIERARCHY.project.layers.output.nodeTypes).toHaveLength(2);
 
-    // Global scope: config (1), knowledge (14) = 15
-    expect(SCOPE_HIERARCHY.Global.subcategories.config.nodeTypes).toHaveLength(1);
-    expect(SCOPE_HIERARCHY.Global.subcategories.knowledge.nodeTypes).toHaveLength(14);
+    // Global realm: config (1), knowledge (14) = 15
+    expect(REALM_HIERARCHY.global.layers.config.nodeTypes).toHaveLength(1);
+    expect(REALM_HIERARCHY.global.layers.knowledge.nodeTypes).toHaveLength(14);
 
-    // Shared scope: seo (3), geo (3) = 6
-    expect(SCOPE_HIERARCHY.Shared.subcategories.seo.nodeTypes).toHaveLength(3);
-    expect(SCOPE_HIERARCHY.Shared.subcategories.geo.nodeTypes).toHaveLength(3);
+    // Shared realm: seo (3), geo (3) = 6
+    expect(REALM_HIERARCHY.shared.layers.seo.nodeTypes).toHaveLength(3);
+    expect(REALM_HIERARCHY.shared.layers.geo.nodeTypes).toHaveLength(3);
   });
 
-  it('should have valid scope definitions with required fields', () => {
-    for (const scope of ['Project', 'Global', 'Shared'] as Scope[]) {
-      const def = SCOPE_HIERARCHY[scope];
-      expect(def.scope).toBe(scope);
+  it('should have valid realm definitions with required fields', () => {
+    for (const realm of ['project', 'global', 'shared'] as Realm[]) {
+      const def = REALM_HIERARCHY[realm];
+      expect(def.realm).toBe(realm);
       expect(typeof def.label).toBe('string');
       expect(typeof def.icon).toBe('string');
       expect(typeof def.description).toBe('string');
-      expect(typeof def.subcategories).toBe('object');
+      expect(typeof def.layers).toBe('object');
     }
   });
 
-  it('should have valid subcategory metadata with required fields', () => {
-    for (const scope of ['Project', 'Global', 'Shared'] as Scope[]) {
-      const def = SCOPE_HIERARCHY[scope];
-      for (const [, subcatMeta] of Object.entries(def.subcategories)) {
-        expect(typeof subcatMeta.label).toBe('string');
-        expect(typeof subcatMeta.description).toBe('string');
-        expect(typeof subcatMeta.icon).toBe('string');
-        expect(Array.isArray(subcatMeta.nodeTypes)).toBe(true);
-        expect(subcatMeta.nodeTypes.length).toBeGreaterThan(0);
+  it('should have valid layer metadata with required fields', () => {
+    for (const realm of ['project', 'global', 'shared'] as Realm[]) {
+      const def = REALM_HIERARCHY[realm];
+      for (const [, layerMeta] of Object.entries(def.layers)) {
+        expect(typeof layerMeta.label).toBe('string');
+        expect(typeof layerMeta.description).toBe('string');
+        expect(typeof layerMeta.icon).toBe('string');
+        expect(Array.isArray(layerMeta.nodeTypes)).toBe(true);
+        expect(layerMeta.nodeTypes.length).toBeGreaterThan(0);
       }
     }
   });

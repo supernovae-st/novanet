@@ -1,11 +1,11 @@
-# models/nodes/locale/locale-lexicon.yaml
+# models/nodes/global/knowledge/locale-lexicon.yaml
 # LocaleLexicon - Expression container for a locale
 #
 # Stability: Medium-High - update every 6-12 months
 
 node:
   name: LocaleLexicon
-  category: locale
+  locale_behavior: knowledge
   icon: "📚"
   description: "Expression library and vocabulary rules for a locale"
 

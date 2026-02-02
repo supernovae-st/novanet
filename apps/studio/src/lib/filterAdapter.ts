@@ -1,8 +1,11 @@
 /**
- * FilterAdapter - novanet-core v8.1.0 compatible filter system
+ * FilterAdapter - novanet-core v9.0.0 compatible filter system
  *
  * Mirrors the NovaNetFilter fluent API and CypherGenerator from novanet-core
  * for use in the visualizer without importing the full library.
+ *
+ * Note: NodeCategory here is a studio-specific grouping for filtering,
+ * NOT the removed core NodeCategory from v8.
  */
 
 import type { NodeType } from '@novanet/core/types';
@@ -18,7 +21,8 @@ export type NodeCategory = 'project' | 'content' | 'locale' | 'generation' | 'se
 export type RelationDirection = 'outgoing' | 'incoming' | 'both';
 
 /**
- * Node categories with their types (v8.1.0 - 35 nodes across 6 categories)
+ * Node categories with their types (v9.0.0 - 35 nodes across 6 categories)
+ * Studio-specific grouping for filter presets - unrelated to removed core NodeCategory
  */
 export const NODE_CATEGORIES: Record<NodeCategory, NodeType[]> = {
   // Project category (3 nodes)

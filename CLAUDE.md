@@ -50,10 +50,9 @@ novanet/
 ├── pnpm-workspace.yaml     # Workspace definitions
 ├── packages/
 │   ├── core/               # @novanet/core - types, schemas, filters
-│   ├── db/                 # @novanet/db - Neo4j infrastructure
-│   └── schema-tools/       # @novanet/schema-tools - TS code generation (replaced by Rust in v9)
-├── tools/                  # PLANNED: Rust binary (not yet created)
-│   └── novanet/            # PLANNED: CLI + TUI — v9+
+│   └── db/                 # @novanet/db - Neo4j infrastructure
+├── tools/
+│   └── novanet/            # Rust CLI + TUI — schema generation, validation, queries
 └── apps/
     └── studio/             # @novanet/studio - web visualization
 ```
@@ -99,8 +98,8 @@ pnpm test --filter=@novanet/studio      # Test only studio
 |---------|-------------|
 | @novanet/core | Types, schemas, filters, generators |
 | @novanet/db | Neo4j Docker, seeds, migrations |
-| @novanet/schema-tools | TS code generation (replaced by Rust binary in v9) |
 | @novanet/studio | Web-based graph visualization |
+| tools/novanet | Rust CLI — schema generation, validation, queries |
 
 ---
 
@@ -108,13 +107,12 @@ pnpm test --filter=@novanet/studio      # Test only studio
 
 ```
                     @novanet/core
-                    ↑           ↑
-    @novanet/schema-tools       │
-                                │
-                         @novanet/studio
+                          ↑
+                          │
+                   @novanet/studio
 
 @novanet/db (standalone)
-tools/novanet (PLANNED: Rust, standalone — reads YAML + Neo4j directly)
+tools/novanet (Rust, standalone — reads YAML, writes Cypher/TS/Mermaid)
 ```
 
 ---
