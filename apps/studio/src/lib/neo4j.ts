@@ -86,16 +86,6 @@ export function getDriver(): Driver {
 }
 
 /**
- * Close the Neo4j driver connection
- */
-export async function closeDriver(): Promise<void> {
-  if (driver) {
-    await driver.close();
-    driver = null;
-  }
-}
-
-/**
  * Sleep helper for retry delays
  */
 function sleep(ms: number): Promise<void> {
@@ -145,21 +135,6 @@ export async function verifyConnection(): Promise<boolean> {
   } catch (error) {
     logger.error('Neo4j', 'Connection verification failed', error);
     return false;
-  }
-}
-
-/**
- * Verify connection with strict mode (throws on failure)
- * Use this for health checks where failure should be explicit
- */
-export async function verifyConnectionStrict(): Promise<void> {
-  const d = getDriver();
-  try {
-    await d.verifyConnectivity();
-    logger.info('Neo4j', 'Connection verified successfully');
-  } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unknown error';
-    throw new Error(`Neo4j connection failed: ${message}`);
   }
 }
 

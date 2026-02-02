@@ -11,8 +11,7 @@ export { applyStackedLayout } from './stacked';
 export { applyTargetLayout } from './target';
 export { applyForceClusterLayout } from './forceClusters';
 export { applyElkLayeredLayout, applyElkLayeredLayoutSync } from './elkLayered';
-export { applyMagneticLayout } from './magnetic';
-export type { MagneticLayoutInput } from './magnetic';
+
 
 import type { HierarchicalSchemaData } from '@novanet/core/graph';
 import type { LayoutDirection, SchemaLayoutResult } from './types';

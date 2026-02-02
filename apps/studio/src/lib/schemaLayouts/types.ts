@@ -34,14 +34,13 @@ export interface SchemaLayoutResult {
 /** Layout direction from UI store */
 export type LayoutDirection = 'LR' | 'TB' | 'dagre' | 'radial' | 'force';
 
-/** Schema layout type - includes special layouts like magnetic */
+/** Schema layout type */
 export type SchemaLayoutType =
   | 'swimlanes'
   | 'stacked'
   | 'elkLayered'
   | 'target'
-  | 'forceClusters'
-  | 'magnetic';
+  | 'forceClusters';
 
 /** Realm visual config */
 export interface RealmConfig {

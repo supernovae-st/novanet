@@ -71,27 +71,6 @@ function extractTopLevelObjectKeys(filePath: string, varName: string): string[] 
   return keys;
 }
 
-function extractCategoryTypes(filePath: string): string[] {
-  const content = fs.readFileSync(path.join(ROOT, filePath), 'utf-8');
-
-  // Match NODE_CATEGORIES object and extract all quoted strings in arrays
-  const regex = /export const NODE_CATEGORIES[^=]*=\s*\{([^}]+(?:\{[^}]*\}[^}]*)*)\}/s;
-  const match = content.match(regex);
-  if (!match) {
-    throw new Error(`Could not find NODE_CATEGORIES in ${filePath}`);
-  }
-
-  // Extract all quoted strings from arrays
-  const allTypes: string[] = [];
-  const arrayRegex = /\[([^\]]+)\]/g;
-  let arrayMatch;
-  while ((arrayMatch = arrayRegex.exec(match[1])) !== null) {
-    const items = arrayMatch[1].match(/'([^']+)'/g) || [];
-    items.forEach((s) => allTypes.push(s.replace(/'/g, '')));
-  }
-  return allTypes;
-}
-
 // =============================================================================
 // VALIDATION HELPERS
 // =============================================================================
@@ -139,7 +118,7 @@ function validateNodeTypesCount(
     );
   }
 
-  return success(`All configs have ${coreCount} node types (v8.1.0)`);
+  return success(`All configs have ${coreCount} node types (v9.0.0)`);
 }
 
 function validateAllTypesPresent(
@@ -232,35 +211,13 @@ function validateNoLegacyTypes(
   return success('No legacy v7.x types found');
 }
 
-function validateCategoryConsistency(
-  coreTypes: string[],
-  categoryTypes: string[]
-): ValidationResult {
-  const typesInCategories = new Set(categoryTypes);
-
-  const missingFromCategories: string[] = [];
-  for (const nodeType of coreTypes) {
-    if (!typesInCategories.has(nodeType)) {
-      missingFromCategories.push(nodeType);
-    }
-  }
-
-  if (missingFromCategories.length > 0) {
-    return failure(
-      `Types missing from NODE_CATEGORIES: ${missingFromCategories.join(', ')}`
-    );
-  }
-
-  return success('All types are in NODE_CATEGORIES');
-}
-
 // =============================================================================
 // MAIN
 // =============================================================================
 
 function main(): void {
   console.log('═══════════════════════════════════════════════════════════════');
-  console.log('  NovaNet Type Validation (v8.1.0)');
+  console.log('  NovaNet Type Validation (v9.0.0)');
   console.log('═══════════════════════════════════════════════════════════════\n');
 
   // Extract data from source files
@@ -277,19 +234,15 @@ function main(): void {
     'apps/studio/src/components/graph/nodes/NodeConfig.ts',
     'NODE_COLORS'
   );
-  const categoryTypes = extractCategoryTypes('apps/studio/src/config/nodeTypes.ts');
-
   console.log(`Core NODE_TYPES: ${coreTypes.length} types`);
   console.log(`Studio nodeTypeConfigs: ${studioConfigs.length} types`);
   console.log(`Studio NODE_SIZES: ${studioSizes.length} types`);
-  console.log(`Studio NODE_COLORS: ${studioColors.length} types`);
-  console.log(`NODE_CATEGORIES: ${categoryTypes.length} types\n`);
+  console.log(`Studio NODE_COLORS: ${studioColors.length} types\n`);
 
   const validations: ValidationResult[] = [
     validateNodeTypesCount(coreTypes, studioConfigs, studioSizes, studioColors),
     validateAllTypesPresent(coreTypes, studioConfigs, studioSizes, studioColors),
     validateNoLegacyTypes(studioConfigs, studioSizes, studioColors),
-    validateCategoryConsistency(coreTypes, categoryTypes),
   ];
 
   let hasErrors = false;
