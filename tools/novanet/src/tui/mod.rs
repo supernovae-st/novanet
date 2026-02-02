@@ -3,14 +3,17 @@
 //! Galaxy-themed mission control layout with five areas: mode tabs,
 //! taxonomy tree (Realm > Layer > Kind), Kind detail pane, Cypher preview,
 //! and status bar. Features: fuzzy search (`/`), edge explorer (`e`),
-//! panel cycling, and faceted query filtering.
+//! CRUD dialogs, command palette, boot animation, and visual effects.
 
 mod app;
+mod boot;
 mod dashboard;
 mod detail;
 mod dialogs;
+mod effects;
 mod events;
 mod logo;
+mod onboarding;
 mod palette;
 mod runtime;
 mod search;
