@@ -20,26 +20,23 @@
 
 ## ADR-002: Filter Presets with Keyboard Shortcuts
 
-**Decision:** 10 built-in presets accessible via 1-9 and 0 keys
+**Decision:** 9 built-in presets accessible via 1-8 and 0 keys
 
 **Rationale:**
 - ~19k instances projected at full deployment - too large to show at once
 - Common workflows need quick access
 - Keyboard-first design philosophy
 
-**Presets (v8.2.0):**
-1. Project Overview - Core structure (Project, Pages, Blocks, Concepts)
-2. Full Graph - All 35 node types
-3. Core + Concepts - Project structure with ConceptL10n
-4. All Locales - Locale nodes only
-5. Concepts - Concept + ConceptL10n
-6. Current Locale - Selected locale with all knowledge
-7. Locale + Expressions - Current locale with expressions
-8. Locale Knowledge - Identity, Voice, Culture, Market, Lexicon
-9. Expressions - Expression + LocaleLexicon
-0. Clear Filters - Reset to default view
-
-**v9 Note:** Presets will migrate to faceted filters (Realm/Layer/Trait dimensions).
+**Presets (v9.0.0) — faceted filters using NovaNetFilter API:**
+1. Project Structure - Project, Pages, Blocks hierarchy (byLayer: foundation, structure, semantic)
+2. Generation Chain - Concepts with L10n outputs (byTypes + byLayer: instruction, output)
+3. Locale Knowledge - Locale with all knowledge nodes (byLayer: config, knowledge)
+4. Concept Network - Concepts and semantic links (byTypes: Concept, ConceptL10n, Expression)
+5. Prompts & Rules - AI instructions and validation rules (byLayer: instruction + byTypes: Page, Block)
+6. SEO & GEO - Search optimization data (byLayer: seo, geo)
+7. High Priority - Critical and high priority nodes (withPriority: critical, high)
+8. Realtime Content - Nodes requiring frequent updates (withFreshness: realtime, hourly)
+0. All Nodes - Show everything (no filters)
 
 ---
 
