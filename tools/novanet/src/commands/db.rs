@@ -156,7 +156,7 @@ async fn execute_cypher_file(db: &Db, path: &Path) -> crate::Result<u64> {
 /// Handles:
 /// - `;` as statement delimiter
 /// - `//` single-line comments (stripped)
-/// - String literals in single quotes (`;` inside strings is preserved)
+/// - String literals in single AND double quotes (`;` and `//` inside strings preserved)
 /// - Empty statements are skipped
 pub fn split_cypher_statements(input: &str) -> Vec<String> {
     let mut statements = Vec::new();
@@ -176,15 +176,16 @@ pub fn split_cypher_statements(input: &str) -> Vec<String> {
                 // Preserve the newline for readability
                 current.push('\n');
             }
-            // String literal: consume until closing quote
-            '\'' => {
-                current.push('\'');
+            // String literal (single or double quotes): consume until closing quote
+            '\'' | '"' => {
+                let quote = ch;
+                current.push(quote);
                 loop {
                     match chars.next() {
-                        Some('\'') => {
-                            current.push('\'');
-                            // Check for escaped quote ('')
-                            if chars.peek() == Some(&'\'') {
+                        Some(c) if c == quote => {
+                            current.push(c);
+                            // Check for escaped quote ('' or "")
+                            if chars.peek() == Some(&quote) {
                                 current.push(chars.next().unwrap());
                             } else {
                                 break;
@@ -348,6 +349,35 @@ CREATE CONSTRAINT project_key IF NOT EXISTS FOR (p:Project) REQUIRE p.key IS UNI
         assert!(stmts[0].contains("locale_key"));
         assert!(stmts[1].contains("locale_language"));
         assert!(stmts[2].contains("project_key"));
+    }
+
+    #[test]
+    fn split_preserves_double_quoted_strings() {
+        let input = r#"CREATE (n {name: "hello;world"});"#;
+        let stmts = split_cypher_statements(input);
+        assert_eq!(stmts.len(), 1);
+        assert!(stmts[0].contains(r#""hello;world""#));
+    }
+
+    #[test]
+    fn split_preserves_urls_in_double_quotes() {
+        let input = r#"CREATE (p:Project {
+  key: "project-qrcode-ai",
+  website_url: "https://qrcode-ai.com",
+  created_at: datetime()
+});"#;
+        let stmts = split_cypher_statements(input);
+        assert_eq!(stmts.len(), 1);
+        assert!(stmts[0].contains("https://qrcode-ai.com"));
+    }
+
+    #[test]
+    fn split_double_quote_with_comment_after() {
+        let input = "CREATE (n {url: \"https://example.com\"});\n// a comment\nMATCH (n) RETURN n;";
+        let stmts = split_cypher_statements(input);
+        assert_eq!(stmts.len(), 2);
+        assert!(stmts[0].contains("https://example.com"));
+        assert!(stmts[1].contains("MATCH"));
     }
 
     #[test]
