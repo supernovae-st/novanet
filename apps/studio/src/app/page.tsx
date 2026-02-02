@@ -140,23 +140,24 @@ export default function HomePage() {
   );
   const transitionActions = useAnimationStore(
     useShallow((state) => ({
+      startTransition: state.startTransition,
       setTransitionPhase: state.setTransitionPhase,
       endTransition: state.endTransition,
     }))
   );
 
   // UI action for data mode (used by transition orchestration)
-  const setDataMode = useUIStore((state) => state.setDataMode);
+  const setNavigationMode = useUIStore((state) => state.setNavigationMode);
 
   // ═══════════════════════════════════════════════════════════════════════════
   // DERIVED STATE & HOOKS
   // ═══════════════════════════════════════════════════════════════════════════
 
   // Filtered graph stats (schema mode shows distinct relation types, not edges)
-  const { visibleNodeCount, visibleEdgeCount, isSchemaMode, distinctRelationTypes } = useFilteredGraph();
+  const { visibleNodeCount, visibleEdgeCount, isMetaMode, distinctRelationTypes } = useFilteredGraph();
 
   // Graph data fetching
-  const { fetchData, fetchSchemaData, executeQuery, dataMode, isLoading: isFetching } = useGraphData();
+  const { fetchData, fetchSchemaData, executeQuery, navigationMode, isLoading: isFetching } = useGraphData();
 
   // Stats pill expansion (hover nodes/relations to see type breakdown)
   const [expandedView, setExpandedView] = useState<ExpandedViewType>(null);
@@ -210,7 +211,7 @@ export default function HomePage() {
     if (node) return node;
 
     // Schema mode: handle different node id formats
-    if (dataMode === 'schema') {
+    if (navigationMode === 'meta') {
       const nodeId = uiState.hoveredNodeId;
 
       // Scope containers: scope-{Scope} (e.g., scope-Global, scope-Project)
@@ -253,7 +254,7 @@ export default function HomePage() {
     }
 
     return null;
-  }, [uiState.hoveredNodeId, getNodeById, dataMode]);
+  }, [uiState.hoveredNodeId, getNodeById, navigationMode]);
   const hoveredEdge = useMemo(
     () => (uiState.hoveredEdgeId ? getEdgeById(uiState.hoveredEdgeId) : null),
     [uiState.hoveredEdgeId, getEdgeById]
@@ -284,28 +285,28 @@ export default function HomePage() {
     }
   }, [filterState.enabledNodeTypes, filterState.activePresetId, filterActions, queryActions]);
 
-  // Track previous dataMode to detect changes
-  const prevDataModeRef = useRef<typeof dataMode | null>(null);
+  // Track previous navigationMode to detect changes
+  const prevNavigationModeRef = useRef<typeof navigationMode | null>(null);
 
-  // Fetch initial data OR re-fetch when dataMode changes (e.g., from URL sync)
+  // Fetch initial data OR re-fetch when navigationMode changes (e.g., from URL sync)
   useEffect(() => {
     if (isFetching) return;
 
     // Check if this is a mode change (vs initial load)
     const isInitialLoad = totalNodes === 0;
-    const modeChanged = prevDataModeRef.current !== null && prevDataModeRef.current !== dataMode;
+    const modeChanged = prevNavigationModeRef.current !== null && prevNavigationModeRef.current !== navigationMode;
 
     // Fetch on initial load OR mode change
     if (isInitialLoad || modeChanged) {
-      if (dataMode === 'schema') {
+      if (navigationMode === 'meta') {
         fetchSchemaData();
       } else {
         fetchData({ limit: DEFAULT_FETCH_LIMIT });
       }
     }
 
-    prevDataModeRef.current = dataMode;
-  }, [totalNodes, isFetching, fetchData, fetchSchemaData, dataMode]);
+    prevNavigationModeRef.current = navigationMode;
+  }, [totalNodes, isFetching, fetchData, fetchSchemaData, navigationMode]);
 
   // ═══════════════════════════════════════════════════════════════════════════
   // MATRIX TRANSITION ORCHESTRATION
@@ -326,8 +327,8 @@ export default function HomePage() {
       const timer = setTimeout(() => {
         // Switch to fetch phase and update data mode
         transitionActions.setTransitionPhase('fetch');
-        setDataMode(targetMode);
-        // Data fetch is triggered automatically by the dataMode change effect above
+        setNavigationMode(targetMode);
+        // Data fetch is triggered automatically by the navigationMode change effect above
       }, 400);
       return () => clearTimeout(timer);
     }
@@ -350,7 +351,7 @@ export default function HomePage() {
     transitionState.transitionPhase,
     transitionState.targetMode,
     isFetching,
-    setDataMode,
+    setNavigationMode,
     transitionActions,
   ]);
 
@@ -405,6 +406,18 @@ export default function HomePage() {
       if (e.key === 'l' && !e.metaKey && !e.ctrlKey && !e.shiftKey) {
         e.preventDefault();
         uiActions.toggleEdgeLabels();
+        return;
+      }
+
+      // Cycle navigation mode (N) - triggers Matrix transition
+      if (e.key === 'n' && !e.metaKey && !e.ctrlKey && !e.shiftKey) {
+        e.preventDefault();
+        if (!transitionState.isTransitioning) {
+          const modes: typeof navigationMode[] = ['data', 'meta', 'overlay', 'query'];
+          const idx = modes.indexOf(navigationMode);
+          const nextMode = modes[(idx + 1) % modes.length];
+          transitionActions.startTransition(nextMode);
+        }
         return;
       }
 
@@ -472,7 +485,7 @@ export default function HomePage() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [uiActions, filterActions, shortcutsOpen, closeShortcuts, openPalette, openAiSearch]);
+  }, [uiActions, filterActions, shortcutsOpen, closeShortcuts, openPalette, openAiSearch, navigationMode, transitionState.isTransitioning, transitionActions]);
 
   // ═══════════════════════════════════════════════════════════════════════════
   // MEMOIZED HANDLERS
@@ -480,12 +493,12 @@ export default function HomePage() {
 
   // Refresh data
   const handleRefresh = useCallback(() => {
-    if (dataMode === 'schema') {
+    if (navigationMode === 'meta') {
       fetchSchemaData();
     } else {
       fetchData({ limit: DEFAULT_FETCH_LIMIT });
     }
-  }, [fetchData, fetchSchemaData, dataMode]);
+  }, [fetchData, fetchSchemaData, navigationMode]);
 
   // Note: Data mode changes are handled by the effect above
   // The toggle only updates the store, the effect fetches the data
@@ -641,7 +654,7 @@ export default function HomePage() {
             {!uiState.focusMode && (
               <div className={cn('absolute top-4 left-4 right-4 z-30 flex flex-col', gapTokens.spacious)}>
                 {/* Row 1: QueryPill (full-width) - only in Data mode */}
-                {dataMode === 'data' && (
+                {navigationMode === 'data' && (
                   <QueryPill className="w-full" onRun={handleRunQuery} />
                 )}
                 {/* Row 2: Stats (left) + Context Picker (right) */}
@@ -652,13 +665,13 @@ export default function HomePage() {
                       <div className={cn('flex items-center', gapTokens.default)}>
                         <StatsCounter
                           nodeCount={visibleNodeCount}
-                          edgeCount={isSchemaMode ? distinctRelationTypes : visibleEdgeCount}
+                          edgeCount={isMetaMode ? distinctRelationTypes : visibleEdgeCount}
                           isLoading={queryState.isExecuting}
                           expandedView={expandedView}
                           onHoverNodes={() => openExpanded('nodes')}
                           onHoverRelations={() => openExpanded('relations')}
                           onHoverLeave={scheduleCloseExpanded}
-                          isSchemaMode={isSchemaMode}
+                          isMetaMode={isMetaMode}
                         />
                         {visibleNodeCount > 0 && (
                           <>
@@ -682,7 +695,7 @@ export default function HomePage() {
                     </div>
                   </Pill>
                   <Pill size="md">
-                    {dataMode === 'schema' ? <ViewPicker /> : <ContextPicker />}
+                    {navigationMode === 'meta' ? <ViewPicker /> : <ContextPicker />}
                   </Pill>
                 </div>
               </div>

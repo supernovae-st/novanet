@@ -10,9 +10,8 @@ export type LayoutDirection = 'TB' | 'LR' | 'dagre' | 'radial' | 'force';
 // Layout mode: containers (hardcoded groups) vs magnetic (Neo4j-driven attractors)
 export type LayoutMode = 'containers' | 'magnetic';
 
-// Data mode: real instances vs ontological schema
-// TODO(v9): Rename DataMode -> NavigationMode, expand to 'data'|'meta'|'overlay'|'query'
-export type DataMode = 'data' | 'schema';
+// Navigation mode: how the user explores the graph
+export type NavigationMode = 'data' | 'meta' | 'overlay' | 'query';
 
 // Modal types - only one can be open at a time
 export type ModalType = 'command-palette' | 'keyboard-shortcuts' | 'ai-chat' | 'cypher-editor' | 'locale-picker' | 'project-picker' | null;
@@ -62,14 +61,14 @@ interface UIStoreState extends UIState, SelectionState {
   /** Counter to force re-layout when spacing changes */
   spacingVersion: number;
 
-  // Data mode: real instances vs ontological schema
-  dataMode: DataMode;
+  // Navigation mode: how the user explores the graph
+  navigationMode: NavigationMode;
 
   // View actions
   setViewMode: (mode: ViewMode) => void;
   toggleViewMode: () => void;
-  setDataMode: (mode: DataMode) => void;
-  toggleDataMode: () => void;
+  setNavigationMode: (mode: NavigationMode) => void;
+  cycleNavigationMode: () => void;
   toggleSidebar: () => void;
   togglePanel: () => void;
   toggleFocusMode: () => void;
@@ -121,8 +120,8 @@ export const selectSelectedEdgeData = (state: UIStoreState) => state.selectedEdg
 /** Selector for hoveredConnectedNodeIds - use with useUIStore(selectHoveredConnectedNodeIds) */
 export const selectHoveredConnectedNodeIds = (state: UIStoreState) => state.hoveredConnectedNodeIds;
 
-/** Selector for dataMode - use with useUIStore(selectDataMode) */
-export const selectDataMode = (state: UIStoreState) => state.dataMode;
+/** Selector for navigationMode - use with useUIStore(selectNavigationMode) */
+export const selectNavigationMode = (state: UIStoreState) => state.navigationMode;
 
 /** Selector for layoutDirection - use with useUIStore(selectLayoutDirection) */
 export const selectLayoutDirection = (state: UIStoreState) => state.layoutDirection;
@@ -154,7 +153,7 @@ export const useUIStore = create<UIStoreState>()(
       spacingPreset: DEFAULT_SPACING_PRESET,
       spacingValue: 100, // 0=compact, 50=normal, 100=spacious
       spacingVersion: 0,
-      dataMode: 'data' as DataMode,
+      navigationMode: 'data' as NavigationMode,
 
       // Selection state
       selectedNodeId: null,
@@ -181,15 +180,17 @@ export const useUIStore = create<UIStoreState>()(
         });
       },
 
-      setDataMode: (mode) => {
+      setNavigationMode: (mode) => {
         set((state) => {
-          state.dataMode = mode;
+          state.navigationMode = mode;
         });
       },
 
-      toggleDataMode: () => {
+      cycleNavigationMode: () => {
         set((state) => {
-          state.dataMode = state.dataMode === 'data' ? 'schema' : 'data';
+          const modes: NavigationMode[] = ['data', 'meta', 'overlay', 'query'];
+          const idx = modes.indexOf(state.navigationMode);
+          state.navigationMode = modes[(idx + 1) % modes.length];
         });
       },
 
@@ -372,9 +373,9 @@ export const useUIStore = create<UIStoreState>()(
         layoutMode: state.layoutMode,
         spacingPreset: state.spacingPreset,
         spacingValue: state.spacingValue,
-        dataMode: state.dataMode,
+        navigationMode: state.navigationMode,
       }),
-      version: 9,
+      version: 10,
       migrate: (persistedState: unknown, version: number) => {
         if (version < 9) {
           // v9: clear stale v8 state, reset to defaults
@@ -387,7 +388,17 @@ export const useUIStore = create<UIStoreState>()(
             layoutMode: 'containers',
             spacingPreset: DEFAULT_SPACING_PRESET,
             spacingValue: 100,
-            dataMode: 'data',
+            navigationMode: 'data',
+          };
+        }
+        if (version < 10) {
+          // v10: DataMode -> NavigationMode, 'schema' -> 'meta'
+          const prev = persistedState as Record<string, unknown>;
+          const oldMode = prev.dataMode ?? prev.navigationMode ?? 'data';
+          return {
+            ...prev,
+            dataMode: undefined,
+            navigationMode: oldMode === 'schema' ? 'meta' : oldMode,
           };
         }
         return persistedState as UIStoreState;

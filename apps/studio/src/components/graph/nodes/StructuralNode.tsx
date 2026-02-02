@@ -54,7 +54,7 @@ export const StructuralNode = memo(function StructuralNode(props: NodeProps<Stru
   const width = getCardWidth(data.type);
   const isDimmed = data.dimmed === true;
   const isHoverDimmed = data.hoverDimmed === true;
-  const isSchemaMode = data.isSchemaMode === true;
+  const isMetaMode = data.isMetaMode === true;
 
   // Shared interaction state management
   const {
@@ -134,8 +134,8 @@ export const StructuralNode = memo(function StructuralNode(props: NodeProps<Stru
             <GlassmorphismEffects borderRadius={NODE_DESIGN.radius.innerSelected} />
           )}
 
-          {/* Blueprint overlay for schema mode */}
-          {isSchemaMode && (
+          {/* Blueprint overlay for meta mode */}
+          {isMetaMode && (
             <BlueprintOverlay
               color={colors.primary}
               selected={selected}

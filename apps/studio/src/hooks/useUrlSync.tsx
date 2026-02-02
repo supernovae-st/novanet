@@ -5,7 +5,9 @@
 import { useEffect, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useViewStore } from '@/stores/viewStore';
-import { useUIStore, selectDataMode, type DataMode } from '@/stores/uiStore';
+import { useUIStore, selectNavigationMode, type NavigationMode } from '@/stores/uiStore';
+
+const VALID_MODES: NavigationMode[] = ['data', 'meta', 'overlay', 'query'];
 
 /**
  * Internal hook that uses useSearchParams (requires Suspense boundary)
@@ -15,9 +17,9 @@ function useUrlSyncInternal() {
   const searchParams = useSearchParams();
   const { activeViewId, params, syncFromURL, toURLParams } = useViewStore();
 
-  // DataMode from uiStore
-  const dataMode = useUIStore(selectDataMode);
-  const setDataMode = useUIStore((state) => state.setDataMode);
+  // NavigationMode from uiStore
+  const navigationMode = useUIStore(selectNavigationMode);
+  const setNavigationMode = useUIStore((state) => state.setNavigationMode);
 
   const initialized = useRef(false);
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
@@ -28,15 +30,17 @@ function useUrlSyncInternal() {
       // Sync viewStore
       syncFromURL(searchParams);
 
-      // Sync dataMode from URL (?mode=data|schema)
+      // Sync navigationMode from URL (?mode=data|meta|overlay|query)
       const urlMode = searchParams.get('mode');
-      if (urlMode === 'data' || urlMode === 'schema') {
-        setDataMode(urlMode as DataMode);
+      // Backwards compat: ?mode=schema -> meta
+      const resolvedMode = urlMode === 'schema' ? 'meta' : urlMode;
+      if (resolvedMode && VALID_MODES.includes(resolvedMode as NavigationMode)) {
+        setNavigationMode(resolvedMode as NavigationMode);
       }
 
       initialized.current = true;
     }
-  }, [searchParams, syncFromURL, setDataMode]);
+  }, [searchParams, syncFromURL, setNavigationMode]);
 
   // Sync store changes to URL (debounced)
   useEffect(() => {
@@ -49,13 +53,13 @@ function useUrlSyncInternal() {
 
     // Debounce URL updates by 300ms
     debounceRef.current = setTimeout(() => {
-      // Build combined URL params (viewStore + dataMode)
+      // Build combined URL params (viewStore + navigationMode)
       const newParams = toURLParams();
 
-      // Add dataMode to URL params
-      if (dataMode !== 'data') {
+      // Add navigationMode to URL params
+      if (navigationMode !== 'data') {
         // Only add mode param if not default (data)
-        newParams.set('mode', dataMode);
+        newParams.set('mode', navigationMode);
       } else {
         // Remove mode param if default
         newParams.delete('mode');
@@ -75,7 +79,7 @@ function useUrlSyncInternal() {
         clearTimeout(debounceRef.current);
       }
     };
-  }, [activeViewId, params, dataMode, router, searchParams, toURLParams]);
+  }, [activeViewId, params, navigationMode, router, searchParams, toURLParams]);
 }
 
 /**

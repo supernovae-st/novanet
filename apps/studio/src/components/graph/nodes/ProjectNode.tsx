@@ -45,7 +45,7 @@ export const ProjectNode = memo(function ProjectNode(props: NodeProps<ProjectNod
   const { data, selected = false } = props;
   const isDimmed = data.dimmed === true;
   const isHoverDimmed = data.hoverDimmed === true;
-  const isSchemaMode = data.isSchemaMode === true;
+  const isMetaMode = data.isMetaMode === true;
   const [imageError, setImageError] = useState(false);
 
   // Shared interaction state management
@@ -118,8 +118,8 @@ export const ProjectNode = memo(function ProjectNode(props: NodeProps<ProjectNod
             <GlassmorphismEffects borderRadius={NODE_DESIGN.radius.inner} />
           )}
 
-          {/* Blueprint overlay for schema mode */}
-          {isSchemaMode && (
+          {/* Blueprint overlay for meta mode */}
+          {isMetaMode && (
             <BlueprintOverlay
               color={PRIMARY}
               selected={selected}

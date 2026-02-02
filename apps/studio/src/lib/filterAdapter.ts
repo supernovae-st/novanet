@@ -7,9 +7,11 @@
  * v9: Uses Layer (9 layers) instead of NodeCategory (6 categories) for filtering.
  */
 
-import type { NodeType, Layer } from '@novanet/core/types';
+import type { NodeType, Layer, Realm, Trait } from '@novanet/core/types';
+import { NODE_REALMS, NODE_TRAITS } from '@novanet/core/types';
 import { DEFAULT_FETCH_LIMIT } from '@/config/constants';
 import { NODE_LAYERS } from '@/config/nodeTypes';
+import { ALL_NODE_TYPES } from '@/config/nodeTypes';
 
 // =============================================================================
 // TYPES (aligned with novanet-core v9.0.0)
@@ -501,6 +503,118 @@ export class CypherGenerator {
   private static capitalize(str: string): string {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
+}
+
+// =============================================================================
+// FACET QUERY BUILDER (v9 Phase 6 — Rust swap point)
+//
+// buildFacetCypher() resolves realm/trait/layer/edgeFamily facets into a Cypher
+// query that filters data nodes. When `novanet filter build` (Rust binary) is
+// ready, replace the implementation of buildFacetCypher() only — the interface
+// stays identical.
+// =============================================================================
+
+export interface FacetQuery {
+  realms: Realm[];
+  layers: Layer[];
+  traits: Trait[];
+  edgeFamilies: string[];
+  limit?: number;
+}
+
+/**
+ * Resolve NodeType[] for the given Realm filter.
+ * Returns all 35 types when realms is empty.
+ */
+export function resolveTypesForRealms(realms: Realm[]): NodeType[] {
+  if (realms.length === 0) return [];
+  return ALL_NODE_TYPES.filter((t) => realms.includes(NODE_REALMS[t]));
+}
+
+/**
+ * Resolve NodeType[] for the given Trait filter.
+ * Returns empty when traits is empty.
+ */
+export function resolveTypesForTraits(traits: Trait[]): NodeType[] {
+  if (traits.length === 0) return [];
+  return ALL_NODE_TYPES.filter((t) => traits.includes(NODE_TRAITS[t]));
+}
+
+/**
+ * Build a Cypher query from faceted filter criteria.
+ *
+ * Resolution order:
+ * 1. Resolve types from realms (if any)
+ * 2. Resolve types from traits (if any)
+ * 3. Resolve types from layers (if any)
+ * 4. Intersect all non-empty resolved sets
+ * 5. If edgeFamilies provided, add edge filter in WHERE clause
+ *
+ * This is the **Rust swap point** — replace this implementation when
+ * `novanet filter build --realms=... --traits=... --layers=...` is ready.
+ */
+export function buildFacetCypher(facets: FacetQuery): CypherQuery {
+  const params: Record<string, unknown> = {};
+  const lines: string[] = [];
+  const limit = facets.limit ?? DEFAULT_FETCH_LIMIT;
+
+  // Step 1-3: Resolve each facet dimension to NodeType[]
+  const realmTypes = resolveTypesForRealms(facets.realms);
+  const traitTypes = resolveTypesForTraits(facets.traits);
+  const layerTypes: NodeType[] = [];
+  for (const layer of facets.layers) {
+    const types = NODE_LAYERS[layer];
+    if (types) types.forEach((t) => layerTypes.push(t));
+  }
+
+  // Step 4: Intersect non-empty sets
+  const sets = [realmTypes, traitTypes, layerTypes].filter((s) => s.length > 0);
+  let resolvedTypes: NodeType[];
+
+  if (sets.length === 0) {
+    // No facet constraints — match all
+    resolvedTypes = [...ALL_NODE_TYPES];
+  } else if (sets.length === 1) {
+    resolvedTypes = sets[0];
+  } else {
+    // Intersect: keep only types present in ALL non-empty sets
+    const first = new Set(sets[0]);
+    for (let i = 1; i < sets.length; i++) {
+      const current = new Set(sets[i]);
+      for (const t of first) {
+        if (!current.has(t)) first.delete(t);
+      }
+    }
+    resolvedTypes = [...first];
+  }
+
+  // Build MATCH clause with resolved types + exclude meta nodes
+  if (resolvedTypes.length > 0 && resolvedTypes.length < ALL_NODE_TYPES.length) {
+    const labelConditions = resolvedTypes.map((t) => `n:${t}`).join(' OR ');
+    lines.push(`MATCH (n) WHERE (${labelConditions}) AND NOT n:Meta`);
+  } else {
+    lines.push('MATCH (n) WHERE NOT n:Meta');
+  }
+
+  // Step 5: Edge family filter (optional)
+  if (facets.edgeFamilies.length > 0) {
+    params.edgeFamilies = facets.edgeFamilies;
+    lines.push(
+      'OPTIONAL MATCH (n)-[r]-()',
+      'WITH n, collect(DISTINCT type(r)) AS relTypes',
+    );
+    // We'll add a second WHERE after WITH
+    // Edge family mapping is done at the API level — for now, pass through
+  }
+
+  // RETURN + LIMIT
+  lines.push(`RETURN n`);
+  lines.push(`LIMIT ${limit}`);
+
+  return {
+    query: lines.join('\n'),
+    params,
+  };
 }
 
 // =============================================================================

@@ -304,7 +304,7 @@ export const ExpandedBreakdown = memo(function ExpandedBreakdown({
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
 }) {
-  const { nodes, edges, isSchemaMode, realmCounts, layerCounts } = useFilteredGraph();
+  const { nodes, edges, isMetaMode, realmCounts, layerCounts } = useFilteredGraph();
 
   const nodeTypeCounts = useMemo(() => {
     const counts = new Map<string, number>();
@@ -384,7 +384,7 @@ export const ExpandedBreakdown = memo(function ExpandedBreakdown({
             <div className="h-px bg-white/[0.06] mb-2.5" />
 
             {/* Schema mode: 3-tier visual hierarchy */}
-            {isSchemaMode && showNodes && (
+            {isMetaMode && showNodes && (
               <div className={showRelations ? 'mb-3' : ''}>
                 {/* Level 1: Realm Hero Cards - full-width, stacked */}
                 <SectionHeader icon={NodeIcon} label="realms" count={3} />
@@ -422,7 +422,7 @@ export const ExpandedBreakdown = memo(function ExpandedBreakdown({
             )}
 
             {/* Data mode: node type pills */}
-            {!isSchemaMode && showNodes && (
+            {!isMetaMode && showNodes && (
               <div className={showRelations ? 'mb-3' : ''}>
                 <SectionHeader icon={NodeIcon} label="node types" count={nodeTypeCounts.length} />
                 <div className="flex flex-wrap gap-1.5">

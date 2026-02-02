@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import type { Realm, Layer, NodeType } from '@novanet/core/types';
+import type { Realm, Layer, Trait, NodeType } from '@novanet/core/types';
 import type { FilterPreset } from '@/types';
 import { CORE_TYPES, ALL_NODE_TYPES, NODE_LAYERS } from '@/config/nodeTypes';
 import { DEFAULT_PRESET } from '@/config/presets';
@@ -29,6 +29,11 @@ interface ExtendedFilterState {
   activeOnly: boolean;
   localeFamily: string | null;
 
+  // Navigation query facets (v9 Phase 6)
+  realmFilter: Realm[];
+  traitFilter: Trait[];
+  edgeFamilyFilter: string[];
+
   // Schema mode collapsed groups (Task 3.1)
   collapsedRealms: Realm[];
   collapsedLayers: string[]; // Format: "Realm-layer"
@@ -50,6 +55,14 @@ interface FilterStoreState extends ExtendedFilterState {
   toggleLayer: (layer: Layer) => void;
   setActiveOnly: (active: boolean) => void;
   setLocaleFamily: (family: string | null) => void;
+
+  // Navigation query facet actions (v9 Phase 6)
+  setRealmFilter: (realms: Realm[]) => void;
+  toggleRealm: (realm: Realm) => void;
+  setTraitFilter: (traits: Trait[]) => void;
+  toggleTrait: (trait: Trait) => void;
+  setEdgeFamilyFilter: (families: string[]) => void;
+  toggleEdgeFamily: (family: string) => void;
 
   // Preset actions
   applyViewPreset: (presetId: string) => void;
@@ -94,6 +107,11 @@ export const useFilterStore = create<FilterStoreState>()(
       layerFilter: [],
       activeOnly: false,
       localeFamily: null,
+
+      // Navigation query facets (v9 Phase 6)
+      realmFilter: [],
+      traitFilter: [],
+      edgeFamilyFilter: [],
 
       // Schema mode collapsed groups initial state (Task 3.1)
       collapsedRealms: [],
@@ -213,6 +231,64 @@ export const useFilterStore = create<FilterStoreState>()(
         });
       },
 
+      // Navigation query facet actions (v9 Phase 6)
+      setRealmFilter: (realms) => {
+        set((state) => {
+          state.realmFilter = realms;
+          state.activePresetId = null;
+        });
+      },
+
+      toggleRealm: (realm) => {
+        set((state) => {
+          const idx = state.realmFilter.indexOf(realm);
+          if (idx >= 0) {
+            state.realmFilter.splice(idx, 1);
+          } else {
+            state.realmFilter.push(realm);
+          }
+          state.activePresetId = null;
+        });
+      },
+
+      setTraitFilter: (traits) => {
+        set((state) => {
+          state.traitFilter = traits;
+          state.activePresetId = null;
+        });
+      },
+
+      toggleTrait: (trait) => {
+        set((state) => {
+          const idx = state.traitFilter.indexOf(trait);
+          if (idx >= 0) {
+            state.traitFilter.splice(idx, 1);
+          } else {
+            state.traitFilter.push(trait);
+          }
+          state.activePresetId = null;
+        });
+      },
+
+      setEdgeFamilyFilter: (families) => {
+        set((state) => {
+          state.edgeFamilyFilter = families;
+          state.activePresetId = null;
+        });
+      },
+
+      toggleEdgeFamily: (family) => {
+        set((state) => {
+          const idx = state.edgeFamilyFilter.indexOf(family);
+          if (idx >= 0) {
+            state.edgeFamilyFilter.splice(idx, 1);
+          } else {
+            state.edgeFamilyFilter.push(family);
+          }
+          state.activePresetId = null;
+        });
+      },
+
       // Preset actions
       applyViewPreset: (presetId) => {
         const viewPreset = VIEW_PRESETS.find(p => p.id === presetId);
@@ -261,6 +337,10 @@ export const useFilterStore = create<FilterStoreState>()(
           state.layerFilter = [];
           state.activeOnly = false;
           state.localeFamily = null;
+          // Reset navigation query facets (v9 Phase 6)
+          state.realmFilter = [];
+          state.traitFilter = [];
+          state.edgeFamilyFilter = [];
         });
       },
 
@@ -440,6 +520,10 @@ export const useFilterStore = create<FilterStoreState>()(
         layerFilter: state.layerFilter,
         activeOnly: state.activeOnly,
         localeFamily: state.localeFamily,
+        // Navigation query facets (v9 Phase 6)
+        realmFilter: state.realmFilter,
+        traitFilter: state.traitFilter,
+        edgeFamilyFilter: state.edgeFamilyFilter,
         // Schema mode collapsed groups (Task 3.1)
         collapsedRealms: state.collapsedRealms,
         collapsedLayers: state.collapsedLayers,
@@ -460,6 +544,9 @@ export const useFilterStore = create<FilterStoreState>()(
             layerFilter: [],
             activeOnly: false,
             localeFamily: null,
+            realmFilter: [],
+            traitFilter: [],
+            edgeFamilyFilter: [],
             collapsedRealms: [],
             collapsedLayers: [],
           };

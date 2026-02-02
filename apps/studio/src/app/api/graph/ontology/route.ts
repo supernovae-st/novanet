@@ -30,7 +30,7 @@ export async function GET() {
         totalNodes: result.nodes.length,
         totalEdges: result.edges.length,
         duration: Date.now() - startTime,
-        mode: 'schema',
+        mode: 'meta',
       },
     });
   } catch (error) {

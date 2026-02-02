@@ -14,7 +14,7 @@
 import { useMemo } from 'react';
 import { useGraphStore } from '@/stores/graphStore';
 import { useFilterStore } from '@/stores/filterStore';
-import { useUIStore, selectDataMode } from '@/stores/uiStore';
+import { useUIStore, selectNavigationMode } from '@/stores/uiStore';
 import { ALL_NODE_TYPES } from '@/config/nodeTypes';
 import { NODE_REALMS, type Realm } from '@novanet/core/types';
 import { NODE_LAYERS, type Layer } from '@novanet/core/graph';
@@ -51,8 +51,8 @@ export interface FilteredGraphResult {
   realmCounts: RealmCounts;
   /** Node counts by subcategory (for schema mode breakdown) */
   layerCounts: LayerCounts;
-  /** Whether currently in schema mode */
-  isSchemaMode: boolean;
+  /** Whether currently in meta or overlay mode (shows schema nodes) */
+  isMetaMode: boolean;
 }
 
 export function useFilteredGraph(): FilteredGraphResult {
@@ -64,9 +64,9 @@ export function useFilteredGraph(): FilteredGraphResult {
   const selectedLocale = useFilterStore((state) => state.selectedLocale);
   const searchQuery = useFilterStore((state) => state.searchQuery);
 
-  // Data mode: schema mode bypasses filters to show all 35 types
-  const dataMode = useUIStore(selectDataMode);
-  const isSchemaMode = dataMode === 'schema';
+  // Navigation mode: meta/overlay modes bypass filters to show all 35 types
+  const navigationMode = useUIStore(selectNavigationMode);
+  const isMetaMode = navigationMode === 'meta' || navigationMode === 'overlay';
 
   // Chained memos for optimal performance:
   // Each filter stage only recalculates when its dependencies change
@@ -80,22 +80,22 @@ export function useFilteredGraph(): FilteredGraphResult {
   // Stage 2: Filter by node type (bypassed in schema mode to show all 35 types)
   const typeFilteredNodes = useMemo(() => {
     // In schema mode, show all types regardless of filter settings
-    if (isSchemaMode) return unhiddenNodes;
+    if (isMetaMode) return unhiddenNodes;
     if (enabledNodeTypes.size === 0) return unhiddenNodes;
     return unhiddenNodes.filter((node) => enabledNodeTypes.has(node.type));
-  }, [unhiddenNodes, enabledNodeTypes, isSchemaMode]);
+  }, [unhiddenNodes, enabledNodeTypes, isMetaMode]);
 
   // Stage 3: Filter by locale (bypassed in schema mode - schema nodes have no locale)
   const localeFilteredNodes = useMemo(() => {
     // In schema mode, skip locale filtering (schema nodes don't have locales)
-    if (isSchemaMode) return typeFilteredNodes;
+    if (isMetaMode) return typeFilteredNodes;
     if (!selectedLocale) return typeFilteredNodes;
     return typeFilteredNodes.filter((node) => {
       // Include nodes that match the locale or don't have a locale (global nodes)
       const nodeLocale = node.data?.locale_code || node.data?.code;
       return !nodeLocale || nodeLocale === selectedLocale;
     });
-  }, [typeFilteredNodes, selectedLocale, isSchemaMode]);
+  }, [typeFilteredNodes, selectedLocale, isMetaMode]);
 
   // Stage 4: Filter by search query
   const filteredNodes = useMemo(() => {
@@ -125,7 +125,7 @@ export function useFilteredGraph(): FilteredGraphResult {
   // Check if any filters are active (in schema mode, type/locale filters are bypassed)
   const isFiltered = useMemo(() => {
     // In schema mode, only search affects visible nodes
-    if (isSchemaMode) {
+    if (isMetaMode) {
       return (
         hiddenNodeIds.size > 0 ||
         (searchQuery !== null && searchQuery.trim() !== '')
@@ -137,7 +137,7 @@ export function useFilteredGraph(): FilteredGraphResult {
       selectedLocale !== null ||
       (searchQuery !== null && searchQuery.trim() !== '')
     );
-  }, [hiddenNodeIds, enabledNodeTypes, selectedLocale, searchQuery, isSchemaMode]);
+  }, [hiddenNodeIds, enabledNodeTypes, selectedLocale, searchQuery, isMetaMode]);
 
   // Compute distinct relation types count
   const distinctRelationTypes = useMemo(() => {
@@ -183,6 +183,6 @@ export function useFilteredGraph(): FilteredGraphResult {
     distinctRelationTypes,
     realmCounts,
     layerCounts,
-    isSchemaMode,
+    isMetaMode,
   };
 }

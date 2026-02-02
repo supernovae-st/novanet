@@ -219,7 +219,7 @@ function Graph2DInner({
     clearSelection,
     sidebarOpen,
     focusMode,
-    dataMode, // Schema mode toggle (Task 3.2)
+    navigationMode, // Navigation mode (data/meta/overlay/query)
   } = useUIStore(
     useShallow((state) => ({
       minimapVisible: state.minimapVisible,
@@ -235,7 +235,7 @@ function Graph2DInner({
       clearSelection: state.clearSelection,
       sidebarOpen: state.sidebarOpen,
       focusMode: state.focusMode,
-      dataMode: state.dataMode, // Schema mode toggle (Task 3.2)
+      navigationMode: state.navigationMode, // Navigation mode (data/meta/overlay/query)
       layoutMode: state.layoutMode, // Magnetic grouping toggle
     }))
   );
@@ -346,8 +346,8 @@ function Graph2DInner({
   const [isSchemaLayouting, setIsSchemaLayouting] = useState(false);
   const [schemaLayoutError, setSchemaLayoutError] = useState<Error | null>(null);
 
-  // Track previous dataMode to detect changes
-  const prevDataModeRef = useRef(dataMode);
+  // Track previous navigationMode to detect changes
+  const prevNavigationModeRef = useRef(navigationMode);
 
   // PERF: Ref for schemaNodes to avoid callback re-creation during drag
   // Callbacks use ref.current to always get latest nodes without re-running
@@ -467,17 +467,17 @@ function Graph2DInner({
   }, [collapsedRealms, collapsedLayers, layoutDirection]);
 
   // Load schema graph when:
-  // - dataMode changes to 'schema'
+  // - navigationMode changes to 'meta'
   // - collapsed state changes (via loadSchemaGraph dependency)
   // - layout direction changes (via loadSchemaGraph dependency)
   // - layoutVersion changes (user clicked layout button)
   useEffect(() => {
-    if (dataMode === 'schema') {
+    if (navigationMode === 'meta') {
       loadSchemaGraph();
     }
-    prevDataModeRef.current = dataMode;
+    prevNavigationModeRef.current = navigationMode;
     // eslint-disable-next-line react-hooks/exhaustive-deps -- layoutVersion forces re-layout on button click
-  }, [dataMode, loadSchemaGraph, layoutVersion]);
+  }, [navigationMode, loadSchemaGraph, layoutVersion]);
 
   // =========================================================================
   // SCHEMA NODE DRAG HANDLERS (Task 1 & 3: Schema Node Dragging + Constraints)
@@ -1414,7 +1414,7 @@ function Graph2DInner({
   // When in schema mode, render the hierarchical schema visualization
   // with ELK layout and group nodes. Wrapped in SchemaErrorBoundary.
   // =========================================================================
-  if (dataMode === 'schema') {
+  if (navigationMode === 'meta') {
     return (
       <SchemaErrorBoundary>
         <div

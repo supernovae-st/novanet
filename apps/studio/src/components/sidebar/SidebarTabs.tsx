@@ -24,6 +24,7 @@ import { useAnimationStore } from '@/stores/animationStore';
 import { useDatabaseSchema } from '@/hooks';
 import { DatabaseInfoPanel } from './DatabaseInfoPanel';
 import { SchemaFilterPanel } from './SchemaFilterPanel';
+import { FacetFilterPanel } from './FacetFilterPanel';
 
 type TabId = 'schema' | 'data';
 
@@ -34,7 +35,7 @@ const TAB_ACCENTS: Record<TabId, string> = {
 };
 
 export const SidebarTabs = memo(function SidebarTabs() {
-  const dataMode = useUIStore((s) => s.dataMode);
+  const navigationMode = useUIStore((s) => s.navigationMode);
   const { isTransitioning, startTransition } = useAnimationStore(
     useShallow((s) => ({
       isTransitioning: s.isTransitioning,
@@ -46,17 +47,17 @@ export const SidebarTabs = memo(function SidebarTabs() {
   const schemaData = useDatabaseSchema();
   const { schema, isLoading: schemaLoading } = schemaData;
 
-  const activeTab: TabId = dataMode === 'schema' ? 'schema' : 'data';
+  const activeTab: TabId = navigationMode === 'meta' || navigationMode === 'overlay' ? 'schema' : 'data';
 
   const handleTabClick = useCallback(
     (tabId: TabId) => {
-      const targetMode = tabId === 'schema' ? 'schema' : 'data';
+      const targetMode = tabId === 'schema' ? 'meta' : 'data';
       // Skip if already in target mode or transition in progress
-      if (dataMode === targetMode || isTransitioning) return;
+      if (navigationMode === targetMode || isTransitioning) return;
       // Start the Matrix transition - page.tsx orchestrates the mode change
       startTransition(targetMode);
     },
-    [dataMode, isTransitioning, startTransition]
+    [navigationMode, isTransitioning, startTransition]
   );
 
   return (
@@ -92,7 +93,7 @@ export const SidebarTabs = memo(function SidebarTabs() {
                 activeTab === 'schema' ? 'text-white/40' : 'text-white/20'
               )}
             >
-              35 types · 3 scopes
+              35 types · 3 realms
             </div>
           </div>
 
@@ -174,8 +175,14 @@ export const SidebarTabs = memo(function SidebarTabs() {
 
       {/* Tab Content */}
       <div className="flex-1 overflow-hidden" id={`sidebar-panel-${activeTab}`} role="tabpanel">
-        {activeTab === 'schema' && <SchemaFilterPanel />}
-        {activeTab === 'data' && <DatabaseInfoPanel schemaData={schemaData} />}
+        {navigationMode === 'query' ? (
+          <FacetFilterPanel />
+        ) : (
+          <>
+            {activeTab === 'schema' && <SchemaFilterPanel />}
+            {activeTab === 'data' && <DatabaseInfoPanel schemaData={schemaData} />}
+          </>
+        )}
       </div>
     </div>
   );
