@@ -235,7 +235,7 @@ export class NovaNetFilter {
     return this;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- reserved for future latestOnly implementation
+   
   includeOutputs(_opts?: { latestOnly?: boolean }): this {
     this.state.includes.push({
       relation: 'HAS_OUTPUT',

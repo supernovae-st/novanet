@@ -75,7 +75,7 @@ const MODE_CONFIG: {
 
 export const NavigationModeToggle = memo(function NavigationModeToggle({
   mode,
-  onModeChange,
+  onModeChange: _onModeChange,
   className,
 }: NavigationModeToggleProps) {
   const startTransition = useAnimationStore((s) => s.startTransition);

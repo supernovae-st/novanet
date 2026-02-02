@@ -413,8 +413,8 @@ function applyEdgeAwareGridLayout(
     const layerCols = Math.min(layerLayouts.length, MAX_LAYERS_PER_ROW);
     const layerRows = Math.ceil(layerLayouts.length / layerCols);
 
-    let maxRowWidths: number[] = [];
-    let rowHeights: number[] = [];
+    const maxRowWidths: number[] = [];
+    const rowHeights: number[] = [];
 
     for (let r = 0; r < layerRows; r++) {
       let rowWidth = 0;

@@ -11,10 +11,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { fetchGraphData, type QueryOptions } from '@/lib/neo4j';
 import { handleApiError } from '@/lib/apiErrorHandler';
 import {
-  buildFacetCypher,
   resolveTypesForRealms,
   resolveTypesForTraits,
-  type FacetQuery,
 } from '@/lib/filterAdapter';
 import { NODE_LAYERS } from '@/config/nodeTypes';
 import type { Realm, Layer, Trait, NodeType } from '@novanet/core/types';

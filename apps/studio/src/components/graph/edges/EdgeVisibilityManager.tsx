@@ -243,7 +243,7 @@ export function useEdgeVisibility(): UseEdgeVisibilityReturn {
 }
 
 // No-op function for graceful fallback when used outside provider
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ 
 function noop(_id: string, _element: Element): void {
   // Intentionally empty - allows hook to work without provider
 }

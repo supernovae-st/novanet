@@ -20,7 +20,7 @@
 
 import type { Node, Edge } from '@xyflow/react';
 import type { SchemaLayoutResult } from './types';
-import { NODE_WIDTH, NODE_HEIGHT, NODE_GAP } from './types';
+import { NODE_WIDTH, NODE_HEIGHT } from './types';
 
 export interface MagneticLayoutInput {
   // Organizing principle nodes from Neo4j

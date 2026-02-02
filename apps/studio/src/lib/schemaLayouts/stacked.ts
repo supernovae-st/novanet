@@ -3,7 +3,6 @@ import type { Node, Edge } from '@xyflow/react';
 import type { HierarchicalSchemaData } from '@novanet/core/graph';
 import type { SchemaLayoutResult } from './types';
 import {
-  REALM_CONFIGS,
   NODE_WIDTH,
   NODE_HEIGHT,
   NODE_GAP,

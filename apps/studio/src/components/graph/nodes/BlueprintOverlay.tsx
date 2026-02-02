@@ -33,7 +33,6 @@ const BLUEPRINT_BLUE_LIGHT = '#2563eb';
  * BlueprintOverlay - Schema mode visual indicator
  */
 export const BlueprintOverlay = memo(function BlueprintOverlay({
-  color,
   selected = false,
   borderRadius = 12,
   showBadge = true,

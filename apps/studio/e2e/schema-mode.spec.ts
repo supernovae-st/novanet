@@ -61,7 +61,7 @@ async function switchToSchemaMode(page: Page) {
 }
 
 // Helper: Switch to data mode if not already
-async function switchToDataMode(page: Page) {
+async function _switchToDataMode(page: Page) {
   const inSchemaMode = await isInSchemaMode(page);
   if (inSchemaMode) {
     await getDataButton(page).click();
