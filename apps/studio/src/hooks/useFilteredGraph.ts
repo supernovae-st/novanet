@@ -16,19 +16,19 @@ import { useGraphStore } from '@/stores/graphStore';
 import { useFilterStore } from '@/stores/filterStore';
 import { useUIStore, selectDataMode } from '@/stores/uiStore';
 import { ALL_NODE_TYPES } from '@/config/nodeTypes';
-import { NODE_SCOPES, type Scope } from '@novanet/core/types';
-import { NODE_SUBCATEGORIES, type Subcategory } from '@novanet/core/graph';
+import { NODE_REALMS, type Realm } from '@novanet/core/types';
+import { NODE_LAYERS, type Layer } from '@novanet/core/graph';
 import type { GraphNode, GraphEdge, NodeType } from '@/types';
 
-/** Scope counts for schema mode breakdown */
-export interface ScopeCounts {
-  Global: number;
-  Project: number;
-  Shared: number;
+/** Realm counts for schema mode breakdown */
+export interface RealmCounts {
+  global: number;
+  project: number;
+  shared: number;
 }
 
-/** Subcategory counts for schema mode breakdown */
-export type SubcategoryCounts = Record<Subcategory, number>;
+/** Layer counts for schema mode breakdown */
+export type LayerCounts = Record<Layer, number>;
 
 export interface FilteredGraphResult {
   /** Filtered nodes based on enabled types and locale */
@@ -48,9 +48,9 @@ export interface FilteredGraphResult {
   /** Number of distinct relation types (for schema mode stats) */
   distinctRelationTypes: number;
   /** Node counts by scope (for schema mode breakdown) */
-  scopeCounts: ScopeCounts;
+  realmCounts: RealmCounts;
   /** Node counts by subcategory (for schema mode breakdown) */
-  subcategoryCounts: SubcategoryCounts;
+  layerCounts: LayerCounts;
   /** Whether currently in schema mode */
   isSchemaMode: boolean;
 }
@@ -146,10 +146,10 @@ export function useFilteredGraph(): FilteredGraphResult {
   }, [filteredEdges]);
 
   // Compute scope counts (for schema mode breakdown)
-  const scopeCounts = useMemo((): ScopeCounts => {
-    const counts: ScopeCounts = { Global: 0, Project: 0, Shared: 0 };
+  const realmCounts = useMemo((): RealmCounts => {
+    const counts: RealmCounts = { global: 0, project: 0, shared: 0 };
     for (const node of filteredNodes) {
-      const scope = NODE_SCOPES[node.type as NodeType];
+      const scope = NODE_REALMS[node.type as NodeType];
       if (scope && scope in counts) {
         counts[scope]++;
       }
@@ -158,13 +158,13 @@ export function useFilteredGraph(): FilteredGraphResult {
   }, [filteredNodes]);
 
   // Compute subcategory counts (for schema mode breakdown)
-  const subcategoryCounts = useMemo((): SubcategoryCounts => {
-    const counts: SubcategoryCounts = {
+  const layerCounts = useMemo((): LayerCounts => {
+    const counts: LayerCounts = {
       foundation: 0, structure: 0, semantic: 0, instruction: 0, output: 0,
       config: 0, knowledge: 0, seo: 0, geo: 0,
     };
     for (const node of filteredNodes) {
-      const subcategory = NODE_SUBCATEGORIES[node.type as NodeType];
+      const subcategory = NODE_LAYERS[node.type as NodeType];
       if (subcategory && subcategory in counts) {
         counts[subcategory]++;
       }
@@ -181,8 +181,8 @@ export function useFilteredGraph(): FilteredGraphResult {
     visibleNodeCount: filteredNodes.length,
     visibleEdgeCount: filteredEdges.length,
     distinctRelationTypes,
-    scopeCounts,
-    subcategoryCounts,
+    realmCounts,
+    layerCounts,
     isSchemaMode,
   };
 }

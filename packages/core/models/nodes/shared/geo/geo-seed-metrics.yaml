@@ -1,4 +1,4 @@
-# models/nodes/geo/geo-seed-metrics.yaml
+# models/nodes/shared/geo/geo-seed-metrics.yaml
 # GEOSeedMetrics - Citation/visibility observation for a GEO seed (v7.8.5)
 #
 # v7.8.5: Renamed from GEOCitation for unified metrics pattern
@@ -7,7 +7,7 @@
 
 node:
   name: GEOSeedMetrics
-  category: geo
+  locale_behavior: derived
   icon: "📑"
   description: "Citation/visibility observation from AI engine responses"
 

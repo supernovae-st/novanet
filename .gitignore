@@ -29,6 +29,9 @@ pnpm-debug.log*
 # Test
 coverage/
 
+# Rust
+tools/novanet/target/
+
 # Docker
 *.pid
 novanet-public-repo/

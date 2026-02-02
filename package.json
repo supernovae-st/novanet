@@ -16,8 +16,8 @@
     "infra:seed": "pnpm --filter=@novanet/db seed",
     "infra:reset": "pnpm --filter=@novanet/db reset",
     "validate:types": "npx tsx scripts/validate-types.ts",
-    "schema:generate": "pnpm --filter=@novanet/schema-tools generate:all",
-    "schema:validate": "pnpm --filter=@novanet/schema-tools validate:sync",
+    "schema:generate": "cargo run --manifest-path tools/novanet/Cargo.toml -- schema generate",
+    "schema:validate": "cargo run --manifest-path tools/novanet/Cargo.toml -- schema validate",
     "prepare": "husky"
   },
   "devDependencies": {

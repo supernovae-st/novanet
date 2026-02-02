@@ -27,7 +27,7 @@ import { NODE_BG, NODE_DESIGN } from '@/config/constants';
 import { useNodeInteractions } from '@/hooks';
 import { SelectionPulseRing, GlassmorphismEffects, NodeHandles } from '../nodes/effects';
 import { glassClasses, gapTokens } from '@/design/tokens';
-import type { Scope } from '@novanet/core/types';
+import type { Realm } from '@novanet/core/types';
 
 /**
  * Data interface for SchemaNode
@@ -36,8 +36,8 @@ export interface SchemaNodeData extends Record<string, unknown> {
   nodeType: string;
   label: string;
   description: string;
-  scope: Scope;
-  subcategory: string;
+  realm: Realm;
+  layer: string;
 }
 
 /** Node type for SchemaNode */
@@ -163,7 +163,7 @@ export const SchemaNode = memo(function SchemaNode({
                   className="text-[9px] font-bold uppercase tracking-wider"
                   style={{ color: colors.primary }}
                 >
-                  {data.subcategory}
+                  {data.layer}
                 </span>
               </div>
 

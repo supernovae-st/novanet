@@ -1,6 +1,6 @@
 // src/types/nodes.ts
 // Single source of truth for all 35 NovaNet node types
-// v8.1.0
+// v9.0.0
 
 // =============================================================================
 // NODE TYPES (35 nodes)
@@ -13,7 +13,7 @@ export const NODE_TYPES = [
   // Localized (6)
   'ProjectL10n', 'ConceptL10n', 'PageL10n', 'BlockL10n',
   'SEOKeywordL10n', 'GEOSeedL10n',
-  // LocaleKnowledge (14)
+  // Knowledge (14)
   'LocaleIdentity', 'LocaleVoice', 'LocaleCulture', 'LocaleCultureReferences',
   'LocaleMarket', 'LocaleLexicon', 'LocaleRulesAdaptation', 'LocaleRulesFormatting',
   'LocaleRulesSlug', 'Expression', 'Reference', 'Metaphor', 'Pattern', 'Constraint',
@@ -26,118 +26,99 @@ export const NODE_TYPES = [
 export type NodeType = typeof NODE_TYPES[number];
 
 // =============================================================================
-// NODE CATEGORIES
+// v9 TAXONOMY TYPES
 // =============================================================================
 
-export type NodeCategory = 'project' | 'content' | 'locale' | 'generation' | 'seo' | 'geo';
+export type Realm = 'global' | 'project' | 'shared';
 
-export const NODE_CATEGORIES: Record<NodeCategory, readonly NodeType[]> = {
-  project: ['Project', 'BrandIdentity', 'ProjectL10n'],
-  content: ['Concept', 'ConceptL10n', 'Page', 'Block', 'PageType', 'BlockType'],
-  locale: [
-    'Locale', 'LocaleIdentity', 'LocaleVoice', 'LocaleCulture', 'LocaleCultureReferences',
-    'LocaleMarket', 'LocaleLexicon', 'LocaleRulesAdaptation', 'LocaleRulesFormatting',
-    'LocaleRulesSlug', 'Expression', 'Reference', 'Metaphor', 'Pattern', 'Constraint',
-  ],
-  generation: ['PagePrompt', 'BlockPrompt', 'BlockRules', 'PageL10n', 'BlockL10n'],
-  seo: ['SEOKeywordL10n', 'SEOKeywordMetrics', 'SEOMiningRun'],
-  geo: ['GEOSeedL10n', 'GEOSeedMetrics', 'GEOMiningRun'],
+export type Layer =
+  | 'config' | 'knowledge'
+  | 'foundation' | 'structure' | 'semantic' | 'instruction' | 'output'
+  | 'seo' | 'geo';
+
+export type Trait = 'invariant' | 'localized' | 'knowledge' | 'derived' | 'job';
+
+// =============================================================================
+// KIND_META — unified classification for all 35 node types
+// Replaces NODE_SCOPES, NODE_BEHAVIORS, NODE_CATEGORIES (v8)
+// =============================================================================
+
+export interface KindMeta {
+  realm: Realm;
+  layer: Layer;
+  trait: Trait;
+}
+
+export const KIND_META: Record<NodeType, KindMeta> = {
+  // ═══════════════════════════════════════════════════════════════════════════
+  // PROJECT REALM — foundation (3)
+  // ═══════════════════════════════════════════════════════════════════════════
+  Project:      { realm: 'project', layer: 'foundation',  trait: 'invariant' },
+  BrandIdentity:{ realm: 'project', layer: 'foundation',  trait: 'invariant' },
+  ProjectL10n:  { realm: 'project', layer: 'foundation',  trait: 'localized' },
+
+  // PROJECT REALM — structure (2)
+  Page:         { realm: 'project', layer: 'structure',   trait: 'invariant' },
+  Block:        { realm: 'project', layer: 'structure',   trait: 'invariant' },
+
+  // PROJECT REALM — semantic (2)
+  Concept:      { realm: 'project', layer: 'semantic',    trait: 'invariant' },
+  ConceptL10n:  { realm: 'project', layer: 'semantic',    trait: 'localized' },
+
+  // PROJECT REALM — instruction (5)
+  PageType:     { realm: 'project', layer: 'instruction', trait: 'invariant' },
+  BlockType:    { realm: 'project', layer: 'instruction', trait: 'invariant' },
+  PagePrompt:   { realm: 'project', layer: 'instruction', trait: 'invariant' },
+  BlockPrompt:  { realm: 'project', layer: 'instruction', trait: 'invariant' },
+  BlockRules:   { realm: 'project', layer: 'instruction', trait: 'invariant' },
+
+  // PROJECT REALM — output (2)
+  PageL10n:     { realm: 'project', layer: 'output',      trait: 'localized' },
+  BlockL10n:    { realm: 'project', layer: 'output',      trait: 'localized' },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // GLOBAL REALM — config (1)
+  // ═══════════════════════════════════════════════════════════════════════════
+  Locale:       { realm: 'global',  layer: 'config',      trait: 'invariant' },
+
+  // GLOBAL REALM — knowledge (14)
+  LocaleIdentity:          { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
+  LocaleVoice:             { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
+  LocaleCulture:           { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
+  LocaleCultureReferences: { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
+  LocaleMarket:            { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
+  LocaleLexicon:           { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
+  LocaleRulesAdaptation:   { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
+  LocaleRulesFormatting:   { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
+  LocaleRulesSlug:         { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
+  Expression:              { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
+  Reference:               { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
+  Metaphor:                { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
+  Pattern:                 { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
+  Constraint:              { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // SHARED REALM — seo (3)
+  // ═══════════════════════════════════════════════════════════════════════════
+  SEOKeywordL10n:    { realm: 'shared', layer: 'seo', trait: 'localized' },
+  SEOKeywordMetrics: { realm: 'shared', layer: 'seo', trait: 'derived' },
+  SEOMiningRun:      { realm: 'shared', layer: 'seo', trait: 'job' },
+
+  // SHARED REALM — geo (3)
+  GEOSeedL10n:    { realm: 'shared', layer: 'geo', trait: 'localized' },
+  GEOSeedMetrics: { realm: 'shared', layer: 'geo', trait: 'derived' },
+  GEOMiningRun:   { realm: 'shared', layer: 'geo', trait: 'job' },
 };
 
 // =============================================================================
-// LOCALE BEHAVIOR
+// DERIVED MAPS — computed from KIND_META
 // =============================================================================
 
-export type LocaleBehavior = 'invariant' | 'localized' | 'localeKnowledge' | 'derived' | 'job';
+function deriveMap<K extends keyof KindMeta>(field: K): Record<NodeType, KindMeta[K]> {
+  return Object.fromEntries(
+    Object.entries(KIND_META).map(([k, v]) => [k, v[field]])
+  ) as Record<NodeType, KindMeta[K]>;
+}
 
-export const NODE_BEHAVIORS: Record<NodeType, LocaleBehavior> = {
-  // Invariant (11)
-  Project: 'invariant',
-  BrandIdentity: 'invariant',
-  Concept: 'invariant',
-  Page: 'invariant',
-  Block: 'invariant',
-  PageType: 'invariant',
-  BlockType: 'invariant',
-  PagePrompt: 'invariant',
-  BlockPrompt: 'invariant',
-  BlockRules: 'invariant',
-  Locale: 'invariant',
-  // Localized (6)
-  ProjectL10n: 'localized',
-  ConceptL10n: 'localized',
-  PageL10n: 'localized',
-  BlockL10n: 'localized',
-  SEOKeywordL10n: 'localized',
-  GEOSeedL10n: 'localized',
-  // LocaleKnowledge (14)
-  LocaleIdentity: 'localeKnowledge',
-  LocaleVoice: 'localeKnowledge',
-  LocaleCulture: 'localeKnowledge',
-  LocaleCultureReferences: 'localeKnowledge',
-  LocaleMarket: 'localeKnowledge',
-  LocaleLexicon: 'localeKnowledge',
-  LocaleRulesAdaptation: 'localeKnowledge',
-  LocaleRulesFormatting: 'localeKnowledge',
-  LocaleRulesSlug: 'localeKnowledge',
-  Expression: 'localeKnowledge',
-  Reference: 'localeKnowledge',
-  Metaphor: 'localeKnowledge',
-  Pattern: 'localeKnowledge',
-  Constraint: 'localeKnowledge',
-  // Derived (2)
-  SEOKeywordMetrics: 'derived',
-  GEOSeedMetrics: 'derived',
-  // Job (2)
-  SEOMiningRun: 'job',
-  GEOMiningRun: 'job',
-};
-
-// =============================================================================
-// SCOPES
-// TODO(v9): Rename Scope -> Realm, NODE_SCOPES -> NODE_REALMS
-// TODO(v9): Values stay 'Global'|'Shared'|'Project' but type name changes
-// =============================================================================
-
-export type Scope = 'Global' | 'Shared' | 'Project';
-
-export const NODE_SCOPES: Record<NodeType, Scope> = {
-  // Global (15)
-  Locale: 'Global',
-  LocaleIdentity: 'Global',
-  LocaleVoice: 'Global',
-  LocaleCulture: 'Global',
-  LocaleCultureReferences: 'Global',
-  LocaleMarket: 'Global',
-  LocaleLexicon: 'Global',
-  LocaleRulesAdaptation: 'Global',
-  LocaleRulesFormatting: 'Global',
-  LocaleRulesSlug: 'Global',
-  Expression: 'Global',
-  Reference: 'Global',
-  Metaphor: 'Global',
-  Pattern: 'Global',
-  Constraint: 'Global',
-  // Shared (6)
-  SEOKeywordL10n: 'Shared',
-  SEOKeywordMetrics: 'Shared',
-  SEOMiningRun: 'Shared',
-  GEOSeedL10n: 'Shared',
-  GEOSeedMetrics: 'Shared',
-  GEOMiningRun: 'Shared',
-  // Project (14)
-  Project: 'Project',
-  BrandIdentity: 'Project',
-  ProjectL10n: 'Project',
-  Concept: 'Project',
-  ConceptL10n: 'Project',
-  Page: 'Project',
-  Block: 'Project',
-  PageType: 'Project',
-  BlockType: 'Project',
-  PagePrompt: 'Project',
-  BlockPrompt: 'Project',
-  BlockRules: 'Project',
-  PageL10n: 'Project',
-  BlockL10n: 'Project',
-};
+export const NODE_REALMS: Record<NodeType, Realm> = deriveMap('realm');
+export const NODE_TRAITS: Record<NodeType, Trait> = deriveMap('trait');

@@ -1,9 +1,9 @@
-# models/nodes/content/block-type.yaml
+# models/nodes/project/instruction/block-type.yaml
 # BlockType - Template rules and structure for block generation
 
 node:
   name: BlockType
-  category: content
+  locale_behavior: invariant
   icon: "🔷"
   description: "Template defining rules, structure, and L10N requirements for a type of block"
 

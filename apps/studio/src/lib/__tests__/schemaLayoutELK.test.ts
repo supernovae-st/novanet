@@ -7,8 +7,8 @@
 
 import { applySchemaLayout } from '../schemaLayoutELK';
 import { getSchemaHierarchy } from '@novanet/core/graph';
-import type { HierarchicalSchemaData, Subcategory, SchemaNode, SchemaEdge } from '@novanet/core/graph';
-import type { Scope } from '@novanet/core/types';
+import type { Layer, SchemaNode, SchemaEdge, HierarchicalSchemaData } from '@novanet/core/graph';
+import type { Realm } from '@novanet/core/types';
 
 // Mock ELK.js
 jest.mock('elkjs/lib/elk.bundled.js', () => {
@@ -81,13 +81,13 @@ describe('schemaLayoutELK', () => {
   beforeEach(() => {
     // Create a minimal mock hierarchy for testing
     mockHierarchy = {
-      scopes: {
-        Project: {
-          scope: 'Project' as Scope,
+      realms: {
+        project: {
+          realm: 'project' as Realm,
           label: 'PROJECT',
           icon: '📦',
           description: 'Project-specific content',
-          subcategories: {
+          layers: {
             foundation: {
               label: 'Foundation',
               description: 'Core project identity',
@@ -100,14 +100,14 @@ describe('schemaLayoutELK', () => {
               icon: '🧱',
               nodeTypes: ['Page', 'Block'] as never[],
             },
-          } as Record<Subcategory, { label: string; description: string; icon: string; nodeTypes: never[] }>,
+          } as Record<Layer, { label: string; description: string; icon: string; nodeTypes: never[] }>,
         },
-        Global: {
-          scope: 'Global' as Scope,
+        global: {
+          realm: 'global' as Realm,
           label: 'GLOBAL',
           icon: '🌍',
           description: 'Shared across all projects',
-          subcategories: {
+          layers: {
             config: {
               label: 'Configuration',
               description: 'Locale configuration',
@@ -120,14 +120,14 @@ describe('schemaLayoutELK', () => {
               icon: '🧠',
               nodeTypes: ['LocaleVoice', 'LocaleCulture'] as never[],
             },
-          } as Record<Subcategory, { label: string; description: string; icon: string; nodeTypes: never[] }>,
+          } as Record<Layer, { label: string; description: string; icon: string; nodeTypes: never[] }>,
         },
-        Shared: {
-          scope: 'Shared' as Scope,
+        shared: {
+          realm: 'shared' as Realm,
           label: 'SHARED',
           icon: '🎯',
           description: 'Shared across projects',
-          subcategories: {
+          layers: {
             seo: {
               label: 'SEO',
               description: 'SEO data',
@@ -140,20 +140,20 @@ describe('schemaLayoutELK', () => {
               icon: '🤖',
               nodeTypes: ['GEOSeedL10n'] as never[],
             },
-          } as Record<Subcategory, { label: string; description: string; icon: string; nodeTypes: never[] }>,
+          } as Record<Layer, { label: string; description: string; icon: string; nodeTypes: never[] }>,
         },
-      } as Record<Scope, typeof mockHierarchy.scopes.Project>,
+      } as Record<Realm, typeof mockHierarchy.realms.project>,
       nodes: [
-        { id: 'schema-Project', nodeType: 'Project', scope: 'Project', subcategory: 'foundation', label: 'Project', description: '', behavior: 'invariant' },
-        { id: 'schema-BrandIdentity', nodeType: 'BrandIdentity', scope: 'Project', subcategory: 'foundation', label: 'Brand Identity', description: '', behavior: 'invariant' },
-        { id: 'schema-ProjectL10n', nodeType: 'ProjectL10n', scope: 'Project', subcategory: 'foundation', label: 'Project L10n', description: '', behavior: 'localized' },
-        { id: 'schema-Page', nodeType: 'Page', scope: 'Project', subcategory: 'structure', label: 'Page', description: '', behavior: 'invariant' },
-        { id: 'schema-Block', nodeType: 'Block', scope: 'Project', subcategory: 'structure', label: 'Block', description: '', behavior: 'invariant' },
-        { id: 'schema-Locale', nodeType: 'Locale', scope: 'Global', subcategory: 'config', label: 'Locale', description: '', behavior: 'invariant' },
-        { id: 'schema-LocaleVoice', nodeType: 'LocaleVoice', scope: 'Global', subcategory: 'knowledge', label: 'Locale Voice', description: '', behavior: 'localeKnowledge' },
-        { id: 'schema-LocaleCulture', nodeType: 'LocaleCulture', scope: 'Global', subcategory: 'knowledge', label: 'Locale Culture', description: '', behavior: 'localeKnowledge' },
-        { id: 'schema-SEOKeywordL10n', nodeType: 'SEOKeywordL10n', scope: 'Shared', subcategory: 'seo', label: 'SEO Keyword', description: '', behavior: 'localized' },
-        { id: 'schema-GEOSeedL10n', nodeType: 'GEOSeedL10n', scope: 'Shared', subcategory: 'geo', label: 'GEO Seed', description: '', behavior: 'localized' },
+        { id: 'schema-Project', nodeType: 'Project', realm: 'project', layer: 'foundation', label: 'Project', description: '', trait: 'invariant' },
+        { id: 'schema-BrandIdentity', nodeType: 'BrandIdentity', realm: 'project', layer: 'foundation', label: 'Brand Identity', description: '', trait: 'invariant' },
+        { id: 'schema-ProjectL10n', nodeType: 'ProjectL10n', realm: 'project', layer: 'foundation', label: 'Project L10n', description: '', trait: 'localized' },
+        { id: 'schema-Page', nodeType: 'Page', realm: 'project', layer: 'structure', label: 'Page', description: '', trait: 'invariant' },
+        { id: 'schema-Block', nodeType: 'Block', realm: 'project', layer: 'structure', label: 'Block', description: '', trait: 'invariant' },
+        { id: 'schema-Locale', nodeType: 'Locale', realm: 'global', layer: 'config', label: 'Locale', description: '', trait: 'invariant' },
+        { id: 'schema-LocaleVoice', nodeType: 'LocaleVoice', realm: 'global', layer: 'knowledge', label: 'Locale Voice', description: '', trait: 'localeKnowledge' },
+        { id: 'schema-LocaleCulture', nodeType: 'LocaleCulture', realm: 'global', layer: 'knowledge', label: 'Locale Culture', description: '', trait: 'localeKnowledge' },
+        { id: 'schema-SEOKeywordL10n', nodeType: 'SEOKeywordL10n', realm: 'shared', layer: 'seo', label: 'SEO Keyword', description: '', trait: 'localized' },
+        { id: 'schema-GEOSeedL10n', nodeType: 'GEOSeedL10n', realm: 'shared', layer: 'geo', label: 'GEO Seed', description: '', trait: 'localized' },
       ] as SchemaNode[],
       edges: [
         { id: 'schema-edge-0', relationType: 'HAS_PAGE', sourceType: 'Project', targetType: 'Page', label: 'HAS_PAGE', description: '', cardinality: '1:N' },
@@ -162,7 +162,7 @@ describe('schemaLayoutELK', () => {
       stats: {
         totalNodes: 10,
         totalEdges: 2,
-        nodesByScope: { Project: 5, Global: 3, Shared: 2 },
+        nodesByRealm: { project: 5, global: 3, shared: 2 },
       },
     };
   });
@@ -172,7 +172,7 @@ describe('schemaLayoutELK', () => {
       const result = await applySchemaLayout(mockHierarchy);
 
       // Should have group nodes + schema nodes
-      // 3 scope groups + 6 subcategory groups + 10 schema nodes = 19
+      // 3 realm groups + 6 layer groups + 10 schema nodes = 19
       expect(result.nodes.length).toBeGreaterThan(10);
 
       // All nodes should have positions
@@ -183,27 +183,27 @@ describe('schemaLayoutELK', () => {
       }
     });
 
-    it('should create scope group nodes', async () => {
+    it('should create realm group nodes', async () => {
       const result = await applySchemaLayout(mockHierarchy);
 
-      const scopeGroups = result.nodes.filter(n => n.type === 'scopeGroup');
-      expect(scopeGroups).toHaveLength(3);
+      const realmGroups = result.nodes.filter(n => n.type === 'realmGroup');
+      expect(realmGroups).toHaveLength(3);
 
-      // Verify scope group data
-      const projectScope = scopeGroups.find(n => n.data.scope === 'Project');
-      expect(projectScope).toBeDefined();
-      expect(projectScope?.data.label).toBe('PROJECT');
-      expect(projectScope?.data.icon).toBe('📦');
+      // Verify realm group data
+      const projectRealm = realmGroups.find(n => n.data.realm === 'project');
+      expect(projectRealm).toBeDefined();
+      expect(projectRealm?.data.label).toBe('PROJECT');
+      expect(projectRealm?.data.icon).toBe('📦');
     });
 
-    it('should create subcategory group nodes', async () => {
+    it('should create layer group nodes', async () => {
       const result = await applySchemaLayout(mockHierarchy);
 
-      const subGroups = result.nodes.filter(n => n.type === 'subcategoryGroup');
+      const subGroups = result.nodes.filter(n => n.type === 'layerGroup');
       // 2 (Project) + 2 (Global) + 2 (Shared) = 6
       expect(subGroups).toHaveLength(6);
 
-      // Verify subcategory has parentId (scope group)
+      // Verify subcategory has parentId (realm group)
       for (const subGroup of subGroups) {
         expect(subGroup.parentId).toBeDefined();
         expect(subGroup.parentId).toMatch(/^scope-/);
@@ -219,7 +219,7 @@ describe('schemaLayoutELK', () => {
 
       for (const node of schemaNodes) {
         expect(node.parentId).toBeDefined();
-        expect(node.parentId).toMatch(/^subcat-/);
+        expect(node.parentId).toMatch(/^layer-/);
         expect(node.extent).toBe('parent');
       }
     });
@@ -255,42 +255,42 @@ describe('schemaLayoutELK', () => {
       // Add an empty subcategory
       const hierarchyWithEmpty: HierarchicalSchemaData = {
         ...mockHierarchy,
-        scopes: {
-          ...mockHierarchy.scopes,
-          Project: {
-            ...mockHierarchy.scopes.Project,
-            subcategories: {
-              ...mockHierarchy.scopes.Project.subcategories,
+        realms: {
+          ...mockHierarchy.realms,
+          project: {
+            ...mockHierarchy.realms.project,
+            layers: {
+              ...mockHierarchy.realms.project.layers,
               empty: {
                 label: 'Empty',
                 description: 'Empty subcategory',
                 icon: '❌',
                 nodeTypes: [], // No nodes!
               },
-            } as unknown as Record<Subcategory, { label: string; description: string; icon: string; nodeTypes: never[] }>,
+            } as unknown as Record<Layer, { label: string; description: string; icon: string; nodeTypes: never[] }>,
           },
-        } as Record<Scope, typeof mockHierarchy.scopes.Project>,
+        } as Record<Realm, typeof mockHierarchy.realms.project>,
       };
 
       const result = await applySchemaLayout(hierarchyWithEmpty);
 
-      // Should NOT create a subcategory group for the empty one
+      // Should NOT create a layer group for the empty one
       const emptySubcat = result.nodes.find(n =>
-        n.type === 'subcategoryGroup' && n.data.subcategory === 'empty'
+        n.type === 'layerGroup' && n.data.layer === 'empty'
       );
       expect(emptySubcat).toBeUndefined();
     });
 
-    it('should set scope group dimensions from ELK layout', async () => {
+    it('should set realm group dimensions from ELK layout', async () => {
       const result = await applySchemaLayout(mockHierarchy);
 
-      const scopeGroups = result.nodes.filter(n => n.type === 'scopeGroup');
+      const realmGroups = result.nodes.filter(n => n.type === 'realmGroup');
 
-      for (const scopeGroup of scopeGroups) {
-        // Scope groups should have width and height from ELK
-        expect(scopeGroup.style).toBeDefined();
-        expect(scopeGroup.style?.width).toBeDefined();
-        expect(scopeGroup.style?.height).toBeDefined();
+      for (const realmGroup of realmGroups) {
+        // Realm groups should have width and height from ELK
+        expect(realmGroup.style).toBeDefined();
+        expect(realmGroup.style?.width).toBeDefined();
+        expect(realmGroup.style?.height).toBeDefined();
       }
     });
   });
@@ -300,12 +300,12 @@ describe('schemaLayoutELK', () => {
       const hierarchy = getSchemaHierarchy();
       const result = await applySchemaLayout(hierarchy);
 
-      // Should have 3 scope groups
-      const scopeGroups = result.nodes.filter(n => n.type === 'scopeGroup');
-      expect(scopeGroups).toHaveLength(3);
+      // Should have 3 realm groups
+      const realmGroups = result.nodes.filter(n => n.type === 'realmGroup');
+      expect(realmGroups).toHaveLength(3);
 
-      // Should have 9 subcategory groups (5 + 2 + 2)
-      const subGroups = result.nodes.filter(n => n.type === 'subcategoryGroup');
+      // Should have 9 layer groups (5 + 2 + 2)
+      const subGroups = result.nodes.filter(n => n.type === 'layerGroup');
       expect(subGroups).toHaveLength(9);
 
       // Should have 35 schema nodes
@@ -329,12 +329,12 @@ describe('schemaLayoutELK', () => {
     it('should fall back to grid layout if ELK fails', async () => {
       // Force ELK to fail by passing invalid data
       const brokenHierarchy: HierarchicalSchemaData = {
-        scopes: {} as never,
+        realms: {} as never,
         nodes: [
-          { id: 'schema-Test', nodeType: 'Project', scope: 'Project', subcategory: 'foundation', label: 'Test', description: '', behavior: 'invariant' },
+          { id: 'schema-Test', nodeType: 'Project', realm: 'project', layer: 'foundation', label: 'Test', description: '', trait: 'invariant' },
         ] as SchemaNode[],
         edges: [],
-        stats: { totalNodes: 1, totalEdges: 0, nodesByScope: { Project: 1, Global: 0, Shared: 0 } },
+        stats: { totalNodes: 1, totalEdges: 0, nodesByRealm: { project: 1, global: 0, shared: 0 } },
       };
 
       // This should not throw, but use fallback

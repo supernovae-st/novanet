@@ -2,6 +2,6 @@
 // NovaNet Graph Module - Schema visualization exports
 
 export * from './types.js';
-export * from './subcategories.js';
+export * from './layers.js';
 export * from './hierarchy.js';
 export * from './generator.js';

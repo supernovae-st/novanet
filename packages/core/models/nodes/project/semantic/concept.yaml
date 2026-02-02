@@ -1,9 +1,9 @@
-# models/nodes/content/concept.yaml
+# models/nodes/project/semantic/concept.yaml
 # Concept - Invariant semantic unit (action, object, feature, tier, brand)
 
 node:
   name: Concept
-  category: content
+  locale_behavior: invariant
   icon: "🔷"
   description: "Invariant semantic unit representing actions, objects, features, tiers, or brand elements"
 

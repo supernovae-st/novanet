@@ -19,24 +19,24 @@ import type { Node, Edge } from '@xyflow/react';
 import type { HierarchicalSchemaData } from '@novanet/core/graph';
 import type { SchemaLayoutResult } from './types';
 import {
-  SCOPE_CONFIGS,
+  REALM_CONFIGS,
   NODE_WIDTH,
   NODE_HEIGHT,
   NODE_GAP,
-  SUBCAT_GAP,
-  SUBCAT_PADDING,
-  SUBCAT_HEADER,
-  SCOPE_GAP,
-  SCOPE_PADDING,
-  SCOPE_HEADER,
+  LAYER_GAP,
+  LAYER_PADDING,
+  LAYER_HEADER,
+  REALM_GAP,
+  REALM_PADDING,
+  REALM_HEADER,
   EDGE_NODE_GAP,
   EDGE_EDGE_GAP,
   CANVAS_MARGIN,
   MAX_NODES_PER_ROW,
-  MAX_SUBCATS_PER_ROW,
+  MAX_LAYERS_PER_ROW,
   MAX_ROW_WIDTH,
 } from './types';
-import type { Scope } from '@novanet/core/types';
+import type { Realm } from '@novanet/core/types';
 
 // Initialize ELK
 const elk = new ELK();
@@ -62,8 +62,8 @@ const ELK_OPTIONS: LayoutOptions = {
   'elk.layered.unnecessaryBendpoints': 'true',
 
   // Spacing - unified from types.ts
-  'elk.spacing.nodeNode': String(SUBCAT_GAP),
-  'elk.layered.spacing.nodeNodeBetweenLayers': String(SCOPE_GAP),
+  'elk.spacing.nodeNode': String(LAYER_GAP),
+  'elk.layered.spacing.nodeNodeBetweenLayers': String(REALM_GAP),
   'elk.spacing.edgeNode': String(EDGE_NODE_GAP),
   'elk.spacing.edgeEdge': String(EDGE_EDGE_GAP),
 
@@ -122,21 +122,21 @@ function buildElkGraph(hierarchy: HierarchicalSchemaData): ElkNode {
   const children: ElkNode[] = [];
   const edges: ElkExtendedEdge[] = [];
 
-  const scopeOrder: Scope[] = ['Project', 'Global', 'Shared'];
+  const realmOrder: Realm[] = ['project', 'global', 'shared'];
 
   // Create scope groups as compound nodes with subcategory children
-  for (const scope of scopeOrder) {
-    const scopeDef = hierarchy.scopes[scope];
-    if (!scopeDef) continue;
+  for (const realm of realmOrder) {
+    const realmDef = hierarchy.realms[realm];
+    if (!realmDef) continue;
 
-    const subcatChildren: ElkNode[] = [];
+    const layerChildren: ElkNode[] = [];
 
     // Create subcategory groups
-    for (const [subcatName, subcatMeta] of Object.entries(scopeDef.subcategories)) {
-      if (subcatMeta.nodeTypes.length === 0) continue;
+    for (const [layerName, layerMeta] of Object.entries(realmDef.layers)) {
+      if (layerMeta.nodeTypes.length === 0) continue;
 
       const nodeChildren: ElkNode[] = [];
-      for (const nodeType of subcatMeta.nodeTypes) {
+      for (const nodeType of layerMeta.nodeTypes) {
         nodeChildren.push({
           id: `schema-${nodeType}`,
           width: NODE_WIDTH,
@@ -145,21 +145,21 @@ function buildElkGraph(hierarchy: HierarchicalSchemaData): ElkNode {
         });
       }
 
-      subcatChildren.push({
-        id: `subcat-${scope}-${subcatName}`,
+      layerChildren.push({
+        id: `layer-${realm}-${layerName}`,
         children: nodeChildren,
         layoutOptions: {
-          'elk.padding': `[top=${SUBCAT_PADDING + SUBCAT_HEADER},left=${SUBCAT_PADDING},bottom=${SUBCAT_PADDING},right=${SUBCAT_PADDING}]`,
+          'elk.padding': `[top=${LAYER_PADDING + LAYER_HEADER},left=${LAYER_PADDING},bottom=${LAYER_PADDING},right=${LAYER_PADDING}]`,
         },
       });
     }
 
-    if (subcatChildren.length > 0) {
+    if (layerChildren.length > 0) {
       children.push({
-        id: `scope-${scope}`,
-        children: subcatChildren,
+        id: `scope-${realm}`,
+        children: layerChildren,
         layoutOptions: {
-          'elk.padding': `[top=${SCOPE_PADDING + SCOPE_HEADER},left=${SCOPE_PADDING},bottom=${SCOPE_PADDING},right=${SCOPE_PADDING}]`,
+          'elk.padding': `[top=${REALM_PADDING + REALM_HEADER},left=${REALM_PADDING},bottom=${REALM_PADDING},right=${REALM_PADDING}]`,
         },
       });
     }
@@ -202,12 +202,12 @@ function convertToReactFlow(
 
   // Process scope groups
   for (const scopeNode of elkGraph.children || []) {
-    const scopeId = scopeNode.id;
-    const scope = scopeId.replace('scope-', '') as Scope;
-    const scopeDef = hierarchy.scopes[scope];
-    const config = SCOPE_CONFIGS.find(c => c.scope === scope);
+    const realmId = scopeNode.id;
+    const realm = realmId.replace('scope-', '') as Realm;
+    const realmDef = hierarchy.realms[realm];
+    const config = REALM_CONFIGS.find(c => c.realm === realm);
 
-    if (!scopeDef || !config) continue;
+    if (!realmDef || !config) continue;
 
     // Count all nodes in this scope
     let nodeCount = 0;
@@ -217,34 +217,34 @@ function convertToReactFlow(
 
     // Add scope group node
     nodes.push({
-      id: scopeId,
-      type: 'scopeGroup',
+      id: realmId,
+      type: 'realmGroup',
       position: { x: scopeNode.x || 0, y: scopeNode.y || 0 },
       style: {
         width: scopeNode.width || 400,
         height: scopeNode.height || 300,
       },
       data: {
-        scope,
-        label: scopeDef.label,
-        icon: scopeDef.icon,
+        realm,
+        label: realmDef.label,
+        icon: realmDef.icon,
         nodeCount,
       },
     });
 
     // Process subcategory groups
     for (const subcatNode of scopeNode.children || []) {
-      const subcatId = subcatNode.id;
-      const subcatName = subcatId.replace(`subcat-${scope}-`, '');
-      const subcatMeta = scopeDef.subcategories[subcatName as keyof typeof scopeDef.subcategories];
+      const layerId = subcatNode.id;
+      const layerName = layerId.replace(`layer-${realm}-`, '');
+      const layerMeta = realmDef.layers[layerName as keyof typeof realmDef.layers];
 
-      if (!subcatMeta) continue;
+      if (!layerMeta) continue;
 
       // Add subcategory group node
       nodes.push({
-        id: subcatId,
-        type: 'subcategoryGroup',
-        parentId: scopeId,
+        id: layerId,
+        type: 'layerGroup',
+        parentId: realmId,
         extent: 'parent',
         draggable: true,
         position: { x: subcatNode.x || 0, y: subcatNode.y || 0 },
@@ -253,10 +253,10 @@ function convertToReactFlow(
           height: subcatNode.height || 150,
         },
         data: {
-          scope,
-          subcategory: subcatName,
-          label: subcatMeta.label,
-          icon: subcatMeta.icon,
+          realm,
+          layer: layerName,
+          label: layerMeta.label,
+          icon: layerMeta.icon,
           nodeCount: subcatNode.children?.length || 0,
         },
       });
@@ -269,7 +269,7 @@ function convertToReactFlow(
         nodes.push({
           id: schemaNodeElk.id,
           type: 'schemaNode',
-          parentId: subcatId,
+          parentId: layerId,
           extent: 'parent',
           draggable: true,
           position: {
@@ -280,8 +280,8 @@ function convertToReactFlow(
             nodeType,
             label: schemaNode?.label || nodeType,
             description: schemaNode?.description || '',
-            scope,
-            subcategory: subcatName,
+            realm,
+            layer: layerName,
           },
         });
       }
@@ -361,7 +361,7 @@ function applyEdgeAwareGridLayout(
   // ===========================================================================
 
   interface SubcatLayout {
-    subcatName: string;
+    layerName: string;
     meta: { label: string; icon: string; nodeTypes: readonly string[] };
     orderedNodes: string[];
     cols: number;
@@ -370,24 +370,24 @@ function applyEdgeAwareGridLayout(
     height: number;
   }
 
-  interface ScopeLayout {
-    scope: Scope;
-    scopeDef: typeof hierarchy.scopes[Scope];
+  interface RealmLayout {
+    realm: Realm;
+    realmDef: typeof hierarchy.realms[Realm];
     subcategories: SubcatLayout[];
     totalWidth: number;
     totalHeight: number;
   }
 
-  const scopeLayouts: ScopeLayout[] = [];
+  const realmLayouts: RealmLayout[] = [];
   const MAX_COLS = MAX_NODES_PER_ROW;
 
-  for (const scope of ['Project', 'Global', 'Shared'] as Scope[]) {
-    const scopeDef = hierarchy.scopes[scope];
-    if (!scopeDef) continue;
+  for (const realm of ['project', 'global', 'shared'] as Realm[]) {
+    const realmDef = hierarchy.realms[realm];
+    if (!realmDef) continue;
 
-    const subcatLayouts: SubcatLayout[] = [];
+    const layerLayouts: SubcatLayout[] = [];
 
-    for (const [subcatName, meta] of Object.entries(scopeDef.subcategories)) {
+    for (const [layerName, meta] of Object.entries(realmDef.layers)) {
       if (meta.nodeTypes.length === 0) continue;
 
       const orderedNodes = orderNodesByBarycenter([...meta.nodeTypes], adjacency);
@@ -398,34 +398,34 @@ function applyEdgeAwareGridLayout(
       // Calculate dimensions using local constants
       const contentWidth = cols * NODE_WIDTH + (cols - 1) * NODE_GAP;
       const contentHeight = rows * NODE_HEIGHT + (rows - 1) * NODE_GAP;
-      const width = contentWidth + SUBCAT_PADDING * 2;
-      const height = contentHeight + SUBCAT_PADDING * 2 + SUBCAT_HEADER;
+      const width = contentWidth + LAYER_PADDING * 2;
+      const height = contentHeight + LAYER_PADDING * 2 + LAYER_HEADER;
 
-      subcatLayouts.push({ subcatName, meta, orderedNodes, cols, rows, width, height });
+      layerLayouts.push({ layerName, meta, orderedNodes, cols, rows, width, height });
     }
 
-    if (subcatLayouts.length === 0) continue;
+    if (layerLayouts.length === 0) continue;
 
     // ===========================================================================
     // PHASE 2: Calculate scope dimensions from subcategories
     // ===========================================================================
 
-    const subcatCols = Math.min(subcatLayouts.length, MAX_SUBCATS_PER_ROW);
-    const subcatRows = Math.ceil(subcatLayouts.length / subcatCols);
+    const layerCols = Math.min(layerLayouts.length, MAX_LAYERS_PER_ROW);
+    const layerRows = Math.ceil(layerLayouts.length / layerCols);
 
     let maxRowWidths: number[] = [];
     let rowHeights: number[] = [];
 
-    for (let r = 0; r < subcatRows; r++) {
+    for (let r = 0; r < layerRows; r++) {
       let rowWidth = 0;
       let maxHeight = 0;
 
-      for (let c = 0; c < subcatCols; c++) {
-        const idx = r * subcatCols + c;
-        if (idx >= subcatLayouts.length) break;
+      for (let c = 0; c < layerCols; c++) {
+        const idx = r * layerCols + c;
+        if (idx >= layerLayouts.length) break;
 
-        const subcat = subcatLayouts[idx];
-        rowWidth += subcat.width + (c > 0 ? SUBCAT_GAP : 0);
+        const subcat = layerLayouts[idx];
+        rowWidth += subcat.width + (c > 0 ? LAYER_GAP : 0);
         maxHeight = Math.max(maxHeight, subcat.height);
       }
 
@@ -434,12 +434,12 @@ function applyEdgeAwareGridLayout(
     }
 
     const totalContentWidth = Math.max(...maxRowWidths);
-    const totalContentHeight = rowHeights.reduce((a, b) => a + b, 0) + (subcatRows - 1) * SUBCAT_GAP;
+    const totalContentHeight = rowHeights.reduce((a, b) => a + b, 0) + (layerRows - 1) * LAYER_GAP;
 
-    const totalWidth = totalContentWidth + SCOPE_PADDING * 2;
-    const totalHeight = totalContentHeight + SCOPE_PADDING * 2 + SCOPE_HEADER;
+    const totalWidth = totalContentWidth + REALM_PADDING * 2;
+    const totalHeight = totalContentHeight + REALM_PADDING * 2 + REALM_HEADER;
 
-    scopeLayouts.push({ scope, scopeDef, subcategories: subcatLayouts, totalWidth, totalHeight });
+    realmLayouts.push({ realm, realmDef, subcategories: layerLayouts, totalWidth, totalHeight });
   }
 
   // ===========================================================================
@@ -447,33 +447,33 @@ function applyEdgeAwareGridLayout(
   // ===========================================================================
 
   let maxHeightInRow = 0;      // Track tallest scope in current row
-  let scopeX = CANVAS_MARGIN;
-  let scopeY = CANVAS_MARGIN;
+  let realmX = CANVAS_MARGIN;
+  let realmY = CANVAS_MARGIN;
 
-  for (const scopeLayout of scopeLayouts) {
-    const { scope, scopeDef, subcategories, totalWidth, totalHeight } = scopeLayout;
+  for (const realmLayout of realmLayouts) {
+    const { realm, realmDef, subcategories, totalWidth, totalHeight } = realmLayout;
 
     // Wrap to next row if needed
-    if (scopeX + totalWidth > MAX_ROW_WIDTH + CANVAS_MARGIN && scopeX > CANVAS_MARGIN) {
-      scopeX = CANVAS_MARGIN;
-      scopeY += maxHeightInRow + SCOPE_GAP;
+    if (realmX + totalWidth > MAX_ROW_WIDTH + CANVAS_MARGIN && realmX > CANVAS_MARGIN) {
+      realmX = CANVAS_MARGIN;
+      realmY += maxHeightInRow + REALM_GAP;
       maxHeightInRow = 0;
     }
 
-    const scopeId = `scope-${scope}`;
+    const realmId = `scope-${realm}`;
 
     // Create scope group node
     nodes.push({
-      id: scopeId,
-      type: 'scopeGroup',
-      position: { x: scopeX, y: scopeY },
+      id: realmId,
+      type: 'realmGroup',
+      position: { x: realmX, y: realmY },
       width: totalWidth,
       height: totalHeight,
       style: { width: totalWidth, height: totalHeight },
       data: {
-        scope,
-        label: scopeDef.label,
-        icon: scopeDef.icon,
+        realm,
+        label: realmDef.label,
+        icon: realmDef.icon,
         nodeCount: subcategories.reduce((sum, s) => sum + s.orderedNodes.length, 0),
       },
     });
@@ -482,29 +482,29 @@ function applyEdgeAwareGridLayout(
     // PHASE 4: Position subcategories within scope (HORIZONTALLY)
     // ===========================================================================
 
-    const subcatColsInScope = Math.min(subcategories.length, MAX_SUBCATS_PER_ROW);
-    let subcatX = SCOPE_PADDING;
-    let subcatY = SCOPE_PADDING + SCOPE_HEADER;
+    const layerColsInScope = Math.min(subcategories.length, MAX_LAYERS_PER_ROW);
+    let layerX = REALM_PADDING;
+    let layerY = REALM_PADDING + REALM_HEADER;
     let colIndex = 0;
     let rowMaxHeight = 0;
 
     for (const subcat of subcategories) {
-      const subcatId = `subcat-${scope}-${subcat.subcatName}`;
+      const layerId = `layer-${realm}-${subcat.layerName}`;
 
       // Create subcategory group node
       nodes.push({
-        id: subcatId,
-        type: 'subcategoryGroup',
-        parentId: scopeId,
+        id: layerId,
+        type: 'layerGroup',
+        parentId: realmId,
         extent: 'parent',
         draggable: true,
-        position: { x: subcatX, y: subcatY },
+        position: { x: layerX, y: layerY },
         width: subcat.width,
         height: subcat.height,
         style: { width: subcat.width, height: subcat.height },
         data: {
-          scope,
-          subcategory: subcat.subcatName,
+          realm,
+          layer: subcat.layerName,
           label: subcat.meta.label,
           icon: subcat.meta.icon,
           nodeCount: subcat.orderedNodes.length,
@@ -523,19 +523,19 @@ function applyEdgeAwareGridLayout(
         nodes.push({
           id: `schema-${nodeType}`,
           type: 'schemaNode',
-          parentId: subcatId,
+          parentId: layerId,
           extent: 'parent',
           draggable: true,
           position: {
-            x: SUBCAT_PADDING + col * (NODE_WIDTH + NODE_GAP),
-            y: SUBCAT_PADDING + SUBCAT_HEADER + row * (NODE_HEIGHT + NODE_GAP),
+            x: LAYER_PADDING + col * (NODE_WIDTH + NODE_GAP),
+            y: LAYER_PADDING + LAYER_HEADER + row * (NODE_HEIGHT + NODE_GAP),
           },
           data: {
             nodeType,
             label: schemaNode?.label || nodeType,
             description: schemaNode?.description || '',
-            scope,
-            subcategory: subcat.subcatName,
+            realm,
+            layer: subcat.layerName,
           },
         });
       });
@@ -544,20 +544,20 @@ function applyEdgeAwareGridLayout(
       rowMaxHeight = Math.max(rowMaxHeight, subcat.height);
       colIndex++;
 
-      if (colIndex >= subcatColsInScope) {
+      if (colIndex >= layerColsInScope) {
         // Move to next row (wrap)
-        subcatX = SCOPE_PADDING;
-        subcatY += rowMaxHeight + SUBCAT_GAP;
+        layerX = REALM_PADDING;
+        layerY += rowMaxHeight + LAYER_GAP;
         colIndex = 0;
         rowMaxHeight = 0;
       } else {
         // Move to next column (horizontal)
-        subcatX += subcat.width + SUBCAT_GAP;
+        layerX += subcat.width + LAYER_GAP;
       }
     }
 
     // Move scope position for next scope
-    scopeX += totalWidth + SCOPE_GAP;
+    realmX += totalWidth + REALM_GAP;
     maxHeightInRow = Math.max(maxHeightInRow, totalHeight);
   }
 
@@ -584,8 +584,8 @@ function applyEdgeAwareGridLayout(
           nodeType: schemaNode.nodeType,
           label: schemaNode.label,
           description: schemaNode.description || '',
-          scope: schemaNode.scope,
-          subcategory: schemaNode.subcategory,
+          realm: schemaNode.realm,
+          layer: schemaNode.layer,
         },
       });
     });

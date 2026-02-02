@@ -1,11 +1,11 @@
-# models/nodes/locale/locale-market.yaml
+# models/nodes/global/knowledge/locale-market.yaml
 # LocaleMarket - BUSINESS data for a locale
 #
 # Stability: Medium - update quarterly to annually
 
 node:
   name: LocaleMarket
-  category: locale
+  locale_behavior: knowledge
   icon: "📈"
   description: "Business and market data for a locale"
 

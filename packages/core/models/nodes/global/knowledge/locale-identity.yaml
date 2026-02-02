@@ -1,11 +1,11 @@
-# models/nodes/locale/locale-identity.yaml
+# models/nodes/global/knowledge/locale-identity.yaml
 # LocaleIdentity - WHO/WHAT/WHERE data for a locale
 #
 # Stability: High - changes only on ISO updates or geopolitical events
 
 node:
   name: LocaleIdentity
-  category: locale
+  locale_behavior: knowledge
   icon: "🆔"
   description: "Script, geographic, and technical identity for a locale"
 

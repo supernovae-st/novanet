@@ -1,5 +1,5 @@
 // packages/core/src/graph/__tests__/generator.test.ts
-// Tests for schema graph generator
+// Tests for schema graph generator — v9.0.0
 // TDD: Write tests first, then implementation
 
 import { describe, it, expect } from 'vitest';
@@ -26,11 +26,11 @@ describe('graph/generator', () => {
 
       expect(projectNode).toBeDefined();
       expect(projectNode?.id).toBe('schema-Project');
-      expect(projectNode?.scope).toBe('Project');
-      expect(projectNode?.subcategory).toBe('foundation');
+      expect(projectNode?.realm).toBe('project');
+      expect(projectNode?.layer).toBe('foundation');
       expect(projectNode?.label).toBe('Project');
       expect(projectNode?.description).toBeDefined();
-      expect(projectNode?.behavior).toBe('invariant');
+      expect(projectNode?.trait).toBe('invariant');
     });
 
     it('should include all required edge properties', () => {
@@ -86,20 +86,20 @@ describe('graph/generator', () => {
   });
 
   describe('getSchemaHierarchy', () => {
-    it('should return hierarchical data with all 3 scopes', () => {
+    it('should return hierarchical data with all 3 realms', () => {
       const result = getSchemaHierarchy();
-      expect(Object.keys(result.scopes)).toHaveLength(3);
-      expect(result.scopes.Project).toBeDefined();
-      expect(result.scopes.Global).toBeDefined();
-      expect(result.scopes.Shared).toBeDefined();
+      expect(Object.keys(result.realms)).toHaveLength(3);
+      expect(result.realms.project).toBeDefined();
+      expect(result.realms.global).toBeDefined();
+      expect(result.realms.shared).toBeDefined();
     });
 
     it('should include stats', () => {
       const result = getSchemaHierarchy();
       expect(result.stats.totalNodes).toBe(35);
-      expect(result.stats.nodesByScope.Project).toBe(14);
-      expect(result.stats.nodesByScope.Global).toBe(15);
-      expect(result.stats.nodesByScope.Shared).toBe(6);
+      expect(result.stats.nodesByRealm.project).toBe(14);
+      expect(result.stats.nodesByRealm.global).toBe(15);
+      expect(result.stats.nodesByRealm.shared).toBe(6);
     });
 
     it('should include all nodes', () => {
@@ -112,23 +112,23 @@ describe('graph/generator', () => {
       expect(result.edges.length).toBeGreaterThan(50);
     });
 
-    it('should have correct scope definitions', () => {
+    it('should have correct realm definitions', () => {
       const result = getSchemaHierarchy();
 
-      // Project scope
-      expect(result.scopes.Project.label).toBe('PROJECT');
-      expect(result.scopes.Project.icon).toBe('📦');
-      expect(Object.keys(result.scopes.Project.subcategories)).toHaveLength(5);
+      // Project realm
+      expect(result.realms.project.label).toBe('PROJECT');
+      expect(result.realms.project.icon).toBe('📦');
+      expect(Object.keys(result.realms.project.layers)).toHaveLength(5);
 
-      // Global scope
-      expect(result.scopes.Global.label).toBe('GLOBAL');
-      expect(result.scopes.Global.icon).toBe('🌍');
-      expect(Object.keys(result.scopes.Global.subcategories)).toHaveLength(2);
+      // Global realm
+      expect(result.realms.global.label).toBe('GLOBAL');
+      expect(result.realms.global.icon).toBe('🌍');
+      expect(Object.keys(result.realms.global.layers)).toHaveLength(2);
 
-      // Shared scope
-      expect(result.scopes.Shared.label).toBe('SHARED');
-      expect(result.scopes.Shared.icon).toBe('🎯');
-      expect(Object.keys(result.scopes.Shared.subcategories)).toHaveLength(2);
+      // Shared realm
+      expect(result.realms.shared.label).toBe('SHARED');
+      expect(result.realms.shared.icon).toBe('🎯');
+      expect(Object.keys(result.realms.shared.layers)).toHaveLength(2);
     });
 
     it('should have totalEdges in stats', () => {

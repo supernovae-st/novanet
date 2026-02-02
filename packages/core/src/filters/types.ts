@@ -1,12 +1,8 @@
 // src/filters/types.ts
-// v8.2.0: NodeType and NodeCategory imported from single source of truth
-// REMOVED v8.2.0: Priority and Freshness no longer exist in types (YAML v7.11.0 alignment)
-// import type { Priority, Freshness } from '../types/index.js';
-import { NODE_CATEGORIES, type NodeType, type NodeCategory } from '../types/nodes.js';
+// v9.0.0: NodeCategory removed — use Layer directly
+import type { NodeType } from '../types/nodes.js';
 
-// Re-export for backwards compatibility
-export { NODE_CATEGORIES };
-export type { NodeType, NodeCategory };
+export type { NodeType };
 
 // =============================================================================
 // FILTER CRITERIA
@@ -15,16 +11,13 @@ export type { NodeType, NodeCategory };
 export interface FilterCriteria {
   // Node selection
   nodeTypes?: NodeType[];
-  categories?: NodeCategory[];
   excludeTypes?: NodeType[];
 
   // Locale filtering
   locale?: string;
   localeFamily?: string;
 
-  // Property filtering (v8.2.0: priority/freshness removed - YAML v7.11.0 alignment)
-  // priority?: Priority[];
-  // freshness?: Freshness[];
+  // Property filtering
   active?: boolean;
 
   // Search
@@ -84,13 +77,13 @@ export interface CypherQuery {
 
 /**
  * View categories for UI grouping.
- * - scope: Layer views (complete, global, shared, project)
+ * - overview: Layer views (complete, global, shared, project)
  * - generation: Orchestrator and sub-agent context views
  * - knowledge: Locale and concept views
  * - project: Project structure views
  * - mining: SEO and GEO pipeline views
  */
-export type ViewCategory = 'scope' | 'generation' | 'knowledge' | 'project' | 'mining';
+export type ViewCategory = 'overview' | 'generation' | 'knowledge' | 'project' | 'mining';
 
 export interface ViewRegistryEntry {
   id: string;

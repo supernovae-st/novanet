@@ -1,4 +1,4 @@
-# models/nodes/content/concept-l10n.yaml
+# models/nodes/project/semantic/concept-l10n.yaml
 # ConceptL10n - Localized content for Concept nodes
 #
 # GRAPH POSITION:
@@ -14,7 +14,7 @@
 
 node:
   name: ConceptL10n
-  category: content
+  locale_behavior: localized
   icon: "🟢"
   description: "Localized definition for a Concept in a specific locale"
 

@@ -1,23 +1,23 @@
 // src/lib/schemaLayouts/target.ts
 import type { Node, Edge } from '@xyflow/react';
-import type { HierarchicalSchemaData, SubcategoryMeta } from '@novanet/core/graph';
+import type { HierarchicalSchemaData, LayerMeta } from '@novanet/core/graph';
 import type { SchemaLayoutResult } from './types';
 import {
   NODE_WIDTH,
   NODE_HEIGHT,
-  SCOPE_GAP,
-  SCOPE_PADDING,
+  REALM_GAP,
+  REALM_PADDING,
   PHI,
   CANVAS_WIDTH,
   CANVAS_HEIGHT,
 } from './types';
-import type { Scope } from '@novanet/core/types';
+import type { Realm } from '@novanet/core/types';
 
 /**
  * Target/Bullseye Layout - Concentric rings by scope
  *
  * Uses unified spacing from types.ts (Golden Ratio system).
- * Ring spacing = SCOPE_GAP × φ for dramatic separation.
+ * Ring spacing = REALM_GAP × φ for dramatic separation.
  *
  * Visual structure:
  *         ╭───────────────────────╮
@@ -40,27 +40,27 @@ export function applyTargetLayout(
   // Derived from unified constants
   const CENTER_X = Math.round(CANVAS_WIDTH / 4);     // Canvas quarter = center
   const CENTER_Y = Math.round(CANVAS_HEIGHT / 4);
-  const RING_SPACING = Math.round(SCOPE_GAP * PHI);  // φ × scope gap between rings
-  const MIN_RADIUS = SCOPE_GAP;                       // Minimum inner radius
+  const RING_SPACING = Math.round(REALM_GAP * PHI);  // φ × scope gap between rings
+  const MIN_RADIUS = REALM_GAP;                       // Minimum inner radius
 
   // Scope order from center outward
-  const scopeOrder: Scope[] = ['Project', 'Global', 'Shared'];
+  const realmOrder: Realm[] = ['project', 'global', 'shared'];
 
-  scopeOrder.forEach((scope, ringIndex) => {
-    const scopeDef = hierarchy.scopes[scope];
-    if (!scopeDef) return;
+  realmOrder.forEach((scope, ringIndex) => {
+    const realmDef = hierarchy.realms[scope];
+    if (!realmDef) return;
 
-    const scopeId = `scope-${scope}`;
+    const realmId = `scope-${scope}`;
     const radius = MIN_RADIUS + ringIndex * RING_SPACING;
-    const ringWidth = RING_SPACING - SCOPE_PADDING;
+    const ringWidth = RING_SPACING - REALM_PADDING;
 
     // For center (Project), use a circle; for others, use a ring
     if (ringIndex === 0) {
       // Center scope - circular group
       const diameter = radius * 2;
       nodes.push({
-        id: scopeId,
-        type: 'scopeGroup',
+        id: realmId,
+        type: 'realmGroup',
         position: { x: CENTER_X - radius, y: CENTER_Y - radius },
         style: {
           width: diameter,
@@ -69,20 +69,20 @@ export function applyTargetLayout(
         },
         data: {
           scope,
-          label: scopeDef.label,
-          icon: scopeDef.icon,
-          nodeCount: hierarchy.stats.nodesByScope[scope] || 0,
+          label: realmDef.label,
+          icon: realmDef.icon,
+          nodeCount: hierarchy.stats.nodesByRealm[scope] || 0,
         },
       });
 
       // Place nodes in center cluster
-      const subcatEntries = Object.entries(scopeDef.subcategories)
+      const layerEntries = Object.entries(realmDef.layers)
         .filter(([_, meta]) => meta.nodeTypes.length > 0);
 
-      let allNodes: { nodeType: string; subcatName: string; subcatMeta: SubcategoryMeta }[] = [];
-      for (const [subcatName, subcatMeta] of subcatEntries) {
-        for (const nodeType of subcatMeta.nodeTypes) {
-          allNodes.push({ nodeType, subcatName, subcatMeta });
+      let allNodes: { nodeType: string; layerName: string; layerMeta: LayerMeta }[] = [];
+      for (const [layerName, layerMeta] of layerEntries) {
+        for (const nodeType of layerMeta.nodeTypes) {
+          allNodes.push({ nodeType, layerName, layerMeta });
         }
       }
 
@@ -95,7 +95,7 @@ export function applyTargetLayout(
         nodes.push({
           id: `schema-${item.nodeType}`,
           type: 'schemaNode',
-          parentId: scopeId,
+          parentId: realmId,
           extent: 'parent',
           draggable: true,
           position: {
@@ -107,21 +107,21 @@ export function applyTargetLayout(
             label: schemaNode?.label || item.nodeType,
             description: schemaNode?.description || '',
             scope,
-            subcategory: item.subcatName,
+            subcategory: item.layerName,
           },
         });
       });
     } else {
       // Outer rings - approximate with large rectangle
       const outerRadius = radius + ringWidth / 2;
-      const size = outerRadius * 2 + SCOPE_PADDING;
+      const size = outerRadius * 2 + REALM_PADDING;
 
       nodes.push({
-        id: scopeId,
-        type: 'scopeGroup',
+        id: realmId,
+        type: 'realmGroup',
         position: {
-          x: CENTER_X - outerRadius - SCOPE_PADDING / 2,
-          y: CENTER_Y - outerRadius - SCOPE_PADDING / 2,
+          x: CENTER_X - outerRadius - REALM_PADDING / 2,
+          y: CENTER_Y - outerRadius - REALM_PADDING / 2,
         },
         style: {
           width: size,
@@ -130,17 +130,17 @@ export function applyTargetLayout(
         },
         data: {
           scope,
-          label: scopeDef.label,
-          icon: scopeDef.icon,
-          nodeCount: hierarchy.stats.nodesByScope[scope] || 0,
+          label: realmDef.label,
+          icon: realmDef.icon,
+          nodeCount: hierarchy.stats.nodesByRealm[scope] || 0,
         },
       });
 
       // Collect all nodes for this scope
-      const allNodes: { nodeType: string; subcatName: string }[] = [];
-      for (const [subcatName, subcatMeta] of Object.entries(scopeDef.subcategories)) {
-        for (const nodeType of subcatMeta.nodeTypes) {
-          allNodes.push({ nodeType, subcatName });
+      const allNodes: { nodeType: string; layerName: string }[] = [];
+      for (const [layerName, layerMeta] of Object.entries(realmDef.layers)) {
+        for (const nodeType of layerMeta.nodeTypes) {
+          allNodes.push({ nodeType, layerName });
         }
       }
 
@@ -151,11 +151,11 @@ export function applyTargetLayout(
         const schemaNode = hierarchy.nodes.find(n => n.nodeType === item.nodeType);
 
         // Position relative to scope group
-        const groupOffset = outerRadius + SCOPE_PADDING / 2;
+        const groupOffset = outerRadius + REALM_PADDING / 2;
         nodes.push({
           id: `schema-${item.nodeType}`,
           type: 'schemaNode',
-          parentId: scopeId,
+          parentId: realmId,
           extent: 'parent',
           draggable: true,
           position: {
@@ -167,7 +167,7 @@ export function applyTargetLayout(
             label: schemaNode?.label || item.nodeType,
             description: schemaNode?.description || '',
             scope,
-            subcategory: item.subcatName,
+            subcategory: item.layerName,
           },
         });
       });

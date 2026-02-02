@@ -16,10 +16,7 @@
 
 node:
   name: Page
-  category: structure
-  scope: project
   locale_behavior: invariant
-  functional_role: structure
   icon: "🔷"
   description: "Invariant page structure containing blocks and orchestrator instructions"
 

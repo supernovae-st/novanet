@@ -1,11 +1,11 @@
-# models/nodes/locale/locale-rules-adaptation.yaml
+# models/nodes/global/knowledge/locale-rules-adaptation.yaml
 # LocaleRulesAdaptation - HOW to adapt content (FACTS vs ILLUSTRATIONS)
 #
 # Stability: Medium - Update when adaptation strategies evolve.
 
 node:
   name: LocaleRulesAdaptation
-  category: locale
+  locale_behavior: knowledge
   icon: "🔄"
   description: "Meta-instructions for content adaptation decisions"
 

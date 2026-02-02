@@ -1,9 +1,9 @@
-# models/nodes/locale/locale.yaml
+# models/nodes/global/config/locale.yaml
 # Locale - Graph-native locale node with fallback chains and knowledge links
 
 node:
   name: Locale
-  category: locale
+  locale_behavior: invariant
   icon: "🔷"
   description: "First-class locale node (BCP 47) with fallback chains and knowledge graph connections"
 

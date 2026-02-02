@@ -1,4 +1,4 @@
-# models/nodes/generation/page-l10n.yaml
+# models/nodes/project/output/page-l10n.yaml
 # PageL10n - Assembled LLM-generated page content (v7.11.0)
 #
 # v7.11.0 CHANGES:
@@ -13,7 +13,7 @@
 
 node:
   name: PageL10n
-  category: generation
+  locale_behavior: localized
   icon: "🟠"
   description: "Assembled BlockL10n content for a page in a specific locale"
 

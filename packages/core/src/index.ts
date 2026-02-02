@@ -1,25 +1,11 @@
 // NovaNet Core - Main Entry Point
-// Graph-native content generation system v8.0.0
+// Graph-native content generation system v9.0.0
 
 // =============================================================================
 // TYPES
 // =============================================================================
 
-// Export all types from index (which re-exports locale-knowledge types)
 export * from './types/index.js';
-// Note: locale-knowledge types are re-exported via types/index.ts to avoid conflicts
-
-// =============================================================================
-// DATABASE
-// =============================================================================
-
-export * from './db/index.js';
-
-// =============================================================================
-// PARSERS
-// =============================================================================
-
-export * from './parsers/index.js';
 
 // =============================================================================
 // FILTERS
@@ -49,7 +35,7 @@ export * from './parsers/index.js';
 export * from './filters/index.js';
 
 // =============================================================================
-// CONFIG (v8.0.0)
+// CONFIG
 // =============================================================================
 
 /**
@@ -59,7 +45,7 @@ export * from './filters/index.js';
 export * as config from './config/index.js';
 
 // =============================================================================
-// SCHEMAS (v8.0.0)
+// SCHEMAS
 // =============================================================================
 
 /**
@@ -69,28 +55,15 @@ export * as config from './config/index.js';
 export * as schemas from './schemas/index.js';
 
 // =============================================================================
-// GENERATORS (v8.0.0)
-// =============================================================================
-
-/**
- * Documentation generators for Unified View System:
- * - ViewParser: Parse and validate view YAML with docs section
- * - MarkdownGenerator: Generate MD documentation from views
- * - CypherExporter: Extract Cypher queries from views
- * Use: `import { generators } from 'novanet-core'`
- */
-export * as generators from './generators/index.js';
-
-// =============================================================================
-// GRAPH (v8.2.0)
+// GRAPH (v9.0.0)
 // =============================================================================
 
 /**
  * Graph module for schema visualization:
  * - generateSchemaGraph(): Flat 35 nodes + ~89 edges
- * - getSchemaHierarchy(): Grouped by scope/subcategory
- * - SCOPE_HIERARCHY: Scope definitions with subcategories
- * - NODE_SUBCATEGORIES: NodeType to subcategory mapping
+ * - getSchemaHierarchy(): Grouped by realm/layer
+ * - REALM_HIERARCHY: Realm definitions with layers
+ * - NODE_LAYERS: NodeType to layer mapping
  * Use: `import { graph } from 'novanet-core'` or `import { generateSchemaGraph } from 'novanet-core'`
  */
 export * as graph from './graph/index.js';

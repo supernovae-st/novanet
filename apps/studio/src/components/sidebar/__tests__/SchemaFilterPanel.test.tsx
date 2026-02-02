@@ -9,21 +9,21 @@ jest.mock('@/stores/filterStore', () => ({
   useFilterStore: jest.fn(),
 }));
 
-const mockToggleSubcategoryCollapsed = jest.fn();
-const mockIsSubcategoryCollapsed = jest.fn();
-const mockSetSubcategoryCollapsed = jest.fn();
+const mockToggleLayerCollapsed = jest.fn();
+const mockIsLayerCollapsed = jest.fn();
+const mockSetLayerCollapsed = jest.fn();
 const mockUseFilterStore = useFilterStore as jest.MockedFunction<typeof useFilterStore>;
 
 describe('SchemaFilterPanel', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    mockIsSubcategoryCollapsed.mockReturnValue(false);
+    mockIsLayerCollapsed.mockReturnValue(false);
 
     mockUseFilterStore.mockImplementation((selector) => {
       const state = {
-        toggleSubcategoryCollapsed: mockToggleSubcategoryCollapsed,
-        isSubcategoryCollapsed: mockIsSubcategoryCollapsed,
-        setSubcategoryCollapsed: mockSetSubcategoryCollapsed,
+        toggleLayerCollapsed: mockToggleLayerCollapsed,
+        isLayerCollapsed: mockIsLayerCollapsed,
+        setLayerCollapsed: mockSetLayerCollapsed,
       };
       return selector ? selector(state as never) : state;
     });
@@ -56,46 +56,46 @@ describe('SchemaFilterPanel', () => {
       expect(screen.getByText('(6)')).toBeInTheDocument(); // Shared
     });
 
-    it('renders subcategories for Project scope', () => {
+    it('renders layers for Project realm', () => {
       render(<SchemaFilterPanel />);
 
-      // Project subcategories
+      // Project layers
       expect(screen.getByText('Foundation')).toBeInTheDocument();
       expect(screen.getByText('Structure')).toBeInTheDocument();
-      expect(screen.getByText('Semantic')).toBeInTheDocument();
-      expect(screen.getByText('Instruction')).toBeInTheDocument();
-      expect(screen.getByText('Output')).toBeInTheDocument();
+      expect(screen.getByText('Semantic Layer')).toBeInTheDocument();
+      expect(screen.getByText('Instructions')).toBeInTheDocument();
+      expect(screen.getByText('Generated Output')).toBeInTheDocument();
     });
 
-    it('renders subcategories for Global scope', () => {
+    it('renders layers for Global realm', () => {
       render(<SchemaFilterPanel />);
 
-      // Global subcategories
+      // Global layers
       expect(screen.getByText('Configuration')).toBeInTheDocument();
-      expect(screen.getByText('Knowledge')).toBeInTheDocument();
+      expect(screen.getByText('Locale Knowledge')).toBeInTheDocument();
     });
 
-    it('renders subcategories for Shared scope', () => {
+    it('renders layers for Shared realm', () => {
       render(<SchemaFilterPanel />);
 
-      // Shared subcategories
-      expect(screen.getByText('SEO')).toBeInTheDocument();
-      expect(screen.getByText('GEO')).toBeInTheDocument();
+      // Shared layers
+      expect(screen.getByText('SEO Intelligence')).toBeInTheDocument();
+      expect(screen.getByText('GEO Intelligence')).toBeInTheDocument();
     });
 
-    it('renders subcategory labels with icons (Lucide SVG)', () => {
+    it('renders layer labels with icons (Lucide SVG)', () => {
       render(<SchemaFilterPanel />);
 
-      // Subcategory labels are rendered - icons are Lucide SVGs (not emojis)
+      // Layer labels are rendered - icons are Lucide SVGs (not emojis)
       expect(screen.getByText('Foundation')).toBeInTheDocument();
       expect(screen.getByText('Structure')).toBeInTheDocument();
-      expect(screen.getByText('Semantic')).toBeInTheDocument();
-      expect(screen.getByText('Instruction')).toBeInTheDocument();
-      expect(screen.getByText('Output')).toBeInTheDocument();
+      expect(screen.getByText('Semantic Layer')).toBeInTheDocument();
+      expect(screen.getByText('Instructions')).toBeInTheDocument();
+      expect(screen.getByText('Generated Output')).toBeInTheDocument();
       expect(screen.getByText('Configuration')).toBeInTheDocument();
-      expect(screen.getByText('Knowledge')).toBeInTheDocument();
-      expect(screen.getByText('SEO')).toBeInTheDocument();
-      expect(screen.getByText('GEO')).toBeInTheDocument();
+      expect(screen.getByText('Locale Knowledge')).toBeInTheDocument();
+      expect(screen.getByText('SEO Intelligence')).toBeInTheDocument();
+      expect(screen.getByText('GEO Intelligence')).toBeInTheDocument();
 
       // Lucide icons render as SVG elements
       const svgIcons = document.querySelectorAll('svg');
@@ -140,14 +140,14 @@ describe('SchemaFilterPanel', () => {
   });
 
   describe('Subcategory Toggle Behavior', () => {
-    it('calls toggleSubcategoryCollapsed when subcategory row is clicked', () => {
+    it('calls toggleLayerCollapsed when subcategory row is clicked', () => {
       render(<SchemaFilterPanel />);
 
       // Click on Foundation subcategory row
       const foundationText = screen.getByText('Foundation');
       fireEvent.click(foundationText);
 
-      expect(mockToggleSubcategoryCollapsed).toHaveBeenCalledWith('Project', 'foundation');
+      expect(mockToggleLayerCollapsed).toHaveBeenCalledWith('project', 'foundation');
     });
 
     it('renders subcategory checkboxes with checked state', () => {
