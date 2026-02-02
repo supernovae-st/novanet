@@ -24,7 +24,7 @@ import { iconSizes, gapTokens } from '@/design/tokens';
 import { DEFAULT_FETCH_LIMIT } from '@/config/constants';
 import { useUIStore, useFilterStore, useGraphStore, useAnimationStore } from '@/stores';
 import { useGraphData, useFilteredGraph, UrlSyncComponent } from '@/hooks';
-import { ContextPicker, ViewPicker } from '@/components/sidebar';
+import { ViewPicker } from '@/components/sidebar';
 import { isInputFocused, matchesKeyCombo } from '@/lib/keyboard';
 import { NODE_TYPE_CONFIG, type NodeTypeConfig } from '@/config/nodeTypes';
 import type { GraphNode, HoverNodeInfo, SchemaGroupNode, NodeType } from '@/types';
@@ -739,7 +739,7 @@ export default function HomePage() {
                     onModeChange={setNavigationMode}
                   />
                   <Pill size="md">
-                    {navigationMode === 'meta' ? <ViewPicker /> : <ContextPicker />}
+                    <ViewPicker />
                   </Pill>
                 </div>
               </div>

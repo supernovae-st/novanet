@@ -482,12 +482,11 @@ export class CypherGenerator {
 }
 
 // =============================================================================
-// FACET QUERY BUILDER (v9 Phase 6 — Rust swap point)
+// FACET QUERY BUILDER (DEPRECATED — Rust bridge active since v9.0.0)
 //
-// buildFacetCypher() resolves realm/trait/layer/edgeFamily facets into a Cypher
-// query that filters data nodes. When `novanet filter build` (Rust binary) is
-// ready, replace the implementation of buildFacetCypher() only — the interface
-// stays identical.
+// The navigation route now calls buildCypherViaRust() from novanetBridge.ts,
+// which invokes `novanet filter build` (Rust binary) via subprocess.
+// These TS helpers are retained for test reference only — do NOT use in new code.
 // =============================================================================
 
 export interface FacetQuery {
@@ -501,6 +500,9 @@ export interface FacetQuery {
 /**
  * Resolve NodeType[] for the given Realm filter.
  * Returns all 35 types when realms is empty.
+ *
+ * @deprecated Replaced by Rust bridge (`novanetBridge.buildCypherViaRust`).
+ * Kept for test reference only.
  */
 export function resolveTypesForRealms(realms: Realm[]): NodeType[] {
   if (realms.length === 0) return [];
@@ -510,6 +512,9 @@ export function resolveTypesForRealms(realms: Realm[]): NodeType[] {
 /**
  * Resolve NodeType[] for the given Trait filter.
  * Returns empty when traits is empty.
+ *
+ * @deprecated Replaced by Rust bridge (`novanetBridge.buildCypherViaRust`).
+ * Kept for test reference only.
  */
 export function resolveTypesForTraits(traits: Trait[]): NodeType[] {
   if (traits.length === 0) return [];
@@ -526,8 +531,9 @@ export function resolveTypesForTraits(traits: Trait[]): NodeType[] {
  * 4. Intersect all non-empty resolved sets
  * 5. If edgeFamilies provided, add edge filter in WHERE clause
  *
- * This is the **Rust swap point** — replace this implementation when
- * `novanet filter build --realms=... --traits=... --layers=...` is ready.
+ * @deprecated Replaced by Rust bridge (`novanetBridge.buildCypherViaRust`).
+ * The navigation route now calls the Rust binary directly.
+ * Kept for test reference only.
  */
 export function buildFacetCypher(facets: FacetQuery): CypherQuery {
   const params: Record<string, unknown> = {};

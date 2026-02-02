@@ -18,22 +18,26 @@ views:
     file: complete-graph.yaml
     description: Full NovaNet graph with all nodes and relations
     category: overview
+    modes: [data, meta, overlay, query]
 
-  # Scope layers (derived from complete-graph)
+  # Realm layers (derived from complete-graph)
   - id: global-layer
     file: global-layer.yaml
     description: Locale configuration and knowledge (15 nodes)
     category: overview
+    modes: [data, meta, overlay, query]
 
   - id: shared-layer
     file: shared-layer.yaml
     description: SEO keywords and GEO seeds (6 nodes)
     category: overview
+    modes: [data, meta, overlay, query]
 
   - id: project-layer
     file: project-layer.yaml
     description: Per-project nodes from foundation to output (14 nodes)
     category: overview
+    modes: [data, meta, overlay, query]
 
 # =============================================================================
 # GENERATION VIEWS (for orchestrator and sub-agents)
@@ -43,16 +47,19 @@ views:
     file: page-generation-context.yaml
     description: Full context for orchestrator to generate a page
     category: generation
+    modes: [data, overlay, query]
 
   - id: block-generation
     file: block-generation.yaml
     description: Full context for sub-agent to generate a block
     category: generation
+    modes: [data, overlay, query]
 
   - id: block-semantic-network
     file: block-semantic-network.yaml
     description: Block with concepts and spreading activation
     category: generation
+    modes: [data, overlay, query]
 
 # =============================================================================
 # KNOWLEDGE VIEWS (locale and concepts)
@@ -62,11 +69,13 @@ views:
     file: locale-full-knowledge.yaml
     description: Complete locale knowledge (Identity, Voice, Culture, Market, Lexicon)
     category: knowledge
+    modes: [data, overlay, query]
 
   - id: concept-ecosystem
     file: concept-ecosystem.yaml
     description: Concept with L10n, SEO keywords, GEO seeds, semantic links
     category: knowledge
+    modes: [data, overlay, query]
 
 # =============================================================================
 # PROJECT VIEWS (project structure)
@@ -76,11 +85,13 @@ views:
     file: project-context.yaml
     description: Project with supported locales and page inventory
     category: project
+    modes: [data, overlay, query]
 
   - id: project-overview
     file: project-overview.yaml
     description: Project dashboard with pages, brand identity, and concepts
     category: project
+    modes: [data, overlay, query]
 
 # =============================================================================
 # MINING VIEWS (SEO and GEO pipelines)
@@ -90,8 +101,10 @@ views:
     file: seo-pipeline.yaml
     description: SEO keyword mining and optimization workflow
     category: mining
+    modes: [data, overlay, query]
 
   - id: geo-pipeline
     file: geo-pipeline.yaml
     description: GEO question mining and citation workflow
     category: mining
+    modes: [data, overlay, query]

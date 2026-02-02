@@ -156,7 +156,7 @@ test.describe('Schema Mode - Schema Graph Display', () => {
     const nodes = page.locator('.react-flow__node');
     await expect(nodes.first()).toBeVisible({ timeout: 30000 });
 
-    // Should have multiple nodes (scope groups + subcategory groups + schema nodes)
+    // Should have multiple nodes (realm groups + layer groups + schema nodes)
     const nodeCount = await nodes.count();
     expect(nodeCount).toBeGreaterThan(0);
   });
@@ -278,11 +278,11 @@ test.describe('Schema Mode - Filter Panel', () => {
     await expect(filterPanel.getByText('GEO')).toBeVisible();
   });
 
-  test('should show node counts for subcategories', async ({ page }) => {
+  test('should show node counts for layers', async ({ page }) => {
     const filterPanel = page.locator('[data-testid="schema-filter-panel"]');
 
-    // The FilterTree shows counts next to each subcategory
-    // Look for subcategory labels - counts may be displayed differently
+    // The FilterTree shows counts next to each layer
+    // Look for layer labels - counts may be displayed differently
     await expect(filterPanel.getByText('Foundation')).toBeVisible();
     await expect(filterPanel.getByText('Knowledge')).toBeVisible();
 
@@ -387,7 +387,7 @@ test.describe('Schema Mode - Scope Collapse', () => {
   });
 });
 
-test.describe('Schema Mode - Subcategory Toggle', () => {
+test.describe('Schema Mode - Layer Toggle', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/?mode=schema');
     await waitForSchemaMode(page);
@@ -395,8 +395,8 @@ test.describe('Schema Mode - Subcategory Toggle', () => {
 
   // NOTE: Skipped due to Playwright interaction issue with role="checkbox" elements
   // The functionality works in the browser - this is a test infrastructure limitation
-  // The subcategory toggle is tested via the scope collapse tests which verify aria-expanded
-  test.skip('should toggle subcategory visibility when clicked', async ({ page }) => {
+  // The layer toggle is tested via the realm collapse tests which verify aria-expanded
+  test.skip('should toggle layer visibility when clicked', async ({ page }) => {
     const filterPanel = page.locator('[data-testid="schema-filter-panel"]');
 
     // Find Foundation checkbox by aria-label (role="checkbox" in FilterTree)
@@ -423,7 +423,7 @@ test.describe('Schema Mode - Subcategory Toggle', () => {
   });
 
   // NOTE: Skipped due to Playwright interaction issue with role="checkbox" elements
-  test.skip('should show visual feedback when subcategory is hidden', async ({ page }) => {
+  test.skip('should show visual feedback when layer is hidden', async ({ page }) => {
     const filterPanel = page.locator('[data-testid="schema-filter-panel"]');
 
     // Find Foundation checkbox by aria-label

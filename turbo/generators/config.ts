@@ -50,8 +50,8 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
       },
       {
         type: 'list',
-        name: 'scope',
-        message: 'Scope (where does this node live?):',
+        name: 'realm',
+        message: 'Realm (where does this node live?):',
         choices: [
           { name: 'global  - Shared by ALL projects (Locale, LocaleKnowledge)', value: 'global' },
           { name: 'shared  - Independent of projects (SEO, GEO)', value: 'shared' },
@@ -60,8 +60,8 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
       },
       {
         type: 'list',
-        name: 'subcategory',
-        message: 'Subcategory:',
+        name: 'layer',
+        message: 'Layer:',
         choices: [
           // Global
           { name: 'config (global)', value: 'config' },
@@ -95,7 +95,7 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
       // 1. Create YAML schema file
       actions.push({
         type: 'add',
-        path: 'packages/core/models/nodes/{{scope}}/{{kebabCase name}}.yaml',
+        path: 'packages/core/models/nodes/{{realm}}/{{layer}}/{{kebabCase name}}.yaml',
         templateFile: 'templates/node.yaml.hbs',
       });
 
@@ -103,7 +103,7 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
       if (answers?.hasL10n) {
         actions.push({
           type: 'add',
-          path: 'packages/core/models/nodes/{{scope}}/{{kebabCase name}}-l10n.yaml',
+          path: 'packages/core/models/nodes/{{realm}}/{{layer}}/{{kebabCase name}}-l10n.yaml',
           templateFile: 'templates/node-l10n.yaml.hbs',
         });
       }
@@ -112,7 +112,7 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
       actions.push(() => {
         return `
 Node created! Next steps:
-  1. Edit packages/core/models/nodes/${answers?.scope}/${plop.getHelper('kebabCase')(answers?.name || '')}.yaml
+  1. Edit packages/core/models/nodes/${answers?.realm}/${answers?.layer}/${plop.getHelper('kebabCase')(answers?.name || '')}.yaml
   2. Add properties specific to your node
   3. Run: pnpm --filter=@novanet/core build
   4. Update types in packages/core/src/types/nodes.ts if needed

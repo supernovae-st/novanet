@@ -3,10 +3,11 @@
 /**
  * FacetFilterPanel - Faceted filter panel for Query mode
  *
- * Three facet sections:
+ * Four facet sections:
  * - Realms (3): global, project, shared
  * - Layers (9): config, knowledge, foundation, ...
  * - Traits (5): invariant, localized, knowledge, derived, job
+ * - Edge Families (5): ownership, localization, semantic, generation, mining
  *
  * Reads/writes filterStore facet state.
  * Uses Sidebar compound component for consistent styling.
@@ -31,6 +32,11 @@ import {
   BookOpen,
   Sparkles,
   Cpu,
+  Link,
+  ArrowRightLeft,
+  Waypoints,
+  Wand2,
+  Pickaxe,
   type LucideIcon,
 } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
@@ -75,9 +81,18 @@ const REALM_COLORS: Record<Realm, string> = {
   shared: realmAccents.shared.color,
 };
 
-// Consistent accent for layer and trait sections
+const EDGE_FAMILIES: { key: string; label: string; icon: LucideIcon }[] = [
+  { key: 'ownership', label: 'Ownership', icon: Link },
+  { key: 'localization', label: 'Localization', icon: ArrowRightLeft },
+  { key: 'semantic', label: 'Semantic', icon: Waypoints },
+  { key: 'generation', label: 'Generation', icon: Wand2 },
+  { key: 'mining', label: 'Mining', icon: Pickaxe },
+];
+
+// Consistent accent for layer, trait, and edge family sections
 const LAYER_SECTION_COLOR = '#6c71c4'; // violet
 const TRAIT_SECTION_COLOR = '#d33682'; // magenta
+const EDGE_FAMILY_SECTION_COLOR = '#cb4b16'; // orange
 
 // =============================================================================
 // COMPONENT
@@ -94,23 +109,28 @@ export const FacetFilterPanel = memo(function FacetFilterPanel({
     realmFilter,
     traitFilter,
     layerFilter,
+    edgeFamilyFilter,
     toggleRealm,
     toggleTrait,
     toggleLayer,
+    toggleEdgeFamily,
   } = useFilterStore(
     useShallow((s) => ({
       realmFilter: s.realmFilter,
       traitFilter: s.traitFilter,
       layerFilter: s.layerFilter,
+      edgeFamilyFilter: s.edgeFamilyFilter,
       toggleRealm: s.toggleRealm,
       toggleTrait: s.toggleTrait,
       toggleLayer: s.toggleLayer,
+      toggleEdgeFamily: s.toggleEdgeFamily,
     }))
   );
 
   const realmSet = useMemo(() => new Set(realmFilter), [realmFilter]);
   const layerSet = useMemo(() => new Set(layerFilter), [layerFilter]);
   const traitSet = useMemo(() => new Set(traitFilter), [traitFilter]);
+  const edgeFamilySet = useMemo(() => new Set(edgeFamilyFilter), [edgeFamilyFilter]);
 
   // Section-level tri-state: all checked, some, none
   const realmCheckboxState = useMemo(() => {
@@ -130,6 +150,12 @@ export const FacetFilterPanel = memo(function FacetFilterPanel({
     if (traitSet.size === TRAITS.length) return 'all' as const;
     return 'partial' as const;
   }, [traitSet]);
+
+  const edgeFamilyCheckboxState = useMemo(() => {
+    if (edgeFamilySet.size === 0) return 'none' as const;
+    if (edgeFamilySet.size === EDGE_FAMILIES.length) return 'all' as const;
+    return 'partial' as const;
+  }, [edgeFamilySet]);
 
   // Toggle all realms
   const handleRealmSectionClick = useCallback(() => {
@@ -164,8 +190,19 @@ export const FacetFilterPanel = memo(function FacetFilterPanel({
     }
   }, [traitCheckboxState]);
 
+  // Toggle all edge families
+  const handleEdgeFamilySectionClick = useCallback(() => {
+    const allKeys = EDGE_FAMILIES.map((f) => f.key);
+    const store = useFilterStore.getState();
+    if (edgeFamilyCheckboxState !== 'none') {
+      store.setEdgeFamilyFilter([]);
+    } else {
+      store.setEdgeFamilyFilter(allKeys);
+    }
+  }, [edgeFamilyCheckboxState]);
+
   // Active facet count
-  const activeFacetCount = realmSet.size + layerSet.size + traitSet.size;
+  const activeFacetCount = realmSet.size + layerSet.size + traitSet.size + edgeFamilySet.size;
 
   return (
     <Sidebar.Content
@@ -260,6 +297,30 @@ export const FacetFilterPanel = memo(function FacetFilterPanel({
               color={TRAIT_SECTION_COLOR}
               isSelected={traitSet.has(key)}
               onToggle={() => toggleTrait(key)}
+            />
+          ))}
+        </Sidebar.Section>
+
+        {/* Edge Families Section */}
+        <Sidebar.Section
+          id="facet-edge-families"
+          label="Edge Families"
+          icon={<Link className={iconSizes.sm} />}
+          color={EDGE_FAMILY_SECTION_COLOR}
+          checkboxState={edgeFamilyCheckboxState}
+          onCheckboxClick={handleEdgeFamilySectionClick}
+          count={EDGE_FAMILIES.length}
+          defaultExpanded
+        >
+          {EDGE_FAMILIES.map(({ key, label, icon: Icon }) => (
+            <Sidebar.Row
+              key={key}
+              id={`facet-edge-family-${key}`}
+              label={label}
+              icon={<Icon className={iconSizes.sm} />}
+              color={EDGE_FAMILY_SECTION_COLOR}
+              isSelected={edgeFamilySet.has(key)}
+              onToggle={() => toggleEdgeFamily(key)}
             />
           ))}
         </Sidebar.Section>

@@ -36,7 +36,7 @@ For each use case, trace the **complete path** through the graph and verify:
 
 ```
 Read and parse:
-├── models/_index.yaml (35 nodes, 3 scopes)
+├── models/_index.yaml (35 nodes, 3 realms)
 ├── models/relations.yaml (50 relations)
 └── models/nodes/**/*.yaml (all node definitions)
 ```
@@ -47,7 +47,7 @@ For each `models/docs/views/*.md`:
 
 | Check | Description |
 |-------|-------------|
-| **Nodes** | All 35 nodes present with correct scope |
+| **Nodes** | All 35 nodes present with correct realm |
 | **Relations FROM→TO** | Direction matches `relations.yaml` |
 | **Relations Props** | Properties (position, temperature) documented |
 | **Styling** | `classDef` matches `locale_behavior` |
@@ -87,7 +87,7 @@ For `apps/studio/src/config/`:
 
 ```
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║  ONTOLOGY AUDIT v8.2.0                                                        ║
+║  ONTOLOGY AUDIT v9.0.0                                                        ║
 ╠═══════════════════════════════════════════════════════════════════════════════╣
 ║  Source of Truth: packages/core/models/                                       ║
 ║  Nodes: 35 | Relations: 50 | Realms: 3                                        ║
@@ -153,7 +153,7 @@ Locale
   └─ :HAS_RULES_SLUG → LocaleRulesSlug
 ```
 
-Verify: All 15 Global scope nodes
+Verify: All 15 Global realm nodes
 
 ### UC3: SEO/GEO Pipeline
 
@@ -174,7 +174,7 @@ SEOMiningRun :SEO_MINES → SEOKeywordL10n
 GEOMiningRun :GEO_MINES → GEOSeedL10n
 ```
 
-Verify: All 6 Shared scope nodes
+Verify: All 6 Shared realm nodes
 
 ### UC4: Page Assembly
 

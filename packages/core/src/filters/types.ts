@@ -85,11 +85,19 @@ export interface CypherQuery {
  */
 export type ViewCategory = 'overview' | 'generation' | 'knowledge' | 'project' | 'mining';
 
+/**
+ * Navigation modes that a view supports.
+ * Defined here (not imported from Studio) to avoid circular dependencies.
+ */
+export type ViewNavigationMode = 'data' | 'meta' | 'overlay' | 'query';
+
 export interface ViewRegistryEntry {
   id: string;
   file: string;
   description: string;
   category: ViewCategory;
+  /** Which navigation modes show this view. Omit for all modes. */
+  modes?: ViewNavigationMode[];
 }
 
 export interface ViewRegistry {

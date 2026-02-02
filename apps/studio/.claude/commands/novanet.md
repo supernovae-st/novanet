@@ -25,7 +25,7 @@ Starts a NovaNet Studio development session.
 4. **Show Quick Actions**
    ```
    ╔═══════════════════════════════════════════════════════════════╗
-   ║  🎯 NOVANET STUDIO v8.2.0                                     ║
+   ║  🎯 NOVANET STUDIO v9.0.0                                     ║
    ╠═══════════════════════════════════════════════════════════════╣
    ║                                                               ║
    ║  Quick Actions:                                               ║

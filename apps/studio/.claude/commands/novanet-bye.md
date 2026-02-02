@@ -10,9 +10,9 @@ Ends a NovaNet Studio development session with proper cleanup.
 
 1. **Verify Clean State**
    ```bash
-   cd /Users/thibaut/Projects/traduction_ai/novanet/studio
-   npm run type-check
-   npm run lint
+   cd /Users/thibaut/supernovae-st/novanet-hq/apps/studio
+   pnpm type-check
+   pnpm lint
    git status
    ```
 

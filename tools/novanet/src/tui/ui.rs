@@ -1,32 +1,40 @@
-//! UI rendering: layout + widgets for the TUI.
+//! UI rendering: Galaxy-themed mission control layout.
 //!
-//! Three-pane layout: [Tree | Detail | Status Bar].
-//! Uses ratatui for terminal rendering.
+//! Five-area layout:
+//! ```text
+//! ┌─ Mode Tabs ───────────────────────────────────┐
+//! ├──────────────┬────────────────────────────────┤
+//! │  TAXONOMY    │  KIND DETAIL                    │
+//! │  (tree)      │                                 │
+//! │  35%         ├────────────────────────────────┤
+//! │              │  CYPHER PREVIEW                 │
+//! │              │  (read-only)                    │
+//! ├──────────────┴────────────────────────────────┤
+//! │  Status bar                                    │
+//! └───────────────────────────────────────────────┘
+//! ```
 
 use ratatui::Frame;
 use ratatui::layout::{Constraint, Direction, Layout, Rect};
-use ratatui::style::{Color, Modifier, Style};
+use ratatui::style::{Modifier, Style};
 use ratatui::text::{Line, Span};
 use ratatui::widgets::{Block, Borders, List, ListItem, Paragraph, Wrap};
 
 use crate::tui::app::{ActivePanel, AppState, NavMode};
+use crate::tui::detail::{self, KindDetail};
+use crate::tui::search::SearchState;
+use crate::tui::theme;
 use crate::tui::tree::{TaxonomyTree, TreeNodeType};
-
-/// Mode tab colors.
-fn mode_color(mode: NavMode, active: bool) -> Color {
-    if !active {
-        return Color::DarkGray;
-    }
-    match mode {
-        NavMode::Data => Color::Cyan,
-        NavMode::Meta => Color::Magenta,
-        NavMode::Overlay => Color::Yellow,
-        NavMode::Query => Color::Green,
-    }
-}
 
 /// Render the full UI frame.
 pub fn render(frame: &mut Frame, state: &AppState) {
+    // Fill entire terminal with deep space background
+    let area = frame.area();
+    frame.render_widget(
+        Block::default().style(Style::default().bg(theme::BG_VOID)),
+        area,
+    );
+
     match state {
         AppState::Loading { message } => render_loading(frame, message),
         AppState::Ready {
@@ -37,6 +45,10 @@ pub fn render(frame: &mut Frame, state: &AppState) {
             status,
             facets,
             node_count,
+            cypher_preview,
+            kind_detail,
+            search,
+            edge_explorer_idx,
         } => render_ready(
             frame,
             *mode,
@@ -46,6 +58,10 @@ pub fn render(frame: &mut Frame, state: &AppState) {
             status,
             facets.show_popup,
             *node_count,
+            cypher_preview,
+            kind_detail.as_deref(),
+            search.as_ref(),
+            *edge_explorer_idx,
         ),
     }
 }
@@ -55,18 +71,17 @@ fn render_loading(frame: &mut Frame, message: &str) {
     let block = Block::default()
         .title(" NovaNet ")
         .borders(Borders::ALL)
-        .border_style(Style::default().fg(Color::Cyan));
+        .border_style(Style::default().fg(theme::CYBER_CYAN))
+        .style(Style::default().bg(theme::BG_PANEL));
 
     let paragraph = Paragraph::new(vec![
         Line::from(""),
         Line::from(Span::styled(
             "NovaNet Context Graph",
-            Style::default()
-                .fg(Color::Cyan)
-                .add_modifier(Modifier::BOLD),
+            theme::accent_bold(theme::CYBER_CYAN),
         )),
         Line::from(""),
-        Line::from(Span::styled(message, Style::default().fg(Color::DarkGray))),
+        Line::from(Span::styled(message, theme::dim_style())),
     ])
     .block(block)
     .centered();
@@ -84,6 +99,10 @@ fn render_ready(
     status: &str,
     show_facet_popup: bool,
     node_count: usize,
+    cypher_preview: &[String],
+    kind_detail: Option<&KindDetail>,
+    search: Option<&SearchState>,
+    edge_explorer_idx: Option<usize>,
 ) {
     let area = frame.area();
 
@@ -98,11 +117,24 @@ fn render_ready(
         .split(area);
 
     render_mode_tabs(frame, vertical[0], mode);
-    render_main_content(frame, vertical[1], mode, tree, active_panel, detail_lines);
-    render_status_bar(frame, vertical[2], status, node_count);
+    render_main_content(
+        frame,
+        vertical[1],
+        tree,
+        active_panel,
+        detail_lines,
+        cypher_preview,
+        kind_detail,
+        edge_explorer_idx,
+    );
+    render_status_bar(frame, vertical[2], mode, status, node_count);
 
     if show_facet_popup {
         render_facet_popup(frame, area);
+    }
+
+    if let Some(s) = search {
+        render_search_overlay(frame, area, s);
     }
 }
 
@@ -118,37 +150,46 @@ fn render_mode_tabs(frame: &mut Frame, area: Rect, current_mode: NavMode) {
         .enumerate()
         .flat_map(|(i, &m)| {
             let active = m == current_mode;
-            let style = Style::default()
-                .fg(mode_color(m, active))
-                .add_modifier(if active {
-                    Modifier::BOLD
-                } else {
-                    Modifier::empty()
-                });
+            let color = if active {
+                theme::mode_color(m)
+            } else {
+                theme::STAR_DIM
+            };
+            let style = Style::default().fg(color).add_modifier(if active {
+                Modifier::BOLD
+            } else {
+                Modifier::empty()
+            });
             let mut spans = vec![Span::styled(format!(" {} {} ", i + 1, m.label()), style)];
             if i < 3 {
-                spans.push(Span::styled(" │ ", Style::default().fg(Color::DarkGray)));
+                spans.push(Span::styled(
+                    " \u{2502} ", // │
+                    Style::default().fg(theme::STAR_DIM),
+                ));
             }
             spans
         })
         .collect();
 
-    let tabs = Paragraph::new(Line::from(spans));
+    let tabs = Paragraph::new(Line::from(spans)).style(Style::default().bg(theme::BG_PANEL));
     frame.render_widget(tabs, area);
 }
 
+#[allow(clippy::too_many_arguments)]
 fn render_main_content(
     frame: &mut Frame,
     area: Rect,
-    _mode: NavMode,
     tree: &TaxonomyTree,
     active_panel: ActivePanel,
     detail_lines: &[String],
+    cypher_preview: &[String],
+    kind_detail: Option<&KindDetail>,
+    edge_explorer_idx: Option<usize>,
 ) {
-    // Horizontal: [tree | detail]
+    // Horizontal: [tree 35% | right pane 65%]
     let horizontal = Layout::default()
         .direction(Direction::Horizontal)
-        .constraints([Constraint::Percentage(40), Constraint::Percentage(60)])
+        .constraints([Constraint::Percentage(35), Constraint::Percentage(65)])
         .split(area);
 
     render_tree_panel(
@@ -157,20 +198,39 @@ fn render_main_content(
         tree,
         active_panel == ActivePanel::Tree,
     );
+
+    // Right pane: vertical split [detail 65% | cypher preview 35%]
+    let right = Layout::default()
+        .direction(Direction::Vertical)
+        .constraints([Constraint::Percentage(65), Constraint::Percentage(35)])
+        .split(horizontal[1]);
+
     render_detail_panel(
         frame,
-        horizontal[1],
+        right[0],
         detail_lines,
         active_panel == ActivePanel::Detail,
+        kind_detail,
+        edge_explorer_idx,
+    );
+    render_cypher_preview(
+        frame,
+        right[1],
+        cypher_preview,
+        active_panel == ActivePanel::CypherPreview,
     );
 }
 
 fn render_tree_panel(frame: &mut Frame, area: Rect, tree: &TaxonomyTree, active: bool) {
-    let border_color = if active { Color::Cyan } else { Color::DarkGray };
+    let border = theme::panel_border(active);
     let block = Block::default()
-        .title(" Taxonomy ")
+        .title(Span::styled(
+            " Taxonomy ",
+            theme::accent_bold(theme::CYBER_CYAN),
+        ))
         .borders(Borders::ALL)
-        .border_style(Style::default().fg(border_color));
+        .border_style(border)
+        .style(Style::default().bg(theme::BG_PANEL));
 
     let items: Vec<ListItem> = tree
         .visible_items()
@@ -178,39 +238,34 @@ fn render_tree_panel(frame: &mut Frame, area: Rect, tree: &TaxonomyTree, active:
         .enumerate()
         .map(|(i, (depth, node))| {
             let indent = "  ".repeat(*depth);
-            let icon = match node.node_type {
+            let (icon, color) = match node.node_type {
                 TreeNodeType::Realm => {
-                    if node.expanded {
-                        "v "
+                    let arrow = if node.expanded {
+                        "\u{25bc}"
                     } else {
-                        "> "
-                    }
+                        "\u{25b6}"
+                    }; // ▼ / ▶
+                    let emoji = theme::realm_emoji(&node.key);
+                    let c = theme::realm_color(&node.key);
+                    (format!("{emoji}{arrow} "), c)
                 }
                 TreeNodeType::Layer => {
-                    if node.expanded {
-                        "v "
+                    let arrow = if node.expanded {
+                        "\u{25bc}"
                     } else {
-                        "> "
-                    }
+                        "\u{25b6}"
+                    };
+                    let c = theme::layer_color(&node.key);
+                    (format!("{arrow} "), c)
                 }
-                TreeNodeType::Kind => "  ",
+                TreeNodeType::Kind => ("  ".to_string(), theme::NOVA_WHITE),
             };
             let label = format!("{indent}{icon}{}", node.display_name);
 
             let style = if i == tree.cursor {
-                Style::default()
-                    .fg(match node.node_type {
-                        TreeNodeType::Realm => Color::Cyan,
-                        TreeNodeType::Layer => Color::Yellow,
-                        TreeNodeType::Kind => Color::White,
-                    })
-                    .add_modifier(Modifier::BOLD | Modifier::REVERSED)
+                theme::selected_style(color)
             } else {
-                Style::default().fg(match node.node_type {
-                    TreeNodeType::Realm => Color::Cyan,
-                    TreeNodeType::Layer => Color::Yellow,
-                    TreeNodeType::Kind => Color::White,
-                })
+                theme::tree_item_style(color)
             };
 
             ListItem::new(Span::styled(label, style))
@@ -221,41 +276,279 @@ fn render_tree_panel(frame: &mut Frame, area: Rect, tree: &TaxonomyTree, active:
     frame.render_widget(list, area);
 }
 
-fn render_detail_panel(frame: &mut Frame, area: Rect, lines: &[String], active: bool) {
-    let border_color = if active { Color::Cyan } else { Color::DarkGray };
-    let block = Block::default()
-        .title(" Detail ")
-        .borders(Borders::ALL)
-        .border_style(Style::default().fg(border_color));
+fn render_detail_panel(
+    frame: &mut Frame,
+    area: Rect,
+    lines: &[String],
+    active: bool,
+    kind_detail: Option<&KindDetail>,
+    edge_explorer_idx: Option<usize>,
+) {
+    let border = theme::panel_border(active);
 
-    let text: Vec<Line> = lines
-        .iter()
-        .map(|l| Line::from(Span::raw(l.as_str())))
-        .collect();
+    let title = if edge_explorer_idx.is_some() {
+        " Edge Explorer "
+    } else {
+        " Detail "
+    };
+
+    let block = Block::default()
+        .title(Span::styled(
+            title,
+            theme::accent_bold(theme::NEBULA_PURPLE),
+        ))
+        .borders(Borders::ALL)
+        .border_style(border)
+        .style(Style::default().bg(theme::BG_PANEL));
+
+    // Edge explorer mode: show focused edge view
+    // Normal mode: use Galaxy-themed styled lines or plain text fallback
+    let text: Vec<Line> = if let (Some(idx), Some(kd)) = (edge_explorer_idx, kind_detail) {
+        detail::edge_explorer_lines(kd, idx)
+    } else if let Some(kd) = kind_detail {
+        detail::styled_lines(kd)
+    } else {
+        lines
+            .iter()
+            .map(|l| {
+                Line::from(Span::styled(
+                    l.as_str(),
+                    Style::default().fg(theme::NOVA_WHITE),
+                ))
+            })
+            .collect()
+    };
 
     let paragraph = Paragraph::new(text).block(block).wrap(Wrap { trim: false });
     frame.render_widget(paragraph, area);
 }
 
-fn render_status_bar(frame: &mut Frame, area: Rect, status: &str, node_count: usize) {
-    let left = Span::styled(format!(" {status} "), Style::default().fg(Color::White));
-    let right = Span::styled(
-        format!(" {node_count} nodes | q:quit ?:help "),
-        Style::default().fg(Color::DarkGray),
-    );
+fn render_cypher_preview(frame: &mut Frame, area: Rect, lines: &[String], active: bool) {
+    let border = theme::panel_border(active);
+    let block = Block::default()
+        .title(Span::styled(
+            " Cypher ",
+            theme::accent_bold(theme::MATRIX_GREEN),
+        ))
+        .borders(Borders::ALL)
+        .border_style(border)
+        .style(Style::default().bg(theme::BG_PANEL));
 
-    let line =
+    let text: Vec<Line> = if lines.is_empty() {
+        vec![Line::from(Span::styled(
+            "Select a Kind to preview Cypher.",
+            theme::dim_style(),
+        ))]
+    } else {
+        lines.iter().map(|l| highlight_cypher_line(l)).collect()
+    };
+
+    let paragraph = Paragraph::new(text).block(block).wrap(Wrap { trim: false });
+    frame.render_widget(paragraph, area);
+}
+
+/// Simple Cypher syntax highlighting for the preview pane.
+///
+/// Colors: keywords → CYBER_CYAN, labels (:Foo) → NEBULA_PURPLE,
+/// strings → MATRIX_GREEN, properties/rest → NOVA_WHITE.
+fn highlight_cypher_line(line: &str) -> Line<'static> {
+    const KEYWORDS: &[&str] = &[
+        "MATCH", "WHERE", "RETURN", "CREATE", "DELETE", "SET", "REMOVE", "MERGE", "WITH", "UNWIND",
+        "OPTIONAL", "UNION", "ALL", "ORDER", "BY", "LIMIT", "SKIP", "AS", "AND", "OR", "NOT", "IN",
+        "IS", "NULL", "TRUE", "FALSE", "DISTINCT", "CASE", "WHEN", "THEN", "ELSE", "END", "CALL",
+        "YIELD", "DETACH",
+    ];
+
+    let keyword_style = Style::default()
+        .fg(theme::CYBER_CYAN)
+        .add_modifier(Modifier::BOLD);
+    let label_style = Style::default().fg(theme::NEBULA_PURPLE);
+    let string_style = Style::default().fg(theme::MATRIX_GREEN);
+    let default_style = Style::default().fg(theme::NOVA_WHITE);
+
+    let mut spans: Vec<Span<'static>> = Vec::new();
+    let chars: Vec<char> = line.chars().collect();
+    let len = chars.len();
+    let mut i = 0;
+
+    while i < len {
+        // String literals (single or double quoted)
+        if chars[i] == '\'' || chars[i] == '"' {
+            let quote = chars[i];
+            let start = i;
+            i += 1;
+            while i < len && chars[i] != quote {
+                if chars[i] == '\\' {
+                    i += 1; // skip escaped char
+                }
+                i += 1;
+            }
+            if i < len {
+                i += 1; // closing quote
+            }
+            let s: String = chars[start..i].iter().collect();
+            spans.push(Span::styled(s, string_style));
+            continue;
+        }
+
+        // Labels (:Word)
+        if chars[i] == ':' && i + 1 < len && chars[i + 1].is_alphabetic() {
+            let start = i;
+            i += 1;
+            while i < len && (chars[i].is_alphanumeric() || chars[i] == '_') {
+                i += 1;
+            }
+            let s: String = chars[start..i].iter().collect();
+            spans.push(Span::styled(s, label_style));
+            continue;
+        }
+
+        // Words (check if keyword)
+        if chars[i].is_alphabetic() || chars[i] == '_' {
+            let start = i;
+            while i < len && (chars[i].is_alphanumeric() || chars[i] == '_') {
+                i += 1;
+            }
+            let word: String = chars[start..i].iter().collect();
+            if KEYWORDS.contains(&word.to_uppercase().as_str()) {
+                spans.push(Span::styled(word, keyword_style));
+            } else {
+                spans.push(Span::styled(word, default_style));
+            }
+            continue;
+        }
+
+        // Everything else (operators, whitespace, brackets)
+        let start = i;
+        while i < len
+            && !chars[i].is_alphabetic()
+            && chars[i] != '_'
+            && chars[i] != ':'
+            && chars[i] != '\''
+            && chars[i] != '"'
+        {
+            i += 1;
+        }
+        let s: String = chars[start..i].iter().collect();
+        spans.push(Span::styled(s, default_style));
+    }
+
+    Line::from(spans)
+}
+
+fn render_search_overlay(frame: &mut Frame, area: Rect, search: &SearchState) {
+    let popup_width = 60.min(area.width.saturating_sub(4));
+    let popup_height = 20.min(area.height.saturating_sub(4));
+    let x = (area.width.saturating_sub(popup_width)) / 2;
+    let y = (area.height.saturating_sub(popup_height)) / 2;
+    let popup_area = Rect::new(x, y, popup_width, popup_height);
+
+    // Clear area behind popup
+    let clear = Block::default().style(Style::default().bg(theme::BG_VOID));
+    frame.render_widget(clear, popup_area);
+
+    let block = Block::default()
+        .title(Span::styled(
+            " Search (/) ",
+            theme::accent_bold(theme::CYBER_CYAN),
+        ))
+        .borders(Borders::ALL)
+        .border_style(Style::default().fg(theme::CYBER_CYAN))
+        .style(Style::default().bg(theme::BG_PANEL));
+
+    let mut lines: Vec<Line> = vec![
+        // Query input line
         Line::from(vec![
-            left,
-            Span::raw(" ".repeat(
-                area.width.saturating_sub(
-                    status.len() as u16 + 2 + node_count.to_string().len() as u16 + 22,
-                ) as usize,
-            )),
-            right,
-        ]);
+            Span::styled(
+                " > ",
+                Style::default()
+                    .fg(theme::CYBER_CYAN)
+                    .add_modifier(Modifier::BOLD),
+            ),
+            Span::styled(
+                format!("{}_", search.query),
+                Style::default().fg(theme::NOVA_WHITE),
+            ),
+        ]),
+        Line::from(Span::styled(
+            "\u{2500}".repeat(popup_width.saturating_sub(2) as usize), // ─ separator
+            Style::default().fg(theme::STAR_DIM),
+        )),
+    ];
 
-    let bar = Paragraph::new(line).style(Style::default().bg(Color::DarkGray).fg(Color::White));
+    if search.results.is_empty() && !search.query.is_empty() {
+        lines.push(Line::from(Span::styled("  No matches", theme::dim_style())));
+    } else {
+        for (i, result) in search.results.iter().enumerate() {
+            let is_selected = i == search.cursor;
+            let indicator = if is_selected { "\u{25b6} " } else { "  " }; // ▶ or space
+            let name_style = if is_selected {
+                theme::selected_style(theme::NOVA_WHITE)
+            } else {
+                Style::default().fg(theme::NOVA_WHITE)
+            };
+            let ctx_style = Style::default().fg(theme::STAR_DIM);
+
+            lines.push(Line::from(vec![
+                Span::styled(
+                    indicator.to_string(),
+                    Style::default().fg(if is_selected {
+                        theme::CYBER_CYAN
+                    } else {
+                        theme::BG_PANEL
+                    }),
+                ),
+                Span::styled(result.display_name.clone(), name_style),
+                Span::styled(format!("  {} / {}", result.realm, result.layer), ctx_style),
+            ]));
+        }
+    }
+
+    // Footer: match count
+    if !search.query.is_empty() {
+        lines.push(Line::from(""));
+        lines.push(Line::from(Span::styled(
+            format!(
+                "  {} match{}",
+                search.results.len(),
+                if search.results.len() == 1 { "" } else { "es" }
+            ),
+            theme::dim_style(),
+        )));
+    }
+
+    let paragraph = Paragraph::new(lines).block(block);
+    frame.render_widget(paragraph, popup_area);
+}
+
+fn render_status_bar(
+    frame: &mut Frame,
+    area: Rect,
+    mode: NavMode,
+    status: &str,
+    node_count: usize,
+) {
+    let mode_text = format!(" {} ", mode.label());
+    let status_text = format!(" {status} ");
+    let right_text = format!(" {node_count} nodes | q:quit ?:help ");
+
+    let used = mode_text.len() + status_text.len() + right_text.len();
+    let padding = (area.width as usize).saturating_sub(used);
+
+    let line = Line::from(vec![
+        Span::styled(
+            mode_text,
+            Style::default()
+                .fg(theme::BG_VOID)
+                .bg(theme::mode_color(mode))
+                .add_modifier(Modifier::BOLD),
+        ),
+        Span::styled(status_text, Style::default().fg(theme::NOVA_WHITE)),
+        Span::raw(" ".repeat(padding)),
+        Span::styled(right_text, Style::default().fg(theme::STAR_DIM)),
+    ]);
+
+    let bar = Paragraph::new(line).style(theme::status_bar_style());
     frame.render_widget(bar, area);
 }
 
@@ -267,34 +560,119 @@ fn render_facet_popup(frame: &mut Frame, area: Rect) {
     let popup_area = Rect::new(x, y, popup_width, popup_height);
 
     let block = Block::default()
-        .title(" Facet Filters (Esc to close) ")
+        .title(Span::styled(
+            " Facet Filters (Esc to close) ",
+            theme::accent_bold(theme::MATRIX_GREEN),
+        ))
         .borders(Borders::ALL)
-        .border_style(Style::default().fg(Color::Green));
+        .border_style(Style::default().fg(theme::MATRIX_GREEN))
+        .style(Style::default().bg(theme::BG_PANEL));
 
     let text = vec![
         Line::from(""),
         Line::from(Span::styled(
             "  Realms: global, project, shared",
-            Style::default().fg(Color::Cyan),
+            Style::default().fg(theme::REALM_GLOBAL),
         )),
         Line::from(""),
         Line::from(Span::styled(
             "  Layers: knowledge, structure, ...",
-            Style::default().fg(Color::Yellow),
+            Style::default().fg(theme::NEBULA_BLUE),
         )),
         Line::from(""),
         Line::from(Span::styled(
             "  Traits: invariant, localized, ...",
-            Style::default().fg(Color::Magenta),
+            Style::default().fg(theme::NEBULA_PURPLE),
         )),
         Line::from(""),
-        Line::from(Span::raw("  (Interactive selection: Phase 7B)")),
+        Line::from(Span::styled(
+            "  (Interactive selection coming soon)",
+            theme::dim_style(),
+        )),
     ];
 
     // Clear area behind popup
-    let clear = Block::default().style(Style::default().bg(Color::Black));
+    let clear = Block::default().style(Style::default().bg(theme::BG_VOID));
     frame.render_widget(clear, popup_area);
 
     let paragraph = Paragraph::new(text).block(block);
     frame.render_widget(paragraph, popup_area);
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn span_text(line: &Line) -> String {
+        line.spans.iter().map(|s| s.content.as_ref()).collect()
+    }
+
+    fn span_texts(line: &Line) -> Vec<(String, ratatui::style::Color)> {
+        line.spans
+            .iter()
+            .map(|s| {
+                (
+                    s.content.to_string(),
+                    s.style.fg.unwrap_or(ratatui::style::Color::Reset),
+                )
+            })
+            .collect()
+    }
+
+    #[test]
+    fn highlight_keyword_bold_cyan() {
+        let line = highlight_cypher_line("MATCH (n)");
+        let parts = span_texts(&line);
+        assert_eq!(parts[0].0, "MATCH");
+        assert_eq!(parts[0].1, theme::CYBER_CYAN);
+    }
+
+    #[test]
+    fn highlight_label_purple() {
+        let line = highlight_cypher_line("(n:Page)");
+        let parts = span_texts(&line);
+        let label = parts.iter().find(|(t, _)| t == ":Page");
+        assert!(label.is_some());
+        assert_eq!(label.unwrap().1, theme::NEBULA_PURPLE);
+    }
+
+    #[test]
+    fn highlight_string_green() {
+        let line = highlight_cypher_line("WHERE n.key = 'hello'");
+        let parts = span_texts(&line);
+        let string = parts.iter().find(|(t, _)| t == "'hello'");
+        assert!(string.is_some());
+        assert_eq!(string.unwrap().1, theme::MATRIX_GREEN);
+    }
+
+    #[test]
+    fn highlight_case_insensitive_keywords() {
+        let line = highlight_cypher_line("match return");
+        let parts = span_texts(&line);
+        assert_eq!(parts[0].0, "match");
+        assert_eq!(parts[0].1, theme::CYBER_CYAN);
+    }
+
+    #[test]
+    fn highlight_empty_line() {
+        let line = highlight_cypher_line("");
+        assert!(line.spans.is_empty());
+    }
+
+    #[test]
+    fn highlight_preserves_full_text() {
+        let input = "MATCH (n:Kind)-[:IN_REALM]->(r:Realm)";
+        let line = highlight_cypher_line(input);
+        let reconstructed = span_text(&line);
+        assert_eq!(reconstructed, input);
+    }
+
+    #[test]
+    fn highlight_double_quoted_string() {
+        let line = highlight_cypher_line("n.name = \"test\"");
+        let parts = span_texts(&line);
+        let string = parts.iter().find(|(t, _)| t == "\"test\"");
+        assert!(string.is_some());
+        assert_eq!(string.unwrap().1, theme::MATRIX_GREEN);
+    }
 }

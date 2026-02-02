@@ -18,6 +18,7 @@ use tokio::sync::mpsc;
 
 use crate::db::Db;
 use crate::tui::app::AppState;
+use crate::tui::detail;
 use crate::tui::events::{self, Action};
 use crate::tui::tree::{MetaRow, TaxonomyTree};
 use crate::tui::ui;
@@ -25,6 +26,7 @@ use crate::tui::ui;
 /// Messages from background tasks to the render loop.
 enum BgMessage {
     MetaLoaded(Vec<MetaRow>),
+    KindDetailLoaded(detail::KindDetail),
     Error(String),
 }
 
@@ -73,6 +75,17 @@ async fn run_app(
                     let tree = TaxonomyTree::from_meta_rows(&rows);
                     state = AppState::ready(tree);
                 }
+                BgMessage::KindDetailLoaded(kd) => {
+                    if let AppState::Ready {
+                        detail_lines,
+                        kind_detail,
+                        ..
+                    } = &mut state
+                    {
+                        *detail_lines = detail::format_detail_lines(&kd);
+                        *kind_detail = Some(Box::new(kd));
+                    }
+                }
                 BgMessage::Error(e) => {
                     state = AppState::loading(format!("Error: {e}"));
                 }
@@ -99,6 +112,12 @@ async fn run_app(
                             .draw(|f| ui::render(f, &state))
                             .map_err(crate::NovaNetError::Io)?;
                     }
+                    Action::FetchDetail(label) => {
+                        spawn_detail_fetch(db, bg_tx.clone(), label);
+                        terminal
+                            .draw(|f| ui::render(f, &state))
+                            .map_err(crate::NovaNetError::Io)?;
+                    }
                     Action::None => {}
                 }
             }
@@ -118,6 +137,21 @@ fn spawn_meta_fetch(db: &Db, tx: mpsc::Sender<BgMessage>) {
             }
             Err(e) => {
                 let _ = tx.send(BgMessage::Error(e.to_string())).await;
+            }
+        }
+    });
+}
+
+/// Spawn a background task to fetch Kind detail from Neo4j.
+fn spawn_detail_fetch(db: &Db, tx: mpsc::Sender<BgMessage>, label: String) {
+    let db = db.clone();
+    tokio::spawn(async move {
+        match detail::fetch_kind_detail(&db, &label).await {
+            Ok(kd) => {
+                let _ = tx.send(BgMessage::KindDetailLoaded(kd)).await;
+            }
+            Err(e) => {
+                let _ = tx.send(BgMessage::Error(format!("Detail: {e}"))).await;
             }
         }
     });

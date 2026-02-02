@@ -164,6 +164,78 @@ impl TaxonomyTree {
         }
         items
     }
+
+    /// Find the visible index of a node by key and jump cursor to it.
+    /// Expands parent nodes as needed to make the target visible.
+    /// Returns true if the node was found and cursor was moved.
+    pub fn jump_to_key(&mut self, key: &str) -> bool {
+        // First, ensure the node's ancestors are expanded
+        for root in &mut self.roots {
+            expand_ancestors(root, key);
+        }
+        // Now find the visible index
+        let items = self.visible_items();
+        if let Some(idx) = items.iter().position(|(_, node)| node.key == key) {
+            self.cursor = idx;
+            true
+        } else {
+            false
+        }
+    }
+
+    /// Collect all Kind labels from the tree (for search).
+    pub fn all_kinds(&self) -> Vec<KindEntry> {
+        let mut entries = Vec::new();
+        for root in &self.roots {
+            collect_kinds(root, &root.key, "", &mut entries);
+        }
+        entries
+    }
+}
+
+/// A Kind entry for search results.
+#[derive(Debug, Clone)]
+pub struct KindEntry {
+    pub label: String,
+    pub display_name: String,
+    pub realm: String,
+    pub layer: String,
+}
+
+fn expand_ancestors(node: &mut TreeNode, target_key: &str) -> bool {
+    if node.key == target_key {
+        return true;
+    }
+    for child in &mut node.children {
+        if expand_ancestors(child, target_key) {
+            node.expanded = true;
+            return true;
+        }
+    }
+    false
+}
+
+fn collect_kinds(node: &TreeNode, realm: &str, layer: &str, entries: &mut Vec<KindEntry>) {
+    match node.node_type {
+        TreeNodeType::Realm => {
+            for child in &node.children {
+                collect_kinds(child, &node.key, layer, entries);
+            }
+        }
+        TreeNodeType::Layer => {
+            for child in &node.children {
+                collect_kinds(child, realm, &node.key, entries);
+            }
+        }
+        TreeNodeType::Kind => {
+            entries.push(KindEntry {
+                label: node.key.clone(),
+                display_name: node.display_name.clone(),
+                realm: realm.to_string(),
+                layer: layer.to_string(),
+            });
+        }
+    }
 }
 
 /// A row from the meta-graph query used to build the tree.
@@ -339,5 +411,45 @@ mod tests {
         assert_eq!(tree.item_count(), 0);
         assert_eq!(tree.visible_count(), 0);
         assert!(tree.selected().is_none());
+    }
+
+    #[test]
+    fn jump_to_key_moves_cursor() {
+        let mut tree = sample_tree();
+        assert!(tree.jump_to_key("Page"));
+        let selected = tree.selected().unwrap();
+        assert_eq!(selected.key, "Page");
+    }
+
+    #[test]
+    fn jump_to_key_expands_collapsed_parents() {
+        let mut tree = sample_tree();
+        // Collapse project realm (cursor at index 3)
+        tree.cursor = 3;
+        tree.toggle_expand(); // collapse project
+        assert_eq!(tree.visible_count(), 4); // project collapsed
+        // Jump to Page — should expand project and structure
+        assert!(tree.jump_to_key("Page"));
+        let selected = tree.selected().unwrap();
+        assert_eq!(selected.key, "Page");
+    }
+
+    #[test]
+    fn jump_to_nonexistent_key() {
+        let mut tree = sample_tree();
+        assert!(!tree.jump_to_key("NonExistent"));
+    }
+
+    #[test]
+    fn all_kinds_collects_kind_entries() {
+        let tree = sample_tree();
+        let kinds = tree.all_kinds();
+        assert_eq!(kinds.len(), 2);
+        assert_eq!(kinds[0].label, "Locale");
+        assert_eq!(kinds[0].realm, "global");
+        assert_eq!(kinds[0].layer, "knowledge");
+        assert_eq!(kinds[1].label, "Page");
+        assert_eq!(kinds[1].realm, "project");
+        assert_eq!(kinds[1].layer, "structure");
     }
 }

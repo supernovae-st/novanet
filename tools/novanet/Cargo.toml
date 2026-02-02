@@ -2,7 +2,7 @@
 name = "novanet"
 version = "0.1.0"
 edition = "2024"
-rust-version = "1.85"  # Minimum supported (edition 2024)
+rust-version = "1.86"  # Minimum supported (ratatui 0.30 requires 1.86+)
 description = "NovaNet context graph CLI + TUI"
 
 [dependencies]
@@ -10,8 +10,15 @@ description = "NovaNet context graph CLI + TUI"
 clap = { version = "4", features = ["derive", "env"] }
 
 # TUI (feature-gated)
-ratatui = { version = "0.29", optional = true }
-crossterm = { version = "0.28", features = ["event-stream"], optional = true }
+ratatui = { version = "0.30", optional = true }
+crossterm = { version = "0.29", features = ["event-stream"], optional = true }
+
+# TUI extras (Phase 7B)
+tui-big-text = { version = "0.8", optional = true }
+tui-popup = { version = "0.7", optional = true }
+tui-scrollview = { version = "0.6", optional = true }
+dirs = { version = "5", optional = true }
+unicode-width = "0.2"
 
 # Async
 tokio = { version = "1.43", features = ["full"] }
@@ -35,6 +42,7 @@ indicatif = "0.17"            # Progress bars for long operations
 
 # Search
 nucleo = "0.5"                # Fuzzy search (TUI / key)
+nucleo-matcher = "0.3"        # Low-level fuzzy matcher (search overlay)
 
 # Graph
 petgraph = "0.7"              # In-memory graph for generator dependency ordering
@@ -51,7 +59,7 @@ tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 
 [features]
 default = ["tui"]
-tui = ["dep:ratatui", "dep:crossterm"]
+tui = ["dep:ratatui", "dep:crossterm", "dep:tui-big-text", "dep:tui-popup", "dep:tui-scrollview", "dep:dirs"]
 
 [dev-dependencies]
 assert_cmd = "2"              # CLI integration tests (binary invocation)
