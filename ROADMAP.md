@@ -5,7 +5,7 @@ Current version: **v9.0.0-rc.1** | Target: QR Code AI (https://qrcode-ai.com)
 ## Milestones Overview
 
 ```
-v9.0  Self-Describing Context Graph    ███████████████████░  ~93%  ← YOU ARE HERE
+v9.0  Self-Describing Context Graph    ████████████████████  ~97%  ← YOU ARE HERE
 v9.5  Advanced TUI (Galaxy)            ██████████████████░░  ~90%
 v10.0 Dynamic Retrieval                ░░░░░░░░░░░░░░░░░░░░    0%
 v11.0 Autonomous Learning              ░░░░░░░░░░░░░░░░░░░░    0%
@@ -35,10 +35,11 @@ with 6 meta-node types, dual navigation, and Rust-first tooling.
 - [x] Verify ViewPicker context-awareness (Phase 6) — 13 views with `modes` field, filtering works
 - [x] Verify keyboard presets T/E (Phase 6) — implemented + in help modal
 - [x] Commit TUI work in progress (Phase 7B Batches 1-7 complete)
-- [ ] Run `/codebase-audit` — Ralph Wiggum #8 (Phase 8)
-- [ ] `pnpm test` — all packages pass (Phase 8)
-- [ ] `pnpm type-check` — zero errors (Phase 8)
-- [ ] `pnpm lint` — zero warnings (Phase 8)
+- [x] Run `/codebase-audit` — Ralph Wiggum #8 (Phase 8) — 6 findings fixed
+- [x] `pnpm test` — 559 tests pass, 34 suites (Phase 8)
+- [x] `pnpm type-check` — zero errors, 3/3 packages (Phase 8)
+- [x] `pnpm lint` — zero errors (Phase 8)
+- [x] `cargo test` — 396 tests pass, zero clippy warnings (Phase 8)
 - [ ] Performance benchmarks — 4 navigation modes (Phase 8)
 - [ ] Code review (Phase 8)
 - [ ] Create GitHub Release v9.0.0 (Phase 8)
