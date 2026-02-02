@@ -1,6 +1,6 @@
 #!/usr/bin/env npx tsx
 /**
- * NovaNet Type Validation Script (v8.1.0)
+ * NovaNet Type Validation Script (v9.0.0)
  *
  * Validates that Studio types are synchronized with Core (Single Source of Truth).
  *
