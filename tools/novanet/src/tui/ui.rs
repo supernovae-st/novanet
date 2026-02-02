@@ -21,7 +21,11 @@ use ratatui::text::{Line, Span};
 use ratatui::widgets::{Block, Borders, List, ListItem, Paragraph, Wrap};
 
 use crate::tui::app::{ActivePanel, AppState, NavMode};
+use crate::tui::dashboard::{self as dash, DashboardStats};
 use crate::tui::detail::{self, KindDetail};
+use crate::tui::dialogs::{DialogKind, DialogState, FieldKind};
+use crate::tui::logo;
+use crate::tui::palette::PaletteState;
 use crate::tui::search::SearchState;
 use crate::tui::theme;
 use crate::tui::tree::{TaxonomyTree, TreeNodeType};
@@ -49,6 +53,12 @@ pub fn render(frame: &mut Frame, state: &AppState) {
             kind_detail,
             search,
             edge_explorer_idx,
+            dialog,
+            edge_kind_keys: _,
+            dashboard_stats,
+            show_dashboard,
+            palette,
+            show_help,
         } => render_ready(
             frame,
             *mode,
@@ -62,6 +72,11 @@ pub fn render(frame: &mut Frame, state: &AppState) {
             kind_detail.as_deref(),
             search.as_ref(),
             *edge_explorer_idx,
+            dialog.as_ref(),
+            dashboard_stats.as_ref(),
+            *show_dashboard,
+            palette.as_ref(),
+            *show_help,
         ),
     }
 }
@@ -69,23 +84,34 @@ pub fn render(frame: &mut Frame, state: &AppState) {
 fn render_loading(frame: &mut Frame, message: &str) {
     let area = frame.area();
     let block = Block::default()
-        .title(" NovaNet ")
         .borders(Borders::ALL)
-        .border_style(Style::default().fg(theme::CYBER_CYAN))
-        .style(Style::default().bg(theme::BG_PANEL));
+        .border_style(Style::default().fg(theme::NEBULA_PURPLE))
+        .style(Style::default().bg(theme::BG_VOID));
 
-    let paragraph = Paragraph::new(vec![
-        Line::from(""),
-        Line::from(Span::styled(
-            "NovaNet Context Graph",
-            theme::accent_bold(theme::CYBER_CYAN),
-        )),
-        Line::from(""),
-        Line::from(Span::styled(message, theme::dim_style())),
-    ])
-    .block(block)
-    .centered();
+    // Build content: logo + branding + status
+    let mut lines: Vec<Line> = Vec::new();
 
+    // Vertical centering: add blank lines before logo
+    let logo_height = logo::FULL_LOGO.len() + 4; // logo + branding + status
+    let padding = area.height.saturating_sub(logo_height as u16 + 2) / 2;
+    for _ in 0..padding {
+        lines.push(Line::from(""));
+    }
+
+    // Render colorized logo
+    lines.extend(logo::full_logo_lines());
+
+    // Branding
+    lines.extend(logo::branding_lines());
+
+    // Status message
+    lines.push(Line::from(""));
+    lines.push(Line::from(Span::styled(
+        message.to_string(),
+        theme::dim_style(),
+    )));
+
+    let paragraph = Paragraph::new(lines).block(block).centered();
     frame.render_widget(paragraph, area);
 }
 
@@ -103,20 +129,25 @@ fn render_ready(
     kind_detail: Option<&KindDetail>,
     search: Option<&SearchState>,
     edge_explorer_idx: Option<usize>,
+    dialog: Option<&DialogState>,
+    dashboard_stats: Option<&DashboardStats>,
+    show_dashboard: bool,
+    palette: Option<&PaletteState>,
+    show_help: bool,
 ) {
     let area = frame.area();
 
-    // Vertical: [mode tabs | main content | status bar]
+    // Vertical: [breadcrumb/tabs | main content | status bar]
     let vertical = Layout::default()
         .direction(Direction::Vertical)
         .constraints([
-            Constraint::Length(1), // mode tabs
+            Constraint::Length(1), // mode tabs + breadcrumb
             Constraint::Min(5),    // main content
             Constraint::Length(1), // status bar
         ])
         .split(area);
 
-    render_mode_tabs(frame, vertical[0], mode);
+    render_mode_tabs(frame, vertical[0], mode, tree);
     render_main_content(
         frame,
         vertical[1],
@@ -126,6 +157,8 @@ fn render_ready(
         cypher_preview,
         kind_detail,
         edge_explorer_idx,
+        dashboard_stats,
+        show_dashboard,
     );
     render_status_bar(frame, vertical[2], mode, status, node_count);
 
@@ -136,40 +169,98 @@ fn render_ready(
     if let Some(s) = search {
         render_search_overlay(frame, area, s);
     }
+
+    if let Some(pal) = palette {
+        render_palette_overlay(frame, area, pal);
+    }
+
+    if show_help {
+        render_help_overlay(frame, area);
+    }
+
+    if let Some(dlg) = dialog {
+        render_dialog(frame, area, dlg);
+    }
 }
 
-fn render_mode_tabs(frame: &mut Frame, area: Rect, current_mode: NavMode) {
+fn render_mode_tabs(frame: &mut Frame, area: Rect, current_mode: NavMode, tree: &TaxonomyTree) {
     let modes = [
         NavMode::Data,
         NavMode::Meta,
         NavMode::Overlay,
         NavMode::Query,
     ];
-    let spans: Vec<Span> = modes
-        .iter()
-        .enumerate()
-        .flat_map(|(i, &m)| {
-            let active = m == current_mode;
-            let color = if active {
-                theme::mode_color(m)
-            } else {
-                theme::STAR_DIM
-            };
-            let style = Style::default().fg(color).add_modifier(if active {
-                Modifier::BOLD
-            } else {
-                Modifier::empty()
-            });
-            let mut spans = vec![Span::styled(format!(" {} {} ", i + 1, m.label()), style)];
-            if i < 3 {
-                spans.push(Span::styled(
-                    " \u{2502} ", // │
-                    Style::default().fg(theme::STAR_DIM),
-                ));
+    let mut spans: Vec<Span> = Vec::new();
+
+    // Inline logo
+    spans.push(Span::styled(
+        " \u{25c9}\u{2550}\u{2573} ",
+        Style::default()
+            .fg(theme::CYBER_CYAN)
+            .add_modifier(Modifier::BOLD),
+    ));
+    spans.push(Span::styled(
+        "\u{2502} ",
+        Style::default().fg(theme::STAR_DIM),
+    ));
+
+    // Mode tabs
+    for (i, &m) in modes.iter().enumerate() {
+        let active = m == current_mode;
+        let color = if active {
+            theme::mode_color(m)
+        } else {
+            theme::STAR_DIM
+        };
+        let style = Style::default().fg(color).add_modifier(if active {
+            Modifier::BOLD
+        } else {
+            Modifier::empty()
+        });
+        spans.push(Span::styled(format!("{} {} ", i + 1, m.label()), style));
+        if i < 3 {
+            spans.push(Span::styled(
+                "\u{2502} ", // │
+                Style::default().fg(theme::STAR_DIM),
+            ));
+        }
+    }
+
+    // Breadcrumb: show current navigation path
+    if let Some(node) = tree.selected() {
+        spans.push(Span::styled(
+            "  \u{25b8} ", // ▸
+            Style::default().fg(theme::STAR_DIM),
+        ));
+        // Show realm/layer/kind based on node type
+        let crumb = match node.node_type {
+            TreeNodeType::Realm => node.display_name.clone(),
+            TreeNodeType::Layer => {
+                // Find parent realm
+                if let Some(parent) = tree.parent_of(&node.key) {
+                    format!("{} \u{25b8} {}", parent.display_name, node.display_name)
+                } else {
+                    node.display_name.clone()
+                }
             }
-            spans
-        })
-        .collect();
+            TreeNodeType::Kind => {
+                // Find parent layer and realm
+                if let Some(layer) = tree.parent_of(&node.key) {
+                    if let Some(realm) = tree.parent_of(&layer.key) {
+                        format!(
+                            "{} \u{25b8} {} \u{25b8} {}",
+                            realm.display_name, layer.display_name, node.display_name
+                        )
+                    } else {
+                        format!("{} \u{25b8} {}", layer.display_name, node.display_name)
+                    }
+                } else {
+                    node.display_name.clone()
+                }
+            }
+        };
+        spans.push(Span::styled(crumb, Style::default().fg(theme::NOVA_WHITE)));
+    }
 
     let tabs = Paragraph::new(Line::from(spans)).style(Style::default().bg(theme::BG_PANEL));
     frame.render_widget(tabs, area);
@@ -185,6 +276,8 @@ fn render_main_content(
     cypher_preview: &[String],
     kind_detail: Option<&KindDetail>,
     edge_explorer_idx: Option<usize>,
+    dashboard_stats: Option<&DashboardStats>,
+    show_dashboard: bool,
 ) {
     // Horizontal: [tree 35% | right pane 65%]
     let horizontal = Layout::default()
@@ -199,26 +292,54 @@ fn render_main_content(
         active_panel == ActivePanel::Tree,
     );
 
-    // Right pane: vertical split [detail 65% | cypher preview 35%]
-    let right = Layout::default()
-        .direction(Direction::Vertical)
-        .constraints([Constraint::Percentage(65), Constraint::Percentage(35)])
-        .split(horizontal[1]);
+    if let (true, Some(stats)) = (show_dashboard, dashboard_stats) {
+        // Right pane: vertical split [detail 40% | dashboard 30% | cypher 30%]
+        let right = Layout::default()
+            .direction(Direction::Vertical)
+            .constraints([
+                Constraint::Percentage(40),
+                Constraint::Percentage(30),
+                Constraint::Percentage(30),
+            ])
+            .split(horizontal[1]);
 
-    render_detail_panel(
-        frame,
-        right[0],
-        detail_lines,
-        active_panel == ActivePanel::Detail,
-        kind_detail,
-        edge_explorer_idx,
-    );
-    render_cypher_preview(
-        frame,
-        right[1],
-        cypher_preview,
-        active_panel == ActivePanel::CypherPreview,
-    );
+        render_detail_panel(
+            frame,
+            right[0],
+            detail_lines,
+            active_panel == ActivePanel::Detail,
+            kind_detail,
+            edge_explorer_idx,
+        );
+        render_dashboard_panel(frame, right[1], stats);
+        render_cypher_preview(
+            frame,
+            right[2],
+            cypher_preview,
+            active_panel == ActivePanel::CypherPreview,
+        );
+    } else {
+        // Right pane: vertical split [detail 65% | cypher preview 35%]
+        let right = Layout::default()
+            .direction(Direction::Vertical)
+            .constraints([Constraint::Percentage(65), Constraint::Percentage(35)])
+            .split(horizontal[1]);
+
+        render_detail_panel(
+            frame,
+            right[0],
+            detail_lines,
+            active_panel == ActivePanel::Detail,
+            kind_detail,
+            edge_explorer_idx,
+        );
+        render_cypher_preview(
+            frame,
+            right[1],
+            cypher_preview,
+            active_panel == ActivePanel::CypherPreview,
+        );
+    }
 }
 
 fn render_tree_panel(frame: &mut Frame, area: Rect, tree: &TaxonomyTree, active: bool) {
@@ -347,6 +468,94 @@ fn render_cypher_preview(frame: &mut Frame, area: Rect, lines: &[String], active
     frame.render_widget(paragraph, area);
 }
 
+fn render_dashboard_panel(frame: &mut Frame, area: Rect, stats: &DashboardStats) {
+    let block = Block::default()
+        .title(Span::styled(
+            " Dashboard ",
+            theme::accent_bold(theme::SOLAR_AMBER),
+        ))
+        .borders(Borders::ALL)
+        .border_style(Style::default().fg(theme::SOLAR_AMBER))
+        .style(Style::default().bg(theme::BG_PANEL));
+
+    let inner_width = area.width.saturating_sub(4) as usize;
+    let bar_width = inner_width.saturating_sub(20).max(5);
+    let mut lines: Vec<Line> = Vec::new();
+
+    // Section: Realms with bar chart
+    lines.push(Line::from(Span::styled(
+        " Kinds by Realm",
+        Style::default()
+            .fg(theme::NOVA_WHITE)
+            .add_modifier(Modifier::BOLD),
+    )));
+    let max_realm = stats.max_realm_count();
+    for rc in &stats.realm_counts {
+        let color = theme::realm_color(&rc.key);
+        let bar_str = dash::bar(rc.count, max_realm, bar_width);
+        lines.push(Line::from(vec![
+            Span::styled(
+                format!(" {:>10} ", rc.display_name),
+                Style::default().fg(color),
+            ),
+            Span::styled(bar_str, Style::default().fg(color)),
+            Span::styled(
+                format!(" {}", rc.count),
+                Style::default().fg(theme::STAR_DIM),
+            ),
+        ]));
+    }
+
+    // Section: Edge families
+    if !stats.family_counts.is_empty() {
+        lines.push(Line::from(""));
+        lines.push(Line::from(Span::styled(
+            " Edges by Family",
+            Style::default()
+                .fg(theme::NOVA_WHITE)
+                .add_modifier(Modifier::BOLD),
+        )));
+        let max_fam = stats.max_family_count();
+        for fc in &stats.family_counts {
+            let color = theme::family_color(&fc.key);
+            let bar_str = dash::bar(fc.count, max_fam, bar_width);
+            lines.push(Line::from(vec![
+                Span::styled(format!(" {:>10} ", fc.key), Style::default().fg(color)),
+                Span::styled(bar_str, Style::default().fg(color)),
+                Span::styled(
+                    format!(" {}", fc.count),
+                    Style::default().fg(theme::STAR_DIM),
+                ),
+            ]));
+        }
+    }
+
+    // Totals line
+    lines.push(Line::from(""));
+    lines.push(Line::from(vec![
+        Span::styled(" Totals: ", Style::default().fg(theme::STAR_DIM)),
+        Span::styled(
+            format!("{}", stats.total_nodes),
+            Style::default()
+                .fg(theme::MATRIX_GREEN)
+                .add_modifier(Modifier::BOLD),
+        ),
+        Span::styled(" nodes  ", Style::default().fg(theme::STAR_DIM)),
+        Span::styled(
+            format!("{}", stats.total_edges),
+            Style::default()
+                .fg(theme::CYBER_CYAN)
+                .add_modifier(Modifier::BOLD),
+        ),
+        Span::styled(" edges", Style::default().fg(theme::STAR_DIM)),
+    ]));
+
+    let paragraph = Paragraph::new(lines)
+        .block(block)
+        .wrap(Wrap { trim: false });
+    frame.render_widget(paragraph, area);
+}
+
 /// Simple Cypher syntax highlighting for the preview pane.
 ///
 /// Colors: keywords → CYBER_CYAN, labels (:Foo) → NEBULA_PURPLE,
@@ -436,6 +645,233 @@ fn highlight_cypher_line(line: &str) -> Line<'static> {
     Line::from(spans)
 }
 
+fn render_dialog(frame: &mut Frame, area: Rect, dlg: &DialogState) {
+    // Calculate popup dimensions based on content
+    let is_delete = matches!(
+        dlg.kind,
+        DialogKind::DeleteNode { .. } | DialogKind::DeleteRelation { .. }
+    );
+    let field_count = dlg.fields.len();
+    let cypher_line_count = dlg.cypher_preview.lines().count();
+
+    // Height: title(1) + border(2) + fields + spacing + cypher preview + footer
+    let content_height = if is_delete {
+        // Compact: warning + field + cypher + footer
+        3 + field_count as u16 * 2 + cypher_line_count as u16 + 3
+    } else {
+        // Full: fields + separator + cypher + footer
+        2 + field_count as u16 * 2 + 1 + cypher_line_count as u16 + 3
+    };
+    let popup_height = content_height.min(area.height.saturating_sub(4));
+    let popup_width = 60u16.min(area.width.saturating_sub(4));
+    let x = (area.width.saturating_sub(popup_width)) / 2;
+    let y = (area.height.saturating_sub(popup_height)) / 2;
+    let popup_area = Rect::new(x, y, popup_width, popup_height);
+
+    // Clear area behind popup
+    let clear = Block::default().style(Style::default().bg(theme::BG_VOID));
+    frame.render_widget(clear, popup_area);
+
+    let border_color = if dlg.submitting {
+        theme::SOLAR_AMBER
+    } else {
+        theme::NEBULA_PURPLE
+    };
+
+    let title = if dlg.submitting {
+        format!(" {} (submitting...) ", dlg.kind.title())
+    } else {
+        format!(" {} ", dlg.kind.title())
+    };
+
+    let block = Block::default()
+        .title(Span::styled(title, theme::accent_bold(border_color)))
+        .borders(Borders::ALL)
+        .border_style(Style::default().fg(border_color))
+        .style(Style::default().bg(theme::BG_PANEL));
+
+    let inner_width = popup_width.saturating_sub(2) as usize;
+    let mut lines: Vec<Line> = Vec::new();
+
+    // Delete dialogs: show warning first
+    if is_delete {
+        lines.push(Line::from(""));
+        let warning_text = match &dlg.kind {
+            DialogKind::DeleteNode { display_name, key } => {
+                format!("  \u{26a0} Delete \"{display_name}\" ({key})?")
+            }
+            DialogKind::DeleteRelation {
+                from_key,
+                to_key,
+                rel_type,
+            } => format!("  \u{26a0} Delete ({from_key})-[:{rel_type}]->({to_key})?"),
+            _ => String::new(),
+        };
+        lines.push(Line::from(Span::styled(
+            warning_text,
+            Style::default()
+                .fg(theme::PLASMA_PINK)
+                .add_modifier(Modifier::BOLD),
+        )));
+        lines.push(Line::from(""));
+        if matches!(dlg.kind, DialogKind::DeleteNode { .. }) {
+            lines.push(Line::from(Span::styled(
+                "  This will DETACH DELETE the node and ALL",
+                Style::default().fg(theme::NOVA_WHITE),
+            )));
+            lines.push(Line::from(Span::styled(
+                "  its relationships. This cannot be undone.",
+                Style::default().fg(theme::NOVA_WHITE),
+            )));
+            lines.push(Line::from(""));
+        }
+    }
+
+    // Render form fields
+    let label_width = dlg.fields.iter().map(|f| f.label.len()).max().unwrap_or(10);
+
+    for (i, field) in dlg.fields.iter().enumerate() {
+        let is_focused = i == dlg.focused;
+        let label_style = if is_focused {
+            Style::default()
+                .fg(theme::CYBER_CYAN)
+                .add_modifier(Modifier::BOLD)
+        } else {
+            Style::default().fg(theme::STAR_DIM)
+        };
+
+        let padded_label = format!("  {:>width$}: ", field.label, width = label_width);
+        let value_max = inner_width
+            .saturating_sub(padded_label.len())
+            .saturating_sub(2);
+
+        match field.field_kind {
+            FieldKind::Readonly => {
+                lines.push(Line::from(vec![
+                    Span::styled(padded_label, label_style),
+                    Span::styled(
+                        truncate_str(&field.value, value_max),
+                        Style::default().fg(theme::STAR_DIM),
+                    ),
+                ]));
+            }
+            FieldKind::Dropdown => {
+                let arrow = if is_focused { "\u{25b8} " } else { "  " }; // ▸ or space
+                let suffix = if is_focused { " \u{25be}" } else { "" }; // ▾
+                lines.push(Line::from(vec![
+                    Span::styled(padded_label, label_style),
+                    Span::styled(arrow.to_string(), Style::default().fg(theme::CYBER_CYAN)),
+                    Span::styled(
+                        truncate_str(&field.value, value_max.saturating_sub(4)),
+                        if is_focused {
+                            Style::default()
+                                .fg(theme::NOVA_WHITE)
+                                .add_modifier(Modifier::BOLD)
+                        } else {
+                            Style::default().fg(theme::NOVA_WHITE)
+                        },
+                    ),
+                    Span::styled(suffix.to_string(), Style::default().fg(theme::STAR_DIM)),
+                ]));
+            }
+            FieldKind::Text => {
+                let display_value = if is_focused && !dlg.submitting {
+                    // Show cursor as underscore
+                    let (before, after) = field.value.split_at(field.cursor.min(field.value.len()));
+                    format!("{before}\u{2502}{after}") // │ cursor
+                } else {
+                    field.value.clone()
+                };
+                let value_style = Style::default().fg(theme::NOVA_WHITE);
+                lines.push(Line::from(vec![
+                    Span::styled(padded_label, label_style),
+                    Span::styled(truncate_str(&display_value, value_max), value_style),
+                ]));
+            }
+        }
+
+        // Show field error
+        if let Some(err) = &field.error {
+            let indent = " ".repeat(label_width + 4);
+            lines.push(Line::from(Span::styled(
+                format!("{indent}{err}"),
+                Style::default().fg(theme::PLASMA_PINK),
+            )));
+        }
+    }
+
+    // Separator + Cypher preview
+    lines.push(Line::from(""));
+    lines.push(Line::from(Span::styled(
+        format!(
+            "  {}",
+            "\u{2504}".repeat(inner_width.saturating_sub(4)) // ┄ dashed separator
+        ),
+        Style::default().fg(theme::STAR_DIM),
+    )));
+    for cypher_line in dlg.cypher_preview.lines() {
+        let mut highlighted = highlight_cypher_line(cypher_line);
+        highlighted.spans.insert(0, Span::raw("  "));
+        lines.push(highlighted);
+    }
+    lines.push(Line::from(Span::styled(
+        format!("  {}", "\u{2504}".repeat(inner_width.saturating_sub(4))),
+        Style::default().fg(theme::STAR_DIM),
+    )));
+
+    // Submission error
+    if let Some(err) = &dlg.error {
+        lines.push(Line::from(Span::styled(
+            format!("  Error: {err}"),
+            Style::default()
+                .fg(theme::PLASMA_PINK)
+                .add_modifier(Modifier::BOLD),
+        )));
+    }
+
+    // Footer key hints
+    let submit_style = if !dlg.submitting {
+        Style::default()
+            .fg(theme::MATRIX_GREEN)
+            .add_modifier(Modifier::BOLD)
+    } else {
+        theme::dim_style()
+    };
+
+    let footer = if is_delete {
+        Line::from(vec![
+            Span::styled("  Enter", submit_style),
+            Span::styled(": confirm  ", theme::dim_style()),
+            Span::styled("Esc", Style::default().fg(theme::STAR_DIM)),
+            Span::styled(": cancel", theme::dim_style()),
+        ])
+    } else {
+        Line::from(vec![
+            Span::styled("  Tab", Style::default().fg(theme::STAR_DIM)),
+            Span::styled(": next  ", theme::dim_style()),
+            Span::styled("Ctrl+S", submit_style),
+            Span::styled(": submit  ", theme::dim_style()),
+            Span::styled("Esc", Style::default().fg(theme::STAR_DIM)),
+            Span::styled(": cancel", theme::dim_style()),
+        ])
+    };
+    lines.push(footer);
+
+    let paragraph = Paragraph::new(lines).block(block);
+    frame.render_widget(paragraph, popup_area);
+}
+
+/// Truncate a string to fit within max_width characters.
+fn truncate_str(s: &str, max_width: usize) -> String {
+    if s.len() <= max_width {
+        s.to_string()
+    } else if max_width > 3 {
+        format!("{}...", &s[..max_width - 3])
+    } else {
+        s[..max_width].to_string()
+    }
+}
+
 fn render_search_overlay(frame: &mut Frame, area: Rect, search: &SearchState) {
     let popup_width = 60.min(area.width.saturating_sub(4));
     let popup_height = 20.min(area.height.saturating_sub(4));
@@ -521,6 +957,186 @@ fn render_search_overlay(frame: &mut Frame, area: Rect, search: &SearchState) {
     frame.render_widget(paragraph, popup_area);
 }
 
+fn render_palette_overlay(frame: &mut Frame, area: Rect, palette: &PaletteState) {
+    let popup_width = 64u16.min(area.width.saturating_sub(4));
+    let popup_height = 22u16.min(area.height.saturating_sub(4));
+    let x = (area.width.saturating_sub(popup_width)) / 2;
+    let y = (area.height.saturating_sub(popup_height)) / 2;
+    let popup_area = Rect::new(x, y, popup_width, popup_height);
+
+    // Clear area behind popup
+    let clear = Block::default().style(Style::default().bg(theme::BG_VOID));
+    frame.render_widget(clear, popup_area);
+
+    let block = Block::default()
+        .title(Span::styled(
+            " Command Palette (:) ",
+            theme::accent_bold(theme::CYBER_CYAN),
+        ))
+        .borders(Borders::ALL)
+        .border_style(Style::default().fg(theme::CYBER_CYAN))
+        .style(Style::default().bg(theme::BG_PANEL));
+
+    let inner_width = popup_width.saturating_sub(2) as usize;
+    let mut lines: Vec<Line> = vec![
+        // Query input line
+        Line::from(vec![
+            Span::styled(
+                " : ",
+                Style::default()
+                    .fg(theme::CYBER_CYAN)
+                    .add_modifier(Modifier::BOLD),
+            ),
+            Span::styled(
+                format!("{}_", palette.query),
+                Style::default().fg(theme::NOVA_WHITE),
+            ),
+        ]),
+        Line::from(Span::styled(
+            "\u{2500}".repeat(inner_width), // ─ separator
+            Style::default().fg(theme::STAR_DIM),
+        )),
+    ];
+
+    if palette.results.is_empty() && !palette.query.is_empty() {
+        lines.push(Line::from(Span::styled("  No matches", theme::dim_style())));
+    } else {
+        let max_visible = (popup_height.saturating_sub(5)) as usize;
+        for (i, _) in palette.results.iter().enumerate().take(max_visible) {
+            let is_selected = i == palette.cursor;
+            let cmd = match palette.command_at(i) {
+                Some(c) => c,
+                None => continue,
+            };
+
+            let indicator = if is_selected { "\u{25b6} " } else { "  " }; // ▶
+            let shortcut_str = cmd.shortcut.map_or(String::new(), |s| format!("[{s}]"));
+            let category = cmd.category.label();
+
+            let label_style = if is_selected {
+                theme::selected_style(theme::NOVA_WHITE)
+            } else {
+                Style::default().fg(theme::NOVA_WHITE)
+            };
+
+            lines.push(Line::from(vec![
+                Span::styled(
+                    indicator.to_string(),
+                    Style::default().fg(if is_selected {
+                        theme::CYBER_CYAN
+                    } else {
+                        theme::BG_PANEL
+                    }),
+                ),
+                Span::styled(format!("{:<16}", cmd.label), label_style),
+                Span::styled(
+                    format!("{:<5} ", shortcut_str),
+                    Style::default().fg(theme::STAR_DIM),
+                ),
+                Span::styled(cmd.description.to_string(), theme::dim_style()),
+                Span::styled(
+                    format!("  {category}"),
+                    Style::default().fg(theme::STAR_DIM),
+                ),
+            ]));
+        }
+    }
+
+    // Footer: match count
+    if !palette.query.is_empty() {
+        lines.push(Line::from(""));
+        lines.push(Line::from(Span::styled(
+            format!(
+                "  {} match{}",
+                palette.results.len(),
+                if palette.results.len() == 1 { "" } else { "es" }
+            ),
+            theme::dim_style(),
+        )));
+    }
+
+    let paragraph = Paragraph::new(lines).block(block);
+    frame.render_widget(paragraph, popup_area);
+}
+
+fn render_help_overlay(frame: &mut Frame, area: Rect) {
+    let popup_width = 58u16.min(area.width.saturating_sub(4));
+    let popup_height = 30u16.min(area.height.saturating_sub(2));
+    let x = (area.width.saturating_sub(popup_width)) / 2;
+    let y = (area.height.saturating_sub(popup_height)) / 2;
+    let popup_area = Rect::new(x, y, popup_width, popup_height);
+
+    // Clear area behind popup
+    let clear = Block::default().style(Style::default().bg(theme::BG_VOID));
+    frame.render_widget(clear, popup_area);
+
+    let block = Block::default()
+        .title(Span::styled(
+            " Keyboard Reference ",
+            theme::accent_bold(theme::SOLAR_AMBER),
+        ))
+        .borders(Borders::ALL)
+        .border_style(Style::default().fg(theme::SOLAR_AMBER))
+        .style(Style::default().bg(theme::BG_PANEL));
+
+    let section = |title: &str| -> Line<'static> {
+        Line::from(Span::styled(
+            format!(" {title}"),
+            Style::default()
+                .fg(theme::CYBER_CYAN)
+                .add_modifier(Modifier::BOLD),
+        ))
+    };
+
+    let binding = |key: &str, desc: &str| -> Line<'static> {
+        Line::from(vec![
+            Span::styled(
+                format!("   {key:<12}"),
+                Style::default()
+                    .fg(theme::NOVA_WHITE)
+                    .add_modifier(Modifier::BOLD),
+            ),
+            Span::styled(desc.to_string(), Style::default().fg(theme::STAR_DIM)),
+        ])
+    };
+
+    let lines = vec![
+        Line::from(""),
+        section("Navigation"),
+        binding("1-4", "Switch mode (Data/Meta/Overlay/Query)"),
+        binding("Tab", "Cycle to next mode"),
+        binding("Left/Right", "Cycle panel (Tree/Detail/Cypher)"),
+        binding("Up/Down", "Navigate tree or edges"),
+        binding("Enter", "Expand/collapse tree node"),
+        Line::from(""),
+        section("Search & Commands"),
+        binding("/", "Open fuzzy search"),
+        binding(":", "Open command palette"),
+        binding("Esc", "Close overlay"),
+        Line::from(""),
+        section("CRUD"),
+        binding("n", "Create node"),
+        binding("r", "Create relation"),
+        binding("E / F2", "Edit node (Phase 7C)"),
+        binding("d", "Delete node (Phase 7C)"),
+        Line::from(""),
+        section("Panels"),
+        binding("e", "Toggle edge explorer"),
+        binding("s", "Toggle dashboard"),
+        binding("f", "Toggle facet filter (Query mode)"),
+        Line::from(""),
+        section("System"),
+        binding("?", "Show/close this help"),
+        binding("q", "Quit"),
+        binding("Ctrl+C", "Force quit"),
+        Line::from(""),
+        Line::from(Span::styled(" Press ? or Esc to close", theme::dim_style())),
+    ];
+
+    let paragraph = Paragraph::new(lines).block(block);
+    frame.render_widget(paragraph, popup_area);
+}
+
 fn render_status_bar(
     frame: &mut Frame,
     area: Rect,
@@ -530,7 +1146,7 @@ fn render_status_bar(
 ) {
     let mode_text = format!(" {} ", mode.label());
     let status_text = format!(" {status} ");
-    let right_text = format!(" {node_count} nodes | q:quit ?:help ");
+    let right_text = format!(" {node_count} nodes | q:quit ?:help ::cmd ");
 
     let used = mode_text.len() + status_text.len() + right_text.len();
     let padding = (area.width as usize).saturating_sub(used);

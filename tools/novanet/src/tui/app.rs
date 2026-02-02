@@ -4,7 +4,10 @@
 //! and `Ready` (interactive browsing). Navigation modes mirror the CLI:
 //! Data (1), Meta (2), Overlay (3), Query (4).
 
+use crate::tui::dashboard::DashboardStats;
 use crate::tui::detail::KindDetail;
+use crate::tui::dialogs::DialogState;
+use crate::tui::palette::PaletteState;
 use crate::tui::search::SearchState;
 use crate::tui::tree::TaxonomyTree;
 
@@ -115,6 +118,18 @@ pub enum AppState {
         search: Option<SearchState>,
         /// Edge explorer cursor. None = normal detail, Some(idx) = focused edge view.
         edge_explorer_idx: Option<usize>,
+        /// CRUD dialog overlay. None = no dialog, Some = modal form.
+        dialog: Option<DialogState>,
+        /// Available EdgeKind keys for relation type dropdowns.
+        edge_kind_keys: Vec<String>,
+        /// Dashboard statistics from Neo4j.
+        dashboard_stats: Option<DashboardStats>,
+        /// Whether the dashboard panel is visible (toggle with 's').
+        show_dashboard: bool,
+        /// Command palette overlay (`:` key).
+        palette: Option<PaletteState>,
+        /// Help reference card overlay (`?` key).
+        show_help: bool,
     },
 }
 
@@ -139,6 +154,12 @@ impl AppState {
             kind_detail: None,
             search: None,
             edge_explorer_idx: None,
+            dialog: None,
+            edge_kind_keys: Vec::new(),
+            dashboard_stats: None,
+            show_dashboard: true,
+            palette: None,
+            show_help: false,
         }
     }
 }

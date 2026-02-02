@@ -6,8 +6,12 @@
 //! panel cycling, and faceted query filtering.
 
 mod app;
+mod dashboard;
 mod detail;
+mod dialogs;
 mod events;
+mod logo;
+mod palette;
 mod runtime;
 mod search;
 mod theme;
