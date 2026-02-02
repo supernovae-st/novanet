@@ -225,10 +225,10 @@ const LayoutButton = memo(function LayoutButton({
 // =============================================================================
 
 // =============================================================================
-// Layout Labels - Dynamic based on data mode
+// Layout Labels - Dynamic based on navigation mode
 // =============================================================================
 
-const SCHEMA_LABELS = {
+const META_LABELS = {
   LR: 'Swimlanes',
   TB: 'Stacked',
   dagre: 'Treemap',
@@ -249,17 +249,17 @@ export const GraphToolbar = memo(function GraphToolbar() {
   const { zoomIn, zoomOut } = useReactFlow();
   const { smartFitView } = useSmartFitView();
 
-  const { triggerLayout, dataMode, layoutMode, toggleLayoutMode } = useUIStore(
+  const { triggerLayout, navigationMode, layoutMode, toggleLayoutMode } = useUIStore(
     useShallow((state) => ({
       triggerLayout: state.triggerLayout,
-      dataMode: state.dataMode,
+      navigationMode: state.navigationMode,
       layoutMode: state.layoutMode,
       toggleLayoutMode: state.toggleLayoutMode,
     }))
   );
 
   // Pick labels based on current mode
-  const labels = dataMode === 'schema' ? SCHEMA_LABELS : DATA_LABELS;
+  const labels = navigationMode === 'meta' ? META_LABELS : DATA_LABELS;
 
   const toggleExpanded = useCallback(() => {
     setIsExpanded((prev) => !prev);

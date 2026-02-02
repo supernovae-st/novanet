@@ -19,15 +19,13 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { DEFAULT_ANIMATION_BUDGET } from '@/components/graph/edges/system/constants';
+import type { NavigationMode } from '@/stores/uiStore';
 
 /** Animation mode levels */
 export type AnimationMode = 'full' | 'reduced' | 'off';
 
 /** Mode transition phases */
 export type TransitionPhase = 'dissolve' | 'fetch' | 'reform' | null;
-
-/** Data mode for transitions */
-export type DataMode = 'data' | 'schema';
 
 /** Animation settings state */
 interface AnimationSettings {
@@ -126,12 +124,12 @@ interface AnimationStore {
   /** Current phase of the transition */
   transitionPhase: TransitionPhase;
   /** Target mode we're transitioning to */
-  targetMode: DataMode | null;
+  targetMode: NavigationMode | null;
 
   /**
    * Start a transition to the specified mode
    */
-  startTransition: (mode: DataMode) => void;
+  startTransition: (mode: NavigationMode) => void;
 
   /**
    * Update the transition phase
@@ -310,7 +308,7 @@ export const useAnimationStore = create<AnimationStore>()(
       transitionPhase: null,
       targetMode: null,
 
-      startTransition: (mode: DataMode) => {
+      startTransition: (mode: NavigationMode) => {
         set({
           isTransitioning: true,
           transitionPhase: 'dissolve',

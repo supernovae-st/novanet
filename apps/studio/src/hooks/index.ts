@@ -3,6 +3,7 @@
  */
 
 export { useFilteredGraph, type FilteredGraphResult } from './useFilteredGraph';
+export { useNavigationMode, type UseNavigationModeReturn } from './useNavigationMode';
 export { useGraphData, type UseGraphDataReturn, type FetchOptions } from './useGraphData';
 export { useUrlSync, UrlSyncComponent } from './useUrlSync';
 export { useFocusMode, type FocusModeState } from './useFocusMode';

@@ -61,7 +61,7 @@ export const LocaleKnowledgeNode = memo(function LocaleKnowledgeNode(props: Node
   const size = getCircleSize(data.type, data.connectionCount);
   const isDimmed = data.dimmed === true;
   const isHoverDimmed = data.hoverDimmed === true;
-  const isSchemaMode = data.isSchemaMode === true;
+  const isMetaMode = data.isMetaMode === true;
 
   // Shared interaction state management (circular variant)
   const {
@@ -148,8 +148,8 @@ export const LocaleKnowledgeNode = memo(function LocaleKnowledgeNode(props: Node
             <GlassmorphismEffects isCircular />
           )}
 
-          {/* Blueprint overlay for schema mode (circular) */}
-          {isSchemaMode && (
+          {/* Blueprint overlay for meta mode (circular) */}
+          {isMetaMode && (
             <BlueprintOverlay
               color={colors.primary}
               selected={selected}

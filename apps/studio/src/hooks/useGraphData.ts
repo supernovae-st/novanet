@@ -12,7 +12,7 @@
 import { useCallback, useState, useRef } from 'react';
 import { useGraphStore } from '@/stores/graphStore';
 import { useFilterStore } from '@/stores/filterStore';
-import { useUIStore, selectDataMode, type DataMode } from '@/stores/uiStore';
+import { useUIStore, selectNavigationMode, type NavigationMode } from '@/stores/uiStore';
 import { DEFAULT_FETCH_LIMIT } from '@/config/constants';
 import { logger } from '@/lib/logger';
 import { fetchJSON, postJSON, getErrorMessage } from '@/lib/fetchClient';
@@ -46,7 +46,7 @@ export interface FetchOptions {
 }
 
 export interface UseGraphDataReturn {
-  /** Fetch graph data from API (or schema based on dataMode) */
+  /** Fetch graph data from API (or schema based on navigationMode) */
   fetchData: (options?: FetchOptions) => Promise<GraphDataResponse>;
   /** Fetch schema graph (ontology) */
   fetchSchemaData: () => Promise<GraphDataResponse>;
@@ -54,8 +54,8 @@ export interface UseGraphDataReturn {
   executeQuery: (cypher: string) => Promise<GraphDataResponse>;
   /** Fetch graph statistics */
   fetchStats: () => Promise<Record<string, number> | null>;
-  /** Current data mode */
-  dataMode: DataMode;
+  /** Current navigation mode */
+  navigationMode: NavigationMode;
   /** Loading state */
   isLoading: boolean;
   /** Error message */
@@ -87,8 +87,8 @@ export function useGraphData(options: UseGraphDataOptions = {}): UseGraphDataRet
   const selectedLocale = useFilterStore((state) => state.selectedLocale);
   const searchQuery = useFilterStore((state) => state.searchQuery);
 
-  // Data mode (data vs schema)
-  const dataMode = useUIStore(selectDataMode);
+  // Navigation mode (data vs meta vs overlay vs query)
+  const navigationMode = useUIStore(selectNavigationMode);
 
   /**
    * Fetch graph data from API
@@ -271,7 +271,7 @@ export function useGraphData(options: UseGraphDataOptions = {}): UseGraphDataRet
     fetchSchemaData,
     executeQuery,
     fetchStats,
-    dataMode,
+    navigationMode,
     isLoading,
     error,
     clearError,

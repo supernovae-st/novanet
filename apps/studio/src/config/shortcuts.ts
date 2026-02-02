@@ -105,6 +105,18 @@ export const SHORTCUTS: Shortcut[] = [
     action: 'novanet:toggle-edge-labels',
   },
 
+  // Navigation Mode
+  {
+    id: 'cycle-navigation-mode',
+    keys: 'n',
+    label: 'Cycle Navigation Mode',
+    description: 'Cycle through Data → Meta → Overlay → Query',
+    category: 'view',
+    icon: 'Compass',
+    when: ['input-not-focused'],
+    action: 'novanet:cycle-navigation-mode',
+  },
+
   // Filter / Search
   {
     id: 'cycle-locale',

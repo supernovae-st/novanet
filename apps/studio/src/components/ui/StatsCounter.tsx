@@ -23,13 +23,13 @@ interface StatsCounterProps {
   onHoverRelations?: () => void;
   onHoverLeave?: () => void;
   /** Whether in schema mode (changes wording and adds badge) */
-  isSchemaMode?: boolean;
+  isMetaMode?: boolean;
 }
 
 /**
  * Unified stats counter showing node/edge counts with icons
  * Hovering nodes/relations expands the pill to show type breakdowns
- * In schema mode, shows "🔷 Schema · X types · Y relations" with adapted wording
+ * In meta mode, shows "🔷 Schema · X types · Y relations" with adapted wording
  */
 export const StatsCounter = memo(function StatsCounter({
   nodeCount,
@@ -40,13 +40,13 @@ export const StatsCounter = memo(function StatsCounter({
   onHoverNodes,
   onHoverRelations,
   onHoverLeave,
-  isSchemaMode = false,
+  isMetaMode = false,
 }: StatsCounterProps) {
   const NodeIcon = GRAPH_ICONS.node;
   const RelIcon = GRAPH_ICONS.relationship;
 
   // Wording changes in schema mode
-  const nodeLabel = isSchemaMode ? 'types' : 'nodes';
+  const nodeLabel = isMetaMode ? 'types' : 'nodes';
   const relLabel = 'relations';
 
   return (
@@ -59,7 +59,7 @@ export const StatsCounter = memo(function StatsCounter({
       )}
     >
       {/* Schema badge (schema mode only) */}
-      {isSchemaMode && (
+      {isMetaMode && (
         <>
           <span className={cn(
             'flex items-center rounded-md px-2 py-0.5',
