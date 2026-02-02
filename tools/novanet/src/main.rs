@@ -62,6 +62,11 @@ enum Commands {
         #[command(subcommand)]
         action: SchemaAction,
     },
+    /// Documentation generation (view-specific Mermaid diagrams)
+    Doc {
+        #[command(subcommand)]
+        action: DocAction,
+    },
     /// Database operations (seed, migrate, reset)
     Db {
         #[command(subcommand)]
@@ -126,6 +131,22 @@ enum SchemaAction {
         /// Strict mode: fail on warnings
         #[arg(long)]
         strict: bool,
+    },
+}
+
+#[derive(Subcommand)]
+enum DocAction {
+    /// Generate Mermaid diagrams for views
+    Generate {
+        /// Generate only this view (by ID)
+        #[arg(long)]
+        view: Option<String>,
+        /// Dry-run: generate without writing files
+        #[arg(long)]
+        dry_run: bool,
+        /// List available views instead of generating
+        #[arg(long)]
+        list: bool,
     },
 }
 
@@ -205,6 +226,55 @@ fn main() -> color_eyre::Result<()> {
 
                 if !errors.is_empty() || (strict && !warnings.is_empty()) {
                     std::process::exit(1);
+                }
+            }
+        },
+        Commands::Doc { action } => match action {
+            DocAction::Generate {
+                view,
+                dry_run,
+                list,
+            } => {
+                let root = root?;
+                if list {
+                    eprintln!("novanet doc generate --list (root: {})", root.display());
+                    let entries = novanet::commands::doc::doc_list(&root)?;
+                    eprintln!();
+                    eprintln!("  {:<30} {:<14} DESCRIPTION", "VIEW ID", "CATEGORY");
+                    eprintln!("  {:<30} {:<14} ───────────", "───────", "────────");
+                    for e in &entries {
+                        eprintln!("  {:<30} {:<14} {}", e.id, e.category, e.description);
+                    }
+                    eprintln!("\n  {} view(s) available", entries.len());
+                } else {
+                    eprintln!(
+                        "novanet doc generate{}{} (root: {})",
+                        view.as_ref()
+                            .map(|v| format!(" --view={v}"))
+                            .unwrap_or_default(),
+                        if dry_run { " --dry-run" } else { "" },
+                        root.display()
+                    );
+                    let results =
+                        novanet::commands::doc::doc_generate(&root, view.as_deref(), dry_run)?;
+                    for r in &results {
+                        eprintln!(
+                            "  {} {} ({} bytes, {}ms)",
+                            if dry_run { "would write" } else { "wrote" },
+                            r.output_path,
+                            r.bytes,
+                            r.duration_ms,
+                        );
+                    }
+                    eprintln!(
+                        "\n{} {} view doc(s)",
+                        if dry_run {
+                            "Would generate"
+                        } else {
+                            "Generated"
+                        },
+                        results.len()
+                    );
                 }
             }
         },

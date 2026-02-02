@@ -11,10 +11,11 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 
 ## Current Status
 
-**Phase 2 complete** — All parsers and generators implemented. `novanet schema generate`
-produces 7 artifacts (4 Cypher seeds, 2 TypeScript, 1 Mermaid). `novanet schema validate`
-checks YAML coherence. 68 tests pass. Remaining commands (data, meta, query, node, db, tui)
-are Phase 7 stubs.
+**Phase 7A (Task 7.7) complete** — Schema generators + view-specific doc generators implemented.
+`novanet schema generate` produces 7 artifacts (4 Cypher seeds, 2 TypeScript, 1 Mermaid).
+`novanet schema validate` checks YAML coherence. `novanet doc generate` produces 12
+view-specific Mermaid diagrams from YAML view definitions. 93 tests pass.
+Remaining commands (data, meta, query, node, db, tui) are Phase 7 stubs.
 
 ## Commands
 
@@ -26,6 +27,12 @@ cargo run -- meta              # Mode 2: Meta-graph only
 cargo run -- overlay           # Mode 3: Data + Meta overlay
 cargo run -- query --realm=project --format=json  # Mode 4: Faceted query
 cargo run -- tui               # Interactive TUI
+
+# Documentation (view-specific Mermaid diagrams)
+cargo run -- doc generate                        # All 12 views → .md files
+cargo run -- doc generate --view=block-generation # Single view
+cargo run -- doc generate --dry-run              # Preview without writing
+cargo run -- doc generate --list                 # List available views
 
 # Quality
 cargo clippy -- -D warnings    # Zero warnings policy
@@ -47,9 +54,9 @@ src/
   config.rs       Root discovery (resolve_root) + connection config
   db.rs           Neo4j connection pool (neo4rs + Arc)
   error.rs        NovaNetError enum (thiserror) + Result type alias
-  commands/       Subcommand implementations (data, meta, query, node, schema, db)
-  parsers/        YAML parser trait + implementations (yaml_node, relations, locale_md)
-  generators/     Code generators (organizing, kind, edge_schema, layer, mermaid, autowire, hierarchy)
+  commands/       Subcommand implementations (schema, doc, data, meta, query, node, db)
+  parsers/        YAML parsers (yaml_node, relations, organizing, views)
+  generators/     Code generators (organizing, kind, edge_schema, layer, mermaid, view_mermaid, autowire, hierarchy)
   tui/            Terminal UI (feature-gated behind `tui` feature)
 ```
 
@@ -63,8 +70,9 @@ src/
 
 ## Dependencies on Monorepo
 
-This binary reads YAML from `packages/core/models/` and writes to `packages/db/seed/`.
-It does NOT depend on any npm packages at build time.
+This binary reads YAML from `packages/core/models/` (nodes, relations, organizing-principles, views)
+and writes to `packages/db/seed/` (Cypher), `packages/core/src/` (TypeScript), and
+`packages/core/models/docs/` (Mermaid). It does NOT depend on any npm packages at build time.
 
 ## Neo4j
 

@@ -56,3 +56,11 @@ pub fn seed_dir(root: &Path) -> PathBuf {
 pub fn core_src_dir(root: &Path) -> PathBuf {
     root.join("packages/core/src")
 }
+
+pub fn views_dir(root: &Path) -> PathBuf {
+    root.join("packages/core/models/views")
+}
+
+pub fn docs_dir(root: &Path) -> PathBuf {
+    root.join("packages/core/models/docs")
+}
