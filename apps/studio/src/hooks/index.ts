@@ -102,3 +102,11 @@ export {
   type OrganizingPrinciples,
   type UseMagneticDataReturn,
 } from './useMagneticData';
+
+// Taxonomy data fetching (v9.5)
+export {
+  useTaxonomy,
+  getCachedTaxonomy,
+  clearTaxonomyCache,
+  type UseTaxonomyResult,
+} from './useTaxonomy';
