@@ -19,8 +19,9 @@ if git diff --cached --name-only | grep -q "packages/core/models/"; then
     echo "  pnpm schema:generate"
     echo ""
     echo "Then stage the regenerated files:"
-    echo "  git add packages/core/src/graph/subcategories.ts"
-    echo "  git add packages/core/models/docs/views/VIEW-COMPLETE-GRAPH.md"
+    echo "  git add packages/core/src/graph/layers.ts"
+    echo "  git add packages/core/src/graph/hierarchy.ts"
+    echo "  git add packages/db/seed/"
     echo "════════════════════════════════════════════════════════════"
     exit 1
   fi

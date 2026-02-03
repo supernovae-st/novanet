@@ -1,9 +1,7 @@
-//! Parse `relations.yaml` (v9 list format + family + multi-source/target).
+//! Parse `relations.yaml` (v9.5 list format + family + multi-source/target).
 //!
-//! Every relation in v9 has a `family` (ownership/localization/semantic/generation/mining),
+//! Every relation in v9.5 has a `family` (ownership/localization/semantic/generation/mining),
 //! and `source`/`target` can be a single label or a list of labels.
-//!
-//! v9.5 Note: EdgeFamily is now ArcFamily. EdgeFamily is kept as a type alias for backwards compatibility.
 
 use serde::Deserialize;
 use smallvec::{SmallVec, smallvec};
@@ -13,7 +11,7 @@ use std::path::Path;
 // Enums
 // ─────────────────────────────────────────────────────────────────────────────
 
-/// The 5 arc families in v9.5 (formerly EdgeFamily in v9).
+/// The 5 arc families in v9.5.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum ArcFamily {
@@ -23,9 +21,6 @@ pub enum ArcFamily {
     Generation,
     Mining,
 }
-
-/// Type alias for backwards compatibility with v9 code.
-pub type EdgeFamily = ArcFamily;
 
 impl std::fmt::Display for ArcFamily {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -226,13 +221,13 @@ mod tests {
     #[test]
     fn edge_family_deserialize() {
         for (yaml, expected) in [
-            ("ownership", EdgeFamily::Ownership),
-            ("localization", EdgeFamily::Localization),
-            ("semantic", EdgeFamily::Semantic),
-            ("generation", EdgeFamily::Generation),
-            ("mining", EdgeFamily::Mining),
+            ("ownership", ArcFamily::Ownership),
+            ("localization", ArcFamily::Localization),
+            ("semantic", ArcFamily::Semantic),
+            ("generation", ArcFamily::Generation),
+            ("mining", ArcFamily::Mining),
         ] {
-            let result: EdgeFamily = serde_yaml::from_str(yaml).unwrap();
+            let result: ArcFamily = serde_yaml::from_str(yaml).unwrap();
             assert_eq!(result, expected);
             assert_eq!(result.to_string(), yaml);
         }
@@ -284,7 +279,7 @@ relations:
 
         let rel = &doc.relations[0];
         assert_eq!(rel.rel_type, "HAS_PAGE");
-        assert_eq!(rel.family, EdgeFamily::Ownership);
+        assert_eq!(rel.family, ArcFamily::Ownership);
         assert_eq!(rel.source.labels().as_slice(), ["Project"]);
         assert_eq!(rel.target.labels().as_slice(), ["Page"]);
         assert_eq!(rel.cardinality, Cardinality::OneToMany);
@@ -385,16 +380,16 @@ relations:
         assert_eq!(doc.relations.len(), 75, "expected 75 relations");
 
         // Family distribution
-        let family_count = |f: EdgeFamily| doc.relations.iter().filter(|r| r.family == f).count();
-        assert_eq!(family_count(EdgeFamily::Ownership), 15, "ownership count");
+        let family_count = |f: ArcFamily| doc.relations.iter().filter(|r| r.family == f).count();
+        assert_eq!(family_count(ArcFamily::Ownership), 15, "ownership count");
         assert_eq!(
-            family_count(EdgeFamily::Localization),
+            family_count(ArcFamily::Localization),
             22,
             "localization count"
         );
-        assert_eq!(family_count(EdgeFamily::Semantic), 14, "semantic count");
-        assert_eq!(family_count(EdgeFamily::Generation), 15, "generation count");
-        assert_eq!(family_count(EdgeFamily::Mining), 9, "mining count");
+        assert_eq!(family_count(ArcFamily::Semantic), 14, "semantic count");
+        assert_eq!(family_count(ArcFamily::Generation), 15, "generation count");
+        assert_eq!(family_count(ArcFamily::Mining), 9, "mining count");
 
         // All relations have non-empty type and llm_context
         for rel in &doc.relations {
@@ -427,7 +422,7 @@ relations:
             .iter()
             .find(|r| r.rel_type == "HAS_PAGE")
             .unwrap();
-        assert_eq!(has_page.family, EdgeFamily::Ownership);
+        assert_eq!(has_page.family, ArcFamily::Ownership);
         assert_eq!(has_page.source.labels().as_slice(), ["Project"]);
         assert_eq!(has_page.target.labels().as_slice(), ["Page"]);
         assert_eq!(has_page.cardinality, Cardinality::OneToMany);
@@ -437,7 +432,7 @@ relations:
             .iter()
             .find(|r| r.rel_type == "FOR_LOCALE")
             .unwrap();
-        assert_eq!(for_locale.family, EdgeFamily::Localization);
+        assert_eq!(for_locale.family, ArcFamily::Localization);
         assert_eq!(for_locale.source.len(), 9, "FOR_LOCALE has 9 sources");
     }
 }

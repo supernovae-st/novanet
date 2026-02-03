@@ -1,6 +1,6 @@
 //! Shared Cypher formatting utilities for seed generators.
 //!
-//! Provides common helper functions used across organizing.rs, kind.rs, and edge_schema.rs
+//! Provides common helper functions used across organizing.rs, kind.rs, and arc_schema.rs
 //! to avoid code duplication.
 
 use std::fmt::Write;

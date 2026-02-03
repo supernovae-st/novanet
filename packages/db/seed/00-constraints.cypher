@@ -104,13 +104,13 @@ CREATE INDEX infl_weight IF NOT EXISTS FOR ()-[r:INFLUENCED_BY]-() ON (r.weight)
 CREATE INDEX gen_date IF NOT EXISTS FOR ()-[r:GENERATED]-() ON (r.generated_at);
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// META-GRAPH (v9.0.0)
-// Faceted classification: Realm, Layer, Kind, Trait, EdgeFamily, EdgeKind
+// META-GRAPH (v9.5.0)
+// Faceted classification: Realm, Layer, Kind, Trait, ArcFamily, ArcKind
 // ═══════════════════════════════════════════════════════════════════════════════
 
 CREATE CONSTRAINT realm_key IF NOT EXISTS FOR (r:Realm) REQUIRE r.key IS UNIQUE;
 CREATE CONSTRAINT layer_key IF NOT EXISTS FOR (l:Layer) REQUIRE l.key IS UNIQUE;
 CREATE CONSTRAINT kind_label IF NOT EXISTS FOR (k:Kind) REQUIRE k.label IS UNIQUE;
 CREATE CONSTRAINT trait_key IF NOT EXISTS FOR (t:Trait) REQUIRE t.key IS UNIQUE;
-CREATE CONSTRAINT edgefamily_key IF NOT EXISTS FOR (ef:EdgeFamily) REQUIRE ef.key IS UNIQUE;
-CREATE CONSTRAINT edgekind_type IF NOT EXISTS FOR (ek:EdgeKind) REQUIRE ek.type IS UNIQUE;
+CREATE CONSTRAINT arcfamily_key IF NOT EXISTS FOR (af:ArcFamily) REQUIRE af.key IS UNIQUE;
+CREATE CONSTRAINT arckind_key IF NOT EXISTS FOR (ak:ArcKind) REQUIRE ak.key IS UNIQUE;
