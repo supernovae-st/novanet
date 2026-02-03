@@ -4,21 +4,15 @@
  * NavigationModeToggle - 4-mode segmented toggle
  *
  * Order: Meta | Data | Overlay | Query
+ * Shortcuts: 1, 2, 3, 4
  * Design: Matches Pill component (solid dark, rounded-2xl)
- * Typography: Monospace code style
  */
 
-import { memo, useCallback } from 'react';
+import { memo, useCallback, useEffect } from 'react';
 import { Boxes, Database, Layers, Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { NavigationMode } from '@/stores/uiStore';
 import { useAnimationStore } from '@/stores/animationStore';
-import {
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent,
-  TooltipShortcut,
-} from '@/components/ui/tooltip';
 
 interface NavigationModeToggleProps {
   mode: NavigationMode;
@@ -26,7 +20,6 @@ interface NavigationModeToggleProps {
   className?: string;
 }
 
-// Mode order: Meta first (schema exploration), then Data, Overlay, Query
 const MODES: {
   id: NavigationMode;
   label: string;
@@ -35,8 +28,7 @@ const MODES: {
   bg: string;
   border: string;
   glow: string;
-  desc: string;
-  shortcut: string;
+  key: string;
 }[] = [
   {
     id: 'meta',
@@ -46,8 +38,7 @@ const MODES: {
     bg: 'bg-blue-500/15',
     border: 'border-blue-500/40',
     glow: 'shadow-[0_0_12px_rgba(59,130,246,0.3)]',
-    desc: 'Schema meta-graph',
-    shortcut: '1',
+    key: '1',
   },
   {
     id: 'data',
@@ -57,8 +48,7 @@ const MODES: {
     bg: 'bg-emerald-500/15',
     border: 'border-emerald-500/40',
     glow: 'shadow-[0_0_12px_rgba(16,185,129,0.3)]',
-    desc: 'Data instances',
-    shortcut: '2',
+    key: '2',
   },
   {
     id: 'overlay',
@@ -68,8 +58,7 @@ const MODES: {
     bg: 'bg-violet-500/15',
     border: 'border-violet-500/40',
     glow: 'shadow-[0_0_12px_rgba(139,92,246,0.3)]',
-    desc: 'Data + schema',
-    shortcut: '3',
+    key: '3',
   },
   {
     id: 'query',
@@ -79,8 +68,7 @@ const MODES: {
     bg: 'bg-amber-500/15',
     border: 'border-amber-500/40',
     glow: 'shadow-[0_0_12px_rgba(245,158,11,0.3)]',
-    desc: 'Faceted query',
-    shortcut: '4',
+    key: '4',
   },
 ];
 
@@ -91,7 +79,7 @@ export const NavigationModeToggle = memo(function NavigationModeToggle({
 }: NavigationModeToggleProps) {
   const startTransition = useAnimationStore((s) => s.startTransition);
 
-  const handleClick = useCallback(
+  const handleSwitch = useCallback(
     (target: NavigationMode) => {
       if (target === mode) return;
       startTransition(target);
@@ -99,10 +87,39 @@ export const NavigationModeToggle = memo(function NavigationModeToggle({
     [mode, startTransition]
   );
 
+  // Keyboard shortcuts: 1, 2, 3, 4
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ignore if typing in input/textarea
+      if (
+        e.target instanceof HTMLInputElement ||
+        e.target instanceof HTMLTextAreaElement ||
+        (e.target as HTMLElement)?.isContentEditable
+      ) {
+        return;
+      }
+
+      const keyMap: Record<string, NavigationMode> = {
+        '1': 'meta',
+        '2': 'data',
+        '3': 'overlay',
+        '4': 'query',
+      };
+
+      const targetMode = keyMap[e.key];
+      if (targetMode) {
+        e.preventDefault();
+        handleSwitch(targetMode);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleSwitch]);
+
   return (
     <div
       className={cn(
-        // Container - matches Pill design
         'flex items-center gap-1 p-1.5 rounded-2xl',
         'bg-[#0a0a0f]',
         'border border-white/10',
@@ -111,46 +128,39 @@ export const NavigationModeToggle = memo(function NavigationModeToggle({
         className
       )}
     >
-      {MODES.map(({ id, label, icon: Icon, color, bg, border, glow, desc, shortcut }) => {
+      {MODES.map(({ id, label, icon: Icon, color, bg, border, glow, key }) => {
         const isActive = id === mode;
 
         return (
-          <Tooltip key={id}>
-            <TooltipTrigger asChild>
-              <button
-                type="button"
-                onClick={() => handleClick(id)}
-                className={cn(
-                  // Base
-                  'flex items-center gap-1.5 px-3 py-1.5 rounded-xl',
-                  'font-mono text-[11px] tracking-tight',
-                  'transition-all duration-200',
-                  // Active state
-                  isActive && [
-                    color,
-                    bg,
-                    'border',
-                    border,
-                    glow,
-                  ],
-                  // Inactive state
-                  !isActive && [
-                    'text-white/30',
-                    'border border-transparent',
-                    'hover:text-white/50',
-                    'hover:bg-white/[0.02]',
-                  ]
-                )}
-              >
-                <Icon className="w-3.5 h-3.5" strokeWidth={isActive ? 2 : 1.5} />
-                <span>{label}</span>
-              </button>
-            </TooltipTrigger>
-            <TooltipContent sideOffset={12}>
-              {desc}
-              <TooltipShortcut>{shortcut}</TooltipShortcut>
-            </TooltipContent>
-          </Tooltip>
+          <button
+            key={id}
+            type="button"
+            onClick={() => handleSwitch(id)}
+            className={cn(
+              'flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl',
+              'font-mono text-[11px] tracking-tight',
+              'transition-all duration-200',
+              isActive && [color, bg, 'border', border, glow],
+              !isActive && [
+                'text-white/30',
+                'border border-transparent',
+                'hover:text-white/50',
+                'hover:bg-white/[0.02]',
+              ]
+            )}
+          >
+            <Icon className="w-3.5 h-3.5" strokeWidth={isActive ? 2 : 1.5} />
+            <span>{label}</span>
+            <kbd
+              className={cn(
+                'ml-0.5 px-1 py-0.5 rounded text-[9px]',
+                'bg-white/5 border border-white/10',
+                isActive ? 'text-white/50' : 'text-white/20'
+              )}
+            >
+              {key}
+            </kbd>
+          </button>
         );
       })}
     </div>
