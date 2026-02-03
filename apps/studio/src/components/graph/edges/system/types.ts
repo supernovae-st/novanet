@@ -184,11 +184,23 @@ export interface EdgeTheme {
 }
 
 /**
+ * Arc family classification (v9.5)
+ */
+export type ArcFamilyType =
+  | 'ownership'      // Structural parent→child containment
+  | 'localization'   // Invariant↔locale-specific bridges
+  | 'semantic'       // Concept connections + spreading activation
+  | 'generation'     // LLM pipeline: prompts → outputs
+  | 'mining';        // SEO/GEO targeting and metrics
+
+/**
  * Resolved theme (after merging category base + relation overrides)
  */
 export interface ResolvedEdgeTheme extends EdgeTheme {
-  /** Source category */
+  /** Source category (legacy, for backward compatibility) */
   category: RelationCategory;
+  /** Arc family (v9.5 - primary classification) */
+  arcFamily?: ArcFamilyType;
   /** Original relation type */
   relationType: string;
   /** Computed timing config */

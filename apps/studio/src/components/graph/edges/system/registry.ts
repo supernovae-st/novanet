@@ -24,6 +24,7 @@ import {
   GLOW_CONFIG,
   getDuration,
 } from './constants';
+import { getArcFamily, getArcFamilyPalette, type ArcFamily } from './arcFamilyPalettes';
 
 // =============================================================================
 // Relation to Category Mapping
@@ -147,10 +148,11 @@ function mergeTheme(base: EdgeTheme, override: ThemeOverride): EdgeTheme {
  * Resolve complete theme for a relation type
  *
  * Resolution order:
- * 1. Get category from relation type
- * 2. Get base theme from category
- * 3. Apply relation-specific overrides (if any)
- * 4. Compute timing and size configs
+ * 1. Get category from relation type (for effects/style)
+ * 2. Get arc family from relation type (for colors, v9.5)
+ * 3. Merge category theme with arc family palette
+ * 4. Apply relation-specific overrides (if any)
+ * 5. Compute timing and size configs
  */
 export function resolveTheme(
   relationType: string,
@@ -162,20 +164,29 @@ export function resolveTheme(
   const { isSelected = false, isHovered = false } = options;
   const isHighlighted = isSelected || isHovered;
 
-  // 1. Get category
+  // 1. Get category (for effects, line style, etc.)
   const category = getCategory(relationType);
 
-  // 2. Get base theme
-  const baseTheme = CATEGORY_THEMES[category];
+  // 2. Get arc family (for colors, v9.5)
+  const arcFamily = getArcFamily(relationType);
+  const arcFamilyPalette = getArcFamilyPalette(relationType);
 
-  // 3. Apply overrides
+  // 3. Merge: category theme structure + arc family colors
+  const categoryTheme = CATEGORY_THEMES[category];
+  const baseTheme: EdgeTheme = {
+    ...categoryTheme,
+    palette: arcFamilyPalette,
+  };
+
+  // 4. Apply overrides
   const override = RELATION_OVERRIDES[relationType as RelationType];
   const mergedTheme = override ? mergeTheme(baseTheme, override) : baseTheme;
 
-  // 4. Build resolved theme
+  // 5. Build resolved theme
   return {
     ...mergedTheme,
     category,
+    arcFamily,
     relationType,
     timing: buildTimingConfig(mergedTheme, isSelected, isHovered),
     sizes: buildSizeConfig(mergedTheme, isHighlighted),
@@ -190,21 +201,37 @@ export function resolveTheme(
 /**
  * Cache for resolved themes (without state-dependent values)
  */
-const themeCache = new Map<string, EdgeTheme & { category: RelationCategory }>();
+const themeCache = new Map<string, EdgeTheme & { category: RelationCategory; arcFamily: ArcFamily }>();
 
 /**
  * Get cached base theme (without timing/size)
+ *
+ * v9.5: Uses arc family palette for colors, category theme for effects/style
  */
-export function getCachedBaseTheme(relationType: string): EdgeTheme & { category: RelationCategory } {
+export function getCachedBaseTheme(relationType: string): EdgeTheme & { category: RelationCategory; arcFamily: ArcFamily } {
   let cached = themeCache.get(relationType);
 
   if (!cached) {
     const category = getCategory(relationType);
-    const baseTheme = CATEGORY_THEMES[category];
+    const arcFamily = getArcFamily(relationType);
+
+    // Get base theme structure from category (effects, line style, etc.)
+    const categoryTheme = CATEGORY_THEMES[category];
+
+    // Get colors from arc family (v9.5)
+    const arcFamilyPalette = getArcFamilyPalette(relationType);
+
+    // Merge: use category theme but override with arc family colors
+    const baseTheme: EdgeTheme = {
+      ...categoryTheme,
+      palette: arcFamilyPalette,
+    };
+
+    // Apply relation-specific overrides
     const override = RELATION_OVERRIDES[relationType as RelationType];
     const mergedTheme = override ? mergeTheme(baseTheme, override) : baseTheme;
 
-    cached = { ...mergedTheme, category };
+    cached = { ...mergedTheme, category, arcFamily };
     themeCache.set(relationType, cached);
   }
 
@@ -213,6 +240,8 @@ export function getCachedBaseTheme(relationType: string): EdgeTheme & { category
 
 /**
  * Resolve theme using cache + dynamic state
+ *
+ * v9.5: Now includes arcFamily in the resolved theme
  */
 export function resolveThemeCached(
   relationType: string,
@@ -229,6 +258,7 @@ export function resolveThemeCached(
   return {
     ...cached,
     relationType,
+    arcFamily: cached.arcFamily,
     timing: buildTimingConfig(cached, isSelected, isHovered),
     sizes: buildSizeConfig(cached, isHighlighted),
     colors: cached.palette, // Alias for easier access
