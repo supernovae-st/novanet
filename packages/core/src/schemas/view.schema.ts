@@ -101,14 +101,3 @@ export function validateViewDefinition(data: unknown): ViewDefinitionParsed {
 export function validateViewRegistry(data: unknown): ViewRegistryParsed {
   return ViewRegistrySchema.parse(data);
 }
-
-/**
- * Safe validation that returns result instead of throwing.
- */
-export function safeValidateViewDefinition(data: unknown) {
-  return ViewDefinitionSchema.safeParse(data);
-}
-
-export function safeValidateViewRegistry(data: unknown) {
-  return ViewRegistrySchema.safeParse(data);
-}
