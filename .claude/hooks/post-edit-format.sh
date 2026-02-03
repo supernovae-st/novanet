@@ -23,7 +23,7 @@ case "$EXT" in
   rs)
     # Rust files - run cargo fmt on the file
     if command -v rustfmt &> /dev/null; then
-      rustfmt --edition 2021 "$FILE_PATH" 2>/dev/null || true
+      rustfmt --edition 2024 "$FILE_PATH" 2>/dev/null || true
     fi
     ;;
   ts|tsx|js|jsx|json)
