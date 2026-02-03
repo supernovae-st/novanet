@@ -1,7 +1,7 @@
 // packages/core/src/graph/__tests__/types.test.ts
-// Tests for graph types — v9.0.0
+// Tests for graph types — v9.5.0
 import { describe, it, expect } from 'vitest';
-import type { SchemaNode, SchemaEdge, RealmDefinition } from '../types';
+import type { SchemaNode, SchemaArc, RealmDefinition } from '../types';
 import type { Layer } from '../../types/nodes';
 
 describe('graph/types', () => {
@@ -18,9 +18,9 @@ describe('graph/types', () => {
     expect(node.nodeType).toBe('Project');
   });
 
-  it('should export SchemaEdge interface', () => {
-    const edge: SchemaEdge = {
-      id: 'schema-edge-0',
+  it('should export SchemaArc interface', () => {
+    const arc: SchemaArc = {
+      id: 'schema-arc-0',
       relationType: 'HAS_PAGE',
       sourceType: 'Project',
       targetType: 'Page',
@@ -28,7 +28,7 @@ describe('graph/types', () => {
       description: 'Project contains pages',
       cardinality: '1:N',
     };
-    expect(edge.relationType).toBe('HAS_PAGE');
+    expect(arc.relationType).toBe('HAS_PAGE');
   });
 
   it('should export Layer type with all values', () => {

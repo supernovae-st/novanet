@@ -1,5 +1,5 @@
 // packages/core/src/graph/__tests__/generator.test.ts
-// Tests for schema graph generator — v9.0.0
+// Tests for schema graph generator — v9.5.0
 // TDD: Write tests first, then implementation
 
 import { describe, it, expect } from 'vitest';
@@ -13,11 +13,11 @@ describe('graph/generator', () => {
       expect(result.nodes).toHaveLength(44);
     });
 
-    it('should generate schema edges from RelationRegistry', () => {
+    it('should generate schema arcs from RelationRegistry', () => {
       const result = generateSchemaGraph();
-      // RelationRegistry has 50 relation types, expanded to ~89 edges
-      // due to multi-type relations creating multiple edges
-      expect(result.edges.length).toBeGreaterThan(50);
+      // RelationRegistry has 83 arc types, expanded to ~89 arcs
+      // due to multi-type relations creating multiple arcs
+      expect(result.arcs.length).toBeGreaterThan(50);
     });
 
     it('should include all required node properties', () => {
@@ -33,16 +33,16 @@ describe('graph/generator', () => {
       expect(projectNode?.trait).toBe('invariant');
     });
 
-    it('should include all required edge properties', () => {
+    it('should include all required arc properties', () => {
       const result = generateSchemaGraph();
-      const hasPageEdge = result.edges.find(e => e.relationType === 'HAS_PAGE');
+      const hasPageArc = result.arcs.find(e => e.relationType === 'HAS_PAGE');
 
-      expect(hasPageEdge).toBeDefined();
-      expect(hasPageEdge?.sourceType).toBe('Project');
-      expect(hasPageEdge?.targetType).toBe('Page');
-      expect(hasPageEdge?.label).toBeDefined();
-      expect(hasPageEdge?.description).toBeDefined();
-      expect(hasPageEdge?.cardinality).toBeDefined();
+      expect(hasPageArc).toBeDefined();
+      expect(hasPageArc?.sourceType).toBe('Project');
+      expect(hasPageArc?.targetType).toBe('Page');
+      expect(hasPageArc?.label).toBeDefined();
+      expect(hasPageArc?.description).toBeDefined();
+      expect(hasPageArc?.cardinality).toBeDefined();
     });
 
     it('should map all 44 node types', () => {
@@ -55,15 +55,15 @@ describe('graph/generator', () => {
       }
     });
 
-    it('should validate edge node types exist before creating edges (P0 fix)', () => {
+    it('should validate arc node types exist before creating arcs (P0 fix)', () => {
       const result = generateSchemaGraph();
 
-      // All edges should reference valid node types
+      // All arcs should reference valid node types
       const validNodeTypes = new Set(NODE_TYPES);
 
-      for (const edge of result.edges) {
-        const sourceTypes = Array.isArray(edge.sourceType) ? edge.sourceType : [edge.sourceType];
-        const targetTypes = Array.isArray(edge.targetType) ? edge.targetType : [edge.targetType];
+      for (const arc of result.arcs) {
+        const sourceTypes = Array.isArray(arc.sourceType) ? arc.sourceType : [arc.sourceType];
+        const targetTypes = Array.isArray(arc.targetType) ? arc.targetType : [arc.targetType];
 
         for (const source of sourceTypes) {
           expect(validNodeTypes.has(source)).toBe(true);
@@ -79,9 +79,9 @@ describe('graph/generator', () => {
 
       // FOR_LOCALE has multiple source types: ConceptL10n, ProjectL10n, PageL10n, BlockL10n, SEOKeywordL10n, GEOSeedL10n
       // All going to Locale (1 target)
-      // Should create 6 edges for this relation
-      const forLocaleEdges = result.edges.filter(e => e.relationType === 'FOR_LOCALE');
-      expect(forLocaleEdges.length).toBe(6);
+      // Should create 6 arcs for this relation
+      const forLocaleArcs = result.arcs.filter(e => e.relationType === 'FOR_LOCALE');
+      expect(forLocaleArcs.length).toBe(6);
     });
   });
 
@@ -107,9 +107,9 @@ describe('graph/generator', () => {
       expect(result.nodes).toHaveLength(44);
     });
 
-    it('should include edges', () => {
+    it('should include arcs', () => {
       const result = getSchemaHierarchy();
-      expect(result.edges.length).toBeGreaterThan(50);
+      expect(result.arcs.length).toBeGreaterThan(50);
     });
 
     it('should have correct realm definitions', () => {
@@ -131,9 +131,9 @@ describe('graph/generator', () => {
       expect(Object.keys(result.realms.shared.layers)).toHaveLength(2);
     });
 
-    it('should have totalEdges in stats', () => {
+    it('should have totalArcs in stats', () => {
       const result = getSchemaHierarchy();
-      expect(result.stats.totalEdges).toBe(result.edges.length);
+      expect(result.stats.totalArcs).toBe(result.arcs.length);
     });
   });
 });
