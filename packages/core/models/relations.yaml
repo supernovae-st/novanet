@@ -1,20 +1,20 @@
 # ═══════════════════════════════════════════════════════════════════════════════
-# RELATIONS - All Neo4j relationships v9.0.0
+# RELATIONS - All Neo4j relationships v9.5.0
 # ═══════════════════════════════════════════════════════════════════════════════
 #
-# v9.0.0 FORMAT CHANGES (from v8.2.0):
+# v9.5.0 FORMAT CHANGES (from v8.2.0):
 #   - Dict → list format (each relation is a list entry)
-#   - Every relation has `family` (maps to EdgeFamily meta-node)
+#   - Every relation has `family` (maps to ArcFamily meta-node)
 #   - `from`/`to` → `source`/`target`
 #   - String-encoded lists "[A, B]" → proper YAML lists
 #   - Wildcard `"*"` → explicit source/target lists
 #   - Added `cardinality` field
 #   - `description` → `llm_context`
 #
-# See organizing-principles.yaml for EdgeFamily definitions.
+# See organizing-principles.yaml for ArcFamily definitions.
 # See _index.yaml for full graph diagram.
 #
-# EDGE FAMILIES (5):
+# ARC FAMILIES (5):
 #   ownership     - Structural parent→child containment
 #   localization  - Invariant↔locale-specific bridges + locale knowledge
 #   semantic      - Concept connections + spreading activation

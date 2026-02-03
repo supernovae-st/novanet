@@ -25,7 +25,7 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 | Filter | `filter build` | Implemented (JSON stdin, Studio subprocess) |
 | TUI | `tui` | Galaxy theme, mission control, search, detail, edge explorer, CRUD dialogs, dashboard, logo, command palette, help overlay, boot animation, effects engine, onboarding |
 
-**185 tests pass** (`cargo test`). Zero clippy warnings.
+**201 tests pass** (`cargo test`). Zero clippy warnings.
 
 ## Commands
 
@@ -113,7 +113,7 @@ src/
     doc.rs        doc generate/list (YAML views → Mermaid)
     filter.rs     filter build (JSON stdin → Cypher stdout)
   parsers/        YAML parsers (yaml_node, relations, organizing, views)
-  generators/     Code generators (organizing, kind, edge_schema, layer, mermaid, view_mermaid, autowire, hierarchy)
+  generators/     Code generators (organizing, kind, arc_schema, layer, mermaid, view_mermaid, autowire, hierarchy)
   tui/            Terminal UI (feature-gated behind `tui` feature)
     app.rs        State machine (NavMode, AppState, ActivePanel, onboarding)
     tree.rs       TaxonomyTree (Realm > Layer > Kind hierarchy + cursor + parent_of)

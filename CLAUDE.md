@@ -34,7 +34,7 @@ v9 refactors the meta-graph from a flat tree (Scope > Subcategory > NodeTypeMeta
 Axis 1 — WHERE?  :Realm     (global / project / shared)
 Axis 2 — WHAT?   :Layer     (9 functional layers)
 Axis 3 — HOW?    :Trait     (invariant / localized / knowledge / derived / job)
-Axis 4 — LINKS?  :ArcKind  (50 relationship types in 5 families)
+Axis 4 — LINKS?  :ArcKind  (83 relationship types in 5 families)
 ```
 
 **Key renames:** Scope -> Realm, Subcategory -> Layer, NodeTypeMeta -> Kind, DataMode -> NavigationMode
@@ -43,7 +43,7 @@ Axis 4 — LINKS?  :ArcKind  (50 relationship types in 5 families)
 
 **Rust binary:** `tools/novanet/` — single crate for CLI + TUI (neo4rs, ratatui, clap).
 All commands implemented: data/meta/overlay/query, node/arc CRUD, search, locale, db,
-schema generate/validate, doc generate, filter build, Galaxy-themed TUI with boot animation, effects engine, and onboarding. 180 tests pass.
+schema generate/validate, doc generate, filter build, Galaxy-themed TUI with boot animation, effects engine, and onboarding. 201 tests pass.
 
 **YAML-first architecture:** Each Kind YAML has explicit `realm:` and `layer:` fields (source of truth).
 Path validation ensures `models/nodes/{realm}/{layer}/{name}.yaml` matches YAML content.

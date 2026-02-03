@@ -9,7 +9,7 @@
 //! Output target: `packages/core/models/docs/complete-graph.md` (Markdown wrapper)
 
 use crate::parsers::organizing::{self, OrganizingDoc};
-use crate::parsers::relations::{self, EdgeFamily, RelationDef};
+use crate::parsers::relations::{self, ArcFamily, RelationDef};
 use crate::parsers::yaml_node::{self, ParsedNode};
 use std::collections::BTreeMap;
 use std::fmt::Write;
@@ -75,24 +75,24 @@ pub fn trait_emoji(behavior: &str) -> &'static str {
 }
 
 /// Returns Mermaid arrow syntax for arc family (O(1) match).
-pub fn family_arrow(family: EdgeFamily) -> &'static str {
+pub fn family_arrow(family: ArcFamily) -> &'static str {
     match family {
-        EdgeFamily::Ownership => "-->",
-        EdgeFamily::Localization => "-.->",
-        EdgeFamily::Semantic => "-.->",
-        EdgeFamily::Generation => "==>",
-        EdgeFamily::Mining => "--o",
+        ArcFamily::Ownership => "-->",
+        ArcFamily::Localization => "-.->",
+        ArcFamily::Semantic => "-.->",
+        ArcFamily::Generation => "==>",
+        ArcFamily::Mining => "--o",
     }
 }
 
 /// Returns stroke color for arc family (O(1) match).
-pub fn family_color(family: EdgeFamily) -> &'static str {
+pub fn family_color(family: ArcFamily) -> &'static str {
     match family {
-        EdgeFamily::Ownership => "#3b82f6",
-        EdgeFamily::Localization => "#22c55e",
-        EdgeFamily::Semantic => "#f97316",
-        EdgeFamily::Generation => "#8b5cf6",
-        EdgeFamily::Mining => "#ec4899",
+        ArcFamily::Ownership => "#3b82f6",
+        ArcFamily::Localization => "#22c55e",
+        ArcFamily::Semantic => "#f97316",
+        ArcFamily::Generation => "#8b5cf6",
+        ArcFamily::Mining => "#ec4899",
     }
 }
 
@@ -128,7 +128,7 @@ pub struct ExpandedEdge {
     pub from: String,
     pub rel_type: String,
     pub to: String,
-    pub family: EdgeFamily,
+    pub family: ArcFamily,
 }
 
 /// Expand multi-source/target relations into concrete edges, filtering wildcards.
@@ -197,11 +197,11 @@ pub fn write_edges_and_styles(out: &mut String, edges: &[ExpandedEdge]) {
     writeln!(out, "  %% Edge colors by family").unwrap();
     for (family_str, indices) in &edge_indices_by_family {
         let family = match family_str.as_str() {
-            "ownership" => EdgeFamily::Ownership,
-            "localization" => EdgeFamily::Localization,
-            "semantic" => EdgeFamily::Semantic,
-            "generation" => EdgeFamily::Generation,
-            "mining" => EdgeFamily::Mining,
+            "ownership" => ArcFamily::Ownership,
+            "localization" => ArcFamily::Localization,
+            "semantic" => ArcFamily::Semantic,
+            "generation" => ArcFamily::Generation,
+            "mining" => ArcFamily::Mining,
             _ => continue,
         };
         let color = family_color(family);
@@ -488,7 +488,7 @@ mod tests {
         }
     }
 
-    fn make_rel(rel_type: &str, family: EdgeFamily, source: &str, target: &str) -> RelationDef {
+    fn make_rel(rel_type: &str, family: ArcFamily, source: &str, target: &str) -> RelationDef {
         RelationDef {
             rel_type: rel_type.to_string(),
             family,
@@ -562,8 +562,8 @@ mod tests {
     #[test]
     fn expand_edges_filters_wildcards() {
         let rels = vec![
-            make_rel("HAS_PAGE", EdgeFamily::Ownership, "Project", "Page"),
-            make_rel("WILDCARD", EdgeFamily::Semantic, "*", "Page"),
+            make_rel("HAS_PAGE", ArcFamily::Ownership, "Project", "Page"),
+            make_rel("WILDCARD", ArcFamily::Semantic, "*", "Page"),
         ];
         let expanded = expand_edges(&rels);
         assert_eq!(expanded.len(), 1);
@@ -575,7 +575,7 @@ mod tests {
     fn expand_edges_multi_source_target() {
         let rel = RelationDef {
             rel_type: "HAS_OUTPUT".to_string(),
-            family: EdgeFamily::Generation,
+            family: ArcFamily::Generation,
             source: NodeRef::Multiple(vec!["Page".to_string(), "Block".to_string()]),
             target: NodeRef::Multiple(vec!["PageL10n".to_string(), "BlockL10n".to_string()]),
             cardinality: Cardinality::OneToMany,
@@ -609,13 +609,13 @@ mod tests {
         let rels = vec![
             make_rel(
                 "HAS_L10N",
-                EdgeFamily::Localization,
+                ArcFamily::Localization,
                 "Project",
                 "ProjectL10n",
             ),
             make_rel(
                 "FOR_LOCALE",
-                EdgeFamily::Localization,
+                ArcFamily::Localization,
                 "ProjectL10n",
                 "Locale",
             ),
@@ -674,9 +674,9 @@ mod tests {
         ];
 
         let rels = vec![
-            make_rel("OWN", EdgeFamily::Ownership, "A", "B"),
-            make_rel("GEN", EdgeFamily::Generation, "A", "C"),
-            make_rel("MINE", EdgeFamily::Mining, "B", "C"),
+            make_rel("OWN", ArcFamily::Ownership, "A", "B"),
+            make_rel("GEN", ArcFamily::Generation, "A", "C"),
+            make_rel("MINE", ArcFamily::Mining, "B", "C"),
         ];
 
         let org_doc = make_org_doc();

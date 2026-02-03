@@ -371,10 +371,10 @@ fn wrap_view_markdown(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::parsers::relations::{Cardinality, EdgeFamily, NodeRef, RelationDef};
+    use crate::parsers::relations::{ArcFamily, Cardinality, NodeRef, RelationDef};
     use crate::parsers::views::{Direction, IncludeRule, RootDef, ViewDef};
 
-    fn make_rel(rel_type: &str, family: EdgeFamily, source: &str, target: &str) -> RelationDef {
+    fn make_rel(rel_type: &str, family: ArcFamily, source: &str, target: &str) -> RelationDef {
         RelationDef {
             rel_type: rel_type.to_string(),
             family,
@@ -431,7 +431,7 @@ mod tests {
     fn resolve_simple_outgoing() {
         let rels = vec![make_rel(
             "HAS_PAGE",
-            EdgeFamily::Ownership,
+            ArcFamily::Ownership,
             "Project",
             "Page",
         )];
@@ -449,7 +449,7 @@ mod tests {
     fn resolve_incoming() {
         let rels = vec![make_rel(
             "HAS_PAGE",
-            EdgeFamily::Ownership,
+            ArcFamily::Ownership,
             "Project",
             "Page",
         )];
@@ -467,7 +467,7 @@ mod tests {
     fn resolve_both_direction() {
         let rels = vec![make_rel(
             "SEMANTIC_LINK",
-            EdgeFamily::Semantic,
+            ArcFamily::Semantic,
             "Concept",
             "Concept",
         )];
@@ -481,8 +481,8 @@ mod tests {
     #[test]
     fn resolve_nested_includes() {
         let rels = vec![
-            make_rel("HAS_PAGE", EdgeFamily::Ownership, "Project", "Page"),
-            make_rel("HAS_BLOCK", EdgeFamily::Ownership, "Page", "Block"),
+            make_rel("HAS_PAGE", ArcFamily::Ownership, "Project", "Page"),
+            make_rel("HAS_BLOCK", ArcFamily::Ownership, "Page", "Block"),
         ];
         let view = make_view(
             "Project",
@@ -504,7 +504,7 @@ mod tests {
     fn resolve_no_matching_relation() {
         let rels = vec![make_rel(
             "HAS_PAGE",
-            EdgeFamily::Ownership,
+            ArcFamily::Ownership,
             "Project",
             "Page",
         )];
@@ -519,7 +519,7 @@ mod tests {
     fn resolve_multi_source_target() {
         let rel = RelationDef {
             rel_type: "OF_TYPE".to_string(),
-            family: EdgeFamily::Ownership,
+            family: ArcFamily::Ownership,
             source: NodeRef::Multiple(vec!["Page".to_string(), "Block".to_string()]),
             target: NodeRef::Multiple(vec!["PageType".to_string(), "BlockType".to_string()]),
             cardinality: Cardinality::ManyToOne,
@@ -541,7 +541,7 @@ mod tests {
     fn edges_are_deduped() {
         let rels = vec![make_rel(
             "SEMANTIC_LINK",
-            EdgeFamily::Semantic,
+            ArcFamily::Semantic,
             "Concept",
             "Concept",
         )];
