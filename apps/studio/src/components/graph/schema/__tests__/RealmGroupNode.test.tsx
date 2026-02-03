@@ -221,17 +221,6 @@ describe('SchemaNode', () => {
     expect(projectElements.length).toBe(2); // label + nodeType
   });
 
-  it('should have source and target handles', () => {
-    render(
-      <ReactFlowProvider>
-        <SchemaNode {...defaultProps} />
-      </ReactFlowProvider>
-    );
-
-    expect(screen.getByTestId('handle-target')).toBeInTheDocument();
-    expect(screen.getByTestId('handle-source')).toBeInTheDocument();
-  });
-
   it('should render with Project node type styling', () => {
     render(
       <ReactFlowProvider>

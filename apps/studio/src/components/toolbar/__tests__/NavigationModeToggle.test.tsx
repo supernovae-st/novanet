@@ -3,6 +3,8 @@
  *
  * Tests rendering of 4-mode segmented toggle, active state styling,
  * and click behavior triggering animationStore transitions.
+ *
+ * v9.5: Order is Meta | Data | Overlay | Query, labels are lowercase mono
  */
 
 import '@testing-library/jest-dom';
@@ -42,13 +44,14 @@ describe('NavigationModeToggle', () => {
   // ==========================================================================
 
   describe('rendering', () => {
-    it('renders all 4 mode buttons', () => {
+    it('renders all 4 mode buttons in correct order', () => {
       render(<NavigationModeToggle mode="data" onModeChange={mockOnModeChange} />);
 
-      expect(screen.getByText('Data')).toBeInTheDocument();
-      expect(screen.getByText('Meta')).toBeInTheDocument();
-      expect(screen.getByText('Overlay')).toBeInTheDocument();
-      expect(screen.getByText('Query')).toBeInTheDocument();
+      // v9.5: lowercase labels, Meta first
+      expect(screen.getByText('meta')).toBeInTheDocument();
+      expect(screen.getByText('data')).toBeInTheDocument();
+      expect(screen.getByText('overlay')).toBeInTheDocument();
+      expect(screen.getByText('query')).toBeInTheDocument();
     });
 
     it('renders icons as SVGs', () => {
@@ -57,7 +60,18 @@ describe('NavigationModeToggle', () => {
       );
 
       const svgs = container.querySelectorAll('svg');
-      expect(svgs.length).toBe(4); // One icon per mode
+      expect(svgs.length).toBe(4);
+    });
+
+    it('uses monospace font for labels', () => {
+      const { container } = render(
+        <NavigationModeToggle mode="data" onModeChange={mockOnModeChange} />
+      );
+
+      const buttons = container.querySelectorAll('button');
+      buttons.forEach((btn) => {
+        expect(btn.className).toContain('font-mono');
+      });
     });
   });
 
@@ -69,36 +83,36 @@ describe('NavigationModeToggle', () => {
     it('highlights data mode when active', () => {
       render(<NavigationModeToggle mode="data" onModeChange={mockOnModeChange} />);
 
-      const dataButton = screen.getByText('Data').closest('button');
+      const dataButton = screen.getByText('data').closest('button');
       expect(dataButton?.className).toContain('emerald');
     });
 
     it('highlights meta mode when active', () => {
       render(<NavigationModeToggle mode="meta" onModeChange={mockOnModeChange} />);
 
-      const metaButton = screen.getByText('Meta').closest('button');
+      const metaButton = screen.getByText('meta').closest('button');
       expect(metaButton?.className).toContain('blue');
     });
 
     it('highlights overlay mode when active', () => {
       render(<NavigationModeToggle mode="overlay" onModeChange={mockOnModeChange} />);
 
-      const overlayButton = screen.getByText('Overlay').closest('button');
+      const overlayButton = screen.getByText('overlay').closest('button');
       expect(overlayButton?.className).toContain('violet');
     });
 
     it('highlights query mode when active', () => {
       render(<NavigationModeToggle mode="query" onModeChange={mockOnModeChange} />);
 
-      const queryButton = screen.getByText('Query').closest('button');
+      const queryButton = screen.getByText('query').closest('button');
       expect(queryButton?.className).toContain('amber');
     });
 
     it('inactive buttons have muted styling', () => {
       render(<NavigationModeToggle mode="data" onModeChange={mockOnModeChange} />);
 
-      const metaButton = screen.getByText('Meta').closest('button');
-      expect(metaButton?.className).toContain('text-white/40');
+      const metaButton = screen.getByText('meta').closest('button');
+      expect(metaButton?.className).toContain('text-white/30');
     });
   });
 
@@ -110,7 +124,7 @@ describe('NavigationModeToggle', () => {
     it('triggers startTransition on click of different mode', () => {
       render(<NavigationModeToggle mode="data" onModeChange={mockOnModeChange} />);
 
-      fireEvent.click(screen.getByText('Meta'));
+      fireEvent.click(screen.getByText('meta'));
 
       expect(mockStartTransition).toHaveBeenCalledWith('meta');
     });
@@ -118,7 +132,7 @@ describe('NavigationModeToggle', () => {
     it('does not trigger transition when clicking active mode', () => {
       render(<NavigationModeToggle mode="data" onModeChange={mockOnModeChange} />);
 
-      fireEvent.click(screen.getByText('Data'));
+      fireEvent.click(screen.getByText('data'));
 
       expect(mockStartTransition).not.toHaveBeenCalled();
     });
@@ -126,12 +140,12 @@ describe('NavigationModeToggle', () => {
     it('triggers correct mode for each button', () => {
       render(<NavigationModeToggle mode="data" onModeChange={mockOnModeChange} />);
 
-      fireEvent.click(screen.getByText('Overlay'));
+      fireEvent.click(screen.getByText('overlay'));
       expect(mockStartTransition).toHaveBeenCalledWith('overlay');
 
       mockStartTransition.mockClear();
 
-      fireEvent.click(screen.getByText('Query'));
+      fireEvent.click(screen.getByText('query'));
       expect(mockStartTransition).toHaveBeenCalledWith('query');
     });
   });

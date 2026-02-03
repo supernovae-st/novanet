@@ -38,6 +38,7 @@ pub struct EdgeFamilyInfo {
 
 /// A Kind in the taxonomy tree.
 #[derive(Debug, Clone)]
+#[allow(dead_code)] // schema_hint reserved for future use
 pub struct KindInfo {
     pub key: String,
     pub display_name: String,
@@ -47,6 +48,11 @@ pub struct KindInfo {
     pub instance_count: i64,
     pub edges: Vec<EdgeInfo>,
     pub yaml_path: String,
+    // Schema properties (from Neo4j Kind node)
+    pub properties: Vec<String>,
+    pub required_properties: Vec<String>,
+    pub schema_hint: String,
+    pub context_budget: String,
 }
 
 /// Layer containing Kinds.
@@ -107,7 +113,12 @@ RETURN
     coalesce(r.display_name, r.key, 'Unknown') AS realm_display,
     coalesce(l.key, 'unknown') AS layer_key,
     coalesce(l.display_name, l.key, 'Unknown') AS layer_display,
-    instances
+    instances,
+    coalesce(k.yaml_path, '') AS yaml_path,
+    coalesce(k.properties, []) AS properties,
+    coalesce(k.required_properties, []) AS required_properties,
+    coalesce(k.schema_hint, '') AS schema_hint,
+    coalesce(k.context_budget, '') AS context_budget
 ORDER BY realm_key, layer_key, kind_key
 "#;
 
@@ -130,13 +141,27 @@ ORDER BY realm_key, layer_key, kind_key
             let layer_display: String = row.get("layer_display").unwrap_or_default();
             let instances: i64 = row.get("instances").unwrap_or(0);
 
-            // Compute YAML path: packages/core/models/nodes/{realm}/{layer}/{kind-kebab}.yaml
-            let yaml_path = format!(
-                "packages/core/models/nodes/{}/{}/{}.yaml",
-                realm_key,
-                layer_key,
-                to_kebab_case(&kind_key)
-            );
+            // Get YAML path from Neo4j (with fallback to computed path)
+            let yaml_path_raw: String = row.get("yaml_path").unwrap_or_default();
+            let yaml_path = if yaml_path_raw.is_empty() {
+                // Fallback: compute path
+                format!(
+                    "packages/core/models/nodes/{}/{}/{}.yaml",
+                    realm_key,
+                    layer_key,
+                    to_kebab_case(&kind_key)
+                )
+            } else {
+                // Neo4j stores relative path like "nodes/project/structure/block.yaml"
+                // We need to prefix with "packages/core/models/"
+                format!("packages/core/models/{}", yaml_path_raw)
+            };
+
+            // Get schema properties from Neo4j
+            let properties: Vec<String> = row.get("properties").unwrap_or_default();
+            let required_properties: Vec<String> = row.get("required_properties").unwrap_or_default();
+            let schema_hint: String = row.get("schema_hint").unwrap_or_default();
+            let context_budget: String = row.get("context_budget").unwrap_or_default();
 
             let kind = KindInfo {
                 key: kind_key,
@@ -147,6 +172,10 @@ ORDER BY realm_key, layer_key, kind_key
                 instance_count: instances,
                 edges: Vec::new(), // Loaded separately
                 yaml_path,
+                properties,
+                required_properties,
+                schema_hint,
+                context_budget,
             };
 
             realm_map

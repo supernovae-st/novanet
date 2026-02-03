@@ -64,7 +64,7 @@ fn render_header(f: &mut Frame, area: Rect, app: &App) {
     header.extend(tabs);
 
     let right_side = vec![
-        Span::styled("  h/l:fold  f:find  /:help  q:quit", Style::default().fg(Color::DarkGray)),
+        Span::styled("  h/l:fold  j/k:yaml  f:find  /:help  q:quit", Style::default().fg(Color::DarkGray)),
     ];
 
     let mut full_header: Vec<Span<'static>> = header;
@@ -98,7 +98,7 @@ fn render_main(f: &mut Frame, area: Rect, app: &mut App) {
 /// Tree panel: taxonomy hierarchy with scroll and collapse.
 fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
     let focused = app.focus == Focus::Tree;
-    let border_color = if focused { Color::Cyan } else { Color::DarkGray };
+    let border_color = if focused { Color::Cyan } else { Color::Rgb(60, 60, 70) };
 
     // Calculate visible height (area minus borders)
     let visible_height = area.height.saturating_sub(2) as usize;
@@ -230,27 +230,119 @@ fn realm_color(key: &str) -> Color {
     }
 }
 
-/// Detail panel: info (1/4) + YAML preview (3/4).
+/// Detail panel: unified container with info + separator + YAML.
 fn render_detail(f: &mut Frame, area: Rect, app: &App) {
     let focused = app.focus == Focus::Detail;
-    let border_color = if focused { Color::Cyan } else { Color::DarkGray };
+    let border_color = if focused { Color::Cyan } else { Color::Rgb(60, 60, 70) };
 
-    // Split detail area vertically: 1/4 info, 3/4 YAML
-    let chunks = Layout::default()
-        .direction(Direction::Vertical)
-        .constraints([
-            Constraint::Ratio(1, 4), // Info
-            Constraint::Ratio(3, 4), // YAML
-        ])
-        .split(area);
+    // Build all lines: info + separator + yaml
+    let mut lines: Vec<Line> = Vec::new();
 
-    render_detail_info(f, chunks[0], app, border_color);
-    render_yaml_preview(f, chunks[1], app, border_color);
+    // === INFO SECTION ===
+    lines.extend(build_info_lines(app));
+
+    // === SEPARATOR with path ===
+    let separator = build_separator_line(&app.yaml_path, area.width.saturating_sub(2) as usize);
+    lines.push(Line::from(""));
+    lines.push(separator);
+    lines.push(Line::from(""));
+
+    // === YAML SECTION ===
+    if !app.yaml_content.is_empty() {
+        for yaml_line in app.yaml_content.lines().skip(app.yaml_scroll) {
+            lines.push(highlight_yaml_line(yaml_line));
+        }
+    } else {
+        lines.push(Line::from(Span::styled(
+            "No YAML file",
+            Style::default().fg(Color::DarkGray),
+        )));
+    }
+
+    // Get title from current item
+    let title = get_detail_title(app);
+
+    let block = Block::default()
+        .title(Span::styled(format!(" {} ", title), Style::default().fg(border_color)))
+        .borders(Borders::ALL)
+        .border_style(Style::default().fg(border_color));
+
+    let paragraph = Paragraph::new(lines).block(block);
+    f.render_widget(paragraph, area);
 }
 
-/// Detail info panel (top 1/4).
-fn render_detail_info(f: &mut Frame, area: Rect, app: &App, border_color: Color) {
-    let lines = match app.tree.item_at(app.tree_cursor) {
+/// Get title for detail panel based on current selection.
+fn get_detail_title(app: &App) -> String {
+    match app.tree.item_at(app.tree_cursor) {
+        Some(TreeItem::KindsSection) => "Kinds".to_string(),
+        Some(TreeItem::RelationsSection) => "Relations".to_string(),
+        Some(TreeItem::Realm(r)) => format!("{} {}", r.emoji, r.display_name),
+        Some(TreeItem::Layer(_, l)) => l.display_name.clone(),
+        Some(TreeItem::Kind(_, _, k)) => {
+            if k.icon.is_empty() { k.display_name.clone() }
+            else { format!("{} {}", k.icon, k.display_name) }
+        }
+        Some(TreeItem::EdgeFamily(f)) => f.display_name.clone(),
+        Some(TreeItem::EdgeKind(_, ek)) => ek.display_name.clone(),
+        None => "Detail".to_string(),
+    }
+}
+
+/// Build separator line: ──── path/to/file.yaml ────
+fn build_separator_line(path: &str, width: usize) -> Line<'static> {
+    if path.is_empty() {
+        let dashes = "─".repeat(width);
+        return Line::from(Span::styled(dashes, Style::default().fg(Color::Rgb(60, 60, 70))));
+    }
+
+    // Colorize path segments
+    let path_spans = colorize_path_inline(path);
+    let path_len: usize = path.len() + 2; // " path "
+
+    let side_len = width.saturating_sub(path_len) / 2;
+    let left_dashes = "─".repeat(side_len.max(2));
+    let right_dashes = "─".repeat(side_len.max(2));
+
+    let mut spans: Vec<Span<'static>> = vec![
+        Span::styled(left_dashes, Style::default().fg(Color::Rgb(60, 60, 70))),
+        Span::raw(" "),
+    ];
+    spans.extend(path_spans);
+    spans.push(Span::raw(" "));
+    spans.push(Span::styled(right_dashes, Style::default().fg(Color::Rgb(60, 60, 70))));
+
+    Line::from(spans)
+}
+
+/// Colorize path inline for separator.
+fn colorize_path_inline(path: &str) -> Vec<Span<'static>> {
+    let parts: Vec<&str> = path.split('/').collect();
+    let mut spans: Vec<Span<'static>> = Vec::new();
+
+    for (i, part) in parts.iter().enumerate() {
+        let color = match i {
+            0..=2 => Color::Rgb(80, 80, 90),   // packages/core/models
+            3 => Color::Magenta,               // nodes
+            4 => match *part {                 // realm
+                "global" => Color::Green,
+                "project" => Color::Yellow,
+                "shared" => Color::Cyan,
+                _ => Color::White,
+            },
+            5 => Color::Rgb(100, 180, 100),    // layer
+            _ => Color::White,                 // filename
+        };
+        spans.push(Span::styled(part.to_string(), Style::default().fg(color)));
+        if i < parts.len() - 1 {
+            spans.push(Span::styled("/", Style::default().fg(Color::Rgb(50, 50, 60))));
+        }
+    }
+    spans
+}
+
+/// Build info lines for detail panel.
+fn build_info_lines(app: &App) -> Vec<Line<'static>> {
+    match app.tree.item_at(app.tree_cursor) {
         Some(TreeItem::KindsSection) => {
             let kind_count: usize = app.tree.realms.iter()
                 .flat_map(|r| r.layers.iter())
@@ -316,7 +408,7 @@ fn render_detail_info(f: &mut Frame, area: Rect, app: &App, border_color: Color)
                 ]),
                 Line::from(vec![
                     Span::styled("key       ", Style::default().fg(Color::DarkGray)),
-                    Span::styled(&realm.key, Style::default().fg(Color::White)),
+                    Span::styled(realm.key.clone(), Style::default().fg(Color::White)),
                 ]),
                 Line::from(vec![
                     Span::styled("layers    ", Style::default().fg(Color::DarkGray)),
@@ -331,7 +423,7 @@ fn render_detail_info(f: &mut Frame, area: Rect, app: &App, border_color: Color)
         Some(TreeItem::Layer(realm, layer)) => {
             vec![
                 Line::from(Span::styled(
-                    &layer.display_name,
+                    layer.display_name.clone(),
                     Style::default().fg(Color::White).add_modifier(Modifier::BOLD),
                 )),
                 Line::from(""),
@@ -341,11 +433,11 @@ fn render_detail_info(f: &mut Frame, area: Rect, app: &App, border_color: Color)
                 ]),
                 Line::from(vec![
                     Span::styled("key       ", Style::default().fg(Color::DarkGray)),
-                    Span::styled(&layer.key, Style::default().fg(Color::White)),
+                    Span::styled(layer.key.clone(), Style::default().fg(Color::White)),
                 ]),
                 Line::from(vec![
                     Span::styled("realm     ", Style::default().fg(Color::DarkGray)),
-                    Span::styled(&realm.display_name, Style::default().fg(realm_color(&realm.key))),
+                    Span::styled(realm.display_name.clone(), Style::default().fg(realm_color(&realm.key))),
                 ]),
                 Line::from(vec![
                     Span::styled("kinds     ", Style::default().fg(Color::DarkGray)),
@@ -371,15 +463,15 @@ fn render_detail_info(f: &mut Frame, area: Rect, app: &App, border_color: Color)
                 ]),
                 Line::from(vec![
                     Span::styled("key       ", Style::default().fg(Color::DarkGray)),
-                    Span::styled(&kind.key, Style::default().fg(Color::White)),
+                    Span::styled(kind.key.clone(), Style::default().fg(Color::White)),
                 ]),
                 Line::from(vec![
                     Span::styled("realm     ", Style::default().fg(Color::DarkGray)),
-                    Span::styled(&realm.display_name, Style::default().fg(realm_color(&realm.key))),
+                    Span::styled(realm.display_name.clone(), Style::default().fg(realm_color(&realm.key))),
                 ]),
                 Line::from(vec![
                     Span::styled("layer     ", Style::default().fg(Color::DarkGray)),
-                    Span::styled(&layer.display_name, Style::default().fg(Color::Green)),
+                    Span::styled(layer.display_name.clone(), Style::default().fg(Color::Green)),
                 ]),
             ];
 
@@ -387,7 +479,7 @@ fn render_detail_info(f: &mut Frame, area: Rect, app: &App, border_color: Color)
             if !kind.trait_name.is_empty() {
                 lines.push(Line::from(vec![
                     Span::styled("trait     ", Style::default().fg(Color::DarkGray)),
-                    Span::styled(&kind.trait_name, Style::default().fg(Color::Magenta)),
+                    Span::styled(kind.trait_name.clone(), Style::default().fg(Color::Magenta)),
                 ]));
             }
 
@@ -395,6 +487,40 @@ fn render_detail_info(f: &mut Frame, area: Rect, app: &App, border_color: Color)
                 Span::styled("instances ", Style::default().fg(Color::DarkGray)),
                 Span::styled(kind.instance_count.to_string(), Style::default().fg(Color::White)),
             ]));
+
+            // Context budget (if present)
+            if !kind.context_budget.is_empty() {
+                lines.push(Line::from(vec![
+                    Span::styled("budget    ", Style::default().fg(Color::DarkGray)),
+                    Span::styled(kind.context_budget.clone(), Style::default().fg(Color::Cyan)),
+                ]));
+            }
+
+            // Properties section (ALL properties with required markers)
+            if !kind.properties.is_empty() {
+                lines.push(Line::from(""));
+                lines.push(Line::from(Span::styled(
+                    format!("Properties ({})", kind.properties.len()),
+                    Style::default().fg(Color::Rgb(100, 100, 120)),
+                )));
+
+                for prop in &kind.properties {
+                    let is_required = kind.required_properties.contains(prop);
+                    let marker = if is_required { "*" } else { " " };
+                    let prop_color = if is_required { Color::Yellow } else { Color::White };
+
+                    lines.push(Line::from(vec![
+                        Span::styled(format!("  {}", marker), Style::default().fg(Color::Rgb(255, 100, 100))),
+                        Span::styled(prop.clone(), Style::default().fg(prop_color)),
+                    ]));
+                }
+
+                // Legend
+                lines.push(Line::from(Span::styled(
+                    "  * = required",
+                    Style::default().fg(Color::DarkGray),
+                )));
+            }
 
             // Edges section
             if !kind.edges.is_empty() {
@@ -412,9 +538,9 @@ fn render_detail_info(f: &mut Frame, area: Rect, app: &App, border_color: Color)
 
                     lines.push(Line::from(vec![
                         Span::styled(format!("  {} ", arrow), Style::default().fg(arrow_color)),
-                        Span::styled(&edge.rel_type, Style::default().fg(arrow_color)),
+                        Span::styled(edge.rel_type.clone(), Style::default().fg(arrow_color)),
                         Span::styled(" → ", Style::default().fg(Color::DarkGray)),
-                        Span::styled(&edge.target_kind, Style::default().fg(Color::Yellow)),
+                        Span::styled(edge.target_kind.clone(), Style::default().fg(Color::Yellow)),
                     ]));
                 }
             }
@@ -423,10 +549,15 @@ fn render_detail_info(f: &mut Frame, area: Rect, app: &App, border_color: Color)
             if !kind.description.is_empty() {
                 lines.push(Line::from(""));
                 lines.push(Line::from(Span::styled("Description", Style::default().fg(Color::Rgb(100, 100, 120)))));
-                lines.push(Line::from(Span::styled(
-                    format!("  {}", &kind.description),
-                    Style::default().fg(Color::Rgb(150, 150, 150)),
-                )));
+                // Wrap description to multiple lines if too long
+                let desc = &kind.description;
+                for chunk in desc.chars().collect::<Vec<_>>().chunks(60) {
+                    let line: String = chunk.iter().collect();
+                    lines.push(Line::from(Span::styled(
+                        format!("  {}", line),
+                        Style::default().fg(Color::Rgb(150, 150, 150)),
+                    )));
+                }
             }
 
             // Cypher
@@ -442,7 +573,7 @@ fn render_detail_info(f: &mut Frame, area: Rect, app: &App, border_color: Color)
         Some(TreeItem::EdgeFamily(family)) => {
             vec![
                 Line::from(Span::styled(
-                    &family.display_name,
+                    family.display_name.clone(),
                     Style::default().fg(Color::Rgb(180, 140, 80)).add_modifier(Modifier::BOLD),
                 )),
                 Line::from(""),
@@ -452,7 +583,7 @@ fn render_detail_info(f: &mut Frame, area: Rect, app: &App, border_color: Color)
                 ]),
                 Line::from(vec![
                     Span::styled("key       ", Style::default().fg(Color::DarkGray)),
-                    Span::styled(&family.key, Style::default().fg(Color::White)),
+                    Span::styled(family.key.clone(), Style::default().fg(Color::White)),
                 ]),
                 Line::from(vec![
                     Span::styled("relations ", Style::default().fg(Color::DarkGray)),
@@ -465,7 +596,7 @@ fn render_detail_info(f: &mut Frame, area: Rect, app: &App, border_color: Color)
         Some(TreeItem::EdgeKind(family, edge_kind)) => {
             let mut lines = vec![
                 Line::from(Span::styled(
-                    &edge_kind.display_name,
+                    edge_kind.display_name.clone(),
                     Style::default().fg(Color::Rgb(150, 150, 150)).add_modifier(Modifier::BOLD),
                 )),
                 Line::from(""),
@@ -475,19 +606,19 @@ fn render_detail_info(f: &mut Frame, area: Rect, app: &App, border_color: Color)
                 ]),
                 Line::from(vec![
                     Span::styled("key       ", Style::default().fg(Color::DarkGray)),
-                    Span::styled(&edge_kind.key, Style::default().fg(Color::White)),
+                    Span::styled(edge_kind.key.clone(), Style::default().fg(Color::White)),
                 ]),
                 Line::from(vec![
                     Span::styled("family    ", Style::default().fg(Color::DarkGray)),
-                    Span::styled(&family.display_name, Style::default().fg(Color::Rgb(180, 140, 80))),
+                    Span::styled(family.display_name.clone(), Style::default().fg(Color::Rgb(180, 140, 80))),
                 ]),
                 Line::from(vec![
                     Span::styled("from      ", Style::default().fg(Color::DarkGray)),
-                    Span::styled(&edge_kind.from_kind, Style::default().fg(Color::Cyan)),
+                    Span::styled(edge_kind.from_kind.clone(), Style::default().fg(Color::Cyan)),
                 ]),
                 Line::from(vec![
                     Span::styled("to        ", Style::default().fg(Color::DarkGray)),
-                    Span::styled(&edge_kind.to_kind, Style::default().fg(Color::Cyan)),
+                    Span::styled(edge_kind.to_kind.clone(), Style::default().fg(Color::Cyan)),
                 ]),
             ];
 
@@ -495,7 +626,7 @@ fn render_detail_info(f: &mut Frame, area: Rect, app: &App, border_color: Color)
             if !edge_kind.cardinality.is_empty() {
                 lines.push(Line::from(vec![
                     Span::styled("cardin.   ", Style::default().fg(Color::DarkGray)),
-                    Span::styled(&edge_kind.cardinality, Style::default().fg(Color::Magenta)),
+                    Span::styled(edge_kind.cardinality.clone(), Style::default().fg(Color::Magenta)),
                 ]));
             }
 
@@ -527,48 +658,7 @@ fn render_detail_info(f: &mut Frame, area: Rect, app: &App, border_color: Color)
                 )),
             ]
         }
-    };
-
-    let block = Block::default()
-        .title(Span::styled(" Detail ", Style::default().fg(border_color)))
-        .borders(Borders::ALL)
-        .border_style(Style::default().fg(border_color));
-
-    let paragraph = Paragraph::new(lines).block(block);
-    f.render_widget(paragraph, area);
-}
-
-/// YAML preview panel (bottom 3/4).
-fn render_yaml_preview(f: &mut Frame, area: Rect, app: &App, border_color: Color) {
-    // Title with file path
-    let title = if app.yaml_path.is_empty() {
-        " YAML ".to_string()
-    } else {
-        format!(" {} ", app.yaml_path)
-    };
-
-    // Parse YAML and apply syntax highlighting
-    let lines: Vec<Line> = if app.yaml_content.is_empty() {
-        vec![Line::from(Span::styled(
-            "No YAML file for this item",
-            Style::default().fg(Color::DarkGray),
-        ))]
-    } else {
-        app.yaml_content
-            .lines()
-            .map(highlight_yaml_line)
-            .collect()
-    };
-
-    let block = Block::default()
-        .title(Span::styled(title, Style::default().fg(border_color)))
-        .borders(Borders::ALL)
-        .border_style(Style::default().fg(border_color));
-
-    let paragraph = Paragraph::new(lines)
-        .block(block)
-        .scroll((app.yaml_scroll as u16, 0));
-    f.render_widget(paragraph, area);
+    }
 }
 
 /// Highlight a YAML line with syntax coloring.
@@ -665,16 +755,25 @@ fn highlight_yaml_value(value: &str) -> Span<'static> {
 /// Status bar: stats + shortcuts.
 fn render_status(f: &mut Frame, area: Rect, app: &App) {
     let stats = &app.tree.stats;
+
+    // Focus indicator
+    let focus_label = match app.focus {
+        Focus::Tree => "Tree",
+        Focus::Detail => "Detail",
+    };
+
     let status = Line::from(vec![
-        Span::styled(format!(" {} nodes", stats.node_count), Style::default().fg(Color::Cyan)),
-        Span::styled(" │ ", Style::default().fg(Color::DarkGray)),
-        Span::styled(format!("{} edges", stats.edge_count), Style::default().fg(Color::Cyan)),
-        Span::styled(" │ ", Style::default().fg(Color::DarkGray)),
-        Span::styled(format!("{} Kinds", stats.kind_count), Style::default().fg(Color::Cyan)),
-        Span::styled(" │ ", Style::default().fg(Color::DarkGray)),
-        Span::styled(format!("{} EdgeKinds", stats.edge_kind_count), Style::default().fg(Color::Cyan)),
-        Span::raw("                              "),
-        Span::styled("↑↓:nav  ←→:panel  N:mode  ", Style::default().fg(Color::DarkGray)),
+        Span::styled(format!(" {} nodes", stats.node_count), Style::default().fg(Color::Rgb(100, 100, 120))),
+        Span::styled(" │ ", Style::default().fg(Color::Rgb(50, 50, 60))),
+        Span::styled(format!("{} edges", stats.edge_count), Style::default().fg(Color::Rgb(100, 100, 120))),
+        Span::styled(" │ ", Style::default().fg(Color::Rgb(50, 50, 60))),
+        Span::styled(format!("{} Kinds", stats.kind_count), Style::default().fg(Color::Rgb(100, 100, 120))),
+        Span::styled(" │ ", Style::default().fg(Color::Rgb(50, 50, 60))),
+        Span::styled(format!("{} EdgeKinds", stats.edge_kind_count), Style::default().fg(Color::Rgb(100, 100, 120))),
+        Span::raw("          "),
+        Span::styled(format!("[{}]", focus_label), Style::default().fg(Color::Cyan)),
+        Span::raw("     "),
+        Span::styled("Tab:panel  j/k:yaml  ", Style::default().fg(Color::DarkGray)),
     ]);
 
     let paragraph = Paragraph::new(status)
@@ -788,7 +887,7 @@ fn render_search(f: &mut Frame, app: &App) {
 fn render_help(f: &mut Frame) {
     let area = f.area();
     let width = 45.min(area.width.saturating_sub(4));
-    let height = 24.min(area.height.saturating_sub(4));
+    let height = 26.min(area.height.saturating_sub(4));
     let x = (area.width.saturating_sub(width)) / 2;
     let y = (area.height.saturating_sub(height)) / 2;
 
@@ -805,12 +904,12 @@ fn render_help(f: &mut Frame) {
             Span::styled("  Navigation", Style::default().fg(Color::Yellow)),
         ]),
         Line::from(vec![
-            Span::styled("    ↑↓       ", Style::default().fg(Color::White)),
-            Span::styled("Move cursor in tree", Style::default().fg(Color::DarkGray)),
+            Span::styled("    Tab      ", Style::default().fg(Color::White)),
+            Span::styled("Toggle Tree ↔ Detail", Style::default().fg(Color::DarkGray)),
         ]),
         Line::from(vec![
-            Span::styled("    ←→       ", Style::default().fg(Color::White)),
-            Span::styled("Switch panel focus", Style::default().fg(Color::DarkGray)),
+            Span::styled("    ↑↓       ", Style::default().fg(Color::White)),
+            Span::styled("Move cursor in tree", Style::default().fg(Color::DarkGray)),
         ]),
         Line::from(""),
         Line::from(vec![
@@ -831,6 +930,18 @@ fn render_help(f: &mut Frame) {
         Line::from(vec![
             Span::styled("    L        ", Style::default().fg(Color::White)),
             Span::styled("Expand all", Style::default().fg(Color::DarkGray)),
+        ]),
+        Line::from(""),
+        Line::from(vec![
+            Span::styled("  YAML scroll", Style::default().fg(Color::Yellow)),
+        ]),
+        Line::from(vec![
+            Span::styled("    j/k      ", Style::default().fg(Color::White)),
+            Span::styled("Scroll YAML up/down", Style::default().fg(Color::DarkGray)),
+        ]),
+        Line::from(vec![
+            Span::styled("    d/u      ", Style::default().fg(Color::White)),
+            Span::styled("Page down/up", Style::default().fg(Color::DarkGray)),
         ]),
         Line::from(""),
         Line::from(vec![

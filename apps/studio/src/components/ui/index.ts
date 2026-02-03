@@ -14,7 +14,7 @@ export { Divider } from './Divider';
 export { IconButton } from './IconButton';
 export { RefreshButton } from './RefreshButton';
 export { Kbd } from './Kbd';
-export { LayerIcon, getLayerIconComponent } from './CategoryIcon';
+export { LayerIcon } from './CategoryIcon';
 
 // Existing components
 export { ErrorBoundary } from './ErrorBoundary';
@@ -43,6 +43,3 @@ export { SegmentedTabs } from './SegmentedTabs';
 // Animation components
 export { MatrixRainOverlay } from './MatrixRainOverlay';
 export { MatrixExplosionOverlay } from './MatrixExplosionOverlay';
-
-// Easter egg
-export { EasterEggButton } from './EasterEggButton';

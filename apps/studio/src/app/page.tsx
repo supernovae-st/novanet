@@ -676,7 +676,7 @@ export default function HomePage() {
                           onHoverLeave={scheduleCloseExpanded}
                           isMetaMode={isMetaMode}
                           onMetaHoverChange={setIsMetaHovered}
-                          onMetaClick={() => setIsExplosionActive(true)}
+                          onMetaClick={() => !isExplosionActive && setIsExplosionActive(true)}
                         />
                         {visibleNodeCount > 0 && (
                           <>

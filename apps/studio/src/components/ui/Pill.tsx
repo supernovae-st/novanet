@@ -74,8 +74,6 @@ interface PillProps {
   className?: string;
   /** Size variant affecting padding and height */
   size?: 'sm' | 'md' | 'lg';
-  /** @deprecated Kept for API compat. */
-  glass?: 'light' | 'medium' | 'heavy';
   /** Absolute positioning preset */
   position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'bottom-center' | null;
   /** Glow effect (e.g., when executing) */
