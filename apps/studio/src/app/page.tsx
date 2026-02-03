@@ -47,7 +47,7 @@ import { GraphErrorBoundary } from '@/components/ui/ErrorBoundary';
 import { StatsCounter, Pill, Divider, RefreshButton, LayerIcon, MatrixRainOverlay, MatrixExplosionOverlay } from '@/components/ui';
 import { NavigationModeToggle } from '@/components/toolbar/NavigationModeToggle';
 import { NodeDetailsPanel } from '@/components/sidebar/NodeDetailsPanel';
-import { EdgeDetailsPanel } from '@/components/sidebar/EdgeDetailsPanel';
+import { ArcDetailsPanel } from '@/components/sidebar/ArcDetailsPanel';
 import { KeyboardHelpPanel } from '@/components/dx/KeyboardHelpPanel';
 import { CommandPalette, useCommandPalette, useCommandPaletteState } from '@/components/ui/CommandPalette';
 import { AiSearchOverlay } from '@/components/chat/AiSearchOverlay';
@@ -861,10 +861,10 @@ export default function HomePage() {
               </button>
             </div>
 
-            {/* Node/Edge Details */}
+            {/* Node/Arc Details */}
             <div className="flex-1 overflow-hidden">
               {selectedEdge ? (
-                <EdgeDetailsPanel edge={selectedEdge} />
+                <ArcDetailsPanel arc={selectedEdge} />
               ) : selectedNode ? (
                 <NodeDetailsPanel node={selectedNode} />
               ) : null}

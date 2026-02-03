@@ -1,14 +1,14 @@
 /**
- * Node & Edge Gradient Colors — v9.0.0
+ * Node & Arc Gradient Colors — v9.5.0
  *
  * SVG gradient pairs (primary/secondary) for React Flow node rendering.
- * Organized by visual category: layer, structural, locale-knowledge, relation.
+ * Organized by visual category: layer, structural, locale-knowledge, arc.
  *
  * Used by:
  * - TurboNode (layer gradients)
  * - StructuralNode (type-specific gradients)
  * - LocaleKnowledgeNode (locale knowledge gradients)
- * - NodeDetailsPanel / EdgeDetailsPanel (display colors)
+ * - NodeDetailsPanel / ArcDetailsPanel (display colors)
  * - SchemaNode (unified node type lookup)
  *
  * Note: FloatingEdge has its own complex style system with animations,
@@ -123,12 +123,12 @@ export function getNodeTypeColors(type: NodeType | string): GradientColors {
 }
 
 // =============================================================================
-// Relation/Edge Colors (for edge details panel)
+// Arc Colors (for arc details panel)
 // =============================================================================
 
 /**
- * Get gradient colors for relation/edge types
- * Used in EdgeDetailsPanel for color-coding relationships
+ * Get gradient colors for arc types (relationships)
+ * Used in ArcDetailsPanel for color-coding arcs
  */
 export function getRelationColors(type: string): GradientColors {
   // Structural relationships

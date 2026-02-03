@@ -7,7 +7,7 @@
 
 import { applySchemaLayout } from '../schemaLayoutELK';
 import { getSchemaHierarchy } from '@novanet/core/graph';
-import type { Layer, SchemaNode, SchemaEdge, HierarchicalSchemaData } from '@novanet/core/graph';
+import type { Layer, SchemaNode, SchemaArc, HierarchicalSchemaData } from '@novanet/core/graph';
 import type { Realm } from '@novanet/core/types';
 
 // Mock ELK.js
@@ -155,13 +155,13 @@ describe('schemaLayoutELK', () => {
         { id: 'schema-SEOKeywordL10n', nodeType: 'SEOKeywordL10n', realm: 'shared', layer: 'seo', label: 'SEO Keyword', description: '', trait: 'localized' },
         { id: 'schema-GEOSeedL10n', nodeType: 'GEOSeedL10n', realm: 'shared', layer: 'geo', label: 'GEO Seed', description: '', trait: 'localized' },
       ] as SchemaNode[],
-      edges: [
-        { id: 'schema-edge-0', relationType: 'HAS_PAGE', sourceType: 'Project', targetType: 'Page', label: 'HAS_PAGE', description: '', cardinality: '1:N' },
-        { id: 'schema-edge-1', relationType: 'HAS_BLOCK', sourceType: 'Page', targetType: 'Block', label: 'HAS_BLOCK', description: '', cardinality: '1:N' },
-      ] as SchemaEdge[],
+      arcs: [
+        { id: 'schema-arc-0', relationType: 'HAS_PAGE', sourceType: 'Project', targetType: 'Page', label: 'HAS_PAGE', description: '', cardinality: '1:N' },
+        { id: 'schema-arc-1', relationType: 'HAS_BLOCK', sourceType: 'Page', targetType: 'Block', label: 'HAS_BLOCK', description: '', cardinality: '1:N' },
+      ] as SchemaArc[],
       stats: {
         totalNodes: 10,
-        totalEdges: 2,
+        totalArcs: 2,
         nodesByRealm: { project: 5, global: 3, shared: 2 },
       },
     };
@@ -338,7 +338,7 @@ describe('schemaLayoutELK', () => {
 
       expect(hasLayerEdges.length).toBeGreaterThan(0);
       expect(hasKindEdges.length).toBeGreaterThan(0);
-      expect(businessEdges.length).toBe(hierarchy.edges.length);
+      expect(businessEdges.length).toBe(hierarchy.arcs.length);
     });
   });
 
@@ -348,8 +348,8 @@ describe('schemaLayoutELK', () => {
       const emptyHierarchy: HierarchicalSchemaData = {
         realms: {} as never,
         nodes: [],
-        edges: [],
-        stats: { totalNodes: 0, totalEdges: 0, nodesByRealm: { project: 0, global: 0, shared: 0 } },
+        arcs: [],
+        stats: { totalNodes: 0, totalArcs: 0, nodesByRealm: { project: 0, global: 0, shared: 0 } },
       };
 
       // Should not throw

@@ -213,7 +213,7 @@ export function applyHierarchicalLayout(
 
   const validNodeIds = new Set(nodes.map((n) => n.id));
 
-  for (const [index, edge] of hierarchy.edges.entries()) {
+  for (const [index, edge] of hierarchy.arcs.entries()) {
     const sourceId = `schema-${edge.sourceType}`;
     const targetId = `schema-${edge.targetType}`;
 
