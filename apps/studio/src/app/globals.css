@@ -877,46 +877,13 @@ body {
 }
 
 /* ========================================
-   EASTER EGG - Matrix Glitch Effects
+   EASTER EGG - Matrix Effect (GPU-only)
    ======================================== */
 
-/* Global glitch state - applied to body */
+/* Global state - CSS vars only, no layout changes */
 .matrix-glitch-active {
-  /* CSS custom properties set by JS */
   --matrix-color: #60a5fa;
   --matrix-glow: rgba(96, 165, 250, 0.6);
-}
-
-/* Shake animation for UI elements when glitch is active */
-.matrix-glitch-active [class*="rounded-2xl"],
-.matrix-glitch-active [class*="Pill"] {
-  animation: uiShake 0.15s ease-in-out 3;
-}
-
-/* Glow pulse on all interactive elements */
-.matrix-glitch-active button,
-.matrix-glitch-active [role="button"] {
-  animation: uiGlowPulse 0.3s ease-out 2;
-  box-shadow: 0 0 20px var(--matrix-glow), 0 0 40px var(--matrix-glow);
-}
-
-/* Border color flash */
-.matrix-glitch-active [class*="border"] {
-  border-color: var(--matrix-color) !important;
-  transition: border-color 0.1s ease-out;
-}
-
-@keyframes uiShake {
-  0%, 100% { transform: translateX(0) translateY(0); }
-  25% { transform: translateX(-3px) translateY(1px); }
-  50% { transform: translateX(3px) translateY(-1px); }
-  75% { transform: translateX(-2px) translateY(2px); }
-}
-
-@keyframes uiGlowPulse {
-  0% { box-shadow: 0 0 5px var(--matrix-glow); }
-  50% { box-shadow: 0 0 30px var(--matrix-glow), 0 0 60px var(--matrix-glow); }
-  100% { box-shadow: 0 0 10px var(--matrix-glow); }
 }
 
 /* Flash burst on explosion start */

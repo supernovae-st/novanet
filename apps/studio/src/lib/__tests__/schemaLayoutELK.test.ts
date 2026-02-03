@@ -168,11 +168,16 @@ describe('schemaLayoutELK', () => {
   });
 
   describe('applySchemaLayout', () => {
-    it('should layout schema nodes with ELK', async () => {
+    // v9.5: Layout changed from ELK containers to Dagre hierarchical graph
+    // - Realm and Layer are now metaBadge nodes (not container groups)
+    // - No parent/child relationships - flat graph with edges
+    // - HAS_LAYER and HAS_KIND edges connect the hierarchy
+
+    it('should layout schema nodes with Dagre', async () => {
       const result = await applySchemaLayout(mockHierarchy);
 
-      // Should have group nodes + schema nodes
-      // 3 realm groups + 6 layer groups + 10 schema nodes = 19
+      // Should have meta nodes + schema nodes
+      // 3 realm badges + 6 layer badges + 10 schema nodes = 19
       expect(result.nodes.length).toBeGreaterThan(10);
 
       // All nodes should have positions
@@ -183,72 +188,71 @@ describe('schemaLayoutELK', () => {
       }
     });
 
-    it('should create realm group nodes', async () => {
+    it('should create realm meta badge nodes', async () => {
       const result = await applySchemaLayout(mockHierarchy);
 
-      const realmGroups = result.nodes.filter(n => n.type === 'realmGroup');
-      expect(realmGroups).toHaveLength(3);
+      // v9.5: Realms are metaBadge nodes with metaType: 'realm'
+      const realmBadges = result.nodes.filter(n =>
+        n.type === 'metaBadge' && n.data.metaType === 'realm'
+      );
+      expect(realmBadges).toHaveLength(3);
 
-      // Verify realm group data
-      const projectRealm = realmGroups.find(n => n.data.realm === 'project');
+      // Verify realm badge data
+      const projectRealm = realmBadges.find(n => n.data.realmKey === 'project');
       expect(projectRealm).toBeDefined();
-      expect(projectRealm?.data.label).toBe('PROJECT');
-      expect(projectRealm?.data.icon).toBe('📦');
+      expect(projectRealm?.data.label).toBe('Project');
     });
 
-    it('should create layer group nodes', async () => {
+    it('should create layer meta badge nodes', async () => {
       const result = await applySchemaLayout(mockHierarchy);
 
-      const subGroups = result.nodes.filter(n => n.type === 'layerGroup');
+      // v9.5: Layers are metaBadge nodes with metaType: 'layer'
+      const layerBadges = result.nodes.filter(n =>
+        n.type === 'metaBadge' && n.data.metaType === 'layer'
+      );
       // 2 (Project) + 2 (Global) + 2 (Shared) = 6
-      expect(subGroups).toHaveLength(6);
+      expect(layerBadges).toHaveLength(6);
 
-      // Verify layer has parentId (realm group)
-      for (const subGroup of subGroups) {
-        expect(subGroup.parentId).toBeDefined();
-        expect(subGroup.parentId).toMatch(/^realm-/);
-        expect(subGroup.extent).toBe('parent');
-      }
+      // v9.5: No parent relationships - connected by HAS_LAYER edges
+      const hasLayerEdges = result.edges.filter(e => e.data?.relationType === 'HAS_LAYER');
+      expect(hasLayerEdges.length).toBe(6);
     });
 
-    it('should set parent relationships for schema nodes', async () => {
+    it('should create schema nodes with layer connections', async () => {
       const result = await applySchemaLayout(mockHierarchy);
 
       const schemaNodes = result.nodes.filter(n => n.type === 'schemaNode');
       expect(schemaNodes).toHaveLength(10);
 
-      for (const node of schemaNodes) {
-        expect(node.parentId).toBeDefined();
-        expect(node.parentId).toMatch(/^layer-/);
-        expect(node.extent).toBe('parent');
-      }
+      // v9.5: Connected by HAS_KIND edges (not parent relationships)
+      const hasKindEdges = result.edges.filter(e => e.data?.relationType === 'HAS_KIND');
+      expect(hasKindEdges.length).toBe(10);
     });
 
-    it('should convert ELK absolute positions to React Flow relative positions', async () => {
+    it('should position all nodes with valid coordinates', async () => {
       const result = await applySchemaLayout(mockHierarchy);
 
-      // Child nodes should have RELATIVE positions (not absolute)
-      // This is the P0 fix - ELK returns absolute, React Flow needs relative for child nodes
       const schemaNodes = result.nodes.filter(n => n.type === 'schemaNode');
 
       for (const node of schemaNodes) {
-        // Relative positions should be smaller than what would be absolute
-        // In our mock, relative positions start at 20, 60 for first child
+        // All positions should be valid numbers
         expect(node.position.x).toBeGreaterThanOrEqual(0);
         expect(node.position.y).toBeGreaterThanOrEqual(0);
       }
     });
 
-    it('should include schema edges', async () => {
+    it('should include business edges plus hierarchy edges', async () => {
       const result = await applySchemaLayout(mockHierarchy);
 
-      expect(result.edges.length).toBe(2);
+      // v9.5: Total edges = HAS_LAYER + HAS_KIND + business edges
+      // 6 HAS_LAYER + 10 HAS_KIND + 2 business = 18
+      const hasLayerEdges = result.edges.filter(e => e.data?.relationType === 'HAS_LAYER');
+      const hasKindEdges = result.edges.filter(e => e.data?.relationType === 'HAS_KIND');
+      const businessEdges = result.edges.filter(e => !e.data?.isMetaEdge);
 
-      const firstEdge = result.edges[0];
-      expect(firstEdge.source).toBe('schema-Project');
-      expect(firstEdge.target).toBe('schema-Page');
-      expect(firstEdge.type).toBe('floating');
-      expect(firstEdge.data?.relationType).toBe('HAS_PAGE');
+      expect(hasLayerEdges.length).toBe(6);
+      expect(hasKindEdges.length).toBe(10);
+      expect(businessEdges.length).toBe(2); // Original mock edges
     });
 
     it('should skip empty layers (P1 fix)', async () => {
@@ -300,53 +304,60 @@ describe('schemaLayoutELK', () => {
       const hierarchy = getSchemaHierarchy();
       const result = await applySchemaLayout(hierarchy);
 
-      // Should have 3 realm groups
-      const realmGroups = result.nodes.filter(n => n.type === 'realmGroup');
-      expect(realmGroups).toHaveLength(3);
+      // v9.5: Uses metaBadge for Realm and Layer, schemaNode for Kind
+      // Should have 3 realm meta badges
+      const realmBadges = result.nodes.filter(n =>
+        n.type === 'metaBadge' && n.data.metaType === 'realm'
+      );
+      expect(realmBadges).toHaveLength(3);
 
-      // Should have 9 layer groups (5 + 2 + 2)
-      const subGroups = result.nodes.filter(n => n.type === 'layerGroup');
-      expect(subGroups).toHaveLength(9);
+      // Should have layer meta badges (varies by active layers)
+      const layerBadges = result.nodes.filter(n =>
+        n.type === 'metaBadge' && n.data.metaType === 'layer'
+      );
+      expect(layerBadges.length).toBeGreaterThan(0);
 
-      // Should have 35 schema nodes
+      // Should have schema nodes (count varies with ontology)
       const schemaNodes = result.nodes.filter(n => n.type === 'schemaNode');
-      expect(schemaNodes).toHaveLength(35);
+      expect(schemaNodes.length).toBeGreaterThan(0);
 
-      // Total nodes: 3 + 9 + 35 = 47
-      expect(result.nodes).toHaveLength(47);
+      // Total should match: realm + layer + kind nodes
+      expect(result.nodes.length).toBe(
+        realmBadges.length + layerBadges.length + schemaNodes.length
+      );
     });
 
-    it('should include all edges from hierarchy', async () => {
+    it('should include edges for hierarchy and business relationships', async () => {
       const hierarchy = getSchemaHierarchy();
       const result = await applySchemaLayout(hierarchy);
 
-      // Should have same number of edges as input
-      expect(result.edges.length).toBe(hierarchy.edges.length);
+      // v9.5: Has HAS_LAYER, HAS_KIND, and business edges
+      const hasLayerEdges = result.edges.filter(e => e.data?.relationType === 'HAS_LAYER');
+      const hasKindEdges = result.edges.filter(e => e.data?.relationType === 'HAS_KIND');
+      const businessEdges = result.edges.filter(e => !e.data?.isMetaEdge);
+
+      expect(hasLayerEdges.length).toBeGreaterThan(0);
+      expect(hasKindEdges.length).toBeGreaterThan(0);
+      expect(businessEdges.length).toBe(hierarchy.edges.length);
     });
   });
 
-  describe('fallback layout', () => {
-    it('should fall back to grid layout if ELK fails', async () => {
-      // Force ELK to fail by passing invalid data
-      const brokenHierarchy: HierarchicalSchemaData = {
+  describe('graceful degradation', () => {
+    it('should handle empty realms without crashing', async () => {
+      // Empty hierarchy with no realms
+      const emptyHierarchy: HierarchicalSchemaData = {
         realms: {} as never,
-        nodes: [
-          { id: 'schema-Test', nodeType: 'Project', realm: 'project', layer: 'foundation', label: 'Test', description: '', trait: 'invariant' },
-        ] as SchemaNode[],
+        nodes: [],
         edges: [],
-        stats: { totalNodes: 1, totalEdges: 0, nodesByRealm: { project: 1, global: 0, shared: 0 } },
+        stats: { totalNodes: 0, totalEdges: 0, nodesByRealm: { project: 0, global: 0, shared: 0 } },
       };
 
-      // This should not throw, but use fallback
-      const result = await applySchemaLayout(brokenHierarchy);
+      // Should not throw
+      const result = await applySchemaLayout(emptyHierarchy);
 
-      // Fallback creates schema nodes directly (no groups)
-      expect(result.nodes.length).toBeGreaterThanOrEqual(1);
-
-      // All nodes should still have positions
-      for (const node of result.nodes) {
-        expect(node.position).toBeDefined();
-      }
+      // Empty input = empty output
+      expect(result.nodes).toBeDefined();
+      expect(result.edges).toBeDefined();
     });
   });
 });

@@ -1,20 +1,18 @@
 'use client';
 
 /**
- * NavigationModeToggle - 4-mode segmented toggle for navigation modes
+ * NavigationModeToggle - 4-mode segmented toggle
  *
- * Modes: Data | Meta | Overlay | Query
- * Each mode has a distinct icon and accent color.
- * Pressing N cycles through modes. Clicking sets directly.
- * Triggers Matrix transition animation via animationStore.
+ * Order: Meta | Data | Overlay | Query
+ * Design: Matches Pill component (solid dark, rounded-2xl)
+ * Typography: Monospace code style
  */
 
 import { memo, useCallback } from 'react';
-import { Database, Boxes, Layers, Search } from 'lucide-react';
+import { Boxes, Database, Layers, Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { NavigationMode } from '@/stores/uiStore';
 import { useAnimationStore } from '@/stores/animationStore';
-import { gapTokens } from '@/design/tokens';
 import {
   Tooltip,
   TooltipTrigger,
@@ -23,53 +21,66 @@ import {
 } from '@/components/ui/tooltip';
 
 interface NavigationModeToggleProps {
-  /** Current navigation mode */
   mode: NavigationMode;
-  /** Called when mode changes */
   onModeChange: (mode: NavigationMode) => void;
-  /** Additional CSS classes */
   className?: string;
 }
 
-const MODE_CONFIG: {
-  mode: NavigationMode;
+// Mode order: Meta first (schema exploration), then Data, Overlay, Query
+const MODES: {
+  id: NavigationMode;
   label: string;
   icon: typeof Database;
-  accent: string;
-  activeClass: string;
-  description: string;
+  color: string;
+  bg: string;
+  border: string;
+  glow: string;
+  desc: string;
+  shortcut: string;
 }[] = [
   {
-    mode: 'data',
-    label: 'Data',
-    icon: Database,
-    accent: 'emerald',
-    activeClass: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40',
-    description: 'Browse real data instances',
-  },
-  {
-    mode: 'meta',
-    label: 'Meta',
+    id: 'meta',
+    label: 'meta',
     icon: Boxes,
-    accent: 'blue',
-    activeClass: 'bg-blue-500/20 text-blue-400 border-blue-500/40',
-    description: 'View schema meta-graph (35 types)',
+    color: 'text-blue-400',
+    bg: 'bg-blue-500/15',
+    border: 'border-blue-500/40',
+    glow: 'shadow-[0_0_12px_rgba(59,130,246,0.3)]',
+    desc: 'Schema meta-graph',
+    shortcut: '1',
   },
   {
-    mode: 'overlay',
-    label: 'Overlay',
+    id: 'data',
+    label: 'data',
+    icon: Database,
+    color: 'text-emerald-400',
+    bg: 'bg-emerald-500/15',
+    border: 'border-emerald-500/40',
+    glow: 'shadow-[0_0_12px_rgba(16,185,129,0.3)]',
+    desc: 'Data instances',
+    shortcut: '2',
+  },
+  {
+    id: 'overlay',
+    label: 'overlay',
     icon: Layers,
-    accent: 'violet',
-    activeClass: 'bg-violet-500/20 text-violet-400 border-violet-500/40',
-    description: 'Data + schema combined',
+    color: 'text-violet-400',
+    bg: 'bg-violet-500/15',
+    border: 'border-violet-500/40',
+    glow: 'shadow-[0_0_12px_rgba(139,92,246,0.3)]',
+    desc: 'Data + schema',
+    shortcut: '3',
   },
   {
-    mode: 'query',
-    label: 'Query',
+    id: 'query',
+    label: 'query',
     icon: Search,
-    accent: 'amber',
-    activeClass: 'bg-amber-500/20 text-amber-400 border-amber-500/40',
-    description: 'Faceted filter query',
+    color: 'text-amber-400',
+    bg: 'bg-amber-500/15',
+    border: 'border-amber-500/40',
+    glow: 'shadow-[0_0_12px_rgba(245,158,11,0.3)]',
+    desc: 'Faceted query',
+    shortcut: '4',
   },
 ];
 
@@ -80,11 +91,10 @@ export const NavigationModeToggle = memo(function NavigationModeToggle({
 }: NavigationModeToggleProps) {
   const startTransition = useAnimationStore((s) => s.startTransition);
 
-  const handleModeClick = useCallback(
-    (targetMode: NavigationMode) => {
-      if (targetMode === mode) return;
-      // Trigger Matrix transition animation, then mode switch happens in page.tsx
-      startTransition(targetMode);
+  const handleClick = useCallback(
+    (target: NavigationMode) => {
+      if (target === mode) return;
+      startTransition(target);
     },
     [mode, startTransition]
   );
@@ -92,65 +102,53 @@ export const NavigationModeToggle = memo(function NavigationModeToggle({
   return (
     <div
       className={cn(
-        // Outer container - bold skeuomorphic bezel
-        'relative flex items-center rounded-xl p-[3px]',
-        // Deep multi-layer background
-        'bg-gradient-to-b from-[#252530] via-[#18181f] to-[#0a0a0f]',
-        // Pronounced outer border with top highlight
-        'border border-black/60',
-        'ring-1 ring-inset ring-white/[0.06]',
-        // Heavy inner shadow for deep inset
-        'shadow-[inset_0_2px_4px_rgba(0,0,0,0.8),inset_0_-1px_0_rgba(255,255,255,0.04)]',
-        // Bold outer shadow
-        'shadow-xl shadow-black/60',
-        gapTokens.compact,
+        // Container - matches Pill design
+        'flex items-center gap-1 p-1.5 rounded-2xl',
+        'bg-[#0a0a0f]',
+        'border border-white/10',
+        'shadow-2xl shadow-black/60',
+        'ring-1 ring-white/[0.03] ring-inset',
         className
       )}
     >
-      {/* Inner track - deeply recessed groove */}
-      <div
-        className={cn(
-          'absolute inset-[3px] rounded-lg',
-          'bg-gradient-to-b from-black/70 to-black/50',
-          'shadow-[inset_0_3px_6px_rgba(0,0,0,0.9),inset_0_1px_2px_rgba(0,0,0,0.5)]'
-        )}
-      />
+      {MODES.map(({ id, label, icon: Icon, color, bg, border, glow, desc, shortcut }) => {
+        const isActive = id === mode;
 
-      {MODE_CONFIG.map(({ mode: m, label, icon: Icon, activeClass, description }) => {
-        const isActive = m === mode;
         return (
-          <Tooltip key={m}>
+          <Tooltip key={id}>
             <TooltipTrigger asChild>
               <button
                 type="button"
-                onClick={() => handleModeClick(m)}
+                onClick={() => handleClick(id)}
                 className={cn(
-                  'relative z-10 flex items-center rounded-lg px-2.5 py-1.5 text-[11px] font-semibold tracking-wide transition-all duration-150',
-                  gapTokens.compact,
-                  isActive
-                    ? cn(
-                        activeClass,
-                        'border',
-                        // Bold raised button - 3D pop effect
-                        'shadow-[0_3px_8px_rgba(0,0,0,0.5),0_1px_3px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.15),inset_0_-1px_0_rgba(0,0,0,0.2)]',
-                        // Slight transform for depth
-                        'translate-y-[-1px]'
-                      )
-                    : cn(
-                        'text-white/35 hover:text-white/55 border border-transparent',
-                        'hover:bg-white/[0.03]',
-                        // Pressed-in look for inactive
-                        'shadow-[inset_0_1px_2px_rgba(0,0,0,0.3)]'
-                      )
+                  // Base
+                  'flex items-center gap-1.5 px-3 py-1.5 rounded-xl',
+                  'font-mono text-[11px] tracking-tight',
+                  'transition-all duration-200',
+                  // Active state
+                  isActive && [
+                    color,
+                    bg,
+                    'border',
+                    border,
+                    glow,
+                  ],
+                  // Inactive state
+                  !isActive && [
+                    'text-white/30',
+                    'border border-transparent',
+                    'hover:text-white/50',
+                    'hover:bg-white/[0.02]',
+                  ]
                 )}
               >
-                <Icon className="w-3.5 h-3.5" />
+                <Icon className="w-3.5 h-3.5" strokeWidth={isActive ? 2 : 1.5} />
                 <span>{label}</span>
               </button>
             </TooltipTrigger>
-            <TooltipContent>
-              {description}
-              <TooltipShortcut>N</TooltipShortcut>
+            <TooltipContent sideOffset={12}>
+              {desc}
+              <TooltipShortcut>{shortcut}</TooltipShortcut>
             </TooltipContent>
           </Tooltip>
         );

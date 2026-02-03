@@ -1,67 +1,158 @@
 'use client';
 
 /**
- * MatrixExplosionOverlay - Epic Matrix Rain Easter Egg
+ * MatrixExplosionOverlay - Matrix Rain Easter Egg
  *
- * Triggered by clicking META badge:
- * 1. Canvas-based Matrix code rain (like the movie)
- * 2. Particle explosion from center
- * 3. Wave glow that pulses through existing UI
- * 4. Mode name reveal with typewriter effect
+ * Architecture:
+ * - State machine for animation phases (IDLE → RUNNING → FADING → IDLE)
+ * - Single requestAnimationFrame loop for all animations
+ * - Debounced activation to prevent rapid-click bugs
+ * - Object pooling for particles (zero GC during animation)
+ * - Direct DOM manipulation (no React re-renders during animation)
  *
- * Color themes per navigation mode:
- * - meta: Blue (#60a5fa)
- * - data: Emerald (#34d399)
- * - overlay: Violet (#a78bfa)
- * - query: Amber (#fbbf24)
+ * Performance:
+ * - GPU-only operations (opacity, transform)
+ * - Pre-allocated particle pool
+ * - Single composite layer for canvas
  */
 
-import { memo, useEffect, useRef, useState, useCallback } from 'react';
-import { cn } from '@/lib/utils';
+import { memo, useEffect, useRef, useCallback } from 'react';
 import type { NavigationMode } from '@/stores/uiStore';
 
-// Terminal-style prefix for mode display
-const MODE_PREFIX = '> mode:';
+// ============================================================================
+// Configuration
+// ============================================================================
 
-// Matrix characters - mix of katakana and symbols
-const MATRIX_CHARS = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEF<>{}[]@#$%';
+const CONFIG = {
+  // Characters
+  matrixChars: 'アイウエオカキクケコ0123456789<>{}[]',
 
-// Mode-specific themes
-const MODE_THEMES: Record<NavigationMode, { primary: string; rgb: string; name: string }> = {
-  data: {
-    primary: '#34d399',
-    rgb: '52, 211, 153',
-    name: 'DATA',
-  },
-  meta: {
-    primary: '#60a5fa',
-    rgb: '96, 165, 250',
-    name: 'META',
-  },
-  overlay: {
-    primary: '#a78bfa',
-    rgb: '167, 139, 250',
-    name: 'OVERLAY',
-  },
-  query: {
-    primary: '#fbbf24',
-    rgb: '251, 191, 36',
-    name: 'QUERY',
-  },
+  // Timing (ms)
+  debounceMs: 100,
+  promptDelayMs: 350,
+  promptFadeInMs: 300,
+  promptDurationMs: 1200,
+  promptFadeOutMs: 400,
+  rainFadeInMs: 250,
+  rainFadeOutMs: 600,
+  totalDurationMs: 2600,
+
+  // Canvas
+  fontSize: 18,
+  trailOpacity: 0.12,
+  maxCanvasOpacity: 0.55,
+
+  // Particles
+  particleCount: 30,
+  particleMinSize: 14,
+  particleMaxSize: 30,
+  particleMinSpeed: 5,
+  particleMaxSpeed: 15,
+  particleGravity: 0.3,
+  particleFriction: 0.98,
+  particleDecay: 0.97,
+
+  // Typewriter
+  charDelayMs: 45,
+} as const;
+
+const THEMES: Record<NavigationMode, { primary: string; rgb: string; name: string }> = {
+  data: { primary: '#34d399', rgb: '52, 211, 153', name: 'data' },
+  meta: { primary: '#60a5fa', rgb: '96, 165, 250', name: 'meta' },
+  overlay: { primary: '#a78bfa', rgb: '167, 139, 250', name: 'overlay' },
+  query: { primary: '#fbbf24', rgb: '251, 191, 36', name: 'query' },
 };
 
-// Particle for explosion effect
+// ============================================================================
+// Types
+// ============================================================================
+
+type AnimationPhase = 'idle' | 'running' | 'fading';
+
 interface Particle {
-  id: number;
-  char: string;
+  active: boolean;
   x: number;
   y: number;
   vx: number;
   vy: number;
   size: number;
   opacity: number;
-  rotation: number;
+  char: string;
+  element: HTMLSpanElement | null;
 }
+
+interface AnimationController {
+  phase: AnimationPhase;
+  startTime: number;
+  canvasOpacity: number;
+  promptOpacity: number;
+  textIndex: number;
+  particles: Particle[];
+  rafId: number;
+  drops: number[];
+}
+
+// ============================================================================
+// Utilities
+// ============================================================================
+
+const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+const easeInCubic = (t: number) => t * t * t;
+const clamp = (v: number, min: number, max: number) => Math.min(Math.max(v, min), max);
+const randomChar = () => CONFIG.matrixChars[Math.floor(Math.random() * CONFIG.matrixChars.length)];
+
+function lerp(start: number, end: number, progress: number, easing: (t: number) => number): number {
+  return start + (end - start) * easing(clamp(progress, 0, 1));
+}
+
+// Pre-allocate particle pool
+function createParticlePool(): Particle[] {
+  return Array.from({ length: CONFIG.particleCount }, () => ({
+    active: false,
+    x: 0,
+    y: 0,
+    vx: 0,
+    vy: 0,
+    size: 0,
+    opacity: 0,
+    char: '',
+    element: null,
+  }));
+}
+
+function activateParticles(particles: Particle[], centerX: number, centerY: number): void {
+  particles.forEach((p, i) => {
+    const angle = (Math.PI * 2 * i) / particles.length + Math.random() * 0.3;
+    const speed = CONFIG.particleMinSpeed + Math.random() * (CONFIG.particleMaxSpeed - CONFIG.particleMinSpeed);
+
+    p.active = true;
+    p.x = centerX;
+    p.y = centerY;
+    p.vx = Math.cos(angle) * speed;
+    p.vy = Math.sin(angle) * speed;
+    p.size = CONFIG.particleMinSize + Math.random() * (CONFIG.particleMaxSize - CONFIG.particleMinSize);
+    p.opacity = 0.9;
+    p.char = randomChar();
+  });
+}
+
+function updateParticle(p: Particle): void {
+  if (!p.active) return;
+
+  p.x += p.vx;
+  p.y += p.vy;
+  p.vy += CONFIG.particleGravity;
+  p.vx *= CONFIG.particleFriction;
+  p.opacity *= CONFIG.particleDecay;
+
+  if (p.opacity < 0.02) {
+    p.active = false;
+  }
+}
+
+// ============================================================================
+// Component
+// ============================================================================
 
 interface MatrixExplosionOverlayProps {
   isActive: boolean;
@@ -74,325 +165,343 @@ export const MatrixExplosionOverlay = memo(function MatrixExplosionOverlay({
   onComplete,
   navigationMode,
 }: MatrixExplosionOverlayProps) {
+  // Refs for DOM elements
+  const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const animationRef = useRef<number | null>(null);
-  const [phase, setPhase] = useState<'idle' | 'rain' | 'explode' | 'fade'>('idle');
-  const [particles, setParticles] = useState<Particle[]>([]);
-  const [showName, setShowName] = useState(false);
-  const [displayedText, setDisplayedText] = useState('');
-  const [showCursor, setShowCursor] = useState(true);
+  const promptRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLSpanElement>(null);
+  const particlesContainerRef = useRef<HTMLDivElement>(null);
 
-  const theme = MODE_THEMES[navigationMode] || MODE_THEMES.meta;
-  const fullText = `${MODE_PREFIX}${theme.name.toLowerCase()}`;
+  // Animation controller (mutable, no re-renders)
+  const ctrlRef = useRef<AnimationController>({
+    phase: 'idle',
+    startTime: 0,
+    canvasOpacity: 0,
+    promptOpacity: 0,
+    textIndex: 0,
+    particles: createParticlePool(),
+    rafId: 0,
+    drops: [],
+  });
 
-  // Matrix rain animation on canvas
-  const startMatrixRain = useCallback(() => {
+  // Debounce ref
+  const lastActivationRef = useRef(0);
+
+  const theme = THEMES[navigationMode] || THEMES.meta;
+  const fullText = `> ${theme.name}`;
+
+  // Initialize canvas
+  const initCanvas = useCallback(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas) return null;
 
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+    const ctx = canvas.getContext('2d', { alpha: true });
+    if (!ctx) return null;
 
-    // Set canvas size
+    const dpr = window.devicePixelRatio || 1;
     const width = window.innerWidth;
     const height = window.innerHeight;
-    canvas.width = width;
-    canvas.height = height;
 
-    // Rain columns
-    const fontSize = 16;
-    const columns = Math.ceil(width / fontSize);
-    const drops: number[] = Array(columns).fill(0).map(() => Math.random() * -100);
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
+    ctx.scale(dpr, dpr);
 
-    let frameCount = 0;
-    const maxFrames = 120; // ~2 seconds at 60fps
+    // Initialize drops
+    const columns = Math.ceil(width / CONFIG.fontSize);
+    ctrlRef.current.drops = Array.from({ length: columns }, () => Math.random() * -30);
 
-    const animate = () => {
-      frameCount++;
+    return { ctx, width, height };
+  }, []);
 
-      // Fade out near the end
-      const fadeProgress = frameCount > maxFrames - 30 ? (maxFrames - frameCount) / 30 : 1;
+  // Create particle DOM elements
+  const initParticleElements = useCallback(() => {
+    const container = particlesContainerRef.current;
+    if (!container) return;
 
-      // Semi-transparent background for trail effect
-      ctx.fillStyle = `rgba(10, 10, 15, ${0.1 * fadeProgress})`;
-      ctx.fillRect(0, 0, width, height);
+    // Remove existing children safely
+    while (container.firstChild) {
+      container.removeChild(container.firstChild);
+    }
 
-      // Draw characters
-      ctx.font = `${fontSize}px monospace`;
+    // Create elements for pool
+    ctrlRef.current.particles.forEach((p) => {
+      const span = document.createElement('span');
+      span.className = 'absolute font-mono font-bold';
+      span.style.cssText = 'opacity: 0; will-change: transform, opacity;';
+      container.appendChild(span);
+      p.element = span;
+    });
+  }, []);
 
-      for (let i = 0; i < columns; i++) {
-        // Random character
-        const char = MATRIX_CHARS[Math.floor(Math.random() * MATRIX_CHARS.length)];
+  // Main animation loop
+  const animate = useCallback((canvasCtx: CanvasRenderingContext2D, width: number, height: number) => {
+    const ctrl = ctrlRef.current;
+    const now = performance.now();
+    const elapsed = now - ctrl.startTime;
 
-        // Varying brightness
+    // === Phase transitions ===
+    if (ctrl.phase === 'running' && elapsed >= CONFIG.promptDurationMs + CONFIG.promptDelayMs) {
+      ctrl.phase = 'fading';
+    }
+
+    // === Canvas opacity ===
+    let targetCanvasOpacity = 0;
+
+    if (ctrl.phase === 'running') {
+      // Fade in
+      const fadeInProgress = elapsed / CONFIG.rainFadeInMs;
+      targetCanvasOpacity = lerp(0, CONFIG.maxCanvasOpacity, fadeInProgress, easeOutCubic);
+    } else if (ctrl.phase === 'fading') {
+      // Fade out
+      const fadeStart = CONFIG.promptDurationMs + CONFIG.promptDelayMs;
+      const fadeProgress = (elapsed - fadeStart) / CONFIG.rainFadeOutMs;
+      targetCanvasOpacity = lerp(CONFIG.maxCanvasOpacity, 0, fadeProgress, easeInCubic);
+    }
+
+    ctrl.canvasOpacity = clamp(targetCanvasOpacity, 0, CONFIG.maxCanvasOpacity);
+
+    if (canvasRef.current) {
+      canvasRef.current.style.opacity = String(ctrl.canvasOpacity);
+    }
+
+    // === Render matrix rain ===
+    if (ctrl.canvasOpacity > 0) {
+      canvasCtx.fillStyle = `rgba(10, 10, 15, ${CONFIG.trailOpacity})`;
+      canvasCtx.fillRect(0, 0, width, height);
+
+      canvasCtx.font = `${CONFIG.fontSize}px monospace`;
+
+      for (let i = 0; i < ctrl.drops.length; i++) {
         const brightness = Math.random() > 0.9 ? 1 : 0.3 + Math.random() * 0.4;
+        canvasCtx.fillStyle = `rgba(${theme.rgb}, ${brightness})`;
+        canvasCtx.fillText(randomChar(), i * CONFIG.fontSize, ctrl.drops[i] * CONFIG.fontSize);
 
-        // Color with theme
-        ctx.fillStyle = `rgba(${theme.rgb}, ${brightness * fadeProgress})`;
-
-        // Glow effect for bright characters
-        if (brightness > 0.8) {
-          ctx.shadowColor = theme.primary;
-          ctx.shadowBlur = 8;
-        } else {
-          ctx.shadowBlur = 0;
+        if (ctrl.drops[i] * CONFIG.fontSize > height && Math.random() > 0.95) {
+          ctrl.drops[i] = 0;
         }
-
-        ctx.fillText(char, i * fontSize, drops[i] * fontSize);
-
-        // Reset drop or continue falling
-        if (drops[i] * fontSize > height && Math.random() > 0.975) {
-          drops[i] = 0;
-        }
-        drops[i] += 0.5 + Math.random() * 0.5;
+        ctrl.drops[i] += 0.6 + Math.random() * 0.4;
       }
+    }
 
-      // Continue animation
-      if (frameCount < maxFrames) {
-        animationRef.current = requestAnimationFrame(animate);
+    // === Prompt opacity ===
+    let targetPromptOpacity = 0;
+
+    if (ctrl.phase === 'running' && elapsed >= CONFIG.promptDelayMs) {
+      const promptElapsed = elapsed - CONFIG.promptDelayMs;
+      if (promptElapsed < CONFIG.promptFadeInMs) {
+        targetPromptOpacity = lerp(0, 1, promptElapsed / CONFIG.promptFadeInMs, easeOutCubic);
       } else {
-        // Clear canvas
-        ctx.clearRect(0, 0, width, height);
+        targetPromptOpacity = 1;
       }
-    };
-
-    animate();
-  }, [theme]);
-
-  // Typewriter effect
-  useEffect(() => {
-    if (!showName) {
-      setDisplayedText('');
-      return;
+    } else if (ctrl.phase === 'fading') {
+      const fadeStart = CONFIG.promptDurationMs + CONFIG.promptDelayMs;
+      const fadeProgress = (elapsed - fadeStart) / CONFIG.promptFadeOutMs;
+      targetPromptOpacity = lerp(1, 0, fadeProgress, easeInCubic);
     }
 
-    let index = 0;
-    const typeInterval = setInterval(() => {
-      if (index < fullText.length) {
-        setDisplayedText(fullText.slice(0, index + 1));
-        index++;
-      } else {
-        clearInterval(typeInterval);
-      }
-    }, 60); // 60ms per character
+    ctrl.promptOpacity = clamp(targetPromptOpacity, 0, 1);
 
-    return () => clearInterval(typeInterval);
-  }, [showName, fullText]);
-
-  // Cursor blink effect
-  useEffect(() => {
-    if (!showName) return;
-
-    const blinkInterval = setInterval(() => {
-      setShowCursor((prev) => !prev);
-    }, 530);
-
-    return () => clearInterval(blinkInterval);
-  }, [showName]);
-
-  // Add/remove glitch class for global UI effect
-  useEffect(() => {
-    if (phase === 'rain' || phase === 'explode') {
-      document.body.classList.add('matrix-glitch-active');
-      document.documentElement.style.setProperty('--matrix-color', theme.primary);
-      document.documentElement.style.setProperty('--matrix-glow', `rgba(${theme.rgb}, 0.6)`);
-    } else {
-      document.body.classList.remove('matrix-glitch-active');
-    }
-    return () => {
-      document.body.classList.remove('matrix-glitch-active');
-    };
-  }, [phase, theme]);
-
-  // Main animation sequence
-  useEffect(() => {
-    if (!isActive) {
-      setPhase('idle');
-      setParticles([]);
-      setShowName(false);
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
-      return;
+    if (promptRef.current) {
+      promptRef.current.style.opacity = String(ctrl.promptOpacity);
     }
 
-    // Phase 1: Start rain
-    setPhase('rain');
-    startMatrixRain();
-
-    // Phase 2: Explosion + name reveal (after 500ms)
-    const explodeTimer = setTimeout(() => {
-      setPhase('explode');
-      setShowName(true);
-
-      // Generate explosion particles from center
-      const centerX = window.innerWidth / 2;
-      const centerY = window.innerHeight / 2;
-
-      const newParticles: Particle[] = Array.from({ length: 60 }, (_, i) => {
-        const angle = (Math.PI * 2 * i) / 60 + Math.random() * 0.5;
-        const speed = 6 + Math.random() * 14;
-        return {
-          id: i,
-          char: MATRIX_CHARS[Math.floor(Math.random() * MATRIX_CHARS.length)],
-          x: centerX,
-          y: centerY,
-          vx: Math.cos(angle) * speed,
-          vy: Math.sin(angle) * speed,
-          size: 18 + Math.random() * 24,
-          opacity: 1,
-          rotation: Math.random() * 360,
-        };
-      });
-      setParticles(newParticles);
-    }, 500);
-
-    // Phase 3: Fade (after 2s)
-    const fadeTimer = setTimeout(() => {
-      setPhase('fade');
-      setShowName(false);
-    }, 2000);
-
-    // Complete (after 2.5s)
-    const completeTimer = setTimeout(() => {
-      setPhase('idle');
-      setParticles([]);
-      onComplete();
-    }, 2500);
-
-    return () => {
-      clearTimeout(explodeTimer);
-      clearTimeout(fadeTimer);
-      clearTimeout(completeTimer);
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
-    };
-  }, [isActive, onComplete, startMatrixRain]);
-
-  // Animate particles with physics
-  useEffect(() => {
-    if (particles.length === 0) return;
-
-    const interval = setInterval(() => {
-      setParticles((prev) =>
-        prev
-          .map((p) => ({
-            ...p,
-            x: p.x + p.vx,
-            y: p.y + p.vy,
-            vy: p.vy + 0.3, // gravity
-            vx: p.vx * 0.98, // friction
-            opacity: Math.max(0, p.opacity - 0.02),
-            rotation: p.rotation + p.vx * 2,
-            // Random character change
-            char:
-              Math.random() > 0.9
-                ? MATRIX_CHARS[Math.floor(Math.random() * MATRIX_CHARS.length)]
-                : p.char,
-          }))
-          .filter((p) => p.opacity > 0)
+    // === Typewriter ===
+    if (ctrl.phase === 'running' && elapsed >= CONFIG.promptDelayMs) {
+      const typeElapsed = elapsed - CONFIG.promptDelayMs;
+      const targetIndex = Math.min(
+        Math.floor(typeElapsed / CONFIG.charDelayMs),
+        fullText.length
       );
-    }, 16);
 
-    return () => clearInterval(interval);
-  }, [particles.length]);
+      if (targetIndex !== ctrl.textIndex) {
+        ctrl.textIndex = targetIndex;
+        if (textRef.current) {
+          textRef.current.textContent = fullText.slice(0, targetIndex);
+        }
+      }
+    }
 
-  if (!isActive && phase === 'idle') return null;
+    // === Particles ===
+    const particlesStarted = elapsed >= CONFIG.promptDelayMs;
+
+    if (particlesStarted) {
+      // Activate particles on first frame after delay
+      if (ctrl.particles[0] && !ctrl.particles[0].active && ctrl.phase === 'running') {
+        activateParticles(ctrl.particles, width / 2, height / 2);
+      }
+
+      // Update and render
+      ctrl.particles.forEach((p) => {
+        updateParticle(p);
+
+        if (p.element) {
+          if (p.active) {
+            p.element.textContent = p.char;
+            p.element.style.cssText = `
+              position: absolute;
+              left: ${p.x}px;
+              top: ${p.y}px;
+              font-size: ${p.size}px;
+              color: ${theme.primary};
+              opacity: ${p.opacity};
+              transform: translate(-50%, -50%);
+              text-shadow: 0 0 6px rgba(${theme.rgb}, 0.5);
+              will-change: transform, opacity;
+            `;
+          } else {
+            p.element.style.opacity = '0';
+          }
+        }
+      });
+    }
+
+    // === Continue or complete ===
+    if (elapsed < CONFIG.totalDurationMs) {
+      ctrl.rafId = requestAnimationFrame(() => animate(canvasCtx, width, height));
+    } else {
+      // Animation complete
+      ctrl.phase = 'idle';
+      ctrl.canvasOpacity = 0;
+      ctrl.promptOpacity = 0;
+      ctrl.textIndex = 0;
+      ctrl.particles.forEach((p) => {
+        p.active = false;
+        if (p.element) p.element.style.opacity = '0';
+      });
+
+      if (canvasRef.current) canvasRef.current.style.opacity = '0';
+      if (promptRef.current) promptRef.current.style.opacity = '0';
+      if (textRef.current) textRef.current.textContent = '';
+
+      // Clear canvas
+      canvasCtx.clearRect(0, 0, width, height);
+
+      onComplete();
+    }
+  }, [theme, fullText, onComplete]);
+
+  // Start animation
+  const startAnimation = useCallback(() => {
+    const canvasData = initCanvas();
+    if (!canvasData) return;
+
+    initParticleElements();
+
+    const ctrl = ctrlRef.current;
+    ctrl.phase = 'running';
+    ctrl.startTime = performance.now();
+    ctrl.canvasOpacity = 0;
+    ctrl.promptOpacity = 0;
+    ctrl.textIndex = 0;
+    ctrl.particles.forEach((p) => (p.active = false));
+
+    // Show container
+    if (containerRef.current) {
+      containerRef.current.style.display = 'block';
+    }
+
+    animate(canvasData.ctx, canvasData.width, canvasData.height);
+  }, [initCanvas, initParticleElements, animate]);
+
+  // Stop animation
+  const stopAnimation = useCallback(() => {
+    const ctrl = ctrlRef.current;
+
+    cancelAnimationFrame(ctrl.rafId);
+    ctrl.phase = 'idle';
+    ctrl.canvasOpacity = 0;
+    ctrl.promptOpacity = 0;
+
+    if (canvasRef.current) canvasRef.current.style.opacity = '0';
+    if (promptRef.current) promptRef.current.style.opacity = '0';
+    if (textRef.current) textRef.current.textContent = '';
+    if (containerRef.current) containerRef.current.style.display = 'none';
+
+    ctrl.particles.forEach((p) => {
+      p.active = false;
+      if (p.element) p.element.style.opacity = '0';
+    });
+  }, []);
+
+  // Handle activation changes
+  useEffect(() => {
+    const ctrl = ctrlRef.current;
+    const now = Date.now();
+
+    if (isActive) {
+      // Debounce rapid clicks
+      if (now - lastActivationRef.current < CONFIG.debounceMs) {
+        return;
+      }
+
+      // Don't restart if already running
+      if (ctrl.phase !== 'idle') {
+        return;
+      }
+
+      lastActivationRef.current = now;
+      startAnimation();
+    } else {
+      // Only stop if we're running (allows natural completion)
+      if (ctrl.phase !== 'idle') {
+        stopAnimation();
+      }
+    }
+
+    return () => {
+      if (ctrl.phase !== 'idle') {
+        cancelAnimationFrame(ctrl.rafId);
+      }
+    };
+  }, [isActive, startAnimation, stopAnimation]);
 
   return (
-    <div className="fixed inset-0 z-[9999] pointer-events-none overflow-hidden">
-      {/* Canvas for Matrix rain */}
+    <div
+      ref={containerRef}
+      className="fixed inset-0 z-[9999] pointer-events-none overflow-hidden"
+      style={{ display: 'none' }}
+    >
+      {/* Matrix rain */}
       <canvas
         ref={canvasRef}
-        className={cn(
-          'absolute inset-0 transition-opacity duration-500',
-          phase === 'fade' ? 'opacity-0' : 'opacity-70'
-        )}
+        className="absolute inset-0"
+        style={{ opacity: 0 }}
       />
 
-      {/* Explosion particles */}
-      {particles.map((p) => (
-        <span
-          key={p.id}
-          className="absolute font-mono font-bold pointer-events-none"
+      {/* Particles */}
+      <div ref={particlesContainerRef} className="absolute inset-0" />
+
+      {/* Terminal prompt */}
+      <div
+        ref={promptRef}
+        className="absolute inset-0 flex items-center justify-center"
+        style={{ opacity: 0 }}
+      >
+        <div
+          className="px-5 py-3 rounded-md"
           style={{
-            left: p.x,
-            top: p.y,
-            fontSize: p.size,
-            color: theme.primary,
-            opacity: p.opacity,
-            transform: `translate(-50%, -50%) rotate(${p.rotation}deg)`,
-            textShadow: `
-              0 0 ${p.size / 2}px rgba(${theme.rgb}, 0.8),
-              0 0 ${p.size}px rgba(${theme.rgb}, 0.4)
-            `,
+            background: 'rgba(0, 0, 0, 0.6)',
+            border: `1px solid rgba(${theme.rgb}, 0.3)`,
+            boxShadow: `0 0 30px rgba(${theme.rgb}, 0.15)`,
           }}
         >
-          {p.char}
-        </span>
-      ))}
-
-      {/* Mode name - Terminal typewriter style */}
-      {showName && (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div
-            className="relative px-6 py-4 rounded-lg"
+          <span
+            className="font-mono text-lg tracking-wider"
             style={{
-              background: 'rgba(0, 0, 0, 0.4)',
-              backdropFilter: 'blur(8px)',
-              border: `1px solid rgba(${theme.rgb}, 0.3)`,
-              boxShadow: `
-                0 0 30px rgba(${theme.rgb}, 0.15),
-                inset 0 1px 0 rgba(255, 255, 255, 0.05)
-              `,
+              color: theme.primary,
+              textShadow: `0 0 8px rgba(${theme.rgb}, 0.4)`,
             }}
           >
-            {/* Scanline effect */}
-            <div
-              className="absolute inset-0 pointer-events-none rounded-lg overflow-hidden opacity-[0.03]"
-              style={{
-                background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.1) 2px, rgba(255,255,255,0.1) 4px)',
-              }}
+            <span ref={textRef} />
+            <span
+              className="inline-block w-2 h-4 ml-1 align-middle animate-pulse"
+              style={{ background: theme.primary }}
             />
-
-            {/* Terminal text */}
-            <div className="relative flex items-center">
-              <span
-                className="font-mono text-2xl font-medium tracking-wide"
-                style={{
-                  color: theme.primary,
-                  textShadow: `0 0 10px rgba(${theme.rgb}, 0.5)`,
-                }}
-              >
-                {displayedText}
-              </span>
-              {/* Blinking cursor */}
-              <span
-                className="font-mono text-2xl font-medium ml-0.5"
-                style={{
-                  color: theme.primary,
-                  opacity: showCursor ? 1 : 0,
-                  textShadow: `0 0 10px rgba(${theme.rgb}, 0.5)`,
-                  transition: 'opacity 0.1s',
-                }}
-              >
-                _
-              </span>
-            </div>
-          </div>
+          </span>
         </div>
-      )}
-
-      {/* Radial pulse on explosion */}
-      {phase === 'explode' && (
-        <div
-          className="absolute inset-0 animate-[flashBurst_0.4s_ease-out_forwards]"
-          style={{
-            background: `radial-gradient(circle at center, rgba(${theme.rgb}, 0.3) 0%, transparent 60%)`,
-          }}
-        />
-      )}
+      </div>
     </div>
   );
 });

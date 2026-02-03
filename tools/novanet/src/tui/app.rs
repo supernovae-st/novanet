@@ -280,13 +280,17 @@ impl App {
                 true
             }
 
-            // Panel focus: ←→
+            // Panel focus: ←→ or Tab
             KeyCode::Left => {
                 self.focus = Focus::Tree;
                 true
             }
-            KeyCode::Right => {
-                self.focus = Focus::Detail;
+            KeyCode::Right | KeyCode::Tab => {
+                self.focus = if self.focus == Focus::Tree {
+                    Focus::Detail
+                } else {
+                    Focus::Tree
+                };
                 true
             }
 
@@ -334,6 +338,31 @@ impl App {
                     self.ensure_cursor_visible();
                     self.load_yaml_for_current();
                 }
+                true
+            }
+
+            // YAML scroll: j/k (vim-style)
+            KeyCode::Char('j') => {
+                let max_scroll = self.yaml_content.lines().count().saturating_sub(10);
+                if self.yaml_scroll < max_scroll {
+                    self.yaml_scroll += 1;
+                }
+                true
+            }
+            KeyCode::Char('k') => {
+                if self.yaml_scroll > 0 {
+                    self.yaml_scroll -= 1;
+                }
+                true
+            }
+            // Page scroll: Ctrl+d / Ctrl+u
+            KeyCode::Char('d') => {
+                let max_scroll = self.yaml_content.lines().count().saturating_sub(10);
+                self.yaml_scroll = (self.yaml_scroll + 10).min(max_scroll);
+                true
+            }
+            KeyCode::Char('u') => {
+                self.yaml_scroll = self.yaml_scroll.saturating_sub(10);
                 true
             }
 
