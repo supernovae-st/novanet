@@ -7,6 +7,38 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [9.0.1] - 2026-02-03
+
+### Added
+- **Auto-release workflow** (`.github/workflows/release.yml`): Push a tag, get a release
+- **Dependabot** (`.github/dependabot.yml`): Automated dependency updates for npm, Cargo, Actions, Docker
+- **CodeQL security scanning** (`.github/workflows/codeql.yml`): Weekly + on PR
+- **CONTRIBUTING.md**: Setup guide, workflow, code style conventions
+- **PR template** + **Issue templates** (bug report, feature request)
+- **LICENSE**: Proprietary license file
+- **SECURITY.md**: Security vulnerability reporting policy
+
+### Changed
+- **TUI v2 rebuild**: Complete rewrite for stability (-7,600 lines, +1,200 lines)
+  - Consolidated 12 modules → 3 (app, data, ui)
+  - Simplified architecture: tree navigation + detail panel + status bar
+  - Galaxy theme features deferred to v9.5.0
+- **Studio v9.0.0**: Version bump from 0.1.0 to match core
+- **NavigationModeToggle**: Complete UI redesign
+- **MatrixExplosionOverlay**: Enhanced animation and performance
+- **README.md**: Added Rust CLI section, ASCII mockup, fixed badges
+
+### Fixed
+- CI badge URL (novanet-hq → novanet-dev)
+- CLAUDE.md file structures (removed deleted directories)
+- NodeCategory → Layer terminology in Studio docs
+
+### Removed
+- Premature tags (v9.5.0, v10.0.0) — work not complete
+- Empty `docs/src/` folder
+- Stale `.worktrees/yaml-views/`
+- Standalone `EasterEggButton.tsx` (integrated elsewhere)
+
 ## [9.0.0] - 2026-02-02
 
 ### Breaking Changes
@@ -148,7 +180,8 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Migrated from git submodules to true monorepo
 - Organization links updated to supernovae-st
 
-[Unreleased]: https://github.com/supernovae-st/novanet-dev/compare/v9.0.0...HEAD
+[Unreleased]: https://github.com/supernovae-st/novanet-dev/compare/v9.0.1...HEAD
+[9.0.1]: https://github.com/supernovae-st/novanet-dev/compare/v9.0.0...v9.0.1
 [9.0.0]: https://github.com/supernovae-st/novanet-dev/compare/v8.3.0...v9.0.0
 [8.3.0]: https://github.com/supernovae-st/novanet-dev/compare/v8.2.0...v8.3.0
 [8.2.0]: https://github.com/supernovae-st/novanet-dev/compare/v8.1.0...v8.2.0
