@@ -188,7 +188,8 @@ export const useUIStore = create<UIStoreState>()(
 
       cycleNavigationMode: () => {
         set((state) => {
-          const modes: NavigationMode[] = ['data', 'meta', 'overlay', 'query'];
+          // Order: 1:Meta 2:Data 3:Overlay 4:Query
+          const modes: NavigationMode[] = ['meta', 'data', 'overlay', 'query'];
           const idx = modes.indexOf(state.navigationMode);
           state.navigationMode = modes[(idx + 1) % modes.length];
         });

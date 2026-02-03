@@ -119,6 +119,8 @@ export const NavigationModeToggle = memo(function NavigationModeToggle({
 
   return (
     <div
+      role="group"
+      aria-label="Navigation mode selector"
       className={cn(
         'flex items-center gap-1 p-1.5 rounded-2xl',
         'bg-[#0a0a0f]',
@@ -135,6 +137,8 @@ export const NavigationModeToggle = memo(function NavigationModeToggle({
           <button
             key={id}
             type="button"
+            aria-current={isActive ? 'true' : undefined}
+            aria-label={`Switch to ${label} mode (keyboard shortcut: ${key})`}
             onClick={() => handleSwitch(id)}
             className={cn(
               'flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl',

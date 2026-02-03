@@ -14,6 +14,8 @@
 
 node:
   name: ConceptL10n
+  realm: project
+  layer: semantic
   locale_behavior: localized
   icon: "🟢"
   description: "Localized definition for a Concept in a specific locale"

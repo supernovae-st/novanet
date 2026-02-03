@@ -386,13 +386,24 @@ RETURN nodes, edges, kinds, count(ek) AS edge_kinds
     }
 
     /// Collapse a node.
+    #[allow(dead_code)]
     pub fn collapse(&mut self, key: &str) {
         self.collapsed.insert(key.to_string());
     }
 
     /// Expand a node.
+    #[allow(dead_code)]
     pub fn expand(&mut self, key: &str) {
         self.collapsed.remove(key);
+    }
+
+    /// Toggle collapse state of a node.
+    pub fn toggle(&mut self, key: &str) {
+        if self.collapsed.contains(key) {
+            self.collapsed.remove(key);
+        } else {
+            self.collapsed.insert(key.to_string());
+        }
     }
 
     /// Collapse all collapsible nodes.

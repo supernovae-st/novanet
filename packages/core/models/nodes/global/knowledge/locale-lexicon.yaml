@@ -5,6 +5,8 @@
 
 node:
   name: LocaleLexicon
+  realm: global
+  layer: knowledge
   locale_behavior: knowledge
   icon: "📚"
   description: "Expression library and vocabulary rules for a locale"

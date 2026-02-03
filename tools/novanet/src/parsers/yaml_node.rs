@@ -1,8 +1,9 @@
 //! Parse 35 YAML node definitions with locale_behavior validation.
 //!
-//! Fails fast if any YAML is missing `locale_behavior` — no silent defaults.
+//! Fails fast if any YAML is missing `locale_behavior`, `realm`, or `layer` — no silent defaults.
 //! Each file at `packages/core/models/nodes/<realm>/<layer>/<name>.yaml`
-//! is deserialized into a [`ParsedNode`] with realm/layer derived from the path.
+//! is deserialized into a [`ParsedNode`] with realm/layer read from the YAML content.
+//! Validation ensures the file path matches the YAML-declared realm/layer.
 
 use serde::Deserialize;
 use std::collections::BTreeMap;
@@ -51,6 +52,12 @@ pub struct NodeDocument {
 pub struct NodeDef {
     /// Neo4j label (PascalCase), e.g. "Project", "PageL10n".
     pub name: String,
+
+    /// Realm classification (global, project, shared) — explicit in YAML.
+    pub realm: String,
+
+    /// Layer classification (config, knowledge, foundation, etc.) — explicit in YAML.
+    pub layer: String,
 
     /// v9 trait — required, fail-fast if missing.
     pub locale_behavior: LocaleBehavior,
@@ -114,7 +121,7 @@ pub struct PropertyDef {
 // ParsedNode (enriched with path metadata)
 // ─────────────────────────────────────────────────────────────────────────────
 
-/// A fully parsed node with realm/layer derived from its file path.
+/// A fully parsed node with realm/layer from YAML content (validated against file path).
 #[derive(Debug)]
 pub struct ParsedNode {
     /// The deserialized node definition.
@@ -149,7 +156,8 @@ impl ParsedNode {
 /// Load and parse all YAML node definitions under `<root>/packages/core/models/nodes/`.
 ///
 /// Walks the directory recursively, deserializes each `.yaml` file, and
-/// derives `realm`/`layer` from the path structure `nodes/<realm>/<layer>/<file>.yaml`.
+/// reads `realm`/`layer` from the YAML content (source of truth).
+/// Validates that the file path matches the YAML-declared realm/layer.
 ///
 /// # Errors
 ///
@@ -186,21 +194,27 @@ pub fn load_all_nodes(root: &Path) -> crate::Result<Vec<ParsedNode>> {
                 source: e,
             })?;
 
-        // Extract realm and layer from path: nodes/<realm>/<layer>/<file>.yaml
+        // Realm and layer are now explicit in YAML (source of truth)
+        let realm = doc.node.realm.clone();
+        let layer = doc.node.layer.clone();
+
+        // Validate path matches YAML content
         let rel = path.strip_prefix(&nodes_dir).unwrap_or(path);
         let components: Vec<_> = rel
             .components()
             .map(|c| c.as_os_str().to_string_lossy().to_string())
             .collect();
 
-        let (realm, layer) = if components.len() >= 3 {
-            (components[0].clone(), components[1].clone())
-        } else {
-            return Err(crate::NovaNetError::Validation(format!(
-                "unexpected path structure (expected nodes/<realm>/<layer>/<file>.yaml): {}",
-                path.display()
-            )));
-        };
+        if components.len() >= 2 {
+            let path_realm = &components[0];
+            let path_layer = &components[1];
+            if path_realm != &realm || path_layer != &layer {
+                return Err(crate::NovaNetError::Validation(format!(
+                    "path/YAML mismatch: file at {}/{} but YAML declares realm={}, layer={}",
+                    path_realm, path_layer, realm, layer
+                )));
+            }
+        }
 
         nodes.push(ParsedNode {
             def: doc.node,
@@ -233,16 +247,18 @@ mod tests {
 
     #[test]
     fn locale_behavior_deserialize() {
-        let yaml = "node:\n  name: Test\n  locale_behavior: invariant\n  description: test";
+        let yaml = "node:\n  name: Test\n  realm: project\n  layer: foundation\n  locale_behavior: invariant\n  description: test";
         let doc: NodeDocument = serde_yml::from_str(yaml).unwrap();
         assert_eq!(doc.node.locale_behavior, LocaleBehavior::Invariant);
         assert_eq!(doc.node.name, "Test");
+        assert_eq!(doc.node.realm, "project");
+        assert_eq!(doc.node.layer, "foundation");
     }
 
     #[test]
     fn locale_behavior_all_variants() {
         for variant in ["invariant", "localized", "knowledge", "derived", "job"] {
-            let yaml = format!("node:\n  name: T\n  locale_behavior: {variant}\n  description: d");
+            let yaml = format!("node:\n  name: T\n  realm: global\n  layer: config\n  locale_behavior: {variant}\n  description: d");
             let doc: NodeDocument = serde_yml::from_str(&yaml).unwrap();
             assert_eq!(doc.node.locale_behavior.to_string(), variant);
         }
@@ -250,7 +266,7 @@ mod tests {
 
     #[test]
     fn missing_locale_behavior_fails() {
-        let yaml = "node:\n  name: Test\n  description: test";
+        let yaml = "node:\n  name: Test\n  realm: project\n  layer: foundation\n  description: test";
         let result = serde_yml::from_str::<NodeDocument>(yaml);
         assert!(result.is_err(), "should fail without locale_behavior");
         let err_msg = result.unwrap_err().to_string();
@@ -261,15 +277,27 @@ mod tests {
     }
 
     #[test]
+    fn missing_realm_fails() {
+        let yaml = "node:\n  name: Test\n  layer: foundation\n  locale_behavior: invariant\n  description: test";
+        let result = serde_yml::from_str::<NodeDocument>(yaml);
+        assert!(result.is_err(), "should fail without realm");
+        let err_msg = result.unwrap_err().to_string();
+        assert!(
+            err_msg.contains("realm"),
+            "error should mention realm: {err_msg}"
+        );
+    }
+
+    #[test]
     fn invalid_locale_behavior_fails() {
-        let yaml = "node:\n  name: Test\n  locale_behavior: banana\n  description: test";
+        let yaml = "node:\n  name: Test\n  realm: project\n  layer: foundation\n  locale_behavior: banana\n  description: test";
         let result = serde_yml::from_str::<NodeDocument>(yaml);
         assert!(result.is_err(), "should fail with invalid locale_behavior");
     }
 
     #[test]
     fn optional_fields_default_to_none() {
-        let yaml = "node:\n  name: Minimal\n  locale_behavior: job\n  description: d";
+        let yaml = "node:\n  name: Minimal\n  realm: shared\n  layer: seo\n  locale_behavior: job\n  description: d";
         let doc: NodeDocument = serde_yml::from_str(yaml).unwrap();
         assert!(doc.node.icon.is_none());
         assert!(doc.node.standard_properties.is_none());
@@ -285,6 +313,8 @@ mod tests {
         let yaml = r#"
 node:
   name: Test
+  realm: project
+  layer: semantic
   locale_behavior: invariant
   description: d
   properties:

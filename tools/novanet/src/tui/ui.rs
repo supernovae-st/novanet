@@ -35,7 +35,7 @@ pub fn render(f: &mut Frame, app: &mut App) {
 
 /// Header: Logo + Mode tabs.
 fn render_header(f: &mut Frame, area: Rect, app: &App) {
-    let tabs: Vec<Span> = [NavMode::Data, NavMode::Meta, NavMode::Overlay, NavMode::Query]
+    let tabs: Vec<Span> = [NavMode::Meta, NavMode::Data, NavMode::Overlay, NavMode::Query]
         .iter()
         .enumerate()
         .map(|(i, mode)| {
@@ -64,7 +64,7 @@ fn render_header(f: &mut Frame, area: Rect, app: &App) {
     header.extend(tabs);
 
     let right_side = vec![
-        Span::styled("  h/l:fold  j/k:yaml  f:find  /:help  q:quit", Style::default().fg(Color::DarkGray)),
+        Span::styled("  h/l:toggle  jk:scroll  []:yaml  Tab:panel  f:find  /:help  q:quit", Style::default().fg(Color::DarkGray)),
     ];
 
     let mut full_header: Vec<Span<'static>> = header;
@@ -81,18 +81,72 @@ fn render_header(f: &mut Frame, area: Rect, app: &App) {
     f.render_widget(paragraph, area);
 }
 
-/// Main content: Tree (left) + Detail (right).
+/// Layout mode based on terminal width.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum LayoutMode {
+    Wide,   // 3 columns: Tree | Info | YAML
+    Narrow, // 2 columns: Tree | (Info / YAML stacked)
+}
+
+impl LayoutMode {
+    fn detect(width: u16) -> Self {
+        if width >= 160 {
+            LayoutMode::Wide
+        } else {
+            LayoutMode::Narrow
+        }
+    }
+}
+
+/// Main content: responsive layout based on terminal width.
 fn render_main(f: &mut Frame, area: Rect, app: &mut App) {
+    let layout_mode = LayoutMode::detect(area.width);
+
+    match layout_mode {
+        LayoutMode::Wide => render_main_wide(f, area, app),
+        LayoutMode::Narrow => render_main_narrow(f, area, app),
+    }
+}
+
+/// Wide layout: Tree (25%) | Info (25%) | YAML (50%).
+fn render_main_wide(f: &mut Frame, area: Rect, app: &mut App) {
     let chunks = Layout::default()
         .direction(Direction::Horizontal)
         .constraints([
-            Constraint::Percentage(40), // Tree
-            Constraint::Percentage(60), // Detail
+            Constraint::Percentage(25), // Tree
+            Constraint::Percentage(25), // Info
+            Constraint::Percentage(50), // YAML
         ])
         .split(area);
 
     render_tree(f, chunks[0], app);
-    render_detail(f, chunks[1], app);
+    render_info_panel(f, chunks[1], app);
+    render_yaml_panel(f, chunks[2], app);
+}
+
+/// Narrow layout: Tree (40%) | Info+YAML stacked (60%).
+fn render_main_narrow(f: &mut Frame, area: Rect, app: &mut App) {
+    let h_chunks = Layout::default()
+        .direction(Direction::Horizontal)
+        .constraints([
+            Constraint::Percentage(40), // Tree
+            Constraint::Percentage(60), // Detail (stacked)
+        ])
+        .split(area);
+
+    render_tree(f, h_chunks[0], app);
+
+    // Stack Info (60%) and YAML (40%) vertically
+    let v_chunks = Layout::default()
+        .direction(Direction::Vertical)
+        .constraints([
+            Constraint::Percentage(55), // Info
+            Constraint::Percentage(45), // YAML
+        ])
+        .split(h_chunks[1]);
+
+    render_info_panel(f, v_chunks[0], app);
+    render_yaml_panel(f, v_chunks[1], app);
 }
 
 /// Tree panel: taxonomy hierarchy with scroll and collapse.
@@ -230,26 +284,56 @@ fn realm_color(key: &str) -> Color {
     }
 }
 
-/// Detail panel: unified container with info + separator + YAML.
-fn render_detail(f: &mut Frame, area: Rect, app: &App) {
-    let focused = app.focus == Focus::Detail;
+/// Info panel: displays metadata for selected item with independent scroll.
+fn render_info_panel(f: &mut Frame, area: Rect, app: &mut App) {
+    let focused = app.focus == Focus::Info;
     let border_color = if focused { Color::Cyan } else { Color::Rgb(60, 60, 70) };
 
-    // Build all lines: info + separator + yaml
+    // Build info lines
+    let all_lines = build_info_lines(app);
+
+    // Update line count for scroll bounds
+    app.info_line_count = all_lines.len();
+
+    // Apply scroll
+    let visible_height = area.height.saturating_sub(2) as usize; // Account for borders
+    let lines: Vec<Line> = all_lines
+        .into_iter()
+        .skip(app.info_scroll)
+        .take(visible_height)
+        .collect();
+
+    // Get title from current item
+    let title = get_detail_title(app);
+
+    // Show scroll indicator if scrollable
+    let scroll_indicator = if app.info_line_count > visible_height {
+        format!(" [{}/{}] ", app.info_scroll + 1, app.info_line_count.saturating_sub(visible_height) + 1)
+    } else {
+        String::new()
+    };
+
+    let block = Block::default()
+        .title(Span::styled(format!(" {} ", title), Style::default().fg(Color::White)))
+        .title_bottom(Span::styled(scroll_indicator, Style::default().fg(Color::DarkGray)))
+        .borders(Borders::ALL)
+        .border_style(Style::default().fg(border_color));
+
+    let paragraph = Paragraph::new(lines).block(block);
+    f.render_widget(paragraph, area);
+}
+
+/// YAML panel: displays YAML source with independent scroll.
+fn render_yaml_panel(f: &mut Frame, area: Rect, app: &App) {
+    let focused = app.focus == Focus::Yaml;
+    let border_color = if focused { Color::Green } else { Color::Rgb(60, 60, 70) };
+
+    // Build YAML lines with syntax highlighting
     let mut lines: Vec<Line> = Vec::new();
 
-    // === INFO SECTION ===
-    lines.extend(build_info_lines(app));
-
-    // === SEPARATOR with path ===
-    let separator = build_separator_line(&app.yaml_path, area.width.saturating_sub(2) as usize);
-    lines.push(Line::from(""));
-    lines.push(separator);
-    lines.push(Line::from(""));
-
-    // === YAML SECTION ===
+    let visible_height = area.height.saturating_sub(2) as usize;
     if !app.yaml_content.is_empty() {
-        for yaml_line in app.yaml_content.lines().skip(app.yaml_scroll) {
+        for yaml_line in app.yaml_content.lines().skip(app.yaml_scroll).take(visible_height) {
             lines.push(highlight_yaml_line(yaml_line));
         }
     } else {
@@ -259,16 +343,37 @@ fn render_detail(f: &mut Frame, area: Rect, app: &App) {
         )));
     }
 
-    // Get title from current item
-    let title = get_detail_title(app);
+    // Build title with colored path
+    let title_spans = build_yaml_title(&app.yaml_path);
+
+    // Show scroll indicator
+    let total_lines = app.yaml_content.lines().count();
+    let scroll_indicator = if total_lines > visible_height {
+        format!(" [{}/{}] ", app.yaml_scroll + 1, total_lines.saturating_sub(visible_height) + 1)
+    } else {
+        String::new()
+    };
 
     let block = Block::default()
-        .title(Span::styled(format!(" {} ", title), Style::default().fg(border_color)))
+        .title(Line::from(title_spans))
+        .title_bottom(Span::styled(scroll_indicator, Style::default().fg(Color::DarkGray)))
         .borders(Borders::ALL)
         .border_style(Style::default().fg(border_color));
 
     let paragraph = Paragraph::new(lines).block(block);
     f.render_widget(paragraph, area);
+}
+
+/// Build YAML panel title with colored path segments.
+fn build_yaml_title(path: &str) -> Vec<Span<'static>> {
+    if path.is_empty() {
+        return vec![Span::styled(" YAML ", Style::default().fg(Color::Rgb(60, 60, 70)))];
+    }
+
+    let mut spans = vec![Span::styled(" ", Style::default())];
+    spans.extend(colorize_path_inline(path));
+    spans.push(Span::styled(" ", Style::default()));
+    spans
 }
 
 /// Get title for detail panel based on current selection.
@@ -288,33 +393,7 @@ fn get_detail_title(app: &App) -> String {
     }
 }
 
-/// Build separator line: ──── path/to/file.yaml ────
-fn build_separator_line(path: &str, width: usize) -> Line<'static> {
-    if path.is_empty() {
-        let dashes = "─".repeat(width);
-        return Line::from(Span::styled(dashes, Style::default().fg(Color::Rgb(60, 60, 70))));
-    }
-
-    // Colorize path segments
-    let path_spans = colorize_path_inline(path);
-    let path_len: usize = path.len() + 2; // " path "
-
-    let side_len = width.saturating_sub(path_len) / 2;
-    let left_dashes = "─".repeat(side_len.max(2));
-    let right_dashes = "─".repeat(side_len.max(2));
-
-    let mut spans: Vec<Span<'static>> = vec![
-        Span::styled(left_dashes, Style::default().fg(Color::Rgb(60, 60, 70))),
-        Span::raw(" "),
-    ];
-    spans.extend(path_spans);
-    spans.push(Span::raw(" "));
-    spans.push(Span::styled(right_dashes, Style::default().fg(Color::Rgb(60, 60, 70))));
-
-    Line::from(spans)
-}
-
-/// Colorize path inline for separator.
+/// Colorize path inline for title.
 fn colorize_path_inline(path: &str) -> Vec<Span<'static>> {
     let parts: Vec<&str> = path.split('/').collect();
     let mut spans: Vec<Span<'static>> = Vec::new();
@@ -349,11 +428,6 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                 .map(|l| l.kinds.len())
                 .sum();
             vec![
-                Line::from(Span::styled(
-                    "Kinds",
-                    Style::default().fg(Color::Magenta).add_modifier(Modifier::BOLD),
-                )),
-                Line::from(""),
                 Line::from(vec![
                     Span::styled("type      ", Style::default().fg(Color::DarkGray)),
                     Span::styled("Section", Style::default().fg(Color::Magenta)),
@@ -373,11 +447,6 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
         Some(TreeItem::RelationsSection) => {
             let edge_count: usize = app.tree.edge_families.iter().map(|f| f.edge_kinds.len()).sum();
             vec![
-                Line::from(Span::styled(
-                    "Relations",
-                    Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD),
-                )),
-                Line::from(""),
                 Line::from(vec![
                     Span::styled("type      ", Style::default().fg(Color::DarkGray)),
                     Span::styled("Section", Style::default().fg(Color::Yellow)),
@@ -397,11 +466,6 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
         Some(TreeItem::Realm(realm)) => {
             let kind_count: usize = realm.layers.iter().map(|l| l.kinds.len()).sum();
             vec![
-                Line::from(Span::styled(
-                    format!("{} {}", realm.emoji, realm.display_name),
-                    Style::default().fg(realm_color(&realm.key)).add_modifier(Modifier::BOLD),
-                )),
-                Line::from(""),
                 Line::from(vec![
                     Span::styled("type      ", Style::default().fg(Color::DarkGray)),
                     Span::styled("Realm", Style::default().fg(Color::Magenta)),
@@ -422,11 +486,6 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
         }
         Some(TreeItem::Layer(realm, layer)) => {
             vec![
-                Line::from(Span::styled(
-                    layer.display_name.clone(),
-                    Style::default().fg(Color::White).add_modifier(Modifier::BOLD),
-                )),
-                Line::from(""),
                 Line::from(vec![
                     Span::styled("type      ", Style::default().fg(Color::DarkGray)),
                     Span::styled("Layer", Style::default().fg(Color::Green)),
@@ -446,17 +505,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
             ]
         }
         Some(TreeItem::Kind(realm, layer, kind)) => {
-            let title = if kind.icon.is_empty() {
-                kind.display_name.clone()
-            } else {
-                format!("{} {}", kind.icon, kind.display_name)
-            };
             let mut lines = vec![
-                Line::from(Span::styled(
-                    title,
-                    Style::default().fg(Color::White).add_modifier(Modifier::BOLD),
-                )),
-                Line::from(""),
                 Line::from(vec![
                     Span::styled("type      ", Style::default().fg(Color::DarkGray)),
                     Span::styled("Kind", Style::default().fg(Color::Cyan)),
@@ -572,11 +621,6 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
         }
         Some(TreeItem::EdgeFamily(family)) => {
             vec![
-                Line::from(Span::styled(
-                    family.display_name.clone(),
-                    Style::default().fg(Color::Rgb(180, 140, 80)).add_modifier(Modifier::BOLD),
-                )),
-                Line::from(""),
                 Line::from(vec![
                     Span::styled("type      ", Style::default().fg(Color::DarkGray)),
                     Span::styled("EdgeFamily", Style::default().fg(Color::Rgb(180, 140, 80))),
@@ -595,11 +639,6 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
         }
         Some(TreeItem::EdgeKind(family, edge_kind)) => {
             let mut lines = vec![
-                Line::from(Span::styled(
-                    edge_kind.display_name.clone(),
-                    Style::default().fg(Color::Rgb(150, 150, 150)).add_modifier(Modifier::BOLD),
-                )),
-                Line::from(""),
                 Line::from(vec![
                     Span::styled("type      ", Style::default().fg(Color::DarkGray)),
                     Span::styled("EdgeKind", Style::default().fg(Color::Yellow)),
@@ -759,7 +798,15 @@ fn render_status(f: &mut Frame, area: Rect, app: &App) {
     // Focus indicator
     let focus_label = match app.focus {
         Focus::Tree => "Tree",
-        Focus::Detail => "Detail",
+        Focus::Info => "Info",
+        Focus::Yaml => "YAML",
+    };
+
+    // Layout indicator
+    let layout_mode = LayoutMode::detect(area.width);
+    let layout_label = match layout_mode {
+        LayoutMode::Wide => "3-col",
+        LayoutMode::Narrow => "stack",
     };
 
     let status = Line::from(vec![
@@ -770,10 +817,12 @@ fn render_status(f: &mut Frame, area: Rect, app: &App) {
         Span::styled(format!("{} Kinds", stats.kind_count), Style::default().fg(Color::Rgb(100, 100, 120))),
         Span::styled(" │ ", Style::default().fg(Color::Rgb(50, 50, 60))),
         Span::styled(format!("{} EdgeKinds", stats.edge_kind_count), Style::default().fg(Color::Rgb(100, 100, 120))),
-        Span::raw("          "),
+        Span::raw("        "),
         Span::styled(format!("[{}]", focus_label), Style::default().fg(Color::Cyan)),
-        Span::raw("     "),
-        Span::styled("Tab:panel  j/k:yaml  ", Style::default().fg(Color::DarkGray)),
+        Span::raw("  "),
+        Span::styled(format!("[{}]", layout_label), Style::default().fg(Color::Rgb(80, 80, 100))),
+        Span::raw("   "),
+        Span::styled("↑↓:scroll  Tab:panel  ", Style::default().fg(Color::DarkGray)),
     ]);
 
     let paragraph = Paragraph::new(status)

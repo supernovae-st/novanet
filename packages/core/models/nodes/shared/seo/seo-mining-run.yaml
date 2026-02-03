@@ -3,6 +3,8 @@
 
 node:
   name: SEOMiningRun
+  realm: shared
+  layer: seo
   locale_behavior: job
   icon: "⚙️"
   description: "Mining job for SEO keyword variations"

@@ -318,6 +318,8 @@ mod tests {
         ParsedNode {
             def: NodeDef {
                 name: name.to_string(),
+                realm: realm.to_string(),
+                layer: layer.to_string(),
                 locale_behavior: behavior,
                 icon: None,
                 description: format!("{name} description."),

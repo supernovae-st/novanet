@@ -228,7 +228,7 @@ mod tests {
             .parent()
             .and_then(|p| p.parent());
 
-        let Some(root) = root else { return None };
+        let root = root?;
         if !root.join("pnpm-workspace.yaml").exists() {
             return None;
         }

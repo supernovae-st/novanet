@@ -3,6 +3,8 @@
 
 node:
   name: BlockType
+  realm: project
+  layer: instruction
   locale_behavior: invariant
   icon: "🔷"
   description: "Template defining rules, structure, and L10N requirements for a type of block"

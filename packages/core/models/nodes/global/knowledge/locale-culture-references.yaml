@@ -5,6 +5,8 @@
 
 node:
   name: LocaleCultureReferences
+  realm: global
+  layer: knowledge
   locale_behavior: knowledge
   icon: "🎯"
   description: "Concrete cultural references for content adaptation"

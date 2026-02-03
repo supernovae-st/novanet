@@ -7,6 +7,8 @@
 
 node:
   name: SEOKeywordMetrics
+  realm: shared
+  layer: seo
   locale_behavior: derived
   icon: "📸"
   description: "Historical metrics snapshot for an SEO keyword"

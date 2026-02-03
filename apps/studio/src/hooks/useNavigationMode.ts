@@ -24,7 +24,7 @@ export interface UseNavigationModeReturn {
   mode: NavigationMode;
   /** Set navigation mode directly */
   setMode: (mode: NavigationMode) => void;
-  /** Cycle to next mode (data -> meta -> overlay -> query -> data) */
+  /** Cycle to next mode (meta -> data -> overlay -> query -> meta) */
   cycleMode: () => void;
   /** Fetch data appropriate for the current mode */
   fetchForMode: () => Promise<GraphDataResponse>;

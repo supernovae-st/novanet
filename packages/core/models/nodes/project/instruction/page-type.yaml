@@ -12,6 +12,8 @@
 
 node:
   name: PageType
+  realm: project
+  layer: instruction
   locale_behavior: invariant
   icon: "📐"
   description: "Template defining meta requirements, layout rules, and block composition for a type of page"

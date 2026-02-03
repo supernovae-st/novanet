@@ -3,6 +3,8 @@
 
 node:
   name: BrandIdentity
+  realm: project
+  layer: foundation
   locale_behavior: invariant
   icon: "🔷"
   description: "Visual style, colors, typography, and artistic direction - universal across locales"

@@ -3,6 +3,8 @@
 
 node:
   name: Locale
+  realm: global
+  layer: config
   locale_behavior: invariant
   icon: "🔷"
   description: "First-class locale node (BCP 47) with fallback chains and knowledge graph connections"
