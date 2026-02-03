@@ -1,12 +1,13 @@
 # NovaNet Roadmap
 
-Current version: **v9.0.0** | Target: QR Code AI (https://qrcode-ai.com)
+Current version: **v9.0.1** | Target: QR Code AI (https://qrcode-ai.com)
 
 ## Milestones Overview
 
 ```
 v9.0  Self-Describing Context Graph    ████████████████████  100%  RELEASED
-v9.5  Advanced TUI (Galaxy)            ██████████████████░░  ~90%  ← YOU ARE HERE
+v9.1  TUI v2 Stability                 ████████████████████  100%  RELEASED (in v9.0.1)
+v9.5  Advanced TUI (Galaxy)            ░░░░░░░░░░░░░░░░░░░░    0%  DEFERRED
 v10.0 Dynamic Retrieval                ░░░░░░░░░░░░░░░░░░░░    0%
 v11.0 Autonomous Learning              ░░░░░░░░░░░░░░░░░░░░    0%
 v12.0 Content Pipeline                 ░░░░░░░░░░░░░░░░░░░░    0%
@@ -44,21 +45,35 @@ with 6 meta-node types, dual navigation, and Rust-first tooling.
 - [x] Code review — PRODUCTION READY, 0 critical/high issues (Phase 8)
 - [x] Create GitHub Release v9.0.0 (Phase 8)
 
-## v9.5.0 — Advanced TUI (Galaxy Theme)
+## v9.1.0 — TUI v2 Stability (shipped in v9.0.1)
 
-Deferred from v9.0 Phase 7B. Mission control cockpit with visual effects.
+Complete TUI rebuild focusing on stability and simplicity.
 
 | Task | Description | Status |
 |------|-------------|--------|
-| 7.8d | Search + detail pane | DONE (nucleo fuzzy, edge explorer) |
-| 7.8e | CRUD dialogs | DONE (node create/edit/delete, relation CRUD) |
-| 7.8f | Galaxy visual theme | DONE (theme.rs, deep space palette) |
-| 7.8g | Dashboard mode | DONE (Neo4j stats, realm/family charts) |
-| 7.8h | Animations (boot, matrix rain) | DONE (6-stage boot: matrix rain → logo reveal → fade) |
-| 7.8i | ASCII logo + branding | DONE (Saturn-graph logo, Galaxy colors) |
-| 7.8j | Onboarding flow | DONE (welcome screen, guided tour, 5 steps) |
-| 7.8k | Command palette + UX | DONE (fuzzy search, 11 commands, 5 categories) |
-| 7.8l | Wow effects (CRT, shake, glitch, pulse) | DONE (CRT scanlines, screen shake, glitch transitions, nebula pulse) |
+| Rebuild | Consolidate 12 modules → 3 (app, data, ui) | DONE |
+| Tree nav | Realm > Layer > Kind hierarchy | DONE |
+| Detail | YAML preview + edge explorer | DONE |
+| Modes | 4 navigation modes [1-4] | DONE |
+
+**Stats:** -7,600 lines deleted, +1,200 lines added. 179 tests pass.
+
+## v9.5.0 — Advanced TUI (Galaxy Theme)
+
+**STATUS: DEFERRED** — Galaxy features removed during v9.1 stability rebuild.
+Will be reimplemented on stable v2 foundation when prioritized.
+
+| Task | Description | Status |
+|------|-------------|--------|
+| 7.8d | Search + detail pane | DEFERRED |
+| 7.8e | CRUD dialogs | DEFERRED |
+| 7.8f | Galaxy visual theme | DEFERRED |
+| 7.8g | Dashboard mode | DEFERRED |
+| 7.8h | Animations (boot, matrix rain) | DEFERRED |
+| 7.8i | ASCII logo + branding | DEFERRED |
+| 7.8j | Onboarding flow | DEFERRED |
+| 7.8k | Command palette + UX | DEFERRED |
+| 7.8l | Wow effects (CRT, shake, glitch, pulse) | DEFERRED |
 
 ## v10.0.0 — Dynamic Retrieval
 
@@ -123,12 +138,11 @@ v9.0.0         Stable release (Phase 8 passed)
 ### Release process
 
 1. Ensure all tests, lint, type-check pass
-2. Run `tools/scripts/release-notes.sh <version>` to generate notes
-3. Update `CHANGELOG.md` with generated notes
-4. Create annotated git tag: `git tag -a v<version> -m "v<version>"`
-5. Push tag: `git push origin v<version>`
-6. Create GitHub Release with generated notes
-7. Update this ROADMAP.md
+2. Update `CHANGELOG.md` with release notes
+3. Create annotated git tag: `git tag -a v<version> -m "v<version>"`
+4. Push tag: `git push origin v<version>`
+5. **GitHub Release is created automatically** via `.github/workflows/release.yml`
+6. Update this ROADMAP.md
 
 ### Branch strategy
 
@@ -149,3 +163,4 @@ release/v*      Release preparation (optional, for complex releases)
 | v8.3.0 | 2026-02-01 | Meta-graph, magnetic layout, v9 design |
 | v9.0.0-rc.1 | 2026-02-02 | Ontology v9, Rust CLI, 4-mode navigation |
 | v9.0.0 | 2026-02-02 | Phase 8 complete: 955 tests, audit clean, benchmarked |
+| v9.0.1 | 2026-02-03 | TUI v2 rebuild, DX improvements, auto-release workflow |
