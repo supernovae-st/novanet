@@ -13,8 +13,8 @@ Turborepo monorepo for NovaNet - knowledge graph localization orchestrator.
 NovaNet uses Neo4j to orchestrate **native content generation** (NOT translation) across 200+ locales.
 
 **Target Application**: QR Code AI (https://qrcode-ai.com)
-**Current Version**: v9.0.1
-**Design Plan**: `docs/plans/2026-02-01-ontology-v9-design.md`
+**Current Version**: v9.5.0
+**Design Plan**: `docs/plans/2026-02-03-nomenclature-v95-design.md`
 **Roadmap**: `ROADMAP.md` | **Changelog**: `CHANGELOG.md`
 
 ```
@@ -26,20 +26,39 @@ Concept (invariant) -> Generate natively -> ConceptL10n (local)  <-- RIGHT
 
 ---
 
-## v9 Migration Context
+## v9.5 Nomenclature
 
-v9 refactors the meta-graph from a flat tree (Scope > Subcategory > NodeTypeMeta) to a **self-describing context graph** with faceted classification:
+v9.5 establishes unified terminology across all layers (YAML, Rust, TypeScript, Neo4j, UI):
 
 ```
-Axis 1 — WHERE?  :Realm     (global / project / shared)
-Axis 2 — WHAT?   :Layer     (9 functional layers)
-Axis 3 — HOW?    :Trait     (invariant / localized / knowledge / derived / job)
-Axis 4 — LINKS?  :ArcKind  (83 relationship types in 5 families)
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  VOCABULARY                                                                 │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  Level           │ Vertex    │ Edge     │                                   │
+│  ─────────────────────────────────────────                                  │
+│  General         │ Node      │ Arc      │                                   │
+│  Instance (data) │ NodeData  │ ArcData  │                                   │
+│  Definition      │ NodeKind  │ ArcKind  │                                   │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  CLASSIFICATION AXES                                                        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  NodeKind:                                                                  │
+│    WHERE?  NodeRealm  (global / project / shared)                           │
+│    WHAT?   NodeLayer  (9 functional layers)                                 │
+│    HOW?    NodeTrait  (invariant / localized / knowledge / derived / job)   │
+│                                                                             │
+│  ArcKind:                                                                   │
+│    SCOPE   ArcScope       (intra_realm / cross_realm)                       │
+│    FUNC    ArcFamily      (ownership / localization / semantic / gen / min) │
+│    MULT    ArcCardinality (1:1 / 1:N / N:M)                                 │
+└─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-**Key renames:** Scope -> Realm, Subcategory -> Layer, NodeTypeMeta -> Kind, DataMode -> NavigationMode
-
-**New concepts:** Trait, ArcFamily, ArcKind, OF_KIND instance bridge, :Meta double-label
+**Key changes from v9.0:**
+- Edge → Arc (throughout codebase)
+- EdgeFamily → ArcFamily
+- EdgeKind → ArcKind
+- New: ArcScope, ArcCardinality
 
 **Rust binary:** `tools/novanet/` — single crate for CLI + TUI (neo4rs, ratatui, clap).
 All commands implemented: data/meta/overlay/query, node/arc CRUD, search, locale, db,
@@ -114,7 +133,7 @@ pnpm test --filter=@novanet/studio      # Test only studio
 | @novanet/core | Types, schemas, filters, generators |
 | @novanet/db | Neo4j Docker, seeds, migrations |
 | @novanet/studio | Web-based graph visualization |
-| tools/novanet | Rust CLI + TUI — all runtime commands (180 tests) |
+| tools/novanet | Rust CLI + TUI — all runtime commands (201 tests) |
 
 ---
 

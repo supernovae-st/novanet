@@ -15,7 +15,7 @@ Synchronize generated artifacts with YAML source of truth.
 
 ```
 packages/core/models/
-├── nodes/                        ← 35 YAML files (one per Kind)
+├── nodes/                        ← 44 YAML files (one per Kind) [→ node-kinds/]
 │   ├── global/                   ← Realm: global
 │   │   ├── config/               ←   Layer: config
 │   │   └── knowledge/            ←   Layer: knowledge
@@ -28,7 +28,7 @@ packages/core/models/
 │   └── shared/                   ← Realm: shared
 │       ├── seo/                  ←   Layer: seo
 │       └── geo/                  ←   Layer: geo
-├── relations.yaml                ← 50 Arc types (→ arc-kinds/ in v9.5)
+├── relations.yaml                ← 83 Arc types (→ arc-kinds/ in v9.5)
 └── organizing-principles.yaml    ← v9: facet defs (→ taxonomy.yaml in v9.5)
 ```
 
@@ -40,7 +40,7 @@ packages/core/models/
 |--------|-----------|--------|
 | models/ | OrganizingGenerator | seed/00.5-organizing-principles.cypher |
 | models/nodes/ | KindGenerator | seed/99-kind-meta-nodes.cypher |
-| models/relations.yaml | ArcSchemaGenerator | seed/99-edge-schema-meta-nodes.cypher |
+| models/relations.yaml | ArcSchemaGenerator | seed/99-arc-schema-meta-nodes.cypher |
 | models/nodes/ | AutowireGenerator | seed/99-autowire-kinds.cypher |
 | models/nodes/ | LayerGenerator | src/graph/layers.ts |
 | models/nodes/ | HierarchyGenerator | src/graph/hierarchy.ts |
@@ -133,6 +133,6 @@ All generators live in `tools/novanet/src/generators/` (Rust-first architecture)
 
 **MermaidGenerator (`generators/mermaid.rs`):**
 - Reads `models/nodes/` and `models/relations.yaml`
-- Generates Mermaid flowchart with all 44 Kinds and 50 relations
+- Generates Mermaid flowchart with all 44 Kinds and 83 relations
 - Groups by Realm (Global, Shared, Project)
 - Colors by Layer (9 distinct colors)

@@ -47,7 +47,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 │   packages/core/models/                                                                             │
 │   ├── _index.yaml                          ← Index du graphe (structure, changelog)                 │
 │   ├── organizing-principles.yaml           ← v9: Realm/Layer/Trait/ArcFamily [→ taxonomy.yaml]     │
-│   ├── nodes/                               ← 44 fichiers YAML (1 par Kind)                         │
+│   ├── nodes/                               ← 44 fichiers YAML (1 par Kind) [→ node-kinds/]        │
 │   │   ├── global/                          ← Realm: global                                          │
 │   │   │   ├── config/                      ←   Layer: config (Locale)                               │
 │   │   │   └── knowledge/                   ←   Layer: knowledge (14 nodes)                          │
@@ -68,7 +68,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 │   │       ├── seo/                         ←   Layer: seo (Keyword, Metrics, MiningRun)              │
 │   │       └── geo/                         ←   Layer: geo (Seed, Metrics, MiningRun)                 │
 │   │                                                                                                 │
-│   ├── relations.yaml                       ← 50 Arc types Neo4j (with family field) [→ arc-kinds/]  │
+│   ├── relations.yaml                       ← 83 Arc types Neo4j (with family field) [→ arc-kinds/]  │
 │   └── views/                               ← Definitions de vues YAML                               │
 │                                                                                                     │
 └─────────────────────────────────────────────────────────────────────────────────────────────────────┘
@@ -91,14 +91,14 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
   │   Axis 2 — WHAT?    :Layer       (9)  config, knowledge, foundation, structure, semantic,    │
   │                                        instruction, output, seo, geo                         │
   │   Axis 3 — HOW?     :Trait       (5)  invariant / localized / knowledge / derived / job      │
-  │   Axis 4 — LINKS?   :ArcKind    (50)  grouped into 5 ArcFamilies                            │
+  │   Axis 4 — LINKS?   :ArcKind    (83)  grouped into 5 ArcFamilies                            │
   │                                                                                              │
   └──────────────────────────────────────────────────────────────────────────────────────────────┘
 
   6 Meta-Node Types (all carry :Meta double-label):
 
   ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
-  │  Realm (3)  │───▶│  Layer (9)  │───▶│  Kind (35)  │
+  │  Realm (3)  │───▶│  Layer (9)  │───▶│  Kind (44)  │
   │  WHERE?     │    │  WHAT?      │    │  1:1 label  │
   │  HAS_LAYER  │    │  HAS_KIND   │    │             │
   └─────────────┘    └─────────────┘    └──────┬──────┘
@@ -120,7 +120,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
   Arc Schema (OWL-inspired):
 
   ┌────────────────┐    FROM_KIND    ┌─────────────┐    TO_KIND     ┌────────────────┐
-  │  ArcKind (50) │───────────────▶│  Kind (35)  │◀──────────────│  ArcKind (50) │
+  │  ArcKind (83) │───────────────▶│  Kind (35)  │◀──────────────│  ArcKind (83) │
   │  1:1 rel type  │                └─────────────┘               │                │
   └───────┬────────┘                                              └────────────────┘
           │
@@ -164,8 +164,8 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
      ┌─────────────────────────────────────────────────────────────────────────────────────────────┐
      │                        📁 YAML (Single Source of Truth)                                     │
      │                        packages/core/models/                                                │
-     │                        ├── nodes/                    ← 44 Kinds                             │
-     │                        ├── relations.yaml            ← 50 Arcs [→ arc-kinds/]               │
+     │                        ├── nodes/                    ← 44 Kinds [→ node-kinds/]             │
+     │                        ├── relations.yaml            ← 83 Arcs [→ arc-kinds/]               │
      │                        └── organizing-principles.yaml← [→ taxonomy.yaml] facet defs        │
      └─────────────────────────────────────────────┬───────────────────────────────────────────────┘
                                                    │
@@ -226,10 +226,10 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
   │  ├── thiserror          ← Library error types                                               │
   │  └── color-eyre         ← Application error reporting                                       │
   │                                                                                             │
-  │  Commands (all implemented, 195 tests):                                                     │
+  │  Commands (all implemented, 201 tests):                                                     │
   │  ├── novanet data/meta/overlay/query       ← 4 navigation modes (faceted Cypher)            │
   │  ├── novanet node create/edit/delete       ← Node CRUD (label validation)                   │
-  │  ├── novanet relation create/delete        ← Relation CRUD (type validation)                │
+  │  ├── novanet arc create/delete             ← Arc CRUD (type validation)                     │
   │  ├── novanet search --query=...            ← Fulltext + property search                     │
   │  ├── novanet locale list/import            ← Locale operations                              │
   │  ├── novanet db seed/migrate/reset         ← Database lifecycle                             │
@@ -462,17 +462,17 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 
 ---
 
-## Key Numbers (v9.0.0)
+## Key Numbers (v9.5.0)
 
 | Metric | Value |
 |--------|-------|
-| Kind (node types) | 35 |
-| ArcKind (relations) | 50 |
+| Kind (node types) | 44 |
+| ArcKind (relations) | 83 |
 | Realms | 3 (global, project, shared) |
 | Layers | 9 |
 | Traits | 5 |
 | ArcFamilies | 5 |
-| Meta-node total | 108 (3+9+35+5+5+50+1 bridge type) |
+| Meta-node total | 141 (3+9+44+5+5+83+1 bridge type) |
 | Locale Knowledge nodes | 14 |
 | Seed files | 7 |
 | Migrations | 6 |
@@ -498,7 +498,7 @@ novanet query --realm=project      # Mode 4: Faceted query
 
 # Write (Neo4j)
 novanet node create --kind=Page --key=my-page
-novanet relation create --from=a --to=b --type=USES_CONCEPT
+novanet arc create --from=a --to=b --kind=USES_CONCEPT
 
 # Database lifecycle
 novanet db seed                    # Execute seed files
