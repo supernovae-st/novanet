@@ -653,6 +653,18 @@ export default function HomePage() {
               phase={transitionState.transitionPhase}
             />
 
+            {/* Loading indicator during fetch phase */}
+            {transitionState.transitionPhase === 'fetch' && (
+              <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
+                <div className="flex flex-col items-center gap-3">
+                  <Loader2 className="w-8 h-8 text-novanet-400 animate-spin" />
+                  <span className="text-sm text-white/50 font-mono">
+                    Loading {transitionState.targetMode} mode...
+                  </span>
+                </div>
+              </div>
+            )}
+
             {/* Top Bar: Unified layout with 2 rows */}
             {!uiState.focusMode && (
               <div className={cn('absolute top-4 left-4 right-4 z-30 flex flex-col', gapTokens.spacious)}>
@@ -828,7 +840,7 @@ export default function HomePage() {
                 click inspect · dbl-click expand
               </span>
               <NavigationModeToggle
-                mode={navigationMode}
+                mode={transitionState.targetMode ?? navigationMode}
                 onModeChange={setNavigationMode}
               />
             </div>
