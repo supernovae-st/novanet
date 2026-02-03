@@ -835,10 +835,6 @@ export default function HomePage() {
                   ) : null}
                 </div>
               )}
-              {/* Shortcut hint - concise */}
-              <span className="text-[10px] text-white/40 select-none pointer-events-none">
-                click inspect · dbl-click expand
-              </span>
               <NavigationModeToggle
                 mode={transitionState.targetMode ?? navigationMode}
                 onModeChange={setNavigationMode}
