@@ -1,30 +1,24 @@
-//! App state machine for the TUI.
-//!
-//! Three top-level states: `Loading` (connecting to Neo4j), `Booting`
-//! (animated logo reveal), and `Ready` (interactive browsing).
-//! Navigation modes mirror the CLI: Data (1), Meta (2), Overlay (3), Query (4).
+//! App state for TUI v2.
 
-use crate::tui::boot::BootState;
-use crate::tui::dashboard::DashboardStats;
-use crate::tui::detail::KindDetail;
-use crate::tui::dialogs::DialogState;
-use crate::tui::effects::EffectsState;
-use crate::tui::onboarding::OnboardingState;
-use crate::tui::palette::PaletteState;
-use crate::tui::search::SearchState;
-use crate::tui::tree::TaxonomyTree;
+use std::fs;
+use std::path::Path;
 
-/// Navigation mode — mirrors CLI modes 1-4.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+use crossterm::event::{KeyCode, KeyEvent};
+
+use super::data::{TaxonomyTree, TreeItem};
+
+/// Navigation mode (matches Studio).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum NavMode {
     Data,
+    #[default]
     Meta,
     Overlay,
     Query,
 }
 
 impl NavMode {
-    pub fn label(self) -> &'static str {
+    pub fn label(&self) -> &'static str {
         match self {
             NavMode::Data => "Data",
             NavMode::Meta => "Meta",
@@ -33,17 +27,7 @@ impl NavMode {
         }
     }
 
-    #[allow(dead_code)] // Used by Phase 7B mode tab rendering
-    pub fn index(self) -> usize {
-        match self {
-            NavMode::Data => 0,
-            NavMode::Meta => 1,
-            NavMode::Overlay => 2,
-            NavMode::Query => 3,
-        }
-    }
-
-    pub fn cycle(self) -> Self {
+    pub fn cycle(&self) -> Self {
         match self {
             NavMode::Data => NavMode::Meta,
             NavMode::Meta => NavMode::Overlay,
@@ -51,233 +35,357 @@ impl NavMode {
             NavMode::Query => NavMode::Data,
         }
     }
-
-    pub fn from_key(c: char) -> Option<Self> {
-        match c {
-            '1' => Some(NavMode::Data),
-            '2' => Some(NavMode::Meta),
-            '3' => Some(NavMode::Overlay),
-            '4' => Some(NavMode::Query),
-            _ => None,
-        }
-    }
 }
 
-/// Active panel in the mission control layout.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum ActivePanel {
+/// Which panel has focus.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum Focus {
+    #[default]
     Tree,
     Detail,
-    CypherPreview,
 }
 
-impl ActivePanel {
-    /// Cycle to the next panel (Tree → Detail → CypherPreview → Tree).
-    pub fn cycle_next(self) -> Self {
-        match self {
-            ActivePanel::Tree => ActivePanel::Detail,
-            ActivePanel::Detail => ActivePanel::CypherPreview,
-            ActivePanel::CypherPreview => ActivePanel::Tree,
-        }
-    }
-
-    /// Cycle to the previous panel (Tree → CypherPreview → Detail → Tree).
-    pub fn cycle_prev(self) -> Self {
-        match self {
-            ActivePanel::Tree => ActivePanel::CypherPreview,
-            ActivePanel::Detail => ActivePanel::Tree,
-            ActivePanel::CypherPreview => ActivePanel::Detail,
-        }
-    }
+/// Main app state.
+#[allow(dead_code)]
+pub struct App {
+    pub mode: NavMode,
+    pub focus: Focus,
+    pub tree_cursor: usize,
+    pub tree_scroll: usize,    // Scroll offset for tree
+    pub tree_height: usize,    // Visible height (set by UI)
+    pub detail_scroll: usize,
+    pub tree: TaxonomyTree,
+    // Search state
+    pub search_active: bool,
+    pub search_query: String,
+    pub search_results: Vec<usize>, // indices into flattened tree
+    pub search_cursor: usize,
+    // Help overlay
+    pub help_active: bool,
+    // YAML preview
+    pub yaml_content: String,
+    pub yaml_path: String,
+    pub yaml_scroll: usize,
+    pub root_path: String,
 }
 
-/// Facet filter state for Query mode.
-#[derive(Debug, Clone, Default)]
-#[allow(dead_code)] // Fields used in Phase 7B interactive filter selection
-pub struct FacetFilterState {
-    pub realms: Vec<String>,
-    pub layers: Vec<String>,
-    pub traits: Vec<String>,
-    pub show_popup: bool,
-    pub popup_cursor: usize,
-}
-
-/// Top-level app state.
-#[allow(clippy::large_enum_variant)] // Ready is the hot path; Loading/Booting are rare
-pub enum AppState {
-    Loading {
-        message: String,
-    },
-    /// Boot animation state — plays between Loading and Ready.
-    Booting {
-        boot: Box<BootState>,
-        tree: TaxonomyTree,
-        edge_kind_keys: Vec<String>,
-    },
-    Ready {
-        mode: NavMode,
-        tree: TaxonomyTree,
-        active_panel: ActivePanel,
-        detail_lines: Vec<String>,
-        status: String,
-        facets: FacetFilterState,
-        node_count: usize,
-        cypher_preview: Vec<String>,
-        kind_detail: Option<Box<KindDetail>>,
-        search: Option<SearchState>,
-        /// Edge explorer cursor. None = normal detail, Some(idx) = focused edge view.
-        edge_explorer_idx: Option<usize>,
-        /// CRUD dialog overlay. None = no dialog, Some = modal form.
-        dialog: Option<DialogState>,
-        /// Available EdgeKind keys for relation type dropdowns.
-        edge_kind_keys: Vec<String>,
-        /// Dashboard statistics from Neo4j.
-        dashboard_stats: Option<DashboardStats>,
-        /// Whether the dashboard panel is visible (toggle with 's').
-        show_dashboard: bool,
-        /// Command palette overlay (`:` key).
-        palette: Option<PaletteState>,
-        /// Help reference card overlay (`?` key).
-        show_help: bool,
-        /// Animation tick counter (increments each frame when effects active).
-        tick: u64,
-        /// Visual effects state (CRT, shake, glitch, pulse).
-        effects: EffectsState,
-        /// Onboarding overlay (first-run welcome screen + guided tour).
-        onboarding: Option<OnboardingState>,
-    },
-}
-
-impl AppState {
-    pub fn loading(message: impl Into<String>) -> Self {
-        AppState::Loading {
-            message: message.into(),
-        }
-    }
-
-    pub fn ready(tree: TaxonomyTree) -> Self {
-        let node_count = tree.item_count();
-        AppState::Ready {
+impl App {
+    pub fn new(tree: TaxonomyTree, root_path: String) -> Self {
+        let mut app = Self {
             mode: NavMode::Meta,
+            focus: Focus::Tree,
+            tree_cursor: 0,
+            tree_scroll: 0,
+            tree_height: 20, // Default, updated by UI
+            detail_scroll: 0,
             tree,
-            active_panel: ActivePanel::Tree,
-            detail_lines: vec!["Select a node to see details.".to_string()],
-            status: format!("{node_count} node(s) loaded"),
-            facets: FacetFilterState::default(),
-            node_count,
-            cypher_preview: Vec::new(),
-            kind_detail: None,
-            search: None,
-            edge_explorer_idx: None,
-            dialog: None,
-            edge_kind_keys: Vec::new(),
-            dashboard_stats: None,
-            show_dashboard: true,
-            palette: None,
-            show_help: false,
-            tick: 0,
-            effects: EffectsState::default(),
-            onboarding: None,
+            search_active: false,
+            search_query: String::new(),
+            search_results: Vec::new(),
+            search_cursor: 0,
+            help_active: false,
+            yaml_content: String::new(),
+            yaml_path: String::new(),
+            yaml_scroll: 0,
+            root_path,
+        };
+        app.load_yaml_for_current();
+        app
+    }
+
+    /// Load YAML content for the current cursor position.
+    pub fn load_yaml_for_current(&mut self) {
+        match self.tree.item_at(self.tree_cursor) {
+            Some(TreeItem::Kind(_, _, kind)) => {
+                let full_path = Path::new(&self.root_path).join(&kind.yaml_path);
+                self.yaml_path = kind.yaml_path.clone();
+                self.yaml_content = fs::read_to_string(&full_path)
+                    .unwrap_or_else(|_| format!("# File not found: {}", full_path.display()));
+                self.yaml_scroll = 0;
+            }
+            Some(TreeItem::EdgeKind(_, _)) => {
+                // EdgeKinds are in relations.yaml
+                let rel_path = "packages/core/models/relations.yaml";
+                let full_path = Path::new(&self.root_path).join(rel_path);
+                self.yaml_path = rel_path.to_string();
+                self.yaml_content = fs::read_to_string(&full_path)
+                    .unwrap_or_else(|_| format!("# File not found: {}", full_path.display()));
+                self.yaml_scroll = 0;
+            }
+            _ => {
+                self.yaml_path.clear();
+                self.yaml_content.clear();
+                self.yaml_scroll = 0;
+            }
         }
     }
 
-    /// Create a booting state with the loaded taxonomy and terminal dimensions.
-    pub fn booting(
-        tree: TaxonomyTree,
-        edge_kind_keys: Vec<String>,
-        width: u16,
-        height: u16,
-    ) -> Self {
-        AppState::Booting {
-            boot: Box::new(BootState::new(width, height)),
-            tree,
-            edge_kind_keys,
+    /// Ensure cursor is visible by adjusting scroll.
+    pub fn ensure_cursor_visible(&mut self) {
+        // Scroll up if cursor is above viewport
+        if self.tree_cursor < self.tree_scroll {
+            self.tree_scroll = self.tree_cursor;
         }
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn nav_mode_cycle() {
-        assert_eq!(NavMode::Data.cycle(), NavMode::Meta);
-        assert_eq!(NavMode::Meta.cycle(), NavMode::Overlay);
-        assert_eq!(NavMode::Overlay.cycle(), NavMode::Query);
-        assert_eq!(NavMode::Query.cycle(), NavMode::Data);
-    }
-
-    #[test]
-    fn nav_mode_from_key() {
-        assert_eq!(NavMode::from_key('1'), Some(NavMode::Data));
-        assert_eq!(NavMode::from_key('4'), Some(NavMode::Query));
-        assert_eq!(NavMode::from_key('x'), None);
-    }
-
-    #[test]
-    fn nav_mode_labels() {
-        assert_eq!(NavMode::Data.label(), "Data");
-        assert_eq!(NavMode::Query.label(), "Query");
-    }
-
-    #[test]
-    fn nav_mode_index() {
-        assert_eq!(NavMode::Data.index(), 0);
-        assert_eq!(NavMode::Query.index(), 3);
-    }
-
-    #[test]
-    fn panel_cycle_next() {
-        assert_eq!(ActivePanel::Tree.cycle_next(), ActivePanel::Detail);
-        assert_eq!(ActivePanel::Detail.cycle_next(), ActivePanel::CypherPreview);
-        assert_eq!(ActivePanel::CypherPreview.cycle_next(), ActivePanel::Tree);
-    }
-
-    #[test]
-    fn panel_cycle_prev() {
-        assert_eq!(ActivePanel::Tree.cycle_prev(), ActivePanel::CypherPreview);
-        assert_eq!(ActivePanel::Detail.cycle_prev(), ActivePanel::Tree);
-        assert_eq!(ActivePanel::CypherPreview.cycle_prev(), ActivePanel::Detail);
-    }
-
-    #[test]
-    fn booting_state_has_boot_and_tree() {
-        use crate::tui::tree::{MetaRow, TaxonomyTree};
-        let rows = vec![MetaRow {
-            label: "Realm".to_string(),
-            key: "global".to_string(),
-            display_name: "Global".to_string(),
-            parent_key: None,
-        }];
-        let tree = TaxonomyTree::from_meta_rows(&rows);
-        let state = AppState::booting(tree, vec!["HAS_BLOCK".to_string()], 80, 24);
-        assert!(matches!(state, AppState::Booting { .. }));
-        if let AppState::Booting {
-            boot,
-            edge_kind_keys,
-            ..
-        } = &state
-        {
-            assert!(!boot.is_complete());
-            assert_eq!(edge_kind_keys.len(), 1);
+        // Scroll down if cursor is below viewport
+        if self.tree_cursor >= self.tree_scroll + self.tree_height {
+            self.tree_scroll = self.tree_cursor.saturating_sub(self.tree_height - 1);
         }
     }
 
-    #[test]
-    fn ready_state_has_effects_and_tick() {
-        use crate::tui::tree::{MetaRow, TaxonomyTree};
-        let rows = vec![MetaRow {
-            label: "Realm".to_string(),
-            key: "global".to_string(),
-            display_name: "Global".to_string(),
-            parent_key: None,
-        }];
-        let tree = TaxonomyTree::from_meta_rows(&rows);
-        let state = AppState::ready(tree);
-        if let AppState::Ready { tick, effects, .. } = &state {
-            assert_eq!(*tick, 0);
-            assert!(!effects.is_animating());
+    /// Update search results based on current query (respects collapsed state).
+    pub fn update_search(&mut self) {
+        self.search_results.clear();
+        if self.search_query.is_empty() {
+            return;
+        }
+
+        let query = self.search_query.to_lowercase();
+        let mut idx = 0;
+
+        // Kinds section header
+        if "kinds".contains(&query) {
+            self.search_results.push(idx);
+        }
+        idx += 1;
+
+        if !self.tree.is_collapsed("kinds") {
+            for realm in &self.tree.realms {
+                if realm.display_name.to_lowercase().contains(&query)
+                    || realm.key.to_lowercase().contains(&query)
+                {
+                    self.search_results.push(idx);
+                }
+                idx += 1;
+
+                if !self.tree.is_collapsed(&format!("realm:{}", realm.key)) {
+                    for layer in &realm.layers {
+                        if layer.display_name.to_lowercase().contains(&query)
+                            || layer.key.to_lowercase().contains(&query)
+                        {
+                            self.search_results.push(idx);
+                        }
+                        idx += 1;
+
+                        if !self.tree.is_collapsed(&format!("layer:{}", layer.key)) {
+                            for kind in &layer.kinds {
+                                if kind.display_name.to_lowercase().contains(&query)
+                                    || kind.key.to_lowercase().contains(&query)
+                                {
+                                    self.search_results.push(idx);
+                                }
+                                idx += 1;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Relations section header
+        if "relations".contains(&query) {
+            self.search_results.push(idx);
+        }
+        idx += 1;
+
+        if !self.tree.is_collapsed("relations") {
+            for family in &self.tree.edge_families {
+                if family.display_name.to_lowercase().contains(&query)
+                    || family.key.to_lowercase().contains(&query)
+                {
+                    self.search_results.push(idx);
+                }
+                idx += 1;
+
+                if !self.tree.is_collapsed(&format!("family:{}", family.key)) {
+                    for edge_kind in &family.edge_kinds {
+                        if edge_kind.display_name.to_lowercase().contains(&query)
+                            || edge_kind.key.to_lowercase().contains(&query)
+                        {
+                            self.search_results.push(idx);
+                        }
+                        idx += 1;
+                    }
+                }
+            }
+        }
+
+        // Reset cursor if out of bounds
+        if self.search_cursor >= self.search_results.len() {
+            self.search_cursor = 0;
+        }
+    }
+
+    /// Select current search result and close search.
+    pub fn select_search_result(&mut self) {
+        if let Some(&idx) = self.search_results.get(self.search_cursor) {
+            self.tree_cursor = idx;
+            self.ensure_cursor_visible();
+        }
+        self.close_search();
+    }
+
+    /// Close search overlay.
+    pub fn close_search(&mut self) {
+        self.search_active = false;
+        self.search_query.clear();
+        self.search_results.clear();
+        self.search_cursor = 0;
+    }
+
+    /// Handle key input. Returns true if state changed (needs re-render).
+    pub fn handle_key(&mut self, key: KeyEvent) -> bool {
+        // Help overlay - any key closes it
+        if self.help_active {
+            self.help_active = false;
+            return true;
+        }
+
+        // Search mode captures all input
+        if self.search_active {
+            return self.handle_search_key(key);
+        }
+
+        match key.code {
+            // Open help
+            KeyCode::Char('/') => {
+                self.help_active = true;
+                true
+            }
+
+            // Open search (f = find)
+            KeyCode::Char('f') => {
+                self.search_active = true;
+                true
+            }
+
+            // Mode switching: 1-4 direct, N cycle
+            KeyCode::Char('1') => {
+                self.mode = NavMode::Data;
+                true
+            }
+            KeyCode::Char('2') => {
+                self.mode = NavMode::Meta;
+                true
+            }
+            KeyCode::Char('3') => {
+                self.mode = NavMode::Overlay;
+                true
+            }
+            KeyCode::Char('4') => {
+                self.mode = NavMode::Query;
+                true
+            }
+            KeyCode::Char('n') | KeyCode::Char('N') => {
+                self.mode = self.mode.cycle();
+                true
+            }
+
+            // Panel focus: ←→
+            KeyCode::Left => {
+                self.focus = Focus::Tree;
+                true
+            }
+            KeyCode::Right => {
+                self.focus = Focus::Detail;
+                true
+            }
+
+            // Collapse/expand: h/l/H/L (vim-style)
+            KeyCode::Char('h') => {
+                // Collapse current node
+                if let Some(key) = self.tree.collapse_key_at(self.tree_cursor) {
+                    self.tree.collapse(&key);
+                }
+                true
+            }
+            KeyCode::Char('l') => {
+                // Expand current node
+                if let Some(key) = self.tree.collapse_key_at(self.tree_cursor) {
+                    self.tree.expand(&key);
+                }
+                true
+            }
+            KeyCode::Char('H') => {
+                // Collapse all
+                self.tree.collapse_all();
+                self.tree_cursor = 0;
+                self.tree_scroll = 0;
+                true
+            }
+            KeyCode::Char('L') => {
+                // Expand all
+                self.tree.expand_all();
+                true
+            }
+
+            // Tree navigation: ↑↓
+            KeyCode::Up => {
+                if self.tree_cursor > 0 {
+                    self.tree_cursor -= 1;
+                    self.ensure_cursor_visible();
+                    self.load_yaml_for_current();
+                }
+                true
+            }
+            KeyCode::Down => {
+                let max = self.tree.item_count().saturating_sub(1);
+                if self.tree_cursor < max {
+                    self.tree_cursor += 1;
+                    self.ensure_cursor_visible();
+                    self.load_yaml_for_current();
+                }
+                true
+            }
+
+            _ => false,
+        }
+    }
+
+    /// Handle key input in search mode.
+    fn handle_search_key(&mut self, key: KeyEvent) -> bool {
+        match key.code {
+            // Close search
+            KeyCode::Esc => {
+                self.close_search();
+                true
+            }
+
+            // Select result
+            KeyCode::Enter => {
+                self.select_search_result();
+                true
+            }
+
+            // Navigate results
+            KeyCode::Up => {
+                if self.search_cursor > 0 {
+                    self.search_cursor -= 1;
+                }
+                true
+            }
+            KeyCode::Down => {
+                let max = self.search_results.len().saturating_sub(1);
+                if self.search_cursor < max {
+                    self.search_cursor += 1;
+                }
+                true
+            }
+
+            // Type character
+            KeyCode::Char(c) => {
+                self.search_query.push(c);
+                self.update_search();
+                true
+            }
+
+            // Delete character
+            KeyCode::Backspace => {
+                self.search_query.pop();
+                self.update_search();
+                true
+            }
+
+            _ => false,
         }
     }
 }

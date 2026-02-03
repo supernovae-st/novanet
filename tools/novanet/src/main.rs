@@ -485,8 +485,9 @@ async fn main() -> color_eyre::Result<()> {
         }
         #[cfg(feature = "tui")]
         Commands::Tui => {
+            let root = root?;
             let db = connect_db(&cli).await?;
-            novanet::tui::run(&db).await?;
+            novanet::tui::run(&db, &root).await?;
         }
     }
 
