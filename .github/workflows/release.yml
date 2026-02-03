@@ -1,0 +1,86 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get version from tag
+        id: version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Get previous tag
+        id: prev_tag
+        run: |
+          VERSION="${{ steps.version.outputs.VERSION }}"
+          PREV_TAG=$(git describe --tags --abbrev=0 "${VERSION}^" 2>/dev/null || echo "")
+          echo "PREV_TAG=$PREV_TAG" >> $GITHUB_OUTPUT
+
+      - name: Generate release notes
+        id: notes
+        env:
+          VERSION: ${{ steps.version.outputs.VERSION }}
+          PREV_TAG: ${{ steps.prev_tag.outputs.PREV_TAG }}
+          REPO: ${{ github.repository }}
+        run: |
+          # Count commits
+          if [ -n "$PREV_TAG" ]; then
+            COMMITS=$(git log --oneline "${PREV_TAG}..${VERSION}" | wc -l | tr -d ' ')
+            COMPARE_URL="https://github.com/${REPO}/compare/${PREV_TAG}...${VERSION}"
+          else
+            COMMITS=$(git log --oneline "${VERSION}" | wc -l | tr -d ' ')
+            COMPARE_URL="https://github.com/${REPO}/commits/${VERSION}"
+          fi
+
+          # Build release notes
+          cat << EOF > release_notes.md
+          ## What's Changed
+
+          See [CHANGELOG.md](https://github.com/${REPO}/blob/main/CHANGELOG.md) for detailed changes.
+
+          ## Stats
+
+          | Metric | Value |
+          |--------|-------|
+          | Commits | $COMMITS |
+
+          ## Full Changelog
+
+          $COMPARE_URL
+          EOF
+
+      - name: Determine pre-release
+        id: prerelease
+        env:
+          VERSION: ${{ steps.version.outputs.VERSION }}
+        run: |
+          if [[ "$VERSION" == *"-"* ]]; then
+            echo "IS_PRERELEASE=true" >> $GITHUB_OUTPUT
+          else
+            echo "IS_PRERELEASE=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.VERSION }}
+          name: ${{ steps.version.outputs.VERSION }}
+          body_path: release_notes.md
+          prerelease: ${{ steps.prerelease.outputs.IS_PRERELEASE }}
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -55,7 +55,7 @@ flowchart TB
         direction TB
         CORE["@novanet/core v9.0.0\nTypes · Schemas · Filters"]
         DB["@novanet/db v1.0.0\nDocker · Seeds · Migrations"]
-        STUDIO["@novanet/studio v0.1.0\nNext.js 16 · React 19"]
+        STUDIO["@novanet/studio v9.0.0\nNext.js 16 · React 19"]
         RUST["novanet CLI v9.0.0\nRust · 13 commands · TUI"]
     end
 
@@ -144,7 +144,7 @@ novanet-hq/
 |---------|---------|-------------|
 | **@novanet/core** | `9.0.0` | Types, Zod schemas, NovaNetFilter API, Cypher generators |
 | **@novanet/db** | `1.0.0` | Docker Compose for Neo4j, Cypher seeds, migrations |
-| **@novanet/studio** | `0.1.0` | Interactive graph visualization with AI chat |
+| **@novanet/studio** | `9.0.0` | Interactive graph visualization with AI chat |
 | **tools/novanet** | `9.0.0` | Rust CLI + TUI for schema generation, validation, queries |
 
 ---
