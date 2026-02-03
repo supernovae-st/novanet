@@ -1320,6 +1320,26 @@ function Graph2DInner({
   }, [isMagneticMode, magneticData]);
 
   // ==========================================================================
+  // Navigation Mode FitView
+  // Refit camera when switching between data/meta/overlay/query modes.
+  // Triggered after transition completes (reform phase ends).
+  // ==========================================================================
+  const prevTransitionPhaseRef = useRef(transitionPhase);
+  useEffect(() => {
+    const transitionJustEnded = prevTransitionPhaseRef.current === 'reform' && transitionPhase === null;
+    prevTransitionPhaseRef.current = transitionPhase;
+
+    if (transitionJustEnded) {
+      // Fit view after mode transition completes
+      const timeoutId = setTimeout(() => {
+        smartFitViewRef.current({ duration: GRAPH_ANIMATION.FIT_VIEW_DURATION });
+      }, 50); // Small delay to ensure nodes are rendered
+      return () => clearTimeout(timeoutId);
+    }
+    // PERF: smartFitView accessed via ref to avoid effect re-registration
+  }, [transitionPhase]);
+
+  // ==========================================================================
   // Initial FitView on Mount
   // Use smartFitView with proper insets instead of ReactFlow's default fitView
   // ==========================================================================

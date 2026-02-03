@@ -1,10 +1,8 @@
 /**
  * NavigationModeToggle Tests
  *
- * Tests rendering of 4-mode segmented toggle, active state styling,
+ * Tests rendering, active state styling, keyboard shortcuts (1-4),
  * and click behavior triggering animationStore transitions.
- *
- * v9.5: Order is Meta | Data | Overlay | Query, labels are lowercase mono
  */
 
 import '@testing-library/jest-dom';
@@ -15,16 +13,6 @@ import { useAnimationStore } from '@/stores/animationStore';
 // Mock animationStore
 jest.mock('@/stores/animationStore', () => ({
   useAnimationStore: jest.fn(),
-}));
-
-// Mock tooltip components to avoid Radix UI complexity in tests
-jest.mock('@/components/ui/tooltip', () => ({
-  Tooltip: ({ children }: { children: React.ReactNode }) => <>{children}</>,
-  TooltipTrigger: ({ children }: { children: React.ReactNode }) => <>{children}</>,
-  TooltipContent: ({ children, sideOffset: _sideOffset }: { children: React.ReactNode; sideOffset?: number }) => (
-    <span data-testid="tooltip">{children}</span>
-  ),
-  TooltipShortcut: ({ children }: { children: React.ReactNode }) => <kbd data-testid="shortcut">{children}</kbd>,
 }));
 
 const mockStartTransition = jest.fn();
@@ -49,7 +37,6 @@ describe('NavigationModeToggle', () => {
     it('renders all 4 mode buttons in correct order', () => {
       render(<NavigationModeToggle mode="data" onModeChange={mockOnModeChange} />);
 
-      // v9.5: lowercase labels, Meta first
       expect(screen.getByText('meta')).toBeInTheDocument();
       expect(screen.getByText('data')).toBeInTheDocument();
       expect(screen.getByText('overlay')).toBeInTheDocument();
@@ -76,14 +63,17 @@ describe('NavigationModeToggle', () => {
       });
     });
 
-    it('shows shortcuts 1, 2, 3, 4 for each mode', () => {
-      render(<NavigationModeToggle mode="data" onModeChange={mockOnModeChange} />);
+    it('shows kbd shortcuts 1, 2, 3, 4 inline', () => {
+      const { container } = render(
+        <NavigationModeToggle mode="data" onModeChange={mockOnModeChange} />
+      );
 
-      const shortcuts = screen.getAllByTestId('shortcut');
-      expect(shortcuts[0]).toHaveTextContent('1'); // meta
-      expect(shortcuts[1]).toHaveTextContent('2'); // data
-      expect(shortcuts[2]).toHaveTextContent('3'); // overlay
-      expect(shortcuts[3]).toHaveTextContent('4'); // query
+      const kbds = container.querySelectorAll('kbd');
+      expect(kbds).toHaveLength(4);
+      expect(kbds[0]).toHaveTextContent('1');
+      expect(kbds[1]).toHaveTextContent('2');
+      expect(kbds[2]).toHaveTextContent('3');
+      expect(kbds[3]).toHaveTextContent('4');
     });
   });
 
@@ -148,17 +138,51 @@ describe('NavigationModeToggle', () => {
 
       expect(mockStartTransition).not.toHaveBeenCalled();
     });
+  });
 
-    it('triggers correct mode for each button', () => {
+  // ==========================================================================
+  // Keyboard shortcuts
+  // ==========================================================================
+
+  describe('keyboard shortcuts', () => {
+    it('switches to meta on pressing 1', () => {
       render(<NavigationModeToggle mode="data" onModeChange={mockOnModeChange} />);
 
-      fireEvent.click(screen.getByText('overlay'));
+      fireEvent.keyDown(window, { key: '1' });
+
+      expect(mockStartTransition).toHaveBeenCalledWith('meta');
+    });
+
+    it('switches to data on pressing 2', () => {
+      render(<NavigationModeToggle mode="meta" onModeChange={mockOnModeChange} />);
+
+      fireEvent.keyDown(window, { key: '2' });
+
+      expect(mockStartTransition).toHaveBeenCalledWith('data');
+    });
+
+    it('switches to overlay on pressing 3', () => {
+      render(<NavigationModeToggle mode="data" onModeChange={mockOnModeChange} />);
+
+      fireEvent.keyDown(window, { key: '3' });
+
       expect(mockStartTransition).toHaveBeenCalledWith('overlay');
+    });
 
-      mockStartTransition.mockClear();
+    it('switches to query on pressing 4', () => {
+      render(<NavigationModeToggle mode="data" onModeChange={mockOnModeChange} />);
 
-      fireEvent.click(screen.getByText('query'));
+      fireEvent.keyDown(window, { key: '4' });
+
       expect(mockStartTransition).toHaveBeenCalledWith('query');
+    });
+
+    it('does not switch when already on target mode', () => {
+      render(<NavigationModeToggle mode="meta" onModeChange={mockOnModeChange} />);
+
+      fireEvent.keyDown(window, { key: '1' });
+
+      expect(mockStartTransition).not.toHaveBeenCalled();
     });
   });
 });
