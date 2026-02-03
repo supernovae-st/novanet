@@ -988,11 +988,11 @@ function Graph2DInner({
   // PERF: Memoized MiniMap nodeColor callbacks to avoid re-creating functions
   // ==========================================================================
   const schemaMinimapNodeColor = useCallback((node: ReactFlowNode) => {
-    // Color by scope for schema nodes
-    const scope = node.data?.realm;
-    if (scope === 'Project') return '#8b5cf6cc'; // violet
-    if (scope === 'Global') return '#10b981cc'; // emerald
-    if (scope === 'Shared') return '#f59e0bcc'; // amber
+    // Color by realm for schema nodes (v9 terminology)
+    const realm = node.data?.realm;
+    if (realm === 'Project') return '#8b5cf6cc'; // violet
+    if (realm === 'Global') return '#10b981cc'; // emerald
+    if (realm === 'Shared') return '#f59e0bcc'; // amber
     return '#666';
   }, []);
 

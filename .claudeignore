@@ -1,0 +1,45 @@
+# NovaNet .claudeignore
+# Files and directories to exclude from Claude Code context
+
+# Build artifacts
+**/dist/
+**/build/
+**/target/
+**/.next/
+**/node_modules/
+
+# Generated files (regenerated from YAML source of truth)
+packages/core/src/types/generated/
+packages/db/seed/*.cypher
+packages/core/models/docs/*.mmd
+
+# IDE and editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Logs and temp
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
+
+# Test coverage and reports
+coverage/
+*.lcov
+.nyc_output/
+
+# Lock files (pnpm-lock is in git but not useful for context)
+pnpm-lock.yaml
+Cargo.lock
+
+# Large binary or data files
+*.sqlite
+*.db
+*.zip
+*.tar.gz
+
+# mdbook build output
+docs/book/
