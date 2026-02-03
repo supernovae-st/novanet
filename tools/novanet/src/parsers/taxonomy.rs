@@ -395,9 +395,9 @@ arc_families:
         assert_eq!(invariant.border_style, Some("solid".to_string()));
         assert_eq!(invariant.unicode_border, Some("─".to_string()));
 
-        // Check terminal palette
+        // Check terminal palette (uses semantic keys like global, project, etc.)
         let terminal = doc.terminal.as_ref().expect("should have terminal palette");
-        assert!(terminal.palette_256.contains_key("cyan"));
-        assert!(terminal.palette_16.contains_key("cyan"));
+        assert!(terminal.palette_256.contains_key("global"));
+        assert!(terminal.palette_16.contains_key("global"));
     }
 }
