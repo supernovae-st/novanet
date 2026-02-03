@@ -220,13 +220,13 @@ export const opacity = {
     heavy: 'white/[0.10]',    // Strong emphasis
     intense: 'white/[0.15]',  // Maximum emphasis
   },
-  /** Border opacities */
+  /** Border opacities - Unified 5-level scale */
   border: {
-    subtle: 'white/[0.06]',   // Panel dividers
-    light: 'white/[0.08]',    // Card borders
-    medium: 'white/[0.12]',   // Modal borders
-    strong: 'white/[0.15]',   // Active borders
-    heavy: 'white/[0.20]',    // High emphasis borders
+    subtle: 'white/[0.06]',   // 6%  - Panel dividers, very light
+    light: 'white/10',        // 10% - Card borders, default
+    medium: 'white/[0.12]',   // 12% - Glass borders, modal borders
+    strong: 'white/[0.15]',   // 15% - Hover, elevated, floating
+    heavy: 'white/20',        // 20% - Active, pressed, high emphasis
   },
   /** Text opacities */
   text: {
@@ -270,12 +270,10 @@ export const iconSizes = {
   sm: 'w-3.5 h-3.5',
   /** 16px - Medium icons (default, buttons) */
   md: 'w-4 h-4',
-  /** 18px - Large icons (headers, actions) */
-  lg: 'w-[18px] h-[18px]',
-  /** 20px - Extra large icons (feature icons) */
-  xl: 'w-5 h-5',
-  /** 24px - Hero icons (empty states) */
-  '2xl': 'w-6 h-6',
+  /** 20px - Large icons (headers, actions) */
+  lg: 'w-5 h-5',
+  /** 24px - Extra large icons (feature icons, hero) */
+  xl: 'w-6 h-6',
 } as const;
 
 // ============================================================================
@@ -344,13 +342,14 @@ export const glass = {
     medium: 'rgba(13, 13, 16, 0.8)',
     heavy: 'rgba(13, 13, 16, 0.95)',
   },
-  // Border opacity levels - Calibrated for contrast
+  // Border opacity levels - Unified 5-level scale (matches opacity.border)
   border: {
-    subtle: 'rgba(255, 255, 255, 0.08)',
-    light: 'rgba(255, 255, 255, 0.12)',
-    medium: 'rgba(255, 255, 255, 0.15)',
-    heavy: 'rgba(255, 255, 255, 0.20)',
-    active: 'rgba(255, 255, 255, 0.30)',
+    subtle: 'rgba(255, 255, 255, 0.06)',  // 6%  - Panel dividers
+    light: 'rgba(255, 255, 255, 0.10)',   // 10% - Card borders
+    medium: 'rgba(255, 255, 255, 0.12)',  // 12% - Glass, modal borders
+    strong: 'rgba(255, 255, 255, 0.15)',  // 15% - Hover, elevated
+    heavy: 'rgba(255, 255, 255, 0.20)',   // 20% - Active, pressed
+    active: 'rgba(255, 255, 255, 0.30)',  // 30% - High emphasis (special)
   },
   // Blur intensity
   blur: {
@@ -453,21 +452,24 @@ export const colors = {
 
 /**
  * Glass morphism utility classes - Premium Nika-Inspired
+ *
+ * Border scale (unified with opacity.border):
+ *   subtle=6%, light=10%, medium=12%, strong=15%, heavy=20%
  */
 export const glassClasses = {
-  subtle: 'bg-[hsl(240,8%,5%)] backdrop-blur-sm border border-white/8',
-  light: 'bg-[hsl(240,8%,5%)] backdrop-blur-md border border-white/12',
-  medium: 'bg-[hsl(240,6%,8%)] backdrop-blur-xl border border-white/12',
-  heavy: 'bg-[hsl(240,5%,12%)] backdrop-blur-xl border border-white/15',
-  floating: 'bg-[hsl(240,6%,8%)] backdrop-blur-xl border border-white/15 rounded-2xl shadow-2xl shadow-black/50 ring-1 ring-white/4 ring-inset',
+  subtle: 'bg-[hsl(240,8%,5%)] backdrop-blur-sm border border-white/[0.06]',
+  light: 'bg-[hsl(240,8%,5%)] backdrop-blur-md border border-white/10',
+  medium: 'bg-[hsl(240,6%,8%)] backdrop-blur-xl border border-white/[0.12]',
+  heavy: 'bg-[hsl(240,5%,12%)] backdrop-blur-xl border border-white/[0.15]',
+  floating: 'bg-[hsl(240,6%,8%)] backdrop-blur-xl border border-white/[0.15] rounded-2xl shadow-2xl shadow-black/50 ring-1 ring-white/4 ring-inset',
   /** Modal variant - fully opaque dark background for better perf and consistency */
   modal: 'bg-[#0d0d12] border border-white/[0.12] rounded-2xl shadow-2xl shadow-black/60',
 
-  // Hover variants for interactive elements
-  subtleHover: 'hover:bg-white/[0.04] hover:border-white/[0.08]',
-  lightHover: 'hover:bg-white/[0.06] hover:border-white/[0.10]',
-  mediumHover: 'hover:bg-white/[0.08] hover:border-white/[0.12]',
-  heavyHover: 'hover:bg-white/[0.12] hover:border-white/[0.15]',
+  // Hover variants - each moves up one level in the opacity scale
+  subtleHover: 'hover:bg-white/[0.04] hover:border-white/10',
+  lightHover: 'hover:bg-white/[0.06] hover:border-white/[0.12]',
+  mediumHover: 'hover:bg-white/[0.08] hover:border-white/[0.15]',
+  heavyHover: 'hover:bg-white/[0.12] hover:border-white/20',
 } as const;
 
 /**

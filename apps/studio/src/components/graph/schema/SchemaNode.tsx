@@ -25,9 +25,31 @@ import { LayerIcon } from '@/components/ui/CategoryIcon';
 import { BlueprintOverlay } from '../nodes/BlueprintOverlay';
 import { NODE_BG, NODE_DESIGN } from '@/config/constants';
 import { useNodeInteractions } from '@/hooks';
-import { SelectionPulseRing, GlassmorphismEffects, NodeHandles } from '../nodes/effects';
-import { glassClasses, gapTokens } from '@/design/tokens';
+import { SelectionPulseRing, GlassmorphismEffects } from '../nodes/effects';
+import { glassClasses } from '@/design/tokens';
 import type { Realm } from '@novanet/core/types';
+
+/**
+ * Trait type - locale behavior encoding
+ * v9: Border style encodes trait
+ */
+export type Trait = 'invariant' | 'localized' | 'knowledge' | 'derived' | 'job';
+
+/**
+ * Trait border styles (v9 visual encoding)
+ * - invariant: Solid 2px - stable, structural nodes
+ * - localized: Dashed 2px - generated per locale
+ * - knowledge: Double border - cultural/linguistic expertise
+ * - derived: Dotted 1px - computed aggregates
+ * - job: Thin 1px - background tasks
+ */
+const TRAIT_BORDER_STYLES: Record<Trait, { style: string; width: number; className?: string }> = {
+  invariant: { style: 'solid', width: 2 },
+  localized: { style: 'dashed', width: 2 },
+  knowledge: { style: 'double', width: 4, className: 'ring-2 ring-inset ring-white/20' },
+  derived: { style: 'dotted', width: 1 },
+  job: { style: 'solid', width: 1 },
+};
 
 /**
  * Data interface for SchemaNode
@@ -38,6 +60,8 @@ export interface SchemaNodeData extends Record<string, unknown> {
   description: string;
   realm: Realm;
   layer: string;
+  /** Trait for border style encoding */
+  trait?: Trait;
 }
 
 /** Node type for SchemaNode */
@@ -79,11 +103,14 @@ export const SchemaNode = memo(function SchemaNode({
         : NODE_DESIGN.shadows.glow(colors.primary),
   }), [colors.primary, colors.secondary, selected, isHovered]);
 
-  // Memoize icon style to prevent re-renders
-  const iconStyle = useMemo(() => ({
-    color: colors.primary,
-    filter: `drop-shadow(0 0 ${selected ? '10px' : '6px'} ${colors.primary}80)`,
-  }), [colors.primary, selected]);
+  // v9: Trait border style encoding
+  const trait = (data.trait || 'invariant') as Trait;
+  const traitBorder = TRAIT_BORDER_STYLES[trait];
+  const traitBorderStyle = useMemo(() => ({
+    borderStyle: traitBorder.style,
+    borderWidth: `${traitBorder.width}px`,
+    borderColor: `${colors.primary}60`,
+  }), [traitBorder.style, traitBorder.width, colors.primary]);
 
   return (
     <div
@@ -113,17 +140,22 @@ export const SchemaNode = memo(function SchemaNode({
         }}
       >
         {/* Inner card - Glassmorphism + Skeuomorphism when selected */}
+        {/* v9: Border style encodes Trait (invariant=solid, localized=dashed, knowledge=double, derived=dotted, job=thin) */}
         <div
           className={cn(
             'relative overflow-hidden transition-colors duration-300',
             selected && glassClasses.medium,
-            selected && 'animate-float'
+            selected && 'animate-float',
+            traitBorder.className // Additional class for knowledge trait (double ring)
           )}
           style={{
             width: 180,
             borderRadius: selected ? NODE_DESIGN.radius.innerSelected : NODE_DESIGN.radius.inner,
             backgroundColor: selected ? NODE_DESIGN.selectedBg : NODE_BG.default,
-            border: selected ? `${NODE_DESIGN.border.innerSelected}px solid ${colors.primary}` : 'none',
+            // v9: Apply trait border style (overridden when selected)
+            ...(selected
+              ? { border: `${NODE_DESIGN.border.innerSelected}px solid ${colors.primary}` }
+              : traitBorderStyle),
             boxShadow: selected ? NODE_DESIGN.shadows.skeuomorphic(colors.primary) : undefined,
           }}
         >
@@ -132,59 +164,50 @@ export const SchemaNode = memo(function SchemaNode({
             <GlassmorphismEffects borderRadius={NODE_DESIGN.radius.innerSelected} />
           )}
 
-          {/* Blueprint overlay - schema mode indicator (always on) */}
+          {/* Blueprint overlay - schema mode indicator (no diamond badge) */}
           <BlueprintOverlay
             color={colors.primary}
             selected={selected}
             borderRadius={selected ? NODE_DESIGN.radius.innerSelected : NODE_DESIGN.radius.inner}
+            showBadge={false}
           />
 
-          {/* Handles - horizontal layout (left/right) for schema */}
-          <NodeHandles color={colors.primary} selected={selected} layout="horizontal" />
+          {/* Trait badge - top right corner */}
+          <div className="absolute top-2 right-2 z-10">
+            <span
+              className={cn(
+                'flex items-center gap-1 text-[8px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded',
+                trait === 'job' && 'animate-pulse'
+              )}
+              style={{
+                backgroundColor: `${colors.primary}25`,
+                color: colors.primary,
+                border: `1px ${traitBorder.style} ${colors.primary}50`,
+                boxShadow: `0 0 8px ${colors.primary}30`,
+              }}
+            >
+              {config && (
+                <LayerIcon
+                  layer={config.layer}
+                  size={10}
+                  strokeWidth={2.5}
+                  style={{ color: colors.primary }}
+                />
+              )}
+              {trait}
+            </span>
+          </div>
 
           {/* Content */}
-          <div className="relative px-4 py-3">
-            {/* Header: Icon + Badge */}
-            <div className="flex items-center justify-between mb-2">
-              <div className={cn('flex items-center', gapTokens.default)}>
-                {config && (
-                  <LayerIcon
-                    layer={config.layer}
-                    size={18}
-                    strokeWidth={2}
-                    className={cn(
-                      'transition-transform duration-200',
-                      (selected || isHovered) && 'scale-110'
-                    )}
-                    style={iconStyle}
-                  />
-                )}
-                <span
-                  className="text-[9px] font-bold uppercase tracking-wider"
-                  style={{ color: colors.primary }}
-                >
-                  {data.layer}
-                </span>
-              </div>
-
-              {/* Status dot */}
-              <div
-                className={cn('w-2 h-2 rounded-full', selected && 'animate-pulse')}
-                style={{
-                  background: colors.primary,
-                  boxShadow: `0 0 8px ${colors.primary}`,
-                }}
-              />
-            </div>
-
-            {/* Display Name */}
-            <h3 className="text-sm font-bold text-white truncate">
+          <div className="relative px-4 py-3 pt-8">
+            {/* Display Name - full width */}
+            <h3 className="text-sm font-bold text-white truncate mb-1">
               {data.label}
             </h3>
 
             {/* Node type */}
             <p
-              className="text-[10px] font-mono truncate mt-0.5"
+              className="text-[10px] font-mono truncate"
               style={{ color: `${colors.primary}70` }}
             >
               {data.nodeType}

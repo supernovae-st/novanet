@@ -91,8 +91,8 @@ const ToolbarButton = memo(function ToolbarButton({
             'rounded-xl',
             'transition', // Duration + easing set via style for token consistency
             // opacity.bg.light = white/[0.04]
-            // opacity.border.subtle = white/[0.08]
-            'bg-white/[0.04] border border-white/[0.08]',
+            // opacity.border.light = white/10
+            'bg-white/[0.04] border border-white/10',
             'hover:bg-white/[0.10] hover:border-white/[0.15] hover:scale-105',
             isActive && [
               'bg-accent-blue/20 border-accent-blue/30',
@@ -166,8 +166,8 @@ const LayoutButton = memo(function LayoutButton({
             'rounded-xl px-2.5',
             'transition',
             // opacity.bg.light = white/[0.04]
-            // opacity.border.subtle = white/[0.08]
-            'bg-white/[0.04] border border-white/[0.08]',
+            // opacity.border.light = white/10
+            'bg-white/[0.04] border border-white/10',
             'hover:bg-white/[0.10] hover:border-white/[0.15] hover:scale-105',
             'active:scale-95 active:bg-white/[0.15]',
             'focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-blue/50'
@@ -201,10 +201,10 @@ const LayoutButton = memo(function LayoutButton({
                 'inline-flex items-center justify-center',
                 'min-w-[28px] h-5 px-1.5',
                 // opacity.bg.medium = white/[0.06]
-                // opacity.border.light = white/[0.10]
-                'bg-white/[0.06] border border-white/[0.10] rounded',
+                // opacity.border.light = white/10
+                'bg-white/[0.06] border border-white/10 rounded',
                 'text-[10px] font-mono text-white/50',
-                'group-hover:bg-white/[0.12] group-hover:text-white/80 group-hover:border-white/[0.20]',
+                'group-hover:bg-white/[0.12] group-hover:text-white/80 group-hover:border-white/20',
                 'transition-colors'
               )}
             >
@@ -351,7 +351,7 @@ export const GraphToolbar = memo(function GraphToolbar() {
                 'transition',
                 layoutMode === 'magnetic'
                   ? 'bg-violet-500/20 text-violet-300 border border-violet-500/40'
-                  : 'bg-white/[0.04] text-white/60 border border-white/[0.08]',
+                  : 'bg-white/[0.04] text-white/60 border border-white/10',
                 'hover:bg-white/[0.10] hover:border-white/[0.15] hover:scale-105',
                 'active:scale-95 active:bg-white/[0.15]',
                 'focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/50'
@@ -386,9 +386,9 @@ export const GraphToolbar = memo(function GraphToolbar() {
                   'min-w-[28px] h-5 px-1.5',
                   layoutMode === 'magnetic'
                     ? 'bg-violet-500/20 border border-violet-500/30 text-violet-300'
-                    : 'bg-white/[0.06] border border-white/[0.10] text-white/50',
+                    : 'bg-white/[0.06] border border-white/10 text-white/50',
                   'rounded text-[10px] font-mono',
-                  'group-hover:bg-white/[0.12] group-hover:text-white/80 group-hover:border-white/[0.20]',
+                  'group-hover:bg-white/[0.12] group-hover:text-white/80 group-hover:border-white/20',
                   'transition-colors'
                 )}
               >

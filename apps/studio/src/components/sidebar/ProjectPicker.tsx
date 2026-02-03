@@ -88,7 +88,7 @@ const ProjectCard = memo(function ProjectCard({
 
       {/* Icon */}
       <FolderOpen className={cn(
-        iconSizes['2xl'],
+        iconSizes.xl,
         isAllCard ? 'opacity-60 text-white/60' : isSelected ? 'text-emerald-400' : 'text-white/60'
       )} />
 
@@ -279,7 +279,7 @@ export const ProjectPicker = memo(function ProjectPicker({
           {/* No results */}
           {filteredProjects.length === 0 && (
             <div className={pickerClasses.emptyState}>
-              <Search className={cn(iconSizes['2xl'], 'mx-auto mb-3 opacity-30')} />
+              <Search className={cn(iconSizes.xl, 'mx-auto mb-3 opacity-30')} />
               <p className="text-sm font-medium">No projects found</p>
               <p className="text-xs opacity-60 mt-1">Try a different search term</p>
             </div>

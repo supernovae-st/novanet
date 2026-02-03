@@ -205,7 +205,7 @@ export const CollapsibleSection = memo(function CollapsibleSection({
         className={cn(
           'overflow-hidden transition-all duration-300',
           isExpanded ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0',
-          showIndentLine && 'ml-6 pl-4 border-l-2 border-white/[0.08]'
+          showIndentLine && 'ml-6 pl-4 border-l-2 border-white/10'
         )}
         role="group"
         aria-label={`${label} items`}

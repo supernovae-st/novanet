@@ -68,7 +68,7 @@ const Toolbar = memo(function Toolbar({
           className={cn(
             'p-2 rounded-lg flex-shrink-0',
             'bg-white/[0.03] border border-white/[0.06]',
-            'text-white/30 hover:text-white/60 hover:bg-white/[0.06] hover:border-white/[0.10]',
+            'text-white/30 hover:text-white/60 hover:bg-white/[0.06] hover:border-white/10',
             'transition-all duration-200',
             isLoading && 'text-white/20 cursor-not-allowed'
           )}

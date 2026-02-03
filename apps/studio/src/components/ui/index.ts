@@ -42,3 +42,7 @@ export { SegmentedTabs } from './SegmentedTabs';
 
 // Animation components
 export { MatrixRainOverlay } from './MatrixRainOverlay';
+export { MatrixExplosionOverlay } from './MatrixExplosionOverlay';
+
+// Easter egg
+export { EasterEggButton } from './EasterEggButton';

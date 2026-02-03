@@ -266,8 +266,8 @@ export const QueryPill = memo(function QueryPill({ className, onRun }: QueryPill
       <div
         className={cn(
           // Solid dark - matches Pill component
-          'relative flex items-center gap-5 px-6 h-20 rounded-2xl',
-          'bg-[#0a0a0f] border border-white/[0.10]',
+          'relative flex items-center gap-5 px-6 h-20 rounded-2xl font-mono',
+          'bg-[#0a0a0f] border border-white/10',
           'shadow-2xl shadow-black/60',
           'ring-1 ring-white/[0.03] ring-inset',
           'hover:border-white/[0.18]',
