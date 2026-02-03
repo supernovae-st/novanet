@@ -1,14 +1,16 @@
 'use client';
 
 /**
- * EdgeDetailsPanel - Details display for selected edges/relations
+ * ArcDetailsPanel - Details display for selected arcs (relationships)
  *
  * Features:
- * - Relation type with color coding
+ * - Arc type with color coding
  * - Source and target node navigation
- * - Edge properties display
+ * - Arc properties display
  * - Copy functionality
  * - Unified design with NodeDetailsPanel
+ *
+ * v9.5.0 — Arc terminology
  */
 
 import { useState, useMemo, memo } from 'react';
@@ -34,11 +36,15 @@ const HashIcon = CONTENT_ICONS.id;
 const ArrowRightIcon = ACTION_ICONS.target;
 const LinkIcon = GRAPH_ICONS.link;
 
-interface EdgeDetailsPanelProps {
-  edge: GraphEdge | null;
+interface ArcDetailsPanelProps {
+  /** The arc to display (uses GraphEdge for React Flow compatibility) */
+  arc: GraphEdge | null;
 }
 
-export const EdgeDetailsPanel = memo(function EdgeDetailsPanel({ edge }: EdgeDetailsPanelProps) {
+/** @deprecated Use ArcDetailsPanel instead */
+export type EdgeDetailsPanelProps = ArcDetailsPanelProps;
+
+export const ArcDetailsPanel = memo(function ArcDetailsPanel({ arc }: ArcDetailsPanelProps) {
   const [expandedSections, setExpandedSections] = useState<Set<string>>(
     new Set(['nodes', 'properties', 'json'])
   );
@@ -61,23 +67,23 @@ export const EdgeDetailsPanel = memo(function EdgeDetailsPanel({ edge }: EdgeDet
 
   // Get source and target nodes
   const { sourceNode, targetNode } = useMemo(() => {
-    if (!edge) return { sourceNode: null, targetNode: null };
+    if (!arc) return { sourceNode: null, targetNode: null };
     return {
-      sourceNode: getNodeById(edge.source) || null,
-      targetNode: getNodeById(edge.target) || null,
+      sourceNode: getNodeById(arc.source) || null,
+      targetNode: getNodeById(arc.target) || null,
     };
-  }, [edge, getNodeById]);
+  }, [arc, getNodeById]);
 
-  if (!edge) {
+  if (!arc) {
     return (
       <div className="h-full flex items-center justify-center p-8">
-        <p className="text-sm text-white/40">No relation selected</p>
+        <p className="text-sm text-white/40">No arc selected</p>
       </div>
     );
   }
 
-  const colors = getRelationColors(edge.type);
-  const dataEntries = edge.data ? Object.entries(edge.data) : [];
+  const colors = getRelationColors(arc.type);
+  const dataEntries = arc.data ? Object.entries(arc.data) : [];
 
   return (
     <div className={panelClasses.container}>
@@ -99,22 +105,22 @@ export const EdgeDetailsPanel = memo(function EdgeDetailsPanel({ edge }: EdgeDet
           }}
         >
           <LinkIcon className={iconSizes.sm} />
-          Relation
+          Arc
         </div>
 
-        {/* Relation Type */}
+        {/* Arc Type */}
         <h2 className="text-xl font-bold text-white mb-2">
-          {formatRelationType(edge.type)}
+          {formatArcType(arc.type)}
         </h2>
 
         {/* ID with copy */}
         <div className={cn('flex items-center text-sm', gapTokens.default)}>
           <HashIcon className={cn(iconSizes.xs, 'text-white/40')} />
           <span className="font-mono text-white/60 truncate flex-1">
-            {edge.id}
+            {arc.id}
           </span>
           <CopyButton
-            onCopy={() => copyToClipboard(edge.id, 'id')}
+            onCopy={() => copyToClipboard(arc.id, 'id')}
             isCopied={copiedField === 'id'}
             label="Copy ID to clipboard"
             size="sm"
@@ -151,7 +157,7 @@ export const EdgeDetailsPanel = memo(function EdgeDetailsPanel({ edge }: EdgeDet
                 }}
               >
                 <ArrowRightIcon className={iconSizes.xs} />
-                {edge.type}
+                {arc.type}
               </div>
             </div>
 
@@ -197,8 +203,8 @@ export const EdgeDetailsPanel = memo(function EdgeDetailsPanel({ edge }: EdgeDet
           onToggle={() => toggleSection('json')}
         >
           <JsonView
-            data={edge}
-            onCopy={() => copyToClipboard(JSON.stringify(edge, null, 2), 'json')}
+            data={arc}
+            onCopy={() => copyToClipboard(JSON.stringify(arc, null, 2), 'json')}
             isCopied={copiedField === 'json'}
           />
         </CollapsibleSection>
@@ -207,11 +213,14 @@ export const EdgeDetailsPanel = memo(function EdgeDetailsPanel({ edge }: EdgeDet
   );
 });
 
+/** @deprecated Use ArcDetailsPanel instead */
+export const EdgeDetailsPanel = ArcDetailsPanel;
+
 // =============================================================================
 // Helpers
 // =============================================================================
 
-function formatRelationType(type: string): string {
+function formatArcType(type: string): string {
   return type
     .replace(/_/g, ' ')
     .toLowerCase()

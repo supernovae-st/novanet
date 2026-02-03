@@ -4,7 +4,7 @@ export { DatabaseInfoPanel } from './DatabaseInfoPanel';
 
 // Detail panels
 export { NodeDetailsPanel } from './NodeDetailsPanel';
-export { EdgeDetailsPanel } from './EdgeDetailsPanel';
+export { ArcDetailsPanel, EdgeDetailsPanel } from './ArcDetailsPanel';
 
 // Filter pickers
 export { LocalePicker } from './LocalePicker';

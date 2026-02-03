@@ -5,7 +5,7 @@
  *
  * CANONICAL COMPONENT - Use this for collapsible sections in detail panels:
  * - NodeDetailsPanel (properties, relationships)
- * - EdgeDetailsPanel (edge details)
+ * - ArcDetailsPanel (arc details)
  *
  * NOTE: For filter lists (Views, Nodes, Rels, Schema tabs), use FilterTree
  * instead which provides more specialized features (tri-state checkboxes,

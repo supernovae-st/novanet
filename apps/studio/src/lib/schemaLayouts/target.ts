@@ -176,7 +176,7 @@ export function applyTargetLayout(
 
   // Create edges
   const validNodeIds = new Set(nodes.map(n => n.id));
-  hierarchy.edges.forEach((edge, index) => {
+  hierarchy.arcs.forEach((edge, index) => {
     const sourceId = `schema-${edge.sourceType}`;
     const targetId = `schema-${edge.targetType}`;
 

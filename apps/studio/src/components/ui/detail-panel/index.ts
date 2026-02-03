@@ -1,7 +1,7 @@
 /**
  * Detail Panel Components
  *
- * Shared components for detail panels (NodeDetailsPanel, EdgeDetailsPanel)
+ * Shared components for detail panels (NodeDetailsPanel, ArcDetailsPanel)
  * Reduces code duplication and ensures consistent styling.
  */
 

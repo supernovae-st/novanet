@@ -166,7 +166,7 @@ function buildElkGraph(hierarchy: HierarchicalSchemaData): ElkNode {
   }
 
   // Create edges
-  hierarchy.edges.forEach((edge, index) => {
+  hierarchy.arcs.forEach((edge, index) => {
     // Handle both single and array source/target types
     const sources = Array.isArray(edge.sourceType)
       ? edge.sourceType.map(t => `schema-${t}`)
@@ -291,7 +291,7 @@ function convertToReactFlow(
   // Create edges (handle both single and array source/target types)
   const validNodeIds = new Set(nodes.map(n => n.id));
   let edgeIndex = 0;
-  for (const edge of hierarchy.edges) {
+  for (const edge of hierarchy.arcs) {
     const sources = Array.isArray(edge.sourceType)
       ? edge.sourceType.map(t => `schema-${t}`)
       : [`schema-${edge.sourceType}`];
@@ -338,7 +338,7 @@ function applyEdgeAwareGridLayout(
 
   // Build adjacency for edge-aware ordering
   const adjacency = new Map<string, Set<string>>();
-  for (const edge of hierarchy.edges) {
+  for (const edge of hierarchy.arcs) {
     const sources = Array.isArray(edge.sourceType)
       ? edge.sourceType.map(String)
       : [String(edge.sourceType)];
@@ -598,7 +598,7 @@ function applyEdgeAwareGridLayout(
   const validNodeIds = new Set(nodes.map(n => n.id));
   let edgeIdx = 0;
 
-  for (const edge of hierarchy.edges) {
+  for (const edge of hierarchy.arcs) {
     const sources = Array.isArray(edge.sourceType)
       ? edge.sourceType.map(t => `schema-${t}`)
       : [`schema-${edge.sourceType}`];
