@@ -1,10 +1,10 @@
 // packages/core/src/graph/generator.ts
 // Schema graph generator - Creates flat and hierarchical schema representations
-// v9.0.0
+// v9.5.0 — Arc terminology
 
 import { NODE_TYPES, NODE_REALMS, NODE_TRAITS, type NodeType, type Realm } from '../types/nodes.js';
 import { RelationRegistry } from '../schemas/relations.schema.js';
-import type { SchemaNode, SchemaEdge, SchemaGraphResult, HierarchicalSchemaData } from './types.js';
+import type { SchemaNode, SchemaArc, SchemaGraphResult, HierarchicalSchemaData } from './types.js';
 import { getLayer } from './layers.js';
 import { REALM_HIERARCHY } from './hierarchy.js';
 
@@ -99,21 +99,21 @@ const TRAIT_DESCRIPTIONS: Record<string, string> = {
 // =============================================================================
 
 /**
- * Generate flat schema graph with all 44 node types and relationships.
+ * Generate flat schema graph with all 44 node types and arcs.
  * This is the canonical representation of the NovaNet ontology.
  *
- * @returns SchemaGraphResult with nodes and edges
+ * @returns SchemaGraphResult with nodes and arcs
  *
  * @example
  * ```typescript
- * const { nodes, edges } = generateSchemaGraph();
- * console.log(`${nodes.length} nodes, ${edges.length} edges`);
- * // Output: "44 nodes, ~89 edges"
+ * const { nodes, arcs } = generateSchemaGraph();
+ * console.log(`${nodes.length} nodes, ${arcs.length} arcs`);
+ * // Output: "44 nodes, ~89 arcs"
  * ```
  */
 export function generateSchemaGraph(): SchemaGraphResult {
   const nodes: SchemaNode[] = [];
-  const edges: SchemaEdge[] = [];
+  const arcs: SchemaArc[] = [];
 
   // ==========================================================================
   // GENERATE NODES - All 44 node types
@@ -136,26 +136,26 @@ export function generateSchemaGraph(): SchemaGraphResult {
   }
 
   // ==========================================================================
-  // GENERATE EDGES - From RelationRegistry (single source of truth)
+  // GENERATE ARCS - From RelationRegistry (single source of truth)
   // ==========================================================================
 
   const validNodeTypes = new Set<string>(NODE_TYPES);
-  let edgeId = 0;
+  let arcId = 0;
 
   for (const relation of Object.values(RelationRegistry)) {
     const sourceTypes = Array.isArray(relation.from) ? relation.from : [relation.from];
     const targetTypes = Array.isArray(relation.to) ? relation.to : [relation.to];
 
-    // Create Cartesian product of edges for multi-type relations
+    // Create Cartesian product of arcs for multi-type relations
     for (const source of sourceTypes) {
       for (const target of targetTypes) {
-        // Skip edges with invalid node types
+        // Skip arcs with invalid node types
         if (!validNodeTypes.has(source) || !validNodeTypes.has(target)) {
           continue;
         }
 
-        edges.push({
-          id: `schema-edge-${edgeId++}`,
+        arcs.push({
+          id: `schema-arc-${arcId++}`,
           relationType: relation.type,
           sourceType: source as NodeType,
           targetType: target as NodeType,
@@ -167,24 +167,24 @@ export function generateSchemaGraph(): SchemaGraphResult {
     }
   }
 
-  return { nodes, edges };
+  return { nodes, arcs };
 }
 
 /**
  * Generate hierarchical schema data grouped by realm and layer.
  * Used by visualizers that need grouped layout (like Studio).
  *
- * @returns HierarchicalSchemaData with realms, nodes, edges, and stats
+ * @returns HierarchicalSchemaData with realms, nodes, arcs, and stats
  *
  * @example
  * ```typescript
  * const hierarchy = getSchemaHierarchy();
  * console.log(hierarchy.stats);
- * // Output: { totalNodes: 44, totalEdges: ~89, nodesByRealm: { project: 21, global: 15, shared: 8 } }
+ * // Output: { totalNodes: 44, totalArcs: ~89, nodesByRealm: { project: 21, global: 15, shared: 8 } }
  * ```
  */
 export function getSchemaHierarchy(): HierarchicalSchemaData {
-  const { nodes, edges } = generateSchemaGraph();
+  const { nodes, arcs } = generateSchemaGraph();
 
   // Count nodes by realm
   const nodesByRealm: Record<Realm, number> = {
@@ -200,10 +200,10 @@ export function getSchemaHierarchy(): HierarchicalSchemaData {
   return {
     realms: REALM_HIERARCHY,
     nodes,
-    edges,
+    arcs,
     stats: {
       totalNodes: nodes.length,
-      totalEdges: edges.length,
+      totalArcs: arcs.length,
       nodesByRealm,
     },
   };

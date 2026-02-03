@@ -38,17 +38,17 @@ export interface SchemaNode {
 }
 
 // =============================================================================
-// SCHEMA EDGE - Represents a relation type
+// SCHEMA ARC - Represents an arc (relationship) type
 // =============================================================================
 
 /**
- * Schema edge representing a relation type.
- * Used for schema visualization (edges between node types).
+ * Schema arc representing an arc type in the ontology.
+ * Used for schema visualization (arcs between node types).
  */
-export interface SchemaEdge {
-  /** Unique identifier (format: "schema-edge-{index}") */
+export interface SchemaArc {
+  /** Unique identifier (format: "schema-arc-{index}") */
   id: string;
-  /** The RelationType this represents */
+  /** The RelationType this represents (Neo4j relationship type) */
   relationType: RelationType;
   /** Source NodeType(s) */
   sourceType: NodeType | NodeType[];
@@ -56,11 +56,14 @@ export interface SchemaEdge {
   targetType: NodeType | NodeType[];
   /** Human-readable label */
   label: string;
-  /** Description of this relation type */
+  /** Description of this arc type */
   description: string;
   /** Cardinality (1:1, 1:N, N:1, N:M) */
   cardinality: string;
 }
+
+/** @deprecated Use SchemaArc instead */
+export type SchemaEdge = SchemaArc;
 
 // =============================================================================
 // LAYER METADATA
@@ -114,14 +117,18 @@ export interface HierarchicalSchemaData {
   realms: Record<Realm, RealmDefinition>;
   /** All schema nodes (44 nodes) */
   nodes: SchemaNode[];
-  /** All schema edges (~89 edges expanded from 50 relation types) */
-  edges: SchemaEdge[];
+  /** All schema arcs (~89 arcs expanded from 83 arc types) */
+  arcs: SchemaArc[];
+  /** @deprecated Use arcs instead */
+  edges?: SchemaArc[];
   /** Statistics */
   stats: {
     /** Total number of node types (44) */
     totalNodes: number;
-    /** Total number of edges */
-    totalEdges: number;
+    /** Total number of arcs */
+    totalArcs: number;
+    /** @deprecated Use totalArcs instead */
+    totalEdges?: number;
     /** Node counts per realm */
     nodesByRealm: Record<Realm, number>;
   };
@@ -133,11 +140,13 @@ export interface HierarchicalSchemaData {
 
 /**
  * Flat schema graph result (for simple consumers).
- * Just nodes and edges without hierarchy metadata.
+ * Just nodes and arcs without hierarchy metadata.
  */
 export interface SchemaGraphResult {
   /** All schema nodes */
   nodes: SchemaNode[];
-  /** All schema edges */
-  edges: SchemaEdge[];
+  /** All schema arcs */
+  arcs: SchemaArc[];
+  /** @deprecated Use arcs instead */
+  edges?: SchemaArc[];
 }
