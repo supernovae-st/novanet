@@ -17,7 +17,7 @@ crossterm = { version = "0.29", features = ["event-stream"], optional = true }
 tui-big-text = { version = "0.8", optional = true }
 tui-popup = { version = "0.7", optional = true }
 tui-scrollview = { version = "0.6", optional = true }
-dirs = { version = "5", optional = true }
+dirs = { version = "6", optional = true }
 unicode-width = "0.2"
 
 # Async
