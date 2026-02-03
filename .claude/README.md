@@ -2,13 +2,15 @@
 
 Claude Code configuration for the NovaNet monorepo.
 
+**Version**: v9.0.1 | **Docs**: [Claude Code Official](https://docs.anthropic.com/en/docs/claude-code)
+
 ---
 
 ## Quick Reference
 
 ```
 ╔═══════════════════════════════════════════════════════════════════════════════════════════════════╗
-║                              NOVANET DX - v9.0.0                                                  ║
+║                              NOVANET DX - v9.0.1                                                  ║
 ╠═══════════════════════════════════════════════════════════════════════════════════════════════════╣
 ║                                                                                                   ║
 ║   COMMANDS (slash commands)                                                                       ║
@@ -44,8 +46,15 @@ Claude Code configuration for the NovaNet monorepo.
 ```
 .claude/
 ├── README.md                    ← This file
-├── settings.json                ← Project settings
+├── settings.json                ← Project settings (permissions, env, hooks)
 ├── settings.local.json          ← Local overrides (gitignored)
+├── hooks/                       ← Hook scripts
+│   ├── session-start.sh         ← SessionStart: show project status
+│   └── post-edit-format.sh      ← PostToolUse: auto-format after edits
+├── rules/                       ← Path-specific rules
+│   ├── rust.md                  ← Rust patterns (tools/novanet/**/*.rs)
+│   ├── typescript.md            ← TypeScript patterns (packages/, apps/)
+│   └── cypher.md                ← Cypher patterns (packages/db/seed/)
 ├── commands/                    ← Slash commands
 │   ├── novanet-arch.md          ← /novanet-arch
 │   ├── novanet-sync.md          ← /novanet-sync
@@ -78,6 +87,54 @@ apps/studio/.claude/
 packages/core/.claude/
 └── commands/
     └── ontology-audit.md        ← /ontology-audit
+```
+
+---
+
+## Hooks
+
+Automated scripts that run at specific lifecycle events.
+
+### SessionStart Hook
+
+**File:** `.claude/hooks/session-start.sh`
+**Trigger:** When a Claude Code session starts
+
+**Output:** Shows project version, git branch, and uncommitted changes count.
+
+```
+NovaNet v9.0.1 | Branch: main | Uncommitted: 3 files
+```
+
+### PostToolUse Hook (Write|Edit)
+
+**File:** `.claude/hooks/post-edit-format.sh`
+**Trigger:** After Write or Edit tool completes
+
+**Actions:**
+- `.rs` files → `rustfmt` (edition 2021)
+- `.ts`, `.tsx`, `.js`, `.jsx`, `.json` → `prettier`
+
+---
+
+## Path-Specific Rules
+
+Rules that apply only when working with matching files.
+
+| Rule File | Paths | Content |
+|-----------|-------|---------|
+| `rust.md` | `tools/novanet/**/*.rs` | Error handling, async patterns, module structure |
+| `typescript.md` | `packages/**/*.ts`, `apps/**/*.tsx` | Type safety, React patterns, v9 terminology |
+| `cypher.md` | `packages/db/seed/**/*.cypher` | Meta-graph navigation, EdgeFamily patterns |
+
+Rules use YAML frontmatter with `paths:` field for scoping:
+
+```yaml
+---
+paths:
+  - "tools/novanet/**/*.rs"
+---
+# Rust rules here...
 ```
 
 ---
