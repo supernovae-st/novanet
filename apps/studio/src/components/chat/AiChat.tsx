@@ -155,7 +155,7 @@ export const AiChat = memo(function AiChat({
       )}
     >
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-white/[0.08]">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
         {/* opacity.border.subtle = white/[0.08] */}
         <div className={cn('flex items-center', gapTokens.spacious)}>
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-novanet-400 to-novanet-600 flex items-center justify-center shadow-lg shadow-novanet-500/20">
@@ -198,7 +198,7 @@ export const AiChat = memo(function AiChat({
         {messages.length === 0 && (
           <div className="text-center py-6">
             <div className="w-12 h-12 rounded-xl bg-novanet-500/10 border border-novanet-500/20 flex items-center justify-center mx-auto mb-4">
-              <SparklesIcon className={cn(iconSizes['2xl'], 'text-novanet-400')} />
+              <SparklesIcon className={cn(iconSizes.xl, 'text-novanet-400')} />
             </div>
             <p className="text-white/60 text-sm mb-1">
               Ask me anything about your graph
@@ -255,7 +255,7 @@ export const AiChat = memo(function AiChat({
       </div>
 
       {/* Input */}
-      <div className="p-4 border-t border-white/[0.08] bg-black/40">
+      <div className="p-4 border-t border-white/10 bg-black/40">
         {/* opacity.border.subtle = white/[0.08] */}
         <div className={cn('flex items-end', gapTokens.default)}>
           <div className="flex-1 relative">

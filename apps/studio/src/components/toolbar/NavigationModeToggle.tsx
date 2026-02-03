@@ -92,12 +92,30 @@ export const NavigationModeToggle = memo(function NavigationModeToggle({
   return (
     <div
       className={cn(
-        'flex items-center rounded-lg border border-white/10 bg-[#0d0d12]/90 backdrop-blur-sm',
+        // Outer container - bold skeuomorphic bezel
+        'relative flex items-center rounded-xl p-[3px]',
+        // Deep multi-layer background
+        'bg-gradient-to-b from-[#252530] via-[#18181f] to-[#0a0a0f]',
+        // Pronounced outer border with top highlight
+        'border border-black/60',
+        'ring-1 ring-inset ring-white/[0.06]',
+        // Heavy inner shadow for deep inset
+        'shadow-[inset_0_2px_4px_rgba(0,0,0,0.8),inset_0_-1px_0_rgba(255,255,255,0.04)]',
+        // Bold outer shadow
+        'shadow-xl shadow-black/60',
         gapTokens.compact,
-        'p-0.5',
         className
       )}
     >
+      {/* Inner track - deeply recessed groove */}
+      <div
+        className={cn(
+          'absolute inset-[3px] rounded-lg',
+          'bg-gradient-to-b from-black/70 to-black/50',
+          'shadow-[inset_0_3px_6px_rgba(0,0,0,0.9),inset_0_1px_2px_rgba(0,0,0,0.5)]'
+        )}
+      />
+
       {MODE_CONFIG.map(({ mode: m, label, icon: Icon, activeClass, description }) => {
         const isActive = m === mode;
         return (
@@ -107,11 +125,23 @@ export const NavigationModeToggle = memo(function NavigationModeToggle({
                 type="button"
                 onClick={() => handleModeClick(m)}
                 className={cn(
-                  'flex items-center rounded-md px-2.5 py-1.5 text-xs font-medium transition-all duration-150',
+                  'relative z-10 flex items-center rounded-lg px-2.5 py-1.5 text-[11px] font-semibold tracking-wide transition-all duration-150',
                   gapTokens.compact,
                   isActive
-                    ? cn(activeClass, 'border')
-                    : 'text-white/40 hover:text-white/70 hover:bg-white/[0.05] border border-transparent'
+                    ? cn(
+                        activeClass,
+                        'border',
+                        // Bold raised button - 3D pop effect
+                        'shadow-[0_3px_8px_rgba(0,0,0,0.5),0_1px_3px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.15),inset_0_-1px_0_rgba(0,0,0,0.2)]',
+                        // Slight transform for depth
+                        'translate-y-[-1px]'
+                      )
+                    : cn(
+                        'text-white/35 hover:text-white/55 border border-transparent',
+                        'hover:bg-white/[0.03]',
+                        // Pressed-in look for inactive
+                        'shadow-[inset_0_1px_2px_rgba(0,0,0,0.3)]'
+                      )
                 )}
               >
                 <Icon className="w-3.5 h-3.5" />

@@ -99,7 +99,7 @@ const ViewCard = memo(function ViewCard({
     >
       {/* Selection indicator */}
       {isSelected && (
-        <div className={cn('absolute top-3 right-3', iconSizes['2xl'], 'rounded-full bg-violet-500 flex items-center justify-center')}>
+        <div className={cn('absolute top-3 right-3', iconSizes.xl, 'rounded-full bg-violet-500 flex items-center justify-center')}>
           <Check className={cn(iconSizes.sm, 'text-white')} strokeWidth={3} />
         </div>
       )}
@@ -292,7 +292,7 @@ const ViewPickerModal = memo(function ViewPickerModal({
           {/* No results */}
           {filteredViews.length === 0 && (
             <div className={pickerClasses.emptyState}>
-              <Search className={cn(iconSizes['2xl'], 'mx-auto mb-3 opacity-30')} />
+              <Search className={cn(iconSizes.xl, 'mx-auto mb-3 opacity-30')} />
               <p className="text-sm font-medium">No views found</p>
               <p className="text-xs opacity-60 mt-1">Try a different search term</p>
             </div>

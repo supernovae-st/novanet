@@ -309,7 +309,7 @@ export const LocalePicker = memo(function LocalePicker({
           {/* No results */}
           {filteredLocales.length === 0 && (
             <div className={pickerClasses.emptyState}>
-              <Search className={cn(iconSizes['2xl'], 'mx-auto mb-3 opacity-30')} />
+              <Search className={cn(iconSizes.xl, 'mx-auto mb-3 opacity-30')} />
               <p className="text-sm font-medium">No languages found</p>
               <p className="text-xs opacity-60 mt-1">Try a different search term</p>
             </div>

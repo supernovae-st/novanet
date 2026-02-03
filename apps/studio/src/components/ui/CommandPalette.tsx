@@ -26,7 +26,6 @@ import {
   LayoutGrid,
   Globe,
   Keyboard,
-  PanelLeft,
   PanelRight,
   Layers,
   Box,
@@ -316,7 +315,6 @@ interface UseCommandPaletteOptions {
   toggleFocusMode: () => void;
   toggleMinimap: () => void;
   toggleEdgeLabels: () => void;
-  toggleSidebar: () => void;
   openShortcuts: () => void;
   applyViewPresetByShortcut: (key: string) => void;
   onRefresh: () => void;
@@ -329,7 +327,6 @@ export function useCommandPalette(options: UseCommandPaletteOptions): CommandIte
     toggleFocusMode,
     toggleMinimap,
     toggleEdgeLabels,
-    toggleSidebar,
     openShortcuts,
     applyViewPresetByShortcut,
     onRefresh,
@@ -403,16 +400,6 @@ export function useCommandPalette(options: UseCommandPaletteOptions): CommandIte
         category: 'View',
         action: toggleEdgeLabels,
       },
-      {
-        id: 'sidebar',
-        title: 'Toggle Sidebar',
-        description: 'Show/hide the left sidebar',
-        shortcut: ['['],
-        icon: <PanelLeft className={iconSizes.md} />,
-        category: 'View',
-        action: toggleSidebar,
-      },
-
       // Quick Views (Presets)
       {
         id: 'preset-1',
@@ -483,7 +470,6 @@ export function useCommandPalette(options: UseCommandPaletteOptions): CommandIte
       toggleFocusMode,
       toggleMinimap,
       toggleEdgeLabels,
-      toggleSidebar,
       openShortcuts,
       applyViewPresetByShortcut,
       onRefresh,

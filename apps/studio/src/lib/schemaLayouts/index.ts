@@ -3,6 +3,8 @@
  *
  * Routes layout requests to specialized layout algorithms based on direction.
  * Each layout is optimized for different visualization needs.
+ *
+ * v9.5: Default layout changed to Hierarchical (pure graph nodes, no containers)
  */
 
 export * from './types';
@@ -11,49 +13,34 @@ export { applyStackedLayout } from './stacked';
 export { applyTargetLayout } from './target';
 export { applyForceClusterLayout } from './forceClusters';
 export { applyElkLayeredLayout, applyElkLayeredLayoutSync } from './elkLayered';
+export { applyHierarchicalLayout } from './hierarchical';
 
 
 import type { HierarchicalSchemaData } from '@novanet/core/graph';
 import type { LayoutDirection, SchemaLayoutResult } from './types';
-import { applySwimlaneLayout } from './swimlanes';
-import { applyStackedLayout } from './stacked';
-import { applyTargetLayout } from './target';
-import { applyForceClusterLayout } from './forceClusters';
-import { applyElkLayeredLayoutSync } from './elkLayered';
+import { applyHierarchicalLayout } from './hierarchical';
 
 /**
  * Apply schema layout based on direction
  *
- * Layout Mapping:
- * - dagre → ELK Layered (DEFAULT) - Sugiyama algorithm with edge crossing minimization
- * - LR    → Swimlanes - Horizontal bands per scope
- * - TB    → Stacked - Vertical stacked scopes
- * - radial → Target - Concentric rings by scope
- * - force → Force Clusters - Physics-based clustering
+ * Layout Mapping (v9.5):
+ * - dagre → Hierarchical (DEFAULT) - Pure graph nodes with Dagre LR layout
+ * - LR    → Hierarchical - Same as dagre (Realm → Layer → Kind)
+ * - TB    → Hierarchical - Same layout (may add TB variant later)
+ * - radial → Hierarchical - Same layout (may add radial variant later)
+ * - force → Hierarchical - Same layout (may add force variant later)
  *
- * Note: ELK Layered analyzes graph structure to minimize edge crossings,
- * producing much cleaner layouts than simple grid/treemap approaches.
+ * Note: v9.5 replaces container-based layouts with pure graph visualization.
+ * All nodes (Realm, Layer, Kind) are regular nodes connected by edges.
  *
  * @param hierarchy - Schema hierarchy data
  * @param direction - Layout direction from toolbar
  */
 export function applySchemaLayoutByDirection(
   hierarchy: HierarchicalSchemaData,
-  direction: LayoutDirection
+  _direction: LayoutDirection
 ): SchemaLayoutResult {
-  switch (direction) {
-    case 'dagre':
-      // Use ELK-based edge-aware layout for crossing minimization
-      return applyElkLayeredLayoutSync(hierarchy);
-    case 'LR':
-      return applySwimlaneLayout(hierarchy);
-    case 'TB':
-      return applyStackedLayout(hierarchy);
-    case 'radial':
-      return applyTargetLayout(hierarchy);
-    case 'force':
-      return applyForceClusterLayout(hierarchy);
-    default:
-      return applyElkLayeredLayoutSync(hierarchy);
-  }
+  // v9.5: Use hierarchical layout for all directions
+  // This removes container nodes and shows pure graph with edges
+  return applyHierarchicalLayout(hierarchy);
 }

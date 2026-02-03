@@ -18,7 +18,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState, lazy, Suspense } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { Box, PanelLeft, Keyboard, X, Network, Table2, Code, Loader2 } from 'lucide-react';
+import { Box, Keyboard, X, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { iconSizes, gapTokens } from '@/design/tokens';
 import { DEFAULT_FETCH_LIMIT } from '@/config/constants';
@@ -44,8 +44,7 @@ const Graph2D = lazy(() =>
   import('@/components/graph').then((mod) => ({ default: mod.Graph2D }))
 );
 import { GraphErrorBoundary } from '@/components/ui/ErrorBoundary';
-import { StatsCounter, Pill, Divider, RefreshButton, LayerIcon, MatrixRainOverlay } from '@/components/ui';
-import { SidebarTabs } from '@/components/sidebar/SidebarTabs';
+import { StatsCounter, Pill, Divider, RefreshButton, LayerIcon, MatrixRainOverlay, MatrixExplosionOverlay } from '@/components/ui';
 import { NavigationModeToggle } from '@/components/toolbar/NavigationModeToggle';
 import { NodeDetailsPanel } from '@/components/sidebar/NodeDetailsPanel';
 import { EdgeDetailsPanel } from '@/components/sidebar/EdgeDetailsPanel';
@@ -167,6 +166,10 @@ export default function HomePage() {
   // Stats pill expansion (hover nodes/relations to see type breakdown)
   const [expandedView, setExpandedView] = useState<ExpandedViewType>(null);
   const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+  // META badge hover triggers Matrix effect on pill
+  const [isMetaHovered, setIsMetaHovered] = useState(false);
+  // Easter egg - Matrix explosion effect
+  const [isExplosionActive, setIsExplosionActive] = useState(false);
 
   const openExpanded = useCallback((view: ExpandedViewType) => {
     if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
@@ -491,13 +494,6 @@ export default function HomePage() {
         }
       }
 
-      // Sidebar toggle
-      if (e.key === '[') {
-        e.preventDefault();
-        uiActions.toggleSidebar();
-        return;
-      }
-
       // Close panel (deselect) with ]
       if (e.key === ']') {
         e.preventDefault();
@@ -574,21 +570,12 @@ export default function HomePage() {
     uiActions.setSelectedEdge(null);
   }, [uiActions]);
 
-  // View mode setters
-  const handleSetQueryViewMode = useCallback(
-    (mode: 'graph' | 'table' | 'raw') => {
-      queryActions.setViewMode(mode);
-    },
-    [queryActions]
-  );
-
   // Command palette commands
   const commands = useCommandPalette({
     toggleViewMode: uiActions.toggleViewMode,
     toggleFocusMode: uiActions.toggleFocusMode,
     toggleMinimap: uiActions.toggleMinimap,
     toggleEdgeLabels: uiActions.toggleEdgeLabels,
-    toggleSidebar: uiActions.toggleSidebar,
     openShortcuts,
     applyViewPresetByShortcut: filterActions.applyViewPresetByShortcut,
     onRefresh: handleRefresh,
@@ -606,30 +593,6 @@ export default function HomePage() {
 
       {/* Main Content */}
       <div className="flex-1 flex overflow-hidden">
-        {/* Left Sidebar - Filters & Database Info (Linear-dark) */}
-        {!uiState.focusMode && uiState.sidebarOpen && (
-          <aside className="w-80 border-r border-white/8 shrink-0 overflow-hidden z-30 bg-[#0d0d12]">
-            <SidebarTabs />
-          </aside>
-        )}
-
-        {/* Toggle sidebar button */}
-        {!uiState.focusMode && (
-          <button
-            onClick={uiActions.toggleSidebar}
-            className={cn(
-              'absolute top-1/2 -translate-y-1/2 z-20',
-              'p-2 bg-[#0d0d12] border border-white/10',
-              'hover:bg-accent-blue/15 hover:border-accent-blue/30 transition-colors duration-200',
-              'shadow-lg shadow-black/50 text-white/50 hover:text-accent-blue',
-              uiState.sidebarOpen ? 'left-[304px] rounded-r-lg' : 'left-0 rounded-r-lg'
-            )}
-            title="Toggle sidebar ([)"
-          >
-            <PanelLeft className={cn(iconSizes.md, !uiState.sidebarOpen && 'rotate-180')} />
-          </button>
-        )}
-
         {/* Canvas */}
         <main className="flex-1 relative">
           {/* Graph Canvas */}
@@ -699,7 +662,7 @@ export default function HomePage() {
                 )}
                 {/* Row 2: Stats (left) + Navigation Mode (center) + Context Picker (right) */}
                 <div className={cn('flex items-start justify-between', gapTokens.large)}>
-                  <Pill size="md" className="items-stretch py-3" glow={queryState.isExecuting || transitionState.isTransitioning} glowColor={transitionState.isTransitioning ? 'novanet' : 'emerald'}>
+                  <Pill size="md" className="items-stretch py-3" glow={queryState.isExecuting || transitionState.isTransitioning || isMetaHovered} glowColor={isMetaHovered ? 'novanet' : transitionState.isTransitioning ? 'novanet' : 'emerald'}>
                     <div className="relative z-10 flex flex-col w-full">
                       {/* Main row */}
                       <div className={cn('flex items-center', gapTokens.default)}>
@@ -712,6 +675,8 @@ export default function HomePage() {
                           onHoverRelations={() => openExpanded('relations')}
                           onHoverLeave={scheduleCloseExpanded}
                           isMetaMode={isMetaMode}
+                          onMetaHoverChange={setIsMetaHovered}
+                          onMetaClick={() => setIsExplosionActive(true)}
                         />
                         {visibleNodeCount > 0 && (
                           <>
@@ -734,10 +699,6 @@ export default function HomePage() {
                       />
                     </div>
                   </Pill>
-                  <NavigationModeToggle
-                    mode={navigationMode}
-                    onModeChange={setNavigationMode}
-                  />
                   <Pill size="md">
                     <ViewPicker />
                   </Pill>
@@ -866,73 +827,10 @@ export default function HomePage() {
               <span className="text-[10px] text-white/40 select-none pointer-events-none">
                 click inspect · dbl-click expand
               </span>
-            <Pill size="sm">
-              {/* 2D Graph / 3D Graph / Table / Raw - Unified glass segmented control */}
-              <div className="flex items-center rounded-lg p-0.5">
-                <button
-                  onClick={() => {
-                    handleSetQueryViewMode('graph');
-                    if (uiState.viewMode !== '2d') uiActions.toggleViewMode();
-                  }}
-                  className={cn(
-                    'flex items-center px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors duration-150',
-                    gapTokens.compact,
-                    queryState.viewMode === 'graph' && uiState.viewMode === '2d'
-                      ? 'bg-white/[0.10] text-white/90 border border-white/[0.15]'
-                      : 'text-white/40 border border-transparent hover:text-white/70 hover:bg-white/[0.06]'
-                  )}
-                  title="2D Graph view"
-                >
-                  <Network className={iconSizes.sm} />
-                  <span className="hidden sm:inline">2D Graph</span>
-                </button>
-                <button
-                  onClick={() => {
-                    handleSetQueryViewMode('graph');
-                    if (uiState.viewMode !== '3d') uiActions.toggleViewMode();
-                  }}
-                  className={cn(
-                    'flex items-center px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors duration-150',
-                    gapTokens.compact,
-                    queryState.viewMode === 'graph' && uiState.viewMode === '3d'
-                      ? 'bg-white/[0.10] text-white/90 border border-white/[0.15]'
-                      : 'text-white/40 border border-transparent hover:text-white/70 hover:bg-white/[0.06]'
-                  )}
-                  title="3D Graph view"
-                >
-                  <Box className={iconSizes.sm} />
-                  <span className="hidden sm:inline">3D Graph</span>
-                </button>
-                <button
-                  onClick={() => handleSetQueryViewMode('table')}
-                  className={cn(
-                    'flex items-center px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors duration-150',
-                    gapTokens.compact,
-                    queryState.viewMode === 'table'
-                      ? 'bg-white/[0.10] text-white/90 border border-white/[0.15]'
-                      : 'text-white/40 border border-transparent hover:text-white/70 hover:bg-white/[0.06]'
-                  )}
-                  title="Table view"
-                >
-                  <Table2 className={iconSizes.sm} />
-                  <span className="hidden sm:inline">Table</span>
-                </button>
-                <button
-                  onClick={() => handleSetQueryViewMode('raw')}
-                  className={cn(
-                    'flex items-center px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors duration-150',
-                    gapTokens.compact,
-                    queryState.viewMode === 'raw'
-                      ? 'bg-white/[0.10] text-white/90 border border-white/[0.15]'
-                      : 'text-white/40 border border-transparent hover:text-white/70 hover:bg-white/[0.06]'
-                  )}
-                  title="Raw JSON view"
-                >
-                  <Code className={iconSizes.sm} />
-                  <span className="hidden sm:inline">Raw</span>
-                </button>
-              </div>
-            </Pill>
+              <NavigationModeToggle
+                mode={navigationMode}
+                onModeChange={setNavigationMode}
+              />
             </div>
 
             {/* Focus mode indicator */}
@@ -988,6 +886,13 @@ export default function HomePage() {
         isOpen={aiSearchOpen}
         onClose={closeAiSearch}
         onExecuteQuery={executeQuery}
+      />
+
+      {/* Easter Egg - Matrix Explosion Effect */}
+      <MatrixExplosionOverlay
+        isActive={isExplosionActive}
+        onComplete={() => setIsExplosionActive(false)}
+        navigationMode={navigationMode}
       />
     </div>
   );

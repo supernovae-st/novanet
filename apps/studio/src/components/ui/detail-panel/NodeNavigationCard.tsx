@@ -41,7 +41,7 @@ export const NodeNavigationCard = memo(function NodeNavigationCard({
     return (
       <div
         className={cn(
-          'p-3 rounded-xl bg-white/[0.04] border border-white/[0.08] text-center',
+          'p-3 rounded-xl bg-white/[0.04] border border-white/10 text-center',
           className
         )}
       >

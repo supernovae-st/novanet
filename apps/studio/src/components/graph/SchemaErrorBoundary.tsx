@@ -227,8 +227,8 @@ export class SchemaErrorBoundary extends Component<
               cn('flex items-center justify-center', gapTokens.default),
               'w-full px-4 py-3 rounded-lg',
               'bg-white/10 hover:bg-white/15',
-              // opacity.border.light = white/[0.08]
-              'border border-white/[0.08] hover:border-white/[0.15]',
+              // opacity.border.light = white/10
+              'border border-white/10 hover:border-white/[0.15]',
               'text-white/90 text-sm font-medium',
               'transition-colors duration-200',
               'focus:outline-none focus:ring-2 focus:ring-white/20 focus:ring-offset-2 focus:ring-offset-black'

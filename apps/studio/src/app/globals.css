@@ -12,6 +12,20 @@
   }
 }
 
+/* Subtle glow pulse animation for Meta badge - very subtle in base state */
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 2px rgba(59, 130, 246, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  }
+  50% {
+    box-shadow:
+      0 0 4px rgba(59, 130, 246, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+}
+
 /* Custom scrollbar */
 @layer utilities {
   .scrollbar-thin {
@@ -41,18 +55,22 @@
 
 /* ============================================================================
    GLASS MORPHISM - Premium Components
+
+   CSS classes for direct use. For JS composition, use `glassClasses` from tokens.ts.
+   Mapping: .glass ≈ glassClasses.medium, .glass-floating ≈ glassClasses.floating
    ============================================================================ */
 @layer components {
+  /* Border scale (unified): subtle=6%, light=10%, medium=12%, strong=15%, heavy=20% */
   .glass {
     @apply backdrop-blur-xl rounded-xl;
     background: hsl(var(--surface-1));
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.12); /* medium (12%) */
   }
 
   .glass-floating {
     @apply backdrop-blur-xl rounded-2xl;
     background: hsl(var(--surface-2));
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.15); /* strong (15%) */
     box-shadow:
       0 25px 50px -12px rgba(0, 0, 0, 0.7),
       0 0 0 1px rgba(255, 255, 255, 0.06) inset,
@@ -209,20 +227,6 @@ body {
 
 .animate-shine-beam {
   animation: shine-beam 4s ease-in-out infinite;
-}
-
-/* Glow pulse for hover/active states */
-@keyframes glow-pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.7;
-  }
-}
-
-.animate-glow-pulse {
-  animation: glow-pulse 2s ease-in-out infinite;
 }
 
 /* Floating animation for panels */
@@ -813,16 +817,16 @@ body {
     --radius: 0.75rem;
 
     /* ========================================
-       GLASS TOKENS (boosted for visibility)
-       Research: Linear/Raycast use 10-12% border opacity
+       GLASS TOKENS - Unified border scale
+       subtle=6%, light=10%, medium=12%, strong=15%, heavy=20%
        ======================================== */
-    --glass-bg: 240 8% 8%;           /* Boosted from 5% for card visibility */
-    --glass-bg-hover: 240 6% 12%;    /* Boosted from 10% */
-    --glass-border: 0 0% 100% / 15%; /* Boosted from 12% */
-    --glass-border-hover: 0 0% 100% / 22%;
-    --glass-border-active: 0 0% 100% / 35%;
+    --glass-bg: 240 8% 8%;
+    --glass-bg-hover: 240 6% 12%;
+    --glass-border: 0 0% 100% / 12%;       /* medium */
+    --glass-border-hover: 0 0% 100% / 15%; /* strong */
+    --glass-border-active: 0 0% 100% / 20%; /* heavy */
     --glass-blur: 16px;
-    --glass-highlight: 0 0% 100% / 8%; /* Boosted from 6% */
+    --glass-highlight: 0 0% 100% / 6%;     /* subtle */
 
     /* ========================================
        SURFACE LAYERS (5% minimum step hierarchy)
@@ -869,6 +873,139 @@ body {
     --text-secondary: 0 0% 80%;
     --text-muted: 0 0% 65%;
     --text-disabled: 0 0% 45%;
+  }
+}
+
+/* ========================================
+   EASTER EGG - Matrix Glitch Effects
+   ======================================== */
+
+/* Global glitch state - applied to body */
+.matrix-glitch-active {
+  /* CSS custom properties set by JS */
+  --matrix-color: #60a5fa;
+  --matrix-glow: rgba(96, 165, 250, 0.6);
+}
+
+/* Shake animation for UI elements when glitch is active */
+.matrix-glitch-active [class*="rounded-2xl"],
+.matrix-glitch-active [class*="Pill"] {
+  animation: uiShake 0.15s ease-in-out 3;
+}
+
+/* Glow pulse on all interactive elements */
+.matrix-glitch-active button,
+.matrix-glitch-active [role="button"] {
+  animation: uiGlowPulse 0.3s ease-out 2;
+  box-shadow: 0 0 20px var(--matrix-glow), 0 0 40px var(--matrix-glow);
+}
+
+/* Border color flash */
+.matrix-glitch-active [class*="border"] {
+  border-color: var(--matrix-color) !important;
+  transition: border-color 0.1s ease-out;
+}
+
+@keyframes uiShake {
+  0%, 100% { transform: translateX(0) translateY(0); }
+  25% { transform: translateX(-3px) translateY(1px); }
+  50% { transform: translateX(3px) translateY(-1px); }
+  75% { transform: translateX(-2px) translateY(2px); }
+}
+
+@keyframes uiGlowPulse {
+  0% { box-shadow: 0 0 5px var(--matrix-glow); }
+  50% { box-shadow: 0 0 30px var(--matrix-glow), 0 0 60px var(--matrix-glow); }
+  100% { box-shadow: 0 0 10px var(--matrix-glow); }
+}
+
+/* Flash burst on explosion start */
+@keyframes flashBurst {
+  0% {
+    opacity: 1;
+    transform: scale(0.5);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+
+/* Matrix rain falling animation */
+@keyframes rainFall {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
+
+/* Mode name reveal animation */
+@keyframes modeReveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) translateY(20px);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1) translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Text glitch effect */
+@keyframes textGlitch {
+  0% {
+    opacity: 0;
+    transform: translateX(-10px) skewX(-5deg);
+    filter: blur(10px);
+  }
+  20% {
+    opacity: 1;
+    transform: translateX(5px) skewX(2deg);
+    filter: blur(0);
+  }
+  40% {
+    transform: translateX(-3px) skewX(-1deg);
+  }
+  60% {
+    transform: translateX(2px) skewX(1deg);
+  }
+  80% {
+    transform: translateX(-1px) skewX(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) skewX(0);
+    filter: blur(0);
+  }
+}
+
+/* Particle explosion outward */
+@keyframes particleExplode {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0;
   }
 }
 

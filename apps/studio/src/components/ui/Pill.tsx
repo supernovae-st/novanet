@@ -131,7 +131,7 @@ export const Pill = memo(function Pill({
         'relative flex items-center rounded-2xl',
         // Solid dark - opaque, no blur
         'bg-[#0a0a0f]',
-        'border border-white/[0.10]',
+        'border border-white/10',
         // Deep shadow for float
         'shadow-2xl shadow-black/60',
         // Inner highlight for depth

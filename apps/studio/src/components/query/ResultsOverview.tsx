@@ -8,16 +8,16 @@
  * "35 nodes" hover: nodes only. "89 relations" hover: relations only.
  */
 
-import { useMemo, memo } from 'react';
+import { useMemo, memo, useCallback } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { gapTokens } from '@/design/tokens';
 import { useFilteredGraph } from '@/hooks/useFilteredGraph';
+import { useFilterStore } from '@/stores/filterStore';
 import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
-import { NODE_REALMS } from '@novanet/core/types';
-import { NODE_LAYERS, type Layer } from '@novanet/core/graph';
+import type { Layer } from '@novanet/core/graph';
 import { relationshipTypeConfigs, type RelationshipCategory } from '@/config/relationshipTypes';
-import { LayerIcon, ProgressBar } from '@/components/ui';
+import { LayerIcon } from '@/components/ui';
 import { GRAPH_ICONS } from '@/config/iconSystem';
 import type { NodeType } from '@/types';
 
@@ -66,209 +66,121 @@ interface ResultsOverviewProps {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════ */
-/*  Compact badge (top row): Icon + Count, hover → name slides in            */
+/*  UnifiedBadge - Single consistent style for all badges                     */
+/*                                                                            */
+/*  Variants:                                                                 */
+/*  - node: LayerIcon (●) + label + count                                     */
+/*  - relation: ArrowRight (→) + label + count                                */
+/*  - realm: emoji + label + count                                            */
+/*  - layer: emoji + label + count                                            */
+/*                                                                            */
+/*  Consistent dimensions: h-7, px-2.5, rounded-lg, border-white/10           */
 /* ═══════════════════════════════════════════════════════════════════════════ */
 
-function TypeBadge({ item }: { item: TypeCountItem }) {
-  return (
-    <span
-      className={cn(
-        'group/badge flex items-center gap-1.5 pl-1.5 pr-2 py-1 rounded-lg',
-        'whitespace-nowrap cursor-default',
-        'bg-white/[0.05] border border-white/[0.06]',
-        'hover:bg-white/[0.10] hover:border-white/[0.15]',
-        'transition-all duration-150'
-      )}
-      title={`${item.type}: ${item.count} nodes`}
-    >
-      <LayerIcon
-        layer={item.category as Layer}
-        size={13}
-        strokeWidth={2.5}
-        className="shrink-0 transition-transform duration-150 group-hover/badge:scale-110"
-        style={{
-          color: item.color,
-          filter: `drop-shadow(0 0 4px ${item.color}60)`,
-        }}
-      />
-      {/* Type name - slides in on hover */}
-      <span className={cn(
-        'text-[11px] text-white/50 overflow-hidden',
-        'max-w-0 group-hover/badge:max-w-[120px]',
-        'transition-all duration-150 ease-out'
-      )}>
-        {item.type}
-      </span>
-      <span
-        className="text-sm font-bold tabular-nums"
-        style={{
-          color: item.color,
-          textShadow: `0 0 8px ${item.color}40`,
-        }}
-      >
-        {item.count}
-      </span>
-    </span>
-  );
+interface UnifiedBadgeProps {
+  item: TypeCountItem;
+  variant: 'node' | 'relation' | 'realm' | 'layer';
+  index?: number;
+  onClick?: () => void;
+  isEnabled?: boolean;
+  showLabel?: boolean;
+  /** Emoji for realm/layer variants */
+  emoji?: string;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════ */
-/*  Node type pill: Icon + Name + Count (tiny, inline)                        */
-/* ═══════════════════════════════════════════════════════════════════════════ */
+function UnifiedBadge({
+  item,
+  variant,
+  index = 0,
+  onClick,
+  isEnabled = true,
+  showLabel = true,
+  emoji,
+}: UnifiedBadgeProps) {
+  const isClickable = !!onClick;
+  const Component = isClickable ? 'button' : 'span';
 
-function NodeTypePill({ item, index }: { item: TypeCountItem; index: number }) {
+  // Get title based on variant
+  const getTitle = () => {
+    const clickHint = isClickable ? ` (click to ${isEnabled ? 'hide' : 'show'})` : '';
+    switch (variant) {
+      case 'node': return `${item.type}: ${item.count} nodes${clickHint}`;
+      case 'relation': return `${item.type}: ${item.count} relationships`;
+      case 'realm': return `${item.type}: ${item.count} loaded${clickHint}`;
+      case 'layer': return `${item.type}: ${item.count} loaded${clickHint}`;
+    }
+  };
+
   return (
-    <span
+    <Component
+      type={isClickable ? 'button' : undefined}
+      onClick={onClick}
       className={cn(
-        'inline-flex items-center gap-1 px-2 py-0.5 rounded-full h-7',
-        'bg-white/[0.04]',
+        // Unified dimensions
+        'inline-flex items-center gap-1.5 h-7 px-2.5 rounded-lg',
+        'whitespace-nowrap',
+        // Border and background
+        'border transition-all duration-150',
+        isEnabled
+          ? 'bg-white/[0.03] border-white/10 hover:bg-white/[0.06] hover:border-white/[0.15]'
+          : 'bg-white/[0.02] border-white/[0.06] opacity-50 hover:opacity-80',
+        // Cursor
+        isClickable ? 'cursor-pointer' : 'cursor-default',
+        // Animation
         'animate-[badgeIn_200ms_ease-out_both]'
       )}
       style={{ animationDelay: `${index * 15}ms` }}
+      title={getTitle()}
     >
-      <LayerIcon
-        layer={item.category as Layer}
-        size={11}
-        strokeWidth={2.5}
-        className="shrink-0"
-        style={{ color: item.color }}
-      />
-      <span className="text-[11px] text-white/50 truncate max-w-[80px]">{item.type}</span>
-      <span
-        className="text-[10px] font-semibold tabular-nums"
-        style={{ color: item.color }}
-      >
-        {item.count}
-      </span>
-    </span>
-  );
-}
-
-function ExpandedRelationBadge({ item, index, maxCount }: { item: TypeCountItem; index: number; maxCount: number }) {
-  return (
-    <div
-      className={cn(
-        'flex items-center gap-2 px-2.5 py-1.5 rounded-lg min-w-[200px]',
-        'bg-white/[0.04] border border-white/[0.06]',
-        'animate-[badgeIn_200ms_ease-out_both]'
-      )}
-      style={{ animationDelay: `${index * 20}ms` }}
-    >
-      <ArrowRight
-        size={12}
-        strokeWidth={2.5}
-        className="shrink-0"
-        style={{
-          color: item.color,
-          filter: `drop-shadow(0 0 3px ${item.color}50)`,
-        }}
-      />
-      <span className="text-[11px] text-white/50 w-32 truncate">{item.type}</span>
-      <ProgressBar value={item.count} max={maxCount} color={item.color} size="sm" className="w-12" />
-      <span
-        className="text-xs font-semibold tabular-nums min-w-[28px] text-right"
-        style={{ color: item.color, textShadow: `0 0 6px ${item.color}30` }}
-      >
-        {item.count}
-      </span>
-    </div>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════ */
-/*  Realm hero card (schema mode only)                                        */
-/* ═══════════════════════════════════════════════════════════════════════════ */
-
-function RealmHeroCard({ scope, typeCount, loadedCount, maxLoaded, index }: {
-  scope: keyof typeof REALM_CONFIG;
-  typeCount: number;
-  loadedCount: number;
-  maxLoaded: number;
-  index: number;
-}) {
-  const config = REALM_CONFIG[scope];
-  return (
-    <div
-      className={cn(
-        'flex items-center gap-4 rounded-xl h-20',
-        'animate-[badgeIn_200ms_ease-out_both]'
-      )}
-      style={{
-        animationDelay: `${index * 40}ms`,
-        background: `linear-gradient(135deg, ${config.color}15, ${config.color}08)`,
-        borderWidth: '1px 1px 1px 4px',
-        borderStyle: 'solid',
-        borderColor: `${config.color}25`,
-        borderLeftColor: config.color,
-        boxShadow: `0 0 30px ${config.color}15, 0 4px 12px rgba(0,0,0,0.3)`,
-        paddingLeft: '16px',
-        paddingRight: '16px',
-      }}
-    >
-      <span className="text-3xl shrink-0">{config.emoji}</span>
-      <div className="flex-1 min-w-0">
-        <span className="text-sm font-bold block" style={{ color: config.color }}>
-          {scope}
-        </span>
-        <span className="text-xs text-white/50 block mt-0.5">
-          {typeCount} types &middot; {loadedCount} loaded
-        </span>
-        <ProgressBar
-          value={loadedCount}
-          max={maxLoaded}
-          color={config.color}
-          size="default"
-          className="mt-1.5"
+      {/* Icon - varies by variant */}
+      {variant === 'node' && (
+        <LayerIcon
+          layer={item.category as Layer}
+          size={12}
+          strokeWidth={2.5}
+          className="shrink-0"
+          style={{
+            color: item.color,
+            filter: isEnabled ? `drop-shadow(0 0 3px ${item.color}50)` : 'none',
+          }}
         />
-      </div>
-    </div>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════ */
-/*  Layer card (schema mode only)                                       */
-/* ═══════════════════════════════════════════════════════════════════════════ */
-
-function LayerCard({ layer, typeCount, loadedCount, maxLoaded, index }: {
-  layer: Layer;
-  typeCount: number;
-  loadedCount: number;
-  maxLoaded: number;
-  index: number;
-}) {
-  const config = LAYER_CONFIG[layer];
-  const realmColor = REALM_CONFIG[config.realm].color;
-  const displayName = layer.charAt(0).toUpperCase() + layer.slice(1);
-  return (
-    <div
-      className={cn(
-        'flex items-center gap-2.5 rounded-lg h-14',
-        'animate-[badgeIn_200ms_ease-out_both]'
       )}
-      style={{
-        animationDelay: `${index * 30}ms`,
-        background: `${realmColor}08`,
-        borderWidth: '2px 1px 1px 1px',
-        borderStyle: 'solid',
-        borderColor: `${realmColor}15`,
-        borderTopColor: `${realmColor}80`,
-        paddingLeft: '12px',
-        paddingRight: '12px',
-      }}
-    >
-      <span className="text-xl shrink-0">{config.emoji}</span>
-      <div className="flex-1 min-w-0">
-        <span className="text-xs font-semibold block" style={{ color: realmColor }}>
-          {displayName}
+      {variant === 'relation' && (
+        <ArrowRight
+          size={12}
+          strokeWidth={2.5}
+          className="shrink-0"
+          style={{
+            color: item.color,
+            filter: `drop-shadow(0 0 3px ${item.color}50)`,
+          }}
+        />
+      )}
+      {(variant === 'realm' || variant === 'layer') && emoji && (
+        <span className="text-xs shrink-0">{emoji}</span>
+      )}
+
+      {/* Label */}
+      {showLabel && (
+        <span className={cn(
+          'text-[11px] truncate max-w-[72px]',
+          isEnabled ? 'text-white/50' : 'text-white/30'
+        )}>
+          {item.type}
         </span>
-        <div className="flex items-center gap-2 mt-0.5">
-          <span className="text-[10px] text-white/40 shrink-0">
-            {typeCount} types &middot; {loadedCount}
-          </span>
-          <ProgressBar value={loadedCount} max={maxLoaded} color={realmColor} size="sm" className="w-12" />
-        </div>
-      </div>
-    </div>
+      )}
+
+      {/* Count */}
+      <span
+        className="text-[11px] font-semibold tabular-nums"
+        style={{
+          color: isEnabled ? item.color : `${item.color}80`,
+          textShadow: isEnabled ? `0 0 6px ${item.color}30` : 'none',
+        }}
+      >
+        {item.count}
+      </span>
+    </Component>
   );
 }
 
@@ -340,31 +252,6 @@ export const ExpandedBreakdown = memo(function ExpandedBreakdown({
       });
   }, [edges]);
 
-  // Compute max counts for progress bars (relative to max)
-  const maxRelCount = relationTypeCounts.length > 0 ? relationTypeCounts[0].count : 1;
-
-  // Type counts per scope (static: how many distinct node types belong to each scope)
-  const scopeTypeCounts = useMemo(() => {
-    const counts: Record<string, number> = { global: 0, project: 0, shared: 0 };
-    for (const scope of Object.values(NODE_REALMS)) {
-      if (scope in counts) counts[scope]++;
-    }
-    return counts;
-  }, []);
-
-  // Type counts per layer (static: how many distinct node types per layer)
-  const layerTypeCounts = useMemo(() => {
-    const counts: Record<string, number> = {};
-    for (const layer of Object.values(NODE_LAYERS)) {
-      counts[layer] = (counts[layer] || 0) + 1;
-    }
-    return counts;
-  }, []);
-
-  // Max loaded counts for progress bar scaling
-  const maxRealmLoaded = Math.max(realmCounts.global, realmCounts.project, realmCounts.shared, 1);
-  const maxLayerLoaded = Math.max(...Object.values(layerCounts), 1);
-
   const showNodes = view === 'nodes' || view === 'all';
   const showRelations = view === 'relations' || view === 'all';
   const NodeIcon = GRAPH_ICONS.node;
@@ -383,51 +270,70 @@ export const ExpandedBreakdown = memo(function ExpandedBreakdown({
             {/* Subtle separator */}
             <div className="h-px bg-white/[0.06] mb-2.5" />
 
-            {/* Schema mode: 3-tier visual hierarchy */}
+            {/* Schema mode: unified badge hierarchy */}
             {isMetaMode && showNodes && (
               <div className={showRelations ? 'mb-3' : ''}>
-                {/* Level 1: Realm Hero Cards - full-width, stacked */}
+                {/* Realms - inline badges */}
                 <SectionHeader icon={NodeIcon} label="realms" count={3} />
-                <div className="flex flex-col gap-2 mb-3">
-                  <RealmHeroCard scope="global" typeCount={scopeTypeCounts.global} loadedCount={realmCounts.global} maxLoaded={maxRealmLoaded} index={0} />
-                  <RealmHeroCard scope="project" typeCount={scopeTypeCounts.project} loadedCount={realmCounts.project} maxLoaded={maxRealmLoaded} index={1} />
-                  <RealmHeroCard scope="shared" typeCount={scopeTypeCounts.shared} loadedCount={realmCounts.shared} maxLoaded={maxRealmLoaded} index={2} />
-                </div>
-
-                {/* Level 2: Layer Cards - 2-col grid */}
-                <div className="h-px bg-white/[0.04] mb-2.5" />
-                <SectionHeader icon={NodeIcon} label="layers" count={9} />
-                <div className="grid grid-cols-2 gap-1.5 mb-3">
-                  {(['config', 'knowledge', 'foundation', 'structure', 'semantic', 'instruction', 'output', 'seo', 'geo'] as const).map((subcat, i) => (
-                    <LayerCard
-                      key={subcat}
-                      layer={subcat}
-                      typeCount={layerTypeCounts[subcat] || 0}
-                      loadedCount={layerCounts[subcat]}
-                      maxLoaded={maxLayerLoaded}
+                <div className="flex flex-wrap gap-1.5 mb-3">
+                  {(['global', 'project', 'shared'] as const).map((scope, i) => (
+                    <UnifiedBadge
+                      key={scope}
+                      item={{
+                        type: scope,
+                        count: realmCounts[scope],
+                        color: REALM_CONFIG[scope].color,
+                        category: 'foundation' as Layer,
+                      }}
+                      variant="realm"
+                      emoji={REALM_CONFIG[scope].emoji}
                       index={i}
                     />
                   ))}
                 </div>
 
-                {/* Level 3: Node Type Pills - inline flex-wrap */}
+                {/* Layers - inline badges */}
+                <div className="h-px bg-white/[0.04] mb-2.5" />
+                <SectionHeader icon={NodeIcon} label="layers" count={9} />
+                <div className="flex flex-wrap gap-1.5 mb-3">
+                  {(['config', 'knowledge', 'foundation', 'structure', 'semantic', 'instruction', 'output', 'seo', 'geo'] as const).map((layer, i) => {
+                    const config = LAYER_CONFIG[layer];
+                    const realmColor = REALM_CONFIG[config.realm].color;
+                    return (
+                      <UnifiedBadge
+                        key={layer}
+                        item={{
+                          type: layer.charAt(0).toUpperCase() + layer.slice(1),
+                          count: layerCounts[layer],
+                          color: realmColor,
+                          category: layer,
+                        }}
+                        variant="layer"
+                        emoji={config.emoji}
+                        index={i + 3}
+                      />
+                    );
+                  })}
+                </div>
+
+                {/* Node Types - inline badges */}
                 <div className="h-px bg-white/[0.04] mb-2.5" />
                 <SectionHeader icon={NodeIcon} label="node types" count={nodeTypeCounts.length} />
                 <div className="flex flex-wrap gap-1.5">
                   {nodeTypeCounts.map((item, i) => (
-                    <NodeTypePill key={item.type} item={item} index={i} />
+                    <UnifiedBadge key={item.type} item={item} variant="node" index={i + 12} />
                   ))}
                 </div>
               </div>
             )}
 
-            {/* Data mode: node type pills */}
+            {/* Data mode: node type badges */}
             {!isMetaMode && showNodes && (
               <div className={showRelations ? 'mb-3' : ''}>
                 <SectionHeader icon={NodeIcon} label="node types" count={nodeTypeCounts.length} />
                 <div className="flex flex-wrap gap-1.5">
                   {nodeTypeCounts.map((item, i) => (
-                    <NodeTypePill key={item.type} item={item} index={i} />
+                    <UnifiedBadge key={item.type} item={item} variant="node" index={i} />
                   ))}
                 </div>
               </div>
@@ -440,11 +346,11 @@ export const ExpandedBreakdown = memo(function ExpandedBreakdown({
                 <SectionHeader icon={RelIcon} label="relation types" count={relationTypeCounts.length} />
                 <div className="flex flex-wrap gap-1.5">
                   {relationTypeCounts.map((item, i) => (
-                    <ExpandedRelationBadge
+                    <UnifiedBadge
                       key={item.type}
                       item={item}
+                      variant="relation"
                       index={showNodes ? i + nodeTypeCounts.length : i}
-                      maxCount={maxRelCount}
                     />
                   ))}
                 </div>
@@ -469,6 +375,12 @@ export const ResultsOverview = memo(function ResultsOverview({
   expandedView,
 }: ResultsOverviewProps) {
   const { nodes, visibleNodeCount: totalNodes } = useFilteredGraph();
+  const toggleNodeType = useFilterStore((s) => s.toggleNodeType);
+  const enabledNodeTypes = useFilterStore((s) => s.enabledNodeTypes);
+
+  const handleToggleType = useCallback((type: NodeType) => {
+    toggleNodeType(type);
+  }, [toggleNodeType]);
 
   const { visibleCounts, overflowCount } = useMemo(() => {
     const counts = new Map<NodeType, number>();
@@ -502,8 +414,16 @@ export const ResultsOverview = memo(function ResultsOverview({
 
   return (
     <div className={cn('flex items-center', gapTokens.compact, className)}>
-      {visibleCounts.map((item) => (
-        <TypeBadge key={item.type} item={item} />
+      {visibleCounts.map((item, i) => (
+        <UnifiedBadge
+          key={item.type}
+          item={item}
+          variant="node"
+          index={i}
+          onClick={() => handleToggleType(item.type as NodeType)}
+          isEnabled={enabledNodeTypes.has(item.type as NodeType)}
+          showLabel={false}
+        />
       ))}
 
       {overflowCount > 0 && (

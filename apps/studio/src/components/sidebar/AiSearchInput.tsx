@@ -34,7 +34,7 @@ export function AiSearchInput({
         gapTokens.default,
         'rounded-lg transition-colors duration-200 text-left',
         'bg-white/[0.03] border border-white/[0.06]',
-        'hover:bg-white/[0.06] hover:border-white/[0.10]',
+        'hover:bg-white/[0.06] hover:border-white/10',
         'group cursor-pointer',
         className,
       )}

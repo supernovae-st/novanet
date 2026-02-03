@@ -69,12 +69,11 @@ import { GraphToolbar } from './GraphToolbar';
 import type { GraphNode as GraphNodeType, GraphEdge as GraphEdgeType } from '@/types';
 
 // Schema mode imports (Task 3.2)
-import { RealmGroupNode, LayerGroupNode, SchemaNode } from './schema';
+import { RealmGroupNode, LayerGroupNode, SchemaNode, MetaBadgeNode } from './schema';
 import { SchemaErrorBoundary } from './SchemaErrorBoundary';
 import { applySchemaLayout } from '@/lib/schemaLayoutELK';
 import { getSchemaHierarchy } from '@novanet/core/graph';
-import { useFilterStore } from '@/stores/filterStore';
-import type { Realm } from '@novanet/core/types';
+// v9.5: useFilterStore and Realm type removed - no longer filtering by collapsed state
 
 // =============================================================================
 // Node & Edge Types - MUST be defined outside component for performance
@@ -90,6 +89,8 @@ const nodeTypes = {
   realmGroup: RealmGroupNode,
   layerGroup: LayerGroupNode,
   schemaNode: SchemaNode,
+  // v9.5: Compact badge for Realm & Layer in hierarchical view
+  metaBadge: MetaBadgeNode,
   // Magnetic grouping attractor nodes (Task 10)
   realmAttractor: RealmAttractorNode,
   layerAttractor: LayerAttractorNode,
@@ -240,13 +241,8 @@ function Graph2DInner({
     }))
   );
 
-  // Filter store - collapsed state for schema mode (Task 3.2)
-  const { collapsedRealms, collapsedLayers } = useFilterStore(
-    useShallow((state) => ({
-      collapsedRealms: state.collapsedRealms,
-      collapsedLayers: state.collapsedLayers,
-    }))
-  );
+  // Filter store - v9.5: collapsed state no longer needed (pure graph nodes)
+  // Kept for potential future use with meta-node filtering
 
   // Animation store - Matrix transition state
   const transitionPhase = useAnimationStore((state) => state.transitionPhase);
@@ -362,7 +358,8 @@ function Graph2DInner({
     bringEdgeNodesToFront: bringSchemaEdgeNodesToFront,
   } = useGraphInteractions({ setNodes: setSchemaNodes });
 
-  // Load schema graph with ELK layout and collapsed state filtering
+  // Load schema graph with hierarchical layout (v9.5)
+  // Generates pure graph nodes (Realm, Layer, Kind) with edges
   // Responds to layoutDirection and layoutVersion changes (like data mode)
   const loadSchemaGraph = useCallback(async () => {
     setIsSchemaLayouting(true);
@@ -372,99 +369,32 @@ function Graph2DInner({
       const hierarchy = getSchemaHierarchy();
       const { nodes: layoutedNodes, edges: layoutedEdges } = await applySchemaLayout(hierarchy, layoutDirection);
 
-      // Apply collapsed state filtering (Task 3.2)
-      // Build lookup maps for parent relationships
-      const nodeMap = new Map(layoutedNodes.map((n) => [n.id, n]));
-
-      const visibleNodes = layoutedNodes.filter((node) => {
-        // Check if realm is collapsed
-        if (node.type === 'realmGroup') {
-          const realm = node.data?.realm as Realm | undefined;
-          return realm ? !collapsedRealms.includes(realm) : true;
-        }
-
-        // Check if layer is collapsed
-        if (node.type === 'layerGroup') {
-          // Check parent realm first
-          const parentRealm = nodeMap.get(node.parentId as string);
-          const parentRealmData = parentRealm?.data?.realm as Realm | undefined;
-          if (parentRealmData && collapsedRealms.includes(parentRealmData)) {
-            return false;
-          }
-          const nodeRealm = node.data?.realm as string | undefined;
-          const nodeLayer = node.data?.layer as string | undefined;
-          if (nodeRealm && nodeLayer) {
-            const key = `${nodeRealm}-${nodeLayer}`;
-            return !collapsedLayers.includes(key);
-          }
-          return true;
-        }
-
-        // Schema nodes: check both parent layer and grandparent realm
-        if (node.type === 'schemaNode') {
-          const parentLayer = nodeMap.get(node.parentId as string);
-          if (!parentLayer) return true;
-
-          // Check grandparent realm
-          const grandparentRealm = nodeMap.get(parentLayer.parentId as string);
-          const grandparentRealmData = grandparentRealm?.data?.realm as Realm | undefined;
-          if (grandparentRealmData && collapsedRealms.includes(grandparentRealmData)) {
-            return false;
-          }
-
-          // Check parent layer
-          const parentRealm = parentLayer.data?.realm as string | undefined;
-          const parentLayerName = parentLayer.data?.layer as string | undefined;
-          if (parentRealm && parentLayerName) {
-            const key = `${parentRealm}-${parentLayerName}`;
-            if (collapsedLayers.includes(key)) {
-              return false;
-            }
-          }
-        }
-
-        return true;
-      });
-
-      // Filter edges to only include those with visible source and target
-      const visibleNodeIds = new Set(visibleNodes.map((n) => n.id));
-      const visibleEdges = layoutedEdges.filter(
-        (edge) => visibleNodeIds.has(edge.source) && visibleNodeIds.has(edge.target)
-      );
-
-      // Apply initial z-index based on node type and realm
-      // Hierarchy: Shared(10) < Global(20) < Project(30) < Nodes(1000)
-      const nodesWithZIndex = visibleNodes.map((node) => {
+      // v9.5: No container filtering needed - all nodes are regular graph nodes
+      // Apply z-index based on meta type (Realm < Layer < Kind)
+      const nodesWithZIndex = layoutedNodes.map((node) => {
         let zIndex: number = Z_INDEX.BASE;
 
-        // Realm containers: realm-{Realm}
-        if (node.id.startsWith('realm-')) {
-          const realm = node.id.replace('realm-', '');
-          if (realm === 'shared') zIndex = Z_INDEX.REALM_SHARED;
-          else if (realm === 'global') zIndex = Z_INDEX.REALM_GLOBAL;
-          else if (realm === 'project') zIndex = Z_INDEX.REALM_PROJECT;
+        // Meta nodes get lower z-index so Kind nodes appear on top
+        const metaType = node.data?.metaType as string | undefined;
+        if (metaType === 'realm') {
+          zIndex = Z_INDEX.REALM_PROJECT; // Realms at base level
+        } else if (metaType === 'layer') {
+          zIndex = Z_INDEX.LAYER_PROJECT; // Layers above realms
         }
-        // Layer containers: layer-{Realm}-{LayerName}
-        else if (node.id.startsWith('layer-')) {
-          const parts = node.id.replace('layer-', '').split('-');
-          const realm = parts[0];
-          if (realm === 'shared') zIndex = Z_INDEX.LAYER_SHARED;
-          else if (realm === 'global') zIndex = Z_INDEX.LAYER_GLOBAL;
-          else if (realm === 'project') zIndex = Z_INDEX.LAYER_PROJECT;
-        }
+        // Kind nodes (metaType === 'kind' or undefined) use BASE (highest)
 
         return { ...node, zIndex };
       });
 
       setSchemaNodes(nodesWithZIndex);
-      setSchemaEdges(visibleEdges);
+      setSchemaEdges(layoutedEdges);
     } catch (error) {
       console.error('[Graph2D] Schema layout failed:', error);
       setSchemaLayoutError(error as Error);
     } finally {
       setIsSchemaLayouting(false);
     }
-  }, [collapsedRealms, collapsedLayers, layoutDirection]);
+  }, [layoutDirection]);
 
   // Load schema graph when:
   // - navigationMode changes to 'meta'
