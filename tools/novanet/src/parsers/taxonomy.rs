@@ -197,10 +197,10 @@ impl TaxonomyDoc {
                     llm_context: t.llm_context.clone(),
                 })
                 .collect(),
-            edge_families: self
+            arc_families: self
                 .arc_families
                 .iter()
-                .map(|f| crate::parsers::organizing::EdgeFamilyDef {
+                .map(|f| crate::parsers::organizing::ArcFamilyDef {
                     key: f.key.clone(),
                     display_name: f.display_name.clone(),
                     color: f.color.clone(),
@@ -359,8 +359,8 @@ arc_families:
         assert_eq!(organizing.realms[0].key, "global");
         assert_eq!(organizing.traits.len(), 1);
         assert_eq!(organizing.traits[0].key, "invariant");
-        assert_eq!(organizing.edge_families.len(), 1);
-        assert_eq!(organizing.edge_families[0].key, "ownership");
+        assert_eq!(organizing.arc_families.len(), 1);
+        assert_eq!(organizing.arc_families[0].key, "ownership");
     }
 
     #[test]
@@ -387,7 +387,11 @@ arc_families:
         assert_eq!(total_layers, 9);
 
         // Check border styles
-        let invariant = doc.node_traits.iter().find(|t| t.key == "invariant").unwrap();
+        let invariant = doc
+            .node_traits
+            .iter()
+            .find(|t| t.key == "invariant")
+            .unwrap();
         assert_eq!(invariant.border_style, Some("solid".to_string()));
         assert_eq!(invariant.unicode_border, Some("─".to_string()));
 

@@ -4,7 +4,7 @@
 //! to produce a complete graph diagram with:
 //! - Subgraphs grouped by Realm → Layer
 //! - Node styling by node_trait (Trait)
-//! - Edge styling by EdgeFamily (arrow style + color)
+//! - Edge styling by ArcFamily (arrow style + color)
 //!
 //! Output target: `packages/core/models/docs/complete-graph.md` (Markdown wrapper)
 
@@ -38,8 +38,8 @@ pub const TRAIT_EMOJI: &[(&str, &str)] = &[
     ("job", "\u{2699}\u{FE0F}"), // ⚙️
 ];
 
-/// Edge family → Mermaid arrow syntax.
-/// Sourced from `organizing-principles.yaml` edge_families section.
+/// Arc family → Mermaid arrow syntax.
+/// Sourced from `organizing-principles.yaml` arc_families section.
 pub const FAMILY_ARROWS: &[(&str, &str)] = &[
     ("ownership", "-->"),
     ("localization", "-.->"),
@@ -48,8 +48,8 @@ pub const FAMILY_ARROWS: &[(&str, &str)] = &[
     ("mining", "--o"),
 ];
 
-/// Edge family → stroke color for linkStyle.
-/// Sourced from `organizing-principles.yaml` edge_families section.
+/// Arc family → stroke color for linkStyle.
+/// Sourced from `organizing-principles.yaml` arc_families section.
 pub const FAMILY_COLORS: &[(&str, &str)] = &[
     ("ownership", "#3b82f6"),
     ("localization", "#22c55e"),
@@ -74,7 +74,7 @@ pub fn trait_emoji(behavior: &str) -> &'static str {
     }
 }
 
-/// Returns Mermaid arrow syntax for edge family (O(1) match).
+/// Returns Mermaid arrow syntax for arc family (O(1) match).
 pub fn family_arrow(family: EdgeFamily) -> &'static str {
     match family {
         EdgeFamily::Ownership => "-->",
@@ -85,7 +85,7 @@ pub fn family_arrow(family: EdgeFamily) -> &'static str {
     }
 }
 
-/// Returns stroke color for edge family (O(1) match).
+/// Returns stroke color for arc family (O(1) match).
 pub fn family_color(family: EdgeFamily) -> &'static str {
     match family {
         EdgeFamily::Ownership => "#3b82f6",
@@ -177,7 +177,7 @@ pub fn write_classdefs(out: &mut String) {
 
 /// Write edges with family-based arrow styles + `linkStyle` coloring.
 pub fn write_edges_and_styles(out: &mut String, edges: &[ExpandedEdge]) {
-    writeln!(out, "  %% Relationships (styled by edge family)").unwrap();
+    writeln!(out, "  %% Relationships (styled by arc family)").unwrap();
     let mut edge_indices_by_family: BTreeMap<String, Vec<usize>> = BTreeMap::new();
     for (i, edge) in edges.iter().enumerate() {
         let arrow = family_arrow(edge.family);
@@ -222,12 +222,7 @@ pub fn write_class_assignments(out: &mut String, nodes: &[&ParsedNode]) {
     let mut sorted: Vec<&&ParsedNode> = nodes.iter().collect();
     sorted.sort_by_key(|n| &n.def.name);
     for node in sorted {
-        writeln!(
-            out,
-            "  class {} {}",
-            node.def.name, node.def.node_trait
-        )
-        .unwrap();
+        writeln!(out, "  class {} {}", node.def.name, node.def.node_trait).unwrap();
     }
 }
 
@@ -345,7 +340,7 @@ fn render_mermaid(
         writeln!(out).unwrap();
     }
 
-    // ── Edges — styled by EdgeFamily ──────────────────────────────────────
+    // ── Edges — styled by ArcFamily ──────────────────────────────────────
     write_edges_and_styles(&mut out, &edges);
 
     // ── class assignments ─────────────────────────────────────────────────
@@ -466,7 +461,7 @@ pub fn wrap_in_markdown(mermaid_code: &str) -> String {
 mod tests {
     use super::*;
     use crate::generators::Generator;
-    use crate::parsers::organizing::{EdgeFamilyDef, LayerDef, RealmDef, TraitDef};
+    use crate::parsers::organizing::{ArcFamilyDef, LayerDef, RealmDef, TraitDef};
     use crate::parsers::relations::{Cardinality, NodeRef, RelationDef};
     use crate::parsers::yaml_node::{LocaleBehavior, NodeDef, ParsedNode};
     use std::path::PathBuf;
@@ -554,7 +549,7 @@ mod tests {
                     llm_context: "Localized.".to_string(),
                 },
             ],
-            edge_families: vec![EdgeFamilyDef {
+            arc_families: vec![ArcFamilyDef {
                 key: "ownership".to_string(),
                 display_name: "Ownership".to_string(),
                 color: "#3b82f6".to_string(),

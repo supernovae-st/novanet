@@ -291,7 +291,9 @@ mod tests {
     #[test]
     fn node_trait_all_variants() {
         for variant in ["invariant", "localized", "knowledge", "derived", "job"] {
-            let yaml = format!("node:\n  name: T\n  realm: global\n  layer: config\n  trait: {variant}\n  description: d");
+            let yaml = format!(
+                "node:\n  name: T\n  realm: global\n  layer: config\n  trait: {variant}\n  description: d"
+            );
             let doc: NodeDocument = serde_yaml::from_str(&yaml).unwrap();
             assert_eq!(doc.node.node_trait.to_string(), variant);
         }
@@ -299,7 +301,8 @@ mod tests {
 
     #[test]
     fn missing_trait_fails() {
-        let yaml = "node:\n  name: Test\n  realm: project\n  layer: foundation\n  description: test";
+        let yaml =
+            "node:\n  name: Test\n  realm: project\n  layer: foundation\n  description: test";
         let result = serde_yaml::from_str::<NodeDocument>(yaml);
         assert!(result.is_err(), "should fail without trait");
         let err_msg = result.unwrap_err().to_string();
@@ -312,7 +315,8 @@ mod tests {
 
     #[test]
     fn missing_realm_fails() {
-        let yaml = "node:\n  name: Test\n  layer: foundation\n  trait: invariant\n  description: test";
+        let yaml =
+            "node:\n  name: Test\n  layer: foundation\n  trait: invariant\n  description: test";
         let result = serde_yaml::from_str::<NodeDocument>(yaml);
         assert!(result.is_err(), "should fail without realm");
         let err_msg = result.unwrap_err().to_string();
@@ -331,7 +335,8 @@ mod tests {
 
     #[test]
     fn optional_fields_default_to_none() {
-        let yaml = "node:\n  name: Minimal\n  realm: shared\n  layer: seo\n  trait: job\n  description: d";
+        let yaml =
+            "node:\n  name: Minimal\n  realm: shared\n  layer: seo\n  trait: job\n  description: d";
         let doc: NodeDocument = serde_yaml::from_str(yaml).unwrap();
         assert!(doc.node.icon.is_none());
         assert!(doc.node.standard_properties.is_none());

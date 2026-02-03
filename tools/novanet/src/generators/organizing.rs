@@ -1,4 +1,4 @@
-//! Generate v9 Cypher for Realm, Layer, Trait, EdgeFamily meta-nodes.
+//! Generate v9 Cypher for Realm, Layer, Trait, ArcFamily meta-nodes.
 //!
 //! Reads `organizing-principles.yaml` and produces idempotent MERGE statements
 //! for the 4 taxonomy dimensions. All meta-nodes receive `:Meta` double-label.
@@ -40,11 +40,11 @@ fn generate_cypher(doc: &OrganizingDoc) -> crate::Result<String> {
     writeln!(out, "//").unwrap();
     writeln!(
         out,
-        "// Creates: {} Realms, {} Layers, {} Traits, {} EdgeFamilies",
+        "// Creates: {} Realms, {} Layers, {} Traits, {} ArcFamilies",
         doc.realms.len(),
         total_layers,
         doc.traits.len(),
-        doc.edge_families.len()
+        doc.arc_families.len()
     )
     .unwrap();
     writeln!(out, "// All meta-nodes have :Meta double-label").unwrap();
@@ -129,16 +129,16 @@ fn generate_cypher(doc: &OrganizingDoc) -> crate::Result<String> {
 
     // ── Edge Families ────────────────────────────────────────────────────
     writeln!(out).unwrap();
-    write_section_header(&mut out, "EDGE FAMILIES", doc.edge_families.len());
+    write_section_header(&mut out, "ARC FAMILIES", doc.arc_families.len());
 
-    for ef in &doc.edge_families {
+    for ef in &doc.arc_families {
         writeln!(out).unwrap();
         let var = format!("ef_{}", ef.key);
         let llm = cypher_str(&ef.llm_context);
         write_merge_meta(
             &mut out,
             &var,
-            "EdgeFamily",
+            "ArcFamily",
             &ef.key,
             &[
                 ("display_name", &ef.display_name),
@@ -170,7 +170,7 @@ fn write_section_header(out: &mut String, title: &str, count: usize) {
 mod tests {
     use super::*;
     use crate::generators::Generator;
-    use crate::parsers::organizing::{EdgeFamilyDef, LayerDef, RealmDef, TraitDef};
+    use crate::parsers::organizing::{ArcFamilyDef, LayerDef, RealmDef, TraitDef};
 
     #[test]
     fn generate_small_cypher() {
@@ -196,7 +196,7 @@ mod tests {
                 color: "#222222".to_string(),
                 llm_context: "Fixed trait.".to_string(),
             }],
-            edge_families: vec![EdgeFamilyDef {
+            arc_families: vec![ArcFamilyDef {
                 key: "owns".to_string(),
                 display_name: "Owns".to_string(),
                 color: "#333333".to_string(),
@@ -224,15 +224,15 @@ mod tests {
         assert!(cypher.contains("MERGE (t_fixed:Meta:Trait {key: 'fixed'})"));
         assert!(cypher.contains("t_fixed.color = '#222222'"));
 
-        // EdgeFamily
-        assert!(cypher.contains("MERGE (ef_owns:Meta:EdgeFamily {key: 'owns'})"));
+        // ArcFamily
+        assert!(cypher.contains("MERGE (ef_owns:Meta:ArcFamily {key: 'owns'})"));
         assert!(cypher.contains("ef_owns.arrow_style = '-->'"));
 
         // :Meta double-label in all MERGE statements
         assert!(cypher.contains(":Meta:Realm"));
         assert!(cypher.contains(":Meta:Layer"));
         assert!(cypher.contains(":Meta:Trait"));
-        assert!(cypher.contains(":Meta:EdgeFamily"));
+        assert!(cypher.contains(":Meta:ArcFamily"));
 
         // Timestamps
         assert!(cypher.contains("created_at = datetime()"));
@@ -241,7 +241,7 @@ mod tests {
         // Header
         assert!(cypher.contains("v9.0.0"));
         assert!(cypher.contains("AUTO-GENERATED"));
-        assert!(cypher.contains("1 Realms, 1 Layers, 1 Traits, 1 EdgeFamilies"));
+        assert!(cypher.contains("1 Realms, 1 Layers, 1 Traits, 1 ArcFamilies"));
     }
 
     #[test]
@@ -268,7 +268,7 @@ mod tests {
                 color: "#aaa".to_string(),
                 llm_context: "Trait.".to_string(),
             }],
-            edge_families: vec![EdgeFamilyDef {
+            arc_families: vec![ArcFamilyDef {
                 key: "e".to_string(),
                 display_name: "E".to_string(),
                 color: "#bbb".to_string(),
@@ -308,7 +308,7 @@ mod tests {
         assert_eq!(count_merges("Realm"), 3, "expected 3 Realm nodes");
         assert_eq!(count_merges("Layer"), 9, "expected 9 Layer nodes");
         assert_eq!(count_merges("Trait"), 5, "expected 5 Trait nodes");
-        assert_eq!(count_merges("EdgeFamily"), 5, "expected 5 EdgeFamily nodes");
+        assert_eq!(count_merges("ArcFamily"), 5, "expected 5 ArcFamily nodes");
 
         // HAS_LAYER relationships
         let has_layer_count = cypher
@@ -326,8 +326,8 @@ mod tests {
         assert!(cypher.contains("l_seo:Meta:Layer {key: 'seo'}"));
         assert!(cypher.contains("t_localized:Meta:Trait {key: 'localized'}"));
         assert!(cypher.contains("t_invariant:Meta:Trait {key: 'invariant'}"));
-        assert!(cypher.contains("ef_semantic:Meta:EdgeFamily {key: 'semantic'}"));
-        assert!(cypher.contains("ef_mining:Meta:EdgeFamily {key: 'mining'}"));
+        assert!(cypher.contains("ef_semantic:Meta:ArcFamily {key: 'semantic'}"));
+        assert!(cypher.contains("ef_mining:Meta:ArcFamily {key: 'mining'}"));
 
         // Spot check — arrow_style preserved
         assert!(cypher.contains("ef_semantic.arrow_style = '.->'"));

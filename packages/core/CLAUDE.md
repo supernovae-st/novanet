@@ -33,8 +33,8 @@ v9 refactors the meta-graph to a **self-describing context graph** with faceted 
 | Subcategory | **Layer** (9 functional layers) |
 | NodeTypeMeta | **Kind** (35 node types, 1:1 with Neo4j labels) |
 | _(new)_ | **Trait** (invariant / localized / knowledge / derived / job) |
-| _(new)_ | **EdgeFamily** (ownership / localization / semantic / generation / mining) |
-| _(new)_ | **EdgeKind** (50 relationship types) |
+| _(new)_ | **ArcFamily** (ownership / localization / semantic / generation / mining) |
+| _(new)_ | **ArcKind** (50 relationship types) |
 
 **Boundary rule:** TypeScript (this package) generates code artifacts. Rust (`tools/novanet/`) executes at runtime.
 
@@ -99,11 +99,11 @@ RETURN r.key, l.key, collect(k.label) AS kinds;
 MATCH (k:Kind)-[:HAS_TRAIT]->(t:Trait {key: "localized"})
 RETURN k.label, t.key;
 
--- v9: Edge schema for a Kind
-MATCH (ek:EdgeKind)-[:FROM_KIND]->(k:Kind {label: "Block"})
-MATCH (ek)-[:TO_KIND]->(target:Kind)
-MATCH (ek)-[:IN_FAMILY]->(ef:EdgeFamily)
-RETURN ek.key, ef.key AS family, target.label AS target_kind;
+-- v9: Arc schema for a Kind
+MATCH (ak:ArcKind)-[:FROM_KIND]->(k:Kind {label: "Block"})
+MATCH (ak)-[:TO_KIND]->(target:Kind)
+MATCH (ak)-[:IN_FAMILY]->(af:ArcFamily)
+RETURN ak.key, af.key AS family, target.label AS target_kind;
 ```
 
 ## File Structure
@@ -113,7 +113,7 @@ core/
 ├── models/                    # YAML schema definitions (SOURCE OF TRUTH)
 │   ├── _index.yaml            # MODEL INDEX (graph structure, node categories, changes)
 │   ├── relations.yaml         # All 50 Neo4j relationships (with family field in v9)
-│   ├── organizing-principles.yaml  # v9: Realm/Layer/Trait/EdgeFamily definitions
+│   ├── organizing-principles.yaml  # v9: Realm/Layer/Trait/ArcFamily definitions
 │   ├── nodes/                 # ONE FILE PER NODE TYPE (35 files)
 │   │   ├── global/            # Realm: global (15 nodes)
 │   │   │   ├── config/        #   Layer: config (Locale)
@@ -156,8 +156,8 @@ Realm           = WHERE? (global / project / shared) — replaces "Scope"
 Layer           = WHAT? (9 functional layers) — replaces "Subcategory"
 Kind            = Neo4j label as meta-node — replaces "NodeTypeMeta"
 Trait           = HOW? (invariant / localized / knowledge / derived / job) — NEW
-EdgeFamily      = Relationship classification (ownership / localization / ...) — NEW
-EdgeKind        = Individual relationship type as meta-node — NEW
+ArcFamily       = Relationship classification (ownership / localization / ...) — NEW
+ArcKind         = Individual relationship type as meta-node — NEW
 :Meta           = Double-label on all meta-nodes — NEW
 OF_KIND         = Instance -> Kind bridge — replaces "IN_SUBCATEGORY"
 NavigationMode  = 4 modes (data / meta / overlay / query) — replaces "DataMode"

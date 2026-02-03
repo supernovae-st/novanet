@@ -6,10 +6,10 @@
 # - 3 Realms (visibility boundaries)
 # - 9 Layers (functional classification)
 # - 5 Traits (locale behavior)
-# - 5 EdgeFamilies (relationship classification)
+# - 5 ArcFamilies (arc classification)
 #
 # Generated artifacts:
-# - packages/db/seed/00.5-organizing-principles.cypher (Realm, Layer, Trait, EdgeFamily + hierarchy)
+# - packages/db/seed/00.5-organizing-principles.cypher (Realm, Layer, Trait, ArcFamily + hierarchy)
 # - packages/core/src/graph/hierarchy.ts (realm→layer tree, auto-generated)
 #
 # All meta-nodes receive double-label :Meta (e.g., :Meta:Realm)
@@ -171,7 +171,7 @@ traits:
       Background processing tasks. Mining runs, batch operations, and other
       asynchronous jobs that produce or update data nodes.
 
-edge_families:
+arc_families:
   - key: ownership
     display_name: Ownership
     color: "#3b82f6"

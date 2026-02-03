@@ -84,7 +84,7 @@
 #                                               PageL10n (history)
 #
 # ═══════════════════════════════════════════════════════════════════════════════
-# EDGE FAMILIES (v9.0.0 - replaces relation classification)
+# ARC FAMILIES (v9.5.0 - replaces relation classification)
 # ═══════════════════════════════════════════════════════════════════════════════
 #
 #   ownership     (11) - Structural containment (HAS_PAGE, HAS_BLOCK, etc.)
@@ -93,8 +93,8 @@
 #   generation     (5) - AI output (GENERATES, USES_PROMPT, etc.)
 #   mining         (7) - Discovery jobs (MINES, HAS_METRICS, etc.)
 #
-#   See organizing-principles.yaml for full EdgeFamily definitions.
-#   See relations.yaml for all 50 relation types with family assignment.
+#   See taxonomy.yaml for full ArcFamily definitions.
+#   See relations.yaml for all 75 arc types with family assignment.
 #
 # ═══════════════════════════════════════════════════════════════════════════════
 # STANDARD NODE PROPERTIES v7.11.0 (simplified from v7.1.0)
@@ -133,7 +133,7 @@
 #
 # Self-Describing Context Graph:
 #   - NEW: organizing-principles.yaml with 6 meta-node types
-#         (Realm, Layer, Kind, Trait, EdgeFamily, EdgeKind)
+#         (Realm, Layer, Kind, Trait, ArcFamily, ArcKind)
 #   - RENAMED: Scope → Realm (global, project, shared)
 #   - RENAMED: Subcategory → Layer (9 functional layers)
 #   - RENAMED: locale_behavior trait "localeKnowledge" → "knowledge"
@@ -154,10 +154,10 @@
 #   - NEW: 3 Realms (global, project, shared)
 #   - NEW: 9 Layers (config, knowledge, foundation, structure, semantic, instruction, output, seo, geo)
 #   - NEW: 5 Traits (invariant, localized, knowledge, derived, job)
-#   - NEW: 5 EdgeFamilies (ownership, localization, semantic, generation, mining)
+#   - NEW: 5 ArcFamilies (ownership, localization, semantic, generation, mining)
 #   - NEW: OF_KIND replaces IN_SUBCATEGORY
 #
-# Statistics: 35 nodes, 50 relations (5 edge families)
+# Statistics: 44 nodes, 75 arcs (5 arc families)
 #
 # ═══════════════════════════════════════════════════════════════════════════════
 # CHANGES v8.2.0 (from v8.1.0)
@@ -414,7 +414,7 @@ nodes_by_trait:
 #   🌍 GLOBAL:  15 nodes (Locale + 14 LocaleKnowledge)
 #   🎯 SHARED:   6 nodes (SEO 3 + GEO 3)
 #   📦 PROJECT: 14 nodes (Foundation 3 + Structure 2 + Semantic 2 + Instruction 5 + Output 2)
-#   TOTAL:      35 nodes, 50 relations (5 edge families)
+#   TOTAL:      44 nodes, 75 arcs (5 arc families)
 #
 # By Trait:
 #   🔵 INVARIANT:  11 (Project, BrandIdentity, Concept, Page, Block, PageType, BlockType, PagePrompt, BlockPrompt, BlockRules, Locale)

@@ -22,7 +22,7 @@ pub struct FacetFilter {
     #[serde(default, rename = "traits")]
     pub trait_filters: Vec<String>,
     #[serde(default)]
-    pub edge_families: Vec<String>,
+    pub arc_families: Vec<String>,
     #[serde(default)]
     pub kinds: Vec<String>,
 }
@@ -50,7 +50,7 @@ impl FacetFilter {
             realms: parse_csv(realm),
             layers: parse_csv(layer),
             trait_filters: parse_csv(trait_filter),
-            edge_families: parse_csv(edge_family),
+            arc_families: parse_csv(edge_family),
             kinds: parse_csv(kind),
         }
     }
@@ -66,7 +66,7 @@ impl FacetFilter {
         self.realms.is_empty()
             && self.layers.is_empty()
             && self.trait_filters.is_empty()
-            && self.edge_families.is_empty()
+            && self.arc_families.is_empty()
             && self.kinds.is_empty()
     }
 
@@ -76,7 +76,7 @@ impl FacetFilter {
             !self.realms.is_empty(),
             !self.layers.is_empty(),
             !self.trait_filters.is_empty(),
-            !self.edge_families.is_empty(),
+            !self.arc_families.is_empty(),
             !self.kinds.is_empty(),
         ]
         .iter()
@@ -141,7 +141,7 @@ mod tests {
         assert_eq!(f.realms, vec!["global", "project"]);
         assert_eq!(f.layers, vec!["knowledge"]);
         assert!(f.trait_filters.is_empty());
-        assert!(f.edge_families.is_empty());
+        assert!(f.arc_families.is_empty());
         assert_eq!(f.kinds, vec!["Locale", "Expression"]);
         assert!(!f.is_empty());
         assert_eq!(f.active_count(), 3);
@@ -160,14 +160,14 @@ mod tests {
             "realms": ["global"],
             "layers": ["knowledge", "config"],
             "traits": ["invariant"],
-            "edge_families": [],
+            "arc_families": [],
             "kinds": []
         }"#;
         let f = FacetFilter::from_json(json).unwrap();
         assert_eq!(f.realms, vec!["global"]);
         assert_eq!(f.layers, vec!["knowledge", "config"]);
         assert_eq!(f.trait_filters, vec!["invariant"]);
-        assert!(f.edge_families.is_empty());
+        assert!(f.arc_families.is_empty());
         assert!(f.kinds.is_empty());
     }
 

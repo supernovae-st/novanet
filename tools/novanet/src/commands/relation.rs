@@ -1,7 +1,7 @@
 //! Relation CRUD commands: `novanet relation create/delete`.
 //!
 //! Creates and deletes relationships between nodes in Neo4j. Validates
-//! relationship type against EdgeKind meta-nodes.
+//! relationship type against ArcKind meta-nodes.
 
 use crate::db::Db;
 
@@ -34,17 +34,17 @@ pub async fn run_create(
 ) -> crate::Result<()> {
     validate_rel_type(rel_type)?;
 
-    // Validate EdgeKind exists in meta-graph
-    let ek_rows = db
+    // Validate ArcKind exists in meta-graph
+    let ak_rows = db
         .execute_with_params(
-            "MATCH (ek:EdgeKind {key: $rel_type}) RETURN ek.key AS key",
+            "MATCH (ak:ArcKind {key: $rel_type}) RETURN ak.key AS key",
             [("rel_type", rel_type)],
         )
         .await?;
 
-    if ek_rows.is_empty() {
+    if ak_rows.is_empty() {
         return Err(crate::NovaNetError::Validation(format!(
-            "EdgeKind '{rel_type}' not found in meta-graph. Use `novanet meta` to list available types."
+            "ArcKind '{rel_type}' not found in meta-graph. Use `novanet meta` to list available types."
         )));
     }
 

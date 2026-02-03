@@ -111,7 +111,7 @@ flowchart TB
     end
   end
 
-  %% Relationships (styled by edge family)
+  %% Relationships (styled by arc family)
   Block -->|BLOCK_OF| Page
   Block -.->|FILLS_SLOT| ContentSlot
   Block -.->|FOR_INTENT| SearchIntent

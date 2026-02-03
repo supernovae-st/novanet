@@ -6,7 +6,7 @@
 //! v9.5 Note: EdgeFamily is now ArcFamily. EdgeFamily is kept as a type alias for backwards compatibility.
 
 use serde::Deserialize;
-use smallvec::{smallvec, SmallVec};
+use smallvec::{SmallVec, smallvec};
 use std::path::Path;
 
 // ─────────────────────────────────────────────────────────────────────────────

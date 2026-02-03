@@ -69,7 +69,7 @@ LIMIT $limit"
 }
 
 // ---------------------------------------------------------------------------
-// Mode 2: Meta — meta-graph only (Realm, Layer, Kind, Trait, EdgeFamily, EdgeKind)
+// Mode 2: Meta — meta-graph only (Realm, Layer, Kind, Trait, ArcFamily, ArcKind)
 // ---------------------------------------------------------------------------
 
 pub fn meta_query() -> CypherStatement {
@@ -393,7 +393,7 @@ mod tests {
             layers: vec!["knowledge".to_string(), "structure".to_string()],
             trait_filters: vec!["invariant".to_string(), "localized".to_string()],
             kinds: vec!["Locale".to_string()],
-            edge_families: vec!["taxonomy".to_string()],
+            arc_families: vec!["taxonomy".to_string()],
         };
         let stmt = faceted_query(&filter, 100);
         assert!(stmt.cypher.contains("IN_REALM"));
