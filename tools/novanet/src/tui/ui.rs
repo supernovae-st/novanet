@@ -230,11 +230,26 @@ fn realm_color(key: &str) -> Color {
     }
 }
 
-/// Detail panel: selected item info.
+/// Detail panel: info (1/4) + YAML preview (3/4).
 fn render_detail(f: &mut Frame, area: Rect, app: &App) {
     let focused = app.focus == Focus::Detail;
     let border_color = if focused { Color::Cyan } else { Color::DarkGray };
 
+    // Split detail area vertically: 1/4 info, 3/4 YAML
+    let chunks = Layout::default()
+        .direction(Direction::Vertical)
+        .constraints([
+            Constraint::Ratio(1, 4), // Info
+            Constraint::Ratio(3, 4), // YAML
+        ])
+        .split(area);
+
+    render_detail_info(f, chunks[0], app, border_color);
+    render_yaml_preview(f, chunks[1], app, border_color);
+}
+
+/// Detail info panel (top 1/4).
+fn render_detail_info(f: &mut Frame, area: Rect, app: &App, border_color: Color) {
     let lines = match app.tree.item_at(app.tree_cursor) {
         Some(TreeItem::KindsSection) => {
             let kind_count: usize = app.tree.realms.iter()
@@ -521,6 +536,130 @@ fn render_detail(f: &mut Frame, area: Rect, app: &App) {
 
     let paragraph = Paragraph::new(lines).block(block);
     f.render_widget(paragraph, area);
+}
+
+/// YAML preview panel (bottom 3/4).
+fn render_yaml_preview(f: &mut Frame, area: Rect, app: &App, border_color: Color) {
+    // Title with file path
+    let title = if app.yaml_path.is_empty() {
+        " YAML ".to_string()
+    } else {
+        format!(" {} ", app.yaml_path)
+    };
+
+    // Parse YAML and apply syntax highlighting
+    let lines: Vec<Line> = if app.yaml_content.is_empty() {
+        vec![Line::from(Span::styled(
+            "No YAML file for this item",
+            Style::default().fg(Color::DarkGray),
+        ))]
+    } else {
+        app.yaml_content
+            .lines()
+            .map(highlight_yaml_line)
+            .collect()
+    };
+
+    let block = Block::default()
+        .title(Span::styled(title, Style::default().fg(border_color)))
+        .borders(Borders::ALL)
+        .border_style(Style::default().fg(border_color));
+
+    let paragraph = Paragraph::new(lines)
+        .block(block)
+        .scroll((app.yaml_scroll as u16, 0));
+    f.render_widget(paragraph, area);
+}
+
+/// Highlight a YAML line with syntax coloring.
+fn highlight_yaml_line(line: &str) -> Line<'static> {
+    // Comment line
+    if line.trim_start().starts_with('#') {
+        return Line::from(Span::styled(
+            line.to_string(),
+            Style::default().fg(Color::DarkGray),
+        ));
+    }
+
+    // Empty line
+    if line.trim().is_empty() {
+        return Line::from(Span::raw(line.to_string()));
+    }
+
+    // Key-value or list item
+    let mut spans: Vec<Span<'static>> = Vec::new();
+
+    // Find leading whitespace
+    let indent_len = line.len() - line.trim_start().len();
+    let indent = &line[..indent_len];
+    let rest = &line[indent_len..];
+
+    spans.push(Span::raw(indent.to_string()));
+
+    // Check for list item
+    if rest.starts_with("- ") {
+        spans.push(Span::styled("-", Style::default().fg(Color::Cyan)));
+        let after_dash = &rest[1..];
+
+        // Check if it's a key-value after dash
+        if let Some(colon_pos) = after_dash.find(':') {
+            let key = &after_dash[..colon_pos + 1];
+            let value = &after_dash[colon_pos + 1..];
+            spans.push(Span::styled(key.to_string(), Style::default().fg(Color::Yellow)));
+            spans.push(highlight_yaml_value(value));
+        } else {
+            spans.push(highlight_yaml_value(after_dash));
+        }
+    } else if let Some(colon_pos) = rest.find(':') {
+        // Key-value pair
+        let key = &rest[..colon_pos];
+        let colon_and_rest = &rest[colon_pos..];
+
+        spans.push(Span::styled(key.to_string(), Style::default().fg(Color::Yellow)));
+
+        if colon_and_rest.len() > 1 {
+            spans.push(Span::styled(":", Style::default().fg(Color::White)));
+            let value = &colon_and_rest[1..];
+            spans.push(highlight_yaml_value(value));
+        } else {
+            spans.push(Span::styled(":", Style::default().fg(Color::White)));
+        }
+    } else {
+        // Plain text
+        spans.push(Span::styled(rest.to_string(), Style::default().fg(Color::White)));
+    }
+
+    Line::from(spans)
+}
+
+/// Highlight a YAML value with appropriate color.
+fn highlight_yaml_value(value: &str) -> Span<'static> {
+    let trimmed = value.trim();
+
+    // Boolean
+    if trimmed == "true" || trimmed == "false" {
+        return Span::styled(value.to_string(), Style::default().fg(Color::Magenta));
+    }
+
+    // Null
+    if trimmed == "null" || trimmed == "~" {
+        return Span::styled(value.to_string(), Style::default().fg(Color::Magenta));
+    }
+
+    // Number
+    if trimmed.parse::<f64>().is_ok() {
+        return Span::styled(value.to_string(), Style::default().fg(Color::Cyan));
+    }
+
+    // String (quoted)
+    if (trimmed.starts_with('"') && trimmed.ends_with('"'))
+        || (trimmed.starts_with('\'') && trimmed.ends_with('\''))
+    {
+        return Span::styled(value.to_string(), Style::default().fg(Color::Green));
+    }
+
+    // Default string
+    Span::styled(value.to_string(), Style::default().fg(Color::Green))
 }
 
 /// Status bar: stats + shortcuts.

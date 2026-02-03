@@ -32,6 +32,9 @@ coverage/
 # Rust
 tools/novanet/target/
 
+# mdBook generated output
+docs/book/
+
 # Docker
 *.pid
 novanet-public-repo/
