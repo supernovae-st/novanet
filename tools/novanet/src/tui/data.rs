@@ -272,17 +272,17 @@ ORDER BY realm_key, layer_key, kind_key
     /// Fetch arcs as a map (for parallel loading).
     async fn fetch_arcs(db: &Db) -> crate::Result<BTreeMap<String, Vec<ArcInfo>>> {
         let cypher = r#"
-MATCH (ek:EdgeKind:Meta)-[:FROM_KIND]->(fromKind:Kind:Meta)
-MATCH (ek)-[:TO_KIND]->(toKind:Kind:Meta)
-RETURN fromKind.label AS kind_key, ek.key AS rel_type, 'outgoing' AS direction, toKind.label AS target_kind
-ORDER BY fromKind.label, ek.key
+MATCH (ak:ArcKind:Meta)-[:FROM_KIND]->(fromKind:Kind:Meta)
+MATCH (ak)-[:TO_KIND]->(toKind:Kind:Meta)
+RETURN fromKind.label AS kind_key, ak.key AS rel_type, 'outgoing' AS direction, toKind.label AS target_kind
+ORDER BY fromKind.label, ak.key
 
 UNION
 
-MATCH (ek:EdgeKind:Meta)-[:FROM_KIND]->(fromKind:Kind:Meta)
-MATCH (ek)-[:TO_KIND]->(toKind:Kind:Meta)
-RETURN toKind.label AS kind_key, ek.key AS rel_type, 'incoming' AS direction, fromKind.label AS target_kind
-ORDER BY toKind.label, ek.key
+MATCH (ak:ArcKind:Meta)-[:FROM_KIND]->(fromKind:Kind:Meta)
+MATCH (ak)-[:TO_KIND]->(toKind:Kind:Meta)
+RETURN toKind.label AS kind_key, ak.key AS rel_type, 'incoming' AS direction, fromKind.label AS target_kind
+ORDER BY toKind.label, ak.key
 "#;
 
         let rows = db.execute(cypher).await?;
@@ -317,19 +317,19 @@ ORDER BY toKind.label, ek.key
     /// Fetch arc families (for parallel loading).
     async fn fetch_arc_families(db: &Db) -> crate::Result<Vec<ArcFamilyInfo>> {
         let cypher = r#"
-MATCH (ek:EdgeKind:Meta)-[:IN_FAMILY]->(ef:EdgeFamily:Meta)
-MATCH (ek)-[:FROM_KIND]->(fromKind:Kind:Meta)
-MATCH (ek)-[:TO_KIND]->(toKind:Kind:Meta)
+MATCH (ak:ArcKind:Meta)-[:IN_FAMILY]->(af:ArcFamily:Meta)
+MATCH (ak)-[:FROM_KIND]->(fromKind:Kind:Meta)
+MATCH (ak)-[:TO_KIND]->(toKind:Kind:Meta)
 RETURN
-    ef.key AS family_key,
-    coalesce(ef.display_name, ef.key) AS family_display,
-    ek.key AS edge_key,
-    coalesce(ek.display_name, ek.key) AS edge_display,
-    coalesce(ek.cardinality, '') AS cardinality,
-    coalesce(ek.llm_context, '') AS edge_desc,
+    af.key AS family_key,
+    coalesce(af.display_name, af.key) AS family_display,
+    ak.key AS arc_key,
+    coalesce(ak.display_name, ak.key) AS arc_display,
+    coalesce(ak.cardinality, '') AS cardinality,
+    coalesce(ak.llm_context, '') AS arc_desc,
     fromKind.label AS from_kind,
     toKind.label AS to_kind
-ORDER BY family_key, edge_key
+ORDER BY family_key, arc_key
 "#;
 
         let rows = db.execute(cypher).await?;
@@ -338,10 +338,10 @@ ORDER BY family_key, edge_key
         for row in rows {
             let family_key: String = row.get("family_key").unwrap_or_default();
             let family_display: String = row.get("family_display").unwrap_or_default();
-            let arc_key: String = row.get("edge_key").unwrap_or_default();
-            let arc_display: String = row.get("edge_display").unwrap_or_default();
+            let arc_key: String = row.get("arc_key").unwrap_or_default();
+            let arc_display: String = row.get("arc_display").unwrap_or_default();
             let cardinality: String = row.get("cardinality").unwrap_or_default();
-            let arc_desc: String = row.get("edge_desc").unwrap_or_default();
+            let arc_desc: String = row.get("arc_desc").unwrap_or_default();
             let from_kind: String = row.get("from_kind").unwrap_or_default();
             let to_kind: String = row.get("to_kind").unwrap_or_default();
 
@@ -381,20 +381,20 @@ ORDER BY family_key, edge_key
 MATCH (n) WHERE NOT n:Meta
 WITH count(n) AS nodes
 MATCH ()-[r]->() WHERE NOT startNode(r):Meta AND NOT endNode(r):Meta
-WITH nodes, count(r) AS edges
+WITH nodes, count(r) AS arcs
 MATCH (k:Kind:Meta)
-WITH nodes, edges, count(k) AS kinds
-MATCH (ek:EdgeKind:Meta)
-RETURN nodes, edges, kinds, count(ek) AS edge_kinds
+WITH nodes, arcs, count(k) AS kinds
+MATCH (ak:ArcKind:Meta)
+RETURN nodes, arcs, kinds, count(ak) AS arc_kinds
 "#;
 
         let rows = db.execute(cypher).await?;
         if let Some(row) = rows.into_iter().next() {
             Ok(GraphStats {
                 node_count: row.get("nodes").unwrap_or(0),
-                arc_count: row.get("edges").unwrap_or(0),
+                arc_count: row.get("arcs").unwrap_or(0),
                 kind_count: row.get("kinds").unwrap_or(0),
-                arc_kind_count: row.get("edge_kinds").unwrap_or(0),
+                arc_kind_count: row.get("arc_kinds").unwrap_or(0),
             })
         } else {
             Ok(GraphStats::default())

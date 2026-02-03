@@ -1,4 +1,4 @@
-//! Parse organizing-principles.yaml (realms, layers, traits, edge families).
+//! Parse organizing-principles.yaml (realms, layers, traits, arc families).
 //!
 //! Shared between:
 //! - `generators/organizing.rs` → Cypher seed
@@ -17,7 +17,7 @@ pub struct OrganizingDoc {
     pub version: String,
     pub realms: Vec<RealmDef>,
     pub traits: Vec<TraitDef>,
-    pub edge_families: Vec<EdgeFamilyDef>,
+    pub arc_families: Vec<ArcFamilyDef>,
 }
 
 /// Realm definition with nested layers.
@@ -50,9 +50,9 @@ pub struct TraitDef {
     pub llm_context: String,
 }
 
-/// Edge family definition.
+/// Arc family definition.
 #[derive(Debug, Deserialize)]
-pub struct EdgeFamilyDef {
+pub struct ArcFamilyDef {
     pub key: String,
     pub display_name: String,
     pub color: String,
@@ -101,9 +101,9 @@ pub fn load_organizing(root: &Path) -> crate::Result<OrganizingDoc> {
             "organizing-principles.yaml has no traits".to_string(),
         ));
     }
-    if doc.edge_families.is_empty() {
+    if doc.arc_families.is_empty() {
         return Err(crate::NovaNetError::Validation(
-            "organizing-principles.yaml has no edge_families".to_string(),
+            "organizing-principles.yaml has no arc_families".to_string(),
         ));
     }
 
@@ -139,12 +139,12 @@ traits:
     display_name: Invariant
     color: "#3b82f6"
     llm_context: "Invariant nodes."
-edge_families:
+arc_families:
   - key: ownership
     display_name: Ownership
     color: "#3b82f6"
     arrow_style: "-->"
-    llm_context: "Ownership edges."
+    llm_context: "Ownership arcs."
 "##;
         let doc: OrganizingDoc = serde_yaml::from_str(yaml).unwrap();
         assert_eq!(doc.version, "9.0.0");
@@ -154,8 +154,8 @@ edge_families:
         assert_eq!(doc.realms[0].layers[0].key, "config");
         assert_eq!(doc.traits.len(), 1);
         assert_eq!(doc.traits[0].key, "invariant");
-        assert_eq!(doc.edge_families.len(), 1);
-        assert_eq!(doc.edge_families[0].arrow_style, "-->");
+        assert_eq!(doc.arc_families.len(), 1);
+        assert_eq!(doc.arc_families[0].arrow_style, "-->");
     }
 
     #[test]
@@ -174,7 +174,7 @@ edge_families:
         assert_eq!(doc.version, "9.0.0");
         assert_eq!(doc.realms.len(), 3);
         assert_eq!(doc.traits.len(), 5);
-        assert_eq!(doc.edge_families.len(), 5);
+        assert_eq!(doc.arc_families.len(), 5);
 
         let total_layers: usize = doc.realms.iter().map(|r| r.layers.len()).sum();
         assert_eq!(total_layers, 9);

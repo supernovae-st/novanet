@@ -22,7 +22,7 @@ struct GeneratorEntry {
 
 fn all_generators() -> Vec<GeneratorEntry> {
     use crate::generators::{
-        autowire::AutowireGenerator, colors::ColorsGenerator, edge_schema::EdgeSchemaGenerator,
+        arc_schema::ArcSchemaGenerator, autowire::AutowireGenerator, colors::ColorsGenerator,
         hierarchy::HierarchyGenerator, icons::IconsGenerator, kind::KindGenerator,
         layer::LayerGenerator, mermaid::MermaidGenerator, organizing::OrganizingGenerator,
     };
@@ -39,8 +39,8 @@ fn all_generators() -> Vec<GeneratorEntry> {
             post_process: None,
         },
         GeneratorEntry {
-            generator: Box::new(EdgeSchemaGenerator),
-            output_path: "packages/db/seed/02-edge-kinds.cypher",
+            generator: Box::new(ArcSchemaGenerator),
+            output_path: "packages/db/seed/02-arc-kinds.cypher",
             post_process: None,
         },
         GeneratorEntry {
@@ -261,7 +261,7 @@ mod tests {
             vec![
                 "organizing-principles",
                 "kinds",
-                "edge_schema",
+                "arc_schema",
                 "layers",
                 "mermaid",
                 "autowire",

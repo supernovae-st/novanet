@@ -154,7 +154,7 @@ All meta-nodes carry the `:Meta` double-label for easy filtering.
 ```
 Realm -[:HAS_LAYER]-> Layer
 Layer -[:HAS_KIND]-> Kind
-ArcFamily -[:HAS_EDGE_KIND]-> ArcKind
+ArcFamily -[:HAS_ARC_KIND]-> ArcKind
 ```
 
 ### Facets (Kind-centric)

@@ -267,7 +267,7 @@ fn render_colors(doc: &OrganizingDoc) -> crate::Result<String> {
 
     // Extract arc families
     let arc_families: Vec<ColorEntry> = doc
-        .edge_families
+        .arc_families
         .iter()
         .map(|e| ColorEntry {
             key: e.key.clone(),
@@ -340,9 +340,7 @@ pub fn hex_to_rgb(hex: &str) -> Option<(u8, u8, u8)> {
 mod tests {
     use super::*;
     use crate::generators::Generator;
-    use crate::parsers::organizing::{
-        EdgeFamilyDef, LayerDef, OrganizingDoc, RealmDef, TraitDef,
-    };
+    use crate::parsers::organizing::{ArcFamilyDef, LayerDef, OrganizingDoc, RealmDef, TraitDef};
 
     fn make_test_principles() -> OrganizingDoc {
         OrganizingDoc {
@@ -391,7 +389,7 @@ mod tests {
                     llm_context: "test".to_string(),
                 },
             ],
-            edge_families: vec![EdgeFamilyDef {
+            arc_families: vec![ArcFamilyDef {
                 key: "ownership".to_string(),
                 display_name: "Ownership".to_string(),
                 color: "#3b82f6".to_string(),

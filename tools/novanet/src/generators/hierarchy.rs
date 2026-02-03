@@ -218,7 +218,7 @@ fn render_hierarchy(doc: &organizing::OrganizingDoc) -> crate::Result<String> {
 mod tests {
     use super::*;
     use crate::generators::Generator;
-    use crate::parsers::organizing::{EdgeFamilyDef, LayerDef, OrganizingDoc, RealmDef, TraitDef};
+    use crate::parsers::organizing::{ArcFamilyDef, LayerDef, OrganizingDoc, RealmDef, TraitDef};
 
     #[test]
     fn first_sentence_period_space() {
@@ -311,7 +311,7 @@ mod tests {
                 color: "#3b82f6".to_string(),
                 llm_context: "Invariant nodes.".to_string(),
             }],
-            edge_families: vec![EdgeFamilyDef {
+            arc_families: vec![ArcFamilyDef {
                 key: "ownership".to_string(),
                 display_name: "Ownership".to_string(),
                 color: "#3b82f6".to_string(),
