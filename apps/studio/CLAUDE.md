@@ -191,13 +191,15 @@ All meta-nodes carry `:Meta` double-label.
 Types are imported via path alias:
 ```typescript
 import { Project, Concept, Page, Locale } from '@novanet/core/types';
-import type { NodeType, NodeCategory, RelationType } from '@novanet/core/types';
+import type { NodeType, Layer, RelationType } from '@novanet/core/types';
 ```
 
 Path configured in tsconfig.json:
 ```json
 "@novanet/core/*": ["../../packages/core/src/*"]
 ```
+
+> **v9 note:** `NodeCategory` was replaced by `Layer` in v9.0.0.
 
 ---
 

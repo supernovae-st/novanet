@@ -129,16 +129,15 @@ core/
 │   │       └── geo/           #   Layer: geo (GEOSeedL10n, GEOSeedMetrics, GEOMiningRun)
 │   └── views/                 # YAML view definitions
 ├── src/                       # TypeScript source
-│   ├── db/                    # Neo4j connection (client.ts)
+│   ├── config/                # Locale codes configuration
 │   ├── filters/               # NovaNetFilter, CypherGenerator, ViewLoader
-│   ├── parsers/               # Markdown parsers for Locale Knowledge
+│   ├── graph/                 # Graph utilities
 │   ├── schemas/               # Zod validation schemas
 │   └── types/                 # TypeScript type definitions
-├── scripts/                   # Build scripts
-├── neo4j/                     # Seed files (Docker in /infra)
-├── config/                    # Locale codes
-└── docs/                      # Additional documentation
+└── __tests__/                 # Jest test suites
 ```
+
+> **Note:** `parsers/`, `services/`, `db/`, and `scripts/` were absorbed into the Rust binary (`tools/novanet/`) in v9.0.0.
 
 ## Nomenclature
 

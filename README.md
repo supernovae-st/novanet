@@ -6,7 +6,8 @@
 
 Generate culturally-native content across 200+ locales — not translation, but true localization from semantic concepts.
 
-[![CI](https://img.shields.io/github/actions/workflow/status/supernovae-st/novanet-hq/ci.yml?branch=main&style=flat-square&label=CI)](https://github.com/supernovae-st/novanet-hq/actions)
+[![CI](https://img.shields.io/github/actions/workflow/status/supernovae-st/novanet-dev/ci.yml?branch=main&style=flat-square&label=CI)](https://github.com/supernovae-st/novanet-dev/actions)
+[![Rust](https://img.shields.io/badge/Rust-1.84-DEA584?style=flat-square&logo=rust&logoColor=white)](https://rust-lang.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://typescriptlang.org)
 [![Neo4j](https://img.shields.io/badge/Neo4j-5.26-018bff?style=flat-square&logo=neo4j&logoColor=white)](https://neo4j.com)
 [![Turborepo](https://img.shields.io/badge/Turborepo-2.8-EF4444?style=flat-square&logo=turborepo&logoColor=white)](https://turbo.build)
@@ -55,17 +56,22 @@ flowchart TB
         CORE["@novanet/core v9.0.0\nTypes · Schemas · Filters"]
         DB["@novanet/db v1.0.0\nDocker · Seeds · Migrations"]
         STUDIO["@novanet/studio v0.1.0\nNext.js 16 · React 19"]
+        RUST["novanet CLI v9.0.0\nRust · 13 commands · TUI"]
     end
 
     CORE --> STUDIO
+    RUST -.->|reads YAML| CORE
+    RUST -.->|generates| DB
 
     NEO4J[("Neo4j 5.26\n~19,000 nodes")]
     DB -.-> NEO4J
     STUDIO --> NEO4J
+    RUST --> NEO4J
 
     style CORE fill:#06b6d4,stroke:#0891b2,color:#fff
     style DB fill:#10b981,stroke:#059669,color:#fff
     style STUDIO fill:#8b5cf6,stroke:#7c3aed,color:#fff
+    style RUST fill:#DEA584,stroke:#B7410E,color:#fff
     style NEO4J fill:#018bff,stroke:#0284c7,color:#fff
 ```
 
@@ -111,13 +117,17 @@ novanet-hq/
 │   ├── core/                  # @novanet/core — types, schemas, filters
 │   │   ├── models/            # YAML schema definitions (source of truth)
 │   │   │   ├── _index.yaml    # 35 nodes, 50+ relations
-│   │   │   ├── nodes/         # Node definitions by scope
+│   │   │   ├── nodes/         # Node definitions by realm
 │   │   │   └── relations.yaml # Relationship definitions
 │   │   └── src/               # TypeScript implementation
 │   └── db/                    # @novanet/db — Neo4j infrastructure
 │       ├── docker-compose.yml # Neo4j 5.26 + APOC
 │       ├── seed/              # Cypher seed scripts
 │       └── seed.sh            # Seed runner
+├── tools/
+│   └── novanet/               # Rust CLI + TUI binary
+│       ├── src/               # Rust source (13 commands, 8 generators)
+│       └── Cargo.toml         # 396 tests, zero clippy warnings
 └── apps/
     └── studio/                # @novanet/studio — web visualization
         ├── src/app/           # Next.js App Router
@@ -135,6 +145,7 @@ novanet-hq/
 | **@novanet/core** | `9.0.0` | Types, Zod schemas, NovaNetFilter API, Cypher generators |
 | **@novanet/db** | `1.0.0` | Docker Compose for Neo4j, Cypher seeds, migrations |
 | **@novanet/studio** | `0.1.0` | Interactive graph visualization with AI chat |
+| **tools/novanet** | `9.0.0` | Rust CLI + TUI for schema generation, validation, queries |
 
 ---
 
@@ -158,6 +169,27 @@ novanet-hq/
 | `pnpm infra:down` | Stop Neo4j container |
 | `pnpm infra:seed` | Seed database with initial data |
 | `pnpm infra:reset` | Reset database (down + up + seed) |
+
+### Rust CLI (tools/novanet)
+
+```bash
+# Schema operations (YAML → Cypher/TS/Mermaid)
+cargo run -- schema generate        # Regenerate all artifacts
+cargo run -- schema validate        # Validate YAML coherence
+
+# Navigation modes
+cargo run -- data                   # Mode 1: Data nodes only
+cargo run -- meta                   # Mode 2: Meta-graph only
+cargo run -- overlay                # Mode 3: Data + Meta combined
+cargo run -- query --realm=project  # Mode 4: Faceted query
+
+# CRUD operations
+cargo run -- node create --kind=Page --key=my-page
+cargo run -- search --query="page" --kind=Page
+
+# Interactive TUI
+cargo run -- tui                    # Galaxy-themed terminal UI
+```
 
 ### Turborepo Filters
 
@@ -200,14 +232,27 @@ See [`packages/core/models/_index.yaml`](packages/core/models/_index.yaml) for c
 
 **NovaNet Studio** is a web-based graph visualization tool:
 
-<div align="center">
-
-<!-- TODO: Replace with actual screenshot -->
-<img src="docs/assets/studio-preview.png" alt="NovaNet Studio" width="800" />
-
-*Interactive 2D graph visualization with AI-powered queries*
-
-</div>
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  NovaNet Studio                                          ⌘K  ⌘J  ?  N  F   │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ ┌─ Filters ──────┐  ┌─ Graph View ─────────────────────┐  ┌─ Details ────┐ │
+│ │ Realm          │  │                                  │  │ Page         │ │
+│ │ ☑ Global       │  │      [Locale]──┐                 │  │ key: home    │ │
+│ │ ☑ Project      │  │          │     ▼                 │  │ realm: proj  │ │
+│ │ ☑ Shared       │  │   [Project]──[Page]──[Block]     │  │ layer: struc │ │
+│ │                │  │          │     │                 │  │              │ │
+│ │ Layer          │  │          ▼     ▼                 │  │ Relations:   │ │
+│ │ ☑ Foundation   │  │   [Concept]──[ConceptL10n]       │  │ → 3 blocks   │ │
+│ │ ☑ Structure    │  │          │                       │  │ → 1 project  │ │
+│ │ ☑ Semantic     │  │          ▼                       │  │              │ │
+│ │ ...            │  │   [BlockL10n]                    │  │ [Copy JSON]  │ │
+│ └────────────────┘  └──────────────────────────────────┘  └──────────────┘ │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  Mode: Data  │  35 nodes  │  50 relations  │  Zoom: 100%  │  Locale: fr-FR │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+*Interactive 2D graph visualization with AI-powered queries (⌘J)*
 
 - **4 Navigation Modes** — Data, Meta, Overlay, Query (cycle with `N`)
 - **9 Filter Presets** — Quick views via `1-8, 0` keys
