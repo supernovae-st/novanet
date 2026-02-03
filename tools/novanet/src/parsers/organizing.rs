@@ -77,7 +77,7 @@ pub fn load_organizing(root: &Path) -> crate::Result<OrganizingDoc> {
 
     let content = std::fs::read_to_string(&path)?;
     let doc: OrganizingDoc =
-        serde_yml::from_str(&content).map_err(|e| crate::NovaNetError::Schema {
+        serde_yaml::from_str(&content).map_err(|e| crate::NovaNetError::Schema {
             path: path.display().to_string(),
             source: e,
         })?;
@@ -146,7 +146,7 @@ edge_families:
     arrow_style: "-->"
     llm_context: "Ownership edges."
 "##;
-        let doc: OrganizingDoc = serde_yml::from_str(yaml).unwrap();
+        let doc: OrganizingDoc = serde_yaml::from_str(yaml).unwrap();
         assert_eq!(doc.version, "9.0.0");
         assert_eq!(doc.realms.len(), 1);
         assert_eq!(doc.realms[0].key, "global");

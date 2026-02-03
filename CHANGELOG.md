@@ -95,7 +95,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - ViewCategory: `'scope'` → `'overview'`
 - relations.yaml: dict → list format with `family`, `source`/`target`, `cardinality`
 - organizing-principles.yaml: v9.0.0 with realms/layers/traits/edge_families
-- 35 node YAMLs: added `locale_behavior`, removed `category`
+- 44 node YAMLs: added `locale_behavior`, removed `category`
 - All seed files regenerated for v9 meta-graph
 - ESLint migrated to flat config
 

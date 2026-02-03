@@ -1,0 +1,119 @@
+# packages/core/models/arc-kinds/_index.yaml
+# Arc Kinds Index — v9.5.0
+#
+# This directory contains one YAML file per ArcKind (relationship type).
+# Organization: arc-kinds/{family}/{arc-name}.yaml
+#
+# For backwards compatibility, relations.yaml remains the active source of truth.
+# This directory structure is the v9.5 target format.
+#
+# Migration status: PARTIAL
+# - taxonomy.yaml: CREATED (ArcFamilies defined)
+# - arc-kinds/: STRUCTURE CREATED (examples only)
+# - relations.yaml: STILL ACTIVE (50 arcs)
+#
+# To fully migrate: Extract each relation from relations.yaml into its own file.
+
+version: "9.5.0"
+
+# Arc count by family
+summary:
+  ownership: 14
+  localization: 22
+  semantic: 12
+  generation: 15
+  mining: 10
+  total: 73
+
+# Directory structure
+structure:
+  ownership:
+    - has-concept.yaml
+    - has-page.yaml
+    - has-brand-identity.yaml
+    - supports-locale.yaml
+    - default-locale.yaml
+    - has-block.yaml
+    - of-type.yaml
+    - has-prompt.yaml
+    - has-rules.yaml
+    - belongs-to-project-l10n.yaml
+    - block-of.yaml
+    - has-slot.yaml
+    - accepts-block-type.yaml
+    - pillar-page.yaml
+    - cluster-page.yaml
+
+  localization:
+    - for-locale.yaml
+    - has-l10n.yaml
+    - has-output.yaml
+    - fallback-to.yaml
+    - variant-of.yaml
+    - has-identity.yaml
+    - has-voice.yaml
+    - has-culture.yaml
+    - has-market.yaml
+    - has-lexicon.yaml
+    - has-expression.yaml
+    - has-rules-adaptation.yaml
+    - has-rules-formatting.yaml
+    - has-rules-slug.yaml
+    - has-culture-references.yaml
+    - has-reference.yaml
+    - has-metaphor.yaml
+    - has-pattern.yaml
+    - has-constraint.yaml
+    - l10n-of.yaml
+    - output-of.yaml
+    - has-localized-content.yaml
+
+  semantic:
+    - semantic-link.yaml
+    - uses-concept.yaml
+    - links-to.yaml
+    - subtopic-of.yaml
+    - used-by.yaml
+    - satisfies-intent.yaml
+    - for-intent.yaml
+    - maps-to-concept.yaml
+    - fills-slot.yaml
+    - clusters-topic.yaml
+    - mentions.yaml
+    - covers.yaml
+    - specializes.yaml
+    - related-thing.yaml
+
+  generation:
+    - generated.yaml
+    - assembles.yaml
+    - previous-version.yaml
+    - influenced-by.yaml
+    - generated-from.yaml
+    - triggered-by.yaml
+    - uses-prompt.yaml
+    - compiled-from.yaml
+    - includes-concept.yaml
+    - includes-voice.yaml
+    - produces.yaml
+    - creates-content.yaml
+    - includes.yaml
+    - has-evaluation.yaml
+    - evaluated-by-job.yaml
+
+  mining:
+    - has-seo-target.yaml
+    - has-geo-target.yaml
+    - targets-seo.yaml
+    - targets-geo.yaml
+    - targets-keyword.yaml
+    - targets-thing.yaml
+    - seo-mines.yaml
+    - geo-mines.yaml
+    - has-metrics.yaml
+
+# Naming conventions
+conventions:
+  file_name: kebab-case.yaml  # e.g., has-block.yaml
+  arc_name: UPPER_SNAKE_CASE  # e.g., HAS_BLOCK
+  source_target: PascalCase   # e.g., Page, Block

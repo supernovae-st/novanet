@@ -9,7 +9,7 @@ Knowledge graph visualization for the NovaNet localization orchestrator.
 
 ## Project Context
 
-**What:** Interactive 2D graph visualization for 35 node types (3 realms), 200 locales (~19,000 instances projected at full deployment)
+**What:** Interactive 2D graph visualization for 44 node types (3 realms), 200 locales (~19,000 instances projected at full deployment)
 **Stack:** Next.js 16 + React 19 + TypeScript 5.9 + Tailwind CSS
 **Graph:** @xyflow/react
 **State:** Zustand 5 with persist/immer
@@ -155,8 +155,8 @@ v9 introduces faceted classification with 6 meta-node types:
 | **Layer** | 9 | WHAT? (functional classification) — replaces "Subcategory" |
 | **Kind** | 35 | Node type (1:1 with Neo4j labels) — replaces "NodeTypeMeta" |
 | **Trait** | 5 | HOW? (invariant / localized / knowledge / derived / job) |
-| **EdgeFamily** | 5 | Relationship classification |
-| **EdgeKind** | 50 | Individual relationship type |
+| **ArcFamily** | 5 | Relationship classification |
+| **ArcKind** | 50 | Individual relationship type |
 
 All meta-nodes carry `:Meta` double-label.
 
@@ -168,7 +168,7 @@ All meta-nodes carry `:Meta` double-label.
 | **📦 Project** | 14 | Project, BrandIdentity, ProjectL10n, Page, Block, BlockType, PageType, Concept, ConceptL10n, PagePrompt, BlockPrompt, BlockRules, PageL10n, BlockL10n |
 | **🎯 Shared** | 6 | SEOKeywordL10n, SEOKeywordMetrics, SEOMiningRun, GEOSeedL10n, GEOSeedMetrics, GEOMiningRun |
 
-### Key Relations (grouped by EdgeFamily)
+### Key Relations (grouped by ArcFamily)
 - **Ownership:** `HAS_CONCEPT`, `HAS_PAGE`, `HAS_BLOCK`, `OF_TYPE`, `SUPPORTS_LOCALE`
 - **Localization:** `HAS_L10N`, `FOR_LOCALE`
 - **Semantic:** `USES_CONCEPT`, `SEMANTIC_LINK`

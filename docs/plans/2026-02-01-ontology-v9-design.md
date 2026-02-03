@@ -2968,8 +2968,7 @@ and documentation. **Advanced TUI features are deferred to Phase 7B (v9.5).**
 | 7.8g | TUI dashboard mode | Mission control dashboard with live Neo4j stats: node/edge counts per Realm, sparkline history, gauge health indicators, edge traffic heatmap |
 | 7.8h | TUI animations | Boot sequence (matrix rain → logo fade-in → dashboard), typing effects on status bar, pulsing cursor on active panel, starfield background on idle |
 | 7.8i | TUI ASCII logo & branding | Saturn-graph animated logo, SuperNovae Studio + NovaNet branding, BigText variants, compact/full/animated modes, boot integration (see **TUI Logo & Branding** below) |
-| 7.8j | TUI onboarding flow | First-run detection (`~/.novanet/init`), welcome screen, Neo4j connection wizard, schema discovery, guided 5-step tour, quick-reference card (see **TUI Onboarding** below) |
-| 7.8k | TUI command palette & UX | `:` command palette (fuzzy via nucleo), contextual `?`/`??` help, breadcrumbs, toast notifications, action menus, clipboard yank, bookmarks (see **TUI Enhanced UX** below) |
+| 7.8j | TUI command palette & UX | `:` command palette (fuzzy via nucleo), contextual `?`/`??` help, breadcrumbs, toast notifications, action menus, clipboard yank, bookmarks (see **TUI Enhanced UX** below) |
 | 7.8l | TUI wow effects | Particle burst on CRUD, CRT scanlines, screen shake on delete, glitch transitions, nebula pulse, aurora idle, heatmap glow, data stream, warp speed, constellation lines (see **TUI Wow Effects** below) |
 
 **Parallelization**: 7.8d-7.8e are sequential (search before CRUD). 7.8f-7.8l are largely independent visual features.
@@ -3315,8 +3314,6 @@ tui-popup = { version = "0.7", optional = true }
 tui-scrollview = { version = "0.6", optional = true }
 rand = "0.8"                 # matrix rain / glitch randomness
 unicode-width = "0.2"        # correct CJK character widths
-dirs = "5"                   # home directory detection (onboarding)
-chrono = "0.4"               # onboarding timestamp
 
 [features]
 tui = [
@@ -3360,12 +3357,6 @@ tools/novanet/src/tui/
 │   ├── transitions.rs           # Panel focus/mode transitions
 │   ├── ticker.rs                # Frame-based animation timer
 │   └── effects.rs               # Particle burst, screen shake, glitch
-├── onboarding/
-│   ├── mod.rs
-│   ├── welcome.rs               # Welcome screen + schema discovery
-│   ├── connection.rs            # Neo4j connection wizard
-│   ├── tour.rs                  # 5-step guided panel tour
-│   └── quick_ref.rs             # Keyboard reference card
 ├── branding/
 │   ├── mod.rs
 │   ├── logo.rs                  # Saturn-graph ASCII logo widget
@@ -3640,35 +3631,11 @@ impl Widget for Logo {
 
 ---
 
-#### TUI Onboarding Experience
+#### TUI Welcome Screen
 
-First-time users see a guided welcome flow instead of the raw dashboard.
-Onboarding runs once and stores completion state in `~/.novanet/init`.
-
-##### First-Run Detection
-
-```rust
-fn is_first_run() -> bool {
-    dirs::home_dir()
-        .map(|h| !h.join(".novanet/init").exists())
-        .unwrap_or(true) // No home dir → treat as first run
-}
-
-fn mark_onboarding_complete() -> std::io::Result<()> {
-    let home = dirs::home_dir().ok_or_else(|| {
-        std::io::Error::new(std::io::ErrorKind::NotFound, "no home directory")
-    })?;
-    let path = home.join(".novanet/init");
-    std::fs::create_dir_all(path.parent().expect("path has parent"))?;
-    std::fs::write(&path, chrono::Utc::now().to_rfc3339())
-}
-```
-
-##### Welcome Screen
-
-After boot animation completes, first-run users see the welcome overlay.
-Each status check animates with a braille spinner (⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏) before
-showing result. Failed checks show `✗` in plasma_pink with a troubleshooting hint.
+First-time users or users without a Neo4j connection see a welcome screen with status checks.
+Each status check animates with a braille spinner (⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏) before showing result.
+Failed checks show `✗` in plasma_pink with a troubleshooting hint.
 
 ```
 ╔═══════════════════════════════════════════════════════════════════════╗
@@ -3695,8 +3662,7 @@ showing result. Failed checks show `✗` in plasma_pink with a troubleshooting h
 ║                                                                       ║
 ║      ◉ Ready!                                                         ║
 ║                                                                       ║
-║      Press [Enter] to start guided tour                               ║
-║      Press [Esc] to skip to dashboard                                 ║
+║      Press [Enter] to continue                                        ║
 ║      Press [?] for keyboard shortcuts                                 ║
 ║                                                                       ║
 ╚═══════════════════════════════════════════════════════════════════════╝
@@ -3708,77 +3674,6 @@ Connection failure state:
 ║        ├── bolt://localhost:7687 ─────── ✗ REFUSED                    ║
 ║        │   └── Hint: run `pnpm infra:up` from monorepo root          ║
 ║        └── Retrying in 3s... (⠹)                                     ║
-```
-
-##### Guided Tour (5 steps)
-
-If user presses [Enter], a highlight overlay walks through each panel.
-Each step highlights the target panel (cyber_cyan border glow, rest dimmed to 40%)
-and shows a tooltip popup with explanation + [Next]/[Skip] navigation.
-
-```
-STEP 1/5: TAXONOMY TREE
-────────────────────────
-┌─ HIGHLIGHTED ────────────┐  ╭──────────────────────────────────╮
-│  🌍 global               │  │ This is the taxonomy tree.        │
-│  ├── ⚙ config            │  │ All 35 Kinds organized by         │
-│  │   └── Locale          │  │ Realm > Layer hierarchy.          │
-│  ├── 📚 knowledge        │  │                                   │
-│  │   ├── Constraint      │  │ Navigate: ↑↓ or j/k              │
-│  │   └── ...             │  │ Expand:   → or Enter              │
-│  📦 project              │  │ Collapse: ← or Backspace          │
-│  └── ...                 │  │                                   │
-└──────────────────────────┘  │         [Next →]  [Skip tour]     │
-                              ╰──────────────────────────────────╯
-
-STEP 2/5: KIND DETAIL
-─────────────────────
-Properties, edges in/out, Realm/Layer/Trait chips, token budget.
-"Select any Kind to see its full profile here."
-
-STEP 3/5: CYPHER PREVIEW
-─────────────────────────
-Live Cypher query generated for the currently selected Kind.
-"Press c to copy, or modify the query in Query mode (4)."
-
-STEP 4/5: DASHBOARD
-────────────────────
-Sparklines, gauges, bar charts — live Neo4j stats.
-"Real data, updating every 5 seconds."
-
-STEP 5/5: STATUS BAR & MODES
-─────────────────────────────
-Navigation modes (1-4), search (/), command palette (:), help (?).
-"Press : to open the command palette — it knows every action."
-```
-
-##### Quick Reference Card
-
-At end of tour (or via `?` key → then `?` again for full card):
-
-```
-╔═══════════════════════════════════════════════════════════════════════╗
-║  NOVANET QUICK REFERENCE                                              ║
-╠═══════════════════════════════════════════════════════════════════════╣
-║                                                                       ║
-║  NAVIGATE              │ ACTIONS              │ VIEWS                  ║
-║  ↑↓ jk   Tree nav      │ n   Create node      │ 1  Data mode          ║
-║  ←→ hl   Panel focus   │ d   Delete            │ 2  Meta mode          ║
-║  Enter   Select/menu   │ e   Edge explorer     │ 3  Overlay mode       ║
-║  Tab     Next panel    │ r   Relation CRUD     │ 4  Query mode         ║
-║  Bksp    Go up level   │ c   Cypher preview    │ t  Toggle tree        ║
-║                        │ u   Undo              │ s  Toggle stats       ║
-║  SEARCH & FILTER       │ y   Yank (copy)       │ b  Toggle borders     ║
-║  /  Fuzzy search       │ B   Bookmark          │ m  Toggle matrix      ║
-║  :  Command palette    │ '   Jump bookmark     │ |  Split view         ║
-║  f  Facet filters      │ x   Export view       │                       ║
-║                        │                       │ EFFECTS               ║
-║  HELP                  │ SYSTEM                │ Ctrl+R CRT scanlines  ║
-║  ?  Quick help         │ F5  Refresh           │ Ctrl+M Mouse toggle   ║
-║  ?? Full reference     │ q   Quit              │                       ║
-║                                                                       ║
-║  [Esc] Close                                     SuperNovae Studio     ║
-╚═══════════════════════════════════════════════════════════════════════╝
 ```
 
 ---
@@ -4224,7 +4119,7 @@ refresh. Thresholds calculated from min/max of visible data range.
 
 ##### Typewriter Effect
 
-All text appearing during onboarding, boot, and status messages uses a
+All text appearing during boot and status messages uses a
 typewriter effect — characters appear one by one:
 
 ```rust

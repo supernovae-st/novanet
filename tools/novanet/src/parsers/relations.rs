@@ -2,18 +2,21 @@
 //!
 //! Every relation in v9 has a `family` (ownership/localization/semantic/generation/mining),
 //! and `source`/`target` can be a single label or a list of labels.
+//!
+//! v9.5 Note: EdgeFamily is now ArcFamily. EdgeFamily is kept as a type alias for backwards compatibility.
 
 use serde::Deserialize;
+use smallvec::{smallvec, SmallVec};
 use std::path::Path;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Enums
 // ─────────────────────────────────────────────────────────────────────────────
 
-/// The 5 edge families in v9.
+/// The 5 arc families in v9.5 (formerly EdgeFamily in v9).
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Deserialize)]
 #[serde(rename_all = "lowercase")]
-pub enum EdgeFamily {
+pub enum ArcFamily {
     Ownership,
     Localization,
     Semantic,
@@ -21,7 +24,10 @@ pub enum EdgeFamily {
     Mining,
 }
 
-impl std::fmt::Display for EdgeFamily {
+/// Type alias for backwards compatibility with v9 code.
+pub type EdgeFamily = ArcFamily;
+
+impl std::fmt::Display for ArcFamily {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             Self::Ownership => write!(f, "ownership"),
@@ -75,10 +81,11 @@ pub enum NodeRef {
 }
 
 impl NodeRef {
-    /// Returns labels as a slice-compatible vector.
-    pub fn labels(&self) -> Vec<&str> {
+    /// Returns labels as a SmallVec (stack-allocated for ≤4 labels).
+    /// Most relations have 1-4 sources/targets, avoiding heap allocation.
+    pub fn labels(&self) -> SmallVec<[&str; 4]> {
         match self {
-            NodeRef::Single(s) => vec![s.as_str()],
+            NodeRef::Single(s) => smallvec![s.as_str()],
             NodeRef::Multiple(v) => v.iter().map(|s| s.as_str()).collect(),
         }
     }
@@ -116,18 +123,19 @@ pub struct RelationsDocument {
 
     /// Example Cypher queries (opaque — for documentation only).
     #[serde(default)]
-    pub examples: Option<serde_yml::Value>,
+    pub examples: Option<serde_yaml::Value>,
 }
 
-/// A single relation definition.
+/// A single relation/arc definition.
+/// v9.5 Note: RelationDef is now ArcDef. RelationDef is kept for backwards compatibility.
 #[derive(Debug, Clone, Deserialize)]
 pub struct RelationDef {
     /// Relationship type (SCREAMING_SNAKE_CASE), e.g. "HAS_PAGE".
     #[serde(rename = "type")]
     pub rel_type: String,
 
-    /// Edge family classification.
-    pub family: EdgeFamily,
+    /// Arc family classification.
+    pub family: ArcFamily,
 
     /// Source node label(s).
     pub source: NodeRef,
@@ -141,7 +149,7 @@ pub struct RelationDef {
     /// LLM context string.
     pub llm_context: String,
 
-    /// Edge property names (optional).
+    /// Arc property names (optional).
     #[serde(default)]
     pub properties: Option<Vec<String>>,
 
@@ -149,10 +157,13 @@ pub struct RelationDef {
     #[serde(default)]
     pub is_self_referential: Option<bool>,
 
-    /// If this is an inverse relation, references the forward relation type.
+    /// If this is an inverse arc, references the forward arc type.
     #[serde(default)]
     pub inverse_of: Option<String>,
 }
+
+/// Type alias for v9.5 Arc terminology.
+pub type ArcDef = RelationDef;
 
 impl RelationDef {
     /// Returns true if this relation has an `inverse_of` field.
@@ -190,7 +201,7 @@ pub fn load_relations(root: &Path) -> crate::Result<RelationsDocument> {
     let content = std::fs::read_to_string(&path)?;
 
     let doc: RelationsDocument =
-        serde_yml::from_str(&content).map_err(|e| crate::NovaNetError::Schema {
+        serde_yaml::from_str(&content).map_err(|e| crate::NovaNetError::Schema {
             path: path.display().to_string(),
             source: e,
         })?;
@@ -221,7 +232,7 @@ mod tests {
             ("generation", EdgeFamily::Generation),
             ("mining", EdgeFamily::Mining),
         ] {
-            let result: EdgeFamily = serde_yml::from_str(yaml).unwrap();
+            let result: EdgeFamily = serde_yaml::from_str(yaml).unwrap();
             assert_eq!(result, expected);
             assert_eq!(result.to_string(), yaml);
         }
@@ -235,7 +246,7 @@ mod tests {
             ("many_to_one", Cardinality::ManyToOne, "N:1"),
             ("many_to_many", Cardinality::ManyToMany, "N:M"),
         ] {
-            let result: Cardinality = serde_yml::from_str(yaml).unwrap();
+            let result: Cardinality = serde_yaml::from_str(yaml).unwrap();
             assert_eq!(result, expected);
             assert_eq!(result.to_string(), display);
         }
@@ -244,16 +255,16 @@ mod tests {
     #[test]
     fn node_ref_single() {
         let yaml = "\"Project\"";
-        let nr: NodeRef = serde_yml::from_str(yaml).unwrap();
-        assert_eq!(nr.labels(), vec!["Project"]);
+        let nr: NodeRef = serde_yaml::from_str(yaml).unwrap();
+        assert_eq!(nr.labels().as_slice(), ["Project"]);
         assert_eq!(nr.len(), 1);
     }
 
     #[test]
     fn node_ref_multiple() {
         let yaml = "- Page\n- Block";
-        let nr: NodeRef = serde_yml::from_str(yaml).unwrap();
-        assert_eq!(nr.labels(), vec!["Page", "Block"]);
+        let nr: NodeRef = serde_yaml::from_str(yaml).unwrap();
+        assert_eq!(nr.labels().as_slice(), ["Page", "Block"]);
         assert_eq!(nr.len(), 2);
     }
 
@@ -268,14 +279,14 @@ relations:
     cardinality: one_to_many
     llm_context: "Project owns pages."
 "#;
-        let doc: RelationsDocument = serde_yml::from_str(yaml).unwrap();
+        let doc: RelationsDocument = serde_yaml::from_str(yaml).unwrap();
         assert_eq!(doc.relations.len(), 1);
 
         let rel = &doc.relations[0];
         assert_eq!(rel.rel_type, "HAS_PAGE");
         assert_eq!(rel.family, EdgeFamily::Ownership);
-        assert_eq!(rel.source.labels(), vec!["Project"]);
-        assert_eq!(rel.target.labels(), vec!["Page"]);
+        assert_eq!(rel.source.labels().as_slice(), ["Project"]);
+        assert_eq!(rel.target.labels().as_slice(), ["Page"]);
         assert_eq!(rel.cardinality, Cardinality::OneToMany);
         assert!(!rel.is_inverse());
         assert!(!rel.has_properties());
@@ -294,7 +305,7 @@ relations:
       - position
     llm_context: "Page contains ordered blocks."
 "#;
-        let doc: RelationsDocument = serde_yml::from_str(yaml).unwrap();
+        let doc: RelationsDocument = serde_yaml::from_str(yaml).unwrap();
         let rel = &doc.relations[0];
         assert!(rel.has_properties());
         assert_eq!(rel.properties.as_ref().unwrap(), &["position"]);
@@ -315,10 +326,10 @@ relations:
     cardinality: many_to_one
     llm_context: "Types."
 "#;
-        let doc: RelationsDocument = serde_yml::from_str(yaml).unwrap();
+        let doc: RelationsDocument = serde_yaml::from_str(yaml).unwrap();
         let rel = &doc.relations[0];
-        assert_eq!(rel.source.labels(), vec!["Page", "Block"]);
-        assert_eq!(rel.target.labels(), vec!["PageType", "BlockType"]);
+        assert_eq!(rel.source.labels().as_slice(), ["Page", "Block"]);
+        assert_eq!(rel.target.labels().as_slice(), ["PageType", "BlockType"]);
     }
 
     #[test]
@@ -333,7 +344,7 @@ relations:
     inverse_of: HAS_BLOCK
     llm_context: "Inverse."
 "#;
-        let doc: RelationsDocument = serde_yml::from_str(yaml).unwrap();
+        let doc: RelationsDocument = serde_yaml::from_str(yaml).unwrap();
         let rel = &doc.relations[0];
         assert!(rel.is_inverse());
         assert_eq!(rel.inverse_of.as_deref(), Some("HAS_BLOCK"));
@@ -351,7 +362,7 @@ relations:
     is_self_referential: true
     llm_context: "Fallback chain."
 "#;
-        let doc: RelationsDocument = serde_yml::from_str(yaml).unwrap();
+        let doc: RelationsDocument = serde_yaml::from_str(yaml).unwrap();
         let rel = &doc.relations[0];
         assert_eq!(rel.is_self_referential, Some(true));
     }
@@ -371,19 +382,19 @@ relations:
         let doc = load_relations(root).expect("should parse relations.yaml");
 
         // Total relation count
-        assert_eq!(doc.relations.len(), 50, "expected 50 relations");
+        assert_eq!(doc.relations.len(), 75, "expected 75 relations");
 
         // Family distribution
         let family_count = |f: EdgeFamily| doc.relations.iter().filter(|r| r.family == f).count();
-        assert_eq!(family_count(EdgeFamily::Ownership), 11, "ownership count");
+        assert_eq!(family_count(EdgeFamily::Ownership), 15, "ownership count");
         assert_eq!(
             family_count(EdgeFamily::Localization),
             22,
             "localization count"
         );
-        assert_eq!(family_count(EdgeFamily::Semantic), 5, "semantic count");
-        assert_eq!(family_count(EdgeFamily::Generation), 5, "generation count");
-        assert_eq!(family_count(EdgeFamily::Mining), 7, "mining count");
+        assert_eq!(family_count(EdgeFamily::Semantic), 14, "semantic count");
+        assert_eq!(family_count(EdgeFamily::Generation), 15, "generation count");
+        assert_eq!(family_count(EdgeFamily::Mining), 9, "mining count");
 
         // All relations have non-empty type and llm_context
         for rel in &doc.relations {
@@ -401,7 +412,7 @@ relations:
         let mut types: Vec<&str> = doc.relations.iter().map(|r| r.rel_type.as_str()).collect();
         types.sort();
         types.dedup();
-        assert_eq!(types.len(), 50, "all relation types should be unique");
+        assert_eq!(types.len(), 75, "all relation types should be unique");
 
         // Semantic link types
         let slt = doc
@@ -417,8 +428,8 @@ relations:
             .find(|r| r.rel_type == "HAS_PAGE")
             .unwrap();
         assert_eq!(has_page.family, EdgeFamily::Ownership);
-        assert_eq!(has_page.source.labels(), vec!["Project"]);
-        assert_eq!(has_page.target.labels(), vec!["Page"]);
+        assert_eq!(has_page.source.labels().as_slice(), ["Project"]);
+        assert_eq!(has_page.target.labels().as_slice(), ["Page"]);
         assert_eq!(has_page.cardinality, Cardinality::OneToMany);
 
         let for_locale = doc
@@ -427,6 +438,6 @@ relations:
             .find(|r| r.rel_type == "FOR_LOCALE")
             .unwrap();
         assert_eq!(for_locale.family, EdgeFamily::Localization);
-        assert_eq!(for_locale.source.len(), 6, "FOR_LOCALE has 6 sources");
+        assert_eq!(for_locale.source.len(), 9, "FOR_LOCALE has 9 sources");
     }
 }

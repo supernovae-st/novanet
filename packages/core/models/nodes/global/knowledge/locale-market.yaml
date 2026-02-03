@@ -7,7 +7,7 @@ node:
   name: LocaleMarket
   realm: global
   layer: knowledge
-  locale_behavior: knowledge
+  trait: knowledge
   icon: "📈"
   description: "Business and market data for a locale"
 

@@ -5,7 +5,7 @@ node:
   name: Project
   realm: project
   layer: foundation
-  locale_behavior: invariant
+  trait: invariant
   icon: "🔷"
   description: "Multi-tenant root node containing project configuration and brand info"
 

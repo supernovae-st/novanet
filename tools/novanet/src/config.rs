@@ -49,6 +49,16 @@ pub fn organizing_principles_path(root: &Path) -> PathBuf {
     root.join("packages/core/models/organizing-principles.yaml")
 }
 
+/// Path to taxonomy.yaml (v9.5 replacement for organizing-principles.yaml)
+pub fn taxonomy_path(root: &Path) -> PathBuf {
+    root.join("packages/core/models/taxonomy.yaml")
+}
+
+/// Directory containing arc-kinds YAML files
+pub fn arc_kinds_dir(root: &Path) -> PathBuf {
+    root.join("packages/core/models/arc-kinds")
+}
+
 pub fn seed_dir(root: &Path) -> PathBuf {
     root.join("packages/db/seed")
 }
@@ -107,6 +117,24 @@ mod tests {
         assert_eq!(
             organizing_principles_path(root),
             PathBuf::from("/fake/root/packages/core/models/organizing-principles.yaml")
+        );
+    }
+
+    #[test]
+    fn taxonomy_path_joins_correctly() {
+        let root = Path::new("/fake/root");
+        assert_eq!(
+            taxonomy_path(root),
+            PathBuf::from("/fake/root/packages/core/models/taxonomy.yaml")
+        );
+    }
+
+    #[test]
+    fn arc_kinds_dir_joins_correctly() {
+        let root = Path::new("/fake/root");
+        assert_eq!(
+            arc_kinds_dir(root),
+            PathBuf::from("/fake/root/packages/core/models/arc-kinds")
         );
     }
 

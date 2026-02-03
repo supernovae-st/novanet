@@ -170,10 +170,10 @@ describe('navigation route logic', () => {
       expect(types.length).toBe(2);
     });
 
-    it('returns empty when intersection has no overlap', () => {
+    it('returns Thing when filtering shared + invariant', () => {
       const types = resolveFacets(['shared'], [], ['invariant']);
-      // No shared types are invariant
-      expect(types).toEqual([]);
+      // Thing is the only shared type that is invariant
+      expect(types).toEqual(['Thing']);
     });
   });
 });

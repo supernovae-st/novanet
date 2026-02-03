@@ -1,0 +1,34 @@
+# packages/core/models/arc-kinds/semantic/uses-concept.yaml
+# ArcKind: USES_CONCEPT — Page/Block references a Concept
+
+arc:
+  name: USES_CONCEPT
+  family: semantic
+  scope: intra_realm
+
+  source:
+    - Page
+    - Block
+  target: Concept
+  cardinality: many_to_many
+
+  properties:
+    - name: purpose
+      type: string
+      required: false
+      enum: [primary, secondary, contextual]
+      description: "How the concept is used: primary topic, secondary mention, or contextual"
+    - name: temperature
+      type: float
+      required: false
+      default: 1.0
+      description: "Activation weight for spreading activation (0.0-1.0)"
+
+  inverse: USED_BY
+
+  llm_context: |
+    Page/Block references concepts for generation context.
+    purpose: primary = main topic, secondary = supporting, contextual = background.
+    temperature: spreading activation weight (higher = more influence).
+
+  cypher_pattern: "(Page)-[:USES_CONCEPT {purpose, temperature}]->(Concept)"

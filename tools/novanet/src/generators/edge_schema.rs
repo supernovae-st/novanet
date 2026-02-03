@@ -5,6 +5,7 @@
 //!
 //! Output target: `packages/db/seed/02-edge-kinds.cypher`
 
+use super::cypher_utils::{cypher_list_owned, cypher_str};
 use crate::parsers::relations::{self, Cardinality, RelationDef, RelationsDocument};
 use std::collections::HashMap;
 use std::fmt::Write;
@@ -13,27 +14,6 @@ use std::path::Path;
 // ─────────────────────────────────────────────────────────────────────────────
 // Helpers
 // ─────────────────────────────────────────────────────────────────────────────
-
-/// Collapse multiline YAML strings into single-line Cypher values
-/// and escape single quotes.
-fn cypher_str(s: &str) -> String {
-    s.split_whitespace()
-        .collect::<Vec<_>>()
-        .join(" ")
-        .replace('\'', "\\'")
-}
-
-/// Format a Rust string slice as a Cypher list literal: `['a', 'b', 'c']`.
-fn cypher_list(items: &[String]) -> String {
-    if items.is_empty() {
-        return "[]".to_string();
-    }
-    let inner: Vec<String> = items
-        .iter()
-        .map(|s| format!("'{}'", cypher_str(s)))
-        .collect();
-    format!("[{}]", inner.join(", "))
-}
 
 /// Convert SCREAMING_SNAKE_CASE to Title Case.
 /// e.g. "HAS_PAGE" -> "Has Page", "SEMANTIC_LINK" -> "Semantic Link"
@@ -157,7 +137,7 @@ fn generate_edge_schema(doc: &RelationsDocument) -> crate::Result<String> {
         writeln!(
             out,
             "  {var}.edge_properties = {props},",
-            props = cypher_list(&props)
+            props = cypher_list_owned(&props)
         )
         .unwrap();
         writeln!(out, "  {var}.cypher_pattern = '{pattern}',").unwrap();
@@ -176,7 +156,7 @@ fn generate_edge_schema(doc: &RelationsDocument) -> crate::Result<String> {
         writeln!(
             out,
             "  {var}.edge_properties = {props},",
-            props = cypher_list(&props)
+            props = cypher_list_owned(&props)
         )
         .unwrap();
         writeln!(out, "  {var}.cypher_pattern = '{pattern}',").unwrap();
@@ -548,26 +528,26 @@ mod tests {
             .generate(root)
             .expect("should generate edge schema cypher");
 
-        // Count non-inverse relations (50 total - 5 inverse = 45)
+        // Count non-inverse relations (75 total - 5 inverse = 70)
         let ek_merges = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains(":Meta:EdgeKind"))
             .count();
-        assert_eq!(ek_merges, 45, "expected 45 EdgeKind MERGE statements");
+        assert_eq!(ek_merges, 70, "expected 70 EdgeKind MERGE statements");
 
         // HAS_EDGE_KIND relationships match EdgeKind count
         let has_ek = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:HAS_EDGE_KIND]"))
             .count();
-        assert_eq!(has_ek, 45, "expected 45 HAS_EDGE_KIND relationships");
+        assert_eq!(has_ek, 70, "expected 70 HAS_EDGE_KIND relationships");
 
         // IN_FAMILY relationships match EdgeKind count
         let in_family = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_FAMILY]"))
             .count();
-        assert_eq!(in_family, 45, "expected 45 IN_FAMILY relationships");
+        assert_eq!(in_family, 70, "expected 70 IN_FAMILY relationships");
 
         // Family distribution (non-inverse counts)
         // Section 2 MATCH lines have EdgeFamily first: "MATCH (ef:EdgeFamily ..."
@@ -588,8 +568,8 @@ mod tests {
         let mining = count_family("mining");
 
         assert!(
-            ownership + localization + semantic + generation + mining == 45,
-            "family counts should sum to 45: o={ownership} l={localization} s={semantic} g={generation} m={mining}"
+            ownership + localization + semantic + generation + mining == 70,
+            "family counts should sum to 70: o={ownership} l={localization} s={semantic} g={generation} m={mining}"
         );
 
         // Spot checks — specific EdgeKinds
@@ -620,6 +600,6 @@ mod tests {
         }
 
         // Header reflects count
-        assert!(cypher.contains("45 EdgeKind nodes"));
+        assert!(cypher.contains("70 EdgeKind nodes"));
     }
 }

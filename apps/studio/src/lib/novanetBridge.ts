@@ -29,7 +29,7 @@ export interface FacetFilter {
   realms: string[];
   layers: string[];
   traits: string[];
-  edge_families: string[];
+  arc_families: string[];
   kinds: string[];
 }
 

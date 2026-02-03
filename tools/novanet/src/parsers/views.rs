@@ -71,7 +71,7 @@ pub struct ViewExample {
     pub description: Option<String>,
     pub query: String,
     #[serde(default)]
-    pub params: Option<serde_yml::Value>,
+    pub params: Option<serde_yaml::Value>,
 }
 
 /// Documentation section of a view definition.
@@ -102,7 +102,7 @@ pub struct ViewDef {
     pub root: RootDef,
     pub include: Vec<IncludeRule>,
     #[serde(default)]
-    pub filters: Option<serde_yml::Value>,
+    pub filters: Option<serde_yaml::Value>,
     #[serde(default)]
     pub docs: Option<ViewDocs>,
 }
@@ -156,7 +156,7 @@ pub fn load_all_views(root: &Path) -> crate::Result<Vec<ViewDef>> {
     for entry in entries {
         let content = std::fs::read_to_string(entry.path())?;
         let view: ViewDef =
-            serde_yml::from_str(&content).map_err(|e| crate::NovaNetError::Schema {
+            serde_yaml::from_str(&content).map_err(|e| crate::NovaNetError::Schema {
                 path: entry.path().display().to_string(),
                 source: e,
             })?;
@@ -176,7 +176,7 @@ pub fn load_view(root: &Path, id: &str) -> crate::Result<ViewDef> {
         )));
     }
     let content = std::fs::read_to_string(&path)?;
-    serde_yml::from_str(&content).map_err(|e| crate::NovaNetError::Schema {
+    serde_yaml::from_str(&content).map_err(|e| crate::NovaNetError::Schema {
         path: path.display().to_string(),
         source: e,
     })
@@ -192,7 +192,7 @@ pub fn load_registry(root: &Path) -> crate::Result<ViewRegistry> {
         )));
     }
     let content = std::fs::read_to_string(&path)?;
-    serde_yml::from_str(&content).map_err(|e| crate::NovaNetError::Schema {
+    serde_yaml::from_str(&content).map_err(|e| crate::NovaNetError::Schema {
         path: path.display().to_string(),
         source: e,
     })
@@ -219,7 +219,7 @@ include:
   - relation: HAS_PROMPT
     direction: outgoing
 "#;
-        let view: ViewDef = serde_yml::from_str(yaml).unwrap();
+        let view: ViewDef = serde_yaml::from_str(yaml).unwrap();
         assert_eq!(view.id, "test-view");
         assert_eq!(view.root.node_type, "Block");
         assert_eq!(view.include.len(), 1);
@@ -245,7 +245,7 @@ include:
       - relation: HAS_PROMPT
         direction: outgoing
 "#;
-        let view: ViewDef = serde_yml::from_str(yaml).unwrap();
+        let view: ViewDef = serde_yaml::from_str(yaml).unwrap();
         let nested = view.include[0].include.as_ref().unwrap();
         assert_eq!(nested.len(), 2);
         assert_eq!(nested[0].relation, "HAS_BLOCK");
@@ -259,7 +259,7 @@ include:
             ("incoming", Direction::Incoming),
             ("both", Direction::Both),
         ] {
-            let result: Direction = serde_yml::from_str(yaml).unwrap();
+            let result: Direction = serde_yaml::from_str(yaml).unwrap();
             assert_eq!(result, expected);
         }
     }
@@ -289,7 +289,7 @@ docs:
     - "Note 1"
     - "Note 2"
 "#;
-        let view: ViewDef = serde_yml::from_str(yaml).unwrap();
+        let view: ViewDef = serde_yaml::from_str(yaml).unwrap();
         let docs = view.docs.as_ref().unwrap();
         assert_eq!(docs.title.as_deref(), Some("My View"));
         assert_eq!(docs.category.as_deref(), Some("knowledge"));
@@ -316,7 +316,7 @@ views:
     description: Block context
     category: generation
 "#;
-        let reg: ViewRegistry = serde_yml::from_str(yaml).unwrap();
+        let reg: ViewRegistry = serde_yaml::from_str(yaml).unwrap();
         assert_eq!(reg.version, "8.1.0");
         assert_eq!(reg.views.len(), 2);
         assert_eq!(reg.views[0].id, "complete-graph");
@@ -336,7 +336,7 @@ include:
     direction: outgoing
     depth: 2
 "#;
-        let view: ViewDef = serde_yml::from_str(yaml).unwrap();
+        let view: ViewDef = serde_yaml::from_str(yaml).unwrap();
         assert_eq!(view.include[0].depth, Some(2));
     }
 

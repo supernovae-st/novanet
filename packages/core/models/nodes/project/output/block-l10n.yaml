@@ -14,7 +14,7 @@ node:
   name: BlockL10n
   realm: project
   layer: output
-  locale_behavior: localized
+  trait: localized
   icon: "🟠"
   description: "LLM-generated localized content for a block"
 

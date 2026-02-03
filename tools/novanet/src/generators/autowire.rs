@@ -192,7 +192,7 @@ mod tests {
                 name: name.to_string(),
                 realm: realm.to_string(),
                 layer: layer.to_string(),
-                locale_behavior: LocaleBehavior::Invariant,
+                node_trait: LocaleBehavior::Invariant,
                 icon: None,
                 description: "test".to_string(),
                 standard_properties: None,
@@ -301,12 +301,12 @@ mod tests {
             .generate(root)
             .expect("should generate autowire cypher");
 
-        // 35 OF_KIND statements
+        // 44 OF_KIND statements
         let of_kind = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:OF_KIND]"))
             .count();
-        assert_eq!(of_kind, 35, "expected 35 OF_KIND statements");
+        assert_eq!(of_kind, 44, "expected 44 OF_KIND statements");
 
         // All 3 realms present
         assert!(cypher.contains("GLOBAL REALM"));
@@ -319,12 +319,12 @@ mod tests {
         assert!(cypher.contains("MATCH (n:SEOMiningRun)"));
         assert!(cypher.contains("MATCH (n:GEOSeedMetrics)"));
 
-        // Layer counts match the 35 nodes (14 project, 15 global, 6 shared)
+        // Layer counts match the 39 nodes (18 project, 15 global, 6 shared)
         assert!(cypher.contains("Global > Config (1 type)"));
         assert!(cypher.contains("Global > Knowledge (14 types)"));
 
         // Header
-        assert!(cypher.contains("Total: 35 node types"));
+        assert!(cypher.contains("Total: 44 node types"));
 
         // Verification query present
         assert!(cypher.contains("VERIFICATION QUERY"));

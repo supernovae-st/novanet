@@ -54,7 +54,7 @@ describe('buildCypherViaRust', () => {
     realms: [],
     layers: [],
     traits: [],
-    edge_families: [],
+    arc_families: [],
     kinds: [],
   };
 
@@ -79,7 +79,7 @@ describe('buildCypherViaRust', () => {
       realms: ['project'],
       layers: ['structure'],
       traits: ['invariant'],
-      edge_families: [],
+      arc_families: [],
       kinds: [],
     };
 

@@ -1,0 +1,30 @@
+# packages/core/models/arc-kinds/mining/has-seo-target.yaml
+# ArcKind: HAS_SEO_TARGET — ConceptL10n targets SEO keyword
+
+arc:
+  name: HAS_SEO_TARGET
+  family: mining
+  scope: cross_realm  # project → shared
+
+  source: ConceptL10n
+  target: SEOKeywordL10n
+  cardinality: one_to_many
+
+  properties:
+    - name: role
+      type: string
+      required: true
+      enum: [primary, secondary, long-tail]
+      description: "Keyword role: primary target, secondary, or long-tail variant"
+    - name: priority
+      type: integer
+      required: false
+      default: 1
+      description: "Priority ranking (1 = highest)"
+
+  llm_context: |
+    Primary SEO targeting — locale-aligned (ConceptL10n fr-FR → SEOKeywordL10n fr-FR).
+    role: primary = main ranking target, secondary = supporting, long-tail = niche.
+    Use for injecting keywords into generated content.
+
+  cypher_pattern: "(ConceptL10n)-[:HAS_SEO_TARGET {role, priority}]->(SEOKeywordL10n)"

@@ -1,0 +1,28 @@
+# packages/core/models/arc-kinds/generation/generated.yaml
+# ArcKind: GENERATED — Prompt produced localized content
+
+arc:
+  name: GENERATED
+  family: generation
+  scope: intra_realm
+
+  source:
+    - PagePrompt
+    - BlockPrompt
+  target:
+    - PageL10n
+    - BlockL10n
+  cardinality: one_to_many
+
+  properties:
+    - name: generated_at
+      type: datetime
+      required: true
+      description: "Timestamp when content was generated"
+
+  llm_context: |
+    Provenance tracking: which prompt generated which output.
+    Use for debugging and version history.
+    Query: MATCH (prompt:BlockPrompt)-[:GENERATED]->(content:BlockL10n)
+
+  cypher_pattern: "(BlockPrompt)-[:GENERATED {generated_at}]->(BlockL10n)"

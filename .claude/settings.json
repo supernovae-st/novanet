@@ -34,6 +34,16 @@
             "command": ".claude/hooks/post-edit-format.sh"
           }
         ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "pathPattern": "**/tui/*.rs",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/keybindings-reminder.sh"
+          }
+        ]
       }
     ]
   }

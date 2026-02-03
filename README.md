@@ -35,7 +35,7 @@ Generate culturally-native content across 200+ locales — not translation, but 
 |  |  |  |  |
 |:---:|:---:|:---:|:---:|
 | **Knowledge Graph** | **200+ Locales** | **Graph Studio** | **AI-Powered** |
-| 35 node types, 50 relations | Native generation per locale | Interactive 2D visualization | Claude API for natural language queries |
+| 44 node types, 50 relations | Native generation per locale | Interactive 2D visualization | Claude API for natural language queries |
 | Neo4j with APOC | Locale knowledge layer | React Flow + ELK.js layouts | Cypher generation from text |
 
 ---
@@ -117,7 +117,7 @@ novanet-hq/
 ├── packages/
 │   ├── core/                  # @novanet/core — types, schemas, filters
 │   │   ├── models/            # YAML schema definitions (source of truth)
-│   │   │   ├── _index.yaml    # 35 nodes, 50+ relations
+│   │   │   ├── _index.yaml    # 44 nodes, 50+ relations
 │   │   │   ├── nodes/         # Node definitions by realm
 │   │   │   └── relations.yaml # Relationship definitions
 │   │   └── src/               # TypeScript implementation
@@ -215,13 +215,13 @@ Password: (see NEO4J_PASSWORD env var)
 
 ## Graph Schema
 
-NovaNet models content as a knowledge graph with **35 node types** across **3 Realms** and **9 Layers** (v9.0.0):
+NovaNet models content as a knowledge graph with **44 node types** across **3 Realms** and **9 Layers** (v10.0.0):
 
 | Realm | Nodes | Layers |
 |-------|-------|--------|
 | **Global** | 15 | Configuration, Locale Knowledge |
-| **Project** | 14 | Foundation, Structure, Semantic, Instructions, Output |
-| **Shared** | 6 | SEO Intelligence, GEO Intelligence |
+| **Project** | 21 | Foundation, Structure, Semantic, Instructions, Output |
+| **Shared** | 8 | SEO Intelligence, GEO Intelligence |
 
 Each node type has a **Trait** (invariant / localized / knowledge / derived / job) and belongs to an **EdgeFamily** classification.
 
@@ -250,7 +250,7 @@ See [`packages/core/models/_index.yaml`](packages/core/models/_index.yaml) for c
 │ │ ...            │  │   [BlockL10n]                    │  │ [Copy JSON]  │ │
 │ └────────────────┘  └──────────────────────────────────┘  └──────────────┘ │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│  Mode: Data  │  35 nodes  │  50 relations  │  Zoom: 100%  │  Locale: fr-FR │
+│  Mode: Data  │  44 nodes  │  50 relations  │  Zoom: 100%  │  Locale: fr-FR │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 *Interactive 2D graph visualization with AI-powered queries (⌘J)*

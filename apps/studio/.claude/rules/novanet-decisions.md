@@ -132,7 +132,7 @@
 
 ## ADR-008: Faceted Classification (v9)
 
-**Decision:** Replace flat tree (Scope > Subcategory > NodeTypeMeta) with faceted classification (Realm + Layer + Trait + EdgeFamily)
+**Decision:** Replace flat tree (Scope > Subcategory > NodeTypeMeta) with faceted classification (Realm + Layer + Trait + ArcFamily)
 
 **Rationale:**
 - Flat tree only classifies by WHERE > WHAT, missing HOW (locale behavior)
@@ -141,7 +141,7 @@
 - Single-axis navigation insufficient for AI agent discovery
 
 **Implementation:**
-- 6 meta-node types: Realm (3), Layer (9), Kind (35), Trait (5), EdgeFamily (5), EdgeKind (50)
+- 6 meta-node types: Realm (3), Layer (9), Kind (35), Trait (5), ArcFamily (5), ArcKind (50)
 - Dual navigation: top-down hierarchy + Kind-centric facets
 - All meta-nodes carry `:Meta` double-label
 - YAML remains source of truth, meta-graph is generated
@@ -162,9 +162,9 @@
 **Key properties:**
 - `schema_hint` on Kind: "key, display_name, instructions (req), locale_behavior"
 - `context_budget` on Kind: high/medium/low/minimal token priority
-- `cypher_pattern` on EdgeKind: "(Page)-[:HAS_BLOCK]->(Block)"
+- `cypher_pattern` on ArcKind: "(Page)-[:HAS_BLOCK]->(Block)"
 - `traversal_depth` on Kind: v10 placeholder (nullable)
-- `temperature_threshold` on EdgeKind: v10 placeholder (nullable)
+- `temperature_threshold` on ArcKind: v10 placeholder (nullable)
 
 ---
 
@@ -183,7 +183,7 @@
 - Single crate at `tools/novanet/`
 - Dependencies: clap, ratatui, crossterm, neo4rs, tokio, serde_yml, minijinja, petgraph, rayon, indicatif
 - Modules: commands/, generators/, parsers/, search/, filter/, tui/
-- 13 subcommands: schema, db, locale, doc, search, filter, data/meta/overlay/query, node, relation, tui
+- 13 subcommands: schema, db, locale, doc, search, filter, data/meta/overlay/query, node, arc, tui
 
 **Architecture rule:** Single `novanet` Rust binary handles ALL schema and graph operations. TypeScript limited to: Studio web app, core/types, core/schemas (Zod).
 
@@ -221,7 +221,7 @@
 | Mode | Content | Use Case |
 |------|---------|----------|
 | `data` | Real instances only | Default exploration |
-| `meta` | Meta-graph only (Realm/Layer/Kind/Trait/EdgeFamily) | Schema understanding |
+| `meta` | Meta-graph only (Realm/Layer/Kind/Trait/ArcFamily) | Schema understanding |
 | `overlay` | Data + meta-graph combined | Architecture debugging |
 | `query` | Faceted filter results | Targeted exploration |
 
@@ -259,7 +259,7 @@
 | Fill color | Layer (9 colors) | Node background |
 | Border style | Trait (5 styles) | Solid/dashed/dotted/double/none |
 | Spatial grouping | Realm (3 zones) | Layout position |
-| Edge color | EdgeFamily (5 colors) | Relationship stroke |
+| Arc stroke | ArcFamily (5 colors) | Arc stroke color |
 
 **Rationale:**
 - No overloading: each facet maps to exactly one visual channel

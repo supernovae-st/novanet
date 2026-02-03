@@ -1,0 +1,157 @@
+# SearchIntent — User search query abstraction (v9.7)
+# Path: packages/core/models/nodes/project/semantic/search-intent.yaml
+
+node:
+  name: SearchIntent
+  realm: project
+  layer: semantic
+  trait: invariant
+  icon: "🎯"
+  description: |
+    Abstraction of user search intent. Represents the underlying need behind
+    a search query, independent of specific keywords or locale. A single
+    SearchIntent can be satisfied by multiple Pages across locales.
+
+    USE: When modeling the "why" behind searches, not just keywords.
+    TRIGGERS: "intent mapping", "search intent", "user need", "query abstraction".
+    NOT: For specific keywords (use SEOKeyword), for page content (use Concept).
+
+  standard_properties:
+    key:
+      type: string
+      required: true
+      description: "Unique identifier"
+      pattern: "^intent-[a-z0-9-]+$"
+      example: "intent-create-qr-code"
+
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable intent name"
+      example: "Create QR Code"
+
+    description:
+      type: string
+      required: true
+      description: "Detailed description of the intent"
+
+    llm_context:
+      type: string
+      required: true
+      description: "LLM prompt context for this intent"
+      example: "User wants to create a new QR code from scratch."
+
+    created_at:
+      type: datetime
+      required: true
+      description: "Creation timestamp"
+
+    updated_at:
+      type: datetime
+      required: true
+      description: "Last update timestamp"
+
+  properties:
+    intent_type:
+      type: string
+      required: true
+      description: "Classification of intent type"
+      enum:
+        - informational
+        - navigational
+        - transactional
+        - commercial
+      example: "transactional"
+
+    funnel_stage:
+      type: string
+      required: true
+      description: "Where in the customer journey this intent appears"
+      enum:
+        - awareness
+        - consideration
+        - decision
+        - retention
+      example: "decision"
+
+    priority:
+      type: int
+      required: true
+      description: "Priority for content creation (1=highest)"
+      example: 1
+
+    estimated_volume:
+      type: int
+      required: false
+      description: "Estimated monthly search volume across all locales"
+      example: 50000
+
+    competitor_coverage:
+      type: float
+      required: false
+      description: "Percentage of competitors covering this intent (0.0-1.0)"
+      example: 0.75
+
+    content_gap_score:
+      type: float
+      required: false
+      description: "Score indicating opportunity (high = underserved intent)"
+      example: 0.8
+
+  neo4j:
+    indexes:
+      - name: searchintent_type
+        property: intent_type
+      - name: searchintent_funnel
+        property: funnel_stage
+      - name: searchintent_priority
+        property: priority
+
+  relations:
+    incoming:
+      - type: SATISFIES_INTENT
+        from: Page
+        description: "Pages that satisfy this search intent"
+
+      - type: FOR_INTENT
+        from: Block
+        description: "Blocks targeted at this search intent"
+
+    outgoing:
+      - type: MAPS_TO_CONCEPT
+        to: Concept
+        description: "Concepts related to this intent"
+
+      - type: TARGETS_KEYWORD
+        to: SEOKeywordL10n
+        description: "Localized SEO keywords that express this intent"
+
+  example:
+    data: |
+      {
+        "key": "intent-create-qr-code",
+        "display_name": "Create QR Code",
+        "description": "User wants to generate a new QR code from various input types",
+        "llm_context": "User intent: create a new QR code. May need guidance on input types, customization options, and output formats.",
+        "intent_type": "transactional",
+        "funnel_stage": "decision",
+        "priority": 1,
+        "estimated_volume": 50000,
+        "competitor_coverage": 0.75,
+        "content_gap_score": 0.3
+      }
+    cypher: |
+      CREATE (i:SearchIntent {
+        key: 'intent-create-qr-code',
+        display_name: 'Create QR Code',
+        description: 'User wants to generate a new QR code from various input types',
+        llm_context: 'User intent: create a new QR code. May need guidance on input types, customization options, and output formats.',
+        intent_type: 'transactional',
+        funnel_stage: 'decision',
+        priority: 1,
+        estimated_volume: 50000,
+        competitor_coverage: 0.75,
+        content_gap_score: 0.3,
+        created_at: datetime(),
+        updated_at: datetime()
+      })

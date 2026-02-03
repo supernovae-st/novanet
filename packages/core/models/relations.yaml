@@ -135,6 +135,9 @@ relations:
       - PageL10n
       - SEOKeywordL10n
       - GEOSeedL10n
+      - GenerationJob
+      - OutputArtifact
+      - ThingL10n
     target: Locale
     cardinality: many_to_one
     llm_context: "All localized content nodes point to their target Locale."
@@ -144,9 +147,11 @@ relations:
     source:
       - Concept
       - Project
+      - Thing
     target:
       - ConceptL10n
       - ProjectL10n
+      - ThingL10n
     cardinality: one_to_many
     llm_context: "Links invariant node to its human-curated localized definitions (one per locale)."
 
@@ -407,9 +412,11 @@ relations:
     source:
       - BlockL10n
       - PageL10n
+      - OutputArtifact
     target:
       - BlockL10n
       - PageL10n
+      - OutputArtifact
     cardinality: one_to_one
     is_self_referential: true
     llm_context: "Links to previous version in history chain. Query: (current)-[:PREVIOUS_VERSION*]->(old)."
@@ -430,6 +437,256 @@ relations:
     target: BlockType
     cardinality: many_to_one
     llm_context: "Direct link for fast structure validation (optimization shortcut)."
+
+  # ─── Generation Pipeline (v9.6) ───────────────────────────────────────────────
+
+  - type: TRIGGERED_BY
+    family: generation
+    source: GenerationJob
+    target: Project
+    cardinality: many_to_one
+    properties:
+      - trigger_type
+    llm_context: "Project triggers generation job. trigger_type: manual/schedule/webhook/api."
+
+  - type: USES_PROMPT
+    family: generation
+    source: GenerationJob
+    target: PromptArtifact
+    cardinality: many_to_many
+    llm_context: "Generation job uses compiled prompt artifacts for generation."
+
+  - type: COMPILED_FROM
+    family: generation
+    source: PromptArtifact
+    target:
+      - PagePrompt
+      - BlockPrompt
+    cardinality: many_to_one
+    llm_context: "Prompt artifact was compiled from source prompt template."
+
+  - type: INCLUDES_CONCEPT
+    family: generation
+    source: PromptArtifact
+    target: Concept
+    cardinality: one_to_many
+    properties:
+      - weight
+    llm_context: "Prompt artifact includes concept context for generation. weight: 0.0-1.0 influence on output."
+
+  - type: INCLUDES_VOICE
+    family: generation
+    source: PromptArtifact
+    target: LocaleVoice
+    cardinality: many_to_one
+    llm_context: "Prompt artifact includes locale voice parameters for tone/style."
+
+  - type: PRODUCES
+    family: generation
+    source: GenerationJob
+    target: OutputArtifact
+    cardinality: one_to_many
+    properties:
+      - produced_at
+    llm_context: "Generation job produces output artifacts (bundles)."
+
+  - type: CREATES_CONTENT
+    family: generation
+    source: GenerationJob
+    target:
+      - PageL10n
+      - BlockL10n
+    cardinality: one_to_many
+    properties:
+      - created_at
+    llm_context: "Generation job creates localized content nodes."
+
+  - type: INCLUDES
+    family: generation
+    source: OutputArtifact
+    target:
+      - PageL10n
+      - BlockL10n
+    cardinality: one_to_many
+    properties:
+      - position
+      - checksum
+    llm_context: "Output artifact bundles specific L10n nodes for deployment."
+
+  - type: HAS_EVALUATION
+    family: generation
+    source:
+      - PageL10n
+      - BlockL10n
+      - OutputArtifact
+    target: EvaluationSignal
+    cardinality: one_to_many
+    properties:
+      - evaluated_at
+    llm_context: "Content has quality evaluation signals. Not traversed in spreading activation."
+
+  - type: EVALUATED_BY_JOB
+    family: generation
+    source: EvaluationSignal
+    target: GenerationJob
+    cardinality: many_to_one
+    llm_context: "Evaluation signal relates to generation job that produced evaluated content."
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # Intent Layer (v9.7)
+  # ─────────────────────────────────────────────────────────────────────────────
+
+  - type: SATISFIES_INTENT
+    family: semantic
+    source: Page
+    target: SearchIntent
+    cardinality: many_to_many
+    properties:
+      - relevance_score
+      - is_primary
+    llm_context: "Page satisfies user search intent. relevance_score: 0.0-1.0 match quality. is_primary: true if main intent."
+
+  - type: FOR_INTENT
+    family: semantic
+    source: Block
+    target: SearchIntent
+    cardinality: many_to_many
+    properties:
+      - contribution_type
+    llm_context: "Block targets search intent. contribution_type: answer/context/cta/navigation."
+
+  - type: MAPS_TO_CONCEPT
+    family: semantic
+    source: SearchIntent
+    target: Concept
+    cardinality: many_to_many
+    properties:
+      - relationship_type
+    llm_context: "Intent maps to concept. relationship_type: directly_about/supports/related."
+
+  - type: TARGETS_KEYWORD
+    family: mining
+    source: SearchIntent
+    target: SEOKeywordL10n
+    cardinality: one_to_many
+    properties:
+      - match_type
+      - volume_share
+    llm_context: "Intent expressed through localized SEO keyword. match_type: exact/phrase/broad. volume_share: 0.0-1.0."
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # Content Slots (v9.7)
+  # ─────────────────────────────────────────────────────────────────────────────
+
+  - type: HAS_SLOT
+    family: ownership
+    source: Page
+    target: ContentSlot
+    cardinality: one_to_many
+    properties:
+      - position_override
+    llm_context: "Page defines content slot. position_override: optional layout position."
+
+  - type: FILLS_SLOT
+    family: semantic
+    source: Block
+    target: ContentSlot
+    cardinality: many_to_many
+    properties:
+      - variant_id
+      - traffic_allocation
+      - is_control
+    llm_context: "Block fills slot (A/B testing). variant_id: unique variant. traffic_allocation: 0.0-1.0. is_control: baseline."
+
+  - type: ACCEPTS_BLOCK_TYPE
+    family: ownership
+    source: ContentSlot
+    target: BlockType
+    cardinality: one_to_many
+    llm_context: "Slot accepts specific block types. Constraint enforcement."
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # Topic Clusters (v9.8)
+  # ─────────────────────────────────────────────────────────────────────────────
+
+  - type: CLUSTERS_TOPIC
+    family: semantic
+    source: TopicCluster
+    target: Concept
+    cardinality: one_to_many
+    properties:
+      - relevance_score
+      - is_primary
+    llm_context: "TopicCluster groups related concepts. relevance_score: 0.0-1.0 fit. is_primary: true if core topic."
+
+  - type: PILLAR_PAGE
+    family: ownership
+    source: TopicCluster
+    target: Page
+    cardinality: one_to_one
+    llm_context: "TopicCluster has ONE pillar page as authoritative hub. All cluster pages link to it."
+
+  - type: CLUSTER_PAGE
+    family: ownership
+    source: TopicCluster
+    target: Page
+    cardinality: one_to_many
+    properties:
+      - subtopic
+      - depth_level
+    llm_context: "TopicCluster contains supporting pages. subtopic: specific angle. depth_level: 1=direct, 2=related."
+
+  # NOTE: LINKS_TO already defined in semantic family (line ~348) for Page-to-Page internal linking
+
+  # ═════════════════════════════════════════════════════════════════════════════
+  # V9.9 — UNIFIED THING MODEL (Schema.org aligned)
+  # ═════════════════════════════════════════════════════════════════════════════
+
+  # NOTE: Thing/ThingL10n added to existing HAS_L10N and FOR_LOCALE definitions above
+
+  # Content → Thing relationships (semantic linking)
+  - type: MENTIONS
+    family: semantic
+    source: Block
+    target: Thing
+    cardinality: many_to_many
+    properties:
+      - position
+      - link_style
+      - anchor_alias
+    llm_context: "Block mentions a Thing entity. position: paragraph index. link_style: inline/citation/reference. anchor_alias: which alias to use for anchor text."
+
+  - type: COVERS
+    family: semantic
+    source: Page
+    target: Thing
+    cardinality: many_to_many
+    properties:
+      - is_primary
+      - depth
+      - coverage_type
+    llm_context: "Page covers a Thing as topic. is_primary: main subject. depth: surface/detailed/comprehensive. coverage_type: introduction/deep-dive/comparison."
+
+  # Thing → Thing relationships
+  - type: SPECIALIZES
+    family: semantic
+    source: Thing
+    target: Thing
+    cardinality: many_to_one
+    properties:
+      - override_level
+    llm_context: "Project Thing specializes a shared Thing. override_level: full/partial/extension. Used when brand has specific definition."
+
+  - type: RELATED_THING
+    family: semantic
+    source: Thing
+    target: Thing
+    cardinality: many_to_many
+    is_self_referential: true
+    properties:
+      - relation_type
+      - strength
+    llm_context: "Semantic link between Things. relation_type: same_as/part_of/instance_of/related_to/opposite_of/derived_from. strength: 0.0-1.0."
 
   # ═════════════════════════════════════════════════════════════════════════════
   # MINING — SEO/GEO targeting, metrics, extraction
@@ -476,6 +733,17 @@ relations:
       - status
       - priority
     llm_context: "Cross-locale GEO shortcut for reporting. status: active/monitoring/archived."
+
+  # V9.9 — Thing targeting (Schema.org entities)
+  - type: TARGETS_THING
+    family: mining
+    source: SEOKeywordL10n
+    target: Thing
+    cardinality: many_to_many
+    properties:
+      - relevance_score
+      - is_primary
+    llm_context: "SEO keyword targets a Schema.org Thing entity. For entity-based SEO linking keywords to universal concepts."
 
   # Mining runs
   - type: SEO_MINES

@@ -107,11 +107,11 @@ export default function HomePage() {
       applyViewPresetByShortcut: state.applyViewPresetByShortcut,
       toCypher: state.toCypher,
       setTraitFilter: state.setTraitFilter,
-      setEdgeFamilyFilter: state.setEdgeFamilyFilter,
+      setArcFamilyFilter: state.setArcFamilyFilter,
     }))
   );
   const traitFilter = useFilterStore((s) => s.traitFilter);
-  const edgeFamilyFilter = useFilterStore((s) => s.edgeFamilyFilter);
+  const arcFamilyFilter = useFilterStore((s) => s.arcFamilyFilter);
 
   // Graph Store - state + selectors
   const totalNodes = useGraphStore((state) => state.totalNodes);
@@ -451,14 +451,14 @@ export default function HomePage() {
       if (e.key === 'e' && !e.metaKey && !e.ctrlKey && !e.shiftKey) {
         e.preventDefault();
         const families = ['ownership', 'localization', 'semantic', 'generation', 'mining'];
-        if (edgeFamilyFilter.length === 0) {
-          filterActions.setEdgeFamilyFilter([families[0]]);
+        if (arcFamilyFilter.length === 0) {
+          filterActions.setArcFamilyFilter([families[0]]);
         } else {
-          const idx = families.indexOf(edgeFamilyFilter[0]);
+          const idx = families.indexOf(arcFamilyFilter[0]);
           if (idx >= 0 && idx < families.length - 1) {
-            filterActions.setEdgeFamilyFilter([families[idx + 1]]);
+            filterActions.setArcFamilyFilter([families[idx + 1]]);
           } else {
-            filterActions.setEdgeFamilyFilter([]);
+            filterActions.setArcFamilyFilter([]);
           }
         }
         return;
@@ -521,7 +521,7 @@ export default function HomePage() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [uiActions, filterActions, shortcutsOpen, closeShortcuts, openPalette, openAiSearch, navigationMode, transitionState.isTransitioning, transitionActions, traitFilter, edgeFamilyFilter]);
+  }, [uiActions, filterActions, shortcutsOpen, closeShortcuts, openPalette, openAiSearch, navigationMode, transitionState.isTransitioning, transitionActions, traitFilter, arcFamilyFilter]);
 
   // ═══════════════════════════════════════════════════════════════════════════
   // MEMOIZED HANDLERS

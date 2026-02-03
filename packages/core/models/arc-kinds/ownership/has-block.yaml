@@ -1,0 +1,25 @@
+# packages/core/models/arc-kinds/ownership/has-block.yaml
+# ArcKind: HAS_BLOCK — Page contains Block
+
+arc:
+  name: HAS_BLOCK
+  family: ownership
+  scope: intra_realm
+
+  source: Page
+  target: Block
+  cardinality: one_to_many
+
+  properties:
+    - name: position
+      type: integer
+      required: true
+      description: "Block ordering within page (0-indexed)"
+
+  inverse: BLOCK_OF
+
+  llm_context: |
+    Page contains blocks with position ordering. Blocks can be reused across pages.
+    Use to enumerate blocks for a page: MATCH (p:Page)-[:HAS_BLOCK]->(b:Block)
+
+  cypher_pattern: "(Page)-[:HAS_BLOCK {position}]->(Block)"

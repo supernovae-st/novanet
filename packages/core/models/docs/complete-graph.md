@@ -4,7 +4,7 @@
 
 ## Overview
 
-This diagram shows the complete NovaNet graph schema with all 35 node types and their relationships.
+This diagram shows the complete NovaNet graph schema with all 44 node types and their relationships.
 
 ### Legend
 
@@ -27,10 +27,10 @@ This diagram shows the complete NovaNet graph schema with all 35 node types and 
 ```mermaid
 flowchart TB
   %% NovaNet Graph v9.0.0
-  %% Generated: 35 nodes, 89 edges
-  %% Source: 35 node YAMLs + relations.yaml + organizing-principles.yaml
+  %% Generated: 44 nodes, 132 edges
+  %% Source: 44 node YAMLs + relations.yaml + organizing-principles.yaml
 
-  %% Trait styling (locale_behavior)
+  %% Trait styling (node_trait)
   classDef invariant fill:#3b82f6,stroke:#1d4ed8,color:#fff
   classDef localized fill:#22c55e,stroke:#16a34a,color:#fff
   classDef knowledge fill:#8b5cf6,stroke:#7c3aed,color:#fff
@@ -69,11 +69,14 @@ flowchart TB
     end
     subgraph PROJECT_structure["Structure"]
       Block["🔵 Block"]
+      ContentSlot["🔵 ContentSlot"]
       Page["🔵 Page"]
     end
     subgraph PROJECT_semantic["Semantic Layer"]
       Concept["🔵 Concept"]
       ConceptL10n["🟢 ConceptL10n"]
+      SearchIntent["🔵 SearchIntent"]
+      TopicCluster["🔵 TopicCluster"]
     end
     subgraph PROJECT_instruction["Instructions"]
       BlockPrompt["🔵 BlockPrompt"]
@@ -81,9 +84,13 @@ flowchart TB
       BlockType["🔵 BlockType"]
       PagePrompt["🔵 PagePrompt"]
       PageType["🔵 PageType"]
+      PromptArtifact["⚪ PromptArtifact"]
     end
     subgraph PROJECT_output["Generated Output"]
       BlockL10n["🟢 BlockL10n"]
+      EvaluationSignal["⚪ EvaluationSignal"]
+      GenerationJob["⚙️ GenerationJob"]
+      OutputArtifact["⚪ OutputArtifact"]
       PageL10n["🟢 PageL10n"]
     end
   end
@@ -99,30 +106,38 @@ flowchart TB
       GEOMiningRun["⚙️ GEOMiningRun"]
       GEOSeedL10n["🟢 GEOSeedL10n"]
       GEOSeedMetrics["⚪ GEOSeedMetrics"]
+      Thing["🔵 Thing"]
+      ThingL10n["🟢 ThingL10n"]
     end
   end
 
   %% Relationships (styled by edge family)
   Block -->|BLOCK_OF| Page
+  Block -.->|FILLS_SLOT| ContentSlot
+  Block -.->|FOR_INTENT| SearchIntent
   Block -.->|HAS_OUTPUT| BlockL10n
   Block -.->|HAS_OUTPUT| PageL10n
   Block -->|HAS_PROMPT| BlockPrompt
   Block -->|HAS_PROMPT| PagePrompt
+  Block -.->|MENTIONS| Thing
   Block -->|OF_TYPE| BlockType
   Block -->|OF_TYPE| PageType
   Block -.->|USES_CONCEPT| Concept
   BlockL10n -.->|FOR_LOCALE| Locale
   BlockL10n ==>|GENERATED_FROM| BlockType
+  BlockL10n ==>|HAS_EVALUATION| EvaluationSignal
   BlockL10n ==>|INFLUENCED_BY| ConceptL10n
   BlockL10n -.->|OUTPUT_OF| Block
   BlockL10n -.->|OUTPUT_OF| Page
   BlockL10n ==>|PREVIOUS_VERSION| BlockL10n
+  BlockL10n ==>|PREVIOUS_VERSION| OutputArtifact
   BlockL10n ==>|PREVIOUS_VERSION| PageL10n
   BlockPrompt ==>|GENERATED| BlockL10n
   BlockPrompt ==>|GENERATED| PageL10n
   BlockType -->|HAS_RULES| BlockRules
   Concept -.->|HAS_L10N| ConceptL10n
   Concept -.->|HAS_L10N| ProjectL10n
+  Concept -.->|HAS_L10N| ThingL10n
   Concept -.->|SEMANTIC_LINK| Concept
   Concept --o|TARGETS_GEO| GEOSeedL10n
   Concept --o|TARGETS_SEO| SEOKeywordL10n
@@ -133,10 +148,18 @@ flowchart TB
   ConceptL10n --o|HAS_SEO_TARGET| SEOKeywordL10n
   ConceptL10n -.->|L10N_OF| Concept
   ConceptL10n -.->|L10N_OF| Project
+  ContentSlot -->|ACCEPTS_BLOCK_TYPE| BlockType
+  EvaluationSignal ==>|EVALUATED_BY_JOB| GenerationJob
   GEOMiningRun --o|GEO_MINES| GEOSeedL10n
   GEOSeedL10n -.->|FOR_LOCALE| Locale
   GEOSeedL10n --o|HAS_METRICS| GEOSeedMetrics
   GEOSeedL10n --o|HAS_METRICS| SEOKeywordMetrics
+  GenerationJob ==>|CREATES_CONTENT| BlockL10n
+  GenerationJob ==>|CREATES_CONTENT| PageL10n
+  GenerationJob -.->|FOR_LOCALE| Locale
+  GenerationJob ==>|PRODUCES| OutputArtifact
+  GenerationJob ==>|TRIGGERED_BY| Project
+  GenerationJob ==>|USES_PROMPT| PromptArtifact
   Locale -.->|FALLBACK_TO| Locale
   Locale -.->|HAS_CULTURE| LocaleCulture
   Locale -.->|HAS_IDENTITY| LocaleIdentity
@@ -159,22 +182,34 @@ flowchart TB
   LocaleCultureReferences -.->|HAS_REFERENCE| Reference
   LocaleLexicon -.->|HAS_EXPRESSION| Expression
   LocaleRulesFormatting -.->|HAS_PATTERN| Pattern
+  OutputArtifact -.->|FOR_LOCALE| Locale
+  OutputArtifact ==>|HAS_EVALUATION| EvaluationSignal
+  OutputArtifact ==>|INCLUDES| BlockL10n
+  OutputArtifact ==>|INCLUDES| PageL10n
+  OutputArtifact ==>|PREVIOUS_VERSION| BlockL10n
+  OutputArtifact ==>|PREVIOUS_VERSION| OutputArtifact
+  OutputArtifact ==>|PREVIOUS_VERSION| PageL10n
+  Page -.->|COVERS| Thing
   Page -->|HAS_BLOCK| Block
   Page -.->|HAS_OUTPUT| BlockL10n
   Page -.->|HAS_OUTPUT| PageL10n
   Page -->|HAS_PROMPT| BlockPrompt
   Page -->|HAS_PROMPT| PagePrompt
+  Page -->|HAS_SLOT| ContentSlot
   Page -.->|LINKS_TO| Page
   Page -->|OF_TYPE| BlockType
   Page -->|OF_TYPE| PageType
+  Page -.->|SATISFIES_INTENT| SearchIntent
   Page -.->|SUBTOPIC_OF| Page
   Page -.->|USES_CONCEPT| Concept
   PageL10n ==>|ASSEMBLES| BlockL10n
   PageL10n -->|BELONGS_TO_PROJECT_L10N| ProjectL10n
   PageL10n -.->|FOR_LOCALE| Locale
+  PageL10n ==>|HAS_EVALUATION| EvaluationSignal
   PageL10n -.->|OUTPUT_OF| Block
   PageL10n -.->|OUTPUT_OF| Page
   PageL10n ==>|PREVIOUS_VERSION| BlockL10n
+  PageL10n ==>|PREVIOUS_VERSION| OutputArtifact
   PageL10n ==>|PREVIOUS_VERSION| PageL10n
   PagePrompt ==>|GENERATED| BlockL10n
   PagePrompt ==>|GENERATED| PageL10n
@@ -183,22 +218,39 @@ flowchart TB
   Project -->|HAS_CONCEPT| Concept
   Project -.->|HAS_L10N| ConceptL10n
   Project -.->|HAS_L10N| ProjectL10n
+  Project -.->|HAS_L10N| ThingL10n
   Project -->|HAS_PAGE| Page
   Project -->|SUPPORTS_LOCALE| Locale
   ProjectL10n -.->|FOR_LOCALE| Locale
   ProjectL10n -.->|L10N_OF| Concept
   ProjectL10n -.->|L10N_OF| Project
+  PromptArtifact ==>|COMPILED_FROM| BlockPrompt
+  PromptArtifact ==>|COMPILED_FROM| PagePrompt
+  PromptArtifact ==>|INCLUDES_CONCEPT| Concept
+  PromptArtifact ==>|INCLUDES_VOICE| LocaleVoice
   SEOKeywordL10n -.->|FOR_LOCALE| Locale
   SEOKeywordL10n --o|HAS_METRICS| GEOSeedMetrics
   SEOKeywordL10n --o|HAS_METRICS| SEOKeywordMetrics
+  SEOKeywordL10n --o|TARGETS_THING| Thing
   SEOMiningRun --o|SEO_MINES| SEOKeywordL10n
+  SearchIntent -.->|MAPS_TO_CONCEPT| Concept
+  SearchIntent --o|TARGETS_KEYWORD| SEOKeywordL10n
+  Thing -.->|HAS_L10N| ConceptL10n
+  Thing -.->|HAS_L10N| ProjectL10n
+  Thing -.->|HAS_L10N| ThingL10n
+  Thing -.->|RELATED_THING| Thing
+  Thing -.->|SPECIALIZES| Thing
+  ThingL10n -.->|FOR_LOCALE| Locale
+  TopicCluster -.->|CLUSTERS_TOPIC| Concept
+  TopicCluster -->|CLUSTER_PAGE| Page
+  TopicCluster -->|PILLAR_PAGE| Page
 
   %% Edge colors by family
-  linkStyle 9,10,13,14,15,16,66,71,72,73,74 stroke:#8b5cf6,stroke-width:2px
-  linkStyle 1,2,8,11,12,18,19,25,28,29,31,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,57,58,68,69,70,78,79,82,83,84,85 stroke:#22c55e,stroke-width:2px
-  linkStyle 21,22,26,27,30,32,33,86,87,88 stroke:#ec4899,stroke-width:2px
-  linkStyle 0,3,4,5,6,17,56,59,60,62,63,67,75,76,77,80,81 stroke:#3b82f6,stroke-width:2px
-  linkStyle 7,20,23,24,61,64,65 stroke:#f97316,stroke-width:2px
+  linkStyle 12,13,14,17,18,19,20,21,37,42,43,45,46,47,71,72,73,74,75,76,90,93,96,97,98,99,100,112,113,114,115 stroke:#8b5cf6,stroke-width:2px
+  linkStyle 3,4,11,15,16,23,24,25,31,34,35,39,44,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,79,80,92,94,95,104,105,106,109,110,111,116,123,124,125,128 stroke:#22c55e,stroke-width:2px
+  linkStyle 27,28,32,33,38,40,41,117,118,119,120,122 stroke:#ec4899,stroke-width:2px
+  linkStyle 0,5,6,8,9,22,36,78,81,82,83,85,86,91,101,102,103,107,108,130,131 stroke:#3b82f6,stroke-width:2px
+  linkStyle 1,2,7,10,26,29,30,77,84,87,88,89,121,126,127,129 stroke:#f97316,stroke-width:2px
 
   %% Class assignments
   class Block invariant
@@ -210,10 +262,13 @@ flowchart TB
   class Concept invariant
   class ConceptL10n localized
   class Constraint knowledge
+  class ContentSlot invariant
+  class EvaluationSignal derived
   class Expression knowledge
   class GEOMiningRun job
   class GEOSeedL10n localized
   class GEOSeedMetrics derived
+  class GenerationJob job
   class Locale invariant
   class LocaleCulture knowledge
   class LocaleCultureReferences knowledge
@@ -225,6 +280,7 @@ flowchart TB
   class LocaleRulesSlug knowledge
   class LocaleVoice knowledge
   class Metaphor knowledge
+  class OutputArtifact derived
   class Page invariant
   class PageL10n localized
   class PagePrompt invariant
@@ -232,10 +288,15 @@ flowchart TB
   class Pattern knowledge
   class Project invariant
   class ProjectL10n localized
+  class PromptArtifact derived
   class Reference knowledge
   class SEOKeywordL10n localized
   class SEOKeywordMetrics derived
   class SEOMiningRun job
+  class SearchIntent invariant
+  class Thing invariant
+  class ThingL10n localized
+  class TopicCluster invariant
 ```
 
 ## Edge Families

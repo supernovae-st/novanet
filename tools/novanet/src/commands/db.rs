@@ -218,6 +218,15 @@ pub fn split_cypher_statements(input: &str) -> Vec<String> {
     statements
 }
 
+/// Validate that a Neo4j identifier name is safe for interpolation.
+/// Defense-in-depth: names come from Neo4j but we validate anyway.
+fn is_valid_neo4j_identifier(name: &str) -> bool {
+    !name.is_empty()
+        && name
+            .chars()
+            .all(|c| c.is_ascii_alphanumeric() || c == '_' || c == '-')
+}
+
 /// Drop all constraints and indexes (for reset).
 async fn drop_all_constraints(db: &Db) -> crate::Result<()> {
     // List all constraints
@@ -226,7 +235,7 @@ async fn drop_all_constraints(db: &Db) -> crate::Result<()> {
         .await?;
     for row in &rows {
         let name: String = row.get("name").unwrap_or_default();
-        if !name.is_empty() {
+        if is_valid_neo4j_identifier(&name) {
             let drop_stmt = format!("DROP CONSTRAINT {name} IF EXISTS");
             db.execute(&drop_stmt).await?;
         }
@@ -238,7 +247,7 @@ async fn drop_all_constraints(db: &Db) -> crate::Result<()> {
         .await?;
     for row in &rows {
         let name: String = row.get("name").unwrap_or_default();
-        if !name.is_empty() {
+        if is_valid_neo4j_identifier(&name) {
             let drop_stmt = format!("DROP INDEX {name} IF EXISTS");
             db.execute(&drop_stmt).await?;
         }

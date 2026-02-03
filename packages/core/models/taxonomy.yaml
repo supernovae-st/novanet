@@ -1,0 +1,324 @@
+# packages/core/models/taxonomy.yaml
+# Source of truth for NovaNet taxonomy structure
+# v9.5.0 — Arc terminology + Visual Encoding ready
+#
+# This file defines:
+# - 3 Realms (visibility boundaries)
+# - 9 Layers (functional classification)
+# - 5 Traits (locale behavior)
+# - 5 ArcFamilies (arc classification)
+#
+# Generated artifacts:
+# - packages/db/seed/00.5-taxonomy.cypher (Realm, Layer, Trait, ArcFamily + hierarchy)
+# - packages/core/src/graph/hierarchy.ts (realm→layer tree, auto-generated)
+# - packages/core/src/design/visual-encoding.ts (colors, borders, auto-generated)
+# - tools/novanet/src/theme/visual_encoding.rs (TUI colors, compile-time)
+#
+# All meta-nodes receive double-label :Meta (e.g., :Meta:Realm)
+# Query all meta-nodes: MATCH (n:Meta) RETURN n
+#
+# CRITICAL: Colors are defined ONLY here. visual-encoding.yaml references them.
+# Do NOT duplicate hex values elsewhere.
+
+version: "9.5.0"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# NODE REALMS — WHERE? (visibility boundaries)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+node_realms:
+  - key: global
+    display_name: Global
+    emoji: "🌍"
+    color: "#2aa198"  # Solarized cyan
+    llm_context: |
+      Shared across ALL projects. Locale-specific knowledge that applies
+      universally: cultural norms, linguistic patterns, voice guidelines,
+      idiomatic expressions. These nodes are READ-ONLY at project level.
+      Changes here affect all projects using that locale.
+    layers:
+      - key: config
+        display_name: Configuration
+        emoji: "⚙️"
+        color: "#64748b"  # Slate
+        llm_context: |
+          Core configuration nodes. Locale definitions with their properties
+          (language code, region, writing direction). Entry point for all
+          locale-specific knowledge traversal.
+
+      - key: knowledge
+        display_name: Locale Knowledge
+        emoji: "📚"
+        color: "#8b5cf6"  # Violet
+        llm_context: |
+          Deep locale-specific knowledge for native content generation.
+          Cultural norms, linguistic patterns, voice guidelines, idiomatic
+          expressions, formatting conventions. This is what makes generated
+          content feel NATIVE rather than translated.
+
+  - key: project
+    display_name: Project
+    emoji: "📦"
+    color: "#6c71c4"  # Solarized violet
+    llm_context: |
+      Business-specific nodes for a single project. Contains brand identity,
+      page structure, semantic concepts, generation prompts, and localized
+      outputs. These nodes define WHAT content to generate and HOW to
+      structure it for this specific product/service.
+    layers:
+      - key: foundation
+        display_name: Foundation
+        emoji: "🏛️"
+        color: "#3b82f6"  # Blue
+        llm_context: |
+          Core project identity. Brand voice, visual identity, value
+          proposition. These nodes anchor ALL content generation for the
+          project - every generated block must align with foundation.
+
+      - key: structure
+        display_name: Structure
+        emoji: "🏗️"
+        color: "#06b6d4"  # Cyan
+        llm_context: |
+          Information architecture. Pages, blocks, and their types. Defines
+          the SKELETON of the website - what pages exist, what blocks compose
+          each page, and the rules for each block type.
+
+      - key: semantic
+        display_name: Semantic Layer
+        emoji: "💡"
+        color: "#f97316"  # Orange
+        llm_context: |
+          Meaning and concepts. Invariant ideas (Concept) that get localized
+          per locale (ConceptL10n). The WHAT of content - pricing tiers,
+          features, benefits, use cases. Concepts link via SEMANTIC_LINK
+          for spreading activation during generation.
+
+      - key: instruction
+        display_name: Instructions
+        emoji: "📝"
+        color: "#eab308"  # Yellow
+        llm_context: |
+          Generation directives. Prompts and rules that guide the LLM during
+          content generation. PagePrompt for page-level guidance, BlockPrompt
+          for block-specific instructions, BlockRules for constraints.
+
+      - key: output
+        display_name: Generated Output
+        emoji: "✨"
+        color: "#22c55e"  # Green
+        llm_context: |
+          LLM-generated content. The final localized pages and blocks ready
+          for rendering. These are the RESULTS of the generation pipeline -
+          created by combining foundation, structure, semantic, and
+          instruction nodes with locale knowledge.
+
+  - key: shared
+    display_name: Shared
+    emoji: "🎯"
+    color: "#cb4b16"  # Solarized orange
+    llm_context: |
+      Cross-project resources that can be linked to multiple projects.
+      SEO keywords and GEO seeds with their metrics. These enable
+      competitive intelligence sharing across the portfolio.
+    layers:
+      - key: seo
+        display_name: SEO Intelligence
+        emoji: "🔍"
+        color: "#ec4899"  # Pink
+        llm_context: |
+          Search engine optimization data. Keywords with their localized
+          forms, search volume metrics, and mining run history. Used to
+          inject relevant keywords into generated content for organic
+          search visibility.
+
+      - key: geo
+        display_name: GEO Intelligence
+        emoji: "📍"
+        color: "#ef4444"  # Red
+        llm_context: |
+          Geographic/local SEO data. Location-based seeds with their
+          localized forms, metrics, and mining history. Used for local
+          business visibility and location-specific content generation.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# NODE TRAITS — HOW? (locale behavior)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+node_traits:
+  - key: invariant
+    display_name: Invariant
+    color: "#3b82f6"  # Blue
+    border_style: solid
+    border_width: 2
+    unicode_border: "─"
+    llm_context: |
+      Nodes that do not change between locales. Structural definitions,
+      configuration, and invariant business logic. Always the same
+      regardless of target locale.
+
+  - key: localized
+    display_name: Localized
+    color: "#22c55e"  # Green
+    border_style: dashed
+    border_width: 2
+    unicode_border: "┄"
+    llm_context: |
+      Content generated natively per locale. NOT translated — each locale
+      version is generated independently from the invariant Concept using
+      locale-specific knowledge.
+
+  - key: knowledge
+    display_name: Knowledge
+    color: "#8b5cf6"  # Violet
+    border_style: double
+    border_width: 3
+    unicode_border: "═"
+    llm_context: |
+      Cultural and linguistic expertise per locale. Deep knowledge about
+      how a locale communicates: voice, culture, formatting rules, lexicon,
+      expressions. The foundation for native content generation.
+
+  - key: derived
+    display_name: Derived
+    color: "#9ca3af"  # Gray
+    border_style: dotted
+    border_width: 2
+    unicode_border: "┈"
+    llm_context: |
+      Computed or aggregated data. Time-series metrics, analytics snapshots,
+      and other values derived from external sources or calculations.
+
+  - key: job
+    display_name: Job
+    color: "#6b7280"  # Gray dark
+    border_style: solid
+    border_width: 1
+    unicode_border: "╌"
+    llm_context: |
+      Background processing tasks. Mining runs, batch operations, and other
+      asynchronous jobs that produce or update data nodes.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# ARC FAMILIES — WHAT KIND OF LINK? (relationship classification)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+arc_families:
+  - key: ownership
+    display_name: Ownership
+    color: "#3b82f6"  # Blue
+    stroke_style: solid
+    stroke_width: 2
+    arrow_style: "-->"
+    llm_context: |
+      Parent-child structural relationships. A node "owns" or "contains"
+      another. Always follow in traversal (structural backbone).
+
+  - key: localization
+    display_name: Localization
+    color: "#22c55e"  # Green
+    stroke_style: dashed
+    stroke_width: 2
+    arrow_style: ".->"
+    llm_context: |
+      Links between invariant nodes and their locale-specific content.
+      Includes locale knowledge arcs (Locale → LocaleVoice, etc.) and
+      content localization arcs (Concept → ConceptL10n, etc.).
+
+  - key: semantic
+    display_name: Semantic
+    color: "#f97316"  # Orange
+    stroke_style: dashed
+    stroke_width: 2
+    arrow_style: ".->"
+    llm_context: |
+      Meaning and concept connections. Spreading activation traversal with
+      temperature-based filtering. Links concepts to each other and to
+      the pages/blocks that use them.
+
+  - key: generation
+    display_name: Generation
+    color: "#8b5cf6"  # Violet
+    stroke_style: solid
+    stroke_width: 3
+    arrow_style: "==>"
+    llm_context: |
+      LLM generation pipeline flow. Provenance tracking from prompts to
+      outputs, version history, and assembly relationships.
+
+  - key: mining
+    display_name: Mining
+    color: "#ec4899"  # Pink
+    stroke_style: dotted
+    stroke_width: 2
+    arrow_style: "--o"
+    llm_context: |
+      SEO/GEO data extraction and targeting. Links mining runs to their
+      targets and concepts to their SEO/GEO keyword targets.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# ARC SCOPES — CROSS-REALM OR INTRA-REALM?
+# ═══════════════════════════════════════════════════════════════════════════════
+
+arc_scopes:
+  - key: intra_realm
+    display_name: Intra-Realm
+    description: "Arc stays within the same realm"
+    stroke_modifier: none
+
+  - key: cross_realm
+    display_name: Cross-Realm
+    description: "Arc crosses realm boundaries"
+    stroke_modifier: double_dash
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# ARC CARDINALITIES
+# ═══════════════════════════════════════════════════════════════════════════════
+
+arc_cardinalities:
+  - key: one_to_one
+    display_name: "1:1"
+    description: "Exactly one target per source"
+
+  - key: one_to_many
+    display_name: "1:N"
+    description: "One source, many targets"
+
+  - key: many_to_one
+    display_name: "N:1"
+    description: "Many sources, one target"
+
+  - key: many_to_many
+    display_name: "N:N"
+    description: "Many sources, many targets"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# TERMINAL PALETTE — Graceful degradation for TUI
+# ═══════════════════════════════════════════════════════════════════════════════
+
+terminal:
+  # 256-color xterm palette mappings (for terminals without truecolor)
+  palette_256:
+    cyan: 37        # #2aa198
+    violet: 61      # #6c71c4
+    orange: 166     # #cb4b16
+    blue: 33        # #3b82f6
+    green: 35       # #22c55e
+    yellow: 178     # #eab308
+    pink: 205       # #ec4899
+    red: 160        # #ef4444
+    gray: 245       # #64748b
+    gray_dark: 242  # #6b7280
+
+  # 16-color ANSI palette mappings (minimal terminals)
+  palette_16:
+    cyan: 6         # Cyan
+    violet: 5       # Magenta
+    orange: 3       # Yellow (closest)
+    blue: 4         # Blue
+    green: 2        # Green
+    yellow: 3       # Yellow
+    pink: 5         # Magenta (closest)
+    red: 1          # Red
+    gray: 7         # White (light gray)
+    gray_dark: 8    # Bright black (dark gray)

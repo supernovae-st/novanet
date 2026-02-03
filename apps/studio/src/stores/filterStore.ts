@@ -29,7 +29,7 @@ interface ExtendedFilterState {
   // Navigation query facets (v9 Phase 6)
   realmFilter: Realm[];
   traitFilter: Trait[];
-  edgeFamilyFilter: string[];
+  arcFamilyFilter: string[];
 
   // Schema mode collapsed groups (Task 3.1)
   collapsedRealms: Realm[];
@@ -56,8 +56,8 @@ interface FilterStoreState extends ExtendedFilterState {
   toggleRealm: (realm: Realm) => void;
   setTraitFilter: (traits: Trait[]) => void;
   toggleTrait: (trait: Trait) => void;
-  setEdgeFamilyFilter: (families: string[]) => void;
-  toggleEdgeFamily: (family: string) => void;
+  setArcFamilyFilter: (families: string[]) => void;
+  toggleArcFamily: (family: string) => void;
 
   // Preset actions
   applyViewPreset: (presetId: string) => void;
@@ -104,7 +104,7 @@ export const useFilterStore = create<FilterStoreState>()(
       // Navigation query facets (v9 Phase 6)
       realmFilter: [],
       traitFilter: [],
-      edgeFamilyFilter: [],
+      arcFamilyFilter: [],
 
       // Schema mode collapsed groups initial state (Task 3.1)
       collapsedRealms: [],
@@ -248,20 +248,20 @@ export const useFilterStore = create<FilterStoreState>()(
         });
       },
 
-      setEdgeFamilyFilter: (families) => {
+      setArcFamilyFilter: (families) => {
         set((state) => {
-          state.edgeFamilyFilter = families;
+          state.arcFamilyFilter = families;
           state.activePresetId = null;
         });
       },
 
-      toggleEdgeFamily: (family) => {
+      toggleArcFamily: (family) => {
         set((state) => {
-          const idx = state.edgeFamilyFilter.indexOf(family);
+          const idx = state.arcFamilyFilter.indexOf(family);
           if (idx >= 0) {
-            state.edgeFamilyFilter.splice(idx, 1);
+            state.arcFamilyFilter.splice(idx, 1);
           } else {
-            state.edgeFamilyFilter.push(family);
+            state.arcFamilyFilter.push(family);
           }
           state.activePresetId = null;
         });
@@ -310,7 +310,7 @@ export const useFilterStore = create<FilterStoreState>()(
           // Reset navigation query facets (v9 Phase 6)
           state.realmFilter = [];
           state.traitFilter = [];
-          state.edgeFamilyFilter = [];
+          state.arcFamilyFilter = [];
         });
       },
 
@@ -483,7 +483,7 @@ export const useFilterStore = create<FilterStoreState>()(
         // Navigation query facets (v9 Phase 6)
         realmFilter: state.realmFilter,
         traitFilter: state.traitFilter,
-        edgeFamilyFilter: state.edgeFamilyFilter,
+        arcFamilyFilter: state.arcFamilyFilter,
         // Schema mode collapsed groups (Task 3.1)
         collapsedRealms: state.collapsedRealms,
         collapsedLayers: state.collapsedLayers,
@@ -504,7 +504,7 @@ export const useFilterStore = create<FilterStoreState>()(
             localeFamily: null,
             realmFilter: [],
             traitFilter: [],
-            edgeFamilyFilter: [],
+            arcFamilyFilter: [],
             collapsedRealms: [],
             collapsedLayers: [],
           };

@@ -15,7 +15,7 @@ node:
   name: PageL10n
   realm: project
   layer: output
-  locale_behavior: localized
+  trait: localized
   icon: "🟠"
   description: "Assembled BlockL10n content for a page in a specific locale"
 

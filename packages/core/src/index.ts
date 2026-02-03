@@ -60,7 +60,7 @@ export * as schemas from './schemas/index.js';
 
 /**
  * Graph module for schema visualization:
- * - generateSchemaGraph(): Flat 35 nodes + ~89 edges
+ * - generateSchemaGraph(): Flat 44 nodes + ~89 edges
  * - getSchemaHierarchy(): Grouped by realm/layer
  * - REALM_HIERARCHY: Realm definitions with layers
  * - NODE_LAYERS: NodeType to layer mapping

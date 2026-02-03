@@ -34,15 +34,15 @@ v9 refactors the meta-graph from a flat tree (Scope > Subcategory > NodeTypeMeta
 Axis 1 — WHERE?  :Realm     (global / project / shared)
 Axis 2 — WHAT?   :Layer     (9 functional layers)
 Axis 3 — HOW?    :Trait     (invariant / localized / knowledge / derived / job)
-Axis 4 — LINKS?  :EdgeKind  (50 relationship types in 5 families)
+Axis 4 — LINKS?  :ArcKind  (50 relationship types in 5 families)
 ```
 
 **Key renames:** Scope -> Realm, Subcategory -> Layer, NodeTypeMeta -> Kind, DataMode -> NavigationMode
 
-**New concepts:** Trait, EdgeFamily, EdgeKind, OF_KIND instance bridge, :Meta double-label
+**New concepts:** Trait, ArcFamily, ArcKind, OF_KIND instance bridge, :Meta double-label
 
 **Rust binary:** `tools/novanet/` — single crate for CLI + TUI (neo4rs, ratatui, clap).
-All commands implemented: data/meta/overlay/query, node/relation CRUD, search, locale, db,
+All commands implemented: data/meta/overlay/query, node/arc CRUD, search, locale, db,
 schema generate/validate, doc generate, filter build, Galaxy-themed TUI with boot animation, effects engine, and onboarding. 180 tests pass.
 
 **YAML-first architecture:** Each Kind YAML has explicit `realm:` and `layer:` fields (source of truth).
@@ -210,7 +210,7 @@ See `.claude/README.md` for full documentation.
 | `/novanet-sync` | Schema validation/regeneration |
 | `/schema:add-node <name>` | Add new node type |
 | `/schema:edit-node <name>` | Modify existing node |
-| `/schema:add-relation <REL>` | Add new relationship |
+| `/schema:add-arc <ARC>` | Add new arc type |
 
 ### Schema Management Workflow
 

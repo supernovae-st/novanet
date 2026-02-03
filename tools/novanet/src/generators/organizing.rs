@@ -5,38 +5,10 @@
 //!
 //! Output target: `packages/db/seed/00.5-organizing-principles.cypher`
 
+use super::cypher_utils::{cypher_str, write_merge_meta};
 use crate::parsers::organizing::OrganizingDoc;
 use std::fmt::Write;
 use std::path::Path;
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Helpers
-// ─────────────────────────────────────────────────────────────────────────────
-
-/// Collapse multiline YAML text to a single line and escape for Cypher string literals.
-fn cypher_str(s: &str) -> String {
-    s.split_whitespace()
-        .collect::<Vec<_>>()
-        .join(" ")
-        .replace('\'', "\\'")
-}
-
-/// Write a MERGE statement for a `:Meta:<Label>` node with ON CREATE/ON MATCH SET.
-fn write_merge_meta(out: &mut String, var: &str, label: &str, key: &str, props: &[(&str, &str)]) {
-    writeln!(out, "MERGE ({var}:Meta:{label} {{key: '{key}'}})").unwrap();
-
-    writeln!(out, "ON CREATE SET").unwrap();
-    for (name, value) in props {
-        writeln!(out, "  {var}.{name} = '{value}',").unwrap();
-    }
-    writeln!(out, "  {var}.created_at = datetime()").unwrap();
-
-    writeln!(out, "ON MATCH SET").unwrap();
-    for (name, value) in props {
-        writeln!(out, "  {var}.{name} = '{value}',").unwrap();
-    }
-    writeln!(out, "  {var}.updated_at = datetime();").unwrap();
-}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Generator
@@ -199,21 +171,6 @@ mod tests {
     use super::*;
     use crate::generators::Generator;
     use crate::parsers::organizing::{EdgeFamilyDef, LayerDef, RealmDef, TraitDef};
-
-    #[test]
-    fn cypher_str_collapses_whitespace() {
-        let input = "Shared across ALL projects.\n  Cultural norms, voice.\n";
-        assert_eq!(
-            cypher_str(input),
-            "Shared across ALL projects. Cultural norms, voice."
-        );
-    }
-
-    #[test]
-    fn cypher_str_escapes_single_quotes() {
-        let input = "It's a test with 'quotes'.";
-        assert_eq!(cypher_str(input), "It\\'s a test with \\'quotes\\'.");
-    }
 
     #[test]
     fn generate_small_cypher() {

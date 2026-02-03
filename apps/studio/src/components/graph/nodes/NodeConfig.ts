@@ -44,11 +44,11 @@ export interface NodeConfig {
 }
 
 // =============================================================================
-// Size Lookup Table (v8.1.0 - 35 nodes)
+// Size Lookup Table (v9.0.1 - 44 nodes)
 // =============================================================================
 
 /**
- * Pre-computed sizes for all 35 node types (v8.1.0)
+ * Pre-computed sizes for all 44 node types (v9.0.1)
  *
  * Size categories:
  * - Large (280x140): Project root nodes
@@ -60,26 +60,54 @@ export interface NodeConfig {
  */
 export const NODE_SIZES: Record<NodeType, NodeSize> = {
   // ==========================================================================
-  // PROJECT CATEGORY (3 nodes)
+  // PROJECT — foundation (3 nodes)
   // ==========================================================================
   Project: { width: 280, height: 140 },
   BrandIdentity: { width: 220, height: 110 },
   ProjectL10n: { width: 220, height: 110 },
 
   // ==========================================================================
-  // CONTENT CATEGORY (6 nodes)
+  // PROJECT — structure (3 nodes)
+  // ==========================================================================
+  Page: { width: 240, height: 120 },
+  Block: { width: 200, height: 100 },
+  ContentSlot: { width: 180, height: 90 },
+
+  // ==========================================================================
+  // PROJECT — semantic (4 nodes)
   // ==========================================================================
   Concept: { width: 240, height: 120 },
   ConceptL10n: { width: 200, height: 100 },
-  Page: { width: 240, height: 120 },
-  PageType: { width: 200, height: 100 },
-  Block: { width: 200, height: 100 },
-  BlockType: { width: 200, height: 100 },
+  SearchIntent: { width: 200, height: 100 },
+  TopicCluster: { width: 220, height: 110 },
 
   // ==========================================================================
-  // LOCALE CATEGORY (15 nodes - Locale + 14 LocaleKnowledge)
+  // PROJECT — instruction (6 nodes)
+  // ==========================================================================
+  PageType: { width: 200, height: 100 },
+  BlockType: { width: 200, height: 100 },
+  PagePrompt: { width: 200, height: 100 },
+  BlockPrompt: { width: 180, height: 90 },
+  BlockRules: { width: 180, height: 90 },
+  PromptArtifact: { width: 200, height: 100 },
+
+  // ==========================================================================
+  // PROJECT — output (5 nodes)
+  // ==========================================================================
+  PageL10n: { width: 220, height: 110 },
+  BlockL10n: { width: 200, height: 100 },
+  GenerationJob: { width: 200, height: 100 },
+  OutputArtifact: { width: 180, height: 90 },
+  EvaluationSignal: { width: 160, height: 80 },
+
+  // ==========================================================================
+  // GLOBAL — config (1 node)
   // ==========================================================================
   Locale: { width: 220, height: 110 },
+
+  // ==========================================================================
+  // GLOBAL — knowledge (14 nodes)
+  // ==========================================================================
   LocaleIdentity: { width: 180, height: 90 },
   LocaleVoice: { width: 180, height: 90 },
   LocaleCulture: { width: 180, height: 90 },
@@ -96,47 +124,42 @@ export const NODE_SIZES: Record<NodeType, NodeSize> = {
   Constraint: { width: 160, height: 80 },
 
   // ==========================================================================
-  // GENERATION CATEGORY (5 nodes)
-  // ==========================================================================
-  PagePrompt: { width: 200, height: 100 },
-  BlockPrompt: { width: 180, height: 90 },
-  BlockRules: { width: 180, height: 90 },
-  PageL10n: { width: 220, height: 110 },
-  BlockL10n: { width: 200, height: 100 },
-
-  // ==========================================================================
-  // SEO CATEGORY (3 nodes)
+  // SHARED — seo (3 nodes)
   // ==========================================================================
   SEOKeywordL10n: { width: 200, height: 100 },
   SEOKeywordMetrics: { width: 160, height: 80 },
   SEOMiningRun: { width: 160, height: 80 },
 
   // ==========================================================================
-  // GEO CATEGORY (3 nodes)
+  // SHARED — geo (5 nodes)
   // ==========================================================================
+  Thing: { width: 220, height: 110 },
+  ThingL10n: { width: 200, height: 100 },
   GEOSeedL10n: { width: 200, height: 100 },
   GEOSeedMetrics: { width: 160, height: 80 },
   GEOMiningRun: { width: 160, height: 80 },
 };
 
 // =============================================================================
-// Color Lookup Table (v8.1.0 - 35 nodes)
+// Color Lookup Table (v9.0.1 - 44 nodes)
 // =============================================================================
 
 /**
- * Pre-computed colors for all 35 node types (v8.1.0)
+ * Pre-computed colors for all 44 node types (v9.0.1)
  *
  * Color palette aligned with design/nodeColors.ts and nodeTypes.ts:
- * - Project: Violet (#8b5cf6 family)
- * - Content: Amber/Blue/Cyan (#f59e0b, #3b82f6, #06b6d4 family)
- * - Locale: Emerald/Green/Pink (#10b981, #22c55e, #ec4899 family)
- * - Generation: Blue/Orange (#3b82f6, #f97316 family)
+ * - Foundation: Violet (#8b5cf6 family)
+ * - Structure: Blue/Cyan (#3b82f6, #06b6d4 family)
+ * - Semantic: Amber (#f59e0b family)
+ * - Instruction: Blue (#3b82f6 family)
+ * - Output: Orange/Red (#f97316, #ef4444 family)
+ * - Knowledge: Emerald/Green/Pink (#10b981, #22c55e, #ec4899 family)
  * - SEO: Red (#ef4444 family)
  * - GEO: Purple (#a855f7 family)
  */
 export const NODE_COLORS: Record<NodeType, NodeColors> = {
   // ==========================================================================
-  // PROJECT CATEGORY - Violet tones
+  // PROJECT — foundation - Violet tones
   // ==========================================================================
   Project: {
     primary: '#8b5cf6',
@@ -158,7 +181,29 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
   },
 
   // ==========================================================================
-  // CONTENT CATEGORY - Amber/Blue/Cyan tones
+  // PROJECT — structure - Blue/Cyan tones
+  // ==========================================================================
+  Page: {
+    primary: '#3b82f6',
+    secondary: '#06b6d4',
+    tertiary: '#60a5fa',
+    glow: '#3b82f640',
+  },
+  Block: {
+    primary: '#06b6d4',
+    secondary: '#14b8a6',
+    tertiary: '#22d3ee',
+    glow: '#06b6d440',
+  },
+  ContentSlot: {
+    primary: '#0891b2',
+    secondary: '#06b6d4',
+    tertiary: '#22d3ee',
+    glow: '#0891b240',
+  },
+
+  // ==========================================================================
+  // PROJECT — semantic - Amber tones
   // ==========================================================================
   Concept: {
     primary: '#f59e0b',
@@ -172,23 +217,27 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
     tertiary: '#fcd34d',
     glow: '#fbbf2440',
   },
-  Page: {
-    primary: '#3b82f6',
-    secondary: '#06b6d4',
-    tertiary: '#60a5fa',
-    glow: '#3b82f640',
+  SearchIntent: {
+    primary: '#d97706',
+    secondary: '#f59e0b',
+    tertiary: '#fbbf24',
+    glow: '#d9770640',
   },
+  TopicCluster: {
+    primary: '#b45309',
+    secondary: '#d97706',
+    tertiary: '#f59e0b',
+    glow: '#b4530940',
+  },
+
+  // ==========================================================================
+  // PROJECT — instruction - Blue tones
+  // ==========================================================================
   PageType: {
     primary: '#2563eb',
     secondary: '#3b82f6',
     tertiary: '#60a5fa',
     glow: '#2563eb40',
-  },
-  Block: {
-    primary: '#06b6d4',
-    secondary: '#14b8a6',
-    tertiary: '#22d3ee',
-    glow: '#06b6d440',
   },
   BlockType: {
     primary: '#14b8a6',
@@ -196,9 +245,67 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
     tertiary: '#2dd4bf',
     glow: '#14b8a640',
   },
+  PagePrompt: {
+    primary: '#3b82f6',
+    secondary: '#60a5fa',
+    tertiary: '#93c5fd',
+    glow: '#3b82f640',
+  },
+  BlockPrompt: {
+    primary: '#60a5fa',
+    secondary: '#3b82f6',
+    tertiary: '#93c5fd',
+    glow: '#60a5fa40',
+  },
+  BlockRules: {
+    primary: '#93c5fd',
+    secondary: '#60a5fa',
+    tertiary: '#bfdbfe',
+    glow: '#93c5fd40',
+  },
+  PromptArtifact: {
+    primary: '#1d4ed8',
+    secondary: '#2563eb',
+    tertiary: '#3b82f6',
+    glow: '#1d4ed840',
+  },
 
   // ==========================================================================
-  // LOCALE CATEGORY - Emerald/Green/Pink tones
+  // PROJECT — output - Orange/Red tones
+  // ==========================================================================
+  PageL10n: {
+    primary: '#f97316',
+    secondary: '#ef4444',
+    tertiary: '#fb923c',
+    glow: '#f9731640',
+  },
+  BlockL10n: {
+    primary: '#fb923c',
+    secondary: '#f97316',
+    tertiary: '#fdba74',
+    glow: '#fb923c40',
+  },
+  GenerationJob: {
+    primary: '#ea580c',
+    secondary: '#f97316',
+    tertiary: '#fb923c',
+    glow: '#ea580c40',
+  },
+  OutputArtifact: {
+    primary: '#c2410c',
+    secondary: '#ea580c',
+    tertiary: '#f97316',
+    glow: '#c2410c40',
+  },
+  EvaluationSignal: {
+    primary: '#9a3412',
+    secondary: '#c2410c',
+    tertiary: '#ea580c',
+    glow: '#9a341240',
+  },
+
+  // ==========================================================================
+  // GLOBAL — config - Emerald tones
   // ==========================================================================
   Locale: {
     primary: '#10b981',
@@ -292,41 +399,7 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
   },
 
   // ==========================================================================
-  // GENERATION CATEGORY - Blue/Orange tones
-  // ==========================================================================
-  PagePrompt: {
-    primary: '#3b82f6',
-    secondary: '#60a5fa',
-    tertiary: '#93c5fd',
-    glow: '#3b82f640',
-  },
-  BlockPrompt: {
-    primary: '#60a5fa',
-    secondary: '#3b82f6',
-    tertiary: '#93c5fd',
-    glow: '#60a5fa40',
-  },
-  BlockRules: {
-    primary: '#93c5fd',
-    secondary: '#60a5fa',
-    tertiary: '#bfdbfe',
-    glow: '#93c5fd40',
-  },
-  PageL10n: {
-    primary: '#f97316',
-    secondary: '#ef4444',
-    tertiary: '#fb923c',
-    glow: '#f9731640',
-  },
-  BlockL10n: {
-    primary: '#fb923c',
-    secondary: '#f97316',
-    tertiary: '#fdba74',
-    glow: '#fb923c40',
-  },
-
-  // ==========================================================================
-  // SEO CATEGORY - Red tones
+  // SHARED — seo - Red tones
   // ==========================================================================
   SEOKeywordL10n: {
     primary: '#ef4444',
@@ -348,8 +421,20 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
   },
 
   // ==========================================================================
-  // GEO CATEGORY - Purple tones
+  // SHARED — geo - Purple tones
   // ==========================================================================
+  Thing: {
+    primary: '#7c3aed',
+    secondary: '#8b5cf6',
+    tertiary: '#a78bfa',
+    glow: '#7c3aed40',
+  },
+  ThingL10n: {
+    primary: '#8b5cf6',
+    secondary: '#a855f7',
+    tertiary: '#c084fc',
+    glow: '#8b5cf640',
+  },
   GEOSeedL10n: {
     primary: '#a855f7',
     secondary: '#c084fc',

@@ -66,12 +66,12 @@ Redirect to `/schema:edit-node <name>`
 
 Redirect to `/schema:add-relation <NAME>`
 
-## Current Schema (v9.0.0)
+## Current Schema (v10.0.0)
 
-**35 Kind Types** across 3 Realms:
+**44 Kind Types** across 3 Realms:
 - **Global (15)**: Locale + 14 LocaleKnowledge nodes
-- **Project (14)**: Project structure, concepts, prompts, outputs
-- **Shared (6)**: SEO/GEO targeting and metrics
+- **Project (21)**: Project structure, concepts, prompts, outputs, generation
+- **Shared (8)**: SEO/GEO targeting and metrics
 
 **50 Relationships** in 5 EdgeFamilies:
 - **Ownership**: HAS_CONCEPT, HAS_PAGE, HAS_BLOCK, OF_TYPE

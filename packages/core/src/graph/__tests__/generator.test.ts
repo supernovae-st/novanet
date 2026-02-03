@@ -8,9 +8,9 @@ import { NODE_TYPES } from '../../types/nodes.js';
 
 describe('graph/generator', () => {
   describe('generateSchemaGraph', () => {
-    it('should generate 35 schema nodes', () => {
+    it('should generate 44 schema nodes', () => {
       const result = generateSchemaGraph();
-      expect(result.nodes).toHaveLength(35);
+      expect(result.nodes).toHaveLength(44);
     });
 
     it('should generate schema edges from RelationRegistry', () => {
@@ -45,7 +45,7 @@ describe('graph/generator', () => {
       expect(hasPageEdge?.cardinality).toBeDefined();
     });
 
-    it('should map all 35 node types', () => {
+    it('should map all 44 node types', () => {
       const result = generateSchemaGraph();
       const nodeTypes = result.nodes.map(n => n.nodeType);
 
@@ -96,15 +96,15 @@ describe('graph/generator', () => {
 
     it('should include stats', () => {
       const result = getSchemaHierarchy();
-      expect(result.stats.totalNodes).toBe(35);
-      expect(result.stats.nodesByRealm.project).toBe(14);
+      expect(result.stats.totalNodes).toBe(44);
+      expect(result.stats.nodesByRealm.project).toBe(21);
       expect(result.stats.nodesByRealm.global).toBe(15);
-      expect(result.stats.nodesByRealm.shared).toBe(6);
+      expect(result.stats.nodesByRealm.shared).toBe(8);
     });
 
     it('should include all nodes', () => {
       const result = getSchemaHierarchy();
-      expect(result.nodes).toHaveLength(35);
+      expect(result.nodes).toHaveLength(44);
     });
 
     it('should include edges', () => {

@@ -5,7 +5,7 @@ node:
   name: GEOSeedL10n
   realm: shared
   layer: geo
-  locale_behavior: localized
+  trait: localized
   icon: "🤖"
   description: "Base query to monitor on AI platforms"
 

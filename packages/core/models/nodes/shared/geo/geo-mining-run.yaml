@@ -5,7 +5,7 @@ node:
   name: GEOMiningRun
   realm: shared
   layer: geo
-  locale_behavior: job
+  trait: job
   icon: "⚙️"
   description: "Mining job for GEO reformulations"
 

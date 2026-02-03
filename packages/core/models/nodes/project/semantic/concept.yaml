@@ -5,7 +5,7 @@ node:
   name: Concept
   realm: project
   layer: semantic
-  locale_behavior: invariant
+  trait: invariant
   icon: "🔷"
   description: "Invariant semantic unit representing actions, objects, features, tiers, or brand elements"
 

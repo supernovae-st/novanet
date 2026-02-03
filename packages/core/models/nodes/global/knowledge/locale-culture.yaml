@@ -7,7 +7,7 @@ node:
   name: LocaleCulture
   realm: global
   layer: knowledge
-  locale_behavior: knowledge
+  trait: knowledge
   icon: "🏛️"
   description: "Values, taboos, sensitivities for a locale"
 

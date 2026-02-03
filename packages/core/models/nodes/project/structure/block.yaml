@@ -5,7 +5,7 @@ node:
   name: Block
   realm: project
   layer: structure
-  locale_behavior: invariant
+  trait: invariant
   icon: "🔷"
   description: "Page section instance containing sub-agent instructions and concept references"
 

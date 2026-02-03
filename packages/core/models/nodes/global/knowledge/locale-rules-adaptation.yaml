@@ -7,7 +7,7 @@ node:
   name: LocaleRulesAdaptation
   realm: global
   layer: knowledge
-  locale_behavior: knowledge
+  trait: knowledge
   icon: "🔄"
   description: "Meta-instructions for content adaptation decisions"
 

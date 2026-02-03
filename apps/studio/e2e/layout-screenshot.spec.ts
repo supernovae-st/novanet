@@ -37,7 +37,6 @@ test.describe('Layout Visual Test', () => {
     // Get the computed height
     const box = await queryPillContainer.boundingBox();
     if (box) {
-      console.log(`QueryPill height: ${box.height}px`);
       // h-20 = 80px
       expect(box.height).toBeGreaterThanOrEqual(76);
     }

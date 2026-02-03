@@ -29,7 +29,7 @@ flowchart TB
         end
     end
 
-    YAML[("YAML Models\n35 node definitions")]
+    YAML[("YAML Models\n44 node definitions")]
     NEO4J[("Neo4j 5.26\n~19,000 nodes")]
 
     YAML --> RUST
@@ -104,8 +104,8 @@ packages/core/models/
 ├── relations.yaml           # 50 relationship types
 └── nodes/
     ├── global/              # 15 global nodes
-    ├── project/             # 14 project nodes
-    └── shared/              # 6 shared nodes
+    ├── project/             # 21 project nodes
+    └── shared/              # 8 shared nodes
 ```
 
 All other artifacts (TypeScript, Cypher, Mermaid) are generated from YAML.

@@ -28,7 +28,7 @@ pub enum NovaNetError {
     Schema {
         path: String,
         #[source]
-        source: serde_yml::Error,
+        source: serde_yaml::Error,
     },
 
     #[error("validation failed: {0}")]
