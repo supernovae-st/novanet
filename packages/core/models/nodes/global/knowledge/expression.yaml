@@ -6,6 +6,8 @@
 
 node:
   name: Expression
+  realm: global
+  layer: knowledge
   locale_behavior: knowledge
   icon: "💭"
   description: "Individual native expression for localized content generation"

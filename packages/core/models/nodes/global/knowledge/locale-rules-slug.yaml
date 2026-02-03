@@ -5,6 +5,8 @@
 
 node:
   name: LocaleRulesSlug
+  realm: global
+  layer: knowledge
   locale_behavior: knowledge
   icon: "🔗"
   description: "URL slug generation rules for a locale"

@@ -8,11 +8,12 @@ use crossterm::event::{KeyCode, KeyEvent};
 use super::data::{TaxonomyTree, TreeItem};
 
 /// Navigation mode (matches Studio).
+/// Order: 1:Meta 2:Data 3:Overlay 4:Query
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum NavMode {
-    Data,
     #[default]
     Meta,
+    Data,
     Overlay,
     Query,
 }
@@ -29,10 +30,10 @@ impl NavMode {
 
     pub fn cycle(&self) -> Self {
         match self {
-            NavMode::Data => NavMode::Meta,
-            NavMode::Meta => NavMode::Overlay,
+            NavMode::Meta => NavMode::Data,
+            NavMode::Data => NavMode::Overlay,
             NavMode::Overlay => NavMode::Query,
-            NavMode::Query => NavMode::Data,
+            NavMode::Query => NavMode::Meta,
         }
     }
 }
@@ -42,7 +43,28 @@ impl NavMode {
 pub enum Focus {
     #[default]
     Tree,
-    Detail,
+    Info,
+    Yaml,
+}
+
+impl Focus {
+    /// Cycle to next focus panel.
+    pub fn next(self) -> Self {
+        match self {
+            Focus::Tree => Focus::Info,
+            Focus::Info => Focus::Yaml,
+            Focus::Yaml => Focus::Tree,
+        }
+    }
+
+    /// Cycle to previous focus panel.
+    pub fn prev(self) -> Self {
+        match self {
+            Focus::Tree => Focus::Yaml,
+            Focus::Info => Focus::Tree,
+            Focus::Yaml => Focus::Info,
+        }
+    }
 }
 
 /// Main app state.
@@ -66,6 +88,9 @@ pub struct App {
     pub yaml_content: String,
     pub yaml_path: String,
     pub yaml_scroll: usize,
+    // Info panel scroll (separate from yaml)
+    pub info_scroll: usize,
+    pub info_line_count: usize, // Set by UI after building lines
     pub root_path: String,
 }
 
@@ -87,6 +112,8 @@ impl App {
             yaml_content: String::new(),
             yaml_path: String::new(),
             yaml_scroll: 0,
+            info_scroll: 0,
+            info_line_count: 0,
             root_path,
         };
         app.load_yaml_for_current();
@@ -95,27 +122,37 @@ impl App {
 
     /// Load YAML content for the current cursor position.
     pub fn load_yaml_for_current(&mut self) {
+        // Reset both scroll positions when changing items
+        self.yaml_scroll = 0;
+        self.info_scroll = 0;
+
         match self.tree.item_at(self.tree_cursor) {
+            // Kind → individual YAML file
             Some(TreeItem::Kind(_, _, kind)) => {
                 let full_path = Path::new(&self.root_path).join(&kind.yaml_path);
                 self.yaml_path = kind.yaml_path.clone();
                 self.yaml_content = fs::read_to_string(&full_path)
                     .unwrap_or_else(|_| format!("# File not found: {}", full_path.display()));
-                self.yaml_scroll = 0;
             }
-            Some(TreeItem::EdgeKind(_, _)) => {
-                // EdgeKinds are in relations.yaml
+            // Realm, Layer → organizing-principles.yaml
+            Some(TreeItem::Realm(_)) | Some(TreeItem::Layer(_, _)) | Some(TreeItem::KindsSection) => {
+                let org_path = "packages/core/models/organizing-principles.yaml";
+                let full_path = Path::new(&self.root_path).join(org_path);
+                self.yaml_path = org_path.to_string();
+                self.yaml_content = fs::read_to_string(&full_path)
+                    .unwrap_or_else(|_| format!("# File not found: {}", full_path.display()));
+            }
+            // EdgeFamily, EdgeKind → relations.yaml
+            Some(TreeItem::EdgeFamily(_)) | Some(TreeItem::EdgeKind(_, _)) | Some(TreeItem::RelationsSection) => {
                 let rel_path = "packages/core/models/relations.yaml";
                 let full_path = Path::new(&self.root_path).join(rel_path);
                 self.yaml_path = rel_path.to_string();
                 self.yaml_content = fs::read_to_string(&full_path)
                     .unwrap_or_else(|_| format!("# File not found: {}", full_path.display()));
-                self.yaml_scroll = 0;
             }
-            _ => {
+            None => {
                 self.yaml_path.clear();
                 self.yaml_content.clear();
-                self.yaml_scroll = 0;
             }
         }
     }
@@ -258,13 +295,13 @@ impl App {
                 true
             }
 
-            // Mode switching: 1-4 direct, N cycle
+            // Mode switching: 1-4 direct (1=Meta, 2=Data, 3=Overlay, 4=Query)
             KeyCode::Char('1') => {
-                self.mode = NavMode::Data;
+                self.mode = NavMode::Meta;
                 true
             }
             KeyCode::Char('2') => {
-                self.mode = NavMode::Meta;
+                self.mode = NavMode::Data;
                 true
             }
             KeyCode::Char('3') => {
@@ -280,89 +317,152 @@ impl App {
                 true
             }
 
-            // Panel focus: ←→ or Tab
+            // Panel focus: Tab cycles, ←→ for quick nav
+            KeyCode::Tab => {
+                self.focus = self.focus.next();
+                true
+            }
+            KeyCode::BackTab => {
+                self.focus = self.focus.prev();
+                true
+            }
             KeyCode::Left => {
                 self.focus = Focus::Tree;
                 true
             }
-            KeyCode::Right | KeyCode::Tab => {
-                self.focus = if self.focus == Focus::Tree {
-                    Focus::Detail
-                } else {
-                    Focus::Tree
+            KeyCode::Right => {
+                // Right goes to Info (or Yaml if already on Info)
+                self.focus = match self.focus {
+                    Focus::Tree => Focus::Info,
+                    Focus::Info => Focus::Yaml,
+                    Focus::Yaml => Focus::Yaml,
                 };
                 true
             }
 
-            // Collapse/expand: h/l/H/L (vim-style)
-            KeyCode::Char('h') => {
-                // Collapse current node
-                if let Some(key) = self.tree.collapse_key_at(self.tree_cursor) {
-                    self.tree.collapse(&key);
-                }
-                true
-            }
-            KeyCode::Char('l') => {
-                // Expand current node
-                if let Some(key) = self.tree.collapse_key_at(self.tree_cursor) {
-                    self.tree.expand(&key);
+            // Toggle collapse/expand: h/l/Space/Enter - only when Tree focused
+            KeyCode::Char('h') | KeyCode::Char('l') | KeyCode::Char(' ') | KeyCode::Enter => {
+                if self.focus == Focus::Tree {
+                    if let Some(key) = self.tree.collapse_key_at(self.tree_cursor) {
+                        self.tree.toggle(&key);
+                    }
                 }
                 true
             }
             KeyCode::Char('H') => {
-                // Collapse all
                 self.tree.collapse_all();
                 self.tree_cursor = 0;
                 self.tree_scroll = 0;
                 true
             }
             KeyCode::Char('L') => {
-                // Expand all
                 self.tree.expand_all();
                 true
             }
 
-            // Tree navigation: ↑↓
-            KeyCode::Up => {
-                if self.tree_cursor > 0 {
-                    self.tree_cursor -= 1;
-                    self.ensure_cursor_visible();
-                    self.load_yaml_for_current();
+            // Navigation: ↑↓ and j/k are context-aware (scroll focused panel)
+            KeyCode::Up | KeyCode::Char('k') => {
+                match self.focus {
+                    Focus::Tree => {
+                        if self.tree_cursor > 0 {
+                            self.tree_cursor -= 1;
+                            self.ensure_cursor_visible();
+                            self.load_yaml_for_current();
+                        }
+                    }
+                    Focus::Info => {
+                        if self.info_scroll > 0 {
+                            self.info_scroll -= 1;
+                        }
+                    }
+                    Focus::Yaml => {
+                        if self.yaml_scroll > 0 {
+                            self.yaml_scroll -= 1;
+                        }
+                    }
                 }
                 true
             }
-            KeyCode::Down => {
-                let max = self.tree.item_count().saturating_sub(1);
-                if self.tree_cursor < max {
-                    self.tree_cursor += 1;
-                    self.ensure_cursor_visible();
-                    self.load_yaml_for_current();
+            KeyCode::Down | KeyCode::Char('j') => {
+                match self.focus {
+                    Focus::Tree => {
+                        let max = self.tree.item_count().saturating_sub(1);
+                        if self.tree_cursor < max {
+                            self.tree_cursor += 1;
+                            self.ensure_cursor_visible();
+                            self.load_yaml_for_current();
+                        }
+                    }
+                    Focus::Info => {
+                        let max_scroll = self.info_line_count.saturating_sub(5);
+                        if self.info_scroll < max_scroll {
+                            self.info_scroll += 1;
+                        }
+                    }
+                    Focus::Yaml => {
+                        let max_scroll = self.yaml_content.lines().count().saturating_sub(10);
+                        if self.yaml_scroll < max_scroll {
+                            self.yaml_scroll += 1;
+                        }
+                    }
                 }
                 true
             }
 
-            // YAML scroll: j/k (vim-style)
-            KeyCode::Char('j') => {
-                let max_scroll = self.yaml_content.lines().count().saturating_sub(10);
-                if self.yaml_scroll < max_scroll {
-                    self.yaml_scroll += 1;
-                }
-                true
-            }
-            KeyCode::Char('k') => {
-                if self.yaml_scroll > 0 {
-                    self.yaml_scroll -= 1;
-                }
-                true
-            }
-            // Page scroll: Ctrl+d / Ctrl+u
+            // Page scroll: d/u (vim-style, context-aware)
             KeyCode::Char('d') => {
-                let max_scroll = self.yaml_content.lines().count().saturating_sub(10);
-                self.yaml_scroll = (self.yaml_scroll + 10).min(max_scroll);
+                match self.focus {
+                    Focus::Tree => {
+                        let max = self.tree.item_count().saturating_sub(1);
+                        self.tree_cursor = (self.tree_cursor + 10).min(max);
+                        self.ensure_cursor_visible();
+                        self.load_yaml_for_current();
+                    }
+                    Focus::Info => {
+                        let max_scroll = self.info_line_count.saturating_sub(5);
+                        self.info_scroll = (self.info_scroll + 10).min(max_scroll);
+                    }
+                    Focus::Yaml => {
+                        let max_scroll = self.yaml_content.lines().count().saturating_sub(10);
+                        self.yaml_scroll = (self.yaml_scroll + 10).min(max_scroll);
+                    }
+                }
                 true
             }
             KeyCode::Char('u') => {
+                match self.focus {
+                    Focus::Tree => {
+                        self.tree_cursor = self.tree_cursor.saturating_sub(10);
+                        self.ensure_cursor_visible();
+                        self.load_yaml_for_current();
+                    }
+                    Focus::Info => {
+                        self.info_scroll = self.info_scroll.saturating_sub(10);
+                    }
+                    Focus::Yaml => {
+                        self.yaml_scroll = self.yaml_scroll.saturating_sub(10);
+                    }
+                }
+                true
+            }
+
+            // YAML scroll from anywhere: [ / ] (line), { / } (page)
+            KeyCode::Char('[') => {
+                self.yaml_scroll = self.yaml_scroll.saturating_sub(1);
+                true
+            }
+            KeyCode::Char(']') => {
+                let max_scroll = self.yaml_content.lines().count().saturating_sub(10);
+                self.yaml_scroll = (self.yaml_scroll + 1).min(max_scroll);
+                true
+            }
+            KeyCode::Char('{') => {
                 self.yaml_scroll = self.yaml_scroll.saturating_sub(10);
+                true
+            }
+            KeyCode::Char('}') => {
+                let max_scroll = self.yaml_content.lines().count().saturating_sub(10);
+                self.yaml_scroll = (self.yaml_scroll + 10).min(max_scroll);
                 true
             }
 

@@ -3,6 +3,8 @@
 
 node:
   name: PagePrompt
+  realm: project
+  layer: instruction
   locale_behavior: invariant
   icon: "🔵"
   description: "AI instructions for orchestrating page generation with versioning"

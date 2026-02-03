@@ -43,7 +43,10 @@ Axis 4 — LINKS?  :EdgeKind  (50 relationship types in 5 families)
 
 **Rust binary:** `tools/novanet/` — single crate for CLI + TUI (neo4rs, ratatui, clap).
 All commands implemented: data/meta/overlay/query, node/relation CRUD, search, locale, db,
-schema generate/validate, doc generate, filter build, Galaxy-themed TUI with boot animation, effects engine, and onboarding. 396 tests pass.
+schema generate/validate, doc generate, filter build, Galaxy-themed TUI with boot animation, effects engine, and onboarding. 180 tests pass.
+
+**YAML-first architecture:** Each Kind YAML has explicit `realm:` and `layer:` fields (source of truth).
+Path validation ensures `models/nodes/{realm}/{layer}/{name}.yaml` matches YAML content.
 
 **Boundary rule (v9 target):** TypeScript generates code artifacts. Rust executes at runtime.
 
@@ -111,7 +114,7 @@ pnpm test --filter=@novanet/studio      # Test only studio
 | @novanet/core | Types, schemas, filters, generators |
 | @novanet/db | Neo4j Docker, seeds, migrations |
 | @novanet/studio | Web-based graph visualization |
-| tools/novanet | Rust CLI + TUI — all runtime commands (396 tests) |
+| tools/novanet | Rust CLI + TUI — all runtime commands (180 tests) |
 
 ---
 
@@ -214,11 +217,25 @@ See `.claude/README.md` for full documentation.
 ```
 1. /schema:add-node MyNode             # Socratic discovery
    ↓
-2. YAML created                        # packages/core/models/nodes/.../my-node.yaml
-   ↓
+2. YAML created                        # packages/core/models/nodes/{realm}/{layer}/my-node.yaml
+   ↓                                   # with explicit realm: and layer: fields
 3. cargo run -- schema generate        # Regenerate all artifacts from YAML
    ↓
-4. cargo run -- schema validate        # Validate YAML coherence
+4. cargo run -- schema validate        # Validate YAML coherence + path/content match
    ↓
 5. cargo run -- db seed                # Update Neo4j
+```
+
+### YAML Kind Structure
+
+```yaml
+# packages/core/models/nodes/project/semantic/concept.yaml
+node:
+  name: Concept
+  realm: project          # Source of truth (must match path)
+  layer: semantic         # Source of truth (must match path)
+  locale_behavior: invariant
+  description: "..."
+  properties:
+    # ...
 ```

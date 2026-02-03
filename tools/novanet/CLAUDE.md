@@ -25,7 +25,7 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 | Filter | `filter build` | Implemented (JSON stdin, Studio subprocess) |
 | TUI | `tui` | Galaxy theme, mission control, search, detail, edge explorer, CRUD dialogs, dashboard, logo, command palette, help overlay, boot animation, effects engine, onboarding |
 
-**396 tests pass** (`cargo test`). Zero clippy warnings.
+**180 tests pass** (`cargo test`). Zero clippy warnings.
 
 ## Commands
 
@@ -80,7 +80,7 @@ cargo run -- tui                                  # Interactive terminal UI
 # Quality
 cargo clippy -- -D warnings    # Zero warnings policy
 cargo fmt --check              # Formatting check
-cargo test                     # 396 unit tests
+cargo test                     # 180 unit tests
 cargo test -- --ignored        # Neo4j integration tests (requires running Neo4j)
 
 # Pre-commit
@@ -139,6 +139,26 @@ src/
 - **Root discovery**: `--root` flag > `NOVANET_ROOT` env > walk up to `pnpm-workspace.yaml`
 - **YAML models**: Live in `packages/core/models/` (relative to monorepo root)
 - **Feature gate**: `cargo build --no-default-features` for CLI-only (no TUI deps)
+- **YAML-first architecture**: Each Kind YAML has explicit `realm:` and `layer:` fields (source of truth)
+  - Path validation: file must be at `models/nodes/{realm}/{layer}/{name}.yaml`
+  - Generators read realm/layer from YAML content, validate against path
+  - This enables flexible folder reorganization while maintaining consistency
+
+## TUI Keybindings
+
+| Key | Action |
+|-----|--------|
+| `1-4` | Switch NavMode (1:Meta, 2:Data, 3:Overlay, 4:Query) |
+| `Tab` | Cycle NavMode forward |
+| `j/k` | Tree cursor up/down |
+| `h/l/Space/Enter` | Toggle expand/collapse |
+| `d/u` | Page down/up (tree or YAML) |
+| `[/]` | Scroll YAML line up/down (from anywhere) |
+| `{/}` | Scroll YAML page up/down (from anywhere) |
+| `?` | Help overlay |
+| `Ctrl+P` | Command palette |
+| `/` | Search overlay |
+| `q/Esc` | Quit (or close overlay) |
 
 ## Dependencies on Monorepo
 

@@ -5,6 +5,8 @@
 
 node:
   name: LocaleRulesFormatting
+  realm: global
+  layer: knowledge
   locale_behavior: knowledge
   icon: "📐"
   description: "Formatting rules for dates, numbers, currency, addresses"

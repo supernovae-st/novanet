@@ -18,6 +18,8 @@
 
 node:
   name: ProjectL10n
+  realm: project
+  layer: foundation
   locale_behavior: localized
   icon: "🟢"
   description: "Localized identity and messaging for a Project"

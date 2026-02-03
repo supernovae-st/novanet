@@ -3,6 +3,8 @@
 
 node:
   name: BlockPrompt
+  realm: project
+  layer: instruction
   locale_behavior: invariant
   icon: "🔵"
   description: "AI instructions for generating a specific block with versioning"

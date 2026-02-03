@@ -5,6 +5,8 @@
 
 node:
   name: LocaleIdentity
+  realm: global
+  layer: knowledge
   locale_behavior: knowledge
   icon: "🆔"
   description: "Script, geographic, and technical identity for a locale"

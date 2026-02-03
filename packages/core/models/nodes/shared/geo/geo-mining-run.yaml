@@ -3,6 +3,8 @@
 
 node:
   name: GEOMiningRun
+  realm: shared
+  layer: geo
   locale_behavior: job
   icon: "⚙️"
   description: "Mining job for GEO reformulations"
