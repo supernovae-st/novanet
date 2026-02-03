@@ -690,16 +690,6 @@ export default function HomePage() {
                           onMetaHoverChange={setIsMetaHovered}
                           onMetaClick={() => !isExplosionActive && setIsExplosionActive(true)}
                         />
-                        {visibleNodeCount > 0 && (
-                          <>
-                            <Divider />
-                            <ResultsOverview
-                              expandedView={expandedView}
-                              onHoverOverflow={() => openExpanded('all')}
-                              onHoverLeave={scheduleCloseExpanded}
-                            />
-                          </>
-                        )}
                         <Divider />
                         <RefreshButton onClick={handleRefresh} isLoading={isFetching} />
                       </div>
