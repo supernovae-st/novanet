@@ -21,8 +21,10 @@ jest.mock('@/stores/animationStore', () => ({
 jest.mock('@/components/ui/tooltip', () => ({
   Tooltip: ({ children }: { children: React.ReactNode }) => <>{children}</>,
   TooltipTrigger: ({ children }: { children: React.ReactNode }) => <>{children}</>,
-  TooltipContent: ({ children }: { children: React.ReactNode }) => <span data-testid="tooltip">{children}</span>,
-  TooltipShortcut: ({ children }: { children: React.ReactNode }) => <kbd>{children}</kbd>,
+  TooltipContent: ({ children, sideOffset: _sideOffset }: { children: React.ReactNode; sideOffset?: number }) => (
+    <span data-testid="tooltip">{children}</span>
+  ),
+  TooltipShortcut: ({ children }: { children: React.ReactNode }) => <kbd data-testid="shortcut">{children}</kbd>,
 }));
 
 const mockStartTransition = jest.fn();
@@ -72,6 +74,16 @@ describe('NavigationModeToggle', () => {
       buttons.forEach((btn) => {
         expect(btn.className).toContain('font-mono');
       });
+    });
+
+    it('shows shortcuts 1, 2, 3, 4 for each mode', () => {
+      render(<NavigationModeToggle mode="data" onModeChange={mockOnModeChange} />);
+
+      const shortcuts = screen.getAllByTestId('shortcut');
+      expect(shortcuts[0]).toHaveTextContent('1'); // meta
+      expect(shortcuts[1]).toHaveTextContent('2'); // data
+      expect(shortcuts[2]).toHaveTextContent('3'); // overlay
+      expect(shortcuts[3]).toHaveTextContent('4'); // query
     });
   });
 
