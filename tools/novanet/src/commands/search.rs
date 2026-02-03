@@ -27,15 +27,15 @@ pub fn build_search_query(query: &str, kind: Option<&str>, limit: i64) -> Cypher
         ParamValue::StringList(vec![query.to_string()]),
     ));
 
-    // Optional Kind filter
+    // Optional Kind filter (parameterized for safety)
     if let Some(kind_label) = kind {
-        // Validate label safety
-        if kind_label
-            .chars()
-            .all(|c| c.is_ascii_alphanumeric() || c == '_')
-        {
-            cypher.push_str(&format!("\nAND n:{kind_label}"));
-        }
+        // Use parameterized label matching instead of direct interpolation
+        // This prevents injection even if validation is bypassed
+        cypher.push_str("\nAND ANY(label IN labels(n) WHERE label = $kind)");
+        params.push((
+            "kind".to_string(),
+            ParamValue::StringList(vec![kind_label.to_string()]),
+        ));
     }
 
     cypher.push_str(
@@ -68,13 +68,10 @@ pub async fn run_search(
               OR toLower(n.description) CONTAINS toLower($query))",
     );
 
-    if let Some(kind_label) = kind {
-        if kind_label
-            .chars()
-            .all(|c| c.is_ascii_alphanumeric() || c == '_')
-        {
-            cypher.push_str(&format!("\nAND n:{kind_label}"));
-        }
+    // Parameterized label matching for safety
+    let has_kind = kind.is_some();
+    if has_kind {
+        cypher.push_str("\nAND ANY(label IN labels(n) WHERE label = $kind)");
     }
 
     cypher.push_str(
@@ -87,15 +84,25 @@ pub async fn run_search(
     match format {
         OutputFormat::Cypher => {
             // Show the query with parameters inlined
-            let display = cypher
+            let mut display = cypher
                 .replace("$query", &format!("'{}'", query.replace('\'', "\\'")))
                 .replace("$limit", &limit.to_string());
+            if let Some(k) = kind {
+                display = display.replace("$kind", &format!("'{}'", k.replace('\'', "\\'")));
+            }
             output::print_output(&display);
         }
         OutputFormat::Table | OutputFormat::Json => {
-            let rows = db
-                .execute_with_params(&cypher, [("query", query), ("limit", &limit.to_string())])
-                .await;
+            let rows = if let Some(k) = kind {
+                db.execute_with_params(
+                    &cypher,
+                    [("query", query), ("kind", k), ("limit", &limit.to_string())],
+                )
+                .await
+            } else {
+                db.execute_with_params(&cypher, [("query", query), ("limit", &limit.to_string())])
+                    .await
+            };
 
             // Fallback: if the query fails (e.g., no text index), try simpler approach
             let rows = match rows {
@@ -155,20 +162,34 @@ mod tests {
     #[test]
     fn search_query_with_kind() {
         let stmt = build_search_query("test", Some("Page"), 10);
-        assert!(stmt.cypher.contains("AND n:Page"));
+        // Uses parameterized label matching (not direct interpolation)
+        assert!(stmt.cypher.contains("ANY(label IN labels(n) WHERE label = $kind)"));
+        let kind = stmt.params.iter().find(|(n, _)| n == "kind");
+        assert!(matches!(
+            kind,
+            Some((_, ParamValue::StringList(v))) if v == &vec!["Page"]
+        ));
     }
 
     #[test]
-    fn search_query_kind_injection_blocked() {
+    fn search_query_kind_injection_safe() {
+        // Even malicious input is safely parameterized
         let stmt = build_search_query("test", Some("Page;DROP"), 10);
-        // Invalid label should not be appended
+        // No direct interpolation - uses parameterized query
         assert!(!stmt.cypher.contains("DROP"));
+        assert!(stmt.cypher.contains("$kind"));
+        // Malicious string is safely contained in params
+        let kind = stmt.params.iter().find(|(n, _)| n == "kind");
+        assert!(matches!(
+            kind,
+            Some((_, ParamValue::StringList(v))) if v == &vec!["Page;DROP"]
+        ));
     }
 
     #[test]
     fn search_query_kind_with_underscore() {
         let stmt = build_search_query("test", Some("Locale_Identity"), 10);
-        assert!(stmt.cypher.contains("AND n:Locale_Identity"));
+        assert!(stmt.cypher.contains("ANY(label IN labels(n) WHERE label = $kind)"));
     }
 
     #[test]

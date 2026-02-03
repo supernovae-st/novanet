@@ -47,7 +47,7 @@ export function useNavigationMode(): UseNavigationModeReturn {
   const realmFilter = useFilterStore((s) => s.realmFilter);
   const traitFilter = useFilterStore((s) => s.traitFilter);
   const layerFilter = useFilterStore((s) => s.layerFilter);
-  const edgeFamilyFilter = useFilterStore((s) => s.edgeFamilyFilter);
+  const arcFamilyFilter = useFilterStore((s) => s.arcFamilyFilter);
 
   // Graph store for overlay merging
   const setGraphData = useGraphStore((s) => s.setGraphData);
@@ -89,7 +89,7 @@ export function useNavigationMode(): UseNavigationModeReturn {
         if (realmFilter.length > 0) params.set('realms', realmFilter.join(','));
         if (layerFilter.length > 0) params.set('layers', layerFilter.join(','));
         if (traitFilter.length > 0) params.set('traits', traitFilter.join(','));
-        if (edgeFamilyFilter.length > 0) params.set('edgeFamilies', edgeFamilyFilter.join(','));
+        if (arcFamilyFilter.length > 0) params.set('arcFamilies', arcFamilyFilter.join(','));
 
         try {
           const data = await fetchJSON<GraphDataResponse>(
@@ -110,7 +110,7 @@ export function useNavigationMode(): UseNavigationModeReturn {
     }
   }, [
     mode, fetchData, fetchSchemaData, setGraphData,
-    realmFilter, traitFilter, layerFilter, edgeFamilyFilter,
+    realmFilter, traitFilter, layerFilter, arcFamilyFilter,
   ]);
 
   return {

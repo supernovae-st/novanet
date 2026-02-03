@@ -5,7 +5,7 @@ node:
   name: BlockRules
   realm: project
   layer: instruction
-  locale_behavior: invariant
+  trait: invariant
   icon: "🔵"
   description: "Generation rules extracted from BlockType for versioning and A/B testing"
 

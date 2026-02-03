@@ -5,9 +5,9 @@ import { NODE_LAYERS, getLayer, getNodeTypesByLayer } from '../layers';
 import { NODE_TYPES } from '../../types/nodes';
 
 describe('graph/layers', () => {
-  it('should map all 35 node types to layers', () => {
+  it('should map all 44 node types to layers', () => {
     const mappedTypes = Object.keys(NODE_LAYERS);
-    expect(mappedTypes).toHaveLength(35);
+    expect(mappedTypes).toHaveLength(44);
 
     // Every NODE_TYPE should be mapped
     for (const nodeType of NODE_TYPES) {

@@ -5,7 +5,7 @@
  *
  * Compact badge: Icon + Count. Hover → type name slides in.
  * +N hover: pill expands showing BOTH node + relation breakdowns.
- * "35 nodes" hover: nodes only. "89 relations" hover: relations only.
+ * "44 nodes" hover: nodes only. "89 relations" hover: relations only.
  */
 
 import { useMemo, memo, useCallback } from 'react';

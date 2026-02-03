@@ -21,7 +21,7 @@ with 6 meta-node types, dual navigation, and Rust-first tooling.
 | Phase | Description | Status | Key Deliverables |
 |-------|-------------|--------|------------------|
 | 0 | Preparation | DONE | `v8.3.0-stable` tag, feature branch |
-| 1 | YAML Foundation | DONE | 35 node YAMLs with `locale_behavior`, relations.yaml v9 |
+| 1 | YAML Foundation | DONE | 44 node YAMLs with `locale_behavior`, relations.yaml v9 |
 | 2 | Rust Generators | DONE | 8 generators, 4 parsers, 279 tests |
 | 3 | TypeScript Types | DONE | KIND_META, NodeCategory removed, old TS deleted |
 | 4 | Neo4j Migration | DONE | v9 seeds, constraints, 8 facet indexes |

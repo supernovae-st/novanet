@@ -74,10 +74,10 @@ db/
 | Realm | Nodes | Description |
 |-------|-------|-------------|
 | **🌍 Global** | 15 | Locale + 14 LocaleKnowledge nodes |
-| **📦 Project** | 14 | Project structure, content, generation |
-| **🎯 Shared** | 6 | SEO/GEO targeting nodes |
+| **📦 Project** | 21 | Project structure, content, generation |
+| **🎯 Shared** | 8 | SEO/GEO targeting nodes |
 
-Total: **35 node types**, **50 relationships**, **102 meta-nodes** (Realm/Layer/Kind/Trait/EdgeFamily/EdgeKind)
+Total: **44 node types**, **50 relationships**, **109 meta-nodes** (Realm/Layer/Kind/Trait/EdgeFamily/EdgeKind)
 
 ---
 

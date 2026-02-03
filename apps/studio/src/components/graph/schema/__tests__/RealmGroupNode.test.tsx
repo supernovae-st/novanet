@@ -31,7 +31,7 @@ describe('RealmGroupNode', () => {
       realm: 'project' as const,
       label: 'PROJECT',
       icon: '📦',
-      nodeCount: 14,
+      nodeCount: 21,
     },
     selected: false,
     dragging: false,
@@ -63,7 +63,7 @@ describe('RealmGroupNode', () => {
       </ReactFlowProvider>
     );
 
-    expect(screen.getByText('14 types')).toBeInTheDocument();
+    expect(screen.getByText('21 types')).toBeInTheDocument();
   });
 
   it('should show NodeResizer when selected', () => {

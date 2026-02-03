@@ -73,9 +73,8 @@ pub struct App {
     pub mode: NavMode,
     pub focus: Focus,
     pub tree_cursor: usize,
-    pub tree_scroll: usize,    // Scroll offset for tree
-    pub tree_height: usize,    // Visible height (set by UI)
-    pub detail_scroll: usize,
+    pub tree_scroll: usize, // Scroll offset for tree
+    pub tree_height: usize, // Visible height (set by UI)
     pub tree: TaxonomyTree,
     // Search state
     pub search_active: bool,
@@ -88,6 +87,7 @@ pub struct App {
     pub yaml_content: String,
     pub yaml_path: String,
     pub yaml_scroll: usize,
+    pub yaml_line_count: usize, // Cached line count (avoids per-scroll recomputation)
     // Info panel scroll (separate from yaml)
     pub info_scroll: usize,
     pub info_line_count: usize, // Set by UI after building lines
@@ -102,7 +102,6 @@ impl App {
             tree_cursor: 0,
             tree_scroll: 0,
             tree_height: 20, // Default, updated by UI
-            detail_scroll: 0,
             tree,
             search_active: false,
             search_query: String::new(),
@@ -112,6 +111,7 @@ impl App {
             yaml_content: String::new(),
             yaml_path: String::new(),
             yaml_scroll: 0,
+            yaml_line_count: 0,
             info_scroll: 0,
             info_line_count: 0,
             root_path,
@@ -133,26 +133,34 @@ impl App {
                 self.yaml_path = kind.yaml_path.clone();
                 self.yaml_content = fs::read_to_string(&full_path)
                     .unwrap_or_else(|_| format!("# File not found: {}", full_path.display()));
+                self.yaml_line_count = self.yaml_content.lines().count();
             }
             // Realm, Layer → organizing-principles.yaml
-            Some(TreeItem::Realm(_)) | Some(TreeItem::Layer(_, _)) | Some(TreeItem::KindsSection) => {
+            Some(TreeItem::Realm(_))
+            | Some(TreeItem::Layer(_, _))
+            | Some(TreeItem::KindsSection) => {
                 let org_path = "packages/core/models/organizing-principles.yaml";
                 let full_path = Path::new(&self.root_path).join(org_path);
                 self.yaml_path = org_path.to_string();
                 self.yaml_content = fs::read_to_string(&full_path)
                     .unwrap_or_else(|_| format!("# File not found: {}", full_path.display()));
+                self.yaml_line_count = self.yaml_content.lines().count();
             }
-            // EdgeFamily, EdgeKind → relations.yaml
-            Some(TreeItem::EdgeFamily(_)) | Some(TreeItem::EdgeKind(_, _)) | Some(TreeItem::RelationsSection) => {
+            // ArcFamily, ArcKind → relations.yaml
+            Some(TreeItem::ArcFamily(_))
+            | Some(TreeItem::ArcKind(_, _))
+            | Some(TreeItem::RelationsSection) => {
                 let rel_path = "packages/core/models/relations.yaml";
                 let full_path = Path::new(&self.root_path).join(rel_path);
                 self.yaml_path = rel_path.to_string();
                 self.yaml_content = fs::read_to_string(&full_path)
                     .unwrap_or_else(|_| format!("# File not found: {}", full_path.display()));
+                self.yaml_line_count = self.yaml_content.lines().count();
             }
             None => {
                 self.yaml_path.clear();
                 self.yaml_content.clear();
+                self.yaml_line_count = 0;
             }
         }
     }
@@ -225,7 +233,7 @@ impl App {
         idx += 1;
 
         if !self.tree.is_collapsed("relations") {
-            for family in &self.tree.edge_families {
+            for family in &self.tree.arc_families {
                 if family.display_name.to_lowercase().contains(&query)
                     || family.key.to_lowercase().contains(&query)
                 {
@@ -234,9 +242,9 @@ impl App {
                 idx += 1;
 
                 if !self.tree.is_collapsed(&format!("family:{}", family.key)) {
-                    for edge_kind in &family.edge_kinds {
-                        if edge_kind.display_name.to_lowercase().contains(&query)
-                            || edge_kind.key.to_lowercase().contains(&query)
+                    for arc_kind in &family.arc_kinds {
+                        if arc_kind.display_name.to_lowercase().contains(&query)
+                            || arc_kind.key.to_lowercase().contains(&query)
                         {
                             self.search_results.push(idx);
                         }
@@ -400,7 +408,7 @@ impl App {
                         }
                     }
                     Focus::Yaml => {
-                        let max_scroll = self.yaml_content.lines().count().saturating_sub(10);
+                        let max_scroll = self.yaml_line_count.saturating_sub(10);
                         if self.yaml_scroll < max_scroll {
                             self.yaml_scroll += 1;
                         }
@@ -423,7 +431,7 @@ impl App {
                         self.info_scroll = (self.info_scroll + 10).min(max_scroll);
                     }
                     Focus::Yaml => {
-                        let max_scroll = self.yaml_content.lines().count().saturating_sub(10);
+                        let max_scroll = self.yaml_line_count.saturating_sub(10);
                         self.yaml_scroll = (self.yaml_scroll + 10).min(max_scroll);
                     }
                 }
@@ -443,26 +451,6 @@ impl App {
                         self.yaml_scroll = self.yaml_scroll.saturating_sub(10);
                     }
                 }
-                true
-            }
-
-            // YAML scroll from anywhere: [ / ] (line), { / } (page)
-            KeyCode::Char('[') => {
-                self.yaml_scroll = self.yaml_scroll.saturating_sub(1);
-                true
-            }
-            KeyCode::Char(']') => {
-                let max_scroll = self.yaml_content.lines().count().saturating_sub(10);
-                self.yaml_scroll = (self.yaml_scroll + 1).min(max_scroll);
-                true
-            }
-            KeyCode::Char('{') => {
-                self.yaml_scroll = self.yaml_scroll.saturating_sub(10);
-                true
-            }
-            KeyCode::Char('}') => {
-                let max_scroll = self.yaml_content.lines().count().saturating_sub(10);
-                self.yaml_scroll = (self.yaml_scroll + 10).min(max_scroll);
                 true
             }
 

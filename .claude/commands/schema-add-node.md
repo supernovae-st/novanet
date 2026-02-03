@@ -22,7 +22,7 @@ Add a new node type to the NovaNet ontology using Socratic discovery.
 
 3. **Creation Phase**:
    - Create YAML file in `packages/core/models/nodes/{realm}/{layer}/{node-name}.yaml`
-   - Update `relations.yaml` if new relationships
+   - Add arc YAML in `arc-kinds/` if new arc types needed
    - Run `novanet schema generate`
    - Run `novanet schema validate`
 

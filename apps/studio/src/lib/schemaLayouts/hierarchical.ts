@@ -4,7 +4,7 @@
  * Generates Realm, Layer, and Kind as regular graph nodes with edges:
  * - Realm nodes (3): project, global, shared
  * - Layer nodes (9): foundation, structure, semantic, instruction, output, config, knowledge, seo, geo
- * - Kind nodes (35): all node types
+ * - Kind nodes (44): all node types
  * - HAS_LAYER edges (Realm → Layer)
  * - HAS_KIND edges (Layer → Kind)
  * - Business edges (Kind → Kind)

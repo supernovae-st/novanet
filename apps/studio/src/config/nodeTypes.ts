@@ -1,19 +1,19 @@
 // =============================================================================
-// NODE TYPE CONFIGURATION (v9.0.0)
+// NODE TYPE CONFIGURATION (v9.0.1)
 // =============================================================================
-// Visual configuration for all 35 NovaNet node types
+// Visual configuration for all 44 NovaNet node types
 // NodeType, Layer, KIND_META imported from @novanet/core (Single Source of Truth)
 
 import type { NodeType, Layer } from '@novanet/core/types';
 import { NODE_TYPES, KIND_META } from '@novanet/core/types';
 
 // =============================================================================
-// NODE LAYERS (v9.0.0 - 9 layers, 35 nodes)
+// NODE LAYERS (v9.0.1 - 9 layers, 44 nodes)
 // Derived from KIND_META — single source of truth
 // =============================================================================
 
 /**
- * Node layers with their types (v9 - 35 nodes across 9 layers)
+ * Node layers with their types (v9 - 44 nodes across 9 layers)
  * Derived from KIND_META in @novanet/core
  */
 export const NODE_LAYERS: Record<Layer, NodeType[]> = Object.entries(KIND_META).reduce(
@@ -44,7 +44,7 @@ export interface NodeTypeConfig {
 }
 
 /**
- * All node type configurations (v9.0.0 - 35 nodes)
+ * All node type configurations (v9.0.1 - 44 nodes)
  * Aligned with @novanet/core NODE_TYPES
  */
 export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
@@ -80,7 +80,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   },
 
   // ==========================================================================
-  // SEMANTIC LAYER (2 nodes)
+  // SEMANTIC LAYER (4 nodes)
   // ==========================================================================
   Concept: {
     type: 'Concept',
@@ -100,9 +100,27 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     size: 16,
     layer: 'semantic',
   },
+  SearchIntent: {
+    type: 'SearchIntent',
+    label: 'Search Intent',
+    icon: '🔎',
+    color: '#d97706',
+    colorClass: 'bg-amber-600',
+    size: 16,
+    layer: 'semantic',
+  },
+  TopicCluster: {
+    type: 'TopicCluster',
+    label: 'Topic Cluster',
+    icon: '🗂️',
+    color: '#b45309',
+    colorClass: 'bg-amber-700',
+    size: 18,
+    layer: 'semantic',
+  },
 
   // ==========================================================================
-  // STRUCTURE LAYER (2 nodes)
+  // STRUCTURE LAYER (3 nodes)
   // ==========================================================================
   Page: {
     type: 'Page',
@@ -122,9 +140,18 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     size: 16,
     layer: 'structure',
   },
+  ContentSlot: {
+    type: 'ContentSlot',
+    label: 'Content Slot',
+    icon: '🔲',
+    color: '#0891b2',
+    colorClass: 'bg-cyan-600',
+    size: 14,
+    layer: 'structure',
+  },
 
   // ==========================================================================
-  // INSTRUCTION LAYER (5 nodes — types + prompts + rules)
+  // INSTRUCTION LAYER (6 nodes — types + prompts + rules + artifact)
   // ==========================================================================
   PageType: {
     type: 'PageType',
@@ -316,9 +343,18 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     size: 12,
     layer: 'instruction',
   },
+  PromptArtifact: {
+    type: 'PromptArtifact',
+    label: 'Prompt Artifact',
+    icon: '📋',
+    color: '#bfdbfe',
+    colorClass: 'bg-blue-200',
+    size: 10,
+    layer: 'instruction',
+  },
 
   // ==========================================================================
-  // OUTPUT LAYER (2 nodes — LLM-generated content)
+  // OUTPUT LAYER (5 nodes — LLM-generated content + jobs + signals)
   // ==========================================================================
   PageL10n: {
     type: 'PageL10n',
@@ -336,6 +372,33 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#fb923c',
     colorClass: 'bg-orange-400',
     size: 14,
+    layer: 'output',
+  },
+  GenerationJob: {
+    type: 'GenerationJob',
+    label: 'Generation Job',
+    icon: '🚀',
+    color: '#ea580c',
+    colorClass: 'bg-orange-600',
+    size: 16,
+    layer: 'output',
+  },
+  OutputArtifact: {
+    type: 'OutputArtifact',
+    label: 'Output Artifact',
+    icon: '📦',
+    color: '#c2410c',
+    colorClass: 'bg-orange-700',
+    size: 12,
+    layer: 'output',
+  },
+  EvaluationSignal: {
+    type: 'EvaluationSignal',
+    label: 'Evaluation Signal',
+    icon: '📊',
+    color: '#9a3412',
+    colorClass: 'bg-orange-800',
+    size: 10,
     layer: 'output',
   },
 
@@ -371,8 +434,26 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   },
 
   // ==========================================================================
-  // GEO LAYER (3 nodes)
+  // GEO LAYER (5 nodes)
   // ==========================================================================
+  Thing: {
+    type: 'Thing',
+    label: 'Thing',
+    icon: '📍',
+    color: '#7c3aed',
+    colorClass: 'bg-violet-600',
+    size: 18,
+    layer: 'geo',
+  },
+  ThingL10n: {
+    type: 'ThingL10n',
+    label: 'Thing L10n',
+    icon: '🌐',
+    color: '#8b5cf6',
+    colorClass: 'bg-violet-500',
+    size: 16,
+    layer: 'geo',
+  },
   GEOSeedL10n: {
     type: 'GEOSeedL10n',
     label: 'GEO Seed',

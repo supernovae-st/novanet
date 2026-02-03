@@ -7,7 +7,7 @@
  * - Realms (3): global, project, shared
  * - Layers (9): config, knowledge, foundation, ...
  * - Traits (5): invariant, localized, knowledge, derived, job
- * - Edge Families (5): ownership, localization, semantic, generation, mining
+ * - Arc Families (5): ownership, localization, semantic, generation, mining
  *
  * Reads/writes filterStore facet state.
  * Uses Sidebar compound component for consistent styling.
@@ -42,7 +42,13 @@ import {
 import { useShallow } from 'zustand/react/shallow';
 import type { Realm, Layer, Trait } from '@novanet/core/types';
 import { useFilterStore } from '@/stores/filterStore';
-import { realmAccents, iconSizes } from '@/design/tokens';
+import { iconSizes } from '@/design/tokens';
+import {
+  REALM_COLORS,
+  LAYER_COLORS,
+  TRAIT_COLORS,
+  ARC_FAMILY_COLORS,
+} from '@/design/colors';
 import { Sidebar } from './SidebarContent';
 
 // =============================================================================
@@ -75,24 +81,13 @@ const TRAITS: { key: Trait; label: string; icon: LucideIcon }[] = [
   { key: 'job', label: 'Job', icon: Cpu },
 ];
 
-const REALM_COLORS: Record<Realm, string> = {
-  global: realmAccents.global.color,
-  project: realmAccents.project.color,
-  shared: realmAccents.shared.color,
-};
-
-const EDGE_FAMILIES: { key: string; label: string; icon: LucideIcon }[] = [
+const ARC_FAMILIES: { key: string; label: string; icon: LucideIcon }[] = [
   { key: 'ownership', label: 'Ownership', icon: Link },
   { key: 'localization', label: 'Localization', icon: ArrowRightLeft },
   { key: 'semantic', label: 'Semantic', icon: Waypoints },
   { key: 'generation', label: 'Generation', icon: Wand2 },
   { key: 'mining', label: 'Mining', icon: Pickaxe },
 ];
-
-// Consistent accent for layer, trait, and edge family sections
-const LAYER_SECTION_COLOR = '#6c71c4'; // violet
-const TRAIT_SECTION_COLOR = '#d33682'; // magenta
-const EDGE_FAMILY_SECTION_COLOR = '#cb4b16'; // orange
 
 // =============================================================================
 // COMPONENT
@@ -109,28 +104,28 @@ export const FacetFilterPanel = memo(function FacetFilterPanel({
     realmFilter,
     traitFilter,
     layerFilter,
-    edgeFamilyFilter,
+    arcFamilyFilter,
     toggleRealm,
     toggleTrait,
     toggleLayer,
-    toggleEdgeFamily,
+    toggleArcFamily,
   } = useFilterStore(
     useShallow((s) => ({
       realmFilter: s.realmFilter,
       traitFilter: s.traitFilter,
       layerFilter: s.layerFilter,
-      edgeFamilyFilter: s.edgeFamilyFilter,
+      arcFamilyFilter: s.arcFamilyFilter,
       toggleRealm: s.toggleRealm,
       toggleTrait: s.toggleTrait,
       toggleLayer: s.toggleLayer,
-      toggleEdgeFamily: s.toggleEdgeFamily,
+      toggleArcFamily: s.toggleArcFamily,
     }))
   );
 
   const realmSet = useMemo(() => new Set(realmFilter), [realmFilter]);
   const layerSet = useMemo(() => new Set(layerFilter), [layerFilter]);
   const traitSet = useMemo(() => new Set(traitFilter), [traitFilter]);
-  const edgeFamilySet = useMemo(() => new Set(edgeFamilyFilter), [edgeFamilyFilter]);
+  const arcFamilySet = useMemo(() => new Set(arcFamilyFilter), [arcFamilyFilter]);
 
   // Section-level tri-state: all checked, some, none
   const realmCheckboxState = useMemo(() => {
@@ -151,11 +146,11 @@ export const FacetFilterPanel = memo(function FacetFilterPanel({
     return 'partial' as const;
   }, [traitSet]);
 
-  const edgeFamilyCheckboxState = useMemo(() => {
-    if (edgeFamilySet.size === 0) return 'none' as const;
-    if (edgeFamilySet.size === EDGE_FAMILIES.length) return 'all' as const;
+  const arcFamilyCheckboxState = useMemo(() => {
+    if (arcFamilySet.size === 0) return 'none' as const;
+    if (arcFamilySet.size === ARC_FAMILIES.length) return 'all' as const;
     return 'partial' as const;
-  }, [edgeFamilySet]);
+  }, [arcFamilySet]);
 
   // Toggle all realms
   const handleRealmSectionClick = useCallback(() => {
@@ -190,19 +185,19 @@ export const FacetFilterPanel = memo(function FacetFilterPanel({
     }
   }, [traitCheckboxState]);
 
-  // Toggle all edge families
-  const handleEdgeFamilySectionClick = useCallback(() => {
-    const allKeys = EDGE_FAMILIES.map((f) => f.key);
+  // Toggle all arc families
+  const handleArcFamilySectionClick = useCallback(() => {
+    const allKeys = ARC_FAMILIES.map((f) => f.key);
     const store = useFilterStore.getState();
-    if (edgeFamilyCheckboxState !== 'none') {
-      store.setEdgeFamilyFilter([]);
+    if (arcFamilyCheckboxState !== 'none') {
+      store.setArcFamilyFilter([]);
     } else {
-      store.setEdgeFamilyFilter(allKeys);
+      store.setArcFamilyFilter(allKeys);
     }
-  }, [edgeFamilyCheckboxState]);
+  }, [arcFamilyCheckboxState]);
 
   // Active facet count
-  const activeFacetCount = realmSet.size + layerSet.size + traitSet.size + edgeFamilySet.size;
+  const activeFacetCount = realmSet.size + layerSet.size + traitSet.size + arcFamilySet.size;
 
   return (
     <Sidebar.Content
@@ -234,7 +229,7 @@ export const FacetFilterPanel = memo(function FacetFilterPanel({
           id="facet-realms"
           label="Realms"
           icon={<Globe className={iconSizes.sm} />}
-          color={realmAccents.global.color}
+          color={REALM_COLORS.global.color}
           checkboxState={realmCheckboxState}
           onCheckboxClick={handleRealmSectionClick}
           count={REALMS.length}
@@ -246,7 +241,7 @@ export const FacetFilterPanel = memo(function FacetFilterPanel({
               id={`facet-realm-${key}`}
               label={label}
               icon={<Icon className={iconSizes.sm} />}
-              color={REALM_COLORS[key]}
+              color={REALM_COLORS[key].color}
               isSelected={realmSet.has(key)}
               onToggle={() => toggleRealm(key)}
             />
@@ -258,7 +253,7 @@ export const FacetFilterPanel = memo(function FacetFilterPanel({
           id="facet-layers"
           label="Layers"
           icon={<Layers className={iconSizes.sm} />}
-          color={LAYER_SECTION_COLOR}
+          color={LAYER_COLORS.foundation.color}
           checkboxState={layerCheckboxState}
           onCheckboxClick={handleLayerSectionClick}
           count={LAYERS.length}
@@ -270,7 +265,7 @@ export const FacetFilterPanel = memo(function FacetFilterPanel({
               id={`facet-layer-${key}`}
               label={label}
               icon={<Icon className={iconSizes.sm} />}
-              color={LAYER_SECTION_COLOR}
+              color={LAYER_COLORS[key].color}
               isSelected={layerSet.has(key)}
               onToggle={() => toggleLayer(key)}
             />
@@ -282,7 +277,7 @@ export const FacetFilterPanel = memo(function FacetFilterPanel({
           id="facet-traits"
           label="Traits"
           icon={<Sparkles className={iconSizes.sm} />}
-          color={TRAIT_SECTION_COLOR}
+          color={TRAIT_COLORS.invariant.color}
           checkboxState={traitCheckboxState}
           onCheckboxClick={handleTraitSectionClick}
           count={TRAITS.length}
@@ -294,33 +289,33 @@ export const FacetFilterPanel = memo(function FacetFilterPanel({
               id={`facet-trait-${key}`}
               label={label}
               icon={<Icon className={iconSizes.sm} />}
-              color={TRAIT_SECTION_COLOR}
+              color={TRAIT_COLORS[key].color}
               isSelected={traitSet.has(key)}
               onToggle={() => toggleTrait(key)}
             />
           ))}
         </Sidebar.Section>
 
-        {/* Edge Families Section */}
+        {/* Arc Families Section */}
         <Sidebar.Section
-          id="facet-edge-families"
-          label="Edge Families"
+          id="facet-arc-families"
+          label="Arc Families"
           icon={<Link className={iconSizes.sm} />}
-          color={EDGE_FAMILY_SECTION_COLOR}
-          checkboxState={edgeFamilyCheckboxState}
-          onCheckboxClick={handleEdgeFamilySectionClick}
-          count={EDGE_FAMILIES.length}
+          color={ARC_FAMILY_COLORS.ownership.color}
+          checkboxState={arcFamilyCheckboxState}
+          onCheckboxClick={handleArcFamilySectionClick}
+          count={ARC_FAMILIES.length}
           defaultExpanded
         >
-          {EDGE_FAMILIES.map(({ key, label, icon: Icon }) => (
+          {ARC_FAMILIES.map(({ key, label, icon: Icon }) => (
             <Sidebar.Row
               key={key}
-              id={`facet-edge-family-${key}`}
+              id={`facet-arc-family-${key}`}
               label={label}
               icon={<Icon className={iconSizes.sm} />}
-              color={EDGE_FAMILY_SECTION_COLOR}
-              isSelected={edgeFamilySet.has(key)}
-              onToggle={() => toggleEdgeFamily(key)}
+              color={ARC_FAMILY_COLORS[key as keyof typeof ARC_FAMILY_COLORS].color}
+              isSelected={arcFamilySet.has(key)}
+              onToggle={() => toggleArcFamily(key)}
             />
           ))}
         </Sidebar.Section>

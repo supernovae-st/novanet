@@ -10,7 +10,7 @@ node:
   name: Pattern
   realm: global
   layer: knowledge
-  locale_behavior: knowledge
+  trait: knowledge
   icon: "📐"
   description: "Formatting pattern with correct/incorrect examples"
 

@@ -20,7 +20,7 @@ v9 introduces a **faceted classification** where each Kind sits at the intersect
 Axis 1 — WHERE?  :Realm     (global / project / shared)
 Axis 2 — WHAT?   :Layer     (knowledge / structure / semantic / ...)
 Axis 3 — HOW?    :Trait     (invariant / localized / knowledge / derived / job)
-Axis 4 — LINKS?  :EdgeKind  (SEMANTIC_LINK, HAS_OUTPUT, HAS_L10N, ...)
+Axis 4 — LINKS?  :ArcKind  (SEMANTIC_LINK, HAS_OUTPUT, HAS_L10N, ...)
 ```
 
 ### Meta-Node Types (6 types)
@@ -31,8 +31,8 @@ Axis 4 — LINKS?  :EdgeKind  (SEMANTIC_LINK, HAS_OUTPUT, HAS_L10N, ...)
 | **Layer** | 9 | Functional classification / architectural layer |
 | **Kind** | 35 | A node type in the data graph (1:1 with Neo4j labels) |
 | **Trait** | 5 | Locale behavior — how a node type changes across locales |
-| **EdgeFamily** | 5 | Classification of relationship types |
-| **EdgeKind** | 50 | Individual relationship type (1:1 with Neo4j rel types) |
+| **ArcFamily** | 5 | Classification of relationship types |
+| **ArcKind** | 50 | Individual relationship type (1:1 with Neo4j rel types) |
 
 All meta-nodes carry the `:Meta` double-label for easy filtering.
 
@@ -68,7 +68,7 @@ All meta-nodes carry the `:Meta` double-label for easy filtering.
 | `derived` | Derived | Computed/aggregated data |
 | `job` | Job | Background processing tasks |
 
-### :EdgeFamily (5 nodes)
+### :ArcFamily (5 nodes)
 
 | Key | Display Name | Arrow Style |
 |-----|-------------|------------|
@@ -148,13 +148,13 @@ All meta-nodes carry the `:Meta` double-label for easy filtering.
 | `created_at` | date | Creation timestamp |
 | `updated_at` | date | Last update timestamp |
 
-## Meta-Graph Relations
+## Meta-Graph Arcs
 
 ### Hierarchy (top-down navigation)
 ```
 Realm -[:HAS_LAYER]-> Layer
 Layer -[:HAS_KIND]-> Kind
-EdgeFamily -[:HAS_EDGE_KIND]-> EdgeKind
+ArcFamily -[:HAS_EDGE_KIND]-> ArcKind
 ```
 
 ### Facets (Kind-centric)
@@ -164,11 +164,11 @@ Kind -[:IN_LAYER]-> Layer
 Kind -[:HAS_TRAIT]-> Trait
 ```
 
-### Edge Schema (OWL-inspired)
+### Arc Schema (OWL-inspired)
 ```
-EdgeKind -[:FROM_KIND]-> Kind   (source node type)
-EdgeKind -[:TO_KIND]-> Kind     (target node type)
-EdgeKind -[:IN_FAMILY]-> EdgeFamily
+ArcKind -[:FROM_KIND]-> Kind   (source node type)
+ArcKind -[:TO_KIND]-> Kind     (target node type)
+ArcKind -[:IN_FAMILY]-> ArcFamily
 ```
 
 ### Instance Bridge
@@ -176,9 +176,9 @@ EdgeKind -[:IN_FAMILY]-> EdgeFamily
 DataNode -[:OF_KIND]-> Kind     (every data node links to its Kind)
 ```
 
-## Key Data Relations
+## Key Data Arcs
 
-| Relation | From -> To | EdgeFamily | Description |
+| Arc | From -> To | ArcFamily | Description |
 |----------|-----------|------------|-------------|
 | `HAS_CONCEPT` | Project -> Concept | ownership | Project owns concepts |
 | `HAS_PAGE` | Project -> Page | ownership | Project owns pages |
@@ -202,8 +202,8 @@ DataNode -[:OF_KIND]-> Kind     (every data node links to its Kind)
 | NodeTypeMeta | **Kind** |
 | IN_SUBCATEGORY | **OF_KIND** |
 | _(new)_ | **Trait** |
-| _(new)_ | **EdgeFamily** |
-| _(new)_ | **EdgeKind** |
+| _(new)_ | **ArcFamily** |
+| _(new)_ | **ArcKind** |
 | DataMode (data/schema) | **NavigationMode** (data/meta/overlay/query) |
 
 ## Abbreviations

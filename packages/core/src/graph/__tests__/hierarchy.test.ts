@@ -69,20 +69,20 @@ describe('graph/hierarchy', () => {
   });
 
   it('should have correct node counts per layer', () => {
-    // Project realm: foundation (3), structure (2), semantic (2), instruction (5), output (2) = 14
+    // Project realm: foundation (3), structure (3), semantic (4), instruction (6), output (5) = 21
     expect(REALM_HIERARCHY.project.layers.foundation.nodeTypes).toHaveLength(3);
-    expect(REALM_HIERARCHY.project.layers.structure.nodeTypes).toHaveLength(2);
-    expect(REALM_HIERARCHY.project.layers.semantic.nodeTypes).toHaveLength(2);
-    expect(REALM_HIERARCHY.project.layers.instruction.nodeTypes).toHaveLength(5);
-    expect(REALM_HIERARCHY.project.layers.output.nodeTypes).toHaveLength(2);
+    expect(REALM_HIERARCHY.project.layers.structure.nodeTypes).toHaveLength(3);
+    expect(REALM_HIERARCHY.project.layers.semantic.nodeTypes).toHaveLength(4);
+    expect(REALM_HIERARCHY.project.layers.instruction.nodeTypes).toHaveLength(6);
+    expect(REALM_HIERARCHY.project.layers.output.nodeTypes).toHaveLength(5);
 
     // Global realm: config (1), knowledge (14) = 15
     expect(REALM_HIERARCHY.global.layers.config.nodeTypes).toHaveLength(1);
     expect(REALM_HIERARCHY.global.layers.knowledge.nodeTypes).toHaveLength(14);
 
-    // Shared realm: seo (3), geo (3) = 6
+    // Shared realm: seo (3), geo (5) = 8
     expect(REALM_HIERARCHY.shared.layers.seo.nodeTypes).toHaveLength(3);
-    expect(REALM_HIERARCHY.shared.layers.geo.nodeTypes).toHaveLength(3);
+    expect(REALM_HIERARCHY.shared.layers.geo.nodeTypes).toHaveLength(5);
   });
 
   it('should have valid realm definitions with required fields', () => {

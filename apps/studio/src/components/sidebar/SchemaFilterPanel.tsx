@@ -33,7 +33,8 @@ import type { Layer } from '@novanet/core/graph';
 import { Realm } from '@novanet/core/types';
 import { RelationType } from '@novanet/core/schemas';
 import { useFilterStore } from '@/stores/filterStore';
-import { realmAccents, iconSizes } from '@/design/tokens';
+import { iconSizes } from '@/design/tokens';
+import { REALM_COLORS } from '@/design/colors';
 import { calculateCheckboxState } from '@/hooks';
 import type { CheckboxState } from '@/components/ui/TriStateCheckbox';
 import { SegmentedTabs } from '@/components/ui/SegmentedTabs';
@@ -65,13 +66,6 @@ const LAYER_ICONS: Record<Layer, LucideIcon> = {
 
 // Ordered realms for consistent rendering
 const REALM_ORDER: Realm[] = ['project', 'global', 'shared'];
-
-// Map realm names to accent keys
-const REALM_ACCENT_MAP: Record<Realm, keyof typeof realmAccents> = {
-  project: 'project',
-  global: 'global',
-  shared: 'shared',
-};
 
 export interface SchemaFilterPanelProps {
   className?: string;
@@ -109,8 +103,7 @@ export const SchemaFilterPanel = memo(function SchemaFilterPanel({
   const realmData = useMemo(() => {
     return REALM_ORDER.map((realm) => {
       const scopeDef = REALM_HIERARCHY[realm];
-      const accentKey = REALM_ACCENT_MAP[realm];
-      const accent = realmAccents[accentKey];
+      const accent = REALM_COLORS[realm];
       const layers = Object.entries(scopeDef.layers) as [
         Layer,
         (typeof scopeDef.layers)[Layer],

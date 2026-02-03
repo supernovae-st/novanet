@@ -1,26 +1,27 @@
 // src/types/nodes.ts
-// Single source of truth for all 35 NovaNet node types
-// v9.0.0
+// Single source of truth for all 44 NovaNet node types
+// v9.0.1 — AUTO-SYNC with packages/core/models/nodes/*.yaml
 
 // =============================================================================
-// NODE TYPES (35 nodes)
+// NODE TYPES (44 nodes)
 // =============================================================================
 
 export const NODE_TYPES = [
-  // Invariant (11)
-  'Project', 'BrandIdentity', 'Concept', 'Page', 'Block',
+  // Invariant (15)
+  'Project', 'BrandIdentity', 'Concept', 'Page', 'Block', 'ContentSlot',
   'PageType', 'BlockType', 'PagePrompt', 'BlockPrompt', 'BlockRules', 'Locale',
-  // Localized (6)
+  'SearchIntent', 'TopicCluster', 'Thing',
+  // Localized (7)
   'ProjectL10n', 'ConceptL10n', 'PageL10n', 'BlockL10n',
-  'SEOKeywordL10n', 'GEOSeedL10n',
+  'SEOKeywordL10n', 'GEOSeedL10n', 'ThingL10n',
   // Knowledge (14)
   'LocaleIdentity', 'LocaleVoice', 'LocaleCulture', 'LocaleCultureReferences',
   'LocaleMarket', 'LocaleLexicon', 'LocaleRulesAdaptation', 'LocaleRulesFormatting',
   'LocaleRulesSlug', 'Expression', 'Reference', 'Metaphor', 'Pattern', 'Constraint',
-  // Derived (2)
-  'SEOKeywordMetrics', 'GEOSeedMetrics',
-  // Job (2)
-  'SEOMiningRun', 'GEOMiningRun',
+  // Derived (5)
+  'SEOKeywordMetrics', 'GEOSeedMetrics', 'PromptArtifact', 'OutputArtifact', 'EvaluationSignal',
+  // Job (3)
+  'SEOMiningRun', 'GEOMiningRun', 'GenerationJob',
 ] as const;
 
 export type NodeType = typeof NODE_TYPES[number];
@@ -39,7 +40,7 @@ export type Layer =
 export type Trait = 'invariant' | 'localized' | 'knowledge' | 'derived' | 'job';
 
 // =============================================================================
-// KIND_META — unified classification for all 35 node types
+// KIND_META — unified classification for all 44 node types
 // Replaces NODE_SCOPES, NODE_BEHAVIORS, NODE_CATEGORIES (v8)
 // =============================================================================
 
@@ -57,24 +58,31 @@ export const KIND_META: Record<NodeType, KindMeta> = {
   BrandIdentity:{ realm: 'project', layer: 'foundation',  trait: 'invariant' },
   ProjectL10n:  { realm: 'project', layer: 'foundation',  trait: 'localized' },
 
-  // PROJECT REALM — structure (2)
+  // PROJECT REALM — structure (3)
   Page:         { realm: 'project', layer: 'structure',   trait: 'invariant' },
   Block:        { realm: 'project', layer: 'structure',   trait: 'invariant' },
+  ContentSlot:  { realm: 'project', layer: 'structure',   trait: 'invariant' },
 
-  // PROJECT REALM — semantic (2)
+  // PROJECT REALM — semantic (4)
   Concept:      { realm: 'project', layer: 'semantic',    trait: 'invariant' },
   ConceptL10n:  { realm: 'project', layer: 'semantic',    trait: 'localized' },
+  SearchIntent: { realm: 'project', layer: 'semantic',    trait: 'invariant' },
+  TopicCluster: { realm: 'project', layer: 'semantic',    trait: 'invariant' },
 
-  // PROJECT REALM — instruction (5)
-  PageType:     { realm: 'project', layer: 'instruction', trait: 'invariant' },
-  BlockType:    { realm: 'project', layer: 'instruction', trait: 'invariant' },
-  PagePrompt:   { realm: 'project', layer: 'instruction', trait: 'invariant' },
-  BlockPrompt:  { realm: 'project', layer: 'instruction', trait: 'invariant' },
-  BlockRules:   { realm: 'project', layer: 'instruction', trait: 'invariant' },
+  // PROJECT REALM — instruction (6)
+  PageType:       { realm: 'project', layer: 'instruction', trait: 'invariant' },
+  BlockType:      { realm: 'project', layer: 'instruction', trait: 'invariant' },
+  PagePrompt:     { realm: 'project', layer: 'instruction', trait: 'invariant' },
+  BlockPrompt:    { realm: 'project', layer: 'instruction', trait: 'invariant' },
+  BlockRules:     { realm: 'project', layer: 'instruction', trait: 'invariant' },
+  PromptArtifact: { realm: 'project', layer: 'instruction', trait: 'derived' },
 
-  // PROJECT REALM — output (2)
-  PageL10n:     { realm: 'project', layer: 'output',      trait: 'localized' },
-  BlockL10n:    { realm: 'project', layer: 'output',      trait: 'localized' },
+  // PROJECT REALM — output (5)
+  PageL10n:         { realm: 'project', layer: 'output', trait: 'localized' },
+  BlockL10n:        { realm: 'project', layer: 'output', trait: 'localized' },
+  GenerationJob:    { realm: 'project', layer: 'output', trait: 'job' },
+  OutputArtifact:   { realm: 'project', layer: 'output', trait: 'derived' },
+  EvaluationSignal: { realm: 'project', layer: 'output', trait: 'derived' },
 
   // ═══════════════════════════════════════════════════════════════════════════
   // GLOBAL REALM — config (1)
@@ -104,7 +112,9 @@ export const KIND_META: Record<NodeType, KindMeta> = {
   SEOKeywordMetrics: { realm: 'shared', layer: 'seo', trait: 'derived' },
   SEOMiningRun:      { realm: 'shared', layer: 'seo', trait: 'job' },
 
-  // SHARED REALM — geo (3)
+  // SHARED REALM — geo (5)
+  Thing:          { realm: 'shared', layer: 'geo', trait: 'invariant' },
+  ThingL10n:      { realm: 'shared', layer: 'geo', trait: 'localized' },
   GEOSeedL10n:    { realm: 'shared', layer: 'geo', trait: 'localized' },
   GEOSeedMetrics: { realm: 'shared', layer: 'geo', trait: 'derived' },
   GEOMiningRun:   { realm: 'shared', layer: 'geo', trait: 'job' },

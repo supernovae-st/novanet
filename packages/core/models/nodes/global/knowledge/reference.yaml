@@ -10,7 +10,7 @@ node:
   name: Reference
   realm: global
   layer: knowledge
-  locale_behavior: knowledge
+  trait: knowledge
   icon: "🎯"
   description: "Cultural reference entity for locale-specific content"
 

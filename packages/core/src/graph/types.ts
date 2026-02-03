@@ -112,13 +112,13 @@ export interface RealmDefinition {
 export interface HierarchicalSchemaData {
   /** All 3 realm definitions */
   realms: Record<Realm, RealmDefinition>;
-  /** All schema nodes (35 nodes) */
+  /** All schema nodes (44 nodes) */
   nodes: SchemaNode[];
   /** All schema edges (~89 edges expanded from 50 relation types) */
   edges: SchemaEdge[];
   /** Statistics */
   stats: {
-    /** Total number of node types (35) */
+    /** Total number of node types (44) */
     totalNodes: number;
     /** Total number of edges */
     totalEdges: number;

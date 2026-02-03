@@ -65,7 +65,7 @@ function setupMocks(mode: NavigationMode, filters: Record<string, string[]> = {}
     realmFilter: filters.realmFilter ?? [],
     traitFilter: filters.traitFilter ?? [],
     layerFilter: filters.layerFilter ?? [],
-    edgeFamilyFilter: filters.edgeFamilyFilter ?? [],
+    arcFamilyFilter: filters.arcFamilyFilter ?? [],
   };
 
   mockUseUIStore.mockImplementation((selector) => {
@@ -228,7 +228,7 @@ describe('useNavigationMode', () => {
         realmFilter: ['global', 'project'],
         layerFilter: ['semantic'],
         traitFilter: ['localized'],
-        edgeFamilyFilter: [],
+        arcFamilyFilter: [],
       });
       mockFetchJSON.mockResolvedValue({
         success: true,
@@ -253,7 +253,7 @@ describe('useNavigationMode', () => {
         realmFilter: ['shared'],
         layerFilter: [],
         traitFilter: [],
-        edgeFamilyFilter: [],
+        arcFamilyFilter: [],
       });
       mockFetchJSON.mockResolvedValue({ success: true, data: { nodes: [], edges: [] } });
 

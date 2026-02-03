@@ -815,32 +815,34 @@ export const sidebarTokens = {
   },
 } as const;
 
-/**
- * Realm-specific accent colors - used for both Schema and Data modes
- */
-export const realmAccents = {
-  project: {
-    color: '#6c71c4', // solarized violet
-    bg: 'bg-[#6c71c4]/20',
-    text: 'text-[#6c71c4]',
-    border: 'border-[#6c71c4]/30',
-  },
-  global: {
-    color: '#2aa198', // solarized cyan
-    bg: 'bg-[#2aa198]/20',
-    text: 'text-[#2aa198]',
-    border: 'border-[#2aa198]/30',
-  },
-  shared: {
-    color: '#cb4b16', // solarized orange
-    bg: 'bg-[#cb4b16]/20',
-    text: 'text-[#cb4b16]',
-    border: 'border-[#cb4b16]/30',
-  },
-} as const;
-
 // Re-export v9 visual encoding (ADR-014)
-export { LAYER_COLORS, getLayerColor, getLayerHex } from './layerColors';
+// Colors generated from organizing-principles.yaml (source of truth)
+export {
+  // Types
+  type ColorTokens,
+  type RealmKey,
+  type LayerKey,
+  type TraitKey,
+  type ArcFamilyKey,
+  // Realm colors (replaces realmAccents)
+  REALM_COLORS,
+  REALM_DISPLAY_NAMES,
+  getRealmColor,
+  // Layer colors
+  LAYER_COLORS,
+  LAYER_DISPLAY_NAMES,
+  getLayerColor,
+  // Trait colors
+  TRAIT_COLORS,
+  TRAIT_DISPLAY_NAMES,
+  getTraitColor,
+  // Arc family colors
+  ARC_FAMILY_COLORS,
+  ARC_FAMILY_DISPLAY_NAMES,
+  getArcFamilyColor,
+  // Utility
+  getFacetHex,
+} from './colors';
 export { TRAIT_STYLES, getTraitStyle, getTraitBorderCSS } from './traitStyles';
 
 // ============================================================================
@@ -874,7 +876,6 @@ export const tokens = {
   pickerClasses,
   // Sidebar design system
   sidebarTokens,
-  realmAccents,
   iconButtonClasses,
 } as const;
 

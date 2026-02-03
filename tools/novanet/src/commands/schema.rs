@@ -1,6 +1,6 @@
 //! `novanet schema generate` and `novanet schema validate` commands.
 //!
-//! - generate: Orchestrates all 7 generators in order
+//! - generate: Orchestrates all 9 generators in order
 //! - validate: YAML-only validation (no Neo4j in Phase 2)
 
 use crate::generators::Generator;
@@ -22,9 +22,9 @@ struct GeneratorEntry {
 
 fn all_generators() -> Vec<GeneratorEntry> {
     use crate::generators::{
-        autowire::AutowireGenerator, edge_schema::EdgeSchemaGenerator,
-        hierarchy::HierarchyGenerator, kind::KindGenerator, layer::LayerGenerator,
-        mermaid::MermaidGenerator, organizing::OrganizingGenerator,
+        autowire::AutowireGenerator, colors::ColorsGenerator, edge_schema::EdgeSchemaGenerator,
+        hierarchy::HierarchyGenerator, icons::IconsGenerator, kind::KindGenerator,
+        layer::LayerGenerator, mermaid::MermaidGenerator, organizing::OrganizingGenerator,
     };
 
     vec![
@@ -63,6 +63,16 @@ fn all_generators() -> Vec<GeneratorEntry> {
             output_path: "packages/core/src/graph/hierarchy.ts",
             post_process: None,
         },
+        GeneratorEntry {
+            generator: Box::new(ColorsGenerator),
+            output_path: "apps/studio/src/design/colors/generated.ts",
+            post_process: None,
+        },
+        GeneratorEntry {
+            generator: Box::new(IconsGenerator),
+            output_path: "apps/studio/src/design/icons/nodeIcons.generated.ts",
+            post_process: None,
+        },
     ]
 }
 
@@ -78,9 +88,9 @@ pub struct GenerateResult {
     pub duration_ms: u128,
 }
 
-/// Run all 7 generators and optionally write output files.
+/// Run all 8 generators and optionally write output files.
 ///
-/// Generator execution order: Organizing → Kind → EdgeSchema → Layer → Mermaid → Autowire → Hierarchy
+/// Generator execution order: Organizing → Kind → EdgeSchema → Layer → Mermaid → Autowire → Hierarchy → Colors
 pub fn schema_generate(root: &Path, dry_run: bool) -> crate::Result<Vec<GenerateResult>> {
     let entries = all_generators();
     let mut results = Vec::with_capacity(entries.len());
@@ -136,10 +146,10 @@ pub enum Severity {
 /// Validate YAML model coherence (Phase 2: YAML-only, no Neo4j).
 ///
 /// Checks:
-/// - All 35 node YAMLs parse with locale_behavior
+/// - All 44 node YAMLs parse with trait
 /// - relations.yaml parses with family on every relation
-/// - organizing-principles.yaml parses (realms, layers, traits, edge_families)
-/// - Every node's realm/layer exists in organizing-principles.yaml
+/// - organizing-principles.yaml / taxonomy.yaml parses (realms, layers, traits, arc_families)
+/// - Every node's realm/layer exists in taxonomy
 /// - Every relation's source/target labels match known node names
 pub fn schema_validate(root: &Path) -> crate::Result<Vec<ValidationIssue>> {
     let mut issues = Vec::new();
@@ -241,8 +251,8 @@ mod tests {
 
         let results = schema_generate(&root, true).expect("should generate all artifacts");
 
-        // All 7 generators should succeed
-        assert_eq!(results.len(), 7, "expected 7 generator results");
+        // All 9 generators should succeed
+        assert_eq!(results.len(), 9, "expected 9 generator results");
 
         // Verify generator names and order
         let names: Vec<&str> = results.iter().map(|r| r.name.as_str()).collect();
@@ -256,6 +266,8 @@ mod tests {
                 "mermaid",
                 "autowire",
                 "hierarchy",
+                "colors",
+                "icons",
             ]
         );
 

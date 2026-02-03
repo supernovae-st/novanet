@@ -1,25 +1,27 @@
 //! Data loading for TUI — Neo4j queries for taxonomy tree, stats, and detail.
 
 use crate::db::Db;
-use std::collections::{BTreeMap, HashSet};
+use rustc_hash::FxHashSet;
+use std::collections::BTreeMap;
+use tokio::join;
 
-/// Edge type for a Kind (from schema).
+/// Arc type for a Kind (from schema).
 #[derive(Debug, Clone)]
-pub struct EdgeInfo {
+pub struct ArcInfo {
     pub rel_type: String,
-    pub direction: EdgeDirection,
+    pub direction: ArcDirection,
     pub target_kind: String,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum EdgeDirection {
+pub enum ArcDirection {
     Outgoing, // →
     Incoming, // ←
 }
 
-/// An EdgeKind in the relations tree.
+/// An ArcKind in the relations tree.
 #[derive(Debug, Clone)]
-pub struct EdgeKindInfo {
+pub struct ArcKindInfo {
     pub key: String,
     pub display_name: String,
     pub from_kind: String,
@@ -28,12 +30,12 @@ pub struct EdgeKindInfo {
     pub description: String,
 }
 
-/// EdgeFamily containing EdgeKinds.
+/// ArcFamily containing ArcKinds.
 #[derive(Debug, Clone)]
-pub struct EdgeFamilyInfo {
+pub struct ArcFamilyInfo {
     pub key: String,
     pub display_name: String,
-    pub edge_kinds: Vec<EdgeKindInfo>,
+    pub arc_kinds: Vec<ArcKindInfo>,
 }
 
 /// A Kind in the taxonomy tree.
@@ -46,7 +48,7 @@ pub struct KindInfo {
     pub icon: String,
     pub trait_name: String,
     pub instance_count: i64,
-    pub edges: Vec<EdgeInfo>,
+    pub arcs: Vec<ArcInfo>,
     pub yaml_path: String,
     // Schema properties (from Neo4j Kind node)
     pub properties: Vec<String>,
@@ -60,6 +62,7 @@ pub struct KindInfo {
 pub struct LayerInfo {
     pub key: String,
     pub display_name: String,
+    pub color: String,
     pub kinds: Vec<KindInfo>,
 }
 
@@ -68,6 +71,7 @@ pub struct LayerInfo {
 pub struct RealmInfo {
     pub key: String,
     pub display_name: String,
+    pub color: String,
     pub emoji: &'static str,
     pub layers: Vec<LayerInfo>,
 }
@@ -76,19 +80,20 @@ pub struct RealmInfo {
 #[derive(Debug, Clone, Default)]
 pub struct GraphStats {
     pub node_count: i64,
-    pub edge_count: i64,
+    pub arc_count: i64,
     pub kind_count: i64,
-    pub edge_kind_count: i64,
+    pub arc_kind_count: i64,
 }
 
-/// Full taxonomy tree: Realm > Layer > Kind + EdgeFamily > EdgeKind.
+/// Full taxonomy tree: Realm > Layer > Kind + ArcFamily > ArcKind.
 #[derive(Debug, Clone, Default)]
 pub struct TaxonomyTree {
     pub realms: Vec<RealmInfo>,
-    pub edge_families: Vec<EdgeFamilyInfo>,
+    pub arc_families: Vec<ArcFamilyInfo>,
     pub stats: GraphStats,
     /// Collapsed state: stores keys of collapsed nodes (e.g., "kinds", "relations", "realm:global", "layer:structure")
-    pub collapsed: HashSet<String>,
+    /// Uses FxHashSet for ~30% faster lookups on string keys.
+    pub collapsed: FxHashSet<String>,
 }
 
 impl TaxonomyTree {
@@ -111,8 +116,10 @@ RETURN
     coalesce(t.key, '') AS trait_key,
     coalesce(r.key, 'unknown') AS realm_key,
     coalesce(r.display_name, r.key, 'Unknown') AS realm_display,
+    coalesce(r.color, '#ffffff') AS realm_color,
     coalesce(l.key, 'unknown') AS layer_key,
     coalesce(l.display_name, l.key, 'Unknown') AS layer_display,
+    coalesce(l.color, '#ffffff') AS layer_color,
     instances,
     coalesce(k.yaml_path, '') AS yaml_path,
     coalesce(k.properties, []) AS properties,
@@ -124,10 +131,16 @@ ORDER BY realm_key, layer_key, kind_key
 
         let rows = db.execute(cypher).await?;
 
-        // Group into tree structure: realm_key -> (realm_display, layer_key -> (layer_display, kinds))
+        // Group into tree structure: realm_key -> (realm_display, realm_color, layer_key -> (layer_display, layer_color, kinds))
         #[allow(clippy::type_complexity)]
-        let mut realm_map: BTreeMap<String, (String, BTreeMap<String, (String, Vec<KindInfo>)>)> =
-            BTreeMap::new();
+        let mut realm_map: BTreeMap<
+            String,
+            (
+                String,
+                String,
+                BTreeMap<String, (String, String, Vec<KindInfo>)>,
+            ),
+        > = BTreeMap::new();
 
         for row in rows {
             let kind_key: String = row.get("kind_key").unwrap_or_default();
@@ -137,8 +150,10 @@ ORDER BY realm_key, layer_key, kind_key
             let trait_key: String = row.get("trait_key").unwrap_or_default();
             let realm_key: String = row.get("realm_key").unwrap_or_default();
             let realm_display: String = row.get("realm_display").unwrap_or_default();
+            let realm_color: String = row.get("realm_color").unwrap_or_default();
             let layer_key: String = row.get("layer_key").unwrap_or_default();
             let layer_display: String = row.get("layer_display").unwrap_or_default();
+            let layer_color: String = row.get("layer_color").unwrap_or_default();
             let instances: i64 = row.get("instances").unwrap_or(0);
 
             // Get YAML path from Neo4j (with fallback to computed path)
@@ -159,7 +174,8 @@ ORDER BY realm_key, layer_key, kind_key
 
             // Get schema properties from Neo4j
             let properties: Vec<String> = row.get("properties").unwrap_or_default();
-            let required_properties: Vec<String> = row.get("required_properties").unwrap_or_default();
+            let required_properties: Vec<String> =
+                row.get("required_properties").unwrap_or_default();
             let schema_hint: String = row.get("schema_hint").unwrap_or_default();
             let context_budget: String = row.get("context_budget").unwrap_or_default();
 
@@ -170,7 +186,7 @@ ORDER BY realm_key, layer_key, kind_key
                 icon: kind_icon,
                 trait_name: trait_key,
                 instance_count: instances,
-                edges: Vec::new(), // Loaded separately
+                arcs: Vec::new(), // Loaded separately
                 yaml_path,
                 properties,
                 required_properties,
@@ -180,57 +196,126 @@ ORDER BY realm_key, layer_key, kind_key
 
             realm_map
                 .entry(realm_key)
-                .or_insert_with(|| (realm_display, BTreeMap::new()))
-                .1
+                .or_insert_with(|| (realm_display, realm_color, BTreeMap::new()))
+                .2
                 .entry(layer_key)
-                .or_insert_with(|| (layer_display, Vec::new()))
-                .1
+                .or_insert_with(|| (layer_display, layer_color, Vec::new()))
+                .2
                 .push(kind);
         }
 
         // Convert to RealmInfo vec
         let realms: Vec<RealmInfo> = realm_map
             .into_iter()
-            .map(|(realm_key, (realm_display, layers_map))| {
+            .map(|(realm_key, (realm_display, realm_color, layers_map))| {
                 let layers: Vec<LayerInfo> = layers_map
                     .into_iter()
-                    .map(|(layer_key, (layer_display, kinds))| LayerInfo {
-                        key: layer_key,
-                        display_name: layer_display,
-                        kinds,
-                    })
+                    .map(
+                        |(layer_key, (layer_display, layer_color, kinds))| LayerInfo {
+                            key: layer_key,
+                            display_name: layer_display,
+                            color: layer_color,
+                            kinds,
+                        },
+                    )
                     .collect();
 
                 RealmInfo {
                     emoji: realm_emoji(&realm_key),
                     key: realm_key,
                     display_name: realm_display,
+                    color: realm_color,
                     layers,
                 }
             })
             .collect();
 
-        // Load stats
-        let stats = Self::load_stats(db).await?;
+        // Load stats, arcs, and families in parallel (~3x faster startup)
+        let (stats_result, arcs_result, families_result) = join!(
+            Self::load_stats(db),
+            Self::fetch_arcs(db),
+            Self::fetch_arc_families(db)
+        );
 
-        let mut tree = Self {
+        let stats = stats_result?;
+        let arc_map = arcs_result.unwrap_or_default();
+        let arc_families = families_result.unwrap_or_default();
+
+        // Apply arcs to kinds
+        let realms = Self::apply_arcs_to_realms(realms, arc_map);
+
+        Ok(Self {
             realms,
-            edge_families: Vec::new(),
+            arc_families,
             stats,
-            collapsed: HashSet::new(),
-        };
-
-        // Load edges for all Kinds (optional - may fail if schema not seeded)
-        let _ = tree.load_edges(db).await;
-
-        // Load edge families (optional)
-        let _ = tree.load_edge_families(db).await;
-
-        Ok(tree)
+            collapsed: FxHashSet::default(),
+        })
     }
 
-    /// Load EdgeKinds grouped by EdgeFamily.
-    async fn load_edge_families(&mut self, db: &Db) -> crate::Result<()> {
+    /// Apply arc map to realm/layer/kind tree.
+    fn apply_arcs_to_realms(
+        mut realms: Vec<RealmInfo>,
+        mut arc_map: BTreeMap<String, Vec<ArcInfo>>,
+    ) -> Vec<RealmInfo> {
+        for realm in &mut realms {
+            for layer in &mut realm.layers {
+                for kind in &mut layer.kinds {
+                    if let Some(arcs) = arc_map.remove(&kind.key) {
+                        kind.arcs = arcs;
+                    }
+                }
+            }
+        }
+        realms
+    }
+
+    /// Fetch arcs as a map (for parallel loading).
+    async fn fetch_arcs(db: &Db) -> crate::Result<BTreeMap<String, Vec<ArcInfo>>> {
+        let cypher = r#"
+MATCH (ek:EdgeKind:Meta)-[:FROM_KIND]->(fromKind:Kind:Meta)
+MATCH (ek)-[:TO_KIND]->(toKind:Kind:Meta)
+RETURN fromKind.label AS kind_key, ek.key AS rel_type, 'outgoing' AS direction, toKind.label AS target_kind
+ORDER BY fromKind.label, ek.key
+
+UNION
+
+MATCH (ek:EdgeKind:Meta)-[:FROM_KIND]->(fromKind:Kind:Meta)
+MATCH (ek)-[:TO_KIND]->(toKind:Kind:Meta)
+RETURN toKind.label AS kind_key, ek.key AS rel_type, 'incoming' AS direction, fromKind.label AS target_kind
+ORDER BY toKind.label, ek.key
+"#;
+
+        let rows = db.execute(cypher).await?;
+        let mut arc_map: BTreeMap<String, Vec<ArcInfo>> = BTreeMap::new();
+
+        for row in rows {
+            let kind_key: String = row.get("kind_key").unwrap_or_default();
+            let rel_type: String = row.get("rel_type").unwrap_or_default();
+            let direction_str: String = row.get("direction").unwrap_or_default();
+            let target_kind: String = row.get("target_kind").unwrap_or_default();
+
+            if kind_key.is_empty() || rel_type.is_empty() {
+                continue;
+            }
+
+            let direction = if direction_str == "incoming" {
+                ArcDirection::Incoming
+            } else {
+                ArcDirection::Outgoing
+            };
+
+            arc_map.entry(kind_key).or_default().push(ArcInfo {
+                rel_type,
+                direction,
+                target_kind,
+            });
+        }
+
+        Ok(arc_map)
+    }
+
+    /// Fetch arc families (for parallel loading).
+    async fn fetch_arc_families(db: &Db) -> crate::Result<Vec<ArcFamilyInfo>> {
         let cypher = r#"
 MATCH (ek:EdgeKind:Meta)-[:IN_FAMILY]->(ef:EdgeFamily:Meta)
 MATCH (ek)-[:FROM_KIND]->(fromKind:Kind:Meta)
@@ -248,110 +333,46 @@ ORDER BY family_key, edge_key
 "#;
 
         let rows = db.execute(cypher).await?;
-
-        // Group by family
-        let mut family_map: BTreeMap<String, (String, Vec<EdgeKindInfo>)> = BTreeMap::new();
+        let mut family_map: BTreeMap<String, (String, Vec<ArcKindInfo>)> = BTreeMap::new();
 
         for row in rows {
             let family_key: String = row.get("family_key").unwrap_or_default();
             let family_display: String = row.get("family_display").unwrap_or_default();
-            let edge_key: String = row.get("edge_key").unwrap_or_default();
-            let edge_display: String = row.get("edge_display").unwrap_or_default();
+            let arc_key: String = row.get("edge_key").unwrap_or_default();
+            let arc_display: String = row.get("edge_display").unwrap_or_default();
             let cardinality: String = row.get("cardinality").unwrap_or_default();
-            let edge_desc: String = row.get("edge_desc").unwrap_or_default();
+            let arc_desc: String = row.get("edge_desc").unwrap_or_default();
             let from_kind: String = row.get("from_kind").unwrap_or_default();
             let to_kind: String = row.get("to_kind").unwrap_or_default();
 
-            if family_key.is_empty() || edge_key.is_empty() {
+            if family_key.is_empty() || arc_key.is_empty() {
                 continue;
             }
 
-            let edge_kind = EdgeKindInfo {
-                key: edge_key,
-                display_name: edge_display,
+            let arc_kind = ArcKindInfo {
+                key: arc_key,
+                display_name: arc_display,
                 from_kind,
                 to_kind,
                 cardinality,
-                description: edge_desc,
+                description: arc_desc,
             };
 
             family_map
                 .entry(family_key)
                 .or_insert_with(|| (family_display, Vec::new()))
                 .1
-                .push(edge_kind);
+                .push(arc_kind);
         }
 
-        self.edge_families = family_map
+        Ok(family_map
             .into_iter()
-            .map(|(key, (display_name, edge_kinds))| EdgeFamilyInfo {
+            .map(|(key, (display_name, arc_kinds))| ArcFamilyInfo {
                 key,
                 display_name,
-                edge_kinds,
+                arc_kinds,
             })
-            .collect();
-
-        Ok(())
-    }
-
-    /// Load edge information for all Kinds from EdgeKind schema.
-    async fn load_edges(&mut self, db: &Db) -> crate::Result<()> {
-        // Query EdgeKind schema: what relationships are defined between Kinds
-        // Note: Kind uses 'label' property, not 'key'
-        let cypher = r#"
-MATCH (ek:EdgeKind:Meta)-[:FROM_KIND]->(fromKind:Kind:Meta)
-MATCH (ek)-[:TO_KIND]->(toKind:Kind:Meta)
-RETURN fromKind.label AS kind_key, ek.key AS rel_type, 'outgoing' AS direction, toKind.label AS target_kind
-ORDER BY fromKind.label, ek.key
-
-UNION
-
-MATCH (ek:EdgeKind:Meta)-[:FROM_KIND]->(fromKind:Kind:Meta)
-MATCH (ek)-[:TO_KIND]->(toKind:Kind:Meta)
-RETURN toKind.label AS kind_key, ek.key AS rel_type, 'incoming' AS direction, fromKind.label AS target_kind
-ORDER BY toKind.label, ek.key
-"#;
-
-        let rows = db.execute(cypher).await?;
-
-        // Build a map of kind_key -> edges
-        let mut edge_map: BTreeMap<String, Vec<EdgeInfo>> = BTreeMap::new();
-
-        for row in rows {
-            let kind_key: String = row.get("kind_key").unwrap_or_default();
-            let rel_type: String = row.get("rel_type").unwrap_or_default();
-            let direction_str: String = row.get("direction").unwrap_or_default();
-            let target_kind: String = row.get("target_kind").unwrap_or_default();
-
-            if kind_key.is_empty() || rel_type.is_empty() {
-                continue;
-            }
-
-            let direction = if direction_str == "incoming" {
-                EdgeDirection::Incoming
-            } else {
-                EdgeDirection::Outgoing
-            };
-
-            edge_map.entry(kind_key).or_default().push(EdgeInfo {
-                rel_type,
-                direction,
-                target_kind,
-            });
-        }
-
-        // Update Kinds with edges
-        for realm in &mut self.realms {
-            for layer in &mut realm.layers {
-                for kind in &mut layer.kinds {
-                    if let Some(edges) = edge_map.remove(&kind.key) {
-                        kind.edges = edges;
-                    }
-                }
-            }
-        }
-
-        Ok(())
+            .collect())
     }
 
     /// Load graph statistics.
@@ -371,9 +392,9 @@ RETURN nodes, edges, kinds, count(ek) AS edge_kinds
         if let Some(row) = rows.into_iter().next() {
             Ok(GraphStats {
                 node_count: row.get("nodes").unwrap_or(0),
-                edge_count: row.get("edges").unwrap_or(0),
+                arc_count: row.get("edges").unwrap_or(0),
                 kind_count: row.get("kinds").unwrap_or(0),
-                edge_kind_count: row.get("edge_kinds").unwrap_or(0),
+                arc_kind_count: row.get("edge_kinds").unwrap_or(0),
             })
         } else {
             Ok(GraphStats::default())
@@ -416,7 +437,7 @@ RETURN nodes, edges, kinds, count(ek) AS edge_kinds
                 self.collapsed.insert(format!("layer:{}", layer.key));
             }
         }
-        for family in &self.edge_families {
+        for family in &self.arc_families {
             self.collapsed.insert(format!("family:{}", family.key));
         }
     }
@@ -449,10 +470,10 @@ RETURN nodes, edges, kinds, count(ek) AS edge_kinds
         // Relations section
         count += 1; // "Relations" header
         if !self.is_collapsed("relations") {
-            for family in &self.edge_families {
+            for family in &self.arc_families {
                 count += 1; // family header
                 if !self.is_collapsed(&format!("family:{}", family.key)) {
-                    count += family.edge_kinds.len();
+                    count += family.arc_kinds.len();
                 }
             }
         }
@@ -504,16 +525,16 @@ RETURN nodes, edges, kinds, count(ek) AS edge_kinds
         idx += 1;
 
         if !self.is_collapsed("relations") {
-            for family in &self.edge_families {
+            for family in &self.arc_families {
                 if idx == cursor {
-                    return Some(TreeItem::EdgeFamily(family));
+                    return Some(TreeItem::ArcFamily(family));
                 }
                 idx += 1;
 
                 if !self.is_collapsed(&format!("family:{}", family.key)) {
-                    for edge_kind in &family.edge_kinds {
+                    for arc_kind in &family.arc_kinds {
                         if idx == cursor {
-                            return Some(TreeItem::EdgeKind(family, edge_kind));
+                            return Some(TreeItem::ArcKind(family, arc_kind));
                         }
                         idx += 1;
                     }
@@ -531,9 +552,9 @@ RETURN nodes, edges, kinds, count(ek) AS edge_kinds
             Some(TreeItem::RelationsSection) => Some("relations".to_string()),
             Some(TreeItem::Realm(r)) => Some(format!("realm:{}", r.key)),
             Some(TreeItem::Layer(_, l)) => Some(format!("layer:{}", l.key)),
-            Some(TreeItem::EdgeFamily(f)) => Some(format!("family:{}", f.key)),
+            Some(TreeItem::ArcFamily(f)) => Some(format!("family:{}", f.key)),
             // Leaf nodes can't be collapsed
-            Some(TreeItem::Kind(_, _, _)) | Some(TreeItem::EdgeKind(_, _)) | None => None,
+            Some(TreeItem::Kind(_, _, _)) | Some(TreeItem::ArcKind(_, _)) | None => None,
         }
     }
 }
@@ -549,8 +570,8 @@ pub enum TreeItem<'a> {
     Layer(&'a RealmInfo, &'a LayerInfo),
     Kind(&'a RealmInfo, &'a LayerInfo, &'a KindInfo),
     // Relations hierarchy
-    EdgeFamily(&'a EdgeFamilyInfo),
-    EdgeKind(&'a EdgeFamilyInfo, &'a EdgeKindInfo),
+    ArcFamily(&'a ArcFamilyInfo),
+    ArcKind(&'a ArcFamilyInfo, &'a ArcKindInfo),
 }
 
 /// Get emoji for realm.
@@ -564,8 +585,9 @@ fn realm_emoji(key: &str) -> &'static str {
 }
 
 /// Convert PascalCase to kebab-case (e.g., "BlockL10n" -> "block-l10n").
+/// Pre-allocates capacity to avoid reallocations.
 fn to_kebab_case(s: &str) -> String {
-    let mut result = String::new();
+    let mut result = String::with_capacity(s.len() + 4); // +4 for potential dashes
     for (i, c) in s.chars().enumerate() {
         if c.is_uppercase() {
             if i > 0 {

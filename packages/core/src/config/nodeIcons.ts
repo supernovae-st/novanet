@@ -10,21 +10,41 @@ import type { NodeType } from '../types/nodes.js';
  * Icons are now in presentation layer, not data model.
  */
 export const NODE_ICONS: Record<NodeType, string> = {
-  // PROJECT SCOPE (3)
+  // PROJECT — foundation (3)
   Project: '📦',
   BrandIdentity: '🎨',
   ProjectL10n: '🌐',
 
-  // CONTENT (6)
+  // PROJECT — structure (3)
+  Page: '📄',
+  Block: '🧱',
+  ContentSlot: '🔲',
+
+  // PROJECT — semantic (4)
   Concept: '💡',
   ConceptL10n: '💬',
-  Page: '📄',
-  PageType: '📐',
-  Block: '🧱',
-  BlockType: '📋',
+  SearchIntent: '🔎',
+  TopicCluster: '🗂️',
 
-  // LOCALE (15)
+  // PROJECT — instruction (6)
+  PageType: '📐',
+  BlockType: '📋',
+  PagePrompt: '📝',
+  BlockPrompt: '📝',
+  BlockRules: '📏',
+  PromptArtifact: '📋',
+
+  // PROJECT — output (5)
+  PageL10n: '📃',
+  BlockL10n: '📝',
+  GenerationJob: '🚀',
+  OutputArtifact: '📦',
+  EvaluationSignal: '📊',
+
+  // GLOBAL — config (1)
   Locale: '🌍',
+
+  // GLOBAL — knowledge (14)
   LocaleIdentity: '🆔',
   LocaleVoice: '🎭',
   LocaleCulture: '🏛️',
@@ -40,19 +60,14 @@ export const NODE_ICONS: Record<NodeType, string> = {
   Pattern: '🔣',
   Constraint: '⚠️',
 
-  // GENERATION (5)
-  PagePrompt: '📝',
-  BlockPrompt: '📝',
-  BlockRules: '📏',
-  PageL10n: '📃',
-  BlockL10n: '📝',
-
-  // SEO (3)
+  // SHARED — seo (3)
   SEOKeywordL10n: '🔍',
   SEOKeywordMetrics: '📊',
   SEOMiningRun: '⚙️',
 
-  // GEO (3)
+  // SHARED — geo (5)
+  Thing: '📍',
+  ThingL10n: '🌐',
   GEOSeedL10n: '🤖',
   GEOSeedMetrics: '📊',
   GEOMiningRun: '⚙️',

@@ -1,9 +1,9 @@
 //! Generate Mermaid flowchart with Realm/Layer/Trait coloring.
 //!
-//! Reads all 35 node YAMLs, `relations.yaml`, and `organizing-principles.yaml`
+//! Reads all 44 node YAMLs, `relations.yaml`, and `organizing-principles.yaml`
 //! to produce a complete graph diagram with:
 //! - Subgraphs grouped by Realm → Layer
-//! - Node styling by locale_behavior (Trait)
+//! - Node styling by node_trait (Trait)
 //! - Edge styling by EdgeFamily (arrow style + color)
 //!
 //! Output target: `packages/core/models/docs/complete-graph.md` (Markdown wrapper)
@@ -19,7 +19,7 @@ use std::path::Path;
 // Constants
 // ─────────────────────────────────────────────────────────────────────────────
 
-/// Trait (locale_behavior) → Mermaid classDef fill + stroke + text color.
+/// Trait (node_trait) → Mermaid classDef fill + stroke + text color.
 /// Colors sourced from `organizing-principles.yaml` traits section.
 pub const TRAIT_STYLES: &[(&str, &str, &str)] = &[
     ("invariant", "#3b82f6", "#1d4ed8"),
@@ -62,45 +62,38 @@ pub const FAMILY_COLORS: &[(&str, &str)] = &[
 // Helpers
 // ─────────────────────────────────────────────────────────────────────────────
 
-pub fn trait_emoji(behavior: &str) -> &str {
-    for &(key, emoji) in TRAIT_EMOJI {
-        if key == behavior {
-            return emoji;
-        }
+/// Returns emoji for node_trait trait (O(1) match instead of O(n) search).
+pub fn trait_emoji(behavior: &str) -> &'static str {
+    match behavior {
+        "invariant" => "\u{1F535}",  // 🔵
+        "localized" => "\u{1F7E2}",  // 🟢
+        "knowledge" => "\u{1F7E3}",  // 🟣
+        "derived" => "\u{26AA}",     // ⚪
+        "job" => "\u{2699}\u{FE0F}", // ⚙️
+        _ => "\u{26AA}",             // fallback: white circle
     }
-    "\u{26AA}" // fallback: white circle
 }
 
+/// Returns Mermaid arrow syntax for edge family (O(1) match).
 pub fn family_arrow(family: EdgeFamily) -> &'static str {
-    let key = match family {
-        EdgeFamily::Ownership => "ownership",
-        EdgeFamily::Localization => "localization",
-        EdgeFamily::Semantic => "semantic",
-        EdgeFamily::Generation => "generation",
-        EdgeFamily::Mining => "mining",
-    };
-    for &(k, arrow) in FAMILY_ARROWS {
-        if k == key {
-            return arrow;
-        }
+    match family {
+        EdgeFamily::Ownership => "-->",
+        EdgeFamily::Localization => "-.->",
+        EdgeFamily::Semantic => "-.->",
+        EdgeFamily::Generation => "==>",
+        EdgeFamily::Mining => "--o",
     }
-    "-->" // fallback
 }
 
+/// Returns stroke color for edge family (O(1) match).
 pub fn family_color(family: EdgeFamily) -> &'static str {
-    let key = match family {
-        EdgeFamily::Ownership => "ownership",
-        EdgeFamily::Localization => "localization",
-        EdgeFamily::Semantic => "semantic",
-        EdgeFamily::Generation => "generation",
-        EdgeFamily::Mining => "mining",
-    };
-    for &(k, color) in FAMILY_COLORS {
-        if k == key {
-            return color;
-        }
+    match family {
+        EdgeFamily::Ownership => "#3b82f6",
+        EdgeFamily::Localization => "#22c55e",
+        EdgeFamily::Semantic => "#f97316",
+        EdgeFamily::Generation => "#8b5cf6",
+        EdgeFamily::Mining => "#ec4899",
     }
-    "#6b7280" // fallback: gray
 }
 
 /// Realm key → emoji (from organizing-principles.yaml).
@@ -171,7 +164,7 @@ pub fn expand_edges(relations: &[RelationDef]) -> Vec<ExpandedEdge> {
 
 /// Write Mermaid `classDef` lines for all traits.
 pub fn write_classdefs(out: &mut String) {
-    writeln!(out, "  %% Trait styling (locale_behavior)").unwrap();
+    writeln!(out, "  %% Trait styling (node_trait)").unwrap();
     for &(behavior, fill, stroke) in TRAIT_STYLES {
         writeln!(
             out,
@@ -232,7 +225,7 @@ pub fn write_class_assignments(out: &mut String, nodes: &[&ParsedNode]) {
         writeln!(
             out,
             "  class {} {}",
-            node.def.name, node.def.locale_behavior
+            node.def.name, node.def.node_trait
         )
         .unwrap();
     }
@@ -298,7 +291,7 @@ fn render_mermaid(
     .unwrap();
     writeln!(
         out,
-        "  %% Source: 35 node YAMLs + relations.yaml + organizing-principles.yaml"
+        "  %% Source: 44 node YAMLs + relations.yaml + organizing-principles.yaml"
     )
     .unwrap();
     writeln!(out).unwrap();
@@ -336,7 +329,7 @@ fn render_mermaid(
             writeln!(out, "    subgraph {layer_id}[\"{display}\"]").unwrap();
 
             for node in node_list {
-                let behavior = node.def.locale_behavior.to_string();
+                let behavior = node.def.node_trait.to_string();
                 let emoji = trait_emoji(&behavior);
                 writeln!(
                     out,
@@ -378,7 +371,7 @@ pub fn wrap_in_markdown(mermaid_code: &str) -> String {
     writeln!(out).unwrap();
     writeln!(
         out,
-        "This diagram shows the complete NovaNet graph schema with all 35 node types and their relationships."
+        "This diagram shows the complete NovaNet graph schema with all 44 node types and their relationships."
     )
     .unwrap();
     writeln!(out).unwrap();
@@ -484,7 +477,7 @@ mod tests {
                 name: name.to_string(),
                 realm: realm.to_string(),
                 layer: layer.to_string(),
-                locale_behavior: behavior,
+                node_trait: behavior,
                 icon: None,
                 description: format!("{name} description"),
                 standard_properties: None,
@@ -740,7 +733,7 @@ mod tests {
         // Header
         assert!(output.contains("flowchart TB"));
         assert!(output.contains("NovaNet Graph v9.0.0"));
-        assert!(output.contains("35 nodes"));
+        assert!(output.contains("44 nodes"));
 
         // All 3 realms
         assert!(output.contains("GLOBAL_REALM"));

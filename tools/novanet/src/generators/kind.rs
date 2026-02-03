@@ -1,10 +1,11 @@
 //! Generate Kind meta-nodes + schema_hint, context_budget + facet relations.
 //!
-//! Reads all 35 YAML node definitions and produces idempotent MERGE statements
+//! Reads all 44 YAML node definitions and produces idempotent MERGE statements
 //! for Kind nodes with auto-computed properties, plus hierarchy and facet rels.
 //!
 //! Output target: `packages/db/seed/01-kinds.cypher`
 
+use super::cypher_utils::{cypher_list_ref, cypher_str};
 use crate::parsers::yaml_node::{self, LocaleBehavior, ParsedNode};
 use std::fmt::Write;
 use std::path::Path;
@@ -13,30 +14,9 @@ use std::path::Path;
 // Helpers
 // ─────────────────────────────────────────────────────────────────────────────
 
-/// Collapse multiline YAML strings into single-line Cypher values
-/// and escape single quotes.
-fn cypher_str(s: &str) -> String {
-    s.split_whitespace()
-        .collect::<Vec<_>>()
-        .join(" ")
-        .replace('\'', "\\'")
-}
-
-/// Format a Rust string slice as a Cypher list literal: `['a', 'b', 'c']`.
-fn cypher_list(items: &[&str]) -> String {
-    if items.is_empty() {
-        return "[]".to_string();
-    }
-    let inner: Vec<String> = items
-        .iter()
-        .map(|s| format!("'{}'", cypher_str(s)))
-        .collect();
-    format!("[{}]", inner.join(", "))
-}
-
 /// Build schema_hint from a ParsedNode's properties.
 ///
-/// Format: `"key, display_name, instructions (req), locale_behavior"`
+/// Format: `"key, display_name, instructions (req), node_trait"`
 /// Required properties get the "(req)" suffix.
 fn build_schema_hint(node: &ParsedNode) -> String {
     let mut parts: Vec<String> = Vec::new();
@@ -67,7 +47,7 @@ fn build_schema_hint(node: &ParsedNode) -> String {
     parts.join(", ")
 }
 
-/// Determine context_budget based on locale_behavior trait and layer.
+/// Determine context_budget based on node_trait trait and layer.
 ///
 /// Rules:
 /// - `job` trait → `minimal`
@@ -76,7 +56,7 @@ fn build_schema_hint(node: &ParsedNode) -> String {
 /// - `instruction` or `config` layer → `medium`
 /// - Everything else → `high`
 fn context_budget(node: &ParsedNode) -> &'static str {
-    match node.def.locale_behavior {
+    match node.def.node_trait {
         LocaleBehavior::Job => "minimal",
         LocaleBehavior::Derived => "low",
         LocaleBehavior::Knowledge => "medium",
@@ -99,7 +79,7 @@ fn yaml_path(node: &ParsedNode) -> String {
 
 /// Collect all property names (standard + business), sorted.
 fn all_properties(node: &ParsedNode) -> Vec<&str> {
-    node.all_property_names()
+    node.all_property_names().to_vec()
 }
 
 /// Collect required property names, sorted.
@@ -187,13 +167,13 @@ fn generate_kind_cypher(nodes: &[ParsedNode]) -> crate::Result<String> {
         writeln!(
             out,
             "  {var}.properties = {props},",
-            props = cypher_list(&props)
+            props = cypher_list_ref(&props)
         )
         .unwrap();
         writeln!(
             out,
             "  {var}.required_properties = {req_props},",
-            req_props = cypher_list(&req_props)
+            req_props = cypher_list_ref(&req_props)
         )
         .unwrap();
         writeln!(out, "  {var}.schema_hint = '{hint}',").unwrap();
@@ -207,13 +187,13 @@ fn generate_kind_cypher(nodes: &[ParsedNode]) -> crate::Result<String> {
         writeln!(
             out,
             "  {var}.properties = {props},",
-            props = cypher_list(&props)
+            props = cypher_list_ref(&props)
         )
         .unwrap();
         writeln!(
             out,
             "  {var}.required_properties = {req_props},",
-            req_props = cypher_list(&req_props)
+            req_props = cypher_list_ref(&req_props)
         )
         .unwrap();
         writeln!(out, "  {var}.schema_hint = '{hint}',").unwrap();
@@ -284,7 +264,7 @@ fn generate_kind_cypher(nodes: &[ParsedNode]) -> crate::Result<String> {
             out,
             "MATCH (k:Kind {{label: '{label}'}}), (t:Trait {{key: '{trait_key}'}})",
             label = node.def.name,
-            trait_key = node.def.locale_behavior
+            trait_key = node.def.node_trait
         )
         .unwrap();
         writeln!(out, "MERGE (k)-[:EXHIBITS]->(t);").unwrap();
@@ -320,7 +300,7 @@ mod tests {
                 name: name.to_string(),
                 realm: realm.to_string(),
                 layer: layer.to_string(),
-                locale_behavior: behavior,
+                node_trait: behavior,
                 icon: None,
                 description: format!("{name} description."),
                 standard_properties: None,
@@ -362,29 +342,6 @@ mod tests {
         let mut node = make_node(name, realm, layer, behavior);
         node.def.properties = Some(properties);
         node
-    }
-
-    #[test]
-    fn cypher_list_empty() {
-        assert_eq!(cypher_list(&[]), "[]");
-    }
-
-    #[test]
-    fn cypher_list_single() {
-        assert_eq!(cypher_list(&["key"]), "['key']");
-    }
-
-    #[test]
-    fn cypher_list_multiple() {
-        assert_eq!(
-            cypher_list(&["key", "name", "status"]),
-            "['key', 'name', 'status']"
-        );
-    }
-
-    #[test]
-    fn cypher_list_escapes_quotes() {
-        assert_eq!(cypher_list(&["it's"]), "['it\\'s']");
     }
 
     #[test]
@@ -558,40 +515,40 @@ mod tests {
             .generate(root)
             .expect("should generate kind cypher");
 
-        // 35 Kind MERGE statements
+        // 44 Kind MERGE statements
         let kind_merges = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains(":Meta:Kind"))
             .count();
-        assert_eq!(kind_merges, 35, "expected 35 Kind MERGE statements");
+        assert_eq!(kind_merges, 44, "expected 44 Kind MERGE statements");
 
-        // 35 HAS_KIND relationships
+        // 44 HAS_KIND relationships
         let has_kind = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:HAS_KIND]"))
             .count();
-        assert_eq!(has_kind, 35, "expected 35 HAS_KIND relationships");
+        assert_eq!(has_kind, 44, "expected 44 HAS_KIND relationships");
 
-        // 35 IN_REALM relationships
+        // 44 IN_REALM relationships
         let in_realm = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_REALM]"))
             .count();
-        assert_eq!(in_realm, 35, "expected 35 IN_REALM relationships");
+        assert_eq!(in_realm, 44, "expected 44 IN_REALM relationships");
 
-        // 35 IN_LAYER relationships
+        // 44 IN_LAYER relationships
         let in_layer = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_LAYER]"))
             .count();
-        assert_eq!(in_layer, 35, "expected 35 IN_LAYER relationships");
+        assert_eq!(in_layer, 44, "expected 44 IN_LAYER relationships");
 
-        // 35 EXHIBITS relationships
+        // 44 EXHIBITS relationships
         let exhibits = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:EXHIBITS]"))
             .count();
-        assert_eq!(exhibits, 35, "expected 35 EXHIBITS relationships");
+        assert_eq!(exhibits, 44, "expected 44 EXHIBITS relationships");
 
         // Spot checks — specific Kinds
         assert!(cypher.contains("k_Project:Meta:Kind {label: 'Project'}"));
@@ -623,7 +580,7 @@ mod tests {
             }
         }
 
-        // Header mentions 35 Kind nodes
-        assert!(cypher.contains("35 Kind nodes"));
+        // Header mentions 44 Kind nodes
+        assert!(cypher.contains("44 Kind nodes"));
     }
 }

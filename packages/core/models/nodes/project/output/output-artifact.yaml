@@ -1,0 +1,115 @@
+node:
+  name: OutputArtifact
+  realm: project
+  layer: output
+  trait: derived
+  icon: "📦"
+  description: "Generated content bundle aggregating PageL10n and BlockL10n for a specific locale version."
+  llm_context: "USE: when bundling generated content. TRIGGERS: bundle, artifact, deployment. NOT: individual content, drafts."
+
+  standard_properties:
+    key:
+      type: string
+      required: true
+      description: "Artifact bundle identifier"
+      pattern: "^outputartifact-[a-z0-9-]+-[a-z]{2}-[A-Z]{2}-v[0-9]+$"
+      example: "outputartifact-project-qrcode-fr-FR-v1"
+    display_name:
+      type: string
+      required: true
+      description: "Bundle name with locale"
+      example: "QRCode AI - French (v1)"
+    description:
+      type: string
+      required: false
+    llm_context:
+      type: string
+      required: false
+    created_at:
+      type: datetime
+      required: true
+    updated_at:
+      type: datetime
+      required: true
+
+  properties:
+    locale_code:
+      type: string
+      required: true
+      description: "Target locale code"
+      example: "fr-FR"
+
+    version:
+      type: int
+      required: true
+      description: "Bundle version number"
+
+    status:
+      type: string
+      required: true
+      enum: ["draft", "validated", "published", "archived"]
+      description: "Bundle lifecycle status"
+
+    pages_included:
+      type: int
+      required: true
+      description: "Count of pages in bundle"
+    blocks_included:
+      type: int
+      required: true
+      description: "Count of blocks in bundle"
+
+    bundled_at:
+      type: datetime
+      required: true
+    bundler_version:
+      type: string
+      required: true
+      description: "Version of the bundler"
+
+    total_size_bytes:
+      type: int
+      required: false
+      description: "Total size of bundled content"
+    checksum:
+      type: string
+      required: false
+      description: "Content integrity checksum"
+
+    published_at:
+      type: datetime
+      required: false
+    published_by:
+      type: string
+      required: false
+
+  neo4j:
+    indexes:
+      - "CREATE INDEX outputartifact_locale IF NOT EXISTS FOR (oa:OutputArtifact) ON (oa.locale_code)"
+      - "CREATE INDEX outputartifact_status IF NOT EXISTS FOR (oa:OutputArtifact) ON (oa.status)"
+
+  relations:
+    incoming:
+      - type: PRODUCES
+        from: GenerationJob
+        description: "Job that produced this artifact"
+
+    outgoing:
+      - type: INCLUDES
+        to:
+          - PageL10n
+          - BlockL10n
+        description: "Content nodes included in this bundle"
+
+      - type: FOR_LOCALE
+        to: Locale
+        description: "Target locale for this bundle"
+
+      - type: HAS_EVALUATION
+        to: EvaluationSignal
+        description: "Quality evaluations for this bundle"
+
+      - type: PREVIOUS_VERSION
+        to: OutputArtifact
+        cardinality: "1:1"
+        description: "Previous version of this artifact"

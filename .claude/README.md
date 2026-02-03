@@ -260,7 +260,7 @@ Master command for schema management.
 
 **Example:**
 ```bash
-/schema status     # Show current schema stats (35 Kinds, 50 EdgeKinds, 3 Realms, 9 Layers)
+/schema status     # Show current schema stats (44 Kinds, 50 EdgeKinds, 3 Realms, 9 Layers)
 ```
 
 ---
@@ -492,7 +492,7 @@ Located in `apps/studio/.claude/rules/`:
 Domain vocabulary reference (v9.0.0):
 - Core concepts (Project, Concept, Page, Block, Locale, Context Graph)
 - Meta-Graph: 6 meta-node types (Realm, Layer, Kind, Trait, EdgeFamily, EdgeKind)
-- Full Kind Inventory (35 Kinds across 3 Realms)
+- Full Kind Inventory (44 Kinds across 3 Realms)
 - Meta-Graph relations (hierarchy, facets, edge schema, instance bridge)
 - Key data relations (grouped by EdgeFamily)
 - v8 → v9 rename mapping

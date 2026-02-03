@@ -9,7 +9,7 @@ node:
   name: SEOKeywordL10n
   realm: shared
   layer: seo
-  locale_behavior: localized
+  trait: localized
   icon: "🔍"
   description: "Target keyword with metrics for SEO optimization (locale-specific)"
 

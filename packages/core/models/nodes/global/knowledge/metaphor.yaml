@@ -10,7 +10,7 @@ node:
   name: Metaphor
   realm: global
   layer: knowledge
-  locale_behavior: knowledge
+  trait: knowledge
   icon: "🎭"
   description: "Locale-native metaphor mapping universal concepts to local expressions"
 

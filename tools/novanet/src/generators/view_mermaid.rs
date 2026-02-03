@@ -188,7 +188,7 @@ fn write_custom_layers(out: &mut String, nodes: &[&ParsedNode], layers: &[ViewLa
 
         for node_name in &layer.nodes {
             if let Some(node) = node_map.get(node_name.as_str()) {
-                let behavior = node.def.locale_behavior.to_string();
+                let behavior = node.def.node_trait.to_string();
                 let emoji = mermaid::trait_emoji(&behavior);
                 writeln!(out, "    {node_name}[\"{emoji} {node_name}\"]").unwrap();
                 assigned.insert(node_name.as_str());
@@ -209,7 +209,7 @@ fn write_custom_layers(out: &mut String, nodes: &[&ParsedNode], layers: &[ViewLa
     if !unassigned.is_empty() {
         writeln!(out, "  %% Additional reachable nodes").unwrap();
         for node in unassigned {
-            let behavior = node.def.locale_behavior.to_string();
+            let behavior = node.def.node_trait.to_string();
             let emoji = mermaid::trait_emoji(&behavior);
             writeln!(out, "  {}[\"{} {}\"]", node.def.name, emoji, node.def.name).unwrap();
         }
@@ -260,7 +260,7 @@ fn write_realm_layers(out: &mut String, nodes: &[&ParsedNode], org_doc: &Organiz
             let layer_id = format!("{}_{}", realm_def.key.to_uppercase(), layer_def.key);
             writeln!(out, "    subgraph {layer_id}[\"{display}\"]").unwrap();
             for node in node_list {
-                let behavior = node.def.locale_behavior.to_string();
+                let behavior = node.def.node_trait.to_string();
                 let emoji = mermaid::trait_emoji(&behavior);
                 writeln!(
                     out,

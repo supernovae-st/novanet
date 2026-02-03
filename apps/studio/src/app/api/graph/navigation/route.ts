@@ -1,7 +1,7 @@
 /**
  * Navigation API Route - Faceted graph query via Rust bridge
  *
- * Resolves realm/trait/layer/edgeFamily facets to a Cypher query using the
+ * Resolves realm/trait/layer/arcFamily facets to a Cypher query using the
  * `novanet filter build` Rust binary (meta-graph aware), then executes
  * against Neo4j. Same response format as /api/graph.
  *
@@ -20,7 +20,7 @@ const VALID_LAYERS: Layer[] = [
   'instruction', 'output', 'seo', 'geo',
 ];
 const VALID_TRAITS: Trait[] = ['invariant', 'localized', 'knowledge', 'derived', 'job'];
-const VALID_EDGE_FAMILIES = ['ownership', 'localization', 'semantic', 'generation', 'mining'];
+const VALID_ARC_FAMILIES = ['ownership', 'localization', 'semantic', 'generation', 'mining'];
 
 function parseCSV<T extends string>(param: string | null, valid: T[]): T[] {
   if (!param) return [];
@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
     const realms = parseCSV(searchParams.get('realms'), VALID_REALMS);
     const layers = parseCSV(searchParams.get('layers'), VALID_LAYERS);
     const traits = parseCSV(searchParams.get('traits'), VALID_TRAITS);
-    const edgeFamilies = parseCSV(searchParams.get('edgeFamilies'), VALID_EDGE_FAMILIES);
+    const arcFamilies = parseCSV(searchParams.get('arcFamilies'), VALID_ARC_FAMILIES);
     const rawLimit = parseInt(searchParams.get('limit') || '500', 10);
     const limit = Math.min(Math.max(1, isNaN(rawLimit) ? 500 : rawLimit), 5000);
 
@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
       realms,
       layers,
       traits,
-      edge_families: edgeFamilies,
+      arc_families: arcFamilies,
       kinds: [],
     };
 
@@ -67,7 +67,7 @@ export async function GET(request: NextRequest) {
         duration: result.duration,
         requestDuration: Date.now() - startTime,
         mode: 'query',
-        facets: { realms, layers, traits, edgeFamilies },
+        facets: { realms, layers, traits, arcFamilies },
         generatedCypher: cypher,
       },
     });

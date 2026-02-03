@@ -1,7 +1,7 @@
 /**
  * FacetFilterPanel Tests
  *
- * Tests rendering of 4 facet sections (Realms, Layers, Traits, Edge Families),
+ * Tests rendering of 4 facet sections (Realms, Layers, Traits, Arc Families),
  * tri-state checkboxes, and toggle behavior via filterStore.
  */
 
@@ -18,11 +18,11 @@ jest.mock('@/stores/filterStore', () => ({
 const mockToggleRealm = jest.fn();
 const mockToggleTrait = jest.fn();
 const mockToggleLayer = jest.fn();
-const mockToggleEdgeFamily = jest.fn();
+const mockToggleArcFamily = jest.fn();
 const mockSetRealmFilter = jest.fn();
 const mockSetLayerFilter = jest.fn();
 const mockSetTraitFilter = jest.fn();
-const mockSetEdgeFamilyFilter = jest.fn();
+const mockSetArcFamilyFilter = jest.fn();
 const mockUseFilterStore = useFilterStore as jest.MockedFunction<typeof useFilterStore>;
 
 function setupStore(overrides: Record<string, unknown> = {}) {
@@ -30,15 +30,15 @@ function setupStore(overrides: Record<string, unknown> = {}) {
     realmFilter: [] as string[],
     traitFilter: [] as string[],
     layerFilter: [] as string[],
-    edgeFamilyFilter: [] as string[],
+    arcFamilyFilter: [] as string[],
     toggleRealm: mockToggleRealm,
     toggleTrait: mockToggleTrait,
     toggleLayer: mockToggleLayer,
-    toggleEdgeFamily: mockToggleEdgeFamily,
+    toggleArcFamily: mockToggleArcFamily,
     setRealmFilter: mockSetRealmFilter,
     setLayerFilter: mockSetLayerFilter,
     setTraitFilter: mockSetTraitFilter,
-    setEdgeFamilyFilter: mockSetEdgeFamilyFilter,
+    setArcFamilyFilter: mockSetArcFamilyFilter,
     ...overrides,
   };
 
@@ -69,7 +69,7 @@ describe('FacetFilterPanel', () => {
       expect(screen.getByText('Realms')).toBeInTheDocument();
       expect(screen.getByText('Layers')).toBeInTheDocument();
       expect(screen.getByText('Traits')).toBeInTheDocument();
-      expect(screen.getByText('Edge Families')).toBeInTheDocument();
+      expect(screen.getByText('Arc Families')).toBeInTheDocument();
     });
 
     it('renders 3 realm items', () => {
@@ -105,7 +105,7 @@ describe('FacetFilterPanel', () => {
       expect(screen.getByText('Job')).toBeInTheDocument();
     });
 
-    it('renders 5 edge family items', () => {
+    it('renders 5 arc family items', () => {
       render(<FacetFilterPanel />);
 
       expect(screen.getByText('Ownership')).toBeInTheDocument();

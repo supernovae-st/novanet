@@ -1,6 +1,6 @@
 //! Generate `layers.ts` via MiniJinja template (YAML → TypeScript).
 //!
-//! Reads all 35 YAML node definitions, groups by realm and layer,
+//! Reads all 44 YAML node definitions, groups by realm and layer,
 //! and produces `packages/core/src/graph/layers.ts`.
 //! Replaces `SubcategoryGenerator.ts` from @novanet/schema-tools.
 //!
@@ -41,8 +41,8 @@ struct TemplateLayer {
 // Realm ordering
 // ─────────────────────────────────────────────────────────────────────────────
 
-/// Fixed realm order matching the existing subcategories.ts output.
-const REALM_ORDER: &[&str] = &["project", "global", "shared"];
+/// Fixed realm order matching organizing-principles.yaml.
+const REALM_ORDER: &[&str] = &["global", "project", "shared"];
 
 // ─────────────────────────────────────────────────────────────────────────────
 // MiniJinja template
@@ -234,7 +234,7 @@ mod tests {
                 name: name.to_string(),
                 realm: realm.to_string(),
                 layer: layer.to_string(),
-                locale_behavior: LocaleBehavior::Invariant,
+                node_trait: LocaleBehavior::Invariant,
                 icon: None,
                 description: "test".to_string(),
                 standard_properties: None,
@@ -301,12 +301,12 @@ mod tests {
         let page_pos = output.find("Page: 'structure',").unwrap();
         assert!(block_pos < page_pos, "Block should come before Page");
 
-        // Realm order: project, global, shared
-        let project_pos = output.find("PROJECT REALM").unwrap();
+        // Realm order: global, project, shared (matches organizing-principles.yaml)
         let global_pos = output.find("GLOBAL REALM").unwrap();
+        let project_pos = output.find("PROJECT REALM").unwrap();
         let shared_pos = output.find("SHARED REALM").unwrap();
-        assert!(project_pos < global_pos);
-        assert!(global_pos < shared_pos);
+        assert!(global_pos < project_pos);
+        assert!(project_pos < shared_pos);
 
         // Helper functions
         assert!(output.contains("export function getLayer(nodeType: NodeType): Layer"));
@@ -397,16 +397,16 @@ mod tests {
         let generator = LayerGenerator;
         let output = generator.generate(root).expect("should generate layers.ts");
 
-        // Total 35 nodes
+        // Total 44 nodes
         assert!(
-            output.contains("mapping all 35 node types"),
-            "should mention 35 node types"
+            output.contains("mapping all 44 node types"),
+            "should mention 44 node types"
         );
 
         // Realm node counts
-        assert!(output.contains("PROJECT REALM (14 nodes)"));
+        assert!(output.contains("PROJECT REALM (21 nodes)"));
         assert!(output.contains("GLOBAL REALM (15 nodes)"));
-        assert!(output.contains("SHARED REALM (6 nodes)"));
+        assert!(output.contains("SHARED REALM (8 nodes)"));
 
         // All 9 layers present
         for layer in [

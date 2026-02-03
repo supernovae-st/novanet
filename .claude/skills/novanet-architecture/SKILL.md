@@ -10,7 +10,7 @@ user-invocable: true
 Display the complete NovaNet architecture diagram showing:
 - Source of truth (YAML models)
 - v9 Meta-Graph (faceted classification)
-- Generators (Mermaid, Layer, Kind, EdgeSchema)
+- Generators (Mermaid, Layer, Kind, ArcSchema)
 - Neo4j infrastructure
 - Rust binary (`tools/novanet/`)
 - Studio visualization
@@ -46,8 +46,8 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 │                                                                                                     │
 │   packages/core/models/                                                                             │
 │   ├── _index.yaml                          ← Index du graphe (structure, changelog)                 │
-│   ├── organizing-principles.yaml           ← v9: Realm/Layer/Trait/EdgeFamily definitions           │
-│   ├── nodes/                               ← 35 fichiers YAML (1 par Kind)                         │
+│   ├── organizing-principles.yaml           ← v9: Realm/Layer/Trait/ArcFamily [→ taxonomy.yaml]     │
+│   ├── nodes/                               ← 44 fichiers YAML (1 par Kind)                         │
 │   │   ├── global/                          ← Realm: global                                          │
 │   │   │   ├── config/                      ←   Layer: config (Locale)                               │
 │   │   │   └── knowledge/                   ←   Layer: knowledge (14 nodes)                          │
@@ -68,7 +68,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 │   │       ├── seo/                         ←   Layer: seo (Keyword, Metrics, MiningRun)              │
 │   │       └── geo/                         ←   Layer: geo (Seed, Metrics, MiningRun)                 │
 │   │                                                                                                 │
-│   ├── relations.yaml                       ← 50 types de relations Neo4j (with family field)        │
+│   ├── relations.yaml                       ← 50 Arc types Neo4j (with family field) [→ arc-kinds/]  │
 │   └── views/                               ← Definitions de vues YAML                               │
 │                                                                                                     │
 └─────────────────────────────────────────────────────────────────────────────────────────────────────┘
@@ -91,7 +91,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
   │   Axis 2 — WHAT?    :Layer       (9)  config, knowledge, foundation, structure, semantic,    │
   │                                        instruction, output, seo, geo                         │
   │   Axis 3 — HOW?     :Trait       (5)  invariant / localized / knowledge / derived / job      │
-  │   Axis 4 — LINKS?   :EdgeKind   (50)  grouped into 5 EdgeFamilies                           │
+  │   Axis 4 — LINKS?   :ArcKind    (50)  grouped into 5 ArcFamilies                            │
   │                                                                                              │
   └──────────────────────────────────────────────────────────────────────────────────────────────┘
 
@@ -117,17 +117,17 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
                                                                 │  HOW?       │
                                                                 └─────────────┘
 
-  Edge Schema (OWL-inspired):
+  Arc Schema (OWL-inspired):
 
   ┌────────────────┐    FROM_KIND    ┌─────────────┐    TO_KIND     ┌────────────────┐
-  │  EdgeKind (50) │───────────────▶│  Kind (35)  │◀──────────────│  EdgeKind (50) │
+  │  ArcKind (50) │───────────────▶│  Kind (35)  │◀──────────────│  ArcKind (50) │
   │  1:1 rel type  │                └─────────────┘               │                │
   └───────┬────────┘                                              └────────────────┘
           │
           │ IN_FAMILY
           ▼
   ┌────────────────┐
-  │EdgeFamily (5)  │
+  │ArcFamily (5)  │
   │  ownership     │
   │  localization  │
   │  semantic      │
@@ -146,7 +146,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 
   ┌─────────────────────────────────────────────────────────────────────────────┐
   │  data     │  Real instances only (default)                                  │
-  │  meta     │  Meta-graph only (Realm/Layer/Kind/Trait/EdgeFamily)            │
+  │  meta     │  Meta-graph only (Realm/Layer/Kind/Trait/ArcFamily)            │
   │  overlay  │  Data + meta combined (debugging)                               │
   │  query    │  Faceted filter results (targeted exploration)                  │
   └─────────────────────────────────────────────────────────────────────────────┘
@@ -164,23 +164,23 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
      ┌─────────────────────────────────────────────────────────────────────────────────────────────┐
      │                        📁 YAML (Single Source of Truth)                                     │
      │                        packages/core/models/                                                │
-     │                        ├── nodes/                    ← 35 Kinds                             │
-     │                        ├── relations.yaml            ← 50 Relations (with family)           │
-     │                        └── organizing-principles.yaml← Realm/Layer/Trait/EdgeFamily defs    │
+     │                        ├── nodes/                    ← 44 Kinds                             │
+     │                        ├── relations.yaml            ← 50 Arcs [→ arc-kinds/]               │
+     │                        └── organizing-principles.yaml← [→ taxonomy.yaml] facet defs        │
      └─────────────────────────────────────────────┬───────────────────────────────────────────────┘
                                                    │
          ┌─────────────────────────────────────────┼─────────────────────────────────────────┐
          │                    │                    │                    │                     │
          ▼                    ▼                    ▼                    ▼                     ▼
   ┌──────────────┐   ┌──────────────┐   ┌──────────────┐   ┌──────────────┐   ┌──────────────────┐
-  │  📊 Mermaid  │   │  📝 Layer    │   │  🏷️ Kind    │   │  🔗 Edge     │   │  🗄️ Manual       │
+  │  📊 Mermaid  │   │  📝 Layer    │   │  🏷️ Kind    │   │  🔗 Arc      │   │  🗄️ Manual       │
   │  Generator   │   │  Generator   │   │  Generator   │   │  Schema Gen  │   │  Cypher Seeds    │
   │  tools/novanet│   │ tools/novanet│   │ tools/novanet│   │ tools/novanet│   │  packages/db/    │
   └──────┬───────┘   └──────┬───────┘   └──────┬───────┘   └──────┬───────┘   └────────┬─────────┘
          │                  │                  │                  │                     │
          ▼                  ▼                  ▼                  ▼                     ▼
   ┌──────────────┐   ┌──────────────┐   ┌──────────────┐   ┌──────────────┐   ┌──────────────────┐
-  │ VIEW-COMPLETE│   │  layers.ts   │   │ Kind :Meta   │   │ EdgeKind     │   │ 00-constraints   │
+  │ VIEW-COMPLETE│   │  layers.ts   │   │ Kind :Meta   │   │ ArcKind     │   │ 00-constraints   │
   │ -GRAPH.md    │   │  src/graph/  │   │ nodes w/     │   │ :Meta nodes  │   │ 01-concepts-mvp  │
   │              │   │              │   │ schema_hint  │   │ w/ cypher_   │   │ 02-locale-know.  │
   │              │   │              │   │              │   │ pattern      │   │ 03-prompts       │
@@ -364,7 +364,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 │   │  │  (~19k instances)  │  │  (105 meta-nodes)   │  │  Data + Meta       │                 │   │
 │   │  │                    │  │                     │  │                    │                 │   │
 │   │  │  Real Neo4j data   │  │  Realm/Layer/Kind   │  │  Architecture      │                 │   │
-│   │  │  Force-directed    │  │  Trait/EdgeFamily    │  │  debugging         │                 │   │
+│   │  │  Force-directed    │  │  Trait/ArcFamily    │  │  debugging         │                 │   │
 │   │  │  Grouped by Realm  │  │  Hierarchical       │  │                    │                 │   │
 │   │  └─────────────────────┘  └─────────────────────┘  └─────────────────────┘                 │   │
 │   │                                                                                             │   │
@@ -373,7 +373,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 │   │  │  Faceted filters   │  ├── Fill color   → Layer (9 colors)                               │   │
 │   │  │                    │  ├── Border style  → Trait (5 styles)                               │   │
 │   │  │  Realm + Layer +   │  ├── Spatial group → Realm (3 zones)                               │   │
-│   │  │  Trait combos      │  └── Edge color    → EdgeFamily (5 colors)                         │   │
+│   │  │  Trait combos      │  └── Arc stroke    → ArcFamily (5 colors)                         │   │
 │   │  └─────────────────────┘                                                                    │   │
 │   │                                                                                             │   │
 │   └─────────────────────────────────────────────────────────────────────────────────────────────┘   │
@@ -405,7 +405,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 ║                                                                                                   ║
 ║   ┌──────────────────────────────────────────────────────────────────────────────────────┐        ║
 ║   │  tools/novanet/  ← Rust binary (CLI + TUI + generators)                              │        ║
-║   │  ├─ generators/  MermaidGen, LayerGen, KindGen, EdgeSchemaGen, AutowireGen, ...      │        ║
+║   │  ├─ generators/  MermaidGen, LayerGen, KindGen, ArcSchemaGen, AutowireGen, ...      │        ║
 ║   │  ├─ parsers/     YAML nodes, relations, locale markdown                              │        ║
 ║   │  ├─ commands/    schema, db, locale, search, filter, data/meta/overlay/query         │        ║
 ║   │  ├─ search/      Hybrid vector + graph search                                        │        ║
@@ -467,11 +467,11 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 | Metric | Value |
 |--------|-------|
 | Kind (node types) | 35 |
-| EdgeKind (relations) | 50 |
+| ArcKind (relations) | 50 |
 | Realms | 3 (global, project, shared) |
 | Layers | 9 |
 | Traits | 5 |
-| EdgeFamilies | 5 |
+| ArcFamilies | 5 |
 | Meta-node total | 108 (3+9+35+5+5+50+1 bridge type) |
 | Locale Knowledge nodes | 14 |
 | Seed files | 7 |

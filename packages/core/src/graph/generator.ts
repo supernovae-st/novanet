@@ -17,28 +17,35 @@ import { REALM_HIERARCHY } from './hierarchy.js';
  * Can be extended with icons/colors in UI layer.
  */
 const NODE_LABELS: Record<NodeType, string> = {
-  // Project realm - foundation
+  // Project realm - foundation (3)
   Project: 'Project',
   BrandIdentity: 'Brand Identity',
   ProjectL10n: 'Project L10n',
-  // Project realm - structure
+  // Project realm - structure (3)
   Page: 'Page',
   Block: 'Block',
-  BlockType: 'Block Type',
-  PageType: 'Page Type',
-  // Project realm - semantic
+  ContentSlot: 'Content Slot',
+  // Project realm - semantic (4)
   Concept: 'Concept',
   ConceptL10n: 'Concept L10n',
-  // Project realm - instruction
+  SearchIntent: 'Search Intent',
+  TopicCluster: 'Topic Cluster',
+  // Project realm - instruction (6)
+  PageType: 'Page Type',
+  BlockType: 'Block Type',
   PagePrompt: 'Page Prompt',
   BlockPrompt: 'Block Prompt',
   BlockRules: 'Block Rules',
-  // Project realm - output
+  PromptArtifact: 'Prompt Artifact',
+  // Project realm - output (5)
   PageL10n: 'Page L10n',
   BlockL10n: 'Block L10n',
-  // Global realm - config
+  GenerationJob: 'Generation Job',
+  OutputArtifact: 'Output Artifact',
+  EvaluationSignal: 'Evaluation Signal',
+  // Global realm - config (1)
   Locale: 'Locale',
-  // Global realm - knowledge
+  // Global realm - knowledge (14)
   LocaleIdentity: 'Locale Identity',
   LocaleVoice: 'Locale Voice',
   LocaleCulture: 'Locale Culture',
@@ -53,11 +60,13 @@ const NODE_LABELS: Record<NodeType, string> = {
   Metaphor: 'Metaphor',
   Pattern: 'Pattern',
   Constraint: 'Constraint',
-  // Shared realm - seo
+  // Shared realm - seo (3)
   SEOKeywordL10n: 'SEO Keyword',
   SEOKeywordMetrics: 'SEO Metrics',
   SEOMiningRun: 'SEO Mining',
-  // Shared realm - geo
+  // Shared realm - geo (5)
+  Thing: 'Thing',
+  ThingL10n: 'Thing L10n',
   GEOSeedL10n: 'GEO Seed',
   GEOSeedMetrics: 'GEO Metrics',
   GEOMiningRun: 'GEO Mining',
@@ -90,7 +99,7 @@ const TRAIT_DESCRIPTIONS: Record<string, string> = {
 // =============================================================================
 
 /**
- * Generate flat schema graph with all 35 node types and relationships.
+ * Generate flat schema graph with all 44 node types and relationships.
  * This is the canonical representation of the NovaNet ontology.
  *
  * @returns SchemaGraphResult with nodes and edges
@@ -99,7 +108,7 @@ const TRAIT_DESCRIPTIONS: Record<string, string> = {
  * ```typescript
  * const { nodes, edges } = generateSchemaGraph();
  * console.log(`${nodes.length} nodes, ${edges.length} edges`);
- * // Output: "35 nodes, ~89 edges"
+ * // Output: "44 nodes, ~89 edges"
  * ```
  */
 export function generateSchemaGraph(): SchemaGraphResult {
@@ -107,7 +116,7 @@ export function generateSchemaGraph(): SchemaGraphResult {
   const edges: SchemaEdge[] = [];
 
   // ==========================================================================
-  // GENERATE NODES - All 35 node types
+  // GENERATE NODES - All 44 node types
   // ==========================================================================
 
   for (const nodeType of NODE_TYPES) {
@@ -171,7 +180,7 @@ export function generateSchemaGraph(): SchemaGraphResult {
  * ```typescript
  * const hierarchy = getSchemaHierarchy();
  * console.log(hierarchy.stats);
- * // Output: { totalNodes: 35, totalEdges: ~89, nodesByRealm: { project: 14, global: 15, shared: 6 } }
+ * // Output: { totalNodes: 44, totalEdges: ~89, nodesByRealm: { project: 21, global: 15, shared: 8 } }
  * ```
  */
 export function getSchemaHierarchy(): HierarchicalSchemaData {

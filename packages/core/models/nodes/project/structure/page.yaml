@@ -18,7 +18,7 @@ node:
   name: Page
   realm: project
   layer: structure
-  locale_behavior: invariant
+  trait: invariant
   icon: "🔷"
   description: "Invariant page structure containing blocks and orchestrator instructions"
 

@@ -9,7 +9,7 @@ node:
   name: GEOSeedMetrics
   realm: shared
   layer: geo
-  locale_behavior: derived
+  trait: derived
   icon: "📑"
   description: "Citation/visibility observation from AI engine responses"
 

@@ -16,7 +16,7 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 | Area | Commands | Status |
 |------|----------|--------|
 | Read | `data`, `meta`, `overlay`, `query` | Implemented (faceted Cypher) |
-| Write | `node create/edit/delete`, `relation create/delete` | Implemented (label validation) |
+| Write | `node create/edit/delete`, `arc create/delete` | Implemented (label validation) |
 | Schema | `schema generate`, `schema validate` | Implemented (7 artifacts) |
 | Docs | `doc generate`, `doc generate --list` | Implemented (12 views) |
 | Search | `search --query=... [--kind=...]` | Implemented (fulltext + property) |
@@ -25,7 +25,7 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 | Filter | `filter build` | Implemented (JSON stdin, Studio subprocess) |
 | TUI | `tui` | Galaxy theme, mission control, search, detail, edge explorer, CRUD dialogs, dashboard, logo, command palette, help overlay, boot animation, effects engine, onboarding |
 
-**180 tests pass** (`cargo test`). Zero clippy warnings.
+**185 tests pass** (`cargo test`). Zero clippy warnings.
 
 ## Commands
 
@@ -45,7 +45,7 @@ cargo run -- query --realm=project --format=json  # Mode 4: Faceted query
 cargo run -- node create --kind=Page --key=my-page --props='{"display_name":"My Page"}'
 cargo run -- node edit --key=my-page --set='{"description":"Updated"}'
 cargo run -- node delete --key=my-page --confirm
-cargo run -- relation create --from=page1 --to=concept1 --type=USES_CONCEPT
+cargo run -- arc create --from=page1 --to=concept1 --kind=USES_CONCEPT
 
 # Search (Neo4j)
 cargo run -- search --query="page" --kind=Page --limit=20
@@ -99,13 +99,13 @@ src/
   db.rs           Neo4j connection pool (neo4rs::Graph + Arc)
   error.rs        NovaNetError enum (thiserror) + Result type alias
   cypher.rs       CypherStatement builder (data/meta/overlay/query/search)
-  facets.rs       FacetFilter (Realm/Layer/Trait/EdgeFamily/Kind) + JSON serde
+  facets.rs       FacetFilter (Realm/Layer/Trait/ArcFamily/Kind) + JSON serde
   output.rs       OutputFormat (Table/Json/Cypher) + rendering helpers
   commands/
     mod.rs        Module registry
     read.rs       data/meta/overlay/query (CypherStatement → Neo4j → format)
     node.rs       node create/edit/delete (label validation + Cypher)
-    relation.rs   relation create/delete (rel type validation + Cypher)
+    arc.rs        arc create/delete (ArcKind validation + Cypher)
     search.rs     search --query (fulltext + property match)
     locale.rs     locale list/import
     db.rs         db seed/migrate/reset (Cypher file execution)
@@ -146,19 +146,17 @@ src/
 
 ## TUI Keybindings
 
-| Key | Action |
-|-----|--------|
-| `1-4` | Switch NavMode (1:Meta, 2:Data, 3:Overlay, 4:Query) |
-| `Tab` | Cycle NavMode forward |
-| `j/k` | Tree cursor up/down |
-| `h/l/Space/Enter` | Toggle expand/collapse |
-| `d/u` | Page down/up (tree or YAML) |
-| `[/]` | Scroll YAML line up/down (from anywhere) |
-| `{/}` | Scroll YAML page up/down (from anywhere) |
-| `?` | Help overlay |
-| `Ctrl+P` | Command palette |
-| `/` | Search overlay |
-| `q/Esc` | Quit (or close overlay) |
+See **[KEYBINDINGS.md](./KEYBINDINGS.md)** for complete keyboard shortcuts reference.
+
+Quick summary:
+```
+Navigation:  j/k (up/down)  h/l (toggle)  d/u (page)  1-4 (modes)
+Scroll:      ENC1 (tree)    ENC2 (yaml)
+Overlays:    / (help)       f (search)
+Exit:        q or Esc
+```
+
+> **Hook**: `.claude/hooks/keybindings-reminder.sh` triggers when `tui/*.rs` is edited.
 
 ## Dependencies on Monorepo
 
