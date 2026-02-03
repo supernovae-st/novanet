@@ -7,11 +7,11 @@ This file provides guidance to Claude Code when working in the `tools/novanet/` 
 `novanet` is a unified Rust CLI + TUI binary for managing the NovaNet context graph.
 It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 
-**Design plan**: `docs/plans/2026-02-01-ontology-v9-design.md` (source of truth)
+**Design plan**: `docs/plans/2026-02-03-nomenclature-v95-design.md` (source of truth)
 
 ## Current Status
 
-**Phase 7B Batch 7 complete** — Galaxy-themed mission control TUI with search, detail, edge explorer, CRUD dialogs, dashboard stats, ASCII logo, breadcrumb navigation, command palette, help overlay, boot animation (matrix rain + logo reveal), effects engine (CRT scanlines, glitch transitions, nebula pulse, screen shake), typewriter effect, and first-run onboarding (welcome screen + guided tour).
+**Phase 7B Batch 7 complete** — Galaxy-themed mission control TUI with search, detail, arc explorer, CRUD dialogs, dashboard stats, ASCII logo, breadcrumb navigation, command palette, help overlay, boot animation (matrix rain + logo reveal), effects engine (CRT scanlines, glitch transitions, nebula pulse, screen shake), typewriter effect, and first-run onboarding (welcome screen + guided tour).
 
 | Area | Commands | Status |
 |------|----------|--------|
@@ -23,7 +23,7 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 | Locale | `locale list`, `locale import` | Implemented |
 | DB | `db seed`, `db migrate`, `db reset` | Implemented |
 | Filter | `filter build` | Implemented (JSON stdin, Studio subprocess) |
-| TUI | `tui` | Galaxy theme, mission control, search, detail, edge explorer, CRUD dialogs, dashboard, logo, command palette, help overlay, boot animation, effects engine, onboarding |
+| TUI | `tui` | Galaxy theme, mission control, search, detail, arc explorer, CRUD dialogs, dashboard, logo, command palette, help overlay, boot animation, effects engine, onboarding |
 
 **201 tests pass** (`cargo test`). Zero clippy warnings.
 
@@ -80,7 +80,7 @@ cargo run -- tui                                  # Interactive terminal UI
 # Quality
 cargo clippy -- -D warnings    # Zero warnings policy
 cargo fmt --check              # Formatting check
-cargo test                     # 180 unit tests
+cargo test                     # 201 unit tests
 cargo test -- --ignored        # Neo4j integration tests (requires running Neo4j)
 
 # Pre-commit
