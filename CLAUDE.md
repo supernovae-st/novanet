@@ -109,8 +109,8 @@ cargo run -- schema generate               # Regenerate all artifacts (7 generat
 cargo run -- schema validate               # Validate YAML coherence
 cargo run -- doc generate                  # Generate 12 view Mermaid diagrams
 cargo run -- doc generate --list           # List available views
-cargo run -- data --format=table           # Mode 1: Data nodes
-cargo run -- meta --format=json            # Mode 2: Meta-graph
+cargo run -- meta --format=json            # Mode 1: Meta-graph
+cargo run -- data --format=table           # Mode 2: Data nodes
 cargo run -- overlay                       # Mode 3: Data + Meta
 cargo run -- query --realm=project         # Mode 4: Faceted query
 cargo run -- search --query="page"         # Fulltext + property search
