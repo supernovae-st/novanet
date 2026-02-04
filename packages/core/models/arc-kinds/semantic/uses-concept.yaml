@@ -5,6 +5,7 @@ arc:
   name: USES_CONCEPT
   family: semantic
   scope: intra_realm
+  temperature_threshold: 0.0  # v9.9: Always follow (primary content reference)
 
   source:
     - Page

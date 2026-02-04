@@ -5,6 +5,7 @@ arc:
   name: CLUSTERS_TOPIC
   family: semantic
   scope: intra_realm
+  temperature_threshold: 0.3  # v9.9: Topic grouping (moderate context)
   source: TopicCluster
   target: Concept
   cardinality: one_to_many

@@ -5,6 +5,7 @@ arc:
   name: SPECIALIZES
   family: semantic
   scope: intra_realm
+  temperature_threshold: 0.2  # v9.9: Thing hierarchy (background context)
   source: Thing
   target: Thing
   cardinality: many_to_one

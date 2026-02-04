@@ -5,6 +5,7 @@ arc:
   name: LINKS_TO
   family: semantic
   scope: intra_realm
+  temperature_threshold: 0.4  # v9.9: Internal links for SEO (moderate priority)
   source: Page
   target: Page
   cardinality: many_to_many
