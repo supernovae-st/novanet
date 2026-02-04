@@ -193,6 +193,29 @@ pnpm dev    # → http://localhost:3000
 
 ---
 
+## Security Compliance
+
+**Multi-layer security toolchain:**
+
+| Layer | Tool | Command | CI Integration |
+|-------|------|---------|----------------|
+| **Rust deps** | cargo-deny | `cargo deny check` | Yes (required) |
+| **Rust vulns** | cargo-audit | `cargo audit` | Yes (weekly) |
+| **Rust unused** | cargo-machete | `cargo machete` | Manual |
+| **TS deps** | pnpm audit | `pnpm audit --audit-level=moderate` | Yes |
+| **Secrets** | TruffleHog | CI only | Yes (on PR) |
+
+**Pre-commit checklist** (see `.claude/rules/security.md`):
+- Rust: `cargo deny check && cargo clippy -- -D warnings`
+- TypeScript: `pnpm audit` passes
+- No credentials in source code
+
+**Run full audit:** `/security-audit all`
+
+**Exception policy:** Document in `deny.toml` with RUSTSEC ID, reason, and quarterly review date.
+
+---
+
 ## Versioning & Releases
 
 **Strategy**: Semantic Versioning (SemVer) with Conventional Commits.
@@ -227,6 +250,7 @@ See `.claude/README.md` for full documentation.
 |---------|-------------|
 | `/novanet-arch` | Architecture diagrams (ASCII) |
 | `/novanet-sync` | Schema validation/regeneration |
+| `/security-audit` | Comprehensive security audit |
 | `/schema:add-node <name>` | Add new node type |
 | `/schema:edit-node <name>` | Modify existing node |
 | `/schema:add-arc <ARC>` | Add new arc type |
