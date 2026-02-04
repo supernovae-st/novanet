@@ -53,10 +53,10 @@ enum Commands {
         #[command(subcommand)]
         action: NodeAction,
     },
-    /// CRUD: relation operations
-    Relation {
+    /// CRUD: arc operations
+    Arc {
         #[command(subcommand)]
-        action: RelationAction,
+        action: ArcAction,
     },
     /// Schema operations (generate artifacts, validate sync)
     Schema {
@@ -111,7 +111,7 @@ struct QueryArgs {
     #[arg(long, name = "trait")]
     trait_filter: Option<String>,
     #[arg(long)]
-    edge_family: Option<String>,
+    arc_family: Option<String>,
     #[arg(long)]
     kind: Option<String>,
     #[arg(long, value_enum, default_value_t = OutputFormat::Table)]
@@ -153,8 +153,8 @@ enum NodeAction {
 }
 
 #[derive(Subcommand)]
-enum RelationAction {
-    /// Create a relationship between two nodes
+enum ArcAction {
+    /// Create an arc between two nodes
     Create {
         /// Source node key
         #[arg(long)]
@@ -162,14 +162,14 @@ enum RelationAction {
         /// Target node key
         #[arg(long)]
         to: String,
-        /// Relationship type (e.g., FOR_LOCALE, HAS_BLOCK)
-        #[arg(long, name = "type")]
-        rel_type: String,
-        /// Optional JSON properties for the relation
+        /// Arc kind (e.g., FOR_LOCALE, HAS_BLOCK)
+        #[arg(long)]
+        kind: String,
+        /// Optional JSON properties for the arc
         #[arg(long, default_value = "{}")]
         props: String,
     },
-    /// Delete a specific relationship
+    /// Delete a specific arc
     Delete {
         /// Source node key
         #[arg(long)]
@@ -177,9 +177,9 @@ enum RelationAction {
         /// Target node key
         #[arg(long)]
         to: String,
-        /// Relationship type to delete
-        #[arg(long, name = "type")]
-        rel_type: String,
+        /// Arc kind to delete
+        #[arg(long)]
+        kind: String,
     },
 }
 
@@ -278,7 +278,7 @@ async fn main() -> color_eyre::Result<()> {
                 args.realm.as_deref(),
                 args.layer.as_deref(),
                 args.trait_filter.as_deref(),
-                args.edge_family.as_deref(),
+                args.arc_family.as_deref(),
                 args.kind.as_deref(),
             );
             novanet::commands::read::run_query(&db, filter, args.format).await?;
@@ -434,21 +434,21 @@ async fn main() -> color_eyre::Result<()> {
                 }
             }
         }
-        Commands::Relation { ref action } => {
+        Commands::Arc { ref action } => {
             let db = connect_db(&cli).await?;
             match action {
-                RelationAction::Create {
+                ArcAction::Create {
                     from,
                     to,
-                    rel_type,
+                    kind,
                     props,
                 } => {
-                    eprintln!("novanet relation create --from={from} --to={to} --type={rel_type}");
-                    novanet::commands::arc::run_create(&db, from, to, rel_type, props).await?;
+                    eprintln!("novanet arc create --from={from} --to={to} --kind={kind}");
+                    novanet::commands::arc::run_create(&db, from, to, kind, props).await?;
                 }
-                RelationAction::Delete { from, to, rel_type } => {
-                    eprintln!("novanet relation delete --from={from} --to={to} --type={rel_type}");
-                    novanet::commands::arc::run_delete(&db, from, to, rel_type).await?;
+                ArcAction::Delete { from, to, kind } => {
+                    eprintln!("novanet arc delete --from={from} --to={to} --kind={kind}");
+                    novanet::commands::arc::run_delete(&db, from, to, kind).await?;
                 }
             }
         }
