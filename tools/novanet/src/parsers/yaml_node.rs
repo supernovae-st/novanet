@@ -384,8 +384,8 @@ node:
             return;
         }
 
-        let nodes = load_all_nodes(root).expect("should parse all 44 nodes");
-        assert_eq!(nodes.len(), 44, "expected 44 YAML node files");
+        let nodes = load_all_nodes(root).expect("should parse all 46 nodes");
+        assert_eq!(nodes.len(), 46, "expected 46 YAML node files");
 
         // Every node has a non-empty name, realm, and layer
         for node in &nodes {
@@ -408,7 +408,7 @@ node:
 
         // Verify trait distribution matches _index.yaml counts
         let count = |t: NodeTrait| nodes.iter().filter(|n| n.def.node_trait == t).count();
-        assert_eq!(count(NodeTrait::Invariant), 15, "invariant count");
+        assert_eq!(count(NodeTrait::Invariant), 17, "invariant count");
         assert_eq!(count(NodeTrait::Localized), 7, "localized count");
         assert_eq!(count(NodeTrait::Knowledge), 14, "knowledge count");
         assert_eq!(count(NodeTrait::Derived), 5, "derived count");
@@ -417,7 +417,7 @@ node:
         // Verify realm distribution
         let realm_count = |r: &str| nodes.iter().filter(|n| n.realm == r).count();
         assert_eq!(realm_count("global"), 15, "global realm count");
-        assert_eq!(realm_count("project"), 21, "project realm count");
+        assert_eq!(realm_count("project"), 23, "project realm count");
         assert_eq!(realm_count("shared"), 8, "shared realm count");
 
         // Spot-check a few known nodes

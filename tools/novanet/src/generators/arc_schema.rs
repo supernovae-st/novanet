@@ -525,26 +525,26 @@ mod tests {
             .generate(root)
             .expect("should generate arc schema cypher");
 
-        // Count non-inverse relations (75 total - 5 inverse = 70)
+        // Count non-inverse relations (77 total - 5 inverse = 72)
         let ak_merges = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains(":Meta:ArcKind"))
             .count();
-        assert_eq!(ak_merges, 70, "expected 70 ArcKind MERGE statements");
+        assert_eq!(ak_merges, 72, "expected 72 ArcKind MERGE statements");
 
         // HAS_ARC_KIND relationships match ArcKind count
         let has_ak = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:HAS_ARC_KIND]"))
             .count();
-        assert_eq!(has_ak, 70, "expected 70 HAS_ARC_KIND relationships");
+        assert_eq!(has_ak, 72, "expected 72 HAS_ARC_KIND relationships");
 
         // IN_FAMILY relationships match ArcKind count
         let in_family = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_FAMILY]"))
             .count();
-        assert_eq!(in_family, 70, "expected 70 IN_FAMILY relationships");
+        assert_eq!(in_family, 72, "expected 72 IN_FAMILY relationships");
 
         // Family distribution (non-inverse counts)
         // Section 2 MATCH lines have ArcFamily first: "MATCH (af:ArcFamily ..."
@@ -565,8 +565,8 @@ mod tests {
         let mining = count_family("mining");
 
         assert!(
-            ownership + localization + semantic + generation + mining == 70,
-            "family counts should sum to 70: o={ownership} l={localization} s={semantic} g={generation} m={mining}"
+            ownership + localization + semantic + generation + mining == 72,
+            "family counts should sum to 72: o={ownership} l={localization} s={semantic} g={generation} m={mining}"
         );
 
         // Spot checks — specific ArcKinds
@@ -597,7 +597,7 @@ mod tests {
         }
 
         // Header reflects count
-        assert!(cypher.contains("70 ArcKind nodes"));
+        assert!(cypher.contains("72 ArcKind nodes"));
     }
 
     /// Snapshot test for a minimal ArcSchema generator output.

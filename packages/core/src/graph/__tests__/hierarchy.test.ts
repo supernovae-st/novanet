@@ -69,10 +69,10 @@ describe('graph/hierarchy', () => {
   });
 
   it('should have correct node counts per layer', () => {
-    // Project realm: foundation (3), structure (3), semantic (4), instruction (6), output (5) = 21
+    // Project realm: foundation (3), structure (3), semantic (6), instruction (6), output (5) = 23
     expect(REALM_HIERARCHY.project.layers.foundation.nodeTypes).toHaveLength(3);
     expect(REALM_HIERARCHY.project.layers.structure.nodeTypes).toHaveLength(3);
-    expect(REALM_HIERARCHY.project.layers.semantic.nodeTypes).toHaveLength(4);
+    expect(REALM_HIERARCHY.project.layers.semantic.nodeTypes).toHaveLength(6);
     expect(REALM_HIERARCHY.project.layers.instruction.nodeTypes).toHaveLength(6);
     expect(REALM_HIERARCHY.project.layers.output.nodeTypes).toHaveLength(5);
 

@@ -729,7 +729,7 @@ mod tests {
         // Header
         assert!(output.contains("flowchart TB"));
         assert!(output.contains("NovaNet Graph v9.0.0"));
-        assert!(output.contains("44 nodes"));
+        assert!(output.contains("46 nodes"));
 
         // All 3 realms
         assert!(output.contains("GLOBAL_REALM"));

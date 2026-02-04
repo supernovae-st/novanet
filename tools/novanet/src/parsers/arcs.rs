@@ -114,7 +114,7 @@ impl NodeRef {
 /// Top-level arcs document (from relations.yaml).
 #[derive(Debug, Deserialize)]
 pub struct ArcsDocument {
-    /// The 75 arc definitions.
+    /// The 77 arc definitions.
     #[serde(alias = "relations")]
     pub arcs: Vec<ArcDef>,
 
@@ -396,7 +396,7 @@ relations:
         let doc = load_arcs(root).expect("should parse relations.yaml");
 
         // Total arc count
-        assert_eq!(doc.arcs.len(), 75, "expected 75 arcs");
+        assert_eq!(doc.arcs.len(), 77, "expected 77 arcs");
 
         // Family distribution
         let family_count = |f: ArcFamily| doc.arcs.iter().filter(|a| a.family == f).count();
@@ -406,7 +406,7 @@ relations:
             22,
             "localization count"
         );
-        assert_eq!(family_count(ArcFamily::Semantic), 14, "semantic count");
+        assert_eq!(family_count(ArcFamily::Semantic), 16, "semantic count");
         assert_eq!(family_count(ArcFamily::Generation), 15, "generation count");
         assert_eq!(family_count(ArcFamily::Mining), 9, "mining count");
 
@@ -426,7 +426,7 @@ relations:
         let mut types: Vec<&str> = doc.arcs.iter().map(|a| a.arc_type.as_str()).collect();
         types.sort();
         types.dedup();
-        assert_eq!(types.len(), 75, "all arc types should be unique");
+        assert_eq!(types.len(), 77, "all arc types should be unique");
 
         // Semantic link types
         let slt = doc

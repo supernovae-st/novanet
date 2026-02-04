@@ -575,6 +575,30 @@ relations:
     llm_context: "Intent expressed through localized SEO keyword. match_type: exact/phrase/broad. volume_share: 0.0-1.0."
 
   # ─────────────────────────────────────────────────────────────────────────────
+  # Audience & Channel (v9.7)
+  # ─────────────────────────────────────────────────────────────────────────────
+
+  - type: TARGETS_PERSONA
+    family: semantic
+    source: Page
+    target: AudiencePersona
+    cardinality: many_to_many
+    properties:
+      - relevance_score
+      - is_primary
+    llm_context: "Page targets specific audience persona. relevance_score: 0.0-1.0 fit. is_primary: true if main target."
+
+  - type: FOR_CHANNEL
+    family: semantic
+    source: Page
+    target: ChannelSurface
+    cardinality: many_to_many
+    properties:
+      - optimization_level
+      - is_primary
+    llm_context: "Page optimized for distribution channel. optimization_level: basic/full. is_primary: true if main channel."
+
+  # ─────────────────────────────────────────────────────────────────────────────
   # Content Slots (v9.7)
   # ─────────────────────────────────────────────────────────────────────────────
 

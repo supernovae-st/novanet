@@ -1,5 +1,5 @@
 # ═══════════════════════════════════════════════════════════════════════════════
-# NOVANET DATA MODELS INDEX v9.6.0
+# NOVANET DATA MODELS INDEX v9.7.0
 # ═══════════════════════════════════════════════════════════════════════════════
 #
 # WHAT: Native content generation system using Neo4j graph database
@@ -27,10 +27,11 @@
 #   │  └───────────────────────────────────────────────────────────────────────┘  │
 #   │                                                                             │
 #   │  ┌───────────────────────────────────────────────────────────────────────┐  │
-#   │  │  📦 PROJECT (18 nodes) - Per-project instances                        │  │
+#   │  │  📦 PROJECT (22 nodes) - Per-project instances                        │  │
 #   │  │  └─ foundation/  🏢 Project, BrandIdentity, ProjectL10n               │  │
-#   │  │  └─ structure/   🔧 Page, Block                                       │  │
-#   │  │  └─ semantic/    💡 Concept, ConceptL10n                              │  │
+#   │  │  └─ structure/   🔧 Page, Block, ContentSlot                          │  │
+#   │  │  └─ semantic/    💡 Concept, ConceptL10n, SearchIntent,               │  │
+#   │  │                     AudiencePersona, ChannelSurface                   │  │
 #   │  │  └─ instruction/ 📝 PageType, PagePrompt, BlockPrompt, BlockType,     │  │
 #   │  │                     BlockRules, PromptArtifact                        │  │
 #   │  │  └─ output/      📤 PageL10n, BlockL10n, GenerationJob, OutputArtifact│  │
@@ -323,15 +324,19 @@ files:
       - nodes/project/foundation/brand-identity.yaml
       - nodes/project/foundation/project-l10n.yaml
 
-    # 🔧 STRUCTURE (2 nodes) - Content scaffolding
+    # 🔧 STRUCTURE (3 nodes) - Content scaffolding (v9.7: +ContentSlot)
     structure:
       - nodes/project/structure/page.yaml
       - nodes/project/structure/block.yaml
+      - nodes/project/structure/content-slot.yaml        # v9.7 A/B testing slots
 
-    # 💡 SEMANTIC (2 nodes) - Meaning & concepts
+    # 💡 SEMANTIC (5 nodes) - Meaning & concepts (v9.7: +SearchIntent, AudiencePersona, ChannelSurface)
     semantic:
       - nodes/project/semantic/concept.yaml
       - nodes/project/semantic/concept-l10n.yaml
+      - nodes/project/semantic/search-intent.yaml        # v9.7 Intent mapping
+      - nodes/project/semantic/audience-persona.yaml     # v9.7 Target personas
+      - nodes/project/semantic/channel-surface.yaml      # v9.7 Distribution channels
 
     # 📝 INSTRUCTION (6 nodes) - AI generation directives (v9.6.0: +PromptArtifact)
     instruction:
@@ -383,6 +388,10 @@ nodes_by_trait:
     - BlockPrompt
     - BlockRules
     - Locale
+    - ContentSlot        # v9.7 A/B testing slots
+    - SearchIntent       # v9.7 Intent mapping
+    - AudiencePersona    # v9.7 Target personas
+    - ChannelSurface     # v9.7 Distribution channels
   localized:
     - ProjectL10n
     - ConceptL10n
@@ -417,24 +426,24 @@ nodes_by_trait:
     - GenerationJob        # v9.6.0 Generation Domain
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# STATISTICS v9.6.0
+# STATISTICS v9.7.0
 # ═══════════════════════════════════════════════════════════════════════════════
 #
 # By Realm:
 #   🌍 GLOBAL:  15 nodes (Locale + 14 LocaleKnowledge)
 #   🎯 SHARED:   6 nodes (SEO 3 + GEO 3)
-#   📦 PROJECT: 18 nodes (Foundation 3 + Structure 2 + Semantic 2 + Instruction 6 + Output 5)
-#   TOTAL:      39 nodes, 75+ arcs (5 arc families)
+#   📦 PROJECT: 22 nodes (Foundation 3 + Structure 3 + Semantic 5 + Instruction 6 + Output 5)
+#   TOTAL:      43 nodes, 77+ arcs (5 arc families)
 #
 # By Trait:
-#   🔵 INVARIANT:  11 (Project, BrandIdentity, Concept, Page, Block, PageType, BlockType, PagePrompt, BlockPrompt, BlockRules, Locale)
+#   🔵 INVARIANT:  15 (Project, BrandIdentity, Concept, Page, Block, PageType, BlockType, PagePrompt, BlockPrompt, BlockRules, Locale, ContentSlot, SearchIntent, AudiencePersona, ChannelSurface)
 #   🟢 LOCALIZED:   6 (ProjectL10n, ConceptL10n, PageL10n, BlockL10n, SEOKeywordL10n, GEOSeedL10n)
 #   🟣 KNOWLEDGE:  14 (LocaleIdentity, LocaleVoice, etc.)
 #   ⚪ DERIVED:     5 (SEOKeywordMetrics, GEOSeedMetrics, PromptArtifact, OutputArtifact, EvaluationSignal)
 #   ⚙️ JOB:         3 (SEOMiningRun, GEOMiningRun, GenerationJob)
 #
-# v9.6.0 additions (Generation Domain):
-#   +1 instruction: PromptArtifact
-#   +3 output: GenerationJob, OutputArtifact, EvaluationSignal
-#   +10 generation arcs (TRIGGERED_BY, USES_PROMPT, PRODUCES, etc.)
+# v9.7.0 additions (Intent Layer):
+#   +1 structure: ContentSlot
+#   +3 semantic: SearchIntent, AudiencePersona, ChannelSurface
+#   +2 semantic arcs (TARGETS_PERSONA, FOR_CHANNEL)
 #

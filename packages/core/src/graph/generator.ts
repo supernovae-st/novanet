@@ -25,11 +25,13 @@ const NODE_LABELS: Record<NodeType, string> = {
   Page: 'Page',
   Block: 'Block',
   ContentSlot: 'Content Slot',
-  // Project realm - semantic (4)
+  // Project realm - semantic (6)
   Concept: 'Concept',
   ConceptL10n: 'Concept L10n',
   SearchIntent: 'Search Intent',
   TopicCluster: 'Topic Cluster',
+  AudiencePersona: 'Audience Persona',
+  ChannelSurface: 'Channel Surface',
   // Project realm - instruction (6)
   PageType: 'Page Type',
   BlockType: 'Block Type',
@@ -99,7 +101,7 @@ const TRAIT_DESCRIPTIONS: Record<string, string> = {
 // =============================================================================
 
 /**
- * Generate flat schema graph with all 44 node types and arcs.
+ * Generate flat schema graph with all 46 node types and arcs.
  * This is the canonical representation of the NovaNet ontology.
  *
  * @returns SchemaGraphResult with nodes and arcs
@@ -108,7 +110,7 @@ const TRAIT_DESCRIPTIONS: Record<string, string> = {
  * ```typescript
  * const { nodes, arcs } = generateSchemaGraph();
  * console.log(`${nodes.length} nodes, ${arcs.length} arcs`);
- * // Output: "44 nodes, ~89 arcs"
+ * // Output: "46 nodes, ~91 arcs"
  * ```
  */
 export function generateSchemaGraph(): SchemaGraphResult {
@@ -116,7 +118,7 @@ export function generateSchemaGraph(): SchemaGraphResult {
   const arcs: SchemaArc[] = [];
 
   // ==========================================================================
-  // GENERATE NODES - All 44 node types
+  // GENERATE NODES - All 46 node types
   // ==========================================================================
 
   for (const nodeType of NODE_TYPES) {
@@ -180,7 +182,7 @@ export function generateSchemaGraph(): SchemaGraphResult {
  * ```typescript
  * const hierarchy = getSchemaHierarchy();
  * console.log(hierarchy.stats);
- * // Output: { totalNodes: 44, totalArcs: ~89, nodesByRealm: { project: 21, global: 15, shared: 8 } }
+ * // Output: { totalNodes: 46, totalArcs: ~91, nodesByRealm: { project: 23, global: 15, shared: 8 } }
  * ```
  */
 export function getSchemaHierarchy(): HierarchicalSchemaData {

@@ -515,40 +515,40 @@ mod tests {
             .generate(root)
             .expect("should generate kind cypher");
 
-        // 44 Kind MERGE statements
+        // 46 Kind MERGE statements
         let kind_merges = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains(":Meta:Kind"))
             .count();
-        assert_eq!(kind_merges, 44, "expected 44 Kind MERGE statements");
+        assert_eq!(kind_merges, 46, "expected 46 Kind MERGE statements");
 
-        // 44 HAS_KIND relationships
+        // 46 HAS_KIND relationships
         let has_kind = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:HAS_KIND]"))
             .count();
-        assert_eq!(has_kind, 44, "expected 44 HAS_KIND relationships");
+        assert_eq!(has_kind, 46, "expected 46 HAS_KIND relationships");
 
-        // 44 IN_REALM relationships
+        // 46 IN_REALM relationships
         let in_realm = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_REALM]"))
             .count();
-        assert_eq!(in_realm, 44, "expected 44 IN_REALM relationships");
+        assert_eq!(in_realm, 46, "expected 46 IN_REALM relationships");
 
-        // 44 IN_LAYER relationships
+        // 46 IN_LAYER relationships
         let in_layer = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_LAYER]"))
             .count();
-        assert_eq!(in_layer, 44, "expected 44 IN_LAYER relationships");
+        assert_eq!(in_layer, 46, "expected 46 IN_LAYER relationships");
 
-        // 44 EXHIBITS relationships
+        // 46 EXHIBITS relationships
         let exhibits = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:EXHIBITS]"))
             .count();
-        assert_eq!(exhibits, 44, "expected 44 EXHIBITS relationships");
+        assert_eq!(exhibits, 46, "expected 46 EXHIBITS relationships");
 
         // Spot checks — specific Kinds
         assert!(cypher.contains("k_Project:Meta:Kind {label: 'Project'}"));
@@ -580,8 +580,8 @@ mod tests {
             }
         }
 
-        // Header mentions 44 Kind nodes
-        assert!(cypher.contains("44 Kind nodes"));
+        // Header mentions 46 Kind nodes
+        assert!(cypher.contains("46 Kind nodes"));
     }
 
     /// Snapshot test for a minimal Kind generator output.
