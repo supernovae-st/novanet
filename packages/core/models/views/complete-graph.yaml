@@ -1,9 +1,9 @@
 # models/views/complete-graph.yaml
-# Complete graph view showing all 46 node types and 77 arc types
+# Complete graph view showing all 42 node types and 73 arc types
 id: complete-graph
 name: Complete Graph
 description: Full NovaNet graph with all nodes and relations
-version: "9.8.0"
+version: "10.0.0"
 
 root:
   type: Project
@@ -51,22 +51,22 @@ docs:
   title: "Complete Graph View"
   category: overview
   description: |
-    The complete NovaNet graph showing all 46 node types organized into three realms:
-    - **Global (15 nodes)**: Locale + 14 LocaleKnowledge nodes, shared across all projects
+    The complete NovaNet graph showing all 42 node types organized into three realms:
+    - **Global (11 nodes)**: Locale + 10 tiered knowledge nodes
     - **Shared (8 nodes)**: SEO/GEO nodes including Thing/ThingL10n for external entity linking
     - **Project (23 nodes)**: Per-project foundation, structure, semantic, instruction, and output nodes
 
   layers:
-    # 🌍 GLOBAL SCOPE (15 nodes)
+    # 🌍 GLOBAL SCOPE (11 nodes)
     - name: Global - Config
       nodes: [Locale]
       color: purple
       description: Locale configuration (BCP-47)
 
     - name: Global - Knowledge
-      nodes: [LocaleIdentity, LocaleVoice, LocaleCulture, LocaleCultureReferences, LocaleMarket, LocaleLexicon, LocaleRulesAdaptation, LocaleRulesFormatting, LocaleRulesSlug, Expression, Reference, Metaphor, Constraint, Pattern]
+      nodes: [Formatting, Slugification, Adaptation, Style, TermSet, ExpressionSet, PatternSet, CultureSet, TabooSet, AudienceSet]
       color: purple
-      description: 14 Locale Knowledge nodes
+      description: 10 tiered knowledge nodes (Technical, Style, Semantic)
 
     # 📦 PROJECT SCOPE (14 nodes)
     - name: Project - Foundation

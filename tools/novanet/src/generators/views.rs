@@ -90,7 +90,7 @@ fn convert_view(view: &ViewDef, registry: &ViewRegistry) -> TemplateView {
         .views
         .iter()
         .find(|e| e.id == view.id)
-        .and_then(|e| Some(e.category.clone()));
+        .map(|e| e.category.clone());
 
     // Extract filters if present
     let filters = view.filters.as_ref().and_then(|f| {

@@ -177,21 +177,20 @@ kind_icons:
   # Global / Config
   Locale: globe
 
-  # Global / Knowledge
-  LocaleIdentity: fingerprint
-  LocaleVoice: mic
-  LocaleCulture: heart
-  LocaleCultureReferences: bookmark
-  LocaleLexicon: book-open
-  LocaleMarket: trending-up
-  LocaleRulesAdaptation: sliders
-  LocaleRulesFormatting: type
-  LocaleRulesSlug: link
-  Expression: message-circle
-  Metaphor: lamp
-  Pattern: puzzle
-  Reference: external-link
-  Constraint: alert-triangle
+  # Global / Knowledge — v10 Tiered Model
+  # Technical tier
+  Formatting: type
+  Slugification: link
+  Adaptation: sliders
+  # Style tier
+  Style: palette
+  # Semantic tier
+  TermSet: book-open
+  ExpressionSet: message-circle
+  PatternSet: puzzle
+  CultureSet: heart
+  TabooSet: alert-triangle
+  AudienceSet: users
 
   # Project / Foundation
   Project: folder
@@ -201,23 +200,30 @@ kind_icons:
   # Project / Structure
   Page: file-text
   Block: square
+  ContentSlot: inbox
   PageType: layout
   BlockType: component
 
   # Project / Semantic
   Concept: lightbulb
   ConceptL10n: globe
-  AudiencePersona: users
+  SearchIntent: compass
+  TopicCluster: network
+  AudiencePersona: user
   ChannelSurface: monitor
 
   # Project / Instruction
   PagePrompt: message-square
   BlockPrompt: terminal
   BlockRules: shield-check
+  PromptArtifact: file-code
 
   # Project / Output
   PageL10n: file-check
   BlockL10n: check-square
+  GenerationJob: play-circle
+  OutputArtifact: package
+  EvaluationSignal: activity
 
   # Shared / SEO
   SEOKeywordL10n: search
@@ -228,15 +234,6 @@ kind_icons:
   GEOSeedL10n: map-pin
   GEOSeedMetrics: trending-up
   GEOMiningRun: cpu
-
-  # New v9.5 nodes
-  PromptArtifact: file-code
-  OutputArtifact: package
-  GenerationJob: play-circle
-  EvaluationSignal: activity
-  SearchIntent: compass
-  TopicCluster: network
-  ContentSlot: inbox
   Thing: box
   ThingL10n: box
 
