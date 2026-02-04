@@ -1,0 +1,12 @@
+# packages/core/models/arc-kinds/ownership/accepts-block-type.yaml
+# ArcKind: ACCEPTS_BLOCK_TYPE — Slot accepts specific block types
+
+arc:
+  name: ACCEPTS_BLOCK_TYPE
+  family: ownership
+  scope: intra_realm
+  source: ContentSlot
+  target: BlockType
+  cardinality: one_to_many
+  llm_context: Slot accepts specific block types. Constraint enforcement.
+  cypher_pattern: (ContentSlot)-[:ACCEPTS_BLOCK_TYPE]->(BlockType)

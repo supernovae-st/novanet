@@ -1,0 +1,12 @@
+# packages/core/models/arc-kinds/ownership/has-brand-identity.yaml
+# ArcKind: HAS_BRAND_IDENTITY — Project has exactly one brand identity
+
+arc:
+  name: HAS_BRAND_IDENTITY
+  family: ownership
+  scope: intra_realm
+  source: Project
+  target: BrandIdentity
+  cardinality: one_to_one
+  llm_context: Project has exactly one brand identity. Use for visual/tone consistency.
+  cypher_pattern: (Project)-[:HAS_BRAND_IDENTITY]->(BrandIdentity)

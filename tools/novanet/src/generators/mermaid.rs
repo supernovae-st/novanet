@@ -1,6 +1,6 @@
 //! Generate Mermaid flowchart with Realm/Layer/Trait coloring.
 //!
-//! Reads all 44 node YAMLs, `relations.yaml`, and `organizing-principles.yaml`
+//! Reads all 44 node YAMLs, `relations.yaml`, and `taxonomy.yaml`
 //! to produce a complete graph diagram with:
 //! - Subgraphs grouped by Realm → Layer
 //! - Node styling by node_trait (Trait)
@@ -8,8 +8,9 @@
 //!
 //! Output target: `packages/core/models/docs/complete-graph.md` (Markdown wrapper)
 
+use crate::parsers::arcs;
+use crate::parsers::arcs::{ArcDef, ArcFamily};
 use crate::parsers::organizing::{self, OrganizingDoc};
-use crate::parsers::relations::{self, ArcFamily, RelationDef};
 use crate::parsers::yaml_node::{self, ParsedNode};
 use std::collections::BTreeMap;
 use std::fmt::Write;
@@ -20,7 +21,7 @@ use std::path::Path;
 // ─────────────────────────────────────────────────────────────────────────────
 
 /// Trait (node_trait) → Mermaid classDef fill + stroke + text color.
-/// Colors sourced from `organizing-principles.yaml` traits section.
+/// Colors sourced from `taxonomy.yaml` traits section.
 pub const TRAIT_STYLES: &[(&str, &str, &str)] = &[
     ("invariant", "#3b82f6", "#1d4ed8"),
     ("localized", "#22c55e", "#16a34a"),
@@ -39,7 +40,7 @@ pub const TRAIT_EMOJI: &[(&str, &str)] = &[
 ];
 
 /// Arc family → Mermaid arrow syntax.
-/// Sourced from `organizing-principles.yaml` arc_families section.
+/// Sourced from `taxonomy.yaml` arc_families section.
 pub const FAMILY_ARROWS: &[(&str, &str)] = &[
     ("ownership", "-->"),
     ("localization", "-.->"),
@@ -49,7 +50,7 @@ pub const FAMILY_ARROWS: &[(&str, &str)] = &[
 ];
 
 /// Arc family → stroke color for linkStyle.
-/// Sourced from `organizing-principles.yaml` arc_families section.
+/// Sourced from `taxonomy.yaml` arc_families section.
 pub const FAMILY_COLORS: &[(&str, &str)] = &[
     ("ownership", "#3b82f6"),
     ("localization", "#22c55e"),
@@ -96,7 +97,7 @@ pub fn family_color(family: ArcFamily) -> &'static str {
     }
 }
 
-/// Realm key → emoji (from organizing-principles.yaml).
+/// Realm key → emoji (from taxonomy.yaml).
 pub fn realm_emoji(key: &str, doc: &OrganizingDoc) -> String {
     for realm in &doc.realms {
         if realm.key == key {
@@ -106,7 +107,7 @@ pub fn realm_emoji(key: &str, doc: &OrganizingDoc) -> String {
     "\u{1F4E6}".to_string() // fallback: 📦
 }
 
-/// Layer key → display_name (from organizing-principles.yaml).
+/// Layer key → display_name (from taxonomy.yaml).
 pub fn layer_display_name(key: &str, doc: &OrganizingDoc) -> String {
     for realm in &doc.realms {
         for layer in &realm.layers {
@@ -126,13 +127,13 @@ pub fn layer_display_name(key: &str, doc: &OrganizingDoc) -> String {
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct ExpandedEdge {
     pub from: String,
-    pub rel_type: String,
+    pub arc_type: String,
     pub to: String,
     pub family: ArcFamily,
 }
 
 /// Expand multi-source/target relations into concrete edges, filtering wildcards.
-pub fn expand_edges(relations: &[RelationDef]) -> Vec<ExpandedEdge> {
+pub fn expand_edges(relations: &[ArcDef]) -> Vec<ExpandedEdge> {
     let mut edges = Vec::new();
     for rel in relations {
         let sources = rel.source.labels();
@@ -147,7 +148,7 @@ pub fn expand_edges(relations: &[RelationDef]) -> Vec<ExpandedEdge> {
                 }
                 edges.push(ExpandedEdge {
                     from: src.to_string(),
-                    rel_type: rel.rel_type.clone(),
+                    arc_type: rel.arc_type.clone(),
                     to: tgt.to_string(),
                     family: rel.family,
                 });
@@ -184,7 +185,7 @@ pub fn write_edges_and_styles(out: &mut String, edges: &[ExpandedEdge]) {
         writeln!(
             out,
             "  {} {}|{}| {}",
-            edge.from, arrow, edge.rel_type, edge.to
+            edge.from, arrow, edge.arc_type, edge.to
         )
         .unwrap();
         edge_indices_by_family
@@ -239,15 +240,15 @@ impl super::Generator for MermaidGenerator {
 
     fn generate(&self, root: &Path) -> crate::Result<String> {
         let nodes = yaml_node::load_all_nodes(root)?;
-        let rels_doc = relations::load_relations(root)?;
+        let rels_doc = arcs::load_arcs(root)?;
         let org_doc = organizing::load_organizing(root)?;
-        render_mermaid(&nodes, &rels_doc.relations, &org_doc)
+        render_mermaid(&nodes, &rels_doc.arcs, &org_doc)
     }
 }
 
 fn render_mermaid(
     nodes: &[ParsedNode],
-    relations: &[RelationDef],
+    relations: &[ArcDef],
     org_doc: &OrganizingDoc,
 ) -> crate::Result<String> {
     let edges = expand_edges(relations);
@@ -286,7 +287,7 @@ fn render_mermaid(
     .unwrap();
     writeln!(
         out,
-        "  %% Source: 44 node YAMLs + relations.yaml + organizing-principles.yaml"
+        "  %% Source: 44 node YAMLs + relations.yaml + taxonomy.yaml"
     )
     .unwrap();
     writeln!(out).unwrap();
@@ -295,7 +296,7 @@ fn render_mermaid(
     write_classdefs(&mut out);
 
     // ── Subgraphs — Realm > Layer > Nodes ─────────────────────────────────
-    // Use ordering from organizing-principles.yaml for realm/layer order
+    // Use ordering from taxonomy.yaml for realm/layer order
     for realm_def in &org_doc.realms {
         let Some(layer_map) = realm_layer_nodes.get(&realm_def.key) else {
             continue;
@@ -461,8 +462,8 @@ pub fn wrap_in_markdown(mermaid_code: &str) -> String {
 mod tests {
     use super::*;
     use crate::generators::Generator;
+    use crate::parsers::arcs::{ArcDef, Cardinality, NodeRef};
     use crate::parsers::organizing::{ArcFamilyDef, LayerDef, RealmDef, TraitDef};
-    use crate::parsers::relations::{Cardinality, NodeRef, RelationDef};
     use crate::parsers::yaml_node::{LocaleBehavior, NodeDef, ParsedNode};
     use std::path::PathBuf;
 
@@ -484,13 +485,13 @@ mod tests {
             },
             realm: realm.to_string(),
             layer: layer.to_string(),
-            source_path: PathBuf::from(format!("nodes/{realm}/{layer}/{name}.yaml")),
+            source_path: PathBuf::from(format!("node-kinds/{realm}/{layer}/{name}.yaml")),
         }
     }
 
-    fn make_rel(rel_type: &str, family: ArcFamily, source: &str, target: &str) -> RelationDef {
-        RelationDef {
-            rel_type: rel_type.to_string(),
+    fn make_rel(rel_type: &str, family: ArcFamily, source: &str, target: &str) -> ArcDef {
+        ArcDef {
+            arc_type: rel_type.to_string(),
             family,
             source: NodeRef::Single(source.to_string()),
             target: NodeRef::Single(target.to_string()),
@@ -573,8 +574,8 @@ mod tests {
 
     #[test]
     fn expand_edges_multi_source_target() {
-        let rel = RelationDef {
-            rel_type: "HAS_OUTPUT".to_string(),
+        let rel = ArcDef {
+            arc_type: "HAS_OUTPUT".to_string(),
             family: ArcFamily::Generation,
             source: NodeRef::Multiple(vec!["Page".to_string(), "Block".to_string()]),
             target: NodeRef::Multiple(vec!["PageL10n".to_string(), "BlockL10n".to_string()]),

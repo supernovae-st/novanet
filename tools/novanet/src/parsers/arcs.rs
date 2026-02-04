@@ -1,7 +1,12 @@
-//! Parse `relations.yaml` (v9.5 list format + family + multi-source/target).
+//! Parse arc definitions from `relations.yaml`.
 //!
-//! Every relation in v9.5 has a `family` (ownership/localization/semantic/generation/mining),
+//! Every arc in v9.5 has a `family` (ownership/localization/semantic/generation/mining),
 //! and `source`/`target` can be a single label or a list of labels.
+//!
+//! Key types:
+//! - `ArcsDocument` — top-level document with all arc definitions
+//! - `ArcDef` — single arc definition (type, family, source, target, cardinality)
+//! - `ArcFamily` — the 5 arc families
 
 use serde::Deserialize;
 use smallvec::{SmallVec, smallvec};
@@ -106,11 +111,12 @@ impl NodeRef {
 // YAML Structs
 // ─────────────────────────────────────────────────────────────────────────────
 
-/// Top-level relations.yaml document.
+/// Top-level arcs document (from relations.yaml).
 #[derive(Debug, Deserialize)]
-pub struct RelationsDocument {
-    /// The 50 relation definitions.
-    pub relations: Vec<RelationDef>,
+pub struct ArcsDocument {
+    /// The 75 arc definitions.
+    #[serde(alias = "relations")]
+    pub arcs: Vec<ArcDef>,
 
     /// SEMANTIC_LINK subtypes (10 entries: is_action_on, includes, etc.).
     #[serde(default)]
@@ -121,13 +127,22 @@ pub struct RelationsDocument {
     pub examples: Option<serde_yaml::Value>,
 }
 
-/// A single relation/arc definition.
-/// v9.5 Note: RelationDef is now ArcDef. RelationDef is kept for backwards compatibility.
+/// Backwards compatibility alias.
+pub type RelationsDocument = ArcsDocument;
+
+impl ArcsDocument {
+    /// Backwards compatibility: access arcs via `relations` field name.
+    pub fn relations(&self) -> &[ArcDef] {
+        &self.arcs
+    }
+}
+
+/// A single arc definition.
 #[derive(Debug, Clone, Deserialize)]
-pub struct RelationDef {
-    /// Relationship type (SCREAMING_SNAKE_CASE), e.g. "HAS_PAGE".
+pub struct ArcDef {
+    /// Arc type (SCREAMING_SNAKE_CASE), e.g. "HAS_PAGE".
     #[serde(rename = "type")]
-    pub rel_type: String,
+    pub arc_type: String,
 
     /// Arc family classification.
     pub family: ArcFamily,
@@ -157,16 +172,21 @@ pub struct RelationDef {
     pub inverse_of: Option<String>,
 }
 
-/// Type alias for v9.5 Arc terminology.
-pub type ArcDef = RelationDef;
+/// Backwards compatibility alias.
+pub type RelationDef = ArcDef;
 
-impl RelationDef {
-    /// Returns true if this relation has an `inverse_of` field.
+impl ArcDef {
+    /// Backwards compatibility: access arc_type via `rel_type`.
+    pub fn rel_type(&self) -> &str {
+        &self.arc_type
+    }
+
+    /// Returns true if this arc has an `inverse_of` field.
     pub fn is_inverse(&self) -> bool {
         self.inverse_of.is_some()
     }
 
-    /// Returns true if this relation carries properties on the edge.
+    /// Returns true if this arc carries properties.
     pub fn has_properties(&self) -> bool {
         self.properties.as_ref().is_some_and(|p| !p.is_empty())
     }
@@ -176,14 +196,14 @@ impl RelationDef {
 // Loader
 // ─────────────────────────────────────────────────────────────────────────────
 
-/// Load and parse `relations.yaml` from `<root>/packages/core/models/relations.yaml`.
+/// Load and parse arc definitions from `relations.yaml`.
 ///
 /// # Errors
 ///
 /// - `NovaNetError::Validation` if the file doesn't exist
 /// - `NovaNetError::Schema` if YAML parsing fails (including missing required fields)
 /// - `NovaNetError::Io` on filesystem errors
-pub fn load_relations(root: &Path) -> crate::Result<RelationsDocument> {
+pub fn load_arcs(root: &Path) -> crate::Result<ArcsDocument> {
     let path = crate::config::relations_path(root);
 
     if !path.exists() {
@@ -195,19 +215,24 @@ pub fn load_relations(root: &Path) -> crate::Result<RelationsDocument> {
 
     let content = std::fs::read_to_string(&path)?;
 
-    let doc: RelationsDocument =
+    let doc: ArcsDocument =
         serde_yaml::from_str(&content).map_err(|e| crate::NovaNetError::Schema {
             path: path.display().to_string(),
             source: e,
         })?;
 
-    if doc.relations.is_empty() {
+    if doc.arcs.is_empty() {
         return Err(crate::NovaNetError::Validation(
-            "relations.yaml contains no relation definitions".to_string(),
+            "relations.yaml contains no arc definitions".to_string(),
         ));
     }
 
     Ok(doc)
+}
+
+/// Backwards compatibility alias.
+pub fn load_relations(root: &Path) -> crate::Result<ArcsDocument> {
+    load_arcs(root)
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -219,7 +244,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn edge_family_deserialize() {
+    fn arc_family_deserialize() {
         for (yaml, expected) in [
             ("ownership", ArcFamily::Ownership),
             ("localization", ArcFamily::Localization),
@@ -264,7 +289,7 @@ mod tests {
     }
 
     #[test]
-    fn parse_single_relation() {
+    fn parse_single_arc() {
         let yaml = r#"
 relations:
   - type: HAS_PAGE
@@ -274,21 +299,21 @@ relations:
     cardinality: one_to_many
     llm_context: "Project owns pages."
 "#;
-        let doc: RelationsDocument = serde_yaml::from_str(yaml).unwrap();
-        assert_eq!(doc.relations.len(), 1);
+        let doc: ArcsDocument = serde_yaml::from_str(yaml).unwrap();
+        assert_eq!(doc.arcs.len(), 1);
 
-        let rel = &doc.relations[0];
-        assert_eq!(rel.rel_type, "HAS_PAGE");
-        assert_eq!(rel.family, ArcFamily::Ownership);
-        assert_eq!(rel.source.labels().as_slice(), ["Project"]);
-        assert_eq!(rel.target.labels().as_slice(), ["Page"]);
-        assert_eq!(rel.cardinality, Cardinality::OneToMany);
-        assert!(!rel.is_inverse());
-        assert!(!rel.has_properties());
+        let arc = &doc.arcs[0];
+        assert_eq!(arc.arc_type, "HAS_PAGE");
+        assert_eq!(arc.family, ArcFamily::Ownership);
+        assert_eq!(arc.source.labels().as_slice(), ["Project"]);
+        assert_eq!(arc.target.labels().as_slice(), ["Page"]);
+        assert_eq!(arc.cardinality, Cardinality::OneToMany);
+        assert!(!arc.is_inverse());
+        assert!(!arc.has_properties());
     }
 
     #[test]
-    fn parse_relation_with_properties() {
+    fn parse_arc_with_properties() {
         let yaml = r#"
 relations:
   - type: HAS_BLOCK
@@ -300,10 +325,10 @@ relations:
       - position
     llm_context: "Page contains ordered blocks."
 "#;
-        let doc: RelationsDocument = serde_yaml::from_str(yaml).unwrap();
-        let rel = &doc.relations[0];
-        assert!(rel.has_properties());
-        assert_eq!(rel.properties.as_ref().unwrap(), &["position"]);
+        let doc: ArcsDocument = serde_yaml::from_str(yaml).unwrap();
+        let arc = &doc.arcs[0];
+        assert!(arc.has_properties());
+        assert_eq!(arc.properties.as_ref().unwrap(), &["position"]);
     }
 
     #[test]
@@ -321,14 +346,14 @@ relations:
     cardinality: many_to_one
     llm_context: "Types."
 "#;
-        let doc: RelationsDocument = serde_yaml::from_str(yaml).unwrap();
-        let rel = &doc.relations[0];
-        assert_eq!(rel.source.labels().as_slice(), ["Page", "Block"]);
-        assert_eq!(rel.target.labels().as_slice(), ["PageType", "BlockType"]);
+        let doc: ArcsDocument = serde_yaml::from_str(yaml).unwrap();
+        let arc = &doc.arcs[0];
+        assert_eq!(arc.source.labels().as_slice(), ["Page", "Block"]);
+        assert_eq!(arc.target.labels().as_slice(), ["PageType", "BlockType"]);
     }
 
     #[test]
-    fn parse_inverse_relation() {
+    fn parse_inverse_arc() {
         let yaml = r#"
 relations:
   - type: BLOCK_OF
@@ -339,14 +364,14 @@ relations:
     inverse_of: HAS_BLOCK
     llm_context: "Inverse."
 "#;
-        let doc: RelationsDocument = serde_yaml::from_str(yaml).unwrap();
-        let rel = &doc.relations[0];
-        assert!(rel.is_inverse());
-        assert_eq!(rel.inverse_of.as_deref(), Some("HAS_BLOCK"));
+        let doc: ArcsDocument = serde_yaml::from_str(yaml).unwrap();
+        let arc = &doc.arcs[0];
+        assert!(arc.is_inverse());
+        assert_eq!(arc.inverse_of.as_deref(), Some("HAS_BLOCK"));
     }
 
     #[test]
-    fn parse_self_referential() {
+    fn parse_self_referential_arc() {
         let yaml = r#"
 relations:
   - type: FALLBACK_TO
@@ -357,13 +382,13 @@ relations:
     is_self_referential: true
     llm_context: "Fallback chain."
 "#;
-        let doc: RelationsDocument = serde_yaml::from_str(yaml).unwrap();
-        let rel = &doc.relations[0];
-        assert_eq!(rel.is_self_referential, Some(true));
+        let doc: ArcsDocument = serde_yaml::from_str(yaml).unwrap();
+        let arc = &doc.arcs[0];
+        assert_eq!(arc.is_self_referential, Some(true));
     }
 
     #[test]
-    fn load_relations_integration() {
+    fn load_arcs_integration() {
         // Requires actual monorepo
         let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
             .parent()
@@ -374,13 +399,13 @@ relations:
             return;
         }
 
-        let doc = load_relations(root).expect("should parse relations.yaml");
+        let doc = load_arcs(root).expect("should parse relations.yaml");
 
-        // Total relation count
-        assert_eq!(doc.relations.len(), 75, "expected 75 relations");
+        // Total arc count
+        assert_eq!(doc.arcs.len(), 75, "expected 75 arcs");
 
         // Family distribution
-        let family_count = |f: ArcFamily| doc.relations.iter().filter(|r| r.family == f).count();
+        let family_count = |f: ArcFamily| doc.arcs.iter().filter(|a| a.family == f).count();
         assert_eq!(family_count(ArcFamily::Ownership), 15, "ownership count");
         assert_eq!(
             family_count(ArcFamily::Localization),
@@ -391,23 +416,23 @@ relations:
         assert_eq!(family_count(ArcFamily::Generation), 15, "generation count");
         assert_eq!(family_count(ArcFamily::Mining), 9, "mining count");
 
-        // All relations have non-empty type and llm_context
-        for rel in &doc.relations {
-            assert!(!rel.rel_type.is_empty(), "empty rel_type");
+        // All arcs have non-empty type and llm_context
+        for arc in &doc.arcs {
+            assert!(!arc.arc_type.is_empty(), "empty arc_type");
             assert!(
-                !rel.llm_context.is_empty(),
+                !arc.llm_context.is_empty(),
                 "empty llm_context for {}",
-                rel.rel_type
+                arc.arc_type
             );
-            assert!(!rel.source.is_empty(), "empty source for {}", rel.rel_type);
-            assert!(!rel.target.is_empty(), "empty target for {}", rel.rel_type);
+            assert!(!arc.source.is_empty(), "empty source for {}", arc.arc_type);
+            assert!(!arc.target.is_empty(), "empty target for {}", arc.arc_type);
         }
 
-        // Unique relation types
-        let mut types: Vec<&str> = doc.relations.iter().map(|r| r.rel_type.as_str()).collect();
+        // Unique arc types
+        let mut types: Vec<&str> = doc.arcs.iter().map(|a| a.arc_type.as_str()).collect();
         types.sort();
         types.dedup();
-        assert_eq!(types.len(), 75, "all relation types should be unique");
+        assert_eq!(types.len(), 75, "all arc types should be unique");
 
         // Semantic link types
         let slt = doc
@@ -417,20 +442,16 @@ relations:
         assert_eq!(slt.len(), 10, "expected 10 semantic link types");
 
         // Spot-checks
-        let has_page = doc
-            .relations
-            .iter()
-            .find(|r| r.rel_type == "HAS_PAGE")
-            .unwrap();
+        let has_page = doc.arcs.iter().find(|a| a.arc_type == "HAS_PAGE").unwrap();
         assert_eq!(has_page.family, ArcFamily::Ownership);
         assert_eq!(has_page.source.labels().as_slice(), ["Project"]);
         assert_eq!(has_page.target.labels().as_slice(), ["Page"]);
         assert_eq!(has_page.cardinality, Cardinality::OneToMany);
 
         let for_locale = doc
-            .relations
+            .arcs
             .iter()
-            .find(|r| r.rel_type == "FOR_LOCALE")
+            .find(|a| a.arc_type == "FOR_LOCALE")
             .unwrap();
         assert_eq!(for_locale.family, ArcFamily::Localization);
         assert_eq!(for_locale.source.len(), 9, "FOR_LOCALE has 9 sources");

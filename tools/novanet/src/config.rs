@@ -37,21 +37,23 @@ pub fn models_dir(root: &Path) -> PathBuf {
     root.join("packages/core/models")
 }
 
-pub fn nodes_dir(root: &Path) -> PathBuf {
-    root.join("packages/core/models/nodes")
+pub fn node_kinds_dir(root: &Path) -> PathBuf {
+    root.join("packages/core/models/node-kinds")
 }
 
 pub fn relations_path(root: &Path) -> PathBuf {
     root.join("packages/core/models/relations.yaml")
 }
 
-pub fn organizing_principles_path(root: &Path) -> PathBuf {
-    root.join("packages/core/models/organizing-principles.yaml")
-}
-
-/// Path to taxonomy.yaml (v9.5 replacement for organizing-principles.yaml)
+/// Path to taxonomy.yaml (v9.5 - realms, layers, traits, arc families)
 pub fn taxonomy_path(root: &Path) -> PathBuf {
     root.join("packages/core/models/taxonomy.yaml")
+}
+
+/// Deprecated: use taxonomy_path() instead
+#[deprecated(since = "9.5.0", note = "use taxonomy_path() instead")]
+pub fn organizing_principles_path(root: &Path) -> PathBuf {
+    taxonomy_path(root)
 }
 
 /// Directory containing arc-kinds YAML files
@@ -94,11 +96,11 @@ mod tests {
     }
 
     #[test]
-    fn nodes_dir_joins_correctly() {
+    fn node_kinds_dir_joins_correctly() {
         let root = Path::new("/fake/root");
         assert_eq!(
-            nodes_dir(root),
-            PathBuf::from("/fake/root/packages/core/models/nodes")
+            node_kinds_dir(root),
+            PathBuf::from("/fake/root/packages/core/models/node-kinds")
         );
     }
 
@@ -112,21 +114,20 @@ mod tests {
     }
 
     #[test]
-    fn organizing_principles_path_joins_correctly() {
-        let root = Path::new("/fake/root");
-        assert_eq!(
-            organizing_principles_path(root),
-            PathBuf::from("/fake/root/packages/core/models/organizing-principles.yaml")
-        );
-    }
-
-    #[test]
     fn taxonomy_path_joins_correctly() {
         let root = Path::new("/fake/root");
         assert_eq!(
             taxonomy_path(root),
             PathBuf::from("/fake/root/packages/core/models/taxonomy.yaml")
         );
+    }
+
+    #[test]
+    #[allow(deprecated)]
+    fn organizing_principles_path_redirects_to_taxonomy() {
+        let root = Path::new("/fake/root");
+        // Deprecated function should redirect to taxonomy_path
+        assert_eq!(organizing_principles_path(root), taxonomy_path(root));
     }
 
     #[test]

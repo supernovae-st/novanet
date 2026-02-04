@@ -1,0 +1,23 @@
+# packages/core/models/arc-kinds/semantic/fills-slot.yaml
+# ArcKind: FILLS_SLOT — Block fills slot (A/B testing)
+
+arc:
+  name: FILLS_SLOT
+  family: semantic
+  scope: intra_realm
+  source: Block
+  target: ContentSlot
+  cardinality: many_to_many
+  properties:
+    - name: variant_id
+      type: string
+      required: false
+    - name: traffic_allocation
+      type: string
+      required: false
+    - name: is_control
+      type: string
+      required: false
+  llm_context: "Block fills slot (A/B testing). variant_id: unique variant. traffic_allocation:
+    0.0-1.0. is_control: baseline."
+  cypher_pattern: (Block)-[:FILLS_SLOT {variant_id, traffic_allocation, is_control}]->(ContentSlot)

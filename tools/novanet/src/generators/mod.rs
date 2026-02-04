@@ -1,6 +1,6 @@
 //! Code generators that replace @novanet/schema-tools.
 //!
-//! Generator execution order: Organizing → Kind → ArcSchema → Layer → Mermaid → Autowire → Hierarchy → Colors → Icons
+//! Generator execution order: Organizing → Kind → ArcSchema → Layer → Mermaid → Autowire → Hierarchy → Colors → Icons → VisualEncoding
 //!
 //! Each generator reads parsed YAML and produces either:
 //! - Cypher statements (for Neo4j seeding)
@@ -18,6 +18,7 @@ pub mod layer;
 pub mod mermaid;
 pub mod organizing;
 pub mod view_mermaid;
+pub mod visual_encoding;
 
 use std::path::Path;
 

@@ -444,11 +444,11 @@ async fn main() -> color_eyre::Result<()> {
                     props,
                 } => {
                     eprintln!("novanet relation create --from={from} --to={to} --type={rel_type}");
-                    novanet::commands::relation::run_create(&db, from, to, rel_type, props).await?;
+                    novanet::commands::arc::run_create(&db, from, to, rel_type, props).await?;
                 }
                 RelationAction::Delete { from, to, rel_type } => {
                     eprintln!("novanet relation delete --from={from} --to={to} --type={rel_type}");
-                    novanet::commands::relation::run_delete(&db, from, to, rel_type).await?;
+                    novanet::commands::arc::run_delete(&db, from, to, rel_type).await?;
                 }
             }
         }

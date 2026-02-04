@@ -1,0 +1,12 @@
+# packages/core/models/arc-kinds/localization/has-rules-formatting.yaml
+# ArcKind: HAS_RULES_FORMATTING — Text formatting rules: number formats, currency placement, patterns
+
+arc:
+  name: HAS_RULES_FORMATTING
+  family: localization
+  scope: intra_realm
+  source: Locale
+  target: LocaleRulesFormatting
+  cardinality: one_to_one
+  llm_context: "Text formatting rules: number formats, currency placement, patterns."
+  cypher_pattern: (Locale)-[:HAS_RULES_FORMATTING]->(LocaleRulesFormatting)

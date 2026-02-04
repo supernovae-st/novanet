@@ -1,0 +1,19 @@
+# packages/core/models/arc-kinds/localization/has-localized-content.yaml
+# ArcKind: HAS_LOCALIZED_CONTENT — Inverse of FOR_LOCALE — locale knows all its content
+
+arc:
+  name: HAS_LOCALIZED_CONTENT
+  family: localization
+  scope: intra_realm
+  source: Locale
+  target:
+    - ProjectL10n
+    - ConceptL10n
+    - PageL10n
+    - BlockL10n
+    - SEOKeywordL10n
+    - GEOSeedL10n
+  cardinality: one_to_many
+  inverse_of: FOR_LOCALE
+  llm_context: Inverse of FOR_LOCALE — locale knows all its content.
+  cypher_pattern: (Locale)-[:HAS_LOCALIZED_CONTENT]->(ProjectL10n)

@@ -1,0 +1,23 @@
+# packages/core/models/arc-kinds/semantic/mentions.yaml
+# ArcKind: MENTIONS — Block mentions a Thing entity
+
+arc:
+  name: MENTIONS
+  family: semantic
+  scope: intra_realm
+  source: Block
+  target: Thing
+  cardinality: many_to_many
+  properties:
+    - name: position
+      type: string
+      required: false
+    - name: link_style
+      type: string
+      required: false
+    - name: anchor_alias
+      type: string
+      required: false
+  llm_context: "Block mentions a Thing entity. position: paragraph index. link_style:
+    inline/citation/reference. anchor_alias: which alias to use for anchor text."
+  cypher_pattern: (Block)-[:MENTIONS {position, link_style, anchor_alias}]->(Thing)

@@ -1,0 +1,16 @@
+# packages/core/models/arc-kinds/ownership/of-type.yaml
+# ArcKind: OF_TYPE — Page/Block references its type template (v7
+
+arc:
+  name: OF_TYPE
+  family: ownership
+  scope: intra_realm
+  source:
+    - Page
+    - Block
+  target:
+    - PageType
+    - BlockType
+  cardinality: many_to_one
+  llm_context: "Page/Block references its type template (v7.10.0: Page→PageType, Block→BlockType)."
+  cypher_pattern: (Page)-[:OF_TYPE]->(PageType)

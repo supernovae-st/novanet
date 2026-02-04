@@ -122,7 +122,7 @@ The TUI provides an immersive terminal experience for exploring the NovaNet know
 - **SuperNovae color palette**: Deep space blues, nebula purples, star golds
 - **Realm colors**: Global (emerald), Project (violet), Shared (amber)
 - **Layer colors**: 9 distinct colors for each functional layer
-- **EdgeFamily colors**: 5 relationship type colors
+- **ArcFamily colors**: 5 relationship type colors
 
 ### Boot Animation (First Launch)
 

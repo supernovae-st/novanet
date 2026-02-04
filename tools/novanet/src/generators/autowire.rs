@@ -91,7 +91,7 @@ fn generate_autowire(nodes: &[yaml_node::ParsedNode]) -> crate::Result<String> {
     for &realm_key in REALM_ORDER {
         let Some(layers_map) = realm_map.get(realm_key) else {
             return Err(crate::NovaNetError::Validation(format!(
-                "realm '{realm_key}' has no nodes — expected nodes under models/nodes/{realm_key}/"
+                "realm '{realm_key}' has no nodes — expected nodes under models/node-kinds/{realm_key}/"
             )));
         };
 
@@ -205,7 +205,7 @@ mod tests {
             realm: realm.to_string(),
             layer: layer.to_string(),
             source_path: std::path::PathBuf::from(format!(
-                "models/nodes/{realm}/{layer}/{name}.yaml"
+                "models/node-kinds/{realm}/{layer}/{name}.yaml"
             )),
         }
     }

@@ -6,8 +6,9 @@
 //! Output target: `packages/core/models/docs/<view-id>.md` (one per view)
 
 use crate::generators::mermaid::{self, ExpandedEdge};
+use crate::parsers::arcs;
+use crate::parsers::arcs::ArcDef;
 use crate::parsers::organizing::{self, OrganizingDoc};
-use crate::parsers::relations::{self, RelationDef};
 use crate::parsers::views::{Direction, IncludeRule, ViewDef, ViewLayer};
 use crate::parsers::yaml_node::{self, ParsedNode};
 use std::collections::{BTreeMap, HashMap, HashSet};
@@ -25,7 +26,7 @@ pub struct ViewGraph {
 }
 
 /// Walk view include rules on the schema to find reachable types and edges.
-pub fn resolve_view_graph(view: &ViewDef, relations: &[RelationDef]) -> ViewGraph {
+pub fn resolve_view_graph(view: &ViewDef, relations: &[ArcDef]) -> ViewGraph {
     let mut graph = ViewGraph {
         reachable: HashSet::from([view.root.node_type.clone()]),
         edges: Vec::new(),
@@ -42,13 +43,13 @@ pub fn resolve_view_graph(view: &ViewDef, relations: &[RelationDef]) -> ViewGrap
 fn walk_rules(
     frontier: &HashSet<String>,
     rules: &[IncludeRule],
-    relations: &[RelationDef],
+    relations: &[ArcDef],
     graph: &mut ViewGraph,
 ) {
     for rule in rules {
         let mut new_targets: HashSet<String> = HashSet::new();
 
-        for rel in relations.iter().filter(|r| r.rel_type == rule.relation) {
+        for rel in relations.iter().filter(|r| r.arc_type == rule.relation) {
             // Outgoing: edges from frontier types
             if matches!(rule.direction, Direction::Outgoing | Direction::Both) {
                 for src in frontier {
@@ -56,7 +57,7 @@ fn walk_rules(
                         for tgt in rel.target.labels() {
                             graph.edges.push(ExpandedEdge {
                                 from: src.clone(),
-                                rel_type: rule.relation.clone(),
+                                arc_type: rule.relation.clone(),
                                 to: tgt.to_string(),
                                 family: rel.family,
                             });
@@ -73,7 +74,7 @@ fn walk_rules(
                         for src in rel.source.labels() {
                             graph.edges.push(ExpandedEdge {
                                 from: src.to_string(),
-                                rel_type: rule.relation.clone(),
+                                arc_type: rule.relation.clone(),
                                 to: tgt.clone(),
                                 family: rel.family,
                             });
@@ -102,10 +103,10 @@ fn walk_rules(
 /// Generate a complete Mermaid-in-Markdown document for a single view.
 pub fn generate_view(root: &Path, view: &ViewDef) -> crate::Result<String> {
     let nodes = yaml_node::load_all_nodes(root)?;
-    let rels_doc = relations::load_relations(root)?;
+    let rels_doc = arcs::load_arcs(root)?;
     let org_doc = organizing::load_organizing(root)?;
 
-    let view_graph = resolve_view_graph(view, &rels_doc.relations);
+    let view_graph = resolve_view_graph(view, &rels_doc.arcs);
 
     let view_nodes: Vec<&ParsedNode> = nodes
         .iter()
@@ -371,12 +372,12 @@ fn wrap_view_markdown(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::parsers::relations::{ArcFamily, Cardinality, NodeRef, RelationDef};
+    use crate::parsers::arcs::{ArcDef, ArcFamily, Cardinality, NodeRef};
     use crate::parsers::views::{Direction, IncludeRule, RootDef, ViewDef};
 
-    fn make_rel(rel_type: &str, family: ArcFamily, source: &str, target: &str) -> RelationDef {
-        RelationDef {
-            rel_type: rel_type.to_string(),
+    fn make_rel(rel_type: &str, family: ArcFamily, source: &str, target: &str) -> ArcDef {
+        ArcDef {
+            arc_type: rel_type.to_string(),
             family,
             source: NodeRef::Single(source.to_string()),
             target: NodeRef::Single(target.to_string()),
@@ -517,8 +518,8 @@ mod tests {
 
     #[test]
     fn resolve_multi_source_target() {
-        let rel = RelationDef {
-            rel_type: "OF_TYPE".to_string(),
+        let rel = ArcDef {
+            arc_type: "OF_TYPE".to_string(),
             family: ArcFamily::Ownership,
             source: NodeRef::Multiple(vec!["Page".to_string(), "Block".to_string()]),
             target: NodeRef::Multiple(vec!["PageType".to_string(), "BlockType".to_string()]),

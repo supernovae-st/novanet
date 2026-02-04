@@ -125,7 +125,7 @@ Rules that apply only when working with matching files.
 |-----------|-------|---------|
 | `rust.md` | `tools/novanet/**/*.rs` | Error handling, async patterns, module structure |
 | `typescript.md` | `packages/**/*.ts`, `apps/**/*.tsx` | Type safety, React patterns, v9 terminology |
-| `cypher.md` | `packages/db/seed/**/*.cypher` | Meta-graph navigation, EdgeFamily patterns |
+| `cypher.md` | `packages/db/seed/**/*.cypher` | Meta-graph navigation, ArcFamily patterns |
 
 Rules use YAML frontmatter with `paths:` field for scoping:
 
@@ -260,7 +260,7 @@ Master command for schema management.
 
 **Example:**
 ```bash
-/schema status     # Show current schema stats (44 Kinds, 50 EdgeKinds, 3 Realms, 9 Layers)
+/schema status     # Show current schema stats (44 Kinds, 76 ArcKinds, 3 Realms, 9 Layers)
 ```
 
 ---
@@ -319,14 +319,14 @@ Modify an existing node type with impact analysis.
 Add a new relationship type between nodes.
 
 **Workflow:**
-1. **Discovery** - Ask about from/to Kinds, cardinality, properties, EdgeFamily
-2. **Classification** - Assign to EdgeFamily (ownership/localization/semantic/generation/mining)
+1. **Discovery** - Ask about from/to Kinds, cardinality, properties, ArcFamily
+2. **Classification** - Assign to ArcFamily (ownership/localization/semantic/generation/mining)
 3. **Bidirectionality** - Check if inverse relation needed
 4. **Creation** - Add to relations.yaml with `family` field, update node YAMLs
 5. **Sync** - Validate and seed
 
 **Naming Conventions:**
-| Pattern | EdgeFamily | Examples |
+| Pattern | ArcFamily | Examples |
 |---------|-----------|----------|
 | `HAS_*` | ownership | HAS_PAGE, HAS_BLOCK, HAS_CONCEPT |
 | `HAS_L10N` | localization | Concept→ConceptL10n, Project→ProjectL10n |
@@ -352,7 +352,7 @@ Add a new relationship type between nodes.
 
 **Provides:**
 - Full architecture ASCII diagram
-- v9 Meta-Graph (faceted classification with Realm/Layer/Kind/Trait/EdgeFamily)
+- v9 Meta-Graph (faceted classification with Realm/Layer/Kind/Trait/ArcFamily)
 - Source of Truth structure
 - Pipeline sync diagram (4 generators + Rust validation)
 - Locale Knowledge structure
@@ -425,7 +425,7 @@ Add a new relationship type between nodes.
 
 **Specialization:**
 - Graph schema design for AI context
-- v9 Meta-Graph navigation (Realm/Layer/Kind/Trait/EdgeFamily)
+- v9 Meta-Graph navigation (Realm/Layer/Kind/Trait/ArcFamily)
 - Efficient Cypher queries (data + meta-graph)
 - Performance optimization
 - Spreading activation patterns
@@ -491,10 +491,10 @@ Located in `apps/studio/.claude/rules/`:
 
 Domain vocabulary reference (v9.0.0):
 - Core concepts (Project, Concept, Page, Block, Locale, Context Graph)
-- Meta-Graph: 6 meta-node types (Realm, Layer, Kind, Trait, EdgeFamily, EdgeKind)
+- Meta-Graph: 6 meta-node types (Realm, Layer, Kind, Trait, ArcFamily, ArcKind)
 - Full Kind Inventory (44 Kinds across 3 Realms)
-- Meta-Graph relations (hierarchy, facets, edge schema, instance bridge)
-- Key data relations (grouped by EdgeFamily)
+- Meta-Graph relations (hierarchy, facets, arc schema, instance bridge)
+- Key data relations (grouped by ArcFamily)
 - v8 → v9 rename mapping
 - Locale Knowledge structure (14 nodes)
 - Standard properties
@@ -524,12 +524,12 @@ Architecture Decision Records (ADRs):
 
 | Metric | Value |
 |--------|-------|
-| Kind (node types) | 35 |
-| EdgeKind (relations) | 50 |
+| Kind (node types) | 44 |
+| ArcKind (relations) | 76 |
 | Realms | 3 (global, project, shared) |
 | Layers | 9 |
 | Traits | 5 |
-| EdgeFamilies | 5 |
+| ArcFamilies | 5 |
 | Meta-node total | ~108 |
 | Locale Knowledge nodes | 14 |
 | Seed files | 7 |
@@ -614,7 +614,7 @@ This README should be updated when:
 1. **Commands change** - New commands, renamed, removed
 2. **Skills updated** - New sections, new triggers
 3. **Agents modified** - New tools, changed prompts
-4. **Schema version bumps** - New Kinds, EdgeKinds, Realms, Layers
+4. **Schema version bumps** - New Kinds, ArcKinds, Realms, Layers
 5. **v9 migration milestones** - Rust binary additions, meta-graph changes
 
 **Validation:**

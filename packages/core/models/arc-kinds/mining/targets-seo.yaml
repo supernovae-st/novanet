@@ -1,0 +1,19 @@
+# packages/core/models/arc-kinds/mining/targets-seo.yaml
+# ArcKind: TARGETS_SEO — Cross-locale SEO shortcut for reporting
+
+arc:
+  name: TARGETS_SEO
+  family: mining
+  scope: intra_realm
+  source: Concept
+  target: SEOKeywordL10n
+  cardinality: one_to_many
+  properties:
+    - name: status
+      type: string
+      required: false
+    - name: priority
+      type: string
+      required: false
+  llm_context: "Cross-locale SEO shortcut for reporting. status: active/paused/archived."
+  cypher_pattern: (Concept)-[:TARGETS_SEO {status, priority}]->(SEOKeywordL10n)

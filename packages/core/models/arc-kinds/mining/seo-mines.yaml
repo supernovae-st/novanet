@@ -1,0 +1,12 @@
+# packages/core/models/arc-kinds/mining/seo-mines.yaml
+# ArcKind: SEO_MINES — SEO mining run produces keyword data
+
+arc:
+  name: SEO_MINES
+  family: mining
+  scope: intra_realm
+  source: SEOMiningRun
+  target: SEOKeywordL10n
+  cardinality: one_to_many
+  llm_context: SEO mining run produces keyword data.
+  cypher_pattern: (SEOMiningRun)-[:SEO_MINES]->(SEOKeywordL10n)

@@ -1,0 +1,16 @@
+# packages/core/models/arc-kinds/generation/produces.yaml
+# ArcKind: PRODUCES — Generation job produces output artifacts (bundles)
+
+arc:
+  name: PRODUCES
+  family: generation
+  scope: intra_realm
+  source: GenerationJob
+  target: OutputArtifact
+  cardinality: one_to_many
+  properties:
+    - name: produced_at
+      type: string
+      required: false
+  llm_context: Generation job produces output artifacts (bundles).
+  cypher_pattern: (GenerationJob)-[:PRODUCES {produced_at}]->(OutputArtifact)

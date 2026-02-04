@@ -1,0 +1,19 @@
+# packages/core/models/arc-kinds/generation/has-evaluation.yaml
+# ArcKind: HAS_EVALUATION — Content has quality evaluation signals
+
+arc:
+  name: HAS_EVALUATION
+  family: generation
+  scope: intra_realm
+  source:
+    - PageL10n
+    - BlockL10n
+    - OutputArtifact
+  target: EvaluationSignal
+  cardinality: one_to_many
+  properties:
+    - name: evaluated_at
+      type: string
+      required: false
+  llm_context: Content has quality evaluation signals. Not traversed in spreading activation.
+  cypher_pattern: (PageL10n)-[:HAS_EVALUATION {evaluated_at}]->(EvaluationSignal)

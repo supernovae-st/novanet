@@ -1,0 +1,16 @@
+# packages/core/models/arc-kinds/ownership/has-prompt.yaml
+# ArcKind: HAS_PROMPT — Links structure nodes to their AI prompts (versioned)
+
+arc:
+  name: HAS_PROMPT
+  family: ownership
+  scope: intra_realm
+  source:
+    - Page
+    - Block
+  target:
+    - PagePrompt
+    - BlockPrompt
+  cardinality: one_to_many
+  llm_context: Links structure nodes to their AI prompts (versioned).
+  cypher_pattern: (Page)-[:HAS_PROMPT]->(PagePrompt)

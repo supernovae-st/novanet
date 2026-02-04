@@ -135,13 +135,13 @@ impl App {
                     .unwrap_or_else(|_| format!("# File not found: {}", full_path.display()));
                 self.yaml_line_count = self.yaml_content.lines().count();
             }
-            // Realm, Layer → organizing-principles.yaml
+            // Realm, Layer → taxonomy.yaml
             Some(TreeItem::Realm(_))
             | Some(TreeItem::Layer(_, _))
             | Some(TreeItem::KindsSection) => {
-                let org_path = "packages/core/models/organizing-principles.yaml";
-                let full_path = Path::new(&self.root_path).join(org_path);
-                self.yaml_path = org_path.to_string();
+                let tax_path = "packages/core/models/taxonomy.yaml";
+                let full_path = Path::new(&self.root_path).join(tax_path);
+                self.yaml_path = tax_path.to_string();
                 self.yaml_content = fs::read_to_string(&full_path)
                     .unwrap_or_else(|_| format!("# File not found: {}", full_path.display()));
                 self.yaml_line_count = self.yaml_content.lines().count();

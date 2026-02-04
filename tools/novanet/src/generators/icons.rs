@@ -8,7 +8,7 @@
 //! in each node's YAML file and generated here for Studio consumption.
 
 use crate::parsers::yaml_node::{self, ParsedNode};
-use minijinja::{context, Environment};
+use minijinja::{Environment, context};
 use serde::Serialize;
 use std::path::Path;
 
@@ -52,7 +52,7 @@ import type { NodeType } from '@novanet/core/types';
  * Emoji icons for all {{ node_count }} node types.
  *
  * Each icon is defined in the node's YAML file under `node.icon`.
- * Source: packages/core/models/nodes/<realm>/<layer>/<name>.yaml
+ * Source: packages/core/models/node-kinds/<realm>/<layer>/<name>.yaml
  */
 export const NODE_ICONS: Record<NodeType, string> = {
 {%- for entry in icons %}

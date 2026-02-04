@@ -161,13 +161,13 @@ ORDER BY realm_key, layer_key, kind_key
             let yaml_path = if yaml_path_raw.is_empty() {
                 // Fallback: compute path
                 format!(
-                    "packages/core/models/nodes/{}/{}/{}.yaml",
+                    "packages/core/models/node-kinds/{}/{}/{}.yaml",
                     realm_key,
                     layer_key,
                     to_kebab_case(&kind_key)
                 )
             } else {
-                // Neo4j stores relative path like "nodes/project/structure/block.yaml"
+                // Neo4j stores relative path like "node-kinds/project/structure/block.yaml"
                 // We need to prefix with "packages/core/models/"
                 format!("packages/core/models/{}", yaml_path_raw)
             };

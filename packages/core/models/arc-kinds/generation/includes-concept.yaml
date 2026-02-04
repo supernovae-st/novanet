@@ -1,0 +1,16 @@
+# packages/core/models/arc-kinds/generation/includes-concept.yaml
+# ArcKind: INCLUDES_CONCEPT — Prompt artifact includes concept context for generation
+
+arc:
+  name: INCLUDES_CONCEPT
+  family: generation
+  scope: intra_realm
+  source: PromptArtifact
+  target: Concept
+  cardinality: one_to_many
+  properties:
+    - name: weight
+      type: string
+      required: false
+  llm_context: "Prompt artifact includes concept context for generation. weight: 0.0-1.0 influence on output."
+  cypher_pattern: (PromptArtifact)-[:INCLUDES_CONCEPT {weight}]->(Concept)

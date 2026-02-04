@@ -12,7 +12,7 @@ MERGE (k_Block:Meta:Kind {label: 'Block'})
 ON CREATE SET
   k_Block.display_name = 'Block',
   k_Block.llm_context = 'Page section instance containing sub-agent instructions and concept references',
-  k_Block.yaml_path = 'nodes/project/structure/block.yaml',
+  k_Block.yaml_path = 'node-kinds/project/structure/block.yaml',
   k_Block.properties = ['created_at', 'description', 'display_name', 'instructions', 'key', 'llm_context', 'updated_at'],
   k_Block.required_properties = ['created_at', 'description', 'display_name', 'key', 'llm_context', 'updated_at'],
   k_Block.schema_hint = 'created_at (req), description (req), display_name (req), instructions, key (req), llm_context (req), updated_at (req)',
@@ -22,7 +22,7 @@ ON CREATE SET
 ON MATCH SET
   k_Block.display_name = 'Block',
   k_Block.llm_context = 'Page section instance containing sub-agent instructions and concept references',
-  k_Block.yaml_path = 'nodes/project/structure/block.yaml',
+  k_Block.yaml_path = 'node-kinds/project/structure/block.yaml',
   k_Block.properties = ['created_at', 'description', 'display_name', 'instructions', 'key', 'llm_context', 'updated_at'],
   k_Block.required_properties = ['created_at', 'description', 'display_name', 'key', 'llm_context', 'updated_at'],
   k_Block.schema_hint = 'created_at (req), description (req), display_name (req), instructions, key (req), llm_context (req), updated_at (req)',
@@ -34,7 +34,7 @@ MERGE (k_BlockL10n:Meta:Kind {label: 'BlockL10n'})
 ON CREATE SET
   k_BlockL10n.display_name = 'BlockL10n',
   k_BlockL10n.llm_context = 'LLM-generated localized content for a block',
-  k_BlockL10n.yaml_path = 'nodes/project/output/block-l10n.yaml',
+  k_BlockL10n.yaml_path = 'node-kinds/project/output/block-l10n.yaml',
   k_BlockL10n.properties = ['created_at', 'description', 'display_name', 'generated', 'generated_at', 'generator_version', 'llm_context', 'published_at', 'replaced_at', 'status', 'updated_at', 'version'],
   k_BlockL10n.required_properties = ['created_at', 'description', 'display_name', 'generated', 'generated_at', 'generator_version', 'status', 'updated_at', 'version'],
   k_BlockL10n.schema_hint = 'created_at (req), description (req), display_name (req), generated (req), generated_at (req), generator_version (req), llm_context, published_at, replaced_at, status (req), updated_at (req), version (req)',
@@ -44,7 +44,7 @@ ON CREATE SET
 ON MATCH SET
   k_BlockL10n.display_name = 'BlockL10n',
   k_BlockL10n.llm_context = 'LLM-generated localized content for a block',
-  k_BlockL10n.yaml_path = 'nodes/project/output/block-l10n.yaml',
+  k_BlockL10n.yaml_path = 'node-kinds/project/output/block-l10n.yaml',
   k_BlockL10n.properties = ['created_at', 'description', 'display_name', 'generated', 'generated_at', 'generator_version', 'llm_context', 'published_at', 'replaced_at', 'status', 'updated_at', 'version'],
   k_BlockL10n.required_properties = ['created_at', 'description', 'display_name', 'generated', 'generated_at', 'generator_version', 'status', 'updated_at', 'version'],
   k_BlockL10n.schema_hint = 'created_at (req), description (req), display_name (req), generated (req), generated_at (req), generator_version (req), llm_context, published_at, replaced_at, status (req), updated_at (req), version (req)',
@@ -56,7 +56,7 @@ MERGE (k_BlockPrompt:Meta:Kind {label: 'BlockPrompt'})
 ON CREATE SET
   k_BlockPrompt.display_name = 'BlockPrompt',
   k_BlockPrompt.llm_context = 'AI instructions for generating a specific block with versioning',
-  k_BlockPrompt.yaml_path = 'nodes/project/instruction/block-prompt.yaml',
+  k_BlockPrompt.yaml_path = 'node-kinds/project/instruction/block-prompt.yaml',
   k_BlockPrompt.properties = ['active', 'created_at', 'description', 'display_name', 'llm_context', 'prompt', 'updated_at', 'version'],
   k_BlockPrompt.required_properties = ['active', 'created_at', 'description', 'display_name', 'prompt', 'updated_at', 'version'],
   k_BlockPrompt.schema_hint = 'active (req), created_at (req), description (req), display_name (req), llm_context, prompt (req), updated_at (req), version (req)',
@@ -66,7 +66,7 @@ ON CREATE SET
 ON MATCH SET
   k_BlockPrompt.display_name = 'BlockPrompt',
   k_BlockPrompt.llm_context = 'AI instructions for generating a specific block with versioning',
-  k_BlockPrompt.yaml_path = 'nodes/project/instruction/block-prompt.yaml',
+  k_BlockPrompt.yaml_path = 'node-kinds/project/instruction/block-prompt.yaml',
   k_BlockPrompt.properties = ['active', 'created_at', 'description', 'display_name', 'llm_context', 'prompt', 'updated_at', 'version'],
   k_BlockPrompt.required_properties = ['active', 'created_at', 'description', 'display_name', 'prompt', 'updated_at', 'version'],
   k_BlockPrompt.schema_hint = 'active (req), created_at (req), description (req), display_name (req), llm_context, prompt (req), updated_at (req), version (req)',
@@ -78,7 +78,7 @@ MERGE (k_BlockRules:Meta:Kind {label: 'BlockRules'})
 ON CREATE SET
   k_BlockRules.display_name = 'BlockRules',
   k_BlockRules.llm_context = 'Generation rules extracted from BlockType for versioning and A/B testing',
-  k_BlockRules.yaml_path = 'nodes/project/instruction/block-rules.yaml',
+  k_BlockRules.yaml_path = 'node-kinds/project/instruction/block-rules.yaml',
   k_BlockRules.properties = ['active', 'created_at', 'description', 'display_name', 'llm_context', 'rules', 'updated_at', 'version'],
   k_BlockRules.required_properties = ['active', 'created_at', 'description', 'display_name', 'rules', 'updated_at', 'version'],
   k_BlockRules.schema_hint = 'active (req), created_at (req), description (req), display_name (req), llm_context, rules (req), updated_at (req), version (req)',
@@ -88,7 +88,7 @@ ON CREATE SET
 ON MATCH SET
   k_BlockRules.display_name = 'BlockRules',
   k_BlockRules.llm_context = 'Generation rules extracted from BlockType for versioning and A/B testing',
-  k_BlockRules.yaml_path = 'nodes/project/instruction/block-rules.yaml',
+  k_BlockRules.yaml_path = 'node-kinds/project/instruction/block-rules.yaml',
   k_BlockRules.properties = ['active', 'created_at', 'description', 'display_name', 'llm_context', 'rules', 'updated_at', 'version'],
   k_BlockRules.required_properties = ['active', 'created_at', 'description', 'display_name', 'rules', 'updated_at', 'version'],
   k_BlockRules.schema_hint = 'active (req), created_at (req), description (req), display_name (req), llm_context, rules (req), updated_at (req), version (req)',
@@ -100,7 +100,7 @@ MERGE (k_BlockType:Meta:Kind {label: 'BlockType'})
 ON CREATE SET
   k_BlockType.display_name = 'BlockType',
   k_BlockType.llm_context = 'Template defining rules, structure, and L10N requirements for a type of block',
-  k_BlockType.yaml_path = 'nodes/project/instruction/block-type.yaml',
+  k_BlockType.yaml_path = 'node-kinds/project/instruction/block-type.yaml',
   k_BlockType.properties = ['category', 'created_at', 'description', 'display_name', 'key', 'llm_context', 'rules', 'structure', 'updated_at'],
   k_BlockType.required_properties = ['category', 'created_at', 'description', 'display_name', 'key', 'llm_context', 'structure', 'updated_at'],
   k_BlockType.schema_hint = 'category (req), created_at (req), description (req), display_name (req), key (req), llm_context (req), rules, structure (req), updated_at (req)',
@@ -110,7 +110,7 @@ ON CREATE SET
 ON MATCH SET
   k_BlockType.display_name = 'BlockType',
   k_BlockType.llm_context = 'Template defining rules, structure, and L10N requirements for a type of block',
-  k_BlockType.yaml_path = 'nodes/project/instruction/block-type.yaml',
+  k_BlockType.yaml_path = 'node-kinds/project/instruction/block-type.yaml',
   k_BlockType.properties = ['category', 'created_at', 'description', 'display_name', 'key', 'llm_context', 'rules', 'structure', 'updated_at'],
   k_BlockType.required_properties = ['category', 'created_at', 'description', 'display_name', 'key', 'llm_context', 'structure', 'updated_at'],
   k_BlockType.schema_hint = 'category (req), created_at (req), description (req), display_name (req), key (req), llm_context (req), rules, structure (req), updated_at (req)',
@@ -122,7 +122,7 @@ MERGE (k_BrandIdentity:Meta:Kind {label: 'BrandIdentity'})
 ON CREATE SET
   k_BrandIdentity.display_name = 'BrandIdentity',
   k_BrandIdentity.llm_context = 'Visual style, colors, typography, and artistic direction - universal across locales',
-  k_BrandIdentity.yaml_path = 'nodes/project/foundation/brand-identity.yaml',
+  k_BrandIdentity.yaml_path = 'node-kinds/project/foundation/brand-identity.yaml',
   k_BrandIdentity.properties = ['animation_style', 'border_radius', 'color_accent', 'color_background', 'color_palette', 'color_primary', 'color_secondary', 'color_text', 'created_at', 'description', 'display_name', 'font_mono', 'font_primary', 'font_secondary', 'image_do', 'image_dont', 'image_style', 'key', 'llm_context', 'logo_icon_url', 'logo_primary_url', 'logo_usage_rules', 'photo_style', 'shadow_style', 'style_influences', 'style_keywords', 'style_mood', 'typography_scale', 'updated_at'],
   k_BrandIdentity.required_properties = ['color_primary', 'created_at', 'description', 'display_name', 'font_primary', 'key', 'llm_context', 'style_keywords', 'updated_at'],
   k_BrandIdentity.schema_hint = 'animation_style, border_radius, color_accent, color_background, color_palette, color_primary (req), color_secondary, color_text, created_at (req), description (req), display_name (req), font_mono, font_primary (req), font_secondary, image_do, image_dont, image_style, key (req), llm_context (req), logo_icon_url, logo_primary_url, logo_usage_rules, photo_style, shadow_style, style_influences, style_keywords (req), style_mood, typography_scale, updated_at (req)',
@@ -132,7 +132,7 @@ ON CREATE SET
 ON MATCH SET
   k_BrandIdentity.display_name = 'BrandIdentity',
   k_BrandIdentity.llm_context = 'Visual style, colors, typography, and artistic direction - universal across locales',
-  k_BrandIdentity.yaml_path = 'nodes/project/foundation/brand-identity.yaml',
+  k_BrandIdentity.yaml_path = 'node-kinds/project/foundation/brand-identity.yaml',
   k_BrandIdentity.properties = ['animation_style', 'border_radius', 'color_accent', 'color_background', 'color_palette', 'color_primary', 'color_secondary', 'color_text', 'created_at', 'description', 'display_name', 'font_mono', 'font_primary', 'font_secondary', 'image_do', 'image_dont', 'image_style', 'key', 'llm_context', 'logo_icon_url', 'logo_primary_url', 'logo_usage_rules', 'photo_style', 'shadow_style', 'style_influences', 'style_keywords', 'style_mood', 'typography_scale', 'updated_at'],
   k_BrandIdentity.required_properties = ['color_primary', 'created_at', 'description', 'display_name', 'font_primary', 'key', 'llm_context', 'style_keywords', 'updated_at'],
   k_BrandIdentity.schema_hint = 'animation_style, border_radius, color_accent, color_background, color_palette, color_primary (req), color_secondary, color_text, created_at (req), description (req), display_name (req), font_mono, font_primary (req), font_secondary, image_do, image_dont, image_style, key (req), llm_context (req), logo_icon_url, logo_primary_url, logo_usage_rules, photo_style, shadow_style, style_influences, style_keywords (req), style_mood, typography_scale, updated_at (req)',
@@ -144,7 +144,7 @@ MERGE (k_Concept:Meta:Kind {label: 'Concept'})
 ON CREATE SET
   k_Concept.display_name = 'Concept',
   k_Concept.llm_context = 'Invariant semantic unit representing actions, objects, features, tiers, or brand elements',
-  k_Concept.yaml_path = 'nodes/project/semantic/concept.yaml',
+  k_Concept.yaml_path = 'node-kinds/project/semantic/concept.yaml',
   k_Concept.properties = ['created_at', 'description', 'display_name', 'feature_category', 'feature_priority', 'is_core', 'is_premium', 'key', 'llm_context', 'search_intent', 'updated_at'],
   k_Concept.required_properties = ['created_at', 'description', 'display_name', 'key', 'llm_context', 'updated_at'],
   k_Concept.schema_hint = 'created_at (req), description (req), display_name (req), feature_category, feature_priority, is_core, is_premium, key (req), llm_context (req), search_intent, updated_at (req)',
@@ -154,7 +154,7 @@ ON CREATE SET
 ON MATCH SET
   k_Concept.display_name = 'Concept',
   k_Concept.llm_context = 'Invariant semantic unit representing actions, objects, features, tiers, or brand elements',
-  k_Concept.yaml_path = 'nodes/project/semantic/concept.yaml',
+  k_Concept.yaml_path = 'node-kinds/project/semantic/concept.yaml',
   k_Concept.properties = ['created_at', 'description', 'display_name', 'feature_category', 'feature_priority', 'is_core', 'is_premium', 'key', 'llm_context', 'search_intent', 'updated_at'],
   k_Concept.required_properties = ['created_at', 'description', 'display_name', 'key', 'llm_context', 'updated_at'],
   k_Concept.schema_hint = 'created_at (req), description (req), display_name (req), feature_category, feature_priority, is_core, is_premium, key (req), llm_context (req), search_intent, updated_at (req)',
@@ -166,7 +166,7 @@ MERGE (k_ConceptL10n:Meta:Kind {label: 'ConceptL10n'})
 ON CREATE SET
   k_ConceptL10n.display_name = 'ConceptL10n',
   k_ConceptL10n.llm_context = 'Localized definition for a Concept in a specific locale',
-  k_ConceptL10n.yaml_path = 'nodes/project/semantic/concept-l10n.yaml',
+  k_ConceptL10n.yaml_path = 'node-kinds/project/semantic/concept-l10n.yaml',
   k_ConceptL10n.properties = ['benefits', 'created_at', 'cultural_notes', 'definition', 'description', 'display_name', 'influence_count', 'llm_context', 'purpose', 'title', 'updated_at', 'use_cases', 'version'],
   k_ConceptL10n.required_properties = ['created_at', 'definition', 'description', 'display_name', 'influence_count', 'llm_context', 'title', 'updated_at', 'version'],
   k_ConceptL10n.schema_hint = 'benefits, created_at (req), cultural_notes, definition (req), description (req), display_name (req), influence_count (req), llm_context (req), purpose, title (req), updated_at (req), use_cases, version (req)',
@@ -176,7 +176,7 @@ ON CREATE SET
 ON MATCH SET
   k_ConceptL10n.display_name = 'ConceptL10n',
   k_ConceptL10n.llm_context = 'Localized definition for a Concept in a specific locale',
-  k_ConceptL10n.yaml_path = 'nodes/project/semantic/concept-l10n.yaml',
+  k_ConceptL10n.yaml_path = 'node-kinds/project/semantic/concept-l10n.yaml',
   k_ConceptL10n.properties = ['benefits', 'created_at', 'cultural_notes', 'definition', 'description', 'display_name', 'influence_count', 'llm_context', 'purpose', 'title', 'updated_at', 'use_cases', 'version'],
   k_ConceptL10n.required_properties = ['created_at', 'definition', 'description', 'display_name', 'influence_count', 'llm_context', 'title', 'updated_at', 'version'],
   k_ConceptL10n.schema_hint = 'benefits, created_at (req), cultural_notes, definition (req), description (req), display_name (req), influence_count (req), llm_context (req), purpose, title (req), updated_at (req), use_cases, version (req)',
@@ -188,7 +188,7 @@ MERGE (k_Constraint:Meta:Kind {label: 'Constraint'})
 ON CREATE SET
   k_Constraint.display_name = 'Constraint',
   k_Constraint.llm_context = 'Cultural constraint or restriction for content generation',
-  k_Constraint.yaml_path = 'nodes/global/knowledge/constraint.yaml',
+  k_Constraint.yaml_path = 'node-kinds/global/knowledge/constraint.yaml',
   k_Constraint.properties = ['alternatives', 'constraint_type', 'created_at', 'cultural_context', 'description', 'display_name', 'enforcement', 'llm_context', 'reason', 'regulation_reference', 'safe_exceptions', 'severity', 'source_metadata', 'topic', 'trigger_keywords', 'updated_at'],
   k_Constraint.required_properties = ['constraint_type', 'created_at', 'description', 'display_name', 'enforcement', 'llm_context', 'reason', 'severity', 'topic', 'updated_at'],
   k_Constraint.schema_hint = 'alternatives, constraint_type (req), created_at (req), cultural_context, description (req), display_name (req), enforcement (req), llm_context (req), reason (req), regulation_reference, safe_exceptions, severity (req), source_metadata, topic (req), trigger_keywords, updated_at (req)',
@@ -198,7 +198,7 @@ ON CREATE SET
 ON MATCH SET
   k_Constraint.display_name = 'Constraint',
   k_Constraint.llm_context = 'Cultural constraint or restriction for content generation',
-  k_Constraint.yaml_path = 'nodes/global/knowledge/constraint.yaml',
+  k_Constraint.yaml_path = 'node-kinds/global/knowledge/constraint.yaml',
   k_Constraint.properties = ['alternatives', 'constraint_type', 'created_at', 'cultural_context', 'description', 'display_name', 'enforcement', 'llm_context', 'reason', 'regulation_reference', 'safe_exceptions', 'severity', 'source_metadata', 'topic', 'trigger_keywords', 'updated_at'],
   k_Constraint.required_properties = ['constraint_type', 'created_at', 'description', 'display_name', 'enforcement', 'llm_context', 'reason', 'severity', 'topic', 'updated_at'],
   k_Constraint.schema_hint = 'alternatives, constraint_type (req), created_at (req), cultural_context, description (req), display_name (req), enforcement (req), llm_context (req), reason (req), regulation_reference, safe_exceptions, severity (req), source_metadata, topic (req), trigger_keywords, updated_at (req)',
@@ -210,7 +210,7 @@ MERGE (k_ContentSlot:Meta:Kind {label: 'ContentSlot'})
 ON CREATE SET
   k_ContentSlot.display_name = 'ContentSlot',
   k_ContentSlot.llm_context = 'Named slot within a page structure for content injection. Enables A/B testing, dynamic content, and component-level modularity. Slots are locale-invariant definitions filled by locale-specific blocks. USE: When defining reusable page structure positions for content variants. TRIGGERS: "content slot", "A/B testing", "component slot", "dynamic block". NOT: For actual content (use Block), for page structure (use Page).',
-  k_ContentSlot.yaml_path = 'nodes/project/structure/content-slot.yaml',
+  k_ContentSlot.yaml_path = 'node-kinds/project/structure/content-slot.yaml',
   k_ContentSlot.properties = ['allows_variants', 'created_at', 'default_block_key', 'description', 'display_name', 'fallback_behavior', 'is_required', 'key', 'llm_context', 'max_variants', 'position', 'render_priority', 'slot_type', 'updated_at'],
   k_ContentSlot.required_properties = ['allows_variants', 'created_at', 'description', 'display_name', 'fallback_behavior', 'is_required', 'key', 'llm_context', 'position', 'render_priority', 'slot_type', 'updated_at'],
   k_ContentSlot.schema_hint = 'allows_variants (req), created_at (req), default_block_key, description (req), display_name (req), fallback_behavior (req), is_required (req), key (req), llm_context (req), max_variants, position (req), render_priority (req), slot_type (req), updated_at (req)',
@@ -220,7 +220,7 @@ ON CREATE SET
 ON MATCH SET
   k_ContentSlot.display_name = 'ContentSlot',
   k_ContentSlot.llm_context = 'Named slot within a page structure for content injection. Enables A/B testing, dynamic content, and component-level modularity. Slots are locale-invariant definitions filled by locale-specific blocks. USE: When defining reusable page structure positions for content variants. TRIGGERS: "content slot", "A/B testing", "component slot", "dynamic block". NOT: For actual content (use Block), for page structure (use Page).',
-  k_ContentSlot.yaml_path = 'nodes/project/structure/content-slot.yaml',
+  k_ContentSlot.yaml_path = 'node-kinds/project/structure/content-slot.yaml',
   k_ContentSlot.properties = ['allows_variants', 'created_at', 'default_block_key', 'description', 'display_name', 'fallback_behavior', 'is_required', 'key', 'llm_context', 'max_variants', 'position', 'render_priority', 'slot_type', 'updated_at'],
   k_ContentSlot.required_properties = ['allows_variants', 'created_at', 'description', 'display_name', 'fallback_behavior', 'is_required', 'key', 'llm_context', 'position', 'render_priority', 'slot_type', 'updated_at'],
   k_ContentSlot.schema_hint = 'allows_variants (req), created_at (req), default_block_key, description (req), display_name (req), fallback_behavior (req), is_required (req), key (req), llm_context (req), max_variants, position (req), render_priority (req), slot_type (req), updated_at (req)',
@@ -232,7 +232,7 @@ MERGE (k_EvaluationSignal:Meta:Kind {label: 'EvaluationSignal'})
 ON CREATE SET
   k_EvaluationSignal.display_name = 'EvaluationSignal',
   k_EvaluationSignal.llm_context = 'Quality signal from content evaluation. Can be LLM-generated, human-provided, or metric-based.',
-  k_EvaluationSignal.yaml_path = 'nodes/project/output/evaluation-signal.yaml',
+  k_EvaluationSignal.yaml_path = 'node-kinds/project/output/evaluation-signal.yaml',
   k_EvaluationSignal.properties = ['confidence', 'created_at', 'description', 'details', 'display_name', 'evaluated_at', 'evaluator_id', 'evaluator_type', 'evaluator_version', 'key', 'llm_context', 'regeneration_priority', 'signal_type', 'signal_value', 'threshold_pass', 'triggers_regeneration', 'updated_at'],
   k_EvaluationSignal.required_properties = ['confidence', 'created_at', 'display_name', 'evaluated_at', 'evaluator_type', 'evaluator_version', 'key', 'signal_type', 'signal_value', 'threshold_pass', 'triggers_regeneration', 'updated_at'],
   k_EvaluationSignal.schema_hint = 'confidence (req), created_at (req), description, details, display_name (req), evaluated_at (req), evaluator_id, evaluator_type (req), evaluator_version (req), key (req), llm_context, regeneration_priority, signal_type (req), signal_value (req), threshold_pass (req), triggers_regeneration (req), updated_at (req)',
@@ -242,7 +242,7 @@ ON CREATE SET
 ON MATCH SET
   k_EvaluationSignal.display_name = 'EvaluationSignal',
   k_EvaluationSignal.llm_context = 'Quality signal from content evaluation. Can be LLM-generated, human-provided, or metric-based.',
-  k_EvaluationSignal.yaml_path = 'nodes/project/output/evaluation-signal.yaml',
+  k_EvaluationSignal.yaml_path = 'node-kinds/project/output/evaluation-signal.yaml',
   k_EvaluationSignal.properties = ['confidence', 'created_at', 'description', 'details', 'display_name', 'evaluated_at', 'evaluator_id', 'evaluator_type', 'evaluator_version', 'key', 'llm_context', 'regeneration_priority', 'signal_type', 'signal_value', 'threshold_pass', 'triggers_regeneration', 'updated_at'],
   k_EvaluationSignal.required_properties = ['confidence', 'created_at', 'display_name', 'evaluated_at', 'evaluator_type', 'evaluator_version', 'key', 'signal_type', 'signal_value', 'threshold_pass', 'triggers_regeneration', 'updated_at'],
   k_EvaluationSignal.schema_hint = 'confidence (req), created_at (req), description, details, display_name (req), evaluated_at (req), evaluator_id, evaluator_type (req), evaluator_version (req), key (req), llm_context, regeneration_priority, signal_type (req), signal_value (req), threshold_pass (req), triggers_regeneration (req), updated_at (req)',
@@ -254,7 +254,7 @@ MERGE (k_Expression:Meta:Kind {label: 'Expression'})
 ON CREATE SET
   k_Expression.display_name = 'Expression',
   k_Expression.llm_context = 'Individual native expression for localized content generation',
-  k_Expression.yaml_path = 'nodes/global/knowledge/expression.yaml',
+  k_Expression.yaml_path = 'node-kinds/global/knowledge/expression.yaml',
   k_Expression.properties = ['context', 'created_at', 'description', 'display_name', 'embedding', 'example_sentence', 'formality_variants', 'intention', 'llm_context', 'register', 'semantic_field', 'source_metadata', 'text', 'updated_at'],
   k_Expression.required_properties = ['context', 'created_at', 'description', 'display_name', 'example_sentence', 'intention', 'llm_context', 'register', 'semantic_field', 'text', 'updated_at'],
   k_Expression.schema_hint = 'context (req), created_at (req), description (req), display_name (req), embedding, example_sentence (req), formality_variants, intention (req), llm_context (req), register (req), semantic_field (req), source_metadata, text (req), updated_at (req)',
@@ -264,7 +264,7 @@ ON CREATE SET
 ON MATCH SET
   k_Expression.display_name = 'Expression',
   k_Expression.llm_context = 'Individual native expression for localized content generation',
-  k_Expression.yaml_path = 'nodes/global/knowledge/expression.yaml',
+  k_Expression.yaml_path = 'node-kinds/global/knowledge/expression.yaml',
   k_Expression.properties = ['context', 'created_at', 'description', 'display_name', 'embedding', 'example_sentence', 'formality_variants', 'intention', 'llm_context', 'register', 'semantic_field', 'source_metadata', 'text', 'updated_at'],
   k_Expression.required_properties = ['context', 'created_at', 'description', 'display_name', 'example_sentence', 'intention', 'llm_context', 'register', 'semantic_field', 'text', 'updated_at'],
   k_Expression.schema_hint = 'context (req), created_at (req), description (req), display_name (req), embedding, example_sentence (req), formality_variants, intention (req), llm_context (req), register (req), semantic_field (req), source_metadata, text (req), updated_at (req)',
@@ -276,7 +276,7 @@ MERGE (k_GEOMiningRun:Meta:Kind {label: 'GEOMiningRun'})
 ON CREATE SET
   k_GEOMiningRun.display_name = 'GEOMiningRun',
   k_GEOMiningRun.llm_context = 'Mining job for GEO reformulations',
-  k_GEOMiningRun.yaml_path = 'nodes/shared/geo/geo-mining-run.yaml',
+  k_GEOMiningRun.yaml_path = 'node-kinds/shared/geo/geo-mining-run.yaml',
   k_GEOMiningRun.properties = ['completed_at', 'created_at', 'description', 'display_name', 'key', 'llm_context', 'platforms', 'started_at', 'status', 'total_reformulations', 'unique_reformulations', 'updated_at'],
   k_GEOMiningRun.required_properties = ['display_name', 'status'],
   k_GEOMiningRun.schema_hint = 'completed_at, created_at, description, display_name (req), key, llm_context, platforms, started_at, status (req), total_reformulations, unique_reformulations, updated_at',
@@ -286,7 +286,7 @@ ON CREATE SET
 ON MATCH SET
   k_GEOMiningRun.display_name = 'GEOMiningRun',
   k_GEOMiningRun.llm_context = 'Mining job for GEO reformulations',
-  k_GEOMiningRun.yaml_path = 'nodes/shared/geo/geo-mining-run.yaml',
+  k_GEOMiningRun.yaml_path = 'node-kinds/shared/geo/geo-mining-run.yaml',
   k_GEOMiningRun.properties = ['completed_at', 'created_at', 'description', 'display_name', 'key', 'llm_context', 'platforms', 'started_at', 'status', 'total_reformulations', 'unique_reformulations', 'updated_at'],
   k_GEOMiningRun.required_properties = ['display_name', 'status'],
   k_GEOMiningRun.schema_hint = 'completed_at, created_at, description, display_name (req), key, llm_context, platforms, started_at, status (req), total_reformulations, unique_reformulations, updated_at',
@@ -298,7 +298,7 @@ MERGE (k_GEOSeedL10n:Meta:Kind {label: 'GEOSeedL10n'})
 ON CREATE SET
   k_GEOSeedL10n.display_name = 'GEOSeedL10n',
   k_GEOSeedL10n.llm_context = 'Base query to monitor on AI platforms',
-  k_GEOSeedL10n.yaml_path = 'nodes/shared/geo/geo-seed-l10n.yaml',
+  k_GEOSeedL10n.yaml_path = 'node-kinds/shared/geo/geo-seed-l10n.yaml',
   k_GEOSeedL10n.properties = ['answer_strategy', 'created_at', 'description', 'display_name', 'format', 'intent', 'key', 'last_mined_at', 'llm_context', 'mining_runs', 'target_answer', 'updated_at', 'value'],
   k_GEOSeedL10n.required_properties = ['display_name', 'key', 'value'],
   k_GEOSeedL10n.schema_hint = 'answer_strategy, created_at, description, display_name (req), format, intent, key (req), last_mined_at, llm_context, mining_runs, target_answer, updated_at, value (req)',
@@ -308,7 +308,7 @@ ON CREATE SET
 ON MATCH SET
   k_GEOSeedL10n.display_name = 'GEOSeedL10n',
   k_GEOSeedL10n.llm_context = 'Base query to monitor on AI platforms',
-  k_GEOSeedL10n.yaml_path = 'nodes/shared/geo/geo-seed-l10n.yaml',
+  k_GEOSeedL10n.yaml_path = 'node-kinds/shared/geo/geo-seed-l10n.yaml',
   k_GEOSeedL10n.properties = ['answer_strategy', 'created_at', 'description', 'display_name', 'format', 'intent', 'key', 'last_mined_at', 'llm_context', 'mining_runs', 'target_answer', 'updated_at', 'value'],
   k_GEOSeedL10n.required_properties = ['display_name', 'key', 'value'],
   k_GEOSeedL10n.schema_hint = 'answer_strategy, created_at, description, display_name (req), format, intent, key (req), last_mined_at, llm_context, mining_runs, target_answer, updated_at, value (req)',
@@ -320,7 +320,7 @@ MERGE (k_GEOSeedMetrics:Meta:Kind {label: 'GEOSeedMetrics'})
 ON CREATE SET
   k_GEOSeedMetrics.display_name = 'GEOSeedMetrics',
   k_GEOSeedMetrics.llm_context = 'Citation/visibility observation from AI engine responses',
-  k_GEOSeedMetrics.yaml_path = 'nodes/shared/geo/geo-seed-metrics.yaml',
+  k_GEOSeedMetrics.yaml_path = 'node-kinds/shared/geo/geo-seed-metrics.yaml',
   k_GEOSeedMetrics.properties = ['cited', 'competitors', 'created_at', 'description', 'display_name', 'key', 'llm_context', 'model', 'observed_at', 'platform', 'position', 'sentiment', 'snippet', 'updated_at', 'url'],
   k_GEOSeedMetrics.required_properties = ['cited', 'display_name', 'key', 'observed_at', 'platform'],
   k_GEOSeedMetrics.schema_hint = 'cited (req), competitors, created_at, description, display_name (req), key (req), llm_context, model, observed_at (req), platform (req), position, sentiment, snippet, updated_at, url',
@@ -330,7 +330,7 @@ ON CREATE SET
 ON MATCH SET
   k_GEOSeedMetrics.display_name = 'GEOSeedMetrics',
   k_GEOSeedMetrics.llm_context = 'Citation/visibility observation from AI engine responses',
-  k_GEOSeedMetrics.yaml_path = 'nodes/shared/geo/geo-seed-metrics.yaml',
+  k_GEOSeedMetrics.yaml_path = 'node-kinds/shared/geo/geo-seed-metrics.yaml',
   k_GEOSeedMetrics.properties = ['cited', 'competitors', 'created_at', 'description', 'display_name', 'key', 'llm_context', 'model', 'observed_at', 'platform', 'position', 'sentiment', 'snippet', 'updated_at', 'url'],
   k_GEOSeedMetrics.required_properties = ['cited', 'display_name', 'key', 'observed_at', 'platform'],
   k_GEOSeedMetrics.schema_hint = 'cited (req), competitors, created_at, description, display_name (req), key (req), llm_context, model, observed_at (req), platform (req), position, sentiment, snippet, updated_at, url',
@@ -342,7 +342,7 @@ MERGE (k_GenerationJob:Meta:Kind {label: 'GenerationJob'})
 ON CREATE SET
   k_GenerationJob.display_name = 'GenerationJob',
   k_GenerationJob.llm_context = 'Background job orchestrating content generation pipeline. Tracks lifecycle of generation runs.',
-  k_GenerationJob.yaml_path = 'nodes/project/output/generation-job.yaml',
+  k_GenerationJob.yaml_path = 'node-kinds/project/output/generation-job.yaml',
   k_GenerationJob.properties = ['blocks_generated', 'completed_at', 'created_at', 'description', 'display_name', 'error_message', 'generator_version', 'key', 'llm_context', 'locales_targeted', 'pages_generated', 'started_at', 'status', 'trigger_type', 'updated_at'],
   k_GenerationJob.required_properties = ['created_at', 'display_name', 'generator_version', 'status', 'trigger_type', 'updated_at'],
   k_GenerationJob.schema_hint = 'blocks_generated, completed_at, created_at (req), description, display_name (req), error_message, generator_version (req), key, llm_context, locales_targeted, pages_generated, started_at, status (req), trigger_type (req), updated_at (req)',
@@ -352,7 +352,7 @@ ON CREATE SET
 ON MATCH SET
   k_GenerationJob.display_name = 'GenerationJob',
   k_GenerationJob.llm_context = 'Background job orchestrating content generation pipeline. Tracks lifecycle of generation runs.',
-  k_GenerationJob.yaml_path = 'nodes/project/output/generation-job.yaml',
+  k_GenerationJob.yaml_path = 'node-kinds/project/output/generation-job.yaml',
   k_GenerationJob.properties = ['blocks_generated', 'completed_at', 'created_at', 'description', 'display_name', 'error_message', 'generator_version', 'key', 'llm_context', 'locales_targeted', 'pages_generated', 'started_at', 'status', 'trigger_type', 'updated_at'],
   k_GenerationJob.required_properties = ['created_at', 'display_name', 'generator_version', 'status', 'trigger_type', 'updated_at'],
   k_GenerationJob.schema_hint = 'blocks_generated, completed_at, created_at (req), description, display_name (req), error_message, generator_version (req), key, llm_context, locales_targeted, pages_generated, started_at, status (req), trigger_type (req), updated_at (req)',
@@ -364,7 +364,7 @@ MERGE (k_Locale:Meta:Kind {label: 'Locale'})
 ON CREATE SET
   k_Locale.display_name = 'Locale',
   k_Locale.llm_context = 'First-class locale node (BCP 47) with fallback chains and knowledge graph connections',
-  k_Locale.yaml_path = 'nodes/global/config/locale.yaml',
+  k_Locale.yaml_path = 'node-kinds/global/config/locale.yaml',
   k_Locale.properties = ['country_code', 'created_at', 'description', 'display_name', 'is_primary', 'key', 'language_code', 'llm_context', 'name_native', 'updated_at'],
   k_Locale.required_properties = ['country_code', 'created_at', 'description', 'display_name', 'key', 'language_code', 'llm_context', 'name_native', 'updated_at'],
   k_Locale.schema_hint = 'country_code (req), created_at (req), description (req), display_name (req), is_primary, key (req), language_code (req), llm_context (req), name_native (req), updated_at (req)',
@@ -374,7 +374,7 @@ ON CREATE SET
 ON MATCH SET
   k_Locale.display_name = 'Locale',
   k_Locale.llm_context = 'First-class locale node (BCP 47) with fallback chains and knowledge graph connections',
-  k_Locale.yaml_path = 'nodes/global/config/locale.yaml',
+  k_Locale.yaml_path = 'node-kinds/global/config/locale.yaml',
   k_Locale.properties = ['country_code', 'created_at', 'description', 'display_name', 'is_primary', 'key', 'language_code', 'llm_context', 'name_native', 'updated_at'],
   k_Locale.required_properties = ['country_code', 'created_at', 'description', 'display_name', 'key', 'language_code', 'llm_context', 'name_native', 'updated_at'],
   k_Locale.schema_hint = 'country_code (req), created_at (req), description (req), display_name (req), is_primary, key (req), language_code (req), llm_context (req), name_native (req), updated_at (req)',
@@ -386,7 +386,7 @@ MERGE (k_LocaleCulture:Meta:Kind {label: 'LocaleCulture'})
 ON CREATE SET
   k_LocaleCulture.display_name = 'LocaleCulture',
   k_LocaleCulture.llm_context = 'Values, taboos, sensitivities for a locale',
-  k_LocaleCulture.yaml_path = 'nodes/global/knowledge/locale-culture.yaml',
+  k_LocaleCulture.yaml_path = 'node-kinds/global/knowledge/locale-culture.yaml',
   k_LocaleCulture.properties = ['age_norms', 'content_prohibitions', 'context_level', 'created_at', 'cultural_phrases', 'description', 'display_name', 'dominant_values', 'gender_considerations', 'hierarchy_sensitivity', 'historical_sensitivities', 'llm_context', 'national_pride', 'phrases_to_avoid', 'political_sensitivities', 'positive_triggers', 'restricted_imagery', 'taboo_topics', 'time_norms', 'updated_at'],
   k_LocaleCulture.required_properties = ['context_level', 'created_at', 'description', 'display_name', 'hierarchy_sensitivity', 'llm_context', 'updated_at'],
   k_LocaleCulture.schema_hint = 'age_norms, content_prohibitions, context_level (req), created_at (req), cultural_phrases, description (req), display_name (req), dominant_values, gender_considerations, hierarchy_sensitivity (req), historical_sensitivities, llm_context (req), national_pride, phrases_to_avoid, political_sensitivities, positive_triggers, restricted_imagery, taboo_topics, time_norms, updated_at (req)',
@@ -396,7 +396,7 @@ ON CREATE SET
 ON MATCH SET
   k_LocaleCulture.display_name = 'LocaleCulture',
   k_LocaleCulture.llm_context = 'Values, taboos, sensitivities for a locale',
-  k_LocaleCulture.yaml_path = 'nodes/global/knowledge/locale-culture.yaml',
+  k_LocaleCulture.yaml_path = 'node-kinds/global/knowledge/locale-culture.yaml',
   k_LocaleCulture.properties = ['age_norms', 'content_prohibitions', 'context_level', 'created_at', 'cultural_phrases', 'description', 'display_name', 'dominant_values', 'gender_considerations', 'hierarchy_sensitivity', 'historical_sensitivities', 'llm_context', 'national_pride', 'phrases_to_avoid', 'political_sensitivities', 'positive_triggers', 'restricted_imagery', 'taboo_topics', 'time_norms', 'updated_at'],
   k_LocaleCulture.required_properties = ['context_level', 'created_at', 'description', 'display_name', 'hierarchy_sensitivity', 'llm_context', 'updated_at'],
   k_LocaleCulture.schema_hint = 'age_norms, content_prohibitions, context_level (req), created_at (req), cultural_phrases, description (req), display_name (req), dominant_values, gender_considerations, hierarchy_sensitivity (req), historical_sensitivities, llm_context (req), national_pride, phrases_to_avoid, political_sensitivities, positive_triggers, restricted_imagery, taboo_topics, time_norms, updated_at (req)',
@@ -408,7 +408,7 @@ MERGE (k_LocaleCultureReferences:Meta:Kind {label: 'LocaleCultureReferences'})
 ON CREATE SET
   k_LocaleCultureReferences.display_name = 'LocaleCultureReferences',
   k_LocaleCultureReferences.llm_context = 'Concrete cultural references for content adaptation',
-  k_LocaleCultureReferences.yaml_path = 'nodes/global/knowledge/locale-culture-references.yaml',
+  k_LocaleCultureReferences.yaml_path = 'node-kinds/global/knowledge/locale-culture-references.yaml',
   k_LocaleCultureReferences.properties = ['brand_comparisons', 'celebrities_to_avoid', 'commercial_events', 'created_at', 'description', 'display_name', 'emblematic_dishes', 'entertainment_references', 'food_metaphors', 'landmark_cities', 'landmark_places', 'llm_context', 'major_sports', 'national_holidays', 'safe_celebrities', 'sports_metaphors', 'trusted_brands', 'updated_at'],
   k_LocaleCultureReferences.required_properties = ['created_at', 'description', 'display_name', 'llm_context', 'updated_at'],
   k_LocaleCultureReferences.schema_hint = 'brand_comparisons, celebrities_to_avoid, commercial_events, created_at (req), description (req), display_name (req), emblematic_dishes, entertainment_references, food_metaphors, landmark_cities, landmark_places, llm_context (req), major_sports, national_holidays, safe_celebrities, sports_metaphors, trusted_brands, updated_at (req)',
@@ -418,7 +418,7 @@ ON CREATE SET
 ON MATCH SET
   k_LocaleCultureReferences.display_name = 'LocaleCultureReferences',
   k_LocaleCultureReferences.llm_context = 'Concrete cultural references for content adaptation',
-  k_LocaleCultureReferences.yaml_path = 'nodes/global/knowledge/locale-culture-references.yaml',
+  k_LocaleCultureReferences.yaml_path = 'node-kinds/global/knowledge/locale-culture-references.yaml',
   k_LocaleCultureReferences.properties = ['brand_comparisons', 'celebrities_to_avoid', 'commercial_events', 'created_at', 'description', 'display_name', 'emblematic_dishes', 'entertainment_references', 'food_metaphors', 'landmark_cities', 'landmark_places', 'llm_context', 'major_sports', 'national_holidays', 'safe_celebrities', 'sports_metaphors', 'trusted_brands', 'updated_at'],
   k_LocaleCultureReferences.required_properties = ['created_at', 'description', 'display_name', 'llm_context', 'updated_at'],
   k_LocaleCultureReferences.schema_hint = 'brand_comparisons, celebrities_to_avoid, commercial_events, created_at (req), description (req), display_name (req), emblematic_dishes, entertainment_references, food_metaphors, landmark_cities, landmark_places, llm_context (req), major_sports, national_holidays, safe_celebrities, sports_metaphors, trusted_brands, updated_at (req)',
@@ -430,7 +430,7 @@ MERGE (k_LocaleIdentity:Meta:Kind {label: 'LocaleIdentity'})
 ON CREATE SET
   k_LocaleIdentity.display_name = 'LocaleIdentity',
   k_LocaleIdentity.llm_context = 'Script, geographic, and technical identity for a locale',
-  k_LocaleIdentity.yaml_path = 'nodes/global/knowledge/locale-identity.yaml',
+  k_LocaleIdentity.yaml_path = 'node-kinds/global/knowledge/locale-identity.yaml',
   k_LocaleIdentity.properties = ['capital', 'continent', 'created_at', 'description', 'diacritics', 'display_name', 'dst_observed', 'encoding', 'has_case', 'keyboard_layout', 'language_family', 'ligatures', 'llm_context', 'region', 'related_languages', 'script_code', 'script_direction', 'script_name', 'special_characters', 'timezone', 'updated_at', 'utc_offset'],
   k_LocaleIdentity.required_properties = ['created_at', 'description', 'display_name', 'llm_context', 'script_code', 'script_direction', 'timezone', 'updated_at'],
   k_LocaleIdentity.schema_hint = 'capital, continent, created_at (req), description (req), diacritics, display_name (req), dst_observed, encoding, has_case, keyboard_layout, language_family, ligatures, llm_context (req), region, related_languages, script_code (req), script_direction (req), script_name, special_characters, timezone (req), updated_at (req), utc_offset',
@@ -440,7 +440,7 @@ ON CREATE SET
 ON MATCH SET
   k_LocaleIdentity.display_name = 'LocaleIdentity',
   k_LocaleIdentity.llm_context = 'Script, geographic, and technical identity for a locale',
-  k_LocaleIdentity.yaml_path = 'nodes/global/knowledge/locale-identity.yaml',
+  k_LocaleIdentity.yaml_path = 'node-kinds/global/knowledge/locale-identity.yaml',
   k_LocaleIdentity.properties = ['capital', 'continent', 'created_at', 'description', 'diacritics', 'display_name', 'dst_observed', 'encoding', 'has_case', 'keyboard_layout', 'language_family', 'ligatures', 'llm_context', 'region', 'related_languages', 'script_code', 'script_direction', 'script_name', 'special_characters', 'timezone', 'updated_at', 'utc_offset'],
   k_LocaleIdentity.required_properties = ['created_at', 'description', 'display_name', 'llm_context', 'script_code', 'script_direction', 'timezone', 'updated_at'],
   k_LocaleIdentity.schema_hint = 'capital, continent, created_at (req), description (req), diacritics, display_name (req), dst_observed, encoding, has_case, keyboard_layout, language_family, ligatures, llm_context (req), region, related_languages, script_code (req), script_direction (req), script_name, special_characters, timezone (req), updated_at (req), utc_offset',
@@ -452,7 +452,7 @@ MERGE (k_LocaleLexicon:Meta:Kind {label: 'LocaleLexicon'})
 ON CREATE SET
   k_LocaleLexicon.display_name = 'LocaleLexicon',
   k_LocaleLexicon.llm_context = 'Expression library and vocabulary rules for a locale',
-  k_LocaleLexicon.yaml_path = 'nodes/global/knowledge/locale-lexicon.yaml',
+  k_LocaleLexicon.yaml_path = 'node-kinds/global/knowledge/locale-lexicon.yaml',
   k_LocaleLexicon.properties = ['accepted_loanwords', 'common_idioms', 'connectors', 'created_at', 'description', 'display_name', 'expression_density', 'llm_context', 'loanwords_policy', 'prefer_native', 'register_matching', 'rotation_rule', 'unique_concepts', 'updated_at'],
   k_LocaleLexicon.required_properties = ['created_at', 'description', 'display_name', 'llm_context', 'loanwords_policy', 'updated_at'],
   k_LocaleLexicon.schema_hint = 'accepted_loanwords, common_idioms, connectors, created_at (req), description (req), display_name (req), expression_density, llm_context (req), loanwords_policy (req), prefer_native, register_matching, rotation_rule, unique_concepts, updated_at (req)',
@@ -462,7 +462,7 @@ ON CREATE SET
 ON MATCH SET
   k_LocaleLexicon.display_name = 'LocaleLexicon',
   k_LocaleLexicon.llm_context = 'Expression library and vocabulary rules for a locale',
-  k_LocaleLexicon.yaml_path = 'nodes/global/knowledge/locale-lexicon.yaml',
+  k_LocaleLexicon.yaml_path = 'node-kinds/global/knowledge/locale-lexicon.yaml',
   k_LocaleLexicon.properties = ['accepted_loanwords', 'common_idioms', 'connectors', 'created_at', 'description', 'display_name', 'expression_density', 'llm_context', 'loanwords_policy', 'prefer_native', 'register_matching', 'rotation_rule', 'unique_concepts', 'updated_at'],
   k_LocaleLexicon.required_properties = ['created_at', 'description', 'display_name', 'llm_context', 'loanwords_policy', 'updated_at'],
   k_LocaleLexicon.schema_hint = 'accepted_loanwords, common_idioms, connectors, created_at (req), description (req), display_name (req), expression_density, llm_context (req), loanwords_policy (req), prefer_native, register_matching, rotation_rule, unique_concepts, updated_at (req)',
@@ -474,7 +474,7 @@ MERGE (k_LocaleMarket:Meta:Kind {label: 'LocaleMarket'})
 ON CREATE SET
   k_LocaleMarket.display_name = 'LocaleMarket',
   k_LocaleMarket.llm_context = 'Business and market data for a locale',
-  k_LocaleMarket.yaml_path = 'nodes/global/knowledge/locale-market.yaml',
+  k_LocaleMarket.yaml_path = 'node-kinds/global/knowledge/locale-market.yaml',
   k_LocaleMarket.properties = ['age_distribution', 'avg_order_value', 'cart_abandonment', 'conversion_rate', 'created_at', 'description', 'display_name', 'dominant_os', 'ecommerce_adoption', 'ecommerce_revenue', 'growth_rate', 'income_levels', 'internet_penetration', 'llm_context', 'low_periods', 'major_players', 'market_concentration', 'median_age', 'messaging_apps', 'mobile_first_users', 'mobile_penetration', 'payment_methods', 'peak_periods', 'population', 'roi_factors', 'roi_score', 'search_engines', 'shopping_events', 'social_platforms', 'updated_at', 'urban_rural_split'],
   k_LocaleMarket.required_properties = ['created_at', 'description', 'display_name', 'llm_context', 'updated_at'],
   k_LocaleMarket.schema_hint = 'age_distribution, avg_order_value, cart_abandonment, conversion_rate, created_at (req), description (req), display_name (req), dominant_os, ecommerce_adoption, ecommerce_revenue, growth_rate, income_levels, internet_penetration, llm_context (req), low_periods, major_players, market_concentration, median_age, messaging_apps, mobile_first_users, mobile_penetration, payment_methods, peak_periods, population, roi_factors, roi_score, search_engines, shopping_events, social_platforms, updated_at (req), urban_rural_split',
@@ -484,7 +484,7 @@ ON CREATE SET
 ON MATCH SET
   k_LocaleMarket.display_name = 'LocaleMarket',
   k_LocaleMarket.llm_context = 'Business and market data for a locale',
-  k_LocaleMarket.yaml_path = 'nodes/global/knowledge/locale-market.yaml',
+  k_LocaleMarket.yaml_path = 'node-kinds/global/knowledge/locale-market.yaml',
   k_LocaleMarket.properties = ['age_distribution', 'avg_order_value', 'cart_abandonment', 'conversion_rate', 'created_at', 'description', 'display_name', 'dominant_os', 'ecommerce_adoption', 'ecommerce_revenue', 'growth_rate', 'income_levels', 'internet_penetration', 'llm_context', 'low_periods', 'major_players', 'market_concentration', 'median_age', 'messaging_apps', 'mobile_first_users', 'mobile_penetration', 'payment_methods', 'peak_periods', 'population', 'roi_factors', 'roi_score', 'search_engines', 'shopping_events', 'social_platforms', 'updated_at', 'urban_rural_split'],
   k_LocaleMarket.required_properties = ['created_at', 'description', 'display_name', 'llm_context', 'updated_at'],
   k_LocaleMarket.schema_hint = 'age_distribution, avg_order_value, cart_abandonment, conversion_rate, created_at (req), description (req), display_name (req), dominant_os, ecommerce_adoption, ecommerce_revenue, growth_rate, income_levels, internet_penetration, llm_context (req), low_periods, major_players, market_concentration, median_age, messaging_apps, mobile_first_users, mobile_penetration, payment_methods, peak_periods, population, roi_factors, roi_score, search_engines, shopping_events, social_platforms, updated_at (req), urban_rural_split',
@@ -496,7 +496,7 @@ MERGE (k_LocaleRulesAdaptation:Meta:Kind {label: 'LocaleRulesAdaptation'})
 ON CREATE SET
   k_LocaleRulesAdaptation.display_name = 'LocaleRulesAdaptation',
   k_LocaleRulesAdaptation.llm_context = 'Meta-instructions for content adaptation decisions',
-  k_LocaleRulesAdaptation.yaml_path = 'nodes/global/knowledge/locale-rules-adaptation.yaml',
+  k_LocaleRulesAdaptation.yaml_path = 'node-kinds/global/knowledge/locale-rules-adaptation.yaml',
   k_LocaleRulesAdaptation.properties = ['adaptation_decision_tree', 'created_at', 'description', 'display_name', 'facts_categories', 'illustrations_treatment', 'key_directive', 'llm_context', 'structural_rules', 'tone_calibration', 'updated_at'],
   k_LocaleRulesAdaptation.required_properties = ['created_at', 'description', 'display_name', 'facts_categories', 'illustrations_treatment', 'key_directive', 'llm_context', 'updated_at'],
   k_LocaleRulesAdaptation.schema_hint = 'adaptation_decision_tree, created_at (req), description (req), display_name (req), facts_categories (req), illustrations_treatment (req), key_directive (req), llm_context (req), structural_rules, tone_calibration, updated_at (req)',
@@ -506,7 +506,7 @@ ON CREATE SET
 ON MATCH SET
   k_LocaleRulesAdaptation.display_name = 'LocaleRulesAdaptation',
   k_LocaleRulesAdaptation.llm_context = 'Meta-instructions for content adaptation decisions',
-  k_LocaleRulesAdaptation.yaml_path = 'nodes/global/knowledge/locale-rules-adaptation.yaml',
+  k_LocaleRulesAdaptation.yaml_path = 'node-kinds/global/knowledge/locale-rules-adaptation.yaml',
   k_LocaleRulesAdaptation.properties = ['adaptation_decision_tree', 'created_at', 'description', 'display_name', 'facts_categories', 'illustrations_treatment', 'key_directive', 'llm_context', 'structural_rules', 'tone_calibration', 'updated_at'],
   k_LocaleRulesAdaptation.required_properties = ['created_at', 'description', 'display_name', 'facts_categories', 'illustrations_treatment', 'key_directive', 'llm_context', 'updated_at'],
   k_LocaleRulesAdaptation.schema_hint = 'adaptation_decision_tree, created_at (req), description (req), display_name (req), facts_categories (req), illustrations_treatment (req), key_directive (req), llm_context (req), structural_rules, tone_calibration, updated_at (req)',
@@ -518,7 +518,7 @@ MERGE (k_LocaleRulesFormatting:Meta:Kind {label: 'LocaleRulesFormatting'})
 ON CREATE SET
   k_LocaleRulesFormatting.display_name = 'LocaleRulesFormatting',
   k_LocaleRulesFormatting.llm_context = 'Formatting rules for dates, numbers, currency, addresses',
-  k_LocaleRulesFormatting.yaml_path = 'nodes/global/knowledge/locale-rules-formatting.yaml',
+  k_LocaleRulesFormatting.yaml_path = 'node-kinds/global/knowledge/locale-rules-formatting.yaml',
   k_LocaleRulesFormatting.properties = ['address_format', 'created_at', 'currency_code', 'currency_examples', 'currency_position', 'currency_spacing', 'currency_symbol', 'date_pattern', 'date_pattern_long', 'date_pattern_short', 'date_separator', 'day_names', 'decimal_separator', 'description', 'display_name', 'first_day_of_week', 'grouping_pattern', 'llm_context', 'month_names', 'negative_sign', 'number_examples', 'percentage_examples', 'percentage_spacing', 'phone_format', 'thousands_separator', 'time_examples', 'time_format', 'time_separator', 'updated_at'],
   k_LocaleRulesFormatting.required_properties = ['created_at', 'currency_code', 'currency_position', 'currency_symbol', 'date_pattern', 'decimal_separator', 'description', 'display_name', 'llm_context', 'thousands_separator', 'updated_at'],
   k_LocaleRulesFormatting.schema_hint = 'address_format, created_at (req), currency_code (req), currency_examples, currency_position (req), currency_spacing, currency_symbol (req), date_pattern (req), date_pattern_long, date_pattern_short, date_separator, day_names, decimal_separator (req), description (req), display_name (req), first_day_of_week, grouping_pattern, llm_context (req), month_names, negative_sign, number_examples, percentage_examples, percentage_spacing, phone_format, thousands_separator (req), time_examples, time_format, time_separator, updated_at (req)',
@@ -528,7 +528,7 @@ ON CREATE SET
 ON MATCH SET
   k_LocaleRulesFormatting.display_name = 'LocaleRulesFormatting',
   k_LocaleRulesFormatting.llm_context = 'Formatting rules for dates, numbers, currency, addresses',
-  k_LocaleRulesFormatting.yaml_path = 'nodes/global/knowledge/locale-rules-formatting.yaml',
+  k_LocaleRulesFormatting.yaml_path = 'node-kinds/global/knowledge/locale-rules-formatting.yaml',
   k_LocaleRulesFormatting.properties = ['address_format', 'created_at', 'currency_code', 'currency_examples', 'currency_position', 'currency_spacing', 'currency_symbol', 'date_pattern', 'date_pattern_long', 'date_pattern_short', 'date_separator', 'day_names', 'decimal_separator', 'description', 'display_name', 'first_day_of_week', 'grouping_pattern', 'llm_context', 'month_names', 'negative_sign', 'number_examples', 'percentage_examples', 'percentage_spacing', 'phone_format', 'thousands_separator', 'time_examples', 'time_format', 'time_separator', 'updated_at'],
   k_LocaleRulesFormatting.required_properties = ['created_at', 'currency_code', 'currency_position', 'currency_symbol', 'date_pattern', 'decimal_separator', 'description', 'display_name', 'llm_context', 'thousands_separator', 'updated_at'],
   k_LocaleRulesFormatting.schema_hint = 'address_format, created_at (req), currency_code (req), currency_examples, currency_position (req), currency_spacing, currency_symbol (req), date_pattern (req), date_pattern_long, date_pattern_short, date_separator, day_names, decimal_separator (req), description (req), display_name (req), first_day_of_week, grouping_pattern, llm_context (req), month_names, negative_sign, number_examples, percentage_examples, percentage_spacing, phone_format, thousands_separator (req), time_examples, time_format, time_separator, updated_at (req)',
@@ -540,7 +540,7 @@ MERGE (k_LocaleRulesSlug:Meta:Kind {label: 'LocaleRulesSlug'})
 ON CREATE SET
   k_LocaleRulesSlug.display_name = 'LocaleRulesSlug',
   k_LocaleRulesSlug.llm_context = 'URL slug generation rules for a locale',
-  k_LocaleRulesSlug.yaml_path = 'nodes/global/knowledge/locale-rules-slug.yaml',
+  k_LocaleRulesSlug.yaml_path = 'node-kinds/global/knowledge/locale-rules-slug.yaml',
   k_LocaleRulesSlug.properties = ['case_handling', 'character_map', 'created_at', 'description', 'diacritics_handling', 'display_name', 'examples', 'ligature_handling', 'llm_context', 'max_length', 'non_latin_handling', 'slug_rule', 'space_handling', 'special_chars_handling', 'stopwords', 'unicode_normalization', 'updated_at'],
   k_LocaleRulesSlug.required_properties = ['case_handling', 'created_at', 'description', 'diacritics_handling', 'display_name', 'llm_context', 'slug_rule', 'space_handling', 'special_chars_handling', 'stopwords', 'updated_at'],
   k_LocaleRulesSlug.schema_hint = 'case_handling (req), character_map, created_at (req), description (req), diacritics_handling (req), display_name (req), examples, ligature_handling, llm_context (req), max_length, non_latin_handling, slug_rule (req), space_handling (req), special_chars_handling (req), stopwords (req), unicode_normalization, updated_at (req)',
@@ -550,7 +550,7 @@ ON CREATE SET
 ON MATCH SET
   k_LocaleRulesSlug.display_name = 'LocaleRulesSlug',
   k_LocaleRulesSlug.llm_context = 'URL slug generation rules for a locale',
-  k_LocaleRulesSlug.yaml_path = 'nodes/global/knowledge/locale-rules-slug.yaml',
+  k_LocaleRulesSlug.yaml_path = 'node-kinds/global/knowledge/locale-rules-slug.yaml',
   k_LocaleRulesSlug.properties = ['case_handling', 'character_map', 'created_at', 'description', 'diacritics_handling', 'display_name', 'examples', 'ligature_handling', 'llm_context', 'max_length', 'non_latin_handling', 'slug_rule', 'space_handling', 'special_chars_handling', 'stopwords', 'unicode_normalization', 'updated_at'],
   k_LocaleRulesSlug.required_properties = ['case_handling', 'created_at', 'description', 'diacritics_handling', 'display_name', 'llm_context', 'slug_rule', 'space_handling', 'special_chars_handling', 'stopwords', 'updated_at'],
   k_LocaleRulesSlug.schema_hint = 'case_handling (req), character_map, created_at (req), description (req), diacritics_handling (req), display_name (req), examples, ligature_handling, llm_context (req), max_length, non_latin_handling, slug_rule (req), space_handling (req), special_chars_handling (req), stopwords (req), unicode_normalization, updated_at (req)',
@@ -562,7 +562,7 @@ MERGE (k_LocaleVoice:Meta:Kind {label: 'LocaleVoice'})
 ON CREATE SET
   k_LocaleVoice.display_name = 'LocaleVoice',
   k_LocaleVoice.llm_context = 'Formality, directness, warmth, humor guidelines for a locale',
-  k_LocaleVoice.yaml_path = 'nodes/global/knowledge/locale-voice.yaml',
+  k_LocaleVoice.yaml_path = 'node-kinds/global/knowledge/locale-voice.yaml',
   k_LocaleVoice.properties = ['avg_sentence_length', 'created_at', 'default_formality', 'default_pronoun', 'description', 'directness_score', 'directness_style', 'display_name', 'formality_score', 'honorific_system', 'humor_score', 'humor_types', 'llm_context', 'preferred_voice', 'pronoun_rules', 'punctuation_rules', 'rhythm_style', 'softening_patterns', 'updated_at', 'warmth_by_stage', 'warmth_score'],
   k_LocaleVoice.required_properties = ['created_at', 'default_formality', 'description', 'directness_score', 'directness_style', 'display_name', 'formality_score', 'llm_context', 'updated_at'],
   k_LocaleVoice.schema_hint = 'avg_sentence_length, created_at (req), default_formality (req), default_pronoun, description (req), directness_score (req), directness_style (req), display_name (req), formality_score (req), honorific_system, humor_score, humor_types, llm_context (req), preferred_voice, pronoun_rules, punctuation_rules, rhythm_style, softening_patterns, updated_at (req), warmth_by_stage, warmth_score',
@@ -572,7 +572,7 @@ ON CREATE SET
 ON MATCH SET
   k_LocaleVoice.display_name = 'LocaleVoice',
   k_LocaleVoice.llm_context = 'Formality, directness, warmth, humor guidelines for a locale',
-  k_LocaleVoice.yaml_path = 'nodes/global/knowledge/locale-voice.yaml',
+  k_LocaleVoice.yaml_path = 'node-kinds/global/knowledge/locale-voice.yaml',
   k_LocaleVoice.properties = ['avg_sentence_length', 'created_at', 'default_formality', 'default_pronoun', 'description', 'directness_score', 'directness_style', 'display_name', 'formality_score', 'honorific_system', 'humor_score', 'humor_types', 'llm_context', 'preferred_voice', 'pronoun_rules', 'punctuation_rules', 'rhythm_style', 'softening_patterns', 'updated_at', 'warmth_by_stage', 'warmth_score'],
   k_LocaleVoice.required_properties = ['created_at', 'default_formality', 'description', 'directness_score', 'directness_style', 'display_name', 'formality_score', 'llm_context', 'updated_at'],
   k_LocaleVoice.schema_hint = 'avg_sentence_length, created_at (req), default_formality (req), default_pronoun, description (req), directness_score (req), directness_style (req), display_name (req), formality_score (req), honorific_system, humor_score, humor_types, llm_context (req), preferred_voice, pronoun_rules, punctuation_rules, rhythm_style, softening_patterns, updated_at (req), warmth_by_stage, warmth_score',
@@ -584,7 +584,7 @@ MERGE (k_Metaphor:Meta:Kind {label: 'Metaphor'})
 ON CREATE SET
   k_Metaphor.display_name = 'Metaphor',
   k_Metaphor.llm_context = 'Locale-native metaphor mapping universal concepts to local expressions',
-  k_Metaphor.yaml_path = 'nodes/global/knowledge/metaphor.yaml',
+  k_Metaphor.yaml_path = 'node-kinds/global/knowledge/metaphor.yaml',
   k_Metaphor.properties = ['alternatives', 'concept_key', 'created_at', 'description', 'display_name', 'domain', 'embedding', 'example_usage', 'literal_translation', 'llm_context', 'local_text', 'register', 'source_metadata', 'updated_at'],
   k_Metaphor.required_properties = ['concept_key', 'created_at', 'description', 'display_name', 'domain', 'example_usage', 'llm_context', 'local_text', 'register', 'updated_at'],
   k_Metaphor.schema_hint = 'alternatives, concept_key (req), created_at (req), description (req), display_name (req), domain (req), embedding, example_usage (req), literal_translation, llm_context (req), local_text (req), register (req), source_metadata, updated_at (req)',
@@ -594,7 +594,7 @@ ON CREATE SET
 ON MATCH SET
   k_Metaphor.display_name = 'Metaphor',
   k_Metaphor.llm_context = 'Locale-native metaphor mapping universal concepts to local expressions',
-  k_Metaphor.yaml_path = 'nodes/global/knowledge/metaphor.yaml',
+  k_Metaphor.yaml_path = 'node-kinds/global/knowledge/metaphor.yaml',
   k_Metaphor.properties = ['alternatives', 'concept_key', 'created_at', 'description', 'display_name', 'domain', 'embedding', 'example_usage', 'literal_translation', 'llm_context', 'local_text', 'register', 'source_metadata', 'updated_at'],
   k_Metaphor.required_properties = ['concept_key', 'created_at', 'description', 'display_name', 'domain', 'example_usage', 'llm_context', 'local_text', 'register', 'updated_at'],
   k_Metaphor.schema_hint = 'alternatives, concept_key (req), created_at (req), description (req), display_name (req), domain (req), embedding, example_usage (req), literal_translation, llm_context (req), local_text (req), register (req), source_metadata, updated_at (req)',
@@ -606,7 +606,7 @@ MERGE (k_OutputArtifact:Meta:Kind {label: 'OutputArtifact'})
 ON CREATE SET
   k_OutputArtifact.display_name = 'OutputArtifact',
   k_OutputArtifact.llm_context = 'Generated content bundle aggregating PageL10n and BlockL10n for a specific locale version.',
-  k_OutputArtifact.yaml_path = 'nodes/project/output/output-artifact.yaml',
+  k_OutputArtifact.yaml_path = 'node-kinds/project/output/output-artifact.yaml',
   k_OutputArtifact.properties = ['blocks_included', 'bundled_at', 'bundler_version', 'checksum', 'created_at', 'description', 'display_name', 'key', 'llm_context', 'locale_code', 'pages_included', 'published_at', 'published_by', 'status', 'total_size_bytes', 'updated_at', 'version'],
   k_OutputArtifact.required_properties = ['blocks_included', 'bundled_at', 'bundler_version', 'created_at', 'display_name', 'key', 'locale_code', 'pages_included', 'status', 'updated_at', 'version'],
   k_OutputArtifact.schema_hint = 'blocks_included (req), bundled_at (req), bundler_version (req), checksum, created_at (req), description, display_name (req), key (req), llm_context, locale_code (req), pages_included (req), published_at, published_by, status (req), total_size_bytes, updated_at (req), version (req)',
@@ -616,7 +616,7 @@ ON CREATE SET
 ON MATCH SET
   k_OutputArtifact.display_name = 'OutputArtifact',
   k_OutputArtifact.llm_context = 'Generated content bundle aggregating PageL10n and BlockL10n for a specific locale version.',
-  k_OutputArtifact.yaml_path = 'nodes/project/output/output-artifact.yaml',
+  k_OutputArtifact.yaml_path = 'node-kinds/project/output/output-artifact.yaml',
   k_OutputArtifact.properties = ['blocks_included', 'bundled_at', 'bundler_version', 'checksum', 'created_at', 'description', 'display_name', 'key', 'llm_context', 'locale_code', 'pages_included', 'published_at', 'published_by', 'status', 'total_size_bytes', 'updated_at', 'version'],
   k_OutputArtifact.required_properties = ['blocks_included', 'bundled_at', 'bundler_version', 'created_at', 'display_name', 'key', 'locale_code', 'pages_included', 'status', 'updated_at', 'version'],
   k_OutputArtifact.schema_hint = 'blocks_included (req), bundled_at (req), bundler_version (req), checksum, created_at (req), description, display_name (req), key (req), llm_context, locale_code (req), pages_included (req), published_at, published_by, status (req), total_size_bytes, updated_at (req), version (req)',
@@ -628,7 +628,7 @@ MERGE (k_Page:Meta:Kind {label: 'Page'})
 ON CREATE SET
   k_Page.display_name = 'Page',
   k_Page.llm_context = 'Invariant page structure containing blocks and orchestrator instructions',
-  k_Page.yaml_path = 'nodes/project/structure/page.yaml',
+  k_Page.yaml_path = 'node-kinds/project/structure/page.yaml',
   k_Page.properties = ['created_at', 'description', 'display_name', 'instructions', 'key', 'llm_context', 'updated_at'],
   k_Page.required_properties = ['created_at', 'description', 'display_name', 'key', 'llm_context', 'updated_at'],
   k_Page.schema_hint = 'created_at (req), description (req), display_name (req), instructions, key (req), llm_context (req), updated_at (req)',
@@ -638,7 +638,7 @@ ON CREATE SET
 ON MATCH SET
   k_Page.display_name = 'Page',
   k_Page.llm_context = 'Invariant page structure containing blocks and orchestrator instructions',
-  k_Page.yaml_path = 'nodes/project/structure/page.yaml',
+  k_Page.yaml_path = 'node-kinds/project/structure/page.yaml',
   k_Page.properties = ['created_at', 'description', 'display_name', 'instructions', 'key', 'llm_context', 'updated_at'],
   k_Page.required_properties = ['created_at', 'description', 'display_name', 'key', 'llm_context', 'updated_at'],
   k_Page.schema_hint = 'created_at (req), description (req), display_name (req), instructions, key (req), llm_context (req), updated_at (req)',
@@ -650,7 +650,7 @@ MERGE (k_PageL10n:Meta:Kind {label: 'PageL10n'})
 ON CREATE SET
   k_PageL10n.display_name = 'PageL10n',
   k_PageL10n.llm_context = 'Assembled BlockL10n content for a page in a specific locale',
-  k_PageL10n.yaml_path = 'nodes/project/output/page-l10n.yaml',
+  k_PageL10n.yaml_path = 'node-kinds/project/output/page-l10n.yaml',
   k_PageL10n.properties = ['assembled', 'assembled_at', 'assembler_version', 'created_at', 'description', 'display_name', 'llm_context', 'published_at', 'replaced_at', 'status', 'updated_at', 'version'],
   k_PageL10n.required_properties = ['assembled', 'assembled_at', 'assembler_version', 'created_at', 'description', 'display_name', 'status', 'updated_at', 'version'],
   k_PageL10n.schema_hint = 'assembled (req), assembled_at (req), assembler_version (req), created_at (req), description (req), display_name (req), llm_context, published_at, replaced_at, status (req), updated_at (req), version (req)',
@@ -660,7 +660,7 @@ ON CREATE SET
 ON MATCH SET
   k_PageL10n.display_name = 'PageL10n',
   k_PageL10n.llm_context = 'Assembled BlockL10n content for a page in a specific locale',
-  k_PageL10n.yaml_path = 'nodes/project/output/page-l10n.yaml',
+  k_PageL10n.yaml_path = 'node-kinds/project/output/page-l10n.yaml',
   k_PageL10n.properties = ['assembled', 'assembled_at', 'assembler_version', 'created_at', 'description', 'display_name', 'llm_context', 'published_at', 'replaced_at', 'status', 'updated_at', 'version'],
   k_PageL10n.required_properties = ['assembled', 'assembled_at', 'assembler_version', 'created_at', 'description', 'display_name', 'status', 'updated_at', 'version'],
   k_PageL10n.schema_hint = 'assembled (req), assembled_at (req), assembler_version (req), created_at (req), description (req), display_name (req), llm_context, published_at, replaced_at, status (req), updated_at (req), version (req)',
@@ -672,7 +672,7 @@ MERGE (k_PagePrompt:Meta:Kind {label: 'PagePrompt'})
 ON CREATE SET
   k_PagePrompt.display_name = 'PagePrompt',
   k_PagePrompt.llm_context = 'AI instructions for orchestrating page generation with versioning',
-  k_PagePrompt.yaml_path = 'nodes/project/instruction/page-prompt.yaml',
+  k_PagePrompt.yaml_path = 'node-kinds/project/instruction/page-prompt.yaml',
   k_PagePrompt.properties = ['active', 'created_at', 'description', 'display_name', 'llm_context', 'prompt', 'updated_at', 'version'],
   k_PagePrompt.required_properties = ['active', 'created_at', 'description', 'display_name', 'prompt', 'updated_at', 'version'],
   k_PagePrompt.schema_hint = 'active (req), created_at (req), description (req), display_name (req), llm_context, prompt (req), updated_at (req), version (req)',
@@ -682,7 +682,7 @@ ON CREATE SET
 ON MATCH SET
   k_PagePrompt.display_name = 'PagePrompt',
   k_PagePrompt.llm_context = 'AI instructions for orchestrating page generation with versioning',
-  k_PagePrompt.yaml_path = 'nodes/project/instruction/page-prompt.yaml',
+  k_PagePrompt.yaml_path = 'node-kinds/project/instruction/page-prompt.yaml',
   k_PagePrompt.properties = ['active', 'created_at', 'description', 'display_name', 'llm_context', 'prompt', 'updated_at', 'version'],
   k_PagePrompt.required_properties = ['active', 'created_at', 'description', 'display_name', 'prompt', 'updated_at', 'version'],
   k_PagePrompt.schema_hint = 'active (req), created_at (req), description (req), display_name (req), llm_context, prompt (req), updated_at (req), version (req)',
@@ -694,7 +694,7 @@ MERGE (k_PageType:Meta:Kind {label: 'PageType'})
 ON CREATE SET
   k_PageType.display_name = 'PageType',
   k_PageType.llm_context = 'Template defining meta requirements, layout rules, and block composition for a type of page',
-  k_PageType.yaml_path = 'nodes/project/instruction/page-type.yaml',
+  k_PageType.yaml_path = 'node-kinds/project/instruction/page-type.yaml',
   k_PageType.properties = ['category', 'created_at', 'description', 'display_name', 'key', 'layout_rules', 'llm_context', 'meta_schema', 'optional_block_types', 'required_block_types', 'updated_at', 'validation_rules'],
   k_PageType.required_properties = ['category', 'created_at', 'description', 'display_name', 'key', 'llm_context', 'meta_schema', 'updated_at'],
   k_PageType.schema_hint = 'category (req), created_at (req), description (req), display_name (req), key (req), layout_rules, llm_context (req), meta_schema (req), optional_block_types, required_block_types, updated_at (req), validation_rules',
@@ -704,7 +704,7 @@ ON CREATE SET
 ON MATCH SET
   k_PageType.display_name = 'PageType',
   k_PageType.llm_context = 'Template defining meta requirements, layout rules, and block composition for a type of page',
-  k_PageType.yaml_path = 'nodes/project/instruction/page-type.yaml',
+  k_PageType.yaml_path = 'node-kinds/project/instruction/page-type.yaml',
   k_PageType.properties = ['category', 'created_at', 'description', 'display_name', 'key', 'layout_rules', 'llm_context', 'meta_schema', 'optional_block_types', 'required_block_types', 'updated_at', 'validation_rules'],
   k_PageType.required_properties = ['category', 'created_at', 'description', 'display_name', 'key', 'llm_context', 'meta_schema', 'updated_at'],
   k_PageType.schema_hint = 'category (req), created_at (req), description (req), display_name (req), key (req), layout_rules, llm_context (req), meta_schema (req), optional_block_types, required_block_types, updated_at (req), validation_rules',
@@ -716,7 +716,7 @@ MERGE (k_Pattern:Meta:Kind {label: 'Pattern'})
 ON CREATE SET
   k_Pattern.display_name = 'Pattern',
   k_Pattern.llm_context = 'Formatting pattern with correct/incorrect examples',
-  k_Pattern.yaml_path = 'nodes/global/knowledge/pattern.yaml',
+  k_Pattern.yaml_path = 'node-kinds/global/knowledge/pattern.yaml',
   k_Pattern.properties = ['correct_examples', 'created_at', 'description', 'display_name', 'format_regex', 'format_string', 'incorrect_examples', 'llm_context', 'pattern_type', 'separator_decimal', 'separator_thousands', 'source_metadata', 'symbol_position', 'symbol_spacing', 'updated_at'],
   k_Pattern.required_properties = ['correct_examples', 'created_at', 'description', 'display_name', 'format_string', 'incorrect_examples', 'llm_context', 'pattern_type', 'updated_at'],
   k_Pattern.schema_hint = 'correct_examples (req), created_at (req), description (req), display_name (req), format_regex, format_string (req), incorrect_examples (req), llm_context (req), pattern_type (req), separator_decimal, separator_thousands, source_metadata, symbol_position, symbol_spacing, updated_at (req)',
@@ -726,7 +726,7 @@ ON CREATE SET
 ON MATCH SET
   k_Pattern.display_name = 'Pattern',
   k_Pattern.llm_context = 'Formatting pattern with correct/incorrect examples',
-  k_Pattern.yaml_path = 'nodes/global/knowledge/pattern.yaml',
+  k_Pattern.yaml_path = 'node-kinds/global/knowledge/pattern.yaml',
   k_Pattern.properties = ['correct_examples', 'created_at', 'description', 'display_name', 'format_regex', 'format_string', 'incorrect_examples', 'llm_context', 'pattern_type', 'separator_decimal', 'separator_thousands', 'source_metadata', 'symbol_position', 'symbol_spacing', 'updated_at'],
   k_Pattern.required_properties = ['correct_examples', 'created_at', 'description', 'display_name', 'format_string', 'incorrect_examples', 'llm_context', 'pattern_type', 'updated_at'],
   k_Pattern.schema_hint = 'correct_examples (req), created_at (req), description (req), display_name (req), format_regex, format_string (req), incorrect_examples (req), llm_context (req), pattern_type (req), separator_decimal, separator_thousands, source_metadata, symbol_position, symbol_spacing, updated_at (req)',
@@ -738,7 +738,7 @@ MERGE (k_Project:Meta:Kind {label: 'Project'})
 ON CREATE SET
   k_Project.display_name = 'Project',
   k_Project.llm_context = 'Multi-tenant root node containing project configuration and brand info',
-  k_Project.yaml_path = 'nodes/project/foundation/project.yaml',
+  k_Project.yaml_path = 'node-kinds/project/foundation/project.yaml',
   k_Project.properties = ['brand_name', 'brand_name_legal', 'category', 'competitors', 'core_values', 'created_at', 'description', 'display_name', 'founding_year', 'key', 'llm_context', 'updated_at', 'website_url'],
   k_Project.required_properties = ['brand_name', 'created_at', 'description', 'display_name', 'key', 'llm_context', 'updated_at'],
   k_Project.schema_hint = 'brand_name (req), brand_name_legal, category, competitors, core_values, created_at (req), description (req), display_name (req), founding_year, key (req), llm_context (req), updated_at (req), website_url',
@@ -748,7 +748,7 @@ ON CREATE SET
 ON MATCH SET
   k_Project.display_name = 'Project',
   k_Project.llm_context = 'Multi-tenant root node containing project configuration and brand info',
-  k_Project.yaml_path = 'nodes/project/foundation/project.yaml',
+  k_Project.yaml_path = 'node-kinds/project/foundation/project.yaml',
   k_Project.properties = ['brand_name', 'brand_name_legal', 'category', 'competitors', 'core_values', 'created_at', 'description', 'display_name', 'founding_year', 'key', 'llm_context', 'updated_at', 'website_url'],
   k_Project.required_properties = ['brand_name', 'created_at', 'description', 'display_name', 'key', 'llm_context', 'updated_at'],
   k_Project.schema_hint = 'brand_name (req), brand_name_legal, category, competitors, core_values, created_at (req), description (req), display_name (req), founding_year, key (req), llm_context (req), updated_at (req), website_url',
@@ -760,7 +760,7 @@ MERGE (k_ProjectL10n:Meta:Kind {label: 'ProjectL10n'})
 ON CREATE SET
   k_ProjectL10n.display_name = 'ProjectL10n',
   k_ProjectL10n.llm_context = 'Localized identity and messaging for a Project',
-  k_ProjectL10n.yaml_path = 'nodes/project/foundation/project-l10n.yaml',
+  k_ProjectL10n.yaml_path = 'node-kinds/project/foundation/project-l10n.yaml',
   k_ProjectL10n.properties = ['created_at', 'cta_primary', 'cta_secondary', 'cta_tertiary', 'description', 'display_name', 'llm_context', 'meta_description', 'pitch_detailed', 'pitch_elevator', 'pitch_one_liner', 'primary_keywords', 'secondary_keywords', 'tagline', 'updated_at', 'voice_do', 'voice_dont', 'voice_personality', 'voice_tone', 'what_long', 'what_medium', 'what_short'],
   k_ProjectL10n.required_properties = ['created_at', 'cta_primary', 'cta_secondary', 'description', 'display_name', 'llm_context', 'meta_description', 'pitch_detailed', 'pitch_elevator', 'pitch_one_liner', 'tagline', 'updated_at', 'voice_do', 'voice_dont', 'voice_personality', 'voice_tone', 'what_long', 'what_medium', 'what_short'],
   k_ProjectL10n.schema_hint = 'created_at (req), cta_primary (req), cta_secondary (req), cta_tertiary, description (req), display_name (req), llm_context (req), meta_description (req), pitch_detailed (req), pitch_elevator (req), pitch_one_liner (req), primary_keywords, secondary_keywords, tagline (req), updated_at (req), voice_do (req), voice_dont (req), voice_personality (req), voice_tone (req), what_long (req), what_medium (req), what_short (req)',
@@ -770,7 +770,7 @@ ON CREATE SET
 ON MATCH SET
   k_ProjectL10n.display_name = 'ProjectL10n',
   k_ProjectL10n.llm_context = 'Localized identity and messaging for a Project',
-  k_ProjectL10n.yaml_path = 'nodes/project/foundation/project-l10n.yaml',
+  k_ProjectL10n.yaml_path = 'node-kinds/project/foundation/project-l10n.yaml',
   k_ProjectL10n.properties = ['created_at', 'cta_primary', 'cta_secondary', 'cta_tertiary', 'description', 'display_name', 'llm_context', 'meta_description', 'pitch_detailed', 'pitch_elevator', 'pitch_one_liner', 'primary_keywords', 'secondary_keywords', 'tagline', 'updated_at', 'voice_do', 'voice_dont', 'voice_personality', 'voice_tone', 'what_long', 'what_medium', 'what_short'],
   k_ProjectL10n.required_properties = ['created_at', 'cta_primary', 'cta_secondary', 'description', 'display_name', 'llm_context', 'meta_description', 'pitch_detailed', 'pitch_elevator', 'pitch_one_liner', 'tagline', 'updated_at', 'voice_do', 'voice_dont', 'voice_personality', 'voice_tone', 'what_long', 'what_medium', 'what_short'],
   k_ProjectL10n.schema_hint = 'created_at (req), cta_primary (req), cta_secondary (req), cta_tertiary, description (req), display_name (req), llm_context (req), meta_description (req), pitch_detailed (req), pitch_elevator (req), pitch_one_liner (req), primary_keywords, secondary_keywords, tagline (req), updated_at (req), voice_do (req), voice_dont (req), voice_personality (req), voice_tone (req), what_long (req), what_medium (req), what_short (req)',
@@ -782,7 +782,7 @@ MERGE (k_PromptArtifact:Meta:Kind {label: 'PromptArtifact'})
 ON CREATE SET
   k_PromptArtifact.display_name = 'PromptArtifact',
   k_PromptArtifact.llm_context = 'Compiled prompt artifact with all context resolved. Immutable snapshot of prompt state.',
-  k_PromptArtifact.yaml_path = 'nodes/project/instruction/prompt-artifact.yaml',
+  k_PromptArtifact.yaml_path = 'node-kinds/project/instruction/prompt-artifact.yaml',
   k_PromptArtifact.properties = ['base_prompt_key', 'base_prompt_version', 'compiled_at', 'compiled_prompt', 'compiler_version', 'created_at', 'description', 'display_name', 'includes_concepts', 'includes_culture', 'includes_voice', 'key', 'llm_context', 'token_count', 'updated_at'],
   k_PromptArtifact.required_properties = ['base_prompt_key', 'base_prompt_version', 'compiled_at', 'compiled_prompt', 'compiler_version', 'created_at', 'display_name', 'includes_concepts', 'includes_culture', 'includes_voice', 'key', 'updated_at'],
   k_PromptArtifact.schema_hint = 'base_prompt_key (req), base_prompt_version (req), compiled_at (req), compiled_prompt (req), compiler_version (req), created_at (req), description, display_name (req), includes_concepts (req), includes_culture (req), includes_voice (req), key (req), llm_context, token_count, updated_at (req)',
@@ -792,7 +792,7 @@ ON CREATE SET
 ON MATCH SET
   k_PromptArtifact.display_name = 'PromptArtifact',
   k_PromptArtifact.llm_context = 'Compiled prompt artifact with all context resolved. Immutable snapshot of prompt state.',
-  k_PromptArtifact.yaml_path = 'nodes/project/instruction/prompt-artifact.yaml',
+  k_PromptArtifact.yaml_path = 'node-kinds/project/instruction/prompt-artifact.yaml',
   k_PromptArtifact.properties = ['base_prompt_key', 'base_prompt_version', 'compiled_at', 'compiled_prompt', 'compiler_version', 'created_at', 'description', 'display_name', 'includes_concepts', 'includes_culture', 'includes_voice', 'key', 'llm_context', 'token_count', 'updated_at'],
   k_PromptArtifact.required_properties = ['base_prompt_key', 'base_prompt_version', 'compiled_at', 'compiled_prompt', 'compiler_version', 'created_at', 'display_name', 'includes_concepts', 'includes_culture', 'includes_voice', 'key', 'updated_at'],
   k_PromptArtifact.schema_hint = 'base_prompt_key (req), base_prompt_version (req), compiled_at (req), compiled_prompt (req), compiler_version (req), created_at (req), description, display_name (req), includes_concepts (req), includes_culture (req), includes_voice (req), key (req), llm_context, token_count, updated_at (req)',
@@ -804,7 +804,7 @@ MERGE (k_Reference:Meta:Kind {label: 'Reference'})
 ON CREATE SET
   k_Reference.display_name = 'Reference',
   k_Reference.llm_context = 'Cultural reference entity for locale-specific content',
-  k_Reference.yaml_path = 'nodes/global/knowledge/reference.yaml',
+  k_Reference.yaml_path = 'node-kinds/global/knowledge/reference.yaml',
   k_Reference.properties = ['associations', 'avoid_reason', 'category', 'created_at', 'description', 'display_name', 'global_equivalent', 'llm_context', 'local_positioning', 'name', 'name_english', 'recognition_score', 'reference_type', 'safety_level', 'sentiment', 'source_metadata', 'subcategory', 'timing', 'updated_at', 'usage_contexts'],
   k_Reference.required_properties = ['created_at', 'description', 'display_name', 'llm_context', 'name', 'recognition_score', 'reference_type', 'safety_level', 'updated_at'],
   k_Reference.schema_hint = 'associations, avoid_reason, category, created_at (req), description (req), display_name (req), global_equivalent, llm_context (req), local_positioning, name (req), name_english, recognition_score (req), reference_type (req), safety_level (req), sentiment, source_metadata, subcategory, timing, updated_at (req), usage_contexts',
@@ -814,7 +814,7 @@ ON CREATE SET
 ON MATCH SET
   k_Reference.display_name = 'Reference',
   k_Reference.llm_context = 'Cultural reference entity for locale-specific content',
-  k_Reference.yaml_path = 'nodes/global/knowledge/reference.yaml',
+  k_Reference.yaml_path = 'node-kinds/global/knowledge/reference.yaml',
   k_Reference.properties = ['associations', 'avoid_reason', 'category', 'created_at', 'description', 'display_name', 'global_equivalent', 'llm_context', 'local_positioning', 'name', 'name_english', 'recognition_score', 'reference_type', 'safety_level', 'sentiment', 'source_metadata', 'subcategory', 'timing', 'updated_at', 'usage_contexts'],
   k_Reference.required_properties = ['created_at', 'description', 'display_name', 'llm_context', 'name', 'recognition_score', 'reference_type', 'safety_level', 'updated_at'],
   k_Reference.schema_hint = 'associations, avoid_reason, category, created_at (req), description (req), display_name (req), global_equivalent, llm_context (req), local_positioning, name (req), name_english, recognition_score (req), reference_type (req), safety_level (req), sentiment, source_metadata, subcategory, timing, updated_at (req), usage_contexts',
@@ -826,7 +826,7 @@ MERGE (k_SEOKeywordL10n:Meta:Kind {label: 'SEOKeywordL10n'})
 ON CREATE SET
   k_SEOKeywordL10n.display_name = 'SEOKeywordL10n',
   k_SEOKeywordL10n.llm_context = 'Target keyword with metrics for SEO optimization (locale-specific)',
-  k_SEOKeywordL10n.yaml_path = 'nodes/shared/seo/seo-keyword-l10n.yaml',
+  k_SEOKeywordL10n.yaml_path = 'node-kinds/shared/seo/seo-keyword-l10n.yaml',
   k_SEOKeywordL10n.properties = ['cpc', 'created_at', 'description', 'difficulty', 'display_name', 'intent', 'key', 'llm_context', 'platform', 'source', 'updated_at', 'value', 'volume'],
   k_SEOKeywordL10n.required_properties = ['display_name', 'key', 'value'],
   k_SEOKeywordL10n.schema_hint = 'cpc, created_at, description, difficulty, display_name (req), intent, key (req), llm_context, platform, source, updated_at, value (req), volume',
@@ -836,7 +836,7 @@ ON CREATE SET
 ON MATCH SET
   k_SEOKeywordL10n.display_name = 'SEOKeywordL10n',
   k_SEOKeywordL10n.llm_context = 'Target keyword with metrics for SEO optimization (locale-specific)',
-  k_SEOKeywordL10n.yaml_path = 'nodes/shared/seo/seo-keyword-l10n.yaml',
+  k_SEOKeywordL10n.yaml_path = 'node-kinds/shared/seo/seo-keyword-l10n.yaml',
   k_SEOKeywordL10n.properties = ['cpc', 'created_at', 'description', 'difficulty', 'display_name', 'intent', 'key', 'llm_context', 'platform', 'source', 'updated_at', 'value', 'volume'],
   k_SEOKeywordL10n.required_properties = ['display_name', 'key', 'value'],
   k_SEOKeywordL10n.schema_hint = 'cpc, created_at, description, difficulty, display_name (req), intent, key (req), llm_context, platform, source, updated_at, value (req), volume',
@@ -848,7 +848,7 @@ MERGE (k_SEOKeywordMetrics:Meta:Kind {label: 'SEOKeywordMetrics'})
 ON CREATE SET
   k_SEOKeywordMetrics.display_name = 'SEOKeywordMetrics',
   k_SEOKeywordMetrics.llm_context = 'Historical metrics snapshot for an SEO keyword',
-  k_SEOKeywordMetrics.yaml_path = 'nodes/shared/seo/seo-keyword-metrics.yaml',
+  k_SEOKeywordMetrics.yaml_path = 'node-kinds/shared/seo/seo-keyword-metrics.yaml',
   k_SEOKeywordMetrics.properties = ['cpc', 'created_at', 'description', 'difficulty', 'display_name', 'key', 'llm_context', 'observed_at', 'position', 'source', 'updated_at', 'url', 'volume'],
   k_SEOKeywordMetrics.required_properties = ['display_name', 'key', 'observed_at', 'source'],
   k_SEOKeywordMetrics.schema_hint = 'cpc, created_at, description, difficulty, display_name (req), key (req), llm_context, observed_at (req), position, source (req), updated_at, url, volume',
@@ -858,7 +858,7 @@ ON CREATE SET
 ON MATCH SET
   k_SEOKeywordMetrics.display_name = 'SEOKeywordMetrics',
   k_SEOKeywordMetrics.llm_context = 'Historical metrics snapshot for an SEO keyword',
-  k_SEOKeywordMetrics.yaml_path = 'nodes/shared/seo/seo-keyword-metrics.yaml',
+  k_SEOKeywordMetrics.yaml_path = 'node-kinds/shared/seo/seo-keyword-metrics.yaml',
   k_SEOKeywordMetrics.properties = ['cpc', 'created_at', 'description', 'difficulty', 'display_name', 'key', 'llm_context', 'observed_at', 'position', 'source', 'updated_at', 'url', 'volume'],
   k_SEOKeywordMetrics.required_properties = ['display_name', 'key', 'observed_at', 'source'],
   k_SEOKeywordMetrics.schema_hint = 'cpc, created_at, description, difficulty, display_name (req), key (req), llm_context, observed_at (req), position, source (req), updated_at, url, volume',
@@ -870,7 +870,7 @@ MERGE (k_SEOMiningRun:Meta:Kind {label: 'SEOMiningRun'})
 ON CREATE SET
   k_SEOMiningRun.display_name = 'SEOMiningRun',
   k_SEOMiningRun.llm_context = 'Mining job for SEO keyword variations',
-  k_SEOMiningRun.yaml_path = 'nodes/shared/seo/seo-mining-run.yaml',
+  k_SEOMiningRun.yaml_path = 'node-kinds/shared/seo/seo-mining-run.yaml',
   k_SEOMiningRun.properties = ['completed_at', 'created_at', 'description', 'display_name', 'key', 'llm_context', 'sources', 'started_at', 'status', 'total_variations', 'unique_variations', 'updated_at'],
   k_SEOMiningRun.required_properties = ['display_name', 'status'],
   k_SEOMiningRun.schema_hint = 'completed_at, created_at, description, display_name (req), key, llm_context, sources, started_at, status (req), total_variations, unique_variations, updated_at',
@@ -880,7 +880,7 @@ ON CREATE SET
 ON MATCH SET
   k_SEOMiningRun.display_name = 'SEOMiningRun',
   k_SEOMiningRun.llm_context = 'Mining job for SEO keyword variations',
-  k_SEOMiningRun.yaml_path = 'nodes/shared/seo/seo-mining-run.yaml',
+  k_SEOMiningRun.yaml_path = 'node-kinds/shared/seo/seo-mining-run.yaml',
   k_SEOMiningRun.properties = ['completed_at', 'created_at', 'description', 'display_name', 'key', 'llm_context', 'sources', 'started_at', 'status', 'total_variations', 'unique_variations', 'updated_at'],
   k_SEOMiningRun.required_properties = ['display_name', 'status'],
   k_SEOMiningRun.schema_hint = 'completed_at, created_at, description, display_name (req), key, llm_context, sources, started_at, status (req), total_variations, unique_variations, updated_at',
@@ -892,7 +892,7 @@ MERGE (k_SearchIntent:Meta:Kind {label: 'SearchIntent'})
 ON CREATE SET
   k_SearchIntent.display_name = 'SearchIntent',
   k_SearchIntent.llm_context = 'Abstraction of user search intent. Represents the underlying need behind a search query, independent of specific keywords or locale. A single SearchIntent can be satisfied by multiple Pages across locales. USE: When modeling the "why" behind searches, not just keywords. TRIGGERS: "intent mapping", "search intent", "user need", "query abstraction". NOT: For specific keywords (use SEOKeyword), for page content (use Concept).',
-  k_SearchIntent.yaml_path = 'nodes/project/semantic/search-intent.yaml',
+  k_SearchIntent.yaml_path = 'node-kinds/project/semantic/search-intent.yaml',
   k_SearchIntent.properties = ['competitor_coverage', 'content_gap_score', 'created_at', 'description', 'display_name', 'estimated_volume', 'funnel_stage', 'intent_type', 'key', 'llm_context', 'priority', 'updated_at'],
   k_SearchIntent.required_properties = ['created_at', 'description', 'display_name', 'funnel_stage', 'intent_type', 'key', 'llm_context', 'priority', 'updated_at'],
   k_SearchIntent.schema_hint = 'competitor_coverage, content_gap_score, created_at (req), description (req), display_name (req), estimated_volume, funnel_stage (req), intent_type (req), key (req), llm_context (req), priority (req), updated_at (req)',
@@ -902,7 +902,7 @@ ON CREATE SET
 ON MATCH SET
   k_SearchIntent.display_name = 'SearchIntent',
   k_SearchIntent.llm_context = 'Abstraction of user search intent. Represents the underlying need behind a search query, independent of specific keywords or locale. A single SearchIntent can be satisfied by multiple Pages across locales. USE: When modeling the "why" behind searches, not just keywords. TRIGGERS: "intent mapping", "search intent", "user need", "query abstraction". NOT: For specific keywords (use SEOKeyword), for page content (use Concept).',
-  k_SearchIntent.yaml_path = 'nodes/project/semantic/search-intent.yaml',
+  k_SearchIntent.yaml_path = 'node-kinds/project/semantic/search-intent.yaml',
   k_SearchIntent.properties = ['competitor_coverage', 'content_gap_score', 'created_at', 'description', 'display_name', 'estimated_volume', 'funnel_stage', 'intent_type', 'key', 'llm_context', 'priority', 'updated_at'],
   k_SearchIntent.required_properties = ['created_at', 'description', 'display_name', 'funnel_stage', 'intent_type', 'key', 'llm_context', 'priority', 'updated_at'],
   k_SearchIntent.schema_hint = 'competitor_coverage, content_gap_score, created_at (req), description (req), display_name (req), estimated_volume, funnel_stage (req), intent_type (req), key (req), llm_context (req), priority (req), updated_at (req)',
@@ -914,7 +914,7 @@ MERGE (k_Thing:Meta:Kind {label: 'Thing'})
 ON CREATE SET
   k_Thing.display_name = 'Thing',
   k_Thing.llm_context = 'Universal entity aligned with Schema.org Thing type. Represents Wikidata-linked concepts, people, places, organizations, products, and other entities that exist independently of any specific project. Project-specific Things can SPECIALIZE shared Things to provide brand-specific definitions.',
-  k_Thing.yaml_path = 'nodes/shared/geo/thing.yaml',
+  k_Thing.yaml_path = 'node-kinds/shared/geo/thing.yaml',
   k_Thing.properties = ['additional_types', 'ai_relevance_score', 'authority_domains', 'citation_count', 'created_at', 'description', 'display_name', 'embedding', 'embedding_source', 'embedding_updated_at', 'identifier', 'image', 'key', 'llm_context', 'same_as', 'schema_type', 'updated_at', 'url', 'wikidata_id'],
   k_Thing.required_properties = ['created_at', 'description', 'display_name', 'key', 'llm_context', 'schema_type', 'updated_at'],
   k_Thing.schema_hint = 'additional_types, ai_relevance_score, authority_domains, citation_count, created_at (req), description (req), display_name (req), embedding, embedding_source, embedding_updated_at, identifier, image, key (req), llm_context (req), same_as, schema_type (req), updated_at (req), url, wikidata_id',
@@ -924,7 +924,7 @@ ON CREATE SET
 ON MATCH SET
   k_Thing.display_name = 'Thing',
   k_Thing.llm_context = 'Universal entity aligned with Schema.org Thing type. Represents Wikidata-linked concepts, people, places, organizations, products, and other entities that exist independently of any specific project. Project-specific Things can SPECIALIZE shared Things to provide brand-specific definitions.',
-  k_Thing.yaml_path = 'nodes/shared/geo/thing.yaml',
+  k_Thing.yaml_path = 'node-kinds/shared/geo/thing.yaml',
   k_Thing.properties = ['additional_types', 'ai_relevance_score', 'authority_domains', 'citation_count', 'created_at', 'description', 'display_name', 'embedding', 'embedding_source', 'embedding_updated_at', 'identifier', 'image', 'key', 'llm_context', 'same_as', 'schema_type', 'updated_at', 'url', 'wikidata_id'],
   k_Thing.required_properties = ['created_at', 'description', 'display_name', 'key', 'llm_context', 'schema_type', 'updated_at'],
   k_Thing.schema_hint = 'additional_types, ai_relevance_score, authority_domains, citation_count, created_at (req), description (req), display_name (req), embedding, embedding_source, embedding_updated_at, identifier, image, key (req), llm_context (req), same_as, schema_type (req), updated_at (req), url, wikidata_id',
@@ -936,7 +936,7 @@ MERGE (k_ThingL10n:Meta:Kind {label: 'ThingL10n'})
 ON CREATE SET
   k_ThingL10n.display_name = 'ThingL10n',
   k_ThingL10n.llm_context = 'Localized name, description, and aliases for a Thing entity. Each ThingL10n represents the native content for one locale. Supports multiple aliases per locale for SEO anchor text variation.',
-  k_ThingL10n.yaml_path = 'nodes/shared/geo/thing-l10n.yaml',
+  k_ThingL10n.yaml_path = 'node-kinds/shared/geo/thing-l10n.yaml',
   k_ThingL10n.properties = ['aliases', 'created_at', 'description', 'display_name', 'formal_name', 'key', 'llm_context', 'name', 'native_description', 'pronunciation', 'short_name', 'updated_at'],
   k_ThingL10n.required_properties = ['display_name', 'key', 'name'],
   k_ThingL10n.schema_hint = 'aliases, created_at, description, display_name (req), formal_name, key (req), llm_context, name (req), native_description, pronunciation, short_name, updated_at',
@@ -946,7 +946,7 @@ ON CREATE SET
 ON MATCH SET
   k_ThingL10n.display_name = 'ThingL10n',
   k_ThingL10n.llm_context = 'Localized name, description, and aliases for a Thing entity. Each ThingL10n represents the native content for one locale. Supports multiple aliases per locale for SEO anchor text variation.',
-  k_ThingL10n.yaml_path = 'nodes/shared/geo/thing-l10n.yaml',
+  k_ThingL10n.yaml_path = 'node-kinds/shared/geo/thing-l10n.yaml',
   k_ThingL10n.properties = ['aliases', 'created_at', 'description', 'display_name', 'formal_name', 'key', 'llm_context', 'name', 'native_description', 'pronunciation', 'short_name', 'updated_at'],
   k_ThingL10n.required_properties = ['display_name', 'key', 'name'],
   k_ThingL10n.schema_hint = 'aliases, created_at, description, display_name (req), formal_name, key (req), llm_context, name (req), native_description, pronunciation, short_name, updated_at',
@@ -958,7 +958,7 @@ MERGE (k_TopicCluster:Meta:Kind {label: 'TopicCluster'})
 ON CREATE SET
   k_TopicCluster.display_name = 'TopicCluster',
   k_TopicCluster.llm_context = 'Represents a pillar-cluster content strategy grouping. A TopicCluster organizes related concepts around a central pillar topic, with supporting cluster content that links back to the pillar for SEO authority building. USE: When modeling pillar-cluster SEO architecture for topical authority. TRIGGERS: "topic cluster", "pillar content", "content hub", "topical authority". NOT: For single pages (use Page), for concepts (use Concept).',
-  k_TopicCluster.yaml_path = 'nodes/project/semantic/topic-cluster.yaml',
+  k_TopicCluster.yaml_path = 'node-kinds/project/semantic/topic-cluster.yaml',
   k_TopicCluster.properties = ['authority_score', 'cluster_size', 'cluster_type', 'completion_percentage', 'created_at', 'description', 'display_name', 'funnel_focus', 'internal_link_density', 'key', 'llm_context', 'primary_intent', 'target_keyword_count', 'updated_at'],
   k_TopicCluster.required_properties = ['cluster_type', 'created_at', 'description', 'display_name', 'funnel_focus', 'key', 'llm_context', 'primary_intent', 'updated_at'],
   k_TopicCluster.schema_hint = 'authority_score, cluster_size, cluster_type (req), completion_percentage, created_at (req), description (req), display_name (req), funnel_focus (req), internal_link_density, key (req), llm_context (req), primary_intent (req), target_keyword_count, updated_at (req)',
@@ -968,7 +968,7 @@ ON CREATE SET
 ON MATCH SET
   k_TopicCluster.display_name = 'TopicCluster',
   k_TopicCluster.llm_context = 'Represents a pillar-cluster content strategy grouping. A TopicCluster organizes related concepts around a central pillar topic, with supporting cluster content that links back to the pillar for SEO authority building. USE: When modeling pillar-cluster SEO architecture for topical authority. TRIGGERS: "topic cluster", "pillar content", "content hub", "topical authority". NOT: For single pages (use Page), for concepts (use Concept).',
-  k_TopicCluster.yaml_path = 'nodes/project/semantic/topic-cluster.yaml',
+  k_TopicCluster.yaml_path = 'node-kinds/project/semantic/topic-cluster.yaml',
   k_TopicCluster.properties = ['authority_score', 'cluster_size', 'cluster_type', 'completion_percentage', 'created_at', 'description', 'display_name', 'funnel_focus', 'internal_link_density', 'key', 'llm_context', 'primary_intent', 'target_keyword_count', 'updated_at'],
   k_TopicCluster.required_properties = ['cluster_type', 'created_at', 'description', 'display_name', 'funnel_focus', 'key', 'llm_context', 'primary_intent', 'updated_at'],
   k_TopicCluster.schema_hint = 'authority_score, cluster_size, cluster_type (req), completion_percentage, created_at (req), description (req), display_name (req), funnel_focus (req), internal_link_density, key (req), llm_context (req), primary_intent (req), target_keyword_count, updated_at (req)',

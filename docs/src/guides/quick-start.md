@@ -72,8 +72,8 @@ Expected output:
 ["Meta", "Layer"]     9
 ["Meta", "Kind"]      35
 ["Meta", "Trait"]     5
-["Meta", "EdgeFamily"] 5
-["Meta", "EdgeKind"]  50
+["Meta", "ArcFamily"]  5
+["Meta", "ArcKind"]   76
 ```
 
 ### Check Rust CLI

@@ -1,0 +1,17 @@
+# packages/core/models/arc-kinds/semantic/specializes.yaml
+# ArcKind: SPECIALIZES — Project Thing specializes a shared Thing
+
+arc:
+  name: SPECIALIZES
+  family: semantic
+  scope: intra_realm
+  source: Thing
+  target: Thing
+  cardinality: many_to_one
+  properties:
+    - name: override_level
+      type: string
+      required: false
+  llm_context: "Project Thing specializes a shared Thing. override_level: full/partial/extension. Used
+    when brand has specific definition."
+  cypher_pattern: (Thing)-[:SPECIALIZES {override_level}]->(Thing)
