@@ -1,0 +1,99 @@
+# packages/core/models/node-kinds/global/knowledge/pattern-set.yaml
+# PatternSet — Usage-specific content patterns for a locale
+#
+# Tier: semantic (contextual retrieval by usage)
+# Usages: cta, headlines, body, social
+# Stability: Medium - update quarterly
+
+node:
+  name: PatternSet
+  realm: global
+  layer: knowledge
+  trait: knowledge
+  knowledge_tier: semantic
+  icon: "📝"
+  description: "Usage-specific content patterns and templates"
+
+  standard_properties:
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable name"
+      example: "French (France) CTA Patterns"
+
+    description:
+      type: string
+      required: true
+      description: "Short description"
+      example: "Call-to-action patterns for fr-FR"
+
+    llm_context:
+      type: string
+      required: true
+      description: "LLM generation hints"
+      example: "USE: for CTA writing. TRIGGERS: button, action, convert. NOT: headlines."
+
+    created_at:
+      type: datetime
+      required: true
+      description: "Creation timestamp"
+
+    updated_at:
+      type: datetime
+      required: true
+      description: "Last update timestamp"
+
+  properties:
+    # Usage identification
+    usage:
+      type: string
+      required: true
+      enum: [cta, headlines, body, social]
+      description: "Pattern usage category"
+      example: "cta"
+
+    # Pattern templates
+    patterns:
+      type: json
+      required: true
+      description: "Content patterns with placeholders"
+      example:
+        primary_action: "Découvrir {product}"
+        secondary_action: "En savoir plus"
+        urgency: "Profitez-en maintenant"
+        benefit: "Bénéficiez de {benefit}"
+
+    # Structure templates
+    structures:
+      type: json
+      required: false
+      description: "Structural patterns"
+      example:
+        short: "{verb} {object}"
+        medium: "{verb} {object} {benefit}"
+        long: "{context}, {verb} {object} et {benefit}"
+
+    # Effective verbs
+    power_verbs:
+      type: json
+      required: false
+      description: "High-conversion verbs for this usage"
+      example: ["découvrir", "profiter", "bénéficier", "accéder", "obtenir"]
+
+    # Patterns to avoid
+    avoid_patterns:
+      type: json
+      required: false
+      description: "Ineffective or culturally inappropriate patterns"
+      example:
+        aggressive: ["Achetez maintenant!", "Ne ratez pas!"]
+        overused: ["Cliquez ici"]
+
+  relations:
+    incoming:
+      - type: HAS_PATTERNS
+        from: Locale
+        cardinality: "1:N"
+        description: "Locale has multiple pattern sets (one per usage)"
+        properties:
+          usage: string
