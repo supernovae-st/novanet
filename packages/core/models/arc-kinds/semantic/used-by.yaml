@@ -5,6 +5,7 @@ arc:
   name: USED_BY
   family: semantic
   scope: intra_realm
+  temperature_threshold: 0.0  # v9.9: Inverse of USES_CONCEPT (always follow)
   source: Concept
   target:
     - Page

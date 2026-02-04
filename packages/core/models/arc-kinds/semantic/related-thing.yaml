@@ -5,6 +5,7 @@ arc:
   name: RELATED_THING
   family: semantic
   scope: intra_realm
+  temperature_threshold: 0.5  # v9.9: Thing relationships (optional context)
   source: Thing
   target: Thing
   cardinality: many_to_many

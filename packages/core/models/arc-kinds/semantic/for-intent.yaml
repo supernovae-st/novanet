@@ -5,6 +5,7 @@ arc:
   name: FOR_INTENT
   family: semantic
   scope: intra_realm
+  temperature_threshold: 0.0  # v9.9: Block→intent targeting (always follow)
   source: Block
   target: SearchIntent
   cardinality: many_to_many

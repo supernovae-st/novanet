@@ -5,6 +5,7 @@ arc:
   name: SUBTOPIC_OF
   family: semantic
   scope: intra_realm
+  temperature_threshold: 0.2  # v9.9: SEO topical hierarchy (background context)
   source: Page
   target: Page
   cardinality: many_to_one
