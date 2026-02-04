@@ -1,0 +1,147 @@
+# packages/core/models/node-kinds/global/knowledge/taboo-set.yaml
+# TabooSet — Severity-specific taboos and constraints for a locale
+#
+# Tier: semantic (contextual retrieval by severity)
+# Severities: avoid, careful, legal
+# Stability: High - critical safety knowledge
+
+node:
+  name: TabooSet
+  realm: global
+  layer: knowledge
+  trait: knowledge
+  knowledge_tier: semantic
+  icon: "⚠️"
+  description: "Severity-specific taboos, constraints, and compliance rules"
+
+  standard_properties:
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable name"
+      example: "French (France) Avoid Topics"
+
+    description:
+      type: string
+      required: true
+      description: "Short description"
+      example: "Topics to never mention for fr-FR"
+
+    llm_context:
+      type: string
+      required: true
+      description: "LLM generation hints"
+      example: "USE: always loaded for safety. TRIGGERS: content generation. NOT: optional."
+
+    created_at:
+      type: datetime
+      required: true
+      description: "Creation timestamp"
+
+    updated_at:
+      type: datetime
+      required: true
+      description: "Last update timestamp"
+
+  properties:
+    # Severity identification
+    severity:
+      type: string
+      required: true
+      enum: [avoid, careful, legal]
+      description: "Taboo severity level"
+      example: "avoid"
+
+    # For severity: avoid
+    forbidden_topics:
+      type: json
+      required: false
+      description: "Topics to never mention (when severity=avoid)"
+      example:
+        - topic: "political parties"
+          reason: "divisive"
+        - topic: "religious beliefs"
+          reason: "sensitive"
+        - topic: "historical controversies"
+          reason: "contentious"
+
+    forbidden_comparisons:
+      type: json
+      required: false
+      description: "Comparisons to avoid"
+      example:
+        - "comparing to competitors by name"
+        - "war/conflict metaphors"
+        - "religious analogies"
+
+    forbidden_imagery:
+      type: json
+      required: false
+      description: "Imagery to avoid"
+      example:
+        - "national flags in commercial context"
+        - "religious symbols"
+        - "political symbols"
+
+    # For severity: careful
+    sensitive_topics:
+      type: json
+      required: false
+      description: "Topics requiring careful handling (when severity=careful)"
+      example:
+        - topic: "environmental claims"
+          guideline: "must be substantiated"
+        - topic: "health benefits"
+          guideline: "avoid medical claims"
+        - topic: "price comparisons"
+          guideline: "must be verifiable"
+
+    cultural_sensitivities:
+      type: json
+      required: false
+      description: "Cultural sensitivities to respect"
+      example:
+        - sensitivity: "regional identities"
+          guideline: "acknowledge diversity"
+        - sensitivity: "language variants"
+          guideline: "use metropolitan French"
+
+    # For severity: legal
+    legal_requirements:
+      type: json
+      required: false
+      description: "Legal compliance requirements (when severity=legal)"
+      example:
+        - requirement: "GDPR privacy notice"
+          applies_to: "data collection"
+        - requirement: "Cookie consent"
+          applies_to: "all pages"
+        - requirement: "Price display"
+          applies_to: "must include TTC"
+
+    advertising_rules:
+      type: json
+      required: false
+      description: "Advertising regulation compliance"
+      example:
+        comparative_advertising: "strictly regulated"
+        superlatives: "must be provable"
+        testimonials: "must be genuine"
+
+    industry_specific:
+      type: json
+      required: false
+      description: "Industry-specific regulations"
+      example:
+        financial: "AMF disclaimers required"
+        health: "ANSM guidelines"
+        alcohol: "mandatory warnings"
+
+  relations:
+    incoming:
+      - type: HAS_TABOOS
+        from: Locale
+        cardinality: "1:N"
+        description: "Locale has multiple taboo sets (one per severity)"
+        properties:
+          severity: string
