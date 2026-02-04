@@ -33,6 +33,15 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 - `pretty_assertions` — Colorful diffs
 - `cargo-nextest` — Fast parallel test runner (CI)
 
+**Quality tools:**
+- `cargo-deny` — License/security policy (`deny.toml`)
+- `cargo-audit` — Vulnerability scanning
+- `cargo-machete` — Unused dependency detection
+- `cargo-llvm-cov` — Coverage reporting
+- `cargo-mutants` — Mutation testing
+- `cargo-bloat` — Binary size analysis
+- `bacon` — Live reload dev experience
+
 ## Commands
 
 ```bash
@@ -86,11 +95,22 @@ cargo run -- tui                                  # Interactive terminal UI
 # Quality
 cargo clippy -- -D warnings    # Zero warnings policy
 cargo fmt --check              # Formatting check
-cargo test                     # 214 unit tests
+cargo nextest run              # 223 tests (fast, parallel)
 cargo test -- --ignored        # Neo4j integration tests (requires running Neo4j)
 
+# Security & auditing
+cargo deny check               # License/security policy (deny.toml)
+cargo audit                    # Vulnerability scanning (RustSec)
+cargo machete                  # Unused dependencies
+
+# Code quality analysis
+cargo llvm-cov                 # Coverage report
+cargo mutants                  # Mutation testing (long)
+cargo bloat --release          # Binary size analysis
+bacon clippy                   # Live reload clippy
+
 # Pre-commit
-cargo fmt && cargo clippy -- -D warnings && cargo test
+cargo fmt && cargo clippy -- -D warnings && cargo nextest run && cargo deny check
 ```
 
 ## Architecture
