@@ -226,7 +226,7 @@ kind_icons:
   EvaluationSignal: activity
 
   # Shared / SEO
-  SEOKeywordL10n: search
+  SEOKeyword: search
   SEOKeywordMetrics: bar-chart-2
   SEOMiningRun: pickaxe
 

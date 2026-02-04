@@ -1059,7 +1059,7 @@ ON CREATE SET
 
 // SEO Keywords - English
 MATCH (c:Concept {key: "action-create-qr"})-[:HAS_L10N]->(cl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale {key: "en-US"})
-MERGE (seo:SEOKeywordL10n {key: "seo-qr-code-generator-en"})
+MERGE (seo:SEOKeyword {key: "seo-qr-code-generator-en"})
 ON CREATE SET
   seo.key = "seo-qr-code-generator-en",
   seo.display_name = "QR Code Generator",
@@ -1076,7 +1076,7 @@ MERGE (cl)-[:HAS_SEO_TARGET]->(seo)
 MERGE (seo)-[:FOR_LOCALE]->(l);
 
 MATCH (c:Concept {key: "action-create-qr"})-[:HAS_L10N]->(cl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale {key: "en-US"})
-MERGE (seo:SEOKeywordL10n {key: "seo-free-qr-code-en"})
+MERGE (seo:SEOKeyword {key: "seo-free-qr-code-en"})
 ON CREATE SET
   seo.key = "seo-free-qr-code-en",
   seo.display_name = "Free QR Code",
@@ -1093,7 +1093,7 @@ MERGE (cl)-[:HAS_SEO_TARGET]->(seo)
 MERGE (seo)-[:FOR_LOCALE]->(l);
 
 MATCH (c:Concept {key: "usecase-restaurant"})-[:HAS_L10N]->(cl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale {key: "en-US"})
-MERGE (seo:SEOKeywordL10n {key: "seo-restaurant-qr-menu-en"})
+MERGE (seo:SEOKeyword {key: "seo-restaurant-qr-menu-en"})
 ON CREATE SET
   seo.key = "seo-restaurant-qr-menu-en",
   seo.display_name = "Restaurant QR Menu",
@@ -1111,7 +1111,7 @@ MERGE (seo)-[:FOR_LOCALE]->(l);
 
 // SEO Keywords - French
 MATCH (c:Concept {key: "action-create-qr"})-[:HAS_L10N]->(cl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale {key: "fr-FR"})
-MERGE (seo:SEOKeywordL10n {key: "seo-generateur-qr-code-fr"})
+MERGE (seo:SEOKeyword {key: "seo-generateur-qr-code-fr"})
 ON CREATE SET
   seo.key = "seo-generateur-qr-code-fr",
   seo.display_name = "Generateur QR Code",
@@ -1128,7 +1128,7 @@ MERGE (cl)-[:HAS_SEO_TARGET]->(seo)
 MERGE (seo)-[:FOR_LOCALE]->(l);
 
 MATCH (c:Concept {key: "action-create-qr"})-[:HAS_L10N]->(cl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale {key: "fr-FR"})
-MERGE (seo:SEOKeywordL10n {key: "seo-qr-code-gratuit-fr"})
+MERGE (seo:SEOKeyword {key: "seo-qr-code-gratuit-fr"})
 ON CREATE SET
   seo.key = "seo-qr-code-gratuit-fr",
   seo.display_name = "QR Code Gratuit",
@@ -1145,22 +1145,22 @@ MERGE (cl)-[:HAS_SEO_TARGET]->(seo)
 MERGE (seo)-[:FOR_LOCALE]->(l);
 
 // SEO Metrics
-MATCH (run:SEOMiningRun {key: "seo-run-2024-01"}), (seo:SEOKeywordL10n {key: "seo-qr-code-generator-en"})
+MATCH (run:SEOMiningRun {key: "seo-run-2024-01"}), (seo:SEOKeyword {key: "seo-qr-code-generator-en"})
 MERGE (run)-[:SEO_MINES]->(seo);
 
-MATCH (run:SEOMiningRun {key: "seo-run-2024-01"}), (seo:SEOKeywordL10n {key: "seo-free-qr-code-en"})
+MATCH (run:SEOMiningRun {key: "seo-run-2024-01"}), (seo:SEOKeyword {key: "seo-free-qr-code-en"})
 MERGE (run)-[:SEO_MINES]->(seo);
 
-MATCH (run:SEOMiningRun {key: "seo-run-2024-01"}), (seo:SEOKeywordL10n {key: "seo-restaurant-qr-menu-en"})
+MATCH (run:SEOMiningRun {key: "seo-run-2024-01"}), (seo:SEOKeyword {key: "seo-restaurant-qr-menu-en"})
 MERGE (run)-[:SEO_MINES]->(seo);
 
-MATCH (run:SEOMiningRun {key: "seo-run-2024-01"}), (seo:SEOKeywordL10n {key: "seo-generateur-qr-code-fr"})
+MATCH (run:SEOMiningRun {key: "seo-run-2024-01"}), (seo:SEOKeyword {key: "seo-generateur-qr-code-fr"})
 MERGE (run)-[:SEO_MINES]->(seo);
 
-MATCH (run:SEOMiningRun {key: "seo-run-2024-01"}), (seo:SEOKeywordL10n {key: "seo-qr-code-gratuit-fr"})
+MATCH (run:SEOMiningRun {key: "seo-run-2024-01"}), (seo:SEOKeyword {key: "seo-qr-code-gratuit-fr"})
 MERGE (run)-[:SEO_MINES]->(seo);
 
-MATCH (seo:SEOKeywordL10n {key: "seo-qr-code-generator-en"})
+MATCH (seo:SEOKeyword {key: "seo-qr-code-generator-en"})
 MERGE (m:SEOKeywordMetrics {key: "seo-metrics-qr-gen-en-2024-01"})
 ON CREATE SET
   m.key = "seo-metrics-qr-gen-en-2024-01",

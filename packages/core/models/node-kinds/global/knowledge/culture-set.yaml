@@ -1,18 +1,17 @@
 # packages/core/models/node-kinds/global/knowledge/culture-set.yaml
-# CultureSet — Type-specific cultural knowledge for a locale
+# CultureSet — Container grouping CultureRef atoms by type
 #
-# Tier: semantic (contextual retrieval by type)
+# v10.1: Pure container (no JSON blobs - data lives in CultureRef atoms)
 # Types: values, references, celebrities, calendar
-# Stability: Low - update monthly for references/celebrities/calendar
+# Stability: High - structure rarely changes
 
 node:
   name: CultureSet
   realm: global
   layer: knowledge
   trait: knowledge
-  knowledge_tier: semantic
-  icon: "🌍"
-  description: "Type-specific cultural knowledge and references"
+  icon: "🎭"
+  description: "Container grouping CultureRef atoms by type"
 
   standard_properties:
     display_name:
@@ -31,7 +30,7 @@ node:
       type: string
       required: true
       description: "LLM generation hints"
-      example: "USE: for cultural alignment. TRIGGERS: values, trust. NOT: calendar dates."
+      example: "USE: to find culture refs by type. TRIGGERS: values, holidays. NOT: individual refs."
 
     created_at:
       type: datetime
@@ -44,124 +43,25 @@ node:
       description: "Last update timestamp"
 
   properties:
-    # Type identification
+    # Type identification (only property - data is in atoms)
     culture_type:
       type: string
       required: true
       enum: [values, references, celebrities, calendar]
-      description: "Cultural knowledge type"
+      description: "Cultural knowledge type this set groups"
       example: "values"
 
-    # For type: values
-    core_values:
-      type: json
-      required: false
-      description: "Core cultural values (when type=values)"
-      example:
-        hierarchy: "respected"
-        individualism: "moderate"
-        uncertainty_avoidance: "high"
-        long_term_orientation: "moderate"
-
-    trust_factors:
-      type: json
-      required: false
-      description: "What builds trust in this culture"
-      example:
-        credentials: "very important"
-        testimonials: "important"
-        certifications: "valued"
-        guarantees: "expected"
-
-    decision_factors:
-      type: json
-      required: false
-      description: "Purchase decision factors"
-      example:
-        quality: "primary"
-        price: "secondary"
-        brand: "important"
-        origin: "valued"
-
-    # For type: references
-    landmarks:
-      type: json
-      required: false
-      description: "Safe-to-reference landmarks (when type=references)"
-      example: ["Tour Eiffel", "Mont-Blanc", "Côte d'Azur"]
-
-    events:
-      type: json
-      required: false
-      description: "Cultural events safe to reference"
-      example: ["Tour de France", "Roland-Garros", "Festival de Cannes"]
-
-    shared_knowledge:
-      type: json
-      required: false
-      description: "Universally known cultural references"
-      example:
-        literature: ["Le Petit Prince", "Les Misérables"]
-        film: ["Amélie", "Intouchables"]
-        cuisine: ["croissant", "baguette", "fromage"]
-
-    # For type: celebrities
-    safe_celebrities:
-      type: json
-      required: false
-      description: "Non-controversial public figures (when type=celebrities)"
-      example:
-        sports: ["Zinedine Zidane", "Kylian Mbappé"]
-        business: ["Bernard Arnault"]
-        culture: ["Thomas Pesquet"]
-
-    celebrity_guidelines:
-      type: json
-      required: false
-      description: "Guidelines for celebrity references"
-      example:
-        avoid_political: true
-        require_recent_relevance: true
-        check_controversy_status: true
-
-    # For type: calendar
-    holidays:
-      type: json
-      required: false
-      description: "Public holidays (when type=calendar)"
-      example:
-        - name: "Jour de l'An"
-          date: "01-01"
-          marketing_relevance: "high"
-        - name: "Fête du Travail"
-          date: "05-01"
-          marketing_relevance: "low"
-
-    vacation_periods:
-      type: json
-      required: false
-      description: "Major vacation periods"
-      example:
-        summer:
-          peak: "July-August"
-          note: "Business slowdown"
-        winter:
-          peak: "December 20 - January 5"
-
-    business_calendar:
-      type: json
-      required: false
-      description: "Business year patterns"
-      example:
-        fiscal_year_end: "December"
-        budget_season: "October-November"
-        slow_periods: ["August", "December 24-31"]
-
   relations:
+    outgoing:
+      - type: CONTAINS
+        to: CultureRef
+        cardinality: "1:N"
+        description: "CultureSet contains multiple CultureRef atoms"
+
     incoming:
       - type: HAS_CULTURE
         from: Locale
         cardinality: "1:N"
-        description: "Locale has multiple culture sets (one per type)"
+        description: "Locale has culture sets"
         properties:
-          type: string
+          culture_type: string

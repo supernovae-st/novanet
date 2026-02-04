@@ -1,18 +1,17 @@
 # packages/core/models/node-kinds/global/knowledge/audience-set.yaml
-# AudienceSet — Segment-specific audience knowledge for a locale
+# AudienceSet — Container grouping AudienceTrait atoms by segment
 #
-# Tier: semantic (contextual retrieval by segment)
+# v10.1: Pure container (no JSON blobs - data lives in AudienceTrait atoms)
 # Segments: b2b, b2c, general
-# Stability: Medium - update quarterly
+# Stability: High - structure rarely changes
 
 node:
   name: AudienceSet
   realm: global
   layer: knowledge
   trait: knowledge
-  knowledge_tier: semantic
   icon: "👥"
-  description: "Segment-specific audience behavior and preferences"
+  description: "Container grouping AudienceTrait atoms by segment"
 
   standard_properties:
     display_name:
@@ -31,7 +30,7 @@ node:
       type: string
       required: true
       description: "LLM generation hints"
-      example: "USE: for B2B content. TRIGGERS: business, enterprise. NOT: consumer content."
+      example: "USE: to find traits by segment. TRIGGERS: B2B, B2C. NOT: individual behaviors."
 
     created_at:
       type: datetime
@@ -44,95 +43,25 @@ node:
       description: "Last update timestamp"
 
   properties:
-    # Segment identification
+    # Segment identification (only property - data is in atoms)
     segment:
       type: string
       required: true
       enum: [b2b, b2c, general]
-      description: "Audience segment"
+      description: "Audience segment this set groups"
       example: "b2b"
 
-    # For segment: b2b
-    decision_makers:
-      type: json
-      required: false
-      description: "Decision maker characteristics (when segment=b2b)"
-      example:
-        typical_roles: ["DSI", "Directeur Marketing", "DG"]
-        decision_process: "committee-based"
-        decision_timeline: "3-6 months"
-
-    purchasing_behavior:
-      type: json
-      required: false
-      description: "B2B purchasing patterns"
-      example:
-        procurement_process: "formal RFP common"
-        budget_cycles: "annual, Q4 planning"
-        vendor_requirements: ["references", "certifications", "support SLA"]
-
-    trust_signals:
-      type: json
-      required: false
-      description: "What builds trust for this segment"
-      example:
-        b2b:
-          - "client logos"
-          - "case studies"
-          - "industry certifications"
-          - "data security compliance"
-
-    # For segment: b2c
-    consumer_behavior:
-      type: json
-      required: false
-      description: "Consumer behavior patterns (when segment=b2c)"
-      example:
-        impulse_purchase_threshold: "50€"
-        research_behavior: "comparison sites, reviews"
-        preferred_channels: ["mobile", "social"]
-
-    payment_preferences:
-      type: json
-      required: false
-      description: "Preferred payment methods"
-      example:
-        online: ["carte bancaire", "PayPal"]
-        installments: "3x sans frais popular"
-
-    # For segment: general
-    demographics:
-      type: json
-      required: false
-      description: "Market demographics (when segment=general)"
-      example:
-        population: 67000000
-        internet_penetration: 0.92
-        mobile_penetration: 0.95
-
-    digital_behavior:
-      type: json
-      required: false
-      description: "General digital behavior"
-      example:
-        social_platforms: ["Facebook", "Instagram", "LinkedIn"]
-        search_engine: "Google (94%)"
-        ecommerce_adoption: "high"
-
-    media_consumption:
-      type: json
-      required: false
-      description: "Media consumption patterns"
-      example:
-        video: "YouTube, streaming dominant"
-        news: "online news, podcasts growing"
-        social: "Instagram, TikTok (younger)"
-
   relations:
+    outgoing:
+      - type: CONTAINS
+        to: AudienceTrait
+        cardinality: "1:N"
+        description: "AudienceSet contains multiple AudienceTrait atoms"
+
     incoming:
       - type: HAS_AUDIENCE
         from: Locale
         cardinality: "1:N"
-        description: "Locale has multiple audience sets (one per segment)"
+        description: "Locale has audience sets"
         properties:
           segment: string

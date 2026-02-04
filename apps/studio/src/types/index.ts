@@ -42,7 +42,7 @@ export type {
   LocaleMarket,
   LocaleLexicon,
   Expression,
-  SEOKeywordL10n,
+  SEOKeyword,
   SEOKeywordMetrics,
   SEOMiningRun,
   GEOSeedL10n,

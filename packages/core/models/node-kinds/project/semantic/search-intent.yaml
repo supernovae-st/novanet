@@ -123,7 +123,7 @@ node:
         description: "Concepts related to this intent"
 
       - type: TARGETS_KEYWORD
-        to: SEOKeywordL10n
+        to: SEOKeyword
         description: "Localized SEO keywords that express this intent"
 
   example:

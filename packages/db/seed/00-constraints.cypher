@@ -5,7 +5,7 @@
 //
 // NOTE: Locale-based filtering uses :FOR_LOCALE relation traversal (not property indexes).
 // NOTE: Removed in v7.2.5: Audience, AudienceL10n, ValuePropL10n, SocialProofL10n
-// NOTE: v7.8.2: Renamed SEOKeyword → SEOKeywordL10n
+// NOTE: v7.8.2: Renamed SEOKeyword → SEOKeyword
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // LOCALE
@@ -62,11 +62,11 @@ CREATE INDEX blockrules_version IF NOT EXISTS FOR (br:BlockRules) ON (br.version
 // SEO STRUCTURE (v7.8.5: SEOSnapshot → SEOKeywordMetrics)
 // ═══════════════════════════════════════════════════════════════════════════════
 
-CREATE INDEX seo_volume IF NOT EXISTS FOR (s:SEOKeywordL10n) ON (s.volume);
-CREATE INDEX seo_intent IF NOT EXISTS FOR (s:SEOKeywordL10n) ON (s.intent);
-CREATE INDEX seo_difficulty IF NOT EXISTS FOR (s:SEOKeywordL10n) ON (s.difficulty);
-CREATE TEXT INDEX seo_value_text IF NOT EXISTS FOR (s:SEOKeywordL10n) ON (s.value);
-// REMOVED v7.8.4: SEOVariation indexes (node deleted, variations are SEOKeywordL10n nodes)
+CREATE INDEX seo_volume IF NOT EXISTS FOR (s:SEOKeyword) ON (s.volume);
+CREATE INDEX seo_intent IF NOT EXISTS FOR (s:SEOKeyword) ON (s.intent);
+CREATE INDEX seo_difficulty IF NOT EXISTS FOR (s:SEOKeyword) ON (s.difficulty);
+CREATE TEXT INDEX seo_value_text IF NOT EXISTS FOR (s:SEOKeyword) ON (s.value);
+// REMOVED v7.8.4: SEOVariation indexes (node deleted, variations are SEOKeyword nodes)
 CREATE INDEX seomr_status IF NOT EXISTS FOR (smr:SEOMiningRun) ON (smr.status);
 // v7.8.5: SEOSnapshot → SEOKeywordMetrics
 CREATE INDEX seokm_observed IF NOT EXISTS FOR (skm:SEOKeywordMetrics) ON (skm.observed_at);
@@ -97,7 +97,7 @@ CREATE INDEX tseo_status IF NOT EXISTS FOR ()-[r:TARGETS_SEO]-() ON (r.status);
 CREATE INDEX tgeo_status IF NOT EXISTS FOR ()-[r:TARGETS_GEO]-() ON (r.status);
 // REMOVED v7.8.1: PAGE_TARGETS_SEO and PAGE_TARGETS_GEO indexes
 // Reason: Direct Page -> SEO/GEO bypasses semantic grouping
-// Correct flow: Page -> Concept -> ConceptL10n -> SEOKeywordL10n/GEOSeedL10n
+// Correct flow: Page -> Concept -> ConceptL10n -> SEOKeyword/GEOSeedL10n
 CREATE INDEX infl_weight IF NOT EXISTS FOR ()-[r:INFLUENCED_BY]-() ON (r.weight);
 // REMOVED v7.9.0: USED_SEO_KEYWORD, USED_GEO_SEED indexes (relations removed)
 // SEO/GEO provenance is implicit via: BlockL10n → INFLUENCED_BY → ConceptL10n → HAS_*_TARGET → SEO/GEO

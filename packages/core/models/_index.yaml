@@ -1,5 +1,5 @@
 # ═══════════════════════════════════════════════════════════════════════════════
-# NOVANET DATA MODELS INDEX v9.9.0
+# NOVANET DATA MODELS INDEX v10.1.0
 # ═══════════════════════════════════════════════════════════════════════════════
 #
 # WHAT: Native content generation system using Neo4j graph database
@@ -7,7 +7,7 @@
 # HOW:  Orchestrator dispatches to sub-agents, each generates a Block natively
 #
 # ═══════════════════════════════════════════════════════════════════════════════
-# MULTI-TENANT ARCHITECTURE (v9.0.0 - realm-based)
+# MULTI-TENANT ARCHITECTURE (v10.1.0 - Knowledge Atoms)
 # ═══════════════════════════════════════════════════════════════════════════════
 #
 #   ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -15,19 +15,19 @@
 #   ├─────────────────────────────────────────────────────────────────────────────┤
 #   │                                                                             │
 #   │  ┌───────────────────────────────────────────────────────────────────────┐  │
-#   │  │  🌍 GLOBAL (11 nodes) - Single instance, shared by ALL projects       │  │
-#   │  │  └─ config/    Locale                                                 │  │
-#   │  │  └─ knowledge/ 10 tiered knowledge nodes (v9.9)                        │  │
-#   │  │      Technical: Formatting, Slugification, Adaptation                 │  │
-#   │  │      Style:     Style                                                 │  │
-#   │  │      Semantic:  TermSet, ExpressionSet, PatternSet, CultureSet,       │  │
-#   │  │                 TabooSet, AudienceSet                                 │  │
+#   │  │  🌍 GLOBAL (17 nodes) - Single instance, shared by ALL projects       │  │
+#   │  │  └─ config/    Locale (1)                                             │  │
+#   │  │  └─ knowledge/ 16 knowledge nodes (10 containers + 6 atoms)           │  │
+#   │  │      Containers: Style, Formatting, Slugification, Adaptation,        │  │
+#   │  │                  TermSet, ExpressionSet, PatternSet, CultureSet,      │  │
+#   │  │                  TabooSet, AudienceSet                                │  │
+#   │  │      Atoms:      Term, Expression, Pattern, Taboo, CultureRef,        │  │
+#   │  │                  AudienceTrait                                        │  │
 #   │  └───────────────────────────────────────────────────────────────────────┘  │
 #   │                                                                             │
 #   │  ┌───────────────────────────────────────────────────────────────────────┐  │
-#   │  │  🎯 SHARED (8 nodes) - Independent of projects, reusable              │  │
-#   │  │  └─ seo/  SEOKeywordL10n, SEOKeywordMetrics, SEOMiningRun             │  │
-#   │  │  └─ geo/  GEOSeedL10n, GEOSeedMetrics, GEOMiningRun, Thing, ThingL10n │  │
+#   │  │  🎯 SHARED (3 nodes) - Independent of projects, reusable              │  │
+#   │  │  └─ seo/  SEOKeyword, SEOKeywordMetrics, SEOMiningRun             │  │
 #   │  └───────────────────────────────────────────────────────────────────────┘  │
 #   │                                                                             │
 #   │  ┌───────────────────────────────────────────────────────────────────────┐  │
@@ -59,16 +59,11 @@
 #             ├─[:HAS_CONCEPT]─> Concept ──[:HAS_L10N]──> ConceptL10n ──:FOR_LOCALE──> Locale
 #             │                     │
 #             │                     ├──[:SEMANTIC_LINK {temperature}]──> Concept
-#             │                     ├──[:TARGETS_SEO]──> SEOKeywordL10n ──:FOR_LOCALE──> Locale
+#             │                     ├──[:TARGETS_SEO]──> SEOKeyword ──:FOR_LOCALE──> Locale
 #             │                     │                         │
 #             │                     │                   :HAS_METRICS
 #             │                     │                         v
 #             │                     │                   SEOKeywordMetrics
-#             │                     └──[:TARGETS_GEO]──> GEOSeedL10n ──:FOR_LOCALE──> Locale
-#             │                                               │
-#             │                                         :HAS_METRICS
-#             │                                               v
-#             │                                         GEOSeedMetrics
 #             │
 #             └─[:HAS_PAGE]─> Page ──┬─[:HAS_BLOCK {position}]─> Block ──:OF_TYPE──> BlockType
 #                               │    │                            │
@@ -131,7 +126,7 @@
 #   *L10n suffix  → ALL localized content (human OR LLM generated)
 #   :HAS_L10N     → human-curated content (ConceptL10n, ProjectL10n)
 #   :HAS_OUTPUT   → LLM-generated content (PageL10n, BlockL10n)
-#   *Metrics      → Time-series observations (SEOKeywordMetrics, GEOSeedMetrics)
+#   *Metrics      → Time-series observations (SEOKeywordMetrics)
 #   Locale*       → Locale Knowledge nodes (LocaleVoice, LocaleCulture, etc.)
 #
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -159,7 +154,7 @@
 #
 # Meta-graph classification:
 #   - NEW: 3 Realms (global, project, shared)
-#   - NEW: 9 Layers (config, knowledge, foundation, structure, semantic, instruction, output, seo, geo)
+#   - NEW: 8 Layers (config, knowledge, foundation, structure, semantic, instruction, output, seo)
 #   - NEW: 5 Traits (invariant, localized, knowledge, derived, job)
 #   - NEW: 5 ArcFamilies (ownership, localization, semantic, generation, mining)
 #   - NEW: OF_KIND replaces IN_SUBCATEGORY
@@ -239,7 +234,7 @@
 #   - RESTRUCTURED: nodes/ now organized by scope (global/, shared/, project/)
 #   - NEW: nodes/global/config/ for Locale configuration
 #   - NEW: nodes/global/knowledge/ for 14 LocaleKnowledge nodes
-#   - NEW: nodes/shared/seo/ and nodes/shared/geo/ for SHARED scope
+#   - NEW: nodes/shared/seo/ for SHARED scope
 #   - NEW: nodes/project/{role}/ for PROJECT scope by functional role
 #   - NEW: models/schema/nodes.schema.json for JSON Schema validation
 #
@@ -262,7 +257,7 @@
 #
 # Unified HAS_METRICS relation for all time-series observations:
 #   - RENAMED: SEOSnapshot → SEOKeywordMetrics
-#   - RENAMED: GEOCitation → GEOSeedMetrics
+#   - REMOVED: GEOCitation (GEO layer removed)
 #   - REMOVED: HAS_SNAPSHOT (replaced by HAS_METRICS)
 #   - REMOVED: HAS_CITATION (replaced by HAS_METRICS)
 #
@@ -272,7 +267,7 @@
 
 files:
   # ═══════════════════════════════════════════════════════════════════════════
-  # 🌍 GLOBAL REALM (11 nodes) - Shared by ALL projects
+  # 🌍 GLOBAL REALM (17 nodes) - Shared by ALL projects
   # ═══════════════════════════════════════════════════════════════════════════
 
   global:
@@ -280,40 +275,37 @@ files:
     config:
       - node-kinds/global/config/locale.yaml
 
-    # Locale knowledge (10 nodes) - v10 tiered model
+    # Locale knowledge (16 nodes) - v10.1 Knowledge Atoms model
     knowledge:
-      # Technical tier (3 nodes)
-      - node-kinds/global/knowledge/formatting.yaml
-      - node-kinds/global/knowledge/slugification.yaml
-      - node-kinds/global/knowledge/adaptation.yaml
-      # Style tier (1 node)
-      - node-kinds/global/knowledge/style.yaml
-      # Semantic tier (6 nodes)
-      - node-kinds/global/knowledge/term-set.yaml
-      - node-kinds/global/knowledge/expression-set.yaml
-      - node-kinds/global/knowledge/pattern-set.yaml
-      - node-kinds/global/knowledge/culture-set.yaml
-      - node-kinds/global/knowledge/taboo-set.yaml
-      - node-kinds/global/knowledge/audience-set.yaml
+      # Container nodes (10) - aggregate knowledge by category
+      - node-kinds/global/knowledge/formatting.yaml       # Technical
+      - node-kinds/global/knowledge/slugification.yaml    # Technical
+      - node-kinds/global/knowledge/adaptation.yaml       # Technical
+      - node-kinds/global/knowledge/style.yaml            # Style
+      - node-kinds/global/knowledge/term-set.yaml         # Semantic container
+      - node-kinds/global/knowledge/expression-set.yaml   # Semantic container
+      - node-kinds/global/knowledge/pattern-set.yaml      # Semantic container
+      - node-kinds/global/knowledge/culture-set.yaml      # Semantic container
+      - node-kinds/global/knowledge/taboo-set.yaml        # Semantic container
+      - node-kinds/global/knowledge/audience-set.yaml     # Semantic container
+      # Atom nodes (6) - granular knowledge items for selective LLM loading
+      - node-kinds/global/knowledge/atoms/term.yaml
+      - node-kinds/global/knowledge/atoms/expression.yaml
+      - node-kinds/global/knowledge/atoms/pattern.yaml
+      - node-kinds/global/knowledge/atoms/culture-ref.yaml
+      - node-kinds/global/knowledge/atoms/taboo.yaml
+      - node-kinds/global/knowledge/atoms/audience-trait.yaml
 
   # ═══════════════════════════════════════════════════════════════════════════
-  # 🎯 SHARED REALM (8 nodes) - Independent of projects, reusable
+  # 🎯 SHARED REALM (3 nodes) - Independent of projects, reusable
   # ═══════════════════════════════════════════════════════════════════════════
 
   shared:
     # SEO targeting + metrics + jobs (3 nodes)
     seo:
-      - node-kinds/shared/seo/seo-keyword-l10n.yaml
+      - node-kinds/shared/seo/seo-keyword.yaml
       - node-kinds/shared/seo/seo-keyword-metrics.yaml
       - node-kinds/shared/seo/seo-mining-run.yaml
-
-    # GEO targeting + metrics + jobs + things (5 nodes)
-    geo:
-      - node-kinds/shared/geo/geo-seed-l10n.yaml
-      - node-kinds/shared/geo/geo-seed-metrics.yaml
-      - node-kinds/shared/geo/geo-mining-run.yaml
-      - node-kinds/shared/geo/thing.yaml
-      - node-kinds/shared/geo/thing-l10n.yaml
 
   # ═══════════════════════════════════════════════════════════════════════════
   # 📦 PROJECT REALM (23 nodes) - Per-project instances
@@ -397,66 +389,64 @@ nodes_by_trait:
     - TopicCluster
     - AudiencePersona
     - ChannelSurface
-    - Thing              # Shared/GEO entity
   localized:
     - ProjectL10n
     - ConceptL10n
     - PageL10n
     - BlockL10n
-    - SEOKeywordL10n
-    - GEOSeedL10n
-    - ThingL10n          # Shared/GEO localized entity
+    - SEOKeyword
   knowledge:
-    # Technical tier
+    # Containers (10)
     - Formatting
     - Slugification
     - Adaptation
-    # Style tier
     - Style
-    # Semantic tier
     - TermSet
     - ExpressionSet
     - PatternSet
     - CultureSet
     - TabooSet
     - AudienceSet
+    # Atoms (6) - v10.1
+    - Term
+    - Expression
+    - Pattern
+    - CultureRef
+    - Taboo
+    - AudienceTrait
   derived:
     - SEOKeywordMetrics
-    - GEOSeedMetrics
     - PromptArtifact
     - OutputArtifact
     - EvaluationSignal
   job:
     - SEOMiningRun
-    - GEOMiningRun
     - GenerationJob
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# STATISTICS v10.0.0
+# STATISTICS v10.1.0 (Knowledge Atoms)
 # ═══════════════════════════════════════════════════════════════════════════════
 #
 # By Realm:
-#   🌍 GLOBAL:  11 nodes (Locale + 10 tiered knowledge)
-#   🎯 SHARED:   8 nodes (SEO 3 + GEO 5 including Thing/ThingL10n)
+#   🌍 GLOBAL:  17 nodes (Locale + 10 containers + 6 atoms)
+#   🎯 SHARED:   3 nodes (SEO 3)
 #   📦 PROJECT: 23 nodes (Foundation 3 + Structure 3 + Semantic 6 + Instruction 6 + Output 5)
-#   TOTAL:      42 nodes, 73 arcs (5 arc families)
+#   TOTAL:      43 nodes, 73 arcs (5 arc families, +6 CONTAINS arcs)
 #
 # By Trait:
-#   🔵 INVARIANT:  17 (Project, BrandIdentity, Concept, Page, Block, PageType, BlockType,
+#   🔵 INVARIANT:  16 (Project, BrandIdentity, Concept, Page, Block, PageType, BlockType,
 #                      PagePrompt, BlockPrompt, BlockRules, Locale, ContentSlot, SearchIntent,
-#                      TopicCluster, AudiencePersona, ChannelSurface, Thing)
-#   🟢 LOCALIZED:   7 (ProjectL10n, ConceptL10n, PageL10n, BlockL10n, SEOKeywordL10n,
-#                      GEOSeedL10n, ThingL10n)
-#   🟣 KNOWLEDGE:  10 (Formatting, Slugification, Adaptation, Style, TermSet, ExpressionSet,
-#                      PatternSet, CultureSet, TabooSet, AudienceSet)
-#   ⚪ DERIVED:     5 (SEOKeywordMetrics, GEOSeedMetrics, PromptArtifact, OutputArtifact,
-#                      EvaluationSignal)
-#   ⚙️ JOB:         3 (SEOMiningRun, GEOMiningRun, GenerationJob)
+#                      TopicCluster, AudiencePersona, ChannelSurface)
+#   🟢 LOCALIZED:   5 (ProjectL10n, ConceptL10n, PageL10n, BlockL10n, SEOKeyword)
+#   🟣 KNOWLEDGE:  16 (Containers: Formatting, Slugification, Adaptation, Style, TermSet,
+#                      ExpressionSet, PatternSet, CultureSet, TabooSet, AudienceSet;
+#                      Atoms: Term, Expression, Pattern, CultureRef, Taboo, AudienceTrait)
+#   ⚪ DERIVED:     4 (SEOKeywordMetrics, PromptArtifact, OutputArtifact, EvaluationSignal)
+#   ⚙️ JOB:         2 (SEOMiningRun, GenerationJob)
 #
-# v10.0.0 changes (Tiered Knowledge Model):
-#   - Replaced 14 flat knowledge nodes with 10 tiered nodes
-#   - Technical: Formatting, Slugification, Adaptation
-#   - Style: Style
-#   - Semantic: TermSet, ExpressionSet, PatternSet, CultureSet, TabooSet, AudienceSet
-#   - Added 10 knowledge arcs (HAS_FORMATTING, HAS_TERMS, etc.)
+# v10.1.0 changes (Knowledge Atoms):
+#   - Added 6 atomic knowledge nodes (Term, Expression, Pattern, CultureRef, Taboo, AudienceTrait)
+#   - Added 6 CONTAINS arcs (Set containers → Atoms)
+#   - Removed knowledge_tier property (node type is sufficient for LLM routing)
+#   - Atoms are unique per locale (unlike Concepts which require L10n in ALL locales)
 #

@@ -136,9 +136,9 @@ node:
       cardinality: "N:1"
       description: "Links to the locale this content is for"
 
-    # v7.7.0: Locale-aligned SEO/GEO targeting (v7.8.2: SEOKeyword → SEOKeywordL10n)
+    # v7.7.0: Locale-aligned SEO/GEO targeting (v7.8.2: SEOKeyword → SEOKeyword)
     - relation: HAS_SEO_TARGET
-      to: SEOKeywordL10n
+      to: SEOKeyword
       direction: outgoing
       cardinality: "1:N"
       props: [role, priority]

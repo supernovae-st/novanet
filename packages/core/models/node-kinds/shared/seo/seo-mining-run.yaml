@@ -89,9 +89,9 @@ node:
 
   relations:
     - relation: MINES
-      to: SEOKeywordL10n
+      to: SEOKeyword
       direction: outgoing
-      description: "Keywords mined by this run (v7.8.2: SEOKeyword → SEOKeywordL10n)"
+      description: "Keywords mined by this run (v7.8.2: SEOKeyword → SEOKeyword)"
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # EXAMPLE

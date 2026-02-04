@@ -8,7 +8,7 @@
 // ======================================================================
 :param locale => "fr-FR";
 
-MATCH (kw:SEOKeywordL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+MATCH (kw:SEOKeyword)-[:FOR_LOCALE]->(l:Locale {key: $locale})
 OPTIONAL MATCH (kw)-[:HAS_METRICS]->(m:SEOKeywordMetrics)
 RETURN kw.keyword AS keyword,
        kw.intent AS intent,
@@ -24,7 +24,7 @@ LIMIT 50
 // ======================================================================
 :param locale => "fr-FR";
 
-MATCH (c:Concept)-[:TARGETS_SEO]->(kw:SEOKeywordL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+MATCH (c:Concept)-[:TARGETS_SEO]->(kw:SEOKeyword)-[:FOR_LOCALE]->(l:Locale {key: $locale})
 RETURN c.key AS concept,
        collect(kw.keyword) AS targetedKeywords
 ORDER BY size(collect(kw.keyword)) DESC
@@ -33,7 +33,7 @@ ORDER BY size(collect(kw.keyword)) DESC
 // Query: Internal linking opportunities
 // Pages that could link based on shared SEO targets
 // ======================================================================
-MATCH (p1:Page)-[:USES_CONCEPT]->(c:Concept)-[:TARGETS_SEO]->(kw:SEOKeywordL10n)
+MATCH (p1:Page)-[:USES_CONCEPT]->(c:Concept)-[:TARGETS_SEO]->(kw:SEOKeyword)
 MATCH (p2:Page)-[:USES_CONCEPT]->(c2:Concept)-[:TARGETS_SEO]->(kw)
 WHERE p1 <> p2
 AND NOT EXISTS { (p1)-[:LINKS_TO]->(p2) }

@@ -15,10 +15,10 @@ import { getNodeTypesByLayer } from './layers.js';
  * Complete realm hierarchy definition.
  * This is the single source of truth for the ontology structure.
  *
- * 3 Realms (9 layers):
+ * 3 Realms (8 layers):
  * - Global: Shared across ALL projects. (2 layers)
  * - Project: Business-specific nodes for a single project. (5 layers)
- * - Shared: Cross-project resources that can be linked to multiple projects. (2 layers)
+ * - Shared: Cross-project resources that can be linked to multiple projects. (1 layer)
  */
 export const REALM_HIERARCHY: Record<Realm, RealmDefinition> = {
   // ═══════════════════════════════════════════════════════════════════════════
@@ -86,7 +86,7 @@ export const REALM_HIERARCHY: Record<Realm, RealmDefinition> = {
     } as Record<Layer, LayerMeta>,
   },
   // ═══════════════════════════════════════════════════════════════════════════
-  // SHARED (2 layers)
+  // SHARED (1 layer)
   // ═══════════════════════════════════════════════════════════════════════════
   shared: {
     realm: 'shared',
@@ -99,12 +99,6 @@ export const REALM_HIERARCHY: Record<Realm, RealmDefinition> = {
         description: 'Search engine optimization data.',
         icon: '🔍',
         nodeTypes: getNodeTypesByLayer('seo'),
-      },
-      geo: {
-        label: 'GEO Intelligence',
-        description: 'Geographic/local SEO data.',
-        icon: '📍',
-        nodeTypes: getNodeTypesByLayer('geo'),
       },
     } as Record<Layer, LayerMeta>,
   },

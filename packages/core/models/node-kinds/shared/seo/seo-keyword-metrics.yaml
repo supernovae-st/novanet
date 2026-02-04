@@ -103,7 +103,7 @@ node:
   # ═══════════════════════════════════════════════════════════════════════════════
 
   relations: []
-  # Incoming: SEOKeywordL10n -[:HAS_METRICS]-> SEOKeywordMetrics
+  # Incoming: SEOKeyword -[:HAS_METRICS]-> SEOKeywordMetrics
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # SPREADING ACTIVATION NOTE
@@ -122,7 +122,7 @@ node:
   example:
     description: "Get metrics history for a keyword"
     cypher: |
-      MATCH (kw:SEOKeywordL10n {key: $keyword_key})-[:HAS_METRICS]->(m:SEOKeywordMetrics)
+      MATCH (kw:SEOKeyword {key: $keyword_key})-[:HAS_METRICS]->(m:SEOKeywordMetrics)
       RETURN m.observed_at, m.volume, m.difficulty, m.position
       ORDER BY m.observed_at DESC
       LIMIT 30

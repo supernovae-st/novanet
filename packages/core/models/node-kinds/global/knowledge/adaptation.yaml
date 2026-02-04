@@ -1,7 +1,7 @@
 # packages/core/models/node-kinds/global/knowledge/adaptation.yaml
 # Adaptation — Content adaptation rules for a locale (length preferences, structure, SEO)
 #
-# Tier: technical (always loaded together)
+# v10.1: knowledge_tier removed (node type is sufficient for LLM routing)
 # Stability: Medium - update quarterly
 
 node:
@@ -9,7 +9,6 @@ node:
   realm: global
   layer: knowledge
   trait: knowledge
-  knowledge_tier: technical
   icon: "📐"
   description: "Content adaptation rules: length preferences, structure patterns, SEO guidelines"
 

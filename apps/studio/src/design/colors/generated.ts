@@ -57,10 +57,10 @@ export const REALM_DISPLAY_NAMES: Record<RealmKey, string> = {
 };
 
 // =============================================================================
-// LAYER COLORS (9)
+// LAYER COLORS (8)
 // =============================================================================
 
-export type LayerKey = 'config' | 'knowledge' | 'foundation' | 'structure' | 'semantic' | 'instruction' | 'output' | 'seo' | 'geo';
+export type LayerKey = 'config' | 'knowledge' | 'foundation' | 'structure' | 'semantic' | 'instruction' | 'output' | 'seo';
 
 export const LAYER_COLORS: Record<LayerKey, ColorTokens> = {
   config: {
@@ -119,13 +119,6 @@ export const LAYER_COLORS: Record<LayerKey, ColorTokens> = {
     border: 'border-[#ec4899]/30',
     bgSolid: 'bg-[#ec4899]',
   },
-  geo: {
-    color: '#ef4444',
-    bg: 'bg-[#ef4444]/20',
-    text: 'text-[#ef4444]',
-    border: 'border-[#ef4444]/30',
-    bgSolid: 'bg-[#ef4444]',
-  },
 };
 
 export const LAYER_DISPLAY_NAMES: Record<LayerKey, string> = {
@@ -137,7 +130,6 @@ export const LAYER_DISPLAY_NAMES: Record<LayerKey, string> = {
   instruction: 'Instructions',
   output: 'Generated Output',
   seo: 'SEO Intelligence',
-  geo: 'GEO Intelligence',
 };
 
 // =============================================================================

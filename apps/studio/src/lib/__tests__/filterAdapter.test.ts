@@ -28,7 +28,7 @@ describe('resolveTypesForRealms', () => {
     expect(types).toContain('Formatting');      // v10 technical tier
     expect(types).toContain('ExpressionSet');  // v10 semantic tier
     expect(types).not.toContain('Project');
-    expect(types).not.toContain('SEOKeywordL10n');
+    expect(types).not.toContain('SEOKeyword');
   });
 
   it('returns project types for project realm', () => {
@@ -37,12 +37,12 @@ describe('resolveTypesForRealms', () => {
     expect(types).toContain('Page');
     expect(types).toContain('Concept');
     expect(types).not.toContain('Locale');
-    expect(types).not.toContain('SEOKeywordL10n');
+    expect(types).not.toContain('SEOKeyword');
   });
 
   it('returns shared types for shared realm', () => {
     const types = resolveTypesForRealms(['shared']);
-    expect(types).toContain('SEOKeywordL10n');
+    expect(types).toContain('SEOKeyword');
     expect(types).toContain('GEOSeedL10n');
     expect(types).not.toContain('Locale');
     expect(types).not.toContain('Project');
@@ -51,7 +51,7 @@ describe('resolveTypesForRealms', () => {
   it('returns union for multiple realms', () => {
     const types = resolveTypesForRealms(['global', 'shared']);
     expect(types).toContain('Locale');
-    expect(types).toContain('SEOKeywordL10n');
+    expect(types).toContain('SEOKeyword');
     expect(types).not.toContain('Project');
   });
 

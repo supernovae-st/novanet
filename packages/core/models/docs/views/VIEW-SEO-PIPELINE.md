@@ -9,12 +9,12 @@ SEO keyword mining and optimization workflow.
 
 **Pipeline stages:**
 1. **Mining**: SEOMiningRun discovers keywords per locale
-2. **Targeting**: Concepts target SEOKeywordL10n
+2. **Targeting**: Concepts target SEOKeyword
 3. **Metrics**: SEOKeywordMetrics tracks performance
 4. **Linking**: Pages link via LINKS_TO with SEO weight
 
 **Node types:**
-- SEOKeywordL10n: Localized keyword (locale-specific)
+- SEOKeyword: Localized keyword (locale-specific)
 - SEOKeywordMetrics: Performance metrics (search volume, difficulty)
 - SEOMiningRun: Mining job metadata
 
@@ -29,7 +29,7 @@ flowchart TB
     classDef orange fill:#f97316,stroke:#ea580c,color:#fff
 
     subgraph Keywords["Keywords"]
-        SEOKeywordL10n["SEOKeywordL10n"]
+        SEOKeyword["SEOKeyword"]
     end
 
     subgraph Metrics["Metrics"]
@@ -44,7 +44,7 @@ flowchart TB
         Concept["Concept"]
     end
 
-    class SEOKeywordL10n blue
+    class SEOKeyword blue
     class SEOKeywordMetrics green
     class SEOMiningRun gray
     class Concept orange
@@ -57,7 +57,7 @@ flowchart TB
 
 | Node | Layer |
 |------|-------|
-| SEOKeywordL10n | Keywords |
+| SEOKeyword | Keywords |
 | SEOKeywordMetrics | Metrics |
 | SEOMiningRun | Mining |
 | Concept | Targeting |
@@ -76,7 +76,7 @@ flowchart TB
 Get keywords with their performance metrics
 
 ```cypher
-MATCH (kw:SEOKeywordL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+MATCH (kw:SEOKeyword)-[:FOR_LOCALE]->(l:Locale {key: $locale})
 OPTIONAL MATCH (kw)-[:HAS_METRICS]->(m:SEOKeywordMetrics)
 RETURN kw.keyword AS keyword,
        kw.intent AS intent,
@@ -95,7 +95,7 @@ LIMIT 50
 Which concepts target which keywords
 
 ```cypher
-MATCH (c:Concept)-[:TARGETS_SEO]->(kw:SEOKeywordL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+MATCH (c:Concept)-[:TARGETS_SEO]->(kw:SEOKeyword)-[:FOR_LOCALE]->(l:Locale {key: $locale})
 RETURN c.key AS concept,
        collect(kw.keyword) AS targetedKeywords
 ORDER BY size(collect(kw.keyword)) DESC
@@ -109,7 +109,7 @@ ORDER BY size(collect(kw.keyword)) DESC
 Pages that could link based on shared SEO targets
 
 ```cypher
-MATCH (p1:Page)-[:USES_CONCEPT]->(c:Concept)-[:TARGETS_SEO]->(kw:SEOKeywordL10n)
+MATCH (p1:Page)-[:USES_CONCEPT]->(c:Concept)-[:TARGETS_SEO]->(kw:SEOKeyword)
 MATCH (p2:Page)-[:USES_CONCEPT]->(c2:Concept)-[:TARGETS_SEO]->(kw)
 WHERE p1 <> p2
 AND NOT EXISTS { (p1)-[:LINKS_TO]->(p2) }
@@ -138,7 +138,7 @@ LIMIT 10
 
 ## Notes
 
-- SEOKeywordL10n is locale-specific (keyword varies by locale)
+- SEOKeyword is locale-specific (keyword varies by locale)
 - Metrics are time-series - use latest for current state
 - LINKS_TO relation includes seo_weight for link juice optimization
 

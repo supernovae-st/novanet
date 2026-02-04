@@ -13,7 +13,7 @@ Turborepo monorepo for NovaNet - knowledge graph localization orchestrator.
 NovaNet uses Neo4j to orchestrate **native content generation** (NOT translation) across 200+ locales.
 
 **Target Application**: QR Code AI (https://qrcode-ai.com)
-**Current Version**: v10.0.0
+**Current Version**: v10.1.0
 **Design Plan**: `docs/plans/2026-02-01-ontology-v9-design.md`
 **Roadmap**: `ROADMAP.md` | **Changelog**: `CHANGELOG.md`
 
@@ -68,6 +68,57 @@ schema generate/validate, doc generate, filter build, Galaxy-themed TUI with boo
 Path validation ensures `models/nodes/{realm}/{layer}/{name}.yaml` matches YAML content.
 
 **Boundary rule (v9 target):** TypeScript generates code artifacts. Rust executes at runtime.
+
+---
+
+## v10.1 Knowledge Atoms Architecture
+
+v10.1 introduces **Knowledge Atoms** - granular knowledge nodes for selective LLM context loading.
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  KNOWLEDGE ARCHITECTURE (v10.1)                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  Locale ──[:HAS_TERMS]──> TermSet ──[:CONTAINS]──> Term (atom)              │
+│          ──[:HAS_EXPRESSIONS]──> ExpressionSet ──[:CONTAINS]──> Expression  │
+│          ──[:HAS_PATTERNS]──> PatternSet ──[:CONTAINS]──> Pattern           │
+│          ──[:HAS_CULTURE]──> CultureSet ──[:CONTAINS]──> CultureRef         │
+│          ──[:HAS_TABOOS]──> TabooSet ──[:CONTAINS]──> Taboo                 │
+│          ──[:HAS_AUDIENCE]──> AudienceSet ──[:CONTAINS]──> AudienceTrait    │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  KEY PRINCIPLES                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  1. CONTAINERS ARE EMPTY                                                    │
+│     └─ Pure grouping nodes (no JSON blobs)                                  │
+│     └─ Only property: grouping identifier (domain, register, etc.)          │
+│     └─ All data lives in atoms                                              │
+│                                                                             │
+│  2. ATOMS ARE LOCALE-NATIVE                                                 │
+│     └─ Unlike Concepts (invariant + L10n for ALL locales)                   │
+│     └─ Atoms exist only where needed: fr-FR may have 20K Terms              │
+│     └─ sw-KE may have 500 Terms - no translation, native generation         │
+│                                                                             │
+│  3. SELECTIVE LLM LOADING                                                   │
+│     └─ Load 50 relevant Terms, not 20K JSON blob                            │
+│     └─ Graph queries: "Terms used by this Block"                            │
+│     └─ [:USES_TERM], [:USES_EXPRESSION] on Block nodes                      │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  STATISTICS                                                                 │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  Containers (6): TermSet, ExpressionSet, PatternSet,                        │
+│                  CultureSet, TabooSet, AudienceSet                          │
+│  Atoms (6):      Term, Expression, Pattern, CultureRef, Taboo, AudienceTrait│
+│  Total:          48 nodes, 79 arcs                                          │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+**No backward compatibility needed** - this is v0, design for clean architecture.
 
 ---
 

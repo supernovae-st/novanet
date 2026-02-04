@@ -98,7 +98,7 @@ Refactor locale knowledge from 14 flat nodes to 10 tiered nodes organized by ret
 | **Style** | Style | Voice/tone configuration |
 | **Semantic** | TermSet, ExpressionSet, PatternSet, CultureSet, TabooSet, AudienceSet | Domain-specific contextual content |
 
-**Schema counts:** 42 NodeKinds, 73 ArcKinds, 3 Realms, 9 Layers
+**Schema counts:** 43 NodeKinds (37 base + 6 knowledge atoms), 67 ArcKinds, 3 Realms, 8 Layers
 
 ---
 
@@ -111,6 +111,7 @@ Future ideas without timeline. Detailed specs in `docs/plans/future/`.
 | **Dynamic Retrieval** | Context Assembly Engine that reads meta-graph to assemble token-aware context windows autonomously |
 | **Autonomous Learning** | Feedback loops where quality scores improve meta-graph weights over time |
 | **Content Pipeline** | Full CLI-driven generation: `novanet generate --project=qrcode-ai --locale=fr-FR` |
+| **GEO Intelligence** | Geographic localization layer: Thing (invariant), ThingL10n, GEOSeed, GEOSeedMetrics, GEOMiningRun. Deferred from v10.1 — add when needed for location-based content. |
 
 ## Versioning Strategy
 

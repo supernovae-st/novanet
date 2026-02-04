@@ -19,7 +19,7 @@
 // v7.8.5 CHANGES:
 //   - UNIFIED: HAS_METRICS for all time-series observations
 //     - PageL10n → PageMetrics (existing)
-//     - SEOKeywordL10n → SEOKeywordMetrics (renamed from SEOSnapshot)
+//     - SEOKeyword → SEOKeywordMetrics (renamed from SEOSnapshot)
 //     - GEOSeedL10n → GEOSeedMetrics (renamed from GEOCitation)
 //   - REMOVED: HAS_SNAPSHOT (replaced by HAS_METRICS)
 //   - REMOVED: HAS_CITATION (replaced by HAS_METRICS)
@@ -29,7 +29,7 @@
 //   - Updated all relations that reference GEOSeed
 //
 // v7.8.2 CHANGES:
-//   - RENAMED: SEOKeyword → SEOKeywordL10n (all LOCALIZED nodes use *L10n suffix)
+//   - RENAMED: SEOKeyword → SEOKeyword (all LOCALIZED nodes use *L10n suffix)
 //   - Updated all relations that reference SEOKeyword
 //
 // v7.2.0 CHANGES:
@@ -39,7 +39,7 @@
 // v7.1.0 CHANGES:
 //   - ADDED: priority/freshness fields to all nodes for context budgeting
 //   - ADDED: Standardized llm_context format: "USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]."
-//   - ADDED: UsedSEOKeywordL10nPropsSchema, UsedGEOSeedPropsSchema for provenance
+//   - ADDED: UsedSEOKeywordPropsSchema, UsedGEOSeedPropsSchema for provenance
 //
 // v7.0.0 CHANGES:
 //   - PAGE_USES_CONCEPT + BLOCK_USES_CONCEPT → USES_CONCEPT (unified)
@@ -123,19 +123,19 @@ export const RelationType = {
   // SEO/GEO TARGETING (v7.7.0: locale-aligned + cross-locale shortcuts)
   // ─────────────────────────────────────────────────────────────────────────────
   // v7.7.0: Locale-aligned primary targeting
-  HAS_SEO_TARGET: 'HAS_SEO_TARGET',     // ConceptL10n → SEOKeywordL10n (locale-aligned)
+  HAS_SEO_TARGET: 'HAS_SEO_TARGET',     // ConceptL10n → SEOKeyword (locale-aligned)
   HAS_GEO_TARGET: 'HAS_GEO_TARGET',     // ConceptL10n → GEOSeedL10n (locale-aligned)
   // Cross-locale shortcuts (kept for management/reporting)
-  TARGETS_SEO: 'TARGETS_SEO',           // Concept → SEOKeywordL10n
+  TARGETS_SEO: 'TARGETS_SEO',           // Concept → SEOKeyword
   TARGETS_GEO: 'TARGETS_GEO',           // Concept → GEOSeedL10n
   // REMOVED v7.8.1: PAGE_TARGETS_SEO, PAGE_TARGETS_GEO
   // Reason: Direct Page → SEO/GEO bypasses semantic grouping
-  // Correct flow: Page → Concept → ConceptL10n → SEOKeywordL10n/GEOSeedL10n
+  // Correct flow: Page → Concept → ConceptL10n → SEOKeyword/GEOSeedL10n
 
   // ─────────────────────────────────────────────────────────────────────────────
   // SEO MINING (v7.8.5: HAS_SNAPSHOT → HAS_METRICS)
   // ─────────────────────────────────────────────────────────────────────────────
-  SEO_MINES: 'SEO_MINES',               // SEOMiningRun → SEOKeywordL10n
+  SEO_MINES: 'SEO_MINES',               // SEOMiningRun → SEOKeyword
   // REMOVED v7.8.5: HAS_SNAPSHOT (replaced by HAS_METRICS)
   // REMOVED v7.8.4: SEO_DISCOVERED_BY, HAS_VARIATION, VARIATES (SEOVariation deleted)
 
@@ -268,7 +268,7 @@ export const InfluencedByPropsSchema = z.object({
   concept_version: z.number().int().positive(),
 });
 
-export const UsedSEOKeywordL10nPropsSchema = z.object({
+export const UsedSEOKeywordPropsSchema = z.object({
   weight: z.number().min(0).max(1),
 });
 
@@ -341,7 +341,7 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
   },
   [RelationType.FOR_LOCALE]: {
     type: RelationType.FOR_LOCALE,
-    from: ['ConceptL10n', 'ProjectL10n', 'PageL10n', 'BlockL10n', 'SEOKeywordL10n', 'GEOSeedL10n'],
+    from: ['ConceptL10n', 'ProjectL10n', 'PageL10n', 'BlockL10n', 'SEOKeyword', 'GEOSeedL10n'],
     to: 'Locale',
     cardinality: 'N:1',
     description: 'Content node targets a specific locale',
@@ -539,12 +539,12 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
   },
   [RelationType.HAS_METRICS]: {
     type: RelationType.HAS_METRICS,
-    from: ['SEOKeywordL10n', 'GEOSeedL10n'],
+    from: ['SEOKeyword', 'GEOSeedL10n'],
     to: ['SEOKeywordMetrics', 'GEOSeedMetrics'],
     cardinality: '1:N',
     description: 'Time-series observations (v7.11.0: PageMetrics removed, query GA/PostHog)',
     // REMOVED v7.11.0: PageL10n → PageMetrics (query GA/PostHog with published_at/replaced_at date ranges)
-    // SEOKeywordL10n → SEOKeywordMetrics (keyword ranking/volume history)
+    // SEOKeyword → SEOKeywordMetrics (keyword ranking/volume history)
     // GEOSeedL10n → GEOSeedMetrics (AI citation observations)
   },
   [RelationType.ASSEMBLES]: {
@@ -563,10 +563,10 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
   [RelationType.HAS_SEO_TARGET]: {
     type: RelationType.HAS_SEO_TARGET,
     from: 'ConceptL10n',
-    to: 'SEOKeywordL10n',
+    to: 'SEOKeyword',
     cardinality: '1:N',
     props: HasSEOTargetPropsSchema,
-    description: 'Primary SEO targeting - locale-aligned (ConceptL10n and SEOKeywordL10n share same locale)',
+    description: 'Primary SEO targeting - locale-aligned (ConceptL10n and SEOKeyword share same locale)',
   },
   [RelationType.HAS_GEO_TARGET]: {
     type: RelationType.HAS_GEO_TARGET,
@@ -580,7 +580,7 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
   [RelationType.TARGETS_SEO]: {
     type: RelationType.TARGETS_SEO,
     from: 'Concept',
-    to: 'SEOKeywordL10n',
+    to: 'SEOKeyword',
     cardinality: '1:N',
     props: TargetsSEOPropsSchema,
     description: 'Cross-locale SEO shortcut for management/reporting',
@@ -595,7 +595,7 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
   },
   // REMOVED v7.8.1: PAGE_TARGETS_SEO and PAGE_TARGETS_GEO definitions
   // Reason: Direct Page → SEO/GEO bypasses semantic grouping
-  // Correct flow: Page → Concept → ConceptL10n → SEOKeywordL10n/GEOSeedL10n
+  // Correct flow: Page → Concept → ConceptL10n → SEOKeyword/GEOSeedL10n
 
   // ─────────────────────────────────────────────────────────────────────────────
   // SEO MINING (v7.8.5: HAS_SNAPSHOT → HAS_METRICS)
@@ -603,11 +603,11 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
   [RelationType.SEO_MINES]: {
     type: RelationType.SEO_MINES,
     from: 'SEOMiningRun',
-    to: 'SEOKeywordL10n',
+    to: 'SEOKeyword',
     cardinality: 'N:M',
-    description: 'Mining run targets SEO keywords (v7.8.2: SEOKeyword → SEOKeywordL10n)',
+    description: 'Mining run targets SEO keywords (v7.8.2: SEOKeyword → SEOKeyword)',
   },
-  // REMOVED v7.8.5: HAS_SNAPSHOT (use HAS_METRICS: SEOKeywordL10n → SEOKeywordMetrics)
+  // REMOVED v7.8.5: HAS_SNAPSHOT (use HAS_METRICS: SEOKeyword → SEOKeywordMetrics)
   // REMOVED v7.8.4: SEO_DISCOVERED_BY, HAS_VARIATION, VARIATES (SEOVariation deleted)
 
   // ─────────────────────────────────────────────────────────────────────────────
@@ -730,7 +730,7 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
   [RelationType.HAS_LOCALIZED_CONTENT]: {
     type: RelationType.HAS_LOCALIZED_CONTENT,
     from: 'Locale',
-    to: ['ProjectL10n', 'ConceptL10n', 'PageL10n', 'BlockL10n', 'SEOKeywordL10n', 'GEOSeedL10n'],
+    to: ['ProjectL10n', 'ConceptL10n', 'PageL10n', 'BlockL10n', 'SEOKeyword', 'GEOSeedL10n'],
     cardinality: '1:N',
     description: 'Inverse of FOR_LOCALE - locale knows all its content',
   },

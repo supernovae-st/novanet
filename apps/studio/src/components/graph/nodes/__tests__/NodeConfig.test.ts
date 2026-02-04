@@ -81,9 +81,9 @@ describe('NodeConfig', () => {
       // Project category (violet) vs Content category (amber)
       expect(NODE_COLORS.Project.primary).not.toBe(NODE_COLORS.Concept.primary);
       // Locale category (green) vs SEO category (red)
-      expect(NODE_COLORS.Locale.primary).not.toBe(NODE_COLORS.SEOKeywordL10n.primary);
+      expect(NODE_COLORS.Locale.primary).not.toBe(NODE_COLORS.SEOKeyword.primary);
       // SEO category (red) vs GEO category (purple)
-      expect(NODE_COLORS.SEOKeywordL10n.primary).not.toBe(NODE_COLORS.GEOSeedL10n.primary);
+      expect(NODE_COLORS.SEOKeyword.primary).not.toBe(NODE_COLORS.GEOSeedL10n.primary);
     });
   });
 

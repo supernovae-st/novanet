@@ -21,7 +21,7 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 | Axis | Question | Type | Property | Values |
 |------|----------|------|----------|--------|
 | 1 | WHERE? | `NodeRealm` | `realm` | `global`, `project`, `shared` |
-| 2 | WHAT? | `NodeLayer` | `layer` | `config`, `knowledge`, `foundation`, `structure`, `semantic`, `instruction`, `output`, `seo`, `geo` |
+| 2 | WHAT? | `NodeLayer` | `layer` | `config`, `knowledge`, `foundation`, `structure`, `semantic`, `instruction`, `output`, `seo` |
 | 3 | HOW? | `NodeTrait` | `trait` | `invariant`, `localized`, `knowledge`, `derived`, `job` |
 
 ### Arc Classification (Faceted)
@@ -50,6 +50,28 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 | TypeScript files | `kebab-case.ts` | `arc-kinds.ts`, `node-layers.ts` |
 | Rust structs | `PascalCase` | `ArcKind`, `NodeRealm` |
 | Rust files | `snake_case.rs` | `arc_schema.rs`, `taxonomy.rs` |
+
+## Node Naming Convention (v10.1)
+
+> **RULE: `*L10n` suffix = has a parent invariant node**
+
+| Pattern | When to Use | Example |
+|---------|-------------|---------|
+| `FooL10n` | Node has a parent invariant `Foo` with the same key | `PageL10n` (parent: `Page`) |
+| `Foo` | Node is standalone (no parent invariant) | `SEOKeyword`, `Term`, `Expression` |
+
+**Examples:**
+
+```
+✅ Page (invariant) → PageL10n (localized)     # Correct: L10n has parent
+✅ Concept (invariant) → ConceptL10n (localized) # Correct: L10n has parent
+✅ SEOKeyword (localized, no parent)           # Correct: no L10n suffix
+✅ Term (knowledge atom, no parent)            # Correct: no L10n suffix
+
+❌ SEOKeywordL10n (no parent invariant)        # Wrong: no parent = no L10n suffix
+```
+
+**Rationale:** The `L10n` suffix signals a paired relationship. If `FooL10n` exists, developers expect to find a `Foo` invariant. This prevents confusion when exploring the schema.
 
 ## Property Naming
 

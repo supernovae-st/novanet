@@ -7,7 +7,7 @@ description: NovaNet Core View Definitions
 # - generation: Orchestrator and sub-agent context views
 # - knowledge: Locale and concept views
 # - project: Project structure views
-# - mining: SEO and GEO pipeline views
+# - mining: SEO pipeline views
 
 # =============================================================================
 # OVERVIEW LAYER VIEWS (extracted from complete-graph)
@@ -29,7 +29,7 @@ views:
 
   - id: shared-layer
     file: shared-layer.yaml
-    description: SEO keywords and GEO seeds (6 nodes)
+    description: SEO keywords (3 nodes)
     category: overview
     modes: [data, meta, overlay, query]
 
@@ -73,7 +73,7 @@ views:
 
   - id: concept-ecosystem
     file: concept-ecosystem.yaml
-    description: Concept with L10n, SEO keywords, GEO seeds, semantic links
+    description: Concept with L10n, SEO keywords, semantic links
     category: knowledge
     modes: [data, overlay, query]
 
@@ -94,17 +94,11 @@ views:
     modes: [data, overlay, query]
 
 # =============================================================================
-# MINING VIEWS (SEO and GEO pipelines)
+# MINING VIEWS (SEO pipeline)
 # =============================================================================
 
   - id: seo-pipeline
     file: seo-pipeline.yaml
     description: SEO keyword mining and optimization workflow
-    category: mining
-    modes: [data, overlay, query]
-
-  - id: geo-pipeline
-    file: geo-pipeline.yaml
-    description: GEO question mining and citation workflow
     category: mining
     modes: [data, overlay, query]

@@ -43,7 +43,7 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 - `bacon` — Live reload dev experience
 
 **Performance optimizations:**
-- `rayon` — Parallel YAML loading (~4x speedup for 42 nodes)
+- `rayon` — Parallel YAML loading (~4x speedup for 48 nodes)
 - `FxHashSet` — 30% faster string key lookups (TUI collapsed state)
 - `SmallVec` — Stack-allocated vectors for properties/labels (avoid heap)
 

@@ -37,7 +37,7 @@ RETURN c.key AS concept,
 :param locale => "fr-FR";
 
 MATCH (c:Concept {key: $conceptKey})
-OPTIONAL MATCH (c)-[:TARGETS_SEO]->(seo:SEOKeywordL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+OPTIONAL MATCH (c)-[:TARGETS_SEO]->(seo:SEOKeyword)-[:FOR_LOCALE]->(l:Locale {key: $locale})
 OPTIONAL MATCH (c)-[:TARGETS_GEO]->(geo:GEOSeedL10n)-[:FOR_LOCALE]->(l2:Locale {key: $locale})
 RETURN c.key AS concept,
        collect(DISTINCT seo.keyword) AS seoKeywords,

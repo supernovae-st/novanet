@@ -53,7 +53,7 @@ cypher: |
   OPTIONAL MATCH (root)-[:HAS_RULES]->(rules)
 {{/if}}
 {{#if (includes 'seo')}}
-  OPTIONAL MATCH (concept)-[:TARGETS_SEO]->(seoKeyword:SEOKeywordL10n)-[:FOR_LOCALE]->(locale)
+  OPTIONAL MATCH (concept)-[:TARGETS_SEO]->(seoKeyword:SEOKeyword)-[:FOR_LOCALE]->(locale)
 {{/if}}
 {{#if (includes 'geo')}}
   OPTIONAL MATCH (concept)-[:TARGETS_GEO]->(geoSeed:GEOSeedL10n)-[:FOR_LOCALE]->(locale)

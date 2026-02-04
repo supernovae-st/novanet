@@ -90,8 +90,8 @@ const RELATION_TARGET_TYPE_MAP: Record<string, string> = {
   HAS_MARKET: 'LocaleMarket',
   HAS_LEXICON: 'LocaleLexicon',
   HAS_EXPRESSION: 'Expression',
-  // SEO/GEO (v7.8.2: SEOKeyword → SEOKeywordL10n, v7.8.3: GEOSeed → GEOSeedL10n)
-  TARGETS_SEO: 'SEOKeywordL10n',
+  // SEO/GEO (v7.8.2: SEOKeyword → SEOKeyword, v7.8.3: GEOSeed → GEOSeedL10n)
+  TARGETS_SEO: 'SEOKeyword',
   TARGETS_GEO: 'GEOSeedL10n',
   // REMOVED v7.8.1: PAGE_TARGETS_SEO, PAGE_TARGETS_GEO (bypasses semantic grouping)
   // Locale
@@ -108,8 +108,8 @@ const RELATION_TARGET_TYPE_MAP: Record<string, string> = {
   GENERATED_FROM: 'BlockType',
   BELONGS_TO_PROJECT_L10N: 'ProjectL10n',
   // SEO Mining (v7.8.5: HAS_SNAPSHOT removed, use HAS_METRICS)
-  SEO_MINES: 'SEOKeywordL10n',
-  // REMOVED v7.8.5: HAS_SNAPSHOT (use HAS_METRICS: SEOKeywordL10n → SEOKeywordMetrics)
+  SEO_MINES: 'SEOKeyword',
+  // REMOVED v7.8.5: HAS_SNAPSHOT (use HAS_METRICS: SEOKeyword → SEOKeywordMetrics)
   // GEO Mining (v7.8.5: HAS_CITATION removed, use HAS_METRICS)
   GEO_MINES: 'GEOSeedL10n',
   // REMOVED v7.8.5: HAS_CITATION (use HAS_METRICS: GEOSeedL10n → GEOSeedMetrics)
