@@ -1,0 +1,20 @@
+# packages/core/models/arc-kinds/semantic/satisfies-intent.yaml
+# ArcKind: SATISFIES_INTENT — Page satisfies user search intent
+
+arc:
+  name: SATISFIES_INTENT
+  family: semantic
+  scope: intra_realm
+  source: Page
+  target: SearchIntent
+  cardinality: many_to_many
+  properties:
+    - name: relevance_score
+      type: string
+      required: false
+    - name: is_primary
+      type: string
+      required: false
+  llm_context: "Page satisfies user search intent. relevance_score: 0.0-1.0 match quality. is_primary:
+    true if main intent."
+  cypher_pattern: (Page)-[:SATISFIES_INTENT {relevance_score, is_primary}]->(SearchIntent)

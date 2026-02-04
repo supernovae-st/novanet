@@ -1,0 +1,12 @@
+# packages/core/models/arc-kinds/ownership/has-rules.yaml
+# ArcKind: HAS_RULES — BlockType defines generation rules templates
+
+arc:
+  name: HAS_RULES
+  family: ownership
+  scope: intra_realm
+  source: BlockType
+  target: BlockRules
+  cardinality: one_to_many
+  llm_context: BlockType defines generation rules templates.
+  cypher_pattern: (BlockType)-[:HAS_RULES]->(BlockRules)

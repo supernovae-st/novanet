@@ -1,4 +1,7 @@
-//! Parse organizing-principles.yaml (realms, layers, traits, arc families).
+//! Organizing principles types (realms, layers, traits, arc families).
+//!
+//! **Note**: Data now comes from `taxonomy.yaml` via conversion.
+//! This module provides the legacy `OrganizingDoc` format for generators.
 //!
 //! Shared between:
 //! - `generators/organizing.rs` → Cypher seed
@@ -8,7 +11,7 @@ use serde::Deserialize;
 use std::path::Path;
 
 // ─────────────────────────────────────────────────────────────────────────────
-// YAML Structs (organizing-principles.yaml)
+// Legacy OrganizingDoc structs (kept for backwards compatibility)
 // ─────────────────────────────────────────────────────────────────────────────
 
 /// Top-level document.
@@ -61,31 +64,23 @@ pub struct ArcFamilyDef {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Loader
+// Loader (via taxonomy.yaml conversion)
 // ─────────────────────────────────────────────────────────────────────────────
 
-/// Load and validate organizing-principles.yaml.
+/// Load organizing principles from taxonomy.yaml (with backwards-compatible format).
+///
+/// This function loads `taxonomy.yaml` and converts it to `OrganizingDoc` format.
+/// The underlying data source is now `taxonomy.yaml`, but the return type remains
+/// `OrganizingDoc` for backwards compatibility with existing generators.
 pub fn load_organizing(root: &Path) -> crate::Result<OrganizingDoc> {
-    let path = crate::config::organizing_principles_path(root);
+    // Load from taxonomy.yaml and convert to OrganizingDoc format
+    let taxonomy = crate::parsers::taxonomy::load_taxonomy(root)?;
+    let doc = taxonomy.to_organizing_doc();
 
-    if !path.exists() {
-        return Err(crate::NovaNetError::Validation(format!(
-            "organizing-principles.yaml not found: {}",
-            path.display()
-        )));
-    }
-
-    let content = std::fs::read_to_string(&path)?;
-    let doc: OrganizingDoc =
-        serde_yaml::from_str(&content).map_err(|e| crate::NovaNetError::Schema {
-            path: path.display().to_string(),
-            source: e,
-        })?;
-
-    // Fail-fast validation
+    // Fail-fast validation (same as before)
     if doc.realms.is_empty() {
         return Err(crate::NovaNetError::Validation(
-            "organizing-principles.yaml has no realms".to_string(),
+            "taxonomy.yaml has no realms".to_string(),
         ));
     }
     for realm in &doc.realms {
@@ -98,12 +93,12 @@ pub fn load_organizing(root: &Path) -> crate::Result<OrganizingDoc> {
     }
     if doc.traits.is_empty() {
         return Err(crate::NovaNetError::Validation(
-            "organizing-principles.yaml has no traits".to_string(),
+            "taxonomy.yaml has no traits".to_string(),
         ));
     }
     if doc.arc_families.is_empty() {
         return Err(crate::NovaNetError::Validation(
-            "organizing-principles.yaml has no arc_families".to_string(),
+            "taxonomy.yaml has no arc_families".to_string(),
         ));
     }
 
@@ -169,9 +164,10 @@ arc_families:
             return;
         }
 
-        let doc = load_organizing(root).expect("should load organizing-principles.yaml");
+        let doc = load_organizing(root).expect("should load from taxonomy.yaml");
 
-        assert_eq!(doc.version, "9.0.0");
+        // Version now comes from taxonomy.yaml (9.5.0)
+        assert_eq!(doc.version, "9.5.0");
         assert_eq!(doc.realms.len(), 3);
         assert_eq!(doc.traits.len(), 5);
         assert_eq!(doc.arc_families.len(), 5);

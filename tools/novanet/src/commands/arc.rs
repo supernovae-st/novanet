@@ -1,7 +1,7 @@
-//! Relation CRUD commands: `novanet relation create/delete`.
+//! Arc CRUD commands: `novanet arc create/delete`.
 //!
-//! Creates and deletes relationships between nodes in Neo4j. Validates
-//! relationship type against ArcKind meta-nodes.
+//! Creates and deletes arcs (relationships) between nodes in Neo4j. Validates
+//! arc type against ArcKind meta-nodes.
 
 use crate::db::Db;
 

@@ -1,0 +1,12 @@
+# packages/core/models/arc-kinds/ownership/has-page.yaml
+# ArcKind: HAS_PAGE — Project owns its page structures
+
+arc:
+  name: HAS_PAGE
+  family: ownership
+  scope: intra_realm
+  source: Project
+  target: Page
+  cardinality: one_to_many
+  llm_context: Project owns its page structures. Use to enumerate pages for generation.
+  cypher_pattern: (Project)-[:HAS_PAGE]->(Page)

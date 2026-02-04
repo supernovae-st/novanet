@@ -41,7 +41,7 @@ struct TemplateLayer {
 // Realm ordering
 // ─────────────────────────────────────────────────────────────────────────────
 
-/// Fixed realm order matching organizing-principles.yaml.
+/// Fixed realm order matching taxonomy.yaml.
 const REALM_ORDER: &[&str] = &["global", "project", "shared"];
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -62,7 +62,7 @@ import type { Layer } from './types.js';
 
 /**
  * Maps each NodeType to its layer within its realm.
- * AUTO-GENERATED from models/nodes/ folder structure.
+ * AUTO-GENERATED from models/node-kinds/ folder structure.
  *
  * Layers by realm:
 {%- for realm in realms %}
@@ -75,7 +75,7 @@ export const NODE_LAYERS: Record<NodeType, Layer> = {
   // {{ realm.label_upper }} REALM ({{ realm.node_count }} nodes)
   // ═══════════════════════════════════════════════════════════════════════════
 {% for layer in realm.layers %}
-  // {{ layer.key }} ({{ layer.node_count }} node{{ "s" if layer.node_count != 1 else "" }}) - matches models/nodes/{{ layer.realm_key }}/{{ layer.key }}/
+  // {{ layer.key }} ({{ layer.node_count }} node{{ "s" if layer.node_count != 1 else "" }}) - matches models/node-kinds/{{ layer.realm_key }}/{{ layer.key }}/
 {%- for node in layer.nodes %}
   {{ node }}: '{{ layer.key }}',
 {%- endfor %}
@@ -152,7 +152,7 @@ fn render_layers(nodes: &[yaml_node::ParsedNode]) -> crate::Result<String> {
     for &realm_key in REALM_ORDER {
         let Some(layers_map) = realm_map.get(realm_key) else {
             return Err(crate::NovaNetError::Validation(format!(
-                "realm '{realm_key}' has no nodes — expected nodes under models/nodes/{realm_key}/"
+                "realm '{realm_key}' has no nodes — expected nodes under models/node-kinds/{realm_key}/"
             )));
         };
 
@@ -247,7 +247,7 @@ mod tests {
             realm: realm.to_string(),
             layer: layer.to_string(),
             source_path: std::path::PathBuf::from(format!(
-                "models/nodes/{realm}/{layer}/{name}.yaml"
+                "models/node-kinds/{realm}/{layer}/{name}.yaml"
             )),
         }
     }
@@ -301,7 +301,7 @@ mod tests {
         let page_pos = output.find("Page: 'structure',").unwrap();
         assert!(block_pos < page_pos, "Block should come before Page");
 
-        // Realm order: global, project, shared (matches organizing-principles.yaml)
+        // Realm order: global, project, shared (matches taxonomy.yaml)
         let global_pos = output.find("GLOBAL REALM").unwrap();
         let project_pos = output.find("PROJECT REALM").unwrap();
         let shared_pos = output.find("SHARED REALM").unwrap();
@@ -361,9 +361,9 @@ mod tests {
         let output = render_layers(&nodes).unwrap();
 
         // Comments should include the YAML folder path
-        assert!(output.contains("models/nodes/project/foundation/"));
-        assert!(output.contains("models/nodes/global/config/"));
-        assert!(output.contains("models/nodes/shared/geo/"));
+        assert!(output.contains("models/node-kinds/project/foundation/"));
+        assert!(output.contains("models/node-kinds/global/config/"));
+        assert!(output.contains("models/node-kinds/shared/geo/"));
     }
 
     #[test]

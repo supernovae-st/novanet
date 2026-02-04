@@ -1,0 +1,21 @@
+# packages/core/models/arc-kinds/generation/includes.yaml
+# ArcKind: INCLUDES — Output artifact bundles specific L10n nodes for deployment
+
+arc:
+  name: INCLUDES
+  family: generation
+  scope: intra_realm
+  source: OutputArtifact
+  target:
+    - PageL10n
+    - BlockL10n
+  cardinality: one_to_many
+  properties:
+    - name: position
+      type: string
+      required: false
+    - name: checksum
+      type: string
+      required: false
+  llm_context: Output artifact bundles specific L10n nodes for deployment.
+  cypher_pattern: (OutputArtifact)-[:INCLUDES {position, checksum}]->(PageL10n)

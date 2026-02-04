@@ -1,0 +1,16 @@
+# packages/core/models/arc-kinds/ownership/has-slot.yaml
+# ArcKind: HAS_SLOT — Page defines content slot
+
+arc:
+  name: HAS_SLOT
+  family: ownership
+  scope: intra_realm
+  source: Page
+  target: ContentSlot
+  cardinality: one_to_many
+  properties:
+    - name: position_override
+      type: string
+      required: false
+  llm_context: "Page defines content slot. position_override: optional layout position."
+  cypher_pattern: (Page)-[:HAS_SLOT {position_override}]->(ContentSlot)

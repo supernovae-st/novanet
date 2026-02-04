@@ -67,10 +67,7 @@ async fn run_app(
 
     loop {
         // Wait for events (non-blocking with timeout for future animations)
-        let event = tokio::time::timeout(
-            Duration::from_millis(100),
-            event_stream.next()
-        ).await;
+        let event = tokio::time::timeout(Duration::from_millis(100), event_stream.next()).await;
 
         match event {
             Ok(Some(Ok(Event::Key(key)))) => {

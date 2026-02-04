@@ -63,7 +63,7 @@ core/
 ├── models/                    # YAML schema definitions (source of truth)
 │   ├── _index.yaml            # Graph structure overview (35 nodes, 50 relations)
 │   ├── relations.yaml         # All Neo4j relationships (with family field)
-│   ├── organizing-principles.yaml  # v9: Realm/Layer/Trait/EdgeFamily
+│   ├── taxonomy.yaml               # v9.5: Realm/Layer/Trait/ArcFamily
 │   ├── nodes/                 # One file per node type
 │   │   ├── global/            # Realm: global (15 nodes)
 │   │   ├── project/           # Realm: project (14 nodes)

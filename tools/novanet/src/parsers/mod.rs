@@ -1,12 +1,15 @@
 //! YAML parsers for NovaNet model definitions.
 //!
-//! - `yaml_node`: Parse 44 node YAML files with trait validation
-//! - `relations`: Parse relations.yaml (list format + family) — legacy v9
-//! - `organizing`: Parse organizing-principles.yaml (realms, layers, traits, arc families) — legacy v9
-//! - `taxonomy`: Parse taxonomy.yaml (v9.5 replacement for organizing-principles.yaml)
+//! - `yaml_node`: Parse node-kind YAML files (44 kinds with trait validation)
+//! - `arcs`: Parse relations.yaml → arc definitions (ArcFamily, ArcDef)
+//! - `organizing`: Parse taxonomy.yaml (realms, layers, traits, arc_families)
+//! - `taxonomy`: Parse taxonomy.yaml (v9.5 source of truth)
+//! - `views`: Parse view YAML files
+//! - `visual_encoding`: Parse visual-encoding.yaml (v9.5 visual system)
 
+pub mod arcs;
 pub mod organizing;
-pub mod relations;
 pub mod taxonomy;
 pub mod views;
+pub mod visual_encoding;
 pub mod yaml_node;

@@ -74,7 +74,7 @@ fn yaml_path(node: &ParsedNode) -> String {
         .file_name()
         .map(|f| f.to_string_lossy().to_string())
         .unwrap_or_default();
-    format!("nodes/{}/{}/{}", node.realm, node.layer, filename)
+    format!("node-kinds/{}/{}/{}", node.realm, node.layer, filename)
 }
 
 /// Collect all property names (standard + business), sorted.
@@ -313,7 +313,7 @@ mod tests {
             realm: realm.to_string(),
             layer: layer.to_string(),
             source_path: std::path::PathBuf::from(format!(
-                "models/nodes/{realm}/{layer}/{}.yaml",
+                "models/node-kinds/{realm}/{layer}/{}.yaml",
                 name.to_lowercase()
             )),
         }
@@ -465,7 +465,7 @@ mod tests {
         assert!(cypher.contains("k_Page.schema_hint = 'display_name (req), key (req)'"));
         assert!(cypher.contains("k_Page.properties = ['display_name', 'key']"));
         assert!(cypher.contains("k_Page.required_properties = ['display_name', 'key']"));
-        assert!(cypher.contains("k_Page.yaml_path = 'nodes/project/structure/page.yaml'"));
+        assert!(cypher.contains("k_Page.yaml_path = 'node-kinds/project/structure/page.yaml'"));
 
         // Kind node for Locale
         assert!(cypher.contains("MERGE (k_Locale:Meta:Kind {label: 'Locale'})"));

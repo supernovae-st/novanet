@@ -1,0 +1,283 @@
+# packages/core/models/visual-encoding.yaml
+# Visual presentation rules for NovaNet graph elements
+# v9.5.0 — Unified Visual System
+#
+# IMPORTANT: Colors are NOT defined here.
+# Colors come from taxonomy.yaml (node_realms, node_layers, node_traits, arc_families)
+# This file defines HOW to USE those colors, not WHAT they are.
+#
+# Generated artifacts:
+# - packages/core/src/graph/visual-encoding.ts (TypeScript types + helpers)
+# - apps/studio/src/design/visual-encoding.json (runtime config)
+# - tools/novanet/src/generated/visual_encoding.rs (TUI compile-time)
+
+version: "9.5.0"
+
+# =============================================================================
+# CHANNEL MAPPING — Which visual channel encodes which facet
+# =============================================================================
+# References taxonomy.yaml color definitions (no hex values here)
+
+channel_mapping:
+  node:
+    fill_color: layer        # Uses taxonomy.node_layers[].color
+    border_style: trait      # Uses trait_borders below
+    border_color: realm      # Uses taxonomy.node_realms[].color at 60% opacity
+    icon: kind               # Uses kind_icons below
+    spatial_grouping: realm  # Layout clustering by realm
+
+  arc:
+    stroke_color: family     # Uses taxonomy.arc_families[].color
+    stroke_style: scope      # solid (intra_realm) vs dashed (cross_realm)
+    arrow_head: cardinality  # single (1:1), double (1:N), crow's foot (N:M)
+    label_position: auto     # center for short labels, offset for long
+
+# =============================================================================
+# NODE VISUAL STATES (Studio: CSS, TUI: ratatui::Style)
+# =============================================================================
+
+node_states:
+  default:
+    opacity: 1.0
+    scale: 1.0
+    shadow: none
+
+  filtered:
+    opacity: 0.3
+    scale: 1.0
+    shadow: none
+
+  focused:
+    opacity: 1.0
+    scale: 1.05
+    shadow: "0 0 12px {color}40"  # {color} = resolved facet color
+    ring: "2px solid {color}"
+
+  hover:
+    opacity: 1.0
+    scale: 1.02
+    shadow: "0 2px 8px rgba(0,0,0,0.2)"
+
+  selected:
+    opacity: 1.0
+    scale: 1.0
+    ring: "2px solid white"
+
+# =============================================================================
+# ARC VISUAL STATES
+# =============================================================================
+
+arc_states:
+  default:
+    opacity: 0.6
+    stroke_width: 1.5
+
+  highlighted:
+    opacity: 1.0
+    stroke_width: 2.5
+    animated: true  # marching ants effect
+
+  filtered:
+    opacity: 0.15
+    stroke_width: 1
+
+  hover:
+    opacity: 1.0
+    stroke_width: 2
+    label_visible: true
+
+# =============================================================================
+# TRAIT BORDER STYLES — Studio (CSS) + TUI (Unicode)
+# =============================================================================
+
+trait_borders:
+  invariant:
+    css_style: solid
+    css_width: 2px
+    unicode_char: "─"
+    unicode_style: light
+    description: "Stable, doesn't change between locales"
+
+  localized:
+    css_style: dashed
+    css_width: 2px
+    css_dash_array: "6 3"
+    unicode_char: "┄"
+    unicode_style: dashed
+    description: "Generated natively per locale"
+
+  knowledge:
+    css_style: dotted
+    css_width: 2px
+    css_dash_array: "2 2"
+    unicode_char: "┈"
+    unicode_style: dotted
+    description: "Locale knowledge reference data"
+
+  derived:
+    css_style: double
+    css_width: 3px
+    unicode_char: "═"
+    unicode_style: double
+    description: "Computed from other nodes"
+
+  job:
+    css_style: solid
+    css_width: 1px
+    css_corner_radius: 8px
+    unicode_char: "─"
+    unicode_style: thin
+    description: "Processing task / generation job"
+
+# =============================================================================
+# SCOPE STROKE STYLES — Intra vs Cross realm arcs
+# =============================================================================
+
+scope_strokes:
+  intra_realm:
+    stroke_style: solid
+    opacity: 1.0
+    description: "Arc within same realm"
+
+  cross_realm:
+    stroke_style: dashed
+    opacity: 0.7
+    description: "Arc crossing realm boundaries"
+
+# =============================================================================
+# CARDINALITY ARROW HEADS
+# =============================================================================
+
+cardinality_arrows:
+  zero_to_one:
+    arrow_head: "circle"
+    arrow_end: "arrow"
+    description: "Optional single target"
+
+  one_to_one:
+    arrow_head: "none"
+    arrow_end: "arrow"
+    description: "Required single target"
+
+  one_to_many:
+    arrow_head: "none"
+    arrow_end: "arrow-double"
+    description: "Single source to multiple targets"
+
+  many_to_many:
+    arrow_head: "diamond"
+    arrow_end: "arrow-double"
+    description: "Multiple sources to multiple targets"
+
+# =============================================================================
+# ICON MAPPING — Lucide icons per Kind
+# =============================================================================
+
+kind_icons:
+  # Global / Config
+  Locale: globe
+
+  # Global / Knowledge
+  LocaleIdentity: fingerprint
+  LocaleVoice: mic
+  LocaleCulture: heart
+  LocaleCultureReferences: bookmark
+  LocaleLexicon: book-open
+  LocaleMarket: trending-up
+  LocaleRulesAdaptation: sliders
+  LocaleRulesFormatting: type
+  LocaleRulesSlug: link
+  Expression: message-circle
+  Metaphor: lamp
+  Pattern: puzzle
+  Reference: external-link
+  Constraint: alert-triangle
+
+  # Project / Foundation
+  Project: folder
+  BrandIdentity: palette
+  ProjectL10n: languages
+
+  # Project / Structure
+  Page: file-text
+  Block: square
+  PageType: layout
+  BlockType: component
+
+  # Project / Semantic
+  Concept: lightbulb
+  ConceptL10n: globe
+
+  # Project / Instruction
+  PagePrompt: message-square
+  BlockPrompt: terminal
+  BlockRules: shield-check
+
+  # Project / Output
+  PageL10n: file-check
+  BlockL10n: check-square
+
+  # Shared / SEO
+  SEOKeywordL10n: search
+  SEOKeywordMetrics: bar-chart-2
+  SEOMiningRun: pickaxe
+
+  # Shared / GEO
+  GEOSeedL10n: map-pin
+  GEOSeedMetrics: trending-up
+  GEOMiningRun: cpu
+
+  # New v9.5 nodes
+  PromptArtifact: file-code
+  OutputArtifact: package
+  GenerationJob: play-circle
+  EvaluationSignal: activity
+  SearchIntent: compass
+  TopicCluster: network
+  ContentSlot: inbox
+  Thing: box
+  ThingL10n: box
+
+# =============================================================================
+# ANIMATION PRESETS (Studio only)
+# =============================================================================
+
+animations:
+  expand_node:
+    duration_ms: 200
+    easing: ease-out
+
+  filter_change:
+    duration_ms: 150
+    easing: ease-in-out
+    stagger_ms: 20  # per node
+
+  focus_transition:
+    duration_ms: 300
+    easing: ease-out
+
+  layout_change:
+    duration_ms: 500
+    easing: ease-in-out
+
+  arc_highlight:
+    duration_ms: 200
+    easing: ease-out
+
+# =============================================================================
+# ACCESSIBILITY
+# =============================================================================
+
+accessibility:
+  # Minimum contrast ratio for text on colored backgrounds
+  min_contrast_ratio: 4.5
+
+  # Alternative visual cues beyond color
+  use_patterns: true
+  use_icons: true
+  use_borders: true
+
+  # Focus indicators
+  focus_ring_width: 2px
+  focus_ring_color: white
+  focus_ring_offset: 2px

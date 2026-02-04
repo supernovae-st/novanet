@@ -36,7 +36,7 @@ MATCH (n:Page)-[:OF_KIND]->(k:Kind {label: 'Page'})
 - Limit `*..n` patterns to reasonable depth
 - Profile with `EXPLAIN` before complex queries
 
-## EdgeFamily Classification
+## ArcFamily Classification
 | Family | Pattern | Example |
 |--------|---------|---------|
 | ownership | `HAS_*`, `*_OF` | `HAS_PAGE`, `PAGE_OF` |

@@ -1,0 +1,23 @@
+# packages/core/models/arc-kinds/semantic/covers.yaml
+# ArcKind: COVERS — Page covers a Thing as topic
+
+arc:
+  name: COVERS
+  family: semantic
+  scope: intra_realm
+  source: Page
+  target: Thing
+  cardinality: many_to_many
+  properties:
+    - name: is_primary
+      type: string
+      required: false
+    - name: depth
+      type: string
+      required: false
+    - name: coverage_type
+      type: string
+      required: false
+  llm_context: "Page covers a Thing as topic. is_primary: main subject. depth:
+    surface/detailed/comprehensive. coverage_type: introduction/deep-dive/comparison."
+  cypher_pattern: (Page)-[:COVERS {is_primary, depth, coverage_type}]->(Thing)

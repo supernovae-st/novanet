@@ -13,7 +13,7 @@ import type { NodeType } from '@novanet/core/types';
  * Emoji icons for all 44 node types.
  *
  * Each icon is defined in the node's YAML file under `node.icon`.
- * Source: packages/core/models/nodes/<realm>/<layer>/<name>.yaml
+ * Source: packages/core/models/node-kinds/<realm>/<layer>/<name>.yaml
  */
 export const NODE_ICONS: Record<NodeType, string> = {
   Block: '🔷',

@@ -1,0 +1,12 @@
+# packages/core/models/arc-kinds/generation/generated-from.yaml
+# ArcKind: GENERATED_FROM — Direct link for fast structure validation (optimization shortcut)
+
+arc:
+  name: GENERATED_FROM
+  family: generation
+  scope: intra_realm
+  source: BlockL10n
+  target: BlockType
+  cardinality: many_to_one
+  llm_context: Direct link for fast structure validation (optimization shortcut).
+  cypher_pattern: (BlockL10n)-[:GENERATED_FROM]->(BlockType)

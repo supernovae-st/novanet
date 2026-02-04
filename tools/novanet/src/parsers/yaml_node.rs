@@ -1,7 +1,7 @@
 //! Parse 44 YAML node definitions with trait validation.
 //!
 //! Fails fast if any YAML is missing `trait` (or `locale_behavior`), `realm`, or `layer` — no silent defaults.
-//! Each file at `packages/core/models/nodes/<realm>/<layer>/<name>.yaml`
+//! Each file at `packages/core/models/node-kinds/<realm>/<layer>/<name>.yaml`
 //! is deserialized into a [`ParsedNode`] with realm/layer read from the YAML content.
 //! Validation ensures the file path matches the YAML-declared realm/layer.
 //!
@@ -164,7 +164,7 @@ impl ParsedNode {
 // Loader
 // ─────────────────────────────────────────────────────────────────────────────
 
-/// Load and parse all YAML node definitions under `<root>/packages/core/models/nodes/`.
+/// Load and parse all YAML node definitions under `<root>/packages/core/models/node-kinds/`.
 ///
 /// Walks the directory recursively, deserializes each `.yaml` file, and
 /// reads `realm`/`layer` from the YAML content (source of truth).
@@ -176,7 +176,7 @@ impl ParsedNode {
 /// - `NovaNetError::Schema` if any YAML file fails to parse (including missing `trait`)
 /// - `NovaNetError::Io` on filesystem errors
 pub fn load_all_nodes(root: &Path) -> crate::Result<Vec<ParsedNode>> {
-    let nodes_dir = crate::config::nodes_dir(root);
+    let nodes_dir = crate::config::node_kinds_dir(root);
 
     if !nodes_dir.exists() {
         return Err(crate::NovaNetError::Validation(format!(

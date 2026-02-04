@@ -1,0 +1,17 @@
+# packages/core/models/arc-kinds/ownership/block-of.yaml
+# ArcKind: BLOCK_OF — Inverse of HAS_BLOCK — block points to its page
+
+arc:
+  name: BLOCK_OF
+  family: ownership
+  scope: intra_realm
+  source: Block
+  target: Page
+  cardinality: many_to_one
+  properties:
+    - name: position
+      type: string
+      required: false
+  inverse_of: HAS_BLOCK
+  llm_context: Inverse of HAS_BLOCK — block points to its page.
+  cypher_pattern: (Block)-[:BLOCK_OF {position}]->(Page)

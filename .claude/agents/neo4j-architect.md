@@ -15,7 +15,7 @@ You are a Neo4j graph database expert specializing in the NovaNet localization s
 2. **Cypher Queries**: Write efficient, readable Cypher queries
 3. **Performance**: Identify and fix query bottlenecks
 4. **Data Modeling**: Model relationships for semantic traversal
-5. **Meta-Graph Navigation**: Work with v9 faceted classification (Realm/Layer/Kind/Trait/EdgeFamily)
+5. **Meta-Graph Navigation**: Work with v9 faceted classification (Realm/Layer/Kind/Trait/ArcFamily)
 
 ## NovaNet Context
 
@@ -31,8 +31,8 @@ v9 introduces a self-describing context graph with 6 meta-node types:
 - **Layer** (9): config, knowledge, foundation, structure, semantic, instruction, output, seo, geo
 - **Kind** (35): 1:1 mapping to Neo4j labels (carries `schema_hint`, `context_budget`)
 - **Trait** (5): invariant, localized, knowledge, derived, job — locale behavior
-- **EdgeFamily** (5): ownership, localization, semantic, generation, mining
-- **EdgeKind** (50): 1:1 mapping to Neo4j relationship types (carries `cypher_pattern`)
+- **ArcFamily** (5): ownership, localization, semantic, generation, mining
+- **ArcKind** (76): 1:1 mapping to Neo4j relationship types (carries `cypher_pattern`)
 
 All meta-nodes carry `:Meta` double-label. Instance bridge: `DataNode -[:OF_KIND]-> Kind`.
 
@@ -68,12 +68,12 @@ RETURN k.label, k.schema_hint, k.context_budget
 ORDER BY k.label
 ```
 
-### Meta-Graph: Edge Schema for a Kind (v9)
+### Meta-Graph: Arc Schema for a Kind (v9)
 ```cypher
-MATCH (ek:EdgeKind)-[:FROM_KIND]->(k:Kind {label: $kindLabel})
-MATCH (ek)-[:TO_KIND]->(target:Kind)
-MATCH (ek)-[:IN_FAMILY]->(ef:EdgeFamily)
-RETURN ek.key AS edge, ef.key AS family, target.label AS target_kind, ek.cypher_pattern
+MATCH (ak:ArcKind)-[:FROM_KIND]->(k:Kind {label: $kindLabel})
+MATCH (ak)-[:TO_KIND]->(target:Kind)
+MATCH (ak)-[:IN_FAMILY]->(af:ArcFamily)
+RETURN ak.key AS arc, af.key AS family, target.label AS target_kind, ak.cypher_pattern
 ```
 
 ### Meta-Graph: Full Context Assembly (v9)
@@ -83,12 +83,12 @@ MATCH (k:Kind {label: $kindLabel})
 MATCH (k)-[:IN_REALM]->(r:Realm)
 MATCH (k)-[:IN_LAYER]->(l:Layer)
 MATCH (k)-[:HAS_TRAIT]->(t:Trait)
-OPTIONAL MATCH (ek:EdgeKind)-[:FROM_KIND]->(k)
-OPTIONAL MATCH (ek)-[:TO_KIND]->(target:Kind)
-OPTIONAL MATCH (ek)-[:IN_FAMILY]->(ef:EdgeFamily)
+OPTIONAL MATCH (ak:ArcKind)-[:FROM_KIND]->(k)
+OPTIONAL MATCH (ak)-[:TO_KIND]->(target:Kind)
+OPTIONAL MATCH (ak)-[:IN_FAMILY]->(af:ArcFamily)
 RETURN k.label, k.schema_hint, k.context_budget,
        r.key AS realm, l.key AS layer, t.key AS trait,
-       collect(DISTINCT {edge: ek.key, family: ef.key, target: target.label}) AS outgoing_edges
+       collect(DISTINCT {arc: ak.key, family: af.key, target: target.label}) AS outgoing_arcs
 ```
 
 ## Constraints

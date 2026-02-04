@@ -12,7 +12,7 @@ import type { Layer } from './types.js';
 
 /**
  * Maps each NodeType to its layer within its realm.
- * AUTO-GENERATED from models/nodes/ folder structure.
+ * AUTO-GENERATED from models/node-kinds/ folder structure.
  *
  * Layers by realm:
  * - Global: config, knowledge
@@ -24,10 +24,10 @@ export const NODE_LAYERS: Record<NodeType, Layer> = {
   // GLOBAL REALM (15 nodes)
   // ═══════════════════════════════════════════════════════════════════════════
 
-  // config (1 node) - matches models/nodes/global/config/
+  // config (1 node) - matches models/node-kinds/global/config/
   Locale: 'config',
 
-  // knowledge (14 nodes) - matches models/nodes/global/knowledge/
+  // knowledge (14 nodes) - matches models/node-kinds/global/knowledge/
   Constraint: 'knowledge',
   Expression: 'knowledge',
   LocaleCulture: 'knowledge',
@@ -47,12 +47,12 @@ export const NODE_LAYERS: Record<NodeType, Layer> = {
   // PROJECT REALM (21 nodes)
   // ═══════════════════════════════════════════════════════════════════════════
 
-  // foundation (3 nodes) - matches models/nodes/project/foundation/
+  // foundation (3 nodes) - matches models/node-kinds/project/foundation/
   BrandIdentity: 'foundation',
   Project: 'foundation',
   ProjectL10n: 'foundation',
 
-  // instruction (6 nodes) - matches models/nodes/project/instruction/
+  // instruction (6 nodes) - matches models/node-kinds/project/instruction/
   BlockPrompt: 'instruction',
   BlockRules: 'instruction',
   BlockType: 'instruction',
@@ -60,20 +60,20 @@ export const NODE_LAYERS: Record<NodeType, Layer> = {
   PageType: 'instruction',
   PromptArtifact: 'instruction',
 
-  // output (5 nodes) - matches models/nodes/project/output/
+  // output (5 nodes) - matches models/node-kinds/project/output/
   BlockL10n: 'output',
   EvaluationSignal: 'output',
   GenerationJob: 'output',
   OutputArtifact: 'output',
   PageL10n: 'output',
 
-  // semantic (4 nodes) - matches models/nodes/project/semantic/
+  // semantic (4 nodes) - matches models/node-kinds/project/semantic/
   Concept: 'semantic',
   ConceptL10n: 'semantic',
   SearchIntent: 'semantic',
   TopicCluster: 'semantic',
 
-  // structure (3 nodes) - matches models/nodes/project/structure/
+  // structure (3 nodes) - matches models/node-kinds/project/structure/
   Block: 'structure',
   ContentSlot: 'structure',
   Page: 'structure',
@@ -82,14 +82,14 @@ export const NODE_LAYERS: Record<NodeType, Layer> = {
   // SHARED REALM (8 nodes)
   // ═══════════════════════════════════════════════════════════════════════════
 
-  // geo (5 nodes) - matches models/nodes/shared/geo/
+  // geo (5 nodes) - matches models/node-kinds/shared/geo/
   GEOMiningRun: 'geo',
   GEOSeedL10n: 'geo',
   GEOSeedMetrics: 'geo',
   Thing: 'geo',
   ThingL10n: 'geo',
 
-  // seo (3 nodes) - matches models/nodes/shared/seo/
+  // seo (3 nodes) - matches models/node-kinds/shared/seo/
   SEOKeywordL10n: 'seo',
   SEOKeywordMetrics: 'seo',
   SEOMiningRun: 'seo',

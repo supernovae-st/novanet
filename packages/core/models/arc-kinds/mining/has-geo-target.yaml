@@ -1,0 +1,19 @@
+# packages/core/models/arc-kinds/mining/has-geo-target.yaml
+# ArcKind: HAS_GEO_TARGET — Primary GEO targeting — locale-aligned
+
+arc:
+  name: HAS_GEO_TARGET
+  family: mining
+  scope: intra_realm
+  source: ConceptL10n
+  target: GEOSeedL10n
+  cardinality: one_to_many
+  properties:
+    - name: role
+      type: string
+      required: false
+    - name: priority
+      type: string
+      required: false
+  llm_context: "Primary GEO targeting — locale-aligned. role: primary/contextual."
+  cypher_pattern: (ConceptL10n)-[:HAS_GEO_TARGET {role, priority}]->(GEOSeedL10n)

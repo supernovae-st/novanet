@@ -1,0 +1,20 @@
+# packages/core/models/arc-kinds/ownership/cluster-page.yaml
+# ArcKind: CLUSTER_PAGE — TopicCluster contains supporting pages
+
+arc:
+  name: CLUSTER_PAGE
+  family: ownership
+  scope: intra_realm
+  source: TopicCluster
+  target: Page
+  cardinality: one_to_many
+  properties:
+    - name: subtopic
+      type: string
+      required: false
+    - name: depth_level
+      type: string
+      required: false
+  llm_context: "TopicCluster contains supporting pages. subtopic: specific angle. depth_level:
+    1=direct, 2=related."
+  cypher_pattern: (TopicCluster)-[:CLUSTER_PAGE {subtopic, depth_level}]->(Page)

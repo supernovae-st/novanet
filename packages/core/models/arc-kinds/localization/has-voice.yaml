@@ -1,0 +1,12 @@
+# packages/core/models/arc-kinds/localization/has-voice.yaml
+# ArcKind: HAS_VOICE — Locale's communication style: formality (0-1), directness, emotional range
+
+arc:
+  name: HAS_VOICE
+  family: localization
+  scope: intra_realm
+  source: Locale
+  target: LocaleVoice
+  cardinality: one_to_one
+  llm_context: "Locale's communication style: formality (0-1), directness, emotional range."
+  cypher_pattern: (Locale)-[:HAS_VOICE]->(LocaleVoice)

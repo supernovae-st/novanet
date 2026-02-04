@@ -223,7 +223,7 @@ NovaNet models content as a knowledge graph with **44 node types** across **3 Re
 | **Project** | 21 | Foundation, Structure, Semantic, Instructions, Output |
 | **Shared** | 8 | SEO Intelligence, GEO Intelligence |
 
-Each node type has a **Trait** (invariant / localized / knowledge / derived / job) and belongs to an **EdgeFamily** classification.
+Each node type has a **Trait** (invariant / localized / knowledge / derived / job) and arcs are classified by **ArcFamily**.
 
 See [`packages/core/models/_index.yaml`](packages/core/models/_index.yaml) for complete schema.
 

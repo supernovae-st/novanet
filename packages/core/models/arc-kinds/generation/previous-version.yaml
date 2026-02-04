@@ -1,0 +1,19 @@
+# packages/core/models/arc-kinds/generation/previous-version.yaml
+# ArcKind: PREVIOUS_VERSION — Links to previous version in history chain
+
+arc:
+  name: PREVIOUS_VERSION
+  family: generation
+  scope: intra_realm
+  source:
+    - BlockL10n
+    - PageL10n
+    - OutputArtifact
+  target:
+    - BlockL10n
+    - PageL10n
+    - OutputArtifact
+  cardinality: one_to_one
+  is_self_referential: true
+  llm_context: "Links to previous version in history chain. Query: (current)-[:PREVIOUS_VERSION*]->(old)."
+  cypher_pattern: (BlockL10n)-[:PREVIOUS_VERSION]->(BlockL10n)

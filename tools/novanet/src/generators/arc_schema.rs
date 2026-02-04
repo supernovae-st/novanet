@@ -6,7 +6,8 @@
 //! Output target: `packages/db/seed/02-arc-kinds.cypher`
 
 use super::cypher_utils::{cypher_list_owned, cypher_str};
-use crate::parsers::relations::{self, Cardinality, RelationDef, RelationsDocument};
+use crate::parsers::arcs;
+use crate::parsers::arcs::{ArcDef, ArcsDocument, Cardinality};
 use std::collections::HashMap;
 use std::fmt::Write;
 use std::path::Path;
@@ -33,12 +34,12 @@ fn display_name(rel_type: &str) -> String {
 
 /// Build a Cypher-ready traversal pattern from source/target labels.
 /// e.g. "(Project)-[:HAS_PAGE]->(Page)" or "(Page, Block)-[:HAS_OUTPUT]->(BlockL10n, PageL10n)"
-fn cypher_pattern(rel: &RelationDef) -> String {
+fn cypher_pattern(rel: &ArcDef) -> String {
     let sources = rel.source.labels().join(", ");
     let targets = rel.target.labels().join(", ");
     format!(
         "({sources})-[:{rel_type}]->({targets})",
-        rel_type = rel.rel_type
+        rel_type = rel.arc_type
     )
 }
 
@@ -64,24 +65,24 @@ impl super::Generator for ArcSchemaGenerator {
     }
 
     fn generate(&self, root: &Path) -> crate::Result<String> {
-        let doc = relations::load_relations(root)?;
+        let doc = arcs::load_arcs(root)?;
         generate_arc_schema(&doc)
     }
 }
 
-fn generate_arc_schema(doc: &RelationsDocument) -> crate::Result<String> {
+fn generate_arc_schema(doc: &ArcsDocument) -> crate::Result<String> {
     // Separate forward (non-inverse) from inverse relations
-    let forward: Vec<&RelationDef> = doc.relations.iter().filter(|r| !r.is_inverse()).collect();
+    let forward: Vec<&ArcDef> = doc.arcs.iter().filter(|r| !r.is_inverse()).collect();
 
     // Build inverse name lookup: forward_type -> inverse_type
     let inverse_names: HashMap<&str, &str> = doc
-        .relations
+        .arcs
         .iter()
         .filter(|r| r.is_inverse())
         .filter_map(|r| {
             r.inverse_of
                 .as_deref()
-                .map(|fwd| (fwd, r.rel_type.as_str()))
+                .map(|fwd| (fwd, r.arc_type.as_str()))
         })
         .collect();
 
@@ -113,7 +114,7 @@ fn generate_arc_schema(doc: &RelationsDocument) -> crate::Result<String> {
     writeln!(out).unwrap();
 
     for rel in &forward {
-        let key = &rel.rel_type;
+        let key = &rel.arc_type;
         let var = format!("ak_{key}");
         let dn = cypher_str(&display_name(key));
         let llm = cypher_str(&rel.llm_context);
@@ -178,7 +179,7 @@ fn generate_arc_schema(doc: &RelationsDocument) -> crate::Result<String> {
             out,
             "MATCH (af:ArcFamily {{key: '{family}'}}), (ak:ArcKind {{key: '{key}'}})",
             family = rel.family,
-            key = rel.rel_type
+            key = rel.arc_type
         )
         .unwrap();
         writeln!(out, "MERGE (af)-[:HAS_ARC_KIND]->(ak);").unwrap();
@@ -197,7 +198,7 @@ fn generate_arc_schema(doc: &RelationsDocument) -> crate::Result<String> {
         writeln!(
             out,
             "MATCH (ak:ArcKind {{key: '{key}'}}), (af:ArcFamily {{key: '{family}'}})",
-            key = rel.rel_type,
+            key = rel.arc_type,
             family = rel.family
         )
         .unwrap();
@@ -219,7 +220,7 @@ fn generate_arc_schema(doc: &RelationsDocument) -> crate::Result<String> {
             writeln!(
                 out,
                 "MATCH (ak:ArcKind {{key: '{key}'}}), (k:Kind {{label: '{source}'}})",
-                key = rel.rel_type
+                key = rel.arc_type
             )
             .unwrap();
             writeln!(out, "MERGE (ak)-[:FROM_KIND]->(k);").unwrap();
@@ -229,11 +230,7 @@ fn generate_arc_schema(doc: &RelationsDocument) -> crate::Result<String> {
 
     // ── Section 5: TO_KIND (ArcKind → Kind target labels) ───────────────────
     let to_count: usize = forward.iter().map(|r| r.target.len()).sum();
-    write_section_header(
-        &mut out,
-        "Arc Schema: ArcKind -[:TO_KIND]-> Kind",
-        to_count,
-    );
+    write_section_header(&mut out, "Arc Schema: ArcKind -[:TO_KIND]-> Kind", to_count);
     writeln!(out).unwrap();
 
     for rel in &forward {
@@ -241,7 +238,7 @@ fn generate_arc_schema(doc: &RelationsDocument) -> crate::Result<String> {
             writeln!(
                 out,
                 "MATCH (ak:ArcKind {{key: '{key}'}}), (k:Kind {{label: '{target}'}})",
-                key = rel.rel_type
+                key = rel.arc_type
             )
             .unwrap();
             writeln!(out, "MERGE (ak)-[:TO_KIND]->(k);").unwrap();
@@ -268,7 +265,7 @@ fn write_section_header(out: &mut String, title: &str, count: usize) {
 mod tests {
     use super::*;
     use crate::generators::Generator;
-    use crate::parsers::relations::{ArcFamily, NodeRef};
+    use crate::parsers::arcs::{ArcFamily, NodeRef};
 
     fn make_rel(
         rel_type: &str,
@@ -276,9 +273,9 @@ mod tests {
         source: NodeRef,
         target: NodeRef,
         cardinality: Cardinality,
-    ) -> RelationDef {
-        RelationDef {
-            rel_type: rel_type.to_string(),
+    ) -> ArcDef {
+        ArcDef {
+            arc_type: rel_type.to_string(),
             family,
             source,
             target,
@@ -290,9 +287,9 @@ mod tests {
         }
     }
 
-    fn make_inverse(rel_type: &str, family: ArcFamily, inverse_of: &str) -> RelationDef {
-        RelationDef {
-            rel_type: rel_type.to_string(),
+    fn make_inverse(rel_type: &str, family: ArcFamily, inverse_of: &str) -> ArcDef {
+        ArcDef {
+            arc_type: rel_type.to_string(),
             family,
             source: NodeRef::Single("B".to_string()),
             target: NodeRef::Single("A".to_string()),
@@ -356,8 +353,8 @@ mod tests {
 
     #[test]
     fn generate_small_arc_schema() {
-        let doc = RelationsDocument {
-            relations: vec![
+        let doc = ArcsDocument {
+            arcs: vec![
                 make_rel(
                     "HAS_PAGE",
                     ArcFamily::Ownership,
@@ -459,8 +456,8 @@ mod tests {
 
     #[test]
     fn generate_multi_source_target_from_to() {
-        let doc = RelationsDocument {
-            relations: vec![make_rel(
+        let doc = ArcsDocument {
+            arcs: vec![make_rel(
                 "HAS_OUTPUT",
                 ArcFamily::Localization,
                 NodeRef::Multiple(vec!["Page".to_string(), "Block".to_string()]),
@@ -502,8 +499,8 @@ mod tests {
         );
         rel.is_self_referential = Some(true);
 
-        let doc = RelationsDocument {
-            relations: vec![rel],
+        let doc = ArcsDocument {
+            arcs: vec![rel],
             semantic_link_types: None,
             examples: None,
         };

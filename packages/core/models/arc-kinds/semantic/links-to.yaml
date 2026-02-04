@@ -1,0 +1,29 @@
+# packages/core/models/arc-kinds/semantic/links-to.yaml
+# ArcKind: LINKS_TO — Explicit internal link for SEO
+
+arc:
+  name: LINKS_TO
+  family: semantic
+  scope: intra_realm
+  source: Page
+  target: Page
+  cardinality: many_to_many
+  is_self_referential: true
+  properties:
+    - name: concept_key
+      type: string
+      required: false
+    - name: context
+      type: string
+      required: false
+    - name: seo_weight
+      type: string
+      required: false
+    - name: anchor_type
+      type: string
+      required: false
+    - name: nofollow
+      type: string
+      required: false
+  llm_context: "Explicit internal link for SEO. anchor_type: exact_match/partial_match/branded/generic."
+  cypher_pattern: (Page)-[:LINKS_TO {concept_key, context, seo_weight, anchor_type, nofollow}]->(Page)

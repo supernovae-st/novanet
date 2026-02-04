@@ -1,0 +1,12 @@
+# packages/core/models/arc-kinds/localization/has-market.yaml
+# ArcKind: HAS_MARKET — Locale's market context: currency, payment preferences, trust signals
+
+arc:
+  name: HAS_MARKET
+  family: localization
+  scope: intra_realm
+  source: Locale
+  target: LocaleMarket
+  cardinality: one_to_one
+  llm_context: "Locale's market context: currency, payment preferences, trust signals."
+  cypher_pattern: (Locale)-[:HAS_MARKET]->(LocaleMarket)

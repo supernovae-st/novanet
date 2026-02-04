@@ -1,0 +1,16 @@
+# packages/core/models/arc-kinds/generation/triggered-by.yaml
+# ArcKind: TRIGGERED_BY — Project triggers generation job
+
+arc:
+  name: TRIGGERED_BY
+  family: generation
+  scope: intra_realm
+  source: GenerationJob
+  target: Project
+  cardinality: many_to_one
+  properties:
+    - name: trigger_type
+      type: string
+      required: false
+  llm_context: "Project triggers generation job. trigger_type: manual/schedule/webhook/api."
+  cypher_pattern: (GenerationJob)-[:TRIGGERED_BY {trigger_type}]->(Project)

@@ -1,0 +1,12 @@
+# packages/core/models/arc-kinds/ownership/has-concept.yaml
+# ArcKind: HAS_CONCEPT — Project owns its semantic concepts
+
+arc:
+  name: HAS_CONCEPT
+  family: ownership
+  scope: intra_realm
+  source: Project
+  target: Concept
+  cardinality: one_to_many
+  llm_context: Project owns its semantic concepts. Use to load all concepts for a project.
+  cypher_pattern: (Project)-[:HAS_CONCEPT]->(Concept)

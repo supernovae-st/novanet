@@ -25,12 +25,13 @@ fn all_generators() -> Vec<GeneratorEntry> {
         arc_schema::ArcSchemaGenerator, autowire::AutowireGenerator, colors::ColorsGenerator,
         hierarchy::HierarchyGenerator, icons::IconsGenerator, kind::KindGenerator,
         layer::LayerGenerator, mermaid::MermaidGenerator, organizing::OrganizingGenerator,
+        visual_encoding::VisualEncodingGenerator,
     };
 
     vec![
         GeneratorEntry {
             generator: Box::new(OrganizingGenerator),
-            output_path: "packages/db/seed/00.5-organizing-principles.cypher",
+            output_path: "packages/db/seed/00.5-taxonomy.cypher",
             post_process: None,
         },
         GeneratorEntry {
@@ -73,6 +74,11 @@ fn all_generators() -> Vec<GeneratorEntry> {
             output_path: "apps/studio/src/design/icons/nodeIcons.generated.ts",
             post_process: None,
         },
+        GeneratorEntry {
+            generator: Box::new(VisualEncodingGenerator),
+            output_path: "packages/core/src/graph/visual-encoding.ts",
+            post_process: None,
+        },
     ]
 }
 
@@ -88,9 +94,9 @@ pub struct GenerateResult {
     pub duration_ms: u128,
 }
 
-/// Run all 8 generators and optionally write output files.
+/// Run all 10 generators and optionally write output files.
 ///
-/// Generator execution order: Organizing → Kind → EdgeSchema → Layer → Mermaid → Autowire → Hierarchy → Colors
+/// Generator execution order: Organizing → Kind → ArcSchema → Layer → Mermaid → Autowire → Hierarchy → Colors → Icons → VisualEncoding
 pub fn schema_generate(root: &Path, dry_run: bool) -> crate::Result<Vec<GenerateResult>> {
     let entries = all_generators();
     let mut results = Vec::with_capacity(entries.len());
@@ -148,7 +154,7 @@ pub enum Severity {
 /// Checks:
 /// - All 44 node YAMLs parse with trait
 /// - relations.yaml parses with family on every relation
-/// - organizing-principles.yaml / taxonomy.yaml parses (realms, layers, traits, arc_families)
+/// - taxonomy.yaml parses (realms, layers, traits, arc_families)
 /// - Every node's realm/layer exists in taxonomy
 /// - Every relation's source/target labels match known node names
 pub fn schema_validate(root: &Path) -> crate::Result<Vec<ValidationIssue>> {
@@ -160,7 +166,7 @@ pub fn schema_validate(root: &Path) -> crate::Result<Vec<ValidationIssue>> {
         nodes.iter().map(|n| n.def.name.clone()).collect();
 
     // 2. Parse relations
-    let rels_doc = crate::parsers::relations::load_relations(root)?;
+    let rels_doc = crate::parsers::arcs::load_arcs(root)?;
 
     // 3. Parse organizing principles
     let org_doc = crate::parsers::organizing::load_organizing(root)?;
@@ -174,13 +180,13 @@ pub fn schema_validate(root: &Path) -> crate::Result<Vec<ValidationIssue>> {
         .flat_map(|r| r.layers.iter().map(|l| l.key.as_str()))
         .collect();
 
-    // 5. Validate each node's realm/layer is defined in organizing-principles
+    // 5. Validate each node's realm/layer is defined in taxonomy
     for node in &nodes {
         if !known_realms.contains(node.realm.as_str()) {
             issues.push(ValidationIssue {
                 severity: Severity::Error,
                 message: format!(
-                    "{}: realm '{}' not defined in organizing-principles.yaml",
+                    "{}: realm '{}' not defined in taxonomy.yaml",
                     node.def.name, node.realm
                 ),
             });
@@ -189,33 +195,33 @@ pub fn schema_validate(root: &Path) -> crate::Result<Vec<ValidationIssue>> {
             issues.push(ValidationIssue {
                 severity: Severity::Error,
                 message: format!(
-                    "{}: layer '{}' not defined in organizing-principles.yaml",
+                    "{}: layer '{}' not defined in taxonomy.yaml",
                     node.def.name, node.layer
                 ),
             });
         }
     }
 
-    // 6. Validate relation source/target labels match known node names
-    for rel in &rels_doc.relations {
-        for label in rel.source.labels() {
+    // 6. Validate arc source/target labels match known node names
+    for arc in &rels_doc.arcs {
+        for label in arc.source.labels() {
             if label != "*" && !node_names.contains(label) {
                 issues.push(ValidationIssue {
                     severity: Severity::Warning,
                     message: format!(
-                        "relation {}: source '{}' is not a known node type",
-                        rel.rel_type, label
+                        "arc {}: source '{}' is not a known node type",
+                        arc.arc_type, label
                     ),
                 });
             }
         }
-        for label in rel.target.labels() {
+        for label in arc.target.labels() {
             if label != "*" && !node_names.contains(label) {
                 issues.push(ValidationIssue {
                     severity: Severity::Warning,
                     message: format!(
-                        "relation {}: target '{}' is not a known node type",
-                        rel.rel_type, label
+                        "arc {}: target '{}' is not a known node type",
+                        arc.arc_type, label
                     ),
                 });
             }
@@ -251,8 +257,8 @@ mod tests {
 
         let results = schema_generate(&root, true).expect("should generate all artifacts");
 
-        // All 9 generators should succeed
-        assert_eq!(results.len(), 9, "expected 9 generator results");
+        // All 10 generators should succeed
+        assert_eq!(results.len(), 10, "expected 10 generator results");
 
         // Verify generator names and order
         let names: Vec<&str> = results.iter().map(|r| r.name.as_str()).collect();
@@ -268,6 +274,7 @@ mod tests {
                 "hierarchy",
                 "colors",
                 "icons",
+                "visual_encoding",
             ]
         );
 

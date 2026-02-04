@@ -163,7 +163,10 @@ mod tests {
     fn search_query_with_kind() {
         let stmt = build_search_query("test", Some("Page"), 10);
         // Uses parameterized label matching (not direct interpolation)
-        assert!(stmt.cypher.contains("ANY(label IN labels(n) WHERE label = $kind)"));
+        assert!(
+            stmt.cypher
+                .contains("ANY(label IN labels(n) WHERE label = $kind)")
+        );
         let kind = stmt.params.iter().find(|(n, _)| n == "kind");
         assert!(matches!(
             kind,
@@ -189,7 +192,10 @@ mod tests {
     #[test]
     fn search_query_kind_with_underscore() {
         let stmt = build_search_query("test", Some("Locale_Identity"), 10);
-        assert!(stmt.cypher.contains("ANY(label IN labels(n) WHERE label = $kind)"));
+        assert!(
+            stmt.cypher
+                .contains("ANY(label IN labels(n) WHERE label = $kind)")
+        );
     }
 
     #[test]

@@ -1,0 +1,21 @@
+# packages/core/models/arc-kinds/localization/for-locale.yaml
+# ArcKind: FOR_LOCALE — All localized content nodes point to their target Locale
+
+arc:
+  name: FOR_LOCALE
+  family: localization
+  scope: intra_realm
+  source:
+    - ConceptL10n
+    - ProjectL10n
+    - BlockL10n
+    - PageL10n
+    - SEOKeywordL10n
+    - GEOSeedL10n
+    - GenerationJob
+    - OutputArtifact
+    - ThingL10n
+  target: Locale
+  cardinality: many_to_one
+  llm_context: All localized content nodes point to their target Locale.
+  cypher_pattern: (ConceptL10n)-[:FOR_LOCALE]->(Locale)

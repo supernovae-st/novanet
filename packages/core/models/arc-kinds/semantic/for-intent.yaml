@@ -1,0 +1,16 @@
+# packages/core/models/arc-kinds/semantic/for-intent.yaml
+# ArcKind: FOR_INTENT — Block targets search intent
+
+arc:
+  name: FOR_INTENT
+  family: semantic
+  scope: intra_realm
+  source: Block
+  target: SearchIntent
+  cardinality: many_to_many
+  properties:
+    - name: contribution_type
+      type: string
+      required: false
+  llm_context: "Block targets search intent. contribution_type: answer/context/cta/navigation."
+  cypher_pattern: (Block)-[:FOR_INTENT {contribution_type}]->(SearchIntent)

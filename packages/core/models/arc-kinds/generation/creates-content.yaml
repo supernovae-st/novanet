@@ -1,0 +1,18 @@
+# packages/core/models/arc-kinds/generation/creates-content.yaml
+# ArcKind: CREATES_CONTENT — Generation job creates localized content nodes
+
+arc:
+  name: CREATES_CONTENT
+  family: generation
+  scope: intra_realm
+  source: GenerationJob
+  target:
+    - PageL10n
+    - BlockL10n
+  cardinality: one_to_many
+  properties:
+    - name: created_at
+      type: string
+      required: false
+  llm_context: Generation job creates localized content nodes.
+  cypher_pattern: (GenerationJob)-[:CREATES_CONTENT {created_at}]->(PageL10n)

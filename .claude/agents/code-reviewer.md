@@ -39,7 +39,7 @@ You are a senior code reviewer for the NovaNet project.
 ### 5. v9 Meta-Graph Conventions
 - Use v9 terminology: Realm (not Scope), Layer (not Subcategory), Kind (not NodeTypeMeta)
 - NavigationMode (not DataMode) with 4 modes: data/meta/overlay/query
-- EdgeFamily classification for relationships
+- ArcFamily classification for relationships
 - `:Meta` double-label for meta-nodes
 - `OF_KIND` for instance bridge (not `IN_SUBCATEGORY`)
 

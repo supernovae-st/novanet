@@ -88,8 +88,8 @@ Prereq: v9.0.0 stable. No schema migration needed — v10 activates properties v
 **Success criteria**: Given a Block + Locale, the engine produces a context window without
 hardcoded traversal logic. All traversal decisions come from the meta-graph.
 
-**Key properties activated**: `traversal_depth` (Kind), `default_traversal` (EdgeFamily),
-`temperature_threshold` (EdgeKind).
+**Key properties activated**: `traversal_depth` (Kind), `default_traversal` (ArcFamily),
+`temperature_threshold` (ArcKind).
 
 ## v11.0.0 — Autonomous Learning
 
