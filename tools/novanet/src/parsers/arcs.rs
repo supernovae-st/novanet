@@ -443,16 +443,16 @@ relations:
 
         let doc = load_arcs(root).expect("should parse relations.yaml");
 
-        // v10.1: Total arc count (GEO/Thing arcs removed)
-        // 73 - 8 = 65 (removed MENTIONS, COVERS, SPECIALIZES, RELATED_THING + HAS_GEO_TARGET, TARGETS_GEO, TARGETS_THING, GEO_MINES)
-        assert_eq!(doc.arcs.len(), 65, "expected 65 arcs");
+        // v10.1: Total arc count (GEO/Thing arcs removed + TARGETS_SEO removed)
+        // 73 - 8 - 1 = 64 (removed GEO arcs + TARGETS_SEO in favor of HAS_SEO_TARGET)
+        assert_eq!(doc.arcs.len(), 64, "expected 64 arcs");
 
         // v10.1: Family distribution
         // Ownership: 25 (unchanged)
         // Localization: 8 (unchanged)
-        // Semantic: 16 - 4 = 12 (removed MENTIONS, COVERS, SPECIALIZES, RELATED_THING)
+        // Semantic: 12 (unchanged)
         // Generation: 15 (unchanged)
-        // Mining: 9 - 4 = 5 (removed HAS_GEO_TARGET, TARGETS_GEO, TARGETS_THING, GEO_MINES)
+        // Mining: 5 - 1 = 4 (removed TARGETS_SEO - now using HAS_SEO_TARGET from ConceptL10n)
         let family_count = |f: ArcFamily| doc.arcs.iter().filter(|a| a.family == f).count();
         assert_eq!(family_count(ArcFamily::Ownership), 25, "ownership count");
         assert_eq!(
@@ -462,7 +462,7 @@ relations:
         );
         assert_eq!(family_count(ArcFamily::Semantic), 12, "semantic count");
         assert_eq!(family_count(ArcFamily::Generation), 15, "generation count");
-        assert_eq!(family_count(ArcFamily::Mining), 5, "mining count");
+        assert_eq!(family_count(ArcFamily::Mining), 4, "mining count");
 
         // All arcs have non-empty type and llm_context
         for arc in &doc.arcs {
@@ -476,11 +476,11 @@ relations:
             assert!(!arc.target.is_empty(), "empty target for {}", arc.arc_type);
         }
 
-        // v10.1: Unique arc types (65 after GEO/Thing removal)
+        // v10.1: Unique arc types (64 after GEO/Thing + TARGETS_SEO removal)
         let mut types: Vec<&str> = doc.arcs.iter().map(|a| a.arc_type.as_str()).collect();
         types.sort();
         types.dedup();
-        assert_eq!(types.len(), 65, "all arc types should be unique");
+        assert_eq!(types.len(), 64, "all arc types should be unique");
 
         // Semantic link types
         let slt = doc

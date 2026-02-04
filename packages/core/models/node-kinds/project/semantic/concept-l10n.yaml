@@ -136,20 +136,13 @@ node:
       cardinality: "N:1"
       description: "Links to the locale this content is for"
 
-    # v7.7.0: Locale-aligned SEO/GEO targeting (v7.8.2: SEOKeyword → SEOKeyword)
+    # v10.1: Locale-aligned SEO targeting (ConceptL10n fr → SEOKeyword fr)
     - relation: HAS_SEO_TARGET
       to: SEOKeyword
       direction: outgoing
       cardinality: "1:N"
       props: [role, priority]
       description: "SEO keywords targeting this localized concept (same locale)"
-
-    - relation: HAS_GEO_TARGET
-      to: GEOSeedL10n
-      direction: outgoing
-      cardinality: "1:N"
-      props: [role, priority]
-      description: "GEO seeds targeting this localized concept (same locale)"
 
   # ===========================================================================
   # INCOMING RELATIONS

@@ -27,7 +27,7 @@ This diagram shows the complete NovaNet graph schema with all 48 node types and 
 ```mermaid
 flowchart TB
   %% NovaNet Graph v10.0.0
-  %% Generated: 43 nodes, 130 edges
+  %% Generated: 43 nodes, 110 edges
   %% Source: 48 node YAMLs + relations.yaml + taxonomy.yaml
 
   %% Trait styling (node_trait)
@@ -116,7 +116,6 @@ flowchart TB
   Block -.->|HAS_OUTPUT| PageL10n
   Block -->|HAS_PROMPT| BlockPrompt
   Block -->|HAS_PROMPT| PagePrompt
-  Block -.->|MENTIONS| Thing
   Block -->|OF_TYPE| BlockType
   Block -->|OF_TYPE| PageType
   Block -.->|USES_CONCEPT| Concept
@@ -134,23 +133,15 @@ flowchart TB
   BlockType -->|HAS_RULES| BlockRules
   Concept -.->|HAS_L10N| ConceptL10n
   Concept -.->|HAS_L10N| ProjectL10n
-  Concept -.->|HAS_L10N| ThingL10n
   Concept -.->|SEMANTIC_LINK| Concept
-  Concept --o|TARGETS_GEO| GEOSeedL10n
-  Concept --o|TARGETS_SEO| SEOKeyword
   Concept -.->|USED_BY| Block
   Concept -.->|USED_BY| Page
   ConceptL10n -.->|FOR_LOCALE| Locale
-  ConceptL10n --o|HAS_GEO_TARGET| GEOSeedL10n
   ConceptL10n --o|HAS_SEO_TARGET| SEOKeyword
   ConceptL10n -.->|L10N_OF| Concept
   ConceptL10n -.->|L10N_OF| Project
   ContentSlot -->|ACCEPTS_BLOCK_TYPE| BlockType
   EvaluationSignal ==>|EVALUATED_BY_JOB| GenerationJob
-  GEOMiningRun --o|GEO_MINES| GEOSeedL10n
-  GEOSeedL10n -.->|FOR_LOCALE| Locale
-  GEOSeedL10n --o|HAS_METRICS| GEOSeedMetrics
-  GEOSeedL10n --o|HAS_METRICS| SEOKeywordMetrics
   GenerationJob ==>|CREATES_CONTENT| BlockL10n
   GenerationJob ==>|CREATES_CONTENT| PageL10n
   GenerationJob -.->|FOR_LOCALE| Locale
@@ -165,7 +156,6 @@ flowchart TB
   Locale -->|HAS_FORMATTING| Formatting
   Locale -.->|HAS_LOCALIZED_CONTENT| BlockL10n
   Locale -.->|HAS_LOCALIZED_CONTENT| ConceptL10n
-  Locale -.->|HAS_LOCALIZED_CONTENT| GEOSeedL10n
   Locale -.->|HAS_LOCALIZED_CONTENT| PageL10n
   Locale -.->|HAS_LOCALIZED_CONTENT| ProjectL10n
   Locale -.->|HAS_LOCALIZED_CONTENT| SEOKeyword
@@ -182,7 +172,6 @@ flowchart TB
   OutputArtifact ==>|PREVIOUS_VERSION| BlockL10n
   OutputArtifact ==>|PREVIOUS_VERSION| OutputArtifact
   OutputArtifact ==>|PREVIOUS_VERSION| PageL10n
-  Page -.->|COVERS| Thing
   Page -.->|FOR_CHANNEL| ChannelSurface
   Page -->|HAS_BLOCK| Block
   Page -.->|HAS_OUTPUT| BlockL10n
@@ -213,7 +202,6 @@ flowchart TB
   Project -->|HAS_CONCEPT| Concept
   Project -.->|HAS_L10N| ConceptL10n
   Project -.->|HAS_L10N| ProjectL10n
-  Project -.->|HAS_L10N| ThingL10n
   Project -->|HAS_PAGE| Page
   Project -->|SUPPORTS_LOCALE| Locale
   ProjectL10n -.->|FOR_LOCALE| Locale
@@ -224,28 +212,20 @@ flowchart TB
   PromptArtifact ==>|INCLUDES_CONCEPT| Concept
   PromptArtifact ==>|INCLUDES_STYLE| Style
   SEOKeyword -.->|FOR_LOCALE| Locale
-  SEOKeyword --o|HAS_METRICS| GEOSeedMetrics
   SEOKeyword --o|HAS_METRICS| SEOKeywordMetrics
-  SEOKeyword --o|TARGETS_THING| Thing
   SEOMiningRun --o|SEO_MINES| SEOKeyword
   SearchIntent -.->|MAPS_TO_CONCEPT| Concept
   SearchIntent --o|TARGETS_KEYWORD| SEOKeyword
-  Thing -.->|HAS_L10N| ConceptL10n
-  Thing -.->|HAS_L10N| ProjectL10n
-  Thing -.->|HAS_L10N| ThingL10n
-  Thing -.->|RELATED_THING| Thing
-  Thing -.->|SPECIALIZES| Thing
-  ThingL10n -.->|FOR_LOCALE| Locale
   TopicCluster -.->|CLUSTERS_TOPIC| Concept
   TopicCluster -->|CLUSTER_PAGE| Page
   TopicCluster -->|PILLAR_PAGE| Page
 
   %% Edge colors by family
-  linkStyle 12,13,14,17,18,19,20,21,37,42,43,45,46,47,67,68,69,70,71,72,88,91,94,95,96,97,98,110,111,112,113 stroke:#8b5cf6,stroke-width:2px
-  linkStyle 3,4,11,15,16,23,24,25,31,34,35,39,44,48,54,55,56,57,58,59,65,66,76,77,90,92,93,102,103,104,107,108,109,114,121,122,123,126 stroke:#22c55e,stroke-width:2px
-  linkStyle 27,28,32,33,38,40,41,115,116,117,118,120 stroke:#ec4899,stroke-width:2px
-  linkStyle 0,5,6,8,9,22,36,49,50,51,52,53,60,61,62,63,64,75,78,79,80,82,83,89,99,100,101,105,106,128,129 stroke:#3b82f6,stroke-width:2px
-  linkStyle 1,2,7,10,26,29,30,73,74,81,84,85,86,87,119,124,125,127 stroke:#f97316,stroke-width:2px
+  linkStyle 11,12,13,16,17,18,19,20,32,33,34,36,37,38,57,58,59,60,61,62,77,80,83,84,85,86,87,98,99,100,101 stroke:#8b5cf6,stroke-width:2px
+  linkStyle 3,4,10,14,15,22,23,27,29,30,35,39,45,46,47,48,49,55,56,65,66,79,81,82,91,92,95,96,97,102 stroke:#22c55e,stroke-width:2px
+  linkStyle 28,103,104,106 stroke:#ec4899,stroke-width:2px
+  linkStyle 0,5,6,7,8,21,31,40,41,42,43,44,50,51,52,53,54,64,67,68,69,71,72,78,88,89,90,93,94,108,109 stroke:#3b82f6,stroke-width:2px
+  linkStyle 1,2,9,24,25,26,63,70,73,74,75,76,105,107 stroke:#f97316,stroke-width:2px
 
   %% Class assignments
   class Adaptation knowledge

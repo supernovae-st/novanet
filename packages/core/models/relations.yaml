@@ -668,17 +668,6 @@ relations:
       - priority
     llm_context: "Primary SEO targeting — locale-aligned. role: primary/secondary/long-tail."
 
-  # Shortcut: cross-locale view (management/reporting)
-  - type: TARGETS_SEO
-    family: mining
-    source: Concept
-    target: SEOKeyword
-    cardinality: one_to_many
-    properties:
-      - status
-      - priority
-    llm_context: "Cross-locale SEO shortcut for reporting. status: active/paused/archived."
-
   # Mining runs
   - type: SEO_MINES
     family: mining

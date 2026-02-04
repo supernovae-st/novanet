@@ -57,13 +57,12 @@
 #             ├─[:HAS_L10N]─> ProjectL10n ──:FOR_LOCALE──> Locale
 #             │
 #             ├─[:HAS_CONCEPT]─> Concept ──[:HAS_L10N]──> ConceptL10n ──:FOR_LOCALE──> Locale
-#             │                     │
-#             │                     ├──[:SEMANTIC_LINK {temperature}]──> Concept
-#             │                     ├──[:TARGETS_SEO]──> SEOKeyword ──:FOR_LOCALE──> Locale
-#             │                     │                         │
-#             │                     │                   :HAS_METRICS
-#             │                     │                         v
-#             │                     │                   SEOKeywordMetrics
+#             │                     │                            │
+#             │                     ├──[:SEMANTIC_LINK]──> Concept │
+#             │                                                    │
+#             │                                              :HAS_SEO_TARGET
+#             │                                                    v
+#             │                                              SEOKeyword ──:FOR_LOCALE──> Locale
 #             │
 #             └─[:HAS_PAGE]─> Page ──┬─[:HAS_BLOCK {position}]─> Block ──:OF_TYPE──> BlockType
 #                               │    │                            │

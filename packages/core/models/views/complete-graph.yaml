@@ -42,18 +42,17 @@ include:
         direction: outgoing
       - relation: HAS_L10N
         direction: outgoing
-      - relation: TARGETS_SEO
-        direction: outgoing
-      - relation: TARGETS_GEO
-        direction: outgoing
+        include:
+          - relation: HAS_SEO_TARGET
+            direction: outgoing
 
 docs:
   title: "Complete Graph View"
   category: overview
   description: |
-    The complete NovaNet graph showing all 42 node types organized into three realms:
-    - **Global (11 nodes)**: Locale + 10 tiered knowledge nodes
-    - **Shared (8 nodes)**: SEO/GEO nodes including Thing/ThingL10n for external entity linking
+    The complete NovaNet graph showing all 43 node types organized into three realms:
+    - **Global (16 nodes)**: Locale + tiered knowledge (Style, Formatting, etc.) + 6 atoms
+    - **Shared (3 nodes)**: SEO nodes (SEOKeyword, SEOSnapshot, SEOMiningRun)
     - **Project (23 nodes)**: Per-project foundation, structure, semantic, instruction, and output nodes
 
   layers:

@@ -1,8 +1,9 @@
 # models/views/concept-ecosystem.yaml
+# v10.1: SEO targeting via ConceptL10n (locale-aligned), GEO removed
 id: concept-ecosystem
 name: Concept Network
-description: Concept with all related data (L10n, SEO, GEO, semantic links)
-version: "8.0.0"
+description: Concept with all related data (L10n, SEO, semantic links)
+version: "10.1.0"
 
 root:
   type: Concept
@@ -11,11 +12,9 @@ include:
   - relation: HAS_L10N
     direction: outgoing
 
-  - relation: TARGETS_SEO
+  - relation: HAS_SEO_TARGET
     direction: outgoing
-
-  - relation: TARGETS_GEO
-    direction: outgoing
+    from: ConceptL10n
 
   - relation: SEMANTIC_LINK
     direction: both
@@ -32,7 +31,7 @@ docs:
     Concepts are the core semantic building blocks of NovaNet:
     - Each Concept has localized versions (ConceptL10n) per locale
     - Concepts connect via SEMANTIC_LINK with temperature weights
-    - Concepts can target SEO keywords and GEO seeds
+    - ConceptL10n targets locale-aligned SEO keywords via HAS_SEO_TARGET
 
   layers:
     - name: Concept Core
@@ -45,10 +44,10 @@ docs:
       color: green
       description: Localized concept content
 
-    - name: SEO/GEO Targets
-      nodes: [SEOKeyword, GEOSeedL10n]
+    - name: SEO Targets
+      nodes: [SEOKeyword]
       color: orange
-      description: SEO and GEO targeting
+      description: Locale-aligned SEO targeting
 
   examples:
     - name: Concept with all localizations
@@ -76,15 +75,14 @@ docs:
       params:
         conceptKey: "tier-pro"
 
-    - name: Concept SEO/GEO targets
-      description: Get SEO keywords and GEO seeds targeted by a concept
+    - name: Concept SEO targets (locale-aligned)
+      description: Get SEO keywords via ConceptL10n (v10.1 architecture)
       query: |
-        MATCH (c:Concept {key: $conceptKey})
-        OPTIONAL MATCH (c)-[:TARGETS_SEO]->(seo:SEOKeyword)-[:FOR_LOCALE]->(l:Locale {key: $locale})
-        OPTIONAL MATCH (c)-[:TARGETS_GEO]->(geo:GEOSeedL10n)-[:FOR_LOCALE]->(l2:Locale {key: $locale})
+        MATCH (c:Concept {key: $conceptKey})-[:HAS_L10N]->(cl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+        OPTIONAL MATCH (cl)-[:HAS_SEO_TARGET]->(seo:SEOKeyword)
         RETURN c.key AS concept,
-               collect(DISTINCT seo.keyword) AS seoKeywords,
-               collect(DISTINCT geo.question) AS geoQuestions
+               cl.title AS localizedTitle,
+               collect(DISTINCT seo.value) AS seoKeywords
       params:
         conceptKey: "tier-pro"
         locale: "fr-FR"
@@ -92,4 +90,5 @@ docs:
   notes:
     - "Concepts are INVARIANT - they exist independently of locale"
     - "ConceptL10n provides locale-specific title, definition, examples"
+    - "SEO keywords linked to ConceptL10n (same locale) via HAS_SEO_TARGET"
     - "SEMANTIC_LINK temperature controls spreading activation strength"
