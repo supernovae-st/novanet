@@ -1,16 +1,16 @@
 // src/types/nodes.ts
-// Single source of truth for all 44 NovaNet node types
-// v9.0.1 — AUTO-SYNC with packages/core/models/nodes/*.yaml
+// Single source of truth for all 46 NovaNet node types
+// v9.7.0 — AUTO-SYNC with packages/core/models/nodes/*.yaml
 
 // =============================================================================
-// NODE TYPES (44 nodes)
+// NODE TYPES (46 nodes)
 // =============================================================================
 
 export const NODE_TYPES = [
-  // Invariant (15)
+  // Invariant (17)
   'Project', 'BrandIdentity', 'Concept', 'Page', 'Block', 'ContentSlot',
   'PageType', 'BlockType', 'PagePrompt', 'BlockPrompt', 'BlockRules', 'Locale',
-  'SearchIntent', 'TopicCluster', 'Thing',
+  'SearchIntent', 'TopicCluster', 'Thing', 'AudiencePersona', 'ChannelSurface',
   // Localized (7)
   'ProjectL10n', 'ConceptL10n', 'PageL10n', 'BlockL10n',
   'SEOKeywordL10n', 'GEOSeedL10n', 'ThingL10n',
@@ -40,7 +40,7 @@ export type Layer =
 export type Trait = 'invariant' | 'localized' | 'knowledge' | 'derived' | 'job';
 
 // =============================================================================
-// KIND_META — unified classification for all 44 node types
+// KIND_META — unified classification for all 46 node types
 // Replaces NODE_SCOPES, NODE_BEHAVIORS, NODE_CATEGORIES (v8)
 // =============================================================================
 
@@ -63,11 +63,13 @@ export const KIND_META: Record<NodeType, KindMeta> = {
   Block:        { realm: 'project', layer: 'structure',   trait: 'invariant' },
   ContentSlot:  { realm: 'project', layer: 'structure',   trait: 'invariant' },
 
-  // PROJECT REALM — semantic (4)
-  Concept:      { realm: 'project', layer: 'semantic',    trait: 'invariant' },
-  ConceptL10n:  { realm: 'project', layer: 'semantic',    trait: 'localized' },
-  SearchIntent: { realm: 'project', layer: 'semantic',    trait: 'invariant' },
-  TopicCluster: { realm: 'project', layer: 'semantic',    trait: 'invariant' },
+  // PROJECT REALM — semantic (6)
+  Concept:         { realm: 'project', layer: 'semantic',    trait: 'invariant' },
+  ConceptL10n:     { realm: 'project', layer: 'semantic',    trait: 'localized' },
+  SearchIntent:    { realm: 'project', layer: 'semantic',    trait: 'invariant' },
+  TopicCluster:    { realm: 'project', layer: 'semantic',    trait: 'invariant' },
+  AudiencePersona: { realm: 'project', layer: 'semantic',    trait: 'invariant' },
+  ChannelSurface:  { realm: 'project', layer: 'semantic',    trait: 'invariant' },
 
   // PROJECT REALM — instruction (6)
   PageType:       { realm: 'project', layer: 'instruction', trait: 'invariant' },

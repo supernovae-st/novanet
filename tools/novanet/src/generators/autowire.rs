@@ -301,12 +301,12 @@ mod tests {
             .generate(root)
             .expect("should generate autowire cypher");
 
-        // 44 OF_KIND statements
+        // 46 OF_KIND statements
         let of_kind = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:OF_KIND]"))
             .count();
-        assert_eq!(of_kind, 44, "expected 44 OF_KIND statements");
+        assert_eq!(of_kind, 46, "expected 46 OF_KIND statements");
 
         // All 3 realms present
         assert!(cypher.contains("GLOBAL REALM"));
@@ -324,7 +324,7 @@ mod tests {
         assert!(cypher.contains("Global > Knowledge (14 types)"));
 
         // Header
-        assert!(cypher.contains("Total: 44 node types"));
+        assert!(cypher.contains("Total: 46 node types"));
 
         // Verification query present
         assert!(cypher.contains("VERIFICATION QUERY"));

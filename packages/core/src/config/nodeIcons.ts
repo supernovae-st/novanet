@@ -20,11 +20,13 @@ export const NODE_ICONS: Record<NodeType, string> = {
   Block: '🧱',
   ContentSlot: '🔲',
 
-  // PROJECT — semantic (4)
+  // PROJECT — semantic (6)
   Concept: '💡',
   ConceptL10n: '💬',
   SearchIntent: '🔎',
   TopicCluster: '🗂️',
+  AudiencePersona: '👤',
+  ChannelSurface: '📡',
 
   // PROJECT — instruction (6)
   PageType: '📐',

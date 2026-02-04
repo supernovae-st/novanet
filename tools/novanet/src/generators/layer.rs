@@ -397,14 +397,14 @@ mod tests {
         let generator = LayerGenerator;
         let output = generator.generate(root).expect("should generate layers.ts");
 
-        // Total 44 nodes
+        // Total 46 nodes
         assert!(
-            output.contains("mapping all 44 node types"),
-            "should mention 44 node types"
+            output.contains("mapping all 46 node types"),
+            "should mention 46 node types"
         );
 
         // Realm node counts
-        assert!(output.contains("PROJECT REALM (21 nodes)"));
+        assert!(output.contains("PROJECT REALM (23 nodes)"));
         assert!(output.contains("GLOBAL REALM (15 nodes)"));
         assert!(output.contains("SHARED REALM (8 nodes)"));
 
