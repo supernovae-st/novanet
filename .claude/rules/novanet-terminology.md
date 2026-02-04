@@ -88,7 +88,7 @@ These terms are deprecated and should NOT be used:
 | `EdgeKind` | `ArcKind` | |
 | `EdgeFamily` | `ArcFamily` | |
 | `Relation` | `Arc` | |
-| `RelationType` | `ArcKind` | |
+| `RelationType` | Keep | Neo4j rel type string (e.g., `"HAS_PAGE"`) — ArcKind is the meta-node |
 | `Scope` (for realm) | `Realm` | v9.0 renamed |
 | `Subcategory` | `Layer` | v9.0 renamed |
 | `NodeTypeMeta` | `Kind` | v9.0 renamed |

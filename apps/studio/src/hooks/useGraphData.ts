@@ -27,7 +27,7 @@ export interface GraphDataResponse {
   };
   meta?: {
     totalNodes: number;
-    totalEdges: number;
+    totalArcs: number;
     duration: number;
     requestDuration: number;
   };

@@ -1,9 +1,10 @@
-//! Generate v9.5 Cypher for Realm, Layer, Trait, ArcFamily meta-nodes.
+//! Generate v9.9 Cypher for Realm, Layer, Trait, ArcFamily meta-nodes.
 //!
-//! Reads `taxonomy.yaml` (v9.5) and produces idempotent MERGE statements
+//! Reads `taxonomy.yaml` (v9.9) and produces idempotent MERGE statements
 //! for the 4 taxonomy dimensions. All meta-nodes receive `:Meta` double-label.
 //!
 //! v9.5: Includes visual encoding properties (border_style, stroke_style, etc.)
+//! v9.9: Adds retrieval properties (default_traversal for ArcFamily)
 //!
 //! Output target: `packages/db/seed/00.5-taxonomy.cypher`
 
@@ -172,6 +173,11 @@ fn generate_cypher(doc: &TaxonomyDoc) -> crate::Result<String> {
             writeln!(out, "  {var}.stroke_width = {width},").unwrap();
         }
 
+        // v9.9: Retrieval default traversal mode
+        if let Some(ref traversal) = af.default_traversal {
+            writeln!(out, "  {var}.default_traversal = '{traversal}',").unwrap();
+        }
+
         writeln!(out, "  {var}.llm_context = '{llm}';").unwrap();
     }
 
@@ -243,7 +249,7 @@ mod tests {
     #[test]
     fn generate_small_cypher() {
         let doc = TaxonomyDoc {
-            version: "9.5.0".to_string(),
+            version: "9.9.0".to_string(),
             node_realms: vec![NodeRealmDef {
                 key: "test".to_string(),
                 display_name: "Test".to_string(),
@@ -267,6 +273,7 @@ mod tests {
                 unicode_border: Some("─".to_string()),
                 llm_context: "Fixed trait.".to_string(),
             }],
+            kind_retrieval_defaults: None,
             arc_families: vec![ArcFamilyDef {
                 key: "owns".to_string(),
                 display_name: "Owns".to_string(),
@@ -274,6 +281,7 @@ mod tests {
                 stroke_style: Some("solid".to_string()),
                 stroke_width: Some(2),
                 arrow_style: "-->".to_string(),
+                default_traversal: None,
                 llm_context: "Ownership.".to_string(),
             }],
             arc_scopes: vec![],
@@ -320,7 +328,7 @@ mod tests {
         assert!(cypher.contains("updated_at = datetime()"));
 
         // Header
-        assert!(cypher.contains("v9.5.0"));
+        assert!(cypher.contains("v9.9.0"));
         assert!(cypher.contains("AUTO-GENERATED"));
         assert!(cypher.contains("1 Realms, 1 Layers, 1 Traits, 1 ArcFamilies"));
         assert!(cypher.contains("v9.5: Includes visual encoding properties"));
@@ -329,7 +337,7 @@ mod tests {
     #[test]
     fn generate_multiline_llm_context() {
         let doc = TaxonomyDoc {
-            version: "9.5.0".to_string(),
+            version: "9.9.0".to_string(),
             node_realms: vec![NodeRealmDef {
                 key: "r".to_string(),
                 display_name: "R".to_string(),
@@ -353,6 +361,7 @@ mod tests {
                 unicode_border: None,
                 llm_context: "Trait.".to_string(),
             }],
+            kind_retrieval_defaults: None,
             arc_families: vec![ArcFamilyDef {
                 key: "e".to_string(),
                 display_name: "E".to_string(),
@@ -360,6 +369,7 @@ mod tests {
                 stroke_style: None,
                 stroke_width: None,
                 arrow_style: "-->".to_string(),
+                default_traversal: None,
                 llm_context: "Arc.".to_string(),
             }],
             arc_scopes: vec![],
@@ -442,8 +452,8 @@ mod tests {
         assert!(cypher.contains("as_intra_realm:Meta:ArcScope {key: 'intra_realm'}"));
         assert!(cypher.contains("ac_one_to_many:Meta:ArcCardinality {key: 'one_to_many'}"));
 
-        // Header mentions v9.5.0
-        assert!(cypher.contains("v9.5.0"));
+        // Header mentions v9.9.0
+        assert!(cypher.contains("v9.9.0"));
 
         // HAS_LAYER wiring — specific pairs
         assert!(cypher.contains("(r:Realm {key: 'global'}), (l:Layer {key: 'config'})"));
@@ -456,7 +466,7 @@ mod tests {
     #[test]
     fn snapshot_minimal_taxonomy() {
         let doc = TaxonomyDoc {
-            version: "9.5.0".to_string(),
+            version: "9.9.0".to_string(),
             node_realms: vec![NodeRealmDef {
                 key: "test".to_string(),
                 display_name: "Test Realm".to_string(),
@@ -500,6 +510,7 @@ mod tests {
                     llm_context: "Content that varies per locale.".to_string(),
                 },
             ],
+            kind_retrieval_defaults: None,
             arc_families: vec![ArcFamilyDef {
                 key: "semantic".to_string(),
                 display_name: "Semantic".to_string(),
@@ -507,6 +518,7 @@ mod tests {
                 stroke_style: Some("solid".to_string()),
                 stroke_width: Some(2),
                 arrow_style: ".->".to_string(),
+                default_traversal: None,
                 llm_context: "Semantic relationships.".to_string(),
             }],
             arc_scopes: vec![],

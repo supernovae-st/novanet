@@ -64,7 +64,7 @@ flowchart TB
 | Metric | Value |
 |--------|-------|
 | Node types (Kinds) | 35 |
-| Relationship types (EdgeKinds) | 50 |
+| Arc types (ArcKinds) | 77 |
 | Realms | 3 |
 | Layers | 9 |
 | Locales supported | 200+ |

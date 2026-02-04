@@ -31,7 +31,7 @@ export async function POST(request: Request) {
       nodes: result.nodes,
       edges: result.edges,
       totalNodes: result.totalNodes,
-      totalEdges: result.totalEdges,
+      totalArcs: result.totalArcs,
       duration: result.duration,
     });
   } catch (error) {

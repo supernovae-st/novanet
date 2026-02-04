@@ -145,7 +145,7 @@ impl App {
             // ArcFamily, ArcKind → relations.yaml
             Some(TreeItem::ArcFamily(_))
             | Some(TreeItem::ArcKind(_, _))
-            | Some(TreeItem::RelationsSection) => {
+            | Some(TreeItem::ArcsSection) => {
                 self.load_yaml_cached("packages/core/models/relations.yaml");
             }
             None => {
@@ -248,13 +248,13 @@ impl App {
             }
         }
 
-        // Relations section header
-        if "relations".contains(&query) {
+        // Arcs section header
+        if "arcs".contains(&query) {
             self.search_results.push(idx);
         }
         idx += 1;
 
-        if !self.tree.is_collapsed("relations") {
+        if !self.tree.is_collapsed("arcs") {
             for family in &self.tree.arc_families {
                 if family.display_name.to_lowercase().contains(&query)
                     || family.key.to_lowercase().contains(&query)

@@ -275,9 +275,9 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
     }
 
     // === RELATIONS SECTION ===
-    let relations_collapsed = app.tree.is_collapsed("relations");
-    let relations_icon = if relations_collapsed { "▶" } else { "▼" };
-    let relations_count: usize = app
+    let arcs_collapsed = app.tree.is_collapsed("arcs");
+    let arcs_icon = if arcs_collapsed { "▶" } else { "▼" };
+    let arcs_count: usize = app
         .tree
         .arc_families
         .iter()
@@ -288,13 +288,13 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
         app.tree_cursor,
         focused,
         "",
-        relations_icon,
-        format!("Relations ({})", relations_count),
+        arcs_icon,
+        format!("Arcs ({})", arcs_count),
         Color::Yellow,
     ));
     idx += 1;
 
-    if !relations_collapsed {
+    if !arcs_collapsed {
         for family in &app.tree.arc_families {
             let family_key = format!("family:{}", family.key);
             let family_collapsed = app.tree.is_collapsed(&family_key);
@@ -495,7 +495,7 @@ fn build_yaml_title(path: &str) -> Vec<Span<'static>> {
 fn get_detail_title(app: &App) -> String {
     match app.tree.item_at(app.tree_cursor) {
         Some(TreeItem::KindsSection) => "Kinds".to_string(),
-        Some(TreeItem::RelationsSection) => "Relations".to_string(),
+        Some(TreeItem::ArcsSection) => "Arcs".to_string(),
         Some(TreeItem::Realm(r)) => format!("{} {}", r.emoji, r.display_name),
         Some(TreeItem::Layer(_, l)) => l.display_name.clone(),
         Some(TreeItem::Kind(_, _, k)) => {
@@ -575,7 +575,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                 )),
             ]
         }
-        Some(TreeItem::RelationsSection) => {
+        Some(TreeItem::ArcsSection) => {
             let arc_count: usize = app
                 .tree
                 .arc_families
@@ -595,7 +595,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                     ),
                 ]),
                 Line::from(vec![
-                    Span::styled("relations ", Style::default().fg(Color::DarkGray)),
+                    Span::styled("arcs ", Style::default().fg(Color::DarkGray)),
                     Span::styled(arc_count.to_string(), Style::default().fg(Color::White)),
                 ]),
                 Line::from(""),
@@ -806,7 +806,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                     Span::styled(family.key.clone(), Style::default().fg(Color::White)),
                 ]),
                 Line::from(vec![
-                    Span::styled("relations ", Style::default().fg(Color::DarkGray)),
+                    Span::styled("arcs ", Style::default().fg(Color::DarkGray)),
                     Span::styled(
                         family.arc_kinds.len().to_string(),
                         Style::default().fg(Color::White),
@@ -1116,7 +1116,7 @@ fn render_search(f: &mut Frame, app: &App) {
 
         let (prefix, name, type_label) = match item {
             Some(TreeItem::KindsSection) => ("", "Kinds".to_string(), "Section"),
-            Some(TreeItem::RelationsSection) => ("", "Relations".to_string(), "Section"),
+            Some(TreeItem::ArcsSection) => ("", "Arcs".to_string(), "Section"),
             Some(TreeItem::Realm(r)) => (r.emoji, r.display_name.clone(), "Realm"),
             Some(TreeItem::Layer(_, l)) => ("  ", l.display_name.clone(), "Layer"),
             Some(TreeItem::Kind(_, _, k)) => ("    ", k.display_name.clone(), "Kind"),

@@ -230,6 +230,77 @@ pub fn load_relations(root: &Path) -> crate::Result<ArcsDocument> {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Individual Arc-Kind YAML Files (v9.9)
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Individual arc-kind YAML file structure (from arc-kinds/{family}/*.yaml).
+#[derive(Debug, Clone, Deserialize)]
+pub struct ArcKindYaml {
+    pub arc: ArcKindDef,
+}
+
+/// Arc definition within individual arc-kind YAML file.
+#[derive(Debug, Clone, Deserialize)]
+pub struct ArcKindDef {
+    pub name: String,
+    pub family: ArcFamily,
+    #[serde(default)]
+    pub scope: Option<String>,
+    #[serde(default)]
+    pub temperature_threshold: Option<f32>,
+    // Other fields are optional for our purposes
+    #[serde(default)]
+    pub source: Option<serde_yaml::Value>,
+    #[serde(default)]
+    pub target: Option<serde_yaml::Value>,
+    #[serde(default)]
+    pub cardinality: Option<String>,
+    #[serde(default)]
+    pub llm_context: Option<String>,
+}
+
+use std::collections::HashMap;
+
+/// Load temperature_threshold values from individual arc-kind YAML files.
+///
+/// Returns a map of arc_type -> temperature_threshold.
+pub fn load_arc_temperatures(root: &Path) -> crate::Result<HashMap<String, f32>> {
+    let arc_kinds_dir = crate::config::arc_kinds_dir(root);
+    let mut temps = HashMap::new();
+
+    if !arc_kinds_dir.exists() {
+        return Ok(temps);
+    }
+
+    // Scan all family directories
+    for family_dir in std::fs::read_dir(&arc_kinds_dir)? {
+        let family_dir = family_dir?;
+        if !family_dir.file_type()?.is_dir() {
+            continue;
+        }
+
+        // Scan YAML files in each family directory
+        for entry in std::fs::read_dir(family_dir.path())? {
+            let entry = entry?;
+            let path = entry.path();
+
+            if path.extension().is_none_or(|e| e != "yaml") {
+                continue;
+            }
+
+            // Parse the arc-kind YAML
+            if let Ok(yaml) = super::utils::load_yaml::<ArcKindYaml>(&path) {
+                if let Some(threshold) = yaml.arc.temperature_threshold {
+                    temps.insert(yaml.arc.name, threshold);
+                }
+            }
+        }
+    }
+
+    Ok(temps)
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Tests
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -449,5 +520,65 @@ relations:
             .unwrap();
         assert_eq!(for_locale.family, ArcFamily::Localization);
         assert_eq!(for_locale.source.len(), 9, "FOR_LOCALE has 9 sources");
+    }
+
+    #[test]
+    fn parse_arc_kind_yaml() {
+        let yaml = r#"
+arc:
+  name: SEMANTIC_LINK
+  family: semantic
+  scope: intra_realm
+  temperature_threshold: 0.3
+"#;
+        let parsed: ArcKindYaml = serde_yaml::from_str(yaml).unwrap();
+        assert_eq!(parsed.arc.name, "SEMANTIC_LINK");
+        assert_eq!(parsed.arc.family, ArcFamily::Semantic);
+        assert_eq!(parsed.arc.temperature_threshold, Some(0.3));
+    }
+
+    #[test]
+    fn parse_arc_kind_yaml_no_threshold() {
+        let yaml = r#"
+arc:
+  name: HAS_PAGE
+  family: ownership
+"#;
+        let parsed: ArcKindYaml = serde_yaml::from_str(yaml).unwrap();
+        assert_eq!(parsed.arc.name, "HAS_PAGE");
+        assert_eq!(parsed.arc.temperature_threshold, None);
+    }
+
+    #[test]
+    fn load_arc_temperatures_integration() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .parent()
+            .and_then(|p| p.parent());
+
+        let Some(root) = root else { return };
+        if !root.join("pnpm-workspace.yaml").exists() {
+            return;
+        }
+
+        let temps = load_arc_temperatures(root).expect("should load arc temperatures");
+
+        // Check semantic arcs have temperature_threshold
+        assert!(
+            temps.contains_key("SEMANTIC_LINK"),
+            "SEMANTIC_LINK should have threshold"
+        );
+        assert_eq!(temps.get("SEMANTIC_LINK"), Some(&0.3_f32));
+        assert!(
+            temps.contains_key("USES_CONCEPT"),
+            "USES_CONCEPT should have threshold"
+        );
+        assert_eq!(temps.get("USES_CONCEPT"), Some(&0.0_f32));
+
+        // Should have multiple semantic arcs
+        let semantic_count = temps.len();
+        assert!(
+            semantic_count >= 14,
+            "should have at least 14 semantic arcs with thresholds"
+        );
     }
 }

@@ -28,7 +28,7 @@ export async function GET() {
       },
       meta: {
         totalNodes: result.nodes.length,
-        totalEdges: result.edges.length,
+        totalArcs: result.edges.length,
         duration: Date.now() - startTime,
         mode: 'meta',
       },

@@ -40,7 +40,7 @@ describe('graphStore', () => {
       edgeMap: new Map(),
       hiddenNodeIds: new Set(),
       totalNodes: 0,
-      totalEdges: 0,
+      totalArcs: 0,
       nodeTypeCounts: {},
     });
   });
@@ -60,7 +60,7 @@ describe('graphStore', () => {
       expect(state.nodes).toEqual(nodes);
       expect(state.edges).toEqual(edges);
       expect(state.totalNodes).toBe(2);
-      expect(state.totalEdges).toBe(1);
+      expect(state.totalArcs).toBe(1);
     });
 
     it('should build nodeMap index for O(1) lookup', () => {
@@ -202,7 +202,7 @@ describe('graphStore', () => {
 
       const state = useGraphStore.getState();
       expect(state.edges.length).toBe(2);
-      expect(state.totalEdges).toBe(2);
+      expect(state.totalArcs).toBe(2);
     });
 
     it('should update indexes when merging', () => {
@@ -396,7 +396,7 @@ describe('graphStore', () => {
       expect(state.adjacencyMap.size).toBe(0);
       expect(state.hiddenNodeIds.size).toBe(0);
       expect(state.totalNodes).toBe(0);
-      expect(state.totalEdges).toBe(0);
+      expect(state.totalArcs).toBe(0);
       expect(state.nodeTypeCounts).toEqual({});
     });
   });

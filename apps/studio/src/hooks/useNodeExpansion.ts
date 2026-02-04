@@ -27,7 +27,7 @@ interface ExpandNodeResponse {
   nodes: GraphNode[];
   edges: GraphEdge[];
   totalNodes: number;
-  totalEdges: number;
+  totalArcs: number;
   duration: number;
 }
 

@@ -57,7 +57,7 @@ export async function GET(request: NextRequest) {
       },
       meta: {
         totalNodes: result.totalNodes,
-        totalEdges: result.totalEdges,
+        totalArcs: result.totalArcs,
         duration: result.duration,
         requestDuration: Date.now() - startTime,
         filters: options,
@@ -98,7 +98,7 @@ export async function POST(request: NextRequest) {
       },
       meta: {
         totalNodes: result.totalNodes,
-        totalEdges: result.totalEdges,
+        totalArcs: result.totalArcs,
         duration: result.duration,
         requestDuration: Date.now() - startTime,
         filters: options,
