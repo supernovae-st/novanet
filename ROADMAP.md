@@ -1,13 +1,16 @@
 # NovaNet Roadmap
 
-Current version: **v9.0.1** | Target: QR Code AI (https://qrcode-ai.com)
+Current version: **v9.7.0** | Target: QR Code AI (https://qrcode-ai.com)
 
 ## Milestones Overview
 
 ```
 v9.0  Self-Describing Context Graph    ████████████████████  100%  RELEASED
 v9.1  TUI v2 Stability                 ████████████████████  100%  RELEASED (in v9.0.1)
-v9.5  Advanced TUI (Galaxy)            ░░░░░░░░░░░░░░░░░░░░    0%  DEFERRED
+v9.5  Nomenclature + Visual Encoding   ████████████████████  100%  RELEASED (in v9.7.0)
+v9.6  Generation Domain                ████████████████████  100%  RELEASED (in v9.7.0)
+v9.7  Intent Layer                     ████████████████████  100%  RELEASED
+v9.8  Unified Thing Model              ████████████████████  100%  RELEASED (in v9.7.0)
 v10.0 Dynamic Retrieval                ░░░░░░░░░░░░░░░░░░░░    0%
 v11.0 Autonomous Learning              ░░░░░░░░░░░░░░░░░░░░    0%
 v12.0 Content Pipeline                 ░░░░░░░░░░░░░░░░░░░░    0%

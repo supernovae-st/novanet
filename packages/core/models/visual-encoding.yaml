@@ -207,6 +207,8 @@ kind_icons:
   # Project / Semantic
   Concept: lightbulb
   ConceptL10n: globe
+  AudiencePersona: users
+  ChannelSurface: monitor
 
   # Project / Instruction
   PagePrompt: message-square

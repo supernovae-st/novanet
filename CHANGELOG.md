@@ -7,6 +7,45 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [9.7.0] - 2026-02-04
+
+### Added
+- **Intent Layer nodes** (project/semantic):
+  - `AudiencePersona` — Target audience definition with demographics, behaviors, goals
+  - `ChannelSurface` — Publication channel with format, constraints, tone requirements
+  - `ContentSlot` — Placeholder for generated content within blocks
+  - `SearchIntent` — User search intent classification for SEO targeting
+  - `TopicCluster` — Topic hierarchy for content organization
+
+- **Generation Domain nodes** (project/output):
+  - `GenerationJob` — Async generation task with status tracking
+  - `PromptArtifact` — Versioned prompt with parameters and metadata
+  - `OutputArtifact` — Generated content artifact with quality scores
+  - `EvaluationSignal` — Quality evaluation feedback signal
+
+- **Unified Thing Model** (shared/geo):
+  - `Thing` — Schema.org-aligned entity with Wikidata linking
+  - `ThingL10n` — Localized thing representation
+
+- **Semantic arcs**:
+  - `MENTIONS` — Page/Block mentions Thing
+  - `COVERS` — Concept covers Thing
+  - `SPECIALIZES` — Thing specializes another Thing
+  - `TARGETS_THING` — SEO keyword targets Thing
+  - `SATISFIES_INTENT` — Content satisfies SearchIntent
+  - `SUBTOPIC_OF` — TopicCluster hierarchy
+  - `CLUSTERS_TOPIC` — Page clusters under TopicCluster
+
+- **Visual encoding system** (v9.5.0):
+  - `taxonomy.yaml` — Unified taxonomy with colors, borders, terminal palette
+  - `visual-encoding.yaml` — Presentation rules for nodes and arcs
+  - Icons for all 46 node types
+
+### Changed
+- **Schema count**: 44 → 46 NodeKinds, 50 → 76 ArcKinds
+- **Studio**: Updated NodeConfig, nodeTypes.ts for new nodes
+- **Tests**: Updated expected counts (44 → 46 nodes, 21 → 23 project realm)
+
 ## [9.0.1] - 2026-02-03
 
 ### Added
@@ -180,7 +219,8 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Migrated from git submodules to true monorepo
 - Organization links updated to supernovae-st
 
-[Unreleased]: https://github.com/supernovae-st/novanet-dev/compare/v9.0.1...HEAD
+[Unreleased]: https://github.com/supernovae-st/novanet-dev/compare/v9.7.0...HEAD
+[9.7.0]: https://github.com/supernovae-st/novanet-dev/compare/v9.0.1...v9.7.0
 [9.0.1]: https://github.com/supernovae-st/novanet-dev/compare/v9.0.0...v9.0.1
 [9.0.0]: https://github.com/supernovae-st/novanet-dev/compare/v8.3.0...v9.0.0
 [8.3.0]: https://github.com/supernovae-st/novanet-dev/compare/v8.2.0...v8.3.0

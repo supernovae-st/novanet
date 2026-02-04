@@ -13,8 +13,8 @@ Turborepo monorepo for NovaNet - knowledge graph localization orchestrator.
 NovaNet uses Neo4j to orchestrate **native content generation** (NOT translation) across 200+ locales.
 
 **Target Application**: QR Code AI (https://qrcode-ai.com)
-**Current Version**: v9.5.0
-**Design Plan**: `docs/plans/2026-02-03-nomenclature-v95-design.md`
+**Current Version**: v9.7.0
+**Design Plan**: `docs/plans/2026-02-01-ontology-v9-design.md`
 **Roadmap**: `ROADMAP.md` | **Changelog**: `CHANGELOG.md`
 
 ```
