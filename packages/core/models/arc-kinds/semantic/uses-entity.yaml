@@ -1,8 +1,8 @@
-# packages/core/models/arc-kinds/semantic/uses-concept.yaml
-# ArcKind: USES_CONCEPT — Page/Block references a Concept
+# packages/core/models/arc-kinds/semantic/uses-entity.yaml
+# ArcKind: USES_ENTITY — Page/Block references an Entity
 
 arc:
-  name: USES_CONCEPT
+  name: USES_ENTITY
   family: semantic
   scope: intra_realm
   temperature_threshold: 0.0  # v9.9: Always follow (primary content reference)
@@ -10,7 +10,7 @@ arc:
   source:
     - Page
     - Block
-  target: Concept
+  target: Entity
   cardinality: many_to_many
 
   properties:
@@ -18,7 +18,7 @@ arc:
       type: string
       required: false
       enum: [primary, secondary, contextual]
-      description: "How the concept is used: primary topic, secondary mention, or contextual"
+      description: "How the entity is used: primary topic, secondary mention, or contextual"
     - name: temperature
       type: float
       required: false
@@ -28,8 +28,8 @@ arc:
   inverse: USED_BY
 
   llm_context: |
-    Page/Block references concepts for generation context.
+    Page/Block references entities for generation context.
     purpose: primary = main topic, secondary = supporting, contextual = background.
     temperature: spreading activation weight (higher = more influence).
 
-  cypher_pattern: "(Page)-[:USES_CONCEPT {purpose, temperature}]->(Concept)"
+  cypher_pattern: "(Page)-[:USES_ENTITY {purpose, temperature}]->(Entity)"

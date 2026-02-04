@@ -443,26 +443,26 @@ relations:
 
         let doc = load_arcs(root).expect("should parse relations.yaml");
 
-        // v10.2: Total arc count (added HAS_SEO_KEYWORDS)
-        // 64 + 1 = 65
-        assert_eq!(doc.arcs.len(), 65, "expected 65 arcs");
+        // v10.3: Total arc count (Entity-Centric Architecture)
+        // 65 - 9 = 56 (removed deprecated Concept/SearchIntent/TopicCluster arcs)
+        assert_eq!(doc.arcs.len(), 56, "expected 56 arcs");
 
-        // v10.2: Family distribution
-        // Ownership: 25 + 1 = 26 (added HAS_SEO_KEYWORDS)
+        // v10.3: Family distribution
+        // Ownership: 26 - 3 = 23 (removed HAS_CONCEPT, CLUSTER_PAGE, PILLAR_PAGE)
         // Localization: 8 (unchanged)
-        // Semantic: 12 (unchanged)
-        // Generation: 15 (unchanged)
-        // Mining: 5 - 1 = 4 (removed TARGETS_SEO - now using HAS_SEO_TARGET from ConceptL10n)
+        // Semantic: 12 - 4 = 8 (removed CLUSTERS_TOPIC, FOR_INTENT, MAPS_TO_CONCEPT, SATISFIES_INTENT)
+        // Generation: 15 (unchanged, INCLUDES_CONCEPT → INCLUDES_ENTITY)
+        // Mining: 4 - 2 = 2 (removed HAS_SEO_TARGET, TARGETS_KEYWORD)
         let family_count = |f: ArcFamily| doc.arcs.iter().filter(|a| a.family == f).count();
-        assert_eq!(family_count(ArcFamily::Ownership), 26, "ownership count");
+        assert_eq!(family_count(ArcFamily::Ownership), 23, "ownership count");
         assert_eq!(
             family_count(ArcFamily::Localization),
             8,
             "localization count"
         );
-        assert_eq!(family_count(ArcFamily::Semantic), 12, "semantic count");
+        assert_eq!(family_count(ArcFamily::Semantic), 8, "semantic count");
         assert_eq!(family_count(ArcFamily::Generation), 15, "generation count");
-        assert_eq!(family_count(ArcFamily::Mining), 4, "mining count");
+        assert_eq!(family_count(ArcFamily::Mining), 2, "mining count");
 
         // All arcs have non-empty type and llm_context
         for arc in &doc.arcs {
@@ -476,11 +476,11 @@ relations:
             assert!(!arc.target.is_empty(), "empty target for {}", arc.arc_type);
         }
 
-        // v10.2: Unique arc types (65 after HAS_SEO_KEYWORDS addition)
+        // v10.3: Unique arc types (56 after Entity-Centric removal)
         let mut types: Vec<&str> = doc.arcs.iter().map(|a| a.arc_type.as_str()).collect();
         types.sort();
         types.dedup();
-        assert_eq!(types.len(), 65, "all arc types should be unique");
+        assert_eq!(types.len(), 56, "all arc types should be unique");
 
         // Semantic link types
         let slt = doc
@@ -553,10 +553,10 @@ arc:
         );
         assert_eq!(temps.get("SEMANTIC_LINK"), Some(&0.3_f32));
         assert!(
-            temps.contains_key("USES_CONCEPT"),
-            "USES_CONCEPT should have threshold"
+            temps.contains_key("USES_ENTITY"),
+            "USES_ENTITY should have threshold"
         );
-        assert_eq!(temps.get("USES_CONCEPT"), Some(&0.0_f32));
+        assert_eq!(temps.get("USES_ENTITY"), Some(&0.0_f32));
 
         // Should have multiple semantic arcs (v10.1: 10 after removing Thing arcs)
         let semantic_count = temps.len();

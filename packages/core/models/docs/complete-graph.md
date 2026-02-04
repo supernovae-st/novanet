@@ -26,7 +26,7 @@ This diagram shows the complete NovaNet graph schema with all 48 node types and 
 ```mermaid
 flowchart TB
   %% NovaNet Graph v10.0.0
-  %% Generated: 43 nodes, 109 edges
+  %% Generated: 42 nodes, 100 edges
   %% Source: 48 node YAMLs + relations.yaml + taxonomy.yaml
 
   %% Trait styling (node_trait)
@@ -47,6 +47,8 @@ flowchart TB
       AudienceTrait["🟣 AudienceTrait"]
       CultureRef["🟣 CultureRef"]
       CultureSet["🟣 CultureSet"]
+      Entity["🔵 Entity"]
+      EntityL10n["🟢 EntityL10n"]
       Expression["🟣 Expression"]
       ExpressionSet["🟣 ExpressionSet"]
       Formatting["🟣 Formatting"]
@@ -81,12 +83,9 @@ flowchart TB
     subgraph PROJECT_semantic["Semantic Layer"]
       AudiencePersona["🔵 AudiencePersona"]
       ChannelSurface["🔵 ChannelSurface"]
-      Concept["🔵 Concept"]
-      ConceptL10n["🟢 ConceptL10n"]
-      SearchIntent["🔵 SearchIntent"]
-      TopicCluster["🔵 TopicCluster"]
     end
     subgraph PROJECT_instruction["Instructions"]
+      BlockInstruction["🔵 BlockInstruction"]
       BlockPrompt["🔵 BlockPrompt"]
       BlockRules["🔵 BlockRules"]
       BlockType["🔵 BlockType"]
@@ -106,18 +105,17 @@ flowchart TB
   %% Relationships (styled by arc family)
   Block -->|BLOCK_OF| Page
   Block -.->|FILLS_SLOT| ContentSlot
-  Block -.->|FOR_INTENT| SearchIntent
   Block -.->|HAS_OUTPUT| BlockL10n
   Block -.->|HAS_OUTPUT| PageL10n
   Block -->|HAS_PROMPT| BlockPrompt
   Block -->|HAS_PROMPT| PagePrompt
   Block -->|OF_TYPE| BlockType
   Block -->|OF_TYPE| PageType
-  Block -.->|USES_CONCEPT| Concept
+  Block -.->|USES_ENTITY| Entity
   BlockL10n -.->|FOR_LOCALE| Locale
   BlockL10n ==>|GENERATED_FROM| BlockType
   BlockL10n ==>|HAS_EVALUATION| EvaluationSignal
-  BlockL10n ==>|INFLUENCED_BY| ConceptL10n
+  BlockL10n ==>|INFLUENCED_BY| EntityL10n
   BlockL10n -.->|OUTPUT_OF| Block
   BlockL10n -.->|OUTPUT_OF| Page
   BlockL10n ==>|PREVIOUS_VERSION| BlockL10n
@@ -126,16 +124,15 @@ flowchart TB
   BlockPrompt ==>|GENERATED| BlockL10n
   BlockPrompt ==>|GENERATED| PageL10n
   BlockType -->|HAS_RULES| BlockRules
-  Concept -.->|HAS_L10N| ConceptL10n
-  Concept -.->|HAS_L10N| ProjectL10n
-  Concept -.->|SEMANTIC_LINK| Concept
-  Concept -.->|USED_BY| Block
-  Concept -.->|USED_BY| Page
-  ConceptL10n -.->|FOR_LOCALE| Locale
-  ConceptL10n --o|HAS_SEO_TARGET| SEOKeyword
-  ConceptL10n -.->|L10N_OF| Concept
-  ConceptL10n -.->|L10N_OF| Project
   ContentSlot -->|ACCEPTS_BLOCK_TYPE| BlockType
+  Entity -.->|HAS_L10N| EntityL10n
+  Entity -.->|HAS_L10N| ProjectL10n
+  Entity -.->|SEMANTIC_LINK| Entity
+  Entity -.->|USED_BY| Block
+  Entity -.->|USED_BY| Page
+  EntityL10n -.->|FOR_LOCALE| Locale
+  EntityL10n -.->|L10N_OF| Entity
+  EntityL10n -.->|L10N_OF| Project
   EvaluationSignal ==>|EVALUATED_BY_JOB| GenerationJob
   GenerationJob ==>|CREATES_CONTENT| BlockL10n
   GenerationJob ==>|CREATES_CONTENT| PageL10n
@@ -150,7 +147,7 @@ flowchart TB
   Locale -->|HAS_EXPRESSIONS| ExpressionSet
   Locale -->|HAS_FORMATTING| Formatting
   Locale -.->|HAS_LOCALIZED_CONTENT| BlockL10n
-  Locale -.->|HAS_LOCALIZED_CONTENT| ConceptL10n
+  Locale -.->|HAS_LOCALIZED_CONTENT| EntityL10n
   Locale -.->|HAS_LOCALIZED_CONTENT| PageL10n
   Locale -.->|HAS_LOCALIZED_CONTENT| ProjectL10n
   Locale -->|HAS_PATTERNS| PatternSet
@@ -177,10 +174,9 @@ flowchart TB
   Page -.->|LINKS_TO| Page
   Page -->|OF_TYPE| BlockType
   Page -->|OF_TYPE| PageType
-  Page -.->|SATISFIES_INTENT| SearchIntent
   Page -.->|SUBTOPIC_OF| Page
   Page -.->|TARGETS_PERSONA| AudiencePersona
-  Page -.->|USES_CONCEPT| Concept
+  Page -.->|USES_ENTITY| Entity
   PageL10n ==>|ASSEMBLES| BlockL10n
   PageL10n -->|BELONGS_TO_PROJECT_L10N| ProjectL10n
   PageL10n -.->|FOR_LOCALE| Locale
@@ -194,32 +190,26 @@ flowchart TB
   PagePrompt ==>|GENERATED| PageL10n
   Project -->|DEFAULT_LOCALE| Locale
   Project -->|HAS_BRAND_IDENTITY| BrandIdentity
-  Project -->|HAS_CONCEPT| Concept
-  Project -.->|HAS_L10N| ConceptL10n
+  Project -.->|HAS_L10N| EntityL10n
   Project -.->|HAS_L10N| ProjectL10n
   Project -->|HAS_PAGE| Page
   Project -->|SUPPORTS_LOCALE| Locale
   ProjectL10n -.->|FOR_LOCALE| Locale
-  ProjectL10n -.->|L10N_OF| Concept
+  ProjectL10n -.->|L10N_OF| Entity
   ProjectL10n -.->|L10N_OF| Project
   PromptArtifact ==>|COMPILED_FROM| BlockPrompt
   PromptArtifact ==>|COMPILED_FROM| PagePrompt
-  PromptArtifact ==>|INCLUDES_CONCEPT| Concept
+  PromptArtifact ==>|INCLUDES_CONCEPT| Entity
   PromptArtifact ==>|INCLUDES_STYLE| Style
   SEOKeyword --o|HAS_METRICS| SEOKeywordMetrics
   SEOMiningRun --o|SEO_MINES| SEOKeyword
-  SearchIntent -.->|MAPS_TO_CONCEPT| Concept
-  SearchIntent --o|TARGETS_KEYWORD| SEOKeyword
-  TopicCluster -.->|CLUSTERS_TOPIC| Concept
-  TopicCluster -->|CLUSTER_PAGE| Page
-  TopicCluster -->|PILLAR_PAGE| Page
 
   %% Edge colors by family
-  linkStyle 11,12,13,16,17,18,19,20,32,33,34,36,37,38,57,58,59,60,61,62,77,80,83,84,85,86,87,98,99,100,101 stroke:#8b5cf6,stroke-width:2px
-  linkStyle 3,4,10,14,15,22,23,27,29,30,35,39,45,46,47,48,55,56,65,66,79,81,82,91,92,95,96,97 stroke:#22c55e,stroke-width:2px
-  linkStyle 28,102,103,105 stroke:#ec4899,stroke-width:2px
-  linkStyle 0,5,6,7,8,21,31,40,41,42,43,44,49,50,51,52,53,54,64,67,68,69,71,72,78,88,89,90,93,94,107,108 stroke:#3b82f6,stroke-width:2px
-  linkStyle 1,2,9,24,25,26,63,70,73,74,75,76,104,106 stroke:#f97316,stroke-width:2px
+  linkStyle 10,11,12,15,16,17,18,19,30,31,32,34,35,36,55,56,57,58,59,60,74,77,80,81,82,83,84,94,95,96,97 stroke:#8b5cf6,stroke-width:2px
+  linkStyle 2,3,9,13,14,22,23,27,28,29,33,37,43,44,45,46,53,54,63,64,76,78,79,87,88,91,92,93 stroke:#22c55e,stroke-width:2px
+  linkStyle 98,99 stroke:#ec4899,stroke-width:2px
+  linkStyle 0,4,5,6,7,20,21,38,39,40,41,42,47,48,49,50,51,52,62,65,66,67,69,70,75,85,86,89,90 stroke:#3b82f6,stroke-width:2px
+  linkStyle 1,8,24,25,26,61,68,71,72,73 stroke:#f97316,stroke-width:2px
 
   %% Class assignments
   class Adaptation knowledge
@@ -227,17 +217,18 @@ flowchart TB
   class AudienceSet knowledge
   class AudienceTrait knowledge
   class Block invariant
+  class BlockInstruction invariant
   class BlockL10n localized
   class BlockPrompt invariant
   class BlockRules invariant
   class BlockType invariant
   class BrandIdentity invariant
   class ChannelSurface invariant
-  class Concept invariant
-  class ConceptL10n localized
   class ContentSlot invariant
   class CultureRef knowledge
   class CultureSet knowledge
+  class Entity invariant
+  class EntityL10n localized
   class EvaluationSignal derived
   class Expression knowledge
   class ExpressionSet knowledge
@@ -257,14 +248,12 @@ flowchart TB
   class SEOKeyword knowledge
   class SEOKeywordMetrics derived
   class SEOMiningRun job
-  class SearchIntent invariant
   class Slugification knowledge
   class Style knowledge
   class Taboo knowledge
   class TabooSet knowledge
   class Term knowledge
   class TermSet knowledge
-  class TopicCluster invariant
 ```
 
 ## Edge Families

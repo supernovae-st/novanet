@@ -455,12 +455,12 @@ node:
             return;
         }
 
-        // v10.1: 43 nodes (37 base + 6 atoms, GEO removed)
-        let nodes = load_all_nodes(root).expect("should parse all 43 nodes");
+        // v10.3: 42 nodes (-4 removed, +3 added)
+        let nodes = load_all_nodes(root).expect("should parse all 42 nodes");
         assert_eq!(
             nodes.len(),
-            43,
-            "expected 43 YAML node files (37 base + 6 atoms)"
+            42,
+            "expected 42 YAML node files (v10.3: -4 removed, +3 added)"
         );
 
         // Every node has a non-empty name, realm, and layer
@@ -482,14 +482,14 @@ node:
             );
         }
 
-        // v10.2: Verify trait distribution (SEOKeyword now knowledge trait)
-        // 16 invariant
-        // 4 localized (SEOKeyword now knowledge trait)
-        // 17 knowledge (10 containers + 6 atoms + SEOKeyword)
+        // v10.3: Verify trait distribution
+        // 15 invariant (16 - Concept/SearchIntent/TopicCluster + Entity/BlockInstruction)
+        // 4 localized (- ConceptL10n + EntityL10n)
+        // 17 knowledge (unchanged)
         // 4 derived
         // 2 jobs
         let count = |t: NodeTrait| nodes.iter().filter(|n| n.def.node_trait == t).count();
-        assert_eq!(count(NodeTrait::Invariant), 16, "invariant count");
+        assert_eq!(count(NodeTrait::Invariant), 15, "invariant count");
         assert_eq!(count(NodeTrait::Localized), 4, "localized count");
         assert_eq!(
             count(NodeTrait::Knowledge),
@@ -499,14 +499,14 @@ node:
         assert_eq!(count(NodeTrait::Derived), 4, "derived count");
         assert_eq!(count(NodeTrait::Job), 2, "job count");
 
-        // v10.2: Verify realm distribution (shared realm removed, SEO moved to global)
+        // v10.3: Verify realm distribution
         let realm_count = |r: &str| nodes.iter().filter(|n| n.realm == r).count();
         assert_eq!(
             realm_count("global"),
-            20,
-            "global realm count (17 + 3 SEO nodes)"
+            22,
+            "global realm count (20 + Entity + EntityL10n)"
         );
-        assert_eq!(realm_count("project"), 23, "project realm count");
+        assert_eq!(realm_count("project"), 20, "project realm count");
 
         // Spot-check known nodes
         let project = nodes.iter().find(|n| n.def.name == "Project").unwrap();

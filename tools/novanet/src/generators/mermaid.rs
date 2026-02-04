@@ -726,7 +726,7 @@ mod tests {
         // Header
         assert!(output.contains("flowchart TB"));
         assert!(output.contains("NovaNet Graph v10.0.0"));
-        assert!(output.contains("43 nodes")); // v10.1: 37 base + 6 atoms
+        assert!(output.contains("42 nodes")); // v10.3: -4 removed, +3 added
 
         // All 2 realms (v10.2: shared removed)
         assert!(output.contains("GLOBAL_REALM"));
@@ -754,8 +754,8 @@ mod tests {
         assert!(output.contains("Project["));
         assert!(output.contains("Page["));
         assert!(output.contains("Block["));
-        assert!(output.contains("Concept["));
-        assert!(output.contains("ConceptL10n["));
+        assert!(output.contains("Entity["));
+        assert!(output.contains("EntityL10n["));
         assert!(output.contains("PageL10n["));
         assert!(output.contains("BlockL10n["));
 

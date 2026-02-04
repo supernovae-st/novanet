@@ -7,10 +7,10 @@ arc:
   scope: intra_realm
 
   source:
-    - Concept
+    - Entity
     - Project
   target:
-    - ConceptL10n
+    - EntityL10n
     - ProjectL10n
   cardinality: one_to_many
 
@@ -19,6 +19,6 @@ arc:
   llm_context: |
     Links invariant node to its human-curated localized definitions (one per locale).
     NOT for LLM-generated content — use HAS_OUTPUT for that.
-    Use: MATCH (c:Concept)-[:HAS_L10N]->(cl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale)
+    Use: MATCH (e:Entity)-[:HAS_L10N]->(el:EntityL10n)-[:FOR_LOCALE]->(l:Locale)
 
-  cypher_pattern: "(Concept)-[:HAS_L10N]->(ConceptL10n)"
+  cypher_pattern: "(Entity)-[:HAS_L10N]->(EntityL10n)"

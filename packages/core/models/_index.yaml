@@ -1,5 +1,5 @@
 # ═══════════════════════════════════════════════════════════════════════════════
-# NOVANET DATA MODELS INDEX v10.2.0
+# NOVANET DATA MODELS INDEX v10.3.0
 # ═══════════════════════════════════════════════════════════════════════════════
 #
 # WHAT: Native content generation system using Neo4j graph database
@@ -7,7 +7,7 @@
 # HOW:  Orchestrator dispatches to sub-agents, each generates a Block natively
 #
 # ═══════════════════════════════════════════════════════════════════════════════
-# TWO-REALM ARCHITECTURE (v10.2.0 - SHARED merged into GLOBAL)
+# TWO-REALM ARCHITECTURE (v10.3.0 - Entity-centric, SHARED merged into GLOBAL)
 # ═══════════════════════════════════════════════════════════════════════════════
 #
 #   ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -15,9 +15,10 @@
 #   ├─────────────────────────────────────────────────────────────────────────────┤
 #   │                                                                             │
 #   │  ┌───────────────────────────────────────────────────────────────────────┐  │
-#   │  │  🌍 GLOBAL (20 nodes) - Single instance, shared by ALL projects       │  │
+#   │  │  🌍 GLOBAL (22 nodes) - Single instance, shared by ALL projects       │  │
 #   │  │  └─ config/    Locale (1)                                             │  │
-#   │  │  └─ knowledge/ 16 knowledge nodes (10 containers + 6 atoms)           │  │
+#   │  │  └─ knowledge/ 18 knowledge nodes (10 containers + 6 atoms + Entity)  │  │
+#   │  │      Entity:     Entity (invariant), EntityL10n (localized)           │  │
 #   │  │      Containers: Style, Formatting, Slugification, Adaptation,        │  │
 #   │  │                  TermSet, ExpressionSet, PatternSet, CultureSet,      │  │
 #   │  │                  TabooSet, AudienceSet                                │  │
@@ -29,13 +30,12 @@
 #   │  └───────────────────────────────────────────────────────────────────────┘  │
 #   │                                                                             │
 #   │  ┌───────────────────────────────────────────────────────────────────────┐  │
-#   │  │  📦 PROJECT (23 nodes) - Per-project instances                        │  │
+#   │  │  📦 PROJECT (21 nodes) - Per-project instances                        │  │
 #   │  │  └─ foundation/  🏢 Project, BrandIdentity, ProjectL10n               │  │
 #   │  │  └─ structure/   🔧 Page, Block, ContentSlot                          │  │
-#   │  │  └─ semantic/    💡 Concept, ConceptL10n, SearchIntent, TopicCluster  │  │
-#   │  │                     AudiencePersona, ChannelSurface                   │  │
+#   │  │  └─ semantic/    💡 AudiencePersona, ChannelSurface                   │  │
 #   │  │  └─ instruction/ 📝 PageType, PagePrompt, BlockPrompt, BlockType,     │  │
-#   │  │                     BlockRules, PromptArtifact                        │  │
+#   │  │                     BlockRules, PromptArtifact, BlockInstruction      │  │
 #   │  │  └─ output/      📤 PageL10n, BlockL10n, GenerationJob, OutputArtifact│  │
 #   │  │                     EvaluationSignal                                  │  │
 #   │  └───────────────────────────────────────────────────────────────────────┘  │
@@ -49,30 +49,27 @@
 #   Project ──┬─[:SUPPORTS_LOCALE {status}]───┐
 #             │                                v
 #             ├─[:DEFAULT_LOCALE]───────────> Locale ─[:HAS_*]──> LocaleKnowledge*
-#             │
-#             ├─[:HAS_BRAND_IDENTITY]─> BrandIdentity
+#             │                                  │
+#             ├─[:HAS_BRAND_IDENTITY]─> BrandIdentity  └─[:HAS_SEO_KEYWORDS]──> SEOKeyword
 #             │
 #             ├─[:HAS_L10N]─> ProjectL10n ──:FOR_LOCALE──> Locale
 #             │
-#             ├─[:HAS_CONCEPT]─> Concept ──[:HAS_L10N]──> ConceptL10n ──:FOR_LOCALE──> Locale
-#             │                     │                            │
-#             │                     ├──[:SEMANTIC_LINK]──> Concept │
-#             │                                                    │
-#             │                                              :HAS_SEO_TARGET
-#             │                                                    v
-#             │                                              SEOKeyword <──:HAS_SEO_KEYWORDS── Locale
-#             │
 #             └─[:HAS_PAGE]─> Page ──┬─[:HAS_BLOCK {position}]─> Block ──:OF_TYPE──> BlockType
 #                               │    │                            │
-#                               │    │                     :USES_CONCEPT
+#                               │    │                     :USES_ENTITY
 #                               │    │                            v
-#                               │    │                         Concept
+#                               │    │                         Entity ──[:HAS_L10N]──> EntityL10n
+#                               │    │                            │           ──:FOR_LOCALE──> Locale
+#                               │    │                            │                    │
+#                               │    │                     :SEMANTIC_LINK        :HAS_SEO_TARGET
+#                               │    │                            v                    v
+#                               │    │                         Entity             SEOKeyword
 #                               │    │
 #                               │    └──:HAS_OUTPUT──> BlockL10n ──:FOR_LOCALE──> Locale
 #                               │
-#                               ├──:USES_CONCEPT──> Concept
+#                               ├──:USES_ENTITY──> Entity (global)
 #                               │
-#                               ├──:LINKS_TO {concept_key, context, seo_weight, anchor_type, nofollow}──> Page (v8.0.0)
+#                               ├──:LINKS_TO {entity_key, context, seo_weight, anchor_type, nofollow}──> Page (v10.3)
 #                               │
 #                               ├──:SUBTOPIC_OF──> Page (pillar-cluster hierarchy, v7.12.0)
 #                               │
@@ -88,7 +85,7 @@
 #
 #   ownership     (11) - Structural containment (HAS_PAGE, HAS_BLOCK, etc.)
 #   localization  (22) - L10n + locale linking (HAS_L10N, FOR_LOCALE, etc.)
-#   semantic       (5) - Meaning connections (SEMANTIC_LINK, USES_CONCEPT, etc.)
+#   semantic       (5) - Meaning connections (SEMANTIC_LINK, USES_ENTITY, etc.)
 #   generation     (5) - AI output (GENERATES, USES_PROMPT, etc.)
 #   mining         (7) - Discovery jobs (MINES, HAS_METRICS, etc.)
 #
@@ -156,7 +153,7 @@
 #   - NEW: 5 ArcFamilies (ownership, localization, semantic, generation, mining)
 #   - NEW: OF_KIND replaces IN_SUBCATEGORY
 #
-# Statistics: 43 nodes, 65 arcs (5 arc families), 2 realms — v10.2.0
+# Statistics: 43 nodes, 65 arcs (5 arc families), 2 realms — v10.3.0
 #
 # ═══════════════════════════════════════════════════════════════════════════════
 # CHANGES v8.2.0 (from v8.1.0)
@@ -264,7 +261,7 @@
 
 files:
   # ═══════════════════════════════════════════════════════════════════════════
-  # 🌍 GLOBAL REALM (17 nodes) - Shared by ALL projects
+  # 🌍 GLOBAL REALM (22 nodes) - Shared by ALL projects
   # ═══════════════════════════════════════════════════════════════════════════
 
   global:
@@ -272,8 +269,11 @@ files:
     config:
       - node-kinds/global/config/locale.yaml
 
-    # Locale knowledge (16 nodes) - v10.1 Knowledge Atoms model
+    # Locale knowledge (18 nodes) - v10.3 Entity-centric + Knowledge Atoms model
     knowledge:
+      # Entity nodes (2) - v10.3 replaces project/semantic/Concept
+      - node-kinds/global/knowledge/entity.yaml           # Invariant entity
+      - node-kinds/global/knowledge/entity-l10n.yaml      # Localized content
       # Container nodes (10) - aggregate knowledge by category
       - node-kinds/global/knowledge/formatting.yaml       # Technical
       - node-kinds/global/knowledge/slugification.yaml    # Technical
@@ -293,19 +293,14 @@ files:
       - node-kinds/global/knowledge/atoms/taboo.yaml
       - node-kinds/global/knowledge/atoms/audience-trait.yaml
 
-  # ═══════════════════════════════════════════════════════════════════════════
-  # 🎯 SHARED REALM (3 nodes) - Independent of projects, reusable
-  # ═══════════════════════════════════════════════════════════════════════════
-
-  shared:
-    # SEO targeting + metrics + jobs (3 nodes)
+    # SEO targeting + metrics + jobs (3 nodes) - v10.2 moved to GLOBAL
     seo:
-      - node-kinds/shared/seo/seo-keyword.yaml
-      - node-kinds/shared/seo/seo-keyword-metrics.yaml
-      - node-kinds/shared/seo/seo-mining-run.yaml
+      - node-kinds/global/seo/seo-keyword.yaml
+      - node-kinds/global/seo/seo-keyword-metrics.yaml
+      - node-kinds/global/seo/seo-mining-run.yaml
 
   # ═══════════════════════════════════════════════════════════════════════════
-  # 📦 PROJECT REALM (23 nodes) - Per-project instances
+  # 📦 PROJECT REALM (21 nodes) - Per-project instances
   # ═══════════════════════════════════════════════════════════════════════════
 
   project:
@@ -321,16 +316,12 @@ files:
       - node-kinds/project/structure/block.yaml
       - node-kinds/project/structure/content-slot.yaml
 
-    # 💡 SEMANTIC (6 nodes) - Meaning & concepts
+    # 💡 SEMANTIC (2 nodes) - Audience & channel targeting (v10.3: Concept moved to GLOBAL Entity)
     semantic:
-      - node-kinds/project/semantic/concept.yaml
-      - node-kinds/project/semantic/concept-l10n.yaml
-      - node-kinds/project/semantic/search-intent.yaml
-      - node-kinds/project/semantic/topic-cluster.yaml
       - node-kinds/project/semantic/audience-persona.yaml
       - node-kinds/project/semantic/channel-surface.yaml
 
-    # 📝 INSTRUCTION (6 nodes) - AI generation directives
+    # 📝 INSTRUCTION (7 nodes) - AI generation directives
     instruction:
       - node-kinds/project/instruction/page-type.yaml
       - node-kinds/project/instruction/page-prompt.yaml
@@ -338,6 +329,7 @@ files:
       - node-kinds/project/instruction/block-type.yaml
       - node-kinds/project/instruction/block-rules.yaml
       - node-kinds/project/instruction/prompt-artifact.yaml
+      - node-kinds/project/instruction/block-instruction.yaml
 
     # 📤 OUTPUT (5 nodes) - LLM-generated content
     output:
@@ -372,7 +364,7 @@ nodes_by_trait:
   invariant:
     - Project
     - BrandIdentity
-    - Concept
+    - Entity                # v10.3 - replaces Concept (GLOBAL)
     - Page
     - Block
     - PageType
@@ -380,15 +372,14 @@ nodes_by_trait:
     - PagePrompt
     - BlockPrompt
     - BlockRules
+    - BlockInstruction      # v10.3 - new
     - Locale
     - ContentSlot
-    - SearchIntent
-    - TopicCluster
     - AudiencePersona
     - ChannelSurface
   localized:
     - ProjectL10n
-    - ConceptL10n
+    - EntityL10n            # v10.3 - replaces ConceptL10n (GLOBAL)
     - PageL10n
     - BlockL10n
     - SEOKeyword
@@ -421,29 +412,30 @@ nodes_by_trait:
     - GenerationJob
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# STATISTICS v10.1.0 (Knowledge Atoms)
+# STATISTICS v10.3.0 (Entity-centric architecture)
 # ═══════════════════════════════════════════════════════════════════════════════
 #
 # By Realm:
-#   🌍 GLOBAL:  17 nodes (Locale + 10 containers + 6 atoms)
-#   🎯 SHARED:   3 nodes (SEO 3)
-#   📦 PROJECT: 23 nodes (Foundation 3 + Structure 3 + Semantic 6 + Instruction 6 + Output 5)
-#   TOTAL:      43 nodes, 64 arcs (5 arc families)
+#   🌍 GLOBAL:  22 nodes (Locale 1 + Knowledge 18 (Entity 2 + Containers 10 + Atoms 6) + SEO 3)
+#   📦 PROJECT: 21 nodes (Foundation 3 + Structure 3 + Semantic 2 + Instruction 7 + Output 5)
+#   TOTAL:      43 nodes, 65 arcs (5 arc families)
 #
 # By Trait:
-#   🔵 INVARIANT:  16 (Project, BrandIdentity, Concept, Page, Block, PageType, BlockType,
-#                      PagePrompt, BlockPrompt, BlockRules, Locale, ContentSlot, SearchIntent,
-#                      TopicCluster, AudiencePersona, ChannelSurface)
-#   🟢 LOCALIZED:   5 (ProjectL10n, ConceptL10n, PageL10n, BlockL10n, SEOKeyword)
+#   🔵 INVARIANT:  15 (Project, BrandIdentity, Entity, Page, Block, PageType, BlockType,
+#                      PagePrompt, BlockPrompt, BlockRules, BlockInstruction, Locale,
+#                      ContentSlot, AudiencePersona, ChannelSurface)
+#   🟢 LOCALIZED:   5 (ProjectL10n, EntityL10n, PageL10n, BlockL10n, SEOKeyword)
 #   🟣 KNOWLEDGE:  16 (Containers: Formatting, Slugification, Adaptation, Style, TermSet,
 #                      ExpressionSet, PatternSet, CultureSet, TabooSet, AudienceSet;
 #                      Atoms: Term, Expression, Pattern, CultureRef, Taboo, AudienceTrait)
 #   ⚪ DERIVED:     4 (SEOKeywordMetrics, PromptArtifact, OutputArtifact, EvaluationSignal)
 #   ⚙️ JOB:         2 (SEOMiningRun, GenerationJob)
 #
-# v10.1.0 changes (Knowledge Atoms):
-#   - Added 6 atomic knowledge nodes (Term, Expression, Pattern, CultureRef, Taboo, AudienceTrait)
-#   - Added 6 CONTAINS arcs (Set containers → Atoms)
-#   - Removed knowledge_tier property (node type is sufficient for LLM routing)
-#   - Atoms are unique per locale (unlike Concepts which require L10n in ALL locales)
+# v10.3.0 changes (Entity-centric):
+#   - MOVED: Concept → Entity (PROJECT semantic → GLOBAL knowledge)
+#   - MOVED: ConceptL10n → EntityL10n (PROJECT semantic → GLOBAL knowledge)
+#   - REMOVED: SearchIntent, TopicCluster (PROJECT semantic) — replaced by Entity
+#   - ADDED: BlockInstruction (PROJECT instruction)
+#   - Entity is GLOBAL: shared across projects, linked via USES_ENTITY
+#   - EntityL10n provides localized titles/descriptions for SEO anchors
 #

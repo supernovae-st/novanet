@@ -249,7 +249,7 @@ mod tests {
     #[test]
     fn generate_small_cypher() {
         let doc = TaxonomyDoc {
-            version: "10.2.0".to_string(),
+            version: "10.3.0".to_string(),
             node_realms: vec![NodeRealmDef {
                 key: "test".to_string(),
                 display_name: "Test".to_string(),
@@ -328,7 +328,7 @@ mod tests {
         assert!(cypher.contains("updated_at = datetime()"));
 
         // Header
-        assert!(cypher.contains("v10.2.0"));
+        assert!(cypher.contains("v10.3.0"));
         assert!(cypher.contains("AUTO-GENERATED"));
         assert!(cypher.contains("1 Realms, 1 Layers, 1 Traits, 1 ArcFamilies"));
         assert!(cypher.contains("v9.5: Includes visual encoding properties"));
@@ -337,7 +337,7 @@ mod tests {
     #[test]
     fn generate_multiline_llm_context() {
         let doc = TaxonomyDoc {
-            version: "10.2.0".to_string(),
+            version: "10.3.0".to_string(),
             node_realms: vec![NodeRealmDef {
                 key: "r".to_string(),
                 display_name: "R".to_string(),
@@ -452,8 +452,8 @@ mod tests {
         assert!(cypher.contains("as_intra_realm:Meta:ArcScope {key: 'intra_realm'}"));
         assert!(cypher.contains("ac_one_to_many:Meta:ArcCardinality {key: 'one_to_many'}"));
 
-        // Header mentions v10.2.0
-        assert!(cypher.contains("v10.2.0"));
+        // Header mentions v10.3.0
+        assert!(cypher.contains("v10.3.0"));
 
         // HAS_LAYER wiring — specific pairs
         assert!(cypher.contains("(r:Realm {key: 'global'}), (l:Layer {key: 'config'})"));
@@ -466,7 +466,7 @@ mod tests {
     #[test]
     fn snapshot_minimal_taxonomy() {
         let doc = TaxonomyDoc {
-            version: "10.2.0".to_string(),
+            version: "10.3.0".to_string(),
             node_realms: vec![NodeRealmDef {
                 key: "test".to_string(),
                 display_name: "Test Realm".to_string(),

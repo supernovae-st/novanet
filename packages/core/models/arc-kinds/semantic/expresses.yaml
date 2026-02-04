@@ -1,0 +1,31 @@
+# packages/core/models/arc-kinds/semantic/expresses.yaml
+# ArcKind: EXPRESSES — SEOKeyword expresses an Entity (v10.3)
+
+arc:
+  name: EXPRESSES
+  family: semantic
+  scope: cross_realm
+  temperature_threshold: 0.5  # v10.3: Keyword→entity mapping (moderate priority)
+
+  source: SEOKeyword
+  target: Entity
+  cardinality: many_to_one
+
+  properties:
+    - name: role
+      type: string
+      required: false
+      enum: [primary, secondary, long_tail]
+      description: "How the keyword expresses the entity"
+    - name: match_score
+      type: float
+      required: false
+      description: "Semantic similarity score (0.0-1.0)"
+
+  llm_context: |
+    SEO keyword expresses a semantic entity.
+    Multiple keywords can express the same entity.
+    role: primary = exact match, secondary = synonym, long_tail = phrase variation.
+    Use: MATCH (k:SEOKeyword)-[:EXPRESSES]->(e:Entity)
+
+  cypher_pattern: "(SEOKeyword)-[:EXPRESSES {role, match_score}]->(Entity)"

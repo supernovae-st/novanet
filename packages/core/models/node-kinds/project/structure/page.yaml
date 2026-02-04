@@ -128,10 +128,10 @@ node:
       cardinality: "1:N"
       description: "Orchestrator instructions with versioning (v7.2.0)"
 
-    USES_CONCEPT:
-      to: Concept
+    USES_ENTITY:
+      to: Entity
       cardinality: "N:N"
-      description: "Concepts referenced by this page"
+      description: "Entities referenced by this page"
 
     # v7.12.0: Page-to-Page relationships (v7.12.1: anchor_type + nofollow)
     LINKS_TO:
@@ -180,9 +180,9 @@ node:
       // Get page with type and all blocks in order
       MATCH (p:Page {key: $key})-[:OF_TYPE]->(pt:PageType)
       MATCH (p)-[r:HAS_BLOCK]->(b:Block)-[:OF_TYPE]->(bt:BlockType)
-      OPTIONAL MATCH (p)-[:USES_CONCEPT]->(c:Concept)
+      OPTIONAL MATCH (p)-[:USES_ENTITY]->(e:Entity)
       RETURN p, pt, collect(DISTINCT {block: b, type: bt, position: r.position}) AS blocks,
-             collect(DISTINCT c.key) AS page_concepts
+             collect(DISTINCT e.key) AS page_entities
       ORDER BY r.position
 
       // Validate page has required blocks from PageType

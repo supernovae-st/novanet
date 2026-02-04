@@ -319,7 +319,7 @@ description: Test depth
 root:
   type: Block
 include:
-  - relation: USES_CONCEPT
+  - relation: USES_ENTITY
     direction: outgoing
     depth: 2
 "#;

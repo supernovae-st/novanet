@@ -387,15 +387,15 @@ mod tests {
         let generator = LayerGenerator;
         let output = generator.generate(root).expect("should generate layers.ts");
 
-        // v10.1: 43 nodes (37 base + 6 atoms)
+        // v10.3: 42 nodes (-4 removed, +3 added)
         assert!(
-            output.contains("mapping all 43 node types"),
-            "should mention 43 node types"
+            output.contains("mapping all 42 node types"),
+            "should mention 42 node types"
         );
 
-        // v10.2: Realm node counts (shared realm removed, SEO moved to global)
-        assert!(output.contains("PROJECT REALM (23 nodes)"));
-        assert!(output.contains("GLOBAL REALM (20 nodes)")); // 17 + 3 SEO nodes from shared
+        // v10.3: Realm node counts (project -4+1, global +2)
+        assert!(output.contains("PROJECT REALM (20 nodes)")); // 23 - 4 + 1 = 20
+        assert!(output.contains("GLOBAL REALM (22 nodes)")); // 20 + 2 (Entity, EntityL10n)
 
         // 8 layers present (geo removed in v10.1)
         for layer in [
@@ -418,7 +418,7 @@ mod tests {
         assert!(output.contains("Project: 'foundation',"));
         assert!(output.contains("Page: 'structure',"));
         assert!(output.contains("Block: 'structure',"));
-        assert!(output.contains("Concept: 'semantic',"));
+        assert!(output.contains("Entity: 'knowledge',"));
         assert!(output.contains("PageL10n: 'output',"));
         assert!(output.contains("Locale: 'config',"));
         assert!(output.contains("Style: 'knowledge',")); // v10: LocaleVoice → Style

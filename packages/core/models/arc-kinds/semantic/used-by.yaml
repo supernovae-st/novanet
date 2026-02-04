@@ -1,16 +1,16 @@
 # packages/core/models/arc-kinds/semantic/used-by.yaml
-# ArcKind: USED_BY — Inverse of USES_CONCEPT — concept knows who uses it
+# ArcKind: USED_BY — Inverse of USES_ENTITY — entity knows who uses it
 
 arc:
   name: USED_BY
   family: semantic
   scope: intra_realm
-  temperature_threshold: 0.0  # v9.9: Inverse of USES_CONCEPT (always follow)
-  source: Concept
+  temperature_threshold: 0.0  # v9.9: Inverse of USES_ENTITY (always follow)
+  source: Entity
   target:
     - Page
     - Block
   cardinality: many_to_many
-  inverse_of: USES_CONCEPT
-  llm_context: Inverse of USES_CONCEPT — concept knows who uses it.
-  cypher_pattern: (Concept)-[:USED_BY]->(Page)
+  inverse_of: USES_ENTITY
+  llm_context: Inverse of USES_ENTITY — entity knows who uses it.
+  cypher_pattern: (Entity)-[:USED_BY]->(Page)

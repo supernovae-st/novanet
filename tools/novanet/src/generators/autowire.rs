@@ -299,14 +299,14 @@ mod tests {
             .generate(root)
             .expect("should generate autowire cypher");
 
-        // v10.1: 43 OF_KIND statements (37 base + 6 atoms)
+        // v10.3: 42 OF_KIND statements (-4 removed, +3 added)
         let of_kind = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:OF_KIND]"))
             .count();
         assert_eq!(
-            of_kind, 43,
-            "expected 43 OF_KIND statements (37 base + 6 atoms)"
+            of_kind, 42,
+            "expected 42 OF_KIND statements (v10.3: -4 removed, +3 added)"
         );
 
         // All 2 realms present (v10.2: shared removed)
@@ -318,12 +318,12 @@ mod tests {
         assert!(cypher.contains("MATCH (k:Kind {label: 'Style'})"));
         assert!(cypher.contains("MATCH (n:SEOMiningRun)"));
 
-        // v10.2: Layer counts match 43 nodes (23 project, 20 global)
+        // v10.3: Layer counts match 42 nodes (20 project, 22 global)
         assert!(cypher.contains("Global > Config (1 type)"));
-        assert!(cypher.contains("Global > Knowledge (16 types)")); // 10 + 6 atoms
+        assert!(cypher.contains("Global > Knowledge (18 types)")); // 16 + Entity + EntityL10n
 
-        // v10.2: Header
-        assert!(cypher.contains("Total: 43 node types"));
+        // v10.3: Header
+        assert!(cypher.contains("Total: 42 node types"));
 
         // Verification query present
         assert!(cypher.contains("VERIFICATION QUERY"));

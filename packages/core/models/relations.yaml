@@ -21,7 +21,7 @@
 # ARC FAMILIES (5):
 #   ownership     - Structural parent→child containment
 #   localization  - Invariant↔locale-specific bridges + locale knowledge
-#   semantic      - Concept connections + spreading activation
+#   semantic      - Entity connections + spreading activation
 #   generation    - LLM pipeline: prompts → outputs → versions
 #   mining        - SEO/GEO targeting, metrics, extraction
 #
@@ -33,12 +33,8 @@ relations:
   # OWNERSHIP — structural backbone
   # ═════════════════════════════════════════════════════════════════════════════
 
-  - type: HAS_CONCEPT
-    family: ownership
-    source: Project
-    target: Concept
-    cardinality: one_to_many
-    llm_context: "Project owns its semantic concepts. Use to load all concepts for a project."
+  # v10.3: HAS_CONCEPT removed — Entity is now in global realm, not project
+  # Projects use USES_ENTITY to reference global entities
 
   - type: HAS_PAGE
     family: ownership
@@ -230,7 +226,7 @@ relations:
   - type: FOR_LOCALE
     family: localization
     source:
-      - ConceptL10n
+      - EntityL10n
       - ProjectL10n
       - BlockL10n
       - PageL10n
@@ -244,10 +240,10 @@ relations:
   - type: HAS_L10N
     family: localization
     source:
-      - Concept
+      - Entity
       - Project
     target:
-      - ConceptL10n
+      - EntityL10n
       - ProjectL10n
     cardinality: one_to_many
     llm_context: "Links invariant node to its human-curated localized definitions (one per locale)."
@@ -286,10 +282,10 @@ relations:
   - type: L10N_OF
     family: localization
     source:
-      - ConceptL10n
+      - EntityL10n
       - ProjectL10n
     target:
-      - Concept
+      - Entity
       - Project
     cardinality: many_to_one
     inverse_of: HAS_L10N
@@ -312,7 +308,7 @@ relations:
     source: Locale
     target:
       - ProjectL10n
-      - ConceptL10n
+      - EntityL10n
       - PageL10n
       - BlockL10n
     cardinality: one_to_many
@@ -326,8 +322,8 @@ relations:
 
   - type: SEMANTIC_LINK
     family: semantic
-    source: Concept
-    target: Concept
+    source: Entity
+    target: Entity
     cardinality: many_to_many
     is_self_referential: true
     properties:
@@ -335,17 +331,17 @@ relations:
       - temperature
     llm_context: "Spreading activation links between concepts. temperature: 0.0-1.0, cutoff 0.3, max 2 hops."
 
-  - type: USES_CONCEPT
+  - type: USES_ENTITY
     family: semantic
     source:
       - Page
       - Block
-    target: Concept
+    target: Entity
     cardinality: many_to_many
     properties:
       - purpose
       - temperature
-    llm_context: "Page/Block references concepts for generation context. purpose: primary/secondary/contextual."
+    llm_context: "Page/Block references entities for generation context. purpose: primary/secondary/contextual."
 
   - type: LINKS_TO
     family: semantic
@@ -372,13 +368,13 @@ relations:
   # Inverse
   - type: USED_BY
     family: semantic
-    source: Concept
+    source: Entity
     target:
       - Page
       - Block
     cardinality: many_to_many
-    inverse_of: USES_CONCEPT
-    llm_context: "Inverse of USES_CONCEPT — concept knows who uses it."
+    inverse_of: USES_ENTITY
+    llm_context: "Inverse of USES_ENTITY — entity knows who uses it."
 
   # ═════════════════════════════════════════════════════════════════════════════
   # GENERATION — LLM pipeline: prompts → outputs → versions
@@ -423,7 +419,7 @@ relations:
   - type: INFLUENCED_BY
     family: generation
     source: BlockL10n
-    target: ConceptL10n
+    target: EntityL10n
     cardinality: many_to_many
     properties:
       - weight
@@ -467,7 +463,7 @@ relations:
   - type: INCLUDES_CONCEPT
     family: generation
     source: PromptArtifact
-    target: Concept
+    target: Entity
     cardinality: one_to_many
     properties:
       - weight
@@ -532,46 +528,8 @@ relations:
     llm_context: "Evaluation signal relates to generation job that produced evaluated content."
 
   # ─────────────────────────────────────────────────────────────────────────────
-  # Intent Layer (v9.7)
+  # v10.3: Intent Layer removed — SearchIntent absorbed into Entity.type=ACTION
   # ─────────────────────────────────────────────────────────────────────────────
-
-  - type: SATISFIES_INTENT
-    family: semantic
-    source: Page
-    target: SearchIntent
-    cardinality: many_to_many
-    properties:
-      - relevance_score
-      - is_primary
-    llm_context: "Page satisfies user search intent. relevance_score: 0.0-1.0 match quality. is_primary: true if main intent."
-
-  - type: FOR_INTENT
-    family: semantic
-    source: Block
-    target: SearchIntent
-    cardinality: many_to_many
-    properties:
-      - contribution_type
-    llm_context: "Block targets search intent. contribution_type: answer/context/cta/navigation."
-
-  - type: MAPS_TO_CONCEPT
-    family: semantic
-    source: SearchIntent
-    target: Concept
-    cardinality: many_to_many
-    properties:
-      - relationship_type
-    llm_context: "Intent maps to concept. relationship_type: directly_about/supports/related."
-
-  - type: TARGETS_KEYWORD
-    family: mining
-    source: SearchIntent
-    target: SEOKeyword
-    cardinality: one_to_many
-    properties:
-      - match_type
-      - volume_share
-    llm_context: "Intent expressed through localized SEO keyword. match_type: exact/phrase/broad. volume_share: 0.0-1.0."
 
   # ─────────────────────────────────────────────────────────────────────────────
   # Audience & Channel (v9.7)
@@ -629,52 +587,17 @@ relations:
     llm_context: "Slot accepts specific block types. Constraint enforcement."
 
   # ─────────────────────────────────────────────────────────────────────────────
-  # Topic Clusters (v9.8)
+  # v10.3: Topic Clusters removed — Use Entity.is_pillar + SUBTOPIC_OF instead
   # ─────────────────────────────────────────────────────────────────────────────
 
-  - type: CLUSTERS_TOPIC
-    family: semantic
-    source: TopicCluster
-    target: Concept
-    cardinality: one_to_many
-    properties:
-      - relevance_score
-      - is_primary
-    llm_context: "TopicCluster groups related concepts. relevance_score: 0.0-1.0 fit. is_primary: true if core topic."
-
-  - type: PILLAR_PAGE
-    family: ownership
-    source: TopicCluster
-    target: Page
-    cardinality: one_to_one
-    llm_context: "TopicCluster has ONE pillar page as authoritative hub. All cluster pages link to it."
-
-  - type: CLUSTER_PAGE
-    family: ownership
-    source: TopicCluster
-    target: Page
-    cardinality: one_to_many
-    properties:
-      - subtopic
-      - depth_level
-    llm_context: "TopicCluster contains supporting pages. subtopic: specific angle. depth_level: 1=direct, 2=related."
-
-  # NOTE: LINKS_TO already defined in semantic family (line ~348) for Page-to-Page internal linking
+  # NOTE: LINKS_TO already defined in semantic family for Page-to-Page internal linking
 
   # ═════════════════════════════════════════════════════════════════════════════
   # MINING — SEO targeting, metrics, extraction
   # ═════════════════════════════════════════════════════════════════════════════
 
-  # Primary: locale-aligned targeting (v7.7.0)
-  - type: HAS_SEO_TARGET
-    family: mining
-    source: ConceptL10n
-    target: SEOKeyword
-    cardinality: one_to_many
-    properties:
-      - role
-      - priority
-    llm_context: "Primary SEO targeting — locale-aligned. role: primary/secondary/long-tail."
+  # v10.3: HAS_SEO_TARGET removed — Replaced by EXPRESSES (SEOKeyword → Entity)
+  # See arc-kinds/semantic/expresses.yaml for the new pattern
 
   # Mining runs
   - type: SEO_MINES
@@ -700,7 +623,7 @@ relations:
 # temperature = link strength (0.0-1.0) for spreading activation.
 #
 # SPREADING ACTIVATION:
-#   MATCH (c:Concept {key: $key})-[r:SEMANTIC_LINK*1..2]->(c2:Concept)
+#   MATCH (c:Entity {key: $key})-[r:SEMANTIC_LINK*1..2]->(c2:Entity)
 #   WHERE ALL(rel IN r WHERE rel.temperature >= 0.3)
 #   WITH c2, reduce(a = 1.0, rel IN r | a * rel.temperature) AS activation
 #   WHERE activation >= 0.3
@@ -732,25 +655,25 @@ semantic_link_types:
 # ═══════════════════════════════════════════════════════════════════════════════
 
 examples:
-  uses_concept:
-    description: "Page/Block uses a concept"
+  uses_entity:
+    description: "Page/Block uses an entity"
     cypher: |
       MATCH (p:Page {key:'pricing'})
-      MATCH (c:Concept {key:'tier-pro'})
-      CREATE (p)-[:USES_CONCEPT {purpose: "primary", temperature: 1.0}]->(c)
+      MATCH (e:Entity {key:'tier-pro'})
+      CREATE (p)-[:USES_ENTITY {purpose: "primary", temperature: 1.0}]->(e)
 
   semantic_link:
     description: "Create semantic link between concepts"
     cypher: |
-      MATCH (c1:Concept {key:'create-qr-code'})
-      MATCH (c2:Concept {key:'qr-code-generator'})
+      MATCH (c1:Entity {key:'create-qr-code'})
+      MATCH (c2:Entity {key:'qr-code-generator'})
       CREATE (c1)-[:SEMANTIC_LINK {type: "is_action_on", temperature: 0.95}]->(c2)
 
   has_seo_target:
-    description: "ConceptL10n targets SEO keyword (locale-aligned primary)"
+    description: "EntityL10n targets SEO keyword (locale-aligned primary)"
     cypher: |
       // v10.2: SEOKeyword now owned by Locale via HAS_SEO_KEYWORDS
-      MATCH (c:Concept {key:'action-create-qr'})-[:HAS_L10N]->(cl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale {key:'fr-FR'})
+      MATCH (c:Entity {key:'action-create-qr'})-[:HAS_L10N]->(cl:EntityL10n)-[:FOR_LOCALE]->(l:Locale {key:'fr-FR'})
       MATCH (l)-[:HAS_SEO_KEYWORDS]->(kw:SEOKeyword {key:'seo-creer-qr-code-gratuit-fr'})
       CREATE (cl)-[:HAS_SEO_TARGET {role: "primary", priority: 1}]->(kw)
 
@@ -764,7 +687,7 @@ examples:
   spreading_activation:
     description: "Get related concepts via spreading activation"
     cypher: |
-      MATCH (c:Concept {key: $key})-[r:SEMANTIC_LINK*1..2]->(c2:Concept)
+      MATCH (c:Entity {key: $key})-[r:SEMANTIC_LINK*1..2]->(c2:Entity)
       WHERE ALL(rel IN r WHERE rel.temperature >= 0.3)
       WITH c2, reduce(a = 1.0, rel IN r | a * rel.temperature) AS activation
       WHERE activation >= 0.3
@@ -774,7 +697,7 @@ examples:
     description: "Get all internal links for a page with localized anchors"
     cypher: |
       MATCH (page:Page {key: $key})-[link:LINKS_TO]->(target:Page)
-      MATCH (c:Concept {key: link.concept_key})-[:HAS_L10N]->(cl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+      MATCH (c:Entity {key: link.concept_key})-[:HAS_L10N]->(cl:EntityL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
       RETURN target.key AS target_page,
              cl.title AS anchor_text,
              link.context AS link_context,
