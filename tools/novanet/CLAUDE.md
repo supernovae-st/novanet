@@ -17,7 +17,7 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 |------|----------|--------|
 | Read | `data`, `meta`, `overlay`, `query` | Implemented (faceted Cypher) |
 | Write | `node create/edit/delete`, `arc create/delete` | Implemented (label validation) |
-| Schema | `schema generate`, `schema validate` | Implemented (7 artifacts) |
+| Schema | `schema generate`, `schema validate` | Implemented (10 artifacts) |
 | Docs | `doc generate`, `doc generate --list` | Implemented (12 views) |
 | Search | `search --query=... [--kind=...]` | Implemented (fulltext + property) |
 | Locale | `locale list`, `locale import` | Implemented |
@@ -41,6 +41,11 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 - `cargo-mutants` — Mutation testing
 - `cargo-bloat` — Binary size analysis
 - `bacon` — Live reload dev experience
+
+**Performance optimizations:**
+- `rayon` — Parallel YAML loading (~4x speedup for 44 nodes)
+- `FxHashSet` — 30% faster string key lookups (TUI collapsed state)
+- `SmallVec` — Stack-allocated vectors for properties/labels (avoid heap)
 
 ## Commands
 
