@@ -81,7 +81,7 @@ pnpm test            # Tests
 | `M` | Toggle minimap |
 | `L` | Toggle edge labels |
 | `T` | Cycle trait filter (Invariant → Localized → ... → None) |
-| `E` | Cycle edge family filter (Ownership → ... → None) |
+| `E` | Cycle arc family filter (Ownership → ... → None) |
 | `⇧L` | Cycle locale filter |
 | `[` | Toggle left sidebar |
 | `]` | Toggle right panel |
@@ -118,13 +118,14 @@ pnpm test            # Tests
 | ⇧Tab | Previous connected node |
 | Delete | Hide node from view |
 
-### API Routes (11 routes)
+### API Routes (12 routes)
 - `/api/chat` - Claude AI endpoint
 - `/api/graph` - Main graph data
 - `/api/graph/expand` - Expand node neighbors
 - `/api/graph/navigation` - Faceted navigation (realm/layer/trait filters)
 - `/api/graph/ontology` - Ontology metadata
 - `/api/graph/organizing-principles` - Organizing principles (realms, layers)
+- `/api/graph/taxonomy` - Complete taxonomy with visual encoding (v9.5)
 - `/api/graph/query` - Execute Cypher queries
 - `/api/graph/schema` - Schema information
 - `/api/graph/stats` - Graph statistics
