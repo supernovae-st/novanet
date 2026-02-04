@@ -24,11 +24,13 @@ Claude Code configuration for the NovaNet monorepo.
 ║   ├── /schema [action]           → Schema status and overview                                     ║
 ║   ├── /schema:add-node <name>    → Add new node type (Socratic discovery)                         ║
 ║   ├── /schema:edit-node <name>   → Modify existing node                                           ║
-║   └── /schema:add-relation <REL> → Add new relationship                                           ║
+║   └── /schema:add-arc <ARC>      → Add new arc type (relationship)                                ║
 ║                                                                                                   ║
 ║   SKILLS (automatic context)                                                                      ║
 ║   ├── novanet-architecture       → ASCII architecture diagrams (v9 meta-graph + Rust)             ║
 ║   ├── novanet-sync               → YAML ↔ TypeScript ↔ Mermaid sync (v9 generators)              ║
+║   ├── novanet-tui                → Galaxy-themed terminal UI (keybindings, navigation)            ║
+║   ├── security-audit             → Comprehensive security audit (Rust + TypeScript)               ║
 ║   ├── codebase-audit             → Parallel codebase health analysis                              ║
 ║   └── token-audit                → Design system token adoption                                   ║
 ║                                                                                                   ║
@@ -50,27 +52,29 @@ Claude Code configuration for the NovaNet monorepo.
 ├── settings.local.json          ← Local overrides (gitignored)
 ├── hooks/                       ← Hook scripts
 │   ├── session-start.sh         ← SessionStart: show project status
-│   └── post-edit-format.sh      ← PostToolUse: auto-format after edits
+│   ├── post-edit-format.sh      ← PostToolUse: auto-format after edits
+│   └── keybindings-reminder.sh  ← TUI file edit reminder
 ├── rules/                       ← Path-specific rules
 │   ├── rust.md                  ← Rust patterns (tools/novanet/**/*.rs)
 │   ├── typescript.md            ← TypeScript patterns (packages/, apps/)
-│   └── cypher.md                ← Cypher patterns (packages/db/seed/)
+│   ├── cypher.md                ← Cypher patterns (packages/db/seed/)
+│   ├── security.md              ← Security patterns (all code)
+│   ├── novanet-terminology.md   ← Domain vocabulary (v9.5)
+│   └── novanet-decisions.md     ← Architecture decisions (ADRs)
 ├── commands/                    ← Slash commands
 │   ├── novanet-arch.md          ← /novanet-arch
 │   ├── novanet-sync.md          ← /novanet-sync
 │   ├── schema.md                ← /schema (master command)
 │   ├── schema-add-node.md       ← /schema:add-node
 │   ├── schema-edit-node.md      ← /schema:edit-node
-│   └── schema-add-relation.md   ← /schema:add-relation
+│   └── schema-add-arc.md        ← /schema:add-arc
 ├── skills/                      ← Skill definitions
-│   ├── novanet-architecture/
-│   │   └── SKILL.md
-│   ├── novanet-sync/
-│   │   └── SKILL.md
-│   ├── codebase-audit/
-│   │   └── SKILL.md
-│   └── token-audit/
-│       └── SKILL.md
+│   ├── novanet-architecture/    ← ASCII architecture diagrams
+│   ├── novanet-sync/            ← Schema sync validation
+│   ├── novanet-tui/             ← Terminal UI keybindings
+│   ├── security-audit/          ← Security audit (Rust + TS)
+│   ├── codebase-audit/          ← Parallel codebase analysis
+│   └── token-audit/             ← Design token adoption
 └── agents/                      ← Subagent definitions
     ├── neo4j-architect.md
     └── code-reviewer.md
@@ -79,14 +83,22 @@ apps/studio/.claude/
 ├── commands/
 │   ├── novanet.md               ← /novanet (session start)
 │   └── novanet-bye.md           ← /novanet-bye (session end)
-├── rules/
-│   ├── novanet-terminology.md   ← Domain vocabulary (v9 meta-graph)
-│   └── novanet-decisions.md     ← Architecture decisions (ADR-001 to ADR-014)
+├── skills/                      ← 10 Studio-specific skills
+│   ├── force-graph-patterns.md
+│   ├── react-flow-patterns.md
+│   ├── zustand-patterns.md
+│   ├── radix-ui-patterns.md
+│   └── ... (6 more)
 └── settings.json
 
 packages/core/.claude/
-└── commands/
-    └── ontology-audit.md        ← /ontology-audit
+├── commands/
+│   └── ontology-audit.md        ← /ontology-audit
+└── skills/                      ← 4 Core-specific skills
+    ├── context-graph-architect.md
+    ├── neo4j-expert.md
+    ├── spreading-activation.md
+    └── dev-environment.md
 ```
 
 ---
@@ -115,6 +127,13 @@ NovaNet v9.0.1 | Branch: main | Uncommitted: 3 files
 - `.rs` files → `rustfmt` (edition 2021)
 - `.ts`, `.tsx`, `.js`, `.jsx`, `.json` → `prettier`
 
+### PostToolUse Hook (TUI Keybindings)
+
+**File:** `.claude/hooks/keybindings-reminder.sh`
+**Trigger:** After editing `tools/novanet/src/tui/*.rs` files
+
+**Output:** Reminds to update `KEYBINDINGS.md` if keybindings changed.
+
 ---
 
 ## Path-Specific Rules
@@ -126,6 +145,9 @@ Rules that apply only when working with matching files.
 | `rust.md` | `tools/novanet/**/*.rs` | Error handling, async patterns, module structure |
 | `typescript.md` | `packages/**/*.ts`, `apps/**/*.tsx` | Type safety, React patterns, v9 terminology |
 | `cypher.md` | `packages/db/seed/**/*.cypher` | Meta-graph navigation, ArcFamily patterns |
+| `security.md` | `**/*.rs`, `**/*.ts`, `**/*.cypher` | Security patterns, pre-commit checklist |
+| `novanet-terminology.md` | All files | v9.5 domain vocabulary |
+| `novanet-decisions.md` | All files | Architecture Decision Records (ADRs) |
 
 Rules use YAML frontmatter with `paths:` field for scoping:
 
@@ -339,7 +361,7 @@ Add a new relationship type between nodes.
 
 **Example:**
 ```bash
-/schema:add-relation HAS_HUMOR    # Dialog to define new relationship
+/schema:add-arc HAS_HUMOR    # Dialog to define new arc type
 ```
 
 ---
@@ -374,6 +396,47 @@ Add a new relationship type between nodes.
 - CI integration details
 - v9 validation section (dual: TS sync check + Rust YAML<->Neo4j)
 - Troubleshooting guide
+
+---
+
+### `novanet-tui`
+
+**Trigger:** TUI launch, keybindings questions, terminal UI navigation
+
+**Provides:**
+- Launch command (`cargo run -- tui`)
+- Keybindings reference (navigation, NavMode, scrolling, overlays)
+- Visual features (Galaxy theme, boot animation, effects engine)
+- Troubleshooting guide
+
+**Arguments:**
+
+| Argument | Description |
+|----------|-------------|
+| _(empty)_ | Launch TUI |
+| `help`, `keys` | Show keybindings reference |
+| `features` | Show visual features overview |
+
+---
+
+### `security-audit`
+
+**Trigger:** Security checks, dependency audits, vulnerability scanning
+
+**Provides:**
+- Rust audit (cargo-deny, cargo-audit, cargo-machete)
+- TypeScript audit (pnpm audit, code patterns)
+- CI security checks verification
+- Exception review and management
+
+**Arguments:**
+
+| Argument | Description |
+|----------|-------------|
+| `rust` | Audit Rust dependencies only |
+| `typescript` | Audit TypeScript dependencies only |
+| `all` | Full audit (default) |
+| `exceptions` | List security exceptions |
 
 ---
 
