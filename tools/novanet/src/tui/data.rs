@@ -55,6 +55,8 @@ pub struct KindInfo {
     pub required_properties: Vec<String>,
     pub schema_hint: String,
     pub context_budget: String,
+    /// v10 knowledge tier (technical/style/semantic) — only for knowledge-trait nodes.
+    pub knowledge_tier: Option<String>,
 }
 
 /// Layer containing Kinds.
@@ -125,7 +127,8 @@ RETURN
     coalesce(k.properties, []) AS properties,
     coalesce(k.required_properties, []) AS required_properties,
     coalesce(k.schema_hint, '') AS schema_hint,
-    coalesce(k.context_budget, '') AS context_budget
+    coalesce(k.context_budget, '') AS context_budget,
+    k.knowledge_tier AS knowledge_tier
 ORDER BY realm_key, layer_key, kind_key
 "#;
 
@@ -178,6 +181,8 @@ ORDER BY realm_key, layer_key, kind_key
                 row.get("required_properties").unwrap_or_default();
             let schema_hint: String = row.get("schema_hint").unwrap_or_default();
             let context_budget: String = row.get("context_budget").unwrap_or_default();
+            // v10: knowledge_tier (optional, only for knowledge-trait nodes)
+            let knowledge_tier: Option<String> = row.get("knowledge_tier").ok();
 
             let kind = KindInfo {
                 key: kind_key,
@@ -192,6 +197,7 @@ ORDER BY realm_key, layer_key, kind_key
                 required_properties,
                 schema_hint,
                 context_budget,
+                knowledge_tier,
             };
 
             realm_map
