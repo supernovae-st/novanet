@@ -1,5 +1,5 @@
 # ═══════════════════════════════════════════════════════════════════════════════
-# NOVANET DATA MODELS INDEX v9.7.0
+# NOVANET DATA MODELS INDEX v10.0.0
 # ═══════════════════════════════════════════════════════════════════════════════
 #
 # WHAT: Native content generation system using Neo4j graph database
@@ -15,22 +15,26 @@
 #   ├─────────────────────────────────────────────────────────────────────────────┤
 #   │                                                                             │
 #   │  ┌───────────────────────────────────────────────────────────────────────┐  │
-#   │  │  🌍 GLOBAL (15 nodes) - Single instance, shared by ALL projects       │  │
+#   │  │  🌍 GLOBAL (11 nodes) - Single instance, shared by ALL projects       │  │
 #   │  │  └─ config/    Locale                                                 │  │
-#   │  │  └─ knowledge/ 14 LocaleKnowledge nodes                               │  │
+#   │  │  └─ knowledge/ 10 tiered knowledge nodes (v10)                        │  │
+#   │  │      Technical: Formatting, Slugification, Adaptation                 │  │
+#   │  │      Style:     Style                                                 │  │
+#   │  │      Semantic:  TermSet, ExpressionSet, PatternSet, CultureSet,       │  │
+#   │  │                 TabooSet, AudienceSet                                 │  │
 #   │  └───────────────────────────────────────────────────────────────────────┘  │
 #   │                                                                             │
 #   │  ┌───────────────────────────────────────────────────────────────────────┐  │
-#   │  │  🎯 SHARED (6 nodes) - Independent of projects, reusable              │  │
+#   │  │  🎯 SHARED (8 nodes) - Independent of projects, reusable              │  │
 #   │  │  └─ seo/  SEOKeywordL10n, SEOKeywordMetrics, SEOMiningRun             │  │
-#   │  │  └─ geo/  GEOSeedL10n, GEOSeedMetrics, GEOMiningRun                   │  │
+#   │  │  └─ geo/  GEOSeedL10n, GEOSeedMetrics, GEOMiningRun, Thing, ThingL10n │  │
 #   │  └───────────────────────────────────────────────────────────────────────┘  │
 #   │                                                                             │
 #   │  ┌───────────────────────────────────────────────────────────────────────┐  │
-#   │  │  📦 PROJECT (22 nodes) - Per-project instances                        │  │
+#   │  │  📦 PROJECT (23 nodes) - Per-project instances                        │  │
 #   │  │  └─ foundation/  🏢 Project, BrandIdentity, ProjectL10n               │  │
 #   │  │  └─ structure/   🔧 Page, Block, ContentSlot                          │  │
-#   │  │  └─ semantic/    💡 Concept, ConceptL10n, SearchIntent,               │  │
+#   │  │  └─ semantic/    💡 Concept, ConceptL10n, SearchIntent, TopicCluster  │  │
 #   │  │                     AudiencePersona, ChannelSurface                   │  │
 #   │  │  └─ instruction/ 📝 PageType, PagePrompt, BlockPrompt, BlockType,     │  │
 #   │  │                     BlockRules, PromptArtifact                        │  │
@@ -268,100 +272,100 @@
 
 files:
   # ═══════════════════════════════════════════════════════════════════════════
-  # 🌍 GLOBAL REALM (15 nodes) - Shared by ALL projects
+  # 🌍 GLOBAL REALM (11 nodes) - Shared by ALL projects
   # ═══════════════════════════════════════════════════════════════════════════
 
   global:
     # Locale configuration (1 node)
     config:
-      - nodes/global/config/locale.yaml
+      - node-kinds/global/config/locale.yaml
 
-    # Locale knowledge (14 nodes)
+    # Locale knowledge (10 nodes) - v10 tiered model
     knowledge:
-      # Core knowledge nodes
-      - nodes/global/knowledge/locale-identity.yaml
-      - nodes/global/knowledge/locale-voice.yaml
-      - nodes/global/knowledge/locale-culture.yaml
-      - nodes/global/knowledge/locale-culture-references.yaml
-      - nodes/global/knowledge/locale-market.yaml
-      - nodes/global/knowledge/locale-lexicon.yaml
-      # Rules nodes (v7.2.4)
-      - nodes/global/knowledge/locale-rules-adaptation.yaml
-      - nodes/global/knowledge/locale-rules-formatting.yaml
-      - nodes/global/knowledge/locale-rules-slug.yaml
-      # Data nodes (graph-native v7.2.4)
-      - nodes/global/knowledge/expression.yaml
-      - nodes/global/knowledge/reference.yaml
-      - nodes/global/knowledge/metaphor.yaml
-      - nodes/global/knowledge/pattern.yaml
-      - nodes/global/knowledge/constraint.yaml
+      # Technical tier (3 nodes)
+      - node-kinds/global/knowledge/formatting.yaml
+      - node-kinds/global/knowledge/slugification.yaml
+      - node-kinds/global/knowledge/adaptation.yaml
+      # Style tier (1 node)
+      - node-kinds/global/knowledge/style.yaml
+      # Semantic tier (6 nodes)
+      - node-kinds/global/knowledge/term-set.yaml
+      - node-kinds/global/knowledge/expression-set.yaml
+      - node-kinds/global/knowledge/pattern-set.yaml
+      - node-kinds/global/knowledge/culture-set.yaml
+      - node-kinds/global/knowledge/taboo-set.yaml
+      - node-kinds/global/knowledge/audience-set.yaml
 
   # ═══════════════════════════════════════════════════════════════════════════
-  # 🎯 SHARED REALM (6 nodes) - Independent of projects, reusable
+  # 🎯 SHARED REALM (8 nodes) - Independent of projects, reusable
   # ═══════════════════════════════════════════════════════════════════════════
 
   shared:
     # SEO targeting + metrics + jobs (3 nodes)
     seo:
-      - nodes/shared/seo/seo-keyword-l10n.yaml
-      - nodes/shared/seo/seo-keyword-metrics.yaml
-      - nodes/shared/seo/seo-mining-run.yaml
+      - node-kinds/shared/seo/seo-keyword-l10n.yaml
+      - node-kinds/shared/seo/seo-keyword-metrics.yaml
+      - node-kinds/shared/seo/seo-mining-run.yaml
 
-    # GEO targeting + metrics + jobs (3 nodes)
+    # GEO targeting + metrics + jobs + things (5 nodes)
     geo:
-      - nodes/shared/geo/geo-seed-l10n.yaml
-      - nodes/shared/geo/geo-seed-metrics.yaml
-      - nodes/shared/geo/geo-mining-run.yaml
+      - node-kinds/shared/geo/geo-seed-l10n.yaml
+      - node-kinds/shared/geo/geo-seed-metrics.yaml
+      - node-kinds/shared/geo/geo-mining-run.yaml
+      - node-kinds/shared/geo/thing.yaml
+      - node-kinds/shared/geo/thing-l10n.yaml
 
   # ═══════════════════════════════════════════════════════════════════════════
-  # 📦 PROJECT REALM (14 nodes) - Per-project instances
+  # 📦 PROJECT REALM (23 nodes) - Per-project instances
   # ═══════════════════════════════════════════════════════════════════════════
 
   project:
     # 🏢 FOUNDATION (3 nodes) - Project root & identity
     foundation:
-      - nodes/project/foundation/project.yaml
-      - nodes/project/foundation/brand-identity.yaml
-      - nodes/project/foundation/project-l10n.yaml
+      - node-kinds/project/foundation/project.yaml
+      - node-kinds/project/foundation/brand-identity.yaml
+      - node-kinds/project/foundation/project-l10n.yaml
 
-    # 🔧 STRUCTURE (3 nodes) - Content scaffolding (v9.7: +ContentSlot)
+    # 🔧 STRUCTURE (3 nodes) - Content scaffolding
     structure:
-      - nodes/project/structure/page.yaml
-      - nodes/project/structure/block.yaml
-      - nodes/project/structure/content-slot.yaml        # v9.7 A/B testing slots
+      - node-kinds/project/structure/page.yaml
+      - node-kinds/project/structure/block.yaml
+      - node-kinds/project/structure/content-slot.yaml
 
-    # 💡 SEMANTIC (5 nodes) - Meaning & concepts (v9.7: +SearchIntent, AudiencePersona, ChannelSurface)
+    # 💡 SEMANTIC (6 nodes) - Meaning & concepts
     semantic:
-      - nodes/project/semantic/concept.yaml
-      - nodes/project/semantic/concept-l10n.yaml
-      - nodes/project/semantic/search-intent.yaml        # v9.7 Intent mapping
-      - nodes/project/semantic/audience-persona.yaml     # v9.7 Target personas
-      - nodes/project/semantic/channel-surface.yaml      # v9.7 Distribution channels
+      - node-kinds/project/semantic/concept.yaml
+      - node-kinds/project/semantic/concept-l10n.yaml
+      - node-kinds/project/semantic/search-intent.yaml
+      - node-kinds/project/semantic/topic-cluster.yaml
+      - node-kinds/project/semantic/audience-persona.yaml
+      - node-kinds/project/semantic/channel-surface.yaml
 
-    # 📝 INSTRUCTION (6 nodes) - AI generation directives (v9.6.0: +PromptArtifact)
+    # 📝 INSTRUCTION (6 nodes) - AI generation directives
     instruction:
-      - nodes/project/instruction/page-type.yaml
-      - nodes/project/instruction/page-prompt.yaml
-      - nodes/project/instruction/block-prompt.yaml
-      - nodes/project/instruction/block-type.yaml
-      - nodes/project/instruction/block-rules.yaml
-      - nodes/project/instruction/prompt-artifact.yaml     # v9.6.0 Generation Domain
+      - node-kinds/project/instruction/page-type.yaml
+      - node-kinds/project/instruction/page-prompt.yaml
+      - node-kinds/project/instruction/block-prompt.yaml
+      - node-kinds/project/instruction/block-type.yaml
+      - node-kinds/project/instruction/block-rules.yaml
+      - node-kinds/project/instruction/prompt-artifact.yaml
 
-    # 📤 OUTPUT (5 nodes) - LLM-generated content (v9.6.0: +GenerationJob, OutputArtifact, EvaluationSignal)
+    # 📤 OUTPUT (5 nodes) - LLM-generated content
     output:
-      - nodes/project/output/page-l10n.yaml
-      - nodes/project/output/block-l10n.yaml
-      - nodes/project/output/generation-job.yaml           # v9.6.0 Generation Domain
-      - nodes/project/output/output-artifact.yaml          # v9.6.0 Generation Domain
-      - nodes/project/output/evaluation-signal.yaml        # v9.6.0 Generation Domain
+      - node-kinds/project/output/page-l10n.yaml
+      - node-kinds/project/output/block-l10n.yaml
+      - node-kinds/project/output/generation-job.yaml
+      - node-kinds/project/output/output-artifact.yaml
+      - node-kinds/project/output/evaluation-signal.yaml
 
   # ═══════════════════════════════════════════════════════════════════════════
   # REFERENCE FILES
   # ═══════════════════════════════════════════════════════════════════════════
 
-  relations: relations.yaml           # All Neo4j relations
+  relations: relations.yaml           # All 73 Neo4j arcs
+  arc_kinds: arc-kinds/               # Arc definitions by family
   views: views/                       # YAML view definitions
-  schema: schema/nodes.schema.json    # JSON Schema for validation (v7.9.0)
+  schema: schema/nodes.schema.json    # JSON Schema for validation
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # NODES BY TRAIT (v9.0.0 - locale_behavior field in each YAML)
@@ -388,10 +392,12 @@ nodes_by_trait:
     - BlockPrompt
     - BlockRules
     - Locale
-    - ContentSlot        # v9.7 A/B testing slots
-    - SearchIntent       # v9.7 Intent mapping
-    - AudiencePersona    # v9.7 Target personas
-    - ChannelSurface     # v9.7 Distribution channels
+    - ContentSlot
+    - SearchIntent
+    - TopicCluster
+    - AudiencePersona
+    - ChannelSurface
+    - Thing              # Shared/GEO entity
   localized:
     - ProjectL10n
     - ConceptL10n
@@ -399,51 +405,58 @@ nodes_by_trait:
     - BlockL10n
     - SEOKeywordL10n
     - GEOSeedL10n
+    - ThingL10n          # Shared/GEO localized entity
   knowledge:
-    - LocaleIdentity
-    - LocaleVoice
-    - LocaleCulture
-    - LocaleMarket
-    - LocaleLexicon
-    - LocaleRulesAdaptation
-    - LocaleRulesFormatting
-    - LocaleRulesSlug
-    - LocaleCultureReferences
-    - Expression
-    - Reference
-    - Metaphor
-    - Pattern
-    - Constraint
+    # Technical tier
+    - Formatting
+    - Slugification
+    - Adaptation
+    # Style tier
+    - Style
+    # Semantic tier
+    - TermSet
+    - ExpressionSet
+    - PatternSet
+    - CultureSet
+    - TabooSet
+    - AudienceSet
   derived:
     - SEOKeywordMetrics
     - GEOSeedMetrics
-    - PromptArtifact       # v9.6.0 Generation Domain
-    - OutputArtifact       # v9.6.0 Generation Domain
-    - EvaluationSignal     # v9.6.0 Generation Domain
+    - PromptArtifact
+    - OutputArtifact
+    - EvaluationSignal
   job:
     - SEOMiningRun
     - GEOMiningRun
-    - GenerationJob        # v9.6.0 Generation Domain
+    - GenerationJob
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# STATISTICS v9.7.0
+# STATISTICS v10.0.0
 # ═══════════════════════════════════════════════════════════════════════════════
 #
 # By Realm:
-#   🌍 GLOBAL:  15 nodes (Locale + 14 LocaleKnowledge)
-#   🎯 SHARED:   6 nodes (SEO 3 + GEO 3)
-#   📦 PROJECT: 22 nodes (Foundation 3 + Structure 3 + Semantic 5 + Instruction 6 + Output 5)
-#   TOTAL:      43 nodes, 77+ arcs (5 arc families)
+#   🌍 GLOBAL:  11 nodes (Locale + 10 tiered knowledge)
+#   🎯 SHARED:   8 nodes (SEO 3 + GEO 5 including Thing/ThingL10n)
+#   📦 PROJECT: 23 nodes (Foundation 3 + Structure 3 + Semantic 6 + Instruction 6 + Output 5)
+#   TOTAL:      42 nodes, 73 arcs (5 arc families)
 #
 # By Trait:
-#   🔵 INVARIANT:  15 (Project, BrandIdentity, Concept, Page, Block, PageType, BlockType, PagePrompt, BlockPrompt, BlockRules, Locale, ContentSlot, SearchIntent, AudiencePersona, ChannelSurface)
-#   🟢 LOCALIZED:   6 (ProjectL10n, ConceptL10n, PageL10n, BlockL10n, SEOKeywordL10n, GEOSeedL10n)
-#   🟣 KNOWLEDGE:  14 (LocaleIdentity, LocaleVoice, etc.)
-#   ⚪ DERIVED:     5 (SEOKeywordMetrics, GEOSeedMetrics, PromptArtifact, OutputArtifact, EvaluationSignal)
+#   🔵 INVARIANT:  17 (Project, BrandIdentity, Concept, Page, Block, PageType, BlockType,
+#                      PagePrompt, BlockPrompt, BlockRules, Locale, ContentSlot, SearchIntent,
+#                      TopicCluster, AudiencePersona, ChannelSurface, Thing)
+#   🟢 LOCALIZED:   7 (ProjectL10n, ConceptL10n, PageL10n, BlockL10n, SEOKeywordL10n,
+#                      GEOSeedL10n, ThingL10n)
+#   🟣 KNOWLEDGE:  10 (Formatting, Slugification, Adaptation, Style, TermSet, ExpressionSet,
+#                      PatternSet, CultureSet, TabooSet, AudienceSet)
+#   ⚪ DERIVED:     5 (SEOKeywordMetrics, GEOSeedMetrics, PromptArtifact, OutputArtifact,
+#                      EvaluationSignal)
 #   ⚙️ JOB:         3 (SEOMiningRun, GEOMiningRun, GenerationJob)
 #
-# v9.7.0 additions (Intent Layer):
-#   +1 structure: ContentSlot
-#   +3 semantic: SearchIntent, AudiencePersona, ChannelSurface
-#   +2 semantic arcs (TARGETS_PERSONA, FOR_CHANNEL)
+# v10.0.0 changes (Tiered Knowledge Model):
+#   - Replaced 14 flat knowledge nodes with 10 tiered nodes
+#   - Technical: Formatting, Slugification, Adaptation
+#   - Style: Style
+#   - Semantic: TermSet, ExpressionSet, PatternSet, CultureSet, TabooSet, AudienceSet
+#   - Added 10 knowledge arcs (HAS_FORMATTING, HAS_TERMS, etc.)
 #

@@ -66,6 +66,95 @@ relations:
     cardinality: many_to_one
     llm_context: "Exactly one per project — the primary/fallback locale."
 
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # v10 LOCALE KNOWLEDGE — Locale owns tiered knowledge nodes
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  # Technical Tier
+  - type: HAS_FORMATTING
+    family: ownership
+    source: Locale
+    target: Formatting
+    cardinality: one_to_one
+    llm_context: "Locale has exactly one formatting configuration."
+
+  - type: HAS_SLUGIFICATION
+    family: ownership
+    source: Locale
+    target: Slugification
+    cardinality: one_to_one
+    llm_context: "Locale has exactly one slugification configuration."
+
+  - type: HAS_ADAPTATION
+    family: ownership
+    source: Locale
+    target: Adaptation
+    cardinality: one_to_one
+    llm_context: "Locale has exactly one adaptation configuration."
+
+  # Style Tier
+  - type: HAS_STYLE
+    family: ownership
+    source: Locale
+    target: Style
+    cardinality: one_to_one
+    llm_context: "Locale has exactly one style configuration."
+
+  # Semantic Tier
+  - type: HAS_TERMS
+    family: ownership
+    source: Locale
+    target: TermSet
+    cardinality: one_to_many
+    properties:
+      - domain
+    llm_context: "Locale has multiple term sets, one per domain (pricing, features, technical, marketing, support, general)."
+
+  - type: HAS_EXPRESSIONS
+    family: ownership
+    source: Locale
+    target: ExpressionSet
+    cardinality: one_to_many
+    properties:
+      - register
+    llm_context: "Locale has multiple expression sets, one per register (formal, neutral, casual)."
+
+  - type: HAS_PATTERNS
+    family: ownership
+    source: Locale
+    target: PatternSet
+    cardinality: one_to_many
+    properties:
+      - usage
+    llm_context: "Locale has multiple pattern sets, one per usage (cta, headlines, body, social)."
+
+  - type: HAS_CULTURE
+    family: ownership
+    source: Locale
+    target: CultureSet
+    cardinality: one_to_many
+    properties:
+      - type
+    llm_context: "Locale has multiple culture sets, one per type (values, references, celebrities, calendar)."
+
+  - type: HAS_TABOOS
+    family: ownership
+    source: Locale
+    target: TabooSet
+    cardinality: one_to_many
+    properties:
+      - severity
+    llm_context: "Locale has multiple taboo sets, one per severity (avoid, careful, legal)."
+
+  - type: HAS_AUDIENCE
+    family: ownership
+    source: Locale
+    target: AudienceSet
+    cardinality: one_to_many
+    properties:
+      - segment
+    llm_context: "Locale has multiple audience sets, one per segment (b2b, b2c, general)."
+
   - type: HAS_BLOCK
     family: ownership
     source: Page

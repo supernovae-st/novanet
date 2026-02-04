@@ -69,28 +69,38 @@ db/
 
 ---
 
-## Graph Schema (v9.0.0)
+## Graph Schema (v10.0.0)
 
 | Realm | Nodes | Description |
 |-------|-------|-------------|
-| **🌍 Global** | 15 | Locale + 14 LocaleKnowledge nodes |
-| **📦 Project** | 21 | Project structure, content, generation |
+| **🌍 Global** | 11 | Locale + 10 tiered knowledge nodes |
+| **📦 Project** | 23 | Project structure, content, generation |
 | **🎯 Shared** | 8 | SEO/GEO targeting nodes |
 
-Total: **46 node types**, **77 arc types**, **126 meta-nodes** (Realm/Layer/Kind/Trait/ArcFamily/ArcKind)
+Total: **42 node types**, **73 arc types**, **126 meta-nodes** (Realm/Layer/Kind/Trait/ArcFamily/ArcKind)
 
 ---
 
-## Locale Knowledge Architecture
+## Locale Knowledge Architecture (v10 Tiered Model)
 
 ```
 Locale {key: "fr-FR"}
     │
-    ├──[:HAS_IDENTITY]──▶ LocaleIdentity
-    ├──[:HAS_VOICE]─────▶ LocaleVoice
-    ├──[:HAS_CULTURE]───▶ LocaleCulture ──▶ LocaleCultureReferences
-    ├──[:HAS_MARKET]────▶ LocaleMarket
-    └──[:HAS_LEXICON]───▶ LocaleLexicon ──[:HAS_EXPRESSION]──▶ Expression
+    │   TECHNICAL TIER
+    ├──[:HAS_FORMATTING]───▶ Formatting
+    ├──[:HAS_SLUGIFICATION]─▶ Slugification
+    ├──[:HAS_ADAPTATION]────▶ Adaptation
+    │
+    │   STYLE TIER
+    ├──[:HAS_STYLE]─────────▶ Style
+    │
+    │   SEMANTIC TIER
+    ├──[:HAS_TERMS]─────────▶ TermSet
+    ├──[:HAS_EXPRESSIONS]───▶ ExpressionSet
+    ├──[:HAS_PATTERNS]──────▶ PatternSet
+    ├──[:HAS_CULTURE]───────▶ CultureSet
+    ├──[:HAS_TABOOS]────────▶ TabooSet
+    └──[:HAS_AUDIENCE]──────▶ AudienceSet
 ```
 
 ---
@@ -105,16 +115,24 @@ RETURN labels(n)[0] AS label, count(*) AS count
 ORDER BY count DESC;
 ```
 
-### Load Locale with Knowledge
+### Load Locale with Knowledge (v10 Tiered Model)
 
 ```cypher
 MATCH (l:Locale {key: $locale})
-OPTIONAL MATCH (l)-[:HAS_IDENTITY]->(li:LocaleIdentity)
-OPTIONAL MATCH (l)-[:HAS_VOICE]->(lv:LocaleVoice)
-OPTIONAL MATCH (l)-[:HAS_CULTURE]->(lc:LocaleCulture)
-OPTIONAL MATCH (l)-[:HAS_MARKET]->(lm:LocaleMarket)
-OPTIONAL MATCH (l)-[:HAS_LEXICON]->(ll:LocaleLexicon)-[:HAS_EXPRESSION]->(e:Expression)
-RETURN l, li, lv, lc, lm, ll, collect(e) AS expressions
+// Technical tier
+OPTIONAL MATCH (l)-[:HAS_FORMATTING]->(fmt:Formatting)
+OPTIONAL MATCH (l)-[:HAS_SLUGIFICATION]->(slug:Slugification)
+OPTIONAL MATCH (l)-[:HAS_ADAPTATION]->(adapt:Adaptation)
+// Style tier
+OPTIONAL MATCH (l)-[:HAS_STYLE]->(style:Style)
+// Semantic tier
+OPTIONAL MATCH (l)-[:HAS_TERMS]->(terms:TermSet)
+OPTIONAL MATCH (l)-[:HAS_EXPRESSIONS]->(expr:ExpressionSet)
+OPTIONAL MATCH (l)-[:HAS_PATTERNS]->(pat:PatternSet)
+OPTIONAL MATCH (l)-[:HAS_CULTURE]->(cult:CultureSet)
+OPTIONAL MATCH (l)-[:HAS_TABOOS]->(taboo:TabooSet)
+OPTIONAL MATCH (l)-[:HAS_AUDIENCE]->(aud:AudienceSet)
+RETURN l, fmt, slug, adapt, style, terms, expr, pat, cult, taboo, aud
 ```
 
 ### Spreading Activation

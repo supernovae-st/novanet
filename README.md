@@ -35,7 +35,7 @@ Generate culturally-native content across 200+ locales — not translation, but 
 |  |  |  |  |
 |:---:|:---:|:---:|:---:|
 | **Knowledge Graph** | **200+ Locales** | **Graph Studio** | **AI-Powered** |
-| 42 node types, 77 relations | Native generation per locale | Interactive 2D visualization | Claude API for natural language queries |
+| 42 node types, 73 relations | Native generation per locale | Interactive 2D visualization | Claude API for natural language queries |
 | Neo4j with APOC | Locale knowledge layer | React Flow + ELK.js layouts | Cypher generation from text |
 
 ---
@@ -117,7 +117,7 @@ novanet-hq/
 ├── packages/
 │   ├── core/                  # @novanet/core — types, schemas, filters
 │   │   ├── models/            # YAML schema definitions (source of truth)
-│   │   │   ├── _index.yaml    # 42 nodes, 77 relations
+│   │   │   ├── _index.yaml    # 42 nodes, 73 relations
 │   │   │   ├── nodes/         # Node definitions by realm
 │   │   │   └── relations.yaml # Relationship definitions
 │   │   └── src/               # TypeScript implementation
@@ -250,7 +250,7 @@ See [`packages/core/models/_index.yaml`](packages/core/models/_index.yaml) for c
 │ │ ...            │  │   [BlockL10n]                    │  │ [Copy JSON]  │ │
 │ └────────────────┘  └──────────────────────────────────┘  └──────────────┘ │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│  Mode: Data  │  42 nodes  │  77 relations  │  Zoom: 100%  │  Locale: fr-FR │
+│  Mode: Data  │  42 nodes  │  73 relations  │  Zoom: 100%  │  Locale: fr-FR │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 *Interactive 2D graph visualization with AI-powered queries (⌘J)*
