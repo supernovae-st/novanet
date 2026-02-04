@@ -6,7 +6,7 @@ arc:
   family: mining
   scope: intra_realm
   source: SEOMiningRun
-  target: SEOKeywordL10n
+  target: SEOKeyword
   cardinality: one_to_many
   llm_context: SEO mining run produces keyword data.
-  cypher_pattern: (SEOMiningRun)-[:SEO_MINES]->(SEOKeywordL10n)
+  cypher_pattern: (SEOMiningRun)-[:SEO_MINES]->(SEOKeyword)

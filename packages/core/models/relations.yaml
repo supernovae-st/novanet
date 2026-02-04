@@ -226,11 +226,9 @@ relations:
       - ProjectL10n
       - BlockL10n
       - PageL10n
-      - SEOKeywordL10n
-      - GEOSeedL10n
+      - SEOKeyword
       - GenerationJob
       - OutputArtifact
-      - ThingL10n
     target: Locale
     cardinality: many_to_one
     llm_context: "All localized content nodes point to their target Locale."
@@ -240,11 +238,9 @@ relations:
     source:
       - Concept
       - Project
-      - Thing
     target:
       - ConceptL10n
       - ProjectL10n
-      - ThingL10n
     cardinality: one_to_many
     llm_context: "Links invariant node to its human-curated localized definitions (one per locale)."
 
@@ -311,8 +307,7 @@ relations:
       - ConceptL10n
       - PageL10n
       - BlockL10n
-      - SEOKeywordL10n
-      - GEOSeedL10n
+      - SEOKeyword
     cardinality: one_to_many
     inverse_of: FOR_LOCALE
     llm_context: "Inverse of FOR_LOCALE — locale knows all its content."
@@ -563,7 +558,7 @@ relations:
   - type: TARGETS_KEYWORD
     family: mining
     source: SearchIntent
-    target: SEOKeywordL10n
+    target: SEOKeyword
     cardinality: one_to_many
     properties:
       - match_type
@@ -659,136 +654,44 @@ relations:
   # NOTE: LINKS_TO already defined in semantic family (line ~348) for Page-to-Page internal linking
 
   # ═════════════════════════════════════════════════════════════════════════════
-  # V9.9 — UNIFIED THING MODEL (Schema.org aligned)
-  # ═════════════════════════════════════════════════════════════════════════════
-
-  # NOTE: Thing/ThingL10n added to existing HAS_L10N and FOR_LOCALE definitions above
-
-  # Content → Thing relationships (semantic linking)
-  - type: MENTIONS
-    family: semantic
-    source: Block
-    target: Thing
-    cardinality: many_to_many
-    properties:
-      - position
-      - link_style
-      - anchor_alias
-    llm_context: "Block mentions a Thing entity. position: paragraph index. link_style: inline/citation/reference. anchor_alias: which alias to use for anchor text."
-
-  - type: COVERS
-    family: semantic
-    source: Page
-    target: Thing
-    cardinality: many_to_many
-    properties:
-      - is_primary
-      - depth
-      - coverage_type
-    llm_context: "Page covers a Thing as topic. is_primary: main subject. depth: surface/detailed/comprehensive. coverage_type: introduction/deep-dive/comparison."
-
-  # Thing → Thing relationships
-  - type: SPECIALIZES
-    family: semantic
-    source: Thing
-    target: Thing
-    cardinality: many_to_one
-    properties:
-      - override_level
-    llm_context: "Project Thing specializes a shared Thing. override_level: full/partial/extension. Used when brand has specific definition."
-
-  - type: RELATED_THING
-    family: semantic
-    source: Thing
-    target: Thing
-    cardinality: many_to_many
-    is_self_referential: true
-    properties:
-      - relation_type
-      - strength
-    llm_context: "Semantic link between Things. relation_type: same_as/part_of/instance_of/related_to/opposite_of/derived_from. strength: 0.0-1.0."
-
-  # ═════════════════════════════════════════════════════════════════════════════
-  # MINING — SEO/GEO targeting, metrics, extraction
+  # MINING — SEO targeting, metrics, extraction
   # ═════════════════════════════════════════════════════════════════════════════
 
   # Primary: locale-aligned targeting (v7.7.0)
   - type: HAS_SEO_TARGET
     family: mining
     source: ConceptL10n
-    target: SEOKeywordL10n
+    target: SEOKeyword
     cardinality: one_to_many
     properties:
       - role
       - priority
     llm_context: "Primary SEO targeting — locale-aligned. role: primary/secondary/long-tail."
 
-  - type: HAS_GEO_TARGET
-    family: mining
-    source: ConceptL10n
-    target: GEOSeedL10n
-    cardinality: one_to_many
-    properties:
-      - role
-      - priority
-    llm_context: "Primary GEO targeting — locale-aligned. role: primary/contextual."
-
   # Shortcut: cross-locale view (management/reporting)
   - type: TARGETS_SEO
     family: mining
     source: Concept
-    target: SEOKeywordL10n
+    target: SEOKeyword
     cardinality: one_to_many
     properties:
       - status
       - priority
     llm_context: "Cross-locale SEO shortcut for reporting. status: active/paused/archived."
 
-  - type: TARGETS_GEO
-    family: mining
-    source: Concept
-    target: GEOSeedL10n
-    cardinality: one_to_many
-    properties:
-      - status
-      - priority
-    llm_context: "Cross-locale GEO shortcut for reporting. status: active/monitoring/archived."
-
-  # V9.9 — Thing targeting (Schema.org entities)
-  - type: TARGETS_THING
-    family: mining
-    source: SEOKeywordL10n
-    target: Thing
-    cardinality: many_to_many
-    properties:
-      - relevance_score
-      - is_primary
-    llm_context: "SEO keyword targets a Schema.org Thing entity. For entity-based SEO linking keywords to universal concepts."
-
   # Mining runs
   - type: SEO_MINES
     family: mining
     source: SEOMiningRun
-    target: SEOKeywordL10n
+    target: SEOKeyword
     cardinality: one_to_many
     llm_context: "SEO mining run produces keyword data."
-
-  - type: GEO_MINES
-    family: mining
-    source: GEOMiningRun
-    target: GEOSeedL10n
-    cardinality: one_to_many
-    llm_context: "GEO mining run produces seed query data."
 
   # Time-series metrics (v7.8.5 unified pattern)
   - type: HAS_METRICS
     family: mining
-    source:
-      - SEOKeywordL10n
-      - GEOSeedL10n
-    target:
-      - SEOKeywordMetrics
-      - GEOSeedMetrics
+    source: SEOKeyword
+    target: SEOKeywordMetrics
     cardinality: one_to_many
     llm_context: "Time-series observation link. Not used in spreading activation."
 
@@ -850,7 +753,7 @@ examples:
     description: "ConceptL10n targets SEO keyword (locale-aligned primary)"
     cypher: |
       MATCH (c:Concept {key:'action-create-qr'})-[:HAS_L10N]->(cl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale {key:'fr-FR'})
-      MATCH (kw:SEOKeywordL10n {key:'seo-creer-qr-code-gratuit-fr'})-[:FOR_LOCALE]->(l)
+      MATCH (kw:SEOKeyword {key:'seo-creer-qr-code-gratuit-fr'})-[:FOR_LOCALE]->(l)
       CREATE (cl)-[:HAS_SEO_TARGET {role: "primary", priority: 1}]->(kw)
 
   locale_knowledge:

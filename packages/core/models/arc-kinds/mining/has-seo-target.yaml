@@ -7,7 +7,7 @@ arc:
   scope: cross_realm  # project → shared
 
   source: ConceptL10n
-  target: SEOKeywordL10n
+  target: SEOKeyword
   cardinality: one_to_many
 
   properties:
@@ -23,8 +23,8 @@ arc:
       description: "Priority ranking (1 = highest)"
 
   llm_context: |
-    Primary SEO targeting — locale-aligned (ConceptL10n fr-FR → SEOKeywordL10n fr-FR).
+    Primary SEO targeting — locale-aligned (ConceptL10n fr-FR → SEOKeyword fr-FR).
     role: primary = main ranking target, secondary = supporting, long-tail = niche.
     Use for injecting keywords into generated content.
 
-  cypher_pattern: "(ConceptL10n)-[:HAS_SEO_TARGET {role, priority}]->(SEOKeywordL10n)"
+  cypher_pattern: "(ConceptL10n)-[:HAS_SEO_TARGET {role, priority}]->(SEOKeyword)"

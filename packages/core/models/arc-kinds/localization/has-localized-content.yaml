@@ -11,8 +11,7 @@ arc:
     - ConceptL10n
     - PageL10n
     - BlockL10n
-    - SEOKeywordL10n
-    - GEOSeedL10n
+    - SEOKeyword
   cardinality: one_to_many
   inverse_of: FOR_LOCALE
   llm_context: Inverse of FOR_LOCALE — locale knows all its content.

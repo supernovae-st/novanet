@@ -5,12 +5,8 @@ arc:
   name: HAS_METRICS
   family: mining
   scope: intra_realm
-  source:
-    - SEOKeywordL10n
-    - GEOSeedL10n
-  target:
-    - SEOKeywordMetrics
-    - GEOSeedMetrics
+  source: SEOKeyword
+  target: SEOKeywordMetrics
   cardinality: one_to_many
   llm_context: Time-series observation link. Not used in spreading activation.
-  cypher_pattern: (SEOKeywordL10n)-[:HAS_METRICS]->(SEOKeywordMetrics)
+  cypher_pattern: (SEOKeyword)-[:HAS_METRICS]->(SEOKeywordMetrics)
