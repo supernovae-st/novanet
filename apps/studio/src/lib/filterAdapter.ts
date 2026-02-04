@@ -1,10 +1,10 @@
 /**
- * FilterAdapter - novanet-core v9.0.0 compatible filter system
+ * FilterAdapter - novanet-core v10.0.0 compatible filter system
  *
  * Mirrors the NovaNetFilter fluent API and CypherGenerator from novanet-core
  * for use in the visualizer without importing the full library.
  *
- * v9: Uses Layer (9 layers) instead of NodeCategory (6 categories) for filtering.
+ * v10: Uses tiered knowledge model with 10 knowledge nodes.
  */
 
 import type { NodeType, Layer, Realm, Trait } from '@novanet/core/types';
@@ -52,7 +52,7 @@ export interface CypherQuery {
 }
 
 // =============================================================================
-// RELATION MAPPINGS (from novanet-core CypherGenerator v8.1.0)
+// RELATION MAPPINGS (v10.0.0 - tiered knowledge model)
 // =============================================================================
 
 const RELATION_ALIAS_MAP: Record<string, string> = {
@@ -62,15 +62,17 @@ const RELATION_ALIAS_MAP: Record<string, string> = {
   USES_CONCEPT: 'concept',
   HAS_L10N: 'l10n',
   HAS_OUTPUT: 'output',
-  HAS_IDENTITY: 'identity',
-  HAS_VOICE: 'voice',
+  // v10 knowledge arcs (tiered model)
+  HAS_FORMATTING: 'formatting',
+  HAS_SLUGIFICATION: 'slugification',
+  HAS_ADAPTATION: 'adaptation',
+  HAS_STYLE: 'style',
+  HAS_TERMS: 'terms',
+  HAS_EXPRESSIONS: 'expressions',
+  HAS_PATTERNS: 'patterns',
   HAS_CULTURE: 'culture',
-  HAS_CULTURE_REFS: 'cultureRefs',
-  HAS_MARKET: 'market',
-  HAS_LEXICON: 'lexicon',
-  HAS_RULES_ADAPTATION: 'adaptationRules',
-  HAS_RULES_FORMATTING: 'formattingRules',
-  HAS_RULES_SLUG: 'slugRules',
+  HAS_TABOOS: 'taboos',
+  HAS_AUDIENCE: 'audience',
   HAS_SEO_TARGET: 'seoKeyword',
   HAS_GEO_TARGET: 'geoSeed',
   TARGETS_SEO: 'seoKeyword',
@@ -88,15 +90,17 @@ const RELATION_TARGET_TYPE_MAP: Record<string, string> = {
   USES_CONCEPT: 'Concept',
   HAS_L10N: 'ConceptL10n',
   HAS_OUTPUT: 'PageL10n',
-  HAS_IDENTITY: 'LocaleIdentity',
-  HAS_VOICE: 'LocaleVoice',
-  HAS_CULTURE: 'LocaleCulture',
-  HAS_CULTURE_REFS: 'LocaleCultureReferences',
-  HAS_MARKET: 'LocaleMarket',
-  HAS_LEXICON: 'LocaleLexicon',
-  HAS_RULES_ADAPTATION: 'LocaleRulesAdaptation',
-  HAS_RULES_FORMATTING: 'LocaleRulesFormatting',
-  HAS_RULES_SLUG: 'LocaleRulesSlug',
+  // v10 knowledge nodes (tiered model)
+  HAS_FORMATTING: 'Formatting',
+  HAS_SLUGIFICATION: 'Slugification',
+  HAS_ADAPTATION: 'Adaptation',
+  HAS_STYLE: 'Style',
+  HAS_TERMS: 'TermSet',
+  HAS_EXPRESSIONS: 'ExpressionSet',
+  HAS_PATTERNS: 'PatternSet',
+  HAS_CULTURE: 'CultureSet',
+  HAS_TABOOS: 'TabooSet',
+  HAS_AUDIENCE: 'AudienceSet',
   HAS_SEO_TARGET: 'SEOKeywordL10n',
   HAS_GEO_TARGET: 'GEOSeedL10n',
   TARGETS_SEO: 'SEOKeywordL10n',
@@ -215,16 +219,21 @@ export class NovaNetFilter {
   }
 
   includeKnowledge(): this {
+    // v10 tiered knowledge arcs
     const knowledgeRelations = [
-      'HAS_IDENTITY',
-      'HAS_VOICE',
+      // Technical tier
+      'HAS_FORMATTING',
+      'HAS_SLUGIFICATION',
+      'HAS_ADAPTATION',
+      // Style tier
+      'HAS_STYLE',
+      // Semantic tier
+      'HAS_TERMS',
+      'HAS_EXPRESSIONS',
+      'HAS_PATTERNS',
       'HAS_CULTURE',
-      'HAS_CULTURE_REFS',
-      'HAS_MARKET',
-      'HAS_LEXICON',
-      'HAS_RULES_ADAPTATION',
-      'HAS_RULES_FORMATTING',
-      'HAS_RULES_SLUG',
+      'HAS_TABOOS',
+      'HAS_AUDIENCE',
     ];
     for (const relation of knowledgeRelations) {
       this.state.includes.push({

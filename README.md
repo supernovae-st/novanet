@@ -35,7 +35,7 @@ Generate culturally-native content across 200+ locales — not translation, but 
 |  |  |  |  |
 |:---:|:---:|:---:|:---:|
 | **Knowledge Graph** | **200+ Locales** | **Graph Studio** | **AI-Powered** |
-| 46 node types, 77 relations | Native generation per locale | Interactive 2D visualization | Claude API for natural language queries |
+| 42 node types, 77 relations | Native generation per locale | Interactive 2D visualization | Claude API for natural language queries |
 | Neo4j with APOC | Locale knowledge layer | React Flow + ELK.js layouts | Cypher generation from text |
 
 ---
@@ -54,10 +54,10 @@ Generate culturally-native content across 200+ locales — not translation, but 
 flowchart TB
     subgraph MONO["NovaNet Monorepo"]
         direction TB
-        CORE["@novanet/core v9.8.0\nTypes · Schemas · Filters"]
+        CORE["@novanet/core v10.0.0\nTypes · Schemas · Filters"]
         DB["@novanet/db v1.0.0\nDocker · Seeds · Migrations"]
-        STUDIO["@novanet/studio v9.8.0\nNext.js 16 · React 19"]
-        RUST["novanet CLI v9.8.0\nRust · 13 commands · TUI"]
+        STUDIO["@novanet/studio v10.0.0\nNext.js 16 · React 19"]
+        RUST["novanet CLI v10.0.0\nRust · 13 commands · TUI"]
     end
 
     CORE --> STUDIO
@@ -117,7 +117,7 @@ novanet-hq/
 ├── packages/
 │   ├── core/                  # @novanet/core — types, schemas, filters
 │   │   ├── models/            # YAML schema definitions (source of truth)
-│   │   │   ├── _index.yaml    # 46 nodes, 77 relations
+│   │   │   ├── _index.yaml    # 42 nodes, 77 relations
 │   │   │   ├── nodes/         # Node definitions by realm
 │   │   │   └── relations.yaml # Relationship definitions
 │   │   └── src/               # TypeScript implementation
@@ -215,7 +215,7 @@ Password: (see NEO4J_PASSWORD env var)
 
 ## Graph Schema
 
-NovaNet models content as a knowledge graph with **46 node types** across **3 Realms** and **9 Layers** (v9.8.0):
+NovaNet models content as a knowledge graph with **42 node types** across **3 Realms** and **9 Layers** (v10.0.0):
 
 | Realm | Nodes | Layers |
 |-------|-------|--------|
@@ -250,7 +250,7 @@ See [`packages/core/models/_index.yaml`](packages/core/models/_index.yaml) for c
 │ │ ...            │  │   [BlockL10n]                    │  │ [Copy JSON]  │ │
 │ └────────────────┘  └──────────────────────────────────┘  └──────────────┘ │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│  Mode: Data  │  46 nodes  │  77 relations  │  Zoom: 100%  │  Locale: fr-FR │
+│  Mode: Data  │  42 nodes  │  77 relations  │  Zoom: 100%  │  Locale: fr-FR │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 *Interactive 2D graph visualization with AI-powered queries (⌘J)*
