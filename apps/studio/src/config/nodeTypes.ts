@@ -1,19 +1,19 @@
 // =============================================================================
-// NODE TYPE CONFIGURATION (v9.0.1)
+// NODE TYPE CONFIGURATION (v9.7.0)
 // =============================================================================
-// Visual configuration for all 44 NovaNet node types
+// Visual configuration for all 46 NovaNet node types
 // NodeType, Layer, KIND_META imported from @novanet/core (Single Source of Truth)
 
 import type { NodeType, Layer } from '@novanet/core/types';
 import { NODE_TYPES, KIND_META } from '@novanet/core/types';
 
 // =============================================================================
-// NODE LAYERS (v9.0.1 - 9 layers, 44 nodes)
+// NODE LAYERS (v9.7.0 - 9 layers, 46 nodes)
 // Derived from KIND_META — single source of truth
 // =============================================================================
 
 /**
- * Node layers with their types (v9 - 44 nodes across 9 layers)
+ * Node layers with their types (v9.7 - 46 nodes across 9 layers)
  * Derived from KIND_META in @novanet/core
  */
 export const NODE_LAYERS: Record<Layer, NodeType[]> = Object.entries(KIND_META).reduce(
@@ -44,7 +44,7 @@ export interface NodeTypeConfig {
 }
 
 /**
- * All node type configurations (v9.0.1 - 44 nodes)
+ * All node type configurations (v9.7.0 - 46 nodes)
  * Aligned with @novanet/core NODE_TYPES
  */
 export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
@@ -80,7 +80,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   },
 
   // ==========================================================================
-  // SEMANTIC LAYER (4 nodes)
+  // SEMANTIC LAYER (6 nodes)
   // ==========================================================================
   Concept: {
     type: 'Concept',
@@ -116,6 +116,24 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#b45309',
     colorClass: 'bg-amber-700',
     size: 18,
+    layer: 'semantic',
+  },
+  AudiencePersona: {
+    type: 'AudiencePersona',
+    label: 'Audience Persona',
+    icon: '👤',
+    color: '#92400e',
+    colorClass: 'bg-amber-800',
+    size: 16,
+    layer: 'semantic',
+  },
+  ChannelSurface: {
+    type: 'ChannelSurface',
+    label: 'Channel Surface',
+    icon: '📡',
+    color: '#78350f',
+    colorClass: 'bg-amber-900',
+    size: 16,
     layer: 'semantic',
   },
 

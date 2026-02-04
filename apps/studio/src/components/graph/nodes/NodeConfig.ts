@@ -44,11 +44,11 @@ export interface NodeConfig {
 }
 
 // =============================================================================
-// Size Lookup Table (v9.0.1 - 44 nodes)
+// Size Lookup Table (v9.7.0 - 46 nodes)
 // =============================================================================
 
 /**
- * Pre-computed sizes for all 44 node types (v9.0.1)
+ * Pre-computed sizes for all 46 node types (v9.7.0)
  *
  * Size categories:
  * - Large (280x140): Project root nodes
@@ -74,12 +74,14 @@ export const NODE_SIZES: Record<NodeType, NodeSize> = {
   ContentSlot: { width: 180, height: 90 },
 
   // ==========================================================================
-  // PROJECT — semantic (4 nodes)
+  // PROJECT — semantic (6 nodes)
   // ==========================================================================
   Concept: { width: 240, height: 120 },
   ConceptL10n: { width: 200, height: 100 },
   SearchIntent: { width: 200, height: 100 },
   TopicCluster: { width: 220, height: 110 },
+  AudiencePersona: { width: 200, height: 100 },
+  ChannelSurface: { width: 200, height: 100 },
 
   // ==========================================================================
   // PROJECT — instruction (6 nodes)
@@ -141,11 +143,11 @@ export const NODE_SIZES: Record<NodeType, NodeSize> = {
 };
 
 // =============================================================================
-// Color Lookup Table (v9.0.1 - 44 nodes)
+// Color Lookup Table (v9.7.0 - 46 nodes)
 // =============================================================================
 
 /**
- * Pre-computed colors for all 44 node types (v9.0.1)
+ * Pre-computed colors for all 46 node types (v9.7.0)
  *
  * Color palette aligned with design/nodeColors.ts and nodeTypes.ts:
  * - Foundation: Violet (#8b5cf6 family)
@@ -203,7 +205,7 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
   },
 
   // ==========================================================================
-  // PROJECT — semantic - Amber tones
+  // PROJECT — semantic - Amber tones (6 nodes)
   // ==========================================================================
   Concept: {
     primary: '#f59e0b',
@@ -228,6 +230,18 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
     secondary: '#d97706',
     tertiary: '#f59e0b',
     glow: '#b4530940',
+  },
+  AudiencePersona: {
+    primary: '#92400e',
+    secondary: '#b45309',
+    tertiary: '#d97706',
+    glow: '#92400e40',
+  },
+  ChannelSurface: {
+    primary: '#78350f',
+    secondary: '#92400e',
+    tertiary: '#b45309',
+    glow: '#78350f40',
   },
 
   // ==========================================================================

@@ -142,12 +142,12 @@ test.describe('Schema Mode - Schema Graph Display', () => {
   });
 
   test('should display schema stats in header', async ({ page }) => {
-    // The stats are shown in the header as "44 node types · 3 realms"
+    // The stats are shown in the header as "46 node types · 3 realms"
     const filterPanel = page.locator('[data-testid="schema-filter-panel"]');
     await expect(filterPanel).toBeVisible();
 
     // Check for stats text format in header
-    const statsText = filterPanel.getByText(/44 node types/);
+    const statsText = filterPanel.getByText(/46 node types/);
     await expect(statsText).toBeVisible({ timeout: 10000 });
   });
 
