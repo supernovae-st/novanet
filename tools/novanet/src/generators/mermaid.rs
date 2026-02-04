@@ -287,7 +287,7 @@ fn render_mermaid(
     .unwrap();
     writeln!(
         out,
-        "  %% Source: 42 node YAMLs + relations.yaml + taxonomy.yaml"
+        "  %% Source: 48 node YAMLs + relations.yaml + taxonomy.yaml"
     )
     .unwrap();
     writeln!(out).unwrap();
@@ -367,7 +367,7 @@ pub fn wrap_in_markdown(mermaid_code: &str) -> String {
     writeln!(out).unwrap();
     writeln!(
         out,
-        "This diagram shows the complete NovaNet graph schema with all 42 node types and their relationships."
+        "This diagram shows the complete NovaNet graph schema with all 48 node types and their relationships."
     )
     .unwrap();
     writeln!(out).unwrap();
@@ -730,7 +730,7 @@ mod tests {
         // Header
         assert!(output.contains("flowchart TB"));
         assert!(output.contains("NovaNet Graph v10.0.0"));
-        assert!(output.contains("42 nodes")); // v10: 46 - 14 old + 10 new
+        assert!(output.contains("43 nodes")); // v10.1: 37 base + 6 atoms
 
         // All 3 realms
         assert!(output.contains("GLOBAL_REALM"));
@@ -746,7 +746,7 @@ mod tests {
         assert!(output.contains("PROJECT_instruction"));
         assert!(output.contains("PROJECT_output"));
         assert!(output.contains("SHARED_seo"));
-        assert!(output.contains("SHARED_geo"));
+        // GEO layer removed in v10.1
 
         // All 5 classDef trait styles
         assert!(output.contains("classDef invariant"));

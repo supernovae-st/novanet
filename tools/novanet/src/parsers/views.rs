@@ -343,8 +343,8 @@ include:
         let Some(root) = test_root() else { return };
         let views = load_all_views(&root).expect("should load all views");
         assert!(
-            views.len() >= 13,
-            "expected at least 13 views, got {}",
+            views.len() >= 12,
+            "expected at least 12 views, got {}",
             views.len()
         );
 
@@ -373,7 +373,7 @@ include:
     fn load_registry_integration() {
         let Some(root) = test_root() else { return };
         let reg = load_registry(&root).expect("should load registry");
-        assert!(reg.views.len() >= 13);
+        assert!(reg.views.len() >= 12);
 
         let valid_cats = ["overview", "generation", "knowledge", "project", "mining"];
         for entry in &reg.views {

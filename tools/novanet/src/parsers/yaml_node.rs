@@ -236,7 +236,7 @@ pub fn load_all_nodes(root: &Path) -> crate::Result<Vec<ParsedNode>> {
         )));
     }
 
-    // Parse in parallel with rayon (~4x speedup for 42 nodes)
+    // Parse in parallel with rayon (~4x speedup for 43 nodes)
     let results: Vec<crate::Result<ParsedNode>> = paths
         .par_iter()
         .map(|path| parse_single_node(path, &nodes_dir))
@@ -455,9 +455,13 @@ node:
             return;
         }
 
-        // v10: 42 nodes (46 - 14 old + 10 new)
-        let nodes = load_all_nodes(root).expect("should parse all 42 nodes");
-        assert_eq!(nodes.len(), 42, "expected 42 YAML node files");
+        // v10.1: 43 nodes (37 base + 6 atoms, GEO removed)
+        let nodes = load_all_nodes(root).expect("should parse all 43 nodes");
+        assert_eq!(
+            nodes.len(),
+            43,
+            "expected 43 YAML node files (37 base + 6 atoms)"
+        );
 
         // Every node has a non-empty name, realm, and layer
         for node in &nodes {
@@ -478,27 +482,32 @@ node:
             );
         }
 
-        // v10: Verify trait distribution
-        // 17 invariant - 0 deleted = 17
-        // 7 localized - 0 deleted = 7
-        // 14 knowledge - 14 deleted + 10 added = 10
-        // 5 derived - 0 deleted = 5
-        // 3 job - 0 deleted = 3
+        // v10.1: Verify trait distribution (GEO nodes removed)
+        // 16 invariant (removed Thing)
+        // 5 localized (removed GEOSeedL10n, ThingL10n)
+        // 16 knowledge (10 containers + 6 atoms)
+        // 4 derived (removed GEOSeedMetrics)
+        // 2 jobs (removed GEOMiningRun)
         let count = |t: NodeTrait| nodes.iter().filter(|n| n.def.node_trait == t).count();
-        assert_eq!(count(NodeTrait::Invariant), 17, "invariant count");
-        assert_eq!(count(NodeTrait::Localized), 7, "localized count");
-        assert_eq!(count(NodeTrait::Knowledge), 10, "knowledge count");
-        assert_eq!(count(NodeTrait::Derived), 5, "derived count");
-        assert_eq!(count(NodeTrait::Job), 3, "job count");
+        assert_eq!(count(NodeTrait::Invariant), 16, "invariant count");
+        assert_eq!(count(NodeTrait::Localized), 5, "localized count");
+        assert_eq!(
+            count(NodeTrait::Knowledge),
+            16,
+            "knowledge count (10 + 6 atoms)"
+        );
+        assert_eq!(count(NodeTrait::Derived), 4, "derived count");
+        assert_eq!(count(NodeTrait::Job), 2, "job count");
 
-        // v10: Verify realm distribution
-        // global: 15 - 14 deleted + 10 added = 11
-        // project: 23 - 0 deleted = 23
-        // shared: 8 - 0 deleted = 8
+        // v10.1: Verify realm distribution (GEO removed from shared)
         let realm_count = |r: &str| nodes.iter().filter(|n| n.realm == r).count();
-        assert_eq!(realm_count("global"), 11, "global realm count");
+        assert_eq!(
+            realm_count("global"),
+            17,
+            "global realm count (11 + 6 atoms)"
+        );
         assert_eq!(realm_count("project"), 23, "project realm count");
-        assert_eq!(realm_count("shared"), 8, "shared realm count");
+        assert_eq!(realm_count("shared"), 3, "shared realm count (SEO only)");
 
         // Spot-check known nodes
         let project = nodes.iter().find(|n| n.def.name == "Project").unwrap();
@@ -507,11 +516,17 @@ node:
         assert_eq!(project.def.node_trait, NodeTrait::Invariant);
         assert_eq!(project.def.knowledge_tier, None); // invariant = no tier
 
-        // v10: Check new Style node with knowledge_tier
+        // v10.1: Check Style node (knowledge_tier removed)
         let style = nodes.iter().find(|n| n.def.name == "Style").unwrap();
         assert_eq!(style.realm, "global");
         assert_eq!(style.layer, "knowledge");
         assert_eq!(style.def.node_trait, NodeTrait::Knowledge);
-        assert_eq!(style.def.knowledge_tier, Some(KnowledgeTier::Style));
+        assert_eq!(style.def.knowledge_tier, None); // v10.1: removed
+
+        // v10.1: Check one of the new atoms
+        let term = nodes.iter().find(|n| n.def.name == "Term").unwrap();
+        assert_eq!(term.realm, "global");
+        assert_eq!(term.layer, "knowledge");
+        assert_eq!(term.def.node_trait, NodeTrait::Knowledge);
     }
 }

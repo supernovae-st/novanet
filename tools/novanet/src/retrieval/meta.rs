@@ -242,7 +242,7 @@ mod tests {
             ArcKindRules {
                 key: "HAS_METRICS".to_string(),
                 family: "mining".to_string(),
-                source: "SEOKeywordL10n".to_string(),
+                source: "SEOKeyword".to_string(),
                 target: "SEOKeywordMetrics".to_string(),
                 temperature_threshold: None,
             },

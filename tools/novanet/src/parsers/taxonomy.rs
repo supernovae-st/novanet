@@ -400,7 +400,7 @@ arc_families:
         assert_eq!(doc.arc_cardinalities.len(), 4);
 
         let total_layers: usize = doc.node_realms.iter().map(|r| r.layers.len()).sum();
-        assert_eq!(total_layers, 9);
+        assert_eq!(total_layers, 8); // geo removed in v10.1
 
         // Check border styles
         let invariant = doc

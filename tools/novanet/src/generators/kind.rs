@@ -529,41 +529,44 @@ mod tests {
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains(":Meta:Kind"))
             .count();
-        assert_eq!(kind_merges, 42, "expected 42 Kind MERGE statements");
+        assert_eq!(
+            kind_merges, 43,
+            "expected 43 Kind MERGE statements (37 base + 6 atoms)"
+        );
 
-        // 42 HAS_KIND relationships
+        // 43 HAS_KIND relationships
         let has_kind = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:HAS_KIND]"))
             .count();
-        assert_eq!(has_kind, 42, "expected 42 HAS_KIND relationships");
+        assert_eq!(has_kind, 43, "expected 43 HAS_KIND relationships");
 
-        // 42 IN_REALM relationships
+        // 43 IN_REALM relationships
         let in_realm = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_REALM]"))
             .count();
-        assert_eq!(in_realm, 42, "expected 42 IN_REALM relationships");
+        assert_eq!(in_realm, 43, "expected 43 IN_REALM relationships");
 
-        // 42 IN_LAYER relationships
+        // 43 IN_LAYER relationships
         let in_layer = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_LAYER]"))
             .count();
-        assert_eq!(in_layer, 42, "expected 42 IN_LAYER relationships");
+        assert_eq!(in_layer, 43, "expected 43 IN_LAYER relationships");
 
-        // 42 EXHIBITS relationships
+        // 43 EXHIBITS relationships
         let exhibits = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:EXHIBITS]"))
             .count();
-        assert_eq!(exhibits, 42, "expected 42 EXHIBITS relationships");
+        assert_eq!(exhibits, 43, "expected 43 EXHIBITS relationships");
 
         // Spot checks — specific Kinds
         assert!(cypher.contains("k_Project:Meta:Kind {label: 'Project'}"));
         assert!(cypher.contains("k_Page:Meta:Kind {label: 'Page'}"));
         assert!(cypher.contains("k_Style:Meta:Kind {label: 'Style'}")); // v10: LocaleVoice → Style
-        assert!(cypher.contains("k_SEOKeywordL10n:Meta:Kind {label: 'SEOKeywordL10n'}"));
+        assert!(cypher.contains("k_SEOKeyword:Meta:Kind {label: 'SEOKeyword'}"));
 
         // Spot check — context_budget assignments
         assert!(cypher.contains("k_Page.context_budget = 'high'"));
@@ -589,26 +592,14 @@ mod tests {
             }
         }
 
-        // v10: Header mentions 42 Kind nodes (46 - 14 old + 10 new)
-        assert!(cypher.contains("42 Kind nodes"));
+        // v10.1: Header mentions 43 Kind nodes (37 base + 6 atoms)
+        assert!(cypher.contains("43 Kind nodes"));
 
-        // v10: knowledge_tier property for knowledge nodes
+        // v10.1: knowledge_tier removed from all YAMLs (node type is sufficient)
+        // Verify no knowledge_tier properties are present in output
         assert!(
-            cypher.contains("k_Style.knowledge_tier = 'style'"),
-            "Style should have knowledge_tier = 'style'"
-        );
-        assert!(
-            cypher.contains("k_Formatting.knowledge_tier = 'technical'"),
-            "Formatting should have knowledge_tier = 'technical'"
-        );
-        assert!(
-            cypher.contains("k_ExpressionSet.knowledge_tier = 'semantic'"),
-            "ExpressionSet should have knowledge_tier = 'semantic'"
-        );
-        // Non-knowledge nodes should NOT have knowledge_tier
-        assert!(
-            !cypher.contains("k_Page.knowledge_tier"),
-            "Page (invariant) should not have knowledge_tier"
+            !cypher.contains(".knowledge_tier"),
+            "No nodes should have knowledge_tier (removed in v10.1)"
         );
     }
 

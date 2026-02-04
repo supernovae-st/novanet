@@ -136,17 +136,33 @@ impl App {
             Some(TreeItem::Kind(_, _, kind)) => {
                 self.load_yaml_cached(&kind.yaml_path.clone());
             }
-            // Realm, Layer → taxonomy.yaml
-            Some(TreeItem::Realm(_))
-            | Some(TreeItem::Layer(_, _))
-            | Some(TreeItem::KindsSection) => {
-                self.load_yaml_cached("packages/core/models/taxonomy.yaml");
+            // Realm → meta/realms/{key}.yaml
+            Some(TreeItem::Realm(realm)) => {
+                let path = format!("packages/core/models/meta/realms/{}.yaml", realm.key);
+                self.load_yaml_cached(&path);
             }
-            // ArcFamily, ArcKind → relations.yaml
-            Some(TreeItem::ArcFamily(_))
-            | Some(TreeItem::ArcKind(_, _))
-            | Some(TreeItem::ArcsSection) => {
-                self.load_yaml_cached("packages/core/models/relations.yaml");
+            // Layer → meta/layers/{key}.yaml
+            Some(TreeItem::Layer(_, layer)) => {
+                let path = format!("packages/core/models/meta/layers/{}.yaml", layer.key);
+                self.load_yaml_cached(&path);
+            }
+            // ArcFamily → meta/arc-families/{key}.yaml
+            Some(TreeItem::ArcFamily(family)) => {
+                let path = format!("packages/core/models/meta/arc-families/{}.yaml", family.key);
+                self.load_yaml_cached(&path);
+            }
+            // ArcKind → arc-kinds/{family}/{arc-name}.yaml
+            Some(TreeItem::ArcKind(family, arc)) => {
+                let arc_file = arc.key.to_lowercase().replace('_', "-");
+                let path = format!(
+                    "packages/core/models/arc-kinds/{}/{}.yaml",
+                    family.key, arc_file
+                );
+                self.load_yaml_cached(&path);
+            }
+            // Section headers → taxonomy overview
+            Some(TreeItem::KindsSection) | Some(TreeItem::ArcsSection) => {
+                self.load_yaml_cached("packages/core/models/taxonomy.yaml");
             }
             None => {
                 self.yaml_path.clear();

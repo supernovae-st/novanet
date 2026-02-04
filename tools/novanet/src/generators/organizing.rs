@@ -406,7 +406,7 @@ mod tests {
         };
 
         assert_eq!(count_merges("Realm"), 3, "expected 3 Realm nodes");
-        assert_eq!(count_merges("Layer"), 9, "expected 9 Layer nodes");
+        assert_eq!(count_merges("Layer"), 8, "expected 8 Layer nodes"); // geo removed v10.1
         assert_eq!(count_merges("Trait"), 5, "expected 5 Trait nodes");
         assert_eq!(count_merges("ArcFamily"), 5, "expected 5 ArcFamily nodes");
         assert_eq!(count_merges("ArcScope"), 2, "expected 2 ArcScope nodes");
@@ -421,7 +421,7 @@ mod tests {
             .lines()
             .filter(|l: &&str| l.contains("[:HAS_LAYER]"))
             .count();
-        assert_eq!(has_layer_count, 9, "expected 9 HAS_LAYER relationships");
+        assert_eq!(has_layer_count, 8, "expected 8 HAS_LAYER relationships"); // geo removed v10.1
 
         // Spot checks — specific nodes exist
         assert!(cypher.contains("r_global:Meta:Realm {key: 'global'}"));
@@ -458,7 +458,7 @@ mod tests {
         // HAS_LAYER wiring — specific pairs
         assert!(cypher.contains("(r:Realm {key: 'global'}), (l:Layer {key: 'config'})"));
         assert!(cypher.contains("(r:Realm {key: 'project'}), (l:Layer {key: 'output'})"));
-        assert!(cypher.contains("(r:Realm {key: 'shared'}), (l:Layer {key: 'geo'})"));
+        assert!(cypher.contains("(r:Realm {key: 'shared'}), (l:Layer {key: 'seo'})")); // geo removed v10.1
     }
 
     /// Snapshot test for a minimal taxonomy document.

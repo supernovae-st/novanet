@@ -261,7 +261,7 @@ mod tests {
             make_node("Block", "project", "structure"),
             make_node("Locale", "global", "config"),
             make_node("Style", "global", "knowledge"), // v10: LocaleVoice → Style
-            make_node("SEOKeywordL10n", "shared", "seo"),
+            make_node("SEOKeyword", "shared", "seo"),
         ];
 
         let output = render_layers(&nodes).unwrap();
@@ -295,7 +295,7 @@ mod tests {
         assert!(output.contains("Page: 'structure',"));
         assert!(output.contains("Locale: 'config',"));
         assert!(output.contains("Style: 'knowledge',")); // v10: LocaleVoice → Style
-        assert!(output.contains("SEOKeywordL10n: 'seo',"));
+        assert!(output.contains("SEOKeyword: 'seo',"));
 
         // Nodes sorted alphabetically within layers
         let block_pos = output.find("Block: 'structure',").unwrap();
@@ -398,19 +398,18 @@ mod tests {
         let generator = LayerGenerator;
         let output = generator.generate(root).expect("should generate layers.ts");
 
-        // v10: 42 nodes (46 - 14 old + 10 new)
+        // v10.1: 43 nodes (37 base + 6 atoms)
         assert!(
-            output.contains("mapping all 42 node types"),
-            "should mention 42 node types"
+            output.contains("mapping all 43 node types"),
+            "should mention 43 node types"
         );
 
-        // v10: Realm node counts
-        // Global: 15 - 14 deleted + 10 added = 11
+        // v10.1: Realm node counts (updated for 6 atoms in global/knowledge)
         assert!(output.contains("PROJECT REALM (23 nodes)"));
-        assert!(output.contains("GLOBAL REALM (11 nodes)"));
-        assert!(output.contains("SHARED REALM (8 nodes)"));
+        assert!(output.contains("GLOBAL REALM (17 nodes)")); // 11 + 6 atoms
+        assert!(output.contains("SHARED REALM (3 nodes)")); // SEO only, GEO removed
 
-        // All 9 layers present
+        // 8 layers present (geo removed in v10.1)
         for layer in [
             "foundation",
             "structure",
@@ -420,7 +419,6 @@ mod tests {
             "config",
             "knowledge",
             "seo",
-            "geo",
         ] {
             assert!(
                 output.contains(&format!("'{layer}'")),
@@ -436,8 +434,8 @@ mod tests {
         assert!(output.contains("PageL10n: 'output',"));
         assert!(output.contains("Locale: 'config',"));
         assert!(output.contains("Style: 'knowledge',")); // v10: LocaleVoice → Style
-        assert!(output.contains("SEOKeywordL10n: 'seo',"));
-        assert!(output.contains("GEOSeedL10n: 'geo',"));
+        assert!(output.contains("SEOKeyword: 'seo',"));
+        // GEO layer removed in v10.1
 
         // Helper functions present
         assert!(output.contains("export function getLayer"));
