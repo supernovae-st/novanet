@@ -1,0 +1,106 @@
+# packages/core/models/node-kinds/global/knowledge/term-set.yaml
+# TermSet — Domain-specific vocabulary for a locale
+#
+# Tier: semantic (contextual retrieval by domain)
+# Domains: pricing, features, technical, marketing, support, general
+# Stability: Medium - update monthly
+
+node:
+  name: TermSet
+  realm: global
+  layer: knowledge
+  trait: knowledge
+  knowledge_tier: semantic
+  icon: "📖"
+  description: "Domain-specific terminology and vocabulary"
+
+  standard_properties:
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable name"
+      example: "French (France) Pricing Terms"
+
+    description:
+      type: string
+      required: true
+      description: "Short description"
+      example: "Pricing-specific vocabulary for fr-FR"
+
+    llm_context:
+      type: string
+      required: true
+      description: "LLM generation hints"
+      example: "USE: for domain-specific terms. TRIGGERS: pricing words. NOT: general vocabulary."
+
+    created_at:
+      type: datetime
+      required: true
+      description: "Creation timestamp"
+
+    updated_at:
+      type: datetime
+      required: true
+      description: "Last update timestamp"
+
+  properties:
+    # Domain identification
+    domain:
+      type: string
+      required: true
+      enum: [pricing, features, technical, marketing, support, general]
+      description: "Vocabulary domain"
+      example: "pricing"
+
+    # Terms collection
+    terms:
+      type: json
+      required: true
+      description: "Term mappings with context"
+      example:
+        price: "prix"
+        pricing: "tarification"
+        subscription: "abonnement"
+        plan: "formule"
+        billing: "facturation"
+        invoice: "facture"
+        discount: "remise"
+        free_trial: "essai gratuit"
+
+    # Preferred usage
+    preferred_terms:
+      type: json
+      required: false
+      description: "Preferred term choices when multiple options exist"
+      example:
+        "price point": "niveau de prix"
+        "monthly fee": "mensualité"
+
+    # Terms to avoid
+    avoid_terms:
+      type: json
+      required: false
+      description: "Terms to avoid with alternatives"
+      example:
+        "cheap": "abordable"
+        "expensive": "premium"
+
+    # Context-specific variants
+    variants_by_context:
+      type: json
+      required: false
+      description: "Term variants by context"
+      example:
+        formal:
+          buy: "acquérir"
+        casual:
+          buy: "acheter"
+
+  relations:
+    incoming:
+      - type: HAS_TERMS
+        from: Locale
+        cardinality: "1:N"
+        description: "Locale has multiple term sets (one per domain)"
+        properties:
+          domain: string
