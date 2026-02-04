@@ -138,9 +138,9 @@ node:
       to: Page
       cardinality: "N:N"
       props:
-        concept_key:
+        entity_key:
           type: string
-          description: "Concept key - anchor text derived from ConceptL10n.title at generation time"
+          description: "Entity key - anchor text derived from EntityL10n.title at generation time"
         context:
           type: string
           enum: [cta, body, related, nav]
@@ -157,7 +157,7 @@ node:
           type: boolean
           default: false
           description: "Set true for login/legal pages to prevent link equity flow (v7.12.1)"
-      description: "Explicit internal link for SEO. Anchor text is localized via Concept → ConceptL10n"
+      description: "Explicit internal link for SEO. Anchor text is localized via Entity → EntityL10n"
 
     SUBTOPIC_OF:
       to: Page
@@ -198,10 +198,10 @@ node:
       ORDER BY pl.assembled_at DESC
       LIMIT 1
 
-      // v7.12.0: Get internal links with localized anchors
+      // v7.12.0: Get internal links with localized anchors (v10.3: Entity-centric)
       MATCH (p:Page {key: $key})-[link:LINKS_TO]->(target:Page)
-      MATCH (c:Concept {key: link.concept_key})-[:HAS_L10N]->(cl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
-      RETURN target.key AS target_page, cl.title AS anchor_text, link.context, link.seo_weight
+      MATCH (e:Entity {key: link.entity_key})-[:HAS_L10N]->(el:EntityL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+      RETURN target.key AS target_page, el.title AS anchor_text, link.context, link.seo_weight
       ORDER BY link.seo_weight DESC
 
       // v7.12.0: Get pillar page with its cluster pages

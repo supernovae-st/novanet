@@ -16,7 +16,7 @@ include:
   - relation: OF_TYPE
     direction: outgoing
 
-  - relation: USES_CONCEPT
+  - relation: USES_ENTITY
     direction: outgoing
     depth: 2
 
@@ -30,7 +30,7 @@ docs:
     Demonstrates the spreading activation algorithm for semantic context retrieval.
 
     **How it works:**
-    1. Start from a Block's USES_CONCEPT relationships
+    1. Start from a Block's USES_ENTITY relationships
     2. Follow SEMANTIC_LINK edges with temperature >= threshold
     3. Multiply temperatures along path to compute activation
     4. Return concepts with activation >= minimum threshold
@@ -46,13 +46,13 @@ docs:
       color: blue
       description: Starting point for activation
 
-    - name: Direct Concepts
-      nodes: [Concept]
+    - name: Direct Entitys
+      nodes: [Entity]
       color: green
-      description: Directly linked concepts (USES_CONCEPT)
+      description: Directly linked concepts (USES_ENTITY)
 
     - name: Semantic Network
-      nodes: [Concept, ConceptL10n]
+      nodes: [Entity, EntityL10n]
       color: orange
       description: Related concepts via SEMANTIC_LINK
 
@@ -60,8 +60,8 @@ docs:
     - name: Basic spreading activation
       description: Get related concepts with minimum activation 0.3
       query: |
-        MATCH (b:Block {key: $blockKey})-[:USES_CONCEPT]->(c:Concept)
-        MATCH (c)-[sl:SEMANTIC_LINK*1..2]->(related:Concept)
+        MATCH (b:Block {key: $blockKey})-[:USES_ENTITY]->(c:Entity)
+        MATCH (c)-[sl:SEMANTIC_LINK*1..2]->(related:Entity)
         WHERE ALL(r IN sl WHERE r.temperature >= 0.3)
         WITH related, reduce(a = 1.0, r IN sl | a * r.temperature) AS activation
         WHERE activation >= 0.3
@@ -73,12 +73,12 @@ docs:
     - name: Spreading with localized content
       description: Get activated concepts with their localized content
       query: |
-        MATCH (b:Block {key: $blockKey})-[:USES_CONCEPT]->(c:Concept)
-        MATCH (c)-[sl:SEMANTIC_LINK*1..2]->(related:Concept)
+        MATCH (b:Block {key: $blockKey})-[:USES_ENTITY]->(c:Entity)
+        MATCH (c)-[sl:SEMANTIC_LINK*1..2]->(related:Entity)
         WHERE ALL(r IN sl WHERE r.temperature >= $minTemp)
         WITH related, reduce(a = 1.0, r IN sl | a * r.temperature) AS activation
         WHERE activation >= $minActivation
-        MATCH (related)-[:HAS_L10N]->(rl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+        MATCH (related)-[:HAS_L10N]->(rl:EntityL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
         RETURN related.key AS concept,
                rl.title AS title,
                rl.definition AS definition,
@@ -94,8 +94,8 @@ docs:
     - name: Activation path analysis
       description: Show the path and temperature at each hop
       query: |
-        MATCH (b:Block {key: $blockKey})-[:USES_CONCEPT]->(c:Concept)
-        MATCH path = (c)-[sl:SEMANTIC_LINK*1..2]->(related:Concept)
+        MATCH (b:Block {key: $blockKey})-[:USES_ENTITY]->(c:Entity)
+        MATCH path = (c)-[sl:SEMANTIC_LINK*1..2]->(related:Entity)
         WITH related, path, [r IN sl | r.temperature] AS temps
         RETURN c.key AS source,
                related.key AS target,

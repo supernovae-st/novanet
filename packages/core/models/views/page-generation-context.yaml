@@ -17,7 +17,7 @@ include:
     filters:
       active: true
 
-  - relation: USES_CONCEPT
+  - relation: USES_ENTITY
     direction: outgoing
     depth: 2  # spreading activation
 
@@ -49,8 +49,8 @@ docs:
       color: green
       description: Page blocks in position order
 
-    - name: Concept Layer
-      nodes: [Concept, ConceptL10n]
+    - name: Entity Layer
+      nodes: [Entity, EntityL10n]
       color: orange
       description: Semantic concepts used by the page
 
@@ -66,8 +66,8 @@ docs:
         MATCH (p:Page {key: $pageKey})
         MATCH (p)-[:HAS_PROMPT]->(pp:PagePrompt)
         OPTIONAL MATCH (p)-[:HAS_BLOCK]->(b:Block)
-        OPTIONAL MATCH (p)-[:USES_CONCEPT]->(c:Concept)
-        OPTIONAL MATCH (c)-[:HAS_L10N]->(cl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+        OPTIONAL MATCH (p)-[:USES_ENTITY]->(c:Entity)
+        OPTIONAL MATCH (c)-[:HAS_L10N]->(cl:EntityL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
         RETURN p, pp,
                collect(DISTINCT b) AS blocks,
                collect(DISTINCT {concept: c.key, title: cl.title}) AS concepts

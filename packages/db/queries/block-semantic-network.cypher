@@ -8,8 +8,8 @@
 // ======================================================================
 :param blockKey => "hero-pricing";
 
-MATCH (b:Block {key: $blockKey})-[:USES_CONCEPT]->(c:Concept)
-MATCH (c)-[sl:SEMANTIC_LINK*1..2]->(related:Concept)
+MATCH (b:Block {key: $blockKey})-[:USES_ENTITY]->(c:Entity)
+MATCH (c)-[sl:SEMANTIC_LINK*1..2]->(related:Entity)
 WHERE ALL(r IN sl WHERE r.temperature >= 0.3)
 WITH related, reduce(a = 1.0, r IN sl | a * r.temperature) AS activation
 WHERE activation >= 0.3
@@ -25,12 +25,12 @@ ORDER BY activation DESC
 :param minTemp => 0.3;
 :param minActivation => 0.3;
 
-MATCH (b:Block {key: $blockKey})-[:USES_CONCEPT]->(c:Concept)
-MATCH (c)-[sl:SEMANTIC_LINK*1..2]->(related:Concept)
+MATCH (b:Block {key: $blockKey})-[:USES_ENTITY]->(c:Entity)
+MATCH (c)-[sl:SEMANTIC_LINK*1..2]->(related:Entity)
 WHERE ALL(r IN sl WHERE r.temperature >= $minTemp)
 WITH related, reduce(a = 1.0, r IN sl | a * r.temperature) AS activation
 WHERE activation >= $minActivation
-MATCH (related)-[:HAS_L10N]->(rl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+MATCH (related)-[:HAS_L10N]->(rl:EntityL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
 RETURN related.key AS concept,
        rl.title AS title,
        rl.definition AS definition,
@@ -44,8 +44,8 @@ LIMIT 10
 // ======================================================================
 :param blockKey => "hero-pricing";
 
-MATCH (b:Block {key: $blockKey})-[:USES_CONCEPT]->(c:Concept)
-MATCH path = (c)-[sl:SEMANTIC_LINK*1..2]->(related:Concept)
+MATCH (b:Block {key: $blockKey})-[:USES_ENTITY]->(c:Entity)
+MATCH path = (c)-[sl:SEMANTIC_LINK*1..2]->(related:Entity)
 WITH related, path, [r IN sl | r.temperature] AS temps
 RETURN c.key AS source,
        related.key AS target,

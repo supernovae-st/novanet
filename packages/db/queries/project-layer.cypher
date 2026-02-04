@@ -49,8 +49,8 @@ ORDER BY b.position
 MATCH (p:Project {key: $projectKey})-[:HAS_PAGE]->(page:Page {key: $pageKey})
 MATCH (page)-[:HAS_PROMPT]->(pp:PagePrompt)
 OPTIONAL MATCH (page)-[:HAS_BLOCK]->(b:Block)
-OPTIONAL MATCH (b)-[:USES_CONCEPT]->(c:Concept)
-OPTIONAL MATCH (c)-[:HAS_L10N]->(cl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+OPTIONAL MATCH (b)-[:USES_ENTITY]->(c:Entity)
+OPTIONAL MATCH (c)-[:HAS_L10N]->(cl:EntityL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
 RETURN page.key AS page,
        pp.instructions AS instructions,
        collect(DISTINCT b.key) AS blocks,
@@ -62,8 +62,8 @@ RETURN page.key AS page,
 // ======================================================================
 :param projectKey => "qrcode-ai";
 
-MATCH (p:Project {key: $projectKey})-[:HAS_CONCEPT]->(c:Concept)
-OPTIONAL MATCH (c)-[sl:SEMANTIC_LINK]->(related:Concept)
+MATCH (p:Project {key: $projectKey})-[:USES_ENTITY]->(c:Entity)
+OPTIONAL MATCH (c)-[sl:SEMANTIC_LINK]->(related:Entity)
 WHERE sl.temperature >= 0.3
 RETURN c.key AS concept,
        collect({

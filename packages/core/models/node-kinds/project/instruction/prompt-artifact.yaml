@@ -95,9 +95,9 @@ node:
           - BlockPrompt
         description: "Source prompt this was compiled from"
 
-      - type: INCLUDES_CONCEPT
-        to: Concept
-        description: "Concepts whose context was included"
+      - type: INCLUDES_ENTITY
+        to: Entity
+        description: "Entities whose context was included"
 
       - type: INCLUDES_VOICE
         to: LocaleVoice

@@ -1,5 +1,5 @@
 # models/views/seo-pipeline.yaml
-# v10.1: SEO targeting via ConceptL10n (locale-aligned)
+# v10.1: SEO targeting via EntityL10n (locale-aligned)
 id: seo-pipeline
 name: SEO Pipeline
 description: SEO keyword mining and internal linking workflow
@@ -18,9 +18,9 @@ include:
       - relation: HAS_METRICS
         direction: outgoing
         targetTypes: [SEOKeywordMetrics]
-      - relation: HAS_SEO_TARGET
+      - relation: EXPRESSES
         direction: incoming
-        targetTypes: [ConceptL10n]
+        targetTypes: [EntityL10n]
 
   # Mining Runs
   - relation: FOR_LOCALE
@@ -35,12 +35,12 @@ docs:
 
     **Pipeline stages:**
     1. **Mining**: SEOMiningRun discovers keywords per locale
-    2. **Targeting**: ConceptL10n targets SEOKeyword (locale-aligned)
+    2. **Targeting**: EntityL10n targets SEOKeyword (locale-aligned)
     3. **Metrics**: SEOKeywordMetrics tracks performance
     4. **Linking**: Pages link via LINKS_TO with SEO weight
 
     **v10.1 Architecture:**
-    - SEOKeyword is linked to ConceptL10n (same locale), not Concept
+    - SEOKeyword is linked to EntityL10n (same locale), not Entity
     - This ensures locale-aligned targeting (fr-FR concept → fr-FR keywords)
 
   layers:
@@ -60,7 +60,7 @@ docs:
       description: Mining job tracking
 
     - name: Targeting
-      nodes: [ConceptL10n]
+      nodes: [EntityL10n]
       color: orange
       description: Localized concepts targeting keywords
 
@@ -80,10 +80,10 @@ docs:
       params:
         locale: "fr-FR"
 
-    - name: Concept keyword coverage (v10.1)
-      description: Which concepts target which keywords (via ConceptL10n)
+    - name: Entity keyword coverage (v10.1)
+      description: Which concepts target which keywords (via EntityL10n)
       query: |
-        MATCH (c:Concept)-[:HAS_L10N]->(cl:ConceptL10n)-[:HAS_SEO_TARGET]->(kw:SEOKeyword)
+        MATCH (c:Entity)-[:HAS_L10N]->(cl:EntityL10n)-[:EXPRESSES]->(kw:SEOKeyword)
         WHERE (cl)-[:FOR_LOCALE]->(:Locale {key: $locale})
         RETURN c.key AS concept,
                cl.title AS localizedTitle,
@@ -95,8 +95,8 @@ docs:
     - name: Internal linking opportunities
       description: Pages that could link based on shared SEO targets
       query: |
-        MATCH (p1:Page)-[:USES_CONCEPT]->(c1:Concept)-[:HAS_L10N]->(cl1:ConceptL10n)-[:HAS_SEO_TARGET]->(kw:SEOKeyword)
-        MATCH (p2:Page)-[:USES_CONCEPT]->(c2:Concept)-[:HAS_L10N]->(cl2:ConceptL10n)-[:HAS_SEO_TARGET]->(kw)
+        MATCH (p1:Page)-[:USES_ENTITY]->(c1:Entity)-[:HAS_L10N]->(cl1:EntityL10n)-[:EXPRESSES]->(kw:SEOKeyword)
+        MATCH (p2:Page)-[:USES_ENTITY]->(c2:Entity)-[:HAS_L10N]->(cl2:EntityL10n)-[:EXPRESSES]->(kw)
         WHERE p1 <> p2
         AND NOT EXISTS { (p1)-[:LINKS_TO]->(p2) }
         RETURN p1.key AS sourcePage,
@@ -119,6 +119,6 @@ docs:
 
   notes:
     - "SEOKeyword is locale-specific (keyword varies by locale)"
-    - "v10.1: SEOKeyword linked to ConceptL10n (locale-aligned targeting)"
+    - "v10.1: SEOKeyword linked to EntityL10n (locale-aligned targeting)"
     - "Metrics are time-series - use latest for current state"
     - "LINKS_TO relation includes seo_weight for link juice optimization"

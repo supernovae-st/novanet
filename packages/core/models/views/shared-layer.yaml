@@ -1,6 +1,6 @@
 # models/views/shared-layer.yaml
 # Shared scope: SEO targeting (3 nodes)
-# v10.1.0 — GEO removed, SEO via ConceptL10n
+# v10.1.0 — GEO removed, SEO via EntityL10n
 id: shared-layer
 name: Shared Layer
 description: SEO keywords independent of projects
@@ -38,8 +38,8 @@ docs:
     A keyword like "QR code generator" can be targeted by multiple projects.
 
     **v10.1 Architecture:**
-    - SEOKeyword is linked to ConceptL10n (locale-aligned targeting)
-    - Pattern: ConceptL10n -[:HAS_SEO_TARGET]-> SEOKeyword -[:FOR_LOCALE]-> Locale
+    - SEOKeyword is linked to EntityL10n (locale-aligned targeting)
+    - Pattern: EntityL10n -[:EXPRESSES]-> SEOKeyword -[:FOR_LOCALE]-> Locale
 
   layers:
     - name: SEO Keywords
@@ -73,9 +73,9 @@ docs:
         locale: "fr-FR"
 
     - name: Keywords targeted by concept (v10.1)
-      description: Find all keywords a concept targets via ConceptL10n
+      description: Find all keywords a concept targets via EntityL10n
       query: |
-        MATCH (c:Concept {key: $conceptKey})-[:HAS_L10N]->(cl:ConceptL10n)-[:HAS_SEO_TARGET]->(kw:SEOKeyword)
+        MATCH (c:Entity {key: $conceptKey})-[:HAS_L10N]->(cl:EntityL10n)-[:EXPRESSES]->(kw:SEOKeyword)
         WHERE (cl)-[:FOR_LOCALE]->(:Locale {key: $locale})
         OPTIONAL MATCH (kw)-[:HAS_METRICS]->(m:SEOKeywordMetrics)
         RETURN kw.value AS keyword,
@@ -101,5 +101,5 @@ docs:
   notes:
     - "Shared nodes are project-independent but locale-specific"
     - "SEO keywords can be targeted by multiple projects' concepts"
-    - "v10.1: SEOKeyword linked to ConceptL10n (same locale)"
+    - "v10.1: SEOKeyword linked to EntityL10n (same locale)"
     - "Metrics are time-series - always use latest for current state"
