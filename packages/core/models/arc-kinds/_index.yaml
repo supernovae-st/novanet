@@ -16,10 +16,10 @@ version: "9.9.0"
 summary:
   ownership: 14
   localization: 22
-  semantic: 12
+  semantic: 7
   generation: 15
-  mining: 10
-  total: 73
+  mining: 5
+  total: 63
 
 # Directory structure
 structure:
@@ -75,10 +75,6 @@ structure:
     - maps-to-concept.yaml
     - fills-slot.yaml
     - clusters-topic.yaml
-    - mentions.yaml
-    - covers.yaml
-    - specializes.yaml
-    - related-thing.yaml
 
   generation:
     - generated.yaml
@@ -99,13 +95,9 @@ structure:
 
   mining:
     - has-seo-target.yaml
-    - has-geo-target.yaml
     - targets-seo.yaml
-    - targets-geo.yaml
     - targets-keyword.yaml
-    - targets-thing.yaml
     - seo-mines.yaml
-    - geo-mines.yaml
     - has-metrics.yaml
 
 # Naming conventions

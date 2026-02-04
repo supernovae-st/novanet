@@ -9,11 +9,9 @@ arc:
   source:
     - Concept
     - Project
-    - Thing
   target:
     - ConceptL10n
     - ProjectL10n
-    - ThingL10n
   cardinality: one_to_many
 
   inverse: L10N_OF

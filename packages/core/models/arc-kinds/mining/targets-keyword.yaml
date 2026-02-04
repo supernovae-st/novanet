@@ -6,7 +6,7 @@ arc:
   family: mining
   scope: intra_realm
   source: SearchIntent
-  target: SEOKeywordL10n
+  target: SEOKeyword
   cardinality: one_to_many
   properties:
     - name: match_type
@@ -17,4 +17,4 @@ arc:
       required: false
   llm_context: "Intent expressed through localized SEO keyword. match_type: exact/phrase/broad.
     volume_share: 0.0-1.0."
-  cypher_pattern: (SearchIntent)-[:TARGETS_KEYWORD {match_type, volume_share}]->(SEOKeywordL10n)
+  cypher_pattern: (SearchIntent)-[:TARGETS_KEYWORD {match_type, volume_share}]->(SEOKeyword)

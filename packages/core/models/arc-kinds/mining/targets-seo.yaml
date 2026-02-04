@@ -6,7 +6,7 @@ arc:
   family: mining
   scope: intra_realm
   source: Concept
-  target: SEOKeywordL10n
+  target: SEOKeyword
   cardinality: one_to_many
   properties:
     - name: status
@@ -16,4 +16,4 @@ arc:
       type: string
       required: false
   llm_context: "Cross-locale SEO shortcut for reporting. status: active/paused/archived."
-  cypher_pattern: (Concept)-[:TARGETS_SEO {status, priority}]->(SEOKeywordL10n)
+  cypher_pattern: (Concept)-[:TARGETS_SEO {status, priority}]->(SEOKeyword)

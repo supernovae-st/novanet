@@ -443,12 +443,16 @@ relations:
 
         let doc = load_arcs(root).expect("should parse relations.yaml");
 
-        // v10: Total arc count (63 + 10 new knowledge arcs = 73)
-        assert_eq!(doc.arcs.len(), 73, "expected 73 arcs");
+        // v10.1: Total arc count (GEO/Thing arcs removed)
+        // 73 - 8 = 65 (removed MENTIONS, COVERS, SPECIALIZES, RELATED_THING + HAS_GEO_TARGET, TARGETS_GEO, TARGETS_THING, GEO_MINES)
+        assert_eq!(doc.arcs.len(), 65, "expected 65 arcs");
 
-        // v10: Family distribution
-        // Ownership: 15 + 10 knowledge arcs = 25
-        // Localization: 22 - 14 deleted = 8
+        // v10.1: Family distribution
+        // Ownership: 25 (unchanged)
+        // Localization: 8 (unchanged)
+        // Semantic: 16 - 4 = 12 (removed MENTIONS, COVERS, SPECIALIZES, RELATED_THING)
+        // Generation: 15 (unchanged)
+        // Mining: 9 - 4 = 5 (removed HAS_GEO_TARGET, TARGETS_GEO, TARGETS_THING, GEO_MINES)
         let family_count = |f: ArcFamily| doc.arcs.iter().filter(|a| a.family == f).count();
         assert_eq!(family_count(ArcFamily::Ownership), 25, "ownership count");
         assert_eq!(
@@ -456,9 +460,9 @@ relations:
             8,
             "localization count"
         );
-        assert_eq!(family_count(ArcFamily::Semantic), 16, "semantic count");
+        assert_eq!(family_count(ArcFamily::Semantic), 12, "semantic count");
         assert_eq!(family_count(ArcFamily::Generation), 15, "generation count");
-        assert_eq!(family_count(ArcFamily::Mining), 9, "mining count");
+        assert_eq!(family_count(ArcFamily::Mining), 5, "mining count");
 
         // All arcs have non-empty type and llm_context
         for arc in &doc.arcs {
@@ -472,11 +476,11 @@ relations:
             assert!(!arc.target.is_empty(), "empty target for {}", arc.arc_type);
         }
 
-        // v10: Unique arc types (63 + 10 knowledge arcs = 73)
+        // v10.1: Unique arc types (65 after GEO/Thing removal)
         let mut types: Vec<&str> = doc.arcs.iter().map(|a| a.arc_type.as_str()).collect();
         types.sort();
         types.dedup();
-        assert_eq!(types.len(), 73, "all arc types should be unique");
+        assert_eq!(types.len(), 65, "all arc types should be unique");
 
         // Semantic link types
         let slt = doc
@@ -498,7 +502,7 @@ relations:
             .find(|a| a.arc_type == "FOR_LOCALE")
             .unwrap();
         assert_eq!(for_locale.family, ArcFamily::Localization);
-        assert_eq!(for_locale.source.len(), 9, "FOR_LOCALE has 9 sources");
+        assert_eq!(for_locale.source.len(), 7, "FOR_LOCALE has 7 sources");
     }
 
     #[test]
@@ -553,11 +557,11 @@ arc:
         );
         assert_eq!(temps.get("USES_CONCEPT"), Some(&0.0_f32));
 
-        // Should have multiple semantic arcs
+        // Should have multiple semantic arcs (v10.1: 10 after removing Thing arcs)
         let semantic_count = temps.len();
         assert!(
-            semantic_count >= 14,
-            "should have at least 14 semantic arcs with thresholds"
+            semantic_count >= 10,
+            "should have at least 10 semantic arcs with thresholds"
         );
     }
 }
