@@ -259,7 +259,7 @@ mod tests {
         assert_eq!(
             names,
             vec![
-                "organizing-principles",
+                "taxonomy",
                 "kinds",
                 "arc_schema",
                 "layers",

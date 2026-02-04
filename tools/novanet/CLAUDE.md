@@ -112,7 +112,7 @@ src/
     schema.rs     schema generate/validate (YAML → artifacts)
     doc.rs        doc generate/list (YAML views → Mermaid)
     filter.rs     filter build (JSON stdin → Cypher stdout)
-  parsers/        YAML parsers (yaml_node, relations, organizing, views)
+  parsers/        YAML parsers (yaml_node, relations, taxonomy, organizing, views)
   generators/     Code generators (organizing, kind, arc_schema, layer, mermaid, view_mermaid, autowire, hierarchy)
   tui/            Terminal UI (feature-gated behind `tui` feature)
     app.rs        State machine (NavMode, AppState, ActivePanel, onboarding)
@@ -160,9 +160,18 @@ Exit:        q or Esc
 
 ## Dependencies on Monorepo
 
-This binary reads YAML from `packages/core/models/` (nodes, relations, organizing-principles, views)
+This binary reads YAML from `packages/core/models/` (nodes, relations, taxonomy, views)
 and writes to `packages/db/seed/` (Cypher), `packages/core/src/` (TypeScript), and
 `packages/core/models/docs/` (Mermaid). It does NOT depend on any npm packages at build time.
+
+**v9.5 visual encoding**: The `taxonomy.yaml` file is the source of truth for:
+- Colors (realms, layers, traits, arc families)
+- Border styles (traits: solid/dashed/dotted/double/none)
+- Stroke styles (arc families: solid/dashed)
+- Unicode characters (box drawing for TUI)
+
+The `organizing` generator reads `taxonomy.yaml` and writes visual encoding properties
+to Neo4j via `00.5-organizing-principles.cypher`.
 
 ## Neo4j
 
