@@ -1,0 +1,15 @@
+# packages/core/models/arc-kinds/ownership/has-taboos.yaml
+arc:
+  name: HAS_TABOOS
+  family: ownership
+  scope: intra_realm
+  source: Locale
+  target: TabooSet
+  cardinality: one_to_many
+  llm_context: Locale has multiple taboo sets, one per severity.
+  cypher_pattern: (Locale)-[:HAS_TABOOS {severity: $severity}]->(TabooSet)
+  properties:
+    severity:
+      type: string
+      required: true
+      description: "Taboo severity (avoid, careful, legal)"

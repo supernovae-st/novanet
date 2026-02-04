@@ -1,0 +1,10 @@
+# packages/core/models/arc-kinds/ownership/has-style.yaml
+arc:
+  name: HAS_STYLE
+  family: ownership
+  scope: intra_realm
+  source: Locale
+  target: Style
+  cardinality: one_to_one
+  llm_context: Locale has exactly one style configuration.
+  cypher_pattern: (Locale)-[:HAS_STYLE]->(Style)

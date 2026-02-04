@@ -1,0 +1,10 @@
+# packages/core/models/arc-kinds/ownership/has-adaptation.yaml
+arc:
+  name: HAS_ADAPTATION
+  family: ownership
+  scope: intra_realm
+  source: Locale
+  target: Adaptation
+  cardinality: one_to_one
+  llm_context: Locale has exactly one adaptation configuration.
+  cypher_pattern: (Locale)-[:HAS_ADAPTATION]->(Adaptation)

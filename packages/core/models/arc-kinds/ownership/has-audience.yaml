@@ -1,0 +1,15 @@
+# packages/core/models/arc-kinds/ownership/has-audience.yaml
+arc:
+  name: HAS_AUDIENCE
+  family: ownership
+  scope: intra_realm
+  source: Locale
+  target: AudienceSet
+  cardinality: one_to_many
+  llm_context: Locale has multiple audience sets, one per segment.
+  cypher_pattern: (Locale)-[:HAS_AUDIENCE {segment: $segment}]->(AudienceSet)
+  properties:
+    segment:
+      type: string
+      required: true
+      description: "Audience segment (b2b, b2c, general)"
