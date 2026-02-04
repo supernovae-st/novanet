@@ -23,7 +23,7 @@ models/
 │   │   ├── instruction/     #    PagePrompt, BlockPrompt, BlockRules
 │   │   └── output/          #    PageL10n, BlockL10n
 │   └── shared/              # 🎯 SHARED scope (6 nodes)
-│       ├── seo/             #    SEOKeywordL10n, SEOKeywordMetrics, SEOMiningRun
+│       ├── seo/             #    SEOKeyword, SEOKeywordMetrics, SEOMiningRun
 │       └── geo/             #    GEOSeedL10n, GEOSeedMetrics, GEOMiningRun
 ├── views/                   # View definitions (YAML)
 │   ├── _registry.yaml
@@ -42,7 +42,7 @@ NovaNet uses a **3-realm architecture** (v9 replaces "scope" with "realm"):
 | Realm | Count | Description | Examples |
 |-------|-------|-------------|----------|
 | 🌍 **GLOBAL** | 15 | Shared locale knowledge | Locale, LocaleVoice, LocaleCulture, Expression |
-| 🎯 **SHARED** | 6 | Reusable targeting data | SEOKeywordL10n, GEOSeedL10n, *Metrics, *MiningRun |
+| 🎯 **SHARED** | 6 | Reusable targeting data | SEOKeyword, GEOSeedL10n, *Metrics, *MiningRun |
 | 📦 **PROJECT** | 14 | Per-project content | Project, Page, Block, Concept, PageL10n, BlockL10n |
 
 ## Locale Behavior Classification

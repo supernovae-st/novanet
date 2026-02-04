@@ -251,7 +251,7 @@ describe('SchemaNode', () => {
       <ReactFlowProvider>
         <SchemaNode
           {...defaultProps}
-          data={{ ...defaultProps.data, realm: 'shared', nodeType: 'SEOKeywordL10n', label: 'SEO Keyword' }}
+          data={{ ...defaultProps.data, realm: 'shared', nodeType: 'SEOKeyword', label: 'SEO Keyword' }}
         />
       </ReactFlowProvider>
     );

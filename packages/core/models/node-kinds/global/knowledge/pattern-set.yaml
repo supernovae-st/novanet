@@ -1,18 +1,17 @@
 # packages/core/models/node-kinds/global/knowledge/pattern-set.yaml
-# PatternSet — Usage-specific content patterns for a locale
+# PatternSet — Container grouping Pattern atoms by usage
 #
-# Tier: semantic (contextual retrieval by usage)
+# v10.1: Pure container (no JSON blobs - data lives in Pattern atoms)
 # Usages: cta, headlines, body, social
-# Stability: Medium - update quarterly
+# Stability: High - structure rarely changes
 
 node:
   name: PatternSet
   realm: global
   layer: knowledge
   trait: knowledge
-  knowledge_tier: semantic
-  icon: "📝"
-  description: "Usage-specific content patterns and templates"
+  icon: "📋"
+  description: "Container grouping Pattern atoms by usage"
 
   standard_properties:
     display_name:
@@ -31,7 +30,7 @@ node:
       type: string
       required: true
       description: "LLM generation hints"
-      example: "USE: for CTA writing. TRIGGERS: button, action, convert. NOT: headlines."
+      example: "USE: to find patterns by usage. TRIGGERS: CTA, headline. NOT: individual templates."
 
     created_at:
       type: datetime
@@ -44,52 +43,21 @@ node:
       description: "Last update timestamp"
 
   properties:
-    # Usage identification
+    # Usage identification (only property - data is in atoms)
     usage:
       type: string
       required: true
       enum: [cta, headlines, body, social]
-      description: "Pattern usage category"
+      description: "Pattern usage category this set groups"
       example: "cta"
 
-    # Pattern templates
-    patterns:
-      type: json
-      required: true
-      description: "Content patterns with placeholders"
-      example:
-        primary_action: "Découvrir {product}"
-        secondary_action: "En savoir plus"
-        urgency: "Profitez-en maintenant"
-        benefit: "Bénéficiez de {benefit}"
-
-    # Structure templates
-    structures:
-      type: json
-      required: false
-      description: "Structural patterns"
-      example:
-        short: "{verb} {object}"
-        medium: "{verb} {object} {benefit}"
-        long: "{context}, {verb} {object} et {benefit}"
-
-    # Effective verbs
-    power_verbs:
-      type: json
-      required: false
-      description: "High-conversion verbs for this usage"
-      example: ["découvrir", "profiter", "bénéficier", "accéder", "obtenir"]
-
-    # Patterns to avoid
-    avoid_patterns:
-      type: json
-      required: false
-      description: "Ineffective or culturally inappropriate patterns"
-      example:
-        aggressive: ["Achetez maintenant!", "Ne ratez pas!"]
-        overused: ["Cliquez ici"]
-
   relations:
+    outgoing:
+      - type: CONTAINS
+        to: Pattern
+        cardinality: "1:N"
+        description: "PatternSet contains multiple Pattern atoms"
+
     incoming:
       - type: HAS_PATTERNS
         from: Locale

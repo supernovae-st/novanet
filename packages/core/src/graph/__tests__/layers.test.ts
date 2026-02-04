@@ -35,7 +35,7 @@ describe('graph/layers', () => {
   });
 
   it('should map shared realm nodes correctly', () => {
-    expect(NODE_LAYERS.SEOKeywordL10n).toBe('seo');
+    expect(NODE_LAYERS.SEOKeyword).toBe('seo');
     expect(NODE_LAYERS.SEOMiningRun).toBe('seo');
     expect(NODE_LAYERS.GEOSeedL10n).toBe('geo');
     expect(NODE_LAYERS.GEOMiningRun).toBe('geo');

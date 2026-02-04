@@ -46,7 +46,7 @@ docs:
       description: Localized concept content
 
     - name: SEO/GEO Targets
-      nodes: [SEOKeywordL10n, GEOSeedL10n]
+      nodes: [SEOKeyword, GEOSeedL10n]
       color: orange
       description: SEO and GEO targeting
 
@@ -80,7 +80,7 @@ docs:
       description: Get SEO keywords and GEO seeds targeted by a concept
       query: |
         MATCH (c:Concept {key: $conceptKey})
-        OPTIONAL MATCH (c)-[:TARGETS_SEO]->(seo:SEOKeywordL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+        OPTIONAL MATCH (c)-[:TARGETS_SEO]->(seo:SEOKeyword)-[:FOR_LOCALE]->(l:Locale {key: $locale})
         OPTIONAL MATCH (c)-[:TARGETS_GEO]->(geo:GEOSeedL10n)-[:FOR_LOCALE]->(l2:Locale {key: $locale})
         RETURN c.key AS concept,
                collect(DISTINCT seo.keyword) AS seoKeywords,

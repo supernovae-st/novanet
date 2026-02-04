@@ -9,7 +9,7 @@ The Shared scope contains nodes that are independent of specific projects
 but still locale-specific. These are reusable across multiple projects.
 
 **6 nodes organized by domain:**
-- **SEO (3)**: SEOKeywordL10n, SEOKeywordMetrics, SEOMiningRun
+- **SEO (3)**: SEOKeyword, SEOKeywordMetrics, SEOMiningRun
 - **GEO (3)**: GEOSeedL10n, GEOSeedMetrics, GEOMiningRun
 
 **Key insight:**
@@ -32,7 +32,7 @@ flowchart TB
     classDef orange fill:#f97316,stroke:#ea580c,color:#fff
 
     subgraph SEO_Keywords["SEO Keywords"]
-        SEOKeywordL10n["SEOKeywordL10n"]
+        SEOKeyword["SEOKeyword"]
     end
 
     subgraph SEO_Metrics["SEO Metrics"]
@@ -55,7 +55,7 @@ flowchart TB
         GEOMiningRun["GEOMiningRun"]
     end
 
-    class SEOKeywordL10n blue
+    class SEOKeyword blue
     class SEOKeywordMetrics green
     class SEOMiningRun gray
     class GEOSeedL10n purple
@@ -72,7 +72,7 @@ flowchart TB
 
 | Node | Layer |
 |------|-------|
-| SEOKeywordL10n | SEO Keywords |
+| SEOKeyword | SEO Keywords |
 | SEOKeywordMetrics | SEO Metrics |
 | SEOMiningRun | SEO Mining |
 | GEOSeedL10n | GEO Seeds |
@@ -95,7 +95,7 @@ flowchart TB
 Get highest-volume SEO keywords for a locale
 
 ```cypher
-MATCH (kw:SEOKeywordL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+MATCH (kw:SEOKeyword)-[:FOR_LOCALE]->(l:Locale {key: $locale})
 MATCH (kw)-[:HAS_METRICS]->(m:SEOKeywordMetrics)
 RETURN kw.keyword AS keyword,
        kw.intent AS intent,
@@ -113,7 +113,7 @@ LIMIT 20
 Find all keywords a concept targets
 
 ```cypher
-MATCH (c:Concept {key: $conceptKey})-[:TARGETS_SEO]->(kw:SEOKeywordL10n)
+MATCH (c:Concept {key: $conceptKey})-[:TARGETS_SEO]->(kw:SEOKeyword)
 MATCH (kw)-[:FOR_LOCALE]->(l:Locale {key: $locale})
 OPTIONAL MATCH (kw)-[:HAS_METRICS]->(m:SEOKeywordMetrics)
 RETURN kw.keyword AS keyword,

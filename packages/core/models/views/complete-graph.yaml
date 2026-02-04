@@ -96,7 +96,7 @@ docs:
 
     # 🎯 SHARED SCOPE (6 nodes)
     - name: Shared - SEO
-      nodes: [SEOKeywordL10n, SEOKeywordMetrics, SEOMiningRun]
+      nodes: [SEOKeyword, SEOKeywordMetrics, SEOMiningRun]
       color: gray
       description: SEO keyword mining
 

@@ -125,7 +125,7 @@ core/
 │   │   │   ├── instruction/   #   Layer: instruction (PagePrompt, BlockPrompt, BlockRules)
 │   │   │   └── output/        #   Layer: output (PageL10n, BlockL10n)
 │   │   └── shared/            # Realm: shared (8 nodes)
-│   │       ├── seo/           #   Layer: seo (SEOKeywordL10n, SEOKeywordMetrics, SEOMiningRun)
+│   │       ├── seo/           #   Layer: seo (SEOKeyword, SEOKeywordMetrics, SEOMiningRun)
 │   │       └── geo/           #   Layer: geo (GEOSeedL10n, GEOSeedMetrics, GEOMiningRun)
 │   └── views/                 # YAML view definitions
 ├── src/                       # TypeScript source

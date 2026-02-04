@@ -77,7 +77,7 @@ describe('graph/generator', () => {
     it('should create Cartesian product for multi-type relations', () => {
       const result = generateSchemaGraph();
 
-      // FOR_LOCALE has multiple source types: ConceptL10n, ProjectL10n, PageL10n, BlockL10n, SEOKeywordL10n, GEOSeedL10n
+      // FOR_LOCALE has multiple source types: ConceptL10n, ProjectL10n, PageL10n, BlockL10n, SEOKeyword, GEOSeedL10n
       // All going to Locale (1 target)
       // Should create 6 arcs for this relation
       const forLocaleArcs = result.arcs.filter(e => e.relationType === 'FOR_LOCALE');

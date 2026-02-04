@@ -12,7 +12,7 @@ include:
   # SEO Keywords
   - relation: FOR_LOCALE
     direction: incoming
-    targetTypes: [SEOKeywordL10n]
+    targetTypes: [SEOKeyword]
     include:
       - relation: HAS_METRICS
         direction: outgoing
@@ -34,18 +34,18 @@ docs:
 
     **Pipeline stages:**
     1. **Mining**: SEOMiningRun discovers keywords per locale
-    2. **Targeting**: Concepts target SEOKeywordL10n
+    2. **Targeting**: Concepts target SEOKeyword
     3. **Metrics**: SEOKeywordMetrics tracks performance
     4. **Linking**: Pages link via LINKS_TO with SEO weight
 
     **Node types:**
-    - SEOKeywordL10n: Localized keyword (locale-specific)
+    - SEOKeyword: Localized keyword (locale-specific)
     - SEOKeywordMetrics: Performance metrics (search volume, difficulty)
     - SEOMiningRun: Mining job metadata
 
   layers:
     - name: Keywords
-      nodes: [SEOKeywordL10n]
+      nodes: [SEOKeyword]
       color: blue
       description: Localized SEO keywords
 
@@ -68,7 +68,7 @@ docs:
     - name: Keywords with metrics
       description: Get keywords with their performance metrics
       query: |
-        MATCH (kw:SEOKeywordL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+        MATCH (kw:SEOKeyword)-[:FOR_LOCALE]->(l:Locale {key: $locale})
         OPTIONAL MATCH (kw)-[:HAS_METRICS]->(m:SEOKeywordMetrics)
         RETURN kw.keyword AS keyword,
                kw.intent AS intent,
@@ -83,7 +83,7 @@ docs:
     - name: Concept keyword coverage
       description: Which concepts target which keywords
       query: |
-        MATCH (c:Concept)-[:TARGETS_SEO]->(kw:SEOKeywordL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+        MATCH (c:Concept)-[:TARGETS_SEO]->(kw:SEOKeyword)-[:FOR_LOCALE]->(l:Locale {key: $locale})
         RETURN c.key AS concept,
                collect(kw.keyword) AS targetedKeywords
         ORDER BY size(collect(kw.keyword)) DESC
@@ -93,7 +93,7 @@ docs:
     - name: Internal linking opportunities
       description: Pages that could link based on shared SEO targets
       query: |
-        MATCH (p1:Page)-[:USES_CONCEPT]->(c:Concept)-[:TARGETS_SEO]->(kw:SEOKeywordL10n)
+        MATCH (p1:Page)-[:USES_CONCEPT]->(c:Concept)-[:TARGETS_SEO]->(kw:SEOKeyword)
         MATCH (p2:Page)-[:USES_CONCEPT]->(c2:Concept)-[:TARGETS_SEO]->(kw)
         WHERE p1 <> p2
         AND NOT EXISTS { (p1)-[:LINKS_TO]->(p2) }
@@ -116,6 +116,6 @@ docs:
         locale: "fr-FR"
 
   notes:
-    - "SEOKeywordL10n is locale-specific (keyword varies by locale)"
+    - "SEOKeyword is locale-specific (keyword varies by locale)"
     - "Metrics are time-series - use latest for current state"
     - "LINKS_TO relation includes seo_weight for link juice optimization"

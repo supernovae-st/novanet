@@ -167,7 +167,7 @@ All meta-nodes carry `:Meta` double-label.
 |-------|-------|-------|
 | **🌍 Global** | 11 | Locale, Formatting, Slugification, Adaptation, Style, TermSet, ExpressionSet, PatternSet, CultureSet, TabooSet, AudienceSet |
 | **📦 Project** | 23 | Project, BrandIdentity, ProjectL10n, Page, Block, BlockType, PageType, Concept, ConceptL10n, PagePrompt, BlockPrompt, BlockRules, PageL10n, BlockL10n, GenerationJob, PromptArtifact, OutputArtifact, EvaluationSignal, ContentSlot, TopicCluster, SearchIntent, AudiencePersona, ChannelSurface |
-| **🎯 Shared** | 8 | SEOKeywordL10n, SEOKeywordMetrics, SEOMiningRun, GEOSeedL10n, GEOSeedMetrics, GEOMiningRun, Thing, ThingL10n |
+| **🎯 Shared** | 8 | SEOKeyword, SEOKeywordMetrics, SEOMiningRun, GEOSeedL10n, GEOSeedMetrics, GEOMiningRun, Thing, ThingL10n |
 
 ### Key Relations (grouped by ArcFamily)
 - **Ownership:** `HAS_CONCEPT`, `HAS_PAGE`, `HAS_BLOCK`, `OF_TYPE`, `SUPPORTS_LOCALE`

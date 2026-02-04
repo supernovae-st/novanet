@@ -62,7 +62,7 @@ export const NODE_ICONS: Record<NodeType, string> = {
   AudienceSet: '👥',
 
   // SHARED — seo (3)
-  SEOKeywordL10n: '🔍',
+  SEOKeyword: '🔍',
   SEOKeywordMetrics: '📊',
   SEOMiningRun: '⚙️',
 

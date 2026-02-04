@@ -13,7 +13,7 @@ export const NODE_TYPES = [
   'SearchIntent', 'TopicCluster', 'Thing', 'AudiencePersona', 'ChannelSurface',
   // Localized (7)
   'ProjectL10n', 'ConceptL10n', 'PageL10n', 'BlockL10n',
-  'SEOKeywordL10n', 'GEOSeedL10n', 'ThingL10n',
+  'SEOKeyword', 'GEOSeedL10n', 'ThingL10n',
   // Knowledge (10) — v10 tiered model: technical/style/semantic
   'Formatting', 'Slugification', 'Adaptation',  // Technical tier
   'Style',                                       // Style tier
@@ -110,7 +110,7 @@ export const KIND_META: Record<NodeType, KindMeta> = {
   // ═══════════════════════════════════════════════════════════════════════════
   // SHARED REALM — seo (3)
   // ═══════════════════════════════════════════════════════════════════════════
-  SEOKeywordL10n:    { realm: 'shared', layer: 'seo', trait: 'localized' },
+  SEOKeyword:    { realm: 'shared', layer: 'seo', trait: 'localized' },
   SEOKeywordMetrics: { realm: 'shared', layer: 'seo', trait: 'derived' },
   SEOMiningRun:      { realm: 'shared', layer: 'seo', trait: 'job' },
 

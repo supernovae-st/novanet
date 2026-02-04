@@ -29,13 +29,13 @@ flowchart TB
     end
 
     subgraph SEO/GEO_Targets["SEO/GEO Targets"]
-        SEOKeywordL10n["SEOKeywordL10n"]
+        SEOKeyword["SEOKeyword"]
         GEOSeedL10n["GEOSeedL10n"]
     end
 
     class Concept blue
     class ConceptL10n green
-    class SEOKeywordL10n,GEOSeedL10n orange
+    class SEOKeyword,GEOSeedL10n orange
 
     Concept -->|HAS_L10N| HAS_L10N_target
     Concept -->|TARGETS_SEO| TARGETS_SEO_target
@@ -49,7 +49,7 @@ flowchart TB
 |------|-------|
 | Concept | Concept Core |
 | ConceptL10n | Localization |
-| SEOKeywordL10n | SEO/GEO Targets |
+| SEOKeyword | SEO/GEO Targets |
 | GEOSeedL10n | SEO/GEO Targets |
 
 ## Relations
@@ -102,7 +102,7 @@ Get SEO keywords and GEO seeds targeted by a concept
 
 ```cypher
 MATCH (c:Concept {key: $conceptKey})
-OPTIONAL MATCH (c)-[:TARGETS_SEO]->(seo:SEOKeywordL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+OPTIONAL MATCH (c)-[:TARGETS_SEO]->(seo:SEOKeyword)-[:FOR_LOCALE]->(l:Locale {key: $locale})
 OPTIONAL MATCH (c)-[:TARGETS_GEO]->(geo:GEOSeedL10n)-[:FOR_LOCALE]->(l2:Locale {key: $locale})
 RETURN c.key AS concept,
        collect(DISTINCT seo.keyword) AS seoKeywords,

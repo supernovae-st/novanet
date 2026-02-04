@@ -101,9 +101,9 @@ const RELATION_TARGET_TYPE_MAP: Record<string, string> = {
   HAS_CULTURE: 'CultureSet',
   HAS_TABOOS: 'TabooSet',
   HAS_AUDIENCE: 'AudienceSet',
-  HAS_SEO_TARGET: 'SEOKeywordL10n',
+  HAS_SEO_TARGET: 'SEOKeyword',
   HAS_GEO_TARGET: 'GEOSeedL10n',
-  TARGETS_SEO: 'SEOKeywordL10n',
+  TARGETS_SEO: 'SEOKeyword',
   TARGETS_GEO: 'GEOSeedL10n',
   HAS_PAGE: 'Page',
   HAS_CONCEPT: 'Concept',
@@ -700,7 +700,7 @@ export const VIEW_PRESETS: ViewPreset[] = [
     filter: () => NovaNetFilter.create()
       .byTypes(
         'ProjectL10n', 'ConceptL10n', 'PageL10n', 'BlockL10n',
-        'SEOKeywordL10n', 'GEOSeedL10n',
+        'SEOKeyword', 'GEOSeedL10n',
       ),
   },
   {

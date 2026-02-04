@@ -305,10 +305,10 @@ export {
 } from './locale-knowledge.js';
 
 // =============================================================================
-// SEO (v7.1.0, v7.8.2: SEOKeyword → SEOKeywordL10n)
+// SEO (v7.1.0, v7.8.2: SEOKeyword → SEOKeyword)
 // =============================================================================
 
-export interface SEOKeywordL10n extends StandardNodeProperties {
+export interface SEOKeyword extends StandardNodeProperties {
   // key: "creer-qr-code-gratuit-fr"
   // display_name: "créer qr code gratuit"
   // icon: "🔍"
@@ -325,7 +325,7 @@ export interface SEOKeywordL10n extends StandardNodeProperties {
 
 /**
  * SEOKeywordMetrics - Historical metrics snapshot for an SEO keyword (v7.8.5)
- * Unified metrics pattern: SEOKeywordL10n -[:HAS_METRICS]-> SEOKeywordMetrics
+ * Unified metrics pattern: SEOKeyword -[:HAS_METRICS]-> SEOKeywordMetrics
  */
 export interface SEOKeywordMetrics {
   // Standard properties (v8.2.0 - no icon/priority/freshness)

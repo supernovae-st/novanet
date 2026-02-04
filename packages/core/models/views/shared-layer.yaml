@@ -14,7 +14,7 @@ include:
   # SEO nodes
   - relation: FOR_LOCALE
     direction: incoming
-    targetTypes: [SEOKeywordL10n]
+    targetTypes: [SEOKeyword]
     include:
       - relation: HAS_METRICS
         direction: outgoing
@@ -43,7 +43,7 @@ docs:
     but still locale-specific. These are reusable across multiple projects.
 
     **6 nodes organized by domain:**
-    - **SEO (3)**: SEOKeywordL10n, SEOKeywordMetrics, SEOMiningRun
+    - **SEO (3)**: SEOKeyword, SEOKeywordMetrics, SEOMiningRun
     - **GEO (3)**: GEOSeedL10n, GEOSeedMetrics, GEOMiningRun
 
     **Key insight:**
@@ -56,7 +56,7 @@ docs:
 
   layers:
     - name: SEO Keywords
-      nodes: [SEOKeywordL10n]
+      nodes: [SEOKeyword]
       color: blue
       description: Localized SEO keywords with search intent
 
@@ -89,7 +89,7 @@ docs:
     - name: Top keywords by volume
       description: Get highest-volume SEO keywords for a locale
       query: |
-        MATCH (kw:SEOKeywordL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+        MATCH (kw:SEOKeyword)-[:FOR_LOCALE]->(l:Locale {key: $locale})
         MATCH (kw)-[:HAS_METRICS]->(m:SEOKeywordMetrics)
         RETURN kw.keyword AS keyword,
                kw.intent AS intent,
@@ -103,7 +103,7 @@ docs:
     - name: Keywords targeted by concept
       description: Find all keywords a concept targets
       query: |
-        MATCH (c:Concept {key: $conceptKey})-[:TARGETS_SEO]->(kw:SEOKeywordL10n)
+        MATCH (c:Concept {key: $conceptKey})-[:TARGETS_SEO]->(kw:SEOKeyword)
         MATCH (kw)-[:FOR_LOCALE]->(l:Locale {key: $locale})
         OPTIONAL MATCH (kw)-[:HAS_METRICS]->(m:SEOKeywordMetrics)
         RETURN kw.keyword AS keyword,

@@ -69,7 +69,7 @@ flowchart TB
       GEOSeedMetrics["⚪ GEOSeedMetrics"]
     end
     subgraph SHARED_seo["SEO"]
-      SEOKeywordL10n["🟢 SEOKeywordL10n"]
+      SEOKeyword["🟢 SEOKeyword"]
       SEOKeywordMetrics["⚪ SEOKeywordMetrics"]
       SEOMiningRun["⚙️ SEOMiningRun"]
     end
@@ -122,9 +122,9 @@ flowchart TB
   Concept -.->|HAS_L10N| ProjectL10n
   Concept -.->|SEMANTIC_LINK| Concept
   Concept --o|TARGETS_GEO| GEOSeedL10n
-  Concept --o|TARGETS_SEO| SEOKeywordL10n
+  Concept --o|TARGETS_SEO| SEOKeyword
   ConceptL10n --o|HAS_GEO_TARGET| GEOSeedL10n
-  ConceptL10n --o|HAS_SEO_TARGET| SEOKeywordL10n
+  ConceptL10n --o|HAS_SEO_TARGET| SEOKeyword
   GEOMiningRun --o|GEO_MINES| GEOSeedL10n
   GEOSeedL10n -->|HAS_METRICS| GEOSeedMetrics
   GEOSeedL10n -->|HAS_METRICS| SEOKeywordMetrics
@@ -167,9 +167,9 @@ flowchart TB
   Project -.->|HAS_L10N| ProjectL10n
   Project -->|HAS_PAGE| Page
   Project -.->|SUPPORTS_LOCALE| Locale
-  SEOKeywordL10n -->|HAS_METRICS| GEOSeedMetrics
-  SEOKeywordL10n -->|HAS_METRICS| SEOKeywordMetrics
-  SEOMiningRun --o|SEO_MINES| SEOKeywordL10n
+  SEOKeyword -->|HAS_METRICS| GEOSeedMetrics
+  SEOKeyword -->|HAS_METRICS| SEOKeywordMetrics
+  SEOMiningRun --o|SEO_MINES| SEOKeyword
 
   %% Edge colors by category
   linkStyle 2,3,7,8,9,10,11,12,43,44,50,52,53,54,55 stroke:#8b5cf6,stroke-width:2px
@@ -213,7 +213,7 @@ flowchart TB
   class Project invariant
   class ProjectL10n localized
   class Reference localeKnowledge
-  class SEOKeywordL10n localized
+  class SEOKeyword localized
   class SEOKeywordMetrics derived
   class SEOMiningRun job
 ```

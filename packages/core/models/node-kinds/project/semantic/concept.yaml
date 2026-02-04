@@ -133,14 +133,9 @@ node:
       description: "Spreading activation links to related concepts"
 
     TARGETS_SEO:
-      to: SEOKeywordL10n
+      to: SEOKeyword
       cardinality: "1:N"
-      description: "SEO keywords targeting this concept (v7.8.2: SEOKeyword → SEOKeywordL10n)"
-
-    TARGETS_GEO:
-      to: GEOSeedL10n
-      cardinality: "1:N"
-      description: "GEO seeds targeting this concept"
+      description: "SEO keywords targeting this concept"
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # EXAMPLE

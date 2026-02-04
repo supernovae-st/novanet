@@ -17,8 +17,8 @@ import type {
   Locale,
   LocaleVoice,
 
-  // SEO/GEO (v7.8.2: SEOKeyword → SEOKeywordL10n, v7.8.5: GEOCitation → GEOSeedMetrics)
-  SEOKeywordL10n,
+  // SEO/GEO (v7.8.2: SEOKeyword → SEOKeyword, v7.8.5: GEOCitation → GEOSeedMetrics)
+  SEOKeyword,
   GEOSeedMetrics,
 
   // Relation props
@@ -180,9 +180,9 @@ describe('Type Exports', () => {
   });
 
   describe('SEO/GEO Types (v8.2.0)', () => {
-    it('SEOKeywordL10n should extend StandardNodeProperties (no icon/priority/freshness)', () => {
+    it('SEOKeyword should extend StandardNodeProperties (no icon/priority/freshness)', () => {
       // v8.2.0: Removed icon, priority, freshness (YAML v7.11.0 alignment)
-      const keyword: SEOKeywordL10n = {
+      const keyword: SEOKeyword = {
         key: 'creer-qr-code-fr',
         display_name: 'créer qr code',
         description: 'Main SEO keyword',

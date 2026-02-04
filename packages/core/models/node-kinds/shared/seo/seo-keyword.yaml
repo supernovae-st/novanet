@@ -1,12 +1,12 @@
-# models/nodes/shared/seo/seo-keyword-l10n.yaml
-# SEOKeywordL10n - Target keyword with metrics (LOCALIZED - has FOR_LOCALE)
+# models/nodes/shared/seo/seo-keyword.yaml
+# SEOKeyword - Target keyword with metrics (LOCALIZED - has FOR_LOCALE)
 #
-# v7.8.2: Renamed from SEOKeyword to SEOKeywordL10n
-#         - Follows *L10n convention for all LOCALIZED nodes (nodes with FOR_LOCALE)
-#         - Consistent with: ProjectL10n, ConceptL10n, PageL10n, BlockL10n
+# v10.0: Renamed back from SEOKeywordL10n to SEOKeyword
+#        - Simpler naming while keeping trait: localized
+#        - Still has FOR_LOCALE relation to Locale
 
 node:
-  name: SEOKeywordL10n
+  name: SEOKeyword
   realm: shared
   layer: seo
   trait: localized
@@ -114,7 +114,7 @@ node:
       description: "Historical ranking snapshots"
 
   # NOTE: SEOVariation REMOVED in v7.8.4
-  # Variations are just other SEOKeywordL10n nodes linked to the same Concept
+  # Variations are just other SEOKeyword nodes linked to the same Concept
   # Use TARGETS_SEO relation with is_primary/variation_type properties instead
 
   # ═══════════════════════════════════════════════════════════════════════════════
@@ -124,7 +124,7 @@ node:
   example:
     description: "Get top keywords by volume for a locale"
     cypher: |
-      MATCH (c:Concept)-[:TARGETS_SEO]->(kw:SEOKeywordL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+      MATCH (c:Concept)-[:TARGETS_SEO]->(kw:SEOKeyword)-[:FOR_LOCALE]->(l:Locale {key: $locale})
       RETURN c.key AS concept, kw.value AS keyword, kw.volume, kw.difficulty
       ORDER BY kw.volume DESC
       LIMIT 20

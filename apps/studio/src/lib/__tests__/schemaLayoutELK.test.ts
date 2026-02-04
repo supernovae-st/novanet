@@ -132,7 +132,7 @@ describe('schemaLayoutELK', () => {
               label: 'SEO',
               description: 'SEO data',
               icon: '🔍',
-              nodeTypes: ['SEOKeywordL10n'] as never[],
+              nodeTypes: ['SEOKeyword'] as never[],
             },
             geo: {
               label: 'GEO',
@@ -152,7 +152,7 @@ describe('schemaLayoutELK', () => {
         { id: 'schema-Locale', nodeType: 'Locale', realm: 'global', layer: 'config', label: 'Locale', description: '', trait: 'invariant' },
         { id: 'schema-Style', nodeType: 'Style', realm: 'global', layer: 'knowledge', label: 'Style', description: '', trait: 'knowledge' },
         { id: 'schema-Formatting', nodeType: 'Formatting', realm: 'global', layer: 'knowledge', label: 'Formatting', description: '', trait: 'knowledge' },
-        { id: 'schema-SEOKeywordL10n', nodeType: 'SEOKeywordL10n', realm: 'shared', layer: 'seo', label: 'SEO Keyword', description: '', trait: 'localized' },
+        { id: 'schema-SEOKeyword', nodeType: 'SEOKeyword', realm: 'shared', layer: 'seo', label: 'SEO Keyword', description: '', trait: 'localized' },
         { id: 'schema-GEOSeedL10n', nodeType: 'GEOSeedL10n', realm: 'shared', layer: 'geo', label: 'GEO Seed', description: '', trait: 'localized' },
       ] as SchemaNode[],
       arcs: [

@@ -390,8 +390,8 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   // ==========================================================================
   // SEO LAYER (3 nodes)
   // ==========================================================================
-  SEOKeywordL10n: {
-    type: 'SEOKeywordL10n',
+  SEOKeyword: {
+    type: 'SEOKeyword',
     label: 'SEO Keyword',
     icon: '🔍',
     color: '#ef4444',

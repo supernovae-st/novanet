@@ -1,7 +1,7 @@
 # packages/core/models/node-kinds/global/knowledge/slugification.yaml
 # Slugification — URL slug rules for a locale (transliteration, stop words, URL conventions)
 #
-# Tier: technical (always loaded together)
+# v10.1: knowledge_tier removed (node type is sufficient for LLM routing)
 # Stability: High - changes rarely
 
 node:
@@ -9,7 +9,6 @@ node:
   realm: global
   layer: knowledge
   trait: knowledge
-  knowledge_tier: technical
   icon: "🔗"
   description: "URL slug rules: transliteration, stop words, URL conventions"
 

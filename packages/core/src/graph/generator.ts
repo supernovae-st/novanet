@@ -62,7 +62,7 @@ const NODE_LABELS: Record<NodeType, string> = {
   TabooSet: 'Taboo Set',
   AudienceSet: 'Audience Set',
   // Shared realm - seo (3)
-  SEOKeywordL10n: 'SEO Keyword',
+  SEOKeyword: 'SEO Keyword',
   SEOKeywordMetrics: 'SEO Metrics',
   SEOMiningRun: 'SEO Mining',
   // Shared realm - geo (5)

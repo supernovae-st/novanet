@@ -141,7 +141,7 @@ describe('navigation route logic', () => {
 
     it('returns realm types for realm-only filter', () => {
       const types = resolveFacets(['shared'], [], []);
-      expect(types).toContain('SEOKeywordL10n');
+      expect(types).toContain('SEOKeyword');
       expect(types).toContain('GEOMiningRun');
       expect(types).not.toContain('Project');
     });

@@ -1,7 +1,7 @@
 # packages/core/models/node-kinds/global/knowledge/formatting.yaml
 # Formatting — Technical formatting rules for a locale (dates, numbers, currency, phone, address, units)
 #
-# Tier: technical (always loaded together)
+# v10.1: knowledge_tier removed (node type is sufficient for LLM routing)
 # Stability: High - changes rarely
 
 node:
@@ -9,7 +9,6 @@ node:
   realm: global
   layer: knowledge
   trait: knowledge
-  knowledge_tier: technical
   icon: "🔢"
   description: "Technical formatting rules: dates, numbers, currency, phone, address, units"
 

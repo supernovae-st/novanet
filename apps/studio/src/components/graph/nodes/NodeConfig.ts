@@ -127,7 +127,7 @@ export const NODE_SIZES: Record<NodeType, NodeSize> = {
   // ==========================================================================
   // SHARED — seo (3 nodes)
   // ==========================================================================
-  SEOKeywordL10n: { width: 200, height: 100 },
+  SEOKeyword: { width: 200, height: 100 },
   SEOKeywordMetrics: { width: 160, height: 80 },
   SEOMiningRun: { width: 160, height: 80 },
 
@@ -393,7 +393,7 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
   // ==========================================================================
   // SHARED — seo - Red tones
   // ==========================================================================
-  SEOKeywordL10n: {
+  SEOKeyword: {
     primary: '#ef4444',
     secondary: '#f87171',
     tertiary: '#fca5a5',

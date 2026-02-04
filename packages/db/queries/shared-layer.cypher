@@ -8,7 +8,7 @@
 // ======================================================================
 :param locale => "fr-FR";
 
-MATCH (kw:SEOKeywordL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+MATCH (kw:SEOKeyword)-[:FOR_LOCALE]->(l:Locale {key: $locale})
 MATCH (kw)-[:HAS_METRICS]->(m:SEOKeywordMetrics)
 RETURN kw.keyword AS keyword,
        kw.intent AS intent,
@@ -24,7 +24,7 @@ LIMIT 20
 :param conceptKey => "qr-code-generator";
 :param locale => "en-US";
 
-MATCH (c:Concept {key: $conceptKey})-[:TARGETS_SEO]->(kw:SEOKeywordL10n)
+MATCH (c:Concept {key: $conceptKey})-[:TARGETS_SEO]->(kw:SEOKeyword)
 MATCH (kw)-[:FOR_LOCALE]->(l:Locale {key: $locale})
 OPTIONAL MATCH (kw)-[:HAS_METRICS]->(m:SEOKeywordMetrics)
 RETURN kw.keyword AS keyword,
