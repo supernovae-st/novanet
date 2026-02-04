@@ -27,7 +27,7 @@ This diagram shows the complete NovaNet graph schema with all 46 node types and 
 ```mermaid
 flowchart TB
   %% NovaNet Graph v9.0.0
-  %% Generated: 46 nodes, 134 edges
+  %% Generated: 42 nodes, 120 edges
   %% Source: 46 node YAMLs + relations.yaml + taxonomy.yaml
 
   %% Trait styling (node_trait)
@@ -43,20 +43,16 @@ flowchart TB
       Locale["🔵 Locale"]
     end
     subgraph GLOBAL_knowledge["Locale Knowledge"]
-      Constraint["🟣 Constraint"]
-      Expression["🟣 Expression"]
-      LocaleCulture["🟣 LocaleCulture"]
-      LocaleCultureReferences["🟣 LocaleCultureReferences"]
-      LocaleIdentity["🟣 LocaleIdentity"]
-      LocaleLexicon["🟣 LocaleLexicon"]
-      LocaleMarket["🟣 LocaleMarket"]
-      LocaleRulesAdaptation["🟣 LocaleRulesAdaptation"]
-      LocaleRulesFormatting["🟣 LocaleRulesFormatting"]
-      LocaleRulesSlug["🟣 LocaleRulesSlug"]
-      LocaleVoice["🟣 LocaleVoice"]
-      Metaphor["🟣 Metaphor"]
-      Pattern["🟣 Pattern"]
-      Reference["🟣 Reference"]
+      Adaptation["🟣 Adaptation"]
+      AudienceSet["🟣 AudienceSet"]
+      CultureSet["🟣 CultureSet"]
+      ExpressionSet["🟣 ExpressionSet"]
+      Formatting["🟣 Formatting"]
+      PatternSet["🟣 PatternSet"]
+      Slugification["🟣 Slugification"]
+      Style["🟣 Style"]
+      TabooSet["🟣 TabooSet"]
+      TermSet["🟣 TermSet"]
     end
   end
 
@@ -163,27 +159,13 @@ flowchart TB
   GenerationJob ==>|TRIGGERED_BY| Project
   GenerationJob ==>|USES_PROMPT| PromptArtifact
   Locale -.->|FALLBACK_TO| Locale
-  Locale -.->|HAS_CULTURE| LocaleCulture
-  Locale -.->|HAS_IDENTITY| LocaleIdentity
-  Locale -.->|HAS_LEXICON| LocaleLexicon
   Locale -.->|HAS_LOCALIZED_CONTENT| BlockL10n
   Locale -.->|HAS_LOCALIZED_CONTENT| ConceptL10n
   Locale -.->|HAS_LOCALIZED_CONTENT| GEOSeedL10n
   Locale -.->|HAS_LOCALIZED_CONTENT| PageL10n
   Locale -.->|HAS_LOCALIZED_CONTENT| ProjectL10n
   Locale -.->|HAS_LOCALIZED_CONTENT| SEOKeywordL10n
-  Locale -.->|HAS_MARKET| LocaleMarket
-  Locale -.->|HAS_RULES_ADAPTATION| LocaleRulesAdaptation
-  Locale -.->|HAS_RULES_FORMATTING| LocaleRulesFormatting
-  Locale -.->|HAS_RULES_SLUG| LocaleRulesSlug
-  Locale -.->|HAS_VOICE| LocaleVoice
   Locale -.->|VARIANT_OF| Locale
-  LocaleCulture -.->|HAS_CONSTRAINT| Constraint
-  LocaleCulture -.->|HAS_CULTURE_REFERENCES| LocaleCultureReferences
-  LocaleCultureReferences -.->|HAS_METAPHOR| Metaphor
-  LocaleCultureReferences -.->|HAS_REFERENCE| Reference
-  LocaleLexicon -.->|HAS_EXPRESSION| Expression
-  LocaleRulesFormatting -.->|HAS_PATTERN| Pattern
   OutputArtifact -.->|FOR_LOCALE| Locale
   OutputArtifact ==>|HAS_EVALUATION| EvaluationSignal
   OutputArtifact ==>|INCLUDES| BlockL10n
@@ -231,7 +213,7 @@ flowchart TB
   PromptArtifact ==>|COMPILED_FROM| BlockPrompt
   PromptArtifact ==>|COMPILED_FROM| PagePrompt
   PromptArtifact ==>|INCLUDES_CONCEPT| Concept
-  PromptArtifact ==>|INCLUDES_VOICE| LocaleVoice
+  PromptArtifact ==>|INCLUDES_STYLE| Style
   SEOKeywordL10n -.->|FOR_LOCALE| Locale
   SEOKeywordL10n --o|HAS_METRICS| GEOSeedMetrics
   SEOKeywordL10n --o|HAS_METRICS| SEOKeywordMetrics
@@ -250,14 +232,16 @@ flowchart TB
   TopicCluster -->|PILLAR_PAGE| Page
 
   %% Edge colors by family
-  linkStyle 12,13,14,17,18,19,20,21,37,42,43,45,46,47,71,72,73,74,75,76,92,95,98,99,100,101,102,114,115,116,117 stroke:#8b5cf6,stroke-width:2px
-  linkStyle 3,4,11,15,16,23,24,25,31,34,35,39,44,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,80,81,94,96,97,106,107,108,111,112,113,118,125,126,127,130 stroke:#22c55e,stroke-width:2px
-  linkStyle 27,28,32,33,38,40,41,119,120,121,122,124 stroke:#ec4899,stroke-width:2px
-  linkStyle 0,5,6,8,9,22,36,79,82,83,84,86,87,93,103,104,105,109,110,132,133 stroke:#3b82f6,stroke-width:2px
-  linkStyle 1,2,7,10,26,29,30,77,78,85,88,89,90,91,123,128,129,131 stroke:#f97316,stroke-width:2px
+  linkStyle 12,13,14,17,18,19,20,21,37,42,43,45,46,47,57,58,59,60,61,62,78,81,84,85,86,87,88,100,101,102,103 stroke:#8b5cf6,stroke-width:2px
+  linkStyle 3,4,11,15,16,23,24,25,31,34,35,39,44,48,49,50,51,52,53,54,55,56,66,67,80,82,83,92,93,94,97,98,99,104,111,112,113,116 stroke:#22c55e,stroke-width:2px
+  linkStyle 27,28,32,33,38,40,41,105,106,107,108,110 stroke:#ec4899,stroke-width:2px
+  linkStyle 0,5,6,8,9,22,36,65,68,69,70,72,73,79,89,90,91,95,96,118,119 stroke:#3b82f6,stroke-width:2px
+  linkStyle 1,2,7,10,26,29,30,63,64,71,74,75,76,77,109,114,115,117 stroke:#f97316,stroke-width:2px
 
   %% Class assignments
+  class Adaptation knowledge
   class AudiencePersona invariant
+  class AudienceSet knowledge
   class Block invariant
   class BlockL10n localized
   class BlockPrompt invariant
@@ -267,39 +251,33 @@ flowchart TB
   class ChannelSurface invariant
   class Concept invariant
   class ConceptL10n localized
-  class Constraint knowledge
   class ContentSlot invariant
+  class CultureSet knowledge
   class EvaluationSignal derived
-  class Expression knowledge
+  class ExpressionSet knowledge
+  class Formatting knowledge
   class GEOMiningRun job
   class GEOSeedL10n localized
   class GEOSeedMetrics derived
   class GenerationJob job
   class Locale invariant
-  class LocaleCulture knowledge
-  class LocaleCultureReferences knowledge
-  class LocaleIdentity knowledge
-  class LocaleLexicon knowledge
-  class LocaleMarket knowledge
-  class LocaleRulesAdaptation knowledge
-  class LocaleRulesFormatting knowledge
-  class LocaleRulesSlug knowledge
-  class LocaleVoice knowledge
-  class Metaphor knowledge
   class OutputArtifact derived
   class Page invariant
   class PageL10n localized
   class PagePrompt invariant
   class PageType invariant
-  class Pattern knowledge
+  class PatternSet knowledge
   class Project invariant
   class ProjectL10n localized
   class PromptArtifact derived
-  class Reference knowledge
   class SEOKeywordL10n localized
   class SEOKeywordMetrics derived
   class SEOMiningRun job
   class SearchIntent invariant
+  class Slugification knowledge
+  class Style knowledge
+  class TabooSet knowledge
+  class TermSet knowledge
   class Thing invariant
   class ThingL10n localized
   class TopicCluster invariant
