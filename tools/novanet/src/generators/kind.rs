@@ -178,6 +178,10 @@ fn generate_kind_cypher(nodes: &[ParsedNode]) -> crate::Result<String> {
         .unwrap();
         writeln!(out, "  {var}.schema_hint = '{hint}',").unwrap();
         writeln!(out, "  {var}.context_budget = '{budget}',").unwrap();
+        // v10: knowledge_tier for knowledge trait nodes only
+        if let Some(tier) = &node.def.knowledge_tier {
+            writeln!(out, "  {var}.knowledge_tier = '{tier}',").unwrap();
+        }
         writeln!(out, "  {var}.generation_count = 0,").unwrap();
         writeln!(out, "  {var}.created_at = datetime()").unwrap();
         writeln!(out, "ON MATCH SET").unwrap();
@@ -198,6 +202,10 @@ fn generate_kind_cypher(nodes: &[ParsedNode]) -> crate::Result<String> {
         .unwrap();
         writeln!(out, "  {var}.schema_hint = '{hint}',").unwrap();
         writeln!(out, "  {var}.context_budget = '{budget}',").unwrap();
+        // v10: knowledge_tier for knowledge trait nodes only
+        if let Some(tier) = &node.def.knowledge_tier {
+            writeln!(out, "  {var}.knowledge_tier = '{tier}',").unwrap();
+        }
         writeln!(out, "  {var}.generation_count = 0,").unwrap();
         writeln!(out, "  {var}.updated_at = datetime();").unwrap();
         writeln!(out).unwrap();
@@ -583,6 +591,25 @@ mod tests {
 
         // v10: Header mentions 42 Kind nodes (46 - 14 old + 10 new)
         assert!(cypher.contains("42 Kind nodes"));
+
+        // v10: knowledge_tier property for knowledge nodes
+        assert!(
+            cypher.contains("k_Style.knowledge_tier = 'style'"),
+            "Style should have knowledge_tier = 'style'"
+        );
+        assert!(
+            cypher.contains("k_Formatting.knowledge_tier = 'technical'"),
+            "Formatting should have knowledge_tier = 'technical'"
+        );
+        assert!(
+            cypher.contains("k_ExpressionSet.knowledge_tier = 'semantic'"),
+            "ExpressionSet should have knowledge_tier = 'semantic'"
+        );
+        // Non-knowledge nodes should NOT have knowledge_tier
+        assert!(
+            !cypher.contains("k_Page.knowledge_tier"),
+            "Page (invariant) should not have knowledge_tier"
+        );
     }
 
     /// Snapshot test for a minimal Kind generator output.
