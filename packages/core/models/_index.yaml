@@ -1,5 +1,5 @@
 # ═══════════════════════════════════════════════════════════════════════════════
-# NOVANET DATA MODELS INDEX v9.0.0
+# NOVANET DATA MODELS INDEX v9.6.0
 # ═══════════════════════════════════════════════════════════════════════════════
 #
 # WHAT: Native content generation system using Neo4j graph database
@@ -27,12 +27,14 @@
 #   │  └───────────────────────────────────────────────────────────────────────┘  │
 #   │                                                                             │
 #   │  ┌───────────────────────────────────────────────────────────────────────┐  │
-#   │  │  📦 PROJECT (14 nodes) - Per-project instances                        │  │
+#   │  │  📦 PROJECT (18 nodes) - Per-project instances                        │  │
 #   │  │  └─ foundation/  🏢 Project, BrandIdentity, ProjectL10n               │  │
 #   │  │  └─ structure/   🔧 Page, Block                                       │  │
 #   │  │  └─ semantic/    💡 Concept, ConceptL10n                              │  │
-#   │  │  └─ instruction/ 📝 PageType, PagePrompt, BlockPrompt, BlockType, BlockRules │  │
-#   │  │  └─ output/      📤 PageL10n, BlockL10n                               │  │
+#   │  │  └─ instruction/ 📝 PageType, PagePrompt, BlockPrompt, BlockType,     │  │
+#   │  │                     BlockRules, PromptArtifact                        │  │
+#   │  │  └─ output/      📤 PageL10n, BlockL10n, GenerationJob, OutputArtifact│  │
+#   │  │                     EvaluationSignal                                  │  │
 #   │  └───────────────────────────────────────────────────────────────────────┘  │
 #   │                                                                             │
 #   └─────────────────────────────────────────────────────────────────────────────┘
@@ -331,18 +333,22 @@ files:
       - nodes/project/semantic/concept.yaml
       - nodes/project/semantic/concept-l10n.yaml
 
-    # 📝 INSTRUCTION (5 nodes) - AI generation directives (v7.10.0: +PageType)
+    # 📝 INSTRUCTION (6 nodes) - AI generation directives (v9.6.0: +PromptArtifact)
     instruction:
       - nodes/project/instruction/page-type.yaml
       - nodes/project/instruction/page-prompt.yaml
       - nodes/project/instruction/block-prompt.yaml
       - nodes/project/instruction/block-type.yaml
       - nodes/project/instruction/block-rules.yaml
+      - nodes/project/instruction/prompt-artifact.yaml     # v9.6.0 Generation Domain
 
-    # 📤 OUTPUT (2 nodes) - LLM-generated content (v7.11.0: removed PageMetrics)
+    # 📤 OUTPUT (5 nodes) - LLM-generated content (v9.6.0: +GenerationJob, OutputArtifact, EvaluationSignal)
     output:
       - nodes/project/output/page-l10n.yaml
       - nodes/project/output/block-l10n.yaml
+      - nodes/project/output/generation-job.yaml           # v9.6.0 Generation Domain
+      - nodes/project/output/output-artifact.yaml          # v9.6.0 Generation Domain
+      - nodes/project/output/evaluation-signal.yaml        # v9.6.0 Generation Domain
 
   # ═══════════════════════════════════════════════════════════════════════════
   # REFERENCE FILES
@@ -402,24 +408,33 @@ nodes_by_trait:
   derived:
     - SEOKeywordMetrics
     - GEOSeedMetrics
+    - PromptArtifact       # v9.6.0 Generation Domain
+    - OutputArtifact       # v9.6.0 Generation Domain
+    - EvaluationSignal     # v9.6.0 Generation Domain
   job:
     - SEOMiningRun
     - GEOMiningRun
+    - GenerationJob        # v9.6.0 Generation Domain
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# STATISTICS v9.0.0
+# STATISTICS v9.6.0
 # ═══════════════════════════════════════════════════════════════════════════════
 #
 # By Realm:
 #   🌍 GLOBAL:  15 nodes (Locale + 14 LocaleKnowledge)
 #   🎯 SHARED:   6 nodes (SEO 3 + GEO 3)
-#   📦 PROJECT: 14 nodes (Foundation 3 + Structure 2 + Semantic 2 + Instruction 5 + Output 2)
-#   TOTAL:      44 nodes, 75 arcs (5 arc families)
+#   📦 PROJECT: 18 nodes (Foundation 3 + Structure 2 + Semantic 2 + Instruction 6 + Output 5)
+#   TOTAL:      39 nodes, 75+ arcs (5 arc families)
 #
 # By Trait:
 #   🔵 INVARIANT:  11 (Project, BrandIdentity, Concept, Page, Block, PageType, BlockType, PagePrompt, BlockPrompt, BlockRules, Locale)
 #   🟢 LOCALIZED:   6 (ProjectL10n, ConceptL10n, PageL10n, BlockL10n, SEOKeywordL10n, GEOSeedL10n)
 #   🟣 KNOWLEDGE:  14 (LocaleIdentity, LocaleVoice, etc.)
-#   ⚪ DERIVED:     2 (SEOKeywordMetrics, GEOSeedMetrics)
-#   ⚙️ JOB:         2 (SEOMiningRun, GEOMiningRun)
+#   ⚪ DERIVED:     5 (SEOKeywordMetrics, GEOSeedMetrics, PromptArtifact, OutputArtifact, EvaluationSignal)
+#   ⚙️ JOB:         3 (SEOMiningRun, GEOMiningRun, GenerationJob)
+#
+# v9.6.0 additions (Generation Domain):
+#   +1 instruction: PromptArtifact
+#   +3 output: GenerationJob, OutputArtifact, EvaluationSignal
+#   +10 generation arcs (TRIGGERED_BY, USES_PROMPT, PRODUCES, etc.)
 #
