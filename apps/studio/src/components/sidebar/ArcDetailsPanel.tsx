@@ -41,8 +41,6 @@ interface ArcDetailsPanelProps {
   arc: GraphEdge | null;
 }
 
-/** @deprecated Use ArcDetailsPanel instead */
-export type EdgeDetailsPanelProps = ArcDetailsPanelProps;
 
 export const ArcDetailsPanel = memo(function ArcDetailsPanel({ arc }: ArcDetailsPanelProps) {
   const [expandedSections, setExpandedSections] = useState<Set<string>>(
@@ -213,8 +211,6 @@ export const ArcDetailsPanel = memo(function ArcDetailsPanel({ arc }: ArcDetails
   );
 });
 
-/** @deprecated Use ArcDetailsPanel instead */
-export const EdgeDetailsPanel = ArcDetailsPanel;
 
 // =============================================================================
 // Helpers

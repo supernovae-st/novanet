@@ -127,16 +127,6 @@ pub struct ArcsDocument {
     pub examples: Option<serde_yaml::Value>,
 }
 
-/// Backwards compatibility alias.
-pub type RelationsDocument = ArcsDocument;
-
-impl ArcsDocument {
-    /// Backwards compatibility: access arcs via `relations` field name.
-    pub fn relations(&self) -> &[ArcDef] {
-        &self.arcs
-    }
-}
-
 /// A single arc definition.
 #[derive(Debug, Clone, Deserialize)]
 pub struct ArcDef {
@@ -172,15 +162,7 @@ pub struct ArcDef {
     pub inverse_of: Option<String>,
 }
 
-/// Backwards compatibility alias.
-pub type RelationDef = ArcDef;
-
 impl ArcDef {
-    /// Backwards compatibility: access arc_type via `rel_type`.
-    pub fn rel_type(&self) -> &str {
-        &self.arc_type
-    }
-
     /// Returns true if this arc has an `inverse_of` field.
     pub fn is_inverse(&self) -> bool {
         self.inverse_of.is_some()
@@ -222,11 +204,6 @@ pub fn load_arcs(root: &Path) -> crate::Result<ArcsDocument> {
     }
 
     Ok(doc)
-}
-
-/// Backwards compatibility alias.
-pub fn load_relations(root: &Path) -> crate::Result<ArcsDocument> {
-    load_arcs(root)
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
