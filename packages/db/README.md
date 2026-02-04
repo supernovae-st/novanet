@@ -69,7 +69,7 @@ db/
 
 ---
 
-## Graph Schema (v10.0.0)
+## Graph Schema (v9.9.0)
 
 | Realm | Nodes | Description |
 |-------|-------|-------------|
@@ -81,7 +81,7 @@ Total: **42 node types**, **73 arc types**, **126 meta-nodes** (Realm/Layer/Kind
 
 ---
 
-## Locale Knowledge Architecture (v10 Tiered Model)
+## Locale Knowledge Architecture (v9.9 Tiered Model)
 
 ```
 Locale {key: "fr-FR"}
@@ -115,7 +115,7 @@ RETURN labels(n)[0] AS label, count(*) AS count
 ORDER BY count DESC;
 ```
 
-### Load Locale with Knowledge (v10 Tiered Model)
+### Load Locale with Knowledge (v9.9 Tiered Model)
 
 ```cypher
 MATCH (l:Locale {key: $locale})

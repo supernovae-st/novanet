@@ -1,5 +1,5 @@
 # ═══════════════════════════════════════════════════════════════════════════════
-# NOVANET DATA MODELS INDEX v10.0.0
+# NOVANET DATA MODELS INDEX v9.9.0
 # ═══════════════════════════════════════════════════════════════════════════════
 #
 # WHAT: Native content generation system using Neo4j graph database
@@ -17,7 +17,7 @@
 #   │  ┌───────────────────────────────────────────────────────────────────────┐  │
 #   │  │  🌍 GLOBAL (11 nodes) - Single instance, shared by ALL projects       │  │
 #   │  │  └─ config/    Locale                                                 │  │
-#   │  │  └─ knowledge/ 10 tiered knowledge nodes (v10)                        │  │
+#   │  │  └─ knowledge/ 10 tiered knowledge nodes (v9.9)                        │  │
 #   │  │      Technical: Formatting, Slugification, Adaptation                 │  │
 #   │  │      Style:     Style                                                 │  │
 #   │  │      Semantic:  TermSet, ExpressionSet, PatternSet, CultureSet,       │  │
