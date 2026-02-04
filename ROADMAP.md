@@ -1,6 +1,6 @@
 # NovaNet Roadmap
 
-Current version: **v9.8.0** | Target: QR Code AI (https://qrcode-ai.com)
+Current version: **v10.0.0** | Target: QR Code AI (https://qrcode-ai.com)
 
 ## Milestones Overview
 

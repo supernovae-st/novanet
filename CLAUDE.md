@@ -133,7 +133,7 @@ pnpm test --filter=@novanet/studio      # Test only studio
 | @novanet/core | Types, schemas, filters, generators |
 | @novanet/db | Neo4j Docker, seeds, migrations |
 | @novanet/studio | Web-based graph visualization |
-| tools/novanet | Rust CLI + TUI — all runtime commands (201 tests) |
+| tools/novanet | Rust CLI + TUI — all runtime commands (246 tests) |
 
 ---
 

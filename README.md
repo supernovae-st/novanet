@@ -7,7 +7,7 @@
 Generate culturally-native content across 200+ locales — not translation, but true localization from semantic concepts.
 
 [![CI](https://img.shields.io/github/actions/workflow/status/supernovae-st/novanet-dev/ci.yml?branch=main&style=flat-square&label=CI)](https://github.com/supernovae-st/novanet-dev/actions)
-[![Tests](https://img.shields.io/badge/tests-738_passing-success?style=flat-square)](https://github.com/supernovae-st/novanet-dev)
+[![Tests](https://img.shields.io/badge/tests-957_passing-success?style=flat-square)](https://github.com/supernovae-st/novanet-dev)
 [![Rust](https://img.shields.io/badge/Rust-1.84-DEA584?style=flat-square&logo=rust&logoColor=white)](https://rust-lang.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://typescriptlang.org)
 [![Neo4j](https://img.shields.io/badge/Neo4j-5.26-018bff?style=flat-square&logo=neo4j&logoColor=white)](https://neo4j.com)
@@ -128,7 +128,7 @@ novanet-hq/
 ├── tools/
 │   └── novanet/               # Rust CLI + TUI binary
 │       ├── src/               # Rust source (13 commands, 8 generators)
-│       └── Cargo.toml         # 223 tests, zero clippy warnings
+│       └── Cargo.toml         # 246 tests, zero clippy warnings
 └── apps/
     └── studio/                # @novanet/studio — web visualization
         ├── src/app/           # Next.js App Router
