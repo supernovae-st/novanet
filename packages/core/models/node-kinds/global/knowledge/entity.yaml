@@ -1,29 +1,33 @@
-# models/nodes/project/semantic/concept.yaml
-# Concept - Invariant semantic unit (action, object, feature, tier, brand)
+# models/node-kinds/global/knowledge/entity.yaml
+# Entity - Universal semantic unit (replaces Concept in v10.2)
 
 node:
-  name: Concept
-  realm: project
-  layer: semantic
+  name: Entity
+  realm: global
+  layer: knowledge
   trait: invariant
   icon: "🔷"
-  description: "Invariant semantic unit representing actions, objects, features, tiers, or brand elements"
+  description: "Universal semantic unit representing actions, things, features, brands, places, audiences, guides, or comparisons"
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # STANDARD PROPERTIES (v7.1.0)
+  # STANDARD PROPERTIES
   # ═══════════════════════════════════════════════════════════════════════════════
 
   standard_properties:
     key:
       type: string
       required: true
-      description: "Semantic prefix + identifier. Format: {semantic-role}-{identifier}"
-      pattern: "^(action|product|feature|tier|brand)-[a-z0-9-]+$"
+      description: "Kebab-case identifier. Format: {type}-{identifier}"
+      pattern: "^[a-z][a-z0-9-]*$"
       examples:
         - "action-create-qr"
-        - "product-generator"
+        - "thing-qr-code"
         - "feature-analytics"
-        - "tier-pro"
+        - "brand-qrcode-ai"
+        - "place-france"
+        - "audience-small-business"
+        - "guide-how-to-create-qr"
+        - "comparison-static-vs-dynamic"
 
     display_name:
       type: string
@@ -34,14 +38,14 @@ node:
     description:
       type: string
       required: true
-      description: "One-line description of the concept"
+      description: "One-line description of the entity"
       example: "Action of creating a QR code from URL, text, or contact"
 
     llm_context:
       type: string
       required: true
       description: "LLM generation hints. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation].'"
-      example: "USE: when user wants to create/generate a new QR code. TRIGGERS: create, generate, make, créer, erstellen, 作成. NOT: viewing or editing existing codes."
+      example: "USE: when user wants to create/generate a new QR code. TRIGGERS: create, generate, make. NOT: viewing or editing existing codes."
 
     created_at:
       type: datetime
@@ -52,7 +56,7 @@ node:
       required: true
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # VECTOR EMBEDDING (v7.8.0 - Hybrid OntologyRAG)
+  # VECTOR EMBEDDING (Hybrid OntologyRAG)
   # ═══════════════════════════════════════════════════════════════════════════════
 
   embedding_properties:
@@ -73,41 +77,51 @@ node:
       description: "Timestamp of last embedding update"
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # CONCEPT-SPECIFIC PROPERTIES
+  # ENTITY-SPECIFIC PROPERTIES
   # ═══════════════════════════════════════════════════════════════════════════════
 
   properties:
-    feature_category:
+    type:
       type: string
-      required: false
-      enum: [core, analytics, design, integration, api]
-      description: "Product catalog category"
-      example: "core"
+      required: true
+      enum: [ACTION, THING, FEATURE, BRAND, PLACE, AUDIENCE, GUIDE, COMPARISON]
+      description: "Entity type classification"
+      examples:
+        - ACTION: "User actions (create, scan, download)"
+        - THING: "Objects and concepts (QR code, URL, contact)"
+        - FEATURE: "Product capabilities (analytics, tracking, design)"
+        - BRAND: "Brand elements (product names, tiers)"
+        - PLACE: "Geographic entities (countries, regions)"
+        - AUDIENCE: "Target user segments (small business, enterprise)"
+        - GUIDE: "How-to and tutorial topics"
+        - COMPARISON: "Versus comparisons (static vs dynamic)"
 
-    feature_priority:
-      type: int
-      required: false
-      description: "Feature importance 1-10 (1 = highest priority)"
-      example: 1
-
-    is_core:
+    is_pillar:
       type: boolean
       required: false
-      description: "True if this is a must-mention feature in marketing"
+      default: false
+      description: "True if this entity is a pillar in the content cluster hierarchy"
       example: true
 
-    is_premium:
-      type: boolean
-      required: false
-      description: "True if this feature is paid tier only"
-      example: false
-
-    search_intent:
+    schema_org_type:
       type: string
       required: false
-      enum: [transactional, informational, navigational]
-      description: "Primary SEO search intent"
-      example: "transactional"
+      description: "Schema.org type for structured data (e.g., Product, HowTo, FAQPage)"
+      examples:
+        - "Product"
+        - "HowTo"
+        - "FAQPage"
+        - "WebApplication"
+        - "SoftwareApplication"
+
+    wikidata_id:
+      type: string
+      required: false
+      pattern: "^Q[0-9]+$"
+      description: "Wikidata entity ID for external knowledge linking"
+      examples:
+        - "Q12345"
+        - "Q185149"  # QR code
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # RELATIONS (FROM this node)
@@ -115,22 +129,34 @@ node:
 
   relations:
     HAS_L10N:
-      to: ConceptL10n
+      to: EntityL10n
       cardinality: "1:N"
-      description: "Localized definitions for this concept (one per locale)"
+      description: "Localized content for this entity (one per locale)"
+
+    SUBTOPIC_OF:
+      to: Entity
+      cardinality: "N:1"
+      props:
+        depth:
+          type: int
+          description: "Hierarchy depth from pillar (1 = direct child)"
+      description: "Parent entity in pillar/cluster hierarchy"
 
     SEMANTIC_LINK:
-      to: Concept
+      to: Entity
       cardinality: "N:N"
       props:
         temperature:
           type: float
           description: "Activation strength 0.0-1.0"
+        temperature_threshold:
+          type: float
+          description: "Minimum activation for traversal (default 0.3)"
         link_type:
           type: string
-          enum: [is_action_on, includes, type_of, used_for, contrasts_with]
+          enum: [is_action_on, includes, type_of, used_for, contrasts_with, related_to]
           description: "Type of semantic relationship"
-      description: "Spreading activation links to related concepts"
+      description: "Spreading activation links to related entities"
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # EXAMPLE
@@ -141,23 +167,27 @@ node:
       key: "action-create-qr"
       display_name: "Create QR Code"
       description: "Action of creating a QR code from URL, text, or contact"
-      llm_context: "USE: when user wants to create/generate a new QR code. TRIGGERS: create, generate, make, créer, erstellen, 作成. NOT: viewing or editing existing codes."
-      feature_category: "core"
-      feature_priority: 1
-      is_core: true
-      is_premium: false
-      search_intent: "transactional"
+      llm_context: "USE: when user wants to create/generate a new QR code. TRIGGERS: create, generate, make. NOT: viewing or editing existing codes."
+      type: "ACTION"
+      is_pillar: false
+      schema_org_type: "HowTo"
+      wikidata_id: null
 
     cypher: |
-      // Get concept with localized definitions
-      MATCH (c:Concept {key: $key})
-      OPTIONAL MATCH (c)-[:HAS_L10N]->(cl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale)
-      RETURN c, collect({locale: l.key, title: cl.title, definition: cl.definition}) AS localizations
+      // Get entity with localized content
+      MATCH (e:Entity {key: $key})
+      OPTIONAL MATCH (e)-[:HAS_L10N]->(el:EntityL10n)-[:FOR_LOCALE]->(l:Locale)
+      RETURN e, collect({locale: l.key, title: el.title, definition: el.definition}) AS localizations
 
-      // Spreading activation from concept (2 hops, threshold 0.3)
-      MATCH (c:Concept {key: $key})-[r:SEMANTIC_LINK*1..2]->(related:Concept)
-      WHERE ALL(rel IN r WHERE rel.temperature >= 0.3)
+      // Get pillar with all subtopics (cluster)
+      MATCH (pillar:Entity {key: $key, is_pillar: true})
+      OPTIONAL MATCH (pillar)<-[:SUBTOPIC_OF*1..3]-(subtopic:Entity)
+      RETURN pillar, collect(subtopic) AS cluster
+
+      // Spreading activation from entity (2 hops, threshold 0.3)
+      MATCH (e:Entity {key: $key})-[r:SEMANTIC_LINK*1..2]->(related:Entity)
+      WHERE ALL(rel IN r WHERE rel.temperature >= coalesce(rel.temperature_threshold, 0.3))
       WITH related, reduce(activation = 1.0, rel IN r | activation * rel.temperature) AS score
       WHERE score >= 0.3
-      RETURN related.key, related.display_name, score
+      RETURN related.key, related.display_name, related.type, score
       ORDER BY score DESC

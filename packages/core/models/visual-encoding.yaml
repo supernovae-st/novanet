@@ -1,6 +1,6 @@
 # packages/core/models/visual-encoding.yaml
 # Visual presentation rules for NovaNet graph elements
-# v10.2.0 — Unified Visual System (2 realms: global, project)
+# v10.3.0 — Entity-Centric Architecture (Entity/EntityL10n in global realm)
 #
 # IMPORTANT: Colors are NOT defined here.
 # Colors come from taxonomy.yaml (node_realms, node_layers, node_traits, arc_families)
@@ -11,7 +11,7 @@
 # - apps/studio/src/design/visual-encoding.json (runtime config)
 # - tools/novanet/src/generated/visual_encoding.rs (TUI compile-time)
 
-version: "10.2.0"
+version: "10.3.0"
 
 # =============================================================================
 # CHANNEL MAPPING — Which visual channel encodes which facet
@@ -192,6 +192,10 @@ kind_icons:
   TabooSet: alert-triangle
   AudienceSet: users
 
+  # Global / Semantic — v10.3 Entity-Centric Architecture
+  Entity: lightbulb
+  EntityL10n: globe
+
   # Project / Foundation
   Project: folder
   BrandIdentity: palette
@@ -205,10 +209,7 @@ kind_icons:
   BlockType: component
 
   # Project / Semantic
-  Concept: lightbulb
-  ConceptL10n: globe
-  SearchIntent: compass
-  TopicCluster: network
+  # v10.3: Concept, ConceptL10n, SearchIntent, TopicCluster removed — see Global / Semantic
   AudiencePersona: user
   ChannelSurface: monitor
 
@@ -216,6 +217,7 @@ kind_icons:
   PagePrompt: message-square
   BlockPrompt: terminal
   BlockRules: shield-check
+  BlockInstruction: clipboard-list
   PromptArtifact: file-code
 
   # Project / Output

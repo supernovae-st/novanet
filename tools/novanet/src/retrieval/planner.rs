@@ -99,7 +99,7 @@ impl<'a> TraversalPlanner<'a> {
         // we use known patterns
         match kind {
             "Block" => vec![
-                ("USES_CONCEPT".into(), "semantic".into(), "Concept".into()),
+                ("USES_ENTITY".into(), "semantic".into(), "Entity".into()),
                 ("OF_TYPE".into(), "ownership".into(), "BlockType".into()),
                 (
                     "HAS_PROMPT".into(),

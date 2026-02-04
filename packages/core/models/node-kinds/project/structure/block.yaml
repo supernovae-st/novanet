@@ -82,10 +82,10 @@ node:
       cardinality: "1:N"
       description: "Sub-agent instructions with versioning (v7.2.0)"
 
-    USES_CONCEPT:
-      to: Concept
+    USES_ENTITY:
+      to: Entity
       cardinality: "N:N"
-      description: "Concepts referenced in this block's instructions"
+      description: "Entities referenced in this block's instructions"
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # EXAMPLE
@@ -102,11 +102,11 @@ node:
     cypher: |
       // Load full context for block generation
       MATCH (b:Block {key: $key})-[:OF_TYPE]->(bt:BlockType)
-      MATCH (b)-[:USES_CONCEPT]->(c:Concept)-[:HAS_L10N]->(cl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+      MATCH (b)-[:USES_ENTITY]->(e:Entity)-[:HAS_L10N]->(el:EntityL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
       OPTIONAL MATCH (l)-[:HAS_VOICE]->(v:LocaleVoice)
       OPTIONAL MATCH (l)-[:HAS_CULTURE]->(cult:LocaleCulture)
       RETURN b.instructions, bt.rules, bt.llm_context,
-             collect(DISTINCT {key: c.key, title: cl.title, definition: cl.definition}) AS concepts,
+             collect(DISTINCT {key: e.key, title: el.title, definition: el.definition}) AS entities,
              v AS voice, cult AS culture
 
       // Get block with latest output for locale

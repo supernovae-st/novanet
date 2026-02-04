@@ -1,0 +1,25 @@
+# packages/core/models/arc-kinds/ownership/has-instruction.yaml
+# ArcKind: HAS_INSTRUCTION — Page owns BlockInstructions (v10.3)
+
+arc:
+  name: HAS_INSTRUCTION
+  family: ownership
+  scope: intra_realm
+
+  source: Page
+  target: BlockInstruction
+  cardinality: one_to_many
+
+  properties:
+    - name: position
+      type: integer
+      required: true
+      description: "BlockInstruction ordering within page (0-indexed)"
+
+  inverse: INSTRUCTION_OF
+
+  llm_context: |
+    Page owns ordered BlockInstructions.
+    Use: MATCH (p:Page)-[:HAS_INSTRUCTION]->(bi:BlockInstruction) ORDER BY bi.position
+
+  cypher_pattern: "(Page)-[:HAS_INSTRUCTION {position}]->(BlockInstruction)"

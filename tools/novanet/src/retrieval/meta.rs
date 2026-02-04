@@ -228,12 +228,12 @@ mod tests {
     fn mock_arc_rules() -> HashMap<String, ArcKindRules> {
         let mut rules = HashMap::new();
         rules.insert(
-            "USES_CONCEPT".to_string(),
+            "USES_ENTITY".to_string(),
             ArcKindRules {
-                key: "USES_CONCEPT".to_string(),
+                key: "USES_ENTITY".to_string(),
                 family: "semantic".to_string(),
                 source: "Block".to_string(),
-                target: "Concept".to_string(),
+                target: "Entity".to_string(),
                 temperature_threshold: Some(0.0),
             },
         );
@@ -271,7 +271,7 @@ mod tests {
     #[test]
     fn test_arc_rules_lookup() {
         let rules = mock_arc_rules();
-        let uses = rules.get("USES_CONCEPT").unwrap();
+        let uses = rules.get("USES_ENTITY").unwrap();
         assert_eq!(uses.family, "semantic");
         assert_eq!(uses.temperature_threshold, Some(0.0));
     }

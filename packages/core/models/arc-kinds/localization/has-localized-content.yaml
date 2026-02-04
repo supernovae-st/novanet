@@ -9,7 +9,7 @@ arc:
   source: Locale
   target:
     - ProjectL10n
-    - ConceptL10n
+    - EntityL10n
     - PageL10n
     - BlockL10n
   cardinality: one_to_many

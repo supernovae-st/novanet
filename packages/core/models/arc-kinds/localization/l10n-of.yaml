@@ -6,12 +6,12 @@ arc:
   family: localization
   scope: intra_realm
   source:
-    - ConceptL10n
+    - EntityL10n
     - ProjectL10n
   target:
-    - Concept
+    - Entity
     - Project
   cardinality: many_to_one
   inverse_of: HAS_L10N
   llm_context: Inverse of HAS_L10N — localized content points to parent.
-  cypher_pattern: (ConceptL10n)-[:L10N_OF]->(Concept)
+  cypher_pattern: (EntityL10n)-[:L10N_OF]->(Entity)

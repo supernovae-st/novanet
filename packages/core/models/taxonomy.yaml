@@ -11,6 +11,7 @@
 # - Terminal palette for TUI graceful degradation
 #
 # v10.2: Merged SHARED realm into GLOBAL (SEO layer now in GLOBAL)
+# v10.3: Entity-Centric Architecture (Entity/EntityL10n in global realm)
 #
 # Generated artifacts:
 # - packages/db/seed/00.5-taxonomy.cypher (Realm, Layer, Trait, ArcFamily + hierarchy)
@@ -19,7 +20,7 @@
 # All meta-nodes receive double-label :Meta (e.g., :Meta:Realm)
 # Query all meta-nodes: MATCH (n:Meta) RETURN n
 
-version: "10.2.0"
+version: "10.3.0"
 
 # =============================================================================
 # NODE REALMS (2) — WHERE does the node live?
