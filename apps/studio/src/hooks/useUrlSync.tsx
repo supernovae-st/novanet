@@ -32,10 +32,8 @@ function useUrlSyncInternal() {
 
       // Sync navigationMode from URL (?mode=data|meta|overlay|query)
       const urlMode = searchParams.get('mode');
-      // Backwards compat: ?mode=schema -> meta
-      const resolvedMode = urlMode === 'schema' ? 'meta' : urlMode;
-      if (resolvedMode && VALID_MODES.includes(resolvedMode as NavigationMode)) {
-        setNavigationMode(resolvedMode as NavigationMode);
+      if (urlMode && VALID_MODES.includes(urlMode as NavigationMode)) {
+        setNavigationMode(urlMode as NavigationMode);
       }
 
       initialized.current = true;

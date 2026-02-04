@@ -338,7 +338,7 @@ function Graph2DInner({
   // real data instances. Uses ELK layout for hierarchical grouped visualization.
   // =========================================================================
   const [schemaNodes, setSchemaNodes] = useState<ReactFlowNode[]>([]);
-  const [schemaEdges, setSchemaEdges] = useState<ReactFlowEdge[]>([]);
+  const [schemaArcs, setSchemaEdges] = useState<ReactFlowEdge[]>([]);
   const [isSchemaLayouting, setIsSchemaLayouting] = useState(false);
   const [, setSchemaLayoutError] = useState<Error | null>(null);
 
@@ -355,7 +355,7 @@ function Graph2DInner({
     bringToFront: bringSchemaNodeToFront,
     setHoverZIndex: setSchemaHoverZIndex,
     resetZIndex: resetSchemaZIndex,
-    bringEdgeNodesToFront: bringSchemaEdgeNodesToFront,
+    bringEdgeNodesToFront: bringSchemaArcNodesToFront,
   } = useGraphInteractions({ setNodes: setSchemaNodes });
 
   // Load schema graph with hierarchical layout (v9.5)
@@ -537,7 +537,7 @@ function Graph2DInner({
     [setSelectedNode, centerOnNode, getInternalNode, getNodes, fitView, bringSchemaNodeToFront]
   );
 
-  const handleSchemaEdgeClick = useCallback(
+  const handleSchemaArcClick = useCallback(
     (_event: React.MouseEvent, edge: ReactFlowEdge) => {
       // Set selected edge with data for schema relation details panel
       // Extract relation type from edge data (schema edges store it in data.relationType)
@@ -551,7 +551,7 @@ function Graph2DInner({
       });
 
       // Bring source and target nodes to front (z-index)
-      bringSchemaEdgeNodesToFront(edge);
+      bringSchemaArcNodesToFront(edge);
 
       // FitView to show both source and target nodes
       setTimeout(() => {
@@ -570,7 +570,7 @@ function Graph2DInner({
         }
       }, 50);
     },
-    [setSelectedEdge, bringSchemaEdgeNodesToFront, getNodes, fitView]
+    [setSelectedEdge, bringSchemaArcNodesToFront, getNodes, fitView]
   );
 
   // =========================================================================
@@ -1374,7 +1374,7 @@ function Graph2DInner({
         >
           <ReactFlow
             nodes={schemaNodes}
-            edges={schemaEdges}
+            edges={schemaArcs}
             nodeTypes={nodeTypes}
             edgeTypes={edgeTypes}
             onNodesChange={handleSchemaNodesChange}
@@ -1383,7 +1383,7 @@ function Graph2DInner({
             onNodeClick={handleSchemaNodeClick}
             onNodeMouseEnter={handleSchemaNodeMouseEnter}
             onNodeMouseLeave={handleSchemaNodeMouseLeave}
-            onEdgeClick={handleSchemaEdgeClick}
+            onEdgeClick={handleSchemaArcClick}
             onEdgeMouseEnter={handleEdgeMouseEnter}
             onEdgeMouseLeave={handleEdgeMouseLeave}
             onPaneClick={handlePaneClick}
