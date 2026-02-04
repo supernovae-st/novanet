@@ -6,10 +6,12 @@
 //! - `taxonomy`: Parse taxonomy.yaml (v9.5 source of truth)
 //! - `views`: Parse view YAML files
 //! - `visual_encoding`: Parse visual-encoding.yaml (v9.5 visual system)
+//! - `utils`: Shared YAML loading utilities
 
 pub mod arcs;
 pub mod organizing;
 pub mod taxonomy;
+pub mod utils;
 pub mod views;
 pub mod visual_encoding;
 pub mod yaml_node;

@@ -120,12 +120,7 @@ pub fn load_taxonomy(root: &Path) -> crate::Result<TaxonomyDoc> {
         )));
     }
 
-    let content = std::fs::read_to_string(&path)?;
-    let doc: TaxonomyDoc =
-        serde_yaml::from_str(&content).map_err(|e| crate::NovaNetError::Schema {
-            path: path.display().to_string(),
-            source: e,
-        })?;
+    let doc: TaxonomyDoc = super::utils::load_yaml(&path)?;
 
     // Fail-fast validation
     if doc.node_realms.is_empty() {

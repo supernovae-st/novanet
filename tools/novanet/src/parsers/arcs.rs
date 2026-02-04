@@ -213,13 +213,7 @@ pub fn load_arcs(root: &Path) -> crate::Result<ArcsDocument> {
         )));
     }
 
-    let content = std::fs::read_to_string(&path)?;
-
-    let doc: ArcsDocument =
-        serde_yaml::from_str(&content).map_err(|e| crate::NovaNetError::Schema {
-            path: path.display().to_string(),
-            source: e,
-        })?;
+    let doc: ArcsDocument = super::utils::load_yaml(&path)?;
 
     if doc.arcs.is_empty() {
         return Err(crate::NovaNetError::Validation(

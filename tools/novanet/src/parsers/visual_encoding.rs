@@ -163,12 +163,7 @@ pub struct AccessibilitySettings {
 /// Load visual encoding from visual-encoding.yaml.
 pub fn load_visual_encoding(root: &Path) -> crate::Result<VisualEncodingDoc> {
     let path = root.join("packages/core/models/visual-encoding.yaml");
-    let content = std::fs::read_to_string(&path).map_err(crate::NovaNetError::Io)?;
-    let doc: VisualEncodingDoc =
-        serde_yaml::from_str(&content).map_err(|e| crate::NovaNetError::Schema {
-            path: path.display().to_string(),
-            source: e,
-        })?;
+    let doc: VisualEncodingDoc = super::utils::load_yaml(&path)?;
 
     // Fail-fast validation
     if doc.node_states.is_empty() {

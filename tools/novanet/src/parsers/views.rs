@@ -154,12 +154,7 @@ pub fn load_all_views(root: &Path) -> crate::Result<Vec<ViewDef>> {
 
     let mut views = Vec::with_capacity(entries.len());
     for entry in entries {
-        let content = std::fs::read_to_string(entry.path())?;
-        let view: ViewDef =
-            serde_yaml::from_str(&content).map_err(|e| crate::NovaNetError::Schema {
-                path: entry.path().display().to_string(),
-                source: e,
-            })?;
+        let view: ViewDef = super::utils::load_yaml(&entry.path())?;
         views.push(view);
     }
 
@@ -175,11 +170,7 @@ pub fn load_view(root: &Path, id: &str) -> crate::Result<ViewDef> {
             path.display()
         )));
     }
-    let content = std::fs::read_to_string(&path)?;
-    serde_yaml::from_str(&content).map_err(|e| crate::NovaNetError::Schema {
-        path: path.display().to_string(),
-        source: e,
-    })
+    super::utils::load_yaml(&path)
 }
 
 /// Load the view registry (`_registry.yaml`).
@@ -191,11 +182,7 @@ pub fn load_registry(root: &Path) -> crate::Result<ViewRegistry> {
             path.display()
         )));
     }
-    let content = std::fs::read_to_string(&path)?;
-    serde_yaml::from_str(&content).map_err(|e| crate::NovaNetError::Schema {
-        path: path.display().to_string(),
-        source: e,
-    })
+    super::utils::load_yaml(&path)
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

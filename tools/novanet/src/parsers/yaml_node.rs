@@ -223,13 +223,7 @@ pub fn load_all_nodes(root: &Path) -> crate::Result<Vec<ParsedNode>> {
 
 /// Parse a single node YAML file (called in parallel).
 fn parse_single_node(path: &Path, nodes_dir: &Path) -> crate::Result<ParsedNode> {
-    let content = std::fs::read_to_string(path)?;
-
-    let doc: NodeDocument =
-        serde_yaml::from_str(&content).map_err(|e| crate::NovaNetError::Schema {
-            path: path.display().to_string(),
-            source: e,
-        })?;
+    let doc: NodeDocument = super::utils::load_yaml(path)?;
 
     // Realm and layer are now explicit in YAML (source of truth)
     let realm = doc.node.realm.clone();

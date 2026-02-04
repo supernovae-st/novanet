@@ -1397,6 +1397,7 @@ dependencies = [
  "serde_yaml",
  "smallvec",
  "tabled",
+ "tempfile",
  "thiserror 2.0.18",
  "tokio",
  "tokio-test",
