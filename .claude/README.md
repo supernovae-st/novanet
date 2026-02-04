@@ -583,7 +583,7 @@ Architecture Decision Records (ADRs):
 
 ---
 
-## Key Numbers (v10.0.0)
+## Key Numbers (v9.9.0)
 
 | Metric | Value |
 |--------|-------|

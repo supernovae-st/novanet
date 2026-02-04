@@ -3,7 +3,7 @@
 id: complete-graph
 name: Complete Graph
 description: Full NovaNet graph with all nodes and relations
-version: "10.0.0"
+version: "9.9.0"
 
 root:
   type: Project
@@ -66,7 +66,7 @@ docs:
     - name: Global - Knowledge
       nodes: [Formatting, Slugification, Adaptation, Style, TermSet, ExpressionSet, PatternSet, CultureSet, TabooSet, AudienceSet]
       color: purple
-      description: 10 tiered knowledge nodes (Technical, Style, Semantic)
+      description: 10 tiered knowledge nodes (v9.9 - Technical, Style, Semantic)
 
     # 📦 PROJECT SCOPE (14 nodes)
     - name: Project - Foundation

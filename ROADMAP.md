@@ -1,19 +1,31 @@
 # NovaNet Roadmap
 
-Current version: **v10.0.0** | Target: QR Code AI (https://qrcode-ai.com)
+Current version: **v9.9.0** | Target: QR Code AI (https://qrcode-ai.com)
 
 ## Milestones Overview
 
 ```
+═══════════════════════════════════════════════════════════════════════════════
+COMPLETED
+═══════════════════════════════════════════════════════════════════════════════
 v9.0  Self-Describing Context Graph    ████████████████████  100%  RELEASED
-v9.1  TUI v2 Stability                 ████████████████████  100%  RELEASED (in v9.0.1)
-v9.5  Nomenclature + Visual Encoding   ████████████████████  100%  RELEASED (in v9.7.0)
-v9.6  Generation Domain                ████████████████████  100%  RELEASED (in v9.7.0)
-v9.7  Intent Layer                     ████████████████████  100%  RELEASED
-v9.8  Unified Thing Model              ████████████████████  100%  RELEASED (in v9.7.0)
-v10.0 Dynamic Retrieval                ░░░░░░░░░░░░░░░░░░░░    0%
-v11.0 Autonomous Learning              ░░░░░░░░░░░░░░░░░░░░    0%
-v12.0 Content Pipeline                 ░░░░░░░░░░░░░░░░░░░░    0%
+v9.1  TUI v2 Stability                 ████████████████████  100%  RELEASED
+v9.5  Nomenclature (Arc, Realm/Layer)  ████████████████████  100%  RELEASED
+v9.6  Generation Domain Nodes          ████████████████████  100%  RELEASED
+v9.7  Intent Layer + Thing Model       ████████████████████  100%  RELEASED
+v9.8  Polish + Cleanup                 ████████████████████  100%  RELEASED
+v9.9  Tiered Knowledge Model           ████████████████████  100%  ← CURRENT
+      42 NodeKinds, 73 ArcKinds
+
+═══════════════════════════════════════════════════════════════════════════════
+FUTURE
+═══════════════════════════════════════════════════════════════════════════════
+v10.0 Dynamic Retrieval                ░░░░░░░░░░░░░░░░░░░░    0%  PLANNED
+      Context Assembly Engine, token-aware traversal
+v11.0 Autonomous Learning              ░░░░░░░░░░░░░░░░░░░░    0%  PLANNED
+      Feedback loops, meta-graph self-improvement
+v12.0 Content Pipeline                 ░░░░░░░░░░░░░░░░░░░░    0%  PLANNED
+      CLI-driven generation, orchestrator integration
 ```
 
 ## v9.0.0 — Self-Describing Context Graph
@@ -78,9 +90,23 @@ Will be reimplemented on stable v2 foundation when prioritized.
 | 7.8k | Command palette + UX | DEFERRED |
 | 7.8l | Wow effects (CRT, shake, glitch, pulse) | DEFERRED |
 
-## v10.0.0 — Dynamic Retrieval
+## v9.9.0 — Tiered Knowledge Model ← CURRENT
 
-Prereq: v9.0.0 stable. No schema migration needed — v10 activates properties v9 already carries.
+Refactor locale knowledge from 14 flat nodes to 10 tiered nodes organized by retrieval purpose.
+
+| Tier | Nodes | Purpose |
+|------|-------|---------|
+| **Technical** | Formatting, Slugification, Adaptation | Deterministic rules (always needed) |
+| **Style** | Style | Voice/tone configuration |
+| **Semantic** | TermSet, ExpressionSet, PatternSet, CultureSet, TabooSet, AudienceSet | Domain-specific contextual content |
+
+**Schema counts:** 42 NodeKinds, 73 ArcKinds, 3 Realms, 9 Layers
+
+---
+
+## v10.0.0 — Dynamic Retrieval (FUTURE)
+
+Prereq: v9.9.0 stable. No schema migration needed — v10 activates properties v9 already carries.
 
 | Phase | Description | Objective |
 |-------|-------------|-----------|
