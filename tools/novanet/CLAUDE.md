@@ -102,8 +102,8 @@ cargo build --features tui                        # Build with TUI (default)
 cargo build --no-default-features                 # CLI-only (no TUI deps)
 
 # Read modes (Neo4j)
-cargo run -- data                                 # Mode 1: Data nodes only
-cargo run -- meta                                 # Mode 2: Meta-graph only
+cargo run -- meta                                 # Mode 1: Meta-graph only
+cargo run -- data                                 # Mode 2: Data nodes only
 cargo run -- overlay                              # Mode 3: Data + Meta overlay
 cargo run -- query --realm=project --format=json  # Mode 4: Faceted query
 

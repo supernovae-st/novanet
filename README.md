@@ -179,8 +179,8 @@ cargo run -- schema generate        # Regenerate all artifacts
 cargo run -- schema validate        # Validate YAML coherence
 
 # Navigation modes
-cargo run -- data                   # Mode 1: Data nodes only
-cargo run -- meta                   # Mode 2: Meta-graph only
+cargo run -- meta                   # Mode 1: Meta-graph only
+cargo run -- data                   # Mode 2: Data nodes only
 cargo run -- overlay                # Mode 3: Data + Meta combined
 cargo run -- query --realm=project  # Mode 4: Faceted query
 
@@ -255,7 +255,7 @@ See [`packages/core/models/_index.yaml`](packages/core/models/_index.yaml) for c
 ```
 *Interactive 2D graph visualization with AI-powered queries (⌘J)*
 
-- **4 Navigation Modes** — Data, Meta, Overlay, Query (cycle with `N`)
+- **4 Navigation Modes** — Meta, Data, Overlay, Query (cycle with `N`)
 - **9 Filter Presets** — Quick views via `1-8, 0` keys
 - **AI Chat** — Natural language to Cypher with `⌘J`
 - **40+ Keyboard Shortcuts** — Full keyboard navigation

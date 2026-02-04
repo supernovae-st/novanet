@@ -31,13 +31,13 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
-    /// Mode 1: Data nodes only (WHERE NOT n:Meta)
-    Data {
+    /// Mode 1: Meta-graph only (MATCH (n:Meta))
+    Meta {
         #[arg(long, value_enum, default_value_t = OutputFormat::Table)]
         format: OutputFormat,
     },
-    /// Mode 2: Meta-graph only (MATCH (n:Meta))
-    Meta {
+    /// Mode 2: Data nodes only (WHERE NOT n:Meta)
+    Data {
         #[arg(long, value_enum, default_value_t = OutputFormat::Table)]
         format: OutputFormat,
     },
