@@ -5,3 +5,4 @@ export * from './types.js';
 export * from './layers.js';
 export * from './hierarchy.js';
 export * from './generator.js';
+export * from './visual-encoding.js';

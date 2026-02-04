@@ -110,3 +110,26 @@ export {
   clearTaxonomyCache,
   type UseTaxonomyResult,
 } from './useTaxonomy';
+
+// Visual encoding (v9.5)
+export {
+  useVisualEncoding,
+  getNodeStateStyle,
+  getArcStateStyle,
+  getTraitBorderStyle,
+  getKindIconName,
+  getAnimationPreset,
+  type UseVisualEncodingResult,
+  type NodeStateKey,
+  type NodeStateStyle,
+  type ArcStateKey,
+  type ArcStateStyle,
+  type TraitKey,
+  type TraitBorderStyle,
+  type ScopeKey,
+  type ScopeStrokeStyle,
+  type CardinalityKey,
+  type CardinalityArrowStyle,
+  type AnimationKey,
+  type AnimationPreset,
+} from './useVisualEncoding';
