@@ -77,7 +77,7 @@ db/
 | **📦 Project** | 21 | Project structure, content, generation |
 | **🎯 Shared** | 8 | SEO/GEO targeting nodes |
 
-Total: **44 node types**, **76 arc types**, **126 meta-nodes** (Realm/Layer/Kind/Trait/ArcFamily/ArcKind)
+Total: **46 node types**, **77 arc types**, **126 meta-nodes** (Realm/Layer/Kind/Trait/ArcFamily/ArcKind)
 
 ---
 

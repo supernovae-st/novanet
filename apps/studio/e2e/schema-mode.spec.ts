@@ -8,7 +8,7 @@ import { waitForGraphLoaded } from './helpers';
  *
  * Tests:
  * 1. Toggle between data and schema mode
- * 2. Schema mode shows 44 nodes in grouped layout
+ * 2. Schema mode shows 46 nodes in grouped layout
  * 3. URL sync works (?mode=schema)
  * 4. Scope groups are visible
  * 5. Filter panel shows hierarchical filters

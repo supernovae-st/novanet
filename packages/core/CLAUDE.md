@@ -31,10 +31,10 @@ v9 refactors the meta-graph to a **self-describing context graph** with faceted 
 |---------|---------|
 | Scope | **Realm** (global / project / shared) |
 | Subcategory | **Layer** (9 functional layers) |
-| NodeTypeMeta | **Kind** (44 node types, 1:1 with Neo4j labels) |
+| NodeTypeMeta | **Kind** (46 node types, 1:1 with Neo4j labels) |
 | _(new)_ | **Trait** (invariant / localized / knowledge / derived / job) |
 | _(new)_ | **ArcFamily** (ownership / localization / semantic / generation / mining) |
-| _(new)_ | **ArcKind** (83 relationship types) |
+| _(new)_ | **ArcKind** (77 relationship types) |
 
 **Boundary rule:** TypeScript (this package) generates code artifacts. Rust (`tools/novanet/`) executes at runtime.
 

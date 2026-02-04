@@ -4,7 +4,7 @@
 
 ## Overview
 
-This diagram shows the complete NovaNet graph schema with all 44 node types and their relationships.
+This diagram shows the complete NovaNet graph schema with all 46 node types and their relationships.
 
 ### Legend
 
@@ -28,7 +28,7 @@ This diagram shows the complete NovaNet graph schema with all 44 node types and 
 flowchart TB
   %% NovaNet Graph v9.0.0
   %% Generated: 46 nodes, 134 edges
-  %% Source: 44 node YAMLs + relations.yaml + taxonomy.yaml
+  %% Source: 46 node YAMLs + relations.yaml + taxonomy.yaml
 
   %% Trait styling (node_trait)
   classDef invariant fill:#3b82f6,stroke:#1d4ed8,color:#fff
