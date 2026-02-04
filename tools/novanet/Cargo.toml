@@ -40,7 +40,7 @@ nucleo = "0.5"                # Fuzzy search (TUI / key)
 nucleo-matcher = "0.3"        # Low-level fuzzy matcher (search overlay)
 
 # Graph
-petgraph = "0.7"              # In-memory graph for generator dependency ordering
+petgraph = "0.8"              # In-memory graph for generator dependency ordering
 rayon = "1.10"                # Parallel YAML processing
 walkdir = "2"                 # Recursive YAML file discovery
 
