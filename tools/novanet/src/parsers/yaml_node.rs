@@ -46,6 +46,34 @@ impl std::fmt::Display for NodeTrait {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// KnowledgeTier (v10 — locale knowledge classification)
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// The 3 knowledge tiers in v10 (for knowledge trait nodes only).
+///
+/// Used to group locale knowledge in TUI and control contextual retrieval:
+/// - Technical: formatting, slugification, adaptation
+/// - Style: voice/identity merged, term glossaries
+/// - Semantic: expressions, patterns, culture, taboos, audience
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum KnowledgeTier {
+    Technical,
+    Style,
+    Semantic,
+}
+
+impl std::fmt::Display for KnowledgeTier {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::Technical => write!(f, "technical"),
+            Self::Style => write!(f, "style"),
+            Self::Semantic => write!(f, "semantic"),
+        }
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // YAML Structs
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -71,6 +99,11 @@ pub struct NodeDef {
     /// Accepts both `trait` (v9.5) and `locale_behavior` (v9) field names.
     #[serde(rename = "trait", alias = "locale_behavior")]
     pub node_trait: NodeTrait,
+
+    /// v10 knowledge tier — optional, only for knowledge trait nodes.
+    /// Groups locale knowledge: technical, style, semantic.
+    #[serde(default)]
+    pub knowledge_tier: Option<KnowledgeTier>,
 
     /// Emoji icon for Mermaid diagrams.
     #[serde(default)]
@@ -373,6 +406,44 @@ node:
     }
 
     #[test]
+    fn knowledge_tier_deserialize() {
+        let yaml = r#"
+node:
+  name: Style
+  realm: global
+  layer: knowledge
+  trait: knowledge
+  knowledge_tier: style
+  description: "Locale style settings"
+"#;
+        let doc: NodeDocument = serde_yaml::from_str(yaml).unwrap();
+        assert_eq!(doc.node.knowledge_tier, Some(KnowledgeTier::Style));
+    }
+
+    #[test]
+    fn knowledge_tier_all_variants() {
+        for (variant, expected) in [
+            ("technical", KnowledgeTier::Technical),
+            ("style", KnowledgeTier::Style),
+            ("semantic", KnowledgeTier::Semantic),
+        ] {
+            let yaml = format!(
+                "node:\n  name: T\n  realm: global\n  layer: knowledge\n  trait: knowledge\n  knowledge_tier: {variant}\n  description: d"
+            );
+            let doc: NodeDocument = serde_yaml::from_str(&yaml).unwrap();
+            assert_eq!(doc.node.knowledge_tier, Some(expected));
+        }
+    }
+
+    #[test]
+    fn knowledge_tier_optional() {
+        // Non-knowledge nodes don't have knowledge_tier
+        let yaml = "node:\n  name: Project\n  realm: project\n  layer: foundation\n  trait: invariant\n  description: d";
+        let doc: NodeDocument = serde_yaml::from_str(yaml).unwrap();
+        assert_eq!(doc.node.knowledge_tier, None);
+    }
+
+    #[test]
     fn load_all_nodes_integration() {
         // Requires actual monorepo — finds root from Cargo.toml location
         let root = Path::new(env!("CARGO_MANIFEST_DIR"))
@@ -384,8 +455,9 @@ node:
             return;
         }
 
-        let nodes = load_all_nodes(root).expect("should parse all 46 nodes");
-        assert_eq!(nodes.len(), 46, "expected 46 YAML node files");
+        // v10: 42 nodes (46 - 14 old + 10 new)
+        let nodes = load_all_nodes(root).expect("should parse all 42 nodes");
+        assert_eq!(nodes.len(), 42, "expected 42 YAML node files");
 
         // Every node has a non-empty name, realm, and layer
         for node in &nodes {
@@ -406,29 +478,40 @@ node:
             );
         }
 
-        // Verify trait distribution matches _index.yaml counts
+        // v10: Verify trait distribution
+        // 17 invariant - 0 deleted = 17
+        // 7 localized - 0 deleted = 7
+        // 14 knowledge - 14 deleted + 10 added = 10
+        // 5 derived - 0 deleted = 5
+        // 3 job - 0 deleted = 3
         let count = |t: NodeTrait| nodes.iter().filter(|n| n.def.node_trait == t).count();
         assert_eq!(count(NodeTrait::Invariant), 17, "invariant count");
         assert_eq!(count(NodeTrait::Localized), 7, "localized count");
-        assert_eq!(count(NodeTrait::Knowledge), 14, "knowledge count");
+        assert_eq!(count(NodeTrait::Knowledge), 10, "knowledge count");
         assert_eq!(count(NodeTrait::Derived), 5, "derived count");
         assert_eq!(count(NodeTrait::Job), 3, "job count");
 
-        // Verify realm distribution
+        // v10: Verify realm distribution
+        // global: 15 - 14 deleted + 10 added = 11
+        // project: 23 - 0 deleted = 23
+        // shared: 8 - 0 deleted = 8
         let realm_count = |r: &str| nodes.iter().filter(|n| n.realm == r).count();
-        assert_eq!(realm_count("global"), 15, "global realm count");
+        assert_eq!(realm_count("global"), 11, "global realm count");
         assert_eq!(realm_count("project"), 23, "project realm count");
         assert_eq!(realm_count("shared"), 8, "shared realm count");
 
-        // Spot-check a few known nodes
+        // Spot-check known nodes
         let project = nodes.iter().find(|n| n.def.name == "Project").unwrap();
         assert_eq!(project.realm, "project");
         assert_eq!(project.layer, "foundation");
         assert_eq!(project.def.node_trait, NodeTrait::Invariant);
+        assert_eq!(project.def.knowledge_tier, None); // invariant = no tier
 
-        let voice = nodes.iter().find(|n| n.def.name == "LocaleVoice").unwrap();
-        assert_eq!(voice.realm, "global");
-        assert_eq!(voice.layer, "knowledge");
-        assert_eq!(voice.def.node_trait, NodeTrait::Knowledge);
+        // v10: Check new Style node with knowledge_tier
+        let style = nodes.iter().find(|n| n.def.name == "Style").unwrap();
+        assert_eq!(style.realm, "global");
+        assert_eq!(style.layer, "knowledge");
+        assert_eq!(style.def.node_trait, NodeTrait::Knowledge);
+        assert_eq!(style.def.knowledge_tier, Some(KnowledgeTier::Style));
     }
 }

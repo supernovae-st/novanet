@@ -235,6 +235,7 @@ mod tests {
                 realm: realm.to_string(),
                 layer: layer.to_string(),
                 node_trait: LocaleBehavior::Invariant,
+                knowledge_tier: None,
                 icon: None,
                 description: "test".to_string(),
                 standard_properties: None,
@@ -259,7 +260,7 @@ mod tests {
             make_node("Page", "project", "structure"),
             make_node("Block", "project", "structure"),
             make_node("Locale", "global", "config"),
-            make_node("LocaleVoice", "global", "knowledge"),
+            make_node("Style", "global", "knowledge"), // v10: LocaleVoice → Style
             make_node("SEOKeywordL10n", "shared", "seo"),
         ];
 
@@ -293,7 +294,7 @@ mod tests {
         assert!(output.contains("Block: 'structure',"));
         assert!(output.contains("Page: 'structure',"));
         assert!(output.contains("Locale: 'config',"));
-        assert!(output.contains("LocaleVoice: 'knowledge',"));
+        assert!(output.contains("Style: 'knowledge',")); // v10: LocaleVoice → Style
         assert!(output.contains("SEOKeywordL10n: 'seo',"));
 
         // Nodes sorted alphabetically within layers
@@ -397,15 +398,16 @@ mod tests {
         let generator = LayerGenerator;
         let output = generator.generate(root).expect("should generate layers.ts");
 
-        // Total 46 nodes
+        // v10: 42 nodes (46 - 14 old + 10 new)
         assert!(
-            output.contains("mapping all 46 node types"),
-            "should mention 46 node types"
+            output.contains("mapping all 42 node types"),
+            "should mention 42 node types"
         );
 
-        // Realm node counts
+        // v10: Realm node counts
+        // Global: 15 - 14 deleted + 10 added = 11
         assert!(output.contains("PROJECT REALM (23 nodes)"));
-        assert!(output.contains("GLOBAL REALM (15 nodes)"));
+        assert!(output.contains("GLOBAL REALM (11 nodes)"));
         assert!(output.contains("SHARED REALM (8 nodes)"));
 
         // All 9 layers present
@@ -433,7 +435,7 @@ mod tests {
         assert!(output.contains("Concept: 'semantic',"));
         assert!(output.contains("PageL10n: 'output',"));
         assert!(output.contains("Locale: 'config',"));
-        assert!(output.contains("LocaleVoice: 'knowledge',"));
+        assert!(output.contains("Style: 'knowledge',")); // v10: LocaleVoice → Style
         assert!(output.contains("SEOKeywordL10n: 'seo',"));
         assert!(output.contains("GEOSeedL10n: 'geo',"));
 
