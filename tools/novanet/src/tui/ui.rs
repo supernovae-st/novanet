@@ -252,17 +252,11 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
 
                     if !layer_collapsed {
                         for kind in &layer.kinds {
+                            // v10.1: Show instance count only (knowledge_tier badges removed)
                             let count = if kind.instance_count > 0 {
                                 format!(" ({})", kind.instance_count)
                             } else {
                                 String::new()
-                            };
-                            // v10: Show knowledge tier badge for knowledge nodes
-                            let tier_badge = match kind.knowledge_tier.as_deref() {
-                                Some("technical") => " [T]",
-                                Some("style") => " [S]",
-                                Some("semantic") => " [M]", // M for meaning
-                                _ => "",
                             };
                             all_lines.push(make_line(
                                 idx,
@@ -270,7 +264,7 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                 focused,
                                 "      ",
                                 "",
-                                format!("{}{}{}", kind.display_name, tier_badge, count),
+                                format!("{}{}", kind.display_name, count),
                                 Color::White,
                             ));
                             idx += 1;
@@ -696,19 +690,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                 ]));
             }
 
-            // v10: Knowledge tier (if present, only for knowledge-trait nodes)
-            if let Some(ref tier) = kind.knowledge_tier {
-                let tier_color = match tier.as_str() {
-                    "technical" => Color::Cyan,    // Blue for technical
-                    "style" => Color::Magenta,     // Purple for style
-                    "semantic" => Color::Yellow,   // Gold for semantic
-                    _ => Color::White,
-                };
-                lines.push(Line::from(vec![
-                    Span::styled("tier      ", Style::default().fg(Color::DarkGray)),
-                    Span::styled(tier.clone(), Style::default().fg(tier_color)),
-                ]));
-            }
+            // v10.1: knowledge_tier removed from display (node type is sufficient)
 
             lines.push(Line::from(vec![
                 Span::styled("instances ", Style::default().fg(Color::DarkGray)),

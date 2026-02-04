@@ -423,7 +423,6 @@ mod tests {
             "instruction",
             "output",
             "seo",
-            "geo",
         ] {
             assert!(
                 output.contains(&format!("getNodeTypesByLayer('{layer}')")),
@@ -431,23 +430,22 @@ mod tests {
             );
         }
 
-        // Realm sections
+        // Realm sections (geo removed in v10.1)
         assert!(output.contains("GLOBAL (2 layers)"));
         assert!(output.contains("PROJECT (5 layers)"));
-        assert!(output.contains("SHARED (2 layers)"));
+        assert!(output.contains("SHARED (1 layer)")); // seo only, geo removed
 
         // Total
-        assert!(output.contains("3 Realms (9 layers)"));
+        assert!(output.contains("3 Realms (8 layers)")); // geo removed
 
         // Helper functions
         assert!(output.contains("export function getRealmDefinition"));
         assert!(output.contains("export function getLayerMeta"));
         assert!(output.contains("export function getLayersForRealm"));
 
-        // Spot checks — display_names from YAML
+        // Spot checks — display_names from YAML (geo removed v10.1)
         assert!(output.contains("label: 'Locale Knowledge'"));
         assert!(output.contains("label: 'SEO Intelligence'"));
-        assert!(output.contains("label: 'GEO Intelligence'"));
 
         // No v8 terms
         assert!(!output.contains("SCOPE_HIERARCHY"));

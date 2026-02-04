@@ -173,6 +173,6 @@ arc_families:
         assert_eq!(doc.arc_families.len(), 5);
 
         let total_layers: usize = doc.realms.iter().map(|r| r.layers.len()).sum();
-        assert_eq!(total_layers, 9);
+        assert_eq!(total_layers, 8); // geo removed in v10.1
     }
 }

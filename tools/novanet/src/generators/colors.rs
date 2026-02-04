@@ -497,6 +497,7 @@ mod tests {
         assert!(output.contains("'shared'"));
 
         // Should have all 9 layers
+        // 8 layers (geo removed in v10.1)
         for layer in [
             "config",
             "knowledge",
@@ -506,7 +507,6 @@ mod tests {
             "instruction",
             "output",
             "seo",
-            "geo",
         ] {
             assert!(
                 output.contains(&format!("'{layer}'")),

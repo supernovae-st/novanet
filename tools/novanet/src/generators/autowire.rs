@@ -218,7 +218,7 @@ mod tests {
             make_node("Page", "project", "structure"),
             make_node("Block", "project", "structure"),
             make_node("Locale", "global", "config"),
-            make_node("SEOKeywordL10n", "shared", "seo"),
+            make_node("SEOKeyword", "shared", "seo"),
         ];
 
         let cypher = generate_autowire(&nodes).unwrap();
@@ -302,30 +302,32 @@ mod tests {
             .generate(root)
             .expect("should generate autowire cypher");
 
-        // v10: 42 OF_KIND statements (46 - 14 old + 10 new)
+        // v10.1: 43 OF_KIND statements (37 base + 6 atoms)
         let of_kind = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:OF_KIND]"))
             .count();
-        assert_eq!(of_kind, 42, "expected 42 OF_KIND statements");
+        assert_eq!(
+            of_kind, 43,
+            "expected 43 OF_KIND statements (37 base + 6 atoms)"
+        );
 
         // All 3 realms present
         assert!(cypher.contains("GLOBAL REALM"));
         assert!(cypher.contains("PROJECT REALM"));
         assert!(cypher.contains("SHARED REALM"));
 
-        // Spot checks
+        // Spot checks (geo removed v10.1)
         assert!(cypher.contains("MATCH (n:Style)")); // v10: LocaleVoice → Style
         assert!(cypher.contains("MATCH (k:Kind {label: 'Style'})"));
         assert!(cypher.contains("MATCH (n:SEOMiningRun)"));
-        assert!(cypher.contains("MATCH (n:GEOSeedMetrics)"));
 
-        // v10: Layer counts match 42 nodes (23 project, 11 global, 8 shared)
+        // v10.1: Layer counts match 43 nodes (23 project, 17 global, 3 shared)
         assert!(cypher.contains("Global > Config (1 type)"));
-        assert!(cypher.contains("Global > Knowledge (10 types)")); // v10: 14 → 10
+        assert!(cypher.contains("Global > Knowledge (16 types)")); // v10.1: 10 + 6 atoms
 
-        // v10: Header
-        assert!(cypher.contains("Total: 42 node types"));
+        // v10.1: Header
+        assert!(cypher.contains("Total: 43 node types"));
 
         // Verification query present
         assert!(cypher.contains("VERIFICATION QUERY"));

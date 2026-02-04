@@ -117,8 +117,8 @@ node_realms:
     color: "#cb4b16"
     llm_context: |
       Cross-project resources that can be linked to multiple projects.
-      SEO keywords and GEO seeds with their metrics. These enable
-      competitive intelligence sharing across the portfolio.
+      SEO keywords with their metrics. These enable competitive
+      intelligence sharing across the portfolio.
     layers:
       - key: seo
         display_name: SEO Intelligence
@@ -129,15 +129,6 @@ node_realms:
           forms, search volume metrics, and mining run history. Used to
           inject relevant keywords into generated content for organic
           search visibility.
-
-      - key: geo
-        display_name: GEO Intelligence
-        emoji: "📍"
-        color: "#ef4444"
-        llm_context: |
-          Geographic/local SEO data. Location-based seeds with their
-          localized forms, metrics, and mining history. Used for local
-          business visibility and location-specific content generation.
 
 # =============================================================================
 # NODE TRAITS (5) — HOW does the node behave across locales?
@@ -286,8 +277,8 @@ arc_families:
     arrow_style: "--o"
     default_traversal: skip   # v9.9: Skip unless explicitly requested
     llm_context: |
-      SEO/GEO data extraction and targeting. Links mining runs to their
-      targets and concepts to their SEO/GEO keyword targets.
+      SEO data extraction and targeting. Links mining runs to their
+      targets and concepts to their SEO keyword targets.
 
 # =============================================================================
 # ARC SCOPES (2) — WHERE does the arc connect?
@@ -347,7 +338,6 @@ terminal:
     instruction: 178 # yellow
     output: 41      # green
     seo: 205        # pink
-    geo: 196        # red
     # Traits
     invariant: 33   # blue
     localized: 41   # green
@@ -375,7 +365,6 @@ terminal:
     instruction: 11 # bright yellow
     output: 2       # green
     seo: 13         # bright magenta
-    geo: 1          # red
     # Traits
     invariant: 4    # blue
     localized: 2    # green
