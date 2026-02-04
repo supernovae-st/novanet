@@ -25,8 +25,8 @@ describe('resolveTypesForRealms', () => {
   it('returns global types for global realm', () => {
     const types = resolveTypesForRealms(['global']);
     expect(types).toContain('Locale');
-    expect(types).toContain('LocaleIdentity');
-    expect(types).toContain('Expression');
+    expect(types).toContain('Formatting');      // v10 technical tier
+    expect(types).toContain('ExpressionSet');  // v10 semantic tier
     expect(types).not.toContain('Project');
     expect(types).not.toContain('SEOKeywordL10n');
   });
@@ -90,9 +90,10 @@ describe('resolveTypesForTraits', () => {
 
   it('returns knowledge types', () => {
     const types = resolveTypesForTraits(['knowledge']);
-    expect(types).toContain('LocaleIdentity');
-    expect(types).toContain('LocaleVoice');
-    expect(types).toContain('Expression');
+    // v10 tiered model: technical/style/semantic
+    expect(types).toContain('Formatting');     // technical tier
+    expect(types).toContain('Style');          // style tier
+    expect(types).toContain('ExpressionSet'); // semantic tier
     expect(types).not.toContain('Project');
   });
 

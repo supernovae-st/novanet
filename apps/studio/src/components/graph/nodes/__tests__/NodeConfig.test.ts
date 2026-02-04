@@ -18,13 +18,13 @@ import {
 import type { NodeType } from '@novanet/core/types';
 import { NODE_TYPES } from '@novanet/core/types';
 
-// All 46 node types in v9.7.0 (from Core - Single Source of Truth)
+// All 42 node types in v10.0.0 (from Core - Single Source of Truth)
 const ALL_NODE_TYPES: NodeType[] = [...NODE_TYPES];
 
 describe('NodeConfig', () => {
   describe('NODE_SIZES lookup table', () => {
-    it('should have predefined sizes for all 46 node types', () => {
-      expect(Object.keys(NODE_SIZES)).toHaveLength(46);
+    it('should have predefined sizes for all 42 node types', () => {
+      expect(Object.keys(NODE_SIZES)).toHaveLength(42);
       ALL_NODE_TYPES.forEach((type) => {
         expect(NODE_SIZES[type]).toBeDefined();
         expect(NODE_SIZES[type].width).toBeGreaterThan(0);
@@ -46,16 +46,16 @@ describe('NodeConfig', () => {
       expect(NODE_SIZES.Concept.width).toBeGreaterThanOrEqual(200);
     });
 
-    it('should have smaller sizes for auxiliary nodes (Expression, mining nodes)', () => {
-      expect(NODE_SIZES.Expression.width).toBeLessThanOrEqual(180);
+    it('should have smaller sizes for auxiliary nodes (ExpressionSet, mining nodes)', () => {
+      expect(NODE_SIZES.ExpressionSet.width).toBeLessThanOrEqual(160);
       expect(NODE_SIZES.SEOMiningRun.width).toBeLessThanOrEqual(180);
       expect(NODE_SIZES.GEOMiningRun.width).toBeLessThanOrEqual(180);
     });
   });
 
   describe('NODE_COLORS lookup table', () => {
-    it('should have predefined colors for all 46 node types', () => {
-      expect(Object.keys(NODE_COLORS)).toHaveLength(46);
+    it('should have predefined colors for all 42 node types', () => {
+      expect(Object.keys(NODE_COLORS)).toHaveLength(42);
       ALL_NODE_TYPES.forEach((type) => {
         expect(NODE_COLORS[type]).toBeDefined();
         expect(NODE_COLORS[type].primary).toBeDefined();

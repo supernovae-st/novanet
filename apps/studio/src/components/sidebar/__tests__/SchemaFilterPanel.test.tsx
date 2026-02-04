@@ -50,9 +50,9 @@ describe('SchemaFilterPanel', () => {
     it('renders node count for each realm in parentheses', () => {
       render(<SchemaFilterPanel />);
 
-      // Realm counts are in parentheses: (23), (15), (8) — v9.7.0
+      // Realm counts are in parentheses: (23), (11), (8) — v10.0.0
       expect(screen.getByText('(23)')).toBeInTheDocument(); // Project
-      expect(screen.getByText('(15)')).toBeInTheDocument(); // Global
+      expect(screen.getByText('(11)')).toBeInTheDocument(); // Global (1 config + 10 knowledge)
       expect(screen.getByText('(8)')).toBeInTheDocument(); // Shared
     });
 

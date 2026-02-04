@@ -1,5 +1,5 @@
 // packages/core/src/graph/__tests__/hierarchy.test.ts
-// Tests for REALM_HIERARCHY — v9.0.0
+// Tests for REALM_HIERARCHY — v10.0.0
 import { describe, it, expect } from 'vitest';
 import { REALM_HIERARCHY, getRealmDefinition, getLayerMeta, getLayersForRealm } from '../hierarchy';
 import type { Realm } from '../../types/nodes';
@@ -27,7 +27,7 @@ describe('graph/hierarchy', () => {
     expect(global.icon).toBe('🌍');
     expect(Object.keys(global.layers)).toHaveLength(2);
     expect(global.layers.config.nodeTypes).toContain('Locale');
-    expect(global.layers.knowledge.nodeTypes).toHaveLength(14);
+    expect(global.layers.knowledge.nodeTypes).toHaveLength(10);  // v10 tiered model
   });
 
   it('should have correct shared realm structure', () => {
@@ -76,9 +76,9 @@ describe('graph/hierarchy', () => {
     expect(REALM_HIERARCHY.project.layers.instruction.nodeTypes).toHaveLength(6);
     expect(REALM_HIERARCHY.project.layers.output.nodeTypes).toHaveLength(5);
 
-    // Global realm: config (1), knowledge (14) = 15
+    // Global realm: config (1), knowledge (10) = 11 (v10 tiered model)
     expect(REALM_HIERARCHY.global.layers.config.nodeTypes).toHaveLength(1);
-    expect(REALM_HIERARCHY.global.layers.knowledge.nodeTypes).toHaveLength(14);
+    expect(REALM_HIERARCHY.global.layers.knowledge.nodeTypes).toHaveLength(10);
 
     // Shared realm: seo (3), geo (5) = 8
     expect(REALM_HIERARCHY.shared.layers.seo.nodeTypes).toHaveLength(3);

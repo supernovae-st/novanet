@@ -47,21 +47,20 @@ const NODE_LABELS: Record<NodeType, string> = {
   EvaluationSignal: 'Evaluation Signal',
   // Global realm - config (1)
   Locale: 'Locale',
-  // Global realm - knowledge (14)
-  LocaleIdentity: 'Locale Identity',
-  LocaleVoice: 'Locale Voice',
-  LocaleCulture: 'Locale Culture',
-  LocaleCultureReferences: 'Culture References',
-  LocaleMarket: 'Locale Market',
-  LocaleLexicon: 'Locale Lexicon',
-  LocaleRulesAdaptation: 'Rules Adaptation',
-  LocaleRulesFormatting: 'Rules Formatting',
-  LocaleRulesSlug: 'Rules Slug',
-  Expression: 'Expression',
-  Reference: 'Reference',
-  Metaphor: 'Metaphor',
-  Pattern: 'Pattern',
-  Constraint: 'Constraint',
+  // Global realm - knowledge (10) — v10 tiered model
+  // Technical tier
+  Formatting: 'Formatting',
+  Slugification: 'Slugification',
+  Adaptation: 'Adaptation',
+  // Style tier
+  Style: 'Style',
+  // Semantic tier
+  TermSet: 'Term Set',
+  ExpressionSet: 'Expression Set',
+  PatternSet: 'Pattern Set',
+  CultureSet: 'Culture Set',
+  TabooSet: 'Taboo Set',
+  AudienceSet: 'Audience Set',
   // Shared realm - seo (3)
   SEOKeywordL10n: 'SEO Keyword',
   SEOKeywordMetrics: 'SEO Metrics',
@@ -101,7 +100,7 @@ const TRAIT_DESCRIPTIONS: Record<string, string> = {
 // =============================================================================
 
 /**
- * Generate flat schema graph with all 46 node types and arcs.
+ * Generate flat schema graph with all 42 node types and arcs.
  * This is the canonical representation of the NovaNet ontology.
  *
  * @returns SchemaGraphResult with nodes and arcs
@@ -118,7 +117,7 @@ export function generateSchemaGraph(): SchemaGraphResult {
   const arcs: SchemaArc[] = [];
 
   // ==========================================================================
-  // GENERATE NODES - All 46 node types
+  // GENERATE NODES - All 42 node types
   // ==========================================================================
 
   for (const nodeType of NODE_TYPES) {

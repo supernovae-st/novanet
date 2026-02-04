@@ -1,9 +1,9 @@
 // src/types/nodes.ts
-// Single source of truth for all 46 NovaNet node types
-// v9.7.0 — AUTO-SYNC with packages/core/models/nodes/*.yaml
+// Single source of truth for all 42 NovaNet node types
+// v10.0.0 — AUTO-SYNC with packages/core/models/node-kinds/*.yaml
 
 // =============================================================================
-// NODE TYPES (46 nodes)
+// NODE TYPES (42 nodes)
 // =============================================================================
 
 export const NODE_TYPES = [
@@ -14,10 +14,10 @@ export const NODE_TYPES = [
   // Localized (7)
   'ProjectL10n', 'ConceptL10n', 'PageL10n', 'BlockL10n',
   'SEOKeywordL10n', 'GEOSeedL10n', 'ThingL10n',
-  // Knowledge (14)
-  'LocaleIdentity', 'LocaleVoice', 'LocaleCulture', 'LocaleCultureReferences',
-  'LocaleMarket', 'LocaleLexicon', 'LocaleRulesAdaptation', 'LocaleRulesFormatting',
-  'LocaleRulesSlug', 'Expression', 'Reference', 'Metaphor', 'Pattern', 'Constraint',
+  // Knowledge (10) — v10 tiered model: technical/style/semantic
+  'Formatting', 'Slugification', 'Adaptation',  // Technical tier
+  'Style',                                       // Style tier
+  'TermSet', 'ExpressionSet', 'PatternSet', 'CultureSet', 'TabooSet', 'AudienceSet', // Semantic tier
   // Derived (5)
   'SEOKeywordMetrics', 'GEOSeedMetrics', 'PromptArtifact', 'OutputArtifact', 'EvaluationSignal',
   // Job (3)
@@ -40,8 +40,9 @@ export type Layer =
 export type Trait = 'invariant' | 'localized' | 'knowledge' | 'derived' | 'job';
 
 // =============================================================================
-// KIND_META — unified classification for all 46 node types
+// KIND_META — unified classification for all 42 node types
 // Replaces NODE_SCOPES, NODE_BEHAVIORS, NODE_CATEGORIES (v8)
+// v10.0.0 — Knowledge tier model: technical/style/semantic
 // =============================================================================
 
 export interface KindMeta {
@@ -91,21 +92,20 @@ export const KIND_META: Record<NodeType, KindMeta> = {
   // ═══════════════════════════════════════════════════════════════════════════
   Locale:       { realm: 'global',  layer: 'config',      trait: 'invariant' },
 
-  // GLOBAL REALM — knowledge (14)
-  LocaleIdentity:          { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
-  LocaleVoice:             { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
-  LocaleCulture:           { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
-  LocaleCultureReferences: { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
-  LocaleMarket:            { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
-  LocaleLexicon:           { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
-  LocaleRulesAdaptation:   { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
-  LocaleRulesFormatting:   { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
-  LocaleRulesSlug:         { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
-  Expression:              { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
-  Reference:               { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
-  Metaphor:                { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
-  Pattern:                 { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
-  Constraint:              { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
+  // GLOBAL REALM — knowledge (10) — v10 tiered model
+  // Technical tier: formatting rules, deterministic
+  Formatting:    { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
+  Slugification: { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
+  Adaptation:    { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
+  // Style tier: voice & tone parameters
+  Style:         { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
+  // Semantic tier: meaning-bearing content sets
+  TermSet:       { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
+  ExpressionSet: { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
+  PatternSet:    { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
+  CultureSet:    { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
+  TabooSet:      { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
+  AudienceSet:   { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
 
   // ═══════════════════════════════════════════════════════════════════════════
   // SHARED REALM — seo (3)

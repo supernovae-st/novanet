@@ -44,11 +44,11 @@ export interface NodeConfig {
 }
 
 // =============================================================================
-// Size Lookup Table (v9.7.0 - 46 nodes)
+// Size Lookup Table (v9.7.0 - 42 nodes)
 // =============================================================================
 
 /**
- * Pre-computed sizes for all 46 node types (v9.7.0)
+ * Pre-computed sizes for all 42 node types (v9.7.0)
  *
  * Size categories:
  * - Large (280x140): Project root nodes
@@ -108,22 +108,21 @@ export const NODE_SIZES: Record<NodeType, NodeSize> = {
   Locale: { width: 220, height: 110 },
 
   // ==========================================================================
-  // GLOBAL — knowledge (14 nodes)
+  // GLOBAL — knowledge (10 nodes) — v10 tiered model
   // ==========================================================================
-  LocaleIdentity: { width: 180, height: 90 },
-  LocaleVoice: { width: 180, height: 90 },
-  LocaleCulture: { width: 180, height: 90 },
-  LocaleCultureReferences: { width: 180, height: 90 },
-  LocaleMarket: { width: 180, height: 90 },
-  LocaleLexicon: { width: 200, height: 100 },
-  LocaleRulesAdaptation: { width: 160, height: 80 },
-  LocaleRulesFormatting: { width: 160, height: 80 },
-  LocaleRulesSlug: { width: 160, height: 80 },
-  Expression: { width: 160, height: 80 },
-  Reference: { width: 160, height: 80 },
-  Metaphor: { width: 160, height: 80 },
-  Pattern: { width: 160, height: 80 },
-  Constraint: { width: 160, height: 80 },
+  // Technical tier
+  Formatting: { width: 160, height: 80 },
+  Slugification: { width: 160, height: 80 },
+  Adaptation: { width: 160, height: 80 },
+  // Style tier
+  Style: { width: 180, height: 90 },
+  // Semantic tier
+  TermSet: { width: 160, height: 80 },
+  ExpressionSet: { width: 160, height: 80 },
+  PatternSet: { width: 160, height: 80 },
+  CultureSet: { width: 160, height: 80 },
+  TabooSet: { width: 160, height: 80 },
+  AudienceSet: { width: 160, height: 80 },
 
   // ==========================================================================
   // SHARED — seo (3 nodes)
@@ -143,11 +142,11 @@ export const NODE_SIZES: Record<NodeType, NodeSize> = {
 };
 
 // =============================================================================
-// Color Lookup Table (v9.7.0 - 46 nodes)
+// Color Lookup Table (v9.7.0 - 42 nodes)
 // =============================================================================
 
 /**
- * Pre-computed colors for all 46 node types (v9.7.0)
+ * Pre-computed colors for all 42 node types (v9.7.0)
  *
  * Color palette aligned with design/nodeColors.ts and nodeTypes.ts:
  * - Foundation: Violet (#8b5cf6 family)
@@ -327,89 +326,68 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
     tertiary: '#34d399',
     glow: '#10b98140',
   },
-  LocaleIdentity: {
+  // v10 Knowledge tier: Technical (cyan)
+  Formatting: {
+    primary: '#06b6d4',
+    secondary: '#0891b2',
+    tertiary: '#22d3ee',
+    glow: '#06b6d440',
+  },
+  Slugification: {
+    primary: '#0891b2',
+    secondary: '#0e7490',
+    tertiary: '#06b6d4',
+    glow: '#0891b240',
+  },
+  Adaptation: {
+    primary: '#0e7490',
+    secondary: '#155e75',
+    tertiary: '#0891b2',
+    glow: '#0e749040',
+  },
+  // v10 Knowledge tier: Style (purple)
+  Style: {
+    primary: '#8b5cf6',
+    secondary: '#a78bfa',
+    tertiary: '#c4b5fd',
+    glow: '#8b5cf640',
+  },
+  // v10 Knowledge tier: Semantic (green/pink)
+  TermSet: {
     primary: '#22c55e',
     secondary: '#10b981',
     tertiary: '#4ade80',
     glow: '#22c55e40',
   },
-  LocaleVoice: {
-    primary: '#4ade80',
-    secondary: '#22c55e',
-    tertiary: '#86efac',
-    glow: '#4ade8040',
-  },
-  LocaleCulture: {
-    primary: '#86efac',
-    secondary: '#4ade80',
-    tertiary: '#bbf7d0',
-    glow: '#86efac40',
-  },
-  LocaleCultureReferences: {
-    primary: '#bbf7d0',
-    secondary: '#86efac',
-    tertiary: '#dcfce7',
-    glow: '#bbf7d040',
-  },
-  LocaleMarket: {
-    primary: '#6ee7b7',
-    secondary: '#34d399',
-    tertiary: '#a7f3d0',
-    glow: '#6ee7b740',
-  },
-  LocaleLexicon: {
-    primary: '#34d399',
-    secondary: '#10b981',
-    tertiary: '#6ee7b7',
-    glow: '#34d39940',
-  },
-  LocaleRulesAdaptation: {
-    primary: '#059669',
-    secondary: '#10b981',
-    tertiary: '#34d399',
-    glow: '#05966940',
-  },
-  LocaleRulesFormatting: {
-    primary: '#047857',
-    secondary: '#059669',
-    tertiary: '#10b981',
-    glow: '#04785740',
-  },
-  LocaleRulesSlug: {
-    primary: '#065f46',
-    secondary: '#047857',
-    tertiary: '#059669',
-    glow: '#065f4640',
-  },
-  Expression: {
+  ExpressionSet: {
     primary: '#ec4899',
     secondary: '#f472b6',
     tertiary: '#f9a8d4',
     glow: '#ec489940',
   },
-  Reference: {
+  PatternSet: {
     primary: '#f472b6',
     secondary: '#ec4899',
     tertiary: '#f9a8d4',
     glow: '#f472b640',
   },
-  Metaphor: {
-    primary: '#f9a8d4',
-    secondary: '#f472b6',
-    tertiary: '#fbcfe8',
-    glow: '#f9a8d440',
+  CultureSet: {
+    primary: '#86efac',
+    secondary: '#4ade80',
+    tertiary: '#bbf7d0',
+    glow: '#86efac40',
   },
-  Pattern: {
-    primary: '#fbcfe8',
-    secondary: '#f9a8d4',
-    tertiary: '#fce7f3',
-    glow: '#fbcfe840',
+  TabooSet: {
+    primary: '#ef4444',
+    secondary: '#f87171',
+    tertiary: '#fca5a5',
+    glow: '#ef444440',
   },
-  Constraint: {
-    primary: '#fda4af',
-    secondary: '#fb7185',
-    tertiary: '#fecdd3',
-    glow: '#fda4af40',
+  AudienceSet: {
+    primary: '#f59e0b',
+    secondary: '#fbbf24',
+    tertiary: '#fcd34d',
+    glow: '#f59e0b40',
   },
 
   // ==========================================================================
