@@ -16,6 +16,7 @@
 |-------|-------|----------|--------|
 | **A** | Pre-v10 Verification | P0 | Planning |
 | **B** | DX Documentation Update | P1 | Planning |
+| **9.9** | Schema Properties (Dynamic Retrieval prereq) | P1 | Planning |
 | **C** | v10 Context Assembly Engine | P2 | Planning |
 
 **Current State (v9.8.0):**
@@ -243,15 +244,122 @@ EOF
 
 ---
 
+## Phase 9.9: Schema Properties for Dynamic Retrieval
+
+> **CRITICAL:** Phase C requires properties that don't exist yet in the schema.
+> Phase 9.9 must be completed BEFORE Phase C can begin.
+
+### Task 9.9.1: Add Meta-Graph Traversal Properties
+
+**Required properties (not yet in schema):**
+
+| Property | Node Type | Purpose |
+|----------|-----------|---------|
+| `traversal_depth` | Kind | Max traversal depth for this kind |
+| `context_budget` | Kind | Default token budget allocation |
+| `token_estimate` | Kind | Estimated tokens per instance |
+| `default_traversal` | ArcFamily | Priority order for traversal (eager/lazy/skip) |
+| `temperature_threshold` | ArcKind | Min temperature for semantic arcs |
+
+**Step 1: Update organizing-principles.yaml**
+
+```yaml
+# Add to kind_properties:
+kind_properties:
+  - traversal_depth: u8   # Max depth (default: 2)
+  - context_budget: u32   # Token allocation (default: 1000)
+  - token_estimate: u32   # Est. tokens per instance (default: 100)
+
+# Add to arc_family_properties:
+arc_family_properties:
+  - default_traversal: eager|lazy|skip
+
+# Add to arc_kind_properties:
+arc_kind_properties:
+  - temperature_threshold: f32  # For semantic arcs (0.0-1.0)
+```
+
+**Step 2: Update Kind YAML files with defaults**
+
+```bash
+# For each Kind, add properties based on typical values:
+# invariant Kinds: context_budget=500, traversal_depth=3
+# localized Kinds: context_budget=800, traversal_depth=2
+# knowledge Kinds: context_budget=200, traversal_depth=1
+```
+
+**Step 3: Update ArcFamily seed with default_traversal**
+
+```cypher
+MATCH (af:ArcFamily {key: 'ownership'})
+SET af.default_traversal = 'eager';
+
+MATCH (af:ArcFamily {key: 'localization'})
+SET af.default_traversal = 'eager';
+
+MATCH (af:ArcFamily {key: 'semantic'})
+SET af.default_traversal = 'lazy';
+
+MATCH (af:ArcFamily {key: 'generation'})
+SET af.default_traversal = 'lazy';
+
+MATCH (af:ArcFamily {key: 'mining'})
+SET af.default_traversal = 'skip';
+```
+
+**Step 4: Update ArcKind seeds with temperature_threshold**
+
+```cypher
+// Only semantic arcs need temperature_threshold
+MATCH (ak:ArcKind)-[:IN_FAMILY]->(:ArcFamily {key: 'semantic'})
+SET ak.temperature_threshold = 0.3;  // Default threshold
+```
+
+**Step 5: Regenerate artifacts**
+
+```bash
+cargo run -- schema generate
+cargo run -- schema validate
+pnpm infra:seed
+```
+
+---
+
+### Task 9.9.2: Add Test Fixtures
+
+**File:** `tools/novanet/tests/fixtures/context_test_data.cypher` (NEW)
+
+```cypher
+// Test project with full context chain
+CREATE (p:Project {key: 'test-project', name: 'Test Project'})
+CREATE (page:Page {key: 'test-page', name: 'Test Page'})
+CREATE (block:Block {key: 'test-block', instructions: 'Test block'})
+CREATE (concept:Concept {key: 'test-concept', llm_context: 'Test concept'})
+CREATE (locale:Locale {key: 'fr-FR', name: 'French (France)'})
+CREATE (voice:LocaleVoice {key: 'fr-FR-voice', formality_score: 0.7})
+CREATE (culture:LocaleCulture {key: 'fr-FR-culture'})
+
+// Create relationships
+CREATE (p)-[:HAS_PAGE]->(page)
+CREATE (page)-[:HAS_BLOCK]->(block)
+CREATE (block)-[:USES_CONCEPT]->(concept)
+CREATE (locale)-[:HAS_VOICE]->(voice)
+CREATE (locale)-[:HAS_CULTURE]->(culture)
+```
+
+---
+
 ## Phase C: v10 Dynamic Retrieval
 
 ### Overview
 
-v10 activates the context assembly features that v9 already carries in the meta-graph.
-No new schema migration needed - v10 uses existing properties:
-- `traversal_depth` (Kind)
-- `default_traversal` (ArcFamily)
-- `temperature_threshold` (ArcKind)
+v10 activates the context assembly features from Phase 9.9.
+**Prereq:** Phase 9.9 must be complete (meta-graph properties exist).
+
+Uses meta-graph properties:
+- `traversal_depth` (Kind) - added in 9.9
+- `default_traversal` (ArcFamily) - added in 9.9
+- `temperature_threshold` (ArcKind) - added in 9.9
 
 ### Task C.1: Context Assembly Engine Design
 
@@ -337,10 +445,11 @@ pub struct MetaGraphReader {
 
 impl MetaGraphReader {
     /// Get traversal rules for a Kind
-    pub async fn get_kind_rules(&self, kind: &str) -> Result<KindRules> {
+    /// Note: Kind nodes use `label` property (e.g., "Block", "Concept") not `key`
+    pub async fn get_kind_rules(&self, kind_label: &str) -> Result<KindRules> {
         // Query Kind node for traversal_depth, context_budget
         let query = r#"
-            MATCH (k:Kind {label: $kind})
+            MATCH (k:Kind {label: $kindLabel})
             RETURN k.traversal_depth AS depth,
                    k.context_budget AS budget,
                    k.token_estimate AS tokens

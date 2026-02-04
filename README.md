@@ -54,10 +54,10 @@ Generate culturally-native content across 200+ locales — not translation, but 
 flowchart TB
     subgraph MONO["NovaNet Monorepo"]
         direction TB
-        CORE["@novanet/core v9.0.0\nTypes · Schemas · Filters"]
+        CORE["@novanet/core v9.8.0\nTypes · Schemas · Filters"]
         DB["@novanet/db v1.0.0\nDocker · Seeds · Migrations"]
-        STUDIO["@novanet/studio v9.0.0\nNext.js 16 · React 19"]
-        RUST["novanet CLI v9.0.0\nRust · 13 commands · TUI"]
+        STUDIO["@novanet/studio v9.8.0\nNext.js 16 · React 19"]
+        RUST["novanet CLI v9.8.0\nRust · 13 commands · TUI"]
     end
 
     CORE --> STUDIO

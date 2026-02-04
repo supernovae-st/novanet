@@ -282,7 +282,7 @@ Master command for schema management.
 
 **Example:**
 ```bash
-/schema status     # Show current schema stats (44 Kinds, 76 ArcKinds, 3 Realms, 9 Layers)
+/schema status     # Show current schema stats (46 Kinds, 77 ArcKinds, 3 Realms, 9 Layers)
 ```
 
 ---
@@ -555,7 +555,7 @@ Located in `apps/studio/.claude/rules/`:
 Domain vocabulary reference (v9.0.0):
 - Core concepts (Project, Concept, Page, Block, Locale, Context Graph)
 - Meta-Graph: 6 meta-node types (Realm, Layer, Kind, Trait, ArcFamily, ArcKind)
-- Full Kind Inventory (44 Kinds across 3 Realms)
+- Full Kind Inventory (46 Kinds across 3 Realms)
 - Meta-Graph relations (hierarchy, facets, arc schema, instance bridge)
 - Key data relations (grouped by ArcFamily)
 - v8 → v9 rename mapping
@@ -583,12 +583,12 @@ Architecture Decision Records (ADRs):
 
 ---
 
-## Key Numbers (v9.0.0)
+## Key Numbers (v9.8.0)
 
 | Metric | Value |
 |--------|-------|
-| Kind (node types) | 44 |
-| ArcKind (relations) | 76 |
+| Kind (node types) | 46 |
+| ArcKind (relations) | 77 |
 | Realms | 3 (global, project, shared) |
 | Layers | 9 |
 | Traits | 5 |
