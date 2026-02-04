@@ -15,13 +15,12 @@ import type { Layer } from './types.js';
  * AUTO-GENERATED from models/node-kinds/ folder structure.
  *
  * Layers by realm:
- * - Global: config, knowledge
+ * - Global: config, knowledge, seo
  * - Project: foundation, instruction, output, semantic, structure
- * - Shared: seo
  */
 export const NODE_LAYERS: Record<NodeType, Layer> = {
   // ═══════════════════════════════════════════════════════════════════════════
-  // GLOBAL REALM (17 nodes)
+  // GLOBAL REALM (20 nodes)
   // ═══════════════════════════════════════════════════════════════════════════
 
   // config (1 node) - matches models/node-kinds/global/config/
@@ -44,6 +43,11 @@ export const NODE_LAYERS: Record<NodeType, Layer> = {
   TabooSet: 'knowledge',
   Term: 'knowledge',
   TermSet: 'knowledge',
+
+  // seo (3 nodes) - matches models/node-kinds/global/seo/
+  SEOKeyword: 'seo',
+  SEOKeywordMetrics: 'seo',
+  SEOMiningRun: 'seo',
 
   // ═══════════════════════════════════════════════════════════════════════════
   // PROJECT REALM (23 nodes)
@@ -81,15 +85,6 @@ export const NODE_LAYERS: Record<NodeType, Layer> = {
   Block: 'structure',
   ContentSlot: 'structure',
   Page: 'structure',
-
-  // ═══════════════════════════════════════════════════════════════════════════
-  // SHARED REALM (3 nodes)
-  // ═══════════════════════════════════════════════════════════════════════════
-
-  // seo (3 nodes) - matches models/node-kinds/shared/seo/
-  SEOKeyword: 'seo',
-  SEOKeywordMetrics: 'seo',
-  SEOMiningRun: 'seo',
 
 };
 

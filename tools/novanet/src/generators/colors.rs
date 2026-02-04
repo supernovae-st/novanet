@@ -491,10 +491,9 @@ mod tests {
         let generator = ColorsGenerator;
         let output = generator.generate(root).expect("should generate colors.ts");
 
-        // Should have all realms from YAML
+        // Should have all realms from YAML (v10.2: shared removed)
         assert!(output.contains("'global'"));
         assert!(output.contains("'project'"));
-        assert!(output.contains("'shared'"));
 
         // Should have all 9 layers
         // 8 layers (geo removed in v10.1)

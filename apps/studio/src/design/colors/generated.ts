@@ -21,10 +21,10 @@ export interface ColorTokens {
 }
 
 // =============================================================================
-// REALM COLORS (3)
+// REALM COLORS (2)
 // =============================================================================
 
-export type RealmKey = 'global' | 'project' | 'shared';
+export type RealmKey = 'global' | 'project';
 
 export const REALM_COLORS: Record<RealmKey, ColorTokens> = {
   global: {
@@ -41,26 +41,18 @@ export const REALM_COLORS: Record<RealmKey, ColorTokens> = {
     border: 'border-[#6c71c4]/30',
     bgSolid: 'bg-[#6c71c4]',
   },
-  shared: {
-    color: '#cb4b16',
-    bg: 'bg-[#cb4b16]/20',
-    text: 'text-[#cb4b16]',
-    border: 'border-[#cb4b16]/30',
-    bgSolid: 'bg-[#cb4b16]',
-  },
 };
 
 export const REALM_DISPLAY_NAMES: Record<RealmKey, string> = {
   global: 'Global',
   project: 'Project',
-  shared: 'Shared',
 };
 
 // =============================================================================
 // LAYER COLORS (8)
 // =============================================================================
 
-export type LayerKey = 'config' | 'knowledge' | 'foundation' | 'structure' | 'semantic' | 'instruction' | 'output' | 'seo';
+export type LayerKey = 'config' | 'knowledge' | 'seo' | 'foundation' | 'structure' | 'semantic' | 'instruction' | 'output';
 
 export const LAYER_COLORS: Record<LayerKey, ColorTokens> = {
   config: {
@@ -76,6 +68,13 @@ export const LAYER_COLORS: Record<LayerKey, ColorTokens> = {
     text: 'text-[#8b5cf6]',
     border: 'border-[#8b5cf6]/30',
     bgSolid: 'bg-[#8b5cf6]',
+  },
+  seo: {
+    color: '#ec4899',
+    bg: 'bg-[#ec4899]/20',
+    text: 'text-[#ec4899]',
+    border: 'border-[#ec4899]/30',
+    bgSolid: 'bg-[#ec4899]',
   },
   foundation: {
     color: '#3b82f6',
@@ -112,24 +111,17 @@ export const LAYER_COLORS: Record<LayerKey, ColorTokens> = {
     border: 'border-[#22c55e]/30',
     bgSolid: 'bg-[#22c55e]',
   },
-  seo: {
-    color: '#ec4899',
-    bg: 'bg-[#ec4899]/20',
-    text: 'text-[#ec4899]',
-    border: 'border-[#ec4899]/30',
-    bgSolid: 'bg-[#ec4899]',
-  },
 };
 
 export const LAYER_DISPLAY_NAMES: Record<LayerKey, string> = {
   config: 'Configuration',
   knowledge: 'Locale Knowledge',
+  seo: 'SEO Intelligence',
   foundation: 'Foundation',
   structure: 'Structure',
   semantic: 'Semantic Layer',
   instruction: 'Instructions',
   output: 'Generated Output',
-  seo: 'SEO Intelligence',
 };
 
 // =============================================================================

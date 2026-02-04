@@ -715,22 +715,22 @@ ON MATCH SET
 MERGE (k_SEOKeyword:Meta:Kind {label: 'SEOKeyword'})
 ON CREATE SET
   k_SEOKeyword.display_name = 'SEOKeyword',
-  k_SEOKeyword.llm_context = 'Target keyword with metrics for SEO optimization (locale-specific)',
-  k_SEOKeyword.yaml_path = 'node-kinds/shared/seo/seo-keyword.yaml',
+  k_SEOKeyword.llm_context = 'Target keyword with metrics for SEO optimization (locale-specific knowledge)',
+  k_SEOKeyword.yaml_path = 'node-kinds/global/seo/seo-keyword.yaml',
   k_SEOKeyword.properties = ['cpc', 'created_at', 'description', 'difficulty', 'display_name', 'intent', 'key', 'llm_context', 'platform', 'source', 'updated_at', 'value', 'volume'],
   k_SEOKeyword.required_properties = ['display_name', 'key', 'value'],
   k_SEOKeyword.schema_hint = 'cpc, created_at, description, difficulty, display_name (req), intent, key (req), llm_context, platform, source, updated_at, value (req), volume',
-  k_SEOKeyword.context_budget = 'high',
+  k_SEOKeyword.context_budget = 'medium',
   k_SEOKeyword.generation_count = 0,
   k_SEOKeyword.created_at = datetime()
 ON MATCH SET
   k_SEOKeyword.display_name = 'SEOKeyword',
-  k_SEOKeyword.llm_context = 'Target keyword with metrics for SEO optimization (locale-specific)',
-  k_SEOKeyword.yaml_path = 'node-kinds/shared/seo/seo-keyword.yaml',
+  k_SEOKeyword.llm_context = 'Target keyword with metrics for SEO optimization (locale-specific knowledge)',
+  k_SEOKeyword.yaml_path = 'node-kinds/global/seo/seo-keyword.yaml',
   k_SEOKeyword.properties = ['cpc', 'created_at', 'description', 'difficulty', 'display_name', 'intent', 'key', 'llm_context', 'platform', 'source', 'updated_at', 'value', 'volume'],
   k_SEOKeyword.required_properties = ['display_name', 'key', 'value'],
   k_SEOKeyword.schema_hint = 'cpc, created_at, description, difficulty, display_name (req), intent, key (req), llm_context, platform, source, updated_at, value (req), volume',
-  k_SEOKeyword.context_budget = 'high',
+  k_SEOKeyword.context_budget = 'medium',
   k_SEOKeyword.generation_count = 0,
   k_SEOKeyword.updated_at = datetime();
 
@@ -738,7 +738,7 @@ MERGE (k_SEOKeywordMetrics:Meta:Kind {label: 'SEOKeywordMetrics'})
 ON CREATE SET
   k_SEOKeywordMetrics.display_name = 'SEOKeywordMetrics',
   k_SEOKeywordMetrics.llm_context = 'Historical metrics snapshot for an SEO keyword',
-  k_SEOKeywordMetrics.yaml_path = 'node-kinds/shared/seo/seo-keyword-metrics.yaml',
+  k_SEOKeywordMetrics.yaml_path = 'node-kinds/global/seo/seo-keyword-metrics.yaml',
   k_SEOKeywordMetrics.properties = ['cpc', 'created_at', 'description', 'difficulty', 'display_name', 'key', 'llm_context', 'observed_at', 'position', 'source', 'updated_at', 'url', 'volume'],
   k_SEOKeywordMetrics.required_properties = ['display_name', 'key', 'observed_at', 'source'],
   k_SEOKeywordMetrics.schema_hint = 'cpc, created_at, description, difficulty, display_name (req), key (req), llm_context, observed_at (req), position, source (req), updated_at, url, volume',
@@ -748,7 +748,7 @@ ON CREATE SET
 ON MATCH SET
   k_SEOKeywordMetrics.display_name = 'SEOKeywordMetrics',
   k_SEOKeywordMetrics.llm_context = 'Historical metrics snapshot for an SEO keyword',
-  k_SEOKeywordMetrics.yaml_path = 'node-kinds/shared/seo/seo-keyword-metrics.yaml',
+  k_SEOKeywordMetrics.yaml_path = 'node-kinds/global/seo/seo-keyword-metrics.yaml',
   k_SEOKeywordMetrics.properties = ['cpc', 'created_at', 'description', 'difficulty', 'display_name', 'key', 'llm_context', 'observed_at', 'position', 'source', 'updated_at', 'url', 'volume'],
   k_SEOKeywordMetrics.required_properties = ['display_name', 'key', 'observed_at', 'source'],
   k_SEOKeywordMetrics.schema_hint = 'cpc, created_at, description, difficulty, display_name (req), key (req), llm_context, observed_at (req), position, source (req), updated_at, url, volume',
@@ -759,21 +759,21 @@ ON MATCH SET
 MERGE (k_SEOMiningRun:Meta:Kind {label: 'SEOMiningRun'})
 ON CREATE SET
   k_SEOMiningRun.display_name = 'SEOMiningRun',
-  k_SEOMiningRun.llm_context = 'Mining job for SEO keyword variations',
-  k_SEOMiningRun.yaml_path = 'node-kinds/shared/seo/seo-mining-run.yaml',
-  k_SEOMiningRun.properties = ['completed_at', 'created_at', 'description', 'display_name', 'key', 'llm_context', 'sources', 'started_at', 'status', 'total_variations', 'unique_variations', 'updated_at'],
-  k_SEOMiningRun.required_properties = ['display_name', 'status'],
-  k_SEOMiningRun.schema_hint = 'completed_at, created_at, description, display_name (req), key, llm_context, sources, started_at, status (req), total_variations, unique_variations, updated_at',
+  k_SEOMiningRun.llm_context = 'Mining job for SEO keyword discovery',
+  k_SEOMiningRun.yaml_path = 'node-kinds/global/seo/seo-mining-run.yaml',
+  k_SEOMiningRun.properties = ['completed_at', 'created_at', 'description', 'display_name', 'error', 'key', 'keywords_found', 'llm_context', 'locale', 'seed_terms', 'sources', 'started_at', 'status', 'updated_at'],
+  k_SEOMiningRun.required_properties = ['display_name', 'locale', 'status'],
+  k_SEOMiningRun.schema_hint = 'completed_at, created_at, description, display_name (req), error, key, keywords_found, llm_context, locale (req), seed_terms, sources, started_at, status (req), updated_at',
   k_SEOMiningRun.context_budget = 'minimal',
   k_SEOMiningRun.generation_count = 0,
   k_SEOMiningRun.created_at = datetime()
 ON MATCH SET
   k_SEOMiningRun.display_name = 'SEOMiningRun',
-  k_SEOMiningRun.llm_context = 'Mining job for SEO keyword variations',
-  k_SEOMiningRun.yaml_path = 'node-kinds/shared/seo/seo-mining-run.yaml',
-  k_SEOMiningRun.properties = ['completed_at', 'created_at', 'description', 'display_name', 'key', 'llm_context', 'sources', 'started_at', 'status', 'total_variations', 'unique_variations', 'updated_at'],
-  k_SEOMiningRun.required_properties = ['display_name', 'status'],
-  k_SEOMiningRun.schema_hint = 'completed_at, created_at, description, display_name (req), key, llm_context, sources, started_at, status (req), total_variations, unique_variations, updated_at',
+  k_SEOMiningRun.llm_context = 'Mining job for SEO keyword discovery',
+  k_SEOMiningRun.yaml_path = 'node-kinds/global/seo/seo-mining-run.yaml',
+  k_SEOMiningRun.properties = ['completed_at', 'created_at', 'description', 'display_name', 'error', 'key', 'keywords_found', 'llm_context', 'locale', 'seed_terms', 'sources', 'started_at', 'status', 'updated_at'],
+  k_SEOMiningRun.required_properties = ['display_name', 'locale', 'status'],
+  k_SEOMiningRun.schema_hint = 'completed_at, created_at, description, display_name (req), error, key, keywords_found, llm_context, locale (req), seed_terms, sources, started_at, status (req), updated_at',
   k_SEOMiningRun.context_budget = 'minimal',
   k_SEOMiningRun.generation_count = 0,
   k_SEOMiningRun.updated_at = datetime();
@@ -1187,13 +1187,13 @@ MERGE (k)-[:IN_REALM]->(r);
 MATCH (k:Kind {label: 'PromptArtifact'}), (r:Realm {key: 'project'})
 MERGE (k)-[:IN_REALM]->(r);
 
-MATCH (k:Kind {label: 'SEOKeyword'}), (r:Realm {key: 'shared'})
+MATCH (k:Kind {label: 'SEOKeyword'}), (r:Realm {key: 'global'})
 MERGE (k)-[:IN_REALM]->(r);
 
-MATCH (k:Kind {label: 'SEOKeywordMetrics'}), (r:Realm {key: 'shared'})
+MATCH (k:Kind {label: 'SEOKeywordMetrics'}), (r:Realm {key: 'global'})
 MERGE (k)-[:IN_REALM]->(r);
 
-MATCH (k:Kind {label: 'SEOMiningRun'}), (r:Realm {key: 'shared'})
+MATCH (k:Kind {label: 'SEOMiningRun'}), (r:Realm {key: 'global'})
 MERGE (k)-[:IN_REALM]->(r);
 
 MATCH (k:Kind {label: 'SearchIntent'}), (r:Realm {key: 'project'})
@@ -1453,7 +1453,7 @@ MERGE (k)-[:EXHIBITS]->(t);
 MATCH (k:Kind {label: 'PromptArtifact'}), (t:Trait {key: 'derived'})
 MERGE (k)-[:EXHIBITS]->(t);
 
-MATCH (k:Kind {label: 'SEOKeyword'}), (t:Trait {key: 'localized'})
+MATCH (k:Kind {label: 'SEOKeyword'}), (t:Trait {key: 'knowledge'})
 MERGE (k)-[:EXHIBITS]->(t);
 
 MATCH (k:Kind {label: 'SEOKeywordMetrics'}), (t:Trait {key: 'derived'})

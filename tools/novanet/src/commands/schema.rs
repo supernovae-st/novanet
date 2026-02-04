@@ -23,9 +23,9 @@ struct GeneratorEntry {
 
 fn all_generators() -> Vec<GeneratorEntry> {
     use crate::generators::{
-        arc_schema::ArcSchemaGenerator, autowire::AutowireGenerator, colors::ColorsGenerator,
-        hierarchy::HierarchyGenerator, icons::IconsGenerator, kind::KindGenerator,
-        layer::LayerGenerator, mermaid::MermaidGenerator, organizing::OrganizingGenerator,
+        arc_kind::ArcKindGenerator, autowire::AutowireGenerator, colors::ColorsGenerator,
+        hierarchy::HierarchyGenerator, icons::IconsGenerator, layer::LayerGenerator,
+        mermaid::MermaidGenerator, node_kind::NodeKindGenerator, organizing::OrganizingGenerator,
         views::ViewsGenerator, visual_encoding::VisualEncodingGenerator,
     };
 
@@ -36,12 +36,12 @@ fn all_generators() -> Vec<GeneratorEntry> {
             post_process: None,
         },
         GeneratorEntry {
-            generator: Box::new(KindGenerator),
+            generator: Box::new(NodeKindGenerator),
             output_path: "packages/db/seed/01-kinds.cypher",
             post_process: None,
         },
         GeneratorEntry {
-            generator: Box::new(ArcSchemaGenerator),
+            generator: Box::new(ArcKindGenerator),
             output_path: "packages/db/seed/02-arc-kinds.cypher",
             post_process: None,
         },

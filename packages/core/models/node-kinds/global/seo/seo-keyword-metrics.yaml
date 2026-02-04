@@ -1,13 +1,13 @@
-# models/nodes/shared/seo/seo-keyword-metrics.yaml
-# SEOKeywordMetrics - Historical metrics snapshot for a keyword (v7.8.5)
+# models/node-kinds/global/seo/seo-keyword-metrics.yaml
+# SEOKeywordMetrics - Historical metrics snapshot for a keyword
 #
-# v7.8.5: Renamed from SEOSnapshot for unified metrics pattern
-# - Relation: HAS_METRICS (unified with PageMetrics, GEOSeedMetrics)
-# - Timestamp: observed_at (standardized)
+# v10.2: Merged SHARED → GLOBAL realm
+#        - realm: global (was shared)
+#        - trait: derived (unchanged)
 
 node:
   name: SEOKeywordMetrics
-  realm: shared
+  realm: global
   layer: seo
   trait: derived
   icon: "📸"

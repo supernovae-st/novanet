@@ -1,13 +1,17 @@
-# models/nodes/shared/seo/seo-mining-run.yaml
+# models/node-kinds/global/seo/seo-mining-run.yaml
 # SEOMiningRun - SEO mining job orchestration
+#
+# v10.2: Merged SHARED → GLOBAL realm
+#        - realm: global (was shared)
+#        - trait: job (unchanged)
 
 node:
   name: SEOMiningRun
-  realm: shared
+  realm: global
   layer: seo
   trait: job
   icon: "⚙️"
-  description: "Mining job for SEO keyword variations"
+  description: "Mining job for SEO keyword discovery"
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # STANDARD PROPERTIES (v7.1.0 - UUID-identified, no key)
@@ -54,7 +58,7 @@ node:
     status:
       type: string
       required: true
-      description: "running | completed | failed"
+      description: "pending | running | completed | failed"
       example: "completed"
 
     sources:
@@ -62,6 +66,18 @@ node:
       required: false
       description: "Data sources used"
       example: '["ahrefs", "semrush"]'
+
+    seed_terms:
+      type: "string[]"
+      required: false
+      description: "Initial seed terms for mining"
+      example: '["qr code", "qr generator"]'
+
+    locale:
+      type: string
+      required: true
+      description: "Target locale for this mining run"
+      example: "en-US"
 
     started_at:
       type: datetime
@@ -73,25 +89,25 @@ node:
       required: false
       description: "Job completion time"
 
-    total_variations:
+    keywords_found:
       type: int
       required: false
-      description: "Total variations found"
+      description: "Total keywords discovered"
 
-    unique_variations:
-      type: int
+    error:
+      type: string
       required: false
-      description: "New unique (non-duplicate) variations"
+      description: "Error message if failed"
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # RELATIONS
   # ═══════════════════════════════════════════════════════════════════════════════
 
   relations:
-    - relation: MINES
+    - relation: SEO_MINES
       to: SEOKeyword
       direction: outgoing
-      description: "Keywords mined by this run (v7.8.2: SEOKeyword → SEOKeyword)"
+      description: "Keywords discovered by this mining run"
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # EXAMPLE
@@ -101,6 +117,6 @@ node:
     description: "Get recent SEO mining runs"
     cypher: |
       MATCH (smr:SEOMiningRun)
-      RETURN smr.display_name, smr.status, smr.total_variations, smr.unique_variations
+      RETURN smr.display_name, smr.status, smr.keywords_found, smr.locale
       ORDER BY smr.started_at DESC
       LIMIT 10

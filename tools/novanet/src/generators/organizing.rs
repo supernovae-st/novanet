@@ -249,7 +249,7 @@ mod tests {
     #[test]
     fn generate_small_cypher() {
         let doc = TaxonomyDoc {
-            version: "9.9.0".to_string(),
+            version: "10.2.0".to_string(),
             node_realms: vec![NodeRealmDef {
                 key: "test".to_string(),
                 display_name: "Test".to_string(),
@@ -328,7 +328,7 @@ mod tests {
         assert!(cypher.contains("updated_at = datetime()"));
 
         // Header
-        assert!(cypher.contains("v9.9.0"));
+        assert!(cypher.contains("v10.2.0"));
         assert!(cypher.contains("AUTO-GENERATED"));
         assert!(cypher.contains("1 Realms, 1 Layers, 1 Traits, 1 ArcFamilies"));
         assert!(cypher.contains("v9.5: Includes visual encoding properties"));
@@ -337,7 +337,7 @@ mod tests {
     #[test]
     fn generate_multiline_llm_context() {
         let doc = TaxonomyDoc {
-            version: "9.9.0".to_string(),
+            version: "10.2.0".to_string(),
             node_realms: vec![NodeRealmDef {
                 key: "r".to_string(),
                 display_name: "R".to_string(),
@@ -405,7 +405,7 @@ mod tests {
                 .count()
         };
 
-        assert_eq!(count_merges("Realm"), 3, "expected 3 Realm nodes");
+        assert_eq!(count_merges("Realm"), 2, "expected 2 Realm nodes");
         assert_eq!(count_merges("Layer"), 8, "expected 8 Layer nodes"); // geo removed v10.1
         assert_eq!(count_merges("Trait"), 5, "expected 5 Trait nodes");
         assert_eq!(count_merges("ArcFamily"), 5, "expected 5 ArcFamily nodes");
@@ -426,7 +426,7 @@ mod tests {
         // Spot checks — specific nodes exist
         assert!(cypher.contains("r_global:Meta:Realm {key: 'global'}"));
         assert!(cypher.contains("r_project:Meta:Realm {key: 'project'}"));
-        assert!(cypher.contains("r_shared:Meta:Realm {key: 'shared'}"));
+        // v10.2: shared realm removed
         assert!(cypher.contains("l_knowledge:Meta:Layer {key: 'knowledge'}"));
         assert!(cypher.contains("l_foundation:Meta:Layer {key: 'foundation'}"));
         assert!(cypher.contains("l_seo:Meta:Layer {key: 'seo'}"));
@@ -452,13 +452,13 @@ mod tests {
         assert!(cypher.contains("as_intra_realm:Meta:ArcScope {key: 'intra_realm'}"));
         assert!(cypher.contains("ac_one_to_many:Meta:ArcCardinality {key: 'one_to_many'}"));
 
-        // Header mentions v9.9.0
-        assert!(cypher.contains("v9.9.0"));
+        // Header mentions v10.2.0
+        assert!(cypher.contains("v10.2.0"));
 
         // HAS_LAYER wiring — specific pairs
         assert!(cypher.contains("(r:Realm {key: 'global'}), (l:Layer {key: 'config'})"));
         assert!(cypher.contains("(r:Realm {key: 'project'}), (l:Layer {key: 'output'})"));
-        assert!(cypher.contains("(r:Realm {key: 'shared'}), (l:Layer {key: 'seo'})")); // geo removed v10.1
+        // v10.2: shared realm removed, seo now in global
     }
 
     /// Snapshot test for a minimal taxonomy document.
@@ -466,7 +466,7 @@ mod tests {
     #[test]
     fn snapshot_minimal_taxonomy() {
         let doc = TaxonomyDoc {
-            version: "9.9.0".to_string(),
+            version: "10.2.0".to_string(),
             node_realms: vec![NodeRealmDef {
                 key: "test".to_string(),
                 display_name: "Test Realm".to_string(),

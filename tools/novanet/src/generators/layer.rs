@@ -41,8 +41,8 @@ struct TemplateLayer {
 // Realm ordering
 // ─────────────────────────────────────────────────────────────────────────────
 
-/// Fixed realm order matching taxonomy.yaml.
-const REALM_ORDER: &[&str] = &["global", "project", "shared"];
+/// Fixed realm order matching taxonomy.yaml (v10.2: 2 realms).
+const REALM_ORDER: &[&str] = &["global", "project"];
 
 // ─────────────────────────────────────────────────────────────────────────────
 // MiniJinja template
@@ -261,7 +261,7 @@ mod tests {
             make_node("Block", "project", "structure"),
             make_node("Locale", "global", "config"),
             make_node("Style", "global", "knowledge"), // v10: LocaleVoice → Style
-            make_node("SEOKeyword", "shared", "seo"),
+            make_node("SEOKeyword", "global", "seo"),  // v10.2: moved to global
         ];
 
         let output = render_layers(&nodes).unwrap();
@@ -277,10 +277,9 @@ mod tests {
         // NODE_LAYERS declaration
         assert!(output.contains("export const NODE_LAYERS: Record<NodeType, Layer>"));
 
-        // Realm headers
+        // Realm headers (v10.2: shared removed, SEO moved to global)
         assert!(output.contains("PROJECT REALM (3 nodes)"));
-        assert!(output.contains("GLOBAL REALM (2 nodes)"));
-        assert!(output.contains("SHARED REALM (1 nodes)"));
+        assert!(output.contains("GLOBAL REALM (3 nodes)"));
 
         // Layer groups with node counts
         assert!(output.contains("// foundation (1 node)"));
@@ -302,12 +301,10 @@ mod tests {
         let page_pos = output.find("Page: 'structure',").unwrap();
         assert!(block_pos < page_pos, "Block should come before Page");
 
-        // Realm order: global, project, shared (matches taxonomy.yaml)
+        // Realm order: global, project (v10.2: shared removed)
         let global_pos = output.find("GLOBAL REALM").unwrap();
         let project_pos = output.find("PROJECT REALM").unwrap();
-        let shared_pos = output.find("SHARED REALM").unwrap();
         assert!(global_pos < project_pos);
-        assert!(project_pos < shared_pos);
 
         // Helper functions
         assert!(output.contains("export function getLayer(nodeType: NodeType): Layer"));
@@ -321,7 +318,6 @@ mod tests {
             make_node("Alpha", "project", "foundation"),
             make_node("Middle", "project", "foundation"),
             make_node("Locale", "global", "config"),
-            make_node("Geo", "shared", "geo"),
         ];
 
         let output = render_layers(&nodes).unwrap();
@@ -336,17 +332,14 @@ mod tests {
 
     #[test]
     fn render_layers_missing_realm_fails() {
-        // Only project and global — missing shared
-        let nodes = vec![
-            make_node("Project", "project", "foundation"),
-            make_node("Locale", "global", "config"),
-        ];
+        // Only project — missing global (v10.2: shared removed)
+        let nodes = vec![make_node("Project", "project", "foundation")];
 
         let result = render_layers(&nodes);
         assert!(result.is_err());
         let err = result.unwrap_err().to_string();
         assert!(
-            err.contains("shared"),
+            err.contains("global"),
             "error should mention missing realm: {err}"
         );
     }
@@ -356,7 +349,6 @@ mod tests {
         let nodes = vec![
             make_node("Project", "project", "foundation"),
             make_node("Locale", "global", "config"),
-            make_node("Geo", "shared", "geo"),
         ];
 
         let output = render_layers(&nodes).unwrap();
@@ -364,7 +356,6 @@ mod tests {
         // Comments should include the YAML folder path
         assert!(output.contains("models/node-kinds/project/foundation/"));
         assert!(output.contains("models/node-kinds/global/config/"));
-        assert!(output.contains("models/node-kinds/shared/geo/"));
     }
 
     #[test]
@@ -373,15 +364,13 @@ mod tests {
             make_node("Project", "project", "foundation"),
             make_node("Page", "project", "structure"),
             make_node("Locale", "global", "config"),
-            make_node("Geo", "shared", "geo"),
         ];
 
         let output = render_layers(&nodes).unwrap();
 
-        // JSDoc comment should list layers per realm
+        // JSDoc comment should list layers per realm (v10.2: shared removed)
         assert!(output.contains("* - Project: foundation, structure"));
         assert!(output.contains("* - Global: config"));
-        assert!(output.contains("* - Shared: geo"));
     }
 
     #[test]
@@ -404,10 +393,9 @@ mod tests {
             "should mention 43 node types"
         );
 
-        // v10.1: Realm node counts (updated for 6 atoms in global/knowledge)
+        // v10.2: Realm node counts (shared realm removed, SEO moved to global)
         assert!(output.contains("PROJECT REALM (23 nodes)"));
-        assert!(output.contains("GLOBAL REALM (17 nodes)")); // 11 + 6 atoms
-        assert!(output.contains("SHARED REALM (3 nodes)")); // SEO only, GEO removed
+        assert!(output.contains("GLOBAL REALM (20 nodes)")); // 17 + 3 SEO nodes from shared
 
         // 8 layers present (geo removed in v10.1)
         for layer in [
@@ -455,13 +443,14 @@ mod tests {
             // Global realm
             make_node("Locale", "global", "config"),
             make_node("LocaleVoice", "global", "knowledge"),
+            // Global realm - SEO (v10.2: moved from shared to global)
+            make_node("SEOKeyword", "global", "seo"),
+            make_node("SEOTarget", "global", "seo"),
             // Project realm
             make_node("Project", "project", "foundation"),
             make_node("Page", "project", "structure"),
             make_node("Block", "project", "structure"),
             make_node("Concept", "project", "semantic"),
-            // Shared realm (required by REALM_ORDER)
-            make_node("SEOKeyword", "shared", "seo"),
         ];
 
         let output = render_layers(&nodes).unwrap();

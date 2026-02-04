@@ -1,5 +1,6 @@
 # packages/core/models/arc-kinds/localization/for-locale.yaml
 # ArcKind: FOR_LOCALE — All localized content nodes point to their target Locale
+# v10.2: SEOKeyword removed — now owned by Locale via HAS_SEO_KEYWORDS
 
 arc:
   name: FOR_LOCALE
@@ -10,7 +11,6 @@ arc:
     - ProjectL10n
     - BlockL10n
     - PageL10n
-    - SEOKeyword
     - GenerationJob
     - OutputArtifact
   target: Locale

@@ -20,14 +20,13 @@ This diagram shows the complete NovaNet graph schema with all 48 node types and 
 
 - **🌍 GLOBAL** — Locale configuration and knowledge (shared across all projects)
 - **📦 PROJECT** — Project-specific content structure and generation
-- **🎯 SHARED** — SEO keyword targeting (shared across projects)
 
 ## Graph Diagram
 
 ```mermaid
 flowchart TB
   %% NovaNet Graph v10.0.0
-  %% Generated: 43 nodes, 110 edges
+  %% Generated: 43 nodes, 109 edges
   %% Source: 48 node YAMLs + relations.yaml + taxonomy.yaml
 
   %% Trait styling (node_trait)
@@ -59,6 +58,11 @@ flowchart TB
       TabooSet["🟣 TabooSet"]
       Term["🟣 Term"]
       TermSet["🟣 TermSet"]
+    end
+    subgraph GLOBAL_seo["SEO Intelligence"]
+      SEOKeyword["🟣 SEOKeyword"]
+      SEOKeywordMetrics["⚪ SEOKeywordMetrics"]
+      SEOMiningRun["⚙️ SEOMiningRun"]
     end
   end
 
@@ -96,15 +100,6 @@ flowchart TB
       GenerationJob["⚙️ GenerationJob"]
       OutputArtifact["⚪ OutputArtifact"]
       PageL10n["🟢 PageL10n"]
-    end
-  end
-
-  subgraph SHARED_REALM["🎯 SHARED"]
-    direction TB
-    subgraph SHARED_seo["SEO Intelligence"]
-      SEOKeyword["🟢 SEOKeyword"]
-      SEOKeywordMetrics["⚪ SEOKeywordMetrics"]
-      SEOMiningRun["⚙️ SEOMiningRun"]
     end
   end
 
@@ -158,8 +153,8 @@ flowchart TB
   Locale -.->|HAS_LOCALIZED_CONTENT| ConceptL10n
   Locale -.->|HAS_LOCALIZED_CONTENT| PageL10n
   Locale -.->|HAS_LOCALIZED_CONTENT| ProjectL10n
-  Locale -.->|HAS_LOCALIZED_CONTENT| SEOKeyword
   Locale -->|HAS_PATTERNS| PatternSet
+  Locale -->|HAS_SEO_KEYWORDS| SEOKeyword
   Locale -->|HAS_SLUGIFICATION| Slugification
   Locale -->|HAS_STYLE| Style
   Locale -->|HAS_TABOOS| TabooSet
@@ -211,7 +206,6 @@ flowchart TB
   PromptArtifact ==>|COMPILED_FROM| PagePrompt
   PromptArtifact ==>|INCLUDES_CONCEPT| Concept
   PromptArtifact ==>|INCLUDES_STYLE| Style
-  SEOKeyword -.->|FOR_LOCALE| Locale
   SEOKeyword --o|HAS_METRICS| SEOKeywordMetrics
   SEOMiningRun --o|SEO_MINES| SEOKeyword
   SearchIntent -.->|MAPS_TO_CONCEPT| Concept
@@ -222,10 +216,10 @@ flowchart TB
 
   %% Edge colors by family
   linkStyle 11,12,13,16,17,18,19,20,32,33,34,36,37,38,57,58,59,60,61,62,77,80,83,84,85,86,87,98,99,100,101 stroke:#8b5cf6,stroke-width:2px
-  linkStyle 3,4,10,14,15,22,23,27,29,30,35,39,45,46,47,48,49,55,56,65,66,79,81,82,91,92,95,96,97,102 stroke:#22c55e,stroke-width:2px
-  linkStyle 28,103,104,106 stroke:#ec4899,stroke-width:2px
-  linkStyle 0,5,6,7,8,21,31,40,41,42,43,44,50,51,52,53,54,64,67,68,69,71,72,78,88,89,90,93,94,108,109 stroke:#3b82f6,stroke-width:2px
-  linkStyle 1,2,9,24,25,26,63,70,73,74,75,76,105,107 stroke:#f97316,stroke-width:2px
+  linkStyle 3,4,10,14,15,22,23,27,29,30,35,39,45,46,47,48,55,56,65,66,79,81,82,91,92,95,96,97 stroke:#22c55e,stroke-width:2px
+  linkStyle 28,102,103,105 stroke:#ec4899,stroke-width:2px
+  linkStyle 0,5,6,7,8,21,31,40,41,42,43,44,49,50,51,52,53,54,64,67,68,69,71,72,78,88,89,90,93,94,107,108 stroke:#3b82f6,stroke-width:2px
+  linkStyle 1,2,9,24,25,26,63,70,73,74,75,76,104,106 stroke:#f97316,stroke-width:2px
 
   %% Class assignments
   class Adaptation knowledge
@@ -260,7 +254,7 @@ flowchart TB
   class Project invariant
   class ProjectL10n localized
   class PromptArtifact derived
-  class SEOKeyword localized
+  class SEOKeyword knowledge
   class SEOKeywordMetrics derived
   class SEOMiningRun job
   class SearchIntent invariant

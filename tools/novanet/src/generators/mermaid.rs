@@ -413,11 +413,7 @@ pub fn wrap_in_markdown(mermaid_code: &str) -> String {
         "- **\u{1F4E6} PROJECT** — Project-specific content structure and generation"
     )
     .unwrap();
-    writeln!(
-        out,
-        "- **\u{1F3AF} SHARED** — SEO keyword targeting (shared across projects)"
-    )
-    .unwrap();
+    // v10.2: SHARED realm removed, SEO now in GLOBAL
     writeln!(out).unwrap();
     writeln!(out, "## Graph Diagram").unwrap();
     writeln!(out).unwrap();
@@ -732,10 +728,9 @@ mod tests {
         assert!(output.contains("NovaNet Graph v10.0.0"));
         assert!(output.contains("43 nodes")); // v10.1: 37 base + 6 atoms
 
-        // All 3 realms
+        // All 2 realms (v10.2: shared removed)
         assert!(output.contains("GLOBAL_REALM"));
         assert!(output.contains("PROJECT_REALM"));
-        assert!(output.contains("SHARED_REALM"));
 
         // Sample layer subgraphs
         assert!(output.contains("GLOBAL_config"));
@@ -745,8 +740,7 @@ mod tests {
         assert!(output.contains("PROJECT_semantic"));
         assert!(output.contains("PROJECT_instruction"));
         assert!(output.contains("PROJECT_output"));
-        assert!(output.contains("SHARED_seo"));
-        // GEO layer removed in v10.1
+        // v10.2: SEO now in global realm (shared realm removed)
 
         // All 5 classDef trait styles
         assert!(output.contains("classDef invariant"));
