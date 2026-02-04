@@ -20,7 +20,7 @@ This diagram shows the complete NovaNet graph schema with all 48 node types and 
 
 - **🌍 GLOBAL** — Locale configuration and knowledge (shared across all projects)
 - **📦 PROJECT** — Project-specific content structure and generation
-- **🎯 SHARED** — SEO/GEO optimization data (shared across projects)
+- **🎯 SHARED** — SEO keyword targeting (shared across projects)
 
 ## Graph Diagram
 
@@ -281,7 +281,7 @@ flowchart TB
 | `.->` | Localization | Locale-specific content links |
 | `.->` | Semantic | Meaning and concept connections |
 | `==>` | Generation | LLM generation flow |
-| `--o` | Mining | SEO/GEO data extraction |
+| `--o` | Mining | SEO keyword mining |
 
 ---
 

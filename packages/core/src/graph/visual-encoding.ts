@@ -250,7 +250,7 @@ export const CARDINALITY_ARROWS: Record<CardinalityKey, CardinalityArrowStyle> =
 };
 
 // =============================================================================
-// KIND ICONS (42) — Lucide icon names
+// KIND ICONS (37) — Lucide icon names
 // =============================================================================
 
 export const KIND_ICONS: Record<string, string> = {
@@ -271,9 +271,6 @@ export const KIND_ICONS: Record<string, string> = {
   EvaluationSignal: 'activity',
   ExpressionSet: 'message-circle',
   Formatting: 'type',
-  GEOMiningRun: 'cpu',
-  GEOSeedL10n: 'map-pin',
-  GEOSeedMetrics: 'trending-up',
   GenerationJob: 'play-circle',
   Locale: 'globe',
   OutputArtifact: 'package',
@@ -293,8 +290,6 @@ export const KIND_ICONS: Record<string, string> = {
   Style: 'palette',
   TabooSet: 'alert-triangle',
   TermSet: 'book-open',
-  Thing: 'box',
-  ThingL10n: 'box',
   TopicCluster: 'network',
 };
 

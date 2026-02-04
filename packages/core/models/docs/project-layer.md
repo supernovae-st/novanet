@@ -33,7 +33,7 @@ Pages and Blocks are invariant scaffolding; PageL10n and BlockL10n are generated
 ```mermaid
 flowchart TB
   %% View: Project Layer (project-layer)
-  %% 14 nodes, 25 edges
+  %% 14 nodes, 23 edges
 
   %% Trait styling (node_trait)
   classDef invariant fill:#3b82f6,stroke:#1d4ed8,color:#fff
@@ -82,7 +82,6 @@ flowchart TB
   Block -->|OF_TYPE| PageType
   Concept -.->|HAS_L10N| ConceptL10n
   Concept -.->|HAS_L10N| ProjectL10n
-  Concept -.->|HAS_L10N| ThingL10n
   Concept -.->|SEMANTIC_LINK| Concept
   Page -->|HAS_BLOCK| Block
   Page -.->|HAS_OUTPUT| BlockL10n
@@ -96,14 +95,13 @@ flowchart TB
   Project -->|HAS_CONCEPT| Concept
   Project -.->|HAS_L10N| ConceptL10n
   Project -.->|HAS_L10N| ProjectL10n
-  Project -.->|HAS_L10N| ThingL10n
   Project -->|HAS_PAGE| Page
   Project -->|SUPPORTS_LOCALE| Locale
 
   %% Edge colors by family
-  linkStyle 0,1,6,7,8,11,12,20,21,22 stroke:#22c55e,stroke-width:2px
-  linkStyle 2,3,4,5,10,13,14,15,16,17,18,19,23,24 stroke:#3b82f6,stroke-width:2px
-  linkStyle 9 stroke:#f97316,stroke-width:2px
+  linkStyle 0,1,6,7,10,11,19,20 stroke:#22c55e,stroke-width:2px
+  linkStyle 2,3,4,5,9,12,13,14,15,16,17,18,21,22 stroke:#3b82f6,stroke-width:2px
+  linkStyle 8 stroke:#f97316,stroke-width:2px
 
   %% Class assignments
   class Block invariant

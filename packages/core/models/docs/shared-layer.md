@@ -7,17 +7,16 @@
 The Shared scope contains nodes that are independent of specific projects
 but still locale-specific. These are reusable across multiple projects.
 
-**6 nodes organized by domain:**
-- **SEO (3)**: SEOKeyword, SEOKeywordMetrics, SEOMiningRun
-- **GEO (3)**: GEOSeedL10n, GEOSeedMetrics, GEOMiningRun
+**3 nodes (v10.1):**
+- **SEO**: SEOKeyword, SEOKeywordMetrics, SEOMiningRun
 
 **Key insight:**
 Shared nodes bridge global locale knowledge and project content.
 A keyword like "QR code generator" can be targeted by multiple projects.
 
-**SEO vs GEO:**
-- SEO: Traditional search engine optimization (Google, Bing)
-- GEO: Generative Engine Optimization (AI answer engines: Perplexity, ChatGPT)
+**v10.1 Architecture:**
+- SEOKeyword is linked to ConceptL10n (locale-aligned targeting)
+- Pattern: ConceptL10n -[:HAS_SEO_TARGET]-> SEOKeyword -[:FOR_LOCALE]-> Locale
 
 ### Legend
 
@@ -34,7 +33,7 @@ A keyword like "QR code generator" can be targeted by multiple projects.
 ```mermaid
 flowchart TB
   %% View: Shared Layer (shared-layer)
-  %% 9 nodes, 13 edges
+  %% 9 nodes, 8 edges
 
   %% Trait styling (node_trait)
   classDef invariant fill:#3b82f6,stroke:#1d4ed8,color:#fff
@@ -54,15 +53,6 @@ flowchart TB
   subgraph SEO_MINING["SEO Mining"]
   end
 
-  subgraph GEO_SEEDS["GEO Seeds"]
-  end
-
-  subgraph GEO_METRICS["GEO Metrics"]
-  end
-
-  subgraph GEO_MINING["GEO Mining"]
-  end
-
   %% Additional reachable nodes
   BlockL10n["🟢 BlockL10n"]
   ConceptL10n["🟢 ConceptL10n"]
@@ -75,21 +65,16 @@ flowchart TB
   %% Relationships (styled by arc family)
   BlockL10n -.->|FOR_LOCALE| Locale
   ConceptL10n -.->|FOR_LOCALE| Locale
-  GEOSeedL10n -.->|FOR_LOCALE| Locale
-  GEOSeedL10n --o|HAS_METRICS| GEOSeedMetrics
-  GEOSeedL10n --o|HAS_METRICS| SEOKeywordMetrics
   GenerationJob -.->|FOR_LOCALE| Locale
   OutputArtifact -.->|FOR_LOCALE| Locale
   PageL10n -.->|FOR_LOCALE| Locale
   ProjectL10n -.->|FOR_LOCALE| Locale
   SEOKeyword -.->|FOR_LOCALE| Locale
-  SEOKeyword --o|HAS_METRICS| GEOSeedMetrics
   SEOKeyword --o|HAS_METRICS| SEOKeywordMetrics
-  ThingL10n -.->|FOR_LOCALE| Locale
 
   %% Edge colors by family
-  linkStyle 0,1,2,5,6,7,8,9,12 stroke:#22c55e,stroke-width:2px
-  linkStyle 3,4,10,11 stroke:#ec4899,stroke-width:2px
+  linkStyle 0,1,2,3,4,5,6 stroke:#22c55e,stroke-width:2px
+  linkStyle 7 stroke:#ec4899,stroke-width:2px
 
   %% Class assignments
   class BlockL10n localized
@@ -107,9 +92,8 @@ flowchart TB
 
 - Shared nodes are project-independent but locale-specific
 - SEO keywords can be targeted by multiple projects' concepts
-- GEO seeds track questions asked to AI answer engines
+- v10.1: SEOKeyword linked to ConceptL10n (same locale)
 - Metrics are time-series - always use latest for current state
-- Mining runs track discovery jobs for both SEO and GEO
 
 ---
 

@@ -113,7 +113,7 @@ v10.1 introduces **Knowledge Atoms** - granular knowledge nodes for selective LL
 │  Containers (6): TermSet, ExpressionSet, PatternSet,                        │
 │                  CultureSet, TabooSet, AudienceSet                          │
 │  Atoms (6):      Term, Expression, Pattern, CultureRef, Taboo, AudienceTrait│
-│  Total:          48 nodes, 79 arcs                                          │
+│  Total:          43 nodes, 64 arcs                                          │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```

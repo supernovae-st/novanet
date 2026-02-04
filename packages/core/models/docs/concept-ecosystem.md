@@ -8,7 +8,7 @@ The concept network showing semantic relationships between concepts.
 Concepts are the core semantic building blocks of NovaNet:
 - Each Concept has localized versions (ConceptL10n) per locale
 - Concepts connect via SEMANTIC_LINK with temperature weights
-- Concepts can target SEO keywords and GEO seeds
+- ConceptL10n targets locale-aligned SEO keywords via HAS_SEO_TARGET
 
 ### Legend
 
@@ -25,7 +25,7 @@ Concepts are the core semantic building blocks of NovaNet:
 ```mermaid
 flowchart TB
   %% View: Concept Network (concept-ecosystem)
-  %% 4 nodes, 6 edges
+  %% 3 nodes, 3 edges
 
   %% Trait styling (node_trait)
   classDef invariant fill:#3b82f6,stroke:#1d4ed8,color:#fff
@@ -42,8 +42,7 @@ flowchart TB
     ConceptL10n["🟢 ConceptL10n"]
   end
 
-  subgraph SEO_GEO_TARGETS["SEO/GEO Targets"]
-    SEOKeyword["🟢 SEOKeyword"]
+  subgraph SEO_TARGETS["SEO Targets"]
   end
 
   %% Additional reachable nodes
@@ -52,27 +51,23 @@ flowchart TB
   %% Relationships (styled by arc family)
   Concept -.->|HAS_L10N| ConceptL10n
   Concept -.->|HAS_L10N| ProjectL10n
-  Concept -.->|HAS_L10N| ThingL10n
   Concept -.->|SEMANTIC_LINK| Concept
-  Concept --o|TARGETS_GEO| GEOSeedL10n
-  Concept --o|TARGETS_SEO| SEOKeyword
 
   %% Edge colors by family
-  linkStyle 0,1,2 stroke:#22c55e,stroke-width:2px
-  linkStyle 4,5 stroke:#ec4899,stroke-width:2px
-  linkStyle 3 stroke:#f97316,stroke-width:2px
+  linkStyle 0,1 stroke:#22c55e,stroke-width:2px
+  linkStyle 2 stroke:#f97316,stroke-width:2px
 
   %% Class assignments
   class Concept invariant
   class ConceptL10n localized
   class ProjectL10n localized
-  class SEOKeyword localized
 ```
 
 ## Notes
 
 - Concepts are INVARIANT - they exist independently of locale
 - ConceptL10n provides locale-specific title, definition, examples
+- SEO keywords linked to ConceptL10n (same locale) via HAS_SEO_TARGET
 - SEMANTIC_LINK temperature controls spreading activation strength
 
 ---

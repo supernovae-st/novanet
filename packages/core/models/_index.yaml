@@ -158,7 +158,7 @@
 #   - NEW: 5 ArcFamilies (ownership, localization, semantic, generation, mining)
 #   - NEW: OF_KIND replaces IN_SUBCATEGORY
 #
-# Statistics: 46 nodes, 77 arcs (5 arc families)
+# Statistics: 43 nodes, 64 arcs (5 arc families) — v10.1.0
 #
 # ═══════════════════════════════════════════════════════════════════════════════
 # CHANGES v8.2.0 (from v8.1.0)
@@ -430,7 +430,7 @@ nodes_by_trait:
 #   🌍 GLOBAL:  17 nodes (Locale + 10 containers + 6 atoms)
 #   🎯 SHARED:   3 nodes (SEO 3)
 #   📦 PROJECT: 23 nodes (Foundation 3 + Structure 3 + Semantic 6 + Instruction 6 + Output 5)
-#   TOTAL:      43 nodes, 73 arcs (5 arc families, +6 CONTAINS arcs)
+#   TOTAL:      43 nodes, 64 arcs (5 arc families)
 #
 # By Trait:
 #   🔵 INVARIANT:  16 (Project, BrandIdentity, Concept, Page, Block, PageType, BlockType,

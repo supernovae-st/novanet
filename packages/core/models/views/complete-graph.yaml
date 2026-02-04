@@ -1,9 +1,10 @@
 # models/views/complete-graph.yaml
-# Complete graph view showing all 42 node types and 73 arc types
+# Complete graph view showing all 43 node types and 64 arc types
+# v10.1.0 — GEO removed, SEO via ConceptL10n
 id: complete-graph
 name: Complete Graph
 description: Full NovaNet graph with all nodes and relations
-version: "9.9.0"
+version: "10.1.0"
 
 root:
   type: Project
@@ -51,58 +52,58 @@ docs:
   category: overview
   description: |
     The complete NovaNet graph showing all 43 node types organized into three realms:
-    - **Global (16 nodes)**: Locale + tiered knowledge (Style, Formatting, etc.) + 6 atoms
-    - **Shared (3 nodes)**: SEO nodes (SEOKeyword, SEOSnapshot, SEOMiningRun)
+    - **Global (17 nodes)**: Locale + 10 knowledge containers + 6 atoms
+    - **Shared (3 nodes)**: SEO nodes (SEOKeyword, SEOKeywordMetrics, SEOMiningRun)
     - **Project (23 nodes)**: Per-project foundation, structure, semantic, instruction, and output nodes
 
   layers:
-    # 🌍 GLOBAL SCOPE (11 nodes)
+    # GLOBAL SCOPE (17 nodes)
     - name: Global - Config
       nodes: [Locale]
       color: purple
       description: Locale configuration (BCP-47)
 
-    - name: Global - Knowledge
+    - name: Global - Knowledge Containers
       nodes: [Formatting, Slugification, Adaptation, Style, TermSet, ExpressionSet, PatternSet, CultureSet, TabooSet, AudienceSet]
       color: purple
-      description: 10 tiered knowledge nodes (v9.9 - Technical, Style, Semantic)
+      description: 10 tiered knowledge containers (Technical, Style, Semantic)
 
-    # 📦 PROJECT SCOPE (14 nodes)
+    - name: Global - Knowledge Atoms
+      nodes: [Term, Expression, Pattern, CultureRef, Taboo, AudienceTrait]
+      color: purple
+      description: 6 atomic knowledge elements
+
+    # PROJECT SCOPE (23 nodes)
     - name: Project - Foundation
       nodes: [Project, BrandIdentity, ProjectL10n]
       color: blue
       description: Project foundation and branding
 
     - name: Project - Structure
-      nodes: [Page, Block, BlockType, PageType]
+      nodes: [Page, Block, ContentSlot, BlockType, PageType]
       color: cyan
       description: Page and block structure
 
     - name: Project - Semantic
-      nodes: [Concept, ConceptL10n]
+      nodes: [Concept, ConceptL10n, SearchIntent, TopicCluster, AudiencePersona, ChannelSurface]
       color: green
-      description: Semantic concepts
+      description: Semantic concepts and targeting
 
     - name: Project - Instruction
-      nodes: [PagePrompt, BlockPrompt, BlockRules]
+      nodes: [PagePrompt, BlockPrompt, BlockRules, PromptArtifact]
       color: orange
       description: Generation instructions
 
     - name: Project - Output
-      nodes: [PageL10n, BlockL10n]
+      nodes: [PageL10n, BlockL10n, GenerationJob, OutputArtifact, EvaluationSignal]
       color: orange
       description: Generated content outputs
 
-    # 🎯 SHARED SCOPE (6 nodes)
+    # SHARED SCOPE (3 nodes)
     - name: Shared - SEO
       nodes: [SEOKeyword, SEOKeywordMetrics, SEOMiningRun]
       color: gray
       description: SEO keyword mining
-
-    - name: Shared - GEO
-      nodes: [GEOSeedL10n, GEOSeedMetrics, GEOMiningRun]
-      color: gray
-      description: GEO question mining
 
   examples:
     - name: Count all nodes by type
@@ -137,4 +138,5 @@ docs:
     - "This view is for documentation and understanding the full schema"
     - "For generation tasks, use more specific views like page-generation or block-generation"
     - "The graph follows a scope hierarchy: Global > Shared > Project"
-    - "Mermaid diagram is auto-generated from relations.yaml via MermaidGenerator"
+    - "Mermaid diagram is auto-generated from arc-kinds/ via MermaidGenerator"
+    - "v10.1: 43 nodes, 64 arcs (GEO removed)"

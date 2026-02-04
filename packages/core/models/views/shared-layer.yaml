@@ -1,12 +1,12 @@
 # models/views/shared-layer.yaml
-# Shared scope: SEO and GEO targeting (6 nodes)
+# Shared scope: SEO targeting (3 nodes)
+# v10.1.0 — GEO removed, SEO via ConceptL10n
 id: shared-layer
 name: Shared Layer
-description: SEO keywords and GEO seeds independent of projects
-version: "8.0.0"
+description: SEO keywords independent of projects
+version: "10.1.0"
 
-# Root is Locale since SEO/GEO nodes are per-locale
-# For detailed SEO/GEO queries, use seo-pipeline.yaml or geo-pipeline.yaml
+# Root is Locale since SEO nodes are per-locale
 root:
   type: Locale
 
@@ -23,18 +23,6 @@ include:
     direction: incoming
     targetTypes: [SEOMiningRun]
 
-  # GEO nodes
-  - relation: FOR_LOCALE
-    direction: incoming
-    targetTypes: [GEOSeedL10n]
-    include:
-      - relation: HAS_METRICS
-        direction: outgoing
-        targetTypes: [GEOSeedMetrics]
-  - relation: FOR_LOCALE
-    direction: incoming
-    targetTypes: [GEOMiningRun]
-
 docs:
   title: "Shared Layer View"
   category: mining
@@ -42,17 +30,16 @@ docs:
     The Shared scope contains nodes that are independent of specific projects
     but still locale-specific. These are reusable across multiple projects.
 
-    **6 nodes organized by domain:**
-    - **SEO (3)**: SEOKeyword, SEOKeywordMetrics, SEOMiningRun
-    - **GEO (3)**: GEOSeedL10n, GEOSeedMetrics, GEOMiningRun
+    **3 nodes (v10.1):**
+    - **SEO**: SEOKeyword, SEOKeywordMetrics, SEOMiningRun
 
     **Key insight:**
     Shared nodes bridge global locale knowledge and project content.
     A keyword like "QR code generator" can be targeted by multiple projects.
 
-    **SEO vs GEO:**
-    - SEO: Traditional search engine optimization (Google, Bing)
-    - GEO: Generative Engine Optimization (AI answer engines: Perplexity, ChatGPT)
+    **v10.1 Architecture:**
+    - SEOKeyword is linked to ConceptL10n (locale-aligned targeting)
+    - Pattern: ConceptL10n -[:HAS_SEO_TARGET]-> SEOKeyword -[:FOR_LOCALE]-> Locale
 
   layers:
     - name: SEO Keywords
@@ -69,21 +56,6 @@ docs:
       nodes: [SEOMiningRun]
       color: gray
       description: Keyword discovery job tracking
-
-    - name: GEO Seeds
-      nodes: [GEOSeedL10n]
-      color: purple
-      description: AI question seeds for citation optimization
-
-    - name: GEO Metrics
-      nodes: [GEOSeedMetrics]
-      color: orange
-      description: Citation count, visibility score
-
-    - name: GEO Mining
-      nodes: [GEOMiningRun]
-      color: gray
-      description: Question discovery job tracking
 
   examples:
     - name: Top keywords by volume
@@ -129,6 +101,5 @@ docs:
   notes:
     - "Shared nodes are project-independent but locale-specific"
     - "SEO keywords can be targeted by multiple projects' concepts"
-    - "GEO seeds track questions asked to AI answer engines"
+    - "v10.1: SEOKeyword linked to ConceptL10n (same locale)"
     - "Metrics are time-series - always use latest for current state"
-    - "Mining runs track discovery jobs for both SEO and GEO"

@@ -230,12 +230,7 @@ kind_icons:
   SEOKeywordMetrics: bar-chart-2
   SEOMiningRun: pickaxe
 
-  # Shared / GEO
-  GEOSeedL10n: map-pin
-  GEOSeedMetrics: trending-up
-  GEOMiningRun: cpu
-  Thing: box
-  ThingL10n: box
+  # v10.1: GEO/Thing nodes removed
 
 # =============================================================================
 # ANIMATION PRESETS (Studio only)
