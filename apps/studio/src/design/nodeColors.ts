@@ -83,13 +83,21 @@ export function getStructuralColors(type: string): GradientColors {
 // Locale Knowledge Colors
 // =============================================================================
 
+// v10 tiered knowledge model colors
 const LOCALE_KNOWLEDGE_COLORS: Record<string, GradientColors> = {
-  LocaleIdentity: { primary: '#22c55e', secondary: '#10b981' },  // Green -> Emerald
-  LocaleVoice: { primary: '#4ade80', secondary: '#22c55e' },     // Light Green
-  LocaleCulture: { primary: '#86efac', secondary: '#4ade80' },   // Mint -> Light Green
-  LocaleMarket: { primary: '#6ee7b7', secondary: '#34d399' },    // Emerald tints
-  LocaleLexicon: { primary: '#34d399', secondary: '#10b981' },   // Teal -> Emerald
-  Expression: { primary: '#ec4899', secondary: '#f472b6' },      // Pink
+  // Technical tier
+  Formatting: { primary: '#22c55e', secondary: '#10b981' },      // Green -> Emerald
+  Slugification: { primary: '#4ade80', secondary: '#22c55e' },   // Light Green
+  Adaptation: { primary: '#86efac', secondary: '#4ade80' },      // Mint -> Light Green
+  // Style tier
+  Style: { primary: '#6ee7b7', secondary: '#34d399' },           // Emerald tints
+  // Semantic tier
+  TermSet: { primary: '#34d399', secondary: '#10b981' },         // Teal -> Emerald
+  ExpressionSet: { primary: '#ec4899', secondary: '#f472b6' },   // Pink
+  PatternSet: { primary: '#a855f7', secondary: '#9333ea' },      // Purple
+  CultureSet: { primary: '#f97316', secondary: '#ea580c' },      // Orange
+  TabooSet: { primary: '#ef4444', secondary: '#dc2626' },        // Red
+  AudienceSet: { primary: '#3b82f6', secondary: '#2563eb' },     // Blue
 };
 
 const DEFAULT_LOCALE_KNOWLEDGE_COLORS: GradientColors = { primary: '#10b981', secondary: '#059669' };

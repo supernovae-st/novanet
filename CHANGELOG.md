@@ -115,17 +115,17 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
   - Command palette (fuzzy search, 11 commands, 5 categories)
   - Onboarding flow (welcome screen, 5-step guided tour)
   - Wow effects (CRT scanlines, screen shake, glitch transitions, nebula pulse)
-- **3 new meta-node types**: Trait (5 values), EdgeFamily (5 families), EdgeKind (50 relationships)
+- **3 new meta-node types**: Trait (5 values), ArcFamily (5 families), ArcKind (77 relationships)
 - **OF_KIND instance bridge**: Replaces IN_SUBCATEGORY
 - **`:Meta` double-label**: All meta-nodes discoverable via `MATCH (n:Meta)`
-- **Faceted classification**: Realm × Layer × Trait × EdgeKind (4 axes)
+- **Faceted classification**: Realm × Layer × Trait × ArcKind (4 axes)
 - **Studio 4-mode navigation**: Data, Meta, Overlay, Query with FacetFilterPanel
 - **NavigationModeToggle** toolbar component
-- **FacetFilterPanel** sidebar component (Realm/Layer/Trait/EdgeFamily checkboxes)
+- **FacetFilterPanel** sidebar component (Realm/Layer/Trait/ArcFamily checkboxes)
 - **novanetBridge.ts**: Subprocess wrapper for Rust CLI integration
 - **Visual system**: `design/layerColors.ts` (9 colors), `design/traitStyles.ts` (5 border styles)
 - **Auto-generated files**: `hierarchy.ts`, `layers.ts` (Rust → MiniJinja → TypeScript)
-- **8 Neo4j facet property indexes** for Kind, EdgeKind, L10n quality/fingerprint
+- **8 Neo4j facet property indexes** for Kind, ArcKind, L10n quality/fingerprint
 
 ### Changed
 - Migrated `config/categoryColors.ts` to `design/nodeColors.ts` — all 5 imports updated

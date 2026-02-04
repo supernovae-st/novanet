@@ -13,7 +13,7 @@ Turborepo monorepo for NovaNet - knowledge graph localization orchestrator.
 NovaNet uses Neo4j to orchestrate **native content generation** (NOT translation) across 200+ locales.
 
 **Target Application**: QR Code AI (https://qrcode-ai.com)
-**Current Version**: v9.8.0
+**Current Version**: v10.0.0
 **Design Plan**: `docs/plans/2026-02-01-ontology-v9-design.md`
 **Roadmap**: `ROADMAP.md` | **Changelog**: `CHANGELOG.md`
 
@@ -26,9 +26,9 @@ Concept (invariant) -> Generate natively -> ConceptL10n (local)  <-- RIGHT
 
 ---
 
-## v9.5 Nomenclature
+## v10.0 Nomenclature
 
-v9.5 establishes unified terminology across all layers (YAML, Rust, TypeScript, Neo4j, UI):
+v10.0 establishes unified terminology across all layers (YAML, Rust, TypeScript, Neo4j, UI):
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -62,7 +62,7 @@ v9.5 establishes unified terminology across all layers (YAML, Rust, TypeScript, 
 
 **Rust binary:** `tools/novanet/` — single crate for CLI + TUI (neo4rs, ratatui, clap).
 All commands implemented: data/meta/overlay/query, node/arc CRUD, search, locale, db,
-schema generate/validate, doc generate, filter build, Galaxy-themed TUI with boot animation, effects engine, and onboarding. 201 tests pass.
+schema generate/validate, doc generate, filter build, Galaxy-themed TUI with boot animation, effects engine, and onboarding. 246 tests pass.
 
 **YAML-first architecture:** Each Kind YAML has explicit `realm:` and `layer:` fields (source of truth).
 Path validation ensures `models/nodes/{realm}/{layer}/{name}.yaml` matches YAML content.

@@ -60,13 +60,20 @@ const NODE_DIMENSIONS: Record<string, { width: number; height: number }> = {
   BrandIdentity: { width: 210, height: 120 },
   ProjectL10n: { width: 210, height: 120 },
 
-  // Locale knowledge nodes - circular, smaller
-  LocaleIdentity: { width: 110, height: 110 },
-  LocaleVoice: { width: 100, height: 100 },
-  LocaleCulture: { width: 95, height: 95 },
-  LocaleMarket: { width: 100, height: 100 },
-  LocaleLexicon: { width: 90, height: 90 },
-  Expression: { width: 85, height: 85 },
+  // v10 knowledge nodes - tiered model
+  // Technical tier
+  Formatting: { width: 100, height: 100 },
+  Slugification: { width: 105, height: 105 },
+  Adaptation: { width: 100, height: 100 },
+  // Style tier
+  Style: { width: 95, height: 95 },
+  // Semantic tier
+  TermSet: { width: 90, height: 90 },
+  ExpressionSet: { width: 110, height: 110 },
+  PatternSet: { width: 100, height: 100 },
+  CultureSet: { width: 100, height: 100 },
+  TabooSet: { width: 90, height: 90 },
+  AudienceSet: { width: 105, height: 105 },
 
   // Generation nodes
   PagePrompt: { width: 200, height: 110 },
