@@ -95,7 +95,7 @@ pnpm test            # Tests
 | `⇧R` | Radial layout (circular) |
 | `⇧F` | Force-directed layout |
 
-**Quick Views (Presets v9.0.0)**
+**Quick Views (Presets v9.8.0)**
 | Key | Action |
 |-----|--------|
 | `1` | Project Structure - Project, Pages, Blocks hierarchy |
@@ -144,7 +144,7 @@ pnpm test            # Tests
 
 ---
 
-## Neo4j Schema (v9.0.0 migration)
+## Neo4j Schema (v9.8.0)
 
 ### Meta-Graph (v9 — Self-Describing Schema)
 
@@ -154,20 +154,20 @@ v9 introduces faceted classification with 6 meta-node types:
 |-----------|-------|---------|
 | **Realm** | 3 | WHERE? (global / project / shared) — replaces "Scope" |
 | **Layer** | 9 | WHAT? (functional classification) — replaces "Subcategory" |
-| **Kind** | 35 | Node type (1:1 with Neo4j labels) — replaces "NodeTypeMeta" |
+| **Kind** | 46 | Node type (1:1 with Neo4j labels) — replaces "NodeTypeMeta" |
 | **Trait** | 5 | HOW? (invariant / localized / knowledge / derived / job) |
 | **ArcFamily** | 5 | Relationship classification |
-| **ArcKind** | 50 | Individual relationship type |
+| **ArcKind** | 77 | Individual relationship type |
 
 All meta-nodes carry `:Meta` double-label.
 
-### Kind Types (35 across 3 Realms)
+### Kind Types (46 across 3 Realms)
 
 | Realm | Nodes | Kinds |
 |-------|-------|-------|
 | **🌍 Global** | 15 | Locale, LocaleIdentity, LocaleVoice, LocaleCulture, LocaleCultureReferences, LocaleMarket, LocaleLexicon, LocaleRulesAdaptation, LocaleRulesFormatting, LocaleRulesSlug, Expression, Reference, Metaphor, Constraint, Pattern |
-| **📦 Project** | 14 | Project, BrandIdentity, ProjectL10n, Page, Block, BlockType, PageType, Concept, ConceptL10n, PagePrompt, BlockPrompt, BlockRules, PageL10n, BlockL10n |
-| **🎯 Shared** | 6 | SEOKeywordL10n, SEOKeywordMetrics, SEOMiningRun, GEOSeedL10n, GEOSeedMetrics, GEOMiningRun |
+| **📦 Project** | 23 | Project, BrandIdentity, ProjectL10n, Page, Block, BlockType, PageType, Concept, ConceptL10n, PagePrompt, BlockPrompt, BlockRules, PageL10n, BlockL10n, GenerationJob, PromptArtifact, OutputArtifact, EvaluationSignal, ContentSlot, TopicCluster, SearchIntent, + 2 more |
+| **🎯 Shared** | 8 | SEOKeywordL10n, SEOKeywordMetrics, SEOMiningRun, GEOSeedL10n, GEOSeedMetrics, GEOMiningRun, Thing, ThingL10n |
 
 ### Key Relations (grouped by ArcFamily)
 - **Ownership:** `HAS_CONCEPT`, `HAS_PAGE`, `HAS_BLOCK`, `OF_TYPE`, `SUPPORTS_LOCALE`
