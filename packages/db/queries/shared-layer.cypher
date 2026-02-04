@@ -21,10 +21,10 @@ LIMIT 20
 // Query: Keywords targeted by concept
 // Find all keywords a concept targets
 // ======================================================================
-:param conceptKey => "qr-code-generator";
+:param entityKey => "qr-code-generator";
 :param locale => "en-US";
 
-MATCH (c:Concept {key: $conceptKey})-[:TARGETS_SEO]->(kw:SEOKeyword)
+MATCH (c:Entity {key: $entityKey})-[:EXPRESSES]->(kw:SEOKeyword)
 MATCH (kw)-[:FOR_LOCALE]->(l:Locale {key: $locale})
 OPTIONAL MATCH (kw)-[:HAS_METRICS]->(m:SEOKeywordMetrics)
 RETURN kw.keyword AS keyword,

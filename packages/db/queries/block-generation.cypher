@@ -13,8 +13,8 @@ MATCH (b:Block {key: $blockKey})
 MATCH (b)-[:HAS_PROMPT]->(bp:BlockPrompt)
 MATCH (b)-[:OF_TYPE]->(bt:BlockType)
 OPTIONAL MATCH (bt)-[:HAS_RULES]->(br:BlockRules)
-OPTIONAL MATCH (b)-[:USES_CONCEPT]->(c:Concept)
-OPTIONAL MATCH (c)-[:HAS_L10N]->(cl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+OPTIONAL MATCH (b)-[:USES_ENTITY]->(c:Entity)
+OPTIONAL MATCH (c)-[:HAS_L10N]->(cl:EntityL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
 RETURN b.key AS block,
        bp.instructions AS instructions,
        bt.name AS blockType,
@@ -28,12 +28,12 @@ RETURN b.key AS block,
 :param blockKey => "hero-pricing";
 :param locale => "fr-FR";
 
-MATCH (b:Block {key: $blockKey})-[:USES_CONCEPT]->(c:Concept)
-MATCH (c)-[sl:SEMANTIC_LINK*1..2]->(related:Concept)
+MATCH (b:Block {key: $blockKey})-[:USES_ENTITY]->(c:Entity)
+MATCH (c)-[sl:SEMANTIC_LINK*1..2]->(related:Entity)
 WHERE ALL(r IN sl WHERE r.temperature >= 0.3)
 WITH related, reduce(a = 1.0, r IN sl | a * r.temperature) AS activation
 WHERE activation >= 0.3
-MATCH (related)-[:HAS_L10N]->(rl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+MATCH (related)-[:HAS_L10N]->(rl:EntityL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
 RETURN related.key AS concept,
        rl.title AS title,
        activation

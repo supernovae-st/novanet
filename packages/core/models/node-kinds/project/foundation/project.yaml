@@ -113,10 +113,7 @@ node:
       cardinality: "1:1"
       description: "Visual and artistic direction"
 
-    HAS_CONCEPT:
-      to: Concept
-      cardinality: "1:N"
-      description: "Semantic units used in project"
+    # v10.3: HAS_CONCEPT removed — Entity is in global realm, use USES_ENTITY from Page/Block
 
     HAS_PAGE:
       to: Page

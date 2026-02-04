@@ -12,5 +12,5 @@ visual_encoding:
 
 llm_context: |
   Content generated natively per locale. NOT translated - each locale
-  version is generated independently from the invariant Concept using
+  version is generated independently from the invariant Entity using
   locale-specific knowledge.

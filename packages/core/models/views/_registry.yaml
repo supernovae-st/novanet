@@ -71,9 +71,9 @@ views:
     category: knowledge
     modes: [data, overlay, query]
 
-  - id: concept-ecosystem
-    file: concept-ecosystem.yaml
-    description: Concept with L10n, SEO keywords, semantic links
+  - id: entity-ecosystem
+    file: entity-ecosystem.yaml
+    description: Entity with L10n, SEO keywords, semantic links (v10.3)
     category: knowledge
     modes: [data, overlay, query]
 

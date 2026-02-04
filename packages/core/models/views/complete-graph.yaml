@@ -73,7 +73,12 @@ docs:
       color: purple
       description: 6 atomic knowledge elements
 
-    # PROJECT SCOPE (23 nodes)
+    - name: Global - Semantic
+      nodes: [Entity, EntityL10n]
+      color: purple
+      description: "v10.3 Entity-Centric Architecture (replaces Concept/ConceptL10n)"
+
+    # PROJECT SCOPE (20 nodes)
     - name: Project - Foundation
       nodes: [Project, BrandIdentity, ProjectL10n]
       color: blue
@@ -85,14 +90,14 @@ docs:
       description: Page and block structure
 
     - name: Project - Semantic
-      nodes: [Concept, ConceptL10n, SearchIntent, TopicCluster, AudiencePersona, ChannelSurface]
+      nodes: [AudiencePersona, ChannelSurface]
       color: green
-      description: Semantic concepts and targeting
+      description: "Audience and channel targeting (v10.3: Entity/EntityL10n moved to Global)"
 
     - name: Project - Instruction
-      nodes: [PagePrompt, BlockPrompt, BlockRules, PromptArtifact]
+      nodes: [PagePrompt, BlockPrompt, BlockRules, BlockInstruction, PromptArtifact]
       color: orange
-      description: Generation instructions
+      description: "Generation instructions (v10.3: added BlockInstruction)"
 
     - name: Project - Output
       nodes: [PageL10n, BlockL10n, GenerationJob, OutputArtifact, EvaluationSignal]
