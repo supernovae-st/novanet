@@ -158,7 +158,7 @@ export const TRAIT_BORDERS: Record<TraitKey, TraitBorderStyle> = {
     cssCornerRadius: null,
     unicodeChar: '─',
     unicodeStyle: 'light',
-    description: 'Stable, doesn't change between locales',
+    description: 'Stable, doesn\'t change between locales',
   },
   job: {
     cssStyle: 'solid',

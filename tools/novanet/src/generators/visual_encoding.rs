@@ -13,9 +13,18 @@
 //! Output target: `packages/core/src/graph/visual-encoding.ts`
 
 use crate::parsers::visual_encoding::{self, VisualEncodingDoc};
-use minijinja::{context, Environment};
+use minijinja::{Environment, context};
 use serde::Serialize;
 use std::path::Path;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Helpers
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Escape single quotes for JavaScript string literals.
+fn escape_js_string(s: &str) -> String {
+    s.replace('\'', "\\'")
+}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Template data structures
@@ -445,7 +454,7 @@ fn render_visual_encoding(doc: &VisualEncodingDoc) -> crate::Result<String> {
             css_corner_radius: border.css_corner_radius.clone().unwrap_or_default(),
             unicode_char: border.unicode_char.clone(),
             unicode_style: border.unicode_style.clone(),
-            description: border.description.clone(),
+            description: escape_js_string(&border.description),
         })
         .collect();
     trait_borders.sort_by(|a, b| a.key.cmp(&b.key));
@@ -458,7 +467,7 @@ fn render_visual_encoding(doc: &VisualEncodingDoc) -> crate::Result<String> {
             key: key.clone(),
             stroke_style: stroke.stroke_style.clone(),
             opacity: stroke.opacity,
-            description: stroke.description.clone(),
+            description: escape_js_string(&stroke.description),
         })
         .collect();
     scope_strokes.sort_by(|a, b| a.key.cmp(&b.key));
@@ -471,7 +480,7 @@ fn render_visual_encoding(doc: &VisualEncodingDoc) -> crate::Result<String> {
             key: key.clone(),
             arrow_head: arrow.arrow_head.clone(),
             arrow_end: arrow.arrow_end.clone(),
-            description: arrow.description.clone(),
+            description: escape_js_string(&arrow.description),
         })
         .collect();
     cardinality_arrows.sort_by(|a, b| a.key.cmp(&b.key));
@@ -519,12 +528,12 @@ fn render_visual_encoding(doc: &VisualEncodingDoc) -> crate::Result<String> {
             detail: format!("template parse error: {e}"),
         })?;
 
-    let tmpl = env
-        .get_template("visual-encoding.ts")
-        .map_err(|e| crate::NovaNetError::Generator {
-            generator: "visual_encoding".to_string(),
-            detail: format!("template not found: {e}"),
-        })?;
+    let tmpl =
+        env.get_template("visual-encoding.ts")
+            .map_err(|e| crate::NovaNetError::Generator {
+                generator: "visual_encoding".to_string(),
+                detail: format!("template not found: {e}"),
+            })?;
 
     let output = tmpl
         .render(context! {
