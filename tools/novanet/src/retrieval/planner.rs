@@ -2,6 +2,18 @@
 //!
 //! v10: Determines which arcs to traverse and in what order based on
 //! ArcFamily default_traversal and ArcKind temperature_threshold.
+//!
+//! # TODO: v10 Migration Required
+//!
+//! The `arc_patterns_for_kind()` function has hardcoded knowledge arcs using
+//! **deprecated v9 node names**: LocaleVoice, LocaleCulture, LocaleLexicon
+//!
+//! v10 uses tiered knowledge nodes:
+//! - Technical: Formatting, Slugification, Adaptation
+//! - Style: Style
+//! - Semantic: TermSet, ExpressionSet, PatternSet, CultureSet, TabooSet, AudienceSet
+//!
+//! Update the pattern matching to use v10 arcs: HAS_FORMATTING, HAS_STYLE, etc.
 
 use super::meta::MetaGraphReader;
 use super::types::{ContextRequest, TraversalMode};

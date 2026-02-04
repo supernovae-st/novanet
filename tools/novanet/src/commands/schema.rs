@@ -159,7 +159,7 @@ pub enum Severity {
 /// Validate YAML model coherence (Phase 2: YAML-only, no Neo4j).
 ///
 /// Checks:
-/// - All 46 node YAMLs parse with trait
+/// - All 42 node YAMLs parse with trait
 /// - relations.yaml parses with family on every relation
 /// - taxonomy.yaml parses (realms, layers, traits, arc_families)
 /// - Every node's realm/layer exists in taxonomy

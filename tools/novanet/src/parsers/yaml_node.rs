@@ -236,7 +236,7 @@ pub fn load_all_nodes(root: &Path) -> crate::Result<Vec<ParsedNode>> {
         )));
     }
 
-    // Parse in parallel with rayon (~4x speedup for 46 nodes)
+    // Parse in parallel with rayon (~4x speedup for 42 nodes)
     let results: Vec<crate::Result<ParsedNode>> = paths
         .par_iter()
         .map(|path| parse_single_node(path, &nodes_dir))
