@@ -25,7 +25,7 @@ Use this view to understand:
 ```mermaid
 flowchart TB
   %% View: Project Context (project-context)
-  %% 6 nodes, 10 edges
+  %% 6 nodes, 8 edges
 
   %% Trait styling (node_trait)
   classDef invariant fill:#3b82f6,stroke:#1d4ed8,color:#fff
@@ -57,15 +57,13 @@ flowchart TB
   Project -->|HAS_BRAND_IDENTITY| BrandIdentity
   Project -.->|HAS_L10N| ConceptL10n
   Project -.->|HAS_L10N| ProjectL10n
-  Project -.->|HAS_L10N| ThingL10n
   Project -->|HAS_PAGE| Page
   Project -->|SUPPORTS_LOCALE| Locale
   ProjectL10n -.->|FOR_LOCALE| Locale
-  ThingL10n -.->|FOR_LOCALE| Locale
 
   %% Edge colors by family
-  linkStyle 0,3,4,5,8,9 stroke:#22c55e,stroke-width:2px
-  linkStyle 1,2,6,7 stroke:#3b82f6,stroke-width:2px
+  linkStyle 0,3,4,7 stroke:#22c55e,stroke-width:2px
+  linkStyle 1,2,5,6 stroke:#3b82f6,stroke-width:2px
 
   %% Class assignments
   class BrandIdentity invariant

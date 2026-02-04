@@ -415,7 +415,7 @@ pub fn wrap_in_markdown(mermaid_code: &str) -> String {
     .unwrap();
     writeln!(
         out,
-        "- **\u{1F3AF} SHARED** — SEO/GEO optimization data (shared across projects)"
+        "- **\u{1F3AF} SHARED** — SEO keyword targeting (shared across projects)"
     )
     .unwrap();
     writeln!(out).unwrap();
@@ -445,7 +445,7 @@ pub fn wrap_in_markdown(mermaid_code: &str) -> String {
     )
     .unwrap();
     writeln!(out, "| `==>` | Generation | LLM generation flow |").unwrap();
-    writeln!(out, "| `--o` | Mining | SEO/GEO data extraction |").unwrap();
+    writeln!(out, "| `--o` | Mining | SEO keyword mining |").unwrap();
     writeln!(out).unwrap();
     writeln!(out, "---").unwrap();
     writeln!(out).unwrap();

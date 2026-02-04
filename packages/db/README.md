@@ -75,9 +75,9 @@ db/
 |-------|-------|-------------|
 | **🌍 Global** | 11 | Locale + 10 tiered knowledge nodes |
 | **📦 Project** | 23 | Project structure, content, generation |
-| **🎯 Shared** | 8 | SEO/GEO targeting nodes |
+| **🎯 Shared** | 3 | SEO targeting nodes (v10.1: GEO removed) |
 
-Total: **42 node types**, **73 arc types**, **126 meta-nodes** (Realm/Layer/Kind/Trait/ArcFamily/ArcKind)
+Total: **43 node types**, **64 arc types**, **~100 meta-nodes** (Realm/Layer/Kind/Trait/ArcFamily/ArcKind)
 
 ---
 

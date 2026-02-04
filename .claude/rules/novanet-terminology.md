@@ -1,4 +1,4 @@
-# NovaNet Terminology (v9.5)
+# NovaNet Terminology (v10.1)
 
 This file defines the canonical terminology for NovaNet. All code, documentation, and UI must use these terms consistently.
 

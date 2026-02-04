@@ -26,7 +26,7 @@ This is the core view for native content generation, providing:
 ```mermaid
 flowchart TB
   %% View: Block Generation Context (block-generation)
-  %% 11 nodes, 12 edges
+  %% 11 nodes, 11 edges
 
   %% Trait styling (node_trait)
   classDef invariant fill:#3b82f6,stroke:#1d4ed8,color:#fff
@@ -68,13 +68,12 @@ flowchart TB
   BlockType -->|HAS_RULES| BlockRules
   Concept -.->|HAS_L10N| ConceptL10n
   Concept -.->|HAS_L10N| ProjectL10n
-  Concept -.->|HAS_L10N| ThingL10n
   Concept -.->|SEMANTIC_LINK| Concept
 
   %% Edge colors by family
-  linkStyle 0,1,8,9,10 stroke:#22c55e,stroke-width:2px
+  linkStyle 0,1,8,9 stroke:#22c55e,stroke-width:2px
   linkStyle 2,3,4,5,7 stroke:#3b82f6,stroke-width:2px
-  linkStyle 6,11 stroke:#f97316,stroke-width:2px
+  linkStyle 6,10 stroke:#f97316,stroke-width:2px
 
   %% Class assignments
   class Block invariant
