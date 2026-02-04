@@ -43,14 +43,14 @@ impl FacetFilter {
         realm: Option<&str>,
         layer: Option<&str>,
         trait_filter: Option<&str>,
-        edge_family: Option<&str>,
+        arc_family: Option<&str>,
         kind: Option<&str>,
     ) -> Self {
         Self {
             realms: parse_csv(realm),
             layers: parse_csv(layer),
             trait_filters: parse_csv(trait_filter),
-            arc_families: parse_csv(edge_family),
+            arc_families: parse_csv(arc_family),
             kinds: parse_csv(kind),
         }
     }
