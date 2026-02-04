@@ -1,0 +1,16 @@
+# models/meta/traits/invariant.yaml
+# NodeTrait: Invariant — No change across locales
+
+key: invariant
+display_name: Invariant
+color: "#3b82f6"
+
+visual_encoding:
+  border_style: solid
+  border_width: 2
+  unicode_border: "─"
+
+llm_context: |
+  Nodes that do not change between locales. Structural definitions,
+  configuration, and invariant business logic. Always the same
+  regardless of target locale.

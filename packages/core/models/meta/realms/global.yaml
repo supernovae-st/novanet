@@ -1,0 +1,17 @@
+# models/meta/realms/global.yaml
+# NodeRealm: Global — Shared across ALL projects
+
+key: global
+display_name: Global
+emoji: "🌍"
+color: "#2aa198"
+
+layers:
+  - config
+  - knowledge
+
+llm_context: |
+  Shared across ALL projects. Locale-specific knowledge that applies
+  universally: cultural norms, linguistic patterns, voice guidelines,
+  idiomatic expressions. These nodes are READ-ONLY at project level.
+  Changes here affect all projects using that locale.

@@ -1,0 +1,16 @@
+# models/meta/realms/shared.yaml
+# NodeRealm: Shared — Cross-project resources
+
+key: shared
+display_name: Shared
+emoji: "🎯"
+color: "#cb4b16"
+
+layers:
+  - seo
+  - geo
+
+llm_context: |
+  Cross-project resources that can be linked to multiple projects.
+  SEO keywords and GEO seeds with their metrics. These enable
+  competitive intelligence sharing across the portfolio.

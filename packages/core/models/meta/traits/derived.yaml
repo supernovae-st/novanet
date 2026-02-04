@@ -1,0 +1,15 @@
+# models/meta/traits/derived.yaml
+# NodeTrait: Derived — Computed or aggregated data
+
+key: derived
+display_name: Derived
+color: "#9ca3af"
+
+visual_encoding:
+  border_style: double
+  border_width: 2
+  unicode_border: "═"
+
+llm_context: |
+  Computed or aggregated data. Time-series metrics, analytics snapshots,
+  and other values derived from external sources or calculations.

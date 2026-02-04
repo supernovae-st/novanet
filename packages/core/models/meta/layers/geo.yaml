@@ -1,0 +1,13 @@
+# models/meta/layers/geo.yaml
+# NodeLayer: GEO Intelligence — Geographic/local SEO data
+
+key: geo
+display_name: GEO Intelligence
+emoji: "📍"
+color: "#ef4444"
+realm: shared
+
+llm_context: |
+  Geographic/local SEO data. Location-based seeds with their
+  localized forms, metrics, and mining history. Used for local
+  business visibility and location-specific content generation.

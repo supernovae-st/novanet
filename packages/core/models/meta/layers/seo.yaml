@@ -1,0 +1,14 @@
+# models/meta/layers/seo.yaml
+# NodeLayer: SEO Intelligence — Search optimization data
+
+key: seo
+display_name: SEO Intelligence
+emoji: "🔍"
+color: "#ec4899"
+realm: shared
+
+llm_context: |
+  Search engine optimization data. Keywords with their localized
+  forms, search volume metrics, and mining run history. Used to
+  inject relevant keywords into generated content for organic
+  search visibility.

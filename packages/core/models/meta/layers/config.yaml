@@ -1,0 +1,13 @@
+# models/meta/layers/config.yaml
+# NodeLayer: Configuration — Core config nodes
+
+key: config
+display_name: Configuration
+emoji: "⚙️"
+color: "#64748b"
+realm: global
+
+llm_context: |
+  Core configuration nodes. Locale definitions with their properties
+  (language code, region, writing direction). Entry point for all
+  locale-specific knowledge traversal.
