@@ -450,4 +450,71 @@ mod tests {
         assert!(cypher.contains("(r:Realm {key: 'project'}), (l:Layer {key: 'output'})"));
         assert!(cypher.contains("(r:Realm {key: 'shared'}), (l:Layer {key: 'geo'})"));
     }
+
+    /// Snapshot test for a minimal taxonomy document.
+    /// Run `cargo insta review` to accept changes.
+    #[test]
+    fn snapshot_minimal_taxonomy() {
+        let doc = TaxonomyDoc {
+            version: "9.5.0".to_string(),
+            node_realms: vec![NodeRealmDef {
+                key: "test".to_string(),
+                display_name: "Test Realm".to_string(),
+                emoji: "🧪".to_string(),
+                color: "#3b82f6".to_string(),
+                llm_context: "A test realm for snapshot testing.".to_string(),
+                layers: vec![
+                    NodeLayerDef {
+                        key: "base".to_string(),
+                        display_name: "Base Layer".to_string(),
+                        emoji: "📋".to_string(),
+                        color: "#10b981".to_string(),
+                        llm_context: "The base layer.".to_string(),
+                    },
+                    NodeLayerDef {
+                        key: "derived".to_string(),
+                        display_name: "Derived Layer".to_string(),
+                        emoji: "🔧".to_string(),
+                        color: "#f59e0b".to_string(),
+                        llm_context: "A derived layer.".to_string(),
+                    },
+                ],
+            }],
+            node_traits: vec![
+                NodeTraitDef {
+                    key: "invariant".to_string(),
+                    display_name: "Invariant".to_string(),
+                    color: "#6366f1".to_string(),
+                    border_style: Some("solid".to_string()),
+                    border_width: Some(2),
+                    unicode_border: Some("─".to_string()),
+                    llm_context: "Content that does not change per locale.".to_string(),
+                },
+                NodeTraitDef {
+                    key: "localized".to_string(),
+                    display_name: "Localized".to_string(),
+                    color: "#ec4899".to_string(),
+                    border_style: Some("dashed".to_string()),
+                    border_width: Some(2),
+                    unicode_border: Some("╌".to_string()),
+                    llm_context: "Content that varies per locale.".to_string(),
+                },
+            ],
+            arc_families: vec![ArcFamilyDef {
+                key: "semantic".to_string(),
+                display_name: "Semantic".to_string(),
+                color: "#8b5cf6".to_string(),
+                stroke_style: Some("solid".to_string()),
+                stroke_width: Some(2),
+                arrow_style: ".->".to_string(),
+                llm_context: "Semantic relationships.".to_string(),
+            }],
+            arc_scopes: vec![],
+            arc_cardinalities: vec![],
+            terminal: None,
+        };
+
+        let cypher = generate_cypher(&doc).unwrap();
+        insta::assert_snapshot!(cypher);
+    }
 }

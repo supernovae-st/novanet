@@ -63,6 +63,8 @@ tui = ["dep:ratatui", "dep:crossterm"]
 assert_cmd = "2"              # CLI integration tests (binary invocation)
 predicates = "3"              # Output assertion matchers
 insta = { version = "1", features = ["yaml"] }  # Snapshot testing
+pretty_assertions = "1"       # Colorful diffs for assert_eq!
+proptest = "1"                # Property-based testing (edge cases)
 tempfile = "3"                # Temporary files for parser tests
 tokio-test = "0.4"            # Async test utilities
 

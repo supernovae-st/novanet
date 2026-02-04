@@ -583,4 +583,30 @@ mod tests {
         // Header mentions 44 Kind nodes
         assert!(cypher.contains("44 Kind nodes"));
     }
+
+    /// Snapshot test for a minimal Kind generator output.
+    /// Run `cargo insta review` to accept changes.
+    #[test]
+    fn snapshot_minimal_kinds() {
+        let nodes = vec![
+            make_node("Project", "project", "foundation", LocaleBehavior::Invariant),
+            make_node_with_props(
+                "Page",
+                "project",
+                "structure",
+                LocaleBehavior::Invariant,
+                vec![
+                    ("key", "string", true),
+                    ("display_name", "string", true),
+                    ("slug", "string", false),
+                ],
+            ),
+            make_node("PageL10n", "project", "structure", LocaleBehavior::Localized),
+            make_node("Concept", "project", "semantic", LocaleBehavior::Invariant),
+            make_node("GenerationJob", "project", "output", LocaleBehavior::Job),
+        ];
+
+        let cypher = generate_kind_cypher(&nodes).unwrap();
+        insta::assert_snapshot!(cypher);
+    }
 }

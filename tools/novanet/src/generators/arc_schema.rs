@@ -599,4 +599,43 @@ mod tests {
         // Header reflects count
         assert!(cypher.contains("70 ArcKind nodes"));
     }
+
+    /// Snapshot test for a minimal ArcSchema generator output.
+    /// Run `cargo insta review` to accept changes.
+    #[test]
+    fn snapshot_minimal_arcs() {
+        use crate::parsers::arcs::ArcsDocument;
+
+        let doc = ArcsDocument {
+            arcs: vec![
+                make_rel(
+                    "HAS_PAGE",
+                    ArcFamily::Ownership,
+                    NodeRef::Single("Project".to_string()),
+                    NodeRef::Single("Page".to_string()),
+                    Cardinality::OneToMany,
+                ),
+                make_inverse("PAGE_OF", ArcFamily::Ownership, "HAS_PAGE"),
+                make_rel(
+                    "USES_CONCEPT",
+                    ArcFamily::Semantic,
+                    NodeRef::Single("Page".to_string()),
+                    NodeRef::Single("Concept".to_string()),
+                    Cardinality::ManyToMany,
+                ),
+                make_rel(
+                    "FOR_LOCALE",
+                    ArcFamily::Localization,
+                    NodeRef::Single("PageL10n".to_string()),
+                    NodeRef::Single("Locale".to_string()),
+                    Cardinality::ManyToOne,
+                ),
+            ],
+            semantic_link_types: None,
+            examples: None,
+        };
+
+        let cypher = generate_arc_schema(&doc).unwrap();
+        insta::assert_snapshot!(cypher);
+    }
 }

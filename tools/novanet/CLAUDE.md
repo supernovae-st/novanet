@@ -25,7 +25,13 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 | Filter | `filter build` | Implemented (JSON stdin, Studio subprocess) |
 | TUI | `tui` | Galaxy theme, mission control, search, detail, arc explorer, CRUD dialogs, dashboard, logo, command palette, help overlay, boot animation, effects engine, onboarding |
 
-**214 tests pass** (`cargo test`). Zero clippy warnings.
+**223 tests pass** (`cargo test`). Zero clippy warnings.
+
+**Testing stack:**
+- `insta` — Snapshot testing (5 generator outputs)
+- `proptest` — Property-based testing (cypher_utils edge cases)
+- `pretty_assertions` — Colorful diffs
+- `cargo-nextest` — Fast parallel test runner (CI)
 
 ## Commands
 

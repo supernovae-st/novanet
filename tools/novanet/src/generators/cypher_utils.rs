@@ -104,11 +104,64 @@ pub fn write_section_header(out: &mut String, title: &str) {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use proptest::prelude::*;
 
     #[test]
     fn cypher_str_collapses_whitespace() {
         let input = "Line one\n  Line two\n    Line three";
         assert_eq!(cypher_str(input), "Line one Line two Line three");
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────────
+    // Property-Based Tests (proptest)
+    // ─────────────────────────────────────────────────────────────────────────────
+
+    proptest! {
+        /// cypher_str should never produce output containing unescaped single quotes.
+        #[test]
+        fn prop_cypher_str_escapes_all_quotes(s in ".*") {
+            let result = cypher_str(&s);
+            // Count unescaped quotes (not preceded by backslash)
+            let unescaped_quotes: Vec<_> = result
+                .chars()
+                .enumerate()
+                .filter(|(i, c)| *c == '\'' && (*i == 0 || result.chars().nth(i - 1) != Some('\\')))
+                .collect();
+            prop_assert!(unescaped_quotes.is_empty(), "Found unescaped quotes in: {result}");
+        }
+
+        /// cypher_str output should never contain newlines or multiple consecutive spaces.
+        #[test]
+        fn prop_cypher_str_no_newlines(s in ".*") {
+            let result = cypher_str(&s);
+            prop_assert!(!result.contains('\n'), "Output contains newline: {result}");
+            prop_assert!(!result.contains("  "), "Output contains double space: {result}");
+        }
+
+        /// cypher_list_ref should produce valid Cypher list syntax.
+        #[test]
+        fn prop_cypher_list_valid_syntax(items in prop::collection::vec("\\PC*", 0..10)) {
+            let refs: Vec<&str> = items.iter().map(|s| s.as_str()).collect();
+            let result = cypher_list_ref(&refs);
+
+            // Must start with [ and end with ]
+            prop_assert!(result.starts_with('['), "List doesn't start with [: {result}");
+            prop_assert!(result.ends_with(']'), "List doesn't end with ]: {result}");
+
+            // Empty list is exactly "[]"
+            if items.is_empty() {
+                prop_assert_eq!(result, "[]");
+            }
+        }
+
+        /// cypher_list_owned should match cypher_list_ref behavior.
+        #[test]
+        fn prop_cypher_list_owned_matches_ref(items in prop::collection::vec("[a-zA-Z0-9_]*", 0..5)) {
+            let refs: Vec<&str> = items.iter().map(|s| s.as_str()).collect();
+            let result_ref = cypher_list_ref(&refs);
+            let result_owned = cypher_list_owned(&items);
+            prop_assert_eq!(result_ref, result_owned);
+        }
     }
 
     #[test]
