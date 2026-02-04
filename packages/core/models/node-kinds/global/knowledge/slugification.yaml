@@ -1,0 +1,120 @@
+# packages/core/models/node-kinds/global/knowledge/slugification.yaml
+# Slugification — URL slug rules for a locale (transliteration, stop words, URL conventions)
+#
+# Tier: technical (always loaded together)
+# Stability: High - changes rarely
+
+node:
+  name: Slugification
+  realm: global
+  layer: knowledge
+  trait: knowledge
+  knowledge_tier: technical
+  icon: "🔗"
+  description: "URL slug rules: transliteration, stop words, URL conventions"
+
+  standard_properties:
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable name"
+      example: "French (France) Slugification"
+
+    description:
+      type: string
+      required: true
+      description: "Short description"
+      example: "URL slug generation rules for fr-FR"
+
+    llm_context:
+      type: string
+      required: true
+      description: "LLM generation hints"
+      example: "USE: for URL/slug generation. TRIGGERS: slug, URL, permalink. NOT: content text."
+
+    created_at:
+      type: datetime
+      required: true
+      description: "Creation timestamp"
+
+    updated_at:
+      type: datetime
+      required: true
+      description: "Last update timestamp"
+
+  properties:
+    # Transliteration
+    transliteration_map:
+      type: json
+      required: true
+      description: "Character replacement map for URL-safe slugs"
+      example:
+        é: "e"
+        è: "e"
+        ê: "e"
+        ë: "e"
+        à: "a"
+        â: "a"
+        ç: "c"
+        ù: "u"
+        û: "u"
+        ü: "u"
+        î: "i"
+        ï: "i"
+        ô: "o"
+        œ: "oe"
+        æ: "ae"
+
+    # Stop words
+    stop_words:
+      type: json
+      required: true
+      description: "Words to remove from slugs"
+      example: ["le", "la", "les", "un", "une", "des", "du", "de", "et", "ou", "à", "en", "pour", "par", "sur", "avec"]
+
+    # URL rules
+    separator:
+      type: string
+      required: true
+      description: "Word separator in slugs"
+      example: "-"
+
+    max_length:
+      type: int
+      required: false
+      description: "Maximum slug length"
+      example: 80
+
+    lowercase:
+      type: bool
+      required: true
+      description: "Force lowercase"
+      example: true
+
+    preserve_numbers:
+      type: bool
+      required: false
+      description: "Keep numbers in slugs"
+      example: true
+
+    # Special rules
+    word_boundaries:
+      type: json
+      required: false
+      description: "Characters that create word boundaries"
+      example: ["'", "'", "-", " "]
+
+    abbreviation_expansions:
+      type: json
+      required: false
+      description: "Abbreviations to expand in slugs"
+      example:
+        "n°": "numero"
+        "&": "et"
+
+  relations:
+    incoming:
+      - type: HAS_SLUGIFICATION
+        from: Locale
+        cardinality: "1:1"
+        description: "Locale has exactly one slugification config"
