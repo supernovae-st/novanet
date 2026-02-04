@@ -1,0 +1,103 @@
+# packages/core/models/node-kinds/global/knowledge/expression-set.yaml
+# ExpressionSet — Register-specific expressions and idioms for a locale
+#
+# Tier: semantic (contextual retrieval by register)
+# Registers: formal, neutral, casual
+# Stability: Medium - update quarterly
+
+node:
+  name: ExpressionSet
+  realm: global
+  layer: knowledge
+  trait: knowledge
+  knowledge_tier: semantic
+  icon: "💬"
+  description: "Register-specific expressions, idioms, and phrases"
+
+  standard_properties:
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable name"
+      example: "French (France) Formal Expressions"
+
+    description:
+      type: string
+      required: true
+      description: "Short description"
+      example: "Formal register expressions for fr-FR"
+
+    llm_context:
+      type: string
+      required: true
+      description: "LLM generation hints"
+      example: "USE: for register-appropriate phrasing. TRIGGERS: formal context. NOT: casual copy."
+
+    created_at:
+      type: datetime
+      required: true
+      description: "Creation timestamp"
+
+    updated_at:
+      type: datetime
+      required: true
+      description: "Last update timestamp"
+
+  properties:
+    # Register identification
+    register:
+      type: string
+      required: true
+      enum: [formal, neutral, casual]
+      description: "Expression register"
+      example: "formal"
+
+    # Expressions collection
+    expressions:
+      type: json
+      required: true
+      description: "Expression mappings with usage"
+      example:
+        greeting: "Nous avons le plaisir de vous présenter"
+        thanks: "Nous vous remercions de votre confiance"
+        invitation: "Nous vous invitons à découvrir"
+        confirmation: "Nous confirmons la bonne réception"
+
+    # Idioms safe to use
+    idioms:
+      type: json
+      required: false
+      description: "Cultural idioms appropriate for register"
+      example:
+        certainty: "sans l'ombre d'un doute"
+        quality: "la crème de la crème"
+        precision: "au millimètre près"
+
+    # Transition phrases
+    transitions:
+      type: json
+      required: false
+      description: "Transition phrases for flow"
+      example:
+        addition: ["de plus", "par ailleurs", "en outre"]
+        contrast: ["cependant", "néanmoins", "toutefois"]
+        conclusion: ["en définitive", "pour conclure"]
+
+    # Emphasis phrases
+    emphasis:
+      type: json
+      required: false
+      description: "Phrases for emphasis"
+      example:
+        strong: "Il est essentiel de souligner que"
+        moderate: "Il convient de noter que"
+        subtle: "On remarquera que"
+
+  relations:
+    incoming:
+      - type: HAS_EXPRESSIONS
+        from: Locale
+        cardinality: "1:N"
+        description: "Locale has multiple expression sets (one per register)"
+        properties:
+          register: string
