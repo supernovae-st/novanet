@@ -1,5 +1,6 @@
 //! App state for TUI v2.
 
+use std::collections::HashMap;
 use std::fs;
 use std::path::Path;
 
@@ -92,6 +93,9 @@ pub struct App {
     pub info_scroll: usize,
     pub info_line_count: usize, // Set by UI after building lines
     pub root_path: String,
+    /// Cache of YAML file contents (path -> content).
+    /// Avoids re-reading files on every scroll/navigation.
+    pub yaml_cache: HashMap<String, String>,
 }
 
 impl App {
@@ -115,6 +119,7 @@ impl App {
             info_scroll: 0,
             info_line_count: 0,
             root_path,
+            yaml_cache: HashMap::new(),
         };
         app.load_yaml_for_current();
         app
@@ -129,33 +134,19 @@ impl App {
         match self.tree.item_at(self.tree_cursor) {
             // Kind → individual YAML file
             Some(TreeItem::Kind(_, _, kind)) => {
-                let full_path = Path::new(&self.root_path).join(&kind.yaml_path);
-                self.yaml_path = kind.yaml_path.clone();
-                self.yaml_content = fs::read_to_string(&full_path)
-                    .unwrap_or_else(|_| format!("# File not found: {}", full_path.display()));
-                self.yaml_line_count = self.yaml_content.lines().count();
+                self.load_yaml_cached(&kind.yaml_path.clone());
             }
             // Realm, Layer → taxonomy.yaml
             Some(TreeItem::Realm(_))
             | Some(TreeItem::Layer(_, _))
             | Some(TreeItem::KindsSection) => {
-                let tax_path = "packages/core/models/taxonomy.yaml";
-                let full_path = Path::new(&self.root_path).join(tax_path);
-                self.yaml_path = tax_path.to_string();
-                self.yaml_content = fs::read_to_string(&full_path)
-                    .unwrap_or_else(|_| format!("# File not found: {}", full_path.display()));
-                self.yaml_line_count = self.yaml_content.lines().count();
+                self.load_yaml_cached("packages/core/models/taxonomy.yaml");
             }
             // ArcFamily, ArcKind → relations.yaml
             Some(TreeItem::ArcFamily(_))
             | Some(TreeItem::ArcKind(_, _))
             | Some(TreeItem::RelationsSection) => {
-                let rel_path = "packages/core/models/relations.yaml";
-                let full_path = Path::new(&self.root_path).join(rel_path);
-                self.yaml_path = rel_path.to_string();
-                self.yaml_content = fs::read_to_string(&full_path)
-                    .unwrap_or_else(|_| format!("# File not found: {}", full_path.display()));
-                self.yaml_line_count = self.yaml_content.lines().count();
+                self.load_yaml_cached("packages/core/models/relations.yaml");
             }
             None => {
                 self.yaml_path.clear();
@@ -163,6 +154,37 @@ impl App {
                 self.yaml_line_count = 0;
             }
         }
+    }
+
+    /// Load YAML content with caching (avoids re-reading files on every navigation).
+    fn load_yaml_cached(&mut self, relative_path: &str) {
+        self.yaml_path = relative_path.to_string();
+
+        // Check cache first
+        if let Some(cached) = self.yaml_cache.get(relative_path) {
+            self.yaml_content = cached.clone();
+            self.yaml_line_count = self.yaml_content.lines().count();
+            return;
+        }
+
+        // Load from disk
+        let full_path = Path::new(&self.root_path).join(relative_path);
+        let content = fs::read_to_string(&full_path)
+            .unwrap_or_else(|_| format!("# File not found: {}", full_path.display()));
+
+        // Update cache
+        self.yaml_cache
+            .insert(relative_path.to_string(), content.clone());
+
+        // Update display
+        self.yaml_content = content;
+        self.yaml_line_count = self.yaml_content.lines().count();
+    }
+
+    /// Clear YAML cache (useful after external file modifications).
+    #[allow(dead_code)]
+    pub fn clear_yaml_cache(&mut self) {
+        self.yaml_cache.clear();
     }
 
     /// Ensure cursor is visible by adjusting scroll.

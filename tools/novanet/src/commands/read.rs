@@ -7,22 +7,26 @@ use crate::cypher::{self, CypherStatement};
 use crate::db::Db;
 use crate::facets::FacetFilter;
 use crate::output::{self, NodeRow, OutputFormat, OverlayRow};
+use tracing::instrument;
 
 const DEFAULT_LIMIT: i64 = 500;
 
 /// Mode 1: Data nodes only (WHERE NOT n:Meta).
+#[instrument(skip(db))]
 pub async fn run_data(db: &Db, format: OutputFormat) -> crate::Result<()> {
     let stmt = cypher::data_query(DEFAULT_LIMIT);
     dispatch(db, &stmt, format, extract_node_rows).await
 }
 
 /// Mode 2: Meta-graph only (MATCH (n:Meta)).
+#[instrument(skip(db))]
 pub async fn run_meta(db: &Db, format: OutputFormat) -> crate::Result<()> {
     let stmt = cypher::meta_query();
     dispatch(db, &stmt, format, extract_node_rows).await
 }
 
 /// Mode 3: Data + Meta overlay.
+#[instrument(skip(db))]
 pub async fn run_overlay(db: &Db, format: OutputFormat) -> crate::Result<()> {
     let stmt = cypher::overlay_query(DEFAULT_LIMIT);
 
@@ -46,6 +50,7 @@ pub async fn run_overlay(db: &Db, format: OutputFormat) -> crate::Result<()> {
 }
 
 /// Mode 4: Faceted query driven by realm/layer/trait/edge-family/kind filters.
+#[instrument(skip(db))]
 pub async fn run_query(db: &Db, filter: FacetFilter, format: OutputFormat) -> crate::Result<()> {
     let stmt = cypher::faceted_query(&filter, DEFAULT_LIMIT);
     eprintln!(
