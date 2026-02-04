@@ -1,0 +1,204 @@
+# packages/core/models/node-kinds/global/knowledge/style.yaml
+# Style — Communication style for a locale (tone, formality, directness, warmth, humor, identity)
+#
+# Tier: style (loaded as cohesive unit)
+# Stability: Medium - update quarterly
+# Merges: locale-voice + locale-identity
+
+node:
+  name: Style
+  realm: global
+  layer: knowledge
+  trait: knowledge
+  knowledge_tier: style
+  icon: "🎭"
+  description: "Communication style: tone, formality, directness, warmth, humor, identity traits"
+
+  standard_properties:
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable name"
+      example: "French (France) Style"
+
+    description:
+      type: string
+      required: true
+      description: "Short description"
+      example: "Tone, formality, and communication identity for fr-FR"
+
+    llm_context:
+      type: string
+      required: true
+      description: "LLM generation hints"
+      example: "USE: for tone/voice decisions. TRIGGERS: formality, vous/tu, style. NOT: formatting."
+
+    created_at:
+      type: datetime
+      required: true
+      description: "Creation timestamp"
+
+    updated_at:
+      type: datetime
+      required: true
+      description: "Last update timestamp"
+
+  properties:
+    # === FORMALITY (from locale-voice) ===
+    formality_score:
+      type: int
+      required: true
+      description: "Formality level 0-100"
+      example: 72
+
+    default_formality:
+      type: string
+      required: true
+      enum: [formal, casual, mixed]
+      description: "Default formality level"
+      example: "formal"
+
+    default_pronoun:
+      type: string
+      required: false
+      description: "Default pronoun (vous, tu, Sie, du)"
+      example: "vous"
+
+    pronoun_rules:
+      type: json
+      required: false
+      description: "Pronoun usage rules by context"
+      example:
+        formal: "vous"
+        casual: "tu"
+        switch_triggers: ["established relationship"]
+
+    # === DIRECTNESS (from locale-voice) ===
+    directness_score:
+      type: int
+      required: true
+      description: "Directness level 0-100"
+      example: 45
+
+    directness_style:
+      type: string
+      required: true
+      enum: [direct, indirect, balanced]
+      description: "Overall directness style"
+      example: "indirect"
+
+    softening_patterns:
+      type: json
+      required: false
+      description: "Patterns for softening direct statements"
+      example:
+        requests: "Pourriez-vous..."
+        negatives: "Difficile"
+
+    # === WARMTH (from locale-voice) ===
+    warmth_score:
+      type: int
+      required: false
+      description: "Overall warmth level 0-100"
+      example: 55
+
+    warmth_by_stage:
+      type: json
+      required: false
+      description: "Warmth levels by relationship stage"
+      example:
+        initial: 45
+        established: 60
+        longterm: 70
+
+    # === HUMOR (from locale-voice) ===
+    humor_score:
+      type: int
+      required: false
+      description: "Humor acceptance level 0-100"
+      example: 40
+
+    humor_types:
+      type: json
+      required: false
+      description: "Acceptability of humor types"
+      example:
+        wordplay: "acceptable"
+        irony: "subtle"
+        slapstick: "avoid"
+
+    # === SENTENCE STYLE (from locale-voice) ===
+    avg_sentence_length:
+      type: int
+      required: false
+      description: "Average sentence length in words"
+      example: 18
+
+    preferred_voice:
+      type: string
+      required: false
+      enum: [active, passive, mixed]
+      description: "Preferred grammatical voice"
+      example: "mixed"
+
+    rhythm_style:
+      type: string
+      required: false
+      description: "Writing rhythm"
+      example: "sophisticated"
+
+    punctuation_rules:
+      type: json
+      required: false
+      description: "Punctuation conventions"
+      example:
+        colon: "space_before"
+        exclamation: "rare"
+        quotes: "guillemets"
+
+    # === HONORIFICS (from locale-voice) ===
+    honorific_system:
+      type: json
+      required: false
+      description: "Honorific system"
+      example:
+        levels: ["san", "sama"]
+        usage:
+          business: "san"
+
+    # === IDENTITY (from locale-identity) ===
+    self_references:
+      type: json
+      required: false
+      description: "How to refer to brand"
+      example:
+        company: "nous"
+        product: "notre solution"
+
+    reader_references:
+      type: json
+      required: false
+      description: "How to refer to reader"
+      example:
+        formal: "vous"
+        familiar: "tu"
+
+    authority_style:
+      type: string
+      required: false
+      enum: [expert, peer, guide, helper]
+      description: "Brand authority positioning"
+      example: "expert"
+
+    personality_traits:
+      type: json
+      required: false
+      description: "Brand personality traits"
+      example: ["professional", "trustworthy", "innovative"]
+
+  relations:
+    incoming:
+      - type: HAS_STYLE
+        from: Locale
+        cardinality: "1:1"
+        description: "Locale has exactly one style config"
