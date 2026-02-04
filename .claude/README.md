@@ -2,7 +2,7 @@
 
 Claude Code configuration for the NovaNet monorepo.
 
-**Version**: v9.0.1 | **Docs**: [Claude Code Official](https://docs.anthropic.com/en/docs/claude-code)
+**Version**: v9.8.0 | **Docs**: [Claude Code Official](https://docs.anthropic.com/en/docs/claude-code)
 
 ---
 
@@ -10,7 +10,7 @@ Claude Code configuration for the NovaNet monorepo.
 
 ```
 ╔═══════════════════════════════════════════════════════════════════════════════════════════════════╗
-║                              NOVANET DX - v9.0.1                                                  ║
+║                              NOVANET DX - v9.8.0                                                  ║
 ╠═══════════════════════════════════════════════════════════════════════════════════════════════════╣
 ║                                                                                                   ║
 ║   COMMANDS (slash commands)                                                                       ║
@@ -115,7 +115,7 @@ Automated scripts that run at specific lifecycle events.
 **Output:** Shows project version, git branch, and uncommitted changes count.
 
 ```
-NovaNet v9.0.1 | Branch: main | Uncommitted: 3 files
+NovaNet v9.8.0 | Branch: main | Uncommitted: 3 files
 ```
 
 ### PostToolUse Hook (Write|Edit)

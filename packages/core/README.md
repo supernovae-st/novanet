@@ -7,7 +7,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Neo4j](https://img.shields.io/badge/Neo4j-5.26-018bff?style=flat-square&logo=neo4j&logoColor=white)](https://neo4j.com/)
 [![Zod](https://img.shields.io/badge/Zod-3.24-8b5cf6?style=flat-square)](https://zod.dev/)
-[![Version](https://img.shields.io/badge/v9.0.0-06b6d4?style=flat-square)]()
+[![Version](https://img.shields.io/badge/v9.8.0-06b6d4?style=flat-square)]()
 
 ---
 
@@ -21,7 +21,7 @@
 
 NovaNet Core provides the foundational layer for the NovaNet knowledge graph system:
 
-- **YAML Schema Definitions** — 35 node types across 3 Realms and 9 Layers
+- **YAML Schema Definitions** — 46 node types across 3 Realms and 9 Layers
 - **TypeScript Types** — Full type safety for Neo4j operations
 - **NovaNetFilter** — Fluent API for composable graph queries
 - **Zod Schemas** — Runtime validation for locale knowledge
