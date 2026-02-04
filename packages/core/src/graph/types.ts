@@ -62,9 +62,6 @@ export interface SchemaArc {
   cardinality: string;
 }
 
-/** @deprecated Use SchemaArc instead */
-export type SchemaEdge = SchemaArc;
-
 // =============================================================================
 // LAYER METADATA
 // =============================================================================
@@ -119,16 +116,12 @@ export interface HierarchicalSchemaData {
   nodes: SchemaNode[];
   /** All schema arcs (~89 arcs expanded from 83 arc types) */
   arcs: SchemaArc[];
-  /** @deprecated Use arcs instead */
-  edges?: SchemaArc[];
   /** Statistics */
   stats: {
     /** Total number of node types (44) */
     totalNodes: number;
     /** Total number of arcs */
     totalArcs: number;
-    /** @deprecated Use totalArcs instead */
-    totalEdges?: number;
     /** Node counts per realm */
     nodesByRealm: Record<Realm, number>;
   };
@@ -147,6 +140,4 @@ export interface SchemaGraphResult {
   nodes: SchemaNode[];
   /** All schema arcs */
   arcs: SchemaArc[];
-  /** @deprecated Use arcs instead */
-  edges?: SchemaArc[];
 }

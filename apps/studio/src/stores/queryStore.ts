@@ -16,7 +16,7 @@ export interface QueryResult {
   nodes: GraphNode[];
   edges: GraphEdge[];
   totalNodes: number;
-  totalEdges: number;
+  totalArcs: number;
   duration: number;
   timestamp: Date;
 }
@@ -84,7 +84,7 @@ export const useQueryStore = create<QueryState>((set) => ({
       interface QueryResponse {
         success: boolean;
         data?: { nodes: GraphNode[]; edges: GraphEdge[] };
-        meta?: { totalNodes: number; totalEdges: number; queryDuration: number };
+        meta?: { totalNodes: number; totalArcs: number; queryDuration: number };
         error?: string;
       }
 
@@ -111,7 +111,7 @@ export const useQueryStore = create<QueryState>((set) => ({
         nodes,
         edges,
         totalNodes: data.meta?.totalNodes || nodes.length,
-        totalEdges: data.meta?.totalEdges || edges.length,
+        totalArcs: data.meta?.totalArcs || edges.length,
         duration: data.meta?.queryDuration || 0,
         timestamp: new Date(),
       };

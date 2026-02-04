@@ -38,7 +38,7 @@ export interface FilteredGraphResult {
   /** Total number of nodes before filtering */
   totalNodes: number;
   /** Total number of edges before filtering */
-  totalEdges: number;
+  totalArcs: number;
   /** Whether any filters are active */
   isFiltered: boolean;
   /** Count of visible nodes */
@@ -176,7 +176,7 @@ export function useFilteredGraph(): FilteredGraphResult {
     nodes: filteredNodes,
     edges: filteredEdges,
     totalNodes: allNodes.length,
-    totalEdges: allEdges.length,
+    totalArcs: allEdges.length,
     isFiltered,
     visibleNodeCount: filteredNodes.length,
     visibleEdgeCount: filteredEdges.length,

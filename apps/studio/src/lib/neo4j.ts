@@ -241,7 +241,7 @@ export interface QueryResult {
   nodes: GraphNode[];
   edges: GraphEdge[];
   totalNodes: number;
-  totalEdges: number;
+  totalArcs: number;
   duration: number;
 }
 
@@ -346,7 +346,7 @@ export async function executeQuery(
         nodes,
         edges,
         totalNodes: nodes.length,
-        totalEdges: edges.length,
+        totalArcs: edges.length,
         duration,
       };
     } finally {

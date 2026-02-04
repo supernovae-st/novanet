@@ -44,7 +44,7 @@ pnpm infra:seed
 ```
 
 This creates:
-- Meta-graph (Realms, Layers, Kinds, Traits, EdgeFamilies, EdgeKinds)
+- Meta-graph (Realms, Layers, Kinds, Traits, ArcFamilies, ArcKinds)
 - Sample data nodes
 - Constraints and indexes
 

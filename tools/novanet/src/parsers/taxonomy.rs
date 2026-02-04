@@ -3,9 +3,10 @@
 //! Handles:
 //! - `node_realms` with nested layers
 //! - `node_traits` with border styles for visual encoding
-//! - `arc_families` with stroke styles and arrow styles
+//! - `arc_families` with stroke styles, arrow styles, and default_traversal
 //! - `arc_scopes` and `arc_cardinalities` for arc classification
 //! - `terminal` palette for TUI graceful degradation
+//! - `kind_retrieval_defaults` per-trait context assembly settings (v9.9)
 
 use serde::Deserialize;
 use std::collections::HashMap;
@@ -21,6 +22,9 @@ pub struct TaxonomyDoc {
     pub version: String,
     pub node_realms: Vec<NodeRealmDef>,
     pub node_traits: Vec<NodeTraitDef>,
+    /// v9.9: Per-trait retrieval defaults for context assembly.
+    #[serde(default)]
+    pub kind_retrieval_defaults: Option<HashMap<String, KindRetrievalDefaults>>,
     pub arc_families: Vec<ArcFamilyDef>,
     #[serde(default)]
     pub arc_scopes: Vec<ArcScopeDef>,
@@ -28,6 +32,20 @@ pub struct TaxonomyDoc {
     pub arc_cardinalities: Vec<ArcCardinalityDef>,
     #[serde(default)]
     pub terminal: Option<TerminalPalette>,
+}
+
+/// v9.9: Per-trait retrieval settings for context assembly.
+#[derive(Debug, Clone, Deserialize)]
+pub struct KindRetrievalDefaults {
+    /// Maximum hops for structural traversal.
+    #[serde(default)]
+    pub traversal_depth: Option<u8>,
+    /// Default token allocation for this trait type.
+    #[serde(default)]
+    pub context_budget: Option<u32>,
+    /// Estimated tokens per instance.
+    #[serde(default)]
+    pub token_estimate: Option<u32>,
 }
 
 /// Realm definition with nested layers.
@@ -77,6 +95,9 @@ pub struct ArcFamilyDef {
     #[serde(default)]
     pub stroke_width: Option<u8>,
     pub arrow_style: String,
+    /// v9.9: Default traversal behavior (eager/lazy/skip).
+    #[serde(default)]
+    pub default_traversal: Option<String>,
     pub llm_context: String,
 }
 
@@ -371,7 +392,7 @@ arc_families:
 
         let doc = load_taxonomy(root).expect("should load taxonomy.yaml");
 
-        assert_eq!(doc.version, "9.5.0");
+        assert_eq!(doc.version, "9.9.0");
         assert_eq!(doc.node_realms.len(), 3);
         assert_eq!(doc.node_traits.len(), 5);
         assert_eq!(doc.arc_families.len(), 5);
@@ -394,5 +415,97 @@ arc_families:
         let terminal = doc.terminal.as_ref().expect("should have terminal palette");
         assert!(terminal.palette_256.contains_key("global"));
         assert!(terminal.palette_16.contains_key("global"));
+
+        // v9.9: Check kind_retrieval_defaults
+        let defaults = doc
+            .kind_retrieval_defaults
+            .as_ref()
+            .expect("should have kind_retrieval_defaults");
+        assert!(defaults.contains_key("invariant"));
+        assert!(defaults.contains_key("localized"));
+        let invariant_defaults = defaults.get("invariant").unwrap();
+        assert_eq!(invariant_defaults.traversal_depth, Some(2));
+        assert_eq!(invariant_defaults.context_budget, Some(500));
+        assert_eq!(invariant_defaults.token_estimate, Some(100));
+
+        // v9.9: Check default_traversal on arc families
+        let ownership = doc
+            .arc_families
+            .iter()
+            .find(|f| f.key == "ownership")
+            .unwrap();
+        assert_eq!(ownership.default_traversal, Some("eager".to_string()));
+        let semantic = doc
+            .arc_families
+            .iter()
+            .find(|f| f.key == "semantic")
+            .unwrap();
+        assert_eq!(semantic.default_traversal, Some("lazy".to_string()));
+    }
+
+    #[test]
+    fn parse_kind_retrieval_defaults() {
+        let yaml = r##"
+version: "9.9.0"
+node_realms:
+  - key: test
+    display_name: Test
+    emoji: "🧪"
+    color: "#000"
+    llm_context: "Test."
+    layers:
+      - key: base
+        display_name: Base
+        emoji: "📋"
+        color: "#111"
+        llm_context: "Base."
+node_traits:
+  - key: invariant
+    display_name: Invariant
+    color: "#222"
+    llm_context: "Invariant."
+kind_retrieval_defaults:
+  invariant:
+    traversal_depth: 2
+    context_budget: 500
+    token_estimate: 100
+  localized:
+    traversal_depth: 2
+    context_budget: 800
+    token_estimate: 150
+arc_families:
+  - key: ownership
+    display_name: Ownership
+    color: "#333"
+    arrow_style: "-->"
+    default_traversal: eager
+    llm_context: "Ownership."
+  - key: semantic
+    display_name: Semantic
+    color: "#444"
+    arrow_style: ".->"
+    default_traversal: lazy
+    llm_context: "Semantic."
+"##;
+        let doc: TaxonomyDoc = serde_yaml::from_str(yaml).unwrap();
+        assert_eq!(doc.version, "9.9.0");
+
+        // Check kind_retrieval_defaults
+        let defaults = doc.kind_retrieval_defaults.unwrap();
+        assert_eq!(defaults.len(), 2);
+        let inv = defaults.get("invariant").unwrap();
+        assert_eq!(inv.traversal_depth, Some(2));
+        assert_eq!(inv.context_budget, Some(500));
+        assert_eq!(inv.token_estimate, Some(100));
+
+        // Check default_traversal
+        assert_eq!(
+            doc.arc_families[0].default_traversal,
+            Some("eager".to_string())
+        );
+        assert_eq!(
+            doc.arc_families[1].default_traversal,
+            Some("lazy".to_string())
+        );
     }
 }

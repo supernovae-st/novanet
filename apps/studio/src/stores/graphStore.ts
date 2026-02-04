@@ -25,7 +25,7 @@ interface GraphState {
 
   // Stats
   totalNodes: number;
-  totalEdges: number;
+  totalArcs: number;
   nodeTypeCounts: Record<string, number>;
 
   // Actions
@@ -57,7 +57,7 @@ export const useGraphStore = create<GraphState>()(
     edgeMap: new Map(),
     hiddenNodeIds: new Set(),
     totalNodes: 0,
-    totalEdges: 0,
+    totalArcs: 0,
     nodeTypeCounts: {},
 
     // Actions
@@ -66,7 +66,7 @@ export const useGraphStore = create<GraphState>()(
         state.nodes = data.nodes;
         state.edges = data.edges;
         state.totalNodes = data.nodes.length;
-        state.totalEdges = data.edges.length;
+        state.totalArcs = data.edges.length;
         state.lastFetchTime = Date.now();
         state.error = null;
 
@@ -171,7 +171,7 @@ export const useGraphStore = create<GraphState>()(
 
         // Update totals
         state.totalNodes = state.nodes.length;
-        state.totalEdges = state.edges.length;
+        state.totalArcs = state.edges.length;
       });
     },
 
@@ -199,7 +199,7 @@ export const useGraphStore = create<GraphState>()(
         state.edgeMap = new Map();
         state.hiddenNodeIds = new Set();
         state.totalNodes = 0;
-        state.totalEdges = 0;
+        state.totalArcs = 0;
         state.nodeTypeCounts = {};
       });
     },

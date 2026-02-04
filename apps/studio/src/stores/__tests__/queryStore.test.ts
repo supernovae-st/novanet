@@ -35,7 +35,7 @@ describe('queryStore', () => {
         json: async () => ({
           success: true,
           data: { nodes: [], edges: [] },
-          meta: { totalNodes: 0, totalEdges: 0 },
+          meta: { totalNodes: 0, totalArcs: 0 },
         }),
       });
 
@@ -60,7 +60,7 @@ describe('queryStore', () => {
         json: async () => ({
           success: true,
           data: { nodes: mockNodes, edges: mockEdges },
-          meta: { totalNodes: 1, totalEdges: 1, queryDuration: 50 },
+          meta: { totalNodes: 1, totalArcs: 1, queryDuration: 50 },
         }),
       });
 
@@ -72,7 +72,7 @@ describe('queryStore', () => {
       expect(state.result?.nodes).toEqual(mockNodes);
       expect(state.result?.edges).toEqual(mockEdges);
       expect(state.result?.totalNodes).toBe(1);
-      expect(state.result?.totalEdges).toBe(1);
+      expect(state.result?.totalArcs).toBe(1);
     });
 
     it('should handle error response from server', async () => {
@@ -195,7 +195,7 @@ describe('queryStore', () => {
           nodes: [],
           edges: [],
           totalNodes: 0,
-          totalEdges: 0,
+          totalArcs: 0,
           duration: 0,
           timestamp: new Date(),
         },

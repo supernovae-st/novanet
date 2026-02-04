@@ -589,7 +589,12 @@ mod tests {
     #[test]
     fn snapshot_minimal_kinds() {
         let nodes = vec![
-            make_node("Project", "project", "foundation", LocaleBehavior::Invariant),
+            make_node(
+                "Project",
+                "project",
+                "foundation",
+                LocaleBehavior::Invariant,
+            ),
             make_node_with_props(
                 "Page",
                 "project",
@@ -601,7 +606,12 @@ mod tests {
                     ("slug", "string", false),
                 ],
             ),
-            make_node("PageL10n", "project", "structure", LocaleBehavior::Localized),
+            make_node(
+                "PageL10n",
+                "project",
+                "structure",
+                LocaleBehavior::Localized,
+            ),
             make_node("Concept", "project", "semantic", LocaleBehavior::Invariant),
             make_node("GenerationJob", "project", "output", LocaleBehavior::Job),
         ];

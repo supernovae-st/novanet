@@ -19,7 +19,7 @@ pub enum ArcDirection {
     Incoming, // ←
 }
 
-/// An ArcKind in the relations tree.
+/// An ArcKind in the arcs tree.
 #[derive(Debug, Clone)]
 pub struct ArcKindInfo {
     pub key: String,
@@ -91,7 +91,7 @@ pub struct TaxonomyTree {
     pub realms: Vec<RealmInfo>,
     pub arc_families: Vec<ArcFamilyInfo>,
     pub stats: GraphStats,
-    /// Collapsed state: stores keys of collapsed nodes (e.g., "kinds", "relations", "realm:global", "layer:structure")
+    /// Collapsed state: stores keys of collapsed nodes (e.g., "kinds", "arcs", "realm:global", "layer:structure")
     /// Uses FxHashSet for ~30% faster lookups on string keys.
     pub collapsed: FxHashSet<String>,
 }
@@ -430,7 +430,7 @@ RETURN nodes, arcs, kinds, count(ak) AS arc_kinds
     /// Collapse all collapsible nodes.
     pub fn collapse_all(&mut self) {
         self.collapsed.insert("kinds".to_string());
-        self.collapsed.insert("relations".to_string());
+        self.collapsed.insert("arcs".to_string());
         for realm in &self.realms {
             self.collapsed.insert(format!("realm:{}", realm.key));
             for layer in &realm.layers {
@@ -467,9 +467,9 @@ RETURN nodes, arcs, kinds, count(ak) AS arc_kinds
             }
         }
 
-        // Relations section
-        count += 1; // "Relations" header
-        if !self.is_collapsed("relations") {
+        // Arcs section
+        count += 1; // "Arcs" header
+        if !self.is_collapsed("arcs") {
             for family in &self.arc_families {
                 count += 1; // family header
                 if !self.is_collapsed(&format!("family:{}", family.key)) {
@@ -518,13 +518,13 @@ RETURN nodes, arcs, kinds, count(ak) AS arc_kinds
             }
         }
 
-        // Relations section header
+        // Arcs section header
         if idx == cursor {
-            return Some(TreeItem::RelationsSection);
+            return Some(TreeItem::ArcsSection);
         }
         idx += 1;
 
-        if !self.is_collapsed("relations") {
+        if !self.is_collapsed("arcs") {
             for family in &self.arc_families {
                 if idx == cursor {
                     return Some(TreeItem::ArcFamily(family));
@@ -549,7 +549,7 @@ RETURN nodes, arcs, kinds, count(ak) AS arc_kinds
     pub fn collapse_key_at(&self, cursor: usize) -> Option<String> {
         match self.item_at(cursor) {
             Some(TreeItem::KindsSection) => Some("kinds".to_string()),
-            Some(TreeItem::RelationsSection) => Some("relations".to_string()),
+            Some(TreeItem::ArcsSection) => Some("arcs".to_string()),
             Some(TreeItem::Realm(r)) => Some(format!("realm:{}", r.key)),
             Some(TreeItem::Layer(_, l)) => Some(format!("layer:{}", l.key)),
             Some(TreeItem::ArcFamily(f)) => Some(format!("family:{}", f.key)),
@@ -564,12 +564,12 @@ RETURN nodes, arcs, kinds, count(ak) AS arc_kinds
 pub enum TreeItem<'a> {
     // Section headers
     KindsSection,
-    RelationsSection,
+    ArcsSection,
     // Kinds hierarchy
     Realm(&'a RealmInfo),
     Layer(&'a RealmInfo, &'a LayerInfo),
     Kind(&'a RealmInfo, &'a LayerInfo, &'a KindInfo),
-    // Relations hierarchy
+    // Arcs hierarchy
     ArcFamily(&'a ArcFamilyInfo),
     ArcKind(&'a ArcFamilyInfo, &'a ArcKindInfo),
 }

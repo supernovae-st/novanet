@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
       },
       meta: {
         totalNodes: result.totalNodes,
-        totalEdges: result.totalEdges,
+        totalArcs: result.totalArcs,
         queryDuration: result.duration,
         requestDuration: Date.now() - startTime,
         query: cypher,

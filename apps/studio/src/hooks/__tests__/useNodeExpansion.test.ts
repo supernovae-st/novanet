@@ -72,7 +72,7 @@ describe('useNodeExpansion', () => {
       nodes: mockNeighborNodes,
       edges: mockNeighborEdges,
       totalNodes: 2,
-      totalEdges: 2,
+      totalArcs: 2,
       duration: 50,
     });
   });
@@ -204,7 +204,7 @@ describe('useNodeExpansion', () => {
           nodes: mockNeighborNodes,
           edges: mockNeighborEdges,
           totalNodes: 2,
-          totalEdges: 2,
+          totalArcs: 2,
           duration: 50,
         });
         await expansionPromise;
@@ -252,7 +252,7 @@ describe('useNodeExpansion', () => {
         nodes: mockNeighborNodes,
         edges: [], // No new edges either
         totalNodes: 2,
-        totalEdges: 0,
+        totalArcs: 0,
         duration: 50,
       });
 
@@ -272,7 +272,7 @@ describe('useNodeExpansion', () => {
         nodes: mockNeighborNodes,
         edges: [],
         totalNodes: 2,
-        totalEdges: 0,
+        totalArcs: 0,
         duration: 50,
       });
 
@@ -328,7 +328,7 @@ describe('useNodeExpansion', () => {
           nodes: mockNeighborNodes,
           edges: mockNeighborEdges,
           totalNodes: 2,
-          totalEdges: 2,
+          totalArcs: 2,
           duration: 50,
         });
         await firstPromise;

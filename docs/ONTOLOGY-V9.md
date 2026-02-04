@@ -13,7 +13,7 @@
 4. [Meta-Node Types](#meta-node-types)
 5. [Meta-Graph Relations](#meta-graph-relations)
 6. [Complete Kind Inventory](#complete-kind-inventory)
-7. [Complete EdgeKind Inventory](#complete-edgekind-inventory)
+7. [Complete ArcKind Inventory](#complete-edgekind-inventory)
 8. [YAML Source Structure](#yaml-source-structure)
 9. [Neo4j Schema](#neo4j-schema)
 10. [Navigation Modes](#navigation-modes)
@@ -111,7 +111,7 @@ flowchart TB
     A1["<b>Axis 1 — WHERE?</b>\n:Realm (3)\nglobal · project · shared"]
     A2["<b>Axis 2 — WHAT?</b>\n:Layer (9)\nconfig · knowledge · foundation\nstructure · semantic · instruction\noutput · seo · geo"]
     A3["<b>Axis 3 — HOW?</b>\n:Trait (5)\ninvariant · localized · knowledge\nderived · job"]
-    A4["<b>Axis 4 — LINKS?</b>\n:EdgeKind (50) + :EdgeFamily (5)\nHAS_PAGE · SEMANTIC_LINK · FOR_LOCALE · ..."]
+    A4["<b>Axis 4 — LINKS?</b>\n:ArcKind (50) + :ArcFamily (5)\nHAS_PAGE · SEMANTIC_LINK · FOR_LOCALE · ..."]
   end
 
   KIND["<b>:Kind</b>\n35 node types\n(center of the ontology)"]
@@ -136,8 +136,8 @@ flowchart TB
 | `:Layer` | 9 | Functional classification / architectural layer | `key` |
 | `:Kind` | 35 | Node type definition (one per Neo4j label) | `label` |
 | `:Trait` | 5 | Locale behavior — how a type changes across locales | `key` |
-| `:EdgeFamily` | 5 | Relationship family classification | `key` |
-| `:EdgeKind` | 50 | Relationship type definition (one per Neo4j rel type) | `key` |
+| `:ArcFamily` | 5 | Relationship family classification | `key` |
+| `:ArcKind` | 50 | Relationship type definition (one per Neo4j rel type) | `key` |
 
 All 6 types receive a secondary **`:Meta`** label for grouping/filtering.
 
@@ -262,7 +262,7 @@ created_at:   datetime
 updated_at:   datetime
 ```
 
-### :EdgeFamily (5 nodes)
+### :ArcFamily (5 nodes)
 
 Classification of relationship types.
 
@@ -293,9 +293,9 @@ In v10, tells the context assembly engine how to handle edges of this family:
 - `'conditional'`: semantic — follow only if temperature >= threshold
 - `'on_demand'`: mining — follow only when task explicitly requests
 
-### :EdgeKind (50 nodes)
+### :ArcKind (50 nodes)
 
-Individual relationship type in the data graph. One EdgeKind per Neo4j relationship type.
+Individual relationship type in the data graph. One ArcKind per Neo4j relationship type.
 
 Properties:
 
@@ -336,14 +336,14 @@ flowchart TB
   Layer["<b>:Layer</b>\n(9)"]
   Kind["<b>:Kind</b>\n(35)"]
   Trait["<b>:Trait</b>\n(5)"]
-  EF["<b>:EdgeFamily</b>\n(5)"]
-  EK["<b>:EdgeKind</b>\n(50)"]
+  EF["<b>:ArcFamily</b>\n(5)"]
+  EK["<b>:ArcKind</b>\n(50)"]
   Data["<b>data node</b>\n(instance)"]
 
   %% Hierarchy (top-down)
   Realm -->|"HAS_LAYER (12)"| Layer
   Layer -->|"HAS_KIND (35)"| Kind
-  EF -->|"HAS_EDGE_KIND (50)"| EK
+  EF -->|"HAS_ARC_KIND (50)"| EK
 
   %% Facettes (Kind-centric)
   Kind -.->|"IN_REALM (35)"| Realm
@@ -377,7 +377,7 @@ Navigate from broad categories down to specific types.
 ```
 :Realm ──[:HAS_LAYER]──>      :Layer      (12 rels: 3 realms x avg 3 layers)
 :Layer ──[:HAS_KIND]──>        :Kind       (35 rels: one per Kind)
-:EdgeFamily ──[:HAS_EDGE_KIND]──> :EdgeKind (50 rels: one per EdgeKind)
+:ArcFamily ──[:HAS_ARC_KIND]──> :ArcKind (50 rels: one per ArcKind)
 ```
 
 #### 2. Facettes (Kind-centric)
@@ -398,9 +398,9 @@ fast lookups without traversing the tree.
 Describe which Kinds can be connected by each edge type.
 
 ```
-:EdgeKind ──[:FROM_KIND]──>  :Kind        (N sources per EdgeKind)
-:EdgeKind ──[:TO_KIND]──>    :Kind        (M targets per EdgeKind)
-:EdgeKind ──[:IN_FAMILY]──>  :EdgeFamily  (1 family per EdgeKind)
+:ArcKind ──[:FROM_KIND]──>  :Kind        (N sources per ArcKind)
+:ArcKind ──[:TO_KIND]──>    :Kind        (M targets per ArcKind)
+:ArcKind ──[:IN_FAMILY]──>  :ArcFamily  (1 family per ArcKind)
 ```
 
 This is the key innovation of v9: edges are **first-class citizens** with
@@ -416,10 +416,10 @@ connect to a Block?" without hardcoding.
 | `IN_REALM` | 35 | Kind → Realm |
 | `IN_LAYER` | 35 | Kind → Layer |
 | `EXHIBITS` | 35 | Kind → Trait |
-| `HAS_EDGE_KIND` | 50 | EdgeFamily → EdgeKind |
-| `FROM_KIND` | ~70 | EdgeKind → Kind (N sources) |
-| `TO_KIND` | ~70 | EdgeKind → Kind (M targets) |
-| `IN_FAMILY` | 50 | EdgeKind → EdgeFamily |
+| `HAS_ARC_KIND` | 50 | ArcFamily → ArcKind |
+| `FROM_KIND` | ~70 | ArcKind → Kind (N sources) |
+| `TO_KIND` | ~70 | ArcKind → Kind (M targets) |
+| `IN_FAMILY` | 50 | ArcKind → ArcFamily |
 | **Total** | **~392** | |
 
 Instance bridge (`OF_KIND`): proportional to data volume.
@@ -555,15 +555,15 @@ flowchart TB
 
 ---
 
-## Complete EdgeKind Inventory
+## Complete ArcKind Inventory
 
-### By EdgeFamily
+### By ArcFamily
 
 #### Ownership (23 edge types)
 
 Parent-child structural relationships. Arrow: `-->`
 
-| # | EdgeKind | Source(s) | Target(s) | Cardinality | Self-ref | Properties |
+| # | ArcKind | Source(s) | Target(s) | Cardinality | Self-ref | Properties |
 |---|----------|-----------|-----------|-------------|----------|------------|
 | 1 | `HAS_PAGE` | Project | Page | 1:N | | |
 | 2 | `HAS_BLOCK` | Page | Block | 1:N | | `position` |
@@ -593,7 +593,7 @@ Parent-child structural relationships. Arrow: `-->`
 
 Links between invariant nodes and locale-specific content. Arrow: `-.->`.
 
-| # | EdgeKind | Source(s) | Target(s) | Cardinality | Self-ref | Properties |
+| # | ArcKind | Source(s) | Target(s) | Cardinality | Self-ref | Properties |
 |---|----------|-----------|-----------|-------------|----------|------------|
 | 24 | `HAS_L10N` | Concept, Project | ConceptL10n, ProjectL10n | 1:N | | |
 | 25 | `HAS_OUTPUT` | Block, Page | BlockL10n, PageL10n | 1:N | | |
@@ -607,7 +607,7 @@ Links between invariant nodes and locale-specific content. Arrow: `-.->`.
 
 Meaning and concept connections. Arrow: `-.->`.
 
-| # | EdgeKind | Source(s) | Target(s) | Cardinality | Self-ref | Properties |
+| # | ArcKind | Source(s) | Target(s) | Cardinality | Self-ref | Properties |
 |---|----------|-----------|-----------|-------------|----------|------------|
 | 31 | `SEMANTIC_LINK` | Concept | Concept | N:N | yes | `temperature`, `semantic_field` |
 | 32 | `USES_CONCEPT` | Block, Page | Concept | N:N | | `temperature` |
@@ -621,7 +621,7 @@ Meaning and concept connections. Arrow: `-.->`.
 
 LLM generation pipeline flow. Arrow: `==>`.
 
-| # | EdgeKind | Source(s) | Target(s) | Cardinality | Self-ref | Properties |
+| # | ArcKind | Source(s) | Target(s) | Cardinality | Self-ref | Properties |
 |---|----------|-----------|-----------|-------------|----------|------------|
 | 38 | `HAS_PROMPT` | Block, Page | BlockPrompt, PagePrompt | 1:1 | | |
 | 39 | `GENERATED` | BlockPrompt, PagePrompt | BlockL10n, PageL10n | 1:N | | `generated_at` |
@@ -634,7 +634,7 @@ LLM generation pipeline flow. Arrow: `==>`.
 
 SEO/GEO data extraction. Arrow: `--o`.
 
-| # | EdgeKind | Source(s) | Target(s) | Cardinality | Self-ref | Properties |
+| # | ArcKind | Source(s) | Target(s) | Cardinality | Self-ref | Properties |
 |---|----------|-----------|-----------|-------------|----------|------------|
 | 44 | `SEO_MINES` | SEOMiningRun | SEOKeywordL10n | 1:N | | |
 | 45 | `GEO_MINES` | GEOMiningRun | GEOSeedL10n | 1:N | | |
@@ -643,24 +643,24 @@ SEO/GEO data extraction. Arrow: `--o`.
 
 Navigational convenience — reverse traversals without full scans.
 
-| # | EdgeKind | Source(s) | Target(s) | Cardinality | Self-ref | Properties |
+| # | ArcKind | Source(s) | Target(s) | Cardinality | Self-ref | Properties |
 |---|----------|-----------|-----------|-------------|----------|------------|
 | 46 | `OUTPUT_OF` | BlockL10n, PageL10n | Block, Page | N:1 | | |
 | 47 | `BLOCK_OF` | Block | Page | N:1 | | |
 
 ### Edge Schema Diagram (OWL pattern)
 
-Each EdgeKind has N `FROM_KIND` and M `TO_KIND` relationships pointing to Kind nodes:
+Each ArcKind has N `FROM_KIND` and M `TO_KIND` relationships pointing to Kind nodes:
 
 ```mermaid
 flowchart LR
-  EK["<b>:EdgeKind</b>\n{key: 'HAS_OUTPUT'}"]
+  EK["<b>:ArcKind</b>\n{key: 'HAS_OUTPUT'}"]
 
   K1["<b>:Kind</b>\n{label: 'Block'}"]
   K2["<b>:Kind</b>\n{label: 'Page'}"]
   K3["<b>:Kind</b>\n{label: 'BlockL10n'}"]
   K4["<b>:Kind</b>\n{label: 'PageL10n'}"]
-  EF["<b>:EdgeFamily</b>\n{key: 'localization'}"]
+  EF["<b>:ArcFamily</b>\n{key: 'localization'}"]
 
   K1 -->|FROM_KIND| EK
   K2 -->|FROM_KIND| EK
@@ -680,9 +680,9 @@ flowchart LR
 
 #### Self-Referential Edges
 
-These EdgeKinds have `FROM_KIND` and `TO_KIND` pointing to the same Kind:
+These ArcKinds have `FROM_KIND` and `TO_KIND` pointing to the same Kind:
 
-| EdgeKind | Kind | Family |
+| ArcKind | Kind | Family |
 |----------|------|--------|
 | `SEMANTIC_LINK` | Concept | semantic |
 | `FALLBACK_TO` | Locale | localization |
@@ -693,7 +693,7 @@ These EdgeKinds have `FROM_KIND` and `TO_KIND` pointing to the same Kind:
 
 #### Polymorphic Edges (multiple sources OR targets)
 
-| EdgeKind | Sources | Targets |
+| ArcKind | Sources | Targets |
 |----------|---------|---------|
 | `HAS_OUTPUT` | Block, Page | BlockL10n, PageL10n |
 | `HAS_PROMPT` | Block, Page | BlockPrompt, PagePrompt |
@@ -714,7 +714,7 @@ types, Mermaid diagrams — is generated from YAML.
 ```
 organizing-principles.yaml  →  generate  →  Neo4j seed (Cypher)
 node YAML files (35)         →  generate  →  TypeScript types
-relations.yaml               →  generate  →  EdgeKind/EdgeFamily seed
+relations.yaml               →  generate  →  ArcKind/ArcFamily seed
 ```
 
 ### organizing-principles.yaml
@@ -947,9 +947,9 @@ CREATE CONSTRAINT kind_label IF NOT EXISTS
 CREATE CONSTRAINT trait_key IF NOT EXISTS
   FOR (t:Trait) REQUIRE t.key IS UNIQUE;
 CREATE CONSTRAINT edge_family_key IF NOT EXISTS
-  FOR (ef:EdgeFamily) REQUIRE ef.key IS UNIQUE;
+  FOR (ef:ArcFamily) REQUIRE ef.key IS UNIQUE;
 CREATE CONSTRAINT edge_kind_key IF NOT EXISTS
-  FOR (ek:EdgeKind) REQUIRE ek.key IS UNIQUE;
+  FOR (ek:ArcKind) REQUIRE ek.key IS UNIQUE;
 ```
 
 Each `UNIQUE` constraint automatically creates a backing index — 6 constraints = 6 indexes.
@@ -964,8 +964,8 @@ CREATE (:Meta:Realm      {key: 'global', ...})
 CREATE (:Meta:Layer      {key: 'config', ...})
 CREATE (:Meta:Kind       {label: 'Page', ...})
 CREATE (:Meta:Trait      {key: 'invariant', ...})
-CREATE (:Meta:EdgeFamily {key: 'ownership', ...})
-CREATE (:Meta:EdgeKind   {key: 'HAS_PAGE', ...})
+CREATE (:Meta:ArcFamily {key: 'ownership', ...})
+CREATE (:Meta:ArcKind   {key: 'HAS_PAGE', ...})
 ```
 
 Benefits:
@@ -1016,7 +1016,7 @@ Show only business data — no meta-graph noise. This is the **default view**.
 |--------|---------|
 | **Cypher** | `MATCH (n) WHERE NOT n:Meta RETURN n` |
 | **Shows** | Pages, Blocks, Concepts, Locales, L10n content, SEO/GEO data |
-| **Hides** | Realm, Layer, Kind, Trait, EdgeFamily, EdgeKind + all meta-relationships |
+| **Hides** | Realm, Layer, Kind, Trait, ArcFamily, ArcKind + all meta-relationships |
 | **Use case** | Day-to-day content work, generation pipeline debugging |
 | **CLI** | `novanet data` |
 | **Studio** | Toggle "Data Only" (default) |
@@ -1028,7 +1028,7 @@ Show only the ontology schema — the "schema of the schema".
 | Aspect | Details |
 |--------|---------|
 | **Cypher** | `MATCH (n:Meta) RETURN n` |
-| **Shows** | 3 Realms, 9 Layers, 35 Kinds, 5 Traits, 5 EdgeFamilies, 50 EdgeKinds (~107 nodes) |
+| **Shows** | 3 Realms, 9 Layers, 35 Kinds, 5 Traits, 5 EdgeFamilies, 50 ArcKinds (~107 nodes) |
 | **Hides** | All data instances and data relationships |
 | **Use case** | Schema exploration, ontology documentation, LLM context assembly |
 | **CLI** | `novanet meta` |
@@ -1050,7 +1050,7 @@ relationships connect data instances to their Kind nodes.
 
 ### Mode 4: Query-Driven Views
 
-Combine facets (Realm, Layer, Trait, EdgeFamily) to create custom subgraph views.
+Combine facets (Realm, Layer, Trait, ArcFamily) to create custom subgraph views.
 This is the key power feature — no hardcoding, fully dynamic.
 
 | Filter | Values | Cypher Pattern |
@@ -1058,7 +1058,7 @@ This is the key power feature — no hardcoding, fully dynamic.
 | Realm | `global`, `project`, `shared` | `(k:Kind)-[:IN_REALM]->(:Realm {key: ?})` |
 | Layer | `config`, `knowledge`, `foundation`, `structure`, `semantic`, `instruction`, `output`, `seo`, `geo` | `(k:Kind)-[:IN_LAYER]->(:Layer {key: ?})` |
 | Trait | `invariant`, `localized`, `knowledge`, `derived`, `job` | `(k:Kind)-[:EXHIBITS]->(:Trait {key: ?})` |
-| EdgeFamily | `ownership`, `localization`, `semantic`, `generation`, `mining` | `(ek:EdgeKind)-[:IN_FAMILY]->(:EdgeFamily {key: ?})` |
+| ArcFamily | `ownership`, `localization`, `semantic`, `generation`, `mining` | `(ek:ArcKind)-[:IN_FAMILY]->(:ArcFamily {key: ?})` |
 | Kind | Any of the 35 labels | `(k:Kind {label: ?})` |
 
 All filters are **composable** — combining `--realm=project --trait=localized` returns
@@ -1077,7 +1077,7 @@ RETURN labels(instance)[0] AS type, count(*) AS count
 #### Example: Generation pipeline edges
 
 ```cypher
-MATCH (ek:EdgeKind)-[:IN_FAMILY]->(:EdgeFamily {key: 'generation'})
+MATCH (ek:ArcKind)-[:IN_FAMILY]->(:ArcFamily {key: 'generation'})
 OPTIONAL MATCH (ek)-[:FROM_KIND]->(src:Kind)
 OPTIONAL MATCH (ek)-[:TO_KIND]->(tgt:Kind)
 RETURN ek.key AS edge, collect(DISTINCT src.label) AS sources,
@@ -1111,7 +1111,7 @@ MATCH (k:Kind {label: 'Page'})
 MATCH (k)-[:IN_REALM]->(r:Realm)
 MATCH (k)-[:IN_LAYER]->(l:Layer)
 MATCH (k)-[:EXHIBITS]->(t:Trait)
-OPTIONAL MATCH (k)<-[:FROM_KIND]-(ek:EdgeKind)-[:IN_FAMILY]->(f:EdgeFamily)
+OPTIONAL MATCH (k)<-[:FROM_KIND]-(ek:ArcKind)-[:IN_FAMILY]->(f:ArcFamily)
 OPTIONAL MATCH (ek)-[:TO_KIND]->(target:Kind)
 RETURN k, r, l, t,
        collect(DISTINCT {edge: ek.key, family: f.key, targets: target.label}) AS edges
@@ -1128,9 +1128,9 @@ RETURN k.label, k.llm_context
 ### What edges can connect to Block?
 
 ```cypher
-MATCH (:Kind {label: 'Block'})<-[:FROM_KIND]-(ek:EdgeKind)
+MATCH (:Kind {label: 'Block'})<-[:FROM_KIND]-(ek:ArcKind)
       -[:TO_KIND]->(target:Kind)
-MATCH (ek)-[:IN_FAMILY]->(f:EdgeFamily)
+MATCH (ek)-[:IN_FAMILY]->(f:ArcFamily)
 RETURN ek.key AS edge, f.key AS family, target.label AS target,
        ek.llm_context AS description
 ```
@@ -1251,9 +1251,9 @@ flowchart TB
   end
 
   subgraph OUTPUT["Generated Artifacts"]
-    O1["00.5-organizing-principles.cypher\n(Realm, Layer, Trait, EdgeFamily\n+ HAS_LAYER hierarchy)"]
+    O1["00.5-organizing-principles.cypher\n(Realm, Layer, Trait, ArcFamily\n+ HAS_LAYER hierarchy)"]
     O2["00.6-kinds.cypher\n(Kind nodes + schema_hint,\ncontext_budget, traversal_depth,\ngeneration_count + facettes)"]
-    O3["00.7-edge-schema.cypher\n(EdgeKind + cypher_pattern,\ntemperature_threshold,\nFROM/TO_KIND, IN_FAMILY)"]
+    O3["00.7-edge-schema.cypher\n(ArcKind + cypher_pattern,\ntemperature_threshold,\nFROM/TO_KIND, IN_FAMILY)"]
     O4["src/graph/layers.ts\n(TypeScript Record)"]
     O5["VIEW-*.md\n(Mermaid diagrams)"]
     O6["99-autowire-kinds.cypher\n(OF_KIND statements)"]
@@ -1335,7 +1335,7 @@ Unchecking a facet filters out matching nodes/edges in real-time.
 | File | Description |
 |------|-------------|
 | `src/components/toolbar/NavigationModeToggle.tsx` | Mode 1-4 toggle buttons |
-| `src/components/sidebar/FacetFilterPanel.tsx` | Realm/Layer/Trait/EdgeFamily checkboxes |
+| `src/components/sidebar/FacetFilterPanel.tsx` | Realm/Layer/Trait/ArcFamily checkboxes |
 | `src/stores/navigationStore.ts` | Active mode + selected facets state |
 | `src/hooks/useNavigationMode.ts` | Mode-aware Cypher query builder |
 | `src/app/api/graph/navigation/route.ts` | API endpoint for filtered subgraph |
@@ -1367,7 +1367,7 @@ interactive exploration. See ADR-010/011 for the Rust-first architecture decisio
 | `--realm` | `global`, `project`, `shared` | Filter by Realm |
 | `--layer` | `config`, `knowledge`, ...9 values | Filter by Layer |
 | `--trait` | `invariant`, `localized`, `knowledge`, `derived`, `job` | Filter by Trait |
-| `--edge-family` | `ownership`, `localization`, `semantic`, `generation`, `mining` | Filter by EdgeFamily |
+| `--edge-family` | `ownership`, `localization`, `semantic`, `generation`, `mining` | Filter by ArcFamily |
 | `--kind` | Any of the 35 Kind labels | Filter by specific Kind |
 | `--format` | `table`, `json`, `cypher` | Output format (default: `table`) |
 
@@ -1424,9 +1424,9 @@ Interactive terminal UI for graph exploration. Built with
 | `↑↓` | Navigate | Browse taxonomy tree (Realm > Layer > Kind) |
 | `1`–`4` | Mode toggle | Switch Data/Meta/Overlay/Query modes |
 | `Enter` | Drill-down | Select Kind → show instances + edge detail |
-| `f` | Facet filter | Popup with Realm/Layer/Trait/EdgeFamily checkboxes |
-| `/` | Search | Fuzzy search across Kind labels and EdgeKind keys |
-| `e` | Edge explorer | Browse EdgeKind → FROM_KIND/TO_KIND schema |
+| `f` | Facet filter | Popup with Realm/Layer/Trait/ArcFamily checkboxes |
+| `/` | Search | Fuzzy search across Kind labels and ArcKind keys |
+| `e` | Edge explorer | Browse ArcKind → FROM_KIND/TO_KIND schema |
 | `c` | Cypher preview | Show the Cypher query behind the current view |
 | `q` | Quit | Exit |
 
@@ -1563,9 +1563,9 @@ export const NODE_TYPES = Object.keys(KIND_META) as NodeType[];
 
 | Type | Convention | Examples |
 |------|-----------|---------|
-| Meta-node labels | PascalCase | `Realm`, `Layer`, `Kind`, `Trait`, `EdgeFamily`, `EdgeKind` |
+| Meta-node labels | PascalCase | `Realm`, `Layer`, `Kind`, `Trait`, `ArcFamily`, `ArcKind` |
 | Data-node labels | PascalCase | `Page`, `Block`, `Concept`, `Locale`, `SEOKeywordL10n` |
-| Double-label (meta) | `:Meta` prefix | `:Meta:Realm`, `:Meta:Kind`, `:Meta:EdgeKind` |
+| Double-label (meta) | `:Meta` prefix | `:Meta:Realm`, `:Meta:Kind`, `:Meta:ArcKind` |
 
 ### Relationships
 
@@ -1580,7 +1580,7 @@ export const NODE_TYPES = Object.keys(KIND_META) as NodeType[];
 | Type | Convention | Examples |
 |------|-----------|---------|
 | All properties | snake_case | `display_name`, `llm_context`, `edge_properties` |
-| PKs (most) | `key` | Realm, Layer, Trait, EdgeFamily, EdgeKind |
+| PKs (most) | `key` | Realm, Layer, Trait, ArcFamily, ArcKind |
 | PK (Kind) | `label` | matches the Neo4j label it describes |
 
 ### Key Values
@@ -1590,9 +1590,9 @@ export const NODE_TYPES = Object.keys(KIND_META) as NodeType[];
 | Realm keys | lowercase | `global`, `project`, `shared` |
 | Layer keys | lowercase | `config`, `knowledge`, `foundation`, `structure`, ... |
 | Trait keys | lowercase | `invariant`, `localized`, `knowledge`, `derived`, `job` |
-| EdgeFamily keys | lowercase | `ownership`, `localization`, `semantic`, `generation`, `mining` |
+| ArcFamily keys | lowercase | `ownership`, `localization`, `semantic`, `generation`, `mining` |
 | Kind labels | PascalCase | `Page`, `BlockL10n`, `SEOKeywordMetrics` |
-| EdgeKind keys | UPPER_SNAKE | `HAS_PAGE`, `SEMANTIC_LINK`, `FOR_LOCALE` |
+| ArcKind keys | UPPER_SNAKE | `HAS_PAGE`, `SEMANTIC_LINK`, `FOR_LOCALE` |
 
 ### YAML Fields
 
@@ -1610,8 +1610,8 @@ export const NODE_TYPES = Object.keys(KIND_META) as NodeType[];
 | `:Subcategory` | `:Layer` | Functional classification |
 | `:NodeTypeMeta` | `:Kind` | Node type definition |
 | — | `:Trait` | Locale behavior (NEW) |
-| — | `:EdgeFamily` | Relation family (NEW) |
-| — | `:EdgeKind` | Relation type (NEW) |
+| — | `:ArcFamily` | Relation family (NEW) |
+| — | `:ArcKind` | Relation type (NEW) |
 | — | `:Meta` | Double-label on all meta-nodes (NEW) |
 | `HAS_SUBCATEGORY` | `HAS_LAYER` | Hierarchy |
 | `DEFINES_TYPE` | `HAS_KIND` | Hierarchy |
@@ -1620,7 +1620,7 @@ export const NODE_TYPES = Object.keys(KIND_META) as NodeType[];
 | — | `IN_LAYER` | Facette (NEW) |
 | — | `EXHIBITS` | Facette (NEW) |
 | — | `IN_FAMILY` | Edge classification (NEW) |
-| — | `HAS_EDGE_KIND` | Edge hierarchy (NEW) |
+| — | `HAS_ARC_KIND` | Edge hierarchy (NEW) |
 | — | `FROM_KIND` | Edge source (NEW) |
 | — | `TO_KIND` | Edge target (NEW) |
 | `'Global'` | `'global'` | Lowercase keys |
@@ -1659,11 +1659,11 @@ RETURN k.label AS broken_kind, realms, layers, traits
 ```
 
 ```cypher
--- Every EdgeKind has >= 1 FROM_KIND, >= 1 TO_KIND, exactly 1 IN_FAMILY
-MATCH (ek:EdgeKind)
+-- Every ArcKind has >= 1 FROM_KIND, >= 1 TO_KIND, exactly 1 IN_FAMILY
+MATCH (ek:ArcKind)
 OPTIONAL MATCH (ek)-[:FROM_KIND]->(src:Kind)
 OPTIONAL MATCH (ek)-[:TO_KIND]->(tgt:Kind)
-OPTIONAL MATCH (ek)-[:IN_FAMILY]->(f:EdgeFamily)
+OPTIONAL MATCH (ek)-[:IN_FAMILY]->(f:ArcFamily)
 WITH ek, count(DISTINCT src) AS sources, count(DISTINCT tgt) AS targets,
      count(DISTINCT f) AS families
 WHERE sources < 1 OR targets < 1 OR families <> 1
@@ -1763,7 +1763,7 @@ meta-node and data-node sections of this spec. The full implementation roadmap
 [design plan](plans/2026-02-01-ontology-v9-design.md).
 
 The faceted ontology makes this evolution achievable: each learning signal maps
-to a specific axis (Trait for behavior, Kind for priority, EdgeFamily for
+to a specific axis (Trait for behavior, Kind for priority, ArcFamily for
 traversal depth).
 
 ### LinkML Compatibility

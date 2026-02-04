@@ -209,7 +209,7 @@ export const TableView = memo(function TableView() {
           <span>Showing <span className="text-white/80 font-medium">{result.nodes.length}</span> of {result.totalNodes} nodes</span>
         </div>
         <div className="text-xs text-white/40">
-          {result.totalEdges} relationships
+          {result.totalArcs} relationships
         </div>
       </div>
     </div>
@@ -355,7 +355,7 @@ export const RawView = memo(function RawView() {
           <div>
             <span className="text-sm font-medium text-white/90">Raw JSON</span>
             <span className="text-xs text-white/40 ml-3">
-              {result.totalNodes} nodes, {result.totalEdges} relationships
+              {result.totalNodes} nodes, {result.totalArcs} relationships
             </span>
           </div>
         </div>

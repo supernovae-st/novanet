@@ -26,7 +26,7 @@ fn all_generators() -> Vec<GeneratorEntry> {
         arc_schema::ArcSchemaGenerator, autowire::AutowireGenerator, colors::ColorsGenerator,
         hierarchy::HierarchyGenerator, icons::IconsGenerator, kind::KindGenerator,
         layer::LayerGenerator, mermaid::MermaidGenerator, organizing::OrganizingGenerator,
-        visual_encoding::VisualEncodingGenerator,
+        views::ViewsGenerator, visual_encoding::VisualEncodingGenerator,
     };
 
     vec![
@@ -80,6 +80,11 @@ fn all_generators() -> Vec<GeneratorEntry> {
             output_path: "packages/core/src/graph/visual-encoding.ts",
             post_process: None,
         },
+        GeneratorEntry {
+            generator: Box::new(ViewsGenerator),
+            output_path: "packages/core/src/filters/views.generated.ts",
+            post_process: None,
+        },
     ]
 }
 
@@ -95,9 +100,9 @@ pub struct GenerateResult {
     pub duration_ms: u128,
 }
 
-/// Run all 10 generators and optionally write output files.
+/// Run all 11 generators and optionally write output files.
 ///
-/// Generator execution order: Organizing → Kind → ArcSchema → Layer → Mermaid → Autowire → Hierarchy → Colors → Icons → VisualEncoding
+/// Generator execution order: Organizing → Kind → ArcSchema → Layer → Mermaid → Autowire → Hierarchy → Colors → Icons → VisualEncoding → Views
 #[instrument(skip_all, fields(root = %root.display(), dry_run))]
 pub fn schema_generate(root: &Path, dry_run: bool) -> crate::Result<Vec<GenerateResult>> {
     let entries = all_generators();
@@ -260,8 +265,8 @@ mod tests {
 
         let results = schema_generate(&root, true).expect("should generate all artifacts");
 
-        // All 10 generators should succeed
-        assert_eq!(results.len(), 10, "expected 10 generator results");
+        // All 11 generators should succeed
+        assert_eq!(results.len(), 11, "expected 11 generator results");
 
         // Verify generator names and order
         let names: Vec<&str> = results.iter().map(|r| r.name.as_str()).collect();
@@ -278,6 +283,7 @@ mod tests {
                 "colors",
                 "icons",
                 "visual_encoding",
+                "views",
             ]
         );
 

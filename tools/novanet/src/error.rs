@@ -18,6 +18,12 @@ pub enum NovaNetError {
         source: neo4rs::Error,
     },
 
+    #[error("neo4j query error: {0}")]
+    Neo4j(#[from] neo4rs::Error),
+
+    #[error("neo4j deserialization error: {0}")]
+    Neo4jDe(#[from] neo4rs::DeError),
+
     #[error("no Kind found for label '{0}'")]
     UnknownKind(String),
 
