@@ -97,7 +97,7 @@
 #   mining         (7) - Discovery jobs (MINES, HAS_METRICS, etc.)
 #
 #   See taxonomy.yaml for full ArcFamily definitions.
-#   See relations.yaml for all 75 arc types with family assignment.
+#   See relations.yaml for all 77 arc types with family assignment.
 #
 # ═══════════════════════════════════════════════════════════════════════════════
 # STANDARD NODE PROPERTIES v7.11.0 (simplified from v7.1.0)
@@ -160,7 +160,7 @@
 #   - NEW: 5 ArcFamilies (ownership, localization, semantic, generation, mining)
 #   - NEW: OF_KIND replaces IN_SUBCATEGORY
 #
-# Statistics: 44 nodes, 75 arcs (5 arc families)
+# Statistics: 46 nodes, 77 arcs (5 arc families)
 #
 # ═══════════════════════════════════════════════════════════════════════════════
 # CHANGES v8.2.0 (from v8.1.0)

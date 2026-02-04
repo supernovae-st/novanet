@@ -1,6 +1,6 @@
 //! Generate Mermaid flowchart with Realm/Layer/Trait coloring.
 //!
-//! Reads all 44 node YAMLs, `relations.yaml`, and `taxonomy.yaml`
+//! Reads all 46 node YAMLs, `relations.yaml`, and `taxonomy.yaml`
 //! to produce a complete graph diagram with:
 //! - Subgraphs grouped by Realm → Layer
 //! - Node styling by node_trait (Trait)
@@ -287,7 +287,7 @@ fn render_mermaid(
     .unwrap();
     writeln!(
         out,
-        "  %% Source: 44 node YAMLs + relations.yaml + taxonomy.yaml"
+        "  %% Source: 46 node YAMLs + relations.yaml + taxonomy.yaml"
     )
     .unwrap();
     writeln!(out).unwrap();
@@ -367,7 +367,7 @@ pub fn wrap_in_markdown(mermaid_code: &str) -> String {
     writeln!(out).unwrap();
     writeln!(
         out,
-        "This diagram shows the complete NovaNet graph schema with all 44 node types and their relationships."
+        "This diagram shows the complete NovaNet graph schema with all 46 node types and their relationships."
     )
     .unwrap();
     writeln!(out).unwrap();

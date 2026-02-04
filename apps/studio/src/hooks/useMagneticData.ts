@@ -4,7 +4,7 @@
  * When layoutMode is 'magnetic', this hook fetches from Neo4j:
  * - 3 Realm nodes (global, project, shared) with display metadata
  * - 9 Layer nodes with display metadata
- * - 44 nodeType → layer mappings (from HAS_KIND relationships)
+ * - 46 nodeType → layer mappings (from HAS_KIND relationships)
  *
  * All display metadata (emoji, color) comes from Neo4j,
  * which is seeded from organizing-principles.yaml (the source of truth).
