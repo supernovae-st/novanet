@@ -8,7 +8,7 @@ NovaNet is a **native content generation system** (NOT translation) using Neo4j 
 
 **Target Application**: QR Code AI (https://qrcode-ai.com) - a multilingual SaaS for QR code generation.
 **Supported Locales**: 200+ locales (fr-FR, en-US, es-MX, ja-JP, etc.)
-**Current Version**: v9.8.0
+**Current Version**: v10.0.0
 
 ## CRITICAL: Generation, NOT Translation
 
@@ -31,10 +31,10 @@ v9 refactors the meta-graph to a **self-describing context graph** with faceted 
 |---------|---------|
 | Scope | **Realm** (global / project / shared) |
 | Subcategory | **Layer** (9 functional layers) |
-| NodeTypeMeta | **Kind** (46 node types, 1:1 with Neo4j labels) |
+| NodeTypeMeta | **Kind** (42 node types, 1:1 with Neo4j labels) |
 | _(new)_ | **Trait** (invariant / localized / knowledge / derived / job) |
 | _(new)_ | **ArcFamily** (ownership / localization / semantic / generation / mining) |
-| _(new)_ | **ArcKind** (77 relationship types) |
+| _(new)_ | **ArcKind** (76 relationship types) |
 
 **Boundary rule:** TypeScript (this package) generates code artifacts. Rust (`tools/novanet/`) executes at runtime.
 
@@ -112,19 +112,19 @@ RETURN ak.key, af.key AS family, target.label AS target_kind;
 core/
 ├── models/                    # YAML schema definitions (SOURCE OF TRUTH)
 │   ├── _index.yaml            # MODEL INDEX (graph structure, node categories, changes)
-│   ├── relations.yaml         # All 50 Neo4j relationships (with family field in v9)
+│   ├── relations.yaml         # All 76 Neo4j relationships (with family field in v9)
 │   ├── organizing-principles.yaml  # v9: Realm/Layer/Trait/ArcFamily definitions
-│   ├── nodes/                 # ONE FILE PER NODE TYPE (35 files)
-│   │   ├── global/            # Realm: global (15 nodes)
+│   ├── nodes/                 # ONE FILE PER NODE TYPE (42 files)
+│   │   ├── global/            # Realm: global (11 nodes)
 │   │   │   ├── config/        #   Layer: config (Locale)
-│   │   │   └── knowledge/     #   Layer: knowledge (14 nodes)
-│   │   ├── project/           # Realm: project (14 nodes)
+│   │   │   └── knowledge/     #   Layer: knowledge (10 nodes - tiered model)
+│   │   ├── project/           # Realm: project (23 nodes)
 │   │   │   ├── foundation/    #   Layer: foundation (Project, BrandIdentity, ProjectL10n)
 │   │   │   ├── structure/     #   Layer: structure (Page, Block, PageType, BlockType)
 │   │   │   ├── semantic/      #   Layer: semantic (Concept, ConceptL10n)
 │   │   │   ├── instruction/   #   Layer: instruction (PagePrompt, BlockPrompt, BlockRules)
 │   │   │   └── output/        #   Layer: output (PageL10n, BlockL10n)
-│   │   └── shared/            # Realm: shared (6 nodes)
+│   │   └── shared/            # Realm: shared (8 nodes)
 │   │       ├── seo/           #   Layer: seo (SEOKeywordL10n, SEOKeywordMetrics, SEOMiningRun)
 │   │       └── geo/           #   Layer: geo (GEOSeedL10n, GEOSeedMetrics, GEOMiningRun)
 │   └── views/                 # YAML view definitions

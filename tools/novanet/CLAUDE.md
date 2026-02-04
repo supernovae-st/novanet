@@ -25,7 +25,7 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 | Filter | `filter build` | Implemented (JSON stdin, Studio subprocess) |
 | TUI | `tui` | Galaxy theme, mission control, search, detail, arc explorer, CRUD dialogs, dashboard, logo, command palette, help overlay, boot animation, effects engine, onboarding |
 
-**223 tests pass** (`cargo test`). Zero clippy warnings.
+**246 tests pass** (`cargo test`). Zero clippy warnings.
 
 **Testing stack:**
 - `insta` — Snapshot testing (5 generator outputs)
@@ -146,7 +146,7 @@ cargo run -- tui                                  # Interactive terminal UI
 # Quality
 cargo clippy -- -D warnings    # Zero warnings policy
 cargo fmt --check              # Formatting check
-cargo nextest run              # 223 tests (fast, parallel)
+cargo nextest run              # 246 tests (fast, parallel)
 cargo test -- --ignored        # Neo4j integration tests (requires running Neo4j)
 
 # Security & auditing
@@ -238,7 +238,7 @@ and writes to `packages/db/seed/` (Cypher), `packages/core/src/` (TypeScript), a
 - Unicode characters (box drawing for TUI)
 
 The `organizing` generator reads `taxonomy.yaml` and writes visual encoding properties
-to Neo4j via `00.5-organizing-principles.cypher`.
+to Neo4j via `00.5-taxonomy.cypher`.
 
 ## Neo4j
 

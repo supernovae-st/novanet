@@ -9,7 +9,7 @@ Knowledge graph visualization for the NovaNet localization orchestrator.
 
 ## Project Context
 
-**What:** Interactive 2D graph visualization for 46 node types (3 realms), 200 locales (~19,000 instances projected at full deployment)
+**What:** Interactive 2D graph visualization for 42 node types (3 realms), 200 locales (~19,000 instances projected at full deployment)
 **Stack:** Next.js 16 + React 19 + TypeScript 5.9 + Tailwind CSS
 **Graph:** @xyflow/react
 **State:** Zustand 5 with persist/immer
@@ -95,7 +95,7 @@ pnpm test            # Tests
 | `⇧R` | Radial layout (circular) |
 | `⇧F` | Force-directed layout |
 
-**Quick Views (Presets v9.8.0)**
+**Quick Views (Presets v10.0.0)**
 | Key | Action |
 |-----|--------|
 | `1` | Project Structure - Project, Pages, Blocks hierarchy |
@@ -144,7 +144,7 @@ pnpm test            # Tests
 
 ---
 
-## Neo4j Schema (v9.8.0)
+## Neo4j Schema (v10.0.0)
 
 ### Meta-Graph (v9 — Self-Describing Schema)
 
@@ -154,19 +154,19 @@ v9 introduces faceted classification with 6 meta-node types:
 |-----------|-------|---------|
 | **Realm** | 3 | WHERE? (global / project / shared) — replaces "Scope" |
 | **Layer** | 9 | WHAT? (functional classification) — replaces "Subcategory" |
-| **Kind** | 46 | Node type (1:1 with Neo4j labels) — replaces "NodeTypeMeta" |
+| **Kind** | 42 | Node type (1:1 with Neo4j labels) — replaces "NodeTypeMeta" |
 | **Trait** | 5 | HOW? (invariant / localized / knowledge / derived / job) |
 | **ArcFamily** | 5 | Relationship classification |
-| **ArcKind** | 77 | Individual relationship type |
+| **ArcKind** | 76 | Individual relationship type |
 
 All meta-nodes carry `:Meta` double-label.
 
-### Kind Types (46 across 3 Realms)
+### Kind Types (42 across 3 Realms)
 
 | Realm | Nodes | Kinds |
 |-------|-------|-------|
-| **🌍 Global** | 15 | Locale, LocaleIdentity, LocaleVoice, LocaleCulture, LocaleCultureReferences, LocaleMarket, LocaleLexicon, LocaleRulesAdaptation, LocaleRulesFormatting, LocaleRulesSlug, Expression, Reference, Metaphor, Constraint, Pattern |
-| **📦 Project** | 23 | Project, BrandIdentity, ProjectL10n, Page, Block, BlockType, PageType, Concept, ConceptL10n, PagePrompt, BlockPrompt, BlockRules, PageL10n, BlockL10n, GenerationJob, PromptArtifact, OutputArtifact, EvaluationSignal, ContentSlot, TopicCluster, SearchIntent, + 2 more |
+| **🌍 Global** | 11 | Locale, Formatting, Slugification, Adaptation, Style, TermSet, ExpressionSet, PatternSet, CultureSet, TabooSet, AudienceSet |
+| **📦 Project** | 23 | Project, BrandIdentity, ProjectL10n, Page, Block, BlockType, PageType, Concept, ConceptL10n, PagePrompt, BlockPrompt, BlockRules, PageL10n, BlockL10n, GenerationJob, PromptArtifact, OutputArtifact, EvaluationSignal, ContentSlot, TopicCluster, SearchIntent, AudiencePersona, ChannelSurface |
 | **🎯 Shared** | 8 | SEOKeywordL10n, SEOKeywordMetrics, SEOMiningRun, GEOSeedL10n, GEOSeedMetrics, GEOMiningRun, Thing, ThingL10n |
 
 ### Key Relations (grouped by ArcFamily)
