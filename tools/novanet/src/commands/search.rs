@@ -7,6 +7,7 @@
 use crate::cypher::{CypherStatement, ParamValue};
 use crate::db::Db;
 use crate::output::{self, NodeRow, OutputFormat};
+use tracing::instrument;
 
 /// Build a search query with optional Kind filter.
 pub fn build_search_query(query: &str, kind: Option<&str>, limit: i64) -> CypherStatement {
@@ -51,6 +52,7 @@ pub fn build_search_query(query: &str, kind: Option<&str>, limit: i64) -> Cypher
 }
 
 /// Run the search and display results.
+#[instrument(skip(db), fields(query = %query, limit))]
 pub async fn run_search(
     db: &Db,
     query: &str,

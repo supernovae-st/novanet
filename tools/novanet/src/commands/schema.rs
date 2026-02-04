@@ -7,6 +7,7 @@ use crate::generators::Generator;
 use std::fs;
 use std::path::Path;
 use std::time::Instant;
+use tracing::instrument;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Output mappings
@@ -97,6 +98,7 @@ pub struct GenerateResult {
 /// Run all 10 generators and optionally write output files.
 ///
 /// Generator execution order: Organizing → Kind → ArcSchema → Layer → Mermaid → Autowire → Hierarchy → Colors → Icons → VisualEncoding
+#[instrument(skip_all, fields(root = %root.display(), dry_run))]
 pub fn schema_generate(root: &Path, dry_run: bool) -> crate::Result<Vec<GenerateResult>> {
     let entries = all_generators();
     let mut results = Vec::with_capacity(entries.len());
@@ -157,6 +159,7 @@ pub enum Severity {
 /// - taxonomy.yaml parses (realms, layers, traits, arc_families)
 /// - Every node's realm/layer exists in taxonomy
 /// - Every relation's source/target labels match known node names
+#[instrument(skip_all, fields(root = %root.display()))]
 pub fn schema_validate(root: &Path) -> crate::Result<Vec<ValidationIssue>> {
     let mut issues = Vec::new();
 
