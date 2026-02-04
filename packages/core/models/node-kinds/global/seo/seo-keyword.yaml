@@ -1,17 +1,19 @@
-# models/nodes/shared/seo/seo-keyword.yaml
-# SEOKeyword - Target keyword with metrics (LOCALIZED - has FOR_LOCALE)
+# models/node-kinds/global/seo/seo-keyword.yaml
+# SEOKeyword - Target keyword with metrics (v10.2: moved to GLOBAL, trait=knowledge)
 #
-# v10.0: Renamed back from SEOKeywordL10n to SEOKeyword
-#        - Simpler naming while keeping trait: localized
-#        - Still has FOR_LOCALE relation to Locale
+# v10.2: Merged SHARED → GLOBAL realm
+#        - realm: global (was shared)
+#        - trait: knowledge (was localized)
+#        - Owned by Locale via HAS_SEO_KEYWORDS (was FOR_LOCALE outgoing)
+#        - Follows same pattern as Term, Pattern, Expression
 
 node:
   name: SEOKeyword
-  realm: shared
+  realm: global
   layer: seo
-  trait: localized
+  trait: knowledge
   icon: "🔍"
-  description: "Target keyword with metrics for SEO optimization (locale-specific)"
+  description: "Target keyword with metrics for SEO optimization (locale-specific knowledge)"
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # STANDARD PROPERTIES (v7.1.0)
@@ -99,23 +101,17 @@ node:
       example: "ahrefs"
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # RELATIONS
+  # RELATIONS (v10.2: ownership by Locale)
   # ═══════════════════════════════════════════════════════════════════════════════
 
   relations:
-    - relation: FOR_LOCALE
-      to: Locale
-      direction: outgoing
-      description: "Keyword is for this locale"
+    # v10.2: Incoming ownership from Locale (like Term, Pattern)
+    # Locale --HAS_SEO_KEYWORDS--> SEOKeyword
 
-    - relation: HAS_SNAPSHOT
-      to: SEOSnapshot
+    - relation: HAS_METRICS
+      to: SEOKeywordMetrics
       direction: outgoing
-      description: "Historical ranking snapshots"
-
-  # NOTE: SEOVariation REMOVED in v7.8.4
-  # Variations are just other SEOKeyword nodes linked to the same ConceptL10n
-  # Use HAS_SEO_TARGET relation with role/priority properties instead
+      description: "Historical metrics snapshots"
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # EXAMPLE
@@ -124,9 +120,9 @@ node:
   example:
     description: "Get top keywords by volume for a locale"
     cypher: |
-      // v10.1: SEOKeyword linked to ConceptL10n (locale-aligned)
-      MATCH (c:Concept)-[:HAS_L10N]->(cl:ConceptL10n)-[:HAS_SEO_TARGET]->(kw:SEOKeyword)
-      WHERE (cl)-[:FOR_LOCALE]->(:Locale {key: $locale})
-      RETURN c.key AS concept, kw.value AS keyword, kw.volume, kw.difficulty
+      // v10.2: SEOKeyword owned by Locale, targeted by ConceptL10n
+      MATCH (l:Locale {key: $locale})-[:HAS_SEO_KEYWORDS]->(kw:SEOKeyword)
+      OPTIONAL MATCH (cl:ConceptL10n)-[:HAS_SEO_TARGET]->(kw)
+      RETURN kw.value AS keyword, kw.volume, kw.difficulty, collect(cl.key) AS targeting_concepts
       ORDER BY kw.volume DESC
       LIMIT 20

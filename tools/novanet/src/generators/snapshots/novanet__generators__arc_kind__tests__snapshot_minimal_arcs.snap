@@ -1,5 +1,5 @@
 ---
-source: src/generators/arc_schema.rs
+source: src/generators/arc_kind.rs
 expression: cypher
 ---
 // ═══════════════════════════════════════════════════════════════════════════════

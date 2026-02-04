@@ -81,6 +81,19 @@ MATCH (n:TermSet)
 MATCH (k:Kind {label: 'TermSet'})
 MERGE (n)-[:OF_KIND]->(k);
 
+// Global > Seo (3 types)
+MATCH (n:SEOKeyword)
+MATCH (k:Kind {label: 'SEOKeyword'})
+MERGE (n)-[:OF_KIND]->(k);
+
+MATCH (n:SEOKeywordMetrics)
+MATCH (k:Kind {label: 'SEOKeywordMetrics'})
+MERGE (n)-[:OF_KIND]->(k);
+
+MATCH (n:SEOMiningRun)
+MATCH (k:Kind {label: 'SEOMiningRun'})
+MERGE (n)-[:OF_KIND]->(k);
+
 // ─────────────────────────────────────────────────────────────────────────────
 // PROJECT REALM
 // ─────────────────────────────────────────────────────────────────────────────
@@ -180,23 +193,6 @@ MERGE (n)-[:OF_KIND]->(k);
 
 MATCH (n:Page)
 MATCH (k:Kind {label: 'Page'})
-MERGE (n)-[:OF_KIND]->(k);
-
-// ─────────────────────────────────────────────────────────────────────────────
-// SHARED REALM
-// ─────────────────────────────────────────────────────────────────────────────
-
-// Shared > Seo (3 types)
-MATCH (n:SEOKeyword)
-MATCH (k:Kind {label: 'SEOKeyword'})
-MERGE (n)-[:OF_KIND]->(k);
-
-MATCH (n:SEOKeywordMetrics)
-MATCH (k:Kind {label: 'SEOKeywordMetrics'})
-MERGE (n)-[:OF_KIND]->(k);
-
-MATCH (n:SEOMiningRun)
-MATCH (k:Kind {label: 'SEOMiningRun'})
 MERGE (n)-[:OF_KIND]->(k);
 
 // ═══════════════════════════════════════════════════════════════════════════════

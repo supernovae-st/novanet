@@ -107,9 +107,9 @@ fn required_properties(node: &ParsedNode) -> Vec<&str> {
 // Generator
 // ─────────────────────────────────────────────────────────────────────────────
 
-pub struct KindGenerator;
+pub struct NodeKindGenerator;
 
-impl super::Generator for KindGenerator {
+impl super::Generator for NodeKindGenerator {
     fn name(&self) -> &'static str {
         "kinds"
     }
@@ -519,7 +519,7 @@ mod tests {
             return;
         }
 
-        let generator = KindGenerator;
+        let generator = NodeKindGenerator;
         let cypher = generator
             .generate(root)
             .expect("should generate kind cypher");

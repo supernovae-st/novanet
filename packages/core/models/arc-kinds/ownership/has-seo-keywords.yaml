@@ -1,0 +1,24 @@
+# arc-kinds/ownership/has-seo-keywords.yaml
+# HAS_SEO_KEYWORDS - Locale owns SEO keywords (v10.2)
+#
+# v10.2: New arc for GLOBAL/seo ownership
+#        - Locale owns SEOKeyword (same pattern as HAS_TERMS, HAS_PATTERNS)
+#        - Replaces FOR_LOCALE (which was localization, not ownership)
+
+arc:
+  type: HAS_SEO_KEYWORDS
+  family: ownership
+  source: Locale
+  target: SEOKeyword
+  cardinality: one_to_many
+  llm_context: |
+    Locale owns its SEO keywords. Similar to HAS_TERMS, HAS_PATTERNS.
+    Use to load all keywords for a locale's SEO strategy.
+    v10.2: Moved from SHARED to GLOBAL realm with ownership pattern.
+
+  example:
+    description: "Get all keywords for a locale"
+    cypher: |
+      MATCH (l:Locale {key: $locale})-[:HAS_SEO_KEYWORDS]->(kw:SEOKeyword)
+      RETURN kw.value, kw.volume, kw.difficulty
+      ORDER BY kw.volume DESC

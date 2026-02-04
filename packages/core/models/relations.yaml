@@ -159,6 +159,14 @@ relations:
       - segment
     llm_context: "Locale has multiple audience sets, one per segment (b2b, b2c, general)."
 
+  # SEO Tier (v10.2: moved from SHARED to GLOBAL)
+  - type: HAS_SEO_KEYWORDS
+    family: ownership
+    source: Locale
+    target: SEOKeyword
+    cardinality: one_to_many
+    llm_context: "Locale owns its SEO keywords. Same pattern as HAS_TERMS, HAS_PATTERNS."
+
   - type: HAS_BLOCK
     family: ownership
     source: Page
@@ -226,12 +234,12 @@ relations:
       - ProjectL10n
       - BlockL10n
       - PageL10n
-      - SEOKeyword
       - GenerationJob
       - OutputArtifact
     target: Locale
     cardinality: many_to_one
     llm_context: "All localized content nodes point to their target Locale."
+    # v10.2: SEOKeyword removed — now owned by Locale via HAS_SEO_KEYWORDS
 
   - type: HAS_L10N
     family: localization
@@ -307,10 +315,10 @@ relations:
       - ConceptL10n
       - PageL10n
       - BlockL10n
-      - SEOKeyword
     cardinality: one_to_many
     inverse_of: FOR_LOCALE
     llm_context: "Inverse of FOR_LOCALE — locale knows all its content."
+    # v10.2: SEOKeyword removed — now via HAS_SEO_KEYWORDS (ownership)
 
   # ═════════════════════════════════════════════════════════════════════════════
   # SEMANTIC — concept connections + spreading activation
@@ -741,8 +749,9 @@ examples:
   has_seo_target:
     description: "ConceptL10n targets SEO keyword (locale-aligned primary)"
     cypher: |
+      // v10.2: SEOKeyword now owned by Locale via HAS_SEO_KEYWORDS
       MATCH (c:Concept {key:'action-create-qr'})-[:HAS_L10N]->(cl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale {key:'fr-FR'})
-      MATCH (kw:SEOKeyword {key:'seo-creer-qr-code-gratuit-fr'})-[:FOR_LOCALE]->(l)
+      MATCH (l)-[:HAS_SEO_KEYWORDS]->(kw:SEOKeyword {key:'seo-creer-qr-code-gratuit-fr'})
       CREATE (cl)-[:HAS_SEO_TARGET {role: "primary", priority: 1}]->(kw)
 
   locale_knowledge:

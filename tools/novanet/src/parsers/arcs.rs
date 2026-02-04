@@ -443,18 +443,18 @@ relations:
 
         let doc = load_arcs(root).expect("should parse relations.yaml");
 
-        // v10.1: Total arc count (GEO/Thing arcs removed + TARGETS_SEO removed)
-        // 73 - 8 - 1 = 64 (removed GEO arcs + TARGETS_SEO in favor of HAS_SEO_TARGET)
-        assert_eq!(doc.arcs.len(), 64, "expected 64 arcs");
+        // v10.2: Total arc count (added HAS_SEO_KEYWORDS)
+        // 64 + 1 = 65
+        assert_eq!(doc.arcs.len(), 65, "expected 65 arcs");
 
-        // v10.1: Family distribution
-        // Ownership: 25 (unchanged)
+        // v10.2: Family distribution
+        // Ownership: 25 + 1 = 26 (added HAS_SEO_KEYWORDS)
         // Localization: 8 (unchanged)
         // Semantic: 12 (unchanged)
         // Generation: 15 (unchanged)
         // Mining: 5 - 1 = 4 (removed TARGETS_SEO - now using HAS_SEO_TARGET from ConceptL10n)
         let family_count = |f: ArcFamily| doc.arcs.iter().filter(|a| a.family == f).count();
-        assert_eq!(family_count(ArcFamily::Ownership), 25, "ownership count");
+        assert_eq!(family_count(ArcFamily::Ownership), 26, "ownership count");
         assert_eq!(
             family_count(ArcFamily::Localization),
             8,
@@ -476,11 +476,11 @@ relations:
             assert!(!arc.target.is_empty(), "empty target for {}", arc.arc_type);
         }
 
-        // v10.1: Unique arc types (64 after GEO/Thing + TARGETS_SEO removal)
+        // v10.2: Unique arc types (65 after HAS_SEO_KEYWORDS addition)
         let mut types: Vec<&str> = doc.arcs.iter().map(|a| a.arc_type.as_str()).collect();
         types.sort();
         types.dedup();
-        assert_eq!(types.len(), 64, "all arc types should be unique");
+        assert_eq!(types.len(), 65, "all arc types should be unique");
 
         // Semantic link types
         let slt = doc
@@ -502,7 +502,8 @@ relations:
             .find(|a| a.arc_type == "FOR_LOCALE")
             .unwrap();
         assert_eq!(for_locale.family, ArcFamily::Localization);
-        assert_eq!(for_locale.source.len(), 7, "FOR_LOCALE has 7 sources");
+        // v10.2: SEOKeyword removed from FOR_LOCALE (now uses HAS_SEO_KEYWORDS ownership)
+        assert_eq!(for_locale.source.len(), 6, "FOR_LOCALE has 6 sources");
     }
 
     #[test]

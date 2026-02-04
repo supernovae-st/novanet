@@ -3,12 +3,14 @@
 # v9.5.0 — Unified Nomenclature
 #
 # This file defines:
-# - 3 NodeRealms (visibility boundaries) with nested NodeLayers
+# - 2 NodeRealms (GLOBAL, PROJECT) with nested NodeLayers
 # - 5 NodeTraits (locale behavior) with visual encoding
 # - 5 ArcFamilies (arc classification) with visual encoding
 # - 2 ArcScopes (intra_realm / cross_realm)
 # - 3 ArcCardinalities (one_to_one / one_to_many / many_to_many)
 # - Terminal palette for TUI graceful degradation
+#
+# v10.2: Merged SHARED realm into GLOBAL (SEO layer now in GLOBAL)
 #
 # Generated artifacts:
 # - packages/db/seed/00.5-taxonomy.cypher (Realm, Layer, Trait, ArcFamily + hierarchy)
@@ -17,10 +19,10 @@
 # All meta-nodes receive double-label :Meta (e.g., :Meta:Realm)
 # Query all meta-nodes: MATCH (n:Meta) RETURN n
 
-version: "9.9.0"
+version: "10.2.0"
 
 # =============================================================================
-# NODE REALMS (3) — WHERE does the node live?
+# NODE REALMS (2) — WHERE does the node live?
 # =============================================================================
 # Each realm contains layers (functional classification)
 
@@ -53,6 +55,16 @@ node_realms:
           Cultural norms, linguistic patterns, voice guidelines, idiomatic
           expressions, formatting conventions. This is what makes generated
           content feel NATIVE rather than translated.
+
+      - key: seo
+        display_name: SEO Intelligence
+        emoji: "🔍"
+        color: "#ec4899"
+        llm_context: |
+          Search engine optimization data. Keywords with their localized
+          forms, search volume metrics, and mining run history. Used to
+          inject relevant keywords into generated content for organic
+          search visibility. v10.2: Moved from SHARED to GLOBAL realm.
 
   - key: project
     display_name: Project
@@ -110,25 +122,6 @@ node_realms:
           for rendering. These are the RESULTS of the generation pipeline -
           created by combining foundation, structure, semantic, and
           instruction nodes with locale knowledge.
-
-  - key: shared
-    display_name: Shared
-    emoji: "🎯"
-    color: "#cb4b16"
-    llm_context: |
-      Cross-project resources that can be linked to multiple projects.
-      SEO keywords with their metrics. These enable competitive
-      intelligence sharing across the portfolio.
-    layers:
-      - key: seo
-        display_name: SEO Intelligence
-        emoji: "🔍"
-        color: "#ec4899"
-        llm_context: |
-          Search engine optimization data. Keywords with their localized
-          forms, search volume metrics, and mining run history. Used to
-          inject relevant keywords into generated content for organic
-          search visibility.
 
 # =============================================================================
 # NODE TRAITS (5) — HOW does the node behave across locales?
@@ -325,10 +318,9 @@ arc_cardinalities:
 
 terminal:
   palette_256:
-    # Realms
+    # Realms (v10.2: 2 realms only)
     global: 37      # cyan
     project: 141    # purple
-    shared: 166     # orange
     # Layers (matching 256-color approximations)
     config: 244     # gray
     knowledge: 141  # purple
@@ -352,10 +344,9 @@ terminal:
     mining_arc: 205     # pink
 
   palette_16:
-    # Realms
+    # Realms (v10.2: 2 realms only)
     global: 6       # cyan
     project: 5      # magenta
-    shared: 3       # yellow
     # Layers
     config: 8       # bright black
     knowledge: 5    # magenta

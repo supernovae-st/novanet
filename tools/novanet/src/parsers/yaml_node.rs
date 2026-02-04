@@ -482,32 +482,31 @@ node:
             );
         }
 
-        // v10.1: Verify trait distribution (GEO nodes removed)
-        // 16 invariant (removed Thing)
-        // 5 localized (removed GEOSeedL10n, ThingL10n)
-        // 16 knowledge (10 containers + 6 atoms)
-        // 4 derived (removed GEOSeedMetrics)
-        // 2 jobs (removed GEOMiningRun)
+        // v10.2: Verify trait distribution (SEOKeyword now knowledge trait)
+        // 16 invariant
+        // 4 localized (SEOKeyword now knowledge trait)
+        // 17 knowledge (10 containers + 6 atoms + SEOKeyword)
+        // 4 derived
+        // 2 jobs
         let count = |t: NodeTrait| nodes.iter().filter(|n| n.def.node_trait == t).count();
         assert_eq!(count(NodeTrait::Invariant), 16, "invariant count");
-        assert_eq!(count(NodeTrait::Localized), 5, "localized count");
+        assert_eq!(count(NodeTrait::Localized), 4, "localized count");
         assert_eq!(
             count(NodeTrait::Knowledge),
-            16,
-            "knowledge count (10 + 6 atoms)"
+            17,
+            "knowledge count (10 + 6 atoms + SEOKeyword)"
         );
         assert_eq!(count(NodeTrait::Derived), 4, "derived count");
         assert_eq!(count(NodeTrait::Job), 2, "job count");
 
-        // v10.1: Verify realm distribution (GEO removed from shared)
+        // v10.2: Verify realm distribution (shared realm removed, SEO moved to global)
         let realm_count = |r: &str| nodes.iter().filter(|n| n.realm == r).count();
         assert_eq!(
             realm_count("global"),
-            17,
-            "global realm count (11 + 6 atoms)"
+            20,
+            "global realm count (17 + 3 SEO nodes)"
         );
         assert_eq!(realm_count("project"), 23, "project realm count");
-        assert_eq!(realm_count("shared"), 3, "shared realm count (SEO only)");
 
         // Spot-check known nodes
         let project = nodes.iter().find(|n| n.def.name == "Project").unwrap();

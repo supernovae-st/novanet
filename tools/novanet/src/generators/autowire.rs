@@ -15,8 +15,8 @@ use std::path::Path;
 // Constants
 // ─────────────────────────────────────────────────────────────────────────────
 
-/// Fixed realm order matching the seed file convention.
-const REALM_ORDER: &[&str] = &["global", "project", "shared"];
+/// Fixed realm order matching the seed file convention (v10.2: 2 realms).
+const REALM_ORDER: &[&str] = &["global", "project"];
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Generator
@@ -218,7 +218,7 @@ mod tests {
             make_node("Page", "project", "structure"),
             make_node("Block", "project", "structure"),
             make_node("Locale", "global", "config"),
-            make_node("SEOKeyword", "shared", "seo"),
+            make_node("SEOKeyword", "global", "seo"), // v10.2: moved to global
         ];
 
         let cypher = generate_autowire(&nodes).unwrap();
@@ -243,18 +243,16 @@ mod tests {
         assert!(cypher.contains("MATCH (n:Locale)"));
         assert!(cypher.contains("MATCH (k:Kind {label: 'Locale'})"));
 
-        // Realm order: global, project, shared
+        // Realm order: global, project (v10.2: shared removed)
         let global_pos = cypher.find("GLOBAL REALM").unwrap();
         let project_pos = cypher.find("PROJECT REALM").unwrap();
-        let shared_pos = cypher.find("SHARED REALM").unwrap();
         assert!(global_pos < project_pos);
-        assert!(project_pos < shared_pos);
 
-        // Layer comments with counts
+        // Layer comments with counts (v10.2: SEO moved to global)
         assert!(cypher.contains("Global > Config (1 type)"));
         assert!(cypher.contains("Project > Foundation (1 type)"));
         assert!(cypher.contains("Project > Structure (2 types)"));
-        assert!(cypher.contains("Shared > Seo (1 type)"));
+        assert!(cypher.contains("Global > Seo (1 type)"));
 
         // Nodes sorted within layer
         let block_pos = cypher.find("MATCH (n:Block)").unwrap();
@@ -273,15 +271,14 @@ mod tests {
     fn generate_autowire_missing_realm_fails() {
         let nodes = vec![
             make_node("Project", "project", "foundation"),
-            make_node("Locale", "global", "config"),
-            // Missing shared
+            // Missing global (v10.2: shared removed)
         ];
 
         let result = generate_autowire(&nodes);
         assert!(result.is_err());
         let err = result.unwrap_err().to_string();
         assert!(
-            err.contains("shared"),
+            err.contains("global"),
             "error should mention missing realm: {err}"
         );
     }
@@ -312,21 +309,20 @@ mod tests {
             "expected 43 OF_KIND statements (37 base + 6 atoms)"
         );
 
-        // All 3 realms present
+        // All 2 realms present (v10.2: shared removed)
         assert!(cypher.contains("GLOBAL REALM"));
         assert!(cypher.contains("PROJECT REALM"));
-        assert!(cypher.contains("SHARED REALM"));
 
-        // Spot checks (geo removed v10.1)
+        // Spot checks (v10.2: SEO moved to global)
         assert!(cypher.contains("MATCH (n:Style)")); // v10: LocaleVoice → Style
         assert!(cypher.contains("MATCH (k:Kind {label: 'Style'})"));
         assert!(cypher.contains("MATCH (n:SEOMiningRun)"));
 
-        // v10.1: Layer counts match 43 nodes (23 project, 17 global, 3 shared)
+        // v10.2: Layer counts match 43 nodes (23 project, 20 global)
         assert!(cypher.contains("Global > Config (1 type)"));
-        assert!(cypher.contains("Global > Knowledge (16 types)")); // v10.1: 10 + 6 atoms
+        assert!(cypher.contains("Global > Knowledge (16 types)")); // 10 + 6 atoms
 
-        // v10.1: Header
+        // v10.2: Header
         assert!(cypher.contains("Total: 43 node types"));
 
         // Verification query present

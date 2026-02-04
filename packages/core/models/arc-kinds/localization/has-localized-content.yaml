@@ -1,5 +1,6 @@
 # packages/core/models/arc-kinds/localization/has-localized-content.yaml
 # ArcKind: HAS_LOCALIZED_CONTENT — Inverse of FOR_LOCALE — locale knows all its content
+# v10.2: SEOKeyword removed — now via HAS_SEO_KEYWORDS (ownership)
 
 arc:
   name: HAS_LOCALIZED_CONTENT
@@ -11,7 +12,6 @@ arc:
     - ConceptL10n
     - PageL10n
     - BlockL10n
-    - SEOKeyword
   cardinality: one_to_many
   inverse_of: FOR_LOCALE
   llm_context: Inverse of FOR_LOCALE — locale knows all its content.

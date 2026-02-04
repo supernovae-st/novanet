@@ -1,5 +1,5 @@
 # ═══════════════════════════════════════════════════════════════════════════════
-# NOVANET DATA MODELS INDEX v10.1.0
+# NOVANET DATA MODELS INDEX v10.2.0
 # ═══════════════════════════════════════════════════════════════════════════════
 #
 # WHAT: Native content generation system using Neo4j graph database
@@ -7,7 +7,7 @@
 # HOW:  Orchestrator dispatches to sub-agents, each generates a Block natively
 #
 # ═══════════════════════════════════════════════════════════════════════════════
-# MULTI-TENANT ARCHITECTURE (v10.1.0 - Knowledge Atoms)
+# TWO-REALM ARCHITECTURE (v10.2.0 - SHARED merged into GLOBAL)
 # ═══════════════════════════════════════════════════════════════════════════════
 #
 #   ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -15,7 +15,7 @@
 #   ├─────────────────────────────────────────────────────────────────────────────┤
 #   │                                                                             │
 #   │  ┌───────────────────────────────────────────────────────────────────────┐  │
-#   │  │  🌍 GLOBAL (17 nodes) - Single instance, shared by ALL projects       │  │
+#   │  │  🌍 GLOBAL (20 nodes) - Single instance, shared by ALL projects       │  │
 #   │  │  └─ config/    Locale (1)                                             │  │
 #   │  │  └─ knowledge/ 16 knowledge nodes (10 containers + 6 atoms)           │  │
 #   │  │      Containers: Style, Formatting, Slugification, Adaptation,        │  │
@@ -23,11 +23,9 @@
 #   │  │                  TabooSet, AudienceSet                                │  │
 #   │  │      Atoms:      Term, Expression, Pattern, Taboo, CultureRef,        │  │
 #   │  │                  AudienceTrait                                        │  │
-#   │  └───────────────────────────────────────────────────────────────────────┘  │
-#   │                                                                             │
-#   │  ┌───────────────────────────────────────────────────────────────────────┐  │
-#   │  │  🎯 SHARED (3 nodes) - Independent of projects, reusable              │  │
-#   │  │  └─ seo/  SEOKeyword, SEOKeywordMetrics, SEOMiningRun             │  │
+#   │  │  └─ seo/       3 SEO nodes (v10.2: moved from SHARED)                 │  │
+#   │  │      SEOKeyword (knowledge), SEOKeywordMetrics (derived),             │  │
+#   │  │      SEOMiningRun (job)                                               │  │
 #   │  └───────────────────────────────────────────────────────────────────────┘  │
 #   │                                                                             │
 #   │  ┌───────────────────────────────────────────────────────────────────────┐  │
@@ -62,7 +60,7 @@
 #             │                                                    │
 #             │                                              :HAS_SEO_TARGET
 #             │                                                    v
-#             │                                              SEOKeyword ──:FOR_LOCALE──> Locale
+#             │                                              SEOKeyword <──:HAS_SEO_KEYWORDS── Locale
 #             │
 #             └─[:HAS_PAGE]─> Page ──┬─[:HAS_BLOCK {position}]─> Block ──:OF_TYPE──> BlockType
 #                               │    │                            │
@@ -158,7 +156,7 @@
 #   - NEW: 5 ArcFamilies (ownership, localization, semantic, generation, mining)
 #   - NEW: OF_KIND replaces IN_SUBCATEGORY
 #
-# Statistics: 43 nodes, 64 arcs (5 arc families) — v10.1.0
+# Statistics: 43 nodes, 65 arcs (5 arc families), 2 realms — v10.2.0
 #
 # ═══════════════════════════════════════════════════════════════════════════════
 # CHANGES v8.2.0 (from v8.1.0)
