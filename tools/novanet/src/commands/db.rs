@@ -5,10 +5,12 @@
 
 use std::path::{Path, PathBuf};
 use std::time::Instant;
+use tracing::{debug, info, instrument};
 
 use crate::db::Db;
 
 /// Run `novanet db seed`: execute all seed files + migrations.
+#[instrument(skip(db), fields(root = %root.display()))]
 pub async fn run_seed(db: &Db, root: &Path) -> crate::Result<()> {
     let seed_dir = crate::config::seed_dir(root);
     let migrations_dir = crate::config::migrations_dir(root);
@@ -16,10 +18,10 @@ pub async fn run_seed(db: &Db, root: &Path) -> crate::Result<()> {
     let seed_files = collect_cypher_files(&seed_dir)?;
     let migration_files = collect_cypher_files(&migrations_dir)?;
 
-    eprintln!(
-        "Seeding: {} seed file(s), {} migration(s)",
-        seed_files.len(),
-        migration_files.len()
+    info!(
+        seed_count = seed_files.len(),
+        migration_count = migration_files.len(),
+        "Starting database seed"
     );
 
     let mut total_stmts = 0u64;
@@ -36,21 +38,22 @@ pub async fn run_seed(db: &Db, root: &Path) -> crate::Result<()> {
     }
 
     let elapsed = start.elapsed();
-    eprintln!(
-        "\nSeed complete: {} statement(s) in {:.1}s",
-        total_stmts,
-        elapsed.as_secs_f64()
+    info!(
+        statements = total_stmts,
+        elapsed_ms = elapsed.as_millis() as u64,
+        "Seed complete"
     );
 
     Ok(())
 }
 
 /// Run `novanet db migrate`: execute only migration files.
+#[instrument(skip(db), fields(root = %root.display()))]
 pub async fn run_migrate(db: &Db, root: &Path) -> crate::Result<()> {
     let migrations_dir = crate::config::migrations_dir(root);
     let migration_files = collect_cypher_files(&migrations_dir)?;
 
-    eprintln!("Running {} migration(s)", migration_files.len());
+    info!(count = migration_files.len(), "Running migrations");
 
     let mut total_stmts = 0u64;
     let start = Instant::now();
@@ -61,29 +64,29 @@ pub async fn run_migrate(db: &Db, root: &Path) -> crate::Result<()> {
     }
 
     let elapsed = start.elapsed();
-    eprintln!(
-        "\nMigrations complete: {} statement(s) in {:.1}s",
-        total_stmts,
-        elapsed.as_secs_f64()
+    info!(
+        statements = total_stmts,
+        elapsed_ms = elapsed.as_millis() as u64,
+        "Migrations complete"
     );
 
     Ok(())
 }
 
 /// Run `novanet db reset`: drop all data, then seed.
+#[instrument(skip(db), fields(root = %root.display()))]
 pub async fn run_reset(db: &Db, root: &Path) -> crate::Result<()> {
-    eprintln!("Resetting database...");
+    info!("Resetting database");
 
     // Drop all constraints and indexes first
-    eprintln!("  Dropping constraints...");
+    debug!("Dropping constraints");
     drop_all_constraints(db).await?;
 
     // Delete all nodes and relationships
-    eprintln!("  Deleting all nodes and relationships...");
+    debug!("Deleting all nodes and relationships");
     delete_all_data(db).await?;
 
-    eprintln!("  Database cleared.");
-    eprintln!();
+    info!("Database cleared, re-seeding");
 
     // Re-seed from scratch
     run_seed(db, root).await
@@ -124,7 +127,7 @@ async fn execute_cypher_file(db: &Db, path: &Path) -> crate::Result<u64> {
     let statements = split_cypher_statements(&content);
 
     if statements.is_empty() {
-        eprintln!("  {filename}: (empty)");
+        debug!(file = filename, "Empty file, skipping");
         return Ok(0);
     }
 
@@ -143,9 +146,11 @@ async fn execute_cypher_file(db: &Db, path: &Path) -> crate::Result<u64> {
     }
 
     let elapsed = start.elapsed();
-    eprintln!(
-        "  {filename}: {executed} statement(s) ({:.1}s)",
-        elapsed.as_secs_f64()
+    debug!(
+        file = filename,
+        statements = executed,
+        elapsed_ms = elapsed.as_millis() as u64,
+        "Executed file"
     );
 
     Ok(executed)
@@ -272,7 +277,7 @@ async fn delete_all_data(db: &Db) -> crate::Result<()> {
         if deleted == 0 {
             break;
         }
-        eprintln!("    deleted {deleted} node(s)...");
+        debug!(deleted, "Deleted batch of nodes");
     }
 
     Ok(())

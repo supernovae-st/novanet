@@ -252,6 +252,20 @@ async fn main() -> color_eyre::Result<()> {
 
     let cli = Cli::parse();
 
+    // Initialize tracing (skip for TUI mode which has its own terminal handling)
+    #[cfg(feature = "tui")]
+    let is_tui = matches!(cli.command, Commands::Tui);
+    #[cfg(not(feature = "tui"))]
+    let is_tui = false;
+
+    if !is_tui {
+        use tracing_subscriber::EnvFilter;
+        tracing_subscriber::fmt()
+            .with_env_filter(EnvFilter::from_default_env())
+            .with_target(false)
+            .init();
+    }
+
     // Resolve monorepo root for commands that need YAML access
     let root = novanet::config::resolve_root(cli.root.as_deref());
 
