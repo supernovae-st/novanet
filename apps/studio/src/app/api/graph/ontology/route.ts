@@ -1,7 +1,7 @@
 /**
  * Schema Graph API Route
  *
- * Returns the ontological schema graph (44 node types + relationships)
+ * Returns the ontological schema graph (46 node types + relationships)
  * instead of real data. Used for "Schema Mode" visualization.
  *
  * @example GET /api/graph/schema

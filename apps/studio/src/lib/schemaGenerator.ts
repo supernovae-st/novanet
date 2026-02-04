@@ -1,7 +1,7 @@
 /**
  * Schema Graph Generator
  *
- * Generates the ontological schema graph (44 node types + relationships)
+ * Generates the ontological schema graph (46 node types + relationships)
  * for "Schema Mode" visualization.
  *
  * v8.2.0: Uses RelationRegistry from @novanet/core as single source of truth
@@ -42,13 +42,13 @@ export interface SchemaGraphResult {
 }
 
 /**
- * Generate schema graph with all 44 node types and their relationships
+ * Generate schema graph with all 46 node types and their relationships
  */
 export function generateSchemaGraph(): SchemaGraphResult {
   const nodes: GraphNode[] = [];
   const edges: GraphEdge[] = [];
 
-  // Generate nodes for all 44 node types
+  // Generate nodes for all 46 node types
   for (const nodeType of NODE_TYPES) {
     const config = nodeTypeConfigs[nodeType];
     const realm = NODE_REALMS[nodeType];

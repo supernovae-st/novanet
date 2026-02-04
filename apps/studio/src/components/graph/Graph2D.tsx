@@ -334,7 +334,7 @@ function Graph2DInner({
   // =========================================================================
   // SCHEMA MODE STATE (Task 3.2)
   // =========================================================================
-  // Schema mode displays the ontology hierarchy (44 node types) instead of
+  // Schema mode displays the ontology hierarchy (46 node types) instead of
   // real data instances. Uses ELK layout for hierarchical grouped visualization.
   // =========================================================================
   const [schemaNodes, setSchemaNodes] = useState<ReactFlowNode[]>([]);
