@@ -301,6 +301,7 @@ mod tests {
                 realm: realm.to_string(),
                 layer: layer.to_string(),
                 node_trait: behavior,
+                knowledge_tier: None,
                 icon: None,
                 description: format!("{name} description."),
                 standard_properties: None,
@@ -515,56 +516,56 @@ mod tests {
             .generate(root)
             .expect("should generate kind cypher");
 
-        // 46 Kind MERGE statements
+        // v10: 42 Kind MERGE statements (46 - 14 old + 10 new)
         let kind_merges = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains(":Meta:Kind"))
             .count();
-        assert_eq!(kind_merges, 46, "expected 46 Kind MERGE statements");
+        assert_eq!(kind_merges, 42, "expected 42 Kind MERGE statements");
 
-        // 46 HAS_KIND relationships
+        // 42 HAS_KIND relationships
         let has_kind = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:HAS_KIND]"))
             .count();
-        assert_eq!(has_kind, 46, "expected 46 HAS_KIND relationships");
+        assert_eq!(has_kind, 42, "expected 42 HAS_KIND relationships");
 
-        // 46 IN_REALM relationships
+        // 42 IN_REALM relationships
         let in_realm = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_REALM]"))
             .count();
-        assert_eq!(in_realm, 46, "expected 46 IN_REALM relationships");
+        assert_eq!(in_realm, 42, "expected 42 IN_REALM relationships");
 
-        // 46 IN_LAYER relationships
+        // 42 IN_LAYER relationships
         let in_layer = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_LAYER]"))
             .count();
-        assert_eq!(in_layer, 46, "expected 46 IN_LAYER relationships");
+        assert_eq!(in_layer, 42, "expected 42 IN_LAYER relationships");
 
-        // 46 EXHIBITS relationships
+        // 42 EXHIBITS relationships
         let exhibits = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:EXHIBITS]"))
             .count();
-        assert_eq!(exhibits, 46, "expected 46 EXHIBITS relationships");
+        assert_eq!(exhibits, 42, "expected 42 EXHIBITS relationships");
 
         // Spot checks — specific Kinds
         assert!(cypher.contains("k_Project:Meta:Kind {label: 'Project'}"));
         assert!(cypher.contains("k_Page:Meta:Kind {label: 'Page'}"));
-        assert!(cypher.contains("k_LocaleVoice:Meta:Kind {label: 'LocaleVoice'}"));
+        assert!(cypher.contains("k_Style:Meta:Kind {label: 'Style'}")); // v10: LocaleVoice → Style
         assert!(cypher.contains("k_SEOKeywordL10n:Meta:Kind {label: 'SEOKeywordL10n'}"));
 
         // Spot check — context_budget assignments
         assert!(cypher.contains("k_Page.context_budget = 'high'"));
         assert!(cypher.contains("k_BlockType.context_budget = 'medium'"));
-        assert!(cypher.contains("k_LocaleVoice.context_budget = 'medium'"));
+        assert!(cypher.contains("k_Style.context_budget = 'medium'")); // v10: LocaleVoice → Style
         assert!(cypher.contains("k_Locale.context_budget = 'medium'"));
 
         // Spot check — facet wiring
         assert!(cypher.contains("(k:Kind {label: 'Page'}), (r:Realm {key: 'project'})"));
-        assert!(cypher.contains("(k:Kind {label: 'LocaleVoice'}), (t:Trait {key: 'knowledge'})"));
+        assert!(cypher.contains("(k:Kind {label: 'Style'}), (t:Trait {key: 'knowledge'})")); // v10: LocaleVoice → Style
         assert!(cypher.contains("(k:Kind {label: 'SEOMiningRun'}), (t:Trait {key: 'job'})"));
 
         // All context_budget values are valid
@@ -580,8 +581,8 @@ mod tests {
             }
         }
 
-        // Header mentions 46 Kind nodes
-        assert!(cypher.contains("46 Kind nodes"));
+        // v10: Header mentions 42 Kind nodes (46 - 14 old + 10 new)
+        assert!(cypher.contains("42 Kind nodes"));
     }
 
     /// Snapshot test for a minimal Kind generator output.

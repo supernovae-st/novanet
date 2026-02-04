@@ -474,6 +474,7 @@ mod tests {
                 realm: realm.to_string(),
                 layer: layer.to_string(),
                 node_trait: behavior,
+                knowledge_tier: None,
                 icon: None,
                 description: format!("{name} description"),
                 standard_properties: None,
@@ -729,7 +730,7 @@ mod tests {
         // Header
         assert!(output.contains("flowchart TB"));
         assert!(output.contains("NovaNet Graph v9.0.0"));
-        assert!(output.contains("46 nodes"));
+        assert!(output.contains("42 nodes")); // v10: 46 - 14 old + 10 new
 
         // All 3 realms
         assert!(output.contains("GLOBAL_REALM"));

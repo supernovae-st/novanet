@@ -193,6 +193,7 @@ mod tests {
                 realm: realm.to_string(),
                 layer: layer.to_string(),
                 node_trait: LocaleBehavior::Invariant,
+                knowledge_tier: None,
                 icon: None,
                 description: "test".to_string(),
                 standard_properties: None,
@@ -301,12 +302,12 @@ mod tests {
             .generate(root)
             .expect("should generate autowire cypher");
 
-        // 46 OF_KIND statements
+        // v10: 42 OF_KIND statements (46 - 14 old + 10 new)
         let of_kind = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:OF_KIND]"))
             .count();
-        assert_eq!(of_kind, 46, "expected 46 OF_KIND statements");
+        assert_eq!(of_kind, 42, "expected 42 OF_KIND statements");
 
         // All 3 realms present
         assert!(cypher.contains("GLOBAL REALM"));
@@ -314,17 +315,17 @@ mod tests {
         assert!(cypher.contains("SHARED REALM"));
 
         // Spot checks
-        assert!(cypher.contains("MATCH (n:LocaleVoice)"));
-        assert!(cypher.contains("MATCH (k:Kind {label: 'LocaleVoice'})"));
+        assert!(cypher.contains("MATCH (n:Style)")); // v10: LocaleVoice → Style
+        assert!(cypher.contains("MATCH (k:Kind {label: 'Style'})"));
         assert!(cypher.contains("MATCH (n:SEOMiningRun)"));
         assert!(cypher.contains("MATCH (n:GEOSeedMetrics)"));
 
-        // Layer counts match the 39 nodes (18 project, 15 global, 6 shared)
+        // v10: Layer counts match 42 nodes (23 project, 11 global, 8 shared)
         assert!(cypher.contains("Global > Config (1 type)"));
-        assert!(cypher.contains("Global > Knowledge (14 types)"));
+        assert!(cypher.contains("Global > Knowledge (10 types)")); // v10: 14 → 10
 
-        // Header
-        assert!(cypher.contains("Total: 46 node types"));
+        // v10: Header
+        assert!(cypher.contains("Total: 42 node types"));
 
         // Verification query present
         assert!(cypher.contains("VERIFICATION QUERY"));

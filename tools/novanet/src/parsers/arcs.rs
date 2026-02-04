@@ -443,15 +443,16 @@ relations:
 
         let doc = load_arcs(root).expect("should parse relations.yaml");
 
-        // Total arc count
-        assert_eq!(doc.arcs.len(), 77, "expected 77 arcs");
+        // v10: Total arc count (77 - 14 deleted = 63)
+        assert_eq!(doc.arcs.len(), 63, "expected 63 arcs");
 
-        // Family distribution
+        // v10: Family distribution
+        // Localization: 22 - 14 deleted = 8
         let family_count = |f: ArcFamily| doc.arcs.iter().filter(|a| a.family == f).count();
         assert_eq!(family_count(ArcFamily::Ownership), 15, "ownership count");
         assert_eq!(
             family_count(ArcFamily::Localization),
-            22,
+            8,
             "localization count"
         );
         assert_eq!(family_count(ArcFamily::Semantic), 16, "semantic count");
@@ -470,11 +471,11 @@ relations:
             assert!(!arc.target.is_empty(), "empty target for {}", arc.arc_type);
         }
 
-        // Unique arc types
+        // v10: Unique arc types (77 - 14 deleted = 63)
         let mut types: Vec<&str> = doc.arcs.iter().map(|a| a.arc_type.as_str()).collect();
         types.sort();
         types.dedup();
-        assert_eq!(types.len(), 77, "all arc types should be unique");
+        assert_eq!(types.len(), 63, "all arc types should be unique");
 
         // Semantic link types
         let slt = doc
