@@ -35,7 +35,7 @@ Generate culturally-native content across 200+ locales — not translation, but 
 |  |  |  |  |
 |:---:|:---:|:---:|:---:|
 | **Knowledge Graph** | **200+ Locales** | **Graph Studio** | **AI-Powered** |
-| 46 node types, 50 relations | Native generation per locale | Interactive 2D visualization | Claude API for natural language queries |
+| 46 node types, 77 relations | Native generation per locale | Interactive 2D visualization | Claude API for natural language queries |
 | Neo4j with APOC | Locale knowledge layer | React Flow + ELK.js layouts | Cypher generation from text |
 
 ---
@@ -117,7 +117,7 @@ novanet-hq/
 ├── packages/
 │   ├── core/                  # @novanet/core — types, schemas, filters
 │   │   ├── models/            # YAML schema definitions (source of truth)
-│   │   │   ├── _index.yaml    # 46 nodes, 50+ relations
+│   │   │   ├── _index.yaml    # 46 nodes, 77 relations
 │   │   │   ├── nodes/         # Node definitions by realm
 │   │   │   └── relations.yaml # Relationship definitions
 │   │   └── src/               # TypeScript implementation
@@ -128,7 +128,7 @@ novanet-hq/
 ├── tools/
 │   └── novanet/               # Rust CLI + TUI binary
 │       ├── src/               # Rust source (13 commands, 8 generators)
-│       └── Cargo.toml         # 396 tests, zero clippy warnings
+│       └── Cargo.toml         # 223 tests, zero clippy warnings
 └── apps/
     └── studio/                # @novanet/studio — web visualization
         ├── src/app/           # Next.js App Router
@@ -143,10 +143,10 @@ novanet-hq/
 
 | Package | Version | Description |
 |---------|---------|-------------|
-| **@novanet/core** | `9.0.0` | Types, Zod schemas, NovaNetFilter API, Cypher generators |
+| **@novanet/core** | `9.8.0` | Types, Zod schemas, NovaNetFilter API, Cypher generators |
 | **@novanet/db** | `1.0.0` | Docker Compose for Neo4j, Cypher seeds, migrations |
-| **@novanet/studio** | `9.0.0` | Interactive graph visualization with AI chat |
-| **tools/novanet** | `9.0.0` | Rust CLI + TUI for schema generation, validation, queries |
+| **@novanet/studio** | `9.8.0` | Interactive graph visualization with AI chat |
+| **tools/novanet** | `9.8.0` | Rust CLI + TUI for schema generation, validation, queries |
 
 ---
 
@@ -250,7 +250,7 @@ See [`packages/core/models/_index.yaml`](packages/core/models/_index.yaml) for c
 │ │ ...            │  │   [BlockL10n]                    │  │ [Copy JSON]  │ │
 │ └────────────────┘  └──────────────────────────────────┘  └──────────────┘ │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│  Mode: Data  │  46 nodes  │  50 relations  │  Zoom: 100%  │  Locale: fr-FR │
+│  Mode: Data  │  46 nodes  │  77 relations  │  Zoom: 100%  │  Locale: fr-FR │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 *Interactive 2D graph visualization with AI-powered queries (⌘J)*
