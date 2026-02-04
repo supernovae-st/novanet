@@ -47,6 +47,52 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 - `FxHashSet` — 30% faster string key lookups (TUI collapsed state)
 - `SmallVec` — Stack-allocated vectors for properties/labels (avoid heap)
 
+**Security toolchain:**
+- `cargo-deny` — License/security policy enforcement (`deny.toml`)
+- `cargo-audit` — RustSec vulnerability database scanning
+- `cargo-machete` — Unused dependency detection (reduce attack surface)
+
+## Security Workflow
+
+### Pre-Commit
+
+```bash
+# Required before every commit touching Cargo.toml or dependencies
+cargo deny check
+
+# Expected output: advisories ok, bans ok, licenses ok, sources ok
+```
+
+### Dependency Policy
+
+**Allowed licenses:** MIT, Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC, Zlib, MPL-2.0, CDLA-Permissive-2.0
+
+**Advisory handling:**
+- Direct deps: Fix immediately or document exception
+- Transitive deps: Document in `[advisories.ignore]` with reason
+
+### Exception Management
+
+Exceptions are documented in `deny.toml`:
+
+```toml
+[advisories]
+ignore = [
+    "RUSTSEC-2025-0012",  # backoff (neo4rs transitive) - waiting on neo4rs 0.9.0
+]
+```
+
+**Review schedule:** Quarterly (check if exceptions can be removed)
+
+### Full Security Audit
+
+```bash
+# Complete security check
+cargo deny check && cargo audit && cargo machete
+```
+
+See `/.claude/rules/security.md` for full security guidelines.
+
 ## Commands
 
 ```bash
