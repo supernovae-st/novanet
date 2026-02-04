@@ -29,6 +29,10 @@
     "./schemas/*": {
       "types": "./dist/schemas/*.d.ts",
       "import": "./dist/schemas/*.js"
+    },
+    "./graph/visual-encoding": {
+      "types": "./dist/graph/visual-encoding.d.ts",
+      "import": "./dist/graph/visual-encoding.js"
     }
   },
   "scripts": {
