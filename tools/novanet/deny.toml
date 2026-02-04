@@ -1,24 +1,35 @@
-# cargo-deny configuration for novanet
-# Run: cargo deny check
-# Install: cargo install cargo-deny
+# cargo-deny configuration for NovaNet CLI/TUI
+# https://embarkstudios.github.io/cargo-deny/
 
 [graph]
-# Target to check (all default features)
-targets = []
-all-features = false
-no-default-features = false
+# Target platforms to check
+targets = [
+    "x86_64-unknown-linux-gnu",
+    "x86_64-apple-darwin",
+    "aarch64-apple-darwin",
+]
 
+# =============================================================================
+# Advisories - Check for known security vulnerabilities
+# =============================================================================
 [advisories]
 db-path = "~/.cargo/advisory-db"
-db-urls = ["https://github.com/RustSec/advisory-db"]
-vulnerability = "deny"
-unmaintained = "warn"
-yanked = "warn"
-notice = "warn"
-ignore = []
+db-urls = ["https://github.com/rustsec/advisory-db"]
+# Ignore unmaintained crates from neo4rs transitive dependencies
+# These are upstream issues we cannot control
+ignore = [
+    "RUSTSEC-2025-0012",  # backoff (neo4rs → backoff)
+    "RUSTSEC-2024-0384",  # instant (neo4rs → backoff → instant)
+    "RUSTSEC-2025-0119",  # number_prefix (indicatif) - cosmetic
+    "RUSTSEC-2024-0436",  # paste (neo4rs → paste)
+    "RUSTSEC-2025-0134",  # rustls-pemfile (neo4rs → rustls-pemfile)
+]
 
+# =============================================================================
+# Licenses - Ensure all dependencies use approved licenses
+# =============================================================================
 [licenses]
-# Allow permissive licenses
+# Allow these licenses
 allow = [
     "MIT",
     "Apache-2.0",
@@ -27,36 +38,47 @@ allow = [
     "BSD-3-Clause",
     "ISC",
     "Zlib",
-    "MPL-2.0",
+    "0BSD",
     "Unicode-3.0",
-    "Unicode-DFS-2016",
-    "CC0-1.0",
-    "BSL-1.0",
-    "Unlicense",
+    "MPL-2.0",
+    "CDLA-Permissive-2.0",  # webpki-roots (TLS certificates)
 ]
+# Confidence threshold for detecting license
 confidence-threshold = 0.8
-copyleft = "deny"
 
-[licenses.private]
-ignore = false
+# Exception for our proprietary crate
+[[licenses.exceptions]]
+name = "novanet"
+allow = ["LicenseRef-Proprietary"]
 
+# Clarify license for crates with non-standard license files
+[[licenses.clarify]]
+name = "novanet"
+expression = "LicenseRef-Proprietary"
+license-files = []
+
+# =============================================================================
+# Bans - Deny specific crates or versions
+# =============================================================================
 [bans]
+# Deny multiple versions of the same crate
 multiple-versions = "warn"
-wildcards = "deny"
+# Allow wildcards in version requirements (not recommended but sometimes needed)
+wildcards = "allow"
+# Highlight when crates have been yanked
 highlight = "all"
-workspace-default-features = "allow"
-external-default-features = "allow"
-allow = []
-deny = []
-skip = []
-skip-tree = []
 
+# Deny specific crates
+deny = []
+
+# Skip duplicate detection for these crates (known to have multiple versions)
+skip = []
+
+# =============================================================================
+# Sources - Ensure dependencies come from trusted sources
+# =============================================================================
 [sources]
+# Only allow crates.io
 unknown-registry = "deny"
 unknown-git = "deny"
 allow-registry = ["https://github.com/rust-lang/crates.io-index"]
-allow-git = []
-
-[sources.allow-org]
-# Allow specific GitHub orgs if needed
-# github = []

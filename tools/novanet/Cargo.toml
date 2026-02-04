@@ -3,6 +3,7 @@ name = "novanet"
 version = "0.1.0"
 edition = "2024"
 rust-version = "1.86"  # Minimum supported (ratatui 0.30 requires 1.86+)
+license = "LicenseRef-Proprietary"
 description = "NovaNet context graph CLI + TUI"
 
 [dependencies]
@@ -76,3 +77,14 @@ opt-level = 3
 
 [profile.dev.package."*"]
 opt-level = 2                 # Optimize deps in dev mode (faster builds)
+
+# cargo-machete: Intentionally kept for v9.5 TUI features
+[package.metadata.cargo-machete]
+ignored = [
+    "indicatif",      # Progress bars (planned for long operations)
+    "nucleo",         # Fuzzy search (v9.5 TUI search overlay)
+    "nucleo-matcher", # Low-level fuzzy matcher (v9.5 TUI search)
+    "petgraph",       # Graph for dependency ordering (v9.5 generator DAG)
+    "tokio-util",     # CancellationToken (v9.5 graceful shutdown)
+    "unicode-width",  # Unicode width calculations (TUI)
+]

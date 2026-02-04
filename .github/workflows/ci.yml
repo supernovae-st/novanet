@@ -100,6 +100,12 @@ jobs:
       - name: Install cargo-nextest
         uses: taiki-e/install-action@nextest
 
+      - name: Install cargo-deny
+        uses: taiki-e/install-action@cargo-deny
+
+      - name: Security Audit (cargo-deny)
+        run: cargo deny check
+
       - name: Format Check
         run: cargo fmt --check
 
