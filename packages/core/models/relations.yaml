@@ -1,6 +1,10 @@
 # ═══════════════════════════════════════════════════════════════════════════════
-# RELATIONS - All Neo4j relationships v9.5.0
+# RELATIONS - All Neo4j relationships v9.9.0
 # ═══════════════════════════════════════════════════════════════════════════════
+#
+# ⚠️  DEPRECATED: This file is being phased out.
+#     New source of truth: arc-kinds/**/*.yaml (1 file per ArcKind)
+#     This file is kept for parser compatibility until migration complete.
 #
 # v9.5.0 FORMAT CHANGES (from v8.2.0):
 #   - Dict → list format (each relation is a list entry)

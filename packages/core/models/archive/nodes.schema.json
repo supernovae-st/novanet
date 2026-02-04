@@ -1,0 +1,179 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://novanet.dev/schema/nodes.schema.json",
+  "title": "NovaNet Node Schema v7.8.5",
+  "description": "JSON Schema for validating NovaNet graph node definitions",
+  "type": "object",
+  "required": ["node"],
+  "properties": {
+    "node": {
+      "type": "object",
+      "required": ["name", "category", "description", "standard_properties"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "PascalCase node type name",
+          "pattern": "^[A-Z][a-zA-Z0-9]+$"
+        },
+        "category": {
+          "type": "string",
+          "description": "Functional category",
+          "enum": ["project", "content", "locale", "generation", "seo", "geo", "analytics"]
+        },
+        "scope": {
+          "type": "string",
+          "description": "Multi-tenant scope (v7.8.5)",
+          "enum": ["global", "shared", "project"]
+        },
+        "locale_behavior": {
+          "type": "string",
+          "description": "How node relates to locales (v7.8.5)",
+          "enum": ["invariant", "localized", "locale_knowledge", "derived", "job"]
+        },
+        "functional_role": {
+          "type": "string",
+          "description": "Role in generation pipeline (v7.8.5)",
+          "enum": ["foundation", "structure", "semantic", "instruction", "output", "locale_config", "locale_knowledge", "targeting", "metrics", "job"]
+        },
+        "icon": {
+          "type": "string",
+          "description": "Emoji icon for visual identification"
+        },
+        "description": {
+          "type": "string",
+          "description": "Human-readable description"
+        },
+        "standard_properties": {
+          "$ref": "#/$defs/standardProperties"
+        },
+        "properties": {
+          "type": "object",
+          "description": "Node-specific properties",
+          "additionalProperties": {
+            "$ref": "#/$defs/propertyDefinition"
+          }
+        },
+        "relations": {
+          "type": "object",
+          "description": "Outgoing relationships from this node",
+          "additionalProperties": {
+            "$ref": "#/$defs/relationDefinition"
+          }
+        },
+        "example": {
+          "type": "object",
+          "description": "Example data and queries"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "standardProperties": {
+      "type": "object",
+      "description": "Standard properties shared by all nodes (v7.1.0)",
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/propertyDefinition"
+        },
+        "display_name": {
+          "$ref": "#/$defs/propertyDefinition"
+        },
+        "icon": {
+          "$ref": "#/$defs/propertyDefinition"
+        },
+        "description": {
+          "$ref": "#/$defs/propertyDefinition"
+        },
+        "llm_context": {
+          "$ref": "#/$defs/propertyDefinition"
+        },
+        "priority": {
+          "$ref": "#/$defs/propertyDefinition"
+        },
+        "freshness": {
+          "$ref": "#/$defs/propertyDefinition"
+        },
+        "created_at": {
+          "$ref": "#/$defs/propertyDefinition"
+        },
+        "updated_at": {
+          "$ref": "#/$defs/propertyDefinition"
+        }
+      }
+    },
+    "propertyDefinition": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Property data type",
+          "enum": ["string", "string[]", "int", "float", "boolean", "datetime", "date", "json", "point"]
+        },
+        "required": {
+          "type": "boolean",
+          "default": false
+        },
+        "description": {
+          "type": "string"
+        },
+        "example": {},
+        "enum": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "default": {},
+        "neo4j_type": {
+          "type": "string",
+          "description": "Neo4j native type constraint (Enterprise)",
+          "enum": ["STRING", "INTEGER", "FLOAT", "BOOLEAN", "DATE", "LOCAL_DATETIME", "ZONED_DATETIME", "DURATION", "POINT", "LIST<STRING>"]
+        },
+        "index": {
+          "type": "string",
+          "description": "Neo4j index type",
+          "enum": ["range", "text", "point", "fulltext", "vector"]
+        },
+        "unique": {
+          "type": "boolean",
+          "description": "Uniqueness constraint"
+        },
+        "vector_dimensions": {
+          "type": "integer",
+          "description": "Vector embedding dimensions (for vector index)"
+        }
+      }
+    },
+    "relationDefinition": {
+      "type": "object",
+      "required": ["to", "cardinality"],
+      "properties": {
+        "to": {
+          "type": "string",
+          "description": "Target node type"
+        },
+        "cardinality": {
+          "type": "string",
+          "description": "Relationship cardinality",
+          "enum": ["1:1", "1:N", "N:1", "N:M"]
+        },
+        "description": {
+          "type": "string"
+        },
+        "props": {
+          "type": "object",
+          "description": "Relationship properties",
+          "additionalProperties": {
+            "$ref": "#/$defs/propertyDefinition"
+          }
+        },
+        "semantic": {
+          "type": "boolean",
+          "description": "Whether this relation is used in spreading activation (v7.8.5)",
+          "default": false
+        }
+      }
+    }
+  }
+}

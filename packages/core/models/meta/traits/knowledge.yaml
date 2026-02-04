@@ -1,0 +1,16 @@
+# models/meta/traits/knowledge.yaml
+# NodeTrait: Knowledge — Cultural and linguistic expertise
+
+key: knowledge
+display_name: Knowledge
+color: "#8b5cf6"
+
+visual_encoding:
+  border_style: dotted
+  border_width: 2
+  unicode_border: "┈"
+
+llm_context: |
+  Cultural and linguistic expertise per locale. Deep knowledge about
+  how a locale communicates: voice, culture, formatting rules, lexicon,
+  expressions. The foundation for native content generation.

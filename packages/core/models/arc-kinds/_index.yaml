@@ -1,20 +1,16 @@
 # packages/core/models/arc-kinds/_index.yaml
-# Arc Kinds Index — v9.5.0
+# Arc Kinds Index — v9.9.0
 #
 # This directory contains one YAML file per ArcKind (relationship type).
 # Organization: arc-kinds/{family}/{arc-name}.yaml
 #
-# For backwards compatibility, relations.yaml remains the active source of truth.
-# This directory structure is the v9.5 target format.
+# Migration status: COMPLETE
+# - arc-kinds/: 73 YAML files (1 per ArcKind)
+# - relations.yaml: DEPRECATED (kept for parser compatibility)
 #
-# Migration status: PARTIAL
-# - taxonomy.yaml: CREATED (ArcFamilies defined)
-# - arc-kinds/: STRUCTURE CREATED (examples only)
-# - relations.yaml: STILL ACTIVE (50 arcs)
-#
-# To fully migrate: Extract each relation from relations.yaml into its own file.
+# See: meta/arc-families/ for ArcFamily definitions
 
-version: "9.5.0"
+version: "9.9.0"
 
 # Arc count by family
 summary:

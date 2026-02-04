@@ -1,0 +1,13 @@
+# models/meta/layers/structure.yaml
+# NodeLayer: Structure — Information architecture
+
+key: structure
+display_name: Structure
+emoji: "🏗️"
+color: "#06b6d4"
+realm: project
+
+llm_context: |
+  Information architecture. Pages, blocks, and their types. Defines
+  the SKELETON of the website - what pages exist, what blocks compose
+  each page, and the rules for each block type.

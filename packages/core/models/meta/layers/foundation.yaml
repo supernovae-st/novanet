@@ -1,0 +1,13 @@
+# models/meta/layers/foundation.yaml
+# NodeLayer: Foundation — Core project identity
+
+key: foundation
+display_name: Foundation
+emoji: "🏛️"
+color: "#3b82f6"
+realm: project
+
+llm_context: |
+  Core project identity. Brand voice, visual identity, value
+  proposition. These nodes anchor ALL content generation for the
+  project - every generated block must align with foundation.

@@ -1,0 +1,14 @@
+# models/meta/layers/semantic.yaml
+# NodeLayer: Semantic — Meaning and concepts
+
+key: semantic
+display_name: Semantic Layer
+emoji: "💡"
+color: "#f97316"
+realm: project
+
+llm_context: |
+  Meaning and concepts. Invariant ideas (Concept) that get localized
+  per locale (ConceptL10n). The WHAT of content - pricing tiers,
+  features, benefits, use cases. Concepts link via SEMANTIC_LINK
+  for spreading activation during generation.
