@@ -18,14 +18,12 @@ v9.9  Tiered Knowledge Model           █████████████�
       42 NodeKinds, 73 ArcKinds
 
 ═══════════════════════════════════════════════════════════════════════════════
-FUTURE
+IDEAS (no timeline)
 ═══════════════════════════════════════════════════════════════════════════════
-v10.0 Dynamic Retrieval                ░░░░░░░░░░░░░░░░░░░░    0%  PLANNED
-      Context Assembly Engine, token-aware traversal
-v11.0 Autonomous Learning              ░░░░░░░░░░░░░░░░░░░░    0%  PLANNED
-      Feedback loops, meta-graph self-improvement
-v12.0 Content Pipeline                 ░░░░░░░░░░░░░░░░░░░░    0%  PLANNED
-      CLI-driven generation, orchestrator integration
+• Dynamic Retrieval — Context Assembly Engine, token-aware traversal
+• Autonomous Learning — Feedback loops, meta-graph self-improvement
+• Content Pipeline — CLI-driven generation, orchestrator integration
+• See: docs/plans/future/ for detailed specs
 ```
 
 ## v9.0.0 — Self-Describing Context Graph
@@ -104,45 +102,15 @@ Refactor locale knowledge from 14 flat nodes to 10 tiered nodes organized by ret
 
 ---
 
-## v10.0.0 — Dynamic Retrieval (FUTURE)
+## Ideas Backlog
 
-Prereq: v9.9.0 stable. No schema migration needed — v10 activates properties v9 already carries.
+Future ideas without timeline. Detailed specs in `docs/plans/future/`.
 
-| Phase | Description | Objective |
-|-------|-------------|-----------|
-| 10 | Context Assembly Engine | Build engine that reads meta-graph to assemble token-aware context windows autonomously |
-| 11 | Dynamic Budget System | Replace static `context_budget` with adaptive system per prompt type, locale complexity |
-| 12 | Retrieval API | REST/gRPC API for external agents to query the context graph |
-
-**Success criteria**: Given a Block + Locale, the engine produces a context window without
-hardcoded traversal logic. All traversal decisions come from the meta-graph.
-
-**Key properties activated**: `traversal_depth` (Kind), `default_traversal` (ArcFamily),
-`temperature_threshold` (ArcKind).
-
-## v11.0.0 — Autonomous Learning
-
-Prereq: v10.0.0 stable.
-
-| Phase | Description | Objective |
-|-------|-------------|-----------|
-| 13 | Feedback Loop | Quality scores from generated content feed back into meta-graph weights |
-| 14 | Self-Tuning | Meta-graph adjusts context budgets and traversal depths from feedback |
-| 15 | Discovery | New concepts and relationships suggested from generation patterns |
-
-**Success criteria**: The meta-graph improves its own context assembly quality over time
-without manual tuning.
-
-## v12.0.0 — Content Pipeline
-
-Prereq: v11.0.0 stable.
-
-| Phase | Description | Objective |
-|-------|-------------|-----------|
-| 16 | CLI-Driven Generation | Full content generation pipeline exposed through `novanet generate` |
-
-**Success criteria**: `novanet generate --project=qrcode-ai --locale=fr-FR` produces
-production-ready localized content for all pages/blocks.
+| Idea | Description |
+|------|-------------|
+| **Dynamic Retrieval** | Context Assembly Engine that reads meta-graph to assemble token-aware context windows autonomously |
+| **Autonomous Learning** | Feedback loops where quality scores improve meta-graph weights over time |
+| **Content Pipeline** | Full CLI-driven generation: `novanet generate --project=qrcode-ai --locale=fr-FR` |
 
 ## Versioning Strategy
 
