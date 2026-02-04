@@ -1,0 +1,15 @@
+# packages/core/models/arc-kinds/ownership/has-patterns.yaml
+arc:
+  name: HAS_PATTERNS
+  family: ownership
+  scope: intra_realm
+  source: Locale
+  target: PatternSet
+  cardinality: one_to_many
+  llm_context: Locale has multiple pattern sets, one per usage.
+  cypher_pattern: (Locale)-[:HAS_PATTERNS {usage: $usage}]->(PatternSet)
+  properties:
+    usage:
+      type: string
+      required: true
+      description: "Pattern usage (cta, headlines, body, social)"

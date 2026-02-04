@@ -1,0 +1,10 @@
+# packages/core/models/arc-kinds/ownership/has-formatting.yaml
+arc:
+  name: HAS_FORMATTING
+  family: ownership
+  scope: intra_realm
+  source: Locale
+  target: Formatting
+  cardinality: one_to_one
+  llm_context: Locale has exactly one formatting configuration.
+  cypher_pattern: (Locale)-[:HAS_FORMATTING]->(Formatting)

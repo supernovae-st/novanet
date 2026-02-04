@@ -1,0 +1,15 @@
+# packages/core/models/arc-kinds/ownership/has-terms.yaml
+arc:
+  name: HAS_TERMS
+  family: ownership
+  scope: intra_realm
+  source: Locale
+  target: TermSet
+  cardinality: one_to_many
+  llm_context: Locale has multiple term sets, one per domain.
+  cypher_pattern: (Locale)-[:HAS_TERMS {domain: $domain}]->(TermSet)
+  properties:
+    domain:
+      type: string
+      required: true
+      description: "Term domain (pricing, features, technical, marketing, support, general)"

@@ -1,0 +1,15 @@
+# packages/core/models/arc-kinds/ownership/has-culture.yaml
+arc:
+  name: HAS_CULTURE
+  family: ownership
+  scope: intra_realm
+  source: Locale
+  target: CultureSet
+  cardinality: one_to_many
+  llm_context: Locale has multiple culture sets, one per type.
+  cypher_pattern: (Locale)-[:HAS_CULTURE {type: $type}]->(CultureSet)
+  properties:
+    type:
+      type: string
+      required: true
+      description: "Culture type (values, references, celebrities, calendar)"
