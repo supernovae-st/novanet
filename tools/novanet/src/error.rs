@@ -34,7 +34,7 @@ pub enum NovaNetError {
     #[error("validation failed: {0}")]
     Validation(String),
 
-    #[error("generator failed: {generator}")]
+    #[error("generator '{generator}' failed: {detail}")]
     Generator { generator: String, detail: String },
 
     #[error(transparent)]
@@ -71,7 +71,7 @@ mod tests {
             generator: "mermaid".to_string(),
             detail: "missing input".to_string(),
         };
-        assert_eq!(err.to_string(), "generator failed: mermaid");
+        assert_eq!(err.to_string(), "generator 'mermaid' failed: missing input");
     }
 
     #[test]

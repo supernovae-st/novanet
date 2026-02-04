@@ -81,8 +81,8 @@ enum Commands {
         /// Filter by Kind label
         #[arg(long)]
         kind: Option<String>,
-        /// Maximum results
-        #[arg(long, default_value_t = 50)]
+        /// Maximum results (1-10000)
+        #[arg(long, default_value_t = 50, value_parser = clap::value_parser!(i64).range(1..=10000))]
         limit: i64,
         #[arg(long, value_enum, default_value_t = OutputFormat::Table)]
         format: OutputFormat,
