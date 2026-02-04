@@ -54,7 +54,7 @@ describe('useNodeExpansion', () => {
   // Test data
   const mockNeighborNodes: GraphNode[] = [
     { id: 'neighbor-1', type: 'Concept', key: 'concept-1', displayName: 'Concept 1' },
-    { id: 'neighbor-2', type: 'Expression', key: 'expr-1', displayName: 'Expression 1' },
+    { id: 'neighbor-2', type: 'ExpressionSet', key: 'expr-1', displayName: 'ExpressionSet 1' },
   ];
 
   const mockNeighborEdges: GraphEdge[] = [

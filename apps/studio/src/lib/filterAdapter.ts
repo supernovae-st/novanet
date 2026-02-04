@@ -649,7 +649,7 @@ export const VIEW_PRESETS: ViewPreset[] = [
     icon: '🕸️',
     shortcut: '4',
     filter: () => NovaNetFilter.create()
-      .byTypes('Concept', 'ConceptL10n', 'Expression'),
+      .byTypes('Concept', 'ConceptL10n', 'ExpressionSet'),
   },
   {
     id: 'prompts-rules',

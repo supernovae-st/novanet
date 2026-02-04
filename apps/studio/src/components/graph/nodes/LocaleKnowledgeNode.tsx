@@ -4,7 +4,7 @@
  * LocaleKnowledgeNode - Circular nodes for locale knowledge types
  *
  * Category: locale (knowledge nodes within locale category)
- * Types: LocaleIdentity, LocaleVoice, LocaleCulture, LocaleMarket, LocaleLexicon, Expression
+ * Types: v10 tiered model - Formatting, Slugification, Adaptation, Style, TermSet, ExpressionSet, PatternSet, CultureSet, TabooSet, AudienceSet
  * Features:
  * - Circular gradient ring design (2px)
  * - Solid/hollow handles for direction indication
@@ -36,13 +36,21 @@ export type LocaleKnowledgeNodeType = Node<BaseNodeData>;
  */
 function getCircleSize(type: string, connectionCount?: number): number {
   const count = connectionCount || 0;
+  // v10 knowledge tier sizes
   const baseSize: Record<string, number> = {
-    LocaleIdentity: 70,
-    LocaleVoice: 65,
-    LocaleCulture: 60,
-    LocaleMarket: 65,
-    LocaleLexicon: 55,
-    Expression: 50,
+    // Technical tier
+    Formatting: 55,
+    Slugification: 55,
+    Adaptation: 55,
+    // Style tier
+    Style: 65,
+    // Semantic tier
+    TermSet: 55,
+    ExpressionSet: 55,
+    PatternSet: 55,
+    CultureSet: 55,
+    TabooSet: 55,
+    AudienceSet: 55,
   };
   const base = baseSize[type] || 55;
   if (count > 10) return base + 20;
@@ -56,7 +64,7 @@ function getCircleSize(type: string, connectionCount?: number): number {
  */
 export const LocaleKnowledgeNode = memo(function LocaleKnowledgeNode(props: NodeProps<LocaleKnowledgeNodeType>) {
   const { data, selected = false } = props;
-  const config = NODE_TYPE_CONFIG[data.type] || NODE_TYPE_CONFIG.Expression;
+  const config = NODE_TYPE_CONFIG[data.type] || NODE_TYPE_CONFIG.ExpressionSet;
   const colors = getLocaleKnowledgeColors(data.type);
   const size = getCircleSize(data.type, data.connectionCount);
   const isDimmed = data.dimmed === true;

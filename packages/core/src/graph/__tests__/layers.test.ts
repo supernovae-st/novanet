@@ -1,13 +1,13 @@
 // packages/core/src/graph/__tests__/layers.test.ts
-// Tests for NODE_LAYERS — v9.0.0
+// Tests for NODE_LAYERS — v10.0.0
 import { describe, it, expect } from 'vitest';
 import { NODE_LAYERS, getLayer, getNodeTypesByLayer } from '../layers';
 import { NODE_TYPES } from '../../types/nodes';
 
 describe('graph/layers', () => {
-  it('should map all 46 node types to layers', () => {
+  it('should map all 42 node types to layers', () => {
     const mappedTypes = Object.keys(NODE_LAYERS);
-    expect(mappedTypes).toHaveLength(46);
+    expect(mappedTypes).toHaveLength(42);
 
     // Every NODE_TYPE should be mapped
     for (const nodeType of NODE_TYPES) {
@@ -28,9 +28,10 @@ describe('graph/layers', () => {
 
   it('should map global realm nodes correctly', () => {
     expect(NODE_LAYERS.Locale).toBe('config');
-    expect(NODE_LAYERS.LocaleVoice).toBe('knowledge');
-    expect(NODE_LAYERS.LocaleCulture).toBe('knowledge');
-    expect(NODE_LAYERS.Expression).toBe('knowledge');
+    // v10: new knowledge tier model
+    expect(NODE_LAYERS.Style).toBe('knowledge');
+    expect(NODE_LAYERS.ExpressionSet).toBe('knowledge');
+    expect(NODE_LAYERS.Formatting).toBe('knowledge');
   });
 
   it('should map shared realm nodes correctly', () => {

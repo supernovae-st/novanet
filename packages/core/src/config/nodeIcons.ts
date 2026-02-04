@@ -46,21 +46,20 @@ export const NODE_ICONS: Record<NodeType, string> = {
   // GLOBAL — config (1)
   Locale: '🌍',
 
-  // GLOBAL — knowledge (14)
-  LocaleIdentity: '🆔',
-  LocaleVoice: '🎭',
-  LocaleCulture: '🏛️',
-  LocaleCultureReferences: '🎭',
-  LocaleMarket: '📈',
-  LocaleLexicon: '📚',
-  LocaleRulesAdaptation: '🔄',
-  LocaleRulesFormatting: '📝',
-  LocaleRulesSlug: '🔗',
-  Expression: '💭',
-  Reference: '📍',
-  Metaphor: '🎨',
-  Pattern: '🔣',
-  Constraint: '⚠️',
+  // GLOBAL — knowledge (10) — v10 tiered model
+  // Technical tier
+  Formatting: '📝',
+  Slugification: '🔗',
+  Adaptation: '🔄',
+  // Style tier
+  Style: '🎭',
+  // Semantic tier
+  TermSet: '📚',
+  ExpressionSet: '💭',
+  PatternSet: '🔣',
+  CultureSet: '🏛️',
+  TabooSet: '⛔',
+  AudienceSet: '👥',
 
   // SHARED — seo (3)
   SEOKeywordL10n: '🔍',
