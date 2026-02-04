@@ -114,22 +114,12 @@ src/
     filter.rs     filter build (JSON stdin → Cypher stdout)
   parsers/        YAML parsers (yaml_node, relations, taxonomy, organizing, views)
   generators/     Code generators (organizing, kind, arc_schema, layer, mermaid, view_mermaid, autowire, hierarchy)
-  tui/            Terminal UI (feature-gated behind `tui` feature)
-    app.rs        State machine (NavMode, AppState, ActivePanel, onboarding)
-    tree.rs       TaxonomyTree (Realm > Layer > Kind hierarchy + cursor + parent_of)
-    events.rs     Keyboard handling (Action dispatch + overlays: dialog > onboarding > palette > help > search)
-    ui.rs         Galaxy-themed mission control layout + Cypher syntax highlighting + overlays
-    runtime.rs    Async event loop (crossterm + mpsc channel bridge + adaptive tick + boot transitions)
-    theme.rs      SuperNovae Galaxy palette + style helpers (realm/layer/family colors)
-    detail.rs     KindDetail struct + Neo4j fetch + styled/explorer rendering
-    search.rs     Fuzzy search overlay (nucleo-matcher + SearchState)
-    dialogs.rs    CRUD dialog forms (create/edit/delete node + create/delete relation)
-    dashboard.rs  Dashboard stats (Neo4j metrics, realm/family bar charts)
-    logo.rs       ASCII logo (Saturn-graph full/compact/inline + Galaxy-themed colors)
-    palette.rs    Command palette (fuzzy search, 11 commands, 5 categories)
-    boot.rs       Boot sequence (6-stage animation: matrix rain → logo reveal → fade)
-    effects.rs    Effects engine (CRT scanlines, glitch, screen shake, nebula pulse, typewriter)
-    onboarding.rs First-run detection, welcome screen, guided tour (5 steps)
+  tui/            Terminal UI v2 — rebuilt for stability (feature-gated)
+    mod.rs        Entry point (terminal setup + event loop)
+    app.rs        State machine (NavMode, Focus, tree/yaml scroll, collapse state)
+    data.rs       TaxonomyTree (Realm > Layer > Kind + ArcFamily > ArcKind)
+    theme.rs      Visual encoding from taxonomy.yaml (realm/layer/trait/arc colors)
+    ui.rs         3-panel layout (Tree | Info | YAML) + search/help overlays
 ```
 
 ## Key Patterns

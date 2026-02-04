@@ -8,6 +8,7 @@
 
 mod app;
 mod data;
+pub mod theme;
 mod ui;
 
 use std::io;

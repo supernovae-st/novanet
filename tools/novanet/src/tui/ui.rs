@@ -8,7 +8,7 @@ use ratatui::widgets::{Block, Borders, Clear, Paragraph};
 
 use super::app::{App, Focus, NavMode};
 use super::data::{ArcDirection, TreeItem};
-use crate::generators::colors::hex_to_rgb;
+use super::theme::{self, hex_to_color};
 
 /// Main render function.
 pub fn render(f: &mut Frame, app: &mut App) {
@@ -52,9 +52,7 @@ fn render_header(f: &mut Frame, area: Rect, app: &App) {
         if is_active {
             Span::styled(
                 format!(" {}{}\u{2022} ", num, label),
-                Style::default()
-                    .fg(Color::Cyan)
-                    .add_modifier(Modifier::BOLD),
+                theme::ui::focused_style(),
             )
         } else {
             Span::styled(
@@ -66,19 +64,14 @@ fn render_header(f: &mut Frame, area: Rect, app: &App) {
     .collect();
 
     let mut header: Vec<Span> = vec![
-        Span::styled(
-            " NovaNet ",
-            Style::default()
-                .fg(Color::Magenta)
-                .add_modifier(Modifier::BOLD),
-        ),
+        Span::styled(" NovaNet ", theme::ui::logo_style()),
         Span::raw("          "),
     ];
     header.extend(tabs);
 
     let right_side = vec![Span::styled(
         "  h/l:toggle  jk:scroll  []:yaml  Tab:panel  f:find  /:help  q:quit",
-        Style::default().fg(Color::DarkGray),
+        theme::ui::muted_style(),
     )];
 
     let mut full_header: Vec<Span<'static>> = header;
@@ -92,7 +85,7 @@ fn render_header(f: &mut Frame, area: Rect, app: &App) {
     full_header.extend(right_side);
 
     let paragraph =
-        Paragraph::new(Line::from(full_header)).style(Style::default().bg(Color::Rgb(15, 15, 20)));
+        Paragraph::new(Line::from(full_header)).style(Style::default().bg(theme::ui::HEADER_BG));
 
     f.render_widget(paragraph, area);
 }
@@ -371,14 +364,6 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
 
     let paragraph = Paragraph::new(lines).block(block);
     f.render_widget(paragraph, area);
-}
-
-/// Convert hex color string to ratatui Color.
-/// Falls back to white if parsing fails.
-fn hex_to_color(hex: &str) -> Color {
-    hex_to_rgb(hex)
-        .map(|(r, g, b)| Color::Rgb(r, g, b))
-        .unwrap_or(Color::White)
 }
 
 /// Info panel: displays metadata for selected item with independent scroll.
