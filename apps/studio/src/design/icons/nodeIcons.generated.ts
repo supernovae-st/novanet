@@ -6,17 +6,19 @@
 import type { NodeType } from '@novanet/core/types';
 
 // =============================================================================
-// NODE ICONS (46 nodes)
+// NODE ICONS (42 nodes)
 // =============================================================================
 
 /**
- * Emoji icons for all 46 node types.
+ * Emoji icons for all 42 node types.
  *
  * Each icon is defined in the node's YAML file under `node.icon`.
  * Source: packages/core/models/node-kinds/<realm>/<layer>/<name>.yaml
  */
 export const NODE_ICONS: Record<NodeType, string> = {
+  Adaptation: '📐',
   AudiencePersona: '👤',
+  AudienceSet: '👥',
   Block: '🔷',
   BlockL10n: '🟠',
   BlockPrompt: '🔵',
@@ -26,39 +28,33 @@ export const NODE_ICONS: Record<NodeType, string> = {
   ChannelSurface: '📡',
   Concept: '🔷',
   ConceptL10n: '🟢',
-  Constraint: '⚠️',
   ContentSlot: '🔲',
+  CultureSet: '🌍',
   EvaluationSignal: '📊',
-  Expression: '💭',
+  ExpressionSet: '💬',
+  Formatting: '🔢',
   GEOMiningRun: '⚙️',
   GEOSeedL10n: '🤖',
   GEOSeedMetrics: '📑',
   GenerationJob: '🚀',
   Locale: '🔷',
-  LocaleCulture: '🏛️',
-  LocaleCultureReferences: '🎯',
-  LocaleIdentity: '🆔',
-  LocaleLexicon: '📚',
-  LocaleMarket: '📈',
-  LocaleRulesAdaptation: '🔄',
-  LocaleRulesFormatting: '📐',
-  LocaleRulesSlug: '🔗',
-  LocaleVoice: '🎭',
-  Metaphor: '🎭',
   OutputArtifact: '📦',
   Page: '🔷',
   PageL10n: '🟠',
   PagePrompt: '🔵',
   PageType: '📐',
-  Pattern: '📐',
+  PatternSet: '📝',
   Project: '🔷',
   ProjectL10n: '🟢',
   PromptArtifact: '📋',
-  Reference: '🎯',
   SEOKeywordL10n: '🔍',
   SEOKeywordMetrics: '📸',
   SEOMiningRun: '⚙️',
   SearchIntent: '🎯',
+  Slugification: '🔗',
+  Style: '🎭',
+  TabooSet: '⚠️',
+  TermSet: '📖',
   Thing: '🔮',
   ThingL10n: '🌐',
   TopicCluster: '🎪',
