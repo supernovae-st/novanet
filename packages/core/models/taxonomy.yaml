@@ -17,7 +17,7 @@
 # All meta-nodes receive double-label :Meta (e.g., :Meta:Realm)
 # Query all meta-nodes: MATCH (n:Meta) RETURN n
 
-version: "9.5.0"
+version: "9.9.0"
 
 # =============================================================================
 # NODE REALMS (3) — WHERE does the node live?
@@ -199,6 +199,34 @@ node_traits:
       asynchronous jobs that produce or update data nodes.
 
 # =============================================================================
+# KIND RETRIEVAL DEFAULTS (v9.9) — Context Assembly Properties
+# =============================================================================
+# Default values per trait type for the v10 Context Assembly Engine.
+# These properties are used by the engine to make autonomous traversal decisions.
+
+kind_retrieval_defaults:
+  invariant:
+    traversal_depth: 2      # Max hops for structural traversal
+    context_budget: 500     # Default token allocation
+    token_estimate: 100     # Estimated tokens per instance
+  localized:
+    traversal_depth: 2
+    context_budget: 800
+    token_estimate: 150
+  knowledge:
+    traversal_depth: 1      # Shallow traversal for knowledge nodes
+    context_budget: 200
+    token_estimate: 50
+  derived:
+    traversal_depth: 1
+    context_budget: 100
+    token_estimate: 30
+  job:
+    traversal_depth: 0      # Never traverse from job nodes
+    context_budget: 0
+    token_estimate: 20
+
+# =============================================================================
 # ARC FAMILIES (5) — WHAT kind of relationship is this?
 # =============================================================================
 # Visual encoding: stroke_style for CSS, arrow_style for Mermaid
@@ -210,6 +238,7 @@ arc_families:
     stroke_style: solid
     stroke_width: 2
     arrow_style: "-->"
+    default_traversal: eager  # v9.9: Always follow in context assembly
     llm_context: |
       Parent-child structural relationships. A node "owns" or "contains"
       another. Always follow in traversal (structural backbone).
@@ -220,6 +249,7 @@ arc_families:
     stroke_style: dashed
     stroke_width: 2
     arrow_style: ".->"
+    default_traversal: eager  # v9.9: Always follow for content localization
     llm_context: |
       Links between invariant nodes and their locale-specific content.
       Includes locale knowledge edges (Locale → LocaleVoice, etc.) and
@@ -231,6 +261,7 @@ arc_families:
     stroke_style: dotted
     stroke_width: 2
     arrow_style: ".->"
+    default_traversal: lazy   # v9.9: Follow if budget allows, temperature-gated
     llm_context: |
       Meaning and concept connections. Spreading activation traversal with
       temperature-based filtering. Links concepts to each other and to
@@ -242,6 +273,7 @@ arc_families:
     stroke_style: solid
     stroke_width: 3
     arrow_style: "==>"
+    default_traversal: lazy   # v9.9: Follow for provenance if budget allows
     llm_context: |
       LLM generation pipeline flow. Provenance tracking from prompts to
       outputs, version history, and assembly relationships.
@@ -252,6 +284,7 @@ arc_families:
     stroke_style: dashed
     stroke_width: 1
     arrow_style: "--o"
+    default_traversal: skip   # v9.9: Skip unless explicitly requested
     llm_context: |
       SEO/GEO data extraction and targeting. Links mining runs to their
       targets and concepts to their SEO/GEO keyword targets.
