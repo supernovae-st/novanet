@@ -271,7 +271,7 @@ docs:
       nodes: [Locale]
       color: blue
     - name: Knowledge
-      nodes: [LocaleIdentity, LocaleVoice]
+      nodes: [Formatting, Style]
   notes:
     - "Note 1"
     - "Note 2"
@@ -283,7 +283,7 @@ docs:
         let layers = docs.layers.as_ref().unwrap();
         assert_eq!(layers.len(), 2);
         assert_eq!(layers[0].nodes, vec!["Locale"]);
-        assert_eq!(layers[1].nodes, vec!["LocaleIdentity", "LocaleVoice"]);
+        assert_eq!(layers[1].nodes, vec!["Formatting", "Style"]);
         let notes = docs.notes.as_ref().unwrap();
         assert_eq!(notes.len(), 2);
     }

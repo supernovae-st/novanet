@@ -1,6 +1,6 @@
 //! Generate `nodeIcons.ts` via MiniJinja template (YAML → TypeScript).
 //!
-//! Reads all 46 node YAMLs and extracts their `icon` emoji field.
+//! Reads all 42 node YAMLs and extracts their `icon` emoji field.
 //!
 //! Output target: `apps/studio/src/design/icons/nodeIcons.generated.ts`
 //!

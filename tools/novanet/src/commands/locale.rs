@@ -2,6 +2,19 @@
 //!
 //! Lists locales with their knowledge satellite status from Neo4j,
 //! and imports locale data from Cypher files.
+//!
+//! # TODO: v10 Migration Required
+//!
+//! This module uses **deprecated v9 knowledge node names and arcs**:
+//! - Old nodes: LocaleIdentity, LocaleVoice, LocaleCulture, LocaleMarket, LocaleLexicon
+//! - Old arcs: HAS_IDENTITY, HAS_VOICE, HAS_CULTURE, HAS_MARKET, HAS_LEXICON
+//!
+//! v10 uses a tiered knowledge model with new nodes and arcs:
+//! - Technical: Formatting, Slugification, Adaptation (HAS_FORMATTING, etc.)
+//! - Style: Style (HAS_STYLE)
+//! - Semantic: TermSet, ExpressionSet, PatternSet, CultureSet, TabooSet, AudienceSet
+//!
+//! The `locale list` command needs rewriting to query v10 knowledge satellites.
 
 use std::path::Path;
 
