@@ -182,105 +182,8 @@ relations:
     is_self_referential: true
     llm_context: "Regional variant: (en-AU)-[:VARIANT_OF]->(en-GB) for inheritance."
 
-  # ─── Locale Knowledge ───────────────────────────────────────────────────────
-
-  - type: HAS_IDENTITY
-    family: localization
-    source: Locale
-    target: LocaleIdentity
-    cardinality: one_to_one
-    llm_context: "Locale's basic identity: language name, native endonym, script info."
-
-  - type: HAS_VOICE
-    family: localization
-    source: Locale
-    target: LocaleVoice
-    cardinality: one_to_one
-    llm_context: "Locale's communication style: formality (0-1), directness, emotional range."
-
-  - type: HAS_CULTURE
-    family: localization
-    source: Locale
-    target: LocaleCulture
-    cardinality: one_to_one
-    llm_context: "Locale's cultural norms: taboos, sensitivities, Hofstede dimensions."
-
-  - type: HAS_MARKET
-    family: localization
-    source: Locale
-    target: LocaleMarket
-    cardinality: one_to_one
-    llm_context: "Locale's market context: currency, payment preferences, trust signals."
-
-  - type: HAS_LEXICON
-    family: localization
-    source: Locale
-    target: LocaleLexicon
-    cardinality: one_to_one
-    llm_context: "Locale's vocabulary: domain-specific terms, semantic field expressions."
-
-  - type: HAS_EXPRESSION
-    family: localization
-    source: LocaleLexicon
-    target: Expression
-    cardinality: one_to_many
-    llm_context: "Lexicon contains expressions: urgency/value/action phrases for CTAs."
-
-  - type: HAS_RULES_ADAPTATION
-    family: localization
-    source: Locale
-    target: LocaleRulesAdaptation
-    cardinality: one_to_one
-    llm_context: "Content adaptation rules: measurement units, date formats, honorifics."
-
-  - type: HAS_RULES_FORMATTING
-    family: localization
-    source: Locale
-    target: LocaleRulesFormatting
-    cardinality: one_to_one
-    llm_context: "Text formatting rules: number formats, currency placement, patterns."
-
-  - type: HAS_RULES_SLUG
-    family: localization
-    source: Locale
-    target: LocaleRulesSlug
-    cardinality: one_to_one
-    llm_context: "URL slug rules: character transliteration, word separators."
-
-  - type: HAS_CULTURE_REFERENCES
-    family: localization
-    source: LocaleCulture
-    target: LocaleCultureReferences
-    cardinality: one_to_one
-    llm_context: "Cultural touchpoints: celebrities, events, idioms for relatability."
-
-  - type: HAS_REFERENCE
-    family: localization
-    source: LocaleCultureReferences
-    target: Reference
-    cardinality: one_to_many
-    llm_context: "Cultural reference entity: person, event, or brand for localization."
-
-  - type: HAS_METAPHOR
-    family: localization
-    source: LocaleCultureReferences
-    target: Metaphor
-    cardinality: one_to_many
-    llm_context: "Cultural metaphor: locale-specific imagery and comparisons."
-
-  - type: HAS_PATTERN
-    family: localization
-    source: LocaleRulesFormatting
-    target: Pattern
-    cardinality: one_to_many
-    llm_context: "Formatting pattern: regex/template for dates, numbers, addresses."
-
-  - type: HAS_CONSTRAINT
-    family: localization
-    source: LocaleCulture
-    target: Constraint
-    cardinality: one_to_many
-    llm_context: "Cultural constraint: topics to avoid, sensitivities, legal restrictions."
+  # NOTE: Locale knowledge arcs moved to ownership family (v10)
+  # See arc-kinds/ownership/has-*.yaml for HAS_FORMATTING, HAS_STYLE, etc.
 
   # Inverses
   - type: L10N_OF
@@ -474,12 +377,12 @@ relations:
       - weight
     llm_context: "Prompt artifact includes concept context for generation. weight: 0.0-1.0 influence on output."
 
-  - type: INCLUDES_VOICE
+  - type: INCLUDES_STYLE
     family: generation
     source: PromptArtifact
-    target: LocaleVoice
+    target: Style
     cardinality: many_to_one
-    llm_context: "Prompt artifact includes locale voice parameters for tone/style."
+    llm_context: "Prompt artifact includes locale style parameters for tone/voice."
 
   - type: PRODUCES
     family: generation
@@ -858,12 +761,11 @@ examples:
       CREATE (cl)-[:HAS_SEO_TARGET {role: "primary", priority: 1}]->(kw)
 
   locale_knowledge:
-    description: "Get locale knowledge for LLM context"
+    description: "Get locale knowledge for LLM context (v10 model)"
     cypher: |
-      MATCH (l:Locale {key:'fr-FR'})-[:HAS_VOICE]->(v:LocaleVoice)
-      MATCH (l)-[:HAS_LEXICON]->(lex:LocaleLexicon)-[:HAS_EXPRESSION]->(e:Expression)
-      WHERE e.semantic_field = 'urgency'
-      RETURN v.formality_score, collect(e.text) AS urgency_expressions
+      MATCH (l:Locale {key:'fr-FR'})-[:HAS_STYLE]->(s:Style)
+      MATCH (l)-[:HAS_EXPRESSIONS {register: 'neutral'}]->(e:ExpressionSet)
+      RETURN s.formality_score, s.directness_score, e.phrases AS expressions
 
   spreading_activation:
     description: "Get related concepts via spreading activation"
