@@ -215,12 +215,12 @@ Password: (see NEO4J_PASSWORD env var)
 
 ## Graph Schema
 
-NovaNet models content as a knowledge graph with **46 node types** across **3 Realms** and **9 Layers** (v10.0.0):
+NovaNet models content as a knowledge graph with **46 node types** across **3 Realms** and **9 Layers** (v9.8.0):
 
 | Realm | Nodes | Layers |
 |-------|-------|--------|
 | **Global** | 15 | Configuration, Locale Knowledge |
-| **Project** | 21 | Foundation, Structure, Semantic, Instructions, Output |
+| **Project** | 23 | Foundation, Structure, Semantic, Instructions, Output |
 | **Shared** | 8 | SEO Intelligence, GEO Intelligence |
 
 Each node type has a **Trait** (invariant / localized / knowledge / derived / job) and arcs are classified by **ArcFamily**.
