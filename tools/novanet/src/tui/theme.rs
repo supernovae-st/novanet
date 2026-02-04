@@ -128,7 +128,6 @@ pub mod layer {
     pub const INSTRUCTION_HEX: &str = "#eab308";
     pub const OUTPUT_HEX: &str = "#22c55e";
     pub const SEO_HEX: &str = "#ec4899";
-    pub const GEO_HEX: &str = "#ef4444";
 
     // 256-color palette indices
     pub const CONFIG_256: u8 = 244;
@@ -139,7 +138,6 @@ pub mod layer {
     pub const INSTRUCTION_256: u8 = 178;
     pub const OUTPUT_256: u8 = 41;
     pub const SEO_256: u8 = 205;
-    pub const GEO_256: u8 = 196;
 
     // 16-color palette
     pub const CONFIG_16: Color = Color::DarkGray;
@@ -150,7 +148,6 @@ pub mod layer {
     pub const INSTRUCTION_16: Color = Color::LightYellow;
     pub const OUTPUT_16: Color = Color::Green;
     pub const SEO_16: Color = Color::LightMagenta;
-    pub const GEO_16: Color = Color::Red;
 
     /// Get layer color for a given color mode.
     pub fn color(layer_key: &str, mode: ColorMode) -> Color {
@@ -164,7 +161,6 @@ pub mod layer {
                 "instruction" => hex_to_color(INSTRUCTION_HEX),
                 "output" => hex_to_color(OUTPUT_HEX),
                 "seo" => hex_to_color(SEO_HEX),
-                "geo" => hex_to_color(GEO_HEX),
                 _ => Color::White,
             },
             ColorMode::Color256 => match layer_key {
@@ -176,7 +172,6 @@ pub mod layer {
                 "instruction" => Color::Indexed(INSTRUCTION_256),
                 "output" => Color::Indexed(OUTPUT_256),
                 "seo" => Color::Indexed(SEO_256),
-                "geo" => Color::Indexed(GEO_256),
                 _ => Color::White,
             },
             ColorMode::Color16 => match layer_key {
@@ -188,7 +183,6 @@ pub mod layer {
                 "instruction" => INSTRUCTION_16,
                 "output" => OUTPUT_16,
                 "seo" => SEO_16,
-                "geo" => GEO_16,
                 _ => Color::White,
             },
         }

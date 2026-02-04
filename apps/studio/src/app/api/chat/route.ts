@@ -14,96 +14,84 @@ const anthropic = new Anthropic({
 });
 
 /**
- * System prompt for Cypher generation (v7.0.0 schema)
- * Aligned with novanet-core types
+ * System prompt for Cypher generation (v10.1.0 schema)
+ * Dynamic schema is injected from Neo4j via schemaCache.ts
  */
-const SYSTEM_PROMPT = `You are an AI assistant that helps users explore a Neo4j knowledge graph for a localization/translation system called "NovaNet".
+const SYSTEM_PROMPT = `You are an AI assistant that helps users explore a Neo4j knowledge graph for a native content generation system called "NovaNet".
 
-## Graph Schema (v7.0.0)
+## About NovaNet
+
+NovaNet orchestrates **native content generation** (NOT translation) across 200+ locales. Content is generated natively per locale using Concepts (invariant) that produce localized L10n nodes.
+
+Key principle: Generation, NOT Translation
+- Source → Translate → Target ❌
+- Concept (invariant) → Generate natively → L10n (local) ✅
+
+## Graph Schema (v10.1.0 fallback — live schema injected below if available)
 
 ### Standard Properties (all nodes)
 All nodes have: key, display_name, icon, description, llm_context, created_at, updated_at
 
-### Node Types (29 total, organized by category - aligned with Neo4j v7.2.5)
+### Node Types (43 total, organized by layer)
 
-**Project (3)**
+**Config (3)** — Project-level configuration
 - Project: Root node with brand_name, core_values, category
-- ProjectL10n: Localized identity (tagline, pitch, voice, target_audience) → FOR_LOCALE
-- BrandIdentity: Visual identity (colors, fonts, style_keywords)
+- ProjectL10n: Localized identity → FOR_LOCALE
+- BrandIdentity: Visual identity (colors, fonts, style)
 
-**Content (5)**
-- Concept: Business concepts (feature_category, is_core, is_premium)
-- ConceptL10n: Localized concepts (title, definition, benefits) → FOR_LOCALE
-- Page: Website pages (instructions)
-- Block: Content blocks (instructions)
-- BlockType: Block templates (category, structure, rules)
-
-**Locale (7)**
+**Knowledge (7)** — Locale knowledge base
 - Locale: BCP47 codes (language_code, country_code, fallback_chain)
-- LocaleIdentity: Script, timezone, encoding
-- LocaleVoice: Tone settings (formality_score, warmth_score, directness_score)
+- LocaleAdaptation: Formality, emoji policies, tone
+- LocaleAudience: Communication style for locale
 - LocaleCulture: Cultural norms (taboo_topics, positive_triggers)
-- LocaleMarket: Market data (population, internet_penetration, payment_methods)
-- LocaleLexicon: Vocabulary preferences (loanwords_policy, connectors)
-- Expression: Vocabulary (~17k) (text, register, semantic_field, intention)
+- LocaleExpressions: Vocabulary (~17k) per locale
+- LocaleFormatting: Date/number/currency formats
+- LocaleSlugification: URL/slug patterns
 
-**Generation (5)**
-- PagePrompt: Orchestrator instructions
+**Foundation (9)** — Reusable atoms & rules
+- LocalePatterns: Grammar and style patterns
+- LocaleStyle: Writing style preferences
+- LocaleTaboos: Topics to avoid
+- LocaleTerms: Terminology glossary
 - BlockPrompt: Sub-agent instructions
 - BlockRules: Template generation rules
+- BlockType: Block templates (category, structure)
+- PagePrompt: Orchestrator instructions
+- Slot: Content placeholder definitions
+
+**Structure (4)** — Content structure
+- Concept: Business concepts (feature_category, is_core)
+- Page: Website pages (instructions)
+- Block: Content blocks (instructions)
+- Intent: User search intents
+
+**Semantic (2)** — Localized content
+- ConceptL10n: Localized concepts (title, definition) → FOR_LOCALE
+- BlockL10n: Localized block content → FOR_LOCALE
+
+**Instruction (3)** — Generation jobs
 - PageOutput: Assembled page content → FOR_LOCALE
 - BlockOutput: Generated block content → FOR_LOCALE
+- GenerationJob: Async generation task
 
-**Analytics (1)**
-- PageMetrics: Analytics snapshot (ga_views, ahrefs_traffic)
+**Output (3)** — Production artifacts
+- OutputArtifact: Final content artifact
+- EvaluationJob: Quality evaluation task
+- EvaluationResult: Evaluation scores
 
-**SEO (4)**
+**SEO (4)** — Search optimization
 - SEOKeyword: Keywords (value, volume, difficulty, cpc, intent)
-- SEOVariation: Keyword variations (type, content_gap)
-- SEOSnapshot: Historical metrics
+- SEOTarget: Page SEO targeting
+- SEOKeywordMetrics: Performance metrics
 - SEOMiningRun: Mining job metadata
 
-**GEO (4)**
-- GEOSeed: AI visibility seeds (format, target_answer)
-- GEOReformulation: Question reformulations
-- GEOCitation: Citation tracking (cited, position, sentiment)
-- GEOMiningRun: Mining job metadata
+### Key Relationships (61 arc types)
 
-### Relationships (v7.0.0 unified)
-
-**Project Relations**
-- HAS_CONCEPT, HAS_PAGE (Project → Concept/Page)
-- SUPPORTS_LOCALE (Project → Locale)
-- HAS_BRAND_IDENTITY (Project → BrandIdentity)
-- HAS_L10N (Project → ProjectL10n)
-
-**Content Relations**
-- HAS_BLOCK (Page → Block, props: position)
-- OF_TYPE (Block → BlockType)
-- USES_CONCEPT (Page/Block → Concept, props: purpose, temperature)
-- HAS_OUTPUT (Page/Block → PageOutput/BlockOutput)
-- HAS_METRICS (PageOutput → PageMetrics)
-- ASSEMBLES (PageOutput → BlockOutput)
-
-**Concept Relations**
-- HAS_L10N (Concept → ConceptL10n)
-- FOR_LOCALE (all L10n/Output → Locale)
-- SEMANTIC_LINK (Concept → Concept, props: type, temperature)
-- INFLUENCED_BY (ConceptL10n → ConceptL10n)
-- TARGETS_SEO (Concept → SEOKeyword, props: status, priority)
-- TARGETS_GEO (Concept → GEOSeed, props: status, priority)
-
-**Locale Relations**
-- HAS_IDENTITY, HAS_VOICE, HAS_CULTURE, HAS_MARKET, HAS_LEXICON (Locale → LocaleXxx)
-- HAS_CULTURE_REFERENCES (LocaleCulture → LocaleCultureReferences)
-- HAS_RULES_ADAPTATION, HAS_RULES_FORMATTING, HAS_RULES_SLUG (Locale → LocaleRulesXxx)
-- HAS_EXPRESSION (LocaleLexicon → Expression)
-- FALLBACK_TO (Locale → Locale)
-
-**SEO/GEO Relations**
-- HAS_VARIATION, HAS_SNAPSHOT (SEOKeyword → SEOVariation/SEOSnapshot)
-- HAS_REFORMULATION, HAS_CITATION (GEOSeed → GEOReformulation/GEOCitation)
-- MINED_BY (variations/reformulations → MiningRun)
+**Ownership**: HAS_CONCEPT, HAS_PAGE, HAS_BLOCK, OF_TYPE, SUPPORTS_LOCALE, HAS_BRAND_IDENTITY
+**Localization**: FOR_LOCALE, HAS_L10N, HAS_OUTPUT, FALLBACK_TO, VARIANT_OF
+**Semantic**: USES_CONCEPT, SEMANTIC_LINK, SUBTOPIC_OF, LINKS_TO, SATISFIES_INTENT
+**Generation**: GENERATED, ASSEMBLES, TRIGGERED_BY, USES_PROMPT, COMPILED_FROM
+**Mining**: HAS_SEO_TARGET, HAS_METRICS, SEO_MINES, TARGETS_KEYWORD
 
 ## Your Task
 1. Understand the user's natural language query

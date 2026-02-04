@@ -100,31 +100,17 @@ docs:
       params:
         locale: "fr-FR"
 
-    - name: Keywords targeted by concept
-      description: Find all keywords a concept targets
+    - name: Keywords targeted by concept (v10.1)
+      description: Find all keywords a concept targets via ConceptL10n
       query: |
-        MATCH (c:Concept {key: $conceptKey})-[:TARGETS_SEO]->(kw:SEOKeyword)
-        MATCH (kw)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+        MATCH (c:Concept {key: $conceptKey})-[:HAS_L10N]->(cl:ConceptL10n)-[:HAS_SEO_TARGET]->(kw:SEOKeyword)
+        WHERE (cl)-[:FOR_LOCALE]->(:Locale {key: $locale})
         OPTIONAL MATCH (kw)-[:HAS_METRICS]->(m:SEOKeywordMetrics)
-        RETURN kw.keyword AS keyword,
+        RETURN kw.value AS keyword,
                m.search_volume AS volume
         ORDER BY m.search_volume DESC
       params:
         conceptKey: "qr-code-generator"
-        locale: "en-US"
-
-    - name: GEO opportunities
-      description: High-volume questions with low citation count
-      query: |
-        MATCH (seed:GEOSeedL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
-        MATCH (seed)-[:HAS_METRICS]->(m:GEOSeedMetrics)
-        WHERE m.search_volume > 500 AND m.citation_count < 3
-        RETURN seed.question AS question,
-               m.search_volume AS volume,
-               m.citation_count AS citations
-        ORDER BY m.search_volume DESC
-        LIMIT 10
-      params:
         locale: "en-US"
 
     - name: Mining job status

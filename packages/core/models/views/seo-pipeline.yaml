@@ -1,8 +1,9 @@
 # models/views/seo-pipeline.yaml
+# v10.1: SEO targeting via ConceptL10n (locale-aligned)
 id: seo-pipeline
 name: SEO Pipeline
 description: SEO keyword mining and internal linking workflow
-version: "8.0.0"
+version: "10.1.0"
 
 # Root is Locale - SEO nodes are queried via incoming FOR_LOCALE
 root:
@@ -17,9 +18,9 @@ include:
       - relation: HAS_METRICS
         direction: outgoing
         targetTypes: [SEOKeywordMetrics]
-      - relation: TARGETS_SEO
+      - relation: HAS_SEO_TARGET
         direction: incoming
-        targetTypes: [Concept]
+        targetTypes: [ConceptL10n]
 
   # Mining Runs
   - relation: FOR_LOCALE
@@ -34,14 +35,13 @@ docs:
 
     **Pipeline stages:**
     1. **Mining**: SEOMiningRun discovers keywords per locale
-    2. **Targeting**: Concepts target SEOKeyword
+    2. **Targeting**: ConceptL10n targets SEOKeyword (locale-aligned)
     3. **Metrics**: SEOKeywordMetrics tracks performance
     4. **Linking**: Pages link via LINKS_TO with SEO weight
 
-    **Node types:**
-    - SEOKeyword: Localized keyword (locale-specific)
-    - SEOKeywordMetrics: Performance metrics (search volume, difficulty)
-    - SEOMiningRun: Mining job metadata
+    **v10.1 Architecture:**
+    - SEOKeyword is linked to ConceptL10n (same locale), not Concept
+    - This ensures locale-aligned targeting (fr-FR concept → fr-FR keywords)
 
   layers:
     - name: Keywords
@@ -60,9 +60,9 @@ docs:
       description: Mining job tracking
 
     - name: Targeting
-      nodes: [Concept]
+      nodes: [ConceptL10n]
       color: orange
-      description: Concepts targeting keywords
+      description: Localized concepts targeting keywords
 
   examples:
     - name: Keywords with metrics
@@ -70,7 +70,7 @@ docs:
       query: |
         MATCH (kw:SEOKeyword)-[:FOR_LOCALE]->(l:Locale {key: $locale})
         OPTIONAL MATCH (kw)-[:HAS_METRICS]->(m:SEOKeywordMetrics)
-        RETURN kw.keyword AS keyword,
+        RETURN kw.value AS keyword,
                kw.intent AS intent,
                m.search_volume AS volume,
                m.difficulty AS difficulty,
@@ -80,26 +80,28 @@ docs:
       params:
         locale: "fr-FR"
 
-    - name: Concept keyword coverage
-      description: Which concepts target which keywords
+    - name: Concept keyword coverage (v10.1)
+      description: Which concepts target which keywords (via ConceptL10n)
       query: |
-        MATCH (c:Concept)-[:TARGETS_SEO]->(kw:SEOKeyword)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+        MATCH (c:Concept)-[:HAS_L10N]->(cl:ConceptL10n)-[:HAS_SEO_TARGET]->(kw:SEOKeyword)
+        WHERE (cl)-[:FOR_LOCALE]->(:Locale {key: $locale})
         RETURN c.key AS concept,
-               collect(kw.keyword) AS targetedKeywords
-        ORDER BY size(collect(kw.keyword)) DESC
+               cl.title AS localizedTitle,
+               collect(kw.value) AS targetedKeywords
+        ORDER BY size(collect(kw.value)) DESC
       params:
         locale: "fr-FR"
 
     - name: Internal linking opportunities
       description: Pages that could link based on shared SEO targets
       query: |
-        MATCH (p1:Page)-[:USES_CONCEPT]->(c:Concept)-[:TARGETS_SEO]->(kw:SEOKeyword)
-        MATCH (p2:Page)-[:USES_CONCEPT]->(c2:Concept)-[:TARGETS_SEO]->(kw)
+        MATCH (p1:Page)-[:USES_CONCEPT]->(c1:Concept)-[:HAS_L10N]->(cl1:ConceptL10n)-[:HAS_SEO_TARGET]->(kw:SEOKeyword)
+        MATCH (p2:Page)-[:USES_CONCEPT]->(c2:Concept)-[:HAS_L10N]->(cl2:ConceptL10n)-[:HAS_SEO_TARGET]->(kw)
         WHERE p1 <> p2
         AND NOT EXISTS { (p1)-[:LINKS_TO]->(p2) }
         RETURN p1.key AS sourcePage,
                p2.key AS targetPage,
-               kw.keyword AS sharedKeyword
+               kw.value AS sharedKeyword
         LIMIT 20
 
     - name: Recent mining runs
@@ -117,5 +119,6 @@ docs:
 
   notes:
     - "SEOKeyword is locale-specific (keyword varies by locale)"
+    - "v10.1: SEOKeyword linked to ConceptL10n (locale-aligned targeting)"
     - "Metrics are time-series - use latest for current state"
     - "LINKS_TO relation includes seo_weight for link juice optimization"

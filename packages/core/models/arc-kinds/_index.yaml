@@ -1,104 +1,94 @@
 # packages/core/models/arc-kinds/_index.yaml
-# Arc Kinds Index — v9.9.0
+# Arc Kinds Index — v10.1.0
 #
 # This directory contains one YAML file per ArcKind (relationship type).
 # Organization: arc-kinds/{family}/{arc-name}.yaml
 #
-# Migration status: COMPLETE
-# - arc-kinds/: 73 YAML files (1 per ArcKind)
-# - relations.yaml: DEPRECATED (kept for parser compatibility)
-#
 # See: meta/arc-families/ for ArcFamily definitions
 
-version: "9.9.0"
+version: "10.1.0"
 
 # Arc count by family
 summary:
-  ownership: 14
-  localization: 22
-  semantic: 7
-  generation: 15
-  mining: 5
-  total: 63
+  ownership: 25
+  localization: 8
+  semantic: 10
+  generation: 14
+  mining: 4
+  total: 61
 
 # Directory structure
 structure:
   ownership:
-    - has-concept.yaml
-    - has-page.yaml
-    - has-brand-identity.yaml
-    - supports-locale.yaml
-    - default-locale.yaml
-    - has-block.yaml
-    - of-type.yaml
-    - has-prompt.yaml
-    - has-rules.yaml
+    - accepts-block-type.yaml
     - belongs-to-project-l10n.yaml
     - block-of.yaml
-    - has-slot.yaml
-    - accepts-block-type.yaml
-    - pillar-page.yaml
     - cluster-page.yaml
+    - default-locale.yaml
+    - has-adaptation.yaml
+    - has-audience.yaml
+    - has-block.yaml
+    - has-brand-identity.yaml
+    - has-concept.yaml
+    - has-culture.yaml
+    - has-expressions.yaml
+    - has-formatting.yaml
+    - has-page.yaml
+    - has-patterns.yaml
+    - has-prompt.yaml
+    - has-rules.yaml
+    - has-slot.yaml
+    - has-slugification.yaml
+    - has-style.yaml
+    - has-taboos.yaml
+    - has-terms.yaml
+    - of-type.yaml
+    - pillar-page.yaml
+    - supports-locale.yaml
 
   localization:
+    - fallback-to.yaml
     - for-locale.yaml
     - has-l10n.yaml
+    - has-localized-content.yaml
     - has-output.yaml
-    - fallback-to.yaml
-    - variant-of.yaml
-    - has-identity.yaml
-    - has-voice.yaml
-    - has-culture.yaml
-    - has-market.yaml
-    - has-lexicon.yaml
-    - has-expression.yaml
-    - has-rules-adaptation.yaml
-    - has-rules-formatting.yaml
-    - has-rules-slug.yaml
-    - has-culture-references.yaml
-    - has-reference.yaml
-    - has-metaphor.yaml
-    - has-pattern.yaml
-    - has-constraint.yaml
     - l10n-of.yaml
     - output-of.yaml
-    - has-localized-content.yaml
+    - variant-of.yaml
 
   semantic:
-    - semantic-link.yaml
-    - uses-concept.yaml
+    - clusters-topic.yaml
+    - fills-slot.yaml
+    - for-intent.yaml
     - links-to.yaml
+    - maps-to-concept.yaml
+    - satisfies-intent.yaml
+    - semantic-link.yaml
     - subtopic-of.yaml
     - used-by.yaml
-    - satisfies-intent.yaml
-    - for-intent.yaml
-    - maps-to-concept.yaml
-    - fills-slot.yaml
-    - clusters-topic.yaml
+    - uses-concept.yaml
 
   generation:
-    - generated.yaml
     - assembles.yaml
-    - previous-version.yaml
-    - influenced-by.yaml
+    - compiled-from.yaml
+    - creates-content.yaml
+    - evaluated-by-job.yaml
     - generated-from.yaml
+    - generated.yaml
+    - has-evaluation.yaml
+    - includes-concept.yaml
+    - includes.yaml
+    - influenced-by.yaml
+    - previous-version.yaml
+    - produces.yaml
     - triggered-by.yaml
     - uses-prompt.yaml
-    - compiled-from.yaml
-    - includes-concept.yaml
-    - includes-voice.yaml
-    - produces.yaml
-    - creates-content.yaml
-    - includes.yaml
-    - has-evaluation.yaml
-    - evaluated-by-job.yaml
 
   mining:
-    - has-seo-target.yaml
-    - targets-seo.yaml
-    - targets-keyword.yaml
-    - seo-mines.yaml
     - has-metrics.yaml
+    - has-seo-target.yaml
+    - seo-mines.yaml
+    - targets-keyword.yaml
 
 # Naming conventions
 conventions:

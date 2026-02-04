@@ -114,8 +114,8 @@ node:
       description: "Historical ranking snapshots"
 
   # NOTE: SEOVariation REMOVED in v7.8.4
-  # Variations are just other SEOKeyword nodes linked to the same Concept
-  # Use TARGETS_SEO relation with is_primary/variation_type properties instead
+  # Variations are just other SEOKeyword nodes linked to the same ConceptL10n
+  # Use HAS_SEO_TARGET relation with role/priority properties instead
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # EXAMPLE
@@ -124,7 +124,9 @@ node:
   example:
     description: "Get top keywords by volume for a locale"
     cypher: |
-      MATCH (c:Concept)-[:TARGETS_SEO]->(kw:SEOKeyword)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+      // v10.1: SEOKeyword linked to ConceptL10n (locale-aligned)
+      MATCH (c:Concept)-[:HAS_L10N]->(cl:ConceptL10n)-[:HAS_SEO_TARGET]->(kw:SEOKeyword)
+      WHERE (cl)-[:FOR_LOCALE]->(:Locale {key: $locale})
       RETURN c.key AS concept, kw.value AS keyword, kw.volume, kw.difficulty
       ORDER BY kw.volume DESC
       LIMIT 20

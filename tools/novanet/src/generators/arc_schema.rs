@@ -540,27 +540,27 @@ mod tests {
             .generate(root)
             .expect("should generate arc schema cypher");
 
-        // v10.1: Count non-inverse relations (65 total - 5 inverse = 60)
-        // Removed: MENTIONS, COVERS, SPECIALIZES, RELATED_THING (4 semantic) + HAS_GEO_TARGET, TARGETS_GEO, TARGETS_THING, GEO_MINES (4 mining)
+        // v10.1: Count non-inverse relations (64 total - 5 inverse = 59)
+        // Removed: GEO arcs + TARGETS_SEO (now using HAS_SEO_TARGET from ConceptL10n)
         let ak_merges = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains(":Meta:ArcKind"))
             .count();
-        assert_eq!(ak_merges, 60, "expected 60 ArcKind MERGE statements");
+        assert_eq!(ak_merges, 59, "expected 59 ArcKind MERGE statements");
 
         // HAS_ARC_KIND relationships match ArcKind count
         let has_ak = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:HAS_ARC_KIND]"))
             .count();
-        assert_eq!(has_ak, 60, "expected 60 HAS_ARC_KIND relationships");
+        assert_eq!(has_ak, 59, "expected 59 HAS_ARC_KIND relationships");
 
         // IN_FAMILY relationships match ArcKind count
         let in_family = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_FAMILY]"))
             .count();
-        assert_eq!(in_family, 60, "expected 60 IN_FAMILY relationships");
+        assert_eq!(in_family, 59, "expected 59 IN_FAMILY relationships");
 
         // Family distribution (non-inverse counts)
         // Section 2 MATCH lines have ArcFamily first: "MATCH (af:ArcFamily ..."
@@ -580,9 +580,10 @@ mod tests {
         let generation = count_family("generation");
         let mining = count_family("mining");
 
+        // v10.1: Total non-inverse arcs = 59 (removed TARGETS_SEO in favor of HAS_SEO_TARGET)
         assert!(
-            ownership + localization + semantic + generation + mining == 60,
-            "family counts should sum to 60: o={ownership} l={localization} s={semantic} g={generation} m={mining}"
+            ownership + localization + semantic + generation + mining == 59,
+            "family counts should sum to 59: o={ownership} l={localization} s={semantic} g={generation} m={mining}"
         );
 
         // Spot checks — specific ArcKinds
@@ -612,8 +613,8 @@ mod tests {
             }
         }
 
-        // v10.1: Header reflects count
-        assert!(cypher.contains("60 ArcKind nodes"));
+        // v10.1: Header reflects count (59 after TARGETS_SEO removal)
+        assert!(cypher.contains("59 ArcKind nodes"));
     }
 
     /// Snapshot test for a minimal ArcSchema generator output.
