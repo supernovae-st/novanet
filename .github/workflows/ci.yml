@@ -97,14 +97,17 @@ jobs:
         with:
           workspaces: tools/novanet
 
+      - name: Install cargo-nextest
+        uses: taiki-e/install-action@nextest
+
       - name: Format Check
         run: cargo fmt --check
 
       - name: Clippy
         run: cargo clippy -- -D warnings
 
-      - name: Test
-        run: cargo test
+      - name: Test (nextest)
+        run: cargo nextest run
 
       - name: Build Release
         run: cargo build --release

@@ -446,4 +446,25 @@ mod tests {
         assert!(output.contains("import type { NodeType }"));
         assert!(output.contains("import type { Layer }"));
     }
+
+    /// Snapshot test for TypeScript layer mapping output.
+    /// Run `cargo insta review` to accept changes.
+    #[test]
+    fn snapshot_layers_typescript() {
+        let nodes = vec![
+            // Global realm
+            make_node("Locale", "global", "config"),
+            make_node("LocaleVoice", "global", "knowledge"),
+            // Project realm
+            make_node("Project", "project", "foundation"),
+            make_node("Page", "project", "structure"),
+            make_node("Block", "project", "structure"),
+            make_node("Concept", "project", "semantic"),
+            // Shared realm (required by REALM_ORDER)
+            make_node("SEOKeyword", "shared", "seo"),
+        ];
+
+        let output = render_layers(&nodes).unwrap();
+        insta::assert_snapshot!(output);
+    }
 }

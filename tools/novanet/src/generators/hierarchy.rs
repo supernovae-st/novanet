@@ -453,4 +453,72 @@ mod tests {
         assert!(!output.contains("SCOPE_HIERARCHY"));
         assert!(!output.contains("getNodeTypesBySubcategory"));
     }
+
+    /// Snapshot test for TypeScript hierarchy output.
+    /// Run `cargo insta review` to accept changes.
+    #[test]
+    fn snapshot_hierarchy_typescript() {
+        let doc = OrganizingDoc {
+            version: "9.0.0".to_string(),
+            realms: vec![
+                RealmDef {
+                    key: "global".to_string(),
+                    display_name: "Global".to_string(),
+                    emoji: "🌍".to_string(),
+                    color: "#2aa198".to_string(),
+                    llm_context: "Shared across ALL projects.".to_string(),
+                    layers: vec![LayerDef {
+                        key: "config".to_string(),
+                        display_name: "Configuration".to_string(),
+                        emoji: "⚙️".to_string(),
+                        color: "#64748b".to_string(),
+                        llm_context: "Core configuration nodes.".to_string(),
+                    }],
+                },
+                RealmDef {
+                    key: "project".to_string(),
+                    display_name: "Project".to_string(),
+                    emoji: "📦".to_string(),
+                    color: "#6c71c4".to_string(),
+                    llm_context: "Business-specific nodes.".to_string(),
+                    layers: vec![
+                        LayerDef {
+                            key: "foundation".to_string(),
+                            display_name: "Foundation".to_string(),
+                            emoji: "🏛️".to_string(),
+                            color: "#b58900".to_string(),
+                            llm_context: "Core project identity.".to_string(),
+                        },
+                        LayerDef {
+                            key: "structure".to_string(),
+                            display_name: "Structure".to_string(),
+                            emoji: "🏗️".to_string(),
+                            color: "#268bd2".to_string(),
+                            llm_context: "Content structure.".to_string(),
+                        },
+                    ],
+                },
+            ],
+            traits: vec![
+                TraitDef {
+                    key: "invariant".to_string(),
+                    display_name: "Invariant".to_string(),
+                    color: "#6366f1".to_string(),
+                    llm_context: "Does not vary per locale.".to_string(),
+                },
+            ],
+            arc_families: vec![
+                ArcFamilyDef {
+                    key: "ownership".to_string(),
+                    display_name: "Ownership".to_string(),
+                    color: "#22c55e".to_string(),
+                    arrow_style: "-->".to_string(),
+                    llm_context: "Containment relationships.".to_string(),
+                },
+            ],
+        };
+
+        let output = render_hierarchy(&doc).unwrap();
+        insta::assert_snapshot!(output);
+    }
 }
