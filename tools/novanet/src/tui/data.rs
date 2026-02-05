@@ -4,8 +4,92 @@ use crate::db::Db;
 use ratatui::style::{Color, Style};
 use ratatui::text::{Line, Span};
 use rustc_hash::FxHashSet;
+use serde_json::Value as JsonValue;
 use std::collections::BTreeMap;
 use tokio::join;
+
+/// Clean up Bolt debug output by removing wrapper type names.
+/// E.g., "DateTime(BoltDateTime { seconds: BoltInteger { value: 123 }, ... })" -> "123"
+fn clean_bolt_debug(debug: &str) -> String {
+    // Extract just the timestamp if it's a DateTime
+    if let Some(start) = debug.find("seconds: BoltInteger { value: ") {
+        let rest = &debug[start + 30..];
+        if let Some(end) = rest.find(' ') {
+            return rest[..end].trim_end_matches(',').to_string();
+        }
+    }
+    // Fallback: just return the debug string but truncated
+    debug.chars().take(50).collect()
+}
+
+/// Convert a neo4rs BoltType to a serde_json::Value for clean display.
+/// This extracts actual values instead of showing Bolt wrapper types.
+fn bolt_to_json(bolt: &neo4rs::BoltType) -> JsonValue {
+    use neo4rs::BoltType;
+    match bolt {
+        BoltType::String(s) => JsonValue::String(s.value.clone()),
+        BoltType::Integer(i) => JsonValue::Number(i.value.into()),
+        BoltType::Float(f) => {
+            serde_json::Number::from_f64(f.value)
+                .map(JsonValue::Number)
+                .unwrap_or(JsonValue::Null)
+        }
+        BoltType::Boolean(b) => JsonValue::Bool(b.value),
+        BoltType::Null(_) => JsonValue::Null,
+        BoltType::List(list) => {
+            JsonValue::Array(list.value.iter().map(bolt_to_json).collect())
+        }
+        BoltType::Map(map) => {
+            let obj: serde_json::Map<String, JsonValue> = map
+                .value
+                .iter()
+                .map(|(k, v)| (k.value.clone(), bolt_to_json(v)))
+                .collect();
+            JsonValue::Object(obj)
+        }
+        // For complex types (Node, Relationship, etc.), show a simplified representation
+        BoltType::Node(n) => {
+            let mut obj = serde_json::Map::new();
+            obj.insert("_type".to_string(), JsonValue::String("Node".to_string()));
+            obj.insert(
+                "_labels".to_string(),
+                JsonValue::Array(
+                    n.labels
+                        .iter()
+                        .map(|l| JsonValue::String(l.to_string()))
+                        .collect(),
+                ),
+            );
+            for (k, v) in &n.properties.value {
+                obj.insert(k.value.clone(), bolt_to_json(v));
+            }
+            JsonValue::Object(obj)
+        }
+        BoltType::Relation(r) => {
+            let mut obj = serde_json::Map::new();
+            obj.insert("_type".to_string(), JsonValue::String("Relationship".to_string()));
+            obj.insert("_rel_type".to_string(), JsonValue::String(r.typ.value.clone()));
+            JsonValue::Object(obj)
+        }
+        // DateTime and other complex types - extract what we can
+        BoltType::DateTime(_)
+        | BoltType::LocalDateTime(_)
+        | BoltType::DateTimeZoneId(_)
+        | BoltType::Date(_)
+        | BoltType::Time(_)
+        | BoltType::LocalTime(_)
+        | BoltType::Duration(_)
+        | BoltType::Point2D(_)
+        | BoltType::Point3D(_)
+        | BoltType::Path(_)
+        | BoltType::UnboundedRelation(_)
+        | BoltType::Bytes(_) => {
+            // Clean up debug output: extract useful info
+            let debug = format!("{:?}", bolt);
+            JsonValue::String(clean_bolt_debug(&debug))
+        }
+    }
+}
 
 /// Arc type for a Kind (from schema).
 #[derive(Debug, Clone)]
@@ -76,7 +160,7 @@ pub struct RealmInfo {
     pub key: String,
     pub display_name: String,
     pub color: String,
-    pub emoji: &'static str,
+    pub icon: &'static str,
     pub layers: Vec<LayerInfo>,
 }
 
@@ -371,7 +455,7 @@ ORDER BY realm_key, layer_key, kind_key
                     .collect();
 
                 RealmInfo {
-                    emoji: realm_emoji(&realm_key),
+                    icon: realm_icon(&realm_key),
                     key: realm_key,
                     display_name: realm_display,
                     color: realm_color,
@@ -567,13 +651,13 @@ LIMIT 100
             let key: String = row.get("key").unwrap_or_default();
             let display_name: String = row.get("display_name").unwrap_or_default();
 
-            // Parse properties as BTreeMap
-            let props: BTreeMap<String, String> = row
+            // Parse properties as BTreeMap with proper JSON values
+            let props: BTreeMap<String, JsonValue> = row
                 .get::<neo4rs::BoltMap>("props")
                 .map(|m| {
                     m.value
                         .iter()
-                        .map(|(k, v)| (k.to_string(), format!("{:?}", v)))
+                        .map(|(k, v)| (k.value.clone(), bolt_to_json(v)))
                         .collect()
                 })
                 .unwrap_or_default();
@@ -1678,12 +1762,13 @@ pub enum TreeItem<'a> {
     Instance(&'a RealmInfo, &'a LayerInfo, &'a KindInfo, &'a InstanceInfo),
 }
 
-/// Get emoji for realm (v10.6: 2 realms only - global + tenant).
-fn realm_emoji(key: &str) -> &'static str {
+/// Get icon for realm (v10.6: 2 realms only - global + tenant).
+/// Uses unicode symbols instead of emoji for terminal compatibility.
+fn realm_icon(key: &str) -> &'static str {
     match key {
-        "global" => "🌍",
-        "tenant" => "🏢",
-        _ => "📁",
+        "global" => "◉",  // filled circle - universal/shared
+        "tenant" => "◎",  // circle with dot - scoped/owned
+        _ => "○",         // empty circle - unknown
     }
 }
 
@@ -1716,8 +1801,8 @@ pub struct InstanceInfo {
     pub key: String,
     pub display_name: String,
     pub kind_key: String,
-    /// Properties as JSON-like map (key -> value as string).
-    pub properties: BTreeMap<String, String>,
+    /// Properties as JSON values (properly typed, not debug strings).
+    pub properties: BTreeMap<String, JsonValue>,
     /// Outgoing arcs from this instance.
     pub outgoing_arcs: Vec<InstanceArc>,
     /// Incoming arcs to this instance.
@@ -1808,37 +1893,37 @@ impl InstanceInfo {
         lines
     }
 
-    /// Determine color based on value content.
-    fn colorize_value(value: &str) -> (String, Color) {
-        // Check for null
-        if value == "null" || value.is_empty() {
-            return ("null".to_string(), Color::DarkGray);
+    /// Determine color based on JSON value type.
+    fn colorize_value(value: &JsonValue) -> (String, Color) {
+        match value {
+            JsonValue::Null => ("null".to_string(), Color::DarkGray),
+            JsonValue::Bool(b) => (b.to_string(), Color::Yellow),
+            JsonValue::Number(n) => (n.to_string(), Color::Yellow),
+            JsonValue::String(s) => {
+                // Check if it looks like a date/timestamp
+                if s.len() > 10
+                    && s.chars().next().map(|c| c.is_ascii_digit()).unwrap_or(false)
+                    && (s.contains('T') || s.chars().filter(|&c| c == '-').count() >= 2)
+                {
+                    (format!("\"{}\"", s), Color::Magenta)
+                } else {
+                    (format!("\"{}\"", s), Color::Green)
+                }
+            }
+            JsonValue::Array(arr) => {
+                // Format arrays compactly
+                let items: Vec<String> = arr.iter().map(|v| Self::colorize_value(v).0).collect();
+                (format!("[{}]", items.join(", ")), Color::Cyan)
+            }
+            JsonValue::Object(obj) => {
+                // Format objects compactly on one line
+                let items: Vec<String> = obj
+                    .iter()
+                    .map(|(k, v)| format!("\"{}\": {}", k, Self::colorize_value(v).0))
+                    .collect();
+                (format!("{{{}}}", items.join(", ")), Color::White)
+            }
         }
-
-        // Check for boolean
-        if value == "true" || value == "false" {
-            return (value.to_string(), Color::Yellow);
-        }
-
-        // Check for number (integer or float)
-        if value.parse::<f64>().is_ok() {
-            return (value.to_string(), Color::Yellow);
-        }
-
-        // Check for ISO date (starts with digit and contains T or -)
-        if value.len() > 10
-            && value
-                .chars()
-                .next()
-                .map(|c| c.is_ascii_digit())
-                .unwrap_or(false)
-            && (value.contains('T') || value.chars().filter(|&c| c == '-').count() >= 2)
-        {
-            return (format!("\"{}\"", value), Color::Magenta);
-        }
-
-        // Default: treat as string
-        (format!("\"{}\"", value), Color::Green)
     }
 }
 
@@ -1882,7 +1967,7 @@ mod tests {
             key: key.to_string(),
             display_name: key.to_string(),
             color: "#ffffff".to_string(),
-            emoji: "📁",
+            icon: "○",
             layers,
         }
     }
@@ -1919,8 +2004,8 @@ mod tests {
             display_name: "Français (France)".to_string(),
             kind_key: "Locale".to_string(),
             properties: BTreeMap::from([
-                ("language".to_string(), "fr".to_string()),
-                ("region".to_string(), "FR".to_string()),
+                ("language".to_string(), JsonValue::String("fr".to_string())),
+                ("region".to_string(), JsonValue::String("FR".to_string())),
             ]),
             outgoing_arcs: vec![],
             incoming_arcs: vec![],
@@ -1928,7 +2013,10 @@ mod tests {
 
         assert_eq!(instance.key, "fr-FR");
         assert_eq!(instance.kind_key, "Locale");
-        assert_eq!(instance.properties.get("language"), Some(&"fr".to_string()));
+        assert_eq!(
+            instance.properties.get("language"),
+            Some(&JsonValue::String("fr".to_string()))
+        );
     }
 
     #[test]

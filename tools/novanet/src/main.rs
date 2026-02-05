@@ -565,7 +565,7 @@ async fn main() -> color_eyre::Result<()> {
                     ath_path,
                     dry_run,
                 } => {
-                    let tier_enum = novanet::commands::knowledge::KnowledgeTier::from_str(tier)
+                    let tier_enum = novanet::commands::knowledge::KnowledgeTier::parse(tier)
                         .ok_or_else(|| {
                             color_eyre::eyre::eyre!(
                                 "Invalid tier '{}'. Valid: technical, voice, culture, market, all",

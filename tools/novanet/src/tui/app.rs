@@ -95,6 +95,20 @@ pub enum GraphPosition {
     Right,  // Outgoing arcs
 }
 
+/// Extracted data from a TreeItem for use in load_yaml_for_current().
+/// This avoids borrow checker issues when we need to both read the tree and mutate App.
+#[derive(Debug)]
+enum TreeItemData {
+    Kind { yaml_path: String, key: String },
+    ArcKind { yaml_path: String, key: String },
+    Realm { key: String },
+    Layer { key: String },
+    ArcFamily { key: String },
+    Section,
+    Instance,
+    None,
+}
+
 /// A node in the graph visualization.
 #[allow(dead_code)] // Fields reserved for future graph visualization enhancements
 #[derive(Debug, Clone)]
@@ -162,6 +176,8 @@ pub struct App {
     pub data_cursor_before_filter: usize,
     /// Atlas mode state (architecture visualizations)
     pub atlas: AtlasState,
+    /// Animation tick counter (increments each frame, used for spinners)
+    pub tick: u16,
 }
 
 impl App {
@@ -199,12 +215,14 @@ impl App {
             data_filter_kind: None,
             data_cursor_before_filter: 0,
             atlas: AtlasState::default(),
+            tick: 0,
         };
         app.load_yaml_for_current();
         app
     }
 
     /// Load YAML content for the current cursor position.
+    /// Uses mode-aware item lookup to handle filtered Data mode correctly.
     pub fn load_yaml_for_current(&mut self) {
         // Reset scroll positions when changing items
         self.yaml_scroll = 0;
@@ -225,78 +243,99 @@ impl App {
         self.pending_layer_load = None;
         self.pending_instance_load = None;
 
-        // Extract data before mutable borrow (to avoid borrow checker issues)
-        let kind_info = match self.tree.item_at(self.tree_cursor) {
-            Some(TreeItem::Kind(_, _, kind)) => Some((kind.yaml_path.clone(), kind.key.clone())),
-            _ => None,
-        };
+        // Get current item using mode-aware method (handles filtered Data mode)
+        // This is the same logic as current_item() but we extract data to avoid borrow issues
+        let current = self.get_current_tree_item_data();
 
-        let arc_kind_info = match self.tree.item_at(self.tree_cursor) {
-            Some(TreeItem::ArcKind(family, arc)) => {
-                let arc_file = arc.key.to_lowercase().replace('_', "-");
-                let path = format!(
-                    "packages/core/models/arc-kinds/{}/{}.yaml",
-                    family.key, arc_file
-                );
-                Some((path, arc.key.clone()))
+        // Handle based on item type
+        match current {
+            TreeItemData::Kind { yaml_path, key } => {
+                self.load_yaml_cached(&yaml_path);
+                self.pending_arcs_load = Some(key);
             }
-            _ => None,
-        };
-
-        // Handle Kind with Neo4j arcs load
-        if let Some((yaml_path, kind_key)) = kind_info {
-            self.load_yaml_cached(&yaml_path);
-            self.pending_arcs_load = Some(kind_key);
-            return;
-        }
-
-        // Handle ArcKind with Neo4j details load
-        if let Some((yaml_path, arc_key)) = arc_kind_info {
-            self.load_yaml_cached(&yaml_path);
-            self.pending_arc_kind_load = Some(arc_key);
-            return;
-        }
-
-        match self.tree.item_at(self.tree_cursor) {
-            // Kind and ArcKind are handled above with early return
-            Some(TreeItem::Kind(_, _, _)) => unreachable!(),
-            Some(TreeItem::ArcKind(_, _)) => unreachable!(),
-            // Realm → meta/realms/{key}.yaml + Neo4j details
-            Some(TreeItem::Realm(realm)) => {
-                let realm_key = realm.key.clone();
-                let path = format!("packages/core/models/meta/realms/{}.yaml", realm_key);
+            TreeItemData::ArcKind { yaml_path, key } => {
+                self.load_yaml_cached(&yaml_path);
+                self.pending_arc_kind_load = Some(key);
+            }
+            TreeItemData::Realm { key } => {
+                let path = format!("packages/core/models/meta/realms/{}.yaml", key);
                 self.load_yaml_cached(&path);
-                self.pending_realm_load = Some(realm_key);
+                self.pending_realm_load = Some(key);
             }
-            // Layer → meta/layers/{key}.yaml + Neo4j details
-            Some(TreeItem::Layer(_, layer)) => {
-                let layer_key = layer.key.clone();
-                let path = format!("packages/core/models/meta/layers/{}.yaml", layer_key);
+            TreeItemData::Layer { key } => {
+                let path = format!("packages/core/models/meta/layers/{}.yaml", key);
                 self.load_yaml_cached(&path);
-                self.pending_layer_load = Some(layer_key);
+                self.pending_layer_load = Some(key);
             }
-            // ArcFamily → meta/arc-families/{key}.yaml
-            Some(TreeItem::ArcFamily(family)) => {
-                let path = format!("packages/core/models/meta/arc-families/{}.yaml", family.key);
+            TreeItemData::ArcFamily { key } => {
+                let path = format!("packages/core/models/meta/arc-families/{}.yaml", key);
                 self.load_yaml_cached(&path);
             }
-            // Section headers → taxonomy overview
-            Some(TreeItem::KindsSection) | Some(TreeItem::ArcsSection) => {
+            TreeItemData::Section => {
                 self.load_yaml_cached("packages/core/models/taxonomy.yaml");
             }
-            // Instance → show JSON properties (handled separately in Data mode)
-            Some(TreeItem::Instance(_, _, _, _instance)) => {
+            TreeItemData::Instance => {
                 // In Data mode, YAML panel shows JSON properties instead
                 // This is handled in ui.rs based on NavMode
                 self.yaml_path = "# Instance data".to_string();
                 self.yaml_content = "# Instance properties shown as JSON in Data mode".to_string();
                 self.yaml_line_count = 1;
             }
-            None => {
+            TreeItemData::None => {
                 self.yaml_path.clear();
                 self.yaml_content.clear();
                 self.yaml_line_count = 0;
             }
+        }
+    }
+
+    /// Extract current tree item data using mode-aware lookup.
+    /// Handles filtered Data mode correctly (same logic as current_item()).
+    fn get_current_tree_item_data(&self) -> TreeItemData {
+        // In filtered Data mode, always return Instance (that's all we show)
+        if self.is_data_mode() && self.data_filter_kind.is_some() {
+            if let Some(kind_key) = &self.data_filter_kind {
+                if self.tree.filtered_item_at(self.tree_cursor, kind_key).is_some() {
+                    return TreeItemData::Instance;
+                }
+            }
+            return TreeItemData::None;
+        }
+
+        // Use mode-aware item lookup
+        let item = if self.is_data_mode() {
+            self.tree.item_at_for_mode(self.tree_cursor, true)
+        } else {
+            self.tree.item_at(self.tree_cursor)
+        };
+
+        match item {
+            Some(TreeItem::Kind(_, _, kind)) => TreeItemData::Kind {
+                yaml_path: kind.yaml_path.clone(),
+                key: kind.key.clone(),
+            },
+            Some(TreeItem::ArcKind(family, arc)) => {
+                let arc_file = arc.key.to_lowercase().replace('_', "-");
+                TreeItemData::ArcKind {
+                    yaml_path: format!(
+                        "packages/core/models/arc-kinds/{}/{}.yaml",
+                        family.key, arc_file
+                    ),
+                    key: arc.key.clone(),
+                }
+            }
+            Some(TreeItem::Realm(realm)) => TreeItemData::Realm {
+                key: realm.key.clone(),
+            },
+            Some(TreeItem::Layer(_, layer)) => TreeItemData::Layer {
+                key: layer.key.clone(),
+            },
+            Some(TreeItem::ArcFamily(family)) => TreeItemData::ArcFamily {
+                key: family.key.clone(),
+            },
+            Some(TreeItem::KindsSection) | Some(TreeItem::ArcsSection) => TreeItemData::Section,
+            Some(TreeItem::Instance(_, _, _, _)) => TreeItemData::Instance,
+            None => TreeItemData::None,
         }
     }
 
@@ -1041,6 +1080,16 @@ impl App {
         self.layer_details = Some(details);
     }
 
+    /// Check if any data is currently being loaded from Neo4j.
+    /// Used to trigger animation re-renders during loading.
+    pub fn has_pending_load(&self) -> bool {
+        self.pending_instance_load.is_some()
+            || self.pending_arcs_load.is_some()
+            || self.pending_arc_kind_load.is_some()
+            || self.pending_realm_load.is_some()
+            || self.pending_layer_load.is_some()
+    }
+
     /// Initialize Atlas state from current selection (context-aware).
     /// Maps current Kind to the most relevant Atlas view.
     pub fn init_atlas_from_current(&mut self) {
@@ -1207,7 +1256,7 @@ mod tests {
             key: "global".to_string(),
             display_name: "Global".to_string(),
             color: "#859900".to_string(),
-            emoji: "🌍",
+            icon: "◉",
             layers: vec![locale_knowledge],
         };
 
@@ -1215,7 +1264,7 @@ mod tests {
             key: "tenant".to_string(),
             display_name: "Tenant".to_string(),
             color: "#b58900".to_string(),
-            emoji: "🏢",
+            icon: "◎",
             layers: vec![structure],
         };
 
