@@ -109,6 +109,26 @@ pub struct KindArcsData {
     pub outgoing: Vec<Neo4jArc>,
 }
 
+/// Endpoint info for an ArcKind (from/to Kind).
+#[derive(Debug, Clone)]
+pub struct ArcEndpoint {
+    pub kind_label: String,
+    pub realm: String,
+    pub layer: String,
+}
+
+/// Complete details for an ArcKind, loaded from Neo4j.
+#[derive(Debug, Clone, Default)]
+pub struct ArcKindDetails {
+    pub display_name: String,
+    pub description: String,
+    pub family: String,
+    pub cardinality: String,
+    pub cypher_pattern: String,
+    pub from_endpoint: Option<ArcEndpoint>,
+    pub to_endpoint: Option<ArcEndpoint>,
+}
+
 /// Full taxonomy tree: Realm > Layer > Kind + ArcFamily > ArcKind.
 #[derive(Debug, Clone, Default)]
 pub struct TaxonomyTree {
@@ -614,6 +634,76 @@ LIMIT 1
             })
         } else {
             Ok(KindArcsData::default())
+        }
+    }
+
+    /// Load ArcKind details from Neo4j (endpoints, family, cardinality).
+    pub async fn load_arc_kind_details(db: &Db, arc_key: &str) -> crate::Result<ArcKindDetails> {
+        let cypher = r#"
+MATCH (ak:ArcKind {key: $arcKey})
+OPTIONAL MATCH (ak)-[:IN_FAMILY]->(af:ArcFamily)
+OPTIONAL MATCH (ak)-[:FROM_KIND]->(fromKind:Kind)
+OPTIONAL MATCH (fromKind)-[:IN_LAYER]->(fromLayer:Layer)
+OPTIONAL MATCH (fromLayer)<-[:HAS_LAYER]-(fromRealm:Realm)
+OPTIONAL MATCH (ak)-[:TO_KIND]->(toKind:Kind)
+OPTIONAL MATCH (toKind)-[:IN_LAYER]->(toLayer:Layer)
+OPTIONAL MATCH (toLayer)<-[:HAS_LAYER]-(toRealm:Realm)
+RETURN coalesce(ak.display_name, ak.key) as display_name,
+       coalesce(ak.llm_context, '') as description,
+       coalesce(ak.cardinality, '') as cardinality,
+       coalesce(ak.cypher_pattern, '') as cypher_pattern,
+       coalesce(af.key, '') as family,
+       fromKind.label as from_kind,
+       coalesce(fromRealm.key, '') as from_realm,
+       coalesce(fromLayer.key, '') as from_layer,
+       toKind.label as to_kind,
+       coalesce(toRealm.key, '') as to_realm,
+       coalesce(toLayer.key, '') as to_layer
+LIMIT 1
+"#;
+
+        let rows = db
+            .execute_with_params(cypher, [("arcKey", arc_key)])
+            .await?;
+
+        if let Some(row) = rows.into_iter().next() {
+            let display_name: String = row.get("display_name").unwrap_or_default();
+            let description: String = row.get("description").unwrap_or_default();
+            let cardinality: String = row.get("cardinality").unwrap_or_default();
+            let cypher_pattern: String = row.get("cypher_pattern").unwrap_or_default();
+            let family: String = row.get("family").unwrap_or_default();
+
+            let from_kind: Option<String> = row.get("from_kind").ok();
+            let from_realm: String = row.get("from_realm").unwrap_or_default();
+            let from_layer: String = row.get("from_layer").unwrap_or_default();
+
+            let to_kind: Option<String> = row.get("to_kind").ok();
+            let to_realm: String = row.get("to_realm").unwrap_or_default();
+            let to_layer: String = row.get("to_layer").unwrap_or_default();
+
+            let from_endpoint = from_kind.map(|kind_label| ArcEndpoint {
+                kind_label,
+                realm: from_realm,
+                layer: from_layer,
+            });
+
+            let to_endpoint = to_kind.map(|kind_label| ArcEndpoint {
+                kind_label,
+                realm: to_realm,
+                layer: to_layer,
+            });
+
+            Ok(ArcKindDetails {
+                display_name,
+                description,
+                family,
+                cardinality,
+                cypher_pattern,
+                from_endpoint,
+                to_endpoint,
+            })
+        } else {
+            Ok(ArcKindDetails::default())
         }
     }
 

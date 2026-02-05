@@ -6,7 +6,7 @@ use std::path::Path;
 
 use crossterm::event::{KeyCode, KeyEvent};
 
-use super::data::{KindArcsData, TaxonomyTree, TreeItem};
+use super::data::{ArcKindDetails, KindArcsData, TaxonomyTree, TreeItem};
 
 /// Navigation mode (matches Studio).
 /// Order: 1:Meta 2:Data 3:Overlay 4:Query
@@ -133,10 +133,14 @@ pub struct App {
     pub graph_nodes: Vec<GraphNode>, // Neighbors of currently selected node (YAML-based, legacy)
     /// Neo4j arc data for current Kind (loaded async)
     pub kind_arcs: Option<KindArcsData>,
+    /// Neo4j arc kind details (loaded async when ArcKind selected)
+    pub arc_kind_details: Option<ArcKindDetails>,
     // Data view: pending instance load request (Kind label to load)
     pub pending_instance_load: Option<String>,
     /// Pending Kind arcs load request (Kind label to load from Neo4j)
     pub pending_arcs_load: Option<String>,
+    /// Pending ArcKind details load request (Arc key to load from Neo4j)
+    pub pending_arc_kind_load: Option<String>,
 }
 
 impl App {
@@ -163,8 +167,10 @@ impl App {
             yaml_cache: HashMap::new(),
             graph_nodes: Vec::new(),
             kind_arcs: None,
+            arc_kind_details: None,
             pending_instance_load: None,
             pending_arcs_load: None,
+            pending_arc_kind_load: None,
         };
         app.load_yaml_for_current();
         app
@@ -179,12 +185,25 @@ impl App {
         // Build graph nodes for the current selection (legacy YAML-based)
         self.build_graph_nodes();
 
-        // Clear kind_arcs when moving away from a Kind
+        // Clear Neo4j data when moving away
         self.kind_arcs = None;
+        self.arc_kind_details = None;
 
-        // Extract data before mutable borrow
+        // Extract data before mutable borrow (to avoid borrow checker issues)
         let kind_info = match self.tree.item_at(self.tree_cursor) {
             Some(TreeItem::Kind(_, _, kind)) => Some((kind.yaml_path.clone(), kind.key.clone())),
+            _ => None,
+        };
+
+        let arc_kind_info = match self.tree.item_at(self.tree_cursor) {
+            Some(TreeItem::ArcKind(family, arc)) => {
+                let arc_file = arc.key.to_lowercase().replace('_', "-");
+                let path = format!(
+                    "packages/core/models/arc-kinds/{}/{}.yaml",
+                    family.key, arc_file
+                );
+                Some((path, arc.key.clone()))
+            }
             _ => None,
         };
 
@@ -195,9 +214,17 @@ impl App {
             return;
         }
 
+        // Handle ArcKind with Neo4j details load
+        if let Some((yaml_path, arc_key)) = arc_kind_info {
+            self.load_yaml_cached(&yaml_path);
+            self.pending_arc_kind_load = Some(arc_key);
+            return;
+        }
+
         match self.tree.item_at(self.tree_cursor) {
-            // Kind is handled above with early return
+            // Kind and ArcKind are handled above with early return
             Some(TreeItem::Kind(_, _, _)) => unreachable!(),
+            Some(TreeItem::ArcKind(_, _)) => unreachable!(),
             // Realm → meta/realms/{key}.yaml
             Some(TreeItem::Realm(realm)) => {
                 let path = format!("packages/core/models/meta/realms/{}.yaml", realm.key);
@@ -211,15 +238,6 @@ impl App {
             // ArcFamily → meta/arc-families/{key}.yaml
             Some(TreeItem::ArcFamily(family)) => {
                 let path = format!("packages/core/models/meta/arc-families/{}.yaml", family.key);
-                self.load_yaml_cached(&path);
-            }
-            // ArcKind → arc-kinds/{family}/{arc-name}.yaml
-            Some(TreeItem::ArcKind(family, arc)) => {
-                let arc_file = arc.key.to_lowercase().replace('_', "-");
-                let path = format!(
-                    "packages/core/models/arc-kinds/{}/{}.yaml",
-                    family.key, arc_file
-                );
                 self.load_yaml_cached(&path);
             }
             // Section headers → taxonomy overview
@@ -796,6 +814,16 @@ impl App {
     /// Set the loaded Kind arcs data from Neo4j.
     pub fn set_kind_arcs(&mut self, arcs: KindArcsData) {
         self.kind_arcs = Some(arcs);
+    }
+
+    /// Take the pending arc kind details load request (returns Arc key if one was queued).
+    pub fn take_pending_arc_kind_load(&mut self) -> Option<String> {
+        self.pending_arc_kind_load.take()
+    }
+
+    /// Set the loaded ArcKind details from Neo4j.
+    pub fn set_arc_kind_details(&mut self, details: ArcKindDetails) {
+        self.arc_kind_details = Some(details);
     }
 }
 
