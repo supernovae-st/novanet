@@ -7,7 +7,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Neo4j](https://img.shields.io/badge/Neo4j-5.26-018bff?style=flat-square&logo=neo4j&logoColor=white)](https://neo4j.com/)
 [![Zod](https://img.shields.io/badge/Zod-3.24-8b5cf6?style=flat-square)](https://zod.dev/)
-[![Version](https://img.shields.io/badge/v10.4.0-06b6d4?style=flat-square)]()
+[![Version](https://img.shields.io/badge/v10.5.0-06b6d4?style=flat-square)]()
 
 ---
 
@@ -21,7 +21,7 @@
 
 NovaNet Core provides the foundational layer for the NovaNet knowledge graph system:
 
-- **YAML Schema Definitions** — 42 node types across 2 Realms and 8 Layers
+- **YAML Schema Definitions** — 45 node types across 3 Realms and 10 Layers
 - **TypeScript Types** — Full type safety for Neo4j operations
 - **NovaNetFilter** — Fluent API for composable graph queries
 - **Zod Schemas** — Runtime validation for locale knowledge
@@ -61,12 +61,14 @@ pnpm --filter=@novanet/core validate
 ```
 core/
 ├── models/                    # YAML schema definitions (source of truth)
-│   ├── _index.yaml            # Graph structure overview (42 nodes, 77 arcs)
-│   ├── relations.yaml         # All Neo4j relationships (with family field)
-│   ├── taxonomy.yaml          # v10.4: Realm/Layer/Trait/ArcFamily
-│   ├── nodes/                 # One file per node type
+│   ├── _index.yaml            # Graph structure overview (45 nodes, 64 arcs)
+│   ├── taxonomy.yaml          # v10.5: Realm/Layer/Trait/ArcFamily/ArcScope
+│   ├── relations.yaml         # Legacy format (parser compatibility)
+│   ├── node-kinds/            # One file per node type (45 files)
 │   │   ├── global/            # Realm: global (19 nodes)
+│   │   ├── organization/      # Realm: organization (NEW in v10.5)
 │   │   └── project/           # Realm: project (23 nodes)
+│   ├── arc-kinds/             # One file per arc type (64 files)
 │   └── views/                 # Predefined view definitions
 ├── src/
 │   ├── types/                 # TypeScript definitions
@@ -77,12 +79,13 @@ core/
 
 ---
 
-## Node Types (v10.4.0)
+## Node Types (v10.5.0)
 
 | Realm | Nodes | Layers |
 |-------|-------|--------|
-| **Global** | 19 | Configuration (1), Locale Knowledge (18) |
-| **Project** | 23 | Foundation (3), Structure (4), Semantic (4), Instructions (3), Output (6), SEO (3) |
+| **Global** | 19 | Configuration, Locale Knowledge, SEO |
+| **Organization** | NEW | Config, Semantic (Entity at org level) |
+| **Project** | 23 | Foundation, Structure, Semantic, Instructions, Output |
 
 ---
 

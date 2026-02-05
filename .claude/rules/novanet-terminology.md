@@ -1,4 +1,4 @@
-# NovaNet Terminology (v10.4)
+# NovaNet Terminology (v10.5)
 
 This file defines the canonical terminology for NovaNet. All code, documentation, and UI must use these terms consistently.
 
@@ -20,9 +20,22 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 
 | Axis | Question | Type | Property | Values |
 |------|----------|------|----------|--------|
-| 1 | WHERE? | `NodeRealm` | `realm` | `global`, `project` |
-| 2 | WHAT? | `NodeLayer` | `layer` | `config`, `knowledge`, `foundation`, `structure`, `semantic`, `instruction`, `output`, `seo` |
+| 1 | WHERE? | `NodeRealm` | `realm` | `global`, `organization`, `project` |
+| 2 | WHAT? | `NodeLayer` | `layer` | `config`, `locale-knowledge`, `seo`, `foundation`, `structure`, `semantic`, `instruction`, `output` |
 | 3 | HOW? | `NodeTrait` | `trait` | `invariant`, `localized`, `knowledge`, `derived`, `job` |
+
+### v10.5 Realm Architecture
+
+| Realm | Layers | Description |
+|-------|--------|-------------|
+| `global` | config, locale-knowledge, seo | Universal locale knowledge, READ-ONLY |
+| `organization` | config, semantic | Multi-tenant isolation (NEW in v10.5) |
+| `project` | foundation, structure, semantic, instruction, output | Business-specific content |
+
+> **v10.5 Changes:**
+> - Added `organization` realm for multi-tenant isolation
+> - `global/knowledge` → `global/locale-knowledge`
+> - Entity moved from GLOBAL to ORGANIZATION/semantic + PROJECT/semantic
 
 ### Arc Classification (Faceted)
 
@@ -32,11 +45,11 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 | 2 | FUNCTION? | `ArcFamily` | `family` | `ownership`, `localization`, `semantic`, `generation`, `mining` |
 | 3 | MULTIPLICITY? | `ArcCardinality` | `cardinality` | `one_to_one`, `one_to_many`, `many_to_many` |
 
-## YAML Source Files (v10.4)
+## YAML Source Files (v10.5)
 
 | File | Content |
 |------|---------|
-| `taxonomy.yaml` | Realm/Layer/Trait/ArcFamily/ArcScope definitions |
+| `taxonomy.yaml` | Realm/Layer/Trait/ArcFamily/ArcScope definitions (v10.5: 3 realms) |
 | `node-kinds/` | 1 file per NodeKind, organized by Realm/Layer (42 files) |
 | `arc-kinds/` | 1 file per ArcKind, organized by ArcFamily (60 files) |
 | `relations.yaml` | Legacy format (deprecated, kept for parser compatibility) |
@@ -83,7 +96,7 @@ Properties use `snake_case` in YAML and TypeScript:
 node:
   name: LocaleVoice
   realm: global
-  layer: knowledge
+  layer: locale-knowledge  # v10.5: renamed from "knowledge"
   trait: knowledge
   display_name: "Locale Voice"
   llm_context: "..."

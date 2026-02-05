@@ -35,7 +35,7 @@ Generate culturally-native content across 200+ locales — not translation, but 
 |  |  |  |  |
 |:---:|:---:|:---:|:---:|
 | **Knowledge Graph** | **200+ Locales** | **Graph Studio** | **AI-Powered** |
-| 42 node types, 77 arcs | Native generation per locale | Interactive 2D visualization | Claude API for natural language queries |
+| 45 node types, 64 arcs | Native generation per locale | Interactive 2D visualization | Claude API for natural language queries |
 | Neo4j with APOC | Locale knowledge layer | React Flow + ELK.js layouts | Cypher generation from text |
 
 ---
@@ -117,9 +117,9 @@ novanet-hq/
 ├── packages/
 │   ├── core/                  # @novanet/core — types, schemas, filters
 │   │   ├── models/            # YAML schema definitions (source of truth)
-│   │   │   ├── _index.yaml    # 42 nodes, 77 arcs
-│   │   │   ├── nodes/         # Node definitions by realm
-│   │   │   └── relations.yaml # Relationship definitions
+│   │   │   ├── taxonomy.yaml  # 3 realms, 10 layers, 5 traits
+│   │   │   ├── node-kinds/    # 45 node definitions by realm/layer
+│   │   │   └── arc-kinds/     # 64 arc definitions by family
 │   │   └── src/               # TypeScript implementation
 │   └── db/                    # @novanet/db — Neo4j infrastructure
 │       ├── docker-compose.yml # Neo4j 5.26 + APOC
@@ -215,16 +215,17 @@ Password: (see NEO4J_PASSWORD env var)
 
 ## Graph Schema
 
-NovaNet models content as a knowledge graph with **42 node types** across **2 Realms** and **8 Layers** (v10.4.0):
+NovaNet models content as a knowledge graph with **45 node types** across **3 Realms** and **10 Layers** (v10.5.0):
 
 | Realm | Nodes | Layers |
 |-------|-------|--------|
-| **Global** | 19 | Configuration (1), Locale Knowledge (18) |
+| **Global** | 19 | Configuration (1), Locale-Knowledge (15), SEO (3) |
+| **Organization** | 3 | Configuration (1), Semantic (2) — *NEW in v10.5* |
 | **Project** | 23 | Foundation (3), Structure (4), Semantic (4), Instructions (3), Output (6), SEO (3) |
 
 Each node type has a **Trait** (invariant / localized / knowledge / derived / job) and arcs are classified by **ArcFamily**.
 
-See [`packages/core/models/_index.yaml`](packages/core/models/_index.yaml) for complete schema.
+See [`packages/core/models/taxonomy.yaml`](packages/core/models/taxonomy.yaml) for complete schema.
 
 ---
 
@@ -249,7 +250,7 @@ See [`packages/core/models/_index.yaml`](packages/core/models/_index.yaml) for c
 │ │ ...            │  │   [BlockL10n]                    │  │ [Copy JSON]  │ │
 │ └────────────────┘  └──────────────────────────────────┘  └──────────────┘ │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│  Mode: Data  │  42 nodes  │  77 arcs  │  Zoom: 100%  │  Locale: fr-FR │
+│  Mode: Data  │  45 nodes  │  64 arcs  │  Zoom: 100%  │  Locale: fr-FR │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 *Interactive 2D graph visualization with AI-powered queries (⌘J)*

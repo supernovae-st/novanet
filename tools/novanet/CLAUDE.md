@@ -7,7 +7,7 @@ This file provides guidance to Claude Code when working in the `tools/novanet/` 
 `novanet` is a unified Rust CLI + TUI binary for managing the NovaNet context graph.
 It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 
-**Version**: v10.4.0 (Entity-Centric Architecture)
+**Version**: v10.5.0 (3-Realm Architecture)
 
 ## Current Status
 
@@ -25,7 +25,7 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 | Filter | `filter build` | Implemented (JSON stdin, Studio subprocess) |
 | TUI | `tui` | Galaxy theme, mission control, search, detail, arc explorer, CRUD dialogs, dashboard, logo, command palette, help overlay, boot animation, effects engine, onboarding |
 
-**245 tests pass** (`cargo test`). Zero clippy warnings.
+**246 tests pass** (`cargo test`). Zero clippy warnings.
 
 **Testing stack:**
 - `insta` — Snapshot testing (5 generator outputs)
@@ -146,7 +146,7 @@ cargo run -- tui                                  # Interactive terminal UI
 # Quality
 cargo clippy -- -D warnings    # Zero warnings policy
 cargo fmt --check              # Formatting check
-cargo nextest run              # 245 tests (fast, parallel)
+cargo nextest run              # 246 tests (fast, parallel)
 cargo test -- --ignored        # Neo4j integration tests (requires running Neo4j)
 
 # Security & auditing
@@ -207,9 +207,9 @@ src/
 - **YAML models**: Live in `packages/core/models/` (relative to monorepo root)
 - **Feature gate**: `cargo build --no-default-features` for CLI-only (no TUI deps)
 - **YAML-first architecture**: Each Kind YAML has explicit `realm:` and `layer:` fields (source of truth)
-  - Path validation: file must be at `models/nodes/{realm}/{layer}/{name}.yaml`
+  - Path validation: file must be at `models/node-kinds/{realm}/{layer}/{name}.yaml`
   - Generators read realm/layer from YAML content, validate against path
-  - This enables flexible folder reorganization while maintaining consistency
+  - v10.5: 3 realms (global, organization, project), 10 layers total
 
 ## TUI Keybindings
 
@@ -227,11 +227,11 @@ Exit:        q or Esc
 
 ## Dependencies on Monorepo
 
-This binary reads YAML from `packages/core/models/` (nodes, relations, taxonomy, views)
+This binary reads YAML from `packages/core/models/` (node-kinds, arc-kinds, taxonomy, views)
 and writes to `packages/db/seed/` (Cypher), `packages/core/src/` (TypeScript), and
 `packages/core/models/docs/` (Mermaid). It does NOT depend on any npm packages at build time.
 
-**v9.5 visual encoding**: The `taxonomy.yaml` file is the source of truth for:
+**v10.5 visual encoding**: The `taxonomy.yaml` file is the source of truth for:
 - Colors (realms, layers, traits, arc families)
 - Border styles (traits: solid/dashed/dotted/double/none)
 - Stroke styles (arc families: solid/dashed)

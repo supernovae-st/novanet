@@ -17,12 +17,20 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 cd "$PROJECT_ROOT"
 
-# Read expected values from source of truth
+# Read expected values from source of truth (dynamic)
 VERSION=$(cat VERSION 2>/dev/null || echo "unknown")
-NODE_COUNT=42
-ARC_COUNT=77
-REALM_COUNT=2
-LAYER_COUNT=8
+NODE_COUNT=$(find packages/core/models/node-kinds -name "*.yaml" 2>/dev/null | wc -l | tr -d ' ')
+ARC_COUNT=$(find packages/core/models/arc-kinds -name "*.yaml" 2>/dev/null | wc -l | tr -d ' ')
+
+# Count realms and layers from taxonomy.yaml (source of truth)
+REALM_COUNT=$(grep -E "^  - key: (global|organization|project)$" packages/core/models/taxonomy.yaml 2>/dev/null | wc -l | tr -d ' ')
+LAYER_COUNT=$(grep -E "^      - key: " packages/core/models/taxonomy.yaml 2>/dev/null | wc -l | tr -d ' ')
+
+# Fallback to v10.5 defaults if parsing fails
+if [ "$NODE_COUNT" -eq 0 ] 2>/dev/null; then NODE_COUNT=45; fi
+if [ "$ARC_COUNT" -eq 0 ] 2>/dev/null; then ARC_COUNT=64; fi
+if [ "$REALM_COUNT" -eq 0 ] 2>/dev/null; then REALM_COUNT=3; fi
+if [ "$LAYER_COUNT" -eq 0 ] 2>/dev/null; then LAYER_COUNT=10; fi
 
 echo -e "${BLUE}NovaNet Documentation Audit${NC}"
 echo "================================"
@@ -66,16 +74,22 @@ check_file() {
   fi
 
   # Check node counts (skip historical references in ROADMAP.md and CHANGELOG.md)
+  # Only match TOTAL counts, not per-realm/layer counts
   if [[ "$file" != *"ROADMAP.md"* ]] && [[ "$file" != *"CHANGELOG.md"* ]]; then
-    if grep -qE "4[4-6]\s*(nodes?|Kinds?|NodeKinds?)" "$file" 2>/dev/null; then
-      echo -e "${YELLOW}WARN${NC}: $file may have outdated node count (should be $NODE_COUNT)"
+    # Match total patterns: "XX node types", "XX Kind Types", "Total: XX nodes", "XX nodes,"
+    local found_node_count
+    found_node_count=$(grep -oE "([0-9]+\s*(node types|Kind Types|Kinds)|\bTotal:?\s*[0-9]+\s*nodes|[0-9]+\s*nodes,)" "$file" 2>/dev/null | grep -oE "[0-9]+" | head -1)
+    if [ -n "$found_node_count" ] && [ "$found_node_count" != "$NODE_COUNT" ] 2>/dev/null; then
+      echo -e "${YELLOW}WARN${NC}: $file has node count $found_node_count (should be $NODE_COUNT)"
       ((WARNINGS++))
       file_issues=1
     fi
 
-    # Check arc counts
-    if grep -qE "(6[7-9]|7[0-6]|8[0-3])\s*(arcs?|ArcKinds?|relations?)" "$file" 2>/dev/null; then
-      echo -e "${YELLOW}WARN${NC}: $file may have outdated arc count (should be $ARC_COUNT)"
+    # Check arc counts - match total patterns: "XX arcs", "XX ArcKinds"
+    local found_arc_count
+    found_arc_count=$(grep -oE "([0-9]+\s*(arcs|ArcKinds))" "$file" 2>/dev/null | grep -oE "[0-9]+" | head -1)
+    if [ -n "$found_arc_count" ] && [ "$found_arc_count" != "$ARC_COUNT" ] 2>/dev/null; then
+      echo -e "${YELLOW}WARN${NC}: $file has arc count $found_arc_count (should be $ARC_COUNT)"
       ((WARNINGS++))
       file_issues=1
     fi
