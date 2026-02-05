@@ -1,10 +1,15 @@
 //! NovaNet TUI v2 — rebuilt from scratch for stability.
 //!
 //! Phase 1: Exploration (MVP)
-//! - Header with mode tabs [1-4]
+//! - Header with mode tabs [1-5]
 //! - Taxonomy tree navigation
 //! - Detail panel with edges
 //! - Status bar with stats
+//!
+//! Phase 2: Atlas Mode
+//! - [5] Atlas mode with 6 interactive architecture views
+//! - Spreading Activation, Knowledge Atoms, Generation Pipeline
+//! - View Traversal, Page Composition, Realm Map
 //!
 //! ## Crash Recovery
 //!
@@ -16,6 +21,7 @@
 //! This ensures terminal isn't left in corrupted state after panics.
 
 mod app;
+pub mod atlas;
 mod data;
 pub mod theme;
 mod ui;
@@ -182,6 +188,29 @@ async fn run_app(
                         if let Ok(details) = TaxonomyTree::load_layer_details(db, &layer_key).await
                         {
                             app.set_layer_details(details);
+                        }
+                    }
+
+                    // Check for pending Atlas Realm stats load (Atlas mode → load from Neo4j)
+                    if app.take_pending_atlas_realm_stats_load() {
+                        if let Ok(stats) = TaxonomyTree::load_atlas_realm_stats(db).await {
+                            app.set_atlas_realm_stats(stats);
+                        }
+                    }
+
+                    // Check for pending Atlas pages list load (Page Composition view)
+                    if app.take_pending_atlas_pages_list_load() {
+                        if let Ok(pages) = TaxonomyTree::load_atlas_pages_list(db).await {
+                            app.set_atlas_pages_list(pages);
+                        }
+                    }
+
+                    // Check for pending Atlas page composition load
+                    if let Some((page_key, locale)) = app.take_pending_atlas_page_load() {
+                        if let Ok(data) =
+                            TaxonomyTree::load_atlas_page_composition(db, &page_key, &locale).await
+                        {
+                            app.set_atlas_page_composition(data);
                         }
                     }
 

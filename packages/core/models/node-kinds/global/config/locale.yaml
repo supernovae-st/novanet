@@ -130,7 +130,7 @@ node:
       cardinality: "1:N"
       description: "Pattern sets by usage (titles, cta, meta_desc, etc.)"
 
-    HAS_CULTURES:
+    HAS_CULTURE:
       to: CultureSet
       cardinality: "1:N"
       description: "Culture reference sets by type (holidays, events, symbols)"
@@ -140,7 +140,7 @@ node:
       cardinality: "1:N"
       description: "Taboo sets by severity (hard_block, soft_avoid, context_dep)"
 
-    HAS_AUDIENCES:
+    HAS_AUDIENCE:
       to: AudienceSet
       cardinality: "1:N"
       description: "Audience trait sets by segment (b2b, b2c, enterprise)"

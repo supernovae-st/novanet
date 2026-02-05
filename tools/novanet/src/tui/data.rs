@@ -90,6 +90,45 @@ pub struct GraphStats {
 }
 
 // ============================================================================
+// Atlas Mode Data Types
+// ============================================================================
+
+/// Atlas Realm Map statistics.
+#[derive(Debug, Clone, Default)]
+pub struct AtlasRealmStats {
+    pub realms: Vec<AtlasRealmInfo>,
+    pub total_kinds: usize,
+}
+
+/// Atlas realm info for Realm Map view.
+#[derive(Debug, Clone)]
+pub struct AtlasRealmInfo {
+    pub key: String,
+    pub display_name: String,
+    pub color: String,
+    pub layers: Vec<AtlasLayerInfo>,
+    pub total_kinds: usize,
+}
+
+/// Atlas layer info for Realm Map view.
+#[derive(Debug, Clone)]
+pub struct AtlasLayerInfo {
+    pub key: String,
+    pub display_name: String,
+    pub color: String,
+    pub kind_count: usize,
+}
+
+/// Atlas page info for Page Composition navigation.
+#[derive(Debug, Clone)]
+pub struct AtlasPageInfo {
+    pub key: String,
+    pub display_name: String,
+    pub project_key: String,
+    pub project_name: String,
+}
+
+// ============================================================================
 // Neo4j Arc Data (live query)
 // ============================================================================
 
@@ -942,6 +981,288 @@ RETURN t.key as trait_key,
         } else {
             Ok(TraitDetails::default())
         }
+    }
+
+    /// Load Atlas Realm Map statistics from Neo4j.
+    /// Returns layer counts organized by realm for the interactive Realm Map view.
+    pub async fn load_atlas_realm_stats(db: &Db) -> crate::Result<AtlasRealmStats> {
+        let cypher = r#"
+MATCH (r:Realm)-[:HAS_LAYER]->(l:Layer)
+OPTIONAL MATCH (k:Kind)-[:IN_LAYER]->(l)
+WITH r, l, count(k) as kind_count
+ORDER BY
+    CASE r.key WHEN 'global' THEN 0 ELSE 1 END,
+    CASE l.key
+        WHEN 'config' THEN 0
+        WHEN 'locale-knowledge' THEN 1
+        WHEN 'seo' THEN 2
+        WHEN 'foundation' THEN 3
+        WHEN 'structure' THEN 4
+        WHEN 'semantic' THEN 5
+        WHEN 'instruction' THEN 6
+        WHEN 'output' THEN 7
+        ELSE 8
+    END
+RETURN r.key as realm_key,
+       coalesce(r.display_name, r.key) as realm_name,
+       coalesce(r.color, '#888888') as realm_color,
+       collect({
+           layer_key: l.key,
+           layer_name: coalesce(l.display_name, l.key),
+           layer_color: coalesce(l.color, '#888888'),
+           kind_count: kind_count
+       }) as layers
+"#;
+
+        let rows = db.execute(cypher).await?;
+
+        let mut realms: Vec<AtlasRealmInfo> = Vec::new();
+        let mut total_kinds = 0;
+
+        for row in rows {
+            let realm_key: String = row.get("realm_key").unwrap_or_default();
+            let realm_name: String = row.get("realm_name").unwrap_or_default();
+            let realm_color: String = row.get("realm_color").unwrap_or_default();
+
+            let mut layers: Vec<AtlasLayerInfo> = Vec::new();
+            let mut realm_kind_count = 0;
+
+            if let Ok(layer_list) = row.get::<Vec<neo4rs::BoltMap>>("layers") {
+                for layer_map in layer_list {
+                    let layer_key: String = layer_map.get("layer_key").unwrap_or_default();
+                    let layer_name: String = layer_map.get("layer_name").unwrap_or_default();
+                    let layer_color: String = layer_map.get("layer_color").unwrap_or_default();
+                    let kind_count: i64 = layer_map.get("kind_count").unwrap_or(0);
+
+                    realm_kind_count += kind_count;
+                    layers.push(AtlasLayerInfo {
+                        key: layer_key,
+                        display_name: layer_name,
+                        color: layer_color,
+                        kind_count: kind_count as usize,
+                    });
+                }
+            }
+
+            total_kinds += realm_kind_count;
+            realms.push(AtlasRealmInfo {
+                key: realm_key,
+                display_name: realm_name,
+                color: realm_color,
+                layers,
+                total_kinds: realm_kind_count as usize,
+            });
+        }
+
+        Ok(AtlasRealmStats {
+            realms,
+            total_kinds: total_kinds as usize,
+        })
+    }
+
+    /// Load list of Pages for Atlas Page Composition navigation.
+    pub async fn load_atlas_pages_list(db: &Db) -> crate::Result<Vec<AtlasPageInfo>> {
+        let cypher = r#"
+MATCH (p:Page)
+OPTIONAL MATCH (p)<-[:HAS_PAGE]-(proj:Project)
+WITH p, proj
+ORDER BY proj.key, p.key
+RETURN p.key as page_key,
+       coalesce(p.display_name, p.key) as display_name,
+       coalesce(proj.key, 'unknown') as project_key,
+       coalesce(proj.display_name, proj.key, 'Unknown') as project_name
+"#;
+
+        let rows = db.execute(cypher).await?;
+        let mut pages = Vec::new();
+
+        for row in rows {
+            pages.push(AtlasPageInfo {
+                key: row.get("page_key").unwrap_or_default(),
+                display_name: row.get("display_name").unwrap_or_default(),
+                project_key: row.get("project_key").unwrap_or_default(),
+                project_name: row.get("project_name").unwrap_or_default(),
+            });
+        }
+
+        Ok(pages)
+    }
+
+    /// Load Page Composition data for Atlas mode.
+    /// Returns full anatomy: Page → Blocks → Entities → SEO Keywords with L10n.
+    pub async fn load_atlas_page_composition(
+        db: &Db,
+        page_key: &str,
+        locale: &str,
+    ) -> crate::Result<super::atlas::PageCompositionData> {
+        use super::atlas::{
+            BlockData, BlockL10nData, EntityData, EntityL10nData, PageCompositionData,
+            PageL10nData, SeoKeywordData,
+        };
+
+        // Query 1: Page info and L10n
+        let page_cypher = r#"
+MATCH (p:Page {key: $pageKey})
+OPTIONAL MATCH (p)<-[:HAS_PAGE]-(proj:Project)
+OPTIONAL MATCH (p)-[:HAS_L10N]->(pl:PageL10n)-[:FOR_LOCALE]->(loc:Locale {bcp47: $locale})
+RETURN p.key as page_key,
+       coalesce(p.display_name, p.key) as page_name,
+       p.page_type as page_type,
+       p.prompt as prompt,
+       coalesce(proj.key, 'unknown') as project_key,
+       coalesce(proj.display_name, proj.key, 'Unknown') as project_name,
+       pl.title as l10n_title,
+       pl.slug as l10n_slug,
+       pl.meta_description as l10n_meta
+"#;
+
+        let page_rows = db
+            .execute_with_params(page_cypher, [("pageKey", page_key), ("locale", locale)])
+            .await?;
+
+        let Some(page_row) = page_rows.into_iter().next() else {
+            return Ok(PageCompositionData::default());
+        };
+
+        let page_l10n = if page_row
+            .get::<Option<String>>("l10n_title")
+            .ok()
+            .flatten()
+            .is_some()
+        {
+            Some(PageL10nData {
+                locale: locale.to_string(),
+                title: page_row.get("l10n_title").ok(),
+                slug: page_row.get("l10n_slug").ok(),
+                meta_description: page_row.get("l10n_meta").ok(),
+            })
+        } else {
+            None
+        };
+
+        // Query 2: Blocks with L10n
+        let blocks_cypher = r#"
+MATCH (p:Page {key: $pageKey})-[:HAS_BLOCK]->(b:Block)
+OPTIONAL MATCH (b)-[:HAS_L10N]->(bl:BlockL10n)-[:FOR_LOCALE]->(loc:Locale {bcp47: $locale})
+WITH b, bl
+ORDER BY b.order
+RETURN b.key as block_key,
+       coalesce(b.display_name, b.key) as block_name,
+       coalesce(b.order, 0) as block_order,
+       b.block_type as block_type,
+       b.prompt as prompt,
+       b.rules as rules,
+       substring(coalesce(bl.content, ''), 0, 100) as content_preview
+"#;
+
+        let block_rows = db
+            .execute_with_params(blocks_cypher, [("pageKey", page_key), ("locale", locale)])
+            .await?;
+
+        let mut blocks = Vec::new();
+        for row in block_rows {
+            let content_preview: String = row.get("content_preview").unwrap_or_default();
+            let l10n = if !content_preview.is_empty() {
+                Some(BlockL10nData {
+                    locale: locale.to_string(),
+                    content_preview,
+                })
+            } else {
+                None
+            };
+
+            blocks.push(BlockData {
+                key: row.get("block_key").unwrap_or_default(),
+                display_name: row.get("block_name").unwrap_or_default(),
+                order: row.get("block_order").unwrap_or(0),
+                block_type: row.get("block_type").ok(),
+                prompt: row.get("prompt").ok(),
+                rules: row.get("rules").ok(),
+                l10n,
+            });
+        }
+
+        // Query 3: Entities used by blocks with L10n
+        let entities_cypher = r#"
+MATCH (p:Page {key: $pageKey})-[:HAS_BLOCK]->(b:Block)-[:USES_ENTITY]->(e:Entity)
+OPTIONAL MATCH (e)-[:HAS_L10N]->(el:EntityL10n)-[:FOR_LOCALE]->(loc:Locale {bcp47: $locale})
+WITH e, el, collect(b.key) as connected_blocks
+RETURN e.key as entity_key,
+       coalesce(e.display_name, e.key) as entity_name,
+       el.name as l10n_name,
+       substring(coalesce(el.description, ''), 0, 80) as l10n_desc,
+       connected_blocks
+"#;
+
+        let entity_rows = db
+            .execute_with_params(entities_cypher, [("pageKey", page_key), ("locale", locale)])
+            .await?;
+
+        let mut entities = Vec::new();
+        for row in entity_rows {
+            let l10n_name: Option<String> = row.get("l10n_name").ok();
+            let l10n_desc: String = row.get("l10n_desc").unwrap_or_default();
+            let l10n = if l10n_name.is_some() || !l10n_desc.is_empty() {
+                Some(EntityL10nData {
+                    locale: locale.to_string(),
+                    name: l10n_name,
+                    description_preview: if l10n_desc.is_empty() {
+                        None
+                    } else {
+                        Some(l10n_desc)
+                    },
+                })
+            } else {
+                None
+            };
+
+            let connected_blocks: Vec<String> = row
+                .get::<Vec<String>>("connected_blocks")
+                .unwrap_or_default();
+
+            entities.push(EntityData {
+                key: row.get("entity_key").unwrap_or_default(),
+                display_name: row.get("entity_name").unwrap_or_default(),
+                l10n,
+                connected_blocks,
+            });
+        }
+
+        // Query 4: SEO Keywords connected to entities
+        let seo_cypher = r#"
+MATCH (p:Page {key: $pageKey})-[:HAS_BLOCK]->(b:Block)-[:USES_ENTITY]->(e:Entity)<-[:EXPRESSES]-(kw:SEOKeyword)
+WITH kw, collect(DISTINCT e.key) as entity_keys
+OPTIONAL MATCH (kw)-[:HAS_METRICS]->(m:SEOKeywordMetrics)
+RETURN kw.keyword as keyword,
+       m.monthly_volume as volume,
+       entity_keys
+"#;
+
+        let seo_rows = db
+            .execute_with_params(seo_cypher, [("pageKey", page_key), ("locale", locale)])
+            .await?;
+
+        let mut seo_keywords = Vec::new();
+        for row in seo_rows {
+            seo_keywords.push(SeoKeywordData {
+                keyword: row.get("keyword").unwrap_or_default(),
+                volume: row.get("volume").ok(),
+                connected_entities: row.get("entity_keys").unwrap_or_default(),
+            });
+        }
+
+        Ok(PageCompositionData {
+            page_key: page_row.get("page_key").unwrap_or_default(),
+            page_display_name: page_row.get("page_name").unwrap_or_default(),
+            project_key: page_row.get("project_key").unwrap_or_default(),
+            project_display_name: page_row.get("project_name").unwrap_or_default(),
+            page_type: page_row.get("page_type").ok(),
+            page_prompt: page_row.get("prompt").ok(),
+            page_l10n,
+            blocks,
+            entities,
+            seo_keywords,
+        })
     }
 
     /// Check if a node is collapsed.

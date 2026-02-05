@@ -2,6 +2,7 @@
 # Slugification — URL slug rules for a locale (transliteration, stop words, URL conventions)
 #
 # v10.6: Added slug_rule enum, preserve_diacritics, unicode_normalization, raw_markdown (hybrid approach)
+# v10.6.1: Added stopwords_by_category (optional, for analysis)
 # Stability: High - changes rarely
 
 node:
@@ -168,6 +169,17 @@ node:
       required: false
       description: "Additional stopwords specific to this locale variant"
       example: []
+
+    stopwords_by_category:
+      type: json
+      required: false
+      description: "Stopwords organized by grammatical category (for analysis, optional)"
+      example:
+        articles: ["le", "la", "les", "un", "une"]
+        prepositions: ["de", "du", "des", "à", "au", "aux", "en", "dans", "pour", "par", "sur", "avec"]
+        conjunctions: ["et", "ou", "mais", "car"]
+        pronouns: ["que", "qui", "ce", "se", "il", "elle", "on"]
+        verbs: ["est", "sont", "être", "avoir"]
 
     # ═══════════════════════════════════════════════════════════════════════════
     # SCRIPT-SPECIFIC (for native_script rule)
