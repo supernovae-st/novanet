@@ -204,11 +204,16 @@ impl App {
         // Build graph nodes for the current selection (legacy YAML-based)
         self.build_graph_nodes();
 
-        // Clear Neo4j data when moving away
+        // Clear Neo4j data AND pending loads when moving away
+        // (prevents race condition where pending load completes after navigation)
         self.kind_arcs = None;
         self.arc_kind_details = None;
         self.realm_details = None;
         self.layer_details = None;
+        self.pending_arcs_load = None;
+        self.pending_arc_kind_load = None;
+        self.pending_realm_load = None;
+        self.pending_layer_load = None;
 
         // Extract data before mutable borrow (to avoid borrow checker issues)
         let kind_info = match self.tree.item_at(self.tree_cursor) {
