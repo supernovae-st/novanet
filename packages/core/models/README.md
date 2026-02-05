@@ -108,7 +108,7 @@ Locale ──[:HAS_IDENTITY]──> LocaleIdentity
 | `SUPPORTS_LOCALE` | `status` | active \| pending \| disabled |
 | `DEFAULT_LOCALE` | (none) | Exactly one per project |
 | `HAS_BLOCK` | `position` | Display order |
-| `USES_ENTITY` | `purpose, temperature` | primary/secondary/contextual (v10.3: was USES_CONCEPT) |
+| `USES_ENTITY` | `purpose, temperature` | primary/secondary/contextual (renamed in v10.3) |
 | `SEMANTIC_LINK` | `type, temperature` | Entity relationships |
 | `HAS_SEO_TARGET` | `role, priority` | locale-aligned: primary/secondary/long-tail |
 | `HAS_GEO_TARGET` | `role, priority` | locale-aligned: primary/contextual |

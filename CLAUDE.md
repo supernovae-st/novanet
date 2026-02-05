@@ -70,13 +70,13 @@ Path validation ensures `models/nodes/{realm}/{layer}/{name}.yaml` matches YAML 
 
 ---
 
-## v10.1 Knowledge Atoms Architecture
+## Knowledge Atoms Architecture
 
-v10.1 introduces **Knowledge Atoms** - granular knowledge nodes for selective LLM context loading.
+**Knowledge Atoms** provide granular knowledge nodes for selective LLM context loading.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  KNOWLEDGE ARCHITECTURE (v10.1)                                             │
+│  KNOWLEDGE ARCHITECTURE                                                     │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
 │  Locale ──[:HAS_TERMS]──> TermSet ──[:CONTAINS]──> Term (atom)              │
@@ -286,7 +286,7 @@ PATCH  = Bug fixes, documentation, refactoring
 
 **Files**: `CHANGELOG.md`, `ROADMAP.md`, `.github/RELEASE_TEMPLATE.md`
 
-**GitHub Milestones**: v9.0.0, v9.5.0, v10.0.0
+**GitHub Milestones**: v9.0.0, v10.0.0, v10.4.0
 
 ---
 
