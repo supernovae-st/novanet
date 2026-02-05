@@ -253,18 +253,6 @@ enum LocaleAction {
         #[arg(long)]
         dry_run: bool,
     },
-    /// Generate 21-formatting, 22-slugification, 23-adaptation Cypher from MD sources
-    GenerateRules {
-        /// Path to localization-data directory (contains 2-rules-* folders)
-        #[arg(long)]
-        source_dir: std::path::PathBuf,
-        /// Output directory for Cypher files (default: packages/db/seed/)
-        #[arg(long)]
-        output_dir: Option<std::path::PathBuf>,
-        /// Dry-run: generate without writing files
-        #[arg(long)]
-        dry_run: bool,
-    },
 }
 
 #[derive(Subcommand)]
@@ -526,23 +514,6 @@ async fn main() -> color_eyre::Result<()> {
                     if *dry_run { " --dry-run" } else { "" }
                 );
                 novanet::commands::locale::run_generate(csv, identity_dir, &output_path, *dry_run)?;
-            }
-            LocaleAction::GenerateRules {
-                source_dir,
-                output_dir,
-                dry_run,
-            } => {
-                let root = root?;
-                let output_path = output_dir
-                    .clone()
-                    .unwrap_or_else(|| root.join("packages/db/seed"));
-                eprintln!(
-                    "novanet locale generate-rules --source-dir={} --output-dir={}{}",
-                    source_dir.display(),
-                    output_path.display(),
-                    if *dry_run { " --dry-run" } else { "" }
-                );
-                novanet::commands::locale::run_generate_rules(source_dir, &output_path, *dry_run)?;
             }
         },
         Commands::Db { ref action } => {
