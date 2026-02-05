@@ -1506,7 +1506,11 @@ impl InstanceInfo {
 
         // Check for ISO date (starts with digit and contains T or -)
         if value.len() > 10
-            && value.chars().next().map(|c| c.is_ascii_digit()).unwrap_or(false)
+            && value
+                .chars()
+                .next()
+                .map(|c| c.is_ascii_digit())
+                .unwrap_or(false)
             && (value.contains('T') || value.chars().filter(|&c| c == '-').count() >= 2)
         {
             return (format!("\"{}\"", value), Color::Magenta);

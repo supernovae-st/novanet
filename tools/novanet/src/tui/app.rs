@@ -6,7 +6,9 @@ use std::path::Path;
 
 use crossterm::event::{KeyCode, KeyEvent};
 
-use super::data::{ArcKindDetails, KindArcsData, LayerDetails, RealmDetails, TaxonomyTree, TreeItem};
+use super::data::{
+    ArcKindDetails, KindArcsData, LayerDetails, RealmDetails, TaxonomyTree, TreeItem,
+};
 
 /// Navigation mode (matches Studio).
 /// Order: 1:Meta 2:Data 3:Overlay 4:Query
@@ -443,7 +445,9 @@ impl App {
         // Scroll down if cursor is below viewport
         // Use saturating_sub to prevent underflow when tree_height is 0
         if self.tree_cursor >= self.tree_scroll + self.tree_height {
-            self.tree_scroll = self.tree_cursor.saturating_sub(self.tree_height.saturating_sub(1));
+            self.tree_scroll = self
+                .tree_cursor
+                .saturating_sub(self.tree_height.saturating_sub(1));
         }
     }
 
