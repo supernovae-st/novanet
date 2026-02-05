@@ -3,6 +3,7 @@
 //! Generates Neo4j seed files from ATH knowledge data.
 //! Currently supports:
 //! - technical tier: 2-rules-slug → SlugRule + Slugification
+//! - technical tier: 2-rules-formatting → Formatting
 
 use std::fs;
 use std::path::Path;
@@ -10,6 +11,7 @@ use std::time::Instant;
 
 use tracing::instrument;
 
+use crate::generators::formatting::FormattingGenerator;
 use crate::generators::slugification::SlugificationGenerator;
 use crate::Result;
 
@@ -30,7 +32,7 @@ pub enum KnowledgeTier {
 
 impl KnowledgeTier {
     /// Parse tier from string.
-    pub fn from_str(s: &str) -> Option<Self> {
+    pub fn parse(s: &str) -> Option<Self> {
         match s.to_lowercase().as_str() {
             "technical" => Some(Self::Technical),
             "voice" => Some(Self::Voice),
@@ -77,6 +79,10 @@ pub fn knowledge_generate(
         KnowledgeTier::Technical | KnowledgeTier::All => {
             // Generate slugification
             let result = generate_slugification(root, ath, dry_run)?;
+            results.push(result);
+
+            // Generate formatting
+            let result = generate_formatting(root, ath, dry_run)?;
             results.push(result);
         }
         KnowledgeTier::Voice => {
@@ -127,6 +133,40 @@ fn generate_slugification(root: &Path, ath_path: &str, dry_run: bool) -> Result<
     })
 }
 
+/// Generate formatting seed file.
+fn generate_formatting(root: &Path, ath_path: &str, dry_run: bool) -> Result<KnowledgeGenerateResult> {
+    let start = Instant::now();
+
+    // Generate Cypher content
+    let generator = FormattingGenerator::with_ath_path(ath_path);
+    let content = generator.generate()?;
+
+    // Count nodes (rough estimate from MERGE statements)
+    let node_count = content.matches("MERGE (").count();
+
+    // Output path
+    let output_path = root.join("packages/db/seed/23-formatting.cypher");
+    let rel_path = "packages/db/seed/23-formatting.cypher";
+
+    // Write file (unless dry run)
+    if !dry_run {
+        if let Some(parent) = output_path.parent() {
+            fs::create_dir_all(parent)?;
+        }
+        fs::write(&output_path, &content)?;
+    }
+
+    let duration = start.elapsed();
+
+    Ok(KnowledgeGenerateResult {
+        tier: "technical/formatting".to_string(),
+        output_path: rel_path.to_string(),
+        bytes: content.len(),
+        duration_ms: duration.as_millis(),
+        node_count,
+    })
+}
+
 /// List available knowledge tiers.
 pub fn knowledge_list() -> Vec<KnowledgeTierInfo> {
     vec![
@@ -135,7 +175,7 @@ pub fn knowledge_list() -> Vec<KnowledgeTierInfo> {
             description: "Technical rules: slugification, formatting, adaptation".to_string(),
             sources: vec![
                 "2-rules-slug/*.md".to_string(),
-                "2-rules-formatting/*.md (pending)".to_string(),
+                "2-rules-formatting/*.md".to_string(),
                 "2-rules-adaptation/*.md (pending)".to_string(),
             ],
             status: "partial".to_string(),
@@ -181,11 +221,11 @@ mod tests {
 
     #[test]
     fn test_knowledge_tier_from_str() {
-        assert_eq!(KnowledgeTier::from_str("technical"), Some(KnowledgeTier::Technical));
-        assert_eq!(KnowledgeTier::from_str("TECHNICAL"), Some(KnowledgeTier::Technical));
-        assert_eq!(KnowledgeTier::from_str("voice"), Some(KnowledgeTier::Voice));
-        assert_eq!(KnowledgeTier::from_str("all"), Some(KnowledgeTier::All));
-        assert_eq!(KnowledgeTier::from_str("invalid"), None);
+        assert_eq!(KnowledgeTier::parse("technical"), Some(KnowledgeTier::Technical));
+        assert_eq!(KnowledgeTier::parse("TECHNICAL"), Some(KnowledgeTier::Technical));
+        assert_eq!(KnowledgeTier::parse("voice"), Some(KnowledgeTier::Voice));
+        assert_eq!(KnowledgeTier::parse("all"), Some(KnowledgeTier::All));
+        assert_eq!(KnowledgeTier::parse("invalid"), None);
     }
 
     #[test]

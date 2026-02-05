@@ -11,6 +11,7 @@ pub mod arc_kind;
 pub mod autowire;
 pub mod colors;
 pub mod cypher_utils;
+pub mod formatting;
 pub mod hierarchy;
 pub mod icons;
 pub mod layer;
