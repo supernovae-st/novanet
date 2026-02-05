@@ -117,45 +117,59 @@ fn render_main(f: &mut Frame, area: Rect, app: &mut App) {
     }
 }
 
-/// Wide layout: Tree (25%) | Info (25%) | YAML (50%).
+/// Wide layout: Tree (15%) | Info+Graph (42.5%) | YAML (42.5%).
 fn render_main_wide(f: &mut Frame, area: Rect, app: &mut App) {
     let chunks = Layout::default()
         .direction(Direction::Horizontal)
         .constraints([
-            Constraint::Percentage(25), // Tree
-            Constraint::Percentage(25), // Info
-            Constraint::Percentage(50), // YAML
+            Constraint::Percentage(15),  // Tree (narrower)
+            Constraint::Percentage(43),  // Info + Graph (stacked)
+            Constraint::Percentage(42),  // YAML
         ])
         .split(area);
 
     render_tree(f, chunks[0], app);
-    render_info_panel(f, chunks[1], app);
+
+    // Stack Info (60%) and Graph (40%) vertically in the middle panel
+    let middle_chunks = Layout::default()
+        .direction(Direction::Vertical)
+        .constraints([
+            Constraint::Percentage(60), // Info
+            Constraint::Percentage(40), // Graph
+        ])
+        .split(chunks[1]);
+
+    render_info_panel(f, middle_chunks[0], app);
+    render_graph_panel(f, middle_chunks[1], app);
+
     render_yaml_panel(f, chunks[2], app);
 }
 
-/// Narrow layout: Tree (40%) | Info+YAML stacked (60%).
+/// Narrow layout: Tree (20%) | Info+Graph+YAML stacked (80%).
 fn render_main_narrow(f: &mut Frame, area: Rect, app: &mut App) {
     let h_chunks = Layout::default()
         .direction(Direction::Horizontal)
         .constraints([
-            Constraint::Percentage(40), // Tree
-            Constraint::Percentage(60), // Detail (stacked)
+            Constraint::Percentage(20), // Tree (narrower)
+            Constraint::Percentage(80), // Detail (stacked)
         ])
         .split(area);
 
     render_tree(f, h_chunks[0], app);
 
-    // Stack Info (60%) and YAML (40%) vertically
+    // Stack Info (35%), Graph (30%), YAML (35%) vertically
     let v_chunks = Layout::default()
         .direction(Direction::Vertical)
         .constraints([
-            Constraint::Percentage(55), // Info
-            Constraint::Percentage(45), // YAML
+            Constraint::Percentage(35), // Info
+            Constraint::Percentage(30), // Graph
+            Constraint::Percentage(35), // YAML
         ])
         .split(h_chunks[1]);
 
     render_info_panel(f, v_chunks[0], app);
-    render_yaml_panel(f, v_chunks[1], app);
+    render_graph_panel(f, v_chunks[1], app);
+    render_yaml_panel(f, v_chunks[2], app);
 }
 
 /// Tree panel: taxonomy hierarchy with scroll and collapse.
@@ -251,23 +265,67 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                     idx += 1;
 
                     if !layer_collapsed {
+                        let is_data_mode = app.is_data_mode();
+
                         for kind in &layer.kinds {
-                            // v10.1: Show instance count only (knowledge_tier badges removed)
+                            // In Data mode, Kind can be collapsed to hide instances
+                            let kind_key = format!("kind:{}", kind.key);
+                            let kind_collapsed = app.tree.is_collapsed(&kind_key);
+
+                            // Show collapse icon in Data mode if instances exist
+                            let kind_icon = if is_data_mode {
+                                if let Some(instances) = app.tree.get_instances(&kind.key) {
+                                    if !instances.is_empty() {
+                                        if kind_collapsed { "▶" } else { "▼" }
+                                    } else {
+                                        ""
+                                    }
+                                } else {
+                                    ""
+                                }
+                            } else {
+                                ""
+                            };
+
+                            // v10.1: Show instance count
                             let count = if kind.instance_count > 0 {
                                 format!(" ({})", kind.instance_count)
                             } else {
                                 String::new()
                             };
+
                             all_lines.push(make_line(
                                 idx,
                                 app.tree_cursor,
                                 focused,
                                 "      ",
-                                "",
+                                kind_icon,
                                 format!("{}{}", kind.display_name, count),
                                 Color::White,
                             ));
                             idx += 1;
+
+                            // In Data mode, show instances under Kind (if not collapsed)
+                            if is_data_mode && !kind_collapsed {
+                                if let Some(instances) = app.tree.get_instances(&kind.key) {
+                                    for instance in instances {
+                                        let is_cursor = idx == app.tree_cursor;
+                                        let style = if is_cursor && focused {
+                                            Style::default()
+                                                .bg(Color::Rgb(30, 40, 50))
+                                                .fg(Color::Green)
+                                        } else {
+                                            Style::default().fg(Color::Rgb(100, 180, 100))
+                                        };
+                                        let prefix = if is_cursor { "›" } else { " " };
+                                        all_lines.push(Line::from(Span::styled(
+                                            format!("{}        • {}", prefix, instance.display_name),
+                                            style,
+                                        )));
+                                        idx += 1;
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -345,8 +403,8 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
         lines
     };
 
-    // Show scroll indicator in title
-    let total = app.tree.item_count();
+    // Show scroll indicator in title (use mode-aware count for Data view)
+    let total = app.current_item_count();
     let title = if total > visible_height {
         format!(
             " Taxonomy [{}-{}/{}] ",
@@ -418,6 +476,137 @@ fn render_info_panel(f: &mut Frame, area: Rect, app: &mut App) {
 
     let paragraph = Paragraph::new(lines).block(block);
     f.render_widget(paragraph, area);
+}
+
+/// Graph panel: Displays Neo4j relationships for the selected Kind.
+///
+/// Shows real arc data from Neo4j when a Kind is selected,
+/// or contextual messages for other selections.
+fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
+    let focused = app.focus == Focus::Graph;
+    let border_color = if focused {
+        Color::Magenta
+    } else {
+        Color::Rgb(60, 60, 70)
+    };
+
+    let block = Block::default()
+        .title(Span::styled(" Arc Relationships ", Style::default().fg(border_color)))
+        .borders(Borders::ALL)
+        .border_style(Style::default().fg(border_color));
+
+    let inner = block.inner(area);
+    f.render_widget(block, area);
+
+    let mut lines: Vec<Line> = Vec::new();
+    let dim = Style::default().fg(Color::Rgb(100, 100, 100));
+    let bright_dim = Style::default().fg(Color::Rgb(140, 140, 140));
+
+    // Check if we have Neo4j arc data for a Kind
+    if let Some(ref arcs) = app.kind_arcs {
+        // === HIERARCHY BREADCRUMB ===
+        lines.push(Line::from(vec![
+            Span::styled("  ", dim),
+            Span::styled(&arcs.realm, Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD)),
+            Span::styled(" (Realm)", Style::default().fg(Color::DarkGray)),
+            Span::styled(" → ", bright_dim),
+            Span::styled(&arcs.layer, Style::default().fg(Color::Magenta).add_modifier(Modifier::BOLD)),
+            Span::styled(" (Layer)", Style::default().fg(Color::DarkGray)),
+            Span::styled(" → ", bright_dim),
+            Span::styled(&arcs.kind_label, Style::default().fg(Color::Green).add_modifier(Modifier::BOLD)),
+            Span::styled(" (Kind)", Style::default().fg(Color::DarkGray)),
+        ]));
+        lines.push(Line::from(Span::raw("")));
+
+        // === INCOMING ARCS ===
+        if !arcs.incoming.is_empty() {
+            lines.push(Line::from(Span::styled(
+                format!("  ◀─ INCOMING ({}) ", arcs.incoming.len()),
+                Style::default().fg(Color::Magenta).add_modifier(Modifier::BOLD),
+            )));
+            lines.push(Line::from(Span::styled(
+                "  ─────────────────────────────────────────",
+                dim,
+            )));
+
+            for arc in &arcs.incoming {
+                let family_color = get_family_color(&arc.family);
+                lines.push(Line::from(vec![
+                    Span::styled("    ", dim),
+                    Span::styled(&arc.other_kind, Style::default().fg(Color::Green)),
+                    Span::styled(" ──[", dim),
+                    Span::styled(&arc.arc_key, Style::default().fg(family_color).add_modifier(Modifier::BOLD)),
+                    Span::styled("]──▶ ", dim),
+                    Span::styled(&arcs.kind_label, Style::default().fg(Color::White)),
+                    Span::styled(format!("  ({})", arc.family), Style::default().fg(Color::DarkGray)),
+                ]));
+            }
+            lines.push(Line::from(Span::raw("")));
+        }
+
+        // === OUTGOING ARCS ===
+        if !arcs.outgoing.is_empty() {
+            lines.push(Line::from(Span::styled(
+                format!("  ─▶ OUTGOING ({}) ", arcs.outgoing.len()),
+                Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD),
+            )));
+            lines.push(Line::from(Span::styled(
+                "  ─────────────────────────────────────────",
+                dim,
+            )));
+
+            for arc in &arcs.outgoing {
+                let family_color = get_family_color(&arc.family);
+                lines.push(Line::from(vec![
+                    Span::styled("    ", dim),
+                    Span::styled(&arcs.kind_label, Style::default().fg(Color::White)),
+                    Span::styled(" ──[", dim),
+                    Span::styled(&arc.arc_key, Style::default().fg(family_color).add_modifier(Modifier::BOLD)),
+                    Span::styled("]──▶ ", dim),
+                    Span::styled(&arc.other_kind, Style::default().fg(Color::Green)),
+                    Span::styled(format!("  ({})", arc.family), Style::default().fg(Color::DarkGray)),
+                ]));
+            }
+            lines.push(Line::from(Span::raw("")));
+        }
+
+        // === NO ARCS MESSAGE ===
+        if arcs.incoming.is_empty() && arcs.outgoing.is_empty() {
+            lines.push(Line::from(Span::styled(
+                "  No arc relationships defined for this Kind",
+                Style::default().fg(Color::DarkGray),
+            )));
+        }
+    } else {
+        // No Neo4j data - show contextual message
+        let msg = match app.current_item() {
+            Some(TreeItem::KindsSection) | Some(TreeItem::ArcsSection) => {
+                "▸ Expand a section to explore"
+            }
+            Some(TreeItem::ArcFamily(_)) => "▸ Select an Arc to see endpoints",
+            Some(TreeItem::ArcKind(_, _)) => "▸ Arc details (Neo4j query coming soon)",
+            Some(TreeItem::Realm(_)) | Some(TreeItem::Layer(_, _)) => {
+                "▸ Select a Kind to see arc relationships"
+            }
+            _ => "▸ Select a Kind to see arc relationships",
+        };
+        lines.push(Line::from(Span::styled(msg, Style::default().fg(Color::DarkGray))));
+    }
+
+    let paragraph = Paragraph::new(lines);
+    f.render_widget(paragraph, inner);
+}
+
+/// Get color for arc family.
+fn get_family_color(family: &str) -> Color {
+    match family {
+        "ownership" => Color::Rgb(38, 139, 210),    // Blue
+        "localization" => Color::Rgb(133, 153, 0),  // Green
+        "semantic" => Color::Rgb(181, 137, 0),      // Yellow
+        "generation" => Color::Rgb(203, 75, 22),    // Orange
+        "mining" => Color::Rgb(108, 113, 196),      // Violet
+        _ => Color::Rgb(140, 140, 140),             // Gray default
+    }
 }
 
 /// YAML panel: displays YAML source with independent scroll.
@@ -494,7 +683,7 @@ fn build_yaml_title(path: &str) -> Vec<Span<'static>> {
 
 /// Get title for detail panel based on current selection.
 fn get_detail_title(app: &App) -> String {
-    match app.tree.item_at(app.tree_cursor) {
+    match app.current_item() {
         Some(TreeItem::KindsSection) => "Kinds".to_string(),
         Some(TreeItem::ArcsSection) => "Arcs".to_string(),
         Some(TreeItem::Realm(r)) => format!("{} {}", r.emoji, r.display_name),
@@ -508,6 +697,9 @@ fn get_detail_title(app: &App) -> String {
         }
         Some(TreeItem::ArcFamily(f)) => f.display_name.clone(),
         Some(TreeItem::ArcKind(_, ek)) => ek.display_name.clone(),
+        Some(TreeItem::Instance(_, _, _, inst)) => {
+            format!("{} ({})", inst.display_name, inst.kind_key)
+        }
         None => "Detail".to_string(),
     }
 }
@@ -543,7 +735,8 @@ fn colorize_path_inline(path: &str) -> Vec<Span<'static>> {
 
 /// Build info lines for detail panel.
 fn build_info_lines(app: &App) -> Vec<Line<'static>> {
-    match app.tree.item_at(app.tree_cursor) {
+    // Use mode-aware item lookup (shows instances in Data mode)
+    match app.current_item() {
         Some(TreeItem::KindsSection) => {
             let kind_count: usize = app
                 .tree
@@ -885,6 +1078,113 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
 
             lines
         }
+        Some(TreeItem::Instance(_realm, _layer, kind, instance)) => {
+            // Instance info for Data view
+            let mut lines: Vec<Line<'static>> = Vec::new();
+
+            // Header
+            lines.push(Line::from(vec![
+                Span::styled("type      ", Style::default().fg(Color::DarkGray)),
+                Span::styled("Instance", Style::default().fg(Color::Green)),
+            ]));
+            lines.push(Line::from(vec![
+                Span::styled("key       ", Style::default().fg(Color::DarkGray)),
+                Span::styled(instance.key.clone(), Style::default().fg(Color::White)),
+            ]));
+            lines.push(Line::from(vec![
+                Span::styled("kind      ", Style::default().fg(Color::DarkGray)),
+                Span::styled(kind.display_name.clone(), Style::default().fg(Color::Cyan)),
+            ]));
+
+            // Properties
+            if !instance.properties.is_empty() {
+                lines.push(Line::from(""));
+                lines.push(Line::from(Span::styled(
+                    format!("Properties ({})", instance.properties.len()),
+                    Style::default().fg(Color::Rgb(100, 100, 120)),
+                )));
+                for (key, value) in &instance.properties {
+                    let truncated = if value.len() > 40 {
+                        format!("{}...", &value[..40])
+                    } else {
+                        value.clone()
+                    };
+                    lines.push(Line::from(vec![
+                        Span::styled(format!("  {} ", key), Style::default().fg(Color::DarkGray)),
+                        Span::styled(truncated, Style::default().fg(Color::White)),
+                    ]));
+                }
+            }
+
+            // Arc comparison diagram: schema arcs vs actual arcs
+            // Shows existing (══) and missing (╌╌) connections
+            if !kind.arcs.is_empty() {
+                let comparisons = instance.compare_arcs(&kind.arcs);
+                let existing_count = comparisons.iter().filter(|c| c.exists).count();
+                let missing_count = comparisons.len() - existing_count;
+
+                lines.push(Line::from(""));
+                lines.push(Line::from(Span::styled(
+                    format!(
+                        "Arc Diagram ({} exist, {} missing)",
+                        existing_count, missing_count
+                    ),
+                    Style::default().fg(Color::Rgb(100, 100, 120)),
+                )));
+
+                // Box drawing for instance node
+                lines.push(Line::from(Span::styled(
+                    format!("  ┌{}┐", "─".repeat(instance.key.len() + 2)),
+                    Style::default().fg(Color::Cyan),
+                )));
+                lines.push(Line::from(Span::styled(
+                    format!("  │ {} │", instance.key),
+                    Style::default().fg(Color::Cyan),
+                )));
+                lines.push(Line::from(Span::styled(
+                    format!("  └{}┘", "─".repeat(instance.key.len() + 2)),
+                    Style::default().fg(Color::Cyan),
+                )));
+
+                // Arcs with status
+                for cmp in &comparisons {
+                    if cmp.exists {
+                        // Existing arc: solid double line (══)
+                        let target_display = cmp
+                            .target_key
+                            .clone()
+                            .unwrap_or_else(|| cmp.target_kind.clone());
+                        lines.push(Line::from(vec![
+                            Span::styled("    ══", Style::default().fg(Color::Green)),
+                            Span::styled(
+                                format!("[{}]", cmp.arc_type),
+                                Style::default().fg(Color::Yellow),
+                            ),
+                            Span::styled("══> ", Style::default().fg(Color::Green)),
+                            Span::styled(target_display, Style::default().fg(Color::White)),
+                            Span::styled(" ✓", Style::default().fg(Color::Green)),
+                        ]));
+                    } else {
+                        // Missing arc: dashed line (╌╌)
+                        lines.push(Line::from(vec![
+                            Span::styled("    ╌╌", Style::default().fg(Color::Red)),
+                            Span::styled(
+                                format!("[{}]", cmp.arc_type),
+                                Style::default().fg(Color::DarkGray),
+                            ),
+                            Span::styled("╌╌> ", Style::default().fg(Color::Red)),
+                            Span::styled(
+                                format!("({} - not connected)", cmp.target_kind),
+                                Style::default().fg(Color::DarkGray),
+                            ),
+                            Span::styled(" ✗", Style::default().fg(Color::Red)),
+                        ]));
+                    }
+                }
+            }
+
+            lines
+        }
         None => {
             vec![Line::from(Span::styled(
                 "Select an item",
@@ -1002,6 +1302,7 @@ fn render_status(f: &mut Frame, area: Rect, app: &App) {
     let focus_label = match app.focus {
         Focus::Tree => "Tree",
         Focus::Info => "Info",
+        Focus::Graph => "Graph",
         Focus::Yaml => "YAML",
     };
 
@@ -1124,6 +1425,7 @@ fn render_search(f: &mut Frame, app: &App) {
             Some(TreeItem::Kind(_, _, k)) => ("    ", k.display_name.clone(), "Kind"),
             Some(TreeItem::ArcFamily(f)) => ("  ", f.display_name.clone(), "ArcFamily"),
             Some(TreeItem::ArcKind(_, ek)) => ("    ", ek.display_name.clone(), "ArcKind"),
+            Some(TreeItem::Instance(_, _, _, inst)) => ("      ", inst.display_name.clone(), "Instance"),
             None => ("?", "Unknown".to_string(), ""),
         };
 
@@ -1160,8 +1462,8 @@ fn render_search(f: &mut Frame, app: &App) {
 /// Help overlay: keyboard shortcuts.
 fn render_help(f: &mut Frame) {
     let area = f.area();
-    let width = 45.min(area.width.saturating_sub(4));
-    let height = 26.min(area.height.saturating_sub(4));
+    let width = 50.min(area.width.saturating_sub(4));
+    let height = 32.min(area.height.saturating_sub(4));
     let x = (area.width.saturating_sub(width)) / 2;
     let y = (area.height.saturating_sub(height)) / 2;
 
@@ -1182,11 +1484,15 @@ fn render_help(f: &mut Frame) {
         )]),
         Line::from(vec![
             Span::styled("    Tab      ", Style::default().fg(Color::White)),
-            Span::styled("Toggle Tree ↔ Detail", Style::default().fg(Color::DarkGray)),
+            Span::styled("Cycle: Tree→Info→Graph→YAML", Style::default().fg(Color::DarkGray)),
         ]),
         Line::from(vec![
-            Span::styled("    ↑↓       ", Style::default().fg(Color::White)),
-            Span::styled("Move cursor in tree", Style::default().fg(Color::DarkGray)),
+            Span::styled("    ←→       ", Style::default().fg(Color::White)),
+            Span::styled("Quick panel switch", Style::default().fg(Color::DarkGray)),
+        ]),
+        Line::from(vec![
+            Span::styled("    j/k ↑↓   ", Style::default().fg(Color::White)),
+            Span::styled("Move cursor / scroll", Style::default().fg(Color::DarkGray)),
         ]),
         Line::from(""),
         Line::from(vec![Span::styled(
@@ -1194,33 +1500,35 @@ fn render_help(f: &mut Frame) {
             Style::default().fg(Color::Yellow),
         )]),
         Line::from(vec![
-            Span::styled("    h        ", Style::default().fg(Color::White)),
-            Span::styled(
-                "Collapse current node",
-                Style::default().fg(Color::DarkGray),
-            ),
+            Span::styled("    h/l      ", Style::default().fg(Color::White)),
+            Span::styled("Collapse/expand node", Style::default().fg(Color::DarkGray)),
         ]),
         Line::from(vec![
-            Span::styled("    l        ", Style::default().fg(Color::White)),
-            Span::styled("Expand current node", Style::default().fg(Color::DarkGray)),
-        ]),
-        Line::from(vec![
-            Span::styled("    H        ", Style::default().fg(Color::White)),
-            Span::styled("Collapse all", Style::default().fg(Color::DarkGray)),
-        ]),
-        Line::from(vec![
-            Span::styled("    L        ", Style::default().fg(Color::White)),
-            Span::styled("Expand all", Style::default().fg(Color::DarkGray)),
+            Span::styled("    H/L      ", Style::default().fg(Color::White)),
+            Span::styled("Collapse/expand all", Style::default().fg(Color::DarkGray)),
         ]),
         Line::from(""),
         Line::from(vec![Span::styled(
-            "  YAML scroll",
-            Style::default().fg(Color::Yellow),
+            "  Graph panel",
+            Style::default().fg(Color::Magenta),
         )]),
         Line::from(vec![
-            Span::styled("    j/k      ", Style::default().fg(Color::White)),
-            Span::styled("Scroll YAML up/down", Style::default().fg(Color::DarkGray)),
+            Span::styled("    j/k ↑↓   ", Style::default().fg(Color::White)),
+            Span::styled("Select neighbor node", Style::default().fg(Color::DarkGray)),
         ]),
+        Line::from(vec![
+            Span::styled("    h/l ←→   ", Style::default().fg(Color::White)),
+            Span::styled("Navigate incoming/outgoing", Style::default().fg(Color::DarkGray)),
+        ]),
+        Line::from(vec![
+            Span::styled("    Enter    ", Style::default().fg(Color::White)),
+            Span::styled("Jump to selected node", Style::default().fg(Color::DarkGray)),
+        ]),
+        Line::from(""),
+        Line::from(vec![Span::styled(
+            "  Scrolling",
+            Style::default().fg(Color::Yellow),
+        )]),
         Line::from(vec![
             Span::styled("    d/u      ", Style::default().fg(Color::White)),
             Span::styled("Page down/up", Style::default().fg(Color::DarkGray)),
@@ -1232,10 +1540,7 @@ fn render_help(f: &mut Frame) {
         )]),
         Line::from(vec![
             Span::styled("    1-4      ", Style::default().fg(Color::White)),
-            Span::styled(
-                "Data/Meta/Overlay/Query",
-                Style::default().fg(Color::DarkGray),
-            ),
+            Span::styled("Meta/Data/Overlay/Query", Style::default().fg(Color::DarkGray)),
         ]),
         Line::from(vec![
             Span::styled("    N        ", Style::default().fg(Color::White)),

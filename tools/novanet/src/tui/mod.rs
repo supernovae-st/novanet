@@ -82,6 +82,20 @@ async fn run_app(
 
                 // Handle other keys
                 if app.handle_key(key) {
+                    // Check for pending instance load (Data mode)
+                    if let Some(kind_label) = app.take_pending_instance_load() {
+                        if let Ok(instances) = TaxonomyTree::load_instances(db, &kind_label).await {
+                            app.tree.set_instances(&kind_label, instances);
+                        }
+                    }
+
+                    // Check for pending arcs load (Kind selected → load from Neo4j)
+                    if let Some(kind_label) = app.take_pending_arcs_load() {
+                        if let Ok(arcs) = TaxonomyTree::load_kind_arcs(db, &kind_label).await {
+                            app.set_kind_arcs(arcs);
+                        }
+                    }
+
                     terminal
                         .draw(|f| ui::render(f, &mut app))
                         .map_err(crate::NovaNetError::Io)?;
