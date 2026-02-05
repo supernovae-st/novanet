@@ -4,6 +4,7 @@ pub mod arc;
 pub mod db;
 pub mod doc;
 pub mod filter;
+pub mod knowledge;
 pub mod locale;
 pub mod node;
 pub mod read;

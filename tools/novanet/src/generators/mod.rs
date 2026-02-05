@@ -17,6 +17,7 @@ pub mod layer;
 pub mod mermaid;
 pub mod node_kind;
 pub mod organizing;
+pub mod slugification;
 pub mod view_mermaid;
 pub mod views;
 pub mod visual_encoding;

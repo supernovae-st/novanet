@@ -97,6 +97,11 @@ enum Commands {
         #[command(subcommand)]
         action: DbAction,
     },
+    /// Knowledge generation from ATH data (slugification, formatting, voice, culture)
+    Knowledge {
+        #[command(subcommand)]
+        action: KnowledgeAction,
+    },
     /// Interactive terminal UI
     #[cfg(feature = "tui")]
     Tui {
@@ -263,6 +268,24 @@ enum DbAction {
     Migrate,
     /// Reset database (drop + seed)
     Reset,
+}
+
+#[derive(Subcommand)]
+enum KnowledgeAction {
+    /// Generate knowledge seed files from ATH data
+    Generate {
+        /// Knowledge tier: technical, voice, culture, market, all
+        #[arg(long, default_value = "all")]
+        tier: String,
+        /// Custom ATH data path (default: ~/Projects/traduction_ai/ath-know-l10n/outputs/localization-data)
+        #[arg(long)]
+        ath_path: Option<String>,
+        /// Dry-run: generate without writing files
+        #[arg(long)]
+        dry_run: bool,
+    },
+    /// List available knowledge tiers and their status
+    List,
 }
 
 #[tokio::main]
@@ -531,6 +554,77 @@ async fn main() -> color_eyre::Result<()> {
                 DbAction::Reset => {
                     eprintln!("novanet db reset (root: {})", root.display());
                     novanet::commands::db::run_reset(&db, &root).await?;
+                }
+            }
+        }
+        Commands::Knowledge { ref action } => {
+            let root = root?;
+            match action {
+                KnowledgeAction::Generate {
+                    tier,
+                    ath_path,
+                    dry_run,
+                } => {
+                    let tier_enum = novanet::commands::knowledge::KnowledgeTier::from_str(tier)
+                        .ok_or_else(|| {
+                            color_eyre::eyre::eyre!(
+                                "Invalid tier '{}'. Valid: technical, voice, culture, market, all",
+                                tier
+                            )
+                        })?;
+
+                    eprintln!(
+                        "novanet knowledge generate --tier={}{}{}",
+                        tier,
+                        ath_path
+                            .as_ref()
+                            .map(|p| format!(" --ath-path={}", p))
+                            .unwrap_or_default(),
+                        if *dry_run { " --dry-run" } else { "" }
+                    );
+
+                    let results = novanet::commands::knowledge::knowledge_generate(
+                        &root,
+                        tier_enum,
+                        ath_path.as_deref(),
+                        *dry_run,
+                    )?;
+
+                    for r in &results {
+                        eprintln!(
+                            "  {} {} ({} bytes, {}ms, {} nodes)",
+                            if *dry_run { "would write" } else { "wrote" },
+                            r.output_path,
+                            r.bytes,
+                            r.duration_ms,
+                            r.node_count
+                        );
+                    }
+                    eprintln!(
+                        "\n{} {} knowledge file(s)",
+                        if *dry_run {
+                            "Would generate"
+                        } else {
+                            "Generated"
+                        },
+                        results.len()
+                    );
+                }
+                KnowledgeAction::List => {
+                    eprintln!("novanet knowledge list\n");
+                    let tiers = novanet::commands::knowledge::knowledge_list();
+                    for t in &tiers {
+                        eprintln!(
+                            "  [{:^8}] {}: {}",
+                            t.status.to_uppercase(),
+                            t.tier,
+                            t.description
+                        );
+                        for src in &t.sources {
+                            eprintln!("            └── {}", src);
+                        }
+                    }
+                    eprintln!("\n  {} tier(s)", tiers.len());
                 }
             }
         }

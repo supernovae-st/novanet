@@ -6,10 +6,12 @@
 //! - `taxonomy`: Parse taxonomy.yaml (v9.5 source of truth)
 //! - `views`: Parse view YAML files
 //! - `visual_encoding`: Parse visual-encoding.yaml (v9.5 visual system)
+//! - `slugification`: Parse ATH 2-rules-slug markdown files
 //! - `utils`: Shared YAML loading utilities
 
 pub mod arcs;
 pub mod organizing;
+pub mod slugification;
 pub mod taxonomy;
 pub mod utils;
 pub mod views;
