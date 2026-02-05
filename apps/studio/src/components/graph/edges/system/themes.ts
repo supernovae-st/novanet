@@ -216,7 +216,7 @@ export const RELATION_OVERRIDES: Partial<Record<RelationType, ThemeOverride>> = 
   },
 
   // ─── Semantic Overrides ───
-  USES_CONCEPT: {
+  USES_ENTITY: {
     effects: [...DEFAULT_EFFECTS, 'zigzag'],
     speed: 'normal',
     strokeWidth: 3.5,

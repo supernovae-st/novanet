@@ -84,7 +84,7 @@ describe('neo4j transformations', () => {
     it('should transform a Neo4j node to GraphNode', () => {
       const neo4jNode = {
         elementId: '4:abc:123',
-        labels: ['Concept'],
+        labels: ['Entity'],
         properties: {
           key: 'free-tier',
           display_name: 'Free Tier',
@@ -99,7 +99,7 @@ describe('neo4j transformations', () => {
       // They now go into the data field as deprecated/extra properties
       expect(result).toEqual({
         id: '4:abc:123',
-        type: 'Concept',
+        type: 'Entity',
         key: 'free-tier',
         displayName: 'Free Tier',
         description: 'A free tier concept',
@@ -175,7 +175,7 @@ describe('neo4j transformations', () => {
         elementId: '5:abc:200',
         startNodeElementId: '4:abc:111',
         endNodeElementId: '4:abc:222',
-        type: 'USES_CONCEPT',
+        type: 'USES_ENTITY',
         properties: {},
       };
 
@@ -185,7 +185,7 @@ describe('neo4j transformations', () => {
         id: '5:abc:200',
         source: '4:abc:111',
         target: '4:abc:222',
-        type: 'USES_CONCEPT',
+        type: 'USES_ENTITY',
         data: {},
       });
     });

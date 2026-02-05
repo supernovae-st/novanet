@@ -63,9 +63,9 @@ export const RELATIONSHIP_CATEGORIES: Record<RelationshipCategory, RelationType[
     'HAS_PATTERN',
     'HAS_CONSTRAINT',
   ],
-  // Semantic: Concept usage (3 relations)
+  // Semantic: Entity usage (3 relations)
   semantic: [
-    'USES_CONCEPT',
+    'USES_ENTITY',
     'SEMANTIC_LINK',
     'USED_BY',
   ],
@@ -294,9 +294,9 @@ export const relationshipTypeConfigs: Record<RelationType, RelationshipTypeConfi
   // ==========================================================================
   // SEMANTIC CATEGORY (3 relations) - amber
   // ==========================================================================
-  USES_CONCEPT: {
-    type: 'USES_CONCEPT',
-    label: 'Uses Concept',
+  USES_ENTITY: {
+    type: 'USES_ENTITY',
+    label: 'Uses Entity',
     color: '#f59e0b',
     category: 'semantic',
   },
