@@ -7,8 +7,8 @@
 Context loading for sub-agent when generating a single block.
 This is the core view for native content generation, providing:
 - Block definition with type and rules
-- Block-specific prompt instructions
-- Related concepts with localized content
+- Block-specific prompt and instruction
+- Related entities with localized content
 - Spreading activation for semantic context
 
 ### Legend
@@ -42,9 +42,9 @@ flowchart TB
     BlockRules["🔵 BlockRules"]
   end
 
-  subgraph CONCEPT_LAYER["Concept Layer"]
-    Concept["🔵 Concept"]
-    ConceptL10n["🟢 ConceptL10n"]
+  subgraph ENTITY_LAYER["Entity Layer"]
+    Entity["🔵 Entity"]
+    EntityL10n["🟢 EntityL10n"]
   end
 
   subgraph OUTPUT_LAYER["Output Layer"]
@@ -64,11 +64,11 @@ flowchart TB
   Block -->|HAS_PROMPT| PagePrompt
   Block -->|OF_TYPE| BlockType
   Block -->|OF_TYPE| PageType
-  Block -.->|USES_CONCEPT| Concept
+  Block -.->|USES_ENTITY| Entity
   BlockType -->|HAS_RULES| BlockRules
-  Concept -.->|HAS_L10N| ConceptL10n
-  Concept -.->|HAS_L10N| ProjectL10n
-  Concept -.->|SEMANTIC_LINK| Concept
+  Entity -.->|HAS_L10N| EntityL10n
+  Entity -.->|HAS_L10N| ProjectL10n
+  Entity -.->|SEMANTIC_LINK| Entity
 
   %% Edge colors by family
   linkStyle 0,1,8,9 stroke:#22c55e,stroke-width:2px
@@ -81,8 +81,8 @@ flowchart TB
   class BlockPrompt invariant
   class BlockRules invariant
   class BlockType invariant
-  class Concept invariant
-  class ConceptL10n localized
+  class Entity invariant
+  class EntityL10n localized
   class PageL10n localized
   class PagePrompt invariant
   class PageType invariant
@@ -93,7 +93,7 @@ flowchart TB
 
 - Sub-agents receive this context to generate ONE block natively
 - The LLM context is entirely in the target locale
-- Spreading activation provides related concepts for richer context
+- Spreading activation provides related entities for richer context
 
 ---
 

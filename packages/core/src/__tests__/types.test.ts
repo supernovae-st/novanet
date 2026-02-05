@@ -1,5 +1,6 @@
-// NovaNet Core - Type Tests v8.2.0
+// NovaNet Core - Type Tests v10.3.0
 // TDD: Verify type exports and structure
+// v10.3.0: Entity-Centric Architecture (Concept → Entity, ConceptL10n → EntityL10n)
 // v8.2.0: Removed icon, priority, freshness from all interfaces (YAML v7.11.0 alignment)
 
 import { describe, it, expect } from 'vitest';
@@ -7,9 +8,9 @@ import type {
   // Standard base
   StandardNodeProperties,
 
-  // Core entities
-  Concept,
-  ConceptL10n,
+  // Core entities (v10.3: Entity replaces Concept)
+  Entity,
+  EntityL10n,
   PageL10n,
   BlockL10n,
 
@@ -17,13 +18,12 @@ import type {
   Locale,
   LocaleVoice,
 
-  // SEO/GEO (v7.8.2: SEOKeyword → SEOKeyword, v7.8.5: GEOCitation → GEOSeedMetrics)
+  // SEO (v10.3: GEO removed)
   SEOKeyword,
-  GEOSeedMetrics,
 
-  // Relation props
+  // Relation props (v10.3: UsesEntityProps replaces UsesConceptProps)
   SemanticLinkProps,
-  UsesConceptProps,
+  UsesEntityProps,
   HasBlockProps,
 } from '../types/index.js';
 
@@ -50,12 +50,12 @@ describe('Type Exports', () => {
   });
 
   describe('Core Entities', () => {
-    it('Concept should extend StandardNodeProperties (v8.2.0)', () => {
-      // v8.2.0: Removed icon, priority, freshness (YAML v7.11.0 alignment)
-      const concept: Concept = {
+    it('Entity should extend StandardNodeProperties (v10.3)', () => {
+      // v10.3: Entity replaces Concept (global realm, knowledge layer)
+      const entity: Entity = {
         key: 'action-create-qr',
         display_name: 'Create QR Code',
-        description: 'Core QR code concept',
+        description: 'Core QR code entity',
         llm_context: 'USE: creating QR codes. TRIGGERS: create, generate. NOT: editing.',
         created_at: new Date(),
         updated_at: new Date(),
@@ -63,16 +63,16 @@ describe('Type Exports', () => {
         is_core: true,
       };
 
-      expect(concept.key).toBe('action-create-qr');
-      expect(concept.feature_category).toBe('core');
-      expect(concept.is_core).toBe(true);
+      expect(entity.key).toBe('action-create-qr');
+      expect(entity.feature_category).toBe('core');
+      expect(entity.is_core).toBe(true);
     });
 
-    it('ConceptL10n should have required localization fields (v8.2.0)', () => {
-      // v8.2.0: Removed icon, priority, freshness (YAML v7.11.0 alignment)
-      const l10n: ConceptL10n = {
+    it('EntityL10n should have required localization fields (v10.3)', () => {
+      // v10.3: EntityL10n replaces ConceptL10n (global realm, knowledge layer)
+      const l10n: EntityL10n = {
         display_name: 'QR Code',
-        description: 'Localized concept',
+        description: 'Localized entity',
         llm_context: 'USE: French QR code content. TRIGGERS: fr-FR. NOT: translation.',
         title: 'Code QR',
         definition: 'Un code-barres 2D',
@@ -179,14 +179,13 @@ describe('Type Exports', () => {
     });
   });
 
-  describe('SEO/GEO Types (v8.2.0)', () => {
-    it('SEOKeyword should extend StandardNodeProperties (no icon/priority/freshness)', () => {
-      // v8.2.0: Removed icon, priority, freshness (YAML v7.11.0 alignment)
+  describe('SEO Types (v10.3 - GEO removed)', () => {
+    it('SEOKeyword should extend StandardNodeProperties', () => {
       const keyword: SEOKeyword = {
         key: 'creer-qr-code-fr',
         display_name: 'créer qr code',
         description: 'Main SEO keyword',
-        llm_context: 'USE: SEO targeting. TRIGGERS: keyword research. NOT: GEO seeds.',
+        llm_context: 'USE: SEO targeting. TRIGGERS: keyword research. NOT: other.',
         created_at: new Date(),
         updated_at: new Date(),
         value: 'créer qr code gratuit',
@@ -203,28 +202,7 @@ describe('Type Exports', () => {
     });
 
     // REMOVED v8.0.0: PageMetrics (query GA/PostHog directly with date ranges)
-
-    it('GEOSeedMetrics should track AI citations (v8.2.0 - no icon/priority/freshness)', () => {
-      // v8.2.0: Removed icon, priority, freshness (YAML v7.11.0 alignment)
-      const metrics: GEOSeedMetrics = {
-        key: 'geometrics-comment-creer-qr-chatgpt-2024-01',
-        display_name: 'Citation ChatGPT',
-        description: 'Citation check',
-        llm_context: 'USE: for citation tracking. TRIGGERS: cited, AI mention. NOT: SEO metrics.',
-        cited: true,
-        position: 2,
-        sentiment: 'positive',
-        platform: 'chatgpt',
-        model: 'gpt-4',
-        observed_at: new Date(),
-        created_at: new Date(),
-        updated_at: new Date(),
-      };
-
-      expect(metrics.cited).toBe(true);
-      expect(metrics.sentiment).toBe('positive');
-      expect(metrics.platform).toBe('chatgpt');
-    });
+    // REMOVED v10.3.0: GEOSeedMetrics (GEO layer removed)
   });
 
   describe('Relation Props', () => {
@@ -237,8 +215,8 @@ describe('Type Exports', () => {
       expect(props.temperature).toBe(0.85);
     });
 
-    it('UsesConceptProps should have purpose', () => {
-      const props: UsesConceptProps = {
+    it('UsesEntityProps should have purpose (v10.3)', () => {
+      const props: UsesEntityProps = {
         purpose: 'primary',
         temperature: 0.9,
       };

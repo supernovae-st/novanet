@@ -8,12 +8,12 @@ SEO keyword mining and optimization workflow.
 
 **Pipeline stages:**
 1. **Mining**: SEOMiningRun discovers keywords per locale
-2. **Targeting**: ConceptL10n targets SEOKeyword (locale-aligned)
+2. **Targeting**: EntityL10n targets SEOKeyword (locale-aligned)
 3. **Metrics**: SEOKeywordMetrics tracks performance
 4. **Linking**: Pages link via LINKS_TO with SEO weight
 
 **v10.1 Architecture:**
-- SEOKeyword is linked to ConceptL10n (same locale), not Concept
+- SEOKeyword is linked to EntityL10n (same locale), not Entity
 - This ensures locale-aligned targeting (fr-FR concept → fr-FR keywords)
 
 ### Legend
@@ -31,7 +31,7 @@ SEO keyword mining and optimization workflow.
 ```mermaid
 flowchart TB
   %% View: SEO Pipeline (seo-pipeline)
-  %% 9 nodes, 9 edges
+  %% 7 nodes, 6 edges
 
   %% Trait styling (node_trait)
   classDef invariant fill:#3b82f6,stroke:#1d4ed8,color:#fff
@@ -41,18 +41,16 @@ flowchart TB
   classDef job fill:#6b7280,stroke:#4b5563,color:#fff
 
   subgraph KEYWORDS["Keywords"]
-    SEOKeyword["🟢 SEOKeyword"]
   end
 
   subgraph METRICS["Metrics"]
-    SEOKeywordMetrics["⚪ SEOKeywordMetrics"]
   end
 
   subgraph MINING["Mining"]
   end
 
   subgraph TARGETING["Targeting"]
-    ConceptL10n["🟢 ConceptL10n"]
+    EntityL10n["🟢 EntityL10n"]
   end
 
   %% Additional reachable nodes
@@ -65,35 +63,29 @@ flowchart TB
 
   %% Relationships (styled by arc family)
   BlockL10n -.->|FOR_LOCALE| Locale
-  ConceptL10n -.->|FOR_LOCALE| Locale
-  ConceptL10n --o|HAS_SEO_TARGET| SEOKeyword
+  EntityL10n -.->|FOR_LOCALE| Locale
   GenerationJob -.->|FOR_LOCALE| Locale
   OutputArtifact -.->|FOR_LOCALE| Locale
   PageL10n -.->|FOR_LOCALE| Locale
   ProjectL10n -.->|FOR_LOCALE| Locale
-  SEOKeyword -.->|FOR_LOCALE| Locale
-  SEOKeyword --o|HAS_METRICS| SEOKeywordMetrics
 
   %% Edge colors by family
-  linkStyle 0,1,3,4,5,6,7 stroke:#22c55e,stroke-width:2px
-  linkStyle 2,8 stroke:#ec4899,stroke-width:2px
+  linkStyle 0,1,2,3,4,5 stroke:#22c55e,stroke-width:2px
 
   %% Class assignments
   class BlockL10n localized
-  class ConceptL10n localized
+  class EntityL10n localized
   class GenerationJob job
   class Locale invariant
   class OutputArtifact derived
   class PageL10n localized
   class ProjectL10n localized
-  class SEOKeyword localized
-  class SEOKeywordMetrics derived
 ```
 
 ## Notes
 
 - SEOKeyword is locale-specific (keyword varies by locale)
-- v10.1: SEOKeyword linked to ConceptL10n (locale-aligned targeting)
+- v10.1: SEOKeyword linked to EntityL10n (locale-aligned targeting)
 - Metrics are time-series - use latest for current state
 - LINKS_TO relation includes seo_weight for link juice optimization
 

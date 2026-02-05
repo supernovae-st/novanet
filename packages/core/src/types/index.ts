@@ -133,31 +133,30 @@ export {
 } from './project.js';
 
 // =============================================================================
-// CONCEPT (v7.1.0)
+// ENTITY (v10.3 - replaces Concept, global realm, knowledge layer)
 // =============================================================================
 
-export interface Concept extends StandardNodeProperties, EmbeddableNode {
+export interface Entity extends StandardNodeProperties, EmbeddableNode {
   // key: "action-create-qr" (semantic prefix + identifier)
   // display_name: "Create QR Code"
-  // icon: "🔷"
-  // description: "Core product concept"
+  // description: "Core knowledge entity"
   // llm_context: "USE: when creating QR codes. TRIGGERS: create, generate. NOT: editing."
 
-  // Concept-specific properties
+  // Entity-specific properties (same as former Concept)
   feature_category?: 'core' | 'analytics' | 'design' | 'integration' | 'api';
-  feature_priority?: number;  // 1-10 (renamed from priority to avoid conflict with v7.1.0 context priority)
+  feature_priority?: number;
   is_core?: boolean;
   is_premium?: boolean;
   search_intent?: 'transactional' | 'informational' | 'navigational';
 }
 
-export interface ConceptL10n extends EmbeddableNode {
+export interface EntityL10n extends EmbeddableNode {
   // Standard properties (v8.2.0 - L10n nodes don't have key, no icon/priority/freshness)
   display_name: string;
   description: string;
   llm_context: string;
 
-  // ConceptL10n-specific
+  // EntityL10n-specific (same as former ConceptL10n)
   title: string;
   definition: string;
   purpose?: string;
@@ -168,6 +167,12 @@ export interface ConceptL10n extends EmbeddableNode {
   created_at: Date;
   updated_at: Date;
 }
+
+// v10.3 backwards compatibility aliases (deprecated, will be removed)
+/** @deprecated Use Entity instead */
+export type Concept = Entity;
+/** @deprecated Use EntityL10n instead */
+export type ConceptL10n = EntityL10n;
 
 // =============================================================================
 // PAGE (v7.1.0)
@@ -364,65 +369,10 @@ export interface SEOMiningRun {
 }
 
 // =============================================================================
-// GEO (v7.1.0, v7.8.3: GEOSeed → GEOSeedL10n)
+// GEO — REMOVED in v10.3
 // =============================================================================
-
-export interface GEOSeedL10n extends StandardNodeProperties {
-  // key: "comment-creer-qr-code-fr"
-  // display_name: "Comment créer un QR code gratuit?"
-  // icon: "🤖"
-  // description: "GEO seed for AI visibility"
-  // llm_context: "Monitor on ChatGPT/Perplexity..."
-  value: string;
-  format: string;
-  intent: string;
-  target_answer?: string;
-  answer_strategy?: string;
-  mining_runs: number;
-  last_mined_at?: Date;
-}
-
-/**
- * GEOSeedMetrics - Citation/visibility observation for a GEO seed (v7.8.5)
- * Unified metrics pattern: GEOSeedL10n -[:HAS_METRICS]-> GEOSeedMetrics
- */
-export interface GEOSeedMetrics {
-  // Standard properties (v8.2.0 - no icon/priority/freshness)
-  key: string;             // "geometrics-comment-creer-qr-perplexity-2024-01-15"
-  display_name: string;    // "Perplexity - Comment créer QR - 2024-01-15"
-  description: string;     // "Citation observation for GEO seed"
-  llm_context: string;     // Not used in spreading activation
-
-  // GEOSeedMetrics-specific (v7.8.5)
-  observed_at: Date;       // When this observation was made
-  platform: string;        // AI platform: chatgpt | perplexity | gemini | copilot | claude
-  cited: boolean;          // Whether we were cited
-  position?: number;       // Position in response citations (1 = first)
-  sentiment?: 'positive' | 'neutral' | 'negative';
-  url?: string;            // Cited URL
-  snippet?: string;        // Citation snippet from AI response
-  competitors?: string;    // Competitors cited (comma-separated)
-  model?: string;          // AI model version
-  created_at: Date;
-  updated_at: Date;
-}
-
-export interface GEOMiningRun {
-  // Standard properties (v8.2.0 - no key, UUID-identified, no icon/priority/freshness)
-  display_name: string;    // "GEO Mining 2024-01-15 10:00"
-  description: string;     // "Mining run for GEO reformulations"
-  llm_context: string;     // "USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]."
-
-  // GEOMiningRun-specific
-  status: 'running' | 'completed' | 'failed';
-  platforms: string[];
-  started_at: Date;
-  completed_at?: Date;
-  total_reformulations: number;
-  unique_reformulations: number;
-  created_at: Date;
-  updated_at: Date;
-}
+// GEOSeedL10n, GEOSeedMetrics, GEOMiningRun removed (GEO layer deprecated)
+// Will be reintroduced in future version with different architecture
 
 // =============================================================================
 // RELATION PROPS
@@ -452,24 +402,29 @@ export interface SemanticLinkProps {
   temperature: number;
 }
 
-export interface UsesConceptProps {
+// v10.3: UsesEntityProps replaces UsesConceptProps
+export interface UsesEntityProps {
   purpose: 'primary' | 'secondary' | 'contextual';
   temperature: number;
 }
 
-export interface TargetsSEOProps {
+/** @deprecated Use UsesEntityProps instead */
+export type UsesConceptProps = UsesEntityProps;
+
+// v10.3: ExpressesProps replaces TargetsSEOProps (EntityL10n -[:EXPRESSES]-> SEOKeyword)
+export interface ExpressesProps {
   status: 'active' | 'paused' | 'archived';
   priority: number;
 }
 
-export interface TargetsGEOProps {
-  status: 'active' | 'monitoring' | 'archived';
-  priority: number;
-}
+/** @deprecated Use ExpressesProps instead */
+export type TargetsSEOProps = ExpressesProps;
+
+// REMOVED v10.3: TargetsGEOProps (GEO layer removed)
 
 export interface InfluencedByProps {
   weight: number;
-  concept_version: number;
+  entity_version: number;  // v10.3: renamed from concept_version
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

@@ -77,12 +77,19 @@ export class NovaNetFilter {
   }
 
   /**
-   * Sets the root node to a Concept.
-   * @param key - The Concept key to query from
+   * Sets the root node to an Entity (v10.3).
+   * @param key - The Entity key to query from
+   */
+  fromEntity(key: string): this {
+    this.state.root = { type: 'Entity', key };
+    return this;
+  }
+
+  /**
+   * @deprecated Use fromEntity() instead (v10.3)
    */
   fromConcept(key: string): this {
-    this.state.root = { type: 'Concept', key };
-    return this;
+    return this.fromEntity(key);
   }
 
   /**
@@ -122,18 +129,25 @@ export class NovaNetFilter {
   }
 
   /**
-   * Includes Concept nodes related to the root via USES_CONCEPT.
+   * Includes Entity nodes related to the root via USES_ENTITY (v10.3).
    * @param opts - Optional configuration
    * @param opts.depth - Traversal depth (default: 1)
    * @param opts.spreading - Enable spreading activation (sets depth to 2)
    */
-  includeConcepts(opts?: { depth?: number; spreading?: boolean }): this {
+  includeEntities(opts?: { depth?: number; spreading?: boolean }): this {
     this.state.includes.push({
-      relation: 'USES_CONCEPT',
+      relation: 'USES_ENTITY',
       direction: 'outgoing',
       depth: opts?.spreading ? 2 : (opts?.depth ?? 1),
     });
     return this;
+  }
+
+  /**
+   * @deprecated Use includeEntities() instead (v10.3)
+   */
+  includeConcepts(opts?: { depth?: number; spreading?: boolean }): this {
+    return this.includeEntities(opts);
   }
 
   /**
@@ -214,26 +228,17 @@ export class NovaNetFilter {
   }
 
   /**
-   * Includes SEO keyword nodes via TARGETS_SEO.
+   * Includes SEO keyword nodes via EXPRESSES (v10.3: replaces TARGETS_SEO).
    */
   includeSEO(): this {
     this.state.includes.push({
-      relation: 'TARGETS_SEO',
+      relation: 'EXPRESSES',
       direction: 'outgoing',
     });
     return this;
   }
 
-  /**
-   * Includes GEO seed nodes via TARGETS_GEO.
-   */
-  includeGEO(): this {
-    this.state.includes.push({
-      relation: 'TARGETS_GEO',
-      direction: 'outgoing',
-    });
-    return this;
-  }
+  // REMOVED v10.3: includeGEO() - GEO layer removed
 
   /**
    * Includes BlockType node via OF_TYPE.
@@ -285,20 +290,8 @@ export class NovaNetFilter {
     return this;
   }
 
-  /**
-   * Includes Project-level Concept nodes via HAS_CONCEPT.
-   * Typically used with fromProject().
-   * @param opts - Optional configuration
-   * @param opts.depth - Traversal depth (default: 1)
-   */
-  includeProjectConcepts(opts?: { depth?: number }): this {
-    this.state.includes.push({
-      relation: 'HAS_CONCEPT',
-      direction: 'outgoing',
-      depth: opts?.depth ?? 1,
-    });
-    return this;
-  }
+  // REMOVED v10.3: includeProjectConcepts() - HAS_CONCEPT arc removed
+  // Entity is now in global realm, accessed via USES_ENTITY from Page/Block
 
   /**
    * Includes localized content via FOR_LOCALE relation.
@@ -350,7 +343,7 @@ export class NovaNetFilter {
 
   /**
    * Includes metrics via HAS_METRICS.
-   * Used for SEOKeywordMetrics and GEOSeedMetrics.
+   * Used for SEOKeywordMetrics (v10.3: GEO removed).
    */
   includeMetrics(): this {
     this.state.includes.push({

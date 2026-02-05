@@ -7,7 +7,7 @@
 Demonstrates the spreading activation algorithm for semantic context retrieval.
 
 **How it works:**
-1. Start from a Block's USES_CONCEPT relationships
+1. Start from a Block's USES_ENTITY relationships
 2. Follow SEMANTIC_LINK edges with temperature >= threshold
 3. Multiply temperatures along path to compute activation
 4. Return concepts with activation >= minimum threshold
@@ -46,12 +46,12 @@ flowchart TB
     BlockPrompt["🔵 BlockPrompt"]
   end
 
-  subgraph DIRECT_CONCEPTS["Direct Concepts"]
-    Concept["🔵 Concept"]
+  subgraph DIRECT_ENTITYS["Direct Entitys"]
+    Entity["🔵 Entity"]
   end
 
   subgraph SEMANTIC_NETWORK["Semantic Network"]
-    Concept["🔵 Concept"]
+    Entity["🔵 Entity"]
   end
 
   %% Additional reachable nodes
@@ -64,7 +64,7 @@ flowchart TB
   Block -->|HAS_PROMPT| PagePrompt
   Block -->|OF_TYPE| BlockType
   Block -->|OF_TYPE| PageType
-  Block -.->|USES_CONCEPT| Concept
+  Block -.->|USES_ENTITY| Entity
 
   %% Edge colors by family
   linkStyle 0,1,2,3 stroke:#3b82f6,stroke-width:2px
@@ -74,7 +74,7 @@ flowchart TB
   class Block invariant
   class BlockPrompt invariant
   class BlockType invariant
-  class Concept invariant
+  class Entity invariant
   class PagePrompt invariant
   class PageType invariant
 ```

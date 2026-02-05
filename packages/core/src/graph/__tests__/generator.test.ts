@@ -1,5 +1,5 @@
 // packages/core/src/graph/__tests__/generator.test.ts
-// Tests for schema graph generator — v10.0.0
+// Tests for schema graph generator — v10.3.0 (Entity-Centric, GEO removed)
 // TDD: Write tests first, then implementation
 
 import { describe, it, expect } from 'vitest';
@@ -15,9 +15,8 @@ describe('graph/generator', () => {
 
     it('should generate schema arcs from RelationRegistry', () => {
       const result = generateSchemaGraph();
-      // RelationRegistry has 83 arc types, expanded to ~89 arcs
-      // due to multi-type relations creating multiple arcs
-      expect(result.arcs.length).toBeGreaterThan(50);
+      // RelationRegistry has arc types, expanded due to multi-type relations
+      expect(result.arcs.length).toBeGreaterThanOrEqual(50);
     });
 
     it('should include all required node properties', () => {
@@ -77,29 +76,28 @@ describe('graph/generator', () => {
     it('should create Cartesian product for multi-type relations', () => {
       const result = generateSchemaGraph();
 
-      // FOR_LOCALE has multiple source types: ConceptL10n, ProjectL10n, PageL10n, BlockL10n, SEOKeyword, GEOSeedL10n
+      // FOR_LOCALE has multiple source types: EntityL10n, ProjectL10n, PageL10n, BlockL10n
+      // (v10.3: ConceptL10n → EntityL10n, GEOSeedL10n removed)
       // All going to Locale (1 target)
-      // Should create 6 arcs for this relation
+      // Should create 4 arcs for this relation
       const forLocaleArcs = result.arcs.filter(e => e.relationType === 'FOR_LOCALE');
-      expect(forLocaleArcs.length).toBe(6);
+      expect(forLocaleArcs.length).toBe(4);
     });
   });
 
   describe('getSchemaHierarchy', () => {
-    it('should return hierarchical data with all 3 realms', () => {
+    it('should return hierarchical data with all 2 realms', () => {
       const result = getSchemaHierarchy();
-      expect(Object.keys(result.realms)).toHaveLength(3);
+      expect(Object.keys(result.realms)).toHaveLength(2);
       expect(result.realms.project).toBeDefined();
       expect(result.realms.global).toBeDefined();
-      expect(result.realms.shared).toBeDefined();
     });
 
     it('should include stats', () => {
       const result = getSchemaHierarchy();
       expect(result.stats.totalNodes).toBe(42);
-      expect(result.stats.nodesByRealm.project).toBe(23);
-      expect(result.stats.nodesByRealm.global).toBe(11);  // v10: 1 config + 10 knowledge
-      expect(result.stats.nodesByRealm.shared).toBe(8);
+      expect(result.stats.nodesByRealm.project).toBe(20);  // v10.3: 20 project nodes
+      expect(result.stats.nodesByRealm.global).toBe(22);   // v10.3: 22 global nodes
     });
 
     it('should include all nodes', () => {
@@ -109,7 +107,7 @@ describe('graph/generator', () => {
 
     it('should include arcs', () => {
       const result = getSchemaHierarchy();
-      expect(result.arcs.length).toBeGreaterThan(50);
+      expect(result.arcs.length).toBeGreaterThanOrEqual(50);
     });
 
     it('should have correct realm definitions', () => {
@@ -120,15 +118,10 @@ describe('graph/generator', () => {
       expect(result.realms.project.icon).toBe('📦');
       expect(Object.keys(result.realms.project.layers)).toHaveLength(5);
 
-      // Global realm
+      // Global realm (v10.3: 4 layers)
       expect(result.realms.global.label).toBe('GLOBAL');
       expect(result.realms.global.icon).toBe('🌍');
-      expect(Object.keys(result.realms.global.layers)).toHaveLength(2);
-
-      // Shared realm
-      expect(result.realms.shared.label).toBe('SHARED');
-      expect(result.realms.shared.icon).toBe('🎯');
-      expect(Object.keys(result.realms.shared.layers)).toHaveLength(2);
+      expect(Object.keys(result.realms.global.layers)).toHaveLength(4);
     });
 
     it('should have totalArcs in stats', () => {

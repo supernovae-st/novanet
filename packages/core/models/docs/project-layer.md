@@ -10,7 +10,7 @@ This is where content generation happens.
 **14 nodes organized by category:**
 - **Foundation (3)**: Project, BrandIdentity, ProjectL10n
 - **Structure (2)**: Page, Block
-- **Semantic (2)**: Concept, ConceptL10n
+- **Semantic (2)**: Entity, EntityL10n
 - **Instruction (5)**: PageType, PagePrompt, BlockType, BlockPrompt, BlockRules
 - **Output (2)**: PageL10n, BlockL10n
 
@@ -33,7 +33,7 @@ Pages and Blocks are invariant scaffolding; PageL10n and BlockL10n are generated
 ```mermaid
 flowchart TB
   %% View: Project Layer (project-layer)
-  %% 14 nodes, 23 edges
+  %% 13 nodes, 19 edges
 
   %% Trait styling (node_trait)
   classDef invariant fill:#3b82f6,stroke:#1d4ed8,color:#fff
@@ -54,8 +54,7 @@ flowchart TB
   end
 
   subgraph SEMANTIC["Semantic"]
-    Concept["🔵 Concept"]
-    ConceptL10n["🟢 ConceptL10n"]
+    EntityL10n["🟢 EntityL10n"]
   end
 
   subgraph INSTRUCTION["Instruction"]
@@ -80,9 +79,6 @@ flowchart TB
   Block -->|HAS_PROMPT| PagePrompt
   Block -->|OF_TYPE| BlockType
   Block -->|OF_TYPE| PageType
-  Concept -.->|HAS_L10N| ConceptL10n
-  Concept -.->|HAS_L10N| ProjectL10n
-  Concept -.->|SEMANTIC_LINK| Concept
   Page -->|HAS_BLOCK| Block
   Page -.->|HAS_OUTPUT| BlockL10n
   Page -.->|HAS_OUTPUT| PageL10n
@@ -92,16 +88,14 @@ flowchart TB
   Page -->|OF_TYPE| PageType
   Project -->|DEFAULT_LOCALE| Locale
   Project -->|HAS_BRAND_IDENTITY| BrandIdentity
-  Project -->|HAS_CONCEPT| Concept
-  Project -.->|HAS_L10N| ConceptL10n
+  Project -.->|HAS_L10N| EntityL10n
   Project -.->|HAS_L10N| ProjectL10n
   Project -->|HAS_PAGE| Page
   Project -->|SUPPORTS_LOCALE| Locale
 
   %% Edge colors by family
-  linkStyle 0,1,6,7,10,11,19,20 stroke:#22c55e,stroke-width:2px
-  linkStyle 2,3,4,5,9,12,13,14,15,16,17,18,21,22 stroke:#3b82f6,stroke-width:2px
-  linkStyle 8 stroke:#f97316,stroke-width:2px
+  linkStyle 0,1,7,8,15,16 stroke:#22c55e,stroke-width:2px
+  linkStyle 2,3,4,5,6,9,10,11,12,13,14,17,18 stroke:#3b82f6,stroke-width:2px
 
   %% Class assignments
   class Block invariant
@@ -109,8 +103,7 @@ flowchart TB
   class BlockPrompt invariant
   class BlockType invariant
   class BrandIdentity invariant
-  class Concept invariant
-  class ConceptL10n localized
+  class EntityL10n localized
   class Locale invariant
   class Page invariant
   class PageL10n localized
@@ -123,7 +116,7 @@ flowchart TB
 ## Notes
 
 - Project nodes are per-project - each project has its own instances
-- Invariant nodes (Page, Block, Concept) are defined once per project
+- Invariant nodes (Page, Block, Entity) are defined once per project
 - Localized nodes (*L10n) are generated for each supported locale
 - The orchestrator uses this view to coordinate generation
 - Output nodes (PageL10n, BlockL10n) are LLM-generated, not human-written

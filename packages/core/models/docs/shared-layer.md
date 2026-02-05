@@ -15,8 +15,8 @@ Shared nodes bridge global locale knowledge and project content.
 A keyword like "QR code generator" can be targeted by multiple projects.
 
 **v10.1 Architecture:**
-- SEOKeyword is linked to ConceptL10n (locale-aligned targeting)
-- Pattern: ConceptL10n -[:HAS_SEO_TARGET]-> SEOKeyword -[:FOR_LOCALE]-> Locale
+- SEOKeyword is linked to EntityL10n (locale-aligned targeting)
+- Pattern: EntityL10n -[:EXPRESSES]-> SEOKeyword -[:FOR_LOCALE]-> Locale
 
 ### Legend
 
@@ -33,7 +33,7 @@ A keyword like "QR code generator" can be targeted by multiple projects.
 ```mermaid
 flowchart TB
   %% View: Shared Layer (shared-layer)
-  %% 9 nodes, 8 edges
+  %% 7 nodes, 6 edges
 
   %% Trait styling (node_trait)
   classDef invariant fill:#3b82f6,stroke:#1d4ed8,color:#fff
@@ -43,11 +43,9 @@ flowchart TB
   classDef job fill:#6b7280,stroke:#4b5563,color:#fff
 
   subgraph SEO_KEYWORDS["SEO Keywords"]
-    SEOKeyword["🟢 SEOKeyword"]
   end
 
   subgraph SEO_METRICS["SEO Metrics"]
-    SEOKeywordMetrics["⚪ SEOKeywordMetrics"]
   end
 
   subgraph SEO_MINING["SEO Mining"]
@@ -55,7 +53,7 @@ flowchart TB
 
   %% Additional reachable nodes
   BlockL10n["🟢 BlockL10n"]
-  ConceptL10n["🟢 ConceptL10n"]
+  EntityL10n["🟢 EntityL10n"]
   GenerationJob["⚙️ GenerationJob"]
   Locale["🔵 Locale"]
   OutputArtifact["⚪ OutputArtifact"]
@@ -64,35 +62,30 @@ flowchart TB
 
   %% Relationships (styled by arc family)
   BlockL10n -.->|FOR_LOCALE| Locale
-  ConceptL10n -.->|FOR_LOCALE| Locale
+  EntityL10n -.->|FOR_LOCALE| Locale
   GenerationJob -.->|FOR_LOCALE| Locale
   OutputArtifact -.->|FOR_LOCALE| Locale
   PageL10n -.->|FOR_LOCALE| Locale
   ProjectL10n -.->|FOR_LOCALE| Locale
-  SEOKeyword -.->|FOR_LOCALE| Locale
-  SEOKeyword --o|HAS_METRICS| SEOKeywordMetrics
 
   %% Edge colors by family
-  linkStyle 0,1,2,3,4,5,6 stroke:#22c55e,stroke-width:2px
-  linkStyle 7 stroke:#ec4899,stroke-width:2px
+  linkStyle 0,1,2,3,4,5 stroke:#22c55e,stroke-width:2px
 
   %% Class assignments
   class BlockL10n localized
-  class ConceptL10n localized
+  class EntityL10n localized
   class GenerationJob job
   class Locale invariant
   class OutputArtifact derived
   class PageL10n localized
   class ProjectL10n localized
-  class SEOKeyword localized
-  class SEOKeywordMetrics derived
 ```
 
 ## Notes
 
 - Shared nodes are project-independent but locale-specific
 - SEO keywords can be targeted by multiple projects' concepts
-- v10.1: SEOKeyword linked to ConceptL10n (same locale)
+- v10.1: SEOKeyword linked to EntityL10n (same locale)
 - Metrics are time-series - always use latest for current state
 
 ---

@@ -5,7 +5,7 @@
 
 import type { Realm } from '../types/nodes.js';
 import type { Layer, RealmDefinition, LayerMeta } from './types.js';
-import { getNodeTypesByLayer } from './layers.js';
+import { getNodeTypesByLayer, getNodeTypesByRealmAndLayer } from './layers.js';
 
 // =============================================================================
 // REALM_HIERARCHY - Complete realm hierarchy definition
@@ -15,13 +15,17 @@ import { getNodeTypesByLayer } from './layers.js';
  * Complete realm hierarchy definition.
  * This is the single source of truth for the ontology structure.
  *
- * 2 Realms (8 layers):
- * - Global: Shared across ALL projects. (3 layers)
+ * 2 Realms (8 layers total):
+ * - Global: Shared across ALL projects. (4 layers: config, knowledge, seo, semantic)
  * - Project: Business-specific nodes for a single project. (5 layers)
+ *
+ * Note: 'semantic' layer exists in both realms:
+ * - Global semantic: Entity, EntityL10n (v10.3 Entity-Centric Architecture)
+ * - Project semantic: AudiencePersona, ChannelSurface
  */
 export const REALM_HIERARCHY: Record<Realm, RealmDefinition> = {
   // ═══════════════════════════════════════════════════════════════════════════
-  // GLOBAL (3 layers)
+  // GLOBAL (4 layers)
   // ═══════════════════════════════════════════════════════════════════════════
   global: {
     realm: 'global',
@@ -46,6 +50,12 @@ export const REALM_HIERARCHY: Record<Realm, RealmDefinition> = {
         description: 'Search engine optimization data.',
         icon: '🔍',
         nodeTypes: getNodeTypesByLayer('seo'),
+      },
+      semantic: {
+        label: 'Semantic Layer',
+        description: 'Global entities shared across projects.',
+        icon: '🧠',
+        nodeTypes: getNodeTypesByRealmAndLayer('global', 'semantic'),
       },
     } as Record<Layer, LayerMeta>,
   },
@@ -72,9 +82,9 @@ export const REALM_HIERARCHY: Record<Realm, RealmDefinition> = {
       },
       semantic: {
         label: 'Semantic Layer',
-        description: 'Meaning and concepts.',
+        description: 'Meaning and entities.',
         icon: '💡',
-        nodeTypes: getNodeTypesByLayer('semantic'),
+        nodeTypes: getNodeTypesByRealmAndLayer('project', 'semantic'),
       },
       instruction: {
         label: 'Instructions',

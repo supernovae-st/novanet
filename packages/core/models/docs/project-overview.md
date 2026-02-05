@@ -21,7 +21,7 @@ Project dashboard with pages, brand identity, and concepts
 ```mermaid
 flowchart TB
   %% View: Project Overview (project-overview)
-  %% 4 nodes, 3 edges
+  %% 3 nodes, 2 edges
 
   %% Trait styling (node_trait)
   classDef invariant fill:#3b82f6,stroke:#1d4ed8,color:#fff
@@ -39,22 +39,17 @@ flowchart TB
     subgraph PROJECT_structure["Structure"]
       Page["🔵 Page"]
     end
-    subgraph PROJECT_semantic["Semantic Layer"]
-      Concept["🔵 Concept"]
-    end
   end
 
   %% Relationships (styled by arc family)
   Project -->|HAS_BRAND_IDENTITY| BrandIdentity
-  Project -->|HAS_CONCEPT| Concept
   Project -->|HAS_PAGE| Page
 
   %% Edge colors by family
-  linkStyle 0,1,2 stroke:#3b82f6,stroke-width:2px
+  linkStyle 0,1 stroke:#3b82f6,stroke-width:2px
 
   %% Class assignments
   class BrandIdentity invariant
-  class Concept invariant
   class Page invariant
   class Project invariant
 ```

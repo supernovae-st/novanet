@@ -49,13 +49,13 @@ flowchart TB
   end
 
   %% Additional reachable nodes
-  ConceptL10n["🟢 ConceptL10n"]
+  EntityL10n["🟢 EntityL10n"]
 
   %% Relationships (styled by arc family)
-  ConceptL10n -.->|FOR_LOCALE| Locale
+  EntityL10n -.->|FOR_LOCALE| Locale
   Project -->|DEFAULT_LOCALE| Locale
   Project -->|HAS_BRAND_IDENTITY| BrandIdentity
-  Project -.->|HAS_L10N| ConceptL10n
+  Project -.->|HAS_L10N| EntityL10n
   Project -.->|HAS_L10N| ProjectL10n
   Project -->|HAS_PAGE| Page
   Project -->|SUPPORTS_LOCALE| Locale
@@ -67,7 +67,7 @@ flowchart TB
 
   %% Class assignments
   class BrandIdentity invariant
-  class ConceptL10n localized
+  class EntityL10n localized
   class Locale invariant
   class Page invariant
   class Project invariant

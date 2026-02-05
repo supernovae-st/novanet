@@ -19,7 +19,7 @@ models/
 │   ├── project/             # 📦 PROJECT scope (14 nodes)
 │   │   ├── foundation/      #    Project, BrandIdentity
 │   │   ├── structure/       #    Page, Block, BlockType
-│   │   ├── semantic/        #    Concept, ConceptL10n
+│   │   ├── semantic/        #    Entity, EntityL10n
 │   │   ├── instruction/     #    PagePrompt, BlockPrompt, BlockRules
 │   │   └── output/          #    PageL10n, BlockL10n
 │   └── shared/              # 🎯 SHARED scope (6 nodes)
@@ -43,14 +43,14 @@ NovaNet uses a **3-realm architecture** (v9 replaces "scope" with "realm"):
 |-------|-------|-------------|----------|
 | 🌍 **GLOBAL** | 15 | Shared locale knowledge | Locale, LocaleVoice, LocaleCulture, Expression |
 | 🎯 **SHARED** | 6 | Reusable targeting data | SEOKeyword, GEOSeedL10n, *Metrics, *MiningRun |
-| 📦 **PROJECT** | 14 | Per-project content | Project, Page, Block, Concept, PageL10n, BlockL10n |
+| 📦 **PROJECT** | 14 | Per-project content | Project, Page, Block, Entity, PageL10n, BlockL10n |
 
 ## Locale Behavior Classification
 
 | Behavior | Icon | Description | Nodes |
 |----------|------|-------------|-------|
-| **INVARIANT** | 🔵 | Defined once, language-independent | Project, Concept, Page, Block, Locale |
-| **LOCALIZED** | 🟢 | Per-locale, has `:FOR_LOCALE` | ProjectL10n, ConceptL10n, PageL10n, BlockL10n |
+| **INVARIANT** | 🔵 | Defined once, language-independent | Project, Entity, Page, Block, Locale |
+| **LOCALIZED** | 🟢 | Per-locale, has `:FOR_LOCALE` | ProjectL10n, EntityL10n, PageL10n, BlockL10n |
 | **LOCALE_KNOWLEDGE** | 🟣 | Knowledge ABOUT a locale | LocaleIdentity, LocaleVoice, LocaleCulture, Expression |
 | **DERIVED** | ⚪ | Inherits locale from parent | SEOKeywordMetrics, GEOSeedMetrics |
 | **JOB** | ⚙️ | Background jobs, no locale | SEOMiningRun, GEOMiningRun |
@@ -59,7 +59,7 @@ NovaNet uses a **3-realm architecture** (v9 replaces "scope" with "realm"):
 
 ```
 *L10n suffix    = ALL localized content (human OR LLM generated)
-:HAS_L10N       = human-curated content (ConceptL10n, ProjectL10n)
+:HAS_L10N       = human-curated content (EntityL10n, ProjectL10n)
 :HAS_OUTPUT     = LLM-generated content (PageL10n, BlockL10n)
 Locale*         = Locale Knowledge nodes (LocaleVoice, LocaleCulture, etc.)
 *Metrics        = Time-series observations (SEOKeywordMetrics, GEOSeedMetrics)
@@ -70,7 +70,7 @@ Locale*         = Locale Knowledge nodes (LocaleVoice, LocaleCulture, etc.)
 ```
 Invariant (EN)              Localized (generated natively)
 ──────────────              ────────────────────────────────
-Concept.key                 ConceptL10n.title (per locale)
+Entity.key                 EntityL10n.title (per locale)
 Page.instructions           PageL10n.assembled (per locale)
 Block.instructions          BlockL10n.generated (per locale)
 ```
@@ -98,7 +98,7 @@ Locale ──[:HAS_IDENTITY]──> LocaleIdentity
 | [Page Generation](docs/views/VIEW-PAGE-GENERATION-CONTEXT.md) | Generation | Orchestrator context for page generation |
 | [Block Generation](docs/views/VIEW-BLOCK-GENERATION.md) | Generation | Sub-agent context for block generation |
 | [Locale Knowledge](docs/views/VIEW-LOCALE-FULL-KNOWLEDGE.md) | Localization | Complete locale knowledge system |
-| [Concept Network](docs/views/VIEW-CONCEPT-ECOSYSTEM.md) | Localization | Concept graph with semantic links |
+| [Entity Network](docs/views/VIEW-CONCEPT-ECOSYSTEM.md) | Localization | Entity graph with semantic links |
 | [Spreading Activation](docs/views/VIEW-BLOCK-SEMANTIC-NETWORK.md) | Semantic | Temperature-based semantic traversal |
 | [SEO Pipeline](docs/views/VIEW-SEO-PIPELINE.md) | Mining | SEO keyword mining workflow |
 | [GEO Pipeline](docs/views/VIEW-GEO-PIPELINE.md) | Mining | GEO answer engine optimization |
@@ -111,7 +111,7 @@ Locale ──[:HAS_IDENTITY]──> LocaleIdentity
 | `DEFAULT_LOCALE` | (none) | Exactly one per project |
 | `HAS_BLOCK` | `position` | Display order |
 | `USES_CONCEPT` | `purpose, temperature` | primary/secondary/contextual |
-| `SEMANTIC_LINK` | `type, temperature` | Concept relationships |
+| `SEMANTIC_LINK` | `type, temperature` | Entity relationships |
 | `HAS_SEO_TARGET` | `role, priority` | locale-aligned: primary/secondary/long-tail |
 | `HAS_GEO_TARGET` | `role, priority` | locale-aligned: primary/contextual |
 | `PREVIOUS_VERSION` | (none) | History chain: BlockL10n/PageL10n → previous |
@@ -147,7 +147,7 @@ npm run validate:relations
 ## TypeScript Types
 
 Models are mirrored in TypeScript at `src/types/`:
-- `index.ts` - Core types (Project, Concept, Page, Block, SEO, GEO)
+- `index.ts` - Core types (Project, Entity, Page, Block, SEO, GEO)
 - `locale-knowledge.ts` - Locale Knowledge types
 - `prompts.ts` - PagePrompt, BlockPrompt, BlockRules types
 

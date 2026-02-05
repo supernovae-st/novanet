@@ -30,10 +30,10 @@ describe('NovaNetFilter', () => {
       expect(criteria.root).toEqual({ type: 'Block', key: 'block-hero' });
     });
 
-    it('fromConcept() sets root to Concept type', () => {
-      const filter = NovaNetFilter.create().fromConcept('tier-pro');
+    it('fromEntity() sets root to Entity type (v10.3)', () => {
+      const filter = NovaNetFilter.create().fromEntity('tier-pro');
       const criteria = filter.getCriteria();
-      expect(criteria.root).toEqual({ type: 'Concept', key: 'tier-pro' });
+      expect(criteria.root).toEqual({ type: 'Entity', key: 'tier-pro' });
     });
 
     it('fromLocale() sets root to Locale type', () => {
@@ -52,19 +52,19 @@ describe('NovaNetFilter', () => {
       );
     });
 
-    it('includeConcepts() adds USES_CONCEPT include rule', () => {
-      const filter = NovaNetFilter.create().fromPage('page-pricing').includeConcepts();
+    it('includeEntities() adds USES_ENTITY include rule (v10.3)', () => {
+      const filter = NovaNetFilter.create().fromPage('page-pricing').includeEntities();
       const criteria = filter.getCriteria();
       expect(criteria.includes).toContainEqual(
-        expect.objectContaining({ relation: 'USES_CONCEPT', direction: 'outgoing' })
+        expect.objectContaining({ relation: 'USES_ENTITY', direction: 'outgoing' })
       );
     });
 
-    it('includeConcepts({ spreading: true }) sets depth to 2', () => {
-      const filter = NovaNetFilter.create().fromPage('page-pricing').includeConcepts({ spreading: true });
+    it('includeEntities({ spreading: true }) sets depth to 2 (v10.3)', () => {
+      const filter = NovaNetFilter.create().fromPage('page-pricing').includeEntities({ spreading: true });
       const criteria = filter.getCriteria();
-      const conceptRule = criteria.includes.find(i => i.relation === 'USES_CONCEPT');
-      expect(conceptRule?.depth).toBe(2);
+      const entityRule = criteria.includes.find(i => i.relation === 'USES_ENTITY');
+      expect(entityRule?.depth).toBe(2);
     });
 
     it('includePrompts() adds HAS_PROMPT include rule', () => {
@@ -90,8 +90,8 @@ describe('NovaNetFilter', () => {
       );
     });
 
-    it('includeSemanticLinks() adds SEMANTIC_LINK include rule', () => {
-      const filter = NovaNetFilter.create().fromConcept('tier-pro').includeSemanticLinks();
+    it('includeSemanticLinks() adds SEMANTIC_LINK include rule (v10.3: from Entity)', () => {
+      const filter = NovaNetFilter.create().fromEntity('tier-pro').includeSemanticLinks();
       const criteria = filter.getCriteria();
       expect(criteria.includes).toContainEqual(
         expect.objectContaining({ relation: 'SEMANTIC_LINK', direction: 'outgoing' })
@@ -99,7 +99,7 @@ describe('NovaNetFilter', () => {
     });
 
     it('includeSemanticLinks({ depth: 2 }) sets traversal depth', () => {
-      const filter = NovaNetFilter.create().fromConcept('tier-pro').includeSemanticLinks({ depth: 2 });
+      const filter = NovaNetFilter.create().fromEntity('tier-pro').includeSemanticLinks({ depth: 2 });
       const criteria = filter.getCriteria();
       const linkRule = criteria.includes.find(i => i.relation === 'SEMANTIC_LINK');
       expect(linkRule?.depth).toBe(2);
@@ -121,20 +121,8 @@ describe('NovaNetFilter', () => {
       );
     });
 
-    it('includeProjectConcepts() adds HAS_CONCEPT include rule', () => {
-      const filter = NovaNetFilter.create().fromProject('qrcode-ai').includeProjectConcepts();
-      const criteria = filter.getCriteria();
-      expect(criteria.includes).toContainEqual(
-        expect.objectContaining({ relation: 'HAS_CONCEPT', direction: 'outgoing' })
-      );
-    });
-
-    it('includeProjectConcepts({ depth: 2 }) sets traversal depth', () => {
-      const filter = NovaNetFilter.create().fromProject('qrcode-ai').includeProjectConcepts({ depth: 2 });
-      const criteria = filter.getCriteria();
-      const conceptRule = criteria.includes.find(i => i.relation === 'HAS_CONCEPT');
-      expect(conceptRule?.depth).toBe(2);
-    });
+    // REMOVED v10.3: includeProjectConcepts tests (HAS_CONCEPT arc removed)
+    // Entity is now in global realm, accessed via USES_ENTITY from Page/Block
 
     it('includeRules() adds HAS_RULES include rule', () => {
       const filter = NovaNetFilter.create().fromBlock('block-hero').includeRules();
@@ -159,29 +147,23 @@ describe('NovaNetFilter', () => {
       );
     });
 
-    it('includeL10n() adds HAS_L10N include rule', () => {
-      const filter = NovaNetFilter.create().fromConcept('tier-pro').includeL10n();
+    it('includeL10n() adds HAS_L10N include rule (v10.3: from Entity)', () => {
+      const filter = NovaNetFilter.create().fromEntity('tier-pro').includeL10n();
       const criteria = filter.getCriteria();
       expect(criteria.includes).toContainEqual(
         expect.objectContaining({ relation: 'HAS_L10N', direction: 'outgoing' })
       );
     });
 
-    it('includeSEO() adds TARGETS_SEO include rule', () => {
-      const filter = NovaNetFilter.create().fromConcept('tier-pro').includeSEO();
+    it('includeSEO() adds EXPRESSES include rule (v10.3: TARGETS_SEO → EXPRESSES)', () => {
+      const filter = NovaNetFilter.create().fromEntity('tier-pro').includeSEO();
       const criteria = filter.getCriteria();
       expect(criteria.includes).toContainEqual(
-        expect.objectContaining({ relation: 'TARGETS_SEO', direction: 'outgoing' })
+        expect.objectContaining({ relation: 'EXPRESSES', direction: 'outgoing' })
       );
     });
 
-    it('includeGEO() adds TARGETS_GEO include rule', () => {
-      const filter = NovaNetFilter.create().fromConcept('tier-pro').includeGEO();
-      const criteria = filter.getCriteria();
-      expect(criteria.includes).toContainEqual(
-        expect.objectContaining({ relation: 'TARGETS_GEO', direction: 'outgoing' })
-      );
-    });
+    // REMOVED v10.3: includeGEO test (GEO layer removed)
 
     it('includeKnowledge() adds all knowledge relations', () => {
       const filter = NovaNetFilter.create().fromLocale('fr-FR').includeKnowledge();
@@ -251,12 +233,11 @@ describe('NovaNetFilter', () => {
   });
 
   describe('chaining', () => {
-    it('supports fluent chaining of multiple methods', () => {
-      // v8.2.0: Removed withPriority (YAML v7.11.0 alignment)
+    it('supports fluent chaining of multiple methods (v10.3: Entity)', () => {
       const filter = NovaNetFilter.create()
         .fromPage('page-pricing')
         .includeBlocks()
-        .includeConcepts({ spreading: true })
+        .includeEntities({ spreading: true })
         .includePrompts({ activeOnly: true })
         .forLocale('fr-FR')
         .maxDepth(2);
@@ -364,24 +345,24 @@ describe('CypherGenerator', () => {
     });
   });
 
-  describe('spreading activation', () => {
-    it('generates SEMANTIC_LINK traversal for concepts with depth > 1', () => {
+  describe('spreading activation (v10.3: Entity)', () => {
+    it('generates SEMANTIC_LINK traversal for entities with depth > 1', () => {
       const filter = NovaNetFilter.create()
         .fromPage('page-pricing')
-        .includeConcepts({ spreading: true });
+        .includeEntities({ spreading: true });
       const result = CypherGenerator.generate(filter);
 
-      expect(result.query).toContain('OPTIONAL MATCH (root)-[:USES_CONCEPT]->(concept:Concept)');
-      expect(result.query).toContain('OPTIONAL MATCH (concept)-[:SEMANTIC_LINK*1..1]->(relatedConcept:Concept)');
+      expect(result.query).toContain('OPTIONAL MATCH (root)-[:USES_ENTITY]->(entity:Entity)');
+      expect(result.query).toContain('OPTIONAL MATCH (entity)-[:SEMANTIC_LINK*1..1]->(relatedEntity:Entity)');
     });
 
-    it('does not generate SEMANTIC_LINK for concepts with depth = 1', () => {
+    it('does not generate SEMANTIC_LINK for entities with depth = 1', () => {
       const filter = NovaNetFilter.create()
         .fromPage('page-pricing')
-        .includeConcepts();
+        .includeEntities();
       const result = CypherGenerator.generate(filter);
 
-      expect(result.query).toContain('OPTIONAL MATCH (root)-[:USES_CONCEPT]->(concept:Concept)');
+      expect(result.query).toContain('OPTIONAL MATCH (root)-[:USES_ENTITY]->(entity:Entity)');
       expect(result.query).not.toContain('SEMANTIC_LINK');
     });
   });
@@ -426,27 +407,25 @@ describe('CypherGenerator', () => {
       expect(result.query).toContain('(root)-[:OF_TYPE]->(blockType:BlockType)');
     });
 
-    it('generates Project include relations', () => {
+    it('generates Project include relations (v10.3: no HAS_CONCEPT)', () => {
       const filter = NovaNetFilter.create()
         .fromProject('qrcode-ai')
         .includePages()
-        .includeBrandIdentity()
-        .includeProjectConcepts();
+        .includeBrandIdentity();
       const result = CypherGenerator.generate(filter);
 
       expect(result.query).toContain('[:HAS_PAGE]->(page:Page)');
       expect(result.query).toContain('[:HAS_BRAND_IDENTITY]->(brandIdentity:BrandIdentity)');
-      expect(result.query).toContain('[:HAS_CONCEPT]->(projectConcept:Concept)');
+      // REMOVED v10.3: HAS_CONCEPT (Entity is in global realm)
     });
   });
 
   describe('complex queries', () => {
-    it('generates full page-generation-context query', () => {
-      // v8.2.0: Removed withPriority (YAML v7.11.0 alignment)
+    it('generates full page-generation-context query (v10.3: Entity)', () => {
       const filter = NovaNetFilter.create()
         .fromPage('page-pricing')
         .includeBlocks()
-        .includeConcepts({ spreading: true })
+        .includeEntities({ spreading: true })
         .includePrompts({ activeOnly: true })
         .forLocale('fr-FR');
 
@@ -455,10 +434,10 @@ describe('CypherGenerator', () => {
       // Should have root match
       expect(result.query).toContain('MATCH (root:Page {key: $rootKey})');
 
-      // Should have includes
+      // Should have includes (v10.3: USES_ENTITY replaces USES_CONCEPT)
       expect(result.query).toContain('OPTIONAL MATCH');
       expect(result.query).toContain('HAS_BLOCK');
-      expect(result.query).toContain('USES_CONCEPT');
+      expect(result.query).toContain('USES_ENTITY');
       expect(result.query).toContain('HAS_PROMPT');
 
       // Should have spreading activation

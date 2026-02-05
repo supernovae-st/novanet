@@ -1,6 +1,6 @@
 // packages/core/src/graph/generator.ts
 // Schema graph generator - Creates flat and hierarchical schema representations
-// v9.5.0 — Arc terminology
+// v10.3.0 — Entity-Centric Architecture, GEO removed
 
 import { NODE_TYPES, NODE_REALMS, NODE_TRAITS, type NodeType, type Realm } from '../types/nodes.js';
 import { RelationRegistry } from '../schemas/relations.schema.js';
@@ -17,60 +17,67 @@ import { REALM_HIERARCHY } from './hierarchy.js';
  * Can be extended with icons/colors in UI layer.
  */
 const NODE_LABELS: Record<NodeType, string> = {
-  // Project realm - foundation (3)
-  Project: 'Project',
-  BrandIdentity: 'Brand Identity',
-  ProjectL10n: 'Project L10n',
-  // Project realm - structure (3)
-  Page: 'Page',
-  Block: 'Block',
-  ContentSlot: 'Content Slot',
-  // Project realm - semantic (6)
-  Concept: 'Concept',
-  ConceptL10n: 'Concept L10n',
-  SearchIntent: 'Search Intent',
-  TopicCluster: 'Topic Cluster',
-  AudiencePersona: 'Audience Persona',
-  ChannelSurface: 'Channel Surface',
-  // Project realm - instruction (6)
-  PageType: 'Page Type',
-  BlockType: 'Block Type',
-  PagePrompt: 'Page Prompt',
-  BlockPrompt: 'Block Prompt',
-  BlockRules: 'Block Rules',
-  PromptArtifact: 'Prompt Artifact',
-  // Project realm - output (5)
-  PageL10n: 'Page L10n',
-  BlockL10n: 'Block L10n',
-  GenerationJob: 'Generation Job',
-  OutputArtifact: 'Output Artifact',
-  EvaluationSignal: 'Evaluation Signal',
   // Global realm - config (1)
   Locale: 'Locale',
-  // Global realm - knowledge (10) — v10 tiered model
-  // Technical tier
+
+  // Global realm - knowledge containers (10) — v10 tiered model
   Formatting: 'Formatting',
   Slugification: 'Slugification',
   Adaptation: 'Adaptation',
-  // Style tier
   Style: 'Style',
-  // Semantic tier
   TermSet: 'Term Set',
   ExpressionSet: 'Expression Set',
   PatternSet: 'Pattern Set',
   CultureSet: 'Culture Set',
   TabooSet: 'Taboo Set',
   AudienceSet: 'Audience Set',
-  // Shared realm - seo (3)
+
+  // Global realm - knowledge atoms (6)
+  Term: 'Term',
+  Expression: 'Expression',
+  Pattern: 'Pattern',
+  CultureRef: 'Culture Ref',
+  Taboo: 'Taboo',
+  AudienceTrait: 'Audience Trait',
+
+  // Global realm - seo (3)
   SEOKeyword: 'SEO Keyword',
   SEOKeywordMetrics: 'SEO Metrics',
   SEOMiningRun: 'SEO Mining',
-  // Shared realm - geo (5)
-  Thing: 'Thing',
-  ThingL10n: 'Thing L10n',
-  GEOSeedL10n: 'GEO Seed',
-  GEOSeedMetrics: 'GEO Metrics',
-  GEOMiningRun: 'GEO Mining',
+
+  // Global realm - semantic (2) — v10.3 Entity-Centric Architecture
+  Entity: 'Entity',
+  EntityL10n: 'Entity L10n',
+
+  // Project realm - foundation (3)
+  Project: 'Project',
+  BrandIdentity: 'Brand Identity',
+  ProjectL10n: 'Project L10n',
+
+  // Project realm - structure (5)
+  Page: 'Page',
+  Block: 'Block',
+  ContentSlot: 'Content Slot',
+  PageType: 'Page Type',
+  BlockType: 'Block Type',
+
+  // Project realm - semantic (2)
+  AudiencePersona: 'Audience Persona',
+  ChannelSurface: 'Channel Surface',
+
+  // Project realm - instruction (5)
+  PagePrompt: 'Page Prompt',
+  BlockPrompt: 'Block Prompt',
+  BlockRules: 'Block Rules',
+  BlockInstruction: 'Block Instruction',
+  PromptArtifact: 'Prompt Artifact',
+
+  // Project realm - output (5)
+  PageL10n: 'Page L10n',
+  BlockL10n: 'Block L10n',
+  GenerationJob: 'Generation Job',
+  OutputArtifact: 'Output Artifact',
+  EvaluationSignal: 'Evaluation Signal',
 };
 
 // =============================================================================
@@ -78,8 +85,7 @@ const NODE_LABELS: Record<NodeType, string> = {
 // =============================================================================
 
 const REALM_DESCRIPTIONS: Record<Realm, string> = {
-  global: 'Shared across all projects (Locale knowledge)',
-  shared: 'Shared across projects (SEO/GEO data)',
+  global: 'Shared across all projects (Locale knowledge, SEO, Entities)',
   project: 'Project-specific content and structure',
 };
 
@@ -109,7 +115,7 @@ const TRAIT_DESCRIPTIONS: Record<string, string> = {
  * ```typescript
  * const { nodes, arcs } = generateSchemaGraph();
  * console.log(`${nodes.length} nodes, ${arcs.length} arcs`);
- * // Output: "46 nodes, ~91 arcs"
+ * // Output: "42 nodes, ~XX arcs"
  * ```
  */
 export function generateSchemaGraph(): SchemaGraphResult {
@@ -181,7 +187,7 @@ export function generateSchemaGraph(): SchemaGraphResult {
  * ```typescript
  * const hierarchy = getSchemaHierarchy();
  * console.log(hierarchy.stats);
- * // Output: { totalNodes: 46, totalArcs: ~91, nodesByRealm: { project: 23, global: 15, shared: 8 } }
+ * // Output: { totalNodes: 42, totalArcs: ~XX, nodesByRealm: { project: 20, global: 22 } }
  * ```
  */
 export function getSchemaHierarchy(): HierarchicalSchemaData {
@@ -191,7 +197,6 @@ export function getSchemaHierarchy(): HierarchicalSchemaData {
   const nodesByRealm: Record<Realm, number> = {
     project: 0,
     global: 0,
-    shared: 0,
   };
 
   for (const node of nodes) {

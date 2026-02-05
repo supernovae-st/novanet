@@ -33,10 +33,10 @@ NovaNet Core provides the foundational layer for the NovaNet knowledge graph sys
 >
 > ```
 > Source → Translate → Target        ❌ Traditional
-> Concept → Generate Natively → L10n ✅ NovaNet
+> Entity → Generate Natively → L10n  ✅ NovaNet
 > ```
 >
-> Content is **generated natively** per locale from invariant Concepts, not translated.
+> Content is **generated natively** per locale from invariant Entities, not translated.
 
 ---
 
@@ -98,7 +98,7 @@ import { NovaNetFilter, CypherGenerator } from '@novanet/core';
 const filter = NovaNetFilter.create()
   .fromPage('page-pricing')
   .includeBlocks()
-  .includeConcepts({ spreading: true })
+  .includeEntities({ spreading: true })  // v10.3: was includeConcepts
   .forLocale('fr-FR')
   .maxDepth(2);
 
@@ -110,8 +110,8 @@ const { query, params } = CypherGenerator.generate(filter);
 ```typescript
 import type {
   Project,
-  Concept,
-  ConceptL10n,
+  Entity,       // v10.3: was Concept
+  EntityL10n,   // v10.3: was ConceptL10n
   Locale,
   NodeType,
   RelationType,

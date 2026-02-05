@@ -162,8 +162,8 @@ export class ViewLoader {
       case 'Block':
         filter.fromBlock(rootKey);
         break;
-      case 'Concept':
-        filter.fromConcept(rootKey);
+      case 'Entity':
+        filter.fromEntity(rootKey);
         break;
       case 'Locale':
         filter.fromLocale(rootKey);
@@ -209,8 +209,10 @@ export class ViewLoader {
         filter.includeBlocks({ depth: include.depth });
         break;
 
-      case 'USES_CONCEPT':
-        filter.includeConcepts({
+      // v10.3: USES_ENTITY replaces USES_CONCEPT
+      case 'USES_ENTITY':
+      case 'USES_CONCEPT':  // Backwards compat
+        filter.includeEntities({
           depth: include.depth,
           spreading: (include.depth || 1) > 1
         });
@@ -247,13 +249,13 @@ export class ViewLoader {
         break;
       }
 
-      case 'TARGETS_SEO':
+      // v10.3: EXPRESSES replaces TARGETS_SEO
+      case 'EXPRESSES':
+      case 'TARGETS_SEO':  // Backwards compat
         filter.includeSEO();
         break;
 
-      case 'TARGETS_GEO':
-        filter.includeGEO();
-        break;
+      // REMOVED v10.3: TARGETS_GEO (GEO layer removed)
 
       case 'OF_TYPE':
         filter.includeBlockType();
@@ -271,9 +273,7 @@ export class ViewLoader {
         filter.includeBrandIdentity();
         break;
 
-      case 'HAS_CONCEPT':
-        filter.includeProjectConcepts({ depth: include.depth });
-        break;
+      // REMOVED v10.3: HAS_CONCEPT (Entity is in global realm, use USES_ENTITY from Page/Block)
 
       case 'FOR_LOCALE':
         filter.includeForLocale();

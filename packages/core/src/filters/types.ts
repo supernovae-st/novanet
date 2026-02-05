@@ -81,7 +81,7 @@ export interface CypherQuery {
  * - generation: Orchestrator and sub-agent context views
  * - knowledge: Locale and concept views
  * - project: Project structure views
- * - mining: SEO and GEO pipeline views
+ * - mining: SEO pipeline views (v10.3: GEO removed)
  */
 export type ViewCategory = 'overview' | 'generation' | 'knowledge' | 'project' | 'mining';
 

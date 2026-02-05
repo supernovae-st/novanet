@@ -25,11 +25,11 @@ const RELATION_ALIAS_MAP: Record<string, string> = {
   // Core structure
   HAS_PAGE: 'page',
   HAS_BLOCK: 'block',
-  HAS_CONCEPT: 'projectConcept',
   HAS_BRAND_IDENTITY: 'brandIdentity',
   OF_TYPE: 'blockType',
-  USES_CONCEPT: 'concept',
-  SEMANTIC_LINK: 'relatedConcept',
+  // v10.3: Entity replaces Concept
+  USES_ENTITY: 'entity',
+  SEMANTIC_LINK: 'relatedEntity',
   // Prompts
   HAS_PROMPT: 'prompt',
   HAS_RULES: 'rules',
@@ -43,10 +43,8 @@ const RELATION_ALIAS_MAP: Record<string, string> = {
   HAS_MARKET: 'market',
   HAS_LEXICON: 'lexicon',
   HAS_EXPRESSION: 'expression',
-  // SEO/GEO
-  TARGETS_SEO: 'seoKeyword',
-  TARGETS_GEO: 'geoSeed',
-  // REMOVED v7.8.1: PAGE_TARGETS_SEO, PAGE_TARGETS_GEO (bypasses semantic grouping)
+  // SEO (v10.3: EXPRESSES replaces TARGETS_SEO, GEO removed)
+  EXPRESSES: 'seoKeyword',
   // Locale
   SUPPORTS_LOCALE: 'supportedLocale',
   FALLBACK_TO: 'fallbackLocale',
@@ -56,33 +54,29 @@ const RELATION_ALIAS_MAP: Record<string, string> = {
   ASSEMBLES: 'assembledBlock',
   // Provenance
   GENERATED: 'generatedOutput',
-  INFLUENCED_BY: 'influencingConcept',
-  // REMOVED v7.9.0: USED_SEO_KEYWORD, USED_GEO_SEED (SEO/GEO is at ConceptL10n level)
+  INFLUENCED_BY: 'influencingEntity',  // v10.3: renamed from influencingConcept
   GENERATED_FROM: 'generatedFromType',
   BELONGS_TO_PROJECT_L10N: 'projectL10n',
-  // SEO Mining (v7.8.5: HAS_SNAPSHOT removed, use HAS_METRICS)
+  // SEO Mining
   SEO_MINES: 'minedSeoKeyword',
-  // REMOVED v7.8.5: SEO_DISCOVERED_BY, HAS_VARIATION, HAS_SNAPSHOT, VARIATES
-  // GEO Mining (v7.8.5: HAS_CITATION removed, use HAS_METRICS)
-  GEO_MINES: 'minedGeoSeed',
-  // REMOVED v7.8.5: GEO_DISCOVERED_BY, HAS_REFORMULATION, HAS_CITATION, REFORMULATES
+  // REMOVED v10.3: HAS_CONCEPT, USES_CONCEPT, TARGETS_SEO, TARGETS_GEO, GEO_MINES (GEO removed)
 };
 
 const RELATION_TARGET_TYPE_MAP: Record<string, string> = {
   // Core structure
   HAS_PAGE: 'Page',
   HAS_BLOCK: 'Block',
-  HAS_CONCEPT: 'Concept',
   HAS_BRAND_IDENTITY: 'BrandIdentity',
   OF_TYPE: 'BlockType',
-  USES_CONCEPT: 'Concept',
-  SEMANTIC_LINK: 'Concept',
+  // v10.3: Entity replaces Concept
+  USES_ENTITY: 'Entity',
+  SEMANTIC_LINK: 'Entity',
   // Prompts
   HAS_PROMPT: 'PagePrompt',
   HAS_RULES: 'BlockRules',
   // Output
   HAS_OUTPUT: 'PageL10n',
-  HAS_L10N: 'ConceptL10n',
+  HAS_L10N: 'EntityL10n',
   // Locale knowledge
   HAS_IDENTITY: 'LocaleIdentity',
   HAS_VOICE: 'LocaleVoice',
@@ -90,10 +84,8 @@ const RELATION_TARGET_TYPE_MAP: Record<string, string> = {
   HAS_MARKET: 'LocaleMarket',
   HAS_LEXICON: 'LocaleLexicon',
   HAS_EXPRESSION: 'Expression',
-  // SEO/GEO (v7.8.2: SEOKeyword → SEOKeyword, v7.8.3: GEOSeed → GEOSeedL10n)
-  TARGETS_SEO: 'SEOKeyword',
-  TARGETS_GEO: 'GEOSeedL10n',
-  // REMOVED v7.8.1: PAGE_TARGETS_SEO, PAGE_TARGETS_GEO (bypasses semantic grouping)
+  // SEO (v10.3: EXPRESSES replaces TARGETS_SEO, GEO removed)
+  EXPRESSES: 'SEOKeyword',
   // Locale
   SUPPORTS_LOCALE: 'Locale',
   FALLBACK_TO: 'Locale',
@@ -103,16 +95,12 @@ const RELATION_TARGET_TYPE_MAP: Record<string, string> = {
   ASSEMBLES: 'BlockL10n',
   // Provenance
   GENERATED: 'PageL10n',
-  INFLUENCED_BY: 'ConceptL10n',
-  // REMOVED v7.9.0: USED_SEO_KEYWORD, USED_GEO_SEED
+  INFLUENCED_BY: 'EntityL10n',  // v10.3: was ConceptL10n
   GENERATED_FROM: 'BlockType',
   BELONGS_TO_PROJECT_L10N: 'ProjectL10n',
-  // SEO Mining (v7.8.5: HAS_SNAPSHOT removed, use HAS_METRICS)
+  // SEO Mining
   SEO_MINES: 'SEOKeyword',
-  // REMOVED v7.8.5: HAS_SNAPSHOT (use HAS_METRICS: SEOKeyword → SEOKeywordMetrics)
-  // GEO Mining (v7.8.5: HAS_CITATION removed, use HAS_METRICS)
-  GEO_MINES: 'GEOSeedL10n',
-  // REMOVED v7.8.5: HAS_CITATION (use HAS_METRICS: GEOSeedL10n → GEOSeedMetrics)
+  // REMOVED v10.3: HAS_CONCEPT, USES_CONCEPT, TARGETS_SEO, TARGETS_GEO, GEO_MINES (GEO removed)
 };
 
 // =============================================================================
@@ -153,10 +141,10 @@ export class CypherGenerator {
 
       lines.push(matchLine);
 
-      // Handle spreading activation for concepts
-      if (include.relation === 'USES_CONCEPT' && include.depth && include.depth > 1) {
+      // Handle spreading activation for entities (v10.3: USES_ENTITY replaces USES_CONCEPT)
+      if (include.relation === 'USES_ENTITY' && include.depth && include.depth > 1) {
         const relatedAlias = `related${this.capitalize(alias)}`;
-        lines.push(`OPTIONAL MATCH (${alias})-[:SEMANTIC_LINK*1..${include.depth - 1}]->(${relatedAlias}:Concept)`);
+        lines.push(`OPTIONAL MATCH (${alias})-[:SEMANTIC_LINK*1..${include.depth - 1}]->(${relatedAlias}:Entity)`);
         aliases.add(relatedAlias);
       }
     }

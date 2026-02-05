@@ -16,10 +16,10 @@ NovaNet is a **native content generation system** (NOT translation) using Neo4j 
 NOVANET = NATIVE GENERATION
 
 Source -> Translate -> Target        <-- WRONG
-Concept (invariant) -> Generate natively -> ConceptL10n (local)  <-- RIGHT
+Entity (invariant) -> Generate natively -> EntityL10n (local)  <-- RIGHT
 ```
 
-Each locale content is **generated natively** from the invariant Concept, NOT translated. The LLM receives context **entirely in the target locale** and generates natively.
+Each locale content is **generated natively** from the invariant Entity, NOT translated. The LLM receives context **entirely in the target locale** and generates natively.
 
 For complete graph schema, node categories, and relations, see: **`models/_index.yaml`**
 
@@ -84,12 +84,12 @@ RETURN p.key, collect(page.key) AS pages;
 
 -- Load block context for generation
 MATCH (b:Block {key: "hero-pricing"})
-MATCH (b)-[:USES_CONCEPT]->(c:Concept)-[:HAS_L10N]->(cl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale {key: "fr-FR"})
+MATCH (b)-[:USES_ENTITY]->(e:Entity)-[:HAS_L10N]->(el:EntityL10n)-[:FOR_LOCALE]->(l:Locale {key: "fr-FR"})
 MATCH (b)-[:OF_TYPE]->(bt:BlockType)
 MATCH (l)-[:HAS_VOICE]->(v:LocaleVoice)
 MATCH (l)-[:HAS_LEXICON]->(lex:LocaleLexicon)-[:HAS_EXPRESSION]->(e:Expression)
 WHERE e.semantic_field IN ['urgency', 'value']
-RETURN b.instructions, c.key, cl.title, bt.rules, v.formality_score, collect(e.text) AS expressions;
+RETURN b.instructions, e.key, el.title, bt.rules, v.formality_score, collect(ex.text) AS expressions;
 
 -- v9: Navigate meta-graph (Realm -> Layer -> Kind)
 MATCH (r:Realm {key: "project"})-[:HAS_LAYER]->(l:Layer)-[:HAS_KIND]->(k:Kind)
@@ -118,15 +118,14 @@ core/
 │   │   ├── global/            # Realm: global (11 nodes)
 │   │   │   ├── config/        #   Layer: config (Locale)
 │   │   │   └── knowledge/     #   Layer: knowledge (10 nodes - tiered model)
-│   │   ├── project/           # Realm: project (23 nodes)
+│   │   ├── project/           # Realm: project (20 nodes)
 │   │   │   ├── foundation/    #   Layer: foundation (Project, BrandIdentity, ProjectL10n)
 │   │   │   ├── structure/     #   Layer: structure (Page, Block, PageType, BlockType)
-│   │   │   ├── semantic/      #   Layer: semantic (Concept, ConceptL10n)
+│   │   │   ├── semantic/      #   Layer: semantic (AudiencePersona, ChannelSurface)
 │   │   │   ├── instruction/   #   Layer: instruction (PagePrompt, BlockPrompt, BlockRules)
 │   │   │   └── output/        #   Layer: output (PageL10n, BlockL10n)
-│   │   └── shared/            # Realm: shared (8 nodes)
+│   │   └── global/            # Realm: global (17 nodes)
 │   │       ├── seo/           #   Layer: seo (SEOKeyword, SEOKeywordMetrics, SEOMiningRun)
-│   │       └── geo/           #   Layer: geo (GEOSeedL10n, GEOSeedMetrics, GEOMiningRun)
 │   └── views/                 # YAML view definitions
 ├── src/                       # TypeScript source
 │   ├── config/                # Locale codes configuration
@@ -143,11 +142,11 @@ core/
 
 ```
 *L10n suffix    = ALL localized content (human OR LLM generated)
-:HAS_L10N       = human-curated content (ConceptL10n, ProjectL10n)
+:HAS_L10N       = human-curated content (EntityL10n, ProjectL10n)
 :HAS_OUTPUT     = LLM-generated content (PageL10n, BlockL10n)
 Locale*         = Locale Knowledge nodes (LocaleVoice, LocaleCulture, etc.)
-*Metrics        = Time-series observations (SEOKeywordMetrics, GEOSeedMetrics)
-*MiningRun      = Batch operations (SEOMiningRun, GEOMiningRun)
+*Metrics        = Time-series observations (SEOKeywordMetrics)
+*MiningRun      = Batch operations (SEOMiningRun)
 ```
 
 **v9 meta-graph terminology:**
@@ -168,7 +167,7 @@ NavigationMode  = 4 modes (data / meta / overlay / query) — replaces "DataMode
 | English (invariant) | Localized (generated natively) |
 |---------------------|--------------------------------|
 | `*.key`, `*.llm_context`, `*.instructions`, `*.rules` | `*L10n.*` fields |
-| Project.key, Concept.key, Page.key, Block.key | ConceptL10n, PageL10n, BlockL10n |
+| Project.key, Entity.key, Page.key, Block.key | EntityL10n, PageL10n, BlockL10n |
 
 **Remember**: Localized content is **generated natively**, not translated.
 
@@ -178,7 +177,7 @@ Block instructions use these directives:
 - `[FIXED]` - Use exact value (brand names, URLs, etc.)
 - `[GENERATE]` - Create content **natively** in target locale (NOT translate)
 
-Concept references use `@concept-key` syntax in instructions.
+Entity references use `@entity-key` syntax in instructions.
 
 > There is no `[TRANSLATE]` directive. All content is generated natively per locale.
 
