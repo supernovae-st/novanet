@@ -40,7 +40,7 @@ const LAYER_GRADIENT_COLORS: Record<Layer, GradientColors> = {
   instruction: { primary: '#d33682', secondary: '#ec4899' },   // Solarized magenta -> Pink
   output: { primary: '#dc322f', secondary: '#f97316' },        // Solarized red -> Orange
   config: { primary: '#2aa198', secondary: '#14b8a6' },        // Solarized cyan -> Teal
-  knowledge: { primary: '#268bd2', secondary: '#3b82f6' },     // Solarized blue -> Blue
+  'locale-knowledge': { primary: '#268bd2', secondary: '#3b82f6' }, // Solarized blue -> Blue
   seo: { primary: '#cb4b16', secondary: '#f97316' },           // Solarized orange -> Orange
 };
 

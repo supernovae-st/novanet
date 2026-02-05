@@ -222,10 +222,10 @@ export default function HomePage() {
     if (navigationMode === 'meta') {
       const nodeId = uiState.hoveredNodeId;
 
-      // Realm containers: realm-{Realm} (e.g., realm-global, realm-project)
+      // Realm containers: realm-{Realm} (e.g., realm-global, realm-tenant)
       if (nodeId.startsWith('realm-')) {
         const realm = nodeId.replace('realm-', '');
-        const realmEmoji = realm === 'global' ? '🌍' : realm === 'project' ? '📦' : '🎯';
+        const realmEmoji = realm === 'global' ? '🌍' : realm === 'tenant' ? '🏢' : '🎯';
         const realmLabel = realm.charAt(0).toUpperCase() + realm.slice(1);
         return {
           id: nodeId,

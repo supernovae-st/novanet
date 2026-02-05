@@ -34,23 +34,23 @@ interface TypeCountItem {
   category: Layer | RelationshipCategory;
 }
 
-/** Realm config for breakdown display - colors match Neo4j organizing-principles */
+/** Realm config for breakdown display - colors match Neo4j organizing-principles (v10.6: 2 realms) */
 const REALM_CONFIG = {
   global: { emoji: '🌍', color: '#2aa198' },   // solarized cyan
-  project: { emoji: '📦', color: '#6c71c4' },  // solarized violet
+  tenant: { emoji: '🏢', color: '#0ea5e9' },   // sky blue
 } as const;
 
-/** Layer config - color inherited from parent realm */
+/** Layer config - color inherited from parent realm (v10.6: 2 realms) */
 const LAYER_CONFIG: Record<Layer, { emoji: string; realm: keyof typeof REALM_CONFIG }> = {
-  // Project realm (5 layers)
-  foundation: { emoji: '🏛️', realm: 'project' },
-  structure: { emoji: '🧱', realm: 'project' },
-  semantic: { emoji: '💡', realm: 'project' },
-  instruction: { emoji: '📋', realm: 'project' },
-  output: { emoji: '📤', realm: 'project' },
-  // Global realm (4 layers) — v10.4: seo moved to global, geo removed
+  // Tenant realm (5 layers)
+  foundation: { emoji: '🏛️', realm: 'tenant' },
+  structure: { emoji: '🧱', realm: 'tenant' },
+  semantic: { emoji: '💡', realm: 'tenant' },
+  instruction: { emoji: '📋', realm: 'tenant' },
+  output: { emoji: '📤', realm: 'tenant' },
+  // Global realm (3 layers) — v10.6: locale-knowledge
   config: { emoji: '⚙️', realm: 'global' },
-  knowledge: { emoji: '🧠', realm: 'global' },
+  'locale-knowledge': { emoji: '🧠', realm: 'global' },
   seo: { emoji: '🔍', realm: 'global' },
 } as const;
 
@@ -270,10 +270,10 @@ export const ExpandedBreakdown = memo(function ExpandedBreakdown({
             {/* Schema mode: unified badge hierarchy */}
             {isMetaMode && showNodes && (
               <div className={showRelations ? 'mb-3' : ''}>
-                {/* Realms - inline badges (v10.4: 2 realms) */}
+                {/* Realms - inline badges (v10.6: 2 realms) */}
                 <SectionHeader icon={NodeIcon} label="realms" count={2} />
                 <div className="flex flex-wrap gap-1.5 mb-3">
-                  {(['global', 'project'] as const).map((scope, i) => (
+                  {(['global', 'tenant'] as const).map((scope, i) => (
                     <UnifiedBadge
                       key={scope}
                       item={{
@@ -289,11 +289,11 @@ export const ExpandedBreakdown = memo(function ExpandedBreakdown({
                   ))}
                 </div>
 
-                {/* Layers - inline badges (v10.4: 8 layers) */}
+                {/* Layers - inline badges (v10.6: 8 layers) */}
                 <div className="h-px bg-white/[0.04] mb-2.5" />
                 <SectionHeader icon={NodeIcon} label="layers" count={8} />
                 <div className="flex flex-wrap gap-1.5 mb-3">
-                  {(['config', 'knowledge', 'foundation', 'structure', 'semantic', 'instruction', 'output', 'seo'] as const).map((layer, i) => {
+                  {(['config', 'locale-knowledge', 'foundation', 'structure', 'semantic', 'instruction', 'output', 'seo'] as const).map((layer, i) => {
                     const config = LAYER_CONFIG[layer];
                     const realmColor = REALM_CONFIG[config.realm].color;
                     return (

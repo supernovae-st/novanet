@@ -148,7 +148,7 @@ function toTurboNode(node: GraphNodeType): TurboNodeType {
       case 'config':
         nodeType = 'structural';
         break;
-      case 'knowledge':
+      case 'locale-knowledge':
         nodeType = 'localeKnowledge';
         break;
       // Default to turbo for seo, geo layers
@@ -377,9 +377,9 @@ function Graph2DInner({
         // Meta nodes get lower z-index so Kind nodes appear on top
         const metaType = node.data?.metaType as string | undefined;
         if (metaType === 'realm') {
-          zIndex = Z_INDEX.REALM_PROJECT; // Realms at base level
+          zIndex = Z_INDEX.REALM_TENANT; // Realms at base level
         } else if (metaType === 'layer') {
-          zIndex = Z_INDEX.LAYER_PROJECT; // Layers above realms
+          zIndex = Z_INDEX.LAYER_TENANT; // Layers above realms
         }
         // Kind nodes (metaType === 'kind' or undefined) use BASE (highest)
 

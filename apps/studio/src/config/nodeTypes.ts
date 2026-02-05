@@ -1,19 +1,19 @@
 // =============================================================================
-// NODE TYPE CONFIGURATION (v10.4.0)
+// NODE TYPE CONFIGURATION (v10.6.0)
 // =============================================================================
-// Visual configuration for all 42 NovaNet node types (v10.4: 8 layers, 2 realms)
+// Visual configuration for all 43 NovaNet node types (v10.6: 8 layers, 2 realms: global, tenant)
 // NodeType, Layer, KIND_META imported from @novanet/core (Single Source of Truth)
 
 import type { NodeType, Layer } from '@novanet/core/types';
 import { NODE_TYPES, KIND_META } from '@novanet/core/types';
 
 // =============================================================================
-// NODE LAYERS (v10.4 - 8 layers, 42 nodes)
+// NODE LAYERS (v10.6 - 8 layers, 42 nodes)
 // Derived from KIND_META — single source of truth
 // =============================================================================
 
 /**
- * Node layers with their types (v10.4 - 42 nodes across 8 layers)
+ * Node layers with their types (v10.6 - 43 nodes across 8 layers)
  * Derived from KIND_META in @novanet/core
  */
 export const NODE_LAYERS: Record<Layer, NodeType[]> = Object.entries(KIND_META).reduce(
@@ -44,7 +44,7 @@ export interface NodeTypeConfig {
 }
 
 /**
- * All node type configurations (v10.4 - 42 nodes)
+ * All node type configurations (v10.6 - 43 nodes)
  * Aligned with @novanet/core NODE_TYPES
  */
 export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
@@ -174,7 +174,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   // ==========================================================================
 
   // ==========================================================================
-  // CONFIG LAYER (1 node)
+  // GLOBAL REALM — CONFIG LAYER (1 node)
   // ==========================================================================
   Locale: {
     type: 'Locale',
@@ -187,7 +187,20 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   },
 
   // ==========================================================================
-  // KNOWLEDGE LAYER (10 nodes — v10 tiered model)
+  // TENANT REALM — CONFIG LAYER (1 node) — v10.6
+  // ==========================================================================
+  Organization: {
+    type: 'Organization',
+    label: 'Organization',
+    icon: '🏢',
+    color: '#0ea5e9',
+    colorClass: 'bg-sky-500',
+    size: 22,
+    layer: 'config',
+  },
+
+  // ==========================================================================
+  // GLOBAL REALM — LOCALE-KNOWLEDGE LAYER (10 nodes — v10 tiered model)
   // ==========================================================================
   // Technical tier
   Formatting: {
@@ -197,7 +210,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#06b6d4',
     colorClass: 'bg-cyan-500',
     size: 12,
-    layer: 'knowledge',
+    layer: 'locale-knowledge',
   },
   Slugification: {
     type: 'Slugification',
@@ -206,7 +219,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#0891b2',
     colorClass: 'bg-cyan-600',
     size: 12,
-    layer: 'knowledge',
+    layer: 'locale-knowledge',
   },
   Adaptation: {
     type: 'Adaptation',
@@ -215,7 +228,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#0e7490',
     colorClass: 'bg-cyan-700',
     size: 12,
-    layer: 'knowledge',
+    layer: 'locale-knowledge',
   },
   // Style tier
   Style: {
@@ -225,7 +238,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#8b5cf6',
     colorClass: 'bg-violet-500',
     size: 14,
-    layer: 'knowledge',
+    layer: 'locale-knowledge',
   },
   // Semantic tier
   TermSet: {
@@ -235,7 +248,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#22c55e',
     colorClass: 'bg-green-500',
     size: 10,
-    layer: 'knowledge',
+    layer: 'locale-knowledge',
   },
   ExpressionSet: {
     type: 'ExpressionSet',
@@ -244,7 +257,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#ec4899',
     colorClass: 'bg-pink-500',
     size: 10,
-    layer: 'knowledge',
+    layer: 'locale-knowledge',
   },
   PatternSet: {
     type: 'PatternSet',
@@ -253,7 +266,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#f472b6',
     colorClass: 'bg-pink-400',
     size: 10,
-    layer: 'knowledge',
+    layer: 'locale-knowledge',
   },
   CultureSet: {
     type: 'CultureSet',
@@ -262,7 +275,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#86efac',
     colorClass: 'bg-green-300',
     size: 10,
-    layer: 'knowledge',
+    layer: 'locale-knowledge',
   },
   TabooSet: {
     type: 'TabooSet',
@@ -271,7 +284,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#ef4444',
     colorClass: 'bg-red-500',
     size: 10,
-    layer: 'knowledge',
+    layer: 'locale-knowledge',
   },
   AudienceSet: {
     type: 'AudienceSet',
@@ -280,7 +293,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#f59e0b',
     colorClass: 'bg-amber-500',
     size: 10,
-    layer: 'knowledge',
+    layer: 'locale-knowledge',
   },
   // Knowledge atoms (6)
   Term: {
@@ -290,7 +303,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#22c55e',
     colorClass: 'bg-green-500',
     size: 8,
-    layer: 'knowledge',
+    layer: 'locale-knowledge',
   },
   Expression: {
     type: 'Expression',
@@ -299,7 +312,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#ec4899',
     colorClass: 'bg-pink-500',
     size: 8,
-    layer: 'knowledge',
+    layer: 'locale-knowledge',
   },
   Pattern: {
     type: 'Pattern',
@@ -308,7 +321,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#f472b6',
     colorClass: 'bg-pink-400',
     size: 8,
-    layer: 'knowledge',
+    layer: 'locale-knowledge',
   },
   CultureRef: {
     type: 'CultureRef',
@@ -317,7 +330,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#86efac',
     colorClass: 'bg-green-300',
     size: 8,
-    layer: 'knowledge',
+    layer: 'locale-knowledge',
   },
   Taboo: {
     type: 'Taboo',
@@ -326,7 +339,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#ef4444',
     colorClass: 'bg-red-500',
     size: 8,
-    layer: 'knowledge',
+    layer: 'locale-knowledge',
   },
   AudienceTrait: {
     type: 'AudienceTrait',
@@ -335,7 +348,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#f59e0b',
     colorClass: 'bg-amber-500',
     size: 8,
-    layer: 'knowledge',
+    layer: 'locale-knowledge',
   },
 
   // (PagePrompt, BlockPrompt, BlockRules already in INSTRUCTION LAYER above)
@@ -486,7 +499,7 @@ export const ALL_NODE_TYPES: readonly NodeType[] = NODE_TYPES;
  */
 export const LOCALE_TYPES: NodeType[] = [
   ...getNodeTypesByLayer('config'),
-  ...getNodeTypesByLayer('knowledge'),
+  ...getNodeTypesByLayer('locale-knowledge'),
 ];
 
 /**
@@ -572,12 +585,12 @@ export const NODE_VISUAL_LAYERS: LayerConfig[] = [
     nodeTypes: getNodeTypesByLayer('config'),
   },
   {
-    id: 'knowledge',
+    id: 'locale-knowledge',
     label: 'Knowledge',
     icon: '📚',
     color: '#268bd2',
     colorLight: '#60a5fa',
-    nodeTypes: getNodeTypesByLayer('knowledge'),
+    nodeTypes: getNodeTypesByLayer('locale-knowledge'),
   },
   {
     id: 'seo',

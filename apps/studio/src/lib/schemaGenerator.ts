@@ -20,8 +20,8 @@ import type { GraphNode, GraphEdge } from '@/types';
 // =============================================================================
 
 const REALM_DESCRIPTIONS: Record<Realm, string> = {
-  global: 'Shared across all projects (Locale knowledge, SEO)',
-  project: 'Project-specific content and structure',
+  global: 'Shared across all tenants (Locale knowledge, SEO)',
+  tenant: 'Business-specific content and structure (Organization, Projects)',
 };
 
 const BEHAVIOR_DESCRIPTIONS: Record<string, string> = {

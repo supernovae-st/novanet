@@ -8,7 +8,7 @@ NovaNet is a **native content generation system** (NOT translation) using Neo4j 
 
 **Target Application**: QR Code AI (https://qrcode-ai.com) - a multilingual SaaS for QR code generation.
 **Supported Locales**: 200+ locales (fr-FR, en-US, es-MX, ja-JP, etc.)
-**Current Version**: v10.5.0
+**Current Version**: v10.6.0
 
 ## CRITICAL: Generation, NOT Translation
 
@@ -23,22 +23,21 @@ Each locale content is **generated natively** from the invariant Entity, NOT tra
 
 For complete graph schema, node categories, and relations, see: **`models/_index.yaml`**
 
-## v10.5 Architecture
+## v10.6 Architecture
 
-v10.5 introduces 3-Realm Architecture with multi-tenant isolation:
+v10.6 establishes 2-Realm Architecture with simplified tenant isolation:
 
 | Axis | Values |
 |------|--------|
-| **Realm** | global / organization / project |
-| **Layer** | 10 functional layers (3 global, 2 org, 5 project) |
-| **Kind** | 45 node types, 64 arc types |
+| **Realm** | global / tenant |
+| **Layer** | 9 functional layers (3 global, 6 tenant) |
 | **Trait** | invariant / localized / knowledge / derived / job |
 | **ArcFamily** | ownership / localization / semantic / generation / mining |
 
-**Key v10.5 changes:**
-- Added ORGANIZATION realm for multi-tenant isolation
-- `global/knowledge` → `global/locale-knowledge`
-- Entity moved from GLOBAL to ORGANIZATION/semantic + PROJECT/semantic
+**Key v10.6 changes:**
+- 3 realms -> 2 realms: GLOBAL + TENANT (merged organization + project)
+- GLOBAL (3 layers): config, locale-knowledge, seo — universal, READ-ONLY
+- TENANT (6 layers): config, foundation, structure, semantic, instruction, output
 
 **Boundary rule:** TypeScript (this package) generates code artifacts. Rust (`tools/novanet/`) executes at runtime.
 
@@ -95,8 +94,8 @@ MATCH (l)-[:HAS_LEXICON]->(lex:LocaleLexicon)-[:HAS_EXPRESSION]->(e:Expression)
 WHERE e.semantic_field IN ['urgency', 'value']
 RETURN b.instructions, e.key, el.title, bt.rules, v.formality_score, collect(ex.text) AS expressions;
 
--- v9: Navigate meta-graph (Realm -> Layer -> Kind)
-MATCH (r:Realm {key: "project"})-[:HAS_LAYER]->(l:Layer)-[:HAS_KIND]->(k:Kind)
+-- v10.6: Navigate meta-graph (Realm -> Layer -> Kind)
+MATCH (r:Realm {key: "tenant"})-[:HAS_LAYER]->(l:Layer)-[:HAS_KIND]->(k:Kind)
 RETURN r.key, l.key, collect(k.label) AS kinds;
 
 -- v9: Find all Kinds with a specific Trait
@@ -116,17 +115,15 @@ RETURN ak.key, af.key AS family, target.label AS target_kind;
 core/
 ├── models/                    # YAML schema definitions (SOURCE OF TRUTH)
 │   ├── _index.yaml            # MODEL INDEX (graph structure, node categories)
-│   ├── taxonomy.yaml          # v10.5: Realm/Layer/Trait/ArcFamily/ArcScope
+│   ├── taxonomy.yaml          # v10.6: 2 Realms (global/tenant), 9 Layers
 │   ├── relations.yaml         # Legacy format (kept for parser compatibility)
-│   ├── node-kinds/            # ONE FILE PER NODE TYPE (45 files)
-│   │   ├── global/            # Realm: global (19 nodes)
+│   ├── node-kinds/            # ONE FILE PER NODE TYPE
+│   │   ├── global/            # Realm: global
 │   │   │   ├── config/        #   Layer: config (Locale + utility nodes)
 │   │   │   ├── locale-knowledge/  #   Layer: locale-knowledge (Knowledge Atoms)
 │   │   │   └── seo/           #   Layer: seo (SEOKeyword, Metrics, MiningRun)
-│   │   ├── organization/      # Realm: organization (NEW in v10.5)
-│   │   │   ├── config/        #   Layer: config (Organization node)
-│   │   │   └── semantic/      #   Layer: semantic (Org-level Entity/EntityL10n)
-│   │   └── project/           # Realm: project (23 nodes)
+│   │   └── tenant/            # Realm: tenant (v10.6: merged org + project)
+│   │       ├── config/        #   Layer: config (Tenant node)
 │   │       ├── foundation/    #   Layer: foundation (Project, Brand, ProjectL10n)
 │   │       ├── structure/     #   Layer: structure (Page, Block, Types)
 │   │       ├── semantic/      #   Layer: semantic (Entity, EntityL10n, Persona)

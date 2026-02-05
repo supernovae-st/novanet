@@ -72,15 +72,15 @@ describe('FacetFilterPanel', () => {
       expect(screen.getByText('Arc Families')).toBeInTheDocument();
     });
 
-    it('renders 2 realm items (v10.4: shared merged into global)', () => {
+    it('renders 2 realm items (v10.6: global + tenant)', () => {
       render(<FacetFilterPanel />);
 
       expect(screen.getByText('Global')).toBeInTheDocument();
-      expect(screen.getByText('Project')).toBeInTheDocument();
-      // shared realm removed in v10.4
+      expect(screen.getByText('Tenant')).toBeInTheDocument();
+      // v10.6: organization + project merged into tenant
     });
 
-    it('renders 8 layer items (v10.4: GEO removed)', () => {
+    it('renders 8 layer items (v10.6: 8 layers)', () => {
       render(<FacetFilterPanel />);
 
       expect(screen.getByText('Configuration')).toBeInTheDocument();
@@ -92,7 +92,6 @@ describe('FacetFilterPanel', () => {
       expect(screen.getByText('Instructions')).toBeInTheDocument();
       expect(screen.getByText('Generated Output')).toBeInTheDocument();
       expect(screen.getByText('SEO Intelligence')).toBeInTheDocument();
-      // GEO layer removed in v10.4
     });
 
     it('renders 5 trait items', () => {

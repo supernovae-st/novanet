@@ -452,12 +452,12 @@ node:
             return;
         }
 
-        // v10.3: 42 nodes (-4 removed, +3 added)
-        let nodes = load_all_nodes(root).expect("should parse all 42 nodes");
+        // v10.5: 43 nodes (org uses company project pattern - only Organization node)
+        let nodes = load_all_nodes(root).expect("should parse all 43 nodes");
         assert_eq!(
             nodes.len(),
-            42,
-            "expected 42 YAML node files (v10.3: -4 removed, +3 added)"
+            43,
+            "expected 43 YAML node files (v10.5: org uses company project)"
         );
 
         // Every node has a non-empty name, realm, and layer
@@ -479,14 +479,9 @@ node:
             );
         }
 
-        // v10.3: Verify trait distribution
-        // 15 invariant (16 - Concept/SearchIntent/TopicCluster + Entity/BlockInstruction)
-        // 4 localized (- ConceptL10n + EntityL10n)
-        // 17 knowledge (unchanged)
-        // 4 derived
-        // 2 jobs
+        // v10.6: Verify trait distribution (2 realms: global + tenant)
         let count = |t: NodeTrait| nodes.iter().filter(|n| n.def.node_trait == t).count();
-        assert_eq!(count(NodeTrait::Invariant), 15, "invariant count");
+        assert_eq!(count(NodeTrait::Invariant), 16, "invariant count");
         assert_eq!(count(NodeTrait::Localized), 4, "localized count");
         assert_eq!(
             count(NodeTrait::Knowledge),
@@ -496,33 +491,29 @@ node:
         assert_eq!(count(NodeTrait::Derived), 4, "derived count");
         assert_eq!(count(NodeTrait::Job), 2, "job count");
 
-        // v10.3: Verify realm distribution
+        // v10.6: Verify realm distribution (2 realms)
         let realm_count = |r: &str| nodes.iter().filter(|n| n.realm == r).count();
-        assert_eq!(
-            realm_count("global"),
-            22,
-            "global realm count (20 + Entity + EntityL10n)"
-        );
-        assert_eq!(realm_count("project"), 20, "project realm count");
+        assert_eq!(realm_count("global"), 20, "global realm count");
+        assert_eq!(realm_count("tenant"), 23, "tenant realm count");
 
         // Spot-check known nodes
         let project = nodes.iter().find(|n| n.def.name == "Project").unwrap();
-        assert_eq!(project.realm, "project");
+        assert_eq!(project.realm, "tenant");
         assert_eq!(project.layer, "foundation");
         assert_eq!(project.def.node_trait, NodeTrait::Invariant);
         assert_eq!(project.def.knowledge_tier, None); // invariant = no tier
 
-        // v10.1: Check Style node (knowledge_tier removed)
+        // Check Style node (in global/config)
         let style = nodes.iter().find(|n| n.def.name == "Style").unwrap();
         assert_eq!(style.realm, "global");
-        assert_eq!(style.layer, "knowledge");
+        assert_eq!(style.layer, "config");
         assert_eq!(style.def.node_trait, NodeTrait::Knowledge);
-        assert_eq!(style.def.knowledge_tier, None); // v10.1: removed
+        assert_eq!(style.def.knowledge_tier, None);
 
-        // v10.1: Check one of the new atoms
+        // Check one of the knowledge atoms
         let term = nodes.iter().find(|n| n.def.name == "Term").unwrap();
         assert_eq!(term.realm, "global");
-        assert_eq!(term.layer, "knowledge");
+        assert_eq!(term.layer, "locale-knowledge");
         assert_eq!(term.def.node_trait, NodeTrait::Knowledge);
     }
 }

@@ -13,7 +13,7 @@ Turborepo monorepo for NovaNet - knowledge graph localization orchestrator.
 NovaNet uses Neo4j to orchestrate **native content generation** (NOT translation) across 200+ locales.
 
 **Target Application**: QR Code AI (https://qrcode-ai.com)
-**Current Version**: v10.5.0
+**Current Version**: v10.6.0
 **Roadmap**: `ROADMAP.md` | **Changelog**: `CHANGELOG.md`
 
 ```
@@ -25,9 +25,9 @@ Entity (invariant) -> Generate natively -> EntityL10n (local)  <-- RIGHT
 
 ---
 
-## v10.5 Nomenclature
+## v10.6 Nomenclature
 
-v10.5 establishes 3-Realm Architecture with multi-tenant isolation:
+v10.6 establishes 2-Realm Architecture with simplified tenant isolation:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -42,8 +42,8 @@ v10.5 establishes 3-Realm Architecture with multi-tenant isolation:
 │  CLASSIFICATION AXES                                                        │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │  NodeKind:                                                                  │
-│    WHERE?  NodeRealm  (global / organization / project)                     │
-│    WHAT?   NodeLayer  (10 functional layers across 3 realms)                │
+│    WHERE?  NodeRealm  (global / tenant)                                     │
+│    WHAT?   NodeLayer  (9 functional layers across 2 realms)                 │
 │    HOW?    NodeTrait  (invariant / localized / knowledge / derived / job)   │
 │                                                                             │
 │  ArcKind:                                                                   │
@@ -53,11 +53,10 @@ v10.5 establishes 3-Realm Architecture with multi-tenant isolation:
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-**Key changes from v10.4:**
-- Added ORGANIZATION realm for multi-tenant isolation
-- `global/knowledge` → `global/locale-knowledge`
-- Entity moved from GLOBAL to ORGANIZATION/semantic + PROJECT/semantic
-- 3 realms: GLOBAL (universal, READ-ONLY), ORGANIZATION (company-level), PROJECT (product-level)
+**Key changes from v10.5:**
+- 3 realms → 2 realms: GLOBAL + TENANT (merged organization + project)
+- GLOBAL (3 layers): config, locale-knowledge, seo — universal, READ-ONLY
+- TENANT (6 layers): config, foundation, structure, semantic, instruction, output
 
 **Rust binary:** `tools/novanet/` — single crate for CLI + TUI (neo4rs, ratatui, clap).
 All commands implemented: data/meta/overlay/query, node/arc CRUD, search, locale, db,
@@ -65,6 +64,7 @@ schema generate/validate, doc generate, filter build, Galaxy-themed TUI with boo
 
 **YAML-first architecture:** Each Kind YAML has explicit `realm:` and `layer:` fields (source of truth).
 Path validation ensures `models/node-kinds/{realm}/{layer}/{name}.yaml` matches YAML content.
+v10.6: 2 realms (global, tenant), 9 layers total.
 
 **Boundary rule (v9 target):** TypeScript generates code artifacts. Rust executes at runtime.
 
@@ -112,7 +112,7 @@ Path validation ensures `models/node-kinds/{realm}/{layer}/{name}.yaml` matches 
 │  Containers (6): TermSet, ExpressionSet, PatternSet,                        │
 │                  CultureSet, TabooSet, AudienceSet                          │
 │  Atoms (6):      Term, Expression, Pattern, CultureRef, Taboo, AudienceTrait│
-│  Total:          45 nodes, 64 arcs                                          │
+│  Total:          46 nodes, 72 arcs                                          │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -162,7 +162,7 @@ cargo run -- doc generate --list           # List available views
 cargo run -- meta --format=json            # Mode 1: Meta-graph
 cargo run -- data --format=table           # Mode 2: Data nodes
 cargo run -- overlay                       # Mode 3: Data + Meta
-cargo run -- query --realm=project         # Mode 4: Faceted query
+cargo run -- query --realm=tenant          # Mode 4: Faceted query
 cargo run -- search --query="page"         # Fulltext + property search
 cargo run -- node create --kind=Page --key=my-page  # CRUD
 cargo run -- db seed                       # Execute seed Cypher files
@@ -286,7 +286,7 @@ PATCH  = Bug fixes, documentation, refactoring
 
 **Files**: `CHANGELOG.md`, `ROADMAP.md`, `.github/RELEASE_TEMPLATE.md`
 
-**GitHub Milestones**: v9.0.0, v10.0.0, v10.4.0
+**GitHub Milestones**: v9.0.0, v10.0.0, v10.5.0, v10.6.0
 
 ---
 
@@ -326,7 +326,7 @@ See `.claude/README.md` for full documentation.
 node:
   name: LocaleVoice
   realm: global               # Source of truth (must match path)
-  layer: locale-knowledge     # v10.5: renamed from "knowledge"
+  layer: locale-knowledge     # v10.6: 2 realms (global, tenant)
   trait: knowledge
   description: "..."
   properties:

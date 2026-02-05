@@ -46,8 +46,8 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 │                                                                                                     │
 │   packages/core/models/                                                                             │
 │   ├── _index.yaml                          ← Index du graphe (structure, changelog)                 │
-│   ├── taxonomy.yaml                        ← v10.5: 3 Realms/10 Layers/5 Traits/5 ArcFamilies      │
-│   ├── node-kinds/                          ← 45 fichiers YAML (1 par Kind)                         │
+│   ├── taxonomy.yaml                        ← v10.5: 3 Realms/9 Layers/5 Traits/5 ArcFamilies      │
+│   ├── node-kinds/                          ← 43 fichiers YAML (1 par Kind)                         │
 │   │   ├── global/                          ← Realm: global (19 nodes)                               │
 │   │   │   ├── config/                      ←   Layer: config (Locale + utilities)                   │
 │   │   │   └── locale-knowledge/            ←   Layer: locale-knowledge (14 nodes)                   │
@@ -69,7 +69,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 │   │       ├── instruction/                 ←   Layer: instruction (Prompts, Rules)                   │
 │   │       └── output/                      ←   Layer: output (PageL10n, BlockL10n)                   │
 │   │                                                                                                 │
-│   ├── arc-kinds/                           ← 64 fichiers YAML (1 par ArcKind)                        │
+│   ├── arc-kinds/                           ← 63 fichiers YAML (1 par ArcKind)                        │
 │   ├── relations.yaml                       ← Legacy format (kept for parser compatibility)           │
 │   └── views/                               ← Definitions de vues YAML                               │
 │                                                                                                     │
@@ -94,14 +94,14 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
   │                                        config, semantic (organization)                       │
   │                                        foundation, structure, semantic, instruction, output  │
   │   Axis 3 — HOW?     :Trait       (5)  invariant / localized / knowledge / derived / job      │
-  │   Axis 4 — LINKS?   :ArcKind    (64)  grouped into 5 ArcFamilies                            │
+  │   Axis 4 — LINKS?   :ArcKind    (63)  grouped into 5 ArcFamilies                            │
   │                                                                                              │
   └──────────────────────────────────────────────────────────────────────────────────────────────┘
 
   6 Meta-Node Types (all carry :Meta double-label):
 
   ┌─────────────┐    ┌──────────────┐    ┌─────────────┐
-  │  Realm (3)  │───▶│  Layer (10)  │───▶│  Kind (45)  │
+  │  Realm (3)  │───▶│  Layer (10)  │───▶│  Kind (43)  │
   │  WHERE?     │    │  WHAT?       │    │  1:1 label  │
   │  HAS_LAYER  │    │  HAS_KIND    │    │             │
   └─────────────┘    └──────────────┘    └──────┬──────┘
@@ -123,7 +123,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
   Arc Schema (OWL-inspired):
 
   ┌────────────────┐    FROM_KIND    ┌─────────────┐    TO_KIND     ┌────────────────┐
-  │  ArcKind (64) │───────────────▶│  Kind (45)  │◀──────────────│  ArcKind (64) │
+  │  ArcKind (63) │───────────────▶│  Kind (43)  │◀──────────────│  ArcKind (63) │
   │  1:1 rel type  │                └─────────────┘               │                │
   └───────┬────────┘                                              └────────────────┘
           │
@@ -167,9 +167,9 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
      ┌─────────────────────────────────────────────────────────────────────────────────────────────┐
      │                        📁 YAML (Single Source of Truth)                                     │
      │                        packages/core/models/                                                │
-     │                        ├── node-kinds/               ← 45 NodeKind files                     │
-     │                        ├── arc-kinds/                ← 64 ArcKind files                      │
-     │                        └── taxonomy.yaml             ← 3 Realms, 10 Layers, 5 Traits         │
+     │                        ├── node-kinds/               ← 43 NodeKind files                     │
+     │                        ├── arc-kinds/                ← 63 ArcKind files                      │
+     │                        └── taxonomy.yaml             ← 3 Realms, 9 Layers, 5 Traits         │
      └─────────────────────────────────────────────┬───────────────────────────────────────────────┘
                                                    │
          ┌─────────────────────────────────────────┼─────────────────────────────────────────┐
@@ -396,7 +396,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 ║                    ┌──────────────────┐                                                           ║
 ║                    │  @novanet/core   │  ← Types, schemas, generators, filters                    ║
 ║                    │  (source truth)  │     node-kinds/ + arc-kinds/ + taxonomy.yaml             ║
-║                    └────────┬─────────┘     v10.5: 3 Realms, 10 Layers                           ║
+║                    └────────┬─────────┘     v10.5: 3 Realms, 9 Layers                           ║
 ║                             │                                                                     ║
 ║              ┌──────────────┼──────────────┐                                                      ║
 ║              │              │              │                                                      ║
@@ -469,8 +469,8 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 
 | Metric | Value |
 |--------|-------|
-| Kind (node types) | 45 |
-| ArcKind (arcs) | 64 |
+| Kind (node types) | 43 |
+| ArcKind (arcs) | 63 |
 | Realms | 3 (global, organization, project) |
 | Layers | 10 (3 global, 2 org, 5 project) |
 | Traits | 5 |

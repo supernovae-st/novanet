@@ -1,0 +1,111 @@
+# models/nodes/project/instruction/block-type.yaml
+# BlockType - Template rules and structure for block generation
+
+node:
+  name: BlockType
+  realm: tenant
+  layer: instruction
+  trait: invariant
+  icon: "🔷"
+  description: "Template defining rules, structure, and L10N requirements for a type of block"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # STANDARD PROPERTIES (v7.1.0)
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  standard_properties:
+    key:
+      type: string
+      required: true
+      description: "BlockType identifier. Format: blocktype-{identifier}"
+      pattern: "^blocktype-[a-z0-9-]+$"
+      examples:
+        - "blocktype-hero"
+        - "blocktype-faq"
+        - "blocktype-pricing-table"
+        - "blocktype-testimonials"
+
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable UI name"
+      example: "Hero Section"
+
+    description:
+      type: string
+      required: true
+      description: "One-line description of the block type"
+      example: "Full-width hero with title, subtitle, and CTA"
+
+    llm_context:
+      type: string
+      required: true
+      description: "LLM generation hints. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation].'"
+      example: "USE: generate attention-grabbing hero sections. TRIGGERS: hero, header, banner, above-fold. NOT: body or footer content."
+
+    created_at:
+      type: datetime
+      required: true
+
+    updated_at:
+      type: datetime
+      required: true
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BLOCKTYPE-SPECIFIC PROPERTIES
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  properties:
+    category:
+      type: string
+      required: true
+      enum: [header, body, footer, sidebar]
+      description: "Page section category"
+      example: "header"
+
+    structure:
+      type: string
+      required: true
+      description: "JSON schema reference defining output structure"
+      example: "schemas/hero.json"
+
+    rules:
+      type: string
+      required: false
+      deprecated: "v7.2.0 - Use :HAS_RULES → BlockRules.rules"
+      description: "Generation rules for LLM"
+      example: "Title: action verb. Subtitle: value prop. CTA: urgency."
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # RELATIONS (FROM this node)
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  relations:
+    HAS_RULES:
+      to: BlockRules
+      cardinality: "1:N"
+      description: "Generation rules with versioning (v7.2.0)"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # EXAMPLE
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  example:
+    data:
+      key: "blocktype-hero"
+      display_name: "Hero Section"
+      description: "Full-width hero with title, subtitle, and CTA"
+      llm_context: "USE: generate attention-grabbing hero sections. TRIGGERS: hero, header, banner, above-fold. NOT: body or footer content."
+      category: "header"
+      structure: "schemas/hero.json"
+      rules: "Title: action verb. Subtitle: value prop. CTA: urgency."
+
+    cypher: |
+      // Get block type with active rules
+      MATCH (bt:BlockType {key: $key})
+      OPTIONAL MATCH (bt)-[:HAS_RULES]->(br:BlockRules {active: true})
+      RETURN bt, br.rules AS active_rules, br.version AS rules_version
+
+      // Get all blocks of this type
+      MATCH (bt:BlockType {key: $key})<-[:OF_TYPE]-(b:Block)
+      RETURN bt, collect(b.key) AS blocks

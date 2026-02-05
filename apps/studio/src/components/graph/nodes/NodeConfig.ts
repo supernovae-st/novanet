@@ -1,13 +1,11 @@
 /**
- * NodeConfig - Pre-computed Lookup Tables for O(1) Access (v8.1.0)
+ * NodeConfig - Pre-computed Lookup Tables for O(1) Access (v10.5.0)
  *
  * Provides instant access to node sizes and colors without runtime computation.
  * This eliminates the performance overhead of computing styles on every render,
  * which is critical when rendering 19k+ nodes.
  *
- * Performance impact:
- * - Before: O(n) category lookup + color computation per render
- * - After: O(1) direct property access
+ * v10.5.0: 43 nodes across 3 realms (GLOBAL / ORGANIZATION / PROJECT)
  *
  * @example
  * // Fast lookup
@@ -44,90 +42,38 @@ export interface NodeConfig {
 }
 
 // =============================================================================
-// Size Lookup Table (v9.7.0 - 42 nodes)
+// Size Lookup Table (v10.5.0 - 43 nodes)
 // =============================================================================
 
 /**
- * Pre-computed sizes for all 42 node types (v9.7.0)
+ * Pre-computed sizes for all 43 node types (v10.5.0)
  *
  * Size categories:
- * - Large (280x140): Project root nodes
- * - Medium-Large (240x120): Page, Concept, main content nodes
+ * - Large (280x140): Root nodes (Project, Organization)
+ * - Medium-Large (240x120): Page, Entity, main content nodes
  * - Medium (220x110): Core L10n, prompts
  * - Medium-Small (200x100): Standard nodes
  * - Small (180x90): Auxiliary nodes
- * - Extra-Small (160x80): Mining, metrics nodes
+ * - Extra-Small (160x80): Knowledge atoms, metrics nodes
  */
 export const NODE_SIZES: Record<NodeType, NodeSize> = {
-  // ==========================================================================
-  // PROJECT — foundation (3 nodes)
-  // ==========================================================================
-  Project: { width: 280, height: 140 },
-  BrandIdentity: { width: 220, height: 110 },
-  ProjectL10n: { width: 220, height: 110 },
-
-  // ==========================================================================
-  // PROJECT — structure (3 nodes)
-  // ==========================================================================
-  Page: { width: 240, height: 120 },
-  Block: { width: 200, height: 100 },
-  ContentSlot: { width: 180, height: 90 },
-
-  // ==========================================================================
-  // PROJECT — structure (cont.) + types
-  // ==========================================================================
-  PageType: { width: 200, height: 100 },
-  BlockType: { width: 200, height: 100 },
-
-  // ==========================================================================
-  // PROJECT — semantic (2 nodes) — v10.4
-  // ==========================================================================
-  AudiencePersona: { width: 200, height: 100 },
-  ChannelSurface: { width: 200, height: 100 },
-
-  // ==========================================================================
-  // PROJECT — instruction (5 nodes)
-  // ==========================================================================
-  PagePrompt: { width: 200, height: 100 },
-  BlockPrompt: { width: 180, height: 90 },
-  BlockRules: { width: 180, height: 90 },
-  BlockInstruction: { width: 180, height: 90 },
-  PromptArtifact: { width: 200, height: 100 },
-
-  // ==========================================================================
-  // PROJECT — output (5 nodes)
-  // ==========================================================================
-  PageL10n: { width: 220, height: 110 },
-  BlockL10n: { width: 200, height: 100 },
-  GenerationJob: { width: 200, height: 100 },
-  OutputArtifact: { width: 180, height: 90 },
-  EvaluationSignal: { width: 160, height: 80 },
-
-  // ==========================================================================
-  // GLOBAL — config (1 node)
-  // ==========================================================================
+  // ═══════════════════════════════════════════════════════════════════════════
+  // GLOBAL REALM (20 nodes)
+  // ═══════════════════════════════════════════════════════════════════════════
+  // config (5)
   Locale: { width: 220, height: 110 },
-
-  // ==========================================================================
-  // GLOBAL — knowledge (10 nodes) — v10 tiered model
-  // ==========================================================================
-  // Technical tier
   Formatting: { width: 160, height: 80 },
   Slugification: { width: 160, height: 80 },
   Adaptation: { width: 160, height: 80 },
-  // Style tier
   Style: { width: 180, height: 90 },
-  // Semantic tier
+
+  // locale-knowledge (12) — Sets + Atoms
   TermSet: { width: 160, height: 80 },
   ExpressionSet: { width: 160, height: 80 },
   PatternSet: { width: 160, height: 80 },
   CultureSet: { width: 160, height: 80 },
   TabooSet: { width: 160, height: 80 },
   AudienceSet: { width: 160, height: 80 },
-
-  // ==========================================================================
-  // GLOBAL — knowledge atoms (6 nodes)
-  // ==========================================================================
   Term: { width: 160, height: 80 },
   Expression: { width: 160, height: 80 },
   Pattern: { width: 160, height: 80 },
@@ -135,41 +81,212 @@ export const NODE_SIZES: Record<NodeType, NodeSize> = {
   Taboo: { width: 160, height: 80 },
   AudienceTrait: { width: 160, height: 80 },
 
-  // ==========================================================================
-  // GLOBAL — seo (3 nodes) — v10.4: moved to global realm
-  // ==========================================================================
+  // seo (3)
   SEOKeyword: { width: 200, height: 100 },
   SEOKeywordMetrics: { width: 160, height: 80 },
   SEOMiningRun: { width: 160, height: 80 },
 
-  // ==========================================================================
-  // GLOBAL — semantic (2 nodes) — v10.4: Entity-Centric Architecture
-  // ==========================================================================
+  // ═══════════════════════════════════════════════════════════════════════════
+  // ORGANIZATION REALM (1 node) — v10.5 company project pattern
+  // ═══════════════════════════════════════════════════════════════════════════
+  Organization: { width: 280, height: 140 },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // PROJECT REALM (22 nodes)
+  // ═══════════════════════════════════════════════════════════════════════════
+  // foundation (3)
+  Project: { width: 280, height: 140 },
+  BrandIdentity: { width: 220, height: 110 },
+  ProjectL10n: { width: 220, height: 110 },
+
+  // structure (3)
+  Page: { width: 240, height: 120 },
+  Block: { width: 200, height: 100 },
+  ContentSlot: { width: 180, height: 90 },
+
+  // semantic (4) — v10.5: Entity/EntityL10n here
   Entity: { width: 240, height: 120 },
   EntityL10n: { width: 200, height: 100 },
+  AudiencePersona: { width: 200, height: 100 },
+  ChannelSurface: { width: 200, height: 100 },
+
+  // instruction (7)
+  PageType: { width: 200, height: 100 },
+  BlockType: { width: 200, height: 100 },
+  PagePrompt: { width: 200, height: 100 },
+  BlockPrompt: { width: 180, height: 90 },
+  BlockRules: { width: 180, height: 90 },
+  BlockInstruction: { width: 180, height: 90 },
+  PromptArtifact: { width: 200, height: 100 },
+
+  // output (5)
+  PageL10n: { width: 220, height: 110 },
+  BlockL10n: { width: 200, height: 100 },
+  GenerationJob: { width: 200, height: 100 },
+  OutputArtifact: { width: 180, height: 90 },
+  EvaluationSignal: { width: 160, height: 80 },
 };
 
 // =============================================================================
-// Color Lookup Table (v9.7.0 - 42 nodes)
+// Color Lookup Table (v10.5.0 - 43 nodes)
 // =============================================================================
 
 /**
- * Pre-computed colors for all 42 node types (v9.7.0)
+ * Pre-computed colors for all 43 node types (v10.5.0)
  *
- * Color palette aligned with design/nodeColors.ts and nodeTypes.ts:
- * - Foundation: Violet (#8b5cf6 family)
- * - Structure: Blue/Cyan (#3b82f6, #06b6d4 family)
- * - Semantic: Amber (#f59e0b family)
- * - Instruction: Blue (#3b82f6 family)
- * - Output: Orange/Red (#f97316, #ef4444 family)
- * - Knowledge: Emerald/Green/Pink (#10b981, #22c55e, #ec4899 family)
- * - SEO: Red (#ef4444 family)
- * - GEO: Purple (#a855f7 family)
+ * Color palette by realm and layer:
+ * - GLOBAL: Emerald/Cyan/Pink tones
+ * - ORGANIZATION: Sky blue (#0ea5e9 family)
+ * - PROJECT Foundation: Violet (#8b5cf6 family)
+ * - PROJECT Structure: Blue/Cyan (#3b82f6, #06b6d4 family)
+ * - PROJECT Semantic: Amber (#f59e0b family)
+ * - PROJECT Instruction: Blue (#3b82f6 family)
+ * - PROJECT Output: Orange/Red (#f97316, #ef4444 family)
  */
 export const NODE_COLORS: Record<NodeType, NodeColors> = {
-  // ==========================================================================
-  // PROJECT — foundation - Violet tones
-  // ==========================================================================
+  // ═══════════════════════════════════════════════════════════════════════════
+  // GLOBAL REALM (20 nodes)
+  // ═══════════════════════════════════════════════════════════════════════════
+  // config (5) — Emerald/Cyan tones
+  Locale: {
+    primary: '#10b981',
+    secondary: '#22c55e',
+    tertiary: '#34d399',
+    glow: '#10b98140',
+  },
+  Formatting: {
+    primary: '#06b6d4',
+    secondary: '#0891b2',
+    tertiary: '#22d3ee',
+    glow: '#06b6d440',
+  },
+  Slugification: {
+    primary: '#0891b2',
+    secondary: '#0e7490',
+    tertiary: '#06b6d4',
+    glow: '#0891b240',
+  },
+  Adaptation: {
+    primary: '#0e7490',
+    secondary: '#155e75',
+    tertiary: '#0891b2',
+    glow: '#0e749040',
+  },
+  Style: {
+    primary: '#8b5cf6',
+    secondary: '#a78bfa',
+    tertiary: '#c4b5fd',
+    glow: '#8b5cf640',
+  },
+
+  // locale-knowledge (12) — Green/Pink tones
+  TermSet: {
+    primary: '#22c55e',
+    secondary: '#10b981',
+    tertiary: '#4ade80',
+    glow: '#22c55e40',
+  },
+  ExpressionSet: {
+    primary: '#ec4899',
+    secondary: '#f472b6',
+    tertiary: '#f9a8d4',
+    glow: '#ec489940',
+  },
+  PatternSet: {
+    primary: '#f472b6',
+    secondary: '#ec4899',
+    tertiary: '#f9a8d4',
+    glow: '#f472b640',
+  },
+  CultureSet: {
+    primary: '#86efac',
+    secondary: '#4ade80',
+    tertiary: '#bbf7d0',
+    glow: '#86efac40',
+  },
+  TabooSet: {
+    primary: '#ef4444',
+    secondary: '#f87171',
+    tertiary: '#fca5a5',
+    glow: '#ef444440',
+  },
+  AudienceSet: {
+    primary: '#f59e0b',
+    secondary: '#fbbf24',
+    tertiary: '#fcd34d',
+    glow: '#f59e0b40',
+  },
+  Term: {
+    primary: '#4ade80',
+    secondary: '#22c55e',
+    tertiary: '#86efac',
+    glow: '#4ade8040',
+  },
+  Expression: {
+    primary: '#f9a8d4',
+    secondary: '#f472b6',
+    tertiary: '#fbcfe8',
+    glow: '#f9a8d440',
+  },
+  Pattern: {
+    primary: '#c4b5fd',
+    secondary: '#a78bfa',
+    tertiary: '#ddd6fe',
+    glow: '#c4b5fd40',
+  },
+  CultureRef: {
+    primary: '#fcd34d',
+    secondary: '#fbbf24',
+    tertiary: '#fde68a',
+    glow: '#fcd34d40',
+  },
+  Taboo: {
+    primary: '#fca5a5',
+    secondary: '#f87171',
+    tertiary: '#fecaca',
+    glow: '#fca5a540',
+  },
+  AudienceTrait: {
+    primary: '#fde68a',
+    secondary: '#fcd34d',
+    tertiary: '#fef3c7',
+    glow: '#fde68a40',
+  },
+
+  // seo (3) — Red tones
+  SEOKeyword: {
+    primary: '#ef4444',
+    secondary: '#f87171',
+    tertiary: '#fca5a5',
+    glow: '#ef444440',
+  },
+  SEOKeywordMetrics: {
+    primary: '#f87171',
+    secondary: '#ef4444',
+    tertiary: '#fca5a5',
+    glow: '#f8717140',
+  },
+  SEOMiningRun: {
+    primary: '#fca5a5',
+    secondary: '#f87171',
+    tertiary: '#fecaca',
+    glow: '#fca5a540',
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // ORGANIZATION REALM (1 node) — Sky blue tone
+  // ═══════════════════════════════════════════════════════════════════════════
+  Organization: {
+    primary: '#0ea5e9',
+    secondary: '#38bdf8',
+    tertiary: '#7dd3fc',
+    glow: '#0ea5e940',
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // PROJECT REALM (22 nodes)
+  // ═══════════════════════════════════════════════════════════════════════════
+  // foundation (3) — Violet tones
   Project: {
     primary: '#8b5cf6',
     secondary: '#6366f1',
@@ -189,9 +306,7 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
     glow: '#a78bfa40',
   },
 
-  // ==========================================================================
-  // PROJECT — structure - Blue/Cyan tones
-  // ==========================================================================
+  // structure (3) — Blue/Cyan tones
   Page: {
     primary: '#3b82f6',
     secondary: '#06b6d4',
@@ -211,9 +326,33 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
     glow: '#0891b240',
   },
 
-  // ==========================================================================
-  // PROJECT — structure (cont.) + types - Blue tones
-  // ==========================================================================
+  // semantic (4) — Amber/Gold tones
+  Entity: {
+    primary: '#f59e0b',
+    secondary: '#f97316',
+    tertiary: '#fbbf24',
+    glow: '#f59e0b40',
+  },
+  EntityL10n: {
+    primary: '#fbbf24',
+    secondary: '#f59e0b',
+    tertiary: '#fcd34d',
+    glow: '#fbbf2440',
+  },
+  AudiencePersona: {
+    primary: '#f59e0b',
+    secondary: '#fbbf24',
+    tertiary: '#fcd34d',
+    glow: '#f59e0b40',
+  },
+  ChannelSurface: {
+    primary: '#d97706',
+    secondary: '#f59e0b',
+    tertiary: '#fbbf24',
+    glow: '#d9770640',
+  },
+
+  // instruction (7) — Blue tones
   PageType: {
     primary: '#2563eb',
     secondary: '#3b82f6',
@@ -257,9 +396,7 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
     glow: '#1d4ed840',
   },
 
-  // ==========================================================================
-  // PROJECT — output - Orange/Red tones
-  // ==========================================================================
+  // output (5) — Orange/Red tones
   PageL10n: {
     primary: '#f97316',
     secondary: '#ef4444',
@@ -289,173 +426,6 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
     secondary: '#c2410c',
     tertiary: '#ea580c',
     glow: '#9a341240',
-  },
-
-  // ==========================================================================
-  // GLOBAL — config - Emerald tones
-  // ==========================================================================
-  Locale: {
-    primary: '#10b981',
-    secondary: '#22c55e',
-    tertiary: '#34d399',
-    glow: '#10b98140',
-  },
-  // v10 Knowledge tier: Technical (cyan)
-  Formatting: {
-    primary: '#06b6d4',
-    secondary: '#0891b2',
-    tertiary: '#22d3ee',
-    glow: '#06b6d440',
-  },
-  Slugification: {
-    primary: '#0891b2',
-    secondary: '#0e7490',
-    tertiary: '#06b6d4',
-    glow: '#0891b240',
-  },
-  Adaptation: {
-    primary: '#0e7490',
-    secondary: '#155e75',
-    tertiary: '#0891b2',
-    glow: '#0e749040',
-  },
-  // v10 Knowledge tier: Style (purple)
-  Style: {
-    primary: '#8b5cf6',
-    secondary: '#a78bfa',
-    tertiary: '#c4b5fd',
-    glow: '#8b5cf640',
-  },
-  // v10 Knowledge tier: Semantic (green/pink)
-  TermSet: {
-    primary: '#22c55e',
-    secondary: '#10b981',
-    tertiary: '#4ade80',
-    glow: '#22c55e40',
-  },
-  ExpressionSet: {
-    primary: '#ec4899',
-    secondary: '#f472b6',
-    tertiary: '#f9a8d4',
-    glow: '#ec489940',
-  },
-  PatternSet: {
-    primary: '#f472b6',
-    secondary: '#ec4899',
-    tertiary: '#f9a8d4',
-    glow: '#f472b640',
-  },
-  CultureSet: {
-    primary: '#86efac',
-    secondary: '#4ade80',
-    tertiary: '#bbf7d0',
-    glow: '#86efac40',
-  },
-  TabooSet: {
-    primary: '#ef4444',
-    secondary: '#f87171',
-    tertiary: '#fca5a5',
-    glow: '#ef444440',
-  },
-  AudienceSet: {
-    primary: '#f59e0b',
-    secondary: '#fbbf24',
-    tertiary: '#fcd34d',
-    glow: '#f59e0b40',
-  },
-
-  // ==========================================================================
-  // PROJECT — semantic - Amber tones (2 nodes) — v10.4
-  // ==========================================================================
-  AudiencePersona: {
-    primary: '#f59e0b',
-    secondary: '#fbbf24',
-    tertiary: '#fcd34d',
-    glow: '#f59e0b40',
-  },
-  ChannelSurface: {
-    primary: '#d97706',
-    secondary: '#f59e0b',
-    tertiary: '#fbbf24',
-    glow: '#d9770640',
-  },
-
-  // ==========================================================================
-  // GLOBAL — knowledge atoms (6 nodes)
-  // ==========================================================================
-  Term: {
-    primary: '#4ade80',
-    secondary: '#22c55e',
-    tertiary: '#86efac',
-    glow: '#4ade8040',
-  },
-  Expression: {
-    primary: '#f9a8d4',
-    secondary: '#f472b6',
-    tertiary: '#fbcfe8',
-    glow: '#f9a8d440',
-  },
-  Pattern: {
-    primary: '#c4b5fd',
-    secondary: '#a78bfa',
-    tertiary: '#ddd6fe',
-    glow: '#c4b5fd40',
-  },
-  CultureRef: {
-    primary: '#fcd34d',
-    secondary: '#fbbf24',
-    tertiary: '#fde68a',
-    glow: '#fcd34d40',
-  },
-  Taboo: {
-    primary: '#fca5a5',
-    secondary: '#f87171',
-    tertiary: '#fecaca',
-    glow: '#fca5a540',
-  },
-  AudienceTrait: {
-    primary: '#fde68a',
-    secondary: '#fcd34d',
-    tertiary: '#fef3c7',
-    glow: '#fde68a40',
-  },
-
-  // ==========================================================================
-  // GLOBAL — seo - Red tones (v10.4: moved to global realm)
-  // ==========================================================================
-  SEOKeyword: {
-    primary: '#ef4444',
-    secondary: '#f87171',
-    tertiary: '#fca5a5',
-    glow: '#ef444440',
-  },
-  SEOKeywordMetrics: {
-    primary: '#f87171',
-    secondary: '#ef4444',
-    tertiary: '#fca5a5',
-    glow: '#f8717140',
-  },
-  SEOMiningRun: {
-    primary: '#fca5a5',
-    secondary: '#f87171',
-    tertiary: '#fecaca',
-    glow: '#fca5a540',
-  },
-
-  // ==========================================================================
-  // GLOBAL — semantic - Gold tones (v10.4: Entity-Centric Architecture)
-  // ==========================================================================
-  Entity: {
-    primary: '#f59e0b',
-    secondary: '#f97316',
-    tertiary: '#fbbf24',
-    glow: '#f59e0b40',
-  },
-  EntityL10n: {
-    primary: '#fbbf24',
-    secondary: '#f59e0b',
-    tertiary: '#fcd34d',
-    glow: '#fbbf2440',
   },
 };
 

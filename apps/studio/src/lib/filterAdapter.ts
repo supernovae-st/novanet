@@ -649,7 +649,7 @@ export const VIEW_PRESETS: ViewPreset[] = [
     icon: '🌍',
     shortcut: '3',
     filter: () => NovaNetFilter.create()
-      .byLayer('config', 'knowledge'),
+      .byLayer('config', 'locale-knowledge'),
   },
   {
     id: 'entity-network',

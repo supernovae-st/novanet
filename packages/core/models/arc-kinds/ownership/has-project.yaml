@@ -1,0 +1,12 @@
+# packages/core/models/arc-kinds/ownership/has-project.yaml
+# ArcKind: HAS_PROJECT — Organization owns product projects (v10.5)
+
+arc:
+  name: HAS_PROJECT
+  family: ownership
+  scope: cross_realm
+  source: Organization
+  target: Project
+  cardinality: one_to_many
+  llm_context: Organization owns product projects. Use to enumerate all projects in an org.
+  cypher_pattern: (Organization)-[:HAS_PROJECT]->(Project)

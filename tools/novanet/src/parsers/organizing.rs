@@ -165,13 +165,13 @@ arc_families:
 
         let doc = load_organizing(root).expect("should load from taxonomy.yaml");
 
-        // Version now comes from taxonomy.yaml (10.4.0)
-        assert_eq!(doc.version, "10.4.0");
-        assert_eq!(doc.realms.len(), 2);
+        // Version now comes from taxonomy.yaml (10.6.0)
+        assert_eq!(doc.version, "10.6.0");
+        assert_eq!(doc.realms.len(), 2); // v10.6: 2 realms (global, tenant)
         assert_eq!(doc.traits.len(), 5);
         assert_eq!(doc.arc_families.len(), 5);
 
         let total_layers: usize = doc.realms.iter().map(|r| r.layers.len()).sum();
-        assert_eq!(total_layers, 8); // geo removed in v10.1
+        assert_eq!(total_layers, 9); // v10.6: 3 global + 6 tenant layers
     }
 }

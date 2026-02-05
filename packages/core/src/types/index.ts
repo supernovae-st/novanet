@@ -1,6 +1,6 @@
-// NovaNet Core Types v10.4.0 - Entity-Centric Architecture
+// NovaNet Core Types v10.6.0 - 2-Realm Architecture
 //
-// v10.4.0: Entity/EntityL10n (global realm), 2 realms (global, project), GEO layer removed
+// v10.6.0: 2 realms (global, tenant), Organization removed, project → tenant
 //
 // STANDARD PROPERTIES (all nodes):
 //   key: string           - Unique identifier (with semantic prefix)

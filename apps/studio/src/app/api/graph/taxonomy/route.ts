@@ -85,9 +85,9 @@ export async function GET() {
         r.llm_context AS llm_context
       ORDER BY
         CASE r.key
-          // v10.4: 2 realms (SHARED merged into GLOBAL)
+          // v10.6: 2 realms (global + tenant)
           WHEN 'global' THEN 1
-          WHEN 'project' THEN 2
+          WHEN 'tenant' THEN 2
           ELSE 3
         END
     `);

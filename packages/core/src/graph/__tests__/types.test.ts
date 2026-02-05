@@ -1,5 +1,5 @@
 // packages/core/src/graph/__tests__/types.test.ts
-// Tests for graph types — v9.5.0
+// Tests for graph types — v10.6.0
 import { describe, it, expect } from 'vitest';
 import type { SchemaNode, SchemaArc, RealmDefinition } from '../types';
 import type { Layer } from '../../types/nodes';
@@ -9,7 +9,7 @@ describe('graph/types', () => {
     const node: SchemaNode = {
       id: 'schema-Project',
       nodeType: 'Project',
-      realm: 'project',
+      realm: 'tenant',
       layer: 'foundation',
       label: 'Project',
       description: 'Project node',
@@ -32,24 +32,24 @@ describe('graph/types', () => {
   });
 
   it('should export Layer type with all values', () => {
-    // v10.3: 8 layers (geo removed)
+    // v10.6: 8 layers (no organization-only layers)
     const layers: Layer[] = [
-      'foundation', 'structure', 'semantic', 'instruction', 'output',  // project realm
-      'config', 'knowledge', 'seo'  // global realm
+      'foundation', 'structure', 'semantic', 'instruction', 'output',  // tenant realm
+      'config', 'locale-knowledge', 'seo'  // global realm
     ];
     expect(layers).toHaveLength(8);
   });
 
   it('should export RealmDefinition interface', () => {
     const realmDef: RealmDefinition = {
-      realm: 'project',
-      label: 'PROJECT',
+      realm: 'tenant',
+      label: 'TENANT',
       icon: '📦',
-      description: 'Project-specific content and structure',
+      description: 'Tenant-specific content and structure',
       layers: {} as RealmDefinition['layers'],
     };
-    expect(realmDef.realm).toBe('project');
-    expect(realmDef.label).toBe('PROJECT');
+    expect(realmDef.realm).toBe('tenant');
+    expect(realmDef.label).toBe('TENANT');
   });
 
   it('should allow optional properties on SchemaNode', () => {

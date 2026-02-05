@@ -1,0 +1,67 @@
+# packages/core/models/node-kinds/global/knowledge/audience-set.yaml
+# AudienceSet — Container grouping AudienceTrait atoms by segment
+#
+# v10.1: Pure container (no JSON blobs - data lives in AudienceTrait atoms)
+# Segments: b2b, b2c, general
+# Stability: High - structure rarely changes
+
+node:
+  name: AudienceSet
+  realm: global
+  layer: locale-knowledge
+  trait: knowledge
+  icon: "👥"
+  description: "Container grouping AudienceTrait atoms by segment"
+
+  standard_properties:
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable name"
+      example: "French (France) B2B Audience"
+
+    description:
+      type: string
+      required: true
+      description: "Short description"
+      example: "B2B audience behavior for fr-FR"
+
+    llm_context:
+      type: string
+      required: true
+      description: "LLM generation hints"
+      example: "USE: to find traits by segment. TRIGGERS: B2B, B2C. NOT: individual behaviors."
+
+    created_at:
+      type: datetime
+      required: true
+      description: "Creation timestamp"
+
+    updated_at:
+      type: datetime
+      required: true
+      description: "Last update timestamp"
+
+  properties:
+    # Segment identification (only property - data is in atoms)
+    segment:
+      type: string
+      required: true
+      enum: [b2b, b2c, general]
+      description: "Audience segment this set groups"
+      example: "b2b"
+
+  relations:
+    outgoing:
+      - type: CONTAINS
+        to: AudienceTrait
+        cardinality: "1:N"
+        description: "AudienceSet contains multiple AudienceTrait atoms"
+
+    incoming:
+      - type: HAS_AUDIENCE
+        from: Locale
+        cardinality: "1:N"
+        description: "Locale has audience sets"
+        properties:
+          segment: string

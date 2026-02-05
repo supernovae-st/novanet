@@ -2,9 +2,9 @@
  * Hierarchical Layout - Pure graph visualization without container nodes
  *
  * Generates Realm, Layer, and Kind as regular graph nodes with edges:
- * - Realm nodes (2): project, global (v10.4)
- * - Layer nodes (8): foundation, structure, semantic, instruction, output, config, knowledge, seo
- * - Kind nodes (42): all node types
+ * - Realm nodes (2): global, tenant (v10.6)
+ * - Layer nodes (8): config, locale-knowledge, seo, foundation, structure, semantic, instruction, output
+ * - Kind nodes (43): all node types
  * - HAS_LAYER edges (Realm → Layer)
  * - HAS_KIND edges (Layer → Kind)
  * - Business edges (Kind → Kind)
@@ -23,8 +23,8 @@ import dagre from '@dagrejs/dagre';
 // =============================================================================
 
 const REALM_CONFIGS: Record<Realm, { label: string; color: string }> = {
-  project: { label: 'Project', color: '#8b5cf6' },
-  global: { label: 'Global', color: '#10b981' },
+  global: { label: 'Global', color: '#2aa198' },   // Solarized cyan
+  tenant: { label: 'Tenant', color: '#6c71c4' },   // Solarized violet
 };
 
 const LAYER_CONFIGS: Record<string, { label: string }> = {
@@ -34,7 +34,7 @@ const LAYER_CONFIGS: Record<string, { label: string }> = {
   instruction: { label: 'Instructions' },
   output: { label: 'Output' },
   config: { label: 'Config' },
-  knowledge: { label: 'Knowledge' },
+  'locale-knowledge': { label: 'Locale Knowledge' },
   seo: { label: 'SEO' },
 };
 

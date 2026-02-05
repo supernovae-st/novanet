@@ -28,9 +28,9 @@ function parseCSV<T extends string>(param: string | null, valid: T[]): T[] {
   return param.split(',').filter((v): v is T => valid.includes(v as T));
 }
 
-const VALID_REALMS: Realm[] = ['global', 'project'];
+const VALID_REALMS: Realm[] = ['global', 'tenant'];
 const VALID_LAYERS: Layer[] = [
-  'config', 'knowledge', 'foundation', 'structure', 'semantic',
+  'config', 'locale-knowledge', 'foundation', 'structure', 'semantic',
   'instruction', 'output', 'seo',
 ];
 const VALID_TRAITS: Trait[] = ['invariant', 'localized', 'knowledge', 'derived', 'job'];
@@ -50,15 +50,15 @@ describe('navigation route logic', () => {
     });
 
     it('parses valid comma-separated values', () => {
-      expect(parseCSV('global,project', VALID_REALMS)).toEqual(['global', 'project']);
+      expect(parseCSV('global,tenant', VALID_REALMS)).toEqual(['global', 'tenant']);
     });
 
     it('filters out invalid values', () => {
-      expect(parseCSV('global,invalid,project', VALID_REALMS)).toEqual(['global', 'project']);
+      expect(parseCSV('global,invalid,tenant', VALID_REALMS)).toEqual(['global', 'tenant']);
     });
 
     it('handles single value', () => {
-      expect(parseCSV('project', VALID_REALMS)).toEqual(['project']);
+      expect(parseCSV('tenant', VALID_REALMS)).toEqual(['tenant']);
     });
 
     it('works for layers', () => {
@@ -147,29 +147,28 @@ describe('navigation route logic', () => {
     });
 
     it('intersects realm + trait correctly', () => {
-      const types = resolveFacets(['project'], [], ['localized']);
-      // Project realm + localized trait = ProjectL10n, PageL10n, BlockL10n
-      // (EntityL10n is in global realm, v10.3 Entity-Centric Architecture)
+      const types = resolveFacets(['tenant'], [], ['localized']);
+      // v10.6: Tenant realm + localized trait = ProjectL10n, PageL10n, BlockL10n, EntityL10n
       expect(types).toContain('ProjectL10n');
       expect(types).toContain('PageL10n');
-      expect(types).not.toContain('EntityL10n'); // global realm
+      expect(types).toContain('EntityL10n'); // v10.6: in tenant realm
       expect(types).not.toContain('Page'); // invariant
       expect(types).not.toContain('Locale'); // global
     });
 
     it('intersects realm + layer correctly', () => {
-      const types = resolveFacets(['project'], ['semantic'], []);
-      // project + semantic = AudiencePersona, ChannelSurface
-      // (Entity/EntityL10n are in global realm, v10.3 Entity-Centric)
+      const types = resolveFacets(['tenant'], ['semantic'], []);
+      // v10.6: tenant + semantic = AudiencePersona, ChannelSurface, Entity, EntityL10n
       expect(types).toContain('AudiencePersona');
       expect(types).toContain('ChannelSurface');
-      expect(types).not.toContain('Entity'); // global realm
+      expect(types).toContain('Entity'); // v10.6: in tenant realm
+      expect(types).toContain('EntityL10n'); // v10.6: in tenant realm
       expect(types).not.toContain('Page'); // structure layer
     });
 
     it('intersects all 3 dimensions', () => {
-      const types = resolveFacets(['project'], ['output'], ['localized']);
-      // project + output + localized = PageL10n, BlockL10n
+      const types = resolveFacets(['tenant'], ['output'], ['localized']);
+      // tenant + output + localized = PageL10n, BlockL10n
       expect(types).toContain('PageL10n');
       expect(types).toContain('BlockL10n');
       expect(types.length).toBe(2);
@@ -177,10 +176,9 @@ describe('navigation route logic', () => {
 
     it('returns only localized types when filtering global + localized', () => {
       const types = resolveFacets(['global'], [], ['localized']);
-      // Global localized types = SEOKeyword, EntityL10n
-      // (SEOKeyword itself is localized - there is no SEOKeywordL10n)
+      // v10.6: Global localized types = SEOKeyword only
       expect(types).toContain('SEOKeyword');
-      expect(types).toContain('EntityL10n');
+      expect(types).not.toContain('EntityL10n'); // v10.6: in tenant realm
       expect(types).not.toContain('Locale'); // invariant
     });
   });

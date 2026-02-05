@@ -1,6 +1,6 @@
 // packages/core/src/config/nodeIcons.ts
 // Presentation layer configuration for node icons
-// v10.3.0 — Entity-Centric Architecture, GEO removed
+// v10.6.0 — 2-Realm Architecture (global + tenant)
 
 import type { NodeType } from '../types/nodes.js';
 
@@ -10,22 +10,20 @@ import type { NodeType } from '../types/nodes.js';
  * Icons are now in presentation layer, not data model.
  */
 export const NODE_ICONS: Record<NodeType, string> = {
-  // GLOBAL — config (1)
+  // GLOBAL — config (5)
   Locale: '🌍',
-
-  // GLOBAL — knowledge containers (10) — v10 tiered model
   Formatting: '📝',
   Slugification: '🔗',
   Adaptation: '🔄',
   Style: '🎭',
+
+  // GLOBAL — locale-knowledge (12) — Sets + Atoms
   TermSet: '📚',
   ExpressionSet: '💭',
   PatternSet: '🔣',
   CultureSet: '🏛️',
   TabooSet: '⛔',
   AudienceSet: '👥',
-
-  // GLOBAL — knowledge atoms (6)
   Term: '📖',
   Expression: '💬',
   Pattern: '🔄',
@@ -38,34 +36,35 @@ export const NODE_ICONS: Record<NodeType, string> = {
   SEOKeywordMetrics: '📊',
   SEOMiningRun: '⚙️',
 
-  // GLOBAL — semantic (2) — v10.3 Entity-Centric Architecture
-  Entity: '💡',
-  EntityL10n: '💬',
+  // TENANT — config (1)
+  Organization: '🏢',
 
-  // PROJECT — foundation (3)
+  // TENANT — foundation (3)
   Project: '📦',
   BrandIdentity: '🎨',
   ProjectL10n: '🌐',
 
-  // PROJECT — structure (5)
+  // TENANT — structure (3)
   Page: '📄',
   Block: '🧱',
   ContentSlot: '🔲',
-  PageType: '📐',
-  BlockType: '📋',
 
-  // PROJECT — semantic (2)
+  // TENANT — semantic (4)
+  Entity: '🏷️',
+  EntityL10n: '🌐',
   AudiencePersona: '👤',
   ChannelSurface: '📡',
 
-  // PROJECT — instruction (5)
+  // TENANT — instruction (7)
+  PageType: '📐',
+  BlockType: '📋',
   PagePrompt: '📝',
   BlockPrompt: '📝',
   BlockRules: '📏',
   BlockInstruction: '📜',
   PromptArtifact: '📋',
 
-  // PROJECT — output (5)
+  // TENANT — output (5)
   PageL10n: '📃',
   BlockL10n: '📝',
   GenerationJob: '🚀',

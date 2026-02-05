@@ -1,0 +1,150 @@
+# models/node-kinds/project/semantic/entity.yaml
+# Entity - Project-level semantic unit (v10.5)
+#
+# This Entity lives in PROJECT realm - specific to one project.
+# For organization-wide entities, use organization/semantic/entity.yaml
+
+node:
+  name: Entity
+  realm: tenant
+  layer: semantic
+  trait: invariant
+  icon: "🔷"
+  description: "Project-specific semantic unit representing features, pricing, and product concepts"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # STANDARD PROPERTIES
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  standard_properties:
+    key:
+      type: string
+      required: true
+      description: "Kebab-case identifier. Format: {type}-{identifier}"
+      pattern: "^[a-z][a-z0-9-]*$"
+      examples:
+        - "feature-dynamic-qr"
+        - "brand-plan-pro"
+        - "guide-how-to-track-scans"
+
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable UI name"
+      example: "Dynamic QR Code"
+
+    description:
+      type: string
+      required: true
+      description: "One-line description of the entity"
+      example: "QR codes that can be edited after creation"
+
+    llm_context:
+      type: string
+      required: true
+      description: "LLM generation hints. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation].'"
+      example: "USE: when discussing editable QR codes. TRIGGERS: dynamic, edit, change. NOT: static QR codes."
+
+    created_at:
+      type: datetime
+      required: true
+
+    updated_at:
+      type: datetime
+      required: true
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # VECTOR EMBEDDING (Hybrid OntologyRAG)
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  embedding_properties:
+    embedding:
+      type: vector
+      dimensions: 1536
+      required: false
+      description: "OpenAI text-embedding-3-small vector for semantic search"
+
+    embedding_source:
+      type: string
+      required: false
+
+    embedding_updated_at:
+      type: datetime
+      required: false
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # ENTITY-SPECIFIC PROPERTIES
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  properties:
+    type:
+      type: string
+      required: true
+      enum: [ACTION, THING, FEATURE, BRAND, PLACE, AUDIENCE, GUIDE, COMPARISON]
+      description: "Entity type classification"
+      examples:
+        - FEATURE: "Product-specific features (dynamic QR, analytics)"
+        - BRAND: "Product pricing tiers (Plan Pro, Enterprise)"
+        - GUIDE: "Product how-to guides"
+        - COMPARISON: "Product comparisons"
+
+    is_pillar:
+      type: boolean
+      required: false
+      default: false
+      description: "True if this entity is a pillar in the content cluster hierarchy"
+
+    schema_org_type:
+      type: string
+      required: false
+      description: "Schema.org type for structured data"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # RELATIONS (FROM this node)
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  relations:
+    HAS_L10N:
+      to: EntityL10n
+      cardinality: "1:N"
+      description: "Localized content for this entity (one per locale)"
+
+    SUBTOPIC_OF:
+      to: Entity
+      cardinality: "N:1"
+      props:
+        depth:
+          type: int
+          description: "Hierarchy depth from pillar"
+      description: "Parent entity in pillar/cluster hierarchy"
+
+    SEMANTIC_LINK:
+      to: Entity
+      cardinality: "N:N"
+      props:
+        temperature:
+          type: float
+          description: "Activation strength 0.0-1.0"
+        link_type:
+          type: string
+          enum: [is_action_on, includes, type_of, used_for, contrasts_with, related_to]
+      description: "Spreading activation links to related entities"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # EXAMPLE
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  example:
+    data:
+      key: "feature-dynamic-qr"
+      display_name: "Dynamic QR Code"
+      description: "QR codes that can be edited after creation"
+      llm_context: "USE: when discussing editable QR codes. TRIGGERS: dynamic, edit, change. NOT: static QR codes."
+      type: "FEATURE"
+      is_pillar: false
+
+    cypher: |
+      // Get project entity with localized content
+      MATCH (p:Project)-[:HAS_ENTITY]->(e:Entity {key: $key})
+      OPTIONAL MATCH (e)-[:HAS_L10N]->(el:EntityL10n)-[:FOR_LOCALE]->(l:Locale)
+      RETURN e, p, collect({locale: l.key, title: el.display_name}) AS localizations

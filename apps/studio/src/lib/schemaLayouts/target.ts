@@ -19,12 +19,12 @@ import type { Realm } from '@novanet/core/types';
  * Uses unified spacing from types.ts (Golden Ratio system).
  * Ring spacing = REALM_GAP × φ for dramatic separation.
  *
- * Visual structure (v10.4: 2 realms):
+ * Visual structure (v10.6: 2 realms):
  *      ╭──────────────────────────╮
  *      │ ╭────────────────╮       │
  *      │ │  ● GLOBAL ●   │       │
  *      │ │ ╭────────────╮│       │
- *      │ │ │  PROJECT   ││       │
+ *      │ │ │   TENANT   ││       │
  *      │ │ ╰────────────╯│       │
  *      │ ╰────────────────╯       │
  *      ╰──────────────────────────╯
@@ -42,7 +42,7 @@ export function applyTargetLayout(
   const MIN_RADIUS = REALM_GAP;                       // Minimum inner radius
 
   // Realm order from center outward
-  const realmOrder: Realm[] = ['project', 'global'];
+  const realmOrder: Realm[] = ['tenant', 'global'];
 
   realmOrder.forEach((realm, ringIndex) => {
     const realmDef = hierarchy.realms[realm];

@@ -1,0 +1,24 @@
+# arc-kinds/semantic/use-case-entity.yaml
+# USE_CASE_ENTITY - SEOPreposition links to use case Entity (v10.6)
+#
+# v10.6: SEO Schema v2
+#        - Optional link when preposition use_case is an Entity
+#        - "qr code for wifi" → wifi might be an Entity
+
+arc:
+  type: USE_CASE_ENTITY
+  family: semantic
+  scope: cross_realm
+  temperature_threshold: 0.4
+
+  source: SEOPreposition
+  target: Entity
+  cardinality: many_to_one
+
+  llm_context: |
+    SEOPreposition optionally links to an Entity when the use_case is a known concept.
+    Not all prepositions have entity links (e.g., "qr code for marketing" might not).
+    Use to find prepositions related to specific entities.
+    Pattern: "qr code pour wifi" → USE_CASE_ENTITY → Entity(wifi-network)
+
+  cypher_pattern: "(SEOPreposition)-[:USE_CASE_ENTITY]->(Entity)"

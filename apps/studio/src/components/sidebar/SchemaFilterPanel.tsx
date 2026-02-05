@@ -21,10 +21,8 @@ import {
   Settings,
   Brain,
   Search,
-  Globe2,
-  Package,
   Globe,
-  Target,
+  Building2,
   type LucideIcon,
 } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
@@ -44,26 +42,26 @@ import { AiSearchInput } from './AiSearchInput';
 // Tab definitions
 type SchemaTabId = 'types' | 'rels';
 
-// Realm to Lucide icon mapping
+// Realm to Lucide icon mapping (v10.6: 2 realms)
 const REALM_ICONS: Record<Realm, LucideIcon> = {
-  project: Package,
   global: Globe,
+  tenant: Building2,
 };
 
 // Layer to Lucide icon mapping
 const LAYER_ICONS: Record<Layer, LucideIcon> = {
+  config: Settings,
+  'locale-knowledge': Brain,
+  seo: Search,
   foundation: Landmark,
   structure: Layers,
   semantic: Lightbulb,
   instruction: FileText,
   output: FileOutput,
-  config: Settings,
-  knowledge: Brain,
-  seo: Search,
 };
 
-// Ordered realms for consistent rendering
-const REALM_ORDER: Realm[] = ['project', 'global'];
+// Ordered realms for consistent rendering (v10.6: 2 realms)
+const REALM_ORDER: Realm[] = ['global', 'tenant'];
 
 export interface SchemaFilterPanelProps {
   className?: string;

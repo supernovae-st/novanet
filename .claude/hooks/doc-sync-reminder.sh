@@ -15,7 +15,7 @@ fi
 
 # Get project root
 PROJECT_ROOT="${CLAUDE_PROJECT_DIR:-$(pwd)}"
-VERSION=$(cat "$PROJECT_ROOT/VERSION" 2>/dev/null || echo "10.4.0")
+VERSION=$(cat "$PROJECT_ROOT/VERSION" 2>/dev/null || echo "10.5.0")
 
 # Check if this is a documentation file that needs consistency
 case "$FILE_PATH" in
@@ -25,7 +25,7 @@ case "$FILE_PATH" in
 {
   "hookSpecificOutput": {
     "hookEventName": "PostToolUse",
-    "additionalContext": "Documentation file edited. Ensure version ($VERSION) and counts (42 nodes, 77 arcs, 2 realms, 8 layers) are consistent. Run 'pnpm doc:audit' to verify."
+    "additionalContext": "Documentation file edited. Ensure version ($VERSION) and counts (43 nodes, 63 arcs, 2 realms, 9 layers) are consistent. Run 'pnpm doc:audit' to verify."
   }
 }
 EOF

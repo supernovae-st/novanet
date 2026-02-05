@@ -1,0 +1,147 @@
+# packages/core/models/node-kinds/global/knowledge/atoms/pattern.yaml
+# Pattern — Content structure template within a PatternSet
+#
+# Locale-native: each locale has its own patterns (no invariant parent)
+# Parent: PatternSet (via CONTAINS arc)
+
+node:
+  name: Pattern
+  realm: global
+  layer: locale-knowledge
+  trait: knowledge
+  icon: "📋"
+  description: "Content structure pattern or template belonging to a locale's PatternSet"
+
+  standard_properties:
+    key:
+      type: string
+      required: true
+      description: "Unique identifier within the PatternSet"
+      pattern: "^[a-z][a-z0-9_]*$"
+      examples:
+        - "cta_primary"
+        - "headline_benefit"
+        - "intro_problem_solution"
+
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable name"
+      example: "Primary CTA Pattern"
+
+    description:
+      type: string
+      required: false
+      description: "When to use this pattern"
+      example: "Main call-to-action on landing pages"
+
+    llm_context:
+      type: string
+      required: false
+      description: "Generation context hints"
+      example: "USE: landing page hero. TRIGGERS: cta, action, convert. NOT: informational pages."
+
+    created_at:
+      type: datetime
+      required: true
+
+    updated_at:
+      type: datetime
+      required: true
+
+  properties:
+    template:
+      type: string
+      required: true
+      description: "The pattern template with {variables}"
+      examples:
+        - "Découvrez {product} dès maintenant"
+        - "Unlock {benefit} with {product}"
+        - "{benefit} — {product} macht's möglich"
+
+    context:
+      type: string
+      required: true
+      enum: [landing, product, checkout, email, social, blog, support, legal]
+      description: "Content context where this pattern applies"
+      example: "landing"
+
+    element:
+      type: string
+      required: true
+      enum: [headline, subheadline, cta, intro, body, bullet, caption, meta_title, meta_desc]
+      description: "Content element type"
+      example: "cta"
+
+    variables:
+      type: json
+      required: true
+      description: "Variables used in the template"
+      example:
+        product: "Product or service name"
+        benefit: "Key benefit or value prop"
+
+    constraints:
+      type: json
+      required: false
+      description: "Length and format constraints"
+      example:
+        max_chars: 50
+        max_words: 8
+        capitalization: "sentence"
+
+    tone:
+      type: string
+      required: false
+      enum: [urgent, confident, friendly, professional, playful]
+      description: "Tone this pattern conveys"
+      example: "confident"
+
+    examples:
+      type: json
+      required: false
+      description: "Rendered examples of this pattern"
+      example:
+        - "Découvrez QR Code AI dès maintenant"
+        - "Découvrez notre solution dès maintenant"
+
+  relations:
+    incoming:
+      - type: CONTAINS
+        from: PatternSet
+        cardinality: "1:N"
+        description: "PatternSet contains multiple Patterns"
+
+  example:
+    data:
+      key: "cta_discover"
+      display_name: "Discover CTA"
+      template: "Découvrez {product} dès maintenant"
+      context: "landing"
+      element: "cta"
+      variables:
+        product: "Product name"
+      constraints:
+        max_chars: 40
+      tone: "confident"
+
+    cypher: |
+      // Create a pattern
+      MATCH (ps:PatternSet {context: "marketing"})<-[:HAS_PATTERNS]-(l:Locale {key: "fr-FR"})
+      CREATE (p:Pattern {
+        key: "cta_discover",
+        display_name: "Discover CTA",
+        template: "Découvrez {product} dès maintenant",
+        context: "landing",
+        element: "cta",
+        tone: "confident",
+        created_at: datetime(),
+        updated_at: datetime()
+      })
+      CREATE (ps)-[:CONTAINS]->(p)
+      RETURN p
+
+      // Find all CTA patterns
+      MATCH (p:Pattern {element: "cta"})
+      MATCH (p)<-[:CONTAINS]-(ps:PatternSet)<-[:HAS_PATTERNS]-(l:Locale)
+      RETURN l.key AS locale, p.template AS cta_pattern

@@ -9,8 +9,8 @@
  * - Premium label badge with glow
  * - NodeResizer for interactive resizing
  *
- * Realm Colors (hex values):
- * - Project: violet (#8b5cf6) - 📦
+ * Realm Colors (hex values, v10.6: 2 realms):
+ * - Tenant: sky (#0ea5e9) - 🏢
  * - Global: emerald (#10b981) - 🌍
  */
 
@@ -34,7 +34,7 @@ export interface RealmGroupData extends Record<string, unknown> {
 export type RealmGroupNodeType = Node<RealmGroupData, 'realmGroup'>;
 
 /**
- * Realm color configuration for glass effect
+ * Realm color configuration for glass effect (v10.6: 2 realms)
  */
 const REALM_COLORS: Record<Realm, {
   primary: string;
@@ -42,17 +42,17 @@ const REALM_COLORS: Record<Realm, {
   glow: string;
   bgGlow: string;
 }> = {
-  project: {
-    primary: '#8b5cf6',
-    secondary: '#a78bfa',
-    glow: 'rgba(139, 92, 246, 0.3)',
-    bgGlow: 'rgba(139, 92, 246, 0.05)',
-  },
   global: {
     primary: '#10b981',
     secondary: '#34d399',
     glow: 'rgba(16, 185, 129, 0.3)',
     bgGlow: 'rgba(16, 185, 129, 0.05)',
+  },
+  tenant: {
+    primary: '#0ea5e9',
+    secondary: '#38bdf8',
+    glow: 'rgba(14, 165, 233, 0.3)',
+    bgGlow: 'rgba(14, 165, 233, 0.05)',
   },
 };
 
@@ -65,7 +65,7 @@ export const RealmGroupNode = memo(function RealmGroupNode({
 }: NodeProps<RealmGroupNodeType>) {
   const [isHovered, setIsHovered] = useState(false);
 
-  const colors = REALM_COLORS[data.realm] || REALM_COLORS.project;
+  const colors = REALM_COLORS[data.realm] || REALM_COLORS.tenant;
 
   const handleMouseEnter = useCallback(() => setIsHovered(true), []);
   const handleMouseLeave = useCallback(() => setIsHovered(false), []);

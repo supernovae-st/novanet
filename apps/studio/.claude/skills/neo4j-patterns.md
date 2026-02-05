@@ -161,7 +161,7 @@ export async function executeWrite<T>(
 ## Common Cypher Patterns for NovaNet (v10.5.0)
 
 ```cypher
--- Get project overview (45 node types, 3 realms)
+-- Get project overview (43 node types, 3 realms)
 MATCH (p:Project)-[:SUPPORTS_LOCALE]->(l:Locale)
 RETURN p.key, p.display_name, collect(l.key) as locales
 

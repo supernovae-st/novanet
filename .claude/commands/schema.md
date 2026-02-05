@@ -24,8 +24,7 @@ YAML (Source of Truth)          TypeScript (Generated)         Neo4j (Runtime)
 packages/core/models/     -->   packages/core/src/types/  -->  bolt://localhost:7687
 ├── node-kinds/                 ├── index.ts
 │   ├── global/                 └── locale-knowledge.ts
-│   ├── organization/
-│   └── project/
+│   └── tenant/
 ├── arc-kinds/
 └── taxonomy.yaml
 ```
@@ -67,14 +66,13 @@ Redirect to `/schema:edit-node <name>`
 
 Redirect to `/schema:add-relation <NAME>`
 
-## Current Schema (v10.5.0)
+## Current Schema (v10.6.0)
 
-**45 Kind Types** across 3 Realms:
-- **Global (19)**: Locale, Knowledge Atoms, SEOKeyword (READ-ONLY)
-- **Organization (NEW)**: Org-level Entity, EntityL10n
-- **Project (23)**: Project structure, prompts, outputs, generation
+**43 Kind Types** across 2 Realms:
+- **Global (20)**: Locale, Knowledge Atoms (Sets + Atoms), SEO nodes (READ-ONLY)
+- **Tenant (23)**: Organization, Project structure, Entity, prompts, outputs, generation
 
-**64 Arcs** in 5 ArcFamilies:
+**63 Arcs** in 5 ArcFamilies:
 - **Ownership**: HAS_PAGE, HAS_BLOCK, OF_TYPE
 - **Localization**: HAS_L10N, FOR_LOCALE
 - **Semantic**: SEMANTIC_LINK, USES_ENTITY

@@ -1,0 +1,67 @@
+# packages/core/models/node-kinds/global/knowledge/expression-set.yaml
+# ExpressionSet — Container grouping Expression atoms by register
+#
+# v10.1: Pure container (no JSON blobs - data lives in Expression atoms)
+# Registers: formal, neutral, casual
+# Stability: High - structure rarely changes
+
+node:
+  name: ExpressionSet
+  realm: global
+  layer: locale-knowledge
+  trait: knowledge
+  icon: "💬"
+  description: "Container grouping Expression atoms by register"
+
+  standard_properties:
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable name"
+      example: "French (France) Formal Expressions"
+
+    description:
+      type: string
+      required: true
+      description: "Short description"
+      example: "Formal register expressions for fr-FR"
+
+    llm_context:
+      type: string
+      required: true
+      description: "LLM generation hints"
+      example: "USE: to find expressions by register. TRIGGERS: tone, formality. NOT: individual phrases."
+
+    created_at:
+      type: datetime
+      required: true
+      description: "Creation timestamp"
+
+    updated_at:
+      type: datetime
+      required: true
+      description: "Last update timestamp"
+
+  properties:
+    # Register identification (only property - data is in atoms)
+    register:
+      type: string
+      required: true
+      enum: [formal, neutral, casual]
+      description: "Expression register this set groups"
+      example: "formal"
+
+  relations:
+    outgoing:
+      - type: CONTAINS
+        to: Expression
+        cardinality: "1:N"
+        description: "ExpressionSet contains multiple Expression atoms"
+
+    incoming:
+      - type: HAS_EXPRESSIONS
+        from: Locale
+        cardinality: "1:N"
+        description: "Locale has multiple expression sets (one per register)"
+        properties:
+          register: string

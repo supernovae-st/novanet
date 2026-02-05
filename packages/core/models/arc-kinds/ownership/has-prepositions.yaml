@@ -1,0 +1,27 @@
+# arc-kinds/ownership/has-prepositions.yaml
+# HAS_PREPOSITIONS - SEOKeyword owns preposition keywords (v10.6)
+#
+# v10.6: SEO Schema v2
+#        - Links parent keyword to ATP-derived preposition keywords
+#        - Each preposition indicates a use case (X for Y)
+
+arc:
+  type: HAS_PREPOSITIONS
+  family: ownership
+  scope: intra_realm
+  source: SEOKeyword
+  target: SEOPreposition
+  cardinality: one_to_many
+
+  llm_context: |
+    SEOKeyword owns its preposition variations from Answer The Public.
+    Prepositions indicate use cases and contexts.
+    Use to discover feature/audience-specific content opportunities.
+    Pattern: "qr code" → "qr code for wifi", "qr code with logo"
+
+  example:
+    description: "Get all prepositions for a keyword by use case type"
+    cypher: |
+      MATCH (kw:SEOKeyword {key: $keyword_key})-[:HAS_PREPOSITIONS]->(p:SEOPreposition)
+      RETURN p.use_case_type, collect(p.value) AS keywords, sum(p.volume) AS total_volume
+      ORDER BY total_volume DESC

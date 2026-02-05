@@ -2,7 +2,7 @@
 
 Claude Code configuration for the NovaNet monorepo.
 
-**Version**: v10.4.0 | **Docs**: [Claude Code Official](https://docs.anthropic.com/en/docs/claude-code)
+**Version**: v10.6.0 | **Docs**: [Claude Code Official](https://docs.anthropic.com/en/docs/claude-code)
 
 ---
 
@@ -10,7 +10,7 @@ Claude Code configuration for the NovaNet monorepo.
 
 ```
 ╔═══════════════════════════════════════════════════════════════════════════════════════════════════╗
-║                              NOVANET DX - v10.4.0                                                  ║
+║                              NOVANET DX - v10.6.0                                                  ║
 ╠═══════════════════════════════════════════════════════════════════════════════════════════════════╣
 ║                                                                                                   ║
 ║   COMMANDS (slash commands)                                                                       ║
@@ -57,7 +57,8 @@ Claude Code configuration for the NovaNet monorepo.
 │   ├── yaml-sync-reminder.sh    ← YAML model edit reminder
 │   ├── yaml-source-reminder.sh  ← YAML read context (source of truth)
 │   ├── doc-sync-reminder.sh     ← Documentation edit reminder
-│   └── skill-sync-reminder.sh   ← Skill/command/rule edit reminder
+│   ├── skill-sync-reminder.sh   ← Skill/command/rule edit reminder
+│   └── security-deps-reminder.sh ← Dependency security reminder (NEW)
 ├── rules/                       ← Path-specific rules
 │   ├── rust.md                  ← Rust patterns (tools/novanet/**/*.rs)
 │   ├── typescript.md            ← TypeScript patterns (packages/, apps/)
@@ -119,7 +120,7 @@ Automated scripts that run at specific lifecycle events.
 **Output:** Shows project version, git branch, and uncommitted changes count.
 
 ```
-NovaNet v10.4.0 | Branch: main | Uncommitted: 3 files
+NovaNet v10.6.0 | Branch: main | Uncommitted: 3 files
 ```
 
 ### PostToolUse Hook (Write|Edit)
@@ -174,7 +175,7 @@ IMPORTANT: Regenerate artifacts with:
 
 **Output:** Reminds to verify against YAML sources:
 - Node counts match `node-kinds/` (45 files)
-- Arc counts match `arc-kinds/` (64 files)
+- Arc counts match `arc-kinds/` (72 files)
 - Paths use `node-kinds/` not `nodes/`
 - Paths use `taxonomy.yaml` not `organizing-principles.yaml`
 
@@ -328,7 +329,7 @@ Master command for schema management.
 
 **Example:**
 ```bash
-/schema status     # Show current schema stats (45 Kinds, 64 ArcKinds, 3 Realms, 10 Layers)
+/schema status     # Show current schema stats (46 Kinds, 51 ArcKinds, 2 Realms, 9 Layers)
 ```
 
 ---
@@ -598,10 +599,10 @@ Located in `apps/studio/.claude/rules/`:
 
 ### `novanet-terminology.md`
 
-Domain vocabulary reference (v10.5.0):
+Domain vocabulary reference (v10.6.0):
 - Core concepts (Project, Entity, Page, Block, Locale, Context Graph)
 - Meta-Graph: 6 meta-node types (Realm, Layer, Kind, Trait, ArcFamily, ArcKind)
-- Full Kind Inventory (45 Kinds across 3 Realms)
+- Full Kind Inventory (46 Kinds across 2 Realms)
 - Meta-Graph relations (hierarchy, facets, arc schema, instance bridge)
 - Key data relations (grouped by ArcFamily)
 - v8 → v9 rename mapping
@@ -629,14 +630,14 @@ Architecture Decision Records (ADRs):
 
 ---
 
-## Key Numbers (v10.5.0)
+## Key Numbers (v10.6.0)
 
 | Metric | Value |
 |--------|-------|
-| Kind (node types) | 45 |
-| ArcKind (relations) | 64 |
-| Realms | 3 (global, organization, project) |
-| Layers | 10 |
+| Kind (node types) | 46 |
+| ArcKind (relations) | 51 |
+| Realms | 2 (global, tenant) |
+| Layers | 9 |
 | Traits | 5 |
 | ArcFamilies | 5 |
 | Meta-node total | ~130 |
@@ -708,17 +709,17 @@ pnpm audit:all
 pnpm doc:generate
 ```
 
-**Source of truth:** `/VERSION` file contains the canonical schema version (10.5.0).
+**Source of truth:** `/VERSION` file contains the canonical schema version (10.6.0).
 
 **`pnpm doc:audit` checks:**
-- Outdated version references (e.g., v10.4 → v10.5)
+- Outdated version references (e.g., v10.5 → v10.6)
 - Deprecated terminology (Concept → Entity, USES_CONCEPT → USES_ENTITY)
-- Removed realm references (shared realm merged into global)
-- Incorrect node/arc counts (45 nodes, 64 arcs expected)
+- Removed realm references (3 realms → 2 realms in v10.6)
+- Incorrect node/arc counts (46 nodes, 72 arcs expected)
 
 **`pnpm skill:audit` checks:**
 - Deprecated paths (`nodes/` → `node-kinds/`, `organizing-principles.yaml` → `taxonomy.yaml`)
-- Node/arc counts match YAML sources (45 node-kinds, 64 arc-kinds)
+- Node/arc counts match YAML sources (46 node-kinds, 72 arc-kinds)
 - Deprecated terminology in skills/commands/rules
 
 **Auto-sync reminders:**

@@ -9,7 +9,7 @@ Knowledge graph visualization for the NovaNet localization orchestrator.
 
 ## Project Context
 
-**What:** Interactive 2D graph visualization for 45 node types (3 realms), 200 locales (~19,000 instances projected at full deployment)
+**What:** Interactive 2D graph visualization for node types (2 realms), 200 locales (~19,000 instances projected at full deployment)
 **Stack:** Next.js 16 + React 19 + TypeScript 5.9 + Tailwind CSS
 **Graph:** @xyflow/react
 **State:** Zustand 5 with persist/immer
@@ -95,7 +95,7 @@ pnpm test            # Tests
 | `⇧R` | Radial layout (circular) |
 | `⇧F` | Force-directed layout |
 
-**Quick Views (Presets v10.0.0)**
+**Quick Views (Presets v10.6.0)**
 | Key | Action |
 |-----|--------|
 | `1` | Project Structure - Project, Pages, Blocks hierarchy |
@@ -125,7 +125,7 @@ pnpm test            # Tests
 - `/api/graph/navigation` - Faceted navigation (realm/layer/trait filters)
 - `/api/graph/ontology` - Ontology metadata
 - `/api/graph/organizing-principles` - Organizing principles (realms, layers)
-- `/api/graph/taxonomy` - Complete taxonomy with visual encoding (v9.5)
+- `/api/graph/taxonomy` - Complete taxonomy with visual encoding (v10.6)
 - `/api/graph/query` - Execute Cypher queries
 - `/api/graph/schema` - Schema information
 - `/api/graph/stats` - Graph statistics
@@ -144,34 +144,33 @@ pnpm test            # Tests
 
 ---
 
-## Neo4j Schema (v10.0.0)
+## Neo4j Schema (v10.6.0)
 
-### Meta-Graph (v9 — Self-Describing Schema)
+### Meta-Graph (v10.6 — 2-Realm Architecture)
 
-v9 introduces faceted classification with 6 meta-node types:
+v10.6 establishes faceted classification with 6 meta-node types:
 
 | Meta-Type | Count | Purpose |
 |-----------|-------|---------|
-| **Realm** | 2 | WHERE? (global / project) — replaces "Scope" |
-| **Layer** | 8 | WHAT? (functional classification) — replaces "Subcategory" |
-| **Kind** | 42 | Node type (1:1 with Neo4j labels) — replaces "NodeTypeMeta" |
+| **Realm** | 2 | WHERE? (global / tenant) — one-way traversal |
+| **Layer** | 9 | WHAT? (functional classification by realm) |
 | **Trait** | 5 | HOW? (invariant / localized / knowledge / derived / job) |
 | **ArcFamily** | 5 | Relationship classification |
-| **ArcKind** | 77 | Individual relationship type |
+| **ArcKind** | varies | Individual relationship type |
 
 All meta-nodes carry `:Meta` double-label.
 
-### Kind Types (42 across 2 Realms)
+### Realm Architecture (v10.6)
 
-| Realm | Nodes | Kinds |
-|-------|-------|-------|
-| **🌍 Global** | 19 | Locale, Formatting, Slugification, Adaptation, Style, TermSet, ExpressionSet, PatternSet, CultureSet, TabooSet, AudienceSet, Term, Expression, Pattern, CultureRef, Taboo, AudienceTrait, Thing, ThingL10n |
-| **📦 Project** | 23 | Project, BrandIdentity, ProjectL10n, Page, Block, BlockType, PageType, PagePrompt, BlockPrompt, BlockRules, PageL10n, BlockL10n, GenerationJob, PromptArtifact, OutputArtifact, EvaluationSignal, ContentSlot, AudiencePersona, ChannelSurface, BlockInstruction, Entity, EntityL10n, SEOKeyword |
+| Realm | Layers | Description |
+|-------|--------|-------------|
+| **Global** | config, locale-knowledge, seo | Universal locale knowledge (READ-ONLY) |
+| **Tenant** | config, foundation, structure, semantic, instruction, output | Business-specific content |
 
 ### Key Relations (grouped by ArcFamily)
-- **Ownership:** `HAS_PAGE`, `HAS_BLOCK`, `OF_TYPE`, `SUPPORTS_LOCALE`
+- **Ownership:** `HAS_PAGE`, `HAS_BLOCK`, `OF_TYPE`, `SUPPORTS_LOCALE`, `BELONGS_TO_ORG`, `HAS_PROJECT`
 - **Localization:** `HAS_L10N`, `FOR_LOCALE`
-- **Semantic:** `USES_ENTITY`, `SEMANTIC_LINK`
+- **Semantic:** `USES_ENTITY`, `SEMANTIC_LINK`, `HAS_ENTITY`
 - **Generation:** `HAS_OUTPUT`, `HAS_PROMPT`
 - **Mining:** `EXPRESSES`
 

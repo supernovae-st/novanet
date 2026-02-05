@@ -20,10 +20,10 @@ import { NODE_REALMS } from '@novanet/core/types';
 import { NODE_LAYERS, type Layer } from '@novanet/core/graph';
 import type { GraphNode, GraphEdge, NodeType } from '@/types';
 
-/** Realm counts for schema mode breakdown (v10.4: 2 realms) */
+/** Realm counts for schema mode breakdown (v10.6: 2 realms) */
 export interface RealmCounts {
   global: number;
-  project: number;
+  tenant: number;
 }
 
 /** Layer counts for schema mode breakdown */
@@ -144,9 +144,9 @@ export function useFilteredGraph(): FilteredGraphResult {
     return types.size;
   }, [filteredEdges]);
 
-  // Compute scope counts (for schema mode breakdown)
+  // Compute scope counts (for schema mode breakdown) - v10.6: 2 realms
   const realmCounts = useMemo((): RealmCounts => {
-    const counts: RealmCounts = { global: 0, project: 0 };
+    const counts: RealmCounts = { global: 0, tenant: 0 };
     for (const node of filteredNodes) {
       const scope = NODE_REALMS[node.type as NodeType];
       if (scope && scope in counts) {
@@ -156,11 +156,11 @@ export function useFilteredGraph(): FilteredGraphResult {
     return counts;
   }, [filteredNodes]);
 
-  // Compute layer counts (for schema mode breakdown) - v10.4: 8 layers
+  // Compute layer counts (for schema mode breakdown) - v10.6: 8 layers
   const layerCounts = useMemo((): LayerCounts => {
     const counts: LayerCounts = {
       foundation: 0, structure: 0, semantic: 0, instruction: 0, output: 0,
-      config: 0, knowledge: 0, seo: 0,
+      config: 0, 'locale-knowledge': 0, seo: 0,
     };
     for (const node of filteredNodes) {
       const layer = NODE_LAYERS[node.type as NodeType];

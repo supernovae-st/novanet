@@ -1,23 +1,23 @@
 'use client';
 
 /**
- * LayerIcon - Memory-efficient SVG icon system using Lucide (v9.0.0)
+ * LayerIcon - Memory-efficient SVG icon system using Lucide (v10.5.0)
  *
  * Features:
  * - Tree-shakeable (only imports used icons)
  * - No memory leaks (pure React components)
- * - One icon per layer (8 layers in v10.4)
+ * - One icon per layer (9 layers in v10.5)
  * - Consistent styling with glow effects
  *
- * Layers (v10.4 - 8 layers):
+ * Layers (v10.5 - 9 layers across 3 realms):
+ * - config: Settings (global + organization)
+ * - locale-knowledge: BookOpen (locale knowledge atoms)
+ * - seo: Search (search optimization)
  * - foundation: Package/project structure
  * - structure: Layout (pages, blocks)
  * - semantic: Lightbulb (entities)
  * - instruction: FileText (prompts, rules, types)
  * - output: Sparkles (generated content)
- * - config: Settings (locale configuration)
- * - knowledge: BookOpen (locale knowledge)
- * - seo: Search (search optimization)
  */
 
 import { memo, useMemo } from 'react';
@@ -39,18 +39,18 @@ import type { Layer } from '@novanet/core/types';
 // =============================================================================
 
 /**
- * Layer to Lucide icon component mapping (v10.4 - 8 layers)
+ * Layer to Lucide icon component mapping (v10.5 - 9 layers)
  * Each layer has ONE representative icon
  */
 const LAYER_ICONS: Record<Layer, React.ComponentType<LucideProps>> = {
+  config: Settings,
+  'locale-knowledge': BookOpen,
+  seo: Search,
   foundation: Package,
   structure: LayoutGrid,
   semantic: Lightbulb,
   instruction: FileText,
   output: Sparkles,
-  config: Settings,
-  knowledge: BookOpen,
-  seo: Search,
 };
 
 // =============================================================================

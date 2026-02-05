@@ -118,10 +118,10 @@ mod tests {
 
     #[test]
     fn parse_csv_multiple_trimmed() {
-        // v10.4: 2 realms only (global, project)
+        // v10.6: 2 realms (global, tenant)
         assert_eq!(
-            parse_csv(Some(" global , project ")),
-            vec!["global", "project"]
+            parse_csv(Some(" global , tenant ")),
+            vec!["global", "tenant"]
         );
     }
 
