@@ -577,6 +577,100 @@ fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
                 Style::default().fg(Color::DarkGray),
             )));
         }
+    } else if let Some(ref details) = app.arc_kind_details {
+        // === ArcKind Details from Neo4j ===
+        let family_color = get_family_color(&details.family);
+
+        // Arc name with family
+        lines.push(Line::from(vec![
+            Span::styled("  ", dim),
+            Span::styled(&details.display_name, Style::default().fg(family_color).add_modifier(Modifier::BOLD)),
+            Span::styled(format!("  ({})", details.family), Style::default().fg(Color::DarkGray)),
+        ]));
+        lines.push(Line::from(Span::raw("")));
+
+        // === ENDPOINTS ===
+        lines.push(Line::from(Span::styled(
+            "  ENDPOINTS",
+            Style::default().fg(Color::White).add_modifier(Modifier::BOLD),
+        )));
+        lines.push(Line::from(Span::styled(
+            "  ─────────────────────────────────────────",
+            dim,
+        )));
+
+        // FROM endpoint
+        if let Some(ref from) = details.from_endpoint {
+            lines.push(Line::from(vec![
+                Span::styled("    FROM: ", Style::default().fg(Color::Magenta)),
+                Span::styled(&from.kind_label, Style::default().fg(Color::Green).add_modifier(Modifier::BOLD)),
+                Span::styled(format!("  ({}/{})", from.realm, from.layer), Style::default().fg(Color::DarkGray)),
+            ]));
+        } else {
+            lines.push(Line::from(vec![
+                Span::styled("    FROM: ", Style::default().fg(Color::Magenta)),
+                Span::styled("(not defined)", Style::default().fg(Color::DarkGray)),
+            ]));
+        }
+
+        // TO endpoint
+        if let Some(ref to) = details.to_endpoint {
+            lines.push(Line::from(vec![
+                Span::styled("    TO:   ", Style::default().fg(Color::Cyan)),
+                Span::styled(&to.kind_label, Style::default().fg(Color::Green).add_modifier(Modifier::BOLD)),
+                Span::styled(format!("  ({}/{})", to.realm, to.layer), Style::default().fg(Color::DarkGray)),
+            ]));
+        } else {
+            lines.push(Line::from(vec![
+                Span::styled("    TO:   ", Style::default().fg(Color::Cyan)),
+                Span::styled("(not defined)", Style::default().fg(Color::DarkGray)),
+            ]));
+        }
+        lines.push(Line::from(Span::raw("")));
+
+        // === PROPERTIES ===
+        lines.push(Line::from(Span::styled(
+            "  PROPERTIES",
+            Style::default().fg(Color::White).add_modifier(Modifier::BOLD),
+        )));
+        lines.push(Line::from(Span::styled(
+            "  ─────────────────────────────────────────",
+            dim,
+        )));
+
+        // Cardinality
+        if !details.cardinality.is_empty() {
+            lines.push(Line::from(vec![
+                Span::styled("    Cardinality: ", dim),
+                Span::styled(&details.cardinality, Style::default().fg(Color::Yellow)),
+            ]));
+        }
+
+        // Cypher pattern
+        if !details.cypher_pattern.is_empty() {
+            lines.push(Line::from(vec![
+                Span::styled("    Pattern: ", dim),
+                Span::styled(&details.cypher_pattern, Style::default().fg(Color::Rgb(108, 113, 196))),
+            ]));
+        }
+
+        // Description
+        if !details.description.is_empty() {
+            lines.push(Line::from(Span::raw("")));
+            lines.push(Line::from(Span::styled(
+                "  DESCRIPTION",
+                Style::default().fg(Color::White).add_modifier(Modifier::BOLD),
+            )));
+            lines.push(Line::from(Span::styled(
+                "  ─────────────────────────────────────────",
+                dim,
+            )));
+            // Wrap description if too long
+            for chunk in details.description.chars().collect::<Vec<_>>().chunks(45) {
+                let line: String = chunk.iter().collect();
+                lines.push(Line::from(Span::styled(format!("    {}", line), Style::default().fg(Color::DarkGray))));
+            }
+        }
     } else {
         // No Neo4j data - show contextual message
         let msg = match app.current_item() {
@@ -584,11 +678,11 @@ fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
                 "▸ Expand a section to explore"
             }
             Some(TreeItem::ArcFamily(_)) => "▸ Select an Arc to see endpoints",
-            Some(TreeItem::ArcKind(_, _)) => "▸ Arc details (Neo4j query coming soon)",
+            Some(TreeItem::ArcKind(_, _)) => "▸ Loading arc details...",
             Some(TreeItem::Realm(_)) | Some(TreeItem::Layer(_, _)) => {
                 "▸ Select a Kind to see arc relationships"
             }
-            _ => "▸ Select a Kind to see arc relationships",
+            _ => "▸ Select a Kind or Arc to see details",
         };
         lines.push(Line::from(Span::styled(msg, Style::default().fg(Color::DarkGray))));
     }

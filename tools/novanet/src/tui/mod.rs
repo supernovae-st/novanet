@@ -96,6 +96,13 @@ async fn run_app(
                         }
                     }
 
+                    // Check for pending arc kind details load (ArcKind selected → load from Neo4j)
+                    if let Some(arc_key) = app.take_pending_arc_kind_load() {
+                        if let Ok(details) = TaxonomyTree::load_arc_kind_details(db, &arc_key).await {
+                            app.set_arc_kind_details(details);
+                        }
+                    }
+
                     terminal
                         .draw(|f| ui::render(f, &mut app))
                         .map_err(crate::NovaNetError::Io)?;
