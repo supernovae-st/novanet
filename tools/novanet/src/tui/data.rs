@@ -87,6 +87,28 @@ pub struct GraphStats {
     pub arc_kind_count: i64,
 }
 
+// ============================================================================
+// Neo4j Arc Data (live query)
+// ============================================================================
+
+/// A single arc relationship from Neo4j.
+#[derive(Debug, Clone)]
+pub struct Neo4jArc {
+    pub arc_key: String,      // e.g., "FALLBACK_TO"
+    pub other_kind: String,   // The Kind on the other end
+    pub family: String,       // e.g., "localization", "ownership"
+}
+
+/// Complete arc data for a Kind, loaded from Neo4j.
+#[derive(Debug, Clone, Default)]
+pub struct KindArcsData {
+    pub kind_label: String,
+    pub realm: String,
+    pub layer: String,
+    pub incoming: Vec<Neo4jArc>,
+    pub outgoing: Vec<Neo4jArc>,
+}
+
 /// Full taxonomy tree: Realm > Layer > Kind + ArcFamily > ArcKind.
 #[derive(Debug, Clone, Default)]
 pub struct TaxonomyTree {
@@ -96,6 +118,9 @@ pub struct TaxonomyTree {
     /// Collapsed state: stores keys of collapsed nodes (e.g., "kinds", "arcs", "realm:global", "layer:structure")
     /// Uses FxHashSet for ~30% faster lookups on string keys.
     pub collapsed: FxHashSet<String>,
+    /// Instances loaded for Data view, keyed by Kind key.
+    /// Only populated when in Data mode and a Kind is selected.
+    pub instances: BTreeMap<String, Vec<InstanceInfo>>,
 }
 
 impl TaxonomyTree {
@@ -255,6 +280,7 @@ ORDER BY realm_key, layer_key, kind_key
             arc_families,
             stats,
             collapsed: FxHashSet::default(),
+            instances: BTreeMap::new(),
         })
     }
 
@@ -381,6 +407,109 @@ ORDER BY family_key, arc_key
             .collect())
     }
 
+    /// Load instances of a Kind from Neo4j for Data view.
+    /// Returns instances with their properties and arcs.
+    pub async fn load_instances(db: &Db, kind_label: &str) -> crate::Result<Vec<InstanceInfo>> {
+        // Query instances of this Kind with their properties and arcs
+        let cypher = format!(
+            r#"
+MATCH (n:{kind_label})
+WHERE NOT n:Meta
+OPTIONAL MATCH (n)-[out]->(target)
+WHERE NOT target:Meta
+WITH n, collect(DISTINCT {{
+    arc_type: type(out),
+    target_key: coalesce(target.key, target.label, id(target)),
+    target_kind: head(labels(target))
+}}) AS outgoing
+OPTIONAL MATCH (source)-[inc]->(n)
+WHERE NOT source:Meta
+WITH n, outgoing, collect(DISTINCT {{
+    arc_type: type(inc),
+    source_key: coalesce(source.key, source.label, id(source)),
+    source_kind: head(labels(source))
+}}) AS incoming
+RETURN
+    coalesce(n.key, n.label, toString(id(n))) AS key,
+    coalesce(n.display_name, n.key, n.label) AS display_name,
+    properties(n) AS props,
+    outgoing,
+    incoming
+ORDER BY key
+LIMIT 100
+"#,
+            kind_label = kind_label
+        );
+
+        let rows = db.execute(&cypher).await?;
+        let mut instances = Vec::new();
+
+        for row in rows {
+            let key: String = row.get("key").unwrap_or_default();
+            let display_name: String = row.get("display_name").unwrap_or_default();
+
+            // Parse properties as BTreeMap
+            let props: BTreeMap<String, String> = row
+                .get::<neo4rs::BoltMap>("props")
+                .map(|m| {
+                    m.value
+                        .iter()
+                        .map(|(k, v)| (k.to_string(), format!("{:?}", v)))
+                        .collect()
+                })
+                .unwrap_or_default();
+
+            // Parse outgoing arcs
+            let outgoing_arcs: Vec<InstanceArc> = row
+                .get::<Vec<neo4rs::BoltMap>>("outgoing")
+                .unwrap_or_default()
+                .into_iter()
+                .filter_map(|m| {
+                    let arc_type = m.get::<String>("arc_type").ok()?;
+                    if arc_type.is_empty() {
+                        return None;
+                    }
+                    Some(InstanceArc {
+                        arc_type,
+                        target_key: m.get("target_key").unwrap_or_default(),
+                        target_kind: m.get("target_kind").unwrap_or_default(),
+                        exists: true,
+                    })
+                })
+                .collect();
+
+            // Parse incoming arcs
+            let incoming_arcs: Vec<InstanceArc> = row
+                .get::<Vec<neo4rs::BoltMap>>("incoming")
+                .unwrap_or_default()
+                .into_iter()
+                .filter_map(|m| {
+                    let arc_type = m.get::<String>("arc_type").ok()?;
+                    if arc_type.is_empty() {
+                        return None;
+                    }
+                    Some(InstanceArc {
+                        arc_type,
+                        target_key: m.get("source_key").unwrap_or_default(),
+                        target_kind: m.get("source_kind").unwrap_or_default(),
+                        exists: true,
+                    })
+                })
+                .collect();
+
+            instances.push(InstanceInfo {
+                key,
+                display_name,
+                kind_key: kind_label.to_string(),
+                properties: props,
+                outgoing_arcs,
+                incoming_arcs,
+            });
+        }
+
+        Ok(instances)
+    }
+
     /// Load graph statistics.
     async fn load_stats(db: &Db) -> crate::Result<GraphStats> {
         let cypher = r#"
@@ -407,21 +536,90 @@ RETURN nodes, arcs, kinds, count(ak) AS arc_kinds
         }
     }
 
+    /// Load arc relationships for a Kind from Neo4j.
+    /// Returns incoming and outgoing arcs with their families.
+    pub async fn load_kind_arcs(db: &Db, kind_label: &str) -> crate::Result<KindArcsData> {
+        let cypher = r#"
+MATCH (k:Kind {label: $kindLabel})
+OPTIONAL MATCH (k)-[:IN_LAYER]->(l:Layer)
+OPTIONAL MATCH (l)<-[:HAS_LAYER]-(r:Realm)
+OPTIONAL MATCH (k)<-[:TO_KIND]-(inArc:ArcKind)-[:FROM_KIND]->(fromKind:Kind)
+OPTIONAL MATCH (inArc)-[:IN_FAMILY]->(inFamily:ArcFamily)
+OPTIONAL MATCH (k)<-[:FROM_KIND]-(outArc:ArcKind)-[:TO_KIND]->(toKind:Kind)
+OPTIONAL MATCH (outArc)-[:IN_FAMILY]->(outFamily:ArcFamily)
+WITH k, r, l,
+     collect(DISTINCT CASE WHEN inArc IS NOT NULL
+         THEN {arc: inArc.key, from: fromKind.label, family: inFamily.key} END) as incoming,
+     collect(DISTINCT CASE WHEN outArc IS NOT NULL
+         THEN {arc: outArc.key, to: toKind.label, family: outFamily.key} END) as outgoing
+RETURN k.label as kind,
+       r.key as realm,
+       l.key as layer,
+       [x IN incoming WHERE x IS NOT NULL] as incoming,
+       [x IN outgoing WHERE x IS NOT NULL] as outgoing
+LIMIT 1
+"#;
+
+        let rows = db
+            .execute_with_params(cypher, [("kindLabel", kind_label)])
+            .await?;
+
+        if let Some(row) = rows.into_iter().next() {
+            let kind: String = row.get("kind").unwrap_or_default();
+            let realm: String = row.get("realm").unwrap_or_default();
+            let layer: String = row.get("layer").unwrap_or_default();
+
+            // Parse incoming arcs
+            let incoming_raw: Vec<neo4rs::BoltMap> = row
+                .get::<Vec<neo4rs::BoltMap>>("incoming")
+                .unwrap_or_default();
+            let incoming: Vec<Neo4jArc> = incoming_raw
+                .into_iter()
+                .filter_map(|m| {
+                    let arc_key = m.get::<String>("arc").ok()?;
+                    let other_kind = m.get::<String>("from").ok()?;
+                    let family = m.get::<String>("family").ok().unwrap_or_default();
+                    Some(Neo4jArc {
+                        arc_key,
+                        other_kind,
+                        family,
+                    })
+                })
+                .collect();
+
+            // Parse outgoing arcs
+            let outgoing_raw: Vec<neo4rs::BoltMap> = row
+                .get::<Vec<neo4rs::BoltMap>>("outgoing")
+                .unwrap_or_default();
+            let outgoing: Vec<Neo4jArc> = outgoing_raw
+                .into_iter()
+                .filter_map(|m| {
+                    let arc_key = m.get::<String>("arc").ok()?;
+                    let other_kind = m.get::<String>("to").ok()?;
+                    let family = m.get::<String>("family").ok().unwrap_or_default();
+                    Some(Neo4jArc {
+                        arc_key,
+                        other_kind,
+                        family,
+                    })
+                })
+                .collect();
+
+            Ok(KindArcsData {
+                kind_label: kind,
+                realm,
+                layer,
+                incoming,
+                outgoing,
+            })
+        } else {
+            Ok(KindArcsData::default())
+        }
+    }
+
     /// Check if a node is collapsed.
     pub fn is_collapsed(&self, key: &str) -> bool {
         self.collapsed.contains(key)
-    }
-
-    /// Collapse a node.
-    #[allow(dead_code)]
-    pub fn collapse(&mut self, key: &str) {
-        self.collapsed.insert(key.to_string());
-    }
-
-    /// Expand a node.
-    #[allow(dead_code)]
-    pub fn expand(&mut self, key: &str) {
-        self.collapsed.remove(key);
     }
 
     /// Toggle collapse state of a node.
@@ -451,6 +649,151 @@ RETURN nodes, arcs, kinds, count(ak) AS arc_kinds
     /// Expand all nodes.
     pub fn expand_all(&mut self) {
         self.collapsed.clear();
+    }
+
+    // ========================================================================
+    // Data view: Instance methods
+    // ========================================================================
+
+    /// Set instances for a Kind (used in Data mode).
+    /// Will be used when integrating Neo4j instance loading.
+    #[allow(dead_code)]
+    pub fn set_instances(&mut self, kind_key: &str, instances: Vec<InstanceInfo>) {
+        self.instances.insert(kind_key.to_string(), instances);
+    }
+
+    /// Get instances for a Kind.
+    pub fn get_instances(&self, kind_key: &str) -> Option<&Vec<InstanceInfo>> {
+        self.instances.get(kind_key)
+    }
+
+    /// Clear all instances (when switching back to Meta mode).
+    #[allow(dead_code)]
+    pub fn clear_instances(&mut self) {
+        self.instances.clear();
+    }
+
+    /// Total number of visible items for a specific mode.
+    /// In Data mode (data_mode=true), includes instances under expanded Kinds.
+    pub fn item_count_for_mode(&self, data_mode: bool) -> usize {
+        let mut count = 0;
+
+        // Kinds section
+        count += 1; // "Kinds" header
+        if !self.is_collapsed("kinds") {
+            for realm in &self.realms {
+                count += 1; // realm header
+                if !self.is_collapsed(&format!("realm:{}", realm.key)) {
+                    for layer in &realm.layers {
+                        count += 1; // layer header
+                        if !self.is_collapsed(&format!("layer:{}", layer.key)) {
+                            for kind in &layer.kinds {
+                                count += 1; // kind
+
+                                // In Data mode, add instances if not collapsed
+                                if data_mode && !self.is_collapsed(&format!("kind:{}", kind.key)) {
+                                    if let Some(instances) = self.instances.get(&kind.key) {
+                                        count += instances.len();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Arcs section
+        count += 1; // "Arcs" header
+        if !self.is_collapsed("arcs") {
+            for family in &self.arc_families {
+                count += 1; // family header
+                if !self.is_collapsed(&format!("family:{}", family.key)) {
+                    count += family.arc_kinds.len();
+                }
+            }
+        }
+
+        count
+    }
+
+    /// Get item at cursor position for a specific mode.
+    /// In Data mode (data_mode=true), includes instances under expanded Kinds.
+    pub fn item_at_for_mode(&self, cursor: usize, data_mode: bool) -> Option<TreeItem<'_>> {
+        let mut idx = 0;
+
+        // Kinds section header
+        if idx == cursor {
+            return Some(TreeItem::KindsSection);
+        }
+        idx += 1;
+
+        if !self.is_collapsed("kinds") {
+            for realm in &self.realms {
+                if idx == cursor {
+                    return Some(TreeItem::Realm(realm));
+                }
+                idx += 1;
+
+                if !self.is_collapsed(&format!("realm:{}", realm.key)) {
+                    for layer in &realm.layers {
+                        if idx == cursor {
+                            return Some(TreeItem::Layer(realm, layer));
+                        }
+                        idx += 1;
+
+                        if !self.is_collapsed(&format!("layer:{}", layer.key)) {
+                            for kind in &layer.kinds {
+                                if idx == cursor {
+                                    return Some(TreeItem::Kind(realm, layer, kind));
+                                }
+                                idx += 1;
+
+                                // In Data mode, check for instances
+                                if data_mode && !self.is_collapsed(&format!("kind:{}", kind.key)) {
+                                    if let Some(instances) = self.instances.get(&kind.key) {
+                                        for instance in instances {
+                                            if idx == cursor {
+                                                return Some(TreeItem::Instance(
+                                                    realm, layer, kind, instance,
+                                                ));
+                                            }
+                                            idx += 1;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Arcs section header
+        if idx == cursor {
+            return Some(TreeItem::ArcsSection);
+        }
+        idx += 1;
+
+        if !self.is_collapsed("arcs") {
+            for family in &self.arc_families {
+                if idx == cursor {
+                    return Some(TreeItem::ArcFamily(family));
+                }
+                idx += 1;
+
+                if !self.is_collapsed(&format!("family:{}", family.key)) {
+                    for arc_kind in &family.arc_kinds {
+                        if idx == cursor {
+                            return Some(TreeItem::ArcKind(family, arc_kind));
+                        }
+                        idx += 1;
+                    }
+                }
+            }
+        }
+
+        None
     }
 
     /// Total number of visible items in the flattened tree (respects collapsed state).
@@ -559,8 +902,10 @@ RETURN nodes, arcs, kinds, count(ak) AS arc_kinds
             Some(TreeItem::Realm(r)) => Some(format!("realm:{}", r.key)),
             Some(TreeItem::Layer(_, l)) => Some(format!("layer:{}", l.key)),
             Some(TreeItem::ArcFamily(f)) => Some(format!("family:{}", f.key)),
+            // In Data mode, Kind can be collapsed to hide instances
+            Some(TreeItem::Kind(_, _, k)) => Some(format!("kind:{}", k.key)),
             // Leaf nodes can't be collapsed
-            Some(TreeItem::Kind(_, _, _)) | Some(TreeItem::ArcKind(_, _)) | None => None,
+            Some(TreeItem::ArcKind(_, _)) | Some(TreeItem::Instance(_, _, _, _)) | None => None,
         }
     }
 }
@@ -578,6 +923,8 @@ pub enum TreeItem<'a> {
     // Arcs hierarchy
     ArcFamily(&'a ArcFamilyInfo),
     ArcKind(&'a ArcFamilyInfo, &'a ArcKindInfo),
+    // Data view: instances under Kinds
+    Instance(&'a RealmInfo, &'a LayerInfo, &'a KindInfo, &'a InstanceInfo),
 }
 
 /// Get emoji for realm (v10.6: 2 realms only - global + tenant).
@@ -604,4 +951,225 @@ fn to_kebab_case(s: &str) -> String {
         }
     }
     result
+}
+
+// ============================================================================
+// DATA VIEW: Instance support (v10.6)
+// Reserved for Data View feature - planned for v10.7+
+// ============================================================================
+
+/// An instance of a Kind in the data graph.
+#[allow(dead_code)]
+#[derive(Debug, Clone)]
+pub struct InstanceInfo {
+    pub key: String,
+    pub display_name: String,
+    pub kind_key: String,
+    /// Properties as JSON-like map (key -> value as string).
+    pub properties: BTreeMap<String, String>,
+    /// Outgoing arcs from this instance.
+    pub outgoing_arcs: Vec<InstanceArc>,
+    /// Incoming arcs to this instance.
+    pub incoming_arcs: Vec<InstanceArc>,
+}
+
+/// An actual arc connection from/to an instance.
+#[allow(dead_code)]
+#[derive(Debug, Clone)]
+pub struct InstanceArc {
+    pub arc_type: String,
+    pub target_key: String,
+    pub target_kind: String,
+    /// True if this arc exists, false if it's from schema but not yet created.
+    pub exists: bool,
+}
+
+/// Comparison of schema arcs vs actual arcs for an instance.
+#[allow(dead_code)]
+#[derive(Debug, Clone)]
+pub struct ArcComparison {
+    pub arc_type: String,
+    pub target_kind: String,
+    pub exists: bool,
+    pub target_key: Option<String>, // Only if exists
+}
+
+#[allow(dead_code)]
+impl InstanceInfo {
+    /// Compare schema arcs with actual arcs.
+    /// Returns list of arcs showing which exist and which are missing.
+    pub fn compare_arcs(&self, schema_arcs: &[ArcInfo]) -> Vec<ArcComparison> {
+        let mut comparisons = Vec::new();
+
+        for schema_arc in schema_arcs {
+            if schema_arc.direction == ArcDirection::Outgoing {
+                // Check if this arc type exists in outgoing_arcs
+                let actual = self
+                    .outgoing_arcs
+                    .iter()
+                    .find(|a| a.arc_type == schema_arc.rel_type);
+
+                comparisons.push(ArcComparison {
+                    arc_type: schema_arc.rel_type.clone(),
+                    target_kind: schema_arc.target_kind.clone(),
+                    exists: actual.is_some(),
+                    target_key: actual.map(|a| a.target_key.clone()),
+                });
+            }
+        }
+
+        comparisons
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    // ========================================================================
+    // Helper functions for creating test data
+    // ========================================================================
+
+    fn create_test_kind(key: &str, display_name: &str) -> KindInfo {
+        KindInfo {
+            key: key.to_string(),
+            display_name: display_name.to_string(),
+            description: String::new(),
+            icon: String::new(),
+            trait_name: "invariant".to_string(),
+            instance_count: 0,
+            arcs: Vec::new(),
+            yaml_path: String::new(),
+            properties: Vec::new(),
+            required_properties: Vec::new(),
+            schema_hint: String::new(),
+            context_budget: String::new(),
+            knowledge_tier: None,
+        }
+    }
+
+    fn create_test_layer(key: &str, kinds: Vec<KindInfo>) -> LayerInfo {
+        LayerInfo {
+            key: key.to_string(),
+            display_name: key.to_string(),
+            color: "#ffffff".to_string(),
+            kinds,
+        }
+    }
+
+    fn create_test_realm(key: &str, layers: Vec<LayerInfo>) -> RealmInfo {
+        RealmInfo {
+            key: key.to_string(),
+            display_name: key.to_string(),
+            color: "#ffffff".to_string(),
+            emoji: "📁",
+            layers,
+        }
+    }
+
+    fn create_test_tree() -> TaxonomyTree {
+        let locale_kind = create_test_kind("Locale", "Locale");
+        let page_kind = create_test_kind("Page", "Page");
+        let entity_kind = create_test_kind("Entity", "Entity");
+
+        let locale_knowledge = create_test_layer("locale-knowledge", vec![locale_kind]);
+        let structure = create_test_layer("structure", vec![page_kind]);
+        let semantic = create_test_layer("semantic", vec![entity_kind]);
+
+        let global = create_test_realm("global", vec![locale_knowledge]);
+        let tenant = create_test_realm("tenant", vec![structure, semantic]);
+
+        TaxonomyTree {
+            realms: vec![global, tenant],
+            arc_families: Vec::new(),
+            stats: GraphStats::default(),
+            collapsed: FxHashSet::default(),
+            instances: BTreeMap::new(),
+        }
+    }
+
+    // ========================================================================
+    // Instance data structure tests
+    // ========================================================================
+
+    #[test]
+    fn test_instance_info_creation() {
+        let instance = InstanceInfo {
+            key: "fr-FR".to_string(),
+            display_name: "Français (France)".to_string(),
+            kind_key: "Locale".to_string(),
+            properties: BTreeMap::from([
+                ("language".to_string(), "fr".to_string()),
+                ("region".to_string(), "FR".to_string()),
+            ]),
+            outgoing_arcs: vec![],
+            incoming_arcs: vec![],
+        };
+
+        assert_eq!(instance.key, "fr-FR");
+        assert_eq!(instance.kind_key, "Locale");
+        assert_eq!(instance.properties.get("language"), Some(&"fr".to_string()));
+    }
+
+    #[test]
+    fn test_instance_arc_comparison_exists() {
+        let instance = InstanceInfo {
+            key: "fr-FR".to_string(),
+            display_name: "Français".to_string(),
+            kind_key: "Locale".to_string(),
+            properties: BTreeMap::new(),
+            outgoing_arcs: vec![InstanceArc {
+                arc_type: "HAS_TERMS".to_string(),
+                target_key: "fr-FR-terms".to_string(),
+                target_kind: "TermSet".to_string(),
+                exists: true,
+            }],
+            incoming_arcs: vec![],
+        };
+
+        let schema_arcs = vec![
+            ArcInfo {
+                rel_type: "HAS_TERMS".to_string(),
+                direction: ArcDirection::Outgoing,
+                target_kind: "TermSet".to_string(),
+            },
+            ArcInfo {
+                rel_type: "HAS_CULTURE".to_string(),
+                direction: ArcDirection::Outgoing,
+                target_kind: "CultureSet".to_string(),
+            },
+        ];
+
+        let comparison = instance.compare_arcs(&schema_arcs);
+
+        assert_eq!(comparison.len(), 2);
+
+        // HAS_TERMS should exist
+        let has_terms = comparison.iter().find(|c| c.arc_type == "HAS_TERMS").unwrap();
+        assert!(has_terms.exists);
+        assert_eq!(has_terms.target_key, Some("fr-FR-terms".to_string()));
+
+        // HAS_CULTURE should be missing
+        let has_culture = comparison.iter().find(|c| c.arc_type == "HAS_CULTURE").unwrap();
+        assert!(!has_culture.exists);
+        assert_eq!(has_culture.target_key, None);
+    }
+
+    // ========================================================================
+    // Tree with instances tests (Data view)
+    // ========================================================================
+
+    #[test]
+    fn test_tree_item_count_meta_mode() {
+        let tree = create_test_tree();
+        // In Meta mode: 1 (Kinds) + 1 (global) + 1 (locale-knowledge) + 1 (Locale)
+        //              + 1 (tenant) + 1 (structure) + 1 (Page) + 1 (semantic) + 1 (Entity)
+        //              + 1 (Arcs)
+        // Total: 10
+        assert_eq!(tree.item_count(), 10);
+    }
+
+    // NOTE: Data View tests (item_count_for_mode, item_at_for_mode, set_instances)
+    // were removed as these methods were never implemented.
+    // Data View feature is planned for v10.7+
 }
