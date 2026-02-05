@@ -69,37 +69,37 @@ pub fn hex_to_color(hex: &str) -> Color {
 // REALM COLORS (from taxonomy.yaml node_realms)
 // =============================================================================
 
-/// Realm color definitions (v10.4: 2 realms only).
+/// Realm color definitions (v10.6: 2 realms only - global + tenant).
 pub mod realm {
     use super::*;
 
     pub const GLOBAL_HEX: &str = "#2aa198";
-    pub const PROJECT_HEX: &str = "#6c71c4";
+    pub const TENANT_HEX: &str = "#6c71c4";
 
     // 256-color palette indices
     pub const GLOBAL_256: u8 = 37;
-    pub const PROJECT_256: u8 = 141;
+    pub const TENANT_256: u8 = 141;
 
     // 16-color palette indices
     pub const GLOBAL_16: Color = Color::Cyan;
-    pub const PROJECT_16: Color = Color::Magenta;
+    pub const TENANT_16: Color = Color::Magenta;
 
     /// Get realm color for a given color mode.
     pub fn color(realm: &str, mode: ColorMode) -> Color {
         match mode {
             ColorMode::TrueColor => match realm {
                 "global" => hex_to_color(GLOBAL_HEX),
-                "project" => hex_to_color(PROJECT_HEX),
+                "tenant" => hex_to_color(TENANT_HEX),
                 _ => Color::White,
             },
             ColorMode::Color256 => match realm {
                 "global" => Color::Indexed(GLOBAL_256),
-                "project" => Color::Indexed(PROJECT_256),
+                "tenant" => Color::Indexed(TENANT_256),
                 _ => Color::White,
             },
             ColorMode::Color16 => match realm {
                 "global" => GLOBAL_16,
-                "project" => PROJECT_16,
+                "tenant" => TENANT_16,
                 _ => Color::White,
             },
         }
@@ -469,21 +469,21 @@ mod tests {
     fn test_realm_colors_truecolor() {
         let mode = ColorMode::TrueColor;
         assert_eq!(realm::color("global", mode), Color::Rgb(42, 161, 152));
-        assert_eq!(realm::color("project", mode), Color::Rgb(108, 113, 196));
+        assert_eq!(realm::color("tenant", mode), Color::Rgb(108, 113, 196));
     }
 
     #[test]
     fn test_realm_colors_256() {
         let mode = ColorMode::Color256;
         assert_eq!(realm::color("global", mode), Color::Indexed(37));
-        assert_eq!(realm::color("project", mode), Color::Indexed(141));
+        assert_eq!(realm::color("tenant", mode), Color::Indexed(141));
     }
 
     #[test]
     fn test_realm_colors_16() {
         let mode = ColorMode::Color16;
         assert_eq!(realm::color("global", mode), Color::Cyan);
-        assert_eq!(realm::color("project", mode), Color::Magenta);
+        assert_eq!(realm::color("tenant", mode), Color::Magenta);
     }
 
     #[test]

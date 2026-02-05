@@ -23,7 +23,7 @@ import type { Realm } from '@novanet/core/types';
  *
  * Visual structure:
  * ┌─────────────────────────────┐
- * │         PROJECT             │
+ * │          TENANT             │
  * │  ┌─────┐ ┌─────┐ ┌─────┐   │
  * │  │Node │ │Node │ │Node │   │
  * │  └─────┘ └─────┘ └─────┘   │
@@ -42,7 +42,7 @@ export function applyStackedLayout(
   const nodes: Node[] = [];
   const edges: Edge[] = [];
 
-  const realmOrder: Realm[] = ['project', 'global'];
+  const realmOrder: Realm[] = ['tenant', 'global'];
   let currentY = 0;
 
   for (const realm of realmOrder) {

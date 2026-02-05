@@ -11,7 +11,6 @@ import {
   resolveTypesForTraits,
   type FacetQuery,
 } from '../filterAdapter';
-import { ALL_NODE_TYPES } from '@/config/nodeTypes';
 
 // =============================================================================
 // resolveTypesForRealms
@@ -28,29 +27,34 @@ describe('resolveTypesForRealms', () => {
     expect(types).toContain('Formatting');      // v10 technical tier
     expect(types).toContain('ExpressionSet');  // v10 semantic tier
     expect(types).toContain('SEOKeyword');     // v10.2: SEO moved to global
-    expect(types).toContain('Entity');         // v10.3: Entity-Centric in global
+    // v10.6: Entity/EntityL10n in tenant realm
+    expect(types).not.toContain('Entity');
     expect(types).not.toContain('Project');
   });
 
-  it('returns project types for project realm', () => {
-    const types = resolveTypesForRealms(['project']);
+  it('returns tenant types for tenant realm', () => {
+    const types = resolveTypesForRealms(['tenant']);
+    expect(types).toContain('Organization');     // v10.6: Organization in tenant/config
     expect(types).toContain('Project');
     expect(types).toContain('Page');
-    expect(types).toContain('AudiencePersona');  // v10.3: semantic types remaining in project
-    expect(types).not.toContain('Entity');       // v10.3: Entity moved to global
+    expect(types).toContain('AudiencePersona');  // v10.3: semantic types in tenant
+    expect(types).toContain('Entity');           // v10.6: Entity in tenant/semantic
+    expect(types).toContain('EntityL10n');       // v10.6: EntityL10n in tenant/semantic
     expect(types).not.toContain('Locale');
   });
 
   it('returns union for multiple realms', () => {
-    const types = resolveTypesForRealms(['global', 'project']);
+    const types = resolveTypesForRealms(['global', 'tenant']);
     expect(types).toContain('Locale');
     expect(types).toContain('Project');
     expect(types).toContain('Entity');
   });
 
-  it('returns all types for both realms', () => {
-    const types = resolveTypesForRealms(['global', 'project']);
-    expect(types.length).toBe(ALL_NODE_TYPES.length);
+  it('returns 43 types for global + tenant (all node types)', () => {
+    const types = resolveTypesForRealms(['global', 'tenant']);
+    // v10.6: 2 realms total. global (20) + tenant (23) = 43
+    expect(types.length).toBe(43);
+    expect(types).toContain('Organization'); // v10.6: Organization in tenant realm
   });
 });
 
@@ -170,16 +174,14 @@ describe('buildFacetCypher', () => {
     it('intersects realm + trait', () => {
       const result = buildFacetCypher({
         ...emptyFacets,
-        realms: ['project'],
+        realms: ['tenant'],
         traits: ['localized'],
       });
-      // project + localized = ProjectL10n, PageL10n, BlockL10n
-      // (EntityL10n is global realm, not project)
+      // v10.6: tenant + localized = ProjectL10n, EntityL10n, PageL10n, BlockL10n
       expect(result.query).toContain('n:ProjectL10n');
       expect(result.query).toContain('n:PageL10n');
-      // EntityL10n is global, not project
-      expect(result.query).not.toContain('n:EntityL10n');
-      // Locale is global, not project
+      expect(result.query).toContain('n:EntityL10n'); // v10.6: EntityL10n in tenant
+      // Locale is global, not tenant
       expect(result.query).not.toContain('n:Locale');
       // Project is invariant, not localized
       expect(result.query).not.toMatch(/\bn:Project\b(?!L10n)/);
@@ -188,26 +190,27 @@ describe('buildFacetCypher', () => {
     it('intersects realm + layer', () => {
       const result = buildFacetCypher({
         ...emptyFacets,
-        realms: ['project'],
+        realms: ['tenant'],
         layers: ['semantic'],
       });
-      // project + semantic = AudiencePersona, ChannelSurface
-      // (Entity/EntityL10n are in global realm, v10.3 Entity-Centric)
+      // v10.6: tenant + semantic = AudiencePersona, ChannelSurface, Entity, EntityL10n
       expect(result.query).toContain('n:AudiencePersona');
       expect(result.query).toContain('n:ChannelSurface');
-      expect(result.query).not.toContain('n:Entity');
+      expect(result.query).toContain('n:Entity');     // v10.6: Entity in tenant
+      expect(result.query).toContain('n:EntityL10n'); // v10.6: EntityL10n in tenant
       expect(result.query).not.toContain('n:Page');
     });
 
-    it('returns global semantic types for global + semantic', () => {
+    it('returns empty for global + semantic (no semantic types in global)', () => {
       const result = buildFacetCypher({
         ...emptyFacets,
         realms: ['global'],
         layers: ['semantic'],
       });
-      // global + semantic = Entity, EntityL10n (v10.3 Entity-Centric)
-      expect(result.query).toContain('n:Entity');
-      expect(result.query).toContain('n:EntityL10n');
+      // v10.6: Semantic layer is only in tenant realm. Global has no semantic layer.
+      // Empty intersection falls back to all non-Meta nodes
+      expect(result.query).toContain('NOT n:Meta');
+      expect(result.query).not.toContain('n:Entity');
     });
   });
 

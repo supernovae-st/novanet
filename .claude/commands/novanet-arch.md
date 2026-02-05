@@ -65,7 +65,7 @@ find packages/core/models/node-kinds -name "*.yaml" | xargs -I{} dirname {} | so
 
 From YAML files, extract:
 - **Node names** from `node.name`
-- **Realms** from `node.realm` (global | project)
+- **Realms** from `node.realm` (global | tenant)
 - **Layers** from `node.layer` (config | knowledge | seo | foundation | structure | semantic | instruction | output)
 - **Traits** from `node.trait` (invariant | localized | knowledge | derived | job)
 - **Colors** from taxonomy.yaml `node_realms[].color`, `node_layers[].color`
@@ -95,7 +95,8 @@ Use `$ARGUMENTS` to focus on specific section:
 | `nodes` | Node taxonomy by realm/layer |
 | `arcs` | Arc taxonomy by family/scope |
 | `seo` | SEO layer nodes and arcs |
-| `knowledge` | Knowledge layer (Entity, Sets, Atoms) |
+| `locale-knowledge` | Locale-knowledge layer (Sets, Atoms) |
+| `tenant` | Tenant realm (Organization + Projects + business content) |
 | `pipeline` | YAML → TypeScript → Neo4j sync flow |
 | `visual` | Visual encoding (colors, borders, strokes) |
 
@@ -141,7 +142,7 @@ Use this structure for consistency:
 ```yaml
 node:
   name: SEOKeyword      # ← Node name
-  realm: global         # ← WHERE (global | project)
+  realm: global         # ← WHERE (global | tenant)
   layer: seo            # ← WHAT layer
   trait: knowledge      # ← HOW (invariant | localized | knowledge | derived | job)
 ```
@@ -188,10 +189,10 @@ Show: SEOKeyword, SEOKeywordMetrics, SEOMiningRun and their relationships.
 ## Section: knowledge
 
 **Required reads:**
-- `packages/core/models/node-kinds/global/knowledge/*.yaml`
-- `packages/core/models/node-kinds/global/knowledge/atoms/*.yaml`
+- `packages/core/models/node-kinds/global/locale-knowledge/*.yaml`
+- `packages/core/models/node-kinds/tenant/semantic/*.yaml` (Entity, EntityL10n)
 
-Show: Entity, EntityL10n, all Sets (TermSet, etc.), all Atoms (Term, etc.), utility nodes (Style, Formatting, etc.).
+Show: All Sets (TermSet, etc.), all Atoms (Term, etc.), Entity/EntityL10n from tenant realm.
 
 ---
 
@@ -202,7 +203,8 @@ Show: Entity, EntityL10n, all Sets (TermSet, etc.), all Atoms (Term, etc.), util
 /novanet-arch nodes        # Node taxonomy from node-kinds/**
 /novanet-arch arcs         # Arc taxonomy from arc-kinds/**
 /novanet-arch seo          # SEO layer from global/seo/
-/novanet-arch knowledge    # Knowledge layer from global/knowledge/
+/novanet-arch locale-knowledge  # Locale-knowledge layer from global/locale-knowledge/
+/novanet-arch tenant       # Tenant realm (v10.6)
 ```
 
 ---

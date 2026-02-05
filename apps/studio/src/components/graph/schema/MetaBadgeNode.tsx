@@ -18,7 +18,7 @@ import { memo, useMemo } from 'react';
 import { type NodeProps, type Node, Handle, Position } from '@xyflow/react';
 import { cn } from '@/lib/utils';
 import { useNodeInteractions } from '@/hooks';
-import { Globe, Package, Target } from 'lucide-react';
+import { Globe, Package, Building2 } from 'lucide-react';
 import { LayerIcon } from '@/components/ui/CategoryIcon';
 import type { Realm, Layer } from '@novanet/core/types';
 
@@ -51,11 +51,10 @@ export type MetaBadgeNodeType = Node<MetaBadgeNodeData, 'metaBadge'>;
 // Realm Icon Map
 // =============================================================================
 
-const REALM_ICONS = {
-  project: Package,
+const REALM_ICONS: Record<Realm, typeof Globe> = {
   global: Globe,
-  shared: Target,
-} as const;
+  tenant: Building2,
+};
 
 // =============================================================================
 // Realm Node - Premium Neon Design
@@ -77,7 +76,7 @@ const RealmNode = memo(function RealmNode({
     onMouseUp: () => void;
   };
 }) {
-  const { label, color, typeCount = 0, realmKey = 'project' } = data;
+  const { label, color, typeCount = 0, realmKey = 'tenant' } = data;
   const RealmIconComponent = REALM_ICONS[realmKey as Realm] || Package;
 
   return (

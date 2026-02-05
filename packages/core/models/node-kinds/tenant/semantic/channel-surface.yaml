@@ -1,0 +1,199 @@
+# ChannelSurface — Content distribution channel (v9.7)
+# Path: packages/core/models/nodes/project/semantic/channel-surface.yaml
+
+node:
+  name: ChannelSurface
+  realm: tenant
+  layer: semantic
+  trait: invariant
+  icon: "📡"
+  description: |
+    Distribution channel or surface where content is published. Represents a specific
+    platform, medium, or touchpoint with its own constraints and best practices.
+    Used to adapt content format, length, and style for each channel.
+
+    USE: When defining where content will be distributed, enabling channel-optimized generation.
+    TRIGGERS: "channel", "platform", "distribution", "surface", "touchpoint".
+    NOT: For content itself (use Page/Block), for analytics (use external tools).
+
+  standard_properties:
+    key:
+      type: string
+      required: true
+      description: "Unique identifier"
+      pattern: "^channel-[a-z0-9-]+$"
+      example: "channel-website-landing"
+
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable channel name"
+      example: "Website Landing Page"
+
+    description:
+      type: string
+      required: true
+      description: "Channel description and purpose"
+
+    llm_context:
+      type: string
+      required: true
+      description: "LLM prompt context for this channel"
+      example: "Channel: website landing page. Optimize for conversion, clear CTAs, scannable content."
+
+    created_at:
+      type: datetime
+      required: true
+      description: "Creation timestamp"
+
+    updated_at:
+      type: datetime
+      required: true
+      description: "Last update timestamp"
+
+  properties:
+    channel_type:
+      type: string
+      required: true
+      description: "Category of channel"
+      enum:
+        - website
+        - email
+        - social
+        - search
+        - app
+        - print
+        - video
+        - podcast
+        - chat
+      example: "website"
+
+    platform:
+      type: string
+      required: false
+      description: "Specific platform if applicable"
+      example: "google_ads"
+
+    content_format:
+      type: string
+      required: true
+      description: "Primary content format"
+      enum:
+        - long_form
+        - short_form
+        - visual
+        - audio
+        - interactive
+        - structured
+      example: "long_form"
+
+    max_length:
+      type: int
+      required: false
+      description: "Maximum content length (characters or words depending on channel)"
+      example: 5000
+
+    tone_requirements:
+      type: "string[]"
+      required: false
+      description: "Tone characteristics required for this channel"
+      example: ["professional", "persuasive", "scannable"]
+
+    seo_relevant:
+      type: boolean
+      required: true
+      description: "Whether SEO optimization applies to this channel"
+      example: true
+
+    supports_rich_media:
+      type: boolean
+      required: true
+      description: "Whether channel supports images, videos, etc."
+      example: true
+
+    conversion_focused:
+      type: boolean
+      required: true
+      description: "Whether primary goal is conversion vs awareness"
+      example: true
+
+    mobile_primary:
+      type: boolean
+      required: false
+      description: "Whether mobile is the primary consumption device"
+      example: false
+
+    update_frequency:
+      type: string
+      required: false
+      description: "How often content is typically updated"
+      enum:
+        - realtime
+        - daily
+        - weekly
+        - monthly
+        - quarterly
+        - static
+      example: "monthly"
+
+    priority:
+      type: int
+      required: true
+      description: "Priority for content creation (1=highest)"
+      example: 1
+
+  neo4j:
+    indexes:
+      - name: channelsurface_type
+        property: channel_type
+      - name: channelsurface_format
+        property: content_format
+      - name: channelsurface_priority
+        property: priority
+
+  relations:
+    incoming:
+      - type: FOR_CHANNEL
+        from: Page
+        description: "Pages optimized for this channel"
+
+    outgoing: []
+
+  example:
+    data: |
+      {
+        "key": "channel-website-landing",
+        "display_name": "Website Landing Page",
+        "description": "Primary conversion-focused landing pages on the main website",
+        "llm_context": "Channel: website landing page. Optimize for conversion with clear value proposition, social proof, and prominent CTAs. Content should be scannable with strong headlines.",
+        "channel_type": "website",
+        "platform": null,
+        "content_format": "long_form",
+        "max_length": 5000,
+        "tone_requirements": ["professional", "persuasive", "benefit-focused"],
+        "seo_relevant": true,
+        "supports_rich_media": true,
+        "conversion_focused": true,
+        "mobile_primary": false,
+        "update_frequency": "monthly",
+        "priority": 1
+      }
+    cypher: |
+      CREATE (c:ChannelSurface {
+        key: 'channel-website-landing',
+        display_name: 'Website Landing Page',
+        description: 'Primary conversion-focused landing pages on the main website',
+        llm_context: 'Channel: website landing page. Optimize for conversion with clear value proposition, social proof, and prominent CTAs.',
+        channel_type: 'website',
+        content_format: 'long_form',
+        max_length: 5000,
+        tone_requirements: ['professional', 'persuasive', 'benefit-focused'],
+        seo_relevant: true,
+        supports_rich_media: true,
+        conversion_focused: true,
+        mobile_primary: false,
+        update_frequency: 'monthly',
+        priority: 1,
+        created_at: datetime(),
+        updated_at: datetime()
+      })

@@ -1,0 +1,12 @@
+# packages/core/models/arc-kinds/ownership/belongs-to-org.yaml
+# ArcKind: BELONGS_TO_ORG — Project belongs to an organization (v10.5)
+
+arc:
+  name: BELONGS_TO_ORG
+  family: ownership
+  scope: cross_realm
+  source: Project
+  target: Organization
+  cardinality: many_to_one
+  llm_context: Project belongs to organization. Use to find org-level context for a project.
+  cypher_pattern: (Project)-[:BELONGS_TO_ORG]->(Organization)

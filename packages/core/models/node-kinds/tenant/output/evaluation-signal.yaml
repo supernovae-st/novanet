@@ -1,0 +1,120 @@
+node:
+  name: EvaluationSignal
+  realm: tenant
+  layer: output
+  trait: derived
+  icon: "📊"
+  description: "Quality signal from content evaluation. Can be LLM-generated, human-provided, or metric-based."
+  llm_context: "USE: when evaluating content quality. TRIGGERS: quality, score, evaluation, signal. NOT: content, generation."
+
+  standard_properties:
+    key:
+      type: string
+      required: true
+      description: "Signal identifier"
+      pattern: "^evalsignal-[a-z0-9-]+-[0-9]+$"
+      example: "evalsignal-page-pricing-fr-1705313400"
+    display_name:
+      type: string
+      required: true
+      description: "Signal summary"
+      example: "Page Pricing FR Quality Check #42"
+    description:
+      type: string
+      required: false
+    llm_context:
+      type: string
+      required: false
+    created_at:
+      type: datetime
+      required: true
+    updated_at:
+      type: datetime
+      required: true
+
+  properties:
+    signal_type:
+      type: string
+      required: true
+      enum:
+        - "quality_score"
+        - "readability"
+        - "conversion_potential"
+        - "seo_compliance"
+        - "brand_alignment"
+        - "cultural_fit"
+        - "grammar_accuracy"
+        - "tone_consistency"
+      description: "Type of evaluation signal"
+
+    evaluator_type:
+      type: string
+      required: true
+      enum: ["llm", "human", "metric", "hybrid"]
+      description: "Source of evaluation"
+
+    evaluator_id:
+      type: string
+      required: false
+      description: "Identifier of specific evaluator (model name or user id)"
+
+    signal_value:
+      type: float
+      required: true
+      description: "Numeric signal value (0.0-1.0)"
+      example: 0.85
+
+    confidence:
+      type: float
+      required: true
+      description: "Confidence in this signal (0.0-1.0)"
+      example: 0.92
+
+    threshold_pass:
+      type: boolean
+      required: true
+      description: "Whether signal meets quality threshold"
+
+    details:
+      type: json
+      required: false
+      description: "Structured evaluation details and reasoning"
+
+    evaluated_at:
+      type: datetime
+      required: true
+    evaluator_version:
+      type: string
+      required: true
+      description: "Version of evaluator used"
+
+    triggers_regeneration:
+      type: boolean
+      required: true
+      description: "Whether failing this signal should trigger regeneration"
+
+    regeneration_priority:
+      type: string
+      required: false
+      enum: ["low", "medium", "high", "critical"]
+      description: "Priority for regeneration if triggered"
+
+  neo4j:
+    indexes:
+      - "CREATE INDEX evalsignal_type IF NOT EXISTS FOR (es:EvaluationSignal) ON (es.signal_type)"
+      - "CREATE INDEX evalsignal_value IF NOT EXISTS FOR (es:EvaluationSignal) ON (es.signal_value)"
+      - "CREATE INDEX evalsignal_pass IF NOT EXISTS FOR (es:EvaluationSignal) ON (es.threshold_pass)"
+
+  relations:
+    incoming:
+      - type: HAS_EVALUATION
+        from:
+          - PageL10n
+          - BlockL10n
+          - OutputArtifact
+        description: "Content being evaluated"
+
+    outgoing:
+      - type: EVALUATED_BY_JOB
+        to: GenerationJob
+        description: "Job that produced the evaluated content"

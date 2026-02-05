@@ -5,7 +5,7 @@
  * `novanet filter build` Rust binary (meta-graph aware), then executes
  * against Neo4j. Same response format as /api/graph.
  *
- * @example GET /api/graph/navigation?realms=global,project&traits=localized&layers=knowledge
+ * @example GET /api/graph/navigation?realms=global,tenant&traits=localized&layers=knowledge
  */
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -14,9 +14,9 @@ import { handleApiError } from '@/lib/apiErrorHandler';
 import { buildCypherViaRust, type FacetFilter } from '@/lib/novanetBridge';
 import type { Realm, Layer, Trait } from '@novanet/core/types';
 
-const VALID_REALMS: Realm[] = ['global', 'project'];
+const VALID_REALMS: Realm[] = ['global', 'tenant'];
 const VALID_LAYERS: Layer[] = [
-  'config', 'knowledge', 'foundation', 'structure', 'semantic',
+  'config', 'locale-knowledge', 'foundation', 'structure', 'semantic',
   'instruction', 'output', 'seo',
 ];
 const VALID_TRAITS: Trait[] = ['invariant', 'localized', 'knowledge', 'derived', 'job'];

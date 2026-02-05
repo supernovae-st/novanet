@@ -1,0 +1,117 @@
+# models/node-kinds/project/semantic/entity-l10n.yaml
+# EntityL10n - Localized content for Project Entity nodes (v10.5)
+#
+# GRAPH POSITION:
+#   Entity --[:HAS_L10N]--> EntityL10n --[:FOR_LOCALE]--> Locale
+
+node:
+  name: EntityL10n
+  realm: tenant
+  layer: semantic
+  trait: localized
+  icon: "🟢"
+  description: "Localized content for a Project Entity in a specific locale"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # STANDARD PROPERTIES
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  standard_properties:
+    display_name:
+      type: string
+      required: true
+      description: "Localized display name"
+
+    description:
+      type: string
+      required: true
+      description: "Localized short description"
+
+    llm_context:
+      type: string
+      required: true
+      description: "Format: USE: [when]. TRIGGERS: [locale keywords]. NOT: [disambiguation]."
+
+    created_at:
+      type: datetime
+      required: true
+
+    updated_at:
+      type: datetime
+      required: true
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # VECTOR EMBEDDING
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  embedding_properties:
+    embedding:
+      type: vector
+      dimensions: 1536
+      required: false
+
+    embedding_source:
+      type: string
+      required: false
+
+    embedding_updated_at:
+      type: datetime
+      required: false
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # ENTITYL10N-SPECIFIC PROPERTIES
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  properties:
+    definition:
+      type: string
+      required: false
+      description: "What it is - localized definition"
+
+    purpose:
+      type: string
+      required: false
+      description: "Why it exists - localized purpose"
+
+    benefits:
+      type: string[]
+      required: false
+      description: "Value propositions in target locale"
+
+    cultural_notes:
+      type: string
+      required: false
+      description: "Locale-specific cultural considerations"
+
+    version:
+      type: int
+      required: true
+      description: "Content version for staleness detection"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # RELATIONS
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  relations:
+    FOR_LOCALE:
+      to: Locale
+      cardinality: "N:1"
+      description: "Links to the locale this content is for"
+
+  incoming_relations:
+    HAS_L10N:
+      from: Entity
+      cardinality: "1:N"
+      description: "Parent entity that owns this localization"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # EXAMPLE
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  example:
+    data:
+      display_name: "QR Code Dynamique"
+      description: "Codes QR modifiables apres creation"
+      llm_context: "USE: French content for dynamic QR feature. TRIGGERS: fr-FR. NOT: Quebec."
+      definition: "Un QR code dynamique permet de modifier la destination apres impression."
+      version: 1

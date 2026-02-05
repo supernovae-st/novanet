@@ -391,15 +391,15 @@ arc_families:
 
         let doc = load_taxonomy(root).expect("should load taxonomy.yaml");
 
-        assert_eq!(doc.version, "10.4.0");
-        assert_eq!(doc.node_realms.len(), 2); // v10.2: shared realm removed
+        assert_eq!(doc.version, "10.6.0");
+        assert_eq!(doc.node_realms.len(), 2); // v10.6: 2 realms (global, tenant)
         assert_eq!(doc.node_traits.len(), 5);
         assert_eq!(doc.arc_families.len(), 5);
         assert_eq!(doc.arc_scopes.len(), 2);
         assert_eq!(doc.arc_cardinalities.len(), 4);
 
         let total_layers: usize = doc.node_realms.iter().map(|r| r.layers.len()).sum();
-        assert_eq!(total_layers, 8); // geo removed in v10.1
+        assert_eq!(total_layers, 9); // v10.6: 3 global + 6 tenant layers
 
         // Check border styles
         let invariant = doc
@@ -410,10 +410,12 @@ arc_families:
         assert_eq!(invariant.border_style, Some("solid".to_string()));
         assert_eq!(invariant.unicode_border, Some("─".to_string()));
 
-        // Check terminal palette (uses semantic keys like global, project, etc.)
+        // Check terminal palette (uses semantic keys like global, tenant, etc.)
         let terminal = doc.terminal.as_ref().expect("should have terminal palette");
         assert!(terminal.palette_256.contains_key("global"));
+        assert!(terminal.palette_256.contains_key("tenant"));
         assert!(terminal.palette_16.contains_key("global"));
+        assert!(terminal.palette_16.contains_key("tenant"));
 
         // v9.9: Check kind_retrieval_defaults
         let defaults = doc
@@ -445,7 +447,7 @@ arc_families:
     #[test]
     fn parse_kind_retrieval_defaults() {
         let yaml = r##"
-version: "10.4.0"
+version: "10.5.0"
 node_realms:
   - key: test
     display_name: Test
@@ -487,7 +489,7 @@ arc_families:
     llm_context: "Semantic."
 "##;
         let doc: TaxonomyDoc = serde_yaml::from_str(yaml).unwrap();
-        assert_eq!(doc.version, "10.4.0");
+        assert_eq!(doc.version, "10.5.0");
 
         // Check kind_retrieval_defaults
         let defaults = doc.kind_retrieval_defaults.unwrap();

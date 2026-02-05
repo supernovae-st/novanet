@@ -7,7 +7,7 @@ This file provides guidance to Claude Code when working in the `tools/novanet/` 
 `novanet` is a unified Rust CLI + TUI binary for managing the NovaNet context graph.
 It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 
-**Version**: v10.5.0 (3-Realm Architecture)
+**Version**: v10.6.0 (2-Realm Architecture)
 
 ## Current Status
 
@@ -43,7 +43,7 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 - `bacon` — Live reload dev experience
 
 **Performance optimizations:**
-- `rayon` — Parallel YAML loading (~4x speedup for 42 nodes)
+- `rayon` — Parallel YAML loading (~4x speedup for node types)
 - `FxHashSet` — 30% faster string key lookups (TUI collapsed state)
 - `SmallVec` — Stack-allocated vectors for properties/labels (avoid heap)
 
@@ -105,7 +105,7 @@ cargo build --no-default-features                 # CLI-only (no TUI deps)
 cargo run -- meta                                 # Mode 1: Meta-graph only
 cargo run -- data                                 # Mode 2: Data nodes only
 cargo run -- overlay                              # Mode 3: Data + Meta overlay
-cargo run -- query --realm=project --format=json  # Mode 4: Faceted query
+cargo run -- query --realm=tenant --format=json   # Mode 4: Faceted query
 
 # Write operations (Neo4j)
 cargo run -- node create --kind=Page --key=my-page --props='{"display_name":"My Page"}'
@@ -209,7 +209,7 @@ src/
 - **YAML-first architecture**: Each Kind YAML has explicit `realm:` and `layer:` fields (source of truth)
   - Path validation: file must be at `models/node-kinds/{realm}/{layer}/{name}.yaml`
   - Generators read realm/layer from YAML content, validate against path
-  - v10.5: 3 realms (global, organization, project), 10 layers total
+  - v10.6: 2 realms (global, tenant), 9 layers total
 
 ## TUI Keybindings
 
@@ -231,7 +231,7 @@ This binary reads YAML from `packages/core/models/` (node-kinds, arc-kinds, taxo
 and writes to `packages/db/seed/` (Cypher), `packages/core/src/` (TypeScript), and
 `packages/core/models/docs/` (Mermaid). It does NOT depend on any npm packages at build time.
 
-**v10.5 visual encoding**: The `taxonomy.yaml` file is the source of truth for:
+**v10.6 visual encoding**: The `taxonomy.yaml` file is the source of truth for:
 - Colors (realms, layers, traits, arc families)
 - Border styles (traits: solid/dashed/dotted/double/none)
 - Stroke styles (arc families: solid/dashed)

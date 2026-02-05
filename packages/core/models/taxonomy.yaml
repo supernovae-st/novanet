@@ -1,14 +1,21 @@
 # packages/core/models/taxonomy.yaml
 # Source of truth for NovaNet taxonomy structure
-# v10.4.0 — Entity-Centric Architecture, Unified Nomenclature
+# v10.6.0 — 2-Realm Architecture (GLOBAL / TENANT)
 #
 # This file defines:
-# - 2 NodeRealms (GLOBAL, PROJECT) with nested NodeLayers
+# - 2 NodeRealms (GLOBAL, TENANT) with nested NodeLayers
 # - 5 NodeTraits (locale behavior) with visual encoding
 # - 5 ArcFamilies (arc classification) with visual encoding
 # - 2 ArcScopes (intra_realm / cross_realm)
-# - 3 ArcCardinalities (one_to_one / one_to_many / many_to_many)
+# - 4 ArcCardinalities (zero_to_one / one_to_one / one_to_many / many_to_many)
 # - Terminal palette for TUI graceful degradation
+#
+# v10.6 Changes:
+# - Simplified from 3 realms to 2 realms: GLOBAL + TENANT
+# - TENANT = merged organization + project (same isolation boundary)
+# - Entity lives at Organization level, referenced by Page/Block via USES_ENTITY
+# - Organization → HAS_ENTITY → Entity (direct ownership)
+# - Multi-tenant isolation at TENANT boundary (Tenant A cannot see Tenant B)
 #
 # Generated artifacts:
 # - packages/db/seed/00.5-taxonomy.cypher (Realm, Layer, Trait, ArcFamily + hierarchy)
@@ -17,12 +24,14 @@
 # All meta-nodes receive double-label :Meta (e.g., :Meta:Realm)
 # Query all meta-nodes: MATCH (n:Meta) RETURN n
 
-version: "10.4.0"
+version: "10.6.0"
 
 # =============================================================================
 # NODE REALMS (2) — WHERE does the node live?
 # =============================================================================
 # Each realm contains layers (functional classification)
+# Traversal: TENANT can read GLOBAL (one-way)
+# Isolation: Tenant A cannot see Tenant B (multi-tenant boundary)
 
 node_realms:
   - key: global
@@ -30,10 +39,9 @@ node_realms:
     emoji: "🌍"
     color: "#2aa198"
     llm_context: |
-      Shared across ALL projects. Locale-specific knowledge that applies
-      universally: cultural norms, linguistic patterns, voice guidelines,
-      idiomatic expressions. These nodes are READ-ONLY at project level.
-      Changes here affect all projects using that locale.
+      Shared across ALL tenants. Universal locale knowledge that applies
+      everywhere: cultural norms, linguistic patterns, formatting conventions.
+      These nodes are READ-ONLY. No Entity here - Entity lives in TENANT realm.
     layers:
       - key: config
         display_name: Configuration
@@ -41,18 +49,18 @@ node_realms:
         color: "#64748b"
         llm_context: |
           Core configuration nodes. Locale definitions with their properties
-          (language code, region, writing direction). Entry point for all
-          locale-specific knowledge traversal.
+          (language code, region, writing direction). Also includes locale
+          utility nodes: Formatting, Style, Slugification, Adaptation rules.
 
-      - key: knowledge
+      - key: locale-knowledge
         display_name: Locale Knowledge
         emoji: "📚"
         color: "#8b5cf6"
         llm_context: |
           Deep locale-specific knowledge for native content generation.
-          Cultural norms, linguistic patterns, voice guidelines, idiomatic
-          expressions, formatting conventions. This is what makes generated
-          content feel NATIVE rather than translated.
+          Knowledge containers (TermSet, ExpressionSet, etc.) and atoms
+          (Term, Expression, Pattern, etc.). Cultural and linguistic
+          expertise that makes content feel NATIVE rather than translated.
 
       - key: seo
         display_name: SEO Intelligence
@@ -62,26 +70,46 @@ node_realms:
           Search engine optimization data. Keywords with their localized
           forms, search volume metrics, and mining run history. Used to
           inject relevant keywords into generated content for organic
-          search visibility. v10.2: Moved from SHARED to GLOBAL realm.
+          search visibility.
 
-  - key: project
-    display_name: Project
-    emoji: "📦"
+  - key: tenant
+    display_name: Tenant
+    emoji: "🏢"
     color: "#6c71c4"
     llm_context: |
-      Business-specific nodes for a single project. Contains brand identity,
-      page structure, semantic concepts, generation prompts, and localized
-      outputs. These nodes define WHAT content to generate and HOW to
-      structure it for this specific product/service.
+      Multi-tenant isolated realm. Contains Organization, Projects, Entities,
+      Pages, Blocks, and all generated outputs. Tenant A cannot see Tenant B.
+      Organization owns Entity directly (HAS_ENTITY). Page/Block reference
+      Entity via USES_ENTITY (N:M). AI context assembly follows arcs from
+      starting point via spreading activation.
     layers:
+      - key: config
+        display_name: Tenant Configuration
+        emoji: "⚙️"
+        color: "#64748b"
+        llm_context: |
+          Organization root node. Entry point for tenant-level traversal.
+          Links to Entity (HAS_ENTITY), company project (HAS_COMPANY_PROJECT),
+          and product projects (HAS_PROJECT).
+
+      - key: semantic
+        display_name: Semantic Layer
+        emoji: "💡"
+        color: "#f97316"
+        llm_context: |
+          Invariant entities (Entity) and their localizations (EntityL10n).
+          Entity lives at Organization level but can be referenced by 0-N
+          projects via USES_ENTITY. Entities link via SEMANTIC_LINK for
+          spreading activation during generation.
+
       - key: foundation
         display_name: Foundation
         emoji: "🏛️"
         color: "#3b82f6"
         llm_context: |
-          Core project identity. Brand voice, visual identity, value
-          proposition. These nodes anchor ALL content generation for the
-          project - every generated block must align with foundation.
+          Project identity. Project, Brand, ProjectL10n. Each Organization
+          has 1 company project (branding) + N product projects. Core
+          identity that anchors ALL content generation for each project.
 
       - key: structure
         display_name: Structure
@@ -91,16 +119,6 @@ node_realms:
           Information architecture. Pages, blocks, and their types. Defines
           the SKELETON of the website - what pages exist, what blocks compose
           each page, and the rules for each block type.
-
-      - key: semantic
-        display_name: Semantic Layer
-        emoji: "💡"
-        color: "#f97316"
-        llm_context: |
-          Meaning and entities. Invariant ideas (Entity) that get localized
-          per locale (EntityL10n). The WHAT of content - pricing tiers,
-          features, benefits, use cases. Entities link via SEMANTIC_LINK
-          for spreading activation during generation.
 
       - key: instruction
         display_name: Instructions
@@ -316,18 +334,18 @@ arc_cardinalities:
 
 terminal:
   palette_256:
-    # Realms (v10.2: 2 realms only)
-    global: 37      # cyan
-    project: 141    # purple
+    # Realms (v10.6: 2 realms)
+    global: 37       # cyan
+    tenant: 141      # purple
     # Layers (matching 256-color approximations)
-    config: 244     # gray
-    knowledge: 141  # purple
-    foundation: 33  # blue
-    structure: 45   # cyan
-    semantic: 208   # orange
-    instruction: 178 # yellow
-    output: 41      # green
-    seo: 205        # pink
+    config: 244             # gray
+    locale_knowledge: 141   # purple
+    seo: 205                # pink
+    semantic: 208           # orange
+    foundation: 33          # blue
+    structure: 45           # cyan
+    instruction: 178        # yellow
+    output: 41              # green
     # Traits
     invariant: 33   # blue
     localized: 41   # green
@@ -342,18 +360,18 @@ terminal:
     mining_arc: 205     # pink
 
   palette_16:
-    # Realms (v10.2: 2 realms only)
-    global: 6       # cyan
-    project: 5      # magenta
+    # Realms (v10.6: 2 realms)
+    global: 6        # cyan
+    tenant: 5        # magenta
     # Layers
-    config: 8       # bright black
-    knowledge: 5    # magenta
-    foundation: 4   # blue
-    structure: 6    # cyan
-    semantic: 3     # yellow
-    instruction: 11 # bright yellow
-    output: 2       # green
-    seo: 13         # bright magenta
+    config: 8              # bright black
+    locale_knowledge: 5    # magenta
+    seo: 13                # bright magenta
+    semantic: 3            # yellow
+    foundation: 4          # blue
+    structure: 6           # cyan
+    instruction: 11        # bright yellow
+    output: 2              # green
     # Traits
     invariant: 4    # blue
     localized: 2    # green

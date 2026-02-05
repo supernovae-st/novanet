@@ -1,0 +1,143 @@
+# packages/core/models/node-kinds/global/knowledge/formatting.yaml
+# Formatting — Technical formatting rules for a locale (dates, numbers, currency, phone, address, units)
+#
+# v10.1: knowledge_tier removed (node type is sufficient for LLM routing)
+# Stability: High - changes rarely
+
+node:
+  name: Formatting
+  realm: global
+  layer: config
+  trait: knowledge
+  icon: "🔢"
+  description: "Technical formatting rules: dates, numbers, currency, phone, address, units"
+
+  standard_properties:
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable name"
+      example: "French (France) Formatting"
+
+    description:
+      type: string
+      required: true
+      description: "Short description"
+      example: "Date, number, currency formatting for fr-FR"
+
+    llm_context:
+      type: string
+      required: true
+      description: "LLM generation hints"
+      example: "USE: for numeric/date formatting. TRIGGERS: dates, prices, numbers. NOT: content style."
+
+    created_at:
+      type: datetime
+      required: true
+      description: "Creation timestamp"
+
+    updated_at:
+      type: datetime
+      required: true
+      description: "Last update timestamp"
+
+  properties:
+    # Date formatting
+    date_format:
+      type: string
+      required: true
+      description: "Primary date format"
+      example: "DD/MM/YYYY"
+
+    date_formats:
+      type: json
+      required: false
+      description: "All date formats by context"
+      example:
+        short: "DD/MM"
+        medium: "DD/MM/YYYY"
+        long: "D MMMM YYYY"
+        full: "dddd D MMMM YYYY"
+
+    # Number formatting
+    decimal_separator:
+      type: string
+      required: true
+      description: "Decimal separator"
+      example: ","
+
+    thousands_separator:
+      type: string
+      required: true
+      description: "Thousands separator"
+      example: " "
+
+    # Currency
+    currency_code:
+      type: string
+      required: true
+      description: "ISO 4217 currency code"
+      example: "EUR"
+
+    currency_symbol:
+      type: string
+      required: true
+      description: "Currency symbol"
+      example: "€"
+
+    currency_position:
+      type: string
+      required: true
+      enum: [before, after]
+      description: "Currency symbol position"
+      example: "after"
+
+    currency_format:
+      type: string
+      required: false
+      description: "Full currency format pattern"
+      example: "{amount} €"
+
+    # Phone
+    phone_format:
+      type: string
+      required: false
+      description: "Phone number format"
+      example: "XX XX XX XX XX"
+
+    country_code:
+      type: string
+      required: false
+      description: "International dialing code"
+      example: "+33"
+
+    # Address
+    address_format:
+      type: json
+      required: false
+      description: "Address line order and format"
+      example:
+        order: ["street", "postal_city", "country"]
+        postal_city: "{postal} {city}"
+
+    # Units
+    measurement_system:
+      type: string
+      required: true
+      enum: [metric, imperial, mixed]
+      description: "Default measurement system"
+      example: "metric"
+
+    temperature_unit:
+      type: string
+      required: false
+      enum: [celsius, fahrenheit]
+      description: "Temperature display unit"
+      example: "celsius"
+
+  relations:
+    incoming:
+      - type: HAS_FORMATTING
+        from: Locale
+        cardinality: "1:1"
+        description: "Locale has exactly one formatting config"

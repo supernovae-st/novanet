@@ -7,7 +7,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Neo4j](https://img.shields.io/badge/Neo4j-5.26-018bff?style=flat-square&logo=neo4j&logoColor=white)](https://neo4j.com/)
 [![Zod](https://img.shields.io/badge/Zod-3.24-8b5cf6?style=flat-square)](https://zod.dev/)
-[![Version](https://img.shields.io/badge/v10.5.0-06b6d4?style=flat-square)]()
+[![Version](https://img.shields.io/badge/v10.6.0-06b6d4?style=flat-square)]()
 
 ---
 
@@ -21,7 +21,7 @@
 
 NovaNet Core provides the foundational layer for the NovaNet knowledge graph system:
 
-- **YAML Schema Definitions** — 45 node types across 3 Realms and 10 Layers
+- **YAML Schema Definitions** — Node types across 2 Realms and 9 Layers
 - **TypeScript Types** — Full type safety for Neo4j operations
 - **NovaNetFilter** — Fluent API for composable graph queries
 - **Zod Schemas** — Runtime validation for locale knowledge
@@ -61,14 +61,13 @@ pnpm --filter=@novanet/core validate
 ```
 core/
 ├── models/                    # YAML schema definitions (source of truth)
-│   ├── _index.yaml            # Graph structure overview (45 nodes, 64 arcs)
-│   ├── taxonomy.yaml          # v10.5: Realm/Layer/Trait/ArcFamily/ArcScope
+│   ├── _index.yaml            # Graph structure overview
+│   ├── taxonomy.yaml          # v10.6: 2 Realms (global/tenant), 9 Layers
 │   ├── relations.yaml         # Legacy format (parser compatibility)
-│   ├── node-kinds/            # One file per node type (45 files)
-│   │   ├── global/            # Realm: global (19 nodes)
-│   │   ├── organization/      # Realm: organization (NEW in v10.5)
-│   │   └── project/           # Realm: project (23 nodes)
-│   ├── arc-kinds/             # One file per arc type (64 files)
+│   ├── node-kinds/            # One file per node type
+│   │   ├── global/            # Realm: global (config, locale-knowledge, seo)
+│   │   └── tenant/            # Realm: tenant (6 layers)
+│   ├── arc-kinds/             # One file per arc type (63 files)
 │   └── views/                 # Predefined view definitions
 ├── src/
 │   ├── types/                 # TypeScript definitions
@@ -79,13 +78,12 @@ core/
 
 ---
 
-## Node Types (v10.5.0)
+## Node Types (v10.6.0)
 
-| Realm | Nodes | Layers |
-|-------|-------|--------|
-| **Global** | 19 | Configuration, Locale Knowledge, SEO |
-| **Organization** | NEW | Config, Semantic (Entity at org level) |
-| **Project** | 23 | Foundation, Structure, Semantic, Instructions, Output |
+| Realm | Layers | Description |
+|-------|--------|-------------|
+| **Global** | config, locale-knowledge, seo | Universal locale knowledge (READ-ONLY) |
+| **Tenant** | config, foundation, structure, semantic, instruction, output | Business-specific content |
 
 ---
 

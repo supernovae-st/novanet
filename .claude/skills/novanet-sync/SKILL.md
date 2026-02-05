@@ -11,27 +11,25 @@ argument-hint: [validate|generate|status]
 
 Synchronize generated artifacts with YAML source of truth.
 
-## Source of Truth
+## Source of Truth (v10.6)
 
 ```
 packages/core/models/
-├── node-kinds/                   ← 45 YAML files (one per NodeKind)
-│   ├── global/                   ← Realm: global (19 nodes)
+├── node-kinds/                   ← 46 YAML files (one per NodeKind)
+│   ├── global/                   ← Realm: global (19 nodes, READ-ONLY)
 │   │   ├── config/               ←   Layer: config (Locale + utilities)
-│   │   ├── locale-knowledge/     ←   Layer: locale-knowledge (v10.5: renamed)
-│   │   └── seo/                  ←   Layer: seo
-│   ├── organization/             ← Realm: organization (NEW in v10.5)
-│   │   ├── config/               ←   Layer: config (Organization node)
-│   │   └── semantic/             ←   Layer: semantic (Org-level Entity)
-│   └── project/                  ← Realm: project (23 nodes)
+│   │   ├── locale-knowledge/     ←   Layer: locale-knowledge
+│   │   └── seo/                  ←   Layer: seo (6 nodes: SEOKeyword, SEOQuestion, etc.)
+│   └── tenant/                   ← Realm: tenant (27 nodes)
+│       ├── config/               ←   Layer: config (Organization)
 │       ├── foundation/           ←   Layer: foundation
 │       ├── structure/            ←   Layer: structure
-│       ├── semantic/             ←   Layer: semantic
+│       ├── semantic/             ←   Layer: semantic (Entity, EntityL10n)
 │       ├── instruction/          ←   Layer: instruction
 │       └── output/               ←   Layer: output
-├── arc-kinds/                    ← 64 YAML files (one per ArcKind)
+├── arc-kinds/                    ← 72 YAML files (one per ArcKind)
 ├── relations.yaml                ← Legacy format (kept for parser compatibility)
-└── taxonomy.yaml                 ← v10.5: 3 Realms, 10 Layers, 5 Traits
+└── taxonomy.yaml                 ← v10.6: 2 Realms, 9 Layers, 5 Traits
 ```
 
 ## Generated Artifacts
@@ -135,6 +133,6 @@ All generators live in `tools/novanet/src/generators/` (Rust-first architecture)
 
 **MermaidGenerator (`generators/mermaid.rs`):**
 - Reads `models/node-kinds/` and `models/arc-kinds/`
-- Generates Mermaid flowchart with all 45 Kinds and 64 arcs
-- Groups by Realm (Global, Organization, Project)
-- Colors by Layer (10 distinct colors)
+- Generates Mermaid flowchart with all 46 Kinds and 72 arcs
+- Groups by Realm (Global, Tenant)
+- Colors by Layer (9 distinct colors)

@@ -412,87 +412,87 @@ describe('filterStore', () => {
 
     describe('toggleRealmCollapsed', () => {
       it('should add realm to collapsedRealms when not present', () => {
-        useFilterStore.getState().toggleRealmCollapsed('project');
+        useFilterStore.getState().toggleRealmCollapsed('tenant');
 
         const state = useFilterStore.getState();
-        expect(state.collapsedRealms).toContain('project');
+        expect(state.collapsedRealms).toContain('tenant');
       });
 
       it('should remove realm from collapsedRealms when already present', () => {
-        useFilterStore.setState({ collapsedRealms: ['project'] });
+        useFilterStore.setState({ collapsedRealms: ['tenant'] });
 
-        useFilterStore.getState().toggleRealmCollapsed('project');
+        useFilterStore.getState().toggleRealmCollapsed('tenant');
 
         const state = useFilterStore.getState();
-        expect(state.collapsedRealms).not.toContain('project');
+        expect(state.collapsedRealms).not.toContain('tenant');
       });
 
       it('should handle multiple realms independently', () => {
-        useFilterStore.getState().toggleRealmCollapsed('project');
+        useFilterStore.getState().toggleRealmCollapsed('tenant');
         useFilterStore.getState().toggleRealmCollapsed('global');
 
         const state = useFilterStore.getState();
-        expect(state.collapsedRealms).toContain('project');
+        expect(state.collapsedRealms).toContain('tenant');
         expect(state.collapsedRealms).toContain('global');
       });
     });
 
     describe('toggleLayerCollapsed', () => {
       it('should add layer key to collapsedLayers when not present', () => {
-        useFilterStore.getState().toggleLayerCollapsed('project', 'foundation');
+        useFilterStore.getState().toggleLayerCollapsed('tenant', 'foundation');
 
         const state = useFilterStore.getState();
-        expect(state.collapsedLayers).toContain('project-foundation');
+        expect(state.collapsedLayers).toContain('tenant-foundation');
       });
 
       it('should remove layer key from collapsedLayers when already present', () => {
-        useFilterStore.setState({ collapsedLayers: ['project-foundation'] });
+        useFilterStore.setState({ collapsedLayers: ['tenant-foundation'] });
 
-        useFilterStore.getState().toggleLayerCollapsed('project', 'foundation');
+        useFilterStore.getState().toggleLayerCollapsed('tenant', 'foundation');
 
         const state = useFilterStore.getState();
-        expect(state.collapsedLayers).not.toContain('project-foundation');
+        expect(state.collapsedLayers).not.toContain('tenant-foundation');
       });
 
       it('should handle multiple layers independently', () => {
-        useFilterStore.getState().toggleLayerCollapsed('project', 'foundation');
-        useFilterStore.getState().toggleLayerCollapsed('project', 'structure');
+        useFilterStore.getState().toggleLayerCollapsed('tenant', 'foundation');
+        useFilterStore.getState().toggleLayerCollapsed('tenant', 'structure');
         useFilterStore.getState().toggleLayerCollapsed('global', 'knowledge');
 
         const state = useFilterStore.getState();
-        expect(state.collapsedLayers).toContain('project-foundation');
-        expect(state.collapsedLayers).toContain('project-structure');
+        expect(state.collapsedLayers).toContain('tenant-foundation');
+        expect(state.collapsedLayers).toContain('tenant-structure');
         expect(state.collapsedLayers).toContain('global-knowledge');
       });
     });
 
     describe('isRealmCollapsed', () => {
       it('should return false when realm is not collapsed', () => {
-        expect(useFilterStore.getState().isRealmCollapsed('project')).toBe(false);
+        expect(useFilterStore.getState().isRealmCollapsed('tenant')).toBe(false);
       });
 
       it('should return true when realm is collapsed', () => {
-        useFilterStore.getState().toggleRealmCollapsed('project');
+        useFilterStore.getState().toggleRealmCollapsed('tenant');
 
-        expect(useFilterStore.getState().isRealmCollapsed('project')).toBe(true);
+        expect(useFilterStore.getState().isRealmCollapsed('tenant')).toBe(true);
       });
     });
 
     describe('isLayerCollapsed', () => {
       it('should return false when layer is not collapsed', () => {
-        expect(useFilterStore.getState().isLayerCollapsed('project', 'foundation')).toBe(false);
+        expect(useFilterStore.getState().isLayerCollapsed('tenant', 'foundation')).toBe(false);
       });
 
       it('should return true when layer is collapsed', () => {
-        useFilterStore.getState().toggleLayerCollapsed('project', 'foundation');
+        useFilterStore.getState().toggleLayerCollapsed('tenant', 'foundation');
 
-        expect(useFilterStore.getState().isLayerCollapsed('project', 'foundation')).toBe(true);
+        expect(useFilterStore.getState().isLayerCollapsed('tenant', 'foundation')).toBe(true);
       });
     });
 
     describe('resetSchemaFilters', () => {
       it('should reset collapsedRealms to empty array', () => {
-        useFilterStore.setState({ collapsedRealms: ['project', 'global'] });
+        useFilterStore.setState({ collapsedRealms: ['tenant', 'global'] });
 
         useFilterStore.getState().resetSchemaFilters();
 
@@ -501,7 +501,7 @@ describe('filterStore', () => {
 
       it('should reset collapsedLayers to empty array', () => {
         useFilterStore.setState({
-          collapsedLayers: ['project-foundation', 'global-knowledge'],
+          collapsedLayers: ['tenant-foundation', 'global-knowledge'],
         });
 
         useFilterStore.getState().resetSchemaFilters();
@@ -511,8 +511,8 @@ describe('filterStore', () => {
 
       it('should reset both collapsedRealms and collapsedLayers', () => {
         useFilterStore.setState({
-          collapsedRealms: ['project', 'global'],
-          collapsedLayers: ['project-foundation', 'global-knowledge'],
+          collapsedRealms: ['tenant', 'global'],
+          collapsedLayers: ['tenant-foundation', 'global-knowledge'],
         });
 
         useFilterStore.getState().resetSchemaFilters();

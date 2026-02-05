@@ -80,14 +80,47 @@ describe('schemaLayoutELK', () => {
 
   beforeEach(() => {
     // Create a minimal mock hierarchy for testing
+    // v10.6: 2 realms (global, tenant)
     mockHierarchy = {
       realms: {
-        project: {
-          realm: 'project' as Realm,
-          label: 'PROJECT',
-          icon: '📦',
-          description: 'Project-specific content',
+        global: {
+          realm: 'global' as Realm,
+          label: 'GLOBAL',
+          icon: '🌍',
+          description: 'Shared across all tenants',
           layers: {
+            config: {
+              label: 'Configuration',
+              description: 'Locale configuration',
+              icon: '⚙️',
+              nodeTypes: ['Locale'] as never[],
+            },
+            'locale-knowledge': {
+              label: 'Locale Knowledge',
+              description: 'Locale-specific knowledge',
+              icon: '🧠',
+              nodeTypes: ['Style', 'Formatting'] as never[],
+            },
+            seo: {
+              label: 'SEO',
+              description: 'SEO data',
+              icon: '🔍',
+              nodeTypes: ['SEOKeyword'] as never[],
+            },
+          } as Record<Layer, { label: string; description: string; icon: string; nodeTypes: never[] }>,
+        },
+        tenant: {
+          realm: 'tenant' as Realm,
+          label: 'TENANT',
+          icon: '🏢',
+          description: 'Tenant-specific content',
+          layers: {
+            config: {
+              label: 'Configuration',
+              description: 'Tenant config',
+              icon: '⚙️',
+              nodeTypes: ['Organization'] as never[],
+            },
             foundation: {
               label: 'Foundation',
               description: 'Core project identity',
@@ -102,42 +135,17 @@ describe('schemaLayoutELK', () => {
             },
           } as Record<Layer, { label: string; description: string; icon: string; nodeTypes: never[] }>,
         },
-        global: {
-          realm: 'global' as Realm,
-          label: 'GLOBAL',
-          icon: '🌍',
-          description: 'Shared across all projects',
-          layers: {
-            config: {
-              label: 'Configuration',
-              description: 'Locale configuration',
-              icon: '⚙️',
-              nodeTypes: ['Locale'] as never[],
-            },
-            knowledge: {
-              label: 'Knowledge',
-              description: 'Locale-specific knowledge',
-              icon: '🧠',
-              nodeTypes: ['Style', 'Formatting'] as never[],
-            },
-            seo: {
-              label: 'SEO',
-              description: 'SEO data',
-              icon: '🔍',
-              nodeTypes: ['SEOKeyword'] as never[],
-            },
-          } as Record<Layer, { label: string; description: string; icon: string; nodeTypes: never[] }>,
-        },
-      } as Record<Realm, typeof mockHierarchy.realms.project>,
+      } as Record<Realm, typeof mockHierarchy.realms.tenant>,
       nodes: [
-        { id: 'schema-Project', nodeType: 'Project', realm: 'project', layer: 'foundation', label: 'Project', description: '', trait: 'invariant' },
-        { id: 'schema-BrandIdentity', nodeType: 'BrandIdentity', realm: 'project', layer: 'foundation', label: 'Brand Identity', description: '', trait: 'invariant' },
-        { id: 'schema-ProjectL10n', nodeType: 'ProjectL10n', realm: 'project', layer: 'foundation', label: 'Project L10n', description: '', trait: 'localized' },
-        { id: 'schema-Page', nodeType: 'Page', realm: 'project', layer: 'structure', label: 'Page', description: '', trait: 'invariant' },
-        { id: 'schema-Block', nodeType: 'Block', realm: 'project', layer: 'structure', label: 'Block', description: '', trait: 'invariant' },
+        { id: 'schema-Organization', nodeType: 'Organization', realm: 'tenant', layer: 'config', label: 'Organization', description: '', trait: 'invariant' },
+        { id: 'schema-Project', nodeType: 'Project', realm: 'tenant', layer: 'foundation', label: 'Project', description: '', trait: 'invariant' },
+        { id: 'schema-BrandIdentity', nodeType: 'BrandIdentity', realm: 'tenant', layer: 'foundation', label: 'Brand Identity', description: '', trait: 'invariant' },
+        { id: 'schema-ProjectL10n', nodeType: 'ProjectL10n', realm: 'tenant', layer: 'foundation', label: 'Project L10n', description: '', trait: 'localized' },
+        { id: 'schema-Page', nodeType: 'Page', realm: 'tenant', layer: 'structure', label: 'Page', description: '', trait: 'invariant' },
+        { id: 'schema-Block', nodeType: 'Block', realm: 'tenant', layer: 'structure', label: 'Block', description: '', trait: 'invariant' },
         { id: 'schema-Locale', nodeType: 'Locale', realm: 'global', layer: 'config', label: 'Locale', description: '', trait: 'invariant' },
-        { id: 'schema-Style', nodeType: 'Style', realm: 'global', layer: 'knowledge', label: 'Style', description: '', trait: 'knowledge' },
-        { id: 'schema-Formatting', nodeType: 'Formatting', realm: 'global', layer: 'knowledge', label: 'Formatting', description: '', trait: 'knowledge' },
+        { id: 'schema-Style', nodeType: 'Style', realm: 'global', layer: 'locale-knowledge', label: 'Style', description: '', trait: 'knowledge' },
+        { id: 'schema-Formatting', nodeType: 'Formatting', realm: 'global', layer: 'locale-knowledge', label: 'Formatting', description: '', trait: 'knowledge' },
         { id: 'schema-SEOKeyword', nodeType: 'SEOKeyword', realm: 'global', layer: 'seo', label: 'SEO Keyword', description: '', trait: 'localized' },
       ] as SchemaNode[],
       arcs: [
@@ -145,9 +153,9 @@ describe('schemaLayoutELK', () => {
         { id: 'schema-arc-1', relationType: 'HAS_BLOCK', sourceType: 'Page', targetType: 'Block', label: 'HAS_BLOCK', description: '', cardinality: '1:N' },
       ] as SchemaArc[],
       stats: {
-        totalNodes: 9,
+        totalNodes: 10,
         totalArcs: 2,
-        nodesByRealm: { project: 5, global: 4 },
+        nodesByRealm: { global: 4, tenant: 6 },
       },
     };
   });
@@ -176,42 +184,42 @@ describe('schemaLayoutELK', () => {
     it('should create realm meta badge nodes', async () => {
       const result = await applySchemaLayout(mockHierarchy);
 
-      // v10.4: Realms are metaBadge nodes with metaType: 'realm' (2 realms: project, global)
+      // v10.6: Realms are metaBadge nodes with metaType: 'realm' (2 realms: global, tenant)
       const realmBadges = result.nodes.filter(n =>
         n.type === 'metaBadge' && n.data.metaType === 'realm'
       );
       expect(realmBadges).toHaveLength(2);
 
       // Verify realm badge data
-      const projectRealm = realmBadges.find(n => n.data.realmKey === 'project');
-      expect(projectRealm).toBeDefined();
-      expect(projectRealm?.data.label).toBe('Project');
+      const tenantRealm = realmBadges.find(n => n.data.realmKey === 'tenant');
+      expect(tenantRealm).toBeDefined();
+      expect(tenantRealm?.data.label).toBe('Tenant');
     });
 
     it('should create layer meta badge nodes', async () => {
       const result = await applySchemaLayout(mockHierarchy);
 
-      // v10.4: Layers are metaBadge nodes with metaType: 'layer'
+      // v10.6: Layers are metaBadge nodes with metaType: 'layer'
       const layerBadges = result.nodes.filter(n =>
         n.type === 'metaBadge' && n.data.metaType === 'layer'
       );
-      // 2 (Project) + 3 (Global: config, knowledge, seo) = 5
-      expect(layerBadges).toHaveLength(5);
+      // 3 (Tenant: config, foundation, structure) + 3 (Global: config, locale-knowledge, seo) = 6
+      expect(layerBadges).toHaveLength(6);
 
-      // v10.4: No parent relationships - connected by HAS_LAYER edges
+      // v10.6: No parent relationships - connected by HAS_LAYER edges
       const hasLayerEdges = result.edges.filter(e => e.data?.relationType === 'HAS_LAYER');
-      expect(hasLayerEdges.length).toBe(5);
+      expect(hasLayerEdges.length).toBe(6);
     });
 
     it('should create schema nodes with layer connections', async () => {
       const result = await applySchemaLayout(mockHierarchy);
 
       const schemaNodes = result.nodes.filter(n => n.type === 'schemaNode');
-      expect(schemaNodes).toHaveLength(9);
+      expect(schemaNodes).toHaveLength(10);
 
-      // v10.4: Connected by HAS_KIND edges (not parent relationships)
+      // v10.5: Connected by HAS_KIND edges (not parent relationships)
       const hasKindEdges = result.edges.filter(e => e.data?.relationType === 'HAS_KIND');
-      expect(hasKindEdges.length).toBe(9);
+      expect(hasKindEdges.length).toBe(10);
     });
 
     it('should position all nodes with valid coordinates', async () => {
@@ -229,27 +237,27 @@ describe('schemaLayoutELK', () => {
     it('should include business edges plus hierarchy edges', async () => {
       const result = await applySchemaLayout(mockHierarchy);
 
-      // v10.4: Total edges = HAS_LAYER + HAS_KIND + business edges
-      // 5 HAS_LAYER + 9 HAS_KIND + 2 business = 16
+      // v10.6: Total edges = HAS_LAYER + HAS_KIND + business edges
+      // 6 HAS_LAYER + 10 HAS_KIND + 2 business = 18
       const hasLayerEdges = result.edges.filter(e => e.data?.relationType === 'HAS_LAYER');
       const hasKindEdges = result.edges.filter(e => e.data?.relationType === 'HAS_KIND');
       const businessEdges = result.edges.filter(e => !e.data?.isMetaEdge);
 
-      expect(hasLayerEdges.length).toBe(5);
-      expect(hasKindEdges.length).toBe(9);
+      expect(hasLayerEdges.length).toBe(6);
+      expect(hasKindEdges.length).toBe(10);
       expect(businessEdges.length).toBe(2); // Original mock edges
     });
 
     it('should skip empty layers (P1 fix)', async () => {
-      // Add an empty layer
+      // Add an empty layer to tenant realm
       const hierarchyWithEmpty: HierarchicalSchemaData = {
         ...mockHierarchy,
         realms: {
           ...mockHierarchy.realms,
-          project: {
-            ...mockHierarchy.realms.project,
+          tenant: {
+            ...mockHierarchy.realms.tenant,
             layers: {
-              ...mockHierarchy.realms.project.layers,
+              ...mockHierarchy.realms.tenant.layers,
               empty: {
                 label: 'Empty',
                 description: 'Empty layer',
@@ -258,7 +266,7 @@ describe('schemaLayoutELK', () => {
               },
             } as unknown as Record<Layer, { label: string; description: string; icon: string; nodeTypes: never[] }>,
           },
-        } as Record<Realm, typeof mockHierarchy.realms.project>,
+        } as Record<Realm, typeof mockHierarchy.realms.tenant>,
       };
 
       const result = await applySchemaLayout(hierarchyWithEmpty);
@@ -289,8 +297,8 @@ describe('schemaLayoutELK', () => {
       const hierarchy = getSchemaHierarchy();
       const result = await applySchemaLayout(hierarchy);
 
-      // v10.4: Uses metaBadge for Realm and Layer, schemaNode for Kind
-      // Should have 2 realm meta badges (project, global)
+      // v10.6: Uses metaBadge for Realm and Layer, schemaNode for Kind
+      // Should have 2 realm meta badges (global, tenant)
       const realmBadges = result.nodes.filter(n =>
         n.type === 'metaBadge' && n.data.metaType === 'realm'
       );
@@ -334,7 +342,7 @@ describe('schemaLayoutELK', () => {
         realms: {} as never,
         nodes: [],
         arcs: [],
-        stats: { totalNodes: 0, totalArcs: 0, nodesByRealm: { project: 0, global: 0 } },
+        stats: { totalNodes: 0, totalArcs: 0, nodesByRealm: { global: 0, tenant: 0 } },
       };
 
       // Should not throw

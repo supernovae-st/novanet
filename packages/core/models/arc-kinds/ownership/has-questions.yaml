@@ -1,0 +1,27 @@
+# arc-kinds/ownership/has-questions.yaml
+# HAS_QUESTIONS - SEOKeyword owns question-form keywords (v10.6)
+#
+# v10.6: SEO Schema v2
+#        - Links parent keyword to ATP-derived questions
+#        - Each question has its own volume/difficulty
+
+arc:
+  type: HAS_QUESTIONS
+  family: ownership
+  scope: intra_realm
+  source: SEOKeyword
+  target: SEOQuestion
+  cardinality: one_to_many
+
+  llm_context: |
+    SEOKeyword owns its question variations from Answer The Public.
+    Use to find all questions related to a seed keyword.
+    Questions have their own SEO metrics (volume, difficulty).
+    Pattern: "qr code" → "comment créer un qr code", "what is qr code"
+
+  example:
+    description: "Get all questions for a keyword"
+    cypher: |
+      MATCH (kw:SEOKeyword {key: $keyword_key})-[:HAS_QUESTIONS]->(q:SEOQuestion)
+      RETURN q.value, q.volume, q.question_word, q.featured_snippet
+      ORDER BY q.volume DESC

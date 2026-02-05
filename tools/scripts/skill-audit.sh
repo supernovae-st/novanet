@@ -1,45 +1,46 @@
 #!/bin/bash
 # NovaNet Skill & Documentation Audit Script
 # Validates that skills, commands, rules, and docs follow YAML sources of truth
-# Usage: ./tools/scripts/skill-audit.sh [--fix]
+# Usage: ./tools/scripts/skill-audit.sh [--yaml-check]
 
 set -e
-
-# Colors
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[0;33m'
-BLUE='\033[0;34m'
-NC='\033[0m' # No Color
 
 # Get script directory and project root
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 cd "$PROJECT_ROOT"
 
-# Read expected values from YAML sources of truth
-VERSION=$(cat VERSION 2>/dev/null || echo "unknown")
+# Source shared library
+source "$SCRIPT_DIR/lib/audit-common.sh"
 
-# Count from actual YAML files and taxonomy.yaml
-NODE_COUNT=$(find packages/core/models/node-kinds -name "*.yaml" 2>/dev/null | wc -l | tr -d ' ')
-ARC_COUNT=$(find packages/core/models/arc-kinds -name "*.yaml" 2>/dev/null | wc -l | tr -d ' ')
+# Parse arguments
+YAML_CHECK=false
+VERBOSE=false
+for arg in "$@"; do
+  case $arg in
+    --yaml-check) YAML_CHECK=true ;;
+    --verbose|-v) VERBOSE=true ;;
+  esac
+done
 
-# Count realms and layers from taxonomy.yaml (source of truth)
-REALM_COUNT=$(grep -E "^  - key: (global|organization|project)$" packages/core/models/taxonomy.yaml 2>/dev/null | wc -l | tr -d ' ')
-LAYER_COUNT=$(grep -E "^      - key: " packages/core/models/taxonomy.yaml 2>/dev/null | wc -l | tr -d ' ')
-
-# Fallback to v10.5 defaults if parsing fails
-if [ "$REALM_COUNT" -eq 0 ] 2>/dev/null; then REALM_COUNT=3; fi
-if [ "$LAYER_COUNT" -eq 0 ] 2>/dev/null; then LAYER_COUNT=10; fi
+VERSION=$(get_version)
 
 echo -e "${BLUE}NovaNet Skill & Documentation Audit${NC}"
 echo "========================================"
 echo "Version: $VERSION"
-echo "Source of Truth (YAML): $NODE_COUNT nodes, $ARC_COUNT arcs, $REALM_COUNT realms, $LAYER_COUNT layers"
 echo ""
 
-ISSUES=0
-WARNINGS=0
+# Print taxonomy summary (sets NODE_COUNT, ARC_COUNT, etc.)
+print_taxonomy_summary
+
+# Optional: Validate YAML syntax
+if [ "$YAML_CHECK" = true ]; then
+  echo -e "${BLUE}Validating YAML syntax...${NC}"
+  validate_yaml_directory "packages/core/models/node-kinds" "Node-kinds"
+  validate_yaml_directory "packages/core/models/arc-kinds" "Arc-kinds"
+  validate_yaml_directory "packages/core/models/meta" "Meta definitions"
+  echo ""
+fi
 
 # Function to check a file for issues
 check_file() {
@@ -80,7 +81,7 @@ check_file() {
     fi
   fi
 
-  # Check for deprecated v9 references when we're on v10.4
+  # Check for deprecated v9 references when we're on v10.5
   if grep -qE "v9\.(0|5).*current|current.*v9\.(0|5)" "$file" 2>/dev/null; then
     echo -e "${YELLOW}WARN${NC}: $file marks v9.x as 'current' (should be v$VERSION)"
     ((WARNINGS++))
@@ -126,16 +127,11 @@ for file in $(find apps -path "*/node_modules" -prune -o -path "*/.claude/skills
   check_file "$file"
 done
 
-echo ""
-echo "========================================"
-if [ $ISSUES -eq 0 ] && [ $WARNINGS -eq 0 ]; then
-  echo -e "${GREEN}All skills and documentation are consistent with YAML sources!${NC}"
-  exit 0
-elif [ $ISSUES -eq 0 ]; then
-  echo -e "${YELLOW}$WARNINGS warning(s) found${NC}"
-  exit 0
-else
-  echo -e "${RED}$ISSUES error(s), $WARNINGS warning(s) found${NC}"
+# Print final result
+print_audit_result "Skill Audit"
+exit_code=$?
+
+if [ $exit_code -ne 0 ]; then
   echo ""
   echo "Source of Truth:"
   echo "  packages/core/models/"
@@ -149,5 +145,6 @@ else
   echo "  - 'organizing-principles.yaml' → 'taxonomy.yaml'"
   echo "  - 'Concept' → 'Entity'"
   echo "  - 'USES_CONCEPT' → 'USES_ENTITY'"
-  exit 1
 fi
+
+exit $exit_code

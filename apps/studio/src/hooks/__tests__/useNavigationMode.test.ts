@@ -225,7 +225,7 @@ describe('useNavigationMode', () => {
 
     it('query mode calls fetchJSON with facet params', async () => {
       setupMocks('query', {
-        realmFilter: ['global', 'project'],
+        realmFilter: ['global', 'tenant'],
         layerFilter: ['semantic'],
         traitFilter: ['localized'],
         arcFamilyFilter: [],

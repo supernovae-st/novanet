@@ -9,7 +9,7 @@ Add a new node type to the NovaNet ontology using Socratic discovery.
 ## Workflow
 
 1. **Discovery Phase**: Ask clarifying questions about the node:
-   - What realm? (global, project)
+   - What realm? (global, tenant)
    - What layer? (existing or new)
    - What is its purpose in the graph?
    - What properties does it need?

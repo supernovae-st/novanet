@@ -25,12 +25,12 @@ jest.mock('@xyflow/react', () => ({
 
 describe('RealmGroupNode', () => {
   const defaultProps = {
-    id: 'realm-Project',
+    id: 'realm-Tenant',
     type: 'realmGroup' as const,
     data: {
-      realm: 'project' as const,
-      label: 'PROJECT',
-      icon: '📦',
+      realm: 'tenant' as const,
+      label: 'TENANT',
+      icon: '🏢',
       nodeCount: 21,
     },
     selected: false,
@@ -52,8 +52,8 @@ describe('RealmGroupNode', () => {
     );
 
     // Icon and label are in separate elements
-    expect(screen.getByText('📦')).toBeInTheDocument();
-    expect(screen.getByText('PROJECT')).toBeInTheDocument();
+    expect(screen.getByText('🏢')).toBeInTheDocument();
+    expect(screen.getByText('TENANT')).toBeInTheDocument();
   });
 
   it('should render node count', () => {
@@ -86,7 +86,7 @@ describe('RealmGroupNode', () => {
     expect(screen.queryByTestId('node-resizer')).not.toBeInTheDocument();
   });
 
-  it('should render with correct realm styling for Project', () => {
+  it('should render with correct realm styling for Tenant', () => {
     render(
       <ReactFlowProvider>
         <RealmGroupNode {...defaultProps} />
@@ -94,8 +94,8 @@ describe('RealmGroupNode', () => {
     );
 
     // Check that realm is rendered with correct label (icon and label are separate)
-    expect(screen.getByText('📦')).toBeInTheDocument();
-    expect(screen.getByText('PROJECT')).toBeInTheDocument();
+    expect(screen.getByText('🏢')).toBeInTheDocument();
+    expect(screen.getByText('TENANT')).toBeInTheDocument();
   });
 
   it('should render with correct realm styling for Global', () => {
@@ -117,10 +117,10 @@ describe('RealmGroupNode', () => {
 
 describe('LayerGroupNode', () => {
   const defaultProps = {
-    id: 'layer-Project-foundation',
+    id: 'layer-Tenant-foundation',
     type: 'layerGroup' as const,
     data: {
-      realm: 'project' as const,
+      realm: 'tenant' as const,
       layer: 'foundation',
       label: 'Foundation',
       icon: '🏛️',
@@ -181,7 +181,7 @@ describe('SchemaNode', () => {
       nodeType: 'project',
       label: 'project',
       description: 'Project node',
-      realm: 'project' as const,
+      realm: 'tenant' as const,
       layer: 'foundation',
     },
     selected: false,

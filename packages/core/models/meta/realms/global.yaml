@@ -8,10 +8,11 @@ color: "#2aa198"
 
 layers:
   - config
-  - knowledge
+  - locale-knowledge
+  - seo
 
 llm_context: |
-  Shared across ALL projects. Locale-specific knowledge that applies
-  universally: cultural norms, linguistic patterns, voice guidelines,
-  idiomatic expressions. These nodes are READ-ONLY at project level.
-  Changes here affect all projects using that locale.
+  Shared across ALL organizations and projects. Universal locale knowledge
+  that applies everywhere: cultural norms, linguistic patterns, formatting
+  conventions. These nodes are READ-ONLY. No Entity here - Entity lives
+  in ORGANIZATION or PROJECT realm. Updated in v10.5.

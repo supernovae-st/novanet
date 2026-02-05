@@ -170,7 +170,7 @@ ORDER BY realm_key, layer_key, kind_key
                     to_kebab_case(&kind_key)
                 )
             } else {
-                // Neo4j stores relative path like "node-kinds/project/structure/block.yaml"
+                // Neo4j stores relative path like "node-kinds/tenant/structure/block.yaml"
                 // We need to prefix with "packages/core/models/"
                 format!("packages/core/models/{}", yaml_path_raw)
             };
@@ -580,11 +580,11 @@ pub enum TreeItem<'a> {
     ArcKind(&'a ArcFamilyInfo, &'a ArcKindInfo),
 }
 
-/// Get emoji for realm (v10.4: 2 realms only).
+/// Get emoji for realm (v10.6: 2 realms only - global + tenant).
 fn realm_emoji(key: &str) -> &'static str {
     match key {
         "global" => "🌍",
-        "project" => "📦",
+        "tenant" => "🏢",
         _ => "📁",
     }
 }

@@ -11,9 +11,9 @@ import type { Realm } from '@novanet/core/types';
  * Uses unified spacing from types.ts (Golden Ratio system).
  * Cluster centers derived from REALM_GAP; spiral spacing from NODE_GAP.
  *
- * Visual structure (v10.4: 2 realms, side by side):
+ * Visual structure (v10.6: 2 realms, side by side):
  *
- *      [PROJECT]          [GLOBAL]
+ *      [TENANT]           [GLOBAL]
  */
 export function applyForceClusterLayout(
   hierarchy: HierarchicalSchemaData
@@ -21,17 +21,17 @@ export function applyForceClusterLayout(
   const nodes: Node[] = [];
   const edges: Edge[] = [];
 
-  // Derived from unified constants
+  // Derived from unified constants (v10.6: 2 realms)
   const BASE_OFFSET = REALM_GAP * 2;               // ~1100px from origin
   const CLUSTER_SPACING = REALM_GAP * 3;            // ~1650px between cluster centers
   const CLUSTER_CENTERS: Record<Realm, { x: number; y: number }> = {
-    project: { x: BASE_OFFSET, y: BASE_OFFSET },
-    global:  { x: BASE_OFFSET + CLUSTER_SPACING, y: BASE_OFFSET - CLUSTER_SPACING * 0.3 },
+    global: { x: BASE_OFFSET, y: BASE_OFFSET },
+    tenant: { x: BASE_OFFSET + CLUSTER_SPACING, y: BASE_OFFSET },
   };
 
   const NODE_REPULSION = NODE_GAP * 1.5;            // ~120px spiral spacing
 
-  const realmOrder: Realm[] = ['project', 'global'];
+  const realmOrder: Realm[] = ['tenant', 'global'];
 
   for (const realm of realmOrder) {
     const realmDef = hierarchy.realms[realm];

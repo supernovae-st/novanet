@@ -34,22 +34,22 @@ export interface LayerGroupData extends Record<string, unknown> {
 export type LayerGroupNodeType = Node<LayerGroupData, 'layerGroup'>;
 
 /**
- * Realm color configuration (subset of parent colors)
+ * Realm color configuration (subset of parent colors, v10.6: 2 realms)
  */
 const REALM_COLORS: Record<Realm, {
   primary: string;
   secondary: string;
   glow: string;
 }> = {
-  project: {
-    primary: '#8b5cf6',
-    secondary: '#a78bfa',
-    glow: 'rgba(139, 92, 246, 0.2)',
-  },
   global: {
     primary: '#10b981',
     secondary: '#34d399',
     glow: 'rgba(16, 185, 129, 0.2)',
+  },
+  tenant: {
+    primary: '#0ea5e9',
+    secondary: '#38bdf8',
+    glow: 'rgba(14, 165, 233, 0.2)',
   },
 };
 
@@ -62,7 +62,7 @@ export const LayerGroupNode = memo(function LayerGroupNode({
 }: NodeProps<LayerGroupNodeType>) {
   const [isHovered, setIsHovered] = useState(false);
 
-  const colors = REALM_COLORS[data.realm] || REALM_COLORS.project;
+  const colors = REALM_COLORS[data.realm] || REALM_COLORS.tenant;
 
   const handleMouseEnter = useCallback(() => setIsHovered(true), []);
   const handleMouseLeave = useCallback(() => setIsHovered(false), []);

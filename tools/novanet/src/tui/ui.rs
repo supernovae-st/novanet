@@ -522,9 +522,9 @@ fn colorize_path_inline(path: &str) -> Vec<Span<'static>> {
             0..=2 => Color::Rgb(80, 80, 90), // packages/core/models
             3 => Color::Magenta,             // nodes
             4 => match *part {
-                // realm (v10.4: 2 realms only)
+                // realm (v10.6: 2 realms - global + tenant)
                 "global" => Color::Green,
-                "project" => Color::Yellow,
+                "tenant" => Color::Yellow,
                 _ => Color::White,
             },
             5 => Color::Rgb(100, 180, 100), // layer

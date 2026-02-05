@@ -1,4 +1,4 @@
-# NovaNet Architecture Decisions (v9.5)
+# NovaNet Architecture Decisions (v10.6)
 
 This file documents key architecture decisions for NovaNet. Reference these when making implementation choices.
 
@@ -24,7 +24,7 @@ This file documents key architecture decisions for NovaNet. Reference these when
 
 ```typescript
 // Types with prefix (globally unique)
-type NodeRealm = 'global' | 'project';
+type NodeRealm = 'global' | 'tenant';  // v10.6: 2 realms
 type ArcFamily = 'ownership' | 'localization' | 'semantic' | 'generation' | 'mining';
 
 // Properties without prefix (context is clear)
@@ -166,6 +166,50 @@ truecolor (24-bit RGB)
 - Outdated docs cause confusion during implementation
 - DX is cheap to update, expensive to fix later
 
+## ADR-011: Company Project Pattern (Superseded)
+
+**Status**: Superseded by ADR-012 (v10.6)
+
+**Decision**: Organization realm contains only the Organization node. Entity/EntityL10n live in PROJECT realm only.
+
+```
+Organization ─[:HAS_COMPANY_PROJECT]→ Project (company project)
+                                         └── Entity nodes here
+             ─[:HAS_PROJECT]─────────→ Project (product projects)
+```
+
+**Rationale**:
+- An organization has a "company project" that holds org-wide Entity nodes
+- Entity/EntityL10n in organization was redundant (same nodes existed in project)
+- Simplifies the schema: 43 nodes instead of 45, 9 layers instead of 10
+- Organization realm becomes a pure multi-tenant isolation boundary
+
+## ADR-012: 2-Realm Architecture
+
+**Status**: Approved (v10.6)
+
+**Decision**: Consolidate 3 realms into 2 realms: GLOBAL + TENANT.
+
+```
+v10.5 (3 realms):  global / organization / project
+v10.6 (2 realms):  global / tenant
+```
+
+**Architecture**:
+- **GLOBAL** (3 layers): config, locale-knowledge, seo — Universal, READ-ONLY
+- **TENANT** (6 layers): config, foundation, structure, semantic, instruction, output — Business-specific
+
+**Rationale**:
+- Organization + Project distinction added unnecessary complexity
+- Tenant is the natural isolation boundary for multi-tenant SaaS
+- Single realm for all business content simplifies queries and permissions
+- 9 total layers (3 global + 6 tenant) provides sufficient granularity
+
+**Migration path**:
+- `organization` -> `tenant` (rename)
+- `project` -> `tenant` (merge into tenant)
+- All node types from both organization and project now live under tenant
+
 ## Decision Log
 
 | ADR | Version | Summary |
@@ -180,6 +224,8 @@ truecolor (24-bit RGB)
 | 008 | v9.0 | Invariant structure, localized content |
 | 009 | v9.5 | Terminal color graceful degradation |
 | 010 | v9.5 | Skill-first DX |
+| 011 | v10.5 | Company project pattern (superseded by 012) |
+| 012 | v10.6 | 2-Realm Architecture |
 
 ## References
 

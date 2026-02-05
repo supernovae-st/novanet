@@ -1,6 +1,6 @@
 // packages/core/src/graph/generator.ts
 // Schema graph generator - Creates flat and hierarchical schema representations
-// v10.3.0 — Entity-Centric Architecture, GEO removed
+// v10.6.0 — 2-Realm Architecture (GLOBAL / TENANT)
 
 import { NODE_TYPES, NODE_REALMS, NODE_TRAITS, type NodeType, type Realm } from '../types/nodes.js';
 import { RelationRegistry } from '../schemas/relations.schema.js';
@@ -17,22 +17,23 @@ import { REALM_HIERARCHY } from './hierarchy.js';
  * Can be extended with icons/colors in UI layer.
  */
 const NODE_LABELS: Record<NodeType, string> = {
-  // Global realm - config (1)
+  // ═══════════════════════════════════════════════════════════════════════════
+  // GLOBAL REALM (20 nodes)
+  // ═══════════════════════════════════════════════════════════════════════════
+  // config (5)
   Locale: 'Locale',
-
-  // Global realm - knowledge containers (10) — v10 tiered model
   Formatting: 'Formatting',
   Slugification: 'Slugification',
   Adaptation: 'Adaptation',
   Style: 'Style',
+
+  // locale-knowledge (12) — Sets + Atoms
   TermSet: 'Term Set',
   ExpressionSet: 'Expression Set',
   PatternSet: 'Pattern Set',
   CultureSet: 'Culture Set',
   TabooSet: 'Taboo Set',
   AudienceSet: 'Audience Set',
-
-  // Global realm - knowledge atoms (6)
   Term: 'Term',
   Expression: 'Expression',
   Pattern: 'Pattern',
@@ -40,39 +41,43 @@ const NODE_LABELS: Record<NodeType, string> = {
   Taboo: 'Taboo',
   AudienceTrait: 'Audience Trait',
 
-  // Global realm - seo (3)
+  // seo (3)
   SEOKeyword: 'SEO Keyword',
   SEOKeywordMetrics: 'SEO Metrics',
   SEOMiningRun: 'SEO Mining',
 
-  // Global realm - semantic (2) — v10.3 Entity-Centric Architecture
-  Entity: 'Entity',
-  EntityL10n: 'Entity L10n',
+  // ═══════════════════════════════════════════════════════════════════════════
+  // TENANT REALM (23 nodes)
+  // ═══════════════════════════════════════════════════════════════════════════
+  // config (1)
+  Organization: 'Organization',
 
-  // Project realm - foundation (3)
+  // foundation (3)
   Project: 'Project',
   BrandIdentity: 'Brand Identity',
   ProjectL10n: 'Project L10n',
 
-  // Project realm - structure (5)
+  // structure (3)
   Page: 'Page',
   Block: 'Block',
   ContentSlot: 'Content Slot',
-  PageType: 'Page Type',
-  BlockType: 'Block Type',
 
-  // Project realm - semantic (2)
+  // semantic (4)
+  Entity: 'Entity',
+  EntityL10n: 'Entity L10n',
   AudiencePersona: 'Audience Persona',
   ChannelSurface: 'Channel Surface',
 
-  // Project realm - instruction (5)
+  // instruction (7)
+  PageType: 'Page Type',
+  BlockType: 'Block Type',
   PagePrompt: 'Page Prompt',
   BlockPrompt: 'Block Prompt',
   BlockRules: 'Block Rules',
   BlockInstruction: 'Block Instruction',
   PromptArtifact: 'Prompt Artifact',
 
-  // Project realm - output (5)
+  // output (5)
   PageL10n: 'Page L10n',
   BlockL10n: 'Block L10n',
   GenerationJob: 'Generation Job',
@@ -85,8 +90,8 @@ const NODE_LABELS: Record<NodeType, string> = {
 // =============================================================================
 
 const REALM_DESCRIPTIONS: Record<Realm, string> = {
-  global: 'Shared across all projects (Locale knowledge, SEO, Entities)',
-  project: 'Project-specific content and structure',
+  global: 'Shared across all tenants (Locale knowledge, SEO)',
+  tenant: 'Tenant-specific content, structure, Entity nodes',
 };
 
 // =============================================================================
@@ -106,7 +111,7 @@ const TRAIT_DESCRIPTIONS: Record<string, string> = {
 // =============================================================================
 
 /**
- * Generate flat schema graph with all 42 node types and arcs.
+ * Generate flat schema graph with all 43 node types and arcs.
  * This is the canonical representation of the NovaNet ontology.
  *
  * @returns SchemaGraphResult with nodes and arcs
@@ -115,7 +120,7 @@ const TRAIT_DESCRIPTIONS: Record<string, string> = {
  * ```typescript
  * const { nodes, arcs } = generateSchemaGraph();
  * console.log(`${nodes.length} nodes, ${arcs.length} arcs`);
- * // Output: "42 nodes, ~XX arcs"
+ * // Output: "43 nodes, ~XX arcs"
  * ```
  */
 export function generateSchemaGraph(): SchemaGraphResult {
@@ -123,7 +128,7 @@ export function generateSchemaGraph(): SchemaGraphResult {
   const arcs: SchemaArc[] = [];
 
   // ==========================================================================
-  // GENERATE NODES - All 42 node types
+  // GENERATE NODES - All 43 node types
   // ==========================================================================
 
   for (const nodeType of NODE_TYPES) {
@@ -187,7 +192,7 @@ export function generateSchemaGraph(): SchemaGraphResult {
  * ```typescript
  * const hierarchy = getSchemaHierarchy();
  * console.log(hierarchy.stats);
- * // Output: { totalNodes: 42, totalArcs: ~XX, nodesByRealm: { project: 20, global: 22 } }
+ * // Output: { totalNodes: 42, totalArcs: ~XX, nodesByRealm: { global: 20, tenant: 22 } }
  * ```
  */
 export function getSchemaHierarchy(): HierarchicalSchemaData {
@@ -195,8 +200,8 @@ export function getSchemaHierarchy(): HierarchicalSchemaData {
 
   // Count nodes by realm
   const nodesByRealm: Record<Realm, number> = {
-    project: 0,
     global: 0,
+    tenant: 0,
   };
 
   for (const node of nodes) {

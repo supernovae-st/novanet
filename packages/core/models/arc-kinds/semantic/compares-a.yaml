@@ -1,0 +1,24 @@
+# arc-kinds/semantic/compares-a.yaml
+# COMPARES_A - SEOComparison references left-side Entity (v10.6)
+#
+# v10.6: SEO Schema v2
+#        - Links comparison to first entity (X in "X vs Y")
+#        - Always used with COMPARES_B to complete the pair
+
+arc:
+  type: COMPARES_A
+  family: semantic
+  scope: cross_realm
+  temperature_threshold: 0.5
+
+  source: SEOComparison
+  target: Entity
+  cardinality: many_to_one
+
+  llm_context: |
+    SEOComparison references the left-side entity (A in "A vs B").
+    Always paired with COMPARES_B for the right-side entity.
+    Use to find all comparisons involving an entity.
+    Pattern: "qr code vs barcode" → COMPARES_A → Entity(qr-code)
+
+  cypher_pattern: "(SEOComparison)-[:COMPARES_A]->(Entity)"

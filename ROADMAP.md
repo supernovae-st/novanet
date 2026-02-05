@@ -1,6 +1,6 @@
 # NovaNet Roadmap
 
-Current version: **v10.4.0** | Target: QR Code AI (https://qrcode-ai.com)
+Current version: **v10.6.0** | Target: QR Code AI (https://qrcode-ai.com)
 
 ## Milestones Overview
 
@@ -15,8 +15,10 @@ v9.6  Generation Domain Nodes          █████████████�
 v9.7  Intent Layer + Thing Model       ████████████████████  100%  RELEASED
 v9.8  Polish + Cleanup                 ████████████████████  100%  RELEASED
 v9.9  Tiered Knowledge Model           ████████████████████  100%  RELEASED
-v10.4 Entity-Centric Architecture      ████████████████████  100%  ← CURRENT
-      42 NodeKinds, 77 ArcKinds, 2 Realms
+v10.4 Entity-Centric Architecture      ████████████████████  100%  RELEASED
+v10.5 3-Realm Architecture             ████████████████████  100%  RELEASED
+v10.6 2-Realm Architecture             ████████████████████  100%  <- CURRENT
+      2 Realms (GLOBAL/TENANT), 9 Layers, simplified tenant isolation
 
 ═══════════════════════════════════════════════════════════════════════════════
 IDEAS (no timeline)
