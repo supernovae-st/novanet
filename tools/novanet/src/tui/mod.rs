@@ -80,7 +80,10 @@ fn install_panic_hook() {
         // 3. Print user-friendly message
         eprintln!("\n\x1b[1;31m💥 NovaNet TUI crashed!\x1b[0m");
         eprintln!("{panic_info}");
-        eprintln!("\n\x1b[33mCrash log saved to: {}\x1b[0m", crash_log_path.display());
+        eprintln!(
+            "\n\x1b[33mCrash log saved to: {}\x1b[0m",
+            crash_log_path.display()
+        );
         eprintln!("\x1b[36mPlease report this issue with the crash log.\x1b[0m\n");
 
         // 4. Call original hook (for color_eyre integration)
@@ -168,14 +171,16 @@ async fn run_app(
 
                     // Check for pending Realm details load (Realm selected → load from Neo4j)
                     if let Some(realm_key) = app.take_pending_realm_load() {
-                        if let Ok(details) = TaxonomyTree::load_realm_details(db, &realm_key).await {
+                        if let Ok(details) = TaxonomyTree::load_realm_details(db, &realm_key).await
+                        {
                             app.set_realm_details(details);
                         }
                     }
 
                     // Check for pending Layer details load (Layer selected → load from Neo4j)
                     if let Some(layer_key) = app.take_pending_layer_load() {
-                        if let Ok(details) = TaxonomyTree::load_layer_details(db, &layer_key).await {
+                        if let Ok(details) = TaxonomyTree::load_layer_details(db, &layer_key).await
+                        {
                             app.set_layer_details(details);
                         }
                     }

@@ -199,7 +199,15 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
 
     // === FILTERED DATA MODE: Show only instances of selected Kind ===
     if let Some(kind_key) = app.get_filter_kind() {
-        render_filtered_instances(f, area, app, kind_key, visible_height, focused, border_color);
+        render_filtered_instances(
+            f,
+            area,
+            app,
+            kind_key,
+            visible_height,
+            focused,
+            border_color,
+        );
         return;
     }
 
@@ -500,7 +508,10 @@ fn render_filtered_instances(
     // Get instances
     let instances = app.tree.get_instances(kind_key);
     let instance_count = instances.map(|i| i.len()).unwrap_or(0);
-    let is_loading = app.pending_instance_load.as_ref().is_some_and(|k| k == kind_key);
+    let is_loading = app
+        .pending_instance_load
+        .as_ref()
+        .is_some_and(|k| k == kind_key);
 
     if instance_count == 0 {
         if is_loading {
@@ -520,9 +531,7 @@ fn render_filtered_instances(
         for (idx, instance) in instances.iter().enumerate() {
             let is_cursor = idx == app.tree_cursor;
             let style = if is_cursor && focused {
-                Style::default()
-                    .bg(Color::Rgb(30, 40, 50))
-                    .fg(Color::Green)
+                Style::default().bg(Color::Rgb(30, 40, 50)).fg(Color::Green)
             } else {
                 Style::default().fg(Color::Rgb(100, 180, 100))
             };
