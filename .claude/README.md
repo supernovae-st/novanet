@@ -173,8 +173,8 @@ IMPORTANT: Regenerate artifacts with:
 **Trigger:** After editing `.claude/{skills,commands,agents,rules}/**/*.md` files
 
 **Output:** Reminds to verify against YAML sources:
-- Node counts match `node-kinds/` (42 files)
-- Arc counts match `arc-kinds/` (60 files)
+- Node counts match `node-kinds/` (45 files)
+- Arc counts match `arc-kinds/` (64 files)
 - Paths use `node-kinds/` not `nodes/`
 - Paths use `taxonomy.yaml` not `organizing-principles.yaml`
 
@@ -328,7 +328,7 @@ Master command for schema management.
 
 **Example:**
 ```bash
-/schema status     # Show current schema stats (42 Kinds, 77 ArcKinds, 2 Realms, 8 Layers)
+/schema status     # Show current schema stats (45 Kinds, 64 ArcKinds, 3 Realms, 10 Layers)
 ```
 
 ---
@@ -598,10 +598,10 @@ Located in `apps/studio/.claude/rules/`:
 
 ### `novanet-terminology.md`
 
-Domain vocabulary reference (v10.4.0):
+Domain vocabulary reference (v10.5.0):
 - Core concepts (Project, Entity, Page, Block, Locale, Context Graph)
 - Meta-Graph: 6 meta-node types (Realm, Layer, Kind, Trait, ArcFamily, ArcKind)
-- Full Kind Inventory (42 Kinds across 2 Realms)
+- Full Kind Inventory (45 Kinds across 3 Realms)
 - Meta-Graph relations (hierarchy, facets, arc schema, instance bridge)
 - Key data relations (grouped by ArcFamily)
 - v8 → v9 rename mapping
@@ -629,17 +629,17 @@ Architecture Decision Records (ADRs):
 
 ---
 
-## Key Numbers (v10.4.0)
+## Key Numbers (v10.5.0)
 
 | Metric | Value |
 |--------|-------|
-| Kind (node types) | 42 |
-| ArcKind (relations) | 77 |
-| Realms | 2 (global, project) |
-| Layers | 8 |
+| Kind (node types) | 45 |
+| ArcKind (relations) | 64 |
+| Realms | 3 (global, organization, project) |
+| Layers | 10 |
 | Traits | 5 |
 | ArcFamilies | 5 |
-| Meta-node total | ~105 |
+| Meta-node total | ~130 |
 | Locale Knowledge nodes | 18 |
 | Seed files | 7 |
 | View definitions | 13 (12 + complete-graph) |
@@ -708,17 +708,17 @@ pnpm audit:all
 pnpm doc:generate
 ```
 
-**Source of truth:** `/VERSION` file contains the canonical schema version (10.4.0).
+**Source of truth:** `/VERSION` file contains the canonical schema version (10.5.0).
 
 **`pnpm doc:audit` checks:**
-- Outdated version references (e.g., v10.3 → v10.4)
+- Outdated version references (e.g., v10.4 → v10.5)
 - Deprecated terminology (Concept → Entity, USES_CONCEPT → USES_ENTITY)
 - Removed realm references (shared realm merged into global)
-- Incorrect node/arc counts (42 nodes, 77 arcs expected)
+- Incorrect node/arc counts (45 nodes, 64 arcs expected)
 
 **`pnpm skill:audit` checks:**
 - Deprecated paths (`nodes/` → `node-kinds/`, `organizing-principles.yaml` → `taxonomy.yaml`)
-- Node/arc counts match YAML sources (42 node-kinds, 60 arc-kinds)
+- Node/arc counts match YAML sources (45 node-kinds, 64 arc-kinds)
 - Deprecated terminology in skills/commands/rules
 
 **Auto-sync reminders:**

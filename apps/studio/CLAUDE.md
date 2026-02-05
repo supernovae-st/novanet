@@ -9,7 +9,7 @@ Knowledge graph visualization for the NovaNet localization orchestrator.
 
 ## Project Context
 
-**What:** Interactive 2D graph visualization for 42 node types (2 realms), 200 locales (~19,000 instances projected at full deployment)
+**What:** Interactive 2D graph visualization for 45 node types (3 realms), 200 locales (~19,000 instances projected at full deployment)
 **Stack:** Next.js 16 + React 19 + TypeScript 5.9 + Tailwind CSS
 **Graph:** @xyflow/react
 **State:** Zustand 5 with persist/immer

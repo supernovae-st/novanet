@@ -158,10 +158,10 @@ export async function executeWrite<T>(
 }
 ```
 
-## Common Cypher Patterns for NovaNet (v8.2.0)
+## Common Cypher Patterns for NovaNet (v10.5.0)
 
 ```cypher
--- Get project overview (35 node types, 3 scopes)
+-- Get project overview (45 node types, 3 realms)
 MATCH (p:Project)-[:SUPPORTS_LOCALE]->(l:Locale)
 RETURN p.key, p.display_name, collect(l.key) as locales
 

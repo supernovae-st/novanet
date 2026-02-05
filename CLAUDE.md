@@ -13,7 +13,7 @@ Turborepo monorepo for NovaNet - knowledge graph localization orchestrator.
 NovaNet uses Neo4j to orchestrate **native content generation** (NOT translation) across 200+ locales.
 
 **Target Application**: QR Code AI (https://qrcode-ai.com)
-**Current Version**: v10.4.0
+**Current Version**: v10.5.0
 **Roadmap**: `ROADMAP.md` | **Changelog**: `CHANGELOG.md`
 
 ```
@@ -25,9 +25,9 @@ Entity (invariant) -> Generate natively -> EntityL10n (local)  <-- RIGHT
 
 ---
 
-## v10.4 Nomenclature
+## v10.5 Nomenclature
 
-v10.4 establishes unified terminology across all layers (YAML, Rust, TypeScript, Neo4j, UI):
+v10.5 establishes 3-Realm Architecture with multi-tenant isolation:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -42,8 +42,8 @@ v10.4 establishes unified terminology across all layers (YAML, Rust, TypeScript,
 │  CLASSIFICATION AXES                                                        │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │  NodeKind:                                                                  │
-│    WHERE?  NodeRealm  (global / project)                                    │
-│    WHAT?   NodeLayer  (8 functional layers)                                 │
+│    WHERE?  NodeRealm  (global / organization / project)                     │
+│    WHAT?   NodeLayer  (10 functional layers across 3 realms)                │
 │    HOW?    NodeTrait  (invariant / localized / knowledge / derived / job)   │
 │                                                                             │
 │  ArcKind:                                                                   │
@@ -53,18 +53,18 @@ v10.4 establishes unified terminology across all layers (YAML, Rust, TypeScript,
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-**Key changes from v9.0:**
-- Edge → Arc (throughout codebase)
-- EdgeFamily → ArcFamily
-- EdgeKind → ArcKind
-- New: ArcScope, ArcCardinality
+**Key changes from v10.4:**
+- Added ORGANIZATION realm for multi-tenant isolation
+- `global/knowledge` → `global/locale-knowledge`
+- Entity moved from GLOBAL to ORGANIZATION/semantic + PROJECT/semantic
+- 3 realms: GLOBAL (universal, READ-ONLY), ORGANIZATION (company-level), PROJECT (product-level)
 
 **Rust binary:** `tools/novanet/` — single crate for CLI + TUI (neo4rs, ratatui, clap).
 All commands implemented: data/meta/overlay/query, node/arc CRUD, search, locale, db,
-schema generate/validate, doc generate, filter build, Galaxy-themed TUI with boot animation, effects engine, and onboarding. 245 tests pass.
+schema generate/validate, doc generate, filter build, Galaxy-themed TUI with boot animation, effects engine, and onboarding. 246 tests pass.
 
 **YAML-first architecture:** Each Kind YAML has explicit `realm:` and `layer:` fields (source of truth).
-Path validation ensures `models/nodes/{realm}/{layer}/{name}.yaml` matches YAML content.
+Path validation ensures `models/node-kinds/{realm}/{layer}/{name}.yaml` matches YAML content.
 
 **Boundary rule (v9 target):** TypeScript generates code artifacts. Rust executes at runtime.
 
@@ -112,7 +112,7 @@ Path validation ensures `models/nodes/{realm}/{layer}/{name}.yaml` matches YAML 
 │  Containers (6): TermSet, ExpressionSet, PatternSet,                        │
 │                  CultureSet, TabooSet, AudienceSet                          │
 │  Atoms (6):      Term, Expression, Pattern, CultureRef, Taboo, AudienceTrait│
-│  Total:          42 nodes, 77 arcs                                          │
+│  Total:          45 nodes, 64 arcs                                          │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -310,7 +310,7 @@ See `.claude/README.md` for full documentation.
 ```
 1. /schema:add-node MyNode             # Socratic discovery
    ↓
-2. YAML created                        # packages/core/models/nodes/{realm}/{layer}/my-node.yaml
+2. YAML created                        # packages/core/models/node-kinds/{realm}/{layer}/my-node.yaml
    ↓                                   # with explicit realm: and layer: fields
 3. cargo run -- schema generate        # Regenerate all artifacts from YAML
    ↓
@@ -322,12 +322,12 @@ See `.claude/README.md` for full documentation.
 ### YAML Kind Structure
 
 ```yaml
-# packages/core/models/nodes/global/knowledge/entity.yaml
+# packages/core/models/node-kinds/global/locale-knowledge/locale-voice.yaml
 node:
-  name: Entity
-  realm: global           # Source of truth (must match path)
-  layer: knowledge        # Source of truth (must match path)
-  locale_behavior: invariant
+  name: LocaleVoice
+  realm: global               # Source of truth (must match path)
+  layer: locale-knowledge     # v10.5: renamed from "knowledge"
+  trait: knowledge
   description: "..."
   properties:
     # ...

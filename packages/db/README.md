@@ -69,14 +69,15 @@ db/
 
 ---
 
-## Graph Schema (v10.4.0)
+## Graph Schema (v10.5.0)
 
 | Realm | Nodes | Description |
 |-------|-------|-------------|
-| **🌍 Global** | 19 | Locale + 18 knowledge nodes (containers + atoms) |
+| **🌍 Global** | 19 | Locale + locale-knowledge atoms (READ-ONLY) |
+| **🏢 Organization** | 3 | Org-level Entity, EntityL10n (NEW in v10.5) |
 | **📦 Project** | 23 | Project structure, content, generation, SEO |
 
-Total: **42 node types**, **77 arc types**, **~100 meta-nodes** (Realm/Layer/Kind/Trait/ArcFamily/ArcKind)
+Total: **45 node types**, **64 arc types**, **~130 meta-nodes** (Realm/Layer/Kind/Trait/ArcFamily/ArcKind)
 
 ---
 

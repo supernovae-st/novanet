@@ -8,7 +8,7 @@ NovaNet is a **native content generation system** (NOT translation) using Neo4j 
 
 **Target Application**: QR Code AI (https://qrcode-ai.com) - a multilingual SaaS for QR code generation.
 **Supported Locales**: 200+ locales (fr-FR, en-US, es-MX, ja-JP, etc.)
-**Current Version**: v10.4.0
+**Current Version**: v10.5.0
 
 ## CRITICAL: Generation, NOT Translation
 
@@ -23,18 +23,22 @@ Each locale content is **generated natively** from the invariant Entity, NOT tra
 
 For complete graph schema, node categories, and relations, see: **`models/_index.yaml`**
 
-## v9 Migration Context
+## v10.5 Architecture
 
-v9 refactors the meta-graph to a **self-describing context graph** with faceted classification:
+v10.5 introduces 3-Realm Architecture with multi-tenant isolation:
 
-| v8 Term | v9 Term |
-|---------|---------|
-| Scope | **Realm** (global / project) |
-| Subcategory | **Layer** (8 functional layers) |
-| NodeTypeMeta | **Kind** (42 node types, 1:1 with Neo4j labels) |
-| _(new)_ | **Trait** (invariant / localized / knowledge / derived / job) |
-| _(new)_ | **ArcFamily** (ownership / localization / semantic / generation / mining) |
-| _(new)_ | **ArcKind** (77 relationship types) |
+| Axis | Values |
+|------|--------|
+| **Realm** | global / organization / project |
+| **Layer** | 10 functional layers (3 global, 2 org, 5 project) |
+| **Kind** | 45 node types, 64 arc types |
+| **Trait** | invariant / localized / knowledge / derived / job |
+| **ArcFamily** | ownership / localization / semantic / generation / mining |
+
+**Key v10.5 changes:**
+- Added ORGANIZATION realm for multi-tenant isolation
+- `global/knowledge` → `global/locale-knowledge`
+- Entity moved from GLOBAL to ORGANIZATION/semantic + PROJECT/semantic
 
 **Boundary rule:** TypeScript (this package) generates code artifacts. Rust (`tools/novanet/`) executes at runtime.
 
@@ -111,20 +115,24 @@ RETURN ak.key, af.key AS family, target.label AS target_kind;
 ```
 core/
 ├── models/                    # YAML schema definitions (SOURCE OF TRUTH)
-│   ├── _index.yaml            # MODEL INDEX (graph structure, node categories, changes)
-│   ├── relations.yaml         # All 77 Neo4j relationships (with family field)
-│   ├── organizing-principles.yaml  # v9: Realm/Layer/Trait/ArcFamily definitions
-│   ├── nodes/                 # ONE FILE PER NODE TYPE (42 files)
+│   ├── _index.yaml            # MODEL INDEX (graph structure, node categories)
+│   ├── taxonomy.yaml          # v10.5: Realm/Layer/Trait/ArcFamily/ArcScope
+│   ├── relations.yaml         # Legacy format (kept for parser compatibility)
+│   ├── node-kinds/            # ONE FILE PER NODE TYPE (45 files)
 │   │   ├── global/            # Realm: global (19 nodes)
-│   │   │   ├── config/        #   Layer: config (Locale)
-│   │   │   ├── knowledge/     #   Layer: knowledge (Knowledge Atoms)
-│   │   │   └── seo/           #   Layer: seo (SEOKeyword, SEOKeywordMetrics, SEOMiningRun)
+│   │   │   ├── config/        #   Layer: config (Locale + utility nodes)
+│   │   │   ├── locale-knowledge/  #   Layer: locale-knowledge (Knowledge Atoms)
+│   │   │   └── seo/           #   Layer: seo (SEOKeyword, Metrics, MiningRun)
+│   │   ├── organization/      # Realm: organization (NEW in v10.5)
+│   │   │   ├── config/        #   Layer: config (Organization node)
+│   │   │   └── semantic/      #   Layer: semantic (Org-level Entity/EntityL10n)
 │   │   └── project/           # Realm: project (23 nodes)
-│   │       ├── foundation/    #   Layer: foundation (Project, BrandIdentity, ProjectL10n)
-│   │       ├── structure/     #   Layer: structure (Page, Block, PageType, BlockType)
-│   │       ├── semantic/      #   Layer: semantic (Entity, EntityL10n, AudiencePersona)
-│   │       ├── instruction/   #   Layer: instruction (PagePrompt, BlockPrompt, BlockRules)
+│   │       ├── foundation/    #   Layer: foundation (Project, Brand, ProjectL10n)
+│   │       ├── structure/     #   Layer: structure (Page, Block, Types)
+│   │       ├── semantic/      #   Layer: semantic (Entity, EntityL10n, Persona)
+│   │       ├── instruction/   #   Layer: instruction (Prompts, BlockRules)
 │   │       └── output/        #   Layer: output (PageL10n, BlockL10n)
+│   ├── arc-kinds/             # ONE FILE PER ARC TYPE (64 files)
 │   └── views/                 # YAML view definitions
 ├── src/                       # TypeScript source
 │   ├── config/                # Locale codes configuration

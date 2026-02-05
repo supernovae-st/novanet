@@ -22,11 +22,12 @@ Master command for managing the NovaNet knowledge graph schema.
 ```
 YAML (Source of Truth)          TypeScript (Generated)         Neo4j (Runtime)
 packages/core/models/     -->   packages/core/src/types/  -->  bolt://localhost:7687
-├── nodes/                      ├── index.ts
+├── node-kinds/                 ├── index.ts
 │   ├── global/                 └── locale-knowledge.ts
-│   ├── project/
-│   └── shared/
-└── relations.yaml
+│   ├── organization/
+│   └── project/
+├── arc-kinds/
+└── taxonomy.yaml
 ```
 
 ## Workflow
@@ -39,7 +40,7 @@ Show current schema statistics:
 
 ```bash
 # Count YAML node definitions
-find packages/core/models/nodes -name "*.yaml" | wc -l
+find packages/core/models/node-kinds -name "*.yaml" | wc -l
 
 # Validate sync
 novanet schema validate
@@ -66,13 +67,14 @@ Redirect to `/schema:edit-node <name>`
 
 Redirect to `/schema:add-relation <NAME>`
 
-## Current Schema (v10.4.0)
+## Current Schema (v10.5.0)
 
-**42 Kind Types** across 2 Realms:
-- **Global (19)**: Locale, Entity, EntityL10n, Knowledge Atoms, SEOKeyword
+**45 Kind Types** across 3 Realms:
+- **Global (19)**: Locale, Knowledge Atoms, SEOKeyword (READ-ONLY)
+- **Organization (NEW)**: Org-level Entity, EntityL10n
 - **Project (23)**: Project structure, prompts, outputs, generation
 
-**77 Arcs** in 5 ArcFamilies:
+**64 Arcs** in 5 ArcFamilies:
 - **Ownership**: HAS_PAGE, HAS_BLOCK, OF_TYPE
 - **Localization**: HAS_L10N, FOR_LOCALE
 - **Semantic**: SEMANTIC_LINK, USES_ENTITY

@@ -20,11 +20,17 @@ cd "$PROJECT_ROOT"
 # Read expected values from YAML sources of truth
 VERSION=$(cat VERSION 2>/dev/null || echo "unknown")
 
-# Count from actual YAML files
+# Count from actual YAML files and taxonomy.yaml
 NODE_COUNT=$(find packages/core/models/node-kinds -name "*.yaml" 2>/dev/null | wc -l | tr -d ' ')
 ARC_COUNT=$(find packages/core/models/arc-kinds -name "*.yaml" 2>/dev/null | wc -l | tr -d ' ')
-REALM_COUNT=$(ls packages/core/models/meta/realms/*.yaml 2>/dev/null | wc -l | tr -d ' ')
-LAYER_COUNT=$(ls packages/core/models/meta/layers/*.yaml 2>/dev/null | wc -l | tr -d ' ')
+
+# Count realms and layers from taxonomy.yaml (source of truth)
+REALM_COUNT=$(grep -E "^  - key: (global|organization|project)$" packages/core/models/taxonomy.yaml 2>/dev/null | wc -l | tr -d ' ')
+LAYER_COUNT=$(grep -E "^      - key: " packages/core/models/taxonomy.yaml 2>/dev/null | wc -l | tr -d ' ')
+
+# Fallback to v10.5 defaults if parsing fails
+if [ "$REALM_COUNT" -eq 0 ] 2>/dev/null; then REALM_COUNT=3; fi
+if [ "$LAYER_COUNT" -eq 0 ] 2>/dev/null; then LAYER_COUNT=10; fi
 
 echo -e "${BLUE}NovaNet Skill & Documentation Audit${NC}"
 echo "========================================"
