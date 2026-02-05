@@ -1,6 +1,6 @@
 // packages/core/src/graph/types.ts
 // NovaNet Graph Module Types - Schema visualization structures
-// v9.0.0
+// v10.3.0 — Entity-Centric Architecture, GEO removed
 
 import type { NodeType, Realm, Layer } from '../types/nodes.js';
 import type { RelationType } from '../schemas/relations.schema.js';
@@ -21,7 +21,7 @@ export interface SchemaNode {
   id: string;
   /** The NodeType this represents */
   nodeType: NodeType;
-  /** Realm (global, shared, project) */
+  /** Realm (global, project) */
   realm: Realm;
   /** Layer within the realm */
   layer: Layer;
@@ -110,15 +110,15 @@ export interface RealmDefinition {
  * Used by visualizers that need grouped layout (like Studio).
  */
 export interface HierarchicalSchemaData {
-  /** All 3 realm definitions */
+  /** All 2 realm definitions (global, project) */
   realms: Record<Realm, RealmDefinition>;
-  /** All schema nodes (46 nodes) */
+  /** All schema nodes (42 nodes) */
   nodes: SchemaNode[];
-  /** All schema arcs (~89 arcs expanded from 83 arc types) */
+  /** All schema arcs */
   arcs: SchemaArc[];
   /** Statistics */
   stats: {
-    /** Total number of node types (44) */
+    /** Total number of node types (42) */
     totalNodes: number;
     /** Total number of arcs */
     totalArcs: number;

@@ -100,9 +100,9 @@ node_realms:
         emoji: "💡"
         color: "#f97316"
         llm_context: |
-          Meaning and concepts. Invariant ideas (Concept) that get localized
-          per locale (ConceptL10n). The WHAT of content - pricing tiers,
-          features, benefits, use cases. Concepts link via SEMANTIC_LINK
+          Meaning and entities. Invariant ideas (Entity) that get localized
+          per locale (EntityL10n). The WHAT of content - pricing tiers,
+          features, benefits, use cases. Entities link via SEMANTIC_LINK
           for spreading activation during generation.
 
       - key: instruction
@@ -149,7 +149,7 @@ node_traits:
     unicode_border: "┄"
     llm_context: |
       Content generated natively per locale. NOT translated — each locale
-      version is generated independently from the invariant Concept using
+      version is generated independently from the invariant Entity using
       locale-specific knowledge.
 
   - key: knowledge
@@ -238,7 +238,7 @@ arc_families:
     llm_context: |
       Links between invariant nodes and their locale-specific content.
       Includes locale knowledge edges (Locale → LocaleVoice, etc.) and
-      content localization edges (Concept → ConceptL10n, etc.).
+      content localization edges (Entity → EntityL10n, etc.).
 
   - key: semantic
     display_name: Semantic
@@ -248,8 +248,8 @@ arc_families:
     arrow_style: ".->"
     default_traversal: lazy   # v9.9: Follow if budget allows, temperature-gated
     llm_context: |
-      Meaning and concept connections. Spreading activation traversal with
-      temperature-based filtering. Links concepts to each other and to
+      Meaning and entity connections. Spreading activation traversal with
+      temperature-based filtering. Links entities to each other and to
       the pages/blocks that use them.
 
   - key: generation

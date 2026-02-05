@@ -1,6 +1,6 @@
 // packages/core/src/config/nodeIcons.ts
 // Presentation layer configuration for node icons
-// Moved from database properties per YAML v7.11.0
+// v10.3.0 — Entity-Centric Architecture, GEO removed
 
 import type { NodeType } from '../types/nodes.js';
 
@@ -10,30 +10,59 @@ import type { NodeType } from '../types/nodes.js';
  * Icons are now in presentation layer, not data model.
  */
 export const NODE_ICONS: Record<NodeType, string> = {
+  // GLOBAL — config (1)
+  Locale: '🌍',
+
+  // GLOBAL — knowledge containers (10) — v10 tiered model
+  Formatting: '📝',
+  Slugification: '🔗',
+  Adaptation: '🔄',
+  Style: '🎭',
+  TermSet: '📚',
+  ExpressionSet: '💭',
+  PatternSet: '🔣',
+  CultureSet: '🏛️',
+  TabooSet: '⛔',
+  AudienceSet: '👥',
+
+  // GLOBAL — knowledge atoms (6)
+  Term: '📖',
+  Expression: '💬',
+  Pattern: '🔄',
+  CultureRef: '🎭',
+  Taboo: '🚫',
+  AudienceTrait: '👤',
+
+  // GLOBAL — seo (3)
+  SEOKeyword: '🔍',
+  SEOKeywordMetrics: '📊',
+  SEOMiningRun: '⚙️',
+
+  // GLOBAL — semantic (2) — v10.3 Entity-Centric Architecture
+  Entity: '💡',
+  EntityL10n: '💬',
+
   // PROJECT — foundation (3)
   Project: '📦',
   BrandIdentity: '🎨',
   ProjectL10n: '🌐',
 
-  // PROJECT — structure (3)
+  // PROJECT — structure (5)
   Page: '📄',
   Block: '🧱',
   ContentSlot: '🔲',
+  PageType: '📐',
+  BlockType: '📋',
 
-  // PROJECT — semantic (6)
-  Concept: '💡',
-  ConceptL10n: '💬',
-  SearchIntent: '🔎',
-  TopicCluster: '🗂️',
+  // PROJECT — semantic (2)
   AudiencePersona: '👤',
   ChannelSurface: '📡',
 
-  // PROJECT — instruction (6)
-  PageType: '📐',
-  BlockType: '📋',
+  // PROJECT — instruction (5)
   PagePrompt: '📝',
   BlockPrompt: '📝',
   BlockRules: '📏',
+  BlockInstruction: '📜',
   PromptArtifact: '📋',
 
   // PROJECT — output (5)
@@ -42,34 +71,4 @@ export const NODE_ICONS: Record<NodeType, string> = {
   GenerationJob: '🚀',
   OutputArtifact: '📦',
   EvaluationSignal: '📊',
-
-  // GLOBAL — config (1)
-  Locale: '🌍',
-
-  // GLOBAL — knowledge (10) — v10 tiered model
-  // Technical tier
-  Formatting: '📝',
-  Slugification: '🔗',
-  Adaptation: '🔄',
-  // Style tier
-  Style: '🎭',
-  // Semantic tier
-  TermSet: '📚',
-  ExpressionSet: '💭',
-  PatternSet: '🔣',
-  CultureSet: '🏛️',
-  TabooSet: '⛔',
-  AudienceSet: '👥',
-
-  // SHARED — seo (3)
-  SEOKeyword: '🔍',
-  SEOKeywordMetrics: '📊',
-  SEOMiningRun: '⚙️',
-
-  // SHARED — geo (5)
-  Thing: '📍',
-  ThingL10n: '🌐',
-  GEOSeedL10n: '🤖',
-  GEOSeedMetrics: '📊',
-  GEOMiningRun: '⚙️',
 };

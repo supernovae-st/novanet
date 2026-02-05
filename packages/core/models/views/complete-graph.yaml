@@ -35,17 +35,8 @@ include:
       - relation: SUBTOPIC_OF
         direction: outgoing
 
-  # Concepts
-  - relation: HAS_CONCEPT
-    direction: outgoing
-    include:
-      - relation: SEMANTIC_LINK
-        direction: outgoing
-      - relation: HAS_L10N
-        direction: outgoing
-        include:
-          - relation: HAS_SEO_TARGET
-            direction: outgoing
+  # v10.3: Entity is in GLOBAL realm, accessed via USES_ENTITY from Page/Block
+  # Removed: HAS_CONCEPT (Entity no longer owned by Project)
 
 docs:
   title: "Complete Graph View"

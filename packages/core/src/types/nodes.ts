@@ -1,48 +1,60 @@
 // src/types/nodes.ts
 // Single source of truth for all 42 NovaNet node types
-// v10.0.0 — AUTO-SYNC with packages/core/models/node-kinds/*.yaml
+// v10.3.0 — Entity-Centric Architecture, GEO removed, 2 realms (global/project)
 
 // =============================================================================
-// NODE TYPES (42 nodes)
+// NODE TYPES (42 nodes across 2 realms)
 // =============================================================================
 
 export const NODE_TYPES = [
-  // Invariant (17)
-  'Project', 'BrandIdentity', 'Concept', 'Page', 'Block', 'ContentSlot',
-  'PageType', 'BlockType', 'PagePrompt', 'BlockPrompt', 'BlockRules', 'Locale',
-  'SearchIntent', 'TopicCluster', 'Thing', 'AudiencePersona', 'ChannelSurface',
-  // Localized (7)
-  'ProjectL10n', 'ConceptL10n', 'PageL10n', 'BlockL10n',
-  'SEOKeyword', 'GEOSeedL10n', 'ThingL10n',
-  // Knowledge (10) — v10 tiered model: technical/style/semantic
+  // ═══════════════════════════════════════════════════════════════════════════
+  // GLOBAL REALM (22 nodes)
+  // ═══════════════════════════════════════════════════════════════════════════
+  // config (1)
+  'Locale',
+  // knowledge containers (10) — v10 tiered model: technical/style/semantic
   'Formatting', 'Slugification', 'Adaptation',  // Technical tier
   'Style',                                       // Style tier
   'TermSet', 'ExpressionSet', 'PatternSet', 'CultureSet', 'TabooSet', 'AudienceSet', // Semantic tier
-  // Derived (5)
-  'SEOKeywordMetrics', 'GEOSeedMetrics', 'PromptArtifact', 'OutputArtifact', 'EvaluationSignal',
-  // Job (3)
-  'SEOMiningRun', 'GEOMiningRun', 'GenerationJob',
+  // knowledge atoms (6)
+  'Term', 'Expression', 'Pattern', 'CultureRef', 'Taboo', 'AudienceTrait',
+  // seo (3) — v10.2: moved from shared to global
+  'SEOKeyword', 'SEOKeywordMetrics', 'SEOMiningRun',
+  // semantic (2) — v10.3: Entity-Centric Architecture
+  'Entity', 'EntityL10n',
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // PROJECT REALM (20 nodes)
+  // ═══════════════════════════════════════════════════════════════════════════
+  // foundation (3)
+  'Project', 'BrandIdentity', 'ProjectL10n',
+  // structure (5)
+  'Page', 'Block', 'ContentSlot', 'PageType', 'BlockType',
+  // semantic (2) — v10.3: AudiencePersona, ChannelSurface only (Entity/EntityL10n moved to global)
+  'AudiencePersona', 'ChannelSurface',
+  // instruction (5)
+  'PagePrompt', 'BlockPrompt', 'BlockRules', 'BlockInstruction', 'PromptArtifact',
+  // output (5)
+  'PageL10n', 'BlockL10n', 'GenerationJob', 'OutputArtifact', 'EvaluationSignal',
 ] as const;
 
 export type NodeType = typeof NODE_TYPES[number];
 
 // =============================================================================
-// v9 TAXONOMY TYPES
+// v10.3 TAXONOMY TYPES (2 realms, 8 layers)
 // =============================================================================
 
-export type Realm = 'global' | 'project' | 'shared';
+export type Realm = 'global' | 'project';
 
 export type Layer =
-  | 'config' | 'knowledge'
-  | 'foundation' | 'structure' | 'semantic' | 'instruction' | 'output'
-  | 'seo' | 'geo';
+  | 'config' | 'knowledge' | 'seo'  // global realm layers
+  | 'foundation' | 'structure' | 'semantic' | 'instruction' | 'output';  // project realm layers
 
 export type Trait = 'invariant' | 'localized' | 'knowledge' | 'derived' | 'job';
 
 // =============================================================================
-// KIND_META — unified classification for all 42 node types
-// Replaces NODE_SCOPES, NODE_BEHAVIORS, NODE_CATEGORIES (v8)
-// v10.0.0 — Knowledge tier model: technical/style/semantic
+// KIND_META — unified classification for all 43 node types
+// v10.3.0 — Entity-Centric Architecture, GEO removed
 // =============================================================================
 
 export interface KindMeta {
@@ -53,46 +65,11 @@ export interface KindMeta {
 
 export const KIND_META: Record<NodeType, KindMeta> = {
   // ═══════════════════════════════════════════════════════════════════════════
-  // PROJECT REALM — foundation (3)
-  // ═══════════════════════════════════════════════════════════════════════════
-  Project:      { realm: 'project', layer: 'foundation',  trait: 'invariant' },
-  BrandIdentity:{ realm: 'project', layer: 'foundation',  trait: 'invariant' },
-  ProjectL10n:  { realm: 'project', layer: 'foundation',  trait: 'localized' },
-
-  // PROJECT REALM — structure (3)
-  Page:         { realm: 'project', layer: 'structure',   trait: 'invariant' },
-  Block:        { realm: 'project', layer: 'structure',   trait: 'invariant' },
-  ContentSlot:  { realm: 'project', layer: 'structure',   trait: 'invariant' },
-
-  // PROJECT REALM — semantic (6)
-  Concept:         { realm: 'project', layer: 'semantic',    trait: 'invariant' },
-  ConceptL10n:     { realm: 'project', layer: 'semantic',    trait: 'localized' },
-  SearchIntent:    { realm: 'project', layer: 'semantic',    trait: 'invariant' },
-  TopicCluster:    { realm: 'project', layer: 'semantic',    trait: 'invariant' },
-  AudiencePersona: { realm: 'project', layer: 'semantic',    trait: 'invariant' },
-  ChannelSurface:  { realm: 'project', layer: 'semantic',    trait: 'invariant' },
-
-  // PROJECT REALM — instruction (6)
-  PageType:       { realm: 'project', layer: 'instruction', trait: 'invariant' },
-  BlockType:      { realm: 'project', layer: 'instruction', trait: 'invariant' },
-  PagePrompt:     { realm: 'project', layer: 'instruction', trait: 'invariant' },
-  BlockPrompt:    { realm: 'project', layer: 'instruction', trait: 'invariant' },
-  BlockRules:     { realm: 'project', layer: 'instruction', trait: 'invariant' },
-  PromptArtifact: { realm: 'project', layer: 'instruction', trait: 'derived' },
-
-  // PROJECT REALM — output (5)
-  PageL10n:         { realm: 'project', layer: 'output', trait: 'localized' },
-  BlockL10n:        { realm: 'project', layer: 'output', trait: 'localized' },
-  GenerationJob:    { realm: 'project', layer: 'output', trait: 'job' },
-  OutputArtifact:   { realm: 'project', layer: 'output', trait: 'derived' },
-  EvaluationSignal: { realm: 'project', layer: 'output', trait: 'derived' },
-
-  // ═══════════════════════════════════════════════════════════════════════════
   // GLOBAL REALM — config (1)
   // ═══════════════════════════════════════════════════════════════════════════
   Locale:       { realm: 'global',  layer: 'config',      trait: 'invariant' },
 
-  // GLOBAL REALM — knowledge (10) — v10 tiered model
+  // GLOBAL REALM — knowledge containers (10) — v10 tiered model
   // Technical tier: formatting rules, deterministic
   Formatting:    { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
   Slugification: { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
@@ -107,19 +84,54 @@ export const KIND_META: Record<NodeType, KindMeta> = {
   TabooSet:      { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
   AudienceSet:   { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
 
-  // ═══════════════════════════════════════════════════════════════════════════
-  // SHARED REALM — seo (3)
-  // ═══════════════════════════════════════════════════════════════════════════
-  SEOKeyword:    { realm: 'shared', layer: 'seo', trait: 'localized' },
-  SEOKeywordMetrics: { realm: 'shared', layer: 'seo', trait: 'derived' },
-  SEOMiningRun:      { realm: 'shared', layer: 'seo', trait: 'job' },
+  // GLOBAL REALM — knowledge atoms (6)
+  Term:          { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
+  Expression:    { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
+  Pattern:       { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
+  CultureRef:    { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
+  Taboo:         { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
+  AudienceTrait: { realm: 'global', layer: 'knowledge', trait: 'knowledge' },
 
-  // SHARED REALM — geo (5)
-  Thing:          { realm: 'shared', layer: 'geo', trait: 'invariant' },
-  ThingL10n:      { realm: 'shared', layer: 'geo', trait: 'localized' },
-  GEOSeedL10n:    { realm: 'shared', layer: 'geo', trait: 'localized' },
-  GEOSeedMetrics: { realm: 'shared', layer: 'geo', trait: 'derived' },
-  GEOMiningRun:   { realm: 'shared', layer: 'geo', trait: 'job' },
+  // GLOBAL REALM — seo (3) — v10.2: moved from shared realm
+  SEOKeyword:       { realm: 'global', layer: 'seo', trait: 'localized' },
+  SEOKeywordMetrics:{ realm: 'global', layer: 'seo', trait: 'derived' },
+  SEOMiningRun:     { realm: 'global', layer: 'seo', trait: 'job' },
+
+  // GLOBAL REALM — semantic (2) — v10.3: Entity-Centric Architecture
+  Entity:        { realm: 'global', layer: 'semantic', trait: 'invariant' },
+  EntityL10n:    { realm: 'global', layer: 'semantic', trait: 'localized' },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // PROJECT REALM — foundation (3)
+  // ═══════════════════════════════════════════════════════════════════════════
+  Project:      { realm: 'project', layer: 'foundation',  trait: 'invariant' },
+  BrandIdentity:{ realm: 'project', layer: 'foundation',  trait: 'invariant' },
+  ProjectL10n:  { realm: 'project', layer: 'foundation',  trait: 'localized' },
+
+  // PROJECT REALM — structure (5)
+  Page:         { realm: 'project', layer: 'structure',   trait: 'invariant' },
+  Block:        { realm: 'project', layer: 'structure',   trait: 'invariant' },
+  ContentSlot:  { realm: 'project', layer: 'structure',   trait: 'invariant' },
+  PageType:     { realm: 'project', layer: 'structure',   trait: 'invariant' },
+  BlockType:    { realm: 'project', layer: 'structure',   trait: 'invariant' },
+
+  // PROJECT REALM — semantic (2) — v10.3: Entity/EntityL10n moved to global
+  AudiencePersona: { realm: 'project', layer: 'semantic', trait: 'invariant' },
+  ChannelSurface:  { realm: 'project', layer: 'semantic', trait: 'invariant' },
+
+  // PROJECT REALM — instruction (5)
+  PagePrompt:      { realm: 'project', layer: 'instruction', trait: 'invariant' },
+  BlockPrompt:     { realm: 'project', layer: 'instruction', trait: 'invariant' },
+  BlockRules:      { realm: 'project', layer: 'instruction', trait: 'invariant' },
+  BlockInstruction:{ realm: 'project', layer: 'instruction', trait: 'invariant' },
+  PromptArtifact:  { realm: 'project', layer: 'instruction', trait: 'derived' },
+
+  // PROJECT REALM — output (5)
+  PageL10n:         { realm: 'project', layer: 'output', trait: 'localized' },
+  BlockL10n:        { realm: 'project', layer: 'output', trait: 'localized' },
+  GenerationJob:    { realm: 'project', layer: 'output', trait: 'job' },
+  OutputArtifact:   { realm: 'project', layer: 'output', trait: 'derived' },
+  EvaluationSignal: { realm: 'project', layer: 'output', trait: 'derived' },
 };
 
 // =============================================================================
@@ -134,3 +146,12 @@ function deriveMap<K extends keyof KindMeta>(field: K): Record<NodeType, KindMet
 
 export const NODE_REALMS: Record<NodeType, Realm> = deriveMap('realm');
 export const NODE_TRAITS: Record<NodeType, Trait> = deriveMap('trait');
+
+// =============================================================================
+// DEPRECATION ALIASES (backwards compatibility)
+// =============================================================================
+
+/** @deprecated Use Entity instead (v10.3) */
+export type Concept = 'Entity';
+/** @deprecated Use EntityL10n instead (v10.3) */
+export type ConceptL10n = 'EntityL10n';

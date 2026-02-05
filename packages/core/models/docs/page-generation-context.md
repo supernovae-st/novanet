@@ -44,8 +44,8 @@ flowchart TB
     Block["🔵 Block"]
   end
 
-  subgraph CONCEPT_LAYER["Concept Layer"]
-    Concept["🔵 Concept"]
+  subgraph ENTITY_LAYER["Entity Layer"]
+    Entity["🔵 Entity"]
   end
 
   subgraph OUTPUT_LAYER["Output Layer"]
@@ -62,7 +62,7 @@ flowchart TB
   Page -.->|HAS_OUTPUT| PageL10n
   Page -->|HAS_PROMPT| BlockPrompt
   Page -->|HAS_PROMPT| PagePrompt
-  Page -.->|USES_CONCEPT| Concept
+  Page -.->|USES_ENTITY| Entity
 
   %% Edge colors by family
   linkStyle 1,2 stroke:#22c55e,stroke-width:2px
@@ -73,7 +73,7 @@ flowchart TB
   class Block invariant
   class BlockL10n localized
   class BlockPrompt invariant
-  class Concept invariant
+  class Entity invariant
   class Page invariant
   class PageL10n localized
   class PagePrompt invariant

@@ -32,12 +32,12 @@ describe('graph/types', () => {
   });
 
   it('should export Layer type with all values', () => {
+    // v10.3: 8 layers (geo removed)
     const layers: Layer[] = [
-      'foundation', 'structure', 'semantic', 'instruction', 'output',
-      'config', 'knowledge',
-      'seo', 'geo'
+      'foundation', 'structure', 'semantic', 'instruction', 'output',  // project realm
+      'config', 'knowledge', 'seo'  // global realm
     ];
-    expect(layers).toHaveLength(9);
+    expect(layers).toHaveLength(8);
   });
 
   it('should export RealmDefinition interface', () => {
