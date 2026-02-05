@@ -6,12 +6,13 @@ use std::path::Path;
 
 use crossterm::event::{KeyCode, KeyEvent};
 
+use super::atlas::AtlasState;
 use super::data::{
     ArcKindDetails, KindArcsData, LayerDetails, RealmDetails, TaxonomyTree, TreeItem,
 };
 
 /// Navigation mode (matches Studio).
-/// Order: 1:Meta 2:Data 3:Overlay 4:Query
+/// Order: 1:Meta 2:Data 3:Overlay 4:Query 5:Atlas
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum NavMode {
     #[default]
@@ -19,15 +20,17 @@ pub enum NavMode {
     Data,
     Overlay,
     Query,
+    Atlas,
 }
 
 impl NavMode {
     pub fn label(&self) -> &'static str {
         match self {
-            NavMode::Data => "Data",
             NavMode::Meta => "Meta",
+            NavMode::Data => "Data",
             NavMode::Overlay => "Overlay",
             NavMode::Query => "Query",
+            NavMode::Atlas => "Atlas",
         }
     }
 
@@ -36,7 +39,8 @@ impl NavMode {
             NavMode::Meta => NavMode::Data,
             NavMode::Data => NavMode::Overlay,
             NavMode::Overlay => NavMode::Query,
-            NavMode::Query => NavMode::Meta,
+            NavMode::Query => NavMode::Atlas,
+            NavMode::Atlas => NavMode::Meta,
         }
     }
 }
@@ -156,6 +160,8 @@ pub struct App {
     pub data_filter_kind: Option<String>,
     /// Cursor position before entering filtered Data mode (for restoration)
     pub data_cursor_before_filter: usize,
+    /// Atlas mode state (architecture visualizations)
+    pub atlas: AtlasState,
 }
 
 impl App {
@@ -192,6 +198,7 @@ impl App {
             layer_details: None,
             data_filter_kind: None,
             data_cursor_before_filter: 0,
+            atlas: AtlasState::default(),
         };
         app.load_yaml_for_current();
         app
@@ -564,6 +571,44 @@ impl App {
             return self.handle_search_key(key);
         }
 
+        // Atlas mode delegates to atlas state (except mode switching 1-5)
+        if self.mode == NavMode::Atlas {
+            match key.code {
+                // Mode switching exits Atlas mode
+                KeyCode::Char('1') => {
+                    self.mode = NavMode::Meta;
+                    return true;
+                }
+                KeyCode::Char('2') => {
+                    self.mode = NavMode::Data;
+                    self.request_instance_load_for_current();
+                    return true;
+                }
+                KeyCode::Char('3') => {
+                    self.mode = NavMode::Overlay;
+                    return true;
+                }
+                KeyCode::Char('4') => {
+                    self.mode = NavMode::Query;
+                    return true;
+                }
+                KeyCode::Char('5') => {
+                    // Already in Atlas, no-op
+                    return false;
+                }
+                KeyCode::Char('/') => {
+                    self.help_active = true;
+                    return true;
+                }
+                KeyCode::Char('f') => {
+                    self.search_active = true;
+                    return true;
+                }
+                // All other keys handled by atlas
+                _ => return self.atlas.handle_key(key),
+            }
+        }
+
         match key.code {
             // Open help
             KeyCode::Char('/') => {
@@ -629,9 +674,20 @@ impl App {
                 self.mode = NavMode::Query;
                 true
             }
+            KeyCode::Char('5') => {
+                self.exit_filtered_data_mode();
+                self.mode = NavMode::Atlas;
+                // Initialize atlas with context from current selection
+                self.init_atlas_from_current();
+                true
+            }
             KeyCode::Char('n') | KeyCode::Char('N') => {
                 self.exit_filtered_data_mode();
                 self.mode = self.mode.cycle();
+                // Initialize atlas when cycling to it
+                if self.mode == NavMode::Atlas {
+                    self.init_atlas_from_current();
+                }
                 true
             }
 
@@ -984,6 +1040,110 @@ impl App {
     pub fn set_layer_details(&mut self, details: LayerDetails) {
         self.layer_details = Some(details);
     }
+
+    /// Initialize Atlas state from current selection (context-aware).
+    /// Maps current Kind to the most relevant Atlas view.
+    pub fn init_atlas_from_current(&mut self) {
+        use super::atlas::AtlasView;
+
+        // Determine the best Atlas view based on current selection
+        let view = match self.current_item() {
+            Some(TreeItem::Kind(_, layer, kind)) => {
+                // Map Kind to appropriate view
+                match kind.key.as_str() {
+                    "Page" | "Block" | "BlockType" | "PageType" => AtlasView::PageComposition,
+                    "Entity" | "EntityL10n" => AtlasView::GenerationPipeline,
+                    "SEOKeyword" | "SEOKeywordMetrics" => AtlasView::SpreadingActivation,
+                    k if k.contains("Set") || k.contains("Term") || k.contains("Expression") => {
+                        AtlasView::KnowledgeAtoms
+                    }
+                    _ => {
+                        // Default based on layer
+                        match layer.key.as_str() {
+                            "structure" | "output" => AtlasView::PageComposition,
+                            "semantic" => AtlasView::GenerationPipeline,
+                            "locale-knowledge" => AtlasView::KnowledgeAtoms,
+                            "seo" => AtlasView::SpreadingActivation,
+                            _ => AtlasView::RealmMap,
+                        }
+                    }
+                }
+            }
+            Some(TreeItem::Realm(..)) | Some(TreeItem::Layer(..)) => AtlasView::RealmMap,
+            Some(TreeItem::Instance(_, _, kind, _)) => {
+                // Map Instance's Kind to view
+                match kind.key.as_str() {
+                    "Page" | "Block" => AtlasView::PageComposition,
+                    "Entity" | "EntityL10n" => AtlasView::GenerationPipeline,
+                    _ => AtlasView::RealmMap,
+                }
+            }
+            _ => AtlasView::RealmMap,
+        };
+
+        self.atlas.current_view = view;
+        self.atlas.pending_page_load = true; // Trigger data load
+    }
+
+    /// Set Atlas layer counts (for Realm Map).
+    #[allow(dead_code)]
+    pub fn set_atlas_layer_counts(&mut self, counts: Vec<(String, usize)>) {
+        self.atlas.layer_counts = counts;
+    }
+
+    /// Check if Atlas realm stats need loading (returns true once, then resets flag).
+    pub fn take_pending_atlas_realm_stats_load(&mut self) -> bool {
+        if self.atlas.pending_realm_stats_load && self.mode == NavMode::Atlas {
+            self.atlas.pending_realm_stats_load = false;
+            true
+        } else {
+            false
+        }
+    }
+
+    /// Set Atlas realm stats (for Realm Map view).
+    pub fn set_atlas_realm_stats(&mut self, stats: super::data::AtlasRealmStats) {
+        self.atlas.realm_stats = Some(stats);
+    }
+
+    /// Check if Atlas pages list needs loading (returns true once, then resets flag).
+    pub fn take_pending_atlas_pages_list_load(&mut self) -> bool {
+        if self.atlas.pending_pages_list_load && self.mode == NavMode::Atlas {
+            self.atlas.pending_pages_list_load = false;
+            true
+        } else {
+            false
+        }
+    }
+
+    /// Set Atlas pages list (for Page Composition view).
+    pub fn set_atlas_pages_list(&mut self, pages: Vec<super::data::AtlasPageInfo>) {
+        self.atlas.page_count = pages.len();
+        self.atlas.pages_list = pages;
+        // Trigger load of first page if available
+        if !self.atlas.pages_list.is_empty() && self.atlas.current_page_key.is_none() {
+            self.atlas.current_page_key = Some(self.atlas.pages_list[0].key.clone());
+            self.atlas.pending_page_load = true;
+        }
+    }
+
+    /// Check if Atlas page composition needs loading (returns page key and locale if needed).
+    pub fn take_pending_atlas_page_load(&mut self) -> Option<(String, String)> {
+        if self.atlas.pending_page_load && self.mode == NavMode::Atlas {
+            self.atlas.pending_page_load = false;
+            self.atlas
+                .current_page_key
+                .clone()
+                .map(|key| (key, self.atlas.selected_locale.clone()))
+        } else {
+            None
+        }
+    }
+
+    /// Set Atlas page composition data.
+    pub fn set_atlas_page_composition(&mut self, data: super::atlas::PageCompositionData) {
+        self.atlas.page_data = Some(data);
+    }
 }
 
 #[cfg(test)]
@@ -1204,6 +1364,9 @@ mod tests {
 
         app.mode = app.mode.cycle();
         assert_eq!(app.mode, NavMode::Query);
+
+        app.mode = app.mode.cycle();
+        assert_eq!(app.mode, NavMode::Atlas);
 
         app.mode = app.mode.cycle();
         assert_eq!(app.mode, NavMode::Meta); // Cycle back

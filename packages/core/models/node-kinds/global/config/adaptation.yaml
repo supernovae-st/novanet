@@ -2,6 +2,7 @@
 # Adaptation — Content adaptation rules for a locale (FACTS vs ILLUSTRATIONS framework)
 #
 # v10.6: Added FACTS/ILLUSTRATIONS framework, priority_hierarchy, formality, measurements, raw_markdown
+# v10.6.1: Added punctuation_spacing, typography_conventions, technical_terms_preferred/accepted, legal_compliance
 # Stability: Medium - update quarterly
 
 node:
@@ -121,6 +122,33 @@ node:
         escalation: "formal"
 
     # ═══════════════════════════════════════════════════════════════════════════
+    # TYPOGRAPHY & PUNCTUATION
+    # ═══════════════════════════════════════════════════════════════════════════
+    punctuation_spacing:
+      type: json
+      required: false
+      description: "Space rules before/after punctuation marks"
+      example:
+        colon: "space_before"
+        semicolon: "space_before"
+        exclamation: "space_before"
+        question: "space_before"
+        comma: "no_space"
+        period: "no_space"
+
+    typography_conventions:
+      type: json
+      required: false
+      description: "Locale-specific typography (quotes, dashes, ellipsis)"
+      example:
+        opening_quote: "«"
+        closing_quote: "»"
+        quote_spacing: true
+        ellipsis: "…"
+        em_dash: "—"
+        en_dash: "–"
+
+    # ═══════════════════════════════════════════════════════════════════════════
     # MEASUREMENT & TECHNICAL
     # ═══════════════════════════════════════════════════════════════════════════
     measurement_system:
@@ -145,6 +173,24 @@ node:
       enum: ["local_only", "english_accepted", "mixed"]
       description: "Approach to technical/tech terms"
       example: "mixed"
+
+    technical_terms_preferred:
+      type: json
+      required: false
+      description: "Preferred local terms over English equivalents"
+      example:
+        computer: "ordinateur"
+        software: "logiciel"
+        download: "télécharger"
+        password: "mot de passe"
+        email: "courriel"
+        cloud: "nuage informatique"
+
+    technical_terms_accepted:
+      type: json
+      required: false
+      description: "English terms accepted in this locale (no translation needed)"
+      example: ["smartphone", "email", "Wi-Fi", "cloud", "hashtag", "start-up"]
 
     # ═══════════════════════════════════════════════════════════════════════════
     # CALENDAR & SEASONS
@@ -275,6 +321,19 @@ node:
         - "Literal translation of idioms"
         - "Missing space before punctuation"
         - "Using period as decimal separator"
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # LEGAL COMPLIANCE
+    # ═══════════════════════════════════════════════════════════════════════════
+    legal_compliance:
+      type: json
+      required: false
+      description: "Key legal frameworks and regulations for this locale"
+      example:
+        consumer_protection: "Code de la consommation"
+        data_privacy: "RGPD / CNIL"
+        language_law: "Loi Toubon"
+        advertising: "Code de la publicité"
 
     # ═══════════════════════════════════════════════════════════════════════════
     # RAW MARKDOWN (Hybrid approach)
