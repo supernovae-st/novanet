@@ -369,7 +369,7 @@ fn extract_stopwords(content: &str) -> HashMap<String, Vec<String>> {
 
         stopwords
             .entry(category)
-            .or_insert_with(Vec::new)
+            .or_default()
             .push(word);
     }
 
