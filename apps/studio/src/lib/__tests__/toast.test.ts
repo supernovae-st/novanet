@@ -149,9 +149,9 @@ describe('toast', () => {
       });
 
       it('should show info with nodeType when count is 0', () => {
-        toast.nodeExpansion(0, 'Concept');
+        toast.nodeExpansion(0, 'Entity');
 
-        expect(sonnerToast.info).toHaveBeenCalledWith('No connected Concept found', {
+        expect(sonnerToast.info).toHaveBeenCalledWith('No connected Entity found', {
           description: undefined,
         });
       });
@@ -272,9 +272,9 @@ describe('toast', () => {
 
     describe('filterApplied', () => {
       it('should show success with filter name', () => {
-        toast.filterApplied('Concept Network');
+        toast.filterApplied('Entity Network');
 
-        expect(sonnerToast.success).toHaveBeenCalledWith('Filter applied: Concept Network', {
+        expect(sonnerToast.success).toHaveBeenCalledWith('Filter applied: Entity Network', {
           description: undefined,
         });
       });

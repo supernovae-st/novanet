@@ -23,10 +23,10 @@ Generate culturally-native content across 200+ locales — not translation, but 
 >
 > ```
 > Source → Translate → Target                    ❌ Traditional
-> Concept (invariant) → Generate natively → L10n ✅ NovaNet
+> Entity (invariant) → Generate natively → L10n  ✅ NovaNet
 > ```
 >
-> Content is generated natively per locale from invariant semantic concepts, not translated from a source language.
+> Content is generated natively per locale from invariant semantic entities, not translated from a source language.
 
 ---
 
@@ -35,7 +35,7 @@ Generate culturally-native content across 200+ locales — not translation, but 
 |  |  |  |  |
 |:---:|:---:|:---:|:---:|
 | **Knowledge Graph** | **200+ Locales** | **Graph Studio** | **AI-Powered** |
-| 43 node types, 64 arcs | Native generation per locale | Interactive 2D visualization | Claude API for natural language queries |
+| 42 node types, 77 arcs | Native generation per locale | Interactive 2D visualization | Claude API for natural language queries |
 | Neo4j with APOC | Locale knowledge layer | React Flow + ELK.js layouts | Cypher generation from text |
 
 ---
@@ -54,10 +54,10 @@ Generate culturally-native content across 200+ locales — not translation, but 
 flowchart TB
     subgraph MONO["NovaNet Monorepo"]
         direction TB
-        CORE["@novanet/core v9.9.0\nTypes · Schemas · Filters"]
+        CORE["@novanet/core v10.4.0\nTypes · Schemas · Filters"]
         DB["@novanet/db v1.0.0\nDocker · Seeds · Migrations"]
-        STUDIO["@novanet/studio v9.9.0\nNext.js 16 · React 19"]
-        RUST["novanet CLI v9.9.0\nRust · 13 commands · TUI"]
+        STUDIO["@novanet/studio v10.4.0\nNext.js 16 · React 19"]
+        RUST["novanet CLI v10.4.0\nRust · 13 commands · TUI"]
     end
 
     CORE --> STUDIO
@@ -117,7 +117,7 @@ novanet-hq/
 ├── packages/
 │   ├── core/                  # @novanet/core — types, schemas, filters
 │   │   ├── models/            # YAML schema definitions (source of truth)
-│   │   │   ├── _index.yaml    # 43 nodes, 64 arcs
+│   │   │   ├── _index.yaml    # 42 nodes, 77 arcs
 │   │   │   ├── nodes/         # Node definitions by realm
 │   │   │   └── relations.yaml # Relationship definitions
 │   │   └── src/               # TypeScript implementation
@@ -128,7 +128,7 @@ novanet-hq/
 ├── tools/
 │   └── novanet/               # Rust CLI + TUI binary
 │       ├── src/               # Rust source (13 commands, 8 generators)
-│       └── Cargo.toml         # 246 tests, zero clippy warnings
+│       └── Cargo.toml         # 245 tests, zero clippy warnings
 └── apps/
     └── studio/                # @novanet/studio — web visualization
         ├── src/app/           # Next.js App Router
@@ -143,10 +143,10 @@ novanet-hq/
 
 | Package | Version | Description |
 |---------|---------|-------------|
-| **@novanet/core** | `9.8.0` | Types, Zod schemas, NovaNetFilter API, Cypher generators |
+| **@novanet/core** | `10.4.0` | Types, Zod schemas, NovaNetFilter API, Cypher generators |
 | **@novanet/db** | `1.0.0` | Docker Compose for Neo4j, Cypher seeds, migrations |
-| **@novanet/studio** | `9.8.0` | Interactive graph visualization with AI chat |
-| **tools/novanet** | `9.8.0` | Rust CLI + TUI for schema generation, validation, queries |
+| **@novanet/studio** | `10.4.0` | Interactive graph visualization with AI chat |
+| **tools/novanet** | `10.4.0` | Rust CLI + TUI for schema generation, validation, queries |
 
 ---
 
@@ -215,13 +215,12 @@ Password: (see NEO4J_PASSWORD env var)
 
 ## Graph Schema
 
-NovaNet models content as a knowledge graph with **43 node types** across **3 Realms** and **9 Layers** (v10.1.0):
+NovaNet models content as a knowledge graph with **42 node types** across **2 Realms** and **8 Layers** (v10.4.0):
 
 | Realm | Nodes | Layers |
 |-------|-------|--------|
-| **Global** | 17 | Configuration, Locale Knowledge (10 containers + 6 atoms) |
-| **Project** | 23 | Foundation, Structure, Semantic, Instructions, Output |
-| **Shared** | 3 | SEO Intelligence (GEO removed in v10.1) |
+| **Global** | 19 | Configuration (1), Locale Knowledge (18) |
+| **Project** | 23 | Foundation (3), Structure (4), Semantic (4), Instructions (3), Output (6), SEO (3) |
 
 Each node type has a **Trait** (invariant / localized / knowledge / derived / job) and arcs are classified by **ArcFamily**.
 
@@ -241,16 +240,16 @@ See [`packages/core/models/_index.yaml`](packages/core/models/_index.yaml) for c
 │ │ Realm          │  │                                  │  │ Page         │ │
 │ │ ☑ Global       │  │      [Locale]──┐                 │  │ key: home    │ │
 │ │ ☑ Project      │  │          │     ▼                 │  │ realm: proj  │ │
-│ │ ☑ Shared       │  │   [Project]──[Page]──[Block]     │  │ layer: struc │ │
+│ │                │  │   [Project]──[Page]──[Block]     │  │ layer: struc │ │
 │ │                │  │          │     │                 │  │              │ │
 │ │ Layer          │  │          ▼     ▼                 │  │ Relations:   │ │
-│ │ ☑ Foundation   │  │   [Concept]──[ConceptL10n]       │  │ → 3 blocks   │ │
+│ │ ☑ Foundation   │  │   [Entity]──[EntityL10n]         │  │ → 3 blocks   │ │
 │ │ ☑ Structure    │  │          │                       │  │ → 1 project  │ │
 │ │ ☑ Semantic     │  │          ▼                       │  │              │ │
 │ │ ...            │  │   [BlockL10n]                    │  │ [Copy JSON]  │ │
 │ └────────────────┘  └──────────────────────────────────┘  └──────────────┘ │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│  Mode: Data  │  43 nodes  │  64 arcs  │  Zoom: 100%  │  Locale: fr-FR │
+│  Mode: Data  │  42 nodes  │  77 arcs  │  Zoom: 100%  │  Locale: fr-FR │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 *Interactive 2D graph visualization with AI-powered queries (⌘J)*

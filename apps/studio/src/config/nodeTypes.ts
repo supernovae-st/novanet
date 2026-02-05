@@ -1,19 +1,19 @@
 // =============================================================================
-// NODE TYPE CONFIGURATION (v9.7.0)
+// NODE TYPE CONFIGURATION (v10.4.0)
 // =============================================================================
-// Visual configuration for all 46 NovaNet node types
+// Visual configuration for all 42 NovaNet node types (v10.4: 8 layers, 2 realms)
 // NodeType, Layer, KIND_META imported from @novanet/core (Single Source of Truth)
 
 import type { NodeType, Layer } from '@novanet/core/types';
 import { NODE_TYPES, KIND_META } from '@novanet/core/types';
 
 // =============================================================================
-// NODE LAYERS (v9.7.0 - 9 layers, 46 nodes)
+// NODE LAYERS (v10.4 - 8 layers, 42 nodes)
 // Derived from KIND_META — single source of truth
 // =============================================================================
 
 /**
- * Node layers with their types (v9.7 - 46 nodes across 9 layers)
+ * Node layers with their types (v10.4 - 42 nodes across 8 layers)
  * Derived from KIND_META in @novanet/core
  */
 export const NODE_LAYERS: Record<Layer, NodeType[]> = Object.entries(KIND_META).reduce(
@@ -44,7 +44,7 @@ export interface NodeTypeConfig {
 }
 
 /**
- * All node type configurations (v9.7.0 - 46 nodes)
+ * All node type configurations (v10.4 - 42 nodes)
  * Aligned with @novanet/core NODE_TYPES
  */
 export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
@@ -80,42 +80,25 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   },
 
   // ==========================================================================
-  // SEMANTIC LAYER (6 nodes)
+  // SEMANTIC LAYER (4 nodes) - v10.3 Entity-Centric
+  // Global realm: Entity, EntityL10n; Project realm: AudiencePersona, ChannelSurface
   // ==========================================================================
-  Concept: {
-    type: 'Concept',
-    label: 'Concept',
+  Entity: {
+    type: 'Entity',
+    label: 'Entity',
     icon: '💡',
     color: '#f59e0b',
     colorClass: 'bg-amber-500',
     size: 20,
     layer: 'semantic',
   },
-  ConceptL10n: {
-    type: 'ConceptL10n',
-    label: 'Concept L10n',
+  EntityL10n: {
+    type: 'EntityL10n',
+    label: 'Entity L10n',
     icon: '💬',
     color: '#fbbf24',
     colorClass: 'bg-yellow-400',
     size: 16,
-    layer: 'semantic',
-  },
-  SearchIntent: {
-    type: 'SearchIntent',
-    label: 'Search Intent',
-    icon: '🔎',
-    color: '#d97706',
-    colorClass: 'bg-amber-600',
-    size: 16,
-    layer: 'semantic',
-  },
-  TopicCluster: {
-    type: 'TopicCluster',
-    label: 'Topic Cluster',
-    icon: '🗂️',
-    color: '#b45309',
-    colorClass: 'bg-amber-700',
-    size: 18,
     layer: 'semantic',
   },
   AudiencePersona: {
@@ -138,7 +121,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   },
 
   // ==========================================================================
-  // STRUCTURE LAYER (3 nodes)
+  // STRUCTURE LAYER (5 nodes) - includes PageType, BlockType
   // ==========================================================================
   Page: {
     type: 'Page',
@@ -167,10 +150,6 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     size: 14,
     layer: 'structure',
   },
-
-  // ==========================================================================
-  // INSTRUCTION LAYER (6 nodes — types + prompts + rules + artifact)
-  // ==========================================================================
   PageType: {
     type: 'PageType',
     label: 'Page Type',
@@ -178,7 +157,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#2563eb',
     colorClass: 'bg-blue-600',
     size: 16,
-    layer: 'instruction',
+    layer: 'structure',
   },
   BlockType: {
     type: 'BlockType',
@@ -187,8 +166,12 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#14b8a6',
     colorClass: 'bg-teal-500',
     size: 16,
-    layer: 'instruction',
+    layer: 'structure',
   },
+
+  // ==========================================================================
+  // INSTRUCTION LAYER (5 nodes — prompts + rules + artifact)
+  // ==========================================================================
 
   // ==========================================================================
   // CONFIG LAYER (1 node)
@@ -299,6 +282,61 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     size: 10,
     layer: 'knowledge',
   },
+  // Knowledge atoms (6)
+  Term: {
+    type: 'Term',
+    label: 'Term',
+    icon: '📖',
+    color: '#22c55e',
+    colorClass: 'bg-green-500',
+    size: 8,
+    layer: 'knowledge',
+  },
+  Expression: {
+    type: 'Expression',
+    label: 'Expression',
+    icon: '💬',
+    color: '#ec4899',
+    colorClass: 'bg-pink-500',
+    size: 8,
+    layer: 'knowledge',
+  },
+  Pattern: {
+    type: 'Pattern',
+    label: 'Pattern',
+    icon: '🔣',
+    color: '#f472b6',
+    colorClass: 'bg-pink-400',
+    size: 8,
+    layer: 'knowledge',
+  },
+  CultureRef: {
+    type: 'CultureRef',
+    label: 'Culture Ref',
+    icon: '🌍',
+    color: '#86efac',
+    colorClass: 'bg-green-300',
+    size: 8,
+    layer: 'knowledge',
+  },
+  Taboo: {
+    type: 'Taboo',
+    label: 'Taboo',
+    icon: '🚫',
+    color: '#ef4444',
+    colorClass: 'bg-red-500',
+    size: 8,
+    layer: 'knowledge',
+  },
+  AudienceTrait: {
+    type: 'AudienceTrait',
+    label: 'Audience Trait',
+    icon: '👤',
+    color: '#f59e0b',
+    colorClass: 'bg-amber-500',
+    size: 8,
+    layer: 'knowledge',
+  },
 
   // (PagePrompt, BlockPrompt, BlockRules already in INSTRUCTION LAYER above)
   PagePrompt: {
@@ -325,6 +363,15 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     icon: '📏',
     color: '#93c5fd',
     colorClass: 'bg-blue-300',
+    size: 12,
+    layer: 'instruction',
+  },
+  BlockInstruction: {
+    type: 'BlockInstruction',
+    label: 'Block Instruction',
+    icon: '📋',
+    color: '#7dd3fc',
+    colorClass: 'bg-sky-300',
     size: 12,
     layer: 'instruction',
   },
@@ -418,54 +465,6 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     layer: 'seo',
   },
 
-  // ==========================================================================
-  // GEO LAYER (5 nodes)
-  // ==========================================================================
-  Thing: {
-    type: 'Thing',
-    label: 'Thing',
-    icon: '📍',
-    color: '#7c3aed',
-    colorClass: 'bg-violet-600',
-    size: 18,
-    layer: 'geo',
-  },
-  ThingL10n: {
-    type: 'ThingL10n',
-    label: 'Thing L10n',
-    icon: '🌐',
-    color: '#8b5cf6',
-    colorClass: 'bg-violet-500',
-    size: 16,
-    layer: 'geo',
-  },
-  GEOSeedL10n: {
-    type: 'GEOSeedL10n',
-    label: 'GEO Seed',
-    icon: '🤖',
-    color: '#a855f7',
-    colorClass: 'bg-purple-500',
-    size: 16,
-    layer: 'geo',
-  },
-  GEOSeedMetrics: {
-    type: 'GEOSeedMetrics',
-    label: 'GEO Metrics',
-    icon: '📊',
-    color: '#c084fc',
-    colorClass: 'bg-purple-400',
-    size: 10,
-    layer: 'geo',
-  },
-  GEOMiningRun: {
-    type: 'GEOMiningRun',
-    label: 'GEO Mining',
-    icon: '⚙️',
-    color: '#d8b4fe',
-    colorClass: 'bg-purple-300',
-    size: 10,
-    layer: 'geo',
-  },
 };
 
 /**
@@ -491,11 +490,11 @@ export const LOCALE_TYPES: NodeType[] = [
 ];
 
 /**
- * Core types for default filter (structure nodes)
+ * Core types for default filter (structure nodes) - v10.3 Entity-Centric
  */
 export const CORE_TYPES: NodeType[] = [
   'Project',
-  'Concept',
+  'Entity',
   'Page',
   'Block',
   'BlockType',
@@ -587,14 +586,6 @@ export const NODE_VISUAL_LAYERS: LayerConfig[] = [
     color: '#cb4b16',
     colorLight: '#fb923c',
     nodeTypes: getNodeTypesByLayer('seo'),
-  },
-  {
-    id: 'geo',
-    label: 'GEO',
-    icon: '📍',
-    color: '#93a1a1',
-    colorLight: '#c084fc',
-    nodeTypes: getNodeTypesByLayer('geo'),
   },
 ];
 

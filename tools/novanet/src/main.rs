@@ -122,7 +122,7 @@ struct QueryArgs {
 enum NodeAction {
     /// Create a new node (auto-wires OF_KIND)
     Create {
-        /// Kind label (e.g., Page, Concept, Project)
+        /// Kind label (e.g., Page, Entity, Project)
         #[arg(long)]
         kind: String,
         /// Unique key for the node

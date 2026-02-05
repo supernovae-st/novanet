@@ -9,7 +9,7 @@ Knowledge graph visualization for the NovaNet localization orchestrator.
 
 ## Project Context
 
-**What:** Interactive 2D graph visualization for 42 node types (3 realms), 200 locales (~19,000 instances projected at full deployment)
+**What:** Interactive 2D graph visualization for 42 node types (2 realms), 200 locales (~19,000 instances projected at full deployment)
 **Stack:** Next.js 16 + React 19 + TypeScript 5.9 + Tailwind CSS
 **Graph:** @xyflow/react
 **State:** Zustand 5 with persist/immer
@@ -99,11 +99,11 @@ pnpm test            # Tests
 | Key | Action |
 |-----|--------|
 | `1` | Project Structure - Project, Pages, Blocks hierarchy |
-| `2` | Generation Chain - Concepts with L10n outputs |
+| `2` | Generation Chain - Entities with L10n outputs |
 | `3` | Locale Knowledge - Locale with all knowledge nodes |
-| `4` | Concept Network - Concepts and semantic links |
+| `4` | Entity Network - Entities and semantic links |
 | `5` | Prompts & Rules - AI instructions and validation rules |
-| `6` | SEO & GEO - Search optimization data |
+| `6` | SEO Targeting - Search optimization data |
 | `7` | Invariant Types - Nodes that do not change between locales |
 | `8` | Localized Content - Nodes generated natively per locale |
 | `0` | All Nodes - Show everything |
@@ -152,29 +152,28 @@ v9 introduces faceted classification with 6 meta-node types:
 
 | Meta-Type | Count | Purpose |
 |-----------|-------|---------|
-| **Realm** | 3 | WHERE? (global / project / shared) — replaces "Scope" |
-| **Layer** | 9 | WHAT? (functional classification) — replaces "Subcategory" |
+| **Realm** | 2 | WHERE? (global / project) — replaces "Scope" |
+| **Layer** | 8 | WHAT? (functional classification) — replaces "Subcategory" |
 | **Kind** | 42 | Node type (1:1 with Neo4j labels) — replaces "NodeTypeMeta" |
 | **Trait** | 5 | HOW? (invariant / localized / knowledge / derived / job) |
 | **ArcFamily** | 5 | Relationship classification |
-| **ArcKind** | 76 | Individual relationship type |
+| **ArcKind** | 77 | Individual relationship type |
 
 All meta-nodes carry `:Meta` double-label.
 
-### Kind Types (42 across 3 Realms)
+### Kind Types (42 across 2 Realms)
 
 | Realm | Nodes | Kinds |
 |-------|-------|-------|
-| **🌍 Global** | 11 | Locale, Formatting, Slugification, Adaptation, Style, TermSet, ExpressionSet, PatternSet, CultureSet, TabooSet, AudienceSet |
-| **📦 Project** | 23 | Project, BrandIdentity, ProjectL10n, Page, Block, BlockType, PageType, Concept, ConceptL10n, PagePrompt, BlockPrompt, BlockRules, PageL10n, BlockL10n, GenerationJob, PromptArtifact, OutputArtifact, EvaluationSignal, ContentSlot, TopicCluster, SearchIntent, AudiencePersona, ChannelSurface |
-| **🎯 Shared** | 8 | SEOKeyword, SEOKeywordMetrics, SEOMiningRun, GEOSeedL10n, GEOSeedMetrics, GEOMiningRun, Thing, ThingL10n |
+| **🌍 Global** | 19 | Locale, Formatting, Slugification, Adaptation, Style, TermSet, ExpressionSet, PatternSet, CultureSet, TabooSet, AudienceSet, Term, Expression, Pattern, CultureRef, Taboo, AudienceTrait, Thing, ThingL10n |
+| **📦 Project** | 23 | Project, BrandIdentity, ProjectL10n, Page, Block, BlockType, PageType, PagePrompt, BlockPrompt, BlockRules, PageL10n, BlockL10n, GenerationJob, PromptArtifact, OutputArtifact, EvaluationSignal, ContentSlot, AudiencePersona, ChannelSurface, BlockInstruction, Entity, EntityL10n, SEOKeyword |
 
 ### Key Relations (grouped by ArcFamily)
-- **Ownership:** `HAS_CONCEPT`, `HAS_PAGE`, `HAS_BLOCK`, `OF_TYPE`, `SUPPORTS_LOCALE`
+- **Ownership:** `HAS_PAGE`, `HAS_BLOCK`, `OF_TYPE`, `SUPPORTS_LOCALE`
 - **Localization:** `HAS_L10N`, `FOR_LOCALE`
-- **Semantic:** `USES_CONCEPT`, `SEMANTIC_LINK`
+- **Semantic:** `USES_ENTITY`, `SEMANTIC_LINK`
 - **Generation:** `HAS_OUTPUT`, `HAS_PROMPT`
-- **Mining:** `HAS_SEO_TARGET`, `HAS_GEO_TARGET`
+- **Mining:** `EXPRESSES`
 
 ### NavigationMode (replaces DataMode)
 
@@ -191,7 +190,7 @@ All meta-nodes carry `:Meta` double-label.
 
 Types are imported via path alias:
 ```typescript
-import { Project, Concept, Page, Locale } from '@novanet/core/types';
+import { Project, Entity, Page, Locale } from '@novanet/core/types';
 import type { NodeType, Layer, RelationType } from '@novanet/core/types';
 ```
 

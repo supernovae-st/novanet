@@ -195,7 +195,7 @@ impl ContextEngine {
         from_key: &str,
         arc_kind: &str,
         locale_key: &str,
-    ) -> Result<Vec<(ContextNode, ContextEdge)>> {
+    ) -> Result<Vec<(ContextNode, ContextArc)>> {
         let q = query(&format!(
             r#"
             MATCH (from {{key: $from_key}})-[r:{arc_kind}]->(to)
@@ -232,7 +232,7 @@ impl ContextEngine {
                 depth: 0, // Will be set by caller
             };
 
-            let edge = ContextEdge {
+            let edge = ContextArc {
                 from_key: from_key.to_string(),
                 to_key: node.key.clone(),
                 arc_kind: row.get::<String>("rel_type").unwrap_or_default(),

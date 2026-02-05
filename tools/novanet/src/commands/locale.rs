@@ -3,56 +3,55 @@
 //! Lists locales with their knowledge satellite status from Neo4j,
 //! and imports locale data from Cypher files.
 //!
-//! # TODO: v10 Migration Required
-//!
-//! This module uses **deprecated v9 knowledge node names and arcs**:
-//! - Old nodes: LocaleIdentity, LocaleVoice, LocaleCulture, LocaleMarket, LocaleLexicon
-//! - Old arcs: HAS_IDENTITY, HAS_VOICE, HAS_CULTURE, HAS_MARKET, HAS_LEXICON
-//!
-//! v10 uses a tiered knowledge model with new nodes and arcs:
-//! - Technical: Formatting, Slugification, Adaptation (HAS_FORMATTING, etc.)
-//! - Style: Style (HAS_STYLE)
-//! - Semantic: TermSet, ExpressionSet, PatternSet, CultureSet, TabooSet, AudienceSet
-//!
-//! The `locale list` command needs rewriting to query v10 knowledge satellites.
+//! v10.4: Uses tiered knowledge model:
+//! - Technical tier: Formatting, Slugification, Adaptation
+//! - Style tier: Style
+//! - Semantic tier: TermSet, ExpressionSet, PatternSet, CultureSet, TabooSet, AudienceSet
 
 use std::path::Path;
 
 use crate::db::Db;
 use crate::output::OutputFormat;
 
-/// A locale row for display.
+/// A locale row for display (v10.4 tiered knowledge model).
 #[derive(Debug, Clone, serde::Serialize, tabled::Tabled)]
 pub struct LocaleRow {
     pub key: String,
     pub display_name: String,
     pub language_code: String,
     pub country_code: String,
-    pub identity: String,
-    pub voice: String,
-    pub culture: String,
-    pub market: String,
-    pub lexicon: String,
+    /// Technical tier (Formatting, Slugification, Adaptation)
+    pub technical: String,
+    /// Style tier (Style)
+    pub style: String,
+    /// Semantic tier (TermSet, ExpressionSet, PatternSet, CultureSet, TabooSet, AudienceSet)
+    pub semantic: String,
 }
 
-/// List all locales with their knowledge satellite status.
+/// List all locales with their knowledge satellite status (v10.4 tiered model).
 pub async fn run_list(db: &Db, format: OutputFormat) -> crate::Result<()> {
     let cypher = "\
 MATCH (l:Locale)
-OPTIONAL MATCH (l)-[:HAS_IDENTITY]->(i:LocaleIdentity)
-OPTIONAL MATCH (l)-[:HAS_VOICE]->(v:LocaleVoice)
-OPTIONAL MATCH (l)-[:HAS_CULTURE]->(c:LocaleCulture)
-OPTIONAL MATCH (l)-[:HAS_MARKET]->(m:LocaleMarket)
-OPTIONAL MATCH (l)-[:HAS_LEXICON]->(x:LocaleLexicon)
+// Technical tier
+OPTIONAL MATCH (l)-[:HAS_FORMATTING]->(f:Formatting)
+OPTIONAL MATCH (l)-[:HAS_SLUGIFICATION]->(sl:Slugification)
+OPTIONAL MATCH (l)-[:HAS_ADAPTATION]->(a:Adaptation)
+// Style tier
+OPTIONAL MATCH (l)-[:HAS_STYLE]->(st:Style)
+// Semantic tier (6 sets)
+OPTIONAL MATCH (l)-[:HAS_TERMS]->(t:TermSet)
+OPTIONAL MATCH (l)-[:HAS_EXPRESSIONS]->(ex:ExpressionSet)
+OPTIONAL MATCH (l)-[:HAS_PATTERNS]->(pa:PatternSet)
+OPTIONAL MATCH (l)-[:HAS_CULTURE]->(c:CultureSet)
+OPTIONAL MATCH (l)-[:HAS_TABOOS]->(tb:TabooSet)
+OPTIONAL MATCH (l)-[:HAS_AUDIENCE]->(au:AudienceSet)
 RETURN l.key AS key,
        l.display_name AS display_name,
        l.language_code AS language_code,
        l.country_code AS country_code,
-       CASE WHEN i IS NOT NULL THEN 'yes' ELSE '-' END AS identity,
-       CASE WHEN v IS NOT NULL THEN 'yes' ELSE '-' END AS voice,
-       CASE WHEN c IS NOT NULL THEN 'yes' ELSE '-' END AS culture,
-       CASE WHEN m IS NOT NULL THEN 'yes' ELSE '-' END AS market,
-       CASE WHEN x IS NOT NULL THEN 'yes' ELSE '-' END AS lexicon
+       CASE WHEN f IS NOT NULL OR sl IS NOT NULL OR a IS NOT NULL THEN 'yes' ELSE '-' END AS technical,
+       CASE WHEN st IS NOT NULL THEN 'yes' ELSE '-' END AS style,
+       CASE WHEN t IS NOT NULL OR ex IS NOT NULL OR pa IS NOT NULL OR c IS NOT NULL OR tb IS NOT NULL OR au IS NOT NULL THEN 'yes' ELSE '-' END AS semantic
 ORDER BY l.key";
 
     match format {
@@ -127,11 +126,9 @@ fn extract_locale_rows(rows: &[neo4rs::Row]) -> Vec<LocaleRow> {
             display_name: row.get("display_name").unwrap_or_default(),
             language_code: row.get("language_code").unwrap_or_default(),
             country_code: row.get("country_code").unwrap_or_default(),
-            identity: row.get("identity").unwrap_or_default(),
-            voice: row.get("voice").unwrap_or_default(),
-            culture: row.get("culture").unwrap_or_default(),
-            market: row.get("market").unwrap_or_default(),
-            lexicon: row.get("lexicon").unwrap_or_default(),
+            technical: row.get("technical").unwrap_or_default(),
+            style: row.get("style").unwrap_or_default(),
+            semantic: row.get("semantic").unwrap_or_default(),
         })
         .collect()
 }

@@ -122,7 +122,7 @@ function buildElkGraph(hierarchy: HierarchicalSchemaData): ElkNode {
   const children: ElkNode[] = [];
   const edges: ElkExtendedEdge[] = [];
 
-  const realmOrder: Realm[] = ['project', 'global', 'shared'];
+  const realmOrder: Realm[] = ['project', 'global'];
 
   // Create realm groups as compound nodes with layer children
   for (const realm of realmOrder) {
@@ -381,7 +381,7 @@ function applyEdgeAwareGridLayout(
   const realmLayouts: RealmLayout[] = [];
   const MAX_COLS = MAX_NODES_PER_ROW;
 
-  for (const realm of ['project', 'global', 'shared'] as Realm[]) {
+  for (const realm of ['project', 'global'] as Realm[]) {
     const realmDef = hierarchy.realms[realm];
     if (!realmDef) continue;
 

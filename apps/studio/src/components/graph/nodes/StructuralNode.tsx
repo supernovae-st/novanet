@@ -36,7 +36,7 @@ export type StructuralNodeType = Node<BaseNodeData>;
 function getCardWidth(type: string): number {
   switch (type) {
     case 'Page': return 210;
-    case 'Concept': return 195;
+    case 'Entity': return 195; // v10.3: was Concept
     case 'Block': return 175;
     case 'BlockType': return 165;
     case 'Locale': return 200;

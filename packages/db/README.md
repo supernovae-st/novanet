@@ -69,15 +69,14 @@ db/
 
 ---
 
-## Graph Schema (v9.9.0)
+## Graph Schema (v10.4.0)
 
 | Realm | Nodes | Description |
 |-------|-------|-------------|
-| **🌍 Global** | 11 | Locale + 10 tiered knowledge nodes |
-| **📦 Project** | 23 | Project structure, content, generation |
-| **🎯 Shared** | 3 | SEO targeting nodes (v10.1: GEO removed) |
+| **🌍 Global** | 19 | Locale + 18 knowledge nodes (containers + atoms) |
+| **📦 Project** | 23 | Project structure, content, generation, SEO |
 
-Total: **43 node types**, **64 arc types**, **~100 meta-nodes** (Realm/Layer/Kind/Trait/ArcFamily/ArcKind)
+Total: **42 node types**, **77 arc types**, **~100 meta-nodes** (Realm/Layer/Kind/Trait/ArcFamily/ArcKind)
 
 ---
 
@@ -138,12 +137,12 @@ RETURN l, fmt, slug, adapt, style, terms, expr, pat, cult, taboo, aud
 ### Spreading Activation
 
 ```cypher
-MATCH (c:Concept {key: "tier-pro"})-[r:SEMANTIC_LINK*1..2]->(c2:Concept)
+MATCH (e:Entity {key: "tier-pro"})-[r:SEMANTIC_LINK*1..2]->(e2:Entity)
 WHERE ALL(rel IN r WHERE rel.temperature >= 0.3)
-WITH c2, reduce(a = 1.0, rel IN r | a * rel.temperature) AS activation
+WITH e2, reduce(a = 1.0, rel IN r | a * rel.temperature) AS activation
 WHERE activation >= 0.3
-MATCH (c2)-[:HAS_L10N]->(cl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
-RETURN c2.key, cl.title, activation
+MATCH (e2)-[:HAS_L10N]->(el:EntityL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+RETURN e2.key, el.title, activation
 ORDER BY activation DESC
 ```
 

@@ -53,9 +53,9 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
         name: 'realm',
         message: 'Realm (where does this node live?):',
         choices: [
-          { name: 'global  - Shared by ALL projects (Locale, LocaleKnowledge)', value: 'global' },
-          { name: 'shared  - Independent of projects (SEO, GEO)', value: 'shared' },
-          { name: 'project - Per-project instances (Page, Block, Concept)', value: 'project' },
+          // v10.4: 2 realms (SHARED merged into GLOBAL)
+          { name: 'global  - Shared by ALL projects (Locale, Knowledge, SEO)', value: 'global' },
+          { name: 'project - Per-project instances (Page, Block, Entity)', value: 'project' },
         ],
       },
       {
@@ -63,12 +63,10 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
         name: 'layer',
         message: 'Layer:',
         choices: [
-          // Global
+          // Global (v10.4: SEO moved from SHARED)
           { name: 'config (global)', value: 'config' },
           { name: 'knowledge (global)', value: 'knowledge' },
-          // Shared
-          { name: 'seo (shared)', value: 'seo' },
-          { name: 'geo (shared)', value: 'geo' },
+          { name: 'seo (global)', value: 'seo' },
           // Project
           { name: 'foundation (project)', value: 'foundation' },
           { name: 'structure (project)', value: 'structure' },

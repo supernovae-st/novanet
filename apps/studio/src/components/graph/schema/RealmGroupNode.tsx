@@ -11,8 +11,7 @@
  *
  * Realm Colors (hex values):
  * - Project: violet (#8b5cf6) - 📦
- * - global: emerald (#10b981) - 🌍
- * - shared: amber (#f59e0b) - 🎯
+ * - Global: emerald (#10b981) - 🌍
  */
 
 import { memo, useState, useCallback } from 'react';
@@ -54,12 +53,6 @@ const REALM_COLORS: Record<Realm, {
     secondary: '#34d399',
     glow: 'rgba(16, 185, 129, 0.3)',
     bgGlow: 'rgba(16, 185, 129, 0.05)',
-  },
-  shared: {
-    primary: '#f59e0b',
-    secondary: '#fbbf24',
-    glow: 'rgba(245, 158, 11, 0.3)',
-    bgGlow: 'rgba(245, 158, 11, 0.05)',
   },
 };
 

@@ -120,25 +120,11 @@ describe('schemaLayoutELK', () => {
               icon: '🧠',
               nodeTypes: ['Style', 'Formatting'] as never[],
             },
-          } as Record<Layer, { label: string; description: string; icon: string; nodeTypes: never[] }>,
-        },
-        shared: {
-          realm: 'shared' as Realm,
-          label: 'SHARED',
-          icon: '🎯',
-          description: 'Shared across projects',
-          layers: {
             seo: {
               label: 'SEO',
               description: 'SEO data',
               icon: '🔍',
               nodeTypes: ['SEOKeyword'] as never[],
-            },
-            geo: {
-              label: 'GEO',
-              description: 'GEO data',
-              icon: '🤖',
-              nodeTypes: ['GEOSeedL10n'] as never[],
             },
           } as Record<Layer, { label: string; description: string; icon: string; nodeTypes: never[] }>,
         },
@@ -152,17 +138,16 @@ describe('schemaLayoutELK', () => {
         { id: 'schema-Locale', nodeType: 'Locale', realm: 'global', layer: 'config', label: 'Locale', description: '', trait: 'invariant' },
         { id: 'schema-Style', nodeType: 'Style', realm: 'global', layer: 'knowledge', label: 'Style', description: '', trait: 'knowledge' },
         { id: 'schema-Formatting', nodeType: 'Formatting', realm: 'global', layer: 'knowledge', label: 'Formatting', description: '', trait: 'knowledge' },
-        { id: 'schema-SEOKeyword', nodeType: 'SEOKeyword', realm: 'shared', layer: 'seo', label: 'SEO Keyword', description: '', trait: 'localized' },
-        { id: 'schema-GEOSeedL10n', nodeType: 'GEOSeedL10n', realm: 'shared', layer: 'geo', label: 'GEO Seed', description: '', trait: 'localized' },
+        { id: 'schema-SEOKeyword', nodeType: 'SEOKeyword', realm: 'global', layer: 'seo', label: 'SEO Keyword', description: '', trait: 'localized' },
       ] as SchemaNode[],
       arcs: [
         { id: 'schema-arc-0', relationType: 'HAS_PAGE', sourceType: 'Project', targetType: 'Page', label: 'HAS_PAGE', description: '', cardinality: '1:N' },
         { id: 'schema-arc-1', relationType: 'HAS_BLOCK', sourceType: 'Page', targetType: 'Block', label: 'HAS_BLOCK', description: '', cardinality: '1:N' },
       ] as SchemaArc[],
       stats: {
-        totalNodes: 10,
+        totalNodes: 9,
         totalArcs: 2,
-        nodesByRealm: { project: 5, global: 3, shared: 2 },
+        nodesByRealm: { project: 5, global: 4 },
       },
     };
   });
@@ -177,8 +162,8 @@ describe('schemaLayoutELK', () => {
       const result = await applySchemaLayout(mockHierarchy);
 
       // Should have meta nodes + schema nodes
-      // 3 realm badges + 6 layer badges + 10 schema nodes = 19
-      expect(result.nodes.length).toBeGreaterThan(10);
+      // 2 realm badges + 5 layer badges + 9 schema nodes = 16
+      expect(result.nodes.length).toBeGreaterThan(9);
 
       // All nodes should have positions
       for (const node of result.nodes) {
@@ -191,11 +176,11 @@ describe('schemaLayoutELK', () => {
     it('should create realm meta badge nodes', async () => {
       const result = await applySchemaLayout(mockHierarchy);
 
-      // v9.5: Realms are metaBadge nodes with metaType: 'realm'
+      // v10.4: Realms are metaBadge nodes with metaType: 'realm' (2 realms: project, global)
       const realmBadges = result.nodes.filter(n =>
         n.type === 'metaBadge' && n.data.metaType === 'realm'
       );
-      expect(realmBadges).toHaveLength(3);
+      expect(realmBadges).toHaveLength(2);
 
       // Verify realm badge data
       const projectRealm = realmBadges.find(n => n.data.realmKey === 'project');
@@ -206,27 +191,27 @@ describe('schemaLayoutELK', () => {
     it('should create layer meta badge nodes', async () => {
       const result = await applySchemaLayout(mockHierarchy);
 
-      // v9.5: Layers are metaBadge nodes with metaType: 'layer'
+      // v10.4: Layers are metaBadge nodes with metaType: 'layer'
       const layerBadges = result.nodes.filter(n =>
         n.type === 'metaBadge' && n.data.metaType === 'layer'
       );
-      // 2 (Project) + 2 (Global) + 2 (Shared) = 6
-      expect(layerBadges).toHaveLength(6);
+      // 2 (Project) + 3 (Global: config, knowledge, seo) = 5
+      expect(layerBadges).toHaveLength(5);
 
-      // v9.5: No parent relationships - connected by HAS_LAYER edges
+      // v10.4: No parent relationships - connected by HAS_LAYER edges
       const hasLayerEdges = result.edges.filter(e => e.data?.relationType === 'HAS_LAYER');
-      expect(hasLayerEdges.length).toBe(6);
+      expect(hasLayerEdges.length).toBe(5);
     });
 
     it('should create schema nodes with layer connections', async () => {
       const result = await applySchemaLayout(mockHierarchy);
 
       const schemaNodes = result.nodes.filter(n => n.type === 'schemaNode');
-      expect(schemaNodes).toHaveLength(10);
+      expect(schemaNodes).toHaveLength(9);
 
-      // v9.5: Connected by HAS_KIND edges (not parent relationships)
+      // v10.4: Connected by HAS_KIND edges (not parent relationships)
       const hasKindEdges = result.edges.filter(e => e.data?.relationType === 'HAS_KIND');
-      expect(hasKindEdges.length).toBe(10);
+      expect(hasKindEdges.length).toBe(9);
     });
 
     it('should position all nodes with valid coordinates', async () => {
@@ -244,14 +229,14 @@ describe('schemaLayoutELK', () => {
     it('should include business edges plus hierarchy edges', async () => {
       const result = await applySchemaLayout(mockHierarchy);
 
-      // v9.5: Total edges = HAS_LAYER + HAS_KIND + business edges
-      // 6 HAS_LAYER + 10 HAS_KIND + 2 business = 18
+      // v10.4: Total edges = HAS_LAYER + HAS_KIND + business edges
+      // 5 HAS_LAYER + 9 HAS_KIND + 2 business = 16
       const hasLayerEdges = result.edges.filter(e => e.data?.relationType === 'HAS_LAYER');
       const hasKindEdges = result.edges.filter(e => e.data?.relationType === 'HAS_KIND');
       const businessEdges = result.edges.filter(e => !e.data?.isMetaEdge);
 
-      expect(hasLayerEdges.length).toBe(6);
-      expect(hasKindEdges.length).toBe(10);
+      expect(hasLayerEdges.length).toBe(5);
+      expect(hasKindEdges.length).toBe(9);
       expect(businessEdges.length).toBe(2); // Original mock edges
     });
 
@@ -304,12 +289,12 @@ describe('schemaLayoutELK', () => {
       const hierarchy = getSchemaHierarchy();
       const result = await applySchemaLayout(hierarchy);
 
-      // v9.5: Uses metaBadge for Realm and Layer, schemaNode for Kind
-      // Should have 3 realm meta badges
+      // v10.4: Uses metaBadge for Realm and Layer, schemaNode for Kind
+      // Should have 2 realm meta badges (project, global)
       const realmBadges = result.nodes.filter(n =>
         n.type === 'metaBadge' && n.data.metaType === 'realm'
       );
-      expect(realmBadges).toHaveLength(3);
+      expect(realmBadges).toHaveLength(2);
 
       // Should have layer meta badges (varies by active layers)
       const layerBadges = result.nodes.filter(n =>
@@ -349,7 +334,7 @@ describe('schemaLayoutELK', () => {
         realms: {} as never,
         nodes: [],
         arcs: [],
-        stats: { totalNodes: 0, totalArcs: 0, nodesByRealm: { project: 0, global: 0, shared: 0 } },
+        stats: { totalNodes: 0, totalArcs: 0, nodesByRealm: { project: 0, global: 0 } },
       };
 
       // Should not throw

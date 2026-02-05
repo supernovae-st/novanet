@@ -1,10 +1,9 @@
-// NovaNet MVP Seed v8.2.0 - YAML v7.11.0 Alignment
+// NovaNet MVP Seed v10.4.0 - Entity-Centric Architecture
 //
-// v8.2.0 STANDARD PROPERTIES (all nodes):
+// v10.4.0 STANDARD PROPERTIES (all nodes):
 //   key, display_name, description, llm_context, created_at, updated_at
 //
-// REMOVED (now YAML-only):
-//   icon, priority, freshness - managed in YAML views, not Neo4j
+// v10.4: Entity replaces Concept, 2 realms (global, project), GEO layer removed
 //
 // KEY NAMING: {semantic-role}-{identifier}
 //   action-*, product-*, feature-*, tier-*, page-*, block-*, blocktype-*, project-*
@@ -203,7 +202,7 @@ CREATE (p)-[:SUPPORTS_LOCALE {default: l.key = "en-US"}]->(l);
 // ═══════════════════════════════════════════════════════════════════════════════
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// CONCEPTS (v8.2.0 - YAML-aligned Property Order)
+// ENTITIES (v8.2.0 - YAML-aligned Property Order)
 // ═══════════════════════════════════════════════════════════════════════════════
 //
 // KEY NAMING: {semantic-role}-{identifier}
@@ -221,7 +220,7 @@ CREATE (p)-[:SUPPORTS_LOCALE {default: l.key = "en-US"}]->(l);
 
 // action-create-qr
 MATCH (p:Project {key: "project-qrcode-ai"})
-CREATE (p)-[:HAS_CONCEPT]->(c:Concept {
+CREATE (p)-[:USES_ENTITY]->(c:Entity {
   // 1. IDENTIFICATION
   key: "action-create-qr",
   display_name: "Create QR Code",
@@ -235,7 +234,7 @@ CREATE (p)-[:HAS_CONCEPT]->(c:Concept {
 
 // product-generator
 MATCH (p:Project {key: "project-qrcode-ai"})
-CREATE (p)-[:HAS_CONCEPT]->(c:Concept {
+CREATE (p)-[:USES_ENTITY]->(c:Entity {
   key: "product-generator",
   display_name: "QR Code Generator",
   description: "The main QR code generator tool/product",
@@ -246,7 +245,7 @@ CREATE (p)-[:HAS_CONCEPT]->(c:Concept {
 
 // feature-analytics
 MATCH (p:Project {key: "project-qrcode-ai"})
-CREATE (p)-[:HAS_CONCEPT]->(c:Concept {
+CREATE (p)-[:USES_ENTITY]->(c:Entity {
   key: "feature-analytics",
   display_name: "Analytics",
   description: "Tracking and statistics feature for QR code scans",
@@ -257,7 +256,7 @@ CREATE (p)-[:HAS_CONCEPT]->(c:Concept {
 
 // tier-free
 MATCH (p:Project {key: "project-qrcode-ai"})
-CREATE (p)-[:HAS_CONCEPT]->(c:Concept {
+CREATE (p)-[:USES_ENTITY]->(c:Entity {
   key: "tier-free",
   display_name: "Free Tier",
   description: "Free pricing tier with basic features",
@@ -268,7 +267,7 @@ CREATE (p)-[:HAS_CONCEPT]->(c:Concept {
 
 // tier-pro
 MATCH (p:Project {key: "project-qrcode-ai"})
-CREATE (p)-[:HAS_CONCEPT]->(c:Concept {
+CREATE (p)-[:USES_ENTITY]->(c:Entity {
   key: "tier-pro",
   display_name: "Pro Tier",
   description: "Premium pricing tier with advanced features",
@@ -278,7 +277,7 @@ CREATE (p)-[:HAS_CONCEPT]->(c:Concept {
 });
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// CONCEPT L10N (v8.2.0 - YAML-aligned Property Order)
+// ENTITY L10N (v10.4.0 - Entity-Centric Architecture)
 // ═══════════════════════════════════════════════════════════════════════════════
 //
 // PROPERTY ORDER:
@@ -290,9 +289,9 @@ CREATE (p)-[:HAS_CONCEPT]->(c:Concept {
 //
 // ───────────────────────────────────────────────────────────────────────────────
 
-// ConceptL10n for action-create-qr: en-US
-MATCH (c:Concept {key: "action-create-qr"}), (l:Locale {key: "en-US"})
-CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
+// EntityL10n for action-create-qr: en-US
+MATCH (c:Entity {key: "action-create-qr"}), (l:Locale {key: "en-US"})
+CREATE (c)-[:HAS_L10N]->(cl:EntityL10n {
   // 1. IDENTIFICATION
   display_name: "Create a QR Code",
   // 2. DOCUMENTATION
@@ -313,9 +312,9 @@ CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
 })
 CREATE (cl)-[:FOR_LOCALE]->(l);
 
-// ConceptL10n for action-create-qr: fr-FR
-MATCH (c:Concept {key: "action-create-qr"}), (l:Locale {key: "fr-FR"})
-CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
+// EntityL10n for action-create-qr: fr-FR
+MATCH (c:Entity {key: "action-create-qr"}), (l:Locale {key: "fr-FR"})
+CREATE (c)-[:HAS_L10N]->(cl:EntityL10n {
   display_name: "Créer un QR Code",
   description: "French (France) localization for action-create-qr concept",
   llm_context: "USE: native French title/definition for generation. TRIGGERS: fr-FR content needed. NOT: Quebec French.",
@@ -331,9 +330,9 @@ CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
 })
 CREATE (cl)-[:FOR_LOCALE]->(l);
 
-// ConceptL10n for action-create-qr: es-ES
-MATCH (c:Concept {key: "action-create-qr"}), (l:Locale {key: "es-ES"})
-CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
+// EntityL10n for action-create-qr: es-ES
+MATCH (c:Entity {key: "action-create-qr"}), (l:Locale {key: "es-ES"})
+CREATE (c)-[:HAS_L10N]->(cl:EntityL10n {
   display_name: "Crear un código QR",
   description: "Spanish (Spain) localization for action-create-qr concept",
   llm_context: "USE: native Spanish title/definition for generation. TRIGGERS: es-ES content needed. NOT: Latin American Spanish.",
@@ -349,9 +348,9 @@ CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
 })
 CREATE (cl)-[:FOR_LOCALE]->(l);
 
-// ConceptL10n for action-create-qr: de-DE
-MATCH (c:Concept {key: "action-create-qr"}), (l:Locale {key: "de-DE"})
-CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
+// EntityL10n for action-create-qr: de-DE
+MATCH (c:Entity {key: "action-create-qr"}), (l:Locale {key: "de-DE"})
+CREATE (c)-[:HAS_L10N]->(cl:EntityL10n {
   display_name: "QR-Code erstellen",
   description: "German localization for action-create-qr concept",
   llm_context: "USE: native German title/definition for generation. TRIGGERS: de-DE content needed. NOT: Austrian German.",
@@ -367,9 +366,9 @@ CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
 })
 CREATE (cl)-[:FOR_LOCALE]->(l);
 
-// ConceptL10n for action-create-qr: ja-JP
-MATCH (c:Concept {key: "action-create-qr"}), (l:Locale {key: "ja-JP"})
-CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
+// EntityL10n for action-create-qr: ja-JP
+MATCH (c:Entity {key: "action-create-qr"}), (l:Locale {key: "ja-JP"})
+CREATE (c)-[:HAS_L10N]->(cl:EntityL10n {
   display_name: "QRコードを作成",
   description: "Japanese localization for action-create-qr concept",
   llm_context: "USE: native Japanese title/definition for generation. TRIGGERS: ja-JP content needed. NOT: other Asian languages.",
@@ -386,12 +385,12 @@ CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
 CREATE (cl)-[:FOR_LOCALE]->(l);
 
 // ───────────────────────────────────────────────────────────────────────────────
-// ConceptL10n for product-generator (5 locales)
+// EntityL10n for product-generator (5 locales)
 // ───────────────────────────────────────────────────────────────────────────────
 
-// ConceptL10n for product-generator: en-US
-MATCH (c:Concept {key: "product-generator"}), (l:Locale {key: "en-US"})
-CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
+// EntityL10n for product-generator: en-US
+MATCH (c:Entity {key: "product-generator"}), (l:Locale {key: "en-US"})
+CREATE (c)-[:HAS_L10N]->(cl:EntityL10n {
   display_name: "QR Code Generator",
   description: "The QR code generation tool",
   llm_context: "USE: native English title/definition for generation. TRIGGERS: en-US content needed. NOT: translation source.",
@@ -406,9 +405,9 @@ CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
 })
 CREATE (cl)-[:FOR_LOCALE]->(l);
 
-// ConceptL10n for product-generator: fr-FR
-MATCH (c:Concept {key: "product-generator"}), (l:Locale {key: "fr-FR"})
-CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
+// EntityL10n for product-generator: fr-FR
+MATCH (c:Entity {key: "product-generator"}), (l:Locale {key: "fr-FR"})
+CREATE (c)-[:HAS_L10N]->(cl:EntityL10n {
   display_name: "Générateur de QR Code",
   description: "L'outil de génération de QR codes",
   llm_context: "USE: native French title/definition for generation. TRIGGERS: fr-FR content needed. NOT: Quebec French.",
@@ -423,9 +422,9 @@ CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
 })
 CREATE (cl)-[:FOR_LOCALE]->(l);
 
-// ConceptL10n for product-generator: es-ES
-MATCH (c:Concept {key: "product-generator"}), (l:Locale {key: "es-ES"})
-CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
+// EntityL10n for product-generator: es-ES
+MATCH (c:Entity {key: "product-generator"}), (l:Locale {key: "es-ES"})
+CREATE (c)-[:HAS_L10N]->(cl:EntityL10n {
   display_name: "Generador de códigos QR",
   description: "La herramienta de generación de códigos QR",
   llm_context: "USE: native Spanish title/definition for generation. TRIGGERS: es-ES content needed. NOT: Latin American Spanish.",
@@ -440,9 +439,9 @@ CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
 })
 CREATE (cl)-[:FOR_LOCALE]->(l);
 
-// ConceptL10n for product-generator: de-DE
-MATCH (c:Concept {key: "product-generator"}), (l:Locale {key: "de-DE"})
-CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
+// EntityL10n for product-generator: de-DE
+MATCH (c:Entity {key: "product-generator"}), (l:Locale {key: "de-DE"})
+CREATE (c)-[:HAS_L10N]->(cl:EntityL10n {
   display_name: "QR-Code-Generator",
   description: "Das QR-Code-Erstellungswerkzeug",
   llm_context: "USE: native German title/definition for generation. TRIGGERS: de-DE content needed. NOT: Austrian German.",
@@ -457,9 +456,9 @@ CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
 })
 CREATE (cl)-[:FOR_LOCALE]->(l);
 
-// ConceptL10n for product-generator: ja-JP
-MATCH (c:Concept {key: "product-generator"}), (l:Locale {key: "ja-JP"})
-CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
+// EntityL10n for product-generator: ja-JP
+MATCH (c:Entity {key: "product-generator"}), (l:Locale {key: "ja-JP"})
+CREATE (c)-[:HAS_L10N]->(cl:EntityL10n {
   display_name: "QRコードジェネレーター",
   description: "QRコード生成ツール",
   llm_context: "USE: native Japanese title/definition for generation. TRIGGERS: ja-JP content needed. NOT: other Asian languages.",
@@ -475,12 +474,12 @@ CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
 CREATE (cl)-[:FOR_LOCALE]->(l);
 
 // ───────────────────────────────────────────────────────────────────────────────
-// ConceptL10n for feature-analytics (5 locales)
+// EntityL10n for feature-analytics (5 locales)
 // ───────────────────────────────────────────────────────────────────────────────
 
-// ConceptL10n for feature-analytics: en-US
-MATCH (c:Concept {key: "feature-analytics"}), (l:Locale {key: "en-US"})
-CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
+// EntityL10n for feature-analytics: en-US
+MATCH (c:Entity {key: "feature-analytics"}), (l:Locale {key: "en-US"})
+CREATE (c)-[:HAS_L10N]->(cl:EntityL10n {
   display_name: "Analytics",
   description: "Scan tracking and statistics feature",
   llm_context: "USE: native English title/definition for generation. TRIGGERS: en-US content needed. NOT: translation source.",
@@ -495,9 +494,9 @@ CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
 })
 CREATE (cl)-[:FOR_LOCALE]->(l);
 
-// ConceptL10n for feature-analytics: fr-FR
-MATCH (c:Concept {key: "feature-analytics"}), (l:Locale {key: "fr-FR"})
-CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
+// EntityL10n for feature-analytics: fr-FR
+MATCH (c:Entity {key: "feature-analytics"}), (l:Locale {key: "fr-FR"})
+CREATE (c)-[:HAS_L10N]->(cl:EntityL10n {
   display_name: "Analytiques",
   description: "Suivi des scans et statistiques",
   llm_context: "USE: native French title/definition for generation. TRIGGERS: fr-FR content needed. NOT: Quebec French.",
@@ -512,9 +511,9 @@ CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
 })
 CREATE (cl)-[:FOR_LOCALE]->(l);
 
-// ConceptL10n for feature-analytics: es-ES
-MATCH (c:Concept {key: "feature-analytics"}), (l:Locale {key: "es-ES"})
-CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
+// EntityL10n for feature-analytics: es-ES
+MATCH (c:Entity {key: "feature-analytics"}), (l:Locale {key: "es-ES"})
+CREATE (c)-[:HAS_L10N]->(cl:EntityL10n {
   display_name: "Analíticas",
   description: "Seguimiento de escaneos y estadísticas",
   llm_context: "USE: native Spanish title/definition for generation. TRIGGERS: es-ES content needed. NOT: Latin American Spanish.",
@@ -529,9 +528,9 @@ CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
 })
 CREATE (cl)-[:FOR_LOCALE]->(l);
 
-// ConceptL10n for feature-analytics: de-DE
-MATCH (c:Concept {key: "feature-analytics"}), (l:Locale {key: "de-DE"})
-CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
+// EntityL10n for feature-analytics: de-DE
+MATCH (c:Entity {key: "feature-analytics"}), (l:Locale {key: "de-DE"})
+CREATE (c)-[:HAS_L10N]->(cl:EntityL10n {
   display_name: "Analysen",
   description: "Scan-Tracking und Statistiken",
   llm_context: "USE: native German title/definition for generation. TRIGGERS: de-DE content needed. NOT: Austrian German.",
@@ -546,9 +545,9 @@ CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
 })
 CREATE (cl)-[:FOR_LOCALE]->(l);
 
-// ConceptL10n for feature-analytics: ja-JP
-MATCH (c:Concept {key: "feature-analytics"}), (l:Locale {key: "ja-JP"})
-CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
+// EntityL10n for feature-analytics: ja-JP
+MATCH (c:Entity {key: "feature-analytics"}), (l:Locale {key: "ja-JP"})
+CREATE (c)-[:HAS_L10N]->(cl:EntityL10n {
   display_name: "アナリティクス",
   description: "スキャン追跡と統計",
   llm_context: "USE: native Japanese title/definition for generation. TRIGGERS: ja-JP content needed. NOT: other Asian languages.",
@@ -564,12 +563,12 @@ CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
 CREATE (cl)-[:FOR_LOCALE]->(l);
 
 // ───────────────────────────────────────────────────────────────────────────────
-// ConceptL10n for tier-free (5 locales)
+// EntityL10n for tier-free (5 locales)
 // ───────────────────────────────────────────────────────────────────────────────
 
-// ConceptL10n for tier-free: en-US
-MATCH (c:Concept {key: "tier-free"}), (l:Locale {key: "en-US"})
-CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
+// EntityL10n for tier-free: en-US
+MATCH (c:Entity {key: "tier-free"}), (l:Locale {key: "en-US"})
+CREATE (c)-[:HAS_L10N]->(cl:EntityL10n {
   display_name: "Free Plan",
   description: "Free tier pricing plan",
   llm_context: "USE: native English title/definition for generation. TRIGGERS: en-US content needed. NOT: translation source.",
@@ -584,9 +583,9 @@ CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
 })
 CREATE (cl)-[:FOR_LOCALE]->(l);
 
-// ConceptL10n for tier-free: fr-FR
-MATCH (c:Concept {key: "tier-free"}), (l:Locale {key: "fr-FR"})
-CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
+// EntityL10n for tier-free: fr-FR
+MATCH (c:Entity {key: "tier-free"}), (l:Locale {key: "fr-FR"})
+CREATE (c)-[:HAS_L10N]->(cl:EntityL10n {
   display_name: "Offre Gratuite",
   description: "Plan tarifaire gratuit",
   llm_context: "USE: native French title/definition for generation. TRIGGERS: fr-FR content needed. NOT: Quebec French.",
@@ -601,9 +600,9 @@ CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
 })
 CREATE (cl)-[:FOR_LOCALE]->(l);
 
-// ConceptL10n for tier-free: es-ES
-MATCH (c:Concept {key: "tier-free"}), (l:Locale {key: "es-ES"})
-CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
+// EntityL10n for tier-free: es-ES
+MATCH (c:Entity {key: "tier-free"}), (l:Locale {key: "es-ES"})
+CREATE (c)-[:HAS_L10N]->(cl:EntityL10n {
   display_name: "Plan Gratuito",
   description: "Plan de precios gratuito",
   llm_context: "USE: native Spanish title/definition for generation. TRIGGERS: es-ES content needed. NOT: Latin American Spanish.",
@@ -618,9 +617,9 @@ CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
 })
 CREATE (cl)-[:FOR_LOCALE]->(l);
 
-// ConceptL10n for tier-free: de-DE
-MATCH (c:Concept {key: "tier-free"}), (l:Locale {key: "de-DE"})
-CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
+// EntityL10n for tier-free: de-DE
+MATCH (c:Entity {key: "tier-free"}), (l:Locale {key: "de-DE"})
+CREATE (c)-[:HAS_L10N]->(cl:EntityL10n {
   display_name: "Kostenloser Plan",
   description: "Kostenloses Tarifpaket",
   llm_context: "USE: native German title/definition for generation. TRIGGERS: de-DE content needed. NOT: Austrian German.",
@@ -635,9 +634,9 @@ CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
 })
 CREATE (cl)-[:FOR_LOCALE]->(l);
 
-// ConceptL10n for tier-free: ja-JP
-MATCH (c:Concept {key: "tier-free"}), (l:Locale {key: "ja-JP"})
-CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
+// EntityL10n for tier-free: ja-JP
+MATCH (c:Entity {key: "tier-free"}), (l:Locale {key: "ja-JP"})
+CREATE (c)-[:HAS_L10N]->(cl:EntityL10n {
   display_name: "無料プラン",
   description: "無料料金プラン",
   llm_context: "USE: native Japanese title/definition for generation. TRIGGERS: ja-JP content needed. NOT: other Asian languages.",
@@ -653,12 +652,12 @@ CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
 CREATE (cl)-[:FOR_LOCALE]->(l);
 
 // ───────────────────────────────────────────────────────────────────────────────
-// ConceptL10n for tier-pro (5 locales)
+// EntityL10n for tier-pro (5 locales)
 // ───────────────────────────────────────────────────────────────────────────────
 
-// ConceptL10n for tier-pro: en-US
-MATCH (c:Concept {key: "tier-pro"}), (l:Locale {key: "en-US"})
-CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
+// EntityL10n for tier-pro: en-US
+MATCH (c:Entity {key: "tier-pro"}), (l:Locale {key: "en-US"})
+CREATE (c)-[:HAS_L10N]->(cl:EntityL10n {
   display_name: "Pro Plan",
   description: "Professional tier pricing plan",
   llm_context: "USE: native English title/definition for generation. TRIGGERS: en-US content needed. NOT: translation source.",
@@ -673,9 +672,9 @@ CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
 })
 CREATE (cl)-[:FOR_LOCALE]->(l);
 
-// ConceptL10n for tier-pro: fr-FR
-MATCH (c:Concept {key: "tier-pro"}), (l:Locale {key: "fr-FR"})
-CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
+// EntityL10n for tier-pro: fr-FR
+MATCH (c:Entity {key: "tier-pro"}), (l:Locale {key: "fr-FR"})
+CREATE (c)-[:HAS_L10N]->(cl:EntityL10n {
   display_name: "Offre Pro",
   description: "Plan tarifaire professionnel",
   llm_context: "USE: native French title/definition for generation. TRIGGERS: fr-FR content needed. NOT: Quebec French.",
@@ -690,9 +689,9 @@ CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
 })
 CREATE (cl)-[:FOR_LOCALE]->(l);
 
-// ConceptL10n for tier-pro: es-ES
-MATCH (c:Concept {key: "tier-pro"}), (l:Locale {key: "es-ES"})
-CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
+// EntityL10n for tier-pro: es-ES
+MATCH (c:Entity {key: "tier-pro"}), (l:Locale {key: "es-ES"})
+CREATE (c)-[:HAS_L10N]->(cl:EntityL10n {
   display_name: "Plan Pro",
   description: "Plan de precios profesional",
   llm_context: "USE: native Spanish title/definition for generation. TRIGGERS: es-ES content needed. NOT: Latin American Spanish.",
@@ -707,9 +706,9 @@ CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
 })
 CREATE (cl)-[:FOR_LOCALE]->(l);
 
-// ConceptL10n for tier-pro: de-DE
-MATCH (c:Concept {key: "tier-pro"}), (l:Locale {key: "de-DE"})
-CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
+// EntityL10n for tier-pro: de-DE
+MATCH (c:Entity {key: "tier-pro"}), (l:Locale {key: "de-DE"})
+CREATE (c)-[:HAS_L10N]->(cl:EntityL10n {
   display_name: "Pro-Plan",
   description: "Professionelles Tarifpaket",
   llm_context: "USE: native German title/definition for generation. TRIGGERS: de-DE content needed. NOT: Austrian German.",
@@ -724,9 +723,9 @@ CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
 })
 CREATE (cl)-[:FOR_LOCALE]->(l);
 
-// ConceptL10n for tier-pro: ja-JP
-MATCH (c:Concept {key: "tier-pro"}), (l:Locale {key: "ja-JP"})
-CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
+// EntityL10n for tier-pro: ja-JP
+MATCH (c:Entity {key: "tier-pro"}), (l:Locale {key: "ja-JP"})
+CREATE (c)-[:HAS_L10N]->(cl:EntityL10n {
   display_name: "プロプラン",
   description: "プロフェッショナル料金プラン",
   llm_context: "USE: native Japanese title/definition for generation. TRIGGERS: ja-JP content needed. NOT: other Asian languages.",
@@ -742,13 +741,13 @@ CREATE (c)-[:HAS_L10N]->(cl:ConceptL10n {
 CREATE (cl)-[:FOR_LOCALE]->(l);
 
 // Semantic links (v7.1.0: updated to new key names)
-MATCH (c1:Concept {key: "action-create-qr"}), (c2:Concept {key: "product-generator"})
+MATCH (c1:Entity {key: "action-create-qr"}), (c2:Entity {key: "product-generator"})
 CREATE (c1)-[:SEMANTIC_LINK {type: "is_action_on", temperature: 0.95}]->(c2);
 
-MATCH (c1:Concept {key: "product-generator"}), (c2:Concept {key: "feature-analytics"})
+MATCH (c1:Entity {key: "product-generator"}), (c2:Entity {key: "feature-analytics"})
 CREATE (c1)-[:SEMANTIC_LINK {type: "includes", temperature: 0.80}]->(c2);
 
-MATCH (c1:Concept {key: "tier-pro"}), (c2:Concept {key: "feature-analytics"})
+MATCH (c1:Entity {key: "tier-pro"}), (c2:Entity {key: "feature-analytics"})
 CREATE (c1)-[:SEMANTIC_LINK {type: "includes", temperature: 0.90}]->(c2);
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -787,10 +786,10 @@ CREATE (p)-[:HAS_PAGE]->(page:Page {
   updated_at: datetime()
 });
 
-// Page uses concepts (v7.1.0: USES_CONCEPT unified)
-MATCH (page:Page {key: "page-pricing"}), (c:Concept)
+// Page uses entities (v7.1.0: USES_ENTITY unified)
+MATCH (page:Page {key: "page-pricing"}), (c:Entity)
 WHERE c.key IN ["tier-free", "tier-pro"]
-CREATE (page)-[:USES_CONCEPT {purpose: "primary", temperature: 1.0}]->(c);
+CREATE (page)-[:USES_ENTITY {purpose: "primary", temperature: 1.0}]->(c);
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // BLOCKTYPE (v8.2.0 - YAML-aligned Property Order)
@@ -857,9 +856,9 @@ CREATE (block:Block {
 })
 CREATE (page)-[:HAS_BLOCK {position: 0}]->(block);
 
-// Block uses concept (v7.1.0: USES_CONCEPT unified)
-MATCH (block:Block {key: "block-pricing-hero"}), (c:Concept {key: "tier-pro"})
-CREATE (block)-[:USES_CONCEPT {purpose: "primary", temperature: 1.0}]->(c);
+// Block uses concept (v7.1.0: USES_ENTITY unified)
+MATCH (block:Block {key: "block-pricing-hero"}), (c:Entity {key: "tier-pro"})
+CREATE (block)-[:USES_ENTITY {purpose: "primary", temperature: 1.0}]->(c);
 
 // Block of type
 MATCH (block:Block {key: "block-pricing-hero"}), (bt:BlockType {key: "blocktype-hero"})

@@ -198,9 +198,9 @@ return <div>{nodeId}</div>;
 import { memo } from 'react';
 
 // Memoize custom nodes for React Flow
-export const ConceptNode = memo(function ConceptNode({ data }: NodeProps) {
+export const EntityNode = memo(function EntityNode({ data }: NodeProps) {
   return (
-    <div className="concept-node">
+    <div className="entity-node">
       <Handle type="target" position={Position.Top} />
       <span>{data.label}</span>
       <Handle type="source" position={Position.Bottom} />

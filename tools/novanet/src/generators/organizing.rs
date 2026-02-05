@@ -1,10 +1,10 @@
-//! Generate v9.9 Cypher for Realm, Layer, Trait, ArcFamily meta-nodes.
+//! Generate Cypher for Realm, Layer, Trait, ArcFamily meta-nodes.
 //!
-//! Reads `taxonomy.yaml` (v9.9) and produces idempotent MERGE statements
+//! Reads `taxonomy.yaml` and produces idempotent MERGE statements
 //! for the 4 taxonomy dimensions. All meta-nodes receive `:Meta` double-label.
 //!
-//! v9.5: Includes visual encoding properties (border_style, stroke_style, etc.)
-//! v9.9: Adds retrieval properties (default_traversal for ArcFamily)
+//! Features: visual encoding properties (border_style, stroke_style),
+//! retrieval properties (default_traversal for ArcFamily).
 //!
 //! Output target: `packages/db/seed/00.5-taxonomy.cypher`
 
@@ -50,7 +50,7 @@ fn generate_cypher(doc: &TaxonomyDoc) -> crate::Result<String> {
         doc.arc_families.len()
     )
     .unwrap();
-    writeln!(out, "// v9.5: Includes visual encoding properties").unwrap();
+    writeln!(out, "// Includes visual encoding properties").unwrap();
     writeln!(out, "// All meta-nodes have :Meta double-label").unwrap();
     writeln!(out, "// Uses MERGE for idempotent execution").unwrap();
 
@@ -130,7 +130,7 @@ fn generate_cypher(doc: &TaxonomyDoc) -> crate::Result<String> {
         writeln!(out, "  {var}.display_name = '{}',", trait_def.display_name).unwrap();
         writeln!(out, "  {var}.color = '{}',", trait_def.color).unwrap();
 
-        // Visual encoding properties (v9.5)
+        // Visual encoding properties
         if let Some(ref style) = trait_def.border_style {
             writeln!(out, "  {var}.border_style = '{style}',").unwrap();
         }
@@ -165,7 +165,7 @@ fn generate_cypher(doc: &TaxonomyDoc) -> crate::Result<String> {
         writeln!(out, "  {var}.color = '{}',", af.color).unwrap();
         writeln!(out, "  {var}.arrow_style = '{}',", af.arrow_style).unwrap();
 
-        // Visual encoding properties (v9.5)
+        // Visual encoding properties
         if let Some(ref style) = af.stroke_style {
             writeln!(out, "  {var}.stroke_style = '{style}',").unwrap();
         }
@@ -173,7 +173,7 @@ fn generate_cypher(doc: &TaxonomyDoc) -> crate::Result<String> {
             writeln!(out, "  {var}.stroke_width = {width},").unwrap();
         }
 
-        // v9.9: Retrieval default traversal mode
+        // Retrieval default traversal mode
         if let Some(ref traversal) = af.default_traversal {
             writeln!(out, "  {var}.default_traversal = '{traversal}',").unwrap();
         }
@@ -181,7 +181,7 @@ fn generate_cypher(doc: &TaxonomyDoc) -> crate::Result<String> {
         writeln!(out, "  {var}.llm_context = '{llm}';").unwrap();
     }
 
-    // ── Arc Scopes (v9.5) ────────────────────────────────────────────────
+    // ── Arc Scopes  ────────────────────────────────────────────────
     if !doc.arc_scopes.is_empty() {
         writeln!(out).unwrap();
         write_section_header(&mut out, "ARC SCOPES", doc.arc_scopes.len());
@@ -202,7 +202,7 @@ fn generate_cypher(doc: &TaxonomyDoc) -> crate::Result<String> {
         }
     }
 
-    // ── Arc Cardinalities (v9.5) ─────────────────────────────────────────
+    // ── Arc Cardinalities  ─────────────────────────────────────────
     if !doc.arc_cardinalities.is_empty() {
         writeln!(out).unwrap();
         write_section_header(&mut out, "ARC CARDINALITIES", doc.arc_cardinalities.len());
@@ -249,7 +249,7 @@ mod tests {
     #[test]
     fn generate_small_cypher() {
         let doc = TaxonomyDoc {
-            version: "10.3.0".to_string(),
+            version: "10.4.0".to_string(),
             node_realms: vec![NodeRealmDef {
                 key: "test".to_string(),
                 display_name: "Test".to_string(),
@@ -328,16 +328,16 @@ mod tests {
         assert!(cypher.contains("updated_at = datetime()"));
 
         // Header
-        assert!(cypher.contains("v10.3.0"));
+        assert!(cypher.contains("v10.4.0"));
         assert!(cypher.contains("AUTO-GENERATED"));
         assert!(cypher.contains("1 Realms, 1 Layers, 1 Traits, 1 ArcFamilies"));
-        assert!(cypher.contains("v9.5: Includes visual encoding properties"));
+        assert!(cypher.contains("Includes visual encoding properties"));
     }
 
     #[test]
     fn generate_multiline_llm_context() {
         let doc = TaxonomyDoc {
-            version: "10.3.0".to_string(),
+            version: "10.4.0".to_string(),
             node_realms: vec![NodeRealmDef {
                 key: "r".to_string(),
                 display_name: "R".to_string(),
@@ -440,11 +440,11 @@ mod tests {
         assert!(cypher.contains("af_generation.arrow_style = '==>'"));
         assert!(cypher.contains("af_mining.arrow_style = '--o'"));
 
-        // Visual encoding v9.5 — border styles on traits
+        // Visual encoding — border styles on traits
         assert!(cypher.contains("t_invariant.border_style = 'solid'"));
         assert!(cypher.contains("t_localized.border_style = 'dashed'"));
 
-        // Visual encoding v9.5 — stroke styles on arc families
+        // Visual encoding — stroke styles on arc families
         assert!(cypher.contains("af_ownership.stroke_style = 'solid'"));
         assert!(cypher.contains("af_localization.stroke_style = 'dashed'"));
 
@@ -452,8 +452,8 @@ mod tests {
         assert!(cypher.contains("as_intra_realm:Meta:ArcScope {key: 'intra_realm'}"));
         assert!(cypher.contains("ac_one_to_many:Meta:ArcCardinality {key: 'one_to_many'}"));
 
-        // Header mentions v10.3.0
-        assert!(cypher.contains("v10.3.0"));
+        // Header mentions v10.4.0
+        assert!(cypher.contains("v10.4.0"));
 
         // HAS_LAYER wiring — specific pairs
         assert!(cypher.contains("(r:Realm {key: 'global'}), (l:Layer {key: 'config'})"));
@@ -466,7 +466,7 @@ mod tests {
     #[test]
     fn snapshot_minimal_taxonomy() {
         let doc = TaxonomyDoc {
-            version: "10.3.0".to_string(),
+            version: "10.4.0".to_string(),
             node_realms: vec![NodeRealmDef {
                 key: "test".to_string(),
                 display_name: "Test Realm".to_string(),

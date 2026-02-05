@@ -1,19 +1,14 @@
 //! Traversal planner builds execution plan from meta-graph rules.
 //!
-//! v10: Determines which arcs to traverse and in what order based on
+//! v10.4: Determines which arcs to traverse and in what order based on
 //! ArcFamily default_traversal and ArcKind temperature_threshold.
 //!
-//! # TODO: v10 Migration Required
+//! Uses v10 tiered knowledge model:
+//! - Technical tier: Formatting, Slugification, Adaptation
+//! - Style tier: Style
+//! - Semantic tier: TermSet, ExpressionSet, PatternSet, CultureSet, TabooSet, AudienceSet
 //!
-//! The `arc_patterns_for_kind()` function has hardcoded knowledge arcs using
-//! **deprecated v9 node names**: LocaleVoice, LocaleCulture, LocaleLexicon
-//!
-//! v10 uses tiered knowledge nodes:
-//! - Technical: Formatting, Slugification, Adaptation
-//! - Style: Style
-//! - Semantic: TermSet, ExpressionSet, PatternSet, CultureSet, TabooSet, AudienceSet
-//!
-//! Update the pattern matching to use v10 arcs: HAS_FORMATTING, HAS_STYLE, etc.
+//! Entity-Centric Architecture (v10.3): Entity/EntityL10n are the primary semantic types.
 
 use super::meta::MetaGraphReader;
 use super::types::{ContextRequest, TraversalMode};
@@ -94,6 +89,7 @@ impl<'a> TraversalPlanner<'a> {
     }
 
     /// Get outgoing arcs for a kind (hardcoded patterns for common kinds).
+    /// v10.4: Entity-Centric Architecture + tiered knowledge model
     fn get_outgoing_arcs_for_kind(&self, kind: &str) -> Vec<(String, String, String)> {
         // This would ideally query the meta-graph, but for initial implementation
         // we use known patterns
@@ -101,38 +97,30 @@ impl<'a> TraversalPlanner<'a> {
             "Block" => vec![
                 ("USES_ENTITY".into(), "semantic".into(), "Entity".into()),
                 ("OF_TYPE".into(), "ownership".into(), "BlockType".into()),
-                (
-                    "HAS_PROMPT".into(),
-                    "ownership".into(),
-                    "BlockPrompt".into(),
-                ),
+                ("HAS_PROMPT".into(), "ownership".into(), "BlockPrompt".into()),
                 ("HAS_RULES".into(), "ownership".into(), "BlockRules".into()),
             ],
-            "Concept" => vec![
-                (
-                    "HAS_L10N".into(),
-                    "localization".into(),
-                    "ConceptL10n".into(),
-                ),
-                ("SEMANTIC_LINK".into(), "semantic".into(), "Concept".into()),
+            // v10.3 Entity-Centric: Entity replaces Concept
+            "Entity" => vec![
+                ("HAS_L10N".into(), "localization".into(), "EntityL10n".into()),
+                ("SEMANTIC_LINK".into(), "semantic".into(), "Entity".into()),
             ],
-            "ConceptL10n" => vec![("FOR_LOCALE".into(), "localization".into(), "Locale".into())],
+            "EntityL10n" => vec![("FOR_LOCALE".into(), "localization".into(), "Locale".into())],
+            // v10 tiered knowledge model
             "Locale" => vec![
-                (
-                    "HAS_VOICE".into(),
-                    "localization".into(),
-                    "LocaleVoice".into(),
-                ),
-                (
-                    "HAS_CULTURE".into(),
-                    "localization".into(),
-                    "LocaleCulture".into(),
-                ),
-                (
-                    "HAS_LEXICON".into(),
-                    "localization".into(),
-                    "LocaleLexicon".into(),
-                ),
+                // Technical tier
+                ("HAS_FORMATTING".into(), "localization".into(), "Formatting".into()),
+                ("HAS_SLUGIFICATION".into(), "localization".into(), "Slugification".into()),
+                ("HAS_ADAPTATION".into(), "localization".into(), "Adaptation".into()),
+                // Style tier
+                ("HAS_STYLE".into(), "localization".into(), "Style".into()),
+                // Semantic tier (sets)
+                ("HAS_TERMS".into(), "localization".into(), "TermSet".into()),
+                ("HAS_EXPRESSIONS".into(), "localization".into(), "ExpressionSet".into()),
+                ("HAS_PATTERNS".into(), "localization".into(), "PatternSet".into()),
+                ("HAS_CULTURE".into(), "localization".into(), "CultureSet".into()),
+                ("HAS_TABOOS".into(), "localization".into(), "TabooSet".into()),
+                ("HAS_AUDIENCE".into(), "localization".into(), "AudienceSet".into()),
             ],
             _ => vec![],
         }

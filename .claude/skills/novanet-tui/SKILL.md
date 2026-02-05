@@ -47,8 +47,8 @@ The TUI provides an immersive terminal experience for exploring the NovaNet know
 │   │      • LocaleVoice   │  │                                                       │   │
 │   │      • LocaleCulture │  │                                                       │   │
 │   │    ▶ config          │  │                                                       │   │
-│   │  ▶ project           │  │                                                       │   │
-│   │  ▶ shared            │  │                                                       │   │
+│   │  ▼ project           │  │                                                       │   │
+│   │                      │  │                                                       │   │
 │   └──────────────────────┘  └──────────────────────────────────────────────────────┘   │
 │                                                                                          │
 │   ┌──────────────────────────────────────────────────────────────────────────────────┐  │
@@ -120,8 +120,8 @@ The TUI provides an immersive terminal experience for exploring the NovaNet know
 ### Galaxy Theme
 
 - **SuperNovae color palette**: Deep space blues, nebula purples, star golds
-- **Realm colors**: Global (emerald), Project (violet), Shared (amber)
-- **Layer colors**: 9 distinct colors for each functional layer
+- **Realm colors**: Global (emerald), Project (violet)
+- **Layer colors**: 8 distinct colors for each functional layer
 - **ArcFamily colors**: 5 relationship type colors
 
 ### Boot Animation (First Launch)

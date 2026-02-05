@@ -1,11 +1,10 @@
-// NovaNet Constraints v9.0.0
+// NovaNet Constraints v10.4.0
 //
 // Schema definitions for Neo4j graph database.
 // Uses IF NOT EXISTS for idempotent execution.
 //
 // NOTE: Locale-based filtering uses :FOR_LOCALE relation traversal (not property indexes).
-// NOTE: Removed in v7.2.5: Audience, AudienceL10n, ValuePropL10n, SocialProofL10n
-// NOTE: v7.8.2: Renamed SEOKeyword → SEOKeyword
+// v10.4: Entity-Centric Architecture (Entity/EntityL10n), GEO layer removed, 2 realms (global, project)
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // LOCALE
@@ -20,8 +19,9 @@ CREATE INDEX locale_country IF NOT EXISTS FOR (l:Locale) ON (l.country_code);
 // ═══════════════════════════════════════════════════════════════════════════════
 
 CREATE CONSTRAINT project_key IF NOT EXISTS FOR (p:Project) REQUIRE p.key IS UNIQUE;
-CREATE CONSTRAINT concept_key IF NOT EXISTS FOR (c:Concept) REQUIRE c.key IS UNIQUE;
-CREATE INDEX cl10n_version IF NOT EXISTS FOR (cl:ConceptL10n) ON (cl.version);
+// v10.3: Entity replaces Concept
+CREATE CONSTRAINT entity_key IF NOT EXISTS FOR (e:Entity) REQUIRE e.key IS UNIQUE;
+CREATE INDEX el10n_version IF NOT EXISTS FOR (el:EntityL10n) ON (el.version);
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // PROJECT NODES (v7.2.5)
@@ -73,34 +73,19 @@ CREATE INDEX seokm_observed IF NOT EXISTS FOR (skm:SEOKeywordMetrics) ON (skm.ob
 CREATE INDEX seokm_source IF NOT EXISTS FOR (skm:SEOKeywordMetrics) ON (skm.source);
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// GEO STRUCTURE (v7.8.5: GEOCitation → GEOSeedMetrics)
-// ═══════════════════════════════════════════════════════════════════════════════
-
-CREATE INDEX geo_format IF NOT EXISTS FOR (g:GEOSeedL10n) ON (g.format);
-CREATE INDEX geo_intent IF NOT EXISTS FOR (g:GEOSeedL10n) ON (g.intent);
-CREATE INDEX geo_last_mined IF NOT EXISTS FOR (g:GEOSeedL10n) ON (g.last_mined_at);
-// REMOVED v7.8.4: GEOReformulation indexes (node deleted, reformulations are GEOSeedL10n nodes)
-// v7.8.5: GEOCitation → GEOSeedMetrics
-CREATE INDEX geosm_observed IF NOT EXISTS FOR (gsm:GEOSeedMetrics) ON (gsm.observed_at);
-CREATE INDEX geosm_platform IF NOT EXISTS FOR (gsm:GEOSeedMetrics) ON (gsm.platform);
-CREATE INDEX geosm_cited IF NOT EXISTS FOR (gsm:GEOSeedMetrics) ON (gsm.cited);
-CREATE INDEX geomr_status IF NOT EXISTS FOR (gmr:GEOMiningRun) ON (gmr.status);
-
-// ═══════════════════════════════════════════════════════════════════════════════
 // RELATIONSHIP INDEXES
 // ═══════════════════════════════════════════════════════════════════════════════
 
 CREATE INDEX has_block_position IF NOT EXISTS FOR ()-[r:HAS_BLOCK]-() ON (r.position);
 CREATE INDEX sl_temp IF NOT EXISTS FOR ()-[r:SEMANTIC_LINK]-() ON (r.temperature);
-CREATE INDEX uc_temp IF NOT EXISTS FOR ()-[r:USES_CONCEPT]-() ON (r.temperature);
-CREATE INDEX tseo_status IF NOT EXISTS FOR ()-[r:TARGETS_SEO]-() ON (r.status);
-CREATE INDEX tgeo_status IF NOT EXISTS FOR ()-[r:TARGETS_GEO]-() ON (r.status);
-// REMOVED v7.8.1: PAGE_TARGETS_SEO and PAGE_TARGETS_GEO indexes
-// Reason: Direct Page -> SEO/GEO bypasses semantic grouping
-// Correct flow: Page -> Concept -> ConceptL10n -> SEOKeyword/GEOSeedL10n
+// v10.3: USES_ENTITY replaces USES_CONCEPT
+CREATE INDEX ue_temp IF NOT EXISTS FOR ()-[r:USES_ENTITY]-() ON (r.temperature);
+// v10.3: EXPRESSES replaces TARGETS_SEO
+CREATE INDEX expresses_status IF NOT EXISTS FOR ()-[r:EXPRESSES]-() ON (r.status);
+// REMOVED v10.3: TARGETS_GEO (GEO layer removed)
+// Correct flow: Page -> Entity -> EntityL10n -> SEOKeyword
 CREATE INDEX infl_weight IF NOT EXISTS FOR ()-[r:INFLUENCED_BY]-() ON (r.weight);
-// REMOVED v7.9.0: USED_SEO_KEYWORD, USED_GEO_SEED indexes (relations removed)
-// SEO/GEO provenance is implicit via: BlockL10n → INFLUENCED_BY → ConceptL10n → HAS_*_TARGET → SEO/GEO
+// SEO provenance is implicit via: BlockL10n → INFLUENCED_BY → EntityL10n
 CREATE INDEX gen_date IF NOT EXISTS FOR ()-[r:GENERATED]-() ON (r.generated_at);
 
 // ═══════════════════════════════════════════════════════════════════════════════

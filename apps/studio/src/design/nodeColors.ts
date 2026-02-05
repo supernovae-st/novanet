@@ -42,7 +42,6 @@ const LAYER_GRADIENT_COLORS: Record<Layer, GradientColors> = {
   config: { primary: '#2aa198', secondary: '#14b8a6' },        // Solarized cyan -> Teal
   knowledge: { primary: '#268bd2', secondary: '#3b82f6' },     // Solarized blue -> Blue
   seo: { primary: '#cb4b16', secondary: '#f97316' },           // Solarized orange -> Orange
-  geo: { primary: '#93a1a1', secondary: '#a8a29e' },           // Solarized base1 -> Stone
 };
 
 const DEFAULT_LAYER_COLORS: GradientColors = { primary: '#6366f1', secondary: '#8b5cf6' };
@@ -64,7 +63,7 @@ const STRUCTURAL_COLORS: Record<string, GradientColors> = {
   Page: { primary: '#3b82f6', secondary: '#06b6d4' },        // Blue -> Cyan
   Block: { primary: '#06b6d4', secondary: '#14b8a6' },       // Cyan -> Teal
   BlockType: { primary: '#14b8a6', secondary: '#10b981' },   // Teal -> Emerald
-  Concept: { primary: '#f59e0b', secondary: '#f97316' },     // Amber -> Orange
+  Entity: { primary: '#f59e0b', secondary: '#f97316' },      // Amber -> Orange (v10.3 Entity-Centric)
   Locale: { primary: '#10b981', secondary: '#22c55e' },      // Emerald -> Green
   BrandIdentity: { primary: '#6d28d9', secondary: '#7c3aed' }, // Purple
   ProjectL10n: { primary: '#a78bfa', secondary: '#8b5cf6' }, // Light Violet

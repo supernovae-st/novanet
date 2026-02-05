@@ -1,6 +1,6 @@
 // src/filters/index.ts
 /**
- * NovaNet Filter System v9.0.0
+ * NovaNet Filter System v10.4.0
  *
  * Provides composable filter/view system for generating Cypher queries.
  *

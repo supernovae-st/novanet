@@ -1,10 +1,10 @@
 //! Generate Mermaid flowchart with Realm/Layer/Trait coloring.
 //!
-//! Reads all 46 node YAMLs, `relations.yaml`, and `taxonomy.yaml`
+//! Reads all 42 node YAMLs, `relations.yaml`, and `taxonomy.yaml` (v10.4)
 //! to produce a complete graph diagram with:
 //! - Subgraphs grouped by Realm → Layer
 //! - Node styling by node_trait (Trait)
-//! - Edge styling by ArcFamily (arrow style + color)
+//! - Arc styling by ArcFamily (arrow style + color)
 //!
 //! Output target: `packages/core/models/docs/complete-graph.md` (Markdown wrapper)
 
@@ -120,21 +120,21 @@ pub fn layer_display_name(key: &str, doc: &OrganizingDoc) -> String {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Expanded edge (after multi-source/target expansion)
+// Expanded arc (after multi-source/target expansion) — v10.4: renamed from edge
 // ─────────────────────────────────────────────────────────────────────────────
 
-/// A single concrete from→to edge (after expanding multi-source/target).
+/// A single concrete from→to arc (after expanding multi-source/target).
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
-pub struct ExpandedEdge {
+pub struct ExpandedArc {
     pub from: String,
     pub arc_type: String,
     pub to: String,
     pub family: ArcFamily,
 }
 
-/// Expand multi-source/target relations into concrete edges, filtering wildcards.
-pub fn expand_edges(relations: &[ArcDef]) -> Vec<ExpandedEdge> {
-    let mut edges = Vec::new();
+/// Expand multi-source/target relations into concrete arcs, filtering wildcards.
+pub fn expand_arcs(relations: &[ArcDef]) -> Vec<ExpandedArc> {
+    let mut arcs = Vec::new();
     for rel in relations {
         let sources = rel.source.labels();
         let targets = rel.target.labels();
@@ -146,7 +146,7 @@ pub fn expand_edges(relations: &[ArcDef]) -> Vec<ExpandedEdge> {
                 if tgt == "*" {
                     continue;
                 }
-                edges.push(ExpandedEdge {
+                arcs.push(ExpandedArc {
                     from: src.to_string(),
                     arc_type: rel.arc_type.clone(),
                     to: tgt.to_string(),
@@ -155,8 +155,8 @@ pub fn expand_edges(relations: &[ArcDef]) -> Vec<ExpandedEdge> {
             }
         }
     }
-    edges.sort();
-    edges
+    arcs.sort();
+    arcs
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -176,27 +176,27 @@ pub fn write_classdefs(out: &mut String) {
     writeln!(out).unwrap();
 }
 
-/// Write edges with family-based arrow styles + `linkStyle` coloring.
-pub fn write_edges_and_styles(out: &mut String, edges: &[ExpandedEdge]) {
+/// Write arcs with family-based arrow styles + `linkStyle` coloring.
+pub fn write_arcs_and_styles(out: &mut String, arcs: &[ExpandedArc]) {
     writeln!(out, "  %% Relationships (styled by arc family)").unwrap();
-    let mut edge_indices_by_family: BTreeMap<String, Vec<usize>> = BTreeMap::new();
-    for (i, edge) in edges.iter().enumerate() {
-        let arrow = family_arrow(edge.family);
+    let mut arc_indices_by_family: BTreeMap<String, Vec<usize>> = BTreeMap::new();
+    for (i, arc) in arcs.iter().enumerate() {
+        let arrow = family_arrow(arc.family);
         writeln!(
             out,
             "  {} {}|{}| {}",
-            edge.from, arrow, edge.arc_type, edge.to
+            arc.from, arrow, arc.arc_type, arc.to
         )
         .unwrap();
-        edge_indices_by_family
-            .entry(edge.family.to_string())
+        arc_indices_by_family
+            .entry(arc.family.to_string())
             .or_default()
             .push(i);
     }
     writeln!(out).unwrap();
 
-    writeln!(out, "  %% Edge colors by family").unwrap();
-    for (family_str, indices) in &edge_indices_by_family {
+    writeln!(out, "  %% Arc colors by family").unwrap();
+    for (family_str, indices) in &arc_indices_by_family {
         let family = match family_str.as_str() {
             "ownership" => ArcFamily::Ownership,
             "localization" => ArcFamily::Localization,
@@ -251,7 +251,7 @@ fn render_mermaid(
     relations: &[ArcDef],
     org_doc: &OrganizingDoc,
 ) -> crate::Result<String> {
-    let edges = expand_edges(relations);
+    let arcs = expand_arcs(relations);
 
     // Group nodes by realm → layer (using BTreeMap for deterministic order)
     let mut realm_layer_nodes: BTreeMap<String, BTreeMap<String, Vec<&ParsedNode>>> =
@@ -272,22 +272,22 @@ fn render_mermaid(
         }
     }
 
-    let edge_count = edges.len();
+    let arc_count = arcs.len();
     let node_count = nodes.len();
 
     let mut out = String::with_capacity(8192);
 
     // ── Header ────────────────────────────────────────────────────────────
     writeln!(out, "flowchart TB").unwrap();
-    writeln!(out, "  %% NovaNet Graph v10.0.0").unwrap();
+    writeln!(out, "  %% NovaNet Graph v10.4.0").unwrap();
     writeln!(
         out,
-        "  %% Generated: {node_count} nodes, {edge_count} edges"
+        "  %% Generated: {node_count} nodes, {arc_count} arcs"
     )
     .unwrap();
     writeln!(
         out,
-        "  %% Source: 48 node YAMLs + relations.yaml + taxonomy.yaml"
+        "  %% Source: 42 node YAMLs + relations.yaml + taxonomy.yaml"
     )
     .unwrap();
     writeln!(out).unwrap();
@@ -341,8 +341,8 @@ fn render_mermaid(
         writeln!(out).unwrap();
     }
 
-    // ── Edges — styled by ArcFamily ──────────────────────────────────────
-    write_edges_and_styles(&mut out, &edges);
+    // ── Arcs — styled by ArcFamily ──────────────────────────────────────
+    write_arcs_and_styles(&mut out, &arcs);
 
     // ── class assignments ─────────────────────────────────────────────────
     let node_refs: Vec<&ParsedNode> = nodes.iter().collect();
@@ -359,7 +359,7 @@ pub fn wrap_in_markdown(mermaid_code: &str) -> String {
     writeln!(out).unwrap();
     writeln!(
         out,
-        "> Auto-generated by novanet v10.0.0. Do not edit manually."
+        "> Auto-generated by novanet v10.4.0. Do not edit manually."
     )
     .unwrap();
     writeln!(out).unwrap();
@@ -367,7 +367,7 @@ pub fn wrap_in_markdown(mermaid_code: &str) -> String {
     writeln!(out).unwrap();
     writeln!(
         out,
-        "This diagram shows the complete NovaNet graph schema with all 48 node types and their relationships."
+        "This diagram shows the complete NovaNet graph schema with all 42 node types and their relationships."
     )
     .unwrap();
     writeln!(out).unwrap();
@@ -421,7 +421,7 @@ pub fn wrap_in_markdown(mermaid_code: &str) -> String {
     write!(out, "{mermaid_code}").unwrap();
     writeln!(out, "```").unwrap();
     writeln!(out).unwrap();
-    writeln!(out, "## Edge Families").unwrap();
+    writeln!(out, "## Arc Families").unwrap();
     writeln!(out).unwrap();
     writeln!(out, "| Arrow | Family | Description |").unwrap();
     writeln!(out, "|-------|--------|-------------|").unwrap();
@@ -558,19 +558,19 @@ mod tests {
     }
 
     #[test]
-    fn expand_edges_filters_wildcards() {
+    fn expand_arcs_filters_wildcards() {
         let rels = vec![
             make_rel("HAS_PAGE", ArcFamily::Ownership, "Project", "Page"),
             make_rel("WILDCARD", ArcFamily::Semantic, "*", "Page"),
         ];
-        let expanded = expand_edges(&rels);
+        let expanded = expand_arcs(&rels);
         assert_eq!(expanded.len(), 1);
         assert_eq!(expanded[0].from, "Project");
         assert_eq!(expanded[0].to, "Page");
     }
 
     #[test]
-    fn expand_edges_multi_source_target() {
+    fn expand_arcs_multi_source_target() {
         let rel = ArcDef {
             arc_type: "HAS_OUTPUT".to_string(),
             family: ArcFamily::Generation,
@@ -582,7 +582,7 @@ mod tests {
             is_self_referential: None,
             inverse_of: None,
         };
-        let expanded = expand_edges(&[rel]);
+        let expanded = expand_arcs(&[rel]);
         assert_eq!(expanded.len(), 4); // 2 sources × 2 targets
     }
 
@@ -624,8 +624,8 @@ mod tests {
 
         // Header
         assert!(output.contains("flowchart TB"));
-        assert!(output.contains("NovaNet Graph v10.0.0"));
-        assert!(output.contains("3 nodes, 2 edges"));
+        assert!(output.contains("NovaNet Graph v10.4.0"));
+        assert!(output.contains("3 nodes, 2 arcs"));
 
         // classDef
         assert!(output.contains("classDef invariant fill:#3b82f6,stroke:#1d4ed8,color:#fff"));
@@ -696,12 +696,12 @@ mod tests {
         let markdown = wrap_in_markdown("flowchart TB\n  A --> B\n");
 
         assert!(markdown.contains("# NovaNet Complete Graph"));
-        assert!(markdown.contains("Auto-generated by novanet v10.0.0"));
+        assert!(markdown.contains("Auto-generated by novanet v10.4.0"));
         assert!(markdown.contains("```mermaid"));
         assert!(markdown.contains("flowchart TB"));
         assert!(markdown.contains("A --> B"));
         assert!(markdown.contains("```"));
-        assert!(markdown.contains("## Edge Families"));
+        assert!(markdown.contains("## Arc Families"));
         assert!(markdown.contains("| `-->` | Ownership"));
         assert!(markdown.contains("| `==>` | Generation"));
         assert!(markdown.contains("| `--o` | Mining"));
@@ -725,7 +725,7 @@ mod tests {
 
         // Header
         assert!(output.contains("flowchart TB"));
-        assert!(output.contains("NovaNet Graph v10.0.0"));
+        assert!(output.contains("NovaNet Graph v10.4.0"));
         assert!(output.contains("42 nodes")); // v10.3: -4 removed, +3 added
 
         // All 2 realms (v10.2: shared removed)

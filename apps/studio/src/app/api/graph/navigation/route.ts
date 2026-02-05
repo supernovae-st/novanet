@@ -14,10 +14,10 @@ import { handleApiError } from '@/lib/apiErrorHandler';
 import { buildCypherViaRust, type FacetFilter } from '@/lib/novanetBridge';
 import type { Realm, Layer, Trait } from '@novanet/core/types';
 
-const VALID_REALMS: Realm[] = ['global', 'project', 'shared'];
+const VALID_REALMS: Realm[] = ['global', 'project'];
 const VALID_LAYERS: Layer[] = [
   'config', 'knowledge', 'foundation', 'structure', 'semantic',
-  'instruction', 'output', 'seo', 'geo',
+  'instruction', 'output', 'seo',
 ];
 const VALID_TRAITS: Trait[] = ['invariant', 'localized', 'knowledge', 'derived', 'job'];
 const VALID_ARC_FAMILIES = ['ownership', 'localization', 'semantic', 'generation', 'mining'];

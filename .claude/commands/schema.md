@@ -66,19 +66,18 @@ Redirect to `/schema:edit-node <name>`
 
 Redirect to `/schema:add-relation <NAME>`
 
-## Current Schema (v10.0.0)
+## Current Schema (v10.4.0)
 
-**44 Kind Types** across 3 Realms:
-- **Global (15)**: Locale + 14 LocaleKnowledge nodes
-- **Project (21)**: Project structure, concepts, prompts, outputs, generation
-- **Shared (8)**: SEO/GEO targeting and metrics
+**42 Kind Types** across 2 Realms:
+- **Global (19)**: Locale, Entity, EntityL10n, Knowledge Atoms, SEOKeyword
+- **Project (23)**: Project structure, prompts, outputs, generation
 
-**50 Relationships** in 5 EdgeFamilies:
-- **Ownership**: HAS_CONCEPT, HAS_PAGE, HAS_BLOCK, OF_TYPE
+**77 Arcs** in 5 ArcFamilies:
+- **Ownership**: HAS_PAGE, HAS_BLOCK, OF_TYPE
 - **Localization**: HAS_L10N, FOR_LOCALE
-- **Semantic**: SEMANTIC_LINK, USES_CONCEPT
+- **Semantic**: SEMANTIC_LINK, USES_ENTITY
 - **Generation**: HAS_OUTPUT, HAS_PROMPT
-- **Mining**: HAS_SEO_TARGET, HAS_GEO_TARGET
+- **Mining**: HAS_SEO_TARGET
 
 ## Validation Commands
 

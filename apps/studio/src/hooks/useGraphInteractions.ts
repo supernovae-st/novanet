@@ -23,12 +23,10 @@ import type { Node as ReactFlowNode, Edge as ReactFlowEdge } from '@xyflow/react
 // =============================================================================
 
 export const Z_INDEX = {
-  /** Realm containers - layered by realm (Shared < Global < Project) */
-  REALM_SHARED: 10,
+  /** Realm containers - layered by realm (Global < Project) - v10.4: 2 realms */
   REALM_GLOBAL: 20,
   REALM_PROJECT: 30,
   /** Layer containers - slightly above their parent realm */
-  LAYER_SHARED: 15,
   LAYER_GLOBAL: 25,
   LAYER_PROJECT: 35,
   /** Regular nodes base level (always above containers) */
@@ -73,8 +71,8 @@ export interface UseGraphInteractionsReturn {
 /**
  * Get base z-index for a node based on its type and realm
  *
- * Container hierarchy (back to front):
- * - Shared realm (10) < Global realm (20) < Project realm (30)
+ * Container hierarchy (back to front) - v10.4: 2 realms:
+ * - Global realm (20) < Project realm (30)
  * - Layers slightly above their parent realm
  * - Regular nodes always on top (1000+)
  */
@@ -84,20 +82,18 @@ function getBaseZIndex(node: ReactFlowNode): number {
   // Realm containers: realm-{Realm}
   if (id.startsWith('realm-')) {
     const realm = id.replace('realm-', '');
-    if (realm === 'shared') return Z_INDEX.REALM_SHARED;
     if (realm === 'global') return Z_INDEX.REALM_GLOBAL;
     if (realm === 'project') return Z_INDEX.REALM_PROJECT;
-    return Z_INDEX.REALM_SHARED; // fallback
+    return Z_INDEX.REALM_GLOBAL; // fallback
   }
 
   // Layer containers: layer-{Realm}-{LayerName}
   if (id.startsWith('layer-')) {
     const parts = id.replace('layer-', '').split('-');
     const realm = parts[0];
-    if (realm === 'shared') return Z_INDEX.LAYER_SHARED;
     if (realm === 'global') return Z_INDEX.LAYER_GLOBAL;
     if (realm === 'project') return Z_INDEX.LAYER_PROJECT;
-    return Z_INDEX.LAYER_SHARED; // fallback
+    return Z_INDEX.LAYER_GLOBAL; // fallback
   }
 
   // Regular nodes - always above containers

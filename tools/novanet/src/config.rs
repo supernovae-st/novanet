@@ -50,12 +50,6 @@ pub fn taxonomy_path(root: &Path) -> PathBuf {
     root.join("packages/core/models/taxonomy.yaml")
 }
 
-/// Deprecated: use taxonomy_path() instead
-#[deprecated(since = "9.5.0", note = "use taxonomy_path() instead")]
-pub fn organizing_principles_path(root: &Path) -> PathBuf {
-    taxonomy_path(root)
-}
-
 /// Directory containing arc-kinds YAML files
 pub fn arc_kinds_dir(root: &Path) -> PathBuf {
     root.join("packages/core/models/arc-kinds")
@@ -120,14 +114,6 @@ mod tests {
             taxonomy_path(root),
             PathBuf::from("/fake/root/packages/core/models/taxonomy.yaml")
         );
-    }
-
-    #[test]
-    #[allow(deprecated)]
-    fn organizing_principles_path_redirects_to_taxonomy() {
-        let root = Path::new("/fake/root");
-        // Deprecated function should redirect to taxonomy_path
-        assert_eq!(organizing_principles_path(root), taxonomy_path(root));
     }
 
     #[test]

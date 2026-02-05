@@ -5,7 +5,7 @@ key: seo
 display_name: SEO Intelligence
 emoji: "🔍"
 color: "#ec4899"
-realm: shared
+realm: global
 
 llm_context: |
   Search engine optimization data. Keywords with their localized

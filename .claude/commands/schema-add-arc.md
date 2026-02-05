@@ -9,7 +9,7 @@ Add a new arc type (directed relationship) between nodes in the NovaNet ontology
 ## Terminology
 
 > **Arc** = directed link between nodes (graph theory term for directed edges)
-> **ArcKind** = arc type definition (e.g., HAS_BLOCK, USES_CONCEPT)
+> **ArcKind** = arc type definition (e.g., HAS_BLOCK, USES_ENTITY)
 > **ArcFamily** = classification of arc types (ownership, localization, semantic, generation, mining)
 
 ## Workflow
@@ -24,7 +24,7 @@ Add a new arc type (directed relationship) between nodes in the NovaNet ontology
 2. **Classification**: Determine ArcFamily:
    - **ownership**: Structural containment (HAS_PAGE, HAS_BLOCK, OF_TYPE)
    - **localization**: Locale-specific variants (HAS_L10N, FOR_LOCALE)
-   - **semantic**: Content relationships (USES_CONCEPT, SEMANTIC_LINK)
+   - **semantic**: Content relationships (USES_ENTITY, SEMANTIC_LINK)
    - **generation**: AI-generated content (HAS_OUTPUT, HAS_PROMPT)
    - **mining**: SEO/GEO data (HAS_SEO_TARGET, HAS_GEO_TARGET)
 
@@ -49,7 +49,7 @@ Add a new arc type (directed relationship) between nodes in the NovaNet ontology
 |--------|---------|-------------|----------|
 | `ownership` | Structural containment | `-->` | HAS_PAGE, HAS_BLOCK, OF_TYPE |
 | `localization` | Locale variants | `-.->` | HAS_L10N, FOR_LOCALE |
-| `semantic` | Content relationships | `-.->` | USES_CONCEPT, SEMANTIC_LINK |
+| `semantic` | Content relationships | `-.->` | USES_ENTITY, SEMANTIC_LINK |
 | `generation` | AI-generated | `==>` | HAS_OUTPUT, HAS_PROMPT |
 | `mining` | SEO/GEO data | `--o` | HAS_SEO_TARGET, HAS_GEO_TARGET |
 
@@ -57,18 +57,18 @@ Add a new arc type (directed relationship) between nodes in the NovaNet ontology
 
 | Pattern | Use For | Examples |
 |---------|---------|----------|
-| `HAS_*` | Ownership/containment | HAS_PAGE, HAS_BLOCK, HAS_CONCEPT |
-| `HAS_L10N` | Localized content (human-curated) | Concept→ConceptL10n |
+| `HAS_*` | Ownership/containment | HAS_PAGE, HAS_BLOCK |
+| `HAS_L10N` | Localized content (human-curated) | Entity→EntityL10n |
 | `HAS_OUTPUT` | Localized content (LLM-generated) | Page→PageL10n |
 | `*_OF` | Inverse of HAS_* | L10N_OF, BLOCK_OF, OUTPUT_OF |
 | `FOR_*` | Target association | FOR_LOCALE |
-| `USES_*` | Reference/usage | USES_CONCEPT |
-| `TARGETS_*` | Cross-scope targeting | TARGETS_SEO, TARGETS_GEO |
+| `USES_*` | Reference/usage | USES_ENTITY |
+| `EXPRESSES` | SEO targeting | EntityL10n→SEOKeyword |
 
 ## Naming Requirements
 
 - **Arc names**: UPPER_SNAKE_CASE (e.g., `HAS_HUMOR`, `FOR_LOCALE`)
-- **Node names in source/target**: PascalCase (e.g., `LocaleLexicon`, `ConceptL10n`)
+- **Node names in source/target**: PascalCase (e.g., `LocaleLexicon`, `EntityL10n`)
 
 ## Example
 
@@ -78,21 +78,21 @@ Add a new arc type (directed relationship) between nodes in the NovaNet ontology
 
 This will start a dialog to understand the arc between LocaleLexicon and LocaleHumor (or whatever nodes are involved).
 
-## YAML Structure (v9.5)
+## YAML Structure (v10.3)
 
 ```yaml
-# packages/core/models/arc-kinds/semantic/uses-concept.yaml
+# packages/core/models/arc-kinds/semantic/uses-entity.yaml
 arc:
-  name: USES_CONCEPT
+  name: USES_ENTITY
   family: semantic
-  scope: intra_realm
+  scope: cross_realm
   cardinality: many_to_many
   source: [Page, Block]
-  target: Concept
-  description: "Content references a semantic concept"
+  target: Entity
+  description: "Content references a semantic entity"
   properties:
-    weight:
+    temperature:
       type: float
-      required: false
-      description: "Relevance weight for spreading activation"
+      required: true
+      description: "Relevance temperature for spreading activation (0.0-1.0)"
 ```

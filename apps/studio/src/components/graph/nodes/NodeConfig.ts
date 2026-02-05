@@ -74,23 +74,24 @@ export const NODE_SIZES: Record<NodeType, NodeSize> = {
   ContentSlot: { width: 180, height: 90 },
 
   // ==========================================================================
-  // PROJECT — semantic (6 nodes)
+  // PROJECT — structure (cont.) + types
   // ==========================================================================
-  Concept: { width: 240, height: 120 },
-  ConceptL10n: { width: 200, height: 100 },
-  SearchIntent: { width: 200, height: 100 },
-  TopicCluster: { width: 220, height: 110 },
+  PageType: { width: 200, height: 100 },
+  BlockType: { width: 200, height: 100 },
+
+  // ==========================================================================
+  // PROJECT — semantic (2 nodes) — v10.4
+  // ==========================================================================
   AudiencePersona: { width: 200, height: 100 },
   ChannelSurface: { width: 200, height: 100 },
 
   // ==========================================================================
-  // PROJECT — instruction (6 nodes)
+  // PROJECT — instruction (5 nodes)
   // ==========================================================================
-  PageType: { width: 200, height: 100 },
-  BlockType: { width: 200, height: 100 },
   PagePrompt: { width: 200, height: 100 },
   BlockPrompt: { width: 180, height: 90 },
   BlockRules: { width: 180, height: 90 },
+  BlockInstruction: { width: 180, height: 90 },
   PromptArtifact: { width: 200, height: 100 },
 
   // ==========================================================================
@@ -125,20 +126,27 @@ export const NODE_SIZES: Record<NodeType, NodeSize> = {
   AudienceSet: { width: 160, height: 80 },
 
   // ==========================================================================
-  // SHARED — seo (3 nodes)
+  // GLOBAL — knowledge atoms (6 nodes)
+  // ==========================================================================
+  Term: { width: 160, height: 80 },
+  Expression: { width: 160, height: 80 },
+  Pattern: { width: 160, height: 80 },
+  CultureRef: { width: 160, height: 80 },
+  Taboo: { width: 160, height: 80 },
+  AudienceTrait: { width: 160, height: 80 },
+
+  // ==========================================================================
+  // GLOBAL — seo (3 nodes) — v10.4: moved to global realm
   // ==========================================================================
   SEOKeyword: { width: 200, height: 100 },
   SEOKeywordMetrics: { width: 160, height: 80 },
   SEOMiningRun: { width: 160, height: 80 },
 
   // ==========================================================================
-  // SHARED — geo (5 nodes)
+  // GLOBAL — semantic (2 nodes) — v10.4: Entity-Centric Architecture
   // ==========================================================================
-  Thing: { width: 220, height: 110 },
-  ThingL10n: { width: 200, height: 100 },
-  GEOSeedL10n: { width: 200, height: 100 },
-  GEOSeedMetrics: { width: 160, height: 80 },
-  GEOMiningRun: { width: 160, height: 80 },
+  Entity: { width: 240, height: 120 },
+  EntityL10n: { width: 200, height: 100 },
 };
 
 // =============================================================================
@@ -204,47 +212,7 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
   },
 
   // ==========================================================================
-  // PROJECT — semantic - Amber tones (6 nodes)
-  // ==========================================================================
-  Concept: {
-    primary: '#f59e0b',
-    secondary: '#f97316',
-    tertiary: '#fbbf24',
-    glow: '#f59e0b40',
-  },
-  ConceptL10n: {
-    primary: '#fbbf24',
-    secondary: '#f59e0b',
-    tertiary: '#fcd34d',
-    glow: '#fbbf2440',
-  },
-  SearchIntent: {
-    primary: '#d97706',
-    secondary: '#f59e0b',
-    tertiary: '#fbbf24',
-    glow: '#d9770640',
-  },
-  TopicCluster: {
-    primary: '#b45309',
-    secondary: '#d97706',
-    tertiary: '#f59e0b',
-    glow: '#b4530940',
-  },
-  AudiencePersona: {
-    primary: '#92400e',
-    secondary: '#b45309',
-    tertiary: '#d97706',
-    glow: '#92400e40',
-  },
-  ChannelSurface: {
-    primary: '#78350f',
-    secondary: '#92400e',
-    tertiary: '#b45309',
-    glow: '#78350f40',
-  },
-
-  // ==========================================================================
-  // PROJECT — instruction - Blue tones
+  // PROJECT — structure (cont.) + types - Blue tones
   // ==========================================================================
   PageType: {
     primary: '#2563eb',
@@ -275,6 +243,12 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
     secondary: '#60a5fa',
     tertiary: '#bfdbfe',
     glow: '#93c5fd40',
+  },
+  BlockInstruction: {
+    primary: '#bfdbfe',
+    secondary: '#93c5fd',
+    tertiary: '#dbeafe',
+    glow: '#bfdbfe40',
   },
   PromptArtifact: {
     primary: '#1d4ed8',
@@ -391,7 +365,63 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
   },
 
   // ==========================================================================
-  // SHARED — seo - Red tones
+  // PROJECT — semantic - Amber tones (2 nodes) — v10.4
+  // ==========================================================================
+  AudiencePersona: {
+    primary: '#f59e0b',
+    secondary: '#fbbf24',
+    tertiary: '#fcd34d',
+    glow: '#f59e0b40',
+  },
+  ChannelSurface: {
+    primary: '#d97706',
+    secondary: '#f59e0b',
+    tertiary: '#fbbf24',
+    glow: '#d9770640',
+  },
+
+  // ==========================================================================
+  // GLOBAL — knowledge atoms (6 nodes)
+  // ==========================================================================
+  Term: {
+    primary: '#4ade80',
+    secondary: '#22c55e',
+    tertiary: '#86efac',
+    glow: '#4ade8040',
+  },
+  Expression: {
+    primary: '#f9a8d4',
+    secondary: '#f472b6',
+    tertiary: '#fbcfe8',
+    glow: '#f9a8d440',
+  },
+  Pattern: {
+    primary: '#c4b5fd',
+    secondary: '#a78bfa',
+    tertiary: '#ddd6fe',
+    glow: '#c4b5fd40',
+  },
+  CultureRef: {
+    primary: '#fcd34d',
+    secondary: '#fbbf24',
+    tertiary: '#fde68a',
+    glow: '#fcd34d40',
+  },
+  Taboo: {
+    primary: '#fca5a5',
+    secondary: '#f87171',
+    tertiary: '#fecaca',
+    glow: '#fca5a540',
+  },
+  AudienceTrait: {
+    primary: '#fde68a',
+    secondary: '#fcd34d',
+    tertiary: '#fef3c7',
+    glow: '#fde68a40',
+  },
+
+  // ==========================================================================
+  // GLOBAL — seo - Red tones (v10.4: moved to global realm)
   // ==========================================================================
   SEOKeyword: {
     primary: '#ef4444',
@@ -413,37 +443,19 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
   },
 
   // ==========================================================================
-  // SHARED — geo - Purple tones
+  // GLOBAL — semantic - Gold tones (v10.4: Entity-Centric Architecture)
   // ==========================================================================
-  Thing: {
-    primary: '#7c3aed',
-    secondary: '#8b5cf6',
-    tertiary: '#a78bfa',
-    glow: '#7c3aed40',
+  Entity: {
+    primary: '#f59e0b',
+    secondary: '#f97316',
+    tertiary: '#fbbf24',
+    glow: '#f59e0b40',
   },
-  ThingL10n: {
-    primary: '#8b5cf6',
-    secondary: '#a855f7',
-    tertiary: '#c084fc',
-    glow: '#8b5cf640',
-  },
-  GEOSeedL10n: {
-    primary: '#a855f7',
-    secondary: '#c084fc',
-    tertiary: '#d8b4fe',
-    glow: '#a855f740',
-  },
-  GEOSeedMetrics: {
-    primary: '#c084fc',
-    secondary: '#a855f7',
-    tertiary: '#d8b4fe',
-    glow: '#c084fc40',
-  },
-  GEOMiningRun: {
-    primary: '#d8b4fe',
-    secondary: '#c084fc',
-    tertiary: '#e9d5ff',
-    glow: '#d8b4fe40',
+  EntityL10n: {
+    primary: '#fbbf24',
+    secondary: '#f59e0b',
+    tertiary: '#fcd34d',
+    glow: '#fbbf2440',
   },
 };
 

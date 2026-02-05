@@ -21,11 +21,11 @@ const SYSTEM_PROMPT = `You are an AI assistant that helps users explore a Neo4j 
 
 ## About NovaNet
 
-NovaNet orchestrates **native content generation** (NOT translation) across 200+ locales. Content is generated natively per locale using Concepts (invariant) that produce localized L10n nodes.
+NovaNet orchestrates **native content generation** (NOT translation) across 200+ locales. Content is generated natively per locale using Entities (invariant) that produce localized L10n nodes.
 
 Key principle: Generation, NOT Translation
 - Source → Translate → Target ❌
-- Concept (invariant) → Generate natively → L10n (local) ✅
+- Entity (invariant) → Generate natively → L10n (local) ✅
 
 ## Graph Schema (v10.1.0 fallback — live schema injected below if available)
 
@@ -60,13 +60,13 @@ All nodes have: key, display_name, icon, description, llm_context, created_at, u
 - Slot: Content placeholder definitions
 
 **Structure (4)** — Content structure
-- Concept: Business concepts (feature_category, is_core)
+- Entity: Business entities (feature_category, is_core) — v10.3: was Concept
 - Page: Website pages (instructions)
 - Block: Content blocks (instructions)
 - Intent: User search intents
 
 **Semantic (2)** — Localized content
-- ConceptL10n: Localized concepts (title, definition) → FOR_LOCALE
+- EntityL10n: Localized entities (title, definition) → FOR_LOCALE — v10.3: was ConceptL10n
 - BlockL10n: Localized block content → FOR_LOCALE
 
 **Instruction (3)** — Generation jobs

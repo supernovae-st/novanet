@@ -1,14 +1,15 @@
-// NovaNet Golden Data Seed v8.2.0
+// NovaNet Golden Data Seed v10.4.0
 // Complete dataset for testing all views and features
 // Uses MERGE for idempotent operations
-// All nodes follow v8.2.0 property order: key, display_name, description, llm_context, [node-specific], created_at, updated_at
+// All nodes follow property order: key, display_name, description, llm_context, [node-specific], created_at, updated_at
+// v10.4: Entity-Centric Architecture (Entity/EntityL10n), GEO layer removed
 
 // =============================================================================
-// NEW CONCEPTS (10 additional concepts for rich demo)
+// NEW ENTITIES (10 additional entities for rich demo)
 // =============================================================================
 
-// Feature Concepts
-MERGE (c:Concept {key: "feature-customization"})
+// Feature Entities
+MERGE (c:Entity {key: "feature-customization"})
 ON CREATE SET
   c.key = "feature-customization",
   c.display_name = "Customization",
@@ -18,9 +19,9 @@ ON CREATE SET
   c.updated_at = datetime()
 WITH c
 MATCH (p:Project {key: "project-qrcode-ai"})
-MERGE (p)-[:HAS_CONCEPT]->(c);
+MERGE (p)-[:USES_ENTITY]->(c);
 
-MERGE (c:Concept {key: "feature-bulk"})
+MERGE (c:Entity {key: "feature-bulk"})
 ON CREATE SET
   c.key = "feature-bulk",
   c.display_name = "Bulk Generation",
@@ -30,9 +31,9 @@ ON CREATE SET
   c.updated_at = datetime()
 WITH c
 MATCH (p:Project {key: "project-qrcode-ai"})
-MERGE (p)-[:HAS_CONCEPT]->(c);
+MERGE (p)-[:USES_ENTITY]->(c);
 
-MERGE (c:Concept {key: "feature-dynamic"})
+MERGE (c:Entity {key: "feature-dynamic"})
 ON CREATE SET
   c.key = "feature-dynamic",
   c.display_name = "Dynamic QR Codes",
@@ -42,9 +43,9 @@ ON CREATE SET
   c.updated_at = datetime()
 WITH c
 MATCH (p:Project {key: "project-qrcode-ai"})
-MERGE (p)-[:HAS_CONCEPT]->(c);
+MERGE (p)-[:USES_ENTITY]->(c);
 
-MERGE (c:Concept {key: "feature-templates"})
+MERGE (c:Entity {key: "feature-templates"})
 ON CREATE SET
   c.key = "feature-templates",
   c.display_name = "Design Templates",
@@ -54,10 +55,10 @@ ON CREATE SET
   c.updated_at = datetime()
 WITH c
 MATCH (p:Project {key: "project-qrcode-ai"})
-MERGE (p)-[:HAS_CONCEPT]->(c);
+MERGE (p)-[:USES_ENTITY]->(c);
 
-// Benefit Concepts
-MERGE (c:Concept {key: "benefit-time-saving"})
+// Benefit Entities
+MERGE (c:Entity {key: "benefit-time-saving"})
 ON CREATE SET
   c.key = "benefit-time-saving",
   c.display_name = "Time Saving",
@@ -67,9 +68,9 @@ ON CREATE SET
   c.updated_at = datetime()
 WITH c
 MATCH (p:Project {key: "project-qrcode-ai"})
-MERGE (p)-[:HAS_CONCEPT]->(c);
+MERGE (p)-[:USES_ENTITY]->(c);
 
-MERGE (c:Concept {key: "benefit-cost-effective"})
+MERGE (c:Entity {key: "benefit-cost-effective"})
 ON CREATE SET
   c.key = "benefit-cost-effective",
   c.display_name = "Cost Effective",
@@ -79,10 +80,10 @@ ON CREATE SET
   c.updated_at = datetime()
 WITH c
 MATCH (p:Project {key: "project-qrcode-ai"})
-MERGE (p)-[:HAS_CONCEPT]->(c);
+MERGE (p)-[:USES_ENTITY]->(c);
 
-// Use Case Concepts
-MERGE (c:Concept {key: "usecase-marketing"})
+// Use Case Entities
+MERGE (c:Entity {key: "usecase-marketing"})
 ON CREATE SET
   c.key = "usecase-marketing",
   c.display_name = "Marketing Campaigns",
@@ -92,9 +93,9 @@ ON CREATE SET
   c.updated_at = datetime()
 WITH c
 MATCH (p:Project {key: "project-qrcode-ai"})
-MERGE (p)-[:HAS_CONCEPT]->(c);
+MERGE (p)-[:USES_ENTITY]->(c);
 
-MERGE (c:Concept {key: "usecase-restaurant"})
+MERGE (c:Entity {key: "usecase-restaurant"})
 ON CREATE SET
   c.key = "usecase-restaurant",
   c.display_name = "Restaurant Menus",
@@ -104,9 +105,9 @@ ON CREATE SET
   c.updated_at = datetime()
 WITH c
 MATCH (p:Project {key: "project-qrcode-ai"})
-MERGE (p)-[:HAS_CONCEPT]->(c);
+MERGE (p)-[:USES_ENTITY]->(c);
 
-MERGE (c:Concept {key: "usecase-retail"})
+MERGE (c:Entity {key: "usecase-retail"})
 ON CREATE SET
   c.key = "usecase-retail",
   c.display_name = "Retail and Products",
@@ -116,9 +117,9 @@ ON CREATE SET
   c.updated_at = datetime()
 WITH c
 MATCH (p:Project {key: "project-qrcode-ai"})
-MERGE (p)-[:HAS_CONCEPT]->(c);
+MERGE (p)-[:USES_ENTITY]->(c);
 
-MERGE (c:Concept {key: "usecase-events"})
+MERGE (c:Entity {key: "usecase-events"})
 ON CREATE SET
   c.key = "usecase-events",
   c.display_name = "Events and Tickets",
@@ -128,16 +129,16 @@ ON CREATE SET
   c.updated_at = datetime()
 WITH c
 MATCH (p:Project {key: "project-qrcode-ai"})
-MERGE (p)-[:HAS_CONCEPT]->(c);
+MERGE (p)-[:USES_ENTITY]->(c);
 
 // =============================================================================
-// CONCEPTL10N - English (en-US)
+// ENTITYL10N - English (en-US)
 // =============================================================================
 
-MATCH (c:Concept {key: "feature-customization"}), (l:Locale {key: "en-US"})
-MERGE (cl:ConceptL10n {key: "conceptl10n-feature-customization-en-US"})
+MATCH (c:Entity {key: "feature-customization"}), (l:Locale {key: "en-US"})
+MERGE (cl:EntityL10n {key: "entityl10n-feature-customization-en-US"})
 ON CREATE SET
-  cl.key = "conceptl10n-feature-customization-en-US",
+  cl.key = "entityl10n-feature-customization-en-US",
   cl.display_name = "Customize Your QR Codes",
   cl.description = "English localization for customization feature",
   cl.llm_context = "USE: when generating customization content in English. TRIGGERS: en-US, customization, design. NOT: other locales.",
@@ -153,10 +154,10 @@ ON CREATE SET
 MERGE (c)-[:HAS_L10N]->(cl)
 MERGE (cl)-[:FOR_LOCALE]->(l);
 
-MATCH (c:Concept {key: "feature-bulk"}), (l:Locale {key: "en-US"})
-MERGE (cl:ConceptL10n {key: "conceptl10n-feature-bulk-en-US"})
+MATCH (c:Entity {key: "feature-bulk"}), (l:Locale {key: "en-US"})
+MERGE (cl:EntityL10n {key: "entityl10n-feature-bulk-en-US"})
 ON CREATE SET
-  cl.key = "conceptl10n-feature-bulk-en-US",
+  cl.key = "entityl10n-feature-bulk-en-US",
   cl.display_name = "Bulk QR Code Generation",
   cl.description = "English localization for bulk feature",
   cl.llm_context = "USE: when generating bulk feature content in English. TRIGGERS: en-US, bulk, batch. NOT: other locales.",
@@ -172,10 +173,10 @@ ON CREATE SET
 MERGE (c)-[:HAS_L10N]->(cl)
 MERGE (cl)-[:FOR_LOCALE]->(l);
 
-MATCH (c:Concept {key: "feature-dynamic"}), (l:Locale {key: "en-US"})
-MERGE (cl:ConceptL10n {key: "conceptl10n-feature-dynamic-en-US"})
+MATCH (c:Entity {key: "feature-dynamic"}), (l:Locale {key: "en-US"})
+MERGE (cl:EntityL10n {key: "entityl10n-feature-dynamic-en-US"})
 ON CREATE SET
-  cl.key = "conceptl10n-feature-dynamic-en-US",
+  cl.key = "entityl10n-feature-dynamic-en-US",
   cl.display_name = "Dynamic QR Codes",
   cl.description = "English localization for dynamic QR codes",
   cl.llm_context = "USE: when generating dynamic QR content in English. TRIGGERS: en-US, dynamic, editable. NOT: other locales.",
@@ -191,10 +192,10 @@ ON CREATE SET
 MERGE (c)-[:HAS_L10N]->(cl)
 MERGE (cl)-[:FOR_LOCALE]->(l);
 
-MATCH (c:Concept {key: "feature-templates"}), (l:Locale {key: "en-US"})
-MERGE (cl:ConceptL10n {key: "conceptl10n-feature-templates-en-US"})
+MATCH (c:Entity {key: "feature-templates"}), (l:Locale {key: "en-US"})
+MERGE (cl:EntityL10n {key: "entityl10n-feature-templates-en-US"})
 ON CREATE SET
-  cl.key = "conceptl10n-feature-templates-en-US",
+  cl.key = "entityl10n-feature-templates-en-US",
   cl.display_name = "Design Templates",
   cl.description = "English localization for templates feature",
   cl.llm_context = "USE: when generating templates content in English. TRIGGERS: en-US, templates, designs. NOT: other locales.",
@@ -210,10 +211,10 @@ ON CREATE SET
 MERGE (c)-[:HAS_L10N]->(cl)
 MERGE (cl)-[:FOR_LOCALE]->(l);
 
-MATCH (c:Concept {key: "benefit-time-saving"}), (l:Locale {key: "en-US"})
-MERGE (cl:ConceptL10n {key: "conceptl10n-benefit-time-saving-en-US"})
+MATCH (c:Entity {key: "benefit-time-saving"}), (l:Locale {key: "en-US"})
+MERGE (cl:EntityL10n {key: "entityl10n-benefit-time-saving-en-US"})
 ON CREATE SET
-  cl.key = "conceptl10n-benefit-time-saving-en-US",
+  cl.key = "entityl10n-benefit-time-saving-en-US",
   cl.display_name = "Save Valuable Time",
   cl.description = "English localization for time saving benefit",
   cl.llm_context = "USE: when emphasizing time benefits in English. TRIGGERS: en-US, fast, quick, instant. NOT: other locales or cost benefits.",
@@ -229,10 +230,10 @@ ON CREATE SET
 MERGE (c)-[:HAS_L10N]->(cl)
 MERGE (cl)-[:FOR_LOCALE]->(l);
 
-MATCH (c:Concept {key: "benefit-cost-effective"}), (l:Locale {key: "en-US"})
-MERGE (cl:ConceptL10n {key: "conceptl10n-benefit-cost-effective-en-US"})
+MATCH (c:Entity {key: "benefit-cost-effective"}), (l:Locale {key: "en-US"})
+MERGE (cl:EntityL10n {key: "entityl10n-benefit-cost-effective-en-US"})
 ON CREATE SET
-  cl.key = "conceptl10n-benefit-cost-effective-en-US",
+  cl.key = "entityl10n-benefit-cost-effective-en-US",
   cl.display_name = "Maximize Your ROI",
   cl.description = "English localization for cost benefit",
   cl.llm_context = "USE: when emphasizing cost benefits in English. TRIGGERS: en-US, affordable, free, value. NOT: other locales or time benefits.",
@@ -248,10 +249,10 @@ ON CREATE SET
 MERGE (c)-[:HAS_L10N]->(cl)
 MERGE (cl)-[:FOR_LOCALE]->(l);
 
-MATCH (c:Concept {key: "usecase-marketing"}), (l:Locale {key: "en-US"})
-MERGE (cl:ConceptL10n {key: "conceptl10n-usecase-marketing-en-US"})
+MATCH (c:Entity {key: "usecase-marketing"}), (l:Locale {key: "en-US"})
+MERGE (cl:EntityL10n {key: "entityl10n-usecase-marketing-en-US"})
 ON CREATE SET
-  cl.key = "conceptl10n-usecase-marketing-en-US",
+  cl.key = "entityl10n-usecase-marketing-en-US",
   cl.display_name = "Marketing with QR Codes",
   cl.description = "English localization for marketing use case",
   cl.llm_context = "USE: when describing marketing applications in English. TRIGGERS: en-US, marketing, campaign. NOT: other locales or use cases.",
@@ -267,10 +268,10 @@ ON CREATE SET
 MERGE (c)-[:HAS_L10N]->(cl)
 MERGE (cl)-[:FOR_LOCALE]->(l);
 
-MATCH (c:Concept {key: "usecase-restaurant"}), (l:Locale {key: "en-US"})
-MERGE (cl:ConceptL10n {key: "conceptl10n-usecase-restaurant-en-US"})
+MATCH (c:Entity {key: "usecase-restaurant"}), (l:Locale {key: "en-US"})
+MERGE (cl:EntityL10n {key: "entityl10n-usecase-restaurant-en-US"})
 ON CREATE SET
-  cl.key = "conceptl10n-usecase-restaurant-en-US",
+  cl.key = "entityl10n-usecase-restaurant-en-US",
   cl.display_name = "Restaurant QR Solutions",
   cl.description = "English localization for restaurant use case",
   cl.llm_context = "USE: when describing restaurant applications in English. TRIGGERS: en-US, restaurant, menu, dining. NOT: other locales or use cases.",
@@ -286,10 +287,10 @@ ON CREATE SET
 MERGE (c)-[:HAS_L10N]->(cl)
 MERGE (cl)-[:FOR_LOCALE]->(l);
 
-MATCH (c:Concept {key: "usecase-retail"}), (l:Locale {key: "en-US"})
-MERGE (cl:ConceptL10n {key: "conceptl10n-usecase-retail-en-US"})
+MATCH (c:Entity {key: "usecase-retail"}), (l:Locale {key: "en-US"})
+MERGE (cl:EntityL10n {key: "entityl10n-usecase-retail-en-US"})
 ON CREATE SET
-  cl.key = "conceptl10n-usecase-retail-en-US",
+  cl.key = "entityl10n-usecase-retail-en-US",
   cl.display_name = "Retail QR Solutions",
   cl.description = "English localization for retail use case",
   cl.llm_context = "USE: when describing retail applications in English. TRIGGERS: en-US, retail, product, packaging. NOT: other locales or use cases.",
@@ -305,10 +306,10 @@ ON CREATE SET
 MERGE (c)-[:HAS_L10N]->(cl)
 MERGE (cl)-[:FOR_LOCALE]->(l);
 
-MATCH (c:Concept {key: "usecase-events"}), (l:Locale {key: "en-US"})
-MERGE (cl:ConceptL10n {key: "conceptl10n-usecase-events-en-US"})
+MATCH (c:Entity {key: "usecase-events"}), (l:Locale {key: "en-US"})
+MERGE (cl:EntityL10n {key: "entityl10n-usecase-events-en-US"})
 ON CREATE SET
-  cl.key = "conceptl10n-usecase-events-en-US",
+  cl.key = "entityl10n-usecase-events-en-US",
   cl.display_name = "Event QR Solutions",
   cl.description = "English localization for events use case",
   cl.llm_context = "USE: when describing event applications in English. TRIGGERS: en-US, event, ticket, conference. NOT: other locales or use cases.",
@@ -325,13 +326,13 @@ MERGE (c)-[:HAS_L10N]->(cl)
 MERGE (cl)-[:FOR_LOCALE]->(l);
 
 // =============================================================================
-// CONCEPTL10N - French (fr-FR)
+// ENTITYL10N - French (fr-FR)
 // =============================================================================
 
-MATCH (c:Concept {key: "feature-customization"}), (l:Locale {key: "fr-FR"})
-MERGE (cl:ConceptL10n {key: "conceptl10n-feature-customization-fr-FR"})
+MATCH (c:Entity {key: "feature-customization"}), (l:Locale {key: "fr-FR"})
+MERGE (cl:EntityL10n {key: "entityl10n-feature-customization-fr-FR"})
 ON CREATE SET
-  cl.key = "conceptl10n-feature-customization-fr-FR",
+  cl.key = "entityl10n-feature-customization-fr-FR",
   cl.display_name = "Personnalisez vos QR Codes",
   cl.description = "Localisation francaise pour la personnalisation",
   cl.llm_context = "USE: when generating customization content in French. TRIGGERS: fr-FR, personnalisation, design. NOT: other locales.",
@@ -347,10 +348,10 @@ ON CREATE SET
 MERGE (c)-[:HAS_L10N]->(cl)
 MERGE (cl)-[:FOR_LOCALE]->(l);
 
-MATCH (c:Concept {key: "feature-bulk"}), (l:Locale {key: "fr-FR"})
-MERGE (cl:ConceptL10n {key: "conceptl10n-feature-bulk-fr-FR"})
+MATCH (c:Entity {key: "feature-bulk"}), (l:Locale {key: "fr-FR"})
+MERGE (cl:EntityL10n {key: "entityl10n-feature-bulk-fr-FR"})
 ON CREATE SET
-  cl.key = "conceptl10n-feature-bulk-fr-FR",
+  cl.key = "entityl10n-feature-bulk-fr-FR",
   cl.display_name = "Generation en masse",
   cl.description = "Localisation francaise pour la fonction bulk",
   cl.llm_context = "USE: when generating bulk content in French. TRIGGERS: fr-FR, masse, lot. NOT: other locales.",
@@ -366,10 +367,10 @@ ON CREATE SET
 MERGE (c)-[:HAS_L10N]->(cl)
 MERGE (cl)-[:FOR_LOCALE]->(l);
 
-MATCH (c:Concept {key: "feature-dynamic"}), (l:Locale {key: "fr-FR"})
-MERGE (cl:ConceptL10n {key: "conceptl10n-feature-dynamic-fr-FR"})
+MATCH (c:Entity {key: "feature-dynamic"}), (l:Locale {key: "fr-FR"})
+MERGE (cl:EntityL10n {key: "entityl10n-feature-dynamic-fr-FR"})
 ON CREATE SET
-  cl.key = "conceptl10n-feature-dynamic-fr-FR",
+  cl.key = "entityl10n-feature-dynamic-fr-FR",
   cl.display_name = "QR Codes Dynamiques",
   cl.description = "Localisation francaise pour les QR codes dynamiques",
   cl.llm_context = "USE: when generating dynamic QR content in French. TRIGGERS: fr-FR, dynamique, modifiable. NOT: other locales.",
@@ -385,10 +386,10 @@ ON CREATE SET
 MERGE (c)-[:HAS_L10N]->(cl)
 MERGE (cl)-[:FOR_LOCALE]->(l);
 
-MATCH (c:Concept {key: "feature-templates"}), (l:Locale {key: "fr-FR"})
-MERGE (cl:ConceptL10n {key: "conceptl10n-feature-templates-fr-FR"})
+MATCH (c:Entity {key: "feature-templates"}), (l:Locale {key: "fr-FR"})
+MERGE (cl:EntityL10n {key: "entityl10n-feature-templates-fr-FR"})
 ON CREATE SET
-  cl.key = "conceptl10n-feature-templates-fr-FR",
+  cl.key = "entityl10n-feature-templates-fr-FR",
   cl.display_name = "Modeles de Design",
   cl.description = "Localisation francaise pour les modeles",
   cl.llm_context = "USE: when generating templates content in French. TRIGGERS: fr-FR, modeles, designs. NOT: other locales.",
@@ -404,10 +405,10 @@ ON CREATE SET
 MERGE (c)-[:HAS_L10N]->(cl)
 MERGE (cl)-[:FOR_LOCALE]->(l);
 
-MATCH (c:Concept {key: "benefit-time-saving"}), (l:Locale {key: "fr-FR"})
-MERGE (cl:ConceptL10n {key: "conceptl10n-benefit-time-saving-fr-FR"})
+MATCH (c:Entity {key: "benefit-time-saving"}), (l:Locale {key: "fr-FR"})
+MERGE (cl:EntityL10n {key: "entityl10n-benefit-time-saving-fr-FR"})
 ON CREATE SET
-  cl.key = "conceptl10n-benefit-time-saving-fr-FR",
+  cl.key = "entityl10n-benefit-time-saving-fr-FR",
   cl.display_name = "Gagnez un temps precieux",
   cl.description = "Localisation francaise pour le gain de temps",
   cl.llm_context = "USE: when emphasizing time benefits in French. TRIGGERS: fr-FR, rapide, instantane. NOT: other locales.",
@@ -423,10 +424,10 @@ ON CREATE SET
 MERGE (c)-[:HAS_L10N]->(cl)
 MERGE (cl)-[:FOR_LOCALE]->(l);
 
-MATCH (c:Concept {key: "benefit-cost-effective"}), (l:Locale {key: "fr-FR"})
-MERGE (cl:ConceptL10n {key: "conceptl10n-benefit-cost-effective-fr-FR"})
+MATCH (c:Entity {key: "benefit-cost-effective"}), (l:Locale {key: "fr-FR"})
+MERGE (cl:EntityL10n {key: "entityl10n-benefit-cost-effective-fr-FR"})
 ON CREATE SET
-  cl.key = "conceptl10n-benefit-cost-effective-fr-FR",
+  cl.key = "entityl10n-benefit-cost-effective-fr-FR",
   cl.display_name = "Maximisez votre ROI",
   cl.description = "Localisation francaise pour le rapport qualite-prix",
   cl.llm_context = "USE: when emphasizing cost benefits in French. TRIGGERS: fr-FR, abordable, gratuit. NOT: other locales.",
@@ -442,10 +443,10 @@ ON CREATE SET
 MERGE (c)-[:HAS_L10N]->(cl)
 MERGE (cl)-[:FOR_LOCALE]->(l);
 
-MATCH (c:Concept {key: "usecase-marketing"}), (l:Locale {key: "fr-FR"})
-MERGE (cl:ConceptL10n {key: "conceptl10n-usecase-marketing-fr-FR"})
+MATCH (c:Entity {key: "usecase-marketing"}), (l:Locale {key: "fr-FR"})
+MERGE (cl:EntityL10n {key: "entityl10n-usecase-marketing-fr-FR"})
 ON CREATE SET
-  cl.key = "conceptl10n-usecase-marketing-fr-FR",
+  cl.key = "entityl10n-usecase-marketing-fr-FR",
   cl.display_name = "Marketing avec QR Codes",
   cl.description = "Localisation francaise pour le marketing",
   cl.llm_context = "USE: when describing marketing in French. TRIGGERS: fr-FR, marketing, campagne. NOT: other locales.",
@@ -461,10 +462,10 @@ ON CREATE SET
 MERGE (c)-[:HAS_L10N]->(cl)
 MERGE (cl)-[:FOR_LOCALE]->(l);
 
-MATCH (c:Concept {key: "usecase-restaurant"}), (l:Locale {key: "fr-FR"})
-MERGE (cl:ConceptL10n {key: "conceptl10n-usecase-restaurant-fr-FR"})
+MATCH (c:Entity {key: "usecase-restaurant"}), (l:Locale {key: "fr-FR"})
+MERGE (cl:EntityL10n {key: "entityl10n-usecase-restaurant-fr-FR"})
 ON CREATE SET
-  cl.key = "conceptl10n-usecase-restaurant-fr-FR",
+  cl.key = "entityl10n-usecase-restaurant-fr-FR",
   cl.display_name = "Solutions Restaurant",
   cl.description = "Localisation francaise pour la restauration",
   cl.llm_context = "USE: when describing restaurant use in French. TRIGGERS: fr-FR, restaurant, menu. NOT: other locales.",
@@ -480,10 +481,10 @@ ON CREATE SET
 MERGE (c)-[:HAS_L10N]->(cl)
 MERGE (cl)-[:FOR_LOCALE]->(l);
 
-MATCH (c:Concept {key: "usecase-retail"}), (l:Locale {key: "fr-FR"})
-MERGE (cl:ConceptL10n {key: "conceptl10n-usecase-retail-fr-FR"})
+MATCH (c:Entity {key: "usecase-retail"}), (l:Locale {key: "fr-FR"})
+MERGE (cl:EntityL10n {key: "entityl10n-usecase-retail-fr-FR"})
 ON CREATE SET
-  cl.key = "conceptl10n-usecase-retail-fr-FR",
+  cl.key = "entityl10n-usecase-retail-fr-FR",
   cl.display_name = "Solutions Retail",
   cl.description = "Localisation francaise pour le retail",
   cl.llm_context = "USE: when describing retail use in French. TRIGGERS: fr-FR, retail, produit. NOT: other locales.",
@@ -499,10 +500,10 @@ ON CREATE SET
 MERGE (c)-[:HAS_L10N]->(cl)
 MERGE (cl)-[:FOR_LOCALE]->(l);
 
-MATCH (c:Concept {key: "usecase-events"}), (l:Locale {key: "fr-FR"})
-MERGE (cl:ConceptL10n {key: "conceptl10n-usecase-events-fr-FR"})
+MATCH (c:Entity {key: "usecase-events"}), (l:Locale {key: "fr-FR"})
+MERGE (cl:EntityL10n {key: "entityl10n-usecase-events-fr-FR"})
 ON CREATE SET
-  cl.key = "conceptl10n-usecase-events-fr-FR",
+  cl.key = "entityl10n-usecase-events-fr-FR",
   cl.display_name = "Solutions Evenements",
   cl.description = "Localisation francaise pour les evenements",
   cl.llm_context = "USE: when describing events use in French. TRIGGERS: fr-FR, evenement, billet. NOT: other locales.",
@@ -519,13 +520,13 @@ MERGE (c)-[:HAS_L10N]->(cl)
 MERGE (cl)-[:FOR_LOCALE]->(l);
 
 // =============================================================================
-// CONCEPTL10N - Japanese (ja-JP) for key concepts
+// ENTITYL10N - Japanese (ja-JP) for key entities
 // =============================================================================
 
-MATCH (c:Concept {key: "feature-customization"}), (l:Locale {key: "ja-JP"})
-MERGE (cl:ConceptL10n {key: "conceptl10n-feature-customization-ja-JP"})
+MATCH (c:Entity {key: "feature-customization"}), (l:Locale {key: "ja-JP"})
+MERGE (cl:EntityL10n {key: "entityl10n-feature-customization-ja-JP"})
 ON CREATE SET
-  cl.key = "conceptl10n-feature-customization-ja-JP",
+  cl.key = "entityl10n-feature-customization-ja-JP",
   cl.display_name = "QRコードをカスタマイズ",
   cl.description = "カスタマイズ機能の日本語ローカライゼーション",
   cl.llm_context = "USE: when generating customization content in Japanese. TRIGGERS: ja-JP, カスタマイズ, デザイン. NOT: other locales.",
@@ -541,10 +542,10 @@ ON CREATE SET
 MERGE (c)-[:HAS_L10N]->(cl)
 MERGE (cl)-[:FOR_LOCALE]->(l);
 
-MATCH (c:Concept {key: "benefit-time-saving"}), (l:Locale {key: "ja-JP"})
-MERGE (cl:ConceptL10n {key: "conceptl10n-benefit-time-saving-ja-JP"})
+MATCH (c:Entity {key: "benefit-time-saving"}), (l:Locale {key: "ja-JP"})
+MERGE (cl:EntityL10n {key: "entityl10n-benefit-time-saving-ja-JP"})
 ON CREATE SET
-  cl.key = "conceptl10n-benefit-time-saving-ja-JP",
+  cl.key = "entityl10n-benefit-time-saving-ja-JP",
   cl.display_name = "貴重な時間を節約",
   cl.description = "時間節約メリットの日本語ローカライゼーション",
   cl.llm_context = "USE: when emphasizing time benefits in Japanese. TRIGGERS: ja-JP, 高速, 即座. NOT: other locales.",
@@ -560,10 +561,10 @@ ON CREATE SET
 MERGE (c)-[:HAS_L10N]->(cl)
 MERGE (cl)-[:FOR_LOCALE]->(l);
 
-MATCH (c:Concept {key: "usecase-restaurant"}), (l:Locale {key: "ja-JP"})
-MERGE (cl:ConceptL10n {key: "conceptl10n-usecase-restaurant-ja-JP"})
+MATCH (c:Entity {key: "usecase-restaurant"}), (l:Locale {key: "ja-JP"})
+MERGE (cl:EntityL10n {key: "entityl10n-usecase-restaurant-ja-JP"})
 ON CREATE SET
-  cl.key = "conceptl10n-usecase-restaurant-ja-JP",
+  cl.key = "entityl10n-usecase-restaurant-ja-JP",
   cl.display_name = "レストランQRソリューション",
   cl.description = "レストラン向けの日本語ローカライゼーション",
   cl.llm_context = "USE: when describing restaurant use in Japanese. TRIGGERS: ja-JP, レストラン, メニュー. NOT: other locales.",
@@ -584,69 +585,69 @@ MERGE (cl)-[:FOR_LOCALE]->(l);
 // =============================================================================
 
 // Feature-to-Feature links
-MATCH (c1:Concept {key: "feature-customization"}), (c2:Concept {key: "feature-templates"})
+MATCH (c1:Entity {key: "feature-customization"}), (c2:Entity {key: "feature-templates"})
 MERGE (c1)-[:SEMANTIC_LINK {type: "complements", temperature: 0.7, context: "templates enable quick customization"}]->(c2);
 
-MATCH (c1:Concept {key: "feature-dynamic"}), (c2:Concept {key: "feature-analytics"})
+MATCH (c1:Entity {key: "feature-dynamic"}), (c2:Entity {key: "feature-analytics"})
 MERGE (c1)-[:SEMANTIC_LINK {type: "enables", temperature: 0.85, context: "dynamic QR enables tracking"}]->(c2);
 
-MATCH (c1:Concept {key: "feature-bulk"}), (c2:Concept {key: "feature-templates"})
+MATCH (c1:Entity {key: "feature-bulk"}), (c2:Entity {key: "feature-templates"})
 MERGE (c1)-[:SEMANTIC_LINK {type: "uses", temperature: 0.6, context: "bulk generation uses templates"}]->(c2);
 
 // Action-to-Feature links
-MATCH (c1:Concept {key: "action-create-qr"}), (c2:Concept {key: "feature-customization"})
+MATCH (c1:Entity {key: "action-create-qr"}), (c2:Entity {key: "feature-customization"})
 MERGE (c1)-[:SEMANTIC_LINK {type: "includes", temperature: 0.8, context: "creation includes customization options"}]->(c2);
 
-MATCH (c1:Concept {key: "action-create-qr"}), (c2:Concept {key: "feature-templates"})
+MATCH (c1:Entity {key: "action-create-qr"}), (c2:Entity {key: "feature-templates"})
 MERGE (c1)-[:SEMANTIC_LINK {type: "uses", temperature: 0.7, context: "creation can use templates"}]->(c2);
 
-MATCH (c1:Concept {key: "action-create-qr"}), (c2:Concept {key: "feature-dynamic"})
+MATCH (c1:Entity {key: "action-create-qr"}), (c2:Entity {key: "feature-dynamic"})
 MERGE (c1)-[:SEMANTIC_LINK {type: "produces", temperature: 0.75, context: "can create dynamic QR codes"}]->(c2);
 
 // Tier-to-Feature links
-MATCH (c1:Concept {key: "tier-pro"}), (c2:Concept {key: "feature-bulk"})
+MATCH (c1:Entity {key: "tier-pro"}), (c2:Entity {key: "feature-bulk"})
 MERGE (c1)-[:SEMANTIC_LINK {type: "includes", temperature: 0.9, context: "bulk is pro feature"}]->(c2);
 
-MATCH (c1:Concept {key: "tier-pro"}), (c2:Concept {key: "feature-dynamic"})
+MATCH (c1:Entity {key: "tier-pro"}), (c2:Entity {key: "feature-dynamic"})
 MERGE (c1)-[:SEMANTIC_LINK {type: "includes", temperature: 0.85, context: "dynamic QR is pro feature"}]->(c2);
 
-MATCH (c1:Concept {key: "tier-free"}), (c2:Concept {key: "feature-customization"})
+MATCH (c1:Entity {key: "tier-free"}), (c2:Entity {key: "feature-customization"})
 MERGE (c1)-[:SEMANTIC_LINK {type: "includes", temperature: 0.7, context: "basic customization in free tier"}]->(c2);
 
-MATCH (c1:Concept {key: "tier-free"}), (c2:Concept {key: "feature-templates"})
+MATCH (c1:Entity {key: "tier-free"}), (c2:Entity {key: "feature-templates"})
 MERGE (c1)-[:SEMANTIC_LINK {type: "includes", temperature: 0.6, context: "some templates in free tier"}]->(c2);
 
 // Tier-to-Benefit links
-MATCH (c1:Concept {key: "tier-free"}), (c2:Concept {key: "benefit-cost-effective"})
+MATCH (c1:Entity {key: "tier-free"}), (c2:Entity {key: "benefit-cost-effective"})
 MERGE (c1)-[:SEMANTIC_LINK {type: "provides", temperature: 0.95, context: "free tier is cost effective"}]->(c2);
 
-MATCH (c1:Concept {key: "tier-pro"}), (c2:Concept {key: "benefit-time-saving"})
+MATCH (c1:Entity {key: "tier-pro"}), (c2:Entity {key: "benefit-time-saving"})
 MERGE (c1)-[:SEMANTIC_LINK {type: "provides", temperature: 0.8, context: "pro features save time"}]->(c2);
 
 // Use Case-to-Feature links
-MATCH (c1:Concept {key: "usecase-marketing"}), (c2:Concept {key: "feature-analytics"})
+MATCH (c1:Entity {key: "usecase-marketing"}), (c2:Entity {key: "feature-analytics"})
 MERGE (c1)-[:SEMANTIC_LINK {type: "requires", temperature: 0.9, context: "marketing needs analytics"}]->(c2);
 
-MATCH (c1:Concept {key: "usecase-marketing"}), (c2:Concept {key: "feature-customization"})
+MATCH (c1:Entity {key: "usecase-marketing"}), (c2:Entity {key: "feature-customization"})
 MERGE (c1)-[:SEMANTIC_LINK {type: "benefits_from", temperature: 0.75, context: "marketing benefits from branding"}]->(c2);
 
-MATCH (c1:Concept {key: "usecase-restaurant"}), (c2:Concept {key: "feature-dynamic"})
+MATCH (c1:Entity {key: "usecase-restaurant"}), (c2:Entity {key: "feature-dynamic"})
 MERGE (c1)-[:SEMANTIC_LINK {type: "requires", temperature: 0.9, context: "menus need dynamic updates"}]->(c2);
 
-MATCH (c1:Concept {key: "usecase-retail"}), (c2:Concept {key: "feature-bulk"})
+MATCH (c1:Entity {key: "usecase-retail"}), (c2:Entity {key: "feature-bulk"})
 MERGE (c1)-[:SEMANTIC_LINK {type: "benefits_from", temperature: 0.8, context: "retail needs bulk for inventory"}]->(c2);
 
-MATCH (c1:Concept {key: "usecase-events"}), (c2:Concept {key: "feature-bulk"})
+MATCH (c1:Entity {key: "usecase-events"}), (c2:Entity {key: "feature-bulk"})
 MERGE (c1)-[:SEMANTIC_LINK {type: "requires", temperature: 0.85, context: "events need bulk tickets"}]->(c2);
 
-MATCH (c1:Concept {key: "usecase-events"}), (c2:Concept {key: "feature-analytics"})
+MATCH (c1:Entity {key: "usecase-events"}), (c2:Entity {key: "feature-analytics"})
 MERGE (c1)-[:SEMANTIC_LINK {type: "benefits_from", temperature: 0.8, context: "events benefit from check-in tracking"}]->(c2);
 
 // Benefit-to-Feature links
-MATCH (c1:Concept {key: "benefit-time-saving"}), (c2:Concept {key: "feature-templates"})
+MATCH (c1:Entity {key: "benefit-time-saving"}), (c2:Entity {key: "feature-templates"})
 MERGE (c1)-[:SEMANTIC_LINK {type: "enabled_by", temperature: 0.8, context: "templates save time"}]->(c2);
 
-MATCH (c1:Concept {key: "benefit-time-saving"}), (c2:Concept {key: "feature-bulk"})
+MATCH (c1:Entity {key: "benefit-time-saving"}), (c2:Entity {key: "feature-bulk"})
 MERGE (c1)-[:SEMANTIC_LINK {type: "enabled_by", temperature: 0.85, context: "bulk saves time"}]->(c2);
 
 // =============================================================================
@@ -982,62 +983,62 @@ MERGE (page)-[:HAS_BLOCK {position: 2}]->(b)
 MERGE (b)-[:OF_TYPE]->(bt);
 
 // =============================================================================
-// USES_CONCEPT relationships
+// USES_ENTITY relationships (v10.4: Entity-Centric Architecture)
 // =============================================================================
 
-MATCH (b:Block {key: "block-home-hero"}), (c:Concept {key: "action-create-qr"})
-MERGE (b)-[:USES_CONCEPT {purpose: "headline", temperature: 0.9}]->(c);
+MATCH (b:Block {key: "block-home-hero"}), (c:Entity {key: "action-create-qr"})
+MERGE (b)-[:USES_ENTITY {purpose: "headline", temperature: 0.9}]->(c);
 
-MATCH (b:Block {key: "block-home-hero"}), (c:Concept {key: "benefit-time-saving"})
-MERGE (b)-[:USES_CONCEPT {purpose: "subheadline", temperature: 0.7}]->(c);
+MATCH (b:Block {key: "block-home-hero"}), (c:Entity {key: "benefit-time-saving"})
+MERGE (b)-[:USES_ENTITY {purpose: "subheadline", temperature: 0.7}]->(c);
 
-MATCH (b:Block {key: "block-home-features"}), (c:Concept {key: "feature-customization"})
-MERGE (b)-[:USES_CONCEPT {purpose: "feature", temperature: 0.8}]->(c);
+MATCH (b:Block {key: "block-home-features"}), (c:Entity {key: "feature-customization"})
+MERGE (b)-[:USES_ENTITY {purpose: "feature", temperature: 0.8}]->(c);
 
-MATCH (b:Block {key: "block-home-features"}), (c:Concept {key: "feature-analytics"})
-MERGE (b)-[:USES_CONCEPT {purpose: "feature", temperature: 0.8}]->(c);
+MATCH (b:Block {key: "block-home-features"}), (c:Entity {key: "feature-analytics"})
+MERGE (b)-[:USES_ENTITY {purpose: "feature", temperature: 0.8}]->(c);
 
-MATCH (b:Block {key: "block-home-features"}), (c:Concept {key: "feature-bulk"})
-MERGE (b)-[:USES_CONCEPT {purpose: "feature", temperature: 0.8}]->(c);
+MATCH (b:Block {key: "block-home-features"}), (c:Entity {key: "feature-bulk"})
+MERGE (b)-[:USES_ENTITY {purpose: "feature", temperature: 0.8}]->(c);
 
-MATCH (b:Block {key: "block-home-features"}), (c:Concept {key: "feature-dynamic"})
-MERGE (b)-[:USES_CONCEPT {purpose: "feature", temperature: 0.8}]->(c);
+MATCH (b:Block {key: "block-home-features"}), (c:Entity {key: "feature-dynamic"})
+MERGE (b)-[:USES_ENTITY {purpose: "feature", temperature: 0.8}]->(c);
 
-MATCH (b:Block {key: "block-home-cta"}), (c:Concept {key: "tier-free"})
-MERGE (b)-[:USES_CONCEPT {purpose: "cta", temperature: 0.9}]->(c);
+MATCH (b:Block {key: "block-home-cta"}), (c:Entity {key: "tier-free"})
+MERGE (b)-[:USES_ENTITY {purpose: "cta", temperature: 0.9}]->(c);
 
-MATCH (b:Block {key: "block-home-cta"}), (c:Concept {key: "benefit-cost-effective"})
-MERGE (b)-[:USES_CONCEPT {purpose: "value_prop", temperature: 0.8}]->(c);
+MATCH (b:Block {key: "block-home-cta"}), (c:Entity {key: "benefit-cost-effective"})
+MERGE (b)-[:USES_ENTITY {purpose: "value_prop", temperature: 0.8}]->(c);
 
-MATCH (b:Block {key: "block-pricing-table"}), (c:Concept {key: "tier-free"})
-MERGE (b)-[:USES_CONCEPT {purpose: "tier", temperature: 1.0}]->(c);
+MATCH (b:Block {key: "block-pricing-table"}), (c:Entity {key: "tier-free"})
+MERGE (b)-[:USES_ENTITY {purpose: "tier", temperature: 1.0}]->(c);
 
-MATCH (b:Block {key: "block-pricing-table"}), (c:Concept {key: "tier-pro"})
-MERGE (b)-[:USES_CONCEPT {purpose: "tier", temperature: 1.0}]->(c);
+MATCH (b:Block {key: "block-pricing-table"}), (c:Entity {key: "tier-pro"})
+MERGE (b)-[:USES_ENTITY {purpose: "tier", temperature: 1.0}]->(c);
 
-MATCH (b:Block {key: "block-features-grid"}), (c:Concept {key: "feature-customization"})
-MERGE (b)-[:USES_CONCEPT {purpose: "feature", temperature: 0.9}]->(c);
+MATCH (b:Block {key: "block-features-grid"}), (c:Entity {key: "feature-customization"})
+MERGE (b)-[:USES_ENTITY {purpose: "feature", temperature: 0.9}]->(c);
 
-MATCH (b:Block {key: "block-features-grid"}), (c:Concept {key: "feature-bulk"})
-MERGE (b)-[:USES_CONCEPT {purpose: "feature", temperature: 0.9}]->(c);
+MATCH (b:Block {key: "block-features-grid"}), (c:Entity {key: "feature-bulk"})
+MERGE (b)-[:USES_ENTITY {purpose: "feature", temperature: 0.9}]->(c);
 
-MATCH (b:Block {key: "block-features-grid"}), (c:Concept {key: "feature-dynamic"})
-MERGE (b)-[:USES_CONCEPT {purpose: "feature", temperature: 0.9}]->(c);
+MATCH (b:Block {key: "block-features-grid"}), (c:Entity {key: "feature-dynamic"})
+MERGE (b)-[:USES_ENTITY {purpose: "feature", temperature: 0.9}]->(c);
 
-MATCH (b:Block {key: "block-features-grid"}), (c:Concept {key: "feature-templates"})
-MERGE (b)-[:USES_CONCEPT {purpose: "feature", temperature: 0.9}]->(c);
+MATCH (b:Block {key: "block-features-grid"}), (c:Entity {key: "feature-templates"})
+MERGE (b)-[:USES_ENTITY {purpose: "feature", temperature: 0.9}]->(c);
 
-MATCH (b:Block {key: "block-usecases-grid"}), (c:Concept {key: "usecase-marketing"})
-MERGE (b)-[:USES_CONCEPT {purpose: "usecase", temperature: 0.9}]->(c);
+MATCH (b:Block {key: "block-usecases-grid"}), (c:Entity {key: "usecase-marketing"})
+MERGE (b)-[:USES_ENTITY {purpose: "usecase", temperature: 0.9}]->(c);
 
-MATCH (b:Block {key: "block-usecases-grid"}), (c:Concept {key: "usecase-restaurant"})
-MERGE (b)-[:USES_CONCEPT {purpose: "usecase", temperature: 0.9}]->(c);
+MATCH (b:Block {key: "block-usecases-grid"}), (c:Entity {key: "usecase-restaurant"})
+MERGE (b)-[:USES_ENTITY {purpose: "usecase", temperature: 0.9}]->(c);
 
-MATCH (b:Block {key: "block-usecases-grid"}), (c:Concept {key: "usecase-retail"})
-MERGE (b)-[:USES_CONCEPT {purpose: "usecase", temperature: 0.9}]->(c);
+MATCH (b:Block {key: "block-usecases-grid"}), (c:Entity {key: "usecase-retail"})
+MERGE (b)-[:USES_ENTITY {purpose: "usecase", temperature: 0.9}]->(c);
 
-MATCH (b:Block {key: "block-usecases-grid"}), (c:Concept {key: "usecase-events"})
-MERGE (b)-[:USES_CONCEPT {purpose: "usecase", temperature: 0.9}]->(c);
+MATCH (b:Block {key: "block-usecases-grid"}), (c:Entity {key: "usecase-events"})
+MERGE (b)-[:USES_ENTITY {purpose: "usecase", temperature: 0.9}]->(c);
 
 // =============================================================================
 // SEO MINING DATA
@@ -1058,7 +1059,7 @@ ON CREATE SET
   run.updated_at = datetime();
 
 // SEO Keywords - English
-MATCH (c:Concept {key: "action-create-qr"})-[:HAS_L10N]->(cl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale {key: "en-US"})
+MATCH (c:Entity {key: "action-create-qr"})-[:HAS_L10N]->(cl:EntityL10n)-[:FOR_LOCALE]->(l:Locale {key: "en-US"})
 MERGE (seo:SEOKeyword {key: "seo-qr-code-generator-en"})
 ON CREATE SET
   seo.key = "seo-qr-code-generator-en",
@@ -1075,7 +1076,7 @@ ON CREATE SET
 MERGE (cl)-[:HAS_SEO_TARGET]->(seo)
 MERGE (seo)-[:FOR_LOCALE]->(l);
 
-MATCH (c:Concept {key: "action-create-qr"})-[:HAS_L10N]->(cl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale {key: "en-US"})
+MATCH (c:Entity {key: "action-create-qr"})-[:HAS_L10N]->(cl:EntityL10n)-[:FOR_LOCALE]->(l:Locale {key: "en-US"})
 MERGE (seo:SEOKeyword {key: "seo-free-qr-code-en"})
 ON CREATE SET
   seo.key = "seo-free-qr-code-en",
@@ -1092,7 +1093,7 @@ ON CREATE SET
 MERGE (cl)-[:HAS_SEO_TARGET]->(seo)
 MERGE (seo)-[:FOR_LOCALE]->(l);
 
-MATCH (c:Concept {key: "usecase-restaurant"})-[:HAS_L10N]->(cl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale {key: "en-US"})
+MATCH (c:Entity {key: "usecase-restaurant"})-[:HAS_L10N]->(cl:EntityL10n)-[:FOR_LOCALE]->(l:Locale {key: "en-US"})
 MERGE (seo:SEOKeyword {key: "seo-restaurant-qr-menu-en"})
 ON CREATE SET
   seo.key = "seo-restaurant-qr-menu-en",
@@ -1110,7 +1111,7 @@ MERGE (cl)-[:HAS_SEO_TARGET]->(seo)
 MERGE (seo)-[:FOR_LOCALE]->(l);
 
 // SEO Keywords - French
-MATCH (c:Concept {key: "action-create-qr"})-[:HAS_L10N]->(cl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale {key: "fr-FR"})
+MATCH (c:Entity {key: "action-create-qr"})-[:HAS_L10N]->(cl:EntityL10n)-[:FOR_LOCALE]->(l:Locale {key: "fr-FR"})
 MERGE (seo:SEOKeyword {key: "seo-generateur-qr-code-fr"})
 ON CREATE SET
   seo.key = "seo-generateur-qr-code-fr",
@@ -1127,7 +1128,7 @@ ON CREATE SET
 MERGE (cl)-[:HAS_SEO_TARGET]->(seo)
 MERGE (seo)-[:FOR_LOCALE]->(l);
 
-MATCH (c:Concept {key: "action-create-qr"})-[:HAS_L10N]->(cl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale {key: "fr-FR"})
+MATCH (c:Entity {key: "action-create-qr"})-[:HAS_L10N]->(cl:EntityL10n)-[:FOR_LOCALE]->(l:Locale {key: "fr-FR"})
 MERGE (seo:SEOKeyword {key: "seo-qr-code-gratuit-fr"})
 ON CREATE SET
   seo.key = "seo-qr-code-gratuit-fr",
@@ -1176,101 +1177,6 @@ ON CREATE SET
   m.created_at = datetime(),
   m.updated_at = datetime()
 MERGE (seo)-[:HAS_METRICS]->(m);
-
-// =============================================================================
-// GEO MINING DATA (Generative Engine Optimization)
-// =============================================================================
-
-MERGE (run:GEOMiningRun {key: "geo-run-2024-01"})
-ON CREATE SET
-  run.key = "geo-run-2024-01",
-  run.display_name = "January 2024 GEO Mining",
-  run.description = "Initial GEO seed mining for AI assistants",
-  run.llm_context = "USE: GEO mining context. TRIGGERS: geo run, ai optimization. NOT: SEO mining.",
-  run.status = "completed",
-  run.started_at = datetime() - duration('P25D'),
-  run.completed_at = datetime() - duration('P24D'),
-  run.seeds_found = 30,
-  run.seeds_qualified = 15,
-  run.created_at = datetime(),
-  run.updated_at = datetime();
-
-// GEO Seeds - English
-MATCH (c:Concept {key: "product-generator"})-[:HAS_L10N]->(cl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale {key: "en-US"})
-MERGE (geo:GEOSeedL10n {key: "geo-best-qr-generator-en"})
-ON CREATE SET
-  geo.key = "geo-best-qr-generator-en",
-  geo.display_name = "Best QR Code Generator",
-  geo.description = "GEO seed for AI recommendations",
-  geo.llm_context = "USE: AI assistant recommendations. TRIGGERS: best qr code tool. NOT: SEO keywords.",
-  geo.query_seed = "What is the best free QR code generator?",
-  geo.intent_category = "recommendation",
-  geo.ai_platforms = '["ChatGPT", "Perplexity", "Claude", "Gemini"]',
-  geo.expected_answer_type = "tool_recommendation",
-  geo.created_at = datetime(),
-  geo.updated_at = datetime()
-MERGE (cl)-[:HAS_GEO_TARGET]->(geo)
-MERGE (geo)-[:FOR_LOCALE]->(l);
-
-MATCH (c:Concept {key: "usecase-restaurant"})-[:HAS_L10N]->(cl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale {key: "en-US"})
-MERGE (geo:GEOSeedL10n {key: "geo-restaurant-qr-how-en"})
-ON CREATE SET
-  geo.key = "geo-restaurant-qr-how-en",
-  geo.display_name = "How to Create Restaurant QR Menu",
-  geo.description = "GEO seed for restaurant how-to queries",
-  geo.llm_context = "USE: restaurant how-to queries. TRIGGERS: how to create menu qr. NOT: other industries.",
-  geo.query_seed = "How do I create a QR code menu for my restaurant?",
-  geo.intent_category = "how_to",
-  geo.ai_platforms = '["ChatGPT", "Perplexity", "Claude"]',
-  geo.expected_answer_type = "step_by_step",
-  geo.created_at = datetime(),
-  geo.updated_at = datetime()
-MERGE (cl)-[:HAS_GEO_TARGET]->(geo)
-MERGE (geo)-[:FOR_LOCALE]->(l);
-
-// GEO Seeds - French
-MATCH (c:Concept {key: "product-generator"})-[:HAS_L10N]->(cl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale {key: "fr-FR"})
-MERGE (geo:GEOSeedL10n {key: "geo-meilleur-generateur-qr-fr"})
-ON CREATE SET
-  geo.key = "geo-meilleur-generateur-qr-fr",
-  geo.display_name = "Meilleur Generateur QR",
-  geo.description = "GEO seed for French AI recommendations",
-  geo.llm_context = "USE: French AI recommendations. TRIGGERS: meilleur generateur qr. NOT: English queries.",
-  geo.query_seed = "Quel est le meilleur generateur de QR code gratuit?",
-  geo.intent_category = "recommendation",
-  geo.ai_platforms = '["ChatGPT", "Perplexity", "Claude"]',
-  geo.expected_answer_type = "tool_recommendation",
-  geo.created_at = datetime(),
-  geo.updated_at = datetime()
-MERGE (cl)-[:HAS_GEO_TARGET]->(geo)
-MERGE (geo)-[:FOR_LOCALE]->(l);
-
-// GEO Mining Links
-MATCH (run:GEOMiningRun {key: "geo-run-2024-01"}), (geo:GEOSeedL10n {key: "geo-best-qr-generator-en"})
-MERGE (run)-[:GEO_MINES]->(geo);
-
-MATCH (run:GEOMiningRun {key: "geo-run-2024-01"}), (geo:GEOSeedL10n {key: "geo-restaurant-qr-how-en"})
-MERGE (run)-[:GEO_MINES]->(geo);
-
-MATCH (run:GEOMiningRun {key: "geo-run-2024-01"}), (geo:GEOSeedL10n {key: "geo-meilleur-generateur-qr-fr"})
-MERGE (run)-[:GEO_MINES]->(geo);
-
-// GEO Metrics
-MATCH (geo:GEOSeedL10n {key: "geo-best-qr-generator-en"})
-MERGE (m:GEOSeedMetrics {key: "geo-metrics-best-qr-2024-01"})
-ON CREATE SET
-  m.key = "geo-metrics-best-qr-2024-01",
-  m.display_name = "Best QR Generator GEO Metrics",
-  m.description = "AI visibility metrics snapshot",
-  m.llm_context = "USE: GEO performance tracking. TRIGGERS: ai visibility, citations. NOT: SEO metrics.",
-  m.recorded_at = datetime() - duration('P5D'),
-  m.visibility_score = 0.72,
-  m.citation_count = 15,
-  m.platforms_appearing = '["Perplexity", "ChatGPT"]',
-  m.sentiment = "positive",
-  m.created_at = datetime(),
-  m.updated_at = datetime()
-MERGE (geo)-[:HAS_METRICS]->(m);
 
 // =============================================================================
 // GENERATED OUTPUTS (PageL10n, BlockL10n)
@@ -1694,4 +1600,4 @@ MERGE (bt)-[:HAS_RULES]->(br);
 // Run these to verify the seed worked:
 // MATCH (n) RETURN labels(n)[0] AS type, count(*) AS count ORDER BY count DESC;
 // MATCH ()-[r]->() RETURN type(r) AS type, count(*) AS count ORDER BY count DESC;
-// MATCH (c:Concept)-[:HAS_L10N]->(cl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale) RETURN c.key, l.key, cl.display_name LIMIT 20;
+// MATCH (c:Entity)-[:HAS_L10N]->(cl:EntityL10n)-[:FOR_LOCALE]->(l:Locale) RETURN c.key, l.key, cl.display_name LIMIT 20;

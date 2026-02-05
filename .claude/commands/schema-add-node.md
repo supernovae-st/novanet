@@ -9,7 +9,7 @@ Add a new node type to the NovaNet ontology using Socratic discovery.
 ## Workflow
 
 1. **Discovery Phase**: Ask clarifying questions about the node:
-   - What realm? (global, project, shared)
+   - What realm? (global, project)
    - What layer? (existing or new)
    - What is its purpose in the graph?
    - What properties does it need?
@@ -32,18 +32,18 @@ Add a new node type to the NovaNet ontology using Socratic discovery.
 
 ## Naming Requirements
 
-- **Node names**: PascalCase (e.g., `LocaleHumor`, `ConceptL10n`)
-- **YAML filename**: kebab-case (e.g., `locale-humor.yaml`, `concept-l10n.yaml`)
+- **Node names**: PascalCase (e.g., `LocaleHumor`, `EntityL10n`)
+- **YAML filename**: kebab-case (e.g., `locale-humor.yaml`, `entity-l10n.yaml`)
 - **Property names**: snake_case (e.g., `display_name`, `llm_context`)
 
 ## Nomenclature Rules
 
 | Pattern | Use For | Examples |
 |---------|---------|----------|
-| `*L10n` | Localized content | ConceptL10n, PageL10n, BlockL10n, ProjectL10n |
+| `*L10n` | Localized content | EntityL10n, PageL10n, BlockL10n, ProjectL10n |
 | `Locale*` | Locale knowledge | LocaleVoice, LocaleCulture, LocaleLexicon |
-| `*Metrics` | Time-series data | SEOKeywordMetrics, GEOSeedMetrics |
-| `*MiningRun` | Batch operations | SEOMiningRun, GEOMiningRun |
+| `*Metrics` | Time-series data | SEOKeywordMetrics |
+| `*MiningRun` | Batch operations | SEOMiningRun |
 
 ## Example
 

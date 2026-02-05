@@ -145,7 +145,7 @@ export function useGraphData(options: UseGraphDataOptions = {}): UseGraphDataRet
   );
 
   /**
-   * Fetch schema graph (ontology) - 46 node types and their relationships
+   * Fetch schema graph (ontology) - 42 node types and their relationships (v10.4)
    */
   const fetchSchemaData = useCallback(
     async (): Promise<GraphDataResponse> => {

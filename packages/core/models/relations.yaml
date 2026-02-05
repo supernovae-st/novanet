@@ -460,14 +460,14 @@ relations:
     cardinality: many_to_one
     llm_context: "Prompt artifact was compiled from source prompt template."
 
-  - type: INCLUDES_CONCEPT
+  - type: INCLUDES_ENTITY
     family: generation
     source: PromptArtifact
     target: Entity
     cardinality: one_to_many
     properties:
       - weight
-    llm_context: "Prompt artifact includes concept context for generation. weight: 0.0-1.0 influence on output."
+    llm_context: "Prompt artifact includes entity context for generation. weight: 0.0-1.0 influence on output."
 
   - type: INCLUDES_STYLE
     family: generation

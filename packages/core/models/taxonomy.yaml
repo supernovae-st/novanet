@@ -1,6 +1,6 @@
 # packages/core/models/taxonomy.yaml
 # Source of truth for NovaNet taxonomy structure
-# v9.5.0 — Unified Nomenclature
+# v10.4.0 — Entity-Centric Architecture, Unified Nomenclature
 #
 # This file defines:
 # - 2 NodeRealms (GLOBAL, PROJECT) with nested NodeLayers
@@ -10,9 +10,6 @@
 # - 3 ArcCardinalities (one_to_one / one_to_many / many_to_many)
 # - Terminal palette for TUI graceful degradation
 #
-# v10.2: Merged SHARED realm into GLOBAL (SEO layer now in GLOBAL)
-# v10.3: Entity-Centric Architecture (Entity/EntityL10n in global realm)
-#
 # Generated artifacts:
 # - packages/db/seed/00.5-taxonomy.cypher (Realm, Layer, Trait, ArcFamily + hierarchy)
 # - packages/core/src/graph/hierarchy.ts (realm→layer tree, auto-generated)
@@ -20,7 +17,7 @@
 # All meta-nodes receive double-label :Meta (e.g., :Meta:Realm)
 # Query all meta-nodes: MATCH (n:Meta) RETURN n
 
-version: "10.3.0"
+version: "10.4.0"
 
 # =============================================================================
 # NODE REALMS (2) — WHERE does the node live?

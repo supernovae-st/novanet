@@ -30,7 +30,7 @@ pub struct ContextWindow {
     /// Nodes included in context
     pub nodes: Vec<ContextNode>,
     /// Edges included in context (for provenance)
-    pub edges: Vec<ContextEdge>,
+    pub edges: Vec<ContextArc>,
     /// Total tokens used
     pub tokens_used: u32,
     /// Token budget
@@ -52,9 +52,9 @@ pub struct ContextNode {
     pub depth: u8,
 }
 
-/// Edge in context window.
+/// Arc in context window (v10.4: renamed from ContextArc).
 #[derive(Debug, Clone, Serialize)]
-pub struct ContextEdge {
+pub struct ContextArc {
     pub from_key: String,
     pub to_key: String,
     pub arc_kind: String,

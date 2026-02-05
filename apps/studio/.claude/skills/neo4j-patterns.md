@@ -171,7 +171,7 @@ OPTIONAL MATCH (b)-[:OF_TYPE]->(bt:BlockType)
 RETURN page.key, collect({block: b.key, type: bt.key}) as blocks
 
 -- Get concept with localized content
-MATCH (c:Concept)-[:HAS_L10N]->(cl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale)
+MATCH (c:Entity)-[:HAS_L10N]->(cl:EntityL10n)-[:FOR_LOCALE]->(l:Locale)
 WHERE l.key = "fr-FR"
 RETURN c.key, cl.title, cl.definition
 
@@ -180,8 +180,8 @@ MATCH (l:Locale {key: "fr-FR"})-[:HAS_LEXICON]->(lex:LocaleLexicon)-[:HAS_EXPRES
 RETURN l.key, e.text, e.semantic_field
 
 -- Get block generation context
-MATCH (b:Block {key: "hero-pricing"})-[:USES_CONCEPT]->(c:Concept)
-OPTIONAL MATCH (c)-[:HAS_L10N]->(cl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale {key: "fr-FR"})
+MATCH (b:Block {key: "hero-pricing"})-[:USES_ENTITY]->(c:Entity)
+OPTIONAL MATCH (c)-[:HAS_L10N]->(cl:EntityL10n)-[:FOR_LOCALE]->(l:Locale {key: "fr-FR"})
 OPTIONAL MATCH (b)-[:HAS_OUTPUT]->(bl:BlockL10n)-[:FOR_LOCALE]->(l)
 RETURN b.key, c.key, cl.title, bl.content
 ```

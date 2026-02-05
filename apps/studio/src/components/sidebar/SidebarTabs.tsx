@@ -93,7 +93,7 @@ export const SidebarTabs = memo(function SidebarTabs() {
                 activeTab === 'schema' ? 'text-white/40' : 'text-white/20'
               )}
             >
-              35 types · 3 realms
+              42 types · 2 realms
             </div>
           </div>
 

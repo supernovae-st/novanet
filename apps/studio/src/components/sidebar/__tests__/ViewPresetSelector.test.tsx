@@ -35,9 +35,9 @@ describe('ViewPresetSelector', () => {
     expect(screen.getByText('Project')).toBeInTheDocument();    // Project Structure
     expect(screen.getByText('Generation')).toBeInTheDocument(); // Generation Chain
     expect(screen.getByText('Locale')).toBeInTheDocument();     // Locale Knowledge
-    expect(screen.getByText('Concept')).toBeInTheDocument();    // Concept Network
+    expect(screen.getByText('Entity')).toBeInTheDocument();     // Entity Network (v10.4)
     expect(screen.getByText('Prompts')).toBeInTheDocument();    // Prompts & Rules
-    expect(screen.getByText('SEO')).toBeInTheDocument();        // SEO & GEO
+    expect(screen.getByText('SEO')).toBeInTheDocument();        // SEO Keywords (v10.4)
     expect(screen.getByText('Invariant')).toBeInTheDocument();   // Invariant Types
     expect(screen.getByText('Localized')).toBeInTheDocument();  // Localized Content
     expect(screen.getByText('All')).toBeInTheDocument();        // All Nodes
@@ -74,13 +74,13 @@ describe('ViewPresetSelector', () => {
     mockUseFilterStore.mockImplementation((selector) => {
       const state = {
         applyViewPreset: mockApplyViewPreset,
-        activePresetId: 'concept-network',
+        activePresetId: 'entity-network',
       };
       return selector ? selector(state as never) : state;
     });
 
     render(<ViewPresetSelector />);
-    const activeItem = screen.getByText('Concept').closest('button');
+    const activeItem = screen.getByText('Entity').closest('button');
     expect(activeItem).toHaveClass('bg-white/[0.1]');
   });
 

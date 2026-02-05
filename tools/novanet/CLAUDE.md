@@ -7,7 +7,7 @@ This file provides guidance to Claude Code when working in the `tools/novanet/` 
 `novanet` is a unified Rust CLI + TUI binary for managing the NovaNet context graph.
 It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 
-**Design plan**: `docs/plans/2026-02-03-nomenclature-v95-design.md` (source of truth)
+**Version**: v10.4.0 (Entity-Centric Architecture)
 
 ## Current Status
 
@@ -25,7 +25,7 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 | Filter | `filter build` | Implemented (JSON stdin, Studio subprocess) |
 | TUI | `tui` | Galaxy theme, mission control, search, detail, arc explorer, CRUD dialogs, dashboard, logo, command palette, help overlay, boot animation, effects engine, onboarding |
 
-**246 tests pass** (`cargo test`). Zero clippy warnings.
+**245 tests pass** (`cargo test`). Zero clippy warnings.
 
 **Testing stack:**
 - `insta` — Snapshot testing (5 generator outputs)
@@ -43,7 +43,7 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 - `bacon` — Live reload dev experience
 
 **Performance optimizations:**
-- `rayon` — Parallel YAML loading (~4x speedup for 43 nodes)
+- `rayon` — Parallel YAML loading (~4x speedup for 42 nodes)
 - `FxHashSet` — 30% faster string key lookups (TUI collapsed state)
 - `SmallVec` — Stack-allocated vectors for properties/labels (avoid heap)
 
@@ -111,7 +111,7 @@ cargo run -- query --realm=project --format=json  # Mode 4: Faceted query
 cargo run -- node create --kind=Page --key=my-page --props='{"display_name":"My Page"}'
 cargo run -- node edit --key=my-page --set='{"description":"Updated"}'
 cargo run -- node delete --key=my-page --confirm
-cargo run -- arc create --from=page1 --to=concept1 --kind=USES_CONCEPT
+cargo run -- arc create --from=page1 --to=entity1 --kind=USES_ENTITY
 
 # Search (Neo4j)
 cargo run -- search --query="page" --kind=Page --limit=20
@@ -146,7 +146,7 @@ cargo run -- tui                                  # Interactive terminal UI
 # Quality
 cargo clippy -- -D warnings    # Zero warnings policy
 cargo fmt --check              # Formatting check
-cargo nextest run              # 246 tests (fast, parallel)
+cargo nextest run              # 245 tests (fast, parallel)
 cargo test -- --ignored        # Neo4j integration tests (requires running Neo4j)
 
 # Security & auditing

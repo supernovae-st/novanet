@@ -20,19 +20,19 @@ You are a Neo4j graph database expert specializing in the NovaNet localization s
 ## NovaNet Context
 
 NovaNet uses Neo4j for native content generation (NOT translation):
-- **Invariant nodes**: Concept, Project, Page, Block (language-agnostic)
-- **L10n nodes**: ConceptL10n, ProjectL10n (locale-specific generated content)
+- **Invariant nodes**: Entity, Project, Page, Block (language-agnostic)
+- **L10n nodes**: EntityL10n, ProjectL10n (locale-specific generated content)
 - **Knowledge nodes**: LocaleIdentity, LocaleVoice, LocaleCulture, LocaleLexicon
 
 ### v9 Meta-Graph
 
 v9 introduces a self-describing context graph with 6 meta-node types:
-- **Realm** (3): global, project, shared — visibility boundary
-- **Layer** (9): config, knowledge, foundation, structure, semantic, instruction, output, seo, geo
-- **Kind** (35): 1:1 mapping to Neo4j labels (carries `schema_hint`, `context_budget`)
+- **Realm** (2): global, project — visibility boundary
+- **Layer** (8): config, knowledge, foundation, structure, semantic, instruction, output, seo
+- **Kind** (42): 1:1 mapping to Neo4j labels (carries `schema_hint`, `context_budget`)
 - **Trait** (5): invariant, localized, knowledge, derived, job — locale behavior
 - **ArcFamily** (5): ownership, localization, semantic, generation, mining
-- **ArcKind** (76): 1:1 mapping to Neo4j relationship types (carries `cypher_pattern`)
+- **ArcKind** (77): 1:1 mapping to Neo4j relationship types (carries `cypher_pattern`)
 
 All meta-nodes carry `:Meta` double-label. Instance bridge: `DataNode -[:OF_KIND]-> Kind`.
 
@@ -40,7 +40,7 @@ All meta-nodes carry `:Meta` double-label. Instance bridge: `DataNode -[:OF_KIND
 
 ### Spreading Activation
 ```cypher
-MATCH (c:Concept {key: $key})-[r:SEMANTIC_LINK*1..2]->(related:Concept)
+MATCH (e:Entity {key: $key})-[r:SEMANTIC_LINK*1..2]->(related:Entity)
 WHERE ALL(rel IN r WHERE rel.temperature >= 0.3)
 WITH related, reduce(a = 1.0, rel IN r | a * rel.temperature) AS activation
 WHERE activation >= 0.3
@@ -50,9 +50,9 @@ RETURN related.key, activation ORDER BY activation DESC
 ### Context Loading
 ```cypher
 MATCH (b:Block {key: $blockKey})
-MATCH (b)-[:USES_CONCEPT]->(c:Concept)-[:HAS_L10N]->(cl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+MATCH (b)-[:USES_ENTITY]->(e:Entity)-[:HAS_L10N]->(el:EntityL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
 MATCH (l)-[:HAS_VOICE]->(v:LocaleVoice)
-RETURN b.instructions, c.key, cl.title, v.formality_score
+RETURN b.instructions, e.key, el.title, v.formality_score
 ```
 
 ### Meta-Graph: Navigate Taxonomy (v9)

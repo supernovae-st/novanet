@@ -79,7 +79,7 @@ describe('filterStore', () => {
 
   describe('setEnabledNodeTypes', () => {
     it('should set enabled node types', () => {
-      const types: NodeType[] = ['Concept', 'Page', 'Block'];
+      const types: NodeType[] = ['Entity', 'Page', 'Block'];
 
       useFilterStore.getState().setEnabledNodeTypes(types);
 
@@ -90,7 +90,7 @@ describe('filterStore', () => {
     it('should clear active preset when manually changed', () => {
       useFilterStore.setState({ activePresetId: 'some-preset' });
 
-      useFilterStore.getState().setEnabledNodeTypes(['Concept']);
+      useFilterStore.getState().setEnabledNodeTypes(['Entity']);
 
       expect(useFilterStore.getState().activePresetId).toBeNull();
     });
@@ -98,22 +98,22 @@ describe('filterStore', () => {
 
   describe('toggleNodeType', () => {
     it('should add node type if not present', () => {
-      useFilterStore.setState({ enabledNodeTypes: new Set(['Concept']) });
+      useFilterStore.setState({ enabledNodeTypes: new Set(['Entity']) });
 
       useFilterStore.getState().toggleNodeType('Page');
 
       const state = useFilterStore.getState();
       expect(state.enabledNodeTypes.has('Page')).toBe(true);
-      expect(state.enabledNodeTypes.has('Concept')).toBe(true);
+      expect(state.enabledNodeTypes.has('Entity')).toBe(true);
     });
 
     it('should remove node type if present', () => {
-      useFilterStore.setState({ enabledNodeTypes: new Set(['Concept', 'Page']) });
+      useFilterStore.setState({ enabledNodeTypes: new Set(['Entity', 'Page']) });
 
-      useFilterStore.getState().toggleNodeType('Concept');
+      useFilterStore.getState().toggleNodeType('Entity');
 
       const state = useFilterStore.getState();
-      expect(state.enabledNodeTypes.has('Concept')).toBe(false);
+      expect(state.enabledNodeTypes.has('Entity')).toBe(false);
       expect(state.enabledNodeTypes.has('Page')).toBe(true);
     });
 
@@ -191,7 +191,7 @@ describe('filterStore', () => {
       expect(state.layerFilter).toEqual(['foundation', 'semantic']);
       // Should have node types from both layers
       expect(state.enabledNodeTypes.has('Project')).toBe(true);
-      expect(state.enabledNodeTypes.has('Concept')).toBe(true);
+      expect(state.enabledNodeTypes.has('Entity')).toBe(true);
     });
   });
 
@@ -285,7 +285,7 @@ describe('filterStore', () => {
         description: 'Test preset',
         icon: '📁',
         shortcut: '',
-        nodeTypes: ['Concept' as NodeType],
+        nodeTypes: ['Entity' as NodeType],
         locale: null,
       };
 
@@ -320,13 +320,13 @@ describe('filterStore', () => {
   describe('toNovaNetFilter', () => {
     it('should create filter with current node types', () => {
       useFilterStore.setState({
-        enabledNodeTypes: new Set(['Concept', 'Page']),
+        enabledNodeTypes: new Set(['Entity', 'Page']),
       });
 
       const filter = useFilterStore.getState().toNovaNetFilter();
       const types = filter.getResolvedNodeTypes();
 
-      expect(types).toContain('Concept');
+      expect(types).toContain('Entity');
       expect(types).toContain('Page');
     });
 
@@ -362,14 +362,14 @@ describe('filterStore', () => {
   describe('toCypher', () => {
     it('should generate Cypher query from filter state', () => {
       useFilterStore.setState({
-        enabledNodeTypes: new Set(['Concept']),
+        enabledNodeTypes: new Set(['Entity']),
         depthLimit: 2,
       });
 
       const cypher = useFilterStore.getState().toCypher();
 
       expect(cypher).toContain('MATCH');
-      expect(cypher).toContain('Concept');
+      expect(cypher).toContain('Entity');
     });
   });
 
@@ -381,7 +381,7 @@ describe('filterStore', () => {
     it('should serialize Set to array when storing', () => {
       // The persist middleware uses custom storage
       // This tests that the storage handler works correctly
-      const types = new Set(['Concept', 'Page'] as NodeType[]);
+      const types = new Set(['Entity', 'Page'] as NodeType[]);
       useFilterStore.setState({ enabledNodeTypes: types });
 
       // Trigger a state change that would cause persistence
@@ -434,7 +434,6 @@ describe('filterStore', () => {
         const state = useFilterStore.getState();
         expect(state.collapsedRealms).toContain('project');
         expect(state.collapsedRealms).toContain('global');
-        expect(state.collapsedRealms).not.toContain('shared');
       });
     });
 

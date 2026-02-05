@@ -252,7 +252,7 @@ CALL apoc.import.json('/import/data.json')
 
 -- Batch update
 CALL apoc.periodic.iterate(
-  'MATCH (n:Concept) RETURN n',
+  'MATCH (n:Entity) RETURN n',
   'SET n.updated_at = datetime()',
   {batchSize: 500}
 )
@@ -261,7 +261,7 @@ CALL apoc.periodic.iterate(
 RETURN apoc.create.uuid() AS uuid
 
 -- Merge nodes
-CALL apoc.merge.node(['Concept'], {key: 'pricing'}, {display_name: 'Pricing'})
+CALL apoc.merge.node(['Entity'], {key: 'pricing'}, {display_name: 'Pricing'})
 ```
 
 ### Check APOC Installation
@@ -320,11 +320,11 @@ docker network ls | grep novanet
 SHOW INDEXES
 
 -- Create missing indexes
-CREATE INDEX concept_key IF NOT EXISTS FOR (c:Concept) ON (c.key);
+CREATE INDEX entity_key IF NOT EXISTS FOR (c:Entity) ON (c.key);
 CREATE INDEX locale_key IF NOT EXISTS FOR (l:Locale) ON (l.key);
 
 -- Profile query
-PROFILE MATCH (c:Concept)-[:HAS_L10N]->(cl) RETURN count(*)
+PROFILE MATCH (c:Entity)-[:HAS_L10N]->(cl) RETURN count(*)
 ```
 
 ### Out of Memory
