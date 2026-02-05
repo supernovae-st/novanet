@@ -214,6 +214,7 @@ impl App {
         self.pending_arc_kind_load = None;
         self.pending_realm_load = None;
         self.pending_layer_load = None;
+        self.pending_instance_load = None;
 
         // Extract data before mutable borrow (to avoid borrow checker issues)
         let kind_info = match self.tree.item_at(self.tree_cursor) {
@@ -891,6 +892,7 @@ impl App {
     pub fn exit_filtered_data_mode(&mut self) {
         if self.data_filter_kind.is_some() {
             self.data_filter_kind = None;
+            self.pending_instance_load = None; // Clear pending to prevent race condition
             // Clamp cursor to valid range before restoring
             let max_cursor = self.tree.item_count().saturating_sub(1);
             self.tree_cursor = self.data_cursor_before_filter.min(max_cursor);
