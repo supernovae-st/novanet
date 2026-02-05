@@ -76,6 +76,16 @@
         ]
       },
       {
+        "matcher": "Write|Edit",
+        "pathPattern": "**/.claude/{skills,commands,agents,rules}/**/*.md",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/skill-sync-reminder.sh"
+          }
+        ]
+      },
+      {
         "matcher": "Read",
         "pathPattern": "**/models/**/*.yaml",
         "hooks": [
