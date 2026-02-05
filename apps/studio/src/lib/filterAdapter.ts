@@ -59,7 +59,7 @@ const RELATION_ALIAS_MAP: Record<string, string> = {
   HAS_BLOCK: 'block',
   HAS_PROMPT: 'prompt',
   HAS_RULES: 'rules',
-  USES_CONCEPT: 'concept',
+  USES_ENTITY: 'entity',
   HAS_L10N: 'l10n',
   HAS_OUTPUT: 'output',
   // v10 knowledge arcs (tiered model)
@@ -87,8 +87,8 @@ const RELATION_TARGET_TYPE_MAP: Record<string, string> = {
   HAS_BLOCK: 'Block',
   HAS_PROMPT: 'PagePrompt',
   HAS_RULES: 'BlockRules',
-  USES_CONCEPT: 'Concept',
-  HAS_L10N: 'ConceptL10n',
+  USES_ENTITY: 'Entity',
+  HAS_L10N: 'EntityL10n',
   HAS_OUTPUT: 'PageL10n',
   // v10 knowledge nodes (tiered model)
   HAS_FORMATTING: 'Formatting',
@@ -143,8 +143,8 @@ export class NovaNetFilter {
     return this;
   }
 
-  fromConcept(key: string): this {
-    this.state.root = { type: 'Concept', key };
+  fromEntity(key: string): this {
+    this.state.root = { type: 'Entity', key };
     return this;
   }
 
@@ -185,9 +185,9 @@ export class NovaNetFilter {
     return this;
   }
 
-  includeConcepts(opts?: { depth?: number; spreading?: boolean }): this {
+  includeEntities(opts?: { depth?: number; spreading?: boolean }): this {
     this.state.includes.push({
-      relation: 'USES_CONCEPT',
+      relation: 'USES_ENTITY',
       direction: 'outgoing',
       depth: opts?.spreading ? 2 : (opts?.depth ?? 1),
     });
@@ -425,10 +425,10 @@ export class CypherGenerator {
 
       lines.push(matchLine);
 
-      // Handle spreading activation for concepts
-      if (include.relation === 'USES_CONCEPT' && include.depth && include.depth > 1) {
+      // Handle spreading activation for entities
+      if (include.relation === 'USES_ENTITY' && include.depth && include.depth > 1) {
         const relatedAlias = `related${this.capitalize(alias)}`;
-        lines.push(`OPTIONAL MATCH (${alias})-[:SEMANTIC_LINK*1..${include.depth - 1}]->(${relatedAlias}:Concept)`);
+        lines.push(`OPTIONAL MATCH (${alias})-[:SEMANTIC_LINK*1..${include.depth - 1}]->(${relatedAlias}:Entity)`);
         aliases.add(relatedAlias);
       }
     }
@@ -630,16 +630,16 @@ export const VIEW_PRESETS: ViewPreset[] = [
     shortcut: '1',
     filter: () => NovaNetFilter.create()
       .byLayer('foundation', 'structure', 'semantic')
-      .excludeTypes('ConceptL10n'),
+      .excludeTypes('EntityL10n'),
   },
   {
     id: 'generation-chain',
     name: 'Generation Chain',
-    description: 'Concepts with L10n outputs',
+    description: 'Entities with L10n outputs',
     icon: '🔗',
     shortcut: '2',
     filter: () => NovaNetFilter.create()
-      .byTypes('Concept', 'ConceptL10n', 'PageL10n', 'BlockL10n')
+      .byTypes('Entity', 'EntityL10n', 'PageL10n', 'BlockL10n')
       .byLayer('instruction', 'output'),
   },
   {
@@ -652,13 +652,13 @@ export const VIEW_PRESETS: ViewPreset[] = [
       .byLayer('config', 'knowledge'),
   },
   {
-    id: 'concept-network',
-    name: 'Concept Network',
-    description: 'Concepts and semantic links',
+    id: 'entity-network',
+    name: 'Entity Network',
+    description: 'Entities and semantic links',
     icon: '🕸️',
     shortcut: '4',
     filter: () => NovaNetFilter.create()
-      .byTypes('Concept', 'ConceptL10n', 'ExpressionSet'),
+      .byTypes('Entity', 'EntityL10n', 'ExpressionSet'),
   },
   {
     id: 'prompts-rules',
@@ -671,13 +671,13 @@ export const VIEW_PRESETS: ViewPreset[] = [
       .byTypes('Page', 'Block'),
   },
   {
-    id: 'seo-geo',
-    name: 'SEO & GEO',
+    id: 'seo-keywords',
+    name: 'SEO Keywords',
     description: 'Search optimization data',
     icon: '🔍',
     shortcut: '6',
     filter: () => NovaNetFilter.create()
-      .byLayer('seo', 'geo'),
+      .byLayer('seo'),
   },
   {
     id: 'invariant-types',
@@ -687,7 +687,7 @@ export const VIEW_PRESETS: ViewPreset[] = [
     shortcut: '7',
     filter: () => NovaNetFilter.create()
       .byTypes(
-        'Locale', 'Project', 'BrandIdentity', 'Page', 'Block', 'Concept',
+        'Locale', 'Project', 'BrandIdentity', 'Page', 'Block', 'Entity',
         'PageType', 'BlockType', 'PagePrompt', 'BlockPrompt', 'BlockRules',
       ),
   },
@@ -699,8 +699,8 @@ export const VIEW_PRESETS: ViewPreset[] = [
     shortcut: '8',
     filter: () => NovaNetFilter.create()
       .byTypes(
-        'ProjectL10n', 'ConceptL10n', 'PageL10n', 'BlockL10n',
-        'SEOKeyword', 'GEOSeedL10n',
+        'ProjectL10n', 'EntityL10n', 'PageL10n', 'BlockL10n',
+        'SEOKeyword',
       ),
   },
   {

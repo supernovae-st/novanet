@@ -182,7 +182,7 @@ describe('Relation Registry', () => {
       // v7.0.0 unified relations
       expect(RelationType.HAS_L10N).toBe('HAS_L10N');
       expect(RelationType.HAS_OUTPUT).toBe('HAS_OUTPUT');
-      expect(RelationType.USES_CONCEPT).toBe('USES_CONCEPT');
+      expect(RelationType.USES_ENTITY).toBe('USES_ENTITY');
 
       // SEO/GEO
       expect(RelationType.TARGETS_SEO).toBe('TARGETS_SEO');
@@ -244,8 +244,8 @@ describe('Relation Registry', () => {
 
       // Check for mixed tenses (e.g., USES vs USED)
       const usesVariants = relations.filter((r) => r.includes('USE'));
-      // USES_CONCEPT is active (v7.9.0: USED_SEO_KEYWORD/USED_GEO_SEED removed)
-      expect(usesVariants).toContain('USES_CONCEPT');
+      // USES_ENTITY is active (v10.3: renamed from USES_CONCEPT)
+      expect(usesVariants).toContain('USES_ENTITY');
     });
   });
 });

@@ -42,7 +42,7 @@
 //   - ADDED: UsedSEOKeywordPropsSchema, UsedGEOSeedPropsSchema for provenance
 //
 // v7.0.0 CHANGES:
-//   - PAGE_USES_CONCEPT + BLOCK_USES_CONCEPT → USES_CONCEPT (unified)
+//   - PAGE_USES_CONCEPT + BLOCK_USES_CONCEPT → USES_CONCEPT (v7.0) → USES_ENTITY (v10.3)
 //   - HAS_PAGE_OUTPUT + HAS_BLOCK_OUTPUT → HAS_OUTPUT (unified)
 //   - Standard property: llm_hints → llm_context
 
@@ -107,9 +107,9 @@ export const RelationType = {
   SUBTOPIC_OF: 'SUBTOPIC_OF',       // Page → Page (cluster → pillar hierarchy)
 
   // ─────────────────────────────────────────────────────────────────────────────
-  // CONCEPT USAGE (v7.0.0: unified USES_CONCEPT)
+  // ENTITY USAGE (v10.3: renamed from USES_CONCEPT)
   // ─────────────────────────────────────────────────────────────────────────────
-  USES_CONCEPT: 'USES_CONCEPT',     // Page|Block → Concept (v7.0.0: unified)
+  USES_ENTITY: 'USES_ENTITY',       // Page|Block → Entity (v10.3: renamed from USES_CONCEPT)
   SEMANTIC_LINK: 'SEMANTIC_LINK',   // Concept → Concept
 
   // ─────────────────────────────────────────────────────────────────────────────
@@ -177,7 +177,7 @@ export const RelationType = {
   L10N_OF: 'L10N_OF',                   // ConceptL10n|ProjectL10n → Concept|Project (inverse of HAS_L10N)
   OUTPUT_OF: 'OUTPUT_OF',               // PageL10n|BlockL10n → Page|Block (inverse of HAS_OUTPUT)
   BLOCK_OF: 'BLOCK_OF',                 // Block → Page (inverse of HAS_BLOCK)
-  USED_BY: 'USED_BY',                   // Concept → Page|Block (inverse of USES_CONCEPT)
+  USED_BY: 'USED_BY',                   // Entity → Page|Block (inverse of USES_ENTITY)
   HAS_LOCALIZED_CONTENT: 'HAS_LOCALIZED_CONTENT', // Locale → *L10n nodes (inverse of FOR_LOCALE)
 } as const;
 
@@ -233,7 +233,7 @@ export const SemanticLinkPropsSchema = z.object({
   temperature: z.number().min(0).max(1),
 });
 
-export const UsesConceptPropsSchema = z.object({
+export const UsesEntityPropsSchema = z.object({
   purpose: z.enum(['primary', 'secondary', 'contextual']),
   temperature: z.number().min(0).max(1),
 });
@@ -508,15 +508,15 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
   },
 
   // ─────────────────────────────────────────────────────────────────────────────
-  // CONCEPT USAGE (v7.0.0: unified USES_CONCEPT)
+  // ENTITY USAGE (v10.3: renamed from USES_CONCEPT)
   // ─────────────────────────────────────────────────────────────────────────────
-  [RelationType.USES_CONCEPT]: {
-    type: RelationType.USES_CONCEPT,
+  [RelationType.USES_ENTITY]: {
+    type: RelationType.USES_ENTITY,
     from: ['Page', 'Block'],
-    to: 'Concept',
+    to: 'Entity',
     cardinality: 'N:M',
-    props: UsesConceptPropsSchema,
-    description: 'Page or Block references concepts via @key (v7.0.0: unified)',
+    props: UsesEntityPropsSchema,
+    description: 'Page or Block references entities via @key (v10.3: renamed from USES_CONCEPT)',
   },
   [RelationType.SEMANTIC_LINK]: {
     type: RelationType.SEMANTIC_LINK,
@@ -725,7 +725,7 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
     from: 'Concept',
     to: ['Page', 'Block'],
     cardinality: '1:N',
-    description: 'Inverse of USES_CONCEPT - concept knows who uses it',
+    description: 'Inverse of USES_ENTITY - entity knows who uses it',
   },
   [RelationType.HAS_LOCALIZED_CONTENT]: {
     type: RelationType.HAS_LOCALIZED_CONTENT,

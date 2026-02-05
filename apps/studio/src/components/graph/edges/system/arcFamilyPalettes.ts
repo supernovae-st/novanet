@@ -140,7 +140,7 @@ export const RELATION_TO_FAMILY: Record<string, ArcFamily> = {
   PRIMARY_LOCALE: 'localization',
 
   // Semantic family
-  USES_CONCEPT: 'semantic',
+  USES_ENTITY: 'semantic',
   SEMANTIC_LINK: 'semantic',
   RELATED_TO: 'semantic',
 
@@ -182,7 +182,7 @@ const FAMILY_PATTERNS: Array<{ pattern: RegExp | string; family: ArcFamily }> = 
   { pattern: 'FOR_LOCALE', family: 'localization' },
 
   // Semantic patterns
-  { pattern: /CONCEPT/, family: 'semantic' },
+  { pattern: /ENTITY/, family: 'semantic' },
   { pattern: 'SEMANTIC', family: 'semantic' },
 
   // Generation patterns
