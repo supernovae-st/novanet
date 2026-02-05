@@ -53,7 +53,10 @@ Claude Code configuration for the NovaNet monorepo.
 ├── hooks/                       ← Hook scripts
 │   ├── session-start.sh         ← SessionStart: show project status
 │   ├── post-edit-format.sh      ← PostToolUse: auto-format after edits
-│   └── keybindings-reminder.sh  ← TUI file edit reminder
+│   ├── keybindings-reminder.sh  ← TUI file edit reminder
+│   ├── yaml-sync-reminder.sh    ← YAML model edit reminder
+│   ├── yaml-source-reminder.sh  ← YAML read context (source of truth)
+│   └── doc-sync-reminder.sh     ← Documentation edit reminder
 ├── rules/                       ← Path-specific rules
 │   ├── rust.md                  ← Rust patterns (tools/novanet/**/*.rs)
 │   ├── typescript.md            ← TypeScript patterns (packages/, apps/)
@@ -133,6 +136,35 @@ NovaNet v10.4.0 | Branch: main | Uncommitted: 3 files
 **Trigger:** After editing `tools/novanet/src/tui/*.rs` files
 
 **Output:** Reminds to update `KEYBINDINGS.md` if keybindings changed.
+
+### PostToolUse Hook (YAML Models)
+
+**File:** `.claude/hooks/yaml-sync-reminder.sh`
+**Trigger:** After editing `packages/core/models/**/*.yaml` files
+
+**Output:** Reminds to regenerate artifacts:
+```
+YAML_MODEL_CHANGE_DETECTED
+
+You modified a YAML model file: entity.yaml
+
+IMPORTANT: Regenerate artifacts with:
+  pnpm schema:generate
+```
+
+### PostToolUse Hook (Documentation)
+
+**File:** `.claude/hooks/doc-sync-reminder.sh`
+**Trigger:** After editing `CLAUDE.md`, `README.md`, or `.claude/**/*.md` files
+
+**Output:** Returns JSON context for Claude with VERSION and expected counts.
+
+### PostToolUse Hook (YAML Read)
+
+**File:** `.claude/hooks/yaml-source-reminder.sh`
+**Trigger:** After reading `packages/core/models/**/*.yaml` files
+
+**Output:** Reminds that YAML is the source of truth, not generated TypeScript.
 
 ---
 
@@ -645,6 +677,30 @@ pnpm type-check
 # Tests
 pnpm test
 ```
+
+### Documentation Maintenance
+
+```bash
+# Check documentation consistency
+pnpm doc:audit
+
+# Regenerate Mermaid view diagrams
+pnpm doc:generate
+```
+
+**Source of truth:** `/VERSION` file contains the canonical schema version (10.4.0).
+
+**`pnpm doc:audit` checks:**
+- Outdated version references (e.g., v10.3 → v10.4)
+- Deprecated terminology (Concept → Entity, USES_CONCEPT → USES_ENTITY)
+- Removed realm references (shared realm merged into global)
+- Incorrect node/arc counts (42 nodes, 77 arcs expected)
+
+**Auto-sync reminders:**
+Claude Code hooks automatically remind you when:
+- YAML model files are edited → regenerate artifacts
+- Documentation files are edited → verify consistency
+- YAML is read → remember it's the source of truth
 
 ---
 

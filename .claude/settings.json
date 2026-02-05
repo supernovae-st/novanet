@@ -44,6 +44,46 @@
             "command": ".claude/hooks/keybindings-reminder.sh"
           }
         ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "pathPattern": "**/models/**/*.yaml",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/yaml-sync-reminder.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "pathPattern": "**/{CLAUDE,README}.md",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/doc-sync-reminder.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "pathPattern": "**/.claude/**/*.md",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/doc-sync-reminder.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Read",
+        "pathPattern": "**/models/**/*.yaml",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/yaml-source-reminder.sh"
+          }
+        ]
       }
     ]
   }

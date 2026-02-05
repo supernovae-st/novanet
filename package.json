@@ -18,6 +18,8 @@
     "validate:types": "npx tsx scripts/validate-types.ts",
     "schema:generate": "cargo run --manifest-path tools/novanet/Cargo.toml -- schema generate",
     "schema:validate": "cargo run --manifest-path tools/novanet/Cargo.toml -- schema validate",
+    "doc:generate": "cargo run --manifest-path tools/novanet/Cargo.toml -- doc generate",
+    "doc:audit": "./tools/scripts/doc-audit.sh",
     "prepare": "husky"
   },
   "devDependencies": {

@@ -96,7 +96,7 @@ import { NovaNetFilter, CypherGenerator } from '@novanet/core';
 const filter = NovaNetFilter.create()
   .fromPage('page-pricing')
   .includeBlocks()
-  .includeEntities({ spreading: true })  // v10.3: was includeConcepts
+  .includeEntities({ spreading: true })  // v10.3+
   .forLocale('fr-FR')
   .maxDepth(2);
 
@@ -108,8 +108,8 @@ const { query, params } = CypherGenerator.generate(filter);
 ```typescript
 import type {
   Project,
-  Entity,       // v10.3: was Concept
-  EntityL10n,   // v10.3: was ConceptL10n
+  Entity,       // v10.3+
+  EntityL10n,   // v10.3+
   Locale,
   NodeType,
   RelationType,
