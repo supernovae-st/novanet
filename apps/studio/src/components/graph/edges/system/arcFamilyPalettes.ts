@@ -103,8 +103,7 @@ export const ARC_FAMILY_STROKES: Record<ArcFamily, {
  * This is used when we know the exact relation type.
  */
 export const RELATION_TO_FAMILY: Record<string, ArcFamily> = {
-  // Ownership family
-  HAS_CONCEPT: 'ownership',
+  // Ownership family (v10.3: HAS_CONCEPT removed)
   HAS_PAGE: 'ownership',
   HAS_BRAND_IDENTITY: 'ownership',
   SUPPORTS_LOCALE: 'ownership',

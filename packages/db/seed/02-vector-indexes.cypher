@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// VECTOR INDEXES for Hybrid OntologyRAG (v7.8.0)
+// VECTOR INDEXES for Hybrid OntologyRAG (v10.4.0)
 // ═══════════════════════════════════════════════════════════════════════════════
 //
 // Prerequisites:
@@ -13,9 +13,9 @@
 // VECTOR INDEXES (HNSW with quantization)
 // ---------------------------------------------------------------------------
 
-// Concept embeddings (invariant layer)
-CREATE VECTOR INDEX concept_embedding IF NOT EXISTS
-FOR (c:Concept) ON (c.embedding)
+// Entity embeddings (v10.3: replaces Concept, knowledge layer)
+CREATE VECTOR INDEX entity_embedding IF NOT EXISTS
+FOR (e:Entity) ON (e.embedding)
 OPTIONS {
   indexConfig: {
     `vector.dimensions`: 1536,
@@ -26,9 +26,9 @@ OPTIONS {
   }
 };
 
-// ConceptL10n embeddings (localized layer)
-CREATE VECTOR INDEX concept_l10n_embedding IF NOT EXISTS
-FOR (cl:ConceptL10n) ON (cl.embedding)
+// EntityL10n embeddings (v10.3: replaces ConceptL10n, localized layer)
+CREATE VECTOR INDEX entity_l10n_embedding IF NOT EXISTS
+FOR (el:EntityL10n) ON (el.embedding)
 OPTIONS {
   indexConfig: {
     `vector.dimensions`: 1536,
@@ -56,13 +56,13 @@ OPTIONS {
 // FULLTEXT INDEXES (fallback for keyword search)
 // ---------------------------------------------------------------------------
 
-// Concept fulltext (invariant - English keys and context)
-CREATE FULLTEXT INDEX concept_fulltext IF NOT EXISTS
-FOR (c:Concept) ON EACH [c.key, c.display_name, c.description, c.llm_context];
+// Entity fulltext (v10.3: replaces Concept, knowledge layer)
+CREATE FULLTEXT INDEX entity_fulltext IF NOT EXISTS
+FOR (e:Entity) ON EACH [e.key, e.display_name, e.description, e.llm_context];
 
-// ConceptL10n fulltext (localized content)
-CREATE FULLTEXT INDEX concept_l10n_fulltext IF NOT EXISTS
-FOR (cl:ConceptL10n) ON EACH [cl.title, cl.definition, cl.summary];
+// EntityL10n fulltext (v10.3: replaces ConceptL10n, localized content)
+CREATE FULLTEXT INDEX entity_l10n_fulltext IF NOT EXISTS
+FOR (el:EntityL10n) ON EACH [el.title, el.definition, el.summary];
 
 // ---------------------------------------------------------------------------
 // VERIFICATION
@@ -71,6 +71,6 @@ FOR (cl:ConceptL10n) ON EACH [cl.title, cl.definition, cl.summary];
 // Show all indexes and their status
 SHOW INDEXES
 YIELD name, type, state, populationPercent
-WHERE name CONTAINS 'concept' OR name CONTAINS 'page'
+WHERE name CONTAINS 'entity' OR name CONTAINS 'page'
 RETURN name, type, state, populationPercent
 ORDER BY name;

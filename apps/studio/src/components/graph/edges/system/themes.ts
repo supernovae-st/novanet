@@ -160,12 +160,7 @@ export const CATEGORY_THEMES: Record<RelationCategory, EdgeTheme> = {
  * Only specify what differs from the category base theme
  */
 export const RELATION_OVERRIDES: Partial<Record<RelationType, ThemeOverride>> = {
-  // ─── Structural Overrides ───
-  HAS_CONCEPT: {
-    effects: [...DEFAULT_EFFECTS, 'zigzag'],
-    speed: 'fast',
-    glowIntensity: 0.9,
-  },
+  // ─── Structural Overrides (v10.3: HAS_CONCEPT removed) ───
   HAS_PAGE: {
     strokeWidth: 4,
     particlePreset: 'plasma',

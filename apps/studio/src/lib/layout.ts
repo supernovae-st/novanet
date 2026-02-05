@@ -54,7 +54,7 @@ const NODE_DIMENSIONS: Record<string, { width: number; height: number }> = {
   // Structural nodes - medium sized cards
   Page: { width: 240, height: 140 },
   Locale: { width: 230, height: 130 },
-  Concept: { width: 225, height: 130 },
+  Entity: { width: 225, height: 130 }, // v10.3: was Concept
   Block: { width: 205, height: 120 },
   BlockType: { width: 195, height: 115 },
   BrandIdentity: { width: 210, height: 120 },

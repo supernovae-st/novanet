@@ -3,9 +3,9 @@ version: "9.9.0"
 description: NovaNet Core View Definitions
 
 # Categories for UI grouping:
-# - overview: Layer views (complete, global, shared, project)
+# - overview: Layer views (complete, global, project)
 # - generation: Orchestrator and sub-agent context views
-# - knowledge: Locale and concept views
+# - knowledge: Locale and entity views
 # - project: Project structure views
 # - mining: SEO pipeline views
 
@@ -27,9 +27,9 @@ views:
     category: overview
     modes: [data, meta, overlay, query]
 
-  - id: shared-layer
-    file: shared-layer.yaml
-    description: SEO keywords (3 nodes)
+  - id: seo-keywords
+    file: seo-keywords.yaml
+    description: SEO keywords and metrics (3 nodes, global realm)
     category: overview
     modes: [data, meta, overlay, query]
 

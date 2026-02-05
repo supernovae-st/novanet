@@ -51,11 +51,6 @@ const REALM_COLORS: Record<Realm, {
     secondary: '#34d399',
     glow: 'rgba(16, 185, 129, 0.2)',
   },
-  shared: {
-    primary: '#f59e0b',
-    secondary: '#fbbf24',
-    glow: 'rgba(245, 158, 11, 0.2)',
-  },
 };
 
 /**

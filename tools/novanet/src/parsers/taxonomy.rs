@@ -172,11 +172,10 @@ pub fn load_taxonomy(root: &Path) -> crate::Result<TaxonomyDoc> {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Backwards Compatibility: Convert to OrganizingDoc format
+// OrganizingDoc Conversion — generator-friendly format
 // ─────────────────────────────────────────────────────────────────────────────
 
-/// Convert TaxonomyDoc to the legacy OrganizingDoc format for generators
-/// that haven't been updated yet.
+/// Convert TaxonomyDoc to OrganizingDoc format for generators.
 impl TaxonomyDoc {
     pub fn to_organizing_doc(&self) -> crate::parsers::organizing::OrganizingDoc {
         crate::parsers::organizing::OrganizingDoc {
@@ -392,7 +391,7 @@ arc_families:
 
         let doc = load_taxonomy(root).expect("should load taxonomy.yaml");
 
-        assert_eq!(doc.version, "10.3.0");
+        assert_eq!(doc.version, "10.4.0");
         assert_eq!(doc.node_realms.len(), 2); // v10.2: shared realm removed
         assert_eq!(doc.node_traits.len(), 5);
         assert_eq!(doc.arc_families.len(), 5);
@@ -446,7 +445,7 @@ arc_families:
     #[test]
     fn parse_kind_retrieval_defaults() {
         let yaml = r##"
-version: "10.3.0"
+version: "10.4.0"
 node_realms:
   - key: test
     display_name: Test
@@ -488,7 +487,7 @@ arc_families:
     llm_context: "Semantic."
 "##;
         let doc: TaxonomyDoc = serde_yaml::from_str(yaml).unwrap();
-        assert_eq!(doc.version, "10.3.0");
+        assert_eq!(doc.version, "10.4.0");
 
         // Check kind_retrieval_defaults
         let defaults = doc.kind_retrieval_defaults.unwrap();

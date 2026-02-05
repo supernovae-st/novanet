@@ -201,11 +201,11 @@ export const SHORTCUTS: Shortcut[] = [
   {
     id: 'preset-3',
     keys: '3',
-    label: 'Core + Concepts',
+    label: 'Core + Entities', // v10.3: was Concepts
     category: 'preset',
     icon: 'Layers',
     when: ['input-not-focused'],
-    action: 'novanet:preset:core-concepts',
+    action: 'novanet:preset:core-entities',
   },
   {
     id: 'preset-4',
@@ -219,11 +219,11 @@ export const SHORTCUTS: Shortcut[] = [
   {
     id: 'preset-5',
     keys: '5',
-    label: 'Concepts',
+    label: 'Entities', // v10.3: was Concepts
     category: 'preset',
     icon: 'Lightbulb',
     when: ['input-not-focused'],
-    action: 'novanet:preset:concepts',
+    action: 'novanet:preset:entities',
   },
   {
     id: 'preset-6',

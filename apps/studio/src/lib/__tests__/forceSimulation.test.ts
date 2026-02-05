@@ -69,7 +69,7 @@ jest.mock('../layout', () => ({
   getNodeDimensions: (type: string) => {
     const dims: Record<string, { width: number; height: number }> = {
       Project: { width: 280, height: 140 },
-      Concept: { width: 240, height: 120 },
+      Entity: { width: 240, height: 120 },
       Locale: { width: 220, height: 110 },
       default: { width: 200, height: 100 },
     };

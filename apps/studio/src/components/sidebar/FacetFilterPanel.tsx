@@ -4,8 +4,8 @@
  * FacetFilterPanel - Faceted filter panel for Query mode
  *
  * Four facet sections:
- * - Realms (3): global, project, shared
- * - Layers (9): config, knowledge, foundation, ...
+ * - Realms (2): global, project
+ * - Layers (8): config, knowledge, foundation, ...
  * - Traits (5): invariant, localized, knowledge, derived, job
  * - Arc Families (5): ownership, localization, semantic, generation, mining
  *
@@ -58,7 +58,6 @@ import { Sidebar } from './SidebarContent';
 const REALMS: { key: Realm; label: string; icon: LucideIcon }[] = [
   { key: 'global', label: 'Global', icon: Globe },
   { key: 'project', label: 'Project', icon: Package },
-  { key: 'shared', label: 'Shared', icon: Target },
 ];
 
 const LAYERS: { key: Layer; label: string; icon: LucideIcon }[] = [
@@ -70,7 +69,6 @@ const LAYERS: { key: Layer; label: string; icon: LucideIcon }[] = [
   { key: 'instruction', label: 'Instructions', icon: FileText },
   { key: 'output', label: 'Generated Output', icon: FileOutput },
   { key: 'seo', label: 'SEO Intelligence', icon: Search },
-  { key: 'geo', label: 'GEO Intelligence', icon: Globe2 },
 ];
 
 const TRAITS: { key: Trait; label: string; icon: LucideIcon }[] = [

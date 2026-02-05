@@ -1,10 +1,10 @@
-# models/views/shared-layer.yaml
-# Shared scope: SEO targeting (3 nodes)
-# v10.1.0 — GEO removed, SEO via EntityL10n
-id: shared-layer
-name: Shared Layer
-description: SEO keywords independent of projects
-version: "10.1.0"
+# models/views/seo-keywords.yaml
+# SEO keywords and metrics (3 nodes in global realm)
+# v10.4.0 — renamed from shared-layer (shared realm removed)
+id: seo-keywords
+name: SEO Keywords
+description: SEO keywords and metrics (global realm, per-locale)
+version: "10.4.0"
 
 # Root is Locale since SEO nodes are per-locale
 root:
@@ -24,17 +24,17 @@ include:
     targetTypes: [SEOMiningRun]
 
 docs:
-  title: "Shared Layer View"
+  title: "SEO Keywords View"
   category: mining
   description: |
-    The Shared scope contains nodes that are independent of specific projects
-    but still locale-specific. These are reusable across multiple projects.
+    SEO nodes in the global realm, organized per-locale.
+    These are reusable across multiple projects.
 
-    **3 nodes (v10.1):**
-    - **SEO**: SEOKeyword, SEOKeywordMetrics, SEOMiningRun
+    **3 nodes (v10.4):**
+    - SEOKeyword, SEOKeywordMetrics, SEOMiningRun
 
     **Key insight:**
-    Shared nodes bridge global locale knowledge and project content.
+    SEO keywords bridge Entity localization and search optimization.
     A keyword like "QR code generator" can be targeted by multiple projects.
 
     **v10.1 Architecture:**
@@ -99,7 +99,7 @@ docs:
         locale: "fr-FR"
 
   notes:
-    - "Shared nodes are project-independent but locale-specific"
-    - "SEO keywords can be targeted by multiple projects' concepts"
-    - "v10.1: SEOKeyword linked to EntityL10n (same locale)"
+    - "SEO nodes are project-independent but locale-specific"
+    - "SEO keywords can be targeted by multiple projects via EntityL10n"
+    - "v10.4: SEOKeyword linked to EntityL10n -[:EXPRESSES]-> SEOKeyword"
     - "Metrics are time-series - always use latest for current state"

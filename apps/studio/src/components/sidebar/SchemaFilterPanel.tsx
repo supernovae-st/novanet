@@ -48,7 +48,6 @@ type SchemaTabId = 'types' | 'rels';
 const REALM_ICONS: Record<Realm, LucideIcon> = {
   project: Package,
   global: Globe,
-  shared: Target,
 };
 
 // Layer to Lucide icon mapping
@@ -61,11 +60,10 @@ const LAYER_ICONS: Record<Layer, LucideIcon> = {
   config: Settings,
   knowledge: Brain,
   seo: Search,
-  geo: Globe2,
 };
 
 // Ordered realms for consistent rendering
-const REALM_ORDER: Realm[] = ['project', 'global', 'shared'];
+const REALM_ORDER: Realm[] = ['project', 'global'];
 
 export interface SchemaFilterPanelProps {
   className?: string;

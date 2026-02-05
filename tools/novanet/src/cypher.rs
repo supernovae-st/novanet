@@ -168,7 +168,7 @@ pub fn faceted_query(filter: &FacetFilter, limit: i64) -> CypherStatement {
 
     let where_clause = where_clauses.join("\n  AND ");
 
-    // Edge families filter edges, not nodes — handled separately in output
+    // Arc families filter arcs, not nodes — handled separately in output
     // (included in params for display but not in the WHERE clause for kind resolution)
 
     params.push(("limit".to_string(), ParamValue::Int(limit)));

@@ -38,7 +38,6 @@ interface TypeCountItem {
 const REALM_CONFIG = {
   global: { emoji: '🌍', color: '#2aa198' },   // solarized cyan
   project: { emoji: '📦', color: '#6c71c4' },  // solarized violet
-  shared: { emoji: '🎯', color: '#cb4b16' },   // solarized orange
 } as const;
 
 /** Layer config - color inherited from parent realm */
@@ -49,12 +48,10 @@ const LAYER_CONFIG: Record<Layer, { emoji: string; realm: keyof typeof REALM_CON
   semantic: { emoji: '💡', realm: 'project' },
   instruction: { emoji: '📋', realm: 'project' },
   output: { emoji: '📤', realm: 'project' },
-  // Global realm (2 layers)
+  // Global realm (4 layers) — v10.4: seo moved to global, geo removed
   config: { emoji: '⚙️', realm: 'global' },
   knowledge: { emoji: '🧠', realm: 'global' },
-  // Shared realm (2 layers)
-  seo: { emoji: '🔍', realm: 'shared' },
-  geo: { emoji: '🌐', realm: 'shared' },
+  seo: { emoji: '🔍', realm: 'global' },
 } as const;
 
 interface ResultsOverviewProps {
@@ -273,10 +270,10 @@ export const ExpandedBreakdown = memo(function ExpandedBreakdown({
             {/* Schema mode: unified badge hierarchy */}
             {isMetaMode && showNodes && (
               <div className={showRelations ? 'mb-3' : ''}>
-                {/* Realms - inline badges */}
-                <SectionHeader icon={NodeIcon} label="realms" count={3} />
+                {/* Realms - inline badges (v10.4: 2 realms) */}
+                <SectionHeader icon={NodeIcon} label="realms" count={2} />
                 <div className="flex flex-wrap gap-1.5 mb-3">
-                  {(['global', 'project', 'shared'] as const).map((scope, i) => (
+                  {(['global', 'project'] as const).map((scope, i) => (
                     <UnifiedBadge
                       key={scope}
                       item={{
@@ -292,11 +289,11 @@ export const ExpandedBreakdown = memo(function ExpandedBreakdown({
                   ))}
                 </div>
 
-                {/* Layers - inline badges */}
+                {/* Layers - inline badges (v10.4: 8 layers) */}
                 <div className="h-px bg-white/[0.04] mb-2.5" />
-                <SectionHeader icon={NodeIcon} label="layers" count={9} />
+                <SectionHeader icon={NodeIcon} label="layers" count={8} />
                 <div className="flex flex-wrap gap-1.5 mb-3">
-                  {(['config', 'knowledge', 'foundation', 'structure', 'semantic', 'instruction', 'output', 'seo', 'geo'] as const).map((layer, i) => {
+                  {(['config', 'knowledge', 'foundation', 'structure', 'semantic', 'instruction', 'output', 'seo'] as const).map((layer, i) => {
                     const config = LAYER_CONFIG[layer];
                     const realmColor = REALM_CONFIG[config.realm].color;
                     return (
@@ -310,7 +307,7 @@ export const ExpandedBreakdown = memo(function ExpandedBreakdown({
                         }}
                         variant="layer"
                         emoji={config.emoji}
-                        index={i + 3}
+                        index={i + 2}
                       />
                     );
                   })}

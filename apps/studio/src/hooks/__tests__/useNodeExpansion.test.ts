@@ -53,12 +53,12 @@ const mockPostJSON = fetchClient.postJSON as jest.MockedFunction<typeof fetchCli
 describe('useNodeExpansion', () => {
   // Test data
   const mockNeighborNodes: GraphNode[] = [
-    { id: 'neighbor-1', type: 'Concept', key: 'concept-1', displayName: 'Concept 1' },
+    { id: 'neighbor-1', type: 'Entity', key: 'concept-1', displayName: 'Entity 1' },
     { id: 'neighbor-2', type: 'ExpressionSet', key: 'expr-1', displayName: 'ExpressionSet 1' },
   ];
 
   const mockNeighborEdges: GraphEdge[] = [
-    { id: 'edge-1', source: 'node-1', target: 'neighbor-1', type: 'USES_CONCEPT' },
+    { id: 'edge-1', source: 'node-1', target: 'neighbor-1', type: 'USES_ENTITY' },
     { id: 'edge-2', source: 'node-1', target: 'neighbor-2', type: 'HAS_EXPRESSION' },
   ];
 
@@ -134,7 +134,7 @@ describe('useNodeExpansion', () => {
 
     it('should filter out existing nodes before merging', async () => {
       // Setup: graph already has one of the neighbor nodes
-      mockNodes = [{ id: 'neighbor-1', type: 'Concept', key: 'existing', displayName: 'Existing' }];
+      mockNodes = [{ id: 'neighbor-1', type: 'Entity', key: 'existing', displayName: 'Existing' }];
 
       const { result } = renderHook(() => useNodeExpansion());
 

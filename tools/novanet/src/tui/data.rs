@@ -580,12 +580,11 @@ pub enum TreeItem<'a> {
     ArcKind(&'a ArcFamilyInfo, &'a ArcKindInfo),
 }
 
-/// Get emoji for realm.
+/// Get emoji for realm (v10.4: 2 realms only).
 fn realm_emoji(key: &str) -> &'static str {
     match key {
         "global" => "🌍",
         "project" => "📦",
-        "shared" => "🔗",
         _ => "📁",
     }
 }

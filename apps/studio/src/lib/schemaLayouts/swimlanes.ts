@@ -17,17 +17,15 @@ import {
 import type { Realm } from '@novanet/core/types';
 
 /**
- * Swimlanes Layout - Horizontal bands per realm
+ * Swimlanes Layout - Horizontal bands per realm (v10.4: 2 realms)
  *
  * Uses unified spacing from types.ts (Golden Ratio system).
  *
  * Visual structure:
  * ┌─────────────────────────────────────────────────────┐
- * │ PROJECT  │ Page ──→ Block ──→ Concept ──→ L10n     │
+ * │ PROJECT  │ Page ──→ Block ──→ Entity ──→ L10n      │
  * ├──────────┼─────────────────────────────────────────┤
- * │ GLOBAL   │ Locale ──→ Identity ──→ Voice ──→ ...  │
- * ├──────────┼─────────────────────────────────────────┤
- * │ SHARED   │ SEO ──→ GEO ──→ Mining                  │
+ * │ GLOBAL   │ Locale ──→ Identity ──→ SEO ──→ ...     │
  * └──────────┴─────────────────────────────────────────┘
  */
 export function applySwimlaneLayout(
@@ -40,7 +38,7 @@ export function applySwimlaneLayout(
   const NODE_STEP_X = NODE_WIDTH + NODE_GAP;     // Horizontal step between nodes
   // const NODE_STEP_Y = NODE_HEIGHT + NODE_GAP; // Vertical step (reserved for multi-row)
 
-  const realmOrder: Realm[] = ['project', 'global', 'shared'];
+  const realmOrder: Realm[] = ['project', 'global'];
   let currentY = 0;
 
   for (const realm of realmOrder) {

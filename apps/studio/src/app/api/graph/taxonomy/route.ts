@@ -85,10 +85,10 @@ export async function GET() {
         r.llm_context AS llm_context
       ORDER BY
         CASE r.key
+          // v10.4: 2 realms (SHARED merged into GLOBAL)
           WHEN 'global' THEN 1
           WHEN 'project' THEN 2
-          WHEN 'shared' THEN 3
-          ELSE 4
+          ELSE 3
         END
     `);
 

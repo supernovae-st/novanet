@@ -115,14 +115,14 @@ CALL apoc.meta.schema() YIELD value RETURN value;
 
 -- Batch operations
 CALL apoc.periodic.iterate(
-  'MATCH (n:Concept) RETURN n',
+  'MATCH (n:Entity) RETURN n',
   'SET n.updated_at = datetime()',
   { batchSize: 500, parallel: false }
 );
 
 -- JSON export
 CALL apoc.export.json.query(
-  'MATCH (n:Concept)-[r]->(m) RETURN n, r, m',
+  'MATCH (n:Entity)-[r]->(m) RETURN n, r, m',
   '/export/concepts.json',
   {}
 );
@@ -136,8 +136,8 @@ CALL apoc.export.json.query(
 
 ```cypher
 -- Find semantically related concepts with weighted traversal
-MATCH (c:Concept {key: $conceptKey})
-MATCH path = (c)-[r:SEMANTIC_LINK*1..2]->(related:Concept)
+MATCH (c:Entity {key: $entityKey})
+MATCH path = (c)-[r:SEMANTIC_LINK*1..2]->(related:Entity)
 WHERE ALL(rel IN relationships(path) WHERE rel.temperature >= 0.3)
 WITH related,
      reduce(activation = 1.0, rel IN relationships(path) |
@@ -159,8 +159,8 @@ MATCH (b:Block {key: $blockKey})
 MATCH (b)-[:OF_TYPE]->(bt:BlockType)
 MATCH (b)<-[:HAS_BLOCK]-(p:Page)
 
-OPTIONAL MATCH (b)-[:USES_CONCEPT]->(c:Concept)
-OPTIONAL MATCH (c)-[:HAS_L10N]->(cl:ConceptL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+OPTIONAL MATCH (b)-[:USES_ENTITY]->(c:Entity)
+OPTIONAL MATCH (c)-[:HAS_L10N]->(cl:EntityL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
 
 OPTIONAL MATCH (l)-[:HAS_IDENTITY]->(li:LocaleIdentity)
 OPTIONAL MATCH (l)-[:HAS_VOICE]->(lv:LocaleVoice)
@@ -181,8 +181,8 @@ export const NODE_COLORS: Record<string, string> = {
   Page: '#3b82f6',         // blue-500
   Block: '#06b6d4',        // cyan-500
   BlockType: '#14b8a6',    // teal-500
-  Concept: '#f59e0b',      // amber-500
-  ConceptL10n: '#fbbf24',  // amber-400
+  Entity: '#f59e0b',      // amber-500
+  EntityL10n: '#fbbf24',  // amber-400
   Locale: '#10b981',       // emerald-500
   LocaleIdentity: '#22c55e',
   LocaleVoice: '#22c55e',
@@ -261,7 +261,7 @@ async function query<T>(
 
 // Usage
 const concepts = await query(
-  'MATCH (c:Concept) RETURN c LIMIT 100',
+  'MATCH (c:Entity) RETURN c LIMIT 100',
   {},
   (record) => mapNode(record.get('c'))
 );
@@ -275,12 +275,12 @@ const concepts = await query(
 
 ```cypher
 -- Create indexes for common queries
-CREATE INDEX concept_key IF NOT EXISTS FOR (c:Concept) ON (c.key);
+CREATE INDEX entity_key IF NOT EXISTS FOR (c:Entity) ON (c.key);
 CREATE INDEX locale_key IF NOT EXISTS FOR (l:Locale) ON (l.key);
 CREATE INDEX node_priority IF NOT EXISTS FOR (n) ON (n.priority);
 
 -- Check index usage
-EXPLAIN MATCH (c:Concept {key: 'pricing'}) RETURN c;
+EXPLAIN MATCH (c:Entity {key: 'pricing'}) RETURN c;
 ```
 
 ### Query Profiling
@@ -289,7 +289,7 @@ EXPLAIN MATCH (c:Concept {key: 'pricing'}) RETURN c;
 -- Profile query performance
 PROFILE MATCH (p:Project)-[:HAS_PAGE]->(page:Page)
         -[:HAS_BLOCK]->(b:Block)
-        -[:USES_CONCEPT]->(c:Concept)
+        -[:USES_ENTITY]->(c:Entity)
 RETURN count(*)
 ```
 
@@ -331,8 +331,8 @@ async function processAllNodes(
 // app/graph/page.tsx (Server Component)
 export default async function GraphPage() {
   const [nodes, edges] = await Promise.all([
-    fetchNodes(['Project', 'Page', 'Concept']),
-    fetchEdges(['HAS_PAGE', 'USES_CONCEPT']),
+    fetchNodes(['Project', 'Page', 'Entity']),
+    fetchEdges(['HAS_PAGE', 'USES_ENTITY']),
   ]);
 
   return <GraphClient initialNodes={nodes} initialEdges={edges} />;

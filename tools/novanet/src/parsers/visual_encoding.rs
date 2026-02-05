@@ -207,7 +207,7 @@ mod tests {
         let doc = load_visual_encoding(root).expect("should load visual-encoding.yaml");
 
         // Version (v10.3: Entity-Centric Architecture)
-        assert_eq!(doc.version, "10.3.0");
+        assert_eq!(doc.version, "10.4.0");
 
         // Channel mapping
         assert_eq!(doc.channel_mapping.node.fill_color, "layer");

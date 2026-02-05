@@ -9,7 +9,7 @@ import { useGraphStore } from '../graphStore';
 import type { GraphNode, GraphEdge, NodeType, RelationType } from '@/types';
 
 // Helper to create test nodes
-const createNode = (id: string, type: NodeType = 'Concept'): GraphNode => ({
+const createNode = (id: string, type: NodeType = 'Entity'): GraphNode => ({
   id,
   type,
   key: `test-${id}`,
@@ -134,8 +134,8 @@ describe('graphStore', () => {
 
     it('should count node types correctly', () => {
       const nodes = [
-        createNode('1', 'Concept'),
-        createNode('2', 'Concept'),
+        createNode('1', 'Entity'),
+        createNode('2', 'Entity'),
         createNode('3', 'Page'),
         createNode('4', 'Locale'),
       ];
@@ -144,7 +144,7 @@ describe('graphStore', () => {
 
       const state = useGraphStore.getState();
       expect(state.nodeTypeCounts).toEqual({
-        Concept: 2,
+        Entity: 2,
         Page: 1,
         Locale: 1,
       });
@@ -224,18 +224,18 @@ describe('graphStore', () => {
 
     it('should update node type counts when merging', () => {
       useGraphStore.getState().setGraphData({
-        nodes: [createNode('1', 'Concept')],
+        nodes: [createNode('1', 'Entity')],
         edges: [],
       });
 
       useGraphStore.getState().mergeGraphData(
-        [createNode('2', 'Page'), createNode('3', 'Concept')],
+        [createNode('2', 'Page'), createNode('3', 'Entity')],
         []
       );
 
       const state = useGraphStore.getState();
       expect(state.nodeTypeCounts).toEqual({
-        Concept: 2,
+        Entity: 2,
         Page: 1,
       });
     });

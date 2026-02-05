@@ -113,20 +113,6 @@ describe('RealmGroupNode', () => {
     expect(screen.getByText('GLOBAL')).toBeInTheDocument();
   });
 
-  it('should render with correct realm styling for Shared', () => {
-    render(
-      <ReactFlowProvider>
-        <RealmGroupNode
-          {...defaultProps}
-          data={{ ...defaultProps.data, realm: 'shared', label: 'SHARED', icon: '🎯' }}
-        />
-      </ReactFlowProvider>
-    );
-
-    // Icon and label are in separate elements
-    expect(screen.getByText('🎯')).toBeInTheDocument();
-    expect(screen.getByText('SHARED')).toBeInTheDocument();
-  });
 });
 
 describe('LayerGroupNode', () => {
@@ -246,12 +232,12 @@ describe('SchemaNode', () => {
     expect(screen.getAllByText('Locale').length).toBeGreaterThanOrEqual(1);
   });
 
-  it('should render with Shared realm', () => {
+  it('should render with Global realm SEO node', () => {
     render(
       <ReactFlowProvider>
         <SchemaNode
           {...defaultProps}
-          data={{ ...defaultProps.data, realm: 'shared', nodeType: 'SEOKeyword', label: 'SEO Keyword' }}
+          data={{ ...defaultProps.data, realm: 'global', nodeType: 'SEOKeyword', label: 'SEO Keyword' }}
         />
       </ReactFlowProvider>
     );

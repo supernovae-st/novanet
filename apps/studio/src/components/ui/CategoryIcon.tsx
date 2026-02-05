@@ -6,19 +6,18 @@
  * Features:
  * - Tree-shakeable (only imports used icons)
  * - No memory leaks (pure React components)
- * - One icon per layer (9 layers in v9.0.0)
+ * - One icon per layer (8 layers in v10.4)
  * - Consistent styling with glow effects
  *
- * Layers:
+ * Layers (v10.4 - 8 layers):
  * - foundation: Package/project structure
  * - structure: Layout (pages, blocks)
- * - semantic: Lightbulb (concepts)
+ * - semantic: Lightbulb (entities)
  * - instruction: FileText (prompts, rules, types)
  * - output: Sparkles (generated content)
  * - config: Settings (locale configuration)
  * - knowledge: BookOpen (locale knowledge)
  * - seo: Search (search optimization)
- * - geo: Target (geolocation)
  */
 
 import { memo, useMemo } from 'react';
@@ -31,7 +30,6 @@ import {
   Settings,
   BookOpen,
   Search,
-  Target,
   type LucideProps,
 } from 'lucide-react';
 import type { Layer } from '@novanet/core/types';
@@ -41,7 +39,7 @@ import type { Layer } from '@novanet/core/types';
 // =============================================================================
 
 /**
- * Layer to Lucide icon component mapping (v9.0.0 - 9 layers)
+ * Layer to Lucide icon component mapping (v10.4 - 8 layers)
  * Each layer has ONE representative icon
  */
 const LAYER_ICONS: Record<Layer, React.ComponentType<LucideProps>> = {
@@ -53,7 +51,6 @@ const LAYER_ICONS: Record<Layer, React.ComponentType<LucideProps>> = {
   config: Settings,
   knowledge: BookOpen,
   seo: Search,
-  geo: Target,
 };
 
 // =============================================================================

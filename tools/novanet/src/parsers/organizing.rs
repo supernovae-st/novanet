@@ -1,9 +1,8 @@
 //! Organizing principles types (realms, layers, traits, arc families).
 //!
-//! **Note**: Data now comes from `taxonomy.yaml` via conversion.
-//! This module provides the legacy `OrganizingDoc` format for generators.
+//! Data comes from `taxonomy.yaml` and is exposed via `OrganizingDoc`.
 //!
-//! Shared between:
+//! Used by:
 //! - `generators/organizing.rs` → Cypher seed
 //! - `generators/hierarchy.rs` → TypeScript hierarchy tree
 
@@ -11,10 +10,10 @@ use serde::Deserialize;
 use std::path::Path;
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Legacy OrganizingDoc structs (kept for backwards compatibility)
+// OrganizingDoc — taxonomy data for generators
 // ─────────────────────────────────────────────────────────────────────────────
 
-/// Top-level document.
+/// Top-level document (converted from TaxonomyDoc).
 #[derive(Debug, Deserialize)]
 pub struct OrganizingDoc {
     pub version: String,
@@ -166,9 +165,9 @@ arc_families:
 
         let doc = load_organizing(root).expect("should load from taxonomy.yaml");
 
-        // Version now comes from taxonomy.yaml (10.3.0)
-        assert_eq!(doc.version, "10.3.0");
-        assert_eq!(doc.realms.len(), 2); // v10.2: shared realm removed
+        // Version now comes from taxonomy.yaml (10.4.0)
+        assert_eq!(doc.version, "10.4.0");
+        assert_eq!(doc.realms.len(), 2);
         assert_eq!(doc.traits.len(), 5);
         assert_eq!(doc.arc_families.len(), 5);
 

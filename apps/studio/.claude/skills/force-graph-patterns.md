@@ -138,7 +138,7 @@ const handleNodeRightClick = useCallback((node: GraphNode) => {
 ```typescript
 const linkColor = useCallback((link: GraphLink) => {
   const colors: Record<string, string> = {
-    USES_CONCEPT: '#10b981',
+    USES_ENTITY: '#10b981',
     HAS_OUTPUT: '#3b82f6',
     DERIVES_FROM: '#8b5cf6',
     CONTAINS: '#f59e0b',

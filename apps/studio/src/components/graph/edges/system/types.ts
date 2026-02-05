@@ -25,8 +25,7 @@ export type RelationCategory =
  * All known relation types (from Neo4j schema)
  */
 export type RelationType =
-  // Structural
-  | 'HAS_CONCEPT'
+  // Structural (v10.3: HAS_CONCEPT removed)
   | 'HAS_PAGE'
   | 'HAS_BLOCK'
   | 'HAS_AUDIENCE'

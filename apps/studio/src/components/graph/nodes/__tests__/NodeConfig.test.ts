@@ -40,16 +40,15 @@ describe('NodeConfig', () => {
       });
     });
 
-    it('should have larger sizes for important nodes (Project, Page, Concept)', () => {
+    it('should have larger sizes for important nodes (Project, Page, Entity)', () => {
       expect(NODE_SIZES.Project.width).toBeGreaterThanOrEqual(240);
       expect(NODE_SIZES.Page.width).toBeGreaterThanOrEqual(200);
-      expect(NODE_SIZES.Concept.width).toBeGreaterThanOrEqual(200);
+      expect(NODE_SIZES.Entity.width).toBeGreaterThanOrEqual(200);
     });
 
     it('should have smaller sizes for auxiliary nodes (ExpressionSet, mining nodes)', () => {
       expect(NODE_SIZES.ExpressionSet.width).toBeLessThanOrEqual(160);
       expect(NODE_SIZES.SEOMiningRun.width).toBeLessThanOrEqual(180);
-      expect(NODE_SIZES.GEOMiningRun.width).toBeLessThanOrEqual(180);
     });
   });
 
@@ -79,11 +78,9 @@ describe('NodeConfig', () => {
 
     it('should have distinct colors for different categories', () => {
       // Project category (violet) vs Content category (amber)
-      expect(NODE_COLORS.Project.primary).not.toBe(NODE_COLORS.Concept.primary);
+      expect(NODE_COLORS.Project.primary).not.toBe(NODE_COLORS.Entity.primary);
       // Locale category (green) vs SEO category (red)
       expect(NODE_COLORS.Locale.primary).not.toBe(NODE_COLORS.SEOKeyword.primary);
-      // SEO category (red) vs GEO category (purple)
-      expect(NODE_COLORS.SEOKeyword.primary).not.toBe(NODE_COLORS.GEOSeedL10n.primary);
     });
   });
 

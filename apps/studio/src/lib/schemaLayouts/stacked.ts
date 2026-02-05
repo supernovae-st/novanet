@@ -42,7 +42,7 @@ export function applyStackedLayout(
   const nodes: Node[] = [];
   const edges: Edge[] = [];
 
-  const realmOrder: Realm[] = ['project', 'global', 'shared'];
+  const realmOrder: Realm[] = ['project', 'global'];
   let currentY = 0;
 
   for (const realm of realmOrder) {

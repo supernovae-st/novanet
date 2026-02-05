@@ -51,9 +51,9 @@ const NODE_COLORS = {
   Block: '#06b6d4',
   BlockType: '#14b8a6',
 
-  // Concept category (amber)
-  Concept: '#f59e0b',
-  ConceptL10n: '#fbbf24',
+  // Entity category (amber)
+  Entity: '#f59e0b',
+  EntityL10n: '#fbbf24',
 
   // Locale category (emerald)
   Locale: '#10b981',
@@ -286,7 +286,7 @@ const cardVariants = cva('rounded-xl border transition-all', {
 ### React Flow Custom Node
 
 ```tsx
-export function ConceptNode({ data, selected }: NodeProps) {
+export function EntityNode({ data, selected }: NodeProps) {
   return (
     <div
       className={cn(
@@ -301,7 +301,7 @@ export function ConceptNode({ data, selected }: NodeProps) {
       <div className="flex items-center gap-2">
         <div
           className="w-3 h-3 rounded-full"
-          style={{ backgroundColor: NODE_COLORS.Concept }}
+          style={{ backgroundColor: NODE_COLORS.Entity }}
         />
         <span className="text-sm font-medium text-white">{data.label}</span>
       </div>

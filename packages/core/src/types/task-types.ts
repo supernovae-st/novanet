@@ -57,7 +57,7 @@ export type SemanticBoosts = Partial<Record<SemanticType, number>>;
 // =============================================================================
 
 /**
- * Concept priority levels for filtering.
+ * Entity priority levels for filtering.
  */
 export type Priority = 'critical' | 'high' | 'medium' | 'low';
 
@@ -153,23 +153,23 @@ export interface GenerationContext {
   taskType: TaskType;
   /** Target locale */
   locale: string;
-  /** Activated concepts with scores */
-  concepts: ActivatedConcept[];
+  /** Activated entities with scores */
+  entities: ActivatedEntity[];
   /** Locale knowledge context */
   localeContext: LocaleContext;
 }
 
 /**
- * A concept activated through spreading activation or vector search.
+ * An entity activated through spreading activation or vector search.
  */
-export interface ActivatedConcept {
-  /** Concept key */
+export interface ActivatedEntity {
+  /** Entity key */
   key: string;
   /** Activation score (0-1) */
   activation: number;
   /** Source of activation */
   source: 'seed' | 'spread' | 'vector' | 'hybrid';
-  /** Concept properties */
+  /** Entity properties */
   properties: {
     display_name?: string;
     description?: string;
@@ -218,8 +218,8 @@ export interface RetrievalRequest {
   taskType: TaskType;
   /** Target locale */
   locale: string;
-  /** Seed concepts to start spreading activation */
-  seedConcepts: string[];
+  /** Seed entities to start spreading activation */
+  seedEntities: string[];
   /** Optional query for vector search */
   query?: string;
   /** Override default parameters */
@@ -230,17 +230,17 @@ export interface RetrievalRequest {
  * Result from hybrid retrieval.
  */
 export interface RetrievalResult {
-  /** All activated concepts */
-  concepts: ActivatedConcept[];
+  /** All activated entities */
+  entities: ActivatedEntity[];
   /** Retrieval metadata */
   metadata: {
     /** Time taken for retrieval (ms) */
     durationMs: number;
-    /** Number of concepts from spreading activation */
+    /** Number of entities from spreading activation */
     spreadCount: number;
-    /** Number of concepts from vector search */
+    /** Number of entities from vector search */
     vectorCount: number;
-    /** Number of concepts from both (merged) */
+    /** Number of entities from both (merged) */
     hybridCount: number;
     /** Task modifier used */
     taskModifier: TaskModifier;

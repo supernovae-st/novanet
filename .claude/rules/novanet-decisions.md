@@ -24,7 +24,7 @@ This file documents key architecture decisions for NovaNet. Reference these when
 
 ```typescript
 // Types with prefix (globally unique)
-type NodeRealm = 'global' | 'project' | 'shared';
+type NodeRealm = 'global' | 'project';
 type ArcFamily = 'ownership' | 'localization' | 'semantic' | 'generation' | 'mining';
 
 // Properties without prefix (context is clear)
@@ -121,7 +121,7 @@ Thing (project)  → Brand-specific definition
 
 ```
 WRONG:  Source → Translate → Target
-RIGHT:  Concept (invariant) → Generate natively → L10n (local)
+RIGHT:  Entity (invariant) → Generate natively → EntityL10n (local)
 ```
 
 **Rationale**: Translation loses cultural nuance. Native generation preserves it.

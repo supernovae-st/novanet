@@ -13,22 +13,21 @@ Turborepo monorepo for NovaNet - knowledge graph localization orchestrator.
 NovaNet uses Neo4j to orchestrate **native content generation** (NOT translation) across 200+ locales.
 
 **Target Application**: QR Code AI (https://qrcode-ai.com)
-**Current Version**: v10.1.0
-**Design Plan**: `docs/plans/2026-02-01-ontology-v9-design.md`
+**Current Version**: v10.4.0
 **Roadmap**: `ROADMAP.md` | **Changelog**: `CHANGELOG.md`
 
 ```
 CRITICAL: Generation, NOT Translation
 
 Source -> Translate -> Target        <-- WRONG
-Concept (invariant) -> Generate natively -> ConceptL10n (local)  <-- RIGHT
+Entity (invariant) -> Generate natively -> EntityL10n (local)  <-- RIGHT
 ```
 
 ---
 
-## v10.0 Nomenclature
+## v10.4 Nomenclature
 
-v10.0 establishes unified terminology across all layers (YAML, Rust, TypeScript, Neo4j, UI):
+v10.4 establishes unified terminology across all layers (YAML, Rust, TypeScript, Neo4j, UI):
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -43,8 +42,8 @@ v10.0 establishes unified terminology across all layers (YAML, Rust, TypeScript,
 │  CLASSIFICATION AXES                                                        │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │  NodeKind:                                                                  │
-│    WHERE?  NodeRealm  (global / project / shared)                           │
-│    WHAT?   NodeLayer  (9 functional layers)                                 │
+│    WHERE?  NodeRealm  (global / project)                                    │
+│    WHAT?   NodeLayer  (8 functional layers)                                 │
 │    HOW?    NodeTrait  (invariant / localized / knowledge / derived / job)   │
 │                                                                             │
 │  ArcKind:                                                                   │
@@ -62,7 +61,7 @@ v10.0 establishes unified terminology across all layers (YAML, Rust, TypeScript,
 
 **Rust binary:** `tools/novanet/` — single crate for CLI + TUI (neo4rs, ratatui, clap).
 All commands implemented: data/meta/overlay/query, node/arc CRUD, search, locale, db,
-schema generate/validate, doc generate, filter build, Galaxy-themed TUI with boot animation, effects engine, and onboarding. 246 tests pass.
+schema generate/validate, doc generate, filter build, Galaxy-themed TUI with boot animation, effects engine, and onboarding. 245 tests pass.
 
 **YAML-first architecture:** Each Kind YAML has explicit `realm:` and `layer:` fields (source of truth).
 Path validation ensures `models/nodes/{realm}/{layer}/{name}.yaml` matches YAML content.
@@ -97,7 +96,7 @@ v10.1 introduces **Knowledge Atoms** - granular knowledge nodes for selective LL
 │     └─ All data lives in atoms                                              │
 │                                                                             │
 │  2. ATOMS ARE LOCALE-NATIVE                                                 │
-│     └─ Unlike Concepts (invariant + L10n for ALL locales)                   │
+│     └─ Unlike Entities (invariant + L10n for ALL locales)                   │
 │     └─ Atoms exist only where needed: fr-FR may have 20K Terms              │
 │     └─ sw-KE may have 500 Terms - no translation, native generation         │
 │                                                                             │
@@ -113,7 +112,7 @@ v10.1 introduces **Knowledge Atoms** - granular knowledge nodes for selective LL
 │  Containers (6): TermSet, ExpressionSet, PatternSet,                        │
 │                  CultureSet, TabooSet, AudienceSet                          │
 │  Atoms (6):      Term, Expression, Pattern, CultureRef, Taboo, AudienceTrait│
-│  Total:          43 nodes, 64 arcs                                          │
+│  Total:          42 nodes, 77 arcs                                          │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -184,7 +183,7 @@ pnpm test --filter=@novanet/studio      # Test only studio
 | @novanet/core | Types, schemas, filters, generators |
 | @novanet/db | Neo4j Docker, seeds, migrations |
 | @novanet/studio | Web-based graph visualization |
-| tools/novanet | Rust CLI + TUI — all runtime commands (246 tests) |
+| tools/novanet | Rust CLI + TUI — all runtime commands (245 tests) |
 
 ---
 
@@ -323,11 +322,11 @@ See `.claude/README.md` for full documentation.
 ### YAML Kind Structure
 
 ```yaml
-# packages/core/models/nodes/project/semantic/concept.yaml
+# packages/core/models/nodes/global/knowledge/entity.yaml
 node:
-  name: Concept
-  realm: project          # Source of truth (must match path)
-  layer: semantic         # Source of truth (must match path)
+  name: Entity
+  realm: global           # Source of truth (must match path)
+  layer: knowledge        # Source of truth (must match path)
   locale_behavior: invariant
   description: "..."
   properties:

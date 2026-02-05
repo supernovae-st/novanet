@@ -81,9 +81,9 @@ Open [http://localhost:3000](http://localhost:3000)
 |-----|------|
 | `1` | Project Overview |
 | `2` | Full Graph |
-| `3` | Core + Concepts |
+| `3` | Core + Entities |
 | `4` | All Locales |
-| `5` | Concepts |
+| `5` | Entities |
 | `6` | Current Locale |
 | `7` | Locale + Expressions |
 | `8` | Locale Knowledge |

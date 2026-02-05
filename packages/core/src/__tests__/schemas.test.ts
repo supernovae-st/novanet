@@ -162,9 +162,8 @@ describe('Locale Knowledge Schemas', () => {
 
 describe('Relation Registry', () => {
   describe('RelationType enum', () => {
-    it('should have all v7.0.0 core relations', () => {
-      // Project root
-      expect(RelationType.HAS_CONCEPT).toBe('HAS_CONCEPT');
+    it('should have all v10.3 core relations', () => {
+      // Project root (v10.3: HAS_CONCEPT removed)
       expect(RelationType.HAS_PAGE).toBe('HAS_PAGE');
       expect(RelationType.SUPPORTS_LOCALE).toBe('SUPPORTS_LOCALE');
 
@@ -215,7 +214,7 @@ describe('Relation Registry', () => {
     it('should use HAS_* for ownership/composition', () => {
       const hasRelations = Object.keys(RelationType).filter((r) => r.startsWith('HAS_'));
 
-      expect(hasRelations).toContain('HAS_CONCEPT');
+      // v10.3: HAS_CONCEPT removed — Entity in global realm
       expect(hasRelations).toContain('HAS_PAGE');
       expect(hasRelations).toContain('HAS_BLOCK');
       expect(hasRelations).toContain('HAS_L10N');
@@ -254,7 +253,7 @@ describe('Relation Naming Conventions', () => {
   it('should use HAS_* for ownership/composition', () => {
     const hasRelations = Object.keys(RelationType).filter((r) => r.startsWith('HAS_'));
 
-    expect(hasRelations).toContain('HAS_CONCEPT');
+    // v10.3: HAS_CONCEPT removed — Entity in global realm
     expect(hasRelations).toContain('HAS_PAGE');
     expect(hasRelations).toContain('HAS_BLOCK');
     expect(hasRelations).toContain('HAS_L10N');

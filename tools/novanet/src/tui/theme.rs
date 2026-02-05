@@ -69,23 +69,20 @@ pub fn hex_to_color(hex: &str) -> Color {
 // REALM COLORS (from taxonomy.yaml node_realms)
 // =============================================================================
 
-/// Realm color definitions.
+/// Realm color definitions (v10.4: 2 realms only).
 pub mod realm {
     use super::*;
 
     pub const GLOBAL_HEX: &str = "#2aa198";
     pub const PROJECT_HEX: &str = "#6c71c4";
-    pub const SHARED_HEX: &str = "#cb4b16";
 
     // 256-color palette indices
     pub const GLOBAL_256: u8 = 37;
     pub const PROJECT_256: u8 = 141;
-    pub const SHARED_256: u8 = 166;
 
     // 16-color palette indices
     pub const GLOBAL_16: Color = Color::Cyan;
     pub const PROJECT_16: Color = Color::Magenta;
-    pub const SHARED_16: Color = Color::Yellow;
 
     /// Get realm color for a given color mode.
     pub fn color(realm: &str, mode: ColorMode) -> Color {
@@ -93,19 +90,16 @@ pub mod realm {
             ColorMode::TrueColor => match realm {
                 "global" => hex_to_color(GLOBAL_HEX),
                 "project" => hex_to_color(PROJECT_HEX),
-                "shared" => hex_to_color(SHARED_HEX),
                 _ => Color::White,
             },
             ColorMode::Color256 => match realm {
                 "global" => Color::Indexed(GLOBAL_256),
                 "project" => Color::Indexed(PROJECT_256),
-                "shared" => Color::Indexed(SHARED_256),
                 _ => Color::White,
             },
             ColorMode::Color16 => match realm {
                 "global" => GLOBAL_16,
                 "project" => PROJECT_16,
-                "shared" => SHARED_16,
                 _ => Color::White,
             },
         }

@@ -20,15 +20,15 @@ export {
   KIND_META,
 } from '@novanet/core/types';
 
-// Standard properties and domain types
+// Standard properties and domain types (v10.4: Entity-Centric, no GEO layer)
 export type {
   StandardNodeProperties,
   // Nodes
   Project,
   ProjectL10n,
   BrandIdentity,
-  Concept,
-  ConceptL10n,
+  Entity,
+  EntityL10n,
   Page,
   PageType,
   PageL10n,
@@ -45,16 +45,13 @@ export type {
   SEOKeyword,
   SEOKeywordMetrics,
   SEOMiningRun,
-  GEOSeedL10n,
-  GEOSeedMetrics,
-  GEOMiningRun,
   // Prompts
   PagePrompt,
   BlockPrompt,
   BlockRules,
   // Relation props
   SemanticLinkProps,
-  UsesConceptProps,
+  UsesEntityProps,
   HasBlockProps,
   LinksToProps,
 } from '@novanet/core/types';

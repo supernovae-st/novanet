@@ -26,10 +26,9 @@ export interface FilterState {
  * const filter = NovaNetFilter.create()
  *   .fromPage('page-pricing')
  *   .includeBlocks()
- *   .includeConcepts({ spreading: true })
+ *   .includeEntities({ spreading: true })
  *   .includePrompts({ activeOnly: true })
  *   .forLocale('fr-FR')
- *   .withPriority('critical', 'high')
  *   .maxDepth(2);
  *
  * const { query, params } = CypherGenerator.generate(filter);
@@ -86,13 +85,6 @@ export class NovaNetFilter {
   }
 
   /**
-   * @deprecated Use fromEntity() instead (v10.3)
-   */
-  fromConcept(key: string): this {
-    return this.fromEntity(key);
-  }
-
-  /**
    * Sets the root node to a Locale.
    * @param key - The Locale key (e.g., 'fr-FR', 'en-US')
    */
@@ -141,13 +133,6 @@ export class NovaNetFilter {
       depth: opts?.spreading ? 2 : (opts?.depth ?? 1),
     });
     return this;
-  }
-
-  /**
-   * @deprecated Use includeEntities() instead (v10.3)
-   */
-  includeConcepts(opts?: { depth?: number; spreading?: boolean }): this {
-    return this.includeEntities(opts);
   }
 
   /**

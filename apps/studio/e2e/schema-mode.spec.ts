@@ -8,7 +8,7 @@ import { waitForGraphLoaded } from './helpers';
  *
  * Tests:
  * 1. Toggle between data and schema mode
- * 2. Schema mode shows 46 nodes in grouped layout
+ * 2. Schema mode shows 42 nodes in grouped layout (v10.4)
  * 3. URL sync works (?mode=schema)
  * 4. Scope groups are visible
  * 5. Filter panel shows hierarchical filters
@@ -128,8 +128,8 @@ test.describe('Schema Mode - Schema Graph Display', () => {
   });
 
   test('should display grouped layout with scope groups', async ({ page }) => {
-    // Should see all 3 scope group labels in the schema filter panel or graph
-    // The scope groups are rendered with icon + label (e.g., "PROJECT", "GLOBAL", "SHARED")
+    // v10.4: 2 realms (SHARED merged into GLOBAL)
+    // The scope groups are rendered with icon + label (e.g., "PROJECT", "GLOBAL")
 
     // Check schema filter panel for scope groups (these are always visible)
     const filterPanel = page.locator('[data-testid="schema-filter-panel"]');
@@ -138,16 +138,16 @@ test.describe('Schema Mode - Schema Graph Display', () => {
     // Use section label IDs to find specific scope headers (more reliable)
     await expect(filterPanel.locator('#section-label-project')).toBeVisible();
     await expect(filterPanel.locator('#section-label-global')).toBeVisible();
-    await expect(filterPanel.locator('#section-label-shared')).toBeVisible();
+    // v10.4: shared removed, merged into global
   });
 
   test('should display schema stats in header', async ({ page }) => {
-    // The stats are shown in the header as "46 node types · 3 realms"
+    // The stats are shown in the header as "42 node types · 2 realms" (v10.4)
     const filterPanel = page.locator('[data-testid="schema-filter-panel"]');
     await expect(filterPanel).toBeVisible();
 
     // Check for stats text format in header
-    const statsText = filterPanel.getByText(/46 node types/);
+    const statsText = filterPanel.getByText(/42 node types/);
     await expect(statsText).toBeVisible({ timeout: 10000 });
   });
 
@@ -250,32 +250,28 @@ test.describe('Schema Mode - Filter Panel', () => {
     await expect(filterPanel.getByText('Schema Browser')).toBeVisible();
   });
 
-  test('should show all 3 scopes with icons', async ({ page }) => {
+  test('should show all 2 realms with icons', async ({ page }) => {
     const filterPanel = page.locator('[data-testid="schema-filter-panel"]');
 
-    // Use section label IDs to find specific scope headers (more reliable than text)
+    // v10.4: 2 realms (SHARED merged into GLOBAL)
     await expect(filterPanel.locator('#section-label-project')).toBeVisible();
     await expect(filterPanel.locator('#section-label-global')).toBeVisible();
-    await expect(filterPanel.locator('#section-label-shared')).toBeVisible();
   });
 
-  test('should display subcategories for each scope', async ({ page }) => {
+  test('should display subcategories for each realm', async ({ page }) => {
     const filterPanel = page.locator('[data-testid="schema-filter-panel"]');
 
-    // Project subcategories
+    // Project layers
     await expect(filterPanel.getByText('Foundation')).toBeVisible();
     await expect(filterPanel.getByText('Structure')).toBeVisible();
     await expect(filterPanel.getByText('Semantic')).toBeVisible();
     await expect(filterPanel.getByText('Instruction')).toBeVisible();
     await expect(filterPanel.getByText('Output')).toBeVisible();
 
-    // Global subcategories
+    // Global layers (v10.4: SEO moved from SHARED)
     await expect(filterPanel.getByText('Configuration')).toBeVisible();
     await expect(filterPanel.getByText('Knowledge')).toBeVisible();
-
-    // Shared subcategories
     await expect(filterPanel.getByText('SEO')).toBeVisible();
-    await expect(filterPanel.getByText('GEO')).toBeVisible();
   });
 
   test('should show node counts for layers', async ({ page }) => {
@@ -293,13 +289,13 @@ test.describe('Schema Mode - Filter Panel', () => {
     expect(count).toBeGreaterThan(0);
   });
 
-  test('should show legend footer with scope icons', async ({ page }) => {
+  test('should show legend footer with realm icons', async ({ page }) => {
     const filterPanel = page.locator('[data-testid="schema-filter-panel"]');
 
-    // The footer shows the legend: "📦 Project · 🌍 Global · 🎯 Shared"
+    // v10.4: 2 realms - "📦 Project · 🌍 Global"
     await expect(filterPanel.getByText('📦 Project')).toBeVisible();
     await expect(filterPanel.getByText('🌍 Global')).toBeVisible();
-    await expect(filterPanel.getByText('🎯 Shared')).toBeVisible();
+    // v10.4: shared removed, merged into global
   });
 });
 

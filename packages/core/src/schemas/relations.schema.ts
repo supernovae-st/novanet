@@ -54,9 +54,8 @@ import { z } from 'zod';
 
 export const RelationType = {
   // ─────────────────────────────────────────────────────────────────────────────
-  // PROJECT ROOT
+  // PROJECT ROOT (v10.3: HAS_CONCEPT removed — Entity in global realm, use USES_ENTITY)
   // ─────────────────────────────────────────────────────────────────────────────
-  HAS_CONCEPT: 'HAS_CONCEPT',             // Project → Concept
   HAS_PAGE: 'HAS_PAGE',                   // Project → Page
   HAS_BRAND_IDENTITY: 'HAS_BRAND_IDENTITY', // Project → BrandIdentity
   SUPPORTS_LOCALE: 'SUPPORTS_LOCALE',     // Project → Locale
@@ -92,7 +91,7 @@ export const RelationType = {
   // ─────────────────────────────────────────────────────────────────────────────
   // LOCALIZATION (v7.0.0: unified HAS_L10N for all *L10n nodes)
   // ─────────────────────────────────────────────────────────────────────────────
-  HAS_L10N: 'HAS_L10N',             // Concept|Project → *L10n
+  HAS_L10N: 'HAS_L10N',             // Entity|Project → *L10n (v10.3: was Concept)
 
   // ─────────────────────────────────────────────────────────────────────────────
   // PAGE STRUCTURE
@@ -110,7 +109,7 @@ export const RelationType = {
   // ENTITY USAGE (v10.3: renamed from USES_CONCEPT)
   // ─────────────────────────────────────────────────────────────────────────────
   USES_ENTITY: 'USES_ENTITY',       // Page|Block → Entity (v10.3: renamed from USES_CONCEPT)
-  SEMANTIC_LINK: 'SEMANTIC_LINK',   // Concept → Concept
+  SEMANTIC_LINK: 'SEMANTIC_LINK',   // Entity → Entity (v10.3: was Concept)
 
   // ─────────────────────────────────────────────────────────────────────────────
   // OUTPUT (v7.0.0: unified HAS_OUTPUT)
@@ -123,14 +122,14 @@ export const RelationType = {
   // SEO/GEO TARGETING (v7.7.0: locale-aligned + cross-locale shortcuts)
   // ─────────────────────────────────────────────────────────────────────────────
   // v7.7.0: Locale-aligned primary targeting
-  HAS_SEO_TARGET: 'HAS_SEO_TARGET',     // ConceptL10n → SEOKeyword (locale-aligned)
-  HAS_GEO_TARGET: 'HAS_GEO_TARGET',     // ConceptL10n → GEOSeedL10n (locale-aligned)
+  HAS_SEO_TARGET: 'HAS_SEO_TARGET',     // EntityL10n → SEOKeyword (locale-aligned)
+  HAS_GEO_TARGET: 'HAS_GEO_TARGET',     // EntityL10n → GEOSeedL10n (locale-aligned)
   // Cross-locale shortcuts (kept for management/reporting)
-  TARGETS_SEO: 'TARGETS_SEO',           // Concept → SEOKeyword
-  TARGETS_GEO: 'TARGETS_GEO',           // Concept → GEOSeedL10n
+  TARGETS_SEO: 'TARGETS_SEO',           // Entity → SEOKeyword (v10.3: was Concept)
+  TARGETS_GEO: 'TARGETS_GEO',           // Entity → GEOSeedL10n (v10.3: was Concept)
   // REMOVED v7.8.1: PAGE_TARGETS_SEO, PAGE_TARGETS_GEO
   // Reason: Direct Page → SEO/GEO bypasses semantic grouping
-  // Correct flow: Page → Concept → ConceptL10n → SEOKeyword/GEOSeedL10n
+  // Correct flow: Page → Entity → EntityL10n → SEOKeyword/GEOSeedL10n
 
   // ─────────────────────────────────────────────────────────────────────────────
   // SEO MINING (v7.8.5: HAS_SNAPSHOT → HAS_METRICS)
@@ -148,10 +147,10 @@ export const RelationType = {
 
   // ─────────────────────────────────────────────────────────────────────────────
   // PROVENANCE (v7.9.0: REMOVED USED_SEO_KEYWORD, USED_GEO_SEED)
-  // SEO/GEO provenance is implicit via: BlockL10n → INFLUENCED_BY → ConceptL10n → HAS_*_TARGET → SEO/GEO
+  // SEO/GEO provenance is implicit via: BlockL10n → INFLUENCED_BY → EntityL10n → HAS_*_TARGET → SEO/GEO
   // ─────────────────────────────────────────────────────────────────────────────
-  INFLUENCED_BY: 'INFLUENCED_BY',       // BlockL10n → ConceptL10n
-  // REMOVED v7.9.0: USED_SEO_KEYWORD, USED_GEO_SEED (SEO/GEO is at ConceptL10n level)
+  INFLUENCED_BY: 'INFLUENCED_BY',       // BlockL10n → EntityL10n
+  // REMOVED v7.9.0: USED_SEO_KEYWORD, USED_GEO_SEED (SEO/GEO is at EntityL10n level)
   GENERATED_FROM: 'GENERATED_FROM',     // BlockL10n → BlockType
 
   // ─────────────────────────────────────────────────────────────────────────────
@@ -174,7 +173,7 @@ export const RelationType = {
   // ─────────────────────────────────────────────────────────────────────────────
   // INVERSE RELATIONSHIPS (v7.8.0 - bidirectional queries without full scans)
   // ─────────────────────────────────────────────────────────────────────────────
-  L10N_OF: 'L10N_OF',                   // ConceptL10n|ProjectL10n → Concept|Project (inverse of HAS_L10N)
+  L10N_OF: 'L10N_OF',                   // EntityL10n|ProjectL10n → Entity|Project (inverse of HAS_L10N)
   OUTPUT_OF: 'OUTPUT_OF',               // PageL10n|BlockL10n → Page|Block (inverse of HAS_OUTPUT)
   BLOCK_OF: 'BLOCK_OF',                 // Block → Page (inverse of HAS_BLOCK)
   USED_BY: 'USED_BY',                   // Entity → Page|Block (inverse of USES_ENTITY)
@@ -210,12 +209,12 @@ export const HasBlockPropsSchema = z.object({
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const LinksToPropsSchema = z.object({
-  concept_key: z.string().regex(/^[a-z0-9-]+$/),  // Anchor text derived from ConceptL10n.title
+  concept_key: z.string().regex(/^[a-z0-9-]+$/),  // Anchor text derived from EntityL10n.title
   context: z.enum(['cta', 'body', 'related', 'nav']),  // Where link appears
   seo_weight: z.number().min(0).max(1),  // Link importance for SEO
   // v7.12.1: SEO anchor optimization
   anchor_type: z.enum(['exact_match', 'partial_match', 'branded', 'generic']).default('partial_match'),
-  // exact_match: anchor = ConceptL10n.title exactly (5× traffic, use sparingly max 10%)
+  // exact_match: anchor = EntityL10n.title exactly (5× traffic, use sparingly max 10%)
   // partial_match: anchor includes concept keywords
   // branded: anchor = brand name (QR Code AI)
   // generic: anchor = "click here", "learn more" (low SEO value)
@@ -248,7 +247,7 @@ export const TargetsGEOPropsSchema = z.object({
   priority: z.number().int().min(1).max(10),
 });
 
-// v7.7.0: Locale-aligned targeting (ConceptL10n → SEO/GEO)
+// v7.7.0: Locale-aligned targeting (EntityL10n → SEO/GEO)
 export const HasSEOTargetPropsSchema = z.object({
   role: z.enum(['primary', 'secondary', 'long-tail']),
   priority: z.number().int().min(1).max(10),
@@ -292,13 +291,7 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
   // ─────────────────────────────────────────────────────────────────────────────
   // PROJECT ROOT
   // ─────────────────────────────────────────────────────────────────────────────
-  [RelationType.HAS_CONCEPT]: {
-    type: RelationType.HAS_CONCEPT,
-    from: 'Project',
-    to: 'Concept',
-    cardinality: '1:N',
-    description: 'Project owns its concepts',
-  },
+  // v10.3: HAS_CONCEPT removed — Entity is in global realm, use USES_ENTITY from Page/Block
   [RelationType.HAS_PAGE]: {
     type: RelationType.HAS_PAGE,
     from: 'Project',
@@ -341,7 +334,7 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
   },
   [RelationType.FOR_LOCALE]: {
     type: RelationType.FOR_LOCALE,
-    from: ['ConceptL10n', 'ProjectL10n', 'PageL10n', 'BlockL10n', 'SEOKeyword', 'GEOSeedL10n'],
+    from: ['EntityL10n', 'ProjectL10n', 'PageL10n', 'BlockL10n', 'SEOKeyword', 'GEOSeedL10n'],
     to: 'Locale',
     cardinality: 'N:1',
     description: 'Content node targets a specific locale',
@@ -463,8 +456,8 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
   // ─────────────────────────────────────────────────────────────────────────────
   [RelationType.HAS_L10N]: {
     type: RelationType.HAS_L10N,
-    from: ['Concept', 'Project'],
-    to: ['ConceptL10n', 'ProjectL10n'],
+    from: ['Entity', 'Project'],
+    to: ['EntityL10n', 'ProjectL10n'],
     cardinality: '1:N',
     description: 'Invariant node has localized content (v7.0.0: unified)',
   },
@@ -497,7 +490,7 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
     to: 'Page',
     cardinality: 'N:M',
     props: LinksToPropsSchema,
-    description: 'Explicit internal link for SEO. Anchor text derived from ConceptL10n.title (v7.12.0)',
+    description: 'Explicit internal link for SEO. Anchor text derived from EntityL10n.title (v7.12.0)',
   },
   [RelationType.SUBTOPIC_OF]: {
     type: RelationType.SUBTOPIC_OF,
@@ -520,11 +513,11 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
   },
   [RelationType.SEMANTIC_LINK]: {
     type: RelationType.SEMANTIC_LINK,
-    from: 'Concept',
-    to: 'Concept',
+    from: 'Entity',
+    to: 'Entity',
     cardinality: 'N:M',
     props: SemanticLinkPropsSchema,
-    description: 'Concepts are semantically linked for spreading activation',
+    description: 'Entities are semantically linked for spreading activation (v10.3: was Concept)',
   },
 
   // ─────────────────────────────────────────────────────────────────────────────
@@ -562,24 +555,24 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
   // v7.7.0: Locale-aligned primary targeting
   [RelationType.HAS_SEO_TARGET]: {
     type: RelationType.HAS_SEO_TARGET,
-    from: 'ConceptL10n',
+    from: 'EntityL10n',
     to: 'SEOKeyword',
     cardinality: '1:N',
     props: HasSEOTargetPropsSchema,
-    description: 'Primary SEO targeting - locale-aligned (ConceptL10n and SEOKeyword share same locale)',
+    description: 'Primary SEO targeting - locale-aligned (EntityL10n and SEOKeyword share same locale)',
   },
   [RelationType.HAS_GEO_TARGET]: {
     type: RelationType.HAS_GEO_TARGET,
-    from: 'ConceptL10n',
+    from: 'EntityL10n',
     to: 'GEOSeedL10n',
     cardinality: '1:N',
     props: HasGEOTargetPropsSchema,
-    description: 'Primary GEO targeting - locale-aligned (ConceptL10n and GEOSeedL10n share same locale)',
+    description: 'Primary GEO targeting - locale-aligned (EntityL10n and GEOSeedL10n share same locale)',
   },
   // Cross-locale shortcuts (kept for management/reporting)
   [RelationType.TARGETS_SEO]: {
     type: RelationType.TARGETS_SEO,
-    from: 'Concept',
+    from: 'Entity',
     to: 'SEOKeyword',
     cardinality: '1:N',
     props: TargetsSEOPropsSchema,
@@ -587,7 +580,7 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
   },
   [RelationType.TARGETS_GEO]: {
     type: RelationType.TARGETS_GEO,
-    from: 'Concept',
+    from: 'Entity',
     to: 'GEOSeedL10n',
     cardinality: '1:N',
     props: TargetsGEOPropsSchema,
@@ -595,7 +588,7 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
   },
   // REMOVED v7.8.1: PAGE_TARGETS_SEO and PAGE_TARGETS_GEO definitions
   // Reason: Direct Page → SEO/GEO bypasses semantic grouping
-  // Correct flow: Page → Concept → ConceptL10n → SEOKeyword/GEOSeedL10n
+  // Correct flow: Page → Entity → EntityL10n → SEOKeyword/GEOSeedL10n
 
   // ─────────────────────────────────────────────────────────────────────────────
   // SEO MINING (v7.8.5: HAS_SNAPSHOT → HAS_METRICS)
@@ -629,13 +622,13 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
   [RelationType.INFLUENCED_BY]: {
     type: RelationType.INFLUENCED_BY,
     from: 'BlockL10n',
-    to: 'ConceptL10n',
+    to: 'EntityL10n',
     cardinality: 'N:M',
     props: InfluencedByPropsSchema,
-    description: 'BlockL10n was influenced by ConceptL10n (provenance)',
+    description: 'BlockL10n was influenced by EntityL10n (provenance)',
   },
-  // REMOVED v7.9.0: USED_SEO_KEYWORD, USED_GEO_SEED (SEO/GEO is at ConceptL10n level)
-  // Provenance is implicit via: BlockL10n → INFLUENCED_BY → ConceptL10n → HAS_*_TARGET → SEO/GEO
+  // REMOVED v7.9.0: USED_SEO_KEYWORD, USED_GEO_SEED (SEO/GEO is at EntityL10n level)
+  // Provenance is implicit via: BlockL10n → INFLUENCED_BY → EntityL10n → HAS_*_TARGET → SEO/GEO
 
   [RelationType.GENERATED_FROM]: {
     type: RelationType.GENERATED_FROM,
@@ -700,8 +693,8 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
   // ─────────────────────────────────────────────────────────────────────────────
   [RelationType.L10N_OF]: {
     type: RelationType.L10N_OF,
-    from: ['ConceptL10n', 'ProjectL10n'],
-    to: ['Concept', 'Project'],
+    from: ['EntityL10n', 'ProjectL10n'],
+    to: ['Entity', 'Project'],
     cardinality: 'N:1',
     description: 'Inverse of HAS_L10N - localized content points to parent',
   },
@@ -722,7 +715,7 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
   },
   [RelationType.USED_BY]: {
     type: RelationType.USED_BY,
-    from: 'Concept',
+    from: 'Entity',
     to: ['Page', 'Block'],
     cardinality: '1:N',
     description: 'Inverse of USES_ENTITY - entity knows who uses it',
@@ -730,7 +723,7 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
   [RelationType.HAS_LOCALIZED_CONTENT]: {
     type: RelationType.HAS_LOCALIZED_CONTENT,
     from: 'Locale',
-    to: ['ProjectL10n', 'ConceptL10n', 'PageL10n', 'BlockL10n', 'SEOKeyword', 'GEOSeedL10n'],
+    to: ['ProjectL10n', 'EntityL10n', 'PageL10n', 'BlockL10n', 'SEOKeyword', 'GEOSeedL10n'],
     cardinality: '1:N',
     description: 'Inverse of FOR_LOCALE - locale knows all its content',
   },

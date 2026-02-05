@@ -1,5 +1,5 @@
 // packages/core/src/graph/__tests__/generator.test.ts
-// Tests for schema graph generator — v10.3.0 (Entity-Centric, GEO removed)
+// Tests for schema graph generator — v10.4.0 (Entity-Centric in knowledge layer, 2 realms)
 // TDD: Write tests first, then implementation
 
 import { describe, it, expect } from 'vitest';
@@ -113,15 +113,15 @@ describe('graph/generator', () => {
     it('should have correct realm definitions', () => {
       const result = getSchemaHierarchy();
 
-      // Project realm
+      // Project realm (5 layers)
       expect(result.realms.project.label).toBe('PROJECT');
       expect(result.realms.project.icon).toBe('📦');
       expect(Object.keys(result.realms.project.layers)).toHaveLength(5);
 
-      // Global realm (v10.3: 4 layers)
+      // Global realm (v10.4: 3 layers - config, knowledge, seo)
       expect(result.realms.global.label).toBe('GLOBAL');
       expect(result.realms.global.icon).toBe('🌍');
-      expect(Object.keys(result.realms.global.layers)).toHaveLength(4);
+      expect(Object.keys(result.realms.global.layers)).toHaveLength(3);
     });
 
     it('should have totalArcs in stats', () => {

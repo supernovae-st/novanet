@@ -147,11 +147,3 @@ function deriveMap<K extends keyof KindMeta>(field: K): Record<NodeType, KindMet
 export const NODE_REALMS: Record<NodeType, Realm> = deriveMap('realm');
 export const NODE_TRAITS: Record<NodeType, Trait> = deriveMap('trait');
 
-// =============================================================================
-// DEPRECATION ALIASES (backwards compatibility)
-// =============================================================================
-
-/** @deprecated Use Entity instead (v10.3) */
-export type Concept = 'Entity';
-/** @deprecated Use EntityL10n instead (v10.3) */
-export type ConceptL10n = 'EntityL10n';

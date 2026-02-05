@@ -15,20 +15,18 @@ Synchronize generated artifacts with YAML source of truth.
 
 ```
 packages/core/models/
-├── nodes/                        ← 44 YAML files (one per Kind) [→ node-kinds/]
-│   ├── global/                   ← Realm: global
+├── nodes/                        ← 42 YAML files (one per Kind) [→ node-kinds/]
+│   ├── global/                   ← Realm: global (19 nodes)
 │   │   ├── config/               ←   Layer: config
-│   │   └── knowledge/            ←   Layer: knowledge
-│   ├── project/                  ← Realm: project
-│   │   ├── foundation/           ←   Layer: foundation
-│   │   ├── structure/            ←   Layer: structure
-│   │   ├── semantic/             ←   Layer: semantic
-│   │   ├── instruction/          ←   Layer: instruction
-│   │   └── output/               ←   Layer: output
-│   └── shared/                   ← Realm: shared
-│       ├── seo/                  ←   Layer: seo
-│       └── geo/                  ←   Layer: geo
-├── relations.yaml                ← 83 Arc types (→ arc-kinds/ in v9.5)
+│   │   ├── knowledge/            ←   Layer: knowledge
+│   │   └── seo/                  ←   Layer: seo (v10.2: merged from SHARED)
+│   └── project/                  ← Realm: project (23 nodes)
+│       ├── foundation/           ←   Layer: foundation
+│       ├── structure/            ←   Layer: structure
+│       ├── semantic/             ←   Layer: semantic
+│       ├── instruction/          ←   Layer: instruction
+│       └── output/               ←   Layer: output
+├── relations.yaml                ← 77 Arc types (→ arc-kinds/ in v9.5)
 └── organizing-principles.yaml    ← v9: facet defs (→ taxonomy.yaml in v9.5)
 ```
 
@@ -133,6 +131,6 @@ All generators live in `tools/novanet/src/generators/` (Rust-first architecture)
 
 **MermaidGenerator (`generators/mermaid.rs`):**
 - Reads `models/nodes/` and `models/relations.yaml`
-- Generates Mermaid flowchart with all 44 Kinds and 83 relations
-- Groups by Realm (Global, Shared, Project)
-- Colors by Layer (9 distinct colors)
+- Generates Mermaid flowchart with all 42 Kinds and 77 arcs
+- Groups by Realm (Global, Project)
+- Colors by Layer (8 distinct colors)

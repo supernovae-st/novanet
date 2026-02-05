@@ -1,12 +1,9 @@
-//! Parse 44 YAML node definitions with trait validation.
+//! Parse 42 YAML node definitions with trait validation.
 //!
-//! Fails fast if any YAML is missing `trait` (or `locale_behavior`), `realm`, or `layer` — no silent defaults.
+//! Fails fast if any YAML is missing `trait`, `realm`, or `layer` — no silent defaults.
 //! Each file at `packages/core/models/node-kinds/<realm>/<layer>/<name>.yaml`
 //! is deserialized into a [`ParsedNode`] with realm/layer read from the YAML content.
 //! Validation ensures the file path matches the YAML-declared realm/layer.
-//!
-//! v9.5 Note: `locale_behavior` has been renamed to `trait`. Both field names are supported
-//! for backwards compatibility, but `trait` is preferred.
 
 use rayon::prelude::*;
 use serde::Deserialize;
@@ -16,10 +13,10 @@ use std::path::{Path, PathBuf};
 use walkdir::WalkDir;
 
 // ─────────────────────────────────────────────────────────────────────────────
-// NodeTrait (v9.5 — formerly LocaleBehavior in v9)
+// NodeTrait — node locale behavior classification
 // ─────────────────────────────────────────────────────────────────────────────
 
-/// The 5 node traits in v9.5 (formerly LocaleBehavior in v9).
+/// The 5 node traits (v10.4): invariant, localized, knowledge, derived, job.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum NodeTrait {
@@ -30,7 +27,7 @@ pub enum NodeTrait {
     Job,
 }
 
-/// Type alias for backwards compatibility with v9 code.
+/// Type alias for code that uses the v9 name.
 pub type LocaleBehavior = NodeTrait;
 
 impl std::fmt::Display for NodeTrait {
@@ -95,8 +92,7 @@ pub struct NodeDef {
     /// Layer classification (config, knowledge, foundation, etc.) — explicit in YAML.
     pub layer: String,
 
-    /// v9.5 trait — required, fail-fast if missing.
-    /// Accepts both `trait` (v9.5) and `locale_behavior` (v9) field names.
+    /// Node trait (v10.4) — required, fail-fast if missing.
     #[serde(rename = "trait", alias = "locale_behavior")]
     pub node_trait: NodeTrait,
 
@@ -362,8 +358,9 @@ mod tests {
 
     #[test]
     fn optional_fields_default_to_none() {
+        // v10.4: SEO layer is in global realm (shared realm removed)
         let yaml =
-            "node:\n  name: Minimal\n  realm: shared\n  layer: seo\n  trait: job\n  description: d";
+            "node:\n  name: Minimal\n  realm: global\n  layer: seo\n  trait: job\n  description: d";
         let doc: NodeDocument = serde_yaml::from_str(yaml).unwrap();
         assert!(doc.node.icon.is_none());
         assert!(doc.node.standard_properties.is_none());

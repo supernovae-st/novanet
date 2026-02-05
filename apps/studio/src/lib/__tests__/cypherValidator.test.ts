@@ -20,7 +20,7 @@ describe('cypherValidator', () => {
     });
 
     it('should accept query with WHERE clause', () => {
-      const result = validateCypher('MATCH (n:Concept) WHERE n.key = "test" RETURN n');
+      const result = validateCypher('MATCH (n:Entity) WHERE n.key = "test" RETURN n');
       expect(result.valid).toBe(true);
     });
 
@@ -35,7 +35,7 @@ describe('cypherValidator', () => {
     });
 
     it('should accept RETURN with aggregations', () => {
-      const result = validateCypher('MATCH (n:Concept) RETURN n.type, count(n)');
+      const result = validateCypher('MATCH (n:Entity) RETURN n.type, count(n)');
       expect(result.valid).toBe(true);
     });
 

@@ -27,36 +27,29 @@ describe('resolveTypesForRealms', () => {
     expect(types).toContain('Locale');
     expect(types).toContain('Formatting');      // v10 technical tier
     expect(types).toContain('ExpressionSet');  // v10 semantic tier
+    expect(types).toContain('SEOKeyword');     // v10.2: SEO moved to global
+    expect(types).toContain('Entity');         // v10.3: Entity-Centric in global
     expect(types).not.toContain('Project');
-    expect(types).not.toContain('SEOKeyword');
   });
 
   it('returns project types for project realm', () => {
     const types = resolveTypesForRealms(['project']);
     expect(types).toContain('Project');
     expect(types).toContain('Page');
-    expect(types).toContain('Concept');
+    expect(types).toContain('AudiencePersona');  // v10.3: semantic types remaining in project
+    expect(types).not.toContain('Entity');       // v10.3: Entity moved to global
     expect(types).not.toContain('Locale');
-    expect(types).not.toContain('SEOKeyword');
-  });
-
-  it('returns shared types for shared realm', () => {
-    const types = resolveTypesForRealms(['shared']);
-    expect(types).toContain('SEOKeyword');
-    expect(types).toContain('GEOSeedL10n');
-    expect(types).not.toContain('Locale');
-    expect(types).not.toContain('Project');
   });
 
   it('returns union for multiple realms', () => {
-    const types = resolveTypesForRealms(['global', 'shared']);
+    const types = resolveTypesForRealms(['global', 'project']);
     expect(types).toContain('Locale');
-    expect(types).toContain('SEOKeyword');
-    expect(types).not.toContain('Project');
+    expect(types).toContain('Project');
+    expect(types).toContain('Entity');
   });
 
-  it('returns all 35 types for all 3 realms', () => {
-    const types = resolveTypesForRealms(['global', 'project', 'shared']);
+  it('returns all types for both realms', () => {
+    const types = resolveTypesForRealms(['global', 'project']);
     expect(types.length).toBe(ALL_NODE_TYPES.length);
   });
 });
@@ -75,13 +68,13 @@ describe('resolveTypesForTraits', () => {
     expect(types).toContain('Locale');
     expect(types).toContain('Project');
     expect(types).toContain('Page');
-    expect(types).not.toContain('ConceptL10n');
+    expect(types).not.toContain('EntityL10n');
     expect(types).not.toContain('PageL10n');
   });
 
   it('returns localized types', () => {
     const types = resolveTypesForTraits(['localized']);
-    expect(types).toContain('ConceptL10n');
+    expect(types).toContain('EntityL10n');
     expect(types).toContain('PageL10n');
     expect(types).toContain('BlockL10n');
     expect(types).toContain('ProjectL10n');
@@ -100,13 +93,11 @@ describe('resolveTypesForTraits', () => {
   it('returns derived types', () => {
     const types = resolveTypesForTraits(['derived']);
     expect(types).toContain('SEOKeywordMetrics');
-    expect(types).toContain('GEOSeedMetrics');
   });
 
   it('returns job types', () => {
     const types = resolveTypesForTraits(['job']);
     expect(types).toContain('SEOMiningRun');
-    expect(types).toContain('GEOMiningRun');
   });
 
   it('returns union for multiple traits', () => {
@@ -158,7 +149,7 @@ describe('buildFacetCypher', () => {
         ...emptyFacets,
         traits: ['localized'],
       });
-      expect(result.query).toContain('n:ConceptL10n');
+      expect(result.query).toContain('n:EntityL10n');
       expect(result.query).toContain('n:PageL10n');
       // Project (invariant) should not appear — ProjectL10n (localized) should
       expect(result.query).not.toMatch(/\bn:Project\b(?!L10n)/);
@@ -182,9 +173,12 @@ describe('buildFacetCypher', () => {
         realms: ['project'],
         traits: ['localized'],
       });
-      // project + localized = ConceptL10n, ProjectL10n, PageL10n, BlockL10n
-      expect(result.query).toContain('n:ConceptL10n');
+      // project + localized = ProjectL10n, PageL10n, BlockL10n
+      // (EntityL10n is global realm, not project)
+      expect(result.query).toContain('n:ProjectL10n');
       expect(result.query).toContain('n:PageL10n');
+      // EntityL10n is global, not project
+      expect(result.query).not.toContain('n:EntityL10n');
       // Locale is global, not project
       expect(result.query).not.toContain('n:Locale');
       // Project is invariant, not localized
@@ -197,21 +191,23 @@ describe('buildFacetCypher', () => {
         realms: ['project'],
         layers: ['semantic'],
       });
-      // project + semantic = Concept, ConceptL10n
-      expect(result.query).toContain('n:Concept');
-      expect(result.query).toContain('n:ConceptL10n');
+      // project + semantic = AudiencePersona, ChannelSurface
+      // (Entity/EntityL10n are in global realm, v10.3 Entity-Centric)
+      expect(result.query).toContain('n:AudiencePersona');
+      expect(result.query).toContain('n:ChannelSurface');
+      expect(result.query).not.toContain('n:Entity');
       expect(result.query).not.toContain('n:Page');
     });
 
-    it('returns empty match when intersection is empty', () => {
+    it('returns global semantic types for global + semantic', () => {
       const result = buildFacetCypher({
         ...emptyFacets,
-        realms: ['shared'],     // SEO/GEO types
-        traits: ['invariant'],  // No shared types are invariant
+        realms: ['global'],
+        layers: ['semantic'],
       });
-      // Intersection should be empty, falling into the "all types" branch
-      // because resolvedTypes.length === 0 when intersection is empty
-      expect(result.query).toContain('MATCH (n)');
+      // global + semantic = Entity, EntityL10n (v10.3 Entity-Centric)
+      expect(result.query).toContain('n:Entity');
+      expect(result.query).toContain('n:EntityL10n');
     });
   });
 

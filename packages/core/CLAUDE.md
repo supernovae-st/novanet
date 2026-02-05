@@ -8,7 +8,7 @@ NovaNet is a **native content generation system** (NOT translation) using Neo4j 
 
 **Target Application**: QR Code AI (https://qrcode-ai.com) - a multilingual SaaS for QR code generation.
 **Supported Locales**: 200+ locales (fr-FR, en-US, es-MX, ja-JP, etc.)
-**Current Version**: v10.0.0
+**Current Version**: v10.4.0
 
 ## CRITICAL: Generation, NOT Translation
 
@@ -29,12 +29,12 @@ v9 refactors the meta-graph to a **self-describing context graph** with faceted 
 
 | v8 Term | v9 Term |
 |---------|---------|
-| Scope | **Realm** (global / project / shared) |
-| Subcategory | **Layer** (9 functional layers) |
+| Scope | **Realm** (global / project) |
+| Subcategory | **Layer** (8 functional layers) |
 | NodeTypeMeta | **Kind** (42 node types, 1:1 with Neo4j labels) |
 | _(new)_ | **Trait** (invariant / localized / knowledge / derived / job) |
 | _(new)_ | **ArcFamily** (ownership / localization / semantic / generation / mining) |
-| _(new)_ | **ArcKind** (73 relationship types) |
+| _(new)_ | **ArcKind** (77 relationship types) |
 
 **Boundary rule:** TypeScript (this package) generates code artifacts. Rust (`tools/novanet/`) executes at runtime.
 
@@ -112,20 +112,19 @@ RETURN ak.key, af.key AS family, target.label AS target_kind;
 core/
 ├── models/                    # YAML schema definitions (SOURCE OF TRUTH)
 │   ├── _index.yaml            # MODEL INDEX (graph structure, node categories, changes)
-│   ├── relations.yaml         # All 76 Neo4j relationships (with family field in v9)
+│   ├── relations.yaml         # All 77 Neo4j relationships (with family field)
 │   ├── organizing-principles.yaml  # v9: Realm/Layer/Trait/ArcFamily definitions
 │   ├── nodes/                 # ONE FILE PER NODE TYPE (42 files)
-│   │   ├── global/            # Realm: global (11 nodes)
+│   │   ├── global/            # Realm: global (19 nodes)
 │   │   │   ├── config/        #   Layer: config (Locale)
-│   │   │   └── knowledge/     #   Layer: knowledge (10 nodes - tiered model)
-│   │   ├── project/           # Realm: project (20 nodes)
-│   │   │   ├── foundation/    #   Layer: foundation (Project, BrandIdentity, ProjectL10n)
-│   │   │   ├── structure/     #   Layer: structure (Page, Block, PageType, BlockType)
-│   │   │   ├── semantic/      #   Layer: semantic (AudiencePersona, ChannelSurface)
-│   │   │   ├── instruction/   #   Layer: instruction (PagePrompt, BlockPrompt, BlockRules)
-│   │   │   └── output/        #   Layer: output (PageL10n, BlockL10n)
-│   │   └── global/            # Realm: global (17 nodes)
-│   │       ├── seo/           #   Layer: seo (SEOKeyword, SEOKeywordMetrics, SEOMiningRun)
+│   │   │   ├── knowledge/     #   Layer: knowledge (Knowledge Atoms)
+│   │   │   └── seo/           #   Layer: seo (SEOKeyword, SEOKeywordMetrics, SEOMiningRun)
+│   │   └── project/           # Realm: project (23 nodes)
+│   │       ├── foundation/    #   Layer: foundation (Project, BrandIdentity, ProjectL10n)
+│   │       ├── structure/     #   Layer: structure (Page, Block, PageType, BlockType)
+│   │       ├── semantic/      #   Layer: semantic (Entity, EntityL10n, AudiencePersona)
+│   │       ├── instruction/   #   Layer: instruction (PagePrompt, BlockPrompt, BlockRules)
+│   │       └── output/        #   Layer: output (PageL10n, BlockL10n)
 │   └── views/                 # YAML view definitions
 ├── src/                       # TypeScript source
 │   ├── config/                # Locale codes configuration
@@ -151,8 +150,8 @@ Locale*         = Locale Knowledge nodes (LocaleVoice, LocaleCulture, etc.)
 
 **v9 meta-graph terminology:**
 ```
-Realm           = WHERE? (global / project / shared) — replaces "Scope"
-Layer           = WHAT? (9 functional layers) — replaces "Subcategory"
+Realm           = WHERE? (global / project) — replaces "Scope"
+Layer           = WHAT? (8 functional layers) — replaces "Subcategory"
 Kind            = Neo4j label as meta-node — replaces "NodeTypeMeta"
 Trait           = HOW? (invariant / localized / knowledge / derived / job) — NEW
 ArcFamily       = Relationship classification (ownership / localization / ...) — NEW

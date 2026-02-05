@@ -118,9 +118,10 @@ mod tests {
 
     #[test]
     fn parse_csv_multiple_trimmed() {
+        // v10.4: 2 realms only (global, project)
         assert_eq!(
-            parse_csv(Some(" global , project , shared ")),
-            vec!["global", "project", "shared"]
+            parse_csv(Some(" global , project ")),
+            vec!["global", "project"]
         );
     }
 
@@ -186,8 +187,9 @@ mod tests {
 
     #[test]
     fn roundtrip_json() {
+        // v10.4: global realm has SEO layer
         let original = FacetFilter::from_cli(
-            Some("global,shared"),
+            Some("global"),
             Some("seo"),
             Some("derived,job"),
             Some("mining"),

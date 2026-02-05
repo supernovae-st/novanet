@@ -19,17 +19,15 @@ import type { Realm } from '@novanet/core/types';
  * Uses unified spacing from types.ts (Golden Ratio system).
  * Ring spacing = REALM_GAP × φ for dramatic separation.
  *
- * Visual structure:
- *         ╭───────────────────────╮
- *       ╭─┤   ○ ○ SHARED ○ ○     ├─╮
- *      ╭──│ ╭────────────────╮   │──╮
- *      │  │ │  ● GLOBAL ●   │   │  │
- *      │  │ │ ╭────────────╮│   │  │
- *      │  │ │ │  PROJECT   ││   │  │
- *      │  │ │ ╰────────────╯│   │  │
- *      │  │ ╰────────────────╯   │  │
- *      ╰──│                      │──╯
- *         ╰───────────────────────╯
+ * Visual structure (v10.4: 2 realms):
+ *      ╭──────────────────────────╮
+ *      │ ╭────────────────╮       │
+ *      │ │  ● GLOBAL ●   │       │
+ *      │ │ ╭────────────╮│       │
+ *      │ │ │  PROJECT   ││       │
+ *      │ │ ╰────────────╯│       │
+ *      │ ╰────────────────╯       │
+ *      ╰──────────────────────────╯
  */
 export function applyTargetLayout(
   hierarchy: HierarchicalSchemaData
@@ -44,7 +42,7 @@ export function applyTargetLayout(
   const MIN_RADIUS = REALM_GAP;                       // Minimum inner radius
 
   // Realm order from center outward
-  const realmOrder: Realm[] = ['project', 'global', 'shared'];
+  const realmOrder: Realm[] = ['project', 'global'];
 
   realmOrder.forEach((realm, ringIndex) => {
     const realmDef = hierarchy.realms[realm];

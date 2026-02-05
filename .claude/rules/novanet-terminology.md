@@ -1,4 +1,4 @@
-# NovaNet Terminology (v10.1)
+# NovaNet Terminology (v10.4)
 
 This file defines the canonical terminology for NovaNet. All code, documentation, and UI must use these terms consistently.
 
@@ -20,7 +20,7 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 
 | Axis | Question | Type | Property | Values |
 |------|----------|------|----------|--------|
-| 1 | WHERE? | `NodeRealm` | `realm` | `global`, `project`, `shared` |
+| 1 | WHERE? | `NodeRealm` | `realm` | `global`, `project` |
 | 2 | WHAT? | `NodeLayer` | `layer` | `config`, `knowledge`, `foundation`, `structure`, `semantic`, `instruction`, `output`, `seo` |
 | 3 | HOW? | `NodeTrait` | `trait` | `invariant`, `localized`, `knowledge`, `derived`, `job` |
 
@@ -44,8 +44,8 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 
 | Type | Convention | Example |
 |------|------------|---------|
-| NodeKind YAML | `kebab-case.yaml` | `locale-voice.yaml`, `concept-l10n.yaml` |
-| ArcKind YAML | `kebab-case.yaml` | `has-page.yaml`, `uses-concept.yaml` |
+| NodeKind YAML | `kebab-case.yaml` | `locale-voice.yaml`, `entity-l10n.yaml` |
+| ArcKind YAML | `kebab-case.yaml` | `has-page.yaml`, `uses-entity.yaml` |
 | TypeScript types | `PascalCase` | `NodeKind`, `ArcFamily`, `NodeRealm` |
 | TypeScript files | `kebab-case.ts` | `arc-kinds.ts`, `node-layers.ts` |
 | Rust structs | `PascalCase` | `ArcKind`, `NodeRealm` |
@@ -64,7 +64,7 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 
 ```
 ✅ Page (invariant) → PageL10n (localized)     # Correct: L10n has parent
-✅ Concept (invariant) → ConceptL10n (localized) # Correct: L10n has parent
+✅ Entity (invariant) → EntityL10n (localized) # Correct: L10n has parent
 ✅ SEOKeyword (localized, no parent)           # Correct: no L10n suffix
 ✅ Term (knowledge atom, no parent)            # Correct: no L10n suffix
 
@@ -142,7 +142,7 @@ Use Arc terminology in commands:
 
 ```bash
 # Correct (v9.5)
-novanet arc create --from=page1 --to=concept1 --kind=USES_CONCEPT
+novanet arc create --from=page1 --to=entity1 --kind=USES_ENTITY
 novanet arc delete --id=abc123
 
 # Deprecated (v9.0)

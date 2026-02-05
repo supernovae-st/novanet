@@ -1,5 +1,5 @@
 // NovaNet Core - Main Entry Point
-// Graph-native content generation system v9.0.0
+// Graph-native content generation system v10.4.0
 
 // =============================================================================
 // TYPES
@@ -22,7 +22,7 @@ export * from './types/index.js';
  * const filter = NovaNetFilter.create()
  *   .fromPage('page-pricing')
  *   .includeBlocks()
- *   .includeConcepts({ spreading: true })
+ *   .includeEntities({ spreading: true })
  *   .forLocale('fr-FR');
  *
  * const { query, params } = CypherGenerator.generate(filter);
@@ -55,12 +55,12 @@ export * as config from './config/index.js';
 export * as schemas from './schemas/index.js';
 
 // =============================================================================
-// GRAPH (v9.0.0)
+// GRAPH
 // =============================================================================
 
 /**
  * Graph module for schema visualization:
- * - generateSchemaGraph(): Flat 46 nodes + ~89 edges
+ * - generateSchemaGraph(): Flat 42 nodes + ~77 edges
  * - getSchemaHierarchy(): Grouped by realm/layer
  * - REALM_HIERARCHY: Realm definitions with layers
  * - NODE_LAYERS: NodeType to layer mapping

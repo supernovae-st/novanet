@@ -250,7 +250,7 @@ describe('useNavigationMode', () => {
 
     it('query mode omits empty facet params', async () => {
       setupMocks('query', {
-        realmFilter: ['shared'],
+        realmFilter: ['global'],
         layerFilter: [],
         traitFilter: [],
         arcFamilyFilter: [],
@@ -264,7 +264,7 @@ describe('useNavigationMode', () => {
 
       expect(mockFetchJSON).toHaveBeenCalledTimes(1);
       const url = mockFetchJSON.mock.calls[0][0] as string;
-      expect(url).toContain('realms=shared');
+      expect(url).toContain('realms=global');
       expect(url).not.toContain('layers=');
       expect(url).not.toContain('traits=');
     });

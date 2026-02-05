@@ -1,4 +1,4 @@
-# 🪽 NovaNet Models v9.0.0
+# 🪽 NovaNet Models v10.4.0
 
 YAML schema definitions for Neo4j graph database.
 
@@ -12,19 +12,17 @@ models/
 ├── _index.yaml              # Graph overview + file index
 ├── relations.yaml           # All Neo4j relationships (50)
 ├── README.md                # This file
-├── nodes/                   # ONE FILE PER NODE TYPE (35 files)
-│   ├── global/              # 🌍 GLOBAL scope (15 nodes)
+├── nodes/                   # ONE FILE PER NODE TYPE (42 files)
+│   ├── global/              # 🌍 GLOBAL realm (19 nodes)
 │   │   ├── config/          #    Locale
-│   │   └── knowledge/       #    14 LocaleKnowledge nodes
-│   ├── project/             # 📦 PROJECT scope (14 nodes)
-│   │   ├── foundation/      #    Project, BrandIdentity
-│   │   ├── structure/       #    Page, Block, BlockType
-│   │   ├── semantic/        #    Entity, EntityL10n
-│   │   ├── instruction/     #    PagePrompt, BlockPrompt, BlockRules
-│   │   └── output/          #    PageL10n, BlockL10n
-│   └── shared/              # 🎯 SHARED scope (6 nodes)
-│       ├── seo/             #    SEOKeyword, SEOKeywordMetrics, SEOMiningRun
-│       └── geo/             #    GEOSeedL10n, GEOSeedMetrics, GEOMiningRun
+│   │   ├── knowledge/       #    Entity, EntityL10n, Knowledge Atoms
+│   │   └── seo/             #    SEOKeyword, SEOKeywordMetrics, SEOMiningRun
+│   └── project/             # 📦 PROJECT realm (23 nodes)
+│       ├── foundation/      #    Project, ProjectL10n, BrandIdentity
+│       ├── structure/       #    Page, Block, ContentSlot
+│       ├── semantic/        #    AudiencePersona, ChannelSurface
+│       ├── instruction/     #    PagePrompt, BlockPrompt, BlockType, PageType, BlockRules, BlockInstruction, PromptArtifact
+│       └── output/          #    PageL10n, BlockL10n, GenerationJob, OutputArtifact, EvaluationSignal
 ├── views/                   # View definitions (YAML)
 │   ├── _registry.yaml
 │   └── *.yaml
@@ -37,13 +35,12 @@ models/
 
 ## Multi-Tenant Architecture
 
-NovaNet uses a **3-realm architecture** (v9 replaces "scope" with "realm"):
+NovaNet uses a **2-realm architecture** (v10.2 merged SHARED into GLOBAL):
 
 | Realm | Count | Description | Examples |
 |-------|-------|-------------|----------|
-| 🌍 **GLOBAL** | 15 | Shared locale knowledge | Locale, LocaleVoice, LocaleCulture, Expression |
-| 🎯 **SHARED** | 6 | Reusable targeting data | SEOKeyword, GEOSeedL10n, *Metrics, *MiningRun |
-| 📦 **PROJECT** | 14 | Per-project content | Project, Page, Block, Entity, PageL10n, BlockL10n |
+| 🌍 **GLOBAL** | 19 | Locale knowledge + shared data | Locale, Entity, EntityL10n, Knowledge Atoms, SEOKeyword |
+| 📦 **PROJECT** | 23 | Per-project content | Project, Page, Block, PageL10n, BlockL10n, GenerationJob |
 
 ## Locale Behavior Classification
 
@@ -55,14 +52,15 @@ NovaNet uses a **3-realm architecture** (v9 replaces "scope" with "realm"):
 | **DERIVED** | ⚪ | Inherits locale from parent | SEOKeywordMetrics, GEOSeedMetrics |
 | **JOB** | ⚙️ | Background jobs, no locale | SEOMiningRun, GEOMiningRun |
 
-## Nomenclature v9.0.0
+## Nomenclature v10.4.0
 
 ```
 *L10n suffix    = ALL localized content (human OR LLM generated)
 :HAS_L10N       = human-curated content (EntityL10n, ProjectL10n)
 :HAS_OUTPUT     = LLM-generated content (PageL10n, BlockL10n)
-Locale*         = Locale Knowledge nodes (LocaleVoice, LocaleCulture, etc.)
-*Metrics        = Time-series observations (SEOKeywordMetrics, GEOSeedMetrics)
+*Set            = Container nodes (TermSet, ExpressionSet, PatternSet, etc.)
+Atoms           = Granular knowledge (Term, Expression, Pattern, Taboo, CultureRef, AudienceTrait)
+*Metrics        = Time-series observations (SEOKeywordMetrics)
 ```
 
 ## Core Pattern: Invariant -> Localized
@@ -110,7 +108,7 @@ Locale ──[:HAS_IDENTITY]──> LocaleIdentity
 | `SUPPORTS_LOCALE` | `status` | active \| pending \| disabled |
 | `DEFAULT_LOCALE` | (none) | Exactly one per project |
 | `HAS_BLOCK` | `position` | Display order |
-| `USES_CONCEPT` | `purpose, temperature` | primary/secondary/contextual |
+| `USES_ENTITY` | `purpose, temperature` | primary/secondary/contextual (v10.3: was USES_CONCEPT) |
 | `SEMANTIC_LINK` | `type, temperature` | Entity relationships |
 | `HAS_SEO_TARGET` | `role, priority` | locale-aligned: primary/secondary/long-tail |
 | `HAS_GEO_TARGET` | `role, priority` | locale-aligned: primary/contextual |
@@ -122,11 +120,11 @@ Locale ──[:HAS_IDENTITY]──> LocaleIdentity
 
 | Metric | Count |
 |--------|-------|
-| **Total Nodes** | 35 |
-| **Total Relations** | 50 |
-| **Scope Layers** | 3 (Global, Shared, Project) |
-| **Locale Behavior Categories** | 5 |
-| **Inverse Relations** | 5 |
+| **Total Nodes** | 42 |
+| **Total Arcs** | 77 |
+| **Realms** | 2 (Global, Project) |
+| **Layers** | 8 |
+| **Node Traits** | 5 (invariant, localized, knowledge, derived, job) |
 
 ## Adding New Nodes
 

@@ -36,7 +36,7 @@ Modify an existing node type in the NovaNet ontology.
 
 ## Naming Requirements
 
-- **Node names**: PascalCase (e.g., `Concept`, `LocaleVoice`)
+- **Node names**: PascalCase (e.g., `Entity`, `LocaleVoice`)
 - **Property names**: snake_case (e.g., `display_name`, `llm_context`)
 - **New properties**: Follow existing patterns in the node's YAML
 
@@ -49,7 +49,7 @@ Modify an existing node type in the NovaNet ontology.
 ## Example
 
 ```bash
-/schema:edit-node Concept
+/schema:edit-node Entity
 ```
 
-This will show current Concept definition and ask what you want to modify.
+This will show current Entity definition and ask what you want to modify.

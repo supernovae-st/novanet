@@ -30,19 +30,18 @@ describe('SchemaFilterPanel', () => {
   });
 
   describe('Rendering', () => {
-    it('renders all 3 realms with icons and labels', () => {
+    it('renders both realms with icons and labels', () => {
       render(<SchemaFilterPanel />);
 
-      // Check realm headers with icons
+      // Check realm headers with icons (v10.4: 2 realms)
       expect(screen.getByText('PROJECT')).toBeInTheDocument();
       expect(screen.getByText('GLOBAL')).toBeInTheDocument();
-      expect(screen.getByText('SHARED')).toBeInTheDocument();
     });
 
     it('renders realm icons as Lucide SVGs', () => {
       render(<SchemaFilterPanel />);
 
-      // Realm icons are Lucide SVGs (Package, Globe, Target), not emojis
+      // Realm icons are Lucide SVGs (Package, Globe), not emojis
       const svgIcons = document.querySelectorAll('svg');
       expect(svgIcons.length).toBeGreaterThan(0);
     });
@@ -50,19 +49,19 @@ describe('SchemaFilterPanel', () => {
     it('renders node count for each realm in parentheses', () => {
       render(<SchemaFilterPanel />);
 
-      // Realm counts are in parentheses: (23), (11), (8) — v10.0.0
-      expect(screen.getByText('(23)')).toBeInTheDocument(); // Project
-      expect(screen.getByText('(11)')).toBeInTheDocument(); // Global (1 config + 10 knowledge)
-      expect(screen.getByText('(8)')).toBeInTheDocument(); // Shared
+      // Realm counts are in parentheses — v10.4: 20 project, 22 global
+      expect(screen.getByText('(20)')).toBeInTheDocument(); // Project
+      expect(screen.getByText('(22)')).toBeInTheDocument(); // Global (config + knowledge + seo)
     });
 
     it('renders layers for Project realm', () => {
       render(<SchemaFilterPanel />);
 
-      // Project layers
+      // Project layers (v10.4: foundation, structure, semantic, instruction, output)
       expect(screen.getByText('Foundation')).toBeInTheDocument();
       expect(screen.getByText('Structure')).toBeInTheDocument();
-      expect(screen.getByText('Semantic Layer')).toBeInTheDocument();
+      // Semantic layer exists in both realms, so use getAllByText
+      expect(screen.getAllByText('Semantic Layer').length).toBeGreaterThanOrEqual(1);
       expect(screen.getByText('Instructions')).toBeInTheDocument();
       expect(screen.getByText('Generated Output')).toBeInTheDocument();
     });
@@ -70,32 +69,28 @@ describe('SchemaFilterPanel', () => {
     it('renders layers for Global realm', () => {
       render(<SchemaFilterPanel />);
 
-      // Global layers
+      // Global layers (v10.4: config, knowledge, seo - NO semantic layer)
       expect(screen.getByText('Configuration')).toBeInTheDocument();
       expect(screen.getByText('Locale Knowledge')).toBeInTheDocument();
-    });
-
-    it('renders layers for Shared realm', () => {
-      render(<SchemaFilterPanel />);
-
-      // Shared layers
       expect(screen.getByText('SEO Intelligence')).toBeInTheDocument();
-      expect(screen.getByText('GEO Intelligence')).toBeInTheDocument();
+      // v10.4: Semantic layer only in project realm (Entity/EntityL10n moved to knowledge)
+      expect(screen.getAllByText('Semantic Layer').length).toBe(1);
     });
 
     it('renders layer labels with icons (Lucide SVG)', () => {
       render(<SchemaFilterPanel />);
 
       // Layer labels are rendered - icons are Lucide SVGs (not emojis)
+      // v10.4: 8 layers total (5 project + 3 global)
       expect(screen.getByText('Foundation')).toBeInTheDocument();
       expect(screen.getByText('Structure')).toBeInTheDocument();
-      expect(screen.getByText('Semantic Layer')).toBeInTheDocument();
+      // v10.4: Semantic layer only in project realm
+      expect(screen.getAllByText('Semantic Layer').length).toBe(1);
       expect(screen.getByText('Instructions')).toBeInTheDocument();
       expect(screen.getByText('Generated Output')).toBeInTheDocument();
       expect(screen.getByText('Configuration')).toBeInTheDocument();
       expect(screen.getByText('Locale Knowledge')).toBeInTheDocument();
       expect(screen.getByText('SEO Intelligence')).toBeInTheDocument();
-      expect(screen.getByText('GEO Intelligence')).toBeInTheDocument();
 
       // Lucide icons render as SVG elements
       const svgIcons = document.querySelectorAll('svg');
@@ -115,9 +110,9 @@ describe('SchemaFilterPanel', () => {
     it('has expand/collapse chevron buttons with aria-label', () => {
       render(<SchemaFilterPanel />);
 
-      // FilterSection has chevron buttons with aria-label
+      // FilterSection has chevron buttons with aria-label (v10.4: 2 realms)
       const collapseButtons = screen.getAllByRole('button', { name: /Collapse/ });
-      expect(collapseButtons.length).toBeGreaterThanOrEqual(3); // 3 scopes
+      expect(collapseButtons.length).toBeGreaterThanOrEqual(2);
     });
 
     it('sections default to expanded (aria-expanded=true)', () => {
@@ -133,9 +128,9 @@ describe('SchemaFilterPanel', () => {
     it('has tri-state checkboxes for scopes', () => {
       render(<SchemaFilterPanel />);
 
-      // FilterSection has checkboxes with role="checkbox"
+      // FilterSection has checkboxes with role="checkbox" (v10.4: 2 realms)
       const checkboxes = screen.getAllByRole('checkbox');
-      expect(checkboxes.length).toBeGreaterThanOrEqual(3); // At least 3 realms
+      expect(checkboxes.length).toBeGreaterThanOrEqual(2);
     });
   });
 
@@ -154,10 +149,9 @@ describe('SchemaFilterPanel', () => {
       render(<SchemaFilterPanel />);
 
       // FilterTree.Row renders checkboxes with aria-checked for toggle state
-      // Find all checkboxes (3 realm checkboxes + 9 layer checkboxes = 12)
+      // Find all checkboxes (v10.4: 2 realm checkboxes + 8 layer checkboxes = 10)
       const checkboxes = screen.getAllByRole('checkbox', { checked: true });
-      // 3 realm checkboxes + 9 layer checkboxes = 12 checked by default
-      expect(checkboxes.length).toBeGreaterThanOrEqual(12);
+      expect(checkboxes.length).toBeGreaterThanOrEqual(10);
     });
   });
 
@@ -173,9 +167,9 @@ describe('SchemaFilterPanel', () => {
     it('has section buttons with aria-expanded', () => {
       render(<SchemaFilterPanel />);
 
-      // FilterSection uses buttons with aria-expanded instead of tree/treeitem
+      // FilterSection uses buttons with aria-expanded instead of tree/treeitem (v10.4: 2 realms)
       const sectionButtons = screen.getAllByRole('button', { name: /Collapse/ });
-      expect(sectionButtons.length).toBe(3); // 3 scopes
+      expect(sectionButtons.length).toBe(2);
       sectionButtons.forEach((button) => {
         expect(button).toHaveAttribute('aria-expanded');
       });
@@ -194,9 +188,9 @@ describe('SchemaFilterPanel', () => {
     it('section content has group role', () => {
       render(<SchemaFilterPanel />);
 
-      // FilterSection content has role="group"
+      // FilterSection content has role="group" (v10.4: 2 realms)
       const groups = screen.getAllByRole('group');
-      expect(groups.length).toBeGreaterThanOrEqual(3); // 3 scope groups
+      expect(groups.length).toBeGreaterThanOrEqual(2);
     });
   });
 
@@ -211,10 +205,9 @@ describe('SchemaFilterPanel', () => {
     it('has proper FilterTree structure for scopes', () => {
       render(<SchemaFilterPanel />);
 
-      // FilterTree.Section renders scope labels
+      // FilterTree.Section renders scope labels (v10.4: 2 realms)
       expect(screen.getByText('PROJECT')).toBeInTheDocument();
       expect(screen.getByText('GLOBAL')).toBeInTheDocument();
-      expect(screen.getByText('SHARED')).toBeInTheDocument();
     });
   });
 });

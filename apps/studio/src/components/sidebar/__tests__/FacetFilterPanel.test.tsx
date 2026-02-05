@@ -72,27 +72,27 @@ describe('FacetFilterPanel', () => {
       expect(screen.getByText('Arc Families')).toBeInTheDocument();
     });
 
-    it('renders 3 realm items', () => {
+    it('renders 2 realm items (v10.4: shared merged into global)', () => {
       render(<FacetFilterPanel />);
 
       expect(screen.getByText('Global')).toBeInTheDocument();
       expect(screen.getByText('Project')).toBeInTheDocument();
-      expect(screen.getByText('Shared')).toBeInTheDocument();
+      // shared realm removed in v10.4
     });
 
-    it('renders 9 layer items', () => {
+    it('renders 8 layer items (v10.4: GEO removed)', () => {
       render(<FacetFilterPanel />);
 
       expect(screen.getByText('Configuration')).toBeInTheDocument();
       expect(screen.getByText('Locale Knowledge')).toBeInTheDocument();
       expect(screen.getByText('Foundation')).toBeInTheDocument();
       expect(screen.getByText('Structure')).toBeInTheDocument();
-      // "Semantic" appears in both Layers and Edge Families sections
+      // "Semantic" appears in both Layers and Arc Families sections
       expect(screen.getAllByText('Semantic')).toHaveLength(2);
       expect(screen.getByText('Instructions')).toBeInTheDocument();
       expect(screen.getByText('Generated Output')).toBeInTheDocument();
       expect(screen.getByText('SEO Intelligence')).toBeInTheDocument();
-      expect(screen.getByText('GEO Intelligence')).toBeInTheDocument();
+      // GEO layer removed in v10.4
     });
 
     it('renders 5 trait items', () => {

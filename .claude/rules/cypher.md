@@ -40,7 +40,7 @@ MATCH (n:Page)-[:OF_KIND]->(k:Kind {label: 'Page'})
 | Family | Pattern | Example |
 |--------|---------|---------|
 | ownership | `HAS_*`, `*_OF` | `HAS_PAGE`, `PAGE_OF` |
-| localization | `HAS_L10N`, `FOR_LOCALE` | `Concept-[:HAS_L10N]->ConceptL10n` |
-| semantic | `USES_*`, `SEMANTIC_LINK` | `Block-[:USES_CONCEPT]->Concept` |
+| localization | `HAS_L10N`, `FOR_LOCALE` | `Entity-[:HAS_L10N]->EntityL10n` |
+| semantic | `USES_*`, `SEMANTIC_LINK` | `Block-[:USES_ENTITY]->Entity` |
 | generation | `HAS_OUTPUT` | `Page-[:HAS_OUTPUT]->PageL10n` |
 | mining | `TARGETS_*` | `SEOMiningRun-[:TARGETS_SEO]->SEOKeyword` |

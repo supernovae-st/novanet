@@ -28,10 +28,10 @@ function parseCSV<T extends string>(param: string | null, valid: T[]): T[] {
   return param.split(',').filter((v): v is T => valid.includes(v as T));
 }
 
-const VALID_REALMS: Realm[] = ['global', 'project', 'shared'];
+const VALID_REALMS: Realm[] = ['global', 'project'];
 const VALID_LAYERS: Layer[] = [
   'config', 'knowledge', 'foundation', 'structure', 'semantic',
-  'instruction', 'output', 'seo', 'geo',
+  'instruction', 'output', 'seo',
 ];
 const VALID_TRAITS: Trait[] = ['invariant', 'localized', 'knowledge', 'derived', 'job'];
 
@@ -58,7 +58,7 @@ describe('navigation route logic', () => {
     });
 
     it('handles single value', () => {
-      expect(parseCSV('shared', VALID_REALMS)).toEqual(['shared']);
+      expect(parseCSV('project', VALID_REALMS)).toEqual(['project']);
     });
 
     it('works for layers', () => {
@@ -140,25 +140,30 @@ describe('navigation route logic', () => {
     });
 
     it('returns realm types for realm-only filter', () => {
-      const types = resolveFacets(['shared'], [], []);
+      const types = resolveFacets(['global'], [], []);
+      expect(types).toContain('Locale');
       expect(types).toContain('SEOKeyword');
-      expect(types).toContain('GEOMiningRun');
       expect(types).not.toContain('Project');
     });
 
     it('intersects realm + trait correctly', () => {
       const types = resolveFacets(['project'], [], ['localized']);
-      // Project realm + localized trait = ProjectL10n, ConceptL10n, PageL10n, BlockL10n
-      expect(types).toContain('ConceptL10n');
+      // Project realm + localized trait = ProjectL10n, PageL10n, BlockL10n
+      // (EntityL10n is in global realm, v10.3 Entity-Centric Architecture)
       expect(types).toContain('ProjectL10n');
+      expect(types).toContain('PageL10n');
+      expect(types).not.toContain('EntityL10n'); // global realm
       expect(types).not.toContain('Page'); // invariant
       expect(types).not.toContain('Locale'); // global
     });
 
     it('intersects realm + layer correctly', () => {
       const types = resolveFacets(['project'], ['semantic'], []);
-      expect(types).toContain('Concept');
-      expect(types).toContain('ConceptL10n');
+      // project + semantic = AudiencePersona, ChannelSurface
+      // (Entity/EntityL10n are in global realm, v10.3 Entity-Centric)
+      expect(types).toContain('AudiencePersona');
+      expect(types).toContain('ChannelSurface');
+      expect(types).not.toContain('Entity'); // global realm
       expect(types).not.toContain('Page'); // structure layer
     });
 
@@ -170,10 +175,13 @@ describe('navigation route logic', () => {
       expect(types.length).toBe(2);
     });
 
-    it('returns Thing when filtering shared + invariant', () => {
-      const types = resolveFacets(['shared'], [], ['invariant']);
-      // Thing is the only shared type that is invariant
-      expect(types).toEqual(['Thing']);
+    it('returns only localized types when filtering global + localized', () => {
+      const types = resolveFacets(['global'], [], ['localized']);
+      // Global localized types = SEOKeyword, EntityL10n
+      // (SEOKeyword itself is localized - there is no SEOKeywordL10n)
+      expect(types).toContain('SEOKeyword');
+      expect(types).toContain('EntityL10n');
+      expect(types).not.toContain('Locale'); // invariant
     });
   });
 });

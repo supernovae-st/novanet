@@ -1,48 +1,8 @@
-// NovaNet Core Types v9.0.0 - Nodable Project Architecture
+// NovaNet Core Types v10.4.0 - Entity-Centric Architecture
 //
-// v8.2.0 CHANGES (YAML v7.11.0 alignment):
-//   - REMOVED: icon, priority, freshness from all interfaces
-//   - REMOVED: Priority, Freshness type definitions
-//   - UPDATED: StandardNodeProperties (6 props instead of 9)
-//   - NOTE: Use NODE_ICONS config for icon display instead
+// v10.4.0: Entity/EntityL10n (global realm), 2 realms (global, project), GEO layer removed
 //
-// v8.0.0 CHANGES:
-//   - ADDED: anchor_type property to LinksToProps (exact_match | partial_match | branded | generic)
-//   - ADDED: nofollow property to LinksToProps (boolean, default false)
-//   - ADDED: AnchorType type for anchor text optimization
-//
-// v7.12.0 CHANGES:
-//   - ADDED: LINKS_TO (Page → Page) for explicit internal linking with concept-based anchors
-//   - ADDED: SUBTOPIC_OF (Page → Page) for pillar-cluster SEO hierarchy
-//   - UPDATED: PageTypeCategory to include 'pillar' | 'cluster'
-//   - ADDED: LinksToProps, PageTypeSeoCategory
-//
-// v7.11.0 CHANGES:
-//   - ADDED: version, published_at, replaced_at to BlockL10n, PageL10n (versioning)
-//   - ADDED: PREVIOUS_VERSION relation for L10n history chains
-//   - REMOVED: PageMetrics (query GA/PostHog with date ranges instead)
-//
-// v7.10.0 CHANGES:
-//   - ADDED: PageType (mirrors BlockType pattern: Page -[:OF_TYPE]-> PageType)
-//   - REMOVED: Page.page_type enum (replaced by PageType node)
-//   - REMOVED: Page.generation_priority (redundant with priority)
-//
-// v7.9.0 CHANGES:
-//   - FOLDER: Scope-based structure (global/shared/project)
-//   - REMOVED: USED_SEO_KEYWORD, USED_GEO_SEED (SEO/GEO is at ConceptL10n level)
-//   - ADDED: JSON Schema validation (models/schema/nodes.schema.json)
-//
-// v7.8.5 CHANGES:
-//   - RENAMED: SEOSnapshot → SEOKeywordMetrics (unified metrics pattern)
-//   - RENAMED: GEOCitation → GEOSeedMetrics (unified metrics pattern)
-//   - UNIFIED: HAS_METRICS relation for all time-series observations
-//   - ADDED: observed_at standardized timestamp for all metrics nodes
-//
-// v7.8.0 CHANGES:
-//   - ADDED: EmbeddableNode interface for vector search support
-//   - UPDATED: Concept, ConceptL10n, Page to include embedding properties
-//
-// v8.2.0 STANDARD PROPERTIES (all nodes):
+// STANDARD PROPERTIES (all nodes):
 //   key: string           - Unique identifier (with semantic prefix)
 //   display_name: string  - Human-readable name
 //   description: string   - Short description
@@ -51,7 +11,7 @@
 //   updated_at: datetime
 
 // =============================================================================
-// NODE TYPES + v9 TAXONOMY (Realm, Layer, Trait, KIND_META)
+// NODE TYPES + TAXONOMY (Realm, Layer, Trait, KIND_META)
 // =============================================================================
 
 export {
@@ -99,7 +59,7 @@ export interface StandardNodeProperties {
 
 /**
  * Base interface for nodes that support vector embeddings.
- * Used by Concept, ConceptL10n, and Page for semantic search.
+ * Used by Entity, EntityL10n, and Page for semantic search.
  */
 export interface EmbeddableNode {
   /** OpenAI text-embedding-3-small vector (1536 dimensions) */
@@ -156,7 +116,7 @@ export interface EntityL10n extends EmbeddableNode {
   description: string;
   llm_context: string;
 
-  // EntityL10n-specific (same as former ConceptL10n)
+  // EntityL10n-specific (same as former EntityL10n)
   title: string;
   definition: string;
   purpose?: string;
@@ -167,12 +127,6 @@ export interface EntityL10n extends EmbeddableNode {
   created_at: Date;
   updated_at: Date;
 }
-
-// v10.3 backwards compatibility aliases (deprecated, will be removed)
-/** @deprecated Use Entity instead */
-export type Concept = Entity;
-/** @deprecated Use EntityL10n instead */
-export type ConceptL10n = EntityL10n;
 
 // =============================================================================
 // PAGE (v7.1.0)
@@ -402,25 +356,17 @@ export interface SemanticLinkProps {
   temperature: number;
 }
 
-// v10.3: UsesEntityProps replaces UsesConceptProps
+// v10.3: UsesEntityProps (Page/Block -[:USES_ENTITY]-> Entity)
 export interface UsesEntityProps {
   purpose: 'primary' | 'secondary' | 'contextual';
   temperature: number;
 }
 
-/** @deprecated Use UsesEntityProps instead */
-export type UsesConceptProps = UsesEntityProps;
-
-// v10.3: ExpressesProps replaces TargetsSEOProps (EntityL10n -[:EXPRESSES]-> SEOKeyword)
+// v10.3: ExpressesProps (EntityL10n -[:EXPRESSES]-> SEOKeyword)
 export interface ExpressesProps {
   status: 'active' | 'paused' | 'archived';
   priority: number;
 }
-
-/** @deprecated Use ExpressesProps instead */
-export type TargetsSEOProps = ExpressesProps;
-
-// REMOVED v10.3: TargetsGEOProps (GEO layer removed)
 
 export interface InfluencedByProps {
   weight: number;
@@ -433,7 +379,7 @@ export interface InfluencedByProps {
 
 /**
  * Anchor text optimization strategy (v8.0.0)
- * - exact_match: anchor = ConceptL10n.title exactly (5× traffic, use sparingly max 10%)
+ * - exact_match: anchor = EntityL10n.title exactly (5× traffic, use sparingly max 10%)
  * - partial_match: anchor includes concept keywords
  * - branded: anchor = brand name (QR Code AI)
  * - generic: anchor = "click here", "learn more" (low SEO value)
@@ -442,10 +388,10 @@ export type AnchorType = 'exact_match' | 'partial_match' | 'branded' | 'generic'
 
 /**
  * LinksToProps - Properties for Page-to-Page internal links (v7.12.0, extended v8.0.0)
- * Anchor text is derived from ConceptL10n.title at generation time.
+ * Anchor text is derived from EntityL10n.title at generation time.
  */
 export interface LinksToProps {
-  /** Concept key - anchor text derived from ConceptL10n.title for the target locale */
+  /** Concept key - anchor text derived from EntityL10n.title for the target locale */
   concept_key: string;
   /** Where the link appears in the content */
   context: 'cta' | 'body' | 'related' | 'nav';
@@ -479,7 +425,7 @@ export {
   type Priority as TaskPriority,
   type TaskModifier,
   type GenerationContext,
-  type ActivatedConcept,
+  type ActivatedEntity,
   type LocaleContext,
   type RetrievalRequest,
   type RetrievalResult,

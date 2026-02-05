@@ -2,9 +2,9 @@
  * useMagneticData - Fetch organizing principles for magnetic layout
  *
  * When layoutMode is 'magnetic', this hook fetches from Neo4j:
- * - 3 Realm nodes (global, project, shared) with display metadata
- * - 9 Layer nodes with display metadata
- * - 46 nodeType → layer mappings (from HAS_KIND relationships)
+ * - 2 Realm nodes (global, project) with display metadata (v10.4: shared merged into global)
+ * - 8 Layer nodes with display metadata
+ * - 42 nodeType → layer mappings (from HAS_KIND relationships)
  *
  * All display metadata (emoji, color) comes from Neo4j,
  * which is seeded from organizing-principles.yaml (the source of truth).
