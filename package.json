@@ -20,6 +20,8 @@
     "schema:validate": "cargo run --manifest-path tools/novanet/Cargo.toml -- schema validate",
     "doc:generate": "cargo run --manifest-path tools/novanet/Cargo.toml -- doc generate",
     "doc:audit": "./tools/scripts/doc-audit.sh",
+    "skill:audit": "./tools/scripts/skill-audit.sh",
+    "audit:all": "./tools/scripts/doc-audit.sh && ./tools/scripts/skill-audit.sh",
     "prepare": "husky"
   },
   "devDependencies": {

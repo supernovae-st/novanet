@@ -56,7 +56,8 @@ Claude Code configuration for the NovaNet monorepo.
 │   ├── keybindings-reminder.sh  ← TUI file edit reminder
 │   ├── yaml-sync-reminder.sh    ← YAML model edit reminder
 │   ├── yaml-source-reminder.sh  ← YAML read context (source of truth)
-│   └── doc-sync-reminder.sh     ← Documentation edit reminder
+│   ├── doc-sync-reminder.sh     ← Documentation edit reminder
+│   └── skill-sync-reminder.sh   ← Skill/command/rule edit reminder
 ├── rules/                       ← Path-specific rules
 │   ├── rust.md                  ← Rust patterns (tools/novanet/**/*.rs)
 │   ├── typescript.md            ← TypeScript patterns (packages/, apps/)
@@ -165,6 +166,19 @@ IMPORTANT: Regenerate artifacts with:
 **Trigger:** After reading `packages/core/models/**/*.yaml` files
 
 **Output:** Reminds that YAML is the source of truth, not generated TypeScript.
+
+### PostToolUse Hook (Skills/Commands/Rules)
+
+**File:** `.claude/hooks/skill-sync-reminder.sh`
+**Trigger:** After editing `.claude/{skills,commands,agents,rules}/**/*.md` files
+
+**Output:** Reminds to verify against YAML sources:
+- Node counts match `node-kinds/` (42 files)
+- Arc counts match `arc-kinds/` (60 files)
+- Paths use `node-kinds/` not `nodes/`
+- Paths use `taxonomy.yaml` not `organizing-principles.yaml`
+
+**Validation command:** `pnpm skill:audit`
 
 ---
 
@@ -684,6 +698,12 @@ pnpm test
 # Check documentation consistency
 pnpm doc:audit
 
+# Check skills/commands/rules against YAML
+pnpm skill:audit
+
+# Run all audits
+pnpm audit:all
+
 # Regenerate Mermaid view diagrams
 pnpm doc:generate
 ```
@@ -696,10 +716,16 @@ pnpm doc:generate
 - Removed realm references (shared realm merged into global)
 - Incorrect node/arc counts (42 nodes, 77 arcs expected)
 
+**`pnpm skill:audit` checks:**
+- Deprecated paths (`nodes/` → `node-kinds/`, `organizing-principles.yaml` → `taxonomy.yaml`)
+- Node/arc counts match YAML sources (42 node-kinds, 60 arc-kinds)
+- Deprecated terminology in skills/commands/rules
+
 **Auto-sync reminders:**
 Claude Code hooks automatically remind you when:
 - YAML model files are edited → regenerate artifacts
 - Documentation files are edited → verify consistency
+- Skills/commands/rules are edited → verify YAML alignment
 - YAML is read → remember it's the source of truth
 
 ---

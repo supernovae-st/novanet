@@ -9,7 +9,7 @@ Modify an existing node type in the NovaNet ontology.
 ## Workflow
 
 1. **Load Phase**: Read the current node definition:
-   - Find YAML file: `packages/core/models/nodes/**/{node-name}.yaml`
+   - Find YAML file: `packages/core/models/node-kinds/**/{node-name}.yaml`
    - Display current properties and relationships
 
 2. **Discovery Phase**: Ask what to modify:

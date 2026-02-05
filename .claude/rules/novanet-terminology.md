@@ -32,13 +32,14 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 | 2 | FUNCTION? | `ArcFamily` | `family` | `ownership`, `localization`, `semantic`, `generation`, `mining` |
 | 3 | MULTIPLICITY? | `ArcCardinality` | `cardinality` | `one_to_one`, `one_to_many`, `many_to_many` |
 
-## YAML Source Files
+## YAML Source Files (v10.4)
 
-| v9.0 (current) | v9.5 (target) | Content |
-|----------------|---------------|---------|
-| `organizing-principles.yaml` | `taxonomy.yaml` | Realm/Layer/Trait/ArcFamily/ArcScope definitions |
-| `nodes/` | `node-kinds/` | 1 file per NodeKind, organized by Realm/Layer |
-| `relations.yaml` | `arc-kinds/` | 1 file per ArcKind, organized by ArcFamily |
+| File | Content |
+|------|---------|
+| `taxonomy.yaml` | Realm/Layer/Trait/ArcFamily/ArcScope definitions |
+| `node-kinds/` | 1 file per NodeKind, organized by Realm/Layer (42 files) |
+| `arc-kinds/` | 1 file per ArcKind, organized by ArcFamily (60 files) |
+| `relations.yaml` | Legacy format (deprecated, kept for parser compatibility) |
 
 ## File Naming
 
