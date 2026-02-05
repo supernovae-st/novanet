@@ -18,7 +18,7 @@ import { REALM_HIERARCHY } from './hierarchy.js';
  */
 const NODE_LABELS: Record<NodeType, string> = {
   // ═══════════════════════════════════════════════════════════════════════════
-  // GLOBAL REALM (20 nodes)
+  // GLOBAL REALM (23 nodes)
   // ═══════════════════════════════════════════════════════════════════════════
   // config (5)
   Locale: 'Locale',
@@ -41,10 +41,13 @@ const NODE_LABELS: Record<NodeType, string> = {
   Taboo: 'Taboo',
   AudienceTrait: 'Audience Trait',
 
-  // seo (3)
+  // seo (6)
   SEOKeyword: 'SEO Keyword',
   SEOKeywordMetrics: 'SEO Metrics',
   SEOMiningRun: 'SEO Mining',
+  SEOComparison: 'SEO Comparison',
+  SEOPreposition: 'SEO Preposition',
+  SEOQuestion: 'SEO Question',
 
   // ═══════════════════════════════════════════════════════════════════════════
   // TENANT REALM (23 nodes)

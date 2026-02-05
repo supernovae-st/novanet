@@ -46,31 +46,26 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 │                                                                                                     │
 │   packages/core/models/                                                                             │
 │   ├── _index.yaml                          ← Index du graphe (structure, changelog)                 │
-│   ├── taxonomy.yaml                        ← v10.5: 3 Realms/9 Layers/5 Traits/5 ArcFamilies      │
-│   ├── node-kinds/                          ← 43 fichiers YAML (1 par Kind)                         │
-│   │   ├── global/                          ← Realm: global (19 nodes)                               │
+│   ├── taxonomy.yaml                        ← v10.6: 2 Realms/9 Layers/5 Traits/5 ArcFamilies       │
+│   ├── node-kinds/                          ← 46 fichiers YAML (1 par Kind)                          │
+│   │   ├── global/                          ← Realm: global (23 nodes)                               │
 │   │   │   ├── config/                      ←   Layer: config (Locale + utilities)                   │
-│   │   │   └── locale-knowledge/            ←   Layer: locale-knowledge (14 nodes)                   │
-│   │   │       ├── locale-identity.yaml     ← Endonym, script, direction                             │
-│   │   │       ├── locale-voice.yaml        ← Formality, directness, emotion                         │
-│   │   │       ├── locale-culture.yaml      ← Taboos, sensitivities, Hofstede                        │
-│   │   │       ├── locale-market.yaml       ← Currency, payments, trust signals                      │
-│   │   │       ├── locale-lexicon.yaml      ← Domain vocabulary                                      │
-│   │   │       ├── locale-rules-*.yaml      ← Adaptation, Formatting, Slug rules                     │
-│   │   │       └── expression.yaml, etc.    ← Reference, Metaphor, Pattern, Constraint               │
-│   │   │   └── seo/                         ←   Layer: seo (SEOKeyword, Metrics, MiningRun)           │
-│   │   ├── organization/                    ← Realm: organization (NEW in v10.5)                     │
-│   │   │   ├── config/                      ←   Layer: config (Organization node)                     │
-│   │   │   └── semantic/                    ←   Layer: semantic (Org-level Entity/EntityL10n)         │
-│   │   └── project/                         ← Realm: project (23 nodes)                               │
-│   │       ├── foundation/                  ←   Layer: foundation (Project, Brand, ProjectL10n)       │
-│   │       ├── structure/                   ←   Layer: structure (Page, Block, Types)                 │
-│   │       ├── semantic/                    ←   Layer: semantic (Entity, EntityL10n, Persona)         │
-│   │       ├── instruction/                 ←   Layer: instruction (Prompts, Rules)                   │
-│   │       └── output/                      ←   Layer: output (PageL10n, BlockL10n)                   │
+│   │   │   ├── locale-knowledge/            ←   Layer: locale-knowledge (18 nodes)                   │
+│   │   │   │   ├── term-set.yaml, term.yaml ← Knowledge Containers + Atoms                           │
+│   │   │   │   ├── expression-set.yaml, ... ← ExpressionSet, PatternSet, CultureSet, etc.            │
+│   │   │   │   └── taboo-set.yaml, etc.     ← TabooSet, AudienceSet + their atoms                    │
+│   │   │   └── seo/                         ←   Layer: seo (SEOKeyword, Metrics, MiningRun)          │
+│   │   │                                                                                             │
+│   │   └── tenant/                          ← Realm: tenant (23 nodes, merged org+project)           │
+│   │       ├── config/                      ←   Layer: config (Organization)                         │
+│   │       ├── foundation/                  ←   Layer: foundation (Project, Brand, ProjectL10n)      │
+│   │       ├── structure/                   ←   Layer: structure (Page, Block, Types)                │
+│   │       ├── semantic/                    ←   Layer: semantic (Entity, EntityL10n, Persona)        │
+│   │       ├── instruction/                 ←   Layer: instruction (Prompts, Rules)                  │
+│   │       └── output/                      ←   Layer: output (PageL10n, BlockL10n)                  │
 │   │                                                                                                 │
-│   ├── arc-kinds/                           ← 63 fichiers YAML (1 par ArcKind)                        │
-│   ├── relations.yaml                       ← Legacy format (kept for parser compatibility)           │
+│   ├── arc-kinds/                           ← 51 fichiers YAML (1 par ArcKind)                       │
+│   ├── relations.yaml                       ← Legacy format (kept for parser compatibility)          │
 │   └── views/                               ← Definitions de vues YAML                               │
 │                                                                                                     │
 └─────────────────────────────────────────────────────────────────────────────────────────────────────┘
@@ -89,19 +84,19 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 
   ┌──────────────────────────────────────────────────────────────────────────────────────────────┐
   │                                                                                              │
-  │   Axis 1 — WHERE?   :Realm       (3)  global / organization / project                       │
-  │   Axis 2 — WHAT?    :Layer      (10)  config, locale-knowledge, seo (global)                │
-  │                                        config, semantic (organization)                       │
-  │                                        foundation, structure, semantic, instruction, output  │
+  │   Axis 1 — WHERE?   :Realm       (2)  global / tenant                                       │
+  │   Axis 2 — WHAT?    :Layer       (9)  config, locale-knowledge, seo (global)                │
+  │                                        config, foundation, structure, semantic,              │
+  │                                        instruction, output (tenant)                          │
   │   Axis 3 — HOW?     :Trait       (5)  invariant / localized / knowledge / derived / job      │
-  │   Axis 4 — LINKS?   :ArcKind    (63)  grouped into 5 ArcFamilies                            │
+  │   Axis 4 — LINKS?   :ArcKind    (51)  grouped into 5 ArcFamilies                            │
   │                                                                                              │
   └──────────────────────────────────────────────────────────────────────────────────────────────┘
 
   6 Meta-Node Types (all carry :Meta double-label):
 
   ┌─────────────┐    ┌──────────────┐    ┌─────────────┐
-  │  Realm (3)  │───▶│  Layer (10)  │───▶│  Kind (43)  │
+  │  Realm (2)  │───▶│  Layer (9)   │───▶│  Kind (46)  │
   │  WHERE?     │    │  WHAT?       │    │  1:1 label  │
   │  HAS_LAYER  │    │  HAS_KIND    │    │             │
   └─────────────┘    └──────────────┘    └──────┬──────┘
@@ -123,7 +118,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
   Arc Schema (OWL-inspired):
 
   ┌────────────────┐    FROM_KIND    ┌─────────────┐    TO_KIND     ┌────────────────┐
-  │  ArcKind (63) │───────────────▶│  Kind (43)  │◀──────────────│  ArcKind (63) │
+  │  ArcKind (51) │───────────────▶│  Kind (46)  │◀──────────────│  ArcKind (51) │
   │  1:1 rel type  │                └─────────────┘               │                │
   └───────┬────────┘                                              └────────────────┘
           │
@@ -184,11 +179,11 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
          ▼                  ▼                  ▼                  ▼                     ▼
   ┌──────────────┐   ┌──────────────┐   ┌──────────────┐   ┌──────────────┐   ┌──────────────────┐
   │ VIEW-COMPLETE│   │  layers.ts   │   │ Kind :Meta   │   │ ArcKind     │   │ 00-constraints   │
-  │ -GRAPH.md    │   │  src/graph/  │   │ nodes w/     │   │ :Meta nodes  │   │ 01-concepts-mvp  │
-  │              │   │              │   │ schema_hint  │   │ w/ cypher_   │   │ 02-locale-know.  │
-  │              │   │              │   │              │   │ pattern      │   │ 03-prompts       │
-  └──────────────┘   └──────────────┘   └──────────────┘   └──────────────┘   │ 04-project       │
-                                                                              │ 05-missing-nodes │
+  │ -GRAPH.md    │   │  src/graph/  │   │ nodes w/     │   │ :Meta nodes  │   │ 00.5-taxonomy    │
+  │              │   │              │   │ schema_hint  │   │ w/ cypher_   │   │ 01-kinds         │
+  │              │   │              │   │              │   │ pattern      │   │ 02-arc-kinds     │
+  └──────────────┘   └──────────────┘   └──────────────┘   └──────────────┘   │ 99-autowire-kinds│
+                                                                              │ (all generated)  │
                                                                               └────────┬─────────┘
                                                                                        │
      ┌─────────────────────────────────────────────────────────────────────────────────┘
@@ -311,14 +306,17 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 │   │  └── Auth: neo4j / novanetpassword                                                          │   │
 │   └─────────────────────────────────────────────────────────────────────────────────────────────┘   │
 │                                                                                                     │
-│   seed/ (7 fichiers, executes en ordre)                                                             │
+│   seed/ (generated + manual, executes en ordre)                                                     │
 │   ├── 00-constraints.cypher        ← Contraintes d'unicite (UNIQUE, EXISTS)                         │
-│   ├── 01-concepts-mvp.cypher       ← Locales + Concepts invariants (Tier Free, Pro, etc.)           │
-│   ├── 02-locale-knowledge.cypher   ← LocaleIdentity, LocaleVoice, LocaleCulture, etc.               │
-│   ├── 02-vector-indexes.cypher     ← Index vectoriels pour recherche semantique                     │
-│   ├── 03-prompts-v720.cypher       ← BlockPrompt, PagePrompt (v7.2.0+)                              │
-│   ├── 04-project-qrcode-ai.cypher  ← Projet QR Code AI avec Pages, Blocks                           │
-│   └── 05-missing-nodes.cypher      ← Nodes manquants (cleanup)                                      │
+│   ├── 00.5-taxonomy.cypher         ← Taxonomy: Realms, Layers, Traits (GENERATED)                   │
+│   ├── 01-kinds.cypher              ← NodeKinds meta-nodes (GENERATED)                               │
+│   ├── 01-vector-indexes.cypher     ← Index vectoriels pour recherche semantique                     │
+│   ├── 02-arc-kinds.cypher          ← ArcKinds meta-nodes (GENERATED)                                │
+│   ├── 20-locales.cypher            ← Locales from CSV + MD (GENERATED)                              │
+│   ├── 21-locale-knowledge.cypher   ← LocaleIdentity, LocaleVoice, LocaleCulture, etc.               │
+│   ├── 31-project-qrcode-ai.cypher  ← Projet QR Code AI avec Pages, Blocks                           │
+│   ├── 34-prompts.cypher            ← BlockPrompt, PagePrompt                                        │
+│   └── 99-autowire-kinds.cypher     ← Links data nodes to Kinds (GENERATED)                          │
 │                                                                                                     │
 │   migrations/ (6 fichiers, idempotents)                                                             │
 │   ├── 001-inverse-relationships.cypher                                                              │
@@ -465,20 +463,20 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 
 ---
 
-## Key Numbers (v10.5.0)
+## Key Numbers (v10.6.0)
 
 | Metric | Value |
 |--------|-------|
-| Kind (node types) | 43 |
-| ArcKind (arcs) | 63 |
-| Realms | 3 (global, organization, project) |
-| Layers | 10 (3 global, 2 org, 5 project) |
+| Kind (node types) | 46 |
+| ArcKind (arcs) | 51 |
+| Realms | 2 (global, tenant) |
+| Layers | 9 (3 global, 6 tenant) |
 | Traits | 5 |
 | ArcFamilies | 5 |
 | Locale Knowledge nodes | 18 |
-| Seed files | 7 |
+| Seed files | 11 |
 | Migrations | 6 |
-| Locales supported | 200+ |
+| Locales supported | 200 |
 | API routes (Studio) | 10 |
 | Zustand stores | 8 |
 

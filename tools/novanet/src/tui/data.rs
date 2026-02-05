@@ -94,9 +94,9 @@ pub struct GraphStats {
 /// A single arc relationship from Neo4j.
 #[derive(Debug, Clone)]
 pub struct Neo4jArc {
-    pub arc_key: String,      // e.g., "FALLBACK_TO"
-    pub other_kind: String,   // The Kind on the other end
-    pub family: String,       // e.g., "localization", "ownership"
+    pub arc_key: String,    // e.g., "FALLBACK_TO"
+    pub other_kind: String, // The Kind on the other end
+    pub family: String,     // e.g., "localization", "ownership"
 }
 
 /// Complete arc data for a Kind, loaded from Neo4j.
@@ -127,6 +127,64 @@ pub struct ArcKindDetails {
     pub cypher_pattern: String,
     pub from_endpoint: Option<ArcEndpoint>,
     pub to_endpoint: Option<ArcEndpoint>,
+}
+
+/// Layer stats for Realm details view.
+#[derive(Debug, Clone)]
+pub struct LayerStats {
+    pub key: String,
+    pub display_name: String,
+    pub kind_count: usize,
+}
+
+/// Complete details for a Realm, loaded from Neo4j.
+#[derive(Debug, Clone, Default)]
+pub struct RealmDetails {
+    pub key: String,
+    pub display_name: String,
+    pub description: String,
+    pub layers: Vec<LayerStats>,
+    pub total_kinds: usize,
+    pub total_instances: usize,
+}
+
+/// Kind stats grouped by trait for Layer details view.
+#[derive(Debug, Clone)]
+pub struct TraitKindGroup {
+    pub trait_key: String,
+    pub kind_names: Vec<String>,
+}
+
+/// Complete details for a Layer, loaded from Neo4j.
+#[derive(Debug, Clone, Default)]
+pub struct LayerDetails {
+    pub key: String,
+    pub display_name: String,
+    pub description: String,
+    pub realm: String,
+    pub kinds_by_trait: Vec<TraitKindGroup>,
+    pub total_kinds: usize,
+    pub total_instances: usize,
+}
+
+/// Kind info for Trait details view.
+#[allow(dead_code)]
+#[derive(Debug, Clone)]
+pub struct TraitKindInfo {
+    pub kind_name: String,
+    pub realm: String,
+    pub layer: String,
+}
+
+/// Complete details for a Trait, loaded from Neo4j.
+#[allow(dead_code)]
+#[derive(Debug, Clone, Default)]
+pub struct TraitDetails {
+    pub key: String,
+    pub display_name: String,
+    pub description: String,
+    pub border_style: String,
+    pub kinds: Vec<TraitKindInfo>,
 }
 
 /// Full taxonomy tree: Realm > Layer > Kind + ArcFamily > ArcKind.
@@ -707,6 +765,183 @@ LIMIT 1
         }
     }
 
+    /// Load Realm details from Neo4j (layers with kind counts, total stats).
+    pub async fn load_realm_details(db: &Db, realm_key: &str) -> crate::Result<RealmDetails> {
+        // Query 1: Get realm info and totals
+        let cypher_realm = r#"
+MATCH (r:Realm {key: $realmKey})
+OPTIONAL MATCH (r)-[:HAS_LAYER]->(l:Layer)<-[:IN_LAYER]-(k:Kind)
+OPTIONAL MATCH (k)<-[:OF_KIND]-(n)
+RETURN r.key as realm_key,
+       coalesce(r.display_name, r.key) as display_name,
+       coalesce(r.llm_context, '') as description,
+       count(DISTINCT k) as total_kinds,
+       count(DISTINCT n) as total_instances
+"#;
+
+        // Query 2: Get layers with their kind counts (separate rows)
+        let cypher_layers = r#"
+MATCH (r:Realm {key: $realmKey})-[:HAS_LAYER]->(l:Layer)
+OPTIONAL MATCH (l)<-[:IN_LAYER]-(k:Kind)
+WITH l, count(DISTINCT k) as kind_count
+ORDER BY l.order
+RETURN l.key as layer_key,
+       coalesce(l.display_name, l.key) as layer_display,
+       kind_count
+"#;
+
+        let realm_rows = db
+            .execute_with_params(cypher_realm, [("realmKey", realm_key)])
+            .await?;
+
+        if let Some(row) = realm_rows.into_iter().next() {
+            let key: String = row.get("realm_key").unwrap_or_default();
+            let display_name: String = row.get("display_name").unwrap_or_default();
+            let description: String = row.get("description").unwrap_or_default();
+            let total_kinds: i64 = row.get("total_kinds").unwrap_or(0);
+            let total_instances: i64 = row.get("total_instances").unwrap_or(0);
+
+            // Get layers
+            let layer_rows = db
+                .execute_with_params(cypher_layers, [("realmKey", realm_key)])
+                .await?;
+
+            let layers: Vec<LayerStats> = layer_rows
+                .into_iter()
+                .map(|lr| LayerStats {
+                    key: lr.get("layer_key").unwrap_or_default(),
+                    display_name: lr.get("layer_display").unwrap_or_default(),
+                    kind_count: lr.get::<i64>("kind_count").unwrap_or(0) as usize,
+                })
+                .collect();
+
+            Ok(RealmDetails {
+                key,
+                display_name,
+                description,
+                layers,
+                total_kinds: total_kinds as usize,
+                total_instances: total_instances as usize,
+            })
+        } else {
+            Ok(RealmDetails::default())
+        }
+    }
+
+    /// Load Layer details from Neo4j (kinds grouped by trait, stats).
+    pub async fn load_layer_details(db: &Db, layer_key: &str) -> crate::Result<LayerDetails> {
+        let cypher = r#"
+MATCH (l:Layer {key: $layerKey})
+OPTIONAL MATCH (r:Realm)-[:HAS_LAYER]->(l)
+OPTIONAL MATCH (l)<-[:IN_LAYER]-(k:Kind)
+OPTIONAL MATCH (k)-[:HAS_TRAIT]->(t:Trait)
+OPTIONAL MATCH (k)<-[:OF_KIND]-(n)
+WITH l, r, t.key as trait_key, k, count(DISTINCT n) as inst_count
+ORDER BY trait_key, k.label
+WITH l, r, trait_key, collect(coalesce(k.display_name, k.label)) as kind_names, count(k) as trait_kind_count, sum(inst_count) as trait_instances
+RETURN l.key as layer_key,
+       coalesce(l.display_name, l.key) as display_name,
+       coalesce(l.llm_context, '') as description,
+       coalesce(r.key, '') as realm,
+       collect({trait_key: trait_key, kind_names: kind_names}) as kinds_by_trait,
+       sum(trait_kind_count) as total_kinds,
+       sum(trait_instances) as total_instances
+"#;
+
+        let rows = db
+            .execute_with_params(cypher, [("layerKey", layer_key)])
+            .await?;
+
+        if let Some(row) = rows.into_iter().next() {
+            let key: String = row.get("layer_key").unwrap_or_default();
+            let display_name: String = row.get("display_name").unwrap_or_default();
+            let description: String = row.get("description").unwrap_or_default();
+            let realm: String = row.get("realm").unwrap_or_default();
+            let total_kinds: i64 = row.get("total_kinds").unwrap_or(0);
+            let total_instances: i64 = row.get("total_instances").unwrap_or(0);
+
+            // Parse kinds_by_trait
+            let mut kinds_by_trait: Vec<TraitKindGroup> = Vec::new();
+            if let Ok(groups_list) = row.get::<Vec<neo4rs::BoltMap>>("kinds_by_trait") {
+                for group_map in groups_list {
+                    if let Ok(trait_key) = group_map.get::<String>("trait_key") {
+                        let kind_names: Vec<String> = group_map
+                            .get::<Vec<String>>("kind_names")
+                            .unwrap_or_default();
+                        kinds_by_trait.push(TraitKindGroup {
+                            trait_key,
+                            kind_names,
+                        });
+                    }
+                }
+            }
+
+            Ok(LayerDetails {
+                key,
+                display_name,
+                description,
+                realm,
+                kinds_by_trait,
+                total_kinds: total_kinds as usize,
+                total_instances: total_instances as usize,
+            })
+        } else {
+            Ok(LayerDetails::default())
+        }
+    }
+
+    /// Load Trait details from Neo4j (kinds with realm/layer, visual encoding).
+    #[allow(dead_code)]
+    pub async fn load_trait_details(db: &Db, trait_key: &str) -> crate::Result<TraitDetails> {
+        let cypher = r#"
+MATCH (t:Trait {key: $traitKey})
+OPTIONAL MATCH (k:Kind)-[:HAS_TRAIT]->(t)
+OPTIONAL MATCH (k)-[:IN_LAYER]->(l:Layer)<-[:HAS_LAYER]-(r:Realm)
+WITH t, k, r, l
+ORDER BY r.key, l.key, k.label
+RETURN t.key as trait_key,
+       coalesce(t.display_name, t.key) as display_name,
+       coalesce(t.llm_context, '') as description,
+       coalesce(t.border_style, 'solid') as border_style,
+       collect({kind_name: coalesce(k.display_name, k.label), realm: coalesce(r.key, ''), layer: coalesce(l.key, '')}) as kinds
+"#;
+
+        let rows = db
+            .execute_with_params(cypher, [("traitKey", trait_key)])
+            .await?;
+
+        if let Some(row) = rows.into_iter().next() {
+            let key: String = row.get("trait_key").unwrap_or_default();
+            let display_name: String = row.get("display_name").unwrap_or_default();
+            let description: String = row.get("description").unwrap_or_default();
+            let border_style: String = row.get("border_style").unwrap_or_default();
+
+            // Parse kinds
+            let mut kinds: Vec<TraitKindInfo> = Vec::new();
+            if let Ok(kinds_list) = row.get::<Vec<neo4rs::BoltMap>>("kinds") {
+                for kind_map in kinds_list {
+                    if let Ok(kind_name) = kind_map.get::<String>("kind_name") {
+                        kinds.push(TraitKindInfo {
+                            kind_name,
+                            realm: kind_map.get::<String>("realm").unwrap_or_default(),
+                            layer: kind_map.get::<String>("layer").unwrap_or_default(),
+                        });
+                    }
+                }
+            }
+
+            Ok(TraitDetails {
+                key,
+                display_name,
+                description,
+                border_style,
+                kinds,
+            })
+        } else {
+            Ok(TraitDetails::default())
+        }
+    }
+
     /// Check if a node is collapsed.
     pub fn is_collapsed(&self, key: &str) -> bool {
         self.collapsed.contains(key)
@@ -998,6 +1233,45 @@ LIMIT 1
             Some(TreeItem::ArcKind(_, _)) | Some(TreeItem::Instance(_, _, _, _)) | None => None,
         }
     }
+
+    // ========================================================================
+    // Filtered Data mode: show only instances of a specific Kind
+    // ========================================================================
+
+    /// Get item count when filtered to a specific Kind (Data mode drill-down).
+    /// Returns only instances of that Kind.
+    pub fn filtered_item_count(&self, kind_key: &str) -> usize {
+        self.instances.get(kind_key).map(|v| v.len()).unwrap_or(0)
+    }
+
+    /// Get item at cursor when filtered to a specific Kind.
+    /// Returns Instance items only.
+    pub fn filtered_item_at<'a>(&'a self, cursor: usize, kind_key: &str) -> Option<TreeItem<'a>> {
+        // Find the Kind info for context
+        let kind_info = self.find_kind(kind_key)?;
+        let instances = self.instances.get(kind_key)?;
+        let instance = instances.get(cursor)?;
+        Some(TreeItem::Instance(
+            kind_info.0,
+            kind_info.1,
+            kind_info.2,
+            instance,
+        ))
+    }
+
+    /// Find a Kind by key, returns (Realm, Layer, Kind) refs.
+    pub fn find_kind(&self, kind_key: &str) -> Option<(&RealmInfo, &LayerInfo, &KindInfo)> {
+        for realm in &self.realms {
+            for layer in &realm.layers {
+                for kind in &layer.kinds {
+                    if kind.key == kind_key {
+                        return Some((realm, layer, kind));
+                    }
+                }
+            }
+        }
+        None
+    }
 }
 
 /// Item type at a tree position.
@@ -1235,12 +1509,18 @@ mod tests {
         assert_eq!(comparison.len(), 2);
 
         // HAS_TERMS should exist
-        let has_terms = comparison.iter().find(|c| c.arc_type == "HAS_TERMS").unwrap();
+        let has_terms = comparison
+            .iter()
+            .find(|c| c.arc_type == "HAS_TERMS")
+            .unwrap();
         assert!(has_terms.exists);
         assert_eq!(has_terms.target_key, Some("fr-FR-terms".to_string()));
 
         // HAS_CULTURE should be missing
-        let has_culture = comparison.iter().find(|c| c.arc_type == "HAS_CULTURE").unwrap();
+        let has_culture = comparison
+            .iter()
+            .find(|c| c.arc_type == "HAS_CULTURE")
+            .unwrap();
         assert!(!has_culture.exists);
         assert_eq!(has_culture.target_key, None);
     }

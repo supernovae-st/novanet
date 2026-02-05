@@ -27,7 +27,7 @@ MATCH (n:Page)-[:OF_KIND]->(k:Kind {label: 'Page'})
 - Use APOC for complex operations
 
 ## Seed File Conventions
-- Files numbered: `00-constraints.cypher`, `01-realms.cypher`...
+- Files numbered: `00-constraints.cypher`, `00.5-taxonomy.cypher`, `01-kinds.cypher`...
 - MERGE for idempotent operations
 - Parameters use `$paramName` syntax
 

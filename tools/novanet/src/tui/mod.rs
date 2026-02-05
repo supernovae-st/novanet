@@ -5,13 +5,23 @@
 //! - Taxonomy tree navigation
 //! - Detail panel with edges
 //! - Status bar with stats
+//!
+//! ## Crash Recovery
+//!
+//! The TUI installs a panic hook that:
+//! 1. Restores terminal state (disables raw mode, leaves alternate screen)
+//! 2. Logs panic info to `~/.novanet/crash.log`
+//! 3. Displays helpful error message with log path
+//!
+//! This ensures terminal isn't left in corrupted state after panics.
 
 mod app;
 mod data;
 pub mod theme;
 mod ui;
 
-use std::io;
+use std::io::{self, Write};
+use std::panic;
 use std::time::Duration;
 
 use crossterm::event::{Event, EventStream, KeyCode, KeyModifiers};
@@ -29,8 +39,60 @@ use crate::db::Db;
 use app::App;
 use data::TaxonomyTree;
 
+/// Install panic hook that restores terminal and logs crash info.
+fn install_panic_hook() {
+    let original_hook = panic::take_hook();
+
+    panic::set_hook(Box::new(move |panic_info| {
+        // 1. Restore terminal state first (critical for usability)
+        let _ = disable_raw_mode();
+        let _ = execute!(io::stdout(), LeaveAlternateScreen);
+
+        // 2. Log crash to file
+        let crash_log_path = dirs::home_dir()
+            .map(|h| h.join(".novanet").join("crash.log"))
+            .unwrap_or_else(|| std::path::PathBuf::from("/tmp/novanet-crash.log"));
+
+        if let Some(parent) = crash_log_path.parent() {
+            let _ = std::fs::create_dir_all(parent);
+        }
+
+        let timestamp = chrono::Local::now().format("%Y-%m-%d %H:%M:%S");
+        let crash_info = format!(
+            "\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\
+             CRASH: {}\n\
+             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\
+             {:#?}\n\n\
+             Backtrace:\n{}\n",
+            timestamp,
+            panic_info,
+            std::backtrace::Backtrace::force_capture()
+        );
+
+        if let Ok(mut file) = std::fs::OpenOptions::new()
+            .create(true)
+            .append(true)
+            .open(&crash_log_path)
+        {
+            let _ = file.write_all(crash_info.as_bytes());
+        }
+
+        // 3. Print user-friendly message
+        eprintln!("\n\x1b[1;31m💥 NovaNet TUI crashed!\x1b[0m");
+        eprintln!("{panic_info}");
+        eprintln!("\n\x1b[33mCrash log saved to: {}\x1b[0m", crash_log_path.display());
+        eprintln!("\x1b[36mPlease report this issue with the crash log.\x1b[0m\n");
+
+        // 4. Call original hook (for color_eyre integration)
+        original_hook(panic_info);
+    }));
+}
+
 /// Entry point: initialize terminal, run event loop, restore terminal.
 pub async fn run(db: &Db, root_path: &Path) -> crate::Result<()> {
+    // Install panic hook BEFORE entering raw mode
+    install_panic_hook();
+
     // Setup terminal
     enable_raw_mode().map_err(crate::NovaNetError::Io)?;
     let mut stdout = io::stdout();
@@ -41,7 +103,7 @@ pub async fn run(db: &Db, root_path: &Path) -> crate::Result<()> {
     // Run the app
     let result = run_app(&mut terminal, db, root_path).await;
 
-    // Restore terminal
+    // Restore terminal (also done in panic hook, but needed for normal exit)
     disable_raw_mode().map_err(crate::NovaNetError::Io)?;
     execute!(terminal.backend_mut(), LeaveAlternateScreen).map_err(crate::NovaNetError::Io)?;
     terminal.show_cursor().map_err(crate::NovaNetError::Io)?;
@@ -98,8 +160,23 @@ async fn run_app(
 
                     // Check for pending arc kind details load (ArcKind selected → load from Neo4j)
                     if let Some(arc_key) = app.take_pending_arc_kind_load() {
-                        if let Ok(details) = TaxonomyTree::load_arc_kind_details(db, &arc_key).await {
+                        if let Ok(details) = TaxonomyTree::load_arc_kind_details(db, &arc_key).await
+                        {
                             app.set_arc_kind_details(details);
+                        }
+                    }
+
+                    // Check for pending Realm details load (Realm selected → load from Neo4j)
+                    if let Some(realm_key) = app.take_pending_realm_load() {
+                        if let Ok(details) = TaxonomyTree::load_realm_details(db, &realm_key).await {
+                            app.set_realm_details(details);
+                        }
+                    }
+
+                    // Check for pending Layer details load (Layer selected → load from Neo4j)
+                    if let Some(layer_key) = app.take_pending_layer_load() {
+                        if let Ok(details) = TaxonomyTree::load_layer_details(db, &layer_key).await {
+                            app.set_layer_details(details);
                         }
                     }
 

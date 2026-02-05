@@ -338,7 +338,9 @@ mod tests {
         // Helper functions
         assert!(output.contains("export function getLayer(nodeType: NodeType): Layer"));
         assert!(output.contains("export function getNodeTypesByLayer(layer: Layer): NodeType[]"));
-        assert!(output.contains("export function getNodeTypesByRealmAndLayer(realm: Realm, layer: Layer): NodeType[]"));
+        assert!(output.contains(
+            "export function getNodeTypesByRealmAndLayer(realm: Realm, layer: Layer): NodeType[]"
+        ));
     }
 
     #[test]
@@ -417,14 +419,14 @@ mod tests {
         let generator = LayerGenerator;
         let output = generator.generate(root).expect("should generate layers.ts");
 
-        // v10.6: 43 nodes (2 realms: global + tenant)
+        // v10.6: 46 nodes (2 realms: global + tenant)
         assert!(
-            output.contains("mapping all 43 node types"),
-            "should mention 43 node types"
+            output.contains("mapping all 46 node types"),
+            "should mention 46 node types"
         );
 
         // v10.6: Realm node counts (2 realms)
-        assert!(output.contains("GLOBAL REALM (20 nodes)")); // config + locale-knowledge + seo
+        assert!(output.contains("GLOBAL REALM (23 nodes)")); // config + locale-knowledge + seo (6 types)
         assert!(output.contains("TENANT REALM (23 nodes)")); // config + semantic + foundation + structure + instruction + output
 
         // 9 layers present (v10.6: config in both realms but deduplicated)

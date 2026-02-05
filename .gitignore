@@ -40,5 +40,8 @@ docs/book/
 novanet-public-repo/
 .worktrees/
 
+# Database backups (use pnpm db:backup:list to see them)
+backups/
+
 # npm (we use pnpm)
 package-lock.json

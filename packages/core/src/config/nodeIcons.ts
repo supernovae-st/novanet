@@ -31,10 +31,13 @@ export const NODE_ICONS: Record<NodeType, string> = {
   Taboo: '🚫',
   AudienceTrait: '👤',
 
-  // GLOBAL — seo (3)
+  // GLOBAL — seo (6)
   SEOKeyword: '🔍',
   SEOKeywordMetrics: '📊',
   SEOMiningRun: '⚙️',
+  SEOComparison: '⚖️',
+  SEOPreposition: '🔗',
+  SEOQuestion: '❓',
 
   // TENANT — config (1)
   Organization: '🏢',

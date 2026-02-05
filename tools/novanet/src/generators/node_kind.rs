@@ -531,37 +531,37 @@ mod tests {
             .filter(|l: &&str| l.contains("MERGE") && l.contains(":Meta:Kind"))
             .count();
         assert_eq!(
-            kind_merges, 43,
-            "expected 43 Kind MERGE statements (v10.6: 2 realms)"
+            kind_merges, 46,
+            "expected 46 Kind MERGE statements (v10.6: 2 realms, 23+23 nodes)"
         );
 
-        // 45 HAS_KIND relationships
+        // 46 HAS_KIND relationships
         let has_kind = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:HAS_KIND]"))
             .count();
-        assert_eq!(has_kind, 43, "expected 43 HAS_KIND relationships");
+        assert_eq!(has_kind, 46, "expected 46 HAS_KIND relationships");
 
-        // 45 IN_REALM relationships
+        // 46 IN_REALM relationships
         let in_realm = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_REALM]"))
             .count();
-        assert_eq!(in_realm, 43, "expected 43 IN_REALM relationships");
+        assert_eq!(in_realm, 46, "expected 46 IN_REALM relationships");
 
-        // 45 IN_LAYER relationships
+        // 46 IN_LAYER relationships
         let in_layer = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_LAYER]"))
             .count();
-        assert_eq!(in_layer, 43, "expected 43 IN_LAYER relationships");
+        assert_eq!(in_layer, 46, "expected 46 IN_LAYER relationships");
 
-        // 45 EXHIBITS relationships
+        // 46 EXHIBITS relationships
         let exhibits = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:EXHIBITS]"))
             .count();
-        assert_eq!(exhibits, 43, "expected 43 EXHIBITS relationships");
+        assert_eq!(exhibits, 46, "expected 46 EXHIBITS relationships");
 
         // Spot checks — specific Kinds
         assert!(cypher.contains("k_Project:Meta:Kind {label: 'Project'}"));
@@ -593,8 +593,8 @@ mod tests {
             }
         }
 
-        // v10.6: Header mentions 43 Kind nodes
-        assert!(cypher.contains("43 Kind nodes"));
+        // v10.6: Header mentions 46 Kind nodes
+        assert!(cypher.contains("46 Kind nodes"));
 
         // v10.1: knowledge_tier removed from all YAMLs (node type is sufficient)
         // Verify no knowledge_tier properties are present in output
@@ -609,12 +609,7 @@ mod tests {
     #[test]
     fn snapshot_minimal_kinds() {
         let nodes = vec![
-            make_node(
-                "Project",
-                "tenant",
-                "foundation",
-                LocaleBehavior::Invariant,
-            ),
+            make_node("Project", "tenant", "foundation", LocaleBehavior::Invariant),
             make_node_with_props(
                 "Page",
                 "tenant",
@@ -626,12 +621,7 @@ mod tests {
                     ("slug", "string", false),
                 ],
             ),
-            make_node(
-                "PageL10n",
-                "tenant",
-                "structure",
-                LocaleBehavior::Localized,
-            ),
+            make_node("PageL10n", "tenant", "structure", LocaleBehavior::Localized),
             make_node("Concept", "tenant", "semantic", LocaleBehavior::Invariant),
             make_node("GenerationJob", "tenant", "output", LocaleBehavior::Job),
         ];

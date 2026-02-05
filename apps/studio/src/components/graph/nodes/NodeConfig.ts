@@ -58,7 +58,7 @@ export interface NodeConfig {
  */
 export const NODE_SIZES: Record<NodeType, NodeSize> = {
   // ═══════════════════════════════════════════════════════════════════════════
-  // GLOBAL REALM (20 nodes)
+  // GLOBAL REALM (23 nodes)
   // ═══════════════════════════════════════════════════════════════════════════
   // config (5)
   Locale: { width: 220, height: 110 },
@@ -81,10 +81,13 @@ export const NODE_SIZES: Record<NodeType, NodeSize> = {
   Taboo: { width: 160, height: 80 },
   AudienceTrait: { width: 160, height: 80 },
 
-  // seo (3)
+  // seo (6)
   SEOKeyword: { width: 200, height: 100 },
   SEOKeywordMetrics: { width: 160, height: 80 },
   SEOMiningRun: { width: 160, height: 80 },
+  SEOComparison: { width: 180, height: 90 },
+  SEOPreposition: { width: 180, height: 90 },
+  SEOQuestion: { width: 180, height: 90 },
 
   // ═══════════════════════════════════════════════════════════════════════════
   // ORGANIZATION REALM (1 node) — v10.5 company project pattern
@@ -253,7 +256,7 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
     glow: '#fde68a40',
   },
 
-  // seo (3) — Red tones
+  // seo (6) — Red tones
   SEOKeyword: {
     primary: '#ef4444',
     secondary: '#f87171',
@@ -271,6 +274,24 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
     secondary: '#f87171',
     tertiary: '#fecaca',
     glow: '#fca5a540',
+  },
+  SEOComparison: {
+    primary: '#dc2626',
+    secondary: '#ef4444',
+    tertiary: '#f87171',
+    glow: '#dc262640',
+  },
+  SEOPreposition: {
+    primary: '#b91c1c',
+    secondary: '#dc2626',
+    tertiary: '#ef4444',
+    glow: '#b91c1c40',
+  },
+  SEOQuestion: {
+    primary: '#991b1b',
+    secondary: '#b91c1c',
+    tertiary: '#dc2626',
+    glow: '#991b1b40',
   },
 
   // ═══════════════════════════════════════════════════════════════════════════

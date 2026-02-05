@@ -99,7 +99,11 @@ enum Commands {
     },
     /// Interactive terminal UI
     #[cfg(feature = "tui")]
-    Tui,
+    Tui {
+        /// Fresh start: regenerate schema + reset database before launching
+        #[arg(long)]
+        fresh: bool,
+    },
 }
 
 #[derive(clap::Args)]
@@ -234,6 +238,21 @@ enum LocaleAction {
         #[arg(long)]
         file: std::path::PathBuf,
     },
+    /// Generate 20-locales.cypher from CSV + MD sources
+    Generate {
+        /// Path to CSV file with 200 locales
+        #[arg(long)]
+        csv: std::path::PathBuf,
+        /// Path to directory with 1-identity/*.md files
+        #[arg(long)]
+        identity_dir: std::path::PathBuf,
+        /// Output path (default: packages/db/seed/20-locales.cypher)
+        #[arg(long)]
+        output: Option<std::path::PathBuf>,
+        /// Dry-run: generate without writing file
+        #[arg(long)]
+        dry_run: bool,
+    },
 }
 
 #[derive(Subcommand)]
@@ -254,7 +273,7 @@ async fn main() -> color_eyre::Result<()> {
 
     // Initialize tracing (skip for TUI mode which has its own terminal handling)
     #[cfg(feature = "tui")]
-    let is_tui = matches!(cli.command, Commands::Tui);
+    let is_tui = matches!(cli.command, Commands::Tui { .. });
     #[cfg(not(feature = "tui"))]
     let is_tui = false;
 
@@ -466,19 +485,37 @@ async fn main() -> color_eyre::Result<()> {
                 }
             }
         }
-        Commands::Locale { ref action } => {
-            let db = connect_db(&cli).await?;
-            match action {
-                LocaleAction::List { format } => {
-                    eprintln!("novanet locale list --format={format:?}");
-                    novanet::commands::locale::run_list(&db, *format).await?;
-                }
-                LocaleAction::Import { file } => {
-                    eprintln!("novanet locale import --file={}", file.display());
-                    novanet::commands::locale::run_import(&db, file).await?;
-                }
+        Commands::Locale { ref action } => match action {
+            LocaleAction::List { format } => {
+                let db = connect_db(&cli).await?;
+                eprintln!("novanet locale list --format={format:?}");
+                novanet::commands::locale::run_list(&db, *format).await?;
             }
-        }
+            LocaleAction::Import { file } => {
+                let db = connect_db(&cli).await?;
+                eprintln!("novanet locale import --file={}", file.display());
+                novanet::commands::locale::run_import(&db, file).await?;
+            }
+            LocaleAction::Generate {
+                csv,
+                identity_dir,
+                output,
+                dry_run,
+            } => {
+                let root = root?;
+                let output_path = output
+                    .clone()
+                    .unwrap_or_else(|| root.join("packages/db/seed/20-locales.cypher"));
+                eprintln!(
+                    "novanet locale generate --csv={} --identity-dir={} --output={}{}",
+                    csv.display(),
+                    identity_dir.display(),
+                    output_path.display(),
+                    if *dry_run { " --dry-run" } else { "" }
+                );
+                novanet::commands::locale::run_generate(csv, identity_dir, &output_path, *dry_run)?;
+            }
+        },
         Commands::Db { ref action } => {
             let db = connect_db(&cli).await?;
             let root = root?;
@@ -498,10 +535,51 @@ async fn main() -> color_eyre::Result<()> {
             }
         }
         #[cfg(feature = "tui")]
-        Commands::Tui => {
+        Commands::Tui { fresh } => {
             let root = root?;
-            let db = connect_db(&cli).await?;
-            novanet::tui::run(&db, &root).await?;
+
+            if fresh {
+                // --fresh: regenerate schema + reset database
+                eprintln!("🔄 Fresh start: regenerating schema...");
+                let results = novanet::commands::schema::schema_generate(&root, false)?;
+                eprintln!("   ✓ Generated {} artifact(s)", results.len());
+
+                eprintln!("🗄️  Resetting database...");
+                let db = connect_db(&cli).await?;
+                novanet::commands::db::run_reset(&db, &root).await?;
+                eprintln!("   ✓ Database reset complete");
+
+                eprintln!("🚀 Launching TUI...\n");
+                novanet::tui::run(&db, &root).await?;
+            } else {
+                // Normal mode: validate schema and warn if out of sync
+                let issues = novanet::commands::schema::schema_validate(&root)?;
+                let errors: Vec<_> = issues
+                    .iter()
+                    .filter(|i| i.severity == novanet::commands::schema::Severity::Error)
+                    .collect();
+                let warnings: Vec<_> = issues
+                    .iter()
+                    .filter(|i| i.severity == novanet::commands::schema::Severity::Warning)
+                    .collect();
+
+                if !errors.is_empty() || !warnings.is_empty() {
+                    eprintln!("⚠️  Schema validation found issues:");
+                    for e in &errors {
+                        eprintln!("   ❌ {}", e.message);
+                    }
+                    for w in &warnings {
+                        eprintln!("   ⚠️  {}", w.message);
+                    }
+                    eprintln!();
+                    eprintln!("   Run: cargo run -- tui --fresh");
+                    eprintln!("   Or:  cargo run -- schema generate && pnpm infra:reset");
+                    eprintln!();
+                }
+
+                let db = connect_db(&cli).await?;
+                novanet::tui::run(&db, &root).await?;
+            }
         }
     }
 

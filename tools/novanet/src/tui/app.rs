@@ -6,7 +6,7 @@ use std::path::Path;
 
 use crossterm::event::{KeyCode, KeyEvent};
 
-use super::data::{ArcKindDetails, KindArcsData, TaxonomyTree, TreeItem};
+use super::data::{ArcKindDetails, KindArcsData, LayerDetails, RealmDetails, TaxonomyTree, TreeItem};
 
 /// Navigation mode (matches Studio).
 /// Order: 1:Meta 2:Data 3:Overlay 4:Query
@@ -141,6 +141,19 @@ pub struct App {
     pub pending_arcs_load: Option<String>,
     /// Pending ArcKind details load request (Arc key to load from Neo4j)
     pub pending_arc_kind_load: Option<String>,
+    /// Pending Realm details load request (Realm key to load from Neo4j)
+    pub pending_realm_load: Option<String>,
+    /// Pending Layer details load request (Layer key to load from Neo4j)
+    pub pending_layer_load: Option<String>,
+    /// Neo4j Realm details (loaded async when Realm selected)
+    pub realm_details: Option<RealmDetails>,
+    /// Neo4j Layer details (loaded async when Layer selected)
+    pub layer_details: Option<LayerDetails>,
+    /// Data mode filter: when set, show only instances of this Kind
+    /// None = show full tree, Some(kind_key) = show only instances of that Kind
+    pub data_filter_kind: Option<String>,
+    /// Cursor position before entering filtered Data mode (for restoration)
+    pub data_cursor_before_filter: usize,
 }
 
 impl App {
@@ -171,6 +184,12 @@ impl App {
             pending_instance_load: None,
             pending_arcs_load: None,
             pending_arc_kind_load: None,
+            pending_realm_load: None,
+            pending_layer_load: None,
+            realm_details: None,
+            layer_details: None,
+            data_filter_kind: None,
+            data_cursor_before_filter: 0,
         };
         app.load_yaml_for_current();
         app
@@ -188,6 +207,8 @@ impl App {
         // Clear Neo4j data when moving away
         self.kind_arcs = None;
         self.arc_kind_details = None;
+        self.realm_details = None;
+        self.layer_details = None;
 
         // Extract data before mutable borrow (to avoid borrow checker issues)
         let kind_info = match self.tree.item_at(self.tree_cursor) {
@@ -225,15 +246,19 @@ impl App {
             // Kind and ArcKind are handled above with early return
             Some(TreeItem::Kind(_, _, _)) => unreachable!(),
             Some(TreeItem::ArcKind(_, _)) => unreachable!(),
-            // Realm → meta/realms/{key}.yaml
+            // Realm → meta/realms/{key}.yaml + Neo4j details
             Some(TreeItem::Realm(realm)) => {
-                let path = format!("packages/core/models/meta/realms/{}.yaml", realm.key);
+                let realm_key = realm.key.clone();
+                let path = format!("packages/core/models/meta/realms/{}.yaml", realm_key);
                 self.load_yaml_cached(&path);
+                self.pending_realm_load = Some(realm_key);
             }
-            // Layer → meta/layers/{key}.yaml
+            // Layer → meta/layers/{key}.yaml + Neo4j details
             Some(TreeItem::Layer(_, layer)) => {
-                let path = format!("packages/core/models/meta/layers/{}.yaml", layer.key);
+                let layer_key = layer.key.clone();
+                let path = format!("packages/core/models/meta/layers/{}.yaml", layer_key);
                 self.load_yaml_cached(&path);
+                self.pending_layer_load = Some(layer_key);
             }
             // ArcFamily → meta/arc-families/{key}.yaml
             Some(TreeItem::ArcFamily(family)) => {
@@ -410,8 +435,9 @@ impl App {
             self.tree_scroll = self.tree_cursor;
         }
         // Scroll down if cursor is below viewport
+        // Use saturating_sub to prevent underflow when tree_height is 0
         if self.tree_cursor >= self.tree_scroll + self.tree_height {
-            self.tree_scroll = self.tree_cursor.saturating_sub(self.tree_height - 1);
+            self.tree_scroll = self.tree_cursor.saturating_sub(self.tree_height.saturating_sub(1));
         }
     }
 
@@ -543,23 +569,39 @@ impl App {
 
             // Mode switching: 1-4 direct (1=Meta, 2=Data, 3=Overlay, 4=Query)
             KeyCode::Char('1') => {
+                self.exit_filtered_data_mode();
                 self.mode = NavMode::Meta;
                 true
             }
             KeyCode::Char('2') => {
+                // If on a Kind in Meta mode, drill-down to its instances
+                if self.mode == NavMode::Meta {
+                    if let Some(super::data::TreeItem::Kind(_, _, kind)) =
+                        self.tree.item_at(self.tree_cursor)
+                    {
+                        let kind_key = kind.key.clone();
+                        self.mode = NavMode::Data;
+                        self.enter_filtered_data_mode(kind_key);
+                        return true;
+                    }
+                }
+                self.exit_filtered_data_mode();
                 self.mode = NavMode::Data;
                 self.request_instance_load_for_current();
                 true
             }
             KeyCode::Char('3') => {
+                self.exit_filtered_data_mode();
                 self.mode = NavMode::Overlay;
                 true
             }
             KeyCode::Char('4') => {
+                self.exit_filtered_data_mode();
                 self.mode = NavMode::Query;
                 true
             }
             KeyCode::Char('n') | KeyCode::Char('N') => {
+                self.exit_filtered_data_mode();
                 self.mode = self.mode.cycle();
                 true
             }
@@ -708,6 +750,16 @@ impl App {
                 true
             }
 
+            // Esc: exit filtered Data mode (if active)
+            KeyCode::Esc => {
+                if self.is_filtered_data_mode() {
+                    self.exit_filtered_data_mode();
+                    self.mode = NavMode::Meta;
+                    return true;
+                }
+                false
+            }
+
             _ => false,
         }
     }
@@ -765,9 +817,28 @@ impl App {
         self.mode == NavMode::Data
     }
 
+    /// Check if in filtered Data mode (drilling into a specific Kind).
+    #[allow(dead_code)]
+    pub fn is_filtered_data_mode(&self) -> bool {
+        self.is_data_mode() && self.data_filter_kind.is_some()
+    }
+
+    /// Get the current filter Kind key (if in filtered Data mode).
+    #[allow(dead_code)]
+    pub fn get_filter_kind(&self) -> Option<&str> {
+        self.data_filter_kind.as_deref()
+    }
+
     /// Get item at cursor position for the current mode.
     /// Uses mode-aware method that shows instances in Data mode.
     pub fn current_item(&self) -> Option<super::data::TreeItem<'_>> {
+        // Filtered Data mode: show only instances of the filtered Kind
+        if let Some(kind_key) = &self.data_filter_kind {
+            if self.is_data_mode() {
+                return self.tree.filtered_item_at(self.tree_cursor, kind_key);
+            }
+        }
+        // Normal mode
         if self.is_data_mode() {
             self.tree.item_at_for_mode(self.tree_cursor, true)
         } else {
@@ -777,10 +848,48 @@ impl App {
 
     /// Get total item count for the current mode.
     pub fn current_item_count(&self) -> usize {
+        // Filtered Data mode: count only instances of the filtered Kind
+        if let Some(kind_key) = &self.data_filter_kind {
+            if self.is_data_mode() {
+                return self.tree.filtered_item_count(kind_key);
+            }
+        }
+        // Normal mode
         if self.is_data_mode() {
             self.tree.item_count_for_mode(true)
         } else {
             self.tree.item_count()
+        }
+    }
+
+    /// Enter filtered Data mode for a specific Kind.
+    /// Saves cursor position and resets to 0.
+    /// Also resets all scroll states to avoid stale positions.
+    #[allow(dead_code)]
+    pub fn enter_filtered_data_mode(&mut self, kind_key: String) {
+        self.data_cursor_before_filter = self.tree_cursor;
+        self.data_filter_kind = Some(kind_key.clone());
+        self.tree_cursor = 0;
+        self.tree_scroll = 0;
+        // Reset other scroll states to avoid stale positions
+        self.info_scroll = 0;
+        self.yaml_scroll = 0;
+        // Request instance load if not already loaded
+        if self.tree.get_instances(&kind_key).is_none() {
+            self.pending_instance_load = Some(kind_key);
+        }
+    }
+
+    /// Exit filtered Data mode, restore cursor position.
+    /// Clamps cursor to valid range in case tree structure changed.
+    #[allow(dead_code)]
+    pub fn exit_filtered_data_mode(&mut self) {
+        if self.data_filter_kind.is_some() {
+            self.data_filter_kind = None;
+            // Clamp cursor to valid range before restoring
+            let max_cursor = self.tree.item_count().saturating_sub(1);
+            self.tree_cursor = self.data_cursor_before_filter.min(max_cursor);
+            self.ensure_cursor_visible();
         }
     }
 
@@ -825,14 +934,34 @@ impl App {
     pub fn set_arc_kind_details(&mut self, details: ArcKindDetails) {
         self.arc_kind_details = Some(details);
     }
+
+    /// Take the pending Realm details load request (returns Realm key if one was queued).
+    pub fn take_pending_realm_load(&mut self) -> Option<String> {
+        self.pending_realm_load.take()
+    }
+
+    /// Set the loaded Realm details from Neo4j.
+    pub fn set_realm_details(&mut self, details: RealmDetails) {
+        self.realm_details = Some(details);
+    }
+
+    /// Take the pending Layer details load request (returns Layer key if one was queued).
+    pub fn take_pending_layer_load(&mut self) -> Option<String> {
+        self.pending_layer_load.take()
+    }
+
+    /// Set the loaded Layer details from Neo4j.
+    pub fn set_layer_details(&mut self, details: LayerDetails) {
+        self.layer_details = Some(details);
+    }
 }
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use super::super::data::{
         GraphStats, InstanceInfo, KindInfo, LayerInfo, RealmInfo, TaxonomyTree, TreeItem,
     };
+    use super::*;
     use rustc_hash::FxHashSet;
     use std::collections::BTreeMap;
 
@@ -1105,5 +1234,194 @@ mod tests {
 
         // Now: 8 items (instances hidden even in Data mode)
         assert_eq!(app.current_item_count(), 8);
+    }
+
+    // === FILTERED DATA MODE TESTS ===
+
+    #[test]
+    fn test_filtered_mode_entry_resets_cursor() {
+        let mut app = create_test_app();
+        app.tree_cursor = 5; // Some position
+        app.tree_scroll = 3;
+        app.info_scroll = 2;
+        app.yaml_scroll = 1;
+        app.mode = NavMode::Data; // Must be in Data mode for filtered mode
+
+        app.enter_filtered_data_mode("Locale".to_string());
+
+        // All cursors/scrolls should be reset
+        assert_eq!(app.tree_cursor, 0);
+        assert_eq!(app.tree_scroll, 0);
+        assert_eq!(app.info_scroll, 0);
+        assert_eq!(app.yaml_scroll, 0);
+        // Previous cursor saved
+        assert_eq!(app.data_cursor_before_filter, 5);
+        assert!(app.is_filtered_data_mode());
+    }
+
+    #[test]
+    fn test_filtered_mode_exit_restores_cursor() {
+        let mut app = create_test_app();
+        app.tree_cursor = 5;
+        app.mode = NavMode::Data;
+
+        app.enter_filtered_data_mode("Locale".to_string());
+        assert_eq!(app.tree_cursor, 0);
+
+        app.exit_filtered_data_mode();
+        assert_eq!(app.tree_cursor, 5);
+        assert!(!app.is_filtered_data_mode());
+    }
+
+    #[test]
+    fn test_filtered_mode_exit_clamps_cursor_to_bounds() {
+        let mut app = create_test_app();
+        app.mode = NavMode::Data;
+        app.tree_cursor = 100; // Way beyond valid range
+        app.data_cursor_before_filter = 100;
+        app.data_filter_kind = Some("Locale".to_string());
+
+        app.exit_filtered_data_mode();
+
+        // Cursor should be clamped to max valid position
+        let max = app.tree.item_count().saturating_sub(1);
+        assert!(app.tree_cursor <= max);
+    }
+
+    #[test]
+    fn test_filtered_mode_empty_instances() {
+        let mut app = create_test_app();
+        app.mode = NavMode::Data;
+        // Page has no instances loaded
+        app.enter_filtered_data_mode("Page".to_string());
+
+        // Should still be in filtered mode
+        assert!(app.is_filtered_data_mode());
+        assert_eq!(app.get_filter_kind(), Some("Page"));
+
+        // Count should be 0 (no instances)
+        assert_eq!(app.current_item_count(), 0);
+    }
+
+    #[test]
+    fn test_filtered_mode_with_instances() {
+        let mut app = create_test_app();
+        app.mode = NavMode::Data;
+
+        // Add instances to Locale kind
+        let instances = vec![
+            InstanceInfo {
+                key: "fr-FR".to_string(),
+                display_name: "Français".to_string(),
+                kind_key: "Locale".to_string(),
+                properties: BTreeMap::new(),
+                outgoing_arcs: vec![],
+                incoming_arcs: vec![],
+            },
+            InstanceInfo {
+                key: "en-US".to_string(),
+                display_name: "English".to_string(),
+                kind_key: "Locale".to_string(),
+                properties: BTreeMap::new(),
+                outgoing_arcs: vec![],
+                incoming_arcs: vec![],
+            },
+        ];
+        app.tree.set_instances("Locale", instances);
+
+        app.enter_filtered_data_mode("Locale".to_string());
+
+        // Count should be 2 instances
+        assert_eq!(app.current_item_count(), 2);
+
+        // Current item should be first instance
+        match app.current_item() {
+            Some(TreeItem::Instance(_, _, _, inst)) => {
+                assert_eq!(inst.key, "fr-FR");
+            }
+            other => panic!("Expected Instance fr-FR, got {:?}", other),
+        }
+    }
+
+    #[test]
+    fn test_key_esc_exits_filtered_mode() {
+        let mut app = create_test_app();
+        app.mode = NavMode::Data;
+        app.enter_filtered_data_mode("Locale".to_string());
+
+        assert!(app.is_filtered_data_mode());
+
+        // Press Esc
+        let handled = app.handle_key(crossterm::event::KeyEvent::from(KeyCode::Esc));
+
+        assert!(handled);
+        assert!(!app.is_filtered_data_mode());
+        assert_eq!(app.mode, NavMode::Meta); // Switched back to Meta
+    }
+
+    #[test]
+    fn test_key_1_exits_filtered_mode() {
+        let mut app = create_test_app();
+        app.mode = NavMode::Data;
+        app.enter_filtered_data_mode("Locale".to_string());
+
+        assert!(app.is_filtered_data_mode());
+
+        // Press 1 (switch to Meta)
+        app.handle_key(crossterm::event::KeyEvent::from(KeyCode::Char('1')));
+
+        assert!(!app.is_filtered_data_mode());
+        assert_eq!(app.mode, NavMode::Meta);
+    }
+
+    // ========================================================================
+    // Edge case: ensure_cursor_visible with zero tree_height
+    // ========================================================================
+
+    #[test]
+    fn test_ensure_cursor_visible_zero_height() {
+        let mut app = create_test_app();
+
+        // Simulate edge case: tree_height = 0 (terminal too small)
+        app.tree_height = 0;
+        app.tree_cursor = 5;
+        app.tree_scroll = 0;
+
+        // Should not panic (saturating_sub prevents underflow)
+        app.ensure_cursor_visible();
+
+        // Cursor should still be valid
+        assert_eq!(app.tree_cursor, 5);
+    }
+
+    #[test]
+    fn test_ensure_cursor_visible_normal_scroll_down() {
+        let mut app = create_test_app();
+
+        // Normal case: cursor below viewport
+        app.tree_height = 10;
+        app.tree_cursor = 15;
+        app.tree_scroll = 0;
+
+        app.ensure_cursor_visible();
+
+        // Scroll should adjust so cursor is at bottom of viewport
+        // tree_scroll = tree_cursor - (tree_height - 1) = 15 - 9 = 6
+        assert_eq!(app.tree_scroll, 6);
+    }
+
+    #[test]
+    fn test_ensure_cursor_visible_scroll_up() {
+        let mut app = create_test_app();
+
+        // Cursor above viewport
+        app.tree_height = 10;
+        app.tree_cursor = 2;
+        app.tree_scroll = 5;
+
+        app.ensure_cursor_visible();
+
+        // Scroll should adjust to show cursor at top
+        assert_eq!(app.tree_scroll, 2);
     }
 }

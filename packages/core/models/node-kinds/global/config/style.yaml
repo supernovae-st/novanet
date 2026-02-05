@@ -1,7 +1,7 @@
-# packages/core/models/node-kinds/global/knowledge/style.yaml
+# packages/core/models/node-kinds/global/config/style.yaml
 # Style — Communication style for a locale (tone, formality, directness, warmth, humor, identity)
 #
-# v10.1: knowledge_tier removed (node type is sufficient for LLM routing)
+# v10.6: Added context_matrix, register_transitions, formality_scale, raw_markdown (hybrid approach)
 # Stability: Medium - update quarterly
 # Merges: locale-voice + locale-identity
 
@@ -14,6 +14,12 @@ node:
   description: "Communication style: tone, formality, directness, warmth, humor, identity traits"
 
   standard_properties:
+    key:
+      type: string
+      required: true
+      description: "Unique key (locale code)"
+      example: "fr-FR"
+
     display_name:
       type: string
       required: true
@@ -30,37 +36,48 @@ node:
       type: string
       required: true
       description: "LLM generation hints"
-      example: "USE: for tone/voice decisions. TRIGGERS: formality, vous/tu, style. NOT: formatting."
+      example: "USE: tone/voice/formality decisions. TRIGGERS: formality, vous/tu, register, punctuation, humor. KEY: check context_matrix for audience. NOT: formatting (use Formatting) or content adaptation (use Adaptation)."
 
     created_at:
       type: datetime
       required: true
-      description: "Creation timestamp"
 
     updated_at:
       type: datetime
       required: true
-      description: "Last update timestamp"
 
   properties:
-    # === FORMALITY (from locale-voice) ===
+    # ═══════════════════════════════════════════════════════════════════════════
+    # FORMALITY SYSTEM
+    # ═══════════════════════════════════════════════════════════════════════════
     formality_score:
       type: int
       required: true
-      description: "Formality level 0-100"
+      description: "Formality level 0-100 (0=very casual, 100=very formal)"
       example: 72
+
+    formality_scale:
+      type: json
+      required: false
+      description: "Formality score ranges with use cases"
+      example:
+        very_formal: "90-100: Legal, government, luxury"
+        high: "70-89: Corporate B2B, banking, first contact"
+        moderate: "50-69: Standard e-commerce, B2C"
+        casual: "30-49: Tech startups, youth brands"
+        very_casual: "0-29: Gaming, peer-to-peer"
 
     default_formality:
       type: string
       required: true
-      enum: [formal, casual, mixed]
+      enum: ["formal", "casual", "mixed"]
       description: "Default formality level"
       example: "formal"
 
     default_pronoun:
       type: string
       required: false
-      description: "Default pronoun (vous, tu, Sie, du)"
+      description: "Default pronoun (vous, tu, Sie, du, usted, tú)"
       example: "vous"
 
     pronoun_rules:
@@ -70,19 +87,58 @@ node:
       example:
         formal: "vous"
         casual: "tu"
-        switch_triggers: ["established relationship"]
+        never_switch_mid_conversation: true
+        escalation_increases_formality: true
 
-    # === DIRECTNESS (from locale-voice) ===
+    # ═══════════════════════════════════════════════════════════════════════════
+    # CONTEXT MATRIX
+    # ═══════════════════════════════════════════════════════════════════════════
+    context_matrix:
+      type: json
+      required: true
+      description: |
+        Decision matrix for formality by context, industry, and audience.
+        Key for consistent tone across different scenarios.
+      example:
+        b2b_corporate:
+          industry: "Finance, Legal, Insurance"
+          audience: "Decision makers"
+          formality: "very_formal"
+          notes: "Use titles (Madame, Monsieur)"
+        b2b_tech:
+          industry: "SaaS, Enterprise"
+          audience: "IT directors, CTOs"
+          formality: "high"
+          notes: "Technical precision, warmth appreciated"
+        b2c_premium:
+          industry: "Luxury, Fashion"
+          audience: "35+, affluent"
+          formality: "very_formal"
+          notes: "Sophistication expected"
+        b2c_standard:
+          industry: "E-commerce, Retail"
+          audience: "General public"
+          formality: "high"
+          notes: "Respectful default"
+        b2c_youth:
+          industry: "Gaming, Streaming"
+          audience: "18-24"
+          formality: "casual"
+          notes: "Only if brand explicitly targets youth"
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # DIRECTNESS
+    # ═══════════════════════════════════════════════════════════════════════════
     directness_score:
       type: int
       required: true
-      description: "Directness level 0-100"
+      description: "Directness level 0-100 (0=very indirect, 100=very direct)"
       example: 45
 
     directness_style:
       type: string
       required: true
-      enum: [direct, indirect, balanced]
+      enum: ["direct", "indirect", "balanced"]
       description: "Overall directness style"
       example: "indirect"
 
@@ -91,10 +147,13 @@ node:
       required: false
       description: "Patterns for softening direct statements"
       example:
-        requests: "Pourriez-vous..."
-        negatives: "Difficile"
+        requests: "Pourriez-vous..., Il serait préférable de..."
+        negatives: "Difficile rather than Impossible"
+        directives: "Nous vous proposons... rather than Vous devez..."
 
-    # === WARMTH (from locale-voice) ===
+    # ═══════════════════════════════════════════════════════════════════════════
+    # WARMTH
+    # ═══════════════════════════════════════════════════════════════════════════
     warmth_score:
       type: int
       required: false
@@ -110,7 +169,18 @@ node:
         established: 60
         longterm: 70
 
-    # === HUMOR (from locale-voice) ===
+    warmth_expression:
+      type: json
+      required: false
+      description: "How warmth is expressed in this culture"
+      example:
+        - "Intellectual engagement over emotional display"
+        - "Recognition of loyalty"
+        - "Attention to detail shows respect"
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # HUMOR
+    # ═══════════════════════════════════════════════════════════════════════════
     humor_score:
       type: int
       required: false
@@ -123,20 +193,32 @@ node:
       description: "Acceptability of humor types"
       example:
         wordplay: "acceptable"
-        irony: "subtle"
+        self_deprecating: "encouraged"
+        irony: "subtle only"
         slapstick: "avoid"
 
-    # === SENTENCE STYLE (from locale-voice) ===
+    # ═══════════════════════════════════════════════════════════════════════════
+    # SENTENCE STYLE
+    # ═══════════════════════════════════════════════════════════════════════════
     avg_sentence_length:
       type: int
       required: false
       description: "Average sentence length in words"
       example: 18
 
+    sentence_length_ranges:
+      type: json
+      required: false
+      description: "Sentence length ranges by context"
+      example:
+        short: "8-15 words (CTAs, headlines)"
+        medium: "16-25 words (standard content)"
+        long: "26-40 words (complex explanations)"
+
     preferred_voice:
       type: string
       required: false
-      enum: [active, passive, mixed]
+      enum: ["active", "passive", "mixed"]
       description: "Preferred grammatical voice"
       example: "mixed"
 
@@ -146,26 +228,62 @@ node:
       description: "Writing rhythm"
       example: "sophisticated"
 
+    # ═══════════════════════════════════════════════════════════════════════════
+    # PUNCTUATION
+    # ═══════════════════════════════════════════════════════════════════════════
     punctuation_rules:
       type: json
       required: false
       description: "Punctuation conventions"
       example:
-        colon: "space_before"
-        exclamation: "rare"
-        quotes: "guillemets"
+        period: "no space before, one after"
+        comma: "no space before, one after"
+        colon: "non-breaking space before, one after"
+        semicolon: "non-breaking space before, one after"
+        question: "non-breaking space before, one after"
+        exclamation: "non-breaking space before, one after"
+        quotes: "guillemets with spaces: « text »"
 
-    # === HONORIFICS (from locale-voice) ===
+    exclamation_usage:
+      type: string
+      required: false
+      enum: ["frequent", "moderate", "rare", "avoid"]
+      description: "How often exclamation marks are appropriate"
+      example: "rare"
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # HONORIFICS
+    # ═══════════════════════════════════════════════════════════════════════════
     honorific_system:
       type: json
       required: false
-      description: "Honorific system"
+      description: "Honorific system (titles, levels, usage)"
       example:
-        levels: ["san", "sama"]
-        usage:
-          business: "san"
+        monsieur: "Standard formal for men"
+        madame: "Standard formal for women (mademoiselle deprecated since 2012)"
+        maitre: "Professional title for lawyers"
+        docteur: "Professional title for doctors"
 
-    # === IDENTITY (from locale-identity) ===
+    # ═══════════════════════════════════════════════════════════════════════════
+    # REGISTER TRANSITIONS
+    # ═══════════════════════════════════════════════════════════════════════════
+    register_transitions:
+      type: json
+      required: false
+      description: "When and how to shift formality register"
+      example:
+        increase_formality:
+          - "Escalation or complaint"
+          - "Legal, financial, compliance matters"
+          - "Error or apology"
+        decrease_formality:
+          - "Customer explicitly uses tu first AND brand allows"
+          - "Established relationship (6+ months)"
+        critical_rule: "Never decrease formality without explicit customer signal"
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # IDENTITY
+    # ═══════════════════════════════════════════════════════════════════════════
     self_references:
       type: json
       required: false
@@ -185,7 +303,7 @@ node:
     authority_style:
       type: string
       required: false
-      enum: [expert, peer, guide, helper]
+      enum: ["expert", "peer", "guide", "helper"]
       description: "Brand authority positioning"
       example: "expert"
 
@@ -194,6 +312,14 @@ node:
       required: false
       description: "Brand personality traits"
       example: ["professional", "trustworthy", "innovative"]
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # RAW MARKDOWN (Hybrid approach)
+    # ═══════════════════════════════════════════════════════════════════════════
+    raw_markdown:
+      type: string
+      required: false
+      description: "Full source markdown for LLM context (includes examples, edge cases)"
 
   relations:
     incoming:

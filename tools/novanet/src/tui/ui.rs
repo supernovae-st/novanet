@@ -10,6 +10,18 @@ use super::app::{App, Focus, NavMode};
 use super::data::{ArcDirection, TreeItem};
 use super::theme::{self, hex_to_color};
 
+/// Safely truncate a UTF-8 string to N characters (not bytes).
+/// Appends "..." if truncated.
+fn truncate_str(s: &str, max_chars: usize) -> String {
+    let char_count = s.chars().count();
+    if char_count > max_chars {
+        let truncated: String = s.chars().take(max_chars).collect();
+        format!("{}...", truncated)
+    } else {
+        s.to_string()
+    }
+}
+
 /// Main render function.
 pub fn render(f: &mut Frame, app: &mut App) {
     let chunks = Layout::default()
@@ -122,9 +134,9 @@ fn render_main_wide(f: &mut Frame, area: Rect, app: &mut App) {
     let chunks = Layout::default()
         .direction(Direction::Horizontal)
         .constraints([
-            Constraint::Percentage(15),  // Tree (narrower)
-            Constraint::Percentage(43),  // Info + Graph (stacked)
-            Constraint::Percentage(42),  // YAML
+            Constraint::Percentage(15), // Tree (narrower)
+            Constraint::Percentage(43), // Info + Graph (stacked)
+            Constraint::Percentage(42), // YAML
         ])
         .split(area);
 
@@ -185,6 +197,12 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
     let visible_height = area.height.saturating_sub(2) as usize;
     app.tree_height = visible_height;
 
+    // === FILTERED DATA MODE: Show only instances of selected Kind ===
+    if let Some(kind_key) = app.get_filter_kind() {
+        render_filtered_instances(f, area, app, kind_key, visible_height, focused, border_color);
+        return;
+    }
+
     // Build all visible tree lines
     let mut all_lines: Vec<Line> = Vec::new();
     let mut idx = 0;
@@ -227,7 +245,7 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
         focused,
         "",
         kinds_icon,
-        format!("Kinds ({})", kinds_count),
+        format!("Node Kinds ({})", kinds_count),
         Color::Magenta,
     ));
     idx += 1;
@@ -319,7 +337,10 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                         };
                                         let prefix = if is_cursor { "›" } else { " " };
                                         all_lines.push(Line::from(Span::styled(
-                                            format!("{}        • {}", prefix, instance.display_name),
+                                            format!(
+                                                "{}        • {}",
+                                                prefix, instance.display_name
+                                            ),
                                             style,
                                         )));
                                         idx += 1;
@@ -425,6 +446,122 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
     f.render_widget(paragraph, area);
 }
 
+/// Render filtered Data mode: only instances of a specific Kind with breadcrumb.
+fn render_filtered_instances(
+    f: &mut Frame,
+    area: Rect,
+    app: &App,
+    kind_key: &str,
+    visible_height: usize,
+    focused: bool,
+    border_color: Color,
+) {
+    // Get Kind info for display with full hierarchy
+    let kind_info = app.tree.find_kind(kind_key);
+    let (realm_display, realm_color, layer_display, layer_color, kind_display) = kind_info
+        .map(|(realm, layer, kind)| {
+            (
+                realm.display_name.clone(),
+                hex_to_color(&realm.color),
+                layer.display_name.clone(),
+                hex_to_color(&layer.color),
+                kind.display_name.clone(),
+            )
+        })
+        .unwrap_or_else(|| {
+            (
+                "Unknown".to_string(),
+                Color::White,
+                "Unknown".to_string(),
+                Color::White,
+                kind_key.to_string(),
+            )
+        });
+
+    // Build lines: breadcrumb + instances
+    let mut all_lines: Vec<Line> = Vec::new();
+
+    // Breadcrumb header with full hierarchy: Realm → Layer → Kind
+    all_lines.push(Line::from(vec![
+        Span::styled("← ", Style::default().fg(Color::DarkGray)),
+        Span::styled("Esc", Style::default().fg(Color::Yellow)),
+        Span::styled(" │ ", Style::default().fg(Color::DarkGray)),
+        Span::styled(&realm_display, Style::default().fg(realm_color)),
+        Span::styled(" → ", Style::default().fg(Color::DarkGray)),
+        Span::styled(&layer_display, Style::default().fg(layer_color)),
+        Span::styled(" → ", Style::default().fg(Color::DarkGray)),
+        Span::styled(&kind_display, Style::default().fg(Color::White)),
+    ]));
+    all_lines.push(Line::from(Span::styled(
+        "─".repeat(area.width.saturating_sub(2) as usize),
+        Style::default().fg(Color::Rgb(60, 60, 70)),
+    )));
+
+    // Get instances
+    let instances = app.tree.get_instances(kind_key);
+    let instance_count = instances.map(|i| i.len()).unwrap_or(0);
+    let is_loading = app.pending_instance_load.as_ref().is_some_and(|k| k == kind_key);
+
+    if instance_count == 0 {
+        if is_loading {
+            // Still loading from Neo4j
+            all_lines.push(Line::from(Span::styled(
+                "  ⏳ Loading instances from Neo4j...",
+                Style::default().fg(Color::Yellow),
+            )));
+        } else {
+            // Loaded but empty
+            all_lines.push(Line::from(Span::styled(
+                "  No instances exist for this Kind",
+                Style::default().fg(Color::DarkGray),
+            )));
+        }
+    } else if let Some(instances) = instances {
+        for (idx, instance) in instances.iter().enumerate() {
+            let is_cursor = idx == app.tree_cursor;
+            let style = if is_cursor && focused {
+                Style::default()
+                    .bg(Color::Rgb(30, 40, 50))
+                    .fg(Color::Green)
+            } else {
+                Style::default().fg(Color::Rgb(100, 180, 100))
+            };
+            let prefix = if is_cursor { "› " } else { "  " };
+            all_lines.push(Line::from(Span::styled(
+                format!("{}• {}", prefix, instance.display_name),
+                style,
+            )));
+        }
+    }
+
+    // Apply scroll
+    let lines: Vec<Line> = all_lines
+        .into_iter()
+        .skip(app.tree_scroll)
+        .take(visible_height)
+        .collect();
+
+    // Title with Kind name and count + position indicator
+    let title = if instance_count > 0 {
+        format!(
+            " {} ({}/{}) [FILTERED] ",
+            kind_display,
+            app.tree_cursor + 1,
+            instance_count
+        )
+    } else {
+        format!(" {} (0) [FILTERED] ", kind_display)
+    };
+
+    let block = Block::default()
+        .title(Span::styled(title, Style::default().fg(layer_color)))
+        .borders(Borders::ALL)
+        .border_style(Style::default().fg(border_color));
+
+    let paragraph = Paragraph::new(lines).block(block);
+    f.render_widget(paragraph, area);
+}
+
 /// Info panel: displays metadata for selected item with independent scroll.
 fn render_info_panel(f: &mut Frame, area: Rect, app: &mut App) {
     let focused = app.focus == Focus::Info;
@@ -478,11 +615,12 @@ fn render_info_panel(f: &mut Frame, area: Rect, app: &mut App) {
     f.render_widget(paragraph, area);
 }
 
-/// Graph panel: Displays Neo4j relationships for the selected Kind.
+/// Graph panel: Displays Neo4j relationships for the selected Kind or Instance.
 ///
 /// Shows real arc data from Neo4j when a Kind is selected,
-/// or contextual messages for other selections.
+/// instance arcs in Data mode, or contextual messages for other selections.
 fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
+    let theme = theme::Theme::new();
     let focused = app.focus == Focus::Graph;
     let border_color = if focused {
         Color::Magenta
@@ -490,8 +628,24 @@ fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
         Color::Rgb(60, 60, 70)
     };
 
+    // Calculate arc count for title
+    let arc_count = if let Some(ref arcs) = app.kind_arcs {
+        arcs.incoming.len() + arcs.outgoing.len()
+    } else if let Some(TreeItem::Instance(_, _, _, inst)) = app.current_item() {
+        inst.outgoing_arcs.len() + inst.incoming_arcs.len()
+    } else {
+        0
+    };
+
+    // Build title with count
+    let title = if arc_count > 0 {
+        format!(" Arc Relationships ({}) ", arc_count)
+    } else {
+        " Arc Relationships ".to_string()
+    };
+
     let block = Block::default()
-        .title(Span::styled(" Arc Relationships ", Style::default().fg(border_color)))
+        .title(Span::styled(title, Style::default().fg(border_color)))
         .borders(Borders::ALL)
         .border_style(Style::default().fg(border_color));
 
@@ -502,109 +656,424 @@ fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
     let dim = Style::default().fg(Color::Rgb(100, 100, 100));
     let bright_dim = Style::default().fg(Color::Rgb(140, 140, 140));
 
-    // Check if we have Neo4j arc data for a Kind
-    if let Some(ref arcs) = app.kind_arcs {
-        // === HIERARCHY BREADCRUMB ===
-        lines.push(Line::from(vec![
-            Span::styled("  ", dim),
-            Span::styled(&arcs.realm, Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD)),
-            Span::styled(" (Realm)", Style::default().fg(Color::DarkGray)),
-            Span::styled(" → ", bright_dim),
-            Span::styled(&arcs.layer, Style::default().fg(Color::Magenta).add_modifier(Modifier::BOLD)),
-            Span::styled(" (Layer)", Style::default().fg(Color::DarkGray)),
-            Span::styled(" → ", bright_dim),
-            Span::styled(&arcs.kind_label, Style::default().fg(Color::Green).add_modifier(Modifier::BOLD)),
-            Span::styled(" (Kind)", Style::default().fg(Color::DarkGray)),
-        ]));
-        lines.push(Line::from(Span::raw("")));
-
-        // === INCOMING ARCS ===
-        if !arcs.incoming.is_empty() {
-            lines.push(Line::from(Span::styled(
-                format!("  ◀─ INCOMING ({}) ", arcs.incoming.len()),
-                Style::default().fg(Color::Magenta).add_modifier(Modifier::BOLD),
-            )));
-            lines.push(Line::from(Span::styled(
-                "  ─────────────────────────────────────────",
-                dim,
-            )));
-
-            for arc in &arcs.incoming {
-                let family_color = get_family_color(&arc.family);
-                lines.push(Line::from(vec![
-                    Span::styled("    ", dim),
-                    Span::styled(&arc.other_kind, Style::default().fg(Color::Green)),
-                    Span::styled(" ──[", dim),
-                    Span::styled(&arc.arc_key, Style::default().fg(family_color).add_modifier(Modifier::BOLD)),
-                    Span::styled("]──▶ ", dim),
-                    Span::styled(&arcs.kind_label, Style::default().fg(Color::White)),
-                    Span::styled(format!("  ({})", arc.family), Style::default().fg(Color::DarkGray)),
-                ]));
-            }
-            lines.push(Line::from(Span::raw("")));
-        }
-
-        // === OUTGOING ARCS ===
-        if !arcs.outgoing.is_empty() {
-            lines.push(Line::from(Span::styled(
-                format!("  ─▶ OUTGOING ({}) ", arcs.outgoing.len()),
-                Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD),
-            )));
-            lines.push(Line::from(Span::styled(
-                "  ─────────────────────────────────────────",
-                dim,
-            )));
-
-            for arc in &arcs.outgoing {
-                let family_color = get_family_color(&arc.family);
-                lines.push(Line::from(vec![
-                    Span::styled("    ", dim),
-                    Span::styled(&arcs.kind_label, Style::default().fg(Color::White)),
-                    Span::styled(" ──[", dim),
-                    Span::styled(&arc.arc_key, Style::default().fg(family_color).add_modifier(Modifier::BOLD)),
-                    Span::styled("]──▶ ", dim),
-                    Span::styled(&arc.other_kind, Style::default().fg(Color::Green)),
-                    Span::styled(format!("  ({})", arc.family), Style::default().fg(Color::DarkGray)),
-                ]));
-            }
-            lines.push(Line::from(Span::raw("")));
-        }
-
-        // === NO ARCS MESSAGE ===
-        if arcs.incoming.is_empty() && arcs.outgoing.is_empty() {
-            lines.push(Line::from(Span::styled(
-                "  No arc relationships defined for this Kind",
-                Style::default().fg(Color::DarkGray),
-            )));
-        }
-    } else if let Some(ref details) = app.arc_kind_details {
-        // === ArcKind Details from Neo4j ===
-        let family_color = get_family_color(&details.family);
-
-        // Arc name with family
-        lines.push(Line::from(vec![
-            Span::styled("  ", dim),
-            Span::styled(&details.display_name, Style::default().fg(family_color).add_modifier(Modifier::BOLD)),
-            Span::styled(format!("  ({})", details.family), Style::default().fg(Color::DarkGray)),
-        ]));
-        lines.push(Line::from(Span::raw("")));
-
-        // === ENDPOINTS ===
+    // === LOADING INDICATOR ===
+    if app.pending_arcs_load.is_some()
+        || app.pending_arc_kind_load.is_some()
+        || app.pending_realm_load.is_some()
+        || app.pending_layer_load.is_some()
+    {
         lines.push(Line::from(Span::styled(
-            "  ENDPOINTS",
-            Style::default().fg(Color::White).add_modifier(Modifier::BOLD),
+            "  ⏳ Loading from Neo4j...",
+            Style::default().fg(Color::Yellow),
+        )));
+        let paragraph = Paragraph::new(lines);
+        f.render_widget(paragraph, inner);
+        return;
+    }
+
+    // === REALM DETAILS VIEW ===
+    if let Some(ref details) = app.realm_details {
+        lines.push(Line::from(vec![
+            Span::styled("  ", dim),
+            Span::styled(
+                &details.display_name,
+                Style::default()
+                    .fg(theme.realm_color(&details.key))
+                    .add_modifier(Modifier::BOLD),
+            ),
+            Span::styled(" (Realm)", Style::default().fg(Color::DarkGray)),
+        ]));
+        lines.push(Line::from(Span::raw("")));
+
+        // Description (if any)
+        if !details.description.is_empty() {
+            lines.push(Line::from(Span::styled(
+                format!("  {}", details.description),
+                Style::default().fg(Color::Rgb(180, 180, 180)),
+            )));
+            lines.push(Line::from(Span::raw("")));
+        }
+
+        // Stats summary
+        lines.push(Line::from(vec![
+            Span::styled("  📊 ", dim),
+            Span::styled(
+                format!("{} Layers", details.layers.len()),
+                Style::default().fg(Color::Cyan),
+            ),
+            Span::styled(" · ", dim),
+            Span::styled(
+                format!("{} Node Kinds", details.total_kinds),
+                Style::default().fg(Color::Green),
+            ),
+            Span::styled(" · ", dim),
+            Span::styled(
+                format!("{} Instances", details.total_instances),
+                Style::default().fg(Color::Yellow),
+            ),
+        ]));
+        lines.push(Line::from(Span::raw("")));
+
+        // Layers with kind counts (horizontal bar chart)
+        lines.push(Line::from(Span::styled(
+            "  LAYERS",
+            Style::default()
+                .fg(Color::White)
+                .add_modifier(Modifier::BOLD),
         )));
         lines.push(Line::from(Span::styled(
             "  ─────────────────────────────────────────",
             dim,
         )));
 
-        // FROM endpoint
+        let max_kinds = details
+            .layers
+            .iter()
+            .map(|l| l.kind_count)
+            .max()
+            .unwrap_or(1)
+            .max(1);
+        let bar_max_width = 20usize;
+
+        for layer in &details.layers {
+            let bar_width = (layer.kind_count * bar_max_width) / max_kinds;
+            let bar = "█".repeat(bar_width.max(1));
+
+            lines.push(Line::from(vec![
+                Span::styled("    ", dim),
+                Span::styled(
+                    format!("{:16}", layer.display_name),
+                    Style::default().fg(theme.layer_color(&layer.key)),
+                ),
+                Span::styled(format!("{:>3} ", layer.kind_count), bright_dim),
+                Span::styled(bar, Style::default().fg(theme.layer_color(&layer.key))),
+            ]));
+        }
+
+        let paragraph = Paragraph::new(lines);
+        f.render_widget(paragraph, inner);
+        return;
+    }
+
+    // === LAYER DETAILS VIEW ===
+    if let Some(ref details) = app.layer_details {
+        lines.push(Line::from(vec![
+            Span::styled("  ", dim),
+            Span::styled(
+                &details.realm,
+                Style::default().fg(theme.realm_color(&details.realm)),
+            ),
+            Span::styled(" → ", bright_dim),
+            Span::styled(
+                &details.display_name,
+                Style::default()
+                    .fg(theme.layer_color(&details.key))
+                    .add_modifier(Modifier::BOLD),
+            ),
+            Span::styled(" (Layer)", Style::default().fg(Color::DarkGray)),
+        ]));
+        lines.push(Line::from(Span::raw("")));
+
+        // Description (if any)
+        if !details.description.is_empty() {
+            lines.push(Line::from(Span::styled(
+                format!("  {}", details.description),
+                Style::default().fg(Color::Rgb(180, 180, 180)),
+            )));
+            lines.push(Line::from(Span::raw("")));
+        }
+
+        // Stats summary
+        lines.push(Line::from(vec![
+            Span::styled("  📊 ", dim),
+            Span::styled(
+                format!("{} Node Kinds", details.total_kinds),
+                Style::default().fg(Color::Green),
+            ),
+            Span::styled(" · ", dim),
+            Span::styled(
+                format!("{} Instances", details.total_instances),
+                Style::default().fg(Color::Yellow),
+            ),
+        ]));
+        lines.push(Line::from(Span::raw("")));
+
+        // Node Kinds grouped by trait
+        lines.push(Line::from(Span::styled(
+            "  NODE KINDS BY TRAIT",
+            Style::default()
+                .fg(Color::White)
+                .add_modifier(Modifier::BOLD),
+        )));
+        lines.push(Line::from(Span::styled(
+            "  ─────────────────────────────────────────",
+            dim,
+        )));
+
+        for group in &details.kinds_by_trait {
+            // Trait header with color
+            let trait_color = theme.trait_color(&group.trait_key);
+            lines.push(Line::from(vec![
+                Span::styled("    ", dim),
+                Span::styled(
+                    format!("{} ({})", group.trait_key, group.kind_names.len()),
+                    Style::default()
+                        .fg(trait_color)
+                        .add_modifier(Modifier::BOLD),
+                ),
+            ]));
+
+            // Kind names
+            for kind_name in &group.kind_names {
+                lines.push(Line::from(vec![
+                    Span::styled("      • ", dim),
+                    Span::styled(
+                        kind_name,
+                        Style::default().fg(theme.layer_color(&details.key)),
+                    ),
+                ]));
+            }
+        }
+
+        let paragraph = Paragraph::new(lines);
+        f.render_widget(paragraph, inner);
+        return;
+    }
+
+    // === INSTANCE ARCS VIEW (Data mode) ===
+    if let Some(TreeItem::Instance(realm, layer, kind, instance)) = app.current_item() {
+        // Clone data to avoid lifetime issues
+        let realm_key = realm.key.clone();
+        let layer_key = layer.key.clone();
+        let kind_display = kind.display_name.clone();
+        let instance_cloned = instance.clone();
+
+        // Breadcrumb for instance
+        lines.push(Line::from(vec![
+            Span::styled("  ", dim),
+            Span::styled(
+                realm_key.clone(),
+                Style::default()
+                    .fg(theme.realm_color(&realm_key))
+                    .add_modifier(Modifier::BOLD),
+            ),
+            Span::styled(" → ", bright_dim),
+            Span::styled(
+                layer_key.clone(),
+                Style::default()
+                    .fg(theme.layer_color(&layer_key))
+                    .add_modifier(Modifier::BOLD),
+            ),
+            Span::styled(" → ", bright_dim),
+            Span::styled(kind_display, Style::default().fg(Color::Green)),
+            Span::styled(" → ", bright_dim),
+            Span::styled(
+                instance_cloned.key.clone(),
+                Style::default()
+                    .fg(Color::White)
+                    .add_modifier(Modifier::BOLD),
+            ),
+        ]));
+        lines.push(Line::from(Span::raw("")));
+
+        // Render instance arcs
+        let outgoing_arcs = instance_cloned.outgoing_arcs.clone();
+        let incoming_arcs = instance_cloned.incoming_arcs.clone();
+        let total = outgoing_arcs.len() + incoming_arcs.len();
+
+        if total == 0 {
+            lines.push(Line::from(Span::styled(
+                "  No arc connections for this instance",
+                Style::default().fg(Color::DarkGray),
+            )));
+        } else {
+            // Outgoing arcs
+            if !outgoing_arcs.is_empty() {
+                lines.push(Line::from(Span::styled(
+                    format!("  ─▶ OUTGOING ({}) ", outgoing_arcs.len()),
+                    Style::default()
+                        .fg(Color::Cyan)
+                        .add_modifier(Modifier::BOLD),
+                )));
+                lines.push(Line::from(Span::styled(
+                    "  ─────────────────────────────────────────",
+                    dim,
+                )));
+
+                for arc in &outgoing_arcs {
+                    let status_style = if arc.exists {
+                        Style::default().fg(Color::Green)
+                    } else {
+                        Style::default().fg(Color::Yellow)
+                    };
+                    let status_char = if arc.exists { "✓" } else { "○" };
+
+                    lines.push(Line::from(vec![
+                        Span::styled(format!("  {} ", status_char), status_style),
+                        Span::styled(
+                            instance_cloned.key.clone(),
+                            Style::default().fg(Color::White),
+                        ),
+                        Span::styled(" ──[", dim),
+                        Span::styled(
+                            arc.arc_type.clone(),
+                            Style::default()
+                                .fg(theme.arc_family_color("semantic"))
+                                .add_modifier(Modifier::BOLD),
+                        ),
+                        Span::styled("]──▶ ", dim),
+                        Span::styled(arc.target_key.clone(), Style::default().fg(Color::Green)),
+                        Span::styled(
+                            format!(" ({})", arc.target_kind),
+                            Style::default().fg(Color::DarkGray),
+                        ),
+                    ]));
+                }
+                lines.push(Line::from(Span::raw("")));
+            }
+
+            // Incoming arcs
+            if !incoming_arcs.is_empty() {
+                lines.push(Line::from(Span::styled(
+                    format!("  ◀─ INCOMING ({}) ", incoming_arcs.len()),
+                    Style::default()
+                        .fg(Color::Magenta)
+                        .add_modifier(Modifier::BOLD),
+                )));
+                lines.push(Line::from(Span::styled(
+                    "  ─────────────────────────────────────────",
+                    dim,
+                )));
+
+                for arc in &incoming_arcs {
+                    let status_style = if arc.exists {
+                        Style::default().fg(Color::Green)
+                    } else {
+                        Style::default().fg(Color::Yellow)
+                    };
+                    let status_char = if arc.exists { "✓" } else { "○" };
+
+                    lines.push(Line::from(vec![
+                        Span::styled(format!("  {} ", status_char), status_style),
+                        Span::styled(arc.target_key.clone(), Style::default().fg(Color::Green)),
+                        Span::styled(
+                            format!(" ({})", arc.target_kind),
+                            Style::default().fg(Color::DarkGray),
+                        ),
+                        Span::styled(" ──[", dim),
+                        Span::styled(
+                            arc.arc_type.clone(),
+                            Style::default()
+                                .fg(theme.arc_family_color("semantic"))
+                                .add_modifier(Modifier::BOLD),
+                        ),
+                        Span::styled("]──▶ ", dim),
+                        Span::styled(
+                            instance_cloned.key.clone(),
+                            Style::default().fg(Color::White),
+                        ),
+                    ]));
+                }
+            }
+        }
+
+        let paragraph = Paragraph::new(lines);
+        f.render_widget(paragraph, inner);
+        return;
+    }
+
+    // === KIND ARCS VIEW (from Neo4j) ===
+    if let Some(ref arcs) = app.kind_arcs {
+        // Hierarchy breadcrumb with theme colors
+        lines.push(Line::from(vec![
+            Span::styled("  ", dim),
+            Span::styled(
+                &arcs.realm,
+                Style::default()
+                    .fg(theme.realm_color(&arcs.realm))
+                    .add_modifier(Modifier::BOLD),
+            ),
+            Span::styled(" (Realm)", Style::default().fg(Color::DarkGray)),
+            Span::styled(" → ", bright_dim),
+            Span::styled(
+                &arcs.layer,
+                Style::default()
+                    .fg(theme.layer_color(&arcs.layer))
+                    .add_modifier(Modifier::BOLD),
+            ),
+            Span::styled(" (Layer)", Style::default().fg(Color::DarkGray)),
+            Span::styled(" → ", bright_dim),
+            Span::styled(
+                &arcs.kind_label,
+                Style::default()
+                    .fg(Color::Green)
+                    .add_modifier(Modifier::BOLD),
+            ),
+            Span::styled(" (Node Kind)", Style::default().fg(Color::DarkGray)),
+        ]));
+        lines.push(Line::from(Span::raw("")));
+
+        // Group all arcs by family
+        render_arcs_by_family(&mut lines, arcs, &theme, &dim);
+
+        let paragraph = Paragraph::new(lines);
+        f.render_widget(paragraph, inner);
+        return;
+    }
+
+    // === ARCKIND DETAILS VIEW ===
+    if let Some(ref details) = app.arc_kind_details {
+        let family_color = theme.arc_family_color(&details.family);
+
+        // Arc name with family
+        lines.push(Line::from(vec![
+            Span::styled("  ", dim),
+            Span::styled(
+                &details.display_name,
+                Style::default()
+                    .fg(family_color)
+                    .add_modifier(Modifier::BOLD),
+            ),
+            Span::styled(
+                format!("  ({})", details.family),
+                Style::default().fg(Color::DarkGray),
+            ),
+        ]));
+        lines.push(Line::from(Span::raw("")));
+
+        // === ENDPOINTS ===
+        lines.push(Line::from(Span::styled(
+            "  ENDPOINTS",
+            Style::default()
+                .fg(Color::White)
+                .add_modifier(Modifier::BOLD),
+        )));
+        lines.push(Line::from(Span::styled(
+            "  ─────────────────────────────────────────",
+            dim,
+        )));
+
+        // FROM endpoint with theme colors
         if let Some(ref from) = details.from_endpoint {
             lines.push(Line::from(vec![
                 Span::styled("    FROM: ", Style::default().fg(Color::Magenta)),
-                Span::styled(&from.kind_label, Style::default().fg(Color::Green).add_modifier(Modifier::BOLD)),
-                Span::styled(format!("  ({}/{})", from.realm, from.layer), Style::default().fg(Color::DarkGray)),
+                Span::styled(
+                    &from.kind_label,
+                    Style::default()
+                        .fg(Color::Green)
+                        .add_modifier(Modifier::BOLD),
+                ),
+                Span::styled("  (", Style::default().fg(Color::DarkGray)),
+                Span::styled(
+                    &from.realm,
+                    Style::default().fg(theme.realm_color(&from.realm)),
+                ),
+                Span::styled("/", Style::default().fg(Color::DarkGray)),
+                Span::styled(
+                    &from.layer,
+                    Style::default().fg(theme.layer_color(&from.layer)),
+                ),
+                Span::styled(")", Style::default().fg(Color::DarkGray)),
             ]));
         } else {
             lines.push(Line::from(vec![
@@ -613,12 +1082,21 @@ fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
             ]));
         }
 
-        // TO endpoint
+        // TO endpoint with theme colors
         if let Some(ref to) = details.to_endpoint {
             lines.push(Line::from(vec![
                 Span::styled("    TO:   ", Style::default().fg(Color::Cyan)),
-                Span::styled(&to.kind_label, Style::default().fg(Color::Green).add_modifier(Modifier::BOLD)),
-                Span::styled(format!("  ({}/{})", to.realm, to.layer), Style::default().fg(Color::DarkGray)),
+                Span::styled(
+                    &to.kind_label,
+                    Style::default()
+                        .fg(Color::Green)
+                        .add_modifier(Modifier::BOLD),
+                ),
+                Span::styled("  (", Style::default().fg(Color::DarkGray)),
+                Span::styled(&to.realm, Style::default().fg(theme.realm_color(&to.realm))),
+                Span::styled("/", Style::default().fg(Color::DarkGray)),
+                Span::styled(&to.layer, Style::default().fg(theme.layer_color(&to.layer))),
+                Span::styled(")", Style::default().fg(Color::DarkGray)),
             ]));
         } else {
             lines.push(Line::from(vec![
@@ -631,7 +1109,9 @@ fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
         // === PROPERTIES ===
         lines.push(Line::from(Span::styled(
             "  PROPERTIES",
-            Style::default().fg(Color::White).add_modifier(Modifier::BOLD),
+            Style::default()
+                .fg(Color::White)
+                .add_modifier(Modifier::BOLD),
         )));
         lines.push(Line::from(Span::styled(
             "  ─────────────────────────────────────────",
@@ -650,7 +1130,10 @@ fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
         if !details.cypher_pattern.is_empty() {
             lines.push(Line::from(vec![
                 Span::styled("    Pattern: ", dim),
-                Span::styled(&details.cypher_pattern, Style::default().fg(Color::Rgb(108, 113, 196))),
+                Span::styled(
+                    &details.cypher_pattern,
+                    Style::default().fg(theme.arc_family_color("generation")),
+                ),
             ]));
         }
 
@@ -659,7 +1142,9 @@ fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
             lines.push(Line::from(Span::raw("")));
             lines.push(Line::from(Span::styled(
                 "  DESCRIPTION",
-                Style::default().fg(Color::White).add_modifier(Modifier::BOLD),
+                Style::default()
+                    .fg(Color::White)
+                    .add_modifier(Modifier::BOLD),
             )));
             lines.push(Line::from(Span::styled(
                 "  ─────────────────────────────────────────",
@@ -668,7 +1153,10 @@ fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
             // Wrap description if too long
             for chunk in details.description.chars().collect::<Vec<_>>().chunks(45) {
                 let line: String = chunk.iter().collect();
-                lines.push(Line::from(Span::styled(format!("    {}", line), Style::default().fg(Color::DarkGray))));
+                lines.push(Line::from(Span::styled(
+                    format!("    {}", line),
+                    Style::default().fg(Color::DarkGray),
+                )));
             }
         }
     } else {
@@ -680,26 +1168,218 @@ fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
             Some(TreeItem::ArcFamily(_)) => "▸ Select an Arc to see endpoints",
             Some(TreeItem::ArcKind(_, _)) => "▸ Loading arc details...",
             Some(TreeItem::Realm(_)) | Some(TreeItem::Layer(_, _)) => {
-                "▸ Select a Kind to see arc relationships"
+                "▸ Select a Node Kind to see arc relationships"
             }
-            _ => "▸ Select a Kind or Arc to see details",
+            _ => "▸ Select a Node Kind or Arc to see details",
         };
-        lines.push(Line::from(Span::styled(msg, Style::default().fg(Color::DarkGray))));
+        lines.push(Line::from(Span::styled(
+            msg,
+            Style::default().fg(Color::DarkGray),
+        )));
     }
 
     let paragraph = Paragraph::new(lines);
     f.render_widget(paragraph, inner);
 }
 
-/// Get color for arc family.
-fn get_family_color(family: &str) -> Color {
-    match family {
-        "ownership" => Color::Rgb(38, 139, 210),    // Blue
-        "localization" => Color::Rgb(133, 153, 0),  // Green
-        "semantic" => Color::Rgb(181, 137, 0),      // Yellow
-        "generation" => Color::Rgb(203, 75, 22),    // Orange
-        "mining" => Color::Rgb(108, 113, 196),      // Violet
-        _ => Color::Rgb(140, 140, 140),             // Gray default
+/// Render arcs grouped by family (instead of by direction).
+fn render_arcs_by_family(
+    lines: &mut Vec<Line>,
+    arcs: &super::data::KindArcsData,
+    theme: &theme::Theme,
+    dim: &Style,
+) {
+    use std::collections::BTreeMap;
+
+    // Collect all arcs grouped by family (clone data to avoid lifetime issues)
+    let mut by_family: BTreeMap<String, Vec<(bool, String, String)>> = BTreeMap::new();
+
+    for arc in &arcs.incoming {
+        by_family.entry(arc.family.clone()).or_default().push((
+            false,
+            arc.arc_key.clone(),
+            arc.other_kind.clone(),
+        )); // false = incoming
+    }
+    for arc in &arcs.outgoing {
+        by_family.entry(arc.family.clone()).or_default().push((
+            true,
+            arc.arc_key.clone(),
+            arc.other_kind.clone(),
+        )); // true = outgoing
+    }
+
+    if by_family.is_empty() {
+        lines.push(Line::from(Span::styled(
+            "  No arc relationships defined for this Node Kind",
+            Style::default().fg(Color::DarkGray),
+        )));
+        return;
+    }
+
+    let kind_label = arcs.kind_label.clone();
+
+    // Render each family group
+    for (family, family_arcs) in &by_family {
+        let family_color = theme.arc_family_color(family);
+        let incoming_count = family_arcs.iter().filter(|(is_out, _, _)| !is_out).count();
+        let outgoing_count = family_arcs.iter().filter(|(is_out, _, _)| *is_out).count();
+
+        // Family header with counts
+        lines.push(Line::from(vec![
+            Span::styled("  ", *dim),
+            Span::styled(
+                family.to_uppercase(),
+                Style::default()
+                    .fg(family_color)
+                    .add_modifier(Modifier::BOLD),
+            ),
+            Span::styled(
+                format!("  (◀{} ▶{})", incoming_count, outgoing_count),
+                Style::default().fg(Color::DarkGray),
+            ),
+        ]));
+        lines.push(Line::from(Span::styled(
+            "  ─────────────────────────────────────────",
+            *dim,
+        )));
+
+        // Render arcs in this family
+        for (is_outgoing, arc_key, other_kind) in family_arcs {
+            if *is_outgoing {
+                // Outgoing: Kind ──[ARC]──▶ Target
+                lines.push(Line::from(vec![
+                    Span::styled("    ", *dim),
+                    Span::styled(kind_label.clone(), Style::default().fg(Color::White)),
+                    Span::styled(" ──[", *dim),
+                    Span::styled(
+                        arc_key.clone(),
+                        Style::default()
+                            .fg(family_color)
+                            .add_modifier(Modifier::BOLD),
+                    ),
+                    Span::styled("]──▶ ", *dim),
+                    Span::styled(other_kind.clone(), Style::default().fg(Color::Green)),
+                ]));
+            } else {
+                // Incoming: Source ──[ARC]──▶ Kind
+                lines.push(Line::from(vec![
+                    Span::styled("    ", *dim),
+                    Span::styled(other_kind.clone(), Style::default().fg(Color::Green)),
+                    Span::styled(" ──[", *dim),
+                    Span::styled(
+                        arc_key.clone(),
+                        Style::default()
+                            .fg(family_color)
+                            .add_modifier(Modifier::BOLD),
+                    ),
+                    Span::styled("]──▶ ", *dim),
+                    Span::styled(kind_label.clone(), Style::default().fg(Color::White)),
+                ]));
+            }
+        }
+        lines.push(Line::from(Span::raw("")));
+    }
+}
+
+/// Render instance arcs (actual connections in the data graph).
+#[allow(dead_code)]
+fn render_instance_arcs(lines: &mut Vec<Line>, instance: &super::data::InstanceInfo, dim: &Style) {
+    let theme = theme::Theme::new();
+
+    let total = instance.outgoing_arcs.len() + instance.incoming_arcs.len();
+    if total == 0 {
+        lines.push(Line::from(Span::styled(
+            "  No arc connections for this instance",
+            Style::default().fg(Color::DarkGray),
+        )));
+        return;
+    }
+
+    let instance_key = instance.key.clone();
+
+    // Outgoing arcs
+    if !instance.outgoing_arcs.is_empty() {
+        lines.push(Line::from(Span::styled(
+            format!("  ─▶ OUTGOING ({}) ", instance.outgoing_arcs.len()),
+            Style::default()
+                .fg(Color::Cyan)
+                .add_modifier(Modifier::BOLD),
+        )));
+        lines.push(Line::from(Span::styled(
+            "  ─────────────────────────────────────────",
+            *dim,
+        )));
+
+        for arc in &instance.outgoing_arcs {
+            let status_style = if arc.exists {
+                Style::default().fg(Color::Green)
+            } else {
+                Style::default().fg(Color::Yellow)
+            };
+            let status_char = if arc.exists { "✓" } else { "○" };
+
+            lines.push(Line::from(vec![
+                Span::styled(format!("  {} ", status_char), status_style),
+                Span::styled(instance_key.clone(), Style::default().fg(Color::White)),
+                Span::styled(" ──[", *dim),
+                Span::styled(
+                    arc.arc_type.clone(),
+                    Style::default()
+                        .fg(theme.arc_family_color("semantic"))
+                        .add_modifier(Modifier::BOLD),
+                ),
+                Span::styled("]──▶ ", *dim),
+                Span::styled(arc.target_key.clone(), Style::default().fg(Color::Green)),
+                Span::styled(
+                    format!(" ({})", arc.target_kind),
+                    Style::default().fg(Color::DarkGray),
+                ),
+            ]));
+        }
+        lines.push(Line::from(Span::raw("")));
+    }
+
+    // Incoming arcs
+    if !instance.incoming_arcs.is_empty() {
+        lines.push(Line::from(Span::styled(
+            format!("  ◀─ INCOMING ({}) ", instance.incoming_arcs.len()),
+            Style::default()
+                .fg(Color::Magenta)
+                .add_modifier(Modifier::BOLD),
+        )));
+        lines.push(Line::from(Span::styled(
+            "  ─────────────────────────────────────────",
+            *dim,
+        )));
+
+        for arc in &instance.incoming_arcs {
+            let status_style = if arc.exists {
+                Style::default().fg(Color::Green)
+            } else {
+                Style::default().fg(Color::Yellow)
+            };
+            let status_char = if arc.exists { "✓" } else { "○" };
+
+            lines.push(Line::from(vec![
+                Span::styled(format!("  {} ", status_char), status_style),
+                Span::styled(arc.target_key.clone(), Style::default().fg(Color::Green)),
+                Span::styled(
+                    format!(" ({})", arc.target_kind),
+                    Style::default().fg(Color::DarkGray),
+                ),
+                Span::styled(" ──[", *dim),
+                Span::styled(
+                    arc.arc_type.clone(),
+                    Style::default()
+                        .fg(theme.arc_family_color("semantic"))
+                        .add_modifier(Modifier::BOLD),
+                ),
+                Span::styled("]──▶ ", *dim),
+                Span::styled(instance_key.clone(), Style::default().fg(Color::White)),
+            ]));
+        }
+        lines.push(Line::from(Span::raw("")));
     }
 }
 
@@ -778,7 +1458,7 @@ fn build_yaml_title(path: &str) -> Vec<Span<'static>> {
 /// Get title for detail panel based on current selection.
 fn get_detail_title(app: &App) -> String {
     match app.current_item() {
-        Some(TreeItem::KindsSection) => "Kinds".to_string(),
+        Some(TreeItem::KindsSection) => "Node Kinds".to_string(),
         Some(TreeItem::ArcsSection) => "Arcs".to_string(),
         Some(TreeItem::Realm(r)) => format!("{} {}", r.emoji, r.display_name),
         Some(TreeItem::Layer(_, l)) => l.display_name.clone(),
@@ -946,7 +1626,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
             let mut lines = vec![
                 Line::from(vec![
                     Span::styled("type      ", Style::default().fg(Color::DarkGray)),
-                    Span::styled("Kind", Style::default().fg(Color::Cyan)),
+                    Span::styled("Node Kind", Style::default().fg(Color::Cyan)),
                 ]),
                 Line::from(vec![
                     Span::styled("key       ", Style::default().fg(Color::DarkGray)),
@@ -1198,11 +1878,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                     Style::default().fg(Color::Rgb(100, 100, 120)),
                 )));
                 for (key, value) in &instance.properties {
-                    let truncated = if value.len() > 40 {
-                        format!("{}...", &value[..40])
-                    } else {
-                        value.clone()
-                    };
+                    let truncated = truncate_str(value, 40);
                     lines.push(Line::from(vec![
                         Span::styled(format!("  {} ", key), Style::default().fg(Color::DarkGray)),
                         Span::styled(truncated, Style::default().fg(Color::White)),
@@ -1226,9 +1902,10 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                     Style::default().fg(Color::Rgb(100, 100, 120)),
                 )));
 
-                // Box drawing for instance node
+                // Box drawing for instance node (use char count for proper alignment)
+                let key_width = instance.key.chars().count();
                 lines.push(Line::from(Span::styled(
-                    format!("  ┌{}┐", "─".repeat(instance.key.len() + 2)),
+                    format!("  ┌{}┐", "─".repeat(key_width + 2)),
                     Style::default().fg(Color::Cyan),
                 )));
                 lines.push(Line::from(Span::styled(
@@ -1236,7 +1913,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                     Style::default().fg(Color::Cyan),
                 )));
                 lines.push(Line::from(Span::styled(
-                    format!("  └{}┘", "─".repeat(instance.key.len() + 2)),
+                    format!("  └{}┘", "─".repeat(key_width + 2)),
                     Style::default().fg(Color::Cyan),
                 )));
 
@@ -1419,7 +2096,7 @@ fn render_status(f: &mut Frame, area: Rect, app: &App) {
         ),
         Span::styled(" │ ", Style::default().fg(Color::Rgb(50, 50, 60))),
         Span::styled(
-            format!("{} Kinds", stats.kind_count),
+            format!("{} Node Kinds", stats.kind_count),
             Style::default().fg(Color::Rgb(100, 100, 120)),
         ),
         Span::styled(" │ ", Style::default().fg(Color::Rgb(50, 50, 60))),
@@ -1512,14 +2189,16 @@ fn render_search(f: &mut Frame, app: &App) {
         let item = app.tree.item_at(idx);
 
         let (prefix, name, type_label) = match item {
-            Some(TreeItem::KindsSection) => ("", "Kinds".to_string(), "Section"),
+            Some(TreeItem::KindsSection) => ("", "Node Kinds".to_string(), "Section"),
             Some(TreeItem::ArcsSection) => ("", "Arcs".to_string(), "Section"),
             Some(TreeItem::Realm(r)) => (r.emoji, r.display_name.clone(), "Realm"),
             Some(TreeItem::Layer(_, l)) => ("  ", l.display_name.clone(), "Layer"),
-            Some(TreeItem::Kind(_, _, k)) => ("    ", k.display_name.clone(), "Kind"),
+            Some(TreeItem::Kind(_, _, k)) => ("    ", k.display_name.clone(), "Node Kind"),
             Some(TreeItem::ArcFamily(f)) => ("  ", f.display_name.clone(), "ArcFamily"),
-            Some(TreeItem::ArcKind(_, ek)) => ("    ", ek.display_name.clone(), "ArcKind"),
-            Some(TreeItem::Instance(_, _, _, inst)) => ("      ", inst.display_name.clone(), "Instance"),
+            Some(TreeItem::ArcKind(_, ek)) => ("    ", ek.display_name.clone(), "Arc Kind"),
+            Some(TreeItem::Instance(_, _, _, inst)) => {
+                ("      ", inst.display_name.clone(), "Instance")
+            }
             None => ("?", "Unknown".to_string(), ""),
         };
 
@@ -1578,7 +2257,10 @@ fn render_help(f: &mut Frame) {
         )]),
         Line::from(vec![
             Span::styled("    Tab      ", Style::default().fg(Color::White)),
-            Span::styled("Cycle: Tree→Info→Graph→YAML", Style::default().fg(Color::DarkGray)),
+            Span::styled(
+                "Cycle: Tree→Info→Graph→YAML",
+                Style::default().fg(Color::DarkGray),
+            ),
         ]),
         Line::from(vec![
             Span::styled("    ←→       ", Style::default().fg(Color::White)),
@@ -1612,11 +2294,17 @@ fn render_help(f: &mut Frame) {
         ]),
         Line::from(vec![
             Span::styled("    h/l ←→   ", Style::default().fg(Color::White)),
-            Span::styled("Navigate incoming/outgoing", Style::default().fg(Color::DarkGray)),
+            Span::styled(
+                "Navigate incoming/outgoing",
+                Style::default().fg(Color::DarkGray),
+            ),
         ]),
         Line::from(vec![
             Span::styled("    Enter    ", Style::default().fg(Color::White)),
-            Span::styled("Jump to selected node", Style::default().fg(Color::DarkGray)),
+            Span::styled(
+                "Jump to selected node",
+                Style::default().fg(Color::DarkGray),
+            ),
         ]),
         Line::from(""),
         Line::from(vec![Span::styled(
@@ -1634,7 +2322,10 @@ fn render_help(f: &mut Frame) {
         )]),
         Line::from(vec![
             Span::styled("    1-4      ", Style::default().fg(Color::White)),
-            Span::styled("Meta/Data/Overlay/Query", Style::default().fg(Color::DarkGray)),
+            Span::styled(
+                "Meta/Data/Overlay/Query",
+                Style::default().fg(Color::DarkGray),
+            ),
         ]),
         Line::from(vec![
             Span::styled("    N        ", Style::default().fg(Color::White)),
@@ -1672,4 +2363,54 @@ fn render_help(f: &mut Frame) {
 
     let paragraph = Paragraph::new(lines).block(block);
     f.render_widget(paragraph, help_area);
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_truncate_str_ascii_under_limit() {
+        assert_eq!(truncate_str("hello", 10), "hello");
+    }
+
+    #[test]
+    fn test_truncate_str_ascii_at_limit() {
+        assert_eq!(truncate_str("hello", 5), "hello");
+    }
+
+    #[test]
+    fn test_truncate_str_ascii_over_limit() {
+        assert_eq!(truncate_str("hello world", 5), "hello...");
+    }
+
+    #[test]
+    fn test_truncate_str_utf8_bengali() {
+        // Bengali: "বাংলা (বাংলাদেশ)" - this caused the original panic
+        let bengali = "বাংলা (বাংলাদেশ)";
+        // Should not panic even when truncating in the middle of multi-byte chars
+        let result = truncate_str(bengali, 5);
+        assert_eq!(result.chars().count(), 8); // 5 chars + "..."
+        assert!(result.ends_with("..."));
+    }
+
+    #[test]
+    fn test_truncate_str_utf8_emoji() {
+        let emoji = "Hello 👋🏻 World 🌍";
+        let result = truncate_str(emoji, 8);
+        // "Hello 👋🏻" = 8 chars (emoji with skin tone is 2 chars)
+        assert!(result.ends_with("..."));
+    }
+
+    #[test]
+    fn test_truncate_str_chinese() {
+        let chinese = "你好世界这是中文测试";
+        let result = truncate_str(chinese, 4);
+        assert_eq!(result, "你好世界...");
+    }
+
+    #[test]
+    fn test_truncate_str_empty() {
+        assert_eq!(truncate_str("", 10), "");
+    }
 }
