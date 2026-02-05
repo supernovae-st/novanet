@@ -325,7 +325,7 @@ Master command for schema management.
 | `status` | Show schema stats (default) |
 | `add-node <name>` | Redirect to /schema:add-node |
 | `edit-node <name>` | Redirect to /schema:edit-node |
-| `add-relation <NAME>` | Redirect to /schema:add-relation |
+| `add-arc <NAME>` | Redirect to /schema:add-arc |
 
 **Example:**
 ```bash
@@ -383,15 +383,15 @@ Modify an existing node type with impact analysis.
 
 ---
 
-### `/schema:add-relation` - Add New Relationship
+### `/schema:add-arc` - Add New Arc Type
 
-Add a new relationship type between nodes.
+Add a new arc type between nodes.
 
 **Workflow:**
 1. **Discovery** - Ask about from/to Kinds, cardinality, properties, ArcFamily
 2. **Classification** - Assign to ArcFamily (ownership/localization/semantic/generation/mining)
-3. **Bidirectionality** - Check if inverse relation needed
-4. **Creation** - Add to relations.yaml with `family` field, update node YAMLs
+3. **Bidirectionality** - Check if inverse arc needed
+4. **Creation** - Add to arc-kinds/ with `family` field, update node YAMLs
 5. **Sync** - Validate and seed
 
 **Naming Conventions:**

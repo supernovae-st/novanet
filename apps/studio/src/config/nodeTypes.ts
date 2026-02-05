@@ -1,7 +1,7 @@
 // =============================================================================
 // NODE TYPE CONFIGURATION (v10.6.0)
 // =============================================================================
-// Visual configuration for all 43 NovaNet node types (v10.6: 8 layers, 2 realms: global, tenant)
+// Visual configuration for all 46 NovaNet node types (v10.6: 8 layers, 2 realms: global, tenant)
 // NodeType, Layer, KIND_META imported from @novanet/core (Single Source of Truth)
 
 import type { NodeType, Layer } from '@novanet/core/types';
@@ -13,7 +13,7 @@ import { NODE_TYPES, KIND_META } from '@novanet/core/types';
 // =============================================================================
 
 /**
- * Node layers with their types (v10.6 - 43 nodes across 8 layers)
+ * Node layers with their types (v10.6 - 46 nodes across 8 layers)
  * Derived from KIND_META in @novanet/core
  */
 export const NODE_LAYERS: Record<Layer, NodeType[]> = Object.entries(KIND_META).reduce(
@@ -44,7 +44,7 @@ export interface NodeTypeConfig {
 }
 
 /**
- * All node type configurations (v10.6 - 43 nodes)
+ * All node type configurations (v10.6 - 46 nodes)
  * Aligned with @novanet/core NODE_TYPES
  */
 export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
@@ -475,6 +475,33 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#fca5a5',
     colorClass: 'bg-red-300',
     size: 10,
+    layer: 'seo',
+  },
+  SEOComparison: {
+    type: 'SEOComparison',
+    label: 'SEO Comparison',
+    icon: '⚖️',
+    color: '#dc2626',
+    colorClass: 'bg-red-600',
+    size: 12,
+    layer: 'seo',
+  },
+  SEOPreposition: {
+    type: 'SEOPreposition',
+    label: 'SEO Preposition',
+    icon: '🔗',
+    color: '#b91c1c',
+    colorClass: 'bg-red-700',
+    size: 12,
+    layer: 'seo',
+  },
+  SEOQuestion: {
+    type: 'SEOQuestion',
+    label: 'SEO Question',
+    icon: '❓',
+    color: '#991b1b',
+    colorClass: 'bg-red-800',
+    size: 12,
     layer: 'seo',
   },
 

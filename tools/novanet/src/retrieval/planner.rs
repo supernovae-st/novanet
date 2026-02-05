@@ -97,30 +97,70 @@ impl<'a> TraversalPlanner<'a> {
             "Block" => vec![
                 ("USES_ENTITY".into(), "semantic".into(), "Entity".into()),
                 ("OF_TYPE".into(), "ownership".into(), "BlockType".into()),
-                ("HAS_PROMPT".into(), "ownership".into(), "BlockPrompt".into()),
+                (
+                    "HAS_PROMPT".into(),
+                    "ownership".into(),
+                    "BlockPrompt".into(),
+                ),
                 ("HAS_RULES".into(), "ownership".into(), "BlockRules".into()),
             ],
             // v10.3 Entity-Centric: Entity replaces Concept
             "Entity" => vec![
-                ("HAS_L10N".into(), "localization".into(), "EntityL10n".into()),
+                (
+                    "HAS_L10N".into(),
+                    "localization".into(),
+                    "EntityL10n".into(),
+                ),
                 ("SEMANTIC_LINK".into(), "semantic".into(), "Entity".into()),
             ],
             "EntityL10n" => vec![("FOR_LOCALE".into(), "localization".into(), "Locale".into())],
             // v10 tiered knowledge model
             "Locale" => vec![
                 // Technical tier
-                ("HAS_FORMATTING".into(), "localization".into(), "Formatting".into()),
-                ("HAS_SLUGIFICATION".into(), "localization".into(), "Slugification".into()),
-                ("HAS_ADAPTATION".into(), "localization".into(), "Adaptation".into()),
+                (
+                    "HAS_FORMATTING".into(),
+                    "localization".into(),
+                    "Formatting".into(),
+                ),
+                (
+                    "HAS_SLUGIFICATION".into(),
+                    "localization".into(),
+                    "Slugification".into(),
+                ),
+                (
+                    "HAS_ADAPTATION".into(),
+                    "localization".into(),
+                    "Adaptation".into(),
+                ),
                 // Style tier
                 ("HAS_STYLE".into(), "localization".into(), "Style".into()),
                 // Semantic tier (sets)
                 ("HAS_TERMS".into(), "localization".into(), "TermSet".into()),
-                ("HAS_EXPRESSIONS".into(), "localization".into(), "ExpressionSet".into()),
-                ("HAS_PATTERNS".into(), "localization".into(), "PatternSet".into()),
-                ("HAS_CULTURE".into(), "localization".into(), "CultureSet".into()),
-                ("HAS_TABOOS".into(), "localization".into(), "TabooSet".into()),
-                ("HAS_AUDIENCE".into(), "localization".into(), "AudienceSet".into()),
+                (
+                    "HAS_EXPRESSIONS".into(),
+                    "localization".into(),
+                    "ExpressionSet".into(),
+                ),
+                (
+                    "HAS_PATTERNS".into(),
+                    "localization".into(),
+                    "PatternSet".into(),
+                ),
+                (
+                    "HAS_CULTURE".into(),
+                    "localization".into(),
+                    "CultureSet".into(),
+                ),
+                (
+                    "HAS_TABOOS".into(),
+                    "localization".into(),
+                    "TabooSet".into(),
+                ),
+                (
+                    "HAS_AUDIENCE".into(),
+                    "localization".into(),
+                    "AudienceSet".into(),
+                ),
             ],
             _ => vec![],
         }

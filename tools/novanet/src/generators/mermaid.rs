@@ -182,12 +182,7 @@ pub fn write_arcs_and_styles(out: &mut String, arcs: &[ExpandedArc]) {
     let mut arc_indices_by_family: BTreeMap<String, Vec<usize>> = BTreeMap::new();
     for (i, arc) in arcs.iter().enumerate() {
         let arrow = family_arrow(arc.family);
-        writeln!(
-            out,
-            "  {} {}|{}| {}",
-            arc.from, arrow, arc.arc_type, arc.to
-        )
-        .unwrap();
+        writeln!(out, "  {} {}|{}| {}", arc.from, arrow, arc.arc_type, arc.to).unwrap();
         arc_indices_by_family
             .entry(arc.family.to_string())
             .or_default()
@@ -280,11 +275,7 @@ fn render_mermaid(
     // ── Header ────────────────────────────────────────────────────────────
     writeln!(out, "flowchart TB").unwrap();
     writeln!(out, "  %% NovaNet Graph v10.6.0").unwrap();
-    writeln!(
-        out,
-        "  %% Generated: {node_count} nodes, {arc_count} arcs"
-    )
-    .unwrap();
+    writeln!(out, "  %% Generated: {node_count} nodes, {arc_count} arcs").unwrap();
     writeln!(
         out,
         "  %% Source: 42 node YAMLs + relations.yaml + taxonomy.yaml"

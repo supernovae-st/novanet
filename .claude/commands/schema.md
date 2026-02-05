@@ -1,6 +1,6 @@
 ---
-description: NovaNet schema management - add/edit nodes and relations
-argument-hint: [add-node|edit-node|add-relation|status] [name]
+description: NovaNet schema management - add/edit nodes and arcs
+argument-hint: [add-node|edit-node|add-arc|status] [name]
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion, mcp__neo4j__read_neo4j_cypher, mcp__neo4j__get_neo4j_schema
 ---
 
@@ -15,7 +15,7 @@ Master command for managing the NovaNet knowledge graph schema.
 | `/schema status` | Show current schema stats |
 | `/schema add-node <name>` | Add new node type |
 | `/schema edit-node <name>` | Modify existing node |
-| `/schema add-relation <NAME>` | Add new relationship |
+| `/schema add-arc <NAME>` | Add new arc type |
 
 ## Schema Architecture
 
@@ -62,17 +62,17 @@ Redirect to `/schema:add-node <name>`
 
 Redirect to `/schema:edit-node <name>`
 
-### `add-relation <NAME>`
+### `add-arc <NAME>`
 
-Redirect to `/schema:add-relation <NAME>`
+Redirect to `/schema:add-arc <NAME>`
 
 ## Current Schema (v10.6.0)
 
-**43 Kind Types** across 2 Realms:
-- **Global (20)**: Locale, Knowledge Atoms (Sets + Atoms), SEO nodes (READ-ONLY)
+**46 Kind Types** across 2 Realms:
+- **Global (23)**: Locale, Knowledge Atoms (Sets + Atoms), SEO nodes
 - **Tenant (23)**: Organization, Project structure, Entity, prompts, outputs, generation
 
-**63 Arcs** in 5 ArcFamilies:
+**51 Arcs** in 5 ArcFamilies:
 - **Ownership**: HAS_PAGE, HAS_BLOCK, OF_TYPE
 - **Localization**: HAS_L10N, FOR_LOCALE
 - **Semantic**: SEMANTIC_LINK, USES_ENTITY

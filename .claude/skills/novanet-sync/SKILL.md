@@ -16,18 +16,18 @@ Synchronize generated artifacts with YAML source of truth.
 ```
 packages/core/models/
 ├── node-kinds/                   ← 46 YAML files (one per NodeKind)
-│   ├── global/                   ← Realm: global (19 nodes, READ-ONLY)
+│   ├── global/                   ← Realm: global (23 nodes)
 │   │   ├── config/               ←   Layer: config (Locale + utilities)
-│   │   ├── locale-knowledge/     ←   Layer: locale-knowledge
+│   │   ├── locale-knowledge/     ←   Layer: locale-knowledge (14 Knowledge Atom types)
 │   │   └── seo/                  ←   Layer: seo (6 nodes: SEOKeyword, SEOQuestion, etc.)
-│   └── tenant/                   ← Realm: tenant (27 nodes)
+│   └── tenant/                   ← Realm: tenant (23 nodes)
 │       ├── config/               ←   Layer: config (Organization)
 │       ├── foundation/           ←   Layer: foundation
 │       ├── structure/            ←   Layer: structure
 │       ├── semantic/             ←   Layer: semantic (Entity, EntityL10n)
 │       ├── instruction/          ←   Layer: instruction
 │       └── output/               ←   Layer: output
-├── arc-kinds/                    ← 72 YAML files (one per ArcKind)
+├── arc-kinds/                    ← 51 YAML files (one per ArcKind)
 ├── relations.yaml                ← Legacy format (kept for parser compatibility)
 └── taxonomy.yaml                 ← v10.6: 2 Realms, 9 Layers, 5 Traits
 ```
@@ -38,9 +38,9 @@ packages/core/models/
 
 | Source | Generator | Output |
 |--------|-----------|--------|
-| models/ | OrganizingGenerator | seed/00.5-organizing-principles.cypher |
-| node-kinds/ | KindGenerator | seed/99-kind-meta-nodes.cypher |
-| arc-kinds/ | ArcSchemaGenerator | seed/99-arc-schema-meta-nodes.cypher |
+| taxonomy.yaml | OrganizingGenerator | seed/00.5-taxonomy.cypher |
+| node-kinds/ | NodeKindGenerator | seed/01-kinds.cypher |
+| arc-kinds/ | ArcKindGenerator | seed/02-arc-kinds.cypher |
 | node-kinds/ | AutowireGenerator | seed/99-autowire-kinds.cypher |
 | node-kinds/ | LayerGenerator | src/graph/layers.ts |
 | node-kinds/ | HierarchyGenerator | src/graph/hierarchy.ts |
@@ -133,6 +133,6 @@ All generators live in `tools/novanet/src/generators/` (Rust-first architecture)
 
 **MermaidGenerator (`generators/mermaid.rs`):**
 - Reads `models/node-kinds/` and `models/arc-kinds/`
-- Generates Mermaid flowchart with all 46 Kinds and 72 arcs
+- Generates Mermaid flowchart with all 46 Kinds and 51 arcs
 - Groups by Realm (Global, Tenant)
 - Colors by Layer (9 distinct colors)

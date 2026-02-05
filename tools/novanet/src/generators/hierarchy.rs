@@ -272,7 +272,8 @@ mod tests {
                     display_name: "Tenant".to_string(),
                     emoji: "\u{1F3E2}".to_string(), // 🏢
                     color: "#6c71c4".to_string(),
-                    llm_context: "Multi-tenant isolated realm. Contains Organization and Projects.".to_string(),
+                    llm_context: "Multi-tenant isolated realm. Contains Organization and Projects."
+                        .to_string(),
                     layers: vec![
                         LayerDef {
                             key: "foundation".to_string(),

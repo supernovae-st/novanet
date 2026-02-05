@@ -1,7 +1,7 @@
-# packages/core/models/node-kinds/global/knowledge/slugification.yaml
+# packages/core/models/node-kinds/global/config/slugification.yaml
 # Slugification — URL slug rules for a locale (transliteration, stop words, URL conventions)
 #
-# v10.1: knowledge_tier removed (node type is sufficient for LLM routing)
+# v10.6: Added slug_rule enum, preserve_diacritics, unicode_normalization, raw_markdown (hybrid approach)
 # Stability: High - changes rarely
 
 node:
@@ -13,6 +13,12 @@ node:
   description: "URL slug rules: transliteration, stop words, URL conventions"
 
   standard_properties:
+    key:
+      type: string
+      required: true
+      description: "Unique key (locale code)"
+      example: "fr-FR"
+
     display_name:
       type: string
       required: true
@@ -29,24 +35,100 @@ node:
       type: string
       required: true
       description: "LLM generation hints"
-      example: "USE: for URL/slug generation. TRIGGERS: slug, URL, permalink. NOT: content text."
+      example: "USE: URL slug generation from titles. TRIGGERS: slug, URL, permalink, SEO. KEY: check slug_rule (latin_preserve/native_script). NOT: content text or translation."
 
     created_at:
       type: datetime
       required: true
-      description: "Creation timestamp"
 
     updated_at:
       type: datetime
       required: true
-      description: "Last update timestamp"
 
   properties:
-    # Transliteration
+    # ═══════════════════════════════════════════════════════════════════════════
+    # CORE SLUG RULE
+    # ═══════════════════════════════════════════════════════════════════════════
+    slug_rule:
+      type: string
+      required: true
+      enum: ["latin_preserve", "latin_strip", "native_script", "transliterate"]
+      description: |
+        Base slug generation strategy:
+        - latin_preserve: Keep diacritics (é, ç, ü) in UTF-8 (French, German, Spanish)
+        - latin_strip: Remove diacritics (é→e, ç→c) to ASCII (US English, SEO-focused)
+        - native_script: Preserve non-Latin scripts in UTF-8 (Arabic, Chinese, Japanese, Korean, Thai, Hebrew)
+        - transliterate: Convert all to ASCII via transliteration map (legacy systems)
+      example: "latin_preserve"
+
+    preserve_diacritics:
+      type: bool
+      required: true
+      description: "Keep accented characters (true for latin_preserve/native_script, false for latin_strip/transliterate)"
+      example: true
+
+    unicode_normalization:
+      type: string
+      required: true
+      enum: ["NFC", "NFD", "NFKC", "NFKD"]
+      description: "Unicode normalization form (NFC = composed, NFD = decomposed)"
+      example: "NFC"
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # LENGTH CONSTRAINTS
+    # ═══════════════════════════════════════════════════════════════════════════
+    min_length:
+      type: int
+      required: true
+      description: "Minimum slug length (typically 3)"
+      example: 3
+
+    max_length:
+      type: int
+      required: true
+      description: "Maximum slug length (typically 80)"
+      example: 80
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # CHARACTER HANDLING
+    # ═══════════════════════════════════════════════════════════════════════════
+    separator:
+      type: string
+      required: true
+      description: "Word separator in slugs"
+      example: "-"
+
+    lowercase:
+      type: bool
+      required: true
+      description: "Force lowercase (true for most, false for scripts without case like Arabic)"
+      example: true
+
+    preserve_numbers:
+      type: bool
+      required: true
+      description: "Keep numbers in slugs"
+      example: true
+
+    character_filter_regex:
+      type: string
+      required: false
+      description: "Regex for allowed characters (Unicode-aware)"
+      example: "[^\\p{L}\\p{N}\\s-]"
+
+    word_boundaries:
+      type: json
+      required: false
+      description: "Characters that create word boundaries"
+      example: ["'", "'", "-", " "]
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # TRANSLITERATION (for latin_strip/transliterate rules)
+    # ═══════════════════════════════════════════════════════════════════════════
     transliteration_map:
       type: json
-      required: true
-      description: "Character replacement map for URL-safe slugs"
+      required: false
+      description: "Character replacement map (only for latin_strip/transliterate)"
       example:
         é: "e"
         è: "e"
@@ -64,45 +146,6 @@ node:
         œ: "oe"
         æ: "ae"
 
-    # Stop words
-    stop_words:
-      type: json
-      required: true
-      description: "Words to remove from slugs"
-      example: ["le", "la", "les", "un", "une", "des", "du", "de", "et", "ou", "à", "en", "pour", "par", "sur", "avec"]
-
-    # URL rules
-    separator:
-      type: string
-      required: true
-      description: "Word separator in slugs"
-      example: "-"
-
-    max_length:
-      type: int
-      required: false
-      description: "Maximum slug length"
-      example: 80
-
-    lowercase:
-      type: bool
-      required: true
-      description: "Force lowercase"
-      example: true
-
-    preserve_numbers:
-      type: bool
-      required: false
-      description: "Keep numbers in slugs"
-      example: true
-
-    # Special rules
-    word_boundaries:
-      type: json
-      required: false
-      description: "Characters that create word boundaries"
-      example: ["'", "'", "-", " "]
-
     abbreviation_expansions:
       type: json
       required: false
@@ -110,6 +153,44 @@ node:
       example:
         "n°": "numero"
         "&": "et"
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # STOPWORDS
+    # ═══════════════════════════════════════════════════════════════════════════
+    stop_words:
+      type: json
+      required: true
+      description: "Words to remove from slugs"
+      example: ["le", "la", "les", "un", "une", "des", "du", "de", "et", "ou", "à", "en", "pour", "par", "sur", "avec"]
+
+    locale_specific_stopwords:
+      type: json
+      required: false
+      description: "Additional stopwords specific to this locale variant"
+      example: []
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # SCRIPT-SPECIFIC (for native_script rule)
+    # ═══════════════════════════════════════════════════════════════════════════
+    script_range:
+      type: string
+      required: false
+      description: "Unicode range for native script (e.g., U+0600-U+06FF for Arabic)"
+      example: "U+0600-U+06FF"
+
+    remove_diacritical_marks:
+      type: json
+      required: false
+      description: "Diacritical marks to remove (e.g., Arabic tashkeel)"
+      example: ["\\u064B-\\u065F", "\\u0670"]
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # RAW MARKDOWN (Hybrid approach)
+    # ═══════════════════════════════════════════════════════════════════════════
+    raw_markdown:
+      type: string
+      required: false
+      description: "Full source markdown for LLM context (includes examples, edge cases, implementation)"
 
   relations:
     incoming:
