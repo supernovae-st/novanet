@@ -575,8 +575,27 @@ impl App {
 
             // Mode switching: 1-4 direct (1=Meta, 2=Data, 3=Overlay, 4=Query)
             KeyCode::Char('1') => {
+                // If on an Instance in Data mode, navigate to its Kind in Meta mode
+                let kind_key_to_focus =
+                    if let Some(super::data::TreeItem::Instance(_, _, kind, _)) =
+                        self.current_item()
+                    {
+                        Some(kind.key.clone())
+                    } else {
+                        None
+                    };
+
                 self.exit_filtered_data_mode();
                 self.mode = NavMode::Meta;
+
+                // Focus on the Kind if we came from an Instance
+                if let Some(kind_key) = kind_key_to_focus {
+                    if let Some(cursor) = self.tree.find_kind_cursor(&kind_key) {
+                        self.tree_cursor = cursor;
+                        self.ensure_cursor_visible();
+                        self.load_yaml_for_current();
+                    }
+                }
                 true
             }
             KeyCode::Char('2') => {

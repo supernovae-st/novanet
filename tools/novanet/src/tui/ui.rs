@@ -1386,6 +1386,75 @@ fn render_instance_arcs(lines: &mut Vec<Line>, instance: &super::data::InstanceI
 /// YAML panel: displays YAML source with independent scroll.
 fn render_yaml_panel(f: &mut Frame, area: Rect, app: &App) {
     let focused = app.focus == Focus::Yaml;
+    let visible_height = area.height.saturating_sub(2) as usize;
+
+    // Check if we're in Data mode on an Instance → show JSON instead of YAML
+    let is_json_mode = app.mode == NavMode::Data
+        && matches!(app.current_item(), Some(TreeItem::Instance(_, _, _, _)));
+
+    if is_json_mode {
+        render_json_panel(f, area, app, focused, visible_height);
+    } else {
+        render_yaml_content(f, area, app, focused, visible_height);
+    }
+}
+
+/// Render JSON panel for Instance data in Data mode.
+fn render_json_panel(f: &mut Frame, area: Rect, app: &App, focused: bool, visible_height: usize) {
+    // Cyan border for JSON mode
+    let border_color = if focused {
+        Color::Cyan
+    } else {
+        Color::Rgb(60, 130, 130) // Dimmed cyan when unfocused
+    };
+
+    let (title, json_lines, total_lines) =
+        if let Some(TreeItem::Instance(_, _, _, inst)) = app.current_item() {
+            let all_lines = inst.to_colored_json();
+            let total = all_lines.len();
+            let visible: Vec<Line> = all_lines
+                .into_iter()
+                .skip(app.yaml_scroll)
+                .take(visible_height)
+                .collect();
+            (format!(" {} ", inst.key), visible, total)
+        } else {
+            (
+                " JSON ".to_string(),
+                vec![Line::from(Span::styled(
+                    "No instance data",
+                    Style::default().fg(Color::DarkGray),
+                ))],
+                1,
+            )
+        };
+
+    // Scroll indicator
+    let scroll_indicator = if total_lines > visible_height {
+        format!(
+            " [{}/{}] ",
+            app.yaml_scroll + 1,
+            total_lines.saturating_sub(visible_height) + 1
+        )
+    } else {
+        String::new()
+    };
+
+    let block = Block::default()
+        .title(Span::styled(title, Style::default().fg(Color::Cyan)))
+        .title_bottom(Span::styled(
+            scroll_indicator,
+            Style::default().fg(Color::DarkGray),
+        ))
+        .borders(Borders::ALL)
+        .border_style(Style::default().fg(border_color));
+
+    let paragraph = Paragraph::new(json_lines).block(block);
+    f.render_widget(paragraph, area);
+}
+
+/// Render YAML panel (original behavior for Meta mode and Kind selection).
+fn render_yaml_content(f: &mut Frame, area: Rect, app: &App, focused: bool, visible_height: usize) {
     let border_color = if focused {
         Color::Green
     } else {
@@ -1395,7 +1464,6 @@ fn render_yaml_panel(f: &mut Frame, area: Rect, app: &App) {
     // Build YAML lines with syntax highlighting
     let mut lines: Vec<Line> = Vec::new();
 
-    let visible_height = area.height.saturating_sub(2) as usize;
     if !app.yaml_content.is_empty() {
         for yaml_line in app
             .yaml_content

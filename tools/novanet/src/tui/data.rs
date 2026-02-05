@@ -1,6 +1,8 @@
 //! Data loading for TUI — Neo4j queries for taxonomy tree, stats, and detail.
 
 use crate::db::Db;
+use ratatui::style::{Color, Style};
+use ratatui::text::{Line, Span};
 use rustc_hash::FxHashSet;
 use std::collections::BTreeMap;
 use tokio::join;
@@ -1272,6 +1274,70 @@ RETURN t.key as trait_key,
         }
         None
     }
+
+    /// Find cursor position for a Kind in Meta mode tree view.
+    /// Expands necessary parents (realm, layer) to make the Kind visible.
+    /// Returns the cursor position if found.
+    pub fn find_kind_cursor(&mut self, kind_key: &str) -> Option<usize> {
+        // First, find the Kind and its parents
+        let mut target_realm_key = None;
+        let mut target_layer_key = None;
+
+        for realm in &self.realms {
+            for layer in &realm.layers {
+                for kind in &layer.kinds {
+                    if kind.key == kind_key {
+                        target_realm_key = Some(realm.key.clone());
+                        target_layer_key = Some(layer.key.clone());
+                        break;
+                    }
+                }
+                if target_layer_key.is_some() {
+                    break;
+                }
+            }
+            if target_realm_key.is_some() {
+                break;
+            }
+        }
+
+        let (realm_key, layer_key) = match (target_realm_key, target_layer_key) {
+            (Some(r), Some(l)) => (r, l),
+            _ => return None,
+        };
+
+        // Expand parents to make Kind visible
+        self.collapsed.remove("kinds");
+        self.collapsed.remove(&format!("realm:{}", realm_key));
+        self.collapsed.remove(&format!("layer:{}", layer_key));
+
+        // Now count to find the cursor position
+        let mut idx = 0;
+
+        // Kinds section header
+        idx += 1;
+
+        for realm in &self.realms {
+            idx += 1; // Realm
+
+            if !self.is_collapsed(&format!("realm:{}", realm.key)) {
+                for layer in &realm.layers {
+                    idx += 1; // Layer
+
+                    if !self.is_collapsed(&format!("layer:{}", layer.key)) {
+                        for kind in &layer.kinds {
+                            if kind.key == kind_key {
+                                return Some(idx);
+                            }
+                            idx += 1;
+                        }
+                    }
+                }
+            }
+        }
+
+        None
+    }
 }
 
 /// Item type at a tree position.
@@ -1383,6 +1449,71 @@ impl InstanceInfo {
         }
 
         comparisons
+    }
+
+    /// Convert instance properties to colorized JSON lines for display.
+    /// Colors: keys=cyan, strings=green, numbers/bools=yellow, null=gray
+    pub fn to_colored_json(&self) -> Vec<Line<'static>> {
+        let mut lines: Vec<Line<'static>> = Vec::with_capacity(self.properties.len() + 2);
+
+        // Opening brace
+        lines.push(Line::from(Span::styled(
+            "{".to_string(),
+            Style::default().fg(Color::White),
+        )));
+
+        let prop_count = self.properties.len();
+        for (i, (key, value)) in self.properties.iter().enumerate() {
+            let comma = if i < prop_count - 1 { "," } else { "" };
+
+            // Detect value type and colorize accordingly
+            let (value_str, value_color) = Self::colorize_value(value);
+
+            lines.push(Line::from(vec![
+                Span::raw("  "),
+                Span::styled(format!("\"{}\"", key), Style::default().fg(Color::Cyan)),
+                Span::styled(": ".to_string(), Style::default().fg(Color::White)),
+                Span::styled(value_str, Style::default().fg(value_color)),
+                Span::styled(comma.to_string(), Style::default().fg(Color::White)),
+            ]));
+        }
+
+        // Closing brace
+        lines.push(Line::from(Span::styled(
+            "}".to_string(),
+            Style::default().fg(Color::White),
+        )));
+
+        lines
+    }
+
+    /// Determine color based on value content.
+    fn colorize_value(value: &str) -> (String, Color) {
+        // Check for null
+        if value == "null" || value.is_empty() {
+            return ("null".to_string(), Color::DarkGray);
+        }
+
+        // Check for boolean
+        if value == "true" || value == "false" {
+            return (value.to_string(), Color::Yellow);
+        }
+
+        // Check for number (integer or float)
+        if value.parse::<f64>().is_ok() {
+            return (value.to_string(), Color::Yellow);
+        }
+
+        // Check for ISO date (starts with digit and contains T or -)
+        if value.len() > 10
+            && value.chars().next().map(|c| c.is_ascii_digit()).unwrap_or(false)
+            && (value.contains('T') || value.chars().filter(|&c| c == '-').count() >= 2)
+        {
+            return (format!("\"{}\"", value), Color::Magenta);
+        }
+
+        // Default: treat as string
+        (format!("\"{}\"", value), Color::Green)
     }
 }
 
