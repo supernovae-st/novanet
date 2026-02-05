@@ -233,7 +233,15 @@ async fn run_app(
                 break;
             }
             Err(_) => {
-                // Timeout, continue (for future animations)
+                // Timeout - increment tick for animations
+                app.tick = app.tick.wrapping_add(1);
+
+                // Re-render if there's a pending load (animates spinner)
+                if app.has_pending_load() {
+                    terminal
+                        .draw(|f| ui::render(f, &mut app))
+                        .map_err(crate::NovaNetError::Io)?;
+                }
             }
             _ => {
                 // Ignore other events (mouse, focus, paste)

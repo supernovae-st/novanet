@@ -22,6 +22,15 @@ fn truncate_str(s: &str, max_chars: usize) -> String {
     }
 }
 
+/// Animated spinner for loading states.
+/// Cycles through braille patterns for smooth animation.
+const SPINNER_FRAMES: &[&str] = &["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"];
+
+/// Get the current spinner frame based on tick counter.
+fn spinner(tick: u16) -> &'static str {
+    SPINNER_FRAMES[(tick as usize / 2) % SPINNER_FRAMES.len()]
+}
+
 /// Main render function.
 pub fn render(f: &mut Frame, app: &mut App) {
     let chunks = Layout::default()
@@ -144,14 +153,14 @@ fn render_main(f: &mut Frame, area: Rect, app: &mut App) {
     }
 }
 
-/// Wide layout: Tree (15%) | Info+Graph (42.5%) | YAML (42.5%).
+/// Wide layout: Tree (20%) | Info+Graph (40%) | YAML (40%).
 fn render_main_wide(f: &mut Frame, area: Rect, app: &mut App) {
     let chunks = Layout::default()
         .direction(Direction::Horizontal)
         .constraints([
-            Constraint::Percentage(15), // Tree (narrower)
-            Constraint::Percentage(43), // Info + Graph (stacked)
-            Constraint::Percentage(42), // YAML
+            Constraint::Percentage(20), // Tree
+            Constraint::Percentage(40), // Info + Graph (stacked)
+            Constraint::Percentage(40), // YAML
         ])
         .split(area);
 
@@ -200,6 +209,7 @@ fn render_main_narrow(f: &mut Frame, area: Rect, app: &mut App) {
 }
 
 /// Tree panel: taxonomy hierarchy with scroll and collapse.
+/// Uses box-drawing characters for visual hierarchy.
 fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
     let focused = app.focus == Focus::Tree;
     let border_color = if focused {
@@ -230,11 +240,11 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
     let mut all_lines: Vec<Line> = Vec::new();
     let mut idx = 0;
 
-    // Helper to create a line
+    // Helper to create a tree line with box-drawing
     let make_line = |idx: usize,
                      cursor: usize,
                      focused: bool,
-                     indent: &str,
+                     tree_prefix: &str,
                      icon: &str,
                      text: String,
                      color: Color|
@@ -246,11 +256,16 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
             Style::default().fg(color)
         };
         let prefix = if is_cursor { "›" } else { " " };
+        let icon_space = if icon.is_empty() { "" } else { " " };
         Line::from(Span::styled(
-            format!("{}{}{} {}", prefix, indent, icon, text),
+            format!("{}{}{}{}{}", prefix, tree_prefix, icon, icon_space, text),
             style,
         ))
     };
+
+    // Box-drawing helpers
+    let branch = |is_last: bool| if is_last { "└─" } else { "├─" };
+    let cont = |parent_is_last: bool| if parent_is_last { "  " } else { "│ " };
 
     // === KINDS SECTION ===
     let kinds_collapsed = app.tree.is_collapsed("kinds");
@@ -273,32 +288,41 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
     ));
     idx += 1;
 
+    let has_arcs = !app.tree.arc_families.is_empty();
+
     if !kinds_collapsed {
-        for realm in &app.tree.realms {
+        let realm_count = app.tree.realms.len();
+        for (ri, realm) in app.tree.realms.iter().enumerate() {
+            let realm_is_last = ri == realm_count - 1 && !has_arcs;
             let realm_key = format!("realm:{}", realm.key);
             let realm_collapsed = app.tree.is_collapsed(&realm_key);
             let realm_icon = if realm_collapsed { "▶" } else { "▼" };
+
             all_lines.push(make_line(
                 idx,
                 app.tree_cursor,
                 focused,
-                "  ",
+                branch(realm_is_last),
                 realm_icon,
-                format!("{} {}", realm.emoji, realm.display_name),
+                format!("{} {}", realm.icon, realm.display_name),
                 hex_to_color(&realm.color),
             ));
             idx += 1;
 
             if !realm_collapsed {
-                for layer in &realm.layers {
+                let layer_count = realm.layers.len();
+                for (li, layer) in realm.layers.iter().enumerate() {
+                    let layer_is_last = li == layer_count - 1;
                     let layer_key = format!("layer:{}", layer.key);
                     let layer_collapsed = app.tree.is_collapsed(&layer_key);
                     let layer_icon = if layer_collapsed { "▶" } else { "▼" };
+
+                    let prefix = format!("{}{}", cont(realm_is_last), branch(layer_is_last));
                     all_lines.push(make_line(
                         idx,
                         app.tree_cursor,
                         focused,
-                        "    ",
+                        &prefix,
                         layer_icon,
                         layer.display_name.clone(),
                         hex_to_color(&layer.color),
@@ -307,11 +331,12 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
 
                     if !layer_collapsed {
                         let is_data_mode = app.is_data_mode();
+                        let kind_count = layer.kinds.len();
 
-                        for kind in &layer.kinds {
-                            // In Data mode, Kind can be collapsed to hide instances
-                            let kind_key = format!("kind:{}", kind.key);
-                            let kind_collapsed = app.tree.is_collapsed(&kind_key);
+                        for (ki, kind) in layer.kinds.iter().enumerate() {
+                            let kind_is_last = ki == kind_count - 1;
+                            let kind_key_str = format!("kind:{}", kind.key);
+                            let kind_collapsed = app.tree.is_collapsed(&kind_key_str);
 
                             // Show collapse icon in Data mode if instances exist
                             let kind_icon = if is_data_mode {
@@ -335,11 +360,17 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                 String::new()
                             };
 
+                            let prefix = format!(
+                                "{}{}{}",
+                                cont(realm_is_last),
+                                cont(layer_is_last),
+                                branch(kind_is_last)
+                            );
                             all_lines.push(make_line(
                                 idx,
                                 app.tree_cursor,
                                 focused,
-                                "      ",
+                                &prefix,
                                 kind_icon,
                                 format!("{}{}", kind.display_name, count),
                                 Color::White,
@@ -349,20 +380,65 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                             // In Data mode, show instances under Kind (if not collapsed)
                             if is_data_mode && !kind_collapsed {
                                 if let Some(instances) = app.tree.get_instances(&kind.key) {
-                                    for instance in instances {
+                                    let inst_count = instances.len();
+                                    for (ii, instance) in instances.iter().enumerate() {
+                                        let inst_is_last = ii == inst_count - 1;
                                         let is_cursor = idx == app.tree_cursor;
+
+                                        // Check if primary (for Locale kind)
+                                        let is_primary = instance
+                                            .properties
+                                            .get("is_primary")
+                                            .and_then(|v| v.as_bool())
+                                            .unwrap_or(false);
+
+                                        // Count incoming FALLBACK_TO
+                                        let fallback_count = if is_primary {
+                                            instance
+                                                .incoming_arcs
+                                                .iter()
+                                                .filter(|a| a.arc_type == "FALLBACK_TO")
+                                                .count()
+                                        } else {
+                                            0
+                                        };
+
+                                        let (icon, base_color) = if is_primary {
+                                            ("●", Color::Yellow)
+                                        } else {
+                                            ("○", Color::Rgb(100, 180, 100))
+                                        };
+
                                         let style = if is_cursor && focused {
                                             Style::default()
                                                 .bg(Color::Rgb(30, 40, 50))
-                                                .fg(Color::Green)
+                                                .fg(Color::White)
                                         } else {
-                                            Style::default().fg(Color::Rgb(100, 180, 100))
+                                            Style::default().fg(base_color)
                                         };
-                                        let prefix = if is_cursor { "›" } else { " " };
+
+                                        let cursor_prefix = if is_cursor { "›" } else { " " };
+                                        let suffix = if is_primary && fallback_count > 0 {
+                                            format!(" [{}↓]", fallback_count)
+                                        } else {
+                                            String::new()
+                                        };
+
+                                        let tree_prefix = format!(
+                                            "{}{}{}{}",
+                                            cont(realm_is_last),
+                                            cont(layer_is_last),
+                                            cont(kind_is_last),
+                                            branch(inst_is_last)
+                                        );
                                         all_lines.push(Line::from(Span::styled(
                                             format!(
-                                                "{}        • {}",
-                                                prefix, instance.display_name
+                                                "{}{}{} {}{}",
+                                                cursor_prefix,
+                                                tree_prefix,
+                                                icon,
+                                                instance.display_name,
+                                                suffix
                                             ),
                                             style,
                                         )));
@@ -398,15 +474,18 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
     idx += 1;
 
     if !arcs_collapsed {
-        for family in &app.tree.arc_families {
+        let family_count = app.tree.arc_families.len();
+        for (fi, family) in app.tree.arc_families.iter().enumerate() {
+            let family_is_last = fi == family_count - 1;
             let family_key = format!("family:{}", family.key);
             let family_collapsed = app.tree.is_collapsed(&family_key);
             let family_icon = if family_collapsed { "▶" } else { "▼" };
+
             all_lines.push(make_line(
                 idx,
                 app.tree_cursor,
                 focused,
-                "  ",
+                branch(family_is_last),
                 family_icon,
                 format!("{} ({})", family.display_name, family.arc_kinds.len()),
                 Color::Rgb(180, 140, 80),
@@ -414,12 +493,15 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
             idx += 1;
 
             if !family_collapsed {
-                for arc_kind in &family.arc_kinds {
+                let arc_count = family.arc_kinds.len();
+                for (ai, arc_kind) in family.arc_kinds.iter().enumerate() {
+                    let arc_is_last = ai == arc_count - 1;
+                    let prefix = format!("{}{}", cont(family_is_last), branch(arc_is_last));
                     all_lines.push(make_line(
                         idx,
                         app.tree_cursor,
                         focused,
-                        "    ",
+                        &prefix,
                         "",
                         arc_kind.display_name.clone(),
                         Color::Rgb(150, 150, 150),
@@ -530,9 +612,9 @@ fn render_filtered_instances(
 
     if instance_count == 0 {
         if is_loading {
-            // Still loading from Neo4j
+            // Still loading from Neo4j (animated spinner)
             all_lines.push(Line::from(Span::styled(
-                "  ⏳ Loading instances from Neo4j...",
+                format!("  {} Loading instances...", spinner(app.tick)),
                 Style::default().fg(Color::Yellow),
             )));
         } else {
@@ -545,16 +627,53 @@ fn render_filtered_instances(
     } else if let Some(instances) = instances {
         for (idx, instance) in instances.iter().enumerate() {
             let is_cursor = idx == app.tree_cursor;
-            let style = if is_cursor && focused {
-                Style::default().bg(Color::Rgb(30, 40, 50)).fg(Color::Green)
+
+            // Check if this is a primary locale (is_primary: true)
+            let is_primary = instance
+                .properties
+                .get("is_primary")
+                .and_then(|v| v.as_bool())
+                .unwrap_or(false);
+
+            // Count incoming FALLBACK_TO arcs for primary locales
+            let fallback_count = if is_primary {
+                instance
+                    .incoming_arcs
+                    .iter()
+                    .filter(|arc| arc.arc_type == "FALLBACK_TO")
+                    .count()
             } else {
-                Style::default().fg(Color::Rgb(100, 180, 100))
+                0
             };
+
+            // Primary locales: filled circle, yellow
+            // Secondary locales: empty circle, green
+            let (icon, base_color) = if is_primary {
+                ("●", Color::Yellow)
+            } else {
+                ("○", Color::Rgb(100, 180, 100))
+            };
+
+            let style = if is_cursor && focused {
+                Style::default().bg(Color::Rgb(30, 40, 50)).fg(Color::White)
+            } else {
+                Style::default().fg(base_color)
+            };
+
             let prefix = if is_cursor { "› " } else { "  " };
-            all_lines.push(Line::from(Span::styled(
-                format!("{}• {}", prefix, instance.display_name),
-                style,
-            )));
+
+            // Format: "● Arabic (Saudi Arabia) [13↓]" for primary
+            // Format: "○ Arabic (Algeria)" for secondary
+            let display = if is_primary && fallback_count > 0 {
+                format!(
+                    "{}{} {} [{}↓]",
+                    prefix, icon, instance.display_name, fallback_count
+                )
+            } else {
+                format!("{}{} {}", prefix, icon, instance.display_name)
+            };
+
+            all_lines.push(Line::from(Span::styled(display, style)));
         }
     }
 
@@ -687,7 +806,7 @@ fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
         || app.pending_layer_load.is_some()
     {
         lines.push(Line::from(Span::styled(
-            "  ⏳ Loading from Neo4j...",
+            format!("  {} Loading...", spinner(app.tick)),
             Style::default().fg(Color::Yellow),
         )));
         let paragraph = Paragraph::new(lines);
@@ -720,7 +839,7 @@ fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
 
         // Stats summary
         lines.push(Line::from(vec![
-            Span::styled("  📊 ", dim),
+            Span::styled("  ▪", dim),
             Span::styled(
                 format!("{} Layers", details.layers.len()),
                 Style::default().fg(Color::Cyan),
@@ -809,7 +928,7 @@ fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
 
         // Stats summary
         lines.push(Line::from(vec![
-            Span::styled("  📊 ", dim),
+            Span::styled("  ▪", dim),
             Span::styled(
                 format!("{} Node Kinds", details.total_kinds),
                 Style::default().fg(Color::Green),
@@ -1552,7 +1671,7 @@ fn get_detail_title(app: &App) -> String {
     match app.current_item() {
         Some(TreeItem::KindsSection) => "Node Kinds".to_string(),
         Some(TreeItem::ArcsSection) => "Arcs".to_string(),
-        Some(TreeItem::Realm(r)) => format!("{} {}", r.emoji, r.display_name),
+        Some(TreeItem::Realm(r)) => format!("{} {}", r.icon, r.display_name),
         Some(TreeItem::Layer(_, l)) => l.display_name.clone(),
         Some(TreeItem::Kind(_, _, k)) => {
             if k.icon.is_empty() {
@@ -1970,10 +2089,23 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                     Style::default().fg(Color::Rgb(100, 100, 120)),
                 )));
                 for (key, value) in &instance.properties {
-                    let truncated = truncate_str(value, 40);
+                    // Format JSON value for display
+                    let value_str = match value {
+                        serde_json::Value::String(s) => format!("\"{}\"", s),
+                        serde_json::Value::Null => "null".to_string(),
+                        _ => value.to_string(),
+                    };
+                    let truncated = truncate_str(&value_str, 40);
+                    let color = match value {
+                        serde_json::Value::String(_) => Color::Green,
+                        serde_json::Value::Number(_) => Color::Yellow,
+                        serde_json::Value::Bool(_) => Color::Yellow,
+                        serde_json::Value::Null => Color::DarkGray,
+                        _ => Color::White,
+                    };
                     lines.push(Line::from(vec![
-                        Span::styled(format!("  {} ", key), Style::default().fg(Color::DarkGray)),
-                        Span::styled(truncated, Style::default().fg(Color::White)),
+                        Span::styled(format!("  {} ", key), Style::default().fg(Color::Cyan)),
+                        Span::styled(truncated, Style::default().fg(color)),
                     ]));
                 }
             }
@@ -2181,17 +2313,17 @@ fn render_status(f: &mut Frame, area: Rect, app: &App) {
             format!(" {} nodes", stats.node_count),
             Style::default().fg(Color::Rgb(100, 100, 120)),
         ),
-        Span::styled(" │ ", Style::default().fg(Color::Rgb(50, 50, 60))),
+        Span::styled(" · ", Style::default().fg(Color::Rgb(70, 70, 80))),
         Span::styled(
             format!("{} arcs", stats.arc_count),
             Style::default().fg(Color::Rgb(100, 100, 120)),
         ),
-        Span::styled(" │ ", Style::default().fg(Color::Rgb(50, 50, 60))),
+        Span::styled(" · ", Style::default().fg(Color::Rgb(70, 70, 80))),
         Span::styled(
             format!("{} Node Kinds", stats.kind_count),
             Style::default().fg(Color::Rgb(100, 100, 120)),
         ),
-        Span::styled(" │ ", Style::default().fg(Color::Rgb(50, 50, 60))),
+        Span::styled(" · ", Style::default().fg(Color::Rgb(70, 70, 80))),
         Span::styled(
             format!("{} Arcs", stats.arc_kind_count),
             Style::default().fg(Color::Rgb(100, 100, 120)),
@@ -2283,7 +2415,7 @@ fn render_search(f: &mut Frame, app: &App) {
         let (prefix, name, type_label) = match item {
             Some(TreeItem::KindsSection) => ("", "Node Kinds".to_string(), "Section"),
             Some(TreeItem::ArcsSection) => ("", "Arcs".to_string(), "Section"),
-            Some(TreeItem::Realm(r)) => (r.emoji, r.display_name.clone(), "Realm"),
+            Some(TreeItem::Realm(r)) => (r.icon, r.display_name.clone(), "Realm"),
             Some(TreeItem::Layer(_, l)) => ("  ", l.display_name.clone(), "Layer"),
             Some(TreeItem::Kind(_, _, k)) => ("    ", k.display_name.clone(), "Node Kind"),
             Some(TreeItem::ArcFamily(f)) => ("  ", f.display_name.clone(), "ArcFamily"),
@@ -3880,11 +4012,11 @@ fn render_atlas_view_traversal(app: &App) -> String {
     for (i, (id, cat, _desc)) in views.iter().enumerate() {
         let marker = if i == selected_idx { "►" } else { " " };
         let cat_icon = match *cat {
-            "overview" => "📊",
-            "generation" => "⚡",
-            "knowledge" => "📚",
-            "project" => "📁",
-            "mining" => "⛏️",
+            "overview" => "▣",
+            "generation" => "◇",
+            "knowledge" => "▤",
+            "project" => "▢",
+            "mining" => "◆",
             _ => "•",
         };
 

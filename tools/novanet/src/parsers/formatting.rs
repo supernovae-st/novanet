@@ -1039,7 +1039,7 @@ fn parse_examples(content: &str, correct: bool) -> Vec<FormatExample> {
         vec!["**NEVER use**", "**Incorrect Formatting**", "**Incorrect**"]
     };
 
-    let end_markers = vec!["**CORRECT", "**NEVER", "**Incorrect", "---", "##"];
+    let end_markers = ["**CORRECT", "**NEVER", "**Incorrect", "---", "##"];
 
     let mut in_section = false;
     let example_re = Regex::new(r"-\s*`([^`]+)`\s*[→→-]\s*`([^`]+)`").unwrap();
