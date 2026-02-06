@@ -625,7 +625,7 @@ LIMIT 100
         );
 
         let rows = db.execute(&cypher).await?;
-        let mut instances = Vec::new();
+        let mut instances = Vec::with_capacity(rows.len());
 
         for row in rows {
             let key: String = row.get("key").unwrap_or_default();
@@ -966,18 +966,19 @@ RETURN l.key as layer_key,
             let total_instances: i64 = row.get("total_instances").unwrap_or(0);
 
             // Parse kinds_by_trait
-            let mut kinds_by_trait: Vec<TraitKindGroup> = Vec::new();
-            if let Ok(groups_list) = row.get::<Vec<neo4rs::BoltMap>>("kinds_by_trait") {
-                for group_map in groups_list {
-                    if let Ok(trait_key) = group_map.get::<String>("trait_key") {
-                        let kind_names: Vec<String> = group_map
-                            .get::<Vec<String>>("kind_names")
-                            .unwrap_or_default();
-                        kinds_by_trait.push(TraitKindGroup {
-                            trait_key,
-                            kind_names,
-                        });
-                    }
+            let groups_list = row
+                .get::<Vec<neo4rs::BoltMap>>("kinds_by_trait")
+                .unwrap_or_default();
+            let mut kinds_by_trait: Vec<TraitKindGroup> = Vec::with_capacity(groups_list.len());
+            for group_map in groups_list {
+                if let Ok(trait_key) = group_map.get::<String>("trait_key") {
+                    let kind_names: Vec<String> = group_map
+                        .get::<Vec<String>>("kind_names")
+                        .unwrap_or_default();
+                    kinds_by_trait.push(TraitKindGroup {
+                        trait_key,
+                        kind_names,
+                    });
                 }
             }
 
@@ -1028,7 +1029,7 @@ RETURN r.key as realm_key,
 
         let rows = db.execute(cypher).await?;
 
-        let mut realms: Vec<AtlasRealmInfo> = Vec::new();
+        let mut realms: Vec<AtlasRealmInfo> = Vec::with_capacity(rows.len());
         let mut total_kinds = 0;
 
         for row in rows {
@@ -1036,24 +1037,25 @@ RETURN r.key as realm_key,
             let realm_name: String = row.get("realm_name").unwrap_or_default();
             let realm_color: String = row.get("realm_color").unwrap_or_default();
 
-            let mut layers: Vec<AtlasLayerInfo> = Vec::new();
+            let layer_list = row
+                .get::<Vec<neo4rs::BoltMap>>("layers")
+                .unwrap_or_default();
+            let mut layers: Vec<AtlasLayerInfo> = Vec::with_capacity(layer_list.len());
             let mut realm_kind_count = 0;
 
-            if let Ok(layer_list) = row.get::<Vec<neo4rs::BoltMap>>("layers") {
-                for layer_map in layer_list {
-                    let layer_key: String = layer_map.get("layer_key").unwrap_or_default();
-                    let layer_name: String = layer_map.get("layer_name").unwrap_or_default();
-                    let layer_color: String = layer_map.get("layer_color").unwrap_or_default();
-                    let kind_count: i64 = layer_map.get("kind_count").unwrap_or(0);
+            for layer_map in layer_list {
+                let layer_key: String = layer_map.get("layer_key").unwrap_or_default();
+                let layer_name: String = layer_map.get("layer_name").unwrap_or_default();
+                let layer_color: String = layer_map.get("layer_color").unwrap_or_default();
+                let kind_count: i64 = layer_map.get("kind_count").unwrap_or(0);
 
-                    realm_kind_count += kind_count;
-                    layers.push(AtlasLayerInfo {
-                        key: layer_key,
-                        display_name: layer_name,
-                        color: layer_color,
-                        kind_count: kind_count as usize,
-                    });
-                }
+                realm_kind_count += kind_count;
+                layers.push(AtlasLayerInfo {
+                    key: layer_key,
+                    display_name: layer_name,
+                    color: layer_color,
+                    kind_count: kind_count as usize,
+                });
             }
 
             total_kinds += realm_kind_count;
@@ -1086,7 +1088,7 @@ RETURN p.key as page_key,
 "#;
 
         let rows = db.execute(cypher).await?;
-        let mut pages = Vec::new();
+        let mut pages = Vec::with_capacity(rows.len());
 
         for row in rows {
             pages.push(AtlasPageInfo {
@@ -1171,7 +1173,7 @@ RETURN b.key as block_key,
             .execute_with_params(blocks_cypher, [("pageKey", page_key), ("locale", locale)])
             .await?;
 
-        let mut blocks = Vec::new();
+        let mut blocks = Vec::with_capacity(block_rows.len());
         for row in block_rows {
             let content_preview: String = row.get("content_preview").unwrap_or_default();
             let l10n = if !content_preview.is_empty() {
@@ -1210,7 +1212,7 @@ RETURN e.key as entity_key,
             .execute_with_params(entities_cypher, [("pageKey", page_key), ("locale", locale)])
             .await?;
 
-        let mut entities = Vec::new();
+        let mut entities = Vec::with_capacity(entity_rows.len());
         for row in entity_rows {
             let l10n_name: Option<String> = row.get("l10n_name").ok();
             let l10n_desc: String = row.get("l10n_desc").unwrap_or_default();
@@ -1254,7 +1256,7 @@ RETURN kw.keyword as keyword,
             .execute_with_params(seo_cypher, [("pageKey", page_key), ("locale", locale)])
             .await?;
 
-        let mut seo_keywords = Vec::new();
+        let mut seo_keywords = Vec::with_capacity(seo_rows.len());
         for row in seo_rows {
             seo_keywords.push(SeoKeywordData {
                 keyword: row.get("keyword").unwrap_or_default(),
@@ -1855,7 +1857,7 @@ impl InstanceInfo {
     /// Compare schema arcs with actual arcs.
     /// Returns list of arcs showing which exist and which are missing.
     pub fn compare_arcs(&self, schema_arcs: &[ArcInfo]) -> Vec<ArcComparison> {
-        let mut comparisons = Vec::new();
+        let mut comparisons = Vec::with_capacity(schema_arcs.len());
 
         for schema_arc in schema_arcs {
             if schema_arc.direction == ArcDirection::Outgoing {
