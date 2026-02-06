@@ -45,6 +45,10 @@ use crate::db::Db;
 use app::App;
 use data::TaxonomyTree;
 
+/// Event polling timeout in milliseconds.
+/// Short timeout enables smooth animation (spinners) during async loading.
+const EVENT_TIMEOUT_MS: u64 = 100;
+
 /// Install panic hook that restores terminal and logs crash info.
 fn install_panic_hook() {
     let original_hook = panic::take_hook();
@@ -139,7 +143,7 @@ async fn run_app(
 
     loop {
         // Wait for events (non-blocking with timeout for future animations)
-        let event = tokio::time::timeout(Duration::from_millis(100), event_stream.next()).await;
+        let event = tokio::time::timeout(Duration::from_millis(EVENT_TIMEOUT_MS), event_stream.next()).await;
 
         match event {
             Ok(Some(Ok(Event::Key(key)))) => {

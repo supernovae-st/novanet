@@ -10,6 +10,16 @@ use super::app::{App, Focus, NavMode};
 use super::data::{ArcDirection, TreeItem};
 use super::theme::{self, hex_to_color};
 
+// =============================================================================
+// CONSTANTS
+// =============================================================================
+
+/// Minimum terminal width for wide (3-column) layout.
+const WIDE_LAYOUT_MIN_WIDTH: u16 = 160;
+
+/// Spinner animation speed divisor (higher = slower animation).
+const SPINNER_SPEED_DIVISOR: usize = 2;
+
 /// Safely truncate a UTF-8 string to N characters (not bytes).
 /// Appends "..." if truncated.
 fn truncate_str(s: &str, max_chars: usize) -> String {
@@ -28,7 +38,7 @@ const SPINNER_FRAMES: &[&str] = &["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦
 
 /// Get the current spinner frame based on tick counter.
 fn spinner(tick: u16) -> &'static str {
-    SPINNER_FRAMES[(tick as usize / 2) % SPINNER_FRAMES.len()]
+    SPINNER_FRAMES[(tick as usize / SPINNER_SPEED_DIVISOR) % SPINNER_FRAMES.len()]
 }
 
 /// Main render function.
@@ -129,7 +139,7 @@ enum LayoutMode {
 
 impl LayoutMode {
     fn detect(width: u16) -> Self {
-        if width >= 160 {
+        if width >= WIDE_LAYOUT_MIN_WIDTH {
             LayoutMode::Wide
         } else {
             LayoutMode::Narrow
@@ -763,7 +773,7 @@ fn render_info_panel(f: &mut Frame, area: Rect, app: &mut App) {
 /// Shows real arc data from Neo4j when a Kind is selected,
 /// instance arcs in Data mode, or contextual messages for other selections.
 fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
-    let theme = theme::Theme::new();
+    let theme = &app.theme; // Use cached theme from App
     let focused = app.focus == Focus::Graph;
     let border_color = if focused {
         Color::Magenta
@@ -799,14 +809,22 @@ fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
     let dim = Style::default().fg(Color::Rgb(100, 100, 100));
     let bright_dim = Style::default().fg(Color::Rgb(140, 140, 140));
 
-    // === LOADING INDICATOR ===
-    if app.pending_arcs_load.is_some()
-        || app.pending_arc_kind_load.is_some()
-        || app.pending_realm_load.is_some()
-        || app.pending_layer_load.is_some()
-    {
+    // === LOADING INDICATOR (specific message based on what's loading) ===
+    let loading_msg = if app.pending_arcs_load.is_some() {
+        Some("Loading arc relationships...")
+    } else if app.pending_arc_kind_load.is_some() {
+        Some("Loading arc kind details...")
+    } else if app.pending_realm_load.is_some() {
+        Some("Loading realm statistics...")
+    } else if app.pending_layer_load.is_some() {
+        Some("Loading layer statistics...")
+    } else {
+        None
+    };
+
+    if let Some(msg) = loading_msg {
         lines.push(Line::from(Span::styled(
-            format!("  {} Loading...", spinner(app.tick)),
+            format!("  {} {}", spinner(app.tick), msg),
             Style::default().fg(Color::Yellow),
         )));
         let paragraph = Paragraph::new(lines);
@@ -985,11 +1003,10 @@ fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
 
     // === INSTANCE ARCS VIEW (Data mode) ===
     if let Some(TreeItem::Instance(realm, layer, kind, instance)) = app.current_item() {
-        // Clone data to avoid lifetime issues
-        let realm_key = realm.key.clone();
-        let layer_key = layer.key.clone();
-        let kind_display = kind.display_name.clone();
-        let instance_cloned = instance.clone();
+        // Use references where possible, clone only when Span needs ownership
+        let realm_key = &realm.key;
+        let layer_key = &layer.key;
+        let instance_key = &instance.key;
 
         // Breadcrumb for instance
         lines.push(Line::from(vec![
@@ -997,21 +1014,21 @@ fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
             Span::styled(
                 realm_key.clone(),
                 Style::default()
-                    .fg(theme.realm_color(&realm_key))
+                    .fg(theme.realm_color(realm_key))
                     .add_modifier(Modifier::BOLD),
             ),
             Span::styled(" → ", bright_dim),
             Span::styled(
                 layer_key.clone(),
                 Style::default()
-                    .fg(theme.layer_color(&layer_key))
+                    .fg(theme.layer_color(layer_key))
                     .add_modifier(Modifier::BOLD),
             ),
             Span::styled(" → ", bright_dim),
-            Span::styled(kind_display, Style::default().fg(Color::Green)),
+            Span::styled(kind.display_name.clone(), Style::default().fg(Color::Green)),
             Span::styled(" → ", bright_dim),
             Span::styled(
-                instance_cloned.key.clone(),
+                instance_key.clone(),
                 Style::default()
                     .fg(Color::White)
                     .add_modifier(Modifier::BOLD),
@@ -1019,10 +1036,8 @@ fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
         ]));
         lines.push(Line::from(Span::raw("")));
 
-        // Render instance arcs
-        let outgoing_arcs = instance_cloned.outgoing_arcs.clone();
-        let incoming_arcs = instance_cloned.incoming_arcs.clone();
-        let total = outgoing_arcs.len() + incoming_arcs.len();
+        // Use references to arc vectors (no clone needed)
+        let total = instance.outgoing_arcs.len() + instance.incoming_arcs.len();
 
         if total == 0 {
             lines.push(Line::from(Span::styled(
@@ -1030,10 +1045,10 @@ fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
                 Style::default().fg(Color::DarkGray),
             )));
         } else {
-            // Outgoing arcs
-            if !outgoing_arcs.is_empty() {
+            // Outgoing arcs (iterate over reference, no clone of Vec)
+            if !instance.outgoing_arcs.is_empty() {
                 lines.push(Line::from(Span::styled(
-                    format!("  ─▶ OUTGOING ({}) ", outgoing_arcs.len()),
+                    format!("  ─▶ OUTGOING ({}) ", instance.outgoing_arcs.len()),
                     Style::default()
                         .fg(Color::Cyan)
                         .add_modifier(Modifier::BOLD),
@@ -1043,7 +1058,7 @@ fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
                     dim,
                 )));
 
-                for arc in &outgoing_arcs {
+                for arc in &instance.outgoing_arcs {
                     let status_style = if arc.exists {
                         Style::default().fg(Color::Green)
                     } else {
@@ -1053,10 +1068,7 @@ fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
 
                     lines.push(Line::from(vec![
                         Span::styled(format!("  {} ", status_char), status_style),
-                        Span::styled(
-                            instance_cloned.key.clone(),
-                            Style::default().fg(Color::White),
-                        ),
+                        Span::styled(instance_key.clone(), Style::default().fg(Color::White)),
                         Span::styled(" ──[", dim),
                         Span::styled(
                             arc.arc_type.clone(),
@@ -1075,10 +1087,10 @@ fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
                 lines.push(Line::from(Span::raw("")));
             }
 
-            // Incoming arcs
-            if !incoming_arcs.is_empty() {
+            // Incoming arcs (iterate over reference, no clone of Vec)
+            if !instance.incoming_arcs.is_empty() {
                 lines.push(Line::from(Span::styled(
-                    format!("  ◀─ INCOMING ({}) ", incoming_arcs.len()),
+                    format!("  ◀─ INCOMING ({}) ", instance.incoming_arcs.len()),
                     Style::default()
                         .fg(Color::Magenta)
                         .add_modifier(Modifier::BOLD),
@@ -1088,7 +1100,7 @@ fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
                     dim,
                 )));
 
-                for arc in &incoming_arcs {
+                for arc in &instance.incoming_arcs {
                     let status_style = if arc.exists {
                         Style::default().fg(Color::Green)
                     } else {
@@ -1111,10 +1123,7 @@ fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
                                 .add_modifier(Modifier::BOLD),
                         ),
                         Span::styled("]──▶ ", dim),
-                        Span::styled(
-                            instance_cloned.key.clone(),
-                            Style::default().fg(Color::White),
-                        ),
+                        Span::styled(instance_key.clone(), Style::default().fg(Color::White)),
                     ]));
                 }
             }
@@ -1157,7 +1166,7 @@ fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
         lines.push(Line::from(Span::raw("")));
 
         // Group all arcs by family
-        render_arcs_by_family(&mut lines, arcs, &theme, &dim);
+        render_arcs_by_family(&mut lines, arcs, theme, &dim);
 
         let paragraph = Paragraph::new(lines);
         f.render_widget(paragraph, inner);
@@ -1427,8 +1436,12 @@ fn render_arcs_by_family(
 
 /// Render instance arcs (actual connections in the data graph).
 #[allow(dead_code)]
-fn render_instance_arcs(lines: &mut Vec<Line>, instance: &super::data::InstanceInfo, dim: &Style) {
-    let theme = theme::Theme::new();
+fn render_instance_arcs(
+    lines: &mut Vec<Line>,
+    instance: &super::data::InstanceInfo,
+    dim: &Style,
+    theme: &theme::Theme,
+) {
 
     let total = instance.outgoing_arcs.len() + instance.incoming_arcs.len();
     if total == 0 {
@@ -2506,6 +2519,10 @@ fn render_help(f: &mut Frame) {
         Line::from(vec![
             Span::styled("    H/L      ", Style::default().fg(Color::White)),
             Span::styled("Collapse/expand all", Style::default().fg(Color::DarkGray)),
+        ]),
+        Line::from(vec![
+            Span::styled("    g/G      ", Style::default().fg(Color::White)),
+            Span::styled("Jump to first/last", Style::default().fg(Color::DarkGray)),
         ]),
         Line::from(""),
         Line::from(vec![Span::styled(
