@@ -1,5 +1,7 @@
 //! App state for TUI v2.
 
+use nucleo_matcher::pattern::{Atom, AtomKind, CaseMatching, Normalization};
+use nucleo_matcher::{Config, Matcher, Utf32Str};
 use rustc_hash::FxHashMap;
 use std::fs;
 use std::path::Path;
@@ -149,10 +151,12 @@ pub struct App {
     pub tree_scroll: usize, // Scroll offset for tree
     pub tree_height: usize, // Visible height (set by UI)
     pub tree: TaxonomyTree,
-    // Search state
+    // Search state (nucleo fuzzy search)
     pub search_active: bool,
     pub search_query: String,
     pub search_results: Vec<usize>, // indices into flattened tree
+    pub search_scores: Vec<u16>,    // fuzzy match scores (sorted desc)
+    pub search_matches: FxHashMap<usize, Vec<u32>>, // idx -> matched char positions for highlighting
     pub search_cursor: usize,
     // Help overlay
     pub help_active: bool,
@@ -214,6 +218,8 @@ impl App {
             search_active: false,
             search_query: String::new(),
             search_results: Vec::new(),
+            search_scores: Vec::new(),
+            search_matches: FxHashMap::default(),
             search_cursor: 0,
             help_active: false,
             yaml_content: String::new(),
@@ -318,7 +324,11 @@ impl App {
         // In filtered Data mode, always return Instance (that's all we show)
         if self.is_data_mode() && self.data_filter_kind.is_some() {
             if let Some(kind_key) = &self.data_filter_kind {
-                if self.tree.filtered_item_at(self.tree_cursor, kind_key).is_some() {
+                if self
+                    .tree
+                    .filtered_item_at(self.tree_cursor, kind_key)
+                    .is_some()
+                {
                     return TreeItemData::Instance;
                 }
             }
@@ -514,46 +524,75 @@ impl App {
         }
     }
 
-    /// Update search results based on current query (respects collapsed state).
+    /// Update search results based on current query using nucleo fuzzy matching.
+    /// Results are sorted by match score (best matches first).
     pub fn update_search(&mut self) {
         self.search_results.clear();
+        self.search_scores.clear();
+        self.search_matches.clear();
+
         if self.search_query.is_empty() {
             return;
         }
 
-        let query = self.search_query.to_lowercase();
+        // Setup nucleo matcher with smart case matching
+        let mut matcher = Matcher::new(Config::DEFAULT);
+        let pattern = Atom::new(
+            &self.search_query,
+            CaseMatching::Smart, // Case-insensitive unless query has uppercase
+            Normalization::Smart,
+            AtomKind::Fuzzy, // Fuzzy matching (not exact)
+            false,           // No append
+        );
+
+        // Collect all (idx, score, match_positions) tuples
+        let mut matches: Vec<(usize, u16, Vec<u32>)> = Vec::new();
         let mut idx = 0;
 
+        // Helper to check fuzzy match and collect positions
+        let fuzzy_match =
+            |text: &str, matcher: &mut Matcher, pattern: &Atom| -> Option<(u16, Vec<u32>)> {
+                let mut buf = Vec::new();
+                let haystack = Utf32Str::new(text, &mut buf);
+                let mut indices = Vec::new();
+                pattern
+                    .indices(haystack, matcher, &mut indices)
+                    .map(|score| (score, indices))
+            };
+
         // Kinds section header
-        if "kinds".contains(&query) {
-            self.search_results.push(idx);
+        if let Some((score, indices)) = fuzzy_match("Node Kinds", &mut matcher, &pattern) {
+            matches.push((idx, score, indices));
         }
         idx += 1;
 
         if !self.tree.is_collapsed("kinds") {
             for realm in &self.tree.realms {
-                if realm.display_name.to_lowercase().contains(&query)
-                    || realm.key.to_lowercase().contains(&query)
-                {
-                    self.search_results.push(idx);
+                // Check display_name and key, take best match
+                let match_display = fuzzy_match(&realm.display_name, &mut matcher, &pattern);
+                let match_key = fuzzy_match(&realm.key, &mut matcher, &pattern);
+                if let Some((score, indices)) = match_display.or(match_key) {
+                    matches.push((idx, score, indices));
                 }
                 idx += 1;
 
                 if !self.tree.is_collapsed(&format!("realm:{}", realm.key)) {
                     for layer in &realm.layers {
-                        if layer.display_name.to_lowercase().contains(&query)
-                            || layer.key.to_lowercase().contains(&query)
-                        {
-                            self.search_results.push(idx);
+                        let match_display =
+                            fuzzy_match(&layer.display_name, &mut matcher, &pattern);
+                        let match_key = fuzzy_match(&layer.key, &mut matcher, &pattern);
+                        if let Some((score, indices)) = match_display.or(match_key) {
+                            matches.push((idx, score, indices));
                         }
                         idx += 1;
 
                         if !self.tree.is_collapsed(&format!("layer:{}", layer.key)) {
                             for kind in &layer.kinds {
-                                if kind.display_name.to_lowercase().contains(&query)
-                                    || kind.key.to_lowercase().contains(&query)
-                                {
-                                    self.search_results.push(idx);
+                                let match_display =
+                                    fuzzy_match(&kind.display_name, &mut matcher, &pattern);
+                                let match_key = fuzzy_match(&kind.key, &mut matcher, &pattern);
+                                if let Some((score, indices)) = match_display.or(match_key) {
+                                    matches.push((idx, score, indices));
                                 }
                                 idx += 1;
                             }
@@ -564,31 +603,42 @@ impl App {
         }
 
         // Arcs section header
-        if "arcs".contains(&query) {
-            self.search_results.push(idx);
+        if let Some((score, indices)) = fuzzy_match("Arcs", &mut matcher, &pattern) {
+            matches.push((idx, score, indices));
         }
         idx += 1;
 
         if !self.tree.is_collapsed("arcs") {
             for family in &self.tree.arc_families {
-                if family.display_name.to_lowercase().contains(&query)
-                    || family.key.to_lowercase().contains(&query)
-                {
-                    self.search_results.push(idx);
+                let match_display = fuzzy_match(&family.display_name, &mut matcher, &pattern);
+                let match_key = fuzzy_match(&family.key, &mut matcher, &pattern);
+                if let Some((score, indices)) = match_display.or(match_key) {
+                    matches.push((idx, score, indices));
                 }
                 idx += 1;
 
                 if !self.tree.is_collapsed(&format!("family:{}", family.key)) {
                     for arc_kind in &family.arc_kinds {
-                        if arc_kind.display_name.to_lowercase().contains(&query)
-                            || arc_kind.key.to_lowercase().contains(&query)
-                        {
-                            self.search_results.push(idx);
+                        let match_display =
+                            fuzzy_match(&arc_kind.display_name, &mut matcher, &pattern);
+                        let match_key = fuzzy_match(&arc_kind.key, &mut matcher, &pattern);
+                        if let Some((score, indices)) = match_display.or(match_key) {
+                            matches.push((idx, score, indices));
                         }
                         idx += 1;
                     }
                 }
             }
+        }
+
+        // Sort by score (descending - best matches first)
+        matches.sort_by(|a, b| b.1.cmp(&a.1));
+
+        // Extract into separate vectors
+        for (idx, score, indices) in matches {
+            self.search_results.push(idx);
+            self.search_scores.push(score);
+            self.search_matches.insert(idx, indices);
         }
 
         // Reset cursor if out of bounds
@@ -611,7 +661,36 @@ impl App {
         self.search_active = false;
         self.search_query.clear();
         self.search_results.clear();
+        self.search_scores.clear();
+        self.search_matches.clear();
         self.search_cursor = 0;
+    }
+
+    /// Navigate to next search result (n key).
+    pub fn next_search_result(&mut self) {
+        if self.search_results.is_empty() {
+            return;
+        }
+        let max = self.search_results.len().saturating_sub(1);
+        self.search_cursor = (self.search_cursor + 1).min(max);
+        if let Some(&target_idx) = self.search_results.get(self.search_cursor) {
+            self.tree_cursor = target_idx;
+            self.ensure_cursor_visible();
+            self.load_yaml_for_current();
+        }
+    }
+
+    /// Navigate to previous search result (N key).
+    pub fn prev_search_result(&mut self) {
+        if self.search_results.is_empty() {
+            return;
+        }
+        self.search_cursor = self.search_cursor.saturating_sub(1);
+        if let Some(&target_idx) = self.search_results.get(self.search_cursor) {
+            self.tree_cursor = target_idx;
+            self.ensure_cursor_visible();
+            self.load_yaml_for_current();
+        }
     }
 
     /// Handle key input. Returns true if state changed (needs re-render).
@@ -625,6 +704,21 @@ impl App {
         // Search mode captures all input
         if self.search_active {
             return self.handle_search_key(key);
+        }
+
+        // Search navigation: Ctrl-n (next) / Ctrl-p (prev) work in any mode
+        if key.modifiers.contains(crossterm::event::KeyModifiers::CONTROL) {
+            match key.code {
+                KeyCode::Char('n') => {
+                    self.next_search_result();
+                    return true;
+                }
+                KeyCode::Char('p') => {
+                    self.prev_search_result();
+                    return true;
+                }
+                _ => {}
+            }
         }
 
         // Atlas mode delegates to atlas state (except mode switching 1-5)
@@ -1111,7 +1205,10 @@ impl App {
                         r.display_name, l.display_name, k.display_name, k.instance_count
                     )
                 } else {
-                    format!("{} › {} › {}", r.display_name, l.display_name, k.display_name)
+                    format!(
+                        "{} › {} › {}",
+                        r.display_name, l.display_name, k.display_name
+                    )
                 }
             }
             Some(TreeItem::Instance(r, l, k, inst)) => {
@@ -1212,6 +1309,13 @@ impl App {
             || self.pending_arc_kind_load.is_some()
             || self.pending_realm_load.is_some()
             || self.pending_layer_load.is_some()
+    }
+
+    /// Get the current spinner frame character (braille dots animation).
+    /// Uses tick counter to animate smoothly during loading.
+    pub fn spinner_frame(&self) -> char {
+        const BRAILLE: &[char] = &['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
+        BRAILLE[(self.tick / 2) as usize % BRAILLE.len()]
     }
 
     /// Initialize Atlas state from current selection (context-aware).
