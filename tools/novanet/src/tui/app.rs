@@ -1,6 +1,6 @@
 //! App state for TUI v2.
 
-use std::collections::HashMap;
+use rustc_hash::FxHashMap;
 use std::fs;
 use std::path::Path;
 
@@ -167,7 +167,7 @@ pub struct App {
     pub root_path: String,
     /// Cache of YAML file contents (path -> content).
     /// Avoids re-reading files on every scroll/navigation.
-    pub yaml_cache: HashMap<String, String>,
+    pub yaml_cache: FxHashMap<String, String>,
     // Graph panel state (display-only, no internal navigation)
     pub graph_nodes: Vec<GraphNode>, // Neighbors of currently selected node (YAML-based, legacy)
     /// Neo4j arc data for current Kind (loaded async)
@@ -221,7 +221,7 @@ impl App {
             info_scroll: 0,
             info_line_count: 0,
             root_path,
-            yaml_cache: HashMap::new(),
+            yaml_cache: FxHashMap::default(),
             graph_nodes: Vec::new(),
             kind_arcs: None,
             arc_kind_details: None,
