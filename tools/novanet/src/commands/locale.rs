@@ -156,11 +156,11 @@ struct CsvLocale {
     #[serde(rename = "Is Primary")]
     is_primary: String, // "true" or "false" as string
     #[serde(rename = "Script")]
-    _script: String,
+    script: String,
     #[serde(rename = "slug_rule")]
     _slug_rule: String,
     #[serde(rename = "Is RTL")]
-    _is_rtl: String, // "true" or "false" as string
+    is_rtl: String, // "true" or "false" as string
     #[serde(rename = "Timezone")]
     _timezone: String,
 }
@@ -187,6 +187,11 @@ struct ParsedLocale {
     name_native: String,
     description: String,
     llm_context: String,
+    // v10.7: Geographic properties for LLM retrieval
+    region: String,
+    language_family: String,
+    script: String,
+    text_direction: String,
 }
 
 /// Generate 20-locales.cypher from CSV + MD sources.
@@ -350,6 +355,16 @@ fn build_parsed_locale(csv: &CsvLocale, enrichment: &IdentityEnrichment) -> Pars
         country_native.to_lowercase()
     );
 
+    // v10.7: Geographic properties
+    let region = infer_region(&csv.country_code);
+    let language_family = infer_language_family(&csv.language_code);
+    let script = normalize_script(&csv.script);
+    let text_direction = if csv.is_rtl.to_lowercase() == "true" {
+        "rtl".to_string()
+    } else {
+        "ltr".to_string()
+    };
+
     ParsedLocale {
         key: csv.locale_code.clone(),
         display_name: csv.language.clone(),
@@ -361,7 +376,112 @@ fn build_parsed_locale(csv: &CsvLocale, enrichment: &IdentityEnrichment) -> Pars
         name_native,
         description,
         llm_context,
+        region,
+        language_family,
+        script,
+        text_direction,
     }
+}
+
+/// Infer geographic region from ISO 3166-1 alpha-2 country code.
+fn infer_region(country_code: &str) -> String {
+    match country_code {
+        // Europe
+        "AT" | "BE" | "BG" | "HR" | "CY" | "CZ" | "DK" | "EE" | "FI" | "FR" | "DE" | "GR"
+        | "HU" | "IE" | "IT" | "LV" | "LT" | "LU" | "MT" | "NL" | "PL" | "PT" | "RO" | "SK"
+        | "SI" | "ES" | "SE" | "GB" | "UA" | "NO" | "CH" | "IS" | "AL" | "RS" | "BA" | "MK"
+        | "ME" | "XK" | "MD" => "europe",
+        // Asia
+        "CN" | "JP" | "KR" | "TW" | "HK" | "MO" | "MN" | "VN" | "TH" | "ID" | "MY" | "SG"
+        | "PH" | "MM" | "LA" | "KH" | "BN" | "IN" | "BD" | "PK" | "LK" | "NP" | "BT" => "asia",
+        // Middle East
+        "SA" | "AE" | "QA" | "KW" | "BH" | "OM" | "YE" | "IQ" | "SY" | "JO" | "LB" | "IL"
+        | "PS" | "IR" | "TR" => "middle_east",
+        // Africa
+        "EG" | "DZ" | "MA" | "TN" | "LY" | "SD" | "ET" | "KE" | "NG" | "GH" | "ZA" | "TZ"
+        | "UG" | "RW" | "SN" | "CI" | "CM" | "CD" | "AO" | "MZ" | "MG" | "ZW" | "ZM" | "BW"
+        | "NA" | "MW" | "MU" => "africa",
+        // Americas
+        "US" | "CA" | "MX" | "BR" | "AR" | "CO" | "CL" | "PE" | "VE" | "EC" | "BO" | "PY"
+        | "UY" | "GT" | "CR" | "PA" | "CU" | "DO" | "PR" | "HN" | "SV" | "NI" | "JM" | "TT"
+        | "HT" | "BS" => "americas",
+        // Oceania
+        "AU" | "NZ" | "FJ" | "PG" | "WS" | "TO" | "VU" | "SB" => "oceania",
+        _ => "other",
+    }
+    .to_string()
+}
+
+/// Infer language family from ISO 639-1 language code.
+fn infer_language_family(language_code: &str) -> String {
+    match language_code {
+        // Romance languages
+        "es" | "pt" | "fr" | "it" | "ro" | "ca" | "gl" => "romance",
+        // Germanic languages
+        "en" | "de" | "nl" | "sv" | "no" | "da" | "is" | "af" => "germanic",
+        // Slavic languages
+        "ru" | "uk" | "pl" | "cs" | "sk" | "bg" | "hr" | "sr" | "sl" | "mk" | "bs" | "be" => {
+            "slavic"
+        }
+        // Sino-Tibetan
+        "zh" | "my" => "sino_tibetan",
+        // Semitic
+        "ar" | "he" | "am" => "semitic",
+        // Japonic
+        "ja" => "japonic",
+        // Koreanic
+        "ko" => "koreanic",
+        // Austronesian
+        "id" | "ms" | "tl" | "fil" | "mg" | "jv" | "su" => "austronesian",
+        // Indo-Aryan
+        "hi" | "bn" | "pa" | "gu" | "mr" | "ne" | "si" | "ur" => "indo_aryan",
+        // Dravidian
+        "ta" | "te" | "kn" | "ml" => "dravidian",
+        // Turkic
+        "tr" | "az" | "uz" | "kk" | "ky" | "tk" => "turkic",
+        // Uralic
+        "fi" | "hu" | "et" => "uralic",
+        // Thai-Kadai
+        "th" | "lo" => "tai_kadai",
+        // Austroasiatic
+        "vi" | "km" => "austroasiatic",
+        // Greek
+        "el" => "hellenic",
+        // Celtic
+        "ga" | "cy" | "gd" => "celtic",
+        // Baltic
+        "lv" | "lt" => "baltic",
+        // Albanian
+        "sq" => "albanian",
+        // Armenian
+        "hy" => "armenian",
+        // Georgian
+        "ka" => "kartvelian",
+        // Persian
+        "fa" => "iranian",
+        // Swahili (Bantu)
+        "sw" => "bantu",
+        _ => "other",
+    }
+    .to_string()
+}
+
+/// Normalize script name from CSV to YAML enum values.
+fn normalize_script(script: &str) -> String {
+    match script.to_lowercase().as_str() {
+        "latin" | "latn" => "latin",
+        "cyrillic" | "cyrl" => "cyrillic",
+        "arabic" | "arab" => "arabic",
+        "hebrew" | "hebr" => "hebrew",
+        "han" | "hans" | "hant" | "cjk" => "cjk",
+        "devanagari" | "deva" => "devanagari",
+        "thai" => "thai",
+        "hangul" | "kore" => "korean",
+        "greek" | "grek" => "greek",
+        "japanese" | "jpan" => "cjk",
+        _ => "other",
+    }
+    .to_string()
 }
 
 /// Extract language from display name like "French (France)" -> "French"
@@ -392,7 +512,7 @@ fn generate_cypher(locales: &[ParsedLocale], primary_map: &HashMap<String, Strin
         "// ═══════════════════════════════════════════════════════════════════════════════\n",
     );
     cypher.push_str("// 20-locales.cypher - Generated by `novanet locale generate`\n");
-    cypher.push_str("// v10.6 - 200 Locale nodes with fallback chains\n");
+    cypher.push_str("// v10.7 - 200 Locale nodes with geographic properties + fallback chains\n");
     cypher.push_str(
         "// ═══════════════════════════════════════════════════════════════════════════════\n\n",
     );
@@ -433,9 +553,47 @@ fn generate_cypher(locales: &[ParsedLocale], primary_map: &HashMap<String, Strin
             escape_cypher(&locale.name_native)
         ));
         cypher.push_str(&format!("  l.is_primary = {},\n", locale.is_primary));
+        // v10.7: Geographic properties
+        cypher.push_str(&format!(
+            "  l.region = \"{}\",\n",
+            escape_cypher(&locale.region)
+        ));
+        cypher.push_str(&format!(
+            "  l.language_family = \"{}\",\n",
+            escape_cypher(&locale.language_family)
+        ));
+        cypher.push_str(&format!(
+            "  l.script = \"{}\",\n",
+            escape_cypher(&locale.script)
+        ));
+        cypher.push_str(&format!(
+            "  l.text_direction = \"{}\",\n",
+            escape_cypher(&locale.text_direction)
+        ));
         cypher.push_str("  l.created_at = datetime(),\n");
         cypher.push_str("  l.updated_at = datetime()\n");
+        // ON MATCH: update all properties to ensure v10.7 fields are set
         cypher.push_str("ON MATCH SET\n");
+        cypher.push_str(&format!(
+            "  l.display_name = \"{}\",\n",
+            escape_cypher(&locale.display_name)
+        ));
+        cypher.push_str(&format!(
+            "  l.region = \"{}\",\n",
+            escape_cypher(&locale.region)
+        ));
+        cypher.push_str(&format!(
+            "  l.language_family = \"{}\",\n",
+            escape_cypher(&locale.language_family)
+        ));
+        cypher.push_str(&format!(
+            "  l.script = \"{}\",\n",
+            escape_cypher(&locale.script)
+        ));
+        cypher.push_str(&format!(
+            "  l.text_direction = \"{}\",\n",
+            escape_cypher(&locale.text_direction)
+        ));
         cypher.push_str("  l.updated_at = datetime();\n\n");
     }
 
@@ -485,4 +643,3 @@ fn escape_cypher(s: &str) -> String {
         .replace('\r', "\\r")
         .replace('\t', "\\t")
 }
-

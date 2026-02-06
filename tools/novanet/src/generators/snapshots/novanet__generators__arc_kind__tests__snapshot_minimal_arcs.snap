@@ -16,6 +16,8 @@ MERGE (ak_HAS_PAGE:Meta:ArcKind {key: 'HAS_PAGE'})
 ON CREATE SET
   ak_HAS_PAGE.display_name = 'Has Page',
   ak_HAS_PAGE.llm_context = 'HAS_PAGE context.',
+  ak_HAS_PAGE.family = 'ownership',
+  ak_HAS_PAGE.scope = 'intra_realm',
   ak_HAS_PAGE.cardinality = 'one_to_many',
   ak_HAS_PAGE.is_self_referential = false,
   ak_HAS_PAGE.inverse_name = 'PAGE_OF',
@@ -26,6 +28,8 @@ ON CREATE SET
 ON MATCH SET
   ak_HAS_PAGE.display_name = 'Has Page',
   ak_HAS_PAGE.llm_context = 'HAS_PAGE context.',
+  ak_HAS_PAGE.family = 'ownership',
+  ak_HAS_PAGE.scope = 'intra_realm',
   ak_HAS_PAGE.cardinality = 'one_to_many',
   ak_HAS_PAGE.is_self_referential = false,
   ak_HAS_PAGE.inverse_name = 'PAGE_OF',
@@ -38,6 +42,8 @@ MERGE (ak_USES_ENTITY:Meta:ArcKind {key: 'USES_ENTITY'})
 ON CREATE SET
   ak_USES_ENTITY.display_name = 'Uses Entity',
   ak_USES_ENTITY.llm_context = 'USES_ENTITY context.',
+  ak_USES_ENTITY.family = 'semantic',
+  ak_USES_ENTITY.scope = 'intra_realm',
   ak_USES_ENTITY.cardinality = 'many_to_many',
   ak_USES_ENTITY.is_self_referential = false,
   ak_USES_ENTITY.inverse_name = null,
@@ -48,6 +54,8 @@ ON CREATE SET
 ON MATCH SET
   ak_USES_ENTITY.display_name = 'Uses Entity',
   ak_USES_ENTITY.llm_context = 'USES_ENTITY context.',
+  ak_USES_ENTITY.family = 'semantic',
+  ak_USES_ENTITY.scope = 'intra_realm',
   ak_USES_ENTITY.cardinality = 'many_to_many',
   ak_USES_ENTITY.is_self_referential = false,
   ak_USES_ENTITY.inverse_name = null,
@@ -60,6 +68,8 @@ MERGE (ak_FOR_LOCALE:Meta:ArcKind {key: 'FOR_LOCALE'})
 ON CREATE SET
   ak_FOR_LOCALE.display_name = 'For Locale',
   ak_FOR_LOCALE.llm_context = 'FOR_LOCALE context.',
+  ak_FOR_LOCALE.family = 'localization',
+  ak_FOR_LOCALE.scope = 'cross_realm',
   ak_FOR_LOCALE.cardinality = 'many_to_one',
   ak_FOR_LOCALE.is_self_referential = false,
   ak_FOR_LOCALE.inverse_name = null,
@@ -70,6 +80,8 @@ ON CREATE SET
 ON MATCH SET
   ak_FOR_LOCALE.display_name = 'For Locale',
   ak_FOR_LOCALE.llm_context = 'FOR_LOCALE context.',
+  ak_FOR_LOCALE.family = 'localization',
+  ak_FOR_LOCALE.scope = 'cross_realm',
   ak_FOR_LOCALE.cardinality = 'many_to_one',
   ak_FOR_LOCALE.is_self_referential = false,
   ak_FOR_LOCALE.inverse_name = null,

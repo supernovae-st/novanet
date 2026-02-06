@@ -7,6 +7,7 @@
 //! - Scope stroke styles (intra/cross realm)
 //! - Cardinality arrow heads
 //! - Kind icons (Lucide icon mapping)
+//! - Icon system (web + terminal icons for all categories)
 //! - Animation presets
 //! - Accessibility settings
 
@@ -31,6 +32,9 @@ pub struct VisualEncodingDoc {
     pub kind_icons: HashMap<String, String>,
     pub animations: HashMap<String, Animation>,
     pub accessibility: AccessibilitySettings,
+    /// Icon system (v10.6) — single source of truth for all icons.
+    #[serde(default)]
+    pub icons: Option<Icons>,
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -157,6 +161,100 @@ pub struct AccessibilitySettings {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Icon system (v10.6)
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Single icon with web (Lucide) and terminal (Unicode) variants.
+#[derive(Debug, Clone, Deserialize)]
+pub struct Icon {
+    /// Lucide icon name for web/Studio.
+    pub web: String,
+    /// Unicode symbol for terminal/TUI.
+    pub terminal: String,
+    /// Human-readable description.
+    pub description: String,
+}
+
+/// Complete icon system — single source of truth for all icons.
+#[derive(Debug, Default, Deserialize)]
+pub struct Icons {
+    /// Realm icons (global, tenant).
+    #[serde(default)]
+    pub realms: HashMap<String, Icon>,
+    /// Layer icons (config, locale-knowledge, etc.).
+    #[serde(default)]
+    pub layers: HashMap<String, Icon>,
+    /// Trait icons (invariant, localized, etc.).
+    #[serde(default)]
+    pub traits: HashMap<String, Icon>,
+    /// Arc family icons (ownership, semantic, etc.).
+    #[serde(default)]
+    pub arc_families: HashMap<String, Icon>,
+    /// UI state icons (loading, error, etc.).
+    #[serde(default)]
+    pub states: HashMap<String, Icon>,
+    /// Navigation icons (expanded, collapsed, etc.).
+    #[serde(default)]
+    pub navigation: HashMap<String, Icon>,
+    /// Data quality icons (complete, partial, etc.).
+    #[serde(default)]
+    pub quality: HashMap<String, Icon>,
+    /// Navigation mode icons (meta, data, etc.).
+    #[serde(default)]
+    pub modes: HashMap<String, Icon>,
+}
+
+impl Icons {
+    /// Get terminal icon for a realm.
+    pub fn realm_terminal(&self, key: &str) -> &str {
+        self.realms
+            .get(key)
+            .map(|i| i.terminal.as_str())
+            .unwrap_or("○")
+    }
+
+    /// Get terminal icon for a layer.
+    pub fn layer_terminal(&self, key: &str) -> &str {
+        self.layers
+            .get(key)
+            .map(|i| i.terminal.as_str())
+            .unwrap_or("·")
+    }
+
+    /// Get terminal icon for a trait.
+    pub fn trait_terminal(&self, key: &str) -> &str {
+        self.traits
+            .get(key)
+            .map(|i| i.terminal.as_str())
+            .unwrap_or("·")
+    }
+
+    /// Get terminal icon for a UI state.
+    pub fn state_terminal(&self, key: &str) -> &str {
+        self.states
+            .get(key)
+            .map(|i| i.terminal.as_str())
+            .unwrap_or("·")
+    }
+
+    /// Get terminal icon for navigation.
+    pub fn nav_terminal(&self, key: &str) -> &str {
+        self.navigation
+            .get(key)
+            .map(|i| i.terminal.as_str())
+            .unwrap_or("·")
+    }
+
+    /// Get terminal icon for quality indicator.
+    pub fn quality_terminal(&self, key: &str) -> &str {
+        self.quality
+            .get(key)
+            .map(|i| i.terminal.as_str())
+            .unwrap_or("·")
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Loader
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -236,5 +334,46 @@ mod tests {
         // Accessibility
         assert!(doc.accessibility.min_contrast_ratio >= 4.5);
         assert!(doc.accessibility.use_icons);
+
+        // Icon system (v10.6)
+        let icons = doc.icons.expect("should have icons section");
+
+        // Realms (2)
+        assert!(icons.realms.contains_key("global"));
+        assert!(icons.realms.contains_key("tenant"));
+        assert_eq!(icons.realm_terminal("global"), "◉");
+        assert_eq!(icons.realm_terminal("tenant"), "◎");
+
+        // Layers (8)
+        assert!(icons.layers.contains_key("config"));
+        assert!(icons.layers.contains_key("locale-knowledge"));
+        assert!(icons.layers.contains_key("output"));
+        assert_eq!(icons.layer_terminal("config"), "⚙");
+
+        // Traits (5)
+        assert!(icons.traits.contains_key("invariant"));
+        assert!(icons.traits.contains_key("localized"));
+        assert_eq!(icons.trait_terminal("invariant"), "■");
+
+        // States (8)
+        assert!(icons.states.contains_key("loading"));
+        assert!(icons.states.contains_key("no_kinds"));
+        assert_eq!(icons.state_terminal("loading"), "◐");
+        assert_eq!(icons.state_terminal("no_kinds"), "∅");
+
+        // Navigation (7)
+        assert!(icons.navigation.contains_key("expanded"));
+        assert!(icons.navigation.contains_key("collapsed"));
+        assert_eq!(icons.nav_terminal("expanded"), "▼");
+        assert_eq!(icons.nav_terminal("collapsed"), "▶");
+
+        // Quality (6)
+        assert!(icons.quality.contains_key("complete"));
+        assert!(icons.quality.contains_key("required"));
+        assert_eq!(icons.quality_terminal("required"), "*");
+
+        // Modes (6)
+        assert!(icons.modes.contains_key("meta"));
+        assert!(icons.modes.contains_key("audit"));
     }
 }

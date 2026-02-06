@@ -1,0 +1,20 @@
+# packages/core/models/arc-kinds/ownership/in-region.yaml
+# ArcKind: IN_REGION - GeoSubRegion belongs to GeoRegion
+# v10.8: Geographic Taxonomy
+
+arc:
+  name: IN_REGION
+  family: ownership
+  scope: intra_realm
+
+  source: GeoSubRegion
+  target: GeoRegion
+  cardinality: many_to_one
+
+  inverse: HAS_SUBREGION
+
+  llm_context: |
+    GeoSubRegion belongs to exactly one GeoRegion (UN M49 optional intermediate level).
+    Use to traverse from sub-region to region: MATCH (sr:GeoSubRegion)-[:IN_REGION]->(r:GeoRegion)
+
+  cypher_pattern: "(GeoSubRegion)-[:IN_REGION]->(GeoRegion)"

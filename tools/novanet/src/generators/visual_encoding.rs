@@ -97,6 +97,22 @@ struct TemplateAnimation {
     stagger_ms: u32,
 }
 
+/// Icon entry for template (web + terminal).
+#[derive(Debug, Serialize)]
+struct TemplateIcon {
+    key: String,
+    web: String,
+    terminal: String,
+    description: String,
+}
+
+/// Icons category for template.
+#[derive(Debug, Serialize)]
+struct TemplateIconCategory {
+    category: String,
+    icons: Vec<TemplateIcon>,
+}
+
 /// Channel mapping for template.
 #[derive(Debug, Serialize)]
 struct TemplateChannelMapping {
@@ -381,6 +397,58 @@ export function getScopeStroke(scope: ScopeKey): ScopeStrokeStyle {
 export function getAnimation(key: AnimationKey): AnimationPreset {
   return ANIMATIONS[key];
 }
+
+// =============================================================================
+// ICON SYSTEM (v10.6) — Single source of truth for all icons
+// =============================================================================
+// Each icon has: web (Lucide name) + terminal (Unicode) + description
+// Categories: realms, layers, traits, arc_families, states, navigation, quality, modes
+
+export interface IconDefinition {
+  web: string;      // Lucide icon name for Studio/web
+  terminal: string; // Unicode symbol for TUI
+  description: string;
+}
+
+{%- for cat in icon_categories %}
+
+// {{ cat.category | upper }} ICONS ({{ cat.icons | length }})
+export const {{ cat.category | upper }}_ICONS: Record<string, IconDefinition> = {
+{%- for icon in cat.icons %}
+  {{ icon.key }}: { web: '{{ icon.web }}', terminal: '{{ icon.terminal }}', description: '{{ icon.description }}' },
+{%- endfor %}
+};
+{%- endfor %}
+
+/**
+ * All icon categories combined.
+ */
+export const ICONS = {
+{%- for cat in icon_categories %}
+  {{ cat.category }}: {{ cat.category | upper }}_ICONS,
+{%- endfor %}
+} as const;
+
+/**
+ * Get icon by category and key.
+ */
+export function getIcon(category: keyof typeof ICONS, key: string): IconDefinition | undefined {
+  return ICONS[category]?.[key];
+}
+
+/**
+ * Get Lucide icon name by category and key.
+ */
+export function getWebIcon(category: keyof typeof ICONS, key: string): string {
+  return ICONS[category]?.[key]?.web ?? 'circle';
+}
+
+/**
+ * Get terminal Unicode icon by category and key.
+ */
+export function getTerminalIcon(category: keyof typeof ICONS, key: string): string {
+  return ICONS[category]?.[key]?.terminal ?? '·';
+}
 "##;
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -520,6 +588,9 @@ fn render_visual_encoding(doc: &VisualEncodingDoc) -> crate::Result<String> {
         focus_ring_offset: doc.accessibility.focus_ring_offset.clone(),
     };
 
+    // Icon categories (v10.6)
+    let icon_categories = build_icon_categories(doc);
+
     // Render template
     let mut env = Environment::new();
     env.add_template("visual-encoding.ts", VISUAL_ENCODING_TEMPLATE)
@@ -547,6 +618,7 @@ fn render_visual_encoding(doc: &VisualEncodingDoc) -> crate::Result<String> {
             kind_icons => kind_icons,
             animations => animations,
             accessibility => accessibility,
+            icon_categories => icon_categories,
         })
         .map_err(|e| crate::NovaNetError::Generator {
             generator: "visual_encoding".to_string(),
@@ -554,6 +626,89 @@ fn render_visual_encoding(doc: &VisualEncodingDoc) -> crate::Result<String> {
         })?;
 
     Ok(output)
+}
+
+/// Build icon categories from the Icons section of visual-encoding.yaml.
+fn build_icon_categories(doc: &VisualEncodingDoc) -> Vec<TemplateIconCategory> {
+    let Some(ref icons) = doc.icons else {
+        return Vec::new();
+    };
+
+    let mut categories = Vec::new();
+
+    // Helper to convert HashMap to sorted Vec of TemplateIcon
+    let to_icons = |map: &std::collections::HashMap<String, crate::parsers::visual_encoding::Icon>| {
+        let mut items: Vec<TemplateIcon> = map
+            .iter()
+            .map(|(key, icon)| TemplateIcon {
+                key: key.clone(),
+                web: icon.web.clone(),
+                terminal: icon.terminal.clone(),
+                description: escape_js_string(&icon.description),
+            })
+            .collect();
+        items.sort_by(|a, b| a.key.cmp(&b.key));
+        items
+    };
+
+    // Add each category in a defined order
+    if !icons.realms.is_empty() {
+        categories.push(TemplateIconCategory {
+            category: "realms".to_string(),
+            icons: to_icons(&icons.realms),
+        });
+    }
+
+    if !icons.layers.is_empty() {
+        categories.push(TemplateIconCategory {
+            category: "layers".to_string(),
+            icons: to_icons(&icons.layers),
+        });
+    }
+
+    if !icons.traits.is_empty() {
+        categories.push(TemplateIconCategory {
+            category: "traits".to_string(),
+            icons: to_icons(&icons.traits),
+        });
+    }
+
+    if !icons.arc_families.is_empty() {
+        categories.push(TemplateIconCategory {
+            category: "arc_families".to_string(),
+            icons: to_icons(&icons.arc_families),
+        });
+    }
+
+    if !icons.states.is_empty() {
+        categories.push(TemplateIconCategory {
+            category: "states".to_string(),
+            icons: to_icons(&icons.states),
+        });
+    }
+
+    if !icons.navigation.is_empty() {
+        categories.push(TemplateIconCategory {
+            category: "navigation".to_string(),
+            icons: to_icons(&icons.navigation),
+        });
+    }
+
+    if !icons.quality.is_empty() {
+        categories.push(TemplateIconCategory {
+            category: "quality".to_string(),
+            icons: to_icons(&icons.quality),
+        });
+    }
+
+    if !icons.modes.is_empty() {
+        categories.push(TemplateIconCategory {
+            category: "modes".to_string(),
+            icons: to_icons(&icons.modes),
+        });
+    }
+
+    categories
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -638,5 +793,37 @@ mod tests {
         assert!(output.contains("export function getTraitBorder"));
         assert!(output.contains("export function getScopeStroke"));
         assert!(output.contains("export function getAnimation"));
+
+        // Icon system (v10.6)
+        assert!(output.contains("ICON SYSTEM (v10.6)"));
+        assert!(output.contains("export interface IconDefinition"));
+
+        // Icon categories
+        assert!(output.contains("REALMS_ICONS:"));
+        assert!(output.contains("LAYERS_ICONS:"));
+        assert!(output.contains("TRAITS_ICONS:"));
+        assert!(output.contains("ARC_FAMILIES_ICONS:"));
+        assert!(output.contains("STATES_ICONS:"));
+        assert!(output.contains("NAVIGATION_ICONS:"));
+        assert!(output.contains("QUALITY_ICONS:"));
+        assert!(output.contains("MODES_ICONS:"));
+
+        // Icon entries (spot check)
+        assert!(output.contains("global: { web: 'globe', terminal: '◉'"));
+        assert!(output.contains("tenant: { web: 'building-2', terminal: '◎'"));
+        assert!(output.contains("invariant: { web: 'lock', terminal: '■'"));
+        assert!(output.contains("localized: { web: 'globe', terminal: '□'"));
+        assert!(output.contains("expanded: { web: 'chevron-down', terminal: '▼'"));
+        assert!(output.contains("collapsed: { web: 'chevron-right', terminal: '▶'"));
+
+        // Combined ICONS object
+        assert!(output.contains("export const ICONS = {"));
+        assert!(output.contains("realms: REALMS_ICONS"));
+        assert!(output.contains("modes: MODES_ICONS"));
+
+        // Helper functions for icons
+        assert!(output.contains("export function getIcon(category: keyof typeof ICONS, key: string)"));
+        assert!(output.contains("export function getWebIcon(category: keyof typeof ICONS, key: string)"));
+        assert!(output.contains("export function getTerminalIcon(category: keyof typeof ICONS, key: string)"));
     }
 }

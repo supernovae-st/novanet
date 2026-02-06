@@ -14,6 +14,10 @@ services:
       # SECURITY: Use environment variable for password in production
       - NEO4J_AUTH=${NEO4J_AUTH:-neo4j/novanetpassword}
       - NEO4J_PLUGINS=["apoc"]
+      # UTF-8 encoding for proper diacritics support (é, ü, ñ, etc.)
+      - LANG=en_US.UTF-8
+      - LC_ALL=en_US.UTF-8
+      - NEO4J_server_jvm_additional=-Dfile.encoding=UTF-8
       # APOC file operations (restricted to /import directory)
       - NEO4J_apoc_export_file_enabled=true
       - NEO4J_apoc_import_file_enabled=true

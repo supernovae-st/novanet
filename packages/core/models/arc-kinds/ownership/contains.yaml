@@ -1,0 +1,24 @@
+# packages/core/models/arc-kinds/ownership/contains.yaml
+# v10.7: Generic container → atom relationship
+# Used by all *Set containers (ExpressionSet, TermSet, CultureSet, etc.)
+arc:
+  name: CONTAINS
+  family: ownership
+  scope: intra_realm
+  source:
+    - ExpressionSet
+    - TermSet
+    - CultureSet
+    - TabooSet
+    - PatternSet
+    - AudienceSet
+  target:
+    - Expression
+    - Term
+    - CultureRef
+    - Taboo
+    - Pattern
+    - AudienceTrait
+  cardinality: one_to_many
+  llm_context: Container holds multiple atoms. Use to traverse from set to individual knowledge items.
+  cypher_pattern: (*Set)-[:CONTAINS]->(*Atom)

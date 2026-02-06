@@ -277,3 +277,243 @@ accessibility:
   focus_ring_width: 2px
   focus_ring_color: white
   focus_ring_offset: 2px
+
+# =============================================================================
+# ICON SYSTEM — Single source of truth for ALL icons (v10.6)
+# =============================================================================
+# Pattern: Each category has `web:` (Lucide icon name) + `terminal:` (Unicode)
+# Terminal icons are single-width Unicode symbols for monospace alignment
+# This section supersedes inline emoji in taxonomy.yaml
+#
+# Generated artifacts:
+# - packages/core/src/config/icons.generated.ts (TypeScript constants)
+# - tools/novanet/src/tui/icons.rs (Rust constants for TUI)
+
+icons:
+  # ---------------------------------------------------------------------------
+  # REALM ICONS — Where does the node live?
+  # ---------------------------------------------------------------------------
+  realms:
+    global:
+      web: globe
+      terminal: "◉"
+      description: "Universal shared data (read-only)"
+    tenant:
+      web: building-2
+      terminal: "◎"
+      description: "Multi-tenant isolated scope"
+
+  # ---------------------------------------------------------------------------
+  # LAYER ICONS — What functional category?
+  # ---------------------------------------------------------------------------
+  layers:
+    config:
+      web: settings
+      terminal: "⚙"
+      description: "Configuration nodes"
+    locale-knowledge:
+      web: book-open
+      terminal: "◈"
+      description: "Locale expertise and knowledge atoms"
+    seo:
+      web: search
+      terminal: "◇"
+      description: "SEO intelligence and keywords"
+    foundation:
+      web: landmark
+      terminal: "▣"
+      description: "Project identity and branding"
+    structure:
+      web: layout
+      terminal: "▤"
+      description: "Information architecture"
+    semantic:
+      web: lightbulb
+      terminal: "◆"
+      description: "Entities and meaning"
+    instruction:
+      web: file-text
+      terminal: "▧"
+      description: "Generation directives"
+    output:
+      web: check-circle
+      terminal: "●"
+      description: "Generated content"
+
+  # ---------------------------------------------------------------------------
+  # TRAIT ICONS — How does the node behave across locales?
+  # ---------------------------------------------------------------------------
+  traits:
+    invariant:
+      web: lock
+      terminal: "■"
+      description: "Stable across all locales"
+    localized:
+      web: globe
+      terminal: "□"
+      description: "Generated natively per locale"
+    knowledge:
+      web: brain
+      terminal: "◊"
+      description: "Locale expertise data"
+    derived:
+      web: calculator
+      terminal: "▪"
+      description: "Computed from other nodes"
+    job:
+      web: play
+      terminal: "▫"
+      description: "Processing task"
+
+  # ---------------------------------------------------------------------------
+  # ARC FAMILY ICONS — What kind of relationship?
+  # ---------------------------------------------------------------------------
+  arc_families:
+    ownership:
+      web: arrow-right
+      terminal: "→"
+      description: "Parent-child structural"
+    localization:
+      web: languages
+      terminal: "⇢"
+      description: "Locale content links"
+    semantic:
+      web: link
+      terminal: "~"
+      description: "Meaning connections"
+    generation:
+      web: sparkles
+      terminal: "⇒"
+      description: "LLM pipeline flow"
+    mining:
+      web: pickaxe
+      terminal: "⇝"
+      description: "SEO data extraction"
+
+  # ---------------------------------------------------------------------------
+  # UI STATE ICONS — Empty states, loading, status indicators
+  # ---------------------------------------------------------------------------
+  states:
+    no_connection:
+      web: wifi-off
+      terminal: "⚠"
+      description: "Database not connected"
+    no_kinds:
+      web: inbox
+      terminal: "∅"
+      description: "No node kinds found"
+    no_results:
+      web: search-x
+      terminal: "◌"
+      description: "Query returned nothing"
+    no_instances:
+      web: file-x
+      terminal: "□"
+      description: "Kind has no instances"
+    loading:
+      web: loader
+      terminal: "◐"
+      description: "Data loading in progress"
+    success:
+      web: check
+      terminal: "✓"
+      description: "Operation succeeded"
+    error:
+      web: x
+      terminal: "✗"
+      description: "Operation failed"
+    warning:
+      web: alert-triangle
+      terminal: "⚠"
+      description: "Warning condition"
+
+  # ---------------------------------------------------------------------------
+  # NAVIGATION ICONS — Tree controls, overlays
+  # ---------------------------------------------------------------------------
+  navigation:
+    expanded:
+      web: chevron-down
+      terminal: "▼"
+      description: "Node expanded"
+    collapsed:
+      web: chevron-right
+      terminal: "▶"
+      description: "Node collapsed"
+    leaf:
+      web: dot
+      terminal: "·"
+      description: "Leaf node (no children)"
+    search:
+      web: search
+      terminal: "/"
+      description: "Search mode"
+    help:
+      web: help-circle
+      terminal: "?"
+      description: "Help overlay"
+    back:
+      web: arrow-left
+      terminal: "←"
+      description: "Navigate back"
+    copy:
+      web: clipboard
+      terminal: "□"
+      description: "Copy to clipboard"
+
+  # ---------------------------------------------------------------------------
+  # DATA QUALITY ICONS — Audit mode, coverage indicators
+  # ---------------------------------------------------------------------------
+  quality:
+    complete:
+      web: check-circle
+      terminal: "●"
+      description: "All required fields present"
+    partial:
+      web: circle-dot
+      terminal: "◐"
+      description: "Some fields missing"
+    empty:
+      web: circle
+      terminal: "○"
+      description: "No data"
+    required:
+      web: asterisk
+      terminal: "*"
+      description: "Required field marker"
+    optional:
+      web: minus
+      terminal: " "
+      description: "Optional field marker"
+    chart:
+      web: bar-chart-2
+      terminal: "≡"
+      description: "Statistics/chart header"
+
+  # ---------------------------------------------------------------------------
+  # MODE ICONS — Navigation modes (1-6 keys)
+  # ---------------------------------------------------------------------------
+  modes:
+    meta:
+      web: database
+      terminal: "M"
+      description: "Meta-graph view"
+    data:
+      web: table
+      terminal: "D"
+      description: "Data instances view"
+    overlay:
+      web: layers
+      terminal: "O"
+      description: "Combined meta+data"
+    query:
+      web: filter
+      terminal: "Q"
+      description: "Faceted query"
+    atlas:
+      web: map
+      terminal: "A"
+      description: "Architecture atlas"
+    audit:
+      web: clipboard-check
+      terminal: "U"
+      description: "Data quality audit"

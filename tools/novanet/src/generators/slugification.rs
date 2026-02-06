@@ -8,8 +8,8 @@ use chrono::Local;
 
 use crate::generators::cypher_utils::escape_cypher;
 use crate::parsers::slugification::{
-    aggregate_slug_rules, load_all_slugifications, RegionalAddition, ScriptConfig, SlugExample,
-    SlugRule, Slugification, Warning,
+    RegionalAddition, ScriptConfig, SlugExample, SlugRule, Slugification, Warning,
+    aggregate_slug_rules, load_all_slugifications,
 };
 use crate::{NovaNetError, Result};
 
@@ -46,7 +46,7 @@ impl SlugificationGenerator {
 
         if slugifications.is_empty() {
             return Err(NovaNetError::Validation(
-                "No slugification files found".to_string()
+                "No slugification files found".to_string(),
             ));
         }
 
@@ -352,9 +352,10 @@ mod tests {
             description: "URL slug generation rules for fr-FR".to_string(),
             llm_context: String::new(),
             slug_rule: "latin_preserve".to_string(),
-            stopwords: HashMap::from([
-                ("article".to_string(), vec!["le".to_string(), "la".to_string()]),
-            ]),
+            stopwords: HashMap::from([(
+                "article".to_string(),
+                vec!["le".to_string(), "la".to_string()],
+            )]),
             stopwords_count: 2,
             regional_additions: vec![],
             script_config: None,

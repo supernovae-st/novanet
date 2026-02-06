@@ -66,6 +66,11 @@ schema generate/validate, doc generate, filter build, Galaxy-themed TUI with boo
 Path validation ensures `models/node-kinds/{realm}/{layer}/{name}.yaml` matches YAML content.
 v10.6: 2 realms (global, tenant), 9 layers total.
 
+**Icons source of truth (v10.6):** `visual-encoding.yaml` → `icons:` section provides dual-format icons:
+- `web`: Lucide icon name for Studio
+- `terminal`: Unicode symbol for TUI
+Categories: realms, layers, traits, arc_families, states, navigation, quality, modes.
+
 **Boundary rule (v9 target):** TypeScript generates code artifacts. Rust executes at runtime.
 
 ---

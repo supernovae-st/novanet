@@ -488,6 +488,7 @@ mod tests {
             properties: None,
             is_self_referential: None,
             inverse_of: None,
+            inverse_name: None,
         }
     }
 
@@ -572,6 +573,7 @@ mod tests {
             properties: None,
             is_self_referential: None,
             inverse_of: None,
+            inverse_name: None,
         };
         let expanded = expand_arcs(&[rel]);
         assert_eq!(expanded.len(), 4); // 2 sources × 2 targets

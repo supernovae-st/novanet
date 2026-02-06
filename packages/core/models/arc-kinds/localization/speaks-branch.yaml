@@ -1,0 +1,21 @@
+# packages/core/models/arc-kinds/localization/speaks-branch.yaml
+# ArcKind: SPEAKS_BRANCH - Locale's primary language branch
+# v10.8: Geographic Taxonomy
+
+arc:
+  name: SPEAKS_BRANCH
+  family: localization
+  scope: cross_realm
+
+  source: Locale
+  target: LanguageBranch
+  cardinality: many_to_one
+
+  inverse: SPOKEN_BY
+
+  llm_context: |
+    Locale's primary language belongs to a language branch.
+    Use to find locales with similar languages: MATCH (l:Locale)-[:SPEAKS_BRANCH]->(b)<-[:SPEAKS_BRANCH]-(similar)
+    Example: fr-FR -[:SPEAKS_BRANCH]-> Romance (roa)
+
+  cypher_pattern: "(Locale)-[:SPEAKS_BRANCH]->(LanguageBranch)"

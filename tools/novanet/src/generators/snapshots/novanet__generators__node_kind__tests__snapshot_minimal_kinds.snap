@@ -14,6 +14,10 @@ expression: cypher
 
 MERGE (k_Project:Meta:Kind {label: 'Project'})
 ON CREATE SET
+  k_Project.key = 'project',
+  k_Project.realm = 'tenant',
+  k_Project.layer = 'foundation',
+  k_Project.trait = 'invariant',
   k_Project.display_name = 'Project',
   k_Project.llm_context = 'Project description.',
   k_Project.yaml_path = 'node-kinds/tenant/foundation/project.yaml',
@@ -24,6 +28,10 @@ ON CREATE SET
   k_Project.generation_count = 0,
   k_Project.created_at = datetime()
 ON MATCH SET
+  k_Project.key = 'project',
+  k_Project.realm = 'tenant',
+  k_Project.layer = 'foundation',
+  k_Project.trait = 'invariant',
   k_Project.display_name = 'Project',
   k_Project.llm_context = 'Project description.',
   k_Project.yaml_path = 'node-kinds/tenant/foundation/project.yaml',
@@ -36,6 +44,10 @@ ON MATCH SET
 
 MERGE (k_Page:Meta:Kind {label: 'Page'})
 ON CREATE SET
+  k_Page.key = 'page',
+  k_Page.realm = 'tenant',
+  k_Page.layer = 'structure',
+  k_Page.trait = 'invariant',
   k_Page.display_name = 'Page',
   k_Page.llm_context = 'Page description.',
   k_Page.yaml_path = 'node-kinds/tenant/structure/page.yaml',
@@ -46,6 +58,10 @@ ON CREATE SET
   k_Page.generation_count = 0,
   k_Page.created_at = datetime()
 ON MATCH SET
+  k_Page.key = 'page',
+  k_Page.realm = 'tenant',
+  k_Page.layer = 'structure',
+  k_Page.trait = 'invariant',
   k_Page.display_name = 'Page',
   k_Page.llm_context = 'Page description.',
   k_Page.yaml_path = 'node-kinds/tenant/structure/page.yaml',
@@ -58,6 +74,10 @@ ON MATCH SET
 
 MERGE (k_PageL10n:Meta:Kind {label: 'PageL10n'})
 ON CREATE SET
+  k_PageL10n.key = 'page-l10n',
+  k_PageL10n.realm = 'tenant',
+  k_PageL10n.layer = 'structure',
+  k_PageL10n.trait = 'localized',
   k_PageL10n.display_name = 'PageL10n',
   k_PageL10n.llm_context = 'PageL10n description.',
   k_PageL10n.yaml_path = 'node-kinds/tenant/structure/pagel10n.yaml',
@@ -68,6 +88,10 @@ ON CREATE SET
   k_PageL10n.generation_count = 0,
   k_PageL10n.created_at = datetime()
 ON MATCH SET
+  k_PageL10n.key = 'page-l10n',
+  k_PageL10n.realm = 'tenant',
+  k_PageL10n.layer = 'structure',
+  k_PageL10n.trait = 'localized',
   k_PageL10n.display_name = 'PageL10n',
   k_PageL10n.llm_context = 'PageL10n description.',
   k_PageL10n.yaml_path = 'node-kinds/tenant/structure/pagel10n.yaml',
@@ -80,6 +104,10 @@ ON MATCH SET
 
 MERGE (k_Concept:Meta:Kind {label: 'Concept'})
 ON CREATE SET
+  k_Concept.key = 'concept',
+  k_Concept.realm = 'tenant',
+  k_Concept.layer = 'semantic',
+  k_Concept.trait = 'invariant',
   k_Concept.display_name = 'Concept',
   k_Concept.llm_context = 'Concept description.',
   k_Concept.yaml_path = 'node-kinds/tenant/semantic/concept.yaml',
@@ -90,6 +118,10 @@ ON CREATE SET
   k_Concept.generation_count = 0,
   k_Concept.created_at = datetime()
 ON MATCH SET
+  k_Concept.key = 'concept',
+  k_Concept.realm = 'tenant',
+  k_Concept.layer = 'semantic',
+  k_Concept.trait = 'invariant',
   k_Concept.display_name = 'Concept',
   k_Concept.llm_context = 'Concept description.',
   k_Concept.yaml_path = 'node-kinds/tenant/semantic/concept.yaml',
@@ -102,6 +134,10 @@ ON MATCH SET
 
 MERGE (k_GenerationJob:Meta:Kind {label: 'GenerationJob'})
 ON CREATE SET
+  k_GenerationJob.key = 'generation-job',
+  k_GenerationJob.realm = 'tenant',
+  k_GenerationJob.layer = 'output',
+  k_GenerationJob.trait = 'job',
   k_GenerationJob.display_name = 'GenerationJob',
   k_GenerationJob.llm_context = 'GenerationJob description.',
   k_GenerationJob.yaml_path = 'node-kinds/tenant/output/generationjob.yaml',
@@ -112,6 +148,10 @@ ON CREATE SET
   k_GenerationJob.generation_count = 0,
   k_GenerationJob.created_at = datetime()
 ON MATCH SET
+  k_GenerationJob.key = 'generation-job',
+  k_GenerationJob.realm = 'tenant',
+  k_GenerationJob.layer = 'output',
+  k_GenerationJob.trait = 'job',
   k_GenerationJob.display_name = 'GenerationJob',
   k_GenerationJob.llm_context = 'GenerationJob description.',
   k_GenerationJob.yaml_path = 'node-kinds/tenant/output/generationjob.yaml',

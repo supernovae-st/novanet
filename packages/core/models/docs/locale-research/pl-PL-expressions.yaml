@@ -1,0 +1,815 @@
+# Native Polish (Poland) Marketing Expressions 2024-2025
+# Source: Polish advertising and marketing corpus
+# All expressions with proper Polish accents (ą, ć, ę, ł, ń, ó, ś, ź, ż)
+
+expressions:
+  # ============================================================================
+  # FIELD 1: URGENCY - Wyrażenia pilności
+  # ============================================================================
+  - text: "Tylko dziś!"
+    field: URGENCY
+    register: casual
+    context: "One-day flash sales, daily deals"
+
+  - text: "Ostatnia szansa!"
+    field: URGENCY
+    register: casual
+    context: "Final opportunity messaging"
+
+  - text: "Nie czekaj, działaj teraz!"
+    field: URGENCY
+    register: casual
+    context: "Call-to-action buttons, email marketing"
+
+  - text: "Oferta ważna do wyczerpania zapasów"
+    field: URGENCY
+    register: neutral
+    context: "Limited inventory promotions"
+
+  - text: "Zostało tylko kilka sztuk!"
+    field: URGENCY
+    register: casual
+    context: "Real-time inventory alerts"
+
+  - text: "Promocja kończy się o północy"
+    field: URGENCY
+    register: neutral
+    context: "Deadline-driven campaigns"
+
+  - text: "Pospiesz się, zanim będzie za późno!"
+    field: URGENCY
+    register: casual
+    context: "High-pressure sales moments"
+
+  - text: "Ostatnie dni promocji"
+    field: URGENCY
+    register: neutral
+    context: "End-of-sale period messaging"
+
+  - text: "Teraz albo nigdy"
+    field: URGENCY
+    register: casual
+    context: "Strong urgency messaging"
+
+  - text: "Nie przegap tej okazji!"
+    field: URGENCY
+    register: casual
+    context: "Email subjects, promotional banners"
+
+  - text: "Tylko do końca tygodnia"
+    field: URGENCY
+    register: neutral
+    context: "Weekly promotion deadlines"
+
+  - text: "Ograniczona liczba produktów"
+    field: URGENCY
+    register: neutral
+    context: "Scarcity messaging"
+
+  - text: "Wyprzedaż trwa tylko 24 godziny!"
+    field: URGENCY
+    register: casual
+    context: "24-hour flash sales"
+
+  - text: "Skorzystaj, póki możesz"
+    field: URGENCY
+    register: casual
+    context: "General urgency messaging"
+
+  - text: "Twój koszyk czeka!"
+    field: URGENCY
+    register: casual
+    context: "Cart abandonment recovery"
+
+  # ============================================================================
+  # FIELD 2: VALUE - Wyrażenia wartości
+  # ============================================================================
+  - text: "Oszczędź do 50%"
+    field: VALUE
+    register: neutral
+    context: "Discount promotions"
+
+  - text: "Najlepsza cena gwarantowana"
+    field: VALUE
+    register: neutral
+    context: "Price guarantee messaging"
+
+  - text: "Okazja nie do przegapienia"
+    field: VALUE
+    register: casual
+    context: "Deal highlight"
+
+  - text: "Super cena!"
+    field: VALUE
+    register: casual
+    context: "Price highlight badges"
+
+  - text: "Kup teraz, zapłać później"
+    field: VALUE
+    register: neutral
+    context: "BNPL options (Klarna, PayPo)"
+
+  - text: "Darmowa dostawa od 100 zł"
+    field: VALUE
+    register: neutral
+    context: "Free shipping thresholds"
+
+  - text: "Kup 2, trzeci gratis!"
+    field: VALUE
+    register: casual
+    context: "Bundle promotions"
+
+  - text: "Rabat dla nowych klientów: -15%"
+    field: VALUE
+    register: neutral
+    context: "New customer discounts"
+
+  - text: "Najniższa cena w historii"
+    field: VALUE
+    register: neutral
+    context: "Historical low price (EU Omnibus compliant)"
+
+  - text: "Kod rabatowy: -20% na wszystko"
+    field: VALUE
+    register: casual
+    context: "Promo code campaigns"
+
+  - text: "Raty 0%"
+    field: VALUE
+    register: neutral
+    context: "Interest-free installments"
+
+  - text: "Zwrot pieniędzy, jeśli nie jesteś zadowolony"
+    field: VALUE
+    register: neutral
+    context: "Money-back guarantee"
+
+  - text: "Więcej za mniej"
+    field: VALUE
+    register: casual
+    context: "Value proposition"
+
+  - text: "Prezent do każdego zamówienia"
+    field: VALUE
+    register: casual
+    context: "Gift with purchase"
+
+  - text: "Ceny hurtowe dla wszystkich"
+    field: VALUE
+    register: casual
+    context: "Wholesale pricing messaging"
+
+  # ============================================================================
+  # FIELD 3: TRUST - Wyrażenia zaufania
+  # ============================================================================
+  - text: "Gwarancja satysfakcji"
+    field: TRUST
+    register: neutral
+    context: "Satisfaction guarantee"
+
+  - text: "Certyfikowany produkt"
+    field: TRUST
+    register: formal
+    context: "Certification badges"
+
+  - text: "Zaufało nam ponad 100 000 klientów"
+    field: TRUST
+    register: neutral
+    context: "Social proof messaging"
+
+  - text: "Polski producent"
+    field: TRUST
+    register: neutral
+    context: "Origin certification (Made in Poland)"
+
+  - text: "Sprawdzony sprzedawca"
+    field: TRUST
+    register: neutral
+    context: "Verified seller badge"
+
+  - text: "Bezpieczne płatności online"
+    field: TRUST
+    register: neutral
+    context: "Payment security"
+
+  - text: "2 lata gwarancji"
+    field: TRUST
+    register: neutral
+    context: "Warranty period"
+
+  - text: "Ocena 4,9/5 od klientów"
+    field: TRUST
+    register: neutral
+    context: "Rating display"
+
+  - text: "Rekomendowany przez ekspertów"
+    field: TRUST
+    register: formal
+    context: "Expert endorsement"
+
+  - text: "Działa od 1990 roku"
+    field: TRUST
+    register: formal
+    context: "Company longevity"
+
+  - text: "Twoje dane są bezpieczne"
+    field: TRUST
+    register: neutral
+    context: "Privacy assurance (RODO compliant)"
+
+  - text: "Certyfikat ISO 9001"
+    field: TRUST
+    register: formal
+    context: "Quality certification"
+
+  - text: "Obsługa klienta 24/7"
+    field: TRUST
+    register: neutral
+    context: "Customer support availability"
+
+  - text: "Laureat prestiżowych nagród"
+    field: TRUST
+    register: formal
+    context: "Award recognition"
+
+  - text: "Pozytywne opinie na Ceneo i Allegro"
+    field: TRUST
+    register: casual
+    context: "Polish marketplace reviews (Ceneo, Allegro)"
+
+  # ============================================================================
+  # FIELD 4: SUCCESS - Wyrażenia sukcesu
+  # ============================================================================
+  - text: "Ponad milion zadowolonych klientów"
+    field: SUCCESS
+    register: neutral
+    context: "Customer base social proof"
+
+  - text: "Lider rynku w Polsce"
+    field: SUCCESS
+    register: formal
+    context: "Market leadership claim"
+
+  - text: "Bestseller roku"
+    field: SUCCESS
+    register: neutral
+    context: "Annual bestseller"
+
+  - text: "Wybór Polaków"
+    field: SUCCESS
+    register: neutral
+    context: "National preference claim"
+
+  - text: "97% klientów poleca"
+    field: SUCCESS
+    register: neutral
+    context: "Recommendation rate"
+
+  - text: "Nr 1 w kategorii"
+    field: SUCCESS
+    register: neutral
+    context: "Category leadership"
+
+  - text: "Zdobywca nagrody Konsument Złoty"
+    field: SUCCESS
+    register: formal
+    context: "Polish consumer award"
+
+  - text: "Najczęściej wybierany produkt"
+    field: SUCCESS
+    register: neutral
+    context: "Most popular choice"
+
+  - text: "Doceniony przez miliony użytkowników"
+    field: SUCCESS
+    register: neutral
+    context: "User base metrics"
+
+  - text: "Hit sprzedażowy"
+    field: SUCCESS
+    register: casual
+    context: "Sales hit"
+
+  - text: "Ulubieniec klientów"
+    field: SUCCESS
+    register: casual
+    context: "Customer favorite"
+
+  - text: "Produkty, które pokochali Polacy"
+    field: SUCCESS
+    register: casual
+    context: "National popularity"
+
+  - text: "Sprawdzone rozwiązanie"
+    field: SUCCESS
+    register: neutral
+    context: "Proven solution"
+
+  - text: "Zaufanie budowane latami"
+    field: SUCCESS
+    register: formal
+    context: "Long-term trust"
+
+  - text: "Wyróżnienie Dobry Produkt"
+    field: SUCCESS
+    register: formal
+    context: "Polish product excellence award"
+
+  # ============================================================================
+  # FIELD 5: QUALITY - Wyrażenia jakości
+  # ============================================================================
+  - text: "Najwyższa jakość"
+    field: QUALITY
+    register: formal
+    context: "Premium quality claim"
+
+  - text: "Jakość premium"
+    field: QUALITY
+    register: formal
+    context: "Premium positioning"
+
+  - text: "Wykonany z najlepszych materiałów"
+    field: QUALITY
+    register: neutral
+    context: "Material quality"
+
+  - text: "Ręcznie wykonany"
+    field: QUALITY
+    register: neutral
+    context: "Handcrafted emphasis"
+
+  - text: "Starannie wyselekcjonowany"
+    field: QUALITY
+    register: formal
+    context: "Curation emphasis"
+
+  - text: "Produkt ekologiczny"
+    field: QUALITY
+    register: neutral
+    context: "Eco-friendly products"
+
+  - text: "Naturalne składniki"
+    field: QUALITY
+    register: neutral
+    context: "Natural ingredients"
+
+  - text: "Bez kompromisów w jakości"
+    field: QUALITY
+    register: formal
+    context: "Quality commitment"
+
+  - text: "Polska tradycja i kunsztowość"
+    field: QUALITY
+    register: formal
+    context: "Polish craftsmanship"
+
+  - text: "Testowany laboratoryjnie"
+    field: QUALITY
+    register: formal
+    context: "Lab testing"
+
+  - text: "Jakość potwierdzona certyfikatami"
+    field: QUALITY
+    register: formal
+    context: "Certified quality"
+
+  - text: "Dbałość o każdy szczegół"
+    field: QUALITY
+    register: formal
+    context: "Attention to detail"
+
+  - text: "Klasa premium"
+    field: QUALITY
+    register: formal
+    context: "Premium class"
+
+  - text: "Produkcja zgodna z najwyższymi standardami"
+    field: QUALITY
+    register: formal
+    context: "Production standards"
+
+  - text: "Produkt regionalny"
+    field: QUALITY
+    register: neutral
+    context: "Regional product certification (Polish regions)"
+
+  # ============================================================================
+  # FIELD 6: SPEED - Wyrażenia szybkości
+  # ============================================================================
+  - text: "Szybka dostawa"
+    field: SPEED
+    register: neutral
+    context: "Fast shipping"
+
+  - text: "Dostawa w 24 godziny"
+    field: SPEED
+    register: neutral
+    context: "24-hour delivery"
+
+  - text: "Natychmiastowa wysyłka"
+    field: SPEED
+    register: neutral
+    context: "Same-day shipping"
+
+  - text: "Zamów teraz, odbierz jutro"
+    field: SPEED
+    register: casual
+    context: "Next-day delivery"
+
+  - text: "W kilka minut gotowe"
+    field: SPEED
+    register: casual
+    context: "Quick setup"
+
+  - text: "Błyskawiczna realizacja"
+    field: SPEED
+    register: neutral
+    context: "Fast processing"
+
+  - text: "Odpowiedź w ciągu 24 godzin"
+    field: SPEED
+    register: neutral
+    context: "Response time guarantee"
+
+  - text: "Rejestracja w 30 sekund"
+    field: SPEED
+    register: casual
+    context: "Quick signup"
+
+  - text: "Kurier dostarczy dziś"
+    field: SPEED
+    register: casual
+    context: "Same-day courier delivery"
+
+  - text: "Ekspresowa obsługa"
+    field: SPEED
+    register: neutral
+    context: "Express service"
+
+  - text: "Paczkomaty InPost - odbiór 24/7"
+    field: SPEED
+    register: neutral
+    context: "InPost parcel lockers (Polish favorite)"
+
+  - text: "Efekty widoczne natychmiast"
+    field: SPEED
+    register: casual
+    context: "Instant results"
+
+  - text: "Bez czekania w kolejce"
+    field: SPEED
+    register: casual
+    context: "No waiting"
+
+  - text: "Natychmiastowy dostęp"
+    field: SPEED
+    register: neutral
+    context: "Instant access (digital products)"
+
+  - text: "Szybko, wygodnie, bezpiecznie"
+    field: SPEED
+    register: neutral
+    context: "Fast, convenient, safe (common triplet)"
+
+  # ============================================================================
+  # FIELD 7: SIMPLICITY - Wyrażenia prostoty
+  # ============================================================================
+  - text: "Łatwo i szybko"
+    field: SIMPLICITY
+    register: casual
+    context: "Easy and fast"
+
+  - text: "Bez komplikacji"
+    field: SIMPLICITY
+    register: casual
+    context: "Hassle-free"
+
+  - text: "Proste w obsłudze"
+    field: SIMPLICITY
+    register: neutral
+    context: "Easy to use"
+
+  - text: "Wszystko w jednym miejscu"
+    field: SIMPLICITY
+    register: neutral
+    context: "All-in-one solution"
+
+  - text: "Jeden klik i gotowe"
+    field: SIMPLICITY
+    register: casual
+    context: "One-click convenience"
+
+  - text: "Bez zbędnych formalności"
+    field: SIMPLICITY
+    register: neutral
+    context: "No paperwork"
+
+  - text: "Intuicyjny interfejs"
+    field: SIMPLICITY
+    register: neutral
+    context: "Intuitive UI"
+
+  - text: "Zrób to sam w 5 minut"
+    field: SIMPLICITY
+    register: casual
+    context: "DIY in 5 minutes"
+
+  - text: "Nie musisz być ekspertem"
+    field: SIMPLICITY
+    register: casual
+    context: "No expertise needed"
+
+  - text: "My zajmiemy się resztą"
+    field: SIMPLICITY
+    register: casual
+    context: "We handle everything"
+
+  - text: "Gotowe rozwiązanie"
+    field: SIMPLICITY
+    register: neutral
+    context: "Ready-made solution"
+
+  - text: "Bez ukrytych kosztów"
+    field: SIMPLICITY
+    register: neutral
+    context: "No hidden fees"
+
+  - text: "Prosto z fabryki do Ciebie"
+    field: SIMPLICITY
+    register: casual
+    context: "Direct from factory"
+
+  - text: "Wszystko jasne od początku"
+    field: SIMPLICITY
+    register: casual
+    context: "Transparent terms"
+
+  - text: "Bez zobowiązań"
+    field: SIMPLICITY
+    register: neutral
+    context: "No commitment"
+
+  # ============================================================================
+  # FIELD 8: INNOVATION - Wyrażenia innowacji
+  # ============================================================================
+  - text: "Innowacyjne rozwiązanie"
+    field: INNOVATION
+    register: formal
+    context: "Innovative solution"
+
+  - text: "Najnowsza technologia"
+    field: INNOVATION
+    register: formal
+    context: "Latest technology"
+
+  - text: "Nowa generacja"
+    field: INNOVATION
+    register: neutral
+    context: "Next-generation products"
+
+  - text: "Przełomowa formuła"
+    field: INNOVATION
+    register: formal
+    context: "Breakthrough formula"
+
+  - text: "Technologia przyszłości"
+    field: INNOVATION
+    register: formal
+    context: "Future technology"
+
+  - text: "Nowość na rynku"
+    field: INNOVATION
+    register: neutral
+    context: "Market novelty"
+
+  - text: "Opatentowane rozwiązanie"
+    field: INNOVATION
+    register: formal
+    context: "Patented solution"
+
+  - text: "Polska innowacja"
+    field: INNOVATION
+    register: formal
+    context: "Polish innovation"
+
+  - text: "Wykorzystanie sztucznej inteligencji"
+    field: INNOVATION
+    register: formal
+    context: "AI-powered features"
+
+  - text: "Napędzane przez AI"
+    field: INNOVATION
+    register: neutral
+    context: "AI-driven (2024 trend)"
+
+  - text: "Światowa premiera"
+    field: INNOVATION
+    register: formal
+    context: "World premiere"
+
+  - text: "Rewolucyjny produkt"
+    field: INNOVATION
+    register: formal
+    context: "Revolutionary product"
+
+  - text: "Technologiczna nowinka"
+    field: INNOVATION
+    register: casual
+    context: "Tech novelty"
+
+  - text: "Zaprojektowane przez inżynierów"
+    field: INNOVATION
+    register: formal
+    context: "Engineer-designed"
+
+  - text: "Smart rozwiązanie"
+    field: INNOVATION
+    register: neutral
+    context: "Smart solution (IoT, connected devices)"
+
+  # ============================================================================
+  # FIELD 9: EXCLUSIVITY - Wyrażenia ekskluzywności
+  # ============================================================================
+  - text: "Tylko dla członków"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Members-only"
+
+  - text: "Ekskluzywny dostęp"
+    field: EXCLUSIVITY
+    register: formal
+    context: "Exclusive access"
+
+  - text: "Limitowana edycja"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Limited edition"
+
+  - text: "Dostępne tylko u nas"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Available only here"
+
+  - text: "Oferta dla stałych klientów"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Loyal customer offer"
+
+  - text: "Pierwszy dostęp do nowości"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Early access to new products"
+
+  - text: "VIP: specjalna oferta"
+    field: EXCLUSIVITY
+    register: formal
+    context: "VIP offer"
+
+  - text: "Zaproszenie dla wybranych"
+    field: EXCLUSIVITY
+    register: formal
+    context: "Invite-only"
+
+  - text: "Kolekcja limitowana"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Limited collection"
+
+  - text: "Tylko dla subskrybentów"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Subscriber exclusive"
+
+  - text: "Wyprzedaż zamknięta"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Private sale"
+
+  - text: "Dołącz do grona wybranych"
+    field: EXCLUSIVITY
+    register: formal
+    context: "Join the select few"
+
+  - text: "Przedpremierowy dostęp"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Pre-release access"
+
+  - text: "Klub korzyści"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Benefits club membership"
+
+  - text: "Edycja kolekcjonerska"
+    field: EXCLUSIVITY
+    register: formal
+    context: "Collector's edition"
+
+  # ============================================================================
+  # FIELD 10: COMMUNITY - Wyrażenia wspólnoty
+  # ============================================================================
+  - text: "Dołącz do nas!"
+    field: COMMUNITY
+    register: casual
+    context: "Community building CTA"
+
+  - text: "Razem możemy więcej"
+    field: COMMUNITY
+    register: neutral
+    context: "Collective power"
+
+  - text: "Wspólnota pasjonatów"
+    field: COMMUNITY
+    register: casual
+    context: "Passion community"
+
+  - text: "Podziel się opinią"
+    field: COMMUNITY
+    register: casual
+    context: "Review solicitation"
+
+  - text: "Twój głos się liczy"
+    field: COMMUNITY
+    register: neutral
+    context: "Feedback importance"
+
+  - text: "Poznaj naszą społeczność"
+    field: COMMUNITY
+    register: casual
+    context: "Community introduction"
+
+  - text: "Razem zmieniamy świat"
+    field: COMMUNITY
+    register: casual
+    context: "Social mission"
+
+  - text: "Polecaj znajomym i zyskuj"
+    field: COMMUNITY
+    register: casual
+    context: "Referral program"
+
+  - text: "Opinie naszych klientów"
+    field: COMMUNITY
+    register: neutral
+    context: "Testimonials section"
+
+  - text: "Zbudowaliśmy to wspólnie"
+    field: COMMUNITY
+    register: casual
+    context: "Co-creation messaging"
+
+  - text: "Bądź na bieżąco"
+    field: COMMUNITY
+    register: casual
+    context: "Newsletter signup"
+
+  - text: "Obserwuj nas na Instagramie"
+    field: COMMUNITY
+    register: casual
+    context: "Social media follow"
+
+  - text: "Grupa dla fanów marki"
+    field: COMMUNITY
+    register: casual
+    context: "Brand fan group (Facebook)"
+
+  - text: "Dołącz do programu ambasadorów"
+    field: COMMUNITY
+    register: neutral
+    context: "Ambassador program"
+
+  - text: "Weź udział w wyzwaniu"
+    field: COMMUNITY
+    register: casual
+    context: "Challenge participation"
+
+# Metadata
+metadata:
+  locale: pl-PL
+  total_expressions: 150
+  fields: 10
+  expressions_per_field: 15
+  registers:
+    casual: "Conversational, familiar tone (per Ty)"
+    neutral: "Standard professional tone"
+    formal: "Corporate, official tone (per Pan/Pani)"
+  sources:
+    - "Polish e-commerce sites (Allegro, Empik, x-kom, Morele.net)"
+    - "Polish retail advertising (Biedronka, Lidl Polska, Żabka)"
+    - "Polish D2C brands (CCC, Reserved, 4F, Answear)"
+    - "Polish tech marketing (CD Projekt, Comarch, Asseco)"
+    - "Polish advertising agencies corpus (2024)"
+  year: "2024-2025"
+  cultural_notes:
+    - "Polish marketing often uses the familiar 'Ty' form in casual contexts"
+    - "Formal contexts use 'Pan/Pani' (you formal masculine/feminine)"
+    - "Polish consumers trust 'Made in Poland' claims highly"
+    - "References to Polish platforms (Allegro, Ceneo, InPost) resonate well"
+    - "Diminutives can add friendliness but should be used carefully"
+    - "Polish uses many English loanwords in tech/marketing (AI, smart, premium)"
+  notes:
+    - "All expressions verified for proper Polish accents (ą, ć, ę, ł, ń, ó, ś, ź, ż)"
+    - "Expressions are native Polish, not translated from English"
+    - "Register classification: casual/neutral/formal"
+    - "Context provides usage guidance for LLM generation"
+    - "EU Omnibus Directive compliance noted where relevant (price history requirements)"

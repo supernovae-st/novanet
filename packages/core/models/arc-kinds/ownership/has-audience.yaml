@@ -7,7 +7,7 @@ arc:
   target: AudienceSet
   cardinality: one_to_many
   llm_context: Locale has multiple audience sets, one per segment.
-  cypher_pattern: (Locale)-[:HAS_AUDIENCE {segment: $segment}]->(AudienceSet)
+  cypher_pattern: "(Locale)-[:HAS_AUDIENCE {segment: $segment}]->(AudienceSet)"
   properties:
     segment:
       type: string

@@ -26,7 +26,7 @@ This diagram shows the complete NovaNet graph schema with all 42 node types and 
 ```mermaid
 flowchart TB
   %% NovaNet Graph v10.6.0
-  %% Generated: 48 nodes, 102 arcs
+  %% Generated: 60 nodes, 138 arcs
   %% Source: 42 node YAMLs + relations.yaml + taxonomy.yaml
 
   %% Trait styling (node_trait)
@@ -40,8 +40,14 @@ flowchart TB
     direction TB
     subgraph GLOBAL_config["Configuration"]
       Adaptation["🟣 Adaptation"]
+      Continent["🔵 Continent"]
       Culture["🟣 Culture"]
+      EconomicRegion["🔵 EconomicRegion"]
       Formatting["🟣 Formatting"]
+      GeoRegion["🔵 GeoRegion"]
+      GeoSubRegion["🔵 GeoSubRegion"]
+      IncomeGroup["🔵 IncomeGroup"]
+      LendingCategory["🔵 LendingCategory"]
       Locale["🔵 Locale"]
       Market["🟣 Market"]
       Slugification["🟣 Slugification"]
@@ -50,12 +56,18 @@ flowchart TB
     subgraph GLOBAL_locale-knowledge["Locale Knowledge"]
       AudienceSet["🟣 AudienceSet"]
       AudienceTrait["🟣 AudienceTrait"]
+      CulturalRealm["🟣 CulturalRealm"]
+      CulturalSubRealm["🟣 CulturalSubRealm"]
       CultureRef["🟣 CultureRef"]
       CultureSet["🟣 CultureSet"]
       Expression["🟣 Expression"]
       ExpressionSet["🟣 ExpressionSet"]
+      LanguageBranch["🟣 LanguageBranch"]
+      LanguageFamily["🟣 LanguageFamily"]
       Pattern["🟣 Pattern"]
       PatternSet["🟣 PatternSet"]
+      PopulationCluster["🟣 PopulationCluster"]
+      PopulationSubCluster["🟣 PopulationSubCluster"]
       Taboo["🟣 Taboo"]
       TabooSet["🟣 TabooSet"]
       Term["🟣 Term"]
@@ -111,6 +123,12 @@ flowchart TB
   end
 
   %% Relationships (styled by arc family)
+  AudienceSet -->|CONTAINS| AudienceTrait
+  AudienceSet -->|CONTAINS| CultureRef
+  AudienceSet -->|CONTAINS| Expression
+  AudienceSet -->|CONTAINS| Pattern
+  AudienceSet -->|CONTAINS| Taboo
+  AudienceSet -->|CONTAINS| Term
   Block -->|BLOCK_OF| Page
   Block -.->|FILLS_SLOT| ContentSlot
   Block -.->|HAS_OUTPUT| BlockL10n
@@ -133,6 +151,12 @@ flowchart TB
   BlockPrompt ==>|GENERATED| PageL10n
   BlockType -->|HAS_RULES| BlockRules
   ContentSlot -->|ACCEPTS_BLOCK_TYPE| BlockType
+  CultureSet -->|CONTAINS| AudienceTrait
+  CultureSet -->|CONTAINS| CultureRef
+  CultureSet -->|CONTAINS| Expression
+  CultureSet -->|CONTAINS| Pattern
+  CultureSet -->|CONTAINS| Taboo
+  CultureSet -->|CONTAINS| Term
   Entity -.->|HAS_L10N| EntityL10n
   Entity -.->|HAS_L10N| ProjectL10n
   Entity -.->|SEMANTIC_LINK| Entity
@@ -142,6 +166,12 @@ flowchart TB
   EntityL10n -.->|L10N_OF| Entity
   EntityL10n -.->|L10N_OF| Project
   EvaluationSignal ==>|EVALUATED_BY_JOB| GenerationJob
+  ExpressionSet -->|CONTAINS| AudienceTrait
+  ExpressionSet -->|CONTAINS| CultureRef
+  ExpressionSet -->|CONTAINS| Expression
+  ExpressionSet -->|CONTAINS| Pattern
+  ExpressionSet -->|CONTAINS| Taboo
+  ExpressionSet -->|CONTAINS| Term
   GenerationJob ==>|CREATES_CONTENT| BlockL10n
   GenerationJob ==>|CREATES_CONTENT| PageL10n
   GenerationJob -.->|FOR_LOCALE| Locale
@@ -198,6 +228,12 @@ flowchart TB
   PageL10n ==>|PREVIOUS_VERSION| PageL10n
   PagePrompt ==>|GENERATED| BlockL10n
   PagePrompt ==>|GENERATED| PageL10n
+  PatternSet -->|CONTAINS| AudienceTrait
+  PatternSet -->|CONTAINS| CultureRef
+  PatternSet -->|CONTAINS| Expression
+  PatternSet -->|CONTAINS| Pattern
+  PatternSet -->|CONTAINS| Taboo
+  PatternSet -->|CONTAINS| Term
   Project -->|DEFAULT_LOCALE| Locale
   Project -->|HAS_BRAND_IDENTITY| BrandIdentity
   Project -.->|HAS_L10N| EntityL10n
@@ -213,13 +249,25 @@ flowchart TB
   PromptArtifact ==>|INCLUDES_STYLE| Style
   SEOKeyword --o|HAS_METRICS| SEOKeywordMetrics
   SEOMiningRun --o|SEO_MINES| SEOKeyword
+  TabooSet -->|CONTAINS| AudienceTrait
+  TabooSet -->|CONTAINS| CultureRef
+  TabooSet -->|CONTAINS| Expression
+  TabooSet -->|CONTAINS| Pattern
+  TabooSet -->|CONTAINS| Taboo
+  TabooSet -->|CONTAINS| Term
+  TermSet -->|CONTAINS| AudienceTrait
+  TermSet -->|CONTAINS| CultureRef
+  TermSet -->|CONTAINS| Expression
+  TermSet -->|CONTAINS| Pattern
+  TermSet -->|CONTAINS| Taboo
+  TermSet -->|CONTAINS| Term
 
   %% Arc colors by family
-  linkStyle 10,11,12,15,16,17,18,19,30,31,32,34,35,36,57,58,59,60,61,62,76,79,82,83,84,85,86,96,97,98,99 stroke:#8b5cf6,stroke-width:2px
-  linkStyle 2,3,9,13,14,22,23,27,28,29,33,37,44,45,46,47,55,56,65,66,78,80,81,89,90,93,94,95 stroke:#22c55e,stroke-width:2px
-  linkStyle 100,101 stroke:#ec4899,stroke-width:2px
-  linkStyle 0,4,5,6,7,20,21,38,39,40,41,42,43,48,49,50,51,52,53,54,64,67,68,69,71,72,77,87,88,91,92 stroke:#3b82f6,stroke-width:2px
-  linkStyle 1,8,24,25,26,63,70,73,74,75 stroke:#f97316,stroke-width:2px
+  linkStyle 16,17,18,21,22,23,24,25,42,49,50,52,53,54,75,76,77,78,79,80,94,97,100,101,102,103,104,120,121,122,123 stroke:#8b5cf6,stroke-width:2px
+  linkStyle 8,9,15,19,20,34,35,39,40,41,51,55,62,63,64,65,73,74,83,84,96,98,99,113,114,117,118,119 stroke:#22c55e,stroke-width:2px
+  linkStyle 124,125 stroke:#ec4899,stroke-width:2px
+  linkStyle 0,1,2,3,4,5,6,10,11,12,13,26,27,28,29,30,31,32,33,43,44,45,46,47,48,56,57,58,59,60,61,66,67,68,69,70,71,72,82,85,86,87,89,90,95,105,106,107,108,109,110,111,112,115,116,126,127,128,129,130,131,132,133,134,135,136,137 stroke:#3b82f6,stroke-width:2px
+  linkStyle 7,14,36,37,38,81,88,91,92,93 stroke:#f97316,stroke-width:2px
 
   %% Class assignments
   class Adaptation knowledge
@@ -235,9 +283,13 @@ flowchart TB
   class BrandIdentity invariant
   class ChannelSurface invariant
   class ContentSlot invariant
+  class Continent invariant
+  class CulturalRealm knowledge
+  class CulturalSubRealm knowledge
   class Culture knowledge
   class CultureRef knowledge
   class CultureSet knowledge
+  class EconomicRegion invariant
   class Entity invariant
   class EntityL10n localized
   class EvaluationSignal derived
@@ -245,6 +297,12 @@ flowchart TB
   class ExpressionSet knowledge
   class Formatting knowledge
   class GenerationJob job
+  class GeoRegion invariant
+  class GeoSubRegion invariant
+  class IncomeGroup invariant
+  class LanguageBranch knowledge
+  class LanguageFamily knowledge
+  class LendingCategory invariant
   class Locale invariant
   class Market knowledge
   class Organization invariant
@@ -255,6 +313,8 @@ flowchart TB
   class PageType invariant
   class Pattern knowledge
   class PatternSet knowledge
+  class PopulationCluster knowledge
+  class PopulationSubCluster knowledge
   class Project invariant
   class ProjectL10n localized
   class PromptArtifact derived

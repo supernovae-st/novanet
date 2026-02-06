@@ -6,11 +6,11 @@
 import type { NodeType } from '@novanet/core/types';
 
 // =============================================================================
-// NODE ICONS (48 nodes)
+// NODE ICONS (60 nodes)
 // =============================================================================
 
 /**
- * Emoji icons for all 48 node types.
+ * Emoji icons for all 60 node types.
  *
  * Each icon is defined in the node's YAML file under `node.icon`.
  * Source: packages/core/models/node-kinds/<realm>/<layer>/<name>.yaml
@@ -29,9 +29,13 @@ export const NODE_ICONS: Record<NodeType, string> = {
   BrandIdentity: '🔷',
   ChannelSurface: '📡',
   ContentSlot: '🔲',
+  Continent: '🌍',
+  CulturalRealm: '🎭',
+  CulturalSubRealm: '🎨',
   Culture: '🌍',
   CultureRef: '🎭',
   CultureSet: '🎭',
+  EconomicRegion: '📊',
   Entity: '🔷',
   EntityL10n: '🟢',
   EvaluationSignal: '📊',
@@ -39,6 +43,12 @@ export const NODE_ICONS: Record<NodeType, string> = {
   ExpressionSet: '💬',
   Formatting: '🔢',
   GenerationJob: '🚀',
+  GeoRegion: '🗺️',
+  GeoSubRegion: '📍',
+  IncomeGroup: '💰',
+  LanguageBranch: '🌿',
+  LanguageFamily: '🗣️',
+  LendingCategory: '🏦',
   Locale: '🔷',
   Market: '📊',
   Organization: '🏢',
@@ -49,6 +59,8 @@ export const NODE_ICONS: Record<NodeType, string> = {
   PageType: '📐',
   Pattern: '📋',
   PatternSet: '📋',
+  PopulationCluster: '👥',
+  PopulationSubCluster: '🧑',
   Project: '🔷',
   ProjectL10n: '🟢',
   PromptArtifact: '📋',

@@ -1,0 +1,18 @@
+# packages/core/models/arc-kinds/semantic/for-channel.yaml
+# ArcKind: FOR_CHANNEL - Content targets a specific channel/surface
+arc:
+  name: FOR_CHANNEL
+  family: semantic
+  scope: intra_realm
+
+  source:
+    - PageL10n
+    - BlockL10n
+  target: ChannelSurface
+  cardinality: many_to_one
+
+  llm_context: |
+    Localized content is tailored for a specific channel surface.
+    Use to filter content: MATCH (c:BlockL10n)-[:FOR_CHANNEL]->(ch:ChannelSurface {key: "mobile"})
+
+  cypher_pattern: "(PageL10n, BlockL10n)-[:FOR_CHANNEL]->(ChannelSurface)"

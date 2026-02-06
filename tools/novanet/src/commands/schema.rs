@@ -1,6 +1,6 @@
 //! `novanet schema generate` and `novanet schema validate` commands.
 //!
-//! - generate: Orchestrates all 9 generators in order
+//! - generate: Orchestrates all 12 generators in order
 //! - validate: YAML-only validation (no Neo4j in Phase 2)
 
 use crate::generators::Generator;
@@ -26,7 +26,8 @@ fn all_generators() -> Vec<GeneratorEntry> {
         arc_kind::ArcKindGenerator, autowire::AutowireGenerator, colors::ColorsGenerator,
         hierarchy::HierarchyGenerator, icons::IconsGenerator, layer::LayerGenerator,
         mermaid::MermaidGenerator, node_kind::NodeKindGenerator, organizing::OrganizingGenerator,
-        views::ViewsGenerator, visual_encoding::VisualEncodingGenerator,
+        tui_icons::TuiIconsGenerator, views::ViewsGenerator,
+        visual_encoding::VisualEncodingGenerator,
     };
 
     vec![
@@ -85,6 +86,11 @@ fn all_generators() -> Vec<GeneratorEntry> {
             output_path: "packages/core/src/filters/views.generated.ts",
             post_process: None,
         },
+        GeneratorEntry {
+            generator: Box::new(TuiIconsGenerator),
+            output_path: "tools/novanet/src/tui/icons.rs",
+            post_process: None,
+        },
     ]
 }
 
@@ -100,9 +106,9 @@ pub struct GenerateResult {
     pub duration_ms: u128,
 }
 
-/// Run all 11 generators and optionally write output files.
+/// Run all 12 generators and optionally write output files.
 ///
-/// Generator execution order: Organizing → Kind → ArcSchema → Layer → Mermaid → Autowire → Hierarchy → Colors → Icons → VisualEncoding → Views
+/// Generator execution order: Organizing → Kind → ArcSchema → Layer → Mermaid → Autowire → Hierarchy → Colors → Icons → VisualEncoding → Views → TuiIcons
 #[instrument(skip_all, fields(root = %root.display(), dry_run))]
 pub fn schema_generate(root: &Path, dry_run: bool) -> crate::Result<Vec<GenerateResult>> {
     let entries = all_generators();
@@ -268,8 +274,8 @@ mod tests {
 
         let results = schema_generate(&root, true).expect("should generate all artifacts");
 
-        // All 11 generators should succeed
-        assert_eq!(results.len(), 11, "expected 11 generator results");
+        // All 12 generators should succeed
+        assert_eq!(results.len(), 12, "expected 12 generator results");
 
         // Verify generator names and order
         let names: Vec<&str> = results.iter().map(|r| r.name.as_str()).collect();
@@ -287,6 +293,7 @@ mod tests {
                 "icons",
                 "visual_encoding",
                 "views",
+                "tui_icons",
             ]
         );
 

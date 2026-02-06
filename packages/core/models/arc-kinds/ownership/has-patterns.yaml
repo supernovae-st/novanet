@@ -7,7 +7,7 @@ arc:
   target: PatternSet
   cardinality: one_to_many
   llm_context: Locale has multiple pattern sets, one per usage.
-  cypher_pattern: (Locale)-[:HAS_PATTERNS {usage: $usage}]->(PatternSet)
+  cypher_pattern: "(Locale)-[:HAS_PATTERNS {usage: $usage}]->(PatternSet)"
   properties:
     usage:
       type: string

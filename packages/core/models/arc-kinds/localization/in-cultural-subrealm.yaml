@@ -1,0 +1,21 @@
+# packages/core/models/arc-kinds/localization/in-cultural-subrealm.yaml
+# ArcKind: IN_CULTURAL_SUBREALM - Locale belongs to CulturalSubRealm
+# v10.8: Geographic Taxonomy
+
+arc:
+  name: IN_CULTURAL_SUBREALM
+  family: localization
+  scope: cross_realm
+
+  source: Locale
+  target: CulturalSubRealm
+  cardinality: many_to_one
+
+  inverse: HAS_LOCALE
+
+  llm_context: |
+    Locale belongs to a cultural sub-realm for content adaptation.
+    Use to find culturally similar locales: MATCH (l:Locale)-[:IN_CULTURAL_SUBREALM]->(csr)<-[:IN_CULTURAL_SUBREALM]-(similar)
+    Example: fr-FR -[:IN_CULTURAL_SUBREALM]-> Mediterranean
+
+  cypher_pattern: "(Locale)-[:IN_CULTURAL_SUBREALM]->(CulturalSubRealm)"

@@ -1,0 +1,32 @@
+# packages/core/models/arc-kinds/localization/has-population.yaml
+# ArcKind: HAS_POPULATION - Locale's population sub-clusters with percentages
+# v10.8: Geographic Taxonomy
+
+arc:
+  name: HAS_POPULATION
+  family: localization
+  scope: cross_realm
+
+  source: Locale
+  target: PopulationSubCluster
+  cardinality: many_to_many
+
+  properties:
+    - name: percentage
+      type: float
+      required: true
+      description: "Population percentage (0.0 to 1.0)"
+
+    - name: is_majority
+      type: boolean
+      required: false
+      description: "True if this population is >50%"
+
+  inverse: POPULATION_OF
+
+  llm_context: |
+    Locale has multiple population sub-clusters with percentages for diverse image generation.
+    Use to get visual traits: MATCH (l:Locale)-[hp:HAS_POPULATION]->(ps:PopulationSubCluster) RETURN ps.visual_traits, hp.percentage
+    Example: fr-FR -[:HAS_POPULATION {percentage: 0.6}]-> Mediterranean
+
+  cypher_pattern: "(Locale)-[:HAS_POPULATION {percentage, is_majority}]->(PopulationSubCluster)"

@@ -7,8 +7,8 @@ set -e
 # Get current directory
 cd "$(dirname "$0")/../.."
 
-# Get version from package.json
-VERSION=$(jq -r '.version // "unknown"' packages/core/package.json 2>/dev/null || echo "unknown")
+# Get version from VERSION file (single source of truth)
+VERSION=$(cat VERSION 2>/dev/null || echo "unknown")
 
 # Get git branch
 BRANCH=$(git branch --show-current 2>/dev/null || echo "unknown")

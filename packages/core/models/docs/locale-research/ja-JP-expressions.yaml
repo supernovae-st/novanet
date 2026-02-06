@@ -1,0 +1,1035 @@
+# Native Japanese Marketing Expressions 2024-2025
+# Source: Japanese advertising and marketing corpus
+# Total: 200 expressions across 10 semantic fields (20 per field)
+# Generated: 2026-02-06
+
+expressions:
+  # ============================================================================
+  # FIELD 1: URGENCY (緊急性) - 20 expressions
+  # ============================================================================
+  - text: "残りわずか！お急ぎください"
+    field: URGENCY
+    register: casual
+    context: "Scarcity alert, limited stock remaining"
+
+  - text: "期間限定！今だけのチャンス"
+    field: URGENCY
+    register: casual
+    context: "Time-limited offer emphasis"
+
+  - text: "本日限り"
+    field: URGENCY
+    register: formal
+    context: "Single-day sale, strong urgency"
+
+  - text: "先着100名様限定"
+    field: URGENCY
+    register: formal
+    context: "First-come-first-served, numbered limit"
+
+  - text: "締め切り間近"
+    field: URGENCY
+    register: formal
+    context: "Deadline approaching, registration/application"
+
+  - text: "在庫わずか"
+    field: URGENCY
+    register: neutral
+    context: "Low stock warning, e-commerce"
+
+  - text: "お早めにどうぞ"
+    field: URGENCY
+    register: polite
+    context: "Gentle urgency, customer service tone"
+
+  - text: "今すぐチェック"
+    field: URGENCY
+    register: casual
+    context: "Call-to-action, digital marketing"
+
+  - text: "見逃し厳禁"
+    field: URGENCY
+    register: casual
+    context: "Do not miss, emphatic"
+
+  - text: "数量限定"
+    field: URGENCY
+    register: formal
+    context: "Limited quantity, scarcity"
+
+  - text: "売り切れ次第終了"
+    field: URGENCY
+    register: neutral
+    context: "While supplies last"
+
+  - text: "今がチャンス"
+    field: URGENCY
+    register: casual
+    context: "Now is your chance, opportunity"
+
+  - text: "お見逃しなく"
+    field: URGENCY
+    register: polite
+    context: "Do not miss out, polite form"
+
+  - text: "タイムセール実施中"
+    field: URGENCY
+    register: neutral
+    context: "Flash sale in progress"
+
+  - text: "あと○日で終了"
+    field: URGENCY
+    register: neutral
+    context: "Countdown, X days remaining"
+
+  - text: "最後のチャンス"
+    field: URGENCY
+    register: casual
+    context: "Last chance, final opportunity"
+
+  - text: "今週末まで"
+    field: URGENCY
+    register: neutral
+    context: "Until this weekend, time-bound"
+
+  - text: "限定入荷"
+    field: URGENCY
+    register: formal
+    context: "Limited stock arrival"
+
+  - text: "完売必至"
+    field: URGENCY
+    register: casual
+    context: "Expected to sell out"
+
+  - text: "ラストチャンス"
+    field: URGENCY
+    register: casual
+    context: "Last chance, loanword emphasis"
+
+  # ============================================================================
+  # FIELD 2: VALUE (お得感) - 20 expressions
+  # ============================================================================
+  - text: "お得にゲット"
+    field: VALUE
+    register: casual
+    context: "Get it at a good price, youth-oriented"
+
+  - text: "最大50%OFF"
+    field: VALUE
+    register: neutral
+    context: "Discount percentage, clear value"
+
+  - text: "送料無料"
+    field: VALUE
+    register: neutral
+    context: "Free shipping, e-commerce essential"
+
+  - text: "今なら○○円引き"
+    field: VALUE
+    register: neutral
+    context: "Current discount amount"
+
+  - text: "初回限定価格"
+    field: VALUE
+    register: formal
+    context: "First-time customer special price"
+
+  - text: "お買い得"
+    field: VALUE
+    register: casual
+    context: "Good deal, bargain"
+
+  - text: "特別価格でご提供"
+    field: VALUE
+    register: formal
+    context: "Special price offer, formal"
+
+  - text: "節約できる"
+    field: VALUE
+    register: casual
+    context: "Save money, practical appeal"
+
+  - text: "コスパ最強"
+    field: VALUE
+    register: casual
+    context: "Best cost-performance, slang"
+
+  - text: "ポイント10倍"
+    field: VALUE
+    register: neutral
+    context: "Point multiplier, loyalty programs"
+
+  - text: "半額以下"
+    field: VALUE
+    register: neutral
+    context: "Less than half price"
+
+  - text: "まとめ買いでさらにお得"
+    field: VALUE
+    register: casual
+    context: "Bulk purchase discount"
+
+  - text: "お財布に優しい"
+    field: VALUE
+    register: casual
+    context: "Wallet-friendly, gentle on budget"
+
+  - text: "驚きの価格"
+    field: VALUE
+    register: casual
+    context: "Surprising price, amazement"
+
+  - text: "破格の値段"
+    field: VALUE
+    register: casual
+    context: "Exceptional price, breakthrough"
+
+  - text: "通常価格より○○%OFF"
+    field: VALUE
+    register: neutral
+    context: "Compared to regular price"
+
+  - text: "会員様限定割引"
+    field: VALUE
+    register: formal
+    context: "Members-only discount"
+
+  - text: "特典付き"
+    field: VALUE
+    register: neutral
+    context: "With bonus/benefits"
+
+  - text: "返金保証付きでリスクなし"
+    field: VALUE
+    register: casual
+    context: "Money-back guarantee, risk-free"
+
+  - text: "実質無料"
+    field: VALUE
+    register: casual
+    context: "Effectively free, net zero cost"
+
+  # ============================================================================
+  # FIELD 3: TRUST (信頼性) - 20 expressions
+  # ============================================================================
+  - text: "安心・安全"
+    field: TRUST
+    register: neutral
+    context: "Safety and security, foundational trust"
+
+  - text: "○○年の実績"
+    field: TRUST
+    register: formal
+    context: "X years of track record"
+
+  - text: "満足保証"
+    field: TRUST
+    register: formal
+    context: "Satisfaction guarantee"
+
+  - text: "全額返金保証"
+    field: TRUST
+    register: formal
+    context: "Full refund guarantee"
+
+  - text: "専門家監修"
+    field: TRUST
+    register: formal
+    context: "Expert-supervised"
+
+  - text: "第三者機関認証済み"
+    field: TRUST
+    register: formal
+    context: "Third-party certified"
+
+  - text: "お客様満足度○○%"
+    field: TRUST
+    register: neutral
+    context: "Customer satisfaction rate"
+
+  - text: "信頼と実績の"
+    field: TRUST
+    register: formal
+    context: "Trust and proven results"
+
+  - text: "業界No.1"
+    field: TRUST
+    register: casual
+    context: "Industry number one"
+
+  - text: "国内生産"
+    field: TRUST
+    register: neutral
+    context: "Made in Japan, domestic production"
+
+  - text: "ISO認証取得"
+    field: TRUST
+    register: formal
+    context: "ISO certified"
+
+  - text: "品質に自信あり"
+    field: TRUST
+    register: casual
+    context: "Confident in quality"
+
+  - text: "老舗ブランド"
+    field: TRUST
+    register: neutral
+    context: "Established/heritage brand"
+
+  - text: "厳選素材"
+    field: TRUST
+    register: formal
+    context: "Carefully selected materials"
+
+  - text: "徹底した品質管理"
+    field: TRUST
+    register: formal
+    context: "Thorough quality control"
+
+  - text: "安心してお使いいただけます"
+    field: TRUST
+    register: polite
+    context: "You can use with peace of mind"
+
+  - text: "長年のご愛顧に感謝"
+    field: TRUST
+    register: formal
+    context: "Thanks for years of patronage"
+
+  - text: "確かな品質"
+    field: TRUST
+    register: formal
+    context: "Reliable quality"
+
+  - text: "自社開発"
+    field: TRUST
+    register: neutral
+    context: "In-house developed"
+
+  - text: "プロが認めた"
+    field: TRUST
+    register: casual
+    context: "Recognized by professionals"
+
+  # ============================================================================
+  # FIELD 4: SUCCESS (成功実績) - 20 expressions
+  # ============================================================================
+  - text: "○○万人が愛用中"
+    field: SUCCESS
+    register: casual
+    context: "X million users, social proof"
+
+  - text: "累計販売○○万個突破"
+    field: SUCCESS
+    register: neutral
+    context: "Cumulative sales milestone"
+
+  - text: "リピート率○○%"
+    field: SUCCESS
+    register: neutral
+    context: "Repeat purchase rate"
+
+  - text: "○○部門で1位獲得"
+    field: SUCCESS
+    register: formal
+    context: "Ranked #1 in X category"
+
+  - text: "テレビで紹介されました"
+    field: SUCCESS
+    register: casual
+    context: "Featured on TV, media validation"
+
+  - text: "SNSで話題沸騰"
+    field: SUCCESS
+    register: casual
+    context: "Trending on social media"
+
+  - text: "口コミで広がる"
+    field: SUCCESS
+    register: casual
+    context: "Spreading by word of mouth"
+
+  - text: "お客様の声が証明"
+    field: SUCCESS
+    register: neutral
+    context: "Customer testimonials prove it"
+
+  - text: "導入企業○○社"
+    field: SUCCESS
+    register: formal
+    context: "X companies have adopted (B2B)"
+
+  - text: "楽天ランキング1位"
+    field: SUCCESS
+    register: casual
+    context: "Rakuten ranking #1"
+
+  - text: "Amazonベストセラー"
+    field: SUCCESS
+    register: casual
+    context: "Amazon bestseller"
+
+  - text: "モンドセレクション受賞"
+    field: SUCCESS
+    register: formal
+    context: "Monde Selection award"
+
+  - text: "○○賞受賞"
+    field: SUCCESS
+    register: formal
+    context: "X award winner"
+
+  - text: "雑誌掲載多数"
+    field: SUCCESS
+    register: neutral
+    context: "Featured in many magazines"
+
+  - text: "芸能人も愛用"
+    field: SUCCESS
+    register: casual
+    context: "Used by celebrities too"
+
+  - text: "インフルエンサー絶賛"
+    field: SUCCESS
+    register: casual
+    context: "Praised by influencers"
+
+  - text: "ロングセラー商品"
+    field: SUCCESS
+    register: neutral
+    context: "Long-selling product"
+
+  - text: "シリーズ累計○○万本"
+    field: SUCCESS
+    register: neutral
+    context: "Series total X million units"
+
+  - text: "前年比○○%増"
+    field: SUCCESS
+    register: formal
+    context: "X% year-over-year growth"
+
+  - text: "選ばれ続けて○○年"
+    field: SUCCESS
+    register: formal
+    context: "Chosen for X years running"
+
+  # ============================================================================
+  # FIELD 5: QUALITY (品質) - 20 expressions
+  # ============================================================================
+  - text: "最高品質"
+    field: QUALITY
+    register: formal
+    context: "Highest quality"
+
+  - text: "プレミアム品質"
+    field: QUALITY
+    register: neutral
+    context: "Premium quality, loanword"
+
+  - text: "職人の技"
+    field: QUALITY
+    register: formal
+    context: "Artisan craftsmanship"
+
+  - text: "こだわり抜いた"
+    field: QUALITY
+    register: casual
+    context: "Thoroughly committed to"
+
+  - text: "上質な素材を使用"
+    field: QUALITY
+    register: formal
+    context: "Using high-quality materials"
+
+  - text: "丁寧な仕上がり"
+    field: QUALITY
+    register: formal
+    context: "Careful finishing"
+
+  - text: "高機能"
+    field: QUALITY
+    register: neutral
+    context: "High functionality"
+
+  - text: "本物志向の方へ"
+    field: QUALITY
+    register: formal
+    context: "For those who seek authenticity"
+
+  - text: "一流の品質"
+    field: QUALITY
+    register: formal
+    context: "First-class quality"
+
+  - text: "妥協のない"
+    field: QUALITY
+    register: casual
+    context: "Uncompromising"
+
+  - text: "厳選された"
+    field: QUALITY
+    register: formal
+    context: "Carefully selected"
+
+  - text: "匠の技術"
+    field: QUALITY
+    register: formal
+    context: "Master craftsman technique"
+
+  - text: "高級感あふれる"
+    field: QUALITY
+    register: neutral
+    context: "Exuding luxury"
+
+  - text: "極上の"
+    field: QUALITY
+    register: formal
+    context: "Supreme, exquisite"
+
+  - text: "ワンランク上の"
+    field: QUALITY
+    register: casual
+    context: "One level above, upgraded"
+
+  - text: "細部までこだわり"
+    field: QUALITY
+    register: casual
+    context: "Attention to every detail"
+
+  - text: "本格派"
+    field: QUALITY
+    register: neutral
+    context: "Authentic, genuine"
+
+  - text: "逸品"
+    field: QUALITY
+    register: formal
+    context: "Masterpiece, gem"
+
+  - text: "至高の"
+    field: QUALITY
+    register: formal
+    context: "Supreme, ultimate"
+
+  - text: "伝統製法"
+    field: QUALITY
+    register: formal
+    context: "Traditional production method"
+
+  # ============================================================================
+  # FIELD 6: SPEED (スピード) - 20 expressions
+  # ============================================================================
+  - text: "即日発送"
+    field: SPEED
+    register: neutral
+    context: "Same-day shipping"
+
+  - text: "スピード対応"
+    field: SPEED
+    register: neutral
+    context: "Quick response"
+
+  - text: "最短翌日届く"
+    field: SPEED
+    register: casual
+    context: "Arrives as early as next day"
+
+  - text: "今すぐ届く"
+    field: SPEED
+    register: casual
+    context: "Delivered right away"
+
+  - text: "24時間以内に発送"
+    field: SPEED
+    register: neutral
+    context: "Shipped within 24 hours"
+
+  - text: "お急ぎ便対応"
+    field: SPEED
+    register: neutral
+    context: "Express delivery available"
+
+  - text: "最速"
+    field: SPEED
+    register: casual
+    context: "Fastest"
+
+  - text: "迅速な対応"
+    field: SPEED
+    register: formal
+    context: "Prompt response"
+
+  - text: "たった○分で完了"
+    field: SPEED
+    register: casual
+    context: "Complete in just X minutes"
+
+  - text: "すぐに始められる"
+    field: SPEED
+    register: casual
+    context: "Start immediately"
+
+  - text: "時短"
+    field: SPEED
+    register: casual
+    context: "Time-saving, abbreviation"
+
+  - text: "効果実感まで最短○日"
+    field: SPEED
+    register: casual
+    context: "Feel results in as few as X days"
+
+  - text: "申し込み後即日開始"
+    field: SPEED
+    register: formal
+    context: "Start same day after application"
+
+  - text: "待ち時間ゼロ"
+    field: SPEED
+    register: casual
+    context: "Zero waiting time"
+
+  - text: "スピーディーに"
+    field: SPEED
+    register: casual
+    context: "Speedily"
+
+  - text: "素早く"
+    field: SPEED
+    register: neutral
+    context: "Quickly"
+
+  - text: "手軽にすぐ"
+    field: SPEED
+    register: casual
+    context: "Easily and immediately"
+
+  - text: "ワンクリックで完了"
+    field: SPEED
+    register: casual
+    context: "Complete with one click"
+
+  - text: "○秒で登録完了"
+    field: SPEED
+    register: casual
+    context: "Registration complete in X seconds"
+
+  - text: "今日から使える"
+    field: SPEED
+    register: casual
+    context: "Usable from today"
+
+  # ============================================================================
+  # FIELD 7: SIMPLICITY (シンプル・簡単) - 20 expressions
+  # ============================================================================
+  - text: "簡単3ステップ"
+    field: SIMPLICITY
+    register: casual
+    context: "Easy 3 steps"
+
+  - text: "シンプル操作"
+    field: SIMPLICITY
+    register: neutral
+    context: "Simple operation"
+
+  - text: "初心者でも安心"
+    field: SIMPLICITY
+    register: casual
+    context: "Safe even for beginners"
+
+  - text: "誰でも簡単に"
+    field: SIMPLICITY
+    register: casual
+    context: "Easy for anyone"
+
+  - text: "面倒な手続き不要"
+    field: SIMPLICITY
+    register: casual
+    context: "No complicated procedures"
+
+  - text: "手間いらず"
+    field: SIMPLICITY
+    register: casual
+    context: "No hassle required"
+
+  - text: "ラクラク"
+    field: SIMPLICITY
+    register: casual
+    context: "Easy-peasy, effortless"
+
+  - text: "使いやすい"
+    field: SIMPLICITY
+    register: neutral
+    context: "Easy to use"
+
+  - text: "分かりやすい"
+    field: SIMPLICITY
+    register: neutral
+    context: "Easy to understand"
+
+  - text: "直感的に操作"
+    field: SIMPLICITY
+    register: neutral
+    context: "Intuitive operation"
+
+  - text: "これ一つで"
+    field: SIMPLICITY
+    register: casual
+    context: "All in one, with just this"
+
+  - text: "難しい設定不要"
+    field: SIMPLICITY
+    register: casual
+    context: "No complicated settings"
+
+  - text: "届いてすぐ使える"
+    field: SIMPLICITY
+    register: casual
+    context: "Ready to use upon delivery"
+
+  - text: "ワンタッチで"
+    field: SIMPLICITY
+    register: casual
+    context: "With one touch"
+
+  - text: "お手軽"
+    field: SIMPLICITY
+    register: casual
+    context: "Convenient, handy"
+
+  - text: "サクッと完了"
+    field: SIMPLICITY
+    register: casual
+    context: "Done quickly and easily"
+
+  - text: "スマホ一台で"
+    field: SIMPLICITY
+    register: casual
+    context: "With just your smartphone"
+
+  - text: "登録不要"
+    field: SIMPLICITY
+    register: neutral
+    context: "No registration required"
+
+  - text: "カンタン設定"
+    field: SIMPLICITY
+    register: casual
+    context: "Easy setup"
+
+  - text: "○○するだけ"
+    field: SIMPLICITY
+    register: casual
+    context: "Just do X"
+
+  # ============================================================================
+  # FIELD 8: INNOVATION (革新・技術) - 20 expressions
+  # ============================================================================
+  - text: "革新的な技術"
+    field: INNOVATION
+    register: formal
+    context: "Innovative technology"
+
+  - text: "最新テクノロジー"
+    field: INNOVATION
+    register: neutral
+    context: "Latest technology"
+
+  - text: "業界初"
+    field: INNOVATION
+    register: formal
+    context: "Industry first"
+
+  - text: "特許取得"
+    field: INNOVATION
+    register: formal
+    context: "Patent acquired"
+
+  - text: "独自開発"
+    field: INNOVATION
+    register: formal
+    context: "Proprietary development"
+
+  - text: "次世代型"
+    field: INNOVATION
+    register: neutral
+    context: "Next-generation type"
+
+  - text: "AI搭載"
+    field: INNOVATION
+    register: casual
+    context: "AI-equipped"
+
+  - text: "最先端"
+    field: INNOVATION
+    register: formal
+    context: "Cutting-edge"
+
+  - text: "新発想"
+    field: INNOVATION
+    register: casual
+    context: "New concept/idea"
+
+  - text: "進化した"
+    field: INNOVATION
+    register: casual
+    context: "Evolved"
+
+  - text: "新時代の"
+    field: INNOVATION
+    register: formal
+    context: "Of a new era"
+
+  - text: "研究開発10年"
+    field: INNOVATION
+    register: formal
+    context: "10 years of R&D"
+
+  - text: "世界初"
+    field: INNOVATION
+    register: formal
+    context: "World first"
+
+  - text: "日本発"
+    field: INNOVATION
+    register: neutral
+    context: "Originating from Japan"
+
+  - text: "新機能搭載"
+    field: INNOVATION
+    register: neutral
+    context: "Equipped with new features"
+
+  - text: "常識を覆す"
+    field: INNOVATION
+    register: casual
+    context: "Overturning common sense"
+
+  - text: "唯一無二の"
+    field: INNOVATION
+    register: formal
+    context: "One and only"
+
+  - text: "先進の"
+    field: INNOVATION
+    register: formal
+    context: "Advanced"
+
+  - text: "DX対応"
+    field: INNOVATION
+    register: neutral
+    context: "Digital transformation ready"
+
+  - text: "未来を変える"
+    field: INNOVATION
+    register: casual
+    context: "Changing the future"
+
+  # ============================================================================
+  # FIELD 9: EXCLUSIVITY (限定・特別) - 20 expressions
+  # ============================================================================
+  - text: "会員限定"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Members only"
+
+  - text: "特別価格"
+    field: EXCLUSIVITY
+    register: formal
+    context: "Special price"
+
+  - text: "VIP限定"
+    field: EXCLUSIVITY
+    register: formal
+    context: "VIP only"
+
+  - text: "あなただけの特典"
+    field: EXCLUSIVITY
+    register: casual
+    context: "Benefits just for you"
+
+  - text: "限定モデル"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Limited edition model"
+
+  - text: "ここでしか買えない"
+    field: EXCLUSIVITY
+    register: casual
+    context: "Only available here"
+
+  - text: "先行予約"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Pre-order, early reservation"
+
+  - text: "招待制"
+    field: EXCLUSIVITY
+    register: formal
+    context: "Invitation only"
+
+  - text: "特別ご招待"
+    field: EXCLUSIVITY
+    register: formal
+    context: "Special invitation"
+
+  - text: "プレミアム会員様限定"
+    field: EXCLUSIVITY
+    register: formal
+    context: "Premium members only"
+
+  - text: "シークレットセール"
+    field: EXCLUSIVITY
+    register: casual
+    context: "Secret sale"
+
+  - text: "非公開情報"
+    field: EXCLUSIVITY
+    register: formal
+    context: "Non-public information"
+
+  - text: "限定○○個"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Limited to X items"
+
+  - text: "スペシャルエディション"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Special edition"
+
+  - text: "当店限定"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Exclusive to this store"
+
+  - text: "コラボ限定"
+    field: EXCLUSIVITY
+    register: casual
+    context: "Collaboration exclusive"
+
+  - text: "初回特典"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "First-time bonus"
+
+  - text: "本日お申込みの方限定"
+    field: EXCLUSIVITY
+    register: formal
+    context: "Only for those who apply today"
+
+  - text: "先着様限定"
+    field: EXCLUSIVITY
+    register: formal
+    context: "First-come basis exclusive"
+
+  - text: "一点もの"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "One of a kind"
+
+  # ============================================================================
+  # FIELD 10: COMMUNITY (コミュニティ・仲間) - 20 expressions
+  # ============================================================================
+  - text: "仲間入り"
+    field: COMMUNITY
+    register: casual
+    context: "Join the group"
+
+  - text: "一緒に始めよう"
+    field: COMMUNITY
+    register: casual
+    context: "Let's start together"
+
+  - text: "○○万人が参加中"
+    field: COMMUNITY
+    register: casual
+    context: "X million people participating"
+
+  - text: "あなたも仲間に"
+    field: COMMUNITY
+    register: casual
+    context: "You too can join"
+
+  - text: "コミュニティに参加"
+    field: COMMUNITY
+    register: neutral
+    context: "Join the community"
+
+  - text: "みんなで"
+    field: COMMUNITY
+    register: casual
+    context: "Everyone together"
+
+  - text: "共に成長"
+    field: COMMUNITY
+    register: formal
+    context: "Grow together"
+
+  - text: "つながる"
+    field: COMMUNITY
+    register: casual
+    context: "Connect"
+
+  - text: "仲間と出会える"
+    field: COMMUNITY
+    register: casual
+    context: "Meet like-minded people"
+
+  - text: "同じ志を持つ仲間"
+    field: COMMUNITY
+    register: formal
+    context: "Companions with shared aspirations"
+
+  - text: "ファミリー"
+    field: COMMUNITY
+    register: casual
+    context: "Family, belonging"
+
+  - text: "サポートし合う"
+    field: COMMUNITY
+    register: casual
+    context: "Support each other"
+
+  - text: "輪を広げよう"
+    field: COMMUNITY
+    register: casual
+    context: "Expand the circle"
+
+  - text: "あなたの参加を待っています"
+    field: COMMUNITY
+    register: polite
+    context: "We're waiting for you to join"
+
+  - text: "一人じゃない"
+    field: COMMUNITY
+    register: casual
+    context: "You're not alone"
+
+  - text: "みんなの声"
+    field: COMMUNITY
+    register: casual
+    context: "Everyone's voice"
+
+  - text: "ご愛用者の皆様"
+    field: COMMUNITY
+    register: formal
+    context: "Our valued customers"
+
+  - text: "ユーザー同士の交流"
+    field: COMMUNITY
+    register: neutral
+    context: "Interaction among users"
+
+  - text: "会員ネットワーク"
+    field: COMMUNITY
+    register: neutral
+    context: "Member network"
+
+  - text: "一緒に作り上げる"
+    field: COMMUNITY
+    register: casual
+    context: "Build together"

@@ -1,0 +1,21 @@
+# packages/core/models/arc-kinds/ownership/branch-of.yaml
+# ArcKind: BRANCH_OF - LanguageBranch belongs to LanguageFamily
+# v10.8: Geographic Taxonomy
+
+arc:
+  name: BRANCH_OF
+  family: ownership
+  scope: intra_realm
+
+  source: LanguageBranch
+  target: LanguageFamily
+  cardinality: many_to_one
+
+  inverse: HAS_BRANCH
+
+  llm_context: |
+    LanguageBranch belongs to exactly one LanguageFamily (ISO 639-5).
+    Use to find related languages: MATCH (b:LanguageBranch)-[:BRANCH_OF]->(f:LanguageFamily)
+    Example: Romance (roa) -[:BRANCH_OF]-> Indo-European (ine)
+
+  cypher_pattern: "(LanguageBranch)-[:BRANCH_OF]->(LanguageFamily)"

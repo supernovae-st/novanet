@@ -1,0 +1,1264 @@
+# Native Simplified Chinese Marketing Expressions 2024-2025
+# Source: Perplexity research on Taobao, Tmall, JD.com, Douyin, Pinduoduo, Kuaishou, Xiaohongshu
+# Total: 200 expressions across 10 semantic fields (20 per field)
+# Generated: 2026-02-06
+
+# =============================================================================
+# FIELD 1: URGENCY (紧迫感) - 20 expressions
+# =============================================================================
+
+# --- Formal/E-commerce ---
+- text: "限时秒杀"
+  pinyin: "xiàn shí miǎo shā"
+  field: URGENCY
+  register: formal
+  context: "Limited time flash sale"
+
+- text: "仅剩最后X件"
+  pinyin: "jǐn shèng zuì hòu X jiàn"
+  field: URGENCY
+  register: formal
+  context: "Only X items left"
+
+- text: "闪购倒计时"
+  pinyin: "shǎn gòu dào jì shí"
+  field: URGENCY
+  register: formal
+  context: "Flash sale countdown"
+
+- text: "24小时限量抢"
+  pinyin: "24 xiǎo shí xiàn liàng qiǎng"
+  field: URGENCY
+  register: formal
+  context: "24-hour limited quantity grab"
+
+- text: "即将售罄"
+  pinyin: "jí jiāng shòu jìng"
+  field: URGENCY
+  register: formal
+  context: "Selling out soon"
+
+- text: "限时9.9元"
+  pinyin: "xiàn shí 9.9 yuán"
+  field: URGENCY
+  register: formal
+  context: "Limited time 9.9 yuan"
+
+- text: "火爆预约中"
+  pinyin: "huǒ bào yù yuē zhōng"
+  field: URGENCY
+  register: formal
+  context: "Hot pre-order ongoing"
+
+- text: "抢购倒计时3小时"
+  pinyin: "qiǎng gòu dào jì shí 3 xiǎo shí"
+  field: URGENCY
+  register: formal
+  context: "Flash purchase countdown 3 hours"
+
+- text: "今晚8点开抢"
+  pinyin: "jīn wǎn 8 diǎn kāi qiǎng"
+  field: URGENCY
+  register: formal
+  context: "Starts at 8 PM tonight"
+
+- text: "今日特惠，速抢"
+  pinyin: "jīn rì tè huì, sù qiǎng"
+  field: URGENCY
+  register: formal
+  context: "Today's special offer, grab it fast"
+
+# --- Casual/Live streaming ---
+- text: "手慢无"
+  pinyin: "shǒu màn wú"
+  field: URGENCY
+  register: casual
+  context: "Hands slow, none left (colloquial)"
+
+- text: "抢完即止"
+  pinyin: "qiǎng wán jí zhǐ"
+  field: URGENCY
+  register: casual
+  context: "Grabbed out, stops immediately"
+
+- text: "三二一，链接在手！"
+  pinyin: "sān èr yī, liàn jiē zài shǒu!"
+  field: URGENCY
+  register: casual
+  context: "3-2-1, link in hand! (live stream catchphrase)"
+
+- text: "库存告急"
+  pinyin: "kùn cún gào jí"
+  field: URGENCY
+  register: casual
+  context: "Inventory emergency"
+
+- text: "现在不下单，后悔一辈子"
+  pinyin: "xiàn zài bù xià dān, hòu huǐ yī bèi zǐ"
+  field: URGENCY
+  register: casual
+  context: "Don't order now, regret for life"
+
+- text: "飞了飞了"
+  pinyin: "fēi le fēi le"
+  field: URGENCY
+  register: casual
+  context: "It's flying away (sold out slang)"
+
+- text: "别犹豫了，冲！"
+  pinyin: "bié yóu yù le, chōng!"
+  field: URGENCY
+  register: casual
+  context: "Don't hesitate, rush!"
+
+- text: "最后一单"
+  pinyin: "zuì hòu yī dān"
+  field: URGENCY
+  register: casual
+  context: "Last order"
+
+- text: "限量抢购"
+  pinyin: "xiàn liàng qiǎng gòu"
+  field: URGENCY
+  register: casual
+  context: "Limited quantity rush buy"
+
+- text: "秒杀"
+  pinyin: "miǎo shā"
+  field: URGENCY
+  register: casual
+  context: "Flash sale / one-second kill"
+
+# =============================================================================
+# FIELD 2: VALUE (价值感) - 20 expressions
+# =============================================================================
+
+# --- Formal/E-commerce ---
+- text: "超值优惠"
+  pinyin: "chāo zhí yōu huì"
+  field: VALUE
+  register: formal
+  context: "Super value discount"
+
+- text: "省XX元"
+  pinyin: "shěng XX yuán"
+  field: VALUE
+  register: formal
+  context: "Save XX yuan"
+
+- text: "买一送一"
+  pinyin: "mǎi yī sòng yī"
+  field: VALUE
+  register: formal
+  context: "Buy one get one free"
+
+- text: "9.9元包邮"
+  pinyin: "9.9 yuán bāo yóu"
+  field: VALUE
+  register: formal
+  context: "9.9 yuan with free shipping"
+
+- text: "满减到手价"
+  pinyin: "mǎn jiǎn dào shǒu jià"
+  field: VALUE
+  register: formal
+  context: "Full reduction final price"
+
+- text: "比实体店便宜5折"
+  pinyin: "bǐ shí tǐ diàn pián yi 5 zhé"
+  field: VALUE
+  register: formal
+  context: "50% cheaper than physical stores"
+
+- text: "天天特价"
+  pinyin: "tiān tiān tè jià"
+  field: VALUE
+  register: formal
+  context: "Daily special price"
+
+- text: "高性价比首选"
+  pinyin: "gāo xìng jià bǐ shǒu xuǎn"
+  field: VALUE
+  register: formal
+  context: "Best value-for-money choice"
+
+- text: "历史最低价"
+  pinyin: "lì shǐ zuì dī jià"
+  field: VALUE
+  register: formal
+  context: "Historical lowest price"
+
+- text: "全网最低"
+  pinyin: "quán wǎng zuì dī"
+  field: VALUE
+  register: formal
+  context: "Lowest price online"
+
+# --- Casual/Live streaming ---
+- text: "白菜价秒杀"
+  pinyin: "bái cài jià miǎo shā"
+  field: VALUE
+  register: casual
+  context: "Dirt-cheap flash sale (cabbage price slang)"
+
+- text: "囤货神价"
+  pinyin: "tún huò shén jià"
+  field: VALUE
+  register: casual
+  context: "Stock-up god price"
+
+- text: "福利价"
+  pinyin: "fú lì jià"
+  field: VALUE
+  register: casual
+  context: "Welfare price / special deal"
+
+- text: "底价"
+  pinyin: "dǐ jià"
+  field: VALUE
+  register: casual
+  context: "Rock-bottom price"
+
+- text: "亏本卖"
+  pinyin: "kuī běn mài"
+  field: VALUE
+  register: casual
+  context: "Selling at a loss"
+
+- text: "不要脸价"
+  pinyin: "bú yào liǎn jià"
+  field: VALUE
+  register: casual
+  context: "Shamelessly low price"
+
+- text: "捡漏"
+  pinyin: "jiān lòu"
+  field: VALUE
+  register: casual
+  context: "Pickup bargain"
+
+- text: "白菜价"
+  pinyin: "bái cài jià"
+  field: VALUE
+  register: casual
+  context: "Cabbage price (dirt cheap)"
+
+- text: "超值"
+  pinyin: "chāo zhí"
+  field: VALUE
+  register: casual
+  context: "Super value"
+
+- text: "内部价"
+  pinyin: "nèibù jià"
+  field: VALUE
+  register: casual
+  context: "Internal price (insider deal)"
+
+# =============================================================================
+# FIELD 3: TRUST (信任感) - 20 expressions
+# =============================================================================
+
+# --- Formal/E-commerce ---
+- text: "正品保证"
+  pinyin: "zhèng pǐn bǎo zhèng"
+  field: TRUST
+  register: formal
+  context: "Genuine product guaranteed"
+
+- text: "7天无理由退货"
+  pinyin: "7 tiān wú yuán yóu tuì huò"
+  field: TRUST
+  register: formal
+  context: "7-day no-reason return"
+
+- text: "品牌官方旗舰店"
+  pinyin: "pǐn pái guān fāng qí jiàn diàn"
+  field: TRUST
+  register: formal
+  context: "Official brand flagship store"
+
+- text: "品质保障"
+  pinyin: "pǐn zhì bǎo zhàng"
+  field: TRUST
+  register: formal
+  context: "Quality assured"
+
+- text: "假一赔十"
+  pinyin: "jiǎ yī péi shí"
+  field: TRUST
+  register: formal
+  context: "Fake one, compensate tenfold"
+
+- text: "全国联保"
+  pinyin: "quán guó lián bǎo"
+  field: TRUST
+  register: formal
+  context: "Nationwide warranty"
+
+- text: "厂家直供"
+  pinyin: "chǎng jiā zhí gōng"
+  field: TRUST
+  register: formal
+  context: "Direct from manufacturer"
+
+- text: "100%正品"
+  pinyin: "100% zhèng pǐn"
+  field: TRUST
+  register: formal
+  context: "100% authentic"
+
+- text: "售后无忧"
+  pinyin: "shòu hòu wú yōu"
+  field: TRUST
+  register: formal
+  context: "Worry-free after-sales"
+
+- text: "京东自营"
+  pinyin: "jǐng dōng zì yíng"
+  field: TRUST
+  register: formal
+  context: "JD self-operated (trust signal on JD.com)"
+
+# --- Casual/Live streaming ---
+- text: "亲测有效"
+  pinyin: "qīn cè yǒu xiào"
+  field: TRUST
+  register: casual
+  context: "Personally tested, effective"
+
+- text: "良心推荐"
+  pinyin: "liáng xīn tuī jiàn"
+  field: TRUST
+  register: casual
+  context: "Heartfelt recommendation"
+
+- text: "真材实料"
+  pinyin: "zhēn cái shí liào"
+  field: TRUST
+  register: casual
+  context: "Real materials, no fakes"
+
+- text: "包你满意"
+  pinyin: "bāo nǐ mǎn yì"
+  field: TRUST
+  register: casual
+  context: "Guaranteed satisfaction"
+
+- text: "用过都说好"
+  pinyin: "yòng guò dōu shuō hǎo"
+  field: TRUST
+  register: casual
+  context: "Everyone who tried says good"
+
+- text: "正规渠道"
+  pinyin: "zhèng guī qú dào"
+  field: TRUST
+  register: casual
+  context: "Official channels"
+
+- text: "有发票"
+  pinyin: "yǒu fā piào"
+  field: TRUST
+  register: casual
+  context: "With invoice (fapiao)"
+
+- text: "不过敏"
+  pinyin: "bù guò mǐn"
+  field: TRUST
+  register: casual
+  context: "No allergies (cosmetics)"
+
+- text: "品质保证"
+  pinyin: "pǐn zhì bǎo zhèng"
+  field: TRUST
+  register: casual
+  context: "Quality guaranteed"
+
+- text: "七天无理由退"
+  pinyin: "qī tiān wú yuán yóu tuì"
+  field: TRUST
+  register: casual
+  context: "7-day no-reason return (short form)"
+
+# =============================================================================
+# FIELD 4: SUCCESS (成功案例) - 20 expressions
+# =============================================================================
+
+# --- Formal/E-commerce ---
+- text: "XX万+人气"
+  pinyin: "XX wàn + rén qì"
+  field: SUCCESS
+  register: formal
+  context: "Over XX million popularity"
+
+- text: "已售XX万件"
+  pinyin: "yǐ shòu XX wàn jiàn"
+  field: SUCCESS
+  register: formal
+  context: "Sold over XX million pieces"
+
+- text: "10万人好评"
+  pinyin: "10 wàn rén hǎo píng"
+  field: SUCCESS
+  register: formal
+  context: "100,000 positive reviews"
+
+- text: "百万妈妈推荐"
+  pinyin: "bǎi wàn mā mā tuī jiàn"
+  field: SUCCESS
+  register: formal
+  context: "Recommended by a million moms"
+
+- text: "全网热卖No.1"
+  pinyin: "quán wǎng rè mài No.1"
+  field: SUCCESS
+  register: formal
+  context: "No.1 bestseller across the web"
+
+- text: "XX万+用户选择"
+  pinyin: "XX wàn + yòng hù xuǎn zé"
+  field: SUCCESS
+  register: formal
+  context: "Chosen by over XX million users"
+
+- text: "销量破百万"
+  pinyin: "xiāo liàng pò bǎi wàn"
+  field: SUCCESS
+  register: formal
+  context: "Sales exceed one million"
+
+- text: "9.9分高评价"
+  pinyin: "9.9 fēn gāo píng jià"
+  field: SUCCESS
+  register: formal
+  context: "9.9 high rating"
+
+- text: "明星同款热销"
+  pinyin: "míng xīng tóng kuǎn rè xiāo"
+  field: SUCCESS
+  register: formal
+  context: "Celebrity same-style bestseller"
+
+- text: "全国销量冠军"
+  pinyin: "quán guó xiāo liàng guàn jūn"
+  field: SUCCESS
+  register: formal
+  context: "National sales champion"
+
+# --- Casual/Live streaming ---
+- text: "回购率高"
+  pinyin: "huí gòu lǜ gāo"
+  field: SUCCESS
+  register: casual
+  context: "High repurchase rate"
+
+- text: "卖疯了"
+  pinyin: "mài fēng le"
+  field: SUCCESS
+  register: casual
+  context: "Selling like crazy"
+
+- text: "10万人抢购"
+  pinyin: "shí wàn rén qiǎng gòu"
+  field: SUCCESS
+  register: casual
+  context: "100k people rushing to buy"
+
+- text: "好评如潮"
+  pinyin: "hǎo píng rú cháo"
+  field: SUCCESS
+  register: casual
+  context: "Flood of positive reviews"
+
+- text: "明星同款"
+  pinyin: "míng xīng tóng kuǎn"
+  field: SUCCESS
+  register: casual
+  context: "Celebrity same style"
+
+- text: "全国热卖"
+  pinyin: "quán guó rè mài"
+  field: SUCCESS
+  register: casual
+  context: "Hot seller nationwide"
+
+- text: "榜单第一"
+  pinyin: "bǎng dān dì yī"
+  field: SUCCESS
+  register: casual
+  context: "No.1 on charts"
+
+- text: "姐妹们都买了"
+  pinyin: "jiě mèi men dōu mǎi le"
+  field: SUCCESS
+  register: casual
+  context: "All sisters bought it"
+
+- text: "断货补不上"
+  pinyin: "duàn huò bǔ bù shàng"
+  field: SUCCESS
+  register: casual
+  context: "Out of stock, can't restock"
+
+- text: "实时销量XX万"
+  pinyin: "shí shí xiāo liàng XX wàn"
+  field: SUCCESS
+  register: casual
+  context: "Real-time sales XX ten thousand"
+
+# =============================================================================
+# FIELD 5: QUALITY (品质感) - 20 expressions
+# =============================================================================
+
+# --- Formal/E-commerce ---
+- text: "高品质选品"
+  pinyin: "gāo pǐn zhì xuǎn pǐn"
+  field: QUALITY
+  register: formal
+  context: "High-quality selection"
+
+- text: "进口原装正品"
+  pinyin: "jìn kǒu yuán zhuāng zhèng pǐn"
+  field: QUALITY
+  register: formal
+  context: "Imported original authentic"
+
+- text: "匠心工艺"
+  pinyin: "jiàng xīn gōng yì"
+  field: QUALITY
+  register: formal
+  context: "Masterful craftsmanship"
+
+- text: "升级版品质"
+  pinyin: "shēng jí bǎn pǐn zhì"
+  field: QUALITY
+  register: formal
+  context: "Upgraded quality version"
+
+- text: "环保材质"
+  pinyin: "huán bǎo cái zhì"
+  field: QUALITY
+  register: formal
+  context: "Eco-friendly material"
+
+- text: "耐用不褪色"
+  pinyin: "nài yòng bù tuì sè"
+  field: QUALITY
+  register: formal
+  context: "Durable, colorfast"
+
+- text: "专业认证"
+  pinyin: "zhuān yè rèn zhèng"
+  field: QUALITY
+  register: formal
+  context: "Professionally certified"
+
+- text: "纯天然原料"
+  pinyin: "chún tiān rán yuán liào"
+  field: QUALITY
+  register: formal
+  context: "Pure natural ingredients"
+
+- text: "顶级面料"
+  pinyin: "dǐng jí miàn liào"
+  field: QUALITY
+  register: formal
+  context: "Top-grade fabric"
+
+- text: "进口原料"
+  pinyin: "jìn kǒu yuán liào"
+  field: QUALITY
+  register: formal
+  context: "Imported raw materials"
+
+# --- Casual/Live streaming ---
+- text: "用料讲究"
+  pinyin: "yòng liào jiǎng jiù"
+  field: QUALITY
+  register: casual
+  context: "Meticulous materials"
+
+- text: "工艺精湛"
+  pinyin: "gōng yì jīng zhàn"
+  field: QUALITY
+  register: casual
+  context: "Exquisite craftsmanship"
+
+- text: "高端大气"
+  pinyin: "gāo duān dà qì"
+  field: QUALITY
+  register: casual
+  context: "High-end and classy"
+
+- text: "耐用不坏"
+  pinyin: "nài yòng bù huài"
+  field: QUALITY
+  register: casual
+  context: "Durable, won't break"
+
+- text: "效果拔群"
+  pinyin: "xiào guǒ bá qún"
+  field: QUALITY
+  register: casual
+  context: "Outstanding results"
+
+- text: "纯天然"
+  pinyin: "chún tiān rán"
+  field: QUALITY
+  register: casual
+  context: "Pure natural"
+
+- text: "科技含量高"
+  pinyin: "kē jì hán liàng gāo"
+  field: QUALITY
+  register: casual
+  context: "High tech content"
+
+- text: "比X好用"
+  pinyin: "bǐ X hǎo yòng"
+  field: QUALITY
+  register: casual
+  context: "Better than X"
+
+- text: "奢品质价比"
+  pinyin: "shē pǐn zhì jià bǐ"
+  field: QUALITY
+  register: casual
+  context: "Luxury quality at value price"
+
+- text: "真材实料"
+  pinyin: "zhēn cái shí liào"
+  field: QUALITY
+  register: casual
+  context: "Real materials, genuine quality"
+
+# =============================================================================
+# FIELD 6: SPEED (速度感) - 20 expressions
+# =============================================================================
+
+# --- Formal/E-commerce ---
+- text: "闪电发货"
+  pinyin: "shǎn diàn fā huò"
+  field: SPEED
+  register: formal
+  context: "Lightning fast delivery"
+
+- text: "24小时达"
+  pinyin: "èr shí sì xiǎo shí dá"
+  field: SPEED
+  register: formal
+  context: "Arrives in 24 hours"
+
+- text: "次日达"
+  pinyin: "cì rì dá"
+  field: SPEED
+  register: formal
+  context: "Next-day delivery"
+
+- text: "极速发货"
+  pinyin: "jí sù fā huò"
+  field: SPEED
+  register: formal
+  context: "Ultra-speed shipping"
+
+- text: "1小时送达"
+  pinyin: "yī xiǎo shí sòng dá"
+  field: SPEED
+  register: formal
+  context: "Delivered in 1 hour"
+
+- text: "闪送到家"
+  pinyin: "shǎn sòng dào jiā"
+  field: SPEED
+  register: formal
+  context: "Flash delivery home"
+
+- text: "限时速达"
+  pinyin: "xiàn shí sù dá"
+  field: SPEED
+  register: formal
+  context: "Limited-time express"
+
+- text: "当日达"
+  pinyin: "dāng rì dá"
+  field: SPEED
+  register: formal
+  context: "Same-day delivery"
+
+- text: "小时达"
+  pinyin: "xiǎo shí dá"
+  field: SPEED
+  register: formal
+  context: "Hourly delivery"
+
+- text: "极速送达"
+  pinyin: "jí sù sòng dá"
+  field: SPEED
+  register: formal
+  context: "Ultra-fast delivery"
+
+# --- Casual/Live streaming ---
+- text: "秒级发货"
+  pinyin: "miǎo jí fā huò"
+  field: SPEED
+  register: casual
+  context: "Second-level dispatch"
+
+- text: "火箭快递"
+  pinyin: "huǒ jiàn kuài dì"
+  field: SPEED
+  register: casual
+  context: "Rocket express"
+
+- text: "飞一般的感觉"
+  pinyin: "fēi yī bān de gǎn jué"
+  field: SPEED
+  register: casual
+  context: "Feels like flying"
+
+- text: "当天到"
+  pinyin: "dāng tiān dào"
+  field: SPEED
+  register: casual
+  context: "Arrives same day"
+
+- text: "快递火箭"
+  pinyin: "kuài dì huǒ jiàn"
+  field: SPEED
+  register: casual
+  context: "Express rocket"
+
+- text: "飞一般送货"
+  pinyin: "fēi yī bān sòng huò"
+  field: SPEED
+  register: casual
+  context: "Delivery like flying"
+
+- text: "限时达"
+  pinyin: "xiàn shí dá"
+  field: SPEED
+  register: casual
+  context: "Time-limited delivery"
+
+- text: "速达神器"
+  pinyin: "sù dá shén qì"
+  field: SPEED
+  register: casual
+  context: "Fast delivery artifact"
+
+- text: "马上到"
+  pinyin: "mǎ shàng dào"
+  field: SPEED
+  register: casual
+  context: "Arrives immediately"
+
+- text: "即刻送达"
+  pinyin: "jí kè sòng dá"
+  field: SPEED
+  register: casual
+  context: "Instant delivery"
+
+# =============================================================================
+# FIELD 7: SIMPLICITY (简单易用) - 20 expressions
+# =============================================================================
+
+# --- Formal/E-commerce ---
+- text: "一键搞定"
+  pinyin: "yī jiàn gǎo dìng"
+  field: SIMPLICITY
+  register: formal
+  context: "One-click done"
+
+- text: "超简单上手"
+  pinyin: "chāo jiǎn dān shàng shǒu"
+  field: SIMPLICITY
+  register: formal
+  context: "Super easy to start"
+
+- text: "一触即发"
+  pinyin: "yī chù jí fā"
+  field: SIMPLICITY
+  register: formal
+  context: "Touch to launch"
+
+- text: "零门槛使用"
+  pinyin: "líng mén kǎn shǐ yòng"
+  field: SIMPLICITY
+  register: formal
+  context: "Zero threshold to use"
+
+- text: "省心省力"
+  pinyin: "shěng xīn shěng lì"
+  field: SIMPLICITY
+  register: formal
+  context: "Effortless and worry-free"
+
+- text: "新手友好"
+  pinyin: "xīn shǒu yǒu hǎo"
+  field: SIMPLICITY
+  register: formal
+  context: "Beginner-friendly"
+
+- text: "一键下单"
+  pinyin: "yī jiàn xià dān"
+  field: SIMPLICITY
+  register: formal
+  context: "One-click order"
+
+- text: "零门槛"
+  pinyin: "líng mén kǎn"
+  field: SIMPLICITY
+  register: formal
+  context: "Zero threshold"
+
+- text: "即插即用"
+  pinyin: "jí chā jí yòng"
+  field: SIMPLICITY
+  register: formal
+  context: "Plug and play"
+
+- text: "轻松上手"
+  pinyin: "qīng sōng shàng shǒu"
+  field: SIMPLICITY
+  register: formal
+  context: "Easy to get started"
+
+# --- Casual/Live streaming ---
+- text: "傻瓜操作"
+  pinyin: "shǎ guā cāo zuò"
+  field: SIMPLICITY
+  register: casual
+  context: "Foolproof operation"
+
+- text: "无脑下单"
+  pinyin: "wú nǎo xià dān"
+  field: SIMPLICITY
+  register: casual
+  context: "Brainless ordering"
+
+- text: "3秒搞定"
+  pinyin: "sān miǎo gǎo dìng"
+  field: SIMPLICITY
+  register: casual
+  context: "Done in 3 seconds"
+
+- text: "手指一滑就行"
+  pinyin: "shǒu zhǐ yī huá jiù xíng"
+  field: SIMPLICITY
+  register: casual
+  context: "Just slide your finger"
+
+- text: "超简单"
+  pinyin: "chāo jiǎn dān"
+  field: SIMPLICITY
+  register: casual
+  context: "Super simple"
+
+- text: "懒人必备"
+  pinyin: "lǎn rén bì bèi"
+  field: SIMPLICITY
+  register: casual
+  context: "Lazy person's essential"
+
+- text: "无脑好用"
+  pinyin: "wú nǎo hǎo yòng"
+  field: SIMPLICITY
+  register: casual
+  context: "Brainless to use"
+
+- text: "省心神器"
+  pinyin: "shěng xīn shén qì"
+  field: SIMPLICITY
+  register: casual
+  context: "Worry-free artifact"
+
+- text: "懒人神器"
+  pinyin: "lǎn rén shén qì"
+  field: SIMPLICITY
+  register: casual
+  context: "Lazy person's artifact"
+
+- text: "新手必备"
+  pinyin: "xīn shǒu bì bèi"
+  field: SIMPLICITY
+  register: casual
+  context: "Beginner's essential"
+
+# =============================================================================
+# FIELD 8: INNOVATION (创新科技) - 20 expressions
+# =============================================================================
+
+# --- Formal/E-commerce ---
+- text: "黑科技"
+  pinyin: "hēi kē jì"
+  field: INNOVATION
+  register: formal
+  context: "Black technology (cutting-edge tech)"
+
+- text: "AI黑科技"
+  pinyin: "AI hēi kē jì"
+  field: INNOVATION
+  register: formal
+  context: "AI black tech"
+
+- text: "未来科技"
+  pinyin: "wèi lái kē jì"
+  field: INNOVATION
+  register: formal
+  context: "Future technology"
+
+- text: "VR沉浸式"
+  pinyin: "VR chén jìn shì"
+  field: INNOVATION
+  register: formal
+  context: "VR immersive"
+
+- text: "高科技加持"
+  pinyin: "gāo kē jì jiā chí"
+  field: INNOVATION
+  register: formal
+  context: "Powered by high tech"
+
+- text: "智能升级"
+  pinyin: "zhì néng shēng jí"
+  field: INNOVATION
+  register: formal
+  context: "Smart upgrade"
+
+- text: "前沿黑科技"
+  pinyin: "qián yán hēi kē jì"
+  field: INNOVATION
+  register: formal
+  context: "Cutting-edge black tech"
+
+- text: "高科技爆款"
+  pinyin: "gāo kē jì bào kuǎn"
+  field: INNOVATION
+  register: formal
+  context: "High-tech hit"
+
+- text: "科技狂欢"
+  pinyin: "kē jì kuáng huān"
+  field: INNOVATION
+  register: formal
+  context: "Tech carnival"
+
+- text: "颠覆黑科技"
+  pinyin: "diān fù hēi kē jì"
+  field: INNOVATION
+  register: formal
+  context: "Disruptive black tech"
+
+# --- Casual/Live streaming ---
+- text: "智能黑马"
+  pinyin: "zhì néng hēi mǎ"
+  field: INNOVATION
+  register: casual
+  context: "Smart dark horse"
+
+- text: "科幻级体验"
+  pinyin: "kē huàn jí tǐ yàn"
+  field: INNOVATION
+  register: casual
+  context: "Sci-fi level experience"
+
+- text: "黑科技首发"
+  pinyin: "hēi kē jì shǒu fā"
+  field: INNOVATION
+  register: casual
+  context: "Black tech debut"
+
+- text: "黑马发明"
+  pinyin: "hēi mǎ fā míng"
+  field: INNOVATION
+  register: casual
+  context: "Dark horse invention"
+
+- text: "科幻神器"
+  pinyin: "kē huàn shén qì"
+  field: INNOVATION
+  register: casual
+  context: "Sci-fi artifact"
+
+- text: "智能黑科技"
+  pinyin: "zhì néng hēi kē jì"
+  field: INNOVATION
+  register: casual
+  context: "Smart black tech"
+
+- text: "颠覆性创新"
+  pinyin: "diān fù xìng chuàng xīn"
+  field: INNOVATION
+  register: casual
+  context: "Disruptive innovation"
+
+- text: "未来感"
+  pinyin: "wèi lái gǎn"
+  field: INNOVATION
+  register: casual
+  context: "Futuristic feel"
+
+- text: "新物种"
+  pinyin: "xīn wù zhǒng"
+  field: INNOVATION
+  register: casual
+  context: "New species (breakthrough product)"
+
+- text: "划时代"
+  pinyin: "huà shí dài"
+  field: INNOVATION
+  register: casual
+  context: "Epoch-making"
+
+# =============================================================================
+# FIELD 9: EXCLUSIVITY (会员专享) - 20 expressions
+# =============================================================================
+
+# --- Formal/E-commerce ---
+- text: "会员专享"
+  pinyin: "huì yuán zhuān xiǎng"
+  field: EXCLUSIVITY
+  register: formal
+  context: "VIP exclusive"
+
+- text: "尊享会员价"
+  pinyin: "zūn xiǎng huì yuán jià"
+  field: EXCLUSIVITY
+  register: formal
+  context: "Exclusive member price"
+
+- text: "VIP专属"
+  pinyin: "VIP zhuān shǔ"
+  field: EXCLUSIVITY
+  register: formal
+  context: "VIP only"
+
+- text: "会员福利"
+  pinyin: "huì yuán fú lì"
+  field: EXCLUSIVITY
+  register: formal
+  context: "Member benefits"
+
+- text: "黑卡专享"
+  pinyin: "hēi kǎ zhuān xiǎng"
+  field: EXCLUSIVITY
+  register: formal
+  context: "Black card exclusive"
+
+- text: "超级会员礼"
+  pinyin: "chāo jí huì yuán lǐ"
+  field: EXCLUSIVITY
+  register: formal
+  context: "Super member gift"
+
+- text: "专属优惠券"
+  pinyin: "zhuān shǔ yōu huì quàn"
+  field: EXCLUSIVITY
+  register: formal
+  context: "Exclusive coupons"
+
+- text: "会员闪购"
+  pinyin: "huì yuán shǎn gòu"
+  field: EXCLUSIVITY
+  register: formal
+  context: "Member flash sale"
+
+- text: "顶级会员权益"
+  pinyin: "dǐng jí huì yuán quán yì"
+  field: EXCLUSIVITY
+  register: formal
+  context: "Top-tier member rights"
+
+- text: "尊贵专供"
+  pinyin: "zūn guì zhuān gōng"
+  field: EXCLUSIVITY
+  register: formal
+  context: "Premium exclusive supply"
+
+# --- Casual/Live streaming ---
+- text: "内部福利"
+  pinyin: "nèi bù fú lì"
+  field: EXCLUSIVITY
+  register: casual
+  context: "Internal perks"
+
+- text: "VIP底价"
+  pinyin: "VIP dǐ jià"
+  field: EXCLUSIVITY
+  register: casual
+  context: "VIP rock-bottom price"
+
+- text: "独家优惠"
+  pinyin: "dú jiā yōu huì"
+  field: EXCLUSIVITY
+  register: casual
+  context: "Exclusive discount"
+
+- text: "会员砍价"
+  pinyin: "huì yuán kǎn jià"
+  field: EXCLUSIVITY
+  register: casual
+  context: "Member bargain"
+
+- text: "隐秘特价"
+  pinyin: "yǐn mì tè jià"
+  field: EXCLUSIVITY
+  register: casual
+  context: "Secret special price"
+
+- text: "圈内价"
+  pinyin: "quān nèi jià"
+  field: EXCLUSIVITY
+  register: casual
+  context: "Insider price"
+
+- text: "忠实粉价"
+  pinyin: "zhōng shí fěn jià"
+  field: EXCLUSIVITY
+  register: casual
+  context: "Loyal fan price"
+
+- text: "私享折扣"
+  pinyin: "sī xiǎng zhé kòu"
+  field: EXCLUSIVITY
+  register: casual
+  context: "Private discount"
+
+- text: "会员黑价"
+  pinyin: "huì yuán hēi jià"
+  field: EXCLUSIVITY
+  register: casual
+  context: "Member black price"
+
+- text: "粉丝专属"
+  pinyin: "fěn sī zhuān shǔ"
+  field: EXCLUSIVITY
+  register: casual
+  context: "Fan exclusive"
+
+# =============================================================================
+# FIELD 10: COMMUNITY (社群感) - 20 expressions
+# =============================================================================
+
+# --- Formal/E-commerce ---
+- text: "加入我们"
+  pinyin: "jiā rù wǒ men"
+  field: COMMUNITY
+  register: formal
+  context: "Join us"
+
+- text: "种草社区"
+  pinyin: "zhòng cǎo shè qū"
+  field: COMMUNITY
+  register: formal
+  context: "Planting grass community (influencer recommendations)"
+
+- text: "社区福利群"
+  pinyin: "shè qū fú lì qún"
+  field: COMMUNITY
+  register: formal
+  context: "Community perks group"
+
+- text: "社区达人汇"
+  pinyin: "shè qū dá rén huì"
+  field: COMMUNITY
+  register: formal
+  context: "Community influencer hub"
+
+- text: "社区团购"
+  pinyin: "shè qū tuán gòu"
+  field: COMMUNITY
+  register: formal
+  context: "Community group buy"
+
+- text: "拼团狂欢"
+  pinyin: "pīn tuán kuáng huān"
+  field: COMMUNITY
+  register: formal
+  context: "Group buy carnival"
+
+- text: "好友同行"
+  pinyin: "hǎo yǒu tóng xíng"
+  field: COMMUNITY
+  register: formal
+  context: "Friends join together"
+
+- text: "一起省钱"
+  pinyin: "yī qǐ shěng qián"
+  field: COMMUNITY
+  register: formal
+  context: "Save money together"
+
+- text: "全民拼购"
+  pinyin: "quán mín pīn gòu"
+  field: COMMUNITY
+  register: formal
+  context: "Everyone group buy"
+
+- text: "共同成长"
+  pinyin: "gòng tóng chéng zhǎng"
+  field: COMMUNITY
+  register: formal
+  context: "Grow together"
+
+# --- Casual/Live streaming ---
+- text: "拼团同行"
+  pinyin: "pīn tuán tóng xíng"
+  field: COMMUNITY
+  register: casual
+  context: "Group buy together"
+
+- text: "晒单达人"
+  pinyin: "shài dān dá rén"
+  field: COMMUNITY
+  register: casual
+  context: "Show-off order pros"
+
+- text: "一起拼单"
+  pinyin: "yī qǐ pīn dān"
+  field: COMMUNITY
+  register: casual
+  context: "Group order together"
+
+- text: "加入种草"
+  pinyin: "jiā rù zhòng cǎo"
+  field: COMMUNITY
+  register: casual
+  context: "Join the influencers"
+
+- text: "粉丝专群"
+  pinyin: "fěn sī zhuān qún"
+  field: COMMUNITY
+  register: casual
+  context: "Fan exclusive group"
+
+- text: "群拼福利"
+  pinyin: "qún pīn fú lì"
+  field: COMMUNITY
+  register: casual
+  context: "Group buy perks"
+
+- text: "拉人拼"
+  pinyin: "lā rén pīn"
+  field: COMMUNITY
+  register: casual
+  context: "Pull friends to group buy"
+
+- text: "拼手气"
+  pinyin: "pīn shǒu qì"
+  field: COMMUNITY
+  register: casual
+  context: "Luck-based group buy"
+
+- text: "集体砍价"
+  pinyin: "jí tǐ kǎn jià"
+  field: COMMUNITY
+  register: casual
+  context: "Collective bargaining"
+
+- text: "朋友圈拼"
+  pinyin: "péng you quān pīn"
+  field: COMMUNITY
+  register: casual
+  context: "WeChat Moments group buy"

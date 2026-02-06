@@ -13,6 +13,11 @@
 CREATE CONSTRAINT locale_key IF NOT EXISTS FOR (l:Locale) REQUIRE l.key IS UNIQUE;
 CREATE INDEX locale_language IF NOT EXISTS FOR (l:Locale) ON (l.language_code);
 CREATE INDEX locale_country IF NOT EXISTS FOR (l:Locale) ON (l.country_code);
+// v10.7: Geographic clustering indexes for LLM retrieval
+CREATE INDEX locale_region IF NOT EXISTS FOR (l:Locale) ON (l.region);
+CREATE INDEX locale_language_family IF NOT EXISTS FOR (l:Locale) ON (l.language_family);
+CREATE INDEX locale_script IF NOT EXISTS FOR (l:Locale) ON (l.script);
+CREATE INDEX locale_text_direction IF NOT EXISTS FOR (l:Locale) ON (l.text_direction);
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // CORE ENTITIES
@@ -99,3 +104,25 @@ CREATE CONSTRAINT kind_label IF NOT EXISTS FOR (k:Kind) REQUIRE k.label IS UNIQU
 CREATE CONSTRAINT trait_key IF NOT EXISTS FOR (t:Trait) REQUIRE t.key IS UNIQUE;
 CREATE CONSTRAINT arcfamily_key IF NOT EXISTS FOR (af:ArcFamily) REQUIRE af.key IS UNIQUE;
 CREATE CONSTRAINT arckind_key IF NOT EXISTS FOR (ak:ArcKind) REQUIRE ak.key IS UNIQUE;
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// KNOWLEDGE ATOMS (v10.7.0)
+// Expression indexes for LLM context retrieval
+// ═══════════════════════════════════════════════════════════════════════════════
+
+CREATE CONSTRAINT expression_key IF NOT EXISTS FOR (e:Expression) REQUIRE e.key IS UNIQUE;
+CREATE INDEX expr_semantic_field IF NOT EXISTS FOR (e:Expression) ON (e.semantic_field);
+CREATE INDEX expr_register IF NOT EXISTS FOR (e:Expression) ON (e.register);
+CREATE INDEX expr_locale_key IF NOT EXISTS FOR (e:Expression) ON (e.locale_key);
+CREATE FULLTEXT INDEX expr_text_fulltext IF NOT EXISTS FOR (e:Expression) ON EACH [e.text, e.intention, e.context];
+
+// ExpressionSet container
+CREATE CONSTRAINT expressionset_key IF NOT EXISTS FOR (es:ExpressionSet) REQUIRE es.key IS UNIQUE;
+
+// Culture and Market (already have key from locale)
+CREATE CONSTRAINT culture_key IF NOT EXISTS FOR (c:Culture) REQUIRE c.key IS UNIQUE;
+CREATE CONSTRAINT market_key IF NOT EXISTS FOR (m:Market) REQUIRE m.key IS UNIQUE;
+
+// Formatting and Slugification
+CREATE CONSTRAINT formatting_key IF NOT EXISTS FOR (f:Formatting) REQUIRE f.key IS UNIQUE;
+CREATE CONSTRAINT slugification_key IF NOT EXISTS FOR (s:Slugification) REQUIRE s.key IS UNIQUE;

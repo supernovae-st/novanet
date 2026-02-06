@@ -1,11 +1,14 @@
-//! TUI Theme — Visual encoding from taxonomy.yaml
+//! TUI Theme — Visual encoding from taxonomy.yaml + visual-encoding.yaml
 //!
 //! Provides terminal colors and styles from the NovaNet visual system.
 //! Supports 256-color and 16-color fallback palettes.
 //!
-//! Source of truth: packages/core/models/taxonomy.yaml
+//! Source of truth:
+//! - Colors: packages/core/models/taxonomy.yaml
+//! - Icons: packages/core/models/visual-encoding.yaml (icons section)
 
 use ratatui::style::{Color, Modifier, Style};
+use std::collections::HashMap;
 
 // =============================================================================
 // COLOR MODE DETECTION
@@ -331,13 +334,190 @@ pub mod arc_family {
 }
 
 // =============================================================================
+// ICONS — Loaded from visual-encoding.yaml (single source of truth)
+// =============================================================================
+
+/// Terminal icons loaded from visual-encoding.yaml.
+/// Provides Unicode symbols for TUI with fallback defaults.
+#[derive(Debug, Clone, Default)]
+pub struct Icons {
+    pub realms: HashMap<String, String>,
+    pub layers: HashMap<String, String>,
+    pub traits: HashMap<String, String>,
+    pub arc_families: HashMap<String, String>,
+    pub states: HashMap<String, String>,
+    pub navigation: HashMap<String, String>,
+    pub quality: HashMap<String, String>,
+    pub modes: HashMap<String, String>,
+}
+
+impl Icons {
+    /// Load icons from visual-encoding.yaml.
+    /// Returns default icons if loading fails (graceful degradation).
+    pub fn load(root_path: &str) -> Self {
+        let path = std::path::Path::new(root_path)
+            .join("packages/core/models/visual-encoding.yaml");
+
+        if let Ok(content) = std::fs::read_to_string(&path) {
+            if let Ok(doc) = serde_yaml::from_str::<serde_yaml::Value>(&content) {
+                return Self::from_yaml(&doc);
+            }
+        }
+        Self::defaults()
+    }
+
+    /// Parse icons from YAML document.
+    fn from_yaml(doc: &serde_yaml::Value) -> Self {
+        let mut icons = Self::defaults();
+
+        if let Some(icons_section) = doc.get("icons") {
+            // Parse each category
+            Self::parse_category(icons_section, "realms", &mut icons.realms);
+            Self::parse_category(icons_section, "layers", &mut icons.layers);
+            Self::parse_category(icons_section, "traits", &mut icons.traits);
+            Self::parse_category(icons_section, "arc_families", &mut icons.arc_families);
+            Self::parse_category(icons_section, "states", &mut icons.states);
+            Self::parse_category(icons_section, "navigation", &mut icons.navigation);
+            Self::parse_category(icons_section, "quality", &mut icons.quality);
+            Self::parse_category(icons_section, "modes", &mut icons.modes);
+        }
+
+        icons
+    }
+
+    /// Parse a single category from YAML into a HashMap.
+    fn parse_category(
+        icons_section: &serde_yaml::Value,
+        category: &str,
+        map: &mut HashMap<String, String>,
+    ) {
+        if let Some(cat) = icons_section.get(category) {
+            if let Some(obj) = cat.as_mapping() {
+                for (key, value) in obj {
+                    if let (Some(k), Some(terminal)) = (
+                        key.as_str(),
+                        value.get("terminal").and_then(|v| v.as_str()),
+                    ) {
+                        map.insert(k.to_string(), terminal.to_string());
+                    }
+                }
+            }
+        }
+    }
+
+    /// Default icons (fallback if YAML loading fails).
+    fn defaults() -> Self {
+        let mut icons = Self::default();
+
+        // Realms
+        icons.realms.insert("global".into(), "◉".into());
+        icons.realms.insert("tenant".into(), "◎".into());
+
+        // Layers
+        icons.layers.insert("config".into(), "⚙".into());
+        icons.layers.insert("locale-knowledge".into(), "◈".into());
+        icons.layers.insert("seo".into(), "◇".into());
+        icons.layers.insert("foundation".into(), "▣".into());
+        icons.layers.insert("structure".into(), "▤".into());
+        icons.layers.insert("semantic".into(), "◆".into());
+        icons.layers.insert("instruction".into(), "▧".into());
+        icons.layers.insert("output".into(), "●".into());
+
+        // Traits
+        icons.traits.insert("invariant".into(), "■".into());
+        icons.traits.insert("localized".into(), "□".into());
+        icons.traits.insert("knowledge".into(), "◊".into());
+        icons.traits.insert("derived".into(), "▪".into());
+        icons.traits.insert("job".into(), "▫".into());
+
+        // Arc families
+        icons.arc_families.insert("ownership".into(), "→".into());
+        icons.arc_families.insert("localization".into(), "⇢".into());
+        icons.arc_families.insert("semantic".into(), "~".into());
+        icons.arc_families.insert("generation".into(), "⇒".into());
+        icons.arc_families.insert("mining".into(), "⇝".into());
+
+        // States
+        icons.states.insert("no_connection".into(), "⚠".into());
+        icons.states.insert("no_kinds".into(), "∅".into());
+        icons.states.insert("no_results".into(), "◌".into());
+        icons.states.insert("no_instances".into(), "□".into());
+        icons.states.insert("loading".into(), "◐".into());
+        icons.states.insert("success".into(), "✓".into());
+        icons.states.insert("error".into(), "✗".into());
+        icons.states.insert("warning".into(), "⚠".into());
+
+        // Navigation
+        icons.navigation.insert("expanded".into(), "▼".into());
+        icons.navigation.insert("collapsed".into(), "▶".into());
+        icons.navigation.insert("leaf".into(), "·".into());
+        icons.navigation.insert("search".into(), "/".into());
+        icons.navigation.insert("help".into(), "?".into());
+        icons.navigation.insert("back".into(), "←".into());
+        icons.navigation.insert("copy".into(), "□".into());
+
+        // Quality
+        icons.quality.insert("complete".into(), "●".into());
+        icons.quality.insert("partial".into(), "◐".into());
+        icons.quality.insert("empty".into(), "○".into());
+        icons.quality.insert("required".into(), "*".into());
+        icons.quality.insert("optional".into(), " ".into());
+        icons.quality.insert("chart".into(), "≡".into());
+
+        // Modes
+        icons.modes.insert("meta".into(), "M".into());
+        icons.modes.insert("data".into(), "D".into());
+        icons.modes.insert("overlay".into(), "O".into());
+        icons.modes.insert("query".into(), "Q".into());
+        icons.modes.insert("atlas".into(), "A".into());
+        icons.modes.insert("audit".into(), "U".into());
+
+        icons
+    }
+
+    // Getter methods with fallbacks
+    pub fn realm(&self, key: &str) -> &str {
+        self.realms.get(key).map(|s| s.as_str()).unwrap_or("○")
+    }
+
+    pub fn layer(&self, key: &str) -> &str {
+        self.layers.get(key).map(|s| s.as_str()).unwrap_or("·")
+    }
+
+    pub fn trait_icon(&self, key: &str) -> &str {
+        self.traits.get(key).map(|s| s.as_str()).unwrap_or("·")
+    }
+
+    pub fn arc_family(&self, key: &str) -> &str {
+        self.arc_families.get(key).map(|s| s.as_str()).unwrap_or("→")
+    }
+
+    pub fn state(&self, key: &str) -> &str {
+        self.states.get(key).map(|s| s.as_str()).unwrap_or("·")
+    }
+
+    pub fn nav(&self, key: &str) -> &str {
+        self.navigation.get(key).map(|s| s.as_str()).unwrap_or("·")
+    }
+
+    pub fn quality(&self, key: &str) -> &str {
+        self.quality.get(key).map(|s| s.as_str()).unwrap_or("·")
+    }
+
+    pub fn mode(&self, key: &str) -> &str {
+        self.modes.get(key).map(|s| s.as_str()).unwrap_or("·")
+    }
+}
+
+// =============================================================================
 // THEME STRUCT — Holds detected color mode and provides styled helpers
 // =============================================================================
 
-/// Theme instance with detected color mode.
+/// Theme instance with detected color mode and icons.
 #[derive(Debug, Clone)]
 pub struct Theme {
     pub mode: ColorMode,
+    pub icons: Icons,
 }
 
 impl Default for Theme {
@@ -347,16 +527,29 @@ impl Default for Theme {
 }
 
 impl Theme {
-    /// Create a new theme with auto-detected color mode.
+    /// Create a new theme with auto-detected color mode and default icons.
     pub fn new() -> Self {
         Self {
             mode: ColorMode::detect(),
+            icons: Icons::defaults(),
         }
     }
 
-    /// Create a theme with explicit color mode.
+    /// Create a theme with icons loaded from a specific root path.
+    /// This is the preferred constructor when the monorepo root is known.
+    pub fn with_root(root_path: &str) -> Self {
+        Self {
+            mode: ColorMode::detect(),
+            icons: Icons::load(root_path),
+        }
+    }
+
+    /// Create a theme with explicit color mode (uses default icons).
     pub fn with_mode(mode: ColorMode) -> Self {
-        Self { mode }
+        Self {
+            mode,
+            icons: Icons::defaults(),
+        }
     }
 
     /// Get realm color.
@@ -602,5 +795,70 @@ mod tests {
         assert_eq!(theme.realm_color("global"), Color::Rgb(42, 161, 152));
         assert_eq!(theme.layer_color("output"), Color::Rgb(34, 197, 94));
         assert_eq!(theme.trait_border("derived"), "═");
+    }
+
+    #[test]
+    fn test_icons_defaults() {
+        let icons = Icons::defaults();
+
+        // Realms
+        assert_eq!(icons.realm("global"), "◉");
+        assert_eq!(icons.realm("tenant"), "◎");
+        assert_eq!(icons.realm("unknown"), "○"); // Fallback
+
+        // Layers
+        assert_eq!(icons.layer("config"), "⚙");
+        assert_eq!(icons.layer("semantic"), "◆");
+        assert_eq!(icons.layer("unknown"), "·"); // Fallback
+
+        // Traits
+        assert_eq!(icons.trait_icon("invariant"), "■");
+        assert_eq!(icons.trait_icon("localized"), "□");
+
+        // States
+        assert_eq!(icons.state("loading"), "◐");
+        assert_eq!(icons.state("no_kinds"), "∅");
+
+        // Navigation
+        assert_eq!(icons.nav("expanded"), "▼");
+        assert_eq!(icons.nav("collapsed"), "▶");
+
+        // Quality
+        assert_eq!(icons.quality("required"), "*");
+        assert_eq!(icons.quality("chart"), "≡");
+
+        // Modes
+        assert_eq!(icons.mode("meta"), "M");
+        assert_eq!(icons.mode("atlas"), "A");
+    }
+
+    #[test]
+    fn test_theme_has_icons() {
+        let theme = Theme::new();
+        // Icons should be available on theme
+        assert_eq!(theme.icons.realm("global"), "◉");
+        assert_eq!(theme.icons.state("loading"), "◐");
+    }
+
+    #[test]
+    fn test_icons_load_integration() {
+        // Test that Icons::load works with real file (integration test)
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .parent()
+            .and_then(|p| p.parent());
+
+        let Some(root) = root else { return };
+        if !root.join("pnpm-workspace.yaml").exists() {
+            return; // Not in monorepo context
+        }
+
+        let icons = Icons::load(&root.display().to_string());
+
+        // Should have loaded from visual-encoding.yaml
+        assert_eq!(icons.realm("global"), "◉");
+        assert_eq!(icons.realm("tenant"), "◎");
+        assert_eq!(icons.layer("config"), "⚙");
+        assert_eq!(icons.state("loading"), "◐");
+        assert_eq!(icons.nav("expanded"), "▼");
     }
 }

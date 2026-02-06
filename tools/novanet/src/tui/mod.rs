@@ -22,9 +22,14 @@
 
 mod app;
 pub mod atlas;
+mod audit;
 mod data;
+#[allow(dead_code)]
+pub mod icons;
+mod schema;
 pub mod theme;
 mod ui;
+mod yaml;
 
 use std::io::{self, Write};
 use std::panic;
@@ -147,11 +152,12 @@ async fn run_app(
 
         match event {
             Ok(Some(Ok(Event::Key(key)))) => {
-                // Ctrl+C or 'q' quits
+                // Ctrl+C always quits
                 if key.modifiers.contains(KeyModifiers::CONTROL) && key.code == KeyCode::Char('c') {
                     break;
                 }
-                if key.code == KeyCode::Char('q') {
+                // 'q' quits only when no overlay is open
+                if key.code == KeyCode::Char('q') && !app.has_overlay_open() {
                     break;
                 }
 
@@ -177,8 +183,8 @@ async fn run_app(
                             }
                         );
 
-                        if let (Some(k), Some(instances)) = (&instance_key, inst_result) {
-                            app.tree.set_instances(k, instances);
+                        if let (Some(k), Some((instances, total))) = (&instance_key, inst_result) {
+                            app.tree.set_instances(k, instances, total);
                         }
                         if let Some(arcs) = arcs_result {
                             app.set_kind_arcs(arcs);
@@ -243,6 +249,13 @@ async fn run_app(
                             TaxonomyTree::load_atlas_page_composition(db, &page_key, &locale).await
                         {
                             app.set_atlas_page_composition(data);
+                        }
+                    }
+
+                    // Audit mode: load global audit stats
+                    if app.take_pending_audit_load() {
+                        if let Ok(stats) = audit::load_audit_stats(db).await {
+                            app.set_audit_stats(stats);
                         }
                     }
 

@@ -1,0 +1,836 @@
+# Native Turkish (Turkey) Marketing Expressions 2024-2025
+# Source: Turkish e-commerce and digital marketing corpus (Trendyol, Hepsiburada, n11, Turkish brands)
+# All expressions with proper Turkish characters (ç, ğ, ı, ö, ş, ü, İ, Ç, Ğ, Ö, Ş, Ü)
+
+expressions:
+  # ============================================================================
+  # FIELD 1: URGENCY - Aciliyet ifadeleri
+  # ============================================================================
+  - text: "Sadece bugün geçerli!"
+    field: URGENCY
+    register: casual
+    context: "Flash sale, one-day promotion"
+
+  - text: "Son fırsat, kaçırmayın!"
+    field: URGENCY
+    register: casual
+    context: "End-of-sale urgency messaging"
+
+  - text: "Stoklar tükenmek üzere"
+    field: URGENCY
+    register: neutral
+    context: "Low inventory alert"
+
+  - text: "Sınırlı sayıda ürün"
+    field: URGENCY
+    register: neutral
+    context: "Limited quantity messaging"
+
+  - text: "Son 24 saat!"
+    field: URGENCY
+    register: casual
+    context: "Countdown timer promotions"
+
+  - text: "Fırsatı yakala!"
+    field: URGENCY
+    register: casual
+    context: "CTA buttons, banner headlines"
+
+  - text: "Acele edin, son ürünler!"
+    field: URGENCY
+    register: casual
+    context: "Scarcity-driven urgency"
+
+  - text: "Bu fiyat sadece bugüne özel"
+    field: URGENCY
+    register: neutral
+    context: "Time-limited pricing"
+
+  - text: "Kampanya bitiyor!"
+    field: URGENCY
+    register: casual
+    context: "Campaign ending soon"
+
+  - text: "Hemen al, yarın çok geç!"
+    field: URGENCY
+    register: casual
+    context: "Strong urgency call-to-action"
+
+  - text: "Şimdi sipariş ver, yarın kapında"
+    field: URGENCY
+    register: casual
+    context: "Fast delivery + urgency combo"
+
+  - text: "Son gün indirimi!"
+    field: URGENCY
+    register: casual
+    context: "Final day of sale"
+
+  - text: "Kaçırılmayacak fırsat!"
+    field: URGENCY
+    register: neutral
+    context: "Can't-miss opportunity"
+
+  - text: "Sadece bu hafta sonu"
+    field: URGENCY
+    register: neutral
+    context: "Weekend-only promotions"
+
+  - text: "Tükenmeden al!"
+    field: URGENCY
+    register: casual
+    context: "Before sold out messaging"
+
+  # ============================================================================
+  # FIELD 2: VALUE - Değer ve tasarruf ifadeleri
+  # ============================================================================
+  - text: "Büyük indirim fırsatı!"
+    field: VALUE
+    register: neutral
+    context: "General discount promotion"
+
+  - text: "Tasarruf et, kazanç sağla"
+    field: VALUE
+    register: neutral
+    context: "Savings-focused messaging"
+
+  - text: "Uygun fiyat garantisi"
+    field: VALUE
+    register: formal
+    context: "Price match guarantee"
+
+  - text: "En uygun fiyatlar burada"
+    field: VALUE
+    register: neutral
+    context: "Best price claim"
+
+  - text: "Sepette ek indirim"
+    field: VALUE
+    register: casual
+    context: "Cart discount promotion"
+
+  - text: "Fiyatlar düştü!"
+    field: VALUE
+    register: casual
+    context: "Price drop announcement"
+
+  - text: "%50'ye varan indirimler"
+    field: VALUE
+    register: neutral
+    context: "Percentage discount range"
+
+  - text: "İkinci ürün yarı fiyatına"
+    field: VALUE
+    register: neutral
+    context: "BOGO half-off promotion"
+
+  - text: "Ücretsiz kargo fırsatı"
+    field: VALUE
+    register: neutral
+    context: "Free shipping promotion"
+
+  - text: "Paran cebinde kalsın"
+    field: VALUE
+    register: casual
+    context: "Colloquial savings expression"
+
+  - text: "En düşük fiyat garantisi"
+    field: VALUE
+    register: formal
+    context: "Lowest price guarantee"
+
+  - text: "Bütçeni düşün, biz de düşündük"
+    field: VALUE
+    register: casual
+    context: "Budget-friendly messaging"
+
+  - text: "Avantajlı fiyatlarla"
+    field: VALUE
+    register: neutral
+    context: "Advantageous pricing"
+
+  - text: "Şok fiyat!"
+    field: VALUE
+    register: casual
+    context: "Shock price promotional"
+
+  - text: "İnanılmaz indirimler"
+    field: VALUE
+    register: casual
+    context: "Incredible discounts"
+
+  # ============================================================================
+  # FIELD 3: TRUST - Güven ve itibar ifadeleri
+  # ============================================================================
+  - text: "Güvenli alışveriş"
+    field: TRUST
+    register: neutral
+    context: "Safe shopping assurance"
+
+  - text: "%100 memnuniyet garantisi"
+    field: TRUST
+    register: formal
+    context: "Satisfaction guarantee"
+
+  - text: "Orijinal ürün garantili"
+    field: TRUST
+    register: formal
+    context: "Authentic product guarantee"
+
+  - text: "Onaylı satıcı"
+    field: TRUST
+    register: formal
+    context: "Verified seller badge"
+
+  - text: "Koşulsuz iade hakkı"
+    field: TRUST
+    register: formal
+    context: "Unconditional return policy"
+
+  - text: "Türkiye'nin güvenilir adresi"
+    field: TRUST
+    register: neutral
+    context: "Trusted destination in Turkey"
+
+  - text: "Yıllardır yanınızdayız"
+    field: TRUST
+    register: neutral
+    context: "Years of service, trust building"
+
+  - text: "Müşteri memnuniyeti önceliğimiz"
+    field: TRUST
+    register: formal
+    context: "Customer satisfaction priority"
+
+  - text: "Kapıda ödeme imkanı"
+    field: TRUST
+    register: neutral
+    context: "Cash on delivery option"
+
+  - text: "SSL güvencesiyle"
+    field: TRUST
+    register: formal
+    context: "SSL security assurance"
+
+  - text: "Binlerce müşterinin tercihi"
+    field: TRUST
+    register: neutral
+    context: "Preferred by thousands"
+
+  - text: "Resmi yetkili satıcı"
+    field: TRUST
+    register: formal
+    context: "Official authorized seller"
+
+  - text: "2 yıl garanti kapsamında"
+    field: TRUST
+    register: formal
+    context: "Warranty coverage"
+
+  - text: "Güvenle alışveriş yapın"
+    field: TRUST
+    register: neutral
+    context: "Shop with confidence"
+
+  - text: "Kalitemizle güveninizi kazandık"
+    field: TRUST
+    register: formal
+    context: "Quality-based trust building"
+
+  # ============================================================================
+  # FIELD 4: SUCCESS - Başarı ve sosyal kanıt ifadeleri
+  # ============================================================================
+  - text: "1 milyondan fazla mutlu müşteri"
+    field: SUCCESS
+    register: neutral
+    context: "Customer count social proof"
+
+  - text: "Türkiye'nin 1 numarası"
+    field: SUCCESS
+    register: casual
+    context: "Market leader claim"
+
+  - text: "En çok tercih edilen"
+    field: SUCCESS
+    register: neutral
+    context: "Most preferred product/service"
+
+  - text: "Sektörün lideri"
+    field: SUCCESS
+    register: formal
+    context: "Industry leader positioning"
+
+  - text: "Ödüllü hizmet"
+    field: SUCCESS
+    register: formal
+    context: "Award-winning service"
+
+  - text: "Müşterilerimiz öneriyor"
+    field: SUCCESS
+    register: neutral
+    context: "Customer recommendation"
+
+  - text: "5 yıldızlı değerlendirmeler"
+    field: SUCCESS
+    register: neutral
+    context: "5-star rating highlight"
+
+  - text: "Binlerce başarı hikayesi"
+    field: SUCCESS
+    register: neutral
+    context: "Success stories testimonials"
+
+  - text: "En beğenilen ürün"
+    field: SUCCESS
+    register: neutral
+    context: "Most liked product"
+
+  - text: "Çok satanlar listesinde"
+    field: SUCCESS
+    register: neutral
+    context: "Bestseller list inclusion"
+
+  - text: "X kullanıcının favorisi"
+    field: SUCCESS
+    register: casual
+    context: "User favorite count"
+
+  - text: "Trend ürünler arasında"
+    field: SUCCESS
+    register: casual
+    context: "Trending products"
+
+  - text: "Rekor satış!"
+    field: SUCCESS
+    register: casual
+    context: "Record sales announcement"
+
+  - text: "Milyonların tercihi"
+    field: SUCCESS
+    register: neutral
+    context: "Millions' choice"
+
+  - text: "Türkiye genelinde 1. sırada"
+    field: SUCCESS
+    register: neutral
+    context: "Nationwide #1 ranking"
+
+  # ============================================================================
+  # FIELD 5: QUALITY - Kalite ve premium ifadeleri
+  # ============================================================================
+  - text: "Yüksek kalite, uygun fiyat"
+    field: QUALITY
+    register: neutral
+    context: "Quality-value proposition"
+
+  - text: "Premium kalite ürünler"
+    field: QUALITY
+    register: formal
+    context: "Premium quality products"
+
+  - text: "A kalite malzeme"
+    field: QUALITY
+    register: neutral
+    context: "Grade A material quality"
+
+  - text: "El yapımı, özenle üretildi"
+    field: QUALITY
+    register: neutral
+    context: "Handcrafted products"
+
+  - text: "Avrupa standartlarında"
+    field: QUALITY
+    register: formal
+    context: "European standards compliance"
+
+  - text: "Üstün performans"
+    field: QUALITY
+    register: formal
+    context: "Superior performance claim"
+
+  - text: "Kaliteden ödün vermeden"
+    field: QUALITY
+    register: neutral
+    context: "No compromise on quality"
+
+  - text: "Profesyonel sınıf"
+    field: QUALITY
+    register: formal
+    context: "Professional grade products"
+
+  - text: "Titizlikle seçildi"
+    field: QUALITY
+    register: neutral
+    context: "Carefully selected"
+
+  - text: "Uzun ömürlü kullanım"
+    field: QUALITY
+    register: neutral
+    context: "Long-lasting durability"
+
+  - text: "ISO sertifikalı"
+    field: QUALITY
+    register: formal
+    context: "ISO certified quality"
+
+  - text: "Kalite kontrollü"
+    field: QUALITY
+    register: formal
+    context: "Quality controlled"
+
+  - text: "Mükemmeliyetin adresi"
+    field: QUALITY
+    register: neutral
+    context: "Address of perfection"
+
+  - text: "Detaylara önem veriyoruz"
+    field: QUALITY
+    register: neutral
+    context: "Attention to detail"
+
+  - text: "Seçkin ürünler"
+    field: QUALITY
+    register: formal
+    context: "Distinguished products"
+
+  # ============================================================================
+  # FIELD 6: SPEED - Hız ve teslimat ifadeleri
+  # ============================================================================
+  - text: "Hızlı teslimat"
+    field: SPEED
+    register: neutral
+    context: "Fast delivery promise"
+
+  - text: "Aynı gün kargo"
+    field: SPEED
+    register: neutral
+    context: "Same-day shipping"
+
+  - text: "Anında teslimat"
+    field: SPEED
+    register: casual
+    context: "Instant delivery"
+
+  - text: "24 saat içinde kapınızda"
+    field: SPEED
+    register: neutral
+    context: "24-hour delivery promise"
+
+  - text: "Ekspres gönderim"
+    field: SPEED
+    register: neutral
+    context: "Express shipping option"
+
+  - text: "Dakikalar içinde hazır"
+    field: SPEED
+    register: casual
+    context: "Ready in minutes"
+
+  - text: "Hemen teslim al"
+    field: SPEED
+    register: casual
+    context: "Immediate pickup"
+
+  - text: "Jet hızında teslimat"
+    field: SPEED
+    register: casual
+    context: "Jet-fast delivery colloquial"
+
+  - text: "Hızlı ve güvenli"
+    field: SPEED
+    register: neutral
+    context: "Fast and secure"
+
+  - text: "Siparişin yolda!"
+    field: SPEED
+    register: casual
+    context: "Order on its way notification"
+
+  - text: "Bugün sipariş, yarın teslim"
+    field: SPEED
+    register: neutral
+    context: "Next-day delivery promise"
+
+  - text: "En hızlı teslimat garantisi"
+    field: SPEED
+    register: formal
+    context: "Fastest delivery guarantee"
+
+  - text: "Bekletmeden gönderim"
+    field: SPEED
+    register: neutral
+    context: "No-wait shipping"
+
+  - text: "30 dakikada kapınızda"
+    field: SPEED
+    register: casual
+    context: "30-minute delivery"
+
+  - text: "Hız bizim işimiz"
+    field: SPEED
+    register: casual
+    context: "Speed is our business tagline"
+
+  # ============================================================================
+  # FIELD 7: SIMPLICITY - Kolaylık ve basitlik ifadeleri
+  # ============================================================================
+  - text: "Kolay ve hızlı alışveriş"
+    field: SIMPLICITY
+    register: neutral
+    context: "Easy and fast shopping"
+
+  - text: "Tek tıkla sipariş"
+    field: SIMPLICITY
+    register: casual
+    context: "One-click ordering"
+
+  - text: "Zahmetsiz deneyim"
+    field: SIMPLICITY
+    register: neutral
+    context: "Effortless experience"
+
+  - text: "Sadece 3 adımda tamamla"
+    field: SIMPLICITY
+    register: neutral
+    context: "Complete in 3 steps"
+
+  - text: "Karmaşık işlemlere son!"
+    field: SIMPLICITY
+    register: casual
+    context: "End to complicated processes"
+
+  - text: "Kullanımı çok kolay"
+    field: SIMPLICITY
+    register: casual
+    context: "Very easy to use"
+
+  - text: "Basit ve anlaşılır"
+    field: SIMPLICITY
+    register: neutral
+    context: "Simple and clear"
+
+  - text: "Herkes için tasarlandı"
+    field: SIMPLICITY
+    register: neutral
+    context: "Designed for everyone"
+
+  - text: "Hiçbir teknik bilgi gerektirmez"
+    field: SIMPLICITY
+    register: neutral
+    context: "No technical knowledge required"
+
+  - text: "Sorunsuz kurulum"
+    field: SIMPLICITY
+    register: neutral
+    context: "Hassle-free setup"
+
+  - text: "Pratik çözümler"
+    field: SIMPLICITY
+    register: neutral
+    context: "Practical solutions"
+
+  - text: "Sezgisel tasarım"
+    field: SIMPLICITY
+    register: formal
+    context: "Intuitive design"
+
+  - text: "İşinizi kolaylaştırır"
+    field: SIMPLICITY
+    register: neutral
+    context: "Makes your work easier"
+
+  - text: "Hayatı kolaylaştıran"
+    field: SIMPLICITY
+    register: casual
+    context: "Life-simplifying"
+
+  - text: "Anında başla"
+    field: SIMPLICITY
+    register: casual
+    context: "Start instantly"
+
+  # ============================================================================
+  # FIELD 8: INNOVATION - Yenilik ve teknoloji ifadeleri
+  # ============================================================================
+  - text: "Son teknoloji ürünler"
+    field: INNOVATION
+    register: neutral
+    context: "Latest technology products"
+
+  - text: "Yenilikçi çözümler"
+    field: INNOVATION
+    register: formal
+    context: "Innovative solutions"
+
+  - text: "Geleceğin teknolojisi"
+    field: INNOVATION
+    register: neutral
+    context: "Technology of the future"
+
+  - text: "Yapay zeka destekli"
+    field: INNOVATION
+    register: neutral
+    context: "AI-powered feature"
+
+  - text: "Akıllı özellikler"
+    field: INNOVATION
+    register: neutral
+    context: "Smart features"
+
+  - text: "Türkiye'de bir ilk!"
+    field: INNOVATION
+    register: casual
+    context: "First in Turkey claim"
+
+  - text: "Devrim niteliğinde"
+    field: INNOVATION
+    register: formal
+    context: "Revolutionary product/service"
+
+  - text: "Yeni nesil teknoloji"
+    field: INNOVATION
+    register: neutral
+    context: "Next-generation technology"
+
+  - text: "İnovasyon öncüsü"
+    field: INNOVATION
+    register: formal
+    context: "Innovation pioneer"
+
+  - text: "En son güncelleme"
+    field: INNOVATION
+    register: neutral
+    context: "Latest update"
+
+  - text: "Çığır açan yenilik"
+    field: INNOVATION
+    register: formal
+    context: "Groundbreaking innovation"
+
+  - text: "Geleceğe hazır"
+    field: INNOVATION
+    register: neutral
+    context: "Future-ready"
+
+  - text: "Akıllı tasarım"
+    field: INNOVATION
+    register: neutral
+    context: "Smart design"
+
+  - text: "Teknolojinin zirvesi"
+    field: INNOVATION
+    register: neutral
+    context: "Peak of technology"
+
+  - text: "Dijital dönüşüm"
+    field: INNOVATION
+    register: formal
+    context: "Digital transformation"
+
+  # ============================================================================
+  # FIELD 9: EXCLUSIVITY - Ayricalik ve ozellik ifadeleri
+  # ============================================================================
+  - text: "Sadece üyelere özel"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Members-only exclusive"
+
+  - text: "Ayrıcalıklı erişim"
+    field: EXCLUSIVITY
+    register: formal
+    context: "Privileged access"
+
+  - text: "VIP müşterilere özel"
+    field: EXCLUSIVITY
+    register: formal
+    context: "VIP customer exclusive"
+
+  - text: "Sınırlı sayıda üretim"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Limited edition production"
+
+  - text: "Size özel teklif"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Exclusive offer for you"
+
+  - text: "Özel koleksiyon"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Special collection"
+
+  - text: "İlk sizde olsun"
+    field: EXCLUSIVITY
+    register: casual
+    context: "Be the first to have it"
+
+  - text: "Sadece seçkinlere"
+    field: EXCLUSIVITY
+    register: formal
+    context: "For the select few"
+
+  - text: "Abone avantajları"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Subscriber benefits"
+
+  - text: "Erken erişim fırsatı"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Early access opportunity"
+
+  - text: "Özel davet"
+    field: EXCLUSIVITY
+    register: formal
+    context: "Exclusive invitation"
+
+  - text: "Sadece burada"
+    field: EXCLUSIVITY
+    register: casual
+    context: "Only here"
+
+  - text: "Kişiye özel deneyim"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Personalized experience"
+
+  - text: "Premium üyelik ayrıcalıkları"
+    field: EXCLUSIVITY
+    register: formal
+    context: "Premium membership privileges"
+
+  - text: "Limitli edisyon"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Limited edition"
+
+  # ============================================================================
+  # FIELD 10: COMMUNITY - Topluluk ve birliktelik ifadeleri
+  # ============================================================================
+  - text: "Bize katıl!"
+    field: COMMUNITY
+    register: casual
+    context: "Join us CTA"
+
+  - text: "Birlikte daha güçlü"
+    field: COMMUNITY
+    register: neutral
+    context: "Stronger together"
+
+  - text: "Ailemize hoş geldin"
+    field: COMMUNITY
+    register: casual
+    context: "Welcome to our family"
+
+  - text: "Topluluğumuzun bir parçası ol"
+    field: COMMUNITY
+    register: neutral
+    context: "Become part of our community"
+
+  - text: "Milyonlarca kullanıcıyla tanış"
+    field: COMMUNITY
+    register: casual
+    context: "Meet millions of users"
+
+  - text: "Deneyimlerini paylaş"
+    field: COMMUNITY
+    register: casual
+    context: "Share your experiences"
+
+  - text: "Birlikte başaralım"
+    field: COMMUNITY
+    register: casual
+    context: "Let's succeed together"
+
+  - text: "Sen de aramıza katıl"
+    field: COMMUNITY
+    register: casual
+    context: "You join us too"
+
+  - text: "Büyüyen aile"
+    field: COMMUNITY
+    register: neutral
+    context: "Growing family"
+
+  - text: "Sosyal ağımıza bağlan"
+    field: COMMUNITY
+    register: neutral
+    context: "Connect to our social network"
+
+  - text: "Fikirlerini paylaş"
+    field: COMMUNITY
+    register: casual
+    context: "Share your ideas"
+
+  - text: "Topluluk gücü"
+    field: COMMUNITY
+    register: neutral
+    context: "Community power"
+
+  - text: "Hep birlikte"
+    field: COMMUNITY
+    register: casual
+    context: "All together"
+
+  - text: "Seninle beraber"
+    field: COMMUNITY
+    register: casual
+    context: "Together with you"
+
+  - text: "Birlikte keşfet"
+    field: COMMUNITY
+    register: casual
+    context: "Discover together"
+
+# ============================================================================
+# METADATA
+# ============================================================================
+metadata:
+  locale: tr-TR
+  language: Turkish
+  region: Turkey
+  total_expressions: 150
+  fields:
+    - name: URGENCY
+      turkish_name: Aciliyet
+      count: 15
+    - name: VALUE
+      turkish_name: Deger
+      count: 15
+    - name: TRUST
+      turkish_name: Guven
+      count: 15
+    - name: SUCCESS
+      turkish_name: Basari
+      count: 15
+    - name: QUALITY
+      turkish_name: Kalite
+      count: 15
+    - name: SPEED
+      turkish_name: Hiz
+      count: 15
+    - name: SIMPLICITY
+      turkish_name: Kolaylik
+      count: 15
+    - name: INNOVATION
+      turkish_name: Yenilik
+      count: 15
+    - name: EXCLUSIVITY
+      turkish_name: Ayricalik
+      count: 15
+    - name: COMMUNITY
+      turkish_name: Topluluk
+      count: 15
+  sources:
+    - "Turkish e-commerce platforms (Trendyol, Hepsiburada, n11, GittiGidiyor)"
+    - "Turkish brand advertising campaigns 2024-2025"
+    - "Turkish digital marketing practices"
+    - "Native Turkish marketing corpus"
+  notes:
+    - "All expressions use proper Turkish characters (ç, ğ, ı, ö, ş, ü, İ, Ç, Ğ, Ö, Ş, Ü)"
+    - "Turkish distinguishes dotted (i/İ) and dotless (ı/I) letters"
+    - "Expressions reflect Turkish e-commerce culture and communication style"
+    - "Register indicates formality level: casual (informal), neutral (standard), formal (business)"
+  research_date: "2025-02"
+  version: "1.0.0"

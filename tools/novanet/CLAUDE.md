@@ -17,7 +17,7 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 |------|----------|--------|
 | Read | `data`, `meta`, `overlay`, `query` | Implemented (faceted Cypher) |
 | Write | `node create/edit/delete`, `arc create/delete` | Implemented (label validation) |
-| Schema | `schema generate`, `schema validate` | Implemented (10 artifacts) |
+| Schema | `schema generate`, `schema validate` | Implemented (12 artifacts) |
 | Docs | `doc generate`, `doc generate --list` | Implemented (12 views) |
 | Search | `search --query=... [--kind=...]` | Implemented (fulltext + property) |
 | Locale | `locale list`, `locale import` | Implemented |
@@ -25,7 +25,7 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 | Filter | `filter build` | Implemented (JSON stdin, Studio subprocess) |
 | TUI | `tui` | Galaxy theme, mission control, search, detail, arc explorer, CRUD dialogs, dashboard, logo, command palette, help overlay, boot animation, effects engine, onboarding |
 
-**246 tests pass** (`cargo test`). Zero clippy warnings.
+**499 tests pass** (`cargo test`). Zero clippy warnings.
 
 **Testing stack:**
 - `insta` — Snapshot testing (5 generator outputs)
@@ -126,7 +126,7 @@ cargo run -- db migrate                           # Run migrations
 cargo run -- db reset                             # Drop + seed
 
 # Schema (YAML, no Neo4j)
-cargo run -- schema generate                      # All 7 artifacts from YAML
+cargo run -- schema generate                      # All 12 artifacts from YAML
 cargo run -- schema generate --dry-run            # Preview without writing
 cargo run -- schema validate                      # Validate YAML coherence
 cargo run -- schema validate --strict             # Fail on warnings
@@ -146,7 +146,7 @@ cargo run -- tui                                  # Interactive terminal UI
 # Quality
 cargo clippy -- -D warnings    # Zero warnings policy
 cargo fmt --check              # Formatting check
-cargo nextest run              # 246 tests (fast, parallel)
+cargo nextest run              # 499 tests (fast, parallel)
 cargo test -- --ignored        # Neo4j integration tests (requires running Neo4j)
 
 # Security & auditing
@@ -190,12 +190,12 @@ src/
     doc.rs        doc generate/list (YAML views → Mermaid)
     filter.rs     filter build (JSON stdin → Cypher stdout)
   parsers/        YAML parsers (yaml_node, relations, taxonomy, organizing, views)
-  generators/     Code generators (organizing, kind, arc_schema, layer, mermaid, view_mermaid, autowire, hierarchy)
+  generators/     Code generators (organizing, kind, arc_schema, layer, mermaid, view_mermaid, autowire, hierarchy, colors, icons, visual_encoding, views, tui_icons)
   tui/            Terminal UI v2 — rebuilt for stability (feature-gated)
     mod.rs        Entry point (terminal setup + event loop)
     app.rs        State machine (NavMode, Focus, tree/yaml scroll, collapse state)
     data.rs       TaxonomyTree (Realm > Layer > Kind + ArcFamily > ArcKind)
-    theme.rs      Visual encoding from taxonomy.yaml (realm/layer/trait/arc colors)
+    theme.rs      Visual encoding + Icons (colors from taxonomy.yaml, icons from visual-encoding.yaml)
     ui.rs         3-panel layout (Tree | Info | YAML) + search/help overlays
 ```
 
@@ -210,6 +210,12 @@ src/
   - Path validation: file must be at `models/node-kinds/{realm}/{layer}/{name}.yaml`
   - Generators read realm/layer from YAML content, validate against path
   - v10.6: 2 realms (global, tenant), 9 layers total
+- **Icons source of truth (v10.6)**: `visual-encoding.yaml` → `icons:` section
+  - Dual format: `web` (Lucide for Studio) + `terminal` (Unicode for TUI)
+  - Categories: realms, layers, traits, arc_families, states, navigation, quality, modes
+  - TypeScript generated: `packages/core/src/graph/visual-encoding.ts` (ICONS export)
+  - Rust compile-time: `tools/novanet/src/tui/icons.rs` (generated constants)
+  - Runtime fallback: `Theme::with_root()` loads from YAML with graceful defaults
 
 ## TUI Keybindings
 
@@ -228,8 +234,9 @@ Exit:        q or Esc
 ## Dependencies on Monorepo
 
 This binary reads YAML from `packages/core/models/` (node-kinds, arc-kinds, taxonomy, views)
-and writes to `packages/db/seed/` (Cypher), `packages/core/src/` (TypeScript), and
-`packages/core/models/docs/` (Mermaid). It does NOT depend on any npm packages at build time.
+and writes to `packages/db/seed/` (Cypher), `packages/core/src/` (TypeScript),
+`packages/core/models/docs/` (Mermaid), and `tools/novanet/src/tui/icons.rs` (Rust).
+It does NOT depend on any npm packages at build time.
 
 **v10.6 visual encoding**: The `taxonomy.yaml` file is the source of truth for:
 - Colors (realms, layers, traits, arc families)

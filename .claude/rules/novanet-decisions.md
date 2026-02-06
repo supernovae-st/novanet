@@ -210,6 +210,56 @@ v10.6 (2 realms):  global / tenant
 - `project` -> `tenant` (merge into tenant)
 - All node types from both organization and project now live under tenant
 
+## ADR-013: Icons Source of Truth
+
+**Status**: Approved (v10.6)
+
+**Decision**: Centralize all icons in `visual-encoding.yaml`, providing both web (Lucide) and terminal (Unicode) variants.
+
+**Location**: `packages/core/models/visual-encoding.yaml` → `icons:` section
+
+**Structure**:
+```yaml
+icons:
+  realms:           # global, tenant
+  layers:           # config, locale-knowledge, seo, foundation, structure, semantic, instruction, output
+  traits:           # invariant, localized, knowledge, derived, job
+  arc_families:     # ownership, localization, semantic, generation, mining
+  states:           # no_connection, no_kinds, no_results, no_instances, loading, success, error, warning
+  navigation:       # expanded, collapsed, leaf, search, help, back, copy
+  quality:          # complete, partial, empty, required, optional, chart
+  modes:            # meta, data, overlay, query, atlas, audit
+
+# Each icon has:
+  category:
+    key:
+      web: "lucide-icon-name"    # For Studio/web
+      terminal: "◉"              # Unicode for TUI
+      description: "..."
+```
+
+**Generated artifacts**:
+- `tools/novanet/src/tui/theme.rs` → `Icons` struct (loaded at runtime)
+- Future: `packages/core/src/config/icons.generated.ts` (TypeScript constants)
+
+**Rationale**:
+- Single source of truth for ALL icons (no duplicates in code)
+- Dual format: web (Lucide) + terminal (Unicode) for different contexts
+- TUI loads icons from YAML at startup with fallback defaults
+- Consistent iconography across Studio and TUI
+- Colorblind-safe: icons supplement color, not replace it
+
+**Categories explained**:
+| Category | Purpose | Example |
+|----------|---------|---------|
+| realms | Where node lives | ◉ global, ◎ tenant |
+| layers | Functional category | ⚙ config, ◆ semantic |
+| traits | Locale behavior | ■ invariant, □ localized |
+| states | UI empty states | ◐ loading, ∅ no_kinds |
+| navigation | Tree controls | ▼ expanded, ▶ collapsed |
+| quality | Data completeness | ● complete, ◐ partial |
+| modes | Navigation modes | M meta, D data |
+
 ## Decision Log
 
 | ADR | Version | Summary |
@@ -226,6 +276,7 @@ v10.6 (2 realms):  global / tenant
 | 010 | v9.5 | Skill-first DX |
 | 011 | v10.5 | Company project pattern (superseded by 012) |
 | 012 | v10.6 | 2-Realm Architecture |
+| 013 | v10.6 | Icons source of truth |
 
 ## References
 

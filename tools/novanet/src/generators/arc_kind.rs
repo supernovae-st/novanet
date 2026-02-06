@@ -1,16 +1,17 @@
 //! Generate ArcKind meta-nodes + cypher_pattern + FROM/TO_KIND + IN_FAMILY relations.
 //!
-//! Reads `relations.yaml`, filters out inverse relations, and produces idempotent
-//! MERGE statements for ArcKind nodes plus hierarchy and arc-schema relationships.
+//! Reads individual arc-kind YAML files from `packages/core/models/arc-kinds/{family}/*.yaml`,
+//! filters out inverse relations, and produces idempotent MERGE statements for ArcKind nodes
+//! plus hierarchy and arc-schema relationships.
 //!
-//! Includes temperature_threshold from individual arc-kind YAML files
-//!       (packages/core/models/arc-kinds/{family}/*.yaml)
+//! v10.7: Migrated from deprecated `relations.yaml` to individual arc-kind YAML files.
 //!
 //! Output target: `packages/db/seed/02-arc-kinds.cypher`
 
 use super::cypher_utils::{cypher_list_owned, cypher_str};
 use crate::parsers::arcs;
 use crate::parsers::arcs::{ArcDef, ArcsDocument, Cardinality};
+use crate::parsers::yaml_node;
 use std::collections::HashMap;
 use std::fmt::Write;
 use std::path::Path;
@@ -56,6 +57,46 @@ fn cardinality_key(c: Cardinality) -> &'static str {
     }
 }
 
+/// Compute arc scope based on source/target kind realms.
+/// Returns "intra_realm" if all sources and targets are in the same realm,
+/// "cross_realm" if they span different realms, or None if realms can't be determined.
+fn compute_scope(rel: &ArcDef, kind_realms: &HashMap<String, String>) -> Option<&'static str> {
+    let source_realms: Vec<&String> = rel
+        .source
+        .labels()
+        .iter()
+        .filter_map(|l| kind_realms.get(*l))
+        .collect();
+    let target_realms: Vec<&String> = rel
+        .target
+        .labels()
+        .iter()
+        .filter_map(|l| kind_realms.get(*l))
+        .collect();
+
+    // If we couldn't find realms for all source/target kinds, return None
+    if source_realms.len() != rel.source.len() || target_realms.len() != rel.target.len() {
+        return None;
+    }
+
+    // Check if all realms are the same
+    let all_realms: Vec<&String> = source_realms
+        .iter()
+        .chain(target_realms.iter())
+        .copied()
+        .collect();
+    if all_realms.is_empty() {
+        return None;
+    }
+
+    let first = all_realms[0];
+    if all_realms.iter().all(|r| *r == first) {
+        Some("intra_realm")
+    } else {
+        Some("cross_realm")
+    }
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Generator
 // ─────────────────────────────────────────────────────────────────────────────
@@ -68,14 +109,25 @@ impl super::Generator for ArcKindGenerator {
     }
 
     fn generate(&self, root: &Path) -> crate::Result<String> {
-        let doc = arcs::load_arcs(root)?;
-        // Load temperature thresholds from individual arc-kind YAML files
+        // v10.7: Load from individual arc-kind YAML files (replaces deprecated relations.yaml)
+        let doc = arcs::load_arc_kinds_from_files(root)?;
+        // Load temperature thresholds separately (for backward compatibility)
         let temps = arcs::load_arc_temperatures(root)?;
-        generate_arc_schema(&doc, &temps)
+        // Load all nodes to build Kind -> realm map for scope computation
+        let nodes = yaml_node::load_all_nodes(root)?;
+        let kind_realms: HashMap<String, String> = nodes
+            .into_iter()
+            .map(|n| (n.def.name.clone(), n.realm))
+            .collect();
+        generate_arc_schema(&doc, &temps, &kind_realms)
     }
 }
 
-fn generate_arc_schema(doc: &ArcsDocument, temps: &HashMap<String, f32>) -> crate::Result<String> {
+fn generate_arc_schema(
+    doc: &ArcsDocument,
+    temps: &HashMap<String, f32>,
+    kind_realms: &HashMap<String, String>,
+) -> crate::Result<String> {
     // Separate forward (non-inverse) from inverse relations
     let forward: Vec<&ArcDef> = doc.arcs.iter().filter(|r| !r.is_inverse()).collect();
 
@@ -123,9 +175,15 @@ fn generate_arc_schema(doc: &ArcsDocument, temps: &HashMap<String, f32>) -> crat
         let var = format!("ak_{key}");
         let dn = cypher_str(&display_name(key));
         let llm = cypher_str(&rel.llm_context);
+        let family = &rel.family.to_string();
+        let scope = compute_scope(rel, kind_realms);
         let card = cardinality_key(rel.cardinality);
         let self_ref = rel.is_self_referential.unwrap_or(false);
-        let inv = inverse_names.get(key.as_str());
+        // Prefer the direct inverse_name field (from arc-kind YAML), fall back to map (relations.yaml)
+        let inv: Option<&str> = rel
+            .inverse_name
+            .as_deref()
+            .or_else(|| inverse_names.get(key.as_str()).copied());
         let props: Vec<String> = rel.properties.clone().unwrap_or_default();
         let pattern = cypher_str(&cypher_pattern(rel));
 
@@ -133,6 +191,12 @@ fn generate_arc_schema(doc: &ArcsDocument, temps: &HashMap<String, f32>) -> crat
         writeln!(out, "ON CREATE SET").unwrap();
         writeln!(out, "  {var}.display_name = '{dn}',").unwrap();
         writeln!(out, "  {var}.llm_context = '{llm}',").unwrap();
+        writeln!(out, "  {var}.family = '{family}',").unwrap();
+        if let Some(s) = scope {
+            writeln!(out, "  {var}.scope = '{s}',").unwrap();
+        } else {
+            writeln!(out, "  {var}.scope = null,").unwrap();
+        }
         writeln!(out, "  {var}.cardinality = '{card}',").unwrap();
         writeln!(out, "  {var}.is_self_referential = {self_ref},").unwrap();
         if let Some(inv_name) = inv {
@@ -157,6 +221,12 @@ fn generate_arc_schema(doc: &ArcsDocument, temps: &HashMap<String, f32>) -> crat
         writeln!(out, "ON MATCH SET").unwrap();
         writeln!(out, "  {var}.display_name = '{dn}',").unwrap();
         writeln!(out, "  {var}.llm_context = '{llm}',").unwrap();
+        writeln!(out, "  {var}.family = '{family}',").unwrap();
+        if let Some(s) = scope {
+            writeln!(out, "  {var}.scope = '{s}',").unwrap();
+        } else {
+            writeln!(out, "  {var}.scope = null,").unwrap();
+        }
         writeln!(out, "  {var}.cardinality = '{card}',").unwrap();
         writeln!(out, "  {var}.is_self_referential = {self_ref},").unwrap();
         if let Some(inv_name) = inv {
@@ -299,6 +369,7 @@ mod tests {
             properties: None,
             is_self_referential: None,
             inverse_of: None,
+            inverse_name: None,
         }
     }
 
@@ -313,7 +384,23 @@ mod tests {
             properties: None,
             is_self_referential: None,
             inverse_of: Some(inverse_of.to_string()),
+            inverse_name: None,
         }
+    }
+
+    /// Build a mock kind_realms map for tests.
+    fn mock_kind_realms() -> HashMap<String, String> {
+        let mut m = HashMap::new();
+        // Common test kinds - all in tenant realm for simplicity
+        m.insert("Project".to_string(), "tenant".to_string());
+        m.insert("Page".to_string(), "tenant".to_string());
+        m.insert("Block".to_string(), "tenant".to_string());
+        m.insert("Entity".to_string(), "tenant".to_string());
+        m.insert("PageL10n".to_string(), "tenant".to_string());
+        m.insert("BlockL10n".to_string(), "tenant".to_string());
+        // Locale is in global realm (cross_realm test)
+        m.insert("Locale".to_string(), "global".to_string());
+        m
     }
 
     #[test]
@@ -394,7 +481,7 @@ mod tests {
             examples: None,
         };
 
-        let cypher = generate_arc_schema(&doc, &HashMap::new()).unwrap();
+        let cypher = generate_arc_schema(&doc, &HashMap::new(), &mock_kind_realms()).unwrap();
 
         // Header
         assert!(cypher.contains("2 ArcKind nodes"));
@@ -483,7 +570,7 @@ mod tests {
             examples: None,
         };
 
-        let cypher = generate_arc_schema(&doc, &HashMap::new()).unwrap();
+        let cypher = generate_arc_schema(&doc, &HashMap::new(), &mock_kind_realms()).unwrap();
 
         // 2 FROM_KIND (Page, Block)
         let from_kind = cypher
@@ -520,7 +607,7 @@ mod tests {
             examples: None,
         };
 
-        let cypher = generate_arc_schema(&doc, &HashMap::new()).unwrap();
+        let cypher = generate_arc_schema(&doc, &HashMap::new(), &mock_kind_realms()).unwrap();
         assert!(cypher.contains("ak_FALLBACK_TO.is_self_referential = true"));
     }
 
@@ -540,26 +627,29 @@ mod tests {
             .generate(root)
             .expect("should generate arc schema cypher");
 
-        // v10.6: Count non-inverse relations (58 total - 5 inverse = 53)
+        // v10.7.1: Count non-inverse relations (92 total after geographic arcs + 3 orphan fixes)
         let ak_merges = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains(":Meta:ArcKind"))
             .count();
-        assert_eq!(ak_merges, 53, "expected 53 ArcKind MERGE statements (v10.6: 58 - 5 inverse)");
+        assert_eq!(
+            ak_merges, 92,
+            "expected 92 ArcKind MERGE statements (v10.7.1: full arc-kinds migration)"
+        );
 
         // HAS_ARC_KIND relationships match ArcKind count
         let has_ak = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:HAS_ARC_KIND]"))
             .count();
-        assert_eq!(has_ak, 53, "expected 53 HAS_ARC_KIND relationships");
+        assert_eq!(has_ak, 92, "expected 92 HAS_ARC_KIND relationships");
 
         // IN_FAMILY relationships match ArcKind count
         let in_family = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_FAMILY]"))
             .count();
-        assert_eq!(in_family, 53, "expected 53 IN_FAMILY relationships");
+        assert_eq!(in_family, 92, "expected 92 IN_FAMILY relationships");
 
         // Family distribution (non-inverse counts)
         // Section 2 MATCH lines have ArcFamily first: "MATCH (af:ArcFamily ..."
@@ -579,10 +669,10 @@ mod tests {
         let generation = count_family("generation");
         let mining = count_family("mining");
 
-        // v10.6: Total non-inverse arcs = 53 (added Culture/Market arcs)
+        // v10.7.1: Total non-inverse arcs = 92 (ownership=39, semantic=19, localization=17, generation=15, mining=2)
         assert!(
-            ownership + localization + semantic + generation + mining == 53,
-            "family counts should sum to 53: o={ownership} l={localization} s={semantic} g={generation} m={mining}"
+            ownership + localization + semantic + generation + mining == 92,
+            "family counts should sum to 92: o={ownership} l={localization} s={semantic} g={generation} m={mining}"
         );
 
         // Spot checks — specific ArcKinds
@@ -612,8 +702,8 @@ mod tests {
             }
         }
 
-        // v10.6: Header reflects count (53 with Culture/Market arcs)
-        assert!(cypher.contains("53 ArcKind nodes"));
+        // v10.7.1: Header reflects count (92 after full arc-kinds migration)
+        assert!(cypher.contains("92 ArcKind nodes"));
     }
 
     /// Snapshot test for a minimal ArcSchema generator output.
@@ -651,7 +741,7 @@ mod tests {
             examples: None,
         };
 
-        let cypher = generate_arc_schema(&doc, &HashMap::new()).unwrap();
+        let cypher = generate_arc_schema(&doc, &HashMap::new(), &mock_kind_realms()).unwrap();
         insta::assert_snapshot!(cypher);
     }
 }

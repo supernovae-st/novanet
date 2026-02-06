@@ -1,6 +1,6 @@
 // ============================================================================
 // SLUGIFICATION SEED - Generated from ATH 2-rules-slug
-// Generated: 2026-02-05 21:35:04
+// Generated: 2026-02-06 13:07:27
 // Source: /Users/thibaut/Projects/traduction_ai/ath-know-l10n/outputs/localization-data/2-rules-slug/
 // Locales: 200
 // ============================================================================
@@ -51,7 +51,7 @@ SET sr.display_name = 'Latin Transform',
     sr.case_handling = 'lowercase',
     sr.spaces = 'hyphen',
     sr.special_chars = 'removed',
-    sr.char_transforms = '{"ö":"oe","ä":"ae","ß":"ss","ü":"ue"}',
+    sr.char_transforms = '{"ö":"oe","ü":"ue","ä":"ae","ß":"ss"}',
     sr.romanization_systems = 'null',
     sr.locale_count = 3,
     sr.locale_examples = '["de-AT","de-CH","de-DE"]',
@@ -84,7 +84,7 @@ SET sr.display_name = 'Romanized',
     sr.spaces = 'hyphen',
     sr.special_chars = 'removed',
     sr.char_transforms = 'null',
-    sr.romanization_systems = '{"zh":"pinyin","ko":"revised","ja":"hepburn"}',
+    sr.romanization_systems = '{"ja":"hepburn","zh":"pinyin","ko":"revised"}',
     sr.locale_count = 3,
     sr.locale_examples = '["zh-CN","zh-SG","zh-TH"]',
     sr.llm_context = 'The Romanized rule produces ASCII slugs. Diacritics are removed via NFD normalization. Non-Latin scripts are romanized via standard systems (Hepburn, Pinyin, Revised). Used by 3 locales including zh-CN, zh-SG, zh-TH.';
@@ -97,7 +97,7 @@ MERGE (s:Slugification {key: 'af-ZA'})
 SET s.display_name = 'Afrikaans (South Africa) Slugification',
     s.description = 'URL slug generation rules for af-ZA',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"conjunction":["en","of","maar","as"],"preposition":["in","op","van","met","na","vir","uit","by","tot","oor"],"adverb":["nie","ook","dan"],"verb":["is","het","was","sal","kan"],"pronoun":["wat","wie","dit","ons"],"article":["die"]}',
+    s.stopwords = '{"conjunction":["en","of","maar","as"],"preposition":["in","op","van","met","na","vir","uit","by","tot","oor"],"verb":["is","het","was","sal","kan"],"adverb":["nie","ook","dan"],"pronoun":["wat","wie","dit","ons"],"article":["die"]}',
     s.stopwords_count = 27,
     s.regional_additions = '[{"word":"","category":"nie","reason":"adverb"},{"word":"","category":"ook","reason":"adverb"},{"word":"","category":"as","reason":"conjunction"},{"word":"","category":"dan","reason":"adverb"}]',
     s.script_config = 'null',
@@ -106,13 +106,13 @@ SET s.display_name = 'Afrikaans (South Africa) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/af-ZA.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for Afrikaans (South Africa). Uses latin_strip rule. 27 stopwords across 6 categories including conjunction, preposition, adverb. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for Afrikaans (South Africa). Uses latin_strip rule. 27 stopwords across 6 categories including conjunction, preposition, verb. Has 4 regional additions.';
 
 MERGE (s:Slugification {key: 'ar-AE'})
 SET s.display_name = 'Arabic (UAE) Slugification',
     s.description = 'URL slug generation rules for ar-AE',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"preposition":["من","في","على","إلى","عن","مع"],"currency":["درهم"],"demonstrative":["هذا","هذه","ذلك"],"conjunction":["و","أو","أن"],"verb":["كان"],"pronoun":["هو","هي"]}',
+    s.stopwords = '{"demonstrative":["هذا","هذه","ذلك"],"currency":["درهم"],"preposition":["من","في","على","إلى","عن","مع"],"conjunction":["و","أو","أن"],"pronoun":["هو","هي"],"verb":["كان"]}',
     s.stopwords_count = 16,
     s.regional_additions = '[{"word":"","category":"الإمارات","reason":"proper noun"},{"word":"","category":"الإماراتي","reason":"adjective"},{"word":"","category":"الإماراتية","reason":"adjective"},{"word":"","category":"دولة","reason":"noun"},{"word":"","category":"درهم","reason":"currency"}]',
     s.script_config = '{"primary_script":"arabic","diacritic_handling":"remove_tashkeel","numeral_handling":"preserve_arabic_indic","special_chars":null}',
@@ -121,7 +121,7 @@ SET s.display_name = 'Arabic (UAE) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ar-AE.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for Arabic (UAE). Uses native_script rule. 16 stopwords across 6 categories including preposition, currency, demonstrative. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for Arabic (UAE). Uses native_script rule. 16 stopwords across 6 categories including demonstrative, currency, preposition. Has 5 regional additions.';
 
 MERGE (s:Slugification {key: 'ar-BH'})
 SET s.display_name = 'AR (BH) Slugification',
@@ -157,7 +157,7 @@ MERGE (s:Slugification {key: 'ar-EG'})
 SET s.display_name = 'AR (EG) Slugification',
     s.description = 'URL slug generation rules for ar-EG',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"negation":["لا"],"filler":["يعني"],"conjunction":["و","أو","ثم","عشان","علشان"],"pronoun":["هو","هي","هم"],"demonstrative":["هذا","هذه","ذلك","دي","ده","دول"],"verb":["كان","يكون"],"possessive":["بتاع","بتاعت"],"preposition":["في","من","على","إلى","عن","مع","زي"],"adverb":["كده"],"interrogative":["ازاي"]}',
+    s.stopwords = '{"conjunction":["و","أو","ثم","عشان","علشان"],"filler":["يعني"],"pronoun":["هو","هي","هم"],"possessive":["بتاع","بتاعت"],"negation":["لا"],"adverb":["كده"],"verb":["كان","يكون"],"demonstrative":["هذا","هذه","ذلك","دي","ده","دول"],"preposition":["في","من","على","إلى","عن","مع","زي"],"interrogative":["ازاي"]}',
     s.stopwords_count = 29,
     s.regional_additions = '[{"word":"","category":"دي","reason":"demonstrative"},{"word":"","category":"ده","reason":"demonstrative"},{"word":"","category":"دول","reason":"demonstrative"},{"word":"","category":"بتاع","reason":"possessive"},{"word":"","category":"بتاعت","reason":"possessive"},{"word":"","category":"كده","reason":"adverb"},{"word":"","category":"عشان","reason":"conjunction"},{"word":"","category":"علشان","reason":"conjunction"},{"word":"","category":"زي","reason":"preposition"},{"word":"","category":"يعني","reason":"filler"},{"word":"","category":"اللي","reason":"relative pronoun"},{"word":"","category":"ازاي","reason":"interrogative"}]',
     s.script_config = '{"primary_script":"arabic","diacritic_handling":null,"numeral_handling":null,"special_chars":null}',
@@ -166,13 +166,13 @@ SET s.display_name = 'AR (EG) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ar-EG.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for AR (EG). Uses native_script rule. 29 stopwords across 10 categories including negation, filler, conjunction. Has 12 regional additions.';
+    s.llm_context = 'URL slugification rules for AR (EG). Uses native_script rule. 29 stopwords across 10 categories including conjunction, filler, pronoun. Has 12 regional additions.';
 
 MERGE (s:Slugification {key: 'ar-IQ'})
 SET s.display_name = 'AR (IQ) Slugification',
     s.description = 'URL slug generation rules for ar-IQ',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"pronoun":["هو","هي","هم"],"demonstrative":["هذا","هذه","ذلك"],"article":["ال"],"preposition":["في","من","على","الى","عن","مع"],"adverb":["هواي"],"conjunction":["و","او","لكن"],"interrogative":["شلون","شنو"],"verb":["كان","يكون","اكو","ماكو"]}',
+    s.stopwords = '{"conjunction":["و","او","لكن"],"preposition":["في","من","على","الى","عن","مع"],"demonstrative":["هذا","هذه","ذلك"],"pronoun":["هو","هي","هم"],"adverb":["هواي"],"verb":["كان","يكون","اكو","ماكو"],"interrogative":["شلون","شنو"],"article":["ال"]}',
     s.stopwords_count = 23,
     s.regional_additions = '[{"word":"","category":"بغداد","reason":"place"},{"word":"","category":"شلون","reason":"interrogative"},{"word":"","category":"شنو","reason":"interrogative"},{"word":"","category":"هواي","reason":"adverb"},{"word":"","category":"اكو","reason":"verb"},{"word":"","category":"ماكو","reason":"verb"}]',
     s.script_config = '{"primary_script":"arabic","diacritic_handling":null,"numeral_handling":null,"special_chars":null}',
@@ -181,7 +181,7 @@ SET s.display_name = 'AR (IQ) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ar-IQ.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for AR (IQ). Uses native_script rule. 23 stopwords across 8 categories including pronoun, demonstrative, article. Has 6 regional additions.';
+    s.llm_context = 'URL slugification rules for AR (IQ). Uses native_script rule. 23 stopwords across 8 categories including conjunction, preposition, demonstrative. Has 6 regional additions.';
 
 MERGE (s:Slugification {key: 'ar-JO'})
 SET s.display_name = 'AR (JO) Slugification',
@@ -202,7 +202,7 @@ MERGE (s:Slugification {key: 'ar-KW'})
 SET s.display_name = 'AR (KW) Slugification',
     s.description = 'URL slug generation rules for ar-KW',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"currency":["دينار"],"preposition":["من","في","على","إلى","عن","مع"],"pronoun":["هو","هي"],"demonstrative":["هذا","هذه","ذلك"],"verb":["كان"],"conjunction":["و","أو","أن"]}',
+    s.stopwords = '{"conjunction":["و","أو","أن"],"verb":["كان"],"preposition":["من","في","على","إلى","عن","مع"],"pronoun":["هو","هي"],"demonstrative":["هذا","هذه","ذلك"],"currency":["دينار"]}',
     s.stopwords_count = 16,
     s.regional_additions = '[{"word":"","category":"الكويت","reason":"proper noun"},{"word":"","category":"الكويتي","reason":"adjective"},{"word":"","category":"الكويتية","reason":"adjective"},{"word":"","category":"دينار","reason":"currency"},{"word":"","category":"البلد","reason":"noun"}]',
     s.script_config = '{"primary_script":"arabic","diacritic_handling":"remove_tashkeel","numeral_handling":"preserve_arabic_indic","special_chars":null}',
@@ -211,13 +211,13 @@ SET s.display_name = 'AR (KW) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ar-KW.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for AR (KW). Uses native_script rule. 16 stopwords across 6 categories including currency, preposition, pronoun. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for AR (KW). Uses native_script rule. 16 stopwords across 6 categories including conjunction, verb, preposition. Has 5 regional additions.';
 
 MERGE (s:Slugification {key: 'ar-LB'})
 SET s.display_name = 'AR (LB) Slugification',
     s.description = 'URL slug generation rules for ar-LB',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"article":["ال"],"conjunction":["و","او","ان"],"pronoun":["هذا","هذه","هو","هي","شو"],"preposition":["في","من","الى","على","عن","مع"],"verb":["كان","يكون"],"adverb":["هيك","كتير","هلق","وين","كيف"]}',
+    s.stopwords = '{"preposition":["في","من","الى","على","عن","مع"],"pronoun":["هذا","هذه","هو","هي","شو"],"adverb":["هيك","كتير","هلق","وين","كيف"],"verb":["كان","يكون"],"conjunction":["و","او","ان"],"article":["ال"]}',
     s.stopwords_count = 22,
     s.regional_additions = '[{"word":"","category":"هيك","reason":"adverb"},{"word":"","category":"كتير","reason":"adverb"},{"word":"","category":"هلق","reason":"adverb"},{"word":"","category":"شو","reason":"pronoun"},{"word":"","category":"وين","reason":"adverb"},{"word":"","category":"كيف","reason":"adverb"}]',
     s.script_config = '{"primary_script":"arabic","diacritic_handling":null,"numeral_handling":"preserve_arabic_indic","special_chars":null}',
@@ -226,13 +226,13 @@ SET s.display_name = 'AR (LB) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ar-LB.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for AR (LB). Uses native_script rule. 22 stopwords across 6 categories including article, conjunction, pronoun. Has 6 regional additions.';
+    s.llm_context = 'URL slugification rules for AR (LB). Uses native_script rule. 22 stopwords across 6 categories including preposition, pronoun, adverb. Has 6 regional additions.';
 
 MERGE (s:Slugification {key: 'ar-LY'})
 SET s.display_name = 'AR (LY) Slugification',
     s.description = 'URL slug generation rules for ar-LY',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"pronoun":["هو","هي","هذا","هذه","ذلك"],"verb":["كان","يكون"],"adverb":["هناك","هكي","توا","برشا"],"article":["ال","الـ"],"conjunction":["و","أو","ثم","لكن"],"preposition":["في","من","إلى","على","عن","مع"]}',
+    s.stopwords = '{"adverb":["هناك","هكي","توا","برشا"],"verb":["كان","يكون"],"preposition":["في","من","إلى","على","عن","مع"],"conjunction":["و","أو","ثم","لكن"],"article":["ال","الـ"],"pronoun":["هو","هي","هذا","هذه","ذلك"]}',
     s.stopwords_count = 23,
     s.regional_additions = '[{"word":"","category":"باهي","reason":"adjective"},{"word":"","category":"هكي","reason":"adverb"},{"word":"","category":"توا","reason":"adverb"},{"word":"","category":"برشا","reason":"adverb"}]',
     s.script_config = '{"primary_script":"arabic","diacritic_handling":"remove_tashkeel","numeral_handling":null,"special_chars":null}',
@@ -241,13 +241,13 @@ SET s.display_name = 'AR (LY) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ar-LY.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for AR (LY). Uses native_script rule. 23 stopwords across 6 categories including pronoun, verb, adverb. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for AR (LY). Uses native_script rule. 23 stopwords across 6 categories including adverb, verb, preposition. Has 4 regional additions.';
 
 MERGE (s:Slugification {key: 'ar-MA'})
 SET s.display_name = 'AR (MA) Slugification',
     s.description = 'URL slug generation rules for ar-MA',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"pronoun":["هو","هي"],"interrogative":["فين","كيفاش","علاش","واش"],"conjunction":["و","أو","لكن"],"verb":["كان","يكون","غادي","راه"],"demonstrative":["هذا","هذه","ذلك"],"preposition":["في","من","إلى","على","عن","مع","بين"],"possessive":["ديال"],"article":["شي"]}',
+    s.stopwords = '{"pronoun":["هو","هي"],"demonstrative":["هذا","هذه","ذلك"],"conjunction":["و","أو","لكن"],"possessive":["ديال"],"preposition":["في","من","إلى","على","عن","مع","بين"],"article":["شي"],"interrogative":["فين","كيفاش","علاش","واش"],"verb":["كان","يكون","غادي","راه"]}',
     s.stopwords_count = 25,
     s.regional_additions = '[{"word":"","category":"ديال","reason":"possessive"},{"word":"","category":"فين","reason":"interrogative"},{"word":"","category":"كيفاش","reason":"interrogative"},{"word":"","category":"علاش","reason":"interrogative"},{"word":"","category":"شي","reason":"article"},{"word":"","category":"واش","reason":"interrogative"},{"word":"","category":"غادي","reason":"verb"},{"word":"","category":"راه","reason":"verb"}]',
     s.script_config = '{"primary_script":"arabic","diacritic_handling":null,"numeral_handling":null,"special_chars":null}',
@@ -256,7 +256,7 @@ SET s.display_name = 'AR (MA) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ar-MA.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for AR (MA). Uses native_script rule. 25 stopwords across 8 categories including pronoun, interrogative, conjunction. Has 8 regional additions.';
+    s.llm_context = 'URL slugification rules for AR (MA). Uses native_script rule. 25 stopwords across 8 categories including pronoun, demonstrative, conjunction. Has 8 regional additions.';
 
 MERGE (s:Slugification {key: 'ar-OM'})
 SET s.display_name = 'AR (OM) Slugification',
@@ -277,7 +277,7 @@ MERGE (s:Slugification {key: 'ar-QA'})
 SET s.display_name = 'AR (QA) Slugification',
     s.description = 'URL slug generation rules for ar-QA',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"conjunction":["ان","و","او"],"verb":["كان"],"currency":["ريال"],"preposition":["من","في","على","الى","عن"],"demonstrative":["هذا","هذه"]}',
+    s.stopwords = '{"demonstrative":["هذا","هذه"],"currency":["ريال"],"preposition":["من","في","على","الى","عن"],"verb":["كان"],"conjunction":["ان","و","او"]}',
     s.stopwords_count = 12,
     s.regional_additions = '[{"word":"","category":"قطر","reason":"proper noun"},{"word":"","category":"الدوحة","reason":"proper noun"},{"word":"","category":"ريال","reason":"currency"},{"word":"","category":"الخليجي","reason":"adjective"}]',
     s.script_config = '{"primary_script":"arabic","diacritic_handling":"remove_tashkeel","numeral_handling":"preserve_arabic_indic","special_chars":null}',
@@ -286,13 +286,13 @@ SET s.display_name = 'AR (QA) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ar-QA.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for AR (QA). Uses native_script rule. 12 stopwords across 5 categories including conjunction, verb, currency. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for AR (QA). Uses native_script rule. 12 stopwords across 5 categories including demonstrative, currency, preposition. Has 4 regional additions.';
 
 MERGE (s:Slugification {key: 'ar-SA'})
 SET s.display_name = 'Arabic (Saudi Arabia) Slugification',
     s.description = 'URL slug generation rules for ar-SA',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"preposition":["من","في","على","الى","عن"],"conjunction":["ان"],"verb":["كان"],"currency":["ريال"],"demonstrative":["هذا","هذه"],"negation":["لم"]}',
+    s.stopwords = '{"preposition":["من","في","على","الى","عن"],"conjunction":["ان"],"currency":["ريال"],"verb":["كان"],"demonstrative":["هذا","هذه"],"negation":["لم"]}',
     s.stopwords_count = 11,
     s.regional_additions = '[{"word":"","category":"السعودية","reason":"proper noun"},{"word":"","category":"المملكة","reason":"proper noun"},{"word":"","category":"ريال","reason":"currency"},{"word":"","category":"سعودي","reason":"adjective"},{"word":"","category":"المقيم","reason":"noun"},{"word":"","category":"الاقامة","reason":"noun"}]',
     s.script_config = '{"primary_script":"arabic","diacritic_handling":"remove_tashkeel","numeral_handling":"preserve_arabic_indic","special_chars":null}',
@@ -301,13 +301,13 @@ SET s.display_name = 'Arabic (Saudi Arabia) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ar-SA.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for Arabic (Saudi Arabia). Uses native_script rule. 11 stopwords across 6 categories including preposition, conjunction, verb. Has 6 regional additions.';
+    s.llm_context = 'URL slugification rules for Arabic (Saudi Arabia). Uses native_script rule. 11 stopwords across 6 categories including preposition, conjunction, currency. Has 6 regional additions.';
 
 MERGE (s:Slugification {key: 'ar-TN'})
 SET s.display_name = 'AR (TN) Slugification',
     s.description = 'URL slug generation rules for ar-TN',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"adverb":["برشا","توة"],"verb":["كان","يكون"],"interrogative":["كيف"],"article":["ال"],"conjunction":["و","أو","ثم","فما"],"pronoun":["هو","هي"],"preposition":["في","من","إلى","على","عن","مع"],"demonstrative":["هذا","هذه","هاذي","هاذا"]}',
+    s.stopwords = '{"demonstrative":["هذا","هذه","هاذي","هاذا"],"interrogative":["كيف"],"conjunction":["و","أو","ثم","فما"],"verb":["كان","يكون"],"preposition":["في","من","إلى","على","عن","مع"],"adverb":["برشا","توة"],"pronoun":["هو","هي"],"article":["ال"]}',
     s.stopwords_count = 22,
     s.regional_additions = '[{"word":"","category":"فما","reason":"conjunction"},{"word":"","category":"كيف","reason":"interrogative"},{"word":"","category":"برشا","reason":"adverb"},{"word":"","category":"توة","reason":"adverb"},{"word":"","category":"هاذي","reason":"demonstrative"},{"word":"","category":"هاذا","reason":"demonstrative"}]',
     s.script_config = '{"primary_script":"arabic","diacritic_handling":null,"numeral_handling":null,"special_chars":null}',
@@ -316,13 +316,13 @@ SET s.display_name = 'AR (TN) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ar-TN.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for AR (TN). Uses native_script rule. 22 stopwords across 8 categories including adverb, verb, interrogative. Has 6 regional additions.';
+    s.llm_context = 'URL slugification rules for AR (TN). Uses native_script rule. 22 stopwords across 8 categories including demonstrative, interrogative, conjunction. Has 6 regional additions.';
 
 MERGE (s:Slugification {key: 'as-IN'})
 SET s.display_name = 'AS (IN) Slugification',
     s.description = 'URL slug generation rules for as-IN',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"article":["এটা","এখন","এজন"],"conjunction":["আৰু","কিন্তু","বা","যদিও"],"pronoun":["মই","তুমি","তেওঁ","আমি"],"verb":["হৈছে","আছে","কৰে"],"demonstrative":["এই","সেই"]}',
+    s.stopwords = '{"pronoun":["মই","তুমি","তেওঁ","আমি"],"conjunction":["আৰু","কিন্তু","বা","যদিও"],"article":["এটা","এখন","এজন"],"verb":["হৈছে","আছে","কৰে"],"demonstrative":["এই","সেই"]}',
     s.stopwords_count = 16,
     s.regional_additions = '[{"word":"","category":"বাবে","reason":"postposition"},{"word":"","category":"সৈতে","reason":"postposition"},{"word":"","category":"বিষয়ে","reason":"postposition"}]',
     s.script_config = 'null',
@@ -331,13 +331,13 @@ SET s.display_name = 'AS (IN) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/as-IN.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for AS (IN). Uses native_script rule. 16 stopwords across 5 categories including article, conjunction, pronoun. Has 3 regional additions.';
+    s.llm_context = 'URL slugification rules for AS (IN). Uses native_script rule. 16 stopwords across 5 categories including pronoun, conjunction, article. Has 3 regional additions.';
 
 MERGE (s:Slugification {key: 'az-AZ'})
 SET s.display_name = 'AZ (AZ) Slugification',
     s.description = 'URL slug generation rules for az-AZ',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"verb":["edir","olur","var","yox"],"adverb":["necə","daha","artıq"],"article":["bir"],"pronoun":["bu","o","nə","hansı"],"conjunction":["və","ki","amma","lakin","yəni"]}',
+    s.stopwords = '{"verb":["edir","olur","var","yox"],"adverb":["necə","daha","artıq"],"conjunction":["və","ki","amma","lakin","yəni"],"article":["bir"],"pronoun":["bu","o","nə","hansı"]}',
     s.stopwords_count = 17,
     s.regional_additions = '[{"word":"","category":"daha","reason":"adverb"},{"word":"","category":"artıq","reason":"adverb"},{"word":"","category":"amma","reason":"conjunction"},{"word":"","category":"lakin","reason":"conjunction"},{"word":"","category":"yəni","reason":"conjunction"}]',
     s.script_config = '{"primary_script":"arabic","diacritic_handling":null,"numeral_handling":null,"special_chars":null}',
@@ -346,13 +346,13 @@ SET s.display_name = 'AZ (AZ) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/az-AZ.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for AZ (AZ). Uses native_script rule. 17 stopwords across 5 categories including verb, adverb, article. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for AZ (AZ). Uses native_script rule. 17 stopwords across 5 categories including verb, adverb, conjunction. Has 5 regional additions.';
 
 MERGE (s:Slugification {key: 'be-BY'})
 SET s.display_name = 'BE (BY) Slugification',
     s.description = 'URL slug generation rules for be-BY',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"pronoun":["што","які","гэта","гэты","той","яго","яе","ён","яна","яны","мы","вы","ты","я"],"verb":["ёсць","быў","была","было","будзе","мае"],"conjunction":["і","як","але","ці","бо"],"preposition":["ў","на","у","да","з","за","ад","па","пра"]}',
+    s.stopwords = '{"preposition":["ў","на","у","да","з","за","ад","па","пра"],"verb":["ёсць","быў","была","было","будзе","мае"],"pronoun":["што","які","гэта","гэты","той","яго","яе","ён","яна","яны","мы","вы","ты","я"],"conjunction":["і","як","але","ці","бо"]}',
     s.stopwords_count = 34,
     s.regional_additions = '[]',
     s.script_config = 'null',
@@ -361,13 +361,13 @@ SET s.display_name = 'BE (BY) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/be-BY.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for BE (BY). Uses native_script rule. 34 stopwords across 4 categories including pronoun, verb, conjunction.';
+    s.llm_context = 'URL slugification rules for BE (BY). Uses native_script rule. 34 stopwords across 4 categories including preposition, verb, pronoun.';
 
 MERGE (s:Slugification {key: 'bg-BG'})
 SET s.display_name = 'Bulgarian (Bulgaria) Slugification',
     s.description = 'URL slug generation rules for bg-BG',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"conjunction":["и","като"],"preposition":["в","на","за","с","от","по","при","до","към"],"verb":["е","бе","са","съм"]}',
+    s.stopwords = '{"conjunction":["и","като"],"verb":["е","бе","са","съм"],"preposition":["в","на","за","с","от","по","при","до","към"]}',
     s.stopwords_count = 15,
     s.regional_additions = '[{"word":"","category":"бе","reason":"verb"},{"word":"","category":"са","reason":"verb"},{"word":"","category":"ще","reason":"particle"},{"word":"","category":"съм","reason":"verb"},{"word":"","category":"ли","reason":"particle"}]',
     s.script_config = 'null',
@@ -376,13 +376,13 @@ SET s.display_name = 'Bulgarian (Bulgaria) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/bg-BG.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for Bulgarian (Bulgaria). Uses native_script rule. 15 stopwords across 3 categories including conjunction, preposition, verb. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for Bulgarian (Bulgaria). Uses native_script rule. 15 stopwords across 3 categories including conjunction, verb, preposition. Has 5 regional additions.';
 
 MERGE (s:Slugification {key: 'bn-BD'})
 SET s.display_name = 'Bengali (Bangladesh) Slugification',
     s.description = 'URL slug generation rules for bn-BD',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"article":["এ","এই","একটি","এক"],"interrogative":["কেমন"],"pronoun":["যে","যা","তা","সে","তার","আমি","আমার","তুমি","আপনি"],"preposition":["থেকে","জন্য","সাথে","মধ্যে","উপর","নিচে","কাছে","দ্বারা"],"verb":["হয়","ছিল","হবে","করা","করে","আছে","নেই","হয়েছে","হচ্ছে"],"conjunction":["ও","এবং","কিন্তু","তবে"]}',
+    s.stopwords = '{"verb":["হয়","ছিল","হবে","করা","করে","আছে","নেই","হয়েছে","হচ্ছে"],"preposition":["থেকে","জন্য","সাথে","মধ্যে","উপর","নিচে","কাছে","দ্বারা"],"pronoun":["যে","যা","তা","সে","তার","আমি","আমার","তুমি","আপনি"],"article":["এ","এই","একটি","এক"],"conjunction":["ও","এবং","কিন্তু","তবে"],"interrogative":["কেমন"]}',
     s.stopwords_count = 35,
     s.regional_additions = '[{"word":"","category":"কেমন","reason":"interrogative"},{"word":"","category":"আছে","reason":"verb"},{"word":"","category":"নেই","reason":"verb"},{"word":"","category":"হয়েছে","reason":"verb"},{"word":"","category":"হচ্ছে","reason":"verb"},{"word":"","category":"দেশের","reason":"genitive"}]',
     s.script_config = '{"primary_script":"arabic","diacritic_handling":null,"numeral_handling":null,"special_chars":null}',
@@ -391,13 +391,13 @@ SET s.display_name = 'Bengali (Bangladesh) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/bn-BD.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for Bengali (Bangladesh). Uses native_script rule. 35 stopwords across 6 categories including article, interrogative, pronoun. Has 6 regional additions.';
+    s.llm_context = 'URL slugification rules for Bengali (Bangladesh). Uses native_script rule. 35 stopwords across 6 categories including verb, preposition, pronoun. Has 6 regional additions.';
 
 MERGE (s:Slugification {key: 'bn-IN'})
 SET s.display_name = 'BN (IN) Slugification',
     s.description = 'URL slug generation rules for bn-IN',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"conjunction":["ও","এবং","কিন্তু","বা"],"pronoun":["তা"],"verb":["হয়","আছে","করা"],"article":["একটি","কোনো"]}',
+    s.stopwords = '{"article":["একটি","কোনো"],"conjunction":["ও","এবং","কিন্তু","বা"],"verb":["হয়","আছে","করা"],"pronoun":["তা"]}',
     s.stopwords_count = 10,
     s.regional_additions = '[{"word":"","category":"পশ্চিমবঙ্গ","reason":"proper noun"},{"word":"","category":"কলকাতা","reason":"proper noun"},{"word":"","category":"প্রতি","reason":"postposition"},{"word":"","category":"সাথে","reason":"postposition"},{"word":"","category":"জন্য","reason":"postposition"}]',
     s.script_config = 'null',
@@ -406,13 +406,13 @@ SET s.display_name = 'BN (IN) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/bn-IN.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for BN (IN). Uses native_script rule. 10 stopwords across 4 categories including conjunction, pronoun, verb. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for BN (IN). Uses native_script rule. 10 stopwords across 4 categories including article, conjunction, verb. Has 5 regional additions.';
 
 MERGE (s:Slugification {key: 'bs-BA'})
 SET s.display_name = 'BS (BA) Slugification',
     s.description = 'URL slug generation rules for bs-BA',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"conjunction":["i","a","ali","ili","da","te","pa","jer"],"preposition":["u","na","za","sa","od","do","po","iz","kod","o","kroz"]}',
+    s.stopwords = '{"preposition":["u","na","za","sa","od","do","po","iz","kod","o","kroz"],"conjunction":["i","a","ali","ili","da","te","pa","jer"]}',
     s.stopwords_count = 19,
     s.regional_additions = '[{"word":"","category":"te","reason":"conjunction"},{"word":"","category":"pa","reason":"conjunction"},{"word":"","category":"jer","reason":"conjunction"},{"word":"","category":"kod","reason":"preposition"},{"word":"","category":"o","reason":"preposition"},{"word":"","category":"kroz","reason":"preposition"}]',
     s.script_config = 'null',
@@ -421,13 +421,13 @@ SET s.display_name = 'BS (BA) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/bs-BA.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for BS (BA). Uses latin_preserve rule. 19 stopwords across 2 categories including conjunction, preposition. Has 6 regional additions.';
+    s.llm_context = 'URL slugification rules for BS (BA). Uses latin_preserve rule. 19 stopwords across 2 categories including preposition, conjunction. Has 6 regional additions.';
 
 MERGE (s:Slugification {key: 'ca-AD'})
 SET s.display_name = 'CA (AD) Slugification',
     s.description = 'URL slug generation rules for ca-AD',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"verb":["és"],"preposition":["de","a","en","per","amb"],"article":["el","la","els","les","un","una"],"conjunction":["i","o","que"],"contraction":["del","al","pel"]}',
+    s.stopwords = '{"contraction":["del","al","pel"],"preposition":["de","a","en","per","amb"],"article":["el","la","els","les","un","una"],"verb":["és"],"conjunction":["i","o","que"]}',
     s.stopwords_count = 18,
     s.regional_additions = '[{"word":"","category":"del","reason":"contraction"},{"word":"","category":"al","reason":"contraction"},{"word":"","category":"pel","reason":"contraction"}]',
     s.script_config = 'null',
@@ -436,13 +436,13 @@ SET s.display_name = 'CA (AD) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ca-AD.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for CA (AD). Uses latin_preserve rule. 18 stopwords across 5 categories including verb, preposition, article. Has 3 regional additions.';
+    s.llm_context = 'URL slugification rules for CA (AD). Uses latin_preserve rule. 18 stopwords across 5 categories including contraction, preposition, article. Has 3 regional additions.';
 
 MERGE (s:Slugification {key: 'ca-ES'})
 SET s.display_name = 'CA (ES) Slugification',
     s.description = 'URL slug generation rules for ca-ES',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"verb":["es","ser","estar","haver"],"conjunction":["i","o","ni","pero","sino","que","com"],"pronoun":["aquest","aquesta","aquell","aquella"],"article":["el","la","els","les","un","una","uns","unes"],"preposition":["de","a","en","per","amb","sense","sobre","sota","entre","cap","fins"]}',
+    s.stopwords = '{"conjunction":["i","o","ni","pero","sino","que","com"],"pronoun":["aquest","aquesta","aquell","aquella"],"preposition":["de","a","en","per","amb","sense","sobre","sota","entre","cap","fins"],"article":["el","la","els","les","un","una","uns","unes"],"verb":["es","ser","estar","haver"]}',
     s.stopwords_count = 34,
     s.regional_additions = '[]',
     s.script_config = 'null',
@@ -451,13 +451,13 @@ SET s.display_name = 'CA (ES) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ca-ES.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for CA (ES). Uses latin_preserve rule. 34 stopwords across 5 categories including verb, conjunction, pronoun.';
+    s.llm_context = 'URL slugification rules for CA (ES). Uses latin_preserve rule. 34 stopwords across 5 categories including conjunction, pronoun, preposition.';
 
 MERGE (s:Slugification {key: 'ceb-PH'})
 SET s.display_name = 'CEB (PH) Slugification',
     s.description = 'URL slug generation rules for ceb-PH',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"article":["ang"],"conjunction":["ug","o","kay","apan","bisan","aron"],"demonstrative":["kini"],"adverb":["usab"],"pronoun":["ako","siya"],"preposition":["sa","tungod","para"]}',
+    s.stopwords = '{"adverb":["usab"],"demonstrative":["kini"],"pronoun":["ako","siya"],"preposition":["sa","tungod","para"],"article":["ang"],"conjunction":["ug","o","kay","apan","bisan","aron"]}',
     s.stopwords_count = 14,
     s.regional_additions = '[{"word":"","category":"bisan","reason":"conjunction"},{"word":"","category":"tungod","reason":"preposition"},{"word":"","category":"para","reason":"preposition"},{"word":"","category":"aron","reason":"conjunction"},{"word":"","category":"usab","reason":"adverb"}]',
     s.script_config = 'null',
@@ -466,13 +466,13 @@ SET s.display_name = 'CEB (PH) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ceb-PH.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for CEB (PH). Uses latin_strip rule. 14 stopwords across 6 categories including article, conjunction, demonstrative. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for CEB (PH). Uses latin_strip rule. 14 stopwords across 6 categories including adverb, demonstrative, pronoun. Has 5 regional additions.';
 
 MERGE (s:Slugification {key: 'cs-CZ'})
 SET s.display_name = 'Czech (Czechia) Slugification',
     s.description = 'URL slug generation rules for cs-CZ',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"pronoun":["ten","to","ta","který","která","které"],"verb":["je","jsou","byl","byla","bylo","být","mít","má"],"preposition":["v","na","do","z","ze","k","ke","o","s","se","pro","při","po","od","před","za","mezi","pod","nad"],"conjunction":["a","ale","i","nebo","že","když","protože"]}',
+    s.stopwords = '{"conjunction":["a","ale","i","nebo","že","když","protože"],"preposition":["v","na","do","z","ze","k","ke","o","s","se","pro","při","po","od","před","za","mezi","pod","nad"],"verb":["je","jsou","byl","byla","bylo","být","mít","má"],"pronoun":["ten","to","ta","který","která","které"]}',
     s.stopwords_count = 40,
     s.regional_additions = '[]',
     s.script_config = 'null',
@@ -481,7 +481,7 @@ SET s.display_name = 'Czech (Czechia) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/cs-CZ.md',
     s.last_updated = '2025-12-08',
-    s.llm_context = 'URL slugification rules for Czech (Czechia). Uses latin_preserve rule. 40 stopwords across 4 categories including pronoun, verb, preposition.';
+    s.llm_context = 'URL slugification rules for Czech (Czechia). Uses latin_preserve rule. 40 stopwords across 4 categories including conjunction, preposition, verb.';
 
 MERGE (s:Slugification {key: 'cy-GB'})
 SET s.display_name = 'CY (GB) Slugification',
@@ -502,7 +502,7 @@ MERGE (s:Slugification {key: 'da-DK'})
 SET s.display_name = 'Danish (Denmark) Slugification',
     s.description = 'URL slug generation rules for da-DK',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"pronoun":["der","som","sig"],"verb":["er"],"preposition":["i","på","af","til","for","med","fra","om"],"article":["en","et","den","det","de"],"conjunction":["og","eller","men"]}',
+    s.stopwords = '{"conjunction":["og","eller","men"],"article":["en","et","den","det","de"],"preposition":["i","på","af","til","for","med","fra","om"],"pronoun":["der","som","sig"],"verb":["er"]}',
     s.stopwords_count = 20,
     s.regional_additions = '[]',
     s.script_config = 'null',
@@ -511,13 +511,13 @@ SET s.display_name = 'Danish (Denmark) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/da-DK.md',
     s.last_updated = '2025-12-08',
-    s.llm_context = 'URL slugification rules for Danish (Denmark). Uses latin_preserve rule. 20 stopwords across 5 categories including pronoun, verb, preposition.';
+    s.llm_context = 'URL slugification rules for Danish (Denmark). Uses latin_preserve rule. 20 stopwords across 5 categories including conjunction, article, preposition.';
 
 MERGE (s:Slugification {key: 'de-AT'})
 SET s.display_name = 'German (Austria) Slugification',
     s.description = 'URL slug generation rules for de-AT',
     s.slug_rule = 'latin_transform',
-    s.stopwords = '{"article":["der","die","das","ein","eine"],"preposition":["in","im","an","am","auf","aus","bei","mit","nach","von","vor","zu","zum","zur","fuer","durch","um","ueber","unter"],"conjunction":["und","oder","aber"],"verb":["ist","sind","hat","haben","wird","werden"]}',
+    s.stopwords = '{"conjunction":["und","oder","aber"],"article":["der","die","das","ein","eine"],"verb":["ist","sind","hat","haben","wird","werden"],"preposition":["in","im","an","am","auf","aus","bei","mit","nach","von","vor","zu","zum","zur","fuer","durch","um","ueber","unter"]}',
     s.stopwords_count = 33,
     s.regional_additions = '[]',
     s.script_config = 'null',
@@ -526,13 +526,13 @@ SET s.display_name = 'German (Austria) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/de-AT.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for German (Austria). Uses latin_transform rule. 33 stopwords across 4 categories including article, preposition, conjunction.';
+    s.llm_context = 'URL slugification rules for German (Austria). Uses latin_transform rule. 33 stopwords across 4 categories including conjunction, article, verb.';
 
 MERGE (s:Slugification {key: 'de-CH'})
 SET s.display_name = 'German (Switzerland) Slugification',
     s.description = 'URL slug generation rules for de-CH',
     s.slug_rule = 'latin_transform',
-    s.stopwords = '{"article":["der","die","das","ein","eine"],"preposition":["in","auf","mit","für","von","zu","bei","uf","bim","zum","zur","vom","im","am"],"conjunction":["und","oder","aber"],"verb":["ist","sind","wird","werden"]}',
+    s.stopwords = '{"verb":["ist","sind","wird","werden"],"conjunction":["und","oder","aber"],"article":["der","die","das","ein","eine"],"preposition":["in","auf","mit","für","von","zu","bei","uf","bim","zum","zur","vom","im","am"]}',
     s.stopwords_count = 26,
     s.regional_additions = '[{"word":"","category":"uf","reason":"preposition"},{"word":"","category":"bim","reason":"preposition"},{"word":"","category":"zum","reason":"preposition"},{"word":"","category":"zur","reason":"preposition"},{"word":"","category":"vom","reason":"preposition"},{"word":"","category":"im","reason":"preposition"},{"word":"","category":"am","reason":"preposition"}]',
     s.script_config = 'null',
@@ -541,13 +541,13 @@ SET s.display_name = 'German (Switzerland) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/de-CH.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for German (Switzerland). Uses latin_transform rule. 26 stopwords across 4 categories including article, preposition, conjunction. Has 7 regional additions.';
+    s.llm_context = 'URL slugification rules for German (Switzerland). Uses latin_transform rule. 26 stopwords across 4 categories including verb, conjunction, article. Has 7 regional additions.';
 
 MERGE (s:Slugification {key: 'de-DE'})
 SET s.display_name = 'German (Germany) Slugification',
     s.description = 'URL slug generation rules for de-DE',
     s.slug_rule = 'latin_transform',
-    s.stopwords = '{"article":["der","die","das","ein","eine","des","dem","den"],"preposition":["in","an","auf","für","von","mit","zu","bei","aus"],"verb":["ist","sind","war","sein","werden"],"conjunction":["und","oder","aber"],"contraction":["im","am","zum","zur","vom","beim"]}',
+    s.stopwords = '{"article":["der","die","das","ein","eine","des","dem","den"],"conjunction":["und","oder","aber"],"preposition":["in","an","auf","für","von","mit","zu","bei","aus"],"verb":["ist","sind","war","sein","werden"],"contraction":["im","am","zum","zur","vom","beim"]}',
     s.stopwords_count = 31,
     s.regional_additions = '[{"word":"","category":"des","reason":"article"},{"word":"","category":"dem","reason":"article"},{"word":"","category":"den","reason":"article"},{"word":"","category":"vom","reason":"contraction"},{"word":"","category":"beim","reason":"contraction"}]',
     s.script_config = 'null',
@@ -556,13 +556,13 @@ SET s.display_name = 'German (Germany) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/de-DE.md',
     s.last_updated = '2025-12-08',
-    s.llm_context = 'URL slugification rules for German (Germany). Uses latin_transform rule. 31 stopwords across 5 categories including article, preposition, verb. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for German (Germany). Uses latin_transform rule. 31 stopwords across 5 categories including article, conjunction, preposition. Has 5 regional additions.';
 
 MERGE (s:Slugification {key: 'de-LU'})
 SET s.display_name = 'DE (LU) Slugification',
     s.description = 'URL slug generation rules for de-LU',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"conjunction":["und","oder","aber"],"article":["der","die","das","ein","eine","des","dem","den"],"preposition":["in","an","auf","fur","von","mit","zu","bei","aus"],"contraction":["im","am","zum","zur","vom","beim"],"verb":["ist","sind","war","sein","werden"]}',
+    s.stopwords = '{"verb":["ist","sind","war","sein","werden"],"contraction":["im","am","zum","zur","vom","beim"],"preposition":["in","an","auf","fur","von","mit","zu","bei","aus"],"article":["der","die","das","ein","eine","des","dem","den"],"conjunction":["und","oder","aber"]}',
     s.stopwords_count = 31,
     s.regional_additions = '[{"word":"","category":"des","reason":"article"},{"word":"","category":"dem","reason":"article"},{"word":"","category":"den","reason":"article"},{"word":"","category":"vom","reason":"contraction"},{"word":"","category":"beim","reason":"contraction"},{"word":"","category":"luxemburg","reason":"proper noun"},{"word":"","category":"grossherzogtum","reason":"proper noun"}]',
     s.script_config = 'null',
@@ -571,13 +571,13 @@ SET s.display_name = 'DE (LU) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/de-LU.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for DE (LU). Uses latin_strip rule. 31 stopwords across 5 categories including conjunction, article, preposition. Has 7 regional additions.';
+    s.llm_context = 'URL slugification rules for DE (LU). Uses latin_strip rule. 31 stopwords across 5 categories including verb, contraction, preposition. Has 7 regional additions.';
 
 MERGE (s:Slugification {key: 'el-CY'})
 SET s.display_name = 'EL (CY) Slugification',
     s.description = 'URL slug generation rules for el-CY',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"negation":["δεν","έννεν"],"article":["το","την","τον","της","του"],"conjunction":["και","τζιαι"],"adverb":["δαμέ","εκεί"],"interrogative":["πού","πώς"],"pronoun":["αυτό","μας","σας"],"verb":["είναι"],"preposition":["με","για","στο","από"]}',
+    s.stopwords = '{"adverb":["δαμέ","εκεί"],"conjunction":["και","τζιαι"],"article":["το","την","τον","της","του"],"pronoun":["αυτό","μας","σας"],"preposition":["με","για","στο","από"],"interrogative":["πού","πώς"],"negation":["δεν","έννεν"],"verb":["είναι"]}',
     s.stopwords_count = 21,
     s.regional_additions = '[{"word":"","category":"τζιαι","reason":"conjunction"},{"word":"","category":"έννεν","reason":"negation"},{"word":"","category":"δαμέ","reason":"adverb"},{"word":"","category":"εκεί","reason":"adverb"},{"word":"","category":"πολλά","reason":"adjective"},{"word":"","category":"μας","reason":"pronoun"},{"word":"","category":"σας","reason":"pronoun"},{"word":"","category":"πού","reason":"interrogative"},{"word":"","category":"πώς","reason":"interrogative"},{"word":"","category":"μεν","reason":"particle"}]',
     s.script_config = '{"primary_script":"greek","diacritic_handling":null,"numeral_handling":null,"special_chars":null}',
@@ -586,13 +586,13 @@ SET s.display_name = 'EL (CY) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/el-CY.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for EL (CY). Uses native_script rule. 21 stopwords across 8 categories including negation, article, conjunction. Has 10 regional additions.';
+    s.llm_context = 'URL slugification rules for EL (CY). Uses native_script rule. 21 stopwords across 8 categories including adverb, conjunction, article. Has 10 regional additions.';
 
 MERGE (s:Slugification {key: 'el-GR'})
 SET s.display_name = 'Greek (Greece) Slugification',
     s.description = 'URL slug generation rules for el-GR',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"article":["το","τη","την","της","τον","του","των","ο","η","οι","τα","ένα","μια","ένας"],"adverb":["δεν","εδώ","τώρα","σήμερα"],"verb":["είναι","έχω","γίνομαι","πάμε"],"pronoun":["αυτό","αυτή","αυτός","εκείνο","εκείνη"],"preposition":["σε","στο","στη","στην","στα","από","με","για","προς","κατά","μετά","παρά","χωρίς","ως"],"conjunction":["και","ή","αλλά","όμως","επειδή","ότι"]}',
+    s.stopwords = '{"article":["το","τη","την","της","τον","του","των","ο","η","οι","τα","ένα","μια","ένας"],"pronoun":["αυτό","αυτή","αυτός","εκείνο","εκείνη"],"verb":["είναι","έχω","γίνομαι","πάμε"],"conjunction":["και","ή","αλλά","όμως","επειδή","ότι"],"adverb":["δεν","εδώ","τώρα","σήμερα"],"preposition":["σε","στο","στη","στην","στα","από","με","για","προς","κατά","μετά","παρά","χωρίς","ως"]}',
     s.stopwords_count = 47,
     s.regional_additions = '[{"word":"","category":"μπες","reason":"imperative"},{"word":"","category":"δες","reason":"imperative"},{"word":"","category":"πάμε","reason":"verb"},{"word":"","category":"εδώ","reason":"adverb"},{"word":"","category":"τώρα","reason":"adverb"},{"word":"","category":"σήμερα","reason":"adverb"}]',
     s.script_config = '{"primary_script":"greek","diacritic_handling":null,"numeral_handling":null,"special_chars":null}',
@@ -601,13 +601,13 @@ SET s.display_name = 'Greek (Greece) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/el-GR.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for Greek (Greece). Uses native_script rule. 47 stopwords across 6 categories including article, adverb, verb. Has 6 regional additions.';
+    s.llm_context = 'URL slugification rules for Greek (Greece). Uses native_script rule. 47 stopwords across 6 categories including article, pronoun, verb. Has 6 regional additions.';
 
 MERGE (s:Slugification {key: 'en-AE'})
 SET s.display_name = 'EN (AE) Slugification',
     s.description = 'URL slug generation rules for en-AE',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"currency":["dirhams","aed"],"conjunction":["and","or","but"],"preposition":["of","in","to","for","on","with"],"verb":["is","are","was","were","be"],"article":["the","a","an"],"pronoun":["it","this","that"]}',
+    s.stopwords = '{"preposition":["of","in","to","for","on","with"],"pronoun":["it","this","that"],"currency":["dirhams","aed"],"conjunction":["and","or","but"],"article":["the","a","an"],"verb":["is","are","was","were","be"]}',
     s.stopwords_count = 22,
     s.regional_additions = '[{"word":"","category":"uae","reason":"acronym"},{"word":"","category":"emirates","reason":"noun"},{"word":"","category":"dubai","reason":"proper noun"},{"word":"","category":"dirhams","reason":"currency"},{"word":"","category":"aed","reason":"currency"}]',
     s.script_config = 'null',
@@ -616,13 +616,13 @@ SET s.display_name = 'EN (AE) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-AE.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for EN (AE). Uses latin_strip rule. 22 stopwords across 6 categories including currency, conjunction, preposition. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (AE). Uses latin_strip rule. 22 stopwords across 6 categories including preposition, pronoun, currency. Has 5 regional additions.';
 
 MERGE (s:Slugification {key: 'en-AU'})
 SET s.display_name = 'EN (AU) Slugification',
     s.description = 'URL slug generation rules for en-AU',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"conjunction":["and","or","but","as"],"article":["the","a","an"],"pronoun":["it","this","that"],"preposition":["in","on","at","to","for","of","with","by"],"verb":["is","are","was","were","be","been"]}',
+    s.stopwords = '{"preposition":["in","on","at","to","for","of","with","by"],"article":["the","a","an"],"conjunction":["and","or","but","as"],"verb":["is","are","was","were","be","been"],"pronoun":["it","this","that"]}',
     s.stopwords_count = 24,
     s.regional_additions = '[{"word":"","category":"mate","reason":"colloquial"},{"word":"","category":"arvo","reason":"colloquial"},{"word":"","category":"reckon","reason":"colloquial"},{"word":"","category":"heaps","reason":"colloquial"}]',
     s.script_config = 'null',
@@ -631,13 +631,13 @@ SET s.display_name = 'EN (AU) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-AU.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for EN (AU). Uses latin_strip rule. 24 stopwords across 5 categories including conjunction, article, pronoun. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (AU). Uses latin_strip rule. 24 stopwords across 5 categories including preposition, article, conjunction. Has 4 regional additions.';
 
 MERGE (s:Slugification {key: 'en-BB'})
 SET s.display_name = 'EN (BB) Slugification',
     s.description = 'URL slug generation rules for en-BB',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"preposition":["in","on","at","to","for","of","with","by","from","fuh","wid","bout"],"verb":["is","are","was","were","be","been","being"],"conjunction":["and","or","but"],"pronoun":["it","that","this","wuh","yuh"],"article":["the","a","an"]}',
+    s.stopwords = '{"conjunction":["and","or","but"],"article":["the","a","an"],"pronoun":["it","that","this","wuh","yuh"],"verb":["is","are","was","were","be","been","being"],"preposition":["in","on","at","to","for","of","with","by","from","fuh","wid","bout"]}',
     s.stopwords_count = 30,
     s.regional_additions = '[{"word":"","category":"wuh","reason":"pronoun"},{"word":"","category":"yuh","reason":"pronoun"},{"word":"","category":"duh","reason":"determiner"},{"word":"","category":"fuh","reason":"preposition"},{"word":"","category":"wid","reason":"preposition"},{"word":"","category":"bout","reason":"preposition"}]',
     s.script_config = 'null',
@@ -646,13 +646,13 @@ SET s.display_name = 'EN (BB) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-BB.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for EN (BB). Uses latin_strip rule. 30 stopwords across 5 categories including preposition, verb, conjunction. Has 6 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (BB). Uses latin_strip rule. 30 stopwords across 5 categories including conjunction, article, pronoun. Has 6 regional additions.';
 
 MERGE (s:Slugification {key: 'en-BW'})
 SET s.display_name = 'EN (BW) Slugification',
     s.description = 'URL slug generation rules for en-BW',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"article":["the","a","an"],"conjunction":["and","or","but"],"pronoun":["it","this"],"preposition":["of","to","in","for","at","by","with"],"verb":["is","are"]}',
+    s.stopwords = '{"conjunction":["and","or","but"],"preposition":["of","to","in","for","at","by","with"],"article":["the","a","an"],"verb":["is","are"],"pronoun":["it","this"]}',
     s.stopwords_count = 17,
     s.regional_additions = '[{"word":"","category":"at","reason":"preposition"},{"word":"","category":"by","reason":"preposition"},{"word":"","category":"with","reason":"preposition"}]',
     s.script_config = 'null',
@@ -661,13 +661,13 @@ SET s.display_name = 'EN (BW) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-BW.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for EN (BW). Uses latin_strip rule. 17 stopwords across 5 categories including article, conjunction, pronoun. Has 3 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (BW). Uses latin_strip rule. 17 stopwords across 5 categories including conjunction, preposition, article. Has 3 regional additions.';
 
 MERGE (s:Slugification {key: 'en-CA'})
 SET s.display_name = 'EN (CA) Slugification',
     s.description = 'URL slug generation rules for en-CA',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"conjunction":["and","or","but","as","if"],"interjection":["eh"],"preposition":["of","in","to","for","on","at","by","with","from"],"article":["the","a","an"],"pronoun":["it","this","that"],"adverb":["not"],"verb":["is","are","was","be"]}',
+    s.stopwords = '{"article":["the","a","an"],"preposition":["of","in","to","for","on","at","by","with","from"],"interjection":["eh"],"verb":["is","are","was","be"],"pronoun":["it","this","that"],"adverb":["not"],"conjunction":["and","or","but","as","if"]}',
     s.stopwords_count = 26,
     s.regional_additions = '[{"word":"","category":"eh","reason":"interjection"},{"word":"","category":"aboot","reason":"regional"}]',
     s.script_config = 'null',
@@ -676,13 +676,13 @@ SET s.display_name = 'EN (CA) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-CA.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for EN (CA). Uses latin_strip rule. 26 stopwords across 7 categories including conjunction, interjection, preposition. Has 2 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (CA). Uses latin_strip rule. 26 stopwords across 7 categories including article, preposition, interjection. Has 2 regional additions.';
 
 MERGE (s:Slugification {key: 'en-CY'})
 SET s.display_name = 'EN (CY) Slugification',
     s.description = 'URL slug generation rules for en-CY',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"conjunction":["and","or","but"],"preposition":["of","in","on","at","to","for","with","by","from","as"],"pronoun":["it","that","this"],"verb":["is","are","was","were","be","been","being"],"article":["a","an","the"]}',
+    s.stopwords = '{"verb":["is","are","was","were","be","been","being"],"conjunction":["and","or","but"],"pronoun":["it","that","this"],"preposition":["of","in","on","at","to","for","with","by","from","as"],"article":["a","an","the"]}',
     s.stopwords_count = 26,
     s.regional_additions = '[]',
     s.script_config = 'null',
@@ -691,13 +691,13 @@ SET s.display_name = 'EN (CY) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-CY.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for EN (CY). Uses latin_strip rule. 26 stopwords across 5 categories including conjunction, preposition, pronoun.';
+    s.llm_context = 'URL slugification rules for EN (CY). Uses latin_strip rule. 26 stopwords across 5 categories including verb, conjunction, pronoun.';
 
 MERGE (s:Slugification {key: 'en-FJ'})
 SET s.display_name = 'EN (FJ) Slugification',
     s.description = 'URL slug generation rules for en-FJ',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"verb":["is","are","was","were","be","been","being"],"article":["the","a","an","na"],"preposition":["in","on","at","to","for","of","with","by","from","as","ni","mai"],"conjunction":["and","or","but"],"pronoun":["it","this","that"]}',
+    s.stopwords = '{"verb":["is","are","was","were","be","been","being"],"pronoun":["it","this","that"],"article":["the","a","an","na"],"conjunction":["and","or","but"],"preposition":["in","on","at","to","for","of","with","by","from","as","ni","mai"]}',
     s.stopwords_count = 29,
     s.regional_additions = '[{"word":"","category":"na","reason":"article"},{"word":"","category":"ni","reason":"preposition"},{"word":"","category":"ko","reason":"particle"},{"word":"","category":"mai","reason":"preposition"},{"word":"","category":"bula","reason":"greeting"}]',
     s.script_config = 'null',
@@ -706,13 +706,13 @@ SET s.display_name = 'EN (FJ) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-FJ.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for EN (FJ). Uses latin_strip rule. 29 stopwords across 5 categories including verb, article, preposition. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (FJ). Uses latin_strip rule. 29 stopwords across 5 categories including verb, pronoun, article. Has 5 regional additions.';
 
 MERGE (s:Slugification {key: 'en-GB'})
 SET s.display_name = 'English (United Kingdom) Slugification',
     s.description = 'URL slug generation rules for en-GB',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"conjunction":["and","or","but","as"],"preposition":["of","to","in","for","on","with","at","by","from"],"pronoun":["it","this","that"],"article":["the","a","an"],"verb":["is","are","be"]}',
+    s.stopwords = '{"verb":["is","are","be"],"article":["the","a","an"],"preposition":["of","to","in","for","on","with","at","by","from"],"conjunction":["and","or","but","as"],"pronoun":["it","this","that"]}',
     s.stopwords_count = 22,
     s.regional_additions = '[]',
     s.script_config = 'null',
@@ -721,13 +721,13 @@ SET s.display_name = 'English (United Kingdom) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-GB.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for English (United Kingdom). Uses latin_strip rule. 22 stopwords across 5 categories including conjunction, preposition, pronoun.';
+    s.llm_context = 'URL slugification rules for English (United Kingdom). Uses latin_strip rule. 22 stopwords across 5 categories including verb, article, preposition.';
 
 MERGE (s:Slugification {key: 'en-GH'})
 SET s.display_name = 'EN (GH) Slugification',
     s.description = 'URL slug generation rules for en-GH',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"article":["the","a","an"],"preposition":["in","on","at","to","for","with","by","from","of","as"],"pronoun":["it","that","this"],"interjection":["ehn"],"verb":["is","are","was","were","be","been","being"],"conjunction":["and","or","but"]}',
+    s.stopwords = '{"verb":["is","are","was","were","be","been","being"],"article":["the","a","an"],"pronoun":["it","that","this"],"preposition":["in","on","at","to","for","with","by","from","of","as"],"conjunction":["and","or","but"],"interjection":["ehn"]}',
     s.stopwords_count = 27,
     s.regional_additions = '[{"word":"","category":"ooo","reason":"particle"},{"word":"","category":"oo","reason":"particle"},{"word":"","category":"paaa","reason":"intensifier"},{"word":"","category":"koraa","reason":"intensifier"},{"word":"","category":"kraa","reason":"intensifier"},{"word":"","category":"abi","reason":"tag question"},{"word":"","category":"ehn","reason":"interjection"},{"word":"","category":"saa","reason":"intensifier"}]',
     s.script_config = 'null',
@@ -736,13 +736,13 @@ SET s.display_name = 'EN (GH) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-GH.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for EN (GH). Uses latin_strip rule. 27 stopwords across 6 categories including article, preposition, pronoun. Has 8 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (GH). Uses latin_strip rule. 27 stopwords across 6 categories including verb, article, pronoun. Has 8 regional additions.';
 
 MERGE (s:Slugification {key: 'en-HK'})
 SET s.display_name = 'EN (HK) Slugification',
     s.description = 'URL slug generation rules for en-HK',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"article":["the","a","an"],"preposition":["in","on","at","to","for","of","with","by"],"conjunction":["and","or","but"],"verb":["is","are","was","were","be","been","being","have","has","had","do","does","did"],"pronoun":["it","this","that"],"abbreviation":["hk"]}',
+    s.stopwords = '{"article":["the","a","an"],"verb":["is","are","was","were","be","been","being","have","has","had","do","does","did"],"preposition":["in","on","at","to","for","of","with","by"],"conjunction":["and","or","but"],"abbreviation":["hk"],"pronoun":["it","this","that"]}',
     s.stopwords_count = 31,
     s.regional_additions = '[{"word":"","category":"hk","reason":"abbreviation"},{"word":"","category":"hongkong","reason":"noun"}]',
     s.script_config = 'null',
@@ -751,13 +751,13 @@ SET s.display_name = 'EN (HK) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-HK.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for EN (HK). Uses latin_strip rule. 31 stopwords across 6 categories including article, preposition, conjunction. Has 2 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (HK). Uses latin_strip rule. 31 stopwords across 6 categories including article, verb, preposition. Has 2 regional additions.';
 
 MERGE (s:Slugification {key: 'en-IE'})
 SET s.display_name = 'EN (IE) Slugification',
     s.description = 'URL slug generation rules for en-IE',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"preposition":["of","to","in","for","on","with","at","by","from"],"pronoun":["it","this","that","yere","meself","yerself"],"article":["the","a","an"],"contraction":["tis","twas"],"verb":["is","are","was","be"],"filler":["sure","so","like"],"conjunction":["and","or","but","as"]}',
+    s.stopwords = '{"contraction":["tis","twas"],"filler":["sure","so","like"],"preposition":["of","to","in","for","on","with","at","by","from"],"verb":["is","are","was","be"],"conjunction":["and","or","but","as"],"pronoun":["it","this","that","yere","meself","yerself"],"article":["the","a","an"]}',
     s.stopwords_count = 31,
     s.regional_additions = '[{"word":"","category":"tis","reason":"contraction"},{"word":"","category":"twas","reason":"contraction"},{"word":"","category":"yere","reason":"pronoun"},{"word":"","category":"meself","reason":"pronoun"},{"word":"","category":"yerself","reason":"pronoun"},{"word":"","category":"sure","reason":"filler"},{"word":"","category":"so","reason":"filler"},{"word":"","category":"like","reason":"filler"}]',
     s.script_config = 'null',
@@ -766,13 +766,13 @@ SET s.display_name = 'EN (IE) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-IE.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for EN (IE). Uses latin_strip rule. 31 stopwords across 7 categories including preposition, pronoun, article. Has 8 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (IE). Uses latin_strip rule. 31 stopwords across 7 categories including contraction, filler, preposition. Has 8 regional additions.';
 
 MERGE (s:Slugification {key: 'en-IN'})
 SET s.display_name = 'EN (IN) Slugification',
     s.description = 'URL slug generation rules for en-IN',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"pronoun":["it","this","that"],"article":["the","a","an"],"conjunction":["and","or","but","as"],"preposition":["of","to","in","for","on","with","at","by","from"],"verb":["is","are","be"]}',
+    s.stopwords = '{"conjunction":["and","or","but","as"],"preposition":["of","to","in","for","on","with","at","by","from"],"pronoun":["it","this","that"],"article":["the","a","an"],"verb":["is","are","be"]}',
     s.stopwords_count = 22,
     s.regional_additions = '[]',
     s.script_config = 'null',
@@ -781,13 +781,13 @@ SET s.display_name = 'EN (IN) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-IN.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for EN (IN). Uses latin_strip rule. 22 stopwords across 5 categories including pronoun, article, conjunction.';
+    s.llm_context = 'URL slugification rules for EN (IN). Uses latin_strip rule. 22 stopwords across 5 categories including conjunction, preposition, pronoun.';
 
 MERGE (s:Slugification {key: 'en-JM'})
 SET s.display_name = 'EN (JM) Slugification',
     s.description = 'URL slug generation rules for en-JM',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"verb":["is","are","was","were","be","been","being"],"preposition":["of","in","on","at","to","for","with","by","from","as"],"pronoun":["it","that","this"],"article":["a","an","the"],"conjunction":["and","or","but"]}',
+    s.stopwords = '{"pronoun":["it","that","this"],"conjunction":["and","or","but"],"article":["a","an","the"],"preposition":["of","in","on","at","to","for","with","by","from","as"],"verb":["is","are","was","were","be","been","being"]}',
     s.stopwords_count = 26,
     s.regional_additions = '[]',
     s.script_config = 'null',
@@ -796,13 +796,13 @@ SET s.display_name = 'EN (JM) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-JM.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for EN (JM). Uses latin_strip rule. 26 stopwords across 5 categories including verb, preposition, pronoun.';
+    s.llm_context = 'URL slugification rules for EN (JM). Uses latin_strip rule. 26 stopwords across 5 categories including pronoun, conjunction, article.';
 
 MERGE (s:Slugification {key: 'en-KE'})
 SET s.display_name = 'EN (KE) Slugification',
     s.description = 'URL slug generation rules for en-KE',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"pronoun":["it","that","this","hii","hiyo"],"adverb":["pia","sana","tu"],"article":["the","a","an"],"preposition":["in","on","at","to","for","with","by","from","of","as","ya","wa","kwa","la","za"],"verb":["is","are","was","were","be","been","being","ni","iko","sema"],"conjunction":["and","or","but","na","au"]}',
+    s.stopwords = '{"pronoun":["it","that","this","hii","hiyo"],"preposition":["in","on","at","to","for","with","by","from","of","as","ya","wa","kwa","la","za"],"conjunction":["and","or","but","na","au"],"adverb":["pia","sana","tu"],"verb":["is","are","was","were","be","been","being","ni","iko","sema"],"article":["the","a","an"]}',
     s.stopwords_count = 41,
     s.regional_additions = '[{"word":"","category":"na","reason":"conjunction"},{"word":"","category":"ya","reason":"preposition"},{"word":"","category":"wa","reason":"preposition"},{"word":"","category":"kwa","reason":"preposition"},{"word":"","category":"ni","reason":"verb"},{"word":"","category":"la","reason":"preposition"},{"word":"","category":"za","reason":"preposition"},{"word":"","category":"hii","reason":"pronoun"},{"word":"","category":"hiyo","reason":"pronoun"},{"word":"","category":"au","reason":"conjunction"},{"word":"","category":"pia","reason":"adverb"},{"word":"","category":"sana","reason":"adverb"},{"word":"**Sheng Function Words (Remove)**","category":"Word","reason":"Category"},{"word":"","category":"iko","reason":"verb"},{"word":"","category":"sema","reason":"verb"},{"word":"","category":"tu","reason":"adverb"}]',
     s.script_config = 'null',
@@ -811,13 +811,13 @@ SET s.display_name = 'EN (KE) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-KE.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for EN (KE). Uses latin_strip rule. 41 stopwords across 6 categories including pronoun, adverb, article. Has 16 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (KE). Uses latin_strip rule. 41 stopwords across 6 categories including pronoun, preposition, conjunction. Has 16 regional additions.';
 
 MERGE (s:Slugification {key: 'en-KY'})
 SET s.display_name = 'EN (KY) Slugification',
     s.description = 'URL slug generation rules for en-KY',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"verb":["is","are","was","be"],"preposition":["of","in","to","for","on","at","by"],"article":["the","a","an"],"conjunction":["and","or","but"],"pronoun":["it"]}',
+    s.stopwords = '{"preposition":["of","in","to","for","on","at","by"],"conjunction":["and","or","but"],"article":["the","a","an"],"pronoun":["it"],"verb":["is","are","was","be"]}',
     s.stopwords_count = 18,
     s.regional_additions = '[{"word":"","category":"on","reason":"preposition"},{"word":"","category":"at","reason":"preposition"},{"word":"","category":"by","reason":"preposition"}]',
     s.script_config = 'null',
@@ -826,13 +826,13 @@ SET s.display_name = 'EN (KY) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-KY.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for EN (KY). Uses latin_strip rule. 18 stopwords across 5 categories including verb, preposition, article. Has 3 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (KY). Uses latin_strip rule. 18 stopwords across 5 categories including preposition, conjunction, article. Has 3 regional additions.';
 
 MERGE (s:Slugification {key: 'en-MU'})
 SET s.display_name = 'EN (MU) Slugification',
     s.description = 'URL slug generation rules for en-MU',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"article":["the","a","an"],"pronoun":["it","this","our","your"],"conjunction":["and","but","or"],"preposition":["of","in","to","for","with","from","at"],"verb":["is","are"]}',
+    s.stopwords = '{"conjunction":["and","but","or"],"verb":["is","are"],"preposition":["of","in","to","for","with","from","at"],"article":["the","a","an"],"pronoun":["it","this","our","your"]}',
     s.stopwords_count = 19,
     s.regional_additions = '[{"word":"","category":"our","reason":"pronoun"},{"word":"","category":"your","reason":"pronoun"},{"word":"","category":"with","reason":"preposition"},{"word":"","category":"from","reason":"preposition"},{"word":"","category":"at","reason":"preposition"}]',
     s.script_config = 'null',
@@ -841,13 +841,13 @@ SET s.display_name = 'EN (MU) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-MU.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for EN (MU). Uses latin_strip rule. 19 stopwords across 5 categories including article, pronoun, conjunction. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (MU). Uses latin_strip rule. 19 stopwords across 5 categories including conjunction, verb, preposition. Has 5 regional additions.';
 
 MERGE (s:Slugification {key: 'en-MY'})
 SET s.display_name = 'EN (MY) Slugification',
     s.description = 'URL slug generation rules for en-MY',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"verb":["is","are","was","were","be","been","being"],"preposition":["in","on","at","to","for","with","by","from","of"],"article":["the","a","an"],"conjunction":["and","or","but"],"pronoun":["it","this","that"]}',
+    s.stopwords = '{"preposition":["in","on","at","to","for","with","by","from","of"],"conjunction":["and","or","but"],"verb":["is","are","was","were","be","been","being"],"pronoun":["it","this","that"],"article":["the","a","an"]}',
     s.stopwords_count = 25,
     s.regional_additions = '[{"word":"","category":"lah","reason":"discourse particle"},{"word":"","category":"mah","reason":"discourse particle"},{"word":"","category":"lor","reason":"discourse particle"},{"word":"","category":"kan","reason":"discourse particle"},{"word":"","category":"bah","reason":"discourse particle"},{"word":"","category":"kot","reason":"discourse particle"},{"word":"","category":"jer","reason":"discourse particle"},{"word":"","category":"punya","reason":"possessive marker"}]',
     s.script_config = 'null',
@@ -856,13 +856,13 @@ SET s.display_name = 'EN (MY) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-MY.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for EN (MY). Uses latin_strip rule. 25 stopwords across 5 categories including verb, preposition, article. Has 8 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (MY). Uses latin_strip rule. 25 stopwords across 5 categories including preposition, conjunction, verb. Has 8 regional additions.';
 
 MERGE (s:Slugification {key: 'en-NG'})
 SET s.display_name = 'EN (NG) Slugification',
     s.description = 'URL slug generation rules for en-NG',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"verb":["is","are","was","were","be","been","being","dey"],"article":["a","an","the"],"conjunction":["and","or","but"],"auxiliary":["na"],"interrogative":["wetin"],"preposition":["of","in","on","at","to","for","with","by","from","as"],"pronoun":["it","that","this"]}',
+    s.stopwords = '{"article":["a","an","the"],"verb":["is","are","was","were","be","been","being","dey"],"pronoun":["it","that","this"],"preposition":["of","in","on","at","to","for","with","by","from","as"],"auxiliary":["na"],"conjunction":["and","or","but"],"interrogative":["wetin"]}',
     s.stopwords_count = 29,
     s.regional_additions = '[{"word":"","category":"na","reason":"auxiliary"},{"word":"","category":"dey","reason":"verb"},{"word":"","category":"sef","reason":"particle"},{"word":"","category":"wetin","reason":"interrogative"}]',
     s.script_config = 'null',
@@ -871,13 +871,13 @@ SET s.display_name = 'EN (NG) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-NG.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for EN (NG). Uses latin_strip rule. 29 stopwords across 7 categories including verb, article, conjunction. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (NG). Uses latin_strip rule. 29 stopwords across 7 categories including article, verb, pronoun. Has 4 regional additions.';
 
 MERGE (s:Slugification {key: 'en-NZ'})
 SET s.display_name = 'EN (NZ) Slugification',
     s.description = 'URL slug generation rules for en-NZ',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"preposition":["of","to","in","for"],"pronoun":["it","this"],"article":["the","a","an","te","nga"],"conjunction":["and","or","but"],"verb":["is","are","was","be"]}',
+    s.stopwords = '{"verb":["is","are","was","be"],"pronoun":["it","this"],"conjunction":["and","or","but"],"article":["the","a","an","te","nga"],"preposition":["of","to","in","for"]}',
     s.stopwords_count = 18,
     s.regional_additions = '[{"word":"","category":"kia","reason":"particle"},{"word":"","category":"te","reason":"article"},{"word":"","category":"nga","reason":"article"}]',
     s.script_config = 'null',
@@ -886,13 +886,13 @@ SET s.display_name = 'EN (NZ) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-NZ.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for EN (NZ). Uses latin_strip rule. 18 stopwords across 5 categories including preposition, pronoun, article. Has 3 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (NZ). Uses latin_strip rule. 18 stopwords across 5 categories including verb, pronoun, conjunction. Has 3 regional additions.';
 
 MERGE (s:Slugification {key: 'en-PH'})
 SET s.display_name = 'EN (PH) Slugification',
     s.description = 'URL slug generation rules for en-PH',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"pronoun":["it","that","this"],"article":["a","an","the"],"preposition":["of","in","on","at","to","for","with","by","from","as"],"conjunction":["and","or","but","kasi"],"verb":["is","are","was","were","be","been","being"],"interrogative":["ano"]}',
+    s.stopwords = '{"interrogative":["ano"],"conjunction":["and","or","but","kasi"],"verb":["is","are","was","were","be","been","being"],"preposition":["of","in","on","at","to","for","with","by","from","as"],"article":["a","an","the"],"pronoun":["it","that","this"]}',
     s.stopwords_count = 28,
     s.regional_additions = '[{"word":"","category":"po","reason":"honorific particle"},{"word":"","category":"opo","reason":"honorific particle"},{"word":"","category":"naman","reason":"discourse particle"},{"word":"","category":"diba","reason":"discourse particle"},{"word":"","category":"ano","reason":"interrogative"},{"word":"","category":"sige","reason":"discourse particle"},{"word":"","category":"talaga","reason":"intensifier"},{"word":"","category":"lang","reason":"limiter"},{"word":"","category":"pala","reason":"discourse particle"},{"word":"","category":"nga","reason":"discourse particle"},{"word":"","category":"ba","reason":"question marker"},{"word":"","category":"kasi","reason":"conjunction"}]',
     s.script_config = 'null',
@@ -901,13 +901,13 @@ SET s.display_name = 'EN (PH) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-PH.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for EN (PH). Uses latin_strip rule. 28 stopwords across 6 categories including pronoun, article, preposition. Has 12 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (PH). Uses latin_strip rule. 28 stopwords across 6 categories including interrogative, conjunction, verb. Has 12 regional additions.';
 
 MERGE (s:Slugification {key: 'en-PK'})
 SET s.display_name = 'EN (PK) Slugification',
     s.description = 'URL slug generation rules for en-PK',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"preposition":["of","in","on","at","to","for","with","by","from"],"article":["the","a","an"],"pronoun":["it","this","that","these","those"],"honorific":["sahib","ji"],"conjunction":["and","or","but"],"verb":["is","are","was","were","be","been","being","have","has","had"]}',
+    s.stopwords = '{"conjunction":["and","or","but"],"article":["the","a","an"],"pronoun":["it","this","that","these","those"],"honorific":["sahib","ji"],"preposition":["of","in","on","at","to","for","with","by","from"],"verb":["is","are","was","were","be","been","being","have","has","had"]}',
     s.stopwords_count = 32,
     s.regional_additions = '[{"word":"","category":"sahib","reason":"honorific"},{"word":"","category":"ji","reason":"honorific"},{"word":"","category":"bhai","reason":"informal address"},{"word":"","category":"yaar","reason":"informal address"},{"word":"","category":"wala","reason":"suffix"}]',
     s.script_config = 'null',
@@ -916,13 +916,13 @@ SET s.display_name = 'EN (PK) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-PK.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for EN (PK). Uses latin_strip rule. 32 stopwords across 6 categories including preposition, article, pronoun. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (PK). Uses latin_strip rule. 32 stopwords across 6 categories including conjunction, article, pronoun. Has 5 regional additions.';
 
 MERGE (s:Slugification {key: 'en-SA'})
 SET s.display_name = 'EN (SA) Slugification',
     s.description = 'URL slug generation rules for en-SA',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"preposition":["in","on","at","to","for","of","with","by"],"verb":["is","are"],"conjunction":["and","or","but"],"article":["the","a","an"]}',
+    s.stopwords = '{"article":["the","a","an"],"conjunction":["and","or","but"],"preposition":["in","on","at","to","for","of","with","by"],"verb":["is","are"]}',
     s.stopwords_count = 16,
     s.regional_additions = '[]',
     s.script_config = 'null',
@@ -931,13 +931,13 @@ SET s.display_name = 'EN (SA) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-SA.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for EN (SA). Uses latin_strip rule. 16 stopwords across 4 categories including preposition, verb, conjunction.';
+    s.llm_context = 'URL slugification rules for EN (SA). Uses latin_strip rule. 16 stopwords across 4 categories including article, conjunction, preposition.';
 
 MERGE (s:Slugification {key: 'en-SG'})
 SET s.display_name = 'EN (SG) Slugification',
     s.description = 'URL slug generation rules for en-SG',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"classifier":["one"],"verb":["is","are","was","were","be","been","being"],"article":["a","an","the"],"preposition":["of","in","on","at","to","for","with","by","from","as"],"pronoun":["it","that","this"],"conjunction":["and","or","but"]}',
+    s.stopwords = '{"conjunction":["and","or","but"],"article":["a","an","the"],"preposition":["of","in","on","at","to","for","with","by","from","as"],"verb":["is","are","was","were","be","been","being"],"pronoun":["it","that","this"],"classifier":["one"]}',
     s.stopwords_count = 27,
     s.regional_additions = '[{"word":"","category":"lah","reason":"discourse particle"},{"word":"","category":"leh","reason":"discourse particle"},{"word":"","category":"lor","reason":"discourse particle"},{"word":"","category":"meh","reason":"discourse particle"},{"word":"","category":"ah","reason":"discourse particle"},{"word":"","category":"hor","reason":"discourse particle"},{"word":"","category":"sia","reason":"discourse particle"},{"word":"","category":"one","reason":"classifier"}]',
     s.script_config = 'null',
@@ -946,13 +946,13 @@ SET s.display_name = 'EN (SG) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-SG.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for EN (SG). Uses latin_strip rule. 27 stopwords across 6 categories including classifier, verb, article. Has 8 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (SG). Uses latin_strip rule. 27 stopwords across 6 categories including conjunction, article, preposition. Has 8 regional additions.';
 
 MERGE (s:Slugification {key: 'en-TT'})
 SET s.display_name = 'EN (TT) Slugification',
     s.description = 'URL slug generation rules for en-TT',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"interjection":["eh","nah"],"article":["the","a","an"],"verb":["is","are","was","be"],"preposition":["in","on","at","to","for","of","with","by","wid"],"conjunction":["and","or","but"],"pronoun":["it","this","that","yuh","dey","dem"]}',
+    s.stopwords = '{"pronoun":["it","this","that","yuh","dey","dem"],"conjunction":["and","or","but"],"preposition":["in","on","at","to","for","of","with","by","wid"],"interjection":["eh","nah"],"verb":["is","are","was","be"],"article":["the","a","an"]}',
     s.stopwords_count = 27,
     s.regional_additions = '[{"word":"","category":"yuh","reason":"pronoun"},{"word":"","category":"dey","reason":"pronoun"},{"word":"","category":"dem","reason":"pronoun"},{"word":"","category":"eh","reason":"interjection"},{"word":"","category":"nah","reason":"interjection"},{"word":"","category":"wid","reason":"preposition"}]',
     s.script_config = 'null',
@@ -961,13 +961,13 @@ SET s.display_name = 'EN (TT) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-TT.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for EN (TT). Uses latin_strip rule. 27 stopwords across 6 categories including interjection, article, verb. Has 6 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (TT). Uses latin_strip rule. 27 stopwords across 6 categories including pronoun, conjunction, preposition. Has 6 regional additions.';
 
 MERGE (s:Slugification {key: 'en-TZ'})
 SET s.display_name = 'EN (TZ) Slugification',
     s.description = 'URL slug generation rules for en-TZ',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"verb":["is","are","was","were","be","been","being","ni"],"preposition":["of","in","on","at","to","for","with","by","from","as","ya","wa","kwa","la","za","katika"],"conjunction":["and","or","but","na","kama","au"],"pronoun":["it","that","this","hii","hiyo"],"article":["a","an","the"]}',
+    s.stopwords = '{"article":["a","an","the"],"conjunction":["and","or","but","na","kama","au"],"preposition":["of","in","on","at","to","for","with","by","from","as","ya","wa","kwa","la","za","katika"],"verb":["is","are","was","were","be","been","being","ni"],"pronoun":["it","that","this","hii","hiyo"]}',
     s.stopwords_count = 38,
     s.regional_additions = '[{"word":"","category":"na","reason":"conjunction"},{"word":"","category":"ya","reason":"preposition"},{"word":"","category":"wa","reason":"preposition"},{"word":"","category":"kwa","reason":"preposition"},{"word":"","category":"ni","reason":"verb"},{"word":"","category":"la","reason":"preposition"},{"word":"","category":"za","reason":"preposition"},{"word":"","category":"katika","reason":"preposition"},{"word":"","category":"hii","reason":"pronoun"},{"word":"","category":"hiyo","reason":"pronoun"},{"word":"","category":"kama","reason":"conjunction"},{"word":"","category":"au","reason":"conjunction"}]',
     s.script_config = 'null',
@@ -976,13 +976,13 @@ SET s.display_name = 'EN (TZ) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-TZ.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for EN (TZ). Uses latin_strip rule. 38 stopwords across 5 categories including verb, preposition, conjunction. Has 12 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (TZ). Uses latin_strip rule. 38 stopwords across 5 categories including article, conjunction, preposition. Has 12 regional additions.';
 
 MERGE (s:Slugification {key: 'en-UG'})
 SET s.display_name = 'EN (UG) Slugification',
     s.description = 'URL slug generation rules for en-UG',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"preposition":["in","on","at","to","for","with","by","from","of","as","mu","ku","okwa"],"verb":["is","are","was","were","be","been","being","eri"],"pronoun":["it","that","this","kino","ekyo"],"conjunction":["and","or","but","ne","oba","nga","era"],"article":["the","a","an"],"adverb":["wano"]}',
+    s.stopwords = '{"conjunction":["and","or","but","ne","oba","nga","era"],"article":["the","a","an"],"preposition":["in","on","at","to","for","with","by","from","of","as","mu","ku","okwa"],"pronoun":["it","that","this","kino","ekyo"],"adverb":["wano"],"verb":["is","are","was","were","be","been","being","eri"]}',
     s.stopwords_count = 37,
     s.regional_additions = '[{"word":"","category":"ne","reason":"conjunction"},{"word":"","category":"oba","reason":"conjunction"},{"word":"","category":"mu","reason":"preposition"},{"word":"","category":"ku","reason":"preposition"},{"word":"","category":"nga","reason":"conjunction"},{"word":"","category":"era","reason":"conjunction"},{"word":"","category":"okwa","reason":"preposition"},{"word":"","category":"eri","reason":"verb"},{"word":"","category":"kino","reason":"pronoun"},{"word":"","category":"ekyo","reason":"pronoun"},{"word":"","category":"buli","reason":"determiner"},{"word":"","category":"wano","reason":"adverb"}]',
     s.script_config = 'null',
@@ -991,13 +991,13 @@ SET s.display_name = 'EN (UG) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-UG.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for EN (UG). Uses latin_strip rule. 37 stopwords across 6 categories including preposition, verb, pronoun. Has 12 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (UG). Uses latin_strip rule. 37 stopwords across 6 categories including conjunction, article, preposition. Has 12 regional additions.';
 
 MERGE (s:Slugification {key: 'en-US'})
 SET s.display_name = 'English (United States) Slugification',
     s.description = 'URL slug generation rules for en-US',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"verb":["is","are","was","were","be","been","being"],"pronoun":["it","that","this"],"article":["a","an","the"],"conjunction":["and","or","but"],"preposition":["of","in","on","at","to","for","with","by","from","as"]}',
+    s.stopwords = '{"preposition":["of","in","on","at","to","for","with","by","from","as"],"conjunction":["and","or","but"],"verb":["is","are","was","were","be","been","being"],"pronoun":["it","that","this"],"article":["a","an","the"]}',
     s.stopwords_count = 26,
     s.regional_additions = '[]',
     s.script_config = 'null',
@@ -1006,13 +1006,13 @@ SET s.display_name = 'English (United States) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-US.md',
     s.last_updated = '2025-12-08',
-    s.llm_context = 'URL slugification rules for English (United States). Uses latin_strip rule. 26 stopwords across 5 categories including verb, pronoun, article.';
+    s.llm_context = 'URL slugification rules for English (United States). Uses latin_strip rule. 26 stopwords across 5 categories including preposition, conjunction, verb.';
 
 MERGE (s:Slugification {key: 'en-VN'})
 SET s.display_name = 'EN (VN) Slugification',
     s.description = 'URL slug generation rules for en-VN',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"preposition":["of","to","in","for","with","at","by","from","on"],"conjunction":["and","or","but"],"abbreviation":["vn"],"article":["the","a","an"],"verb":["is","are","was","were","be"]}',
+    s.stopwords = '{"article":["the","a","an"],"preposition":["of","to","in","for","with","at","by","from","on"],"verb":["is","are","was","were","be"],"abbreviation":["vn"],"conjunction":["and","or","but"]}',
     s.stopwords_count = 21,
     s.regional_additions = '[{"word":"","category":"vietnam","reason":"geographic"},{"word":"","category":"vietnamese","reason":"adjective"},{"word":"","category":"vn","reason":"abbreviation"},{"word":"","category":"saigon","reason":"geographic"},{"word":"","category":"hanoi","reason":"geographic"}]',
     s.script_config = 'null',
@@ -1021,13 +1021,13 @@ SET s.display_name = 'EN (VN) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-VN.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for EN (VN). Uses latin_strip rule. 21 stopwords across 5 categories including preposition, conjunction, abbreviation. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (VN). Uses latin_strip rule. 21 stopwords across 5 categories including article, preposition, verb. Has 5 regional additions.';
 
 MERGE (s:Slugification {key: 'en-ZA'})
 SET s.display_name = 'EN (ZA) Slugification',
     s.description = 'URL slug generation rules for en-ZA',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"pronoun":["it","its","this","that","these","those"],"preposition":["of","in","on","at","to","for","with","by","from","into"],"conjunction":["and","or","but","as"],"interjection":["ja","ne","hey"],"adverb":["mos"],"article":["the","a","an"],"verb":["is","are","was","were","be","been","being","have","has","had","do","does","did","will","would","could","should"]}',
+    s.stopwords = '{"article":["the","a","an"],"preposition":["of","in","on","at","to","for","with","by","from","into"],"pronoun":["it","its","this","that","these","those"],"interjection":["ja","ne","hey"],"adverb":["mos"],"verb":["is","are","was","were","be","been","being","have","has","had","do","does","did","will","would","could","should"],"conjunction":["and","or","but","as"]}',
     s.stopwords_count = 44,
     s.regional_additions = '[{"word":"","category":"ja","reason":"interjection"},{"word":"","category":"ne","reason":"interjection"},{"word":"","category":"hey","reason":"interjection"},{"word":"","category":"mos","reason":"adverb"},{"word":"","category":"lekker","reason":"adjective"}]',
     s.script_config = 'null',
@@ -1036,13 +1036,13 @@ SET s.display_name = 'EN (ZA) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-ZA.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for EN (ZA). Uses latin_strip rule. 44 stopwords across 7 categories including pronoun, preposition, conjunction. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for EN (ZA). Uses latin_strip rule. 44 stopwords across 7 categories including article, preposition, pronoun. Has 5 regional additions.';
 
 MERGE (s:Slugification {key: 'en-ZM'})
 SET s.display_name = 'EN (ZM) Slugification',
     s.description = 'URL slug generation rules for en-ZM',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"preposition":["of","to","in","for","on","with","at","by","from"],"verb":["is","are","was","be"],"conjunction":["and","or","but","as"],"article":["the","a","an"],"adverb":["also","just","very","even"]}',
+    s.stopwords = '{"preposition":["of","to","in","for","on","with","at","by","from"],"verb":["is","are","was","be"],"conjunction":["and","or","but","as"],"adverb":["also","just","very","even"],"article":["the","a","an"]}',
     s.stopwords_count = 24,
     s.regional_additions = '[{"word":"","category":"also","reason":"adverb"},{"word":"","category":"just","reason":"adverb"},{"word":"","category":"very","reason":"adverb"},{"word":"","category":"even","reason":"adverb"}]',
     s.script_config = 'null',
@@ -1057,7 +1057,7 @@ MERGE (s:Slugification {key: 'en-ZW'})
 SET s.display_name = 'EN (ZW) Slugification',
     s.description = 'URL slug generation rules for en-ZW',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"article":["the","a","an"],"preposition":["of","in","to","for","on","with","at","by","from"],"conjunction":["and","or","but","as","if","so","than"],"verb":["is","are","was","were","be","been","being","have","has","had","do","does","did"],"pronoun":["it","this","that","these","those","what","which","who","your","our","their","its"],"adverb":["not","too","very","just","only","also","how","when","where","why"]}',
+    s.stopwords = '{"adverb":["not","too","very","just","only","also","how","when","where","why"],"pronoun":["it","this","that","these","those","what","which","who","your","our","their","its"],"conjunction":["and","or","but","as","if","so","than"],"article":["the","a","an"],"verb":["is","are","was","were","be","been","being","have","has","had","do","does","did"],"preposition":["of","in","to","for","on","with","at","by","from"]}',
     s.stopwords_count = 54,
     s.regional_additions = '[]',
     s.script_config = 'null',
@@ -1066,13 +1066,13 @@ SET s.display_name = 'EN (ZW) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/en-ZW.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for EN (ZW). Uses latin_strip rule. 54 stopwords across 6 categories including article, preposition, conjunction.';
+    s.llm_context = 'URL slugification rules for EN (ZW). Uses latin_strip rule. 54 stopwords across 6 categories including adverb, pronoun, conjunction.';
 
 MERGE (s:Slugification {key: 'es-AR'})
 SET s.display_name = 'ES (AR) Slugification',
     s.description = 'URL slug generation rules for es-AR',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"article":["el","la","los","las","un","una"],"conjunction":["que","y","o"],"verb":["es","ser","sos","tenés","podés"],"contraction":["del","al"],"preposition":["de","en","con","para","por"],"interjection":["che","boludo","dale","bueno"],"adverb":["muy","más"]}',
+    s.stopwords = '{"interjection":["che","boludo","dale","bueno"],"adverb":["muy","más"],"conjunction":["que","y","o"],"verb":["es","ser","sos","tenés","podés"],"contraction":["del","al"],"article":["el","la","los","las","un","una"],"preposition":["de","en","con","para","por"]}',
     s.stopwords_count = 27,
     s.regional_additions = '[{"word":"","category":"che","reason":"interjection"},{"word":"","category":"boludo","reason":"interjection"},{"word":"","category":"dale","reason":"interjection"},{"word":"","category":"bueno","reason":"interjection"},{"word":"","category":"sos","reason":"verb"},{"word":"","category":"tenés","reason":"verb"},{"word":"","category":"podés","reason":"verb"},{"word":"","category":"re","reason":"intensifier"},{"word":"","category":"muy","reason":"adverb"},{"word":"","category":"más","reason":"adverb"}]',
     s.script_config = 'null',
@@ -1081,13 +1081,13 @@ SET s.display_name = 'ES (AR) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-AR.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for ES (AR). Uses latin_preserve rule. 27 stopwords across 7 categories including article, conjunction, verb. Has 10 regional additions.';
+    s.llm_context = 'URL slugification rules for ES (AR). Uses latin_preserve rule. 27 stopwords across 7 categories including interjection, adverb, conjunction. Has 10 regional additions.';
 
 MERGE (s:Slugification {key: 'es-BO'})
 SET s.display_name = 'ES (BO) Slugification',
     s.description = 'URL slug generation rules for es-BO',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"contraction":["del","al"],"conjunction":["y","o","que"],"pronoun":["su","sus"],"adverb":["nomas","bien"],"article":["el","la","los","las","un","una"],"preposition":["de","en","con","para","por"],"interjection":["che"],"verb":["es","son"]}',
+    s.stopwords = '{"conjunction":["y","o","que"],"verb":["es","son"],"contraction":["del","al"],"article":["el","la","los","las","un","una"],"preposition":["de","en","con","para","por"],"adverb":["nomas","bien"],"interjection":["che"],"pronoun":["su","sus"]}',
     s.stopwords_count = 23,
     s.regional_additions = '[{"word":"","category":"pues","reason":"discourse marker"},{"word":"","category":"nomas","reason":"adverb"},{"word":"","category":"che","reason":"interjection"},{"word":"","category":"bien","reason":"adverb"},{"word":"","category":"ahi","reason":"locative"}]',
     s.script_config = 'null',
@@ -1096,13 +1096,13 @@ SET s.display_name = 'ES (BO) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-BO.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for ES (BO). Uses latin_preserve rule. 23 stopwords across 8 categories including contraction, conjunction, pronoun. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for ES (BO). Uses latin_preserve rule. 23 stopwords across 8 categories including conjunction, verb, contraction. Has 5 regional additions.';
 
 MERGE (s:Slugification {key: 'es-CL'})
 SET s.display_name = 'ES (CL) Slugification',
     s.description = 'URL slug generation rules for es-CL',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"conjunction":["y","o","pero","que","si"],"pronoun":["su","sus","mi","mis"],"adverb":["muy"],"preposition":["de","en","a","con","por","para"],"verb":["es","son"],"article":["el","la","los","las","un","una"],"contraction":["del","al"]}',
+    s.stopwords = '{"article":["el","la","los","las","un","una"],"adverb":["muy"],"preposition":["de","en","a","con","por","para"],"conjunction":["y","o","pero","que","si"],"pronoun":["su","sus","mi","mis"],"contraction":["del","al"],"verb":["es","son"]}',
     s.stopwords_count = 26,
     s.regional_additions = '[{"word":"","category":"po","reason":"particle"},{"word":"","category":"muy","reason":"adverb"}]',
     s.script_config = 'null',
@@ -1111,13 +1111,13 @@ SET s.display_name = 'ES (CL) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-CL.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for ES (CL). Uses latin_preserve rule. 26 stopwords across 7 categories including conjunction, pronoun, adverb. Has 2 regional additions.';
+    s.llm_context = 'URL slugification rules for ES (CL). Uses latin_preserve rule. 26 stopwords across 7 categories including article, adverb, preposition. Has 2 regional additions.';
 
 MERGE (s:Slugification {key: 'es-CO'})
 SET s.display_name = 'ES (CO) Slugification',
     s.description = 'URL slug generation rules for es-CO',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"adverb":["ahi"],"conjunction":["y","o","que"],"verb":["es","son"],"article":["el","la","los","las","un","una"],"preposition":["de","en","con","para","por","pa","pal","onde"],"filler":["pues"]}',
+    s.stopwords = '{"preposition":["de","en","con","para","por","pa","pal","onde"],"filler":["pues"],"article":["el","la","los","las","un","una"],"conjunction":["y","o","que"],"adverb":["ahi"],"verb":["es","son"]}',
     s.stopwords_count = 21,
     s.regional_additions = '[{"word":"","category":"pa","reason":"preposition"},{"word":"","category":"pal","reason":"preposition"},{"word":"","category":"onde","reason":"preposition"},{"word":"","category":"pues","reason":"filler"},{"word":"","category":"ahi","reason":"adverb"}]',
     s.script_config = 'null',
@@ -1126,13 +1126,13 @@ SET s.display_name = 'ES (CO) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-CO.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for ES (CO). Uses latin_preserve rule. 21 stopwords across 6 categories including adverb, conjunction, verb. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for ES (CO). Uses latin_preserve rule. 21 stopwords across 6 categories including preposition, filler, article. Has 5 regional additions.';
 
 MERGE (s:Slugification {key: 'es-CR'})
 SET s.display_name = 'ES (CR) Slugification',
     s.description = 'URL slug generation rules for es-CR',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"article":["el","la","los","las","un","una"],"preposition":["de","en","con","para","por"],"conjunction":["y","o","pero"],"contraction":["del","al"],"verb":["es","está","son"],"demonstrative":["este"]}',
+    s.stopwords = '{"conjunction":["y","o","pero"],"verb":["es","está","son"],"preposition":["de","en","con","para","por"],"article":["el","la","los","las","un","una"],"demonstrative":["este"],"contraction":["del","al"]}',
     s.stopwords_count = 20,
     s.regional_additions = '[{"word":"","category":"muy","reason":"intensifier"},{"word":"","category":"más","reason":"intensifier"},{"word":"","category":"como","reason":"relative"},{"word":"","category":"este","reason":"demonstrative"}]',
     s.script_config = 'null',
@@ -1141,13 +1141,13 @@ SET s.display_name = 'ES (CR) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-CR.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for ES (CR). Uses latin_preserve rule. 20 stopwords across 6 categories including article, preposition, conjunction. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for ES (CR). Uses latin_preserve rule. 20 stopwords across 6 categories including conjunction, verb, preposition. Has 4 regional additions.';
 
 MERGE (s:Slugification {key: 'es-CU'})
 SET s.display_name = 'ES (CU) Slugification',
     s.description = 'URL slug generation rules for es-CU',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"preposition":["de","en","con","por","para"],"verb":["es","son"],"conjunction":["y","o"],"pronoun":["que"],"adverb":["aca","asi"],"article":["el","la","los","las","un","una"],"contraction":["pa","na"]}',
+    s.stopwords = '{"contraction":["pa","na"],"pronoun":["que"],"preposition":["de","en","con","por","para"],"article":["el","la","los","las","un","una"],"conjunction":["y","o"],"verb":["es","son"],"adverb":["aca","asi"]}',
     s.stopwords_count = 20,
     s.regional_additions = '[{"word":"","category":"aca","reason":"adverb"},{"word":"","category":"asi","reason":"adverb"},{"word":"","category":"pa","reason":"contraction"},{"word":"","category":"na","reason":"contraction"}]',
     s.script_config = 'null',
@@ -1156,13 +1156,13 @@ SET s.display_name = 'ES (CU) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-CU.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for ES (CU). Uses latin_preserve rule. 20 stopwords across 7 categories including preposition, verb, conjunction. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for ES (CU). Uses latin_preserve rule. 20 stopwords across 7 categories including contraction, pronoun, preposition. Has 4 regional additions.';
 
 MERGE (s:Slugification {key: 'es-DO'})
 SET s.display_name = 'ES (DO) Slugification',
     s.description = 'URL slug generation rules for es-DO',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"conjunction":["y","o"],"pronoun":["que"],"article":["el","la","los","las","un","una"],"preposition":["de","en","con","para","por","pa","pal"],"verb":["es","son"],"adverb":["tato"],"interjection":["ombe"]}',
+    s.stopwords = '{"article":["el","la","los","las","un","una"],"conjunction":["y","o"],"pronoun":["que"],"verb":["es","son"],"interjection":["ombe"],"adverb":["tato"],"preposition":["de","en","con","para","por","pa","pal"]}',
     s.stopwords_count = 20,
     s.regional_additions = '[{"word":"","category":"pa","reason":"preposition"},{"word":"","category":"pal","reason":"preposition"},{"word":"","category":"tato","reason":"adverb"},{"word":"","category":"ombe","reason":"interjection"}]',
     s.script_config = 'null',
@@ -1171,13 +1171,13 @@ SET s.display_name = 'ES (DO) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-DO.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for ES (DO). Uses latin_preserve rule. 20 stopwords across 7 categories including conjunction, pronoun, article. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for ES (DO). Uses latin_preserve rule. 20 stopwords across 7 categories including article, conjunction, pronoun. Has 4 regional additions.';
 
 MERGE (s:Slugification {key: 'es-EC'})
 SET s.display_name = 'ES (EC) Slugification',
     s.description = 'URL slug generation rules for es-EC',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"preposition":["de","en","con","para","por","a"],"article":["el","la","los","las","un","una"],"adverb":["como"],"conjunction":["que","y","o"],"contraction":["del","al"],"pronoun":["se","su"]}',
+    s.stopwords = '{"article":["el","la","los","las","un","una"],"conjunction":["que","y","o"],"adverb":["como"],"pronoun":["se","su"],"preposition":["de","en","con","para","por","a"],"contraction":["del","al"]}',
     s.stopwords_count = 20,
     s.regional_additions = '[{"word":"","category":"verás","reason":"discourse marker"},{"word":"","category":"mismo","reason":"intensifier"},{"word":"","category":"pes","reason":"discourse marker"}]',
     s.script_config = 'null',
@@ -1186,13 +1186,13 @@ SET s.display_name = 'ES (EC) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-EC.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for ES (EC). Uses latin_preserve rule. 20 stopwords across 6 categories including preposition, article, adverb. Has 3 regional additions.';
+    s.llm_context = 'URL slugification rules for ES (EC). Uses latin_preserve rule. 20 stopwords across 6 categories including article, conjunction, adverb. Has 3 regional additions.';
 
 MERGE (s:Slugification {key: 'es-ES'})
 SET s.display_name = 'Spanish (Spain) Slugification',
     s.description = 'URL slug generation rules for es-ES',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"pronoun":["su","sus","mi","mis"],"contraction":["del","al"],"preposition":["de","en","a","con","por","para"],"conjunction":["y","o","pero","que","si","pues"],"verb":["es","son"],"article":["el","la","los","las","un","una"],"interjection":["vale"],"adverb":["muy"]}',
+    s.stopwords = '{"article":["el","la","los","las","un","una"],"contraction":["del","al"],"verb":["es","son"],"adverb":["muy"],"pronoun":["su","sus","mi","mis"],"interjection":["vale"],"preposition":["de","en","a","con","por","para"],"conjunction":["y","o","pero","que","si","pues"]}',
     s.stopwords_count = 28,
     s.regional_additions = '[{"word":"","category":"pues","reason":"conjunction"},{"word":"","category":"vale","reason":"interjection"},{"word":"","category":"muy","reason":"adverb"}]',
     s.script_config = 'null',
@@ -1201,13 +1201,13 @@ SET s.display_name = 'Spanish (Spain) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-ES.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for Spanish (Spain). Uses latin_preserve rule. 28 stopwords across 8 categories including pronoun, contraction, preposition. Has 3 regional additions.';
+    s.llm_context = 'URL slugification rules for Spanish (Spain). Uses latin_preserve rule. 28 stopwords across 8 categories including article, contraction, verb. Has 3 regional additions.';
 
 MERGE (s:Slugification {key: 'es-GT'})
 SET s.display_name = 'ES (GT) Slugification',
     s.description = 'URL slug generation rules for es-GT',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"interjection":["puchis","va","sho"],"conjunction":["que","y","o"],"contraction":["del","al"],"article":["el","la","los","las","un","una"],"preposition":["de","en","con","para","por","a"],"pronoun":["vos"]}',
+    s.stopwords = '{"interjection":["puchis","va","sho"],"pronoun":["vos"],"preposition":["de","en","con","para","por","a"],"contraction":["del","al"],"article":["el","la","los","las","un","una"],"conjunction":["que","y","o"]}',
     s.stopwords_count = 21,
     s.regional_additions = '[{"word":"","category":"puchis","reason":"interjection"},{"word":"","category":"chilero","reason":"adjective"},{"word":"","category":"va","reason":"interjection"},{"word":"","category":"vos","reason":"pronoun"},{"word":"","category":"sho","reason":"interjection"}]',
     s.script_config = 'null',
@@ -1216,13 +1216,13 @@ SET s.display_name = 'ES (GT) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-GT.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for ES (GT). Uses latin_preserve rule. 21 stopwords across 6 categories including interjection, conjunction, contraction. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for ES (GT). Uses latin_preserve rule. 21 stopwords across 6 categories including interjection, pronoun, preposition. Has 5 regional additions.';
 
 MERGE (s:Slugification {key: 'es-HN'})
 SET s.display_name = 'ES (HN) Slugification',
     s.description = 'URL slug generation rules for es-HN',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"conjunction":["que","y","o","pues"],"contraction":["del","al"],"verb":["es","son"],"article":["el","la","los","las","un","una"],"preposition":["de","en","con","para","por","a"],"interjection":["va"],"pronoun":["vos"]}',
+    s.stopwords = '{"contraction":["del","al"],"conjunction":["que","y","o","pues"],"pronoun":["vos"],"article":["el","la","los","las","un","una"],"verb":["es","son"],"interjection":["va"],"preposition":["de","en","con","para","por","a"]}',
     s.stopwords_count = 22,
     s.regional_additions = '[{"word":"","category":"pues","reason":"conjunction"},{"word":"","category":"va","reason":"interjection"},{"word":"","category":"maje","reason":"vocative"},{"word":"","category":"vos","reason":"pronoun"}]',
     s.script_config = 'null',
@@ -1231,13 +1231,13 @@ SET s.display_name = 'ES (HN) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-HN.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for ES (HN). Uses latin_preserve rule. 22 stopwords across 7 categories including conjunction, contraction, verb. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for ES (HN). Uses latin_preserve rule. 22 stopwords across 7 categories including contraction, conjunction, pronoun. Has 4 regional additions.';
 
 MERGE (s:Slugification {key: 'es-MX'})
 SET s.display_name = 'Spanish (Mexico) Slugification',
     s.description = 'URL slug generation rules for es-MX',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"contraction":["del","al"],"article":["el","la","los","las","un","una"],"preposition":["de","en","a","con","por","para"],"conjunction":["y","o","pero","que","si","pues"],"pronoun":["su","sus"],"verb":["es","son"],"adverb":["más","muy","aquí","como"]}',
+    s.stopwords = '{"contraction":["del","al"],"preposition":["de","en","a","con","por","para"],"adverb":["más","muy","aquí","como"],"conjunction":["y","o","pero","que","si","pues"],"verb":["es","son"],"pronoun":["su","sus"],"article":["el","la","los","las","un","una"]}',
     s.stopwords_count = 28,
     s.regional_additions = '[{"word":"","category":"pues","reason":"conjunction"},{"word":"","category":"más","reason":"adverb"},{"word":"","category":"muy","reason":"adverb"},{"word":"","category":"aquí","reason":"adverb"},{"word":"","category":"como","reason":"adverb"}]',
     s.script_config = 'null',
@@ -1246,13 +1246,13 @@ SET s.display_name = 'Spanish (Mexico) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-MX.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for Spanish (Mexico). Uses latin_preserve rule. 28 stopwords across 7 categories including contraction, article, preposition. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for Spanish (Mexico). Uses latin_preserve rule. 28 stopwords across 7 categories including contraction, preposition, adverb. Has 5 regional additions.';
 
 MERGE (s:Slugification {key: 'es-NI'})
 SET s.display_name = 'ES (NI) Slugification',
     s.description = 'URL slug generation rules for es-NI',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"conjunction":["y","o","pero","que","si","pues"],"preposition":["de","en","a","con","por","para"],"adverb":["entonces"],"verb":["es","son"],"pronoun":["su","sus","mi","mis"],"contraction":["del","al"],"article":["el","la","los","las","un","una"],"interjection":["ideay"]}',
+    s.stopwords = '{"article":["el","la","los","las","un","una"],"contraction":["del","al"],"preposition":["de","en","a","con","por","para"],"pronoun":["su","sus","mi","mis"],"verb":["es","son"],"conjunction":["y","o","pero","que","si","pues"],"interjection":["ideay"],"adverb":["entonces"]}',
     s.stopwords_count = 28,
     s.regional_additions = '[{"word":"","category":"pues","reason":"conjunction"},{"word":"","category":"entonces","reason":"adverb"},{"word":"","category":"ideay","reason":"interjection"}]',
     s.script_config = 'null',
@@ -1261,13 +1261,13 @@ SET s.display_name = 'ES (NI) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-NI.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for ES (NI). Uses latin_preserve rule. 28 stopwords across 8 categories including conjunction, preposition, adverb. Has 3 regional additions.';
+    s.llm_context = 'URL slugification rules for ES (NI). Uses latin_preserve rule. 28 stopwords across 8 categories including article, contraction, preposition. Has 3 regional additions.';
 
 MERGE (s:Slugification {key: 'es-PA'})
 SET s.display_name = 'ES (PA) Slugification',
     s.description = 'URL slug generation rules for es-PA',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"conjunction":["y","o","e","u","que","pero","ni","como"],"article":["el","la","los","las","un","una"],"verb":["es","son","ser","estar"],"preposition":["de","del","en","a","al","con","por","para","sin","sobre"]}',
+    s.stopwords = '{"preposition":["de","del","en","a","al","con","por","para","sin","sobre"],"article":["el","la","los","las","un","una"],"conjunction":["y","o","e","u","que","pero","ni","como"],"verb":["es","son","ser","estar"]}',
     s.stopwords_count = 28,
     s.regional_additions = '[]',
     s.script_config = 'null',
@@ -1276,13 +1276,13 @@ SET s.display_name = 'ES (PA) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-PA.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for ES (PA). Uses latin_preserve rule. 28 stopwords across 4 categories including conjunction, article, verb.';
+    s.llm_context = 'URL slugification rules for ES (PA). Uses latin_preserve rule. 28 stopwords across 4 categories including preposition, article, conjunction.';
 
 MERGE (s:Slugification {key: 'es-PE'})
 SET s.display_name = 'ES (PE) Slugification',
     s.description = 'URL slug generation rules for es-PE',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"pronoun":["que","su","se"],"verb":["es","son"],"abbreviation":["pe"],"article":["el","la","los","las","un","una","lo"],"contraction":["del","al"],"conjunction":["y","o"],"preposition":["de","en","con","para","por"]}',
+    s.stopwords = '{"abbreviation":["pe"],"article":["el","la","los","las","un","una","lo"],"verb":["es","son"],"contraction":["del","al"],"pronoun":["que","su","se"],"conjunction":["y","o"],"preposition":["de","en","con","para","por"]}',
     s.stopwords_count = 22,
     s.regional_additions = '[{"word":"","category":"pe","reason":"abbreviation"},{"word":"","category":"del","reason":"contraction"},{"word":"","category":"al","reason":"contraction"},{"word":"","category":"lo","reason":"article"},{"word":"","category":"su","reason":"pronoun"},{"word":"","category":"se","reason":"pronoun"}]',
     s.script_config = 'null',
@@ -1291,13 +1291,13 @@ SET s.display_name = 'ES (PE) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-PE.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for ES (PE). Uses latin_preserve rule. 22 stopwords across 7 categories including pronoun, verb, abbreviation. Has 6 regional additions.';
+    s.llm_context = 'URL slugification rules for ES (PE). Uses latin_preserve rule. 22 stopwords across 7 categories including abbreviation, article, verb. Has 6 regional additions.';
 
 MERGE (s:Slugification {key: 'es-PR'})
 SET s.display_name = 'ES (PR) Slugification',
     s.description = 'URL slug generation rules for es-PR',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"contraction":["del","al"],"verb":["es","son"],"preposition":["de","en","con","para","por","pa"],"article":["el","la","los","las","un","una"],"conjunction":["y","o","que"]}',
+    s.stopwords = '{"contraction":["del","al"],"preposition":["de","en","con","para","por","pa"],"article":["el","la","los","las","un","una"],"conjunction":["y","o","que"],"verb":["es","son"]}',
     s.stopwords_count = 19,
     s.regional_additions = '[{"word":"","category":"del","reason":"contraction"},{"word":"","category":"al","reason":"contraction"},{"word":"","category":"pa","reason":"preposition"}]',
     s.script_config = 'null',
@@ -1306,13 +1306,13 @@ SET s.display_name = 'ES (PR) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-PR.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for ES (PR). Uses latin_preserve rule. 19 stopwords across 5 categories including contraction, verb, preposition. Has 3 regional additions.';
+    s.llm_context = 'URL slugification rules for ES (PR). Uses latin_preserve rule. 19 stopwords across 5 categories including contraction, preposition, article. Has 3 regional additions.';
 
 MERGE (s:Slugification {key: 'es-PY'})
 SET s.display_name = 'ES (PY) Slugification',
     s.description = 'URL slug generation rules for es-PY',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"conjunction":["y","o","que"],"pronoun":["nde"],"demonstrative":["ko"],"verb":["es","son"],"preposition":["de","en","con","por","para"],"article":["el","la","los","las","un","una"],"adverb":["gua\'u"],"interjection":["che"]}',
+    s.stopwords = '{"conjunction":["y","o","que"],"preposition":["de","en","con","por","para"],"pronoun":["nde"],"interjection":["che"],"demonstrative":["ko"],"verb":["es","son"],"article":["el","la","los","las","un","una"],"adverb":["gua\'u"]}',
     s.stopwords_count = 20,
     s.regional_additions = '[{"word":"","category":"che","reason":"interjection"},{"word":"","category":"nde","reason":"pronoun"},{"word":"","category":"pio","reason":"particle"},{"word":"","category":"katu","reason":"particle"},{"word":"gua\'u","category":"adverb","reason":"Guarani-origin word meaning \"a little\" in casual speech"},{"word":"ko","category":"demonstrative","reason":"Guarani demonstrative often mixed into Spanish"}]',
     s.script_config = 'null',
@@ -1321,13 +1321,13 @@ SET s.display_name = 'ES (PY) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-PY.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for ES (PY). Uses latin_preserve rule. 20 stopwords across 8 categories including conjunction, pronoun, demonstrative. Has 6 regional additions.';
+    s.llm_context = 'URL slugification rules for ES (PY). Uses latin_preserve rule. 20 stopwords across 8 categories including conjunction, preposition, pronoun. Has 6 regional additions.';
 
 MERGE (s:Slugification {key: 'es-SV'})
 SET s.display_name = 'ES (SV) Slugification',
     s.description = 'URL slug generation rules for es-SV',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"verb":["es","son"],"preposition":["de","en","con","por","para","a"],"article":["el","la","los","las","un","una"],"contraction":["al","del"],"conjunction":["y","o","que"]}',
+    s.stopwords = '{"preposition":["de","en","con","por","para","a"],"verb":["es","son"],"article":["el","la","los","las","un","una"],"contraction":["al","del"],"conjunction":["y","o","que"]}',
     s.stopwords_count = 19,
     s.regional_additions = '[{"word":"","category":"al","reason":"contraction"},{"word":"","category":"del","reason":"contraction"}]',
     s.script_config = 'null',
@@ -1336,13 +1336,13 @@ SET s.display_name = 'ES (SV) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-SV.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for ES (SV). Uses latin_preserve rule. 19 stopwords across 5 categories including verb, preposition, article. Has 2 regional additions.';
+    s.llm_context = 'URL slugification rules for ES (SV). Uses latin_preserve rule. 19 stopwords across 5 categories including preposition, verb, article. Has 2 regional additions.';
 
 MERGE (s:Slugification {key: 'es-UY'})
 SET s.display_name = 'ES (UY) Slugification',
     s.description = 'URL slug generation rules for es-UY',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"preposition":["de","en","a","con","por","para"],"article":["el","la","los","las","un","una"],"contraction":["del","al"],"verb":["es","son","sos"],"interjection":["bo","ta"],"adverb":["muy","más","tan"],"pronoun":["su","sus","mi","mis"],"conjunction":["y","o","pero","que","si"]}',
+    s.stopwords = '{"adverb":["muy","más","tan"],"pronoun":["su","sus","mi","mis"],"contraction":["del","al"],"verb":["es","son","sos"],"article":["el","la","los","las","un","una"],"interjection":["bo","ta"],"conjunction":["y","o","pero","que","si"],"preposition":["de","en","a","con","por","para"]}',
     s.stopwords_count = 31,
     s.regional_additions = '[{"word":"","category":"bo","reason":"interjection"},{"word":"","category":"sos","reason":"verb"},{"word":"","category":"ta","reason":"interjection"},{"word":"","category":"muy","reason":"adverb"},{"word":"","category":"más","reason":"adverb"},{"word":"","category":"tan","reason":"adverb"}]',
     s.script_config = 'null',
@@ -1351,13 +1351,13 @@ SET s.display_name = 'ES (UY) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-UY.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for ES (UY). Uses latin_preserve rule. 31 stopwords across 8 categories including preposition, article, contraction. Has 6 regional additions.';
+    s.llm_context = 'URL slugification rules for ES (UY). Uses latin_preserve rule. 31 stopwords across 8 categories including adverb, pronoun, contraction. Has 6 regional additions.';
 
 MERGE (s:Slugification {key: 'es-VE'})
 SET s.display_name = 'ES (VE) Slugification',
     s.description = 'URL slug generation rules for es-VE',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"conjunction":["y","o","pero","que","si","pues"],"preposition":["de","en","a","con","por","para"],"interjection":["vale","mira"],"contraction":["del","al"],"verb":["es","son"],"pronoun":["su","sus","mi","mis"],"article":["el","la","los","las","un","una"]}',
+    s.stopwords = '{"interjection":["vale","mira"],"article":["el","la","los","las","un","una"],"contraction":["del","al"],"preposition":["de","en","a","con","por","para"],"conjunction":["y","o","pero","que","si","pues"],"verb":["es","son"],"pronoun":["su","sus","mi","mis"]}',
     s.stopwords_count = 28,
     s.regional_additions = '[{"word":"","category":"pues","reason":"conjunction"},{"word":"","category":"vale","reason":"interjection"},{"word":"","category":"mira","reason":"interjection"}]',
     s.script_config = 'null',
@@ -1366,13 +1366,13 @@ SET s.display_name = 'ES (VE) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/es-VE.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for ES (VE). Uses latin_preserve rule. 28 stopwords across 7 categories including conjunction, preposition, interjection. Has 3 regional additions.';
+    s.llm_context = 'URL slugification rules for ES (VE). Uses latin_preserve rule. 28 stopwords across 7 categories including interjection, article, contraction. Has 3 regional additions.';
 
 MERGE (s:Slugification {key: 'et-EE'})
 SET s.display_name = 'Estonian (Estonia) Slugification',
     s.description = 'URL slug generation rules for et-EE',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"adverb":["ka","veel","siin","seal","nüüd"],"pronoun":["see","mis","kes","ta","tema"],"verb":["on","oli"],"possessive":["oma"],"conjunction":["ja","ning","või","aga","kuid","et"],"preposition":["kui"]}',
+    s.stopwords = '{"pronoun":["see","mis","kes","ta","tema"],"possessive":["oma"],"verb":["on","oli"],"preposition":["kui"],"conjunction":["ja","ning","või","aga","kuid","et"],"adverb":["ka","veel","siin","seal","nüüd"]}',
     s.stopwords_count = 20,
     s.regional_additions = '[{"word":"","category":"eesti","reason":"adjective"},{"word":"","category":"siin","reason":"adverb"},{"word":"","category":"seal","reason":"adverb"},{"word":"","category":"nüüd","reason":"adverb"}]',
     s.script_config = 'null',
@@ -1381,7 +1381,7 @@ SET s.display_name = 'Estonian (Estonia) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/et-EE.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for Estonian (Estonia). Uses latin_preserve rule. 20 stopwords across 6 categories including adverb, pronoun, verb. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for Estonian (Estonia). Uses latin_preserve rule. 20 stopwords across 6 categories including pronoun, possessive, verb. Has 4 regional additions.';
 
 MERGE (s:Slugification {key: 'eu-ES'})
 SET s.display_name = 'EU (ES) Slugification',
@@ -1402,7 +1402,7 @@ MERGE (s:Slugification {key: 'fa-IR'})
 SET s.display_name = 'Persian (Iran) Slugification',
     s.description = 'URL slug generation rules for fa-IR',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"demonstrative":["این","آن"],"conjunction":["و","یا","که"],"auxiliary":["می"],"adverb":["نیز","هم","حتی"],"preposition":["به","از","در","با","برای"]}',
+    s.stopwords = '{"auxiliary":["می"],"demonstrative":["این","آن"],"conjunction":["و","یا","که"],"adverb":["نیز","هم","حتی"],"preposition":["به","از","در","با","برای"]}',
     s.stopwords_count = 14,
     s.regional_additions = '[{"word":"","category":"می","reason":"auxiliary"},{"word":"","category":"نیز","reason":"adverb"},{"word":"","category":"هم","reason":"adverb"},{"word":"","category":"حتی","reason":"adverb"}]',
     s.script_config = '{"primary_script":"arabic","diacritic_handling":null,"numeral_handling":null,"special_chars":null}',
@@ -1411,13 +1411,13 @@ SET s.display_name = 'Persian (Iran) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fa-IR.md',
     s.last_updated = '2025-12-08',
-    s.llm_context = 'URL slugification rules for Persian (Iran). Uses native_script rule. 14 stopwords across 5 categories including demonstrative, conjunction, auxiliary. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for Persian (Iran). Uses native_script rule. 14 stopwords across 5 categories including auxiliary, demonstrative, conjunction. Has 4 regional additions.';
 
 MERGE (s:Slugification {key: 'fi-FI'})
 SET s.display_name = 'Finnish (Finland) Slugification',
     s.description = 'URL slug generation rules for fi-FI',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"pronoun":["se","tämä","joka","mitä"],"verb":["on","ei","oli","ovat"],"quantifier":["kaikki"],"conjunction":["ja","tai","sekä","että","mutta","vaan","eli","kun","jos","vaikka","koska","jotta"],"adverb":["myös"]}',
+    s.stopwords = '{"quantifier":["kaikki"],"verb":["on","ei","oli","ovat"],"adverb":["myös"],"pronoun":["se","tämä","joka","mitä"],"conjunction":["ja","tai","sekä","että","mutta","vaan","eli","kun","jos","vaikka","koska","jotta"]}',
     s.stopwords_count = 22,
     s.regional_additions = '[{"word":"","category":"vuonna","reason":"temporal"},{"word":"","category":"vuoden","reason":"temporal"},{"word":"","category":"kuin","reason":"comparison"},{"word":"","category":"kaikki","reason":"quantifier"},{"word":"","category":"myös","reason":"adverb"}]',
     s.script_config = 'null',
@@ -1426,7 +1426,7 @@ SET s.display_name = 'Finnish (Finland) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fi-FI.md',
     s.last_updated = '2025-12-08',
-    s.llm_context = 'URL slugification rules for Finnish (Finland). Uses latin_preserve rule. 22 stopwords across 5 categories including pronoun, verb, quantifier. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for Finnish (Finland). Uses latin_preserve rule. 22 stopwords across 5 categories including quantifier, verb, adverb. Has 5 regional additions.';
 
 MERGE (s:Slugification {key: 'fr-BE'})
 SET s.display_name = 'FR (BE) Slugification',
@@ -1447,7 +1447,7 @@ MERGE (s:Slugification {key: 'fr-BF'})
 SET s.display_name = 'FR (BF) Slugification',
     s.description = 'URL slug generation rules for fr-BF',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"conjunction":["et","ou","wala","donc"],"filler":["quoi"],"article":["le","la","les","un","une","des"],"interjection":["bon","voila"],"preposition":["de","du","a","au","aux","en","pour","dans","sur","avec","chez"],"adverb":["meme","aussi"]}',
+    s.stopwords = '{"preposition":["de","du","a","au","aux","en","pour","dans","sur","avec","chez"],"adverb":["meme","aussi"],"article":["le","la","les","un","une","des"],"interjection":["bon","voila"],"filler":["quoi"],"conjunction":["et","ou","wala","donc"]}',
     s.stopwords_count = 26,
     s.regional_additions = '[{"word":"","category":"wala","reason":"conjunction"},{"word":"","category":"bon","reason":"interjection"},{"word":"","category":"voila","reason":"interjection"},{"word":"","category":"donc","reason":"conjunction"},{"word":"","category":"quoi","reason":"filler"},{"word":"","category":"meme","reason":"adverb"},{"word":"","category":"aussi","reason":"adverb"},{"word":"","category":"chez","reason":"preposition"}]',
     s.script_config = 'null',
@@ -1456,13 +1456,13 @@ SET s.display_name = 'FR (BF) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fr-BF.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for FR (BF). Uses latin_preserve rule. 26 stopwords across 6 categories including conjunction, filler, article. Has 8 regional additions.';
+    s.llm_context = 'URL slugification rules for FR (BF). Uses latin_preserve rule. 26 stopwords across 6 categories including preposition, adverb, article. Has 8 regional additions.';
 
 MERGE (s:Slugification {key: 'fr-CA'})
 SET s.display_name = 'French (Canada) Slugification',
     s.description = 'URL slug generation rules for fr-CA',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"article":["le","la","les","un","une","des"],"verb":["est","sont"],"adverb":["ben","icitte"],"pronoun":["qui","ce","cette","ces"],"preposition":["de","du","dans","pour","avec","sur","par","en","aux","au","chez"],"conjunction":["et","ou","mais","donc","que","pis"]}',
+    s.stopwords = '{"verb":["est","sont"],"article":["le","la","les","un","une","des"],"adverb":["ben","icitte"],"preposition":["de","du","dans","pour","avec","sur","par","en","aux","au","chez"],"conjunction":["et","ou","mais","donc","que","pis"],"pronoun":["qui","ce","cette","ces"]}',
     s.stopwords_count = 31,
     s.regional_additions = '[{"word":"","category":"pis","reason":"conjunction"},{"word":"","category":"ben","reason":"adverb"},{"word":"","category":"chez","reason":"preposition"},{"word":"","category":"icitte","reason":"adverb"}]',
     s.script_config = 'null',
@@ -1471,13 +1471,13 @@ SET s.display_name = 'French (Canada) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fr-CA.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for French (Canada). Uses latin_preserve rule. 31 stopwords across 6 categories including article, verb, adverb. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for French (Canada). Uses latin_preserve rule. 31 stopwords across 6 categories including verb, article, adverb. Has 4 regional additions.';
 
 MERGE (s:Slugification {key: 'fr-CD'})
 SET s.display_name = 'FR (CD) Slugification',
     s.description = 'URL slug generation rules for fr-CD',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"negation":["te"],"verb":["eza"],"conjunction":["et","ou"],"adverb":["kaka","très","trop"],"interrogative":["nini"],"preposition":["de","du","à","au","aux","en","pour","dans","sur","avec"],"possessive":["ya"],"article":["le","la","les","un","une","des"]}',
+    s.stopwords = '{"preposition":["de","du","à","au","aux","en","pour","dans","sur","avec"],"negation":["te"],"interrogative":["nini"],"conjunction":["et","ou"],"possessive":["ya"],"article":["le","la","les","un","une","des"],"verb":["eza"],"adverb":["kaka","très","trop"]}',
     s.stopwords_count = 25,
     s.regional_additions = '[{"word":"","category":"na","reason":"connector"},{"word":"","category":"ya","reason":"possessive"},{"word":"","category":"te","reason":"negation"},{"word":"","category":"nini","reason":"interrogative"},{"word":"","category":"eza","reason":"verb"},{"word":"","category":"kaka","reason":"adverb"},{"word":"","category":"très","reason":"adverb"},{"word":"","category":"trop","reason":"adverb"}]',
     s.script_config = 'null',
@@ -1486,13 +1486,13 @@ SET s.display_name = 'FR (CD) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fr-CD.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for FR (CD). Uses latin_preserve rule. 25 stopwords across 8 categories including negation, verb, conjunction. Has 8 regional additions.';
+    s.llm_context = 'URL slugification rules for FR (CD). Uses latin_preserve rule. 25 stopwords across 8 categories including preposition, negation, interrogative. Has 8 regional additions.';
 
 MERGE (s:Slugification {key: 'fr-CH'})
 SET s.display_name = 'FR (CH) Slugification',
     s.description = 'URL slug generation rules for fr-CH',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"pronoun":["que","qui"],"conjunction":["et","ou"],"article":["le","la","les","un","une"],"preposition":["de","du","des","à","au","aux","en","sur","pour","avec","dans","par"],"verb":["est","sont"]}',
+    s.stopwords = '{"article":["le","la","les","un","une"],"pronoun":["que","qui"],"conjunction":["et","ou"],"verb":["est","sont"],"preposition":["de","du","des","à","au","aux","en","sur","pour","avec","dans","par"]}',
     s.stopwords_count = 23,
     s.regional_additions = '[{"word":"","category":"sur","reason":"preposition"},{"word":"","category":"pour","reason":"preposition"},{"word":"","category":"avec","reason":"preposition"},{"word":"","category":"dans","reason":"preposition"},{"word":"","category":"par","reason":"preposition"}]',
     s.script_config = 'null',
@@ -1501,13 +1501,13 @@ SET s.display_name = 'FR (CH) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fr-CH.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for FR (CH). Uses latin_preserve rule. 23 stopwords across 5 categories including pronoun, conjunction, article. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for FR (CH). Uses latin_preserve rule. 23 stopwords across 5 categories including article, pronoun, conjunction. Has 5 regional additions.';
 
 MERGE (s:Slugification {key: 'fr-CI'})
 SET s.display_name = 'FR (CI) Slugification',
     s.description = 'URL slug generation rules for fr-CI',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"preposition":["de","du","a","au","aux","en","pour","dans","sur","avec"],"article":["le","la","les","un","une","des"],"interjection":["deh","ya"],"contraction":["cest"],"adverb":["meme","ici"],"filler":["quoi"],"conjunction":["et","ou"]}',
+    s.stopwords = '{"article":["le","la","les","un","une","des"],"filler":["quoi"],"contraction":["cest"],"interjection":["deh","ya"],"conjunction":["et","ou"],"adverb":["meme","ici"],"preposition":["de","du","a","au","aux","en","pour","dans","sur","avec"]}',
     s.stopwords_count = 24,
     s.regional_additions = '[{"word":"","category":"deh","reason":"interjection"},{"word":"","category":"ya","reason":"interjection"},{"word":"","category":"quoi","reason":"filler"},{"word":"","category":"meme","reason":"adverb"},{"word":"","category":"cest","reason":"contraction"},{"word":"","category":"ici","reason":"adverb"}]',
     s.script_config = 'null',
@@ -1516,13 +1516,13 @@ SET s.display_name = 'FR (CI) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fr-CI.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for FR (CI). Uses latin_preserve rule. 24 stopwords across 7 categories including preposition, article, interjection. Has 6 regional additions.';
+    s.llm_context = 'URL slugification rules for FR (CI). Uses latin_preserve rule. 24 stopwords across 7 categories including article, filler, contraction. Has 6 regional additions.';
 
 MERGE (s:Slugification {key: 'fr-CM'})
 SET s.display_name = 'FR (CM) Slugification',
     s.description = 'URL slug generation rules for fr-CM',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"filler":["ca"],"conjunction":["et","ou"],"adverb":["dja","meme","ici"],"verb":["go"],"contraction":["cest"],"preposition":["de","du","des","a","au","aux","en","pour","dans","sur","avec"],"article":["le","la","les","un","une"]}',
+    s.stopwords = '{"conjunction":["et","ou"],"article":["le","la","les","un","une"],"verb":["go"],"preposition":["de","du","des","a","au","aux","en","pour","dans","sur","avec"],"filler":["ca"],"adverb":["dja","meme","ici"],"contraction":["cest"]}',
     s.stopwords_count = 24,
     s.regional_additions = '[{"word":"","category":"ca","reason":"filler"},{"word":"","category":"dja","reason":"adverb"},{"word":"","category":"meme","reason":"adverb"},{"word":"","category":"ici","reason":"adverb"},{"word":"","category":"tara","reason":"noun"},{"word":"","category":"ya","reason":"existential"},{"word":"","category":"go","reason":"verb"},{"word":"","category":"cest","reason":"contraction"}]',
     s.script_config = 'null',
@@ -1531,13 +1531,13 @@ SET s.display_name = 'FR (CM) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fr-CM.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for FR (CM). Uses latin_preserve rule. 24 stopwords across 7 categories including filler, conjunction, adverb. Has 8 regional additions.';
+    s.llm_context = 'URL slugification rules for FR (CM). Uses latin_preserve rule. 24 stopwords across 7 categories including conjunction, article, verb. Has 8 regional additions.';
 
 MERGE (s:Slugification {key: 'fr-DZ'})
 SET s.display_name = 'FR (DZ) Slugification',
     s.description = 'URL slug generation rules for fr-DZ',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"conjunction":["et","ou","mais","car"],"preposition":["de","du","des","à","au","aux","en","dans","pour","par","sur","avec","chez"],"pronoun":["que","qui","ce","se","il","elle","on"],"article":["le","la","les","un","une","el","al"],"verb":["est","sont","être","avoir"]}',
+    s.stopwords = '{"article":["le","la","les","un","une","el","al"],"pronoun":["que","qui","ce","se","il","elle","on"],"verb":["est","sont","être","avoir"],"conjunction":["et","ou","mais","car"],"preposition":["de","du","des","à","au","aux","en","dans","pour","par","sur","avec","chez"]}',
     s.stopwords_count = 35,
     s.regional_additions = '[{"word":"","category":"chez","reason":"preposition"},{"word":"","category":"ben","reason":"particle"},{"word":"","category":"bou","reason":"particle"},{"word":"","category":"el","reason":"article"},{"word":"","category":"al","reason":"article"}]',
     s.script_config = 'null',
@@ -1546,13 +1546,13 @@ SET s.display_name = 'FR (DZ) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fr-DZ.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for FR (DZ). Uses latin_preserve rule. 35 stopwords across 5 categories including conjunction, preposition, pronoun. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for FR (DZ). Uses latin_preserve rule. 35 stopwords across 5 categories including article, pronoun, verb. Has 5 regional additions.';
 
 MERGE (s:Slugification {key: 'fr-FR'})
 SET s.display_name = 'French (France) Slugification',
     s.description = 'URL slug generation rules for fr-FR',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"article":["le","la","les","un","une"],"preposition":["de","du","des","à","au","aux","en","dans","pour","par","sur","avec"],"conjunction":["et","ou","mais","car"],"pronoun":["que","qui","ce","se","il","elle","on"],"verb":["est","sont","être","avoir"]}',
+    s.stopwords = '{"article":["le","la","les","un","une"],"preposition":["de","du","des","à","au","aux","en","dans","pour","par","sur","avec"],"pronoun":["que","qui","ce","se","il","elle","on"],"conjunction":["et","ou","mais","car"],"verb":["est","sont","être","avoir"]}',
     s.stopwords_count = 32,
     s.regional_additions = '[]',
     s.script_config = 'null',
@@ -1561,7 +1561,7 @@ SET s.display_name = 'French (France) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fr-FR.md',
     s.last_updated = '2025-12-08',
-    s.llm_context = 'URL slugification rules for French (France). Uses latin_preserve rule. 32 stopwords across 5 categories including article, preposition, conjunction.';
+    s.llm_context = 'URL slugification rules for French (France). Uses latin_preserve rule. 32 stopwords across 5 categories including article, preposition, pronoun.';
 
 MERGE (s:Slugification {key: 'fr-LU'})
 SET s.display_name = 'FR (LU) Slugification',
@@ -1582,7 +1582,7 @@ MERGE (s:Slugification {key: 'fr-MA'})
 SET s.display_name = 'FR (MA) Slugification',
     s.description = 'URL slug generation rules for fr-MA',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"preposition":["de","du","des","en","dans","pour","sur","par","avec","au","aux"],"conjunction":["et","ou"],"article":["le","la","les","un","une"],"pronoun":["que","qui"],"verb":["est","sont"]}',
+    s.stopwords = '{"conjunction":["et","ou"],"pronoun":["que","qui"],"article":["le","la","les","un","une"],"preposition":["de","du","des","en","dans","pour","sur","par","avec","au","aux"],"verb":["est","sont"]}',
     s.stopwords_count = 22,
     s.regional_additions = '[]',
     s.script_config = 'null',
@@ -1591,13 +1591,13 @@ SET s.display_name = 'FR (MA) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fr-MA.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for FR (MA). Uses latin_preserve rule. 22 stopwords across 5 categories including preposition, conjunction, article.';
+    s.llm_context = 'URL slugification rules for FR (MA). Uses latin_preserve rule. 22 stopwords across 5 categories including conjunction, pronoun, article.';
 
 MERGE (s:Slugification {key: 'fr-MG'})
 SET s.display_name = 'FR (MG) Slugification',
     s.description = 'URL slug generation rules for fr-MG',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"article":["le","la","les","un","une","des","ny"],"preposition":["de","du","a","au","aux","en","pour","dans","sur","avec","amin","ho"],"conjunction":["et","ou","sy","ary"]}',
+    s.stopwords = '{"article":["le","la","les","un","une","des","ny"],"conjunction":["et","ou","sy","ary"],"preposition":["de","du","a","au","aux","en","pour","dans","sur","avec","amin","ho"]}',
     s.stopwords_count = 23,
     s.regional_additions = '[{"word":"","category":"ny","reason":"article"},{"word":"","category":"sy","reason":"conjunction"},{"word":"","category":"ary","reason":"conjunction"},{"word":"","category":"dia","reason":"connector"},{"word":"","category":"izay","reason":"relative"},{"word":"","category":"amin","reason":"preposition"},{"word":"","category":"ho","reason":"preposition"},{"word":"","category":"eto","reason":"locative"},{"word":"","category":"any","reason":"locative"}]',
     s.script_config = 'null',
@@ -1606,13 +1606,13 @@ SET s.display_name = 'FR (MG) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fr-MG.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for FR (MG). Uses latin_preserve rule. 23 stopwords across 3 categories including article, preposition, conjunction. Has 9 regional additions.';
+    s.llm_context = 'URL slugification rules for FR (MG). Uses latin_preserve rule. 23 stopwords across 3 categories including article, conjunction, preposition. Has 9 regional additions.';
 
 MERGE (s:Slugification {key: 'fr-RW'})
 SET s.display_name = 'FR (RW) Slugification',
     s.description = 'URL slug generation rules for fr-RW',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"preposition":["de","du","des","au","aux","en","pour","avec","sur","dans","muri","kuri"],"verb":["est","sont"],"pronoun":["que","qui","ce"],"article":["le","la","les","un","une"],"adverb":["aussi","ici"],"conjunction":["et","ou","mais","donc","na"]}',
+    s.stopwords = '{"adverb":["aussi","ici"],"article":["le","la","les","un","une"],"verb":["est","sont"],"preposition":["de","du","des","au","aux","en","pour","avec","sur","dans","muri","kuri"],"pronoun":["que","qui","ce"],"conjunction":["et","ou","mais","donc","na"]}',
     s.stopwords_count = 29,
     s.regional_additions = '[{"word":"","category":"muri","reason":"preposition"},{"word":"","category":"na","reason":"conjunction"},{"word":"","category":"kuri","reason":"preposition"},{"word":"","category":"aussi","reason":"adverb"},{"word":"","category":"ici","reason":"adverb"}]',
     s.script_config = 'null',
@@ -1621,13 +1621,13 @@ SET s.display_name = 'FR (RW) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fr-RW.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for FR (RW). Uses latin_preserve rule. 29 stopwords across 6 categories including preposition, verb, pronoun. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for FR (RW). Uses latin_preserve rule. 29 stopwords across 6 categories including adverb, article, verb. Has 5 regional additions.';
 
 MERGE (s:Slugification {key: 'fr-SN'})
 SET s.display_name = 'FR (SN) Slugification',
     s.description = 'URL slug generation rules for fr-SN',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"conjunction":["et","ou"],"interjection":["nak","bon","waw"],"preposition":["de","du","à","au","aux","en","pour","dans","sur","avec"],"filler":["quoi"],"article":["le","la","les","un","une","des"]}',
+    s.stopwords = '{"preposition":["de","du","à","au","aux","en","pour","dans","sur","avec"],"filler":["quoi"],"article":["le","la","les","un","une","des"],"conjunction":["et","ou"],"interjection":["nak","bon","waw"]}',
     s.stopwords_count = 22,
     s.regional_additions = '[{"word":"","category":"nak","reason":"interjection"},{"word":"","category":"quoi","reason":"filler"},{"word":"","category":"bon","reason":"interjection"},{"word":"","category":"waw","reason":"interjection"}]',
     s.script_config = 'null',
@@ -1636,13 +1636,13 @@ SET s.display_name = 'FR (SN) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fr-SN.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for FR (SN). Uses latin_preserve rule. 22 stopwords across 5 categories including conjunction, interjection, preposition. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for FR (SN). Uses latin_preserve rule. 22 stopwords across 5 categories including preposition, filler, article. Has 4 regional additions.';
 
 MERGE (s:Slugification {key: 'fr-TN'})
 SET s.display_name = 'FR (TN) Slugification',
     s.description = 'URL slug generation rules for fr-TN',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"preposition":["de","du","à","au","aux","en","pour","dans","sur","avec","par"],"article":["le","la","les","un","une","des"],"pronoun":["que","qui"],"conjunction":["et","ou"],"abbreviation":["tn"]}',
+    s.stopwords = '{"conjunction":["et","ou"],"abbreviation":["tn"],"pronoun":["que","qui"],"article":["le","la","les","un","une","des"],"preposition":["de","du","à","au","aux","en","pour","dans","sur","avec","par"]}',
     s.stopwords_count = 22,
     s.regional_additions = '[{"word":"","category":"tn","reason":"abbreviation"},{"word":"","category":"tunisie","reason":"geonym"},{"word":"","category":"tunisien","reason":"adjective"},{"word":"","category":"tunisienne","reason":"adjective"}]',
     s.script_config = 'null',
@@ -1651,13 +1651,13 @@ SET s.display_name = 'FR (TN) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/fr-TN.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for FR (TN). Uses latin_preserve rule. 22 stopwords across 5 categories including preposition, article, pronoun. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for FR (TN). Uses latin_preserve rule. 22 stopwords across 5 categories including conjunction, abbreviation, pronoun. Has 4 regional additions.';
 
 MERGE (s:Slugification {key: 'ga-IE'})
 SET s.display_name = 'GA (IE) Slugification',
     s.description = 'URL slug generation rules for ga-IE',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"article":["an","na"],"preposition":["ag","ar","le","i","do","de","as","faoi"],"verb":["is","ta"],"demonstrative":["seo"],"pronoun":["se","si"],"conjunction":["agus","ach","mar","no"]}',
+    s.stopwords = '{"article":["an","na"],"conjunction":["agus","ach","mar","no"],"preposition":["ag","ar","le","i","do","de","as","faoi"],"demonstrative":["seo"],"pronoun":["se","si"],"verb":["is","ta"]}',
     s.stopwords_count = 19,
     s.regional_additions = '[{"word":"","category":"go","reason":"particle"},{"word":"","category":"ni","reason":"particle"},{"word":"","category":"as","reason":"preposition"},{"word":"","category":"faoi","reason":"preposition"},{"word":"","category":"mar","reason":"conjunction"},{"word":"","category":"no","reason":"conjunction"}]',
     s.script_config = 'null',
@@ -1666,13 +1666,13 @@ SET s.display_name = 'GA (IE) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ga-IE.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for GA (IE). Uses latin_preserve rule. 19 stopwords across 6 categories including article, preposition, verb. Has 6 regional additions.';
+    s.llm_context = 'URL slugification rules for GA (IE). Uses latin_preserve rule. 19 stopwords across 6 categories including article, conjunction, preposition. Has 6 regional additions.';
 
 MERGE (s:Slugification {key: 'gl-ES'})
 SET s.display_name = 'GL (ES) Slugification',
     s.description = 'URL slug generation rules for gl-ES',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"verb":["e","ser","estar","ter"],"preposition":["de","en","con","para","por","sobre","entre","sen","ata","desde"],"conjunction":["e","ou","nin","mais","pero","que","como"],"article":["o","a","os","as","un","unha","uns","unhas"],"pronoun":["este","esta","ese","esa","aquel","aquela"]}',
+    s.stopwords = '{"preposition":["de","en","con","para","por","sobre","entre","sen","ata","desde"],"article":["o","a","os","as","un","unha","uns","unhas"],"conjunction":["e","ou","nin","mais","pero","que","como"],"pronoun":["este","esta","ese","esa","aquel","aquela"],"verb":["e","ser","estar","ter"]}',
     s.stopwords_count = 35,
     s.regional_additions = '[]',
     s.script_config = 'null',
@@ -1681,7 +1681,7 @@ SET s.display_name = 'GL (ES) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/gl-ES.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for GL (ES). Uses latin_preserve rule. 35 stopwords across 5 categories including verb, preposition, conjunction.';
+    s.llm_context = 'URL slugification rules for GL (ES). Uses latin_preserve rule. 35 stopwords across 5 categories including preposition, article, conjunction.';
 
 MERGE (s:Slugification {key: 'gn-PY'})
 SET s.display_name = 'GN (PY) Slugification',
@@ -1702,7 +1702,7 @@ MERGE (s:Slugification {key: 'gu-IN'})
 SET s.display_name = 'GU (IN) Slugification',
     s.description = 'URL slug generation rules for gu-IN',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"quantifier":["બધા"],"conjunction":["અને","પણ","કે","અથવા"]}',
+    s.stopwords = '{"conjunction":["અને","પણ","કે","અથવા"],"quantifier":["બધા"]}',
     s.stopwords_count = 5,
     s.regional_additions = '[]',
     s.script_config = 'null',
@@ -1711,13 +1711,13 @@ SET s.display_name = 'GU (IN) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/gu-IN.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for GU (IN). Uses native_script rule. 5 stopwords across 2 categories including quantifier, conjunction.';
+    s.llm_context = 'URL slugification rules for GU (IN). Uses native_script rule. 5 stopwords across 2 categories including conjunction, quantifier.';
 
 MERGE (s:Slugification {key: 'ha-NG'})
 SET s.display_name = 'HA (NG) Slugification',
     s.description = 'URL slug generation rules for ha-NG',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"conjunction":["ko","kuma","amma"],"negation":["ba"],"adverb":["sai"],"preposition":["a","cikin","daga","kan","zuwa","don"],"pronoun":["shi"]}',
+    s.stopwords = '{"conjunction":["ko","kuma","amma"],"adverb":["sai"],"pronoun":["shi"],"negation":["ba"],"preposition":["a","cikin","daga","kan","zuwa","don"]}',
     s.stopwords_count = 12,
     s.regional_additions = '[{"word":"","category":"kuma","reason":"conjunction"},{"word":"","category":"amma","reason":"conjunction"},{"word":"","category":"sai","reason":"adverb"},{"word":"","category":"shi","reason":"pronoun"}]',
     s.script_config = 'null',
@@ -1726,13 +1726,13 @@ SET s.display_name = 'HA (NG) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ha-NG.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for HA (NG). Uses latin_strip rule. 12 stopwords across 5 categories including conjunction, negation, adverb. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for HA (NG). Uses latin_strip rule. 12 stopwords across 5 categories including conjunction, adverb, pronoun. Has 4 regional additions.';
 
 MERGE (s:Slugification {key: 'he-IL'})
 SET s.display_name = 'Hebrew (Israel) Slugification',
     s.description = 'URL slug generation rules for he-IL',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"adverb":["גם","רק"],"conjunction":["אך"]}',
+    s.stopwords = '{"conjunction":["אך"],"adverb":["גם","רק"]}',
     s.stopwords_count = 3,
     s.regional_additions = '[{"word":"","category":"יש","reason":"existential"},{"word":"","category":"אין","reason":"negative existential"},{"word":"","category":"כל","reason":"determiner"},{"word":"","category":"גם","reason":"adverb"},{"word":"","category":"אך","reason":"conjunction"},{"word":"","category":"רק","reason":"adverb"}]',
     s.script_config = '{"primary_script":"hebrew","diacritic_handling":null,"numeral_handling":null,"special_chars":null}',
@@ -1741,13 +1741,13 @@ SET s.display_name = 'Hebrew (Israel) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/he-IL.md',
     s.last_updated = '2025-12-08',
-    s.llm_context = 'URL slugification rules for Hebrew (Israel). Uses native_script rule. 3 stopwords across 2 categories including adverb, conjunction. Has 6 regional additions.';
+    s.llm_context = 'URL slugification rules for Hebrew (Israel). Uses native_script rule. 3 stopwords across 2 categories including conjunction, adverb. Has 6 regional additions.';
 
 MERGE (s:Slugification {key: 'hi-IN'})
 SET s.display_name = 'Hindi (India) Slugification',
     s.description = 'URL slug generation rules for hi-IN',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"honorific":["जी"],"preposition":["साथ"]}',
+    s.stopwords = '{"preposition":["साथ"],"honorific":["जी"]}',
     s.stopwords_count = 2,
     s.regional_additions = '[{"word":"","category":"जी","reason":"honorific"},{"word":"","category":"जैसे","reason":"comparative"},{"word":"","category":"साथ","reason":"preposition"},{"word":"","category":"लिए","reason":"postposition"},{"word":"","category":"द्वारा","reason":"postposition"}]',
     s.script_config = 'null',
@@ -1756,13 +1756,13 @@ SET s.display_name = 'Hindi (India) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/hi-IN.md',
     s.last_updated = '2025-12-08',
-    s.llm_context = 'URL slugification rules for Hindi (India). Uses native_script rule. 2 stopwords across 2 categories including honorific, preposition. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for Hindi (India). Uses native_script rule. 2 stopwords across 2 categories including preposition, honorific. Has 5 regional additions.';
 
 MERGE (s:Slugification {key: 'hr-HR'})
 SET s.display_name = 'Croatian (Croatia) Slugification',
     s.description = 'URL slug generation rules for hr-HR',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"adverb":["kao"],"conjunction":["i","a","ali","ili","pa","te","ni","niti"],"verb":["je","su","biti"],"pronoun":["taj","ta","to","koji","koja","koje","ovaj","ova","ovo"],"preposition":["u","na","za","s","sa","od","do","iz","o","kroz","prema","tijekom","nakon","prije"]}',
+    s.stopwords = '{"pronoun":["taj","ta","to","koji","koja","koje","ovaj","ova","ovo"],"conjunction":["i","a","ali","ili","pa","te","ni","niti"],"verb":["je","su","biti"],"preposition":["u","na","za","s","sa","od","do","iz","o","kroz","prema","tijekom","nakon","prije"],"adverb":["kao"]}',
     s.stopwords_count = 35,
     s.regional_additions = '[{"word":"","category":"kroz","reason":"preposition"},{"word":"","category":"prema","reason":"preposition"},{"word":"","category":"tijekom","reason":"preposition"},{"word":"","category":"nakon","reason":"preposition"},{"word":"","category":"prije","reason":"preposition"}]',
     s.script_config = 'null',
@@ -1771,13 +1771,13 @@ SET s.display_name = 'Croatian (Croatia) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/hr-HR.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for Croatian (Croatia). Uses latin_preserve rule. 35 stopwords across 5 categories including adverb, conjunction, verb. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for Croatian (Croatia). Uses latin_preserve rule. 35 stopwords across 5 categories including pronoun, conjunction, verb. Has 5 regional additions.';
 
 MERGE (s:Slugification {key: 'ht-HT'})
 SET s.display_name = 'HT (HT) Slugification',
     s.description = 'URL slug generation rules for ht-HT',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"demonstrative":["sa"],"quantifier":["tout"],"negation":["pa"],"verb":["gen"]}',
+    s.stopwords = '{"verb":["gen"],"negation":["pa"],"demonstrative":["sa"],"quantifier":["tout"]}',
     s.stopwords_count = 4,
     s.regional_additions = '[{"word":"","category":"ki","reason":"relative pronoun"},{"word":"","category":"sa","reason":"demonstrative"},{"word":"","category":"tout","reason":"quantifier"},{"word":"","category":"pa","reason":"negation"},{"word":"","category":"gen","reason":"verb"}]',
     s.script_config = 'null',
@@ -1786,7 +1786,7 @@ SET s.display_name = 'HT (HT) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ht-HT.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for HT (HT). Uses latin_strip rule. 4 stopwords across 4 categories including demonstrative, quantifier, negation. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for HT (HT). Uses latin_strip rule. 4 stopwords across 4 categories including verb, negation, demonstrative. Has 5 regional additions.';
 
 MERGE (s:Slugification {key: 'hu-HU'})
 SET s.display_name = 'Hungarian (Hungary) Slugification',
@@ -1807,7 +1807,7 @@ MERGE (s:Slugification {key: 'hy-AM'})
 SET s.display_name = 'HY (AM) Slugification',
     s.description = 'URL slug generation rules for hy-AM',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"adverb":["delays (naev - also, too)"],"article":["-delays (the, definite article suffix)"],"pronoun":["delays (ays - this)","delays (ayn - that)","delays (vor - which, that)","delays (na - it, he/she)"],"verb":["delays (e - is)"],"preposition":["delays (het - with)","-delays (its - from)","delays (depi - to, towards)","delays (mej - in)","delays (hamar - for)","delays (vra - on, upon)"],"conjunction":["delays / և (yev - and)"]}',
+    s.stopwords = '{"conjunction":["delays / և (yev - and)"],"article":["-delays (the, definite article suffix)"],"adverb":["delays (naev - also, too)"],"preposition":["delays (het - with)","-delays (its - from)","delays (depi - to, towards)","delays (mej - in)","delays (hamar - for)","delays (vra - on, upon)"],"pronoun":["delays (ays - this)","delays (ayn - that)","delays (vor - which, that)","delays (na - it, he/she)"],"verb":["delays (e - is)"]}',
     s.stopwords_count = 14,
     s.regional_additions = '[]',
     s.script_config = 'null',
@@ -1816,7 +1816,7 @@ SET s.display_name = 'HY (AM) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/hy-AM.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for HY (AM). Uses native_script rule. 14 stopwords across 6 categories including adverb, article, pronoun.';
+    s.llm_context = 'URL slugification rules for HY (AM). Uses native_script rule. 14 stopwords across 6 categories including conjunction, article, adverb.';
 
 MERGE (s:Slugification {key: 'id-ID'})
 SET s.display_name = 'Indonesian (Indonesia) Slugification',
@@ -1852,7 +1852,7 @@ MERGE (s:Slugification {key: 'is-IS'})
 SET s.display_name = 'IS (IS) Slugification',
     s.description = 'URL slug generation rules for is-IS',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"conjunction":["og","eða","en","sem"],"pronoun":["það","þetta","hann","hún","við","þeir"],"preposition":["á","í","til","um","af","frá","með","fyrir","við","eftir"],"article":["hinn","hin","hið"],"verb":["er","var","vera","hefur","verður"]}',
+    s.stopwords = '{"article":["hinn","hin","hið"],"preposition":["á","í","til","um","af","frá","með","fyrir","við","eftir"],"verb":["er","var","vera","hefur","verður"],"conjunction":["og","eða","en","sem"],"pronoun":["það","þetta","hann","hún","við","þeir"]}',
     s.stopwords_count = 28,
     s.regional_additions = '[]',
     s.script_config = 'null',
@@ -1861,13 +1861,13 @@ SET s.display_name = 'IS (IS) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/is-IS.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for IS (IS). Uses latin_preserve rule. 28 stopwords across 5 categories including conjunction, pronoun, preposition.';
+    s.llm_context = 'URL slugification rules for IS (IS). Uses latin_preserve rule. 28 stopwords across 5 categories including article, preposition, verb.';
 
 MERGE (s:Slugification {key: 'it-CH'})
 SET s.display_name = 'IT (CH) Slugification',
     s.description = 'URL slug generation rules for it-CH',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"article":["il","lo","la","i","gli","le","un","uno","una"],"preposition":["di","da","in","con","su","per","tra","fra","a","presso","entro"],"conjunction":["e","o","ma"]}',
+    s.stopwords = '{"preposition":["di","da","in","con","su","per","tra","fra","a","presso","entro"],"article":["il","lo","la","i","gli","le","un","uno","una"],"conjunction":["e","o","ma"]}',
     s.stopwords_count = 23,
     s.regional_additions = '[{"word":"","category":"dal","reason":"article+preposition"},{"word":"","category":"dalla","reason":"article+preposition"},{"word":"","category":"dai","reason":"article+preposition"},{"word":"","category":"dalle","reason":"article+preposition"},{"word":"","category":"dallo","reason":"article+preposition"},{"word":"","category":"dagli","reason":"article+preposition"},{"word":"","category":"col","reason":"article+preposition"},{"word":"","category":"coi","reason":"article+preposition"},{"word":"","category":"presso","reason":"preposition"},{"word":"","category":"entro","reason":"preposition"}]',
     s.script_config = 'null',
@@ -1876,13 +1876,13 @@ SET s.display_name = 'IT (CH) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/it-CH.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for IT (CH). Uses latin_preserve rule. 23 stopwords across 3 categories including article, preposition, conjunction. Has 10 regional additions.';
+    s.llm_context = 'URL slugification rules for IT (CH). Uses latin_preserve rule. 23 stopwords across 3 categories including preposition, article, conjunction. Has 10 regional additions.';
 
 MERGE (s:Slugification {key: 'it-IT'})
 SET s.display_name = 'Italian (Italy) Slugification',
     s.description = 'URL slug generation rules for it-IT',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"article":["il","lo","la","i","gli","le","un","uno","una"],"preposition":["di","da","in","con","su","per","tra","fra","a"],"conjunction":["e","o","ma"]}',
+    s.stopwords = '{"conjunction":["e","o","ma"],"preposition":["di","da","in","con","su","per","tra","fra","a"],"article":["il","lo","la","i","gli","le","un","uno","una"]}',
     s.stopwords_count = 21,
     s.regional_additions = '[{"word":"","category":"dal","reason":"article+preposition"},{"word":"","category":"dalla","reason":"article+preposition"},{"word":"","category":"dai","reason":"article+preposition"},{"word":"","category":"dalle","reason":"article+preposition"},{"word":"","category":"dallo","reason":"article+preposition"},{"word":"","category":"dagli","reason":"article+preposition"},{"word":"","category":"col","reason":"article+preposition"},{"word":"","category":"coi","reason":"article+preposition"}]',
     s.script_config = 'null',
@@ -1891,7 +1891,7 @@ SET s.display_name = 'Italian (Italy) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/it-IT.md',
     s.last_updated = '2025-12-08',
-    s.llm_context = 'URL slugification rules for Italian (Italy). Uses latin_preserve rule. 21 stopwords across 3 categories including article, preposition, conjunction. Has 8 regional additions.';
+    s.llm_context = 'URL slugification rules for Italian (Italy). Uses latin_preserve rule. 21 stopwords across 3 categories including conjunction, preposition, article. Has 8 regional additions.';
 
 MERGE (s:Slugification {key: 'ja-JP'})
 SET s.display_name = 'Japanese (Japan) Slugification',
@@ -1912,7 +1912,7 @@ MERGE (s:Slugification {key: 'jv-ID'})
 SET s.display_name = 'JV (ID) Slugification',
     s.description = 'URL slug generation rules for jv-ID',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"adverb":["mung"],"conjunction":["lan","utawa"],"preposition":["ing","nang","menyang","saka","kanggo","karo","dening"]}',
+    s.stopwords = '{"conjunction":["lan","utawa"],"preposition":["ing","nang","menyang","saka","kanggo","karo","dening"],"adverb":["mung"]}',
     s.stopwords_count = 10,
     s.regional_additions = '[{"word":"","category":"wonten","reason":"verb (krama)"},{"word":"","category":"ingkang","reason":"relative pronoun (krama)"},{"word":"","category":"kaliyan","reason":"conjunction (krama)"},{"word":"","category":"saking","reason":"preposition (krama)"},{"word":"","category":"dateng","reason":"preposition (krama)"}]',
     s.script_config = 'null',
@@ -1921,13 +1921,13 @@ SET s.display_name = 'JV (ID) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/jv-ID.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for JV (ID). Uses latin_strip rule. 10 stopwords across 3 categories including adverb, conjunction, preposition. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for JV (ID). Uses latin_strip rule. 10 stopwords across 3 categories including conjunction, preposition, adverb. Has 5 regional additions.';
 
 MERGE (s:Slugification {key: 'ka-GE'})
 SET s.display_name = 'KA (GE) Slugification',
     s.description = 'URL slug generation rules for ka-GE',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"adverb":["სად","როგორ","რატომ","აქ"],"pronoun":["ეს","ის","რა","ვინ","მე","შენ","ჩვენ","თქვენ"],"verb":["არის","იყო"],"conjunction":["და","ან","მაგრამ","თუ","რომ","როცა"]}',
+    s.stopwords = '{"adverb":["სად","როგორ","რატომ","აქ"],"conjunction":["და","ან","მაგრამ","თუ","რომ","როცა"],"pronoun":["ეს","ის","რა","ვინ","მე","შენ","ჩვენ","თქვენ"],"verb":["არის","იყო"]}',
     s.stopwords_count = 20,
     s.regional_additions = '[{"word":"","category":"საქართველო","reason":"proper noun"},{"word":"","category":"თბილისი","reason":"proper noun"},{"word":"","category":"ქართული","reason":"adjective"}]',
     s.script_config = 'null',
@@ -1936,13 +1936,13 @@ SET s.display_name = 'KA (GE) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ka-GE.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for KA (GE). Uses native_script rule. 20 stopwords across 4 categories including adverb, pronoun, verb. Has 3 regional additions.';
+    s.llm_context = 'URL slugification rules for KA (GE). Uses native_script rule. 20 stopwords across 4 categories including adverb, conjunction, pronoun. Has 3 regional additions.';
 
 MERGE (s:Slugification {key: 'kk-KZ'})
 SET s.display_name = 'KK (KZ) Slugification',
     s.description = 'URL slug generation rules for kk-KZ',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"conjunction":["және","бірақ","немесе"],"pronoun":["сен","ол","біз"],"currency":["теңге"],"abbreviation":["ҚР","ТМД"]}',
+    s.stopwords = '{"conjunction":["және","бірақ","немесе"],"currency":["теңге"],"abbreviation":["ҚР","ТМД"],"pronoun":["сен","ол","біз"]}',
     s.stopwords_count = 9,
     s.regional_additions = '[{"word":"","category":"ҚР","reason":"abbreviation"},{"word":"","category":"ТМД","reason":"abbreviation"},{"word":"","category":"теңге","reason":"currency"}]',
     s.script_config = 'null',
@@ -1951,13 +1951,13 @@ SET s.display_name = 'KK (KZ) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/kk-KZ.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for KK (KZ). Uses native_script rule. 9 stopwords across 4 categories including conjunction, pronoun, currency. Has 3 regional additions.';
+    s.llm_context = 'URL slugification rules for KK (KZ). Uses native_script rule. 9 stopwords across 4 categories including conjunction, currency, abbreviation. Has 3 regional additions.';
 
 MERGE (s:Slugification {key: 'km-KH'})
 SET s.display_name = 'KM (KH) Slugification',
     s.description = 'URL slug generation rules for km-KH',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"conjunction":["និង"],"verb":["មាន","ជា"],"demonstrative":["នេះ","នោះ"],"adverb":["ផង"],"preposition":["នៅ","ក្នុង","របស់","ពី"]}',
+    s.stopwords = '{"conjunction":["និង"],"adverb":["ផង"],"demonstrative":["នេះ","នោះ"],"verb":["មាន","ជា"],"preposition":["នៅ","ក្នុង","របស់","ពី"]}',
     s.stopwords_count = 10,
     s.regional_additions = '[{"word":"","category":"ផង","reason":"adverb"},{"word":"","category":"បាទ","reason":"particle"}]',
     s.script_config = 'null',
@@ -1966,13 +1966,13 @@ SET s.display_name = 'KM (KH) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/km-KH.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for KM (KH). Uses native_script rule. 10 stopwords across 5 categories including conjunction, verb, demonstrative. Has 2 regional additions.';
+    s.llm_context = 'URL slugification rules for KM (KH). Uses native_script rule. 10 stopwords across 5 categories including conjunction, adverb, demonstrative. Has 2 regional additions.';
 
 MERGE (s:Slugification {key: 'kn-IN'})
 SET s.display_name = 'KN (IN) Slugification',
     s.description = 'URL slug generation rules for kn-IN',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"verb":["ಇದೆ","ಆಗಿದೆ","ಮಾಡಿ","ಬಂದ","ಹೋದ"],"interrogative":["ಏನು","ಯಾರು","ಹೇಗೆ","ಎಲ್ಲಿ","ಯಾವ"],"pronoun":["ಇದು","ಅದು","ಅವರು","ಅವನು","ಅವಳು"],"conjunction":["ಮತ್ತು","ಹಾಗೂ","ಆದರೆ","ಅಥವಾ","ಆದ್ದರಿಂದ"],"article":["ಒಂದು"],"demonstrative":["ಈ","ಆ"]}',
+    s.stopwords = '{"demonstrative":["ಈ","ಆ"],"conjunction":["ಮತ್ತು","ಹಾಗೂ","ಆದರೆ","ಅಥವಾ","ಆದ್ದರಿಂದ"],"article":["ಒಂದು"],"pronoun":["ಇದು","ಅದು","ಅವರು","ಅವನು","ಅವಳು"],"verb":["ಇದೆ","ಆಗಿದೆ","ಮಾಡಿ","ಬಂದ","ಹೋದ"],"interrogative":["ಏನು","ಯಾರು","ಹೇಗೆ","ಎಲ್ಲಿ","ಯಾವ"]}',
     s.stopwords_count = 23,
     s.regional_additions = '[]',
     s.script_config = '{"primary_script":"arabic","diacritic_handling":null,"numeral_handling":null,"special_chars":null}',
@@ -1981,7 +1981,7 @@ SET s.display_name = 'KN (IN) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/kn-IN.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for KN (IN). Uses native_script rule. 23 stopwords across 6 categories including verb, interrogative, pronoun.';
+    s.llm_context = 'URL slugification rules for KN (IN). Uses native_script rule. 23 stopwords across 6 categories including demonstrative, conjunction, article.';
 
 MERGE (s:Slugification {key: 'ko-KR'})
 SET s.display_name = 'Korean (South Korea) Slugification',
@@ -2002,7 +2002,7 @@ MERGE (s:Slugification {key: 'ku-TR'})
 SET s.display_name = 'KU (TR) Slugification',
     s.description = 'URL slug generation rules for ku-TR',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"conjunction":["u","an","le","ku","eger"],"preposition":["di","de","ji","bi","li","ser","ber","nav"],"article":["yek","hinek","hemû"],"verb":["e","bû","ye","ne","heye","nine"],"adverb":["iro","duh","sibe","geleki"],"pronoun":["ew","ev","ez","em","tu","hun"]}',
+    s.stopwords = '{"conjunction":["u","an","le","ku","eger"],"pronoun":["ew","ev","ez","em","tu","hun"],"article":["yek","hinek","hemû"],"preposition":["di","de","ji","bi","li","ser","ber","nav"],"adverb":["iro","duh","sibe","geleki"],"verb":["e","bû","ye","ne","heye","nine"]}',
     s.stopwords_count = 32,
     s.regional_additions = '[{"word":"","category":"iro","reason":"adverb"},{"word":"","category":"duh","reason":"adverb"},{"word":"","category":"sibe","reason":"adverb"},{"word":"","category":"geleki","reason":"adverb"}]',
     s.script_config = 'null',
@@ -2011,13 +2011,13 @@ SET s.display_name = 'KU (TR) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ku-TR.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for KU (TR). Uses native_script rule. 32 stopwords across 6 categories including conjunction, preposition, article. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for KU (TR). Uses native_script rule. 32 stopwords across 6 categories including conjunction, pronoun, article. Has 4 regional additions.';
 
 MERGE (s:Slugification {key: 'ky-KG'})
 SET s.display_name = 'KY (KG) Slugification',
     s.description = 'URL slug generation rules for ky-KG',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"negation":["эмес"],"verb":["болуп"],"pronoun":["бул","ал","анын"],"conjunction":["жана"]}',
+    s.stopwords = '{"negation":["эмес"],"verb":["болуп"],"conjunction":["жана"],"pronoun":["бул","ал","анын"]}',
     s.stopwords_count = 6,
     s.regional_additions = '[{"word":"","category":"эле","reason":"particle"},{"word":"","category":"го","reason":"particle"}]',
     s.script_config = 'null',
@@ -2026,13 +2026,13 @@ SET s.display_name = 'KY (KG) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ky-KG.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for KY (KG). Uses native_script rule. 6 stopwords across 4 categories including negation, verb, pronoun. Has 2 regional additions.';
+    s.llm_context = 'URL slugification rules for KY (KG). Uses native_script rule. 6 stopwords across 4 categories including negation, verb, conjunction. Has 2 regional additions.';
 
 MERGE (s:Slugification {key: 'ln-CD'})
 SET s.display_name = 'LN (CD) Slugification',
     s.description = 'URL slug generation rules for ln-CD',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"preposition":["ntango"],"conjunction":["kasi","soki"],"adverb":["mingi"]}',
+    s.stopwords = '{"conjunction":["kasi","soki"],"adverb":["mingi"],"preposition":["ntango"]}',
     s.stopwords_count = 4,
     s.regional_additions = '[{"word":"","category":"kasi","reason":"conjunction"},{"word":"","category":"soki","reason":"conjunction"},{"word":"","category":"ntango","reason":"preposition"},{"word":"","category":"mingi","reason":"adverb"}]',
     s.script_config = 'null',
@@ -2041,7 +2041,7 @@ SET s.display_name = 'LN (CD) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ln-CD.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for LN (CD). Uses latin_strip rule. 4 stopwords across 3 categories including preposition, conjunction, adverb. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for LN (CD). Uses latin_strip rule. 4 stopwords across 3 categories including conjunction, adverb, preposition. Has 4 regional additions.';
 
 MERGE (s:Slugification {key: 'lt-LT'})
 SET s.display_name = 'Lithuanian (Lithuania) Slugification',
@@ -2107,7 +2107,7 @@ MERGE (s:Slugification {key: 'mk-MK'})
 SET s.display_name = 'MK (MK) Slugification',
     s.description = 'URL slug generation rules for mk-MK',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"pronoun":["што","кој","која","кое","тој","таа","тоа","овој","оваа","ова"],"preposition":["на","во","со","од","за","до","кон","при","низ"],"adverb":["како","кога","каде"],"verb":["е","се","беше","има","нема"],"conjunction":["и","или","но","а"]}',
+    s.stopwords = '{"verb":["е","се","беше","има","нема"],"adverb":["како","кога","каде"],"conjunction":["и","или","но","а"],"preposition":["на","во","со","од","за","до","кон","при","низ"],"pronoun":["што","кој","која","кое","тој","таа","тоа","овој","оваа","ова"]}',
     s.stopwords_count = 31,
     s.regional_additions = '[]',
     s.script_config = 'null',
@@ -2116,7 +2116,7 @@ SET s.display_name = 'MK (MK) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/mk-MK.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for MK (MK). Uses native_script rule. 31 stopwords across 5 categories including pronoun, preposition, adverb.';
+    s.llm_context = 'URL slugification rules for MK (MK). Uses native_script rule. 31 stopwords across 5 categories including verb, adverb, conjunction.';
 
 MERGE (s:Slugification {key: 'ml-IN'})
 SET s.display_name = 'ML (IN) Slugification',
@@ -2137,7 +2137,7 @@ MERGE (s:Slugification {key: 'mn-MN'})
 SET s.display_name = 'MN (MN) Slugification',
     s.description = 'URL slug generation rules for mn-MN',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"demonstrative":["энэ","тэр","ийм","тийм"],"interrogative":["ямар","юу","хэн"],"conjunction":["бөгөөд","ба","болон","эсвэл","харин","гэхдээ"]}',
+    s.stopwords = '{"interrogative":["ямар","юу","хэн"],"conjunction":["бөгөөд","ба","болон","эсвэл","харин","гэхдээ"],"demonstrative":["энэ","тэр","ийм","тийм"]}',
     s.stopwords_count = 13,
     s.regional_additions = '[]',
     s.script_config = 'null',
@@ -2146,13 +2146,13 @@ SET s.display_name = 'MN (MN) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/mn-MN.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for MN (MN). Uses native_script rule. 13 stopwords across 3 categories including demonstrative, interrogative, conjunction.';
+    s.llm_context = 'URL slugification rules for MN (MN). Uses native_script rule. 13 stopwords across 3 categories including interrogative, conjunction, demonstrative.';
 
 MERGE (s:Slugification {key: 'mr-IN'})
 SET s.display_name = 'MR (IN) Slugification',
     s.description = 'URL slug generation rules for mr-IN',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"demonstrative":["हा","ही","हे","तो","ती","ते"],"interrogative":["कसे","काय","कोण"],"quantifier":["सर्व","अनेक"],"conjunction":["आणि","व","किंवा","पण","परंतु","म्हणून","कारण","जर"],"verb":["आहे","असे","होते","केले","करणे"]}',
+    s.stopwords = '{"conjunction":["आणि","व","किंवा","पण","परंतु","म्हणून","कारण","जर"],"interrogative":["कसे","काय","कोण"],"quantifier":["सर्व","अनेक"],"verb":["आहे","असे","होते","केले","करणे"],"demonstrative":["हा","ही","हे","तो","ती","ते"]}',
     s.stopwords_count = 24,
     s.regional_additions = '[{"word":"","category":"कसे","reason":"interrogative"},{"word":"","category":"काय","reason":"interrogative"},{"word":"","category":"कोण","reason":"interrogative"},{"word":"","category":"सर्व","reason":"quantifier"},{"word":"","category":"अनेक","reason":"quantifier"}]',
     s.script_config = '{"primary_script":"arabic","diacritic_handling":null,"numeral_handling":null,"special_chars":null}',
@@ -2161,13 +2161,13 @@ SET s.display_name = 'MR (IN) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/mr-IN.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for MR (IN). Uses native_script rule. 24 stopwords across 5 categories including demonstrative, interrogative, quantifier. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for MR (IN). Uses native_script rule. 24 stopwords across 5 categories including conjunction, interrogative, quantifier. Has 5 regional additions.';
 
 MERGE (s:Slugification {key: 'ms-BN'})
 SET s.display_name = 'MS (BN) Slugification',
     s.description = 'URL slug generation rules for ms-BN',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"conjunction":["dan","atau","agar"],"auxiliary":["akan","telah"],"demonstrative":["ini","itu"],"adverb":["juga","saja"],"preposition":["di","ke","dari","untuk","pada","dengan","oleh","bagi","berkenaan","bersama"],"honorific":["baginda"]}',
+    s.stopwords = '{"preposition":["di","ke","dari","untuk","pada","dengan","oleh","bagi","berkenaan","bersama"],"auxiliary":["akan","telah"],"honorific":["baginda"],"conjunction":["dan","atau","agar"],"adverb":["juga","saja"],"demonstrative":["ini","itu"]}',
     s.stopwords_count = 20,
     s.regional_additions = '[{"word":"","category":"nya","reason":"clitic"},{"word":"","category":"saja","reason":"adverb"},{"word":"","category":"oleh","reason":"preposition"},{"word":"","category":"bagi","reason":"preposition"},{"word":"","category":"baginda","reason":"honorific"},{"word":"","category":"pihak","reason":"noun"},{"word":"","category":"berkenaan","reason":"preposition"},{"word":"","category":"telah","reason":"auxiliary"},{"word":"","category":"bersama","reason":"preposition"},{"word":"","category":"agar","reason":"conjunction"}]',
     s.script_config = 'null',
@@ -2176,13 +2176,13 @@ SET s.display_name = 'MS (BN) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ms-BN.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for MS (BN). Uses latin_strip rule. 20 stopwords across 6 categories including conjunction, auxiliary, demonstrative. Has 10 regional additions.';
+    s.llm_context = 'URL slugification rules for MS (BN). Uses latin_strip rule. 20 stopwords across 6 categories including preposition, auxiliary, honorific. Has 10 regional additions.';
 
 MERGE (s:Slugification {key: 'ms-MY'})
 SET s.display_name = 'Malay (Malaysia) Slugification',
     s.description = 'URL slug generation rules for ms-MY',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"auxiliary":["akan","nak"],"conjunction":["dan","atau"],"demonstrative":["ini","itu"],"preposition":["di","ke","dari","untuk","pada","dengan","kat"],"adverb":["juga","gak","je","sahaja"],"negation":["tak"]}',
+    s.stopwords = '{"negation":["tak"],"preposition":["di","ke","dari","untuk","pada","dengan","kat"],"conjunction":["dan","atau"],"demonstrative":["ini","itu"],"adverb":["juga","gak","je","sahaja"],"auxiliary":["akan","nak"]}',
     s.stopwords_count = 18,
     s.regional_additions = '[{"word":"","category":"lah","reason":"particle"},{"word":"","category":"kan","reason":"particle"},{"word":"","category":"mah","reason":"particle"},{"word":"","category":"meh","reason":"particle"},{"word":"","category":"lor","reason":"particle"},{"word":"","category":"kah","reason":"particle"},{"word":"","category":"kot","reason":"particle"},{"word":"","category":"gak","reason":"adverb"},{"word":"","category":"je","reason":"adverb"},{"word":"","category":"kat","reason":"preposition"},{"word":"","category":"sahaja","reason":"adverb"},{"word":"","category":"pun","reason":"particle"},{"word":"","category":"nak","reason":"auxiliary"},{"word":"","category":"tak","reason":"negation"},{"word":"","category":"nya","reason":"clitic"}]',
     s.script_config = 'null',
@@ -2191,13 +2191,13 @@ SET s.display_name = 'Malay (Malaysia) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ms-MY.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for Malay (Malaysia). Uses latin_strip rule. 18 stopwords across 6 categories including auxiliary, conjunction, demonstrative. Has 15 regional additions.';
+    s.llm_context = 'URL slugification rules for Malay (Malaysia). Uses latin_strip rule. 18 stopwords across 6 categories including negation, preposition, conjunction. Has 15 regional additions.';
 
 MERGE (s:Slugification {key: 'ms-SG'})
 SET s.display_name = 'MS (SG) Slugification',
     s.description = 'URL slug generation rules for ms-SG',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"auxiliary":["akan"],"preposition":["di","ke","dari","untuk","dengan","pada"],"possessive":["punya"],"demonstrative":["ini","itu"],"conjunction":["dan","atau"],"negation":["tidak"],"adverb":["juga"]}',
+    s.stopwords = '{"preposition":["di","ke","dari","untuk","dengan","pada"],"negation":["tidak"],"auxiliary":["akan"],"conjunction":["dan","atau"],"adverb":["juga"],"possessive":["punya"],"demonstrative":["ini","itu"]}',
     s.stopwords_count = 14,
     s.regional_additions = '[{"word":"","category":"lah","reason":"particle"},{"word":"","category":"lor","reason":"particle"},{"word":"","category":"hor","reason":"particle"},{"word":"","category":"leh","reason":"particle"},{"word":"","category":"kan","reason":"particle"},{"word":"","category":"punya","reason":"possessive"},{"word":"","category":"macam","reason":"intensifier"}]',
     s.script_config = 'null',
@@ -2206,13 +2206,13 @@ SET s.display_name = 'MS (SG) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ms-SG.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for MS (SG). Uses latin_strip rule. 14 stopwords across 7 categories including auxiliary, preposition, possessive. Has 7 regional additions.';
+    s.llm_context = 'URL slugification rules for MS (SG). Uses latin_strip rule. 14 stopwords across 7 categories including preposition, negation, auxiliary. Has 7 regional additions.';
 
 MERGE (s:Slugification {key: 'mt-MT'})
 SET s.display_name = 'MT (MT) Slugification',
     s.description = 'URL slug generation rules for mt-MT',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"demonstrative":["dawn","dawk","dan","din"],"adverb":["hemm","hawn"],"pronoun":["kollox"],"indefinite":["xi"],"quantifier":["kull"]}',
+    s.stopwords = '{"indefinite":["xi"],"adverb":["hemm","hawn"],"quantifier":["kull"],"pronoun":["kollox"],"demonstrative":["dawn","dawk","dan","din"]}',
     s.stopwords_count = 9,
     s.regional_additions = '[{"word":"","category":"dawn","reason":"demonstrative"},{"word":"","category":"dawk","reason":"demonstrative"},{"word":"","category":"dan","reason":"demonstrative"},{"word":"","category":"din","reason":"demonstrative"},{"word":"","category":"hemm","reason":"adverb"},{"word":"","category":"hawn","reason":"adverb"},{"word":"","category":"kollox","reason":"pronoun"},{"word":"","category":"xi","reason":"indefinite"},{"word":"","category":"kull","reason":"quantifier"}]',
     s.script_config = 'null',
@@ -2221,7 +2221,7 @@ SET s.display_name = 'MT (MT) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/mt-MT.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for MT (MT). Uses latin_preserve rule. 9 stopwords across 5 categories including demonstrative, adverb, pronoun. Has 9 regional additions.';
+    s.llm_context = 'URL slugification rules for MT (MT). Uses latin_preserve rule. 9 stopwords across 5 categories including indefinite, adverb, quantifier. Has 9 regional additions.';
 
 MERGE (s:Slugification {key: 'my-MM'})
 SET s.display_name = 'MY (MM) Slugification',
@@ -2242,7 +2242,7 @@ MERGE (s:Slugification {key: 'ne-NP'})
 SET s.display_name = 'NE (NP) Slugification',
     s.description = 'URL slug generation rules for ne-NP',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"adverb":["पनि"],"pronoun":["यो","त्यो","यी","ती","कुनै"],"conjunction":["र","तथा","वा","तर"],"verb":["हो","छ","थियो","गर्नु","हुनु","भयो"]}',
+    s.stopwords = '{"pronoun":["यो","त्यो","यी","ती","कुनै"],"adverb":["पनि"],"verb":["हो","छ","थियो","गर्नु","हुनु","भयो"],"conjunction":["र","तथा","वा","तर"]}',
     s.stopwords_count = 16,
     s.regional_additions = '[]',
     s.script_config = 'null',
@@ -2251,13 +2251,13 @@ SET s.display_name = 'NE (NP) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ne-NP.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for NE (NP). Uses native_script rule. 16 stopwords across 4 categories including adverb, pronoun, conjunction.';
+    s.llm_context = 'URL slugification rules for NE (NP). Uses native_script rule. 16 stopwords across 4 categories including pronoun, adverb, verb.';
 
 MERGE (s:Slugification {key: 'nl-BE'})
 SET s.display_name = 'NL (BE) Slugification',
     s.description = 'URL slug generation rules for nl-BE',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"article":["de","het","een","ne"],"preposition":["van","in","op","met","voor","aan","te","naar","bij","uit","om","over"],"pronoun":["dat","die","dit","ge","gij","wa"],"conjunction":["en","of","maar","als"],"verb":["is","zijn","wordt"]}',
+    s.stopwords = '{"verb":["is","zijn","wordt"],"pronoun":["dat","die","dit","ge","gij","wa"],"preposition":["van","in","op","met","voor","aan","te","naar","bij","uit","om","over"],"conjunction":["en","of","maar","als"],"article":["de","het","een","ne"]}',
     s.stopwords_count = 29,
     s.regional_additions = '[{"word":"","category":"ne","reason":"article"},{"word":"","category":"ge","reason":"pronoun"},{"word":"","category":"gij","reason":"pronoun"},{"word":"","category":"wa","reason":"pronoun"}]',
     s.script_config = 'null',
@@ -2266,13 +2266,13 @@ SET s.display_name = 'NL (BE) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/nl-BE.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for NL (BE). Uses latin_preserve rule. 29 stopwords across 5 categories including article, preposition, pronoun. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for NL (BE). Uses latin_preserve rule. 29 stopwords across 5 categories including verb, pronoun, preposition. Has 4 regional additions.';
 
 MERGE (s:Slugification {key: 'nl-NL'})
 SET s.display_name = 'Dutch (Netherlands) Slugification',
     s.description = 'URL slug generation rules for nl-NL',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"verb":["is","zijn","was","waren"],"article":["de","het","een","der","des"],"pronoun":["deze","die","dit","dat","zij"],"adverb":["ook","nog"],"preposition":["van","in","op","voor","met","aan","bij","door","naar","uit","over","om","na","ter","tot","bij"],"conjunction":["en","of","maar","als"]}',
+    s.stopwords = '{"adverb":["ook","nog"],"conjunction":["en","of","maar","als"],"article":["de","het","een","der","des"],"verb":["is","zijn","was","waren"],"preposition":["van","in","op","voor","met","aan","bij","door","naar","uit","over","om","na","ter","tot","bij"],"pronoun":["deze","die","dit","dat","zij"]}',
     s.stopwords_count = 36,
     s.regional_additions = '[{"word":"","category":"der","reason":"article"},{"word":"","category":"des","reason":"article"},{"word":"","category":"ter","reason":"preposition"},{"word":"","category":"tot","reason":"preposition"},{"word":"","category":"bij","reason":"preposition"}]',
     s.script_config = 'null',
@@ -2281,7 +2281,7 @@ SET s.display_name = 'Dutch (Netherlands) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/nl-NL.md',
     s.last_updated = '2025-12-08',
-    s.llm_context = 'URL slugification rules for Dutch (Netherlands). Uses latin_preserve rule. 36 stopwords across 6 categories including verb, article, pronoun. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for Dutch (Netherlands). Uses latin_preserve rule. 36 stopwords across 6 categories including adverb, conjunction, article. Has 5 regional additions.';
 
 MERGE (s:Slugification {key: 'no-NO'})
 SET s.display_name = 'Norwegian (Norway) Slugification',
@@ -2347,7 +2347,7 @@ MERGE (s:Slugification {key: 'pl-PL'})
 SET s.display_name = 'Polish (Poland) Slugification',
     s.description = 'URL slug generation rules for pl-PL',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"preposition":["w","z","do","na","o","od","po","dla","ze","we","przy","przez","pod","za"],"negation":["nie"],"pronoun":["to","się"],"conjunction":["i","a","oraz","czy","ale"],"verb":["jest"]}',
+    s.stopwords = '{"preposition":["w","z","do","na","o","od","po","dla","ze","we","przy","przez","pod","za"],"negation":["nie"],"conjunction":["i","a","oraz","czy","ale"],"verb":["jest"],"pronoun":["to","się"]}',
     s.stopwords_count = 23,
     s.regional_additions = '[]',
     s.script_config = 'null',
@@ -2356,7 +2356,7 @@ SET s.display_name = 'Polish (Poland) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/pl-PL.md',
     s.last_updated = '2025-12-08',
-    s.llm_context = 'URL slugification rules for Polish (Poland). Uses latin_preserve rule. 23 stopwords across 5 categories including preposition, negation, pronoun.';
+    s.llm_context = 'URL slugification rules for Polish (Poland). Uses latin_preserve rule. 23 stopwords across 5 categories including preposition, negation, conjunction.';
 
 MERGE (s:Slugification {key: 'ps-AF'})
 SET s.display_name = 'PS (AF) Slugification',
@@ -2377,7 +2377,7 @@ MERGE (s:Slugification {key: 'pt-AO'})
 SET s.display_name = 'PT (AO) Slugification',
     s.description = 'URL slug generation rules for pt-AO',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"verb":["é","ser","estar"],"adverb":["bué","mais","então"],"interjection":["yá"],"article":["o","a","os","as","um","uma"],"conjunction":["e","ou","mas"],"preposition":["de","da","do","em","na","no","para","por","com","sem"],"pronoun":["se"]}',
+    s.stopwords = '{"interjection":["yá"],"preposition":["de","da","do","em","na","no","para","por","com","sem"],"pronoun":["se"],"article":["o","a","os","as","um","uma"],"conjunction":["e","ou","mas"],"verb":["é","ser","estar"],"adverb":["bué","mais","então"]}',
     s.stopwords_count = 27,
     s.regional_additions = '[{"word":"","category":"bué","reason":"adverb"},{"word":"","category":"yá","reason":"interjection"},{"word":"","category":"kota","reason":"noun"},{"word":"","category":"mais","reason":"adverb"},{"word":"","category":"então","reason":"adverb"}]',
     s.script_config = 'null',
@@ -2386,13 +2386,13 @@ SET s.display_name = 'PT (AO) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/pt-AO.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for PT (AO). Uses latin_preserve rule. 27 stopwords across 7 categories including verb, adverb, interjection. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for PT (AO). Uses latin_preserve rule. 27 stopwords across 7 categories including interjection, preposition, pronoun. Has 5 regional additions.';
 
 MERGE (s:Slugification {key: 'pt-BR'})
 SET s.display_name = 'Portuguese (Brazil) Slugification',
     s.description = 'URL slug generation rules for pt-BR',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"filler":["tipo"],"preposition":["de","da","do","em","na","no","para","por","com","sem","pro","pra"],"pronoun":["se"],"verb":["é","ser","estar","tá"],"article":["o","a","os","as","um","uma"],"conjunction":["e","ou","mas"]}',
+    s.stopwords = '{"pronoun":["se"],"filler":["tipo"],"article":["o","a","os","as","um","uma"],"preposition":["de","da","do","em","na","no","para","por","com","sem","pro","pra"],"verb":["é","ser","estar","tá"],"conjunction":["e","ou","mas"]}',
     s.stopwords_count = 27,
     s.regional_additions = '[{"word":"","category":"pro","reason":"preposition"},{"word":"","category":"pra","reason":"preposition"},{"word":"","category":"tá","reason":"verb"},{"word":"","category":"né","reason":"particle"},{"word":"","category":"tipo","reason":"filler"}]',
     s.script_config = 'null',
@@ -2401,13 +2401,13 @@ SET s.display_name = 'Portuguese (Brazil) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/pt-BR.md',
     s.last_updated = '2025-12-08',
-    s.llm_context = 'URL slugification rules for Portuguese (Brazil). Uses latin_preserve rule. 27 stopwords across 6 categories including filler, preposition, pronoun. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for Portuguese (Brazil). Uses latin_preserve rule. 27 stopwords across 6 categories including pronoun, filler, article. Has 5 regional additions.';
 
 MERGE (s:Slugification {key: 'pt-CH'})
 SET s.display_name = 'PT (CH) Slugification',
     s.description = 'URL slug generation rules for pt-CH',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"conjunction":["e","ou","mas"],"pronoun":["se"],"verb":["é","ser","estar"],"article":["o","a","os","as","um","uma"],"preposition":["de","da","do","em","na","no","para","por","com","sem","ao","aos","pelo","pela","neste","nesta"]}',
+    s.stopwords = '{"conjunction":["e","ou","mas"],"article":["o","a","os","as","um","uma"],"preposition":["de","da","do","em","na","no","para","por","com","sem","ao","aos","pelo","pela","neste","nesta"],"pronoun":["se"],"verb":["é","ser","estar"]}',
     s.stopwords_count = 29,
     s.regional_additions = '[{"word":"","category":"ao","reason":"preposition"},{"word":"","category":"aos","reason":"preposition"},{"word":"","category":"pelo","reason":"preposition"},{"word":"","category":"pela","reason":"preposition"},{"word":"","category":"neste","reason":"preposition"},{"word":"","category":"nesta","reason":"preposition"}]',
     s.script_config = 'null',
@@ -2416,13 +2416,13 @@ SET s.display_name = 'PT (CH) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/pt-CH.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for PT (CH). Uses latin_preserve rule. 29 stopwords across 5 categories including conjunction, pronoun, verb. Has 6 regional additions.';
+    s.llm_context = 'URL slugification rules for PT (CH). Uses latin_preserve rule. 29 stopwords across 5 categories including conjunction, article, preposition. Has 6 regional additions.';
 
 MERGE (s:Slugification {key: 'pt-MZ'})
 SET s.display_name = 'PT (MZ) Slugification',
     s.description = 'URL slug generation rules for pt-MZ',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"contraction":["na","no","do","da","ao","pelo","pela"],"pronoun":["que","se"],"conjunction":["e","ou","mas"],"verb":["é","são"],"preposition":["de","em","para","com","por"],"article":["o","a","os","as","um","uma"]}',
+    s.stopwords = '{"preposition":["de","em","para","com","por"],"article":["o","a","os","as","um","uma"],"verb":["é","são"],"conjunction":["e","ou","mas"],"pronoun":["que","se"],"contraction":["na","no","do","da","ao","pelo","pela"]}',
     s.stopwords_count = 25,
     s.regional_additions = '[{"word":"","category":"na","reason":"contraction"},{"word":"","category":"no","reason":"contraction"},{"word":"","category":"do","reason":"contraction"},{"word":"","category":"da","reason":"contraction"},{"word":"","category":"ao","reason":"contraction"},{"word":"","category":"pelo","reason":"contraction"},{"word":"","category":"pela","reason":"contraction"}]',
     s.script_config = 'null',
@@ -2431,7 +2431,7 @@ SET s.display_name = 'PT (MZ) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/pt-MZ.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for PT (MZ). Uses latin_preserve rule. 25 stopwords across 6 categories including contraction, pronoun, conjunction. Has 7 regional additions.';
+    s.llm_context = 'URL slugification rules for PT (MZ). Uses latin_preserve rule. 25 stopwords across 6 categories including preposition, article, verb. Has 7 regional additions.';
 
 MERGE (s:Slugification {key: 'pt-PT'})
 SET s.display_name = 'Portuguese (Portugal) Slugification',
@@ -2467,7 +2467,7 @@ MERGE (s:Slugification {key: 'ro-MD'})
 SET s.display_name = 'RO (MD) Slugification',
     s.description = 'URL slug generation rules for ro-MD',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"article":["un","o","al","ale"],"verb":["este","sunt","fost"],"preposition":["de","la","pe","cu","din","pentru","prin","spre","fără"],"conjunction":["și","sau","dar","ori","deci"],"pronoun":["care","ce","acesta","aceasta"]}',
+    s.stopwords = '{"preposition":["de","la","pe","cu","din","pentru","prin","spre","fără"],"verb":["este","sunt","fost"],"pronoun":["care","ce","acesta","aceasta"],"conjunction":["și","sau","dar","ori","deci"],"article":["un","o","al","ale"]}',
     s.stopwords_count = 25,
     s.regional_additions = '[{"word":"","category":"din","reason":"preposition"},{"word":"","category":"pentru","reason":"preposition"},{"word":"","category":"prin","reason":"preposition"},{"word":"","category":"spre","reason":"preposition"},{"word":"","category":"fără","reason":"preposition"},{"word":"","category":"ori","reason":"conjunction"},{"word":"","category":"deci","reason":"conjunction"},{"word":"","category":"acesta","reason":"pronoun"},{"word":"","category":"aceasta","reason":"pronoun"},{"word":"","category":"fost","reason":"verb"}]',
     s.script_config = 'null',
@@ -2476,7 +2476,7 @@ SET s.display_name = 'RO (MD) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ro-MD.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for RO (MD). Uses latin_preserve rule. 25 stopwords across 5 categories including article, verb, preposition. Has 10 regional additions.';
+    s.llm_context = 'URL slugification rules for RO (MD). Uses latin_preserve rule. 25 stopwords across 5 categories including preposition, verb, pronoun. Has 10 regional additions.';
 
 MERGE (s:Slugification {key: 'ro-RO'})
 SET s.display_name = 'Romanian (Romania) Slugification',
@@ -2497,7 +2497,7 @@ MERGE (s:Slugification {key: 'ru-BY'})
 SET s.display_name = 'RU (BY) Slugification',
     s.description = 'URL slug generation rules for ru-BY',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"preposition":["в","на","с","по","к","о","из","за","у","от","до","для","при"],"conjunction":["и","а","но","или","что","как"],"pronoun":["это","то","он","она","они","мы","вы","его","её","их"]}',
+    s.stopwords = '{"pronoun":["это","то","он","она","они","мы","вы","его","её","их"],"preposition":["в","на","с","по","к","о","из","за","у","от","до","для","при"],"conjunction":["и","а","но","или","что","как"]}',
     s.stopwords_count = 29,
     s.regional_additions = '[]',
     s.script_config = 'null',
@@ -2506,13 +2506,13 @@ SET s.display_name = 'RU (BY) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ru-BY.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for RU (BY). Uses native_script rule. 29 stopwords across 3 categories including preposition, conjunction, pronoun.';
+    s.llm_context = 'URL slugification rules for RU (BY). Uses native_script rule. 29 stopwords across 3 categories including pronoun, preposition, conjunction.';
 
 MERGE (s:Slugification {key: 'ru-IL'})
 SET s.display_name = 'RU (IL) Slugification',
     s.description = 'URL slug generation rules for ru-IL',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"preposition":["в","на","с","к","у","о","по","за","из","до","для","от","при"],"conjunction":["и","а","но","или","что","как","если"],"pronoun":["это","он","она","они","мы","вы","я","его","её","их"],"adverb":["тут","там","ещё","уже","тоже"]}',
+    s.stopwords = '{"conjunction":["и","а","но","или","что","как","если"],"pronoun":["это","он","она","они","мы","вы","я","его","её","их"],"preposition":["в","на","с","к","у","о","по","за","из","до","для","от","при"],"adverb":["тут","там","ещё","уже","тоже"]}',
     s.stopwords_count = 35,
     s.regional_additions = '[{"word":"","category":"тут","reason":"adverb"},{"word":"","category":"там","reason":"adverb"},{"word":"","category":"ещё","reason":"adverb"},{"word":"","category":"уже","reason":"adverb"},{"word":"","category":"тоже","reason":"adverb"}]',
     s.script_config = '{"primary_script":"hebrew","diacritic_handling":null,"numeral_handling":null,"special_chars":null}',
@@ -2521,13 +2521,13 @@ SET s.display_name = 'RU (IL) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ru-IL.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for RU (IL). Uses native_script rule. 35 stopwords across 4 categories including preposition, conjunction, pronoun. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for RU (IL). Uses native_script rule. 35 stopwords across 4 categories including conjunction, pronoun, preposition. Has 5 regional additions.';
 
 MERGE (s:Slugification {key: 'ru-KG'})
 SET s.display_name = 'RU (KG) Slugification',
     s.description = 'URL slug generation rules for ru-KG',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"pronoun":["это"],"preposition":["в","на","с","к","по","за","из","у","о","для","от","до","при"],"conjunction":["и","а","но","что","как"],"adverb":["там"]}',
+    s.stopwords = '{"pronoun":["это"],"conjunction":["и","а","но","что","как"],"preposition":["в","на","с","к","по","за","из","у","о","для","от","до","при"],"adverb":["там"]}',
     s.stopwords_count = 20,
     s.regional_additions = '[{"word":"","category":"там","reason":"adverb"},{"word":"","category":"ну","reason":"particle"},{"word":"","category":"да","reason":"particle"}]',
     s.script_config = 'null',
@@ -2536,13 +2536,13 @@ SET s.display_name = 'RU (KG) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ru-KG.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for RU (KG). Uses native_script rule. 20 stopwords across 4 categories including pronoun, preposition, conjunction. Has 3 regional additions.';
+    s.llm_context = 'URL slugification rules for RU (KG). Uses native_script rule. 20 stopwords across 4 categories including pronoun, conjunction, preposition. Has 3 regional additions.';
 
 MERGE (s:Slugification {key: 'ru-KZ'})
 SET s.display_name = 'RU (KZ) Slugification',
     s.description = 'URL slug generation rules for ru-KZ',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"conjunction":["и","а","но","или","что","как"],"pronoun":["это","то","он","она","они","мы","вы","его","её","их"],"preposition":["в","на","с","по","к","о","из","за","у","от","до","для","при","через"],"adverb":["ещё","очень","также"],"verb":["можно","нужно"]}',
+    s.stopwords = '{"verb":["можно","нужно"],"conjunction":["и","а","но","или","что","как"],"adverb":["ещё","очень","также"],"preposition":["в","на","с","по","к","о","из","за","у","от","до","для","при","через"],"pronoun":["это","то","он","она","они","мы","вы","его","её","их"]}',
     s.stopwords_count = 35,
     s.regional_additions = '[{"word":"","category":"ещё","reason":"adverb"},{"word":"","category":"очень","reason":"adverb"},{"word":"","category":"также","reason":"adverb"},{"word":"","category":"можно","reason":"verb"},{"word":"","category":"нужно","reason":"verb"},{"word":"","category":"через","reason":"preposition"}]',
     s.script_config = 'null',
@@ -2551,13 +2551,13 @@ SET s.display_name = 'RU (KZ) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ru-KZ.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for RU (KZ). Uses native_script rule. 35 stopwords across 5 categories including conjunction, pronoun, preposition. Has 6 regional additions.';
+    s.llm_context = 'URL slugification rules for RU (KZ). Uses native_script rule. 35 stopwords across 5 categories including verb, conjunction, adverb. Has 6 regional additions.';
 
 MERGE (s:Slugification {key: 'ru-MD'})
 SET s.display_name = 'RU (MD) Slugification',
     s.description = 'URL slug generation rules for ru-MD',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"pronoun":["это","себе"],"conjunction":["и","а","но","что","как"],"adverb":["ещё","уже"],"preposition":["в","на","с","к","по","за","из","у","о","для","от","до","при","про"]}',
+    s.stopwords = '{"preposition":["в","на","с","к","по","за","из","у","о","для","от","до","при","про"],"conjunction":["и","а","но","что","как"],"adverb":["ещё","уже"],"pronoun":["это","себе"]}',
     s.stopwords_count = 23,
     s.regional_additions = '[{"word":"","category":"при","reason":"preposition"},{"word":"","category":"про","reason":"preposition"},{"word":"","category":"себе","reason":"pronoun"},{"word":"","category":"ещё","reason":"adverb"},{"word":"","category":"уже","reason":"adverb"}]',
     s.script_config = 'null',
@@ -2566,7 +2566,7 @@ SET s.display_name = 'RU (MD) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ru-MD.md',
     s.last_updated = '2026-01-11',
-    s.llm_context = 'URL slugification rules for RU (MD). Uses native_script rule. 23 stopwords across 4 categories including pronoun, conjunction, adverb. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for RU (MD). Uses native_script rule. 23 stopwords across 4 categories including preposition, conjunction, adverb. Has 5 regional additions.';
 
 MERGE (s:Slugification {key: 'ru-RU'})
 SET s.display_name = 'Russian (Russia) Slugification',
@@ -2587,7 +2587,7 @@ MERGE (s:Slugification {key: 'rw-RW'})
 SET s.display_name = 'RW (RW) Slugification',
     s.description = 'URL slug generation rules for rw-RW',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"conjunction":["kandi","naho"],"interrogative":["none"],"preposition":["muri"]}',
+    s.stopwords = '{"interrogative":["none"],"preposition":["muri"],"conjunction":["kandi","naho"]}',
     s.stopwords_count = 4,
     s.regional_additions = '[{"word":"","category":"muri","reason":"preposition"},{"word":"","category":"kandi","reason":"conjunction"},{"word":"","category":"naho","reason":"conjunction"},{"word":"","category":"none","reason":"interrogative"}]',
     s.script_config = 'null',
@@ -2596,13 +2596,13 @@ SET s.display_name = 'RW (RW) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/rw-RW.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for RW (RW). Uses latin_strip rule. 4 stopwords across 3 categories including conjunction, interrogative, preposition. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for RW (RW). Uses latin_strip rule. 4 stopwords across 3 categories including interrogative, preposition, conjunction. Has 4 regional additions.';
 
 MERGE (s:Slugification {key: 'sd-PK'})
 SET s.display_name = 'SD (PK) Slugification',
     s.description = 'URL slug generation rules for sd-PK',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"article":["هڪ","هي","اهي"],"pronoun":["هو","هوءَ","اهو","اها"],"conjunction":["۽","يا","پر","جيڪو","ته"],"verb":["آهي","آهن","ٿيو","هئي","هئا","ڪيو","ڪري"]}',
+    s.stopwords = '{"conjunction":["۽","يا","پر","جيڪو","ته"],"verb":["آهي","آهن","ٿيو","هئي","هئا","ڪيو","ڪري"],"article":["هڪ","هي","اهي"],"pronoun":["هو","هوءَ","اهو","اها"]}',
     s.stopwords_count = 19,
     s.regional_additions = '[]',
     s.script_config = '{"primary_script":"arabic","diacritic_handling":null,"numeral_handling":null,"special_chars":null}',
@@ -2611,13 +2611,13 @@ SET s.display_name = 'SD (PK) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/sd-PK.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for SD (PK). Uses native_script rule. 19 stopwords across 4 categories including article, pronoun, conjunction.';
+    s.llm_context = 'URL slugification rules for SD (PK). Uses native_script rule. 19 stopwords across 4 categories including conjunction, verb, article.';
 
 MERGE (s:Slugification {key: 'si-LK'})
 SET s.display_name = 'SI (LK) Slugification',
     s.description = 'URL slug generation rules for si-LK',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"honorific":["ශ්‍රී"],"demonstrative":["ඒ","මේ"],"verb":["ඇත","නැත","කළ"],"conjunction":["සහ","හෝ","නමුත්"],"pronoun":["එය","මම","ඔබ","ඔහු"]}',
+    s.stopwords = '{"pronoun":["එය","මම","ඔබ","ඔහු"],"demonstrative":["ඒ","මේ"],"conjunction":["සහ","හෝ","නමුත්"],"verb":["ඇත","නැත","කළ"],"honorific":["ශ්‍රී"]}',
     s.stopwords_count = 13,
     s.regional_additions = '[{"word":"","category":"ලංකාවේ","reason":"locative"},{"word":"","category":"ශ්‍රී","reason":"honorific"},{"word":"","category":"අලුත්","reason":"adjective"},{"word":"","category":"පිළිබඳ","reason":"postposition"}]',
     s.script_config = 'null',
@@ -2626,13 +2626,13 @@ SET s.display_name = 'SI (LK) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/si-LK.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for SI (LK). Uses native_script rule. 13 stopwords across 5 categories including honorific, demonstrative, verb. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for SI (LK). Uses native_script rule. 13 stopwords across 5 categories including pronoun, demonstrative, conjunction. Has 4 regional additions.';
 
 MERGE (s:Slugification {key: 'sk-SK'})
 SET s.display_name = 'Slovak (Slovakia) Slugification',
     s.description = 'URL slug generation rules for sk-SK',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"verb":["je","sú","bol","bola","bolo","boli","byť"],"conjunction":["a","i","alebo","ale","no","lebo","pretože","aby","keď","ak","kým"],"pronoun":["to","ten","tá","táto","tento","toto","ktorý","ktorá","ktoré"],"preposition":["v","vo","na","do","z","zo","s","so","k","ku","o","od","po","pre","pri","za","nad","pod","medzi","bez"],"adverb":["ako","tak","tu","tam","tiež","ešte","veľmi","len","už","práve"]}',
+    s.stopwords = '{"adverb":["ako","tak","tu","tam","tiež","ešte","veľmi","len","už","práve"],"preposition":["v","vo","na","do","z","zo","s","so","k","ku","o","od","po","pre","pri","za","nad","pod","medzi","bez"],"verb":["je","sú","bol","bola","bolo","boli","byť"],"conjunction":["a","i","alebo","ale","no","lebo","pretože","aby","keď","ak","kým"],"pronoun":["to","ten","tá","táto","tento","toto","ktorý","ktorá","ktoré"]}',
     s.stopwords_count = 57,
     s.regional_additions = '[{"word":"","category":"tiež","reason":"adverb"},{"word":"","category":"ešte","reason":"adverb"},{"word":"","category":"veľmi","reason":"adverb"},{"word":"","category":"len","reason":"adverb"},{"word":"","category":"už","reason":"adverb"},{"word":"","category":"práve","reason":"adverb"}]',
     s.script_config = 'null',
@@ -2641,13 +2641,13 @@ SET s.display_name = 'Slovak (Slovakia) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/sk-SK.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for Slovak (Slovakia). Uses latin_preserve rule. 57 stopwords across 5 categories including verb, conjunction, pronoun. Has 6 regional additions.';
+    s.llm_context = 'URL slugification rules for Slovak (Slovakia). Uses latin_preserve rule. 57 stopwords across 5 categories including adverb, preposition, verb. Has 6 regional additions.';
 
 MERGE (s:Slugification {key: 'sl-SI'})
 SET s.display_name = 'Slovenian (Slovenia) Slugification',
     s.description = 'URL slug generation rules for sl-SI',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"article":["en","ena","eno","eden","neki","neka","neke"],"conjunction":["in","ali","ter","pa","a","ampak","vendar","da","ker","če","ko","kot"],"pronoun":["ta","ti","to","te","tisto","jaz","mi","vi","on","ona","oni","se","kaj","kdo","kar","ki","vse"],"adverb":["tudi","samo","le","zelo","bolj","lahko","kako","tako","potem","zdaj"],"preposition":["na","v","za","z","s","po","do","od","pri","med","nad","pod","pred","ob","o","k","iz"],"verb":["je","so","sem","si","smo","ste","bo","bil","bila","biti","ima","imajo"]}',
+    s.stopwords = '{"adverb":["tudi","samo","le","zelo","bolj","lahko","kako","tako","potem","zdaj"],"preposition":["na","v","za","z","s","po","do","od","pri","med","nad","pod","pred","ob","o","k","iz"],"verb":["je","so","sem","si","smo","ste","bo","bil","bila","biti","ima","imajo"],"pronoun":["ta","ti","to","te","tisto","jaz","mi","vi","on","ona","oni","se","kaj","kdo","kar","ki","vse"],"conjunction":["in","ali","ter","pa","a","ampak","vendar","da","ker","če","ko","kot"],"article":["en","ena","eno","eden","neki","neka","neke"]}',
     s.stopwords_count = 75,
     s.regional_additions = '[]',
     s.script_config = 'null',
@@ -2656,13 +2656,13 @@ SET s.display_name = 'Slovenian (Slovenia) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/sl-SI.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for Slovenian (Slovenia). Uses latin_preserve rule. 75 stopwords across 6 categories including article, conjunction, pronoun.';
+    s.llm_context = 'URL slugification rules for Slovenian (Slovenia). Uses latin_preserve rule. 75 stopwords across 6 categories including adverb, preposition, verb.';
 
 MERGE (s:Slugification {key: 'sn-ZW'})
 SET s.display_name = 'SN (ZW) Slugification',
     s.description = 'URL slug generation rules for sn-ZW',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"adverb":["kupi"],"pronoun":["ani","chii"]}',
+    s.stopwords = '{"pronoun":["ani","chii"],"adverb":["kupi"]}',
     s.stopwords_count = 3,
     s.regional_additions = '[{"word":"","category":"here","reason":"particle"},{"word":"","category":"sei","reason":"particle"},{"word":"","category":"ani","reason":"pronoun"},{"word":"","category":"chii","reason":"pronoun"},{"word":"","category":"kupi","reason":"adverb"}]',
     s.script_config = 'null',
@@ -2671,13 +2671,13 @@ SET s.display_name = 'SN (ZW) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/sn-ZW.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for SN (ZW). Uses latin_strip rule. 3 stopwords across 2 categories including adverb, pronoun. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for SN (ZW). Uses latin_strip rule. 3 stopwords across 2 categories including pronoun, adverb. Has 5 regional additions.';
 
 MERGE (s:Slugification {key: 'so-SO'})
 SET s.display_name = 'SO (SO) Slugification',
     s.description = 'URL slug generation rules for so-SO',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"adverb":["sida","markii"],"verb":["waa","yahay","tahay"],"pronoun":["waxaa","aan","uu","ay","waxa"],"conjunction":["iyo","ama","laakiin","oo","ee","haddii"],"preposition":["ka","ku","ilaa","dhexe"]}',
+    s.stopwords = '{"preposition":["ka","ku","ilaa","dhexe"],"verb":["waa","yahay","tahay"],"pronoun":["waxaa","aan","uu","ay","waxa"],"adverb":["sida","markii"],"conjunction":["iyo","ama","laakiin","oo","ee","haddii"]}',
     s.stopwords_count = 20,
     s.regional_additions = '[{"word":"","category":"waxa","reason":"pronoun"},{"word":"","category":"sida","reason":"adverb"},{"word":"","category":"haddii","reason":"conjunction"},{"word":"","category":"markii","reason":"adverb"},{"word":"","category":"ilaa","reason":"preposition"},{"word":"","category":"dhexe","reason":"preposition"}]',
     s.script_config = 'null',
@@ -2686,7 +2686,7 @@ SET s.display_name = 'SO (SO) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/so-SO.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for SO (SO). Uses latin_strip rule. 20 stopwords across 5 categories including adverb, verb, pronoun. Has 6 regional additions.';
+    s.llm_context = 'URL slugification rules for SO (SO). Uses latin_strip rule. 20 stopwords across 5 categories including preposition, verb, pronoun. Has 6 regional additions.';
 
 MERGE (s:Slugification {key: 'sq-AL'})
 SET s.display_name = 'SQ (AL) Slugification',
@@ -2707,7 +2707,7 @@ MERGE (s:Slugification {key: 'sr-RS'})
 SET s.display_name = 'SR (RS) Slugification',
     s.description = 'URL slug generation rules for sr-RS',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"preposition":["у","на","за","са","од","до","по","о","из","ка","при","преко","кроз","између","око"],"pronoun":["ми","ви","он","она","они","то","ово","та"],"conjunction":["и","а","али","или","као","што","ако","када","док","него","већ","па","те"]}',
+    s.stopwords = '{"conjunction":["и","а","али","или","као","што","ако","када","док","него","већ","па","те"],"preposition":["у","на","за","са","од","до","по","о","из","ка","при","преко","кроз","између","око"],"pronoun":["ми","ви","он","она","они","то","ово","та"]}',
     s.stopwords_count = 36,
     s.regional_additions = '[]',
     s.script_config = 'null',
@@ -2716,7 +2716,7 @@ SET s.display_name = 'SR (RS) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/sr-RS.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for SR (RS). Uses native_script rule. 36 stopwords across 3 categories including preposition, pronoun, conjunction.';
+    s.llm_context = 'URL slugification rules for SR (RS). Uses native_script rule. 36 stopwords across 3 categories including conjunction, preposition, pronoun.';
 
 MERGE (s:Slugification {key: 'su-ID'})
 SET s.display_name = 'SU (ID) Slugification',
@@ -2737,7 +2737,7 @@ MERGE (s:Slugification {key: 'sv-SE'})
 SET s.display_name = 'Swedish (Sweden) Slugification',
     s.description = 'URL slug generation rules for sv-SE',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"verb":["är","var"],"pronoun":["som","de","du","han","hon","vi"],"article":["en","ett","den","det"],"preposition":["i","på","av","för","med","till","från","om","vid","över","under","utan"],"conjunction":["och","eller","men","samt"]}',
+    s.stopwords = '{"verb":["är","var"],"preposition":["i","på","av","för","med","till","från","om","vid","över","under","utan"],"pronoun":["som","de","du","han","hon","vi"],"article":["en","ett","den","det"],"conjunction":["och","eller","men","samt"]}',
     s.stopwords_count = 28,
     s.regional_additions = '[{"word":"","category":"samt","reason":"conjunction"},{"word":"","category":"över","reason":"preposition"},{"word":"","category":"under","reason":"preposition"},{"word":"","category":"utan","reason":"preposition"}]',
     s.script_config = 'null',
@@ -2746,13 +2746,13 @@ SET s.display_name = 'Swedish (Sweden) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/sv-SE.md',
     s.last_updated = '2025-12-08',
-    s.llm_context = 'URL slugification rules for Swedish (Sweden). Uses latin_preserve rule. 28 stopwords across 5 categories including verb, pronoun, article. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for Swedish (Sweden). Uses latin_preserve rule. 28 stopwords across 5 categories including verb, preposition, pronoun. Has 4 regional additions.';
 
 MERGE (s:Slugification {key: 'sw-KE'})
 SET s.display_name = 'Swahili (Kenya) Slugification',
     s.description = 'URL slug generation rules for sw-KE',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"interjection":["basi"],"adverb":["sana","tu","kweli"]}',
+    s.stopwords = '{"adverb":["sana","tu","kweli"],"interjection":["basi"]}',
     s.stopwords_count = 4,
     s.regional_additions = '[{"word":"","category":"sana","reason":"adverb"},{"word":"","category":"tu","reason":"adverb"},{"word":"","category":"basi","reason":"interjection"},{"word":"","category":"kweli","reason":"adverb"}]',
     s.script_config = 'null',
@@ -2761,13 +2761,13 @@ SET s.display_name = 'Swahili (Kenya) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/sw-KE.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for Swahili (Kenya). Uses latin_strip rule. 4 stopwords across 2 categories including interjection, adverb. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for Swahili (Kenya). Uses latin_strip rule. 4 stopwords across 2 categories including adverb, interjection. Has 4 regional additions.';
 
 MERGE (s:Slugification {key: 'sw-TZ'})
 SET s.display_name = 'SW (TZ) Slugification',
     s.description = 'URL slug generation rules for sw-TZ',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"conjunction":["au","lakini","kama"],"demonstrative":["hii","hiyo","hizi","ile"],"adverb":["hapa","pale","sana"],"preposition":["ya","wa","kwa","katika","la"]}',
+    s.stopwords = '{"demonstrative":["hii","hiyo","hizi","ile"],"adverb":["hapa","pale","sana"],"preposition":["ya","wa","kwa","katika","la"],"conjunction":["au","lakini","kama"]}',
     s.stopwords_count = 15,
     s.regional_additions = '[{"word":"","category":"hapa","reason":"adverb"},{"word":"","category":"pale","reason":"adverb"},{"word":"","category":"sana","reason":"adverb"}]',
     s.script_config = 'null',
@@ -2776,13 +2776,13 @@ SET s.display_name = 'SW (TZ) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/sw-TZ.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for SW (TZ). Uses latin_strip rule. 15 stopwords across 4 categories including conjunction, demonstrative, adverb. Has 3 regional additions.';
+    s.llm_context = 'URL slugification rules for SW (TZ). Uses latin_strip rule. 15 stopwords across 4 categories including demonstrative, adverb, preposition. Has 3 regional additions.';
 
 MERGE (s:Slugification {key: 'ta-IN'})
 SET s.display_name = 'TA (IN) Slugification',
     s.description = 'URL slug generation rules for ta-IN',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"conjunction":["என்று","மற்றும்","ஆனால்","அல்லது"],"verb":["உள்ள","இருக்கும்","செய்யும்"],"article":["ஒரு","அந்த","இந்த"],"pronoun":["அது","இது","அவர்","இவர்"],"interrogative":["என்ன","எப்படி","ஏன்"]}',
+    s.stopwords = '{"pronoun":["அது","இது","அவர்","இவர்"],"article":["ஒரு","அந்த","இந்த"],"conjunction":["என்று","மற்றும்","ஆனால்","அல்லது"],"verb":["உள்ள","இருக்கும்","செய்யும்"],"interrogative":["என்ன","எப்படி","ஏன்"]}',
     s.stopwords_count = 17,
     s.regional_additions = '[{"word":"","category":"தான்","reason":"emphatic particle"},{"word":"","category":"போல","reason":"postposition"},{"word":"","category":"வரை","reason":"postposition"},{"word":"","category":"விட","reason":"postposition"},{"word":"","category":"கூட","reason":"particle"}]',
     s.script_config = '{"primary_script":"arabic","diacritic_handling":null,"numeral_handling":null,"special_chars":null}',
@@ -2791,13 +2791,13 @@ SET s.display_name = 'TA (IN) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ta-IN.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for TA (IN). Uses native_script rule. 17 stopwords across 5 categories including conjunction, verb, article. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for TA (IN). Uses native_script rule. 17 stopwords across 5 categories including pronoun, article, conjunction. Has 5 regional additions.';
 
 MERGE (s:Slugification {key: 'ta-LK'})
 SET s.display_name = 'TA (LK) Slugification',
     s.description = 'URL slug generation rules for ta-LK',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"conjunction":["மற்றும்","அல்லது","ஆனால்"],"pronoun":["அது","இது","அவர்","அவள்"],"article":["ஒரு"]}',
+    s.stopwords = '{"article":["ஒரு"],"conjunction":["மற்றும்","அல்லது","ஆனால்"],"pronoun":["அது","இது","அவர்","அவள்"]}',
     s.stopwords_count = 8,
     s.regional_additions = '[{"word":"","category":"லங்கை","reason":"geographic"},{"word":"","category":"இலங்கை","reason":"geographic"},{"word":"","category":"சிங்கள","reason":"ethnic"},{"word":"","category":"யாழ்ப்பாணம்","reason":"geographic"},{"word":"","category":"கொழும்பு","reason":"geographic"}]',
     s.script_config = '{"primary_script":"arabic","diacritic_handling":null,"numeral_handling":null,"special_chars":null}',
@@ -2806,7 +2806,7 @@ SET s.display_name = 'TA (LK) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ta-LK.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for TA (LK). Uses native_script rule. 8 stopwords across 3 categories including conjunction, pronoun, article. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for TA (LK). Uses native_script rule. 8 stopwords across 3 categories including article, conjunction, pronoun. Has 5 regional additions.';
 
 MERGE (s:Slugification {key: 'te-IN'})
 SET s.display_name = 'TE (IN) Slugification',
@@ -2857,7 +2857,7 @@ MERGE (s:Slugification {key: 'tk-TM'})
 SET s.display_name = 'TK (TM) Slugification',
     s.description = 'URL slug generation rules for tk-TM',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"conjunction":["we","hem","ýa-da","hem-de"],"article":["bir","birnäçe"],"pronoun":["bu","şu","ol"],"preposition":["bilen","üçin"],"adverb":["ýok","has","iň"],"verb":["bolsa","bar"]}',
+    s.stopwords = '{"conjunction":["we","hem","ýa-da","hem-de"],"article":["bir","birnäçe"],"preposition":["bilen","üçin"],"verb":["bolsa","bar"],"adverb":["ýok","has","iň"],"pronoun":["bu","şu","ol"]}',
     s.stopwords_count = 16,
     s.regional_additions = '[{"word":"","category":"barada","reason":"postposition"},{"word":"","category":"hakynda","reason":"postposition"},{"word":"hem-de","category":"conjunction","reason":"Common compound conjunction in Turkmen"}]',
     s.script_config = 'null',
@@ -2866,7 +2866,7 @@ SET s.display_name = 'TK (TM) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/tk-TM.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for TK (TM). Uses latin_preserve rule. 16 stopwords across 6 categories including conjunction, article, pronoun. Has 3 regional additions.';
+    s.llm_context = 'URL slugification rules for TK (TM). Uses latin_preserve rule. 16 stopwords across 6 categories including conjunction, article, preposition. Has 3 regional additions.';
 
 MERGE (s:Slugification {key: 'tl-PH'})
 SET s.display_name = 'TL (PH) Slugification',
@@ -2887,7 +2887,7 @@ MERGE (s:Slugification {key: 'tr-TR'})
 SET s.display_name = 'Turkish (Turkey) Slugification',
     s.description = 'URL slug generation rules for tr-TR',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"article":["bir"],"conjunction":["ve","veya","da","de","ya"],"adverb":["daha","çok","en"],"preposition":["ile","için"],"pronoun":["bu","şu","o","olan"]}',
+    s.stopwords = '{"article":["bir"],"conjunction":["ve","veya","da","de","ya"],"adverb":["daha","çok","en"],"pronoun":["bu","şu","o","olan"],"preposition":["ile","için"]}',
     s.stopwords_count = 15,
     s.regional_additions = '[{"word":"","category":"olan","reason":"pronoun"},{"word":"","category":"gibi","reason":"postposition"},{"word":"","category":"kadar","reason":"postposition"}]',
     s.script_config = 'null',
@@ -2902,7 +2902,7 @@ MERGE (s:Slugification {key: 'uk-UA'})
 SET s.display_name = 'Ukrainian (Ukraine) Slugification',
     s.description = 'URL slug generation rules for uk-UA',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"pronoun":["що","це","той","цей"],"adverb":["як"],"preposition":["в","на","з","до","від","для"],"conjunction":["і","та","або","але"]}',
+    s.stopwords = '{"conjunction":["і","та","або","але"],"adverb":["як"],"pronoun":["що","це","той","цей"],"preposition":["в","на","з","до","від","для"]}',
     s.stopwords_count = 15,
     s.regional_additions = '[]',
     s.script_config = 'null',
@@ -2911,13 +2911,13 @@ SET s.display_name = 'Ukrainian (Ukraine) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/uk-UA.md',
     s.last_updated = '2025-12-08',
-    s.llm_context = 'URL slugification rules for Ukrainian (Ukraine). Uses native_script rule. 15 stopwords across 4 categories including pronoun, adverb, preposition.';
+    s.llm_context = 'URL slugification rules for Ukrainian (Ukraine). Uses native_script rule. 15 stopwords across 4 categories including conjunction, adverb, pronoun.';
 
 MERGE (s:Slugification {key: 'ur-PK'})
 SET s.display_name = 'UR (PK) Slugification',
     s.description = 'URL slug generation rules for ur-PK',
     s.slug_rule = 'native_script',
-    s.stopwords = '{"conjunction":["تو"],"adverb":["بھی"],"demonstrative":["یہ","وہ"]}',
+    s.stopwords = '{"adverb":["بھی"],"demonstrative":["یہ","وہ"],"conjunction":["تو"]}',
     s.stopwords_count = 4,
     s.regional_additions = '[{"word":"","category":"یہ","reason":"demonstrative"},{"word":"","category":"وہ","reason":"demonstrative"},{"word":"","category":"جو","reason":"relative"},{"word":"","category":"تو","reason":"conjunction"},{"word":"","category":"بھی","reason":"adverb"}]',
     s.script_config = '{"primary_script":"arabic","diacritic_handling":null,"numeral_handling":null,"special_chars":null}',
@@ -2926,13 +2926,13 @@ SET s.display_name = 'UR (PK) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/ur-PK.md',
     s.last_updated = '2026-01-09',
-    s.llm_context = 'URL slugification rules for UR (PK). Uses native_script rule. 4 stopwords across 3 categories including conjunction, adverb, demonstrative. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for UR (PK). Uses native_script rule. 4 stopwords across 3 categories including adverb, demonstrative, conjunction. Has 5 regional additions.';
 
 MERGE (s:Slugification {key: 'uz-UZ'})
 SET s.display_name = 'UZ (UZ) Slugification',
     s.description = 'URL slug generation rules for uz-UZ',
     s.slug_rule = 'latin_preserve',
-    s.stopwords = '{"conjunction":["va","yoki","ham","esa"],"adverb":["keyin","oldin"],"pronoun":["bu","shu","u"]}',
+    s.stopwords = '{"pronoun":["bu","shu","u"],"conjunction":["va","yoki","ham","esa"],"adverb":["keyin","oldin"]}',
     s.stopwords_count = 9,
     s.regional_additions = '[{"word":"","category":"oʻzbekiston","reason":"proper noun"},{"word":"","category":"toshkent","reason":"proper noun"},{"word":"","category":"davlat","reason":"noun"}]',
     s.script_config = 'null',
@@ -2941,13 +2941,13 @@ SET s.display_name = 'UZ (UZ) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/uz-UZ.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for UZ (UZ). Uses latin_preserve rule. 9 stopwords across 3 categories including conjunction, adverb, pronoun. Has 3 regional additions.';
+    s.llm_context = 'URL slugification rules for UZ (UZ). Uses latin_preserve rule. 9 stopwords across 3 categories including pronoun, conjunction, adverb. Has 3 regional additions.';
 
 MERGE (s:Slugification {key: 'vi-VN'})
 SET s.display_name = 'Vietnamese (Vietnam) Slugification',
     s.description = 'URL slug generation rules for vi-VN',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"article":["các","những","một"],"demonstrative":["này","đó","kia","đây"],"conjunction":["và","hoặc","nhưng","nếu"],"preposition":["của","cho","với","từ","đến","tại","trong","ngoài"],"copula":["là"]}',
+    s.stopwords = '{"copula":["là"],"preposition":["của","cho","với","từ","đến","tại","trong","ngoài"],"article":["các","những","một"],"conjunction":["và","hoặc","nhưng","nếu"],"demonstrative":["này","đó","kia","đây"]}',
     s.stopwords_count = 20,
     s.regional_additions = '[]',
     s.script_config = 'null',
@@ -2956,7 +2956,7 @@ SET s.display_name = 'Vietnamese (Vietnam) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/vi-VN.md',
     s.last_updated = '2025-12-08',
-    s.llm_context = 'URL slugification rules for Vietnamese (Vietnam). Uses latin_strip rule. 20 stopwords across 5 categories including article, demonstrative, conjunction.';
+    s.llm_context = 'URL slugification rules for Vietnamese (Vietnam). Uses latin_strip rule. 20 stopwords across 5 categories including copula, preposition, article.';
 
 MERGE (s:Slugification {key: 'wo-SN'})
 SET s.display_name = 'WO (SN) Slugification',
@@ -2977,7 +2977,7 @@ MERGE (s:Slugification {key: 'xh-ZA'})
 SET s.display_name = 'XH (ZA) Slugification',
     s.description = 'URL slug generation rules for xh-ZA',
     s.slug_rule = 'latin_strip',
-    s.stopwords = '{"demonstrative":["lo","le","eli","aba","ezi","oku","oko"],"conjunction":["na","okanye","kodwa","ukuba","ngenxa","kunye"],"adverb":["njalo","nje"],"pronoun":["mna","wena","yena","thina"],"preposition":["ku","e","kwa","nge"]}',
+    s.stopwords = '{"demonstrative":["lo","le","eli","aba","ezi","oku","oko"],"conjunction":["na","okanye","kodwa","ukuba","ngenxa","kunye"],"preposition":["ku","e","kwa","nge"],"pronoun":["mna","wena","yena","thina"],"adverb":["njalo","nje"]}',
     s.stopwords_count = 23,
     s.regional_additions = '[{"word":"","category":"kunye","reason":"conjunction"},{"word":"","category":"njalo","reason":"adverb"},{"word":"","category":"ke","reason":"discourse marker"},{"word":"","category":"nje","reason":"adverb"}]',
     s.script_config = 'null',
@@ -2986,7 +2986,7 @@ SET s.display_name = 'XH (ZA) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/xh-ZA.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for XH (ZA). Uses latin_strip rule. 23 stopwords across 5 categories including demonstrative, conjunction, adverb. Has 4 regional additions.';
+    s.llm_context = 'URL slugification rules for XH (ZA). Uses latin_strip rule. 23 stopwords across 5 categories including demonstrative, conjunction, preposition. Has 4 regional additions.';
 
 MERGE (s:Slugification {key: 'yo-NG'})
 SET s.display_name = 'YO (NG) Slugification',
@@ -3037,7 +3037,7 @@ MERGE (s:Slugification {key: 'zh-SG'})
 SET s.display_name = 'ZH (SG) Slugification',
     s.description = 'URL slug generation rules for zh-SG',
     s.slug_rule = 'romanized',
-    s.stopwords = '{"verb":["是 (shi)","有 (you)"],"preposition":["在 (zai)","为 (wei)"],"conjunction":["和 (he)","与 (yu)","或 (huo)"],"classifier":["个 (ge)"],"pronoun":["这 (zhe)","那 (na)"]}',
+    s.stopwords = '{"conjunction":["和 (he)","与 (yu)","或 (huo)"],"classifier":["个 (ge)"],"preposition":["在 (zai)","为 (wei)"],"pronoun":["这 (zhe)","那 (na)"],"verb":["是 (shi)","有 (you)"]}',
     s.stopwords_count = 10,
     s.regional_additions = '[{"word":"啦 (la)","category":"particle","reason":"Singapore colloquial particle from Singlish"},{"word":"咯 (lo)","category":"particle","reason":"Singapore colloquial particle from Singlish"},{"word":"吗 (ma)","category":"particle","reason":"Question particle common in Singapore Chinese"},{"word":"呢 (ne)","category":"particle","reason":"Sentence-final particle"},{"word":"哦 (o)","category":"particle","reason":"Singapore colloquial acknowledgment particle"}]',
     s.script_config = '{"primary_script":"chinese","diacritic_handling":null,"numeral_handling":null,"special_chars":null}',
@@ -3046,13 +3046,13 @@ SET s.display_name = 'ZH (SG) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/zh-SG.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for ZH (SG). Uses romanized rule. 10 stopwords across 5 categories including verb, preposition, conjunction. Has 5 regional additions.';
+    s.llm_context = 'URL slugification rules for ZH (SG). Uses romanized rule. 10 stopwords across 5 categories including conjunction, classifier, preposition. Has 5 regional additions.';
 
 MERGE (s:Slugification {key: 'zh-TH'})
 SET s.display_name = 'ZH (TH) Slugification',
     s.description = 'URL slug generation rules for zh-TH',
     s.slug_rule = 'romanized',
-    s.stopwords = '{"preposition":["zai (在)"],"verb":["shi (是)"],"conjunction":["he (和)","yu (与)"],"demonstrative":["zhe (这)","na (那)"],"classifier":["ge (个)"]}',
+    s.stopwords = '{"conjunction":["he (和)","yu (与)"],"classifier":["ge (个)"],"verb":["shi (是)"],"preposition":["zai (在)"],"demonstrative":["zhe (这)","na (那)"]}',
     s.stopwords_count = 7,
     s.regional_additions = '[{"word":"tai (泰)","category":"geographic","reason":"Very common in Thai-Chinese content, rarely adds SEO value"},{"word":"mangu (曼谷)","category":"geographic","reason":"Bangkok reference, often redundant in Thailand context"},{"word":"zhongguo (中国)","category":"geographic","reason":"China reference, may not be relevant for local Thai content"}]',
     s.script_config = '{"primary_script":"thai","diacritic_handling":null,"numeral_handling":null,"special_chars":null}',
@@ -3061,7 +3061,7 @@ SET s.display_name = 'ZH (TH) Slugification',
     s.template_version = '2.0',
     s.source_file = '2-rules-slug/zh-TH.md',
     s.last_updated = '2025-01-09',
-    s.llm_context = 'URL slugification rules for ZH (TH). Uses romanized rule. 7 stopwords across 5 categories including preposition, verb, conjunction. Has 3 regional additions.';
+    s.llm_context = 'URL slugification rules for ZH (TH). Uses romanized rule. 7 stopwords across 5 categories including conjunction, classifier, verb. Has 3 regional additions.';
 
 MERGE (s:Slugification {key: 'zh-TW'})
 SET s.display_name = 'Chinese (Traditional) Slugification',

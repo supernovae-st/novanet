@@ -10,12 +10,12 @@ version: "10.7.0"
 
 # Arc count by family
 summary:
-  ownership: 33
-  localization: 9
-  semantic: 16
-  generation: 14
+  ownership: 39
+  localization: 17
+  semantic: 19          # +2: for-channel, targets-persona
+  generation: 15        # +1: includes-style
   mining: 2
-  total: 74
+  total: 92
 
 # Directory structure
 structure:
@@ -24,6 +24,9 @@ structure:
     - belongs-to-org.yaml
     - belongs-to-project-l10n.yaml
     - block-of.yaml
+    - branch-of.yaml           # Geographic: language branch hierarchy
+    - cluster-of.yaml          # Geographic: population cluster hierarchy
+    - contains.yaml            # Container → atom relationship
     - default-locale.yaml
     - has-adaptation.yaml
     - has-audience.yaml
@@ -51,18 +54,29 @@ structure:
     - has-style.yaml
     - has-taboos.yaml
     - has-terms.yaml
+    - in-continent.yaml        # Geographic: country → continent
+    - in-region.yaml           # Geographic: country → geo-region
     - of-type.yaml
+    - part-of-realm.yaml       # Geographic: cultural realm membership
     - supports-locale.yaml
 
   localization:
     - fallback-to.yaml
     - for-locale.yaml
+    - has-income-level.yaml    # Geographic: country → income group
     - has-internal-link.yaml
     - has-l10n.yaml
+    - has-lending-type.yaml    # Geographic: country → lending category
     - has-localized-content.yaml
     - has-output.yaml
+    - has-population.yaml      # Geographic: locale → population cluster
+    - has-primary-population.yaml  # Geographic: locale primary population
+    - in-cultural-subrealm.yaml    # Geographic: locale → cultural sub-realm
+    - in-economic-region.yaml  # Geographic: country → economic region
+    - in-subregion.yaml        # Geographic: country → geo sub-region
     - l10n-of.yaml
     - output-of.yaml
+    - speaks-branch.yaml       # Geographic: locale → language branch
     - variant-of.yaml
 
   semantic:
@@ -70,8 +84,10 @@ structure:
     - answers.yaml
     - compares-a.yaml
     - compares-b.yaml
+    - culturally-similar.yaml  # Geographic: cultural similarity between locales
     - expresses.yaml
     - fills-slot.yaml
+    - for-channel.yaml         # Content targets channel surface
     - links-to.yaml
     - materializes-as.yaml
     - references-entity.yaml
@@ -79,6 +95,7 @@ structure:
     - semantic-link.yaml
     - subtopic-of.yaml
     - targets.yaml
+    - targets-persona.yaml     # Content targets audience persona
     - use-case-entity.yaml
     - used-by.yaml
     - uses-entity.yaml
@@ -92,6 +109,7 @@ structure:
     - generated.yaml
     - has-evaluation.yaml
     - includes-entity.yaml
+    - includes-style.yaml      # Prompt includes style directives
     - includes.yaml
     - influenced-by.yaml
     - previous-version.yaml

@@ -1,0 +1,167 @@
+# packages/core/models/node-kinds/global/locale-knowledge/population-sub-cluster.yaml
+# PopulationSubCluster - Sub-cluster for fine-grained image generation diversity
+#
+# v10.8: Geographic Taxonomy - Phase 5
+# Data: ~25 sub-clusters (Northern European, Mediterranean, Han Chinese, etc.)
+# Use case: Generate specific, representative images for different markets
+
+node:
+  name: PopulationSubCluster
+  realm: global
+  layer: locale-knowledge
+  trait: knowledge
+  icon: "🧑"
+  description: "Population sub-cluster with specific visual traits for image generation"
+
+  standard_properties:
+    key:
+      type: string
+      required: true
+      description: "Kebab-case sub-cluster key"
+      pattern: "^[a-z-]+$"
+      examples:
+        - "northern-european"
+        - "mediterranean"
+        - "middle-eastern"
+        - "han-chinese"
+        - "japanese"
+        - "west-african"
+
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable sub-cluster name"
+      example: "Northern European"
+
+    description:
+      type: string
+      required: true
+      description: "Short description"
+      example: "Nordic and Germanic populations (Scandinavia, Germany, Netherlands, UK)"
+
+    llm_context:
+      type: string
+      required: true
+      description: "LLM hints for image generation"
+      example: "USE: for Nordic/Germanic markets. TRIGGERS: scandinavia, germany, netherlands, uk. IMAGE: light skin, blonde to light brown hair, blue/green/grey eyes."
+
+    created_at:
+      type: datetime
+      required: true
+
+    updated_at:
+      type: datetime
+      required: true
+
+  properties:
+    parent_cluster:
+      type: string
+      required: true
+      description: "Parent PopulationCluster key"
+      example: "west-eurasian"
+
+    visual_traits:
+      type: json
+      required: true
+      description: "Specific visual traits for image prompts"
+      example:
+        - "light to very light skin tone"
+        - "blonde to light brown hair"
+        - "blue, green, or grey eyes"
+        - "tall stature"
+
+    skin_tone_range:
+      type: string
+      required: true
+      description: "Skin tone range description for image generation"
+      example: "very light to light"
+
+    hair_colors:
+      type: json
+      required: true
+      description: "Common hair colors"
+      example:
+        - "blonde"
+        - "light brown"
+        - "red"
+
+    eye_colors:
+      type: json
+      required: true
+      description: "Common eye colors"
+      example:
+        - "blue"
+        - "green"
+        - "grey"
+        - "light brown"
+
+    image_prompt_template:
+      type: string
+      required: false
+      description: "Template for image generation prompts"
+      example: "professional person with {skin_tone_range} skin, {hair_colors} hair"
+
+  relations:
+    outgoing:
+      - type: CLUSTER_OF
+        to: PopulationCluster
+        cardinality: "N:1"
+        description: "Sub-cluster belongs to macro population cluster"
+
+    incoming:
+      - type: HAS_POPULATION
+        from: Locale
+        cardinality: "N:M"
+        properties:
+          percentage:
+            type: float
+            description: "Population percentage (0.0 to 1.0)"
+          is_majority:
+            type: bool
+            description: "True if >50%"
+        description: "Locales with this population sub-cluster"
+
+  example:
+    data:
+      key: "northern-european"
+      display_name: "Northern European"
+      description: "Nordic and Germanic populations (Scandinavia, Germany, Netherlands, UK)"
+      parent_cluster: "west-eurasian"
+      visual_traits:
+        - "light to very light skin tone"
+        - "blonde to light brown hair"
+        - "blue, green, or grey eyes"
+        - "tall stature"
+      skin_tone_range: "very light to light"
+      hair_colors:
+        - "blonde"
+        - "light brown"
+        - "red"
+      eye_colors:
+        - "blue"
+        - "green"
+        - "grey"
+        - "light brown"
+      image_prompt_template: "professional person with {skin_tone_range} skin, {hair_colors} hair, {eye_colors} eyes"
+      llm_context: "USE: for Nordic/Germanic markets (SE, NO, DK, FI, DE, NL, UK). TRIGGERS: scandinavia, nordic, germanic. IMAGE: light skin, fair hair, light eyes. NOT: Mediterranean, Slavic."
+
+    cypher: |
+      // Get sub-cluster visual traits
+      MATCH (ps:PopulationSubCluster {key: $key})
+      RETURN ps.visual_traits, ps.skin_tone_range, ps.hair_colors, ps.eye_colors
+
+      // Get all locales with this population
+      MATCH (ps:PopulationSubCluster {key: $key})<-[hp:HAS_POPULATION]-(l:Locale)
+      RETURN l.key, l.display_name, hp.percentage, hp.is_majority
+      ORDER BY hp.percentage DESC
+
+      // Build image prompt for a locale
+      MATCH (l:Locale {key: 'de-DE'})-[hp:HAS_POPULATION]->(ps:PopulationSubCluster)
+      WHERE hp.percentage > 0.1
+      RETURN ps.name,
+             ps.skin_tone_range,
+             ps.hair_colors,
+             ps.eye_colors,
+             hp.percentage,
+             'professional person, ' + ps.skin_tone_range + ' skin, ' + ps.hair_colors[0] + ' hair' AS image_prompt
+      ORDER BY hp.percentage DESC
