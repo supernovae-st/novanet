@@ -1,6 +1,6 @@
 //! Generate Mermaid flowchart with Realm/Layer/Trait coloring.
 //!
-//! Reads all 46 node YAMLs, `relations.yaml`, and `taxonomy.yaml` (v10.6)
+//! Reads all 48 node YAMLs, `relations.yaml`, and `taxonomy.yaml` (v10.6)
 //! to produce a complete graph diagram with:
 //! - Subgraphs grouped by Realm → Layer
 //! - Node styling by node_trait (Trait)
