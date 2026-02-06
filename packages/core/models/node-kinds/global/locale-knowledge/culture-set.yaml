@@ -59,9 +59,9 @@ node:
         description: "CultureSet contains multiple CultureRef atoms"
 
     incoming:
-      - type: HAS_CULTURE
+      - type: HAS_CULTURE_SET
         from: Locale
         cardinality: "1:N"
-        description: "Locale has culture sets"
+        description: "Locale has culture sets (one per type)"
         properties:
-          culture_type: string
+          type: string
