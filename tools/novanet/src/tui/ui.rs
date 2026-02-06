@@ -104,6 +104,27 @@ const STYLE_ACCENT: Style = Style::new().fg(Color::Magenta);
 /// Error/warning indicators.
 const STYLE_ERROR: Style = Style::new().fg(Color::Red);
 
+/// Muted/secondary text (custom RGB).
+const STYLE_MUTED: Style = Style::new().fg(COLOR_MUTED_TEXT);
+
+/// Separator dots style.
+const STYLE_SEPARATOR: Style = Style::new().fg(COLOR_SEPARATOR);
+
+/// Hint text style.
+const STYLE_HINT: Style = Style::new().fg(COLOR_HINT_TEXT);
+
+/// Description text style.
+const STYLE_DESC: Style = Style::new().fg(COLOR_DESC_TEXT);
+
+/// Unfocused border style.
+const STYLE_UNFOCUSED: Style = Style::new().fg(COLOR_UNFOCUSED_BORDER);
+
+/// Arc family label style.
+const STYLE_ARC_FAMILY: Style = Style::new().fg(COLOR_ARC_FAMILY);
+
+/// Bright dim text style.
+const STYLE_BRIGHT_DIM: Style = Style::new().fg(COLOR_BRIGHT_DIM);
+
 /// Safely truncate a UTF-8 string to N characters (not bytes).
 /// Appends "..." if truncated.
 fn truncate_str(s: &str, max_chars: usize) -> String {
@@ -693,7 +714,7 @@ fn render_filtered_instances(
     ]));
     all_lines.push(Line::from(Span::styled(
         "─".repeat(area.width.saturating_sub(2) as usize),
-        Style::default().fg(COLOR_UNFOCUSED_BORDER),
+        STYLE_UNFOCUSED,
     )));
 
     // Get instances
@@ -891,7 +912,7 @@ fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
 
     let mut lines: Vec<Line> = Vec::new();
     let dim = Style::default().fg(Color::Rgb(100, 100, 100));
-    let bright_dim = Style::default().fg(COLOR_BRIGHT_DIM);
+    let bright_dim = STYLE_BRIGHT_DIM;
 
     // === LOADING INDICATOR (specific message based on what's loading) ===
     let loading_msg = if app.pending_arcs_load.is_some() {
@@ -1753,7 +1774,7 @@ fn build_yaml_title(path: &str) -> Vec<Span<'static>> {
     if path.is_empty() {
         return vec![Span::styled(
             " YAML ",
-            Style::default().fg(COLOR_UNFOCUSED_BORDER),
+            STYLE_UNFOCUSED,
         )];
     }
 
@@ -1990,7 +2011,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                 lines.push(Line::from(""));
                 lines.push(Line::from(Span::styled(
                     format!("Properties ({})", kind.properties.len()),
-                    Style::default().fg(COLOR_MUTED_TEXT),
+                    STYLE_MUTED,
                 )));
 
                 for prop in &kind.properties {
@@ -2023,7 +2044,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                 lines.push(Line::from(""));
                 lines.push(Line::from(Span::styled(
                     format!("Arcs ({})", kind.arcs.len()),
-                    Style::default().fg(COLOR_MUTED_TEXT),
+                    STYLE_MUTED,
                 )));
 
                 for arc in &kind.arcs {
@@ -2046,7 +2067,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                 lines.push(Line::from(""));
                 lines.push(Line::from(Span::styled(
                     "Description",
-                    Style::default().fg(COLOR_MUTED_TEXT),
+                    STYLE_MUTED,
                 )));
                 // Wrap description to multiple lines if too long
                 let desc = &kind.description;
@@ -2054,7 +2075,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                     let line: String = chunk.iter().collect();
                     lines.push(Line::from(Span::styled(
                         format!("  {}", line),
-                        Style::default().fg(COLOR_DESC_TEXT),
+                        STYLE_DESC,
                     )));
                 }
             }
@@ -2063,11 +2084,11 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
             lines.push(Line::from(""));
             lines.push(Line::from(Span::styled(
                 "Cypher",
-                Style::default().fg(COLOR_MUTED_TEXT),
+                STYLE_MUTED,
             )));
             lines.push(Line::from(Span::styled(
                 format!("  MATCH (n:{}) RETURN n LIMIT 100", kind.key),
-                Style::default().fg(COLOR_HINT_TEXT),
+                STYLE_HINT,
             )));
 
             lines
@@ -2076,7 +2097,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
             vec![
                 Line::from(vec![
                     Span::styled("type      ", STYLE_DIM),
-                    Span::styled("ArcFamily", Style::default().fg(COLOR_ARC_FAMILY)),
+                    Span::styled("ArcFamily", STYLE_ARC_FAMILY),
                 ]),
                 Line::from(vec![
                     Span::styled("key       ", STYLE_DIM),
@@ -2110,7 +2131,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                     Span::styled("family    ", STYLE_DIM),
                     Span::styled(
                         family.display_name.clone(),
-                        Style::default().fg(COLOR_ARC_FAMILY),
+                        STYLE_ARC_FAMILY,
                     ),
                 ]),
                 Line::from(vec![
@@ -2139,11 +2160,11 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                 lines.push(Line::from(""));
                 lines.push(Line::from(Span::styled(
                     "Description",
-                    Style::default().fg(COLOR_MUTED_TEXT),
+                    STYLE_MUTED,
                 )));
                 lines.push(Line::from(Span::styled(
                     format!("  {}", &arc_kind.description),
-                    Style::default().fg(COLOR_DESC_TEXT),
+                    STYLE_DESC,
                 )));
             }
 
@@ -2151,11 +2172,11 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
             lines.push(Line::from(""));
             lines.push(Line::from(Span::styled(
                 "Cypher",
-                Style::default().fg(COLOR_MUTED_TEXT),
+                STYLE_MUTED,
             )));
             lines.push(Line::from(Span::styled(
                 format!("  MATCH ()-[r:{}]->() RETURN r LIMIT 100", arc_kind.key),
-                Style::default().fg(COLOR_HINT_TEXT),
+                STYLE_HINT,
             )));
 
             lines
@@ -2183,7 +2204,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                 lines.push(Line::from(""));
                 lines.push(Line::from(Span::styled(
                     format!("Properties ({})", instance.properties.len()),
-                    Style::default().fg(COLOR_MUTED_TEXT),
+                    STYLE_MUTED,
                 )));
                 for (key, value) in &instance.properties {
                     // Format JSON value for display
@@ -2220,7 +2241,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                         "Arc Diagram ({} exist, {} missing)",
                         existing_count, missing_count
                     ),
-                    Style::default().fg(COLOR_MUTED_TEXT),
+                    STYLE_MUTED,
                 )));
 
                 // Box drawing for instance node (use char count for proper alignment)
@@ -2391,22 +2412,22 @@ fn render_status(f: &mut Frame, area: Rect, app: &App) {
     let status = Line::from(vec![
         Span::styled(
             format!(" {} nodes", stats.node_count),
-            Style::default().fg(COLOR_MUTED_TEXT),
+            STYLE_MUTED,
         ),
-        Span::styled(" · ", Style::default().fg(COLOR_SEPARATOR)),
+        Span::styled(" · ", STYLE_SEPARATOR),
         Span::styled(
             format!("{} arcs", stats.arc_count),
-            Style::default().fg(COLOR_MUTED_TEXT),
+            STYLE_MUTED,
         ),
-        Span::styled(" · ", Style::default().fg(COLOR_SEPARATOR)),
+        Span::styled(" · ", STYLE_SEPARATOR),
         Span::styled(
             format!("{} Node Kinds", stats.kind_count),
-            Style::default().fg(COLOR_MUTED_TEXT),
+            STYLE_MUTED,
         ),
-        Span::styled(" · ", Style::default().fg(COLOR_SEPARATOR)),
+        Span::styled(" · ", STYLE_SEPARATOR),
         Span::styled(
             format!("{} Arcs", stats.arc_kind_count),
-            Style::default().fg(COLOR_MUTED_TEXT),
+            STYLE_MUTED,
         ),
         Span::raw("        "),
         Span::styled(
@@ -2416,7 +2437,7 @@ fn render_status(f: &mut Frame, area: Rect, app: &App) {
         Span::raw("  "),
         Span::styled(
             format!("[{}]", layout_label),
-            Style::default().fg(COLOR_HINT_TEXT),
+            STYLE_HINT,
         ),
         Span::raw("   "),
         Span::styled(
@@ -2509,7 +2530,7 @@ fn render_search(f: &mut Frame, app: &App) {
         let style = if is_selected {
             Style::default().bg(Color::Rgb(30, 50, 70)).fg(Color::White)
         } else {
-            Style::default().fg(COLOR_DESC_TEXT)
+            STYLE_DESC
         };
 
         let type_style = if is_selected {
