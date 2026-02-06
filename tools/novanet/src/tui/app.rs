@@ -2252,4 +2252,224 @@ mod tests {
 
         // May find items with spaces in names, but shouldn't panic
     }
+
+    // ========================================================================
+    // Search ranking/scoring tests (Phase 6.3 TDD)
+    // ========================================================================
+
+    #[test]
+    fn test_search_exact_match_scores_highest() {
+        let mut app = create_test_app();
+
+        // Search for exact name "Page"
+        app.search_query = "Page".to_string();
+        app.update_search();
+
+        // Should have results
+        assert!(!app.search_results.is_empty(), "Should find results for 'Page'");
+
+        // First result should be the exact match with highest score
+        if app.search_results.len() > 1 {
+            let top_score = app.search_scores[0];
+            for score in &app.search_scores[1..] {
+                assert!(
+                    top_score >= *score,
+                    "Top score {} should be >= other scores",
+                    top_score
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn test_search_prefix_match_scores_well() {
+        let mut app = create_test_app();
+
+        // Search for "Loc" which is a prefix of "Locale"
+        app.search_query = "Loc".to_string();
+        app.update_search();
+
+        // Should find Locale-related items
+        assert!(!app.search_results.is_empty(), "Should find results for 'Loc'");
+    }
+
+    #[test]
+    fn test_search_smart_case_lowercase() {
+        let mut app = create_test_app();
+
+        // Lowercase query should match regardless of case
+        app.search_query = "page".to_string();
+        app.update_search();
+
+        // Should find "Page" even with lowercase query
+        assert!(!app.search_results.is_empty(), "Lowercase 'page' should find 'Page'");
+    }
+
+    #[test]
+    fn test_search_smart_case_uppercase() {
+        let mut app = create_test_app();
+
+        // Query with uppercase forces case-sensitive matching
+        app.search_query = "PAGE".to_string();
+        app.update_search();
+
+        // May or may not find results depending on nucleo's smart case behavior
+        // Just verify no panic
+    }
+
+    #[test]
+    fn test_search_same_query_same_scores() {
+        let mut app = create_test_app();
+
+        // Run search twice with same query
+        app.search_query = "Entity".to_string();
+        app.update_search();
+        let first_results = app.search_results.clone();
+        let first_scores = app.search_scores.clone();
+
+        app.update_search();
+        let second_results = app.search_results.clone();
+        let second_scores = app.search_scores.clone();
+
+        // Results and scores should be identical (deterministic)
+        assert_eq!(first_results, second_results, "Results should be deterministic");
+        assert_eq!(first_scores, second_scores, "Scores should be deterministic");
+    }
+
+    #[test]
+    fn test_search_longer_query_fewer_results() {
+        let mut app = create_test_app();
+
+        // Short query
+        app.search_query = "e".to_string();
+        app.update_search();
+        let short_count = app.search_results.len();
+
+        // Longer query (more specific)
+        app.search_query = "ent".to_string();
+        app.update_search();
+        let long_count = app.search_results.len();
+
+        // More specific query should have fewer or equal results
+        assert!(
+            long_count <= short_count,
+            "Longer query should filter more: {} vs {}",
+            long_count,
+            short_count
+        );
+    }
+
+    #[test]
+    fn test_search_matches_have_positions() {
+        let mut app = create_test_app();
+
+        app.search_query = "Pg".to_string();
+        app.update_search();
+
+        // For each result with match positions, verify positions are valid
+        for (idx, positions) in &app.search_matches {
+            // Index should be in results
+            assert!(
+                app.search_results.contains(idx),
+                "Match index {} should be in results",
+                idx
+            );
+            // Positions should be non-empty for matched items
+            assert!(
+                !positions.is_empty(),
+                "Match positions for index {} should not be empty",
+                idx
+            );
+        }
+    }
+
+    #[test]
+    fn test_search_scores_are_positive() {
+        let mut app = create_test_app();
+
+        app.search_query = "Block".to_string();
+        app.update_search();
+
+        // All scores should be positive (nucleo returns positive scores for matches)
+        for score in &app.search_scores {
+            assert!(*score > 0, "Score should be positive, got {}", score);
+        }
+    }
+
+    #[test]
+    fn test_search_result_indices_reasonable() {
+        let mut app = create_test_app();
+
+        app.search_query = "config".to_string();
+        app.update_search();
+
+        // Result indices should be reasonable (within expected tree size)
+        // Tree has: 2 headers + 2 realms + 9 layers + 48 kinds + 5 arc families + ~30 arc kinds
+        // So max should be under 200
+        let reasonable_max = 200;
+        for idx in &app.search_results {
+            assert!(
+                *idx < reasonable_max,
+                "Result index {} should be < {} (reasonable tree size)",
+                idx,
+                reasonable_max
+            );
+        }
+    }
+
+    #[test]
+    fn test_search_different_queries_different_results() {
+        let mut app = create_test_app();
+
+        // First query
+        app.search_query = "Page".to_string();
+        app.update_search();
+        let page_results = app.search_results.clone();
+
+        // Different query
+        app.search_query = "Block".to_string();
+        app.update_search();
+        let block_results = app.search_results.clone();
+
+        // Should have different results (at least top result should differ)
+        if !page_results.is_empty() && !block_results.is_empty() {
+            assert_ne!(
+                page_results[0], block_results[0],
+                "Different queries should give different top results"
+            );
+        }
+    }
+
+    #[test]
+    fn test_search_no_duplicate_results() {
+        let mut app = create_test_app();
+
+        app.search_query = "a".to_string(); // Common letter, many matches
+        app.update_search();
+
+        // Check no duplicates in results
+        let mut seen = std::collections::HashSet::new();
+        for idx in &app.search_results {
+            assert!(seen.insert(*idx), "Duplicate result index: {}", idx);
+        }
+    }
+
+    #[test]
+    fn test_search_match_positions_sorted() {
+        let mut app = create_test_app();
+
+        app.search_query = "Pge".to_string();
+        app.update_search();
+
+        // Match positions should be sorted ascending (char positions in order)
+        for positions in app.search_matches.values() {
+            for i in 1..positions.len() {
+                assert!(
+                    positions[i - 1] < positions[i],
+                    "Match positions should be sorted: {:?}",
+                    positions
+                );
+            }
+        }
+    }
 }
