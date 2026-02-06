@@ -1,54 +1,63 @@
 # packages/core/models/arc-kinds/_index.yaml
-# Arc Kinds Index — v10.1.0
+# Arc Kinds Index - v10.7.0
 #
 # This directory contains one YAML file per ArcKind (relationship type).
 # Organization: arc-kinds/{family}/{arc-name}.yaml
 #
 # See: meta/arc-families/ for ArcFamily definitions
 
-version: "10.1.0"
+version: "10.7.0"
 
 # Arc count by family
 summary:
-  ownership: 25
-  localization: 8
-  semantic: 10
+  ownership: 33
+  localization: 9
+  semantic: 16
   generation: 14
-  mining: 4
-  total: 61
+  mining: 2
+  total: 74
 
 # Directory structure
 structure:
   ownership:
     - accepts-block-type.yaml
+    - belongs-to-org.yaml
     - belongs-to-project-l10n.yaml
     - block-of.yaml
-    - cluster-page.yaml
     - default-locale.yaml
     - has-adaptation.yaml
     - has-audience.yaml
     - has-block.yaml
     - has-brand-identity.yaml
-    - has-concept.yaml
+    - has-company-project.yaml
+    - has-comparisons.yaml
+    - has-culture-set.yaml
     - has-culture.yaml
+    - has-entity.yaml
     - has-expressions.yaml
     - has-formatting.yaml
+    - has-instruction.yaml
+    - has-market.yaml
     - has-page.yaml
     - has-patterns.yaml
+    - has-prepositions.yaml
+    - has-project.yaml
     - has-prompt.yaml
+    - has-questions.yaml
     - has-rules.yaml
+    - has-seo-keywords.yaml
     - has-slot.yaml
     - has-slugification.yaml
     - has-style.yaml
     - has-taboos.yaml
     - has-terms.yaml
     - of-type.yaml
-    - pillar-page.yaml
     - supports-locale.yaml
 
   localization:
     - fallback-to.yaml
     - for-locale.yaml
+    - has-internal-link.yaml
     - has-l10n.yaml
     - has-localized-content.yaml
     - has-output.yaml
@@ -57,16 +66,22 @@ structure:
     - variant-of.yaml
 
   semantic:
-    - clusters-topic.yaml
+    - addresses.yaml
+    - answers.yaml
+    - compares-a.yaml
+    - compares-b.yaml
+    - expresses.yaml
     - fills-slot.yaml
-    - for-intent.yaml
     - links-to.yaml
-    - maps-to-concept.yaml
-    - satisfies-intent.yaml
+    - materializes-as.yaml
+    - references-entity.yaml
+    - references-page.yaml
     - semantic-link.yaml
     - subtopic-of.yaml
+    - targets.yaml
+    - use-case-entity.yaml
     - used-by.yaml
-    - uses-concept.yaml
+    - uses-entity.yaml
 
   generation:
     - assembles.yaml
@@ -76,7 +91,7 @@ structure:
     - generated-from.yaml
     - generated.yaml
     - has-evaluation.yaml
-    - includes-concept.yaml
+    - includes-entity.yaml
     - includes.yaml
     - influenced-by.yaml
     - previous-version.yaml
@@ -86,9 +101,7 @@ structure:
 
   mining:
     - has-metrics.yaml
-    - has-seo-target.yaml
     - seo-mines.yaml
-    - targets-keyword.yaml
 
 # Naming conventions
 conventions:
