@@ -9,11 +9,13 @@
 //! - `slugification`: Parse ATH 2-rules-slug markdown files
 //! - `formatting`: Parse ATH 2-rules-formatting markdown files
 //! - `culture`: Parse ATH 4-culture-norms markdown files
+//! - `market`: Parse ATH 5-market markdown files
 //! - `utils`: Shared YAML loading utilities
 
 pub mod arcs;
 pub mod culture;
 pub mod formatting;
+pub mod market;
 pub mod organizing;
 pub mod slugification;
 pub mod taxonomy;
