@@ -6,8 +6,10 @@ use ratatui::Frame;
 use ratatui::layout::{Constraint, Direction, Layout, Rect};
 use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
-#[allow(unused_imports)] // Sparkline used in Batch 4.2
-use ratatui::widgets::{Bar, BarChart, BarGroup, Block, Borders, Clear, Paragraph, Sparkline, Wrap};
+use ratatui::widgets::{
+    Bar, BarChart, BarGroup, Block, Borders, Clear, Paragraph, Scrollbar, ScrollbarOrientation,
+    ScrollbarState, Sparkline, Wrap,
+};
 
 use rustc_hash::FxHashSet;
 
@@ -351,6 +353,9 @@ pub fn render(f: &mut Frame, app: &mut App) {
     }
     if app.help_active {
         overlays::render_help(f);
+    }
+    if app.legend_active {
+        overlays::render_legend(f, app);
     }
 }
 
@@ -816,8 +821,10 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
 
                             // v10.1: Show instance count (always in Data mode)
                             // v10.6: Add trait icon prefix
+                            // QW7: Show arc count in Meta mode
                             let kind_is_empty = kind.instance_count == 0;
                             let icon = trait_icon(&kind.trait_name);
+                            let arc_count = kind.arcs.len();
                             let (display_text, kind_text_color) = if is_data_mode {
                                 let text = format!(
                                     "{} {} ({})",
@@ -830,7 +837,13 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                 };
                                 (text, color)
                             } else {
-                                (format!("{} {}", icon, kind.display_name), Color::White)
+                                // Meta mode: show arc count inline
+                                let text = if arc_count > 0 {
+                                    format!("{} {} ↔{}", icon, kind.display_name, arc_count)
+                                } else {
+                                    format!("{} {}", icon, kind.display_name)
+                                };
+                                (text, Color::White)
                             };
 
                             let prefix = format!(
@@ -1226,9 +1239,10 @@ fn render_info_panel(f: &mut Frame, area: Rect, app: &mut App) {
         COLOR_UNFOCUSED_BORDER
     };
 
-    // Check if we should show a chart (Realm or Layer item)
+    // Check if we should show a chart (Realm, Layer, or Kind item)
     let show_bar_chart = matches!(app.current_item(), Some(TreeItem::Realm(_)));
     let show_sparkline = matches!(app.current_item(), Some(TreeItem::Layer(_, _)));
+    let show_arc_chart = matches!(app.current_item(), Some(TreeItem::Kind(..)));
 
     if show_bar_chart && area.height > 12 {
         // Split area: top for text, bottom for bar chart
@@ -1254,6 +1268,18 @@ fn render_info_panel(f: &mut Frame, area: Rect, app: &mut App) {
 
         // Render sparkline in bottom chunk
         render_layer_sparkline(f, chunks[1], app);
+    } else if show_arc_chart && area.height > 10 {
+        // Split area: top for text, bottom for arc distribution chart
+        let chunks = Layout::default()
+            .direction(Direction::Vertical)
+            .constraints([Constraint::Min(6), Constraint::Length(5)])
+            .split(area);
+
+        // Render text info in top chunk
+        render_info_text(f, chunks[0], app, focused, border_color);
+
+        // Render arc distribution chart in bottom chunk
+        render_kind_arc_chart(f, chunks[1], app);
     } else {
         // Normal text-only info panel
         render_info_text(f, area, app, focused, border_color);
@@ -1308,6 +1334,27 @@ fn render_info_text(f: &mut Frame, area: Rect, app: &mut App, focused: bool, bor
 
     let paragraph = Paragraph::new(lines).block(block);
     f.render_widget(paragraph, area);
+
+    // Add scrollbar if content exceeds visible area
+    if app.info_line_count > visible_height {
+        let scrollbar = Scrollbar::new(ScrollbarOrientation::VerticalRight)
+            .begin_symbol(Some("↑"))
+            .end_symbol(Some("↓"))
+            .track_symbol(Some("│"))
+            .thumb_symbol("█");
+
+        let mut scrollbar_state =
+            ScrollbarState::new(app.info_line_count.saturating_sub(visible_height))
+                .position(app.info_scroll);
+
+        let scrollbar_area = Rect {
+            x: area.x + area.width.saturating_sub(2),
+            y: area.y + 1,
+            width: 1,
+            height: area.height.saturating_sub(2),
+        };
+        f.render_stateful_widget(scrollbar, scrollbar_area, &mut scrollbar_state);
+    }
 }
 
 /// Render a bar chart showing kinds per layer for the selected Realm.
@@ -1388,6 +1435,66 @@ fn render_layer_sparkline(f: &mut Frame, area: Rect, app: &App) {
         .style(Style::default().fg(hex_to_color(&layer.color)));
 
     f.render_widget(sparkline, area);
+}
+
+/// Render a bar chart showing incoming vs outgoing arc distribution for the selected Kind.
+fn render_kind_arc_chart(f: &mut Frame, area: Rect, app: &App) {
+    let Some(TreeItem::Kind(_, _, kind)) = app.current_item() else {
+        return;
+    };
+
+    // Count incoming and outgoing arcs from kind definition
+    use super::data::ArcDirection;
+    let incoming: usize = kind
+        .arcs
+        .iter()
+        .filter(|a| a.direction == ArcDirection::Incoming)
+        .count();
+    let outgoing: usize = kind
+        .arcs
+        .iter()
+        .filter(|a| a.direction == ArcDirection::Outgoing)
+        .count();
+
+    if incoming == 0 && outgoing == 0 {
+        // No arcs, show placeholder
+        let block = Block::default()
+            .title(Span::styled(" Arc Distribution ", STYLE_DIM))
+            .borders(Borders::ALL)
+            .border_style(Style::default().fg(COLOR_UNFOCUSED_BORDER));
+        let paragraph = Paragraph::new(Span::styled("  No arcs defined", STYLE_MUTED)).block(block);
+        f.render_widget(paragraph, area);
+        return;
+    }
+
+    // Build bar data
+    let bars = vec![
+        Bar::default()
+            .value(incoming as u64)
+            .label(Line::from("← In"))
+            .style(Style::default().fg(Color::Green)),
+        Bar::default()
+            .value(outgoing as u64)
+            .label(Line::from("Out →"))
+            .style(Style::default().fg(Color::Cyan)),
+    ];
+
+    let chart = BarChart::default()
+        .block(
+            Block::default()
+                .title(Span::styled(
+                    format!(" Arc Distribution ({} total) ", incoming + outgoing),
+                    STYLE_DIM,
+                ))
+                .borders(Borders::ALL)
+                .border_style(Style::default().fg(COLOR_UNFOCUSED_BORDER)),
+        )
+        .data(BarGroup::default().bars(&bars))
+        .bar_width(8)
+        .bar_gap(2)
+        .direction(Direction::Vertical);
+
+    f.render_widget(chart, area);
 }
 
 /// Graph panel: Displays Neo4j relationships for the selected Kind or Instance.
@@ -2125,6 +2232,26 @@ fn render_json_panel(f: &mut Frame, area: Rect, app: &App, focused: bool, visibl
 
     let paragraph = Paragraph::new(json_lines).block(block);
     f.render_widget(paragraph, area);
+
+    // Add scrollbar if content exceeds visible area
+    if total_lines > visible_height {
+        let scrollbar = Scrollbar::new(ScrollbarOrientation::VerticalRight)
+            .begin_symbol(Some("↑"))
+            .end_symbol(Some("↓"))
+            .track_symbol(Some("│"))
+            .thumb_symbol("█");
+
+        let mut scrollbar_state = ScrollbarState::new(total_lines.saturating_sub(visible_height))
+            .position(app.yaml_scroll);
+
+        let scrollbar_area = Rect {
+            x: area.x + area.width.saturating_sub(2),
+            y: area.y + 1,
+            width: 1,
+            height: area.height.saturating_sub(2),
+        };
+        f.render_stateful_widget(scrollbar, scrollbar_area, &mut scrollbar_state);
+    }
 }
 
 /// Render YAML panel (original behavior for Meta mode and Kind selection).
@@ -2180,6 +2307,27 @@ fn render_yaml_content(f: &mut Frame, area: Rect, app: &App, focused: bool, visi
 
     let paragraph = Paragraph::new(lines).block(block);
     f.render_widget(paragraph, area);
+
+    // Add scrollbar if content exceeds visible area
+    if total_lines > visible_height {
+        let scrollbar = Scrollbar::new(ScrollbarOrientation::VerticalRight)
+            .begin_symbol(Some("↑"))
+            .end_symbol(Some("↓"))
+            .track_symbol(Some("│"))
+            .thumb_symbol("█");
+
+        let mut scrollbar_state = ScrollbarState::new(total_lines.saturating_sub(visible_height))
+            .position(app.yaml_scroll);
+
+        // Render scrollbar in the inner area (inside border)
+        let scrollbar_area = Rect {
+            x: area.x + area.width.saturating_sub(2),
+            y: area.y + 1,
+            width: 1,
+            height: area.height.saturating_sub(2),
+        };
+        f.render_stateful_widget(scrollbar, scrollbar_area, &mut scrollbar_state);
+    }
 }
 
 /// Build YAML panel title with colored path segments.
@@ -2821,13 +2969,27 @@ fn render_status(f: &mut Frame, area: Rect, app: &App) {
         breadcrumb
     };
 
-    // Contextual shortcuts based on mode and focus
+    // Contextual shortcuts based on mode, focus, and selection
     let shortcuts = match app.mode {
         NavMode::Atlas => "j/k:nav  1-4:modes  /:help",
-        NavMode::Data => "j/k:nav  h/l:toggle  0:hide∅  /:help",
+        NavMode::Data => {
+            // Check if on an Instance (can navigate to Kind with '1')
+            if matches!(app.current_item(), Some(crate::tui::data::TreeItem::Instance(..))) {
+                "j/k:nav  1:→Kind  h/l:toggle  /:help"
+            } else {
+                "j/k:nav  h/l:toggle  0:hide∅  /:help"
+            }
+        }
         NavMode::Query => "j/k:nav  f:filter  /:help",
-        _ => match app.focus {
-            Focus::Tree => "j/k:nav  h/l:toggle  H/L:all  /:help",
+        NavMode::Meta | NavMode::Overlay => match app.focus {
+            Focus::Tree => {
+                // Check if on a Kind (can drill into instances with '2')
+                if matches!(app.current_item(), Some(crate::tui::data::TreeItem::Kind(..))) {
+                    "j/k:nav  2:→Data  h/l:toggle  /:help"
+                } else {
+                    "j/k:nav  h/l:toggle  H/L:all  /:help"
+                }
+            }
             Focus::Yaml | Focus::Info => "j/k:scroll  d/u:page  g/G:jump",
             Focus::Graph => "Tab:panel  1-5:modes",
         },
