@@ -7,7 +7,7 @@
 //! - Status bar with stats
 //!
 //! Phase 2: Atlas Mode
-//! - [5] Atlas mode with 6 interactive architecture views
+//! - `5` Atlas mode with 6 interactive architecture views
 //! - Spreading Activation, Knowledge Atoms, Generation Pipeline
 //! - View Traversal, Page Composition, Realm Map
 //!

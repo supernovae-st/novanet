@@ -6,6 +6,7 @@ use std::path::Path;
 
 use chrono::Local;
 
+use crate::generators::cypher_utils::escape_cypher;
 use crate::parsers::slugification::{
     aggregate_slug_rules, load_all_slugifications, RegionalAddition, ScriptConfig, SlugExample,
     SlugRule, Slugification, Warning,
@@ -289,11 +290,6 @@ impl Default for SlugificationGenerator {
 // ============================================================================
 // Helper Functions
 // ============================================================================
-
-/// Escape single quotes for Cypher strings.
-fn escape_cypher(s: &str) -> String {
-    s.replace('\'', "\\'").replace('\n', "\\n")
-}
 
 /// Serialize regional additions to JSON string.
 fn serialize_regional_additions(additions: &[RegionalAddition]) -> String {

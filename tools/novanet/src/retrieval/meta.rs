@@ -39,7 +39,6 @@ pub struct ArcKindRules {
 
 /// Reads traversal rules from Neo4j meta-graph.
 pub struct MetaGraphReader {
-    #[allow(dead_code)]
     graph: Arc<Graph>,
     kind_rules: HashMap<String, KindRules>,
     family_rules: HashMap<String, ArcFamilyRules>,
