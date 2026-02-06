@@ -6,6 +6,7 @@ use std::path::Path;
 
 use chrono::Local;
 
+use crate::generators::cypher_utils::escape_cypher;
 use crate::parsers::formatting::{load_all_formattings, Formatting};
 use crate::{NovaNetError, Result};
 
@@ -198,15 +199,6 @@ impl Default for FormattingGenerator {
     fn default() -> Self {
         Self::new()
     }
-}
-
-// ============================================================================
-// Helper Functions
-// ============================================================================
-
-/// Escape single quotes and newlines for Cypher strings.
-fn escape_cypher(s: &str) -> String {
-    s.replace('\'', "\\'").replace('\n', "\\n")
 }
 
 // ============================================================================

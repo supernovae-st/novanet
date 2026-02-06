@@ -1,7 +1,7 @@
 //! Generate OF_KIND wiring Cypher statements (instance → Kind bridge).
 //!
 //! For every node type in the schema, generates a MERGE statement that links
-//! all existing instances of that type to their Kind meta-node via [:OF_KIND].
+//! all existing instances of that type to their Kind meta-node via `OF_KIND`.
 //! Replaces the v8 `99-autowire-subcategories.cypher` (IN_SUBCATEGORY → OF_KIND).
 //!
 //! Output target: `packages/db/seed/99-autowire-kinds.cypher`

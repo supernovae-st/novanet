@@ -193,6 +193,8 @@ pub struct App {
     pub data_filter_kind: Option<String>,
     /// Cursor position before entering filtered Data mode (for restoration)
     pub data_cursor_before_filter: usize,
+    /// Hide empty: when true, hide kinds/layers with 0 instances in Data mode
+    pub hide_empty: bool,
     /// Atlas mode state (architecture visualizations)
     pub atlas: AtlasState,
     /// Animation tick counter (increments each frame, used for spinners)
@@ -234,6 +236,7 @@ impl App {
             layer_details: None,
             data_filter_kind: None,
             data_cursor_before_filter: 0,
+            hide_empty: false,
             atlas: AtlasState::default(),
             tick: 0,
         };
@@ -382,12 +385,6 @@ impl App {
         // Update display
         self.yaml_content = content;
         self.yaml_line_count = self.yaml_content.lines().count();
-    }
-
-    /// Clear YAML cache (useful after external file modifications).
-    #[allow(dead_code)]
-    pub fn clear_yaml_cache(&mut self) {
-        self.yaml_cache.clear();
     }
 
     /// Build graph nodes for the currently selected item (display-only).
@@ -800,6 +797,37 @@ impl App {
                 true
             }
 
+            // Expand/Collapse subtree under cursor (e/c)
+            KeyCode::Char('e') | KeyCode::Char('E') if key.modifiers.is_empty() => {
+                // E = Expand subtree under cursor
+                if self.focus == Focus::Tree {
+                    if let Some(key) = self.tree.collapse_key_at(self.tree_cursor) {
+                        self.tree.expand_subtree(&key);
+                    }
+                }
+                true
+            }
+            KeyCode::Char('c') => {
+                // c = Collapse subtree under cursor
+                if self.focus == Focus::Tree {
+                    if let Some(key) = self.tree.collapse_key_at(self.tree_cursor) {
+                        self.tree.collapse_subtree(&key);
+                    }
+                }
+                true
+            }
+
+            // Toggle hide empty (0) - only in Data mode
+            KeyCode::Char('0') => {
+                if self.is_data_mode() {
+                    self.hide_empty = !self.hide_empty;
+                    // Reset cursor to avoid pointing to hidden item
+                    self.tree_cursor = 0;
+                    self.tree_scroll = 0;
+                }
+                true
+            }
+
             // Jump to first/last (vim-style: g/G)
             KeyCode::Char('g') => {
                 match self.focus {
@@ -1065,6 +1093,41 @@ impl App {
         }
     }
 
+    /// Get breadcrumb path for the current selection.
+    /// Returns a string like "Tenant > Foundation > Entity (12)"
+    pub fn current_breadcrumb(&self) -> String {
+        use super::data::TreeItem;
+        match self.current_item() {
+            Some(TreeItem::KindsSection) => "Node Kinds".to_string(),
+            Some(TreeItem::ArcsSection) => "Arcs".to_string(),
+            Some(TreeItem::Realm(r)) => r.display_name.clone(),
+            Some(TreeItem::Layer(r, l)) => {
+                format!("{} › {}", r.display_name, l.display_name)
+            }
+            Some(TreeItem::Kind(r, l, k)) => {
+                if self.is_data_mode() && k.instance_count > 0 {
+                    format!(
+                        "{} › {} › {} ({})",
+                        r.display_name, l.display_name, k.display_name, k.instance_count
+                    )
+                } else {
+                    format!("{} › {} › {}", r.display_name, l.display_name, k.display_name)
+                }
+            }
+            Some(TreeItem::Instance(r, l, k, inst)) => {
+                format!(
+                    "{} › {} › {} › {}",
+                    r.display_name, l.display_name, k.display_name, inst.display_name
+                )
+            }
+            Some(TreeItem::ArcFamily(f)) => format!("Arcs › {}", f.display_name),
+            Some(TreeItem::ArcKind(f, ak)) => {
+                format!("Arcs › {} › {}", f.display_name, ak.display_name)
+            }
+            None => "NovaNet".to_string(),
+        }
+    }
+
     /// Exit filtered Data mode, restore cursor position.
     /// Clamps cursor to valid range in case tree structure changed.
     #[allow(dead_code)]
@@ -1193,12 +1256,6 @@ impl App {
 
         self.atlas.current_view = view;
         self.atlas.pending_page_load = true; // Trigger data load
-    }
-
-    /// Set Atlas layer counts (for Realm Map).
-    #[allow(dead_code)]
-    pub fn set_atlas_layer_counts(&mut self, counts: Vec<(String, usize)>) {
-        self.atlas.layer_counts = counts;
     }
 
     /// Check if Atlas realm stats need loading (returns true once, then resets flag).

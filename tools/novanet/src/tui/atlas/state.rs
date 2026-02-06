@@ -3,17 +3,17 @@
 /// Which Atlas view is currently active.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum AtlasView {
-    /// [a] Spreading Activation — Cognitive science math
+    /// `a` Spreading Activation — Cognitive science math
     SpreadingActivation,
-    /// [b] Knowledge Atoms — Selective loading vs blobs
+    /// `b` Knowledge Atoms — Selective loading vs blobs
     KnowledgeAtoms,
-    /// [c] Generation Pipeline — Block generation flow
+    /// `c` Generation Pipeline — Block generation flow
     GenerationPipeline,
-    /// [v] View Traversal — Debug view definitions
+    /// `v` View Traversal — Debug view definitions
     ViewTraversal,
-    /// [e] Page Composition — Anatomy of a Page
+    /// `e` Page Composition — Anatomy of a Page
     PageComposition,
-    /// [r] Realm Map — Bird's-eye view
+    /// `r` Realm Map — Bird's-eye view
     #[default]
     RealmMap,
 }

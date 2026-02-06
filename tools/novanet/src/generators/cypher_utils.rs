@@ -9,6 +9,19 @@ use std::fmt::Write;
 // String Formatting
 // ─────────────────────────────────────────────────────────────────────────────
 
+/// Escape single quotes and newlines for Cypher strings.
+///
+/// Use this when you want to preserve the original structure but escape special characters.
+/// For collapsing whitespace, use `cypher_str` instead.
+///
+/// # Example
+/// ```ignore
+/// assert_eq!(escape_cypher("it's\nok"), "it\\'s\\nok");
+/// ```
+pub fn escape_cypher(s: &str) -> String {
+    s.replace('\'', "\\'").replace('\n', "\\n")
+}
+
 /// Collapse multiline YAML strings into single-line Cypher values and escape single quotes.
 ///
 /// # Example

@@ -1,12 +1,12 @@
 //! Atlas Mode — Interactive architecture visualizations.
 //!
 //! Atlas Mode provides 6 views for understanding NovaNet's architecture:
-//! - [a] Spreading Activation — Cognitive science math behind context assembly
-//! - [b] Knowledge Atoms — Selective loading vs monolithic blobs
-//! - [c] Generation Pipeline — Block generation flow (not translation)
-//! - [d] View Traversal — Debug the 12 view definitions
-//! - [e] Page Composition — Complete anatomy of a Page
-//! - [f] Realm Map — Bird's-eye view of 2-realm architecture
+//! - `a` Spreading Activation — Cognitive science math behind context assembly
+//! - `b` Knowledge Atoms — Selective loading vs monolithic blobs
+//! - `c` Generation Pipeline — Block generation flow (not translation)
+//! - `v` View Traversal — Debug the 12 view definitions
+//! - `e` Page Composition — Complete anatomy of a Page
+//! - `r` Realm Map — Bird's-eye view of 2-realm architecture
 
 mod state;
 

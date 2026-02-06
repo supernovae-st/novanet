@@ -292,26 +292,6 @@ pub struct LayerDetails {
     pub total_instances: usize,
 }
 
-/// Kind info for Trait details view.
-#[allow(dead_code)]
-#[derive(Debug, Clone)]
-pub struct TraitKindInfo {
-    pub kind_name: String,
-    pub realm: String,
-    pub layer: String,
-}
-
-/// Complete details for a Trait, loaded from Neo4j.
-#[allow(dead_code)]
-#[derive(Debug, Clone, Default)]
-pub struct TraitDetails {
-    pub key: String,
-    pub display_name: String,
-    pub description: String,
-    pub border_style: String,
-    pub kinds: Vec<TraitKindInfo>,
-}
-
 /// Full taxonomy tree: Realm > Layer > Kind + ArcFamily > ArcKind.
 #[derive(Debug, Clone, Default)]
 pub struct TaxonomyTree {
@@ -1015,58 +995,6 @@ RETURN l.key as layer_key,
         }
     }
 
-    /// Load Trait details from Neo4j (kinds with realm/layer, visual encoding).
-    #[allow(dead_code)]
-    pub async fn load_trait_details(db: &Db, trait_key: &str) -> crate::Result<TraitDetails> {
-        let cypher = r#"
-MATCH (t:Trait {key: $traitKey})
-OPTIONAL MATCH (k:Kind)-[:HAS_TRAIT]->(t)
-OPTIONAL MATCH (k)-[:IN_LAYER]->(l:Layer)<-[:HAS_LAYER]-(r:Realm)
-WITH t, k, r, l
-ORDER BY r.key, l.key, k.label
-RETURN t.key as trait_key,
-       coalesce(t.display_name, t.key) as display_name,
-       coalesce(t.llm_context, '') as description,
-       coalesce(t.border_style, 'solid') as border_style,
-       collect({kind_name: coalesce(k.display_name, k.label), realm: coalesce(r.key, ''), layer: coalesce(l.key, '')}) as kinds
-"#;
-
-        let rows = db
-            .execute_with_params(cypher, [("traitKey", trait_key)])
-            .await?;
-
-        if let Some(row) = rows.into_iter().next() {
-            let key: String = row.get("trait_key").unwrap_or_default();
-            let display_name: String = row.get("display_name").unwrap_or_default();
-            let description: String = row.get("description").unwrap_or_default();
-            let border_style: String = row.get("border_style").unwrap_or_default();
-
-            // Parse kinds
-            let mut kinds: Vec<TraitKindInfo> = Vec::new();
-            if let Ok(kinds_list) = row.get::<Vec<neo4rs::BoltMap>>("kinds") {
-                for kind_map in kinds_list {
-                    if let Ok(kind_name) = kind_map.get::<String>("kind_name") {
-                        kinds.push(TraitKindInfo {
-                            kind_name,
-                            realm: kind_map.get::<String>("realm").unwrap_or_default(),
-                            layer: kind_map.get::<String>("layer").unwrap_or_default(),
-                        });
-                    }
-                }
-            }
-
-            Ok(TraitDetails {
-                key,
-                display_name,
-                description,
-                border_style,
-                kinds,
-            })
-        } else {
-            Ok(TraitDetails::default())
-        }
-    }
-
     /// Load Atlas Realm Map statistics from Neo4j.
     /// Returns layer counts organized by realm for the interactive Realm Map view.
     pub async fn load_atlas_realm_stats(db: &Db) -> crate::Result<AtlasRealmStats> {
@@ -1383,6 +1311,104 @@ RETURN kw.keyword as keyword,
         self.collapsed.clear();
     }
 
+    /// Expand subtree under a specific key.
+    /// Expands the item and all its children.
+    pub fn expand_subtree(&mut self, key: &str) {
+        // Remove the key itself
+        self.collapsed.remove(key);
+
+        // Expand children based on key type
+        if key == "kinds" {
+            // Expand all realms and layers
+            for realm in &self.realms {
+                self.collapsed.remove(&format!("realm:{}", realm.key));
+                for layer in &realm.layers {
+                    self.collapsed.remove(&format!("layer:{}", layer.key));
+                    for kind in &layer.kinds {
+                        self.collapsed.remove(&format!("kind:{}", kind.key));
+                    }
+                }
+            }
+        } else if key == "arcs" {
+            // Expand all arc families
+            for family in &self.arc_families {
+                self.collapsed.remove(&format!("family:{}", family.key));
+            }
+        } else if let Some(realm_key) = key.strip_prefix("realm:") {
+            // Expand all layers in this realm
+            if let Some(realm) = self.realms.iter().find(|r| r.key == realm_key) {
+                for layer in &realm.layers {
+                    self.collapsed.remove(&format!("layer:{}", layer.key));
+                    for kind in &layer.kinds {
+                        self.collapsed.remove(&format!("kind:{}", kind.key));
+                    }
+                }
+            }
+        } else if let Some(layer_key) = key.strip_prefix("layer:") {
+            // Expand all kinds in this layer
+            for realm in &self.realms {
+                if let Some(layer) = realm.layers.iter().find(|l| l.key == layer_key) {
+                    for kind in &layer.kinds {
+                        self.collapsed.remove(&format!("kind:{}", kind.key));
+                    }
+                }
+            }
+        } else if let Some(family_key) = key.strip_prefix("family:") {
+            // Arc family - nothing more to expand (arc kinds aren't collapsible)
+            let _ = family_key; // Suppress unused warning
+        }
+        // kind: prefix - nothing more to expand (instances aren't collapsible)
+    }
+
+    /// Collapse subtree under a specific key.
+    /// Collapses the item and all its children.
+    pub fn collapse_subtree(&mut self, key: &str) {
+        // Collapse the key itself
+        self.collapsed.insert(key.to_string());
+
+        // Collapse children based on key type
+        if key == "kinds" {
+            // Collapse all realms and layers
+            for realm in &self.realms {
+                self.collapsed.insert(format!("realm:{}", realm.key));
+                for layer in &realm.layers {
+                    self.collapsed.insert(format!("layer:{}", layer.key));
+                    for kind in &layer.kinds {
+                        self.collapsed.insert(format!("kind:{}", kind.key));
+                    }
+                }
+            }
+        } else if key == "arcs" {
+            // Collapse all arc families
+            for family in &self.arc_families {
+                self.collapsed.insert(format!("family:{}", family.key));
+            }
+        } else if let Some(realm_key) = key.strip_prefix("realm:") {
+            // Collapse all layers in this realm
+            if let Some(realm) = self.realms.iter().find(|r| r.key == realm_key) {
+                for layer in &realm.layers {
+                    self.collapsed.insert(format!("layer:{}", layer.key));
+                    for kind in &layer.kinds {
+                        self.collapsed.insert(format!("kind:{}", kind.key));
+                    }
+                }
+            }
+        } else if let Some(layer_key) = key.strip_prefix("layer:") {
+            // Collapse all kinds in this layer
+            for realm in &self.realms {
+                if let Some(layer) = realm.layers.iter().find(|l| l.key == layer_key) {
+                    for kind in &layer.kinds {
+                        self.collapsed.insert(format!("kind:{}", kind.key));
+                    }
+                }
+            }
+        } else if let Some(family_key) = key.strip_prefix("family:") {
+            // Arc family - nothing more to collapse
+            let _ = family_key;
+        }
+        // kind: prefix - nothing more to collapse
+    }
+
     // ========================================================================
     // Data view: Instance methods
     // ========================================================================
@@ -1397,12 +1423,6 @@ RETURN kw.keyword as keyword,
     /// Get instances for a Kind.
     pub fn get_instances(&self, kind_key: &str) -> Option<&Vec<InstanceInfo>> {
         self.instances.get(kind_key)
-    }
-
-    /// Clear all instances (when switching back to Meta mode).
-    #[allow(dead_code)]
-    pub fn clear_instances(&mut self) {
-        self.instances.clear();
     }
 
     /// Total number of visible items for a specific mode.

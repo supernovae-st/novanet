@@ -55,6 +55,27 @@ const COLOR_OVERLAY_BG: Color = Color::Rgb(20, 20, 30);
 const COLOR_BRIGHT_DIM: Color = Color::Rgb(140, 140, 140);
 
 // -----------------------------------------------------------------------------
+// Trait icons for visual node classification
+// -----------------------------------------------------------------------------
+
+/// Get icon for a node trait.
+/// - invariant: ◆ (solid diamond) - core structural nodes
+/// - localized: ◇ (empty diamond) - locale-specific content
+/// - knowledge: ● (solid circle) - knowledge atoms
+/// - job: ○ (empty circle) - async processing nodes
+/// - derived: ◈ (fancy diamond) - computed/derived nodes
+fn trait_icon(trait_name: &str) -> &'static str {
+    match trait_name {
+        "invariant" => "◆",
+        "localized" => "◇",
+        "knowledge" => "●",
+        "job" => "○",
+        "derived" => "◈",
+        _ => "·", // fallback
+    }
+}
+
+// -----------------------------------------------------------------------------
 // YAML syntax highlighting styles (const to avoid recreation per line)
 // -----------------------------------------------------------------------------
 
@@ -206,15 +227,25 @@ fn render_header(f: &mut Frame, area: Rect, app: &App) {
     ];
     header.extend(tabs);
 
+    // Show hide_empty indicator when active in Data mode
+    if app.hide_empty && app.mode == NavMode::Data {
+        header.push(Span::styled(" [∅ hidden]", Style::default().fg(Color::Yellow)));
+    }
+
     // Context-aware shortcuts
     let right_side = if app.mode == NavMode::Atlas {
         vec![Span::styled(
             "  a-r:views  d:demo  l:locale  /:help  q:quit",
             theme::ui::muted_style(),
         )]
+    } else if app.mode == NavMode::Data {
+        vec![Span::styled(
+            "  h/l:toggle  jk:scroll  0:hide  Tab:panel  f:find  /:help  q:quit",
+            theme::ui::muted_style(),
+        )]
     } else {
         vec![Span::styled(
-            "  h/l:toggle  jk:scroll  []:yaml  Tab:panel  f:find  /:help  q:quit",
+            "  h/l:toggle  jk:scroll  Tab:panel  f:find  /:help  q:quit",
             theme::ui::muted_style(),
         )]
     };
@@ -443,10 +474,24 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
             idx += 1;
 
             if !realm_collapsed {
-                let layer_count = realm.layers.len();
                 let is_data_mode = app.is_data_mode();
+                let hide_empty = app.hide_empty && is_data_mode;
 
-                for (li, layer) in realm.layers.iter().enumerate() {
+                // Filter visible layers (hide empty if hide_empty is true)
+                let visible_layers: Vec<_> = realm
+                    .layers
+                    .iter()
+                    .filter(|l| {
+                        if hide_empty {
+                            l.kinds.iter().map(|k| k.instance_count).sum::<i64>() > 0
+                        } else {
+                            true
+                        }
+                    })
+                    .collect();
+                let layer_count = visible_layers.len();
+
+                for (li, layer) in visible_layers.iter().enumerate() {
                     let layer_is_last = li == layer_count - 1;
                     let layer_key = format!("layer:{}", layer.key);
                     let layer_collapsed = app.tree.is_collapsed(&layer_key);
@@ -487,9 +532,21 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                     idx += 1;
 
                     if !layer_collapsed {
-                        let kind_count = layer.kinds.len();
+                        // Filter visible kinds (hide empty if hide_empty is true)
+                        let visible_kinds: Vec<_> = layer
+                            .kinds
+                            .iter()
+                            .filter(|k| {
+                                if hide_empty {
+                                    k.instance_count > 0
+                                } else {
+                                    true
+                                }
+                            })
+                            .collect();
+                        let kind_count = visible_kinds.len();
 
-                        for (ki, kind) in layer.kinds.iter().enumerate() {
+                        for (ki, kind) in visible_kinds.iter().enumerate() {
                             let kind_is_last = ki == kind_count - 1;
                             let kind_key_str = format!("kind:{}", kind.key);
                             let kind_collapsed = app.tree.is_collapsed(&kind_key_str);
@@ -510,10 +567,14 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                             };
 
                             // v10.1: Show instance count (always in Data mode)
+                            // v10.6: Add trait icon prefix
                             let kind_is_empty = kind.instance_count == 0;
+                            let icon = trait_icon(&kind.trait_name);
                             let (display_text, kind_text_color) = if is_data_mode {
-                                let text =
-                                    format!("{} ({})", kind.display_name, kind.instance_count);
+                                let text = format!(
+                                    "{} {} ({})",
+                                    icon, kind.display_name, kind.instance_count
+                                );
                                 let color = if kind_is_empty {
                                     COLOR_MUTED_TEXT // Gray for empty kinds
                                 } else {
@@ -521,7 +582,7 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                 };
                                 (text, color)
                             } else {
-                                (kind.display_name.clone(), Color::White)
+                                (format!("{} {}", icon, kind.display_name), Color::White)
                             };
 
                             let prefix = format!(
@@ -727,8 +788,21 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
         " Taxonomy ".to_string()
     };
 
+    // Breadcrumb as bottom title (truncate if too long)
+    let breadcrumb = app.current_breadcrumb();
+    let max_breadcrumb_len = area.width.saturating_sub(4) as usize;
+    let breadcrumb_display = if breadcrumb.len() > max_breadcrumb_len {
+        format!("…{}", &breadcrumb[breadcrumb.len() - max_breadcrumb_len + 1..])
+    } else {
+        breadcrumb
+    };
+
     let block = Block::default()
         .title(Span::styled(title, Style::default().fg(border_color)))
+        .title_bottom(Line::from(Span::styled(
+            format!(" {} ", breadcrumb_display),
+            Style::default().fg(COLOR_HINT_TEXT),
+        )))
         .borders(Borders::ALL)
         .border_style(Style::default().fg(border_color));
 
@@ -1609,110 +1683,6 @@ fn render_arcs_by_family(
     }
 }
 
-/// Render instance arcs (actual connections in the data graph).
-#[allow(dead_code)]
-fn render_instance_arcs(
-    lines: &mut Vec<Line>,
-    instance: &super::data::InstanceInfo,
-    dim: &Style,
-    theme: &theme::Theme,
-) {
-
-    let total = instance.outgoing_arcs.len() + instance.incoming_arcs.len();
-    if total == 0 {
-        lines.push(Line::from(Span::styled(
-            "  No arc connections for this instance",
-            STYLE_DIM,
-        )));
-        return;
-    }
-
-    let instance_key = instance.key.clone();
-
-    // Outgoing arcs
-    if !instance.outgoing_arcs.is_empty() {
-        lines.push(Line::from(Span::styled(
-            format!("  ─▶ OUTGOING ({}) ", instance.outgoing_arcs.len()),
-            Style::default()
-                .fg(Color::Cyan)
-                .add_modifier(Modifier::BOLD),
-        )));
-        lines.push(Line::from(Span::styled(
-            "  ─────────────────────────────────────────",
-            *dim,
-        )));
-
-        for arc in &instance.outgoing_arcs {
-            let status_style = if arc.exists {
-                STYLE_SUCCESS
-            } else {
-                STYLE_HIGHLIGHT
-            };
-            let status_char = if arc.exists { "✓" } else { "○" };
-
-            lines.push(Line::from(vec![
-                Span::styled(format!("  {} ", status_char), status_style),
-                Span::styled(instance_key.clone(), STYLE_PRIMARY),
-                Span::styled(" ──[", *dim),
-                Span::styled(
-                    arc.arc_type.clone(),
-                    Style::default()
-                        .fg(theme.arc_family_color("semantic"))
-                        .add_modifier(Modifier::BOLD),
-                ),
-                Span::styled("]──▶ ", *dim),
-                Span::styled(arc.target_key.clone(), STYLE_SUCCESS),
-                Span::styled(
-                    format!(" ({})", arc.target_kind),
-                    STYLE_DIM,
-                ),
-            ]));
-        }
-        lines.push(Line::from(Span::raw("")));
-    }
-
-    // Incoming arcs
-    if !instance.incoming_arcs.is_empty() {
-        lines.push(Line::from(Span::styled(
-            format!("  ◀─ INCOMING ({}) ", instance.incoming_arcs.len()),
-            Style::default()
-                .fg(Color::Magenta)
-                .add_modifier(Modifier::BOLD),
-        )));
-        lines.push(Line::from(Span::styled(
-            "  ─────────────────────────────────────────",
-            *dim,
-        )));
-
-        for arc in &instance.incoming_arcs {
-            let status_style = if arc.exists {
-                STYLE_SUCCESS
-            } else {
-                STYLE_HIGHLIGHT
-            };
-            let status_char = if arc.exists { "✓" } else { "○" };
-
-            lines.push(Line::from(vec![
-                Span::styled(format!("  {} ", status_char), status_style),
-                Span::styled(arc.target_key.clone(), STYLE_SUCCESS),
-                Span::styled(
-                    format!(" ({})", arc.target_kind),
-                    STYLE_DIM,
-                ),
-                Span::styled(" ──[", *dim),
-                Span::styled(
-                    arc.arc_type.clone(),
-                    Style::default()
-                        .fg(theme.arc_family_color("semantic"))
-                        .add_modifier(Modifier::BOLD),
-                ),
-                Span::styled("]──▶ ", *dim),
-                Span::styled(instance_key.clone(), STYLE_PRIMARY),
-            ]));
-        }
-        lines.push(Line::from(Span::raw("")));
-    }
-}
 
 /// YAML panel: displays YAML source with independent scroll.
 fn render_yaml_panel(f: &mut Frame, area: Rect, app: &App) {
