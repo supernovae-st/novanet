@@ -58,14 +58,16 @@ export interface NodeConfig {
  */
 export const NODE_SIZES: Record<NodeType, NodeSize> = {
   // ═══════════════════════════════════════════════════════════════════════════
-  // GLOBAL REALM (23 nodes)
+  // GLOBAL REALM (25 nodes)
   // ═══════════════════════════════════════════════════════════════════════════
-  // config (5)
+  // config (7) - v10.7: added Culture, Market
   Locale: { width: 220, height: 110 },
   Formatting: { width: 160, height: 80 },
   Slugification: { width: 160, height: 80 },
   Adaptation: { width: 160, height: 80 },
   Style: { width: 180, height: 90 },
+  Culture: { width: 180, height: 90 },
+  Market: { width: 180, height: 90 },
 
   // locale-knowledge (12) — Sets + Atoms
   TermSet: { width: 160, height: 80 },
@@ -148,9 +150,9 @@ export const NODE_SIZES: Record<NodeType, NodeSize> = {
  */
 export const NODE_COLORS: Record<NodeType, NodeColors> = {
   // ═══════════════════════════════════════════════════════════════════════════
-  // GLOBAL REALM (20 nodes)
+  // GLOBAL REALM (25 nodes)
   // ═══════════════════════════════════════════════════════════════════════════
-  // config (5) — Emerald/Cyan tones
+  // config (7) — Emerald/Cyan tones - v10.7: added Culture, Market
   Locale: {
     primary: '#10b981',
     secondary: '#22c55e',
@@ -180,6 +182,18 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
     secondary: '#a78bfa',
     tertiary: '#c4b5fd',
     glow: '#8b5cf640',
+  },
+  Culture: {
+    primary: '#d97706',
+    secondary: '#b45309',
+    tertiary: '#f59e0b',
+    glow: '#d9770640',
+  },
+  Market: {
+    primary: '#059669',
+    secondary: '#047857',
+    tertiary: '#10b981',
+    glow: '#05966940',
   },
 
   // locale-knowledge (12) — Green/Pink tones

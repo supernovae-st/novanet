@@ -297,7 +297,7 @@ SET
   af_localization.stroke_style = 'dashed',
   af_localization.stroke_width = 2,
   af_localization.default_traversal = 'eager',
-  af_localization.llm_context = 'Links between invariant nodes and their locale-specific content. Includes locale technical edges (Locale → Formatting/Slugification/Adaptation), style edges (Locale → Style), semantic edges (Locale → TermSet/ExpressionSet/PatternSet/CultureSet/TabooSet/AudienceSet), and content localization edges (Entity → EntityL10n, Page → PageL10n, etc.).';
+  af_localization.llm_context = 'Links between invariant nodes and their locale-specific content. Includes locale knowledge edges (Locale → LocaleVoice, etc.) and content localization edges (Entity → EntityL10n, etc.).';
 
 MERGE (af_semantic:Meta:ArcFamily {key: 'semantic'})
 ON CREATE SET
