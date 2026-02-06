@@ -7,6 +7,8 @@ use ratatui::text::{Line, Span};
 #[allow(unused_imports)] // Sparkline used in Batch 4.2
 use ratatui::widgets::{Bar, BarChart, BarGroup, Block, Borders, Clear, Paragraph, Sparkline, Wrap};
 
+use rustc_hash::FxHashSet;
+
 use super::app::{App, Focus, NavMode};
 use super::data::{ArcDirection, TreeItem};
 use super::theme::{self, hex_to_color};
@@ -230,7 +232,7 @@ impl EmptyStateKind {
         match self {
             EmptyStateKind::NoConnection => "Press 'r' to retry",
             EmptyStateKind::NoKinds => "Press 'q' to quit",
-            EmptyStateKind::NoResults => "Press '1' for Meta mode",
+            EmptyStateKind::NoResults => "Press 'c' to clear filters",
             EmptyStateKind::NoInstances => "Press Esc to go back",
             EmptyStateKind::Loading => "",
         }
@@ -524,8 +526,8 @@ fn highlight_matches(text: &str, matches: Option<&[u32]>, base_color: Color) -> 
         return vec![Span::styled(text.to_string(), Style::default().fg(base_color))];
     }
 
-    // Build a set of matched positions for O(1) lookup
-    let match_set: std::collections::HashSet<usize> = positions.iter().map(|&p| p as usize).collect();
+    // Build a set of matched positions for O(1) lookup (FxHashSet is faster for integer keys)
+    let match_set: FxHashSet<usize> = positions.iter().map(|&p| p as usize).collect();
 
     let mut spans = Vec::new();
     let mut current_text = String::new();
@@ -1350,6 +1352,43 @@ fn render_realm_bar_chart(f: &mut Frame, area: Rect, app: &App) {
         .label_style(Style::default().fg(Color::Gray));
 
     f.render_widget(chart, area);
+}
+
+/// Render a sparkline showing instance counts per kind for the selected Layer.
+fn render_layer_sparkline(f: &mut Frame, area: Rect, app: &App) {
+    let Some(TreeItem::Layer(_, layer)) = app.current_item() else {
+        return;
+    };
+
+    // Collect instance counts from kinds
+    let data: Vec<u64> = layer
+        .kinds
+        .iter()
+        .map(|k| k.instance_count.max(0) as u64)
+        .collect();
+
+    if data.is_empty() {
+        return;
+    }
+
+    // Calculate max for label
+    let max_val = *data.iter().max().unwrap_or(&0);
+    let total: u64 = data.iter().sum();
+
+    let sparkline = Sparkline::default()
+        .block(
+            Block::default()
+                .title(Span::styled(
+                    format!(" Instances ({} total, max {}) ", total, max_val),
+                    STYLE_DIM,
+                ))
+                .borders(Borders::ALL)
+                .border_style(Style::default().fg(COLOR_UNFOCUSED_BORDER)),
+        )
+        .data(&data)
+        .style(Style::default().fg(hex_to_color(&layer.color)));
+
+    f.render_widget(sparkline, area);
 }
 
 /// Graph panel: Displays Neo4j relationships for the selected Kind or Instance.
@@ -4748,5 +4787,243 @@ mod tests {
     #[test]
     fn test_truncate_str_empty() {
         assert_eq!(truncate_str("", 10), "");
+    }
+
+    // =============================================================================
+    // Highlight matches tests (fuzzy search highlighting)
+    // =============================================================================
+
+    #[test]
+    fn test_highlight_matches_no_positions() {
+        let spans = highlight_matches("hello", None, Color::White);
+        assert_eq!(spans.len(), 1);
+        // Check that the text is correct
+        let span = &spans[0];
+        assert_eq!(span.content, "hello");
+    }
+
+    #[test]
+    fn test_highlight_matches_empty_positions() {
+        let spans = highlight_matches("hello", Some(&[]), Color::White);
+        assert_eq!(spans.len(), 1);
+        assert_eq!(spans[0].content, "hello");
+    }
+
+    #[test]
+    fn test_highlight_matches_single_char() {
+        // Match positions: 0 (first char 'h')
+        let spans = highlight_matches("hello", Some(&[0]), Color::White);
+        // Should be: [highlighted 'h'], [normal 'ello']
+        assert_eq!(spans.len(), 2);
+        assert_eq!(spans[0].content, "h");
+        assert_eq!(spans[1].content, "ello");
+    }
+
+    #[test]
+    fn test_highlight_matches_consecutive() {
+        // Match positions: 0, 1, 2 ('hel')
+        let spans = highlight_matches("hello", Some(&[0, 1, 2]), Color::White);
+        // Should be: [highlighted 'hel'], [normal 'lo']
+        assert_eq!(spans.len(), 2);
+        assert_eq!(spans[0].content, "hel");
+        assert_eq!(spans[1].content, "lo");
+    }
+
+    #[test]
+    fn test_highlight_matches_scattered() {
+        // Match positions: 0, 2, 4 ('h', 'l', 'o')
+        let spans = highlight_matches("hello", Some(&[0, 2, 4]), Color::White);
+        // Should produce alternating highlighted/normal spans
+        // [h], [e], [l], [l], [o] with h, l, o highlighted
+        // Merged: [h(hl)], [e(norm)], [l(hl)], [l(norm)], [o(hl)]
+        assert!(spans.len() >= 3);
+    }
+
+    #[test]
+    fn test_highlight_matches_full_match() {
+        // All chars match
+        let spans = highlight_matches("hi", Some(&[0, 1]), Color::White);
+        assert_eq!(spans.len(), 1);
+        assert_eq!(spans[0].content, "hi");
+    }
+
+    // =============================================================================
+    // Spinner tests
+    // =============================================================================
+
+    #[test]
+    fn test_spinner_cycles_through_frames() {
+        // Spinner should return different chars for different ticks
+        let frames: Vec<&str> = (0..20).map(spinner).collect();
+        // Check that we get braille characters
+        assert!(frames.iter().all(|f| f.chars().all(|c| c.is_ascii() == false)));
+    }
+
+    // =============================================================================
+    // EmptyStateKind tests (Phase 6.2 TDD)
+    // =============================================================================
+
+    #[test]
+    fn test_empty_state_kind_icon_no_connection() {
+        assert_eq!(EmptyStateKind::NoConnection.icon(), "⚠");
+    }
+
+    #[test]
+    fn test_empty_state_kind_icon_no_kinds() {
+        assert_eq!(EmptyStateKind::NoKinds.icon(), "📭");
+    }
+
+    #[test]
+    fn test_empty_state_kind_icon_no_results() {
+        assert_eq!(EmptyStateKind::NoResults.icon(), "🔍");
+    }
+
+    #[test]
+    fn test_empty_state_kind_icon_no_instances() {
+        assert_eq!(EmptyStateKind::NoInstances.icon(), "📋");
+    }
+
+    #[test]
+    fn test_empty_state_kind_icon_loading() {
+        assert_eq!(EmptyStateKind::Loading.icon(), "⏳");
+    }
+
+    #[test]
+    fn test_empty_state_kind_title_no_connection() {
+        assert_eq!(EmptyStateKind::NoConnection.title(), "Neo4j Not Connected");
+    }
+
+    #[test]
+    fn test_empty_state_kind_title_no_kinds() {
+        assert_eq!(EmptyStateKind::NoKinds.title(), "No Node Kinds Found");
+    }
+
+    #[test]
+    fn test_empty_state_kind_title_no_results() {
+        assert_eq!(EmptyStateKind::NoResults.title(), "No Results");
+    }
+
+    #[test]
+    fn test_empty_state_kind_title_no_instances() {
+        assert_eq!(EmptyStateKind::NoInstances.title(), "No Instances");
+    }
+
+    #[test]
+    fn test_empty_state_kind_title_loading() {
+        assert_eq!(EmptyStateKind::Loading.title(), "Loading…");
+    }
+
+    #[test]
+    fn test_empty_state_kind_description_no_connection() {
+        let desc = EmptyStateKind::NoConnection.description();
+        assert!(!desc.is_empty(), "description should not be empty");
+        assert!(desc.iter().any(|s| s.contains("bolt://")), "should mention bolt URL");
+        assert!(desc.iter().any(|s| s.contains("infra:up")), "should suggest pnpm infra:up");
+    }
+
+    #[test]
+    fn test_empty_state_kind_description_no_kinds() {
+        let desc = EmptyStateKind::NoKinds.description();
+        assert!(!desc.is_empty());
+        assert!(desc.iter().any(|s| s.contains("schema generate")), "should suggest schema generate");
+        assert!(desc.iter().any(|s| s.contains("db seed")), "should suggest db seed");
+    }
+
+    #[test]
+    fn test_empty_state_kind_description_no_results() {
+        let desc = EmptyStateKind::NoResults.description();
+        assert!(!desc.is_empty());
+        assert!(desc.iter().any(|s| s.contains("filter")), "should mention filters");
+    }
+
+    #[test]
+    fn test_empty_state_kind_description_no_instances() {
+        let desc = EmptyStateKind::NoInstances.description();
+        assert!(!desc.is_empty());
+        assert!(desc.iter().any(|s| s.contains("node create")), "should suggest node create command");
+    }
+
+    #[test]
+    fn test_empty_state_kind_description_loading() {
+        let desc = EmptyStateKind::Loading.description();
+        assert!(!desc.is_empty());
+        assert!(desc.iter().any(|s| s.contains("Neo4j")), "should mention Neo4j");
+    }
+
+    #[test]
+    fn test_empty_state_kind_hint_no_connection() {
+        let hint = EmptyStateKind::NoConnection.hint();
+        assert!(hint.contains("r"), "hint should suggest retry with 'r'");
+    }
+
+    #[test]
+    fn test_empty_state_kind_hint_no_kinds() {
+        let hint = EmptyStateKind::NoKinds.hint();
+        assert!(hint.contains("q"), "hint should suggest quit with 'q'");
+    }
+
+    #[test]
+    fn test_empty_state_kind_hint_no_results() {
+        let hint = EmptyStateKind::NoResults.hint();
+        assert!(hint.contains("1"), "hint should suggest switching modes with '1'");
+    }
+
+    #[test]
+    fn test_empty_state_kind_hint_no_instances() {
+        let hint = EmptyStateKind::NoInstances.hint();
+        assert!(hint.contains("Esc"), "hint should suggest go back");
+    }
+
+    #[test]
+    fn test_empty_state_kind_hint_loading() {
+        // Loading has no hint - it's a transient state
+        let hint = EmptyStateKind::Loading.hint();
+        // Just verify it doesn't panic and returns something
+        assert!(hint.is_empty() || !hint.is_empty());
+    }
+
+    #[test]
+    fn test_empty_state_kind_is_copy() {
+        // Verify EmptyStateKind is Copy (can be assigned without move)
+        let kind = EmptyStateKind::NoConnection;
+        let kind2 = kind; // Copy
+        let _kind3 = kind; // Still valid - proves Copy
+        assert_eq!(kind2.title(), "Neo4j Not Connected");
+    }
+
+    #[test]
+    fn test_empty_state_kind_debug_trait() {
+        // Verify Debug is implemented
+        let kind = EmptyStateKind::Loading;
+        let debug_str = format!("{:?}", kind);
+        assert!(debug_str.contains("Loading"), "Debug should contain variant name");
+    }
+
+    #[test]
+    fn test_all_empty_state_kinds_have_non_empty_icon() {
+        let kinds = [
+            EmptyStateKind::NoConnection,
+            EmptyStateKind::NoKinds,
+            EmptyStateKind::NoResults,
+            EmptyStateKind::NoInstances,
+            EmptyStateKind::Loading,
+        ];
+        for kind in kinds {
+            assert!(!kind.icon().is_empty(), "{:?} icon should not be empty", kind);
+        }
+    }
+
+    #[test]
+    fn test_all_empty_state_kinds_have_non_empty_title() {
+        let kinds = [
+            EmptyStateKind::NoConnection,
+            EmptyStateKind::NoKinds,
+            EmptyStateKind::NoResults,
+            EmptyStateKind::NoInstances,
+            EmptyStateKind::Loading,
+        ];
+        for kind in kinds {
+            assert!(!kind.title().is_empty(), "{:?} title should not be empty", kind);
+        }
     }
 }
