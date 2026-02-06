@@ -137,6 +137,7 @@ node:
       required: true
       enum: ["24h", "12h"]
       description: "Time system (24h for most of Europe, 12h for US/UK)"
+      llm_context: "24h = most of world; 12h = US/UK/Philippines. Affects time display."
       example: "24h"
 
     time_format:
@@ -234,6 +235,7 @@ node:
       required: true
       enum: ["metric", "imperial", "mixed"]
       description: "Default measurement system"
+      llm_context: "metric = most of world; imperial = US only; mixed = UK."
       example: "metric"
 
     temperature_unit:
