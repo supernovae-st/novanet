@@ -329,7 +329,7 @@ Master command for schema management.
 
 **Example:**
 ```bash
-/schema status     # Show current schema stats (46 Kinds, 51 ArcKinds, 2 Realms, 9 Layers)
+/schema status     # Show current schema stats (60 Kinds, 90 ArcKinds, 2 Realms, 9 Layers)
 ```
 
 ---
@@ -602,7 +602,7 @@ Located in `apps/studio/.claude/rules/`:
 Domain vocabulary reference (v10.6.0):
 - Core concepts (Project, Entity, Page, Block, Locale, Context Graph)
 - Meta-Graph: 6 meta-node types (Realm, Layer, Kind, Trait, ArcFamily, ArcKind)
-- Full Kind Inventory (46 Kinds across 2 Realms)
+- Full Kind Inventory (60 Kinds across 2 Realms)
 - Meta-Graph relations (hierarchy, facets, arc schema, instance bridge)
 - Key data relations (grouped by ArcFamily)
 - v8 → v9 rename mapping
@@ -715,11 +715,11 @@ pnpm doc:generate
 - Outdated version references (e.g., v10.5 → v10.6)
 - Deprecated terminology (Concept → Entity, USES_CONCEPT → USES_ENTITY)
 - Removed realm references (3 realms → 2 realms in v10.6)
-- Incorrect node/arc counts (46 nodes, 72 arcs expected)
+- Incorrect node/arc counts (60 nodes, 90 arcs expected)
 
 **`pnpm skill:audit` checks:**
 - Deprecated paths (`nodes/` → `node-kinds/`, `organizing-principles.yaml` → `taxonomy.yaml`)
-- Node/arc counts match YAML sources (46 node-kinds, 72 arc-kinds)
+- Node/arc counts match YAML sources (60 node-kinds, 90 arc-kinds)
 - Deprecated terminology in skills/commands/rules
 
 **Auto-sync reminders:**
