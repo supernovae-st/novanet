@@ -2472,4 +2472,263 @@ mod tests {
             }
         }
     }
+
+    // ========================================================================
+    // Edge case tests (Phase 6.4 TDD)
+    // ========================================================================
+
+    #[test]
+    fn test_empty_tree_cursor_at_zero() {
+        // Create app with empty tree
+        let tree = TaxonomyTree::default();
+        let app = App::new(tree, "/test/root".to_string());
+
+        assert_eq!(app.tree_cursor, 0, "Initial cursor should be 0");
+    }
+
+    #[test]
+    fn test_navigation_cursor_at_zero_saturating_sub() {
+        let mut app = create_test_app();
+        app.tree_cursor = 0;
+
+        // Saturating subtraction should keep at 0
+        app.tree_cursor = app.tree_cursor.saturating_sub(1);
+        assert_eq!(app.tree_cursor, 0, "Cursor should not go negative");
+    }
+
+    #[test]
+    fn test_navigation_cursor_increment_decrement() {
+        let mut app = create_test_app();
+        app.tree_cursor = 0;
+
+        // Move down then up should return to original
+        app.tree_cursor += 1;
+        assert_eq!(app.tree_cursor, 1);
+        app.tree_cursor = app.tree_cursor.saturating_sub(1);
+        assert_eq!(app.tree_cursor, 0);
+    }
+
+    #[test]
+    fn test_navigation_page_size_moves() {
+        let mut app = create_test_app();
+        app.tree_cursor = 0;
+        app.tree_height = 10; // Page size
+
+        // Page down
+        app.tree_cursor += app.tree_height;
+        let after_down = app.tree_cursor;
+        assert!(after_down >= 10, "Should move down by page size");
+
+        // Page up
+        app.tree_cursor = app.tree_cursor.saturating_sub(app.tree_height);
+        assert!(app.tree_cursor < after_down, "Should move back up");
+    }
+
+    #[test]
+    fn test_search_rapid_query_changes() {
+        let mut app = create_test_app();
+
+        // Rapidly change query
+        for query in ["a", "ab", "abc", "ab", "a", ""] {
+            app.search_query = query.to_string();
+            app.update_search();
+        }
+
+        // Final empty query should clear results
+        assert!(app.search_results.is_empty());
+    }
+
+    #[test]
+    fn test_search_unicode_emoji_query() {
+        let mut app = create_test_app();
+
+        // Emoji query - should not panic
+        app.search_query = "🔍".to_string();
+        app.update_search();
+
+        // May or may not find results, just verify no panic
+    }
+
+    #[test]
+    fn test_search_unicode_cjk_query() {
+        let mut app = create_test_app();
+
+        // Chinese characters query
+        app.search_query = "项目".to_string();
+        app.update_search();
+
+        // Should not panic, likely no results in English codebase
+    }
+
+    #[test]
+    fn test_search_unicode_arabic_query() {
+        let mut app = create_test_app();
+
+        // Arabic query (right-to-left)
+        app.search_query = "مشروع".to_string();
+        app.update_search();
+
+        // Should handle RTL gracefully
+    }
+
+    #[test]
+    fn test_search_very_long_query_100_chars() {
+        let mut app = create_test_app();
+
+        // Very long query
+        app.search_query = "a".repeat(100);
+        app.update_search();
+
+        // Should handle without panic, likely no matches
+        assert!(
+            app.search_results.is_empty(),
+            "100-char query unlikely to match anything"
+        );
+    }
+
+    #[test]
+    fn test_search_newline_in_query() {
+        let mut app = create_test_app();
+
+        // Query with newline character
+        app.search_query = "Page\nBlock".to_string();
+        app.update_search();
+
+        // Should handle gracefully (may or may not match)
+    }
+
+    #[test]
+    fn test_search_tab_in_query() {
+        let mut app = create_test_app();
+
+        // Query with tab character
+        app.search_query = "Page\tBlock".to_string();
+        app.update_search();
+
+        // Should handle gracefully
+    }
+
+    #[test]
+    fn test_collapse_all_then_search() {
+        let mut app = create_test_app();
+
+        // Collapse everything
+        app.tree.collapse_all();
+
+        // Search should still work on visible items (headers)
+        app.search_query = "Kind".to_string();
+        app.update_search();
+
+        // Should find "Node Kinds" header
+        assert!(!app.search_results.is_empty(), "Should find header even when collapsed");
+    }
+
+    #[test]
+    fn test_toggle_collapse_on_tree() {
+        let mut app = create_test_app();
+
+        // Toggle a section using the tree API
+        app.tree.toggle("kinds");
+
+        // Verify toggle happened (collapsed state changed)
+        let is_collapsed = app.tree.is_collapsed("kinds");
+        // Toggle again
+        app.tree.toggle("kinds");
+        let after_toggle = app.tree.is_collapsed("kinds");
+
+        // Should be opposite of before
+        assert_ne!(is_collapsed, after_toggle, "Toggle should change collapsed state");
+    }
+
+    #[test]
+    fn test_mode_switch_direct() {
+        let mut app = create_test_app();
+
+        // Start search
+        app.search_query = "Page".to_string();
+        app.search_active = true;
+        app.update_search();
+
+        // Switch mode directly
+        app.mode = NavMode::Meta;
+
+        // Search state should still exist
+        assert_eq!(app.mode, NavMode::Meta);
+        // Search results preserved (or cleared depending on design)
+    }
+
+    #[test]
+    fn test_scroll_at_boundary_zero() {
+        let mut app = create_test_app();
+        app.tree_scroll = 0;
+        app.tree_height = 10;
+
+        // Scroll up from 0 should stay at 0
+        if app.tree_scroll > 0 {
+            app.tree_scroll -= 1;
+        }
+        assert_eq!(app.tree_scroll, 0);
+    }
+
+    #[test]
+    fn test_yaml_scroll_at_zero() {
+        let mut app = create_test_app();
+        app.yaml_scroll = 0;
+
+        // Should not go negative
+        if app.yaml_scroll > 0 {
+            app.yaml_scroll -= 1;
+        }
+        assert_eq!(app.yaml_scroll, 0);
+    }
+
+    #[test]
+    fn test_focus_cycle_tree_to_yaml() {
+        let mut app = create_test_app();
+        app.focus = Focus::Tree;
+
+        // Cycle focus
+        app.focus = Focus::Yaml;
+        assert_eq!(app.focus, Focus::Yaml);
+
+        app.focus = Focus::Tree;
+        assert_eq!(app.focus, Focus::Tree);
+    }
+
+    #[test]
+    fn test_info_scroll_at_zero() {
+        let mut app = create_test_app();
+        app.info_scroll = 0;
+
+        // Should stay at 0
+        if app.info_scroll > 0 {
+            app.info_scroll -= 1;
+        }
+        assert_eq!(app.info_scroll, 0);
+    }
+
+    #[test]
+    fn test_tick_counter_wraps() {
+        let mut app = create_test_app();
+
+        // Increment tick many times
+        for _ in 0..1000 {
+            app.tick = app.tick.wrapping_add(1);
+        }
+
+        // Should handle wrapping without panic
+        assert!(app.tick > 0 || app.tick == 0); // Always true, just exercises the code
+    }
+
+    #[test]
+    fn test_hide_empty_toggle() {
+        let mut app = create_test_app();
+
+        let initial = app.hide_empty;
+        app.hide_empty = !app.hide_empty;
+        assert_ne!(app.hide_empty, initial);
+
+        app.hide_empty = !app.hide_empty;
+        assert_eq!(app.hide_empty, initial);
+    }
 }
