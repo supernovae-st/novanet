@@ -196,18 +196,36 @@ pub fn render_help(f: &mut Frame) {
             Span::styled("Cycle through modes", STYLE_DIM),
         ]),
         Line::from(""),
-        Line::from(vec![Span::styled("  Actions", STYLE_HIGHLIGHT)]),
-        Line::from(vec![
-            Span::styled("    f        ", STYLE_PRIMARY),
-            Span::styled("Find / search", STYLE_DIM),
-        ]),
+        Line::from(vec![Span::styled("  Search & Help", STYLE_HIGHLIGHT)]),
         Line::from(vec![
             Span::styled("    /        ", STYLE_PRIMARY),
-            Span::styled("Show this help", STYLE_DIM),
+            Span::styled("Search (vim-style)", STYLE_DIM),
         ]),
         Line::from(vec![
             Span::styled("    ?        ", STYLE_PRIMARY),
+            Span::styled("Show this help", STYLE_DIM),
+        ]),
+        Line::from(vec![
+            Span::styled("    F1       ", STYLE_PRIMARY),
             Span::styled("Color legend", STYLE_DIM),
+        ]),
+        Line::from(""),
+        Line::from(vec![Span::styled("  Actions", STYLE_HIGHLIGHT)]),
+        Line::from(vec![
+            Span::styled("    r        ", STYLE_PRIMARY),
+            Span::styled("Refresh data", STYLE_DIM),
+        ]),
+        Line::from(vec![
+            Span::styled("    y        ", STYLE_PRIMARY),
+            Span::styled("Yank (copy key)", STYLE_DIM),
+        ]),
+        Line::from(vec![
+            Span::styled("    Ctrl+o   ", STYLE_PRIMARY),
+            Span::styled("Go back in history", STYLE_DIM),
+        ]),
+        Line::from(vec![
+            Span::styled("    Ctrl+i   ", STYLE_PRIMARY),
+            Span::styled("Go forward in history", STYLE_DIM),
         ]),
         Line::from(vec![
             Span::styled("    q        ", STYLE_PRIMARY),

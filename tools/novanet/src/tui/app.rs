@@ -203,6 +203,13 @@ pub struct App {
     pub help_active: bool,
     // Legend overlay (color meanings)
     pub legend_active: bool,
+    /// Navigation history for Ctrl+o (back) / Ctrl+i (forward)
+    pub nav_history: Vec<(NavMode, usize)>, // (mode, cursor)
+    pub nav_history_pos: usize,             // Current position in history
+    /// Status message (e.g., "Copied to clipboard", "Refreshing...")
+    pub status_message: Option<(String, std::time::Instant)>,
+    /// Pending refresh request
+    pub pending_refresh: bool,
     // YAML preview
     pub yaml_content: String,
     pub yaml_path: String,
@@ -262,6 +269,10 @@ impl App {
             search: SearchState::default(),
             help_active: false,
             legend_active: false,
+            nav_history: Vec::with_capacity(100),
+            nav_history_pos: 0,
+            status_message: None,
+            pending_refresh: false,
             yaml_content: String::new(),
             yaml_path: String::new(),
             yaml_scroll: 0,
@@ -798,12 +809,16 @@ impl App {
                     // Already in Atlas, no-op
                     return false;
                 }
-                KeyCode::Char('/') => {
+                KeyCode::Char('?') => {
                     self.help_active = true;
                     return true;
                 }
-                KeyCode::Char('f') => {
+                KeyCode::Char('/') | KeyCode::Char('f') => {
                     self.search.active = true;
+                    return true;
+                }
+                KeyCode::F(1) => {
+                    self.legend_active = true;
                     return true;
                 }
                 // All other keys handled by atlas
@@ -812,20 +827,20 @@ impl App {
         }
 
         match key.code {
-            // Open help
-            KeyCode::Char('/') => {
+            // Open help (? = vim-style help)
+            KeyCode::Char('?') => {
                 self.help_active = true;
                 true
             }
 
-            // Open search (f = find)
-            KeyCode::Char('f') => {
+            // Open search (/ = vim-style search, f = find alias)
+            KeyCode::Char('/') | KeyCode::Char('f') => {
                 self.search.active = true;
                 true
             }
 
-            // Open color legend (? = what colors mean)
-            KeyCode::Char('?') => {
+            // Open color legend (F1 = accessible, out of flow)
+            KeyCode::F(1) => {
                 self.legend_active = true;
                 true
             }
@@ -1135,6 +1150,31 @@ impl App {
                 true
             }
 
+            // Refresh data from Neo4j (r = refresh)
+            KeyCode::Char('r') => {
+                self.pending_refresh = true;
+                self.set_status("Refreshing...");
+                true
+            }
+
+            // Yank (copy node key to clipboard)
+            KeyCode::Char('y') => {
+                self.yank_current_key();
+                true
+            }
+
+            // Navigation history: back (Ctrl+o)
+            KeyCode::Char('o') if key.modifiers.contains(crossterm::event::KeyModifiers::CONTROL) => {
+                self.nav_back();
+                true
+            }
+
+            // Navigation history: forward (Ctrl+i)
+            KeyCode::Char('i') if key.modifiers.contains(crossterm::event::KeyModifiers::CONTROL) => {
+                self.nav_forward();
+                true
+            }
+
             // Esc: exit filtered Data mode (if active)
             KeyCode::Esc => {
                 if self.is_filtered_data_mode() {
@@ -1223,6 +1263,89 @@ impl App {
         self.mode = new_mode;
         self.restore_mode_cursor(new_mode);
         self.load_yaml_for_current();
+    }
+
+    /// Set a temporary status message (auto-clears after ~3 seconds).
+    pub fn set_status(&mut self, msg: &str) {
+        self.status_message = Some((msg.to_string(), std::time::Instant::now()));
+    }
+
+    /// Clear status message if expired (called by UI tick).
+    pub fn clear_expired_status(&mut self) {
+        if let Some((_, instant)) = &self.status_message {
+            if instant.elapsed().as_secs() >= 3 {
+                self.status_message = None;
+            }
+        }
+    }
+
+    /// Push current position to navigation history.
+    pub fn push_nav_history(&mut self) {
+        let entry = (self.mode, self.tree_cursor);
+        // Truncate forward history if we're not at the end
+        if self.nav_history_pos < self.nav_history.len() {
+            self.nav_history.truncate(self.nav_history_pos);
+        }
+        // Avoid duplicate consecutive entries
+        if self.nav_history.last() != Some(&entry) {
+            self.nav_history.push(entry);
+            // Limit history size
+            if self.nav_history.len() > 100 {
+                self.nav_history.remove(0);
+            }
+        }
+        self.nav_history_pos = self.nav_history.len();
+    }
+
+    /// Navigate back in history (Ctrl+o).
+    pub fn nav_back(&mut self) {
+        if self.nav_history_pos == 0 {
+            return;
+        }
+        // Save current position before going back (if not already at end of history)
+        if self.nav_history_pos == self.nav_history.len() {
+            self.push_nav_history();
+            self.nav_history_pos = self.nav_history_pos.saturating_sub(1);
+        }
+        self.nav_history_pos = self.nav_history_pos.saturating_sub(1);
+        if let Some(&(mode, cursor)) = self.nav_history.get(self.nav_history_pos) {
+            self.mode = mode;
+            self.tree_cursor = cursor;
+            self.ensure_cursor_visible();
+            self.load_yaml_for_current();
+        }
+    }
+
+    /// Navigate forward in history (Ctrl+i).
+    pub fn nav_forward(&mut self) {
+        if self.nav_history_pos >= self.nav_history.len().saturating_sub(1) {
+            return;
+        }
+        self.nav_history_pos += 1;
+        if let Some(&(mode, cursor)) = self.nav_history.get(self.nav_history_pos) {
+            self.mode = mode;
+            self.tree_cursor = cursor;
+            self.ensure_cursor_visible();
+            self.load_yaml_for_current();
+        }
+    }
+
+    /// Yank (copy) the current item's key to clipboard.
+    pub fn yank_current_key(&mut self) {
+        use super::data::TreeItem;
+        let key = match self.current_item() {
+            Some(TreeItem::Realm(r)) => Some(r.key.clone()),
+            Some(TreeItem::Layer(_, l)) => Some(l.key.clone()),
+            Some(TreeItem::Kind(_, _, k)) => Some(k.key.clone()),
+            Some(TreeItem::ArcFamily(f)) => Some(f.key.clone()),
+            Some(TreeItem::ArcKind(_, a)) => Some(a.key.clone()),
+            Some(TreeItem::Instance(_, _, _, inst)) => Some(inst.key.clone()),
+            _ => None,
+        };
+        if let Some(key) = key {
+            // Show key in status (user can copy from terminal with mouse)
+            self.set_status(&format!("📋 {}", key));
+        }
     }
 
     /// Check if in filtered Data mode (drilling into a specific Kind).

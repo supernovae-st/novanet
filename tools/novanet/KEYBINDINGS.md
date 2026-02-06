@@ -61,13 +61,14 @@ Scrollbars are displayed when content exceeds visible area.
 
 ---
 
-## Overlays
+## Search & Help
 
 | Key | Action |
 |-----|--------|
-| `/` | Open help overlay (keyboard shortcuts) |
-| `?` | Open color legend overlay (Realm/Layer/Trait colors) |
-| `f` | Open search overlay |
+| `/` | Open search overlay (vim-style) |
+| `f` | Open search overlay (alias) |
+| `?` | Open help overlay (keyboard shortcuts) |
+| `F1` | Open color legend overlay (Realm/Layer/Trait colors) |
 | `Esc` | Close current overlay |
 
 ---
@@ -83,6 +84,17 @@ Scrollbars are displayed when content exceeds visible area.
 | `Ctrl+N` | Next search result (works globally) |
 | `Ctrl+P` | Previous search result (works globally) |
 | `Backspace` | Delete character |
+
+---
+
+## Actions
+
+| Key | Action |
+|-----|--------|
+| `r` | Refresh data from Neo4j |
+| `y` | Yank (copy current item's key to clipboard) |
+| `Ctrl+o` | Navigate back in history |
+| `Ctrl+i` | Navigate forward in history |
 
 ---
 
@@ -114,6 +126,7 @@ Expand:      e (subtree)    c (collapse)  H/L (global collapse/expand)
 Filter:      0 (hide empty in Data mode)
 Modes:       1-5 (direct)   N (cycle)
 Focus:       Tab (cycle panels)
-Overlays:    / (help)       ? (legend)    f (search)
+Search:      / or f (search)  ? (help)  F1 (legend)
+Actions:     r (refresh)  y (yank key)  Ctrl+o/i (back/forward)
 Exit:        q or Esc
 ```

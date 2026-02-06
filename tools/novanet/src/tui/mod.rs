@@ -268,8 +268,11 @@ async fn run_app(
                 // Timeout - increment tick for animations
                 app.tick = app.tick.wrapping_add(1);
 
-                // Re-render if there's a pending load (animates spinner)
-                if app.has_pending_load() {
+                // Clear expired status messages
+                app.clear_expired_status();
+
+                // Re-render if there's a pending load (animates spinner) or status message
+                if app.has_pending_load() || app.status_message.is_some() {
                     terminal
                         .draw(|f| ui::render(f, &mut app))
                         .map_err(crate::NovaNetError::Io)?;
