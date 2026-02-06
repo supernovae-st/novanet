@@ -62,6 +62,17 @@ impl NavMode {
             NavMode::Atlas => NavMode::Meta,
         }
     }
+
+    /// Get array index for mode_cursors (0-4).
+    pub fn index(&self) -> usize {
+        match self {
+            NavMode::Meta => 0,
+            NavMode::Data => 1,
+            NavMode::Overlay => 2,
+            NavMode::Query => 3,
+            NavMode::Atlas => 4,
+        }
+    }
 }
 
 /// Which panel has focus.
@@ -181,6 +192,8 @@ pub struct App {
     pub mode: NavMode,
     pub focus: Focus,
     pub tree_cursor: usize,
+    /// Remember cursor position per mode (Meta, Data, Overlay, Query, Atlas).
+    pub mode_cursors: [usize; 5],
     pub tree_scroll: usize, // Scroll offset for tree
     pub tree_height: usize, // Visible height (set by UI)
     pub tree: TaxonomyTree,
@@ -188,6 +201,8 @@ pub struct App {
     pub search: SearchState,
     // Help overlay
     pub help_active: bool,
+    // Legend overlay (color meanings)
+    pub legend_active: bool,
     // YAML preview
     pub yaml_content: String,
     pub yaml_path: String,
@@ -240,11 +255,13 @@ impl App {
             mode: NavMode::Meta,
             focus: Focus::Tree,
             tree_cursor: 0,
+            mode_cursors: [0; 5], // Init all modes at cursor 0
             tree_scroll: 0,
             tree_height: DEFAULT_TREE_HEIGHT,
             tree,
             search: SearchState::default(),
             help_active: false,
+            legend_active: false,
             yaml_content: String::new(),
             yaml_path: String::new(),
             yaml_scroll: 0,
@@ -719,6 +736,12 @@ impl App {
             return true;
         }
 
+        // Legend overlay - any key closes it
+        if self.legend_active {
+            self.legend_active = false;
+            return true;
+        }
+
         // Search mode captures all input
         if self.search.active {
             return self.handle_search_key(key);
@@ -742,22 +765,33 @@ impl App {
         // Atlas mode delegates to atlas state (except mode switching 1-5)
         if self.mode == NavMode::Atlas {
             match key.code {
-                // Mode switching exits Atlas mode
+                // Mode switching exits Atlas mode (with cursor memory)
                 KeyCode::Char('1') => {
+                    self.save_mode_cursor();
                     self.mode = NavMode::Meta;
+                    self.restore_mode_cursor(NavMode::Meta);
+                    self.load_yaml_for_current();
                     return true;
                 }
                 KeyCode::Char('2') => {
+                    self.save_mode_cursor();
                     self.mode = NavMode::Data;
+                    self.restore_mode_cursor(NavMode::Data);
                     self.request_instance_load_for_current();
                     return true;
                 }
                 KeyCode::Char('3') => {
+                    self.save_mode_cursor();
                     self.mode = NavMode::Overlay;
+                    self.restore_mode_cursor(NavMode::Overlay);
+                    self.load_yaml_for_current();
                     return true;
                 }
                 KeyCode::Char('4') => {
+                    self.save_mode_cursor();
                     self.mode = NavMode::Query;
+                    self.restore_mode_cursor(NavMode::Query);
+                    self.load_yaml_for_current();
                     return true;
                 }
                 KeyCode::Char('5') => {
@@ -790,6 +824,12 @@ impl App {
                 true
             }
 
+            // Open color legend (? = what colors mean)
+            KeyCode::Char('?') => {
+                self.legend_active = true;
+                true
+            }
+
             // Mode switching: 1-4 direct (1=Meta, 2=Data, 3=Overlay, 4=Query)
             KeyCode::Char('1') => {
                 // If on an Instance in Data mode, navigate to its Kind in Meta mode
@@ -803,15 +843,20 @@ impl App {
                     };
 
                 self.exit_filtered_data_mode();
+                self.save_mode_cursor();
                 self.mode = NavMode::Meta;
 
-                // Focus on the Kind if we came from an Instance
+                // Focus on the Kind if we came from an Instance (overrides saved cursor)
                 if let Some(kind_key) = kind_key_to_focus {
                     if let Some(cursor) = self.tree.find_kind_cursor(&kind_key) {
                         self.tree_cursor = cursor;
                         self.ensure_cursor_visible();
                         self.load_yaml_for_current();
                     }
+                } else {
+                    // Restore saved cursor for normal mode switch
+                    self.restore_mode_cursor(NavMode::Meta);
+                    self.load_yaml_for_current();
                 }
                 true
             }
@@ -822,40 +867,55 @@ impl App {
                         self.tree.item_at(self.tree_cursor)
                     {
                         let kind_key = kind.key.clone();
+                        self.save_mode_cursor();
                         self.mode = NavMode::Data;
                         self.enter_filtered_data_mode(kind_key);
                         return true;
                     }
                 }
                 self.exit_filtered_data_mode();
+                self.save_mode_cursor();
                 self.mode = NavMode::Data;
+                self.restore_mode_cursor(NavMode::Data);
                 self.request_instance_load_for_current();
                 true
             }
             KeyCode::Char('3') => {
                 self.exit_filtered_data_mode();
+                self.save_mode_cursor();
                 self.mode = NavMode::Overlay;
+                self.restore_mode_cursor(NavMode::Overlay);
+                self.load_yaml_for_current();
                 true
             }
             KeyCode::Char('4') => {
                 self.exit_filtered_data_mode();
+                self.save_mode_cursor();
                 self.mode = NavMode::Query;
+                self.restore_mode_cursor(NavMode::Query);
+                self.load_yaml_for_current();
                 true
             }
             KeyCode::Char('5') => {
                 self.exit_filtered_data_mode();
+                self.save_mode_cursor();
                 self.mode = NavMode::Atlas;
+                self.restore_mode_cursor(NavMode::Atlas);
                 // Initialize atlas with context from current selection
                 self.init_atlas_from_current();
                 true
             }
             KeyCode::Char('n') | KeyCode::Char('N') => {
                 self.exit_filtered_data_mode();
-                self.mode = self.mode.cycle();
+                self.save_mode_cursor();
+                let new_mode = self.mode.cycle();
+                self.mode = new_mode;
+                self.restore_mode_cursor(new_mode);
                 // Initialize atlas when cycling to it
-                if self.mode == NavMode::Atlas {
+                if new_mode == NavMode::Atlas {
                     self.init_atlas_from_current();
                 }
+                self.load_yaml_for_current();
                 true
             }
 
@@ -1140,6 +1200,29 @@ impl App {
     /// Check if currently in Data mode.
     pub fn is_data_mode(&self) -> bool {
         self.mode == NavMode::Data
+    }
+
+    /// Save current cursor to mode_cursors for the current mode.
+    fn save_mode_cursor(&mut self) {
+        self.mode_cursors[self.mode.index()] = self.tree_cursor;
+    }
+
+    /// Restore cursor from mode_cursors for the new mode.
+    fn restore_mode_cursor(&mut self, new_mode: NavMode) {
+        self.tree_cursor = self.mode_cursors[new_mode.index()];
+        self.ensure_cursor_visible();
+    }
+
+    /// Switch mode with cursor memory: saves current cursor, switches mode, restores new mode cursor.
+    #[allow(dead_code)]
+    pub fn switch_mode(&mut self, new_mode: NavMode) {
+        if self.mode == new_mode {
+            return;
+        }
+        self.save_mode_cursor();
+        self.mode = new_mode;
+        self.restore_mode_cursor(new_mode);
+        self.load_yaml_for_current();
     }
 
     /// Check if in filtered Data mode (drilling into a specific Kind).

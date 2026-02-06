@@ -1,4 +1,4 @@
-//! Overlay panels for TUI: search and help popups.
+//! Overlay panels for TUI: search, help, and legend popups.
 
 use ratatui::Frame;
 use ratatui::layout::Rect;
@@ -8,6 +8,7 @@ use ratatui::widgets::{Block, Borders, Clear, Paragraph};
 
 use super::super::app::App;
 use super::super::data::TreeItem;
+use super::hex_to_color;
 
 // Re-use shared styles from parent module
 use super::{
@@ -205,6 +206,10 @@ pub fn render_help(f: &mut Frame) {
             Span::styled("Show this help", STYLE_DIM),
         ]),
         Line::from(vec![
+            Span::styled("    ?        ", STYLE_PRIMARY),
+            Span::styled("Color legend", STYLE_DIM),
+        ]),
+        Line::from(vec![
             Span::styled("    q        ", STYLE_PRIMARY),
             Span::styled("Quit", STYLE_DIM),
         ]),
@@ -220,4 +225,94 @@ pub fn render_help(f: &mut Frame) {
 
     let paragraph = Paragraph::new(lines).block(block);
     f.render_widget(paragraph, help_area);
+}
+
+/// Color legend overlay: shows Realm, Layer, and Trait color meanings.
+pub fn render_legend(f: &mut Frame, app: &App) {
+    let area = f.area();
+    let width = 45.min(area.width.saturating_sub(4));
+    let height = 24.min(area.height.saturating_sub(4));
+    let x = (area.width.saturating_sub(width)) / 2;
+    let y = (area.height.saturating_sub(height)) / 2;
+
+    let legend_area = Rect::new(x, y, width, height);
+    f.render_widget(Clear, legend_area);
+
+    let mut lines = vec![
+        Line::from(Span::styled(
+            " NovaNet — Color Legend",
+            Style::default()
+                .fg(Color::Cyan)
+                .add_modifier(Modifier::BOLD),
+        )),
+        Line::from(""),
+        Line::from(vec![Span::styled("  Realms (border color)", STYLE_HIGHLIGHT)]),
+    ];
+
+    // Add realm colors from taxonomy
+    for realm in &app.tree.realms {
+        let color = hex_to_color(&realm.color);
+        lines.push(Line::from(vec![
+            Span::styled("    ██ ", Style::default().fg(color)),
+            Span::styled(&realm.display_name, Style::default().fg(Color::White)),
+        ]));
+    }
+
+    lines.push(Line::from(""));
+    lines.push(Line::from(vec![Span::styled(
+        "  Layers (fill color)",
+        STYLE_HIGHLIGHT,
+    )]));
+
+    // Add layer colors from first realm (layers are same across realms)
+    if let Some(realm) = app.tree.realms.first() {
+        for layer in &realm.layers {
+            let color = hex_to_color(&layer.color);
+            lines.push(Line::from(vec![
+                Span::styled("    ██ ", Style::default().fg(color)),
+                Span::styled(&layer.display_name, Style::default().fg(Color::White)),
+            ]));
+        }
+    }
+
+    lines.push(Line::from(""));
+    lines.push(Line::from(vec![Span::styled(
+        "  Traits (border style)",
+        STYLE_HIGHLIGHT,
+    )]));
+    lines.push(Line::from(vec![
+        Span::styled("    ─── ", STYLE_PRIMARY),
+        Span::styled("invariant (solid)", STYLE_DIM),
+    ]));
+    lines.push(Line::from(vec![
+        Span::styled("    ╌╌╌ ", STYLE_PRIMARY),
+        Span::styled("localized (dashed)", STYLE_DIM),
+    ]));
+    lines.push(Line::from(vec![
+        Span::styled("    ═══ ", STYLE_PRIMARY),
+        Span::styled("knowledge (double)", STYLE_DIM),
+    ]));
+    lines.push(Line::from(vec![
+        Span::styled("    ··· ", STYLE_PRIMARY),
+        Span::styled("derived (dotted)", STYLE_DIM),
+    ]));
+    lines.push(Line::from(vec![
+        Span::styled("    ─ ─ ", STYLE_PRIMARY),
+        Span::styled("job (thin)", STYLE_DIM),
+    ]));
+
+    lines.push(Line::from(""));
+    lines.push(Line::from(Span::styled(
+        "  Press any key to close",
+        STYLE_DIM,
+    )));
+
+    let block = Block::default()
+        .title(Span::styled(" Legend ", STYLE_ACCENT))
+        .borders(Borders::ALL)
+        .border_style(STYLE_ACCENT)
+        .style(Style::default().bg(COLOR_OVERLAY_BG));
+
+    let paragraph = Paragraph::new(lines).block(block);
+    f.render_widget(paragraph, legend_area);
 }
