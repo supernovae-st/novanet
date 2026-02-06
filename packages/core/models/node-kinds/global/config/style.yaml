@@ -1,9 +1,11 @@
 # packages/core/models/node-kinds/global/config/style.yaml
 # Style — Communication style for a locale (tone, formality, directness, warmth, humor, identity)
 #
+# v10.7: Added formality properties from Adaptation migration (formality_default, pronoun_preference,
+#        directness_level, warmth_level, formality_rules, length_preferences, seo_preferences, tone_modifiers)
 # v10.6: Added context_matrix, register_transitions, formality_scale, raw_markdown (hybrid approach)
 # Stability: Medium - update quarterly
-# Merges: locale-voice + locale-identity
+# Merges: locale-voice + locale-identity + style-related Adaptation properties
 
 node:
   name: Style
@@ -89,6 +91,87 @@ node:
         casual: "tu"
         never_switch_mid_conversation: true
         escalation_increases_formality: true
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # ADAPTATION MIGRATION: TIER 1 INDEXED SCALARS
+    # ═══════════════════════════════════════════════════════════════════════════
+    formality_default:
+      type: string
+      required: true
+      enum: ["formal", "informal", "neutral"]
+      description: "Default formality level for this locale"
+      example: "formal"
+      llm_context: "Base formality unless context specifies otherwise"
+
+    pronoun_preference:
+      type: string
+      required: false
+      enum: ["tu", "vous", "usted", "du", "sie", "mixed", "n_a"]
+      description: "Preferred pronoun form for direct address"
+      example: "vous"
+      llm_context: "Use this pronoun form when addressing the reader"
+
+    directness_level:
+      type: string
+      required: true
+      enum: ["direct", "indirect", "balanced"]
+      description: "Communication directness preference"
+      example: "indirect"
+      llm_context: "Direct = explicit CTAs; Indirect = softer suggestions; Balanced = context-dependent"
+
+    warmth_level:
+      type: string
+      required: true
+      enum: ["warm", "neutral", "reserved"]
+      description: "Emotional warmth in communication"
+      example: "neutral"
+      llm_context: "Warm = expressive; Neutral = professional; Reserved = restrained"
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # ADAPTATION MIGRATION: TIER 2 STRUCTURED JSON
+    # ═══════════════════════════════════════════════════════════════════════════
+    formality_rules:
+      type: json
+      required: false
+      description: "Context-specific formality overrides"
+      example:
+        b2b: "formal"
+        b2c_youth: "informal"
+        legal: "formal"
+        support_escalation: "formal"
+        marketing_promo: "casual"
+
+    length_preferences:
+      type: json
+      required: false
+      description: "Preferred content lengths by type (in characters)"
+      example:
+        headline: 60
+        subhead: 120
+        body_paragraph: 150
+        cta: 25
+        meta_description: 155
+
+    seo_preferences:
+      type: json
+      required: false
+      description: "SEO-related style preferences"
+      example:
+        keywords_per_100_words: 2
+        heading_style: "question"
+        meta_length: 155
+        title_format: "primary | brand"
+
+    tone_modifiers:
+      type: json
+      required: false
+      description: "Tone adjustments by context"
+      example:
+        urgency: "soft"
+        celebration: "expressive"
+        error: "apologetic"
+        success: "warm"
+        warning: "direct"
 
     # ═══════════════════════════════════════════════════════════════════════════
     # CONTEXT MATRIX
