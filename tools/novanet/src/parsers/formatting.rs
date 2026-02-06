@@ -5,6 +5,7 @@
 use std::collections::HashMap;
 use std::fs;
 use std::path::Path;
+use std::sync::LazyLock;
 
 use rayon::prelude::*;
 use regex::Regex;
@@ -12,6 +13,28 @@ use serde::{Deserialize, Serialize};
 use walkdir::WalkDir;
 
 use crate::{NovaNetError, Result};
+
+// ============================================================================
+// Lazy-compiled Regex Patterns
+// ============================================================================
+// Note: High-priority patterns for file metadata and frequently-parsed sections.
+// Additional patterns can be migrated incrementally.
+
+/// Template version extraction
+static RE_VERSION: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"template_version:\s*(.+)").expect("valid version regex"));
+
+/// Last updated date extraction
+static RE_DATE: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"last_updated:\s*(.+)").expect("valid date regex"));
+
+/// Data sources extraction: **Data Sources**: ...
+static RE_DATA_SOURCES: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"\*\*Data Sources\*\*:\s*(.+)").expect("valid data sources regex"));
+
+/// Section header: ## N. Title
+static RE_SECTION: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"##\s+\d+\.\s+(.+)").expect("valid section regex"));
 
 // ============================================================================
 // Main Structs
@@ -468,16 +491,13 @@ pub fn parse_formatting_file(path: &Path) -> Result<Formatting> {
 
 /// Parse YAML frontmatter.
 fn parse_frontmatter(content: &str) -> Result<(String, String)> {
-    let version_re = Regex::new(r"template_version:\s*(.+)").unwrap();
-    let date_re = Regex::new(r"last_updated:\s*(.+)").unwrap();
-
-    let version = version_re
+    let version = RE_VERSION
         .captures(content)
         .and_then(|c: regex::Captures| c.get(1))
         .map(|m: regex::Match| m.as_str().trim().to_string())
         .unwrap_or_else(|| "2.0".to_string());
 
-    let date = date_re
+    let date = RE_DATE
         .captures(content)
         .and_then(|c: regex::Captures| c.get(1))
         .map(|m: regex::Match| m.as_str().trim().to_string())
@@ -488,9 +508,7 @@ fn parse_frontmatter(content: &str) -> Result<(String, String)> {
 
 /// Parse data sources from content.
 fn parse_data_sources(content: &str) -> Vec<String> {
-    let re = Regex::new(r"\*\*Data Sources\*\*:\s*(.+)").unwrap();
-
-    re.captures(content)
+    RE_DATA_SOURCES.captures(content)
         .and_then(|c: regex::Captures| c.get(1))
         .map(|m: regex::Match| {
             m.as_str()
@@ -513,13 +531,12 @@ fn parse_data_sources(content: &str) -> Vec<String> {
 /// Split content into sections by ## headers.
 fn split_sections(content: &str) -> HashMap<String, String> {
     let mut sections = HashMap::new();
-    let section_re = Regex::new(r"##\s+\d+\.\s+(.+)").unwrap();
 
     let mut current_section: Option<String> = None;
     let mut current_content = String::new();
 
     for line in content.lines() {
-        if let Some(caps) = section_re.captures(line) {
+        if let Some(caps) = RE_SECTION.captures(line) {
             // Save previous section
             if let Some(ref name) = current_section {
                 sections.insert(name.clone(), current_content.clone());
