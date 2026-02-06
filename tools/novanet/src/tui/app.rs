@@ -9,10 +9,13 @@ use std::path::Path;
 use crossterm::event::{KeyCode, KeyEvent};
 
 use super::atlas::AtlasState;
+use super::audit::GlobalAuditStats;
 use super::data::{
     ArcKindDetails, KindArcsData, LayerDetails, RealmDetails, TaxonomyTree, TreeItem,
 };
+use super::schema::{CoverageStats, MatchedProperty};
 use super::theme::Theme;
+use super::yaml::{YamlSections, YamlViewSection};
 
 // =============================================================================
 // CONSTANTS
@@ -31,7 +34,7 @@ pub const INFO_SCROLL_MARGIN: usize = 5;
 pub const DEFAULT_TREE_HEIGHT: usize = 20;
 
 /// Navigation mode (matches Studio).
-/// Order: 1:Meta 2:Data 3:Overlay 4:Query 5:Atlas
+/// Order: 1:Meta 2:Data 3:Overlay 4:Query 5:Atlas 6:Audit
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum NavMode {
     #[default]
@@ -40,6 +43,7 @@ pub enum NavMode {
     Overlay,
     Query,
     Atlas,
+    Audit,
 }
 
 impl NavMode {
@@ -50,6 +54,7 @@ impl NavMode {
             NavMode::Overlay => "Overlay",
             NavMode::Query => "Query",
             NavMode::Atlas => "Atlas",
+            NavMode::Audit => "Audit",
         }
     }
 
@@ -59,11 +64,12 @@ impl NavMode {
             NavMode::Data => NavMode::Overlay,
             NavMode::Overlay => NavMode::Query,
             NavMode::Query => NavMode::Atlas,
-            NavMode::Atlas => NavMode::Meta,
+            NavMode::Atlas => NavMode::Audit,
+            NavMode::Audit => NavMode::Meta,
         }
     }
 
-    /// Get array index for mode_cursors (0-4).
+    /// Get array index for mode_cursors (0-5).
     pub fn index(&self) -> usize {
         match self {
             NavMode::Meta => 0,
@@ -71,6 +77,7 @@ impl NavMode {
             NavMode::Overlay => 2,
             NavMode::Query => 3,
             NavMode::Atlas => 4,
+            NavMode::Audit => 5,
         }
     }
 }
@@ -135,7 +142,8 @@ enum TreeItemData {
     Layer { key: String },
     ArcFamily { key: String },
     Section,
-    Instance,
+    /// Instance with its parent Kind's yaml_path (to show schema in YAML panel).
+    Instance { kind_yaml_path: String },
     None,
 }
 
@@ -192,8 +200,8 @@ pub struct App {
     pub mode: NavMode,
     pub focus: Focus,
     pub tree_cursor: usize,
-    /// Remember cursor position per mode (Meta, Data, Overlay, Query, Atlas).
-    pub mode_cursors: [usize; 5],
+    /// Remember cursor position per mode (Meta, Data, Overlay, Query, Atlas, Audit).
+    pub mode_cursors: [usize; 6],
     pub tree_scroll: usize, // Scroll offset for tree
     pub tree_height: usize, // Visible height (set by UI)
     pub tree: TaxonomyTree,
@@ -203,6 +211,9 @@ pub struct App {
     pub help_active: bool,
     // Legend overlay (color meanings)
     pub legend_active: bool,
+    // Recent items overlay (` key)
+    pub recent_items_active: bool,
+    pub recent_items_cursor: usize,
     /// Navigation history for Ctrl+o (back) / Ctrl+i (forward)
     pub nav_history: Vec<(NavMode, usize)>, // (mode, cursor)
     pub nav_history_pos: usize,             // Current position in history
@@ -215,6 +226,10 @@ pub struct App {
     pub yaml_path: String,
     pub yaml_scroll: usize,
     pub yaml_line_count: usize, // Cached line count (avoids per-scroll recomputation)
+    /// Parsed YAML sections for contextual view (Kind vs Instance).
+    pub yaml_sections: Option<YamlSections>,
+    /// Whether peek mode is active (showing hidden section in dim).
+    pub yaml_peek: bool,
     // Info panel scroll (separate from yaml)
     pub info_scroll: usize,
     pub info_line_count: usize, // Set by UI after building lines
@@ -253,22 +268,52 @@ pub struct App {
     pub atlas: AtlasState,
     /// Animation tick counter (increments each frame, used for spinners)
     pub tick: u16,
+    // ==========================================================================
+    // Schema Overlay State (Feature 1)
+    // ==========================================================================
+    /// Whether schema overlay is enabled in Data mode (toggle with 's')
+    pub schema_overlay_enabled: bool,
+    /// Matched properties for current instance (schema + values)
+    pub matched_properties: Option<Vec<MatchedProperty>>,
+    /// Coverage stats for current instance
+    pub coverage_stats: Option<CoverageStats>,
+    // ==========================================================================
+    // Property Focus State (Feature 3)
+    // ==========================================================================
+    /// Index of focused property in Info panel (for truncate intelligent)
+    pub focused_property_idx: usize,
+    // ==========================================================================
+    // JSON Pretty-Print State (Feature 4)
+    // ==========================================================================
+    /// Whether to pretty-print JSON values (toggle with 'J')
+    pub json_pretty: bool,
+    // ==========================================================================
+    // Audit Mode State (Feature 6)
+    // ==========================================================================
+    /// Audit statistics (loaded async when entering Audit mode)
+    pub audit_stats: Option<GlobalAuditStats>,
+    /// Pending audit stats load request
+    pub pending_audit_load: bool,
+    /// Cursor in audit mode (which Kind is selected)
+    pub audit_cursor: usize,
 }
 
 impl App {
     pub fn new(tree: TaxonomyTree, root_path: String) -> Self {
         let mut app = Self {
-            theme: Theme::new(), // Detect color mode once at startup
+            theme: Theme::with_root(&root_path), // Load colors + icons from YAML
             mode: NavMode::Meta,
             focus: Focus::Tree,
             tree_cursor: 0,
-            mode_cursors: [0; 5], // Init all modes at cursor 0
+            mode_cursors: [0; 6], // Init all modes at cursor 0 (Meta, Data, Overlay, Query, Atlas, Audit)
             tree_scroll: 0,
             tree_height: DEFAULT_TREE_HEIGHT,
             tree,
             search: SearchState::default(),
             help_active: false,
             legend_active: false,
+            recent_items_active: false,
+            recent_items_cursor: 0,
             nav_history: Vec::with_capacity(100),
             nav_history_pos: 0,
             status_message: None,
@@ -277,6 +322,8 @@ impl App {
             yaml_path: String::new(),
             yaml_scroll: 0,
             yaml_line_count: 0,
+            yaml_sections: None,
+            yaml_peek: false,
             info_scroll: 0,
             info_line_count: 0,
             root_path,
@@ -296,9 +343,33 @@ impl App {
             hide_empty: false,
             atlas: AtlasState::default(),
             tick: 0,
+            // Schema overlay (Feature 1)
+            schema_overlay_enabled: true, // Enabled by default
+            matched_properties: None,
+            coverage_stats: None,
+            // Property focus (Feature 3)
+            focused_property_idx: 0,
+            // JSON pretty-print (Feature 4)
+            json_pretty: false,
+            // Audit mode (Feature 6)
+            audit_stats: None,
+            pending_audit_load: false,
+            audit_cursor: 0,
         };
         app.load_yaml_for_current();
         app
+    }
+
+    /// Get the active YAML section based on current navigation mode.
+    /// - Meta mode → Kind section
+    /// - Data mode → Instance section
+    pub fn yaml_active_section(&self) -> YamlViewSection {
+        match self.mode {
+            NavMode::Meta => YamlViewSection::Kind,
+            NavMode::Data => YamlViewSection::Instance,
+            // Overlay/Query/Atlas default to Kind
+            _ => YamlViewSection::Kind,
+        }
     }
 
     /// Load YAML content for the current cursor position.
@@ -354,12 +425,16 @@ impl App {
             TreeItemData::Section => {
                 self.load_yaml_cached("packages/core/models/taxonomy.yaml");
             }
-            TreeItemData::Instance => {
-                // In Data mode, YAML panel shows JSON properties instead
-                // This is handled in ui.rs based on NavMode
-                self.yaml_path = "# Instance data".to_string();
-                self.yaml_content = "# Instance properties shown as JSON in Data mode".to_string();
-                self.yaml_line_count = 1;
+            TreeItemData::Instance { kind_yaml_path } => {
+                // Load the Kind's YAML to show Instance schema (standard_properties)
+                if !kind_yaml_path.is_empty() {
+                    self.load_yaml_cached(&kind_yaml_path);
+                } else {
+                    self.yaml_path.clear();
+                    self.yaml_content.clear();
+                    self.yaml_line_count = 0;
+                    self.yaml_sections = None;
+                }
             }
             TreeItemData::None => {
                 self.yaml_path.clear();
@@ -380,7 +455,15 @@ impl App {
                     .filtered_item_at(self.tree_cursor, kind_key)
                     .is_some()
                 {
-                    return TreeItemData::Instance;
+                    // Get the Kind's yaml_path for showing schema in YAML panel
+                    if let Some((_, _, kind)) = self.tree.find_kind(kind_key) {
+                        return TreeItemData::Instance {
+                            kind_yaml_path: kind.yaml_path.clone(),
+                        };
+                    }
+                    return TreeItemData::Instance {
+                        kind_yaml_path: String::new(),
+                    };
                 }
             }
             return TreeItemData::None;
@@ -418,7 +501,9 @@ impl App {
                 key: family.key.clone(),
             },
             Some(TreeItem::KindsSection) | Some(TreeItem::ArcsSection) => TreeItemData::Section,
-            Some(TreeItem::Instance(_, _, _, _)) => TreeItemData::Instance,
+            Some(TreeItem::Instance(_, _, kind, _)) => TreeItemData::Instance {
+                kind_yaml_path: kind.yaml_path.clone(),
+            },
             None => TreeItemData::None,
         }
     }
@@ -426,11 +511,14 @@ impl App {
     /// Load YAML content with caching (avoids re-reading files on every navigation).
     fn load_yaml_cached(&mut self, relative_path: &str) {
         self.yaml_path = relative_path.to_string();
+        self.yaml_peek = false; // Reset peek when loading new file
 
         // Check cache first
         if let Some(cached) = self.yaml_cache.get(relative_path) {
             self.yaml_content = cached.clone();
             self.yaml_line_count = self.yaml_content.lines().count();
+            // Parse sections for contextual view
+            self.yaml_sections = YamlSections::parse(&self.yaml_content);
             return;
         }
 
@@ -446,6 +534,8 @@ impl App {
         // Update display
         self.yaml_content = content;
         self.yaml_line_count = self.yaml_content.lines().count();
+        // Parse sections for contextual view
+        self.yaml_sections = YamlSections::parse(&self.yaml_content);
     }
 
     /// Build graph nodes for the currently selected item (display-only).
@@ -637,7 +727,7 @@ impl App {
                         }
                         idx += 1;
 
-                        if !self.tree.is_collapsed(&format!("layer:{}", layer.key)) {
+                        if !self.tree.is_collapsed(&format!("layer:{}:{}", realm.key, layer.key)) {
                             for kind in &layer.kinds {
                                 let match_display =
                                     fuzzy_match(&kind.display_name, &mut matcher, &pattern);
@@ -753,6 +843,11 @@ impl App {
             return true;
         }
 
+        // Recent items overlay - handles navigation and selection
+        if self.recent_items_active {
+            return self.handle_recent_items_key(key);
+        }
+
         // Search mode captures all input
         if self.search.active {
             return self.handle_search_key(key);
@@ -773,7 +868,7 @@ impl App {
             }
         }
 
-        // Atlas mode delegates to atlas state (except mode switching 1-5)
+        // Atlas mode delegates to atlas state (except mode switching 1-6)
         if self.mode == NavMode::Atlas {
             match key.code {
                 // Mode switching exits Atlas mode (with cursor memory)
@@ -809,6 +904,13 @@ impl App {
                     // Already in Atlas, no-op
                     return false;
                 }
+                KeyCode::Char('6') => {
+                    self.save_mode_cursor();
+                    self.mode = NavMode::Audit;
+                    self.restore_mode_cursor(NavMode::Audit);
+                    self.pending_audit_load = true;
+                    return true;
+                }
                 KeyCode::Char('?') => {
                     self.help_active = true;
                     return true;
@@ -823,6 +925,79 @@ impl App {
                 }
                 // All other keys handled by atlas
                 _ => return self.atlas.handle_key(key),
+            }
+        }
+
+        // Audit mode: handle navigation and mode switching
+        if self.mode == NavMode::Audit {
+            match key.code {
+                // Mode switching exits Audit mode
+                KeyCode::Char('1') => {
+                    self.save_mode_cursor();
+                    self.mode = NavMode::Meta;
+                    self.restore_mode_cursor(NavMode::Meta);
+                    self.load_yaml_for_current();
+                    return true;
+                }
+                KeyCode::Char('2') => {
+                    self.save_mode_cursor();
+                    self.mode = NavMode::Data;
+                    self.restore_mode_cursor(NavMode::Data);
+                    self.request_instance_load_for_current();
+                    return true;
+                }
+                KeyCode::Char('3') => {
+                    self.save_mode_cursor();
+                    self.mode = NavMode::Overlay;
+                    self.restore_mode_cursor(NavMode::Overlay);
+                    self.load_yaml_for_current();
+                    return true;
+                }
+                KeyCode::Char('4') => {
+                    self.save_mode_cursor();
+                    self.mode = NavMode::Query;
+                    self.restore_mode_cursor(NavMode::Query);
+                    self.load_yaml_for_current();
+                    return true;
+                }
+                KeyCode::Char('5') => {
+                    self.save_mode_cursor();
+                    self.mode = NavMode::Atlas;
+                    self.restore_mode_cursor(NavMode::Atlas);
+                    return true;
+                }
+                KeyCode::Char('6') => {
+                    // Already in Audit, no-op
+                    return false;
+                }
+                // Navigation in Audit mode
+                KeyCode::Up | KeyCode::Char('k') => {
+                    if self.audit_cursor > 0 {
+                        self.audit_cursor -= 1;
+                    }
+                    return true;
+                }
+                KeyCode::Down | KeyCode::Char('j') => {
+                    if let Some(stats) = &self.audit_stats {
+                        let max = stats.kinds.len().saturating_sub(1);
+                        if self.audit_cursor < max {
+                            self.audit_cursor += 1;
+                        }
+                    }
+                    return true;
+                }
+                // Refresh audit stats
+                KeyCode::Char('r') => {
+                    self.pending_audit_load = true;
+                    self.audit_cursor = 0;
+                    self.set_status("Refreshing audit data...");
+                    return true;
+                }
+                KeyCode::Char('?') => {
+                    self.help_active = true;
+                    return true;
+                }
+                _ => return false, // Ignore other keys in Audit mode
             }
         }
 
@@ -842,6 +1017,15 @@ impl App {
             // Open color legend (F1 = accessible, out of flow)
             KeyCode::F(1) => {
                 self.legend_active = true;
+                true
+            }
+
+            // Open recent items popup (` = backtick)
+            KeyCode::Char('`') => {
+                if !self.nav_history.is_empty() {
+                    self.recent_items_active = true;
+                    self.recent_items_cursor = 0;
+                }
                 true
             }
 
@@ -900,6 +1084,15 @@ impl App {
                 self.init_atlas_from_current();
                 true
             }
+            KeyCode::Char('6') => {
+                self.exit_filtered_data_mode();
+                self.save_mode_cursor();
+                self.mode = NavMode::Audit;
+                self.restore_mode_cursor(NavMode::Audit);
+                // Request audit stats load
+                self.pending_audit_load = true;
+                true
+            }
             KeyCode::Char('n') | KeyCode::Char('N') => {
                 self.exit_filtered_data_mode();
                 self.save_mode_cursor();
@@ -909,6 +1102,10 @@ impl App {
                 // Initialize atlas when cycling to it
                 if new_mode == NavMode::Atlas {
                     self.init_atlas_from_current();
+                }
+                // Request audit stats when cycling to Audit
+                if new_mode == NavMode::Audit {
+                    self.pending_audit_load = true;
                 }
                 self.load_yaml_for_current();
                 true
@@ -934,12 +1131,21 @@ impl App {
                 true
             }
 
-            // Enter: toggle collapse/expand (Tree only)
+            // Enter: toggle collapse/expand (Tree) or toggle peek (YAML)
             KeyCode::Enter => {
-                if self.focus == Focus::Tree {
-                    if let Some(key) = self.tree.collapse_key_at(self.tree_cursor) {
-                        self.tree.toggle(&key);
+                match self.focus {
+                    Focus::Tree => {
+                        if let Some(key) = self.tree.collapse_key_at(self.tree_cursor) {
+                            self.tree.toggle(&key);
+                        }
                     }
+                    Focus::Yaml => {
+                        // Toggle peek mode (show/hide other section)
+                        if self.yaml_sections.is_some() {
+                            self.yaml_peek = !self.yaml_peek;
+                        }
+                    }
+                    _ => {}
                 }
                 true
             }
@@ -1143,6 +1349,62 @@ impl App {
                 true
             }
 
+            // Jump to parent [p]
+            KeyCode::Char('p') => {
+                if let Some(parent_cursor) =
+                    self.tree.find_parent_cursor(self.tree_cursor, self.is_data_mode())
+                {
+                    self.tree_cursor = parent_cursor;
+                    self.ensure_cursor_visible();
+                    self.set_status("↑ Parent");
+                }
+                true
+            }
+
+            // Toggle schema overlay (s) - only in Data mode
+            KeyCode::Char('s') => {
+                if self.is_data_mode() {
+                    self.schema_overlay_enabled = !self.schema_overlay_enabled;
+                    // Load/clear matched properties based on new state
+                    self.update_schema_match_for_current();
+                    self.set_status(if self.schema_overlay_enabled {
+                        "Schema overlay ON"
+                    } else {
+                        "Schema overlay OFF"
+                    });
+                }
+                true
+            }
+
+            // Toggle JSON pretty-print (J) - only when viewing properties
+            KeyCode::Char('J') => {
+                self.json_pretty = !self.json_pretty;
+                self.set_status(if self.json_pretty {
+                    "JSON pretty-print ON"
+                } else {
+                    "JSON compact mode"
+                });
+                true
+            }
+
+            // Property focus navigation (+/-) - Feature 3: Truncate Intelligent
+            // Navigate focused property in schema overlay
+            KeyCode::Char('+') | KeyCode::Char('=') => {
+                if self.is_data_mode() && self.schema_overlay_enabled {
+                    if let Some(matched) = &self.matched_properties {
+                        let max_idx = matched.len().saturating_sub(1);
+                        self.focused_property_idx = (self.focused_property_idx + 1).min(max_idx);
+                    }
+                }
+                true
+            }
+            KeyCode::Char('-') | KeyCode::Char('_') => {
+                if self.is_data_mode() && self.schema_overlay_enabled {
+                    self.focused_property_idx = self.focused_property_idx.saturating_sub(1);
+                }
+                true
+            }
+
             // Navigation history: back (Ctrl+o)
             KeyCode::Char('o') if key.modifiers.contains(crossterm::event::KeyModifiers::CONTROL) => {
                 self.nav_back();
@@ -1155,8 +1417,14 @@ impl App {
                 true
             }
 
-            // Esc: exit filtered Data mode (if active)
+            // Esc: close peek (YAML), or exit filtered Data mode
             KeyCode::Esc => {
+                // First priority: close yaml peek if active
+                if self.yaml_peek {
+                    self.yaml_peek = false;
+                    return true;
+                }
+                // Second priority: exit filtered Data mode
                 if self.is_filtered_data_mode() {
                     self.exit_filtered_data_mode();
                     self.mode = NavMode::Meta;
@@ -1184,14 +1452,14 @@ impl App {
                 true
             }
 
-            // Navigate results
-            KeyCode::Up => {
+            // Navigate results (arrow keys and vim j/k)
+            KeyCode::Up | KeyCode::Char('k') => {
                 if self.search.cursor > 0 {
                     self.search.cursor -= 1;
                 }
                 true
             }
-            KeyCode::Down => {
+            KeyCode::Down | KeyCode::Char('j') => {
                 let max = self.search.results.len().saturating_sub(1);
                 if self.search.cursor < max {
                     self.search.cursor += 1;
@@ -1199,7 +1467,7 @@ impl App {
                 true
             }
 
-            // Type character
+            // Type character (j/k are handled above for navigation)
             KeyCode::Char(c) => {
                 self.search.query.push(c);
                 self.update_search();
@@ -1214,6 +1482,58 @@ impl App {
             }
 
             _ => false,
+        }
+    }
+
+    /// Handle key events for the recent items popup.
+    fn handle_recent_items_key(&mut self, key: KeyEvent) -> bool {
+        match key.code {
+            // Close popup
+            KeyCode::Esc | KeyCode::Char('`') => {
+                self.recent_items_active = false;
+                true
+            }
+
+            // Select and jump to item
+            KeyCode::Enter => {
+                self.select_recent_item();
+                true
+            }
+
+            // Navigate up
+            KeyCode::Up | KeyCode::Char('k') => {
+                if self.recent_items_cursor > 0 {
+                    self.recent_items_cursor -= 1;
+                }
+                true
+            }
+
+            // Navigate down
+            KeyCode::Down | KeyCode::Char('j') => {
+                let max = self.nav_history.len().saturating_sub(1);
+                if self.recent_items_cursor < max {
+                    self.recent_items_cursor += 1;
+                }
+                true
+            }
+
+            _ => true, // Consume all other keys while popup is open
+        }
+    }
+
+    /// Select and jump to the currently highlighted recent item.
+    fn select_recent_item(&mut self) {
+        // History is stored oldest→newest, but we display newest first
+        let display_idx = self.recent_items_cursor;
+        let history_idx = self.nav_history.len().saturating_sub(1 + display_idx);
+
+        if let Some(&(mode, cursor)) = self.nav_history.get(history_idx) {
+            self.recent_items_active = false;
+            self.mode = mode;
+            self.tree_cursor = cursor;
+            self.ensure_cursor_visible();
+            self.load_yaml_for_current();
+            self.set_status("↩ Jumped to recent item");
         }
     }
 
@@ -1324,7 +1644,7 @@ impl App {
         };
         if let Some(key) = key {
             // Show key in status (user can copy from terminal with mouse)
-            self.set_status(&format!("📋 {}", key));
+            self.set_status(&format!("□ {}", key));
         }
     }
 
@@ -1457,6 +1777,41 @@ impl App {
                 self.pending_instance_load = Some(kind.key.clone());
             }
         }
+
+        // Also update schema match if on an instance
+        self.update_schema_match_for_current();
+    }
+
+    /// Update schema match for the current instance (if any).
+    /// Called after navigation or schema overlay toggle.
+    pub fn update_schema_match_for_current(&mut self) {
+        // Reset focused property index when navigating to new instance
+        self.focused_property_idx = 0;
+
+        // Only relevant in Data mode with schema overlay enabled
+        if !self.is_data_mode() || !self.schema_overlay_enabled {
+            self.matched_properties = None;
+            self.coverage_stats = None;
+            return;
+        }
+
+        // Check if current item is an Instance
+        // Note: item_at_for_mode takes (cursor, data_mode: bool), data_mode=true shows instances
+        // Clone properties to avoid borrow conflict
+        let props = if let Some(super::data::TreeItem::Instance(_, _, _, instance)) =
+            self.tree.item_at_for_mode(self.tree_cursor, true)
+        {
+            Some(instance.properties.clone())
+        } else {
+            None
+        };
+
+        if let Some(properties) = props {
+            self.load_matched_properties(&properties);
+        } else {
+            self.matched_properties = None;
+            self.coverage_stats = None;
+        }
     }
 
     /// Check and clear pending instance load request.
@@ -1513,6 +1868,12 @@ impl App {
             || self.pending_arc_kind_load.is_some()
             || self.pending_realm_load.is_some()
             || self.pending_layer_load.is_some()
+    }
+
+    /// Check if any overlay (help, legend, search, recent) is currently open.
+    /// Used to prevent 'q' from quitting while overlays are active.
+    pub fn has_overlay_open(&self) -> bool {
+        self.help_active || self.legend_active || self.search.active || self.recent_items_active
     }
 
     /// Get the current spinner frame character (braille dots animation).
@@ -1619,6 +1980,74 @@ impl App {
     pub fn set_atlas_page_composition(&mut self, data: super::atlas::PageCompositionData) {
         self.atlas.page_data = Some(data);
     }
+
+    // =========================================================================
+    // Audit Mode Methods (Feature 6)
+    // =========================================================================
+
+    /// Check if Audit stats need loading (returns true once then resets).
+    #[allow(dead_code)] // WIP: Audit mode implementation
+    pub fn take_pending_audit_load(&mut self) -> bool {
+        if self.pending_audit_load && self.mode == NavMode::Audit {
+            self.pending_audit_load = false;
+            true
+        } else {
+            false
+        }
+    }
+
+    /// Set Audit statistics after async load.
+    #[allow(dead_code)] // WIP: Audit mode implementation
+    pub fn set_audit_stats(&mut self, stats: GlobalAuditStats) {
+        self.audit_stats = Some(stats);
+    }
+
+    // =========================================================================
+    // Schema Overlay Methods (Feature 1)
+    // =========================================================================
+
+    /// Load matched properties for the current instance (schema + values).
+    /// Called after loading instance data to prepare schema overlay.
+    pub fn load_matched_properties(&mut self, instance_props: &std::collections::BTreeMap<String, serde_json::Value>) {
+        use super::schema::{load_schema_properties, match_properties, CoverageStats};
+
+        // Only in Data mode with schema overlay enabled
+        if !self.is_data_mode() || !self.schema_overlay_enabled {
+            self.matched_properties = None;
+            self.coverage_stats = None;
+            return;
+        }
+
+        // Need the Kind's YAML path to load schema
+        if self.yaml_path.is_empty() {
+            self.matched_properties = None;
+            self.coverage_stats = None;
+            return;
+        }
+
+        // Load schema from YAML
+        let schema = load_schema_properties(&self.root_path, &self.yaml_path);
+        if schema.is_empty() {
+            self.matched_properties = None;
+            self.coverage_stats = None;
+            return;
+        }
+
+        // Match properties
+        let matched = match_properties(&schema, instance_props);
+        let stats = CoverageStats::from_matched(&matched);
+
+        self.matched_properties = Some(matched);
+        self.coverage_stats = Some(stats);
+    }
+
+    /// Clear matched properties (called when leaving Data mode or instance).
+    #[allow(dead_code)] // WIP: Schema overlay implementation
+    pub fn clear_matched_properties(&mut self) {
+        self.matched_properties = None;
+        self.coverage_stats = None;
+        self.focused_property_idx = 0;
+    }
 }
 
 #[cfg(test)]
@@ -1646,6 +2075,8 @@ mod tests {
             schema_hint: String::new(),
             context_budget: String::new(),
             knowledge_tier: None,
+            health_percent: None,
+            issues_count: None,
         };
 
         let page_kind = KindInfo {
@@ -1662,6 +2093,8 @@ mod tests {
             schema_hint: String::new(),
             context_budget: String::new(),
             knowledge_tier: None,
+            health_percent: None,
+            issues_count: None,
         };
 
         let locale_knowledge = LayerInfo {
@@ -1842,6 +2275,9 @@ mod tests {
 
         app.mode = app.mode.cycle();
         assert_eq!(app.mode, NavMode::Atlas);
+
+        app.mode = app.mode.cycle();
+        assert_eq!(app.mode, NavMode::Audit);
 
         app.mode = app.mode.cycle();
         assert_eq!(app.mode, NavMode::Meta); // Cycle back
