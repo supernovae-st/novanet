@@ -150,9 +150,12 @@ pub struct ValidationIssue {
     pub message: String,
 }
 
+/// Severity level for schema validation issues.
 #[derive(Debug, PartialEq, Eq)]
 pub enum Severity {
+    /// Critical issue that must be fixed before proceeding.
     Error,
+    /// Non-critical issue that should be addressed.
     Warning,
 }
 
