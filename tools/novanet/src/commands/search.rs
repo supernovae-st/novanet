@@ -11,8 +11,10 @@ use tracing::instrument;
 
 /// Build a search query with optional Kind filter.
 pub fn build_search_query(query: &str, kind: Option<&str>, limit: i64) -> CypherStatement {
-    let mut cypher = String::new();
-    let mut params: Vec<(String, ParamValue)> = Vec::new();
+    // Pre-allocate: base query ~230 chars + kind filter ~50 chars + return clause ~120 chars
+    let mut cypher = String::with_capacity(400);
+    // 2-3 params: query, limit, optional kind
+    let mut params: Vec<(String, ParamValue)> = Vec::with_capacity(3);
 
     // Base: search across key, display_name, description
     cypher.push_str(
