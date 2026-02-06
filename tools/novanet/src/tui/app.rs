@@ -140,6 +140,39 @@ pub struct GraphNode {
     pub color: Option<String>,     // Hex color from taxonomy
 }
 
+// =============================================================================
+// SUB-STATES (extracted for cleaner architecture)
+// =============================================================================
+
+/// Search state for nucleo fuzzy search (extracted sub-state).
+#[derive(Debug, Default)]
+pub struct SearchState {
+    /// Whether search overlay is active.
+    pub active: bool,
+    /// Current search query string.
+    pub query: String,
+    /// Indices into flattened tree matching the query.
+    pub results: Vec<usize>,
+    /// Fuzzy match scores (sorted descending, parallel to results).
+    pub scores: Vec<u16>,
+    /// Character positions for highlighting (idx -> matched positions).
+    pub matches: FxHashMap<usize, Vec<u32>>,
+    /// Current cursor within search results.
+    pub cursor: usize,
+}
+
+impl SearchState {
+    /// Clear all search state.
+    pub fn clear(&mut self) {
+        self.active = false;
+        self.query.clear();
+        self.results.clear();
+        self.scores.clear();
+        self.matches.clear();
+        self.cursor = 0;
+    }
+}
+
 /// Main app state.
 #[allow(dead_code)]
 pub struct App {
@@ -151,13 +184,8 @@ pub struct App {
     pub tree_scroll: usize, // Scroll offset for tree
     pub tree_height: usize, // Visible height (set by UI)
     pub tree: TaxonomyTree,
-    // Search state (nucleo fuzzy search)
-    pub search_active: bool,
-    pub search_query: String,
-    pub search_results: Vec<usize>, // indices into flattened tree
-    pub search_scores: Vec<u16>,    // fuzzy match scores (sorted desc)
-    pub search_matches: FxHashMap<usize, Vec<u32>>, // idx -> matched char positions for highlighting
-    pub search_cursor: usize,
+    /// Search state (extracted sub-state).
+    pub search: SearchState,
     // Help overlay
     pub help_active: bool,
     // YAML preview
@@ -215,12 +243,7 @@ impl App {
             tree_scroll: 0,
             tree_height: DEFAULT_TREE_HEIGHT,
             tree,
-            search_active: false,
-            search_query: String::new(),
-            search_results: Vec::new(),
-            search_scores: Vec::new(),
-            search_matches: FxHashMap::default(),
-            search_cursor: 0,
+            search: SearchState::default(),
             help_active: false,
             yaml_content: String::new(),
             yaml_path: String::new(),
@@ -527,18 +550,18 @@ impl App {
     /// Update search results based on current query using nucleo fuzzy matching.
     /// Results are sorted by match score (best matches first).
     pub fn update_search(&mut self) {
-        self.search_results.clear();
-        self.search_scores.clear();
-        self.search_matches.clear();
+        self.search.results.clear();
+        self.search.scores.clear();
+        self.search.matches.clear();
 
-        if self.search_query.is_empty() {
+        if self.search.query.is_empty() {
             return;
         }
 
         // Setup nucleo matcher with smart case matching
         let mut matcher = Matcher::new(Config::DEFAULT);
         let pattern = Atom::new(
-            &self.search_query,
+            &self.search.query,
             CaseMatching::Smart, // Case-insensitive unless query has uppercase
             Normalization::Smart,
             AtomKind::Fuzzy, // Fuzzy matching (not exact)
@@ -636,20 +659,20 @@ impl App {
 
         // Extract into separate vectors
         for (idx, score, indices) in matches {
-            self.search_results.push(idx);
-            self.search_scores.push(score);
-            self.search_matches.insert(idx, indices);
+            self.search.results.push(idx);
+            self.search.scores.push(score);
+            self.search.matches.insert(idx, indices);
         }
 
         // Reset cursor if out of bounds
-        if self.search_cursor >= self.search_results.len() {
-            self.search_cursor = 0;
+        if self.search.cursor >= self.search.results.len() {
+            self.search.cursor = 0;
         }
     }
 
     /// Select current search result and close search.
     pub fn select_search_result(&mut self) {
-        if let Some(&idx) = self.search_results.get(self.search_cursor) {
+        if let Some(&idx) = self.search.results.get(self.search.cursor) {
             self.tree_cursor = idx;
             self.ensure_cursor_visible();
         }
@@ -658,22 +681,17 @@ impl App {
 
     /// Close search overlay.
     pub fn close_search(&mut self) {
-        self.search_active = false;
-        self.search_query.clear();
-        self.search_results.clear();
-        self.search_scores.clear();
-        self.search_matches.clear();
-        self.search_cursor = 0;
+        self.search.clear();
     }
 
     /// Navigate to next search result (n key).
     pub fn next_search_result(&mut self) {
-        if self.search_results.is_empty() {
+        if self.search.results.is_empty() {
             return;
         }
-        let max = self.search_results.len().saturating_sub(1);
-        self.search_cursor = (self.search_cursor + 1).min(max);
-        if let Some(&target_idx) = self.search_results.get(self.search_cursor) {
+        let max = self.search.results.len().saturating_sub(1);
+        self.search.cursor = (self.search.cursor + 1).min(max);
+        if let Some(&target_idx) = self.search.results.get(self.search.cursor) {
             self.tree_cursor = target_idx;
             self.ensure_cursor_visible();
             self.load_yaml_for_current();
@@ -682,11 +700,11 @@ impl App {
 
     /// Navigate to previous search result (N key).
     pub fn prev_search_result(&mut self) {
-        if self.search_results.is_empty() {
+        if self.search.results.is_empty() {
             return;
         }
-        self.search_cursor = self.search_cursor.saturating_sub(1);
-        if let Some(&target_idx) = self.search_results.get(self.search_cursor) {
+        self.search.cursor = self.search.cursor.saturating_sub(1);
+        if let Some(&target_idx) = self.search.results.get(self.search.cursor) {
             self.tree_cursor = target_idx;
             self.ensure_cursor_visible();
             self.load_yaml_for_current();
@@ -702,7 +720,7 @@ impl App {
         }
 
         // Search mode captures all input
-        if self.search_active {
+        if self.search.active {
             return self.handle_search_key(key);
         }
 
@@ -751,7 +769,7 @@ impl App {
                     return true;
                 }
                 KeyCode::Char('f') => {
-                    self.search_active = true;
+                    self.search.active = true;
                     return true;
                 }
                 // All other keys handled by atlas
@@ -768,7 +786,7 @@ impl App {
 
             // Open search (f = find)
             KeyCode::Char('f') => {
-                self.search_active = true;
+                self.search.active = true;
                 true
             }
 
@@ -1088,29 +1106,29 @@ impl App {
 
             // Navigate results
             KeyCode::Up => {
-                if self.search_cursor > 0 {
-                    self.search_cursor -= 1;
+                if self.search.cursor > 0 {
+                    self.search.cursor -= 1;
                 }
                 true
             }
             KeyCode::Down => {
-                let max = self.search_results.len().saturating_sub(1);
-                if self.search_cursor < max {
-                    self.search_cursor += 1;
+                let max = self.search.results.len().saturating_sub(1);
+                if self.search.cursor < max {
+                    self.search.cursor += 1;
                 }
                 true
             }
 
             // Type character
             KeyCode::Char(c) => {
-                self.search_query.push(c);
+                self.search.query.push(c);
                 self.update_search();
                 true
             }
 
             // Delete character
             KeyCode::Backspace => {
-                self.search_query.pop();
+                self.search.query.pop();
                 self.update_search();
                 true
             }
@@ -1897,95 +1915,95 @@ mod tests {
     fn test_next_search_result_empty() {
         let mut app = create_test_app();
         // No search results - should do nothing
-        app.search_results.clear();
-        app.search_cursor = 0;
+        app.search.results.clear();
+        app.search.cursor = 0;
 
         app.next_search_result();
 
         // Cursor should remain at 0
-        assert_eq!(app.search_cursor, 0);
+        assert_eq!(app.search.cursor, 0);
     }
 
     #[test]
     fn test_next_search_result_advances() {
         let mut app = create_test_app();
-        app.search_results = vec![0, 3, 5];
-        app.search_cursor = 0;
+        app.search.results = vec![0, 3, 5];
+        app.search.cursor = 0;
         app.tree_height = 20; // Ensure cursor is visible
 
         app.next_search_result();
 
-        assert_eq!(app.search_cursor, 1);
+        assert_eq!(app.search.cursor, 1);
         assert_eq!(app.tree_cursor, 3); // Jumped to second result
     }
 
     #[test]
     fn test_next_search_result_stops_at_end() {
         let mut app = create_test_app();
-        app.search_results = vec![0, 3];
-        app.search_cursor = 1; // Already at last result
+        app.search.results = vec![0, 3];
+        app.search.cursor = 1; // Already at last result
         app.tree_height = 20;
 
         app.next_search_result();
 
         // Should stay at last result
-        assert_eq!(app.search_cursor, 1);
+        assert_eq!(app.search.cursor, 1);
     }
 
     #[test]
     fn test_prev_search_result_empty() {
         let mut app = create_test_app();
-        app.search_results.clear();
-        app.search_cursor = 0;
+        app.search.results.clear();
+        app.search.cursor = 0;
 
         app.prev_search_result();
 
-        assert_eq!(app.search_cursor, 0);
+        assert_eq!(app.search.cursor, 0);
     }
 
     #[test]
     fn test_prev_search_result_goes_back() {
         let mut app = create_test_app();
-        app.search_results = vec![0, 3, 5];
-        app.search_cursor = 2;
+        app.search.results = vec![0, 3, 5];
+        app.search.cursor = 2;
         app.tree_height = 20;
 
         app.prev_search_result();
 
-        assert_eq!(app.search_cursor, 1);
+        assert_eq!(app.search.cursor, 1);
         assert_eq!(app.tree_cursor, 3);
     }
 
     #[test]
     fn test_prev_search_result_stops_at_start() {
         let mut app = create_test_app();
-        app.search_results = vec![0, 3];
-        app.search_cursor = 0; // Already at first result
+        app.search.results = vec![0, 3];
+        app.search.cursor = 0; // Already at first result
         app.tree_height = 20;
 
         app.prev_search_result();
 
-        assert_eq!(app.search_cursor, 0);
+        assert_eq!(app.search.cursor, 0);
     }
 
     #[test]
     fn test_close_search_clears_all_state() {
         let mut app = create_test_app();
-        app.search_active = true;
-        app.search_query = "test".to_string();
-        app.search_results = vec![1, 2, 3];
-        app.search_scores = vec![100, 90, 80];
-        app.search_matches.insert(1, vec![0, 2]);
-        app.search_cursor = 2;
+        app.search.active = true;
+        app.search.query = "test".to_string();
+        app.search.results = vec![1, 2, 3];
+        app.search.scores = vec![100, 90, 80];
+        app.search.matches.insert(1, vec![0, 2]);
+        app.search.cursor = 2;
 
         app.close_search();
 
-        assert!(!app.search_active);
-        assert!(app.search_query.is_empty());
-        assert!(app.search_results.is_empty());
-        assert!(app.search_scores.is_empty());
-        assert!(app.search_matches.is_empty());
-        assert_eq!(app.search_cursor, 0);
+        assert!(!app.search.active);
+        assert!(app.search.query.is_empty());
+        assert!(app.search.results.is_empty());
+        assert!(app.search.scores.is_empty());
+        assert!(app.search.matches.is_empty());
+        assert_eq!(app.search.cursor, 0);
     }
 
     // ========================================================================
@@ -2028,12 +2046,12 @@ mod tests {
         let mut app = create_test_app();
 
         // Empty query
-        app.search_query = String::new();
+        app.search.query = String::new();
         app.update_search();
 
-        assert!(app.search_results.is_empty());
-        assert!(app.search_scores.is_empty());
-        assert!(app.search_matches.is_empty());
+        assert!(app.search.results.is_empty());
+        assert!(app.search.scores.is_empty());
+        assert!(app.search.matches.is_empty());
     }
 
     #[test]
@@ -2041,18 +2059,18 @@ mod tests {
         let mut app = create_test_app();
 
         // Search for "Page" (exact match exists)
-        app.search_query = "Page".to_string();
+        app.search.query = "Page".to_string();
         app.update_search();
 
-        assert!(!app.search_results.is_empty(), "Should find at least one result");
+        assert!(!app.search.results.is_empty(), "Should find at least one result");
 
         // The result should include the index of "Page" kind
         // Tree structure: Kinds(0), global(1), locale-knowledge(2), Locale(3),
         //                 tenant(4), structure(5), Page(6), Arcs(7)
         assert!(
-            app.search_results.contains(&6),
+            app.search.results.contains(&6),
             "Should find Page at index 6, got: {:?}",
-            app.search_results
+            app.search.results
         );
     }
 
@@ -2061,10 +2079,10 @@ mod tests {
         let mut app = create_test_app();
 
         // Search for "page" (lowercase) should match "Page"
-        app.search_query = "page".to_string();
+        app.search.query = "page".to_string();
         app.update_search();
 
-        assert!(!app.search_results.is_empty(), "Should find case-insensitive match");
+        assert!(!app.search.results.is_empty(), "Should find case-insensitive match");
     }
 
     #[test]
@@ -2072,13 +2090,13 @@ mod tests {
         let mut app = create_test_app();
 
         // Search for "loc" should match "Locale" and "Locale Knowledge"
-        app.search_query = "loc".to_string();
+        app.search.query = "loc".to_string();
         app.update_search();
 
         assert!(
-            app.search_results.len() >= 2,
+            app.search.results.len() >= 2,
             "Should find multiple partial matches, got: {}",
-            app.search_results.len()
+            app.search.results.len()
         );
     }
 
@@ -2087,7 +2105,7 @@ mod tests {
         let mut app = create_test_app();
 
         // Search for "pg" should fuzzy match "Page"
-        app.search_query = "pg".to_string();
+        app.search.query = "pg".to_string();
         app.update_search();
 
         // May or may not find - depends on fuzzy threshold
@@ -2100,16 +2118,16 @@ mod tests {
         let mut app = create_test_app();
 
         // Search for "l" which matches multiple items
-        app.search_query = "l".to_string();
+        app.search.query = "l".to_string();
         app.update_search();
 
-        if app.search_scores.len() >= 2 {
+        if app.search.scores.len() >= 2 {
             // Scores should be in descending order (best first)
-            for i in 1..app.search_scores.len() {
+            for i in 1..app.search.scores.len() {
                 assert!(
-                    app.search_scores[i - 1] >= app.search_scores[i],
+                    app.search.scores[i - 1] >= app.search.scores[i],
                     "Scores should be descending: {:?}",
-                    app.search_scores
+                    app.search.scores
                 );
             }
         }
@@ -2120,13 +2138,13 @@ mod tests {
         let mut app = create_test_app();
 
         // Search for "Page"
-        app.search_query = "Page".to_string();
+        app.search.query = "Page".to_string();
         app.update_search();
 
         // Should have match positions for each result
-        for &idx in &app.search_results {
+        for &idx in &app.search.results {
             assert!(
-                app.search_matches.contains_key(&idx),
+                app.search.matches.contains_key(&idx),
                 "Should have match positions for index {}",
                 idx
             );
@@ -2138,17 +2156,17 @@ mod tests {
         let mut app = create_test_app();
 
         // First search
-        app.search_query = "Page".to_string();
+        app.search.query = "Page".to_string();
         app.update_search();
-        let first_results = app.search_results.clone();
+        let first_results = app.search.results.clone();
         assert!(!first_results.is_empty());
 
         // Second search clears previous results
-        app.search_query = "Locale".to_string();
+        app.search.query = "Locale".to_string();
         app.update_search();
 
         assert_ne!(
-            app.search_results, first_results,
+            app.search.results, first_results,
             "New search should replace old results"
         );
     }
@@ -2161,13 +2179,13 @@ mod tests {
         app.tree.collapsed.insert("kinds".to_string());
 
         // Search for "Page" (which is under kinds)
-        app.search_query = "Page".to_string();
+        app.search.query = "Page".to_string();
         app.update_search();
 
         // When kinds is collapsed, we shouldn't search its children
         // But we should still find "Node Kinds" header if it matches
         assert!(
-            !app.search_results.contains(&6),
+            !app.search.results.contains(&6),
             "Should not find Page when kinds is collapsed"
         );
     }
@@ -2177,7 +2195,7 @@ mod tests {
         let mut app = create_test_app();
 
         // Unicode query should not crash
-        app.search_query = "日本語".to_string();
+        app.search.query = "日本語".to_string();
         app.update_search();
 
         // May or may not find results, but shouldn't panic
@@ -2189,7 +2207,7 @@ mod tests {
         let mut app = create_test_app();
 
         // Special characters should not crash
-        app.search_query = ".*+?[]()".to_string();
+        app.search.query = ".*+?[]()".to_string();
         app.update_search();
 
         // nucleo handles regex-like chars as literals, shouldn't panic
@@ -2199,13 +2217,13 @@ mod tests {
     fn test_search_results_match_scores_length() {
         let mut app = create_test_app();
 
-        app.search_query = "a".to_string();
+        app.search.query = "a".to_string();
         app.update_search();
 
         // search_results and search_scores should have same length
         assert_eq!(
-            app.search_results.len(),
-            app.search_scores.len(),
+            app.search.results.len(),
+            app.search.scores.len(),
             "Results and scores vectors should have same length"
         );
     }
@@ -2214,21 +2232,21 @@ mod tests {
     fn test_search_activate_deactivate() {
         let mut app = create_test_app();
 
-        assert!(!app.search_active, "Search should start inactive");
+        assert!(!app.search.active, "Search should start inactive");
 
-        app.search_active = true;
-        app.search_query = "test".to_string();
+        app.search.active = true;
+        app.search.query = "test".to_string();
         app.update_search();
 
-        assert!(app.search_active, "Search should be active");
+        assert!(app.search.active, "Search should be active");
 
         // Deactivate
-        app.search_active = false;
-        app.search_query.clear();
+        app.search.active = false;
+        app.search.query.clear();
         app.update_search();
 
-        assert!(!app.search_active, "Search should be inactive");
-        assert!(app.search_results.is_empty(), "Results should be cleared");
+        assert!(!app.search.active, "Search should be inactive");
+        assert!(app.search.results.is_empty(), "Results should be cleared");
     }
 
     #[test]
@@ -2236,7 +2254,7 @@ mod tests {
         let mut app = create_test_app();
 
         // Very long query should not crash
-        app.search_query = "a".repeat(1000);
+        app.search.query = "a".repeat(1000);
         app.update_search();
 
         // Should complete without panic
@@ -2247,7 +2265,7 @@ mod tests {
         let mut app = create_test_app();
 
         // Whitespace-only query
-        app.search_query = "   ".to_string();
+        app.search.query = "   ".to_string();
         app.update_search();
 
         // May find items with spaces in names, but shouldn't panic
@@ -2262,16 +2280,16 @@ mod tests {
         let mut app = create_test_app();
 
         // Search for exact name "Page"
-        app.search_query = "Page".to_string();
+        app.search.query = "Page".to_string();
         app.update_search();
 
         // Should have results
-        assert!(!app.search_results.is_empty(), "Should find results for 'Page'");
+        assert!(!app.search.results.is_empty(), "Should find results for 'Page'");
 
         // First result should be the exact match with highest score
-        if app.search_results.len() > 1 {
-            let top_score = app.search_scores[0];
-            for score in &app.search_scores[1..] {
+        if app.search.results.len() > 1 {
+            let top_score = app.search.scores[0];
+            for score in &app.search.scores[1..] {
                 assert!(
                     top_score >= *score,
                     "Top score {} should be >= other scores",
@@ -2286,11 +2304,11 @@ mod tests {
         let mut app = create_test_app();
 
         // Search for "Loc" which is a prefix of "Locale"
-        app.search_query = "Loc".to_string();
+        app.search.query = "Loc".to_string();
         app.update_search();
 
         // Should find Locale-related items
-        assert!(!app.search_results.is_empty(), "Should find results for 'Loc'");
+        assert!(!app.search.results.is_empty(), "Should find results for 'Loc'");
     }
 
     #[test]
@@ -2298,11 +2316,11 @@ mod tests {
         let mut app = create_test_app();
 
         // Lowercase query should match regardless of case
-        app.search_query = "page".to_string();
+        app.search.query = "page".to_string();
         app.update_search();
 
         // Should find "Page" even with lowercase query
-        assert!(!app.search_results.is_empty(), "Lowercase 'page' should find 'Page'");
+        assert!(!app.search.results.is_empty(), "Lowercase 'page' should find 'Page'");
     }
 
     #[test]
@@ -2310,7 +2328,7 @@ mod tests {
         let mut app = create_test_app();
 
         // Query with uppercase forces case-sensitive matching
-        app.search_query = "PAGE".to_string();
+        app.search.query = "PAGE".to_string();
         app.update_search();
 
         // May or may not find results depending on nucleo's smart case behavior
@@ -2322,14 +2340,14 @@ mod tests {
         let mut app = create_test_app();
 
         // Run search twice with same query
-        app.search_query = "Entity".to_string();
+        app.search.query = "Entity".to_string();
         app.update_search();
-        let first_results = app.search_results.clone();
-        let first_scores = app.search_scores.clone();
+        let first_results = app.search.results.clone();
+        let first_scores = app.search.scores.clone();
 
         app.update_search();
-        let second_results = app.search_results.clone();
-        let second_scores = app.search_scores.clone();
+        let second_results = app.search.results.clone();
+        let second_scores = app.search.scores.clone();
 
         // Results and scores should be identical (deterministic)
         assert_eq!(first_results, second_results, "Results should be deterministic");
@@ -2341,14 +2359,14 @@ mod tests {
         let mut app = create_test_app();
 
         // Short query
-        app.search_query = "e".to_string();
+        app.search.query = "e".to_string();
         app.update_search();
-        let short_count = app.search_results.len();
+        let short_count = app.search.results.len();
 
         // Longer query (more specific)
-        app.search_query = "ent".to_string();
+        app.search.query = "ent".to_string();
         app.update_search();
-        let long_count = app.search_results.len();
+        let long_count = app.search.results.len();
 
         // More specific query should have fewer or equal results
         assert!(
@@ -2363,14 +2381,14 @@ mod tests {
     fn test_search_matches_have_positions() {
         let mut app = create_test_app();
 
-        app.search_query = "Pg".to_string();
+        app.search.query = "Pg".to_string();
         app.update_search();
 
         // For each result with match positions, verify positions are valid
-        for (idx, positions) in &app.search_matches {
+        for (idx, positions) in &app.search.matches {
             // Index should be in results
             assert!(
-                app.search_results.contains(idx),
+                app.search.results.contains(idx),
                 "Match index {} should be in results",
                 idx
             );
@@ -2387,11 +2405,11 @@ mod tests {
     fn test_search_scores_are_positive() {
         let mut app = create_test_app();
 
-        app.search_query = "Block".to_string();
+        app.search.query = "Block".to_string();
         app.update_search();
 
         // All scores should be positive (nucleo returns positive scores for matches)
-        for score in &app.search_scores {
+        for score in &app.search.scores {
             assert!(*score > 0, "Score should be positive, got {}", score);
         }
     }
@@ -2400,14 +2418,14 @@ mod tests {
     fn test_search_result_indices_reasonable() {
         let mut app = create_test_app();
 
-        app.search_query = "config".to_string();
+        app.search.query = "config".to_string();
         app.update_search();
 
         // Result indices should be reasonable (within expected tree size)
         // Tree has: 2 headers + 2 realms + 9 layers + 48 kinds + 5 arc families + ~30 arc kinds
         // So max should be under 200
         let reasonable_max = 200;
-        for idx in &app.search_results {
+        for idx in &app.search.results {
             assert!(
                 *idx < reasonable_max,
                 "Result index {} should be < {} (reasonable tree size)",
@@ -2422,14 +2440,14 @@ mod tests {
         let mut app = create_test_app();
 
         // First query
-        app.search_query = "Page".to_string();
+        app.search.query = "Page".to_string();
         app.update_search();
-        let page_results = app.search_results.clone();
+        let page_results = app.search.results.clone();
 
         // Different query
-        app.search_query = "Block".to_string();
+        app.search.query = "Block".to_string();
         app.update_search();
-        let block_results = app.search_results.clone();
+        let block_results = app.search.results.clone();
 
         // Should have different results (at least top result should differ)
         if !page_results.is_empty() && !block_results.is_empty() {
@@ -2444,12 +2462,12 @@ mod tests {
     fn test_search_no_duplicate_results() {
         let mut app = create_test_app();
 
-        app.search_query = "a".to_string(); // Common letter, many matches
+        app.search.query = "a".to_string(); // Common letter, many matches
         app.update_search();
 
         // Check no duplicates in results
         let mut seen = std::collections::HashSet::new();
-        for idx in &app.search_results {
+        for idx in &app.search.results {
             assert!(seen.insert(*idx), "Duplicate result index: {}", idx);
         }
     }
@@ -2458,11 +2476,11 @@ mod tests {
     fn test_search_match_positions_sorted() {
         let mut app = create_test_app();
 
-        app.search_query = "Pge".to_string();
+        app.search.query = "Pge".to_string();
         app.update_search();
 
         // Match positions should be sorted ascending (char positions in order)
-        for positions in app.search_matches.values() {
+        for positions in app.search.matches.values() {
             for i in 1..positions.len() {
                 assert!(
                     positions[i - 1] < positions[i],
@@ -2530,12 +2548,12 @@ mod tests {
 
         // Rapidly change query
         for query in ["a", "ab", "abc", "ab", "a", ""] {
-            app.search_query = query.to_string();
+            app.search.query = query.to_string();
             app.update_search();
         }
 
         // Final empty query should clear results
-        assert!(app.search_results.is_empty());
+        assert!(app.search.results.is_empty());
     }
 
     #[test]
@@ -2543,7 +2561,7 @@ mod tests {
         let mut app = create_test_app();
 
         // Emoji query - should not panic
-        app.search_query = "🔍".to_string();
+        app.search.query = "🔍".to_string();
         app.update_search();
 
         // May or may not find results, just verify no panic
@@ -2554,7 +2572,7 @@ mod tests {
         let mut app = create_test_app();
 
         // Chinese characters query
-        app.search_query = "项目".to_string();
+        app.search.query = "项目".to_string();
         app.update_search();
 
         // Should not panic, likely no results in English codebase
@@ -2565,7 +2583,7 @@ mod tests {
         let mut app = create_test_app();
 
         // Arabic query (right-to-left)
-        app.search_query = "مشروع".to_string();
+        app.search.query = "مشروع".to_string();
         app.update_search();
 
         // Should handle RTL gracefully
@@ -2576,12 +2594,12 @@ mod tests {
         let mut app = create_test_app();
 
         // Very long query
-        app.search_query = "a".repeat(100);
+        app.search.query = "a".repeat(100);
         app.update_search();
 
         // Should handle without panic, likely no matches
         assert!(
-            app.search_results.is_empty(),
+            app.search.results.is_empty(),
             "100-char query unlikely to match anything"
         );
     }
@@ -2591,7 +2609,7 @@ mod tests {
         let mut app = create_test_app();
 
         // Query with newline character
-        app.search_query = "Page\nBlock".to_string();
+        app.search.query = "Page\nBlock".to_string();
         app.update_search();
 
         // Should handle gracefully (may or may not match)
@@ -2602,7 +2620,7 @@ mod tests {
         let mut app = create_test_app();
 
         // Query with tab character
-        app.search_query = "Page\tBlock".to_string();
+        app.search.query = "Page\tBlock".to_string();
         app.update_search();
 
         // Should handle gracefully
@@ -2616,11 +2634,11 @@ mod tests {
         app.tree.collapse_all();
 
         // Search should still work on visible items (headers)
-        app.search_query = "Kind".to_string();
+        app.search.query = "Kind".to_string();
         app.update_search();
 
         // Should find "Node Kinds" header
-        assert!(!app.search_results.is_empty(), "Should find header even when collapsed");
+        assert!(!app.search.results.is_empty(), "Should find header even when collapsed");
     }
 
     #[test]
@@ -2645,8 +2663,8 @@ mod tests {
         let mut app = create_test_app();
 
         // Start search
-        app.search_query = "Page".to_string();
-        app.search_active = true;
+        app.search.query = "Page".to_string();
+        app.search.active = true;
         app.update_search();
 
         // Switch mode directly
