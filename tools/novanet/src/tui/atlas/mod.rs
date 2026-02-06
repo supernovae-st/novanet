@@ -10,6 +10,9 @@
 
 mod state;
 
+/// Available locales for Atlas mode.
+const ATLAS_LOCALES: &[&str] = &["en-US", "fr-FR", "es-ES", "de-DE", "ja-JP", "ar-SA"];
+
 pub use state::{
     ActivationTask, AtlasState, AtlasView, BlockData, BlockL10nData, EntityData, EntityL10nData,
     PageCompositionData, PageL10nData, SeoKeywordData,
@@ -227,10 +230,12 @@ impl AtlasState {
 
     /// Cycle through available locales.
     fn cycle_locale(&mut self) {
-        let locales = ["en-US", "fr-FR", "es-ES", "de-DE", "ja-JP", "ar-SA"];
-        if let Some(pos) = locales.iter().position(|&l| l == self.selected_locale) {
-            let next = (pos + 1) % locales.len();
-            self.selected_locale = locales[next].to_string();
+        if let Some(pos) = ATLAS_LOCALES
+            .iter()
+            .position(|&l| l == self.selected_locale)
+        {
+            let next = (pos + 1) % ATLAS_LOCALES.len();
+            self.selected_locale = ATLAS_LOCALES[next].to_string();
         }
     }
 }
