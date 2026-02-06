@@ -443,18 +443,18 @@ relations:
 
         let doc = load_arcs(root).expect("should parse relations.yaml");
 
-        // v10.3: Total arc count (Entity-Centric Architecture)
-        // 65 - 9 = 56 (removed deprecated Concept/SearchIntent/TopicCluster arcs)
-        assert_eq!(doc.arcs.len(), 56, "expected 56 arcs");
+        // v10.6: Total arc count (Entity-Centric Architecture)
+        // 58 arcs (added 2 new arcs in v10.6)
+        assert_eq!(doc.arcs.len(), 58, "expected 58 arcs");
 
-        // v10.3: Family distribution
-        // Ownership: 26 - 3 = 23 (removed HAS_CONCEPT, CLUSTER_PAGE, PILLAR_PAGE)
+        // v10.6: Family distribution (58 total arcs)
+        // Ownership: 25 (added HAS_CULTURE, HAS_MARKET for 7-node architecture)
         // Localization: 8 (unchanged)
-        // Semantic: 12 - 4 = 8 (removed CLUSTERS_TOPIC, FOR_INTENT, MAPS_TO_CONCEPT, SATISFIES_INTENT)
-        // Generation: 15 (unchanged, INCLUDES_CONCEPT → INCLUDES_ENTITY)
-        // Mining: 4 - 2 = 2 (removed HAS_SEO_TARGET, TARGETS_KEYWORD)
+        // Semantic: 8 (unchanged)
+        // Generation: 15 (unchanged)
+        // Mining: 2 (unchanged)
         let family_count = |f: ArcFamily| doc.arcs.iter().filter(|a| a.family == f).count();
-        assert_eq!(family_count(ArcFamily::Ownership), 23, "ownership count");
+        assert_eq!(family_count(ArcFamily::Ownership), 25, "ownership count");
         assert_eq!(
             family_count(ArcFamily::Localization),
             8,
@@ -476,11 +476,11 @@ relations:
             assert!(!arc.target.is_empty(), "empty target for {}", arc.arc_type);
         }
 
-        // v10.3: Unique arc types (56 after Entity-Centric removal)
+        // v10.6: Unique arc types (58 with Culture/Market arcs)
         let mut types: Vec<&str> = doc.arcs.iter().map(|a| a.arc_type.as_str()).collect();
         types.sort();
         types.dedup();
-        assert_eq!(types.len(), 56, "all arc types should be unique");
+        assert_eq!(types.len(), 58, "all arc types should be unique");
 
         // Semantic link types
         let slt = doc
