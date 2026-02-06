@@ -30,6 +30,11 @@ Complete keyboard shortcuts reference for the NovaNet Terminal UI.
 | `l` | Toggle collapse/expand |
 | `Space` | Toggle collapse/expand |
 | `Enter` | Toggle collapse/expand |
+| `e` | Expand subtree under cursor |
+| `c` | Collapse subtree under cursor |
+| `H` | Collapse all (global) |
+| `L` | Expand all (global) |
+| `0` | Toggle hide empty (Data mode only) |
 | `d` | Page down (half screen) |
 | `u` | Page up (half screen) |
 | `g` | Jump to first item |
@@ -109,6 +114,8 @@ Keyboard fallback (when panel focused):
 
 ```
 Navigation:  j/k (up/down)  h/l (toggle)  d/u (page)  g/G (top/bottom)
+Expand:      e (subtree)    c (collapse)  H/L (global collapse/expand)
+Filter:      0 (hide empty in Data mode)
 Modes:       1-4 (direct)   Tab (cycle)
 Scroll:      ENC1 (tree)    ENC2 (yaml)   j/k/d/u (keyboard fallback)
 Overlays:    / (help)       f (search)
