@@ -157,21 +157,35 @@ async fn run_app(
 
                 // Handle other keys
                 if app.handle_key(key) {
-                    // Check for pending instance load (Data mode)
-                    if let Some(kind_label) = app.take_pending_instance_load() {
-                        if let Ok(instances) = TaxonomyTree::load_instances(db, &kind_label).await {
-                            app.tree.set_instances(&kind_label, instances);
-                        }
-                    }
+                    // Parallel load: instances + arcs (both triggered when Kind selected)
+                    let instance_key = app.take_pending_instance_load();
+                    let arcs_key = app.take_pending_arcs_load();
 
-                    // Check for pending arcs load (Kind selected → load from Neo4j)
-                    if let Some(kind_label) = app.take_pending_arcs_load() {
-                        if let Ok(arcs) = TaxonomyTree::load_kind_arcs(db, &kind_label).await {
+                    if instance_key.is_some() || arcs_key.is_some() {
+                        let (inst_result, arcs_result) = tokio::join!(
+                            async {
+                                match &instance_key {
+                                    Some(k) => TaxonomyTree::load_instances(db, k).await.ok(),
+                                    None => None,
+                                }
+                            },
+                            async {
+                                match &arcs_key {
+                                    Some(k) => TaxonomyTree::load_kind_arcs(db, k).await.ok(),
+                                    None => None,
+                                }
+                            }
+                        );
+
+                        if let (Some(k), Some(instances)) = (&instance_key, inst_result) {
+                            app.tree.set_instances(k, instances);
+                        }
+                        if let Some(arcs) = arcs_result {
                             app.set_kind_arcs(arcs);
                         }
                     }
 
-                    // Check for pending arc kind details load (ArcKind selected → load from Neo4j)
+                    // Sequential loads for other details (typically only one fires at a time)
                     if let Some(arc_key) = app.take_pending_arc_kind_load() {
                         if let Ok(details) = TaxonomyTree::load_arc_kind_details(db, &arc_key).await
                         {
@@ -179,7 +193,6 @@ async fn run_app(
                         }
                     }
 
-                    // Check for pending Realm details load (Realm selected → load from Neo4j)
                     if let Some(realm_key) = app.take_pending_realm_load() {
                         if let Ok(details) = TaxonomyTree::load_realm_details(db, &realm_key).await
                         {
@@ -187,7 +200,6 @@ async fn run_app(
                         }
                     }
 
-                    // Check for pending Layer details load (Layer selected → load from Neo4j)
                     if let Some(layer_key) = app.take_pending_layer_load() {
                         if let Ok(details) = TaxonomyTree::load_layer_details(db, &layer_key).await
                         {
@@ -195,21 +207,37 @@ async fn run_app(
                         }
                     }
 
-                    // Check for pending Atlas Realm stats load (Atlas mode → load from Neo4j)
-                    if app.take_pending_atlas_realm_stats_load() {
-                        if let Ok(stats) = TaxonomyTree::load_atlas_realm_stats(db).await {
+                    // Parallel load: Atlas realm stats + pages list (both triggered when entering Atlas)
+                    let load_atlas_stats = app.take_pending_atlas_realm_stats_load();
+                    let load_atlas_pages = app.take_pending_atlas_pages_list_load();
+
+                    if load_atlas_stats || load_atlas_pages {
+                        let (stats_result, pages_result) = tokio::join!(
+                            async {
+                                if load_atlas_stats {
+                                    TaxonomyTree::load_atlas_realm_stats(db).await.ok()
+                                } else {
+                                    None
+                                }
+                            },
+                            async {
+                                if load_atlas_pages {
+                                    TaxonomyTree::load_atlas_pages_list(db).await.ok()
+                                } else {
+                                    None
+                                }
+                            }
+                        );
+
+                        if let Some(stats) = stats_result {
                             app.set_atlas_realm_stats(stats);
                         }
-                    }
-
-                    // Check for pending Atlas pages list load (Page Composition view)
-                    if app.take_pending_atlas_pages_list_load() {
-                        if let Ok(pages) = TaxonomyTree::load_atlas_pages_list(db).await {
+                        if let Some(pages) = pages_result {
                             app.set_atlas_pages_list(pages);
                         }
                     }
 
-                    // Check for pending Atlas page composition load
+                    // Atlas page composition (individual load, depends on page_key)
                     if let Some((page_key, locale)) = app.take_pending_atlas_page_load() {
                         if let Ok(data) =
                             TaxonomyTree::load_atlas_page_composition(db, &page_key, &locale).await
