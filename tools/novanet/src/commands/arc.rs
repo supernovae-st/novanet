@@ -4,6 +4,7 @@
 //! arc type against ArcKind meta-nodes.
 
 use crate::db::Db;
+use tracing::{info, warn};
 
 /// Validate that a relationship type contains only safe characters for Cypher.
 /// Relationship types must be UPPER_SNAKE_CASE (A-Z, 0-9, underscore).
@@ -104,7 +105,7 @@ pub async fn run_create(
             source: e,
         })? {
         Some(_row) => {
-            eprintln!("Created relationship: ({from_key})-[:{rel_type}]->({to_key})");
+            info!(from = %from_key, to = %to_key, rel_type = %rel_type, "created relationship");
         }
         None => {
             return Err(crate::NovaNetError::Validation(format!(
@@ -158,9 +159,9 @@ pub async fn run_delete(
     };
 
     if deleted == 0 {
-        eprintln!("No relationship found: ({from_key})-[:{rel_type}]->({to_key})");
+        warn!(from = %from_key, to = %to_key, rel_type = %rel_type, "no relationship found to delete");
     } else {
-        eprintln!("Deleted {deleted} relationship(s): ({from_key})-[:{rel_type}]->({to_key})");
+        info!(from = %from_key, to = %to_key, rel_type = %rel_type, count = deleted, "deleted relationships");
     }
 
     Ok(())

@@ -4,6 +4,7 @@
 //! the Kind against the meta-graph and auto-wires the `OF_KIND` relationship.
 
 use crate::db::Db;
+use tracing::{info, warn};
 
 /// Validate that a label contains only safe characters for Cypher interpolation.
 /// Labels must be alphanumeric (A-Z, a-z, 0-9, underscore).
@@ -113,7 +114,7 @@ pub async fn run_create(db: &Db, kind: &str, key: &str, props_json: &str) -> cra
         })?
     {
         let created_key: String = row.get("key").unwrap_or_default();
-        eprintln!("Created node: {created_key} (Kind: {kind})");
+        info!(key = %created_key, kind = %kind, "created node");
     }
 
     Ok(())
@@ -160,7 +161,7 @@ pub async fn run_edit(db: &Db, key: &str, set_json: &str) -> crate::Result<()> {
         })? {
         Some(row) => {
             let edited_key: String = row.get("key").unwrap_or_default();
-            eprintln!("Updated node: {edited_key}");
+            info!(key = %edited_key, "updated node");
         }
         None => {
             return Err(crate::NovaNetError::Validation(format!(
@@ -193,9 +194,9 @@ pub async fn run_delete(db: &Db, key: &str, confirm: bool) -> crate::Result<()> 
         .unwrap_or(0);
 
     if deleted == 0 {
-        eprintln!("No node found with key '{key}'");
+        warn!(key = %key, "no node found to delete");
     } else {
-        eprintln!("Deleted node '{key}' and all its relationships");
+        info!(key = %key, "deleted node and all relationships");
     }
 
     Ok(())
