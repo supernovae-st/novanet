@@ -452,12 +452,12 @@ node:
             return;
         }
 
-        // v10.6: 46 nodes (23 global + 23 tenant, includes 6 SEO types)
-        let nodes = load_all_nodes(root).expect("should parse all 46 nodes");
+        // v10.6: 48 nodes (25 global + 23 tenant, includes 7 SEO types)
+        let nodes = load_all_nodes(root).expect("should parse all 48 nodes");
         assert_eq!(
             nodes.len(),
-            46,
-            "expected 46 YAML node files (v10.6: 23 global + 23 tenant)"
+            48,
+            "expected 48 YAML node files (v10.6: 25 global + 23 tenant)"
         );
 
         // Every node has a non-empty name, realm, and layer
@@ -485,8 +485,8 @@ node:
         assert_eq!(count(NodeTrait::Localized), 4, "localized count");
         assert_eq!(
             count(NodeTrait::Knowledge),
-            20,
-            "knowledge count (10 + 6 atoms + 4 SEO types)"
+            22,
+            "knowledge count (6 config + 12 locale-knowledge + 4 SEO types)"
         );
         assert_eq!(count(NodeTrait::Derived), 4, "derived count");
         assert_eq!(count(NodeTrait::Job), 2, "job count");
@@ -495,8 +495,8 @@ node:
         let realm_count = |r: &str| nodes.iter().filter(|n| n.realm == r).count();
         assert_eq!(
             realm_count("global"),
-            23,
-            "global realm count (incl. 6 SEO types)"
+            25,
+            "global realm count (7 config + 12 locale-knowledge + 6 SEO)"
         );
         assert_eq!(realm_count("tenant"), 23, "tenant realm count");
 
