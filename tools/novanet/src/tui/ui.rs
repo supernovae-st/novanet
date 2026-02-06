@@ -20,6 +20,40 @@ const WIDE_LAYOUT_MIN_WIDTH: u16 = 160;
 /// Spinner animation speed divisor (higher = slower animation).
 const SPINNER_SPEED_DIVISOR: usize = 2;
 
+// -----------------------------------------------------------------------------
+// Color palette constants (avoid repeated Color::Rgb constructions)
+// -----------------------------------------------------------------------------
+
+/// Unfocused panel border color.
+const COLOR_UNFOCUSED_BORDER: Color = Color::Rgb(60, 60, 70);
+
+/// Muted text for secondary information.
+const COLOR_MUTED_TEXT: Color = Color::Rgb(100, 100, 120);
+
+/// Highlighted row background.
+const COLOR_HIGHLIGHT_BG: Color = Color::Rgb(30, 40, 50);
+
+/// Connected/active status indicator.
+const COLOR_CONNECTED: Color = Color::Rgb(100, 180, 100);
+
+/// Arc family label color.
+const COLOR_ARC_FAMILY: Color = Color::Rgb(180, 140, 80);
+
+/// Description/secondary text.
+const COLOR_DESC_TEXT: Color = Color::Rgb(150, 150, 150);
+
+/// Separator dots between stats.
+const COLOR_SEPARATOR: Color = Color::Rgb(70, 70, 80);
+
+/// Hint text (dimmed).
+const COLOR_HINT_TEXT: Color = Color::Rgb(80, 80, 100);
+
+/// Overlay/popup background.
+const COLOR_OVERLAY_BG: Color = Color::Rgb(20, 20, 30);
+
+/// Brighter dim text.
+const COLOR_BRIGHT_DIM: Color = Color::Rgb(140, 140, 140);
+
 /// Safely truncate a UTF-8 string to N characters (not bytes).
 /// Appends "..." if truncated.
 fn truncate_str(s: &str, max_chars: usize) -> String {
@@ -225,7 +259,7 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
     let border_color = if focused {
         Color::Cyan
     } else {
-        Color::Rgb(60, 60, 70)
+        COLOR_UNFOCUSED_BORDER
     };
 
     // Calculate visible height (area minus borders)
@@ -261,7 +295,7 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
      -> Line {
         let is_cursor = idx == cursor;
         let style = if is_cursor && focused {
-            Style::default().bg(Color::Rgb(30, 40, 50)).fg(Color::White)
+            Style::default().bg(COLOR_HIGHLIGHT_BG).fg(Color::White)
         } else {
             Style::default().fg(color)
         };
@@ -416,12 +450,12 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                         let (icon, base_color) = if is_primary {
                                             ("●", Color::Yellow)
                                         } else {
-                                            ("○", Color::Rgb(100, 180, 100))
+                                            ("○", COLOR_CONNECTED)
                                         };
 
                                         let style = if is_cursor && focused {
                                             Style::default()
-                                                .bg(Color::Rgb(30, 40, 50))
+                                                .bg(COLOR_HIGHLIGHT_BG)
                                                 .fg(Color::White)
                                         } else {
                                             Style::default().fg(base_color)
@@ -498,7 +532,7 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                 branch(family_is_last),
                 family_icon,
                 format!("{} ({})", family.display_name, family.arc_kinds.len()),
-                Color::Rgb(180, 140, 80),
+                COLOR_ARC_FAMILY,
             ));
             idx += 1;
 
@@ -514,7 +548,7 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                         &prefix,
                         "",
                         arc_kind.display_name.clone(),
-                        Color::Rgb(150, 150, 150),
+                        COLOR_DESC_TEXT,
                     ));
                     idx += 1;
                 }
@@ -609,7 +643,7 @@ fn render_filtered_instances(
     ]));
     all_lines.push(Line::from(Span::styled(
         "─".repeat(area.width.saturating_sub(2) as usize),
-        Style::default().fg(Color::Rgb(60, 60, 70)),
+        Style::default().fg(COLOR_UNFOCUSED_BORDER),
     )));
 
     // Get instances
@@ -661,11 +695,11 @@ fn render_filtered_instances(
             let (icon, base_color) = if is_primary {
                 ("●", Color::Yellow)
             } else {
-                ("○", Color::Rgb(100, 180, 100))
+                ("○", COLOR_CONNECTED)
             };
 
             let style = if is_cursor && focused {
-                Style::default().bg(Color::Rgb(30, 40, 50)).fg(Color::White)
+                Style::default().bg(COLOR_HIGHLIGHT_BG).fg(Color::White)
             } else {
                 Style::default().fg(base_color)
             };
@@ -721,7 +755,7 @@ fn render_info_panel(f: &mut Frame, area: Rect, app: &mut App) {
     let border_color = if focused {
         Color::Cyan
     } else {
-        Color::Rgb(60, 60, 70)
+        COLOR_UNFOCUSED_BORDER
     };
 
     // Build info lines
@@ -778,7 +812,7 @@ fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
     let border_color = if focused {
         Color::Magenta
     } else {
-        Color::Rgb(60, 60, 70)
+        COLOR_UNFOCUSED_BORDER
     };
 
     // Calculate arc count for title
@@ -807,7 +841,7 @@ fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
 
     let mut lines: Vec<Line> = Vec::new();
     let dim = Style::default().fg(Color::Rgb(100, 100, 100));
-    let bright_dim = Style::default().fg(Color::Rgb(140, 140, 140));
+    let bright_dim = Style::default().fg(COLOR_BRIGHT_DIM);
 
     // === LOADING INDICATOR (specific message based on what's loading) ===
     let loading_msg = if app.pending_arcs_load.is_some() {
@@ -1614,7 +1648,7 @@ fn render_yaml_content(f: &mut Frame, area: Rect, app: &App, focused: bool, visi
     let border_color = if focused {
         Color::Green
     } else {
-        Color::Rgb(60, 60, 70)
+        COLOR_UNFOCUSED_BORDER
     };
 
     // Build YAML lines with syntax highlighting
@@ -1669,7 +1703,7 @@ fn build_yaml_title(path: &str) -> Vec<Span<'static>> {
     if path.is_empty() {
         return vec![Span::styled(
             " YAML ",
-            Style::default().fg(Color::Rgb(60, 60, 70)),
+            Style::default().fg(COLOR_UNFOCUSED_BORDER),
         )];
     }
 
@@ -1717,7 +1751,7 @@ fn colorize_path_inline(path: &str) -> Vec<Span<'static>> {
                 "tenant" => Color::Yellow,
                 _ => Color::White,
             },
-            5 => Color::Rgb(100, 180, 100), // layer
+            5 => COLOR_CONNECTED, // layer
             _ => Color::White,              // filename
         };
         spans.push(Span::styled(part.to_string(), Style::default().fg(color)));
@@ -1906,7 +1940,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                 lines.push(Line::from(""));
                 lines.push(Line::from(Span::styled(
                     format!("Properties ({})", kind.properties.len()),
-                    Style::default().fg(Color::Rgb(100, 100, 120)),
+                    Style::default().fg(COLOR_MUTED_TEXT),
                 )));
 
                 for prop in &kind.properties {
@@ -1939,7 +1973,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                 lines.push(Line::from(""));
                 lines.push(Line::from(Span::styled(
                     format!("Arcs ({})", kind.arcs.len()),
-                    Style::default().fg(Color::Rgb(100, 100, 120)),
+                    Style::default().fg(COLOR_MUTED_TEXT),
                 )));
 
                 for arc in &kind.arcs {
@@ -1962,7 +1996,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                 lines.push(Line::from(""));
                 lines.push(Line::from(Span::styled(
                     "Description",
-                    Style::default().fg(Color::Rgb(100, 100, 120)),
+                    Style::default().fg(COLOR_MUTED_TEXT),
                 )));
                 // Wrap description to multiple lines if too long
                 let desc = &kind.description;
@@ -1970,7 +2004,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                     let line: String = chunk.iter().collect();
                     lines.push(Line::from(Span::styled(
                         format!("  {}", line),
-                        Style::default().fg(Color::Rgb(150, 150, 150)),
+                        Style::default().fg(COLOR_DESC_TEXT),
                     )));
                 }
             }
@@ -1979,11 +2013,11 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
             lines.push(Line::from(""));
             lines.push(Line::from(Span::styled(
                 "Cypher",
-                Style::default().fg(Color::Rgb(100, 100, 120)),
+                Style::default().fg(COLOR_MUTED_TEXT),
             )));
             lines.push(Line::from(Span::styled(
                 format!("  MATCH (n:{}) RETURN n LIMIT 100", kind.key),
-                Style::default().fg(Color::Rgb(80, 80, 100)),
+                Style::default().fg(COLOR_HINT_TEXT),
             )));
 
             lines
@@ -1992,7 +2026,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
             vec![
                 Line::from(vec![
                     Span::styled("type      ", Style::default().fg(Color::DarkGray)),
-                    Span::styled("ArcFamily", Style::default().fg(Color::Rgb(180, 140, 80))),
+                    Span::styled("ArcFamily", Style::default().fg(COLOR_ARC_FAMILY)),
                 ]),
                 Line::from(vec![
                     Span::styled("key       ", Style::default().fg(Color::DarkGray)),
@@ -2026,7 +2060,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                     Span::styled("family    ", Style::default().fg(Color::DarkGray)),
                     Span::styled(
                         family.display_name.clone(),
-                        Style::default().fg(Color::Rgb(180, 140, 80)),
+                        Style::default().fg(COLOR_ARC_FAMILY),
                     ),
                 ]),
                 Line::from(vec![
@@ -2055,11 +2089,11 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                 lines.push(Line::from(""));
                 lines.push(Line::from(Span::styled(
                     "Description",
-                    Style::default().fg(Color::Rgb(100, 100, 120)),
+                    Style::default().fg(COLOR_MUTED_TEXT),
                 )));
                 lines.push(Line::from(Span::styled(
                     format!("  {}", &arc_kind.description),
-                    Style::default().fg(Color::Rgb(150, 150, 150)),
+                    Style::default().fg(COLOR_DESC_TEXT),
                 )));
             }
 
@@ -2067,11 +2101,11 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
             lines.push(Line::from(""));
             lines.push(Line::from(Span::styled(
                 "Cypher",
-                Style::default().fg(Color::Rgb(100, 100, 120)),
+                Style::default().fg(COLOR_MUTED_TEXT),
             )));
             lines.push(Line::from(Span::styled(
                 format!("  MATCH ()-[r:{}]->() RETURN r LIMIT 100", arc_kind.key),
-                Style::default().fg(Color::Rgb(80, 80, 100)),
+                Style::default().fg(COLOR_HINT_TEXT),
             )));
 
             lines
@@ -2099,7 +2133,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                 lines.push(Line::from(""));
                 lines.push(Line::from(Span::styled(
                     format!("Properties ({})", instance.properties.len()),
-                    Style::default().fg(Color::Rgb(100, 100, 120)),
+                    Style::default().fg(COLOR_MUTED_TEXT),
                 )));
                 for (key, value) in &instance.properties {
                     // Format JSON value for display
@@ -2136,7 +2170,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                         "Arc Diagram ({} exist, {} missing)",
                         existing_count, missing_count
                     ),
-                    Style::default().fg(Color::Rgb(100, 100, 120)),
+                    Style::default().fg(COLOR_MUTED_TEXT),
                 )));
 
                 // Box drawing for instance node (use char count for proper alignment)
@@ -2324,22 +2358,22 @@ fn render_status(f: &mut Frame, area: Rect, app: &App) {
     let status = Line::from(vec![
         Span::styled(
             format!(" {} nodes", stats.node_count),
-            Style::default().fg(Color::Rgb(100, 100, 120)),
+            Style::default().fg(COLOR_MUTED_TEXT),
         ),
-        Span::styled(" · ", Style::default().fg(Color::Rgb(70, 70, 80))),
+        Span::styled(" · ", Style::default().fg(COLOR_SEPARATOR)),
         Span::styled(
             format!("{} arcs", stats.arc_count),
-            Style::default().fg(Color::Rgb(100, 100, 120)),
+            Style::default().fg(COLOR_MUTED_TEXT),
         ),
-        Span::styled(" · ", Style::default().fg(Color::Rgb(70, 70, 80))),
+        Span::styled(" · ", Style::default().fg(COLOR_SEPARATOR)),
         Span::styled(
             format!("{} Node Kinds", stats.kind_count),
-            Style::default().fg(Color::Rgb(100, 100, 120)),
+            Style::default().fg(COLOR_MUTED_TEXT),
         ),
-        Span::styled(" · ", Style::default().fg(Color::Rgb(70, 70, 80))),
+        Span::styled(" · ", Style::default().fg(COLOR_SEPARATOR)),
         Span::styled(
             format!("{} Arcs", stats.arc_kind_count),
-            Style::default().fg(Color::Rgb(100, 100, 120)),
+            Style::default().fg(COLOR_MUTED_TEXT),
         ),
         Span::raw("        "),
         Span::styled(
@@ -2349,7 +2383,7 @@ fn render_status(f: &mut Frame, area: Rect, app: &App) {
         Span::raw("  "),
         Span::styled(
             format!("[{}]", layout_label),
-            Style::default().fg(Color::Rgb(80, 80, 100)),
+            Style::default().fg(COLOR_HINT_TEXT),
         ),
         Span::raw("   "),
         Span::styled(
@@ -2442,7 +2476,7 @@ fn render_search(f: &mut Frame, app: &App) {
         let style = if is_selected {
             Style::default().bg(Color::Rgb(30, 50, 70)).fg(Color::White)
         } else {
-            Style::default().fg(Color::Rgb(150, 150, 150))
+            Style::default().fg(COLOR_DESC_TEXT)
         };
 
         let type_style = if is_selected {
@@ -2463,7 +2497,7 @@ fn render_search(f: &mut Frame, app: &App) {
         .title(Span::styled(" Search ", Style::default().fg(Color::Cyan)))
         .borders(Borders::ALL)
         .border_style(Style::default().fg(Color::Cyan))
-        .style(Style::default().bg(Color::Rgb(20, 20, 30)));
+        .style(Style::default().bg(COLOR_OVERLAY_BG));
 
     let paragraph = Paragraph::new(lines).block(block);
     f.render_widget(paragraph, search_area);
@@ -2600,7 +2634,7 @@ fn render_help(f: &mut Frame) {
         .title(Span::styled(" Help ", Style::default().fg(Color::Magenta)))
         .borders(Borders::ALL)
         .border_style(Style::default().fg(Color::Magenta))
-        .style(Style::default().bg(Color::Rgb(20, 20, 30)));
+        .style(Style::default().bg(COLOR_OVERLAY_BG));
 
     let paragraph = Paragraph::new(lines).block(block);
     f.render_widget(paragraph, help_area);
