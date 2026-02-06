@@ -54,6 +54,31 @@ const COLOR_OVERLAY_BG: Color = Color::Rgb(20, 20, 30);
 /// Brighter dim text.
 const COLOR_BRIGHT_DIM: Color = Color::Rgb(140, 140, 140);
 
+// -----------------------------------------------------------------------------
+// YAML syntax highlighting styles (const to avoid recreation per line)
+// -----------------------------------------------------------------------------
+
+/// YAML comment style.
+const STYLE_YAML_COMMENT: Style = Style::new().fg(Color::DarkGray);
+
+/// YAML key style.
+const STYLE_YAML_KEY: Style = Style::new().fg(Color::Yellow);
+
+/// YAML colon/dash style.
+const STYLE_YAML_PUNCT: Style = Style::new().fg(Color::Cyan);
+
+/// YAML string value style.
+const STYLE_YAML_STRING: Style = Style::new().fg(Color::Green);
+
+/// YAML boolean/null style.
+const STYLE_YAML_LITERAL: Style = Style::new().fg(Color::Magenta);
+
+/// YAML number style.
+const STYLE_YAML_NUMBER: Style = Style::new().fg(Color::Cyan);
+
+/// YAML plain text style.
+const STYLE_YAML_TEXT: Style = Style::new().fg(Color::White);
+
 /// Safely truncate a UTF-8 string to N characters (not bytes).
 /// Appends "..." if truncated.
 fn truncate_str(s: &str, max_chars: usize) -> String {
@@ -2237,13 +2262,11 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
 }
 
 /// Highlight a YAML line with syntax coloring.
+/// Uses const STYLE_YAML_* for efficiency (avoids Style recreation per line).
 fn highlight_yaml_line(line: &str) -> Line<'static> {
     // Comment line
     if line.trim_start().starts_with('#') {
-        return Line::from(Span::styled(
-            line.to_string(),
-            Style::default().fg(Color::DarkGray),
-        ));
+        return Line::from(Span::styled(line.to_string(), STYLE_YAML_COMMENT));
     }
 
     // Empty line
@@ -2251,8 +2274,8 @@ fn highlight_yaml_line(line: &str) -> Line<'static> {
         return Line::from(Span::raw(line.to_string()));
     }
 
-    // Key-value or list item
-    let mut spans: Vec<Span<'static>> = Vec::new();
+    // Key-value or list item (most lines have 2-4 spans)
+    let mut spans: Vec<Span<'static>> = Vec::with_capacity(4);
 
     // Find leading whitespace
     let indent_len = line.len() - line.trim_start().len();
@@ -2263,17 +2286,14 @@ fn highlight_yaml_line(line: &str) -> Line<'static> {
 
     // Check for list item
     if rest.starts_with("- ") {
-        spans.push(Span::styled("-", Style::default().fg(Color::Cyan)));
+        spans.push(Span::styled("-", STYLE_YAML_PUNCT));
         let after_dash = &rest[1..];
 
         // Check if it's a key-value after dash
         if let Some(colon_pos) = after_dash.find(':') {
             let key = &after_dash[..colon_pos + 1];
             let value = &after_dash[colon_pos + 1..];
-            spans.push(Span::styled(
-                key.to_string(),
-                Style::default().fg(Color::Yellow),
-            ));
+            spans.push(Span::styled(key.to_string(), STYLE_YAML_KEY));
             spans.push(highlight_yaml_value(value));
         } else {
             spans.push(highlight_yaml_value(after_dash));
@@ -2283,57 +2303,45 @@ fn highlight_yaml_line(line: &str) -> Line<'static> {
         let key = &rest[..colon_pos];
         let colon_and_rest = &rest[colon_pos..];
 
-        spans.push(Span::styled(
-            key.to_string(),
-            Style::default().fg(Color::Yellow),
-        ));
+        spans.push(Span::styled(key.to_string(), STYLE_YAML_KEY));
 
         if colon_and_rest.len() > 1 {
-            spans.push(Span::styled(":", Style::default().fg(Color::White)));
+            spans.push(Span::styled(":", STYLE_YAML_TEXT));
             let value = &colon_and_rest[1..];
             spans.push(highlight_yaml_value(value));
         } else {
-            spans.push(Span::styled(":", Style::default().fg(Color::White)));
+            spans.push(Span::styled(":", STYLE_YAML_TEXT));
         }
     } else {
         // Plain text
-        spans.push(Span::styled(
-            rest.to_string(),
-            Style::default().fg(Color::White),
-        ));
+        spans.push(Span::styled(rest.to_string(), STYLE_YAML_TEXT));
     }
 
     Line::from(spans)
 }
 
 /// Highlight a YAML value with appropriate color.
+/// Uses const STYLE_YAML_* for efficiency.
 fn highlight_yaml_value(value: &str) -> Span<'static> {
     let trimmed = value.trim();
 
     // Boolean
     if trimmed == "true" || trimmed == "false" {
-        return Span::styled(value.to_string(), Style::default().fg(Color::Magenta));
+        return Span::styled(value.to_string(), STYLE_YAML_LITERAL);
     }
 
     // Null
     if trimmed == "null" || trimmed == "~" {
-        return Span::styled(value.to_string(), Style::default().fg(Color::Magenta));
+        return Span::styled(value.to_string(), STYLE_YAML_LITERAL);
     }
 
     // Number
     if trimmed.parse::<f64>().is_ok() {
-        return Span::styled(value.to_string(), Style::default().fg(Color::Cyan));
+        return Span::styled(value.to_string(), STYLE_YAML_NUMBER);
     }
 
-    // String (quoted)
-    if (trimmed.starts_with('"') && trimmed.ends_with('"'))
-        || (trimmed.starts_with('\'') && trimmed.ends_with('\''))
-    {
-        return Span::styled(value.to_string(), Style::default().fg(Color::Green));
-    }
-
-    // Default string
-    Span::styled(value.to_string(), Style::default().fg(Color::Green))
+    // String (quoted or unquoted)
+    Span::styled(value.to_string(), STYLE_YAML_STRING)
 }
 
 /// Status bar: stats + shortcuts.
