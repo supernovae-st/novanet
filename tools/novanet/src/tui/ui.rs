@@ -356,26 +356,41 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
     let mut idx = 0;
 
     // Helper to create a tree line with box-drawing
+    // line_color: color for tree prefix (│├└ characters)
+    // text_color: color for icon and text
     let make_line = |idx: usize,
                      cursor: usize,
                      focused: bool,
                      tree_prefix: &str,
                      icon: &str,
                      text: String,
-                     color: Color|
+                     line_color: Color,
+                     text_color: Color|
      -> Line {
         let is_cursor = idx == cursor;
-        let style = if is_cursor && focused {
-            Style::default().bg(COLOR_HIGHLIGHT_BG).fg(Color::White)
-        } else {
-            Style::default().fg(color)
-        };
-        let prefix = if is_cursor { "›" } else { " " };
+        let cursor_char = if is_cursor { "›" } else { " " };
         let icon_space = if icon.is_empty() { "" } else { " " };
-        Line::from(Span::styled(
-            format!("{}{}{}{}{}", prefix, tree_prefix, icon, icon_space, text),
-            style,
-        ))
+
+        if is_cursor && focused {
+            // When focused/selected, use white on highlight bg for entire line
+            let style = Style::default().bg(COLOR_HIGHLIGHT_BG).fg(Color::White);
+            Line::from(Span::styled(
+                format!("{}{}{}{}{}", cursor_char, tree_prefix, icon, icon_space, text),
+                style,
+            ))
+        } else {
+            // Split into spans: tree_prefix colored, text colored differently
+            let mut spans = Vec::with_capacity(4);
+            spans.push(Span::styled(cursor_char, Style::default()));
+            if !tree_prefix.is_empty() {
+                spans.push(Span::styled(tree_prefix.to_string(), Style::default().fg(line_color)));
+            }
+            spans.push(Span::styled(
+                format!("{}{}{}", icon, icon_space, text),
+                Style::default().fg(text_color),
+            ));
+            Line::from(spans)
+        }
     };
 
     // Box-drawing helpers
@@ -399,7 +414,8 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
         "",
         kinds_icon,
         format!("Node Kinds ({})", kinds_count),
-        Color::Magenta,
+        Color::Magenta, // line_color (not used - no prefix)
+        Color::Magenta, // text_color
     ));
     idx += 1;
 
@@ -413,6 +429,7 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
             let realm_collapsed = app.tree.is_collapsed(&realm_key);
             let realm_icon = if realm_collapsed { "▶" } else { "▼" };
 
+            let realm_color = hex_to_color(&realm.color);
             all_lines.push(make_line(
                 idx,
                 app.tree_cursor,
@@ -420,17 +437,41 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                 branch(realm_is_last),
                 realm_icon,
                 format!("{} {}", realm.icon, realm.display_name),
-                hex_to_color(&realm.color),
+                Color::Magenta, // line_color: parent section color
+                realm_color,    // text_color
             ));
             idx += 1;
 
             if !realm_collapsed {
                 let layer_count = realm.layers.len();
+                let is_data_mode = app.is_data_mode();
+
                 for (li, layer) in realm.layers.iter().enumerate() {
                     let layer_is_last = li == layer_count - 1;
                     let layer_key = format!("layer:{}", layer.key);
                     let layer_collapsed = app.tree.is_collapsed(&layer_key);
+
+                    // Calculate total instances in this layer
+                    let layer_instance_count: i64 =
+                        layer.kinds.iter().map(|k| k.instance_count).sum();
+                    let layer_is_empty = layer_instance_count == 0;
+
+                    // Show expand icon only if layer has content
                     let layer_icon = if layer_collapsed { "▶" } else { "▼" };
+
+                    // In Data mode: gray out empty layers, show instance count
+                    let layer_color = hex_to_color(&layer.color);
+                    let (display_name, text_color) = if is_data_mode {
+                        let name = format!("{} ({})", layer.display_name, layer_instance_count);
+                        let color = if layer_is_empty {
+                            COLOR_MUTED_TEXT // Gray for empty layers
+                        } else {
+                            layer_color
+                        };
+                        (name, color)
+                    } else {
+                        (layer.display_name.clone(), layer_color)
+                    };
 
                     let prefix = format!("{}{}", cont(realm_is_last), branch(layer_is_last));
                     all_lines.push(make_line(
@@ -439,13 +480,13 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                         focused,
                         &prefix,
                         layer_icon,
-                        layer.display_name.clone(),
-                        hex_to_color(&layer.color),
+                        display_name,
+                        realm_color, // line_color: parent realm color
+                        text_color,  // text_color (grayed if empty in Data mode)
                     ));
                     idx += 1;
 
                     if !layer_collapsed {
-                        let is_data_mode = app.is_data_mode();
                         let kind_count = layer.kinds.len();
 
                         for (ki, kind) in layer.kinds.iter().enumerate() {
@@ -468,11 +509,19 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                 ""
                             };
 
-                            // v10.1: Show instance count
-                            let count = if kind.instance_count > 0 {
-                                format!(" ({})", kind.instance_count)
+                            // v10.1: Show instance count (always in Data mode)
+                            let kind_is_empty = kind.instance_count == 0;
+                            let (display_text, kind_text_color) = if is_data_mode {
+                                let text =
+                                    format!("{} ({})", kind.display_name, kind.instance_count);
+                                let color = if kind_is_empty {
+                                    COLOR_MUTED_TEXT // Gray for empty kinds
+                                } else {
+                                    Color::White
+                                };
+                                (text, color)
                             } else {
-                                String::new()
+                                (kind.display_name.clone(), Color::White)
                             };
 
                             let prefix = format!(
@@ -487,8 +536,9 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                 focused,
                                 &prefix,
                                 kind_icon,
-                                format!("{}{}", kind.display_name, count),
-                                Color::White,
+                                display_text,
+                                layer_color,     // line_color: parent layer color
+                                kind_text_color, // text_color (grayed if empty)
                             ));
                             idx += 1;
 
@@ -532,7 +582,7 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                             Style::default().fg(base_color)
                                         };
 
-                                        let cursor_prefix = if is_cursor { "›" } else { " " };
+                                        let cursor_char = if is_cursor { "›" } else { " " };
                                         let suffix = if is_primary && fallback_count > 0 {
                                             format!(" [{}↓]", fallback_count)
                                         } else {
@@ -546,17 +596,34 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                             cont(kind_is_last),
                                             branch(inst_is_last)
                                         );
-                                        all_lines.push(Line::from(Span::styled(
-                                            format!(
-                                                "{}{}{} {}{}",
-                                                cursor_prefix,
-                                                tree_prefix,
-                                                icon,
-                                                instance.display_name,
-                                                suffix
-                                            ),
-                                            style,
-                                        )));
+
+                                        if is_cursor && focused {
+                                            // Selected: single span with highlight bg
+                                            all_lines.push(Line::from(Span::styled(
+                                                format!(
+                                                    "{}{}{} {}{}",
+                                                    cursor_char,
+                                                    tree_prefix,
+                                                    icon,
+                                                    instance.display_name,
+                                                    suffix
+                                                ),
+                                                style,
+                                            )));
+                                        } else {
+                                            // Not selected: split into spans for colored tree lines
+                                            all_lines.push(Line::from(vec![
+                                                Span::styled(cursor_char, Style::default()),
+                                                Span::styled(
+                                                    tree_prefix,
+                                                    Style::default().fg(layer_color),
+                                                ),
+                                                Span::styled(
+                                                    format!("{} {}{}", icon, instance.display_name, suffix),
+                                                    style,
+                                                ),
+                                            ]));
+                                        }
                                         idx += 1;
                                     }
                                 }
@@ -584,7 +651,8 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
         "",
         arcs_icon,
         format!("Arcs ({})", arcs_count),
-        Color::Yellow,
+        Color::Yellow, // line_color (not used - no prefix)
+        Color::Yellow, // text_color
     ));
     idx += 1;
 
@@ -603,7 +671,8 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                 branch(family_is_last),
                 family_icon,
                 format!("{} ({})", family.display_name, family.arc_kinds.len()),
-                COLOR_ARC_FAMILY,
+                Color::Yellow,    // line_color: parent section color
+                COLOR_ARC_FAMILY, // text_color
             ));
             idx += 1;
 
@@ -619,7 +688,8 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                         &prefix,
                         "",
                         arc_kind.display_name.clone(),
-                        COLOR_DESC_TEXT,
+                        COLOR_ARC_FAMILY, // line_color: parent family color
+                        COLOR_DESC_TEXT,  // text_color
                     ));
                     idx += 1;
                 }
