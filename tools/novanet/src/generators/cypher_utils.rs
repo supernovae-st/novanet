@@ -3,7 +3,27 @@
 //! Provides common helper functions used across organizing.rs, kind.rs, and arc_schema.rs
 //! to avoid code duplication.
 
+use serde::Serialize;
 use std::fmt::Write;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// JSON Serialization Helpers
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Serialize data to JSON string with fallback value on failure.
+///
+/// Use this instead of `serde_json::to_string(...).unwrap_or_else(|_| "...".to_string())`
+/// to reduce boilerplate.
+///
+/// # Examples
+/// ```ignore
+/// let json = serialize_json(&data, "{}");     // Object fallback
+/// let json = serialize_json(&items, "[]");    // Array fallback
+/// let json = serialize_json(&value, "null");  // Nullable fallback
+/// ```
+pub fn serialize_json<T: Serialize>(data: &T, fallback: &str) -> String {
+    serde_json::to_string(data).unwrap_or_else(|_| fallback.to_string())
+}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // String Formatting
@@ -242,5 +262,41 @@ mod tests {
         write_section_header(&mut out, "TEST SECTION");
         assert!(out.contains("// TEST SECTION"));
         assert!(out.contains("// ─────"));
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────────
+    // serialize_json Tests
+    // ─────────────────────────────────────────────────────────────────────────────
+
+    #[test]
+    fn serialize_json_object() {
+        use std::collections::HashMap;
+        let mut map = HashMap::new();
+        map.insert("key", "value");
+        let result = serialize_json(&map, "{}");
+        assert!(result.contains("key"));
+        assert!(result.contains("value"));
+    }
+
+    #[test]
+    fn serialize_json_array() {
+        let items = vec!["a", "b", "c"];
+        let result = serialize_json(&items, "[]");
+        assert_eq!(result, r#"["a","b","c"]"#);
+    }
+
+    #[test]
+    fn serialize_json_empty_vec() {
+        let items: Vec<String> = vec![];
+        let result = serialize_json(&items, "[]");
+        assert_eq!(result, "[]");
+    }
+
+    #[test]
+    fn serialize_json_null_fallback() {
+        // Option::None serializes to "null"
+        let opt: Option<String> = None;
+        let result = serialize_json(&opt, "null");
+        assert_eq!(result, "null");
     }
 }
