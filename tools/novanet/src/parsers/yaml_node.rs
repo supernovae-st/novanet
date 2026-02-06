@@ -452,12 +452,15 @@ node:
             return;
         }
 
-        // v10.6: 48 nodes (25 global + 23 tenant, includes 7 SEO types)
-        let nodes = load_all_nodes(root).expect("should parse all 48 nodes");
+        // v10.8: 60 nodes (37 global + 23 tenant)
+        // v10.8 added: Continent, GeoRegion, GeoSubRegion, LanguageFamily, LanguageBranch,
+        // CulturalRealm, CulturalSubRealm, IncomeGroup, LendingCategory, EconomicRegion,
+        // PopulationCluster, PopulationSubCluster (+12)
+        let nodes = load_all_nodes(root).expect("should parse all 60 nodes");
         assert_eq!(
             nodes.len(),
-            48,
-            "expected 48 YAML node files (v10.6: 25 global + 23 tenant)"
+            60,
+            "expected 60 YAML node files (v10.8: 37 global + 23 tenant)"
         );
 
         // Every node has a non-empty name, realm, and layer
@@ -479,24 +482,26 @@ node:
             );
         }
 
-        // v10.6: Verify trait distribution (2 realms: global + tenant)
+        // v10.8: Verify trait distribution (2 realms: global + tenant)
+        // v10.8 added 6 invariant (Continent, GeoRegion, GeoSubRegion, IncomeGroup, LendingCategory, EconomicRegion)
+        // v10.8 added 6 knowledge (LanguageFamily, LanguageBranch, CulturalRealm, CulturalSubRealm, PopulationCluster, PopulationSubCluster)
         let count = |t: NodeTrait| nodes.iter().filter(|n| n.def.node_trait == t).count();
-        assert_eq!(count(NodeTrait::Invariant), 16, "invariant count");
+        assert_eq!(count(NodeTrait::Invariant), 22, "invariant count");
         assert_eq!(count(NodeTrait::Localized), 4, "localized count");
         assert_eq!(
             count(NodeTrait::Knowledge),
-            22,
-            "knowledge count (6 config + 12 locale-knowledge + 4 SEO types)"
+            28,
+            "knowledge count (12 config + 18 locale-knowledge - 2 invariant overlap)"
         );
         assert_eq!(count(NodeTrait::Derived), 4, "derived count");
         assert_eq!(count(NodeTrait::Job), 2, "job count");
 
-        // v10.6: Verify realm distribution (2 realms)
+        // v10.8: Verify realm distribution (2 realms)
         let realm_count = |r: &str| nodes.iter().filter(|n| n.realm == r).count();
         assert_eq!(
             realm_count("global"),
-            25,
-            "global realm count (7 config + 12 locale-knowledge + 6 SEO)"
+            37,
+            "global realm count (13 config + 18 locale-knowledge + 6 SEO)"
         );
         assert_eq!(realm_count("tenant"), 23, "tenant realm count");
 

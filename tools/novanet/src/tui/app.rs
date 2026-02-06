@@ -1033,6 +1033,7 @@ impl App {
             KeyCode::Char('1') => {
                 // Switch to Meta mode, restoring saved cursor position
                 self.exit_filtered_data_mode();
+                self.tree.collapse_all_kinds(); // Collapse all Kind instances
                 self.save_mode_cursor(); // Save Data cursor
                 self.mode = NavMode::Meta;
                 self.restore_mode_cursor(NavMode::Meta); // Restore Meta cursor
@@ -1040,7 +1041,7 @@ impl App {
                 true
             }
             KeyCode::Char('2') => {
-                // If on a Kind in Meta mode, drill-down to its instances
+                // If on a Kind in Meta mode, switch to Data and expand to show instances
                 if self.mode == NavMode::Meta {
                     if let Some(super::data::TreeItem::Kind(_, _, kind)) =
                         self.tree.item_at(self.tree_cursor)
@@ -1048,11 +1049,18 @@ impl App {
                         let kind_key = kind.key.clone();
                         self.save_mode_cursor();
                         self.mode = NavMode::Data;
-                        self.enter_filtered_data_mode(kind_key);
+                        // Collapse all Kinds first, then expand only the current one
+                        self.tree.collapse_all_kinds();
+                        self.tree.collapsed.remove(&format!("kind:{}", kind_key));
+                        // Request instance load
+                        if self.tree.get_instances(&kind_key).is_none() {
+                            self.pending_instance_load = Some(kind_key);
+                        }
                         return true;
                     }
                 }
                 self.exit_filtered_data_mode();
+                self.tree.collapse_all_kinds(); // Collapse all Kind instances
                 self.save_mode_cursor();
                 self.mode = NavMode::Data;
                 self.restore_mode_cursor(NavMode::Data);
@@ -2133,6 +2141,7 @@ mod tests {
             stats: GraphStats::default(),
             collapsed: FxHashSet::default(),
             instances: BTreeMap::new(),
+            instance_totals: BTreeMap::new(),
         }
     }
 
@@ -2202,7 +2211,7 @@ mod tests {
                 incoming_arcs: vec![],
             },
         ];
-        app.tree.set_instances("Locale", instances);
+        app.tree.set_instances("Locale", instances.clone(), instances.len());
 
         // Switch to Data mode
         app.mode = NavMode::Data;
@@ -2245,7 +2254,7 @@ mod tests {
             outgoing_arcs: vec![],
             incoming_arcs: vec![],
         }];
-        app.tree.set_instances("Locale", instances);
+        app.tree.set_instances("Locale", instances.clone(), instances.len());
 
         // In Meta mode, instances should not be counted
         assert_eq!(app.current_item_count(), 8); // No instances
@@ -2325,7 +2334,7 @@ mod tests {
                 incoming_arcs: vec![],
             },
         ];
-        app.tree.set_instances("Locale", instances);
+        app.tree.set_instances("Locale", instances.clone(), instances.len());
 
         // Switch to Data mode
         app.mode = NavMode::Data;
@@ -2431,7 +2440,7 @@ mod tests {
                 incoming_arcs: vec![],
             },
         ];
-        app.tree.set_instances("Locale", instances);
+        app.tree.set_instances("Locale", instances.clone(), instances.len());
 
         app.enter_filtered_data_mode("Locale".to_string());
 

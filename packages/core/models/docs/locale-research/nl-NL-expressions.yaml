@@ -1,0 +1,784 @@
+# Native Dutch (Netherlands) Marketing Expressions 2024-2025
+# Source: Dutch advertising, e-commerce, and marketing corpus
+# All expressions with proper Dutch diacritics and spelling
+
+expressions:
+  # ============================================================================
+  # FIELD 1: URGENCY - Urgentie-uitdrukkingen
+  # ============================================================================
+  - text: "Op=Op!"
+    field: URGENCY
+    register: casual
+    context: "Flash sales, limited stock alerts"
+
+  - text: "Laatste stuks in huis"
+    field: URGENCY
+    register: neutral
+    context: "Inventory scarcity messaging"
+
+  - text: "Nog maar 3 op voorraad"
+    field: URGENCY
+    register: neutral
+    context: "Real-time stock counter displays"
+
+  - text: "Laatste kans"
+    field: URGENCY
+    register: casual
+    context: "End-of-promotion banners"
+
+  - text: "Tijdelijke actie: nu of nooit"
+    field: URGENCY
+    register: casual
+    context: "Time-limited promotional campaigns"
+
+  - text: "Alleen dit weekend geldig"
+    field: URGENCY
+    register: neutral
+    context: "Weekend sale promotions"
+
+  - text: "Einddatum nadert: bestel vandaag!"
+    field: URGENCY
+    register: casual
+    context: "Countdown timer messaging"
+
+  - text: "Voorraad bijna op"
+    field: URGENCY
+    register: neutral
+    context: "Low stock warnings"
+
+  - text: "Actie eindigt morgen"
+    field: URGENCY
+    register: neutral
+    context: "Deadline-driven email campaigns"
+
+  - text: "Wees er snel bij"
+    field: URGENCY
+    register: casual
+    context: "Product launch announcements"
+
+  - text: "Alleen vandaag"
+    field: URGENCY
+    register: casual
+    context: "One-day flash sales"
+
+  - text: "Nog maar even geldig"
+    field: URGENCY
+    register: casual
+    context: "Expiring discount codes"
+
+  - text: "Uitverkoop: laatste kans"
+    field: URGENCY
+    register: neutral
+    context: "End-of-season clearance"
+
+  - text: "De timer loopt af"
+    field: URGENCY
+    register: casual
+    context: "Countdown timer on product pages"
+
+  - text: "Vandaag laatste dag"
+    field: URGENCY
+    register: neutral
+    context: "Final day promotions"
+
+  # ============================================================================
+  # FIELD 2: VALUE - Waarde-uitdrukkingen
+  # ============================================================================
+  - text: "Bespaar 20%"
+    field: VALUE
+    register: neutral
+    context: "Discount percentage displays"
+
+  - text: "Scherp geprijsd"
+    field: VALUE
+    register: neutral
+    context: "Competitive pricing claims"
+
+  - text: "Voordelig pakketprijs"
+    field: VALUE
+    register: neutral
+    context: "Bundle deal promotions"
+
+  - text: "Gratis verzending vanaf 50 euro"
+    field: VALUE
+    register: neutral
+    context: "Free shipping threshold messaging"
+
+  - text: "Laagste prijsgarantie"
+    field: VALUE
+    register: formal
+    context: "Price match guarantee policies"
+
+  - text: "Van 49,99 euro voor 29,99 euro"
+    field: VALUE
+    register: neutral
+    context: "Strikethrough pricing displays"
+
+  - text: "Tot 50% korting"
+    field: VALUE
+    register: neutral
+    context: "Sale banners and promotions"
+
+  - text: "Superdeal"
+    field: VALUE
+    register: casual
+    context: "Featured discount products"
+
+  - text: "Beste prijs online"
+    field: VALUE
+    register: neutral
+    context: "Price comparison claims"
+
+  - text: "Gratis cadeau bij je bestelling"
+    field: VALUE
+    register: casual
+    context: "Gift with purchase promotions"
+
+  - text: "Mega voordeel"
+    field: VALUE
+    register: casual
+    context: "Large discount campaigns"
+
+  - text: "Lage prijs belofte"
+    field: VALUE
+    register: neutral
+    context: "Value proposition statements"
+
+  - text: "Zet je geld slim in"
+    field: VALUE
+    register: casual
+    context: "Smart shopping messaging"
+
+  - text: "Korting tot 70%"
+    field: VALUE
+    register: neutral
+    context: "Major sale events like Black Friday"
+
+  - text: "Gratis retourneren"
+    field: VALUE
+    register: neutral
+    context: "Return policy highlights"
+
+  # ============================================================================
+  # FIELD 3: TRUST - Vertrouwen-uitdrukkingen
+  # ============================================================================
+  - text: "Thuiswinkel Waarborg"
+    field: TRUST
+    register: formal
+    context: "E-commerce certification badge"
+
+  - text: "Webshop Keurmerk"
+    field: TRUST
+    register: formal
+    context: "Quality certification display"
+
+  - text: "Niet goed? Geld terug!"
+    field: TRUST
+    register: casual
+    context: "Money-back guarantee messaging"
+
+  - text: "30 dagen gratis retourneren"
+    field: TRUST
+    register: neutral
+    context: "Return policy information"
+
+  - text: "Veilig betalen met iDEAL"
+    field: TRUST
+    register: neutral
+    context: "Payment security messaging"
+
+  - text: "Gecertificeerde webshop"
+    field: TRUST
+    register: formal
+    context: "Trust badge displays"
+
+  - text: "100 dagen bedenktijd"
+    field: TRUST
+    register: neutral
+    context: "Extended return window policy"
+
+  - text: "Klantbeoordeling 9.2"
+    field: TRUST
+    register: neutral
+    context: "Customer rating displays"
+
+  - text: "Betalen achteraf mogelijk"
+    field: TRUST
+    register: neutral
+    context: "Payment options (Klarna, Afterpay)"
+
+  - text: "Gegarandeerd origineel"
+    field: TRUST
+    register: formal
+    context: "Authenticity guarantee for brands"
+
+  - text: "Ervaren webwinkel sinds 2010"
+    field: TRUST
+    register: neutral
+    context: "Longevity trust signals"
+
+  - text: "Volledig veilig afrekenen"
+    field: TRUST
+    register: neutral
+    context: "Checkout security messaging"
+
+  - text: "Webwinkelkeur gecertificeerd"
+    field: TRUST
+    register: formal
+    context: "Dutch e-commerce certification"
+
+  - text: "Gratis proefperiode"
+    field: TRUST
+    register: neutral
+    context: "Risk-free trial offers"
+
+  - text: "Betrouwbaar en veilig"
+    field: TRUST
+    register: neutral
+    context: "General trust messaging"
+
+  # ============================================================================
+  # FIELD 4: SUCCESS - Succes-uitdrukkingen
+  # ============================================================================
+  - text: "Meer dan 10.000 tevreden klanten"
+    field: SUCCESS
+    register: neutral
+    context: "Social proof statistics"
+
+  - text: "Onze bestseller"
+    field: SUCCESS
+    register: neutral
+    context: "Popular product highlighting"
+
+  - text: "Top verkocht deze week"
+    field: SUCCESS
+    register: neutral
+    context: "Weekly bestseller lists"
+
+  - text: "Al 500 keer verkocht"
+    field: SUCCESS
+    register: neutral
+    context: "Sales volume indicators"
+
+  - text: "Populair product nummer 1"
+    field: SUCCESS
+    register: neutral
+    context: "Product ranking displays"
+
+  - text: "Aanbevolen door klanten"
+    field: SUCCESS
+    register: neutral
+    context: "Customer recommendation badges"
+
+  - text: "Favoriet bij onze shoppers"
+    field: SUCCESS
+    register: casual
+    context: "Customer favorite sections"
+
+  - text: "Meest gevraagde item"
+    field: SUCCESS
+    register: neutral
+    context: "High-demand product indicators"
+
+  - text: "Top 10 bestseller"
+    field: SUCCESS
+    register: neutral
+    context: "Bestseller category lists"
+
+  - text: "Duizenden tevreden kopers"
+    field: SUCCESS
+    register: neutral
+    context: "Cumulative customer success"
+
+  - text: "Al jaren onze nummer 1"
+    field: SUCCESS
+    register: neutral
+    context: "Long-term bestseller status"
+
+  - text: "Klantenfavoriet"
+    field: SUCCESS
+    register: casual
+    context: "Customer choice badges"
+
+  - text: "In 24 uur uitverkocht"
+    field: SUCCESS
+    register: casual
+    context: "Rapid sellout indicators"
+
+  - text: "Trending in ons assortiment"
+    field: SUCCESS
+    register: casual
+    context: "Trending product sections"
+
+  - text: "Winnaar van het jaar"
+    field: SUCCESS
+    register: formal
+    context: "Award-winning product claims"
+
+  # ============================================================================
+  # FIELD 5: QUALITY - Kwaliteit-uitdrukkingen
+  # ============================================================================
+  - text: "Topkwaliteit gegarandeerd"
+    field: QUALITY
+    register: neutral
+    context: "Quality assurance messaging"
+
+  - text: "Premium materiaal"
+    field: QUALITY
+    register: formal
+    context: "Material quality descriptions"
+
+  - text: "A-merk kwaliteit"
+    field: QUALITY
+    register: neutral
+    context: "Brand quality comparisons"
+
+  - text: "Duurzaam en stevig"
+    field: QUALITY
+    register: neutral
+    context: "Durability claims"
+
+  - text: "Handgemaakt in Nederland"
+    field: QUALITY
+    register: formal
+    context: "Artisanal product descriptions"
+
+  - text: "Made in Holland"
+    field: QUALITY
+    register: formal
+    context: "Dutch origin certification"
+
+  - text: "Hoogwaardige afwerking"
+    field: QUALITY
+    register: formal
+    context: "Premium finish descriptions"
+
+  - text: "Professionele kwaliteit"
+    field: QUALITY
+    register: neutral
+    context: "Pro-grade product positioning"
+
+  - text: "Lange levensduur"
+    field: QUALITY
+    register: neutral
+    context: "Longevity claims"
+
+  - text: "Exclusief design"
+    field: QUALITY
+    register: formal
+    context: "Unique design highlights"
+
+  - text: "Gemaakt van beste materialen"
+    field: QUALITY
+    register: neutral
+    context: "Material sourcing claims"
+
+  - text: "Kwaliteitsproduct uit eigen atelier"
+    field: QUALITY
+    register: formal
+    context: "In-house production claims"
+
+  - text: "Superieur vakmanschap"
+    field: QUALITY
+    register: formal
+    context: "Craftsmanship emphasis"
+
+  - text: "5-sterren kwaliteit"
+    field: QUALITY
+    register: casual
+    context: "Star rating quality claims"
+
+  - text: "Authentiek Nederlands"
+    field: QUALITY
+    register: formal
+    context: "Dutch heritage products"
+
+  # ============================================================================
+  # FIELD 6: SPEED - Snelheid-uitdrukkingen
+  # ============================================================================
+  - text: "Morgen in huis"
+    field: SPEED
+    register: casual
+    context: "Next-day delivery promise"
+
+  - text: "Snelle levering"
+    field: SPEED
+    register: neutral
+    context: "General fast shipping messaging"
+
+  - text: "Vandaag verzonden"
+    field: SPEED
+    register: neutral
+    context: "Same-day dispatch notifications"
+
+  - text: "Direct beschikbaar"
+    field: SPEED
+    register: neutral
+    context: "In-stock availability indicators"
+
+  - text: "Binnen 24 uur geleverd"
+    field: SPEED
+    register: neutral
+    context: "Express delivery options"
+
+  - text: "Snel thuisbezorgd"
+    field: SPEED
+    register: casual
+    context: "Home delivery messaging"
+
+  - text: "Volgende dag thuis"
+    field: SPEED
+    register: casual
+    context: "Next-day home delivery"
+
+  - text: "Direct uit voorraad"
+    field: SPEED
+    register: neutral
+    context: "Immediate availability from warehouse"
+
+  - text: "Bliksemsnel geleverd"
+    field: SPEED
+    register: casual
+    context: "Ultra-fast delivery promotions"
+
+  - text: "Same day delivery"
+    field: SPEED
+    register: neutral
+    context: "Same-day delivery in urban areas"
+
+  - text: "Vandaag besteld, morgen in huis"
+    field: SPEED
+    register: neutral
+    context: "Standard fast delivery promise"
+
+  - text: "Snelle verzending"
+    field: SPEED
+    register: neutral
+    context: "Shipping speed messaging"
+
+  - text: "Onmiddellijk leverbaar"
+    field: SPEED
+    register: formal
+    context: "Immediate availability status"
+
+  - text: "24-uurs levering"
+    field: SPEED
+    register: neutral
+    context: "Express shipping option"
+
+  - text: "Expresbezorging"
+    field: SPEED
+    register: neutral
+    context: "Priority delivery service"
+
+  # ============================================================================
+  # FIELD 7: SIMPLICITY - Eenvoud-uitdrukkingen
+  # ============================================================================
+  - text: "Makkelijk en snel"
+    field: SIMPLICITY
+    register: casual
+    context: "Easy ordering process"
+
+  - text: "Zonder gedoe"
+    field: SIMPLICITY
+    register: casual
+    context: "Hassle-free service messaging"
+
+  - text: "In een paar klikken"
+    field: SIMPLICITY
+    register: casual
+    context: "Quick checkout process"
+
+  - text: "Simpel geregeld"
+    field: SIMPLICITY
+    register: casual
+    context: "Easy setup or return process"
+
+  - text: "Eenvoudig bestellen"
+    field: SIMPLICITY
+    register: neutral
+    context: "Simple ordering messaging"
+
+  - text: "Zonder wachtrijen"
+    field: SIMPLICITY
+    register: casual
+    context: "Online vs. store comparison"
+
+  - text: "In 3 stappen klaar"
+    field: SIMPLICITY
+    register: casual
+    context: "Step-by-step guides"
+
+  - text: "Supereenvoudig"
+    field: SIMPLICITY
+    register: casual
+    context: "App or service promotion"
+
+  - text: "Geen installatie nodig"
+    field: SIMPLICITY
+    register: neutral
+    context: "Plug-and-play product claims"
+
+  - text: "Klik, koop, klaar"
+    field: SIMPLICITY
+    register: casual
+    context: "Quick purchase CTAs"
+
+  - text: "Makkelijk retourneren"
+    field: SIMPLICITY
+    register: neutral
+    context: "Easy return policy"
+
+  - text: "Stap voor stap"
+    field: SIMPLICITY
+    register: neutral
+    context: "Tutorial or onboarding guides"
+
+  - text: "Zonder abonnement"
+    field: SIMPLICITY
+    register: neutral
+    context: "No-commitment purchase options"
+
+  - text: "Met een klik betalen"
+    field: SIMPLICITY
+    register: casual
+    context: "One-click payment options"
+
+  - text: "Zo geregeld"
+    field: SIMPLICITY
+    register: casual
+    context: "Quick service completion"
+
+  # ============================================================================
+  # FIELD 8: INNOVATION - Innovatie-uitdrukkingen
+  # ============================================================================
+  - text: "Nieuwste technologie"
+    field: INNOVATION
+    register: neutral
+    context: "Tech product descriptions"
+
+  - text: "Innovatief design"
+    field: INNOVATION
+    register: formal
+    context: "New product launches"
+
+  - text: "Geavanceerd systeem"
+    field: INNOVATION
+    register: formal
+    context: "Smart home and tech products"
+
+  - text: "State-of-the-art"
+    field: INNOVATION
+    register: formal
+    context: "Premium tech positioning"
+
+  - text: "Revolutionaire formule"
+    field: INNOVATION
+    register: formal
+    context: "Cosmetics and skincare"
+
+  - text: "Next-gen prestaties"
+    field: INNOVATION
+    register: casual
+    context: "Gaming and electronics"
+
+  - text: "Slimme innovatie"
+    field: INNOVATION
+    register: neutral
+    context: "Smart product features"
+
+  - text: "Vooruitstrevend"
+    field: INNOVATION
+    register: formal
+    context: "Cutting-edge positioning"
+
+  - text: "Cutting-edge technologie"
+    field: INNOVATION
+    register: formal
+    context: "Advanced tech claims"
+
+  - text: "Vernieuwend concept"
+    field: INNOVATION
+    register: formal
+    context: "New product categories"
+
+  - text: "High-tech afwerking"
+    field: INNOVATION
+    register: formal
+    context: "Premium product finishes"
+
+  - text: "Innovatieve oplossing"
+    field: INNOVATION
+    register: neutral
+    context: "Problem-solving products"
+
+  - text: "Toekomstbestendig"
+    field: INNOVATION
+    register: formal
+    context: "Future-proof product claims"
+
+  - text: "Pioniers in technologie"
+    field: INNOVATION
+    register: formal
+    context: "Brand positioning"
+
+  - text: "Slim en modern"
+    field: INNOVATION
+    register: casual
+    context: "Contemporary product features"
+
+  # ============================================================================
+  # FIELD 9: EXCLUSIVITY - Exclusiviteit-uitdrukkingen
+  # ============================================================================
+  - text: "Alleen voor leden"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Member-only promotions"
+
+  - text: "Exclusieve toegang"
+    field: EXCLUSIVITY
+    register: formal
+    context: "Early access to sales"
+
+  - text: "VIP korting"
+    field: EXCLUSIVITY
+    register: casual
+    context: "Loyalty program rewards"
+
+  - text: "Beperkte oplage"
+    field: EXCLUSIVITY
+    register: formal
+    context: "Limited edition products"
+
+  - text: "Members only"
+    field: EXCLUSIVITY
+    register: casual
+    context: "Exclusive member deals"
+
+  - text: "Exclusief bij ons"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Store-exclusive products"
+
+  - text: "Ledenvoordeel"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Member benefits highlights"
+
+  - text: "Limited edition"
+    field: EXCLUSIVITY
+    register: formal
+    context: "Collectible or special products"
+
+  - text: "Alleen voor VIPs"
+    field: EXCLUSIVITY
+    register: casual
+    context: "VIP customer privileges"
+
+  - text: "Exclusieve aanbieding"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Special offer emails"
+
+  - text: "Club deal"
+    field: EXCLUSIVITY
+    register: casual
+    context: "Membership club promotions"
+
+  - text: "Uniek voor abonnees"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Subscriber-only content"
+
+  - text: "Beperkt verkrijgbaar"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Scarcity messaging"
+
+  - text: "Premium ledenkorting"
+    field: EXCLUSIVITY
+    register: formal
+    context: "Top-tier membership perks"
+
+  - text: "Speciaal voor jou geselecteerd"
+    field: EXCLUSIVITY
+    register: casual
+    context: "Personalized recommendations"
+
+  # ============================================================================
+  # FIELD 10: COMMUNITY - Gemeenschap-uitdrukkingen
+  # ============================================================================
+  - text: "Word lid"
+    field: COMMUNITY
+    register: neutral
+    context: "Membership signup CTAs"
+
+  - text: "Samen sterk"
+    field: COMMUNITY
+    register: casual
+    context: "Community mission statements"
+
+  - text: "Onze community"
+    field: COMMUNITY
+    register: casual
+    context: "Community forum or group"
+
+  - text: "Sluit je aan"
+    field: COMMUNITY
+    register: neutral
+    context: "Membership invitations"
+
+  - text: "Lid worden"
+    field: COMMUNITY
+    register: neutral
+    context: "Signup prompts"
+
+  - text: "Deel van ons team"
+    field: COMMUNITY
+    register: casual
+    context: "Loyalty program messaging"
+
+  - text: "Community voordeel"
+    field: COMMUNITY
+    register: neutral
+    context: "Group benefits"
+
+  - text: "Join de club"
+    field: COMMUNITY
+    register: casual
+    context: "Youth-oriented memberships"
+
+  - text: "Samen shoppen"
+    field: COMMUNITY
+    register: casual
+    context: "Group buying promotions"
+
+  - text: "Word deel van onze familie"
+    field: COMMUNITY
+    register: casual
+    context: "Brand community building"
+
+  - text: "Onze ledenclub"
+    field: COMMUNITY
+    register: neutral
+    context: "Loyalty club pages"
+
+  - text: "Verbonden met elkaar"
+    field: COMMUNITY
+    register: casual
+    context: "Social community messaging"
+
+  - text: "Doe mee"
+    field: COMMUNITY
+    register: casual
+    context: "Community challenges and events"
+
+  - text: "Jouw community"
+    field: COMMUNITY
+    register: casual
+    context: "Personalized community space"
+
+  - text: "Samen vooruit"
+    field: COMMUNITY
+    register: casual
+    context: "Sustainability and social initiatives"

@@ -1,0 +1,100 @@
+# packages/core/models/node-kinds/global/locale-knowledge/language-family.yaml
+# LanguageFamily - ISO 639-5 top-level language family
+#
+# v10.8: Geographic Taxonomy - Phase 2
+# Data: ~15 families (Indo-European, Sino-Tibetan, Afro-Asiatic, etc.)
+# Source: ISO 639-5 (loc.gov)
+
+node:
+  name: LanguageFamily
+  realm: global
+  layer: locale-knowledge
+  trait: knowledge
+  icon: "🗣️"
+  description: "ISO 639-5 language family for clustering linguistically related locales"
+
+  standard_properties:
+    key:
+      type: string
+      required: true
+      description: "ISO 639-5 three-letter code"
+      pattern: "^[a-z]{3}$"
+      examples:
+        - "ine"  # Indo-European
+        - "sit"  # Sino-Tibetan
+        - "afa"  # Afro-Asiatic
+        - "map"  # Austronesian
+        - "jpx"  # Japonic
+
+    display_name:
+      type: string
+      required: true
+      description: "English name of the language family"
+      example: "Indo-European"
+
+    description:
+      type: string
+      required: true
+      description: "Short description"
+      example: "Largest language family, includes Romance, Germanic, Slavic, Indo-Iranian"
+
+    llm_context:
+      type: string
+      required: true
+      description: "LLM generation hints"
+      example: "USE: for European, Iranian, Indian languages. TRIGGERS: indo-european, romance, germanic, slavic. SHARE: cognates, grammatical structures."
+
+    created_at:
+      type: datetime
+      required: true
+
+    updated_at:
+      type: datetime
+      required: true
+
+  properties:
+    name_french:
+      type: string
+      required: false
+      description: "French name of the language family"
+      example: "Indo-europeenne"
+
+    branch_count:
+      type: int
+      required: false
+      description: "Number of LanguageBranch children"
+      example: 9
+
+    speaker_estimate:
+      type: string
+      required: false
+      description: "Estimated number of speakers"
+      example: "3.2 billion"
+
+  relations:
+    incoming:
+      - type: BRANCH_OF
+        from: LanguageBranch
+        cardinality: "N:1"
+        description: "Language branches within this family"
+
+  example:
+    data:
+      key: "ine"
+      display_name: "Indo-European"
+      description: "Largest language family, includes Romance, Germanic, Slavic, Indo-Iranian"
+      name_french: "Indo-europeenne"
+      branch_count: 9
+      speaker_estimate: "3.2 billion"
+      llm_context: "USE: for European, Iranian, Indian languages. TRIGGERS: indo-european, romance, germanic, slavic. SHARE: cognates, similar grammar. Branches can share vocabulary."
+
+    cypher: |
+      // Get all branches in a family
+      MATCH (f:LanguageFamily {key: $key})<-[:BRANCH_OF]-(b:LanguageBranch)
+      RETURN b.key, b.name
+      ORDER BY b.name
+
+      // Get all locales speaking languages from this family
+      MATCH (f:LanguageFamily {key: $key})<-[:BRANCH_OF]-(b:LanguageBranch)<-[:SPEAKS_BRANCH]-(l:Locale)
+      RETURN l.key, b.name AS branch
+      ORDER BY b.name, l.key

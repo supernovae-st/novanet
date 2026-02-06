@@ -7,7 +7,7 @@ arc:
   target: TermSet
   cardinality: one_to_many
   llm_context: Locale has multiple term sets, one per domain.
-  cypher_pattern: (Locale)-[:HAS_TERMS {domain: $domain}]->(TermSet)
+  cypher_pattern: "(Locale)-[:HAS_TERMS {domain: $domain}]->(TermSet)"
   properties:
     domain:
       type: string

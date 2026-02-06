@@ -314,6 +314,9 @@ pub struct TaxonomyTree {
     /// Instances loaded for Data view, keyed by Kind key.
     /// Only populated when in Data mode and a Kind is selected.
     pub instances: BTreeMap<String, Vec<InstanceInfo>>,
+    /// Total instance counts in Neo4j (may be > loaded instances due to LIMIT).
+    /// Used to show "3/500 of 847" when results are truncated.
+    pub instance_totals: BTreeMap<String, usize>,
 }
 
 impl TaxonomyTree {
@@ -477,6 +480,7 @@ ORDER BY realm_key, layer_key, kind_key
             stats,
             collapsed: FxHashSet::default(),
             instances: BTreeMap::new(),
+            instance_totals: BTreeMap::new(),
         })
     }
 
@@ -604,9 +608,20 @@ ORDER BY family_key, arc_key
     }
 
     /// Load instances of a Kind from Neo4j for Data view.
-    /// Returns instances with their properties and arcs.
-    pub async fn load_instances(db: &Db, kind_label: &str) -> crate::Result<Vec<InstanceInfo>> {
-        // Query instances of this Kind with their properties and arcs
+    /// Returns (instances, total_count) - instances are limited to 500, total is the real count.
+    pub async fn load_instances(db: &Db, kind_label: &str) -> crate::Result<(Vec<InstanceInfo>, usize)> {
+        // First, get the total count (fast query with index)
+        let count_cypher = format!(
+            "MATCH (n:{kind_label}) WHERE NOT n:Meta RETURN count(n) AS total",
+            kind_label = kind_label
+        );
+        let count_rows = db.execute(&count_cypher).await?;
+        let total_count: usize = count_rows
+            .first()
+            .and_then(|r| r.get::<i64>("total").ok())
+            .unwrap_or(0) as usize;
+
+        // Query instances of this Kind with their properties and arcs (limited to 500)
         let cypher = format!(
             r#"
 MATCH (n:{kind_label})
@@ -632,7 +647,7 @@ RETURN
     outgoing,
     incoming
 ORDER BY key
-LIMIT 100
+LIMIT 500
 "#,
             kind_label = kind_label
         );
@@ -703,7 +718,7 @@ LIMIT 100
             });
         }
 
-        Ok(instances)
+        Ok((instances, total_count))
     }
 
     /// Load graph statistics.
@@ -1326,6 +1341,18 @@ RETURN kw.keyword as keyword,
         self.collapsed.clear();
     }
 
+    /// Collapse all Kind instances (hide their instances).
+    /// Used when switching between Meta and Data modes.
+    pub fn collapse_all_kinds(&mut self) {
+        for realm in &self.realms {
+            for layer in &realm.layers {
+                for kind in &layer.kinds {
+                    self.collapsed.insert(format!("kind:{}", kind.key));
+                }
+            }
+        }
+    }
+
     /// Expand subtree under a specific key.
     /// Expands the item and all its children.
     pub fn expand_subtree(&mut self, key: &str) {
@@ -1435,15 +1462,21 @@ RETURN kw.keyword as keyword,
     // ========================================================================
 
     /// Set instances for a Kind (used in Data mode).
-    /// Will be used when integrating Neo4j instance loading.
+    /// Also stores the total count for "X of Y" display.
     #[allow(dead_code)]
-    pub fn set_instances(&mut self, kind_key: &str, instances: Vec<InstanceInfo>) {
+    pub fn set_instances(&mut self, kind_key: &str, instances: Vec<InstanceInfo>, total: usize) {
         self.instances.insert(kind_key.to_string(), instances);
+        self.instance_totals.insert(kind_key.to_string(), total);
     }
 
     /// Get instances for a Kind.
     pub fn get_instances(&self, kind_key: &str) -> Option<&Vec<InstanceInfo>> {
         self.instances.get(kind_key)
+    }
+
+    /// Get total instance count for a Kind (may be > loaded instances).
+    pub fn get_instance_total(&self, kind_key: &str) -> Option<usize> {
+        self.instance_totals.get(kind_key).copied()
     }
 
     /// Total number of visible items for a specific mode.
@@ -2209,6 +2242,7 @@ mod tests {
             stats: GraphStats::default(),
             collapsed: FxHashSet::default(),
             instances: BTreeMap::new(),
+            instance_totals: BTreeMap::new(),
         }
     }
 

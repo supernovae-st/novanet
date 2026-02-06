@@ -158,8 +158,14 @@ pub struct ArcDef {
     pub is_self_referential: Option<bool>,
 
     /// If this is an inverse arc, references the forward arc type.
+    /// Used in relations.yaml format to mark inverse arcs that should be filtered.
     #[serde(default)]
     pub inverse_of: Option<String>,
+
+    /// The name of this arc's inverse (for display purposes).
+    /// e.g., HAS_PAGE has inverse "PAGE_OF"
+    #[serde(skip)]
+    pub inverse_name: Option<String>,
 }
 
 impl ArcDef {
@@ -207,8 +213,10 @@ pub fn load_arcs(root: &Path) -> crate::Result<ArcsDocument> {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Individual Arc-Kind YAML Files (v9.9)
+// Individual Arc-Kind YAML Files (v10.7)
 // ─────────────────────────────────────────────────────────────────────────────
+
+use std::collections::HashMap;
 
 /// Individual arc-kind YAML file structure (from arc-kinds/{family}/*.yaml).
 #[derive(Debug, Clone, Deserialize)]
@@ -219,24 +227,208 @@ pub struct ArcKindYaml {
 /// Arc definition within individual arc-kind YAML file.
 #[derive(Debug, Clone, Deserialize)]
 pub struct ArcKindDef {
+    /// Arc type name (SCREAMING_SNAKE_CASE), e.g., "HAS_PAGE".
+    /// Supports both `name:` and `type:` fields for compatibility.
+    #[serde(alias = "type")]
     pub name: String,
+
+    /// Arc family classification.
     pub family: ArcFamily,
+
+    /// Scope (intra_realm or cross_realm).
     #[serde(default)]
     pub scope: Option<String>,
+
+    /// Temperature threshold for spreading activation (0.0 - 1.0).
     #[serde(default)]
     pub temperature_threshold: Option<f32>,
-    // Other fields are optional for our purposes
-    #[serde(default)]
-    pub source: Option<serde_yaml::Value>,
-    #[serde(default)]
-    pub target: Option<serde_yaml::Value>,
-    #[serde(default)]
-    pub cardinality: Option<String>,
+
+    /// Source node label(s).
+    pub source: NodeRef,
+
+    /// Target node label(s).
+    pub target: NodeRef,
+
+    /// Cardinality constraint.
+    pub cardinality: Cardinality,
+
+    /// LLM context description.
     #[serde(default)]
     pub llm_context: Option<String>,
+
+    /// Arc properties (optional) - can be list of strings, list of objects, or map.
+    /// We store as opaque Value since format varies.
+    #[serde(default)]
+    pub properties: Option<serde_yaml::Value>,
+
+    /// Inverse arc reference (optional).
+    #[serde(default)]
+    pub inverse: Option<String>,
+
+    /// Cypher pattern (optional, can be auto-generated).
+    #[serde(default)]
+    pub cypher_pattern: Option<String>,
 }
 
-use std::collections::HashMap;
+impl ArcKindDef {
+    /// Extract property names from the various formats.
+    fn extract_property_names(&self) -> Option<Vec<String>> {
+        self.properties.as_ref().and_then(|v| match v {
+            // List of strings: ["position", "status"]
+            serde_yaml::Value::Sequence(seq) => {
+                let names: Vec<String> = seq
+                    .iter()
+                    .filter_map(|item| {
+                        // Could be string or object with "name" field
+                        match item {
+                            serde_yaml::Value::String(s) => Some(s.clone()),
+                            serde_yaml::Value::Mapping(m) => m
+                                .get(serde_yaml::Value::String("name".to_string()))
+                                .and_then(|v| v.as_str().map(|s| s.to_string())),
+                            _ => None,
+                        }
+                    })
+                    .collect();
+                if names.is_empty() {
+                    None
+                } else {
+                    Some(names)
+                }
+            }
+            // Map: {segment: {type: string, ...}}
+            serde_yaml::Value::Mapping(m) => {
+                let names: Vec<String> = m
+                    .keys()
+                    .filter_map(|k| k.as_str().map(|s| s.to_string()))
+                    .collect();
+                if names.is_empty() {
+                    None
+                } else {
+                    Some(names)
+                }
+            }
+            _ => None,
+        })
+    }
+
+    /// Convert to ArcDef format for generator compatibility.
+    ///
+    /// Note: The `inverse` field in arc-kind YAML means "the inverse of THIS arc is called X",
+    /// NOT "this arc IS the inverse of X". So we set `inverse_of` to None here.
+    /// The inverse name is stored in `inverse_name` for display purposes in the generator.
+    pub fn to_arc_def(&self) -> ArcDef {
+        ArcDef {
+            arc_type: self.name.clone(),
+            family: self.family,
+            source: self.source.clone(),
+            target: self.target.clone(),
+            cardinality: self.cardinality,
+            llm_context: self.llm_context.clone().unwrap_or_default(),
+            properties: self.extract_property_names(),
+            is_self_referential: None,
+            // Don't set inverse_of here - the `inverse` field means "this arc's inverse IS X",
+            // not "this arc IS the inverse OF X". Setting inverse_of would incorrectly filter
+            // this arc as an inverse relation.
+            inverse_of: None,
+            // Store the inverse name for display in the generator
+            inverse_name: self.inverse.clone(),
+        }
+    }
+}
+
+/// Load all arc definitions from individual arc-kind YAML files.
+///
+/// This is the v10.7+ replacement for `load_arcs()` which reads from relations.yaml.
+/// Returns an ArcsDocument compatible with existing generator code.
+pub fn load_arc_kinds_from_files(root: &Path) -> crate::Result<ArcsDocument> {
+    let arc_kinds_dir = crate::config::arc_kinds_dir(root);
+
+    if !arc_kinds_dir.exists() {
+        return Err(crate::NovaNetError::Validation(format!(
+            "arc-kinds directory not found: {}",
+            arc_kinds_dir.display()
+        )));
+    }
+
+    let mut arcs = Vec::new();
+
+    // Scan all family directories
+    for family_dir in std::fs::read_dir(&arc_kinds_dir)? {
+        let family_dir = family_dir?;
+        if !family_dir.file_type()?.is_dir() {
+            continue;
+        }
+
+        // Scan YAML files in each family directory
+        for entry in std::fs::read_dir(family_dir.path())? {
+            let entry = entry?;
+            let path = entry.path();
+
+            // Skip non-YAML and index files
+            if path.extension().is_none_or(|e| e != "yaml") {
+                continue;
+            }
+            if path.file_name().is_some_and(|n| n == "_index.yaml") {
+                continue;
+            }
+
+            // Parse the arc-kind YAML
+            match super::utils::load_yaml::<ArcKindYaml>(&path) {
+                Ok(yaml) => {
+                    arcs.push(yaml.arc.to_arc_def());
+                }
+                Err(e) => {
+                    // Try to get more detailed error info
+                    let content = std::fs::read_to_string(&path).unwrap_or_default();
+                    match serde_yaml::from_str::<serde_yaml::Value>(&content) {
+                        Ok(v) => {
+                            eprintln!(
+                                "Warning: Failed to parse {}: {} (valid YAML but wrong schema)",
+                                path.display(),
+                                e
+                            );
+                            // Try to identify the issue
+                            if let Some(arc) = v.get("arc") {
+                                if arc.get("source").is_none() {
+                                    eprintln!("  -> Missing 'source' field");
+                                }
+                                if arc.get("target").is_none() {
+                                    eprintln!("  -> Missing 'target' field");
+                                }
+                                if arc.get("cardinality").is_none() {
+                                    eprintln!("  -> Missing 'cardinality' field");
+                                }
+                            }
+                        }
+                        Err(_) => {
+                            eprintln!("Warning: Failed to parse {}: {}", path.display(), e);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    if arcs.is_empty() {
+        return Err(crate::NovaNetError::Validation(
+            "No arc-kind YAML files found".to_string(),
+        ));
+    }
+
+    // Sort by family then by type for deterministic output
+    arcs.sort_by(|a, b| {
+        a.family
+            .to_string()
+            .cmp(&b.family.to_string())
+            .then_with(|| a.arc_type.cmp(&b.arc_type))
+    });
+
+    Ok(ArcsDocument {
+        arcs,
+        semantic_link_types: None,
+        examples: None,
+    })
+}
 
 /// Load temperature_threshold values from individual arc-kind YAML files.
 ///
@@ -443,18 +635,18 @@ relations:
 
         let doc = load_arcs(root).expect("should parse relations.yaml");
 
-        // v10.6: Total arc count (Entity-Centric Architecture)
-        // 58 arcs (added 2 new arcs in v10.6)
-        assert_eq!(doc.arcs.len(), 58, "expected 58 arcs");
+        // v10.7: Total arc count (7-node architecture + CONTAINS)
+        // 59 arcs (added CONTAINS for *Set → Atom pattern)
+        assert_eq!(doc.arcs.len(), 59, "expected 59 arcs");
 
-        // v10.6: Family distribution (58 total arcs)
-        // Ownership: 25 (added HAS_CULTURE, HAS_MARKET for 7-node architecture)
+        // v10.7: Family distribution (59 total arcs)
+        // Ownership: 26 (added CONTAINS for *Set → Atom pattern)
         // Localization: 8 (unchanged)
         // Semantic: 8 (unchanged)
         // Generation: 15 (unchanged)
         // Mining: 2 (unchanged)
         let family_count = |f: ArcFamily| doc.arcs.iter().filter(|a| a.family == f).count();
-        assert_eq!(family_count(ArcFamily::Ownership), 25, "ownership count");
+        assert_eq!(family_count(ArcFamily::Ownership), 26, "ownership count");
         assert_eq!(
             family_count(ArcFamily::Localization),
             8,
@@ -480,7 +672,7 @@ relations:
         let mut types: Vec<&str> = doc.arcs.iter().map(|a| a.arc_type.as_str()).collect();
         types.sort();
         types.dedup();
-        assert_eq!(types.len(), 58, "all arc types should be unique");
+        assert_eq!(types.len(), 59, "all arc types should be unique");
 
         // Semantic link types
         let slt = doc
@@ -513,6 +705,9 @@ arc:
   name: SEMANTIC_LINK
   family: semantic
   scope: intra_realm
+  source: Entity
+  target: Entity
+  cardinality: many_to_many
   temperature_threshold: 0.3
 "#;
         let parsed: ArcKindYaml = serde_yaml::from_str(yaml).unwrap();
@@ -527,6 +722,9 @@ arc:
 arc:
   name: HAS_PAGE
   family: ownership
+  source: Project
+  target: Page
+  cardinality: one_to_many
 "#;
         let parsed: ArcKindYaml = serde_yaml::from_str(yaml).unwrap();
         assert_eq!(parsed.arc.name, "HAS_PAGE");
@@ -566,3 +764,56 @@ arc:
         );
     }
 }
+
+#[cfg(test)]
+mod arc_kind_tests {
+    use super::*;
+
+    #[test]
+    fn parse_has_audience_yaml() {
+        let yaml = r#"
+arc:
+  name: HAS_AUDIENCE
+  family: ownership
+  scope: intra_realm
+  source: Locale
+  target: AudienceSet
+  cardinality: one_to_many
+  llm_context: Locale has multiple audience sets, one per segment.
+  cypher_pattern: "(Locale)-[:HAS_AUDIENCE {segment: $segment}]->(AudienceSet)"
+  properties:
+    segment:
+      type: string
+      required: true
+      description: "Audience segment (b2b, b2c, general)"
+"#;
+        let result: Result<ArcKindYaml, _> = serde_yaml::from_str(yaml);
+        match &result {
+            Ok(v) => println!("Parsed: {}", v.arc.name),
+            Err(e) => println!("Error: {}", e),
+        }
+        result.expect("should parse HAS_AUDIENCE");
+    }
+}
+
+    #[test]
+    fn parse_has_audience_file() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .parent()
+            .and_then(|p| p.parent())
+            .expect("should find root");
+        
+        let path = root.join("packages/core/models/arc-kinds/ownership/has-audience.yaml");
+        eprintln!("Loading from: {}", path.display());
+        
+        let content = std::fs::read_to_string(&path).expect("should read file");
+        eprintln!("Content:\n{}", &content[..200.min(content.len())]);
+        
+        match serde_yaml::from_str::<ArcKindYaml>(&content) {
+            Ok(v) => eprintln!("Parsed: {}", v.arc.name),
+            Err(e) => {
+                eprintln!("Error: {}", e);
+                panic!("Failed to parse: {}", e);
+            }
+        }
+    }

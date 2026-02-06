@@ -8,6 +8,10 @@
 
 set -euo pipefail
 
+# UTF-8 encoding for proper diacritics support (é, ü, ñ, etc.)
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
 # SECURITY: Use environment variables with defaults for dev only
 NEO4J_USER="${NEO4J_USER:-neo4j}"
 NEO4J_PASSWORD="${NEO4J_PASSWORD:-novanetpassword}"

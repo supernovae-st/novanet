@@ -149,6 +149,29 @@ These terms are deprecated and should NOT be used:
 | Arc stroke | ArcFamily | `taxonomy.yaml` arc_families[].color |
 | Arc dash | ArcScope | solid (intra) / dashed (cross) |
 
+## Icons (v10.6)
+
+Source of truth: `packages/core/models/visual-encoding.yaml` → `icons:` section
+
+Each icon has dual format:
+- `web`: Lucide icon name for Studio/web
+- `terminal`: Unicode symbol for TUI
+
+| Category | Purpose | Examples |
+|----------|---------|----------|
+| `realms` | Node ownership | ◉ global, ◎ tenant |
+| `layers` | Functional layer | ⚙ config, ◆ semantic, ● output |
+| `traits` | Locale behavior | ■ invariant, □ localized, ◊ knowledge |
+| `arc_families` | Arc type | → ownership, ⇢ localization |
+| `states` | UI empty states | ◐ loading, ∅ no_kinds, ⚠ error |
+| `navigation` | Tree controls | ▼ expanded, ▶ collapsed |
+| `quality` | Data completeness | ● complete, ◐ partial, * required |
+| `modes` | Nav modes | M meta, D data, A atlas |
+
+**TUI loading**: `Theme::with_root()` loads icons from YAML at startup.
+
+**Fallback**: Default icons used if YAML loading fails (graceful degradation).
+
 ## Commands
 
 Use Arc terminology in commands:

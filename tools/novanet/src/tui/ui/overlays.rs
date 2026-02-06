@@ -264,7 +264,10 @@ pub fn render_legend(f: &mut Frame, app: &App) {
                 .add_modifier(Modifier::BOLD),
         )),
         Line::from(""),
-        Line::from(vec![Span::styled("  Realms (border color)", STYLE_HIGHLIGHT)]),
+        Line::from(vec![Span::styled(
+            "  Realms (border color)",
+            STYLE_HIGHLIGHT,
+        )]),
     ];
 
     // Add realm colors from taxonomy

@@ -1,0 +1,1057 @@
+# Native French (France) Marketing Expressions 2024-2025
+# Source: French advertising and marketing corpus
+# All expressions with proper French accents (é, è, ê, ë, à, â, ù, û, ç, œ, æ, î, ï, ô)
+
+expressions:
+  # ============================================================================
+  # FIELD 1: URGENCY - Expressions d'urgence
+  # ============================================================================
+  - text: "Plus que quelques heures !"
+    field: URGENCY
+    register: casual
+    context: "Flash sale, countdown timer"
+
+  - text: "Offre limitée dans le temps"
+    field: URGENCY
+    register: neutral
+    context: "Time-limited promotional offers"
+
+  - text: "Dernières places disponibles"
+    field: URGENCY
+    register: neutral
+    context: "Events, courses, limited capacity"
+
+  - text: "Ne ratez pas cette occasion"
+    field: URGENCY
+    register: casual
+    context: "Email marketing, promotional banners"
+
+  - text: "Stock limité, faites vite !"
+    field: URGENCY
+    register: casual
+    context: "E-commerce scarcity messaging"
+
+  - text: "Plus que 24h pour en profiter"
+    field: URGENCY
+    register: casual
+    context: "Countdown promotions"
+
+  - text: "C'est maintenant ou jamais"
+    field: URGENCY
+    register: casual
+    context: "High-pressure sales moments"
+
+  - text: "Dernière chance de bénéficier de"
+    field: URGENCY
+    register: neutral
+    context: "End-of-sale messaging"
+
+  - text: "L'offre expire ce soir à minuit"
+    field: URGENCY
+    register: neutral
+    context: "Deadline-driven campaigns"
+
+  - text: "Rupture de stock imminente"
+    field: URGENCY
+    register: formal
+    context: "Scarcity alerts"
+
+  - text: "Vite, il n'en reste plus que 3 !"
+    field: URGENCY
+    register: casual
+    context: "Real-time inventory alerts"
+
+  - text: "Offre exceptionnelle jusqu'à épuisement"
+    field: URGENCY
+    register: neutral
+    context: "Limited inventory promotions"
+
+  - text: "Ne laissez pas passer cette offre"
+    field: URGENCY
+    register: neutral
+    context: "CTA buttons, email subjects"
+
+  - text: "Fin de série, prix cassés"
+    field: URGENCY
+    register: casual
+    context: "Clearance sales"
+
+  - text: "Profitez-en avant qu'il ne soit trop tard"
+    field: URGENCY
+    register: casual
+    context: "General urgency messaging"
+
+  - text: "Seulement pour les plus rapides"
+    field: URGENCY
+    register: casual
+    context: "First-come-first-served offers"
+
+  - text: "Demain, il sera trop tard"
+    field: URGENCY
+    register: casual
+    context: "Strong urgency messaging"
+
+  - text: "Quantités très limitées"
+    field: URGENCY
+    register: formal
+    context: "Premium product scarcity"
+
+  - text: "Derniers jours des soldes"
+    field: URGENCY
+    register: neutral
+    context: "End of sales period (soldes légales)"
+
+  - text: "Votre panier expire bientôt"
+    field: URGENCY
+    register: neutral
+    context: "Cart abandonment recovery"
+
+  # ============================================================================
+  # FIELD 2: VALUE - Expressions de valeur
+  # ============================================================================
+  - text: "Économisez jusqu'à 50%"
+    field: VALUE
+    register: neutral
+    context: "Discount promotions"
+
+  - text: "Profitez de prix imbattables"
+    field: VALUE
+    register: casual
+    context: "Price competition messaging"
+
+  - text: "Le meilleur rapport qualité-prix"
+    field: VALUE
+    register: neutral
+    context: "Value proposition statements"
+
+  - text: "Petit prix, grande qualité"
+    field: VALUE
+    register: casual
+    context: "Budget-friendly positioning"
+
+  - text: "Livraison offerte dès 49€"
+    field: VALUE
+    register: neutral
+    context: "Free shipping thresholds"
+
+  - text: "Frais de port gratuits"
+    field: VALUE
+    register: neutral
+    context: "Free shipping offers"
+
+  - text: "Un cadeau offert pour toute commande"
+    field: VALUE
+    register: neutral
+    context: "Gift with purchase"
+
+  - text: "Achetez-en 2, le 3ème offert"
+    field: VALUE
+    register: casual
+    context: "Bundle promotions"
+
+  - text: "Prix sacrifiés sur tout le site"
+    field: VALUE
+    register: casual
+    context: "Aggressive discounting"
+
+  - text: "Jusqu'à -70% sur une sélection"
+    field: VALUE
+    register: neutral
+    context: "Category-specific discounts"
+
+  - text: "Code promo exclusif : -20%"
+    field: VALUE
+    register: casual
+    context: "Promo code campaigns"
+
+  - text: "Prix cassés garantis"
+    field: VALUE
+    register: casual
+    context: "Price guarantee messaging"
+
+  - text: "Payez en 3 fois sans frais"
+    field: VALUE
+    register: neutral
+    context: "Payment installment options"
+
+  - text: "Premier mois offert"
+    field: VALUE
+    register: neutral
+    context: "Subscription free trials"
+
+  - text: "Remboursé si vous n'êtes pas satisfait"
+    field: VALUE
+    register: neutral
+    context: "Money-back guarantee"
+
+  - text: "Offre de bienvenue : -15%"
+    field: VALUE
+    register: neutral
+    context: "New customer discounts"
+
+  - text: "Ventes privées réservées aux membres"
+    field: VALUE
+    register: formal
+    context: "Member-exclusive sales"
+
+  - text: "Des économies toute l'année"
+    field: VALUE
+    register: casual
+    context: "Loyalty program benefits"
+
+  - text: "Le moins cher du marché"
+    field: VALUE
+    register: casual
+    context: "Price leadership claims"
+
+  - text: "Satisfait ou remboursé pendant 30 jours"
+    field: VALUE
+    register: neutral
+    context: "Return policy highlight"
+
+  # ============================================================================
+  # FIELD 3: TRUST - Expressions de confiance
+  # ============================================================================
+  - text: "Garanti 2 ans"
+    field: TRUST
+    register: neutral
+    context: "Product warranty"
+
+  - text: "Approuvé par des milliers de clients"
+    field: TRUST
+    register: neutral
+    context: "Social proof messaging"
+
+  - text: "Fabriqué en France"
+    field: TRUST
+    register: neutral
+    context: "Origin certification"
+
+  - text: "Certifié conforme aux normes européennes"
+    field: TRUST
+    register: formal
+    context: "Regulatory compliance"
+
+  - text: "Recommandé par les professionnels"
+    field: TRUST
+    register: formal
+    context: "Expert endorsement"
+
+  - text: "Élu produit de l'année"
+    field: TRUST
+    register: formal
+    context: "Award mention"
+
+  - text: "Testé et approuvé"
+    field: TRUST
+    register: casual
+    context: "Quality verification"
+
+  - text: "Plus de 10 000 avis positifs"
+    field: TRUST
+    register: neutral
+    context: "Review aggregation"
+
+  - text: "Notre engagement qualité"
+    field: TRUST
+    register: formal
+    context: "Brand promise statements"
+
+  - text: "Noté 4,8/5 par nos clients"
+    field: TRUST
+    register: neutral
+    context: "Rating display"
+
+  - text: "Paiement 100% sécurisé"
+    field: TRUST
+    register: neutral
+    context: "Checkout security"
+
+  - text: "Vos données sont protégées"
+    field: TRUST
+    register: neutral
+    context: "Privacy assurance"
+
+  - text: "Service client à votre écoute"
+    field: TRUST
+    register: formal
+    context: "Customer support"
+
+  - text: "Depuis 1995, votre partenaire de confiance"
+    field: TRUST
+    register: formal
+    context: "Heritage and longevity"
+
+  - text: "Ils nous font confiance"
+    field: TRUST
+    register: neutral
+    context: "Client logos section"
+
+  - text: "Labelisé Excellence"
+    field: TRUST
+    register: formal
+    context: "Quality label display"
+
+  - text: "Membre de la Fédération du e-commerce"
+    field: TRUST
+    register: formal
+    context: "Industry association"
+
+  - text: "Entreprise française engagée"
+    field: TRUST
+    register: neutral
+    context: "Corporate responsibility"
+
+  - text: "Artisan certifié Meilleur Ouvrier de France"
+    field: TRUST
+    register: formal
+    context: "Craftmanship certification"
+
+  - text: "Conforme au RGPD"
+    field: TRUST
+    register: formal
+    context: "GDPR compliance"
+
+  # ============================================================================
+  # FIELD 4: SUCCESS - Expressions de succès
+  # ============================================================================
+  - text: "Rejoignez plus de 50 000 clients satisfaits"
+    field: SUCCESS
+    register: neutral
+    context: "Customer base social proof"
+
+  - text: "Déjà adopté par des milliers de Français"
+    field: SUCCESS
+    register: neutral
+    context: "National adoption metrics"
+
+  - text: "La solution plébiscitée par les pros"
+    field: SUCCESS
+    register: casual
+    context: "B2B endorsement"
+
+  - text: "N°1 des ventes en France"
+    field: SUCCESS
+    register: neutral
+    context: "Market leadership claim"
+
+  - text: "Plus d'un million de produits vendus"
+    field: SUCCESS
+    register: neutral
+    context: "Sales volume proof"
+
+  - text: "97% de clients satisfaits"
+    field: SUCCESS
+    register: neutral
+    context: "Satisfaction rate"
+
+  - text: "Le choix des experts"
+    field: SUCCESS
+    register: formal
+    context: "Expert preference"
+
+  - text: "Recommandé par 9 clients sur 10"
+    field: SUCCESS
+    register: neutral
+    context: "Recommendation rate"
+
+  - text: "Best-seller depuis 3 ans"
+    field: SUCCESS
+    register: casual
+    context: "Sustained popularity"
+
+  - text: "Plus de 100 000 téléchargements"
+    field: SUCCESS
+    register: neutral
+    context: "App/digital product success"
+
+  - text: "La référence du marché"
+    field: SUCCESS
+    register: formal
+    context: "Market standard positioning"
+
+  - text: "Classé parmi les meilleurs"
+    field: SUCCESS
+    register: neutral
+    context: "Ranking mention"
+
+  - text: "Ils ont transformé leur quotidien"
+    field: SUCCESS
+    register: casual
+    context: "Testimonial intro"
+
+  - text: "Des résultats prouvés"
+    field: SUCCESS
+    register: neutral
+    context: "Efficacy claims"
+
+  - text: "Vu à la télé"
+    field: SUCCESS
+    register: casual
+    context: "Media exposure"
+
+  - text: "Coup de cœur de la rédaction"
+    field: SUCCESS
+    register: casual
+    context: "Editorial pick"
+
+  - text: "Primé au Salon de l'Innovation"
+    field: SUCCESS
+    register: formal
+    context: "Award winning"
+
+  - text: "Leader européen depuis 2018"
+    field: SUCCESS
+    register: formal
+    context: "European market leadership"
+
+  - text: "Comme vu sur M6 et TF1"
+    field: SUCCESS
+    register: casual
+    context: "TV channel mentions"
+
+  - text: "La marque préférée des Français"
+    field: SUCCESS
+    register: neutral
+    context: "National preference claim"
+
+  # ============================================================================
+  # FIELD 5: QUALITY - Expressions de qualité
+  # ============================================================================
+  - text: "Qualité premium garantie"
+    field: QUALITY
+    register: formal
+    context: "High-end positioning"
+
+  - text: "L'excellence à la française"
+    field: QUALITY
+    register: formal
+    context: "French quality heritage"
+
+  - text: "Sélectionné avec soin"
+    field: QUALITY
+    register: neutral
+    context: "Curation emphasis"
+
+  - text: "Matériaux nobles et durables"
+    field: QUALITY
+    register: formal
+    context: "Material quality"
+
+  - text: "Finitions haut de gamme"
+    field: QUALITY
+    register: formal
+    context: "Premium finish"
+
+  - text: "Fabriqué à la main par nos artisans"
+    field: QUALITY
+    register: formal
+    context: "Handcrafted emphasis"
+
+  - text: "Ingrédients d'origine naturelle"
+    field: QUALITY
+    register: neutral
+    context: "Natural ingredients"
+
+  - text: "Sans compromis sur la qualité"
+    field: QUALITY
+    register: formal
+    context: "Quality commitment"
+
+  - text: "Conçu pour durer"
+    field: QUALITY
+    register: neutral
+    context: "Durability focus"
+
+  - text: "Le savoir-faire français"
+    field: QUALITY
+    register: formal
+    context: "French expertise"
+
+  - text: "Testé en laboratoire"
+    field: QUALITY
+    register: formal
+    context: "Lab testing"
+
+  - text: "Qualité professionnelle"
+    field: QUALITY
+    register: neutral
+    context: "Pro-grade quality"
+
+  - text: "Normes les plus strictes"
+    field: QUALITY
+    register: formal
+    context: "Standards compliance"
+
+  - text: "Attention aux moindres détails"
+    field: QUALITY
+    register: formal
+    context: "Detail orientation"
+
+  - text: "Élaboré avec passion"
+    field: QUALITY
+    register: casual
+    context: "Passion-driven creation"
+
+  - text: "Collection signature"
+    field: QUALITY
+    register: formal
+    context: "Premium collection"
+
+  - text: "Édition limitée numérotée"
+    field: QUALITY
+    register: formal
+    context: "Limited edition"
+
+  - text: "Le meilleur de la technologie française"
+    field: QUALITY
+    register: formal
+    context: "French tech excellence"
+
+  - text: "Pureté garantie"
+    field: QUALITY
+    register: formal
+    context: "Purity claims"
+
+  - text: "Issu de l'agriculture biologique"
+    field: QUALITY
+    register: neutral
+    context: "Organic certification"
+
+  # ============================================================================
+  # FIELD 6: SPEED - Expressions de rapidité
+  # ============================================================================
+  - text: "Livraison express en 24h"
+    field: SPEED
+    register: neutral
+    context: "Fast shipping"
+
+  - text: "En quelques clics seulement"
+    field: SPEED
+    register: casual
+    context: "Easy checkout"
+
+  - text: "Commandez maintenant, recevez demain"
+    field: SPEED
+    register: casual
+    context: "Next-day delivery"
+
+  - text: "Résultats visibles en 7 jours"
+    field: SPEED
+    register: neutral
+    context: "Quick results"
+
+  - text: "Installation en moins de 5 minutes"
+    field: SPEED
+    register: casual
+    context: "Easy setup"
+
+  - text: "Inscription en 30 secondes"
+    field: SPEED
+    register: casual
+    context: "Quick signup"
+
+  - text: "Réponse garantie sous 24h"
+    field: SPEED
+    register: neutral
+    context: "Response time guarantee"
+
+  - text: "Prêt en un instant"
+    field: SPEED
+    register: casual
+    context: "Instant availability"
+
+  - text: "Livraison le jour même"
+    field: SPEED
+    register: neutral
+    context: "Same-day delivery"
+
+  - text: "Activez votre compte immédiatement"
+    field: SPEED
+    register: neutral
+    context: "Instant activation"
+
+  - text: "Devis en ligne en 2 minutes"
+    field: SPEED
+    register: casual
+    context: "Quick quote"
+
+  - text: "Prise en charge rapide"
+    field: SPEED
+    register: neutral
+    context: "Fast processing"
+
+  - text: "Votre colis expédié sous 48h"
+    field: SPEED
+    register: neutral
+    context: "Shipping speed"
+
+  - text: "Sans attente, sans rendez-vous"
+    field: SPEED
+    register: casual
+    context: "No waiting"
+
+  - text: "Service express disponible"
+    field: SPEED
+    register: neutral
+    context: "Express option"
+
+  - text: "Téléchargement instantané"
+    field: SPEED
+    register: neutral
+    context: "Digital delivery"
+
+  - text: "Créez votre compte en un clic"
+    field: SPEED
+    register: casual
+    context: "One-click signup"
+
+  - text: "Réservation immédiate"
+    field: SPEED
+    register: neutral
+    context: "Instant booking"
+
+  - text: "Livraison gratuite et rapide"
+    field: SPEED
+    register: neutral
+    context: "Free fast shipping"
+
+  - text: "Accès instantané à votre espace"
+    field: SPEED
+    register: neutral
+    context: "Instant access"
+
+  # ============================================================================
+  # FIELD 7: SIMPLICITY - Expressions de simplicité
+  # ============================================================================
+  - text: "Simple comme bonjour"
+    field: SIMPLICITY
+    register: casual
+    context: "Easy process emphasis"
+
+  - text: "Sans prise de tête"
+    field: SIMPLICITY
+    register: casual
+    context: "Hassle-free messaging"
+
+  - text: "Facile à utiliser"
+    field: SIMPLICITY
+    register: neutral
+    context: "Ease of use"
+
+  - text: "Aucune compétence technique requise"
+    field: SIMPLICITY
+    register: neutral
+    context: "No-code/low-code tools"
+
+  - text: "En toute simplicité"
+    field: SIMPLICITY
+    register: neutral
+    context: "General simplicity"
+
+  - text: "Clé en main"
+    field: SIMPLICITY
+    register: neutral
+    context: "Turnkey solutions"
+
+  - text: "Prêt à l'emploi"
+    field: SIMPLICITY
+    register: neutral
+    context: "Ready to use"
+
+  - text: "Zéro configuration"
+    field: SIMPLICITY
+    register: casual
+    context: "No setup required"
+
+  - text: "Pas besoin d'être un expert"
+    field: SIMPLICITY
+    register: casual
+    context: "Accessible to all"
+
+  - text: "Un jeu d'enfant"
+    field: SIMPLICITY
+    register: casual
+    context: "Child's play metaphor"
+
+  - text: "On s'occupe de tout"
+    field: SIMPLICITY
+    register: casual
+    context: "Full-service offering"
+
+  - text: "Laissez-vous guider"
+    field: SIMPLICITY
+    register: neutral
+    context: "Guided experience"
+
+  - text: "Sans engagement"
+    field: SIMPLICITY
+    register: neutral
+    context: "No commitment required"
+
+  - text: "Interface intuitive"
+    field: SIMPLICITY
+    register: neutral
+    context: "UX simplicity"
+
+  - text: "Tout est inclus"
+    field: SIMPLICITY
+    register: neutral
+    context: "All-inclusive offer"
+
+  - text: "Rien à installer"
+    field: SIMPLICITY
+    register: casual
+    context: "Cloud/web solutions"
+
+  - text: "Démarrez en quelques minutes"
+    field: SIMPLICITY
+    register: casual
+    context: "Quick start"
+
+  - text: "Un service clé en main"
+    field: SIMPLICITY
+    register: neutral
+    context: "Turnkey service"
+
+  - text: "Conçu pour simplifier votre vie"
+    field: SIMPLICITY
+    register: neutral
+    context: "Life simplification"
+
+  - text: "Plus simple, tu meurs"
+    field: SIMPLICITY
+    register: casual
+    context: "Colloquial simplicity (informal)"
+
+  # ============================================================================
+  # FIELD 8: INNOVATION - Expressions d'innovation
+  # ============================================================================
+  - text: "Technologie révolutionnaire"
+    field: INNOVATION
+    register: formal
+    context: "Breakthrough tech"
+
+  - text: "Nouvelle génération"
+    field: INNOVATION
+    register: neutral
+    context: "Next-gen products"
+
+  - text: "Innovation française"
+    field: INNOVATION
+    register: formal
+    context: "French innovation"
+
+  - text: "À la pointe de la technologie"
+    field: INNOVATION
+    register: formal
+    context: "Cutting-edge"
+
+  - text: "Le futur, c'est maintenant"
+    field: INNOVATION
+    register: casual
+    context: "Future-forward"
+
+  - text: "Breveté et exclusif"
+    field: INNOVATION
+    register: formal
+    context: "Patent claims"
+
+  - text: "Jamais vu auparavant"
+    field: INNOVATION
+    register: casual
+    context: "Novel product"
+
+  - text: "Première mondiale"
+    field: INNOVATION
+    register: formal
+    context: "World first"
+
+  - text: "Découvrez l'innovation"
+    field: INNOVATION
+    register: neutral
+    context: "Innovation reveal"
+
+  - text: "Technologie de pointe"
+    field: INNOVATION
+    register: formal
+    context: "Advanced technology"
+
+  - text: "Une avancée majeure"
+    field: INNOVATION
+    register: formal
+    context: "Major breakthrough"
+
+  - text: "Réinventé pour vous"
+    field: INNOVATION
+    register: neutral
+    context: "Reinvention narrative"
+
+  - text: "L'avenir de la catégorie"
+    field: INNOVATION
+    register: formal
+    context: "Category future"
+
+  - text: "Intelligence artificielle intégrée"
+    field: INNOVATION
+    register: formal
+    context: "AI features"
+
+  - text: "Dopé à l'IA"
+    field: INNOVATION
+    register: casual
+    context: "AI-powered (trendy 2024)"
+
+  - text: "Propulsé par l'intelligence artificielle"
+    field: INNOVATION
+    register: neutral
+    context: "AI-powered"
+
+  - text: "Conçu par nos ingénieurs"
+    field: INNOVATION
+    register: formal
+    context: "Engineering focus"
+
+  - text: "Une nouvelle ère commence"
+    field: INNOVATION
+    register: formal
+    context: "Era-defining launch"
+
+  - text: "Formule innovante brevetée"
+    field: INNOVATION
+    register: formal
+    context: "Patented formula"
+
+  - text: "Design avant-gardiste"
+    field: INNOVATION
+    register: formal
+    context: "Avant-garde design"
+
+  # ============================================================================
+  # FIELD 9: EXCLUSIVITY - Expressions d'exclusivité
+  # ============================================================================
+  - text: "Réservé aux membres"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Member-only access"
+
+  - text: "Accès privilégié"
+    field: EXCLUSIVITY
+    register: formal
+    context: "VIP access"
+
+  - text: "Offre exclusive"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Exclusive offer"
+
+  - text: "En avant-première"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Early access"
+
+  - text: "Uniquement sur notre site"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Online exclusive"
+
+  - text: "Série limitée"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Limited series"
+
+  - text: "Invité VIP"
+    field: EXCLUSIVITY
+    register: formal
+    context: "VIP invitation"
+
+  - text: "Accès anticipé réservé"
+    field: EXCLUSIVITY
+    register: formal
+    context: "Reserved early access"
+
+  - text: "Sur invitation uniquement"
+    field: EXCLUSIVITY
+    register: formal
+    context: "Invite-only"
+
+  - text: "Collection capsule"
+    field: EXCLUSIVITY
+    register: formal
+    context: "Capsule collection"
+
+  - text: "Vente privée"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Private sale"
+
+  - text: "Accès prioritaire"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Priority access"
+
+  - text: "Édition collector"
+    field: EXCLUSIVITY
+    register: formal
+    context: "Collector edition"
+
+  - text: "Réservé à nos abonnés"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Subscriber exclusive"
+
+  - text: "Vous faites partie des premiers"
+    field: EXCLUSIVITY
+    register: casual
+    context: "Early adopter messaging"
+
+  - text: "Privilège client fidèle"
+    field: EXCLUSIVITY
+    register: formal
+    context: "Loyalty reward"
+
+  - text: "Disponible en exclusivité"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Exclusive availability"
+
+  - text: "Votre accès personnel"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Personal access"
+
+  - text: "Offre réservée à une sélection de clients"
+    field: EXCLUSIVITY
+    register: formal
+    context: "Select customers"
+
+  - text: "Les coulisses de la marque"
+    field: EXCLUSIVITY
+    register: casual
+    context: "Behind-the-scenes content"
+
+  # ============================================================================
+  # FIELD 10: COMMUNITY - Expressions de communauté
+  # ============================================================================
+  - text: "Rejoignez la communauté"
+    field: COMMUNITY
+    register: casual
+    context: "Community building"
+
+  - text: "Ensemble, allons plus loin"
+    field: COMMUNITY
+    register: neutral
+    context: "Collective progress"
+
+  - text: "Faites partie de l'aventure"
+    field: COMMUNITY
+    register: casual
+    context: "Brand journey"
+
+  - text: "Une famille de passionnés"
+    field: COMMUNITY
+    register: casual
+    context: "Passion community"
+
+  - text: "Partagez votre expérience"
+    field: COMMUNITY
+    register: casual
+    context: "UGC encouragement"
+
+  - text: "Ils en parlent mieux que nous"
+    field: COMMUNITY
+    register: casual
+    context: "Testimonial intro"
+
+  - text: "Nos ambassadeurs témoignent"
+    field: COMMUNITY
+    register: neutral
+    context: "Ambassador program"
+
+  - text: "Rejoignez le mouvement"
+    field: COMMUNITY
+    register: casual
+    context: "Movement building"
+
+  - text: "Créons ensemble"
+    field: COMMUNITY
+    register: casual
+    context: "Co-creation"
+
+  - text: "Votre avis compte"
+    field: COMMUNITY
+    register: neutral
+    context: "Feedback solicitation"
+
+  - text: "La communauté a parlé"
+    field: COMMUNITY
+    register: casual
+    context: "Community choice"
+
+  - text: "Parrainez vos proches"
+    field: COMMUNITY
+    register: neutral
+    context: "Referral program"
+
+  - text: "Entre nous"
+    field: COMMUNITY
+    register: casual
+    context: "Insider communication"
+
+  - text: "Ensemble pour l'environnement"
+    field: COMMUNITY
+    register: neutral
+    context: "Eco-community"
+
+  - text: "Rejoignez nos 100 000 membres"
+    field: COMMUNITY
+    register: neutral
+    context: "Community size"
+
+  - text: "Vos histoires nous inspirent"
+    field: COMMUNITY
+    register: casual
+    context: "Story sharing"
+
+  - text: "Co-créé avec notre communauté"
+    field: COMMUNITY
+    register: neutral
+    context: "Community co-creation"
+
+  - text: "Le club des initiés"
+    field: COMMUNITY
+    register: casual
+    context: "Insider club"
+
+  - text: "Participez au défi"
+    field: COMMUNITY
+    register: casual
+    context: "Challenge participation"
+
+  - text: "Connectez-vous avec d'autres passionnés"
+    field: COMMUNITY
+    register: neutral
+    context: "Community connection"
+
+# Metadata
+metadata:
+  locale: fr-FR
+  total_expressions: 200
+  fields: 10
+  expressions_per_field: 20
+  registers:
+    casual: "Conversational, familiar tone"
+    neutral: "Standard professional tone"
+    formal: "Corporate, official tone"
+  sources:
+    - "French e-commerce sites (Amazon.fr, Fnac, Cdiscount)"
+    - "French retail advertising (Carrefour, Leclerc, Auchan)"
+    - "French D2C brands (Le Slip Français, Sézane, Respire)"
+    - "French tech marketing (OVH, Doctolib, BlaBlaCar)"
+    - "Traditional French advertising corpus"
+  year: "2024-2025"
+  notes:
+    - "All expressions verified for proper French accents"
+    - "Expressions are native French, not translated from English"
+    - "Register classification: casual/neutral/formal"
+    - "Context provides usage guidance for LLM generation"

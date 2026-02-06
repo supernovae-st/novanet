@@ -386,6 +386,7 @@ mod tests {
             properties: None,
             is_self_referential: None,
             inverse_of: None,
+            inverse_name: None,
         }
     }
 
@@ -528,6 +529,7 @@ mod tests {
             properties: None,
             is_self_referential: None,
             inverse_of: None,
+            inverse_name: None,
         };
         let view = make_view("Block", vec![rule("OF_TYPE", Direction::Outgoing)]);
         let graph = resolve_view_graph(&view, &[rel]);

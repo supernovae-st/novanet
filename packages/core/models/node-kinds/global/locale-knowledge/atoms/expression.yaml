@@ -50,7 +50,7 @@ node:
       required: true
 
   properties:
-    phrase:
+    text:
       type: string
       required: true
       description: "The actual expression/phrase in the target locale"
@@ -125,7 +125,7 @@ node:
     data:
       key: "closing_formal_fr"
       display_name: "Formal Letter Closing"
-      phrase: "Veuillez agréer l'expression de mes sentiments distingués"
+      text: "Veuillez agréer l'expression de mes sentiments distingués"
       tone: "formal"
       formality: "very_formal"
       use_case: "closing"
@@ -138,11 +138,11 @@ node:
 
     cypher: |
       // Create an expression
-      MATCH (es:ExpressionSet {register: "formal"})<-[:HAS_EXPRESSIONS]-(l:Locale {key: "fr-FR"})
+      MATCH (es:ExpressionSet)<-[:HAS_EXPRESSIONS]-(l:Locale {key: "fr-FR"})
       CREATE (e:Expression {
         key: "closing_formal",
         display_name: "Formal Letter Closing",
-        phrase: "Veuillez agréer l'expression de mes sentiments distingués",
+        text: "Veuillez agréer l'expression de mes sentiments distingués",
         tone: "formal",
         formality: "very_formal",
         use_case: "closing",
@@ -155,4 +155,4 @@ node:
       // Find all formal closings across locales
       MATCH (e:Expression {use_case: "closing", formality: "very_formal"})
       MATCH (e)<-[:CONTAINS]-(es:ExpressionSet)<-[:HAS_EXPRESSIONS]-(l:Locale)
-      RETURN l.key AS locale, e.phrase AS closing
+      RETURN l.key AS locale, e.text AS closing

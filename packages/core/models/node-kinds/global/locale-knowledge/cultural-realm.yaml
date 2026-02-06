@@ -1,0 +1,126 @@
+# packages/core/models/node-kinds/global/locale-knowledge/cultural-realm.yaml
+# CulturalRealm - Major cultural realm (Broek & Webb classification)
+#
+# v10.8: Geographic Taxonomy - Phase 3
+# Data: 6 major realms (Occidental, Islamic, Indic, East Asian, Southeast Asian, Meso-African)
+# Source: Broek & Webb cultural geography
+
+node:
+  name: CulturalRealm
+  realm: global
+  layer: locale-knowledge
+  trait: knowledge
+  icon: "🎭"
+  description: "Major cultural realm for understanding cultural patterns and sensitivities"
+
+  standard_properties:
+    key:
+      type: string
+      required: true
+      description: "Kebab-case realm key"
+      pattern: "^[a-z-]+$"
+      examples:
+        - "occidental"
+        - "islamic"
+        - "indic"
+        - "east-asian"
+        - "southeast-asian"
+        - "meso-african"
+
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable realm name"
+      example: "Occidental"
+
+    description:
+      type: string
+      required: true
+      description: "Short description of the cultural realm"
+      example: "Western civilization rooted in Greco-Roman and Judeo-Christian traditions"
+
+    llm_context:
+      type: string
+      required: true
+      description: "LLM generation hints for cultural context"
+      example: "USE: for Western Europe, Americas, Australia/NZ. TRIGGERS: western, occidental, european-influenced. VALUES: individualism, rationalism, directness."
+
+    created_at:
+      type: datetime
+      required: true
+
+    updated_at:
+      type: datetime
+      required: true
+
+  properties:
+    primary_religion:
+      type: string
+      required: false
+      description: "Dominant religious/philosophical tradition"
+      example: "Christianity"
+
+    characteristics:
+      type: json
+      required: true
+      description: "Key cultural characteristics for content adaptation"
+      example:
+        - "individualism"
+        - "linear time perception"
+        - "direct communication"
+        - "secular/religious balance"
+
+    communication_style:
+      type: string
+      required: false
+      description: "Predominant communication pattern"
+      enum: ["low-context", "high-context", "mixed"]
+      example: "low-context"
+
+    power_distance:
+      type: string
+      required: false
+      description: "Typical power distance (Hofstede)"
+      enum: ["low", "medium", "high"]
+      example: "low"
+
+    subrealm_count:
+      type: int
+      required: false
+      description: "Number of CulturalSubRealm children"
+      example: 6
+
+  relations:
+    incoming:
+      - type: PART_OF_REALM
+        from: CulturalSubRealm
+        cardinality: "N:1"
+        description: "Cultural sub-realms within this realm"
+
+  example:
+    data:
+      key: "occidental"
+      display_name: "Occidental"
+      description: "Western civilization rooted in Greco-Roman and Judeo-Christian traditions"
+      primary_religion: "Christianity"
+      characteristics:
+        - "individualism"
+        - "linear time perception"
+        - "direct communication"
+        - "emphasis on personal achievement"
+        - "separation of church and state"
+      communication_style: "low-context"
+      power_distance: "low"
+      subrealm_count: 6
+      llm_context: "USE: for Western Europe, Americas, Australia/NZ. TRIGGERS: western, occidental, european. VALUES: individualism, rationalism, directness, punctuality, explicit communication."
+
+    cypher: |
+      // Get all sub-realms in a cultural realm
+      MATCH (cr:CulturalRealm {key: $key})<-[:PART_OF_REALM]-(csr:CulturalSubRealm)
+      RETURN csr.key, csr.name
+      ORDER BY csr.name
+
+      // Get all locales in a cultural realm
+      MATCH (cr:CulturalRealm {key: $key})<-[:PART_OF_REALM]-(csr:CulturalSubRealm)<-[:IN_CULTURAL_SUBREALM]-(l:Locale)
+      RETURN l.key, csr.name AS subrealm
+      ORDER BY csr.name, l.key

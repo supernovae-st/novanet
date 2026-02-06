@@ -52,6 +52,7 @@ regex = "1"                   # Regex for ATH markdown parsing
 # Performance optimizations
 rustc-hash = "2.0"            # FxHashSet/FxHashMap - faster hashing for string keys
 smallvec = "1.13"             # Stack-allocated small vectors (properties, edges)
+indexmap = { version = "2", features = ["serde"] }  # Preserve YAML property order
 
 # Error handling
 thiserror = "2"               # Library-style errors (NovaNetError enum)

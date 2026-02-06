@@ -103,6 +103,41 @@ fn required_properties(node: &ParsedNode) -> Vec<&str> {
     names
 }
 
+/// Convert PascalCase to kebab-case.
+///
+/// Examples:
+/// - `"LocaleVoice"` → `"locale-voice"`
+/// - `"SEOKeyword"` → `"seo-keyword"`
+/// - `"EntityL10n"` → `"entity-l10n"`
+fn to_kebab_case(s: &str) -> String {
+    let chars: Vec<char> = s.chars().collect();
+    let mut result = String::with_capacity(s.len() + 4);
+
+    for (i, &c) in chars.iter().enumerate() {
+        if c.is_uppercase() {
+            if i > 0 {
+                let prev = chars[i - 1];
+                let next = chars.get(i + 1);
+
+                // Add hyphen if:
+                // 1. Previous was lowercase (normal transition: "Voice" in "LocaleVoice")
+                // 2. Previous was uppercase AND next is lowercase (acronym boundary: "K" in "SEOKeyword")
+                let prev_was_lower = prev.is_lowercase();
+                let at_acronym_boundary =
+                    prev.is_uppercase() && next.is_some_and(|n| n.is_lowercase());
+
+                if prev_was_lower || at_acronym_boundary {
+                    result.push('-');
+                }
+            }
+            result.push(c.to_lowercase().next().unwrap());
+        } else {
+            result.push(c);
+        }
+    }
+    result
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Generator
 // ─────────────────────────────────────────────────────────────────────────────
@@ -159,8 +194,17 @@ fn generate_kind_cypher(nodes: &[ParsedNode]) -> crate::Result<String> {
         let hint = cypher_str(&build_schema_hint(node));
         let budget = context_budget(node);
 
+        let key = to_kebab_case(label);
+        let realm = &node.realm;
+        let layer = &node.layer;
+        let trait_key = &node.def.node_trait;
+
         writeln!(out, "MERGE ({var}:Meta:Kind {{label: '{label}'}})").unwrap();
         writeln!(out, "ON CREATE SET").unwrap();
+        writeln!(out, "  {var}.key = '{key}',").unwrap();
+        writeln!(out, "  {var}.realm = '{realm}',").unwrap();
+        writeln!(out, "  {var}.layer = '{layer}',").unwrap();
+        writeln!(out, "  {var}.trait = '{trait_key}',").unwrap();
         writeln!(out, "  {var}.display_name = '{display}',").unwrap();
         writeln!(out, "  {var}.llm_context = '{llm}',").unwrap();
         writeln!(out, "  {var}.yaml_path = '{ypath}',").unwrap();
@@ -185,6 +229,10 @@ fn generate_kind_cypher(nodes: &[ParsedNode]) -> crate::Result<String> {
         writeln!(out, "  {var}.generation_count = 0,").unwrap();
         writeln!(out, "  {var}.created_at = datetime()").unwrap();
         writeln!(out, "ON MATCH SET").unwrap();
+        writeln!(out, "  {var}.key = '{key}',").unwrap();
+        writeln!(out, "  {var}.realm = '{realm}',").unwrap();
+        writeln!(out, "  {var}.layer = '{layer}',").unwrap();
+        writeln!(out, "  {var}.trait = '{trait_key}',").unwrap();
         writeln!(out, "  {var}.display_name = '{display}',").unwrap();
         writeln!(out, "  {var}.llm_context = '{llm}',").unwrap();
         writeln!(out, "  {var}.yaml_path = '{ypath}',").unwrap();
@@ -448,6 +496,32 @@ mod tests {
     }
 
     #[test]
+    fn to_kebab_case_simple() {
+        assert_eq!(to_kebab_case("Page"), "page");
+        assert_eq!(to_kebab_case("Project"), "project");
+    }
+
+    #[test]
+    fn to_kebab_case_pascal() {
+        assert_eq!(to_kebab_case("LocaleVoice"), "locale-voice");
+        assert_eq!(to_kebab_case("BlockType"), "block-type");
+        assert_eq!(to_kebab_case("GenerationJob"), "generation-job");
+    }
+
+    #[test]
+    fn to_kebab_case_acronyms() {
+        assert_eq!(to_kebab_case("SEOKeyword"), "seo-keyword");
+        assert_eq!(to_kebab_case("SEOMiningRun"), "seo-mining-run");
+    }
+
+    #[test]
+    fn to_kebab_case_l10n() {
+        assert_eq!(to_kebab_case("EntityL10n"), "entity-l10n");
+        assert_eq!(to_kebab_case("PageL10n"), "page-l10n");
+        assert_eq!(to_kebab_case("BlockL10n"), "block-l10n");
+    }
+
+    #[test]
     fn generate_small_kind_cypher() {
         let nodes = vec![
             make_node_with_props(
@@ -531,37 +605,37 @@ mod tests {
             .filter(|l: &&str| l.contains("MERGE") && l.contains(":Meta:Kind"))
             .count();
         assert_eq!(
-            kind_merges, 48,
-            "expected 48 Kind MERGE statements (v10.6: 2 realms, 25+23 nodes)"
+            kind_merges, 60,
+            "expected 60 Kind MERGE statements (v10.8: 2 realms, 37+23 nodes)"
         );
 
-        // 48 HAS_KIND relationships
+        // 60 HAS_KIND relationships
         let has_kind = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:HAS_KIND]"))
             .count();
-        assert_eq!(has_kind, 48, "expected 48 HAS_KIND relationships");
+        assert_eq!(has_kind, 60, "expected 60 HAS_KIND relationships");
 
-        // 48 IN_REALM relationships
+        // 60 IN_REALM relationships
         let in_realm = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_REALM]"))
             .count();
-        assert_eq!(in_realm, 48, "expected 48 IN_REALM relationships");
+        assert_eq!(in_realm, 60, "expected 60 IN_REALM relationships");
 
-        // 48 IN_LAYER relationships
+        // 60 IN_LAYER relationships
         let in_layer = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_LAYER]"))
             .count();
-        assert_eq!(in_layer, 48, "expected 48 IN_LAYER relationships");
+        assert_eq!(in_layer, 60, "expected 60 IN_LAYER relationships");
 
-        // 48 EXHIBITS relationships
+        // 60 EXHIBITS relationships
         let exhibits = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:EXHIBITS]"))
             .count();
-        assert_eq!(exhibits, 48, "expected 48 EXHIBITS relationships");
+        assert_eq!(exhibits, 60, "expected 60 EXHIBITS relationships");
 
         // Spot checks — specific Kinds
         assert!(cypher.contains("k_Project:Meta:Kind {label: 'Project'}"));
@@ -593,8 +667,8 @@ mod tests {
             }
         }
 
-        // v10.6: Header mentions 48 Kind nodes
-        assert!(cypher.contains("48 Kind nodes"));
+        // v10.8: Header mentions 60 Kind nodes
+        assert!(cypher.contains("60 Kind nodes"));
 
         // v10.1: knowledge_tier removed from all YAMLs (node type is sufficient)
         // Verify no knowledge_tier properties are present in output

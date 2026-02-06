@@ -7,7 +7,7 @@ use std::path::Path;
 use chrono::Local;
 
 use crate::generators::cypher_utils::escape_cypher;
-use crate::parsers::formatting::{load_all_formattings, Formatting};
+use crate::parsers::formatting::{Formatting, load_all_formattings};
 use crate::{NovaNetError, Result};
 
 /// Default ATH data path.
@@ -104,18 +104,12 @@ impl FormattingGenerator {
     /// Generate Cypher for a single Formatting node.
     fn generate_formatting_cypher(&self, f: &Formatting) -> String {
         // Serialize sections to JSON
-        let number_json =
-            serde_json::to_string(&f.number).unwrap_or_else(|_| "{}".to_string());
-        let date_json =
-            serde_json::to_string(&f.date).unwrap_or_else(|_| "{}".to_string());
-        let time_json =
-            serde_json::to_string(&f.time).unwrap_or_else(|_| "{}".to_string());
-        let currency_json =
-            serde_json::to_string(&f.currency).unwrap_or_else(|_| "{}".to_string());
-        let phone_json =
-            serde_json::to_string(&f.phone).unwrap_or_else(|_| "{}".to_string());
-        let address_json =
-            serde_json::to_string(&f.address).unwrap_or_else(|_| "{}".to_string());
+        let number_json = serde_json::to_string(&f.number).unwrap_or_else(|_| "{}".to_string());
+        let date_json = serde_json::to_string(&f.date).unwrap_or_else(|_| "{}".to_string());
+        let time_json = serde_json::to_string(&f.time).unwrap_or_else(|_| "{}".to_string());
+        let currency_json = serde_json::to_string(&f.currency).unwrap_or_else(|_| "{}".to_string());
+        let phone_json = serde_json::to_string(&f.phone).unwrap_or_else(|_| "{}".to_string());
+        let address_json = serde_json::to_string(&f.address).unwrap_or_else(|_| "{}".to_string());
         let measurement_json =
             serde_json::to_string(&f.measurement).unwrap_or_else(|_| "{}".to_string());
         let percentage_json =

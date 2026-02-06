@@ -1,0 +1,803 @@
+# Native Italian (Italy) Marketing Expressions 2024-2025
+# Source: Italian advertising and marketing corpus
+# All expressions with proper Italian accents (à, è, é, ì, ò, ù)
+
+expressions:
+  # ============================================================================
+  # FIELD 1: URGENCY - Espressioni di urgenza
+  # ============================================================================
+  - text: "Solo per oggi"
+    field: URGENCY
+    register: casual
+    context: "One-day flash sales"
+
+  - text: "Ultime ore per approfittarne"
+    field: URGENCY
+    register: casual
+    context: "Countdown promotions"
+
+  - text: "Offerta a tempo limitato"
+    field: URGENCY
+    register: neutral
+    context: "Time-bound promotional offers"
+
+  - text: "Affrettati, sta per scadere!"
+    field: URGENCY
+    register: casual
+    context: "Expiring deal alerts"
+
+  - text: "Ultimi pezzi disponibili"
+    field: URGENCY
+    register: neutral
+    context: "Low stock warnings"
+
+  - text: "Non perdere questa occasione"
+    field: URGENCY
+    register: casual
+    context: "General urgency CTAs"
+
+  - text: "Disponibilità limitata"
+    field: URGENCY
+    register: formal
+    context: "Scarcity messaging"
+
+  - text: "Scade domani a mezzanotte"
+    field: URGENCY
+    register: neutral
+    context: "Deadline communications"
+
+  - text: "Solo fino a esaurimento scorte"
+    field: URGENCY
+    register: neutral
+    context: "Inventory-based promotions"
+
+  - text: "È la tua ultima possibilità"
+    field: URGENCY
+    register: casual
+    context: "High-pressure sales moments"
+
+  - text: "Mancano solo 24 ore"
+    field: URGENCY
+    register: casual
+    context: "Countdown timers"
+
+  - text: "Promozione in scadenza"
+    field: URGENCY
+    register: formal
+    context: "B2B communications"
+
+  - text: "Ora o mai più"
+    field: URGENCY
+    register: casual
+    context: "Dramatic urgency messaging"
+
+  - text: "Approfitta subito dell'offerta"
+    field: URGENCY
+    register: neutral
+    context: "CTA buttons, banners"
+
+  - text: "Prenota ora, posti limitati"
+    field: URGENCY
+    register: neutral
+    context: "Event bookings, reservations"
+
+  # ============================================================================
+  # FIELD 2: VALUE - Espressioni di valore
+  # ============================================================================
+  - text: "Risparmia fino al 50%"
+    field: VALUE
+    register: neutral
+    context: "Discount promotions"
+
+  - text: "Prezzo conveniente"
+    field: VALUE
+    register: neutral
+    context: "Budget-friendly positioning"
+
+  - text: "Il miglior rapporto qualità-prezzo"
+    field: VALUE
+    register: neutral
+    context: "Value proposition statements"
+
+  - text: "Offerta imperdibile"
+    field: VALUE
+    register: casual
+    context: "Deal highlights"
+
+  - text: "Spedizione gratuita"
+    field: VALUE
+    register: neutral
+    context: "Free shipping offers"
+
+  - text: "Consegna gratis sopra i 49€"
+    field: VALUE
+    register: neutral
+    context: "Free shipping thresholds"
+
+  - text: "Prezzi imbattibili"
+    field: VALUE
+    register: casual
+    context: "Price competition messaging"
+
+  - text: "Sconto esclusivo del 30%"
+    field: VALUE
+    register: neutral
+    context: "Percentage discount offers"
+
+  - text: "Omaggio incluso"
+    field: VALUE
+    register: neutral
+    context: "Gift with purchase"
+
+  - text: "3x2: compri tre, paghi due"
+    field: VALUE
+    register: casual
+    context: "Bundle promotions (Italian format)"
+
+  - text: "Prezzo scontato"
+    field: VALUE
+    register: neutral
+    context: "Sale price indicators"
+
+  - text: "Risparmio garantito"
+    field: VALUE
+    register: neutral
+    context: "Value assurance messaging"
+
+  - text: "Zero costi nascosti"
+    field: VALUE
+    register: casual
+    context: "Transparency messaging"
+
+  - text: "Investi nel tuo benessere"
+    field: VALUE
+    register: formal
+    context: "Premium value positioning"
+
+  - text: "Più qualità, meno spesa"
+    field: VALUE
+    register: casual
+    context: "Value comparison messaging"
+
+  # ============================================================================
+  # FIELD 3: TRUST - Espressioni di fiducia
+  # ============================================================================
+  - text: "Garanzia soddisfatti o rimborsati"
+    field: TRUST
+    register: neutral
+    context: "Money-back guarantee"
+
+  - text: "Certificato e garantito"
+    field: TRUST
+    register: formal
+    context: "Quality certifications"
+
+  - text: "Oltre 10.000 clienti soddisfatti"
+    field: TRUST
+    register: neutral
+    context: "Social proof, testimonials"
+
+  - text: "Pagamenti sicuri al 100%"
+    field: TRUST
+    register: neutral
+    context: "Payment security assurance"
+
+  - text: "Fidati di noi"
+    field: TRUST
+    register: casual
+    context: "Trust-building messaging"
+
+  - text: "Qualità garantita"
+    field: TRUST
+    register: neutral
+    context: "Quality assurance statements"
+
+  - text: "Azienda affidabile dal 1990"
+    field: TRUST
+    register: formal
+    context: "Company heritage messaging"
+
+  - text: "Transazione protetta"
+    field: TRUST
+    register: formal
+    context: "Checkout security"
+
+  - text: "Reso gratuito entro 30 giorni"
+    field: TRUST
+    register: neutral
+    context: "Return policy highlights"
+
+  - text: "Valutazione media: 4,8 stelle"
+    field: TRUST
+    register: neutral
+    context: "Rating displays"
+
+  - text: "Assistenza clienti dedicata"
+    field: TRUST
+    register: formal
+    context: "Customer support messaging"
+
+  - text: "Privacy garantita"
+    field: TRUST
+    register: formal
+    context: "Data protection assurance"
+
+  - text: "Verificato da migliaia di utenti"
+    field: TRUST
+    register: neutral
+    context: "User verification messaging"
+
+  - text: "La tua sicurezza è la nostra priorità"
+    field: TRUST
+    register: formal
+    context: "Security commitment statements"
+
+  - text: "Prodotto testato e approvato"
+    field: TRUST
+    register: neutral
+    context: "Product testing claims"
+
+  # ============================================================================
+  # FIELD 4: SUCCESS - Espressioni di successo
+  # ============================================================================
+  - text: "Oltre 1 milione di clienti soddisfatti"
+    field: SUCCESS
+    register: neutral
+    context: "Large-scale social proof"
+
+  - text: "Leader di mercato"
+    field: SUCCESS
+    register: formal
+    context: "Market leadership claims"
+
+  - text: "La scelta dei professionisti"
+    field: SUCCESS
+    register: formal
+    context: "Professional endorsement"
+
+  - text: "Numero uno in Italia"
+    field: SUCCESS
+    register: neutral
+    context: "Market position claims"
+
+  - text: "Risultati comprovati"
+    field: SUCCESS
+    register: formal
+    context: "Evidence-based marketing"
+
+  - text: "Consigliato dagli esperti"
+    field: SUCCESS
+    register: neutral
+    context: "Expert endorsement"
+
+  - text: "Il preferito dagli italiani"
+    field: SUCCESS
+    register: casual
+    context: "National preference claims"
+
+  - text: "Già scelto da oltre 500.000 persone"
+    field: SUCCESS
+    register: neutral
+    context: "Adoption statistics"
+
+  - text: "Vincitore di numerosi premi"
+    field: SUCCESS
+    register: formal
+    context: "Award recognition"
+
+  - text: "Successo garantito"
+    field: SUCCESS
+    register: casual
+    context: "Outcome assurance"
+
+  - text: "Trasforma i tuoi obiettivi in realtà"
+    field: SUCCESS
+    register: casual
+    context: "Aspirational messaging"
+
+  - text: "Unisciti ai vincenti"
+    field: SUCCESS
+    register: casual
+    context: "Community success messaging"
+
+  - text: "Come visto in TV"
+    field: SUCCESS
+    register: casual
+    context: "Media exposure claims"
+
+  - text: "Raccomandato dai migliori"
+    field: SUCCESS
+    register: formal
+    context: "Premium endorsement"
+
+  - text: "Il segreto del successo"
+    field: SUCCESS
+    register: casual
+    context: "Success formula messaging"
+
+  # ============================================================================
+  # FIELD 5: QUALITY - Espressioni di qualità
+  # ============================================================================
+  - text: "Qualità premium"
+    field: QUALITY
+    register: formal
+    context: "Premium tier positioning"
+
+  - text: "Made in Italy"
+    field: QUALITY
+    register: neutral
+    context: "Italian origin certification"
+
+  - text: "Eccellenza italiana"
+    field: QUALITY
+    register: formal
+    context: "Italian excellence positioning"
+
+  - text: "Materiali di prima scelta"
+    field: QUALITY
+    register: formal
+    context: "Material quality claims"
+
+  - text: "Artigianato italiano"
+    field: QUALITY
+    register: formal
+    context: "Craftsmanship positioning"
+
+  - text: "Qualità superiore"
+    field: QUALITY
+    register: formal
+    context: "Quality tier claims"
+
+  - text: "Prodotto con cura"
+    field: QUALITY
+    register: casual
+    context: "Care and attention messaging"
+
+  - text: "Standard elevati"
+    field: QUALITY
+    register: formal
+    context: "Quality standards claims"
+
+  - text: "Selezione accurata"
+    field: QUALITY
+    register: formal
+    context: "Curation messaging"
+
+  - text: "Il meglio del meglio"
+    field: QUALITY
+    register: casual
+    context: "Superlative quality claims"
+
+  - text: "Attenzione ai dettagli"
+    field: QUALITY
+    register: neutral
+    context: "Precision messaging"
+
+  - text: "Tradizione e innovazione"
+    field: QUALITY
+    register: formal
+    context: "Heritage + modernity positioning"
+
+  - text: "Ingredienti naturali al 100%"
+    field: QUALITY
+    register: neutral
+    context: "Natural product claims"
+
+  - text: "Lavorazione artigianale"
+    field: QUALITY
+    register: formal
+    context: "Artisan production claims"
+
+  - text: "Progettato per durare"
+    field: QUALITY
+    register: neutral
+    context: "Durability messaging"
+
+  # ============================================================================
+  # FIELD 6: SPEED - Espressioni di velocità
+  # ============================================================================
+  - text: "Spedizione veloce"
+    field: SPEED
+    register: neutral
+    context: "Fast shipping claims"
+
+  - text: "Consegna rapida"
+    field: SPEED
+    register: neutral
+    context: "Quick delivery promises"
+
+  - text: "Ricevi in 24 ore"
+    field: SPEED
+    register: casual
+    context: "Next-day delivery"
+
+  - text: "Consegna express"
+    field: SPEED
+    register: neutral
+    context: "Express shipping option"
+
+  - text: "Spedizione in giornata"
+    field: SPEED
+    register: neutral
+    context: "Same-day shipping"
+
+  - text: "Risultati immediati"
+    field: SPEED
+    register: casual
+    context: "Instant results claims"
+
+  - text: "Attivazione istantanea"
+    field: SPEED
+    register: neutral
+    context: "Instant activation (digital)"
+
+  - text: "Pronto in pochi minuti"
+    field: SPEED
+    register: casual
+    context: "Quick setup messaging"
+
+  - text: "Nessuna attesa"
+    field: SPEED
+    register: casual
+    context: "No waiting messaging"
+
+  - text: "Elaborazione rapida"
+    field: SPEED
+    register: formal
+    context: "Fast processing claims"
+
+  - text: "Consegna entro 48 ore"
+    field: SPEED
+    register: neutral
+    context: "2-day delivery promise"
+
+  - text: "Risposte in tempo reale"
+    field: SPEED
+    register: neutral
+    context: "Real-time response claims"
+
+  - text: "Ordina oggi, ricevi domani"
+    field: SPEED
+    register: casual
+    context: "Next-day delivery promise"
+
+  - text: "Veloce come un fulmine"
+    field: SPEED
+    register: casual
+    context: "Speed metaphor (Italian idiom)"
+
+  - text: "Servizio rapido ed efficiente"
+    field: SPEED
+    register: formal
+    context: "Professional speed claims"
+
+  # ============================================================================
+  # FIELD 7: SIMPLICITY - Espressioni di semplicità
+  # ============================================================================
+  - text: "Facile e veloce"
+    field: SIMPLICITY
+    register: casual
+    context: "Ease of use claims"
+
+  - text: "Senza complicazioni"
+    field: SIMPLICITY
+    register: casual
+    context: "Hassle-free messaging"
+
+  - text: "In pochi semplici passaggi"
+    field: SIMPLICITY
+    register: neutral
+    context: "Step-by-step simplicity"
+
+  - text: "Bastano pochi clic"
+    field: SIMPLICITY
+    register: casual
+    context: "Click simplicity (digital)"
+
+  - text: "Semplice come bere un bicchier d'acqua"
+    field: SIMPLICITY
+    register: casual
+    context: "Italian idiom for ease"
+
+  - text: "Nessuna competenza richiesta"
+    field: SIMPLICITY
+    register: neutral
+    context: "No expertise needed"
+
+  - text: "Intuitivo e immediato"
+    field: SIMPLICITY
+    register: neutral
+    context: "UX simplicity claims"
+
+  - text: "Zero stress"
+    field: SIMPLICITY
+    register: casual
+    context: "Stress-free messaging"
+
+  - text: "Tutto incluso"
+    field: SIMPLICITY
+    register: neutral
+    context: "All-inclusive offers"
+
+  - text: "Senza pensieri"
+    field: SIMPLICITY
+    register: casual
+    context: "Worry-free messaging"
+
+  - text: "Configurazione in un attimo"
+    field: SIMPLICITY
+    register: casual
+    context: "Quick setup claims"
+
+  - text: "Pronto all'uso"
+    field: SIMPLICITY
+    register: neutral
+    context: "Ready-to-use products"
+
+  - text: "Un solo clic"
+    field: SIMPLICITY
+    register: casual
+    context: "One-click simplicity"
+
+  - text: "Accessibile a tutti"
+    field: SIMPLICITY
+    register: neutral
+    context: "Universal accessibility"
+
+  - text: "La semplicità è la nostra forza"
+    field: SIMPLICITY
+    register: formal
+    context: "Brand simplicity positioning"
+
+  # ============================================================================
+  # FIELD 8: INNOVATION - Espressioni di innovazione
+  # ============================================================================
+  - text: "Rivoluzionario"
+    field: INNOVATION
+    register: casual
+    context: "Revolutionary product claims"
+
+  - text: "Tecnologia avanzata"
+    field: INNOVATION
+    register: formal
+    context: "Advanced technology positioning"
+
+  - text: "Innovazione all'avanguardia"
+    field: INNOVATION
+    register: formal
+    context: "Cutting-edge innovation"
+
+  - text: "Il futuro è qui"
+    field: INNOVATION
+    register: casual
+    context: "Futuristic positioning"
+
+  - text: "Nuova generazione"
+    field: INNOVATION
+    register: neutral
+    context: "Next-gen product claims"
+
+  - text: "Brevettato"
+    field: INNOVATION
+    register: formal
+    context: "Patent claims"
+
+  - text: "Prima mondiale"
+    field: INNOVATION
+    register: formal
+    context: "World-first claims"
+
+  - text: "Esclusiva tecnologia"
+    field: INNOVATION
+    register: formal
+    context: "Proprietary technology"
+
+  - text: "Intelligenza artificiale integrata"
+    field: INNOVATION
+    register: formal
+    context: "AI feature claims"
+
+  - text: "Soluzione innovativa"
+    field: INNOVATION
+    register: neutral
+    context: "Innovation positioning"
+
+  - text: "Design futuristico"
+    field: INNOVATION
+    register: neutral
+    context: "Futuristic design claims"
+
+  - text: "Prestazioni senza precedenti"
+    field: INNOVATION
+    register: formal
+    context: "Performance innovation"
+
+  - text: "Tecnologia di ultima generazione"
+    field: INNOVATION
+    register: formal
+    context: "Latest technology claims"
+
+  - text: "Oltre ogni aspettativa"
+    field: INNOVATION
+    register: casual
+    context: "Exceeding expectations"
+
+  - text: "Reinventiamo il possibile"
+    field: INNOVATION
+    register: formal
+    context: "Brand innovation positioning"
+
+  # ============================================================================
+  # FIELD 9: EXCLUSIVITY - Espressioni di esclusività
+  # ============================================================================
+  - text: "Solo per i membri"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Member-only offers"
+
+  - text: "Accesso esclusivo"
+    field: EXCLUSIVITY
+    register: formal
+    context: "Exclusive access claims"
+
+  - text: "Edizione limitata"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Limited edition products"
+
+  - text: "Riservato a pochi"
+    field: EXCLUSIVITY
+    register: formal
+    context: "Exclusive availability"
+
+  - text: "Solo per te"
+    field: EXCLUSIVITY
+    register: casual
+    context: "Personalized exclusivity"
+
+  - text: "Offerta riservata"
+    field: EXCLUSIVITY
+    register: formal
+    context: "Reserved offer messaging"
+
+  - text: "Collezione esclusiva"
+    field: EXCLUSIVITY
+    register: formal
+    context: "Exclusive collection"
+
+  - text: "Accedi al club VIP"
+    field: EXCLUSIVITY
+    register: casual
+    context: "VIP membership"
+
+  - text: "Privilegio esclusivo"
+    field: EXCLUSIVITY
+    register: formal
+    context: "Exclusive privilege"
+
+  - text: "Numero limitato disponibile"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Limited availability"
+
+  - text: "Solo su invito"
+    field: EXCLUSIVITY
+    register: formal
+    context: "Invitation-only access"
+
+  - text: "Esperienza unica"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Unique experience claims"
+
+  - text: "Non troverai altrove"
+    field: EXCLUSIVITY
+    register: casual
+    context: "Exclusive availability"
+
+  - text: "Il lusso accessibile"
+    field: EXCLUSIVITY
+    register: formal
+    context: "Accessible luxury positioning"
+
+  - text: "Sii il primo a scoprire"
+    field: EXCLUSIVITY
+    register: casual
+    context: "Early access messaging"
+
+  # ============================================================================
+  # FIELD 10: COMMUNITY - Espressioni di comunità
+  # ============================================================================
+  - text: "Unisciti a noi"
+    field: COMMUNITY
+    register: casual
+    context: "Join community CTAs"
+
+  - text: "Insieme siamo più forti"
+    field: COMMUNITY
+    register: casual
+    context: "Community strength messaging"
+
+  - text: "Fai parte della famiglia"
+    field: COMMUNITY
+    register: casual
+    context: "Family community positioning"
+
+  - text: "La nostra comunità cresce"
+    field: COMMUNITY
+    register: neutral
+    context: "Growing community claims"
+
+  - text: "Condividi l'esperienza"
+    field: COMMUNITY
+    register: casual
+    context: "Experience sharing CTAs"
+
+  - text: "Entra nella community"
+    field: COMMUNITY
+    register: casual
+    context: "Community membership"
+
+  - text: "Migliaia di persone come te"
+    field: COMMUNITY
+    register: casual
+    context: "Peer connection messaging"
+
+  - text: "Costruiamo insieme il futuro"
+    field: COMMUNITY
+    register: formal
+    context: "Collaborative future messaging"
+
+  - text: "Uniti dalla passione"
+    field: COMMUNITY
+    register: casual
+    context: "Passion-driven community"
+
+  - text: "Il tuo parere conta"
+    field: COMMUNITY
+    register: casual
+    context: "Voice of customer messaging"
+
+  - text: "Partecipa e vinci"
+    field: COMMUNITY
+    register: casual
+    context: "Contest engagement"
+
+  - text: "Raccontaci la tua storia"
+    field: COMMUNITY
+    register: casual
+    context: "User story collection"
+
+  - text: "Insieme possiamo fare la differenza"
+    field: COMMUNITY
+    register: formal
+    context: "Impact community messaging"
+
+  - text: "Seguici sui social"
+    field: COMMUNITY
+    register: casual
+    context: "Social media CTAs"
+
+  - text: "Una grande famiglia"
+    field: COMMUNITY
+    register: casual
+    context: "Family metaphor for community"
+
+metadata:
+  locale: it-IT
+  language: Italian
+  country: Italy
+  total_expressions: 150
+  fields_covered: 10
+  expressions_per_field: 15
+  last_updated: "2025-02"
+  sources:
+    - "Italian advertising corpus 2024-2025"
+    - "Italian e-commerce marketing patterns"
+    - "Italian social media marketing trends"
+  notes:
+    - "All expressions use proper Italian accents (à, è, é, ì, ò, ù)"
+    - "Expressions reflect Italian marketing culture: strong emphasis on Made in Italy, family values, and quality"
+    - "Italian marketing often uses formal register for trust and quality messaging"
+    - "Italian idioms included where appropriate (e.g., 'semplice come bere un bicchier d'acqua')"
+    - "3x2 format is distinctly Italian (vs. 'buy 2 get 1 free' in English)"

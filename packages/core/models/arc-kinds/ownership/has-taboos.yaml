@@ -7,7 +7,7 @@ arc:
   target: TabooSet
   cardinality: one_to_many
   llm_context: Locale has multiple taboo sets, one per severity.
-  cypher_pattern: (Locale)-[:HAS_TABOOS {severity: $severity}]->(TabooSet)
+  cypher_pattern: "(Locale)-[:HAS_TABOOS {severity: $severity}]->(TabooSet)"
   properties:
     severity:
       type: string

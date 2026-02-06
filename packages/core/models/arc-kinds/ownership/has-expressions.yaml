@@ -1,15 +1,11 @@
 # packages/core/models/arc-kinds/ownership/has-expressions.yaml
+# v10.7: Simplified to 1:1 - register is a property on Expression atoms
 arc:
   name: HAS_EXPRESSIONS
   family: ownership
   scope: intra_realm
   source: Locale
   target: ExpressionSet
-  cardinality: one_to_many
-  llm_context: Locale has multiple expression sets, one per register.
-  cypher_pattern: (Locale)-[:HAS_EXPRESSIONS {register: $register}]->(ExpressionSet)
-  properties:
-    register:
-      type: string
-      required: true
-      description: "Expression register (formal, neutral, casual)"
+  cardinality: one_to_one
+  llm_context: Locale has exactly one expression set containing all expressions across registers.
+  cypher_pattern: (Locale)-[:HAS_EXPRESSIONS]->(ExpressionSet)

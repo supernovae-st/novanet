@@ -82,6 +82,35 @@ node:
       description: "True if this is the primary locale for the language"
       example: true
 
+    # v10.7: Geographic properties for LLM retrieval optimization
+    region:
+      type: string
+      required: true
+      enum: [europe, asia, americas, africa, oceania, middle_east]
+      description: "Geographic region for clustering similar markets and cultural patterns"
+      example: "europe"
+
+    language_family:
+      type: string
+      required: true
+      enum: [romance, germanic, slavic, sino_tibetan, semitic, japonic, koreanic, austronesian, indo_aryan, dravidian, turkic, uralic, other]
+      description: "Linguistic family for sharing expressions and grammatical patterns"
+      example: "romance"
+
+    script:
+      type: string
+      required: true
+      enum: [latin, cyrillic, arabic, hebrew, cjk, devanagari, thai, korean, greek, other]
+      description: "Writing system for text handling, transliteration, and slug generation"
+      example: "latin"
+
+    text_direction:
+      type: string
+      required: true
+      enum: [ltr, rtl]
+      description: "Text direction for layout and UI considerations"
+      example: "ltr"
+
   # ═══════════════════════════════════════════════════════════════════════════════
   # RELATIONS (FROM this node)
   # ═══════════════════════════════════════════════════════════════════════════════
@@ -182,6 +211,10 @@ node:
       country_code: "FR"
       name_native: "Français (France)"
       is_primary: true
+      region: "europe"
+      language_family: "romance"
+      script: "latin"
+      text_direction: "ltr"
 
     cypher: |
       // Get locale with tiered knowledge (v10.1)

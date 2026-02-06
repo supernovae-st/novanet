@@ -8,6 +8,7 @@
 
 #![allow(dead_code)] // WIP: Schema overlay implementation
 
+use indexmap::IndexMap;
 use serde::Deserialize;
 use serde_json::Value as JsonValue;
 use std::collections::BTreeMap;
@@ -110,12 +111,13 @@ struct YamlProperty {
 }
 
 /// Raw YAML node structure (for deserialization).
+/// Uses IndexMap to preserve property order from YAML files.
 #[derive(Debug, Deserialize)]
 struct YamlNode {
     #[serde(default)]
-    standard_properties: Option<BTreeMap<String, YamlProperty>>,
+    standard_properties: Option<IndexMap<String, YamlProperty>>,
     #[serde(default)]
-    properties: Option<BTreeMap<String, YamlProperty>>,
+    properties: Option<IndexMap<String, YamlProperty>>,
 }
 
 /// Root YAML structure.
@@ -308,18 +310,24 @@ node:
 
         assert_eq!(props.len(), 6);
 
-        // Check standard_properties come first
-        assert_eq!(props[0].name, "description");
-        assert!(props[0].required);
+        // Check properties are in YAML definition order (not alphabetical!)
+        // standard_properties come first, then properties
+        assert_eq!(props[0].name, "key");           // 1st in standard_properties
+        assert_eq!(props[1].name, "display_name");  // 2nd in standard_properties
+        assert_eq!(props[2].name, "description");   // 3rd in standard_properties
+        assert_eq!(props[3].name, "hemisphere");    // 1st in properties
+        assert_eq!(props[4].name, "holidays");      // 2nd in properties
+        assert_eq!(props[5].name, "seasonal_greetings"); // 3rd in properties
 
-        // Check properties section
-        let hemisphere = props.iter().find(|p| p.name == "hemisphere").unwrap();
-        assert!(hemisphere.required);
-        assert_eq!(hemisphere.enum_values.as_ref().unwrap().len(), 2);
+        // Verify required flags
+        assert!(props[0].required); // key
+        assert!(props[3].required); // hemisphere
 
-        let holidays = props.iter().find(|p| p.name == "holidays").unwrap();
-        assert!(!holidays.required);
-        assert_eq!(holidays.prop_type, "json");
+        // Verify enum values
+        assert_eq!(props[3].enum_values.as_ref().unwrap().len(), 2);
+
+        // Verify types
+        assert_eq!(props[4].prop_type, "json"); // holidays
     }
 
     #[test]

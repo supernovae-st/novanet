@@ -9,7 +9,7 @@ arc:
   target: CultureSet
   cardinality: one_to_many
   llm_context: Locale has multiple culture sets, one per type (values, references, celebrities, calendar).
-  cypher_pattern: (Locale)-[:HAS_CULTURE_SET {type: $type}]->(CultureSet)
+  cypher_pattern: "(Locale)-[:HAS_CULTURE_SET {type: $type}]->(CultureSet)"
   properties:
     type:
       type: string

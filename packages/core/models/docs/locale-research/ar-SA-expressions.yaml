@@ -1,0 +1,812 @@
+# Native Arabic (Saudi Arabia) Marketing Expressions 2024-2025
+# Source: Saudi advertising and marketing corpus (Perplexity research)
+# Locale: ar-SA (Arabic - Saudi Arabia)
+# Direction: RTL (Right-to-Left)
+# Script: Arabic
+# Note: All expressions use Modern Standard Arabic with Saudi Gulf dialect influences
+
+expressions:
+  # ============================================================================
+  # FIELD 1: URGENCY - عبارات الاستعجال
+  # ============================================================================
+  - text: "لفترة محدودة فقط"
+    field: URGENCY
+    register: neutral
+    context: "Time-limited offers on e-commerce platforms like Noon"
+
+  - text: "آخر يوم للعرض"
+    field: URGENCY
+    register: neutral
+    context: "Last day promotions at Jarir bookstore"
+
+  - text: "اغتنم الفرصة الآن"
+    field: URGENCY
+    register: casual
+    context: "Airline booking campaigns like Flynas with limited seat availability"
+
+  - text: "عرض ليوم واحد"
+    field: URGENCY
+    register: casual
+    context: "Flash sales on Shein during White Friday"
+
+  - text: "سارع قبل النفاد"
+    field: URGENCY
+    register: casual
+    context: "Food promotions at Panda supermarket"
+
+  - text: "اليوم الأخير"
+    field: URGENCY
+    register: neutral
+    context: "Starbucks Saudi Arabia seasonal coupon campaigns"
+
+  - text: "لا تفوت العرض قبل الإغلاق"
+    field: URGENCY
+    register: formal
+    context: "Harvey Nichols furniture advertisements"
+
+  - text: "عاجل: نهاية العرض غدا"
+    field: URGENCY
+    register: casual
+    context: "Zain digital package promotions"
+
+  - text: "الفرصة تنفذ سريعا"
+    field: URGENCY
+    register: casual
+    context: "Jahez food delivery app campaigns"
+
+  - text: "حسب توفر المخزون"
+    field: URGENCY
+    register: formal
+    context: "Extra electronics scarcity messaging"
+
+  - text: "الآن أو لا شيء"
+    field: URGENCY
+    register: casual
+    context: "Perfume promotions during Ramadan season"
+
+  - text: "انتهاء العرض في ساعات"
+    field: URGENCY
+    register: neutral
+    context: "Al Rajhi Bank promotional offers"
+
+  - text: "سارع بالطلب"
+    field: URGENCY
+    register: casual
+    context: "Careem private ride promotions"
+
+  - text: "آخر التوفر"
+    field: URGENCY
+    register: formal
+    context: "Al-Obeikan bookstore book offers"
+
+  - text: "الوقت ينفذ"
+    field: URGENCY
+    register: casual
+    context: "Talabat daily discount campaigns"
+
+  # ============================================================================
+  # FIELD 2: VALUE - عبارات القيمة والتوفير
+  # ============================================================================
+  - text: "وفر الآن 50%"
+    field: VALUE
+    register: casual
+    context: "Noon daily accessory promotions"
+
+  - text: "سعر مميز لا يُقاوم"
+    field: VALUE
+    register: neutral
+    context: "Jarir electronics advertisements"
+
+  - text: "خصم هائل يصل 70%"
+    field: VALUE
+    register: casual
+    context: "Extra White Friday campaigns"
+
+  - text: "أفضل سعر في السوق"
+    field: VALUE
+    register: neutral
+    context: "Panda food products promotions"
+
+  - text: "ادفع أقل واحصل على أكثر"
+    field: VALUE
+    register: casual
+    context: "Shein clothing advertisements"
+
+  - text: "توفير يصل 40%"
+    field: VALUE
+    register: neutral
+    context: "Amazon Saudi Arabia book campaigns"
+
+  - text: "عرض اقتصادي حقيقي"
+    field: VALUE
+    register: formal
+    context: "Harvey Nichols furniture promotions"
+
+  - text: "سعر خاص لك"
+    field: VALUE
+    register: casual
+    context: "Zain phone deal advertisements"
+
+  - text: "خصومات تصل 60%"
+    field: VALUE
+    register: casual
+    context: "Jahez app delivery promotions"
+
+  - text: "قيمة مقابل سعر"
+    field: VALUE
+    register: formal
+    context: "Starbucks meal deal offers"
+
+  - text: "ادخر مئات الريالات"
+    field: VALUE
+    register: casual
+    context: "Flynas airline ticket promotions"
+
+  - text: "أقل سعر مضمون"
+    field: VALUE
+    register: formal
+    context: "Najd home appliances campaigns"
+
+  - text: "عروض توفير يومية"
+    field: VALUE
+    register: neutral
+    context: "Al-Obeikan bookstore daily deals"
+
+  - text: "سعر الفرصة"
+    field: VALUE
+    register: casual
+    context: "Careem transportation promotions"
+
+  - text: "وفر وقتك ومالك"
+    field: VALUE
+    register: casual
+    context: "Talabat delivery service advertisements"
+
+  # ============================================================================
+  # FIELD 3: TRUST - عبارات الثقة والمصداقية
+  # ============================================================================
+  - text: "مضمون 100%"
+    field: TRUST
+    register: casual
+    context: "Noon free return policy promotions"
+
+  - text: "معتمد من الهيئة"
+    field: TRUST
+    register: formal
+    context: "Jarir official product certifications"
+
+  - text: "موثوق منذ 30 عاما"
+    field: TRUST
+    register: formal
+    context: "Panda supermarket brand heritage"
+
+  - text: "ضمان الجودة الكامل"
+    field: TRUST
+    register: formal
+    context: "Extra electronics warranty messaging"
+
+  - text: "ثقة آلاف العملاء"
+    field: TRUST
+    register: neutral
+    context: "Shein customer testimonial campaigns"
+
+  - text: "معتمد سعوديا"
+    field: TRUST
+    register: formal
+    context: "STC service certification advertisements"
+
+  - text: "آمن وموثوق"
+    field: TRUST
+    register: neutral
+    context: "Al Rajhi Bank security messaging"
+
+  - text: "مضمون الجودة"
+    field: TRUST
+    register: formal
+    context: "Harvey Nichols quality assurance"
+
+  - text: "ثقة الخبراء"
+    field: TRUST
+    register: formal
+    context: "Zain internet service promotions"
+
+  - text: "معتمد من الجهات الرسمية"
+    field: TRUST
+    register: formal
+    context: "Jahez official compliance messaging"
+
+  - text: "موثوق لكل العائلة"
+    field: TRUST
+    register: neutral
+    context: "Starbucks family-friendly branding"
+
+  - text: "ضمان دائم"
+    field: TRUST
+    register: formal
+    context: "Flynas service guarantee"
+
+  - text: "ثقة الملايين"
+    field: TRUST
+    register: neutral
+    context: "Najd brand trust campaigns"
+
+  - text: "معتمد وآمن"
+    field: TRUST
+    register: formal
+    context: "Al-Obeikan secure shopping messaging"
+
+  - text: "موثوقية كاملة"
+    field: TRUST
+    register: formal
+    context: "Talabat delivery reliability campaigns"
+
+  # ============================================================================
+  # FIELD 4: SUCCESS - عبارات النجاح والشعبية
+  # ============================================================================
+  - text: "أكثر من مليون عميل راض"
+    field: SUCCESS
+    register: formal
+    context: "Noon Saudi Arabia customer base campaigns"
+
+  - text: "الأكثر مبيعا في السعودية"
+    field: SUCCESS
+    register: neutral
+    context: "Jarir phone bestseller advertisements"
+
+  - text: "اختيار 5 ملايين سعودي"
+    field: SUCCESS
+    register: formal
+    context: "Panda customer reach messaging"
+
+  - text: "رقم 1 في المبيعات"
+    field: SUCCESS
+    register: casual
+    context: "Extra market leader positioning"
+
+  - text: "أسرع نمو في 2024"
+    field: SUCCESS
+    register: neutral
+    context: "Shein growth campaign advertisements"
+
+  - text: "ثقة 2 مليون مستخدم"
+    field: SUCCESS
+    register: formal
+    context: "STC user base promotions"
+
+  - text: "الأفضل مبيعا يوميا"
+    field: SUCCESS
+    register: casual
+    context: "Al Rajhi Bank service popularity"
+
+  - text: "نجاح 10 ملايين طلب"
+    field: SUCCESS
+    register: formal
+    context: "Harvey Nichols order volume messaging"
+
+  - text: "الأكثر شعبية"
+    field: SUCCESS
+    register: casual
+    context: "Zain trending service campaigns"
+
+  - text: "أكثر من 500 ألف تقييم إيجابي"
+    field: SUCCESS
+    register: formal
+    context: "Jahez app store rating campaigns"
+
+  - text: "رائد السوق"
+    field: SUCCESS
+    register: formal
+    context: "Starbucks market leadership positioning"
+
+  - text: "نجاح موسمي هائل"
+    field: SUCCESS
+    register: neutral
+    context: "Flynas seasonal booking success"
+
+  - text: "الأسرع مبيعا"
+    field: SUCCESS
+    register: casual
+    context: "Najd fast-selling product campaigns"
+
+  - text: "اختيار الملايين"
+    field: SUCCESS
+    register: formal
+    context: "Al-Obeikan mass market appeal"
+
+  - text: "قمة المبيعات 2024"
+    field: SUCCESS
+    register: formal
+    context: "Talabat annual success campaigns"
+
+  # ============================================================================
+  # FIELD 5: QUALITY - عبارات الجودة والفخامة
+  # ============================================================================
+  - text: "جودة عالية مضمونة"
+    field: QUALITY
+    register: formal
+    context: "Noon product quality assurance"
+
+  - text: "فاخر وأصيل"
+    field: QUALITY
+    register: formal
+    context: "Jarir international brand positioning"
+
+  - text: "ممتاز في كل التفاصيل"
+    field: QUALITY
+    register: formal
+    context: "Panda food quality messaging"
+
+  - text: "جودة سويسرية"
+    field: QUALITY
+    register: formal
+    context: "Extra watch department promotions"
+
+  - text: "فخامة لا تُضاهى"
+    field: QUALITY
+    register: formal
+    context: "Shein premium collection advertisements"
+
+  - text: "أعلى معايير الجودة"
+    field: QUALITY
+    register: formal
+    context: "STC service excellence messaging"
+
+  - text: "ممتاز ودائم"
+    field: QUALITY
+    register: neutral
+    context: "Al Rajhi Bank durability messaging"
+
+  - text: "جودة فائقة"
+    field: QUALITY
+    register: formal
+    context: "Harvey Nichols premium positioning"
+
+  - text: "فاخر بأفضل الأسعار"
+    field: QUALITY
+    register: neutral
+    context: "Zain value-luxury balance"
+
+  - text: "جودة عالمية"
+    field: QUALITY
+    register: formal
+    context: "Jahez international standard messaging"
+
+  - text: "ممتاز لكل ذوق"
+    field: QUALITY
+    register: neutral
+    context: "Starbucks taste variety campaigns"
+
+  - text: "أجود المواد"
+    field: QUALITY
+    register: formal
+    context: "Flynas comfort quality messaging"
+
+  - text: "فخامة سعودية"
+    field: QUALITY
+    register: formal
+    context: "Najd local luxury positioning"
+
+  - text: "جودة استثنائية"
+    field: QUALITY
+    register: formal
+    context: "Al-Obeikan exceptional quality"
+
+  - text: "ممتاز وموثوق"
+    field: QUALITY
+    register: formal
+    context: "Talabat quality reliability combination"
+
+  # ============================================================================
+  # FIELD 6: SPEED - عبارات السرعة والتوصيل
+  # ============================================================================
+  - text: "توصيل خلال ساعة"
+    field: SPEED
+    register: casual
+    context: "HungerStation delivery app promotions in Riyadh"
+
+  - text: "شحن فوري في دقائق"
+    field: SPEED
+    register: casual
+    context: "Amazon Saudi Arabia fast delivery campaigns"
+
+  - text: "وصول سريع خلال 30 دقيقة"
+    field: SPEED
+    register: casual
+    context: "Talabat food delivery in Jeddah peak hours"
+
+  - text: "استلام فوري اليوم"
+    field: SPEED
+    register: neutral
+    context: "Jumia same-day electronics delivery"
+
+  - text: "سرعة خارقة في التوصيل"
+    field: SPEED
+    register: casual
+    context: "Noon daily products Instagram Reels campaigns"
+
+  - text: "خلال ساعتين فقط"
+    field: SPEED
+    register: casual
+    context: "Shein Saudi Arabia fast shopping for young women"
+
+  - text: "شحن بليك"
+    field: SPEED
+    register: casual
+    context: "Jarir books and devices TV advertisements"
+
+  - text: "فوري ومجاني"
+    field: SPEED
+    register: casual
+    context: "Careem transportation short wait time messaging"
+
+  - text: "توصيل صاروخي"
+    field: SPEED
+    register: casual
+    context: "MRSOOL urban delivery advertisements"
+
+  - text: "سرعة لا تُصدق"
+    field: SPEED
+    register: casual
+    context: "Nivea perfume Snapchat campaigns 2024"
+
+  - text: "خلال 60 دقيقة مضمون"
+    field: SPEED
+    register: neutral
+    context: "Bindawood family grocery delivery"
+
+  - text: "شحن آني"
+    field: SPEED
+    register: casual
+    context: "Ablik medical order fast delivery"
+
+  - text: "وصول فوري إلى بابك"
+    field: SPEED
+    register: casual
+    context: "Swvl e-commerce delivery"
+
+  - text: "سريع كالبرق"
+    field: SPEED
+    register: casual
+    context: "Zain high-speed internet advertisements"
+
+  - text: "توصيل في ساعات"
+    field: SPEED
+    register: neutral
+    context: "Extra large home appliances delivery"
+
+  # ============================================================================
+  # FIELD 7: SIMPLICITY - عبارات البساطة وسهولة الاستخدام
+  # ============================================================================
+  - text: "سهل وبسيط"
+    field: SIMPLICITY
+    register: casual
+    context: "STC package activation Twitter promotions"
+
+  - text: "بدون تعقيد"
+    field: SIMPLICITY
+    register: casual
+    context: "Mobily monthly subscription campaigns"
+
+  - text: "استخدام سهل"
+    field: SIMPLICITY
+    register: neutral
+    context: "Al Rajhi Bank mobile app promotions"
+
+  - text: "بسيط بخطوة واحدة"
+    field: SIMPLICITY
+    register: casual
+    context: "Noon Pay electronic payment advertisements"
+
+  - text: "لا إرهاق، مجرد نقرة"
+    field: SIMPLICITY
+    register: casual
+    context: "Talabat app ordering campaigns"
+
+  - text: "بساطة كاملة"
+    field: SIMPLICITY
+    register: neutral
+    context: "Jarir online book purchasing"
+
+  - text: "سهل التنزيل"
+    field: SIMPLICITY
+    register: casual
+    context: "Anghami music app promotions"
+
+  - text: "بدون مجهود"
+    field: SIMPLICITY
+    register: casual
+    context: "Shein quick shopping campaigns"
+
+  - text: "بسيط وفعال"
+    field: SIMPLICITY
+    register: neutral
+    context: "Zira'a real estate promotions"
+
+  - text: "خطوات قليلة"
+    field: SIMPLICITY
+    register: neutral
+    context: "Careem booking simplicity messaging"
+
+  - text: "سهل كاللعب"
+    field: SIMPLICITY
+    register: casual
+    context: "PlayStation Saudi Arabia campaigns"
+
+  - text: "بساطة في كل شيء"
+    field: SIMPLICITY
+    register: neutral
+    context: "SAB Bank service messaging"
+
+  - text: "لا تعقيدات"
+    field: SIMPLICITY
+    register: casual
+    context: "Emaar residential project advertisements"
+
+  - text: "استخدام فوري"
+    field: SIMPLICITY
+    register: casual
+    context: "Nivea perfume campaigns"
+
+  - text: "بسيط للجميع"
+    field: SIMPLICITY
+    register: neutral
+    context: "Swvl shopping accessibility"
+
+  # ============================================================================
+  # FIELD 8: INNOVATION - عبارات الابتكار والتقنية
+  # ============================================================================
+  - text: "تقنية حديثة"
+    field: INNOVATION
+    register: formal
+    context: "NEOM technology project advertisements"
+
+  - text: "مبتكر الأول من نوعه"
+    field: INNOVATION
+    register: formal
+    context: "Vision 2030 innovation campaigns"
+
+  - text: "ابتكار سعودي"
+    field: INNOVATION
+    register: formal
+    context: "STC 5G technology promotions"
+
+  - text: "تقنية المستقبل"
+    field: INNOVATION
+    register: formal
+    context: "Aramco digital transformation advertisements"
+
+  - text: "ثورة في الابتكار"
+    field: INNOVATION
+    register: formal
+    context: "CITC communications authority campaigns"
+
+  - text: "حديث ومتطور"
+    field: INNOVATION
+    register: neutral
+    context: "Samsung Saudi Arabia product launches"
+
+  - text: "ابتكار لا يُضاهى"
+    field: INNOVATION
+    register: formal
+    context: "Qimam real estate modern developments"
+
+  - text: "تقنية ذكية"
+    field: INNOVATION
+    register: neutral
+    context: "Google Cloud Saudi Arabia campaigns"
+
+  - text: "الأول عالميا"
+    field: INNOVATION
+    register: formal
+    context: "Riyad Bank app innovation messaging"
+
+  - text: "ابتكار يغير الحياة"
+    field: INNOVATION
+    register: formal
+    context: "Altibbi health app advertisements"
+
+  - text: "حداثة كاملة"
+    field: INNOVATION
+    register: neutral
+    context: "Huawei Saudi Arabia campaigns"
+
+  - text: "مبتكر وفريد"
+    field: INNOVATION
+    register: formal
+    context: "Emaar Mall innovation positioning"
+
+  - text: "تقنية 2025"
+    field: INNOVATION
+    register: neutral
+    context: "Zain AI technology advertisements"
+
+  - text: "ثورة تقنية"
+    field: INNOVATION
+    register: formal
+    context: "NEOM Tech campaigns"
+
+  - text: "ابتكار سعودي أصيل"
+    field: INNOVATION
+    register: formal
+    context: "Renewable energy company promotions"
+
+  # ============================================================================
+  # FIELD 9: EXCLUSIVITY - عبارات التميز والحصرية
+  # ============================================================================
+  - text: "حصري للأعضاء"
+    field: EXCLUSIVITY
+    register: formal
+    context: "Noon VIP membership advertisements"
+
+  - text: "عرض خاص محدود"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Jarir Club exclusive campaigns"
+
+  - text: "لفئة مختارة"
+    field: EXCLUSIVITY
+    register: formal
+    context: "Bank Al-Jazira Premium banking"
+
+  - text: "حصريا في السعودية"
+    field: EXCLUSIVITY
+    register: formal
+    context: "Adidas Saudi exclusive releases"
+
+  - text: "عضوية خاصة"
+    field: EXCLUSIVITY
+    register: formal
+    context: "STC Pro membership campaigns"
+
+  - text: "للنخبة فقط"
+    field: EXCLUSIVITY
+    register: formal
+    context: "Ritaj hotel luxury positioning"
+
+  - text: "عرض حصري"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Shein Exclusive collection"
+
+  - text: "خاص لك"
+    field: EXCLUSIVITY
+    register: casual
+    context: "SAB Privilege banking campaigns"
+
+  - text: "محدود العدد"
+    field: EXCLUSIVITY
+    register: formal
+    context: "Extra Pro limited edition products"
+
+  - text: "حصري للعملاء المميزين"
+    field: EXCLUSIVITY
+    register: formal
+    context: "Mobily Elite membership"
+
+  - text: "عرض نخبوي"
+    field: EXCLUSIVITY
+    register: formal
+    context: "Al Rajhi Premium services"
+
+  - text: "للأعضاء المميزين"
+    field: EXCLUSIVITY
+    register: formal
+    context: "Nivea Club membership"
+
+  - text: "خاص جدا"
+    field: EXCLUSIVITY
+    register: casual
+    context: "Redan perfume exclusivity"
+
+  - text: "حصري لفترة محدودة"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Jumia Pro limited time offers"
+
+  - text: "تميزك يستحق"
+    field: EXCLUSIVITY
+    register: formal
+    context: "Qasr Al-Electronics premium positioning"
+
+  # ============================================================================
+  # FIELD 10: COMMUNITY - عبارات المجتمع والانتماء
+  # ============================================================================
+  - text: "انضم إلينا الآن"
+    field: COMMUNITY
+    register: casual
+    context: "TenderSA supplier registration campaigns"
+
+  - text: "معا ننجح"
+    field: COMMUNITY
+    register: formal
+    context: "Vision 2030 national unity messaging"
+
+  - text: "كن جزءا من العائلة"
+    field: COMMUNITY
+    register: casual
+    context: "STC Community family branding"
+
+  - text: "انضم للمجتمع"
+    field: COMMUNITY
+    register: casual
+    context: "Noon Club community building"
+
+  - text: "معا نحو الأفضل"
+    field: COMMUNITY
+    register: formal
+    context: "Al Rajhi Bank collective progress messaging"
+
+  - text: "كن معنا"
+    field: COMMUNITY
+    register: casual
+    context: "Jarir Readers community"
+
+  - text: "جزء من مجتمعنا"
+    field: COMMUNITY
+    register: neutral
+    context: "Talabat Fans loyalty program"
+
+  - text: "انضم للثورة"
+    field: COMMUNITY
+    register: casual
+    context: "NEOM innovation movement"
+
+  - text: "معا نبني"
+    field: COMMUNITY
+    register: formal
+    context: "Aramco nation building campaigns"
+
+  - text: "كن عضوا"
+    field: COMMUNITY
+    register: casual
+    context: "Mobily Community membership"
+
+  - text: "مع مجتمعنا الكبير"
+    field: COMMUNITY
+    register: neutral
+    context: "Zain Fans community campaigns"
+
+  - text: "انضم وشارك"
+    field: COMMUNITY
+    register: casual
+    context: "Shein Saudi Arabia social campaigns"
+
+  - text: "جزء من الفريق"
+    field: COMMUNITY
+    register: casual
+    context: "Careem Drivers partnership"
+
+  - text: "معا أقوى"
+    field: COMMUNITY
+    register: formal
+    context: "CMA financial market unity messaging"
+
+  - text: "انضم لعائلتنا"
+    field: COMMUNITY
+    register: casual
+    context: "Emaar Residents community building"
+
+# Metadata
+metadata:
+  locale: ar-SA
+  language: Arabic
+  country: Saudi Arabia
+  direction: RTL
+  script: Arabic
+  total_expressions: 150
+  fields: 10
+  expressions_per_field: 15
+  research_date: "2026-02-06"
+  sources:
+    - "Saudi e-commerce campaigns (Noon, Amazon SA, Jarir)"
+    - "Telecom advertisements (STC, Zain, Mobily)"
+    - "Food delivery apps (HungerStation, Talabat, Jahez)"
+    - "Banking promotions (Al Rajhi, SAB, Riyad Bank)"
+    - "Vision 2030 and NEOM campaigns"
+    - "White Friday and Ramadan seasonal promotions"
+  notes:
+    - "Expressions use Modern Standard Arabic with Saudi Gulf influences"
+    - "Many expressions originate from major Saudi brands and campaigns"
+    - "Cultural sensitivity: avoid religious terminology in commercial contexts"
+    - "Saudi market prefers formal register for trust/quality messaging"
+    - "Casual register works well for urgency and speed messaging"

@@ -1,0 +1,784 @@
+# Native Indonesian (id-ID) Marketing Expressions 2024-2025
+# Source: Indonesian e-commerce (Tokopedia, Shopee, Lazada), brand advertising, fintech apps
+# Focus: Authentic expressions used in Indonesian digital marketing and social commerce
+
+expressions:
+  # ============================================================================
+  # FIELD 1: URGENCY - Ungkapan Mendesak
+  # ============================================================================
+  - text: "Hanya hari ini"
+    field: URGENCY
+    register: casual
+    context: "Flash sale harian di Shopee/Tokopedia untuk diskon besar"
+
+  - text: "Kesempatan terakhir"
+    field: URGENCY
+    register: neutral
+    context: "Banner akhir promo Lazada untuk stok terbatas"
+
+  - text: "Segera habis"
+    field: URGENCY
+    register: casual
+    context: "Countdown stok di product page, ciptakan FOMO pada item populer"
+
+  - text: "Stok terbatas"
+    field: URGENCY
+    register: neutral
+    context: "Deskripsi produk untuk edisi khusus, percepat konversi"
+
+  - text: "Promo berakhir malam ini"
+    field: URGENCY
+    register: neutral
+    context: "Notifikasi push e-commerce, urgency untuk checkout sebelum tengah malam"
+
+  - text: "Claim sekarang"
+    field: URGENCY
+    register: casual
+    context: "Voucher gratis di TikTok Shop/Shopee, kolaborasi influencer"
+
+  - text: "Jangan sampai kehabisan"
+    field: URGENCY
+    register: casual
+    context: "Caption Instagram ads brand skincare, dorong swipe up"
+
+  - text: "Flash sale 1 jam"
+    field: URGENCY
+    register: neutral
+    context: "Event waktu singkat di homepage Tokopedia, tingkatkan traffic"
+
+  - text: "Terakhir 10 pcs"
+    field: URGENCY
+    register: casual
+    context: "Live shopping Shopee, tampilkan stok real-time"
+
+  - text: "Berakhir dalam 5 menit"
+    field: URGENCY
+    register: neutral
+    context: "Timer di checkout, cegah cart abandonment"
+
+  - text: "Limited edition"
+    field: URGENCY
+    register: neutral
+    context: "Peluncuran produk brand fashion, edisi terbatas"
+
+  - text: "Dapatkan sebelum tutup"
+    field: URGENCY
+    register: casual
+    context: "Akhir hari promo di marketplace, target value-seeker"
+
+  - text: "Urgent: Diskon 70%"
+    field: URGENCY
+    register: casual
+    context: "Email marketing Shopee, personalisasi AI-driven"
+
+  - text: "Habis besok"
+    field: URGENCY
+    register: neutral
+    context: "Banner Lazada untuk bundling hemat biaya"
+
+  - text: "Sekarang atau tidak sama sekali"
+    field: URGENCY
+    register: casual
+    context: "Ads TikTok untuk social commerce"
+
+  # ============================================================================
+  # FIELD 2: VALUE - Ungkapan Nilai/Hemat
+  # ============================================================================
+  - text: "Hemat hingga 50%"
+    field: VALUE
+    register: neutral
+    context: "Headline promo Tokopedia, bandingkan harga asli vs diskon"
+
+  - text: "Harga terjangkau"
+    field: VALUE
+    register: neutral
+    context: "Deskripsi Lazada untuk produk harian, target segmen menengah"
+
+  - text: "Gratis ongkir"
+    field: VALUE
+    register: casual
+    context: "Voucher Shopee nasional, tingkatkan omnichannel belanja"
+
+  - text: "Value for money"
+    field: VALUE
+    register: neutral
+    context: "Tagline brand di iklan TV/digital, seimbang praktis-aspirasi"
+
+  - text: "Diskon gila-gilaan"
+    field: VALUE
+    register: casual
+    context: "Flash sale Shopee, tarik konsumen data-driven"
+
+  - text: "Lebih murah di sini"
+    field: VALUE
+    register: casual
+    context: "Comparison ads Tokopedia vs kompetitor"
+
+  - text: "Beli 1 gratis 1"
+    field: VALUE
+    register: neutral
+    context: "Bundling Lazada, populer untuk konsumen sadar biaya"
+
+  - text: "Harga spesial"
+    field: VALUE
+    register: neutral
+    context: "Member deal Shopee, personalisasi experience"
+
+  - text: "Kualitas premium harga hemat"
+    field: VALUE
+    register: formal
+    context: "Iklan brand fashion, penekanan value proposition"
+
+  - text: "Ongkir 0 rupiah"
+    field: VALUE
+    register: casual
+    context: "Promo Tokopedia, dorong repeat purchase"
+
+  - text: "Super hemat"
+    field: VALUE
+    register: casual
+    context: "Caption Instagram Shop, social commerce"
+
+  - text: "Nilai terbaik"
+    field: VALUE
+    register: neutral
+    context: "Deskripsi produk Lazada, fokus pengalaman"
+
+  - text: "Promo hemat dompet"
+    field: VALUE
+    register: casual
+    context: "TikTok ads, target konsumen bijak"
+
+  - text: "Gratis biaya tambahan"
+    field: VALUE
+    register: neutral
+    context: "Checkout Shopee, transparansi harga"
+
+  - text: "Harga paling rendah"
+    field: VALUE
+    register: neutral
+    context: "Price match guarantee Tokopedia, bangun trust"
+
+  # ============================================================================
+  # FIELD 3: TRUST - Ungkapan Kepercayaan
+  # ============================================================================
+  - text: "Garansi resmi"
+    field: TRUST
+    register: neutral
+    context: "Product listings e-commerce untuk jaminan garansi, elektronik"
+
+  - text: "Tersertifikasi halal"
+    field: TRUST
+    register: formal
+    context: "Iklan makanan dan kosmetik, sertifikasi MUI"
+
+  - text: "Terpercaya No.1"
+    field: TRUST
+    register: neutral
+    context: "Slogan brand dalam kampanye digital, klaim kepemimpinan pasar"
+
+  - text: "Resmi distributor"
+    field: TRUST
+    register: formal
+    context: "Badge penjual resmi di marketplace untuk autentisitas"
+
+  - text: "Kualitas terjamin"
+    field: TRUST
+    register: neutral
+    context: "Deskripsi produk fashion dan kecantikan untuk jaminan kualitas"
+
+  - text: "Ulasan 5 bintang"
+    field: TRUST
+    register: casual
+    context: "Social proof di bagian ulasan Shopee"
+
+  - text: "Sudah terbukti"
+    field: TRUST
+    register: neutral
+    context: "Iklan testimoni di Instagram untuk brand skincare"
+
+  - text: "Aman dan terlindungi"
+    field: TRUST
+    register: neutral
+    context: "Promosi payment gateway, penekanan keamanan"
+
+  - text: "Rekomendasi dokter"
+    field: TRUST
+    register: formal
+    context: "Iklan produk kesehatan dengan endorsement ahli"
+
+  - text: "Asli 100%"
+    field: TRUST
+    register: casual
+    context: "Klaim anti-palsu di marketplace sneaker dan gadget"
+
+  - text: "Transparan harga"
+    field: TRUST
+    register: neutral
+    context: "Listing GoFood/GrabFood, tidak ada biaya tersembunyi"
+
+  - text: "BPOM terdaftar"
+    field: TRUST
+    register: formal
+    context: "Iklan kosmetik dan suplemen sesuai regulasi Indonesia"
+
+  - text: "Word of mouth terbaik"
+    field: TRUST
+    register: casual
+    context: "Promosi komunitas di TikTok untuk UMKM lokal"
+
+  - text: "Brand terpercaya"
+    field: TRUST
+    register: neutral
+    context: "Banner ads memperkuat reputasi jangka panjang"
+
+  - text: "Loyalitas pelanggan"
+    field: TRUST
+    register: formal
+    context: "Kampanye CRM membangun kepercayaan pembeli setia"
+
+  # ============================================================================
+  # FIELD 4: SUCCESS - Ungkapan Kesuksesan
+  # ============================================================================
+  - text: "Lebih dari 1 juta pelanggan puas"
+    field: SUCCESS
+    register: neutral
+    context: "Banner homepage Tokopedia untuk daya tarik massal"
+
+  - text: "Dipilih jutaan pengguna"
+    field: SUCCESS
+    register: neutral
+    context: "Deskripsi app store dan iklan Google Play untuk apps seperti Gojek"
+
+  - text: "Rating tertinggi 4.9"
+    field: SUCCESS
+    register: casual
+    context: "Kartu produk Shopee menampilkan rating bintang"
+
+  - text: "No.1 di Indonesia"
+    field: SUCCESS
+    register: neutral
+    context: "Klaim kompetitif di hasil pencarian e-commerce"
+
+  - text: "Terjual 100K+ unit"
+    field: SUCCESS
+    register: casual
+    context: "Timer flash sale Lazada untuk item permintaan tinggi"
+
+  - text: "Pilihan terlaris"
+    field: SUCCESS
+    register: neutral
+    context: "Bagian best-seller di marketplace fashion"
+
+  - text: "Repeat order 80%"
+    field: SUCCESS
+    register: neutral
+    context: "Iklan program loyalitas menekankan tingkat pembelian ulang"
+
+  - text: "Testimoni ribuan"
+    field: SUCCESS
+    register: casual
+    context: "Carousel konten user-generated di Instagram Shops"
+
+  - text: "Market leader"
+    field: SUCCESS
+    register: formal
+    context: "Iklan korporat untuk banking dan fintech apps"
+
+  - text: "Paling banyak dibeli"
+    field: SUCCESS
+    register: casual
+    context: "Feed produk trending di TikTok Shop"
+
+  - text: "Sukses terjual habis"
+    field: SUCCESS
+    register: neutral
+    context: "Notifikasi pasca-penjualan di live shopping events"
+
+  - text: "Jutaan ulasan positif"
+    field: SUCCESS
+    register: neutral
+    context: "Agregator ulasan di platform e-commerce"
+
+  - text: "Pelanggan setia bertahun-tahun"
+    field: SUCCESS
+    register: formal
+    context: "Kampanye anniversary membangun narasi sukses emosional"
+
+  - text: "Top rating app"
+    field: SUCCESS
+    register: casual
+    context: "Optimisasi Play Store untuk aplikasi layanan pengiriman"
+
+  - text: "Loyalitas tinggi"
+    field: SUCCESS
+    register: formal
+    context: "Kampanye retensi via WhatsApp Business untuk repeat order"
+
+  # ============================================================================
+  # FIELD 5: QUALITY - Ungkapan Kualitas
+  # ============================================================================
+  - text: "Kualitas premium"
+    field: QUALITY
+    register: neutral
+    context: "Tag produk untuk elektronik atau fashion high-end di Shopee"
+
+  - text: "Terbaik di kelasnya"
+    field: QUALITY
+    register: neutral
+    context: "Banner kategori Tokopedia untuk brand lokal bersaing"
+
+  - text: "Original 100%"
+    field: QUALITY
+    register: casual
+    context: "Label anti-palsu di Lazada untuk apparel dan aksesoris"
+
+  - text: "Produk unggulan"
+    field: QUALITY
+    register: neutral
+    context: "Listing unggulan di Shopee untuk item berpenghargaan"
+
+  - text: "Grade A super"
+    field: QUALITY
+    register: casual
+    context: "Deskripsi aksesoris handphone di Lazada, kualitas setara impor"
+
+  - text: "Bahan berkualitas tinggi"
+    field: QUALITY
+    register: formal
+    context: "Detail kain di listing fashion Shopee, target pembeli premium"
+
+  - text: "Standar internasional"
+    field: QUALITY
+    register: neutral
+    context: "Klaim kualitas ekspor di Tokopedia untuk produk makanan"
+
+  - text: "Awet tahan lama"
+    field: QUALITY
+    register: casual
+    context: "Tag durabilitas untuk tools dan gadget di Lazada"
+
+  - text: "Pilihan konsumen"
+    field: QUALITY
+    register: neutral
+    context: "Badge penghargaan seperti Brand Choice di Shopee"
+
+  - text: "Kualitas no.1"
+    field: QUALITY
+    register: casual
+    context: "Badge bestseller di Tokopedia untuk produk kecantikan"
+
+  - text: "Asli premium lokal"
+    field: QUALITY
+    register: neutral
+    context: "Promosi brand lokal di Lazada, tingkatkan kepercayaan produk Indonesia"
+
+  - text: "Hasil riset terbaik"
+    field: QUALITY
+    register: formal
+    context: "Deskripsi gadget tech di Shopee, mengutip pengujian kredibel"
+
+  - text: "Eksklusif berkualitas"
+    field: QUALITY
+    register: neutral
+    context: "Tag limited-edition di Tokopedia untuk fashion lokal mewah"
+
+  - text: "Diakui konsumen"
+    field: QUALITY
+    register: formal
+    context: "Ringkasan ulasan di Lazada, menyorot kepuasan tinggi"
+
+  - text: "Kualitas terjamin"
+    field: QUALITY
+    register: formal
+    context: "Bagian garansi di Tokopedia untuk peralatan rumah tangga"
+
+  # ============================================================================
+  # FIELD 6: SPEED - Ungkapan Kecepatan
+  # ============================================================================
+  - text: "Pengiriman cepat"
+    field: SPEED
+    register: neutral
+    context: "Badge pengiriman standar di Shopee untuk pesanan nasional, 1-3 hari"
+
+  - text: "Instan"
+    field: SPEED
+    register: casual
+    context: "Download produk digital instan di Tokopedia, seperti voucher atau e-book"
+
+  - text: "Same day delivery"
+    field: SPEED
+    register: neutral
+    context: "Banner flash sale urban di Lazada Jakarta/Bandung"
+
+  - text: "Langsung sampai"
+    field: SPEED
+    register: casual
+    context: "Respons chat dan judul produk di Shopee untuk pickup lokal"
+
+  - text: "Gratis ongkir kilat"
+    field: SPEED
+    register: casual
+    context: "Kode promo Tokopedia untuk pengiriman cepat gratis pesanan di bawah Rp50k"
+
+  - text: "1 hari sampai"
+    field: SPEED
+    register: neutral
+    context: "Ikon garansi di Lazada untuk JNE/J&T express, umum di groceries"
+
+  - text: "Ekspres 24 jam"
+    field: SPEED
+    register: formal
+    context: "Label layanan premium di Shopee untuk elektronik, next-day delivery"
+
+  - text: "Super cepat"
+    field: SPEED
+    register: casual
+    context: "Timer flash deal di Tokopedia untuk keuntungan kecepatan terbatas"
+
+  - text: "Delivery kilat"
+    field: SPEED
+    register: casual
+    context: "Notifikasi mobile app Lazada, target Gen Z untuk fashion drops cepat"
+
+  - text: "Siap kirim hari ini"
+    field: SPEED
+    register: neutral
+    context: "Status stok di halaman seller Shopee, jaminan pengiriman segera"
+
+  - text: "Cepat dan aman"
+    field: SPEED
+    register: neutral
+    context: "Badge kepercayaan gabungan di Tokopedia untuk partner logistik"
+
+  - text: "On-time guarantee"
+    field: SPEED
+    register: formal
+    context: "Bagian kebijakan di Lazada, refund untuk keterlambatan di penjualan volume tinggi"
+
+  - text: "Flash delivery"
+    field: SPEED
+    register: neutral
+    context: "Tag event-specific di Shopee 11.11, penanganan ultra-cepat"
+
+  - text: "Langsung ke rumah"
+    field: SPEED
+    register: casual
+    context: "Promo seller lingkungan di Tokopedia, pengiriman hyperlocal instan"
+
+  - text: "Kecepatan terdepan"
+    field: SPEED
+    register: formal
+    context: "Slogan brand di Lazada untuk produk lokal teroptimasi logistik"
+
+  # ============================================================================
+  # FIELD 7: SIMPLICITY - Ungkapan Kesederhanaan
+  # ============================================================================
+  - text: "Mudah dan cepat"
+    field: SIMPLICITY
+    register: casual
+    context: "Prompt download app fintech untuk transfer instan"
+
+  - text: "Tanpa ribet"
+    field: SIMPLICITY
+    register: casual
+    context: "Banner e-commerce untuk one-tap checkout"
+
+  - text: "Praktis banget"
+    field: SIMPLICITY
+    register: casual
+    context: "Promo gadget tech menyorot penggunaan tanpa setup"
+
+  - text: "Tinggal klik"
+    field: SIMPLICITY
+    register: casual
+    context: "Iklan digital wallet untuk pembayaran cepat"
+
+  - text: "Gampang banget"
+    field: SIMPLICITY
+    register: casual
+    context: "Live shopping Shopee untuk pemesanan seamless"
+
+  - text: "Cepat tanpa drama"
+    field: SIMPLICITY
+    register: casual
+    context: "Aplikasi ride-hailing seperti Gojek untuk booking"
+
+  - text: "Simpel aja"
+    field: SIMPLICITY
+    register: casual
+    context: "Onboarding fintech untuk pembuatan akun instan"
+
+  - text: "Langsung jadi"
+    field: SIMPLICITY
+    register: neutral
+    context: "Flash sale e-commerce untuk pengiriman segera"
+
+  - text: "Mudah digunakan"
+    field: SIMPLICITY
+    register: neutral
+    context: "Tutorial tech di deskripsi app store"
+
+  - text: "Proses cepat"
+    field: SIMPLICITY
+    register: neutral
+    context: "App bank untuk approval pinjaman"
+
+  - text: "Efisien dan praktis"
+    field: SIMPLICITY
+    register: formal
+    context: "Laporan fintech korporat dan email"
+
+  - text: "Tanpa komplikasi"
+    field: SIMPLICITY
+    register: formal
+    context: "Demo software tech enterprise"
+
+  - text: "Akses instan"
+    field: SIMPLICITY
+    register: neutral
+    context: "Sign-up layanan streaming"
+
+  - text: "Satu langkah saja"
+    field: SIMPLICITY
+    register: casual
+    context: "Redeem voucher di e-commerce"
+
+  - text: "Hemat waktu"
+    field: SIMPLICITY
+    register: neutral
+    context: "Aplikasi delivery untuk tracking pesanan"
+
+  # ============================================================================
+  # FIELD 8: INNOVATION - Ungkapan Inovasi
+  # ============================================================================
+  - text: "Inovatif"
+    field: INNOVATION
+    register: neutral
+    context: "Tagline umum untuk fitur app baru"
+
+  - text: "Teknologi terbaru"
+    field: INNOVATION
+    register: neutral
+    context: "Iklan fintech untuk AI-driven insights"
+
+  - text: "Canggih"
+    field: INNOVATION
+    register: casual
+    context: "Kampanye peluncuran smartphone"
+
+  - text: "Pertama di Indonesia"
+    field: INNOVATION
+    register: neutral
+    context: "Drop eksklusif e-commerce"
+
+  - text: "Revolusioner"
+    field: INNOVATION
+    register: formal
+    context: "Promo fintech blockchain"
+
+  - text: "Futuristik"
+    field: INNOVATION
+    register: casual
+    context: "Demo VR/AR tech di TikTok"
+
+  - text: "Teknologi breakthrough"
+    field: INNOVATION
+    register: formal
+    context: "Webinar software enterprise"
+
+  - text: "Pionir"
+    field: INNOVATION
+    register: neutral
+    context: "Klaim first-mover di payments apps"
+
+  - text: "Generasi baru"
+    field: INNOVATION
+    register: neutral
+    context: "Versi e-wallet yang diupdate"
+
+  - text: "Inovasi pintar"
+    field: INNOVATION
+    register: casual
+    context: "AI chatbots dalam customer service"
+
+  - text: "Transformasi digital"
+    field: INNOVATION
+    register: formal
+    context: "Kampanye upgrade digital company-wide"
+
+  - text: "Fitur mutakhir"
+    field: INNOVATION
+    register: neutral
+    context: "Tools personalisasi e-commerce"
+
+  - text: "Inovasi terkini"
+    field: INNOVATION
+    register: neutral
+    context: "Update tech tahunan dalam newsletter"
+
+  - text: "Next level"
+    field: INNOVATION
+    register: casual
+    context: "Gaming dan fitur gamification fintech"
+
+  - text: "Cutting-edge"
+    field: INNOVATION
+    register: formal
+    context: "Review dan iklan gadget"
+
+  # ============================================================================
+  # FIELD 9: EXCLUSIVITY - Ungkapan Eksklusivitas
+  # ============================================================================
+  - text: "Khusus member"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Program loyalitas di e-commerce untuk diskon pelanggan tetap"
+
+  - text: "Akses eksklusif"
+    field: EXCLUSIVITY
+    register: formal
+    context: "Membership premium di app belanja, akses fitur VIP sebelum umum"
+
+  - text: "Hanya untuk Anda"
+    field: EXCLUSIVITY
+    register: casual
+    context: "Email marketing personalisasi untuk pembeli pertama atau VIP"
+
+  - text: "Edisi terbatas"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Edisi terbatas produk fashion/kecantikan di Instagram ads"
+
+  - text: "Penawaran khusus pelanggan setia"
+    field: EXCLUSIVITY
+    register: formal
+    context: "Kampanye loyalitas di situs web, hadiah untuk repeat buyer"
+
+  - text: "Hanya tersedia 50 unit"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Promo stok terbatas di WhatsApp broadcast untuk ciptakan urgency"
+
+  - text: "Promo spesial pembelian pertama"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Pop-up onsite e-commerce untuk user baru"
+
+  - text: "Tersedia hanya di sini"
+    field: EXCLUSIVITY
+    register: casual
+    context: "Iklan sosial media untuk produk unik toko online"
+
+  - text: "Produk eksklusif harga spesial"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Deskripsi produk di marketplace untuk rasa istimewa"
+
+  - text: "Kesempatan terbatas cuma hari ini"
+    field: EXCLUSIVITY
+    register: casual
+    context: "Flash sale di TikTok Shop atau IG Stories"
+
+  - text: "Penawaran eksklusif pelanggan setia"
+    field: EXCLUSIVITY
+    register: formal
+    context: "Notifikasi in-app untuk member gold/platinum"
+
+  - text: "Harga spesial kualitas istimewa"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Banner promo di homepage e-commerce"
+
+  - text: "Nikmati penawaran khusus mulai hari ini"
+    field: EXCLUSIVITY
+    register: neutral
+    context: "Launch produk baru di social media"
+
+  - text: "Bonus eksklusif dari kami"
+    field: EXCLUSIVITY
+    register: casual
+    context: "Upsell di checkout page untuk pembelian besar"
+
+  - text: "Spesial untuk Anda"
+    field: EXCLUSIVITY
+    register: casual
+    context: "Personalized recommendation di homepage e-commerce"
+
+  # ============================================================================
+  # FIELD 10: COMMUNITY - Ungkapan Komunitas
+  # ============================================================================
+  - text: "Gabung bersama kami"
+    field: COMMUNITY
+    register: casual
+    context: "Call-to-action di Instagram untuk komunitas brand"
+
+  - text: "Bersama kita bisa"
+    field: COMMUNITY
+    register: neutral
+    context: "Kampanye sosial media untuk program loyalitas"
+
+  - text: "Komunitas pecinta produk kami"
+    field: COMMUNITY
+    register: casual
+    context: "Grup WhatsApp atau Facebook group untuk user"
+
+  - text: "Jutaan pengguna sudah pilih kami"
+    field: COMMUNITY
+    register: neutral
+    context: "Testimoni di landing page e-commerce"
+
+  - text: "Kepuasan Anda kebanggaan kami"
+    field: COMMUNITY
+    register: formal
+    context: "Slogan di broadcast WhatsApp untuk trust building"
+
+  - text: "Kami besar dengan kepercayaan pelanggan"
+    field: COMMUNITY
+    register: formal
+    context: "Promo membership di situs web"
+
+  - text: "Setelah pakai, beri testimoni positif"
+    field: COMMUNITY
+    register: casual
+    context: "User-generated content di TikTok challenges"
+
+  - text: "Kami ada solusinya untuk Anda"
+    field: COMMUNITY
+    register: neutral
+    context: "Responsif chat di social media komunitas"
+
+  - text: "Gabung promo cashback bersama ribuan member"
+    field: COMMUNITY
+    register: casual
+    context: "Broadcast grup untuk event komunal"
+
+  - text: "Bersama nikmati diskon besar-besaran"
+    field: COMMUNITY
+    register: neutral
+    context: "Kampanye akhir bulan di komunitas online"
+
+  - text: "Jutaan pelanggan puas, giliran Anda"
+    field: COMMUNITY
+    register: neutral
+    context: "Headline di app promo untuk rasa aman bergabung"
+
+  - text: "Komunitas kami hadir untuk penawaran lebih besar"
+    field: COMMUNITY
+    register: formal
+    context: "Undangan newsletter ke subscriber"
+
+  - text: "Ayo beli bersama teman-teman"
+    field: COMMUNITY
+    register: casual
+    context: "Referral program di e-commerce"
+
+  - text: "Ribuan user sudah rasakan manfaatnya"
+    field: COMMUNITY
+    register: neutral
+    context: "Social proof di iklan video YouTube"
+
+  - text: "Bergabunglah dan dapatkan bonus komunitas"
+    field: COMMUNITY
+    register: casual
+    context: "Onboarding popup untuk new user di platform"

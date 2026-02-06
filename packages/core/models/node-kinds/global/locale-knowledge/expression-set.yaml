@@ -1,8 +1,8 @@
-# packages/core/models/node-kinds/global/knowledge/expression-set.yaml
-# ExpressionSet — Container grouping Expression atoms by register
+# packages/core/models/node-kinds/global/locale-knowledge/expression-set.yaml
+# ExpressionSet — Container for all Expression atoms of a locale
 #
-# v10.1: Pure container (no JSON blobs - data lives in Expression atoms)
-# Registers: formal, neutral, casual
+# v10.7: Simplified model - one ExpressionSet per locale
+# Register is a property on Expression atoms, not on the container
 # Stability: High - structure rarely changes
 
 node:
@@ -11,26 +11,26 @@ node:
   layer: locale-knowledge
   trait: knowledge
   icon: "💬"
-  description: "Container grouping Expression atoms by register"
+  description: "Container for all Expression atoms of a locale"
 
   standard_properties:
     display_name:
       type: string
       required: true
       description: "Human-readable name"
-      example: "French (France) Formal Expressions"
+      example: "French (France) Expressions"
 
     description:
       type: string
       required: true
       description: "Short description"
-      example: "Formal register expressions for fr-FR"
+      example: "Native expressions for fr-FR across all registers"
 
     llm_context:
       type: string
       required: true
       description: "LLM generation hints"
-      example: "USE: to find expressions by register. TRIGGERS: tone, formality. NOT: individual phrases."
+      example: "USE: to find expressions for a locale. Filter by semantic_field and register on atoms."
 
     created_at:
       type: datetime
@@ -43,13 +43,18 @@ node:
       description: "Last update timestamp"
 
   properties:
-    # Register identification (only property - data is in atoms)
-    register:
-      type: string
+    # Semantic fields summary (metadata about contained atoms)
+    semantic_fields_count:
+      type: integer
       required: true
-      enum: [formal, neutral, casual]
-      description: "Expression register this set groups"
-      example: "formal"
+      description: "Number of semantic fields represented"
+      example: 10
+
+    total_expressions:
+      type: integer
+      required: true
+      description: "Total number of Expression atoms"
+      example: 80
 
   relations:
     outgoing:
@@ -61,7 +66,5 @@ node:
     incoming:
       - type: HAS_EXPRESSIONS
         from: Locale
-        cardinality: "1:N"
-        description: "Locale has multiple expression sets (one per register)"
-        properties:
-          register: string
+        cardinality: "1:1"
+        description: "Locale has exactly one expression set"

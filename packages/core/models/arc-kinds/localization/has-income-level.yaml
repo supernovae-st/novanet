@@ -1,0 +1,21 @@
+# packages/core/models/arc-kinds/localization/has-income-level.yaml
+# ArcKind: HAS_INCOME_LEVEL - Locale's World Bank income classification
+# v10.8: Geographic Taxonomy
+
+arc:
+  name: HAS_INCOME_LEVEL
+  family: localization
+  scope: cross_realm
+
+  source: Locale
+  target: IncomeGroup
+  cardinality: many_to_one
+
+  inverse: CLASSIFIES
+
+  llm_context: |
+    Locale is classified in a World Bank income group for pricing/messaging.
+    Use to find similar markets: MATCH (l:Locale)-[:HAS_INCOME_LEVEL]->(ig)<-[:HAS_INCOME_LEVEL]-(similar)
+    Example: fr-FR -[:HAS_INCOME_LEVEL]-> HIC (high income)
+
+  cypher_pattern: "(Locale)-[:HAS_INCOME_LEVEL]->(IncomeGroup)"

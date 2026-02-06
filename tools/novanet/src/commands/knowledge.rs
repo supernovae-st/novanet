@@ -11,7 +11,10 @@ use std::time::Instant;
 
 use tracing::instrument;
 
+use crate::generators::culture::CultureGenerator;
+use crate::generators::expression::ExpressionGenerator;
 use crate::generators::formatting::FormattingGenerator;
+use crate::generators::market::MarketGenerator;
 use crate::generators::slugification::SlugificationGenerator;
 use crate::Result;
 
@@ -75,25 +78,31 @@ pub fn knowledge_generate(
         "/Users/thibaut/Projects/traduction_ai/ath-know-l10n/outputs/localization-data";
     let ath = ath_path.unwrap_or(default_ath);
 
-    match tier {
-        KnowledgeTier::Technical | KnowledgeTier::All => {
-            // Generate slugification
-            let result = generate_slugification(root, ath, dry_run)?;
-            results.push(result);
+    // Technical tier: slugification, formatting
+    if tier == KnowledgeTier::Technical || tier == KnowledgeTier::All {
+        let result = generate_slugification(root, ath, dry_run)?;
+        results.push(result);
 
-            // Generate formatting
-            let result = generate_formatting(root, ath, dry_run)?;
-            results.push(result);
-        }
-        KnowledgeTier::Voice => {
-            eprintln!("  Voice tier not yet implemented");
-        }
-        KnowledgeTier::Culture => {
-            eprintln!("  Culture tier not yet implemented");
-        }
-        KnowledgeTier::Market => {
-            eprintln!("  Market tier not yet implemented");
-        }
+        let result = generate_formatting(root, ath, dry_run)?;
+        results.push(result);
+    }
+
+    // Voice tier: expression atoms
+    if tier == KnowledgeTier::Voice || tier == KnowledgeTier::All {
+        let result = generate_expression(root, ath, dry_run)?;
+        results.push(result);
+    }
+
+    // Culture tier: culture norms
+    if tier == KnowledgeTier::Culture || tier == KnowledgeTier::All {
+        let result = generate_culture(root, ath, dry_run)?;
+        results.push(result);
+    }
+
+    // Market tier: market data
+    if tier == KnowledgeTier::Market || tier == KnowledgeTier::All {
+        let result = generate_market(root, ath, dry_run)?;
+        results.push(result);
     }
 
     Ok(results)
@@ -167,42 +176,137 @@ fn generate_formatting(root: &Path, ath_path: &str, dry_run: bool) -> Result<Kno
     })
 }
 
+/// Generate culture seed file.
+fn generate_culture(root: &Path, ath_path: &str, dry_run: bool) -> Result<KnowledgeGenerateResult> {
+    let start = Instant::now();
+
+    // Generate Cypher content
+    let generator = CultureGenerator::with_ath_path(ath_path);
+    let content = generator.generate()?;
+
+    // Count nodes (rough estimate from MERGE statements)
+    let node_count = content.matches("MERGE (").count();
+
+    // Output path
+    let output_path = root.join("packages/db/seed/24-culture.cypher");
+    let rel_path = "packages/db/seed/24-culture.cypher";
+
+    // Write file (unless dry run)
+    if !dry_run {
+        if let Some(parent) = output_path.parent() {
+            fs::create_dir_all(parent)?;
+        }
+        fs::write(&output_path, &content)?;
+    }
+
+    let duration = start.elapsed();
+
+    Ok(KnowledgeGenerateResult {
+        tier: "culture/norms".to_string(),
+        output_path: rel_path.to_string(),
+        bytes: content.len(),
+        duration_ms: duration.as_millis(),
+        node_count,
+    })
+}
+
+/// Generate market seed file.
+fn generate_market(root: &Path, ath_path: &str, dry_run: bool) -> Result<KnowledgeGenerateResult> {
+    let start = Instant::now();
+
+    // Generate Cypher content
+    let generator = MarketGenerator::with_ath_path(ath_path);
+    let content = generator.generate()?;
+
+    // Count nodes (rough estimate from MERGE statements)
+    let node_count = content.matches("MERGE (").count();
+
+    // Output path
+    let output_path = root.join("packages/db/seed/25-market.cypher");
+    let rel_path = "packages/db/seed/25-market.cypher";
+
+    // Write file (unless dry run)
+    if !dry_run {
+        if let Some(parent) = output_path.parent() {
+            fs::create_dir_all(parent)?;
+        }
+        fs::write(&output_path, &content)?;
+    }
+
+    let duration = start.elapsed();
+
+    Ok(KnowledgeGenerateResult {
+        tier: "market/data".to_string(),
+        output_path: rel_path.to_string(),
+        bytes: content.len(),
+        duration_ms: duration.as_millis(),
+        node_count,
+    })
+}
+
+/// Generate expression atoms seed file.
+fn generate_expression(root: &Path, ath_path: &str, dry_run: bool) -> Result<KnowledgeGenerateResult> {
+    let start = Instant::now();
+
+    // Generate Cypher content
+    let generator = ExpressionGenerator::with_ath_path(ath_path);
+    let content = generator.generate()?;
+
+    // Count nodes (rough estimate from MERGE statements)
+    let node_count = content.matches("MERGE (").count();
+
+    // Output path
+    let output_path = root.join("packages/db/seed/26-expression.cypher");
+    let rel_path = "packages/db/seed/26-expression.cypher";
+
+    // Write file (unless dry run)
+    if !dry_run {
+        if let Some(parent) = output_path.parent() {
+            fs::create_dir_all(parent)?;
+        }
+        fs::write(&output_path, &content)?;
+    }
+
+    let duration = start.elapsed();
+
+    Ok(KnowledgeGenerateResult {
+        tier: "voice/expression".to_string(),
+        output_path: rel_path.to_string(),
+        bytes: content.len(),
+        duration_ms: duration.as_millis(),
+        node_count,
+    })
+}
+
 /// List available knowledge tiers.
 pub fn knowledge_list() -> Vec<KnowledgeTierInfo> {
     vec![
         KnowledgeTierInfo {
             tier: "technical".to_string(),
-            description: "Technical rules: slugification, formatting, adaptation".to_string(),
+            description: "Technical rules: slugification, formatting".to_string(),
             sources: vec![
                 "2-rules-slug/*.md".to_string(),
                 "2-rules-formatting/*.md".to_string(),
-                "2-rules-adaptation/*.md (pending)".to_string(),
             ],
-            status: "partial".to_string(),
+            status: "implemented".to_string(),
         },
         KnowledgeTierInfo {
             tier: "voice".to_string(),
-            description: "Voice and style: tone, formality, register".to_string(),
-            sources: vec![
-                "3-voice-tone/*.md (pending)".to_string(),
-                "3-voice-formality/*.md (pending)".to_string(),
-            ],
-            status: "pending".to_string(),
+            description: "Voice and style: expression lexicon".to_string(),
+            sources: vec!["3-voice-lexicon/*.md".to_string()],
+            status: "implemented".to_string(),
         },
         KnowledgeTierInfo {
             tier: "culture".to_string(),
-            description: "Culture: references, taboos, metaphors".to_string(),
-            sources: vec![
-                "4-culture-references/*.md (pending)".to_string(),
-                "4-culture-taboos/*.md (pending)".to_string(),
-            ],
-            status: "pending".to_string(),
+            description: "Culture: norms, values, taboos, communication style".to_string(),
+            sources: vec!["4-culture-norms/*.md".to_string()],
+            status: "implemented".to_string(),
         },
         KnowledgeTierInfo {
             tier: "market".to_string(),
-            description: "Market: audience, distribution".to_string(),
-            sources: vec!["5-market/*.md (pending)".to_string()],
-            status: "pending".to_string(),
+            description: "Market: demographics, digital maturity, platforms".to_string(),
+            sources: vec!["5-market/*.md".to_string()],
+            status: "implemented".to_string(),
         },
     ]
 }
@@ -233,6 +337,6 @@ mod tests {
         let tiers = knowledge_list();
         assert_eq!(tiers.len(), 4);
         assert_eq!(tiers[0].tier, "technical");
-        assert_eq!(tiers[0].status, "partial");
+        assert_eq!(tiers[0].status, "implemented");
     }
 }

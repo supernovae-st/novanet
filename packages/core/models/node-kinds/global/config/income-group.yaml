@@ -1,0 +1,112 @@
+# packages/core/models/node-kinds/global/config/income-group.yaml
+# IncomeGroup - World Bank income classification
+#
+# v10.8: Geographic Taxonomy - Phase 4
+# Data: 4 income groups (LIC, LMIC, UMIC, HIC)
+# Source: World Bank (data.worldbank.org)
+
+node:
+  name: IncomeGroup
+  realm: global
+  layer: config
+  trait: invariant
+  icon: "💰"
+  description: "World Bank income classification for market segmentation"
+
+  standard_properties:
+    key:
+      type: string
+      required: true
+      description: "Income group code"
+      enum:
+        - "lic"   # Low income
+        - "lmic"  # Lower-middle income
+        - "umic"  # Upper-middle income
+        - "hic"   # High income
+
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable group name"
+      example: "High income"
+
+    description:
+      type: string
+      required: true
+      description: "Short description with threshold info"
+      example: "High income economies (GNI > $13,935 per capita)"
+
+    llm_context:
+      type: string
+      required: true
+      description: "LLM generation hints for pricing and messaging"
+      example: "USE: for premium pricing, quality-focused messaging. TRIGGERS: high income, developed, hic. STYLE: value-focused, quality over price."
+
+    created_at:
+      type: datetime
+      required: true
+
+    updated_at:
+      type: datetime
+      required: true
+
+  properties:
+    gni_threshold_min:
+      type: int
+      required: false
+      description: "Minimum GNI per capita threshold (USD)"
+      example: 13936
+
+    gni_threshold_max:
+      type: int
+      required: false
+      description: "Maximum GNI per capita threshold (USD)"
+      example: null  # No upper limit for HIC
+
+    fiscal_year:
+      type: string
+      required: true
+      description: "World Bank fiscal year for thresholds"
+      example: "FY2026"
+
+    pricing_tier:
+      type: string
+      required: false
+      description: "Recommended pricing tier"
+      enum: ["budget", "standard", "premium", "luxury"]
+      example: "premium"
+
+    messaging_focus:
+      type: string
+      required: false
+      description: "Recommended messaging focus"
+      example: "quality, innovation, sustainability"
+
+  relations:
+    incoming:
+      - type: HAS_INCOME_LEVEL
+        from: Locale
+        cardinality: "N:1"
+        description: "Locales classified in this income group"
+
+  example:
+    data:
+      key: "hic"
+      display_name: "High income"
+      description: "High income economies (GNI > $13,935 per capita)"
+      gni_threshold_min: 13936
+      gni_threshold_max: null
+      fiscal_year: "FY2026"
+      pricing_tier: "premium"
+      messaging_focus: "quality, innovation, sustainability, convenience"
+      llm_context: "USE: for premium pricing, quality-focused messaging. TRIGGERS: high income, developed, hic, wealthy. STYLE: emphasize quality, innovation, sustainability. AVOID: budget-focused, discount messaging."
+
+    cypher: |
+      // Get all locales in an income group
+      MATCH (ig:IncomeGroup {key: $key})<-[:HAS_INCOME_LEVEL]-(l:Locale)
+      RETURN l.key, l.display_name
+      ORDER BY l.key
+
+      // Get income group pricing context
+      MATCH (ig:IncomeGroup {key: $key})
+      RETURN ig.key, ig.pricing_tier, ig.messaging_focus, ig.llm_context
