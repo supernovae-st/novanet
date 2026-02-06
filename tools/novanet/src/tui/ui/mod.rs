@@ -323,6 +323,19 @@ fn truncate_str(s: &str, max_chars: usize) -> String {
     }
 }
 
+/// Safely truncate a UTF-8 string from the START, keeping last N characters.
+/// Prepends "…" if truncated. Used for breadcrumbs where the end is most relevant.
+fn truncate_start(s: &str, max_chars: usize) -> String {
+    let char_count = s.chars().count();
+    if char_count > max_chars {
+        let skip = char_count.saturating_sub(max_chars);
+        let truncated: String = s.chars().skip(skip).collect();
+        format!("…{}", truncated)
+    } else {
+        s.to_string()
+    }
+}
+
 /// Animated spinner for loading states.
 /// Cycles through braille patterns for smooth animation.
 const SPINNER_FRAMES: &[&str] = &["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"];
@@ -403,17 +416,17 @@ fn render_header(f: &mut Frame, area: Rect, app: &App) {
     // Context-aware shortcuts
     let right_side = if app.mode == NavMode::Atlas {
         vec![Span::styled(
-            "  a-r:views  d:demo  l:locale  /:help  q:quit",
+            "  a-r:views  d:demo  l:locale  ?:help  q:quit",
             theme::ui::muted_style(),
         )]
     } else if app.mode == NavMode::Data {
         vec![Span::styled(
-            "  h/l:toggle  jk:scroll  0:hide  Tab:panel  f:find  /:help  q:quit",
+            "  h/l:toggle  jk:scroll  0:hide  Tab:panel  /:find  ?:help  q:quit",
             theme::ui::muted_style(),
         )]
     } else {
         vec![Span::styled(
-            "  h/l:toggle  jk:scroll  Tab:panel  f:find  /:help  q:quit",
+            "  h/l:toggle  jk:scroll  Tab:panel  /:find  ?:help  q:quit",
             theme::ui::muted_style(),
         )]
     };
@@ -2960,34 +2973,30 @@ fn render_status(f: &mut Frame, area: Rect, app: &App) {
     let mode_icon = theme.nav_mode_icon(mode_label);
     let mode_style = theme.nav_mode_style(mode_label);
 
-    // Breadcrumb (truncated if too long)
+    // Breadcrumb (truncated from start if too long - uses UTF-8 safe truncation)
     let breadcrumb = app.current_breadcrumb();
     let max_breadcrumb_len = (area.width as usize).saturating_sub(60).min(40);
-    let breadcrumb_display = if breadcrumb.len() > max_breadcrumb_len {
-        format!("…{}", &breadcrumb[breadcrumb.len().saturating_sub(max_breadcrumb_len)..])
-    } else {
-        breadcrumb
-    };
+    let breadcrumb_display = truncate_start(&breadcrumb, max_breadcrumb_len);
 
     // Contextual shortcuts based on mode, focus, and selection
     let shortcuts = match app.mode {
-        NavMode::Atlas => "j/k:nav  1-4:modes  /:help",
+        NavMode::Atlas => "j/k:nav  1-4:modes  ?:help",
         NavMode::Data => {
             // Check if on an Instance (can navigate to Kind with '1')
             if matches!(app.current_item(), Some(crate::tui::data::TreeItem::Instance(..))) {
-                "j/k:nav  1:→Kind  h/l:toggle  /:help"
+                "j/k:nav  1:→Kind  h/l:toggle  ?:help"
             } else {
-                "j/k:nav  h/l:toggle  0:hide∅  /:help"
+                "j/k:nav  h/l:toggle  0:hide∅  ?:help"
             }
         }
-        NavMode::Query => "j/k:nav  f:filter  /:help",
+        NavMode::Query => "j/k:nav  f:filter  ?:help",
         NavMode::Meta | NavMode::Overlay => match app.focus {
             Focus::Tree => {
                 // Check if on a Kind (can drill into instances with '2')
                 if matches!(app.current_item(), Some(crate::tui::data::TreeItem::Kind(..))) {
-                    "j/k:nav  2:→Data  h/l:toggle  /:help"
+                    "j/k:nav  2:→Data  h/l:toggle  ?:help"
                 } else {
-                    "j/k:nav  h/l:toggle  H/L:all  /:help"
+                    "j/k:nav  h/l:toggle  H/L:all  ?:help"
                 }
             }
             Focus::Yaml | Focus::Info => "j/k:scroll  d/u:page  g/G:jump",
@@ -3012,6 +3021,12 @@ fn render_status(f: &mut Frame, area: Rect, app: &App) {
             format!("{} Loading…", app.spinner_frame()),
             Style::default().fg(Color::Yellow),
         ));
+    }
+
+    // Status message (temporary, e.g., "Copied: key")
+    if let Some((msg, _)) = &app.status_message {
+        spans.push(Span::styled(" │ ", STYLE_SEPARATOR));
+        spans.push(Span::styled(msg.clone(), Style::default().fg(Color::Green)));
     }
 
     // Spacer to push shortcuts to the right
@@ -4705,6 +4720,50 @@ mod tests {
     #[test]
     fn test_truncate_str_empty() {
         assert_eq!(truncate_str("", 10), "");
+    }
+
+    // =============================================================================
+    // truncate_start tests (UTF-8 safe start truncation for breadcrumbs)
+    // =============================================================================
+
+    #[test]
+    fn test_truncate_start_under_limit() {
+        assert_eq!(truncate_start("hello", 10), "hello");
+    }
+
+    #[test]
+    fn test_truncate_start_at_limit() {
+        assert_eq!(truncate_start("hello", 5), "hello");
+    }
+
+    #[test]
+    fn test_truncate_start_over_limit() {
+        // "hello world" has 11 chars, limit 5 → keep last 5 → "world"
+        assert_eq!(truncate_start("hello world", 5), "…world");
+    }
+
+    #[test]
+    fn test_truncate_start_utf8_arrows() {
+        // This is the actual bug case: "Global › Tenant" with › being 3 bytes
+        let s = "Global › Tenant Configuration › Slugification";
+        let result = truncate_start(s, 20);
+        // Should keep last 20 chars without panicking
+        assert!(result.starts_with('…'));
+        assert!(result.chars().count() <= 21); // 20 + ellipsis
+    }
+
+    #[test]
+    fn test_truncate_start_utf8_emoji() {
+        // "🎉 Hello 🎉 World" - emojis are 4 bytes each
+        let s = "🎉 Hello 🎉 World";
+        let result = truncate_start(s, 8);
+        assert!(result.starts_with('…'));
+        // Should not panic on multi-byte boundaries
+    }
+
+    #[test]
+    fn test_truncate_start_empty() {
+        assert_eq!(truncate_start("", 10), "");
     }
 
     // =============================================================================
