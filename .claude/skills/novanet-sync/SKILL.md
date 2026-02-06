@@ -15,8 +15,8 @@ Synchronize generated artifacts with YAML source of truth.
 
 ```
 packages/core/models/
-├── node-kinds/                   ← 46 YAML files (one per NodeKind)
-│   ├── global/                   ← Realm: global (23 nodes)
+├── node-kinds/                   ← 60 YAML files (one per NodeKind)
+│   ├── global/                   ← Realm: global (37 nodes)
 │   │   ├── config/               ←   Layer: config (Locale + utilities)
 │   │   ├── locale-knowledge/     ←   Layer: locale-knowledge (14 Knowledge Atom types)
 │   │   └── seo/                  ←   Layer: seo (6 nodes: SEOKeyword, SEOQuestion, etc.)
@@ -27,24 +27,29 @@ packages/core/models/
 │       ├── semantic/             ←   Layer: semantic (Entity, EntityL10n)
 │       ├── instruction/          ←   Layer: instruction
 │       └── output/               ←   Layer: output
-├── arc-kinds/                    ← 51 YAML files (one per ArcKind)
+├── arc-kinds/                    ← 90 YAML files (one per ArcKind)
 ├── relations.yaml                ← Legacy format (kept for parser compatibility)
 └── taxonomy.yaml                 ← v10.6: 2 Realms, 9 Layers, 5 Traits
 ```
 
 ## Generated Artifacts
 
-`novanet schema generate` produces 7 artifacts:
+`novanet schema generate` produces 12 artifacts:
 
 | Source | Generator | Output |
 |--------|-----------|--------|
 | taxonomy.yaml | OrganizingGenerator | seed/00.5-taxonomy.cypher |
 | node-kinds/ | NodeKindGenerator | seed/01-kinds.cypher |
 | arc-kinds/ | ArcKindGenerator | seed/02-arc-kinds.cypher |
-| node-kinds/ | AutowireGenerator | seed/99-autowire-kinds.cypher |
 | node-kinds/ | LayerGenerator | src/graph/layers.ts |
+| models/ | MermaidGenerator | models/docs/complete-graph.md |
+| node-kinds/ | AutowireGenerator | seed/99-autowire-kinds.cypher |
 | node-kinds/ | HierarchyGenerator | src/graph/hierarchy.ts |
-| models/ | MermaidGenerator | models/docs/views/VIEW-COMPLETE-GRAPH.md |
+| taxonomy.yaml | ColorsGenerator | apps/studio/src/design/colors/generated.ts |
+| visual-encoding.yaml | IconsGenerator | apps/studio/src/design/icons/nodeIcons.generated.ts |
+| visual-encoding.yaml | VisualEncodingGenerator | src/graph/visual-encoding.ts |
+| views/*.yaml | ViewsGenerator | src/filters/views.generated.ts |
+| visual-encoding.yaml | TuiIconsGenerator | tools/novanet/src/tui/icons.rs |
 
 `novanet doc generate` produces 12 view-specific Mermaid diagrams from `models/views/`.
 
@@ -133,6 +138,6 @@ All generators live in `tools/novanet/src/generators/` (Rust-first architecture)
 
 **MermaidGenerator (`generators/mermaid.rs`):**
 - Reads `models/node-kinds/` and `models/arc-kinds/`
-- Generates Mermaid flowchart with all 46 Kinds and 51 arcs
+- Generates Mermaid flowchart with all 60 Kinds and 90 arcs
 - Groups by Realm (Global, Tenant)
 - Colors by Layer (9 distinct colors)

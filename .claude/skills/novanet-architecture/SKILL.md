@@ -47,8 +47,8 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 │   packages/core/models/                                                                             │
 │   ├── _index.yaml                          ← Index du graphe (structure, changelog)                 │
 │   ├── taxonomy.yaml                        ← v10.6: 2 Realms/9 Layers/5 Traits/5 ArcFamilies       │
-│   ├── node-kinds/                          ← 46 fichiers YAML (1 par Kind)                          │
-│   │   ├── global/                          ← Realm: global (23 nodes)                               │
+│   ├── node-kinds/                          ← 60 fichiers YAML (1 par Kind)                          │
+│   │   ├── global/                          ← Realm: global (37 nodes)                               │
 │   │   │   ├── config/                      ←   Layer: config (Locale + utilities)                   │
 │   │   │   ├── locale-knowledge/            ←   Layer: locale-knowledge (18 nodes)                   │
 │   │   │   │   ├── term-set.yaml, term.yaml ← Knowledge Containers + Atoms                           │
@@ -64,7 +64,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 │   │       ├── instruction/                 ←   Layer: instruction (Prompts, Rules)                  │
 │   │       └── output/                      ←   Layer: output (PageL10n, BlockL10n)                  │
 │   │                                                                                                 │
-│   ├── arc-kinds/                           ← 51 fichiers YAML (1 par ArcKind)                       │
+│   ├── arc-kinds/                           ← 90 fichiers YAML (1 par ArcKind)                       │
 │   ├── relations.yaml                       ← Legacy format (kept for parser compatibility)          │
 │   └── views/                               ← Definitions de vues YAML                               │
 │                                                                                                     │
@@ -89,14 +89,14 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
   │                                        config, foundation, structure, semantic,              │
   │                                        instruction, output (tenant)                          │
   │   Axis 3 — HOW?     :Trait       (5)  invariant / localized / knowledge / derived / job      │
-  │   Axis 4 — LINKS?   :ArcKind    (51)  grouped into 5 ArcFamilies                            │
+  │   Axis 4 — LINKS?   :ArcKind    (90)  grouped into 5 ArcFamilies                            │
   │                                                                                              │
   └──────────────────────────────────────────────────────────────────────────────────────────────┘
 
   6 Meta-Node Types (all carry :Meta double-label):
 
   ┌─────────────┐    ┌──────────────┐    ┌─────────────┐
-  │  Realm (2)  │───▶│  Layer (9)   │───▶│  Kind (46)  │
+  │  Realm (2)  │───▶│  Layer (9)   │───▶│  Kind (60)  │
   │  WHERE?     │    │  WHAT?       │    │  1:1 label  │
   │  HAS_LAYER  │    │  HAS_KIND    │    │             │
   └─────────────┘    └──────────────┘    └──────┬──────┘
@@ -118,7 +118,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
   Arc Schema (OWL-inspired):
 
   ┌────────────────┐    FROM_KIND    ┌─────────────┐    TO_KIND     ┌────────────────┐
-  │  ArcKind (51) │───────────────▶│  Kind (46)  │◀──────────────│  ArcKind (51) │
+  │  ArcKind (90) │───────────────▶│  Kind (60)  │◀──────────────│  ArcKind (90) │
   │  1:1 rel type  │                └─────────────┘               │                │
   └───────┬────────┘                                              └────────────────┘
           │
@@ -162,9 +162,9 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
      ┌─────────────────────────────────────────────────────────────────────────────────────────────┐
      │                        📁 YAML (Single Source of Truth)                                     │
      │                        packages/core/models/                                                │
-     │                        ├── node-kinds/               ← 43 NodeKind files                     │
-     │                        ├── arc-kinds/                ← 63 ArcKind files                      │
-     │                        └── taxonomy.yaml             ← 3 Realms, 9 Layers, 5 Traits         │
+     │                        ├── node-kinds/               ← 60 NodeKind files                     │
+     │                        ├── arc-kinds/                ← 90 ArcKind files                      │
+     │                        └── taxonomy.yaml             ← 2 Realms, 9 Layers, 5 Traits         │
      └─────────────────────────────────────────────┬───────────────────────────────────────────────┘
                                                    │
          ┌─────────────────────────────────────────┼─────────────────────────────────────────┐
@@ -224,14 +224,14 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
   │  ├── thiserror          ← Library error types                                               │
   │  └── color-eyre         ← Application error reporting                                       │
   │                                                                                             │
-  │  Commands (all implemented, 246 tests):                                                     │
+  │  Commands (all implemented, 499 tests):                                                     │
   │  ├── novanet data/meta/overlay/query       ← 4 navigation modes (faceted Cypher)            │
   │  ├── novanet node create/edit/delete       ← Node CRUD (label validation)                   │
   │  ├── novanet arc create/delete             ← Arc CRUD (type validation)                     │
   │  ├── novanet search --query=...            ← Fulltext + property search                     │
   │  ├── novanet locale list/import            ← Locale operations                              │
   │  ├── novanet db seed/migrate/reset         ← Database lifecycle                             │
-  │  ├── novanet schema generate/validate      ← YAML → artifacts (7 generators)                │
+  │  ├── novanet schema generate/validate      ← YAML → artifacts (12 generators)               │
   │  ├── novanet doc generate                  ← View-specific Mermaid (12 views)               │
   │  ├── novanet filter build                  ← JSON stdin → Cypher (Studio subprocess)        │
   │  └── novanet tui                           ← Interactive terminal (ratatui)                  │
@@ -370,10 +370,10 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 │   │  └─────────────────────┘  └─────────────────────┘  └─────────────────────┘                 │   │
 │   │                                                                                             │   │
 │   │  ┌─────────────────────┐                                                                    │   │
-│   │  │  QUERY MODE        │  Visual Encoding (v10.5):                                          │   │
-│   │  │  Faceted filters   │  ├── Fill color   → Layer (10 colors)                              │   │
+│   │  │  QUERY MODE        │  Visual Encoding (v10.6):                                          │   │
+│   │  │  Faceted filters   │  ├── Fill color   → Layer (9 colors)                               │   │
 │   │  │                    │  ├── Border style  → Trait (5 styles)                               │   │
-│   │  │  Realm + Layer +   │  ├── Spatial group → Realm (3 zones)                               │   │
+│   │  │  Realm + Layer +   │  ├── Spatial group → Realm (2 zones)                               │   │
 │   │  │  Trait combos      │  └── Arc stroke    → ArcFamily (5 colors)                         │   │
 │   │  └─────────────────────┘                                                                    │   │
 │   │                                                                                             │   │
@@ -394,7 +394,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 ║                    ┌──────────────────┐                                                           ║
 ║                    │  @novanet/core   │  ← Types, schemas, generators, filters                    ║
 ║                    │  (source truth)  │     node-kinds/ + arc-kinds/ + taxonomy.yaml             ║
-║                    └────────┬─────────┘     v10.5: 3 Realms, 9 Layers                           ║
+║                    └────────┬─────────┘     v10.6: 2 Realms, 9 Layers                           ║
 ║                             │                                                                     ║
 ║              ┌──────────────┼──────────────┐                                                      ║
 ║              │              │              │                                                      ║
@@ -467,8 +467,8 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 
 | Metric | Value |
 |--------|-------|
-| Kind (node types) | 46 |
-| ArcKind (arcs) | 51 |
+| Kind (node types) | 60 |
+| ArcKind (arcs) | 90 |
 | Realms | 2 (global, tenant) |
 | Layers | 9 (3 global, 6 tenant) |
 | Traits | 5 |

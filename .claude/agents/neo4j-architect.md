@@ -29,10 +29,10 @@ NovaNet uses Neo4j for native content generation (NOT translation):
 v10.6 uses a self-describing context graph with 6 meta-node types:
 - **Realm** (2): global, tenant — visibility boundary (one-way: global→tenant)
 - **Layer** (9): global (config, locale-knowledge, seo) | tenant (config, foundation, structure, semantic, instruction, output)
-- **Kind** (43): 1:1 mapping to Neo4j labels (carries `schema_hint`, `context_budget`)
+- **Kind** (60): 1:1 mapping to Neo4j labels (carries `schema_hint`, `context_budget`)
 - **Trait** (5): invariant, localized, knowledge, derived, job — locale behavior
 - **ArcFamily** (5): ownership, localization, semantic, generation, mining
-- **ArcKind** (63): 1:1 mapping to Neo4j relationship types (carries `cypher_pattern`)
+- **ArcKind** (90): 1:1 mapping to Neo4j relationship types (carries `cypher_pattern`)
 
 All meta-nodes carry `:Meta` double-label. Instance bridge: `DataNode -[:OF_KIND]-> Kind`.
 
