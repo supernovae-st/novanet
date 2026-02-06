@@ -12,10 +12,14 @@ use ratatui::widgets::{
 };
 
 use rustc_hash::FxHashSet;
+use serde_json::Value as JsonValue;
+use std::collections::BTreeMap;
 
 use super::app::{App, Focus, NavMode};
 use super::data::{ArcDirection, TreeItem};
+use super::schema::PropertyStatus;
 use super::theme::{self, hex_to_color};
+use super::yaml::YamlViewSection;
 
 // =============================================================================
 // CONSTANTS
@@ -79,6 +83,23 @@ fn trait_icon(trait_name: &str) -> &'static str {
         "job" => "○",
         "derived" => "◈",
         _ => "·", // fallback
+    }
+}
+
+/// Convert property type to short badge for schema overlay.
+fn type_badge(prop_type: &str) -> &str {
+    match prop_type.to_lowercase().as_str() {
+        "string" => "str",
+        "json" => "json",
+        "enum" => "enum",
+        "datetime" => "dt",
+        "int" | "integer" => "int",
+        "float" | "number" => "num",
+        "bool" | "boolean" => "bool",
+        "array" | "list" => "arr",
+        "object" | "map" => "obj",
+        "url" | "uri" => "url",
+        _ => "···", // fallback for unknown types
     }
 }
 
@@ -179,10 +200,10 @@ impl EmptyStateKind {
     fn icon(&self) -> &'static str {
         match self {
             EmptyStateKind::NoConnection => "⚠",
-            EmptyStateKind::NoKinds => "📭",
-            EmptyStateKind::NoResults => "🔍",
-            EmptyStateKind::NoInstances => "📋",
-            EmptyStateKind::Loading => "⏳",
+            EmptyStateKind::NoKinds => "∅",
+            EmptyStateKind::NoResults => "◌",
+            EmptyStateKind::NoInstances => "□",
+            EmptyStateKind::Loading => "◐",
         }
     }
 
@@ -370,6 +391,9 @@ pub fn render(f: &mut Frame, app: &mut App) {
     if app.legend_active {
         overlays::render_legend(f, app);
     }
+    if app.recent_items_active {
+        render_recent_items_overlay(f, app);
+    }
 }
 
 /// Header: Logo + Mode tabs.
@@ -469,6 +493,12 @@ fn render_main(f: &mut Frame, area: Rect, app: &mut App) {
     // Atlas mode has its own rendering
     if app.mode == NavMode::Atlas {
         render_atlas(f, area, app);
+        return;
+    }
+
+    // Audit mode has its own rendering (Feature 6)
+    if app.mode == NavMode::Audit {
+        render_audit(f, area, app);
         return;
     }
 
@@ -758,7 +788,7 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
 
                 for (li, layer) in visible_layers.iter().enumerate() {
                     let layer_is_last = li == layer_count - 1;
-                    let layer_key = format!("layer:{}", layer.key);
+                    let layer_key = format!("layer:{}:{}", realm.key, layer.key);
                     let layer_collapsed = app.tree.is_collapsed(&layer_key);
 
                     // Calculate total instances in this layer
@@ -835,13 +865,38 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                             // v10.1: Show instance count (always in Data mode)
                             // v10.6: Add trait icon prefix
                             // QW7: Show arc count in Meta mode
+                            // Feature 2: Health badges in Data mode
                             let kind_is_empty = kind.instance_count == 0;
                             let icon = trait_icon(&kind.trait_name);
                             let arc_count = kind.arcs.len();
                             let (display_text, kind_text_color) = if is_data_mode {
+                                // Build health badge if data present
+                                let health_badge = if let Some(percent) = kind.health_percent {
+                                    let filled = percent / 10;
+                                    let empty = 10 - filled;
+                                    let issues = kind.issues_count.unwrap_or(0);
+                                    if issues > 0 {
+                                        format!(
+                                            " {}{}{}% ⚠{}",
+                                            "━".repeat(filled as usize),
+                                            "░".repeat(empty as usize),
+                                            percent,
+                                            issues
+                                        )
+                                    } else {
+                                        format!(
+                                            " {}{}{}%",
+                                            "━".repeat(filled as usize),
+                                            "░".repeat(empty as usize),
+                                            percent
+                                        )
+                                    }
+                                } else {
+                                    String::new()
+                                };
                                 let text = format!(
-                                    "{} {} ({})",
-                                    icon, kind.display_name, kind.instance_count
+                                    "{} {} ({}){}",
+                                    icon, kind.display_name, kind.instance_count, health_badge
                                 );
                                 let color = if kind_is_empty {
                                     COLOR_MUTED_TEXT // Gray for empty kinds
@@ -1066,14 +1121,10 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
         " Taxonomy ".to_string()
     };
 
-    // Breadcrumb as bottom title (truncate if too long)
+    // Breadcrumb as bottom title (truncate if too long, UTF-8 safe)
     let breadcrumb = app.current_breadcrumb();
     let max_breadcrumb_len = area.width.saturating_sub(4) as usize;
-    let breadcrumb_display = if breadcrumb.len() > max_breadcrumb_len {
-        format!("…{}", &breadcrumb[breadcrumb.len() - max_breadcrumb_len + 1..])
-    } else {
-        breadcrumb
-    };
+    let breadcrumb_display = truncate_start(&breadcrumb, max_breadcrumb_len);
 
     let block = Block::default()
         .title(Span::styled(title, Style::default().fg(border_color)))
@@ -1508,6 +1559,106 @@ fn render_kind_arc_chart(f: &mut Frame, area: Rect, app: &App) {
         .direction(Direction::Vertical);
 
     f.render_widget(chart, area);
+}
+
+/// Build realm/layer distribution stats for empty Graph panel.
+/// Shows visual bars with percentages and kind counts.
+fn build_graph_distribution_stats(app: &App) -> Vec<Line<'static>> {
+    let theme = &app.theme;
+    let dim = Style::default().fg(Color::Rgb(100, 100, 100));
+    let mut lines: Vec<Line<'static>> = Vec::with_capacity(20);
+
+    // Calculate total kinds
+    let mut total_kinds: usize = 0;
+    for realm in &app.tree.realms {
+        for layer in &realm.layers {
+            total_kinds += layer.kinds.len();
+        }
+    }
+
+    if total_kinds == 0 {
+        lines.push(Line::from(Span::styled("  No kinds loaded", STYLE_DIM)));
+        return lines;
+    }
+
+    // Header
+    lines.push(Line::from(Span::styled(
+        "  REALM DISTRIBUTION",
+        Style::default().fg(Color::White).add_modifier(Modifier::BOLD),
+    )));
+    lines.push(Line::from(Span::styled(
+        "  ─────────────────────────────────────────",
+        dim,
+    )));
+
+    let bar_max_width = 20usize;
+
+    // Realm bars
+    for realm in &app.tree.realms {
+        let realm_kinds: usize = realm.layers.iter().map(|l| l.kinds.len()).sum();
+        let percent = (realm_kinds as f64 / total_kinds as f64 * 100.0).round() as u8;
+        let bar_width = (realm_kinds * bar_max_width) / total_kinds.max(1);
+        let bar = "█".repeat(bar_width.max(1));
+        let empty = "░".repeat(bar_max_width.saturating_sub(bar_width));
+
+        lines.push(Line::from(vec![
+            Span::styled("    ", dim),
+            Span::styled(
+                format!("{:8}", realm.display_name),
+                Style::default().fg(theme.realm_color(&realm.key)).add_modifier(Modifier::BOLD),
+            ),
+            Span::styled(" ", dim),
+            Span::styled(bar, Style::default().fg(theme.realm_color(&realm.key))),
+            Span::styled(empty, STYLE_DIM),
+            Span::styled(format!(" {:>3}%", percent), STYLE_MUTED),
+            Span::styled(format!("  {} Kinds", realm_kinds), STYLE_DIM),
+        ]));
+    }
+
+    lines.push(Line::from(Span::raw("")));
+
+    // Layer breakdown header
+    lines.push(Line::from(Span::styled(
+        "  LAYER BREAKDOWN",
+        Style::default().fg(Color::White).add_modifier(Modifier::BOLD),
+    )));
+    lines.push(Line::from(Span::styled(
+        "  ─────────────────────────────────────────",
+        dim,
+    )));
+
+    // Find max kinds per layer for scaling
+    let max_layer_kinds = app.tree.realms
+        .iter()
+        .flat_map(|r| r.layers.iter())
+        .map(|l| l.kinds.len())
+        .max()
+        .unwrap_or(1)
+        .max(1);
+
+    // Layer bars (grouped by realm)
+    for realm in &app.tree.realms {
+        for layer in &realm.layers {
+            let layer_kinds = layer.kinds.len();
+            if layer_kinds == 0 {
+                continue; // Skip empty layers
+            }
+            let bar_width = (layer_kinds * bar_max_width) / max_layer_kinds;
+            let bar = "█".repeat(bar_width.max(1));
+
+            lines.push(Line::from(vec![
+                Span::styled("    ", dim),
+                Span::styled(
+                    format!("{:16}", layer.display_name),
+                    Style::default().fg(theme.layer_color(&layer.key)),
+                ),
+                Span::styled(format!("{:>3} ", layer_kinds), STYLE_MUTED),
+                Span::styled(bar, Style::default().fg(theme.layer_color(&layer.key))),
+            ]));
+        }
+    }
+
+    lines
 }
 
 /// Graph panel: Displays Neo4j relationships for the selected Kind or Instance.
@@ -2054,8 +2205,12 @@ fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
             }
         }
     } else {
-        // No Neo4j data - show contextual message
-        let msg = match app.current_item() {
+        // No Neo4j data - show realm/layer distribution stats
+        lines.extend(build_graph_distribution_stats(app));
+
+        // Add contextual hint at the bottom
+        lines.push(Line::from(Span::raw("")));
+        let hint = match app.current_item() {
             Some(TreeItem::KindsSection) | Some(TreeItem::ArcsSection) => {
                 "▸ Expand a section to explore"
             }
@@ -2066,10 +2221,7 @@ fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
             }
             _ => "▸ Select a Node Kind or Arc to see details",
         };
-        lines.push(Line::from(Span::styled(
-            msg,
-            STYLE_DIM,
-        )));
+        lines.push(Line::from(Span::styled(hint, STYLE_DIM)));
     }
 
     let paragraph = Paragraph::new(lines);
@@ -2178,22 +2330,17 @@ fn render_arcs_by_family(
 
 
 /// YAML panel: displays YAML source with independent scroll.
+/// In Data mode on Instance, shows Instance schema (standard_properties) from Kind's YAML.
 fn render_yaml_panel(f: &mut Frame, area: Rect, app: &App) {
     let focused = app.focus == Focus::Yaml;
     let visible_height = area.height.saturating_sub(2) as usize;
 
-    // Check if we're in Data mode on an Instance → show JSON instead of YAML
-    let is_json_mode = app.mode == NavMode::Data
-        && matches!(app.current_item(), Some(TreeItem::Instance(_, _, _, _)));
-
-    if is_json_mode {
-        render_json_panel(f, area, app, focused, visible_height);
-    } else {
-        render_yaml_content(f, area, app, focused, visible_height);
-    }
+    // Always show YAML with contextual view (Kind or Instance section)
+    render_yaml_content(f, area, app, focused, visible_height);
 }
 
-/// Render JSON panel for Instance data in Data mode.
+/// Render JSON panel for Instance data (reserved for future JSON view toggle).
+#[allow(dead_code)]
 fn render_json_panel(f: &mut Frame, area: Rect, app: &App, focused: bool, visible_height: usize) {
     // Cyan border for JSON mode
     let border_color = if focused {
@@ -2267,7 +2414,7 @@ fn render_json_panel(f: &mut Frame, area: Rect, app: &App, focused: bool, visibl
     }
 }
 
-/// Render YAML panel (original behavior for Meta mode and Kind selection).
+/// Render YAML panel with contextual view (Kind vs Instance sections).
 fn render_yaml_content(f: &mut Frame, area: Rect, app: &App, focused: bool, visible_height: usize) {
     let border_color = if focused {
         Color::Green
@@ -2275,10 +2422,90 @@ fn render_yaml_content(f: &mut Frame, area: Rect, app: &App, focused: bool, visi
         COLOR_UNFOCUSED_BORDER
     };
 
+    // Check if we have parsed sections for contextual view
+    let has_sections = app.yaml_sections.as_ref().is_some_and(|s| s.is_valid());
+    let active_section = app.yaml_active_section();
+
     // Build YAML lines with syntax highlighting
     let mut lines: Vec<Line> = Vec::new();
 
-    if !app.yaml_content.is_empty() {
+    if has_sections {
+        // Contextual view: show active section with ellipsis for hidden section
+        let sections = app.yaml_sections.as_ref().unwrap();
+
+        match active_section {
+            YamlViewSection::Kind => {
+                // Show Kind section
+                for yaml_line in sections.kind_lines_iter().skip(app.yaml_scroll).take(visible_height.saturating_sub(1)) {
+                    lines.push(highlight_yaml_line(yaml_line));
+                }
+                // Add ellipsis for hidden Instance section (if not in peek mode)
+                if !app.yaml_peek && lines.len() < visible_height {
+                    let hint = if focused { "[Enter: peek]" } else { "" };
+                    lines.push(Line::from(vec![
+                        Span::styled("┄┄┄ ", Style::default().fg(COLOR_MUTED_TEXT)),
+                        Span::styled("standard_properties", Style::default().fg(Color::Yellow).add_modifier(Modifier::DIM)),
+                        Span::styled(format!(" ({} lines) ", sections.instance_line_count()), Style::default().fg(COLOR_MUTED_TEXT)),
+                        Span::styled(hint, Style::default().fg(COLOR_HINT_TEXT)),
+                        Span::styled(" ┄┄┄", Style::default().fg(COLOR_MUTED_TEXT)),
+                    ]));
+                }
+                // Show peeked content (dim)
+                if app.yaml_peek {
+                    lines.push(Line::from(Span::styled(
+                        "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄",
+                        Style::default().fg(COLOR_MUTED_TEXT),
+                    )));
+                    let remaining = visible_height.saturating_sub(lines.len()).saturating_sub(1);
+                    for yaml_line in sections.instance_lines_iter().take(remaining) {
+                        lines.push(highlight_yaml_line_dim(yaml_line));
+                    }
+                    let hint = if focused { "[Enter: collapse]" } else { "" };
+                    lines.push(Line::from(vec![
+                        Span::styled("┄┄┄┄┄┄┄┄┄┄┄┄ ", Style::default().fg(COLOR_MUTED_TEXT)),
+                        Span::styled(hint, Style::default().fg(COLOR_HINT_TEXT)),
+                        Span::styled(" ┄┄┄┄┄┄┄┄┄┄┄┄", Style::default().fg(COLOR_MUTED_TEXT)),
+                    ]));
+                }
+            }
+            YamlViewSection::Instance => {
+                // Add ellipsis for hidden Kind section (if not in peek mode)
+                if !app.yaml_peek {
+                    let hint = if focused { "[Enter: peek]" } else { "" };
+                    lines.push(Line::from(vec![
+                        Span::styled("┄┄┄ ", Style::default().fg(COLOR_MUTED_TEXT)),
+                        Span::styled("node metadata", Style::default().fg(Color::Yellow).add_modifier(Modifier::DIM)),
+                        Span::styled(format!(" ({} lines) ", sections.kind_line_count()), Style::default().fg(COLOR_MUTED_TEXT)),
+                        Span::styled(hint, Style::default().fg(COLOR_HINT_TEXT)),
+                        Span::styled(" ┄┄┄", Style::default().fg(COLOR_MUTED_TEXT)),
+                    ]));
+                }
+                // Show peeked Kind content (dim) at the top
+                if app.yaml_peek {
+                    let hint = if focused { "[Enter: collapse]" } else { "" };
+                    lines.push(Line::from(vec![
+                        Span::styled("┄┄┄┄┄┄┄┄┄┄┄┄ ", Style::default().fg(COLOR_MUTED_TEXT)),
+                        Span::styled(hint, Style::default().fg(COLOR_HINT_TEXT)),
+                        Span::styled(" ┄┄┄┄┄┄┄┄┄┄┄┄", Style::default().fg(COLOR_MUTED_TEXT)),
+                    ]));
+                    let peek_lines = visible_height / 3; // Show ~1/3 of the hidden section
+                    for yaml_line in sections.kind_lines_iter().take(peek_lines) {
+                        lines.push(highlight_yaml_line_dim(yaml_line));
+                    }
+                    lines.push(Line::from(Span::styled(
+                        "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄",
+                        Style::default().fg(COLOR_MUTED_TEXT),
+                    )));
+                }
+                // Show Instance section
+                let remaining = visible_height.saturating_sub(lines.len());
+                for yaml_line in sections.instance_lines_iter().skip(app.yaml_scroll).take(remaining) {
+                    lines.push(highlight_yaml_line(yaml_line));
+                }
+            }
+        }
+    } else if !app.yaml_content.is_empty() {
+        // Fallback: show full YAML (non-NodeKind files)
         for yaml_line in app
             .yaml_content
             .lines()
@@ -2294,11 +2521,18 @@ fn render_yaml_content(f: &mut Frame, area: Rect, app: &App, focused: bool, visi
         )));
     }
 
-    // Build title with colored path
-    let title_spans = build_yaml_title(&app.yaml_path);
+    // Build title with tabs and path
+    let title_spans = build_yaml_title_with_tabs(&app.yaml_path, active_section, has_sections);
 
     // Show scroll indicator
-    let total_lines = app.yaml_content.lines().count();
+    let total_lines = if has_sections {
+        match active_section {
+            YamlViewSection::Kind => app.yaml_sections.as_ref().unwrap().kind_line_count(),
+            YamlViewSection::Instance => app.yaml_sections.as_ref().unwrap().instance_line_count(),
+        }
+    } else {
+        app.yaml_content.lines().count()
+    };
     let scroll_indicator = if total_lines > visible_height {
         format!(
             " [{}/{}] ",
@@ -2343,7 +2577,55 @@ fn render_yaml_content(f: &mut Frame, area: Rect, app: &App, focused: bool, visi
     }
 }
 
-/// Build YAML panel title with colored path segments.
+/// Highlight a YAML line with dimmed colors (for peeked content).
+fn highlight_yaml_line_dim(line: &str) -> Line<'static> {
+    let dim_style = Style::default().fg(Color::DarkGray);
+    Line::from(Span::styled(line.to_string(), dim_style))
+}
+
+/// Build YAML panel title with section tabs.
+fn build_yaml_title_with_tabs(path: &str, active: YamlViewSection, has_sections: bool) -> Vec<Span<'static>> {
+    let mut spans = vec![Span::styled(" ", Style::default())];
+
+    // Add tabs if we have sections
+    if has_sections {
+        let (kind_style, instance_style) = match active {
+            YamlViewSection::Kind => (
+                Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD),
+                Style::default().fg(COLOR_MUTED_TEXT),
+            ),
+            YamlViewSection::Instance => (
+                Style::default().fg(COLOR_MUTED_TEXT),
+                Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD),
+            ),
+        };
+
+        let kind_indicator = if active == YamlViewSection::Kind { "●" } else { "○" };
+        let instance_indicator = if active == YamlViewSection::Instance { "●" } else { "○" };
+
+        spans.push(Span::styled("[Kind ", kind_style));
+        spans.push(Span::styled(kind_indicator, kind_style));
+        spans.push(Span::styled("]", kind_style));
+        spans.push(Span::styled(" ", Style::default()));
+        spans.push(Span::styled("[Instance ", instance_style));
+        spans.push(Span::styled(instance_indicator, instance_style));
+        spans.push(Span::styled("]", instance_style));
+        spans.push(Span::styled("  ", Style::default()));
+    }
+
+    // Add path
+    if !path.is_empty() {
+        spans.extend(colorize_path_inline(path));
+    } else {
+        spans.push(Span::styled("YAML", STYLE_UNFOCUSED));
+    }
+
+    spans.push(Span::styled(" ", Style::default()));
+    spans
+}
+
+/// Build YAML panel title with colored path segments (fallback for non-NodeKind files).
+#[allow(dead_code)] // Reserved for fallback rendering
 fn build_yaml_title(path: &str) -> Vec<Span<'static>> {
     if path.is_empty() {
         return vec![Span::styled(
@@ -2415,6 +2697,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
     // Use mode-aware item lookup (shows instances in Data mode)
     match app.current_item() {
         Some(TreeItem::KindsSection) => {
+            let theme = &app.theme;
             let kind_count: usize = app
                 .tree
                 .realms
@@ -2422,7 +2705,8 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                 .flat_map(|r| r.layers.iter())
                 .map(|l| l.kinds.len())
                 .sum();
-            vec![
+
+            let mut lines = vec![
                 Line::from(vec![
                     Span::styled("type      ", STYLE_DIM),
                     Span::styled("Section", STYLE_ACCENT),
@@ -2439,11 +2723,46 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                     Span::styled(kind_count.to_string(), STYLE_PRIMARY),
                 ]),
                 Line::from(""),
-                Line::from(Span::styled(
-                    "h/l to collapse/expand",
+            ];
+
+            // Add realm distribution breakdown
+            if kind_count > 0 {
+                lines.push(Line::from(Span::styled(
+                    "REALM DISTRIBUTION",
+                    Style::default().fg(Color::White).add_modifier(Modifier::BOLD),
+                )));
+                lines.push(Line::from(Span::styled(
+                    "──────────────────────────",
                     STYLE_DIM,
-                )),
-            ]
+                )));
+
+                let bar_width = 16usize;
+                for realm in &app.tree.realms {
+                    let realm_kinds: usize = realm.layers.iter().map(|l| l.kinds.len()).sum();
+                    let percent = (realm_kinds as f64 / kind_count as f64 * 100.0).round() as u8;
+                    let filled = (realm_kinds * bar_width) / kind_count.max(1);
+                    let bar = "█".repeat(filled.max(1));
+                    let empty = "░".repeat(bar_width.saturating_sub(filled));
+
+                    lines.push(Line::from(vec![
+                        Span::styled(
+                            format!("{:8} ", realm.display_name),
+                            Style::default().fg(theme.realm_color(&realm.key)),
+                        ),
+                        Span::styled(bar, Style::default().fg(theme.realm_color(&realm.key))),
+                        Span::styled(empty, STYLE_DIM),
+                        Span::styled(format!(" {:>3}%", percent), STYLE_MUTED),
+                        Span::styled(format!("  {} Kinds", realm_kinds), STYLE_DIM),
+                    ]));
+                }
+                lines.push(Line::from(""));
+            }
+
+            lines.push(Line::from(Span::styled(
+                "h/l to collapse/expand",
+                STYLE_DIM,
+            )));
+            lines
         }
         Some(TreeItem::ArcsSection) => {
             let arc_count: usize = app
@@ -2476,8 +2795,9 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
             ]
         }
         Some(TreeItem::Realm(realm)) => {
+            let theme = &app.theme;
             let kind_count: usize = realm.layers.iter().map(|l| l.kinds.len()).sum();
-            vec![
+            let mut lines = vec![
                 Line::from(vec![
                     Span::styled("type      ", STYLE_DIM),
                     Span::styled("Realm", STYLE_ACCENT),
@@ -2497,10 +2817,51 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                     Span::styled("kinds     ", STYLE_DIM),
                     Span::styled(kind_count.to_string(), STYLE_PRIMARY),
                 ]),
-            ]
+            ];
+
+            // Add layer breakdown if there are layers with kinds
+            if kind_count > 0 {
+                lines.push(Line::from(""));
+                lines.push(Line::from(Span::styled(
+                    "LAYER BREAKDOWN",
+                    Style::default().fg(Color::White).add_modifier(Modifier::BOLD),
+                )));
+                lines.push(Line::from(Span::styled(
+                    "──────────────────────────",
+                    STYLE_DIM,
+                )));
+
+                let bar_width = 12usize;
+                for layer in &realm.layers {
+                    let count = layer.kinds.len();
+                    if count == 0 {
+                        continue;
+                    }
+                    let percent = (count as f64 / kind_count as f64 * 100.0).round() as u8;
+                    let filled = (count * bar_width) / kind_count.max(1);
+                    let bar = "█".repeat(filled.max(1));
+                    let empty = "░".repeat(bar_width.saturating_sub(filled));
+                    let layer_color = theme.layer_color(&layer.key);
+
+                    lines.push(Line::from(vec![
+                        Span::styled("  ", Style::default().fg(layer_color)),
+                        Span::styled(
+                            format!("{:16} ", layer.display_name),
+                            Style::default().fg(layer_color),
+                        ),
+                        Span::styled(bar, Style::default().fg(layer_color)),
+                        Span::styled(empty, STYLE_DIM),
+                        Span::styled(format!(" {:>3}%", percent), STYLE_MUTED),
+                        Span::styled(format!("  {}", count), STYLE_DIM),
+                    ]));
+                }
+            }
+
+            lines
         }
         Some(TreeItem::Layer(realm, layer)) => {
-            vec![
+            let theme = &app.theme;
+            let mut lines = vec![
                 Line::from(vec![
                     Span::styled("type      ", STYLE_DIM),
                     Span::styled("Layer", STYLE_SUCCESS),
@@ -2523,7 +2884,50 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                         STYLE_PRIMARY,
                     ),
                 ]),
-            ]
+            ];
+
+            // Add trait breakdown if there are kinds
+            if !layer.kinds.is_empty() {
+                // Count kinds by trait
+                let mut trait_counts: std::collections::BTreeMap<String, usize> = std::collections::BTreeMap::new();
+                for kind in &layer.kinds {
+                    *trait_counts.entry(kind.trait_name.clone()).or_insert(0) += 1;
+                }
+
+                lines.push(Line::from(""));
+                lines.push(Line::from(Span::styled(
+                    "TRAIT BREAKDOWN",
+                    Style::default().fg(Color::White).add_modifier(Modifier::BOLD),
+                )));
+                lines.push(Line::from(Span::styled(
+                    "──────────────────────────",
+                    STYLE_DIM,
+                )));
+
+                let total = layer.kinds.len();
+                let bar_width = 12usize;
+                for (trait_name, count) in &trait_counts {
+                    let percent = (*count as f64 / total as f64 * 100.0).round() as u8;
+                    let filled = (*count * bar_width) / total.max(1);
+                    let bar = "█".repeat(filled.max(1));
+                    let empty = "░".repeat(bar_width.saturating_sub(filled));
+                    let icon = trait_icon(trait_name);
+
+                    lines.push(Line::from(vec![
+                        Span::styled(format!("{} ", icon), Style::default().fg(theme.trait_color(trait_name))),
+                        Span::styled(
+                            format!("{:12} ", trait_name),
+                            Style::default().fg(theme.trait_color(trait_name)),
+                        ),
+                        Span::styled(bar, Style::default().fg(theme.trait_color(trait_name))),
+                        Span::styled(empty, STYLE_DIM),
+                        Span::styled(format!(" {:>3}%", percent), STYLE_MUTED),
+                        Span::styled(format!("  {}", count), STYLE_DIM),
+                    ]));
+                }
+            }
+
+            lines
         }
         Some(TreeItem::Kind(realm, layer, kind)) => {
             let mut lines = vec![
@@ -2553,21 +2957,44 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
 
             // Trait (if present)
             if !kind.trait_name.is_empty() {
+                let theme = &app.theme;
                 lines.push(Line::from(vec![
                     Span::styled("trait     ", STYLE_DIM),
-                    Span::styled(kind.trait_name.clone(), STYLE_ACCENT),
+                    Span::styled(
+                        kind.trait_name.clone(),
+                        Style::default().fg(theme.trait_color(&kind.trait_name)),
+                    ),
                 ]));
             }
 
             // v10.1: knowledge_tier removed from display (node type is sufficient)
 
+            // Instance count with visual bar
+            let instance_count = kind.instance_count;
             lines.push(Line::from(vec![
                 Span::styled("instances ", STYLE_DIM),
                 Span::styled(
-                    kind.instance_count.to_string(),
+                    instance_count.to_string(),
                     STYLE_PRIMARY,
                 ),
             ]));
+
+            // Instance bar (log scale for better visualization)
+            if instance_count > 0 {
+                let bar_width = 20usize;
+                // Use log scale: 1->1, 10->5, 100->10, 1000->15, 10000->20
+                let log_val = (instance_count as f64).log10().max(0.0);
+                let filled = ((log_val / 4.0) * bar_width as f64).round() as usize;
+                let filled = filled.clamp(1, bar_width);
+                let bar = "█".repeat(filled);
+                let empty = "░".repeat(bar_width.saturating_sub(filled));
+
+                lines.push(Line::from(vec![
+                    Span::styled("          ", STYLE_DIM), // alignment
+                    Span::styled(bar, STYLE_INFO),
+                    Span::styled(empty, STYLE_DIM),
+                ]));
+            }
 
             // Context budget (if present)
             if !kind.context_budget.is_empty() {
@@ -2577,6 +3004,54 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                         kind.context_budget.clone(),
                         STYLE_INFO,
                     ),
+                ]));
+            }
+
+            // Property coverage summary
+            let total_props = kind.properties.len();
+            let required_props = kind.required_properties.len();
+            let optional_props = total_props.saturating_sub(required_props);
+
+            if total_props > 0 {
+                lines.push(Line::from(""));
+                lines.push(Line::from(Span::styled(
+                    "PROPERTY COVERAGE",
+                    Style::default().fg(Color::White).add_modifier(Modifier::BOLD),
+                )));
+                lines.push(Line::from(Span::styled(
+                    "──────────────────────────",
+                    STYLE_DIM,
+                )));
+
+                let bar_width = 12usize;
+                // Required bar
+                let req_percent = (required_props as f64 / total_props as f64 * 100.0).round() as u8;
+                let req_filled = (required_props * bar_width) / total_props.max(1);
+                let req_bar = "█".repeat(req_filled.max(if required_props > 0 { 1 } else { 0 }));
+                let req_empty = "░".repeat(bar_width.saturating_sub(req_filled));
+
+                lines.push(Line::from(vec![
+                    Span::styled("* ", Style::default().fg(Color::Red)),
+                    Span::styled("required     ", Style::default().fg(Color::Yellow)),
+                    Span::styled(req_bar, Style::default().fg(Color::Yellow)),
+                    Span::styled(req_empty, STYLE_DIM),
+                    Span::styled(format!(" {:>3}%", req_percent), STYLE_MUTED),
+                    Span::styled(format!("  {}", required_props), STYLE_DIM),
+                ]));
+
+                // Optional bar
+                let opt_percent = (optional_props as f64 / total_props as f64 * 100.0).round() as u8;
+                let opt_filled = (optional_props * bar_width) / total_props.max(1);
+                let opt_bar = "█".repeat(opt_filled.max(if optional_props > 0 { 1 } else { 0 }));
+                let opt_empty = "░".repeat(bar_width.saturating_sub(opt_filled));
+
+                lines.push(Line::from(vec![
+                    Span::styled("  ", STYLE_DIM),
+                    Span::styled("optional     ", Style::default().fg(Color::White)),
+                    Span::styled(opt_bar, Style::default().fg(Color::White)),
+                    Span::styled(opt_empty, STYLE_DIM),
+                    Span::styled(format!(" {:>3}%", opt_percent), STYLE_MUTED),
+                    Span::styled(format!("  {}", optional_props), STYLE_DIM),
                 ]));
             }
 
@@ -2773,32 +3248,145 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                 Span::styled(kind.display_name.clone(), STYLE_INFO),
             ]));
 
-            // Properties
-            if !instance.properties.is_empty() {
-                lines.push(Line::from(""));
-                lines.push(Line::from(Span::styled(
-                    format!("Properties ({})", instance.properties.len()),
-                    STYLE_MUTED,
-                )));
-                for (key, value) in &instance.properties {
-                    // Format JSON value for display
-                    let value_str = match value {
-                        serde_json::Value::String(s) => format!("\"{}\"", s),
-                        serde_json::Value::Null => "null".to_string(),
-                        _ => value.to_string(),
-                    };
-                    let truncated = truncate_str(&value_str, 40);
-                    let color = match value {
-                        serde_json::Value::String(_) => Color::Green,
-                        serde_json::Value::Number(_) => Color::Yellow,
-                        serde_json::Value::Bool(_) => Color::Yellow,
-                        serde_json::Value::Null => Color::DarkGray,
-                        _ => Color::White,
-                    };
+            // Properties with optional Schema Overlay
+            // If schema overlay is enabled and we have matched properties, show schema view
+            // Otherwise, fall back to simple property list
+            if app.schema_overlay_enabled {
+                if let Some(matched) = &app.matched_properties {
+                    // Schema overlay: show all schema properties with status
+                    let stats = app.coverage_stats.as_ref();
+                    let (filled, total) = stats
+                        .map(|s| (s.filled, s.total))
+                        .unwrap_or((matched.iter().filter(|p| p.status == PropertyStatus::Filled).count(), matched.len()));
+                    let missing_req = stats.map(|s| s.missing_required).unwrap_or(0);
+                    let percent = if total > 0 { (filled * 100) / total } else { 100 };
+
+                    lines.push(Line::from(""));
+
+                    // Header with progress bar
+                    let progress_filled = percent / 10;
+                    let progress_empty = 10 - progress_filled;
+                    let mut header_spans = vec![
+                        Span::styled(
+                            format!("Properties ({}/{}) ", filled, total),
+                            STYLE_MUTED,
+                        ),
+                        Span::styled("━".repeat(progress_filled), STYLE_SUCCESS),
+                        Span::styled("░".repeat(progress_empty), STYLE_DIM),
+                        Span::styled(format!(" {}%", percent), STYLE_MUTED),
+                    ];
+                    if missing_req > 0 {
+                        header_spans.push(Span::styled(
+                            format!("  ⚠ {} required missing", missing_req),
+                            STYLE_ERROR,
+                        ));
+                    }
+                    lines.push(Line::from(header_spans));
+
+                    // Show each property with status
+                    // Feature 3: Track focused property index for intelligent truncation
+                    // Feature 6: Type badges [str], [json], [enum], etc.
+                    for (prop_idx, prop) in matched.iter().enumerate() {
+                        let is_required = prop.schema.required;
+                        let prefix = if is_required { "*" } else { " " };
+                        let badge = type_badge(&prop.schema.prop_type);
+                        // Feature 3: Show full value when property is focused
+                        let is_focused = prop_idx == app.focused_property_idx;
+                        let truncate_limit = if is_focused { 200 } else { 40 };
+
+                        match prop.status {
+                            PropertyStatus::Filled => {
+                                // Has value: show normally with type badge
+                                let value_str = prop.value.as_ref().map(|v| {
+                                    if app.json_pretty && (v.starts_with('{') || v.starts_with('[')) {
+                                        // Pretty-print JSON
+                                        serde_json::from_str::<serde_json::Value>(v)
+                                            .ok()
+                                            .and_then(|j| serde_json::to_string_pretty(&j).ok())
+                                            .unwrap_or_else(|| v.clone())
+                                    } else {
+                                        v.clone()
+                                    }
+                                }).unwrap_or_default();
+                                let truncated = truncate_str(&format!("\"{}\"", value_str), truncate_limit);
+                                // Feature 3: Highlight focused property row
+                                let name_style = if is_focused { STYLE_HIGHLIGHT } else { STYLE_INFO };
+                                lines.push(Line::from(vec![
+                                    Span::styled(format!("{}[{:4}] ", prefix, badge), STYLE_DIM),
+                                    Span::styled(format!("{:<15}", prop.schema.name), name_style),
+                                    Span::styled(truncated, STYLE_SUCCESS),
+                                ]));
+                            }
+                            PropertyStatus::EmptyOptional => {
+                                // Optional, empty: dim with type badge + example
+                                let hint = format!(
+                                    "— e.g. {}",
+                                    prop.schema.example.as_deref().unwrap_or("...")
+                                );
+                                lines.push(Line::from(vec![
+                                    Span::styled(format!("{}[{:4}] ", prefix, badge), STYLE_DIM),
+                                    Span::styled(format!("{:<15}", prop.schema.name), STYLE_DIM),
+                                    Span::styled(truncate_str(&hint, 40), STYLE_DIM),
+                                ]));
+                            }
+                            PropertyStatus::MissingRequired => {
+                                // Required, missing: red warning with type badge + example
+                                let hint = format!(
+                                    "⚠ e.g. {}",
+                                    prop.schema.example.as_deref().unwrap_or("...")
+                                );
+                                lines.push(Line::from(vec![
+                                    Span::styled(format!("{}[{:4}] ", prefix, badge), STYLE_ERROR),
+                                    Span::styled(format!("{:<15}", prop.schema.name), STYLE_ERROR),
+                                    Span::styled(truncate_str(&hint, 40), STYLE_ERROR),
+                                ]));
+                            }
+                        }
+                    }
+                } else {
+                    // Schema overlay enabled but no matched properties loaded yet
+                    // Fall back to simple display
+                    render_simple_properties(&mut lines, &instance.properties);
+                }
+            } else {
+                // Schema overlay disabled: simple property list with fill rate header
+                let total_schema_props = kind.properties.len();
+                let filled_props = instance.properties.len();
+
+                if total_schema_props > 0 && filled_props > 0 {
+                    let fill_percent = ((filled_props as f64 / total_schema_props as f64) * 100.0)
+                        .round()
+                        .min(100.0) as usize;
+                    let bar_width = 10usize;
+                    let filled = (fill_percent * bar_width) / 100;
+                    let bar = "━".repeat(filled.max(1));
+                    let empty = "░".repeat(bar_width.saturating_sub(filled));
+
+                    lines.push(Line::from(""));
                     lines.push(Line::from(vec![
-                        Span::styled(format!("  {} ", key), STYLE_INFO),
-                        Span::styled(truncated, Style::default().fg(color)),
+                        Span::styled(
+                            format!("Properties ({}/{}) ", filled_props, total_schema_props),
+                            STYLE_MUTED,
+                        ),
+                        Span::styled(bar, STYLE_SUCCESS),
+                        Span::styled(empty, STYLE_DIM),
+                        Span::styled(format!(" {}%", fill_percent), STYLE_MUTED),
                     ]));
+
+                    // Show properties
+                    for (key, value) in &instance.properties {
+                        if key.starts_with('_') || key == "key" || key == "display_name" {
+                            continue;
+                        }
+                        let value_str = json_value_to_display(value);
+                        let truncated = truncate_str(&value_str, 45);
+                        lines.push(Line::from(vec![
+                            Span::styled(format!("{:<20}", key), STYLE_INFO),
+                            Span::styled(truncated, STYLE_PRIMARY),
+                        ]));
+                    }
+                } else {
+                    render_simple_properties(&mut lines, &instance.properties);
                 }
             }
 
@@ -2964,6 +3552,69 @@ fn highlight_yaml_value(value: &str) -> Span<'static> {
     Span::styled(value.to_string(), STYLE_YAML_STRING)
 }
 
+/// Build a mini realm distribution bar using Unicode blocks with percentages.
+/// Returns spans showing proportion of kinds per realm with realm colors.
+/// Example: "▓▓█████ G:30% T:70%"
+fn build_realm_mini_bar(app: &App, bar_width: usize) -> Vec<Span<'static>> {
+    let mut spans = Vec::with_capacity(8);
+
+    // Calculate total kinds from all realms
+    let mut realm_counts: Vec<(&str, usize, Color)> = Vec::with_capacity(app.tree.realms.len());
+    let mut total_kinds: usize = 0;
+
+    for realm in &app.tree.realms {
+        let count: usize = realm.layers.iter().map(|l| l.kinds.len()).sum();
+        let color = hex_to_color(&realm.color);
+        realm_counts.push((&realm.key, count, color));
+        total_kinds += count;
+    }
+
+    if total_kinds == 0 {
+        spans.push(Span::styled("░".repeat(bar_width), STYLE_DIM));
+        return spans;
+    }
+
+    // Calculate proportional widths and build the bar
+    let mut used_width = 0;
+    let mut percentages: Vec<(&str, u8, Color)> = Vec::with_capacity(realm_counts.len());
+
+    for (i, (key, count, color)) in realm_counts.iter().enumerate() {
+        let proportion = *count as f64 / total_kinds as f64;
+        let percent = (proportion * 100.0).round() as u8;
+        percentages.push((key, percent, *color));
+
+        let width = if i == realm_counts.len() - 1 {
+            // Last realm gets remaining width to avoid rounding errors
+            bar_width.saturating_sub(used_width)
+        } else {
+            (proportion * bar_width as f64).round() as usize
+        };
+
+        if width > 0 {
+            // Use different block characters for distinction
+            let block = match *key {
+                "global" => "▓", // Lighter block for global (reference data)
+                _ => "█",       // Solid block for tenant (business data)
+            };
+            spans.push(Span::styled(block.repeat(width), Style::default().fg(*color)));
+        }
+        used_width += width;
+    }
+
+    // Add percentages after the bar: " Global:30% Tenant:70%"
+    for (key, percent, color) in percentages {
+        let label = match key {
+            "global" => "Global",
+            "tenant" => "Tenant",
+            _ => key,
+        };
+        spans.push(Span::styled(format!(" {}:", label), STYLE_DIM));
+        spans.push(Span::styled(format!("{}%", percent), Style::default().fg(color)));
+    }
+
+    spans
+}
+
 /// Status bar: enriched with mode indicator, breadcrumb, shortcuts, spinner.
 fn render_status(f: &mut Frame, area: Rect, app: &App) {
     let theme = &app.theme;
@@ -2981,6 +3632,7 @@ fn render_status(f: &mut Frame, area: Rect, app: &App) {
     // Contextual shortcuts based on mode, focus, and selection
     let shortcuts = match app.mode {
         NavMode::Atlas => "j/k:nav  1-4:modes  ?:help",
+        NavMode::Audit => "j/k:nav  1-5:modes  ?:help",
         NavMode::Data => {
             // Check if on an Instance (can navigate to Kind with '1')
             if matches!(app.current_item(), Some(crate::tui::data::TreeItem::Instance(..))) {
@@ -3000,7 +3652,7 @@ fn render_status(f: &mut Frame, area: Rect, app: &App) {
                 }
             }
             Focus::Yaml | Focus::Info => "j/k:scroll  d/u:page  g/G:jump",
-            Focus::Graph => "Tab:panel  1-5:modes",
+            Focus::Graph => "Tab:panel  1-6:modes",
         },
     };
 
@@ -3032,15 +3684,19 @@ fn render_status(f: &mut Frame, area: Rect, app: &App) {
     // Spacer to push shortcuts to the right
     spans.push(Span::raw("  "));
 
-    // Stats (condensed: nodes·arcs | kinds·arc-kinds)
+    // Stats (full words: nodes·arcs │ kinds·arc-kinds)
     let stats = &app.tree.stats;
     spans.push(Span::styled(
         format!(
-            "{}n·{}a │ {}K·{}A",
+            "{} nodes·{} arcs │ {} Kinds·{} ArcKinds",
             stats.node_count, stats.arc_count, stats.kind_count, stats.arc_kind_count
         ),
         STYLE_MUTED,
     ));
+
+    // Mini realm distribution bar (8 char width) - shows proportion of kinds per realm
+    spans.push(Span::styled(" ", STYLE_SEPARATOR));
+    spans.extend(build_realm_mini_bar(app, 8));
 
     spans.push(Span::styled(" │ ", STYLE_SEPARATOR));
 
@@ -3053,6 +3709,146 @@ fn render_status(f: &mut Frame, area: Rect, app: &App) {
     let paragraph = Paragraph::new(status).style(Style::default().bg(Color::Rgb(15, 15, 20)));
 
     f.render_widget(paragraph, area);
+}
+
+// =============================================================================
+// AUDIT MODE (Feature 6)
+// =============================================================================
+
+/// Audit mode: data quality dashboard.
+fn render_audit(f: &mut Frame, area: Rect, app: &mut App) {
+    let chunks = Layout::default()
+        .direction(Direction::Vertical)
+        .constraints([
+            Constraint::Length(3), // Header
+            Constraint::Length(5), // Global stats
+            Constraint::Min(10),   // Kind list
+            Constraint::Length(2), // Footer
+        ])
+        .split(area);
+
+    // Header
+    let header = Paragraph::new(Line::from(vec![
+        Span::styled("≡ ", Style::default()),
+        Span::styled(
+            "Data Quality Audit",
+            Style::default()
+                .fg(Color::Cyan)
+                .add_modifier(Modifier::BOLD),
+        ),
+    ]))
+    .block(
+        Block::default()
+            .borders(Borders::BOTTOM)
+            .border_style(Style::default().fg(COLOR_UNFOCUSED_BORDER)),
+    );
+    f.render_widget(header, chunks[0]);
+
+    // Global stats
+    if let Some(stats) = &app.audit_stats {
+        let progress_filled = stats.global_coverage / 10;
+        let progress_empty = 10 - progress_filled;
+        let global_stats = vec![
+            Line::from(""),
+            Line::from(vec![
+                Span::styled("  Global Coverage: ", STYLE_MUTED),
+                Span::styled(format!("{}%  ", stats.global_coverage), STYLE_SUCCESS),
+                Span::styled("━".repeat(progress_filled as usize), STYLE_SUCCESS),
+                Span::styled("░".repeat(progress_empty as usize), STYLE_DIM),
+                Span::styled(format!("  Total Issues: {}", stats.total_issues), STYLE_ERROR),
+            ]),
+            Line::from(vec![
+                Span::styled(
+                    format!(
+                        "  {} Kinds  •  {} instances  •  {} with issues",
+                        stats.kinds.len(),
+                        stats.total_instances,
+                        stats.kinds_with_issues
+                    ),
+                    STYLE_DIM,
+                ),
+            ]),
+        ];
+        let global_paragraph = Paragraph::new(global_stats);
+        f.render_widget(global_paragraph, chunks[1]);
+
+        // Kind list
+        let mut lines: Vec<Line> = vec![
+            Line::from(""),
+            Line::from(vec![
+                Span::styled(
+                    format!("{:<20} {:>10} {:>15}     {:>12}", "Kind", "Instances", "Coverage", "Issues"),
+                    Style::default()
+                        .fg(COLOR_MUTED_TEXT)
+                        .add_modifier(Modifier::UNDERLINED),
+                ),
+            ]),
+        ];
+
+        for (idx, kind_stat) in stats.kinds.iter().enumerate() {
+            let is_selected = idx == app.audit_cursor;
+            let progress_filled = kind_stat.coverage_percent / 10;
+            let progress_empty = 10 - progress_filled;
+            let progress_bar = format!(
+                "{}{}",
+                "━".repeat(progress_filled as usize),
+                "░".repeat(progress_empty as usize)
+            );
+
+            let issue_display = if kind_stat.incomplete_instances > 0 {
+                format!("⚠ {} missing", kind_stat.incomplete_instances)
+            } else {
+                "✓ complete".to_string()
+            };
+
+            let line_style = if is_selected {
+                Style::default().bg(COLOR_HIGHLIGHT_BG)
+            } else {
+                Style::default()
+            };
+
+            let issue_style = if kind_stat.incomplete_instances > 0 {
+                Style::default().fg(Color::Red)
+            } else {
+                Style::default().fg(Color::Green)
+            };
+
+            lines.push(Line::from(vec![
+                Span::styled(
+                    format!("{:<20} {:>10} ", kind_stat.display_name, kind_stat.instance_count),
+                    line_style.fg(Color::White),
+                ),
+                Span::styled(progress_bar, line_style.fg(Color::Green)),
+                Span::styled(format!(" {:>3}%", kind_stat.coverage_percent), line_style),
+                Span::styled(format!("     {}", issue_display), line_style.patch(issue_style)),
+            ]));
+        }
+
+        let kind_list = Paragraph::new(lines)
+            .block(
+                Block::default()
+                    .borders(Borders::TOP)
+                    .border_style(Style::default().fg(COLOR_UNFOCUSED_BORDER)),
+            )
+            .scroll((0, 0));
+        f.render_widget(kind_list, chunks[2]);
+    } else {
+        // Loading state
+        let loading = Paragraph::new(vec![
+            Line::from(""),
+            Line::from(Span::styled("  Loading audit data...", STYLE_DIM)),
+        ]);
+        f.render_widget(loading, chunks[1]);
+    }
+
+    // Footer with keybindings
+    let footer = Paragraph::new(Line::from(vec![
+        Span::styled("[j/k] Navigate  ", STYLE_DIM),
+        Span::styled("[Enter] Drill down  ", STYLE_DIM),
+        Span::styled("[r] Refresh  ", STYLE_DIM),
+        Span::styled("[1-5] Switch mode", STYLE_DIM),
+    ]));
+    f.render_widget(footer, chunks[3]);
 }
 
 /// Atlas mode: interactive architecture visualizations.
@@ -4673,6 +5469,148 @@ fn render_atlas_view_traversal(app: &App) -> String {
     lines.join("\n")
 }
 
+// =============================================================================
+// HELPER: Simple Property Rendering
+// =============================================================================
+
+/// Render instance properties in simple mode (no schema overlay).
+/// Shows each property with key-value format, truncating long values.
+fn render_simple_properties(lines: &mut Vec<Line<'_>>, properties: &BTreeMap<String, JsonValue>) {
+    if properties.is_empty() {
+        return;
+    }
+
+    lines.push(Line::from(""));
+    lines.push(Line::from(Span::styled("Properties", STYLE_MUTED)));
+
+    for (key, value) in properties {
+        // Skip internal properties (starting with underscore or known meta)
+        if key.starts_with('_') || key == "key" || key == "display_name" {
+            continue;
+        }
+
+        let value_str = json_value_to_display(value);
+        let truncated = truncate_str(&value_str, 45);
+
+        lines.push(Line::from(vec![
+            Span::styled(format!("{:<20}", key), STYLE_INFO),
+            Span::styled(truncated, STYLE_PRIMARY),
+        ]));
+    }
+}
+
+/// Convert a JSON value to a display string.
+fn json_value_to_display(value: &JsonValue) -> String {
+    match value {
+        JsonValue::Null => "null".to_string(),
+        JsonValue::Bool(b) => b.to_string(),
+        JsonValue::Number(n) => n.to_string(),
+        JsonValue::String(s) => format!("\"{}\"", s),
+        JsonValue::Array(arr) => serde_json::to_string(arr).unwrap_or_else(|_| "[]".to_string()),
+        JsonValue::Object(obj) => serde_json::to_string(obj).unwrap_or_else(|_| "{}".to_string()),
+    }
+}
+
+/// Render the recent items popup overlay.
+fn render_recent_items_overlay(f: &mut Frame, app: &App) {
+    use ratatui::widgets::Clear;
+
+    // Center the popup
+    let area = f.area();
+    let width = 50.min(area.width.saturating_sub(4));
+    let height = 14.min(area.height.saturating_sub(4));
+    let x = (area.width.saturating_sub(width)) / 2;
+    let y = (area.height.saturating_sub(height)) / 3;
+
+    let popup_area = Rect::new(x, y, width, height);
+
+    // Clear the area behind the overlay
+    f.render_widget(Clear, popup_area);
+
+    // Build content
+    let mut lines: Vec<Line> = Vec::new();
+
+    // Title
+    lines.push(Line::from(vec![
+        Span::styled(" Recent Items ", STYLE_INFO),
+        Span::styled("(j/k Enter Esc)", STYLE_DIM),
+    ]));
+    lines.push(Line::from(""));
+
+    // Show history items (newest first, limit to 10)
+    let max_items = 10.min(app.nav_history.len());
+    let visible_height = height.saturating_sub(4) as usize;
+
+    // Calculate scroll window
+    let start = if max_items <= visible_height || app.recent_items_cursor < visible_height / 2 {
+        0
+    } else if app.recent_items_cursor > max_items - visible_height / 2 {
+        max_items.saturating_sub(visible_height)
+    } else {
+        app.recent_items_cursor.saturating_sub(visible_height / 2)
+    };
+
+    for display_idx in start..start + visible_height.min(max_items - start) {
+        // History is oldest→newest, we show newest first
+        let history_idx = app.nav_history.len().saturating_sub(1 + display_idx);
+        let is_selected = display_idx == app.recent_items_cursor;
+
+        if let Some(&(mode, cursor)) = app.nav_history.get(history_idx) {
+            // Get item name at that cursor position
+            let item = app.tree.item_at(cursor);
+            let (icon, name) = match item {
+                Some(crate::tui::data::TreeItem::KindsSection) => ("≡", "Node Kinds".to_string()),
+                Some(crate::tui::data::TreeItem::ArcsSection) => ("⇄", "Arcs".to_string()),
+                Some(crate::tui::data::TreeItem::Realm(r)) => (r.icon, r.display_name.clone()),
+                Some(crate::tui::data::TreeItem::Layer(_, l)) => ("▸", l.display_name.clone()),
+                Some(crate::tui::data::TreeItem::Kind(_, _, k)) => ("◆", k.display_name.clone()),
+                Some(crate::tui::data::TreeItem::Instance(_, _, _, i)) => {
+                    ("•", i.display_name.clone())
+                }
+                Some(crate::tui::data::TreeItem::ArcFamily(f)) => ("↔", f.display_name.clone()),
+                Some(crate::tui::data::TreeItem::ArcKind(_, ak)) => ("→", ak.display_name.clone()),
+                None => ("?", format!("(cursor {})", cursor)),
+            };
+
+            let mode_badge = match mode {
+                crate::tui::app::NavMode::Meta => "[M]",
+                crate::tui::app::NavMode::Data => "[D]",
+                crate::tui::app::NavMode::Overlay => "[O]",
+                crate::tui::app::NavMode::Query => "[Q]",
+                crate::tui::app::NavMode::Atlas => "[A]",
+                crate::tui::app::NavMode::Audit => "[!]",
+            };
+
+            let prefix = if is_selected { "› " } else { "  " };
+            let style = if is_selected {
+                Style::default().bg(COLOR_HIGHLIGHT_BG).fg(Color::White)
+            } else {
+                Style::default()
+            };
+
+            let text = format!("{}{} {} {}", prefix, mode_badge, icon, truncate_str(&name, 35));
+            lines.push(Line::from(Span::styled(text, style)));
+        }
+    }
+
+    // Footer hint
+    if max_items == 0 {
+        lines.push(Line::from(Span::styled(
+            "  No history yet. Navigate around!",
+            STYLE_DIM,
+        )));
+    }
+
+    let paragraph = Paragraph::new(lines).block(
+        Block::default()
+            .borders(Borders::ALL)
+            .border_style(Style::default().fg(Color::Cyan))
+            .style(Style::default().bg(COLOR_OVERLAY_BG)),
+    );
+
+    f.render_widget(paragraph, popup_area);
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -4847,22 +5785,22 @@ mod tests {
 
     #[test]
     fn test_empty_state_kind_icon_no_kinds() {
-        assert_eq!(EmptyStateKind::NoKinds.icon(), "📭");
+        assert_eq!(EmptyStateKind::NoKinds.icon(), "∅");
     }
 
     #[test]
     fn test_empty_state_kind_icon_no_results() {
-        assert_eq!(EmptyStateKind::NoResults.icon(), "🔍");
+        assert_eq!(EmptyStateKind::NoResults.icon(), "◌");
     }
 
     #[test]
     fn test_empty_state_kind_icon_no_instances() {
-        assert_eq!(EmptyStateKind::NoInstances.icon(), "📋");
+        assert_eq!(EmptyStateKind::NoInstances.icon(), "□");
     }
 
     #[test]
     fn test_empty_state_kind_icon_loading() {
-        assert_eq!(EmptyStateKind::Loading.icon(), "⏳");
+        assert_eq!(EmptyStateKind::Loading.icon(), "◐");
     }
 
     #[test]

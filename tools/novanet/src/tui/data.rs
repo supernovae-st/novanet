@@ -11,11 +11,16 @@ use tokio::join;
 /// Clean up Bolt debug output by removing wrapper type names.
 /// E.g., "DateTime(BoltDateTime { seconds: BoltInteger { value: 123 }, ... })" -> "123"
 fn clean_bolt_debug(debug: &str) -> String {
+    const PATTERN: &str = "seconds: BoltInteger { value: ";
     // Extract just the timestamp if it's a DateTime
-    if let Some(start) = debug.find("seconds: BoltInteger { value: ") {
-        let rest = &debug[start + 30..];
-        if let Some(end) = rest.find(' ') {
-            return rest[..end].trim_end_matches(',').to_string();
+    // Use find() which returns byte index, but pattern is ASCII so addition is safe
+    if let Some(start_byte) = debug.find(PATTERN) {
+        // Pattern is ASCII-only, so start_byte + PATTERN.len() is a valid char boundary
+        let rest = &debug[start_byte + PATTERN.len()..];
+        // Find the end of the value (space or comma) - use chars for safety
+        let value: String = rest.chars().take_while(|c| c.is_ascii_digit()).collect();
+        if !value.is_empty() {
+            return value;
         }
     }
     // Fallback: just return the debug string but truncated
@@ -143,6 +148,11 @@ pub struct KindInfo {
     pub context_budget: String,
     /// v10 knowledge tier (technical/style/semantic) — only for knowledge-trait nodes.
     pub knowledge_tier: Option<String>,
+    // Health stats for tree badges (Feature 2)
+    /// Coverage percentage (0-100) — instances with all required fields filled.
+    pub health_percent: Option<u8>,
+    /// Number of instances with missing required fields.
+    pub issues_count: Option<usize>,
 }
 
 /// Layer containing Kinds.
@@ -406,6 +416,9 @@ ORDER BY realm_key, layer_key, kind_key
                 schema_hint,
                 context_budget,
                 knowledge_tier,
+                // Health stats (not loaded yet, requires separate query)
+                health_percent: None,
+                issues_count: None,
             };
 
             realm_map
@@ -1300,7 +1313,7 @@ RETURN kw.keyword as keyword,
         for realm in &self.realms {
             self.collapsed.insert(format!("realm:{}", realm.key));
             for layer in &realm.layers {
-                self.collapsed.insert(format!("layer:{}", layer.key));
+                self.collapsed.insert(format!("layer:{}:{}", realm.key, layer.key));
             }
         }
         for family in &self.arc_families {
@@ -1325,7 +1338,7 @@ RETURN kw.keyword as keyword,
             for realm in &self.realms {
                 self.collapsed.remove(&format!("realm:{}", realm.key));
                 for layer in &realm.layers {
-                    self.collapsed.remove(&format!("layer:{}", layer.key));
+                    self.collapsed.remove(&format!("layer:{}:{}", realm.key, layer.key));
                     for kind in &layer.kinds {
                         self.collapsed.remove(&format!("kind:{}", kind.key));
                     }
@@ -1340,18 +1353,21 @@ RETURN kw.keyword as keyword,
             // Expand all layers in this realm
             if let Some(realm) = self.realms.iter().find(|r| r.key == realm_key) {
                 for layer in &realm.layers {
-                    self.collapsed.remove(&format!("layer:{}", layer.key));
+                    self.collapsed.remove(&format!("layer:{}:{}", realm_key, layer.key));
                     for kind in &layer.kinds {
                         self.collapsed.remove(&format!("kind:{}", kind.key));
                     }
                 }
             }
-        } else if let Some(layer_key) = key.strip_prefix("layer:") {
+        } else if let Some(rest) = key.strip_prefix("layer:") {
+            // Layer key format: layer:{realm_key}:{layer_key}
             // Expand all kinds in this layer
-            for realm in &self.realms {
-                if let Some(layer) = realm.layers.iter().find(|l| l.key == layer_key) {
-                    for kind in &layer.kinds {
-                        self.collapsed.remove(&format!("kind:{}", kind.key));
+            if let Some((realm_key, layer_key)) = rest.split_once(':') {
+                if let Some(realm) = self.realms.iter().find(|r| r.key == realm_key) {
+                    if let Some(layer) = realm.layers.iter().find(|l| l.key == layer_key) {
+                        for kind in &layer.kinds {
+                            self.collapsed.remove(&format!("kind:{}", kind.key));
+                        }
                     }
                 }
             }
@@ -1374,7 +1390,7 @@ RETURN kw.keyword as keyword,
             for realm in &self.realms {
                 self.collapsed.insert(format!("realm:{}", realm.key));
                 for layer in &realm.layers {
-                    self.collapsed.insert(format!("layer:{}", layer.key));
+                    self.collapsed.insert(format!("layer:{}:{}", realm.key, layer.key));
                     for kind in &layer.kinds {
                         self.collapsed.insert(format!("kind:{}", kind.key));
                     }
@@ -1389,18 +1405,21 @@ RETURN kw.keyword as keyword,
             // Collapse all layers in this realm
             if let Some(realm) = self.realms.iter().find(|r| r.key == realm_key) {
                 for layer in &realm.layers {
-                    self.collapsed.insert(format!("layer:{}", layer.key));
+                    self.collapsed.insert(format!("layer:{}:{}", realm_key, layer.key));
                     for kind in &layer.kinds {
                         self.collapsed.insert(format!("kind:{}", kind.key));
                     }
                 }
             }
-        } else if let Some(layer_key) = key.strip_prefix("layer:") {
+        } else if let Some(rest) = key.strip_prefix("layer:") {
+            // Layer key format: layer:{realm_key}:{layer_key}
             // Collapse all kinds in this layer
-            for realm in &self.realms {
-                if let Some(layer) = realm.layers.iter().find(|l| l.key == layer_key) {
-                    for kind in &layer.kinds {
-                        self.collapsed.insert(format!("kind:{}", kind.key));
+            if let Some((realm_key, layer_key)) = rest.split_once(':') {
+                if let Some(realm) = self.realms.iter().find(|r| r.key == realm_key) {
+                    if let Some(layer) = realm.layers.iter().find(|l| l.key == layer_key) {
+                        for kind in &layer.kinds {
+                            self.collapsed.insert(format!("kind:{}", kind.key));
+                        }
                     }
                 }
             }
@@ -1440,7 +1459,7 @@ RETURN kw.keyword as keyword,
                 if !self.is_collapsed(&format!("realm:{}", realm.key)) {
                     for layer in &realm.layers {
                         count += 1; // layer header
-                        if !self.is_collapsed(&format!("layer:{}", layer.key)) {
+                        if !self.is_collapsed(&format!("layer:{}:{}", realm.key, layer.key)) {
                             for kind in &layer.kinds {
                                 count += 1; // kind
 
@@ -1496,7 +1515,7 @@ RETURN kw.keyword as keyword,
                         }
                         idx += 1;
 
-                        if !self.is_collapsed(&format!("layer:{}", layer.key)) {
+                        if !self.is_collapsed(&format!("layer:{}:{}", realm.key, layer.key)) {
                             for kind in &layer.kinds {
                                 if idx == cursor {
                                     return Some(TreeItem::Kind(realm, layer, kind));
@@ -1562,7 +1581,7 @@ RETURN kw.keyword as keyword,
                 if !self.is_collapsed(&format!("realm:{}", realm.key)) {
                     for layer in &realm.layers {
                         count += 1; // layer header
-                        if !self.is_collapsed(&format!("layer:{}", layer.key)) {
+                        if !self.is_collapsed(&format!("layer:{}:{}", realm.key, layer.key)) {
                             count += layer.kinds.len();
                         }
                     }
@@ -1608,7 +1627,7 @@ RETURN kw.keyword as keyword,
                         }
                         idx += 1;
 
-                        if !self.is_collapsed(&format!("layer:{}", layer.key)) {
+                        if !self.is_collapsed(&format!("layer:{}:{}", realm.key, layer.key)) {
                             for kind in &layer.kinds {
                                 if idx == cursor {
                                     return Some(TreeItem::Kind(realm, layer, kind));
@@ -1654,13 +1673,188 @@ RETURN kw.keyword as keyword,
             Some(TreeItem::KindsSection) => Some("kinds".to_string()),
             Some(TreeItem::ArcsSection) => Some("arcs".to_string()),
             Some(TreeItem::Realm(r)) => Some(format!("realm:{}", r.key)),
-            Some(TreeItem::Layer(_, l)) => Some(format!("layer:{}", l.key)),
+            Some(TreeItem::Layer(r, l)) => Some(format!("layer:{}:{}", r.key, l.key)),
             Some(TreeItem::ArcFamily(f)) => Some(format!("family:{}", f.key)),
             // In Data mode, Kind can be collapsed to hide instances
             Some(TreeItem::Kind(_, _, k)) => Some(format!("kind:{}", k.key)),
             // Leaf nodes can't be collapsed
             Some(TreeItem::ArcKind(_, _)) | Some(TreeItem::Instance(_, _, _, _)) | None => None,
         }
+    }
+
+    /// Find the cursor position of the parent item.
+    /// Returns None if at root or no parent exists.
+    /// Hierarchy: Instance → Kind → Layer → Realm → KindsSection
+    ///            ArcKind → ArcFamily → ArcsSection
+    pub fn find_parent_cursor(&self, cursor: usize, data_mode: bool) -> Option<usize> {
+        let current = if data_mode {
+            self.item_at_for_mode(cursor, true)
+        } else {
+            self.item_at(cursor)
+        };
+
+        match current {
+            // Section headers have no parent
+            Some(TreeItem::KindsSection) | Some(TreeItem::ArcsSection) | None => None,
+
+            // Realm's parent is KindsSection (always at index 0)
+            Some(TreeItem::Realm(_)) => Some(0),
+
+            // Layer's parent is its Realm
+            Some(TreeItem::Layer(realm, _)) => self.find_realm_cursor(&realm.key),
+
+            // Kind's parent is its Layer
+            Some(TreeItem::Kind(realm, layer, _)) => {
+                self.find_layer_cursor(&realm.key, &layer.key)
+            }
+
+            // Instance's parent is its Kind
+            Some(TreeItem::Instance(realm, layer, kind, _)) => {
+                self.find_kind_cursor_readonly(&realm.key, &layer.key, &kind.key, data_mode)
+            }
+
+            // ArcFamily's parent is ArcsSection
+            Some(TreeItem::ArcFamily(_)) => self.find_arcs_section_cursor(),
+
+            // ArcKind's parent is its ArcFamily
+            Some(TreeItem::ArcKind(family, _)) => self.find_family_cursor(&family.key),
+        }
+    }
+
+    /// Find cursor position of a Realm (does not modify collapse state).
+    fn find_realm_cursor(&self, realm_key: &str) -> Option<usize> {
+        if self.is_collapsed("kinds") {
+            return None; // Realm not visible
+        }
+        let mut idx = 1; // Skip KindsSection
+        for realm in &self.realms {
+            if realm.key == realm_key {
+                return Some(idx);
+            }
+            idx += 1;
+            if !self.is_collapsed(&format!("realm:{}", realm.key)) {
+                for layer in &realm.layers {
+                    idx += 1;
+                    if !self.is_collapsed(&format!("layer:{}:{}", realm.key, layer.key)) {
+                        idx += layer.kinds.len();
+                    }
+                }
+            }
+        }
+        None
+    }
+
+    /// Find cursor position of a Layer (does not modify collapse state).
+    fn find_layer_cursor(&self, realm_key: &str, layer_key: &str) -> Option<usize> {
+        if self.is_collapsed("kinds") {
+            return None;
+        }
+        let mut idx = 1; // Skip KindsSection
+        for realm in &self.realms {
+            idx += 1; // Realm
+            if realm.key == realm_key {
+                if self.is_collapsed(&format!("realm:{}", realm.key)) {
+                    return None; // Layer not visible
+                }
+                for layer in &realm.layers {
+                    if layer.key == layer_key {
+                        return Some(idx);
+                    }
+                    idx += 1;
+                    if !self.is_collapsed(&format!("layer:{}:{}", realm.key, layer.key)) {
+                        idx += layer.kinds.len();
+                    }
+                }
+                return None;
+            }
+            if !self.is_collapsed(&format!("realm:{}", realm.key)) {
+                for layer in &realm.layers {
+                    idx += 1;
+                    if !self.is_collapsed(&format!("layer:{}:{}", realm.key, layer.key)) {
+                        idx += layer.kinds.len();
+                    }
+                }
+            }
+        }
+        None
+    }
+
+    /// Find cursor position of a Kind (readonly, does not modify collapse state).
+    fn find_kind_cursor_readonly(
+        &self,
+        realm_key: &str,
+        layer_key: &str,
+        kind_key: &str,
+        data_mode: bool,
+    ) -> Option<usize> {
+        if self.is_collapsed("kinds") {
+            return None;
+        }
+        let mut idx = 1; // Skip KindsSection
+        for realm in &self.realms {
+            idx += 1; // Realm
+            if !self.is_collapsed(&format!("realm:{}", realm.key)) {
+                for layer in &realm.layers {
+                    idx += 1; // Layer
+                    if !self.is_collapsed(&format!("layer:{}:{}", realm.key, layer.key)) {
+                        for kind in &layer.kinds {
+                            if realm.key == realm_key
+                                && layer.key == layer_key
+                                && kind.key == kind_key
+                            {
+                                return Some(idx);
+                            }
+                            idx += 1;
+                            // In data mode, count instances
+                            if data_mode && !self.is_collapsed(&format!("kind:{}", kind.key)) {
+                                if let Some(instances) = self.instances.get(&kind.key) {
+                                    idx += instances.len();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        None
+    }
+
+    /// Find cursor position of ArcsSection.
+    fn find_arcs_section_cursor(&self) -> Option<usize> {
+        let mut idx = 1; // Skip KindsSection
+        if !self.is_collapsed("kinds") {
+            for realm in &self.realms {
+                idx += 1;
+                if !self.is_collapsed(&format!("realm:{}", realm.key)) {
+                    for layer in &realm.layers {
+                        idx += 1;
+                        if !self.is_collapsed(&format!("layer:{}:{}", realm.key, layer.key)) {
+                            idx += layer.kinds.len();
+                        }
+                    }
+                }
+            }
+        }
+        Some(idx) // ArcsSection is right after all realms
+    }
+
+    /// Find cursor position of an ArcFamily.
+    fn find_family_cursor(&self, family_key: &str) -> Option<usize> {
+        let arcs_idx = self.find_arcs_section_cursor()?;
+        if self.is_collapsed("arcs") {
+            return None;
+        }
+        let mut idx = arcs_idx + 1;
+        for family in &self.arc_families {
+            if family.key == family_key {
+                return Some(idx);
+            }
+            idx += 1;
+            if !self.is_collapsed(&format!("family:{}", family.key)) {
+                idx += family.arc_kinds.len();
+            }
+        }
+        None
     }
 
     // ========================================================================
@@ -1705,6 +1899,7 @@ RETURN kw.keyword as keyword,
     /// Find cursor position for a Kind in Meta mode tree view.
     /// Expands necessary parents (realm, layer) to make the Kind visible.
     /// Returns the cursor position if found.
+    #[allow(dead_code)] // Prepared for search/navigation features
     pub fn find_kind_cursor(&mut self, kind_key: &str) -> Option<usize> {
         // First, find the Kind and its parents
         let mut target_realm_key = None;
@@ -1736,7 +1931,7 @@ RETURN kw.keyword as keyword,
         // Expand parents to make Kind visible
         self.collapsed.remove("kinds");
         self.collapsed.remove(&format!("realm:{}", realm_key));
-        self.collapsed.remove(&format!("layer:{}", layer_key));
+        self.collapsed.remove(&format!("layer:{}:{}", realm_key, layer_key));
 
         // Now count to find the cursor position
         let mut idx = 0;
@@ -1751,7 +1946,7 @@ RETURN kw.keyword as keyword,
                 for layer in &realm.layers {
                     idx += 1; // Layer
 
-                    if !self.is_collapsed(&format!("layer:{}", layer.key)) {
+                    if !self.is_collapsed(&format!("layer:{}:{}", realm.key, layer.key)) {
                         for kind in &layer.kinds {
                             if kind.key == kind_key {
                                 return Some(idx);
@@ -1972,6 +2167,8 @@ mod tests {
             schema_hint: String::new(),
             context_budget: String::new(),
             knowledge_tier: None,
+            health_percent: None,
+            issues_count: None,
         }
     }
 
