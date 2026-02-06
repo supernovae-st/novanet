@@ -4965,7 +4965,7 @@ mod tests {
     #[test]
     fn test_empty_state_kind_hint_no_results() {
         let hint = EmptyStateKind::NoResults.hint();
-        assert!(hint.contains("1"), "hint should suggest switching modes with '1'");
+        assert!(hint.contains("c"), "hint should suggest clearing filters with 'c'");
     }
 
     #[test]
