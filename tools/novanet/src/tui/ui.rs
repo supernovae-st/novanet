@@ -193,37 +193,37 @@ impl EmptyStateKind {
         }
     }
 
-    /// Get the description lines for this empty state.
-    fn description(&self) -> Vec<&'static str> {
+    /// Get the description lines for this empty state (zero allocation).
+    fn description(&self) -> &'static [&'static str] {
         match self {
-            EmptyStateKind::NoConnection => vec![
+            EmptyStateKind::NoConnection => &[
                 "Unable to reach bolt://localhost:7687",
                 "",
                 "Try:",
                 "  • pnpm infra:up",
                 "  • Check Neo4j credentials",
             ],
-            EmptyStateKind::NoKinds => vec![
+            EmptyStateKind::NoKinds => &[
                 "The taxonomy tree is empty.",
                 "",
                 "Run:",
                 "  • cargo run -- schema generate",
                 "  • cargo run -- db seed",
             ],
-            EmptyStateKind::NoResults => vec![
+            EmptyStateKind::NoResults => &[
                 "No nodes match your current filter.",
                 "",
                 "Try:",
                 "  • Remove filters with 'c'",
                 "  • Switch modes with 1-5",
             ],
-            EmptyStateKind::NoInstances => vec![
+            EmptyStateKind::NoInstances => &[
                 "This Kind has no data instances yet.",
                 "",
                 "Create one with:",
                 "  cargo run -- node create --kind=<Kind>",
             ],
-            EmptyStateKind::Loading => vec!["Fetching data from Neo4j…"],
+            EmptyStateKind::Loading => &["Fetching data from Neo4j…"],
         }
     }
 
@@ -529,7 +529,8 @@ fn highlight_matches(text: &str, matches: Option<&[u32]>, base_color: Color) -> 
     // Build a set of matched positions for O(1) lookup (FxHashSet is faster for integer keys)
     let match_set: FxHashSet<usize> = positions.iter().map(|&p| p as usize).collect();
 
-    let mut spans = Vec::new();
+    // Pre-allocate: worst case is alternating match/non-match segments
+    let mut spans = Vec::with_capacity(positions.len() * 2 + 1);
     let mut current_text = String::new();
     let mut in_match = false;
 
@@ -1319,12 +1320,8 @@ fn render_realm_bar_chart(f: &mut Frame, area: Rect, app: &App) {
         .iter()
         .map(|layer| {
             let count = layer.kinds.len() as u64;
-            // Use first 3 chars of layer name as label
-            let label = if layer.display_name.len() > 4 {
-                layer.display_name[..4].to_string()
-            } else {
-                layer.display_name.clone()
-            };
+            // Use first 4 chars of layer name as label (Unicode-safe)
+            let label: String = layer.display_name.chars().take(4).collect();
             Bar::default()
                 .value(count)
                 .label(Line::from(label))
