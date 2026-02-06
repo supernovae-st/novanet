@@ -5,11 +5,47 @@
 
 use std::collections::HashMap;
 use std::path::Path;
+use std::sync::LazyLock;
 
 use regex::Regex;
 use serde::{Deserialize, Serialize};
 
 use crate::{NovaNetError, Result};
+
+// ============================================================================
+// Lazy-compiled Regex Patterns
+// ============================================================================
+
+/// YAML frontmatter pattern: ---\n...\n---
+static RE_FRONTMATTER: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"(?s)^---\n(.*?)\n---").expect("valid frontmatter regex"));
+
+/// Slug rule extraction: **Slug Rule**: {rule}
+static RE_SLUG_RULE: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"\*\*Slug Rule\*\*:\s*(\w+)").expect("valid slug rule regex"));
+
+/// Stopword table row: | word | category |
+static RE_STOPWORD: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"\|\s*([^\|]+?)\s*\|\s*(article|preposition|conjunction|pronoun|verb|contraction|demonstrative|auxiliary|possessive|interrogative|negation|adverb|particle_\w+|honorific|classifier|copula|proper_noun|currency|relative_pronoun|indefinite|quantifier|interjection|abbreviation|filler|honorific_suffix)\s*\|")
+        .expect("valid stopword regex")
+});
+
+/// Regional additions table row: | word | category | reason |
+static RE_REGIONAL_ADDITION: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"\|\s*([^\|]+?)\s*\|\s*(\w+)\s*\|\s*([^\|]+?)\s*\|")
+        .expect("valid regional addition regex")
+});
+
+/// Examples table row: | input | output | rules |
+static RE_EXAMPLE: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"\|\s*([^\|]+?)\s*\|\s*([^\|]+?)\s*\|\s*([^\|]+?)\s*\|")
+        .expect("valid example regex")
+});
+
+/// Warnings table row: | condition | warning |
+static RE_WARNING: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"\|\s*([^\|]+?)\s*\|\s*([^\|]+?)\s*\|").expect("valid warning regex")
+});
 
 // ============================================================================
 // Data Structures
@@ -327,9 +363,7 @@ pub fn parse_slugification(content: &str, source_path: &Path) -> Result<Slugific
 
 /// Parse YAML frontmatter from markdown.
 fn parse_frontmatter(content: &str) -> Result<Frontmatter> {
-    let re = Regex::new(r"(?s)^---\n(.*?)\n---").unwrap();
-
-    let caps = re.captures(content).ok_or_else(|| NovaNetError::Validation(
+    let caps = RE_FRONTMATTER.captures(content).ok_or_else(|| NovaNetError::Validation(
         "No YAML frontmatter found".to_string()
     ))?;
 
@@ -341,9 +375,7 @@ fn parse_frontmatter(content: &str) -> Result<Frontmatter> {
 
 /// Extract slug rule from "**Slug Rule**: {rule}".
 fn extract_slug_rule(content: &str) -> Result<String> {
-    let re = Regex::new(r"\*\*Slug Rule\*\*:\s*(\w+)").unwrap();
-
-    re.captures(content)
+    RE_SLUG_RULE.captures(content)
         .and_then(|caps: regex::Captures| caps.get(1))
         .map(|m: regex::Match| m.as_str().to_string())
         .ok_or_else(|| NovaNetError::Validation(
@@ -355,10 +387,7 @@ fn extract_slug_rule(content: &str) -> Result<String> {
 fn extract_stopwords(content: &str) -> HashMap<String, Vec<String>> {
     let mut stopwords: HashMap<String, Vec<String>> = HashMap::new();
 
-    // Match table rows: | word | category |
-    let re = Regex::new(r"\|\s*([^\|]+?)\s*\|\s*(article|preposition|conjunction|pronoun|verb|contraction|demonstrative|auxiliary|possessive|interrogative|negation|adverb|particle_\w+|honorific|classifier|copula|proper_noun|currency|relative_pronoun|indefinite|quantifier|interjection|abbreviation|filler|honorific_suffix)\s*\|").unwrap();
-
-    for caps in re.captures_iter(content) {
+    for caps in RE_STOPWORD.captures_iter(content) {
         let word = caps.get(1).unwrap().as_str().trim().to_string();
         let category = caps.get(2).unwrap().as_str().trim().to_string();
 
@@ -385,9 +414,6 @@ fn extract_regional_additions(content: &str) -> Vec<RegionalAddition> {
         return additions;
     }
 
-    // Match table rows with reason: | word | category | reason |
-    let re = Regex::new(r"\|\s*([^\|]+?)\s*\|\s*(\w+)\s*\|\s*([^\|]+?)\s*\|").unwrap();
-
     // Find the section start
     let section_start = content.find("Locale-Specific Additions").unwrap_or(0);
     let section_content = &content[section_start..];
@@ -399,7 +425,7 @@ fn extract_regional_additions(content: &str) -> Vec<RegionalAddition> {
         .unwrap_or(section_content.len());
     let section = &section_content[..section_end];
 
-    for caps in re.captures_iter(section) {
+    for caps in RE_REGIONAL_ADDITION.captures_iter(section) {
         let word = caps.get(1).unwrap().as_str().trim().to_string();
         let category = caps.get(2).unwrap().as_str().trim().to_string();
         let reason = caps.get(3).unwrap().as_str().trim().to_string();
@@ -436,10 +462,7 @@ fn extract_examples(content: &str) -> Vec<SlugExample> {
         .unwrap_or(section_content.len());
     let section = &section_content[..section_end];
 
-    // Match table rows: | input | output | rules |
-    let re = Regex::new(r"\|\s*([^\|]+?)\s*\|\s*([^\|]+?)\s*\|\s*([^\|]+?)\s*\|").unwrap();
-
-    for caps in re.captures_iter(section) {
+    for caps in RE_EXAMPLE.captures_iter(section) {
         let input = caps.get(1).unwrap().as_str().trim().to_string();
         let output = caps.get(2).unwrap().as_str().trim().to_string();
         let rules_str = caps.get(3).unwrap().as_str().trim();
@@ -483,10 +506,7 @@ fn extract_warnings(content: &str) -> Vec<Warning> {
         .unwrap_or(section_content.len());
     let section = &section_content[..section_end];
 
-    // Match table rows: | condition | warning |
-    let re = Regex::new(r"\|\s*([^\|]+?)\s*\|\s*([^\|]+?)\s*\|").unwrap();
-
-    for caps in re.captures_iter(section) {
+    for caps in RE_WARNING.captures_iter(section) {
         let condition = caps.get(1).unwrap().as_str().trim().to_string();
         let message = caps.get(2).unwrap().as_str().trim().to_string();
 
