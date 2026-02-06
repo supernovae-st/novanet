@@ -8,9 +8,11 @@
 //! - `visual_encoding`: Parse visual-encoding.yaml (v9.5 visual system)
 //! - `slugification`: Parse ATH 2-rules-slug markdown files
 //! - `formatting`: Parse ATH 2-rules-formatting markdown files
+//! - `culture`: Parse ATH 4-culture-norms markdown files
 //! - `utils`: Shared YAML loading utilities
 
 pub mod arcs;
+pub mod culture;
 pub mod formatting;
 pub mod organizing;
 pub mod slugification;
