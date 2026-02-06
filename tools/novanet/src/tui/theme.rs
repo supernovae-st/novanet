@@ -405,6 +405,95 @@ impl Theme {
     pub fn trait_border(&self, trait_key: &str) -> &'static str {
         traits::border_char(trait_key)
     }
+
+    /// Get nav mode color.
+    pub fn nav_mode_color(&self, mode_label: &str) -> Color {
+        nav_mode::color(mode_label, self.mode)
+    }
+
+    /// Get nav mode icon.
+    pub fn nav_mode_icon(&self, mode_label: &str) -> &'static str {
+        nav_mode::icon(mode_label)
+    }
+
+    /// Get styled text for a nav mode.
+    pub fn nav_mode_style(&self, mode_label: &str) -> Style {
+        Style::default()
+            .fg(self.nav_mode_color(mode_label))
+            .add_modifier(Modifier::BOLD)
+    }
+}
+
+// =============================================================================
+// NAV MODE COLORS — Colors for navigation modes
+// =============================================================================
+
+/// Navigation mode color definitions.
+pub mod nav_mode {
+    use super::*;
+
+    // Mode colors (hex)
+    pub const META_HEX: &str = "#06b6d4"; // Cyan - schema exploration
+    pub const DATA_HEX: &str = "#22c55e"; // Green - live data
+    pub const OVERLAY_HEX: &str = "#f97316"; // Orange - combined view
+    pub const QUERY_HEX: &str = "#eab308"; // Yellow - search/filter
+    pub const ATLAS_HEX: &str = "#8b5cf6"; // Purple - architecture
+
+    // 256-color palette
+    pub const META_256: u8 = 45;
+    pub const DATA_256: u8 = 41;
+    pub const OVERLAY_256: u8 = 208;
+    pub const QUERY_256: u8 = 178;
+    pub const ATLAS_256: u8 = 141;
+
+    // 16-color palette
+    pub const META_16: Color = Color::Cyan;
+    pub const DATA_16: Color = Color::Green;
+    pub const OVERLAY_16: Color = Color::Yellow;
+    pub const QUERY_16: Color = Color::LightYellow;
+    pub const ATLAS_16: Color = Color::Magenta;
+
+    /// Get nav mode color for a given color mode.
+    pub fn color(nav_mode: &str, mode: ColorMode) -> Color {
+        match mode {
+            ColorMode::TrueColor => match nav_mode {
+                "meta" | "Meta" => hex_to_color(META_HEX),
+                "data" | "Data" => hex_to_color(DATA_HEX),
+                "overlay" | "Overlay" => hex_to_color(OVERLAY_HEX),
+                "query" | "Query" => hex_to_color(QUERY_HEX),
+                "atlas" | "Atlas" => hex_to_color(ATLAS_HEX),
+                _ => Color::White,
+            },
+            ColorMode::Color256 => match nav_mode {
+                "meta" | "Meta" => Color::Indexed(META_256),
+                "data" | "Data" => Color::Indexed(DATA_256),
+                "overlay" | "Overlay" => Color::Indexed(OVERLAY_256),
+                "query" | "Query" => Color::Indexed(QUERY_256),
+                "atlas" | "Atlas" => Color::Indexed(ATLAS_256),
+                _ => Color::White,
+            },
+            ColorMode::Color16 => match nav_mode {
+                "meta" | "Meta" => META_16,
+                "data" | "Data" => DATA_16,
+                "overlay" | "Overlay" => OVERLAY_16,
+                "query" | "Query" => QUERY_16,
+                "atlas" | "Atlas" => ATLAS_16,
+                _ => Color::White,
+            },
+        }
+    }
+
+    /// Get icon for nav mode.
+    pub fn icon(nav_mode: &str) -> &'static str {
+        match nav_mode {
+            "meta" | "Meta" => "◈",
+            "data" | "Data" => "●",
+            "overlay" | "Overlay" => "◐",
+            "query" | "Query" => "◎",
+            "atlas" | "Atlas" => "✦",
+            _ => "○",
+        }
+    }
 }
 
 // =============================================================================

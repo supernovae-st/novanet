@@ -4,7 +4,8 @@ use ratatui::Frame;
 use ratatui::layout::{Constraint, Direction, Layout, Rect};
 use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
-use ratatui::widgets::{Block, Borders, Clear, Paragraph, Wrap};
+#[allow(unused_imports)] // Sparkline used in Batch 4.2
+use ratatui::widgets::{Bar, BarChart, BarGroup, Block, Borders, Clear, Paragraph, Sparkline, Wrap};
 
 use super::app::{App, Focus, NavMode};
 use super::data::{ArcDirection, TreeItem};
@@ -145,6 +146,164 @@ const STYLE_ARC_FAMILY: Style = Style::new().fg(COLOR_ARC_FAMILY);
 
 /// Bright dim text style.
 const STYLE_BRIGHT_DIM: Style = Style::new().fg(COLOR_BRIGHT_DIM);
+
+// =============================================================================
+// EMPTY STATE RENDERING
+// =============================================================================
+
+/// Types of empty states that can be displayed.
+/// Some variants are defined for future use in error handling paths.
+#[derive(Debug, Clone, Copy)]
+#[allow(dead_code)] // Variants used incrementally as error paths are implemented
+pub enum EmptyStateKind {
+    /// Neo4j connection failed
+    NoConnection,
+    /// Database has no node kinds
+    NoKinds,
+    /// Query returned no results
+    NoResults,
+    /// Kind has no instances
+    NoInstances,
+    /// Loading data (with animation)
+    Loading,
+}
+
+impl EmptyStateKind {
+    /// Get the icon for this empty state.
+    fn icon(&self) -> &'static str {
+        match self {
+            EmptyStateKind::NoConnection => "⚠",
+            EmptyStateKind::NoKinds => "📭",
+            EmptyStateKind::NoResults => "🔍",
+            EmptyStateKind::NoInstances => "📋",
+            EmptyStateKind::Loading => "⏳",
+        }
+    }
+
+    /// Get the title for this empty state.
+    fn title(&self) -> &'static str {
+        match self {
+            EmptyStateKind::NoConnection => "Neo4j Not Connected",
+            EmptyStateKind::NoKinds => "No Node Kinds Found",
+            EmptyStateKind::NoResults => "No Results",
+            EmptyStateKind::NoInstances => "No Instances",
+            EmptyStateKind::Loading => "Loading…",
+        }
+    }
+
+    /// Get the description lines for this empty state.
+    fn description(&self) -> Vec<&'static str> {
+        match self {
+            EmptyStateKind::NoConnection => vec![
+                "Unable to reach bolt://localhost:7687",
+                "",
+                "Try:",
+                "  • pnpm infra:up",
+                "  • Check Neo4j credentials",
+            ],
+            EmptyStateKind::NoKinds => vec![
+                "The taxonomy tree is empty.",
+                "",
+                "Run:",
+                "  • cargo run -- schema generate",
+                "  • cargo run -- db seed",
+            ],
+            EmptyStateKind::NoResults => vec![
+                "No nodes match your current filter.",
+                "",
+                "Try:",
+                "  • Remove filters with 'c'",
+                "  • Switch modes with 1-5",
+            ],
+            EmptyStateKind::NoInstances => vec![
+                "This Kind has no data instances yet.",
+                "",
+                "Create one with:",
+                "  cargo run -- node create --kind=<Kind>",
+            ],
+            EmptyStateKind::Loading => vec!["Fetching data from Neo4j…"],
+        }
+    }
+
+    /// Get the hint text for this empty state.
+    fn hint(&self) -> &'static str {
+        match self {
+            EmptyStateKind::NoConnection => "Press 'r' to retry",
+            EmptyStateKind::NoKinds => "Press 'q' to quit",
+            EmptyStateKind::NoResults => "Press '1' for Meta mode",
+            EmptyStateKind::NoInstances => "Press Esc to go back",
+            EmptyStateKind::Loading => "",
+        }
+    }
+}
+
+/// Render an empty state message in a centered box.
+fn render_empty_state(f: &mut Frame, area: Rect, kind: EmptyStateKind, tick: u16) {
+    // Calculate centered box dimensions
+    let box_width = 50.min(area.width.saturating_sub(4));
+    let box_height = 12.min(area.height.saturating_sub(2));
+
+    if box_width < 20 || box_height < 6 {
+        // Area too small for empty state
+        return;
+    }
+
+    let x = (area.width.saturating_sub(box_width)) / 2 + area.x;
+    let y = (area.height.saturating_sub(box_height)) / 2 + area.y;
+    let box_area = Rect::new(x, y, box_width, box_height);
+
+    // Build content lines
+    let mut lines: Vec<Line> = Vec::new();
+
+    // Title with icon
+    let title_icon = kind.icon();
+    let title_text = kind.title();
+
+    // Loading spinner animation
+    let display_icon = if matches!(kind, EmptyStateKind::Loading) {
+        const BRAILLE: &[&str] = &["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"];
+        BRAILLE[(tick / SPINNER_SPEED_DIVISOR as u16) as usize % BRAILLE.len()]
+    } else {
+        title_icon
+    };
+
+    lines.push(Line::from(vec![
+        Span::styled(format!("  {} ", display_icon), STYLE_HIGHLIGHT),
+        Span::styled(title_text, Style::default().fg(Color::White).add_modifier(Modifier::BOLD)),
+    ]));
+
+    lines.push(Line::from(""));
+
+    // Description lines
+    for desc_line in kind.description() {
+        lines.push(Line::from(Span::styled(
+            format!("  {}", desc_line),
+            STYLE_DESC,
+        )));
+    }
+
+    // Hint (if any)
+    let hint = kind.hint();
+    if !hint.is_empty() {
+        lines.push(Line::from(""));
+        lines.push(Line::from(Span::styled(
+            format!("  {}", hint),
+            STYLE_INFO,
+        )));
+    }
+
+    // Render block with border
+    let block = Block::default()
+        .borders(Borders::ALL)
+        .border_style(Style::default().fg(COLOR_UNFOCUSED_BORDER))
+        .style(Style::default().bg(COLOR_OVERLAY_BG));
+
+    let paragraph = Paragraph::new(lines).block(block);
+
+    // Clear background and render
+    f.render_widget(Clear, box_area);
+    f.render_widget(paragraph, box_area);
+}
 
 /// Safely truncate a UTF-8 string to N characters (not bytes).
 /// Appends "..." if truncated.
@@ -354,6 +513,55 @@ fn render_main_narrow(f: &mut Frame, area: Rect, app: &mut App) {
     render_yaml_panel(f, v_chunks[2], app);
 }
 
+/// Create styled spans with fuzzy match highlighting.
+/// Matched character positions are shown with a highlight background.
+fn highlight_matches(text: &str, matches: Option<&[u32]>, base_color: Color) -> Vec<Span<'static>> {
+    let Some(positions) = matches else {
+        return vec![Span::styled(text.to_string(), Style::default().fg(base_color))];
+    };
+
+    if positions.is_empty() {
+        return vec![Span::styled(text.to_string(), Style::default().fg(base_color))];
+    }
+
+    // Build a set of matched positions for O(1) lookup
+    let match_set: std::collections::HashSet<usize> = positions.iter().map(|&p| p as usize).collect();
+
+    let mut spans = Vec::new();
+    let mut current_text = String::new();
+    let mut in_match = false;
+
+    for (i, c) in text.chars().enumerate() {
+        let is_match = match_set.contains(&i);
+
+        if is_match != in_match {
+            // Flush current segment
+            if !current_text.is_empty() {
+                let style = if in_match {
+                    Style::default().fg(Color::Black).bg(Color::Yellow)
+                } else {
+                    Style::default().fg(base_color)
+                };
+                spans.push(Span::styled(std::mem::take(&mut current_text), style));
+            }
+            in_match = is_match;
+        }
+        current_text.push(c);
+    }
+
+    // Flush remaining
+    if !current_text.is_empty() {
+        let style = if in_match {
+            Style::default().fg(Color::Black).bg(Color::Yellow)
+        } else {
+            Style::default().fg(base_color)
+        };
+        spans.push(Span::styled(current_text, style));
+    }
+
+    spans
+}
+
 /// Tree panel: taxonomy hierarchy with scroll and collapse.
 /// Uses box-drawing characters for visual hierarchy.
 fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
@@ -367,6 +575,34 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
     // Calculate visible height (area minus borders)
     let visible_height = area.height.saturating_sub(2) as usize;
     app.tree_height = visible_height;
+
+    // === EMPTY STATE: No node kinds loaded ===
+    let total_kinds: usize = app
+        .tree
+        .realms
+        .iter()
+        .flat_map(|r| r.layers.iter())
+        .map(|l| l.kinds.len())
+        .sum();
+
+    if total_kinds == 0 {
+        // Render empty tree panel with border
+        let block = Block::default()
+            .title(" Taxonomy ")
+            .borders(Borders::ALL)
+            .border_style(Style::default().fg(border_color));
+        f.render_widget(block, area);
+
+        // Overlay empty state
+        let inner_area = Rect::new(
+            area.x + 1,
+            area.y + 1,
+            area.width.saturating_sub(2),
+            area.height.saturating_sub(2),
+        );
+        render_empty_state(f, inner_area, EmptyStateKind::NoKinds, app.tick);
+        return;
+    }
 
     // === FILTERED DATA MODE: Show only instances of selected Kind ===
     if let Some(kind_key) = app.get_filter_kind() {
@@ -389,6 +625,7 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
     // Helper to create a tree line with box-drawing
     // line_color: color for tree prefix (│├└ characters)
     // text_color: color for icon and text
+    // match_positions: optional fuzzy match positions for highlighting
     let make_line = |idx: usize,
                      cursor: usize,
                      focused: bool,
@@ -396,7 +633,8 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                      icon: &str,
                      text: String,
                      line_color: Color,
-                     text_color: Color|
+                     text_color: Color,
+                     match_positions: Option<&[u32]>|
      -> Line {
         let is_cursor = idx == cursor;
         let cursor_char = if is_cursor { "›" } else { " " };
@@ -411,15 +649,17 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
             ))
         } else {
             // Split into spans: tree_prefix colored, text colored differently
-            let mut spans = Vec::with_capacity(4);
+            let mut spans = Vec::with_capacity(6);
             spans.push(Span::styled(cursor_char, Style::default()));
             if !tree_prefix.is_empty() {
                 spans.push(Span::styled(tree_prefix.to_string(), Style::default().fg(line_color)));
             }
             spans.push(Span::styled(
-                format!("{}{}{}", icon, icon_space, text),
+                format!("{}{}", icon, icon_space),
                 Style::default().fg(text_color),
             ));
+            // Apply fuzzy match highlighting to text if positions provided
+            spans.extend(highlight_matches(&text, match_positions, text_color));
             Line::from(spans)
         }
     };
@@ -447,6 +687,7 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
         format!("Node Kinds ({})", kinds_count),
         Color::Magenta, // line_color (not used - no prefix)
         Color::Magenta, // text_color
+        app.search_matches.get(&idx).map(|v| v.as_slice()),
     ));
     idx += 1;
 
@@ -470,6 +711,7 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                 format!("{} {}", realm.icon, realm.display_name),
                 Color::Magenta, // line_color: parent section color
                 realm_color,    // text_color
+                app.search_matches.get(&idx).map(|v| v.as_slice()),
             ));
             idx += 1;
 
@@ -528,6 +770,7 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                         display_name,
                         realm_color, // line_color: parent realm color
                         text_color,  // text_color (grayed if empty in Data mode)
+                        app.search_matches.get(&idx).map(|v| v.as_slice()),
                     ));
                     idx += 1;
 
@@ -600,6 +843,7 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                 display_text,
                                 layer_color,     // line_color: parent layer color
                                 kind_text_color, // text_color (grayed if empty)
+                                app.search_matches.get(&idx).map(|v| v.as_slice()),
                             ));
                             idx += 1;
 
@@ -714,6 +958,7 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
         format!("Arcs ({})", arcs_count),
         Color::Yellow, // line_color (not used - no prefix)
         Color::Yellow, // text_color
+        app.search_matches.get(&idx).map(|v| v.as_slice()),
     ));
     idx += 1;
 
@@ -734,6 +979,7 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                 format!("{} ({})", family.display_name, family.arc_kinds.len()),
                 Color::Yellow,    // line_color: parent section color
                 COLOR_ARC_FAMILY, // text_color
+                app.search_matches.get(&idx).map(|v| v.as_slice()),
             ));
             idx += 1;
 
@@ -751,6 +997,7 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                         arc_kind.display_name.clone(),
                         COLOR_ARC_FAMILY, // line_color: parent family color
                         COLOR_DESC_TEXT,  // text_color
+                        app.search_matches.get(&idx).map(|v| v.as_slice()),
                     ));
                     idx += 1;
                 }
@@ -965,6 +1212,7 @@ fn render_filtered_instances(
 }
 
 /// Info panel: displays metadata for selected item with independent scroll.
+/// Shows a BarChart when on a Realm item.
 fn render_info_panel(f: &mut Frame, area: Rect, app: &mut App) {
     let focused = app.focus == Focus::Info;
     let border_color = if focused {
@@ -973,6 +1221,42 @@ fn render_info_panel(f: &mut Frame, area: Rect, app: &mut App) {
         COLOR_UNFOCUSED_BORDER
     };
 
+    // Check if we should show a chart (Realm or Layer item)
+    let show_bar_chart = matches!(app.current_item(), Some(TreeItem::Realm(_)));
+    let show_sparkline = matches!(app.current_item(), Some(TreeItem::Layer(_, _)));
+
+    if show_bar_chart && area.height > 12 {
+        // Split area: top for text, bottom for bar chart
+        let chunks = Layout::default()
+            .direction(Direction::Vertical)
+            .constraints([Constraint::Min(6), Constraint::Length(8)])
+            .split(area);
+
+        // Render text info in top chunk
+        render_info_text(f, chunks[0], app, focused, border_color);
+
+        // Render bar chart in bottom chunk
+        render_realm_bar_chart(f, chunks[1], app);
+    } else if show_sparkline && area.height > 10 {
+        // Split area: top for text, bottom for sparkline
+        let chunks = Layout::default()
+            .direction(Direction::Vertical)
+            .constraints([Constraint::Min(6), Constraint::Length(5)])
+            .split(area);
+
+        // Render text info in top chunk
+        render_info_text(f, chunks[0], app, focused, border_color);
+
+        // Render sparkline in bottom chunk
+        render_layer_sparkline(f, chunks[1], app);
+    } else {
+        // Normal text-only info panel
+        render_info_text(f, area, app, focused, border_color);
+    }
+}
+
+/// Render the text portion of the info panel.
+fn render_info_text(f: &mut Frame, area: Rect, app: &mut App, focused: bool, border_color: Color) {
     // Build info lines
     let all_lines = build_info_lines(app);
 
@@ -1011,10 +1295,61 @@ fn render_info_panel(f: &mut Frame, area: Rect, app: &mut App) {
             STYLE_DIM,
         ))
         .borders(Borders::ALL)
-        .border_style(Style::default().fg(border_color));
+        .border_style(Style::default().fg(if focused {
+            Color::Cyan
+        } else {
+            border_color
+        }));
 
     let paragraph = Paragraph::new(lines).block(block);
     f.render_widget(paragraph, area);
+}
+
+/// Render a bar chart showing kinds per layer for the selected Realm.
+fn render_realm_bar_chart(f: &mut Frame, area: Rect, app: &App) {
+    let Some(TreeItem::Realm(realm)) = app.current_item() else {
+        return;
+    };
+
+    // Build bar data from layers
+    let bars: Vec<Bar> = realm
+        .layers
+        .iter()
+        .map(|layer| {
+            let count = layer.kinds.len() as u64;
+            // Use first 3 chars of layer name as label
+            let label = if layer.display_name.len() > 4 {
+                layer.display_name[..4].to_string()
+            } else {
+                layer.display_name.clone()
+            };
+            Bar::default()
+                .value(count)
+                .label(Line::from(label))
+                .style(Style::default().fg(hex_to_color(&layer.color)))
+        })
+        .collect();
+
+    if bars.is_empty() {
+        return;
+    }
+
+    let bar_group = BarGroup::default().bars(&bars);
+
+    let chart = BarChart::default()
+        .block(
+            Block::default()
+                .title(Span::styled(" Kinds/Layer ", STYLE_DIM))
+                .borders(Borders::ALL)
+                .border_style(Style::default().fg(COLOR_UNFOCUSED_BORDER)),
+        )
+        .data(bar_group)
+        .bar_width(5)
+        .bar_gap(1)
+        .value_style(Style::default().fg(Color::White).add_modifier(Modifier::BOLD))
+        .label_style(Style::default().fg(Color::Gray));
+
+    f.render_widget(chart, area);
 }
 
 /// Graph panel: Displays Neo4j relationships for the selected Kind or Instance.
@@ -2430,62 +2765,76 @@ fn highlight_yaml_value(value: &str) -> Span<'static> {
     Span::styled(value.to_string(), STYLE_YAML_STRING)
 }
 
-/// Status bar: stats + shortcuts.
+/// Status bar: enriched with mode indicator, breadcrumb, shortcuts, spinner.
 fn render_status(f: &mut Frame, area: Rect, app: &App) {
+    let theme = &app.theme;
+
+    // Mode indicator with icon and color
+    let mode_label = app.mode.label();
+    let mode_icon = theme.nav_mode_icon(mode_label);
+    let mode_style = theme.nav_mode_style(mode_label);
+
+    // Breadcrumb (truncated if too long)
+    let breadcrumb = app.current_breadcrumb();
+    let max_breadcrumb_len = (area.width as usize).saturating_sub(60).min(40);
+    let breadcrumb_display = if breadcrumb.len() > max_breadcrumb_len {
+        format!("…{}", &breadcrumb[breadcrumb.len().saturating_sub(max_breadcrumb_len)..])
+    } else {
+        breadcrumb
+    };
+
+    // Contextual shortcuts based on mode and focus
+    let shortcuts = match app.mode {
+        NavMode::Atlas => "j/k:nav  1-4:modes  /:help",
+        NavMode::Data => "j/k:nav  h/l:toggle  0:hide∅  /:help",
+        NavMode::Query => "j/k:nav  f:filter  /:help",
+        _ => match app.focus {
+            Focus::Tree => "j/k:nav  h/l:toggle  H/L:all  /:help",
+            Focus::Yaml | Focus::Info => "j/k:scroll  d/u:page  g/G:jump",
+            Focus::Graph => "Tab:panel  1-5:modes",
+        },
+    };
+
+    // Build status line spans
+    let mut spans = vec![
+        // Mode indicator: [◈ META]
+        Span::raw(" "),
+        Span::styled(format!("{} {}", mode_icon, mode_label.to_uppercase()), mode_style),
+        Span::styled(" │ ", STYLE_SEPARATOR),
+        // Breadcrumb
+        Span::styled(breadcrumb_display, STYLE_HINT),
+    ];
+
+    // Loading spinner (if pending load)
+    if app.has_pending_load() {
+        spans.push(Span::styled(" │ ", STYLE_SEPARATOR));
+        spans.push(Span::styled(
+            format!("{} Loading…", app.spinner_frame()),
+            Style::default().fg(Color::Yellow),
+        ));
+    }
+
+    // Spacer to push shortcuts to the right
+    spans.push(Span::raw("  "));
+
+    // Stats (condensed: nodes·arcs | kinds·arc-kinds)
     let stats = &app.tree.stats;
+    spans.push(Span::styled(
+        format!(
+            "{}n·{}a │ {}K·{}A",
+            stats.node_count, stats.arc_count, stats.kind_count, stats.arc_kind_count
+        ),
+        STYLE_MUTED,
+    ));
 
-    // Focus indicator
-    let focus_label = match app.focus {
-        Focus::Tree => "Tree",
-        Focus::Info => "Info",
-        Focus::Graph => "Graph",
-        Focus::Yaml => "YAML",
-    };
+    spans.push(Span::styled(" │ ", STYLE_SEPARATOR));
 
-    // Layout indicator
-    let layout_mode = LayoutMode::detect(area.width);
-    let layout_label = match layout_mode {
-        LayoutMode::Wide => "3-col",
-        LayoutMode::Narrow => "stack",
-    };
+    // Contextual shortcuts
+    spans.push(Span::styled(shortcuts, STYLE_DIM));
 
-    let status = Line::from(vec![
-        Span::styled(
-            format!(" {} nodes", stats.node_count),
-            STYLE_MUTED,
-        ),
-        Span::styled(" · ", STYLE_SEPARATOR),
-        Span::styled(
-            format!("{} arcs", stats.arc_count),
-            STYLE_MUTED,
-        ),
-        Span::styled(" · ", STYLE_SEPARATOR),
-        Span::styled(
-            format!("{} Node Kinds", stats.kind_count),
-            STYLE_MUTED,
-        ),
-        Span::styled(" · ", STYLE_SEPARATOR),
-        Span::styled(
-            format!("{} Arcs", stats.arc_kind_count),
-            STYLE_MUTED,
-        ),
-        Span::raw("        "),
-        Span::styled(
-            format!("[{}]", focus_label),
-            STYLE_INFO,
-        ),
-        Span::raw("  "),
-        Span::styled(
-            format!("[{}]", layout_label),
-            STYLE_HINT,
-        ),
-        Span::raw("   "),
-        Span::styled(
-            "↑↓:scroll  Tab:panel  ",
-            STYLE_DIM,
-        ),
-    ]);
+    spans.push(Span::raw(" "));
 
+    let status = Line::from(spans);
     let paragraph = Paragraph::new(status).style(Style::default().bg(Color::Rgb(15, 15, 20)));
 
     f.render_widget(paragraph, area);
