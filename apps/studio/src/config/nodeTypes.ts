@@ -174,7 +174,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   // ==========================================================================
 
   // ==========================================================================
-  // GLOBAL REALM — CONFIG LAYER (1 node)
+  // GLOBAL REALM — CONFIG LAYER (7 nodes) - v10.7: added Culture, Market
   // ==========================================================================
   Locale: {
     type: 'Locale',
@@ -183,6 +183,24 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#10b981',
     colorClass: 'bg-emerald-500',
     size: 20,
+    layer: 'config',
+  },
+  Culture: {
+    type: 'Culture',
+    label: 'Culture',
+    icon: '🏺',
+    color: '#d97706',
+    colorClass: 'bg-amber-600',
+    size: 16,
+    layer: 'config',
+  },
+  Market: {
+    type: 'Market',
+    label: 'Market',
+    icon: '📊',
+    color: '#059669',
+    colorClass: 'bg-emerald-600',
+    size: 16,
     layer: 'config',
   },
 

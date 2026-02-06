@@ -1,6 +1,6 @@
 // packages/core/src/config/nodeIcons.ts
 // Presentation layer configuration for node icons
-// v10.6.0 — 2-Realm Architecture (global + tenant)
+// v10.7.0 — 7-node locale knowledge architecture (global + tenant)
 
 import type { NodeType } from '../types/nodes.js';
 
@@ -10,12 +10,14 @@ import type { NodeType } from '../types/nodes.js';
  * Icons are now in presentation layer, not data model.
  */
 export const NODE_ICONS: Record<NodeType, string> = {
-  // GLOBAL — config (5)
+  // GLOBAL — config (7) - v10.7: added Culture, Market
   Locale: '🌍',
   Formatting: '📝',
   Slugification: '🔗',
   Adaptation: '🔄',
   Style: '🎭',
+  Culture: '🏺',
+  Market: '📊',
 
   // GLOBAL — locale-knowledge (12) — Sets + Atoms
   TermSet: '📚',

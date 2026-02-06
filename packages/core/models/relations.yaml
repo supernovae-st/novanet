@@ -100,6 +100,21 @@ relations:
     cardinality: one_to_one
     llm_context: "Locale has exactly one style configuration."
 
+  # v10.7: Config Tier (7-node locale knowledge architecture)
+  - type: HAS_CULTURE
+    family: ownership
+    source: Locale
+    target: Culture
+    cardinality: one_to_one
+    llm_context: "Locale has exactly one culture configuration node."
+
+  - type: HAS_MARKET
+    family: ownership
+    source: Locale
+    target: Market
+    cardinality: one_to_one
+    llm_context: "Locale has exactly one market intelligence configuration node."
+
   # Semantic Tier
   - type: HAS_TERMS
     family: ownership
@@ -128,7 +143,7 @@ relations:
       - usage
     llm_context: "Locale has multiple pattern sets, one per usage (cta, headlines, body, social)."
 
-  - type: HAS_CULTURE
+  - type: HAS_CULTURE_SET
     family: ownership
     source: Locale
     target: CultureSet

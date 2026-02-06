@@ -26,7 +26,7 @@ This diagram shows the complete NovaNet graph schema with all 42 node types and 
 ```mermaid
 flowchart TB
   %% NovaNet Graph v10.6.0
-  %% Generated: 46 nodes, 100 arcs
+  %% Generated: 48 nodes, 102 arcs
   %% Source: 42 node YAMLs + relations.yaml + taxonomy.yaml
 
   %% Trait styling (node_trait)
@@ -40,8 +40,10 @@ flowchart TB
     direction TB
     subgraph GLOBAL_config["Configuration"]
       Adaptation["🟣 Adaptation"]
+      Culture["🟣 Culture"]
       Formatting["🟣 Formatting"]
       Locale["🔵 Locale"]
+      Market["🟣 Market"]
       Slugification["🟣 Slugification"]
       Style["🟣 Style"]
     end
@@ -149,13 +151,15 @@ flowchart TB
   Locale -.->|FALLBACK_TO| Locale
   Locale -->|HAS_ADAPTATION| Adaptation
   Locale -->|HAS_AUDIENCE| AudienceSet
-  Locale -->|HAS_CULTURE| CultureSet
+  Locale -->|HAS_CULTURE| Culture
+  Locale -->|HAS_CULTURE_SET| CultureSet
   Locale -->|HAS_EXPRESSIONS| ExpressionSet
   Locale -->|HAS_FORMATTING| Formatting
   Locale -.->|HAS_LOCALIZED_CONTENT| BlockL10n
   Locale -.->|HAS_LOCALIZED_CONTENT| EntityL10n
   Locale -.->|HAS_LOCALIZED_CONTENT| PageL10n
   Locale -.->|HAS_LOCALIZED_CONTENT| ProjectL10n
+  Locale -->|HAS_MARKET| Market
   Locale -->|HAS_PATTERNS| PatternSet
   Locale -->|HAS_SEO_KEYWORDS| SEOKeyword
   Locale -->|HAS_SLUGIFICATION| Slugification
@@ -211,11 +215,11 @@ flowchart TB
   SEOMiningRun --o|SEO_MINES| SEOKeyword
 
   %% Arc colors by family
-  linkStyle 10,11,12,15,16,17,18,19,30,31,32,34,35,36,55,56,57,58,59,60,74,77,80,81,82,83,84,94,95,96,97 stroke:#8b5cf6,stroke-width:2px
-  linkStyle 2,3,9,13,14,22,23,27,28,29,33,37,43,44,45,46,53,54,63,64,76,78,79,87,88,91,92,93 stroke:#22c55e,stroke-width:2px
-  linkStyle 98,99 stroke:#ec4899,stroke-width:2px
-  linkStyle 0,4,5,6,7,20,21,38,39,40,41,42,47,48,49,50,51,52,62,65,66,67,69,70,75,85,86,89,90 stroke:#3b82f6,stroke-width:2px
-  linkStyle 1,8,24,25,26,61,68,71,72,73 stroke:#f97316,stroke-width:2px
+  linkStyle 10,11,12,15,16,17,18,19,30,31,32,34,35,36,57,58,59,60,61,62,76,79,82,83,84,85,86,96,97,98,99 stroke:#8b5cf6,stroke-width:2px
+  linkStyle 2,3,9,13,14,22,23,27,28,29,33,37,44,45,46,47,55,56,65,66,78,80,81,89,90,93,94,95 stroke:#22c55e,stroke-width:2px
+  linkStyle 100,101 stroke:#ec4899,stroke-width:2px
+  linkStyle 0,4,5,6,7,20,21,38,39,40,41,42,43,48,49,50,51,52,53,54,64,67,68,69,71,72,77,87,88,91,92 stroke:#3b82f6,stroke-width:2px
+  linkStyle 1,8,24,25,26,63,70,73,74,75 stroke:#f97316,stroke-width:2px
 
   %% Class assignments
   class Adaptation knowledge
@@ -231,6 +235,7 @@ flowchart TB
   class BrandIdentity invariant
   class ChannelSurface invariant
   class ContentSlot invariant
+  class Culture knowledge
   class CultureRef knowledge
   class CultureSet knowledge
   class Entity invariant
@@ -241,6 +246,7 @@ flowchart TB
   class Formatting knowledge
   class GenerationJob job
   class Locale invariant
+  class Market knowledge
   class Organization invariant
   class OutputArtifact derived
   class Page invariant

@@ -1,17 +1,17 @@
 // src/types/nodes.ts
-// Single source of truth for all 46 NovaNet node types
-// v10.6.0 — 2-Realm Architecture (GLOBAL / TENANT)
+// Single source of truth for all 48 NovaNet node types
+// v10.7.0 — 7-node locale knowledge architecture (GLOBAL / TENANT)
 
 // =============================================================================
-// NODE TYPES (46 nodes across 2 realms)
+// NODE TYPES (48 nodes across 2 realms)
 // =============================================================================
 
 export const NODE_TYPES = [
   // ═══════════════════════════════════════════════════════════════════════════
-  // GLOBAL REALM (23 nodes)
+  // GLOBAL REALM (25 nodes)
   // ═══════════════════════════════════════════════════════════════════════════
-  // config (5)
-  'Locale', 'Formatting', 'Slugification', 'Adaptation', 'Style',
+  // config (7) - v10.7: added Culture, Market
+  'Locale', 'Formatting', 'Slugification', 'Adaptation', 'Style', 'Culture', 'Market',
   // locale-knowledge (12) — Sets + Atoms
   'TermSet', 'ExpressionSet', 'PatternSet', 'CultureSet', 'TabooSet', 'AudienceSet',
   'Term', 'Expression', 'Pattern', 'CultureRef', 'Taboo', 'AudienceTrait',
@@ -62,13 +62,15 @@ export interface KindMeta {
 
 export const KIND_META: Record<NodeType, KindMeta> = {
   // ═══════════════════════════════════════════════════════════════════════════
-  // GLOBAL REALM — config (5)
+  // GLOBAL REALM — config (7) - v10.7: added Culture, Market
   // ═══════════════════════════════════════════════════════════════════════════
   Locale:        { realm: 'global', layer: 'config', trait: 'invariant' },
   Formatting:    { realm: 'global', layer: 'config', trait: 'knowledge' },
   Slugification: { realm: 'global', layer: 'config', trait: 'knowledge' },
   Adaptation:    { realm: 'global', layer: 'config', trait: 'knowledge' },
   Style:         { realm: 'global', layer: 'config', trait: 'knowledge' },
+  Culture:       { realm: 'global', layer: 'config', trait: 'knowledge' },
+  Market:        { realm: 'global', layer: 'config', trait: 'knowledge' },
 
   // GLOBAL REALM — locale-knowledge (12) — Sets + Atoms
   TermSet:       { realm: 'global', layer: 'locale-knowledge', trait: 'knowledge' },

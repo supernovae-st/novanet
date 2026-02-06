@@ -1,6 +1,6 @@
 // packages/core/src/graph/generator.ts
 // Schema graph generator - Creates flat and hierarchical schema representations
-// v10.6.0 — 2-Realm Architecture (GLOBAL / TENANT)
+// v10.7.0 — 7-node locale knowledge architecture (GLOBAL / TENANT)
 
 import { NODE_TYPES, NODE_REALMS, NODE_TRAITS, type NodeType, type Realm } from '../types/nodes.js';
 import { RelationRegistry } from '../schemas/relations.schema.js';
@@ -18,14 +18,16 @@ import { REALM_HIERARCHY } from './hierarchy.js';
  */
 const NODE_LABELS: Record<NodeType, string> = {
   // ═══════════════════════════════════════════════════════════════════════════
-  // GLOBAL REALM (23 nodes)
+  // GLOBAL REALM (25 nodes)
   // ═══════════════════════════════════════════════════════════════════════════
-  // config (5)
+  // config (7) - v10.7: added Culture, Market
   Locale: 'Locale',
   Formatting: 'Formatting',
   Slugification: 'Slugification',
   Adaptation: 'Adaptation',
   Style: 'Style',
+  Culture: 'Culture',
+  Market: 'Market',
 
   // locale-knowledge (12) — Sets + Atoms
   TermSet: 'Term Set',
