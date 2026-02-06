@@ -10,6 +10,23 @@ use super::atlas::AtlasState;
 use super::data::{
     ArcKindDetails, KindArcsData, LayerDetails, RealmDetails, TaxonomyTree, TreeItem,
 };
+use super::theme::Theme;
+
+// =============================================================================
+// CONSTANTS
+// =============================================================================
+
+/// Number of items to scroll with page up/down (d/u keys).
+pub const PAGE_SCROLL_AMOUNT: usize = 10;
+
+/// Minimum visible lines to keep above max scroll position in YAML panel.
+pub const YAML_SCROLL_MARGIN: usize = 10;
+
+/// Minimum visible lines to keep above max scroll position in Info panel.
+pub const INFO_SCROLL_MARGIN: usize = 5;
+
+/// Default tree height (updated by UI on render).
+pub const DEFAULT_TREE_HEIGHT: usize = 20;
 
 /// Navigation mode (matches Studio).
 /// Order: 1:Meta 2:Data 3:Overlay 4:Query 5:Atlas
@@ -124,6 +141,8 @@ pub struct GraphNode {
 /// Main app state.
 #[allow(dead_code)]
 pub struct App {
+    /// Cached theme (color mode detected once at startup).
+    pub theme: Theme,
     pub mode: NavMode,
     pub focus: Focus,
     pub tree_cursor: usize,
@@ -183,11 +202,12 @@ pub struct App {
 impl App {
     pub fn new(tree: TaxonomyTree, root_path: String) -> Self {
         let mut app = Self {
+            theme: Theme::new(), // Detect color mode once at startup
             mode: NavMode::Meta,
             focus: Focus::Tree,
             tree_cursor: 0,
             tree_scroll: 0,
-            tree_height: 20, // Default, updated by UI
+            tree_height: DEFAULT_TREE_HEIGHT,
             tree,
             search_active: false,
             search_query: String::new(),
@@ -780,6 +800,47 @@ impl App {
                 true
             }
 
+            // Jump to first/last (vim-style: g/G)
+            KeyCode::Char('g') => {
+                match self.focus {
+                    Focus::Tree => {
+                        self.tree_cursor = 0;
+                        self.tree_scroll = 0;
+                        self.load_yaml_for_current();
+                        self.request_instance_load_for_current();
+                    }
+                    Focus::Info => {
+                        self.info_scroll = 0;
+                    }
+                    Focus::Graph => {} // Display-only
+                    Focus::Yaml => {
+                        self.yaml_scroll = 0;
+                    }
+                }
+                true
+            }
+            KeyCode::Char('G') => {
+                match self.focus {
+                    Focus::Tree => {
+                        let max = self.current_item_count().saturating_sub(1);
+                        self.tree_cursor = max;
+                        self.ensure_cursor_visible();
+                        self.load_yaml_for_current();
+                        self.request_instance_load_for_current();
+                    }
+                    Focus::Info => {
+                        let max_scroll = self.info_line_count.saturating_sub(INFO_SCROLL_MARGIN);
+                        self.info_scroll = max_scroll;
+                    }
+                    Focus::Graph => {} // Display-only
+                    Focus::Yaml => {
+                        let max_scroll = self.yaml_line_count.saturating_sub(YAML_SCROLL_MARGIN);
+                        self.yaml_scroll = max_scroll;
+                    }
+                }
+                true
+            }
+
             // Navigation: ↑↓ and j/k scroll the focused panel (Graph is display-only)
             KeyCode::Up | KeyCode::Char('k') => {
                 match self.focus {
@@ -817,14 +878,14 @@ impl App {
                         }
                     }
                     Focus::Info => {
-                        let max_scroll = self.info_line_count.saturating_sub(5);
+                        let max_scroll = self.info_line_count.saturating_sub(INFO_SCROLL_MARGIN);
                         if self.info_scroll < max_scroll {
                             self.info_scroll += 1;
                         }
                     }
                     Focus::Graph => {} // Display-only panel, no navigation
                     Focus::Yaml => {
-                        let max_scroll = self.yaml_line_count.saturating_sub(10);
+                        let max_scroll = self.yaml_line_count.saturating_sub(YAML_SCROLL_MARGIN);
                         if self.yaml_scroll < max_scroll {
                             self.yaml_scroll += 1;
                         }
@@ -838,19 +899,19 @@ impl App {
                 match self.focus {
                     Focus::Tree => {
                         let max = self.current_item_count().saturating_sub(1);
-                        self.tree_cursor = (self.tree_cursor + 10).min(max);
+                        self.tree_cursor = (self.tree_cursor + PAGE_SCROLL_AMOUNT).min(max);
                         self.ensure_cursor_visible();
                         self.load_yaml_for_current();
                         self.request_instance_load_for_current();
                     }
                     Focus::Info => {
-                        let max_scroll = self.info_line_count.saturating_sub(5);
-                        self.info_scroll = (self.info_scroll + 10).min(max_scroll);
+                        let max_scroll = self.info_line_count.saturating_sub(INFO_SCROLL_MARGIN);
+                        self.info_scroll = (self.info_scroll + PAGE_SCROLL_AMOUNT).min(max_scroll);
                     }
                     Focus::Graph => {} // Display-only panel, no navigation
                     Focus::Yaml => {
-                        let max_scroll = self.yaml_line_count.saturating_sub(10);
-                        self.yaml_scroll = (self.yaml_scroll + 10).min(max_scroll);
+                        let max_scroll = self.yaml_line_count.saturating_sub(YAML_SCROLL_MARGIN);
+                        self.yaml_scroll = (self.yaml_scroll + PAGE_SCROLL_AMOUNT).min(max_scroll);
                     }
                 }
                 true
@@ -858,17 +919,17 @@ impl App {
             KeyCode::Char('u') => {
                 match self.focus {
                     Focus::Tree => {
-                        self.tree_cursor = self.tree_cursor.saturating_sub(10);
+                        self.tree_cursor = self.tree_cursor.saturating_sub(PAGE_SCROLL_AMOUNT);
                         self.ensure_cursor_visible();
                         self.load_yaml_for_current();
                         self.request_instance_load_for_current();
                     }
                     Focus::Info => {
-                        self.info_scroll = self.info_scroll.saturating_sub(10);
+                        self.info_scroll = self.info_scroll.saturating_sub(PAGE_SCROLL_AMOUNT);
                     }
                     Focus::Graph => {} // Display-only panel, no navigation
                     Focus::Yaml => {
-                        self.yaml_scroll = self.yaml_scroll.saturating_sub(10);
+                        self.yaml_scroll = self.yaml_scroll.saturating_sub(PAGE_SCROLL_AMOUNT);
                     }
                 }
                 true
