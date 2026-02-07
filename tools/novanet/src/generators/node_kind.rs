@@ -403,7 +403,7 @@ mod tests {
 
     #[test]
     fn schema_hint_no_properties() {
-        let node = make_node("Test", "project", "foundation", LocaleBehavior::Invariant);
+        let node = make_node("Test", "tenant", "foundation", LocaleBehavior::Invariant);
         assert_eq!(build_schema_hint(&node), "");
     }
 
@@ -411,7 +411,7 @@ mod tests {
     fn schema_hint_with_properties() {
         let node = make_node_with_props(
             "Page",
-            "project",
+            "tenant",
             "structure",
             LocaleBehavior::Invariant,
             vec![
@@ -457,7 +457,7 @@ mod tests {
         assert_eq!(
             context_budget(&make_node(
                 "PageType",
-                "project",
+                "tenant",
                 "instruction",
                 LocaleBehavior::Invariant
             )),
@@ -477,7 +477,7 @@ mod tests {
         assert_eq!(
             context_budget(&make_node(
                 "Page",
-                "project",
+                "tenant",
                 "structure",
                 LocaleBehavior::Invariant
             )),
@@ -487,7 +487,7 @@ mod tests {
         assert_eq!(
             context_budget(&make_node(
                 "PageL10n",
-                "project",
+                "tenant",
                 "output",
                 LocaleBehavior::Localized
             )),
@@ -526,7 +526,7 @@ mod tests {
         let nodes = vec![
             make_node_with_props(
                 "Page",
-                "project",
+                "tenant",
                 "structure",
                 LocaleBehavior::Invariant,
                 vec![("key", "string", true), ("display_name", "string", true)],
@@ -550,7 +550,7 @@ mod tests {
         assert!(cypher.contains("k_Page.schema_hint = 'display_name (req), key (req)'"));
         assert!(cypher.contains("k_Page.properties = ['key', 'display_name']"));
         assert!(cypher.contains("k_Page.required_properties = ['key', 'display_name']"));
-        assert!(cypher.contains("k_Page.yaml_path = 'node-kinds/project/structure/page.yaml'"));
+        assert!(cypher.contains("k_Page.yaml_path = 'node-kinds/tenant/structure/page.yaml'"));
 
         // Kind node for Locale
         assert!(cypher.contains("MERGE (k_Locale:Meta:Kind {label: 'Locale'})"));
@@ -561,7 +561,7 @@ mod tests {
         assert!(cypher.contains("MERGE (l)-[:HAS_KIND]->(k)"));
 
         // IN_REALM facet
-        assert!(cypher.contains("(k:Kind {label: 'Page'}), (r:Realm {key: 'project'})"));
+        assert!(cypher.contains("(k:Kind {label: 'Page'}), (r:Realm {key: 'tenant'})"));
         assert!(cypher.contains("MERGE (k)-[:IN_REALM]->(r)"));
 
         // IN_LAYER facet

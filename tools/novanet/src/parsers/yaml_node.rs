@@ -87,7 +87,7 @@ pub struct NodeDef {
     /// Neo4j label (PascalCase), e.g. "Project", "PageL10n".
     pub name: String,
 
-    /// Realm classification (global, project, shared) — explicit in YAML.
+    /// Realm classification (global, tenant) — explicit in YAML.
     pub realm: String,
 
     /// Layer classification (config, knowledge, foundation, etc.) — explicit in YAML.
@@ -160,7 +160,7 @@ pub struct PropertyDef {
 pub struct ParsedNode {
     /// The deserialized node definition.
     pub def: NodeDef,
-    /// Realm from directory: "global", "project", "shared".
+    /// Realm from directory: "global", "tenant".
     pub realm: String,
     /// Layer from directory: "config", "knowledge", "foundation", etc.
     pub layer: String,
@@ -291,18 +291,18 @@ mod tests {
     #[test]
     fn node_trait_deserialize() {
         // Test with v9.5 `trait` field
-        let yaml = "node:\n  name: Test\n  realm: project\n  layer: foundation\n  trait: invariant\n  description: test";
+        let yaml = "node:\n  name: Test\n  realm: tenant\n  layer: foundation\n  trait: invariant\n  description: test";
         let doc: NodeDocument = serde_yaml::from_str(yaml).unwrap();
         assert_eq!(doc.node.node_trait, NodeTrait::Invariant);
         assert_eq!(doc.node.name, "Test");
-        assert_eq!(doc.node.realm, "project");
+        assert_eq!(doc.node.realm, "tenant");
         assert_eq!(doc.node.layer, "foundation");
     }
 
     #[test]
     fn locale_behavior_alias_works() {
         // Test backwards compatibility with v9 `locale_behavior` field
-        let yaml = "node:\n  name: Test\n  realm: project\n  layer: foundation\n  locale_behavior: localized\n  description: test";
+        let yaml = "node:\n  name: Test\n  realm: tenant\n  layer: foundation\n  locale_behavior: localized\n  description: test";
         let doc: NodeDocument = serde_yaml::from_str(yaml).unwrap();
         assert_eq!(doc.node.node_trait, NodeTrait::Localized);
     }
@@ -321,7 +321,7 @@ mod tests {
     #[test]
     fn missing_trait_fails() {
         let yaml =
-            "node:\n  name: Test\n  realm: project\n  layer: foundation\n  description: test";
+            "node:\n  name: Test\n  realm: tenant\n  layer: foundation\n  description: test";
         let result = serde_yaml::from_str::<NodeDocument>(yaml);
         assert!(result.is_err(), "should fail without trait");
         let err_msg = result.unwrap_err().to_string();
@@ -347,7 +347,7 @@ mod tests {
 
     #[test]
     fn invalid_trait_fails() {
-        let yaml = "node:\n  name: Test\n  realm: project\n  layer: foundation\n  trait: banana\n  description: test";
+        let yaml = "node:\n  name: Test\n  realm: tenant\n  layer: foundation\n  trait: banana\n  description: test";
         let result = serde_yaml::from_str::<NodeDocument>(yaml);
         assert!(result.is_err(), "should fail with invalid trait");
     }
@@ -370,7 +370,7 @@ mod tests {
         let yaml = r#"
 node:
   name: Test
-  realm: project
+  realm: tenant
   layer: semantic
   trait: invariant
   description: d
@@ -429,7 +429,7 @@ node:
     #[test]
     fn knowledge_tier_optional() {
         // Non-knowledge nodes don't have knowledge_tier
-        let yaml = "node:\n  name: Project\n  realm: project\n  layer: foundation\n  trait: invariant\n  description: d";
+        let yaml = "node:\n  name: Project\n  realm: tenant\n  layer: foundation\n  trait: invariant\n  description: d";
         let doc: NodeDocument = serde_yaml::from_str(yaml).unwrap();
         assert_eq!(doc.node.knowledge_tier, None);
     }
