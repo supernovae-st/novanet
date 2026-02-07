@@ -838,7 +838,11 @@ logo ──[part_of, 0.85]──> custom-qr-code
 
 ```
 analytics ──[part_of, 0.85]──> smart-link
-tracking ──[part_of, 0.85]──> smart-link
+    ├──[includes]──> click-tracking
+    ├──[includes]──> scan-counting
+    ├──[includes]──> geo-tracking
+    ├──[includes]──> device-detection
+    └──[includes]──> time-series
 contextual-routing ──[part_of, 0.85]──> smart-link
 custom-domain-name ──[part_of, 0.80]──> smart-link
 custom-link-preview ──[part_of, 0.80]──> smart-link
@@ -1922,12 +1926,16 @@ barcode-scanner:
 
 ## Phase 4: Features & Tools (FEATURE/TOOL) — 25 Entities
 
-### 4.1 Platform Features (FEATURE) — 15
+### 4.1 Platform Features (FEATURE) — 20
 
 | Key | Type | Parent | Description |
 |-----|------|--------|-------------|
-| `analytics` | FEATURE | smart-link | Scan/click tracking, stats |
-| `tracking` | FEATURE | smart-link | Visitor tracking, geolocation |
+| `analytics` | FEATURE | smart-link | Umbrella feature for all tracking/stats |
+| `click-tracking` | FEATURE | analytics | Tracks link click events |
+| `scan-counting` | FEATURE | analytics | Counts QR code scans |
+| `geo-tracking` | FEATURE | analytics | Geographic location of scans |
+| `device-detection` | FEATURE | analytics | OS/browser/device info |
+| `time-series` | FEATURE | analytics | Historical data over time |
 | `contextual-routing` | FEATURE | smart-link | OS/device/location redirect |
 | `custom-domain-name` | FEATURE | smart-link | Branded short domains |
 | `custom-link-preview` | FEATURE | smart-link | OG meta customization |
@@ -1970,12 +1978,32 @@ analytics:
   outgoing:
     - [part_of, 0.85] -> smart-link
     - [requires, 0.90] -> short-link
+    - [includes, 0.70] -> click-tracking
+    - [includes, 0.70] -> scan-counting
+    - [includes, 0.70] -> geo-tracking
+    - [includes, 0.70] -> device-detection
+    - [includes, 0.70] -> time-series
 
-tracking:
+click-tracking:
   outgoing:
-    - [part_of, 0.85] -> smart-link
-    - [requires, 0.90] -> short-link
-    - [related_to, 0.70] -> analytics
+    - [part_of, 0.85] -> analytics
+
+scan-counting:
+  outgoing:
+    - [part_of, 0.85] -> analytics
+
+geo-tracking:
+  outgoing:
+    - [part_of, 0.85] -> analytics
+    - [related_to, 0.60] -> device-detection
+
+device-detection:
+  outgoing:
+    - [part_of, 0.85] -> analytics
+
+time-series:
+  outgoing:
+    - [part_of, 0.85] -> analytics
 
 contextual-routing:
   outgoing:
@@ -3114,33 +3142,51 @@ pnpm infra:reset                       # Drop + reseed
 
 ## File Summary
 
-### Files to CREATE
+### Seed File Numbering Convention
+
+```
+00-09: Schema (constraints, taxonomy, kinds, arc-kinds)
+20-29: Global data (locales, slugification, formatting, culture, market, geographic)
+30-39: Tenant foundation (organization, project, project details)  ← EXISTING
+40-49: Entity data (pillars, styles, content-types, features)     ← NEW
+50-59: Entity arcs (generated from YAML)
+90-99: Legacy (deprecated, for reference)
+```
+
+### Files ALREADY EXIST (Infrastructure)
+
+| Path | Content |
+|------|---------|
+| `packages/db/seed/30-org-template.cypher` | ✅ Organization + Project + HAS_PROJECT arc |
+| `packages/db/seed/31-project-qrcode-ai.cypher` | ✅ BrandIdentity + ProjectL10n |
+
+### Files to CREATE (Entity Data)
 
 | Path | Type | Description |
 |------|------|-------------|
 | `packages/core/models/entity-arcs/_schema.yaml` | YAML | Arc file structure |
-| `packages/core/models/entity-arcs/semantic-links.yaml` | YAML | ~500 SEMANTIC_LINK |
+| `packages/core/models/entity-arcs/semantic-links.yaml` | YAML | ~500 typed semantic arcs |
 | `packages/core/models/entity-arcs/subtopic-of.yaml` | YAML | ~275 SUBTOPIC_OF |
 | `packages/core/models/entity-arcs/popular-in.yaml` | YAML | ~50 POPULAR_IN |
-| `packages/db/seed/30-entities-pillars.cypher` | Cypher | 5 pillar entities |
-| `packages/db/seed/31-entities-styles.cypher` | Cypher | 13 style entities |
-| `packages/db/seed/32-entities-content-types.cypher` | Cypher | 58 content types |
-| `packages/db/seed/33-entities-features-tools.cypher` | Cypher | 25 features/tools |
-| `packages/db/seed/34-entities-mediums.cypher` | Cypher | 20 mediums |
-| `packages/db/seed/35-entities-actions.cypher` | Cypher | 15 actions |
-| `packages/db/seed/36-entities-industries.cypher` | Cypher | 25 industries |
-| `packages/db/seed/37-entities-brands.cypher` | Cypher | 25 brands |
-| `packages/db/seed/38-entities-concepts.cypher` | Cypher | 12 concepts |
-| `packages/db/seed/39-entities-misc.cypher` | Cypher | 81 misc entities |
+| `packages/db/seed/40-entities-pillars.cypher` | Cypher | 5 pillar entities |
+| `packages/db/seed/41-entities-styles.cypher` | Cypher | 13 style entities |
+| `packages/db/seed/42-entities-content-types.cypher` | Cypher | 58 content types |
+| `packages/db/seed/43-entities-features-tools.cypher` | Cypher | 30+ features/tools (incl. analytics sub-entities) |
+| `packages/db/seed/44-entities-mediums.cypher` | Cypher | 20 mediums |
+| `packages/db/seed/45-entities-actions.cypher` | Cypher | 15 actions |
+| `packages/db/seed/46-entities-industries.cypher` | Cypher | 25 industries |
+| `packages/db/seed/47-entities-brands.cypher` | Cypher | 25 brands |
+| `packages/db/seed/48-entities-concepts.cypher` | Cypher | 12+ concepts (incl. static/dynamic-qr-code) |
+| `packages/db/seed/49-entities-misc.cypher` | Cypher | Remaining entities |
 | `tools/novanet/src/parsers/entity_arcs.rs` | Rust | YAML parser |
 | `tools/novanet/src/generators/entity_arcs.rs` | Rust | Cypher generator |
 | `tools/novanet/src/commands/entity_arcs.rs` | Rust | CLI command |
 
-### Files ALREADY UPDATED
+### Files ALREADY UPDATED (Schema)
 
 | Path | Status |
 |------|--------|
-| `packages/core/models/node-kinds/tenant/semantic/entity.yaml` | ✅ 13 types, POPULAR_IN |
+| `packages/core/models/node-kinds/tenant/semantic/entity.yaml` | ✅ 13 types, POPULAR_IN, entity_summary |
 | `packages/core/models/node-kinds/tenant/semantic/entity-l10n.yaml` | ✅ TARGETS, ANSWERS |
 
 ### Files to GENERATE

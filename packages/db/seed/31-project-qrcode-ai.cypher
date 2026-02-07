@@ -15,7 +15,7 @@
 // BRAND IDENTITY (invariant - visual/artistic direction)
 // ═══════════════════════════════════════════════════════════════════════════════
 
-MATCH (p:Project {key: "project-qrcode-ai"})
+MATCH (p:Project {key: "qrcode-ai"})
 CREATE (p)-[:HAS_BRAND_IDENTITY]->(bi:BrandIdentity {
   // 1. IDENTIFICATION
   key: "brand-qrcode-ai",
@@ -57,7 +57,7 @@ CREATE (p)-[:HAS_BRAND_IDENTITY]->(bi:BrandIdentity {
 // ═══════════════════════════════════════════════════════════════════════════════
 
 // ProjectL10n: en-US
-MATCH (p:Project {key: "project-qrcode-ai"}), (l:Locale {key: "en-US"})
+MATCH (p:Project {key: "qrcode-ai"}), (l:Locale {key: "en-US"})
 CREATE (p)-[:HAS_L10N]->(pl:ProjectL10n {
   // 1. IDENTIFICATION
   display_name: "QR Code AI",
@@ -95,7 +95,7 @@ CREATE (p)-[:HAS_L10N]->(pl:ProjectL10n {
 CREATE (pl)-[:FOR_LOCALE]->(l);
 
 // ProjectL10n: fr-FR
-MATCH (p:Project {key: "project-qrcode-ai"}), (l:Locale {key: "fr-FR"})
+MATCH (p:Project {key: "qrcode-ai"}), (l:Locale {key: "fr-FR"})
 CREATE (p)-[:HAS_L10N]->(pl:ProjectL10n {
   display_name: "QR Code AI",
   description: "Localisation française de l'identité QR Code AI",
