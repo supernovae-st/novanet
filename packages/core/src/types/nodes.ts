@@ -1,22 +1,25 @@
 // src/types/nodes.ts
-// Single source of truth for all 48 NovaNet node types
-// v10.7.0 — 7-node locale knowledge architecture (GLOBAL / TENANT)
+// Single source of truth for all 63 NovaNet node types
+// v10.9.0 — Typed semantic arcs + GEO layer (GLOBAL / TENANT)
 
 // =============================================================================
-// NODE TYPES (48 nodes across 2 realms)
+// NODE TYPES (63 nodes across 2 realms)
 // =============================================================================
 
 export const NODE_TYPES = [
   // ═══════════════════════════════════════════════════════════════════════════
-  // GLOBAL REALM (25 nodes)
+  // GLOBAL REALM (40 nodes)
   // ═══════════════════════════════════════════════════════════════════════════
-  // config (7) - v10.7: added Culture, Market
+  // config (13) - v10.8: added geographic taxonomy
   'Locale', 'Formatting', 'Slugification', 'Adaptation', 'Style', 'Culture', 'Market',
-  // locale-knowledge (12) — Sets + Atoms
+  'Continent', 'GeoRegion', 'GeoSubRegion', 'IncomeGroup', 'LendingCategory', 'EconomicRegion',
+  // locale-knowledge (18) — Sets + Atoms + Linguistic/Cultural taxonomy
   'TermSet', 'ExpressionSet', 'PatternSet', 'CultureSet', 'TabooSet', 'AudienceSet',
   'Term', 'Expression', 'Pattern', 'CultureRef', 'Taboo', 'AudienceTrait',
-  // seo (6) — Keywords, metrics, mining, comparisons, prepositions, questions
+  'LanguageFamily', 'LanguageBranch', 'CulturalRealm', 'CulturalSubRealm', 'PopulationCluster', 'PopulationSubCluster',
+  // seo (9) — Keywords, metrics, mining, comparisons, prepositions, questions + GEO
   'SEOKeyword', 'SEOKeywordMetrics', 'SEOMiningRun', 'SEOComparison', 'SEOPreposition', 'SEOQuestion',
+  'GEOQuery', 'GEOAnswer', 'GEOMetrics',
 
   // ═══════════════════════════════════════════════════════════════════════════
   // TENANT REALM (23 nodes) — v10.6: merged organization + project
@@ -50,8 +53,8 @@ export type Layer =
 export type Trait = 'invariant' | 'localized' | 'knowledge' | 'derived' | 'job';
 
 // =============================================================================
-// KIND_META — unified classification for all 46 node types
-// v10.6.0 — 2-Realm Architecture (global + tenant)
+// KIND_META — unified classification for all 63 node types
+// v10.9.0 — Typed semantic arcs + GEO layer
 // =============================================================================
 
 export interface KindMeta {
@@ -62,37 +65,52 @@ export interface KindMeta {
 
 export const KIND_META: Record<NodeType, KindMeta> = {
   // ═══════════════════════════════════════════════════════════════════════════
-  // GLOBAL REALM — config (7) - v10.7: added Culture, Market
+  // GLOBAL REALM — config (13) - v10.8: added geographic taxonomy
   // ═══════════════════════════════════════════════════════════════════════════
-  Locale:        { realm: 'global', layer: 'config', trait: 'invariant' },
-  Formatting:    { realm: 'global', layer: 'config', trait: 'knowledge' },
-  Slugification: { realm: 'global', layer: 'config', trait: 'knowledge' },
-  Adaptation:    { realm: 'global', layer: 'config', trait: 'knowledge' },
-  Style:         { realm: 'global', layer: 'config', trait: 'knowledge' },
-  Culture:       { realm: 'global', layer: 'config', trait: 'knowledge' },
-  Market:        { realm: 'global', layer: 'config', trait: 'knowledge' },
+  Locale:         { realm: 'global', layer: 'config', trait: 'invariant' },
+  Formatting:     { realm: 'global', layer: 'config', trait: 'knowledge' },
+  Slugification:  { realm: 'global', layer: 'config', trait: 'knowledge' },
+  Adaptation:     { realm: 'global', layer: 'config', trait: 'knowledge' },
+  Style:          { realm: 'global', layer: 'config', trait: 'knowledge' },
+  Culture:        { realm: 'global', layer: 'config', trait: 'knowledge' },
+  Market:         { realm: 'global', layer: 'config', trait: 'knowledge' },
+  Continent:      { realm: 'global', layer: 'config', trait: 'invariant' },
+  GeoRegion:      { realm: 'global', layer: 'config', trait: 'invariant' },
+  GeoSubRegion:   { realm: 'global', layer: 'config', trait: 'invariant' },
+  IncomeGroup:    { realm: 'global', layer: 'config', trait: 'invariant' },
+  LendingCategory:{ realm: 'global', layer: 'config', trait: 'invariant' },
+  EconomicRegion: { realm: 'global', layer: 'config', trait: 'invariant' },
 
-  // GLOBAL REALM — locale-knowledge (12) — Sets + Atoms
-  TermSet:       { realm: 'global', layer: 'locale-knowledge', trait: 'knowledge' },
-  ExpressionSet: { realm: 'global', layer: 'locale-knowledge', trait: 'knowledge' },
-  PatternSet:    { realm: 'global', layer: 'locale-knowledge', trait: 'knowledge' },
-  CultureSet:    { realm: 'global', layer: 'locale-knowledge', trait: 'knowledge' },
-  TabooSet:      { realm: 'global', layer: 'locale-knowledge', trait: 'knowledge' },
-  AudienceSet:   { realm: 'global', layer: 'locale-knowledge', trait: 'knowledge' },
-  Term:          { realm: 'global', layer: 'locale-knowledge', trait: 'knowledge' },
-  Expression:    { realm: 'global', layer: 'locale-knowledge', trait: 'knowledge' },
-  Pattern:       { realm: 'global', layer: 'locale-knowledge', trait: 'knowledge' },
-  CultureRef:    { realm: 'global', layer: 'locale-knowledge', trait: 'knowledge' },
-  Taboo:         { realm: 'global', layer: 'locale-knowledge', trait: 'knowledge' },
-  AudienceTrait: { realm: 'global', layer: 'locale-knowledge', trait: 'knowledge' },
+  // GLOBAL REALM — locale-knowledge (18) — Sets + Atoms + Linguistic/Cultural taxonomy
+  TermSet:             { realm: 'global', layer: 'locale-knowledge', trait: 'knowledge' },
+  ExpressionSet:       { realm: 'global', layer: 'locale-knowledge', trait: 'knowledge' },
+  PatternSet:          { realm: 'global', layer: 'locale-knowledge', trait: 'knowledge' },
+  CultureSet:          { realm: 'global', layer: 'locale-knowledge', trait: 'knowledge' },
+  TabooSet:            { realm: 'global', layer: 'locale-knowledge', trait: 'knowledge' },
+  AudienceSet:         { realm: 'global', layer: 'locale-knowledge', trait: 'knowledge' },
+  Term:                { realm: 'global', layer: 'locale-knowledge', trait: 'knowledge' },
+  Expression:          { realm: 'global', layer: 'locale-knowledge', trait: 'knowledge' },
+  Pattern:             { realm: 'global', layer: 'locale-knowledge', trait: 'knowledge' },
+  CultureRef:          { realm: 'global', layer: 'locale-knowledge', trait: 'knowledge' },
+  Taboo:               { realm: 'global', layer: 'locale-knowledge', trait: 'knowledge' },
+  AudienceTrait:       { realm: 'global', layer: 'locale-knowledge', trait: 'knowledge' },
+  LanguageFamily:      { realm: 'global', layer: 'locale-knowledge', trait: 'knowledge' },
+  LanguageBranch:      { realm: 'global', layer: 'locale-knowledge', trait: 'knowledge' },
+  CulturalRealm:       { realm: 'global', layer: 'locale-knowledge', trait: 'knowledge' },
+  CulturalSubRealm:    { realm: 'global', layer: 'locale-knowledge', trait: 'knowledge' },
+  PopulationCluster:   { realm: 'global', layer: 'locale-knowledge', trait: 'knowledge' },
+  PopulationSubCluster:{ realm: 'global', layer: 'locale-knowledge', trait: 'knowledge' },
 
-  // GLOBAL REALM — seo (6)
+  // GLOBAL REALM — seo (9) — SEO + GEO (Generative Engine Optimization)
   SEOKeyword:       { realm: 'global', layer: 'seo', trait: 'localized' },
   SEOKeywordMetrics:{ realm: 'global', layer: 'seo', trait: 'derived' },
   SEOMiningRun:     { realm: 'global', layer: 'seo', trait: 'job' },
   SEOComparison:    { realm: 'global', layer: 'seo', trait: 'localized' },
   SEOPreposition:   { realm: 'global', layer: 'seo', trait: 'localized' },
   SEOQuestion:      { realm: 'global', layer: 'seo', trait: 'localized' },
+  GEOQuery:         { realm: 'global', layer: 'seo', trait: 'knowledge' },
+  GEOAnswer:        { realm: 'global', layer: 'seo', trait: 'derived' },
+  GEOMetrics:       { realm: 'global', layer: 'seo', trait: 'derived' },
 
   // ═══════════════════════════════════════════════════════════════════════════
   // TENANT REALM — config (1)
