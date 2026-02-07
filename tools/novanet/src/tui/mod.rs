@@ -24,8 +24,6 @@ mod app;
 pub mod atlas;
 mod audit;
 mod data;
-#[allow(dead_code)]
-pub mod icons;
 mod schema;
 pub mod theme;
 mod ui;

@@ -119,14 +119,6 @@ pub struct NodeDef {
     #[serde(default)]
     pub properties: Option<IndexMap<String, PropertyDef>>,
 
-    /// Relations declared in this file (format varies — canonical source is relations.yaml).
-    #[serde(default)]
-    pub relations: Option<serde_yaml::Value>,
-
-    /// Incoming relations (some files use this instead of nesting under `relations`).
-    #[serde(default)]
-    pub incoming_relations: Option<serde_yaml::Value>,
-
     /// Neo4j configuration (indexes, constraints).
     #[serde(default)]
     pub neo4j: Option<serde_yaml::Value>,
@@ -369,8 +361,6 @@ mod tests {
         assert!(doc.node.icon.is_none());
         assert!(doc.node.standard_properties.is_none());
         assert!(doc.node.properties.is_none());
-        assert!(doc.node.relations.is_none());
-        assert!(doc.node.incoming_relations.is_none());
         assert!(doc.node.neo4j.is_none());
         assert!(doc.node.example.is_none());
     }

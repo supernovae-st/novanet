@@ -4322,7 +4322,7 @@ fn render_realm_map_demo(lines: &mut Vec<String>, cursor: usize) {
     let tenant_selected = cursor == 1;
     let t_prefix = if tenant_selected { "▶" } else { " " };
     lines.push(format!(
-        "║  {} ┌─ TENANT (per-organization) ───────────── 22 kinds ──────┐          ║",
+        "║  {} ┌─ TENANT ─────────────────────────────── 22 kinds ──────┐          ║",
         t_prefix
     ));
     lines.push(
