@@ -2,10 +2,11 @@
 //!
 //! Transforms parsed ATH 2-rules-slug data into Neo4j seed file.
 
-use std::path::Path;
+use std::path::PathBuf;
 
 use chrono::Local;
 
+use crate::config::resolve_ath_path;
 use crate::generators::cypher_utils::escape_cypher;
 use crate::parsers::slugification::{
     RegionalAddition, ScriptConfig, SlugExample, SlugRule, Slugification, Warning,
@@ -13,36 +14,23 @@ use crate::parsers::slugification::{
 };
 use crate::{NovaNetError, Result};
 
-/// Default ATH data path.
-const DEFAULT_ATH_PATH: &str =
-    "/Users/thibaut/Projects/traduction_ai/ath-know-l10n/outputs/localization-data";
-
 /// Generate Cypher for SlugRule and Slugification nodes.
 pub struct SlugificationGenerator {
-    ath_path: String,
+    ath_path: PathBuf,
 }
 
 impl SlugificationGenerator {
-    /// Create a new generator with default ATH path.
-    pub fn new() -> Self {
-        Self {
-            ath_path: DEFAULT_ATH_PATH.to_string(),
-        }
-    }
-
-    /// Create a generator with custom ATH path.
-    pub fn with_ath_path(ath_path: &str) -> Self {
-        Self {
-            ath_path: ath_path.to_string(),
-        }
+    /// Create a generator with ATH path from env var or explicit path.
+    pub fn new(explicit_path: Option<&str>) -> Result<Self> {
+        Ok(Self {
+            ath_path: resolve_ath_path(explicit_path)?,
+        })
     }
 
     /// Generate the complete Cypher file content.
     pub fn generate(&self) -> Result<String> {
-        let ath_path = Path::new(&self.ath_path);
-
         // Load all slugification files
-        let slugifications = load_all_slugifications(ath_path)?;
+        let slugifications = load_all_slugifications(&self.ath_path)?;
 
         if slugifications.is_empty() {
             return Err(NovaNetError::Validation(
@@ -88,7 +76,9 @@ impl SlugificationGenerator {
 // ============================================================================
 
 "#,
-            timestamp, self.ath_path, locale_count
+            timestamp,
+            self.ath_path.display(),
+            locale_count
         )
     }
 
@@ -281,12 +271,6 @@ MERGE (s)-[:FOLLOWS_RULE]->(sr);
     }
 }
 
-impl Default for SlugificationGenerator {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
 // ============================================================================
 // Helper Functions
 // ============================================================================
@@ -336,7 +320,7 @@ mod tests {
         rule.locale_examples = vec!["en-US".to_string(), "es-ES".to_string()];
         rule.generate_llm_context();
 
-        let generator = SlugificationGenerator::new();
+        let generator = SlugificationGenerator::new(Some("/tmp/test")).unwrap();
         let cypher = generator.generate_slug_rule_cypher(&rule);
 
         assert!(cypher.contains("MERGE (sr:SlugRule {key: 'latin_strip'})"));
@@ -368,7 +352,7 @@ mod tests {
         };
         s.generate_llm_context();
 
-        let generator = SlugificationGenerator::new();
+        let generator = SlugificationGenerator::new(Some("/tmp/test")).unwrap();
         let cypher = generator.generate_slugification_cypher(&s);
 
         assert!(cypher.contains("MERGE (s:Slugification {key: 'fr-FR'})"));

@@ -3,44 +3,32 @@
 //! Transforms parsed ATH 3-voice-lexicon data into Neo4j seed file.
 //! Creates ExpressionSet (container) and Expression (atom) nodes per locale.
 
-use std::path::Path;
+use std::path::PathBuf;
 
 use chrono::Local;
 
+use crate::config::resolve_ath_path;
 use crate::generators::cypher_utils::escape_cypher;
-use crate::parsers::expression::{load_all_expressions, ExpressionData, Expression, SemanticField};
+use crate::parsers::expression::{Expression, ExpressionData, SemanticField, load_all_expressions};
 use crate::{NovaNetError, Result};
-
-/// Default ATH data path.
-const DEFAULT_ATH_PATH: &str =
-    "/Users/thibaut/Projects/traduction_ai/ath-know-l10n/outputs/localization-data";
 
 /// Generate Cypher for Expression atoms.
 pub struct ExpressionGenerator {
-    ath_path: String,
+    ath_path: PathBuf,
 }
 
 impl ExpressionGenerator {
-    /// Create a new generator with default ATH path.
-    pub fn new() -> Self {
-        Self {
-            ath_path: DEFAULT_ATH_PATH.to_string(),
-        }
-    }
-
-    /// Create a generator with custom ATH path.
-    pub fn with_ath_path(ath_path: &str) -> Self {
-        Self {
-            ath_path: ath_path.to_string(),
-        }
+    /// Create a generator with ATH path from env var or explicit path.
+    pub fn new(explicit_path: Option<&str>) -> Result<Self> {
+        Ok(Self {
+            ath_path: resolve_ath_path(explicit_path)?,
+        })
     }
 
     /// Generate the complete Cypher file content.
     pub fn generate(&self) -> Result<String> {
-        let ath_path = Path::new(&self.ath_path);
-
         // Load all expression files
-        let expressions = load_all_expressions(ath_path)?;
+        let expressions = load_all_expressions(&self.ath_path)?;
 
         if expressions.is_empty() {
             return Err(NovaNetError::Validation(
@@ -87,7 +75,10 @@ impl ExpressionGenerator {
 // ============================================================================
 
 "#,
-            timestamp, self.ath_path, locale_count, total_atoms
+            timestamp,
+            self.ath_path.display(),
+            locale_count,
+            total_atoms
         )
     }
 
@@ -126,7 +117,8 @@ impl ExpressionGenerator {
                 })
             })
             .collect();
-        let fields_json = serde_json::to_string(&fields_summary).unwrap_or_else(|_| "[]".to_string());
+        let fields_json =
+            serde_json::to_string(&fields_summary).unwrap_or_else(|_| "[]".to_string());
 
         format!(
             r#"MERGE (es:ExpressionSet {{key: '{}'}})
@@ -203,7 +195,11 @@ SET es.display_name = '{}',
             expr.context,
             field.name.to_lowercase(),
             expr.register,
-            expr.intention.split_whitespace().take(3).collect::<Vec<_>>().join(" "),
+            expr.intention
+                .split_whitespace()
+                .take(3)
+                .collect::<Vec<_>>()
+                .join(" "),
             data.locale_key
         );
 
@@ -291,12 +287,6 @@ MERGE (es)-[:CONTAINS]->(e);
     }
 }
 
-impl Default for ExpressionGenerator {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
 // ============================================================================
 // Tests
 // ============================================================================
@@ -357,7 +347,7 @@ mod tests {
     #[test]
     fn test_generate_expression_set_cypher() {
         let data = create_test_expression_data();
-        let generator = ExpressionGenerator::new();
+        let generator = ExpressionGenerator::new(Some("/tmp/test")).unwrap();
         let cypher = generator.generate_expression_set_cypher(&data);
 
         assert!(cypher.contains("MERGE (es:ExpressionSet {key: 'fr-FR'})"));
@@ -368,7 +358,7 @@ mod tests {
     #[test]
     fn test_generate_expression_atom_cypher() {
         let data = create_test_expression_data();
-        let generator = ExpressionGenerator::new();
+        let generator = ExpressionGenerator::new(Some("/tmp/test")).unwrap();
         let field = &data.semantic_fields[0];
         let expr = &field.expressions[0];
         let cypher = generator.generate_expression_atom_cypher(&data, field, expr, 0);
@@ -386,7 +376,7 @@ mod tests {
     #[test]
     fn test_generate_locale_arcs() {
         let expressions = vec![create_test_expression_data()];
-        let generator = ExpressionGenerator::new();
+        let generator = ExpressionGenerator::new(Some("/tmp/test")).unwrap();
         let cypher = generator.generate_locale_arcs_section(&expressions);
 
         assert!(cypher.contains("MATCH (l:Locale {key: 'fr-FR'})"));
@@ -397,7 +387,7 @@ mod tests {
     #[test]
     fn test_generate_contains_arcs() {
         let expressions = vec![create_test_expression_data()];
-        let generator = ExpressionGenerator::new();
+        let generator = ExpressionGenerator::new(Some("/tmp/test")).unwrap();
         let cypher = generator.generate_contains_arcs_section(&expressions);
 
         // Should have 3 CONTAINS arcs (2 SUCCESS + 1 SPEED)
@@ -410,7 +400,7 @@ mod tests {
     #[test]
     fn test_generate_header() {
         let expressions = vec![create_test_expression_data()];
-        let generator = ExpressionGenerator::new();
+        let generator = ExpressionGenerator::new(Some("/tmp/test")).unwrap();
         let header = generator.generate_header(&expressions, 3);
 
         assert!(header.contains("EXPRESSION ATOMS SEED"));
@@ -427,7 +417,7 @@ mod tests {
     #[test]
     fn test_atom_key_format() {
         let data = create_test_expression_data();
-        let generator = ExpressionGenerator::new();
+        let generator = ExpressionGenerator::new(Some("/tmp/test")).unwrap();
         let field = &data.semantic_fields[1]; // SPEED
         let expr = &field.expressions[0];
         let cypher = generator.generate_expression_atom_cypher(&data, field, expr, 0);

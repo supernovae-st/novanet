@@ -2,44 +2,32 @@
 //!
 //! Transforms parsed ATH 2-rules-formatting data into Neo4j seed file.
 
-use std::path::Path;
+use std::path::PathBuf;
 
 use chrono::Local;
 
+use crate::config::resolve_ath_path;
 use crate::generators::cypher_utils::escape_cypher;
 use crate::parsers::formatting::{Formatting, load_all_formattings};
 use crate::{NovaNetError, Result};
 
-/// Default ATH data path.
-const DEFAULT_ATH_PATH: &str =
-    "/Users/thibaut/Projects/traduction_ai/ath-know-l10n/outputs/localization-data";
-
 /// Generate Cypher for Formatting nodes.
 pub struct FormattingGenerator {
-    ath_path: String,
+    ath_path: PathBuf,
 }
 
 impl FormattingGenerator {
-    /// Create a new generator with default ATH path.
-    pub fn new() -> Self {
-        Self {
-            ath_path: DEFAULT_ATH_PATH.to_string(),
-        }
-    }
-
-    /// Create a generator with custom ATH path.
-    pub fn with_ath_path(ath_path: &str) -> Self {
-        Self {
-            ath_path: ath_path.to_string(),
-        }
+    /// Create a generator with ATH path from env var or explicit path.
+    pub fn new(explicit_path: Option<&str>) -> Result<Self> {
+        Ok(Self {
+            ath_path: resolve_ath_path(explicit_path)?,
+        })
     }
 
     /// Generate the complete Cypher file content.
     pub fn generate(&self) -> Result<String> {
-        let ath_path = Path::new(&self.ath_path);
-
         // Load all formatting files
-        let formattings = load_all_formattings(ath_path)?;
+        let formattings = load_all_formattings(&self.ath_path)?;
 
         if formattings.is_empty() {
             return Err(NovaNetError::Validation(
@@ -76,7 +64,9 @@ impl FormattingGenerator {
 // ============================================================================
 
 "#,
-            timestamp, self.ath_path, locale_count
+            timestamp,
+            self.ath_path.display(),
+            locale_count
         )
     }
 
@@ -189,12 +179,6 @@ MERGE (l)-[:HAS_FORMATTING]->(f);
     }
 }
 
-impl Default for FormattingGenerator {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
 // ============================================================================
 // Tests
 // ============================================================================
@@ -260,7 +244,7 @@ mod tests {
     #[test]
     fn test_generate_formatting_cypher() {
         let formatting = create_test_formatting();
-        let generator = FormattingGenerator::new();
+        let generator = FormattingGenerator::new(Some("/tmp/test")).unwrap();
         let cypher = generator.generate_formatting_cypher(&formatting);
 
         assert!(cypher.contains("MERGE (f:Formatting {key: 'fr-FR'})"));
@@ -274,7 +258,7 @@ mod tests {
     #[test]
     fn test_generate_locale_arcs() {
         let formattings = vec![create_test_formatting()];
-        let generator = FormattingGenerator::new();
+        let generator = FormattingGenerator::new(Some("/tmp/test")).unwrap();
         let cypher = generator.generate_locale_arcs_section(&formattings);
 
         assert!(cypher.contains("MATCH (l:Locale {key: 'fr-FR'})"));
@@ -285,7 +269,7 @@ mod tests {
     #[test]
     fn test_generate_header() {
         let formattings = vec![create_test_formatting()];
-        let generator = FormattingGenerator::new();
+        let generator = FormattingGenerator::new(Some("/tmp/test")).unwrap();
         let header = generator.generate_header(&formattings);
 
         assert!(header.contains("FORMATTING SEED"));

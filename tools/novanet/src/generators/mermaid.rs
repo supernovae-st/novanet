@@ -581,12 +581,7 @@ mod tests {
     fn render_small_mermaid() {
         let nodes = vec![
             make_node("Locale", "global", "config", LocaleBehavior::Invariant),
-            make_node(
-                "Project",
-                "tenant",
-                "foundation",
-                LocaleBehavior::Invariant,
-            ),
+            make_node("Project", "tenant", "foundation", LocaleBehavior::Invariant),
             make_node(
                 "ProjectL10n",
                 "tenant",

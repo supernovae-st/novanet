@@ -75,7 +75,10 @@ impl CoverageStats {
     /// Calculate coverage stats from matched properties.
     pub fn from_matched(props: &[MatchedProperty]) -> Self {
         let total = props.len();
-        let filled = props.iter().filter(|p| p.status == PropertyStatus::Filled).count();
+        let filled = props
+            .iter()
+            .filter(|p| p.status == PropertyStatus::Filled)
+            .count();
         let missing_required = props
             .iter()
             .filter(|p| p.status == PropertyStatus::MissingRequired)
@@ -248,10 +251,7 @@ fn yaml_to_schema_property(name: String, prop: YamlProperty) -> SchemaProperty {
         serde_yaml::Value::Bool(b) => b.to_string(),
         serde_yaml::Value::Sequence(seq) => {
             // Format as JSON array
-            let items: Vec<String> = seq
-                .into_iter()
-                .map(|v| format!("{:?}", v))
-                .collect();
+            let items: Vec<String> = seq.into_iter().map(|v| format!("{:?}", v)).collect();
             format!("[{}]", items.join(", "))
         }
         serde_yaml::Value::Mapping(map) => {
@@ -437,11 +437,11 @@ node:
 
         // Check properties are in YAML definition order (not alphabetical!)
         // standard_properties come first, then properties
-        assert_eq!(props[0].name, "key");           // 1st in standard_properties
-        assert_eq!(props[1].name, "display_name");  // 2nd in standard_properties
-        assert_eq!(props[2].name, "description");   // 3rd in standard_properties
-        assert_eq!(props[3].name, "hemisphere");    // 1st in properties
-        assert_eq!(props[4].name, "holidays");      // 2nd in properties
+        assert_eq!(props[0].name, "key"); // 1st in standard_properties
+        assert_eq!(props[1].name, "display_name"); // 2nd in standard_properties
+        assert_eq!(props[2].name, "description"); // 3rd in standard_properties
+        assert_eq!(props[3].name, "hemisphere"); // 1st in properties
+        assert_eq!(props[4].name, "holidays"); // 2nd in properties
         assert_eq!(props[5].name, "seasonal_greetings"); // 3rd in properties
 
         // Verify required flags
@@ -461,16 +461,31 @@ node:
 
         let mut instance = BTreeMap::new();
         instance.insert("key".to_string(), JsonValue::String("af-ZA".to_string()));
-        instance.insert("display_name".to_string(), JsonValue::String("Afrikaans".to_string()));
-        instance.insert("hemisphere".to_string(), JsonValue::String("southern".to_string()));
+        instance.insert(
+            "display_name".to_string(),
+            JsonValue::String("Afrikaans".to_string()),
+        );
+        instance.insert(
+            "hemisphere".to_string(),
+            JsonValue::String("southern".to_string()),
+        );
         // description and holidays missing
 
         let matched = match_properties(&props, &instance);
 
         // Count statuses
-        let filled = matched.iter().filter(|p| p.status == PropertyStatus::Filled).count();
-        let missing_req = matched.iter().filter(|p| p.status == PropertyStatus::MissingRequired).count();
-        let empty_opt = matched.iter().filter(|p| p.status == PropertyStatus::EmptyOptional).count();
+        let filled = matched
+            .iter()
+            .filter(|p| p.status == PropertyStatus::Filled)
+            .count();
+        let missing_req = matched
+            .iter()
+            .filter(|p| p.status == PropertyStatus::MissingRequired)
+            .count();
+        let empty_opt = matched
+            .iter()
+            .filter(|p| p.status == PropertyStatus::EmptyOptional)
+            .count();
 
         assert_eq!(filled, 3); // key, display_name, hemisphere
         assert_eq!(missing_req, 1); // description (required but missing)
@@ -483,9 +498,18 @@ node:
 
         let mut instance = BTreeMap::new();
         instance.insert("key".to_string(), JsonValue::String("af-ZA".to_string()));
-        instance.insert("display_name".to_string(), JsonValue::String("Afrikaans".to_string()));
-        instance.insert("description".to_string(), JsonValue::String("Test".to_string()));
-        instance.insert("hemisphere".to_string(), JsonValue::String("southern".to_string()));
+        instance.insert(
+            "display_name".to_string(),
+            JsonValue::String("Afrikaans".to_string()),
+        );
+        instance.insert(
+            "description".to_string(),
+            JsonValue::String("Test".to_string()),
+        );
+        instance.insert(
+            "hemisphere".to_string(),
+            JsonValue::String("southern".to_string()),
+        );
 
         let matched = match_properties(&props, &instance);
         let stats = CoverageStats::from_matched(&matched);

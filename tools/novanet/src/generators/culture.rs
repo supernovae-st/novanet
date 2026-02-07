@@ -2,44 +2,32 @@
 //!
 //! Transforms parsed ATH 4-culture-norms data into Neo4j seed file.
 
-use std::path::Path;
+use std::path::PathBuf;
 
 use chrono::Local;
 
+use crate::config::resolve_ath_path;
 use crate::generators::cypher_utils::escape_cypher;
 use crate::parsers::culture::{CultureData, load_all_cultures};
 use crate::{NovaNetError, Result};
 
-/// Default ATH data path.
-const DEFAULT_ATH_PATH: &str =
-    "/Users/thibaut/Projects/traduction_ai/ath-know-l10n/outputs/localization-data";
-
 /// Generate Cypher for Culture nodes.
 pub struct CultureGenerator {
-    ath_path: String,
+    ath_path: PathBuf,
 }
 
 impl CultureGenerator {
-    /// Create a new generator with default ATH path.
-    pub fn new() -> Self {
-        Self {
-            ath_path: DEFAULT_ATH_PATH.to_string(),
-        }
-    }
-
-    /// Create a generator with custom ATH path.
-    pub fn with_ath_path(ath_path: &str) -> Self {
-        Self {
-            ath_path: ath_path.to_string(),
-        }
+    /// Create a generator with ATH path from env var or explicit path.
+    pub fn new(explicit_path: Option<&str>) -> Result<Self> {
+        Ok(Self {
+            ath_path: resolve_ath_path(explicit_path)?,
+        })
     }
 
     /// Generate the complete Cypher file content.
     pub fn generate(&self) -> Result<String> {
-        let ath_path = Path::new(&self.ath_path);
-
         // Load all culture files
-        let cultures = load_all_cultures(ath_path)?;
+        let cultures = load_all_cultures(&self.ath_path)?;
 
         if cultures.is_empty() {
             return Err(NovaNetError::Validation(
@@ -76,7 +64,9 @@ impl CultureGenerator {
 // ============================================================================
 
 "#,
-            timestamp, self.ath_path, locale_count
+            timestamp,
+            self.ath_path.display(),
+            locale_count
         )
     }
 
@@ -190,12 +180,6 @@ MERGE (l)-[:HAS_CULTURE]->(c);
     }
 }
 
-impl Default for CultureGenerator {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
 // ============================================================================
 // Tests
 // ============================================================================
@@ -238,7 +222,7 @@ mod tests {
     #[test]
     fn test_generate_culture_cypher() {
         let culture = create_test_culture();
-        let generator = CultureGenerator::new();
+        let generator = CultureGenerator::new(Some("/tmp/test")).unwrap();
         let cypher = generator.generate_culture_cypher(&culture);
 
         assert!(cypher.contains("MERGE (c:Culture {key: 'fr-FR'})"));
@@ -251,7 +235,7 @@ mod tests {
     #[test]
     fn test_generate_locale_arcs() {
         let cultures = vec![create_test_culture()];
-        let generator = CultureGenerator::new();
+        let generator = CultureGenerator::new(Some("/tmp/test")).unwrap();
         let cypher = generator.generate_locale_arcs_section(&cultures);
 
         assert!(cypher.contains("MATCH (l:Locale {key: 'fr-FR'})"));
@@ -262,7 +246,7 @@ mod tests {
     #[test]
     fn test_generate_header() {
         let cultures = vec![create_test_culture()];
-        let generator = CultureGenerator::new();
+        let generator = CultureGenerator::new(Some("/tmp/test")).unwrap();
         let header = generator.generate_header(&cultures);
 
         assert!(header.contains("CULTURE SEED"));
@@ -272,7 +256,7 @@ mod tests {
     #[test]
     fn test_json_serialization() {
         let culture = create_test_culture();
-        let generator = CultureGenerator::new();
+        let generator = CultureGenerator::new(Some("/tmp/test")).unwrap();
         let cypher = generator.generate_culture_cypher(&culture);
 
         // Check JSON fields are serialized

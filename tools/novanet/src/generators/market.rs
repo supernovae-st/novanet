@@ -2,44 +2,32 @@
 //!
 //! Transforms parsed ATH 5-market data into Neo4j seed file.
 
-use std::path::Path;
+use std::path::PathBuf;
 
 use chrono::Local;
 
+use crate::config::resolve_ath_path;
 use crate::generators::cypher_utils::escape_cypher;
 use crate::parsers::market::{MarketData, load_all_markets};
 use crate::{NovaNetError, Result};
 
-/// Default ATH data path.
-const DEFAULT_ATH_PATH: &str =
-    "/Users/thibaut/Projects/traduction_ai/ath-know-l10n/outputs/localization-data";
-
 /// Generate Cypher for Market nodes.
 pub struct MarketGenerator {
-    ath_path: String,
+    ath_path: PathBuf,
 }
 
 impl MarketGenerator {
-    /// Create a new generator with default ATH path.
-    pub fn new() -> Self {
-        Self {
-            ath_path: DEFAULT_ATH_PATH.to_string(),
-        }
-    }
-
-    /// Create a generator with custom ATH path.
-    pub fn with_ath_path(ath_path: &str) -> Self {
-        Self {
-            ath_path: ath_path.to_string(),
-        }
+    /// Create a generator with ATH path from env var or explicit path.
+    pub fn new(explicit_path: Option<&str>) -> Result<Self> {
+        Ok(Self {
+            ath_path: resolve_ath_path(explicit_path)?,
+        })
     }
 
     /// Generate the complete Cypher file content.
     pub fn generate(&self) -> Result<String> {
-        let ath_path = Path::new(&self.ath_path);
-
         // Load all market files
-        let markets = load_all_markets(ath_path)?;
+        let markets = load_all_markets(&self.ath_path)?;
 
         if markets.is_empty() {
             return Err(NovaNetError::Validation(
@@ -76,7 +64,9 @@ impl MarketGenerator {
 // ============================================================================
 
 "#,
-            timestamp, self.ath_path, locale_count
+            timestamp,
+            self.ath_path.display(),
+            locale_count
         )
     }
 
@@ -204,12 +194,6 @@ MERGE (l)-[:HAS_MARKET]->(m);
     }
 }
 
-impl Default for MarketGenerator {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
 // ============================================================================
 // Tests
 // ============================================================================
@@ -252,7 +236,7 @@ mod tests {
     #[test]
     fn test_generate_market_cypher() {
         let market = create_test_market();
-        let generator = MarketGenerator::new();
+        let generator = MarketGenerator::new(Some("/tmp/test")).unwrap();
         let cypher = generator.generate_market_cypher(&market);
 
         assert!(cypher.contains("MERGE (m:Market {key: 'fr-FR'})"));
@@ -265,7 +249,7 @@ mod tests {
     #[test]
     fn test_generate_locale_arcs() {
         let markets = vec![create_test_market()];
-        let generator = MarketGenerator::new();
+        let generator = MarketGenerator::new(Some("/tmp/test")).unwrap();
         let cypher = generator.generate_locale_arcs_section(&markets);
 
         assert!(cypher.contains("MATCH (l:Locale {key: 'fr-FR'})"));
@@ -276,7 +260,7 @@ mod tests {
     #[test]
     fn test_generate_header() {
         let markets = vec![create_test_market()];
-        let generator = MarketGenerator::new();
+        let generator = MarketGenerator::new(Some("/tmp/test")).unwrap();
         let header = generator.generate_header(&markets);
 
         assert!(header.contains("MARKET SEED"));
@@ -286,7 +270,7 @@ mod tests {
     #[test]
     fn test_optional_gdp_present() {
         let market = create_test_market();
-        let generator = MarketGenerator::new();
+        let generator = MarketGenerator::new(Some("/tmp/test")).unwrap();
         let cypher = generator.generate_market_cypher(&market);
 
         assert!(cypher.contains("m.gdp_per_capita_usd = 45000"));
@@ -296,7 +280,7 @@ mod tests {
     fn test_optional_gdp_absent() {
         let mut market = create_test_market();
         market.gdp_per_capita_usd = None;
-        let generator = MarketGenerator::new();
+        let generator = MarketGenerator::new(Some("/tmp/test")).unwrap();
         let cypher = generator.generate_market_cypher(&market);
 
         assert!(!cypher.contains("gdp_per_capita_usd"));
@@ -305,7 +289,7 @@ mod tests {
     #[test]
     fn test_json_serialization() {
         let market = create_test_market();
-        let generator = MarketGenerator::new();
+        let generator = MarketGenerator::new(Some("/tmp/test")).unwrap();
         let cypher = generator.generate_market_cypher(&market);
 
         // Check JSON fields are serialized

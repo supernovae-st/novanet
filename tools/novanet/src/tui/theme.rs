@@ -355,8 +355,8 @@ impl Icons {
     /// Load icons from visual-encoding.yaml.
     /// Returns default icons if loading fails (graceful degradation).
     pub fn load(root_path: &str) -> Self {
-        let path = std::path::Path::new(root_path)
-            .join("packages/core/models/visual-encoding.yaml");
+        let path =
+            std::path::Path::new(root_path).join("packages/core/models/visual-encoding.yaml");
 
         if let Ok(content) = std::fs::read_to_string(&path) {
             if let Ok(doc) = serde_yaml::from_str::<serde_yaml::Value>(&content) {
@@ -394,10 +394,9 @@ impl Icons {
         if let Some(cat) = icons_section.get(category) {
             if let Some(obj) = cat.as_mapping() {
                 for (key, value) in obj {
-                    if let (Some(k), Some(terminal)) = (
-                        key.as_str(),
-                        value.get("terminal").and_then(|v| v.as_str()),
-                    ) {
+                    if let (Some(k), Some(terminal)) =
+                        (key.as_str(), value.get("terminal").and_then(|v| v.as_str()))
+                    {
                         map.insert(k.to_string(), terminal.to_string());
                     }
                 }
@@ -489,7 +488,10 @@ impl Icons {
     }
 
     pub fn arc_family(&self, key: &str) -> &str {
-        self.arc_families.get(key).map(|s| s.as_str()).unwrap_or("→")
+        self.arc_families
+            .get(key)
+            .map(|s| s.as_str())
+            .unwrap_or("→")
     }
 
     pub fn state(&self, key: &str) -> &str {

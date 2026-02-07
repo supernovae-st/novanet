@@ -12,7 +12,6 @@ pub mod facets;
 pub mod generators;
 pub mod output;
 pub mod parsers;
-pub mod retrieval;
 #[cfg(feature = "tui")]
 pub mod tui;
 

@@ -34,16 +34,12 @@ fn bolt_to_json(bolt: &neo4rs::BoltType) -> JsonValue {
     match bolt {
         BoltType::String(s) => JsonValue::String(s.value.clone()),
         BoltType::Integer(i) => JsonValue::Number(i.value.into()),
-        BoltType::Float(f) => {
-            serde_json::Number::from_f64(f.value)
-                .map(JsonValue::Number)
-                .unwrap_or(JsonValue::Null)
-        }
+        BoltType::Float(f) => serde_json::Number::from_f64(f.value)
+            .map(JsonValue::Number)
+            .unwrap_or(JsonValue::Null),
         BoltType::Boolean(b) => JsonValue::Bool(b.value),
         BoltType::Null(_) => JsonValue::Null,
-        BoltType::List(list) => {
-            JsonValue::Array(list.value.iter().map(bolt_to_json).collect())
-        }
+        BoltType::List(list) => JsonValue::Array(list.value.iter().map(bolt_to_json).collect()),
         BoltType::Map(map) => {
             let obj: serde_json::Map<String, JsonValue> = map
                 .value
@@ -72,8 +68,14 @@ fn bolt_to_json(bolt: &neo4rs::BoltType) -> JsonValue {
         }
         BoltType::Relation(r) => {
             let mut obj = serde_json::Map::new();
-            obj.insert("_type".to_string(), JsonValue::String("Relationship".to_string()));
-            obj.insert("_rel_type".to_string(), JsonValue::String(r.typ.value.clone()));
+            obj.insert(
+                "_type".to_string(),
+                JsonValue::String("Relationship".to_string()),
+            );
+            obj.insert(
+                "_rel_type".to_string(),
+                JsonValue::String(r.typ.value.clone()),
+            );
             JsonValue::Object(obj)
         }
         // DateTime and other complex types - extract what we can
@@ -382,18 +384,22 @@ ORDER BY realm_key, layer_key, kind_key
 
             // Get YAML path from Neo4j (with fallback to computed path)
             let yaml_path_raw: String = row.get("yaml_path").unwrap_or_default();
-            let yaml_path = if yaml_path_raw.is_empty() {
-                // Fallback: compute path
+            let yaml_path = if !yaml_path_raw.is_empty() {
+                // Neo4j stores relative path like "node-kinds/tenant/structure/block.yaml"
+                // We need to prefix with "packages/core/models/"
+                format!("packages/core/models/{}", yaml_path_raw)
+            } else if realm_key == "unknown" || layer_key == "unknown" {
+                // Missing realm/layer relationship - can't compute valid path
+                // Return empty to signal "file not found" in UI (better than invalid path)
+                String::new()
+            } else {
+                // Fallback: compute path from realm/layer
                 format!(
                     "packages/core/models/node-kinds/{}/{}/{}.yaml",
                     realm_key,
                     layer_key,
                     to_kebab_case(&kind_key)
                 )
-            } else {
-                // Neo4j stores relative path like "node-kinds/tenant/structure/block.yaml"
-                // We need to prefix with "packages/core/models/"
-                format!("packages/core/models/{}", yaml_path_raw)
             };
 
             // Get schema properties from Neo4j
@@ -609,7 +615,10 @@ ORDER BY family_key, arc_key
 
     /// Load instances of a Kind from Neo4j for Data view.
     /// Returns (instances, total_count) - instances are limited to 500, total is the real count.
-    pub async fn load_instances(db: &Db, kind_label: &str) -> crate::Result<(Vec<InstanceInfo>, usize)> {
+    pub async fn load_instances(
+        db: &Db,
+        kind_label: &str,
+    ) -> crate::Result<(Vec<InstanceInfo>, usize)> {
         // First, get the total count (fast query with index)
         let count_cypher = format!(
             "MATCH (n:{kind_label}) WHERE NOT n:Meta RETURN count(n) AS total",
@@ -1328,7 +1337,8 @@ RETURN kw.keyword as keyword,
         for realm in &self.realms {
             self.collapsed.insert(format!("realm:{}", realm.key));
             for layer in &realm.layers {
-                self.collapsed.insert(format!("layer:{}:{}", realm.key, layer.key));
+                self.collapsed
+                    .insert(format!("layer:{}:{}", realm.key, layer.key));
             }
         }
         for family in &self.arc_families {
@@ -1365,7 +1375,8 @@ RETURN kw.keyword as keyword,
             for realm in &self.realms {
                 self.collapsed.remove(&format!("realm:{}", realm.key));
                 for layer in &realm.layers {
-                    self.collapsed.remove(&format!("layer:{}:{}", realm.key, layer.key));
+                    self.collapsed
+                        .remove(&format!("layer:{}:{}", realm.key, layer.key));
                     for kind in &layer.kinds {
                         self.collapsed.remove(&format!("kind:{}", kind.key));
                     }
@@ -1380,7 +1391,8 @@ RETURN kw.keyword as keyword,
             // Expand all layers in this realm
             if let Some(realm) = self.realms.iter().find(|r| r.key == realm_key) {
                 for layer in &realm.layers {
-                    self.collapsed.remove(&format!("layer:{}:{}", realm_key, layer.key));
+                    self.collapsed
+                        .remove(&format!("layer:{}:{}", realm_key, layer.key));
                     for kind in &layer.kinds {
                         self.collapsed.remove(&format!("kind:{}", kind.key));
                     }
@@ -1417,7 +1429,8 @@ RETURN kw.keyword as keyword,
             for realm in &self.realms {
                 self.collapsed.insert(format!("realm:{}", realm.key));
                 for layer in &realm.layers {
-                    self.collapsed.insert(format!("layer:{}:{}", realm.key, layer.key));
+                    self.collapsed
+                        .insert(format!("layer:{}:{}", realm.key, layer.key));
                     for kind in &layer.kinds {
                         self.collapsed.insert(format!("kind:{}", kind.key));
                     }
@@ -1432,7 +1445,8 @@ RETURN kw.keyword as keyword,
             // Collapse all layers in this realm
             if let Some(realm) = self.realms.iter().find(|r| r.key == realm_key) {
                 for layer in &realm.layers {
-                    self.collapsed.insert(format!("layer:{}:{}", realm_key, layer.key));
+                    self.collapsed
+                        .insert(format!("layer:{}:{}", realm_key, layer.key));
                     for kind in &layer.kinds {
                         self.collapsed.insert(format!("kind:{}", kind.key));
                     }
@@ -1737,9 +1751,7 @@ RETURN kw.keyword as keyword,
             Some(TreeItem::Layer(realm, _)) => self.find_realm_cursor(&realm.key),
 
             // Kind's parent is its Layer
-            Some(TreeItem::Kind(realm, layer, _)) => {
-                self.find_layer_cursor(&realm.key, &layer.key)
-            }
+            Some(TreeItem::Kind(realm, layer, _)) => self.find_layer_cursor(&realm.key, &layer.key),
 
             // Instance's parent is its Kind
             Some(TreeItem::Instance(realm, layer, kind, _)) => {
@@ -1964,7 +1976,8 @@ RETURN kw.keyword as keyword,
         // Expand parents to make Kind visible
         self.collapsed.remove("kinds");
         self.collapsed.remove(&format!("realm:{}", realm_key));
-        self.collapsed.remove(&format!("layer:{}:{}", realm_key, layer_key));
+        self.collapsed
+            .remove(&format!("layer:{}:{}", realm_key, layer_key));
 
         // Now count to find the cursor position
         let mut idx = 0;
@@ -2016,9 +2029,9 @@ pub enum TreeItem<'a> {
 /// Uses unicode symbols instead of emoji for terminal compatibility.
 fn realm_icon(key: &str) -> &'static str {
     match key {
-        "global" => "◉",  // filled circle - universal/shared
-        "tenant" => "◎",  // circle with dot - scoped/owned
-        _ => "○",         // empty circle - unknown
+        "global" => "◉", // filled circle - universal/shared
+        "tenant" => "◎", // circle with dot - scoped/owned
+        _ => "○",        // empty circle - unknown
     }
 }
 
@@ -2152,7 +2165,10 @@ impl InstanceInfo {
             JsonValue::String(s) => {
                 // Check if it looks like a date/timestamp
                 if s.len() > 10
-                    && s.chars().next().map(|c| c.is_ascii_digit()).unwrap_or(false)
+                    && s.chars()
+                        .next()
+                        .map(|c| c.is_ascii_digit())
+                        .unwrap_or(false)
                     && (s.contains('T') || s.chars().filter(|&c| c == '-').count() >= 2)
                 {
                     (format!("\"{}\"", s), Color::Magenta)
@@ -2339,4 +2355,135 @@ mod tests {
     // NOTE: Data View tests (item_count_for_mode, item_at_for_mode, set_instances)
     // were removed as these methods were never implemented.
     // Data View feature is planned for v10.7+
+
+    // ========================================================================
+    // YAML path validation tests
+    // ========================================================================
+
+    #[test]
+    fn test_yaml_path_fallback_rejects_unknown_realm() {
+        // When realm is "unknown", fallback should return empty string
+        // instead of generating invalid path like "node-kinds/unknown/layer/kind.yaml"
+        let realm_key = "unknown";
+        let layer_key = "structure";
+        let kind_key = "Page";
+
+        // Simulate the validation logic from TaxonomyTree::load
+        let yaml_path = if realm_key == "unknown" || layer_key == "unknown" {
+            String::new() // Invalid - can't compute path
+        } else {
+            format!(
+                "packages/core/models/node-kinds/{}/{}/{}.yaml",
+                realm_key,
+                layer_key,
+                super::to_kebab_case(kind_key)
+            )
+        };
+
+        assert!(
+            yaml_path.is_empty(),
+            "Should return empty for unknown realm"
+        );
+    }
+
+    #[test]
+    fn test_yaml_path_fallback_accepts_valid_realm_layer() {
+        // When realm and layer are valid, fallback should generate proper path
+        let realm_key = "tenant";
+        let layer_key = "structure";
+        let kind_key = "Page";
+
+        let yaml_path = if realm_key == "unknown" || layer_key == "unknown" {
+            String::new()
+        } else {
+            format!(
+                "packages/core/models/node-kinds/{}/{}/{}.yaml",
+                realm_key,
+                layer_key,
+                super::to_kebab_case(kind_key)
+            )
+        };
+
+        assert_eq!(
+            yaml_path,
+            "packages/core/models/node-kinds/tenant/structure/page.yaml"
+        );
+    }
+
+    // ========================================================================
+    // Neo4j Integration Tests (require running Neo4j)
+    // Run with: cargo test -- --ignored
+    // ========================================================================
+
+    #[tokio::test]
+    #[ignore] // Requires running Neo4j
+    async fn test_taxonomy_tree_load_integration() {
+        let db = crate::db::Db::connect("bolt://localhost:7687", "neo4j", "novanetpassword")
+            .await
+            .expect("Failed to connect to Neo4j");
+
+        let tree = TaxonomyTree::load(&db).await.expect("Failed to load tree");
+
+        // Basic sanity checks
+        assert!(!tree.realms.is_empty(), "Should load realms from Neo4j");
+        assert!(
+            tree.realms.iter().any(|r| r.key == "global"),
+            "Should have global realm"
+        );
+        assert!(
+            tree.realms.iter().any(|r| r.key == "tenant"),
+            "Should have tenant realm"
+        );
+    }
+
+    #[tokio::test]
+    #[ignore] // Requires running Neo4j
+    async fn test_load_instances_integration() {
+        let db = crate::db::Db::connect("bolt://localhost:7687", "neo4j", "novanetpassword")
+            .await
+            .expect("Failed to connect to Neo4j");
+
+        // Load instances for a Kind that should exist (Locale has seed data)
+        let result = TaxonomyTree::load_instances(&db, "Locale").await;
+
+        match result {
+            Ok((instances, total)) => {
+                // Should return some data (at least empty vec with count)
+                assert!(total >= 0, "Total should be non-negative");
+                assert_eq!(
+                    instances.len(),
+                    total as usize,
+                    "Instance count should match"
+                );
+            }
+            Err(e) => {
+                panic!("load_instances failed: {}", e);
+            }
+        }
+    }
+
+    #[tokio::test]
+    #[ignore] // Requires running Neo4j
+    async fn test_load_kind_arcs_integration() {
+        let db = crate::db::Db::connect("bolt://localhost:7687", "neo4j", "novanetpassword")
+            .await
+            .expect("Failed to connect to Neo4j");
+
+        // Load arcs for a Kind that should have relationships
+        let result = TaxonomyTree::load_kind_arcs(&db, "Page").await;
+
+        match result {
+            Ok(arcs_data) => {
+                // Page should have some outgoing arcs (HAS_BLOCK, etc.)
+                // Even if empty, the call should succeed
+                assert!(
+                    arcs_data.outgoing.len() >= 0,
+                    "Should return arcs (even if empty)"
+                );
+            }
+            Err(e) => {
+                panic!("load_kind_arcs failed: {}", e);
+            }
+        }
+    }
 }

@@ -123,13 +123,24 @@ enum TreeItemData {
         key: String,
         properties: Vec<String>,
     },
-    ArcKind { yaml_path: String, key: String },
-    Realm { key: String },
-    Layer { key: String },
-    ArcFamily { key: String },
+    ArcKind {
+        yaml_path: String,
+        key: String,
+    },
+    Realm {
+        key: String,
+    },
+    Layer {
+        key: String,
+    },
+    ArcFamily {
+        key: String,
+    },
     Section,
     /// Instance with its parent Kind's yaml_path (to show schema in YAML panel).
-    Instance { kind_yaml_path: String },
+    Instance {
+        kind_yaml_path: String,
+    },
     None,
 }
 
@@ -190,7 +201,7 @@ pub struct App {
     pub recent_items_cursor: usize,
     /// Navigation history for Ctrl+o (back) / Ctrl+i (forward)
     pub nav_history: Vec<(NavMode, usize)>, // (mode, cursor)
-    pub nav_history_pos: usize,             // Current position in history
+    pub nav_history_pos: usize, // Current position in history
     /// Status message (e.g., "Copied to clipboard", "Refreshing...")
     pub status_message: Option<(String, std::time::Instant)>,
     /// Pending refresh request
@@ -604,7 +615,10 @@ impl App {
                         }
                         idx += 1;
 
-                        if !self.tree.is_collapsed(&format!("layer:{}:{}", realm.key, layer.key)) {
+                        if !self
+                            .tree
+                            .is_collapsed(&format!("layer:{}:{}", realm.key, layer.key))
+                        {
                             for kind in &layer.kinds {
                                 let match_display =
                                     fuzzy_match(&kind.display_name, &mut matcher, &pattern);
@@ -731,7 +745,10 @@ impl App {
         }
 
         // Search navigation: Ctrl-n (next) / Ctrl-p (prev) work in any mode
-        if key.modifiers.contains(crossterm::event::KeyModifiers::CONTROL) {
+        if key
+            .modifiers
+            .contains(crossterm::event::KeyModifiers::CONTROL)
+        {
             match key.code {
                 KeyCode::Char('n') => {
                     self.next_search_result();
@@ -1236,8 +1253,9 @@ impl App {
 
             // Jump to parent [p]
             KeyCode::Char('p') => {
-                if let Some(parent_cursor) =
-                    self.tree.find_parent_cursor(self.tree_cursor, self.is_data_mode())
+                if let Some(parent_cursor) = self
+                    .tree
+                    .find_parent_cursor(self.tree_cursor, self.is_data_mode())
                 {
                     self.tree_cursor = parent_cursor;
                     self.ensure_cursor_visible();
@@ -1291,13 +1309,21 @@ impl App {
             }
 
             // Navigation history: back (Ctrl+o)
-            KeyCode::Char('o') if key.modifiers.contains(crossterm::event::KeyModifiers::CONTROL) => {
+            KeyCode::Char('o')
+                if key
+                    .modifiers
+                    .contains(crossterm::event::KeyModifiers::CONTROL) =>
+            {
                 self.nav_back();
                 true
             }
 
             // Navigation history: forward (Ctrl+i)
-            KeyCode::Char('i') if key.modifiers.contains(crossterm::event::KeyModifiers::CONTROL) => {
+            KeyCode::Char('i')
+                if key
+                    .modifiers
+                    .contains(crossterm::event::KeyModifiers::CONTROL) =>
+            {
                 self.nav_forward();
                 true
             }
@@ -1441,6 +1467,12 @@ impl App {
     /// Set a temporary status message (auto-clears after ~3 seconds).
     pub fn set_status(&mut self, msg: &str) {
         self.status_message = Some((msg.to_string(), std::time::Instant::now()));
+    }
+
+    /// Set an error status message with ⚠ prefix (auto-clears after ~3 seconds).
+    /// Used when async data loading fails to inform the user.
+    pub fn set_status_error(&mut self, msg: &str) {
+        self.status_message = Some((format!("⚠ {}", msg), std::time::Instant::now()));
     }
 
     /// Clear status message if expired (called by UI tick).
@@ -1879,8 +1911,11 @@ impl App {
 
     /// Load matched properties for the current instance (schema + values).
     /// Called after loading instance data to prepare schema overlay.
-    pub fn load_matched_properties(&mut self, instance_props: &std::collections::BTreeMap<String, serde_json::Value>) {
-        use super::schema::{load_schema_properties, match_properties, CoverageStats};
+    pub fn load_matched_properties(
+        &mut self,
+        instance_props: &std::collections::BTreeMap<String, serde_json::Value>,
+    ) {
+        use super::schema::{CoverageStats, load_schema_properties, match_properties};
 
         // Only in Data mode with schema overlay enabled
         if !self.is_data_mode() || !self.schema_overlay_enabled {
@@ -1920,7 +1955,7 @@ impl App {
     /// Called when selecting a Kind in Meta mode to show validation status.
     /// Uses cached YAML content to avoid redundant file I/O.
     pub fn load_validated_kind_properties(&mut self, kind_properties: &[String]) {
-        use super::schema::{parse_schema_properties, validate_kind_properties, ValidationStats};
+        use super::schema::{ValidationStats, parse_schema_properties, validate_kind_properties};
 
         // Need the Kind's YAML path to load schema
         if self.yaml_path.is_empty() {
@@ -2105,7 +2140,8 @@ mod tests {
                 incoming_arcs: vec![],
             },
         ];
-        app.tree.set_instances("Locale", instances.clone(), instances.len());
+        app.tree
+            .set_instances("Locale", instances.clone(), instances.len());
 
         // Switch to Data mode
         app.mode = NavMode::Data;
@@ -2148,7 +2184,8 @@ mod tests {
             outgoing_arcs: vec![],
             incoming_arcs: vec![],
         }];
-        app.tree.set_instances("Locale", instances.clone(), instances.len());
+        app.tree
+            .set_instances("Locale", instances.clone(), instances.len());
 
         // In Meta mode, instances should not be counted
         assert_eq!(app.current_item_count(), 8); // No instances
@@ -2228,7 +2265,8 @@ mod tests {
                 incoming_arcs: vec![],
             },
         ];
-        app.tree.set_instances("Locale", instances.clone(), instances.len());
+        app.tree
+            .set_instances("Locale", instances.clone(), instances.len());
 
         // Switch to Data mode
         app.mode = NavMode::Data;
@@ -2334,7 +2372,8 @@ mod tests {
                 incoming_arcs: vec![],
             },
         ];
-        app.tree.set_instances("Locale", instances.clone(), instances.len());
+        app.tree
+            .set_instances("Locale", instances.clone(), instances.len());
 
         app.enter_filtered_data_mode("Locale".to_string());
 
@@ -2587,7 +2626,10 @@ mod tests {
         app.search.query = "Page".to_string();
         app.update_search();
 
-        assert!(!app.search.results.is_empty(), "Should find at least one result");
+        assert!(
+            !app.search.results.is_empty(),
+            "Should find at least one result"
+        );
 
         // The result should include the index of "Page" kind
         // Tree structure: Kinds(0), global(1), locale-knowledge(2), Locale(3),
@@ -2607,7 +2649,10 @@ mod tests {
         app.search.query = "page".to_string();
         app.update_search();
 
-        assert!(!app.search.results.is_empty(), "Should find case-insensitive match");
+        assert!(
+            !app.search.results.is_empty(),
+            "Should find case-insensitive match"
+        );
     }
 
     #[test]
@@ -2809,7 +2854,10 @@ mod tests {
         app.update_search();
 
         // Should have results
-        assert!(!app.search.results.is_empty(), "Should find results for 'Page'");
+        assert!(
+            !app.search.results.is_empty(),
+            "Should find results for 'Page'"
+        );
 
         // First result should be the exact match with highest score
         if app.search.results.len() > 1 {
@@ -2833,7 +2881,10 @@ mod tests {
         app.update_search();
 
         // Should find Locale-related items
-        assert!(!app.search.results.is_empty(), "Should find results for 'Loc'");
+        assert!(
+            !app.search.results.is_empty(),
+            "Should find results for 'Loc'"
+        );
     }
 
     #[test]
@@ -2845,7 +2896,10 @@ mod tests {
         app.update_search();
 
         // Should find "Page" even with lowercase query
-        assert!(!app.search.results.is_empty(), "Lowercase 'page' should find 'Page'");
+        assert!(
+            !app.search.results.is_empty(),
+            "Lowercase 'page' should find 'Page'"
+        );
     }
 
     #[test]
@@ -2875,8 +2929,14 @@ mod tests {
         let second_scores = app.search.scores.clone();
 
         // Results and scores should be identical (deterministic)
-        assert_eq!(first_results, second_results, "Results should be deterministic");
-        assert_eq!(first_scores, second_scores, "Scores should be deterministic");
+        assert_eq!(
+            first_results, second_results,
+            "Results should be deterministic"
+        );
+        assert_eq!(
+            first_scores, second_scores,
+            "Scores should be deterministic"
+        );
     }
 
     #[test]
@@ -3163,7 +3223,10 @@ mod tests {
         app.update_search();
 
         // Should find "Node Kinds" header
-        assert!(!app.search.results.is_empty(), "Should find header even when collapsed");
+        assert!(
+            !app.search.results.is_empty(),
+            "Should find header even when collapsed"
+        );
     }
 
     #[test]
@@ -3180,7 +3243,10 @@ mod tests {
         let after_toggle = app.tree.is_collapsed("kinds");
 
         // Should be opposite of before
-        assert_ne!(is_collapsed, after_toggle, "Toggle should change collapsed state");
+        assert_ne!(
+            is_collapsed, after_toggle,
+            "Toggle should change collapsed state"
+        );
     }
 
     #[test]
@@ -3273,5 +3339,22 @@ mod tests {
 
         app.hide_empty = !app.hide_empty;
         assert_eq!(app.hide_empty, initial);
+    }
+
+    #[test]
+    fn test_set_status_error_adds_warning_prefix() {
+        let mut app = create_test_app();
+
+        // Error status should have ⚠ prefix
+        app.set_status_error("Neo4j connection failed");
+        assert!(app.status_message.is_some());
+        let (msg, _) = app.status_message.as_ref().unwrap();
+        assert!(msg.starts_with("⚠"), "Error status should start with ⚠");
+        assert!(msg.contains("Neo4j connection failed"));
+
+        // Regular status should NOT have ⚠ prefix
+        app.set_status("Loading...");
+        let (msg, _) = app.status_message.as_ref().unwrap();
+        assert!(!msg.starts_with("⚠"), "Regular status should not have ⚠");
     }
 }

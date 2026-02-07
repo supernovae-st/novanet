@@ -104,7 +104,7 @@ fn type_badge(prop_type: &str) -> &'static str {
         "object" | "map" => "obj ",
         "url" | "uri" => "url ",
         "?" => "?   ", // unknown type from validation
-        _ => "··· ", // fallback for unknown types
+        _ => "··· ",   // fallback for unknown types
     }
 }
 
@@ -1238,8 +1238,8 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
             .track_symbol(Some("│"))
             .thumb_symbol("█");
 
-        let mut scrollbar_state = ScrollbarState::new(total.saturating_sub(visible_height))
-            .position(app.tree_scroll);
+        let mut scrollbar_state =
+            ScrollbarState::new(total.saturating_sub(visible_height)).position(app.tree_scroll);
 
         let scrollbar_area = Rect {
             x: area.x + area.width.saturating_sub(2),
@@ -3104,10 +3104,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                 // Header with validation stats
                 if let Some(stats) = &app.validation_stats {
                     lines.push(Line::from(vec![
-                        Span::styled(
-                            format!("Properties ({}) ", validated.len()),
-                            STYLE_MUTED,
-                        ),
+                        Span::styled(format!("Properties ({}) ", validated.len()), STYLE_MUTED),
                         Span::styled(format!("✓{}", stats.sync_count), STYLE_SUCCESS),
                         Span::styled(" ", STYLE_DIM),
                         if stats.missing_count > 0 {
@@ -3141,13 +3138,18 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                     let type_badge = type_badge(&prop.prop_type);
 
                     // Example value (if available)
-                    let example_str = prop.example.as_ref()
+                    let example_str = prop
+                        .example
+                        .as_ref()
                         .map(|e| format!("→ {}", truncate_str(e, 25)))
                         .unwrap_or_default();
 
                     lines.push(Line::from(vec![
                         Span::styled(status_icon, status_style),
-                        Span::styled(required_marker, Style::default().fg(Color::Rgb(255, 100, 100))),
+                        Span::styled(
+                            required_marker,
+                            Style::default().fg(Color::Rgb(255, 100, 100)),
+                        ),
                         Span::styled(format!("[{:4}] ", type_badge), STYLE_DIM),
                         Span::styled(format!("{:<15}", prop.name), STYLE_INFO),
                         Span::styled(example_str, STYLE_MUTED),
@@ -3357,10 +3359,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
             if kind.instance_count > 0 {
                 lines.push(Line::from(vec![
                     Span::styled("instances   ", STYLE_DIM),
-                    Span::styled(
-                        format!("{} total", kind.instance_count),
-                        STYLE_MUTED,
-                    ),
+                    Span::styled(format!("{} total", kind.instance_count), STYLE_MUTED),
                 ]));
             }
 
@@ -3406,7 +3405,10 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                         .filter(|p| p.schema.required && p.status != PropertyStatus::Filled)
                         .count();
                     let (status_text, status_style) = if missing_required > 0 {
-                        (format!("missing {} required", missing_required), STYLE_ERROR)
+                        (
+                            format!("missing {} required", missing_required),
+                            STYLE_ERROR,
+                        )
                     } else if percent == 100 {
                         ("complete".to_string(), STYLE_SUCCESS)
                     } else {
@@ -3445,14 +3447,24 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                         100
                     };
                     let req_bar_filled = (req_percent * bar_width) / 100;
-                    let req_bar_filled = req_bar_filled.max(if required_filled > 0 { 1 } else { 0 });
+                    let req_bar_filled =
+                        req_bar_filled.max(if required_filled > 0 { 1 } else { 0 });
                     lines.push(Line::from(vec![
                         Span::styled("* ", Style::default().fg(Color::Red)),
                         Span::styled("required     ", Style::default().fg(Color::Yellow)),
-                        Span::styled("█".repeat(req_bar_filled), Style::default().fg(Color::Yellow)),
-                        Span::styled("░".repeat(bar_width.saturating_sub(req_bar_filled)), STYLE_DIM),
+                        Span::styled(
+                            "█".repeat(req_bar_filled),
+                            Style::default().fg(Color::Yellow),
+                        ),
+                        Span::styled(
+                            "░".repeat(bar_width.saturating_sub(req_bar_filled)),
+                            STYLE_DIM,
+                        ),
                         Span::styled(format!(" {:>3}%", req_percent), STYLE_MUTED),
-                        Span::styled(format!("  {}/{}", required_filled, required_count), STYLE_DIM),
+                        Span::styled(
+                            format!("  {}/{}", required_filled, required_count),
+                            STYLE_DIM,
+                        ),
                     ]));
 
                     // Optional bar
@@ -3462,14 +3474,21 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                         100
                     };
                     let opt_bar_filled = (opt_percent * bar_width) / 100;
-                    let opt_bar_filled = opt_bar_filled.max(if optional_filled > 0 { 1 } else { 0 });
+                    let opt_bar_filled =
+                        opt_bar_filled.max(if optional_filled > 0 { 1 } else { 0 });
                     lines.push(Line::from(vec![
                         Span::styled("  ", Style::default()),
                         Span::styled("optional     ", Style::default().fg(Color::Gray)),
                         Span::styled("█".repeat(opt_bar_filled), Style::default().fg(Color::Gray)),
-                        Span::styled("░".repeat(bar_width.saturating_sub(opt_bar_filled)), STYLE_DIM),
+                        Span::styled(
+                            "░".repeat(bar_width.saturating_sub(opt_bar_filled)),
+                            STYLE_DIM,
+                        ),
                         Span::styled(format!(" {:>3}%", opt_percent), STYLE_MUTED),
-                        Span::styled(format!("  {}/{}", optional_filled, optional_count), STYLE_DIM),
+                        Span::styled(
+                            format!("  {}/{}", optional_filled, optional_count),
+                            STYLE_DIM,
+                        ),
                     ]));
 
                     // Properties list header
@@ -3582,7 +3601,10 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
 
                     // Show properties in YAML definition order (kind.properties preserves order)
                     for prop_name in &kind.properties {
-                        if prop_name.starts_with('_') || prop_name == "key" || prop_name == "display_name" {
+                        if prop_name.starts_with('_')
+                            || prop_name == "key"
+                            || prop_name == "display_name"
+                        {
                             continue;
                         }
                         if let Some(value) = instance.properties.get(prop_name) {
@@ -3837,8 +3859,8 @@ fn render_status(f: &mut Frame, area: Rect, app: &App) {
 
     // Contextual shortcuts based on mode, focus, and selection
     let shortcuts = match app.mode {
-        NavMode::Atlas => "j/k:nav  1-4:modes  ?:help",
-        NavMode::Audit => "j/k:nav  1-5:modes  ?:help",
+        NavMode::Atlas => "j/k:nav  1-6:modes  ?:help",
+        NavMode::Audit => "j/k:nav  1-6:modes  ?:help",
         NavMode::Data => {
             // Check if on an Instance (can navigate to Kind with '1')
             if matches!(

@@ -289,11 +289,7 @@ impl ArcKindDef {
                         }
                     })
                     .collect();
-                if names.is_empty() {
-                    None
-                } else {
-                    Some(names)
-                }
+                if names.is_empty() { None } else { Some(names) }
             }
             // Map: {segment: {type: string, ...}}
             serde_yaml::Value::Mapping(m) => {
@@ -301,11 +297,7 @@ impl ArcKindDef {
                     .keys()
                     .filter_map(|k| k.as_str().map(|s| s.to_string()))
                     .collect();
-                if names.is_empty() {
-                    None
-                } else {
-                    Some(names)
-                }
+                if names.is_empty() { None } else { Some(names) }
             }
             _ => None,
         })
@@ -796,24 +788,24 @@ arc:
     }
 }
 
-    #[test]
-    fn parse_has_audience_file() {
-        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
-            .parent()
-            .and_then(|p| p.parent())
-            .expect("should find root");
-        
-        let path = root.join("packages/core/models/arc-kinds/ownership/has-audience.yaml");
-        eprintln!("Loading from: {}", path.display());
-        
-        let content = std::fs::read_to_string(&path).expect("should read file");
-        eprintln!("Content:\n{}", &content[..200.min(content.len())]);
-        
-        match serde_yaml::from_str::<ArcKindYaml>(&content) {
-            Ok(v) => eprintln!("Parsed: {}", v.arc.name),
-            Err(e) => {
-                eprintln!("Error: {}", e);
-                panic!("Failed to parse: {}", e);
-            }
+#[test]
+fn parse_has_audience_file() {
+    let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+        .parent()
+        .and_then(|p| p.parent())
+        .expect("should find root");
+
+    let path = root.join("packages/core/models/arc-kinds/ownership/has-audience.yaml");
+    eprintln!("Loading from: {}", path.display());
+
+    let content = std::fs::read_to_string(&path).expect("should read file");
+    eprintln!("Content:\n{}", &content[..200.min(content.len())]);
+
+    match serde_yaml::from_str::<ArcKindYaml>(&content) {
+        Ok(v) => eprintln!("Parsed: {}", v.arc.name),
+        Err(e) => {
+            eprintln!("Error: {}", e);
+            panic!("Failed to parse: {}", e);
         }
     }
+}

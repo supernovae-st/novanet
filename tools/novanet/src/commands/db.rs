@@ -393,7 +393,10 @@ CREATE (m {other: 'value'});";
             stmts[0].contains(r"'Kaapstad: \'n Stad van Kulture'"),
             "First statement should contain escaped quote"
         );
-        assert!(stmts[1].contains("'value'"), "Second statement should be separate");
+        assert!(
+            stmts[1].contains("'value'"),
+            "Second statement should be separate"
+        );
     }
 
     #[test]
