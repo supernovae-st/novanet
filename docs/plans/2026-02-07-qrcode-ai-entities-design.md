@@ -3193,88 +3193,109 @@ pnpm infra:reset                       # Drop + reseed
 │  │  SEMANTIC LAYER — Entity Graph (~279 nodes, ~825 arcs)                                                    ││
 │  │  ════════════════════════════════════════════════════════════════════════════════════════════════════════││
 │  │                                                                                                           ││
-│  │                                         ┌─────────────────┐                                               ││
-│  │                                         │   SHORT-LINK    │                                               ││
-│  │                                         │    (THING)      │                                               ││
-│  │                                         └────────┬────────┘                                               ││
-│  │                                                  │ [enables]                                              ││
-│  │                              ┌───────────────────┼───────────────────┐                                    ││
-│  │                              │                   │                   │                                    ││
-│  │                              ▼                   ▼                   ▼                                    ││
-│  │                    ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐                            ││
-│  │                    │   ANALYTICS     │ │   SMART-LINK    │ │CONTEXTUAL-ROUTE │                            ││
-│  │                    │   (FEATURE)     │ │   (PILLAR)      │ │   (FEATURE)     │                            ││
-│  │                    └─────────────────┘ └────────┬────────┘ └─────────────────┘                            ││
-│  │                                                 │                                                          ││
-│  │  ═══════════════════════════════════════════════╪═══════════════════════════════════════════════════════  ││
-│  │  4 PILLARS                                      │                                                          ││
-│  │  ═══════════════════════════════════════════════╪═══════════════════════════════════════════════════════  ││
-│  │                                                 │                                                          ││
-│  │  ┌───────────────┐              ┌───────────────┴───────────────┐              ┌───────────────┐          ││
-│  │  │    BARCODE    │◄─[rel 0.40]──│           QR-CODE             │──[rel 0.40]─►│ LANDING-PAGE  │          ││
-│  │  │   (PILLAR)    │              │          (PILLAR)             │              │   (PILLAR)    │          ││
-│  │  │   18 nodes    │              │         is_pillar: true       │              │   7 nodes     │          ││
-│  │  └───────┬───────┘              └───────────────┬───────────────┘              └───────┬───────┘          ││
-│  │          │                                      │                                      │                   ││
-│  │          │ [includes]                           │ [includes]                           │ [includes]        ││
-│  │          │                                      │                                      │                   ││
-│  │          ▼                                      ▼                                      ▼                   ││
-│  │  ┌───────────────┐    ┌─────────────────────────────────────────────────────┐  ┌───────────────┐          ││
-│  │  │BARCODE-FORMAT │    │                  QR-CODE-STYLE                       │  │LANDING-TYPE   │          ││
-│  │  │   (THING)     │    │                   (THING)                            │  │   (THING)     │          ││
-│  │  │               │    │  ┌────────────┐ ┌────────────┐ ┌────────────┐       │  │               │          ││
-│  │  │ • ean-13      │    │  │  CUSTOM    │ │   IMAGE    │ │    ART     │       │  │ • link-in-bio │          ││
-│  │  │ • upc-a       │    │  │ qr-code    │ │  qr-code   │ │  qr-code   │       │  │ • menu        │          ││
-│  │  │ • code-128    │    │  │            │ │            │ │            │       │  │ • forms       │          ││
-│  │  │ • data-matrix │    │  │ [variant_of│ │ [variant_of│ │ [variant_of│       │  │ • event-rsvp  │          ││
-│  │  │ • pdf417      │    │  │  0.85]     │ │  0.85]     │ │  0.85]     │       │  │ • booking     │          ││
-│  │  └───────────────┘    │  └──────┬─────┘ └──────┬─────┘ └──────┬─────┘       │  └───────────────┘          ││
-│  │                       │         │              │              │              │                             ││
-│  │                       │         └──────────────┼──────────────┘              │                             ││
-│  │                       │                        ▼                             │                             ││
-│  │                       │               ┌─────────────────┐                    │                             ││
-│  │                       │               │  DESIGN SPECS   │                    │                             ││
-│  │                       │               │ • with-logo     │                    │                             ││
-│  │                       │               │ • with-text     │                    │                             ││
-│  │                       │               │ • color         │                    │                             ││
-│  │                       │               │ • shapes        │                    │                             ││
-│  │                       │               │ • background    │                    │                             ││
-│  │                       └───────────────┴─────────────────┴────────────────────┘                             ││
-│  │                                                                                                            ││
-│  │  ═══════════════════════════════════════════════════════════════════════════════════════════════════════  ││
-│  │  CONTENT TYPES (58)                  CONCEPTS (12)                 ACTIONS (15)                            ││
-│  │  ═══════════════════════════════════════════════════════════════════════════════════════════════════════  ││
-│  │                                                                                                            ││
-│  │  ┌─────────────┐ ┌─────────────┐    ┌─────────────┐ ┌─────────────┐    ┌─────────────┐ ┌─────────────┐    ││
-│  │  │    BASIC    │ │   SOCIAL    │    │   DYNAMIC   │ │   STATIC    │    │   CREATE    │ │    SCAN     │    ││
-│  │  │  url, wifi  │ │  instagram  │    │  qr-code    │ │  qr-code    │    │  qr-code    │ │  qr-code    │    ││
-│  │  │  vcard, pdf │ │  linkedin   │    │             │ │             │    │             │ │             │    ││
-│  │  │  email, sms │ │  facebook   │    │ [requires]  │ │ [contrasts] │    │[is_action_on│ │[is_action_on│    ││
-│  │  │             │ │  youtube    │    │  short-link │ │  dynamic    │    │  0.95]      │ │  0.95]      │    ││
-│  │  └─────────────┘ └─────────────┘    └─────────────┘ └─────────────┘    └─────────────┘ └─────────────┘    ││
-│  │                                                                                                            ││
-│  │  ┌─────────────┐ ┌─────────────┐    ┌─────────────────────────────────────────────────────────────────┐   ││
-│  │  │   PAYMENT   │ │  LOCATION   │    │  FEATURES & TOOLS (25)                                          │   ││
-│  │  │  pix (🇧🇷)   │ │ google-maps │    │  ───────────────────                                            │   ││
-│  │  │  upi (🇮🇳)   │ │ apple-maps  │    │  analytics, tracking, contextual-routing, custom-domain,       │   ││
-│  │  │  paypal     │ │ waze        │    │  bulk-creation, team-workspaces, api, qr-code-generator,        │   ││
-│  │  │  bitcoin    │ │ coordinates │    │  qr-code-scanner, barcode-generator, landing-page-builder       │   ││
-│  │  │             │ │             │    │                                                                  │   ││
-│  │  │ [:POPULAR_IN│ │             │    │  [used_for 0.95] ──► qr-code                                    │   ││
-│  │  │  brazil 0.9]│ │             │    │  [part_of 0.85] ──► smart-link                                  │   ││
-│  │  └─────────────┘ └─────────────┘    └─────────────────────────────────────────────────────────────────┘   ││
-│  │                                                                                                            ││
-│  │  ═══════════════════════════════════════════════════════════════════════════════════════════════════════  ││
-│  │  MEDIUMS (20)        INDUSTRIES (25)       BRANDS (25)        INTEGRATIONS (12)                           ││
-│  │  ═══════════════════════════════════════════════════════════════════════════════════════════════════════  ││
-│  │                                                                                                            ││
-│  │  • business-cards    • restaurants          • google           • zapier-integration                       ││
-│  │  • posters           • retail               • instagram        • hubspot-integration                      ││
-│  │  • flyers            • healthcare           • facebook         • google-sheets-integration                ││
-│  │  • packaging         • marketing-agencies   • spotify          • shopify-integration                      ││
-│  │  • emails            • real-estate          • paypal           • salesforce-integration                   ││
-│  │  • table-tents       • education            • apple            • make-integration                         ││
-│  │                                                                                                            ││
+│  │  ═══════════════════════════════════════════════════════════════════════════════════════════════════════ ││
+│  │  CORE DEPENDENCY CHAIN                                                                                    ││
+│  │  ═══════════════════════════════════════════════════════════════════════════════════════════════════════ ││
+│  │                                                                                                           ││
+│  │  ┌─────────────────┐         ┌─────────────────┐         ┌─────────────────────────────────────────────┐ ││
+│  │  │   SHORT-LINK    │         │  DYNAMIC-QR-CODE│         │         ANALYTICS (FEATURE)                 │ ││
+│  │  │    (THING)      │◄────────│    (CONCEPT)    │────────►│  ┌──────────────────────────────────────┐   │ ││
+│  │  │                 │[requires│                 │[enables]│  │  INCLUDES (sub-entities):            │   │ ││
+│  │  │ Core redirect   │  0.90]  │ Editable after  │  [0.85] │  │  • click-tracking (FEATURE)          │   │ ││
+│  │  │ mechanism       │         │ print           │         │  │  • scan-counting (FEATURE)           │   │ ││
+│  │  │                 │         │                 │         │  │  • geo-tracking (FEATURE)            │   │ ││
+│  │  │ [enables]       │         │ [variant_of]    │         │  │  • device-detection (FEATURE)        │   │ ││
+│  │  │  ├─► analytics  │         │  ▲              │         │  │  • time-series (FEATURE)             │   │ ││
+│  │  │  ├─► smart-link │         │  │ [0.85]       │         │  └──────────────────────────────────────┘   │ ││
+│  │  │  └─► context-rt │         │  │              │         │                                             │ ││
+│  │  └─────────────────┘         └──┼──────────────┘         └─────────────────────────────────────────────┘ ││
+│  │                                 │                                                                         ││
+│  │  ═══════════════════════════════╪═══════════════════════════════════════════════════════════════════════ ││
+│  │  4 PILLARS                      │                                                                         ││
+│  │  ═══════════════════════════════╪═══════════════════════════════════════════════════════════════════════ ││
+│  │                                 │                                                                         ││
+│  │  ┌───────────────┐    ┌─────────┴───────────────────┐    ┌───────────────┐    ┌───────────────┐          ││
+│  │  │    BARCODE    │◄───│         QR-CODE             │───►│  SMART-LINK   │───►│ LANDING-PAGE  │          ││
+│  │  │   (PILLAR)    │rel │        (PILLAR)             │rel │   (PILLAR)    │rel │   (PILLAR)    │          ││
+│  │  │   18 nodes    │0.40│       is_pillar: true       │0.50│               │0.40│   7 nodes     │          ││
+│  │  └───────┬───────┘    └─────────────┬───────────────┘    └───────────────┘    └───────┬───────┘          ││
+│  │          │                          │                                                  │                  ││
+│  │          │ [includes]               │ [includes]                                       │ [includes]       ││
+│  │          ▼                          ▼                                                  ▼                  ││
+│  │  ┌───────────────┐    ┌──────────────────────────────────────────────┐        ┌───────────────┐          ││
+│  │  │BARCODE-FORMAT │    │              QR-CODE VARIANTS                 │        │LANDING-TYPE   │          ││
+│  │  │   (THING)     │    │ ┌───────────────────┐ ┌───────────────────┐  │        │   (THING)     │          ││
+│  │  │               │    │ │  STATIC-QR-CODE   │ │  DYNAMIC-QR-CODE  │  │        │               │          ││
+│  │  │ • ean-13      │    │ │    (CONCEPT)      │ │    (CONCEPT)      │  │        │ • link-in-bio │          ││
+│  │  │ • upc-a       │    │ │                   │ │                   │  │        │ • menu        │          ││
+│  │  │ • code-128    │    │ │ Fixed URL         │ │ Editable URL      │  │        │ • forms       │          ││
+│  │  │ • data-matrix │    │ │ No tracking       │ │ + Analytics       │  │        │ • event-rsvp  │          ││
+│  │  │ • pdf417      │    │ │                   │ │                   │  │        │ • booking     │          ││
+│  │  └───────────────┘    │ │ [contrasts 0.25]◄─┼─┤ [requires 0.90]───┼──┼────►short-link        │          ││
+│  │                       │ │ [variant_of 0.85] │ │ [variant_of 0.85] │  │        └───────────────┘          ││
+│  │                       │ │        │          │ │        │          │  │                                   ││
+│  │                       │ └────────┼──────────┘ └────────┼──────────┘  │                                   ││
+│  │                       │          │                     │             │                                   ││
+│  │                       │          └─────────┬───────────┘             │                                   ││
+│  │                       │                    ▼                         │                                   ││
+│  │                       │           ┌─────────────────┐                │                                   ││
+│  │                       │           │  QR-CODE-STYLE  │                │                                   ││
+│  │                       │           │   (THING)       │                │                                   ││
+│  │                       │           │ ┌─────┐┌─────┐┌─────┐            │                                   ││
+│  │                       │           │ │CUST.││IMAGE││ ART │            │                                   ││
+│  │                       │           │ │[0.85││[0.85││[0.85│            │                                   ││
+│  │                       │           │ └─────┘└─────┘└─────┘            │                                   ││
+│  │                       │           │ • with-logo • with-text          │                                   ││
+│  │                       │           │ • color • shapes • bg            │                                   ││
+│  │                       └───────────┴─────────────────┴────────────────┘                                   ││
+│  │                                                                                                           ││
+│  │  ═══════════════════════════════════════════════════════════════════════════════════════════════════════ ││
+│  │  CONTENT TYPES (58)                  CONCEPTS (12)                 ACTIONS (15)                           ││
+│  │  ═══════════════════════════════════════════════════════════════════════════════════════════════════════ ││
+│  │                                                                                                           ││
+│  │  ┌─────────────┐ ┌─────────────┐    ┌──────────────────────────────────────┐    ┌─────────────┐          ││
+│  │  │    BASIC    │ │   SOCIAL    │    │  CONCEPTS                            │    │   ACTIONS   │          ││
+│  │  │  url, wifi  │ │  instagram  │    │  • dynamic-qr-code [variant_of qr]   │    │  • create   │          ││
+│  │  │  vcard, pdf │ │  linkedin   │    │  • static-qr-code  [variant_of qr]   │    │  • scan     │          ││
+│  │  │  email, sms │ │  facebook   │    │  • error-correction                  │    │  • generate │          ││
+│  │  │             │ │  youtube    │    │  • encoding                          │    │  • download │          ││
+│  │  └─────────────┘ └─────────────┘    │  • redirect                          │    │  • customize│          ││
+│  │                                      └──────────────────────────────────────┘    │  • track    │          ││
+│  │  ┌─────────────┐ ┌─────────────┐                                                 │  [is_action_│          ││
+│  │  │   PAYMENT   │ │  LOCATION   │    ┌─────────────────────────────────────────┐  │  on 0.95]  │          ││
+│  │  │  pix (🇧🇷)   │ │ google-maps │    │  FEATURES & TOOLS (25+)                 │  └─────────────┘          ││
+│  │  │  upi (🇮🇳)   │ │ apple-maps  │    │  ───────────────────────                │                          ││
+│  │  │  paypal     │ │ waze        │    │                                         │                          ││
+│  │  │  bitcoin    │ │ coordinates │    │  ┌─────────────────────────────────┐    │                          ││
+│  │  │             │ │             │    │  │ ANALYTICS [includes]:           │    │                          ││
+│  │  │ [:POPULAR_IN│ │             │    │  │  • click-tracking               │    │                          ││
+│  │  │  brazil 0.9]│ │             │    │  │  • scan-counting                │    │                          ││
+│  │  └─────────────┘ └─────────────┘    │  │  • geo-tracking                 │    │                          ││
+│  │                                      │  │  • device-detection             │    │                          ││
+│  │                                      │  │  • time-series                  │    │                          ││
+│  │                                      │  └─────────────────────────────────┘    │                          ││
+│  │                                      │                                         │                          ││
+│  │                                      │  Other features:                        │                          ││
+│  │                                      │  contextual-routing, custom-domain,     │                          ││
+│  │                                      │  bulk-creation, team-workspaces, api,   │                          ││
+│  │                                      │  qr-code-generator, qr-code-scanner,    │                          ││
+│  │                                      │  barcode-generator, landing-page-builder│                          ││
+│  │                                      │                                         │                          ││
+│  │                                      │  [used_for 0.95] ──► qr-code            │                          ││
+│  │                                      │  [part_of 0.85] ──► smart-link          │                          ││
+│  │                                      └─────────────────────────────────────────┘                          ││
+│  │                                                                                                           ││
+│  │  ═══════════════════════════════════════════════════════════════════════════════════════════════════════ ││
+│  │  MEDIUMS (20)        INDUSTRIES (25)       BRANDS (25)        INTEGRATIONS (12)                          ││
+│  │  ═══════════════════════════════════════════════════════════════════════════════════════════════════════ ││
+│  │                                                                                                           ││
+│  │  • business-cards    • restaurants          • google           • zapier-integration                      ││
+│  │  • posters           • retail               • instagram        • hubspot-integration                     ││
+│  │  • flyers            • healthcare           • facebook         • google-sheets-integration               ││
+│  │  • packaging         • marketing-agencies   • spotify          • shopify-integration                     ││
+│  │  • emails            • real-estate          • paypal           • salesforce-integration                  ││
+│  │  • table-tents       • education            • apple            • make-integration                        ││
+│  │                                                                                                           ││
 │  └───────────────────────────────────────────────────────────────────────────────────────────────────────────┘│
 │                                                                                                               │
 │  ┌───────────────────────────────────────────────────────────────────────────────────────────────────────────┐│
@@ -3288,6 +3309,31 @@ pnpm infra:reset                       # Drop + reseed
 
 
 ┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│  KEY RELATIONSHIPS SUMMARY                                                                                     │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                                               │
+│  qr-code (PILLAR)                                                                                             │
+│    ├──[includes]──► static-qr-code (CONCEPT)                                                                  │
+│    │                  └──[contrasts 0.25]──► dynamic-qr-code                                                  │
+│    │                  └──[variant_of 0.85]──► qr-code                                                         │
+│    └──[includes]──► dynamic-qr-code (CONCEPT)                                                                 │
+│                       └──[requires 0.90]──► short-link                                                        │
+│                       └──[variant_of 0.85]──► qr-code                                                         │
+│                       └──[enables 0.85]──► analytics                                                          │
+│                                                                                                               │
+│  short-link (THING)                                                                                           │
+│    ├──[enables 0.85]──► analytics                                                                             │
+│    ├──[enables 0.85]──► smart-link                                                                            │
+│    └──[enables 0.85]──► contextual-routing                                                                    │
+│                                                                                                               │
+│  analytics (FEATURE)                                                                                          │
+│    ├──[includes]──► click-tracking (FEATURE)                                                                  │
+│    ├──[includes]──► scan-counting (FEATURE)                                                                   │
+│    ├──[includes]──► geo-tracking (FEATURE)                                                                    │
+│    ├──[includes]──► device-detection (FEATURE)                                                                │
+│    └──[includes]──► time-series (FEATURE)                                                                     │
+│                                                                                                               │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
 │  ARC TYPES LEGEND                                                                                              │
 ├───────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
 │                                                                                                               │
