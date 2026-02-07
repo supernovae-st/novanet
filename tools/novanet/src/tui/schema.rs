@@ -5,8 +5,8 @@
 //! - Filled properties (value present)
 //! - Empty optional properties (dim)
 //! - Missing required properties (red warning)
-
-#![allow(dead_code)] // WIP: Schema overlay implementation
+//!
+//! Also provides Kind validation (Neo4j ↔ YAML source of truth).
 
 use indexmap::IndexMap;
 use serde::Deserialize;
@@ -26,9 +26,11 @@ pub struct SchemaProperty {
     pub required: bool,
     /// Example value from schema (for display when empty)
     pub example: Option<String>,
-    /// Property description
+    /// Property description (parsed for future tooltip/detail view)
+    #[allow(dead_code)]
     pub description: Option<String>,
-    /// Enum values if prop_type is "enum"
+    /// Enum values if prop_type is "enum" (parsed for future dropdown/validation)
+    #[allow(dead_code)]
     pub enum_values: Option<Vec<String>>,
 }
 
@@ -61,9 +63,11 @@ pub struct CoverageStats {
     pub total: usize,
     /// Properties with values
     pub filled: usize,
-    /// Required properties missing
+    /// Required properties missing (used in tests and audit mode)
+    #[allow(dead_code)]
     pub missing_required: usize,
-    /// Coverage percentage (0-100)
+    /// Coverage percentage (0-100) — calculated for future progress bar display
+    #[allow(dead_code)]
     pub percent: u8,
 }
 
@@ -87,6 +91,67 @@ impl CoverageStats {
             filled,
             missing_required,
             percent,
+        }
+    }
+}
+
+// =============================================================================
+// Kind Property Validation (Neo4j ↔ YAML)
+// =============================================================================
+
+/// Validation status for Kind properties (Neo4j vs YAML source of truth).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum ValidationStatus {
+    /// Property exists in both YAML schema and Neo4j Kind node
+    Sync,
+    /// YAML defines this property, but Neo4j Kind node is missing it
+    Missing,
+    /// Neo4j Kind node has this property, but not defined in YAML schema
+    Extra,
+}
+
+/// Validated property combining YAML schema with Neo4j validation status.
+#[derive(Debug, Clone)]
+pub struct ValidatedProperty {
+    /// Property name
+    pub name: String,
+    /// Property type from YAML (e.g., "string", "boolean", "datetime")
+    /// For Extra properties, this will be "?"
+    pub prop_type: String,
+    /// Whether this property is required (from YAML)
+    pub required: bool,
+    /// Example value from YAML schema
+    pub example: Option<String>,
+    /// Validation status (Sync, Missing, or Extra)
+    pub status: ValidationStatus,
+}
+
+/// Validation statistics for a Kind.
+#[derive(Debug, Clone, Default)]
+pub struct ValidationStats {
+    /// Properties in sync (YAML = Neo4j)
+    pub sync_count: usize,
+    /// Properties missing in Neo4j
+    pub missing_count: usize,
+    /// Extra properties in Neo4j (not in YAML)
+    pub extra_count: usize,
+}
+
+impl ValidationStats {
+    /// Calculate validation stats from validated properties.
+    /// Uses single-pass iteration for efficiency.
+    pub fn from_validated(props: &[ValidatedProperty]) -> Self {
+        let (sync_count, missing_count, extra_count) =
+            props.iter().fold((0, 0, 0), |(s, m, e), p| match p.status {
+                ValidationStatus::Sync => (s + 1, m, e),
+                ValidationStatus::Missing => (s, m + 1, e),
+                ValidationStatus::Extra => (s, m, e + 1),
+            });
+
+        Self {
+            sync_count,
+            missing_count,
+            extra_count,
         }
     }
 }
@@ -256,6 +321,66 @@ fn json_value_to_string(value: &JsonValue) -> String {
             serde_json::to_string(obj).unwrap_or_else(|_| "{}".to_string())
         }
     }
+}
+
+// =============================================================================
+// Kind Validation Functions
+// =============================================================================
+
+/// Validate Kind properties by comparing YAML schema against Neo4j state.
+///
+/// Returns validated properties showing:
+/// - Sync: property exists in both YAML and Neo4j
+/// - Missing: YAML defines it, but Neo4j doesn't have it
+/// - Extra: Neo4j has it, but not in YAML schema
+pub fn validate_kind_properties(
+    schema: &[SchemaProperty],
+    neo4j_properties: &[String],
+) -> Vec<ValidatedProperty> {
+    use rustc_hash::FxHashSet; // 30% faster than std::collections::HashSet for strings
+
+    let neo4j_set: FxHashSet<&str> = neo4j_properties.iter().map(|s| s.as_str()).collect();
+    let yaml_set: FxHashSet<&str> = schema.iter().map(|p| p.name.as_str()).collect();
+
+    // Pre-allocate with estimated capacity (schema + potential extras)
+    let mut validated = Vec::with_capacity(schema.len() + 8);
+
+    // First: YAML properties (in schema order) - mark as Sync or Missing
+    for prop in schema {
+        let status = if neo4j_set.contains(prop.name.as_str()) {
+            ValidationStatus::Sync
+        } else {
+            ValidationStatus::Missing
+        };
+
+        validated.push(ValidatedProperty {
+            name: prop.name.clone(),
+            prop_type: prop.prop_type.clone(),
+            required: prop.required,
+            example: prop.example.clone(),
+            status,
+        });
+    }
+
+    // Second: Extra properties (in Neo4j but not in YAML)
+    // Collect and sort for deterministic UI order
+    let mut extra_props: Vec<_> = neo4j_properties
+        .iter()
+        .filter(|p| !yaml_set.contains(p.as_str()))
+        .collect();
+    extra_props.sort(); // Alphabetical order for consistent display
+
+    for neo4j_prop in extra_props {
+        validated.push(ValidatedProperty {
+            name: neo4j_prop.clone(),
+            prop_type: "?".to_string(),
+            required: false,
+            example: None,
+            status: ValidationStatus::Extra,
+        });
+    }
+
+    validated
 }
 
 // =============================================================================

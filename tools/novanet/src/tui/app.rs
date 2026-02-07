@@ -13,7 +13,7 @@ use super::audit::GlobalAuditStats;
 use super::data::{
     ArcKindDetails, KindArcsData, LayerDetails, RealmDetails, TaxonomyTree, TreeItem,
 };
-use super::schema::{CoverageStats, MatchedProperty};
+use super::schema::{CoverageStats, MatchedProperty, ValidatedProperty, ValidationStats};
 use super::theme::Theme;
 use super::yaml::{YamlSections, YamlViewSection};
 
@@ -114,29 +114,15 @@ impl Focus {
     }
 }
 
-/// Type of node in the graph visualization.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum GraphNodeType {
-    Realm,       // Parent realm (hierarchy)
-    Layer,       // Parent layer (hierarchy)
-    Kind,        // Semantic neighbor (arc target)
-    ArcEndpoint, // From/to endpoint of an ArcKind
-}
-
-/// Position hint for graph visualization layout.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum GraphPosition {
-    Top,    // Parent hierarchy (Realm, Layer)
-    Bottom, // Child nodes or outgoing arcs
-    Left,   // Incoming arcs
-    Right,  // Outgoing arcs
-}
-
 /// Extracted data from a TreeItem for use in load_yaml_for_current().
 /// This avoids borrow checker issues when we need to both read the tree and mutate App.
 #[derive(Debug)]
 enum TreeItemData {
-    Kind { yaml_path: String, key: String },
+    Kind {
+        yaml_path: String,
+        key: String,
+        properties: Vec<String>,
+    },
     ArcKind { yaml_path: String, key: String },
     Realm { key: String },
     Layer { key: String },
@@ -145,18 +131,6 @@ enum TreeItemData {
     /// Instance with its parent Kind's yaml_path (to show schema in YAML panel).
     Instance { kind_yaml_path: String },
     None,
-}
-
-/// A node in the graph visualization.
-#[allow(dead_code)] // Fields reserved for future graph visualization enhancements
-#[derive(Debug, Clone)]
-pub struct GraphNode {
-    pub key: String,
-    pub display_name: String,
-    pub node_type: GraphNodeType,
-    pub position: GraphPosition,
-    pub arc_label: Option<String>, // Arc type label (e.g., "HAS_LAYER", "HAS_PAGE")
-    pub color: Option<String>,     // Hex color from taxonomy
 }
 
 // =============================================================================
@@ -237,8 +211,6 @@ pub struct App {
     /// Cache of YAML file contents (path -> content).
     /// Avoids re-reading files on every scroll/navigation.
     pub yaml_cache: FxHashMap<String, String>,
-    // Graph panel state (display-only, no internal navigation)
-    pub graph_nodes: Vec<GraphNode>, // Neighbors of currently selected node (YAML-based, legacy)
     /// Neo4j arc data for current Kind (loaded async)
     pub kind_arcs: Option<KindArcsData>,
     /// Neo4j arc kind details (loaded async when ArcKind selected)
@@ -277,6 +249,13 @@ pub struct App {
     pub matched_properties: Option<Vec<MatchedProperty>>,
     /// Coverage stats for current instance
     pub coverage_stats: Option<CoverageStats>,
+    // ==========================================================================
+    // Kind Validation State (Neo4j ↔ YAML)
+    // ==========================================================================
+    /// Validated properties for current Kind (YAML schema vs Neo4j)
+    pub validated_kind_properties: Option<Vec<ValidatedProperty>>,
+    /// Validation stats for current Kind
+    pub validation_stats: Option<ValidationStats>,
     // ==========================================================================
     // Property Focus State (Feature 3)
     // ==========================================================================
@@ -328,7 +307,6 @@ impl App {
             info_line_count: 0,
             root_path,
             yaml_cache: FxHashMap::default(),
-            graph_nodes: Vec::new(),
             kind_arcs: None,
             arc_kind_details: None,
             pending_instance_load: None,
@@ -347,6 +325,9 @@ impl App {
             schema_overlay_enabled: true, // Enabled by default
             matched_properties: None,
             coverage_stats: None,
+            // Kind validation (Neo4j ↔ YAML)
+            validated_kind_properties: None,
+            validation_stats: None,
             // Property focus (Feature 3)
             focused_property_idx: 0,
             // JSON pretty-print (Feature 4)
@@ -379,9 +360,6 @@ impl App {
         self.yaml_scroll = 0;
         self.info_scroll = 0;
 
-        // Build graph nodes for the current selection (legacy YAML-based)
-        self.build_graph_nodes();
-
         // Clear Neo4j data AND pending loads when moving away
         // (prevents race condition where pending load completes after navigation)
         self.kind_arcs = None;
@@ -394,15 +372,25 @@ impl App {
         self.pending_layer_load = None;
         self.pending_instance_load = None;
 
+        // Clear Kind validation state (only populated for Kind items)
+        self.validated_kind_properties = None;
+        self.validation_stats = None;
+
         // Get current item using mode-aware method (handles filtered Data mode)
         // This is the same logic as current_item() but we extract data to avoid borrow issues
         let current = self.get_current_tree_item_data();
 
         // Handle based on item type
         match current {
-            TreeItemData::Kind { yaml_path, key } => {
+            TreeItemData::Kind {
+                yaml_path,
+                key,
+                properties,
+            } => {
                 self.load_yaml_cached(&yaml_path);
                 self.pending_arcs_load = Some(key);
+                // Load Kind validation (Neo4j vs YAML)
+                self.load_validated_kind_properties(&properties);
             }
             TreeItemData::ArcKind { yaml_path, key } => {
                 self.load_yaml_cached(&yaml_path);
@@ -480,6 +468,7 @@ impl App {
             Some(TreeItem::Kind(_, _, kind)) => TreeItemData::Kind {
                 yaml_path: kind.yaml_path.clone(),
                 key: kind.key.clone(),
+                properties: kind.properties.clone(),
             },
             Some(TreeItem::ArcKind(family, arc)) => {
                 let arc_file = arc.key.to_lowercase().replace('_', "-");
@@ -536,118 +525,6 @@ impl App {
         self.yaml_line_count = self.yaml_content.lines().count();
         // Parse sections for contextual view
         self.yaml_sections = YamlSections::parse(&self.yaml_content);
-    }
-
-    /// Build graph nodes for the currently selected item (display-only).
-    /// Supports: Realm, Layer, Kind, ArcKind selections.
-    fn build_graph_nodes(&mut self) {
-        self.graph_nodes.clear();
-
-        match self.tree.item_at(self.tree_cursor) {
-            // Realm → show child Layers
-            Some(TreeItem::Realm(realm)) => {
-                for layer in &realm.layers {
-                    self.graph_nodes.push(GraphNode {
-                        key: layer.key.clone(),
-                        display_name: layer.display_name.clone(),
-                        node_type: GraphNodeType::Layer,
-                        position: GraphPosition::Bottom,
-                        arc_label: Some("HAS_LAYER".to_string()),
-                        color: Some(layer.color.clone()),
-                    });
-                }
-            }
-
-            // Layer → show parent Realm + child Kinds (limited)
-            Some(TreeItem::Layer(realm, layer)) => {
-                // Parent Realm (top)
-                self.graph_nodes.push(GraphNode {
-                    key: realm.key.clone(),
-                    display_name: realm.display_name.clone(),
-                    node_type: GraphNodeType::Realm,
-                    position: GraphPosition::Top,
-                    arc_label: Some("HAS_LAYER".to_string()),
-                    color: Some(realm.color.clone()),
-                });
-
-                // Child Kinds (bottom, limited to 8 to avoid clutter)
-                for kind in layer.kinds.iter().take(8) {
-                    self.graph_nodes.push(GraphNode {
-                        key: kind.key.clone(),
-                        display_name: kind.display_name.clone(),
-                        node_type: GraphNodeType::Kind,
-                        position: GraphPosition::Bottom,
-                        arc_label: Some("HAS_KIND".to_string()),
-                        color: None, // Use layer color
-                    });
-                }
-            }
-
-            // Kind → show hierarchy (Realm, Layer) + semantic arcs
-            Some(TreeItem::Kind(realm, layer, kind)) => {
-                // Grandparent Realm (top-left)
-                self.graph_nodes.push(GraphNode {
-                    key: realm.key.clone(),
-                    display_name: realm.display_name.clone(),
-                    node_type: GraphNodeType::Realm,
-                    position: GraphPosition::Top,
-                    arc_label: None, // Implicit hierarchy
-                    color: Some(realm.color.clone()),
-                });
-
-                // Parent Layer (top-right)
-                self.graph_nodes.push(GraphNode {
-                    key: layer.key.clone(),
-                    display_name: layer.display_name.clone(),
-                    node_type: GraphNodeType::Layer,
-                    position: GraphPosition::Top,
-                    arc_label: Some("HAS_KIND".to_string()),
-                    color: Some(layer.color.clone()),
-                });
-
-                // Semantic arcs (incoming = left, outgoing = right)
-                for arc in &kind.arcs {
-                    let is_incoming = arc.direction == super::data::ArcDirection::Incoming;
-                    self.graph_nodes.push(GraphNode {
-                        key: arc.target_kind.clone(),
-                        display_name: arc.target_kind.clone(),
-                        node_type: GraphNodeType::Kind,
-                        position: if is_incoming {
-                            GraphPosition::Left
-                        } else {
-                            GraphPosition::Right
-                        },
-                        arc_label: Some(arc.rel_type.clone()),
-                        color: None,
-                    });
-                }
-            }
-
-            // ArcKind → show from and to endpoint Kinds
-            Some(TreeItem::ArcKind(_, arc_kind)) => {
-                // From node (left)
-                self.graph_nodes.push(GraphNode {
-                    key: arc_kind.from_kind.clone(),
-                    display_name: arc_kind.from_kind.clone(),
-                    node_type: GraphNodeType::ArcEndpoint,
-                    position: GraphPosition::Left,
-                    arc_label: Some(arc_kind.key.clone()),
-                    color: None,
-                });
-                // To node (right)
-                self.graph_nodes.push(GraphNode {
-                    key: arc_kind.to_kind.clone(),
-                    display_name: arc_kind.to_kind.clone(),
-                    node_type: GraphNodeType::ArcEndpoint,
-                    position: GraphPosition::Right,
-                    arc_label: Some(arc_kind.key.clone()),
-                    color: None,
-                });
-            }
-
-            // Sections don't have graph neighbors
-            _ => {}
-        }
     }
 
     /// Ensure cursor is visible by adjusting scroll.
@@ -1561,18 +1438,6 @@ impl App {
         self.ensure_cursor_visible();
     }
 
-    /// Switch mode with cursor memory: saves current cursor, switches mode, restores new mode cursor.
-    #[allow(dead_code)]
-    pub fn switch_mode(&mut self, new_mode: NavMode) {
-        if self.mode == new_mode {
-            return;
-        }
-        self.save_mode_cursor();
-        self.mode = new_mode;
-        self.restore_mode_cursor(new_mode);
-        self.load_yaml_for_current();
-    }
-
     /// Set a temporary status message (auto-clears after ~3 seconds).
     pub fn set_status(&mut self, msg: &str) {
         self.status_message = Some((msg.to_string(), std::time::Instant::now()));
@@ -1657,13 +1522,11 @@ impl App {
     }
 
     /// Check if in filtered Data mode (drilling into a specific Kind).
-    #[allow(dead_code)]
     pub fn is_filtered_data_mode(&self) -> bool {
         self.is_data_mode() && self.data_filter_kind.is_some()
     }
 
     /// Get the current filter Kind key (if in filtered Data mode).
-    #[allow(dead_code)]
     pub fn get_filter_kind(&self) -> Option<&str> {
         self.data_filter_kind.as_deref()
     }
@@ -2049,12 +1912,43 @@ impl App {
         self.coverage_stats = Some(stats);
     }
 
-    /// Clear matched properties (called when leaving Data mode or instance).
-    #[allow(dead_code)] // WIP: Schema overlay implementation
-    pub fn clear_matched_properties(&mut self) {
-        self.matched_properties = None;
-        self.coverage_stats = None;
-        self.focused_property_idx = 0;
+    // ==========================================================================
+    // Kind Validation (Neo4j ↔ YAML)
+    // ==========================================================================
+
+    /// Load validated properties for the current Kind (compares Neo4j vs YAML).
+    /// Called when selecting a Kind in Meta mode to show validation status.
+    /// Uses cached YAML content to avoid redundant file I/O.
+    pub fn load_validated_kind_properties(&mut self, kind_properties: &[String]) {
+        use super::schema::{parse_schema_properties, validate_kind_properties, ValidationStats};
+
+        // Need the Kind's YAML path to load schema
+        if self.yaml_path.is_empty() {
+            return; // State already cleared in load_yaml_for_current()
+        }
+
+        // Use cached YAML content (already loaded by load_yaml_cached)
+        let yaml_content = match self.yaml_cache.get(&self.yaml_path) {
+            Some(content) => content,
+            None => {
+                tracing::warn!(path = %self.yaml_path, "YAML not in cache for Kind validation");
+                return;
+            }
+        };
+
+        // Parse schema from cached YAML content
+        let schema = parse_schema_properties(yaml_content);
+        if schema.is_empty() {
+            tracing::debug!(path = %self.yaml_path, "No schema properties found in YAML");
+            return;
+        }
+
+        // Validate: compare YAML schema against Neo4j properties
+        let validated = validate_kind_properties(&schema, kind_properties);
+        let stats = ValidationStats::from_validated(&validated);
+
+        self.validated_kind_properties = Some(validated);
+        self.validation_stats = Some(stats);
     }
 }
 

@@ -77,12 +77,12 @@ fn yaml_path(node: &ParsedNode) -> String {
     format!("node-kinds/{}/{}/{}", node.realm, node.layer, filename)
 }
 
-/// Collect all property names (standard + business), sorted.
+/// Collect all property names (standard + business) in YAML definition order.
 fn all_properties(node: &ParsedNode) -> Vec<&str> {
     node.all_property_names().to_vec()
 }
 
-/// Collect required property names, sorted.
+/// Collect required property names in YAML definition order.
 fn required_properties(node: &ParsedNode) -> Vec<&str> {
     let mut names: Vec<&str> = Vec::new();
     if let Some(ref sp) = node.def.standard_properties {
@@ -99,7 +99,7 @@ fn required_properties(node: &ParsedNode) -> Vec<&str> {
             }
         }
     }
-    names.sort();
+    // No sorting — preserve YAML definition order
     names
 }
 
@@ -347,6 +347,7 @@ mod tests {
     use super::*;
     use crate::generators::Generator;
     use crate::parsers::yaml_node::{NodeDef, PropertyDef};
+    use indexmap::IndexMap;
     use std::collections::BTreeMap;
 
     /// Build a minimal ParsedNode for testing.
@@ -383,7 +384,8 @@ mod tests {
         behavior: LocaleBehavior,
         props: Vec<(&str, &str, bool)>, // (name, type, required)
     ) -> ParsedNode {
-        let mut properties = BTreeMap::new();
+        // Use IndexMap to preserve YAML definition order
+        let mut properties = IndexMap::new();
         for (pname, ptype, req) in props {
             properties.insert(
                 pname.to_string(),
@@ -546,9 +548,10 @@ mod tests {
         assert!(cypher.contains("k_Page.display_name = 'Page'"));
         assert!(cypher.contains("k_Page.context_budget = 'high'"));
         assert!(cypher.contains("k_Page.generation_count = 0"));
+        // Properties now preserve YAML definition order (key first, then display_name)
         assert!(cypher.contains("k_Page.schema_hint = 'display_name (req), key (req)'"));
-        assert!(cypher.contains("k_Page.properties = ['display_name', 'key']"));
-        assert!(cypher.contains("k_Page.required_properties = ['display_name', 'key']"));
+        assert!(cypher.contains("k_Page.properties = ['key', 'display_name']"));
+        assert!(cypher.contains("k_Page.required_properties = ['key', 'display_name']"));
         assert!(cypher.contains("k_Page.yaml_path = 'node-kinds/project/structure/page.yaml'"));
 
         // Kind node for Locale
