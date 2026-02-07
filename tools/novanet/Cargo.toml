@@ -13,11 +13,9 @@ clap = { version = "4", features = ["derive", "env"] }
 # TUI (feature-gated)
 ratatui = { version = "0.30", optional = true }
 crossterm = { version = "0.29", features = ["event-stream"], optional = true }
-unicode-width = "0.2"
 
 # Async
 tokio = { version = "1.43", features = ["full"] }
-tokio-util = "0.7"            # CancellationToken for graceful shutdown
 futures = "0.3"               # StreamExt for crossterm EventStream
 
 # Neo4j
@@ -34,14 +32,11 @@ chrono = "0.4"                # Timestamp for generated file headers
 
 # Output
 tabled = "0.17"
-indicatif = "0.17"            # Progress bars for long operations
 
 # Search
-nucleo = "0.5"                # Fuzzy search (TUI / key)
-nucleo-matcher = "0.3"        # Low-level fuzzy matcher (search overlay)
+nucleo-matcher = "0.3"        # Low-level fuzzy matcher (TUI search overlay)
 
 # Graph
-petgraph = "0.8"              # In-memory graph for generator dependency ordering
 rayon = "1.10"                # Parallel YAML processing
 walkdir = "2"                 # Recursive YAML file discovery
 
@@ -68,8 +63,6 @@ default = ["tui"]
 tui = ["dep:ratatui", "dep:crossterm"]
 
 [dev-dependencies]
-assert_cmd = "2"              # CLI integration tests (binary invocation)
-predicates = "3"              # Output assertion matchers
 insta = { version = "1", features = ["yaml"] }  # Snapshot testing
 pretty_assertions = "1"       # Colorful diffs for assert_eq!
 proptest = "1"                # Property-based testing (edge cases)
@@ -85,13 +78,3 @@ opt-level = 3
 [profile.dev.package."*"]
 opt-level = 2                 # Optimize deps in dev mode (faster builds)
 
-# cargo-machete: Intentionally kept for v9.5 TUI features
-[package.metadata.cargo-machete]
-ignored = [
-    "indicatif",      # Progress bars (planned for long operations)
-    "nucleo",         # Fuzzy search (v9.5 TUI search overlay)
-    "nucleo-matcher", # Low-level fuzzy matcher (v9.5 TUI search)
-    "petgraph",       # Graph for dependency ordering (v9.5 generator DAG)
-    "tokio-util",     # CancellationToken (v9.5 graceful shutdown)
-    "unicode-width",  # Unicode width calculations (TUI)
-]

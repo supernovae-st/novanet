@@ -2817,7 +2817,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                     Span::styled(app.tree.arc_families.len().to_string(), STYLE_PRIMARY),
                 ]),
                 Line::from(vec![
-                    Span::styled("arcs ", STYLE_DIM),
+                    Span::styled("arcs      ", STYLE_DIM),
                     Span::styled(arc_count.to_string(), STYLE_PRIMARY),
                 ]),
                 Line::from(""),
@@ -3005,14 +3005,20 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
 
             // v10.1: knowledge_tier removed from display (node type is sufficient)
 
+            // Instances count (aligned with Instance view)
+            let instance_count = kind.instance_count;
+            lines.push(Line::from(vec![
+                Span::styled("instances   ", STYLE_DIM),
+                Span::styled(format!("{} total", instance_count), STYLE_MUTED),
+            ]));
+
             // Blank line before stats section
             lines.push(Line::from(""));
 
             // Properties line (aligned with Instance view)
             let total_props = kind.properties.len();
-            let instance_count = kind.instance_count;
 
-            // Format: "properties  8 defined, 200 instances ████░░░░"
+            // Format: "properties  8 defined ████░░░░"
             let bar_width = 10usize;
             let log_val = if instance_count > 0 {
                 (instance_count as f64).log10().max(0.0)
@@ -3027,8 +3033,6 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
             lines.push(Line::from(vec![
                 Span::styled("properties  ", STYLE_DIM),
                 Span::styled(format!("{} defined", total_props), STYLE_INFO),
-                Span::styled(", ", STYLE_DIM),
-                Span::styled(format!("{} inst", instance_count), STYLE_PRIMARY),
                 Span::styled(" ", STYLE_DIM),
                 Span::styled(bar, STYLE_SUCCESS),
                 Span::styled(empty, STYLE_DIM),
@@ -3241,7 +3245,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                     Span::styled(family.key.clone(), STYLE_PRIMARY),
                 ]),
                 Line::from(vec![
-                    Span::styled("arcs ", STYLE_DIM),
+                    Span::styled("arcs      ", STYLE_DIM),
                     Span::styled(family.arc_kinds.len().to_string(), STYLE_PRIMARY),
                 ]),
                 Line::from(""),
