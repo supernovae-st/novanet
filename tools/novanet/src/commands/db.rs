@@ -182,11 +182,20 @@ pub fn split_cypher_statements(input: &str) -> Vec<String> {
                 current.push('\n');
             }
             // String literal (single or double quotes): consume until closing quote
+            // Handles both doubled quotes ('') and backslash escapes (\')
             '\'' | '"' => {
                 let quote = ch;
                 current.push(quote);
                 loop {
                     match chars.next() {
+                        // Backslash escape: consume next char regardless
+                        Some('\\') => {
+                            current.push('\\');
+                            if let Some(escaped) = chars.next() {
+                                current.push(escaped);
+                            }
+                        }
+                        // Quote char: check for doubled quote escape
                         Some(c) if c == quote => {
                             current.push(c);
                             // Check for escaped quote ('' or "")
@@ -371,6 +380,20 @@ CREATE CONSTRAINT project_key IF NOT EXISTS FOR (p:Project) REQUIRE p.key IS UNI
         let stmts = split_cypher_statements(input);
         assert_eq!(stmts.len(), 1);
         assert!(stmts[0].contains(r#""hello;world""#));
+    }
+
+    #[test]
+    fn split_handles_backslash_escaped_quotes() {
+        // Neo4j supports \' as escape for single quote within strings
+        let input = r"CREATE (n {text: 'Kaapstad: \'n Stad van Kulture'});
+CREATE (m {other: 'value'});";
+        let stmts = split_cypher_statements(input);
+        assert_eq!(stmts.len(), 2, "Should split into 2 statements");
+        assert!(
+            stmts[0].contains(r"'Kaapstad: \'n Stad van Kulture'"),
+            "First statement should contain escaped quote"
+        );
+        assert!(stmts[1].contains("'value'"), "Second statement should be separate");
     }
 
     #[test]

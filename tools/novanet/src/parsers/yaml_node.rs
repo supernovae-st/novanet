@@ -5,6 +5,7 @@
 //! is deserialized into a [`ParsedNode`] with realm/layer read from the YAML content.
 //! Validation ensures the file path matches the YAML-declared realm/layer.
 
+use indexmap::IndexMap;
 use rayon::prelude::*;
 use serde::Deserialize;
 use smallvec::SmallVec;
@@ -109,12 +110,14 @@ pub struct NodeDef {
     pub description: String,
 
     /// Standard properties (key, display_name, llm_context, etc.).
+    /// Uses IndexMap to preserve YAML definition order.
     #[serde(default)]
-    pub standard_properties: Option<BTreeMap<String, PropertyDef>>,
+    pub standard_properties: Option<IndexMap<String, PropertyDef>>,
 
     /// Node-specific business properties.
+    /// Uses IndexMap to preserve YAML definition order.
     #[serde(default)]
-    pub properties: Option<BTreeMap<String, PropertyDef>>,
+    pub properties: Option<IndexMap<String, PropertyDef>>,
 
     /// Relations declared in this file (format varies — canonical source is relations.yaml).
     #[serde(default)]
@@ -174,8 +177,9 @@ pub struct ParsedNode {
 }
 
 impl ParsedNode {
-    /// Returns all property names (standard + business), sorted.
+    /// Returns all property names (standard + business) in YAML definition order.
     /// Uses SmallVec (stack-allocated for ≤16 properties) since nodes typically have 5-15 props.
+    /// Order: standard_properties first, then properties (preserves YAML order via IndexMap).
     pub fn all_property_names(&self) -> SmallVec<[&str; 16]> {
         let mut names: SmallVec<[&str; 16]> = SmallVec::new();
         if let Some(ref sp) = self.def.standard_properties {
@@ -184,7 +188,7 @@ impl ParsedNode {
         if let Some(ref p) = self.def.properties {
             names.extend(p.keys().map(|k| k.as_str()));
         }
-        names.sort_unstable(); // sort_unstable is faster when stability not needed
+        // No sorting — preserve YAML definition order (IndexMap already maintains order)
         names
     }
 }
