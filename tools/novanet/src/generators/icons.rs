@@ -192,7 +192,7 @@ mod tests {
             ParsedNode {
                 def: NodeDef {
                     name: "TestNode".to_string(),
-                    realm: "project".to_string(),
+                    realm: "tenant".to_string(),
                     layer: "foundation".to_string(),
                     node_trait: LocaleBehavior::Invariant,
                     knowledge_tier: None,
@@ -203,7 +203,7 @@ mod tests {
                     neo4j: None,
                     example: None,
                 },
-                realm: "project".to_string(),
+                realm: "tenant".to_string(),
                 layer: "foundation".to_string(),
                 source_path: PathBuf::from("test.yaml"),
             },

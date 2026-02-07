@@ -11,8 +11,8 @@ use serde::{Deserialize, Serialize};
 /// Each field holds zero or more values. Empty = no restriction on that axis.
 /// Multiple values within a facet are OR-combined; facets are AND-combined.
 ///
-/// Example: `realms=["global","project"], layers=["knowledge"]`
-///   → Kinds that are (IN_REALM global OR project) AND (IN_LAYER knowledge)
+/// Example: `realms=["global","tenant"], layers=["knowledge"]`
+///   → Kinds that are (IN_REALM global OR tenant) AND (IN_LAYER knowledge)
 #[derive(Debug, Clone, Default, Serialize, Deserialize, PartialEq)]
 pub struct FacetFilter {
     #[serde(default)]
@@ -33,9 +33,9 @@ impl FacetFilter {
     /// ```
     /// use novanet::facets::FacetFilter;
     /// let f = FacetFilter::from_cli(
-    ///     Some("global,project"), Some("knowledge"), None, None, None,
+    ///     Some("global,tenant"), Some("knowledge"), None, None, None,
     /// );
-    /// assert_eq!(f.realms, vec!["global", "project"]);
+    /// assert_eq!(f.realms, vec!["global", "tenant"]);
     /// assert_eq!(f.layers, vec!["knowledge"]);
     /// assert!(f.trait_filters.is_empty());
     /// ```
@@ -133,13 +133,13 @@ mod tests {
     #[test]
     fn from_cli_mixed() {
         let f = FacetFilter::from_cli(
-            Some("global,project"),
+            Some("global,tenant"),
             Some("knowledge"),
             None,
             None,
             Some("Locale,Expression"),
         );
-        assert_eq!(f.realms, vec!["global", "project"]);
+        assert_eq!(f.realms, vec!["global", "tenant"]);
         assert_eq!(f.layers, vec!["knowledge"]);
         assert!(f.trait_filters.is_empty());
         assert!(f.arc_families.is_empty());
@@ -174,9 +174,9 @@ mod tests {
 
     #[test]
     fn from_json_minimal() {
-        let json = r#"{"realms": ["project"]}"#;
+        let json = r#"{"realms": ["tenant"]}"#;
         let f = FacetFilter::from_json(json).unwrap();
-        assert_eq!(f.realms, vec!["project"]);
+        assert_eq!(f.realms, vec!["tenant"]);
         assert!(f.layers.is_empty());
     }
 

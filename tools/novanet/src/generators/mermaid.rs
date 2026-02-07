@@ -509,11 +509,11 @@ mod tests {
                     }],
                 },
                 RealmDef {
-                    key: "project".to_string(),
-                    display_name: "Project".to_string(),
+                    key: "tenant".to_string(),
+                    display_name: "Tenant".to_string(),
                     emoji: "\u{1F4E6}".to_string(),
                     color: "#6c71c4".to_string(),
-                    llm_context: "Project context.".to_string(),
+                    llm_context: "Tenant context.".to_string(),
                     layers: vec![LayerDef {
                         key: "foundation".to_string(),
                         display_name: "Foundation".to_string(),
@@ -583,13 +583,13 @@ mod tests {
             make_node("Locale", "global", "config", LocaleBehavior::Invariant),
             make_node(
                 "Project",
-                "project",
+                "tenant",
                 "foundation",
                 LocaleBehavior::Invariant,
             ),
             make_node(
                 "ProjectL10n",
-                "project",
+                "tenant",
                 "foundation",
                 LocaleBehavior::Localized,
             ),
@@ -624,13 +624,13 @@ mod tests {
 
         // Subgraphs — Realm order from organizing doc
         assert!(output.contains("GLOBAL_REALM"));
-        assert!(output.contains("PROJECT_REALM"));
+        assert!(output.contains("TENANT_REALM"));
         assert!(output.contains("GLOBAL_config"));
-        assert!(output.contains("PROJECT_foundation"));
+        assert!(output.contains("TENANT_foundation"));
 
         // Realm labels with emoji
         assert!(output.contains("\"\u{1F30D} GLOBAL\""));
-        assert!(output.contains("\"\u{1F4E6} PROJECT\""));
+        assert!(output.contains("\"\u{1F4E6} TENANT\""));
 
         // Layer display names
         assert!(output.contains("\"Configuration\""));
