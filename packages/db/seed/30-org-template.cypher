@@ -54,10 +54,29 @@ MATCH (k:Kind {label: 'BrandIdentity'})
 MERGE (brand)-[:OF_KIND]->(k);
 
 // ─────────────────────────────────────────────────────────────────────────────
-// PROJECTS (add more as needed)
+// PROJECTS
 // ─────────────────────────────────────────────────────────────────────────────
 
-// See 31-project-*.cypher for project definitions
+// QR Code AI - Primary product
+MERGE (proj:Project {key: 'qrcode-ai'})
+SET proj.display_name = 'QR Code AI',
+    proj.slug = 'qrcode-ai',
+    proj.description = 'AI-powered QR code generator with analytics',
+    proj.website = 'https://qrcode-ai.com',
+    proj.status = 'active',
+    proj.created_at = datetime(),
+    proj.updated_at = datetime();
+
+// Link Project to Kind
+MATCH (k:Kind {label: 'Project'})
+MERGE (proj)-[:OF_KIND]->(k);
+
+// Link Organization → Project (HAS_PROJECT arc)
+MATCH (org:Organization {key: 'supernovae-studio'}),
+      (proj:Project {key: 'qrcode-ai'})
+MERGE (org)-[:HAS_PROJECT]->(proj);
+
+// See 31-project-*.cypher for project-specific data (BrandIdentity, ProjectL10n)
 
 // ─────────────────────────────────────────────────────────────────────────────
 // VERIFICATION
