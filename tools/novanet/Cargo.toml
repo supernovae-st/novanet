@@ -31,7 +31,7 @@ minijinja = "2"               # 1 dep, better errors than tera (15+ deps), by Ar
 chrono = "0.4"                # Timestamp for generated file headers
 
 # Output
-tabled = "0.17"
+tabled = "0.20"
 
 # Search
 nucleo-matcher = "0.3"        # Low-level fuzzy matcher (TUI search overlay)
