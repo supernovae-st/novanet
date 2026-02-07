@@ -1591,30 +1591,30 @@ impl App {
             Some(TreeItem::ArcsSection) => "Arcs".to_string(),
             Some(TreeItem::Realm(r)) => r.display_name.clone(),
             Some(TreeItem::Layer(r, l)) => {
-                format!("{} › {}", r.display_name, l.display_name)
+                format!("{} → {}", r.display_name, l.display_name)
             }
             Some(TreeItem::Kind(r, l, k)) => {
                 if self.is_data_mode() && k.instance_count > 0 {
                     format!(
-                        "{} › {} › {} ({})",
+                        "{} → {} → {} ({})",
                         r.display_name, l.display_name, k.display_name, k.instance_count
                     )
                 } else {
                     format!(
-                        "{} › {} › {}",
+                        "{} → {} → {}",
                         r.display_name, l.display_name, k.display_name
                     )
                 }
             }
             Some(TreeItem::Instance(r, l, k, inst)) => {
                 format!(
-                    "{} › {} › {} › {}",
+                    "{} → {} → {} → {}",
                     r.display_name, l.display_name, k.display_name, inst.display_name
                 )
             }
-            Some(TreeItem::ArcFamily(f)) => format!("Arcs › {}", f.display_name),
+            Some(TreeItem::ArcFamily(f)) => format!("Arcs → {}", f.display_name),
             Some(TreeItem::ArcKind(f, ak)) => {
-                format!("Arcs › {} › {}", f.display_name, ak.display_name)
+                format!("Arcs → {} → {}", f.display_name, ak.display_name)
             }
             None => "NovaNet".to_string(),
         }
