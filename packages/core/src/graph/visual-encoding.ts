@@ -406,81 +406,81 @@ export interface IconDefinition {
 
 // REALMS ICONS (2)
 export const REALMS_ICONS: Record<string, IconDefinition> = {
-  global: { web: 'globe', terminal: '◉', description: 'Universal shared data (read-only)' },
-  tenant: { web: 'building-2', terminal: '◎', description: 'Multi-tenant isolated scope' },
+  'global': { web: 'globe', terminal: '◉', description: 'Universal shared data (read-only)' },
+  'tenant': { web: 'building-2', terminal: '◎', description: 'Multi-tenant isolated scope' },
 };
 
 // LAYERS ICONS (8)
 export const LAYERS_ICONS: Record<string, IconDefinition> = {
-  config: { web: 'settings', terminal: '⚙', description: 'Configuration nodes' },
-  foundation: { web: 'landmark', terminal: '▣', description: 'Project identity and branding' },
-  instruction: { web: 'file-text', terminal: '▧', description: 'Generation directives' },
-  locale-knowledge: { web: 'book-open', terminal: '◈', description: 'Locale expertise and knowledge atoms' },
-  output: { web: 'check-circle', terminal: '●', description: 'Generated content' },
-  semantic: { web: 'lightbulb', terminal: '◆', description: 'Entities and meaning' },
-  seo: { web: 'search', terminal: '◇', description: 'SEO intelligence and keywords' },
-  structure: { web: 'layout', terminal: '▤', description: 'Information architecture' },
+  'config': { web: 'settings', terminal: '⚙', description: 'Configuration nodes' },
+  'foundation': { web: 'landmark', terminal: '▣', description: 'Project identity and branding' },
+  'instruction': { web: 'file-text', terminal: '▧', description: 'Generation directives' },
+  'locale-knowledge': { web: 'book-open', terminal: '◈', description: 'Locale expertise and knowledge atoms' },
+  'output': { web: 'check-circle', terminal: '●', description: 'Generated content' },
+  'semantic': { web: 'lightbulb', terminal: '◆', description: 'Entities and meaning' },
+  'seo': { web: 'search', terminal: '◇', description: 'SEO intelligence and keywords' },
+  'structure': { web: 'layout', terminal: '▤', description: 'Information architecture' },
 };
 
 // TRAITS ICONS (5)
 export const TRAITS_ICONS: Record<string, IconDefinition> = {
-  derived: { web: 'calculator', terminal: '▪', description: 'Computed from other nodes' },
-  invariant: { web: 'lock', terminal: '■', description: 'Stable across all locales' },
-  job: { web: 'play', terminal: '▫', description: 'Processing task' },
-  knowledge: { web: 'brain', terminal: '◊', description: 'Locale expertise data' },
-  localized: { web: 'globe', terminal: '□', description: 'Generated natively per locale' },
+  'derived': { web: 'calculator', terminal: '▪', description: 'Computed from other nodes' },
+  'invariant': { web: 'lock', terminal: '■', description: 'Stable across all locales' },
+  'job': { web: 'play', terminal: '▫', description: 'Processing task' },
+  'knowledge': { web: 'brain', terminal: '◊', description: 'Locale expertise data' },
+  'localized': { web: 'globe', terminal: '□', description: 'Generated natively per locale' },
 };
 
 // ARC_FAMILIES ICONS (5)
 export const ARC_FAMILIES_ICONS: Record<string, IconDefinition> = {
-  generation: { web: 'sparkles', terminal: '⇒', description: 'LLM pipeline flow' },
-  localization: { web: 'languages', terminal: '⇢', description: 'Locale content links' },
-  mining: { web: 'pickaxe', terminal: '⇝', description: 'SEO data extraction' },
-  ownership: { web: 'arrow-right', terminal: '→', description: 'Parent-child structural' },
-  semantic: { web: 'link', terminal: '~', description: 'Meaning connections' },
+  'generation': { web: 'sparkles', terminal: '⇒', description: 'LLM pipeline flow' },
+  'localization': { web: 'languages', terminal: '⇢', description: 'Locale content links' },
+  'mining': { web: 'pickaxe', terminal: '⇝', description: 'SEO data extraction' },
+  'ownership': { web: 'arrow-right', terminal: '→', description: 'Parent-child structural' },
+  'semantic': { web: 'link', terminal: '~', description: 'Meaning connections' },
 };
 
 // STATES ICONS (8)
 export const STATES_ICONS: Record<string, IconDefinition> = {
-  error: { web: 'x', terminal: '✗', description: 'Operation failed' },
-  loading: { web: 'loader', terminal: '◐', description: 'Data loading in progress' },
-  no_connection: { web: 'wifi-off', terminal: '⚠', description: 'Database not connected' },
-  no_instances: { web: 'file-x', terminal: '□', description: 'Kind has no instances' },
-  no_kinds: { web: 'inbox', terminal: '∅', description: 'No node kinds found' },
-  no_results: { web: 'search-x', terminal: '◌', description: 'Query returned nothing' },
-  success: { web: 'check', terminal: '✓', description: 'Operation succeeded' },
-  warning: { web: 'alert-triangle', terminal: '⚠', description: 'Warning condition' },
+  'error': { web: 'x', terminal: '✗', description: 'Operation failed' },
+  'loading': { web: 'loader', terminal: '◐', description: 'Data loading in progress' },
+  'no_connection': { web: 'wifi-off', terminal: '⚠', description: 'Database not connected' },
+  'no_instances': { web: 'file-x', terminal: '□', description: 'Kind has no instances' },
+  'no_kinds': { web: 'inbox', terminal: '∅', description: 'No node kinds found' },
+  'no_results': { web: 'search-x', terminal: '◌', description: 'Query returned nothing' },
+  'success': { web: 'check', terminal: '✓', description: 'Operation succeeded' },
+  'warning': { web: 'alert-triangle', terminal: '⚠', description: 'Warning condition' },
 };
 
 // NAVIGATION ICONS (7)
 export const NAVIGATION_ICONS: Record<string, IconDefinition> = {
-  back: { web: 'arrow-left', terminal: '←', description: 'Navigate back' },
-  collapsed: { web: 'chevron-right', terminal: '▶', description: 'Node collapsed' },
-  copy: { web: 'clipboard', terminal: '□', description: 'Copy to clipboard' },
-  expanded: { web: 'chevron-down', terminal: '▼', description: 'Node expanded' },
-  help: { web: 'help-circle', terminal: '?', description: 'Help overlay' },
-  leaf: { web: 'dot', terminal: '·', description: 'Leaf node (no children)' },
-  search: { web: 'search', terminal: '/', description: 'Search mode' },
+  'back': { web: 'arrow-left', terminal: '←', description: 'Navigate back' },
+  'collapsed': { web: 'chevron-right', terminal: '▶', description: 'Node collapsed' },
+  'copy': { web: 'clipboard', terminal: '□', description: 'Copy to clipboard' },
+  'expanded': { web: 'chevron-down', terminal: '▼', description: 'Node expanded' },
+  'help': { web: 'help-circle', terminal: '?', description: 'Help overlay' },
+  'leaf': { web: 'dot', terminal: '·', description: 'Leaf node (no children)' },
+  'search': { web: 'search', terminal: '/', description: 'Search mode' },
 };
 
 // QUALITY ICONS (6)
 export const QUALITY_ICONS: Record<string, IconDefinition> = {
-  chart: { web: 'bar-chart-2', terminal: '≡', description: 'Statistics/chart header' },
-  complete: { web: 'check-circle', terminal: '●', description: 'All required fields present' },
-  empty: { web: 'circle', terminal: '○', description: 'No data' },
-  optional: { web: 'minus', terminal: ' ', description: 'Optional field marker' },
-  partial: { web: 'circle-dot', terminal: '◐', description: 'Some fields missing' },
-  required: { web: 'asterisk', terminal: '*', description: 'Required field marker' },
+  'chart': { web: 'bar-chart-2', terminal: '≡', description: 'Statistics/chart header' },
+  'complete': { web: 'check-circle', terminal: '●', description: 'All required fields present' },
+  'empty': { web: 'circle', terminal: '○', description: 'No data' },
+  'optional': { web: 'minus', terminal: ' ', description: 'Optional field marker' },
+  'partial': { web: 'circle-dot', terminal: '◐', description: 'Some fields missing' },
+  'required': { web: 'asterisk', terminal: '*', description: 'Required field marker' },
 };
 
 // MODES ICONS (6)
 export const MODES_ICONS: Record<string, IconDefinition> = {
-  atlas: { web: 'map', terminal: 'A', description: 'Architecture atlas' },
-  audit: { web: 'clipboard-check', terminal: 'U', description: 'Data quality audit' },
-  data: { web: 'table', terminal: 'D', description: 'Data instances view' },
-  meta: { web: 'database', terminal: 'M', description: 'Meta-graph view' },
-  overlay: { web: 'layers', terminal: 'O', description: 'Combined meta+data' },
-  query: { web: 'filter', terminal: 'Q', description: 'Faceted query' },
+  'atlas': { web: 'map', terminal: 'A', description: 'Architecture atlas' },
+  'audit': { web: 'clipboard-check', terminal: 'U', description: 'Data quality audit' },
+  'data': { web: 'table', terminal: 'D', description: 'Data instances view' },
+  'meta': { web: 'database', terminal: 'M', description: 'Meta-graph view' },
+  'overlay': { web: 'layers', terminal: 'O', description: 'Combined meta+data' },
+  'query': { web: 'filter', terminal: 'Q', description: 'Faceted query' },
 };
 
 /**

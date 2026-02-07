@@ -1,0 +1,44 @@
+# packages/core/models/arc-kinds/semantic/includes.yaml
+# ArcKind: INCLUDES - Entity includes/contains another Entity (containment)
+# v10.7: Typed semantic arcs (replaces generic SEMANTIC_LINK)
+
+arc:
+  name: INCLUDES
+  family: semantic
+  scope: intra_realm
+  temperature_threshold: 0.1  # Containment - always follow for completeness
+
+  source: Entity
+  target: Entity
+  cardinality: one_to_many
+  is_self_referential: true
+
+  properties:
+    - name: strength
+      type: float
+      required: false
+      default: 0.9
+      description: "Containment strength (0.0-1.0)"
+
+    - name: temperature
+      type: float
+      required: false
+      default: 0.95
+      description: "Spreading activation weight (high for parts)"
+
+    - name: containment_type
+      type: string
+      required: false
+      enum: [part, component, element, member, feature]
+      description: "Type of containment relationship"
+
+  inverse: INCLUDED_IN
+
+  llm_context: |
+    Containment relationship: Entity A includes/contains Entity B.
+    Part-whole relationship (mereology).
+    containment_type: part (physical), component (functional),
+      element (collection), member (set), feature (capability)
+    Examples: QRCode INCLUDES ErrorCorrection, PaymentQR INCLUDES Amount
+
+  cypher_pattern: "(Entity)-[:INCLUDES {strength, temperature, containment_type}]->(Entity)"

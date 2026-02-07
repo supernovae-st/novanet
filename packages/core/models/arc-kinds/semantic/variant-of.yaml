@@ -1,0 +1,44 @@
+# packages/core/models/arc-kinds/semantic/variant-of.yaml
+# ArcKind: VARIANT_OF - Entity is a variant/version of another Entity
+# v10.7: Typed semantic arcs (replaces generic SEMANTIC_LINK)
+
+arc:
+  name: VARIANT_OF
+  family: semantic
+  scope: intra_realm
+  temperature_threshold: 0.2  # Follow in most spreading activation scenarios
+
+  source: Entity
+  target: Entity
+  cardinality: many_to_one
+  is_self_referential: true
+
+  properties:
+    - name: strength
+      type: float
+      required: false
+      default: 0.8
+      description: "Relationship intensity (0.0-1.0)"
+
+    - name: temperature
+      type: float
+      required: false
+      default: 0.85
+      description: "Spreading activation weight"
+
+    - name: variant_type
+      type: string
+      required: false
+      enum: [version, flavor, edition, specialization, customization]
+      description: "Type of variant relationship"
+
+  inverse: HAS_VARIANT
+
+  llm_context: |
+    Variant relationship: Entity A is a variant/version of Entity B.
+    The source is a specialized form of the target (more specific).
+    Examples: CustomQRCode VARIANT_OF QRCode, DynamicQR VARIANT_OF QRCode
+    variant_type: version (temporal), flavor (style), edition (release),
+      specialization (domain), customization (user-defined)
+
+  cypher_pattern: "(Entity)-[:VARIANT_OF {strength, temperature, variant_type}]->(Entity)"

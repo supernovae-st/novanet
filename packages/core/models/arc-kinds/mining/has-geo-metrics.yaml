@@ -1,0 +1,30 @@
+# arc-kinds/mining/has-geo-metrics.yaml
+# HAS_GEO_METRICS - GEOQuery links to visibility metrics snapshots (v10.7)
+#
+# v10.7: GEO Schema v1
+#        - Time-series observation link (mining family)
+#        - Not used in spreading activation
+#        - Pattern mirrors HAS_METRICS (SEOKeyword → SEOKeywordMetrics)
+
+arc:
+  name: HAS_GEO_METRICS
+  family: mining
+  scope: intra_realm
+  source: GEOQuery
+  target: GEOMetrics
+  cardinality: one_to_many
+  llm_context: |
+    Time-series observation link for GEO visibility metrics.
+    Not used in spreading activation (mining arc).
+    Use for trend analysis and historical visibility tracking.
+    v10.7: New arc for GEO time-series data.
+
+  cypher_pattern: (GEOQuery)-[:HAS_GEO_METRICS]->(GEOMetrics)
+
+  example:
+    description: "Get visibility trend for a GEO query"
+    cypher: |
+      MATCH (q:GEOQuery {key: $query_key})-[:HAS_GEO_METRICS]->(m:GEOMetrics)
+      RETURN m.observed_at, m.ai_visibility_score, m.citation_trend
+      ORDER BY m.observed_at DESC
+      LIMIT 30

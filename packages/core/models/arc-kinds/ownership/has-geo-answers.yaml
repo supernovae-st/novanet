@@ -1,0 +1,28 @@
+# arc-kinds/ownership/has-geo-answers.yaml
+# HAS_GEO_ANSWERS - GEOQuery owns LLM response samples (v10.7)
+#
+# v10.7: GEO Schema v1
+#        - GEOQuery owns GEOAnswer snapshots
+#        - One query can have many answers (one per engine, per observation)
+
+arc:
+  type: HAS_GEO_ANSWERS
+  family: ownership
+  scope: intra_realm
+  source: GEOQuery
+  target: GEOAnswer
+  cardinality: one_to_many
+  llm_context: |
+    GEOQuery owns its LLM response samples. Each GEOAnswer is an immutable snapshot.
+    Multiple answers per query: different engines, different observation times.
+    Use to analyze how different AI engines respond to the same query.
+    v10.7: New arc for GEO analysis.
+
+  cypher_pattern: (GEOQuery)-[:HAS_GEO_ANSWERS]->(GEOAnswer)
+
+  example:
+    description: "Get all answers for a GEO query"
+    cypher: |
+      MATCH (q:GEOQuery {key: $query_key})-[:HAS_GEO_ANSWERS]->(a:GEOAnswer)
+      RETURN a.engine, a.observed_at, a.cited_domains, a.brand_mentions
+      ORDER BY a.observed_at DESC

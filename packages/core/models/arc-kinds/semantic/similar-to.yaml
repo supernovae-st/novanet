@@ -1,0 +1,53 @@
+# packages/core/models/arc-kinds/semantic/similar-to.yaml
+# ArcKind: SIMILAR_TO - Entity is similar to another Entity (symmetric)
+# v10.7: Typed semantic arcs (replaces generic SEMANTIC_LINK)
+
+arc:
+  name: SIMILAR_TO
+  family: semantic
+  scope: intra_realm
+  temperature_threshold: 0.35  # Similarity - moderate for exploration
+
+  source: Entity
+  target: Entity
+  cardinality: many_to_many
+  is_self_referential: true
+  is_symmetric: true
+
+  properties:
+    - name: strength
+      type: float
+      required: false
+      default: 0.65
+      description: "Similarity score (0.0-1.0)"
+
+    - name: temperature
+      type: float
+      required: false
+      default: 0.7
+      description: "Spreading activation weight"
+
+    - name: similarity_type
+      type: string
+      required: false
+      enum: [functional, structural, semantic, visual, behavioral]
+      description: "Type of similarity"
+
+    - name: similarity_dimensions
+      type: json
+      required: false
+      description: "Dimensions contributing to similarity"
+
+  # No inverse - symmetric relationship
+
+  llm_context: |
+    Similarity relationship: Entity A is similar to Entity B (symmetric).
+    General similarity without implying competition or substitutability.
+    similarity_type: functional (same purpose), structural (same form),
+      semantic (same meaning), visual (same appearance), behavioral (same action)
+    Differs from ALTERNATIVE_TO: similar entities may not be interchangeable.
+    Examples: QRCode SIMILAR_TO DataMatrix, VCard SIMILAR_TO hCard
+    Symmetric: A SIMILAR_TO B implies B SIMILAR_TO A.
+    Use for: exploration, recommendation, related content.
+
+  cypher_pattern: "(Entity)-[:SIMILAR_TO {strength, temperature, similarity_type, similarity_dimensions}]->(Entity)"
