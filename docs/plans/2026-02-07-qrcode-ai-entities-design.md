@@ -1,9 +1,9 @@
 # QR Code AI — Entity Design for NovaNet
 
 **Date**: 2026-02-07
-**Status**: Complete (v10.7)
+**Status**: Complete (v11)
 **Project**: QR Code AI (qrcode-ai.com)
-**Version**: v10.7 Entity Schema
+**Version**: v11 Entity + SEO + GEO Schema
 
 ---
 
@@ -16,7 +16,7 @@ QR Code AI is a platform with **2 main products** (QR Code, Smart Link) that sha
 
 ---
 
-## Research-Based Design Decisions (v10.7)
+## Research-Based Design Decisions (v11)
 
 Based on deep research (Perplexity + Context7) on knowledge graph ontology best practices,
 GraphRAG patterns, and Neo4j relationship modeling.
@@ -163,76 +163,185 @@ MERGE (a)-[:VARIANT_OF {strength: 0.85}]->(b)
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-## SEO Schema Architecture (v10.6)
+## SEO + GEO Schema Architecture (v11)
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════════════════════════╗
+║  NovaNet v11 — ENTITY + SEO + GEO COMPLETE ARCHITECTURE                                           ║
+╠═══════════════════════════════════════════════════════════════════════════════════════════════════╣
+║                                                                                                   ║
+║  ┌─────────────────────────────────────────────────────────────────────────────────────────────┐  ║
+║  │  TENANT REALM                                                                                │  ║
+║  ├─────────────────────────────────────────────────────────────────────────────────────────────┤  ║
+║  │                                                                                              │  ║
+║  │   Organization ──[:HAS_PROJECT]──> Project ──[:HAS_ENTITY]──> Entity (INVARIANT, EN)        │  ║
+║  │                                                                      │                       │  ║
+║  │                                                                      │ [:HAS_L10N]           │  ║
+║  │                                                                      ▼                       │  ║
+║  │                                                               EntityL10n ◄─── PER LOCALE    │  ║
+║  │                                                                      │                       │  ║
+║  │                                              ┌────────────────────────┼────────────────────┐ │  ║
+║  │                                              │                        │                    │ │  ║
+║  │                                              ▼                        ▼                    ▼ │  ║
+║  │                                        [:FOR_LOCALE]           [:TARGETS]            [:ANSWERS]║
+║  │                                              │                        │                    │ │  ║
+║  └──────────────────────────────────────────────┼────────────────────────┼────────────────────┼─┘  ║
+║                                                 │                        │                    │    ║
+║  ┌──────────────────────────────────────────────┼────────────────────────┼────────────────────┼─┐  ║
+║  │  GLOBAL REALM                                │                        │                    │ │  ║
+║  ├──────────────────────────────────────────────┼────────────────────────┼────────────────────┼─┤  ║
+║  │                                              ▼                        ▼                    ▼ │  ║
+║  │                                           Locale ◄──────────────── SAME LOCALE ───────────►  │  ║
+║  │                                              │                                               │  ║
+║  │              ┌───────────────────────────────┴───────────────────────────────┐               │  ║
+║  │              │                                                               │               │  ║
+║  │              ▼                                                               ▼               │  ║
+║  │    [:HAS_SEO_KEYWORDS]                                              [:HAS_GEO_QUERIES]       │  ║
+║  │              │                                                               │               │  ║
+║  │              ▼                                                               ▼               │  ║
+║  │  ╔═══════════════════════════════════════════╗   ╔═══════════════════════════════════════╗   │  ║
+║  │  ║  SEO SUITE (Search Engine Optimization)   ║   ║  GEO SUITE (Generative Engine Opt.)   ║   │  ║
+║  │  ╠═══════════════════════════════════════════╣   ╠═══════════════════════════════════════╣   │  ║
+║  │  ║                                           ║   ║                                       ║   │  ║
+║  │  ║  SEOKeyword ◄── EntityL10n [:TARGETS]     ║   ║  GEOQuery ◄── EntityL10n [:TARGETS]   ║   │  ║
+║  │  ║      │                                    ║   ║      │                                ║   │  ║
+║  │  ║      ├──[:HAS_METRICS]──> SEOMetrics      ║   ║      ├──[:HAS_METRICS]──> GEOMetrics  ║   │  ║
+║  │  ║      │                                    ║   ║      │                                ║   │  ║
+║  │  ║      ├──[:HAS_QUESTIONS]──> SEOQuestion   ║   ║      └──[:HAS_ANSWER]──> GEOAnswer    ║   │  ║
+║  │  ║      │                          │         ║   ║                              │        ║   │  ║
+║  │  ║      │                          │         ║   ║                              │        ║   │  ║
+║  │  ║      │               [:HAS_METRICS]       ║   ║                   [:HAS_METRICS]      ║   │  ║
+║  │  ║      │                          │         ║   ║                              │        ║   │  ║
+║  │  ║      │                          ▼         ║   ║                              ▼        ║   │  ║
+║  │  ║      │                     SEOMetrics     ║   ║                         GEOMetrics    ║   │  ║
+║  │  ║      │                                    ║   ║                                       ║   │  ║
+║  │  ║      ├──[:HAS_COMPARISONS]──> SEOCompar.  ║   ╚═══════════════════════════════════════╝   │  ║
+║  │  ║      │                          │         ║                                               │  ║
+║  │  ║      │               [:HAS_METRICS]       ║                                               │  ║
+║  │  ║      │                          ▼         ║                                               │  ║
+║  │  ║      │                     SEOMetrics     ║                                               │  ║
+║  │  ║      │                                    ║                                               │  ║
+║  │  ║      └──[:HAS_PREPOSITIONS]──> SEOPrepos. ║                                               │  ║
+║  │  ║                                 │         ║                                               │  ║
+║  │  ║                      [:HAS_METRICS]       ║                                               │  ║
+║  │  ║                                 ▼         ║                                               │  ║
+║  │  ║                            SEOMetrics     ║                                               │  ║
+║  │  ║                                           ║                                               │  ║
+║  │  ╚═══════════════════════════════════════════╝                                               │  ║
+║  │                                                                                              │  ║
+║  └──────────────────────────────────────────────────────────────────────────────────────────────┘  ║
+║                                                                                                   ║
+╠═══════════════════════════════════════════════════════════════════════════════════════════════════╣
+║  NODE TYPES                                                                                       ║
+╠═══════════════════════════════════════════════════════════════════════════════════════════════════╣
+║                                                                                                   ║
+║  TENANT (semantic layer):                                                                         ║
+║    • Entity        = Invariant semantic unit (EN key, universal properties)                       ║
+║    • EntityL10n    = Localized content per locale (fr-FR, ja-JP, etc.)                            ║
+║                                                                                                   ║
+║  GLOBAL (locale-knowledge layer):                                                                 ║
+║    • Locale        = Language/region (fr-FR, en-US, ja-JP)                                        ║
+║                                                                                                   ║
+║  GLOBAL (seo layer):                                                                              ║
+║    • SEOKeyword    = Root keyword (value, intent, trend, serp_features)                           ║
+║    • SEOQuestion   = Question form ("comment créer un QR code ?")                                 ║
+║    • SEOComparison = Versus form ("QR code vs barcode")                                           ║
+║    • SEOPreposition= Preposition form ("QR code for restaurant")                                  ║
+║    • SEOMetrics    = Time-series snapshot (volume, difficulty, position, CTR)                     ║
+║                                                                                                   ║
+║  GLOBAL (geo layer) — NEW v11:                                                                    ║
+║    • GEOQuery      = Question asked to AI engine ("What is a dynamic QR code?")                   ║
+║    • GEOAnswer     = AI-generated response snapshot                                               ║
+║    • GEOMetrics    = Visibility tracking (engine, cited, citation_rank, coverage)                 ║
+║                                                                                                   ║
+╠═══════════════════════════════════════════════════════════════════════════════════════════════════╣
+║  METRICS COMPARISON                                                                               ║
+╠═══════════════════════════════════════════════════════════════════════════════════════════════════╣
+║                                                                                                   ║
+║  ┌─────────────────────────────────────┐    ┌─────────────────────────────────────┐               ║
+║  │  SEOMetrics                         │    │  GEOMetrics                         │               ║
+║  ├─────────────────────────────────────┤    ├─────────────────────────────────────┤               ║
+║  │  observed_at: datetime              │    │  observed_at: datetime              │               ║
+║  │  volume: int (monthly searches)     │    │  engine: string (gemini/gpt/pplx)   │               ║
+║  │  difficulty: float (0-100)          │    │  query_text: string                 │               ║
+║  │  cpc: float (USD)                   │    │  cited: bool                        │               ║
+║  │  position: int (SERP rank)          │    │  citation_rank: int (1=first)       │               ║
+║  │  clicks: int (GSC)                  │    │  visibility_score: float (0-1)      │               ║
+║  │  impressions: int (GSC)             │    │  answer_coverage: enum              │               ║
+║  │  ctr: float                         │    │    (full/partial/mentioned/absent)  │               ║
+║  └─────────────────────────────────────┘    └─────────────────────────────────────┘               ║
+║                                                                                                   ║
+║  SEO = Google, Bing (traditional)           GEO = Gemini, GPT, Perplexity, Claude (AI)            ║
+║                                                                                                   ║
+╚═══════════════════════════════════════════════════════════════════════════════════════════════════╝
+```
+
+**Key Points (v11):**
+- **EntityL10n → SEO/GEO**: EntityL10n (NOT Entity!) connects to SEO/GEO of SAME locale
+- **SEOMetrics for ALL SEO**: Every SEO type (Keyword, Question, Comparison, Preposition) has [:HAS_METRICS]
+- **GEOMetrics for ALL GEO**: Every GEO type (Query, Answer) has [:HAS_METRICS]
+- **Immutable sources**: Keyword/Query nodes stay unchanged, only *Metrics snapshots change
+- **SEO suite**: SEOKeyword → SEOQuestion, SEOComparison, SEOPreposition
+- **GEO suite**: GEOQuery → GEOAnswer (AI visibility tracking)
+
+---
+
+## Metrics Strategy (v11)
+
+**Decision: Domain-Specific Metrics Types (SEO vs GEO)**
+
+We use **SEOMetrics** and **GEOMetrics** (not generic "Metrics") because:
+1. **SEO** (Search Engine Optimization): Traditional search metrics (volume, difficulty, position)
+2. **GEO** (Generative Engine Optimization): AI search visibility (citation, coverage, prominence)
+3. Different domains = different properties = separate types
+4. Generic "Metrics" would require type discriminator + union of all properties
+5. Separate types are cleaner and more queryable
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  SEO KEYWORD GRAPH                                                          │
+│  METRICS TYPES (current + future)                                           │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
-│  Locale (fr-FR) ──[:HAS_SEO_KEYWORDS]──> SEOKeyword                        │
-│                                               │                             │
-│                                               ├─ value: "Code QR"           │
-│                                               ├─ volume: 40500              │
-│                                               ├─ difficulty: 35             │
-│                                               ├─ intent: transactional      │
-│                                               ├─ traffic_potential: 35000   │
-│                                               ├─ serp_features: [...]       │
-│                                               └─ trend: rising              │
-│                                                   │                         │
-│       ┌───────────────────┬───────────────────┬───┴───────────┐            │
-│       │                   │                   │               │            │
-│       ▼                   ▼                   ▼               ▼            │
-│  [:HAS_METRICS]     [:HAS_QUESTIONS]    [:HAS_COMPARISONS] [:HAS_PREPOS.]  │
-│       │                   │                   │               │            │
-│       ▼                   ▼                   ▼               ▼            │
-│  SEOKeywordMetrics   SEOQuestion        SEOComparison    SEOPreposition   │
-│  (time-series)       (from ATP)         (X vs Y)         (X for Y)        │
-│  ┌──────────────┐   ┌──────────────┐   ┌──────────────┐  ┌─────────────┐  │
-│  │observed_at   │   │value:        │   │value:        │  │value:       │  │
-│  │volume        │   │"comment      │   │"Code QR vs   │  │"Code QR     │  │
-│  │difficulty    │   │ créer..."    │   │ barcode"     │  │ pour wifi"  │  │
-│  │position      │   │question_word │   │entity_a_key  │  │preposition  │  │
-│  │impressions   │   │answer_type   │   │entity_b_key  │  │use_case     │  │
-│  │clicks_gsc    │   │featured_snip │   │winner        │  │use_case_type│  │
-│  │ctr           │   │paa_position  │   │              │  │             │  │
-│  └──────────────┘   └──────────────┘   └──────────────┘  └─────────────┘  │
-│                           │                   │               │            │
-│                           ▼                   ▼               ▼            │
-│                      COMPARES_A/B         USE_CASE_ENTITY                  │
-│                           │                   │               │            │
-│                           └───────────────────┴───────────────┘            │
-│                                       │                                     │
-│                                       ▼                                     │
-│                                    Entity (invariant)                       │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │  SEOMetrics (v11)                                                     │   │
+│  ├─────────────────────────────────────────────────────────────────────┤   │
+│  │  observed_at: datetime   ← When snapshot taken                       │   │
+│  │  volume: int             ← Monthly search volume                     │   │
+│  │  difficulty: float       ← Keyword difficulty (0-100)                │   │
+│  │  cpc: float              ← Cost per click (USD)                      │   │
+│  │  position: int           ← SERP ranking (1-100+)                     │   │
+│  │  clicks: int             ← GSC clicks                                │   │
+│  │  impressions: int        ← GSC impressions                           │   │
+│  │  ctr: float              ← Click-through rate                        │   │
+│  │                                                                      │   │
+│  │  Used by: SEOKeyword, SEOQuestion, SEOComparison, SEOPreposition     │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
 │                                                                             │
-├─────────────────────────────────────────────────────────────────────────────┤
-│  ENTITYL10N → SEO RELATIONS                                                 │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                             │
-│  EntityL10n ──[:TARGETS]──> SEOKeyword (N:N, targeting for ranking)        │
-│  EntityL10n ──[:ANSWERS]──> SEOQuestion (N:N, content coverage)            │
-│  PageL10n ──[:ADDRESSES]──> SEOComparison (coverage tracking)              │
-│  BlockL10n ──[:ADDRESSES]──> SEOPreposition (coverage tracking)            │
-│                                                                             │
-│  SEOKeyword ──[:EXPRESSES]──> Entity (semantic link back)                  │
-│                                                                             │
-├─────────────────────────────────────────────────────────────────────────────┤
-│  MINING JOB                                                                 │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                             │
-│  SEOMiningRun ──[:SEO_MINES]──> SEOKeyword (discovery tracking)            │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │  GEOMetrics (v11)                                                     │   │
+│  ├─────────────────────────────────────────────────────────────────────┤   │
+│  │  observed_at: datetime   ← When snapshot taken                       │   │
+│  │  engine: string          ← "gemini", "gpt", "perplexity", "claude"   │   │
+│  │  cited: bool             ← Was our content cited in AI answer?       │   │
+│  │  citation_rank: int      ← Position in AI response (1 = first)       │   │
+│  │  visibility_score: float ← 0-1 prominence in AI Overview             │   │
+│  │  answer_coverage: enum   ← full/partial/mentioned/absent             │   │
+│  │  query_text: string      ← The question asked to the AI              │   │
+│  │                                                                      │   │
+│  │  Used by: GEOQuery, GEOAnswer (future node types)                    │   │
+│  │                                                                      │   │
+│  │  CONTEXT:                                                            │   │
+│  │  GEO = Generative Engine Optimization                                │   │
+│  │  Tracks visibility in AI-powered search (Google AI Overview,         │   │
+│  │  Perplexity, ChatGPT Search, Gemini, Claude, etc.)                   │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-**Key Points:**
-- **SEOKeyword**: Root keyword with rich metrics (volume, difficulty, CPC, intent, traffic_potential)
-- **SEOKeywordMetrics**: Time-series snapshots for historical tracking (GSC + Ahrefs/Semrush)
-- **SEOQuestion**: Question-form keywords from Answer The Public ("comment créer...")
-- **SEOComparison**: Comparison keywords ("X vs Y") with links to 2 Entities
-- **SEOPreposition**: Preposition keywords ("X for Y") with use case Entity
-- **All derived nodes** (Question/Comparison/Preposition) have their own volume/difficulty
+**Key Principle**: SEO vs GEO = different optimization targets = different metrics types.
+- **SEOMetrics**: Traditional search (Google, Bing) - volume, position, CTR
+- **GEOMetrics**: Generative AI (Gemini, GPT, Perplexity) - citations, visibility, coverage
 
 ---
 
@@ -264,7 +373,7 @@ MERGE (a)-[:VARIANT_OF {strength: 0.85}]->(b)
 
 ---
 
-## Entity Type System (v10.7) — 13 Types
+## Entity Type System (v11) — 13 Types
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
@@ -673,7 +782,7 @@ link_type:
 
 ---
 
-## SEMANTIC_LINK System (v10.7)
+## SEMANTIC_LINK System (v11)
 
 ### link_type Enum (11 types)
 
@@ -943,7 +1052,7 @@ llm_context: |
 
 ## Implementation Checklist
 
-- [x] Entity schema v10.7 documented
+- [x] Entity schema v11 documented (Entity + SEO + GEO)
 - [x] EntityL10n schema updated with new properties
 - [x] EntityL10n ANSWERS relation to SEOQuestion added
 - [x] Type enum expanded (10 types)

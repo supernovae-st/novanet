@@ -1,5 +1,5 @@
 # models/node-kinds/tenant/semantic/entity-l10n.yaml
-# EntityL10n - Localized content for Tenant Entity nodes (v10.7)
+# EntityL10n - Localized content for Tenant Entity nodes (v11)
 #
 # ═══════════════════════════════════════════════════════════════════════════════
 # PURPOSE
@@ -146,7 +146,7 @@ node:
       # EXAMPLE: ["Modifiable après impression", "Statistiques de scan", "Pas de coût d'impression"]
 
     # ─────────────────────────────────────────────────────────────────────────────
-    # LOCALE-SPECIFIC PROPERTIES (v10.7 - from research)
+    # LOCALE-SPECIFIC PROPERTIES (v11 - from research)
     # ─────────────────────────────────────────────────────────────────────────────
 
     # ─────────────────────────────────────────────────────────────────────────────
