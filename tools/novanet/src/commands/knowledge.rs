@@ -11,12 +11,12 @@ use std::time::Instant;
 
 use tracing::instrument;
 
+use crate::Result;
 use crate::generators::culture::CultureGenerator;
 use crate::generators::expression::ExpressionGenerator;
 use crate::generators::formatting::FormattingGenerator;
 use crate::generators::market::MarketGenerator;
 use crate::generators::slugification::SlugificationGenerator;
-use crate::Result;
 
 /// Tier of knowledge to generate.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -73,35 +73,30 @@ pub fn knowledge_generate(
 ) -> Result<Vec<KnowledgeGenerateResult>> {
     let mut results = Vec::new();
 
-    // Default ATH path
-    let default_ath =
-        "/Users/thibaut/Projects/traduction_ai/ath-know-l10n/outputs/localization-data";
-    let ath = ath_path.unwrap_or(default_ath);
-
     // Technical tier: slugification, formatting
     if tier == KnowledgeTier::Technical || tier == KnowledgeTier::All {
-        let result = generate_slugification(root, ath, dry_run)?;
+        let result = generate_slugification(root, ath_path, dry_run)?;
         results.push(result);
 
-        let result = generate_formatting(root, ath, dry_run)?;
+        let result = generate_formatting(root, ath_path, dry_run)?;
         results.push(result);
     }
 
     // Voice tier: expression atoms
     if tier == KnowledgeTier::Voice || tier == KnowledgeTier::All {
-        let result = generate_expression(root, ath, dry_run)?;
+        let result = generate_expression(root, ath_path, dry_run)?;
         results.push(result);
     }
 
     // Culture tier: culture norms
     if tier == KnowledgeTier::Culture || tier == KnowledgeTier::All {
-        let result = generate_culture(root, ath, dry_run)?;
+        let result = generate_culture(root, ath_path, dry_run)?;
         results.push(result);
     }
 
     // Market tier: market data
     if tier == KnowledgeTier::Market || tier == KnowledgeTier::All {
-        let result = generate_market(root, ath, dry_run)?;
+        let result = generate_market(root, ath_path, dry_run)?;
         results.push(result);
     }
 
@@ -109,11 +104,15 @@ pub fn knowledge_generate(
 }
 
 /// Generate slugification seed file.
-fn generate_slugification(root: &Path, ath_path: &str, dry_run: bool) -> Result<KnowledgeGenerateResult> {
+fn generate_slugification(
+    root: &Path,
+    ath_path: Option<&str>,
+    dry_run: bool,
+) -> Result<KnowledgeGenerateResult> {
     let start = Instant::now();
 
     // Generate Cypher content
-    let generator = SlugificationGenerator::with_ath_path(ath_path);
+    let generator = SlugificationGenerator::new(ath_path)?;
     let content = generator.generate()?;
 
     // Count nodes (rough estimate from MERGE statements)
@@ -143,11 +142,15 @@ fn generate_slugification(root: &Path, ath_path: &str, dry_run: bool) -> Result<
 }
 
 /// Generate formatting seed file.
-fn generate_formatting(root: &Path, ath_path: &str, dry_run: bool) -> Result<KnowledgeGenerateResult> {
+fn generate_formatting(
+    root: &Path,
+    ath_path: Option<&str>,
+    dry_run: bool,
+) -> Result<KnowledgeGenerateResult> {
     let start = Instant::now();
 
     // Generate Cypher content
-    let generator = FormattingGenerator::with_ath_path(ath_path);
+    let generator = FormattingGenerator::new(ath_path)?;
     let content = generator.generate()?;
 
     // Count nodes (rough estimate from MERGE statements)
@@ -177,11 +180,15 @@ fn generate_formatting(root: &Path, ath_path: &str, dry_run: bool) -> Result<Kno
 }
 
 /// Generate culture seed file.
-fn generate_culture(root: &Path, ath_path: &str, dry_run: bool) -> Result<KnowledgeGenerateResult> {
+fn generate_culture(
+    root: &Path,
+    ath_path: Option<&str>,
+    dry_run: bool,
+) -> Result<KnowledgeGenerateResult> {
     let start = Instant::now();
 
     // Generate Cypher content
-    let generator = CultureGenerator::with_ath_path(ath_path);
+    let generator = CultureGenerator::new(ath_path)?;
     let content = generator.generate()?;
 
     // Count nodes (rough estimate from MERGE statements)
@@ -211,11 +218,15 @@ fn generate_culture(root: &Path, ath_path: &str, dry_run: bool) -> Result<Knowle
 }
 
 /// Generate market seed file.
-fn generate_market(root: &Path, ath_path: &str, dry_run: bool) -> Result<KnowledgeGenerateResult> {
+fn generate_market(
+    root: &Path,
+    ath_path: Option<&str>,
+    dry_run: bool,
+) -> Result<KnowledgeGenerateResult> {
     let start = Instant::now();
 
     // Generate Cypher content
-    let generator = MarketGenerator::with_ath_path(ath_path);
+    let generator = MarketGenerator::new(ath_path)?;
     let content = generator.generate()?;
 
     // Count nodes (rough estimate from MERGE statements)
@@ -245,11 +256,15 @@ fn generate_market(root: &Path, ath_path: &str, dry_run: bool) -> Result<Knowled
 }
 
 /// Generate expression atoms seed file.
-fn generate_expression(root: &Path, ath_path: &str, dry_run: bool) -> Result<KnowledgeGenerateResult> {
+fn generate_expression(
+    root: &Path,
+    ath_path: Option<&str>,
+    dry_run: bool,
+) -> Result<KnowledgeGenerateResult> {
     let start = Instant::now();
 
     // Generate Cypher content
-    let generator = ExpressionGenerator::with_ath_path(ath_path);
+    let generator = ExpressionGenerator::new(ath_path)?;
     let content = generator.generate()?;
 
     // Count nodes (rough estimate from MERGE statements)
@@ -325,8 +340,14 @@ mod tests {
 
     #[test]
     fn test_knowledge_tier_from_str() {
-        assert_eq!(KnowledgeTier::parse("technical"), Some(KnowledgeTier::Technical));
-        assert_eq!(KnowledgeTier::parse("TECHNICAL"), Some(KnowledgeTier::Technical));
+        assert_eq!(
+            KnowledgeTier::parse("technical"),
+            Some(KnowledgeTier::Technical)
+        );
+        assert_eq!(
+            KnowledgeTier::parse("TECHNICAL"),
+            Some(KnowledgeTier::Technical)
+        );
         assert_eq!(KnowledgeTier::parse("voice"), Some(KnowledgeTier::Voice));
         assert_eq!(KnowledgeTier::parse("all"), Some(KnowledgeTier::All));
         assert_eq!(KnowledgeTier::parse("invalid"), None);

@@ -133,8 +133,25 @@ async fn run_app(
     db: &Db,
     root_path: &Path,
 ) -> crate::Result<()> {
-    // Load taxonomy tree from Neo4j
-    let tree = TaxonomyTree::load(db).await?;
+    // Load taxonomy tree from Neo4j with graceful error handling
+    let tree = match TaxonomyTree::load(db).await {
+        Ok(tree) => tree,
+        Err(e) => {
+            // Restore terminal before printing error
+            crossterm::terminal::disable_raw_mode().ok();
+            crossterm::execute!(io::stdout(), crossterm::terminal::LeaveAlternateScreen).ok();
+
+            eprintln!("\n\x1b[1;31m❌ Failed to load graph data from Neo4j:\x1b[0m");
+            eprintln!("   {}\n", e);
+            eprintln!("\x1b[1;33m💡 Troubleshooting:\x1b[0m");
+            eprintln!("   • Check Neo4j is running: \x1b[36mdocker ps\x1b[0m");
+            eprintln!("   • Verify credentials: \x1b[36mneo4j / novanetpassword\x1b[0m");
+            eprintln!("   • Run seed: \x1b[36mpnpm infra:seed\x1b[0m");
+            eprintln!("   • Check connection: \x1b[36mcargo run -- meta\x1b[0m\n");
+
+            return Err(e);
+        }
+    };
     let root_str = root_path.display().to_string();
     let mut app = App::new(tree, root_str);
     let mut event_stream = EventStream::new();
@@ -146,7 +163,9 @@ async fn run_app(
 
     loop {
         // Wait for events (non-blocking with timeout for future animations)
-        let event = tokio::time::timeout(Duration::from_millis(EVENT_TIMEOUT_MS), event_stream.next()).await;
+        let event =
+            tokio::time::timeout(Duration::from_millis(EVENT_TIMEOUT_MS), event_stream.next())
+                .await;
 
         match event {
             Ok(Some(Ok(Event::Key(key)))) => {
@@ -169,45 +188,59 @@ async fn run_app(
                         let (inst_result, arcs_result) = tokio::join!(
                             async {
                                 match &instance_key {
-                                    Some(k) => TaxonomyTree::load_instances(db, k).await.ok(),
+                                    Some(k) => Some(TaxonomyTree::load_instances(db, k).await),
                                     None => None,
                                 }
                             },
                             async {
                                 match &arcs_key {
-                                    Some(k) => TaxonomyTree::load_kind_arcs(db, k).await.ok(),
+                                    Some(k) => Some(TaxonomyTree::load_kind_arcs(db, k).await),
                                     None => None,
                                 }
                             }
                         );
 
-                        if let (Some(k), Some((instances, total))) = (&instance_key, inst_result) {
-                            app.tree.set_instances(k, instances, total);
+                        if let Some(k) = &instance_key {
+                            match inst_result {
+                                Some(Ok((instances, total))) => {
+                                    app.tree.set_instances(k, instances, total);
+                                }
+                                Some(Err(e)) => {
+                                    app.set_status_error(&format!("Load instances: {}", e));
+                                }
+                                None => {}
+                            }
                         }
-                        if let Some(arcs) = arcs_result {
-                            app.set_kind_arcs(arcs);
+                        match arcs_result {
+                            Some(Ok(arcs)) => {
+                                app.set_kind_arcs(arcs);
+                            }
+                            Some(Err(e)) => {
+                                app.set_status_error(&format!("Load arcs: {}", e));
+                            }
+                            None => {}
                         }
                     }
 
                     // Sequential loads for other details (typically only one fires at a time)
                     if let Some(arc_key) = app.take_pending_arc_kind_load() {
-                        if let Ok(details) = TaxonomyTree::load_arc_kind_details(db, &arc_key).await
-                        {
-                            app.set_arc_kind_details(details);
+                        match TaxonomyTree::load_arc_kind_details(db, &arc_key).await {
+                            Ok(details) => app.set_arc_kind_details(details),
+                            Err(e) => app.set_status_error(&format!("Load arc: {}", e)),
                         }
                     }
 
                     if let Some(realm_key) = app.take_pending_realm_load() {
-                        if let Ok(details) = TaxonomyTree::load_realm_details(db, &realm_key).await
-                        {
-                            app.set_realm_details(details);
+                        match TaxonomyTree::load_realm_details(db, &realm_key).await {
+                            Ok(details) => app.set_realm_details(details),
+                            Err(e) => app.set_status_error(&format!("Load realm: {}", e)),
                         }
                     }
 
                     if let Some(layer_key) = app.take_pending_layer_load() {
-                        if let Ok(details) = TaxonomyTree::load_layer_details(db, &layer_key).await
-                        {
-                            app.set_layer_details(details);
+                        match TaxonomyTree::load_layer_details(db, &layer_key).await {
+                            Ok(details) => app.set_layer_details(details),
+                            Err(e) => app.set_status_error(&format!("Load layer: {}", e)),
                         }
                     }
 
@@ -219,41 +252,51 @@ async fn run_app(
                         let (stats_result, pages_result) = tokio::join!(
                             async {
                                 if load_atlas_stats {
-                                    TaxonomyTree::load_atlas_realm_stats(db).await.ok()
+                                    Some(TaxonomyTree::load_atlas_realm_stats(db).await)
                                 } else {
                                     None
                                 }
                             },
                             async {
                                 if load_atlas_pages {
-                                    TaxonomyTree::load_atlas_pages_list(db).await.ok()
+                                    Some(TaxonomyTree::load_atlas_pages_list(db).await)
                                 } else {
                                     None
                                 }
                             }
                         );
 
-                        if let Some(stats) = stats_result {
-                            app.set_atlas_realm_stats(stats);
+                        match stats_result {
+                            Some(Ok(stats)) => app.set_atlas_realm_stats(stats),
+                            Some(Err(e)) => {
+                                app.set_status_error(&format!("Load atlas stats: {}", e))
+                            }
+                            None => {}
                         }
-                        if let Some(pages) = pages_result {
-                            app.set_atlas_pages_list(pages);
+                        match pages_result {
+                            Some(Ok(pages)) => app.set_atlas_pages_list(pages),
+                            Some(Err(e)) => {
+                                app.set_status_error(&format!("Load atlas pages: {}", e))
+                            }
+                            None => {}
                         }
                     }
 
                     // Atlas page composition (individual load, depends on page_key)
                     if let Some((page_key, locale)) = app.take_pending_atlas_page_load() {
-                        if let Ok(data) =
-                            TaxonomyTree::load_atlas_page_composition(db, &page_key, &locale).await
+                        match TaxonomyTree::load_atlas_page_composition(db, &page_key, &locale)
+                            .await
                         {
-                            app.set_atlas_page_composition(data);
+                            Ok(data) => app.set_atlas_page_composition(data),
+                            Err(e) => app.set_status_error(&format!("Load page: {}", e)),
                         }
                     }
 
                     // Audit mode: load global audit stats
                     if app.take_pending_audit_load() {
-                        if let Ok(stats) = audit::load_audit_stats(db).await {
-                            app.set_audit_stats(stats);
+                        match audit::load_audit_stats(db).await {
+                            Ok(stats) => app.set_audit_stats(stats),
+                            Err(e) => app.set_status_error(&format!("Load audit: {}", e)),
                         }
                     }
 

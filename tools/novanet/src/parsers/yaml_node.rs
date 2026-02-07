@@ -320,8 +320,7 @@ mod tests {
 
     #[test]
     fn missing_trait_fails() {
-        let yaml =
-            "node:\n  name: Test\n  realm: tenant\n  layer: foundation\n  description: test";
+        let yaml = "node:\n  name: Test\n  realm: tenant\n  layer: foundation\n  description: test";
         let result = serde_yaml::from_str::<NodeDocument>(yaml);
         assert!(result.is_err(), "should fail without trait");
         let err_msg = result.unwrap_err().to_string();
@@ -488,7 +487,11 @@ node:
             29,
             "knowledge count (12 config + 18 locale-knowledge + 1 GEO - 2 invariant overlap)"
         );
-        assert_eq!(count(NodeTrait::Derived), 6, "derived count (4 base + 2 GEO)");
+        assert_eq!(
+            count(NodeTrait::Derived),
+            6,
+            "derived count (4 base + 2 GEO)"
+        );
         assert_eq!(count(NodeTrait::Job), 2, "job count");
 
         // v10.9: Verify realm distribution (2 realms)

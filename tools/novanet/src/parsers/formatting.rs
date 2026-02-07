@@ -29,8 +29,9 @@ static RE_DATE: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r"last_updated:\s*(.+)").expect("valid date regex"));
 
 /// Data sources extraction: **Data Sources**: ...
-static RE_DATA_SOURCES: LazyLock<Regex> =
-    LazyLock::new(|| Regex::new(r"\*\*Data Sources\*\*:\s*(.+)").expect("valid data sources regex"));
+static RE_DATA_SOURCES: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"\*\*Data Sources\*\*:\s*(.+)").expect("valid data sources regex")
+});
 
 /// Section header: ## N. Title
 static RE_SECTION: LazyLock<Regex> =
@@ -75,7 +76,10 @@ impl Formatting {
         ));
 
         // Date format
-        parts.push(format!("Dates: {} ({})", self.date.pattern, self.date.calendar_system));
+        parts.push(format!(
+            "Dates: {} ({})",
+            self.date.pattern, self.date.calendar_system
+        ));
 
         // Time system
         parts.push(format!("Time: {}", self.time.system));
@@ -84,7 +88,11 @@ impl Formatting {
         parts.push(format!(
             "Currency: {} {} amount",
             self.currency.symbol,
-            if self.currency.symbol_position == "before" { "before" } else { "after" }
+            if self.currency.symbol_position == "before" {
+                "before"
+            } else {
+                "after"
+            }
         ));
 
         // Top incorrect examples (most valuable for LLM)
@@ -393,12 +401,7 @@ pub fn load_all_formattings(ath_path: &Path) -> Result<Vec<Formatting>> {
         .max_depth(1)
         .into_iter()
         .filter_map(|e| e.ok())
-        .filter(|e| {
-            e.path()
-                .extension()
-                .map(|ext| ext == "md")
-                .unwrap_or(false)
-        })
+        .filter(|e| e.path().extension().map(|ext| ext == "md").unwrap_or(false))
         .collect();
 
     // Parse in parallel
@@ -446,15 +449,15 @@ pub fn parse_formatting_file(path: &Path) -> Result<Formatting> {
     let currency =
         parse_currency_section(sections.get("currency").map(|s| s.as_str()).unwrap_or(""));
     let phone = parse_phone_section(sections.get("phone").map(|s| s.as_str()).unwrap_or(""));
-    let address =
-        parse_address_section(sections.get("address").map(|s| s.as_str()).unwrap_or(""));
-    let measurement =
-        parse_measurement_section(sections.get("measurement").map(|s| s.as_str()).unwrap_or(""));
-    let (percentage, temperature) = parse_percentage_temperature_section(
+    let address = parse_address_section(sections.get("address").map(|s| s.as_str()).unwrap_or(""));
+    let measurement = parse_measurement_section(
         sections
-            .get("percentage")
+            .get("measurement")
             .map(|s| s.as_str())
             .unwrap_or(""),
+    );
+    let (percentage, temperature) = parse_percentage_temperature_section(
+        sections.get("percentage").map(|s| s.as_str()).unwrap_or(""),
     );
     let validation_patterns =
         parse_validation_section(sections.get("validation").map(|s| s.as_str()).unwrap_or(""));
@@ -508,7 +511,8 @@ fn parse_frontmatter(content: &str) -> Result<(String, String)> {
 
 /// Parse data sources from content.
 fn parse_data_sources(content: &str) -> Vec<String> {
-    RE_DATA_SOURCES.captures(content)
+    RE_DATA_SOURCES
+        .captures(content)
         .and_then(|c: regex::Captures| c.get(1))
         .map(|m: regex::Match| {
             m.as_str()
@@ -1290,7 +1294,10 @@ mod tests {
     fn test_normalize_section_name() {
         assert_eq!(normalize_section_name("number formatting"), "number");
         assert_eq!(normalize_section_name("date formatting"), "date");
-        assert_eq!(normalize_section_name("percentage & temperature"), "percentage");
+        assert_eq!(
+            normalize_section_name("percentage & temperature"),
+            "percentage"
+        );
     }
 
     #[test]
@@ -1417,7 +1424,10 @@ mod tests {
 "#;
 
         let patterns = parse_validation_section(content);
-        assert_eq!(patterns.get("date"), Some(&r"^\d{2}/\d{2}/\d{4}$".to_string()));
+        assert_eq!(
+            patterns.get("date"),
+            Some(&r"^\d{2}/\d{2}/\d{4}$".to_string())
+        );
         assert!(patterns.contains_key("phone"));
     }
 }

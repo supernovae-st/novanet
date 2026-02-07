@@ -75,6 +75,23 @@ pub fn migrations_dir(root: &Path) -> PathBuf {
     root.join("packages/db/migrations")
 }
 
+/// Resolve the ATH data path for knowledge generators.
+/// Priority: 1) explicit path  2) NOVANET_ATH_PATH env var  3) error
+pub fn resolve_ath_path(explicit: Option<&str>) -> crate::Result<PathBuf> {
+    if let Some(path) = explicit {
+        return Ok(PathBuf::from(path));
+    }
+
+    if let Ok(env_path) = std::env::var("NOVANET_ATH_PATH") {
+        return Ok(PathBuf::from(env_path));
+    }
+
+    Err(crate::NovaNetError::Validation(
+        "ATH data path not set. Use --ath-path or set NOVANET_ATH_PATH environment variable."
+            .to_string(),
+    ))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

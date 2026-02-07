@@ -74,7 +74,16 @@ pub struct SlugRule {
 impl SlugRule {
     /// Create a new SlugRule from its key, inferring properties from the rule type.
     pub fn new(key: &str) -> Self {
-        let (display_name, output_encoding, has_case, normalization, diacritics, non_latin, char_transforms, romanization_systems) = match key {
+        let (
+            display_name,
+            output_encoding,
+            has_case,
+            normalization,
+            diacritics,
+            non_latin,
+            char_transforms,
+            romanization_systems,
+        ) = match key {
             "latin_strip" => (
                 "Latin Strip",
                 "ASCII",
@@ -171,7 +180,9 @@ impl SlugRule {
             "remove" => "removed via NFD normalization",
             "preserve" => "preserved in UTF-8",
             "transform" => "transformed to ASCII equivalents (ß→ss, ü→ue)",
-            "script_specific" => "handled per-script (Arabic removes tashkeel, Thai converts numerals)",
+            "script_specific" => {
+                "handled per-script (Arabic removes tashkeel, Thai converts numerals)"
+            }
             _ => &self.diacritics,
         };
 
@@ -233,10 +244,7 @@ impl Slugification {
         };
 
         let regional_note = if !self.regional_additions.is_empty() {
-            format!(
-                " Has {} regional additions.",
-                self.regional_additions.len()
-            )
+            format!(" Has {} regional additions.", self.regional_additions.len())
         } else {
             String::new()
         };
@@ -351,7 +359,10 @@ pub fn parse_slugification(content: &str, source_path: &Path) -> Result<Slugific
         template_version: frontmatter.template_version,
         source_file: format!(
             "2-rules-slug/{}.md",
-            source_path.file_stem().unwrap_or_default().to_string_lossy()
+            source_path
+                .file_stem()
+                .unwrap_or_default()
+                .to_string_lossy()
         ),
         last_updated: frontmatter.last_updated,
     };
@@ -363,24 +374,22 @@ pub fn parse_slugification(content: &str, source_path: &Path) -> Result<Slugific
 
 /// Parse YAML frontmatter from markdown.
 fn parse_frontmatter(content: &str) -> Result<Frontmatter> {
-    let caps = RE_FRONTMATTER.captures(content).ok_or_else(|| NovaNetError::Validation(
-        "No YAML frontmatter found".to_string()
-    ))?;
+    let caps = RE_FRONTMATTER
+        .captures(content)
+        .ok_or_else(|| NovaNetError::Validation("No YAML frontmatter found".to_string()))?;
 
     let yaml_str = caps.get(1).unwrap().as_str();
-    serde_yaml::from_str(yaml_str).map_err(|e| NovaNetError::Validation(
-        format!("Failed to parse frontmatter: {}", e)
-    ))
+    serde_yaml::from_str(yaml_str)
+        .map_err(|e| NovaNetError::Validation(format!("Failed to parse frontmatter: {}", e)))
 }
 
 /// Extract slug rule from "**Slug Rule**: {rule}".
 fn extract_slug_rule(content: &str) -> Result<String> {
-    RE_SLUG_RULE.captures(content)
+    RE_SLUG_RULE
+        .captures(content)
         .and_then(|caps: regex::Captures| caps.get(1))
         .map(|m: regex::Match| m.as_str().to_string())
-        .ok_or_else(|| NovaNetError::Validation(
-            "Could not find Slug Rule in content".to_string()
-        ))
+        .ok_or_else(|| NovaNetError::Validation("Could not find Slug Rule in content".to_string()))
 }
 
 /// Extract stopwords from markdown tables.
@@ -396,10 +405,7 @@ fn extract_stopwords(content: &str) -> HashMap<String, Vec<String>> {
             continue;
         }
 
-        stopwords
-            .entry(category)
-            .or_default()
-            .push(word);
+        stopwords.entry(category).or_default().push(word);
     }
 
     stopwords
@@ -550,11 +556,12 @@ fn extract_script_config(content: &str, slug_rule: &str) -> Option<ScriptConfig>
     };
 
     // Extract diacritic handling
-    let diacritic_handling = if content.contains("tashkeel") || content.contains("[\u{064B}-\u{065F}") {
-        Some("remove_tashkeel".to_string())
-    } else {
-        None
-    };
+    let diacritic_handling =
+        if content.contains("tashkeel") || content.contains("[\u{064B}-\u{065F}") {
+            Some("remove_tashkeel".to_string())
+        } else {
+            None
+        };
 
     // Extract numeral handling
     let numeral_handling = if content.contains("Thai numerals") || content.contains("๐-๙") {
@@ -683,9 +690,10 @@ pub fn load_all_slugifications(ath_path: &Path) -> Result<Vec<Slugification>> {
     let slug_dir = ath_path.join("2-rules-slug");
 
     if !slug_dir.exists() {
-        return Err(NovaNetError::Validation(
-            format!("ATH slug directory not found: {}", slug_dir.display())
-        ));
+        return Err(NovaNetError::Validation(format!(
+            "ATH slug directory not found: {}",
+            slug_dir.display()
+        )));
     }
 
     let mut slugifications = Vec::new();

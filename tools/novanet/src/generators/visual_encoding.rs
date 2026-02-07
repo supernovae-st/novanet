@@ -637,19 +637,20 @@ fn build_icon_categories(doc: &VisualEncodingDoc) -> Vec<TemplateIconCategory> {
     let mut categories = Vec::new();
 
     // Helper to convert HashMap to sorted Vec of TemplateIcon
-    let to_icons = |map: &std::collections::HashMap<String, crate::parsers::visual_encoding::Icon>| {
-        let mut items: Vec<TemplateIcon> = map
-            .iter()
-            .map(|(key, icon)| TemplateIcon {
-                key: key.clone(),
-                web: icon.web.clone(),
-                terminal: icon.terminal.clone(),
-                description: escape_js_string(&icon.description),
-            })
-            .collect();
-        items.sort_by(|a, b| a.key.cmp(&b.key));
-        items
-    };
+    let to_icons =
+        |map: &std::collections::HashMap<String, crate::parsers::visual_encoding::Icon>| {
+            let mut items: Vec<TemplateIcon> = map
+                .iter()
+                .map(|(key, icon)| TemplateIcon {
+                    key: key.clone(),
+                    web: icon.web.clone(),
+                    terminal: icon.terminal.clone(),
+                    description: escape_js_string(&icon.description),
+                })
+                .collect();
+            items.sort_by(|a, b| a.key.cmp(&b.key));
+            items
+        };
 
     // Add each category in a defined order
     if !icons.realms.is_empty() {
@@ -822,8 +823,15 @@ mod tests {
         assert!(output.contains("modes: MODES_ICONS"));
 
         // Helper functions for icons
-        assert!(output.contains("export function getIcon(category: keyof typeof ICONS, key: string)"));
-        assert!(output.contains("export function getWebIcon(category: keyof typeof ICONS, key: string)"));
-        assert!(output.contains("export function getTerminalIcon(category: keyof typeof ICONS, key: string)"));
+        assert!(
+            output.contains("export function getIcon(category: keyof typeof ICONS, key: string)")
+        );
+        assert!(
+            output
+                .contains("export function getWebIcon(category: keyof typeof ICONS, key: string)")
+        );
+        assert!(output.contains(
+            "export function getTerminalIcon(category: keyof typeof ICONS, key: string)"
+        ));
     }
 }

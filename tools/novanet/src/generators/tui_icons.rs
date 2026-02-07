@@ -63,7 +63,11 @@ impl IconDef {{
     };
 
     // Helper to generate a category
-    let mut generate_category = |name: &str, category: &std::collections::HashMap<String, crate::parsers::visual_encoding::Icon>| {
+    let mut generate_category = |name: &str,
+                                 category: &std::collections::HashMap<
+        String,
+        crate::parsers::visual_encoding::Icon,
+    >| {
         let upper_name = name.to_uppercase();
         let mut items: Vec<_> = category.iter().collect();
         items.sort_by(|a, b| a.0.cmp(b.0));
@@ -75,11 +79,7 @@ impl IconDef {{
         ));
 
         for (key, icon) in &items {
-            let const_name = format!(
-                "{}_{}",
-                upper_name,
-                key.to_uppercase().replace('-', "_")
-            );
+            let const_name = format!("{}_{}", upper_name, key.to_uppercase().replace('-', "_"));
             output.push_str(&format!(
                 "pub const {}: IconDef = IconDef::new(\"{}\", \"{}\", \"{}\");\n",
                 const_name,
@@ -101,7 +101,8 @@ impl IconDef {{
     generate_category("modes", &icons.modes);
 
     // Generate lookup functions
-    output.push_str(r#"// =============================================================================
+    output.push_str(
+        r#"// =============================================================================
 // LOOKUP FUNCTIONS
 // =============================================================================
 
@@ -117,7 +118,8 @@ macro_rules! icon_map {
 /// Get all realm icons.
 pub fn realm_icons() -> HashMap<&'static str, IconDef> {
     icon_map! {
-"#);
+"#,
+    );
 
     // Realms
     let mut items: Vec<_> = icons.realms.iter().collect();
@@ -199,14 +201,16 @@ pub fn realm_icons() -> HashMap<&'static str, IconDef> {
     output.push_str("    }\n}\n\n");
 
     // Convenience functions
-    output.push_str(r#"// =============================================================================
+    output.push_str(
+        r#"// =============================================================================
 // CONVENIENCE FUNCTIONS
 // =============================================================================
 
 /// Get terminal icon for a realm.
 pub fn realm_terminal_icon(key: &str) -> &'static str {
     match key {
-"#);
+"#,
+    );
     let mut items: Vec<_> = icons.realms.iter().collect();
     items.sort_by(|a, b| a.0.cmp(b.0));
     for (key, icon) in items {
@@ -214,10 +218,12 @@ pub fn realm_terminal_icon(key: &str) -> &'static str {
     }
     output.push_str("        _ => \"·\",\n    }\n}\n\n");
 
-    output.push_str(r#"/// Get terminal icon for a layer.
+    output.push_str(
+        r#"/// Get terminal icon for a layer.
 pub fn layer_terminal_icon(key: &str) -> &'static str {
     match key {
-"#);
+"#,
+    );
     let mut items: Vec<_> = icons.layers.iter().collect();
     items.sort_by(|a, b| a.0.cmp(b.0));
     for (key, icon) in items {
@@ -225,10 +231,12 @@ pub fn layer_terminal_icon(key: &str) -> &'static str {
     }
     output.push_str("        _ => \"·\",\n    }\n}\n\n");
 
-    output.push_str(r#"/// Get terminal icon for a trait.
+    output.push_str(
+        r#"/// Get terminal icon for a trait.
 pub fn trait_terminal_icon(key: &str) -> &'static str {
     match key {
-"#);
+"#,
+    );
     let mut items: Vec<_> = icons.traits.iter().collect();
     items.sort_by(|a, b| a.0.cmp(b.0));
     for (key, icon) in items {
@@ -236,10 +244,12 @@ pub fn trait_terminal_icon(key: &str) -> &'static str {
     }
     output.push_str("        _ => \"·\",\n    }\n}\n\n");
 
-    output.push_str(r#"/// Get terminal icon for a navigation action.
+    output.push_str(
+        r#"/// Get terminal icon for a navigation action.
 pub fn navigation_terminal_icon(key: &str) -> &'static str {
     match key {
-"#);
+"#,
+    );
     let mut items: Vec<_> = icons.navigation.iter().collect();
     items.sort_by(|a, b| a.0.cmp(b.0));
     for (key, icon) in items {
@@ -247,10 +257,12 @@ pub fn navigation_terminal_icon(key: &str) -> &'static str {
     }
     output.push_str("        _ => \"·\",\n    }\n}\n\n");
 
-    output.push_str(r#"/// Get terminal icon for a state.
+    output.push_str(
+        r#"/// Get terminal icon for a state.
 pub fn state_terminal_icon(key: &str) -> &'static str {
     match key {
-"#);
+"#,
+    );
     let mut items: Vec<_> = icons.states.iter().collect();
     items.sort_by(|a, b| a.0.cmp(b.0));
     for (key, icon) in items {
@@ -258,10 +270,12 @@ pub fn state_terminal_icon(key: &str) -> &'static str {
     }
     output.push_str("        _ => \"·\",\n    }\n}\n\n");
 
-    output.push_str(r#"/// Get terminal icon for a mode.
+    output.push_str(
+        r#"/// Get terminal icon for a mode.
 pub fn mode_terminal_icon(key: &str) -> &'static str {
     match key {
-"#);
+"#,
+    );
     let mut items: Vec<_> = icons.modes.iter().collect();
     items.sort_by(|a, b| a.0.cmp(b.0));
     for (key, icon) in items {
@@ -293,9 +307,7 @@ mod tests {
         }
 
         let generator = TuiIconsGenerator;
-        let output = generator
-            .generate(root)
-            .expect("should generate tui icons");
+        let output = generator.generate(root).expect("should generate tui icons");
 
         // Header
         assert!(output.contains("AUTO-GENERATED by novanet v10.6.0"));

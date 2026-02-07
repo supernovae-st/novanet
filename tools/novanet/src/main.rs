@@ -277,7 +277,7 @@ enum KnowledgeAction {
         /// Knowledge tier: technical, voice, culture, market, all
         #[arg(long, default_value = "all")]
         tier: String,
-        /// Custom ATH data path (default: ~/Projects/traduction_ai/ath-know-l10n/outputs/localization-data)
+        /// Custom ATH data path (default: $NOVANET_ATH_PATH or error if unset)
         #[arg(long)]
         ath_path: Option<String>,
         /// Dry-run: generate without writing files
