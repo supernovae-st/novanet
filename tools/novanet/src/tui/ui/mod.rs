@@ -5907,8 +5907,8 @@ mod tests {
 
     #[test]
     fn test_truncate_start_utf8_arrows() {
-        // This is the actual bug case: "Global › Tenant" with › being 3 bytes
-        let s = "Global › Tenant Configuration › Slugification";
+        // This is the actual bug case: "Global → Tenant" with → being 3 bytes
+        let s = "Global → Tenant Configuration → Slugification";
         let result = truncate_start(s, 20);
         // Should keep last 20 chars without panicking
         assert!(result.starts_with('…'));
