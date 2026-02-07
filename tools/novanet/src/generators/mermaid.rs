@@ -466,8 +466,6 @@ mod tests {
                 description: format!("{name} description"),
                 standard_properties: None,
                 properties: None,
-                relations: None,
-                incoming_relations: None,
                 neo4j: None,
                 example: None,
             },

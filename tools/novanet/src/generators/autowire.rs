@@ -198,8 +198,6 @@ mod tests {
                 description: "test".to_string(),
                 standard_properties: None,
                 properties: None,
-                relations: None,
-                incoming_relations: None,
                 neo4j: None,
                 example: None,
             },
