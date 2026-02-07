@@ -26,6 +26,8 @@ CREATE INDEX locale_text_direction IF NOT EXISTS FOR (l:Locale) ON (l.text_direc
 CREATE CONSTRAINT project_key IF NOT EXISTS FOR (p:Project) REQUIRE p.key IS UNIQUE;
 // v10.3: Entity replaces Concept
 CREATE CONSTRAINT entity_key IF NOT EXISTS FOR (e:Entity) REQUIRE e.key IS UNIQUE;
+// v11: Entity type filtering for semantic queries
+CREATE INDEX entity_type IF NOT EXISTS FOR (e:Entity) ON (e.type);
 CREATE INDEX el10n_version IF NOT EXISTS FOR (el:EntityL10n) ON (el.version);
 
 // ═══════════════════════════════════════════════════════════════════════════════

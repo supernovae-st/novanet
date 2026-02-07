@@ -44,7 +44,7 @@ GraphRAG patterns, and Neo4j relationship modeling.
 | Identity | `SAME_AS`, `ALIAS_OF` |
 | Cross-realm | `POPULAR_IN` (Entity → GeoRegion) |
 
-**Rationale**: GraphRAG traversal benefits from typed edges; meta-graph visibility; clearer semantics.
+**Rationale**: GraphRAG traversal benefits from typed arcs; meta-graph visibility; clearer semantics.
 
 ### Decision 2: Property Name = `strength`
 
@@ -3026,16 +3026,16 @@ packages/db/seed/
 ├── 27-geographic-taxonomy.cypher        Continents, GeoRegions, etc.
 ├── 28-locale-taxonomy-links.cypher      Locale → GeoRegion arcs
 │
-├── 30-entities-pillars.cypher           4 pillars + infra (5 nodes)
-├── 31-entities-styles.cypher            QR styles + design specs (13)
-├── 32-entities-content-types.cypher     URL, WiFi, social... (58)
-├── 33-entities-features-tools.cypher    Analytics, Generator... (25)
-├── 34-entities-mediums.cypher           Business cards, posters (20)
-├── 35-entities-actions.cypher           Create, Scan, Track (15)
-├── 36-entities-industries.cypher        Restaurants, Retail (25)
-├── 37-entities-brands.cypher            Google, Instagram (25)
-├── 38-entities-concepts.cypher          Dynamic, Static, Quiet Zone (12)
-├── 39-entities-misc.cypher              Integrations, Guides, etc. (81)
+├── 40-entities-pillars.cypher           4 pillars + infra (5 nodes)
+├── 41-entities-styles.cypher            QR styles + design specs (13)
+├── 42-entities-content-types.cypher     URL, WiFi, social... (58)
+├── 43-entities-features-tools.cypher    Analytics, Generator... (25)
+├── 44-entities-mediums.cypher           Business cards, posters (20)
+├── 45-entities-actions.cypher           Create, Scan, Track (15)
+├── 46-entities-industries.cypher        Restaurants, Retail (25)
+├── 47-entities-brands.cypher            Google, Instagram (25)
+├── 48-entities-concepts.cypher          Dynamic, Static, Quiet Zone (12)
+├── 49-entities-misc.cypher              Integrations, Guides, etc. (81)
 │
 ├── 50-entity-arcs.cypher                ← GENERATED from entity-arcs/*.yaml
 │
@@ -3055,7 +3055,7 @@ packages/db/seed/
 │     node-kinds/*.yaml ──► cargo run -- schema generate ──► TypeScript + Cypher │
 │                                                                                 │
 │  2. ENTITY NODES (Cypher direct)                                                │
-│     Hand-written 30-39-entities-*.cypher ──► pnpm infra:seed ──► Neo4j         │
+│     Hand-written 40-49-entities-*.cypher ──► pnpm infra:seed ──► Neo4j         │
 │                                                                                 │
 │  3. SEMANTIC ARCS (YAML → Cypher)                                              │
 │     entity-arcs/*.yaml ──► cargo run -- entity-arcs generate                   │
@@ -3121,16 +3121,16 @@ packages/db/seed/
 
 | Seed File | Content | Count |
 |-----------|---------|-------|
-| `30-entities-pillars.cypher` | 4 pillars + short-link | 5 |
-| `31-entities-styles.cypher` | QR styles + design specs | 13 |
-| `32-entities-content-types.cypher` | URL, WiFi, social, payment... | 58 |
-| `33-entities-features-tools.cypher` | Analytics, Generator... | 25 |
-| `34-entities-mediums.cypher` | Business cards, posters... | 20 |
-| `35-entities-actions.cypher` | Create, Scan, Track... | 15 |
-| `36-entities-industries.cypher` | Restaurants, Retail... | 25 |
-| `37-entities-brands.cypher` | Google, Instagram... | 25 |
-| `38-entities-concepts.cypher` | Dynamic, Static, Quiet Zone... | 12 |
-| `39-entities-misc.cypher` | Integrations, Guides, Comparisons | 81 |
+| `40-entities-pillars.cypher` | 4 pillars + short-link | 5 |
+| `41-entities-styles.cypher` | QR styles + design specs | 13 |
+| `42-entities-content-types.cypher` | URL, WiFi, social, payment... | 58 |
+| `43-entities-features-tools.cypher` | Analytics, Generator... | 25 |
+| `44-entities-mediums.cypher` | Business cards, posters... | 20 |
+| `45-entities-actions.cypher` | Create, Scan, Track... | 15 |
+| `46-entities-industries.cypher` | Restaurants, Retail... | 25 |
+| `47-entities-brands.cypher` | Google, Instagram... | 25 |
+| `48-entities-concepts.cypher` | Dynamic, Static, Quiet Zone... | 12 |
+| `49-entities-misc.cypher` | Integrations, Guides, Comparisons | 81 |
 | **TOTAL** | | **~279** |
 
 ### Phase 4: Entity Arcs (YAML → Cypher)
