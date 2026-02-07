@@ -415,7 +415,7 @@ export interface IconDefinition {
 // {{ cat.category | upper }} ICONS ({{ cat.icons | length }})
 export const {{ cat.category | upper }}_ICONS: Record<string, IconDefinition> = {
 {%- for icon in cat.icons %}
-  {{ icon.key }}: { web: '{{ icon.web }}', terminal: '{{ icon.terminal }}', description: '{{ icon.description }}' },
+  '{{ icon.key }}': { web: '{{ icon.web }}', terminal: '{{ icon.terminal }}', description: '{{ icon.description }}' },
 {%- endfor %}
 };
 {%- endfor %}
@@ -808,13 +808,13 @@ mod tests {
         assert!(output.contains("QUALITY_ICONS:"));
         assert!(output.contains("MODES_ICONS:"));
 
-        // Icon entries (spot check)
-        assert!(output.contains("global: { web: 'globe', terminal: '◉'"));
-        assert!(output.contains("tenant: { web: 'building-2', terminal: '◎'"));
-        assert!(output.contains("invariant: { web: 'lock', terminal: '■'"));
-        assert!(output.contains("localized: { web: 'globe', terminal: '□'"));
-        assert!(output.contains("expanded: { web: 'chevron-down', terminal: '▼'"));
-        assert!(output.contains("collapsed: { web: 'chevron-right', terminal: '▶'"));
+        // Icon entries (spot check) - keys are quoted for consistency with hyphenated keys
+        assert!(output.contains("'global': { web: 'globe', terminal: '◉'"));
+        assert!(output.contains("'tenant': { web: 'building-2', terminal: '◎'"));
+        assert!(output.contains("'invariant': { web: 'lock', terminal: '■'"));
+        assert!(output.contains("'localized': { web: 'globe', terminal: '□'"));
+        assert!(output.contains("'expanded': { web: 'chevron-down', terminal: '▼'"));
+        assert!(output.contains("'collapsed': { web: 'chevron-right', terminal: '▶'"));
 
         // Combined ICONS object
         assert!(output.contains("export const ICONS = {"));

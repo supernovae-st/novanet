@@ -26,7 +26,7 @@ This diagram shows the complete NovaNet graph schema with all 42 node types and 
 ```mermaid
 flowchart TB
   %% NovaNet Graph v10.6.0
-  %% Generated: 60 nodes, 138 arcs
+  %% Generated: 63 nodes, 138 arcs
   %% Source: 42 node YAMLs + relations.yaml + taxonomy.yaml
 
   %% Trait styling (node_trait)
@@ -74,6 +74,9 @@ flowchart TB
       TermSet["🟣 TermSet"]
     end
     subgraph GLOBAL_seo["SEO Intelligence"]
+      GEOAnswer["⚪ GEOAnswer"]
+      GEOMetrics["⚪ GEOMetrics"]
+      GEOQuery["🟣 GEOQuery"]
       SEOComparison["🟣 SEOComparison"]
       SEOKeyword["🟣 SEOKeyword"]
       SEOKeywordMetrics["⚪ SEOKeywordMetrics"]
@@ -296,6 +299,9 @@ flowchart TB
   class Expression knowledge
   class ExpressionSet knowledge
   class Formatting knowledge
+  class GEOAnswer derived
+  class GEOMetrics derived
+  class GEOQuery knowledge
   class GenerationJob job
   class GeoRegion invariant
   class GeoSubRegion invariant

@@ -1,6 +1,6 @@
 // packages/core/src/graph/generator.ts
 // Schema graph generator - Creates flat and hierarchical schema representations
-// v10.7.0 — 7-node locale knowledge architecture (GLOBAL / TENANT)
+// v10.8.0 — Geographic taxonomy + locale knowledge architecture (global + tenant)
 
 import { NODE_TYPES, NODE_REALMS, NODE_TRAITS, type NodeType, type Realm } from '../types/nodes.js';
 import { RelationRegistry } from '../schemas/relations.schema.js';
@@ -18,9 +18,9 @@ import { REALM_HIERARCHY } from './hierarchy.js';
  */
 const NODE_LABELS: Record<NodeType, string> = {
   // ═══════════════════════════════════════════════════════════════════════════
-  // GLOBAL REALM (25 nodes)
+  // GLOBAL REALM (37 nodes)
   // ═══════════════════════════════════════════════════════════════════════════
-  // config (7) - v10.7: added Culture, Market
+  // config (13) - v10.8: added geographic taxonomy
   Locale: 'Locale',
   Formatting: 'Formatting',
   Slugification: 'Slugification',
@@ -28,8 +28,14 @@ const NODE_LABELS: Record<NodeType, string> = {
   Style: 'Style',
   Culture: 'Culture',
   Market: 'Market',
+  Continent: 'Continent',
+  GeoRegion: 'Geo Region',
+  GeoSubRegion: 'Geo Sub-Region',
+  IncomeGroup: 'Income Group',
+  LendingCategory: 'Lending Category',
+  EconomicRegion: 'Economic Region',
 
-  // locale-knowledge (12) — Sets + Atoms
+  // locale-knowledge (18) — Sets + Atoms + Linguistic/Cultural taxonomy
   TermSet: 'Term Set',
   ExpressionSet: 'Expression Set',
   PatternSet: 'Pattern Set',
@@ -42,6 +48,12 @@ const NODE_LABELS: Record<NodeType, string> = {
   CultureRef: 'Culture Ref',
   Taboo: 'Taboo',
   AudienceTrait: 'Audience Trait',
+  LanguageFamily: 'Language Family',
+  LanguageBranch: 'Language Branch',
+  CulturalRealm: 'Cultural Realm',
+  CulturalSubRealm: 'Cultural Sub-Realm',
+  PopulationCluster: 'Population Cluster',
+  PopulationSubCluster: 'Population Sub-Cluster',
 
   // seo (6)
   SEOKeyword: 'SEO Keyword',
@@ -116,7 +128,7 @@ const TRAIT_DESCRIPTIONS: Record<string, string> = {
 // =============================================================================
 
 /**
- * Generate flat schema graph with all 43 node types and arcs.
+ * Generate flat schema graph with all 60 node types and arcs.
  * This is the canonical representation of the NovaNet ontology.
  *
  * @returns SchemaGraphResult with nodes and arcs
@@ -125,7 +137,7 @@ const TRAIT_DESCRIPTIONS: Record<string, string> = {
  * ```typescript
  * const { nodes, arcs } = generateSchemaGraph();
  * console.log(`${nodes.length} nodes, ${arcs.length} arcs`);
- * // Output: "43 nodes, ~XX arcs"
+ * // Output: "60 nodes, ~XX arcs"
  * ```
  */
 export function generateSchemaGraph(): SchemaGraphResult {
@@ -133,7 +145,7 @@ export function generateSchemaGraph(): SchemaGraphResult {
   const arcs: SchemaArc[] = [];
 
   // ==========================================================================
-  // GENERATE NODES - All 43 node types
+  // GENERATE NODES - All 60 node types
   // ==========================================================================
 
   for (const nodeType of NODE_TYPES) {
@@ -197,7 +209,7 @@ export function generateSchemaGraph(): SchemaGraphResult {
  * ```typescript
  * const hierarchy = getSchemaHierarchy();
  * console.log(hierarchy.stats);
- * // Output: { totalNodes: 42, totalArcs: ~XX, nodesByRealm: { global: 20, tenant: 22 } }
+ * // Output: { totalNodes: 60, totalArcs: ~XX, nodesByRealm: { global: 37, tenant: 23 } }
  * ```
  */
 export function getSchemaHierarchy(): HierarchicalSchemaData {

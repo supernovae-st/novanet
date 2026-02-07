@@ -1,0 +1,128 @@
+# models/node-kinds/global/seo/geo-answer.yaml
+# GEOAnswer - LLM response sample (immutable snapshot)
+#
+# v10.7: GEO Schema v1
+#        - Captures actual LLM responses for analysis
+#        - Immutable snapshot: once created, never updated
+#        - Tracks citations, brand mentions, and relevance
+#        - Owned by GEOQuery via HAS_GEO_ANSWERS
+
+node:
+  name: GEOAnswer
+  realm: global
+  layer: seo
+  trait: derived
+  icon: "💬"
+  description: "LLM response sample for GEO analysis (immutable snapshot)"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # STANDARD PROPERTIES (v7.1.0)
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  standard_properties:
+    key:
+      type: string
+      required: true
+      description: "Unique identifier"
+      example: "geo-answer-20260208-gemini-abc123"
+
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable name"
+      example: "Gemini response 2026-02-08"
+
+    description:
+      type: string
+      required: false
+      description: "Short description"
+
+    llm_context:
+      type: string
+      required: false
+      description: "Format: USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]."
+
+    created_at:
+      type: datetime
+      required: false
+
+    updated_at:
+      type: datetime
+      required: false
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # NODE-SPECIFIC PROPERTIES
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  properties:
+    # --- Engine identification ---
+    engine:
+      type: string
+      required: true
+      description: "AI engine: gemini | gpt | perplexity | claude"
+      example: "gemini"
+
+    engine_version:
+      type: string
+      required: false
+      description: "Engine version or model identifier"
+      example: "gemini-1.5-pro"
+
+    observed_at:
+      type: datetime
+      required: true
+      description: "Timestamp when this response was captured"
+      example: "2026-02-08T14:30:00Z"
+
+    # --- Response content ---
+    answer_text:
+      type: string
+      required: true
+      description: "Full text of the LLM response"
+      example: "To create a QR code, you can use free online tools like..."
+
+    # --- Analysis data ---
+    cited_domains:
+      type: "string[]"
+      required: false
+      description: "Domains cited or referenced in the response"
+      example: '["qrcode-ai.com", "example.com"]'
+
+    brand_mentions:
+      type: "string[]"
+      required: false
+      description: "Brands mentioned in the response"
+      example: '["QR Code AI", "Google"]'
+
+    relevance_score:
+      type: float
+      required: false
+      description: "Relevance of response to the query (0-100)"
+      example: 85.5
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # RELATIONS
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  relations:
+    # Incoming: GEOQuery --[:HAS_GEO_ANSWERS]--> GEOAnswer (ownership)
+    # This is a leaf node - no outgoing relations
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # EXAMPLE
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  example:
+    description: "Get latest Gemini answers for a query"
+    cypher: |
+      // v10.7: GEOAnswer snapshots by engine
+      MATCH (q:GEOQuery {key: $query_key})-[:HAS_GEO_ANSWERS]->(a:GEOAnswer)
+      WHERE a.engine = 'gemini'
+      RETURN a.observed_at,
+             a.engine_version,
+             a.answer_text,
+             a.cited_domains,
+             a.brand_mentions,
+             a.relevance_score
+      ORDER BY a.observed_at DESC
+      LIMIT 10

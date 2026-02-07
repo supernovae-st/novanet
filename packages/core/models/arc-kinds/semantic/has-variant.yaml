@@ -1,0 +1,43 @@
+# packages/core/models/arc-kinds/semantic/has-variant.yaml
+# ArcKind: HAS_VARIANT - Entity has variants/versions (inverse of VARIANT_OF)
+# v10.7: Typed semantic arcs (replaces generic SEMANTIC_LINK)
+
+arc:
+  name: HAS_VARIANT
+  family: semantic
+  scope: intra_realm
+  temperature_threshold: 0.2  # Follow in most spreading activation scenarios
+
+  source: Entity
+  target: Entity
+  cardinality: one_to_many
+  is_self_referential: true
+
+  properties:
+    - name: strength
+      type: float
+      required: false
+      default: 0.8
+      description: "Relationship intensity (0.0-1.0)"
+
+    - name: temperature
+      type: float
+      required: false
+      default: 0.85
+      description: "Spreading activation weight"
+
+    - name: variant_type
+      type: string
+      required: false
+      enum: [version, flavor, edition, specialization, customization]
+      description: "Type of variant relationship"
+
+  inverse: VARIANT_OF
+
+  llm_context: |
+    Inverse of VARIANT_OF: Entity A has Entity B as a variant.
+    The target is a specialized form of the source (more specific).
+    Examples: QRCode HAS_VARIANT CustomQRCode, QRCode HAS_VARIANT DynamicQR
+    Use for: finding all variants of a base entity.
+
+  cypher_pattern: "(Entity)-[:HAS_VARIANT {strength, temperature, variant_type}]->(Entity)"

@@ -1,0 +1,49 @@
+# packages/core/models/arc-kinds/semantic/has-application.yaml
+# ArcKind: HAS_APPLICATION - Entity has applications (inverse of APPLIES_TO)
+# v10.7: Typed semantic arcs (replaces generic SEMANTIC_LINK)
+
+arc:
+  name: HAS_APPLICATION
+  family: semantic
+  scope: intra_realm
+  temperature_threshold: 0.2  # Application - important for use case discovery
+
+  source: Entity
+  target: Entity
+  cardinality: many_to_many
+  is_self_referential: true
+
+  properties:
+    - name: strength
+      type: float
+      required: false
+      default: 0.75
+      description: "Applicability strength (0.0-1.0)"
+
+    - name: temperature
+      type: float
+      required: false
+      default: 0.8
+      description: "Spreading activation weight"
+
+    - name: application_type
+      type: string
+      required: false
+      enum: [use_case, domain, industry, scenario, context]
+      description: "Type of application"
+
+    - name: relevance
+      type: string
+      required: false
+      enum: [primary, secondary, niche, experimental]
+      description: "Relevance level for this application"
+
+  inverse: APPLIES_TO
+
+  llm_context: |
+    Inverse of APPLIES_TO: Entity A has Entity B as an applicable tool/method.
+    Source is a domain/context, target is a tool/method.
+    Use for: finding tools for a domain, discovering applicable technologies.
+    Examples: Marketing HAS_APPLICATION QRCode, Networking HAS_APPLICATION VCard
+
+  cypher_pattern: "(Entity)-[:HAS_APPLICATION {strength, temperature, application_type, relevance}]->(Entity)"

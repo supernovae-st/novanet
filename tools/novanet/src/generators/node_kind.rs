@@ -606,37 +606,37 @@ mod tests {
             .filter(|l: &&str| l.contains("MERGE") && l.contains(":Meta:Kind"))
             .count();
         assert_eq!(
-            kind_merges, 60,
-            "expected 60 Kind MERGE statements (v10.8: 2 realms, 37+23 nodes)"
+            kind_merges, 63,
+            "expected 63 Kind MERGE statements (v10.9: 2 realms, 40+23 nodes)"
         );
 
-        // 60 HAS_KIND relationships
+        // 63 HAS_KIND relationships
         let has_kind = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:HAS_KIND]"))
             .count();
-        assert_eq!(has_kind, 60, "expected 60 HAS_KIND relationships");
+        assert_eq!(has_kind, 63, "expected 63 HAS_KIND relationships");
 
-        // 60 IN_REALM relationships
+        // 63 IN_REALM relationships
         let in_realm = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_REALM]"))
             .count();
-        assert_eq!(in_realm, 60, "expected 60 IN_REALM relationships");
+        assert_eq!(in_realm, 63, "expected 63 IN_REALM relationships");
 
-        // 60 IN_LAYER relationships
+        // 63 IN_LAYER relationships
         let in_layer = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_LAYER]"))
             .count();
-        assert_eq!(in_layer, 60, "expected 60 IN_LAYER relationships");
+        assert_eq!(in_layer, 63, "expected 63 IN_LAYER relationships");
 
-        // 60 EXHIBITS relationships
+        // 63 EXHIBITS relationships
         let exhibits = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:EXHIBITS]"))
             .count();
-        assert_eq!(exhibits, 60, "expected 60 EXHIBITS relationships");
+        assert_eq!(exhibits, 63, "expected 63 EXHIBITS relationships");
 
         // Spot checks — specific Kinds
         assert!(cypher.contains("k_Project:Meta:Kind {label: 'Project'}"));
@@ -668,8 +668,8 @@ mod tests {
             }
         }
 
-        // v10.8: Header mentions 60 Kind nodes
-        assert!(cypher.contains("60 Kind nodes"));
+        // v10.9: Header mentions 63 Kind nodes
+        assert!(cypher.contains("63 Kind nodes"));
 
         // v10.1: knowledge_tier removed from all YAMLs (node type is sufficient)
         // Verify no knowledge_tier properties are present in output

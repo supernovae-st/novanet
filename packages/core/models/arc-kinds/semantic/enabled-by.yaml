@@ -1,0 +1,42 @@
+# packages/core/models/arc-kinds/semantic/enabled-by.yaml
+# ArcKind: ENABLED_BY - Entity is enabled by another Entity (inverse of ENABLES)
+# v10.7: Typed semantic arcs (replaces generic SEMANTIC_LINK)
+
+arc:
+  name: ENABLED_BY
+  family: semantic
+  scope: intra_realm
+  temperature_threshold: 0.2  # Enablement - important for capability mapping
+
+  source: Entity
+  target: Entity
+  cardinality: many_to_many
+  is_self_referential: true
+
+  properties:
+    - name: strength
+      type: float
+      required: false
+      default: 0.75
+      description: "Enablement strength (0.0-1.0)"
+
+    - name: temperature
+      type: float
+      required: false
+      default: 0.8
+      description: "Spreading activation weight"
+
+    - name: enablement_type
+      type: string
+      required: false
+      enum: [unlocks, enhances, permits, facilitates]
+      description: "Type of enablement relationship"
+
+  inverse: ENABLES
+
+  llm_context: |
+    Inverse of ENABLES: Entity A is enabled/unlocked by Entity B.
+    Use for: finding prerequisites, capability dependencies.
+    Examples: Integration ENABLED_BY API, Optimization ENABLED_BY Analytics
+
+  cypher_pattern: "(Entity)-[:ENABLED_BY {strength, temperature, enablement_type}]->(Entity)"

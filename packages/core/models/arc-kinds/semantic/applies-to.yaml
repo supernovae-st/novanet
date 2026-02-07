@@ -1,0 +1,52 @@
+# packages/core/models/arc-kinds/semantic/applies-to.yaml
+# ArcKind: APPLIES_TO - Entity applies to / is applicable to another Entity
+# v10.7: Typed semantic arcs (replaces generic SEMANTIC_LINK)
+
+arc:
+  name: APPLIES_TO
+  family: semantic
+  scope: intra_realm
+  temperature_threshold: 0.2  # Application - important for use case discovery
+
+  source: Entity
+  target: Entity
+  cardinality: many_to_many
+  is_self_referential: true
+
+  properties:
+    - name: strength
+      type: float
+      required: false
+      default: 0.75
+      description: "Applicability strength (0.0-1.0)"
+
+    - name: temperature
+      type: float
+      required: false
+      default: 0.8
+      description: "Spreading activation weight"
+
+    - name: application_type
+      type: string
+      required: false
+      enum: [use_case, domain, industry, scenario, context]
+      description: "Type of application"
+
+    - name: relevance
+      type: string
+      required: false
+      enum: [primary, secondary, niche, experimental]
+      description: "Relevance level for this application"
+
+  inverse: HAS_APPLICATION
+
+  llm_context: |
+    Application relationship: Entity A applies to / is used in Entity B.
+    Source is a tool/method, target is a domain/context.
+    application_type: use_case (specific), domain (field), industry (sector),
+      scenario (situation), context (environment)
+    relevance: primary (main use), secondary (common), niche (specialized),
+      experimental (emerging)
+    Examples: QRCode APPLIES_TO Marketing, VCard APPLIES_TO Networking
+
+  cypher_pattern: "(Entity)-[:APPLIES_TO {strength, temperature, application_type, relevance}]->(Entity)"

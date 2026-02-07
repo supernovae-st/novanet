@@ -417,14 +417,14 @@ mod tests {
         let generator = LayerGenerator;
         let output = generator.generate(root).expect("should generate layers.ts");
 
-        // v10.8: 60 nodes (2 realms: global + tenant)
+        // v10.9: 63 nodes (2 realms: global + tenant)
         assert!(
-            output.contains("mapping all 60 node types"),
-            "should mention 60 node types"
+            output.contains("mapping all 63 node types"),
+            "should mention 63 node types"
         );
 
-        // v10.8: Realm node counts (2 realms)
-        assert!(output.contains("GLOBAL REALM (37 nodes)")); // config (13) + locale-knowledge (18) + seo (6)
+        // v10.9: Realm node counts (2 realms)
+        assert!(output.contains("GLOBAL REALM (40 nodes)")); // config (13) + locale-knowledge (18) + seo (9)
         assert!(output.contains("TENANT REALM (23 nodes)")); // config + semantic + foundation + structure + instruction + output
 
         // 9 layers present (v10.6: config in both realms but deduplicated)
