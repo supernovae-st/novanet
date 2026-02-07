@@ -1,6 +1,6 @@
 # ═══════════════════════════════════════════════════════════════════════════════
 # models/node-kinds/tenant/semantic/entity.yaml
-# Entity - Tenant-level semantic unit (v10.7)
+# Entity - Tenant-level semantic unit (v11)
 # ═══════════════════════════════════════════════════════════════════════════════
 #
 # PURPOSE:
@@ -131,7 +131,7 @@ node:
         - "USE: AI QR, artistic QR, generated QR. TRIGGERS: qr art, ai qr, qr artistique. NOT: photo overlay (use QR Code Image), manual design (use Custom QR Code)."
 
     # ─────────────────────────────────────────────────────────────────────────────
-    # entity_summary: LLM context summary (v10.7)
+    # entity_summary: LLM context summary (v11)
     # ─────────────────────────────────────────────────────────────────────────────
     # PURPOSE:
     #   2-3 sentence summary optimized for LLM context loading.
