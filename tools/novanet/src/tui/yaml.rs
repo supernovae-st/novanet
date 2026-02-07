@@ -24,20 +24,6 @@ pub struct YamlSections {
     raw_content: String,
 }
 
-/// Keys that belong to the Kind section (metadata about the type).
-#[allow(dead_code)] // Reserved for future validation
-const KIND_KEYS: &[&str] = &[
-    "name:",
-    "realm:",
-    "layer:",
-    "trait:",
-    "description:",
-    "icon:",
-    "llm_context:",
-    "context_budget:",
-    "knowledge_tier:",
-];
-
 /// Keys that belong to the Instance section (structure of instances).
 const INSTANCE_KEYS: &[&str] = &["standard_properties:", "properties:"];
 
@@ -174,25 +160,6 @@ pub enum YamlViewSection {
     Instance,
 }
 
-#[allow(dead_code)] // Methods reserved for future use
-impl YamlViewSection {
-    /// Toggle between Kind and Instance.
-    pub fn toggle(&self) -> Self {
-        match self {
-            YamlViewSection::Kind => YamlViewSection::Instance,
-            YamlViewSection::Instance => YamlViewSection::Kind,
-        }
-    }
-
-    /// Label for display.
-    pub fn label(&self) -> &'static str {
-        match self {
-            YamlViewSection::Kind => "Kind",
-            YamlViewSection::Instance => "Instance",
-        }
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -250,12 +217,5 @@ name: Test
 realm: global
 "#;
         assert!(YamlSections::parse(invalid).is_none());
-    }
-
-    #[test]
-    fn test_section_toggle() {
-        let section = YamlViewSection::Kind;
-        assert_eq!(section.toggle(), YamlViewSection::Instance);
-        assert_eq!(section.toggle().toggle(), YamlViewSection::Kind);
     }
 }
