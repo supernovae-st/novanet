@@ -2945,6 +2945,69 @@ pnpm infra:reset                       # Drop + reseed
 
 ---
 
+## Development Workflow & Tools
+
+### Skills to Use
+
+| Skill | When to Use |
+|-------|-------------|
+| `rust-core` | Rust fundamentals: ownership, error handling (thiserror), type-state patterns |
+| `rust-async` | If async needed: Tokio patterns, channels, concurrency |
+| `test-driven-development` | Write tests FIRST for parser and generator |
+| `brainstorming` | Refine design decisions before coding |
+| `verification-before-completion` | Run `cargo test` before claiming done |
+
+### Agents to Dispatch
+
+| Agent | Task |
+|-------|------|
+| `rust-pro` | Complex Rust implementation (parser, generator, CLI) |
+| `rust-architect` | Design decisions for module structure |
+| `code-reviewer` | Review implementation against this plan |
+| `feature-dev:code-explorer` | Understand existing parser/generator patterns |
+
+### Mandatory Workflows
+
+```
+1. Research existing patterns
+   └── Read: parsers/yaml_node.rs, generators/node_kind.rs
+   └── Understand: how existing YAML→Cypher works
+
+2. TDD for Rust code
+   └── Write test first (insta snapshots)
+   └── Run test (RED)
+   └── Implement minimal code
+   └── Run test (GREEN)
+   └── Refactor
+
+3. Verification before commit
+   └── cargo fmt && cargo clippy -- -D warnings
+   └── cargo nextest run
+   └── cargo deny check
+```
+
+### Claude Code Documentation
+
+| Topic | Command/Skill |
+|-------|---------------|
+| Rust patterns | `/spn-rust:rust-core` |
+| Async Tokio | `/spn-rust:rust-async` |
+| NovaNet architecture | `/novanet-arch` |
+| Schema management | `/novanet-sync` |
+| Claude Code features | `spn-powers:claude-code-docs` |
+
+### Quality Gates
+
+| Phase | Verification |
+|-------|--------------|
+| Schema YAML | `cargo run -- schema validate` |
+| Entity Arcs YAML | `cargo run -- entity-arcs validate` |
+| Rust code | `cargo nextest run && cargo clippy -- -D warnings` |
+| Generated Cypher | `pnpm infra:seed` (no errors) |
+| Neo4j data | Query in browser: `MATCH (e:Entity) RETURN count(e)` |
+
+---
+
 ## File Summary
 
 ### Files to CREATE
