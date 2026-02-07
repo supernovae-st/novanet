@@ -28,6 +28,8 @@ CREATE CONSTRAINT project_key IF NOT EXISTS FOR (p:Project) REQUIRE p.key IS UNI
 CREATE CONSTRAINT entity_key IF NOT EXISTS FOR (e:Entity) REQUIRE e.key IS UNIQUE;
 // v11: Entity type filtering for semantic queries
 CREATE INDEX entity_type IF NOT EXISTS FOR (e:Entity) ON (e.type);
+// v11: Pillar filtering for content hierarchy navigation
+CREATE INDEX entity_is_pillar IF NOT EXISTS FOR (e:Entity) ON (e.is_pillar);
 CREATE INDEX el10n_version IF NOT EXISTS FOR (el:EntityL10n) ON (el.version);
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -72,6 +74,8 @@ CREATE INDEX blockrules_version IF NOT EXISTS FOR (br:BlockRules) ON (br.version
 CREATE INDEX seo_volume IF NOT EXISTS FOR (s:SEOKeyword) ON (s.volume);
 CREATE INDEX seo_intent IF NOT EXISTS FOR (s:SEOKeyword) ON (s.intent);
 CREATE INDEX seo_difficulty IF NOT EXISTS FOR (s:SEOKeyword) ON (s.difficulty);
+// v11: Traffic potential ranking for content gap analysis
+CREATE INDEX seo_traffic_potential IF NOT EXISTS FOR (s:SEOKeyword) ON (s.traffic_potential);
 CREATE TEXT INDEX seo_value_text IF NOT EXISTS FOR (s:SEOKeyword) ON (s.value);
 // REMOVED v7.8.4: SEOVariation indexes (node deleted, variations are SEOKeyword nodes)
 CREATE INDEX seomr_status IF NOT EXISTS FOR (smr:SEOMiningRun) ON (smr.status);
