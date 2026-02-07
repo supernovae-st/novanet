@@ -1,6 +1,6 @@
 // packages/core/src/graph/generator.ts
 // Schema graph generator - Creates flat and hierarchical schema representations
-// v10.8.0 — Geographic taxonomy + locale knowledge architecture (global + tenant)
+// v10.9.0 — Typed semantic arcs + GEO layer (global + tenant)
 
 import { NODE_TYPES, NODE_REALMS, NODE_TRAITS, type NodeType, type Realm } from '../types/nodes.js';
 import { RelationRegistry } from '../schemas/relations.schema.js';
@@ -18,7 +18,7 @@ import { REALM_HIERARCHY } from './hierarchy.js';
  */
 const NODE_LABELS: Record<NodeType, string> = {
   // ═══════════════════════════════════════════════════════════════════════════
-  // GLOBAL REALM (37 nodes)
+  // GLOBAL REALM (40 nodes)
   // ═══════════════════════════════════════════════════════════════════════════
   // config (13) - v10.8: added geographic taxonomy
   Locale: 'Locale',
@@ -55,13 +55,16 @@ const NODE_LABELS: Record<NodeType, string> = {
   PopulationCluster: 'Population Cluster',
   PopulationSubCluster: 'Population Sub-Cluster',
 
-  // seo (6)
+  // seo (9) — SEO + GEO (Generative Engine Optimization)
   SEOKeyword: 'SEO Keyword',
   SEOKeywordMetrics: 'SEO Metrics',
   SEOMiningRun: 'SEO Mining',
   SEOComparison: 'SEO Comparison',
   SEOPreposition: 'SEO Preposition',
   SEOQuestion: 'SEO Question',
+  GEOQuery: 'GEO Query',
+  GEOAnswer: 'GEO Answer',
+  GEOMetrics: 'GEO Metrics',
 
   // ═══════════════════════════════════════════════════════════════════════════
   // TENANT REALM (23 nodes)

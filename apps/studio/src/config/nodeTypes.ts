@@ -1,19 +1,19 @@
 // =============================================================================
-// NODE TYPE CONFIGURATION (v10.6.0)
+// NODE TYPE CONFIGURATION (v10.9.0)
 // =============================================================================
-// Visual configuration for all 46 NovaNet node types (v10.6: 8 layers, 2 realms: global, tenant)
+// Visual configuration for all 63 NovaNet node types (v10.9: 8 layers, 2 realms: global, tenant)
 // NodeType, Layer, KIND_META imported from @novanet/core (Single Source of Truth)
 
 import type { NodeType, Layer } from '@novanet/core/types';
 import { NODE_TYPES, KIND_META } from '@novanet/core/types';
 
 // =============================================================================
-// NODE LAYERS (v10.6 - 8 layers, 42 nodes)
+// NODE LAYERS (v10.9 - 8 layers, 63 nodes)
 // Derived from KIND_META — single source of truth
 // =============================================================================
 
 /**
- * Node layers with their types (v10.6 - 46 nodes across 8 layers)
+ * Node layers with their types (v10.9 - 63 nodes across 8 layers)
  * Derived from KIND_META in @novanet/core
  */
 export const NODE_LAYERS: Record<Layer, NodeType[]> = Object.entries(KIND_META).reduce(
@@ -44,7 +44,7 @@ export interface NodeTypeConfig {
 }
 
 /**
- * All node type configurations (v10.6 - 46 nodes)
+ * All node type configurations (v10.9 - 63 nodes)
  * Aligned with @novanet/core NODE_TYPES
  */
 export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
@@ -174,7 +174,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   // ==========================================================================
 
   // ==========================================================================
-  // GLOBAL REALM — CONFIG LAYER (7 nodes) - v10.7: added Culture, Market
+  // GLOBAL REALM — CONFIG LAYER (13 nodes) - v10.8: added geographic taxonomy
   // ==========================================================================
   Locale: {
     type: 'Locale',
@@ -203,6 +203,60 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     size: 16,
     layer: 'config',
   },
+  Continent: {
+    type: 'Continent',
+    label: 'Continent',
+    icon: '🗺️',
+    color: '#2563eb',
+    colorClass: 'bg-blue-600',
+    size: 18,
+    layer: 'config',
+  },
+  GeoRegion: {
+    type: 'GeoRegion',
+    label: 'Geo Region',
+    icon: '🌐',
+    color: '#3b82f6',
+    colorClass: 'bg-blue-500',
+    size: 16,
+    layer: 'config',
+  },
+  GeoSubRegion: {
+    type: 'GeoSubRegion',
+    label: 'Geo Sub-Region',
+    icon: '🗾',
+    color: '#60a5fa',
+    colorClass: 'bg-blue-400',
+    size: 14,
+    layer: 'config',
+  },
+  IncomeGroup: {
+    type: 'IncomeGroup',
+    label: 'Income Group',
+    icon: '💰',
+    color: '#16a34a',
+    colorClass: 'bg-green-600',
+    size: 14,
+    layer: 'config',
+  },
+  LendingCategory: {
+    type: 'LendingCategory',
+    label: 'Lending Category',
+    icon: '🏦',
+    color: '#0891b2',
+    colorClass: 'bg-cyan-600',
+    size: 14,
+    layer: 'config',
+  },
+  EconomicRegion: {
+    type: 'EconomicRegion',
+    label: 'Economic Region',
+    icon: '💹',
+    color: '#059669',
+    colorClass: 'bg-emerald-600',
+    size: 14,
+    layer: 'config',
+  },
 
   // ==========================================================================
   // TENANT REALM — CONFIG LAYER (1 node) — v10.6
@@ -218,7 +272,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   },
 
   // ==========================================================================
-  // GLOBAL REALM — LOCALE-KNOWLEDGE LAYER (10 nodes — v10 tiered model)
+  // GLOBAL REALM — LOCALE-KNOWLEDGE LAYER (18 nodes — v10.8: added linguistic/cultural taxonomy)
   // ==========================================================================
   // Technical tier
   Formatting: {
@@ -368,6 +422,61 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     size: 8,
     layer: 'locale-knowledge',
   },
+  // Linguistic/Cultural taxonomy (6)
+  LanguageFamily: {
+    type: 'LanguageFamily',
+    label: 'Language Family',
+    icon: '🗣️',
+    color: '#7c3aed',
+    colorClass: 'bg-violet-600',
+    size: 14,
+    layer: 'locale-knowledge',
+  },
+  LanguageBranch: {
+    type: 'LanguageBranch',
+    label: 'Language Branch',
+    icon: '🌿',
+    color: '#8b5cf6',
+    colorClass: 'bg-violet-500',
+    size: 12,
+    layer: 'locale-knowledge',
+  },
+  CulturalRealm: {
+    type: 'CulturalRealm',
+    label: 'Cultural Realm',
+    icon: '🎪',
+    color: '#db2777',
+    colorClass: 'bg-pink-600',
+    size: 14,
+    layer: 'locale-knowledge',
+  },
+  CulturalSubRealm: {
+    type: 'CulturalSubRealm',
+    label: 'Cultural Sub-Realm',
+    icon: '🎭',
+    color: '#ec4899',
+    colorClass: 'bg-pink-500',
+    size: 12,
+    layer: 'locale-knowledge',
+  },
+  PopulationCluster: {
+    type: 'PopulationCluster',
+    label: 'Population Cluster',
+    icon: '👨‍👩‍👧‍👦',
+    color: '#0284c7',
+    colorClass: 'bg-sky-600',
+    size: 14,
+    layer: 'locale-knowledge',
+  },
+  PopulationSubCluster: {
+    type: 'PopulationSubCluster',
+    label: 'Population Sub-Cluster',
+    icon: '👥',
+    color: '#0ea5e9',
+    colorClass: 'bg-sky-500',
+    size: 12,
+    layer: 'locale-knowledge',
+  },
 
   // (PagePrompt, BlockPrompt, BlockRules already in INSTRUCTION LAYER above)
   PagePrompt: {
@@ -466,7 +575,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   },
 
   // ==========================================================================
-  // SEO LAYER (3 nodes)
+  // SEO LAYER (9 nodes) — SEO + GEO (Generative Engine Optimization)
   // ==========================================================================
   SEOKeyword: {
     type: 'SEOKeyword',
@@ -520,6 +629,34 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#991b1b',
     colorClass: 'bg-red-800',
     size: 12,
+    layer: 'seo',
+  },
+  // GEO (Generative Engine Optimization) — Violet tones
+  GEOQuery: {
+    type: 'GEOQuery',
+    label: 'GEO Query',
+    icon: '🤖',
+    color: '#6366f1',
+    colorClass: 'bg-indigo-500',
+    size: 16,
+    layer: 'seo',
+  },
+  GEOAnswer: {
+    type: 'GEOAnswer',
+    label: 'GEO Answer',
+    icon: '💬',
+    color: '#8b5cf6',
+    colorClass: 'bg-violet-500',
+    size: 14,
+    layer: 'seo',
+  },
+  GEOMetrics: {
+    type: 'GEOMetrics',
+    label: 'GEO Metrics',
+    icon: '📊',
+    color: '#a78bfa',
+    colorClass: 'bg-violet-400',
+    size: 10,
     layer: 'seo',
   },
 

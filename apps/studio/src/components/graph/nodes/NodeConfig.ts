@@ -1,11 +1,11 @@
 /**
- * NodeConfig - Pre-computed Lookup Tables for O(1) Access (v10.5.0)
+ * NodeConfig - Pre-computed Lookup Tables for O(1) Access (v10.9.0)
  *
  * Provides instant access to node sizes and colors without runtime computation.
  * This eliminates the performance overhead of computing styles on every render,
  * which is critical when rendering 19k+ nodes.
  *
- * v10.5.0: 43 nodes across 3 realms (GLOBAL / ORGANIZATION / PROJECT)
+ * v10.9.0: 63 nodes across 2 realms (GLOBAL / TENANT) — Typed semantic arcs + GEO layer
  *
  * @example
  * // Fast lookup
@@ -42,11 +42,11 @@ export interface NodeConfig {
 }
 
 // =============================================================================
-// Size Lookup Table (v10.5.0 - 43 nodes)
+// Size Lookup Table (v10.9.0 - 63 nodes)
 // =============================================================================
 
 /**
- * Pre-computed sizes for all 43 node types (v10.5.0)
+ * Pre-computed sizes for all 63 node types (v10.9.0)
  *
  * Size categories:
  * - Large (280x140): Root nodes (Project, Organization)
@@ -58,9 +58,9 @@ export interface NodeConfig {
  */
 export const NODE_SIZES: Record<NodeType, NodeSize> = {
   // ═══════════════════════════════════════════════════════════════════════════
-  // GLOBAL REALM (25 nodes)
+  // GLOBAL REALM (40 nodes)
   // ═══════════════════════════════════════════════════════════════════════════
-  // config (7) - v10.7: added Culture, Market
+  // config (13) - v10.8: added geographic taxonomy
   Locale: { width: 220, height: 110 },
   Formatting: { width: 160, height: 80 },
   Slugification: { width: 160, height: 80 },
@@ -68,8 +68,14 @@ export const NODE_SIZES: Record<NodeType, NodeSize> = {
   Style: { width: 180, height: 90 },
   Culture: { width: 180, height: 90 },
   Market: { width: 180, height: 90 },
+  Continent: { width: 200, height: 100 },
+  GeoRegion: { width: 180, height: 90 },
+  GeoSubRegion: { width: 180, height: 90 },
+  IncomeGroup: { width: 180, height: 90 },
+  LendingCategory: { width: 180, height: 90 },
+  EconomicRegion: { width: 180, height: 90 },
 
-  // locale-knowledge (12) — Sets + Atoms
+  // locale-knowledge (18) — Sets + Atoms + Linguistic/Cultural taxonomy
   TermSet: { width: 160, height: 80 },
   ExpressionSet: { width: 160, height: 80 },
   PatternSet: { width: 160, height: 80 },
@@ -82,23 +88,29 @@ export const NODE_SIZES: Record<NodeType, NodeSize> = {
   CultureRef: { width: 160, height: 80 },
   Taboo: { width: 160, height: 80 },
   AudienceTrait: { width: 160, height: 80 },
+  LanguageFamily: { width: 180, height: 90 },
+  LanguageBranch: { width: 180, height: 90 },
+  CulturalRealm: { width: 180, height: 90 },
+  CulturalSubRealm: { width: 180, height: 90 },
+  PopulationCluster: { width: 180, height: 90 },
+  PopulationSubCluster: { width: 180, height: 90 },
 
-  // seo (6)
+  // seo (9) — SEO + GEO (Generative Engine Optimization)
   SEOKeyword: { width: 200, height: 100 },
   SEOKeywordMetrics: { width: 160, height: 80 },
   SEOMiningRun: { width: 160, height: 80 },
   SEOComparison: { width: 180, height: 90 },
   SEOPreposition: { width: 180, height: 90 },
   SEOQuestion: { width: 180, height: 90 },
+  GEOQuery: { width: 200, height: 100 },
+  GEOAnswer: { width: 180, height: 90 },
+  GEOMetrics: { width: 160, height: 80 },
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // ORGANIZATION REALM (1 node) — v10.5 company project pattern
+  // TENANT REALM (23 nodes) — v10.6: merged organization + project
   // ═══════════════════════════════════════════════════════════════════════════
+  // config (1)
   Organization: { width: 280, height: 140 },
-
-  // ═══════════════════════════════════════════════════════════════════════════
-  // PROJECT REALM (22 nodes)
-  // ═══════════════════════════════════════════════════════════════════════════
   // foundation (3)
   Project: { width: 280, height: 140 },
   BrandIdentity: { width: 220, height: 110 },
@@ -133,26 +145,28 @@ export const NODE_SIZES: Record<NodeType, NodeSize> = {
 };
 
 // =============================================================================
-// Color Lookup Table (v10.5.0 - 43 nodes)
+// Color Lookup Table (v10.9.0 - 63 nodes)
 // =============================================================================
 
 /**
- * Pre-computed colors for all 43 node types (v10.5.0)
+ * Pre-computed colors for all 63 node types (v10.9.0)
  *
  * Color palette by realm and layer:
- * - GLOBAL: Emerald/Cyan/Pink tones
- * - ORGANIZATION: Sky blue (#0ea5e9 family)
- * - PROJECT Foundation: Violet (#8b5cf6 family)
- * - PROJECT Structure: Blue/Cyan (#3b82f6, #06b6d4 family)
- * - PROJECT Semantic: Amber (#f59e0b family)
- * - PROJECT Instruction: Blue (#3b82f6 family)
- * - PROJECT Output: Orange/Red (#f97316, #ef4444 family)
+ * - GLOBAL config: Emerald/Cyan/Blue tones
+ * - GLOBAL locale-knowledge: Green/Pink/Purple tones
+ * - GLOBAL seo: Red tones
+ * - TENANT config: Sky blue (#0ea5e9 family)
+ * - TENANT Foundation: Violet (#8b5cf6 family)
+ * - TENANT Structure: Blue/Cyan (#3b82f6, #06b6d4 family)
+ * - TENANT Semantic: Amber (#f59e0b family)
+ * - TENANT Instruction: Blue (#3b82f6 family)
+ * - TENANT Output: Orange/Red (#f97316, #ef4444 family)
  */
 export const NODE_COLORS: Record<NodeType, NodeColors> = {
   // ═══════════════════════════════════════════════════════════════════════════
-  // GLOBAL REALM (25 nodes)
+  // GLOBAL REALM (40 nodes)
   // ═══════════════════════════════════════════════════════════════════════════
-  // config (7) — Emerald/Cyan tones - v10.7: added Culture, Market
+  // config (13) — Emerald/Cyan tones - v10.8: added geographic taxonomy
   Locale: {
     primary: '#10b981',
     secondary: '#22c55e',
@@ -195,8 +209,44 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
     tertiary: '#10b981',
     glow: '#05966940',
   },
+  Continent: {
+    primary: '#2563eb',
+    secondary: '#3b82f6',
+    tertiary: '#60a5fa',
+    glow: '#2563eb40',
+  },
+  GeoRegion: {
+    primary: '#3b82f6',
+    secondary: '#60a5fa',
+    tertiary: '#93c5fd',
+    glow: '#3b82f640',
+  },
+  GeoSubRegion: {
+    primary: '#60a5fa',
+    secondary: '#93c5fd',
+    tertiary: '#bfdbfe',
+    glow: '#60a5fa40',
+  },
+  IncomeGroup: {
+    primary: '#16a34a',
+    secondary: '#22c55e',
+    tertiary: '#4ade80',
+    glow: '#16a34a40',
+  },
+  LendingCategory: {
+    primary: '#0891b2',
+    secondary: '#06b6d4',
+    tertiary: '#22d3ee',
+    glow: '#0891b240',
+  },
+  EconomicRegion: {
+    primary: '#059669',
+    secondary: '#10b981',
+    tertiary: '#34d399',
+    glow: '#05966940',
+  },
 
-  // locale-knowledge (12) — Green/Pink tones
+  // locale-knowledge (18) — Green/Pink tones + Linguistic/Cultural taxonomy
   TermSet: {
     primary: '#22c55e',
     secondary: '#10b981',
@@ -269,8 +319,44 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
     tertiary: '#fef3c7',
     glow: '#fde68a40',
   },
+  LanguageFamily: {
+    primary: '#7c3aed',
+    secondary: '#8b5cf6',
+    tertiary: '#a78bfa',
+    glow: '#7c3aed40',
+  },
+  LanguageBranch: {
+    primary: '#8b5cf6',
+    secondary: '#a78bfa',
+    tertiary: '#c4b5fd',
+    glow: '#8b5cf640',
+  },
+  CulturalRealm: {
+    primary: '#db2777',
+    secondary: '#ec4899',
+    tertiary: '#f472b6',
+    glow: '#db277740',
+  },
+  CulturalSubRealm: {
+    primary: '#ec4899',
+    secondary: '#f472b6',
+    tertiary: '#f9a8d4',
+    glow: '#ec489940',
+  },
+  PopulationCluster: {
+    primary: '#0284c7',
+    secondary: '#0ea5e9',
+    tertiary: '#38bdf8',
+    glow: '#0284c740',
+  },
+  PopulationSubCluster: {
+    primary: '#0ea5e9',
+    secondary: '#38bdf8',
+    tertiary: '#7dd3fc',
+    glow: '#0ea5e940',
+  },
 
-  // seo (6) — Red tones
+  // seo (9) — Red tones + GEO (Generative Engine Optimization)
   SEOKeyword: {
     primary: '#ef4444',
     secondary: '#f87171',
@@ -307,20 +393,36 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
     tertiary: '#dc2626',
     glow: '#991b1b40',
   },
+  // GEO (Generative Engine Optimization) — Blue/Violet tones
+  GEOQuery: {
+    primary: '#6366f1',
+    secondary: '#818cf8',
+    tertiary: '#a5b4fc',
+    glow: '#6366f140',
+  },
+  GEOAnswer: {
+    primary: '#8b5cf6',
+    secondary: '#a78bfa',
+    tertiary: '#c4b5fd',
+    glow: '#8b5cf640',
+  },
+  GEOMetrics: {
+    primary: '#a78bfa',
+    secondary: '#8b5cf6',
+    tertiary: '#c4b5fd',
+    glow: '#a78bfa40',
+  },
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // ORGANIZATION REALM (1 node) — Sky blue tone
+  // TENANT REALM (23 nodes) — v10.6: merged organization + project
   // ═══════════════════════════════════════════════════════════════════════════
+  // config (1) — Sky blue tone
   Organization: {
     primary: '#0ea5e9',
     secondary: '#38bdf8',
     tertiary: '#7dd3fc',
     glow: '#0ea5e940',
   },
-
-  // ═══════════════════════════════════════════════════════════════════════════
-  // PROJECT REALM (22 nodes)
-  // ═══════════════════════════════════════════════════════════════════════════
   // foundation (3) — Violet tones
   Project: {
     primary: '#8b5cf6',

@@ -1,6 +1,6 @@
 // packages/core/src/config/nodeIcons.ts
 // Presentation layer configuration for node icons
-// v10.7.0 — 7-node locale knowledge architecture (global + tenant)
+// v10.9.0 — Typed semantic arcs + GEO layer (global + tenant)
 
 import type { NodeType } from '../types/nodes.js';
 
@@ -10,7 +10,7 @@ import type { NodeType } from '../types/nodes.js';
  * Icons are now in presentation layer, not data model.
  */
 export const NODE_ICONS: Record<NodeType, string> = {
-  // GLOBAL — config (7) - v10.7: added Culture, Market
+  // GLOBAL — config (13) - v10.8: added geographic taxonomy
   Locale: '🌍',
   Formatting: '📝',
   Slugification: '🔗',
@@ -18,8 +18,14 @@ export const NODE_ICONS: Record<NodeType, string> = {
   Style: '🎭',
   Culture: '🏺',
   Market: '📊',
+  Continent: '🗺️',
+  GeoRegion: '🌐',
+  GeoSubRegion: '🗾',
+  IncomeGroup: '💰',
+  LendingCategory: '🏦',
+  EconomicRegion: '💹',
 
-  // GLOBAL — locale-knowledge (12) — Sets + Atoms
+  // GLOBAL — locale-knowledge (18) — Sets + Atoms + Linguistic/Cultural taxonomy
   TermSet: '📚',
   ExpressionSet: '💭',
   PatternSet: '🔣',
@@ -32,14 +38,23 @@ export const NODE_ICONS: Record<NodeType, string> = {
   CultureRef: '🎭',
   Taboo: '🚫',
   AudienceTrait: '👤',
+  LanguageFamily: '🗣️',
+  LanguageBranch: '🌿',
+  CulturalRealm: '🎪',
+  CulturalSubRealm: '🎭',
+  PopulationCluster: '👨‍👩‍👧‍👦',
+  PopulationSubCluster: '👥',
 
-  // GLOBAL — seo (6)
+  // GLOBAL — seo (9) — SEO + GEO (Generative Engine Optimization)
   SEOKeyword: '🔍',
   SEOKeywordMetrics: '📊',
   SEOMiningRun: '⚙️',
   SEOComparison: '⚖️',
   SEOPreposition: '🔗',
   SEOQuestion: '❓',
+  GEOQuery: '🤖',
+  GEOAnswer: '💬',
+  GEOMetrics: '📊',
 
   // TENANT — config (1)
   Organization: '🏢',
