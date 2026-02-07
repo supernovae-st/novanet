@@ -17,7 +17,7 @@
 // CONTINENTS (UN M49 - 6 macro-regions)
 // -----------------------------------------------------------------------------
 
-MERGE (c:Continent:Meta {
+MERGE (c:Continent {
   key: 'africa',
   name: 'Africa',
   m49_code: '002',
@@ -25,7 +25,7 @@ MERGE (c:Continent:Meta {
   llm_context: 'USE: for African countries and markets. TRIGGERS: africa, african, subsaharan. CULTURAL_NOTES: Extremely diverse - 54 countries, 2000+ languages. Never generalize. Split by: Northern Africa (Arab/Berber), Sub-Saharan (diverse). ECONOMIC: Mix of LMIC/LIC, rapid mobile adoption, young population. AVOID: Treating as monolithic; colonial stereotypes; poverty focus.'
 });
 
-MERGE (c:Continent:Meta {
+MERGE (c:Continent {
   key: 'americas',
   name: 'Americas',
   m49_code: '019',
@@ -33,7 +33,7 @@ MERGE (c:Continent:Meta {
   llm_context: 'USE: for North, Central, South America + Caribbean. TRIGGERS: americas, american, western hemisphere. CULTURAL_NOTES: Split Occidental (NA, Southern Cone) vs Latin American. Indigenous influence varies: high (Guatemala, Peru) vs low (Argentina, USA). ECONOMIC: Full range HIC (US/CA) to LIC (Haiti). LANGUAGE: English north, Spanish/Portuguese south. AVOID: American = USA only.'
 });
 
-MERGE (c:Continent:Meta {
+MERGE (c:Continent {
   key: 'asia',
   name: 'Asia',
   m49_code: '142',
@@ -41,7 +41,7 @@ MERGE (c:Continent:Meta {
   llm_context: 'USE: for Asian countries and markets. TRIGGERS: asia, asian, east, southeast, middle east. CULTURAL_NOTES: 4 major cultural realms: East Asian, South Asian, Southeast Asian, Islamic (Middle East/Central Asia). High-context communication common. ECONOMIC: Full range from HIC (Japan, Singapore) to LIC (Afghanistan). SCRIPTS: CJK, Arabic, Devanagari, Thai. RTL: Arabic regions.'
 });
 
-MERGE (c:Continent:Meta {
+MERGE (c:Continent {
   key: 'europe',
   name: 'Europe',
   m49_code: '150',
@@ -49,7 +49,7 @@ MERGE (c:Continent:Meta {
   llm_context: 'USE: for European countries and markets. TRIGGERS: europe, european, eu. CULTURAL_NOTES: Predominantly Occidental. Split: Western (low-context), Eastern (medium-context), Mediterranean (relationship-focused), Nordic (egalitarian). ECONOMIC: Mostly HIC/UMIC. EU integration in west, post-Soviet east. SCRIPTS: Latin west, Cyrillic east. AVOID: EU = Europe.'
 });
 
-MERGE (c:Continent:Meta {
+MERGE (c:Continent {
   key: 'oceania',
   name: 'Oceania',
   m49_code: '009',
@@ -57,7 +57,7 @@ MERGE (c:Continent:Meta {
   llm_context: 'USE: for Pacific region markets. TRIGGERS: oceania, pacific, australasia. CULTURAL_NOTES: Australia/NZ = Occidental (British-influenced). Pacific Islands = Melanesian, Polynesian, Micronesian cultures with strong community focus. ECONOMIC: AU/NZ = HIC. Pacific Islands = LMIC/LIC. LANGUAGE: English dominant in AU/NZ. 1000+ indigenous languages in Melanesia.'
 });
 
-MERGE (c:Continent:Meta {
+MERGE (c:Continent {
   key: 'antarctica',
   name: 'Antarctica',
   m49_code: '010',
@@ -70,7 +70,7 @@ MERGE (c:Continent:Meta {
 // -----------------------------------------------------------------------------
 
 // Africa regions
-MERGE (r:GeoRegion:Meta {
+MERGE (r:GeoRegion {
   key: 'northern-africa',
   name: 'Northern Africa',
   m49_code: '015',
@@ -80,7 +80,7 @@ MERGE (r:GeoRegion:Meta {
   dominant_languages: ['ar', 'fr', 'ber']
 });
 
-MERGE (r:GeoRegion:Meta {
+MERGE (r:GeoRegion {
   key: 'western-africa',
   name: 'Western Africa',
   m49_code: '011',
@@ -90,7 +90,7 @@ MERGE (r:GeoRegion:Meta {
   dominant_languages: ['fr', 'en', 'ha', 'yo', 'ig']
 });
 
-MERGE (r:GeoRegion:Meta {
+MERGE (r:GeoRegion {
   key: 'middle-africa',
   name: 'Middle Africa',
   m49_code: '017',
@@ -100,7 +100,7 @@ MERGE (r:GeoRegion:Meta {
   dominant_languages: ['fr', 'pt', 'sw', 'ln']
 });
 
-MERGE (r:GeoRegion:Meta {
+MERGE (r:GeoRegion {
   key: 'eastern-africa',
   name: 'Eastern Africa',
   m49_code: '014',
@@ -110,7 +110,7 @@ MERGE (r:GeoRegion:Meta {
   dominant_languages: ['sw', 'en', 'am', 'om', 'so']
 });
 
-MERGE (r:GeoRegion:Meta {
+MERGE (r:GeoRegion {
   key: 'southern-africa',
   name: 'Southern Africa',
   m49_code: '018',
@@ -121,7 +121,7 @@ MERGE (r:GeoRegion:Meta {
 });
 
 // Americas regions
-MERGE (r:GeoRegion:Meta {
+MERGE (r:GeoRegion {
   key: 'northern-america',
   name: 'Northern America',
   m49_code: '021',
@@ -131,7 +131,7 @@ MERGE (r:GeoRegion:Meta {
   dominant_languages: ['en', 'fr', 'es']
 });
 
-MERGE (r:GeoRegion:Meta {
+MERGE (r:GeoRegion {
   key: 'central-america',
   name: 'Central America',
   m49_code: '013',
@@ -141,7 +141,7 @@ MERGE (r:GeoRegion:Meta {
   dominant_languages: ['es', 'en']
 });
 
-MERGE (r:GeoRegion:Meta {
+MERGE (r:GeoRegion {
   key: 'caribbean',
   name: 'Caribbean',
   m49_code: '029',
@@ -151,7 +151,7 @@ MERGE (r:GeoRegion:Meta {
   dominant_languages: ['es', 'en', 'fr', 'ht', 'nl']
 });
 
-MERGE (r:GeoRegion:Meta {
+MERGE (r:GeoRegion {
   key: 'south-america',
   name: 'South America',
   m49_code: '005',
@@ -162,7 +162,7 @@ MERGE (r:GeoRegion:Meta {
 });
 
 // Asia regions
-MERGE (r:GeoRegion:Meta {
+MERGE (r:GeoRegion {
   key: 'western-asia',
   name: 'Western Asia',
   m49_code: '145',
@@ -172,7 +172,7 @@ MERGE (r:GeoRegion:Meta {
   dominant_languages: ['ar', 'fa', 'tr', 'he', 'ku']
 });
 
-MERGE (r:GeoRegion:Meta {
+MERGE (r:GeoRegion {
   key: 'central-asia',
   name: 'Central Asia',
   m49_code: '143',
@@ -182,7 +182,7 @@ MERGE (r:GeoRegion:Meta {
   dominant_languages: ['ru', 'kk', 'uz', 'tg', 'ky']
 });
 
-MERGE (r:GeoRegion:Meta {
+MERGE (r:GeoRegion {
   key: 'southern-asia',
   name: 'Southern Asia',
   m49_code: '034',
@@ -192,7 +192,7 @@ MERGE (r:GeoRegion:Meta {
   dominant_languages: ['hi', 'bn', 'ur', 'ta', 'te', 'mr']
 });
 
-MERGE (r:GeoRegion:Meta {
+MERGE (r:GeoRegion {
   key: 'eastern-asia',
   name: 'Eastern Asia',
   m49_code: '030',
@@ -202,7 +202,7 @@ MERGE (r:GeoRegion:Meta {
   dominant_languages: ['zh', 'ja', 'ko']
 });
 
-MERGE (r:GeoRegion:Meta {
+MERGE (r:GeoRegion {
   key: 'south-eastern-asia',
   name: 'South-Eastern Asia',
   m49_code: '035',
@@ -213,7 +213,7 @@ MERGE (r:GeoRegion:Meta {
 });
 
 // Europe regions
-MERGE (r:GeoRegion:Meta {
+MERGE (r:GeoRegion {
   key: 'northern-europe',
   name: 'Northern Europe',
   m49_code: '154',
@@ -223,7 +223,7 @@ MERGE (r:GeoRegion:Meta {
   dominant_languages: ['en', 'sv', 'no', 'da', 'fi', 'is']
 });
 
-MERGE (r:GeoRegion:Meta {
+MERGE (r:GeoRegion {
   key: 'western-europe',
   name: 'Western Europe',
   m49_code: '155',
@@ -233,7 +233,7 @@ MERGE (r:GeoRegion:Meta {
   dominant_languages: ['de', 'fr', 'nl', 'en']
 });
 
-MERGE (r:GeoRegion:Meta {
+MERGE (r:GeoRegion {
   key: 'eastern-europe',
   name: 'Eastern Europe',
   m49_code: '151',
@@ -243,7 +243,7 @@ MERGE (r:GeoRegion:Meta {
   dominant_languages: ['ru', 'pl', 'uk', 'ro', 'cs', 'hu']
 });
 
-MERGE (r:GeoRegion:Meta {
+MERGE (r:GeoRegion {
   key: 'southern-europe',
   name: 'Southern Europe',
   m49_code: '039',
@@ -254,7 +254,7 @@ MERGE (r:GeoRegion:Meta {
 });
 
 // Oceania regions
-MERGE (r:GeoRegion:Meta {
+MERGE (r:GeoRegion {
   key: 'australia-new-zealand',
   name: 'Australia and New Zealand',
   m49_code: '053',
@@ -264,7 +264,7 @@ MERGE (r:GeoRegion:Meta {
   dominant_languages: ['en', 'mi']
 });
 
-MERGE (r:GeoRegion:Meta {
+MERGE (r:GeoRegion {
   key: 'melanesia',
   name: 'Melanesia',
   m49_code: '054',
@@ -274,7 +274,7 @@ MERGE (r:GeoRegion:Meta {
   dominant_languages: ['en', 'fr', 'tpi', 'bi']
 });
 
-MERGE (r:GeoRegion:Meta {
+MERGE (r:GeoRegion {
   key: 'micronesia',
   name: 'Micronesia',
   m49_code: '057',
@@ -284,7 +284,7 @@ MERGE (r:GeoRegion:Meta {
   dominant_languages: ['en', 'ch']
 });
 
-MERGE (r:GeoRegion:Meta {
+MERGE (r:GeoRegion {
   key: 'polynesia',
   name: 'Polynesia',
   m49_code: '061',
@@ -295,10 +295,197 @@ MERGE (r:GeoRegion:Meta {
 });
 
 // -----------------------------------------------------------------------------
+// GEO SUB-REGIONS (UN M49 intermediate + cultural groupings)
+// -----------------------------------------------------------------------------
+// Optional finer level below GeoRegion for localization granularity.
+// Mix of official UN M49 codes and commonly used cultural/economic groupings.
+
+// --- Europe ---
+
+MERGE (sr:GeoSubRegion {
+  key: 'channel-islands',
+  name: 'Channel Islands',
+  m49_code: '830',
+  parent_region: 'northern-europe',
+  wikidata_id: 'Q42314',
+  llm_context: 'USE: for Jersey, Guernsey markets. TRIGGERS: channel islands, jersey, guernsey. CULTURE: British Crown Dependencies, NOT part of UK. Unique tax status. English dominant, Norman French heritage. HIGH income. AVOID: Treating as UK.'
+});
+
+MERGE (sr:GeoSubRegion {
+  key: 'nordic-countries',
+  name: 'Nordic Countries',
+  
+  parent_region: 'northern-europe',
+  wikidata_id: 'Q52062',
+  llm_context: 'USE: for Denmark, Finland, Iceland, Norway, Sweden. TRIGGERS: nordic, scandinavian, norden. CULTURE: High trust, egalitarian, design-focused, sustainability-conscious. HIGH income. English proficiency excellent. AVOID: Conflating with Baltic states.'
+});
+
+MERGE (sr:GeoSubRegion {
+  key: 'baltic-states',
+  name: 'Baltic States',
+  
+  parent_region: 'northern-europe',
+  wikidata_id: 'Q107426',
+  llm_context: 'USE: for Estonia, Latvia, Lithuania. TRIGGERS: baltic, baltics. CULTURE: Post-Soviet, EU members, distinct from Nordic. Tech-savvy (Estonia especially). Russian minority influence. AVOID: Conflating with Nordic or Eastern Europe.'
+});
+
+MERGE (sr:GeoSubRegion {
+  key: 'british-isles',
+  name: 'British Isles',
+  
+  parent_region: 'northern-europe',
+  wikidata_id: 'Q38272',
+  llm_context: 'USE: for UK + Ireland grouping. TRIGGERS: british isles. CULTURE: English-speaking, shared history but distinct identities. UK = Brexit, Ireland = EU. SENSITIVE: Term controversial in Ireland. AVOID: Using for Ireland alone.'
+});
+
+MERGE (sr:GeoSubRegion {
+  key: 'benelux',
+  name: 'Benelux',
+  
+  parent_region: 'western-europe',
+  wikidata_id: 'Q12047',
+  llm_context: 'USE: for Belgium, Netherlands, Luxembourg. TRIGGERS: benelux, low countries. CULTURE: Multilingual (Dutch, French, German), EU hub, high international business. LANGUAGE: NL has Dutch only, BE has Dutch+French+German, LU has French+German+Luxembourgish.'
+});
+
+MERGE (sr:GeoSubRegion {
+  key: 'dach',
+  name: 'DACH',
+  
+  parent_region: 'western-europe',
+  wikidata_id: 'Q1079962',
+  llm_context: 'USE: for Germany, Austria, Switzerland German-speaking markets. TRIGGERS: dach, german-speaking. CULTURE: German language unifies but distinct varieties (Hochdeutsch, Österreichisch, Schweizerdeutsch). High precision, quality focus. AVOID: Assuming identical German.'
+});
+
+MERGE (sr:GeoSubRegion {
+  key: 'iberian-peninsula',
+  name: 'Iberian Peninsula',
+  
+  parent_region: 'southern-europe',
+  wikidata_id: 'Q12837',
+  llm_context: 'USE: for Spain, Portugal, Andorra, Gibraltar. TRIGGERS: iberian, iberia. CULTURE: Romance languages (Spanish, Portuguese, Catalan, Basque). Mediterranean lifestyle. Regional identities strong (Catalonia, Basque Country). AVOID: Assuming Spanish = Castilian only.'
+});
+
+// --- Africa ---
+
+MERGE (sr:GeoSubRegion {
+  key: 'great-lakes-africa',
+  name: 'Great Lakes Region',
+  
+  parent_region: 'eastern-africa',
+  wikidata_id: 'Q186533',
+  llm_context: 'USE: for Burundi, DRC, Kenya, Rwanda, Tanzania, Uganda. TRIGGERS: great lakes, african great lakes. CULTURE: Bantu languages dominant, Swahili lingua franca. Complex history (genocide, conflict). Rapid tech adoption (mobile money). SENSITIVE: Ethnic tensions.'
+});
+
+MERGE (sr:GeoSubRegion {
+  key: 'horn-of-africa',
+  name: 'Horn of Africa',
+  
+  parent_region: 'eastern-africa',
+  wikidata_id: 'Q40530',
+  llm_context: 'USE: for Djibouti, Eritrea, Ethiopia, Somalia. TRIGGERS: horn of africa. CULTURE: Cushitic + Semitic languages. Ethiopia unique (Amharic script, Orthodox Christianity, never colonized). Somalia = Islamic. SENSITIVE: Conflict zones, famine history.'
+});
+
+MERGE (sr:GeoSubRegion {
+  key: 'maghreb',
+  name: 'Maghreb',
+  
+  parent_region: 'northern-africa',
+  wikidata_id: 'Q7835',
+  llm_context: 'USE: for Algeria, Libya, Mauritania, Morocco, Tunisia. TRIGGERS: maghreb, north africa arab. CULTURE: Arab-Berber, Islamic, French colonial legacy. Arabic + French bilingual. Darija (Maghrebi Arabic) distinct from Middle Eastern Arabic. AVOID: Conflating with Middle East.'
+});
+
+// --- Asia ---
+
+MERGE (sr:GeoSubRegion {
+  key: 'mainland-southeast-asia',
+  name: 'Mainland Southeast Asia',
+  
+  parent_region: 'south-eastern-asia',
+  wikidata_id: 'Q11708',
+  llm_context: 'USE: for Cambodia, Laos, Myanmar, Thailand, Vietnam. TRIGGERS: indochina, mainland southeast asia. CULTURE: Buddhist (Theravada) dominant except Vietnam (Mahayana + ancestor worship). Tonal languages. Rice culture. French colonial legacy (VN, LA, KH). SENSITIVE: Myanmar conflict.'
+});
+
+MERGE (sr:GeoSubRegion {
+  key: 'maritime-southeast-asia',
+  name: 'Maritime Southeast Asia',
+  
+  parent_region: 'south-eastern-asia',
+  wikidata_id: 'Q3922305',
+  llm_context: 'USE: for Indonesia, Malaysia, Philippines, Singapore, Brunei, Timor-Leste. TRIGGERS: maritime southeast asia, malay world. CULTURE: Austronesian heritage. Islam dominant (ID, MY, BN) except Philippines (Catholic) and Singapore (diverse). Malay lingua franca in MY/ID/BN.'
+});
+
+MERGE (sr:GeoSubRegion {
+  key: 'levant',
+  name: 'Levant',
+  
+  parent_region: 'western-asia',
+  wikidata_id: 'Q81483',
+  llm_context: 'USE: for Jordan, Lebanon, Palestine, Syria, Israel. TRIGGERS: levant, sham, eastern mediterranean. CULTURE: Levantine Arabic distinct. Christian minorities significant (Lebanon). HIGH complexity: Israeli-Palestinian conflict, Syrian crisis. SENSITIVE: Political terminology critical.'
+});
+
+MERGE (sr:GeoSubRegion {
+  key: 'gulf-states',
+  name: 'Gulf Cooperation Council',
+  
+  parent_region: 'western-asia',
+  wikidata_id: 'Q217172',
+  llm_context: 'USE: for Bahrain, Kuwait, Oman, Qatar, Saudi Arabia, UAE. TRIGGERS: gcc, gulf states, khaleeji. CULTURE: Gulf Arabic, Islamic (Sunni majority, Shia in Bahrain). Oil wealth, expat workforce majority. Luxury + traditional values. AVOID: Assuming homogeneous.'
+});
+
+MERGE (sr:GeoSubRegion {
+  key: 'indian-subcontinent',
+  name: 'Indian Subcontinent',
+  
+  parent_region: 'southern-asia',
+  wikidata_id: 'Q60140',
+  llm_context: 'USE: for India, Pakistan, Bangladesh, Sri Lanka, Nepal, Bhutan, Maldives. TRIGGERS: south asia, indian subcontinent. CULTURE: Indo-Aryan + Dravidian languages. Hindu/Muslim/Buddhist. Cricket-loving. Huge linguistic diversity (22 official languages in India alone).'
+});
+
+// --- Americas ---
+
+MERGE (sr:GeoSubRegion {
+  key: 'central-american-isthmus',
+  name: 'Central American Isthmus',
+  
+  parent_region: 'central-america',
+  wikidata_id: 'Q27611',
+  llm_context: 'USE: for Guatemala, Belize, El Salvador, Honduras, Nicaragua, Costa Rica, Panama. TRIGGERS: central america, isthmus. CULTURE: Spanish dominant (except Belize = English). Strong indigenous heritage (Guatemala). Catholic. Panama = more cosmopolitan.'
+});
+
+MERGE (sr:GeoSubRegion {
+  key: 'southern-cone',
+  name: 'Southern Cone',
+  
+  parent_region: 'south-america',
+  wikidata_id: 'Q110628',
+  llm_context: 'USE: for Argentina, Chile, Uruguay, (sometimes Paraguay, S. Brazil). TRIGGERS: southern cone, cono sur. CULTURE: European immigrant influence (Italian, German). Rioplatense Spanish (voseo). Mate culture. More secular than rest of LatAm. Higher income.'
+});
+
+MERGE (sr:GeoSubRegion {
+  key: 'andean-region',
+  name: 'Andean Region',
+  
+  parent_region: 'south-america',
+  wikidata_id: 'Q188590',
+  llm_context: 'USE: for Bolivia, Colombia, Ecuador, Peru, Venezuela. TRIGGERS: andean, andes. CULTURE: Strong indigenous heritage (Quechua, Aymara). Spanish + indigenous languages. Altitude influences lifestyle. SENSITIVE: Venezuela political situation.'
+});
+
+// --- Oceania ---
+
+MERGE (sr:GeoSubRegion {
+  key: 'pacific-islands-forum',
+  name: 'Pacific Islands Forum',
+  
+  parent_region: 'polynesia',
+  wikidata_id: 'Q153541',
+  llm_context: 'USE: for Pacific island nations excluding AU/NZ. TRIGGERS: pacific islands, south pacific. CULTURE: Polynesian, Melanesian, Micronesian. Community-focused. Climate change = existential threat. Small populations. Tourism + fishing economies.'
+});
+
+// -----------------------------------------------------------------------------
 // INCOME GROUPS (World Bank FY26)
 // -----------------------------------------------------------------------------
 
-MERGE (i:IncomeGroup:Meta {
+MERGE (i:IncomeGroup {
   key: 'lic',
   name: 'Low Income',
   gni_threshold_max: 1135,
@@ -309,7 +496,7 @@ MERGE (i:IncomeGroup:Meta {
   market_characteristics: 'Price-sensitive, mobile-first, informal economy, youth demographic'
 });
 
-MERGE (i:IncomeGroup:Meta {
+MERGE (i:IncomeGroup {
   key: 'lmic',
   name: 'Lower-Middle Income',
   gni_threshold_min: 1136,
@@ -321,7 +508,7 @@ MERGE (i:IncomeGroup:Meta {
   market_characteristics: 'Growing middle class, mobile commerce, value-conscious aspirational'
 });
 
-MERGE (i:IncomeGroup:Meta {
+MERGE (i:IncomeGroup {
   key: 'umic',
   name: 'Upper-Middle Income',
   gni_threshold_min: 4496,
@@ -333,7 +520,7 @@ MERGE (i:IncomeGroup:Meta {
   market_characteristics: 'Established middle class, brand-conscious, e-commerce growth'
 });
 
-MERGE (i:IncomeGroup:Meta {
+MERGE (i:IncomeGroup {
   key: 'hic',
   name: 'High Income',
   gni_threshold_min: 13936,
@@ -345,10 +532,118 @@ MERGE (i:IncomeGroup:Meta {
 });
 
 // -----------------------------------------------------------------------------
+// ECONOMIC REGIONS (World Bank)
+// -----------------------------------------------------------------------------
+
+MERGE (er:EconomicRegion {
+  key: 'eap',
+  name: 'East Asia & Pacific',
+  abbreviation: 'EAP',
+  wikidata_id: 'Q4119134',
+  llm_context: 'USE: for China, Japan, Korea, SE Asia, Pacific islands markets. TRIGGERS: east asia, pacific rim, asia-pacific. CONTENT: Diverse from high-tech (Japan, Korea) to emerging (Vietnam, Indonesia). Mobile-first. E-commerce advanced.',
+  country_examples: ['China', 'Japan', 'South Korea', 'Indonesia', 'Vietnam', 'Thailand', 'Philippines', 'Australia'],
+  economic_characteristics: 'Manufacturing hub, tech-forward, mobile commerce, diverse income levels'
+});
+
+MERGE (er:EconomicRegion {
+  key: 'eca',
+  name: 'Europe & Central Asia',
+  abbreviation: 'ECA',
+  wikidata_id: 'Q4119132',
+  llm_context: 'USE: for Eastern Europe, Russia, Turkey, Central Asia markets. TRIGGERS: eastern europe, central asia, eurasia. CONTENT: Post-Soviet transition economies to EU members. Cyrillic/Latin scripts. Orthodox Christian + Islamic influences.',
+  country_examples: ['Russia', 'Turkey', 'Poland', 'Ukraine', 'Romania', 'Kazakhstan', 'Uzbekistan'],
+  economic_characteristics: 'Transition economies, EU integration path, energy exports, manufacturing'
+});
+
+MERGE (er:EconomicRegion {
+  key: 'lac',
+  name: 'Latin America & Caribbean',
+  abbreviation: 'LAC',
+  wikidata_id: 'Q4119135',
+  llm_context: 'USE: for Central/South America, Caribbean markets. TRIGGERS: latin america, latam, caribbean. CONTENT: Spanish/Portuguese dominant. Catholic cultural base. High inequality. Urban concentration. Social media heavy.',
+  country_examples: ['Brazil', 'Mexico', 'Argentina', 'Colombia', 'Chile', 'Peru', 'Dominican Republic'],
+  economic_characteristics: 'Commodity exports, inequality, urban concentration, social commerce growth'
+});
+
+MERGE (er:EconomicRegion {
+  key: 'mena',
+  name: 'Middle East & North Africa',
+  abbreviation: 'MENA',
+  wikidata_id: 'Q4119136',
+  llm_context: 'USE: for Arab world, Iran, Israel, Turkey markets. TRIGGERS: middle east, north africa, mena, arab world. CONTENT: Arabic dominant. Islamic cultural context. RTL scripts. Oil economies + diversification. High mobile penetration.',
+  country_examples: ['Saudi Arabia', 'UAE', 'Egypt', 'Morocco', 'Iran', 'Israel', 'Qatar'],
+  economic_characteristics: 'Oil-dependent to diversifying, high mobile adoption, luxury segments, Islamic finance'
+});
+
+MERGE (er:EconomicRegion {
+  key: 'na',
+  name: 'North America',
+  abbreviation: 'NA',
+  wikidata_id: 'Q4119137',
+  llm_context: 'USE: for USA, Canada markets. TRIGGERS: north america, usa, canada. CONTENT: English dominant (French in Quebec). Mature e-commerce. Innovation-driven. Multicultural. Sustainability-conscious. High expectations.',
+  country_examples: ['United States', 'Canada'],
+  economic_characteristics: 'Mature market, innovation hub, high purchasing power, sustainability focus'
+});
+
+MERGE (er:EconomicRegion {
+  key: 'sa',
+  name: 'South Asia',
+  abbreviation: 'SA',
+  wikidata_id: 'Q4119138',
+  llm_context: 'USE: for India, Pakistan, Bangladesh, Sri Lanka markets. TRIGGERS: south asia, subcontinent, indian subcontinent. CONTENT: Hindi/English + regional languages. Hindu/Muslim/Buddhist. Mobile-first. Value-conscious. Festivals important.',
+  country_examples: ['India', 'Pakistan', 'Bangladesh', 'Sri Lanka', 'Nepal'],
+  economic_characteristics: 'Mobile-first, value-conscious, young demographics, festival-driven commerce'
+});
+
+MERGE (er:EconomicRegion {
+  key: 'ssa',
+  name: 'Sub-Saharan Africa',
+  abbreviation: 'SSA',
+  wikidata_id: 'Q4119133',
+  llm_context: 'USE: for Africa south of Sahara markets. TRIGGERS: sub-saharan africa, africa, ssa. CONTENT: Multilingual (colonial + indigenous). Mobile money dominant. Young population. Informal economy large. Community-oriented.',
+  country_examples: ['Nigeria', 'South Africa', 'Kenya', 'Ethiopia', 'Ghana', 'Tanzania'],
+  economic_characteristics: 'Mobile money leaders, young demographics, informal economy, leapfrog tech adoption'
+});
+
+// -----------------------------------------------------------------------------
+// LENDING CATEGORIES (World Bank)
+// -----------------------------------------------------------------------------
+
+MERGE (lc:LendingCategory {
+  key: 'ida',
+  name: 'IDA',
+  full_name: 'International Development Association',
+  wikidata_id: 'Q827525',
+  llm_context: 'USE: for poorest countries (GNI ≤ $1,315/capita). TRIGGERS: ida, least developed, poorest countries. CONTENT: Basic needs focus. NGO/aid sector presence. Infrastructure gaps. Affordability critical. Local language important.',
+  target_countries: 'Poorest countries with GNI per capita below $1,315',
+  content_implications: 'Affordability-first, basic needs, development messaging, NGO partnerships'
+});
+
+MERGE (lc:LendingCategory {
+  key: 'blend',
+  name: 'Blend',
+  full_name: 'Blend (IDA + IBRD eligible)',
+  wikidata_id: 'Q827525',
+  llm_context: 'USE: for transition countries (IDA-eligible but IBRD creditworthy). TRIGGERS: blend, transitional. CONTENT: Emerging from poverty. Growing middle class. Mix of basic and aspirational. Infrastructure improving.',
+  target_countries: 'IDA-eligible but IBRD creditworthy (e.g., Pakistan, Nigeria, India historically)',
+  content_implications: 'Aspirational + accessible mix, emerging middle class, infrastructure growth'
+});
+
+MERGE (lc:LendingCategory {
+  key: 'ibrd',
+  name: 'IBRD',
+  full_name: 'International Bank for Reconstruction and Development',
+  wikidata_id: 'Q189746',
+  llm_context: 'USE: for middle-income countries (creditworthy). TRIGGERS: ibrd, middle-income, creditworthy. CONTENT: Standard commercial approach. Brand-conscious. Quality expectations. Sustainability messaging resonates.',
+  target_countries: 'Middle-income countries with IBRD creditworthiness',
+  content_implications: 'Standard commercial content, quality expectations, brand positioning'
+});
+
+// -----------------------------------------------------------------------------
 // LANGUAGE FAMILIES (ISO 639-5)
 // -----------------------------------------------------------------------------
 
-MERGE (f:LanguageFamily:Meta {
+MERGE (f:LanguageFamily {
   key: 'ine',
   name: 'Indo-European',
   iso_639_5: 'ine',
@@ -359,7 +654,7 @@ MERGE (f:LanguageFamily:Meta {
   llm_context: 'USE: for European, South Asian, Iranian languages. INCLUDES: English, Spanish, French, German, Russian, Hindi, Portuguese, Bengali, Urdu, Persian. LARGEST family by speakers (46% of world).'
 });
 
-MERGE (f:LanguageFamily:Meta {
+MERGE (f:LanguageFamily {
   key: 'sit',
   name: 'Sino-Tibetan',
   iso_639_5: 'sit',
@@ -370,7 +665,7 @@ MERGE (f:LanguageFamily:Meta {
   llm_context: 'USE: for Chinese, Tibetan, Burmese languages. INCLUDES: Mandarin, Cantonese, Wu, Min, Hakka, Tibetan, Burmese. TONAL languages. CJK scripts.'
 });
 
-MERGE (f:LanguageFamily:Meta {
+MERGE (f:LanguageFamily {
   key: 'nic',
   name: 'Niger-Congo',
   iso_639_5: 'nic',
@@ -381,7 +676,7 @@ MERGE (f:LanguageFamily:Meta {
   llm_context: 'USE: for Sub-Saharan African languages. INCLUDES: Swahili, Yoruba, Igbo, Zulu, Shona, Fula. LARGEST African family. Bantu branch dominant in east/south.'
 });
 
-MERGE (f:LanguageFamily:Meta {
+MERGE (f:LanguageFamily {
   key: 'afa',
   name: 'Afroasiatic',
   iso_639_5: 'afa',
@@ -392,7 +687,7 @@ MERGE (f:LanguageFamily:Meta {
   llm_context: 'USE: for Arabic, Hebrew, Amharic, Hausa, Somali. INCLUDES: Semitic (Arabic, Hebrew), Berber, Cushitic, Chadic. RTL for Arabic/Hebrew. Islamic cultural context for most.'
 });
 
-MERGE (f:LanguageFamily:Meta {
+MERGE (f:LanguageFamily {
   key: 'map',
   name: 'Austronesian',
   iso_639_5: 'map',
@@ -403,7 +698,7 @@ MERGE (f:LanguageFamily:Meta {
   llm_context: 'USE: for Indonesian, Malay, Filipino, Maori, Hawaiian. SPANS: Maritime SEA to Pacific to Madagascar. Latin script dominant today.'
 });
 
-MERGE (f:LanguageFamily:Meta {
+MERGE (f:LanguageFamily {
   key: 'dra',
   name: 'Dravidian',
   iso_639_5: 'dra',
@@ -414,7 +709,7 @@ MERGE (f:LanguageFamily:Meta {
   llm_context: 'USE: for South Indian languages. INCLUDES: Tamil, Telugu, Kannada, Malayalam. DISTINCT from Indo-Aryan Hindi belt. Unique scripts. Strong regional identity.'
 });
 
-MERGE (f:LanguageFamily:Meta {
+MERGE (f:LanguageFamily {
   key: 'trk',
   name: 'Turkic',
   iso_639_5: 'trk',
@@ -425,7 +720,7 @@ MERGE (f:LanguageFamily:Meta {
   llm_context: 'USE: for Turkish, Azerbaijani, Uzbek, Kazakh. CULTURAL: Islamic despite linguistic isolation. Ottoman heritage. Latin in Turkey, Cyrillic in Central Asia.'
 });
 
-MERGE (f:LanguageFamily:Meta {
+MERGE (f:LanguageFamily {
   key: 'jpx',
   name: 'Japonic',
   iso_639_5: 'jpx',
@@ -436,7 +731,7 @@ MERGE (f:LanguageFamily:Meta {
   llm_context: 'USE: for Japanese. ISOLATE family. Unique writing system (3 scripts). HIGH-CONTEXT culture. Honorifics essential. Polite forms required in business.'
 });
 
-MERGE (f:LanguageFamily:Meta {
+MERGE (f:LanguageFamily {
   key: 'aav',
   name: 'Austroasiatic',
   iso_639_5: 'aav',
@@ -447,7 +742,7 @@ MERGE (f:LanguageFamily:Meta {
   llm_context: 'USE: for Vietnamese, Khmer. NOTE: Vietnamese culturally Sinosphere despite Austroasiatic linguistic family. Khmer with unique script. Tonal (Vietnamese).'
 });
 
-MERGE (f:LanguageFamily:Meta {
+MERGE (f:LanguageFamily {
   key: 'tai',
   name: 'Tai-Kadai',
   iso_639_5: 'tai',
@@ -458,7 +753,7 @@ MERGE (f:LanguageFamily:Meta {
   llm_context: 'USE: for Thai, Lao. CULTURE: Theravada Buddhist. Unique scripts derived from Khmer. Tonal languages. Respectful forms important.'
 });
 
-MERGE (f:LanguageFamily:Meta {
+MERGE (f:LanguageFamily {
   key: 'kor',
   name: 'Koreanic',
   iso_639_5: 'kor',
@@ -469,7 +764,7 @@ MERGE (f:LanguageFamily:Meta {
   llm_context: 'USE: for Korean. ISOLATE family. Hangul script (scientific design). HIGH-CONTEXT. Honorifics essential. Confucian heritage. K-culture global influence.'
 });
 
-MERGE (f:LanguageFamily:Meta {
+MERGE (f:LanguageFamily {
   key: 'ura',
   name: 'Uralic',
   iso_639_5: 'ura',
@@ -485,48 +780,48 @@ MERGE (f:LanguageFamily:Meta {
 // -----------------------------------------------------------------------------
 
 // Indo-European branches
-MERGE (b:LanguageBranch:Meta { key: 'gem', name: 'Germanic', iso_639_5: 'gem', parent_family: 'ine', includes: ['en', 'de', 'nl', 'sv', 'no', 'da', 'is', 'af'], llm_context: 'English, German, Dutch, Scandinavian. Latin script. Occidental culture.' });
-MERGE (b:LanguageBranch:Meta { key: 'roa', name: 'Romance', iso_639_5: 'roa', parent_family: 'ine', includes: ['es', 'pt', 'fr', 'it', 'ro', 'ca'], llm_context: 'Spanish, Portuguese, French, Italian, Romanian. Latin script. Mediterranean + Latin American cultures.' });
-MERGE (b:LanguageBranch:Meta { key: 'sla', name: 'Slavic', iso_639_5: 'sla', parent_family: 'ine', includes: ['ru', 'pl', 'uk', 'cs', 'sr', 'hr', 'bg', 'sk'], llm_context: 'Russian, Polish, Ukrainian, Czech, Serbian. Cyrillic (east) or Latin (west). Orthodox/Catholic split.' });
-MERGE (b:LanguageBranch:Meta { key: 'inc', name: 'Indo-Aryan', iso_639_5: 'inc', parent_family: 'ine', includes: ['hi', 'bn', 'ur', 'pa', 'gu', 'mr', 'ne'], llm_context: 'Hindi, Bengali, Urdu, Punjabi. Devanagari/Arabic scripts. Indic + Islamic cultures.' });
-MERGE (b:LanguageBranch:Meta { key: 'ira', name: 'Iranian', iso_639_5: 'ira', parent_family: 'ine', includes: ['fa', 'ps', 'ku', 'tg'], llm_context: 'Persian, Pashto, Kurdish, Tajik. Arabic script (mostly). Islamic cultural context.' });
-MERGE (b:LanguageBranch:Meta { key: 'cel', name: 'Celtic', iso_639_5: 'cel', parent_family: 'ine', includes: ['ga', 'cy', 'gd', 'br'], llm_context: 'Irish, Welsh, Scottish Gaelic, Breton. Latin script. Strong cultural revival movements.' });
-MERGE (b:LanguageBranch:Meta { key: 'grk', name: 'Hellenic', iso_639_5: 'grk', parent_family: 'ine', includes: ['el'], llm_context: 'Greek. Unique script. Mediterranean culture. Orthodox heritage.' });
-MERGE (b:LanguageBranch:Meta { key: 'bal', name: 'Baltic', iso_639_5: 'bat', parent_family: 'ine', includes: ['lt', 'lv'], llm_context: 'Lithuanian, Latvian. Latin script. EU members. Mix of Nordic and Slavic influences.' });
+MERGE (b:LanguageBranch { key: 'gem', name: 'Germanic', iso_639_5: 'gem', parent_family: 'ine', includes: ['en', 'de', 'nl', 'sv', 'no', 'da', 'is', 'af'], llm_context: 'English, German, Dutch, Scandinavian. Latin script. Occidental culture.' });
+MERGE (b:LanguageBranch { key: 'roa', name: 'Romance', iso_639_5: 'roa', parent_family: 'ine', includes: ['es', 'pt', 'fr', 'it', 'ro', 'ca'], llm_context: 'Spanish, Portuguese, French, Italian, Romanian. Latin script. Mediterranean + Latin American cultures.' });
+MERGE (b:LanguageBranch { key: 'sla', name: 'Slavic', iso_639_5: 'sla', parent_family: 'ine', includes: ['ru', 'pl', 'uk', 'cs', 'sr', 'hr', 'bg', 'sk'], llm_context: 'Russian, Polish, Ukrainian, Czech, Serbian. Cyrillic (east) or Latin (west). Orthodox/Catholic split.' });
+MERGE (b:LanguageBranch { key: 'inc', name: 'Indo-Aryan', iso_639_5: 'inc', parent_family: 'ine', includes: ['hi', 'bn', 'ur', 'pa', 'gu', 'mr', 'ne'], llm_context: 'Hindi, Bengali, Urdu, Punjabi. Devanagari/Arabic scripts. Indic + Islamic cultures.' });
+MERGE (b:LanguageBranch { key: 'ira', name: 'Iranian', iso_639_5: 'ira', parent_family: 'ine', includes: ['fa', 'ps', 'ku', 'tg'], llm_context: 'Persian, Pashto, Kurdish, Tajik. Arabic script (mostly). Islamic cultural context.' });
+MERGE (b:LanguageBranch { key: 'cel', name: 'Celtic', iso_639_5: 'cel', parent_family: 'ine', includes: ['ga', 'cy', 'gd', 'br'], llm_context: 'Irish, Welsh, Scottish Gaelic, Breton. Latin script. Strong cultural revival movements.' });
+MERGE (b:LanguageBranch { key: 'grk', name: 'Hellenic', iso_639_5: 'grk', parent_family: 'ine', includes: ['el'], llm_context: 'Greek. Unique script. Mediterranean culture. Orthodox heritage.' });
+MERGE (b:LanguageBranch { key: 'bal', name: 'Baltic', iso_639_5: 'bat', parent_family: 'ine', includes: ['lt', 'lv'], llm_context: 'Lithuanian, Latvian. Latin script. EU members. Mix of Nordic and Slavic influences.' });
 
 // Sino-Tibetan branches
-MERGE (b:LanguageBranch:Meta { key: 'zhx', name: 'Chinese', iso_639_5: 'zhx', parent_family: 'sit', includes: ['zh', 'yue', 'nan', 'wuu'], llm_context: 'Mandarin, Cantonese, Min, Wu. CJK characters. Tonal. Sinosphere culture.' });
-MERGE (b:LanguageBranch:Meta { key: 'tbq', name: 'Tibeto-Burman', iso_639_5: 'tbq', parent_family: 'sit', includes: ['bo', 'my', 'dz'], llm_context: 'Tibetan, Burmese, Dzongkha. Buddhist cultures. Unique scripts.' });
+MERGE (b:LanguageBranch { key: 'zhx', name: 'Chinese', iso_639_5: 'zhx', parent_family: 'sit', includes: ['zh', 'yue', 'nan', 'wuu'], llm_context: 'Mandarin, Cantonese, Min, Wu. CJK characters. Tonal. Sinosphere culture.' });
+MERGE (b:LanguageBranch { key: 'tbq', name: 'Tibeto-Burman', iso_639_5: 'tbq', parent_family: 'sit', includes: ['bo', 'my', 'dz'], llm_context: 'Tibetan, Burmese, Dzongkha. Buddhist cultures. Unique scripts.' });
 
 // Afroasiatic branches
-MERGE (b:LanguageBranch:Meta { key: 'sem', name: 'Semitic', iso_639_5: 'sem', parent_family: 'afa', includes: ['ar', 'he', 'am', 'ti', 'mt'], llm_context: 'Arabic, Hebrew, Amharic, Maltese. RTL (Arabic, Hebrew). Arabic = Islamic, Hebrew = Judaic, Maltese = Mediterranean.' });
-MERGE (b:LanguageBranch:Meta { key: 'ber', name: 'Berber', iso_639_5: 'ber', parent_family: 'afa', includes: ['ber', 'tzm', 'kab'], llm_context: 'Berber languages of North Africa. Tifinagh/Latin scripts. Indigenous to Maghreb.' });
+MERGE (b:LanguageBranch { key: 'sem', name: 'Semitic', iso_639_5: 'sem', parent_family: 'afa', includes: ['ar', 'he', 'am', 'ti', 'mt'], llm_context: 'Arabic, Hebrew, Amharic, Maltese. RTL (Arabic, Hebrew). Arabic = Islamic, Hebrew = Judaic, Maltese = Mediterranean.' });
+MERGE (b:LanguageBranch { key: 'ber', name: 'Berber', iso_639_5: 'ber', parent_family: 'afa', includes: ['ber', 'tzm', 'kab'], llm_context: 'Berber languages of North Africa. Tifinagh/Latin scripts. Indigenous to Maghreb.' });
 
 // Niger-Congo branches
-MERGE (b:LanguageBranch:Meta { key: 'bnt', name: 'Bantu', iso_639_5: 'bnt', parent_family: 'nic', includes: ['sw', 'zu', 'xh', 'rw', 'rn', 'sn', 'lg'], llm_context: 'Swahili, Zulu, Xhosa, Rwandan. Latin script. East/Southern Africa. Swahili = lingua franca.' });
-MERGE (b:LanguageBranch:Meta { key: 'alv', name: 'Atlantic-Congo', iso_639_5: 'alv', parent_family: 'nic', includes: ['yo', 'ig', 'ha', 'wo', 'ff'], llm_context: 'Yoruba, Igbo, Wolof, Fula. Latin script. West Africa. English/French colonial legacy.' });
+MERGE (b:LanguageBranch { key: 'bnt', name: 'Bantu', iso_639_5: 'bnt', parent_family: 'nic', includes: ['sw', 'zu', 'xh', 'rw', 'rn', 'sn', 'lg'], llm_context: 'Swahili, Zulu, Xhosa, Rwandan. Latin script. East/Southern Africa. Swahili = lingua franca.' });
+MERGE (b:LanguageBranch { key: 'alv', name: 'Atlantic-Congo', iso_639_5: 'alv', parent_family: 'nic', includes: ['yo', 'ig', 'ha', 'wo', 'ff'], llm_context: 'Yoruba, Igbo, Wolof, Fula. Latin script. West Africa. English/French colonial legacy.' });
 
 // Turkic branches
-MERGE (b:LanguageBranch:Meta { key: 'ogz', name: 'Oghuz', iso_639_5: 'ogz', parent_family: 'trk', includes: ['tr', 'az', 'tk'], llm_context: 'Turkish, Azerbaijani, Turkmen. Latin script (Turkey, Azerbaijan). Islamic culture.' });
-MERGE (b:LanguageBranch:Meta { key: 'kip', name: 'Kipchak', iso_639_5: 'kip', parent_family: 'trk', includes: ['kk', 'ky', 'tt'], llm_context: 'Kazakh, Kyrgyz, Tatar. Cyrillic script. Central Asian. Post-Soviet context.' });
+MERGE (b:LanguageBranch { key: 'ogz', name: 'Oghuz', iso_639_5: 'ogz', parent_family: 'trk', includes: ['tr', 'az', 'tk'], llm_context: 'Turkish, Azerbaijani, Turkmen. Latin script (Turkey, Azerbaijan). Islamic culture.' });
+MERGE (b:LanguageBranch { key: 'kip', name: 'Kipchak', iso_639_5: 'kip', parent_family: 'trk', includes: ['kk', 'ky', 'tt'], llm_context: 'Kazakh, Kyrgyz, Tatar. Cyrillic script. Central Asian. Post-Soviet context.' });
 
 // Austronesian branches
-MERGE (b:LanguageBranch:Meta { key: 'poz', name: 'Malayo-Polynesian', iso_639_5: 'poz', parent_family: 'map', includes: ['id', 'ms', 'tl', 'jv', 'mi', 'haw', 'sm', 'to'], llm_context: 'Indonesian, Malay, Filipino, Javanese, Maori, Hawaiian, Samoan. Latin script. SEA + Pacific.' });
+MERGE (b:LanguageBranch { key: 'poz', name: 'Malayo-Polynesian', iso_639_5: 'poz', parent_family: 'map', includes: ['id', 'ms', 'tl', 'jv', 'mi', 'haw', 'sm', 'to'], llm_context: 'Indonesian, Malay, Filipino, Javanese, Maori, Hawaiian, Samoan. Latin script. SEA + Pacific.' });
 
 // Austroasiatic branches
-MERGE (b:LanguageBranch:Meta { key: 'mkh', name: 'Mon-Khmer', iso_639_5: 'mkh', parent_family: 'aav', includes: ['vi', 'km'], llm_context: 'Vietnamese, Khmer. Tonal (Vi). Unique Khmer script. Vietnamese = Sinosphere culture despite language family.' });
+MERGE (b:LanguageBranch { key: 'mkh', name: 'Mon-Khmer', iso_639_5: 'mkh', parent_family: 'aav', includes: ['vi', 'km'], llm_context: 'Vietnamese, Khmer. Tonal (Vi). Unique Khmer script. Vietnamese = Sinosphere culture despite language family.' });
 
 // Dravidian branches
-MERGE (b:LanguageBranch:Meta { key: 'sdv', name: 'South Dravidian', iso_639_5: 'sdv', parent_family: 'dra', includes: ['ta', 'te', 'kn', 'ml'], llm_context: 'Tamil, Telugu, Kannada, Malayalam. Unique scripts each. South India. Strong regional identity.' });
+MERGE (b:LanguageBranch { key: 'sdv', name: 'South Dravidian', iso_639_5: 'sdv', parent_family: 'dra', includes: ['ta', 'te', 'kn', 'ml'], llm_context: 'Tamil, Telugu, Kannada, Malayalam. Unique scripts each. South India. Strong regional identity.' });
 
 // Uralic branches
-MERGE (b:LanguageBranch:Meta { key: 'fiu', name: 'Finno-Ugric', iso_639_5: 'fiu', parent_family: 'ura', includes: ['fi', 'hu', 'et'], llm_context: 'Finnish, Hungarian, Estonian. Latin script. EU members. Nordic (Fi, Et) vs Central European (Hu).' });
+MERGE (b:LanguageBranch { key: 'fiu', name: 'Finno-Ugric', iso_639_5: 'fiu', parent_family: 'ura', includes: ['fi', 'hu', 'et'], llm_context: 'Finnish, Hungarian, Estonian. Latin script. EU members. Nordic (Fi, Et) vs Central European (Hu).' });
 
 // -----------------------------------------------------------------------------
 // CULTURAL REALMS (Broek & Webb)
 // -----------------------------------------------------------------------------
 
-MERGE (cr:CulturalRealm:Meta {
+MERGE (cr:CulturalRealm {
   key: 'occidental',
   name: 'Occidental',
   wikidata_id: 'Q1410',
@@ -537,7 +832,7 @@ MERGE (cr:CulturalRealm:Meta {
   llm_context: 'USE: for Western Europe, Americas, Australia/NZ. TRIGGERS: western, occidental, european-influenced. VALUES: Individual rights, direct communication, time efficiency. STYLE: Low-context, explicit, data-driven. AVOID: Vague claims, excessive formality.'
 });
 
-MERGE (cr:CulturalRealm:Meta {
+MERGE (cr:CulturalRealm {
   key: 'islamic',
   name: 'Islamic',
   wikidata_id: 'Q98032199',
@@ -548,7 +843,7 @@ MERGE (cr:CulturalRealm:Meta {
   llm_context: 'USE: for Middle East, North Africa, Central Asia, parts of South/Southeast Asia. TRIGGERS: islamic, muslim, arab, middle-eastern. VALUES: Faith, family, hospitality. STYLE: Respectful, relationship-first. AVOID: Alcohol, pork, immodest images, religious imagery.'
 });
 
-MERGE (cr:CulturalRealm:Meta {
+MERGE (cr:CulturalRealm {
   key: 'indic',
   name: 'Indic',
   wikidata_id: 'Q176770',
@@ -559,7 +854,7 @@ MERGE (cr:CulturalRealm:Meta {
   llm_context: 'USE: for India, Nepal, Sri Lanka, parts of Southeast Asia. TRIGGERS: indian, hindu, south-asian. VALUES: Family, education, spirituality. STYLE: Respectful of hierarchy, indirect. AVOID: Beef references (Hindu), religious insensitivity.'
 });
 
-MERGE (cr:CulturalRealm:Meta {
+MERGE (cr:CulturalRealm {
   key: 'east-asian',
   name: 'East Asian',
   wikidata_id: 'Q27231',
@@ -570,7 +865,7 @@ MERGE (cr:CulturalRealm:Meta {
   llm_context: 'USE: for China, Japan, Korea, Taiwan, Vietnam. TRIGGERS: east-asian, confucian, cjk. VALUES: Harmony, face, education, hierarchy. STYLE: Indirect, respectful, group-oriented. AVOID: Direct criticism, number 4, causing embarrassment.'
 });
 
-MERGE (cr:CulturalRealm:Meta {
+MERGE (cr:CulturalRealm {
   key: 'southeast-asian',
   name: 'Southeast Asian',
   wikidata_id: 'Q11708',
@@ -581,7 +876,7 @@ MERGE (cr:CulturalRealm:Meta {
   llm_context: 'USE: for Thailand, Indonesia, Philippines, Malaysia, Myanmar. TRIGGERS: southeast-asian, asean. VALUES: Harmony, flexibility, smiles. STYLE: Non-confrontational, polite. AVOID: Confrontation, disrespect to elders/royalty.'
 });
 
-MERGE (cr:CulturalRealm:Meta {
+MERGE (cr:CulturalRealm {
   key: 'meso-african',
   name: 'Meso-African',
   wikidata_id: 'Q27407',
@@ -597,46 +892,46 @@ MERGE (cr:CulturalRealm:Meta {
 // -----------------------------------------------------------------------------
 
 // Occidental sub-realms
-MERGE (csr:CulturalSubRealm:Meta { key: 'anglo-american', name: 'Anglo-American', parent_realm: 'occidental', regions: ['northern-america', 'australia-new-zealand'], llm_context: 'US, UK, Canada, Australia, NZ. English. Very low-context. Direct. Informal. Consumer culture.' });
-MERGE (csr:CulturalSubRealm:Meta { key: 'west-european', name: 'Western European', parent_realm: 'occidental', regions: ['western-europe'], llm_context: 'Germany, France, Netherlands, Belgium. Mix of Germanic and Romance. Quality-focused. Environmental awareness.' });
-MERGE (csr:CulturalSubRealm:Meta { key: 'nordic', name: 'Nordic', parent_realm: 'occidental', regions: ['northern-europe'], llm_context: 'Scandinavia, Finland, Iceland. Egalitarian. Design-conscious. Sustainability. Premium markets.' });
-MERGE (csr:CulturalSubRealm:Meta { key: 'mediterranean', name: 'Mediterranean', parent_realm: 'occidental', regions: ['southern-europe'], llm_context: 'Spain, Italy, Portugal, Greece. Relationship-focused. Warm communication. Family values.' });
-MERGE (csr:CulturalSubRealm:Meta { key: 'eastern-european', name: 'Eastern European', parent_realm: 'occidental', regions: ['eastern-europe'], llm_context: 'Poland, Czech, Hungary, Romania, Balkans. Post-transition. Mix of Catholic and Orthodox.' });
-MERGE (csr:CulturalSubRealm:Meta { key: 'latin-american', name: 'Latin American', parent_realm: 'occidental', regions: ['central-america', 'south-america', 'caribbean'], llm_context: 'Spanish/Portuguese Americas. Warm, relationship-focused. Family-centered. Growing middle class.' });
-MERGE (csr:CulturalSubRealm:Meta { key: 'slavic-orthodox', name: 'Slavic Orthodox', parent_realm: 'occidental', regions: ['eastern-europe'], llm_context: 'Russia, Ukraine, Belarus, Serbia, Bulgaria. Orthodox heritage. Cyrillic. Collectivist tradition.' });
+MERGE (csr:CulturalSubRealm { key: 'anglo-american', name: 'Anglo-American', parent_realm: 'occidental', regions: ['northern-america', 'australia-new-zealand'], llm_context: 'US, UK, Canada, Australia, NZ. English. Very low-context. Direct. Informal. Consumer culture.' });
+MERGE (csr:CulturalSubRealm { key: 'west-european', name: 'Western European', parent_realm: 'occidental', regions: ['western-europe'], llm_context: 'Germany, France, Netherlands, Belgium. Mix of Germanic and Romance. Quality-focused. Environmental awareness.' });
+MERGE (csr:CulturalSubRealm { key: 'nordic', name: 'Nordic', parent_realm: 'occidental', regions: ['northern-europe'], llm_context: 'Scandinavia, Finland, Iceland. Egalitarian. Design-conscious. Sustainability. Premium markets.' });
+MERGE (csr:CulturalSubRealm { key: 'mediterranean', name: 'Mediterranean', parent_realm: 'occidental', regions: ['southern-europe'], llm_context: 'Spain, Italy, Portugal, Greece. Relationship-focused. Warm communication. Family values.' });
+MERGE (csr:CulturalSubRealm { key: 'eastern-european', name: 'Eastern European', parent_realm: 'occidental', regions: ['eastern-europe'], llm_context: 'Poland, Czech, Hungary, Romania, Balkans. Post-transition. Mix of Catholic and Orthodox.' });
+MERGE (csr:CulturalSubRealm { key: 'latin-american', name: 'Latin American', parent_realm: 'occidental', regions: ['central-america', 'south-america', 'caribbean'], llm_context: 'Spanish/Portuguese Americas. Warm, relationship-focused. Family-centered. Growing middle class.' });
+MERGE (csr:CulturalSubRealm { key: 'slavic-orthodox', name: 'Slavic Orthodox', parent_realm: 'occidental', regions: ['eastern-europe'], llm_context: 'Russia, Ukraine, Belarus, Serbia, Bulgaria. Orthodox heritage. Cyrillic. Collectivist tradition.' });
 
 // Islamic sub-realms
-MERGE (csr:CulturalSubRealm:Meta { key: 'islamic-arab', name: 'Islamic Arab', parent_realm: 'islamic', regions: ['western-asia', 'northern-africa'], llm_context: 'Arab world. Arabic language. Gulf + Levant + Maghreb variations. RTL. Conservative in Gulf, moderate in Levant.' });
-MERGE (csr:CulturalSubRealm:Meta { key: 'islamic-persian', name: 'Islamic Persian', parent_realm: 'islamic', regions: ['western-asia', 'central-asia'], llm_context: 'Iran, Afghanistan, Tajikistan. Persian heritage. Poetry tradition. Distinct from Arab culture.' });
-MERGE (csr:CulturalSubRealm:Meta { key: 'islamic-turkic', name: 'Islamic Turkic', parent_realm: 'islamic', regions: ['western-asia', 'central-asia'], llm_context: 'Turkey, Azerbaijan, Central Asia. Turkic languages. Turkey more secular. Ottoman heritage.' });
-MERGE (csr:CulturalSubRealm:Meta { key: 'south-asian-islamic', name: 'South Asian Islamic', parent_realm: 'islamic', regions: ['southern-asia'], llm_context: 'Pakistan, Bangladesh, Indian Muslims. Indo-Islamic culture. Urdu/Bengali. South Asian context.' });
-MERGE (csr:CulturalSubRealm:Meta { key: 'maritime-islamic', name: 'Maritime Islamic', parent_realm: 'islamic', regions: ['south-eastern-asia'], llm_context: 'Malaysia, Indonesia, Brunei. Malay culture. Moderate Islam. Halal important but less conservative.' });
+MERGE (csr:CulturalSubRealm { key: 'islamic-arab', name: 'Islamic Arab', parent_realm: 'islamic', regions: ['western-asia', 'northern-africa'], llm_context: 'Arab world. Arabic language. Gulf + Levant + Maghreb variations. RTL. Conservative in Gulf, moderate in Levant.' });
+MERGE (csr:CulturalSubRealm { key: 'islamic-persian', name: 'Islamic Persian', parent_realm: 'islamic', regions: ['western-asia', 'central-asia'], llm_context: 'Iran, Afghanistan, Tajikistan. Persian heritage. Poetry tradition. Distinct from Arab culture.' });
+MERGE (csr:CulturalSubRealm { key: 'islamic-turkic', name: 'Islamic Turkic', parent_realm: 'islamic', regions: ['western-asia', 'central-asia'], llm_context: 'Turkey, Azerbaijan, Central Asia. Turkic languages. Turkey more secular. Ottoman heritage.' });
+MERGE (csr:CulturalSubRealm { key: 'south-asian-islamic', name: 'South Asian Islamic', parent_realm: 'islamic', regions: ['southern-asia'], llm_context: 'Pakistan, Bangladesh, Indian Muslims. Indo-Islamic culture. Urdu/Bengali. South Asian context.' });
+MERGE (csr:CulturalSubRealm { key: 'maritime-islamic', name: 'Maritime Islamic', parent_realm: 'islamic', regions: ['south-eastern-asia'], llm_context: 'Malaysia, Indonesia, Brunei. Malay culture. Moderate Islam. Halal important but less conservative.' });
 
 // Indic sub-realms
-MERGE (csr:CulturalSubRealm:Meta { key: 'north-indian', name: 'North Indian', parent_realm: 'indic', regions: ['southern-asia'], llm_context: 'Hindi belt. Devanagari script. Hindu majority. Bollywood influence. Cricket culture.' });
-MERGE (csr:CulturalSubRealm:Meta { key: 'south-indian', name: 'South Indian', parent_realm: 'indic', regions: ['southern-asia'], llm_context: 'Dravidian states. Tamil, Telugu, Kannada, Malayalam. Strong regional identity. IT hubs.' });
-MERGE (csr:CulturalSubRealm:Meta { key: 'himalayan-buddhist', name: 'Himalayan Buddhist', parent_realm: 'indic', regions: ['southern-asia'], llm_context: 'Nepal, Bhutan, Tibetan diaspora. Buddhist. Mountain cultures. Traditional values.' });
+MERGE (csr:CulturalSubRealm { key: 'north-indian', name: 'North Indian', parent_realm: 'indic', regions: ['southern-asia'], llm_context: 'Hindi belt. Devanagari script. Hindu majority. Bollywood influence. Cricket culture.' });
+MERGE (csr:CulturalSubRealm { key: 'south-indian', name: 'South Indian', parent_realm: 'indic', regions: ['southern-asia'], llm_context: 'Dravidian states. Tamil, Telugu, Kannada, Malayalam. Strong regional identity. IT hubs.' });
+MERGE (csr:CulturalSubRealm { key: 'himalayan-buddhist', name: 'Himalayan Buddhist', parent_realm: 'indic', regions: ['southern-asia'], llm_context: 'Nepal, Bhutan, Tibetan diaspora. Buddhist. Mountain cultures. Traditional values.' });
 
 // East Asian sub-realms
-MERGE (csr:CulturalSubRealm:Meta { key: 'sinosphere', name: 'Sinosphere', parent_realm: 'east-asian', regions: ['eastern-asia'], llm_context: 'China, Taiwan, Singapore Chinese. Mandarin. CJK characters. Confucian. Face culture.' });
-MERGE (csr:CulturalSubRealm:Meta { key: 'japanese', name: 'Japanese', parent_realm: 'east-asian', regions: ['eastern-asia'], llm_context: 'Japan. Unique. Extreme politeness. Attention to detail. Pop culture global influence.' });
-MERGE (csr:CulturalSubRealm:Meta { key: 'korean', name: 'Korean', parent_realm: 'east-asian', regions: ['eastern-asia'], llm_context: 'Korea. Hangul. Confucian + dynamic. K-wave global influence. Tech-forward.' });
-MERGE (csr:CulturalSubRealm:Meta { key: 'vietnamese-sinosphere', name: 'Vietnamese Sinosphere', parent_realm: 'east-asian', regions: ['south-eastern-asia'], llm_context: 'Vietnam. Sinosphere culture despite Austroasiatic language. Confucian values. Latin script.' });
+MERGE (csr:CulturalSubRealm { key: 'sinosphere', name: 'Sinosphere', parent_realm: 'east-asian', regions: ['eastern-asia'], llm_context: 'China, Taiwan, Singapore Chinese. Mandarin. CJK characters. Confucian. Face culture.' });
+MERGE (csr:CulturalSubRealm { key: 'japanese', name: 'Japanese', parent_realm: 'east-asian', regions: ['eastern-asia'], llm_context: 'Japan. Unique. Extreme politeness. Attention to detail. Pop culture global influence.' });
+MERGE (csr:CulturalSubRealm { key: 'korean', name: 'Korean', parent_realm: 'east-asian', regions: ['eastern-asia'], llm_context: 'Korea. Hangul. Confucian + dynamic. K-wave global influence. Tech-forward.' });
+MERGE (csr:CulturalSubRealm { key: 'vietnamese-sinosphere', name: 'Vietnamese Sinosphere', parent_realm: 'east-asian', regions: ['south-eastern-asia'], llm_context: 'Vietnam. Sinosphere culture despite Austroasiatic language. Confucian values. Latin script.' });
 
 // Southeast Asian sub-realms
-MERGE (csr:CulturalSubRealm:Meta { key: 'theravada-buddhist', name: 'Theravada Buddhist', parent_realm: 'southeast-asian', regions: ['south-eastern-asia'], llm_context: 'Thailand, Myanmar, Cambodia, Laos. Buddhist. Monarchy respect (Thailand). Non-confrontational.' });
-MERGE (csr:CulturalSubRealm:Meta { key: 'philippine-syncretic', name: 'Philippine Syncretic', parent_realm: 'southeast-asian', regions: ['south-eastern-asia'], llm_context: 'Philippines. Catholic + Malay + American mix. English widely spoken. Unique in region.' });
+MERGE (csr:CulturalSubRealm { key: 'theravada-buddhist', name: 'Theravada Buddhist', parent_realm: 'southeast-asian', regions: ['south-eastern-asia'], llm_context: 'Thailand, Myanmar, Cambodia, Laos. Buddhist. Monarchy respect (Thailand). Non-confrontational.' });
+MERGE (csr:CulturalSubRealm { key: 'philippine-syncretic', name: 'Philippine Syncretic', parent_realm: 'southeast-asian', regions: ['south-eastern-asia'], llm_context: 'Philippines. Catholic + Malay + American mix. English widely spoken. Unique in region.' });
 
 // Meso-African sub-realms
-MERGE (csr:CulturalSubRealm:Meta { key: 'west-african', name: 'West African', parent_realm: 'meso-african', regions: ['western-africa'], llm_context: 'Nigeria, Ghana, Senegal. Diverse. English/French. Strong oral traditions. Music influence.' });
-MERGE (csr:CulturalSubRealm:Meta { key: 'east-african', name: 'East African', parent_realm: 'meso-african', regions: ['eastern-africa'], llm_context: 'Kenya, Tanzania, Uganda. Swahili. English. Safari tourism. Mix of cultures.' });
-MERGE (csr:CulturalSubRealm:Meta { key: 'southern-african', name: 'Southern African', parent_realm: 'meso-african', regions: ['southern-africa'], llm_context: 'South Africa, Zimbabwe, Botswana. Most developed in region. English/Afrikaans. Mining heritage.' });
+MERGE (csr:CulturalSubRealm { key: 'west-african', name: 'West African', parent_realm: 'meso-african', regions: ['western-africa'], llm_context: 'Nigeria, Ghana, Senegal. Diverse. English/French. Strong oral traditions. Music influence.' });
+MERGE (csr:CulturalSubRealm { key: 'east-african', name: 'East African', parent_realm: 'meso-african', regions: ['eastern-africa'], llm_context: 'Kenya, Tanzania, Uganda. Swahili. English. Safari tourism. Mix of cultures.' });
+MERGE (csr:CulturalSubRealm { key: 'southern-african', name: 'Southern African', parent_realm: 'meso-african', regions: ['southern-africa'], llm_context: 'South Africa, Zimbabwe, Botswana. Most developed in region. English/Afrikaans. Mining heritage.' });
 
 // -----------------------------------------------------------------------------
 // POPULATION CLUSTERS (for AI image generation diversity)
 // -----------------------------------------------------------------------------
 
-MERGE (pc:PopulationCluster:Meta {
+MERGE (pc:PopulationCluster {
   key: 'west-eurasian',
   name: 'West Eurasian',
   regions: ['Europe', 'Middle East', 'North Africa', 'South Asia'],
@@ -644,7 +939,7 @@ MERGE (pc:PopulationCluster:Meta {
   llm_context: 'USE: for European, Middle Eastern, North African, South Asian phenotypes. DIVERSE: Nordic to Mediterranean to South Asian range.'
 });
 
-MERGE (pc:PopulationCluster:Meta {
+MERGE (pc:PopulationCluster {
   key: 'east-asian',
   name: 'East Asian',
   regions: ['East Asia', 'Central Asia', 'Arctic'],
@@ -652,7 +947,7 @@ MERGE (pc:PopulationCluster:Meta {
   llm_context: 'USE: for East Asian, Central Asian phenotypes. INCLUDES: Han Chinese, Japanese, Korean, Mongolian appearances.'
 });
 
-MERGE (pc:PopulationCluster:Meta {
+MERGE (pc:PopulationCluster {
   key: 'southeast-asian',
   name: 'Southeast Asian',
   regions: ['Southeast Asia', 'Pacific Islands'],
@@ -660,7 +955,7 @@ MERGE (pc:PopulationCluster:Meta {
   llm_context: 'USE: for Southeast Asian, Filipino, Indonesian, Thai, Vietnamese phenotypes. DIVERSE within region.'
 });
 
-MERGE (pc:PopulationCluster:Meta {
+MERGE (pc:PopulationCluster {
   key: 'south-asian',
   name: 'South Asian',
   regions: ['South Asia'],
@@ -668,7 +963,7 @@ MERGE (pc:PopulationCluster:Meta {
   llm_context: 'USE: for Indian, Pakistani, Bangladeshi, Sri Lankan phenotypes. DIVERSE: North to South India range.'
 });
 
-MERGE (pc:PopulationCluster:Meta {
+MERGE (pc:PopulationCluster {
   key: 'sub-saharan',
   name: 'Sub-Saharan African',
   regions: ['Sub-Saharan Africa'],
@@ -676,7 +971,7 @@ MERGE (pc:PopulationCluster:Meta {
   llm_context: 'USE: for African phenotypes. MOST DIVERSE genetically. West, East, Southern variations.'
 });
 
-MERGE (pc:PopulationCluster:Meta {
+MERGE (pc:PopulationCluster {
   key: 'native-american',
   name: 'Native American',
   regions: ['North America', 'Central America', 'South America'],
@@ -684,7 +979,7 @@ MERGE (pc:PopulationCluster:Meta {
   llm_context: 'USE: for Indigenous Americas phenotypes. DIVERSE: Inuit to Mesoamerican to Andean variations.'
 });
 
-MERGE (pc:PopulationCluster:Meta {
+MERGE (pc:PopulationCluster {
   key: 'oceanian',
   name: 'Oceanian',
   regions: ['Australia', 'Melanesia', 'Polynesia', 'Micronesia'],
@@ -697,41 +992,41 @@ MERGE (pc:PopulationCluster:Meta {
 // -----------------------------------------------------------------------------
 
 // West Eurasian sub-clusters
-MERGE (psc:PopulationSubCluster:Meta { key: 'nordic', name: 'Nordic', parent_cluster: 'west-eurasian', visual_traits: 'Fair porcelain skin, light blonde to strawberry blonde hair, blue or grey eyes, tall stature, angular features', regions: ['Scandinavia', 'Iceland', 'Baltic'] });
-MERGE (psc:PopulationSubCluster:Meta { key: 'mediterranean', name: 'Mediterranean', parent_cluster: 'west-eurasian', visual_traits: 'Warm olive skin, dark brown to black wavy hair, brown or hazel eyes, expressive dark eyebrows', regions: ['Southern Europe', 'Mediterranean'] });
-MERGE (psc:PopulationSubCluster:Meta { key: 'slavic', name: 'Slavic', parent_cluster: 'west-eurasian', visual_traits: 'Fair to light skin, light brown to dark blonde hair, blue green or grey eyes, high cheekbones', regions: ['Eastern Europe', 'Russia'] });
-MERGE (psc:PopulationSubCluster:Meta { key: 'celtic', name: 'Celtic', parent_cluster: 'west-eurasian', visual_traits: 'Very fair freckled skin, red to auburn hair, green or blue eyes, soft rounded features', regions: ['Ireland', 'Scotland', 'Wales'] });
-MERGE (psc:PopulationSubCluster:Meta { key: 'middle-eastern', name: 'Middle Eastern', parent_cluster: 'west-eurasian', visual_traits: 'Warm tan to olive skin, dark brown to black wavy hair, dark brown eyes, thick dark eyebrows, prominent nose', regions: ['Middle East', 'Levant'] });
-MERGE (psc:PopulationSubCluster:Meta { key: 'north-african', name: 'North African', parent_cluster: 'west-eurasian', visual_traits: 'Light olive to tan skin, dark wavy to curly hair, dark brown eyes, defined cheekbones', regions: ['Maghreb', 'Egypt'] });
+MERGE (psc:PopulationSubCluster { key: 'nordic', name: 'Nordic', parent_cluster: 'west-eurasian', visual_traits: 'Fair porcelain skin, light blonde to strawberry blonde hair, blue or grey eyes, tall stature, angular features', regions: ['Scandinavia', 'Iceland', 'Baltic'] });
+MERGE (psc:PopulationSubCluster { key: 'mediterranean', name: 'Mediterranean', parent_cluster: 'west-eurasian', visual_traits: 'Warm olive skin, dark brown to black wavy hair, brown or hazel eyes, expressive dark eyebrows', regions: ['Southern Europe', 'Mediterranean'] });
+MERGE (psc:PopulationSubCluster { key: 'slavic', name: 'Slavic', parent_cluster: 'west-eurasian', visual_traits: 'Fair to light skin, light brown to dark blonde hair, blue green or grey eyes, high cheekbones', regions: ['Eastern Europe', 'Russia'] });
+MERGE (psc:PopulationSubCluster { key: 'celtic', name: 'Celtic', parent_cluster: 'west-eurasian', visual_traits: 'Very fair freckled skin, red to auburn hair, green or blue eyes, soft rounded features', regions: ['Ireland', 'Scotland', 'Wales'] });
+MERGE (psc:PopulationSubCluster { key: 'middle-eastern', name: 'Middle Eastern', parent_cluster: 'west-eurasian', visual_traits: 'Warm tan to olive skin, dark brown to black wavy hair, dark brown eyes, thick dark eyebrows, prominent nose', regions: ['Middle East', 'Levant'] });
+MERGE (psc:PopulationSubCluster { key: 'north-african', name: 'North African', parent_cluster: 'west-eurasian', visual_traits: 'Light olive to tan skin, dark wavy to curly hair, dark brown eyes, defined cheekbones', regions: ['Maghreb', 'Egypt'] });
 
 // East Asian sub-clusters
-MERGE (psc:PopulationSubCluster:Meta { key: 'han-chinese', name: 'Han Chinese', parent_cluster: 'east-asian', visual_traits: 'Warm ivory to light golden skin, straight fine black hair, almond-shaped dark brown eyes with epicanthic fold, round face', regions: ['China', 'Taiwan', 'Singapore'] });
-MERGE (psc:PopulationSubCluster:Meta { key: 'japanese', name: 'Japanese', parent_cluster: 'east-asian', visual_traits: 'Fair ivory skin, straight fine black hair, narrow almond eyes, delicate features, small nose', regions: ['Japan'] });
-MERGE (psc:PopulationSubCluster:Meta { key: 'korean', name: 'Korean', parent_cluster: 'east-asian', visual_traits: 'Fair to light golden skin, straight silky black hair, monolid or subtle double eyelid, V-shaped jaw', regions: ['Korea'] });
-MERGE (psc:PopulationSubCluster:Meta { key: 'central-asian', name: 'Central Asian', parent_cluster: 'east-asian', visual_traits: 'Tan to golden skin, straight dark hair, almond eyes with varied epicanthic fold, high cheekbones, mixed features', regions: ['Kazakhstan', 'Mongolia', 'Tibet'] });
+MERGE (psc:PopulationSubCluster { key: 'han-chinese', name: 'Han Chinese', parent_cluster: 'east-asian', visual_traits: 'Warm ivory to light golden skin, straight fine black hair, almond-shaped dark brown eyes with epicanthic fold, round face', regions: ['China', 'Taiwan', 'Singapore'] });
+MERGE (psc:PopulationSubCluster { key: 'japanese', name: 'Japanese', parent_cluster: 'east-asian', visual_traits: 'Fair ivory skin, straight fine black hair, narrow almond eyes, delicate features, small nose', regions: ['Japan'] });
+MERGE (psc:PopulationSubCluster { key: 'korean', name: 'Korean', parent_cluster: 'east-asian', visual_traits: 'Fair to light golden skin, straight silky black hair, monolid or subtle double eyelid, V-shaped jaw', regions: ['Korea'] });
+MERGE (psc:PopulationSubCluster { key: 'central-asian', name: 'Central Asian', parent_cluster: 'east-asian', visual_traits: 'Tan to golden skin, straight dark hair, almond eyes with varied epicanthic fold, high cheekbones, mixed features', regions: ['Kazakhstan', 'Mongolia', 'Tibet'] });
 
 // Southeast Asian sub-clusters
-MERGE (psc:PopulationSubCluster:Meta { key: 'mainland-sea', name: 'Mainland Southeast Asian', parent_cluster: 'southeast-asian', visual_traits: 'Warm golden to light brown skin, straight black hair, dark brown eyes, medium nose, medium build', regions: ['Thailand', 'Vietnam', 'Cambodia', 'Myanmar'] });
-MERGE (psc:PopulationSubCluster:Meta { key: 'maritime-sea', name: 'Maritime Southeast Asian', parent_cluster: 'southeast-asian', visual_traits: 'Warm brown skin, straight to wavy black hair, dark brown eyes, broader nose, varied builds', regions: ['Indonesia', 'Malaysia', 'Philippines'] });
+MERGE (psc:PopulationSubCluster { key: 'mainland-sea', name: 'Mainland Southeast Asian', parent_cluster: 'southeast-asian', visual_traits: 'Warm golden to light brown skin, straight black hair, dark brown eyes, medium nose, medium build', regions: ['Thailand', 'Vietnam', 'Cambodia', 'Myanmar'] });
+MERGE (psc:PopulationSubCluster { key: 'maritime-sea', name: 'Maritime Southeast Asian', parent_cluster: 'southeast-asian', visual_traits: 'Warm brown skin, straight to wavy black hair, dark brown eyes, broader nose, varied builds', regions: ['Indonesia', 'Malaysia', 'Philippines'] });
 
 // South Asian sub-clusters
-MERGE (psc:PopulationSubCluster:Meta { key: 'north-indian', name: 'North Indian', parent_cluster: 'south-asian', visual_traits: 'Light to medium brown skin, straight to wavy black hair, dark brown eyes, prominent nose, varied features', regions: ['North India', 'Pakistan'] });
-MERGE (psc:PopulationSubCluster:Meta { key: 'south-indian', name: 'South Indian', parent_cluster: 'south-asian', visual_traits: 'Medium to dark brown skin, wavy to curly black hair, dark brown eyes, broader nose, strong features', regions: ['South India', 'Sri Lanka'] });
+MERGE (psc:PopulationSubCluster { key: 'north-indian', name: 'North Indian', parent_cluster: 'south-asian', visual_traits: 'Light to medium brown skin, straight to wavy black hair, dark brown eyes, prominent nose, varied features', regions: ['North India', 'Pakistan'] });
+MERGE (psc:PopulationSubCluster { key: 'south-indian', name: 'South Indian', parent_cluster: 'south-asian', visual_traits: 'Medium to dark brown skin, wavy to curly black hair, dark brown eyes, broader nose, strong features', regions: ['South India', 'Sri Lanka'] });
 
 // Sub-Saharan sub-clusters
-MERGE (psc:PopulationSubCluster:Meta { key: 'west-african', name: 'West African', parent_cluster: 'sub-saharan', visual_traits: 'Deep rich dark skin, tightly coiled black hair, dark brown eyes, broad nose, full sculpted lips', regions: ['Nigeria', 'Ghana', 'Senegal'] });
-MERGE (psc:PopulationSubCluster:Meta { key: 'east-african', name: 'East African', parent_cluster: 'sub-saharan', visual_traits: 'Rich dark brown skin, tightly curled black hair, dark almond eyes, narrow refined nose, high cheekbones, elongated features', regions: ['Ethiopia', 'Kenya', 'Somalia'] });
-MERGE (psc:PopulationSubCluster:Meta { key: 'southern-african-bantu', name: 'Southern African Bantu', parent_cluster: 'sub-saharan', visual_traits: 'Dark brown to black skin, coiled black hair, dark brown eyes, broad nose, full lips, rounded features', regions: ['South Africa', 'Zimbabwe'] });
+MERGE (psc:PopulationSubCluster { key: 'west-african', name: 'West African', parent_cluster: 'sub-saharan', visual_traits: 'Deep rich dark skin, tightly coiled black hair, dark brown eyes, broad nose, full sculpted lips', regions: ['Nigeria', 'Ghana', 'Senegal'] });
+MERGE (psc:PopulationSubCluster { key: 'east-african', name: 'East African', parent_cluster: 'sub-saharan', visual_traits: 'Rich dark brown skin, tightly curled black hair, dark almond eyes, narrow refined nose, high cheekbones, elongated features', regions: ['Ethiopia', 'Kenya', 'Somalia'] });
+MERGE (psc:PopulationSubCluster { key: 'southern-african-bantu', name: 'Southern African Bantu', parent_cluster: 'sub-saharan', visual_traits: 'Dark brown to black skin, coiled black hair, dark brown eyes, broad nose, full lips, rounded features', regions: ['South Africa', 'Zimbabwe'] });
 
 // Native American sub-clusters
-MERGE (psc:PopulationSubCluster:Meta { key: 'north-american-indigenous', name: 'North American Indigenous', parent_cluster: 'native-american', visual_traits: 'Warm bronze to reddish-brown skin, straight coarse black hair, dark brown eyes, high prominent cheekbones, aquiline nose', regions: ['United States', 'Canada'] });
-MERGE (psc:PopulationSubCluster:Meta { key: 'mesoamerican', name: 'Mesoamerican', parent_cluster: 'native-american', visual_traits: 'Warm brown to bronze skin, straight thick black hair, dark brown eyes, high cheekbones, prominent nose, rounded face', regions: ['Mexico', 'Guatemala'] });
-MERGE (psc:PopulationSubCluster:Meta { key: 'andean', name: 'Andean', parent_cluster: 'native-american', visual_traits: 'Copper to bronze skin, straight jet-black hair, dark brown eyes, high cheekbones, aquiline nose, compact build', regions: ['Peru', 'Bolivia', 'Ecuador'] });
+MERGE (psc:PopulationSubCluster { key: 'north-american-indigenous', name: 'North American Indigenous', parent_cluster: 'native-american', visual_traits: 'Warm bronze to reddish-brown skin, straight coarse black hair, dark brown eyes, high prominent cheekbones, aquiline nose', regions: ['United States', 'Canada'] });
+MERGE (psc:PopulationSubCluster { key: 'mesoamerican', name: 'Mesoamerican', parent_cluster: 'native-american', visual_traits: 'Warm brown to bronze skin, straight thick black hair, dark brown eyes, high cheekbones, prominent nose, rounded face', regions: ['Mexico', 'Guatemala'] });
+MERGE (psc:PopulationSubCluster { key: 'andean', name: 'Andean', parent_cluster: 'native-american', visual_traits: 'Copper to bronze skin, straight jet-black hair, dark brown eyes, high cheekbones, aquiline nose, compact build', regions: ['Peru', 'Bolivia', 'Ecuador'] });
 
 // Oceanian sub-clusters
-MERGE (psc:PopulationSubCluster:Meta { key: 'aboriginal-australian', name: 'Aboriginal Australian', parent_cluster: 'oceanian', visual_traits: 'Deep dark brown skin, wavy to curly dark hair, dark brown deep-set eyes, broad nose, pronounced brow ridge', regions: ['Australia'] });
-MERGE (psc:PopulationSubCluster:Meta { key: 'melanesian', name: 'Melanesian', parent_cluster: 'oceanian', visual_traits: 'Very dark skin, naturally blonde to dark curly hair, dark brown eyes, broad nose, full lips, strong features', regions: ['Papua New Guinea', 'Fiji', 'Solomon Islands'] });
-MERGE (psc:PopulationSubCluster:Meta { key: 'polynesian', name: 'Polynesian', parent_cluster: 'oceanian', visual_traits: 'Warm brown to tan skin, wavy dark hair, dark brown eyes, broad nose, full lips, strong muscular build', regions: ['Hawaii', 'Samoa', 'Tonga', 'New Zealand'] });
+MERGE (psc:PopulationSubCluster { key: 'aboriginal-australian', name: 'Aboriginal Australian', parent_cluster: 'oceanian', visual_traits: 'Deep dark brown skin, wavy to curly dark hair, dark brown deep-set eyes, broad nose, pronounced brow ridge', regions: ['Australia'] });
+MERGE (psc:PopulationSubCluster { key: 'melanesian', name: 'Melanesian', parent_cluster: 'oceanian', visual_traits: 'Very dark skin, naturally blonde to dark curly hair, dark brown eyes, broad nose, full lips, strong features', regions: ['Papua New Guinea', 'Fiji', 'Solomon Islands'] });
+MERGE (psc:PopulationSubCluster { key: 'polynesian', name: 'Polynesian', parent_cluster: 'oceanian', visual_traits: 'Warm brown to tan skin, wavy dark hair, dark brown eyes, broad nose, full lips, strong muscular build', regions: ['Hawaii', 'Samoa', 'Tonga', 'New Zealand'] });
 
 // -----------------------------------------------------------------------------
 // CREATE HIERARCHY RELATIONSHIPS
@@ -743,6 +1038,9 @@ MATCH (c:Continent {key: 'americas'}), (r:GeoRegion) WHERE r.parent_continent = 
 MATCH (c:Continent {key: 'asia'}), (r:GeoRegion) WHERE r.parent_continent = 'asia' MERGE (r)-[:IN_CONTINENT]->(c);
 MATCH (c:Continent {key: 'europe'}), (r:GeoRegion) WHERE r.parent_continent = 'europe' MERGE (r)-[:IN_CONTINENT]->(c);
 MATCH (c:Continent {key: 'oceania'}), (r:GeoRegion) WHERE r.parent_continent = 'oceania' MERGE (r)-[:IN_CONTINENT]->(c);
+
+// GeoSubRegion -> GeoRegion
+MATCH (sr:GeoSubRegion), (r:GeoRegion) WHERE sr.parent_region = r.key MERGE (sr)-[:IN_REGION]->(r);
 
 // LanguageFamily -> LanguageBranch
 MATCH (f:LanguageFamily), (b:LanguageBranch) WHERE b.parent_family = f.key MERGE (b)-[:BRANCH_OF]->(f);
@@ -759,6 +1057,7 @@ MATCH (pc:PopulationCluster), (psc:PopulationSubCluster) WHERE psc.parent_cluste
 
 MATCH (n:Continent), (k:Kind {label: 'Continent'}) MERGE (n)-[:OF_KIND]->(k);
 MATCH (n:GeoRegion), (k:Kind {label: 'GeoRegion'}) MERGE (n)-[:OF_KIND]->(k);
+MATCH (n:GeoSubRegion), (k:Kind {label: 'GeoSubRegion'}) MERGE (n)-[:OF_KIND]->(k);
 MATCH (n:IncomeGroup), (k:Kind {label: 'IncomeGroup'}) MERGE (n)-[:OF_KIND]->(k);
 MATCH (n:LanguageFamily), (k:Kind {label: 'LanguageFamily'}) MERGE (n)-[:OF_KIND]->(k);
 MATCH (n:LanguageBranch), (k:Kind {label: 'LanguageBranch'}) MERGE (n)-[:OF_KIND]->(k);
