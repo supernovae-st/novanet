@@ -11,8 +11,112 @@
 
 QR Code AI is a platform with **2 main products** (QR Code, Smart Link) that share common infrastructure (Short Link, Analytics). This document defines the complete Entity structure for NovaNet knowledge graph.
 
-**Total Entities**: 56 (from concepts-detailed.md)
-**Core MVP Entities**: ~35 (defined below)
+**Total Entities**: ~279 across 13 types
+**Semantic Arcs**: ~825 (VARIANT_OF, REQUIRES, ENABLES, etc.)
+
+---
+
+## Research-Based Design Decisions (v10.7)
+
+Based on deep research (Perplexity + Context7) on knowledge graph ontology best practices,
+GraphRAG patterns, and Neo4j relationship modeling.
+
+### Decision 1: Typed Relationships (not SEMANTIC_LINK)
+
+**Choice**: Use specific relationship types instead of generic SEMANTIC_LINK container.
+
+```cypher
+# ❌ OLD: Generic container
+(a)-[:SEMANTIC_LINK {type: "variant_of", strength: 0.85}]->(b)
+
+# ✅ NEW: Typed relationships
+(a)-[:VARIANT_OF {strength: 0.85}]->(b)
+```
+
+**Relationship Types** (by category):
+
+| Category | Types |
+|----------|-------|
+| Hierarchical | `TYPE_OF`, `VARIANT_OF`, `SUBTOPIC_OF`, `INCLUDES` |
+| Dependency | `REQUIRES`, `ENABLES`, `DEPENDS_ON` |
+| Associative | `RELATED_TO`, `SIMILAR_TO`, `CONTRASTS_WITH` |
+| Functional | `USED_FOR`, `PART_OF`, `IS_ACTION_ON` |
+| Identity | `SAME_AS`, `ALIAS_OF` |
+| Cross-realm | `POPULAR_IN` (Entity → GeoRegion) |
+
+**Rationale**: GraphRAG traversal benefits from typed edges; meta-graph visibility; clearer semantics.
+
+### Decision 2: Property Name = `strength`
+
+**Choice**: Use `strength` (not `weight`, `relevance`, or `confidence`).
+
+```cypher
+(a)-[:VARIANT_OF {strength: 0.85}]->(b)
+```
+
+**Rationale**: Aligns with GraphRAG convention (`relationship_strength`); more expressive than technical "weight".
+
+### Decision 3: Add `entity_summary` to Entity Schema
+
+**Choice**: Add `entity_summary` property for LLM context optimization.
+
+```yaml
+# Entity properties
+entity_summary:
+  type: string
+  required: false
+  description: "2-3 sentence summary for LLM context loading"
+```
+
+**Rationale**: GraphRAG requires `entity_description` for effective context. Our existing
+`description` (short) + `llm_context` (structured) + new `entity_summary` (prose) covers all needs.
+
+### Decision 4: No Description on Individual Arcs
+
+**Choice**: The relationship TYPE carries the semantics; no `description` property on each arc.
+
+```cypher
+# Sufficient - type is self-documenting
+(a)-[:VARIANT_OF {strength: 0.85}]->(b)
+
+# Not needed - 825 descriptions would be overkill
+(a)-[:VARIANT_OF {strength: 0.85, description: "Custom QR codes are..."}]->(b)
+```
+
+**Rationale**: With typed relationships, the semantics are clear. Adding descriptions to 825 arcs
+would be maintenance burden with little value.
+
+### Decision 5: Hybrid Key Format (YAML vs Neo4j)
+
+**Choice**: Type-prefixed keys in YAML for readability, flat keys in Neo4j for stability.
+
+```yaml
+# YAML arc files (human-readable, self-documenting)
+arcs:
+  - from: thing:custom-qr-code
+    to: thing:qr-code
+    type: VARIANT_OF
+    strength: 0.85
+```
+
+```cypher
+// Neo4j (stable flat keys)
+MATCH (a:Entity {key: 'custom-qr-code', entity_type: 'THING'})
+MATCH (b:Entity {key: 'qr-code', entity_type: 'THING'})
+MERGE (a)-[:VARIANT_OF {strength: 0.85}]->(b)
+```
+
+**Generator Validation**:
+1. Parse `thing:custom-qr-code` → `(type: "thing", key: "custom-qr-code")`
+2. Lookup Entity with `key = "custom-qr-code"`
+3. Verify `entity.entity_type == "THING"`
+4. If mismatch → ERROR
+
+**Rationale**:
+- YAML is self-documenting (you see the relationship nature immediately)
+- Neo4j keys are stable (type changes don't break keys)
+- URLs can use flat keys: `/topics/qr-code`
+- Cross-validation ensures consistency
 
 ---
 
