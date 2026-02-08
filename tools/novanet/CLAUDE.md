@@ -209,7 +209,7 @@ src/
 - **YAML-first architecture**: Each Kind YAML has explicit `realm:` and `layer:` fields (source of truth)
   - Path validation: file must be at `models/node-kinds/{realm}/{layer}/{name}.yaml`
   - Generators read realm/layer from YAML content, validate against path
-  - v11.0: 2 realms (global, tenant), 9 layers (2 global + 7 tenant), 64 node types total
+  - v11.0: 2 realms (global, tenant), 9 layers (2 global + 7 tenant), 76 node types total
 - **Icons source of truth (v11.0)**: `visual-encoding.yaml` → `icons:` section
   - Dual format: `web` (Lucide for Studio) + `terminal` (Unicode for TUI)
   - Categories: realms, layers, traits, arc_families, states, navigation, quality, modes
