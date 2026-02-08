@@ -1,0 +1,309 @@
+# Phase 5: Mediums — 20 Entities
+# QR Code AI Entity Data for NovaNet
+# v11 Schema with Typed Semantic Arcs
+
+project: qrcode-ai
+phase: 5
+name: Mediums
+description: Physical and digital mediums where QR codes are placed (print, product, digital)
+
+entities:
+  # =============================================================================
+  # PRINT MEDIUMS (10)
+  # =============================================================================
+  - key: business-cards
+    type: MEDIUM
+    display_name: Business Cards
+    description: Professional contact cards
+    entity_summary: |
+      Business cards are traditional print mediums for professional networking.
+      QR codes on business cards link to digital profiles, vCards, or portfolios.
+      Compact size requires small, high-contrast QR codes.
+
+  - key: flyers
+    type: MEDIUM
+    display_name: Flyers
+    description: Promotional flyers
+    entity_summary: |
+      Flyers are single-sheet printed materials for promotions and announcements.
+      QR codes on flyers link to landing pages, coupons, or event registration.
+      Allow larger QR codes with more design freedom.
+
+  - key: posters-billboards
+    type: MEDIUM
+    display_name: Posters & Billboards
+    description: Large format displays
+    entity_summary: |
+      Posters and billboards are large-format print for high-visibility advertising.
+      QR codes must be scannable from distance - require high contrast and size.
+      Often link to campaigns, apps, or promotional content.
+
+  - key: brochures
+    type: MEDIUM
+    display_name: Brochures
+    description: Folded informational materials
+    entity_summary: |
+      Brochures are folded print materials for detailed information.
+      QR codes can link to videos, downloads, or interactive content that
+      expands on printed information.
+
+  - key: catalogs
+    type: MEDIUM
+    display_name: Catalogs
+    description: Product catalogs
+    entity_summary: |
+      Catalogs showcase products with detailed descriptions and images.
+      QR codes next to products link directly to e-commerce pages for
+      instant purchasing or additional product information.
+
+  - key: magazines
+    type: MEDIUM
+    display_name: Magazines
+    description: Print publications
+    entity_summary: |
+      Magazines are periodic print publications. QR codes in magazines
+      link to interactive content, videos, or exclusive online offers.
+      Higher-quality paper allows detailed QR code designs.
+
+  - key: newspapers
+    type: MEDIUM
+    display_name: Newspapers
+    description: News publications
+    entity_summary: |
+      Newspapers are daily or weekly news publications. QR codes link to
+      full articles, video reports, or subscription pages. Lower paper
+      quality requires simpler, higher-contrast QR codes.
+
+  - key: direct-mail
+    type: MEDIUM
+    display_name: Direct Mail
+    description: Mailed marketing materials
+    entity_summary: |
+      Direct mail includes postcards, letters, and packages sent to recipients.
+      QR codes enable tracking of physical mail campaigns and link to
+      personalized landing pages or special offers.
+
+  - key: stickers-labels
+    type: MEDIUM
+    display_name: Stickers & Labels
+    description: Adhesive prints
+    entity_summary: |
+      Stickers and labels are adhesive materials applied to surfaces.
+      QR codes on stickers can appear anywhere - products, windows, equipment.
+      Compact format requires clear, simple QR designs.
+
+  - key: banners
+    type: MEDIUM
+    display_name: Banners
+    description: Event and trade show banners
+    entity_summary: |
+      Banners are large fabric or vinyl displays for events and trade shows.
+      QR codes must be visible from distance and scannable in busy environments.
+      Often link to contact forms, catalogs, or lead capture.
+
+  # =============================================================================
+  # PRODUCT MEDIUMS (6)
+  # =============================================================================
+  - key: product-packaging
+    type: MEDIUM
+    display_name: Product Packaging
+    description: Product boxes and containers
+    entity_summary: |
+      Product packaging includes boxes, bottles, and containers holding products.
+      QR codes provide access to user manuals, registration, authenticity
+      verification, and promotional content.
+
+  - key: product-labels
+    type: MEDIUM
+    display_name: Product Labels
+    description: Applied product labels
+    entity_summary: |
+      Product labels are adhesive tags applied to products. QR codes on labels
+      provide product information, nutritional data, or traceability for food
+      and pharmaceutical industries.
+
+  - key: receipts
+    type: MEDIUM
+    display_name: Receipts
+    description: Transaction receipts
+    entity_summary: |
+      Receipts are proof of purchase documents. QR codes on receipts link to
+      digital receipts, loyalty programs, feedback forms, or warranty registration.
+
+  - key: table-tents
+    type: MEDIUM
+    display_name: Table Tents
+    description: Restaurant table displays
+    entity_summary: |
+      Table tents are folded standing displays on restaurant tables.
+      QR codes provide access to digital menus, ordering, payment, or feedback.
+      Common in the post-COVID contactless dining trend.
+
+  - key: menus-printed
+    type: MEDIUM
+    display_name: Printed Menus
+    description: Physical restaurant menus
+    entity_summary: |
+      Printed menus are traditional paper or laminated restaurant menus.
+      QR codes link to digital versions, allergen info, or ordering systems
+      while maintaining traditional dining experience.
+
+  - key: tickets-physical
+    type: MEDIUM
+    display_name: Physical Tickets
+    description: Event tickets
+    entity_summary: |
+      Physical tickets provide entry to events, transportation, or venues.
+      QR codes enable quick scanning for entry and can link to event
+      information, maps, or schedules.
+
+  # =============================================================================
+  # DIGITAL MEDIUMS (4)
+  # =============================================================================
+  - key: emails
+    type: MEDIUM
+    display_name: Emails
+    description: Email signatures and campaigns
+    entity_summary: |
+      Emails are digital messages for communication and marketing.
+      QR codes in email signatures or campaigns enable quick actions
+      like adding contacts, downloading apps, or accessing exclusive content.
+
+  - key: presentations
+    type: MEDIUM
+    display_name: Presentations
+    description: Slides and decks
+    entity_summary: |
+      Presentations are slide-based documents for meetings and conferences.
+      QR codes in slides provide quick access to resources, polls,
+      downloads, or follow-up materials during live presentations.
+
+  - key: documents
+    type: MEDIUM
+    display_name: Documents
+    description: PDFs, reports, and contracts
+    entity_summary: |
+      Documents include PDFs, reports, and contracts. QR codes in documents
+      link to related resources, verification systems, or interactive content
+      that complements printed or digital documents.
+
+  - key: websites
+    type: MEDIUM
+    display_name: Websites
+    description: Web pages
+    entity_summary: |
+      Websites display QR codes for cross-device experiences.
+      Desktop users can scan to continue on mobile, download apps,
+      or save content for offline access.
+
+# =============================================================================
+# SEMANTIC ARCS (~35 connections)
+# =============================================================================
+
+arcs:
+  # ---------------------------------------------------------------------------
+  # PRINT → FRAME CONNECTIONS
+  # ---------------------------------------------------------------------------
+  - from: business-cards
+    to: qr-code-business-card
+    type: SIMILAR_TO
+    strength: 0.85
+
+  - from: business-cards
+    to: qr-code-vcard
+    type: ENABLES
+    strength: 0.70
+
+  - from: flyers
+    to: qr-code-flyer
+    type: SIMILAR_TO
+    strength: 0.85
+
+  - from: posters-billboards
+    to: qr-code-poster
+    type: SIMILAR_TO
+    strength: 0.85
+
+  - from: table-tents
+    to: qr-code-table-tent
+    type: SIMILAR_TO
+    strength: 0.85
+
+  - from: product-packaging
+    to: qr-code-packaging-label
+    type: SIMILAR_TO
+    strength: 0.85
+
+  - from: emails
+    to: qr-code-email-signature
+    type: SIMILAR_TO
+    strength: 0.85
+
+  # ---------------------------------------------------------------------------
+  # PRINT MEDIUM SIMILARITIES
+  # ---------------------------------------------------------------------------
+  - from: flyers
+    to: brochures
+    type: SIMILAR_TO
+    strength: 0.70
+
+  - from: posters-billboards
+    to: banners
+    type: SIMILAR_TO
+    strength: 0.70
+
+  - from: magazines
+    to: newspapers
+    type: SIMILAR_TO
+    strength: 0.65
+
+  - from: catalogs
+    to: brochures
+    type: SIMILAR_TO
+    strength: 0.60
+
+  - from: stickers-labels
+    to: product-labels
+    type: SIMILAR_TO
+    strength: 0.80
+
+  - from: menus-printed
+    to: table-tents
+    type: SIMILAR_TO
+    strength: 0.65
+
+  # ---------------------------------------------------------------------------
+  # DIGITAL MEDIUM SIMILARITIES
+  # ---------------------------------------------------------------------------
+  - from: presentations
+    to: documents
+    type: SIMILAR_TO
+    strength: 0.60
+
+  - from: emails
+    to: websites
+    type: SIMILAR_TO
+    strength: 0.50
+
+  # ---------------------------------------------------------------------------
+  # MEDIUM → CONTENT TYPE CONNECTIONS
+  # ---------------------------------------------------------------------------
+  - from: product-packaging
+    to: barcode
+    type: ENABLES
+    strength: 0.80
+
+  - from: product-labels
+    to: barcode
+    type: ENABLES
+    strength: 0.80
+
+  - from: tickets-physical
+    to: qr-code-event
+    type: ENABLES
+    strength: 0.75
+
+  - from: receipts
+    to: qr-code-url
+    type: ENABLES
+    strength: 0.65
