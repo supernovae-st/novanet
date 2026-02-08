@@ -1,0 +1,42 @@
+# packages/core/models/arc-kinds/semantic/read-by.yaml
+# ArcKind: READ_BY - Entity is read by a tool
+# v11.0: Inverse of READS arc
+
+arc:
+  name: READ_BY
+  family: semantic
+  scope: intra_realm
+  temperature_threshold: 0.15
+
+  source: Entity
+  target: Entity
+  cardinality: many_to_many
+  is_self_referential: false
+
+  properties:
+    - name: strength
+      type: float
+      required: false
+      default: 0.9
+      description: "Read strength (0.0-1.0)"
+
+    - name: temperature
+      type: float
+      required: false
+      default: 0.85
+      description: "Spreading activation weight"
+
+    - name: read_type
+      type: string
+      required: false
+      enum: [scan, decode, parse, extract, verify]
+      description: "Type of read operation"
+
+  inverse: READS
+
+  llm_context: |
+    Inverse of READS: THING is read/scanned by TOOL.
+    Use for qr-code READ_BY qr-code-scanner, barcode READ_BY barcode-scanner.
+    Enables traversal from entity to tools that can read it.
+
+  cypher_pattern: "(Entity)-[:READ_BY {strength, temperature, read_type}]->(Entity)"
