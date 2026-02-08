@@ -124,7 +124,7 @@ Categories: realms, layers, traits, arc_families, states, navigation, quality, m
 │  Containers (6): TermSet, ExpressionSet, PatternSet,                        │
 │                  CultureSet, TabooSet, AudienceSet                          │
 │  Atoms (6):      Term, Expression, Pattern, CultureRef, Taboo, AudienceTrait│
-│  Total:          64 nodes, 123 arcs                                         │
+│  Total:          76 nodes, 123 arcs                                         │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
