@@ -33,6 +33,12 @@ pub fn buffer_to_string(buffer: &Buffer) -> String {
     output
 }
 
+/// Render a widget and return as snapshot-ready string.
+pub fn render_to_snapshot<W: Widget>(widget: W, width: u16, height: u16) -> String {
+    let buffer = render_widget(widget, width, height);
+    buffer_to_string(&buffer)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -51,5 +57,13 @@ mod tests {
         let buffer = render_widget(widget, 5, 1);
         let output = buffer_to_string(&buffer);
         assert!(output.contains("AB"));
+    }
+
+    #[test]
+    fn test_render_to_snapshot() {
+        let widget = ratatui::widgets::Paragraph::new("Test");
+        let output = render_to_snapshot(widget, 10, 1);
+        assert!(output.contains("Test"));
+        assert!(output.ends_with('\n'));
     }
 }
