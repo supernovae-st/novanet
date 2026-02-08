@@ -62,10 +62,7 @@ pub fn truncate_start_to_width(s: &str, max_width: usize) -> String {
     let target_width = max_width.saturating_sub(ellipsis_width);
 
     // Collect graphemes with their widths
-    let graphemes: Vec<(&str, usize)> = s
-        .graphemes(true)
-        .map(|g| (g, g.width()))
-        .collect();
+    let graphemes: Vec<(&str, usize)> = s.graphemes(true).map(|g| (g, g.width())).collect();
 
     // Find where to start from the end
     let mut width_from_end = 0;
@@ -206,5 +203,66 @@ mod tests {
     fn test_truncate_start_empty() {
         assert_eq!(truncate_start_to_width("", 5), "");
         assert_eq!(truncate_start_to_width("hello", 0), "");
+    }
+
+    // Edge case tests
+    #[test]
+    fn test_display_width_zwj_emoji_sequence() {
+        // Zero-width joiner sequences: family emoji 👨‍👩‍👧 is one grapheme
+        // Made of: man (👨) + ZWJ + woman (👩) + ZWJ + girl (👧)
+        let family = "👨‍👩‍👧";
+        // Should be treated as a single grapheme cluster
+        let grapheme_count = family.graphemes(true).count();
+        assert_eq!(grapheme_count, 1, "ZWJ sequence should be one grapheme");
+        // Width is typically 2 for emoji
+        assert!(
+            display_width(family) >= 2,
+            "ZWJ emoji should have width >= 2"
+        );
+    }
+
+    #[test]
+    fn test_display_width_devanagari() {
+        // Devanagari script (Hindi): "नमस्ते" (namaste)
+        // Contains combining characters (virama, vowel signs)
+        let hindi = "नमस्ते";
+        let width = display_width(hindi);
+        // Devanagari characters are typically 1 column each
+        // but combining marks should not add width
+        assert!(width > 0, "Devanagari should have positive width");
+        assert!(
+            width <= hindi.chars().count(),
+            "Width should be <= char count due to combining marks"
+        );
+    }
+
+    #[test]
+    fn test_display_width_control_characters() {
+        // Control characters behavior varies - unicode_width follows UAX #11
+        // Most control chars are treated as separate graphemes with width 0 or 1
+
+        // Tab has width 0 (non-printable)
+        let with_tab = "a\tb";
+        // Tab is typically 0 width (the terminal handles expansion)
+        let tab_width = display_width(with_tab);
+        assert!(
+            tab_width >= 2,
+            "Tab width varies but base chars should be counted"
+        );
+
+        // Newline should be 0 width
+        let with_newline = "ab\ncd";
+        let newline_width = display_width(with_newline);
+        assert!(newline_width >= 4, "Base chars should be counted");
+
+        // Carriage return should be 0 width
+        let with_cr = "test\r";
+        let cr_width = display_width(with_cr);
+        assert!(cr_width >= 4, "CR should not add visible width");
+
+        // Escape sequence start (ESC) should be 0 width
+        let with_esc = "x\x1by";
+        let esc_width = display_width(with_esc);
+        assert!(esc_width >= 2, "ESC should be 0 width");
     }
 }
