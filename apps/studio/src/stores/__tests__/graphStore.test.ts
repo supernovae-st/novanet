@@ -17,7 +17,7 @@ const createNode = (id: string, type: NodeType = 'Entity'): GraphNode => ({
 });
 
 // Helper to create test edges
-const createEdge = (id: string, source: string, target: string, type: RelationType = 'HAS_L10N'): GraphEdge => ({
+const createEdge = (id: string, source: string, target: string, type: RelationType = 'HAS_CONTENT'): GraphEdge => ({
   id,
   source,
   target,
@@ -305,7 +305,7 @@ describe('graphStore', () => {
     it('should return node with incoming and outgoing relations', () => {
       const nodes = [createNode('1'), createNode('2'), createNode('3')];
       const edges = [
-        createEdge('e1', '1', '2', 'HAS_L10N'),
+        createEdge('e1', '1', '2', 'HAS_CONTENT'),
         createEdge('e2', '2', '3', 'HAS_PAGE'),
       ];
       useGraphStore.getState().setGraphData({ nodes, edges });
@@ -315,7 +315,7 @@ describe('graphStore', () => {
       expect(detail).not.toBeNull();
       expect(detail?.node.id).toBe('2');
       expect(detail?.relations.incoming.length).toBe(1);
-      expect(detail?.relations.incoming[0].type).toBe('HAS_L10N');
+      expect(detail?.relations.incoming[0].type).toBe('HAS_CONTENT');
       expect(detail?.relations.incoming[0].node.id).toBe('1');
       expect(detail?.relations.outgoing.length).toBe(1);
       expect(detail?.relations.outgoing[0].type).toBe('HAS_PAGE');

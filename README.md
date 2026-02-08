@@ -243,13 +243,13 @@ See [`packages/core/models/taxonomy.yaml`](packages/core/models/taxonomy.yaml) f
 │ │                │  │   [Project]──[Page]──[Block]     │  │ layer: struc │ │
 │ │                │  │          │     │                 │  │              │ │
 │ │ Layer          │  │          ▼     ▼                 │  │ Relations:   │ │
-│ │ ☑ Foundation   │  │   [Entity]──[EntityL10n]         │  │ → 3 blocks   │ │
+│ │ ☑ Foundation   │  │   [Entity]──[EntityContent]      │  │ → 3 blocks   │ │
 │ │ ☑ Structure    │  │          │                       │  │ → 1 project  │ │
 │ │ ☑ Semantic     │  │          ▼                       │  │              │ │
-│ │ ...            │  │   [BlockL10n]                    │  │ [Copy JSON]  │ │
+│ │ ...            │  │   [BlockGenerated]               │  │ [Copy JSON]  │ │
 │ └────────────────┘  └──────────────────────────────────┘  └──────────────┘ │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│  Mode: Data  │  46 nodes  │  72 arcs  │  Zoom: 100%  │  Locale: fr-FR │
+│  Mode: Data  │  64 nodes  │  116 arcs  │  Zoom: 100%  │  Locale: fr-FR │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 *Interactive 2D graph visualization with AI-powered queries (⌘J)*

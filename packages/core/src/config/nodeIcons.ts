@@ -56,8 +56,9 @@ export const NODE_ICONS: Record<NodeType, string> = {
   GEOAnswer: '💬',
   GEOMetrics: '📊',
 
-  // TENANT — config (1)
+  // TENANT — config (2)
   Organization: '🏢',
+  Tenant: '🏠',
 
   // TENANT — foundation (3)
   Project: '📦',

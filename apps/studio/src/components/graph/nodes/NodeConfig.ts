@@ -109,8 +109,9 @@ export const NODE_SIZES: Record<NodeType, NodeSize> = {
   // ═══════════════════════════════════════════════════════════════════════════
   // TENANT REALM (23 nodes) — v10.6: merged organization + project
   // ═══════════════════════════════════════════════════════════════════════════
-  // config (1)
+  // config (2)
   Organization: { width: 280, height: 140 },
+  Tenant: { width: 280, height: 140 },
   // foundation (3)
   Project: { width: 280, height: 140 },
   BrandIdentity: { width: 220, height: 110 },
@@ -121,9 +122,9 @@ export const NODE_SIZES: Record<NodeType, NodeSize> = {
   Block: { width: 200, height: 100 },
   ContentSlot: { width: 180, height: 90 },
 
-  // semantic (4) — v10.5: Entity/EntityL10n here
+  // semantic (4) — v10.5: Entity/EntityContent here
   Entity: { width: 240, height: 120 },
-  EntityL10n: { width: 200, height: 100 },
+  EntityContent: { width: 200, height: 100 },
   AudiencePersona: { width: 200, height: 100 },
   ChannelSurface: { width: 200, height: 100 },
 
@@ -137,8 +138,8 @@ export const NODE_SIZES: Record<NodeType, NodeSize> = {
   PromptArtifact: { width: 200, height: 100 },
 
   // output (5)
-  PageL10n: { width: 220, height: 110 },
-  BlockL10n: { width: 200, height: 100 },
+  PageGenerated: { width: 220, height: 110 },
+  BlockGenerated: { width: 200, height: 100 },
   GenerationJob: { width: 200, height: 100 },
   OutputArtifact: { width: 180, height: 90 },
   EvaluationSignal: { width: 160, height: 80 },
@@ -416,12 +417,18 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
   // ═══════════════════════════════════════════════════════════════════════════
   // TENANT REALM (23 nodes) — v10.6: merged organization + project
   // ═══════════════════════════════════════════════════════════════════════════
-  // config (1) — Sky blue tone
+  // config (2) — Sky blue tone
   Organization: {
     primary: '#0ea5e9',
     secondary: '#38bdf8',
     tertiary: '#7dd3fc',
     glow: '#0ea5e940',
+  },
+  Tenant: {
+    primary: '#0284c7',
+    secondary: '#0ea5e9',
+    tertiary: '#38bdf8',
+    glow: '#0284c740',
   },
   // foundation (3) — Violet tones
   Project: {
@@ -470,7 +477,7 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
     tertiary: '#fbbf24',
     glow: '#f59e0b40',
   },
-  EntityL10n: {
+  EntityContent: {
     primary: '#fbbf24',
     secondary: '#f59e0b',
     tertiary: '#fcd34d',
@@ -534,13 +541,13 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
   },
 
   // output (5) — Orange/Red tones
-  PageL10n: {
+  PageGenerated: {
     primary: '#f97316',
     secondary: '#ef4444',
     tertiary: '#fb923c',
     glow: '#f9731640',
   },
-  BlockL10n: {
+  BlockGenerated: {
     primary: '#fb923c',
     secondary: '#f97316',
     tertiary: '#fdba74',

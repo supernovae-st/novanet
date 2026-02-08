@@ -60,8 +60,8 @@ const RELATION_ALIAS_MAP: Record<string, string> = {
   HAS_PROMPT: 'prompt',
   HAS_RULES: 'rules',
   USES_ENTITY: 'entity',
-  HAS_L10N: 'l10n',
-  HAS_OUTPUT: 'output',
+  HAS_CONTENT: 'content',
+  HAS_GENERATED: 'generated',
   // v10 knowledge arcs (tiered model)
   HAS_FORMATTING: 'formatting',
   HAS_SLUGIFICATION: 'slugification',
@@ -88,8 +88,8 @@ const RELATION_TARGET_TYPE_MAP: Record<string, string> = {
   HAS_PROMPT: 'PagePrompt',
   HAS_RULES: 'BlockRules',
   USES_ENTITY: 'Entity',
-  HAS_L10N: 'EntityL10n',
-  HAS_OUTPUT: 'PageL10n',
+  HAS_CONTENT: 'EntityContent',
+  HAS_GENERATED: 'PageGenerated',
   // v10 knowledge nodes (tiered model)
   HAS_FORMATTING: 'Formatting',
   HAS_SLUGIFICATION: 'Slugification',
@@ -630,7 +630,7 @@ export const VIEW_PRESETS: ViewPreset[] = [
     shortcut: '1',
     filter: () => NovaNetFilter.create()
       .byLayer('foundation', 'structure', 'semantic')
-      .excludeTypes('EntityL10n'),
+      .excludeTypes('EntityContent'),
   },
   {
     id: 'generation-chain',
@@ -639,7 +639,7 @@ export const VIEW_PRESETS: ViewPreset[] = [
     icon: '🔗',
     shortcut: '2',
     filter: () => NovaNetFilter.create()
-      .byTypes('Entity', 'EntityL10n', 'PageL10n', 'BlockL10n')
+      .byTypes('Entity', 'EntityContent', 'PageGenerated', 'BlockGenerated')
       .byLayer('instruction', 'output'),
   },
   {
@@ -658,7 +658,7 @@ export const VIEW_PRESETS: ViewPreset[] = [
     icon: '🕸️',
     shortcut: '4',
     filter: () => NovaNetFilter.create()
-      .byTypes('Entity', 'EntityL10n', 'ExpressionSet'),
+      .byTypes('Entity', 'EntityContent', 'ExpressionSet'),
   },
   {
     id: 'prompts-rules',
@@ -699,7 +699,7 @@ export const VIEW_PRESETS: ViewPreset[] = [
     shortcut: '8',
     filter: () => NovaNetFilter.create()
       .byTypes(
-        'ProjectL10n', 'EntityL10n', 'PageL10n', 'BlockL10n',
+        'ProjectL10n', 'EntityContent', 'PageGenerated', 'BlockGenerated',
         'SEOKeyword',
       ),
   },
