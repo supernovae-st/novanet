@@ -496,14 +496,14 @@ node:
         ); // v10.9: was 6, now 8
         assert_eq!(count(NodeTrait::Job), 2, "job count");
 
-        // v10.9: Verify realm distribution (2 realms)
+        // v10.10: Verify realm distribution (SEO moved to tenant)
         let realm_count = |r: &str| nodes.iter().filter(|n| n.realm == r).count();
         assert_eq!(
             realm_count("global"),
-            40,
-            "global realm count (13 config + 18 locale-knowledge + 9 SEO)"
+            31,
+            "global realm count (13 config + 18 locale-knowledge)"
         );
-        assert_eq!(realm_count("tenant"), 24, "tenant realm count");
+        assert_eq!(realm_count("tenant"), 33, "tenant realm count (+ 9 SEO)");
 
         // Spot-check known nodes
         let project = nodes.iter().find(|n| n.def.name == "Project").unwrap();

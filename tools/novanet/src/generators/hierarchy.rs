@@ -400,17 +400,17 @@ mod tests {
         // Check key realm/layer combinations
         assert!(output.contains("getNodeTypesByRealmAndLayer('global', 'config')"));
         assert!(output.contains("getNodeTypesByRealmAndLayer('global', 'locale-knowledge')"));
-        assert!(output.contains("getNodeTypesByRealmAndLayer('global', 'seo')"));
         assert!(output.contains("getNodeTypesByRealmAndLayer('tenant', 'config')"));
         assert!(output.contains("getNodeTypesByRealmAndLayer('tenant', 'semantic')"));
+        assert!(output.contains("getNodeTypesByRealmAndLayer('tenant', 'seo')")); // v10.10: SEO moved to tenant
         assert!(output.contains("getNodeTypesByRealmAndLayer('tenant', 'foundation')"));
         assert!(output.contains("getNodeTypesByRealmAndLayer('tenant', 'structure')"));
         assert!(output.contains("getNodeTypesByRealmAndLayer('tenant', 'instruction')"));
         assert!(output.contains("getNodeTypesByRealmAndLayer('tenant', 'output')"));
 
-        // Realm sections (v10.6: 2 realms)
-        assert!(output.contains("GLOBAL (3 layers)")); // config, locale-knowledge, seo
-        assert!(output.contains("TENANT (6 layers)")); // config, semantic, foundation, structure, instruction, output
+        // Realm sections (v10.10: SEO moved to tenant)
+        assert!(output.contains("GLOBAL (2 layers)")); // config, locale-knowledge
+        assert!(output.contains("TENANT (7 layers)")); // config, semantic, seo, foundation, structure, instruction, output
 
         // Total
         assert!(output.contains("2 Realms (9 layers)")); // v10.6: 2 realms

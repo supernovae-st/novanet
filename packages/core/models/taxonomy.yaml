@@ -62,16 +62,6 @@ node_realms:
           (Term, Expression, Pattern, etc.). Cultural and linguistic
           expertise that makes content feel NATIVE rather than translated.
 
-      - key: seo
-        display_name: SEO Intelligence
-        emoji: "🔍"
-        color: "#ec4899"
-        llm_context: |
-          Search engine optimization data. Keywords with their localized
-          forms, search volume metrics, and mining run history. Used to
-          inject relevant keywords into generated content for organic
-          search visibility.
-
   - key: tenant
     display_name: Tenant
     emoji: "🏢"
@@ -101,6 +91,16 @@ node_realms:
           Entity lives at Organization level but can be referenced by 0-N
           projects via USES_ENTITY. Entities link via SEMANTIC_LINK for
           spreading activation during generation.
+
+      - key: seo
+        display_name: SEO Intelligence
+        emoji: "🔍"
+        color: "#ec4899"
+        llm_context: |
+          Search engine optimization data per tenant. Keywords, comparisons,
+          prepositions, questions, and GEO monitoring. Each tenant manages its
+          own SEO strategy. Keywords link to Entity via EXPRESSES, content
+          targets keywords via TARGETS.
 
       - key: foundation
         display_name: Foundation

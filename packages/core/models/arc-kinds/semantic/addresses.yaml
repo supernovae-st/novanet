@@ -8,7 +8,7 @@
 arc:
   name: ADDRESSES
   family: semantic
-  scope: cross_realm
+  scope: intra_realm
   temperature_threshold: 0.5
 
   source: PageGenerated

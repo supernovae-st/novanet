@@ -5,7 +5,7 @@
 arc:
   name: IN_CULTURAL_SUBREALM
   family: localization
-  scope: cross_realm
+  scope: intra_realm
 
   source: Locale
   target: CulturalSubRealm

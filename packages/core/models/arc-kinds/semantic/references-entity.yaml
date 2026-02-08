@@ -4,7 +4,7 @@
 arc:
   name: REFERENCES_ENTITY
   family: semantic
-  scope: cross_realm
+  scope: intra_realm
   temperature_threshold: 0.6  # v10.3: Instruction→entity reference (moderate-high priority)
 
   source: BlockInstruction

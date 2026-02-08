@@ -52,7 +52,7 @@ export const REALM_DISPLAY_NAMES: Record<RealmKey, string> = {
 // LAYER COLORS (8)
 // =============================================================================
 
-export type LayerKey = 'config' | 'locale-knowledge' | 'seo' | 'semantic' | 'foundation' | 'structure' | 'instruction' | 'output';
+export type LayerKey = 'config' | 'locale-knowledge' | 'semantic' | 'seo' | 'foundation' | 'structure' | 'instruction' | 'output';
 
 export const LAYER_COLORS: Record<LayerKey, ColorTokens> = {
   'config': {
@@ -69,19 +69,19 @@ export const LAYER_COLORS: Record<LayerKey, ColorTokens> = {
     border: 'border-[#8b5cf6]/30',
     bgSolid: 'bg-[#8b5cf6]',
   },
-  'seo': {
-    color: '#ec4899',
-    bg: 'bg-[#ec4899]/20',
-    text: 'text-[#ec4899]',
-    border: 'border-[#ec4899]/30',
-    bgSolid: 'bg-[#ec4899]',
-  },
   'semantic': {
     color: '#f97316',
     bg: 'bg-[#f97316]/20',
     text: 'text-[#f97316]',
     border: 'border-[#f97316]/30',
     bgSolid: 'bg-[#f97316]',
+  },
+  'seo': {
+    color: '#ec4899',
+    bg: 'bg-[#ec4899]/20',
+    text: 'text-[#ec4899]',
+    border: 'border-[#ec4899]/30',
+    bgSolid: 'bg-[#ec4899]',
   },
   'foundation': {
     color: '#3b82f6',
@@ -116,8 +116,8 @@ export const LAYER_COLORS: Record<LayerKey, ColorTokens> = {
 export const LAYER_DISPLAY_NAMES: Record<LayerKey, string> = {
   'config': 'Configuration',
   'locale-knowledge': 'Locale Knowledge',
-  'seo': 'SEO Intelligence',
   'semantic': 'Semantic Layer',
+  'seo': 'SEO Intelligence',
   'foundation': 'Foundation',
   'structure': 'Structure',
   'instruction': 'Instructions',

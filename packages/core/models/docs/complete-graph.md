@@ -73,17 +73,6 @@ flowchart TB
       Term["🟣 Term"]
       TermSet["🟣 TermSet"]
     end
-    subgraph GLOBAL_seo["SEO Intelligence"]
-      GEOAnswer["⚪ GEOAnswer"]
-      GEOMetrics["⚪ GEOMetrics"]
-      GEOQuery["🟣 GEOQuery"]
-      SEOComparison["🟣 SEOComparison"]
-      SEOKeyword["🟣 SEOKeyword"]
-      SEOKeywordMetrics["⚪ SEOKeywordMetrics"]
-      SEOMiningRun["⚙️ SEOMiningRun"]
-      SEOPreposition["🟣 SEOPreposition"]
-      SEOQuestion["🟣 SEOQuestion"]
-    end
   end
 
   subgraph TENANT_REALM["🏢 TENANT"]
@@ -97,6 +86,17 @@ flowchart TB
       ChannelSurface["🔵 ChannelSurface"]
       Entity["🔵 Entity"]
       EntityContent["🟢 EntityContent"]
+    end
+    subgraph TENANT_seo["SEO Intelligence"]
+      GEOAnswer["⚪ GEOAnswer"]
+      GEOMetrics["⚪ GEOMetrics"]
+      GEOQuery["🟣 GEOQuery"]
+      SEOComparison["🟣 SEOComparison"]
+      SEOKeyword["🟣 SEOKeyword"]
+      SEOKeywordMetrics["⚪ SEOKeywordMetrics"]
+      SEOMiningRun["⚙️ SEOMiningRun"]
+      SEOPreposition["🟣 SEOPreposition"]
+      SEOQuestion["🟣 SEOQuestion"]
     end
     subgraph TENANT_foundation["Foundation"]
       BrandIdentity["🔵 BrandIdentity"]

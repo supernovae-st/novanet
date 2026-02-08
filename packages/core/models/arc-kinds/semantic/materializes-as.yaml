@@ -4,7 +4,7 @@
 arc:
   name: MATERIALIZES_AS
   family: semantic
-  scope: cross_realm
+  scope: intra_realm
   temperature_threshold: 0.7  # v10.3: Entity→page materialization (high priority)
 
   source: Entity

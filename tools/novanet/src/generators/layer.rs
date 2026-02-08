@@ -423,9 +423,9 @@ mod tests {
             "should mention 64 node types"
         );
 
-        // v10.9: Realm node counts (2 realms)
-        assert!(output.contains("GLOBAL REALM (40 nodes)")); // config (13) + locale-knowledge (18) + seo (9)
-        assert!(output.contains("TENANT REALM (24 nodes)")); // config + semantic + foundation + structure + instruction + output
+        // v10.10: Realm node counts (SEO moved to tenant)
+        assert!(output.contains("GLOBAL REALM (31 nodes)")); // config (13) + locale-knowledge (18)
+        assert!(output.contains("TENANT REALM (33 nodes)")); // config + semantic + seo (9) + foundation + structure + instruction + output
 
         // 9 layers present (v10.6: config in both realms but deduplicated)
         for layer in [

@@ -76,22 +76,6 @@ ON MATCH SET
 
 MATCH (r:Realm {key: 'global'}), (l:Layer {key: 'locale-knowledge'})
 MERGE (r)-[:HAS_LAYER]->(l);
-MERGE (l_seo:Meta:Layer {key: 'seo'})
-ON CREATE SET
-  l_seo.display_name = 'SEO Intelligence',
-  l_seo.emoji = '🔍',
-  l_seo.color = '#ec4899',
-  l_seo.llm_context = 'Search engine optimization data. Keywords with their localized forms, search volume metrics, and mining run history. Used to inject relevant keywords into generated content for organic search visibility.',
-  l_seo.created_at = datetime()
-ON MATCH SET
-  l_seo.display_name = 'SEO Intelligence',
-  l_seo.emoji = '🔍',
-  l_seo.color = '#ec4899',
-  l_seo.llm_context = 'Search engine optimization data. Keywords with their localized forms, search volume metrics, and mining run history. Used to inject relevant keywords into generated content for organic search visibility.',
-  l_seo.updated_at = datetime();
-
-MATCH (r:Realm {key: 'global'}), (l:Layer {key: 'seo'})
-MERGE (r)-[:HAS_LAYER]->(l);
 
 // Tenant layers
 MERGE (l_config:Meta:Layer {key: 'config'})
@@ -125,6 +109,22 @@ ON MATCH SET
   l_semantic.updated_at = datetime();
 
 MATCH (r:Realm {key: 'tenant'}), (l:Layer {key: 'semantic'})
+MERGE (r)-[:HAS_LAYER]->(l);
+MERGE (l_seo:Meta:Layer {key: 'seo'})
+ON CREATE SET
+  l_seo.display_name = 'SEO Intelligence',
+  l_seo.emoji = '🔍',
+  l_seo.color = '#ec4899',
+  l_seo.llm_context = 'Search engine optimization data per tenant. Keywords, comparisons, prepositions, questions, and GEO monitoring. Each tenant manages its own SEO strategy. Keywords link to Entity via EXPRESSES, content targets keywords via TARGETS.',
+  l_seo.created_at = datetime()
+ON MATCH SET
+  l_seo.display_name = 'SEO Intelligence',
+  l_seo.emoji = '🔍',
+  l_seo.color = '#ec4899',
+  l_seo.llm_context = 'Search engine optimization data per tenant. Keywords, comparisons, prepositions, questions, and GEO monitoring. Each tenant manages its own SEO strategy. Keywords link to Entity via EXPRESSES, content targets keywords via TARGETS.',
+  l_seo.updated_at = datetime();
+
+MATCH (r:Realm {key: 'tenant'}), (l:Layer {key: 'seo'})
 MERGE (r)-[:HAS_LAYER]->(l);
 MERGE (l_foundation:Meta:Layer {key: 'foundation'})
 ON CREATE SET
