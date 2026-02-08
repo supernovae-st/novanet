@@ -6,7 +6,7 @@
 #        - Derived from Answer The Public "prepositions" category
 #        - Links to parent SEOKeyword via HAS_PREPOSITIONS
 #        - Optionally links to use_case Entity via USE_CASE_ENTITY arc
-#        - Can be addressed by BlockL10n via ADDRESSES arc
+#        - Can be addressed by BlockGenerated via ADDRESSES arc
 
 node:
   name: SEOPreposition
@@ -106,7 +106,7 @@ node:
 
   relations:
     # Incoming: SEOKeyword --[:HAS_PREPOSITIONS]--> SEOPreposition (ownership)
-    # Incoming: BlockL10n --[:ADDRESSES]--> SEOPreposition (coverage)
+    # Incoming: BlockGenerated --[:ADDRESSES]--> SEOPreposition (coverage)
 
     - relation: USE_CASE_ENTITY
       to: Entity

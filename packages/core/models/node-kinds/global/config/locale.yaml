@@ -190,7 +190,7 @@ node:
 
   incoming_relations:
     FOR_LOCALE:
-      from: "[ConceptL10n, BlockL10n, PageL10n, SEOKeyword, ProjectL10n]"
+      from: "[EntityContent, BlockGenerated, PageGenerated, GenerationJob, OutputArtifact, ProjectL10n]"
       description: "Content nodes targeting this locale"
 
     SUPPORTS_LOCALE:

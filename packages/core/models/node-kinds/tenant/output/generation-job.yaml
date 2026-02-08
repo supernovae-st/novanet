@@ -95,9 +95,9 @@ node:
 
       - type: CREATES_CONTENT
         to:
-          - PageL10n
-          - BlockL10n
-        description: "L10n content created by this job"
+          - PageGenerated
+          - BlockGenerated
+        description: "Generated content created by this job"
 
       - type: FOR_LOCALE
         to: Locale
