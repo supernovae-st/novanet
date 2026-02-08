@@ -19,7 +19,7 @@ use super::app::{App, Focus, NavMode};
 use super::data::{ArcDirection, TreeItem};
 use super::schema::{PropertyStatus, ValidationStatus};
 use super::theme::{self, hex_to_color};
-use super::unicode::{truncate_start_to_width, truncate_to_width};
+use super::unicode::{display_width, truncate_start_to_width, truncate_to_width};
 use super::yaml::YamlViewSection;
 
 // =============================================================================
@@ -3801,8 +3801,8 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                     STYLE_MUTED,
                 )));
 
-                // Box drawing for instance node (use char count for proper alignment)
-                let key_width = instance.key.chars().count();
+                // Box drawing for instance node (use display width for CJK/emoji alignment)
+                let key_width = display_width(&instance.key);
                 lines.push(Line::from(Span::styled(
                     format!("  ┌{}┐", "─".repeat(key_width + 2)),
                     STYLE_INFO,
@@ -6215,11 +6215,7 @@ mod tests {
         // Spinner should return different chars for different ticks
         let frames: Vec<&str> = (0..20).map(spinner).collect();
         // Check that we get braille characters
-        assert!(
-            frames
-                .iter()
-                .all(|f| f.chars().all(|c| c.is_ascii() == false))
-        );
+        assert!(frames.iter().all(|f| f.chars().all(|c| !c.is_ascii())));
     }
 
     // =============================================================================
