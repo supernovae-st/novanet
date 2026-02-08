@@ -1260,6 +1260,12 @@ impl App {
                 true
             }
 
+            // Yank JSON properties (Y)
+            KeyCode::Char('Y') => {
+                self.yank_current_json();
+                true
+            }
+
             // Jump to parent [p]
             KeyCode::Char('p') => {
                 if let Some(parent_cursor) = self
@@ -1561,6 +1567,34 @@ impl App {
         if let Some(key) = key {
             // Show key in status (user can copy from terminal with mouse)
             self.set_status(&format!("□ {}", key));
+        }
+    }
+
+    /// Yank (copy) the current item's properties as JSON.
+    pub fn yank_current_json(&mut self) {
+        use super::data::TreeItem;
+        let json = match self.current_item() {
+            Some(TreeItem::Instance(_, _, _, inst)) => {
+                // Serialize instance properties to JSON
+                serde_json::to_string_pretty(&inst.properties).ok()
+            }
+            Some(TreeItem::Kind(_, _, kind)) => {
+                // For Kind, show properties schema
+                Some(format!(
+                    "{{\"properties\": {:?}, \"required\": {:?}}}",
+                    kind.properties, kind.required_properties
+                ))
+            }
+            _ => None,
+        };
+        if let Some(json) = json {
+            // Truncate for status display (full JSON in terminal can be copied)
+            let preview = if json.len() > 50 {
+                format!("{}...", &json[..50])
+            } else {
+                json
+            };
+            self.set_status(&format!("JSON: {}", preview));
         }
     }
 
@@ -2143,6 +2177,8 @@ mod tests {
                 outgoing_arcs: vec![],
                 incoming_arcs: vec![],
                 missing_required_count: 0,
+                filled_properties: 0,
+                total_properties: 0,
             },
             InstanceInfo {
                 key: "en-US".to_string(),
@@ -2152,6 +2188,8 @@ mod tests {
                 outgoing_arcs: vec![],
                 incoming_arcs: vec![],
                 missing_required_count: 0,
+                filled_properties: 0,
+                total_properties: 0,
             },
         ];
         app.tree
@@ -2198,6 +2236,8 @@ mod tests {
             outgoing_arcs: vec![],
             incoming_arcs: vec![],
             missing_required_count: 0,
+            filled_properties: 0,
+            total_properties: 0,
         }];
         app.tree
             .set_instances("Locale", instances.clone(), instances.len());
@@ -2271,6 +2311,8 @@ mod tests {
                 outgoing_arcs: vec![],
                 incoming_arcs: vec![],
                 missing_required_count: 0,
+                filled_properties: 0,
+                total_properties: 0,
             },
             InstanceInfo {
                 key: "en-US".to_string(),
@@ -2280,6 +2322,8 @@ mod tests {
                 outgoing_arcs: vec![],
                 incoming_arcs: vec![],
                 missing_required_count: 0,
+                filled_properties: 0,
+                total_properties: 0,
             },
         ];
         app.tree
@@ -2380,6 +2424,8 @@ mod tests {
                 outgoing_arcs: vec![],
                 incoming_arcs: vec![],
                 missing_required_count: 0,
+                filled_properties: 0,
+                total_properties: 0,
             },
             InstanceInfo {
                 key: "en-US".to_string(),
@@ -2389,6 +2435,8 @@ mod tests {
                 outgoing_arcs: vec![],
                 incoming_arcs: vec![],
                 missing_required_count: 0,
+                filled_properties: 0,
+                total_properties: 0,
             },
         ];
         app.tree
