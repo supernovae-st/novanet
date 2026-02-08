@@ -15,6 +15,7 @@ entities:
     type: CONTENT_TYPE
     display_name: URL QR Code
     description: QR code that redirects to any URL
+    llm_context: "USE: when discussing QR codes linking to websites, URL encoding. TRIGGERS: url qr, website qr, link qr, web qr. NOT: specific platforms (use Instagram QR, YouTube QR, etc.), WiFi (use WiFi QR)."
     entity_summary: |
       A URL QR code encodes a web address, allowing users to visit any website
       by scanning. This is the most common QR code type, supporting both static
@@ -24,6 +25,7 @@ entities:
     type: CONTENT_TYPE
     display_name: WiFi QR Code
     description: QR code with WiFi credentials (SSID, password, encryption)
+    llm_context: "USE: when discussing WiFi sharing, network credentials in QR. TRIGGERS: wifi qr, wireless qr, network qr, wifi password qr. NOT: hotspot login page (use URL QR), Bluetooth."
     entity_summary: |
       A WiFi QR code stores network credentials (SSID, password, encryption type).
       When scanned, devices can automatically connect to the network without
@@ -33,6 +35,7 @@ entities:
     type: CONTENT_TYPE
     display_name: vCard QR Code
     description: Digital business card in vCard format
+    llm_context: "USE: when discussing digital business cards, contact sharing QR. TRIGGERS: vcard qr, contact qr, business card qr, digital card. NOT: MeCard (use MeCard QR), LinkedIn profile (use LinkedIn QR)."
     entity_summary: |
       A vCard QR code contains contact information in the standard vCard format.
       Scanning adds the contact directly to the phone's address book with name,
@@ -42,6 +45,7 @@ entities:
     type: CONTENT_TYPE
     display_name: MeCard QR Code
     description: Japanese contact format (more compact than vCard)
+    llm_context: "USE: when discussing Japanese contact format, compact contact QR. TRIGGERS: mecard, mecard qr, japanese contact qr. NOT: vCard (use vCard QR), standard contact."
     entity_summary: |
       MeCard is a compact contact data format developed in Japan. It encodes
       similar information to vCard but with a more efficient syntax, resulting
@@ -51,6 +55,7 @@ entities:
     type: CONTENT_TYPE
     display_name: PDF QR Code
     description: Links to PDF document for viewing or download
+    llm_context: "USE: when discussing PDF links, document QR codes. TRIGGERS: pdf qr, document qr, brochure qr, manual qr. NOT: generic file (use File Download QR), image gallery (use Image Gallery QR)."
     entity_summary: |
       A PDF QR code links to a PDF document, allowing instant access to
       brochures, menus, manuals, or any document. Typically dynamic to enable
@@ -60,6 +65,7 @@ entities:
     type: CONTENT_TYPE
     display_name: Text QR Code
     description: Plain text content encoded directly
+    llm_context: "USE: when discussing plain text encoding, static text in QR. TRIGGERS: text qr, plain text qr, message qr. NOT: URL (use URL QR), email (use Email QR)."
     entity_summary: |
       A text QR code encodes plain text directly in the pattern. Used for
       short messages, product codes, serial numbers, or any static text.
@@ -69,6 +75,7 @@ entities:
     type: CONTENT_TYPE
     display_name: Email QR Code
     description: Opens email composer with prefilled fields
+    llm_context: "USE: when discussing email QR codes, mailto links in QR. TRIGGERS: email qr, mailto qr, compose email qr. NOT: SMS (use SMS QR), contact (use vCard QR)."
     entity_summary: |
       An email QR code opens the user's email app with prefilled recipient,
       subject, and body. Used for support requests, feedback, and customer
@@ -78,6 +85,7 @@ entities:
     type: CONTENT_TYPE
     display_name: SMS QR Code
     description: Opens SMS with prefilled phone number and message
+    llm_context: "USE: when discussing SMS QR codes, text message QR. TRIGGERS: sms qr, text message qr, message qr. NOT: WhatsApp (use WhatsApp QR), phone call (use Phone QR)."
     entity_summary: |
       An SMS QR code opens the messaging app with a prefilled phone number
       and optional message text. Used for quick opt-ins, support, and
@@ -87,6 +95,7 @@ entities:
     type: CONTENT_TYPE
     display_name: Phone QR Code
     description: Phone number for direct calling
+    llm_context: "USE: when discussing phone call QR codes, tel: links. TRIGGERS: phone qr, call qr, tel qr, phone number qr. NOT: SMS (use SMS QR), WhatsApp (use WhatsApp QR)."
     entity_summary: |
       A phone QR code encodes a phone number in tel: format. Scanning
       initiates a call to the number. Simple, static encoding ideal for
@@ -96,6 +105,7 @@ entities:
     type: CONTENT_TYPE
     display_name: Video QR Code
     description: Links to video content (YouTube, Vimeo, hosted)
+    llm_context: "USE: when discussing video link QR codes, video sharing. TRIGGERS: video qr, youtube qr link, vimeo qr, video link. NOT: YouTube channel (use YouTube QR), audio (use Audio QR)."
     entity_summary: |
       A video QR code links to video content on platforms like YouTube,
       Vimeo, or self-hosted servers. Used for product demos, tutorials,
@@ -105,6 +115,7 @@ entities:
     type: CONTENT_TYPE
     display_name: Audio QR Code
     description: Links to audio or podcast content
+    llm_context: "USE: when discussing audio link QR codes, podcast QR. TRIGGERS: audio qr, podcast qr, music link qr, voice message qr. NOT: Spotify profile (use Spotify QR), video (use Video QR)."
     entity_summary: |
       An audio QR code links to audio content like podcasts, music tracks,
       or voice messages. Used for audio guides, museum tours, and podcast
@@ -114,6 +125,7 @@ entities:
     type: CONTENT_TYPE
     display_name: Image Gallery QR Code
     description: Links to image gallery or photo album
+    llm_context: "USE: when discussing photo album QR, image collection links. TRIGGERS: gallery qr, photo album qr, image gallery qr, photos qr. NOT: single image, PDF (use PDF QR)."
     entity_summary: |
       An image gallery QR code opens a collection of photos or images.
       Used for event photos, product catalogs, portfolios, and real estate
@@ -123,6 +135,7 @@ entities:
     type: CONTENT_TYPE
     display_name: Coupon QR Code
     description: Digital coupon or discount code
+    llm_context: "USE: when discussing discount QR codes, promotional codes. TRIGGERS: coupon qr, discount qr, promo qr, deal qr. NOT: payment (use Payment QR), ticket (use Ticket QR)."
     entity_summary: |
       A coupon QR code contains a discount code or promotional offer.
       Can link to a landing page with the offer or encode the code directly.
@@ -135,6 +148,7 @@ entities:
     type: THING
     display_name: Social Media QR Code
     description: Category for social media platform QR codes
+    llm_context: "USE: when discussing social media QR codes generally. TRIGGERS: social qr, social media qr, social link qr. NOT: specific platforms (use Instagram QR, LinkedIn QR, etc.)."
     entity_summary: |
       Social media QR codes link to profiles, pages, or posts on social
       platforms. They make it easy to gain followers by scanning instead
@@ -144,6 +158,7 @@ entities:
     type: CONTENT_TYPE
     display_name: Instagram QR Code
     description: Links to Instagram profile or post
+    llm_context: "USE: when discussing Instagram profile QR, Instagram links. TRIGGERS: instagram qr, ig qr, insta qr. NOT: other social (use Facebook QR, TikTok QR, etc.), generic social (use Social Media QR)."
     entity_summary: |
       An Instagram QR code links to an Instagram profile, post, or Reel.
       Used by influencers, businesses, and creators to grow followers.
@@ -153,6 +168,7 @@ entities:
     type: CONTENT_TYPE
     display_name: LinkedIn QR Code
     description: Links to LinkedIn profile or company page
+    llm_context: "USE: when discussing LinkedIn profile QR, professional networking QR. TRIGGERS: linkedin qr, professional qr, company page qr. NOT: vCard (use vCard QR), business card frame (use Business Card QR)."
     entity_summary: |
       A LinkedIn QR code links to a professional profile or company page.
       Popular on business cards and at networking events. Dynamic to
@@ -162,6 +178,7 @@ entities:
     type: CONTENT_TYPE
     display_name: Facebook QR Code
     description: Links to Facebook page or profile
+    llm_context: "USE: when discussing Facebook page QR, Facebook profile links. TRIGGERS: facebook qr, fb qr, facebook page qr. NOT: Instagram (use Instagram QR), WhatsApp (use WhatsApp QR)."
     entity_summary: |
       A Facebook QR code links to a Facebook page, profile, group, or
       event. Used for business promotion and community building.
@@ -171,6 +188,7 @@ entities:
     type: CONTENT_TYPE
     display_name: Twitter/X QR Code
     description: Links to Twitter/X profile or tweet
+    llm_context: "USE: when discussing Twitter profile QR, X platform links. TRIGGERS: twitter qr, x qr, tweet qr. NOT: other social platforms."
     entity_summary: |
       A Twitter/X QR code links to a profile, tweet, or list. Used for
       news, updates, and brand engagement. Dynamic to track follows
@@ -180,6 +198,7 @@ entities:
     type: CONTENT_TYPE
     display_name: YouTube QR Code
     description: Links to YouTube channel or video
+    llm_context: "USE: when discussing YouTube channel QR, YouTube video links. TRIGGERS: youtube qr, channel qr, yt qr. NOT: generic video (use Video QR), TikTok (use TikTok QR)."
     entity_summary: |
       A YouTube QR code links to a channel, video, or playlist. Used for
       content promotion, tutorials, and brand channels. Dynamic for
@@ -189,6 +208,7 @@ entities:
     type: CONTENT_TYPE
     display_name: TikTok QR Code
     description: Links to TikTok profile or video
+    llm_context: "USE: when discussing TikTok profile QR, TikTok video links. TRIGGERS: tiktok qr, tt qr. NOT: Instagram Reels (use Instagram QR), YouTube Shorts (use YouTube QR)."
     entity_summary: |
       A TikTok QR code links to a profile or specific video. Popular with
       creators and brands targeting younger audiences. Dynamic for
@@ -198,6 +218,7 @@ entities:
     type: CONTENT_TYPE
     display_name: Snapchat QR Code
     description: Links to Snapchat profile
+    llm_context: "USE: when discussing Snapchat profile QR, Snapcode alternatives. TRIGGERS: snapchat qr, snap qr, snapcode. NOT: Instagram Stories (use Instagram QR)."
     entity_summary: |
       A Snapchat QR code links to a Snapchat profile or lens. Snapchat
       has native Snapcodes, but standard QR codes can link to profiles.
@@ -207,6 +228,7 @@ entities:
     type: CONTENT_TYPE
     display_name: WhatsApp QR Code
     description: Opens WhatsApp chat with prefilled message
+    llm_context: "USE: when discussing WhatsApp chat QR, wa.me links. TRIGGERS: whatsapp qr, wa qr, whatsapp chat qr. NOT: SMS (use SMS QR), Telegram (use Telegram QR)."
     entity_summary: |
       A WhatsApp QR code opens a chat with a specific number using
       wa.me links. Can include a prefilled message. Used for customer
@@ -216,6 +238,7 @@ entities:
     type: CONTENT_TYPE
     display_name: Telegram QR Code
     description: Links to Telegram channel, group, or bot
+    llm_context: "USE: when discussing Telegram channel QR, Telegram links. TRIGGERS: telegram qr, tg qr, telegram channel qr, telegram bot qr. NOT: WhatsApp (use WhatsApp QR)."
     entity_summary: |
       A Telegram QR code links to a channel, group, or bot. Used for
       community building, news channels, and customer support bots.
@@ -225,6 +248,7 @@ entities:
     type: CONTENT_TYPE
     display_name: Pinterest QR Code
     description: Links to Pinterest profile or board
+    llm_context: "USE: when discussing Pinterest profile QR, Pinterest board links. TRIGGERS: pinterest qr, pin qr, board qr. NOT: Instagram (use Instagram QR), image gallery (use Image Gallery QR)."
     entity_summary: |
       A Pinterest QR code links to a profile, board, or pin. Used for
       visual inspiration, product catalogs, and recipe collections.
@@ -234,6 +258,7 @@ entities:
     type: CONTENT_TYPE
     display_name: Spotify QR Code
     description: Links to Spotify artist, album, or playlist
+    llm_context: "USE: when discussing Spotify link QR, music sharing QR. TRIGGERS: spotify qr, playlist qr, music qr. NOT: Apple Music (use Apple Music QR), SoundCloud (use SoundCloud QR)."
     entity_summary: |
       A Spotify QR code links to an artist, album, playlist, or podcast.
       Used for music promotion and playlist sharing. Dynamic for
@@ -243,6 +268,7 @@ entities:
     type: CONTENT_TYPE
     display_name: Apple Music QR Code
     description: Links to Apple Music artist, album, or playlist
+    llm_context: "USE: when discussing Apple Music link QR. TRIGGERS: apple music qr, itunes qr. NOT: Spotify (use Spotify QR), generic audio (use Audio QR)."
     entity_summary: |
       An Apple Music QR code links to music content on Apple Music.
       Used alongside Spotify codes for cross-platform music promotion.
@@ -252,6 +278,7 @@ entities:
     type: CONTENT_TYPE
     display_name: SoundCloud QR Code
     description: Links to SoundCloud artist or track
+    llm_context: "USE: when discussing SoundCloud link QR, indie music QR. TRIGGERS: soundcloud qr, sc qr. NOT: Spotify (use Spotify QR), generic audio (use Audio QR)."
     entity_summary: |
       A SoundCloud QR code links to an artist page, track, or playlist.
       Popular with independent musicians and DJs. Dynamic for
@@ -264,6 +291,7 @@ entities:
     type: THING
     display_name: Payment QR Code
     description: Category for payment-related QR codes
+    llm_context: "USE: when discussing payment QR codes generally. TRIGGERS: payment qr, pay qr, money qr. NOT: specific systems (use PIX QR, UPI QR, PayPal QR, etc.)."
     entity_summary: |
       Payment QR codes enable financial transactions via scanning. This
       category includes regional systems (PIX, UPI), digital wallets
@@ -273,6 +301,7 @@ entities:
     type: CONTENT_TYPE
     display_name: PIX QR Code
     description: Brazil instant payment system
+    llm_context: "USE: when discussing Brazilian payments, PIX system. TRIGGERS: pix qr, brazil payment qr, pix code. NOT: UPI India (use UPI QR), generic payment."
     entity_summary: |
       PIX is Brazil's instant payment system launched in 2020. PIX QR
       codes enable real-time bank transfers. Extremely popular in Brazil
@@ -282,6 +311,7 @@ entities:
     type: CONTENT_TYPE
     display_name: UPI QR Code
     description: India Unified Payments Interface
+    llm_context: "USE: when discussing Indian payments, UPI system. TRIGGERS: upi qr, india payment qr, bharat qr. NOT: PIX Brazil (use PIX QR), generic payment."
     entity_summary: |
       UPI (Unified Payments Interface) is India's real-time payment
       system. UPI QR codes are ubiquitous in India, used by street
@@ -291,6 +321,7 @@ entities:
     type: CONTENT_TYPE
     display_name: PayPal QR Code
     description: PayPal payment or money request
+    llm_context: "USE: when discussing PayPal payments, PayPal.me links. TRIGGERS: paypal qr, paypal.me qr. NOT: Venmo (use Venmo QR), bank transfer (use Bank Transfer QR)."
     entity_summary: |
       A PayPal QR code links to PayPal.me for payments or money requests.
       Used for donations, invoices, and peer-to-peer payments. Works
@@ -300,6 +331,7 @@ entities:
     type: CONTENT_TYPE
     display_name: Venmo QR Code
     description: Venmo payment (US only)
+    llm_context: "USE: when discussing Venmo payments, US P2P payments. TRIGGERS: venmo qr, venmo code. NOT: PayPal (use PayPal QR), Cash App."
     entity_summary: |
       A Venmo QR code enables payments through the Venmo app (US only).
       Popular for splitting bills, small business payments, and tips.
@@ -309,6 +341,7 @@ entities:
     type: CONTENT_TYPE
     display_name: Bitcoin QR Code
     description: Bitcoin wallet address for payments
+    llm_context: "USE: when discussing Bitcoin payments, BTC address QR. TRIGGERS: bitcoin qr, btc qr, crypto wallet qr. NOT: Ethereum (use Ethereum QR), generic crypto (use Crypto QR)."
     entity_summary: |
       A Bitcoin QR code encodes a wallet address for receiving Bitcoin
       payments. Standard format across all Bitcoin wallets. Can include
@@ -318,6 +351,7 @@ entities:
     type: CONTENT_TYPE
     display_name: Ethereum QR Code
     description: Ethereum wallet address for payments
+    llm_context: "USE: when discussing Ethereum payments, ETH address QR. TRIGGERS: ethereum qr, eth qr, erc20 qr. NOT: Bitcoin (use Bitcoin QR), generic crypto (use Crypto QR)."
     entity_summary: |
       An Ethereum QR code encodes an ETH wallet address. Used for
       receiving Ether and ERC-20 tokens. Standard EIP-681 format
@@ -327,6 +361,7 @@ entities:
     type: CONTENT_TYPE
     display_name: Crypto QR Code
     description: Generic cryptocurrency payment
+    llm_context: "USE: when discussing generic crypto payments, multi-coin wallets. TRIGGERS: crypto qr, cryptocurrency qr, multi-coin qr. NOT: specific coins (use Bitcoin QR, Ethereum QR)."
     entity_summary: |
       A generic crypto QR code can link to payment pages or encode
       wallet addresses for various cryptocurrencies. Used when
@@ -336,6 +371,7 @@ entities:
     type: CONTENT_TYPE
     display_name: Bank Transfer QR Code
     description: SEPA or domestic bank transfer
+    llm_context: "USE: when discussing bank transfer QR, IBAN encoding. TRIGGERS: bank transfer qr, sepa qr, iban qr, wire transfer qr. NOT: PIX (use PIX QR), UPI (use UPI QR)."
     entity_summary: |
       A bank transfer QR code encodes IBAN and payment details for
       SEPA (Europe) or domestic transfers. Can include amount,
@@ -348,6 +384,7 @@ entities:
     type: THING
     display_name: Location QR Code
     description: Category for location and maps QR codes
+    llm_context: "USE: when discussing location QR codes generally, maps category. TRIGGERS: location qr, maps qr, navigation qr. NOT: specific apps (use Google Maps QR, Apple Maps QR, Waze QR)."
     entity_summary: |
       Location QR codes link to map services or encode coordinates.
       Used for navigation to stores, events, parking, and points of
@@ -357,6 +394,7 @@ entities:
     type: CONTENT_TYPE
     display_name: Google Maps QR Code
     description: Opens location in Google Maps
+    llm_context: "USE: when discussing Google Maps links, Google location QR. TRIGGERS: google maps qr, gmaps qr, google location qr. NOT: Apple Maps (use Apple Maps QR), Waze (use Waze QR)."
     entity_summary: |
       A Google Maps QR code opens a location in Google Maps app or web.
       Uses maps.google.com links with coordinates or place ID.
@@ -366,6 +404,7 @@ entities:
     type: CONTENT_TYPE
     display_name: Apple Maps QR Code
     description: Opens location in Apple Maps
+    llm_context: "USE: when discussing Apple Maps links, iOS maps QR. TRIGGERS: apple maps qr, ios maps qr. NOT: Google Maps (use Google Maps QR), Waze (use Waze QR)."
     entity_summary: |
       An Apple Maps QR code opens a location in Apple Maps on iOS
       devices. Uses maps.apple.com links. Falls back to web on
@@ -375,6 +414,7 @@ entities:
     type: CONTENT_TYPE
     display_name: Waze QR Code
     description: Opens navigation in Waze
+    llm_context: "USE: when discussing Waze navigation links. TRIGGERS: waze qr, waze navigation qr. NOT: Google Maps (use Google Maps QR), Apple Maps (use Apple Maps QR)."
     entity_summary: |
       A Waze QR code opens the Waze app for navigation. Uses waze.com
       links with coordinates. Popular for businesses with parking
@@ -384,6 +424,7 @@ entities:
     type: CONTENT_TYPE
     display_name: Coordinates QR Code
     description: "Raw GPS coordinates (geo: URI)"
+    llm_context: "USE: when discussing raw GPS encoding, geo: URI format. TRIGGERS: coordinates qr, gps qr, geo qr, lat long qr. NOT: specific map apps (use Google Maps QR, Apple Maps QR)."
     entity_summary: |
       A coordinates QR code encodes raw GPS coordinates using the
       geo: URI scheme. Device-agnostic - opens in the default maps
@@ -396,6 +437,7 @@ entities:
     type: THING
     display_name: App Download QR Code
     description: Category for app store download QR codes
+    llm_context: "USE: when discussing app download QR codes generally. TRIGGERS: app qr, download app qr, app store qr. NOT: specific stores (use App Store QR, Play Store QR)."
     entity_summary: |
       App download QR codes link to app stores for easy installation.
       Can be platform-specific (iOS, Android) or smart links that
@@ -405,6 +447,7 @@ entities:
     type: CONTENT_TYPE
     display_name: App Store QR Code
     description: iOS App Store download link
+    llm_context: "USE: when discussing iOS app downloads, Apple App Store links. TRIGGERS: app store qr, ios app qr, apple app qr. NOT: Play Store (use Play Store QR), smart link (use Smart App Download QR)."
     entity_summary: |
       An App Store QR code links directly to an iOS app on the Apple
       App Store. Uses apps.apple.com links. Only works on iOS devices
@@ -414,6 +457,7 @@ entities:
     type: CONTENT_TYPE
     display_name: Play Store QR Code
     description: Google Play Store download link
+    llm_context: "USE: when discussing Android app downloads, Google Play links. TRIGGERS: play store qr, android app qr, google play qr. NOT: App Store (use App Store QR), smart link (use Smart App Download QR)."
     entity_summary: |
       A Play Store QR code links to an Android app on Google Play.
       Uses play.google.com links. Works on Android devices and
@@ -423,6 +467,7 @@ entities:
     type: CONTENT_TYPE
     display_name: Smart App Download QR Code
     description: Auto-detects OS and redirects to correct store
+    llm_context: "USE: when discussing smart app links, cross-platform app download. TRIGGERS: smart app qr, universal app link, cross platform app qr. NOT: specific stores (use App Store QR, Play Store QR)."
     entity_summary: |
       A smart app download QR code detects the user's device and
       redirects to the appropriate app store. Uses dynamic links
@@ -435,6 +480,7 @@ entities:
     type: CONTENT_TYPE
     display_name: Review QR Code
     description: Links to Google, TripAdvisor, or other review platform
+    llm_context: "USE: when discussing review collection QR, Google review links. TRIGGERS: review qr, google review qr, tripadvisor qr, yelp qr. NOT: feedback form (use Feedback QR), survey (use Survey QR)."
     entity_summary: |
       A review QR code links directly to a review form on Google,
       TripAdvisor, Yelp, or other platforms. Used by restaurants,
@@ -444,6 +490,7 @@ entities:
     type: CONTENT_TYPE
     display_name: Survey QR Code
     description: Links to online survey or form
+    llm_context: "USE: when discussing survey QR codes, questionnaire links. TRIGGERS: survey qr, questionnaire qr, typeform qr, google form qr. NOT: simple feedback (use Feedback QR), review (use Review QR)."
     entity_summary: |
       A survey QR code links to an online survey (Google Forms,
       Typeform, SurveyMonkey). Used for customer feedback, market
@@ -453,6 +500,7 @@ entities:
     type: CONTENT_TYPE
     display_name: Feedback QR Code
     description: Links to feedback collection form
+    llm_context: "USE: when discussing simple feedback collection, rating QR. TRIGGERS: feedback qr, rating qr, quick feedback qr. NOT: full survey (use Survey QR), review platform (use Review QR)."
     entity_summary: |
       A feedback QR code opens a form for collecting customer opinions.
       Often simpler than full surveys, focusing on ratings or quick
@@ -462,6 +510,7 @@ entities:
     type: CONTENT_TYPE
     display_name: Menu QR Code
     description: Restaurant or cafe digital menu
+    llm_context: "USE: when discussing restaurant menu QR, contactless menu. TRIGGERS: menu qr, restaurant qr, cafe qr, food menu qr. NOT: Digital Menu landing page (use Digital Menu), table tent frame (use Table Tent QR)."
     entity_summary: |
       A menu QR code links to a digital restaurant menu. Became
       ubiquitous during COVID-19 for contactless dining. Can be a
@@ -471,6 +520,7 @@ entities:
     type: CONTENT_TYPE
     display_name: Resume QR Code
     description: Links to digital resume or CV
+    llm_context: "USE: when discussing resume QR, CV links, portfolio QR. TRIGGERS: resume qr, cv qr, portfolio qr. NOT: LinkedIn profile (use LinkedIn QR), vCard (use vCard QR)."
     entity_summary: |
       A resume QR code links to an online CV or professional profile.
       Used on printed resumes, business cards, and portfolios. Can
@@ -480,6 +530,7 @@ entities:
     type: CONTENT_TYPE
     display_name: Certificate QR Code
     description: Verifies authenticity of certificates and credentials
+    llm_context: "USE: when discussing certificate verification, credential QR. TRIGGERS: certificate qr, diploma qr, credential qr, verification qr. NOT: ticket (use Ticket QR), ID badge."
     entity_summary: |
       A certificate QR code enables verification of diplomas, licenses,
       and credentials. Links to issuer database for authenticity
@@ -489,6 +540,7 @@ entities:
     type: CONTENT_TYPE
     display_name: Ticket QR Code
     description: Event or transport ticket
+    llm_context: "USE: when discussing event tickets, transport tickets, entry QR. TRIGGERS: ticket qr, event ticket qr, boarding pass qr, concert ticket qr. NOT: attendance check-in (use Attendance QR), coupon (use Coupon QR)."
     entity_summary: |
       A ticket QR code encodes event entry or transport ticket data.
       Scanned at entry for validation. Used for concerts, flights,
@@ -498,6 +550,7 @@ entities:
     type: CONTENT_TYPE
     display_name: Attendance QR Code
     description: Check-in for events, classes, or meetings
+    llm_context: "USE: when discussing check-in QR, attendance tracking. TRIGGERS: attendance qr, check-in qr, sign-in qr, class attendance qr. NOT: event ticket (use Ticket QR), access badge."
     entity_summary: |
       An attendance QR code enables quick check-in by scanning.
       Used in schools, conferences, gyms, and offices. Links to
@@ -507,6 +560,7 @@ entities:
     type: CONTENT_TYPE
     display_name: Pet Tag QR Code
     description: Pet identification with owner contact info
+    llm_context: "USE: when discussing pet ID QR, lost pet tags. TRIGGERS: pet tag qr, pet id qr, dog tag qr, cat tag qr. NOT: medical ID (use Medical ID QR), vCard (use vCard QR)."
     entity_summary: |
       A pet tag QR code links to owner contact information if a
       pet is lost. Can include pet name, medical info, and multiple
@@ -516,6 +570,7 @@ entities:
     type: CONTENT_TYPE
     display_name: Medical ID QR Code
     description: Emergency medical information
+    llm_context: "USE: when discussing medical alert QR, health info QR. TRIGGERS: medical id qr, health qr, emergency info qr, medical alert qr. NOT: pet tag (use Pet Tag QR), certificate (use Certificate QR)."
     entity_summary: |
       A medical ID QR code provides emergency access to critical
       health information (blood type, allergies, medications,
@@ -525,6 +580,7 @@ entities:
     type: CONTENT_TYPE
     display_name: File Download QR Code
     description: Links to any downloadable file
+    llm_context: "USE: when discussing file download QR, document download links. TRIGGERS: file qr, download qr, zip qr, document download qr. NOT: PDF specifically (use PDF QR), image gallery (use Image Gallery QR)."
     entity_summary: |
       A file download QR code links to any downloadable file (ZIP,
       DOC, XLS, etc.). Used for sharing documents, software, and
@@ -534,6 +590,7 @@ entities:
     type: CONTENT_TYPE
     display_name: Calendar Event QR Code
     description: Adds event to calendar
+    llm_context: "USE: when discussing calendar event QR, iCal links. TRIGGERS: calendar qr, event qr, ical qr, add to calendar qr. NOT: event RSVP page (use Event RSVP), ticket (use Ticket QR)."
     entity_summary: |
       A calendar event QR code encodes event details (date, time,
       location, description) in iCal format. Scanning adds the event

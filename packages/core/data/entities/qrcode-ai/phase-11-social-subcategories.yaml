@@ -15,6 +15,7 @@ entities:
     type: THING
     display_name: Messaging QR Codes
     description: Subcategory for messaging app QR codes
+    llm_context: "USE: when discussing QR codes for messaging apps like WhatsApp, Telegram, or chat platforms. TRIGGERS: messaging qr, chat qr, whatsapp category, telegram category, direct message qr. NOT: video platform (video content), professional (business networking)."
     entity_summary: |
       Messaging QR codes link to chat apps like WhatsApp and Telegram.
       They enable direct communication channels for customer support,
@@ -24,6 +25,7 @@ entities:
     type: THING
     display_name: Video Platform QR Codes
     description: Subcategory for video platform QR codes
+    llm_context: "USE: when discussing QR codes for video platforms like YouTube, TikTok, or Snapchat. TRIGGERS: video platform qr, youtube category, tiktok category, video content qr, streaming qr. NOT: messaging (chat), music platform (audio)."
     entity_summary: |
       Video platform QR codes link to video content on YouTube, TikTok,
       and Snapchat. Used for content promotion, tutorials, and
@@ -33,6 +35,7 @@ entities:
     type: THING
     display_name: Professional Network QR Codes
     description: Subcategory for professional networking QR codes
+    llm_context: "USE: when discussing QR codes for professional networking like LinkedIn. TRIGGERS: professional qr, linkedin category, business networking qr, career qr, professional network. NOT: messaging (chat), video platform (content)."
     entity_summary: |
       Professional network QR codes link to business profiles on LinkedIn.
       Popular on business cards and at networking events for quick
@@ -42,6 +45,7 @@ entities:
     type: THING
     display_name: Music Platform QR Codes
     description: Subcategory for music streaming QR codes
+    llm_context: "USE: when discussing QR codes for music platforms like Spotify, Apple Music, or SoundCloud. TRIGGERS: music platform qr, spotify category, apple music category, music streaming qr, playlist category. NOT: video platform (video), audio file (direct file)."
     entity_summary: |
       Music platform QR codes link to artists, playlists, and tracks on
       Spotify, Apple Music, and SoundCloud. Used by musicians and

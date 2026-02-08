@@ -15,6 +15,7 @@ entities:
     type: ACTION
     display_name: Create QR Code
     description: Generate a new QR code
+    llm_context: "USE: when discussing QR code creation, making QR codes, or generating new QR codes. TRIGGERS: create qr code, make qr, generate qr, new qr code, create qr, make qr code. NOT: customize qr (design), scan qr (reading), edit destination (update)."
     entity_summary: |
       Creating a QR code is the primary action of encoding data into a
       scannable 2D barcode. Users input content (URL, text, vCard) and
@@ -24,6 +25,7 @@ entities:
     type: ACTION
     display_name: Scan QR Code
     description: Read QR code data
+    llm_context: "USE: when discussing scanning QR codes, reading QR codes, or decoding QR content. TRIGGERS: scan qr code, read qr, decode qr, scan qr, qr scan, use camera to scan. NOT: create qr (making), track scans (analytics)."
     entity_summary: |
       Scanning a QR code uses a camera to decode the data stored within.
       Modern smartphones have built-in QR scanning in the camera app.
@@ -33,6 +35,7 @@ entities:
     type: ACTION
     display_name: Customize QR Code
     description: Design and style a QR code
+    llm_context: "USE: when discussing QR code customization, styling QR codes, or designing QR appearance. TRIGGERS: customize qr, design qr, style qr, qr design, qr customization, personalize qr. NOT: create qr (initial), add logo (specific), change colors (specific)."
     entity_summary: |
       Customizing a QR code involves changing colors, adding logos,
       modifying patterns, and applying design elements while maintaining
@@ -42,6 +45,7 @@ entities:
     type: ACTION
     display_name: Download QR Code
     description: Export QR as image file
+    llm_context: "USE: when discussing downloading QR codes, exporting QR images, or saving QR files. TRIGGERS: download qr, export qr, save qr, qr download, get qr image, qr file. NOT: print qr (physical), share qr (distribute)."
     entity_summary: |
       Downloading a QR code exports it as an image file (PNG, SVG, PDF).
       Different formats serve different purposes - PNG for web, SVG for
@@ -51,6 +55,7 @@ entities:
     type: ACTION
     display_name: Print QR Code
     description: Print for physical use
+    llm_context: "USE: when discussing printing QR codes, physical QR output, or QR print requirements. TRIGGERS: print qr, qr printing, physical qr, print qr code, qr for print, printable qr. NOT: download qr (digital), qr size (specification)."
     entity_summary: |
       Printing a QR code produces physical copies for real-world use.
       Requires consideration of size, contrast, and quiet zone to
@@ -60,6 +65,7 @@ entities:
     type: ACTION
     display_name: Add Logo
     description: Add logo to QR center
+    llm_context: "USE: when discussing adding logos to QR codes, branded QR codes, or logo placement in QR. TRIGGERS: add logo, logo qr, branded qr, qr with logo, center logo, embed logo. NOT: customize qr (general), change colors (different aspect)."
     entity_summary: |
       Adding a logo places a brand image in the center of a QR code.
       Requires higher error correction to maintain scannability.
@@ -69,6 +75,7 @@ entities:
     type: ACTION
     display_name: Change Colors
     description: Customize QR colors
+    llm_context: "USE: when discussing QR code color customization, changing QR colors, or colored QR codes. TRIGGERS: change colors, qr colors, colored qr, custom color qr, qr color scheme. NOT: add logo (different aspect), customize qr (general)."
     entity_summary: |
       Changing colors customizes the foreground and background of a QR code.
       Requires sufficient contrast for scanning. Dark foreground on
@@ -78,6 +85,7 @@ entities:
     type: ACTION
     display_name: Edit Destination
     description: Change QR target URL
+    llm_context: "USE: when discussing editing QR destinations, changing where QR points, or updating QR URLs. TRIGGERS: edit destination, change url, update link, modify destination, redirect qr, change qr target. NOT: create qr (initial), dynamic qr (code type)."
     entity_summary: |
       Editing destination changes where a dynamic QR code redirects.
       Only possible with dynamic QR codes that use short links.
@@ -87,6 +95,7 @@ entities:
     type: ACTION
     display_name: Share QR Code
     description: Share via link or email
+    llm_context: "USE: when discussing sharing QR codes, distributing QR images, or sending QR codes to others. TRIGGERS: share qr, send qr, distribute qr, qr sharing, email qr, share qr code. NOT: download qr (save), print qr (physical)."
     entity_summary: |
       Sharing a QR code distributes it to others via email, messaging,
       or social media. Can share the image file or a link to view/scan.
@@ -95,6 +104,7 @@ entities:
     type: ACTION
     display_name: Track Scans
     description: Monitor scan analytics
+    llm_context: "USE: when discussing scan tracking, monitoring QR performance, or viewing scan analytics. TRIGGERS: track scans, scan analytics, monitor scans, scan statistics, scan tracking, qr tracking. NOT: scan qr (action), analytics (feature)."
     entity_summary: |
       Tracking scans monitors who, when, and where QR codes are scanned.
       Requires dynamic QR codes with short links. Provides data for
@@ -107,6 +117,7 @@ entities:
     type: ACTION
     display_name: Shorten URL
     description: Create short URL
+    llm_context: "USE: when discussing URL shortening, creating short links, or compacting long URLs. TRIGGERS: shorten url, short link, short url, url shortener, compact link, tiny url. NOT: create smart link (intelligent), custom domain (branding)."
     entity_summary: |
       Shortening a URL creates a compact link that redirects to the
       original. Short URLs are easier to share, track, and encode in
@@ -116,6 +127,7 @@ entities:
     type: ACTION
     display_name: Create Smart Link
     description: Create intelligent link
+    llm_context: "USE: when discussing smart link creation, intelligent links, or advanced short links with routing. TRIGGERS: create smart link, smart link, intelligent link, routing link, conditional link. NOT: shorten url (basic), contextual routing (feature)."
     entity_summary: |
       Creating a smart link adds intelligence to URL shortening.
       Smart links can route based on device, location, or time,
@@ -125,6 +137,7 @@ entities:
     type: ACTION
     display_name: Create Landing Page
     description: Build destination page
+    llm_context: "USE: when discussing landing page creation, building destination pages, or creating bio pages. TRIGGERS: create landing page, build page, make landing page, destination page, bio page creation. NOT: landing page builder (tool), link in bio (specific type)."
     entity_summary: |
       Creating a landing page builds a destination for QR codes and links.
       No-code builders enable creating bio pages, menus, forms, and
@@ -137,6 +150,7 @@ entities:
     type: ACTION
     display_name: Create Barcode
     description: Generate barcode
+    llm_context: "USE: when discussing barcode creation, generating 1D barcodes, or making EAN/UPC codes. TRIGGERS: create barcode, generate barcode, make barcode, barcode creation, ean barcode, upc barcode. NOT: create qr (2D), scan barcode (reading)."
     entity_summary: |
       Creating a barcode generates a 1D or 2D barcode image. Different
       formats (EAN, UPC, Code 128) serve different industries. Primarily
@@ -146,6 +160,7 @@ entities:
     type: ACTION
     display_name: Scan Barcode
     description: Read barcode data
+    llm_context: "USE: when discussing barcode scanning, reading 1D barcodes, or decoding product barcodes. TRIGGERS: scan barcode, read barcode, barcode scan, decode barcode, barcode reader. NOT: scan qr (2D), create barcode (making)."
     entity_summary: |
       Scanning a barcode reads the encoded data using a scanner or camera.
       Returns product information, prices, or inventory codes. Essential

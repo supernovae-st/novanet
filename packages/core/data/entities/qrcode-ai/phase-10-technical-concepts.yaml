@@ -15,6 +15,7 @@ entities:
     type: CONCEPT
     display_name: Quiet Zone
     description: White margin around QR (minimum 4 modules)
+    llm_context: "USE: when discussing QR code margins, white border requirements, or scan failures due to cropping. TRIGGERS: quiet zone, qr margin, white border, qr padding, module margin, quiet area. NOT: finder pattern (corners), timing pattern (lines)."
     entity_summary: |
       The quiet zone is the white border around a QR code. It must be at
       least 4 modules wide to ensure scanners can detect the code's edges.
@@ -24,6 +25,7 @@ entities:
     type: CONCEPT
     display_name: Error Correction
     description: Reed-Solomon encoding (L/M/Q/H levels)
+    llm_context: "USE: when discussing QR code damage tolerance, logo placement, or error correction levels L/M/Q/H. TRIGGERS: error correction, qr damage, reed solomon, correction level, damaged qr, logo error correction. NOT: data capacity (size), encoding mode (character type)."
     entity_summary: |
       Error correction allows QR codes to be readable even when partially
       damaged. Four levels exist: L (7%), M (15%), Q (25%), H (30%).
@@ -33,6 +35,7 @@ entities:
     type: CONCEPT
     display_name: Data Capacity
     description: Maximum characters based on version and error correction
+    llm_context: "USE: when discussing how much data a QR code can hold, character limits, or QR size requirements. TRIGGERS: data capacity, qr capacity, character limit, qr data size, how much data, qr storage. NOT: error correction (damage), encoding mode (format)."
     entity_summary: |
       Data capacity determines how much information a QR code can hold.
       Version 1 (21x21) holds ~25 alphanumeric characters. Version 40
@@ -42,6 +45,7 @@ entities:
     type: CONCEPT
     display_name: QR Code Version
     description: Size grid (21x21 v1 to 177x177 v40)
+    llm_context: "USE: when discussing QR code size, version numbers 1-40, or module grid dimensions. TRIGGERS: qr version, qr size, version 1, version 40, module grid, qr dimensions. NOT: data capacity (characters), error correction (damage)."
     entity_summary: |
       QR code version determines the physical size and capacity.
       40 versions exist: Version 1 is 21x21 modules, Version 40 is
@@ -54,6 +58,7 @@ entities:
     type: CONCEPT
     display_name: Encoding Mode
     description: Numeric/Alphanumeric/Byte/Kanji modes
+    llm_context: "USE: when discussing QR encoding efficiency, character types, or numeric vs alphanumeric modes. TRIGGERS: encoding mode, numeric mode, alphanumeric mode, byte mode, kanji mode, qr encoding. NOT: error correction (damage), data capacity (size)."
     entity_summary: |
       Encoding mode determines how data is stored in a QR code.
       Numeric (0-9) is most efficient. Alphanumeric adds letters.
@@ -63,6 +68,7 @@ entities:
     type: CONCEPT
     display_name: Module
     description: Single black or white square unit
+    llm_context: "USE: when discussing QR code pixels, individual squares, or module-level design. TRIGGERS: module, qr pixel, qr square, black module, white module, qr unit. NOT: finder pattern (corner squares), quiet zone (border)."
     entity_summary: |
       A module is the smallest unit in a QR code - a single square.
       Modules can be black (dark) or white (light). The pattern of
@@ -72,6 +78,7 @@ entities:
     type: CONCEPT
     display_name: Finder Pattern
     description: Three corner squares for orientation
+    llm_context: "USE: when discussing QR code corner squares, orientation markers, or why QR codes have three big squares. TRIGGERS: finder pattern, corner squares, qr orientation, position detection, three squares, qr corners. NOT: timing pattern (lines), alignment pattern (small squares)."
     entity_summary: |
       Finder patterns are the three large squares in QR code corners.
       They help scanners locate and orient the code regardless of
@@ -81,6 +88,7 @@ entities:
     type: CONCEPT
     display_name: Timing Pattern
     description: Alternating modules for alignment
+    llm_context: "USE: when discussing QR code alignment, alternating black/white lines, or grid calibration. TRIGGERS: timing pattern, alignment lines, alternating modules, grid calibration, qr timing. NOT: finder pattern (corners), module (single square)."
     entity_summary: |
       Timing patterns are alternating black/white lines connecting
       finder patterns. They help scanners determine module coordinates
