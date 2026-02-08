@@ -113,7 +113,9 @@ pub async fn run_create(db: &Db, kind: &str, key: &str, props_json: &str) -> cra
             source: e,
         })?
     {
-        let created_key: String = row.get("key").unwrap_or_default();
+        let created_key: String = row.get("key").map_err(|_| {
+            crate::NovaNetError::Validation("Neo4j query result missing 'key' field".to_string())
+        })?;
         info!(key = %created_key, kind = %kind, "created node");
     }
 
@@ -160,7 +162,11 @@ pub async fn run_edit(db: &Db, key: &str, set_json: &str) -> crate::Result<()> {
             source: e,
         })? {
         Some(row) => {
-            let edited_key: String = row.get("key").unwrap_or_default();
+            let edited_key: String = row.get("key").map_err(|_| {
+                crate::NovaNetError::Validation(
+                    "Neo4j query result missing 'key' field".to_string(),
+                )
+            })?;
             info!(key = %edited_key, "updated node");
         }
         None => {

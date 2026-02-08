@@ -69,6 +69,38 @@ const COLOR_BRIGHT_DIM: Color = Color::Rgb(140, 140, 140);
 const COLOR_ACTIVE_KIND_BG: Color = Color::Rgb(25, 35, 45);
 
 // -----------------------------------------------------------------------------
+// Layout constants (percentages and sizes)
+// -----------------------------------------------------------------------------
+
+/// Wide layout: Tree panel percentage.
+const LAYOUT_WIDE_TREE_PCT: u16 = 20;
+/// Wide layout: Info+Graph panel percentage.
+const LAYOUT_WIDE_INFO_PCT: u16 = 40;
+/// Wide layout: YAML panel percentage.
+const LAYOUT_WIDE_YAML_PCT: u16 = 40;
+/// Wide layout: Info section percentage (within Info+Graph).
+const LAYOUT_WIDE_INFO_SECTION_PCT: u16 = 60;
+/// Wide layout: Graph section percentage (within Info+Graph).
+const LAYOUT_WIDE_GRAPH_SECTION_PCT: u16 = 40;
+
+/// Narrow layout: Tree panel percentage.
+const LAYOUT_NARROW_TREE_PCT: u16 = 20;
+/// Narrow layout: Detail panel percentage.
+const LAYOUT_NARROW_DETAIL_PCT: u16 = 80;
+/// Narrow layout: Info section percentage.
+const LAYOUT_NARROW_INFO_PCT: u16 = 35;
+/// Narrow layout: Graph section percentage.
+const LAYOUT_NARROW_GRAPH_PCT: u16 = 30;
+/// Narrow layout: YAML section percentage.
+const LAYOUT_NARROW_YAML_PCT: u16 = 35;
+
+/// Popup/overlay box dimensions.
+const POPUP_BOX_WIDTH: u16 = 50;
+const POPUP_BOX_HEIGHT: u16 = 12;
+const POPUP_BOX_MIN_WIDTH: u16 = 20;
+const POPUP_BOX_MIN_HEIGHT: u16 = 6;
+
+// -----------------------------------------------------------------------------
 // Trait icons for visual node classification
 // -----------------------------------------------------------------------------
 
@@ -106,6 +138,34 @@ fn type_badge(prop_type: &str) -> &'static str {
         "?" => "?   ", // unknown type from validation
         _ => "··· ",   // fallback for unknown types
     }
+}
+
+// -----------------------------------------------------------------------------
+// Text wrapping helper (avoids Vec<char> allocation per frame)
+// -----------------------------------------------------------------------------
+
+/// Wrap text to lines of max `width` characters, returning owned Strings.
+/// Uses char indices instead of collecting to Vec<char> for efficiency.
+fn wrap_text(text: &str, width: usize) -> Vec<String> {
+    let mut result = Vec::new();
+    let mut chars = text.char_indices().peekable();
+    while chars.peek().is_some() {
+        let start = chars.peek().map(|(i, _)| *i).unwrap_or(0);
+        let mut end = start;
+        let mut count = 0;
+        while let Some((idx, c)) = chars.peek() {
+            if count >= width {
+                break;
+            }
+            end = *idx + c.len_utf8();
+            count += 1;
+            chars.next();
+        }
+        if start < end {
+            result.push(text[start..end].to_string());
+        }
+    }
+    result
 }
 
 // -----------------------------------------------------------------------------
@@ -313,10 +373,10 @@ impl EmptyStateKind {
 /// Render an empty state message in a centered box.
 fn render_empty_state(f: &mut Frame, area: Rect, kind: EmptyStateKind, tick: u16) {
     // Calculate centered box dimensions
-    let box_width = 50.min(area.width.saturating_sub(4));
-    let box_height = 12.min(area.height.saturating_sub(2));
+    let box_width = POPUP_BOX_WIDTH.min(area.width.saturating_sub(4));
+    let box_height = POPUP_BOX_HEIGHT.min(area.height.saturating_sub(2));
 
-    if box_width < 20 || box_height < 6 {
+    if box_width < POPUP_BOX_MIN_WIDTH || box_height < POPUP_BOX_MIN_HEIGHT {
         // Area too small for empty state
         return;
     }
@@ -558,25 +618,25 @@ fn render_main(f: &mut Frame, area: Rect, app: &mut App) {
     }
 }
 
-/// Wide layout: Tree (20%) | Info+Graph (40%) | YAML (40%).
+/// Wide layout: Tree | Info+Graph | YAML.
 fn render_main_wide(f: &mut Frame, area: Rect, app: &mut App) {
     let chunks = Layout::default()
         .direction(Direction::Horizontal)
         .constraints([
-            Constraint::Percentage(20), // Tree
-            Constraint::Percentage(40), // Info + Graph (stacked)
-            Constraint::Percentage(40), // YAML
+            Constraint::Percentage(LAYOUT_WIDE_TREE_PCT),
+            Constraint::Percentage(LAYOUT_WIDE_INFO_PCT),
+            Constraint::Percentage(LAYOUT_WIDE_YAML_PCT),
         ])
         .split(area);
 
     render_tree(f, chunks[0], app);
 
-    // Stack Info (60%) and Graph (40%) vertically in the middle panel
+    // Stack Info and Graph vertically in the middle panel
     let middle_chunks = Layout::default()
         .direction(Direction::Vertical)
         .constraints([
-            Constraint::Percentage(60), // Info
-            Constraint::Percentage(40), // Graph
+            Constraint::Percentage(LAYOUT_WIDE_INFO_SECTION_PCT),
+            Constraint::Percentage(LAYOUT_WIDE_GRAPH_SECTION_PCT),
         ])
         .split(chunks[1]);
 
@@ -586,25 +646,25 @@ fn render_main_wide(f: &mut Frame, area: Rect, app: &mut App) {
     render_yaml_panel(f, chunks[2], app);
 }
 
-/// Narrow layout: Tree (20%) | Info+Graph+YAML stacked (80%).
+/// Narrow layout: Tree | Info+Graph+YAML stacked.
 fn render_main_narrow(f: &mut Frame, area: Rect, app: &mut App) {
     let h_chunks = Layout::default()
         .direction(Direction::Horizontal)
         .constraints([
-            Constraint::Percentage(20), // Tree (narrower)
-            Constraint::Percentage(80), // Detail (stacked)
+            Constraint::Percentage(LAYOUT_NARROW_TREE_PCT),
+            Constraint::Percentage(LAYOUT_NARROW_DETAIL_PCT),
         ])
         .split(area);
 
     render_tree(f, h_chunks[0], app);
 
-    // Stack Info (35%), Graph (30%), YAML (35%) vertically
+    // Stack Info, Graph, YAML vertically
     let v_chunks = Layout::default()
         .direction(Direction::Vertical)
         .constraints([
-            Constraint::Percentage(35), // Info
-            Constraint::Percentage(30), // Graph
-            Constraint::Percentage(35), // YAML
+            Constraint::Percentage(LAYOUT_NARROW_INFO_PCT),
+            Constraint::Percentage(LAYOUT_NARROW_GRAPH_PCT),
+            Constraint::Percentage(LAYOUT_NARROW_YAML_PCT),
         ])
         .split(h_chunks[1]);
 
@@ -2367,9 +2427,8 @@ fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
                 "  ─────────────────────────────────────────",
                 dim,
             )));
-            // Wrap description if too long
-            for chunk in details.description.chars().collect::<Vec<_>>().chunks(45) {
-                let line: String = chunk.iter().collect();
+            // Wrap description if too long (no Vec<char> allocation)
+            for line in wrap_text(&details.description, 45) {
                 lines.push(Line::from(Span::styled(format!("    {}", line), STYLE_DIM)));
             }
         }
@@ -3285,10 +3344,8 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
             if !kind.description.is_empty() {
                 lines.push(Line::from(""));
                 lines.push(Line::from(Span::styled("Description", STYLE_MUTED)));
-                // Wrap description to multiple lines if too long
-                let desc = &kind.description;
-                for chunk in desc.chars().collect::<Vec<_>>().chunks(60) {
-                    let line: String = chunk.iter().collect();
+                // Wrap description to multiple lines (no Vec<char> allocation)
+                for line in wrap_text(&kind.description, 60) {
                     lines.push(Line::from(Span::styled(format!("  {}", line), STYLE_DESC)));
                 }
             }
@@ -3618,10 +3675,9 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                                         ),
                                         Span::styled("▼ ", STYLE_HINT), // Expanded indicator
                                     ]));
-                                    // Wrap value text to multiple lines (50 chars per line)
+                                    // Wrap value text to multiple lines (no Vec<char> allocation)
                                     let full_value = format!("\"{}\"", value_str);
-                                    for chunk in full_value.chars().collect::<Vec<_>>().chunks(50) {
-                                        let line: String = chunk.iter().collect();
+                                    for line in wrap_text(&full_value, 50) {
                                         lines.push(Line::from(vec![
                                             Span::styled("                        ", STYLE_DIM), // Indent
                                             Span::styled(line, STYLE_SUCCESS),
@@ -5887,8 +5943,8 @@ fn render_recent_items_overlay(f: &mut Frame, app: &App) {
 
     // Center the popup
     let area = f.area();
-    let width = 50.min(area.width.saturating_sub(4));
-    let height = 14.min(area.height.saturating_sub(4));
+    let width = POPUP_BOX_WIDTH.min(area.width.saturating_sub(4));
+    let height = 14.min(area.height.saturating_sub(4)); // Taller for list items
     let x = (area.width.saturating_sub(width)) / 2;
     let y = (area.height.saturating_sub(height)) / 3;
 

@@ -20,7 +20,7 @@ db-urls = ["https://github.com/rustsec/advisory-db"]
 ignore = [
     "RUSTSEC-2025-0012",  # backoff (neo4rs → backoff)
     "RUSTSEC-2024-0384",  # instant (neo4rs → backoff → instant)
-    "RUSTSEC-2025-0119",  # number_prefix (indicatif) - cosmetic
+    # Removed: RUSTSEC-2025-0119 (indicatif is not a dependency - false positive)
     "RUSTSEC-2024-0436",  # paste (neo4rs → paste)
     "RUSTSEC-2025-0134",  # rustls-pemfile (neo4rs → rustls-pemfile)
     "RUSTSEC-2026-0009",  # time (ratatui-widgets → time) - DoS via stack, low risk for TUI

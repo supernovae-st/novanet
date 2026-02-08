@@ -6,7 +6,7 @@
 //! Output target: `packages/db/seed/01-kinds.cypher`
 
 use super::cypher_utils::{cypher_list_ref, cypher_str};
-use crate::parsers::yaml_node::{self, LocaleBehavior, ParsedNode};
+use crate::parsers::yaml_node::{self, NodeTrait, ParsedNode};
 use std::fmt::Write;
 use std::path::Path;
 
@@ -57,10 +57,10 @@ fn build_schema_hint(node: &ParsedNode) -> String {
 /// - Everything else → `high`
 fn context_budget(node: &ParsedNode) -> &'static str {
     match node.def.node_trait {
-        LocaleBehavior::Job => "minimal",
-        LocaleBehavior::Derived => "low",
-        LocaleBehavior::Knowledge => "medium",
-        LocaleBehavior::Invariant | LocaleBehavior::Localized => match node.layer.as_str() {
+        NodeTrait::Job => "minimal",
+        NodeTrait::Derived => "low",
+        NodeTrait::Knowledge => "medium",
+        NodeTrait::Invariant | NodeTrait::Localized => match node.layer.as_str() {
             "instruction" | "config" => "medium",
             _ => "high",
         },
@@ -130,7 +130,8 @@ fn to_kebab_case(s: &str) -> String {
                     result.push('-');
                 }
             }
-            result.push(c.to_lowercase().next().unwrap());
+            // Safe: to_lowercase always returns at least one char for valid Unicode
+            result.push(c.to_lowercase().next().unwrap_or(c));
         } else {
             result.push(c);
         }
@@ -351,7 +352,7 @@ mod tests {
     use std::collections::BTreeMap;
 
     /// Build a minimal ParsedNode for testing.
-    fn make_node(name: &str, realm: &str, layer: &str, behavior: LocaleBehavior) -> ParsedNode {
+    fn make_node(name: &str, realm: &str, layer: &str, behavior: NodeTrait) -> ParsedNode {
         ParsedNode {
             def: NodeDef {
                 name: name.to_string(),
@@ -379,7 +380,7 @@ mod tests {
         name: &str,
         realm: &str,
         layer: &str,
-        behavior: LocaleBehavior,
+        behavior: NodeTrait,
         props: Vec<(&str, &str, bool)>, // (name, type, required)
     ) -> ParsedNode {
         // Use IndexMap to preserve YAML definition order
@@ -403,7 +404,7 @@ mod tests {
 
     #[test]
     fn schema_hint_no_properties() {
-        let node = make_node("Test", "tenant", "foundation", LocaleBehavior::Invariant);
+        let node = make_node("Test", "tenant", "foundation", NodeTrait::Invariant);
         assert_eq!(build_schema_hint(&node), "");
     }
 
@@ -413,7 +414,7 @@ mod tests {
             "Page",
             "tenant",
             "structure",
-            LocaleBehavior::Invariant,
+            NodeTrait::Invariant,
             vec![
                 ("key", "string", true),
                 ("display_name", "string", true),
@@ -428,16 +429,11 @@ mod tests {
     fn context_budget_by_trait() {
         // v10.4: SEO layer is in global realm
         assert_eq!(
-            context_budget(&make_node("Run", "global", "seo", LocaleBehavior::Job)),
+            context_budget(&make_node("Run", "global", "seo", NodeTrait::Job)),
             "minimal"
         );
         assert_eq!(
-            context_budget(&make_node(
-                "Metrics",
-                "global",
-                "seo",
-                LocaleBehavior::Derived
-            )),
+            context_budget(&make_node("Metrics", "global", "seo", NodeTrait::Derived)),
             "low"
         );
         assert_eq!(
@@ -445,7 +441,7 @@ mod tests {
                 "Voice",
                 "global",
                 "knowledge",
-                LocaleBehavior::Knowledge
+                NodeTrait::Knowledge
             )),
             "medium"
         );
@@ -459,7 +455,7 @@ mod tests {
                 "PageType",
                 "tenant",
                 "instruction",
-                LocaleBehavior::Invariant
+                NodeTrait::Invariant
             )),
             "medium"
         );
@@ -469,7 +465,7 @@ mod tests {
                 "Locale",
                 "global",
                 "config",
-                LocaleBehavior::Invariant
+                NodeTrait::Invariant
             )),
             "medium"
         );
@@ -479,7 +475,7 @@ mod tests {
                 "Page",
                 "tenant",
                 "structure",
-                LocaleBehavior::Invariant
+                NodeTrait::Invariant
             )),
             "high"
         );
@@ -489,7 +485,7 @@ mod tests {
                 "PageL10n",
                 "tenant",
                 "output",
-                LocaleBehavior::Localized
+                NodeTrait::Localized
             )),
             "high"
         );
@@ -528,10 +524,10 @@ mod tests {
                 "Page",
                 "tenant",
                 "structure",
-                LocaleBehavior::Invariant,
+                NodeTrait::Invariant,
                 vec![("key", "string", true), ("display_name", "string", true)],
             ),
-            make_node("Locale", "global", "config", LocaleBehavior::Invariant),
+            make_node("Locale", "global", "config", NodeTrait::Invariant),
         ];
 
         let cypher = generate_kind_cypher(&nodes).unwrap();
@@ -684,21 +680,21 @@ mod tests {
     #[test]
     fn snapshot_minimal_kinds() {
         let nodes = vec![
-            make_node("Project", "tenant", "foundation", LocaleBehavior::Invariant),
+            make_node("Project", "tenant", "foundation", NodeTrait::Invariant),
             make_node_with_props(
                 "Page",
                 "tenant",
                 "structure",
-                LocaleBehavior::Invariant,
+                NodeTrait::Invariant,
                 vec![
                     ("key", "string", true),
                     ("display_name", "string", true),
                     ("slug", "string", false),
                 ],
             ),
-            make_node("PageL10n", "tenant", "structure", LocaleBehavior::Localized),
-            make_node("Concept", "tenant", "semantic", LocaleBehavior::Invariant),
-            make_node("GenerationJob", "tenant", "output", LocaleBehavior::Job),
+            make_node("PageL10n", "tenant", "structure", NodeTrait::Localized),
+            make_node("Concept", "tenant", "semantic", NodeTrait::Invariant),
+            make_node("GenerationJob", "tenant", "output", NodeTrait::Job),
         ];
 
         let cypher = generate_kind_cypher(&nodes).unwrap();
