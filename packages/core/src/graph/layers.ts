@@ -93,17 +93,17 @@ export const NODE_LAYERS: Record<NodeType, Layer> = {
   PromptArtifact: 'instruction',
 
   // output (5 nodes) - matches models/node-kinds/tenant/output/
-  BlockL10n: 'output',
+  BlockGenerated: 'output',
   EvaluationSignal: 'output',
   GenerationJob: 'output',
   OutputArtifact: 'output',
-  PageL10n: 'output',
+  PageGenerated: 'output',
 
   // semantic (4 nodes) - matches models/node-kinds/tenant/semantic/
   AudiencePersona: 'semantic',
   ChannelSurface: 'semantic',
   Entity: 'semantic',
-  EntityL10n: 'semantic',
+  EntityContent: 'semantic',
 
   // structure (3 nodes) - matches models/node-kinds/tenant/structure/
   Block: 'structure',

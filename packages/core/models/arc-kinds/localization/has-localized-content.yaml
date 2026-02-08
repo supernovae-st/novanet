@@ -9,9 +9,9 @@ arc:
   source: Locale
   target:
     - ProjectL10n
-    - EntityL10n
-    - PageL10n
-    - BlockL10n
+    - EntityContent
+    - PageGenerated
+    - BlockGenerated
   cardinality: one_to_many
   inverse_of: FOR_LOCALE
   llm_context: Inverse of FOR_LOCALE — locale knows all its content.

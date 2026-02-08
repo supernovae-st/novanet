@@ -72,8 +72,8 @@ node:
       cardinality: "N:1"
       description: "Template type for this block"
 
-    HAS_OUTPUT:
-      to: BlockL10n
+    HAS_GENERATED:  # v10.9.0: renamed from HAS_OUTPUT
+      to: BlockGenerated  # v10.9.0: renamed from BlockL10n
       cardinality: "1:N"
       description: "Generated outputs for this block (one per locale)"
 
@@ -100,17 +100,17 @@ node:
       instructions: "[GENERATE] Hero for pricing page, highlight @tier-pro benefits"
 
     cypher: |
-      // Load full context for block generation
+      // Load full context for block generation (v10.9.0: EntityContent)
       MATCH (b:Block {key: $key})-[:OF_TYPE]->(bt:BlockType)
-      MATCH (b)-[:USES_ENTITY]->(e:Entity)-[:HAS_L10N]->(el:EntityL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+      MATCH (b)-[:USES_ENTITY]->(e:Entity)-[:HAS_CONTENT]->(ec:EntityContent)-[:FOR_LOCALE]->(l:Locale {key: $locale})
       OPTIONAL MATCH (l)-[:HAS_VOICE]->(v:LocaleVoice)
       OPTIONAL MATCH (l)-[:HAS_CULTURE]->(cult:LocaleCulture)
       RETURN b.instructions, bt.rules, bt.llm_context,
-             collect(DISTINCT {key: e.key, title: el.title, definition: el.definition}) AS entities,
+             collect(DISTINCT {key: e.key, title: ec.display_name, definition: ec.definition}) AS entities,
              v AS voice, cult AS culture
 
-      // Get block with latest output for locale
-      MATCH (b:Block {key: $key})-[:HAS_OUTPUT]->(bl:BlockL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
-      RETURN b, bl
-      ORDER BY bl.generated_at DESC
+      // Get block with latest generated output for locale (v10.9.0)
+      MATCH (b:Block {key: $key})-[:HAS_GENERATED]->(bg:BlockGenerated)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+      RETURN b, bg
+      ORDER BY bg.generated_at DESC
       LIMIT 1

@@ -7,8 +7,8 @@ arc:
   scope: intra_realm
   source: OutputArtifact
   target:
-    - PageL10n
-    - BlockL10n
+    - PageGenerated
+    - BlockGenerated
   cardinality: one_to_many
   properties:
     - name: position
@@ -18,4 +18,4 @@ arc:
       type: string
       required: false
   llm_context: Output artifact bundles specific L10n nodes for deployment.
-  cypher_pattern: (OutputArtifact)-[:INCLUDES {position, checksum}]->(PageL10n)
+  cypher_pattern: (OutputArtifact)-[:INCLUDES {position, checksum}]->(PageGenerated)

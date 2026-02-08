@@ -14,7 +14,7 @@ include:
 
   - relation: EXPRESSES
     direction: outgoing
-    from: EntityL10n
+    from: EntityContent
 
   - relation: SEMANTIC_LINK
     direction: both
@@ -29,9 +29,9 @@ docs:
   description: |
     The entity network showing semantic relationships between entities.
     Entities are the core semantic building blocks of NovaNet:
-    - Each Entity has localized versions (EntityL10n) per locale
+    - Each Entity has localized versions (EntityContent) per locale
     - Entities connect via SEMANTIC_LINK with temperature weights
-    - EntityL10n expresses SEO keywords via EXPRESSES arc
+    - EntityContent expresses SEO keywords via EXPRESSES arc
 
   layers:
     - name: Entity Core
@@ -40,7 +40,7 @@ docs:
       description: Invariant entity definitions
 
     - name: Localization
-      nodes: [EntityL10n]
+      nodes: [EntityContent]
       color: green
       description: Localized entity content
 
@@ -54,7 +54,7 @@ docs:
       description: Get an entity with all its localized versions
       query: |
         MATCH (e:Entity {key: $entityKey})
-        OPTIONAL MATCH (e)-[:HAS_L10N]->(el:EntityL10n)-[:FOR_LOCALE]->(l:Locale)
+        OPTIONAL MATCH (e)-[:HAS_L10N]->(el:EntityContent)-[:FOR_LOCALE]->(l:Locale)
         RETURN e.key AS entity,
                e.llm_context AS context,
                collect({locale: l.key, title: el.title, definition: el.definition}) AS localizations
@@ -76,9 +76,9 @@ docs:
         entityKey: "tier-pro"
 
     - name: Entity SEO targets (locale-aligned)
-      description: Get SEO keywords via EntityL10n (v10.3 architecture)
+      description: Get SEO keywords via EntityContent (v10.3 architecture)
       query: |
-        MATCH (e:Entity {key: $entityKey})-[:HAS_L10N]->(el:EntityL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+        MATCH (e:Entity {key: $entityKey})-[:HAS_L10N]->(el:EntityContent)-[:FOR_LOCALE]->(l:Locale {key: $locale})
         OPTIONAL MATCH (el)-[:EXPRESSES]->(seo:SEOKeyword)
         RETURN e.key AS entity,
                el.title AS localizedTitle,
@@ -89,6 +89,6 @@ docs:
 
   notes:
     - "Entities are INVARIANT - they exist independently of locale"
-    - "EntityL10n provides locale-specific title, definition, examples"
-    - "SEO keywords linked to EntityL10n (same locale) via EXPRESSES"
+    - "EntityContent provides locale-specific title, definition, examples"
+    - "SEO keywords linked to EntityContent (same locale) via EXPRESSES"
     - "SEMANTIC_LINK temperature controls spreading activation strength"

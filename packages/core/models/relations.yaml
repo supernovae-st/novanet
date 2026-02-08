@@ -251,10 +251,10 @@ relations:
 
   - type: BELONGS_TO_PROJECT_L10N
     family: ownership
-    source: PageL10n
+    source: PageGenerated
     target: ProjectL10n
     cardinality: many_to_one
-    llm_context: "Locale-aligned: PageL10n (fr-FR) → ProjectL10n (fr-FR). Provides voice, tagline, CTAs."
+    llm_context: "Locale-aligned: PageGenerated (fr-FR) → ProjectL10n (fr-FR). Provides voice, tagline, CTAs."
 
   # Inverse
   - type: BLOCK_OF
@@ -274,10 +274,10 @@ relations:
   - type: FOR_LOCALE
     family: localization
     source:
-      - EntityL10n
+      - EntityContent
       - ProjectL10n
-      - BlockL10n
-      - PageL10n
+      - BlockGenerated
+      - PageGenerated
       - GenerationJob
       - OutputArtifact
     target: Locale
@@ -291,7 +291,7 @@ relations:
       - Entity
       - Project
     target:
-      - EntityL10n
+      - EntityContent
       - ProjectL10n
     cardinality: one_to_many
     llm_context: "Links invariant node to its human-curated localized definitions (one per locale)."
@@ -302,8 +302,8 @@ relations:
       - Page
       - Block
     target:
-      - PageL10n
-      - BlockL10n
+      - PageGenerated
+      - BlockGenerated
     cardinality: one_to_many
     llm_context: "Links structure to its LLM-generated localized content."
 
@@ -330,7 +330,7 @@ relations:
   - type: L10N_OF
     family: localization
     source:
-      - EntityL10n
+      - EntityContent
       - ProjectL10n
     target:
       - Entity
@@ -342,8 +342,8 @@ relations:
   - type: OUTPUT_OF
     family: localization
     source:
-      - PageL10n
-      - BlockL10n
+      - PageGenerated
+      - BlockGenerated
     target:
       - Page
       - Block
@@ -356,9 +356,9 @@ relations:
     source: Locale
     target:
       - ProjectL10n
-      - EntityL10n
-      - PageL10n
-      - BlockL10n
+      - EntityContent
+      - PageGenerated
+      - BlockGenerated
     cardinality: one_to_many
     inverse_of: FOR_LOCALE
     llm_context: "Inverse of FOR_LOCALE — locale knows all its content."
@@ -434,8 +434,8 @@ relations:
       - PagePrompt
       - BlockPrompt
     target:
-      - PageL10n
-      - BlockL10n
+      - PageGenerated
+      - BlockGenerated
     cardinality: one_to_many
     properties:
       - generated_at
@@ -443,22 +443,22 @@ relations:
 
   - type: ASSEMBLES
     family: generation
-    source: PageL10n
-    target: BlockL10n
+    source: PageGenerated
+    target: BlockGenerated
     cardinality: one_to_many
     properties:
       - position
-    llm_context: "PageL10n assembles BlockL10ns with position for ordering."
+    llm_context: "PageGenerated assembles BlockGenerateds with position for ordering."
 
   - type: PREVIOUS_VERSION
     family: generation
     source:
-      - BlockL10n
-      - PageL10n
+      - BlockGenerated
+      - PageGenerated
       - OutputArtifact
     target:
-      - BlockL10n
-      - PageL10n
+      - BlockGenerated
+      - PageGenerated
       - OutputArtifact
     cardinality: one_to_one
     is_self_referential: true
@@ -466,8 +466,8 @@ relations:
 
   - type: INFLUENCED_BY
     family: generation
-    source: BlockL10n
-    target: EntityL10n
+    source: BlockGenerated
+    target: EntityContent
     cardinality: many_to_many
     properties:
       - weight
@@ -476,7 +476,7 @@ relations:
 
   - type: GENERATED_FROM
     family: generation
-    source: BlockL10n
+    source: BlockGenerated
     target: BlockType
     cardinality: many_to_one
     llm_context: "Direct link for fast structure validation (optimization shortcut)."
@@ -537,8 +537,8 @@ relations:
     family: generation
     source: GenerationJob
     target:
-      - PageL10n
-      - BlockL10n
+      - PageGenerated
+      - BlockGenerated
     cardinality: one_to_many
     properties:
       - created_at
@@ -548,8 +548,8 @@ relations:
     family: generation
     source: OutputArtifact
     target:
-      - PageL10n
-      - BlockL10n
+      - PageGenerated
+      - BlockGenerated
     cardinality: one_to_many
     properties:
       - position
@@ -559,8 +559,8 @@ relations:
   - type: HAS_EVALUATION
     family: generation
     source:
-      - PageL10n
-      - BlockL10n
+      - PageGenerated
+      - BlockGenerated
       - OutputArtifact
     target: EvaluationSignal
     cardinality: one_to_many
@@ -718,10 +718,10 @@ examples:
       CREATE (c1)-[:SEMANTIC_LINK {type: "is_action_on", temperature: 0.95}]->(c2)
 
   has_seo_target:
-    description: "EntityL10n targets SEO keyword (locale-aligned primary)"
+    description: "EntityContent targets SEO keyword (locale-aligned primary)"
     cypher: |
       // v10.2: SEOKeyword now owned by Locale via HAS_SEO_KEYWORDS
-      MATCH (c:Entity {key:'action-create-qr'})-[:HAS_L10N]->(cl:EntityL10n)-[:FOR_LOCALE]->(l:Locale {key:'fr-FR'})
+      MATCH (c:Entity {key:'action-create-qr'})-[:HAS_L10N]->(cl:EntityContent)-[:FOR_LOCALE]->(l:Locale {key:'fr-FR'})
       MATCH (l)-[:HAS_SEO_KEYWORDS]->(kw:SEOKeyword {key:'seo-creer-qr-code-gratuit-fr'})
       CREATE (cl)-[:HAS_SEO_TARGET {role: "primary", priority: 1}]->(kw)
 
@@ -745,7 +745,7 @@ examples:
     description: "Get all internal links for a page with localized anchors"
     cypher: |
       MATCH (page:Page {key: $key})-[link:LINKS_TO]->(target:Page)
-      MATCH (c:Entity {key: link.concept_key})-[:HAS_L10N]->(cl:EntityL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+      MATCH (c:Entity {key: link.concept_key})-[:HAS_L10N]->(cl:EntityContent)-[:FOR_LOCALE]->(l:Locale {key: $locale})
       RETURN target.key AS target_page,
              cl.title AS anchor_text,
              link.context AS link_context,

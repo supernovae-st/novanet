@@ -18,7 +18,7 @@
 #   │  │  🌍 GLOBAL (22 nodes) - Single instance, shared by ALL projects       │  │
 #   │  │  └─ config/    Locale (1)                                             │  │
 #   │  │  └─ knowledge/ 18 knowledge nodes (10 containers + 6 atoms + Entity)  │  │
-#   │  │      Entity:     Entity (invariant), EntityL10n (localized)           │  │
+#   │  │      Entity:     Entity (invariant), EntityContent (localized)           │  │
 #   │  │      Containers: Style, Formatting, Slugification, Adaptation,        │  │
 #   │  │                  TermSet, ExpressionSet, PatternSet, CultureSet,      │  │
 #   │  │                  TabooSet, AudienceSet                                │  │
@@ -36,7 +36,7 @@
 #   │  │  └─ semantic/    💡 AudiencePersona, ChannelSurface                   │  │
 #   │  │  └─ instruction/ 📝 PageType, PagePrompt, BlockPrompt, BlockType,     │  │
 #   │  │                     BlockRules, PromptArtifact, BlockInstruction      │  │
-#   │  │  └─ output/      📤 PageL10n, BlockL10n, GenerationJob, OutputArtifact│  │
+#   │  │  └─ output/      📤 PageGenerated, BlockGenerated, GenerationJob, OutputArtifact│  │
 #   │  │                     EvaluationSignal                                  │  │
 #   │  └───────────────────────────────────────────────────────────────────────┘  │
 #   │                                                                             │
@@ -58,14 +58,14 @@
 #                               │    │                            │
 #                               │    │                     :USES_ENTITY
 #                               │    │                            v
-#                               │    │                         Entity ──[:HAS_L10N]──> EntityL10n
+#                               │    │                         Entity ──[:HAS_L10N]──> EntityContent
 #                               │    │                            │           ──:FOR_LOCALE──> Locale
 #                               │    │                            │                    │
 #                               │    │                     :SEMANTIC_LINK        :HAS_SEO_TARGET
 #                               │    │                            v                    v
 #                               │    │                         Entity             SEOKeyword
 #                               │    │
-#                               │    └──:HAS_OUTPUT──> BlockL10n ──:FOR_LOCALE──> Locale
+#                               │    └──:HAS_OUTPUT──> BlockGenerated ──:FOR_LOCALE──> Locale
 #                               │
 #                               ├──:USES_ENTITY──> Entity (global)
 #                               │
@@ -73,11 +73,11 @@
 #                               │
 #                               ├──:SUBTOPIC_OF──> Page (pillar-cluster hierarchy, v7.12.0)
 #                               │
-#                               └──:HAS_OUTPUT──> PageL10n ──:FOR_LOCALE──> Locale
+#                               └──:HAS_OUTPUT──> PageGenerated ──:FOR_LOCALE──> Locale
 #                                                     │
 #                                               :PREVIOUS_VERSION
 #                                                     v
-#                                               PageL10n (history)
+#                                               PageGenerated (history)
 #
 # ═══════════════════════════════════════════════════════════════════════════════
 # ARC FAMILIES (v9.5.0 - replaces relation classification)
@@ -109,7 +109,7 @@
 # NAMING CONVENTIONS (Neo4j official)
 # ═══════════════════════════════════════════════════════════════════════════════
 #
-#   NODE LABELS:      CamelCase, uppercase first (ConceptL10n, PageL10n)
+#   NODE LABELS:      CamelCase, uppercase first (ConceptL10n, PageGenerated)
 #   RELATIONSHIPS:    UPPER_SNAKE_CASE (HAS_L10N, FOR_LOCALE)
 #   PROPERTIES:       snake_case (display_name, llm_context)
 #
@@ -119,7 +119,7 @@
 #
 #   *L10n suffix  → ALL localized content (human OR LLM generated)
 #   :HAS_L10N     → human-curated content (ConceptL10n, ProjectL10n)
-#   :HAS_OUTPUT   → LLM-generated content (PageL10n, BlockL10n)
+#   :HAS_OUTPUT   → LLM-generated content (PageGenerated, BlockGenerated)
 #   *Metrics      → Time-series observations (SEOKeywordMetrics)
 #   Locale*       → Locale Knowledge nodes (LocaleVoice, LocaleCulture, etc.)
 #
@@ -205,7 +205,7 @@
 # Simplification + Versioning:
 #   - REMOVED: priority, freshness, icon from standard properties (YAGNI)
 #   - REMOVED: PageMetrics node (query GA/PostHog with date ranges instead)
-#   - ADDED: PREVIOUS_VERSION relation for BlockL10n, PageL10n history chain
+#   - ADDED: PREVIOUS_VERSION relation for BlockGenerated, PageGenerated history chain
 #   - ADDED: version, published_at, replaced_at properties on L10n nodes
 #
 # Statistics: 35 nodes (-1), 61 relations (+1)
@@ -237,7 +237,7 @@
 #   - structure/   🔧 Page, Block
 #   - semantic/    💡 Concept, ConceptL10n
 #   - instruction/ 📝 PagePrompt, BlockPrompt, BlockType, BlockRules
-#   - output/      📤 PageL10n, BlockL10n, PageMetrics
+#   - output/      📤 PageGenerated, BlockGenerated, PageMetrics
 #
 # Benefits:
 #   - Perfect alignment with GRAPH-DETAILED.md scope architecture
@@ -379,9 +379,9 @@ nodes_by_trait:
     - ChannelSurface
   localized:
     - ProjectL10n
-    - EntityL10n            # v10.3 - replaces ConceptL10n (GLOBAL)
-    - PageL10n
-    - BlockL10n
+    - EntityContent            # v10.3 - replaces ConceptL10n (GLOBAL)
+    - PageGenerated
+    - BlockGenerated
     - SEOKeyword
   knowledge:
     # Containers (10)
@@ -424,7 +424,7 @@ nodes_by_trait:
 #   🔵 INVARIANT:  15 (Project, BrandIdentity, Entity, Page, Block, PageType, BlockType,
 #                      PagePrompt, BlockPrompt, BlockRules, BlockInstruction, Locale,
 #                      ContentSlot, AudiencePersona, ChannelSurface)
-#   🟢 LOCALIZED:   5 (ProjectL10n, EntityL10n, PageL10n, BlockL10n, SEOKeyword)
+#   🟢 LOCALIZED:   5 (ProjectL10n, EntityContent, PageGenerated, BlockGenerated, SEOKeyword)
 #   🟣 KNOWLEDGE:  16 (Containers: Formatting, Slugification, Adaptation, Style, TermSet,
 #                      ExpressionSet, PatternSet, CultureSet, TabooSet, AudienceSet;
 #                      Atoms: Term, Expression, Pattern, CultureRef, Taboo, AudienceTrait)
@@ -433,9 +433,9 @@ nodes_by_trait:
 #
 # v10.3.0 changes (Entity-centric):
 #   - MOVED: Concept → Entity (PROJECT semantic → GLOBAL knowledge)
-#   - MOVED: ConceptL10n → EntityL10n (PROJECT semantic → GLOBAL knowledge)
+#   - MOVED: ConceptL10n → EntityContent (PROJECT semantic → GLOBAL knowledge)
 #   - REMOVED: SearchIntent, TopicCluster (PROJECT semantic) — replaced by Entity
 #   - ADDED: BlockInstruction (PROJECT instruction)
 #   - Entity is GLOBAL: shared across projects, linked via USES_ENTITY
-#   - EntityL10n provides localized titles/descriptions for SEO anchors
+#   - EntityContent provides localized titles/descriptions for SEO anchors
 #

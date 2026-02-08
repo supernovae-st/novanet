@@ -1,11 +1,11 @@
 # arc-kinds/semantic/monitors-geo.yaml
-# MONITORS_GEO - EntityL10n monitors GEO queries for AI visibility (v10.7)
+# MONITORS_GEO - EntityContent monitors GEO queries for AI visibility (v10.7)
 #
 # v10.7: GEO Schema v1
-#        - Semantic link from EntityL10n to GEOQuery
-#        - Parallel to TARGETS (EntityL10n → SEOKeyword) for SEO
+#        - Semantic link from EntityContent to GEOQuery
+#        - Parallel to TARGETS (EntityContent → SEOKeyword) for SEO
 #        - Enables tracking which entities care about which AI queries
-#        - Cross-realm: tenant (EntityL10n) → global (GEOQuery)
+#        - Cross-realm: tenant (EntityContent) → global (GEOQuery)
 
 arc:
   type: MONITORS_GEO
@@ -13,7 +13,7 @@ arc:
   scope: cross_realm
   temperature_threshold: 0.6
 
-  source: EntityL10n
+  source: EntityContent
   target: GEOQuery
   cardinality: many_to_many
 
@@ -29,17 +29,17 @@ arc:
       description: "Visibility drop threshold to trigger alert (percentage points)"
 
   llm_context: |
-    EntityL10n monitors GEO queries for AI visibility optimization.
-    Parallel to TARGETS (for SEO): EntityL10n --[:TARGETS]--> SEOKeyword
+    EntityContent monitors GEO queries for AI visibility optimization.
+    Parallel to TARGETS (for SEO): EntityContent --[:TARGETS]--> SEOKeyword
     Use to track which business entities care about which AI queries.
-    CONSTRAINT: EntityL10n locale should align with GEOQuery locale.
+    CONSTRAINT: EntityContent locale should align with GEOQuery locale.
     v10.7: New arc for GEO targeting.
 
-  cypher_pattern: "(EntityL10n)-[:MONITORS_GEO {priority, alert_threshold}]->(GEOQuery)"
+  cypher_pattern: "(EntityContent)-[:MONITORS_GEO {priority, alert_threshold}]->(GEOQuery)"
 
   example:
     description: "Get all GEO queries monitored by an entity"
     cypher: |
-      MATCH (e:EntityL10n {key: $entity_key})-[r:MONITORS_GEO]->(q:GEOQuery)
+      MATCH (e:EntityContent {key: $entity_key})-[r:MONITORS_GEO]->(q:GEOQuery)
       RETURN q.value, q.ai_visibility_score, r.priority
       ORDER BY r.priority, q.ai_visibility_score DESC

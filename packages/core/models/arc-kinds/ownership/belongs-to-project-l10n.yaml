@@ -1,12 +1,12 @@
 # packages/core/models/arc-kinds/ownership/belongs-to-project-l10n.yaml
-# ArcKind: BELONGS_TO_PROJECT_L10N — Locale-aligned: PageL10n (fr-FR) → ProjectL10n (fr-FR)
+# ArcKind: BELONGS_TO_PROJECT_L10N — Locale-aligned: PageGenerated (fr-FR) → ProjectL10n (fr-FR)
 
 arc:
   name: BELONGS_TO_PROJECT_L10N
   family: ownership
   scope: intra_realm
-  source: PageL10n
+  source: PageGenerated
   target: ProjectL10n
   cardinality: many_to_one
-  llm_context: "Locale-aligned: PageL10n (fr-FR) → ProjectL10n (fr-FR). Provides voice, tagline, CTAs."
-  cypher_pattern: (PageL10n)-[:BELONGS_TO_PROJECT_L10N]->(ProjectL10n)
+  llm_context: "Locale-aligned: PageGenerated (fr-FR) → ProjectL10n (fr-FR). Provides voice, tagline, CTAs."
+  cypher_pattern: (PageGenerated)-[:BELONGS_TO_PROJECT_L10N]->(ProjectL10n)

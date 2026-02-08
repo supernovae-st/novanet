@@ -10,8 +10,8 @@ arc:
     - PagePrompt
     - BlockPrompt
   target:
-    - PageL10n
-    - BlockL10n
+    - PageGenerated
+    - BlockGenerated
   cardinality: one_to_many
 
   properties:
@@ -23,6 +23,6 @@ arc:
   llm_context: |
     Provenance tracking: which prompt generated which output.
     Use for debugging and version history.
-    Query: MATCH (prompt:BlockPrompt)-[:GENERATED]->(content:BlockL10n)
+    Query: MATCH (prompt:BlockPrompt)-[:GENERATED]->(content:BlockGenerated)
 
-  cypher_pattern: "(BlockPrompt)-[:GENERATED {generated_at}]->(BlockL10n)"
+  cypher_pattern: "(BlockPrompt)-[:GENERATED {generated_at}]->(BlockGenerated)"
