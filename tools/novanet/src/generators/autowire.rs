@@ -305,8 +305,8 @@ mod tests {
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:OF_KIND]"))
             .count();
         assert_eq!(
-            of_kind, 63,
-            "expected 63 OF_KIND statements (v10.9: 2 realms, 40+23 nodes)"
+            of_kind, 64,
+            "expected 64 OF_KIND statements (v10.9: 2 realms, 40+24 nodes)"
         );
 
         // 2 realms present (v10.6: global + tenant)
@@ -323,7 +323,7 @@ mod tests {
         assert!(cypher.contains("Global > Locale-knowledge (18 types)")); // Sets + Atoms + 6 knowledge
 
         // v10.9: Header
-        assert!(cypher.contains("Total: 63 node types"));
+        assert!(cypher.contains("Total: 64 node types"));
 
         // Verification query present
         assert!(cypher.contains("VERIFICATION QUERY"));
