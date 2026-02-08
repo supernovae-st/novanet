@@ -48,6 +48,8 @@ regex = "1"                   # Regex for ATH markdown parsing
 rustc-hash = "2.0"            # FxHashSet/FxHashMap - faster hashing for string keys
 smallvec = "1.13"             # Stack-allocated small vectors (properties, edges)
 indexmap = { version = "2", features = ["serde"] }  # Preserve YAML property order
+unicode-width = "0.2"         # Display width for CJK, emoji (UAX#11)
+unicode-segmentation = "1.11" # Grapheme cluster iteration
 
 # Error handling
 thiserror = "2"               # Library-style errors (NovaNetError enum)
