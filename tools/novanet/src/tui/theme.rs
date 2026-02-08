@@ -953,7 +953,8 @@ mod tests {
             "config layer should NOT return RGB in Color16 mode"
         );
         assert_eq!(
-            color, layer::CONFIG_16,
+            color,
+            layer::CONFIG_16,
             "config layer should return CONFIG_16 in Color16 mode"
         );
     }

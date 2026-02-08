@@ -1195,7 +1195,7 @@ RETURN p.key as page_key,
         locale: &str,
     ) -> crate::Result<super::atlas::PageCompositionData> {
         use super::atlas::{
-            BlockData, BlockGeneratedData, EntityData, EntityContentData, PageCompositionData,
+            BlockData, BlockGeneratedData, EntityContentData, EntityData, PageCompositionData,
             PageGeneratedData, SeoKeywordData,
         };
 
@@ -2284,9 +2284,165 @@ impl InstanceInfo {
     }
 }
 
+// =============================================================================
+// Test-only TaxonomyTree construction
+// =============================================================================
+
+#[cfg(test)]
+impl TaxonomyTree {
+    /// Create a minimal mock tree for unit tests.
+    ///
+    /// Structure:
+    /// - global (1 layer)
+    ///   - config (1 kind)
+    ///     - AppConfig
+    /// - tenant (1 layer)
+    ///   - foundation (1 kind)
+    ///     - Entity
+    ///
+    /// Empty arc_families and default stats.
+    pub fn mock_for_testing() -> Self {
+        let app_config = KindInfo {
+            key: "AppConfig".to_string(),
+            display_name: "App Config".to_string(),
+            description: "Application configuration".to_string(),
+            icon: String::new(),
+            trait_name: "invariant".to_string(),
+            instance_count: 0,
+            arcs: Vec::new(),
+            yaml_path: String::new(),
+            properties: Vec::new(),
+            required_properties: Vec::new(),
+            schema_hint: String::new(),
+            context_budget: String::new(),
+            knowledge_tier: None,
+            health_percent: None,
+            issues_count: None,
+        };
+
+        let entity = KindInfo {
+            key: "Entity".to_string(),
+            display_name: "Entity".to_string(),
+            description: "Foundation entity".to_string(),
+            icon: String::new(),
+            trait_name: "invariant".to_string(),
+            instance_count: 0,
+            arcs: Vec::new(),
+            yaml_path: String::new(),
+            properties: Vec::new(),
+            required_properties: Vec::new(),
+            schema_hint: String::new(),
+            context_budget: String::new(),
+            knowledge_tier: None,
+            health_percent: None,
+            issues_count: None,
+        };
+
+        let config_layer = LayerInfo {
+            key: "config".to_string(),
+            display_name: "Config".to_string(),
+            color: "#6c71c4".to_string(),
+            kinds: vec![app_config],
+        };
+
+        let foundation_layer = LayerInfo {
+            key: "foundation".to_string(),
+            display_name: "Foundation".to_string(),
+            color: "#268bd2".to_string(),
+            kinds: vec![entity],
+        };
+
+        let global_realm = RealmInfo {
+            key: "global".to_string(),
+            display_name: "Global".to_string(),
+            color: "#2aa198".to_string(),
+            icon: "◉",
+            layers: vec![config_layer],
+        };
+
+        let tenant_realm = RealmInfo {
+            key: "tenant".to_string(),
+            display_name: "Tenant".to_string(),
+            color: "#d33682".to_string(),
+            icon: "◎",
+            layers: vec![foundation_layer],
+        };
+
+        let realms = vec![global_realm, tenant_realm];
+
+        // Build kind_index for O(1) lookups
+        let mut kind_index = FxHashMap::default();
+        for (r_idx, realm) in realms.iter().enumerate() {
+            for (l_idx, layer) in realm.layers.iter().enumerate() {
+                for (k_idx, kind) in layer.kinds.iter().enumerate() {
+                    kind_index.insert(kind.key.clone(), (r_idx, l_idx, k_idx));
+                }
+            }
+        }
+
+        Self {
+            realms,
+            arc_families: Vec::new(),
+            stats: GraphStats::default(),
+            collapsed: FxHashSet::default(),
+            instances: BTreeMap::new(),
+            instance_totals: BTreeMap::new(),
+            kind_index,
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    // ========================================================================
+    // TaxonomyTree::mock_for_testing() tests
+    // ========================================================================
+
+    #[test]
+    fn test_mock_tree_has_realms() {
+        let tree = TaxonomyTree::mock_for_testing();
+
+        assert_eq!(tree.realms.len(), 2, "mock should have 2 realms");
+        assert_eq!(tree.realms[0].key, "global");
+        assert_eq!(tree.realms[1].key, "tenant");
+    }
+
+    #[test]
+    fn test_mock_tree_global_structure() {
+        let tree = TaxonomyTree::mock_for_testing();
+        let global = &tree.realms[0];
+
+        assert_eq!(global.layers.len(), 1, "global should have 1 layer");
+        assert_eq!(global.layers[0].key, "config");
+        assert_eq!(global.layers[0].kinds.len(), 1, "config should have 1 kind");
+        assert_eq!(global.layers[0].kinds[0].key, "AppConfig");
+    }
+
+    #[test]
+    fn test_mock_tree_tenant_structure() {
+        let tree = TaxonomyTree::mock_for_testing();
+        let tenant = &tree.realms[1];
+
+        assert_eq!(tenant.layers.len(), 1, "tenant should have 1 layer");
+        assert_eq!(tenant.layers[0].key, "foundation");
+        assert_eq!(
+            tenant.layers[0].kinds.len(),
+            1,
+            "foundation should have 1 kind"
+        );
+        assert_eq!(tenant.layers[0].kinds[0].key, "Entity");
+    }
+
+    #[test]
+    fn test_mock_tree_kind_index() {
+        let tree = TaxonomyTree::mock_for_testing();
+
+        // Verify kind_index has correct mappings
+        assert_eq!(tree.kind_index.get("AppConfig"), Some(&(0, 0, 0)));
+        assert_eq!(tree.kind_index.get("Entity"), Some(&(1, 0, 0)));
+    }
 
     // ========================================================================
     // Helper functions for creating test data
