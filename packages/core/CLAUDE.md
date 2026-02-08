@@ -8,7 +8,7 @@ NovaNet is a **native content generation system** (NOT translation) using Neo4j 
 
 **Target Application**: QR Code AI (https://qrcode-ai.com) - a multilingual SaaS for QR code generation.
 **Supported Locales**: 200+ locales (fr-FR, en-US, es-MX, ja-JP, etc.)
-**Current Version**: v10.6.0
+**Current Version**: v10.9.0
 
 ## CRITICAL: Generation, NOT Translation
 
@@ -16,16 +16,16 @@ NovaNet is a **native content generation system** (NOT translation) using Neo4j 
 NOVANET = NATIVE GENERATION
 
 Source -> Translate -> Target        <-- WRONG
-Entity (invariant) -> Generate natively -> EntityL10n (local)  <-- RIGHT
+Entity (invariant) -> Generate natively -> EntityContent (local)  <-- RIGHT
 ```
 
 Each locale content is **generated natively** from the invariant Entity, NOT translated. The LLM receives context **entirely in the target locale** and generates natively.
 
 For complete graph schema, node categories, and relations, see: **`models/_index.yaml`**
 
-## v10.6 Architecture
+## v10.9 Architecture
 
-v10.6 establishes 2-Realm Architecture with simplified tenant isolation:
+v10.9 establishes 2-Realm Architecture with naming convention refactor:
 
 | Axis | Values |
 |------|--------|
@@ -34,10 +34,12 @@ v10.6 establishes 2-Realm Architecture with simplified tenant isolation:
 | **Trait** | invariant / localized / knowledge / derived / job |
 | **ArcFamily** | ownership / localization / semantic / generation / mining |
 
-**Key v10.6 changes:**
-- 3 realms -> 2 realms: GLOBAL + TENANT (merged organization + project)
+**Key v10.9 changes:**
+- Renamed nodes: EntityL10n → EntityContent, PageL10n → PageGenerated, BlockL10n → BlockGenerated
+- Renamed arcs: HAS_L10N → HAS_CONTENT, HAS_OUTPUT → HAS_GENERATED
 - GLOBAL (3 layers): config, locale-knowledge, seo — universal, READ-ONLY
 - TENANT (6 layers): config, foundation, structure, semantic, instruction, output
+- 64 node types, 116 arc types
 
 **Boundary rule:** TypeScript (this package) generates code artifacts. Rust (`tools/novanet/`) executes at runtime.
 
@@ -87,14 +89,14 @@ RETURN p.key, collect(page.key) AS pages;
 
 -- Load block context for generation
 MATCH (b:Block {key: "hero-pricing"})
-MATCH (b)-[:USES_ENTITY]->(e:Entity)-[:HAS_L10N]->(el:EntityL10n)-[:FOR_LOCALE]->(l:Locale {key: "fr-FR"})
+MATCH (b)-[:USES_ENTITY]->(e:Entity)-[:HAS_CONTENT]->(el:EntityContent)-[:FOR_LOCALE]->(l:Locale {key: "fr-FR"})
 MATCH (b)-[:OF_TYPE]->(bt:BlockType)
 MATCH (l)-[:HAS_VOICE]->(v:LocaleVoice)
 MATCH (l)-[:HAS_LEXICON]->(lex:LocaleLexicon)-[:HAS_EXPRESSION]->(e:Expression)
 WHERE e.semantic_field IN ['urgency', 'value']
 RETURN b.instructions, e.key, el.title, bt.rules, v.formality_score, collect(ex.text) AS expressions;
 
--- v10.6: Navigate meta-graph (Realm -> Layer -> Kind)
+-- v10.9: Navigate meta-graph (Realm -> Layer -> Kind)
 MATCH (r:Realm {key: "tenant"})-[:HAS_LAYER]->(l:Layer)-[:HAS_KIND]->(k:Kind)
 RETURN r.key, l.key, collect(k.label) AS kinds;
 
@@ -122,13 +124,13 @@ core/
 │   │   │   ├── config/        #   Layer: config (Locale + utility nodes)
 │   │   │   ├── locale-knowledge/  #   Layer: locale-knowledge (Knowledge Atoms)
 │   │   │   └── seo/           #   Layer: seo (SEOKeyword, Metrics, MiningRun)
-│   │   └── tenant/            # Realm: tenant (v10.6: merged org + project)
-│   │       ├── config/        #   Layer: config (Tenant node)
+│   │   └── tenant/            # Realm: tenant (v10.9)
+│   │       ├── config/        #   Layer: config (Organization, Tenant)
 │   │       ├── foundation/    #   Layer: foundation (Project, Brand, ProjectL10n)
-│   │       ├── structure/     #   Layer: structure (Page, Block, Types)
-│   │       ├── semantic/      #   Layer: semantic (Entity, EntityL10n, Persona)
+│   │       ├── structure/     #   Layer: structure (Page, Block, ContentSlot)
+│   │       ├── semantic/      #   Layer: semantic (Entity, EntityContent, Persona)
 │   │       ├── instruction/   #   Layer: instruction (Prompts, BlockRules)
-│   │       └── output/        #   Layer: output (PageL10n, BlockL10n)
+│   │       └── output/        #   Layer: output (PageGenerated, BlockGenerated)
 │   ├── arc-kinds/             # ONE FILE PER ARC TYPE (64 files)
 │   └── views/                 # YAML view definitions
 ├── src/                       # TypeScript source
@@ -142,36 +144,38 @@ core/
 
 > **Note:** `parsers/`, `services/`, `db/`, and `scripts/` were absorbed into the Rust binary (`tools/novanet/`) in v9.0.0.
 
-## Nomenclature
+## Nomenclature (v10.9.0)
 
 ```
-*L10n suffix    = ALL localized content (human OR LLM generated)
-:HAS_L10N       = human-curated content (EntityL10n, ProjectL10n)
-:HAS_OUTPUT     = LLM-generated content (PageL10n, BlockL10n)
+*Content suffix = Human-curated localized content (EntityContent)
+*Generated      = LLM-generated output content (PageGenerated, BlockGenerated)
+:HAS_CONTENT    = Human-curated content arc (Entity→EntityContent)
+:HAS_GENERATED  = LLM-generated content arc (Page→PageGenerated, Block→BlockGenerated)
+*L10n suffix    = Other localized content (ProjectL10n - still uses L10n)
 Locale*         = Locale Knowledge nodes (LocaleVoice, LocaleCulture, etc.)
 *Metrics        = Time-series observations (SEOKeywordMetrics)
 *MiningRun      = Batch operations (SEOMiningRun)
 ```
 
-**v9 meta-graph terminology:**
+**v10.9 meta-graph terminology:**
 ```
-Realm           = WHERE? (global / project) — replaces "Scope"
-Layer           = WHAT? (8 functional layers) — replaces "Subcategory"
-Kind            = Neo4j label as meta-node — replaces "NodeTypeMeta"
-Trait           = HOW? (invariant / localized / knowledge / derived / job) — NEW
-ArcFamily       = Relationship classification (ownership / localization / ...) — NEW
-ArcKind         = Individual relationship type as meta-node — NEW
-:Meta           = Double-label on all meta-nodes — NEW
-OF_KIND         = Instance -> Kind bridge — replaces "IN_SUBCATEGORY"
-NavigationMode  = 4 modes (data / meta / overlay / query) — replaces "DataMode"
+Realm           = WHERE? (global / tenant)
+Layer           = WHAT? (9 functional layers)
+Kind            = Neo4j label as meta-node
+Trait           = HOW? (invariant / localized / knowledge / derived / job)
+ArcFamily       = Relationship classification (ownership / localization / semantic / generation / mining)
+ArcKind         = Individual relationship type as meta-node
+:Meta           = Double-label on all meta-nodes
+OF_KIND         = Instance -> Kind bridge
+NavigationMode  = 4 modes (data / meta / overlay / query)
 ```
 
 ## Language Convention
 
 | English (invariant) | Localized (generated natively) |
 |---------------------|--------------------------------|
-| `*.key`, `*.llm_context`, `*.instructions`, `*.rules` | `*L10n.*` fields |
-| Project.key, Entity.key, Page.key, Block.key | EntityL10n, PageL10n, BlockL10n |
+| `*.key`, `*.llm_context`, `*.instructions`, `*.rules` | `*Content.*`, `*Generated.*` fields |
+| Project.key, Entity.key, Page.key, Block.key | EntityContent, PageGenerated, BlockGenerated |
 
 **Remember**: Localized content is **generated natively**, not translated.
 

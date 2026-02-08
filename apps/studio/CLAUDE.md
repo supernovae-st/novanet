@@ -95,7 +95,7 @@ pnpm test            # Tests
 | `⇧R` | Radial layout (circular) |
 | `⇧F` | Force-directed layout |
 
-**Quick Views (Presets v10.6.0)**
+**Quick Views (Presets v10.9.0)**
 | Key | Action |
 |-----|--------|
 | `1` | Project Structure - Project, Pages, Blocks hierarchy |
@@ -125,7 +125,7 @@ pnpm test            # Tests
 - `/api/graph/navigation` - Faceted navigation (realm/layer/trait filters)
 - `/api/graph/ontology` - Ontology metadata
 - `/api/graph/organizing-principles` - Organizing principles (realms, layers)
-- `/api/graph/taxonomy` - Complete taxonomy with visual encoding (v10.6)
+- `/api/graph/taxonomy` - Complete taxonomy with visual encoding (v10.9)
 - `/api/graph/query` - Execute Cypher queries
 - `/api/graph/schema` - Schema information
 - `/api/graph/stats` - Graph statistics
@@ -144,11 +144,11 @@ pnpm test            # Tests
 
 ---
 
-## Neo4j Schema (v10.6.0)
+## Neo4j Schema (v10.9.0)
 
-### Meta-Graph (v10.6 — 2-Realm Architecture)
+### Meta-Graph (v10.9 — 2-Realm Architecture)
 
-v10.6 establishes faceted classification with 6 meta-node types:
+v10.9 establishes faceted classification with 6 meta-node types:
 
 | Meta-Type | Count | Purpose |
 |-----------|-------|---------|
@@ -160,7 +160,7 @@ v10.6 establishes faceted classification with 6 meta-node types:
 
 All meta-nodes carry `:Meta` double-label.
 
-### Realm Architecture (v10.6)
+### Realm Architecture (v10.9)
 
 | Realm | Layers | Description |
 |-------|--------|-------------|
@@ -169,9 +169,9 @@ All meta-nodes carry `:Meta` double-label.
 
 ### Key Relations (grouped by ArcFamily)
 - **Ownership:** `HAS_PAGE`, `HAS_BLOCK`, `OF_TYPE`, `SUPPORTS_LOCALE`, `BELONGS_TO_ORG`, `HAS_PROJECT`
-- **Localization:** `HAS_L10N`, `FOR_LOCALE`
+- **Localization:** `HAS_CONTENT`, `FOR_LOCALE`
 - **Semantic:** `USES_ENTITY`, `SEMANTIC_LINK`, `HAS_ENTITY`
-- **Generation:** `HAS_OUTPUT`, `HAS_PROMPT`
+- **Generation:** `HAS_GENERATED`, `HAS_PROMPT`
 - **Mining:** `EXPRESSES`
 
 ### NavigationMode (replaces DataMode)

@@ -11,25 +11,25 @@ argument-hint: [validate|generate|status]
 
 Synchronize generated artifacts with YAML source of truth.
 
-## Source of Truth (v10.6)
+## Source of Truth (v10.9)
 
 ```
 packages/core/models/
-├── node-kinds/                   ← 60 YAML files (one per NodeKind)
-│   ├── global/                   ← Realm: global (37 nodes)
+├── node-kinds/                   ← 64 YAML files (one per NodeKind)
+│   ├── global/                   ← Realm: global (40 nodes)
 │   │   ├── config/               ←   Layer: config (Locale + utilities)
 │   │   ├── locale-knowledge/     ←   Layer: locale-knowledge (14 Knowledge Atom types)
 │   │   └── seo/                  ←   Layer: seo (6 nodes: SEOKeyword, SEOQuestion, etc.)
-│   └── tenant/                   ← Realm: tenant (23 nodes)
+│   └── tenant/                   ← Realm: tenant (24 nodes)
 │       ├── config/               ←   Layer: config (Organization)
 │       ├── foundation/           ←   Layer: foundation
 │       ├── structure/            ←   Layer: structure
-│       ├── semantic/             ←   Layer: semantic (Entity, EntityL10n)
+│       ├── semantic/             ←   Layer: semantic (Entity, EntityContent)
 │       ├── instruction/          ←   Layer: instruction
 │       └── output/               ←   Layer: output
-├── arc-kinds/                    ← 90 YAML files (one per ArcKind)
+├── arc-kinds/                    ← 116 YAML files (one per ArcKind)
 ├── relations.yaml                ← Legacy format (kept for parser compatibility)
-└── taxonomy.yaml                 ← v10.6: 2 Realms, 9 Layers, 5 Traits
+└── taxonomy.yaml                 ← v10.9: 2 Realms, 9 Layers, 5 Traits
 ```
 
 ## Generated Artifacts
@@ -138,6 +138,6 @@ All generators live in `tools/novanet/src/generators/` (Rust-first architecture)
 
 **MermaidGenerator (`generators/mermaid.rs`):**
 - Reads `models/node-kinds/` and `models/arc-kinds/`
-- Generates Mermaid flowchart with all 60 Kinds and 90 arcs
+- Generates Mermaid flowchart with all 64 Kinds and 116 arcs
 - Groups by Realm (Global, Tenant)
 - Colors by Layer (9 distinct colors)
