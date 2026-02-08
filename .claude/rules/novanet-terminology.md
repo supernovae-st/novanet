@@ -1,4 +1,4 @@
-# NovaNet Terminology (v10.6)
+# NovaNet Terminology (v10.9)
 
 This file defines the canonical terminology for NovaNet. All code, documentation, and UI must use these terms consistently.
 
@@ -57,34 +57,54 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 
 | Type | Convention | Example |
 |------|------------|---------|
-| NodeKind YAML | `kebab-case.yaml` | `locale-voice.yaml`, `entity-l10n.yaml` |
+| NodeKind YAML | `kebab-case.yaml` | `locale-voice.yaml`, `entity-content.yaml`, `page-generated.yaml` |
 | ArcKind YAML | `kebab-case.yaml` | `has-page.yaml`, `uses-entity.yaml` |
 | TypeScript types | `PascalCase` | `NodeKind`, `ArcFamily`, `NodeRealm` |
 | TypeScript files | `kebab-case.ts` | `arc-kinds.ts`, `node-layers.ts` |
 | Rust structs | `PascalCase` | `ArcKind`, `NodeRealm` |
 | Rust files | `snake_case.rs` | `arc_schema.rs`, `taxonomy.rs` |
 
-## Node Naming Convention (v10.1)
+## Node Naming Convention (v10.9)
 
-> **RULE: `*L10n` suffix = has a parent invariant node**
+> **RULE: Suffix indicates trait and relationship to parent invariant node**
 
-| Pattern | When to Use | Example |
-|---------|-------------|---------|
-| `FooL10n` | Node has a parent invariant `Foo` with the same key | `PageL10n` (parent: `Page`) |
-| `Foo` | Node is standalone (no parent invariant) | `SEOKeyword`, `Term`, `Expression` |
+| Pattern | Trait | Layer | When to Use | Example |
+|---------|-------|-------|-------------|---------|
+| `FooContent` | localized | semantic | Node has locale-specific content for invariant `Foo` | `EntityContent` (parent: `Entity`) |
+| `FooGenerated` | derived | output | Node is generated output from invariant `Foo` | `PageGenerated` (parent: `Page`) |
+| `FooL10n` | localized | foundation | Node has locale-specific settings for invariant `Foo` | `ProjectL10n` (parent: `Project`) |
+| `Foo` | varies | varies | Node is standalone (no parent invariant) | `SEOKeyword`, `Term`, `Expression` |
+
+**v10.9 Changes:**
+- `EntityL10n` renamed to `EntityContent` (semantic layer, localized trait)
+- `PageL10n` renamed to `PageGenerated` (output layer, derived trait)
+- `BlockL10n` renamed to `BlockGenerated` (output layer, derived trait)
+- `ProjectL10n` unchanged (foundation layer, localized trait)
+
+**Arc Changes (v10.9):**
+- `HAS_L10N` renamed to `HAS_CONTENT` (Entity → EntityContent)
+- `HAS_OUTPUT` renamed to `HAS_GENERATED` (Page/Block → PageGenerated/BlockGenerated)
 
 **Examples:**
 
 ```
-✅ Page (invariant) → PageL10n (localized)     # Correct: L10n has parent
-✅ Entity (invariant) → EntityL10n (localized) # Correct: L10n has parent
-✅ SEOKeyword (localized, no parent)           # Correct: no L10n suffix
-✅ Term (knowledge atom, no parent)            # Correct: no L10n suffix
+✅ Entity (invariant) → EntityContent (localized)   # Semantic layer content
+✅ Page (invariant) → PageGenerated (derived)       # Output layer generated
+✅ Block (invariant) → BlockGenerated (derived)     # Output layer generated
+✅ Project (invariant) → ProjectL10n (localized)    # Foundation layer settings
+✅ SEOKeyword (localized, no parent)                # Correct: no suffix
+✅ Term (knowledge atom, no parent)                 # Correct: no suffix
 
-❌ SEOKeywordL10n (no parent invariant)        # Wrong: no parent = no L10n suffix
+❌ EntityL10n (deprecated)                          # Use EntityContent
+❌ PageL10n (deprecated)                            # Use PageGenerated
+❌ BlockL10n (deprecated)                           # Use BlockGenerated
 ```
 
-**Rationale:** The `L10n` suffix signals a paired relationship. If `FooL10n` exists, developers expect to find a `Foo` invariant. This prevents confusion when exploring the schema.
+**Rationale:**
+- `*Content` suffix indicates locale-specific semantic content (localized trait)
+- `*Generated` suffix indicates derived output from generation pipeline (derived trait)
+- `*L10n` suffix reserved for foundation-layer locale settings only
+- Suffix choice reflects both the trait (localized vs derived) and the layer (semantic vs output vs foundation)
 
 ## Property Naming
 
@@ -129,6 +149,11 @@ These terms are deprecated and should NOT be used:
 | `NodeTypeMeta` | `Kind` | v9.0 renamed |
 | `DataMode` | `NavigationMode` | v9.0 renamed |
 | `category` | `trait` | YAML property |
+| `EntityL10n` | `EntityContent` | v10.9 renamed (semantic layer) |
+| `PageL10n` | `PageGenerated` | v10.9 renamed (output layer) |
+| `BlockL10n` | `BlockGenerated` | v10.9 renamed (output layer) |
+| `HAS_L10N` | `HAS_CONTENT` | v10.9 renamed (Entity → EntityContent) |
+| `HAS_OUTPUT` | `HAS_GENERATED` | v10.9 renamed (Page/Block → *Generated) |
 
 ## Navigation Modes
 

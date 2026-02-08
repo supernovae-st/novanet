@@ -1,4 +1,4 @@
-# NovaNet Architecture Decisions (v10.6)
+# NovaNet Architecture Decisions (v10.9)
 
 This file documents key architecture decisions for NovaNet. Reference these when making implementation choices.
 
@@ -121,8 +121,10 @@ Thing (project)  → Brand-specific definition
 
 ```
 WRONG:  Source → Translate → Target
-RIGHT:  Entity (invariant) → Generate natively → EntityL10n (local)
+RIGHT:  Entity (invariant) → Generate natively → EntityContent (local)
 ```
+
+> **Note**: v10.9 renamed `EntityL10n` to `EntityContent`. See ADR-014.
 
 **Rationale**: Translation loses cultural nuance. Native generation preserves it.
 
@@ -170,7 +172,7 @@ truecolor (24-bit RGB)
 
 **Status**: Superseded by ADR-012 (v10.6)
 
-**Decision**: Organization realm contains only the Organization node. Entity/EntityL10n live in PROJECT realm only.
+**Decision**: Organization realm contains only the Organization node. Entity/EntityContent live in PROJECT realm only.
 
 ```
 Organization ─[:HAS_COMPANY_PROJECT]→ Project (company project)
@@ -180,9 +182,11 @@ Organization ─[:HAS_COMPANY_PROJECT]→ Project (company project)
 
 **Rationale**:
 - An organization has a "company project" that holds org-wide Entity nodes
-- Entity/EntityL10n in organization was redundant (same nodes existed in project)
+- Entity/EntityContent in organization was redundant (same nodes existed in project)
 - Simplifies the schema: 43 nodes instead of 45, 9 layers instead of 10
 - Organization realm becomes a pure multi-tenant isolation boundary
+
+> **Note**: v10.9 renamed `EntityL10n` to `EntityContent`. See ADR-014.
 
 ## ADR-012: 2-Realm Architecture
 
@@ -260,6 +264,79 @@ icons:
 | quality | Data completeness | ● complete, ◐ partial |
 | modes | Navigation modes | M meta, D data |
 
+## ADR-014: Naming Convention Refactor (L10n to Content/Generated)
+
+**Status**: Approved (v10.9.0)
+
+**Decision**: Rename `*L10n` nodes and arcs to semantically clearer names that distinguish content storage from generation output.
+
+**Renames**:
+
+| Old Name | New Name | Reason |
+|----------|----------|--------|
+| `EntityL10n` | `EntityContent` | Stores semantic content, not localization metadata |
+| `PageL10n` | `PageGenerated` | Clarifies this is LLM generation output |
+| `BlockL10n` | `BlockGenerated` | Parallel naming with PageGenerated |
+| `HAS_L10N` | `HAS_CONTENT` | Content relationship, not localization |
+| `HAS_OUTPUT` | `HAS_GENERATED` | Moved to generation family, clarifies purpose |
+
+**Composite Key Pattern**:
+
+Content and generated nodes use composite keys to ensure uniqueness across locales:
+
+```
+EntityContent key:  entity:{entity_key}@{locale_key}
+PageGenerated key:  page:{page_key}@{locale_key}
+BlockGenerated key: block:{block_key}@{locale_key}
+
+Examples:
+  entity:qr-code-generator@fr-FR
+  page:homepage@de-DE
+  block:hero-section@ja-JP
+```
+
+**Key format**: `{kind}:{invariant_key}@{locale_key}`
+- `{kind}`: lowercase node kind prefix (entity, page, block)
+- `{invariant_key}`: key of the parent invariant node
+- `@`: separator (not valid in keys, unambiguous parsing)
+- `{locale_key}`: BCP-47 locale code
+
+**Rationale**:
+
+1. **Semantic clarity**: `L10n` (localization) implies translation, but NovaNet generates natively. `Content` and `Generated` describe what the node actually contains.
+
+2. **Layer distinction**:
+   - `EntityContent` lives in **semantic** layer (meaning, knowledge)
+   - `PageGenerated`/`BlockGenerated` live in **output** layer (rendered artifacts)
+
+3. **Arc family alignment**:
+   - `HAS_CONTENT` stays in **semantic** family (content relationship)
+   - `HAS_GENERATED` moves to **generation** family (output relationship)
+
+4. **Composite key benefits**:
+   - Unique across all locales without additional index
+   - Parseable: extract invariant key or locale with simple split
+   - Query-friendly: `STARTS WITH 'entity:qr-code-generator@'` finds all locales
+   - Self-documenting: key reveals parent and locale at a glance
+
+**Migration**:
+
+```cypher
+// Rename node labels
+MATCH (n:EntityL10n) SET n:EntityContent REMOVE n:EntityL10n;
+MATCH (n:PageL10n) SET n:PageGenerated REMOVE n:PageL10n;
+MATCH (n:BlockL10n) SET n:BlockGenerated REMOVE n:BlockL10n;
+
+// Update relationship types (requires recreation in Neo4j)
+// HAS_L10N → HAS_CONTENT
+// HAS_OUTPUT → HAS_GENERATED
+```
+
+**Code impact**:
+- YAML: Update `node-kinds/` and `arc-kinds/` files
+- Generators: Names propagate automatically via YAML-first architecture
+- Queries: Search-replace in Cypher files and Rust code
+
 ## Decision Log
 
 | ADR | Version | Summary |
@@ -277,6 +354,7 @@ icons:
 | 011 | v10.5 | Company project pattern (superseded by 012) |
 | 012 | v10.6 | 2-Realm Architecture |
 | 013 | v10.6 | Icons source of truth |
+| 014 | v10.9 | Naming convention refactor (L10n to Content/Generated) |
 
 ## References
 

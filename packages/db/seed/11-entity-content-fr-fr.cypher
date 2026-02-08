@@ -7,8 +7,13 @@
 // Create EntityContent nodes
 // -------------------------------------------------------------------
 
-MERGE (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code',
+MERGE (el:EntityContent {key: 'entity:qr-code@fr-FR'})
+SET el.entity_key = 'qr-code',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code',
+    el.full_path = '/fr/qr-code',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'QR Code',
     el.description = 'Code matriciel 2D permettant d\'encoder des données accessibles par scan mobile.',
     el.definition = 'Solution QR Code AI pour la création et gestion de QR Code.',
@@ -18,8 +23,13 @@ SET el.slug = 'qr-code',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'smart-link', locale_key: 'fr-FR'})
-SET el.slug = 'lien-intelligent',
+MERGE (el:EntityContent {key: 'entity:smart-link@fr-FR'})
+SET el.entity_key = 'smart-link',
+    el.locale_key = 'fr-FR',
+    el.slug = 'lien-intelligent',
+    el.full_path = '/fr/lien-intelligent',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Lien Intelligent',
     el.description = 'URL intelligente avec règles de routage pour rediriger selon l\'appareil ou la localisation.',
     el.definition = 'Solution QR Code AI pour la création et gestion de Lien Intelligent.',
@@ -29,8 +39,13 @@ SET el.slug = 'lien-intelligent',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'barcode', locale_key: 'fr-FR'})
-SET el.slug = 'code-barres',
+MERGE (el:EntityContent {key: 'entity:barcode@fr-FR'})
+SET el.entity_key = 'barcode',
+    el.locale_key = 'fr-FR',
+    el.slug = 'code-barres',
+    el.full_path = '/fr/code-barres',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Code-barres',
     el.description = 'Code-barres linéaire 1D pour l\'identification des produits (EAN, UPC, Code 128).',
     el.definition = 'Solution QR Code AI pour la création et gestion de Code-barres.',
@@ -40,8 +55,13 @@ SET el.slug = 'code-barres',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'landing-page', locale_key: 'fr-FR'})
-SET el.slug = 'page-destination',
+MERGE (el:EntityContent {key: 'entity:landing-page@fr-FR'})
+SET el.entity_key = 'landing-page',
+    el.locale_key = 'fr-FR',
+    el.slug = 'page-destination',
+    el.full_path = '/fr/page-destination',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Page de Destination',
     el.description = 'Page web de destination créée via un constructeur no-code intégré.',
     el.definition = 'Solution QR Code AI pour la création et gestion de Page de Destination.',
@@ -51,8 +71,13 @@ SET el.slug = 'page-destination',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'short-link', locale_key: 'fr-FR'})
-SET el.slug = 'lien-court',
+MERGE (el:EntityContent {key: 'entity:short-link@fr-FR'})
+SET el.entity_key = 'short-link',
+    el.locale_key = 'fr-FR',
+    el.slug = 'lien-court',
+    el.full_path = '/fr/lien-court',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Lien Court',
     el.description = 'URL raccourcie avec suivi des clics et statistiques de performance.',
     el.definition = 'Solution QR Code AI pour la création et gestion de Lien Court.',
@@ -62,8 +87,13 @@ SET el.slug = 'lien-court',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-style', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-style',
+MERGE (el:EntityContent {key: 'entity:qr-code-style@fr-FR'})
+SET el.entity_key = 'qr-code-style',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-style',
+    el.full_path = '/fr/qr-code-style',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'QR Code Style',
     el.description = 'Catégorie de style visuel pour personnaliser l\'apparence des QR Codes.',
     el.definition = 'Solution QR Code AI pour la création et gestion de QR Code Style.',
@@ -73,8 +103,13 @@ SET el.slug = 'qr-code-style',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-content', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-contenu',
+MERGE (el:EntityContent {key: 'entity:qr-code-content@fr-FR'})
+SET el.entity_key = 'qr-code-content',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-contenu',
+    el.full_path = '/fr/qr-code-contenu',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'QR Code Contenu',
     el.description = 'Catégorie de contenu définissant le type de données encodées dans un QR Code.',
     el.definition = 'Solution QR Code AI pour la création et gestion de QR Code Contenu.',
@@ -84,8 +119,13 @@ SET el.slug = 'qr-code-contenu',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-frame', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-cadre',
+MERGE (el:EntityContent {key: 'entity:qr-code-frame@fr-FR'})
+SET el.entity_key = 'qr-code-frame',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-cadre',
+    el.full_path = '/fr/qr-code-cadre',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'QR Code Cadre',
     el.description = 'Modèle de placement physique optimisé pour l\'impression des QR Codes.',
     el.definition = 'Solution QR Code AI pour la création et gestion de QR Code Cadre.',
@@ -95,8 +135,13 @@ SET el.slug = 'qr-code-cadre',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'barcode-format', locale_key: 'fr-FR'})
-SET el.slug = 'code-barres-format',
+MERGE (el:EntityContent {key: 'entity:barcode-format@fr-FR'})
+SET el.entity_key = 'barcode-format',
+    el.locale_key = 'fr-FR',
+    el.slug = 'code-barres-format',
+    el.full_path = '/fr/code-barres-format',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Code-barres Format',
     el.description = 'Format technique de code-barres définissant la structure d\'encodage.',
     el.definition = 'Solution QR Code AI pour la création et gestion de Code-barres Format.',
@@ -106,8 +151,13 @@ SET el.slug = 'code-barres-format',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'landing-page-type', locale_key: 'fr-FR'})
-SET el.slug = 'page-destination-type',
+MERGE (el:EntityContent {key: 'entity:landing-page-type@fr-FR'})
+SET el.entity_key = 'landing-page-type',
+    el.locale_key = 'fr-FR',
+    el.slug = 'page-destination-type',
+    el.full_path = '/fr/page-destination-type',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Page de Destination Type',
     el.description = 'Type de page de destination adapté à un cas d\'usage spécifique.',
     el.definition = 'Solution QR Code AI pour la création et gestion de Page de Destination Type.',
@@ -117,8 +167,13 @@ SET el.slug = 'page-destination-type',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'custom-qr-code', locale_key: 'fr-FR'})
-SET el.slug = 'personnalise-qr-code',
+MERGE (el:EntityContent {key: 'entity:custom-qr-code@fr-FR'})
+SET el.entity_key = 'custom-qr-code',
+    el.locale_key = 'fr-FR',
+    el.slug = 'personnalise-qr-code',
+    el.full_path = '/fr/personnalise-qr-code',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'QR Code Personnalisé',
     el.description = 'QR Code entièrement personnalisable avec couleurs, formes et logo.',
     el.definition = 'Solution QR Code AI pour la création et gestion de QR Code Personnalisé.',
@@ -128,8 +183,13 @@ SET el.slug = 'personnalise-qr-code',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-image', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-image',
+MERGE (el:EntityContent {key: 'entity:qr-code-image@fr-FR'})
+SET el.entity_key = 'qr-code-image',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-image',
+    el.full_path = '/fr/qr-code-image',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'QR Code avec Image',
     el.description = 'QR Code avec image ou photo en arrière-plan.',
     el.definition = 'Solution QR Code AI pour la création et gestion de QR Code avec Image.',
@@ -139,8 +199,13 @@ SET el.slug = 'qr-code-image',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-art', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-art',
+MERGE (el:EntityContent {key: 'entity:qr-code-art@fr-FR'})
+SET el.entity_key = 'qr-code-art',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-art',
+    el.full_path = '/fr/qr-code-art',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'QR Code Art',
     el.description = 'QR Code artistique généré par intelligence artificielle.',
     el.definition = 'Solution QR Code AI pour la création et gestion de QR Code Art.',
@@ -150,8 +215,13 @@ SET el.slug = 'qr-code-art',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-photo', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-photo',
+MERGE (el:EntityContent {key: 'entity:qr-code-photo@fr-FR'})
+SET el.entity_key = 'qr-code-photo',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-photo',
+    el.full_path = '/fr/qr-code-photo',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'QR Code Photo',
     el.description = 'QR Code intégrant une photographie en fond.',
     el.definition = 'Solution QR Code AI pour la création et gestion de QR Code Photo.',
@@ -161,8 +231,13 @@ SET el.slug = 'qr-code-photo',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-with-logo', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-avec-logo',
+MERGE (el:EntityContent {key: 'entity:qr-code-with-logo@fr-FR'})
+SET el.entity_key = 'qr-code-with-logo',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-avec-logo',
+    el.full_path = '/fr/qr-code-avec-logo',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'QR Code avec Logo',
     el.description = 'QR Code affichant un logo au centre pour renforcer l\'identité de marque.',
     el.definition = 'Solution QR Code AI pour la création et gestion de QR Code avec Logo.',
@@ -172,8 +247,13 @@ SET el.slug = 'qr-code-avec-logo',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-with-text', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-avec-texte',
+MERGE (el:EntityContent {key: 'entity:qr-code-with-text@fr-FR'})
+SET el.entity_key = 'qr-code-with-text',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-avec-texte',
+    el.full_path = '/fr/qr-code-avec-texte',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'QR Code avec Textee',
     el.description = 'QR Code accompagné d\'un texte d\'appel à l\'action.',
     el.definition = 'Solution QR Code AI pour la création et gestion de QR Code avec Textee.',
@@ -183,8 +263,13 @@ SET el.slug = 'qr-code-avec-texte',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-color', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-color',
+MERGE (el:EntityContent {key: 'entity:qr-code-color@fr-FR'})
+SET el.entity_key = 'qr-code-color',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-color',
+    el.full_path = '/fr/qr-code-color',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'QR Code Couleurs',
     el.description = 'Personnalisation des couleurs de premier plan et d\'arrière-plan du QR Code.',
     el.definition = 'Solution QR Code AI pour la création et gestion de QR Code Couleurs.',
@@ -194,8 +279,13 @@ SET el.slug = 'qr-code-color',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-shapes', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-formes',
+MERGE (el:EntityContent {key: 'entity:qr-code-shapes@fr-FR'})
+SET el.entity_key = 'qr-code-shapes',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-formes',
+    el.full_path = '/fr/qr-code-formes',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'QR Code Formes',
     el.description = 'Personnalisation des formes des modules et des yeux du QR Code.',
     el.definition = 'Solution QR Code AI pour la création et gestion de QR Code Formes.',
@@ -205,8 +295,13 @@ SET el.slug = 'qr-code-formes',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-transparent-background', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-fond-transparent',
+MERGE (el:EntityContent {key: 'entity:qr-code-transparent-background@fr-FR'})
+SET el.entity_key = 'qr-code-transparent-background',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-fond-transparent',
+    el.full_path = '/fr/qr-code-fond-transparent',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Fond Transparent',
     el.description = 'QR Code avec fond transparent pour superposition sur d\'autres visuels.',
     el.definition = 'Solution QR Code AI pour la création et gestion de Fond Transparent.',
@@ -216,8 +311,13 @@ SET el.slug = 'qr-code-fond-transparent',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-background', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-background',
+MERGE (el:EntityContent {key: 'entity:qr-code-background@fr-FR'})
+SET el.entity_key = 'qr-code-background',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-background',
+    el.full_path = '/fr/qr-code-background',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'QR Code Arrière-plan',
     el.description = 'Options de personnalisation de l\'arrière-plan des QR Codes.',
     el.definition = 'Solution QR Code AI pour la création et gestion de QR Code Arrière-plan.',
@@ -227,8 +327,13 @@ SET el.slug = 'qr-code-background',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-background-color', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-couleur-fond',
+MERGE (el:EntityContent {key: 'entity:qr-code-background-color@fr-FR'})
+SET el.entity_key = 'qr-code-background-color',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-couleur-fond',
+    el.full_path = '/fr/qr-code-couleur-fond',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Couleur de Fond',
     el.description = 'Couleur d\'arrière-plan unie pour les QR Codes.',
     el.definition = 'Solution QR Code AI pour la création et gestion de Couleur de Fond.',
@@ -238,8 +343,13 @@ SET el.slug = 'qr-code-couleur-fond',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-background-gradient', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-fond-degrade',
+MERGE (el:EntityContent {key: 'entity:qr-code-background-gradient@fr-FR'})
+SET el.entity_key = 'qr-code-background-gradient',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-fond-degrade',
+    el.full_path = '/fr/qr-code-fond-degrade',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Fond en Dégradé',
     el.description = 'Dégradé de couleurs en arrière-plan des QR Codes.',
     el.definition = 'Solution QR Code AI pour la création et gestion de Fond en Dégradé.',
@@ -249,8 +359,13 @@ SET el.slug = 'qr-code-fond-degrade',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-background-image', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-image-fond',
+MERGE (el:EntityContent {key: 'entity:qr-code-background-image@fr-FR'})
+SET el.entity_key = 'qr-code-background-image',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-image-fond',
+    el.full_path = '/fr/qr-code-image-fond',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Image de Fond',
     el.description = 'Image ou motif en arrière-plan des QR Codes.',
     el.definition = 'Solution QR Code AI pour la création et gestion de Image de Fond.',
@@ -260,8 +375,13 @@ SET el.slug = 'qr-code-image-fond',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'dynamic-qr-code', locale_key: 'fr-FR'})
-SET el.slug = 'dynamique-qr-code',
+MERGE (el:EntityContent {key: 'entity:dynamic-qr-code@fr-FR'})
+SET el.entity_key = 'dynamic-qr-code',
+    el.locale_key = 'fr-FR',
+    el.slug = 'dynamique-qr-code',
+    el.full_path = '/fr/dynamique-qr-code',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'QR Code Dynamique',
     el.description = 'QR Code modifiable après impression dont la destination peut être mise à jour sans régénérer le code.',
     el.definition = 'Concept clé pour comprendre et maîtriser les QR Code Dynamique.',
@@ -271,8 +391,13 @@ SET el.slug = 'dynamique-qr-code',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'static-qr-code', locale_key: 'fr-FR'})
-SET el.slug = 'statique-qr-code',
+MERGE (el:EntityContent {key: 'entity:static-qr-code@fr-FR'})
+SET el.entity_key = 'static-qr-code',
+    el.locale_key = 'fr-FR',
+    el.slug = 'statique-qr-code',
+    el.full_path = '/fr/statique-qr-code',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'QR Code Statique',
     el.description = 'QR Code fixe avec données encodées directement, gratuit et permanent.',
     el.definition = 'Concept clé pour comprendre et maîtriser les QR Code Statique.',
@@ -282,8 +407,13 @@ SET el.slug = 'statique-qr-code',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-light-mode', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-light-mode',
+MERGE (el:EntityContent {key: 'entity:qr-code-light-mode@fr-FR'})
+SET el.entity_key = 'qr-code-light-mode',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-light-mode',
+    el.full_path = '/fr/qr-code-light-mode',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Light Mode',
     el.description = 'La Light Mode pour vos projets QR Code.',
     el.definition = 'Concept clé pour comprendre et maîtriser les Light Mode.',
@@ -293,8 +423,13 @@ SET el.slug = 'qr-code-light-mode',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-dark-mode', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-dark-mode',
+MERGE (el:EntityContent {key: 'entity:qr-code-dark-mode@fr-FR'})
+SET el.entity_key = 'qr-code-dark-mode',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-dark-mode',
+    el.full_path = '/fr/qr-code-dark-mode',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Dark Mode',
     el.description = 'La Dark Mode pour vos projets QR Code.',
     el.definition = 'Concept clé pour comprendre et maîtriser les Dark Mode.',
@@ -304,8 +439,13 @@ SET el.slug = 'qr-code-dark-mode',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-carte-visite',
+MERGE (el:EntityContent {key: 'entity:qr-code-business-card@fr-FR'})
+SET el.entity_key = 'qr-code-business-card',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-carte-visite',
+    el.full_path = '/fr/qr-code-carte-visite',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Carte de Visite QR',
     el.description = 'La Carte de Visite QR pour vos projets QR Code.',
     el.definition = 'Solution QR Code AI pour la création et gestion de Carte de Visite QR.',
@@ -315,8 +455,13 @@ SET el.slug = 'qr-code-carte-visite',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-email-signature', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-email-signature',
+MERGE (el:EntityContent {key: 'entity:qr-code-email-signature@fr-FR'})
+SET el.entity_key = 'qr-code-email-signature',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-email-signature',
+    el.full_path = '/fr/qr-code-email-signature',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Email Signature QR',
     el.description = 'L\'Email Signature QR pour vos projets QR Code.',
     el.definition = 'Solution QR Code AI pour la création et gestion de Email Signature QR.',
@@ -326,8 +471,13 @@ SET el.slug = 'qr-code-email-signature',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-flyer', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-flyer',
+MERGE (el:EntityContent {key: 'entity:qr-code-flyer@fr-FR'})
+SET el.entity_key = 'qr-code-flyer',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-flyer',
+    el.full_path = '/fr/qr-code-flyer',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Flyer QR',
     el.description = 'Le Flyer QR pour vos projets QR Code.',
     el.definition = 'Solution QR Code AI pour la création et gestion de Flyer QR.',
@@ -337,8 +487,13 @@ SET el.slug = 'qr-code-flyer',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-poster', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-poster',
+MERGE (el:EntityContent {key: 'entity:qr-code-poster@fr-FR'})
+SET el.entity_key = 'qr-code-poster',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-poster',
+    el.full_path = '/fr/qr-code-poster',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Affiche QR',
     el.description = 'L\'Affiche QR pour vos projets QR Code.',
     el.definition = 'Solution QR Code AI pour la création et gestion de Affiche QR.',
@@ -348,8 +503,13 @@ SET el.slug = 'qr-code-poster',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-table-tent', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-table-tent',
+MERGE (el:EntityContent {key: 'entity:qr-code-table-tent@fr-FR'})
+SET el.entity_key = 'qr-code-table-tent',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-table-tent',
+    el.full_path = '/fr/qr-code-table-tent',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Table Tent QR',
     el.description = 'La Table Tent QR pour vos projets QR Code.',
     el.definition = 'Solution QR Code AI pour la création et gestion de Table Tent QR.',
@@ -359,8 +519,13 @@ SET el.slug = 'qr-code-table-tent',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-packaging-label', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-packaging-label',
+MERGE (el:EntityContent {key: 'entity:qr-code-packaging-label@fr-FR'})
+SET el.entity_key = 'qr-code-packaging-label',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-packaging-label',
+    el.full_path = '/fr/qr-code-packaging-label',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Emballage Label QR',
     el.description = 'L\'Emballage Label QR pour vos projets QR Code.',
     el.definition = 'Solution QR Code AI pour la création et gestion de Emballage Label QR.',
@@ -370,8 +535,13 @@ SET el.slug = 'qr-code-packaging-label',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'link-in-bio', locale_key: 'fr-FR'})
-SET el.slug = 'lien-en-bio',
+MERGE (el:EntityContent {key: 'entity:link-in-bio@fr-FR'})
+SET el.entity_key = 'link-in-bio',
+    el.locale_key = 'fr-FR',
+    el.slug = 'lien-en-bio',
+    el.full_path = '/fr/lien-en-bio',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Lien en Bio',
     el.description = 'Le Lien en Bio pour vos projets QR Code.',
     el.definition = 'Solution QR Code AI pour la création et gestion de Lien en Bio.',
@@ -381,8 +551,13 @@ SET el.slug = 'lien-en-bio',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'menu-restaurant', locale_key: 'fr-FR'})
-SET el.slug = 'menu-restaurant',
+MERGE (el:EntityContent {key: 'entity:menu-restaurant@fr-FR'})
+SET el.entity_key = 'menu-restaurant',
+    el.locale_key = 'fr-FR',
+    el.slug = 'menu-restaurant',
+    el.full_path = '/fr/menu-restaurant',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Menu Digital',
     el.description = 'Le Menu Digital pour vos projets QR Code.',
     el.definition = 'Solution QR Code AI pour la création et gestion de Menu Digital.',
@@ -392,8 +567,13 @@ SET el.slug = 'menu-restaurant',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'forms', locale_key: 'fr-FR'})
-SET el.slug = 'forms',
+MERGE (el:EntityContent {key: 'entity:forms@fr-FR'})
+SET el.entity_key = 'forms',
+    el.locale_key = 'fr-FR',
+    el.slug = 'forms',
+    el.full_path = '/fr/forms',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Forms',
     el.description = 'Les Forms pour vos projets QR Code.',
     el.definition = 'Solution QR Code AI pour la création et gestion de Forms.',
@@ -403,8 +583,13 @@ SET el.slug = 'forms',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'announcement', locale_key: 'fr-FR'})
-SET el.slug = 'announcement',
+MERGE (el:EntityContent {key: 'entity:announcement@fr-FR'})
+SET el.entity_key = 'announcement',
+    el.locale_key = 'fr-FR',
+    el.slug = 'announcement',
+    el.full_path = '/fr/announcement',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Announcement',
     el.description = 'L\'Announcement pour vos projets QR Code.',
     el.definition = 'Solution QR Code AI pour la création et gestion de Announcement.',
@@ -414,8 +599,13 @@ SET el.slug = 'announcement',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'event-rsvp', locale_key: 'fr-FR'})
-SET el.slug = 'event-rsvp',
+MERGE (el:EntityContent {key: 'entity:event-rsvp@fr-FR'})
+SET el.entity_key = 'event-rsvp',
+    el.locale_key = 'fr-FR',
+    el.slug = 'event-rsvp',
+    el.full_path = '/fr/event-rsvp',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Événement RSVP',
     el.description = 'Le Événement RSVP pour vos projets QR Code.',
     el.definition = 'Solution QR Code AI pour la création et gestion de Événement RSVP.',
@@ -425,8 +615,13 @@ SET el.slug = 'event-rsvp',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'booking-appointment', locale_key: 'fr-FR'})
-SET el.slug = 'booking-appointment',
+MERGE (el:EntityContent {key: 'entity:booking-appointment@fr-FR'})
+SET el.entity_key = 'booking-appointment',
+    el.locale_key = 'fr-FR',
+    el.slug = 'booking-appointment',
+    el.full_path = '/fr/booking-appointment',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Booking/Applicationointment',
     el.description = 'La Booking/Applicationointment pour vos projets QR Code.',
     el.definition = 'Solution QR Code AI pour la création et gestion de Booking/Applicationointment.',
@@ -436,8 +631,13 @@ SET el.slug = 'booking-appointment',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-url', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-url',
+MERGE (el:EntityContent {key: 'entity:qr-code-url@fr-FR'})
+SET el.entity_key = 'qr-code-url',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-url',
+    el.full_path = '/fr/qr-code-url',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'QR Code URL',
     el.description = 'QR Code redirigeant vers une adresse web.',
     el.definition = 'Format de données QR Code URL compatible avec les QR Codes.',
@@ -447,8 +647,13 @@ SET el.slug = 'qr-code-url',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-wifi', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-wifi',
+MERGE (el:EntityContent {key: 'entity:qr-code-wifi@fr-FR'})
+SET el.entity_key = 'qr-code-wifi',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-wifi',
+    el.full_path = '/fr/qr-code-wifi',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'QR Code WiFi',
     el.description = 'QR Code pour connexion WiFi automatique.',
     el.definition = 'Format de données QR Code WiFi compatible avec les QR Codes.',
@@ -458,8 +663,13 @@ SET el.slug = 'qr-code-wifi',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-vcard', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-vcard',
+MERGE (el:EntityContent {key: 'entity:qr-code-vcard@fr-FR'})
+SET el.entity_key = 'qr-code-vcard',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-vcard',
+    el.full_path = '/fr/qr-code-vcard',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'vCard QR Code',
     el.description = 'QR Code contenant une carte de visite électronique.',
     el.definition = 'Format de données vCard QR Code compatible avec les QR Codes.',
@@ -469,8 +679,13 @@ SET el.slug = 'qr-code-vcard',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-mecard', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-mecard',
+MERGE (el:EntityContent {key: 'entity:qr-code-mecard@fr-FR'})
+SET el.entity_key = 'qr-code-mecard',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-mecard',
+    el.full_path = '/fr/qr-code-mecard',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'MeCard QR Code',
     el.description = 'Le MeCard QR Code pour vos projets QR Code.',
     el.definition = 'Format de données MeCard QR Code compatible avec les QR Codes.',
@@ -480,8 +695,13 @@ SET el.slug = 'qr-code-mecard',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-pdf', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-pdf',
+MERGE (el:EntityContent {key: 'entity:qr-code-pdf@fr-FR'})
+SET el.entity_key = 'qr-code-pdf',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-pdf',
+    el.full_path = '/fr/qr-code-pdf',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'PDF QR Code',
     el.description = 'QR Code donnant accès à un document PDF.',
     el.definition = 'Format de données PDF QR Code compatible avec les QR Codes.',
@@ -491,8 +711,13 @@ SET el.slug = 'qr-code-pdf',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-text', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-text',
+MERGE (el:EntityContent {key: 'entity:qr-code-text@fr-FR'})
+SET el.entity_key = 'qr-code-text',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-text',
+    el.full_path = '/fr/qr-code-text',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Texte QR Code',
     el.description = 'QR Code encodant du texte brut.',
     el.definition = 'Format de données Texte QR Code compatible avec les QR Codes.',
@@ -502,8 +727,13 @@ SET el.slug = 'qr-code-text',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-email', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-email',
+MERGE (el:EntityContent {key: 'entity:qr-code-email@fr-FR'})
+SET el.entity_key = 'qr-code-email',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-email',
+    el.full_path = '/fr/qr-code-email',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Email QR Code',
     el.description = 'QR Code ouvrant un email pré-rédigé.',
     el.definition = 'Format de données Email QR Code compatible avec les QR Codes.',
@@ -513,8 +743,13 @@ SET el.slug = 'qr-code-email',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-sms', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-sms',
+MERGE (el:EntityContent {key: 'entity:qr-code-sms@fr-FR'})
+SET el.entity_key = 'qr-code-sms',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-sms',
+    el.full_path = '/fr/qr-code-sms',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'SMS QR Code',
     el.description = 'QR Code pré-remplissant un SMS.',
     el.definition = 'Format de données SMS QR Code compatible avec les QR Codes.',
@@ -524,8 +759,13 @@ SET el.slug = 'qr-code-sms',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-phone', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-phone',
+MERGE (el:EntityContent {key: 'entity:qr-code-phone@fr-FR'})
+SET el.entity_key = 'qr-code-phone',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-phone',
+    el.full_path = '/fr/qr-code-phone',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Téléphone QR Code',
     el.description = 'QR Code pour appel téléphonique direct.',
     el.definition = 'Format de données Téléphone QR Code compatible avec les QR Codes.',
@@ -535,8 +775,13 @@ SET el.slug = 'qr-code-phone',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-video', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-video',
+MERGE (el:EntityContent {key: 'entity:qr-code-video@fr-FR'})
+SET el.entity_key = 'qr-code-video',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-video',
+    el.full_path = '/fr/qr-code-video',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Vidéo QR Code',
     el.description = 'QR Code redirigeant vers une vidéo.',
     el.definition = 'Format de données Vidéo QR Code compatible avec les QR Codes.',
@@ -546,8 +791,13 @@ SET el.slug = 'qr-code-video',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-audio', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-audio',
+MERGE (el:EntityContent {key: 'entity:qr-code-audio@fr-FR'})
+SET el.entity_key = 'qr-code-audio',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-audio',
+    el.full_path = '/fr/qr-code-audio',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Audio QR Code',
     el.description = 'QR Code donnant accès à un fichier audio.',
     el.definition = 'Format de données Audio QR Code compatible avec les QR Codes.',
@@ -557,8 +807,13 @@ SET el.slug = 'qr-code-audio',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-image-gallery', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-image-gallery',
+MERGE (el:EntityContent {key: 'entity:qr-code-image-gallery@fr-FR'})
+SET el.entity_key = 'qr-code-image-gallery',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-image-gallery',
+    el.full_path = '/fr/qr-code-image-gallery',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Image Gallery QR Code',
     el.description = 'L\'Image Gallery QR Code pour vos projets QR Code.',
     el.definition = 'Format de données Image Gallery QR Code compatible avec les QR Codes.',
@@ -568,8 +823,13 @@ SET el.slug = 'qr-code-image-gallery',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-coupon', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-coupon',
+MERGE (el:EntityContent {key: 'entity:qr-code-coupon@fr-FR'})
+SET el.entity_key = 'qr-code-coupon',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-coupon',
+    el.full_path = '/fr/qr-code-coupon',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Coupon QR Code',
     el.description = 'QR Code offrant une réduction ou un bon d\'achat.',
     el.definition = 'Format de données Coupon QR Code compatible avec les QR Codes.',
@@ -579,8 +839,13 @@ SET el.slug = 'qr-code-coupon',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-social', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-social',
+MERGE (el:EntityContent {key: 'entity:qr-code-social@fr-FR'})
+SET el.entity_key = 'qr-code-social',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-social',
+    el.full_path = '/fr/qr-code-social',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Réseaux Sociaux Media QR Code',
     el.description = 'Le Réseaux Sociaux Media QR Code pour vos projets QR Code.',
     el.definition = 'Solution QR Code AI pour la création et gestion de Réseaux Sociaux Media QR Code.',
@@ -590,8 +855,13 @@ SET el.slug = 'qr-code-social',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-instagram', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-instagram',
+MERGE (el:EntityContent {key: 'entity:qr-code-instagram@fr-FR'})
+SET el.entity_key = 'qr-code-instagram',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-instagram',
+    el.full_path = '/fr/qr-code-instagram',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Instagram QR Code',
     el.description = 'L\'Instagram QR Code pour vos projets QR Code.',
     el.definition = 'Format de données Instagram QR Code compatible avec les QR Codes.',
@@ -601,8 +871,13 @@ SET el.slug = 'qr-code-instagram',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-linkedin', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-linkedin',
+MERGE (el:EntityContent {key: 'entity:qr-code-linkedin@fr-FR'})
+SET el.entity_key = 'qr-code-linkedin',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-linkedin',
+    el.full_path = '/fr/qr-code-linkedin',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'LinkedIn QR Code',
     el.description = 'Le LinkedIn QR Code pour vos projets QR Code.',
     el.definition = 'Format de données LinkedIn QR Code compatible avec les QR Codes.',
@@ -612,8 +887,13 @@ SET el.slug = 'qr-code-linkedin',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-facebook', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-facebook',
+MERGE (el:EntityContent {key: 'entity:qr-code-facebook@fr-FR'})
+SET el.entity_key = 'qr-code-facebook',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-facebook',
+    el.full_path = '/fr/qr-code-facebook',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Facebook QR Code',
     el.description = 'Le Facebook QR Code pour vos projets QR Code.',
     el.definition = 'Format de données Facebook QR Code compatible avec les QR Codes.',
@@ -623,8 +903,13 @@ SET el.slug = 'qr-code-facebook',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-twitter', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-twitter',
+MERGE (el:EntityContent {key: 'entity:qr-code-twitter@fr-FR'})
+SET el.entity_key = 'qr-code-twitter',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-twitter',
+    el.full_path = '/fr/qr-code-twitter',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Twitter/X QR Code',
     el.description = 'Le Twitter/X QR Code pour vos projets QR Code.',
     el.definition = 'Format de données Twitter/X QR Code compatible avec les QR Codes.',
@@ -634,8 +919,13 @@ SET el.slug = 'qr-code-twitter',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-youtube', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-youtube',
+MERGE (el:EntityContent {key: 'entity:qr-code-youtube@fr-FR'})
+SET el.entity_key = 'qr-code-youtube',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-youtube',
+    el.full_path = '/fr/qr-code-youtube',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'YouTube QR Code',
     el.description = 'Le YouTube QR Code pour vos projets QR Code.',
     el.definition = 'Format de données YouTube QR Code compatible avec les QR Codes.',
@@ -645,8 +935,13 @@ SET el.slug = 'qr-code-youtube',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-tiktok', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-tiktok',
+MERGE (el:EntityContent {key: 'entity:qr-code-tiktok@fr-FR'})
+SET el.entity_key = 'qr-code-tiktok',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-tiktok',
+    el.full_path = '/fr/qr-code-tiktok',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'TikTok QR Code',
     el.description = 'Le TikTok QR Code pour vos projets QR Code.',
     el.definition = 'Format de données TikTok QR Code compatible avec les QR Codes.',
@@ -656,8 +951,13 @@ SET el.slug = 'qr-code-tiktok',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-snapchat', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-snapchat',
+MERGE (el:EntityContent {key: 'entity:qr-code-snapchat@fr-FR'})
+SET el.entity_key = 'qr-code-snapchat',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-snapchat',
+    el.full_path = '/fr/qr-code-snapchat',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Snapchat QR Code',
     el.description = 'Le Snapchat QR Code pour vos projets QR Code.',
     el.definition = 'Format de données Snapchat QR Code compatible avec les QR Codes.',
@@ -667,8 +967,13 @@ SET el.slug = 'qr-code-snapchat',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-whatsapp', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-whatsapp',
+MERGE (el:EntityContent {key: 'entity:qr-code-whatsapp@fr-FR'})
+SET el.entity_key = 'qr-code-whatsapp',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-whatsapp',
+    el.full_path = '/fr/qr-code-whatsapp',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'WhatsApplication QR Code',
     el.description = 'La WhatsApplication QR Code pour vos projets QR Code.',
     el.definition = 'Format de données WhatsApplication QR Code compatible avec les QR Codes.',
@@ -678,8 +983,13 @@ SET el.slug = 'qr-code-whatsapp',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-telegram', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-telegram',
+MERGE (el:EntityContent {key: 'entity:qr-code-telegram@fr-FR'})
+SET el.entity_key = 'qr-code-telegram',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-telegram',
+    el.full_path = '/fr/qr-code-telegram',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Telegram QR Code',
     el.description = 'Le Telegram QR Code pour vos projets QR Code.',
     el.definition = 'Format de données Telegram QR Code compatible avec les QR Codes.',
@@ -689,8 +999,13 @@ SET el.slug = 'qr-code-telegram',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-pinterest', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-pinterest',
+MERGE (el:EntityContent {key: 'entity:qr-code-pinterest@fr-FR'})
+SET el.entity_key = 'qr-code-pinterest',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-pinterest',
+    el.full_path = '/fr/qr-code-pinterest',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Pinterest QR Code',
     el.description = 'Le Pinterest QR Code pour vos projets QR Code.',
     el.definition = 'Format de données Pinterest QR Code compatible avec les QR Codes.',
@@ -700,8 +1015,13 @@ SET el.slug = 'qr-code-pinterest',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-spotify', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-spotify',
+MERGE (el:EntityContent {key: 'entity:qr-code-spotify@fr-FR'})
+SET el.entity_key = 'qr-code-spotify',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-spotify',
+    el.full_path = '/fr/qr-code-spotify',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Spotify QR Code',
     el.description = 'Le Spotify QR Code pour vos projets QR Code.',
     el.definition = 'Format de données Spotify QR Code compatible avec les QR Codes.',
@@ -711,8 +1031,13 @@ SET el.slug = 'qr-code-spotify',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-apple-music', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-apple-music',
+MERGE (el:EntityContent {key: 'entity:qr-code-apple-music@fr-FR'})
+SET el.entity_key = 'qr-code-apple-music',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-apple-music',
+    el.full_path = '/fr/qr-code-apple-music',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Applicationle Music QR Code',
     el.description = 'L\'Applicationle Music QR Code pour vos projets QR Code.',
     el.definition = 'Format de données Applicationle Music QR Code compatible avec les QR Codes.',
@@ -722,8 +1047,13 @@ SET el.slug = 'qr-code-apple-music',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-soundcloud', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-soundcloud',
+MERGE (el:EntityContent {key: 'entity:qr-code-soundcloud@fr-FR'})
+SET el.entity_key = 'qr-code-soundcloud',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-soundcloud',
+    el.full_path = '/fr/qr-code-soundcloud',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'SoundCloud QR Code',
     el.description = 'Le SoundCloud QR Code pour vos projets QR Code.',
     el.definition = 'Format de données SoundCloud QR Code compatible avec les QR Codes.',
@@ -733,8 +1063,13 @@ SET el.slug = 'qr-code-soundcloud',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-payment', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-payment',
+MERGE (el:EntityContent {key: 'entity:qr-code-payment@fr-FR'})
+SET el.entity_key = 'qr-code-payment',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-payment',
+    el.full_path = '/fr/qr-code-payment',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Paiement QR Code',
     el.description = 'Le Paiement QR Code pour vos projets QR Code.',
     el.definition = 'Solution QR Code AI pour la création et gestion de Paiement QR Code.',
@@ -744,8 +1079,13 @@ SET el.slug = 'qr-code-payment',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-pix', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-pix',
+MERGE (el:EntityContent {key: 'entity:qr-code-pix@fr-FR'})
+SET el.entity_key = 'qr-code-pix',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-pix',
+    el.full_path = '/fr/qr-code-pix',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'PIX QR Code',
     el.description = 'Le PIX QR Code pour vos projets QR Code.',
     el.definition = 'Format de données PIX QR Code compatible avec les QR Codes.',
@@ -755,8 +1095,13 @@ SET el.slug = 'qr-code-pix',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-upi', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-upi',
+MERGE (el:EntityContent {key: 'entity:qr-code-upi@fr-FR'})
+SET el.entity_key = 'qr-code-upi',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-upi',
+    el.full_path = '/fr/qr-code-upi',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'UPI QR Code',
     el.description = 'L\'UPI QR Code pour vos projets QR Code.',
     el.definition = 'Format de données UPI QR Code compatible avec les QR Codes.',
@@ -766,8 +1111,13 @@ SET el.slug = 'qr-code-upi',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-paypal', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-paypal',
+MERGE (el:EntityContent {key: 'entity:qr-code-paypal@fr-FR'})
+SET el.entity_key = 'qr-code-paypal',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-paypal',
+    el.full_path = '/fr/qr-code-paypal',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'PayPal QR Code',
     el.description = 'Le PayPal QR Code pour vos projets QR Code.',
     el.definition = 'Format de données PayPal QR Code compatible avec les QR Codes.',
@@ -777,8 +1127,13 @@ SET el.slug = 'qr-code-paypal',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-venmo', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-venmo',
+MERGE (el:EntityContent {key: 'entity:qr-code-venmo@fr-FR'})
+SET el.entity_key = 'qr-code-venmo',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-venmo',
+    el.full_path = '/fr/qr-code-venmo',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Venmo QR Code',
     el.description = 'Le Venmo QR Code pour vos projets QR Code.',
     el.definition = 'Format de données Venmo QR Code compatible avec les QR Codes.',
@@ -788,8 +1143,13 @@ SET el.slug = 'qr-code-venmo',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-bitcoin', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-bitcoin',
+MERGE (el:EntityContent {key: 'entity:qr-code-bitcoin@fr-FR'})
+SET el.entity_key = 'qr-code-bitcoin',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-bitcoin',
+    el.full_path = '/fr/qr-code-bitcoin',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Bitcoin QR Code',
     el.description = 'QR Code pour paiement en Bitcoin.',
     el.definition = 'Format de données Bitcoin QR Code compatible avec les QR Codes.',
@@ -799,8 +1159,13 @@ SET el.slug = 'qr-code-bitcoin',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-ethereum', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-ethereum',
+MERGE (el:EntityContent {key: 'entity:qr-code-ethereum@fr-FR'})
+SET el.entity_key = 'qr-code-ethereum',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-ethereum',
+    el.full_path = '/fr/qr-code-ethereum',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Ethereum QR Code',
     el.description = 'L\'Ethereum QR Code pour vos projets QR Code.',
     el.definition = 'Format de données Ethereum QR Code compatible avec les QR Codes.',
@@ -810,8 +1175,13 @@ SET el.slug = 'qr-code-ethereum',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-crypto', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-crypto',
+MERGE (el:EntityContent {key: 'entity:qr-code-crypto@fr-FR'})
+SET el.entity_key = 'qr-code-crypto',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-crypto',
+    el.full_path = '/fr/qr-code-crypto',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Crypto QR Code',
     el.description = 'QR Code pour transactions en cryptomonnaie.',
     el.definition = 'Format de données Crypto QR Code compatible avec les QR Codes.',
@@ -821,8 +1191,13 @@ SET el.slug = 'qr-code-crypto',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-bank-transfer', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-bank-transfer',
+MERGE (el:EntityContent {key: 'entity:qr-code-bank-transfer@fr-FR'})
+SET el.entity_key = 'qr-code-bank-transfer',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-bank-transfer',
+    el.full_path = '/fr/qr-code-bank-transfer',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Bank Transfer QR Code',
     el.description = 'Le Bank Transfer QR Code pour vos projets QR Code.',
     el.definition = 'Format de données Bank Transfer QR Code compatible avec les QR Codes.',
@@ -832,8 +1207,13 @@ SET el.slug = 'qr-code-bank-transfer',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-location', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-location',
+MERGE (el:EntityContent {key: 'entity:qr-code-location@fr-FR'})
+SET el.entity_key = 'qr-code-location',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-location',
+    el.full_path = '/fr/qr-code-location',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Localisation QR Code',
     el.description = 'La Localisation QR Code pour vos projets QR Code.',
     el.definition = 'Solution QR Code AI pour la création et gestion de Localisation QR Code.',
@@ -843,8 +1223,13 @@ SET el.slug = 'qr-code-location',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-google-maps', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-google-maps',
+MERGE (el:EntityContent {key: 'entity:qr-code-google-maps@fr-FR'})
+SET el.entity_key = 'qr-code-google-maps',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-google-maps',
+    el.full_path = '/fr/qr-code-google-maps',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Google Maps QR Code',
     el.description = 'Le Google Maps QR Code pour vos projets QR Code.',
     el.definition = 'Format de données Google Maps QR Code compatible avec les QR Codes.',
@@ -854,8 +1239,13 @@ SET el.slug = 'qr-code-google-maps',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-apple-maps', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-apple-maps',
+MERGE (el:EntityContent {key: 'entity:qr-code-apple-maps@fr-FR'})
+SET el.entity_key = 'qr-code-apple-maps',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-apple-maps',
+    el.full_path = '/fr/qr-code-apple-maps',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Applicationle Maps QR Code',
     el.description = 'L\'Applicationle Maps QR Code pour vos projets QR Code.',
     el.definition = 'Format de données Applicationle Maps QR Code compatible avec les QR Codes.',
@@ -865,8 +1255,13 @@ SET el.slug = 'qr-code-apple-maps',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-waze', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-waze',
+MERGE (el:EntityContent {key: 'entity:qr-code-waze@fr-FR'})
+SET el.entity_key = 'qr-code-waze',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-waze',
+    el.full_path = '/fr/qr-code-waze',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Waze QR Code',
     el.description = 'Le Waze QR Code pour vos projets QR Code.',
     el.definition = 'Format de données Waze QR Code compatible avec les QR Codes.',
@@ -876,8 +1271,13 @@ SET el.slug = 'qr-code-waze',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-coordinates', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-coordinates',
+MERGE (el:EntityContent {key: 'entity:qr-code-coordinates@fr-FR'})
+SET el.entity_key = 'qr-code-coordinates',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-coordinates',
+    el.full_path = '/fr/qr-code-coordinates',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Coordinates QR Code',
     el.description = 'Le Coordinates QR Code pour vos projets QR Code.',
     el.definition = 'Format de données Coordinates QR Code compatible avec les QR Codes.',
@@ -887,8 +1287,13 @@ SET el.slug = 'qr-code-coordinates',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-app', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-app',
+MERGE (el:EntityContent {key: 'entity:qr-code-app@fr-FR'})
+SET el.entity_key = 'qr-code-app',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-app',
+    el.full_path = '/fr/qr-code-app',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Application Télécharger QR Code',
     el.description = 'L\'Application Télécharger QR Code pour vos projets QR Code.',
     el.definition = 'Solution QR Code AI pour la création et gestion de Application Télécharger QR Code.',
@@ -898,8 +1303,13 @@ SET el.slug = 'qr-code-app',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-app-store', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-app-store',
+MERGE (el:EntityContent {key: 'entity:qr-code-app-store@fr-FR'})
+SET el.entity_key = 'qr-code-app-store',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-app-store',
+    el.full_path = '/fr/qr-code-app-store',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Application Store QR Code',
     el.description = 'L\'Application Store QR Code pour vos projets QR Code.',
     el.definition = 'Format de données Application Store QR Code compatible avec les QR Codes.',
@@ -909,8 +1319,13 @@ SET el.slug = 'qr-code-app-store',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-play-store', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-play-store',
+MERGE (el:EntityContent {key: 'entity:qr-code-play-store@fr-FR'})
+SET el.entity_key = 'qr-code-play-store',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-play-store',
+    el.full_path = '/fr/qr-code-play-store',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Play Store QR Code',
     el.description = 'Le Play Store QR Code pour vos projets QR Code.',
     el.definition = 'Format de données Play Store QR Code compatible avec les QR Codes.',
@@ -920,8 +1335,13 @@ SET el.slug = 'qr-code-play-store',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-app-download', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-app-download',
+MERGE (el:EntityContent {key: 'entity:qr-code-app-download@fr-FR'})
+SET el.entity_key = 'qr-code-app-download',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-app-download',
+    el.full_path = '/fr/qr-code-app-download',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Smart Application Télécharger QR Code',
     el.description = 'La Smart Application Télécharger QR Code pour vos projets QR Code.',
     el.definition = 'Format de données Smart Application Télécharger QR Code compatible avec les QR Codes.',
@@ -931,8 +1351,13 @@ SET el.slug = 'qr-code-app-download',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-review', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-review',
+MERGE (el:EntityContent {key: 'entity:qr-code-review@fr-FR'})
+SET el.entity_key = 'qr-code-review',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-review',
+    el.full_path = '/fr/qr-code-review',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Review QR Code',
     el.description = 'Le Review QR Code pour vos projets QR Code.',
     el.definition = 'Format de données Review QR Code compatible avec les QR Codes.',
@@ -942,8 +1367,13 @@ SET el.slug = 'qr-code-review',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-survey', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-survey',
+MERGE (el:EntityContent {key: 'entity:qr-code-survey@fr-FR'})
+SET el.entity_key = 'qr-code-survey',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-survey',
+    el.full_path = '/fr/qr-code-survey',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Sondage QR Code',
     el.description = 'QR Code vers un formulaire de sondage.',
     el.definition = 'Format de données Sondage QR Code compatible avec les QR Codes.',
@@ -953,8 +1383,13 @@ SET el.slug = 'qr-code-survey',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-feedback', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-feedback',
+MERGE (el:EntityContent {key: 'entity:qr-code-feedback@fr-FR'})
+SET el.entity_key = 'qr-code-feedback',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-feedback',
+    el.full_path = '/fr/qr-code-feedback',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Avis QR Code',
     el.description = 'QR Code pour recueillir des avis clients.',
     el.definition = 'Format de données Avis QR Code compatible avec les QR Codes.',
@@ -964,8 +1399,13 @@ SET el.slug = 'qr-code-feedback',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-menu', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-menu',
+MERGE (el:EntityContent {key: 'entity:qr-code-menu@fr-FR'})
+SET el.entity_key = 'qr-code-menu',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-menu',
+    el.full_path = '/fr/qr-code-menu',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Menu QR Code',
     el.description = 'QR Code affichant un menu de restaurant.',
     el.definition = 'Format de données Menu QR Code compatible avec les QR Codes.',
@@ -975,8 +1415,13 @@ SET el.slug = 'qr-code-menu',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-resume', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-resume',
+MERGE (el:EntityContent {key: 'entity:qr-code-resume@fr-FR'})
+SET el.entity_key = 'qr-code-resume',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-resume',
+    el.full_path = '/fr/qr-code-resume',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Resume QR Code',
     el.description = 'Le Resume QR Code pour vos projets QR Code.',
     el.definition = 'Format de données Resume QR Code compatible avec les QR Codes.',
@@ -986,8 +1431,13 @@ SET el.slug = 'qr-code-resume',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-certificate', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-certificate',
+MERGE (el:EntityContent {key: 'entity:qr-code-certificate@fr-FR'})
+SET el.entity_key = 'qr-code-certificate',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-certificate',
+    el.full_path = '/fr/qr-code-certificate',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Certificate QR Code',
     el.description = 'Le Certificate QR Code pour vos projets QR Code.',
     el.definition = 'Format de données Certificate QR Code compatible avec les QR Codes.',
@@ -997,8 +1447,13 @@ SET el.slug = 'qr-code-certificate',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-ticket', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-ticket',
+MERGE (el:EntityContent {key: 'entity:qr-code-ticket@fr-FR'})
+SET el.entity_key = 'qr-code-ticket',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-ticket',
+    el.full_path = '/fr/qr-code-ticket',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Ticket QR Code',
     el.description = 'Le Ticket QR Code pour vos projets QR Code.',
     el.definition = 'Format de données Ticket QR Code compatible avec les QR Codes.',
@@ -1008,8 +1463,13 @@ SET el.slug = 'qr-code-ticket',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-attendance', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-attendance',
+MERGE (el:EntityContent {key: 'entity:qr-code-attendance@fr-FR'})
+SET el.entity_key = 'qr-code-attendance',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-attendance',
+    el.full_path = '/fr/qr-code-attendance',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Attendance QR Code',
     el.description = 'L\'Attendance QR Code pour vos projets QR Code.',
     el.definition = 'Format de données Attendance QR Code compatible avec les QR Codes.',
@@ -1019,8 +1479,13 @@ SET el.slug = 'qr-code-attendance',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-pet-tag', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-pet-tag',
+MERGE (el:EntityContent {key: 'entity:qr-code-pet-tag@fr-FR'})
+SET el.entity_key = 'qr-code-pet-tag',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-pet-tag',
+    el.full_path = '/fr/qr-code-pet-tag',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Pet Tag QR Code',
     el.description = 'Le Pet Tag QR Code pour vos projets QR Code.',
     el.definition = 'Format de données Pet Tag QR Code compatible avec les QR Codes.',
@@ -1030,8 +1495,13 @@ SET el.slug = 'qr-code-pet-tag',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-medical-id', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-medical-id',
+MERGE (el:EntityContent {key: 'entity:qr-code-medical-id@fr-FR'})
+SET el.entity_key = 'qr-code-medical-id',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-medical-id',
+    el.full_path = '/fr/qr-code-medical-id',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Medical ID QR Code',
     el.description = 'Le Medical ID QR Code pour vos projets QR Code.',
     el.definition = 'Format de données Medical ID QR Code compatible avec les QR Codes.',
@@ -1041,8 +1511,13 @@ SET el.slug = 'qr-code-medical-id',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-file', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-file',
+MERGE (el:EntityContent {key: 'entity:qr-code-file@fr-FR'})
+SET el.entity_key = 'qr-code-file',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-file',
+    el.full_path = '/fr/qr-code-file',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'File Télécharger QR Code',
     el.description = 'Le File Télécharger QR Code pour vos projets QR Code.',
     el.definition = 'Format de données File Télécharger QR Code compatible avec les QR Codes.',
@@ -1052,8 +1527,13 @@ SET el.slug = 'qr-code-file',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-calendar', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-calendar',
+MERGE (el:EntityContent {key: 'entity:qr-code-calendar@fr-FR'})
+SET el.entity_key = 'qr-code-calendar',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-calendar',
+    el.full_path = '/fr/qr-code-calendar',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Calendrier Événement QR Code',
     el.description = 'QR Code pour événement calendrier.',
     el.definition = 'Format de données Calendrier Événement QR Code compatible avec les QR Codes.',
@@ -1063,8 +1543,13 @@ SET el.slug = 'qr-code-calendar',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'ean-13', locale_key: 'fr-FR'})
-SET el.slug = 'ean-13',
+MERGE (el:EntityContent {key: 'entity:ean-13@fr-FR'})
+SET el.entity_key = 'ean-13',
+    el.locale_key = 'fr-FR',
+    el.slug = 'ean-13',
+    el.full_path = '/fr/ean-13',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'EAN-13',
     el.description = 'L\'EAN-13 pour vos projets QR Code.',
     el.definition = 'Solution QR Code AI pour la création et gestion de EAN-13.',
@@ -1074,8 +1559,13 @@ SET el.slug = 'ean-13',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'ean-8', locale_key: 'fr-FR'})
-SET el.slug = 'ean-8',
+MERGE (el:EntityContent {key: 'entity:ean-8@fr-FR'})
+SET el.entity_key = 'ean-8',
+    el.locale_key = 'fr-FR',
+    el.slug = 'ean-8',
+    el.full_path = '/fr/ean-8',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'EAN-8',
     el.description = 'L\'EAN-8 pour vos projets QR Code.',
     el.definition = 'Solution QR Code AI pour la création et gestion de EAN-8.',
@@ -1085,8 +1575,13 @@ SET el.slug = 'ean-8',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'upc-a', locale_key: 'fr-FR'})
-SET el.slug = 'upc-a',
+MERGE (el:EntityContent {key: 'entity:upc-a@fr-FR'})
+SET el.entity_key = 'upc-a',
+    el.locale_key = 'fr-FR',
+    el.slug = 'upc-a',
+    el.full_path = '/fr/upc-a',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'UPC-A',
     el.description = 'L\'UPC-A pour vos projets QR Code.',
     el.definition = 'Solution QR Code AI pour la création et gestion de UPC-A.',
@@ -1096,8 +1591,13 @@ SET el.slug = 'upc-a',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'upc-e', locale_key: 'fr-FR'})
-SET el.slug = 'upc-e',
+MERGE (el:EntityContent {key: 'entity:upc-e@fr-FR'})
+SET el.entity_key = 'upc-e',
+    el.locale_key = 'fr-FR',
+    el.slug = 'upc-e',
+    el.full_path = '/fr/upc-e',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'UPC-E',
     el.description = 'L\'UPC-E pour vos projets QR Code.',
     el.definition = 'Solution QR Code AI pour la création et gestion de UPC-E.',
@@ -1107,8 +1607,13 @@ SET el.slug = 'upc-e',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'code-128', locale_key: 'fr-FR'})
-SET el.slug = 'code-128',
+MERGE (el:EntityContent {key: 'entity:code-128@fr-FR'})
+SET el.entity_key = 'code-128',
+    el.locale_key = 'fr-FR',
+    el.slug = 'code-128',
+    el.full_path = '/fr/code-128',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Code 128',
     el.description = 'Le Code 128 pour vos projets QR Code.',
     el.definition = 'Solution QR Code AI pour la création et gestion de Code 128.',
@@ -1118,8 +1623,13 @@ SET el.slug = 'code-128',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'code-39', locale_key: 'fr-FR'})
-SET el.slug = 'code-39',
+MERGE (el:EntityContent {key: 'entity:code-39@fr-FR'})
+SET el.entity_key = 'code-39',
+    el.locale_key = 'fr-FR',
+    el.slug = 'code-39',
+    el.full_path = '/fr/code-39',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Code 39',
     el.description = 'Le Code 39 pour vos projets QR Code.',
     el.definition = 'Solution QR Code AI pour la création et gestion de Code 39.',
@@ -1129,8 +1639,13 @@ SET el.slug = 'code-39',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'itf-14', locale_key: 'fr-FR'})
-SET el.slug = 'itf-14',
+MERGE (el:EntityContent {key: 'entity:itf-14@fr-FR'})
+SET el.entity_key = 'itf-14',
+    el.locale_key = 'fr-FR',
+    el.slug = 'itf-14',
+    el.full_path = '/fr/itf-14',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'ITF-14',
     el.description = 'L\'ITF-14 pour vos projets QR Code.',
     el.definition = 'Solution QR Code AI pour la création et gestion de ITF-14.',
@@ -1140,8 +1655,13 @@ SET el.slug = 'itf-14',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'codabar', locale_key: 'fr-FR'})
-SET el.slug = 'codabar',
+MERGE (el:EntityContent {key: 'entity:codabar@fr-FR'})
+SET el.entity_key = 'codabar',
+    el.locale_key = 'fr-FR',
+    el.slug = 'codabar',
+    el.full_path = '/fr/codabar',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Codabar',
     el.description = 'Le Codabar pour vos projets QR Code.',
     el.definition = 'Solution QR Code AI pour la création et gestion de Codabar.',
@@ -1151,8 +1671,13 @@ SET el.slug = 'codabar',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'msi-plessey', locale_key: 'fr-FR'})
-SET el.slug = 'msi-plessey',
+MERGE (el:EntityContent {key: 'entity:msi-plessey@fr-FR'})
+SET el.entity_key = 'msi-plessey',
+    el.locale_key = 'fr-FR',
+    el.slug = 'msi-plessey',
+    el.full_path = '/fr/msi-plessey',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'MSI Plessey',
     el.description = 'Le MSI Plessey pour vos projets QR Code.',
     el.definition = 'Solution QR Code AI pour la création et gestion de MSI Plessey.',
@@ -1162,8 +1687,13 @@ SET el.slug = 'msi-plessey',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'gs1-128', locale_key: 'fr-FR'})
-SET el.slug = 'gs1-128',
+MERGE (el:EntityContent {key: 'entity:gs1-128@fr-FR'})
+SET el.entity_key = 'gs1-128',
+    el.locale_key = 'fr-FR',
+    el.slug = 'gs1-128',
+    el.full_path = '/fr/gs1-128',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'GS1-128',
     el.description = 'Le GS1-128 pour vos projets QR Code.',
     el.definition = 'Solution QR Code AI pour la création et gestion de GS1-128.',
@@ -1173,8 +1703,13 @@ SET el.slug = 'gs1-128',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'data-matrix', locale_key: 'fr-FR'})
-SET el.slug = 'data-matrix',
+MERGE (el:EntityContent {key: 'entity:data-matrix@fr-FR'})
+SET el.entity_key = 'data-matrix',
+    el.locale_key = 'fr-FR',
+    el.slug = 'data-matrix',
+    el.full_path = '/fr/data-matrix',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Data Matrix',
     el.description = 'Le Data Matrix pour vos projets QR Code.',
     el.definition = 'Solution QR Code AI pour la création et gestion de Data Matrix.',
@@ -1184,8 +1719,13 @@ SET el.slug = 'data-matrix',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'pdf417', locale_key: 'fr-FR'})
-SET el.slug = 'pdf417',
+MERGE (el:EntityContent {key: 'entity:pdf417@fr-FR'})
+SET el.entity_key = 'pdf417',
+    el.locale_key = 'fr-FR',
+    el.slug = 'pdf417',
+    el.full_path = '/fr/pdf417',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'PDF417',
     el.description = 'Le PDF417 pour vos projets QR Code.',
     el.definition = 'Solution QR Code AI pour la création et gestion de PDF417.',
@@ -1195,8 +1735,13 @@ SET el.slug = 'pdf417',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'aztec-code', locale_key: 'fr-FR'})
-SET el.slug = 'aztec-code',
+MERGE (el:EntityContent {key: 'entity:aztec-code@fr-FR'})
+SET el.entity_key = 'aztec-code',
+    el.locale_key = 'fr-FR',
+    el.slug = 'aztec-code',
+    el.full_path = '/fr/aztec-code',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Aztec Code',
     el.description = 'L\'Aztec Code pour vos projets QR Code.',
     el.definition = 'Solution QR Code AI pour la création et gestion de Aztec Code.',
@@ -1206,8 +1751,13 @@ SET el.slug = 'aztec-code',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'maxicode', locale_key: 'fr-FR'})
-SET el.slug = 'maxicode',
+MERGE (el:EntityContent {key: 'entity:maxicode@fr-FR'})
+SET el.entity_key = 'maxicode',
+    el.locale_key = 'fr-FR',
+    el.slug = 'maxicode',
+    el.full_path = '/fr/maxicode',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'MaxiCode',
     el.description = 'Le MaxiCode pour vos projets QR Code.',
     el.definition = 'Solution QR Code AI pour la création et gestion de MaxiCode.',
@@ -1217,8 +1767,13 @@ SET el.slug = 'maxicode',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'gs1-datamatrix', locale_key: 'fr-FR'})
-SET el.slug = 'gs1-datamatrix',
+MERGE (el:EntityContent {key: 'entity:gs1-datamatrix@fr-FR'})
+SET el.entity_key = 'gs1-datamatrix',
+    el.locale_key = 'fr-FR',
+    el.slug = 'gs1-datamatrix',
+    el.full_path = '/fr/gs1-datamatrix',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'GS1 DataMatrix',
     el.description = 'Le GS1 DataMatrix pour vos projets QR Code.',
     el.definition = 'Solution QR Code AI pour la création et gestion de GS1 DataMatrix.',
@@ -1228,8 +1783,13 @@ SET el.slug = 'gs1-datamatrix',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'barcode-generator', locale_key: 'fr-FR'})
-SET el.slug = 'code-barres-generateur',
+MERGE (el:EntityContent {key: 'entity:barcode-generator@fr-FR'})
+SET el.entity_key = 'barcode-generator',
+    el.locale_key = 'fr-FR',
+    el.slug = 'code-barres-generateur',
+    el.full_path = '/fr/code-barres-generateur',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Code-barres Générateur',
     el.description = 'Générateur de codes-barres 1D en ligne.',
     el.definition = 'Outil professionnel Code-barres Générateur intégré à QR Code AI.',
@@ -1239,8 +1799,13 @@ SET el.slug = 'code-barres-generateur',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'barcode-scanner', locale_key: 'fr-FR'})
-SET el.slug = 'code-barres-scanner',
+MERGE (el:EntityContent {key: 'entity:barcode-scanner@fr-FR'})
+SET el.entity_key = 'barcode-scanner',
+    el.locale_key = 'fr-FR',
+    el.slug = 'code-barres-scanner',
+    el.full_path = '/fr/code-barres-scanner',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Code-barres Scannerner',
     el.description = 'Le Code-barres Scannerner pour vos projets QR Code.',
     el.definition = 'Outil professionnel Code-barres Scannerner intégré à QR Code AI.',
@@ -1250,8 +1815,13 @@ SET el.slug = 'code-barres-scanner',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'analytics', locale_key: 'fr-FR'})
-SET el.slug = 'analytiques',
+MERGE (el:EntityContent {key: 'entity:analytics@fr-FR'})
+SET el.entity_key = 'analytics',
+    el.locale_key = 'fr-FR',
+    el.slug = 'analytiques',
+    el.full_path = '/fr/analytiques',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Analytiques',
     el.description = 'Les Analytiques pour vos projets QR Code.',
     el.definition = 'Fonctionnalité avancée Analytiques de QR Code AI.',
@@ -1261,8 +1831,13 @@ SET el.slug = 'analytiques',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'click-tracking', locale_key: 'fr-FR'})
-SET el.slug = 'click-suivi',
+MERGE (el:EntityContent {key: 'entity:click-tracking@fr-FR'})
+SET el.entity_key = 'click-tracking',
+    el.locale_key = 'fr-FR',
+    el.slug = 'click-suivi',
+    el.full_path = '/fr/click-suivi',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Click Suivi',
     el.description = 'Le Click Suivi pour vos projets QR Code.',
     el.definition = 'Fonctionnalité avancée Click Suivi de QR Code AI.',
@@ -1272,8 +1847,13 @@ SET el.slug = 'click-suivi',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'scan-counting', locale_key: 'fr-FR'})
-SET el.slug = 'scanner-counting',
+MERGE (el:EntityContent {key: 'entity:scan-counting@fr-FR'})
+SET el.entity_key = 'scan-counting',
+    el.locale_key = 'fr-FR',
+    el.slug = 'scanner-counting',
+    el.full_path = '/fr/scanner-counting',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Scanner Counting',
     el.description = 'Le Scanner Counting pour vos projets QR Code.',
     el.definition = 'Fonctionnalité avancée Scanner Counting de QR Code AI.',
@@ -1283,8 +1863,13 @@ SET el.slug = 'scanner-counting',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'geo-tracking', locale_key: 'fr-FR'})
-SET el.slug = 'geo-suivi',
+MERGE (el:EntityContent {key: 'entity:geo-tracking@fr-FR'})
+SET el.entity_key = 'geo-tracking',
+    el.locale_key = 'fr-FR',
+    el.slug = 'geo-suivi',
+    el.full_path = '/fr/geo-suivi',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Geographic Suivi',
     el.description = 'Le Geographic Suivi pour vos projets QR Code.',
     el.definition = 'Fonctionnalité avancée Geographic Suivi de QR Code AI.',
@@ -1294,8 +1879,13 @@ SET el.slug = 'geo-suivi',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'device-detection', locale_key: 'fr-FR'})
-SET el.slug = 'device-detection',
+MERGE (el:EntityContent {key: 'entity:device-detection@fr-FR'})
+SET el.entity_key = 'device-detection',
+    el.locale_key = 'fr-FR',
+    el.slug = 'device-detection',
+    el.full_path = '/fr/device-detection',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Device Detection',
     el.description = 'La Device Detection pour vos projets QR Code.',
     el.definition = 'Fonctionnalité avancée Device Detection de QR Code AI.',
@@ -1305,8 +1895,13 @@ SET el.slug = 'device-detection',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'time-series', locale_key: 'fr-FR'})
-SET el.slug = 'time-series',
+MERGE (el:EntityContent {key: 'entity:time-series@fr-FR'})
+SET el.entity_key = 'time-series',
+    el.locale_key = 'fr-FR',
+    el.slug = 'time-series',
+    el.full_path = '/fr/time-series',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Time Series Analytiques',
     el.description = 'Les Time Series Analytiques pour vos projets QR Code.',
     el.definition = 'Fonctionnalité avancée Time Series Analytiques de QR Code AI.',
@@ -1316,8 +1911,13 @@ SET el.slug = 'time-series',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'contextual-routing', locale_key: 'fr-FR'})
-SET el.slug = 'contextual-routing',
+MERGE (el:EntityContent {key: 'entity:contextual-routing@fr-FR'})
+SET el.entity_key = 'contextual-routing',
+    el.locale_key = 'fr-FR',
+    el.slug = 'contextual-routing',
+    el.full_path = '/fr/contextual-routing',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Contextual Routing',
     el.description = 'Le Contextual Routing pour vos projets QR Code.',
     el.definition = 'Fonctionnalité avancée Contextual Routing de QR Code AI.',
@@ -1327,8 +1927,13 @@ SET el.slug = 'contextual-routing',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'custom-domain-name', locale_key: 'fr-FR'})
-SET el.slug = 'domaine-personnalise-name',
+MERGE (el:EntityContent {key: 'entity:custom-domain-name@fr-FR'})
+SET el.entity_key = 'custom-domain-name',
+    el.locale_key = 'fr-FR',
+    el.slug = 'domaine-personnalise-name',
+    el.full_path = '/fr/domaine-personnalise-name',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Domaine Personnalisé',
     el.description = 'Le Domaine Personnalisé pour vos projets QR Code.',
     el.definition = 'Fonctionnalité avancée Domaine Personnalisé de QR Code AI.',
@@ -1338,8 +1943,13 @@ SET el.slug = 'domaine-personnalise-name',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'custom-link-preview', locale_key: 'fr-FR'})
-SET el.slug = 'personnalise-link-preview',
+MERGE (el:EntityContent {key: 'entity:custom-link-preview@fr-FR'})
+SET el.entity_key = 'custom-link-preview',
+    el.locale_key = 'fr-FR',
+    el.slug = 'personnalise-link-preview',
+    el.full_path = '/fr/personnalise-link-preview',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Personnalisé Link Preview',
     el.description = 'Le Personnalisé Link Preview pour vos projets QR Code.',
     el.definition = 'Fonctionnalité avancée Personnalisé Link Preview de QR Code AI.',
@@ -1349,8 +1959,13 @@ SET el.slug = 'personnalise-link-preview',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'utm-builder', locale_key: 'fr-FR'})
-SET el.slug = 'utm-builder',
+MERGE (el:EntityContent {key: 'entity:utm-builder@fr-FR'})
+SET el.entity_key = 'utm-builder',
+    el.locale_key = 'fr-FR',
+    el.slug = 'utm-builder',
+    el.full_path = '/fr/utm-builder',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'UTM Builder',
     el.description = 'L\'UTM Builder pour vos projets QR Code.',
     el.definition = 'Fonctionnalité avancée UTM Builder de QR Code AI.',
@@ -1360,8 +1975,13 @@ SET el.slug = 'utm-builder',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'bulk-creation', locale_key: 'fr-FR'})
-SET el.slug = 'masse-creation',
+MERGE (el:EntityContent {key: 'entity:bulk-creation@fr-FR'})
+SET el.entity_key = 'bulk-creation',
+    el.locale_key = 'fr-FR',
+    el.slug = 'masse-creation',
+    el.full_path = '/fr/masse-creation',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'En Masse Creation',
     el.description = 'L\'En Masse Creation pour vos projets QR Code.',
     el.definition = 'Fonctionnalité avancée En Masse Creation de QR Code AI.',
@@ -1371,8 +1991,13 @@ SET el.slug = 'masse-creation',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'team-workspaces', locale_key: 'fr-FR'})
-SET el.slug = 'team-workspaces',
+MERGE (el:EntityContent {key: 'entity:team-workspaces@fr-FR'})
+SET el.entity_key = 'team-workspaces',
+    el.locale_key = 'fr-FR',
+    el.slug = 'team-workspaces',
+    el.full_path = '/fr/team-workspaces',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Team Workspaces',
     el.description = 'Les Team Workspaces pour vos projets QR Code.',
     el.definition = 'Fonctionnalité avancée Team Workspaces de QR Code AI.',
@@ -1382,8 +2007,13 @@ SET el.slug = 'team-workspaces',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'api', locale_key: 'fr-FR'})
-SET el.slug = 'api',
+MERGE (el:EntityContent {key: 'entity:api@fr-FR'})
+SET el.entity_key = 'api',
+    el.locale_key = 'fr-FR',
+    el.slug = 'api',
+    el.full_path = '/fr/api',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'API Access',
     el.description = 'L\'API Access pour vos projets QR Code.',
     el.definition = 'Fonctionnalité avancée API Access de QR Code AI.',
@@ -1393,8 +2023,13 @@ SET el.slug = 'api',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'webhooks', locale_key: 'fr-FR'})
-SET el.slug = 'webhooks',
+MERGE (el:EntityContent {key: 'entity:webhooks@fr-FR'})
+SET el.entity_key = 'webhooks',
+    el.locale_key = 'fr-FR',
+    el.slug = 'webhooks',
+    el.full_path = '/fr/webhooks',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Webhooks',
     el.description = 'Les Webhooks pour vos projets QR Code.',
     el.definition = 'Fonctionnalité avancée Webhooks de QR Code AI.',
@@ -1404,8 +2039,13 @@ SET el.slug = 'webhooks',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'white-label', locale_key: 'fr-FR'})
-SET el.slug = 'marque-blanche',
+MERGE (el:EntityContent {key: 'entity:white-label@fr-FR'})
+SET el.entity_key = 'white-label',
+    el.locale_key = 'fr-FR',
+    el.slug = 'marque-blanche',
+    el.full_path = '/fr/marque-blanche',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Marque Blanche',
     el.description = 'Solution en marque blanche personnalisable.',
     el.definition = 'Fonctionnalité avancée Marque Blanche de QR Code AI.',
@@ -1415,8 +2055,13 @@ SET el.slug = 'marque-blanche',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'password-protection', locale_key: 'fr-FR'})
-SET el.slug = 'protection-mot-de-passe',
+MERGE (el:EntityContent {key: 'entity:password-protection@fr-FR'})
+SET el.entity_key = 'password-protection',
+    el.locale_key = 'fr-FR',
+    el.slug = 'protection-mot-de-passe',
+    el.full_path = '/fr/protection-mot-de-passe',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Protection par Mot de Passe',
     el.description = 'Protection par mot de passe des QR Codes.',
     el.definition = 'Fonctionnalité avancée Protection par Mot de Passe de QR Code AI.',
@@ -1426,8 +2071,13 @@ SET el.slug = 'protection-mot-de-passe',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'expiration', locale_key: 'fr-FR'})
-SET el.slug = 'expiration',
+MERGE (el:EntityContent {key: 'entity:expiration@fr-FR'})
+SET el.entity_key = 'expiration',
+    el.locale_key = 'fr-FR',
+    el.slug = 'expiration',
+    el.full_path = '/fr/expiration',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Link Expiration',
     el.description = 'La Link Expiration pour vos projets QR Code.',
     el.definition = 'Fonctionnalité avancée Link Expiration de QR Code AI.',
@@ -1437,8 +2087,13 @@ SET el.slug = 'expiration',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'scan-limit', locale_key: 'fr-FR'})
-SET el.slug = 'limite-scans',
+MERGE (el:EntityContent {key: 'entity:scan-limit@fr-FR'})
+SET el.entity_key = 'scan-limit',
+    el.locale_key = 'fr-FR',
+    el.slug = 'limite-scans',
+    el.full_path = '/fr/limite-scans',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Limite de Scanners',
     el.description = 'Limitation du nombre de scans autorisés.',
     el.definition = 'Fonctionnalité avancée Limite de Scanners de QR Code AI.',
@@ -1448,8 +2103,13 @@ SET el.slug = 'limite-scans',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'retargeting-pixel', locale_key: 'fr-FR'})
-SET el.slug = 'reciblage-pixel',
+MERGE (el:EntityContent {key: 'entity:retargeting-pixel@fr-FR'})
+SET el.entity_key = 'retargeting-pixel',
+    el.locale_key = 'fr-FR',
+    el.slug = 'reciblage-pixel',
+    el.full_path = '/fr/reciblage-pixel',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Reciblage Pixel',
     el.description = 'Le Reciblage Pixel pour vos projets QR Code.',
     el.definition = 'Fonctionnalité avancée Reciblage Pixel de QR Code AI.',
@@ -1459,8 +2119,13 @@ SET el.slug = 'reciblage-pixel',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-generator', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-generateur',
+MERGE (el:EntityContent {key: 'entity:qr-code-generator@fr-FR'})
+SET el.entity_key = 'qr-code-generator',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-generateur',
+    el.full_path = '/fr/qr-code-generateur',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'QR Code Générateur',
     el.description = 'Outil en ligne pour créer des QR Codes personnalisés.',
     el.definition = 'Outil professionnel QR Code Générateur intégré à QR Code AI.',
@@ -1470,8 +2135,13 @@ SET el.slug = 'qr-code-generateur',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-scanner', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-scanner',
+MERGE (el:EntityContent {key: 'entity:qr-code-scanner@fr-FR'})
+SET el.entity_key = 'qr-code-scanner',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-scanner',
+    el.full_path = '/fr/qr-code-scanner',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'QR Code Scannerner',
     el.description = 'Application pour lire les QR Codes.',
     el.definition = 'Outil professionnel QR Code Scannerner intégré à QR Code AI.',
@@ -1481,8 +2151,13 @@ SET el.slug = 'qr-code-scanner',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-api', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-api',
+MERGE (el:EntityContent {key: 'entity:qr-code-api@fr-FR'})
+SET el.entity_key = 'qr-code-api',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-api',
+    el.full_path = '/fr/qr-code-api',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'QR Code API',
     el.description = 'Le QR Code API pour vos projets QR Code.',
     el.definition = 'Outil professionnel QR Code API intégré à QR Code AI.',
@@ -1492,8 +2167,13 @@ SET el.slug = 'qr-code-api',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'landing-page-builder', locale_key: 'fr-FR'})
-SET el.slug = 'page-destination-builder',
+MERGE (el:EntityContent {key: 'entity:landing-page-builder@fr-FR'})
+SET el.entity_key = 'landing-page-builder',
+    el.locale_key = 'fr-FR',
+    el.slug = 'page-destination-builder',
+    el.full_path = '/fr/page-destination-builder',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Page de Destination Builder',
     el.description = 'La Page de Destination Builder pour vos projets QR Code.',
     el.definition = 'Outil professionnel Page de Destination Builder intégré à QR Code AI.',
@@ -1503,8 +2183,13 @@ SET el.slug = 'page-destination-builder',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'url-shortener', locale_key: 'fr-FR'})
-SET el.slug = 'url-shortener',
+MERGE (el:EntityContent {key: 'entity:url-shortener@fr-FR'})
+SET el.entity_key = 'url-shortener',
+    el.locale_key = 'fr-FR',
+    el.slug = 'url-shortener',
+    el.full_path = '/fr/url-shortener',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'URL Shortener',
     el.description = 'L\'URL Shortener pour vos projets QR Code.',
     el.definition = 'Outil professionnel URL Shortener intégré à QR Code AI.',
@@ -1514,8 +2199,13 @@ SET el.slug = 'url-shortener',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'link-in-bio-builder', locale_key: 'fr-FR'})
-SET el.slug = 'lien-en-bio-builder',
+MERGE (el:EntityContent {key: 'entity:link-in-bio-builder@fr-FR'})
+SET el.entity_key = 'link-in-bio-builder',
+    el.locale_key = 'fr-FR',
+    el.slug = 'lien-en-bio-builder',
+    el.full_path = '/fr/lien-en-bio-builder',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Lien en Bio Builder',
     el.description = 'Le Lien en Bio Builder pour vos projets QR Code.',
     el.definition = 'Outil professionnel Lien en Bio Builder intégré à QR Code AI.',
@@ -1525,8 +2215,13 @@ SET el.slug = 'lien-en-bio-builder',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'menu-builder', locale_key: 'fr-FR'})
-SET el.slug = 'menu-builder',
+MERGE (el:EntityContent {key: 'entity:menu-builder@fr-FR'})
+SET el.entity_key = 'menu-builder',
+    el.locale_key = 'fr-FR',
+    el.slug = 'menu-builder',
+    el.full_path = '/fr/menu-builder',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Menu Builder',
     el.description = 'Le Menu Builder pour vos projets QR Code.',
     el.definition = 'Outil professionnel Menu Builder intégré à QR Code AI.',
@@ -1536,8 +2231,13 @@ SET el.slug = 'menu-builder',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'vcard-generator', locale_key: 'fr-FR'})
-SET el.slug = 'vcard-generateur',
+MERGE (el:EntityContent {key: 'entity:vcard-generator@fr-FR'})
+SET el.entity_key = 'vcard-generator',
+    el.locale_key = 'fr-FR',
+    el.slug = 'vcard-generateur',
+    el.full_path = '/fr/vcard-generateur',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'vCard Générateur',
     el.description = 'Le vCard Générateur pour vos projets QR Code.',
     el.definition = 'Outil professionnel vCard Générateur intégré à QR Code AI.',
@@ -1547,8 +2247,13 @@ SET el.slug = 'vcard-generateur',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'wifi-qr-generator', locale_key: 'fr-FR'})
-SET el.slug = 'wifi-qr-generateur',
+MERGE (el:EntityContent {key: 'entity:wifi-qr-generator@fr-FR'})
+SET el.entity_key = 'wifi-qr-generator',
+    el.locale_key = 'fr-FR',
+    el.slug = 'wifi-qr-generateur',
+    el.full_path = '/fr/wifi-qr-generateur',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'WiFi QR Générateur',
     el.description = 'Le WiFi QR Générateur pour vos projets QR Code.',
     el.definition = 'Outil professionnel WiFi QR Générateur intégré à QR Code AI.',
@@ -1558,8 +2263,13 @@ SET el.slug = 'wifi-qr-generateur',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'batch-qr-generator', locale_key: 'fr-FR'})
-SET el.slug = 'batch-qr-generateur',
+MERGE (el:EntityContent {key: 'entity:batch-qr-generator@fr-FR'})
+SET el.entity_key = 'batch-qr-generator',
+    el.locale_key = 'fr-FR',
+    el.slug = 'batch-qr-generateur',
+    el.full_path = '/fr/batch-qr-generateur',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Batch QR Générateur',
     el.description = 'Le Batch QR Générateur pour vos projets QR Code.',
     el.definition = 'Outil professionnel Batch QR Générateur intégré à QR Code AI.',
@@ -1569,8 +2279,13 @@ SET el.slug = 'batch-qr-generateur',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'business-cards', locale_key: 'fr-FR'})
-SET el.slug = 'carte-visites',
+MERGE (el:EntityContent {key: 'entity:business-cards@fr-FR'})
+SET el.entity_key = 'business-cards',
+    el.locale_key = 'fr-FR',
+    el.slug = 'carte-visites',
+    el.full_path = '/fr/carte-visites',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Carte de Visites',
     el.description = 'Les Carte de Visites pour vos projets QR Code.',
     el.definition = 'Support physique Carte de Visites optimisé pour l\'affichage de QR Codes.',
@@ -1580,8 +2295,13 @@ SET el.slug = 'carte-visites',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'flyers', locale_key: 'fr-FR'})
-SET el.slug = 'flyers',
+MERGE (el:EntityContent {key: 'entity:flyers@fr-FR'})
+SET el.entity_key = 'flyers',
+    el.locale_key = 'fr-FR',
+    el.slug = 'flyers',
+    el.full_path = '/fr/flyers',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Flyers',
     el.description = 'Les Flyers pour vos projets QR Code.',
     el.definition = 'Support physique Flyers optimisé pour l\'affichage de QR Codes.',
@@ -1591,8 +2311,13 @@ SET el.slug = 'flyers',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'posters-billboards', locale_key: 'fr-FR'})
-SET el.slug = 'posters-billboards',
+MERGE (el:EntityContent {key: 'entity:posters-billboards@fr-FR'})
+SET el.entity_key = 'posters-billboards',
+    el.locale_key = 'fr-FR',
+    el.slug = 'posters-billboards',
+    el.full_path = '/fr/posters-billboards',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Affiches & Panneaus',
     el.description = 'L\'Affiches & Panneaus pour vos projets QR Code.',
     el.definition = 'Support physique Affiches & Panneaus optimisé pour l\'affichage de QR Codes.',
@@ -1602,8 +2327,13 @@ SET el.slug = 'posters-billboards',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'brochures', locale_key: 'fr-FR'})
-SET el.slug = 'brochures',
+MERGE (el:EntityContent {key: 'entity:brochures@fr-FR'})
+SET el.entity_key = 'brochures',
+    el.locale_key = 'fr-FR',
+    el.slug = 'brochures',
+    el.full_path = '/fr/brochures',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Brochures',
     el.description = 'Les Brochures pour vos projets QR Code.',
     el.definition = 'Support physique Brochures optimisé pour l\'affichage de QR Codes.',
@@ -1613,8 +2343,13 @@ SET el.slug = 'brochures',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'catalogs', locale_key: 'fr-FR'})
-SET el.slug = 'catalogs',
+MERGE (el:EntityContent {key: 'entity:catalogs@fr-FR'})
+SET el.entity_key = 'catalogs',
+    el.locale_key = 'fr-FR',
+    el.slug = 'catalogs',
+    el.full_path = '/fr/catalogs',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Catalogues',
     el.description = 'Les Catalogues pour vos projets QR Code.',
     el.definition = 'Support physique Catalogues optimisé pour l\'affichage de QR Codes.',
@@ -1624,8 +2359,13 @@ SET el.slug = 'catalogs',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'magazines', locale_key: 'fr-FR'})
-SET el.slug = 'magazines',
+MERGE (el:EntityContent {key: 'entity:magazines@fr-FR'})
+SET el.entity_key = 'magazines',
+    el.locale_key = 'fr-FR',
+    el.slug = 'magazines',
+    el.full_path = '/fr/magazines',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Magazines',
     el.description = 'Les Magazines pour vos projets QR Code.',
     el.definition = 'Support physique Magazines optimisé pour l\'affichage de QR Codes.',
@@ -1635,8 +2375,13 @@ SET el.slug = 'magazines',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'newspapers', locale_key: 'fr-FR'})
-SET el.slug = 'newspapers',
+MERGE (el:EntityContent {key: 'entity:newspapers@fr-FR'})
+SET el.entity_key = 'newspapers',
+    el.locale_key = 'fr-FR',
+    el.slug = 'newspapers',
+    el.full_path = '/fr/newspapers',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Journals',
     el.description = 'Les Journals pour vos projets QR Code.',
     el.definition = 'Support physique Journals optimisé pour l\'affichage de QR Codes.',
@@ -1646,8 +2391,13 @@ SET el.slug = 'newspapers',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'direct-mail', locale_key: 'fr-FR'})
-SET el.slug = 'direct-mail',
+MERGE (el:EntityContent {key: 'entity:direct-mail@fr-FR'})
+SET el.entity_key = 'direct-mail',
+    el.locale_key = 'fr-FR',
+    el.slug = 'direct-mail',
+    el.full_path = '/fr/direct-mail',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Direct Mail',
     el.description = 'Le Direct Mail pour vos projets QR Code.',
     el.definition = 'Support physique Direct Mail optimisé pour l\'affichage de QR Codes.',
@@ -1657,8 +2407,13 @@ SET el.slug = 'direct-mail',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'stickers-labels', locale_key: 'fr-FR'})
-SET el.slug = 'stickers-labels',
+MERGE (el:EntityContent {key: 'entity:stickers-labels@fr-FR'})
+SET el.entity_key = 'stickers-labels',
+    el.locale_key = 'fr-FR',
+    el.slug = 'stickers-labels',
+    el.full_path = '/fr/stickers-labels',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Autocollants & Labels',
     el.description = 'Les Autocollants & Labels pour vos projets QR Code.',
     el.definition = 'Support physique Autocollants & Labels optimisé pour l\'affichage de QR Codes.',
@@ -1668,8 +2423,13 @@ SET el.slug = 'stickers-labels',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'banners', locale_key: 'fr-FR'})
-SET el.slug = 'banners',
+MERGE (el:EntityContent {key: 'entity:banners@fr-FR'})
+SET el.entity_key = 'banners',
+    el.locale_key = 'fr-FR',
+    el.slug = 'banners',
+    el.full_path = '/fr/banners',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Bannières',
     el.description = 'Les Bannières pour vos projets QR Code.',
     el.definition = 'Support physique Bannières optimisé pour l\'affichage de QR Codes.',
@@ -1679,8 +2439,13 @@ SET el.slug = 'banners',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'product-packaging', locale_key: 'fr-FR'})
-SET el.slug = 'product-packaging',
+MERGE (el:EntityContent {key: 'entity:product-packaging@fr-FR'})
+SET el.entity_key = 'product-packaging',
+    el.locale_key = 'fr-FR',
+    el.slug = 'product-packaging',
+    el.full_path = '/fr/product-packaging',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Produit Emballage',
     el.description = 'Le Produit Emballage pour vos projets QR Code.',
     el.definition = 'Support physique Produit Emballage optimisé pour l\'affichage de QR Codes.',
@@ -1690,8 +2455,13 @@ SET el.slug = 'product-packaging',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'product-labels', locale_key: 'fr-FR'})
-SET el.slug = 'product-labels',
+MERGE (el:EntityContent {key: 'entity:product-labels@fr-FR'})
+SET el.entity_key = 'product-labels',
+    el.locale_key = 'fr-FR',
+    el.slug = 'product-labels',
+    el.full_path = '/fr/product-labels',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Produit Labels',
     el.description = 'Les Produit Labels pour vos projets QR Code.',
     el.definition = 'Support physique Produit Labels optimisé pour l\'affichage de QR Codes.',
@@ -1701,8 +2471,13 @@ SET el.slug = 'product-labels',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'receipts', locale_key: 'fr-FR'})
-SET el.slug = 'receipts',
+MERGE (el:EntityContent {key: 'entity:receipts@fr-FR'})
+SET el.entity_key = 'receipts',
+    el.locale_key = 'fr-FR',
+    el.slug = 'receipts',
+    el.full_path = '/fr/receipts',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Tickets',
     el.description = 'Les Tickets pour vos projets QR Code.',
     el.definition = 'Support physique Tickets optimisé pour l\'affichage de QR Codes.',
@@ -1712,8 +2487,13 @@ SET el.slug = 'receipts',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'table-tents', locale_key: 'fr-FR'})
-SET el.slug = 'table-tents',
+MERGE (el:EntityContent {key: 'entity:table-tents@fr-FR'})
+SET el.entity_key = 'table-tents',
+    el.locale_key = 'fr-FR',
+    el.slug = 'table-tents',
+    el.full_path = '/fr/table-tents',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Table Tents',
     el.description = 'Les Table Tents pour vos projets QR Code.',
     el.definition = 'Support physique Table Tents optimisé pour l\'affichage de QR Codes.',
@@ -1723,8 +2503,13 @@ SET el.slug = 'table-tents',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'menus-printed', locale_key: 'fr-FR'})
-SET el.slug = 'menus-printed',
+MERGE (el:EntityContent {key: 'entity:menus-printed@fr-FR'})
+SET el.entity_key = 'menus-printed',
+    el.locale_key = 'fr-FR',
+    el.slug = 'menus-printed',
+    el.full_path = '/fr/menus-printed',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Imprimered Menus',
     el.description = 'L\'Imprimered Menus pour vos projets QR Code.',
     el.definition = 'Support physique Imprimered Menus optimisé pour l\'affichage de QR Codes.',
@@ -1734,8 +2519,13 @@ SET el.slug = 'menus-printed',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'tickets-physical', locale_key: 'fr-FR'})
-SET el.slug = 'tickets-physical',
+MERGE (el:EntityContent {key: 'entity:tickets-physical@fr-FR'})
+SET el.entity_key = 'tickets-physical',
+    el.locale_key = 'fr-FR',
+    el.slug = 'tickets-physical',
+    el.full_path = '/fr/tickets-physical',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Physical Tickets',
     el.description = 'Les Physical Tickets pour vos projets QR Code.',
     el.definition = 'Support physique Physical Tickets optimisé pour l\'affichage de QR Codes.',
@@ -1745,8 +2535,13 @@ SET el.slug = 'tickets-physical',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'emails', locale_key: 'fr-FR'})
-SET el.slug = 'emails',
+MERGE (el:EntityContent {key: 'entity:emails@fr-FR'})
+SET el.entity_key = 'emails',
+    el.locale_key = 'fr-FR',
+    el.slug = 'emails',
+    el.full_path = '/fr/emails',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Emails',
     el.description = 'Les Emails pour vos projets QR Code.',
     el.definition = 'Support physique Emails optimisé pour l\'affichage de QR Codes.',
@@ -1756,8 +2551,13 @@ SET el.slug = 'emails',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'presentations', locale_key: 'fr-FR'})
-SET el.slug = 'presentations',
+MERGE (el:EntityContent {key: 'entity:presentations@fr-FR'})
+SET el.entity_key = 'presentations',
+    el.locale_key = 'fr-FR',
+    el.slug = 'presentations',
+    el.full_path = '/fr/presentations',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Presentations',
     el.description = 'Les Presentations pour vos projets QR Code.',
     el.definition = 'Support physique Presentations optimisé pour l\'affichage de QR Codes.',
@@ -1767,8 +2567,13 @@ SET el.slug = 'presentations',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'documents', locale_key: 'fr-FR'})
-SET el.slug = 'documents',
+MERGE (el:EntityContent {key: 'entity:documents@fr-FR'})
+SET el.entity_key = 'documents',
+    el.locale_key = 'fr-FR',
+    el.slug = 'documents',
+    el.full_path = '/fr/documents',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Documents',
     el.description = 'Les Documents pour vos projets QR Code.',
     el.definition = 'Support physique Documents optimisé pour l\'affichage de QR Codes.',
@@ -1778,8 +2583,13 @@ SET el.slug = 'documents',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'websites', locale_key: 'fr-FR'})
-SET el.slug = 'websites',
+MERGE (el:EntityContent {key: 'entity:websites@fr-FR'})
+SET el.entity_key = 'websites',
+    el.locale_key = 'fr-FR',
+    el.slug = 'websites',
+    el.full_path = '/fr/websites',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Websites',
     el.description = 'Les Websites pour vos projets QR Code.',
     el.definition = 'Support physique Websites optimisé pour l\'affichage de QR Codes.',
@@ -1789,8 +2599,13 @@ SET el.slug = 'websites',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
-SET el.slug = 'creer-qr-code',
+MERGE (el:EntityContent {key: 'entity:create-qr-code@fr-FR'})
+SET el.entity_key = 'create-qr-code',
+    el.locale_key = 'fr-FR',
+    el.slug = 'creer-qr-code',
+    el.full_path = '/fr/creer-qr-code',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Créer QR Code',
     el.description = 'Générer un QR Code personnalisé en quelques clics.',
     el.definition = 'Fonctionnalité QR Code AI permettant de créer qr code facilement.',
@@ -1800,8 +2615,13 @@ SET el.slug = 'creer-qr-code',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
-SET el.slug = 'scanner-qr-code',
+MERGE (el:EntityContent {key: 'entity:scan-qr-code@fr-FR'})
+SET el.entity_key = 'scan-qr-code',
+    el.locale_key = 'fr-FR',
+    el.slug = 'scanner-qr-code',
+    el.full_path = '/fr/scanner-qr-code',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Scanner QR Code',
     el.description = 'Lire un QR Code avec la caméra de votre smartphone.',
     el.definition = 'Fonctionnalité QR Code AI permettant de scanner qr code facilement.',
@@ -1811,8 +2631,13 @@ SET el.slug = 'scanner-qr-code',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'customize-qr-code', locale_key: 'fr-FR'})
-SET el.slug = 'personnaliser-qr-code',
+MERGE (el:EntityContent {key: 'entity:customize-qr-code@fr-FR'})
+SET el.entity_key = 'customize-qr-code',
+    el.locale_key = 'fr-FR',
+    el.slug = 'personnaliser-qr-code',
+    el.full_path = '/fr/personnaliser-qr-code',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Personnaliser QR Code',
     el.description = 'Personnaliser l\'apparence de votre QR Code avec vos couleurs et logo.',
     el.definition = 'Fonctionnalité QR Code AI permettant de personnaliser qr code facilement.',
@@ -1822,8 +2647,13 @@ SET el.slug = 'personnaliser-qr-code',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'download-qr-code', locale_key: 'fr-FR'})
-SET el.slug = 'telecharger-qr-code',
+MERGE (el:EntityContent {key: 'entity:download-qr-code@fr-FR'})
+SET el.entity_key = 'download-qr-code',
+    el.locale_key = 'fr-FR',
+    el.slug = 'telecharger-qr-code',
+    el.full_path = '/fr/telecharger-qr-code',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Télécharger QR Code',
     el.description = 'Télécharger votre QR Code en PNG, SVG ou PDF haute résolution.',
     el.definition = 'Fonctionnalité QR Code AI permettant de télécharger qr code facilement.',
@@ -1833,8 +2663,13 @@ SET el.slug = 'telecharger-qr-code',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'print-qr-code', locale_key: 'fr-FR'})
-SET el.slug = 'imprimer-qr-code',
+MERGE (el:EntityContent {key: 'entity:print-qr-code@fr-FR'})
+SET el.entity_key = 'print-qr-code',
+    el.locale_key = 'fr-FR',
+    el.slug = 'imprimer-qr-code',
+    el.full_path = '/fr/imprimer-qr-code',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Imprimer QR Code',
     el.description = 'Imprimer votre QR Code avec les paramètres optimaux.',
     el.definition = 'Fonctionnalité QR Code AI permettant de imprimer qr code facilement.',
@@ -1844,8 +2679,13 @@ SET el.slug = 'imprimer-qr-code',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'add-logo', locale_key: 'fr-FR'})
-SET el.slug = 'add-logo',
+MERGE (el:EntityContent {key: 'entity:add-logo@fr-FR'})
+SET el.entity_key = 'add-logo',
+    el.locale_key = 'fr-FR',
+    el.slug = 'add-logo',
+    el.full_path = '/fr/add-logo',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Add Logo',
     el.description = 'L\'Add Logo pour vos projets QR Code.',
     el.definition = 'Fonctionnalité QR Code AI permettant de add logo facilement.',
@@ -1855,8 +2695,13 @@ SET el.slug = 'add-logo',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'change-colors', locale_key: 'fr-FR'})
-SET el.slug = 'change-couleurs',
+MERGE (el:EntityContent {key: 'entity:change-colors@fr-FR'})
+SET el.entity_key = 'change-colors',
+    el.locale_key = 'fr-FR',
+    el.slug = 'change-couleurs',
+    el.full_path = '/fr/change-couleurs',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Change Couleurs',
     el.description = 'Les Change Couleurs pour vos projets QR Code.',
     el.definition = 'Fonctionnalité QR Code AI permettant de change couleurs facilement.',
@@ -1866,8 +2711,13 @@ SET el.slug = 'change-couleurs',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'edit-destination', locale_key: 'fr-FR'})
-SET el.slug = 'modifier-destination',
+MERGE (el:EntityContent {key: 'entity:edit-destination@fr-FR'})
+SET el.entity_key = 'edit-destination',
+    el.locale_key = 'fr-FR',
+    el.slug = 'modifier-destination',
+    el.full_path = '/fr/modifier-destination',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Modifier Destination',
     el.description = 'La Modifier Destination pour vos projets QR Code.',
     el.definition = 'Fonctionnalité QR Code AI permettant de modifier destination facilement.',
@@ -1877,8 +2727,13 @@ SET el.slug = 'modifier-destination',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'share-qr-code', locale_key: 'fr-FR'})
-SET el.slug = 'partager-qr-code',
+MERGE (el:EntityContent {key: 'entity:share-qr-code@fr-FR'})
+SET el.entity_key = 'share-qr-code',
+    el.locale_key = 'fr-FR',
+    el.slug = 'partager-qr-code',
+    el.full_path = '/fr/partager-qr-code',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Partager QR Code',
     el.description = 'Partager votre QR Code par email, réseaux sociaux ou lien direct.',
     el.definition = 'Fonctionnalité QR Code AI permettant de partager qr code facilement.',
@@ -1888,8 +2743,13 @@ SET el.slug = 'partager-qr-code',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'track-scans', locale_key: 'fr-FR'})
-SET el.slug = 'suivre-scans',
+MERGE (el:EntityContent {key: 'entity:track-scans@fr-FR'})
+SET el.entity_key = 'track-scans',
+    el.locale_key = 'fr-FR',
+    el.slug = 'suivre-scans',
+    el.full_path = '/fr/suivre-scans',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Suivre Scanners',
     el.description = 'Les Suivre Scanners pour vos projets QR Code.',
     el.definition = 'Fonctionnalité QR Code AI permettant de suivre scanners facilement.',
@@ -1899,8 +2759,13 @@ SET el.slug = 'suivre-scans',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'shorten-url', locale_key: 'fr-FR'})
-SET el.slug = 'shorten-url',
+MERGE (el:EntityContent {key: 'entity:shorten-url@fr-FR'})
+SET el.entity_key = 'shorten-url',
+    el.locale_key = 'fr-FR',
+    el.slug = 'shorten-url',
+    el.full_path = '/fr/shorten-url',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Shorten URL',
     el.description = 'Le Shorten URL pour vos projets QR Code.',
     el.definition = 'Fonctionnalité QR Code AI permettant de shorten url facilement.',
@@ -1910,8 +2775,13 @@ SET el.slug = 'shorten-url',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'create-smart-link', locale_key: 'fr-FR'})
-SET el.slug = 'creer-lien-intelligent',
+MERGE (el:EntityContent {key: 'entity:create-smart-link@fr-FR'})
+SET el.entity_key = 'create-smart-link',
+    el.locale_key = 'fr-FR',
+    el.slug = 'creer-lien-intelligent',
+    el.full_path = '/fr/creer-lien-intelligent',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Créer Lien Intelligent',
     el.description = 'Le Créer Lien Intelligent pour vos projets QR Code.',
     el.definition = 'Fonctionnalité QR Code AI permettant de créer lien intelligent facilement.',
@@ -1921,8 +2791,13 @@ SET el.slug = 'creer-lien-intelligent',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'create-landing-page', locale_key: 'fr-FR'})
-SET el.slug = 'creer-page-destination',
+MERGE (el:EntityContent {key: 'entity:create-landing-page@fr-FR'})
+SET el.entity_key = 'create-landing-page',
+    el.locale_key = 'fr-FR',
+    el.slug = 'creer-page-destination',
+    el.full_path = '/fr/creer-page-destination',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Créer Page de Destination',
     el.description = 'La Créer Page de Destination pour vos projets QR Code.',
     el.definition = 'Fonctionnalité QR Code AI permettant de créer page de destination facilement.',
@@ -1932,8 +2807,13 @@ SET el.slug = 'creer-page-destination',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'create-barcode', locale_key: 'fr-FR'})
-SET el.slug = 'creer-code-barres',
+MERGE (el:EntityContent {key: 'entity:create-barcode@fr-FR'})
+SET el.entity_key = 'create-barcode',
+    el.locale_key = 'fr-FR',
+    el.slug = 'creer-code-barres',
+    el.full_path = '/fr/creer-code-barres',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Créer Code-barres',
     el.description = 'Les Créer Code-barres pour vos projets QR Code.',
     el.definition = 'Fonctionnalité QR Code AI permettant de créer code-barres facilement.',
@@ -1943,8 +2823,13 @@ SET el.slug = 'creer-code-barres',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'scan-barcode', locale_key: 'fr-FR'})
-SET el.slug = 'scanner-code-barres',
+MERGE (el:EntityContent {key: 'entity:scan-barcode@fr-FR'})
+SET el.entity_key = 'scan-barcode',
+    el.locale_key = 'fr-FR',
+    el.slug = 'scanner-code-barres',
+    el.full_path = '/fr/scanner-code-barres',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Scanner Code-barres',
     el.description = 'Les Scanner Code-barres pour vos projets QR Code.',
     el.definition = 'Fonctionnalité QR Code AI permettant de scanner code-barres facilement.',
@@ -1954,8 +2839,13 @@ SET el.slug = 'scanner-code-barres',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'restaurants', locale_key: 'fr-FR'})
-SET el.slug = 'restaurants',
+MERGE (el:EntityContent {key: 'entity:restaurants@fr-FR'})
+SET el.entity_key = 'restaurants',
+    el.locale_key = 'fr-FR',
+    el.slug = 'restaurants',
+    el.full_path = '/fr/restaurants',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Restaurants',
     el.description = 'Solutions QR Code pour la restauration : menus, paiements, avis.',
     el.definition = 'Solutions QR Code spécialisées pour le secteur Restaurants.',
@@ -1965,8 +2855,13 @@ SET el.slug = 'restaurants',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'retail', locale_key: 'fr-FR'})
-SET el.slug = 'commerce-detail',
+MERGE (el:EntityContent {key: 'entity:retail@fr-FR'})
+SET el.entity_key = 'retail',
+    el.locale_key = 'fr-FR',
+    el.slug = 'commerce-detail',
+    el.full_path = '/fr/commerce-detail',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Commerce de Détail',
     el.description = 'QR Codes pour le commerce de détail : produits, promotions, fidélité.',
     el.definition = 'Solutions QR Code spécialisées pour le secteur Commerce de Détail.',
@@ -1976,8 +2871,13 @@ SET el.slug = 'commerce-detail',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'hospitality', locale_key: 'fr-FR'})
-SET el.slug = 'hotellerie',
+MERGE (el:EntityContent {key: 'entity:hospitality@fr-FR'})
+SET el.entity_key = 'hospitality',
+    el.locale_key = 'fr-FR',
+    el.slug = 'hotellerie',
+    el.full_path = '/fr/hotellerie',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Hôtellerie',
     el.description = 'QR Codes pour l\'hôtellerie : check-in, services, informations.',
     el.definition = 'Solutions QR Code spécialisées pour le secteur Hôtellerie.',
@@ -1987,8 +2887,13 @@ SET el.slug = 'hotellerie',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'healthcare', locale_key: 'fr-FR'})
-SET el.slug = 'sante',
+MERGE (el:EntityContent {key: 'entity:healthcare@fr-FR'})
+SET el.entity_key = 'healthcare',
+    el.locale_key = 'fr-FR',
+    el.slug = 'sante',
+    el.full_path = '/fr/sante',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Santé',
     el.description = 'QR Codes pour la santé : informations patient, médicaments, rendez-vous.',
     el.definition = 'Solutions QR Code spécialisées pour le secteur Santé.',
@@ -1998,8 +2903,13 @@ SET el.slug = 'sante',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'education', locale_key: 'fr-FR'})
-SET el.slug = 'education',
+MERGE (el:EntityContent {key: 'entity:education@fr-FR'})
+SET el.entity_key = 'education',
+    el.locale_key = 'fr-FR',
+    el.slug = 'education',
+    el.full_path = '/fr/education',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Éducation',
     el.description = 'QR Codes pour l\'éducation : ressources, cours, examens.',
     el.definition = 'Solutions QR Code spécialisées pour le secteur Éducation.',
@@ -2009,8 +2919,13 @@ SET el.slug = 'education',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'real-estate', locale_key: 'fr-FR'})
-SET el.slug = 'immobilier',
+MERGE (el:EntityContent {key: 'entity:real-estate@fr-FR'})
+SET el.entity_key = 'real-estate',
+    el.locale_key = 'fr-FR',
+    el.slug = 'immobilier',
+    el.full_path = '/fr/immobilier',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Immobilier',
     el.description = 'QR Codes pour l\'immobilier : visites virtuelles, annonces, contacts.',
     el.definition = 'Solutions QR Code spécialisées pour le secteur Immobilier.',
@@ -2020,8 +2935,13 @@ SET el.slug = 'immobilier',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'fitness', locale_key: 'fr-FR'})
-SET el.slug = 'fitness',
+MERGE (el:EntityContent {key: 'entity:fitness@fr-FR'})
+SET el.entity_key = 'fitness',
+    el.locale_key = 'fr-FR',
+    el.slug = 'fitness',
+    el.full_path = '/fr/fitness',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Fitness',
     el.description = 'QR Codes pour le fitness : programmes, équipements, cours.',
     el.definition = 'Solutions QR Code spécialisées pour le secteur Fitness.',
@@ -2031,8 +2951,13 @@ SET el.slug = 'fitness',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'beauty', locale_key: 'fr-FR'})
-SET el.slug = 'beaute',
+MERGE (el:EntityContent {key: 'entity:beauty@fr-FR'})
+SET el.entity_key = 'beauty',
+    el.locale_key = 'fr-FR',
+    el.slug = 'beaute',
+    el.full_path = '/fr/beaute',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Beauté',
     el.description = 'QR Codes pour la beauté : tutoriels, ingrédients, achats.',
     el.definition = 'Solutions QR Code spécialisées pour le secteur Beauté.',
@@ -2042,8 +2967,13 @@ SET el.slug = 'beaute',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'entertainment', locale_key: 'fr-FR'})
-SET el.slug = 'divertissement',
+MERGE (el:EntityContent {key: 'entity:entertainment@fr-FR'})
+SET el.entity_key = 'entertainment',
+    el.locale_key = 'fr-FR',
+    el.slug = 'divertissement',
+    el.full_path = '/fr/divertissement',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Divertissement',
     el.description = 'QR Codes pour le divertissement : billets, contenus exclusifs.',
     el.definition = 'Solutions QR Code spécialisées pour le secteur Divertissement.',
@@ -2053,8 +2983,13 @@ SET el.slug = 'divertissement',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'transportation', locale_key: 'fr-FR'})
-SET el.slug = 'transportation',
+MERGE (el:EntityContent {key: 'entity:transportation@fr-FR'})
+SET el.entity_key = 'transportation',
+    el.locale_key = 'fr-FR',
+    el.slug = 'transportation',
+    el.full_path = '/fr/transportation',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Transportation',
     el.description = 'La Transportation pour vos projets QR Code.',
     el.definition = 'Solutions QR Code spécialisées pour le secteur Transportation.',
@@ -2064,8 +2999,13 @@ SET el.slug = 'transportation',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'manufacturing', locale_key: 'fr-FR'})
-SET el.slug = 'industrie',
+MERGE (el:EntityContent {key: 'entity:manufacturing@fr-FR'})
+SET el.entity_key = 'manufacturing',
+    el.locale_key = 'fr-FR',
+    el.slug = 'industrie',
+    el.full_path = '/fr/industrie',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Industrie',
     el.description = 'QR Codes pour l\'industrie : traçabilité, maintenance, inventaire.',
     el.definition = 'Solutions QR Code spécialisées pour le secteur Industrie.',
@@ -2075,8 +3015,13 @@ SET el.slug = 'industrie',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'logistics', locale_key: 'fr-FR'})
-SET el.slug = 'logistique',
+MERGE (el:EntityContent {key: 'entity:logistics@fr-FR'})
+SET el.entity_key = 'logistics',
+    el.locale_key = 'fr-FR',
+    el.slug = 'logistique',
+    el.full_path = '/fr/logistique',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Logistique',
     el.description = 'QR Codes pour la logistique : suivi colis, inventaire, livraison.',
     el.definition = 'Solutions QR Code spécialisées pour le secteur Logistique.',
@@ -2086,8 +3031,13 @@ SET el.slug = 'logistique',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'construction', locale_key: 'fr-FR'})
-SET el.slug = 'btp',
+MERGE (el:EntityContent {key: 'entity:construction@fr-FR'})
+SET el.entity_key = 'construction',
+    el.locale_key = 'fr-FR',
+    el.slug = 'btp',
+    el.full_path = '/fr/btp',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'BTP',
     el.description = 'QR Codes pour le BTP : plans, sécurité, documentation.',
     el.definition = 'Solutions QR Code spécialisées pour le secteur BTP.',
@@ -2097,8 +3047,13 @@ SET el.slug = 'btp',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'finance', locale_key: 'fr-FR'})
-SET el.slug = 'finance',
+MERGE (el:EntityContent {key: 'entity:finance@fr-FR'})
+SET el.entity_key = 'finance',
+    el.locale_key = 'fr-FR',
+    el.slug = 'finance',
+    el.full_path = '/fr/finance',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Finance',
     el.description = 'QR Codes pour la finance : paiements, documents, authentification.',
     el.definition = 'Solutions QR Code spécialisées pour le secteur Finance.',
@@ -2108,8 +3063,13 @@ SET el.slug = 'finance',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'government', locale_key: 'fr-FR'})
-SET el.slug = 'services-publics',
+MERGE (el:EntityContent {key: 'entity:government@fr-FR'})
+SET el.entity_key = 'government',
+    el.locale_key = 'fr-FR',
+    el.slug = 'services-publics',
+    el.full_path = '/fr/services-publics',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Services Publics',
     el.description = 'QR Codes pour services publics : formulaires, informations, accès.',
     el.definition = 'Solutions QR Code spécialisées pour le secteur Services Publics.',
@@ -2119,8 +3079,13 @@ SET el.slug = 'services-publics',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'marketing-agencies', locale_key: 'fr-FR'})
-SET el.slug = 'marketing-agencies',
+MERGE (el:EntityContent {key: 'entity:marketing-agencies@fr-FR'})
+SET el.entity_key = 'marketing-agencies',
+    el.locale_key = 'fr-FR',
+    el.slug = 'marketing-agencies',
+    el.full_path = '/fr/marketing-agencies',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Marketing Agencies',
     el.description = 'Les Marketing Agencies pour vos projets QR Code.',
     el.definition = 'Solutions QR Code spécialisées pour le secteur Marketing Agencies.',
@@ -2130,8 +3095,13 @@ SET el.slug = 'marketing-agencies',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'creative-agencies', locale_key: 'fr-FR'})
-SET el.slug = 'creative-agencies',
+MERGE (el:EntityContent {key: 'entity:creative-agencies@fr-FR'})
+SET el.entity_key = 'creative-agencies',
+    el.locale_key = 'fr-FR',
+    el.slug = 'creative-agencies',
+    el.full_path = '/fr/creative-agencies',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Creative Agencies',
     el.description = 'Les Creative Agencies pour vos projets QR Code.',
     el.definition = 'Solutions QR Code spécialisées pour le secteur Creative Agencies.',
@@ -2141,8 +3111,13 @@ SET el.slug = 'creative-agencies',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'event-management', locale_key: 'fr-FR'})
-SET el.slug = 'event-management',
+MERGE (el:EntityContent {key: 'entity:event-management@fr-FR'})
+SET el.entity_key = 'event-management',
+    el.locale_key = 'fr-FR',
+    el.slug = 'event-management',
+    el.full_path = '/fr/event-management',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Événement Management',
     el.description = 'Le Événement Management pour vos projets QR Code.',
     el.definition = 'Solutions QR Code spécialisées pour le secteur Événement Management.',
@@ -2152,8 +3127,13 @@ SET el.slug = 'event-management',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'nonprofits', locale_key: 'fr-FR'})
-SET el.slug = 'associationss',
+MERGE (el:EntityContent {key: 'entity:nonprofits@fr-FR'})
+SET el.entity_key = 'nonprofits',
+    el.locale_key = 'fr-FR',
+    el.slug = 'associationss',
+    el.full_path = '/fr/associationss',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Associationss',
     el.description = 'L\'Associationss pour vos projets QR Code.',
     el.definition = 'Solutions QR Code spécialisées pour le secteur Associationss.',
@@ -2163,8 +3143,13 @@ SET el.slug = 'associationss',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'consulting', locale_key: 'fr-FR'})
-SET el.slug = 'consulting',
+MERGE (el:EntityContent {key: 'entity:consulting@fr-FR'})
+SET el.entity_key = 'consulting',
+    el.locale_key = 'fr-FR',
+    el.slug = 'consulting',
+    el.full_path = '/fr/consulting',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Consulting',
     el.description = 'Le Consulting pour vos projets QR Code.',
     el.definition = 'Solutions QR Code spécialisées pour le secteur Consulting.',
@@ -2174,8 +3159,13 @@ SET el.slug = 'consulting',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'developers', locale_key: 'fr-FR'})
-SET el.slug = 'developers',
+MERGE (el:EntityContent {key: 'entity:developers@fr-FR'})
+SET el.entity_key = 'developers',
+    el.locale_key = 'fr-FR',
+    el.slug = 'developers',
+    el.full_path = '/fr/developers',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Developers',
     el.description = 'Les Developers pour vos projets QR Code.',
     el.definition = 'Solutions QR Code spécialisées pour le secteur Developers.',
@@ -2185,8 +3175,13 @@ SET el.slug = 'developers',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'enterprise', locale_key: 'fr-FR'})
-SET el.slug = 'enterprise',
+MERGE (el:EntityContent {key: 'entity:enterprise@fr-FR'})
+SET el.entity_key = 'enterprise',
+    el.locale_key = 'fr-FR',
+    el.slug = 'enterprise',
+    el.full_path = '/fr/enterprise',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Enterprise',
     el.description = 'L\'Enterprise pour vos projets QR Code.',
     el.definition = 'Solutions QR Code spécialisées pour le secteur Enterprise.',
@@ -2196,8 +3191,13 @@ SET el.slug = 'enterprise',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'agencies', locale_key: 'fr-FR'})
-SET el.slug = 'agencies',
+MERGE (el:EntityContent {key: 'entity:agencies@fr-FR'})
+SET el.entity_key = 'agencies',
+    el.locale_key = 'fr-FR',
+    el.slug = 'agencies',
+    el.full_path = '/fr/agencies',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Agencies',
     el.description = 'Les Agencies pour vos projets QR Code.',
     el.definition = 'Solutions QR Code spécialisées pour le secteur Agencies.',
@@ -2207,8 +3207,13 @@ SET el.slug = 'agencies',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'small-business', locale_key: 'fr-FR'})
-SET el.slug = 'small-business',
+MERGE (el:EntityContent {key: 'entity:small-business@fr-FR'})
+SET el.entity_key = 'small-business',
+    el.locale_key = 'fr-FR',
+    el.slug = 'small-business',
+    el.full_path = '/fr/small-business',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Small Business',
     el.description = 'Le Small Business pour vos projets QR Code.',
     el.definition = 'Solutions QR Code spécialisées pour le secteur Small Business.',
@@ -2218,8 +3223,13 @@ SET el.slug = 'small-business',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'freelancers', locale_key: 'fr-FR'})
-SET el.slug = 'freelancers',
+MERGE (el:EntityContent {key: 'entity:freelancers@fr-FR'})
+SET el.entity_key = 'freelancers',
+    el.locale_key = 'fr-FR',
+    el.slug = 'freelancers',
+    el.full_path = '/fr/freelancers',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Gratuitlancers',
     el.description = 'Les Gratuitlancers pour vos projets QR Code.',
     el.definition = 'Solutions QR Code spécialisées pour le secteur Gratuitlancers.',
@@ -2229,8 +3239,13 @@ SET el.slug = 'freelancers',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'instagram', locale_key: 'fr-FR'})
-SET el.slug = 'instagram',
+MERGE (el:EntityContent {key: 'entity:instagram@fr-FR'})
+SET el.entity_key = 'instagram',
+    el.locale_key = 'fr-FR',
+    el.slug = 'instagram',
+    el.full_path = '/fr/instagram',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Instagram',
     el.description = 'QR Code vers votre profil Instagram.',
     el.definition = 'Intégration QR Code pour la plateforme Instagram.',
@@ -2240,8 +3255,13 @@ SET el.slug = 'instagram',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'linkedin', locale_key: 'fr-FR'})
-SET el.slug = 'linkedin',
+MERGE (el:EntityContent {key: 'entity:linkedin@fr-FR'})
+SET el.entity_key = 'linkedin',
+    el.locale_key = 'fr-FR',
+    el.slug = 'linkedin',
+    el.full_path = '/fr/linkedin',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'LinkedIn',
     el.description = 'QR Code vers votre profil LinkedIn.',
     el.definition = 'Intégration QR Code pour la plateforme LinkedIn.',
@@ -2251,8 +3271,13 @@ SET el.slug = 'linkedin',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'facebook', locale_key: 'fr-FR'})
-SET el.slug = 'facebook',
+MERGE (el:EntityContent {key: 'entity:facebook@fr-FR'})
+SET el.entity_key = 'facebook',
+    el.locale_key = 'fr-FR',
+    el.slug = 'facebook',
+    el.full_path = '/fr/facebook',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Facebook',
     el.description = 'QR Code vers votre page Facebook.',
     el.definition = 'Intégration QR Code pour la plateforme Facebook.',
@@ -2262,8 +3287,13 @@ SET el.slug = 'facebook',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'twitter', locale_key: 'fr-FR'})
-SET el.slug = 'twitter',
+MERGE (el:EntityContent {key: 'entity:twitter@fr-FR'})
+SET el.entity_key = 'twitter',
+    el.locale_key = 'fr-FR',
+    el.slug = 'twitter',
+    el.full_path = '/fr/twitter',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Twitter / X',
     el.description = 'QR Code vers votre compte Twitter/X.',
     el.definition = 'Intégration QR Code pour la plateforme Twitter / X.',
@@ -2273,8 +3303,13 @@ SET el.slug = 'twitter',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'youtube', locale_key: 'fr-FR'})
-SET el.slug = 'youtube',
+MERGE (el:EntityContent {key: 'entity:youtube@fr-FR'})
+SET el.entity_key = 'youtube',
+    el.locale_key = 'fr-FR',
+    el.slug = 'youtube',
+    el.full_path = '/fr/youtube',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'YouTube',
     el.description = 'QR Code vers votre chaîne YouTube.',
     el.definition = 'Intégration QR Code pour la plateforme YouTube.',
@@ -2284,8 +3319,13 @@ SET el.slug = 'youtube',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'tiktok', locale_key: 'fr-FR'})
-SET el.slug = 'tiktok',
+MERGE (el:EntityContent {key: 'entity:tiktok@fr-FR'})
+SET el.entity_key = 'tiktok',
+    el.locale_key = 'fr-FR',
+    el.slug = 'tiktok',
+    el.full_path = '/fr/tiktok',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'TikTok',
     el.description = 'QR Code vers votre compte TikTok.',
     el.definition = 'Intégration QR Code pour la plateforme TikTok.',
@@ -2295,8 +3335,13 @@ SET el.slug = 'tiktok',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'snapchat', locale_key: 'fr-FR'})
-SET el.slug = 'snapchat',
+MERGE (el:EntityContent {key: 'entity:snapchat@fr-FR'})
+SET el.entity_key = 'snapchat',
+    el.locale_key = 'fr-FR',
+    el.slug = 'snapchat',
+    el.full_path = '/fr/snapchat',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Snapchat',
     el.description = 'QR Code vers votre profil Snapchat.',
     el.definition = 'Intégration QR Code pour la plateforme Snapchat.',
@@ -2306,8 +3351,13 @@ SET el.slug = 'snapchat',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'whatsapp', locale_key: 'fr-FR'})
-SET el.slug = 'whatsapp',
+MERGE (el:EntityContent {key: 'entity:whatsapp@fr-FR'})
+SET el.entity_key = 'whatsapp',
+    el.locale_key = 'fr-FR',
+    el.slug = 'whatsapp',
+    el.full_path = '/fr/whatsapp',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'WhatsApp',
     el.description = 'QR Code pour démarrer une conversation WhatsApp.',
     el.definition = 'Intégration QR Code pour la plateforme WhatsApp.',
@@ -2317,8 +3367,13 @@ SET el.slug = 'whatsapp',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'telegram', locale_key: 'fr-FR'})
-SET el.slug = 'telegram',
+MERGE (el:EntityContent {key: 'entity:telegram@fr-FR'})
+SET el.entity_key = 'telegram',
+    el.locale_key = 'fr-FR',
+    el.slug = 'telegram',
+    el.full_path = '/fr/telegram',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Telegram',
     el.description = 'QR Code vers votre canal Telegram.',
     el.definition = 'Intégration QR Code pour la plateforme Telegram.',
@@ -2328,8 +3383,13 @@ SET el.slug = 'telegram',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'pinterest', locale_key: 'fr-FR'})
-SET el.slug = 'pinterest',
+MERGE (el:EntityContent {key: 'entity:pinterest@fr-FR'})
+SET el.entity_key = 'pinterest',
+    el.locale_key = 'fr-FR',
+    el.slug = 'pinterest',
+    el.full_path = '/fr/pinterest',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Pinterest',
     el.description = 'QR Code vers vos tableaux Pinterest.',
     el.definition = 'Intégration QR Code pour la plateforme Pinterest.',
@@ -2339,8 +3399,13 @@ SET el.slug = 'pinterest',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'spotify', locale_key: 'fr-FR'})
-SET el.slug = 'spotify',
+MERGE (el:EntityContent {key: 'entity:spotify@fr-FR'})
+SET el.entity_key = 'spotify',
+    el.locale_key = 'fr-FR',
+    el.slug = 'spotify',
+    el.full_path = '/fr/spotify',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Spotify',
     el.description = 'QR Code vers votre musique Spotify.',
     el.definition = 'Intégration QR Code pour la plateforme Spotify.',
@@ -2350,8 +3415,13 @@ SET el.slug = 'spotify',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'apple', locale_key: 'fr-FR'})
-SET el.slug = 'apple',
+MERGE (el:EntityContent {key: 'entity:apple@fr-FR'})
+SET el.entity_key = 'apple',
+    el.locale_key = 'fr-FR',
+    el.slug = 'apple',
+    el.full_path = '/fr/apple',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Apple',
     el.description = 'L\'Applicationle pour vos projets QR Code.',
     el.definition = 'Intégration QR Code pour la plateforme Apple.',
@@ -2361,8 +3431,13 @@ SET el.slug = 'apple',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'soundcloud', locale_key: 'fr-FR'})
-SET el.slug = 'soundcloud',
+MERGE (el:EntityContent {key: 'entity:soundcloud@fr-FR'})
+SET el.entity_key = 'soundcloud',
+    el.locale_key = 'fr-FR',
+    el.slug = 'soundcloud',
+    el.full_path = '/fr/soundcloud',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'SoundCloud',
     el.description = 'Le SoundCloud pour vos projets QR Code.',
     el.definition = 'Intégration QR Code pour la plateforme SoundCloud.',
@@ -2372,8 +3447,13 @@ SET el.slug = 'soundcloud',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'paypal', locale_key: 'fr-FR'})
-SET el.slug = 'paypal',
+MERGE (el:EntityContent {key: 'entity:paypal@fr-FR'})
+SET el.entity_key = 'paypal',
+    el.locale_key = 'fr-FR',
+    el.slug = 'paypal',
+    el.full_path = '/fr/paypal',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'PayPal',
     el.description = 'QR Code pour paiement PayPal.',
     el.definition = 'Intégration QR Code pour la plateforme PayPal.',
@@ -2383,8 +3463,13 @@ SET el.slug = 'paypal',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'venmo', locale_key: 'fr-FR'})
-SET el.slug = 'venmo',
+MERGE (el:EntityContent {key: 'entity:venmo@fr-FR'})
+SET el.entity_key = 'venmo',
+    el.locale_key = 'fr-FR',
+    el.slug = 'venmo',
+    el.full_path = '/fr/venmo',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Venmo',
     el.description = 'QR Code pour paiement Venmo.',
     el.definition = 'Intégration QR Code pour la plateforme Venmo.',
@@ -2394,8 +3479,13 @@ SET el.slug = 'venmo',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'google', locale_key: 'fr-FR'})
-SET el.slug = 'google',
+MERGE (el:EntityContent {key: 'entity:google@fr-FR'})
+SET el.entity_key = 'google',
+    el.locale_key = 'fr-FR',
+    el.slug = 'google',
+    el.full_path = '/fr/google',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Google',
     el.description = 'Le Google pour vos projets QR Code.',
     el.definition = 'Intégration QR Code pour la plateforme Google.',
@@ -2405,8 +3495,13 @@ SET el.slug = 'google',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'waze', locale_key: 'fr-FR'})
-SET el.slug = 'waze',
+MERGE (el:EntityContent {key: 'entity:waze@fr-FR'})
+SET el.entity_key = 'waze',
+    el.locale_key = 'fr-FR',
+    el.slug = 'waze',
+    el.full_path = '/fr/waze',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Waze',
     el.description = 'QR Code vers une navigation Waze.',
     el.definition = 'Intégration QR Code pour la plateforme Waze.',
@@ -2416,8 +3511,13 @@ SET el.slug = 'waze',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'zapier', locale_key: 'fr-FR'})
-SET el.slug = 'zapier',
+MERGE (el:EntityContent {key: 'entity:zapier@fr-FR'})
+SET el.entity_key = 'zapier',
+    el.locale_key = 'fr-FR',
+    el.slug = 'zapier',
+    el.full_path = '/fr/zapier',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Zapier',
     el.description = 'Le Zapier pour vos projets QR Code.',
     el.definition = 'Intégration QR Code pour la plateforme Zapier.',
@@ -2427,8 +3527,13 @@ SET el.slug = 'zapier',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'make', locale_key: 'fr-FR'})
-SET el.slug = 'make',
+MERGE (el:EntityContent {key: 'entity:make@fr-FR'})
+SET el.entity_key = 'make',
+    el.locale_key = 'fr-FR',
+    el.slug = 'make',
+    el.full_path = '/fr/make',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Make (Integromat)',
     el.description = 'Le Make (Integromat) pour vos projets QR Code.',
     el.definition = 'Intégration QR Code pour la plateforme Make (Integromat).',
@@ -2438,8 +3543,13 @@ SET el.slug = 'make',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'n8n', locale_key: 'fr-FR'})
-SET el.slug = 'n8n',
+MERGE (el:EntityContent {key: 'entity:n8n@fr-FR'})
+SET el.entity_key = 'n8n',
+    el.locale_key = 'fr-FR',
+    el.slug = 'n8n',
+    el.full_path = '/fr/n8n',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'n8n',
     el.description = 'Le n8n pour vos projets QR Code.',
     el.definition = 'Intégration QR Code pour la plateforme n8n.',
@@ -2449,8 +3559,13 @@ SET el.slug = 'n8n',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'hubspot', locale_key: 'fr-FR'})
-SET el.slug = 'hubspot',
+MERGE (el:EntityContent {key: 'entity:hubspot@fr-FR'})
+SET el.entity_key = 'hubspot',
+    el.locale_key = 'fr-FR',
+    el.slug = 'hubspot',
+    el.full_path = '/fr/hubspot',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'HubSpot',
     el.description = 'L\'HubSpot pour vos projets QR Code.',
     el.definition = 'Intégration QR Code pour la plateforme HubSpot.',
@@ -2460,8 +3575,13 @@ SET el.slug = 'hubspot',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'salesforce', locale_key: 'fr-FR'})
-SET el.slug = 'salesforce',
+MERGE (el:EntityContent {key: 'entity:salesforce@fr-FR'})
+SET el.entity_key = 'salesforce',
+    el.locale_key = 'fr-FR',
+    el.slug = 'salesforce',
+    el.full_path = '/fr/salesforce',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Salesforce',
     el.description = 'Le Salesforce pour vos projets QR Code.',
     el.definition = 'Intégration QR Code pour la plateforme Salesforce.',
@@ -2471,8 +3591,13 @@ SET el.slug = 'salesforce',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'mailchimp', locale_key: 'fr-FR'})
-SET el.slug = 'mailchimp',
+MERGE (el:EntityContent {key: 'entity:mailchimp@fr-FR'})
+SET el.entity_key = 'mailchimp',
+    el.locale_key = 'fr-FR',
+    el.slug = 'mailchimp',
+    el.full_path = '/fr/mailchimp',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Mailchimp',
     el.description = 'Le Mailchimp pour vos projets QR Code.',
     el.definition = 'Intégration QR Code pour la plateforme Mailchimp.',
@@ -2482,8 +3607,13 @@ SET el.slug = 'mailchimp',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'shopify', locale_key: 'fr-FR'})
-SET el.slug = 'shopify',
+MERGE (el:EntityContent {key: 'entity:shopify@fr-FR'})
+SET el.entity_key = 'shopify',
+    el.locale_key = 'fr-FR',
+    el.slug = 'shopify',
+    el.full_path = '/fr/shopify',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Shopify',
     el.description = 'Le Shopify pour vos projets QR Code.',
     el.definition = 'Intégration QR Code pour la plateforme Shopify.',
@@ -2493,8 +3623,13 @@ SET el.slug = 'shopify',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'woocommerce', locale_key: 'fr-FR'})
-SET el.slug = 'woocommerce',
+MERGE (el:EntityContent {key: 'entity:woocommerce@fr-FR'})
+SET el.entity_key = 'woocommerce',
+    el.locale_key = 'fr-FR',
+    el.slug = 'woocommerce',
+    el.full_path = '/fr/woocommerce',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'WooCommerce',
     el.description = 'Le WooCommerce pour vos projets QR Code.',
     el.definition = 'Intégration QR Code pour la plateforme WooCommerce.',
@@ -2504,8 +3639,13 @@ SET el.slug = 'woocommerce',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'zapier-integration', locale_key: 'fr-FR'})
-SET el.slug = 'zapier-integration',
+MERGE (el:EntityContent {key: 'entity:zapier-integration@fr-FR'})
+SET el.entity_key = 'zapier-integration',
+    el.locale_key = 'fr-FR',
+    el.slug = 'zapier-integration',
+    el.full_path = '/fr/zapier-integration',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Zapier Integration',
     el.description = 'La Zapier Integration pour vos projets QR Code.',
     el.definition = 'Connexion API entre QR Code AI et Zapier Integration.',
@@ -2515,8 +3655,13 @@ SET el.slug = 'zapier-integration',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'make-integration', locale_key: 'fr-FR'})
-SET el.slug = 'make-integration',
+MERGE (el:EntityContent {key: 'entity:make-integration@fr-FR'})
+SET el.entity_key = 'make-integration',
+    el.locale_key = 'fr-FR',
+    el.slug = 'make-integration',
+    el.full_path = '/fr/make-integration',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Make Integration',
     el.description = 'La Make Integration pour vos projets QR Code.',
     el.definition = 'Connexion API entre QR Code AI et Make Integration.',
@@ -2526,8 +3671,13 @@ SET el.slug = 'make-integration',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'n8n-integration', locale_key: 'fr-FR'})
-SET el.slug = 'n8n-integration',
+MERGE (el:EntityContent {key: 'entity:n8n-integration@fr-FR'})
+SET el.entity_key = 'n8n-integration',
+    el.locale_key = 'fr-FR',
+    el.slug = 'n8n-integration',
+    el.full_path = '/fr/n8n-integration',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'n8n Integration',
     el.description = 'La n8n Integration pour vos projets QR Code.',
     el.definition = 'Connexion API entre QR Code AI et n8n Integration.',
@@ -2537,8 +3687,13 @@ SET el.slug = 'n8n-integration',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'hubspot-integration', locale_key: 'fr-FR'})
-SET el.slug = 'hubspot-integration',
+MERGE (el:EntityContent {key: 'entity:hubspot-integration@fr-FR'})
+SET el.entity_key = 'hubspot-integration',
+    el.locale_key = 'fr-FR',
+    el.slug = 'hubspot-integration',
+    el.full_path = '/fr/hubspot-integration',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'HubSpot Integration',
     el.description = 'L\'HubSpot Integration pour vos projets QR Code.',
     el.definition = 'Connexion API entre QR Code AI et HubSpot Integration.',
@@ -2548,8 +3703,13 @@ SET el.slug = 'hubspot-integration',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'salesforce-integration', locale_key: 'fr-FR'})
-SET el.slug = 'salesforce-integration',
+MERGE (el:EntityContent {key: 'entity:salesforce-integration@fr-FR'})
+SET el.entity_key = 'salesforce-integration',
+    el.locale_key = 'fr-FR',
+    el.slug = 'salesforce-integration',
+    el.full_path = '/fr/salesforce-integration',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Salesforce Integration',
     el.description = 'La Salesforce Integration pour vos projets QR Code.',
     el.definition = 'Connexion API entre QR Code AI et Salesforce Integration.',
@@ -2559,8 +3719,13 @@ SET el.slug = 'salesforce-integration',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'mailchimp-integration', locale_key: 'fr-FR'})
-SET el.slug = 'mailchimp-integration',
+MERGE (el:EntityContent {key: 'entity:mailchimp-integration@fr-FR'})
+SET el.entity_key = 'mailchimp-integration',
+    el.locale_key = 'fr-FR',
+    el.slug = 'mailchimp-integration',
+    el.full_path = '/fr/mailchimp-integration',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Mailchimp Integration',
     el.description = 'La Mailchimp Integration pour vos projets QR Code.',
     el.definition = 'Connexion API entre QR Code AI et Mailchimp Integration.',
@@ -2570,8 +3735,13 @@ SET el.slug = 'mailchimp-integration',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'google-sheets-integration', locale_key: 'fr-FR'})
-SET el.slug = 'google-sheets-integration',
+MERGE (el:EntityContent {key: 'entity:google-sheets-integration@fr-FR'})
+SET el.entity_key = 'google-sheets-integration',
+    el.locale_key = 'fr-FR',
+    el.slug = 'google-sheets-integration',
+    el.full_path = '/fr/google-sheets-integration',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Google Sheets Integration',
     el.description = 'La Google Sheets Integration pour vos projets QR Code.',
     el.definition = 'Connexion API entre QR Code AI et Google Sheets Integration.',
@@ -2581,8 +3751,13 @@ SET el.slug = 'google-sheets-integration',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'notion-integration', locale_key: 'fr-FR'})
-SET el.slug = 'notion-integration',
+MERGE (el:EntityContent {key: 'entity:notion-integration@fr-FR'})
+SET el.entity_key = 'notion-integration',
+    el.locale_key = 'fr-FR',
+    el.slug = 'notion-integration',
+    el.full_path = '/fr/notion-integration',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Notion Integration',
     el.description = 'La Notion Integration pour vos projets QR Code.',
     el.definition = 'Connexion API entre QR Code AI et Notion Integration.',
@@ -2592,8 +3767,13 @@ SET el.slug = 'notion-integration',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'slack-integration', locale_key: 'fr-FR'})
-SET el.slug = 'slack-integration',
+MERGE (el:EntityContent {key: 'entity:slack-integration@fr-FR'})
+SET el.entity_key = 'slack-integration',
+    el.locale_key = 'fr-FR',
+    el.slug = 'slack-integration',
+    el.full_path = '/fr/slack-integration',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Slack Integration',
     el.description = 'La Slack Integration pour vos projets QR Code.',
     el.definition = 'Connexion API entre QR Code AI et Slack Integration.',
@@ -2603,8 +3783,13 @@ SET el.slug = 'slack-integration',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'shopify-integration', locale_key: 'fr-FR'})
-SET el.slug = 'shopify-integration',
+MERGE (el:EntityContent {key: 'entity:shopify-integration@fr-FR'})
+SET el.entity_key = 'shopify-integration',
+    el.locale_key = 'fr-FR',
+    el.slug = 'shopify-integration',
+    el.full_path = '/fr/shopify-integration',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Shopify Integration',
     el.description = 'La Shopify Integration pour vos projets QR Code.',
     el.definition = 'Connexion API entre QR Code AI et Shopify Integration.',
@@ -2614,8 +3799,13 @@ SET el.slug = 'shopify-integration',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'woocommerce-integration', locale_key: 'fr-FR'})
-SET el.slug = 'woocommerce-integration',
+MERGE (el:EntityContent {key: 'entity:woocommerce-integration@fr-FR'})
+SET el.entity_key = 'woocommerce-integration',
+    el.locale_key = 'fr-FR',
+    el.slug = 'woocommerce-integration',
+    el.full_path = '/fr/woocommerce-integration',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'WooCommerce Integration',
     el.description = 'La WooCommerce Integration pour vos projets QR Code.',
     el.definition = 'Connexion API entre QR Code AI et WooCommerce Integration.',
@@ -2625,8 +3815,13 @@ SET el.slug = 'woocommerce-integration',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'wordpress-integration', locale_key: 'fr-FR'})
-SET el.slug = 'wordpress-integration',
+MERGE (el:EntityContent {key: 'entity:wordpress-integration@fr-FR'})
+SET el.entity_key = 'wordpress-integration',
+    el.locale_key = 'fr-FR',
+    el.slug = 'wordpress-integration',
+    el.full_path = '/fr/wordpress-integration',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'WordPress Integration',
     el.description = 'La WordPress Integration pour vos projets QR Code.',
     el.definition = 'Connexion API entre QR Code AI et WordPress Integration.',
@@ -2636,8 +3831,13 @@ SET el.slug = 'wordpress-integration',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'quiet-zone', locale_key: 'fr-FR'})
-SET el.slug = 'quiet-zone',
+MERGE (el:EntityContent {key: 'entity:quiet-zone@fr-FR'})
+SET el.entity_key = 'quiet-zone',
+    el.locale_key = 'fr-FR',
+    el.slug = 'quiet-zone',
+    el.full_path = '/fr/quiet-zone',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Quiet Zone',
     el.description = 'Le Quiet Zone pour vos projets QR Code.',
     el.definition = 'Concept clé pour comprendre et maîtriser les Quiet Zone.',
@@ -2647,8 +3847,13 @@ SET el.slug = 'quiet-zone',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'error-correction', locale_key: 'fr-FR'})
-SET el.slug = 'error-correction',
+MERGE (el:EntityContent {key: 'entity:error-correction@fr-FR'})
+SET el.entity_key = 'error-correction',
+    el.locale_key = 'fr-FR',
+    el.slug = 'error-correction',
+    el.full_path = '/fr/error-correction',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Error Correction',
     el.description = 'L\'Error Correction pour vos projets QR Code.',
     el.definition = 'Concept clé pour comprendre et maîtriser les Error Correction.',
@@ -2658,8 +3863,13 @@ SET el.slug = 'error-correction',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'data-capacity', locale_key: 'fr-FR'})
-SET el.slug = 'data-capacity',
+MERGE (el:EntityContent {key: 'entity:data-capacity@fr-FR'})
+SET el.entity_key = 'data-capacity',
+    el.locale_key = 'fr-FR',
+    el.slug = 'data-capacity',
+    el.full_path = '/fr/data-capacity',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Data Capacity',
     el.description = 'Le Data Capacity pour vos projets QR Code.',
     el.definition = 'Concept clé pour comprendre et maîtriser les Data Capacity.',
@@ -2669,8 +3879,13 @@ SET el.slug = 'data-capacity',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-version', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-version',
+MERGE (el:EntityContent {key: 'entity:qr-code-version@fr-FR'})
+SET el.entity_key = 'qr-code-version',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-version',
+    el.full_path = '/fr/qr-code-version',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'QR Code Version',
     el.description = 'La QR Code Version pour vos projets QR Code.',
     el.definition = 'Concept clé pour comprendre et maîtriser les QR Code Version.',
@@ -2680,8 +3895,13 @@ SET el.slug = 'qr-code-version',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'encoding-mode', locale_key: 'fr-FR'})
-SET el.slug = 'encoding-mode',
+MERGE (el:EntityContent {key: 'entity:encoding-mode@fr-FR'})
+SET el.entity_key = 'encoding-mode',
+    el.locale_key = 'fr-FR',
+    el.slug = 'encoding-mode',
+    el.full_path = '/fr/encoding-mode',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Encoding Mode',
     el.description = 'L\'Encoding Mode pour vos projets QR Code.',
     el.definition = 'Concept clé pour comprendre et maîtriser les Encoding Mode.',
@@ -2691,8 +3911,13 @@ SET el.slug = 'encoding-mode',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'module', locale_key: 'fr-FR'})
-SET el.slug = 'module',
+MERGE (el:EntityContent {key: 'entity:module@fr-FR'})
+SET el.entity_key = 'module',
+    el.locale_key = 'fr-FR',
+    el.slug = 'module',
+    el.full_path = '/fr/module',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Module',
     el.description = 'Le Module pour vos projets QR Code.',
     el.definition = 'Concept clé pour comprendre et maîtriser les Module.',
@@ -2702,8 +3927,13 @@ SET el.slug = 'module',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'finder-pattern', locale_key: 'fr-FR'})
-SET el.slug = 'finder-pattern',
+MERGE (el:EntityContent {key: 'entity:finder-pattern@fr-FR'})
+SET el.entity_key = 'finder-pattern',
+    el.locale_key = 'fr-FR',
+    el.slug = 'finder-pattern',
+    el.full_path = '/fr/finder-pattern',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Finder Pattern',
     el.description = 'Le Finder Pattern pour vos projets QR Code.',
     el.definition = 'Concept clé pour comprendre et maîtriser les Finder Pattern.',
@@ -2713,8 +3943,13 @@ SET el.slug = 'finder-pattern',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'timing-pattern', locale_key: 'fr-FR'})
-SET el.slug = 'timing-pattern',
+MERGE (el:EntityContent {key: 'entity:timing-pattern@fr-FR'})
+SET el.entity_key = 'timing-pattern',
+    el.locale_key = 'fr-FR',
+    el.slug = 'timing-pattern',
+    el.full_path = '/fr/timing-pattern',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Timing Pattern',
     el.description = 'Le Timing Pattern pour vos projets QR Code.',
     el.definition = 'Concept clé pour comprendre et maîtriser les Timing Pattern.',
@@ -2724,8 +3959,13 @@ SET el.slug = 'timing-pattern',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-messaging', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-messaging',
+MERGE (el:EntityContent {key: 'entity:qr-code-messaging@fr-FR'})
+SET el.entity_key = 'qr-code-messaging',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-messaging',
+    el.full_path = '/fr/qr-code-messaging',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Messaging QR Codes',
     el.description = 'Les Messaging QR Codes pour vos projets QR Code.',
     el.definition = 'Solution QR Code AI pour la création et gestion de Messaging QR Codes.',
@@ -2735,8 +3975,13 @@ SET el.slug = 'qr-code-messaging',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-video-platform', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-video-platform',
+MERGE (el:EntityContent {key: 'entity:qr-code-video-platform@fr-FR'})
+SET el.entity_key = 'qr-code-video-platform',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-video-platform',
+    el.full_path = '/fr/qr-code-video-platform',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Vidéo Platform QR Codes',
     el.description = 'Les Vidéo Platform QR Codes pour vos projets QR Code.',
     el.definition = 'Solution QR Code AI pour la création et gestion de Vidéo Platform QR Codes.',
@@ -2746,8 +3991,13 @@ SET el.slug = 'qr-code-video-platform',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-professional', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-professional',
+MERGE (el:EntityContent {key: 'entity:qr-code-professional@fr-FR'})
+SET el.entity_key = 'qr-code-professional',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-professional',
+    el.full_path = '/fr/qr-code-professional',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Professional Network QR Codes',
     el.description = 'Les Professional Network QR Codes pour vos projets QR Code.',
     el.definition = 'Solution QR Code AI pour la création et gestion de Professional Network QR Codes.',
@@ -2757,8 +4007,13 @@ SET el.slug = 'qr-code-professional',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-music-platform', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-music-platform',
+MERGE (el:EntityContent {key: 'entity:qr-code-music-platform@fr-FR'})
+SET el.entity_key = 'qr-code-music-platform',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-music-platform',
+    el.full_path = '/fr/qr-code-music-platform',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Music Platform QR Codes',
     el.description = 'Les Music Platform QR Codes pour vos projets QR Code.',
     el.definition = 'Solution QR Code AI pour la création et gestion de Music Platform QR Codes.',
@@ -2768,8 +4023,13 @@ SET el.slug = 'qr-code-music-platform',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'funny-qr-codes', locale_key: 'fr-FR'})
-SET el.slug = 'funny-qr-codes',
+MERGE (el:EntityContent {key: 'entity:funny-qr-codes@fr-FR'})
+SET el.entity_key = 'funny-qr-codes',
+    el.locale_key = 'fr-FR',
+    el.slug = 'funny-qr-codes',
+    el.full_path = '/fr/funny-qr-codes',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Funny QR Codes',
     el.description = 'Les Funny QR Codes pour vos projets QR Code.',
     el.definition = 'Cas d\'usage professionnel Funny QR Codes avec QR Codes.',
@@ -2779,8 +4039,13 @@ SET el.slug = 'funny-qr-codes',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-tattoo', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-tattoo',
+MERGE (el:EntityContent {key: 'entity:qr-code-tattoo@fr-FR'})
+SET el.entity_key = 'qr-code-tattoo',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-tattoo',
+    el.full_path = '/fr/qr-code-tattoo',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'QR Code Tattoo',
     el.description = 'Le QR Code Tattoo pour vos projets QR Code.',
     el.definition = 'Cas d\'usage professionnel QR Code Tattoo avec QR Codes.',
@@ -2790,8 +4055,13 @@ SET el.slug = 'qr-code-tattoo',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-art-installation', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-art-installation',
+MERGE (el:EntityContent {key: 'entity:qr-code-art-installation@fr-FR'})
+SET el.entity_key = 'qr-code-art-installation',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-art-installation',
+    el.full_path = '/fr/qr-code-art-installation',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'QR Art Installation',
     el.description = 'La QR Art Installation pour vos projets QR Code.',
     el.definition = 'Cas d\'usage professionnel QR Art Installation avec QR Codes.',
@@ -2801,8 +4071,13 @@ SET el.slug = 'qr-code-art-installation',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-scavenger-hunt', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-scavenger-hunt',
+MERGE (el:EntityContent {key: 'entity:qr-code-scavenger-hunt@fr-FR'})
+SET el.entity_key = 'qr-code-scavenger-hunt',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-scavenger-hunt',
+    el.full_path = '/fr/qr-code-scavenger-hunt',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'QR Scavenger Hunt',
     el.description = 'Le QR Scavenger Hunt pour vos projets QR Code.',
     el.definition = 'Cas d\'usage professionnel QR Scavenger Hunt avec QR Codes.',
@@ -2812,8 +4087,13 @@ SET el.slug = 'qr-code-scavenger-hunt',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-reviews', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-reviews',
+MERGE (el:EntityContent {key: 'entity:qr-code-reviews@fr-FR'})
+SET el.entity_key = 'qr-code-reviews',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-reviews',
+    el.full_path = '/fr/qr-code-reviews',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'QR for Reviews',
     el.description = 'Les QR for Reviews pour vos projets QR Code.',
     el.definition = 'Cas d\'usage professionnel QR for Reviews avec QR Codes.',
@@ -2823,8 +4103,13 @@ SET el.slug = 'qr-code-reviews',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-contactless-payment', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-contactless-payment',
+MERGE (el:EntityContent {key: 'entity:qr-code-contactless-payment@fr-FR'})
+SET el.entity_key = 'qr-code-contactless-payment',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-contactless-payment',
+    el.full_path = '/fr/qr-code-contactless-payment',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Contactless Paiement',
     el.description = 'Le Contactless Paiement pour vos projets QR Code.',
     el.definition = 'Cas d\'usage professionnel Contactless Paiement avec QR Codes.',
@@ -2834,8 +4119,13 @@ SET el.slug = 'qr-code-contactless-payment',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-loyalty-program', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-programme-fidelite',
+MERGE (el:EntityContent {key: 'entity:qr-code-loyalty-program@fr-FR'})
+SET el.entity_key = 'qr-code-loyalty-program',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-programme-fidelite',
+    el.full_path = '/fr/qr-code-programme-fidelite',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Programme de Fidélité',
     el.description = 'La Programme de Fidélité pour vos projets QR Code.',
     el.definition = 'Cas d\'usage professionnel Programme de Fidélité avec QR Codes.',
@@ -2845,8 +4135,13 @@ SET el.slug = 'qr-code-programme-fidelite',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-product-authentication', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-authentification-produit',
+MERGE (el:EntityContent {key: 'entity:qr-code-product-authentication@fr-FR'})
+SET el.entity_key = 'qr-code-product-authentication',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-authentification-produit',
+    el.full_path = '/fr/qr-code-authentification-produit',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Authentification Produit',
     el.description = 'L\'Authentification Produit pour vos projets QR Code.',
     el.definition = 'Cas d\'usage professionnel Authentification Produit avec QR Codes.',
@@ -2856,8 +4151,13 @@ SET el.slug = 'qr-code-authentification-produit',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-event-checkin', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-event-checkin',
+MERGE (el:EntityContent {key: 'entity:qr-code-event-checkin@fr-FR'})
+SET el.entity_key = 'qr-code-event-checkin',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-event-checkin',
+    el.full_path = '/fr/qr-code-event-checkin',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Événement Check-in',
     el.description = 'Le Événement Check-in pour vos projets QR Code.',
     el.definition = 'Cas d\'usage professionnel Événement Check-in avec QR Codes.',
@@ -2867,8 +4167,13 @@ SET el.slug = 'qr-code-event-checkin',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-networking', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-networking',
+MERGE (el:EntityContent {key: 'entity:qr-code-networking@fr-FR'})
+SET el.entity_key = 'qr-code-networking',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-networking',
+    el.full_path = '/fr/qr-code-networking',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Networking QR',
     el.description = 'Le Networking QR pour vos projets QR Code.',
     el.definition = 'Cas d\'usage professionnel Networking QR avec QR Codes.',
@@ -2878,8 +4183,13 @@ SET el.slug = 'qr-code-networking',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-wedding', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-wedding',
+MERGE (el:EntityContent {key: 'entity:qr-code-wedding@fr-FR'})
+SET el.entity_key = 'qr-code-wedding',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-wedding',
+    el.full_path = '/fr/qr-code-wedding',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Wedding QR Codes',
     el.description = 'Les Wedding QR Codes pour vos projets QR Code.',
     el.definition = 'Cas d\'usage professionnel Wedding QR Codes avec QR Codes.',
@@ -2889,8 +4199,13 @@ SET el.slug = 'qr-code-wedding',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-museum-exhibit', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-museum-exhibit',
+MERGE (el:EntityContent {key: 'entity:qr-code-museum-exhibit@fr-FR'})
+SET el.entity_key = 'qr-code-museum-exhibit',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-museum-exhibit',
+    el.full_path = '/fr/qr-code-museum-exhibit',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Museum Exhibits',
     el.description = 'Les Museum Exhibits pour vos projets QR Code.',
     el.definition = 'Cas d\'usage professionnel Museum Exhibits avec QR Codes.',
@@ -2900,8 +4215,13 @@ SET el.slug = 'qr-code-museum-exhibit',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
-SET el.slug = 'comment-creer-qr-code',
+MERGE (el:EntityContent {key: 'entity:how-to-create-qr-code@fr-FR'})
+SET el.entity_key = 'how-to-create-qr-code',
+    el.locale_key = 'fr-FR',
+    el.slug = 'comment-creer-qr-code',
+    el.full_path = '/fr/comment-creer-qr-code',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Comment Créer QR Code',
     el.description = 'Guide complet pour créer votre premier QR Code.',
     el.definition = 'Guide pratique et tutoriel : Comment Créer QR Code.',
@@ -2911,8 +4231,13 @@ SET el.slug = 'comment-creer-qr-code',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-design-guide', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-design-guide',
+MERGE (el:EntityContent {key: 'entity:qr-code-design-guide@fr-FR'})
+SET el.entity_key = 'qr-code-design-guide',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-design-guide',
+    el.full_path = '/fr/qr-code-design-guide',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'QR Code Design Guide',
     el.description = 'Le QR Code Design Guide pour vos projets QR Code.',
     el.definition = 'Guide pratique et tutoriel : QR Code Design Guide.',
@@ -2922,8 +4247,13 @@ SET el.slug = 'qr-code-design-guide',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-print-guide', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-imprimer-guide',
+MERGE (el:EntityContent {key: 'entity:qr-code-print-guide@fr-FR'})
+SET el.entity_key = 'qr-code-print-guide',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-imprimer-guide',
+    el.full_path = '/fr/qr-code-imprimer-guide',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'QR Code Imprimer Guide',
     el.description = 'Le QR Code Imprimer Guide pour vos projets QR Code.',
     el.definition = 'Guide pratique et tutoriel : QR Code Imprimer Guide.',
@@ -2933,8 +4263,13 @@ SET el.slug = 'qr-code-imprimer-guide',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'dynamic-vs-static-guide', locale_key: 'fr-FR'})
-SET el.slug = 'dynamique-vs-statique-guide',
+MERGE (el:EntityContent {key: 'entity:dynamic-vs-static-guide@fr-FR'})
+SET el.entity_key = 'dynamic-vs-static-guide',
+    el.locale_key = 'fr-FR',
+    el.slug = 'dynamique-vs-statique-guide',
+    el.full_path = '/fr/dynamique-vs-statique-guide',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Dynamique vs Statique Guide',
     el.description = 'Le Dynamique vs Statique Guide pour vos projets QR Code.',
     el.definition = 'Guide pratique et tutoriel : Dynamique vs Statique Guide.',
@@ -2944,8 +4279,13 @@ SET el.slug = 'dynamique-vs-statique-guide',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-marketing-guide', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-marketing-guide',
+MERGE (el:EntityContent {key: 'entity:qr-code-marketing-guide@fr-FR'})
+SET el.entity_key = 'qr-code-marketing-guide',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-marketing-guide',
+    el.full_path = '/fr/qr-code-marketing-guide',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'QR Marketing Guide',
     el.description = 'Le QR Marketing Guide pour vos projets QR Code.',
     el.definition = 'Guide pratique et tutoriel : QR Marketing Guide.',
@@ -2955,8 +4295,13 @@ SET el.slug = 'qr-code-marketing-guide',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-restaurant-guide', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-restaurant-guide',
+MERGE (el:EntityContent {key: 'entity:qr-code-restaurant-guide@fr-FR'})
+SET el.entity_key = 'qr-code-restaurant-guide',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-restaurant-guide',
+    el.full_path = '/fr/qr-code-restaurant-guide',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Restaurant QR Guide',
     el.description = 'Le Restaurant QR Guide pour vos projets QR Code.',
     el.definition = 'Guide pratique et tutoriel : Restaurant QR Guide.',
@@ -2966,8 +4311,13 @@ SET el.slug = 'qr-code-restaurant-guide',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-business-card-guide', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-carte-visite-guide',
+MERGE (el:EntityContent {key: 'entity:qr-code-business-card-guide@fr-FR'})
+SET el.entity_key = 'qr-code-business-card-guide',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-carte-visite-guide',
+    el.full_path = '/fr/qr-code-carte-visite-guide',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Carte de Visite QR Guide',
     el.description = 'La Carte de Visite QR Guide pour vos projets QR Code.',
     el.definition = 'Guide pratique et tutoriel : Carte de Visite QR Guide.',
@@ -2977,8 +4327,13 @@ SET el.slug = 'qr-code-carte-visite-guide',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-api-guide', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-api-guide',
+MERGE (el:EntityContent {key: 'entity:qr-code-api-guide@fr-FR'})
+SET el.entity_key = 'qr-code-api-guide',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-api-guide',
+    el.full_path = '/fr/qr-code-api-guide',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'QR Code API Guide',
     el.description = 'Le QR Code API Guide pour vos projets QR Code.',
     el.definition = 'Guide pratique et tutoriel : QR Code API Guide.',
@@ -2988,8 +4343,13 @@ SET el.slug = 'qr-code-api-guide',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-analytics-guide', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-analytiques-guide',
+MERGE (el:EntityContent {key: 'entity:qr-code-analytics-guide@fr-FR'})
+SET el.entity_key = 'qr-code-analytics-guide',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-analytiques-guide',
+    el.full_path = '/fr/qr-code-analytiques-guide',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Analytiques Guide',
     el.description = 'L\'Analytiques Guide pour vos projets QR Code.',
     el.definition = 'Guide pratique et tutoriel : Analytiques Guide.',
@@ -2999,8 +4359,13 @@ SET el.slug = 'qr-code-analytiques-guide',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-security-guide', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-security-guide',
+MERGE (el:EntityContent {key: 'entity:qr-code-security-guide@fr-FR'})
+SET el.entity_key = 'qr-code-security-guide',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-security-guide',
+    el.full_path = '/fr/qr-code-security-guide',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'QR Security Guide',
     el.description = 'Le QR Security Guide pour vos projets QR Code.',
     el.definition = 'Guide pratique et tutoriel : QR Security Guide.',
@@ -3010,8 +4375,13 @@ SET el.slug = 'qr-code-security-guide',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-vs-barcode', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-vs-code-barres',
+MERGE (el:EntityContent {key: 'entity:qr-code-vs-barcode@fr-FR'})
+SET el.entity_key = 'qr-code-vs-barcode',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-vs-code-barres',
+    el.full_path = '/fr/qr-code-vs-code-barres',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'QR Code vs Code-barres',
     el.description = 'Différences entre QR Codes et codes-barres traditionnels.',
     el.definition = 'Comparatif détaillé : QR Code vs Code-barres.',
@@ -3021,8 +4391,13 @@ SET el.slug = 'qr-code-vs-code-barres',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'dynamic-vs-static-qr-code', locale_key: 'fr-FR'})
-SET el.slug = 'dynamique-vs-statique-qr-code',
+MERGE (el:EntityContent {key: 'entity:dynamic-vs-static-qr-code@fr-FR'})
+SET el.entity_key = 'dynamic-vs-static-qr-code',
+    el.locale_key = 'fr-FR',
+    el.slug = 'dynamique-vs-statique-qr-code',
+    el.full_path = '/fr/dynamique-vs-statique-qr-code',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Dynamique vs QR Code Statique',
     el.description = 'Comparatif entre QR Codes dynamiques et statiques.',
     el.definition = 'Comparatif détaillé : Dynamique vs QR Code Statique.',
@@ -3032,8 +4407,13 @@ SET el.slug = 'dynamique-vs-statique-qr-code',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-vs-nfc', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-vs-nfc',
+MERGE (el:EntityContent {key: 'entity:qr-code-vs-nfc@fr-FR'})
+SET el.entity_key = 'qr-code-vs-nfc',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-vs-nfc',
+    el.full_path = '/fr/qr-code-vs-nfc',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'QR Code vs NFC',
     el.description = 'QR Code vs NFC : quelle technologie choisir ?',
     el.definition = 'Comparatif détaillé : QR Code vs NFC.',
@@ -3043,8 +4423,13 @@ SET el.slug = 'qr-code-vs-nfc',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-vs-data-matrix', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-vs-data-matrix',
+MERGE (el:EntityContent {key: 'entity:qr-code-vs-data-matrix@fr-FR'})
+SET el.entity_key = 'qr-code-vs-data-matrix',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-vs-data-matrix',
+    el.full_path = '/fr/qr-code-vs-data-matrix',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'QR Code vs Data Matrix',
     el.description = 'Le QR Code vs Data Matrix pour vos projets QR Code.',
     el.definition = 'Comparatif détaillé : QR Code vs Data Matrix.',
@@ -3054,8 +4439,13 @@ SET el.slug = 'qr-code-vs-data-matrix',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'free-vs-paid-qr-generator', locale_key: 'fr-FR'})
-SET el.slug = 'free-vs-paid-qr-generateur',
+MERGE (el:EntityContent {key: 'entity:free-vs-paid-qr-generator@fr-FR'})
+SET el.entity_key = 'free-vs-paid-qr-generator',
+    el.locale_key = 'fr-FR',
+    el.slug = 'free-vs-paid-qr-generateur',
+    el.full_path = '/fr/free-vs-paid-qr-generateur',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Gratuit vs Premium QR Générateur',
     el.description = 'Le Gratuit vs Premium QR Générateur pour vos projets QR Code.',
     el.definition = 'Comparatif détaillé : Gratuit vs Premium QR Générateur.',
@@ -3065,8 +4455,13 @@ SET el.slug = 'free-vs-paid-qr-generateur',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'qr-code-ai-vs-competitors', locale_key: 'fr-FR'})
-SET el.slug = 'qr-code-ai-vs-competitors',
+MERGE (el:EntityContent {key: 'entity:qr-code-ai-vs-competitors@fr-FR'})
+SET el.entity_key = 'qr-code-ai-vs-competitors',
+    el.locale_key = 'fr-FR',
+    el.slug = 'qr-code-ai-vs-competitors',
+    el.full_path = '/fr/qr-code-ai-vs-competitors',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'QR Code AI vs Competitors',
     el.description = 'Les QR Code AI vs Competitors pour vos projets QR Code.',
     el.definition = 'Comparatif détaillé : QR Code AI vs Competitors.',
@@ -3076,8 +4471,13 @@ SET el.slug = 'qr-code-ai-vs-competitors',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'short-link-vs-qr-code', locale_key: 'fr-FR'})
-SET el.slug = 'lien-court-vs-qr-code',
+MERGE (el:EntityContent {key: 'entity:short-link-vs-qr-code@fr-FR'})
+SET el.entity_key = 'short-link-vs-qr-code',
+    el.locale_key = 'fr-FR',
+    el.slug = 'lien-court-vs-qr-code',
+    el.full_path = '/fr/lien-court-vs-qr-code',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Lien Court vs QR Code',
     el.description = 'Le Lien Court vs QR Code pour vos projets QR Code.',
     el.definition = 'Comparatif détaillé : Lien Court vs QR Code.',
@@ -3087,8 +4487,13 @@ SET el.slug = 'lien-court-vs-qr-code',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityContent {entity_key: 'spotify-code-vs-qr-code', locale_key: 'fr-FR'})
-SET el.slug = 'spotify-code-vs-qr-code',
+MERGE (el:EntityContent {key: 'entity:spotify-code-vs-qr-code@fr-FR'})
+SET el.entity_key = 'spotify-code-vs-qr-code',
+    el.locale_key = 'fr-FR',
+    el.slug = 'spotify-code-vs-qr-code',
+    el.full_path = '/fr/spotify-code-vs-qr-code',
+    el.depth = 0,
+    el.curation_status = 'ai_generated',
     el.display_name = 'Spotify Code vs QR Code',
     el.description = 'Le Spotify Code vs QR Code pour vos projets QR Code.',
     el.definition = 'Comparatif détaillé : Spotify Code vs QR Code.',
@@ -3097,7 +4502,6 @@ SET el.slug = 'spotify-code-vs-qr-code',
     el.version = 1,
     el.created_at = datetime(),
     el.updated_at = datetime();
-
 // -------------------------------------------------------------------
 // Create relations to parent Entity (HAS_CONTENT)
 // -------------------------------------------------------------------
