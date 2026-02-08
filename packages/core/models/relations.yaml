@@ -285,7 +285,7 @@ relations:
     llm_context: "All localized content nodes point to their target Locale."
     # v10.2: SEOKeyword removed — now owned by Locale via HAS_SEO_KEYWORDS
 
-  - type: HAS_L10N
+  - type: HAS_CONTENT
     family: localization
     source:
       - Entity
@@ -296,7 +296,7 @@ relations:
     cardinality: one_to_many
     llm_context: "Links invariant node to its human-curated localized definitions (one per locale)."
 
-  - type: HAS_OUTPUT
+  - type: HAS_GENERATED
     family: localization
     source:
       - Page
@@ -327,7 +327,7 @@ relations:
   # See arc-kinds/ownership/has-*.yaml for HAS_FORMATTING, HAS_STYLE, etc.
 
   # Inverses
-  - type: L10N_OF
+  - type: CONTENT_OF
     family: localization
     source:
       - EntityContent
@@ -336,10 +336,10 @@ relations:
       - Entity
       - Project
     cardinality: many_to_one
-    inverse_of: HAS_L10N
-    llm_context: "Inverse of HAS_L10N — localized content points to parent."
+    inverse_of: HAS_CONTENT
+    llm_context: "Inverse of HAS_CONTENT — localized content points to parent."
 
-  - type: OUTPUT_OF
+  - type: GENERATED_FOR
     family: localization
     source:
       - PageGenerated
@@ -348,8 +348,8 @@ relations:
       - Page
       - Block
     cardinality: many_to_one
-    inverse_of: HAS_OUTPUT
-    llm_context: "Inverse of HAS_OUTPUT — generated content points to structure."
+    inverse_of: HAS_GENERATED
+    llm_context: "Inverse of HAS_GENERATED — generated content points to structure."
 
   - type: HAS_LOCALIZED_CONTENT
     family: localization
@@ -721,7 +721,7 @@ examples:
     description: "EntityContent targets SEO keyword (locale-aligned primary)"
     cypher: |
       // v10.2: SEOKeyword now owned by Locale via HAS_SEO_KEYWORDS
-      MATCH (c:Entity {key:'action-create-qr'})-[:HAS_L10N]->(cl:EntityContent)-[:FOR_LOCALE]->(l:Locale {key:'fr-FR'})
+      MATCH (c:Entity {key:'action-create-qr'})-[:HAS_CONTENT]->(cl:EntityContent)-[:FOR_LOCALE]->(l:Locale {key:'fr-FR'})
       MATCH (l)-[:HAS_SEO_KEYWORDS]->(kw:SEOKeyword {key:'seo-creer-qr-code-gratuit-fr'})
       CREATE (cl)-[:HAS_SEO_TARGET {role: "primary", priority: 1}]->(kw)
 
@@ -745,7 +745,7 @@ examples:
     description: "Get all internal links for a page with localized anchors"
     cypher: |
       MATCH (page:Page {key: $key})-[link:LINKS_TO]->(target:Page)
-      MATCH (c:Entity {key: link.concept_key})-[:HAS_L10N]->(cl:EntityContent)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+      MATCH (c:Entity {key: link.concept_key})-[:HAS_CONTENT]->(cl:EntityContent)-[:FOR_LOCALE]->(l:Locale {key: $locale})
       RETURN target.key AS target_page,
              cl.title AS anchor_text,
              link.context AS link_context,

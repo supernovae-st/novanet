@@ -25,12 +25,12 @@ include:
     direction: outgoing
     depth: 2
     include:
-      - relation: HAS_L10N
+      - relation: HAS_CONTENT
         direction: outgoing
       - relation: SEMANTIC_LINK
         direction: outgoing
 
-  - relation: HAS_OUTPUT
+  - relation: HAS_GENERATED
     direction: outgoing
 
 filters:
@@ -73,7 +73,7 @@ docs:
         OPTIONAL MATCH (bt)-[:HAS_RULES]->(br:BlockRules)
         OPTIONAL MATCH (b)-[:HAS_INSTRUCTION]->(bi:BlockInstruction)
         OPTIONAL MATCH (b)-[:USES_ENTITY]->(e:Entity)
-        OPTIONAL MATCH (e)-[:HAS_L10N]->(el:EntityContent)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+        OPTIONAL MATCH (e)-[:HAS_CONTENT]->(el:EntityContent)-[:FOR_LOCALE]->(l:Locale {key: $locale})
         RETURN b.key AS block,
                bp.instructions AS instructions,
                bi.content AS blockInstruction,
@@ -92,7 +92,7 @@ docs:
         WHERE ALL(r IN sl WHERE r.temperature >= 0.3)
         WITH related, reduce(a = 1.0, r IN sl | a * r.temperature) AS activation
         WHERE activation >= 0.3
-        MATCH (related)-[:HAS_L10N]->(rl:EntityContent)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+        MATCH (related)-[:HAS_CONTENT]->(rl:EntityContent)-[:FOR_LOCALE]->(l:Locale {key: $locale})
         RETURN related.key AS entity,
                rl.title AS title,
                activation

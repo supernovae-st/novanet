@@ -135,19 +135,19 @@ flowchart TB
   AudienceSet -->|CONTAINS| Term
   Block -->|BLOCK_OF| Page
   Block -.->|FILLS_SLOT| ContentSlot
-  Block -.->|HAS_OUTPUT| BlockGenerated
-  Block -.->|HAS_OUTPUT| PageGenerated
+  Block -.->|HAS_GENERATED| BlockGenerated
+  Block -.->|HAS_GENERATED| PageGenerated
   Block -->|HAS_PROMPT| BlockPrompt
   Block -->|HAS_PROMPT| PagePrompt
   Block -->|OF_TYPE| BlockType
   Block -->|OF_TYPE| PageType
   Block -.->|USES_ENTITY| Entity
   BlockGenerated -.->|FOR_LOCALE| Locale
+  BlockGenerated -.->|GENERATED_FOR| Block
+  BlockGenerated -.->|GENERATED_FOR| Page
   BlockGenerated ==>|GENERATED_FROM| BlockType
   BlockGenerated ==>|HAS_EVALUATION| EvaluationSignal
   BlockGenerated ==>|INFLUENCED_BY| EntityContent
-  BlockGenerated -.->|OUTPUT_OF| Block
-  BlockGenerated -.->|OUTPUT_OF| Page
   BlockGenerated ==>|PREVIOUS_VERSION| BlockGenerated
   BlockGenerated ==>|PREVIOUS_VERSION| OutputArtifact
   BlockGenerated ==>|PREVIOUS_VERSION| PageGenerated
@@ -161,14 +161,14 @@ flowchart TB
   CultureSet -->|CONTAINS| Pattern
   CultureSet -->|CONTAINS| Taboo
   CultureSet -->|CONTAINS| Term
-  Entity -.->|HAS_L10N| EntityContent
-  Entity -.->|HAS_L10N| ProjectL10n
+  Entity -.->|HAS_CONTENT| EntityContent
+  Entity -.->|HAS_CONTENT| ProjectL10n
   Entity -.->|SEMANTIC_LINK| Entity
   Entity -.->|USED_BY| Block
   Entity -.->|USED_BY| Page
+  EntityContent -.->|CONTENT_OF| Entity
+  EntityContent -.->|CONTENT_OF| Project
   EntityContent -.->|FOR_LOCALE| Locale
-  EntityContent -.->|L10N_OF| Entity
-  EntityContent -.->|L10N_OF| Project
   EvaluationSignal ==>|EVALUATED_BY_JOB| GenerationJob
   ExpressionSet -->|CONTAINS| AudienceTrait
   ExpressionSet -->|CONTAINS| CultureRef
@@ -210,8 +210,8 @@ flowchart TB
   OutputArtifact ==>|PREVIOUS_VERSION| PageGenerated
   Page -.->|FOR_CHANNEL| ChannelSurface
   Page -->|HAS_BLOCK| Block
-  Page -.->|HAS_OUTPUT| BlockGenerated
-  Page -.->|HAS_OUTPUT| PageGenerated
+  Page -.->|HAS_GENERATED| BlockGenerated
+  Page -.->|HAS_GENERATED| PageGenerated
   Page -->|HAS_PROMPT| BlockPrompt
   Page -->|HAS_PROMPT| PagePrompt
   Page -->|HAS_SLOT| ContentSlot
@@ -224,9 +224,9 @@ flowchart TB
   PageGenerated ==>|ASSEMBLES| BlockGenerated
   PageGenerated -->|BELONGS_TO_PROJECT_L10N| ProjectL10n
   PageGenerated -.->|FOR_LOCALE| Locale
+  PageGenerated -.->|GENERATED_FOR| Block
+  PageGenerated -.->|GENERATED_FOR| Page
   PageGenerated ==>|HAS_EVALUATION| EvaluationSignal
-  PageGenerated -.->|OUTPUT_OF| Block
-  PageGenerated -.->|OUTPUT_OF| Page
   PageGenerated ==>|PREVIOUS_VERSION| BlockGenerated
   PageGenerated ==>|PREVIOUS_VERSION| OutputArtifact
   PageGenerated ==>|PREVIOUS_VERSION| PageGenerated
@@ -240,13 +240,13 @@ flowchart TB
   PatternSet -->|CONTAINS| Term
   Project -->|DEFAULT_LOCALE| Locale
   Project -->|HAS_BRAND_IDENTITY| BrandIdentity
-  Project -.->|HAS_L10N| EntityContent
-  Project -.->|HAS_L10N| ProjectL10n
+  Project -.->|HAS_CONTENT| EntityContent
+  Project -.->|HAS_CONTENT| ProjectL10n
   Project -->|HAS_PAGE| Page
   Project -->|SUPPORTS_LOCALE| Locale
+  ProjectL10n -.->|CONTENT_OF| Entity
+  ProjectL10n -.->|CONTENT_OF| Project
   ProjectL10n -.->|FOR_LOCALE| Locale
-  ProjectL10n -.->|L10N_OF| Entity
-  ProjectL10n -.->|L10N_OF| Project
   PromptArtifact ==>|COMPILED_FROM| BlockPrompt
   PromptArtifact ==>|COMPILED_FROM| PagePrompt
   PromptArtifact ==>|INCLUDES_ENTITY| Entity
@@ -267,8 +267,8 @@ flowchart TB
   TermSet -->|CONTAINS| Term
 
   %% Arc colors by family
-  linkStyle 16,17,18,21,22,23,24,25,42,49,50,52,53,54,75,76,77,78,79,80,94,97,100,101,102,103,104,120,121,122,123 stroke:#8b5cf6,stroke-width:2px
-  linkStyle 8,9,15,19,20,34,35,39,40,41,51,55,62,63,64,65,73,74,83,84,96,98,99,113,114,117,118,119 stroke:#22c55e,stroke-width:2px
+  linkStyle 18,19,20,21,22,23,24,25,42,49,50,52,53,54,75,76,77,78,79,80,94,99,100,101,102,103,104,120,121,122,123 stroke:#8b5cf6,stroke-width:2px
+  linkStyle 8,9,15,16,17,34,35,39,40,41,51,55,62,63,64,65,73,74,83,84,96,97,98,113,114,117,118,119 stroke:#22c55e,stroke-width:2px
   linkStyle 124,125 stroke:#ec4899,stroke-width:2px
   linkStyle 0,1,2,3,4,5,6,10,11,12,13,26,27,28,29,30,31,32,33,43,44,45,46,47,48,56,57,58,59,60,61,66,67,68,69,70,71,72,82,85,86,87,89,90,95,105,106,107,108,109,110,111,112,115,116,126,127,128,129,130,131,132,133,134,135,136,137 stroke:#3b82f6,stroke-width:2px
   linkStyle 7,14,36,37,38,81,88,91,92,93 stroke:#f97316,stroke-width:2px

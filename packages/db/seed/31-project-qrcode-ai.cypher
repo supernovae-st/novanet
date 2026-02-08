@@ -49,7 +49,7 @@ SET bi.display_name = "QR Code AI Brand",
 
 // ProjectL10n: en-US
 MATCH (p:Project {key: "qrcode-ai"}), (l:Locale {key: "en-US"})
-MERGE (p)-[:HAS_L10N]->(pl:ProjectL10n {key: "qrcode-ai-en-US"})
+MERGE (p)-[:HAS_CONTENT]->(pl:ProjectL10n {key: "qrcode-ai-en-US"})
 MERGE (pl)-[:FOR_LOCALE]->(l)
 SET pl.display_name = "QR Code AI",
     pl.description = "English localization for QR Code AI project identity",
@@ -77,7 +77,7 @@ SET pl.display_name = "QR Code AI",
 
 // ProjectL10n: fr-FR
 MATCH (p:Project {key: "qrcode-ai"}), (l:Locale {key: "fr-FR"})
-MERGE (p)-[:HAS_L10N]->(pl:ProjectL10n {key: "qrcode-ai-fr-FR"})
+MERGE (p)-[:HAS_CONTENT]->(pl:ProjectL10n {key: "qrcode-ai-fr-FR"})
 MERGE (pl)-[:FOR_LOCALE]->(l)
 SET pl.display_name = "QR Code AI",
     pl.description = "Localisation française de l'identité QR Code AI",

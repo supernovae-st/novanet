@@ -9,7 +9,7 @@ root:
   type: Entity
 
 include:
-  - relation: HAS_L10N
+  - relation: HAS_CONTENT
     direction: outgoing
 
   - relation: EXPRESSES
@@ -54,7 +54,7 @@ docs:
       description: Get an entity with all its localized versions
       query: |
         MATCH (e:Entity {key: $entityKey})
-        OPTIONAL MATCH (e)-[:HAS_L10N]->(el:EntityContent)-[:FOR_LOCALE]->(l:Locale)
+        OPTIONAL MATCH (e)-[:HAS_CONTENT]->(el:EntityContent)-[:FOR_LOCALE]->(l:Locale)
         RETURN e.key AS entity,
                e.llm_context AS context,
                collect({locale: l.key, title: el.title, definition: el.definition}) AS localizations
@@ -78,7 +78,7 @@ docs:
     - name: Entity SEO targets (locale-aligned)
       description: Get SEO keywords via EntityContent (v10.3 architecture)
       query: |
-        MATCH (e:Entity {key: $entityKey})-[:HAS_L10N]->(el:EntityContent)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+        MATCH (e:Entity {key: $entityKey})-[:HAS_CONTENT]->(el:EntityContent)-[:FOR_LOCALE]->(l:Locale {key: $locale})
         OPTIONAL MATCH (el)-[:EXPRESSES]->(seo:SEOKeyword)
         RETURN e.key AS entity,
                el.title AS localizedTitle,
