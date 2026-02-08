@@ -829,7 +829,7 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
 
                     lines.push(Line::from(vec![
                         Span::styled(format!("  {} ", arrow), Style::default().fg(arrow_color)),
-                        Span::styled(arc.rel_type.clone(), Style::default().fg(arrow_color)),
+                        Span::styled(arc.arc_type.clone(), Style::default().fg(arrow_color)),
                         Span::styled(" → ", STYLE_DIM),
                         Span::styled(arc.target_kind.clone(), STYLE_HIGHLIGHT),
                     ]));

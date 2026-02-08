@@ -396,7 +396,7 @@ arc_families:
         assert_eq!(doc.node_traits.len(), 5);
         assert_eq!(doc.arc_families.len(), 5);
         assert_eq!(doc.arc_scopes.len(), 2);
-        assert_eq!(doc.arc_cardinalities.len(), 4);
+        assert_eq!(doc.arc_cardinalities.len(), 5); // zero_to_one, one_to_one, one_to_many, many_to_one, many_to_many
 
         let total_layers: usize = doc.node_realms.iter().map(|r| r.layers.len()).sum();
         assert_eq!(total_layers, 9); // v10.6: 3 global + 6 tenant layers

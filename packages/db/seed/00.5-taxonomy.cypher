@@ -369,7 +369,7 @@ ON MATCH SET
   as_cross_realm.updated_at = datetime();
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// ARC CARDINALITIES (4)
+// ARC CARDINALITIES (5)
 // ═══════════════════════════════════════════════════════════════════════════════
 
 MERGE (ac_zero_to_one:Meta:ArcCardinality {key: 'zero_to_one'})
@@ -401,6 +401,16 @@ ON MATCH SET
   ac_one_to_many.display_name = '1:N',
   ac_one_to_many.description = 'Single source to multiple targets',
   ac_one_to_many.updated_at = datetime();
+
+MERGE (ac_many_to_one:Meta:ArcCardinality {key: 'many_to_one'})
+ON CREATE SET
+  ac_many_to_one.display_name = 'N:1',
+  ac_many_to_one.description = 'Multiple sources to single target (inverse of one_to_many)',
+  ac_many_to_one.created_at = datetime()
+ON MATCH SET
+  ac_many_to_one.display_name = 'N:1',
+  ac_many_to_one.description = 'Multiple sources to single target (inverse of one_to_many)',
+  ac_many_to_one.updated_at = datetime();
 
 MERGE (ac_many_to_many:Meta:ArcCardinality {key: 'many_to_many'})
 ON CREATE SET

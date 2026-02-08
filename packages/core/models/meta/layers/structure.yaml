@@ -5,7 +5,7 @@ key: structure
 display_name: Structure
 emoji: "🏗️"
 color: "#06b6d4"
-realm: project
+realm: tenant
 
 llm_context: |
   Information architecture. Pages, blocks, and their types. Defines

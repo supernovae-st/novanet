@@ -7,7 +7,7 @@
 # - 5 NodeTraits (locale behavior) with visual encoding
 # - 5 ArcFamilies (arc classification) with visual encoding
 # - 2 ArcScopes (intra_realm / cross_realm)
-# - 4 ArcCardinalities (zero_to_one / one_to_one / one_to_many / many_to_many)
+# - 5 ArcCardinalities (zero_to_one / one_to_one / one_to_many / many_to_one / many_to_many)
 # - Terminal palette for TUI graceful degradation
 #
 # v10.6 Changes:
@@ -306,7 +306,7 @@ arc_scopes:
     stroke_modifier: opacity-60
 
 # =============================================================================
-# ARC CARDINALITIES (3) — HOW MANY connections?
+# ARC CARDINALITIES (5) — HOW MANY connections?
 # =============================================================================
 # Used for arrow head styling
 
@@ -322,6 +322,10 @@ arc_cardinalities:
   - key: one_to_many
     display_name: "1:N"
     description: Single source to multiple targets
+
+  - key: many_to_one
+    display_name: "N:1"
+    description: Multiple sources to single target (inverse of one_to_many)
 
   - key: many_to_many
     display_name: "N:M"

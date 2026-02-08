@@ -5,7 +5,7 @@ key: foundation
 display_name: Foundation
 emoji: "🏛️"
 color: "#3b82f6"
-realm: project
+realm: tenant
 
 llm_context: |
   Core project identity. Brand voice, visual identity, value
