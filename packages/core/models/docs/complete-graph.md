@@ -26,7 +26,7 @@ This diagram shows the complete NovaNet graph schema with all 42 node types and 
 ```mermaid
 flowchart TB
   %% NovaNet Graph v10.6.0
-  %% Generated: 63 nodes, 138 arcs
+  %% Generated: 64 nodes, 138 arcs
   %% Source: 42 node YAMLs + relations.yaml + taxonomy.yaml
 
   %% Trait styling (node_trait)
@@ -90,6 +90,7 @@ flowchart TB
     direction TB
     subgraph TENANT_config["Configuration"]
       Organization["🔵 Organization"]
+      Tenant["🔵 Tenant"]
     end
     subgraph TENANT_semantic["Semantic Layer"]
       AudiencePersona["🔵 AudiencePersona"]
@@ -334,6 +335,7 @@ flowchart TB
   class Style knowledge
   class Taboo knowledge
   class TabooSet knowledge
+  class Tenant invariant
   class Term knowledge
   class TermSet knowledge
 ```

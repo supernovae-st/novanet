@@ -8,11 +8,8 @@
 // PROJECT NODE
 // ─────────────────────────────────────────────────────────────────────────────
 
-MERGE (proj:Project:Meta {key: "qrcode-ai"})
-ON CREATE SET proj.display_name = "qrcode-ai",
-             proj.created_at = datetime(),
-             proj.updated_at = datetime()
-ON MATCH SET proj.updated_at = datetime();
+MATCH (proj:Project {key: "qrcode-ai"})
+SET proj.updated_at = datetime();
 
 // ─────────────────────────────────────────────────────────────────────────────
 // ENTITIES (12)
@@ -25,6 +22,7 @@ ON CREATE SET
   e.type = "USE_CASE",
   e.is_pillar = false,
   e.entity_summary = "Funny QR codes are creative, humorous applications of QR technology.\nInclude rickrolling, prank redirects, Easter egg content, and\nunexpected meme destinations. Popular for viral marketing.",
+  e.llm_context = "USE: when discussing humorous, prank, or creative QR code applications like rickrolling. TRIGGERS: funny qr, prank qr, rickroll qr, meme qr, easter egg qr, joke qr. NOT: art installation (serious art), tattoo (permanent).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -41,6 +39,7 @@ ON CREATE SET
   e.type = "USE_CASE",
   e.is_pillar = false,
   e.entity_summary = "QR code tattoos are permanent body art containing scannable codes.\nMust use dynamic QR codes to allow destination changes. Popular\nfor personal links, memorial tributes, and identity statements.",
+  e.llm_context = "USE: when discussing QR code tattoos, permanent body art QR codes, or skin-based QR. TRIGGERS: qr tattoo, tattoo qr code, body art qr, permanent qr, skin qr, inked qr. NOT: temporary (sticker), art installation (public).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -57,6 +56,7 @@ ON CREATE SET
   e.type = "USE_CASE",
   e.is_pillar = false,
   e.entity_summary = "QR art installations are large-scale creative displays using QR codes.\nInclude murals, building projections, and interactive exhibits.\nBlend technology with visual art for public engagement.",
+  e.llm_context = "USE: when discussing large-scale QR art, public installations, or artistic QR displays. TRIGGERS: qr art, art installation qr, mural qr, public art qr, interactive art qr, projection qr. NOT: tattoo (body), funny qr (humor).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -73,6 +73,7 @@ ON CREATE SET
   e.type = "USE_CASE",
   e.is_pillar = false,
   e.entity_summary = "QR scavenger hunts use multiple QR codes for interactive games.\nEach code reveals clues or unlocks content. Popular for team\nbuilding, education, and event engagement.",
+  e.llm_context = "USE: when discussing QR scavenger hunts, treasure hunts, or gamified QR experiences. TRIGGERS: scavenger hunt qr, treasure hunt qr, qr game, interactive qr hunt, clue qr, quest qr. NOT: event check-in (registration), museum (educational).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -89,6 +90,7 @@ ON CREATE SET
   e.type = "USE_CASE",
   e.is_pillar = false,
   e.entity_summary = "QR codes for reviews make leaving feedback easy for customers.\nPlace on receipts, table tents, or packaging. Direct link to\nGoogle, Yelp, or feedback forms increases review collection.",
+  e.llm_context = "USE: when discussing QR codes for collecting reviews, feedback, or ratings. TRIGGERS: review qr, feedback qr, rating qr, google review qr, yelp qr, customer feedback qr. NOT: loyalty program (rewards), payment (transaction).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -105,6 +107,7 @@ ON CREATE SET
   e.type = "USE_CASE",
   e.is_pillar = false,
   e.entity_summary = "QR contactless payment enables touch-free transactions.\nCustomer scans merchant QR to pay via app. Popular in Asia,\ngrowing globally post-COVID for hygiene and convenience.",
+  e.llm_context = "USE: when discussing QR-based contactless payments, touch-free transactions, or scan-to-pay. TRIGGERS: contactless payment qr, scan to pay, touch-free payment, qr payment, mobile payment qr. NOT: loyalty program (points), reviews (feedback).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -121,6 +124,7 @@ ON CREATE SET
   e.type = "USE_CASE",
   e.is_pillar = false,
   e.entity_summary = "QR loyalty programs digitize punch cards and rewards.\nCustomers scan to earn points, redeem rewards, and track\nprogress. Reduces fraud and paper waste.",
+  e.llm_context = "USE: when discussing QR-based loyalty programs, digital punch cards, or rewards via QR. TRIGGERS: loyalty qr, punch card qr, rewards qr, points qr, member qr, stamp card qr. NOT: payment (transaction), reviews (feedback).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -137,6 +141,7 @@ ON CREATE SET
   e.type = "USE_CASE",
   e.is_pillar = false,
   e.entity_summary = "QR product authentication fights counterfeiting with unique codes.\nCustomers scan to verify authenticity. Used for luxury goods,\npharmaceuticals, and electronics. Builds consumer trust.",
+  e.llm_context = "USE: when discussing QR codes for product authentication, anti-counterfeiting, or verification. TRIGGERS: authentication qr, anti-counterfeit qr, verify product qr, genuine qr, counterfeit detection qr. NOT: loyalty (rewards), payment (transaction).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -153,6 +158,7 @@ ON CREATE SET
   e.type = "USE_CASE",
   e.is_pillar = false,
   e.entity_summary = "QR event check-in streamlines attendee registration.\nScan ticket QR for instant verification. Eliminates queues\nand provides real-time attendance tracking.",
+  e.llm_context = "USE: when discussing QR codes for event check-in, registration, or attendee verification. TRIGGERS: event check-in qr, registration qr, attendee qr, ticket scan, conference check-in, entry qr. NOT: networking (contact exchange), wedding (personal event).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -169,6 +175,7 @@ ON CREATE SET
   e.type = "USE_CASE",
   e.is_pillar = false,
   e.entity_summary = "QR networking enables quick contact exchange at events.\nScan to add contacts, LinkedIn profiles, or digital business\ncards. Replaces manual entry and paper cards.",
+  e.llm_context = "USE: when discussing QR codes for professional networking, contact exchange, or event connections. TRIGGERS: networking qr, contact exchange qr, meet and greet qr, business card qr, connection qr. NOT: event check-in (registration), wedding (personal).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -185,6 +192,7 @@ ON CREATE SET
   e.type = "USE_CASE",
   e.is_pillar = false,
   e.entity_summary = "Wedding QR codes simplify event management. Use for RSVPs,\ndigital invitations, photo sharing, and gift registry links.\nModern alternative to traditional wedding stationery.",
+  e.llm_context = "USE: when discussing QR codes for weddings, wedding invitations, or wedding RSVPs. TRIGGERS: wedding qr, wedding invitation qr, rsvp qr, wedding registry qr, wedding photo qr, marriage qr. NOT: event check-in (corporate), networking (business).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -201,6 +209,7 @@ ON CREATE SET
   e.type = "USE_CASE",
   e.is_pillar = false,
   e.entity_summary = "QR museum exhibits enhance visitor experiences with digital content.\nScan for audio guides, videos, 3D models, and detailed information.\nReduces printed materials and updates content easily.",
+  e.llm_context = "USE: when discussing QR codes for museums, exhibits, galleries, or educational displays. TRIGGERS: museum qr, exhibit qr, gallery qr, audio guide qr, art museum qr, exhibition qr. NOT: scavenger hunt (game), art installation (creative).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET

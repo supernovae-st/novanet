@@ -8,11 +8,8 @@
 // PROJECT NODE
 // ─────────────────────────────────────────────────────────────────────────────
 
-MERGE (proj:Project:Meta {key: "qrcode-ai"})
-ON CREATE SET proj.display_name = "qrcode-ai",
-             proj.created_at = datetime(),
-             proj.updated_at = datetime()
-ON MATCH SET proj.updated_at = datetime();
+MATCH (proj:Project {key: "qrcode-ai"})
+SET proj.updated_at = datetime();
 
 // ─────────────────────────────────────────────────────────────────────────────
 // ENTITIES (57)
@@ -25,6 +22,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "A URL QR code encodes a web address, allowing users to visit any website\nby scanning. This is the most common QR code type, supporting both static\n(fixed URL) and dynamic (editable destination) modes.",
+  e.llm_context = "USE: when discussing QR codes linking to websites, URL encoding. TRIGGERS: url qr, website qr, link qr, web qr. NOT: specific platforms (use Instagram QR, YouTube QR, etc.), WiFi (use WiFi QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -41,6 +39,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "A WiFi QR code stores network credentials (SSID, password, encryption type).\nWhen scanned, devices can automatically connect to the network without\nmanual password entry. Always static since credentials are encoded directly.",
+  e.llm_context = "USE: when discussing WiFi sharing, network credentials in QR. TRIGGERS: wifi qr, wireless qr, network qr, wifi password qr. NOT: hotspot login page (use URL QR), Bluetooth.",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -57,6 +56,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "A vCard QR code contains contact information in the standard vCard format.\nScanning adds the contact directly to the phone's address book with name,\nphone, email, company, and address. Static encoding using vCard 3.0/4.0.",
+  e.llm_context = "USE: when discussing digital business cards, contact sharing QR. TRIGGERS: vcard qr, contact qr, business card qr, digital card. NOT: MeCard (use MeCard QR), LinkedIn profile (use LinkedIn QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -73,6 +73,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "MeCard is a compact contact data format developed in Japan. It encodes\nsimilar information to vCard but with a more efficient syntax, resulting\nin smaller QR codes. Popular for business cards in Asia.",
+  e.llm_context = "USE: when discussing Japanese contact format, compact contact QR. TRIGGERS: mecard, mecard qr, japanese contact qr. NOT: vCard (use vCard QR), standard contact.",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -89,6 +90,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "A PDF QR code links to a PDF document, allowing instant access to\nbrochures, menus, manuals, or any document. Typically dynamic to enable\ndocument updates after printing the QR code.",
+  e.llm_context = "USE: when discussing PDF links, document QR codes. TRIGGERS: pdf qr, document qr, brochure qr, manual qr. NOT: generic file (use File Download QR), image gallery (use Image Gallery QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -105,6 +107,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "A text QR code encodes plain text directly in the pattern. Used for\nshort messages, product codes, serial numbers, or any static text.\nAlways static since the text is embedded in the QR pattern itself.",
+  e.llm_context = "USE: when discussing plain text encoding, static text in QR. TRIGGERS: text qr, plain text qr, message qr. NOT: URL (use URL QR), email (use Email QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -121,6 +124,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "An email QR code opens the user's email app with prefilled recipient,\nsubject, and body. Used for support requests, feedback, and customer\ncontact. Can be dynamic to update email content.",
+  e.llm_context = "USE: when discussing email QR codes, mailto links in QR. TRIGGERS: email qr, mailto qr, compose email qr. NOT: SMS (use SMS QR), contact (use vCard QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -137,6 +141,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "An SMS QR code opens the messaging app with a prefilled phone number\nand optional message text. Used for quick opt-ins, support, and\nmarketing campaigns. Can be static or dynamic.",
+  e.llm_context = "USE: when discussing SMS QR codes, text message QR. TRIGGERS: sms qr, text message qr, message qr. NOT: WhatsApp (use WhatsApp QR), phone call (use Phone QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -153,6 +158,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "A phone QR code encodes a phone number in tel: format. Scanning\ninitiates a call to the number. Simple, static encoding ideal for\nbusiness cards, signs, and customer service.",
+  e.llm_context = "USE: when discussing phone call QR codes, tel: links. TRIGGERS: phone qr, call qr, tel qr, phone number qr. NOT: SMS (use SMS QR), WhatsApp (use WhatsApp QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -169,6 +175,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "A video QR code links to video content on platforms like YouTube,\nVimeo, or self-hosted servers. Used for product demos, tutorials,\nand marketing videos. Typically dynamic for analytics.",
+  e.llm_context = "USE: when discussing video link QR codes, video sharing. TRIGGERS: video qr, youtube qr link, vimeo qr, video link. NOT: YouTube channel (use YouTube QR), audio (use Audio QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -185,6 +192,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "An audio QR code links to audio content like podcasts, music tracks,\nor voice messages. Used for audio guides, museum tours, and podcast\npromotion. Dynamic for tracking listens.",
+  e.llm_context = "USE: when discussing audio link QR codes, podcast QR. TRIGGERS: audio qr, podcast qr, music link qr, voice message qr. NOT: Spotify profile (use Spotify QR), video (use Video QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -201,6 +209,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "An image gallery QR code opens a collection of photos or images.\nUsed for event photos, product catalogs, portfolios, and real estate\nlistings. Dynamic to update gallery contents.",
+  e.llm_context = "USE: when discussing photo album QR, image collection links. TRIGGERS: gallery qr, photo album qr, image gallery qr, photos qr. NOT: single image, PDF (use PDF QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -217,6 +226,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "A coupon QR code contains a discount code or promotional offer.\nCan link to a landing page with the offer or encode the code directly.\nDynamic for tracking redemptions and expiration.",
+  e.llm_context = "USE: when discussing discount QR codes, promotional codes. TRIGGERS: coupon qr, discount qr, promo qr, deal qr. NOT: payment (use Payment QR), ticket (use Ticket QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -233,6 +243,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "Social media QR codes link to profiles, pages, or posts on social\nplatforms. They make it easy to gain followers by scanning instead\nof searching. Always dynamic for profile tracking.",
+  e.llm_context = "USE: when discussing social media QR codes generally. TRIGGERS: social qr, social media qr, social link qr. NOT: specific platforms (use Instagram QR, LinkedIn QR, etc.).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -249,6 +260,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "An Instagram QR code links to an Instagram profile, post, or Reel.\nUsed by influencers, businesses, and creators to grow followers.\nDynamic to track scans and update linked content.",
+  e.llm_context = "USE: when discussing Instagram profile QR, Instagram links. TRIGGERS: instagram qr, ig qr, insta qr. NOT: other social (use Facebook QR, TikTok QR, etc.), generic social (use Social Media QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -265,6 +277,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "A LinkedIn QR code links to a professional profile or company page.\nPopular on business cards and at networking events. Dynamic to\ntrack professional connections.",
+  e.llm_context = "USE: when discussing LinkedIn profile QR, professional networking QR. TRIGGERS: linkedin qr, professional qr, company page qr. NOT: vCard (use vCard QR), business card frame (use Business Card QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -281,6 +294,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "A Facebook QR code links to a Facebook page, profile, group, or\nevent. Used for business promotion and community building.\nDynamic for engagement tracking.",
+  e.llm_context = "USE: when discussing Facebook page QR, Facebook profile links. TRIGGERS: facebook qr, fb qr, facebook page qr. NOT: Instagram (use Instagram QR), WhatsApp (use WhatsApp QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -297,6 +311,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "A Twitter/X QR code links to a profile, tweet, or list. Used for\nnews, updates, and brand engagement. Dynamic to track follows\nand interactions.",
+  e.llm_context = "USE: when discussing Twitter profile QR, X platform links. TRIGGERS: twitter qr, x qr, tweet qr. NOT: other social platforms.",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -313,6 +328,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "A YouTube QR code links to a channel, video, or playlist. Used for\ncontent promotion, tutorials, and brand channels. Dynamic for\nview tracking.",
+  e.llm_context = "USE: when discussing YouTube channel QR, YouTube video links. TRIGGERS: youtube qr, channel qr, yt qr. NOT: generic video (use Video QR), TikTok (use TikTok QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -329,6 +345,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "A TikTok QR code links to a profile or specific video. Popular with\ncreators and brands targeting younger audiences. Dynamic for\nfollower tracking.",
+  e.llm_context = "USE: when discussing TikTok profile QR, TikTok video links. TRIGGERS: tiktok qr, tt qr. NOT: Instagram Reels (use Instagram QR), YouTube Shorts (use YouTube QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -345,6 +362,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "A Snapchat QR code links to a Snapchat profile or lens. Snapchat\nhas native Snapcodes, but standard QR codes can link to profiles.\nUsed for friend adds and AR experiences.",
+  e.llm_context = "USE: when discussing Snapchat profile QR, Snapcode alternatives. TRIGGERS: snapchat qr, snap qr, snapcode. NOT: Instagram Stories (use Instagram QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -361,6 +379,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "A WhatsApp QR code opens a chat with a specific number using\nwa.me links. Can include a prefilled message. Used for customer\nsupport and direct communication.",
+  e.llm_context = "USE: when discussing WhatsApp chat QR, wa.me links. TRIGGERS: whatsapp qr, wa qr, whatsapp chat qr. NOT: SMS (use SMS QR), Telegram (use Telegram QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -377,6 +396,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "A Telegram QR code links to a channel, group, or bot. Used for\ncommunity building, news channels, and customer support bots.\nDynamic for subscriber tracking.",
+  e.llm_context = "USE: when discussing Telegram channel QR, Telegram links. TRIGGERS: telegram qr, tg qr, telegram channel qr, telegram bot qr. NOT: WhatsApp (use WhatsApp QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -393,6 +413,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "A Pinterest QR code links to a profile, board, or pin. Used for\nvisual inspiration, product catalogs, and recipe collections.\nDynamic for engagement tracking.",
+  e.llm_context = "USE: when discussing Pinterest profile QR, Pinterest board links. TRIGGERS: pinterest qr, pin qr, board qr. NOT: Instagram (use Instagram QR), image gallery (use Image Gallery QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -409,6 +430,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "A Spotify QR code links to an artist, album, playlist, or podcast.\nUsed for music promotion and playlist sharing. Dynamic for\nstream tracking.",
+  e.llm_context = "USE: when discussing Spotify link QR, music sharing QR. TRIGGERS: spotify qr, playlist qr, music qr. NOT: Apple Music (use Apple Music QR), SoundCloud (use SoundCloud QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -425,6 +447,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "An Apple Music QR code links to music content on Apple Music.\nUsed alongside Spotify codes for cross-platform music promotion.\nDynamic for stream tracking.",
+  e.llm_context = "USE: when discussing Apple Music link QR. TRIGGERS: apple music qr, itunes qr. NOT: Spotify (use Spotify QR), generic audio (use Audio QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -441,6 +464,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "A SoundCloud QR code links to an artist page, track, or playlist.\nPopular with independent musicians and DJs. Dynamic for\nplay tracking.",
+  e.llm_context = "USE: when discussing SoundCloud link QR, indie music QR. TRIGGERS: soundcloud qr, sc qr. NOT: Spotify (use Spotify QR), generic audio (use Audio QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -457,6 +481,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "Payment QR codes enable financial transactions via scanning. This\ncategory includes regional systems (PIX, UPI), digital wallets\n(PayPal, Venmo), and cryptocurrency payments.",
+  e.llm_context = "USE: when discussing payment QR codes generally. TRIGGERS: payment qr, pay qr, money qr. NOT: specific systems (use PIX QR, UPI QR, PayPal QR, etc.).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -473,6 +498,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "PIX is Brazil's instant payment system launched in 2020. PIX QR\ncodes enable real-time bank transfers. Extremely popular in Brazil\nfor both retail and P2P payments.",
+  e.llm_context = "USE: when discussing Brazilian payments, PIX system. TRIGGERS: pix qr, brazil payment qr, pix code. NOT: UPI India (use UPI QR), generic payment.",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -489,6 +515,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "UPI (Unified Payments Interface) is India's real-time payment\nsystem. UPI QR codes are ubiquitous in India, used by street\nvendors to large retailers for instant bank transfers.",
+  e.llm_context = "USE: when discussing Indian payments, UPI system. TRIGGERS: upi qr, india payment qr, bharat qr. NOT: PIX Brazil (use PIX QR), generic payment.",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -505,6 +532,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "A PayPal QR code links to PayPal.me for payments or money requests.\nUsed for donations, invoices, and peer-to-peer payments. Works\nglobally where PayPal is available.",
+  e.llm_context = "USE: when discussing PayPal payments, PayPal.me links. TRIGGERS: paypal qr, paypal.me qr. NOT: Venmo (use Venmo QR), bank transfer (use Bank Transfer QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -521,6 +549,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "A Venmo QR code enables payments through the Venmo app (US only).\nPopular for splitting bills, small business payments, and tips.\nSocial payment features included.",
+  e.llm_context = "USE: when discussing Venmo payments, US P2P payments. TRIGGERS: venmo qr, venmo code. NOT: PayPal (use PayPal QR), Cash App.",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -537,6 +566,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "A Bitcoin QR code encodes a wallet address for receiving Bitcoin\npayments. Standard format across all Bitcoin wallets. Can include\namount and message parameters.",
+  e.llm_context = "USE: when discussing Bitcoin payments, BTC address QR. TRIGGERS: bitcoin qr, btc qr, crypto wallet qr. NOT: Ethereum (use Ethereum QR), generic crypto (use Crypto QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -553,6 +583,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "An Ethereum QR code encodes an ETH wallet address. Used for\nreceiving Ether and ERC-20 tokens. Standard EIP-681 format\nsupported by most wallets.",
+  e.llm_context = "USE: when discussing Ethereum payments, ETH address QR. TRIGGERS: ethereum qr, eth qr, erc20 qr. NOT: Bitcoin (use Bitcoin QR), generic crypto (use Crypto QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -569,6 +600,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "A generic crypto QR code can link to payment pages or encode\nwallet addresses for various cryptocurrencies. Used when\nsupporting multiple crypto payment options.",
+  e.llm_context = "USE: when discussing generic crypto payments, multi-coin wallets. TRIGGERS: crypto qr, cryptocurrency qr, multi-coin qr. NOT: specific coins (use Bitcoin QR, Ethereum QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -585,6 +617,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "A bank transfer QR code encodes IBAN and payment details for\nSEPA (Europe) or domestic transfers. Can include amount,\nreference, and beneficiary information.",
+  e.llm_context = "USE: when discussing bank transfer QR, IBAN encoding. TRIGGERS: bank transfer qr, sepa qr, iban qr, wire transfer qr. NOT: PIX (use PIX QR), UPI (use UPI QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -601,6 +634,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "Location QR codes link to map services or encode coordinates.\nUsed for navigation to stores, events, parking, and points of\ninterest. Can target specific map applications.",
+  e.llm_context = "USE: when discussing location QR codes generally, maps category. TRIGGERS: location qr, maps qr, navigation qr. NOT: specific apps (use Google Maps QR, Apple Maps QR, Waze QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -617,6 +651,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "A Google Maps QR code opens a location in Google Maps app or web.\nUses maps.google.com links with coordinates or place ID.\nSupports directions, place search, and saved locations.",
+  e.llm_context = "USE: when discussing Google Maps links, Google location QR. TRIGGERS: google maps qr, gmaps qr, google location qr. NOT: Apple Maps (use Apple Maps QR), Waze (use Waze QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -633,6 +668,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "An Apple Maps QR code opens a location in Apple Maps on iOS\ndevices. Uses maps.apple.com links. Falls back to web on\nnon-Apple devices.",
+  e.llm_context = "USE: when discussing Apple Maps links, iOS maps QR. TRIGGERS: apple maps qr, ios maps qr. NOT: Google Maps (use Google Maps QR), Waze (use Waze QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -649,6 +685,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "A Waze QR code opens the Waze app for navigation. Uses waze.com\nlinks with coordinates. Popular for businesses with parking\nor complex access routes.",
+  e.llm_context = "USE: when discussing Waze navigation links. TRIGGERS: waze qr, waze navigation qr. NOT: Google Maps (use Google Maps QR), Apple Maps (use Apple Maps QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -665,6 +702,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "A coordinates QR code encodes raw GPS coordinates using the\ngeo: URI scheme. Device-agnostic - opens in the default maps\napplication. Pure latitude/longitude encoding.",
+  e.llm_context = "USE: when discussing raw GPS encoding, geo: URI format. TRIGGERS: coordinates qr, gps qr, geo qr, lat long qr. NOT: specific map apps (use Google Maps QR, Apple Maps QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -681,6 +719,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "App download QR codes link to app stores for easy installation.\nCan be platform-specific (iOS, Android) or smart links that\ndetect the device and redirect appropriately.",
+  e.llm_context = "USE: when discussing app download QR codes generally. TRIGGERS: app qr, download app qr, app store qr. NOT: specific stores (use App Store QR, Play Store QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -697,6 +736,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "An App Store QR code links directly to an iOS app on the Apple\nApp Store. Uses apps.apple.com links. Only works on iOS devices\nor redirects to web preview.",
+  e.llm_context = "USE: when discussing iOS app downloads, Apple App Store links. TRIGGERS: app store qr, ios app qr, apple app qr. NOT: Play Store (use Play Store QR), smart link (use Smart App Download QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -713,6 +753,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "A Play Store QR code links to an Android app on Google Play.\nUses play.google.com links. Works on Android devices and\nprovides web preview on other platforms.",
+  e.llm_context = "USE: when discussing Android app downloads, Google Play links. TRIGGERS: play store qr, android app qr, google play qr. NOT: App Store (use App Store QR), smart link (use Smart App Download QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -729,6 +770,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "A smart app download QR code detects the user's device and\nredirects to the appropriate app store. Uses dynamic links\nor smart link services for cross-platform support.",
+  e.llm_context = "USE: when discussing smart app links, cross-platform app download. TRIGGERS: smart app qr, universal app link, cross platform app qr. NOT: specific stores (use App Store QR, Play Store QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -745,6 +787,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "A review QR code links directly to a review form on Google,\nTripAdvisor, Yelp, or other platforms. Used by restaurants,\nhotels, and businesses to collect customer feedback.",
+  e.llm_context = "USE: when discussing review collection QR, Google review links. TRIGGERS: review qr, google review qr, tripadvisor qr, yelp qr. NOT: feedback form (use Feedback QR), survey (use Survey QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -761,6 +804,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "A survey QR code links to an online survey (Google Forms,\nTypeform, SurveyMonkey). Used for customer feedback, market\nresearch, and event evaluations.",
+  e.llm_context = "USE: when discussing survey QR codes, questionnaire links. TRIGGERS: survey qr, questionnaire qr, typeform qr, google form qr. NOT: simple feedback (use Feedback QR), review (use Review QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -777,6 +821,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "A feedback QR code opens a form for collecting customer opinions.\nOften simpler than full surveys, focusing on ratings or quick\ncomments. Used in retail, hospitality, and service industries.",
+  e.llm_context = "USE: when discussing simple feedback collection, rating QR. TRIGGERS: feedback qr, rating qr, quick feedback qr. NOT: full survey (use Survey QR), review platform (use Review QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -793,6 +838,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "A menu QR code links to a digital restaurant menu. Became\nubiquitous during COVID-19 for contactless dining. Can be a\nPDF, landing page, or ordering system.",
+  e.llm_context = "USE: when discussing restaurant menu QR, contactless menu. TRIGGERS: menu qr, restaurant qr, cafe qr, food menu qr. NOT: Digital Menu landing page (use Digital Menu), table tent frame (use Table Tent QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -809,6 +855,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "A resume QR code links to an online CV or professional profile.\nUsed on printed resumes, business cards, and portfolios. Can\nlink to LinkedIn, personal website, or PDF.",
+  e.llm_context = "USE: when discussing resume QR, CV links, portfolio QR. TRIGGERS: resume qr, cv qr, portfolio qr. NOT: LinkedIn profile (use LinkedIn QR), vCard (use vCard QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -825,6 +872,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "A certificate QR code enables verification of diplomas, licenses,\nand credentials. Links to issuer database for authenticity\ncheck. Used in education, healthcare, and professional fields.",
+  e.llm_context = "USE: when discussing certificate verification, credential QR. TRIGGERS: certificate qr, diploma qr, credential qr, verification qr. NOT: ticket (use Ticket QR), ID badge.",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -841,6 +889,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "A ticket QR code encodes event entry or transport ticket data.\nScanned at entry for validation. Used for concerts, flights,\ntrains, and venues. Can be static or dynamic.",
+  e.llm_context = "USE: when discussing event tickets, transport tickets, entry QR. TRIGGERS: ticket qr, event ticket qr, boarding pass qr, concert ticket qr. NOT: attendance check-in (use Attendance QR), coupon (use Coupon QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -857,6 +906,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "An attendance QR code enables quick check-in by scanning.\nUsed in schools, conferences, gyms, and offices. Links to\nattendance tracking system with timestamp.",
+  e.llm_context = "USE: when discussing check-in QR, attendance tracking. TRIGGERS: attendance qr, check-in qr, sign-in qr, class attendance qr. NOT: event ticket (use Ticket QR), access badge.",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -873,6 +923,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "A pet tag QR code links to owner contact information if a\npet is lost. Can include pet name, medical info, and multiple\ncontact methods. Always dynamic for updates.",
+  e.llm_context = "USE: when discussing pet ID QR, lost pet tags. TRIGGERS: pet tag qr, pet id qr, dog tag qr, cat tag qr. NOT: medical ID (use Medical ID QR), vCard (use vCard QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -889,6 +940,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "A medical ID QR code provides emergency access to critical\nhealth information (blood type, allergies, medications,\nemergency contacts). Worn as bracelet or necklace.",
+  e.llm_context = "USE: when discussing medical alert QR, health info QR. TRIGGERS: medical id qr, health qr, emergency info qr, medical alert qr. NOT: pet tag (use Pet Tag QR), certificate (use Certificate QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -905,6 +957,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "A file download QR code links to any downloadable file (ZIP,\nDOC, XLS, etc.). Used for sharing documents, software, and\nmedia. Dynamic for download tracking and updates.",
+  e.llm_context = "USE: when discussing file download QR, document download links. TRIGGERS: file qr, download qr, zip qr, document download qr. NOT: PDF specifically (use PDF QR), image gallery (use Image Gallery QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -921,6 +974,7 @@ ON CREATE SET
   e.type = "CONTENT_TYPE",
   e.is_pillar = false,
   e.entity_summary = "A calendar event QR code encodes event details (date, time,\nlocation, description) in iCal format. Scanning adds the event\ndirectly to the user's calendar app.",
+  e.llm_context = "USE: when discussing calendar event QR, iCal links. TRIGGERS: calendar qr, event qr, ical qr, add to calendar qr. NOT: event RSVP page (use Event RSVP), ticket (use Ticket QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET

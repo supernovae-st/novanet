@@ -8,11 +8,8 @@
 // PROJECT NODE
 // ─────────────────────────────────────────────────────────────────────────────
 
-MERGE (proj:Project:Meta {key: "qrcode-ai"})
-ON CREATE SET proj.display_name = "qrcode-ai",
-             proj.created_at = datetime(),
-             proj.updated_at = datetime()
-ON MATCH SET proj.updated_at = datetime();
+MATCH (proj:Project {key: "qrcode-ai"})
+SET proj.updated_at = datetime();
 
 // ─────────────────────────────────────────────────────────────────────────────
 // ENTITIES (39)
@@ -25,6 +22,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = true,
   e.entity_summary = "A QR Code (Quick Response Code) is a two-dimensional barcode that stores\ninformation in a machine-readable format. QR codes can encode URLs, text,\ncontact information, WiFi credentials, and more. They are widely used for\nmarketing, payments, and contactless interactions.",
+  e.llm_context = "USE: when discussing QR codes, scanning, 2D barcodes, quick response codes. TRIGGERS: qr, qr code, qr-code, scan code, 2d barcode, matrix code. NOT: barcode 1D (use Barcode), data matrix (use Data Matrix), link shortener without QR (use Smart Link).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -41,6 +39,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = true,
   e.entity_summary = "A Smart Link is an intelligent URL shortener that routes users based on\ndevice type, geographic location, time of day, or other contextual factors.\nUsed for A/B testing, geo-targeting, retargeting, and advanced analytics.",
+  e.llm_context = "USE: when discussing intelligent URLs, link routing, device targeting, geo-targeting links. TRIGGERS: smart link, intelligent url, routing link, conditional redirect, targeted link. NOT: basic short URL (use Short Link), QR code (use QR Code), landing page (use Landing Page).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -57,6 +56,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = true,
   e.entity_summary = "A barcode is a one-dimensional representation of data using parallel lines\nof varying widths. Common formats include EAN-13, UPC-A, and Code 128.\nUsed primarily in retail, logistics, and inventory management.",
+  e.llm_context = "USE: when discussing 1D barcodes, linear barcodes, retail barcodes, product codes. TRIGGERS: barcode, 1d barcode, ean, upc, code 128, linear barcode, product code. NOT: QR code (use QR Code), 2D codes (use QR Code or Data Matrix).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -73,6 +73,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = true,
   e.entity_summary = "A landing page is a standalone web page designed for a specific marketing\nor conversion goal. QR Code AI provides a no-code builder for creating\nmobile-optimized landing pages like link-in-bio, digital menus, and forms.",
+  e.llm_context = "USE: when discussing destination pages, page builder, no-code pages, mobile pages. TRIGGERS: landing page, destination page, page builder, mobile page, microsite. NOT: full website (external), QR code itself (use QR Code), link shortener (use Smart Link).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -89,6 +90,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "A short link is a condensed URL that redirects to a longer destination.\nIt serves as the foundational technology for both Smart Links and Dynamic\nQR Codes, enabling tracking, analytics, and link management.",
+  e.llm_context = "USE: when discussing URL shortening, link tracking, shortened URLs as technology. TRIGGERS: short link, shortened url, url shortener, link shortening, tiny url. NOT: smart routing (use Smart Link), QR code (use QR Code), vanity URL only (mention custom domain).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -105,6 +107,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "QR Code styles define the visual approach to generating QR codes.\nOptions include custom (parametric design), image (photo overlay),\nand art (AI-generated artistic fusion).",
+  e.llm_context = "USE: when discussing QR code visual approaches, style categories, design types. TRIGGERS: qr style, qr code style, visual style, design approach. NOT: specific styles (use Custom QR, QR Art, etc.), colors only (use QR Code Colors).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -121,6 +124,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "QR Code content types define what data is encoded in the QR code.\nCommon types include URLs, WiFi credentials, vCards, social profiles,\napp store links, payment information, and more.",
+  e.llm_context = "USE: when discussing QR code data types, what QR codes encode, content categories. TRIGGERS: qr content, content type, qr data, what to encode. NOT: specific content types (use URL QR, WiFi QR, etc.), QR appearance (use QR Code Style).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -137,6 +141,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "QR Code frames are pre-designed templates optimized for specific\nphysical placements like business cards, posters, table tents,\nand product packaging.",
+  e.llm_context = "USE: when discussing QR code templates, physical placement, print templates. TRIGGERS: qr frame, template, placement, print size, frame template. NOT: specific frames (use Business Card QR, Poster QR, etc.), digital only (use Landing Page).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -153,6 +158,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "Barcode formats define the encoding standard used. 1D formats include\nEAN-13, UPC-A, and Code 128. 2D formats include Data Matrix, PDF417,\nand Aztec codes.",
+  e.llm_context = "USE: when discussing barcode standards, encoding formats, barcode types. TRIGGERS: barcode format, barcode type, barcode standard, encoding format. NOT: specific formats (use EAN-13, UPC-A, etc.), QR codes (use QR Code).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -169,6 +175,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "Landing page types are pre-built templates for common use cases like\nlink-in-bio pages, digital restaurant menus, contact forms, event RSVPs,\nand booking/appointment pages.",
+  e.llm_context = "USE: when discussing landing page templates, page types, use case templates. TRIGGERS: landing page type, page template, page category, template type. NOT: specific types (use Link in Bio, Digital Menu, etc.), external websites.",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -185,6 +192,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "A custom QR code allows full control over visual elements including\ncolors, shapes, logos, text, and backgrounds. Users configure each\nelement individually for maximum design flexibility.",
+  e.llm_context = "USE: when discussing fully customizable QR codes, parametric design, manual customization. TRIGGERS: custom qr, customize qr, design qr, parametric qr, branded qr. NOT: AI-generated (use QR Code Art), photo overlay (use QR Code with Image).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -201,6 +209,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "A QR code with image uses a two-layer approach where a photo or image\nserves as the background with the QR code pattern overlaid on top.\nIdeal for branded or visually striking codes.",
+  e.llm_context = "USE: when discussing QR codes with photos, image overlays, background images on QR. TRIGGERS: qr with image, qr photo, image qr, photo background qr. NOT: AI art (use QR Code Art), logo only (use QR Code with Logo).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -217,6 +226,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "QR Code Art uses AI to generate a unified artistic image that seamlessly\nincorporates the QR code pattern. The result is a visually stunning\nartwork that remains scannable.",
+  e.llm_context = "USE: when discussing AI QR codes, artistic QR generation, creative AI QR. TRIGGERS: qr art, ai qr, artistic qr, ai generated qr, creative qr. NOT: manual design (use Custom QR Code), photo overlay (use QR Code with Image).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -233,6 +243,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "QR Code Photo is an alternative name for QR Code with Image. Both terms\nrefer to the same product where a photo serves as the QR code background.",
+  e.llm_context = "USE: when user says 'QR photo' specifically, redirect to QR Code with Image. TRIGGERS: qr photo, photo qr code. NOT: primary term (use QR Code with Image instead).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -249,6 +260,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "A QR code with logo places a brand logo or image in the center of the\nQR code. Error correction ensures the code remains scannable despite\nthe logo covering part of the pattern.",
+  e.llm_context = "USE: when discussing adding logos to QR codes, branded QR with logo, center logo. TRIGGERS: qr with logo, add logo, logo qr, branded qr, center logo. NOT: full custom design (use Custom QR Code), background image (use QR Code with Image).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -265,6 +277,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "A QR code with text includes a call-to-action message like \"Scan Me\"\nor custom text below or around the QR code to encourage user engagement.",
+  e.llm_context = "USE: when discussing adding text to QR codes, CTA text, scan me text. TRIGGERS: qr with text, add text, scan me, call to action, text qr. NOT: encoded text content (use Text QR), logo (use QR Code with Logo).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -281,6 +294,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "QR code colors allow customization of the foreground (dark modules)\nand background colors. Supports solid colors, gradients, and ensures\nsufficient contrast for scannability.",
+  e.llm_context = "USE: when discussing QR code colors, color customization, foreground/background. TRIGGERS: qr color, colored qr, change color, qr colors, color scheme. NOT: shapes (use QR Code Shapes), gradients specifically (use Background Gradient).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -297,6 +311,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "QR code shapes customize the appearance of modules (dots, squares, rounded)\nand finder pattern eyes (square, circle, leaf, etc.) for unique designs.",
+  e.llm_context = "USE: when discussing QR module shapes, dot patterns, eye patterns, shape customization. TRIGGERS: qr shapes, module shape, dot pattern, eye pattern, rounded qr. NOT: colors (use QR Code Colors), logo (use QR Code with Logo).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -313,6 +328,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "A transparent background QR code removes the background color, allowing\nthe code to be placed over any surface or image. Exported as PNG with\nalpha channel.",
+  e.llm_context = "USE: when discussing transparent QR codes, PNG with alpha, overlay QR. TRIGGERS: transparent qr, transparent background, png alpha, overlay qr, no background. NOT: white background (default), image background (use Background Image).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -329,6 +345,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "QR code background options include solid colors, gradients, and images.\nThe background appears behind the QR code pattern and affects overall\nvisual appearance.",
+  e.llm_context = "USE: when discussing QR background options generally, background customization category. TRIGGERS: qr background, background options, background type. NOT: specific types (use Background Color, Gradient, or Image).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -345,6 +362,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "A solid color background provides a clean, uniform backdrop for the\nQR code. Light backgrounds with dark foregrounds ensure optimal contrast.",
+  e.llm_context = "USE: when discussing solid color backgrounds for QR codes. TRIGGERS: background color, solid background, fill color. NOT: gradient (use Background Gradient), image (use Background Image).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -361,6 +379,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "A gradient background transitions between two or more colors, creating\na modern, dynamic look while maintaining scannability.",
+  e.llm_context = "USE: when discussing gradient backgrounds for QR codes. TRIGGERS: gradient background, color gradient, gradient qr. NOT: solid color (use Background Color), image (use Background Image).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -377,6 +396,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "A background image places a photo, pattern, or texture behind the\nQR code. Requires careful contrast management to ensure scannability.",
+  e.llm_context = "USE: when discussing image backgrounds for QR codes, patterns, textures. TRIGGERS: background image, image background, pattern background, texture. NOT: QR Code with Image style (different feature), solid color (use Background Color).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -393,6 +413,7 @@ ON CREATE SET
   e.type = "CONCEPT",
   e.is_pillar = false,
   e.entity_summary = "A dynamic QR code encodes a short link that redirects to the destination.\nThe destination can be changed after printing, and all scans are tracked.\nRequires an active subscription.",
+  e.llm_context = "USE: when discussing editable QR codes, trackable QR, changeable destination. TRIGGERS: dynamic qr, editable qr, trackable qr, change destination, update qr. NOT: fixed content (use Static QR Code), smart routing (use Smart Link).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -409,6 +430,7 @@ ON CREATE SET
   e.type = "CONCEPT",
   e.is_pillar = false,
   e.entity_summary = "A static QR code encodes data directly in the pattern. Once printed,\nthe content cannot be changed and scans cannot be tracked. Free to\ngenerate but less flexible.",
+  e.llm_context = "USE: when discussing fixed QR codes, permanent QR, direct encoding. TRIGGERS: static qr, fixed qr, permanent qr, free qr, direct encode. NOT: editable (use Dynamic QR Code), trackable (use Dynamic QR Code).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -425,6 +447,7 @@ ON CREATE SET
   e.type = "CONCEPT",
   e.is_pillar = false,
   e.entity_summary = "Light mode QR codes use a dark foreground on a light background,\nfollowing the traditional QR code appearance for maximum compatibility.",
+  e.llm_context = "USE: when discussing light theme QR codes, standard contrast QR. TRIGGERS: light mode, light theme, light background, standard qr. NOT: dark theme (use Dark Mode), inverted colors.",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -441,6 +464,7 @@ ON CREATE SET
   e.type = "CONCEPT",
   e.is_pillar = false,
   e.entity_summary = "Dark mode QR codes invert the colors, using a light foreground on a\ndark background. Ideal for dark-themed designs and night mode interfaces.",
+  e.llm_context = "USE: when discussing dark theme QR codes, inverted QR, night mode. TRIGGERS: dark mode, dark theme, dark background, inverted qr, night mode. NOT: light theme (use Light Mode), standard appearance.",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -457,6 +481,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "A business card QR code template is sized and designed for standard\nbusiness cards. Typically links to a vCard, LinkedIn profile, or\ndigital business card landing page.",
+  e.llm_context = "USE: when discussing QR codes for business cards, professional networking QR. TRIGGERS: business card qr, card qr, professional qr, networking qr. NOT: email signature (use Email Signature QR), vCard content (use vCard QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -473,6 +498,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "An email signature QR code is a small, unobtrusive code designed to\nfit in email signatures. Links to contact information or scheduling pages.",
+  e.llm_context = "USE: when discussing QR codes for email signatures, small signature QR. TRIGGERS: email signature qr, signature qr, email qr. NOT: business card (use Business Card QR), contact form (use Forms).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -489,6 +515,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "A flyer QR code template is optimized for standard flyer sizes with\nappropriate margins and call-to-action text. Used for promotions and events.",
+  e.llm_context = "USE: when discussing QR codes for flyers, promotional print QR. TRIGGERS: flyer qr, handout qr, promotional qr, print qr. NOT: poster size (use Poster QR), product packaging (use Packaging Label QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -505,6 +532,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "A poster QR code template is designed for large-format printing with\nhigh resolution and appropriate sizing for viewing distance.",
+  e.llm_context = "USE: when discussing QR codes for posters, large format QR, billboard QR. TRIGGERS: poster qr, billboard qr, large qr, high resolution qr. NOT: flyer size (use Flyer QR), table display (use Table Tent QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -521,6 +549,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "A table tent QR code template is designed for restaurant and event\ntable displays. Typically links to menus, feedback forms, or promotions.",
+  e.llm_context = "USE: when discussing QR codes for table displays, restaurant table QR. TRIGGERS: table tent qr, table qr, restaurant qr, menu qr. NOT: digital menu content (use Digital Menu), poster (use Poster QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -537,6 +566,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "A packaging label QR code template is sized for product labels and\npackaging. Links to product information, instructions, or registration.",
+  e.llm_context = "USE: when discussing QR codes for product packaging, label QR, product QR. TRIGGERS: packaging qr, label qr, product qr, package qr. NOT: retail barcode (use Barcode), poster (use Poster QR).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -553,6 +583,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "A link-in-bio page is a mobile-optimized landing page that aggregates\nmultiple links for social media profiles. Used by creators, businesses,\nand influencers to share multiple destinations from one link.",
+  e.llm_context = "USE: when discussing bio link pages, social media link aggregation, creator links. TRIGGERS: link in bio, bio link, linktree alternative, social links, creator page. NOT: full landing page (use Landing Page), single URL (use Short Link).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -569,6 +600,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "A digital menu is a mobile-friendly restaurant menu page. Supports\ncategories, item descriptions, prices, images, and dietary information.\nReduces printing costs and enables real-time updates.",
+  e.llm_context = "USE: when discussing restaurant menus, digital menus, QR menus, contactless menus. TRIGGERS: digital menu, restaurant menu, qr menu, contactless menu, menu page. NOT: table tent template (use Table Tent QR), generic landing page.",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -585,6 +617,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "Form landing pages collect user information through customizable fields.\nUsed for contact forms, lead generation, surveys, and registrations.",
+  e.llm_context = "USE: when discussing contact forms, lead capture, form pages, data collection. TRIGGERS: form, contact form, lead form, survey, registration form. NOT: event RSVP specifically (use Event RSVP), booking (use Booking/Appointment).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -601,6 +634,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "An announcement page displays a single message or notification.\nUsed for promotions, updates, alerts, or temporary information.",
+  e.llm_context = "USE: when discussing announcement pages, message pages, notification pages. TRIGGERS: announcement, message page, notification, alert page, info page. NOT: event invitation (use Event RSVP), ongoing content (use Link in Bio).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -617,6 +651,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "An event RSVP page allows guests to register for events, confirm\nattendance, and provide additional information. Includes calendar\nintegration and reminder functionality.",
+  e.llm_context = "USE: when discussing event registration, RSVP pages, guest management. TRIGGERS: event rsvp, event registration, rsvp page, guest list, invitation. NOT: general forms (use Forms), booking slots (use Booking/Appointment).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -633,6 +668,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "A booking page allows users to schedule appointments or reservations.\nIntegrates with calendars and provides availability management.",
+  e.llm_context = "USE: when discussing appointment booking, scheduling pages, reservation systems. TRIGGERS: booking, appointment, schedule, reservation, calendar booking. NOT: event RSVP (use Event RSVP), contact form (use Forms).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET

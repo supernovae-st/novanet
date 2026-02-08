@@ -8,11 +8,8 @@
 // PROJECT NODE
 // ─────────────────────────────────────────────────────────────────────────────
 
-MERGE (proj:Project:Meta {key: "qrcode-ai"})
-ON CREATE SET proj.display_name = "qrcode-ai",
-             proj.created_at = datetime(),
-             proj.updated_at = datetime()
-ON MATCH SET proj.updated_at = datetime();
+MATCH (proj:Project {key: "qrcode-ai"})
+SET proj.updated_at = datetime();
 
 // ─────────────────────────────────────────────────────────────────────────────
 // ENTITIES (17)
@@ -25,6 +22,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "EAN-13 (European Article Number) is the most widely used barcode format\nfor retail products globally. It encodes 13 digits including a country\ncode, manufacturer ID, product code, and check digit.",
+  e.llm_context = "USE: when discussing EAN-13 barcodes, European retail product identification, 13-digit barcodes, or GTIN-13 standard. TRIGGERS: ean-13, ean13, european article number, 13-digit barcode, gtin-13, retail barcode europe. NOT: EAN-8 (compact version), UPC-A (North American), ISBN (books).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -41,6 +39,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "EAN-8 is a shorter version of EAN-13, using only 8 digits. Designed for\nsmall products where full EAN-13 barcodes won't fit. Contains country\ncode, item code, and check digit.",
+  e.llm_context = "USE: when discussing EAN-8 barcodes, compact retail barcodes, 8-digit product codes, or small product labeling. TRIGGERS: ean-8, ean8, 8-digit barcode, compact barcode, small product barcode. NOT: EAN-13 (full version), UPC-E (North American compact).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -57,6 +56,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "UPC-A (Universal Product Code) is the standard retail barcode in North\nAmerica. 12 digits encode manufacturer and product IDs. Compatible with\nEAN-13 (add leading zero for conversion).",
+  e.llm_context = "USE: when discussing UPC-A barcodes, North American retail product codes, 12-digit barcodes, or US/Canada product identification. TRIGGERS: upc-a, upca, universal product code, 12-digit barcode, us barcode, canada barcode, gtin-12. NOT: UPC-E (compressed), EAN-13 (European).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -73,6 +73,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "UPC-E is a compressed version of UPC-A using 6 digits. Zero suppression\nalgorithm removes unnecessary zeros. Used on small retail items where\nspace is limited.",
+  e.llm_context = "USE: when discussing UPC-E barcodes, compressed product codes, 6-digit barcodes, or small package identification in North America. TRIGGERS: upc-e, upce, 6-digit barcode, compressed upc, zero-suppressed barcode. NOT: UPC-A (full version), EAN-8 (European compact).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -89,6 +90,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "Code 128 is a high-density barcode supporting the full ASCII character\nset. Widely used in logistics, shipping, and supply chain. Three code\nsets (A, B, C) for different character ranges.",
+  e.llm_context = "USE: when discussing Code 128 barcodes, logistics barcodes, shipping labels, high-density alphanumeric encoding, or ASCII barcodes. TRIGGERS: code 128, code128, logistics barcode, shipping barcode, alphanumeric barcode, ascii barcode. NOT: Code 39 (simpler), GS1-128 (with application identifiers).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -105,6 +107,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "Code 39 (Code 3 of 9) is a variable-length alphanumeric barcode.\nSelf-checking without required check digit. Common in automotive,\ndefense, and healthcare industries.",
+  e.llm_context = "USE: when discussing Code 39 barcodes, industrial barcodes, automotive parts labeling, or self-checking alphanumeric codes. TRIGGERS: code 39, code39, code 3 of 9, industrial barcode, automotive barcode, defense barcode. NOT: Code 128 (higher density), Codabar (numeric).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -121,6 +124,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "ITF-14 (Interleaved 2 of 5) is used for shipping cartons and pallets.\nEncodes 14 digits including GTIN-14. Highly readable even on corrugated\ncardboard surfaces.",
+  e.llm_context = "USE: when discussing ITF-14 barcodes, shipping carton barcodes, pallet labeling, or GTIN-14 encoding. TRIGGERS: itf-14, itf14, interleaved 2 of 5, carton barcode, pallet barcode, gtin-14, case barcode. NOT: EAN-13 (retail), GS1-128 (with dates/lots).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -137,6 +141,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "Codabar is a linear barcode for numeric data plus special characters.\nUsed in libraries, blood banks, and overnight delivery services.\nSelf-checking with start/stop characters.",
+  e.llm_context = "USE: when discussing Codabar barcodes, library barcodes, blood bank barcodes, or legacy numeric codes. TRIGGERS: codabar, library barcode, blood bank barcode, fedex barcode, photo lab barcode. NOT: Code 39 (alphanumeric), Code 128 (modern logistics).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -153,6 +158,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "MSI Plessey (Modified Plessey) is used for inventory and warehouse\nmanagement. Numeric-only with optional check digits. Popular in\ngrocery and retail inventory systems.",
+  e.llm_context = "USE: when discussing MSI Plessey barcodes, warehouse inventory barcodes, grocery store shelf labeling, or check-digit numeric codes. TRIGGERS: msi plessey, msi barcode, plessey barcode, inventory barcode, warehouse barcode, shelf barcode. NOT: Code 128 (modern), ITF-14 (shipping).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -169,6 +175,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "GS1-128 (formerly EAN-128/UCC-128) extends Code 128 with GS1 Application\nIdentifiers. Encodes batch numbers, expiry dates, serial numbers for\ntraceability. Standard for supply chain logistics.",
+  e.llm_context = "USE: when discussing GS1-128 barcodes, supply chain traceability, batch/lot tracking, expiration dates on barcodes, or application identifiers. TRIGGERS: gs1-128, gs1128, ean-128, ucc-128, application identifier, batch barcode, lot barcode, expiry barcode. NOT: Code 128 (without AI), ITF-14 (simpler).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -185,6 +192,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "Data Matrix is a 2D barcode for high-density data on small items.\nCommon in electronics, pharmaceuticals, and component marking. Can\nencode up to 2,335 alphanumeric characters.",
+  e.llm_context = "USE: when discussing Data Matrix codes, electronics component marking, pharmaceutical serialization, or small 2D codes for industrial use. TRIGGERS: data matrix, datamatrix, ecc200, electronics marking, pharma barcode, component marking, small 2d code. NOT: QR code (consumer), GS1 DataMatrix (with identifiers).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -201,6 +209,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "PDF417 (Portable Data File) is a stacked 2D barcode holding large\namounts of data. Used on driver's licenses, travel documents, and\nshipping labels. Can encode up to 1,850 characters.",
+  e.llm_context = "USE: when discussing PDF417 codes, driver's license barcodes, boarding passes, ID cards, or stacked 2D barcodes. TRIGGERS: pdf417, pdf 417, driver license barcode, id barcode, boarding pass barcode, stacked barcode. NOT: QR code (square), Aztec (no quiet zone).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -217,6 +226,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "Aztec Code is a 2D barcode requiring no quiet zone around it.\nPopular for transport tickets (boarding passes, train tickets).\nCan encode up to 3,832 digits or 3,067 characters.",
+  e.llm_context = "USE: when discussing Aztec codes, airline boarding passes, train tickets, transport tickets, or 2D codes without quiet zone. TRIGGERS: aztec code, aztec barcode, boarding pass code, train ticket barcode, transport barcode, no quiet zone barcode. NOT: QR code (needs quiet zone), PDF417 (rectangular).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -233,6 +243,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "MaxiCode is a fixed-size 2D barcode developed by UPS for package\ntracking. Hexagonal dot pattern enables high-speed scanning on\nconveyor belts. Primary/secondary message structure.",
+  e.llm_context = "USE: when discussing MaxiCode, UPS package tracking, high-speed conveyor scanning, or hexagonal 2D codes. TRIGGERS: maxicode, ups barcode, package sorting code, hexagonal barcode, conveyor barcode. NOT: QR code (square), Data Matrix (small items).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -249,6 +260,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "GS1 DataMatrix combines Data Matrix with GS1 Application Identifiers.\nStandard for pharmaceutical serialization, medical devices, and\nfood traceability. Enables product authentication.",
+  e.llm_context = "USE: when discussing GS1 DataMatrix, pharmaceutical serialization, medical device UDI, food traceability, or regulated 2D codes. TRIGGERS: gs1 datamatrix, gs1 data matrix, pharma serialization, udi barcode, fmd barcode, medical device barcode, food traceability code. NOT: plain Data Matrix (no AI), QR code (consumer).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -265,6 +277,7 @@ ON CREATE SET
   e.type = "TOOL",
   e.is_pillar = false,
   e.entity_summary = "A barcode generator creates barcode images in various formats (EAN,\nUPC, Code 128, etc.). Outputs images for printing on products,\nlabels, and packaging. Validates check digits automatically.",
+  e.llm_context = "USE: when discussing barcode creation tools, generating EAN/UPC/Code 128 images, or barcode image software. TRIGGERS: barcode generator, create barcode, generate barcode, barcode maker, barcode image, ean generator, upc generator. NOT: QR code generator (2D square), barcode scanner (reading).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -281,6 +294,7 @@ ON CREATE SET
   e.type = "TOOL",
   e.is_pillar = false,
   e.entity_summary = "A barcode scanner reads barcode data using cameras or laser scanners.\nMobile apps can scan using smartphone cameras. Decodes data and\noptionally looks up product information.",
+  e.llm_context = "USE: when discussing barcode reading tools, scanning EAN/UPC codes, barcode reader apps, or point-of-sale scanning. TRIGGERS: barcode scanner, barcode reader, scan barcode, pos scanner, barcode app, read barcode. NOT: QR code scanner (2D), barcode generator (creation).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET

@@ -8,11 +8,8 @@
 // PROJECT NODE
 // ─────────────────────────────────────────────────────────────────────────────
 
-MERGE (proj:Project:Meta {key: "qrcode-ai"})
-ON CREATE SET proj.display_name = "qrcode-ai",
-             proj.created_at = datetime(),
-             proj.updated_at = datetime()
-ON MATCH SET proj.updated_at = datetime();
+MATCH (proj:Project {key: "qrcode-ai"})
+SET proj.updated_at = datetime();
 
 // ─────────────────────────────────────────────────────────────────────────────
 // ENTITIES (20)
@@ -25,6 +22,7 @@ ON CREATE SET
   e.type = "MEDIUM",
   e.is_pillar = false,
   e.entity_summary = "Business cards are traditional print mediums for professional networking.\nQR codes on business cards link to digital profiles, vCards, or portfolios.\nCompact size requires small, high-contrast QR codes.",
+  e.llm_context = "USE: when discussing QR codes on business cards, networking cards, or professional contact materials. TRIGGERS: business cards, business card qr, card qr code, networking card, contact card, visiting card. NOT: vcard (digital format), flyers (larger print).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -41,6 +39,7 @@ ON CREATE SET
   e.type = "MEDIUM",
   e.is_pillar = false,
   e.entity_summary = "Flyers are single-sheet printed materials for promotions and announcements.\nQR codes on flyers link to landing pages, coupons, or event registration.\nAllow larger QR codes with more design freedom.",
+  e.llm_context = "USE: when discussing QR codes on flyers, promotional handouts, or single-sheet marketing materials. TRIGGERS: flyers, flyer qr, handout, leaflet, promotional flyer, marketing flyer. NOT: brochures (folded), posters (large format).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -57,6 +56,7 @@ ON CREATE SET
   e.type = "MEDIUM",
   e.is_pillar = false,
   e.entity_summary = "Posters and billboards are large-format print for high-visibility advertising.\nQR codes must be scannable from distance - require high contrast and size.\nOften link to campaigns, apps, or promotional content.",
+  e.llm_context = "USE: when discussing QR codes on posters, billboards, outdoor advertising, or large-format displays. TRIGGERS: poster qr, billboard qr, outdoor qr, large qr, signage qr, advertising poster. NOT: banners (fabric), flyers (small print).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -73,6 +73,7 @@ ON CREATE SET
   e.type = "MEDIUM",
   e.is_pillar = false,
   e.entity_summary = "Brochures are folded print materials for detailed information.\nQR codes can link to videos, downloads, or interactive content that\nexpands on printed information.",
+  e.llm_context = "USE: when discussing QR codes on brochures, tri-folds, pamphlets, or folded marketing materials. TRIGGERS: brochure qr, tri-fold, pamphlet, folded brochure, informational brochure. NOT: flyers (single sheet), catalogs (bound).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -89,6 +90,7 @@ ON CREATE SET
   e.type = "MEDIUM",
   e.is_pillar = false,
   e.entity_summary = "Catalogs showcase products with detailed descriptions and images.\nQR codes next to products link directly to e-commerce pages for\ninstant purchasing or additional product information.",
+  e.llm_context = "USE: when discussing QR codes in product catalogs, print catalogs, or catalog shopping materials. TRIGGERS: catalog qr, product catalog, print catalog, shopping catalog, catalogue. NOT: brochures (folded), magazines (editorial).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -105,6 +107,7 @@ ON CREATE SET
   e.type = "MEDIUM",
   e.is_pillar = false,
   e.entity_summary = "Magazines are periodic print publications. QR codes in magazines\nlink to interactive content, videos, or exclusive online offers.\nHigher-quality paper allows detailed QR code designs.",
+  e.llm_context = "USE: when discussing QR codes in magazines, print publications, or editorial content. TRIGGERS: magazine qr, print magazine, editorial qr, publication qr, magazine ad. NOT: newspapers (daily), brochures (marketing).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -121,6 +124,7 @@ ON CREATE SET
   e.type = "MEDIUM",
   e.is_pillar = false,
   e.entity_summary = "Newspapers are daily or weekly news publications. QR codes link to\nfull articles, video reports, or subscription pages. Lower paper\nquality requires simpler, higher-contrast QR codes.",
+  e.llm_context = "USE: when discussing QR codes in newspapers, print news, or daily/weekly publications. TRIGGERS: newspaper qr, print news, daily paper, news publication, newspaper ad. NOT: magazines (glossy), digital news (websites).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -137,6 +141,7 @@ ON CREATE SET
   e.type = "MEDIUM",
   e.is_pillar = false,
   e.entity_summary = "Direct mail includes postcards, letters, and packages sent to recipients.\nQR codes enable tracking of physical mail campaigns and link to\npersonalized landing pages or special offers.",
+  e.llm_context = "USE: when discussing QR codes on direct mail, postcards, mailers, or shipped marketing materials. TRIGGERS: direct mail qr, postcard qr, mailer, mailed marketing, postal qr. NOT: flyers (handed out), email (digital).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -153,6 +158,7 @@ ON CREATE SET
   e.type = "MEDIUM",
   e.is_pillar = false,
   e.entity_summary = "Stickers and labels are adhesive materials applied to surfaces.\nQR codes on stickers can appear anywhere - products, windows, equipment.\nCompact format requires clear, simple QR designs.",
+  e.llm_context = "USE: when discussing QR codes on stickers, adhesive labels, or peel-and-stick materials. TRIGGERS: sticker qr, label qr, adhesive qr, peel and stick, vinyl sticker. NOT: product labels (packaging), product packaging (boxes).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -169,6 +175,7 @@ ON CREATE SET
   e.type = "MEDIUM",
   e.is_pillar = false,
   e.entity_summary = "Banners are large fabric or vinyl displays for events and trade shows.\nQR codes must be visible from distance and scannable in busy environments.\nOften link to contact forms, catalogs, or lead capture.",
+  e.llm_context = "USE: when discussing QR codes on banners, trade show displays, event signage, or fabric/vinyl banners. TRIGGERS: banner qr, trade show banner, event banner, fabric banner, vinyl banner, roll-up banner. NOT: posters (paper), billboards (outdoor).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -185,6 +192,7 @@ ON CREATE SET
   e.type = "MEDIUM",
   e.is_pillar = false,
   e.entity_summary = "Product packaging includes boxes, bottles, and containers holding products.\nQR codes provide access to user manuals, registration, authenticity\nverification, and promotional content.",
+  e.llm_context = "USE: when discussing QR codes on product packaging, boxes, containers, or retail packaging. TRIGGERS: packaging qr, product box, container qr, retail packaging, package qr code. NOT: product labels (adhesive), shipping labels (logistics).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -201,6 +209,7 @@ ON CREATE SET
   e.type = "MEDIUM",
   e.is_pillar = false,
   e.entity_summary = "Product labels are adhesive tags applied to products. QR codes on labels\nprovide product information, nutritional data, or traceability for food\nand pharmaceutical industries.",
+  e.llm_context = "USE: when discussing QR codes on product labels, applied labels, or product tag labels. TRIGGERS: product label qr, applied label, product tag, label qr code, item label. NOT: stickers (decorative), product packaging (boxes).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -217,6 +226,7 @@ ON CREATE SET
   e.type = "MEDIUM",
   e.is_pillar = false,
   e.entity_summary = "Receipts are proof of purchase documents. QR codes on receipts link to\ndigital receipts, loyalty programs, feedback forms, or warranty registration.",
+  e.llm_context = "USE: when discussing QR codes on receipts, transaction slips, or purchase confirmations. TRIGGERS: receipt qr, transaction receipt, purchase receipt, pos receipt, sales receipt. NOT: tickets (entry), invoices (billing).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -233,6 +243,7 @@ ON CREATE SET
   e.type = "MEDIUM",
   e.is_pillar = false,
   e.entity_summary = "Table tents are folded standing displays on restaurant tables.\nQR codes provide access to digital menus, ordering, payment, or feedback.\nCommon in the post-COVID contactless dining trend.",
+  e.llm_context = "USE: when discussing QR codes on table tents, restaurant table stands, or tabletop displays. TRIGGERS: table tent qr, table stand, restaurant table qr, tabletop display, table card. NOT: printed menus (booklet), flyers (handed out).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -249,6 +260,7 @@ ON CREATE SET
   e.type = "MEDIUM",
   e.is_pillar = false,
   e.entity_summary = "Printed menus are traditional paper or laminated restaurant menus.\nQR codes link to digital versions, allergen info, or ordering systems\nwhile maintaining traditional dining experience.",
+  e.llm_context = "USE: when discussing QR codes on printed menus, physical restaurant menus, or paper menus. TRIGGERS: printed menu qr, paper menu, physical menu, restaurant menu qr, laminated menu. NOT: digital menu (online), table tents (standing).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -265,6 +277,7 @@ ON CREATE SET
   e.type = "MEDIUM",
   e.is_pillar = false,
   e.entity_summary = "Physical tickets provide entry to events, transportation, or venues.\nQR codes enable quick scanning for entry and can link to event\ninformation, maps, or schedules.",
+  e.llm_context = "USE: when discussing QR codes on physical tickets, event tickets, admission tickets, or printed tickets. TRIGGERS: ticket qr, event ticket, physical ticket, admission ticket, printed ticket, concert ticket. NOT: digital tickets (mobile), receipts (purchase).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -281,6 +294,7 @@ ON CREATE SET
   e.type = "MEDIUM",
   e.is_pillar = false,
   e.entity_summary = "Emails are digital messages for communication and marketing.\nQR codes in email signatures or campaigns enable quick actions\nlike adding contacts, downloading apps, or accessing exclusive content.",
+  e.llm_context = "USE: when discussing QR codes in emails, email signatures, email campaigns, or email marketing. TRIGGERS: email qr, email signature, email campaign, email marketing qr, newsletter qr. NOT: websites (web pages), documents (pdfs).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -297,6 +311,7 @@ ON CREATE SET
   e.type = "MEDIUM",
   e.is_pillar = false,
   e.entity_summary = "Presentations are slide-based documents for meetings and conferences.\nQR codes in slides provide quick access to resources, polls,\ndownloads, or follow-up materials during live presentations.",
+  e.llm_context = "USE: when discussing QR codes in presentations, slide decks, PowerPoint, or meeting materials. TRIGGERS: presentation qr, slide qr, powerpoint qr, deck qr, meeting slides, conference presentation. NOT: documents (static), websites (interactive).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -313,6 +328,7 @@ ON CREATE SET
   e.type = "MEDIUM",
   e.is_pillar = false,
   e.entity_summary = "Documents include PDFs, reports, and contracts. QR codes in documents\nlink to related resources, verification systems, or interactive content\nthat complements printed or digital documents.",
+  e.llm_context = "USE: when discussing QR codes in documents, PDFs, reports, contracts, or printed documents. TRIGGERS: document qr, pdf qr, report qr, contract qr, printed document. NOT: presentations (slides), emails (messages).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -329,6 +345,7 @@ ON CREATE SET
   e.type = "MEDIUM",
   e.is_pillar = false,
   e.entity_summary = "Websites display QR codes for cross-device experiences.\nDesktop users can scan to continue on mobile, download apps,\nor save content for offline access.",
+  e.llm_context = "USE: when discussing QR codes displayed on websites, web pages, or online platforms. TRIGGERS: website qr, web page qr, online qr, site qr, desktop to mobile. NOT: emails (messages), presentations (slides).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
