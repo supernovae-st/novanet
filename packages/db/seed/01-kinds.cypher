@@ -1478,35 +1478,35 @@ ON MATCH SET
   k_Project.generation_count = 0,
   k_Project.updated_at = datetime();
 
-MERGE (k_ProjectL10n:Meta:Kind {label: 'ProjectL10n'})
+MERGE (k_ProjectContent:Meta:Kind {label: 'ProjectContent'})
 ON CREATE SET
-  k_ProjectL10n.key = 'project-l10n',
-  k_ProjectL10n.realm = 'tenant',
-  k_ProjectL10n.layer = 'foundation',
-  k_ProjectL10n.trait = 'localized',
-  k_ProjectL10n.display_name = 'ProjectL10n',
-  k_ProjectL10n.llm_context = 'Localized identity and messaging for a Project',
-  k_ProjectL10n.yaml_path = 'node-kinds/tenant/foundation/project-l10n.yaml',
-  k_ProjectL10n.properties = ['display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'what_short', 'what_medium', 'what_long', 'tagline', 'pitch_one_liner', 'pitch_elevator', 'pitch_detailed', 'voice_personality', 'voice_tone', 'voice_do', 'voice_dont', 'cta_primary', 'cta_secondary', 'cta_tertiary', 'meta_description', 'primary_keywords', 'secondary_keywords'],
-  k_ProjectL10n.required_properties = ['display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'what_short', 'what_medium', 'what_long', 'tagline', 'pitch_one_liner', 'pitch_elevator', 'pitch_detailed', 'voice_personality', 'voice_tone', 'voice_do', 'voice_dont', 'cta_primary', 'cta_secondary', 'meta_description'],
-  k_ProjectL10n.schema_hint = 'created_at (req), cta_primary (req), cta_secondary (req), cta_tertiary, description (req), display_name (req), llm_context (req), meta_description (req), pitch_detailed (req), pitch_elevator (req), pitch_one_liner (req), primary_keywords, secondary_keywords, tagline (req), updated_at (req), voice_do (req), voice_dont (req), voice_personality (req), voice_tone (req), what_long (req), what_medium (req), what_short (req)',
-  k_ProjectL10n.context_budget = 'high',
-  k_ProjectL10n.generation_count = 0,
-  k_ProjectL10n.created_at = datetime()
+  k_ProjectContent.key = 'project-content',
+  k_ProjectContent.realm = 'tenant',
+  k_ProjectContent.layer = 'foundation',
+  k_ProjectContent.trait = 'localized',
+  k_ProjectContent.display_name = 'ProjectContent',
+  k_ProjectContent.llm_context = 'Localized identity and messaging for a Project',
+  k_ProjectContent.yaml_path = 'node-kinds/tenant/foundation/project-content.yaml',
+  k_ProjectContent.properties = ['display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'what_short', 'what_medium', 'what_long', 'tagline', 'pitch_one_liner', 'pitch_elevator', 'pitch_detailed', 'voice_personality', 'voice_tone', 'voice_do', 'voice_dont', 'cta_primary', 'cta_secondary', 'cta_tertiary', 'meta_description', 'primary_keywords', 'secondary_keywords'],
+  k_ProjectContent.required_properties = ['display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'what_short', 'what_medium', 'what_long', 'tagline', 'pitch_one_liner', 'pitch_elevator', 'pitch_detailed', 'voice_personality', 'voice_tone', 'voice_do', 'voice_dont', 'cta_primary', 'cta_secondary', 'meta_description'],
+  k_ProjectContent.schema_hint = 'created_at (req), cta_primary (req), cta_secondary (req), cta_tertiary, description (req), display_name (req), llm_context (req), meta_description (req), pitch_detailed (req), pitch_elevator (req), pitch_one_liner (req), primary_keywords, secondary_keywords, tagline (req), updated_at (req), voice_do (req), voice_dont (req), voice_personality (req), voice_tone (req), what_long (req), what_medium (req), what_short (req)',
+  k_ProjectContent.context_budget = 'high',
+  k_ProjectContent.generation_count = 0,
+  k_ProjectContent.created_at = datetime()
 ON MATCH SET
-  k_ProjectL10n.key = 'project-l10n',
-  k_ProjectL10n.realm = 'tenant',
-  k_ProjectL10n.layer = 'foundation',
-  k_ProjectL10n.trait = 'localized',
-  k_ProjectL10n.display_name = 'ProjectL10n',
-  k_ProjectL10n.llm_context = 'Localized identity and messaging for a Project',
-  k_ProjectL10n.yaml_path = 'node-kinds/tenant/foundation/project-l10n.yaml',
-  k_ProjectL10n.properties = ['display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'what_short', 'what_medium', 'what_long', 'tagline', 'pitch_one_liner', 'pitch_elevator', 'pitch_detailed', 'voice_personality', 'voice_tone', 'voice_do', 'voice_dont', 'cta_primary', 'cta_secondary', 'cta_tertiary', 'meta_description', 'primary_keywords', 'secondary_keywords'],
-  k_ProjectL10n.required_properties = ['display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'what_short', 'what_medium', 'what_long', 'tagline', 'pitch_one_liner', 'pitch_elevator', 'pitch_detailed', 'voice_personality', 'voice_tone', 'voice_do', 'voice_dont', 'cta_primary', 'cta_secondary', 'meta_description'],
-  k_ProjectL10n.schema_hint = 'created_at (req), cta_primary (req), cta_secondary (req), cta_tertiary, description (req), display_name (req), llm_context (req), meta_description (req), pitch_detailed (req), pitch_elevator (req), pitch_one_liner (req), primary_keywords, secondary_keywords, tagline (req), updated_at (req), voice_do (req), voice_dont (req), voice_personality (req), voice_tone (req), what_long (req), what_medium (req), what_short (req)',
-  k_ProjectL10n.context_budget = 'high',
-  k_ProjectL10n.generation_count = 0,
-  k_ProjectL10n.updated_at = datetime();
+  k_ProjectContent.key = 'project-content',
+  k_ProjectContent.realm = 'tenant',
+  k_ProjectContent.layer = 'foundation',
+  k_ProjectContent.trait = 'localized',
+  k_ProjectContent.display_name = 'ProjectContent',
+  k_ProjectContent.llm_context = 'Localized identity and messaging for a Project',
+  k_ProjectContent.yaml_path = 'node-kinds/tenant/foundation/project-content.yaml',
+  k_ProjectContent.properties = ['display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'what_short', 'what_medium', 'what_long', 'tagline', 'pitch_one_liner', 'pitch_elevator', 'pitch_detailed', 'voice_personality', 'voice_tone', 'voice_do', 'voice_dont', 'cta_primary', 'cta_secondary', 'cta_tertiary', 'meta_description', 'primary_keywords', 'secondary_keywords'],
+  k_ProjectContent.required_properties = ['display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'what_short', 'what_medium', 'what_long', 'tagline', 'pitch_one_liner', 'pitch_elevator', 'pitch_detailed', 'voice_personality', 'voice_tone', 'voice_do', 'voice_dont', 'cta_primary', 'cta_secondary', 'meta_description'],
+  k_ProjectContent.schema_hint = 'created_at (req), cta_primary (req), cta_secondary (req), cta_tertiary, description (req), display_name (req), llm_context (req), meta_description (req), pitch_detailed (req), pitch_elevator (req), pitch_one_liner (req), primary_keywords, secondary_keywords, tagline (req), updated_at (req), voice_do (req), voice_dont (req), voice_personality (req), voice_tone (req), what_long (req), what_medium (req), what_short (req)',
+  k_ProjectContent.context_budget = 'high',
+  k_ProjectContent.generation_count = 0,
+  k_ProjectContent.updated_at = datetime();
 
 MERGE (k_PromptArtifact:Meta:Kind {label: 'PromptArtifact'})
 ON CREATE SET
@@ -2079,7 +2079,7 @@ MERGE (l)-[:HAS_KIND]->(k);
 MATCH (l:Layer {key: 'foundation'}), (k:Kind {label: 'Project'})
 MERGE (l)-[:HAS_KIND]->(k);
 
-MATCH (l:Layer {key: 'foundation'}), (k:Kind {label: 'ProjectL10n'})
+MATCH (l:Layer {key: 'foundation'}), (k:Kind {label: 'ProjectContent'})
 MERGE (l)-[:HAS_KIND]->(k);
 
 MATCH (l:Layer {key: 'instruction'}), (k:Kind {label: 'PromptArtifact'})
@@ -2275,7 +2275,7 @@ MERGE (k)-[:IN_REALM]->(r);
 MATCH (k:Kind {label: 'Project'}), (r:Realm {key: 'tenant'})
 MERGE (k)-[:IN_REALM]->(r);
 
-MATCH (k:Kind {label: 'ProjectL10n'}), (r:Realm {key: 'tenant'})
+MATCH (k:Kind {label: 'ProjectContent'}), (r:Realm {key: 'tenant'})
 MERGE (k)-[:IN_REALM]->(r);
 
 MATCH (k:Kind {label: 'PromptArtifact'}), (r:Realm {key: 'tenant'})
@@ -2471,7 +2471,7 @@ MERGE (k)-[:IN_LAYER]->(l);
 MATCH (k:Kind {label: 'Project'}), (l:Layer {key: 'foundation'})
 MERGE (k)-[:IN_LAYER]->(l);
 
-MATCH (k:Kind {label: 'ProjectL10n'}), (l:Layer {key: 'foundation'})
+MATCH (k:Kind {label: 'ProjectContent'}), (l:Layer {key: 'foundation'})
 MERGE (k)-[:IN_LAYER]->(l);
 
 MATCH (k:Kind {label: 'PromptArtifact'}), (l:Layer {key: 'instruction'})
@@ -2667,7 +2667,7 @@ MERGE (k)-[:EXHIBITS]->(t);
 MATCH (k:Kind {label: 'Project'}), (t:Trait {key: 'invariant'})
 MERGE (k)-[:EXHIBITS]->(t);
 
-MATCH (k:Kind {label: 'ProjectL10n'}), (t:Trait {key: 'localized'})
+MATCH (k:Kind {label: 'ProjectContent'}), (t:Trait {key: 'localized'})
 MERGE (k)-[:EXHIBITS]->(t);
 
 MATCH (k:Kind {label: 'PromptArtifact'}), (t:Trait {key: 'derived'})

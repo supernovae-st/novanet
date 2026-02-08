@@ -56,7 +56,7 @@ docs:
     This is where content generation happens.
 
     **14 nodes organized by category:**
-    - **Foundation (3)**: Project, BrandIdentity, ProjectL10n
+    - **Foundation (3)**: Project, BrandIdentity, ProjectContent
     - **Structure (2)**: Page, Block
     - **Semantic (2)**: Entity, EntityContent
     - **Instruction (5)**: PageType, PagePrompt, BlockType, BlockPrompt, BlockRules
@@ -68,7 +68,7 @@ docs:
 
   layers:
     - name: Foundation
-      nodes: [Project, BrandIdentity, ProjectL10n]
+      nodes: [Project, BrandIdentity, ProjectContent]
       color: blue
       description: Project root, branding, and localized metadata
 

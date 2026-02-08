@@ -65,7 +65,7 @@ export const NODE_ICONS: Record<NodeType, string> = {
   PopulationCluster: '👥',
   PopulationSubCluster: '🧑',
   Project: '🔷',
-  ProjectL10n: '🟢',
+  ProjectContent: '🟢',
   PromptArtifact: '📋',
   SEOComparison: '⚖️',
   SEOKeyword: '🔍',

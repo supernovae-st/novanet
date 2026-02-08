@@ -31,7 +31,7 @@
 #   │                                                                             │
 #   │  ┌───────────────────────────────────────────────────────────────────────┐  │
 #   │  │  📦 PROJECT (21 nodes) - Per-project instances                        │  │
-#   │  │  └─ foundation/  🏢 Project, BrandIdentity, ProjectL10n               │  │
+#   │  │  └─ foundation/  🏢 Project, BrandIdentity, ProjectContent               │  │
 #   │  │  └─ structure/   🔧 Page, Block, ContentSlot                          │  │
 #   │  │  └─ semantic/    💡 AudiencePersona, ChannelSurface                   │  │
 #   │  │  └─ instruction/ 📝 PageType, PagePrompt, BlockPrompt, BlockType,     │  │
@@ -52,7 +52,7 @@
 #             │                                  │
 #             ├─[:HAS_BRAND_IDENTITY]─> BrandIdentity  └─[:HAS_SEO_KEYWORDS]──> SEOKeyword
 #             │
-#             ├─[:HAS_L10N]─> ProjectL10n ──:FOR_LOCALE──> Locale
+#             ├─[:HAS_L10N]─> ProjectContent ──:FOR_LOCALE──> Locale
 #             │
 #             └─[:HAS_PAGE]─> Page ──┬─[:HAS_BLOCK {position}]─> Block ──:OF_TYPE──> BlockType
 #                               │    │                            │
@@ -118,7 +118,7 @@
 # ═══════════════════════════════════════════════════════════════════════════════
 #
 #   *L10n suffix  → ALL localized content (human OR LLM generated)
-#   :HAS_L10N     → human-curated content (ConceptL10n, ProjectL10n)
+#   :HAS_L10N     → human-curated content (ConceptL10n, ProjectContent)
 #   :HAS_OUTPUT   → LLM-generated content (PageGenerated, BlockGenerated)
 #   *Metrics      → Time-series observations (SEOKeywordMetrics)
 #   Locale*       → Locale Knowledge nodes (LocaleVoice, LocaleCulture, etc.)
@@ -233,7 +233,7 @@
 #   - NEW: models/schema/nodes.schema.json for JSON Schema validation
 #
 # Functional Role Sub-folders (within project/):
-#   - foundation/  🏢 Project, BrandIdentity, ProjectL10n
+#   - foundation/  🏢 Project, BrandIdentity, ProjectContent
 #   - structure/   🔧 Page, Block
 #   - semantic/    💡 Concept, ConceptL10n
 #   - instruction/ 📝 PagePrompt, BlockPrompt, BlockType, BlockRules
@@ -378,7 +378,7 @@ nodes_by_trait:
     - AudiencePersona
     - ChannelSurface
   localized:
-    - ProjectL10n
+    - ProjectContent
     - EntityContent            # v10.3 - replaces ConceptL10n (GLOBAL)
     - PageGenerated
     - BlockGenerated
@@ -424,7 +424,7 @@ nodes_by_trait:
 #   🔵 INVARIANT:  15 (Project, BrandIdentity, Entity, Page, Block, PageType, BlockType,
 #                      PagePrompt, BlockPrompt, BlockRules, BlockInstruction, Locale,
 #                      ContentSlot, AudiencePersona, ChannelSurface)
-#   🟢 LOCALIZED:   5 (ProjectL10n, EntityContent, PageGenerated, BlockGenerated, SEOKeyword)
+#   🟢 LOCALIZED:   5 (ProjectContent, EntityContent, PageGenerated, BlockGenerated, SEOKeyword)
 #   🟣 KNOWLEDGE:  16 (Containers: Formatting, Slugification, Adaptation, Style, TermSet,
 #                      ExpressionSet, PatternSet, CultureSet, TabooSet, AudienceSet;
 #                      Atoms: Term, Expression, Pattern, CultureRef, Taboo, AudienceTrait)

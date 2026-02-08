@@ -107,7 +107,7 @@ node_realms:
         emoji: "🏛️"
         color: "#3b82f6"
         llm_context: |
-          Project identity. Project, Brand, ProjectL10n. Each Organization
+          Project identity. Project, Brand, ProjectContent. Each Organization
           has 1 company project (branding) + N product projects. Core
           identity that anchors ALL content generation for each project.
 

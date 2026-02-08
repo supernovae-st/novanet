@@ -8,7 +8,7 @@ The Project scope contains all nodes specific to a single project.
 This is where content generation happens.
 
 **14 nodes organized by category:**
-- **Foundation (3)**: Project, BrandIdentity, ProjectL10n
+- **Foundation (3)**: Project, BrandIdentity, ProjectContent
 - **Structure (2)**: Page, Block
 - **Semantic (2)**: Entity, EntityContent
 - **Instruction (5)**: PageType, PagePrompt, BlockType, BlockPrompt, BlockRules
@@ -45,7 +45,7 @@ flowchart TB
   subgraph FOUNDATION["Foundation"]
     Project["🔵 Project"]
     BrandIdentity["🔵 BrandIdentity"]
-    ProjectL10n["🟢 ProjectL10n"]
+    ProjectContent["🟢 ProjectContent"]
   end
 
   subgraph STRUCTURE["Structure"]
@@ -89,7 +89,7 @@ flowchart TB
   Project -->|DEFAULT_LOCALE| Locale
   Project -->|HAS_BRAND_IDENTITY| BrandIdentity
   Project -.->|HAS_CONTENT| EntityContent
-  Project -.->|HAS_CONTENT| ProjectL10n
+  Project -.->|HAS_CONTENT| ProjectContent
   Project -->|HAS_PAGE| Page
   Project -->|SUPPORTS_LOCALE| Locale
 
@@ -110,7 +110,7 @@ flowchart TB
   class PagePrompt invariant
   class PageType invariant
   class Project invariant
-  class ProjectL10n localized
+  class ProjectContent localized
 ```
 
 ## Notes

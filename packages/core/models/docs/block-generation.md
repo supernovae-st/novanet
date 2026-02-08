@@ -55,7 +55,7 @@ flowchart TB
   PageGenerated["⚪ PageGenerated"]
   PagePrompt["🔵 PagePrompt"]
   PageType["🔵 PageType"]
-  ProjectL10n["🟢 ProjectL10n"]
+  ProjectContent["🟢 ProjectContent"]
 
   %% Relationships (styled by arc family)
   Block -.->|HAS_GENERATED| BlockGenerated
@@ -67,7 +67,7 @@ flowchart TB
   Block -.->|USES_ENTITY| Entity
   BlockType -->|HAS_RULES| BlockRules
   Entity -.->|HAS_CONTENT| EntityContent
-  Entity -.->|HAS_CONTENT| ProjectL10n
+  Entity -.->|HAS_CONTENT| ProjectContent
   Entity -.->|SEMANTIC_LINK| Entity
 
   %% Arc colors by family
@@ -86,7 +86,7 @@ flowchart TB
   class PageGenerated derived
   class PagePrompt invariant
   class PageType invariant
-  class ProjectL10n localized
+  class ProjectContent localized
 ```
 
 ## Notes

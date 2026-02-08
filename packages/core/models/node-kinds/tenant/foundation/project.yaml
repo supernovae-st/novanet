@@ -104,7 +104,7 @@ node:
       description: "Organization that owns this project (v10.5)"
 
     HAS_CONTENT:
-      to: ProjectL10n
+      to: ProjectContent
       cardinality: "1:N"
       description: "Localized project identity and messaging"
 

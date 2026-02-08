@@ -159,8 +159,8 @@ MATCH (n:Project)
 MATCH (k:Kind {label: 'Project'})
 MERGE (n)-[:OF_KIND]->(k);
 
-MATCH (n:ProjectL10n)
-MATCH (k:Kind {label: 'ProjectL10n'})
+MATCH (n:ProjectContent)
+MATCH (k:Kind {label: 'ProjectContent'})
 MERGE (n)-[:OF_KIND]->(k);
 
 // Tenant > Instruction (7 types)

@@ -131,13 +131,13 @@ ON CREATE SET
   l_foundation.display_name = 'Foundation',
   l_foundation.emoji = '🏛️',
   l_foundation.color = '#3b82f6',
-  l_foundation.llm_context = 'Project identity. Project, Brand, ProjectL10n. Each Organization has 1 company project (branding) + N product projects. Core identity that anchors ALL content generation for each project.',
+  l_foundation.llm_context = 'Project identity. Project, Brand, ProjectContent. Each Organization has 1 company project (branding) + N product projects. Core identity that anchors ALL content generation for each project.',
   l_foundation.created_at = datetime()
 ON MATCH SET
   l_foundation.display_name = 'Foundation',
   l_foundation.emoji = '🏛️',
   l_foundation.color = '#3b82f6',
-  l_foundation.llm_context = 'Project identity. Project, Brand, ProjectL10n. Each Organization has 1 company project (branding) + N product projects. Core identity that anchors ALL content generation for each project.',
+  l_foundation.llm_context = 'Project identity. Project, Brand, ProjectContent. Each Organization has 1 company project (branding) + N product projects. Core identity that anchors ALL content generation for each project.',
   l_foundation.updated_at = datetime();
 
 MATCH (r:Realm {key: 'tenant'}), (l:Layer {key: 'foundation'})
