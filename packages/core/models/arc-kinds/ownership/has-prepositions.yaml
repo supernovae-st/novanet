@@ -6,7 +6,7 @@
 #        - Each preposition indicates a use case (X for Y)
 
 arc:
-  type: HAS_PREPOSITIONS
+  name: HAS_PREPOSITIONS
   family: ownership
   scope: intra_realm
   source: SEOKeyword

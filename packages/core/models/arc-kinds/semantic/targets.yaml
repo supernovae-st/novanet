@@ -7,7 +7,7 @@
 #        - Must respect locale alignment (EntityContent.locale == SEOKeyword.locale)
 
 arc:
-  type: TARGETS
+  name: TARGETS
   family: semantic
   scope: cross_realm
   temperature_threshold: 0.6

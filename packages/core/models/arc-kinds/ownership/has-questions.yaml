@@ -6,7 +6,7 @@
 #        - Each question has its own volume/difficulty
 
 arc:
-  type: HAS_QUESTIONS
+  name: HAS_QUESTIONS
   family: ownership
   scope: intra_realm
   source: SEOKeyword

@@ -1,0 +1,15 @@
+# arc-kinds/ownership/contains-expression.yaml
+# CONTAINS_EXPRESSION - ExpressionSet contains Expression atoms (v10.9.0)
+#
+# v10.9.0: Split from generic CONTAINS for semantic correctness
+#          Each container type can only contain its specific atom type
+
+arc:
+  name: CONTAINS_EXPRESSION
+  family: ownership
+  scope: intra_realm
+  source: ExpressionSet
+  target: Expression
+  cardinality: one_to_many
+  llm_context: ExpressionSet contains Expression atoms. Use to traverse from set to individual expressions.
+  cypher_pattern: "(ExpressionSet)-[:CONTAINS_EXPRESSION]->(Expression)"

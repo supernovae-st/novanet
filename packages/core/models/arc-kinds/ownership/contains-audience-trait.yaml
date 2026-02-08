@@ -1,0 +1,15 @@
+# arc-kinds/ownership/contains-audience-trait.yaml
+# CONTAINS_AUDIENCE_TRAIT - AudienceSet contains AudienceTrait atoms (v10.9.0)
+#
+# v10.9.0: Split from generic CONTAINS for semantic correctness
+#          Each container type can only contain its specific atom type
+
+arc:
+  name: CONTAINS_AUDIENCE_TRAIT
+  family: ownership
+  scope: intra_realm
+  source: AudienceSet
+  target: AudienceTrait
+  cardinality: one_to_many
+  llm_context: AudienceSet contains AudienceTrait atoms. Use to traverse from set to individual audience traits.
+  cypher_pattern: "(AudienceSet)-[:CONTAINS_AUDIENCE_TRAIT]->(AudienceTrait)"

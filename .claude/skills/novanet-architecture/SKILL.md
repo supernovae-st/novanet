@@ -89,7 +89,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
   │                                        config, foundation, structure, semantic,              │
   │                                        instruction, output (tenant)                          │
   │   Axis 3 — HOW?     :Trait       (5)  invariant / localized / knowledge / derived / job      │
-  │   Axis 4 — LINKS?   :ArcKind   (116)  grouped into 5 ArcFamilies                            │
+  │   Axis 4 — LINKS?   :ArcKind   (121)  grouped into 5 ArcFamilies                            │
   │                                                                                              │
   └──────────────────────────────────────────────────────────────────────────────────────────────┘
 
@@ -468,7 +468,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 | Metric | Value |
 |--------|-------|
 | Kind (node types) | 64 |
-| ArcKind (arcs) | 116 |
+| ArcKind (arcs) | 121 |
 | Realms | 2 (global, tenant) |
 | Layers | 9 (3 global, 6 tenant) |
 | Traits | 5 |

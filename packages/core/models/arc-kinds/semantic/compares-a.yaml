@@ -6,7 +6,7 @@
 #        - Always used with COMPARES_B to complete the pair
 
 arc:
-  type: COMPARES_A
+  name: COMPARES_A
   family: semantic
   scope: cross_realm
   temperature_threshold: 0.5
