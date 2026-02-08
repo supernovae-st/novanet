@@ -2475,6 +2475,7 @@ fn render_graph_panel(f: &mut Frame, area: Rect, app: &App) {
 }
 
 /// Render arcs grouped by family (instead of by direction).
+/// Optimized to use references instead of cloning strings.
 fn render_arcs_by_family(
     lines: &mut Vec<Line>,
     arcs: &super::data::KindArcsData,
@@ -2483,22 +2484,20 @@ fn render_arcs_by_family(
 ) {
     use std::collections::BTreeMap;
 
-    // Collect all arcs grouped by family (clone data to avoid lifetime issues)
-    let mut by_family: BTreeMap<String, Vec<(bool, String, String)>> = BTreeMap::new();
+    // Collect all arcs grouped by family using references (no cloning)
+    let mut by_family: BTreeMap<&str, Vec<(bool, &str, &str)>> = BTreeMap::new();
 
     for arc in &arcs.incoming {
-        by_family.entry(arc.family.clone()).or_default().push((
-            false,
-            arc.arc_key.clone(),
-            arc.other_kind.clone(),
-        )); // false = incoming
+        by_family
+            .entry(&arc.family)
+            .or_default()
+            .push((false, &arc.arc_key, &arc.other_kind)); // false = incoming
     }
     for arc in &arcs.outgoing {
-        by_family.entry(arc.family.clone()).or_default().push((
-            true,
-            arc.arc_key.clone(),
-            arc.other_kind.clone(),
-        )); // true = outgoing
+        by_family
+            .entry(&arc.family)
+            .or_default()
+            .push((true, &arc.arc_key, &arc.other_kind)); // true = outgoing
     }
 
     if by_family.is_empty() {
@@ -2509,7 +2508,7 @@ fn render_arcs_by_family(
         return;
     }
 
-    let kind_label = arcs.kind_label.clone();
+    let kind_label = &arcs.kind_label;
 
     // Render each family group
     for (family, family_arcs) in &by_family {
@@ -2536,37 +2535,37 @@ fn render_arcs_by_family(
             *dim,
         )));
 
-        // Render arcs in this family
+        // Render arcs in this family (convert &str to owned String only for Span)
         for (is_outgoing, arc_key, other_kind) in family_arcs {
             if *is_outgoing {
                 // Outgoing: Kind ──[ARC]──▶ Target
                 lines.push(Line::from(vec![
                     Span::styled("    ", *dim),
-                    Span::styled(kind_label.clone(), STYLE_PRIMARY),
+                    Span::styled(kind_label.to_string(), STYLE_PRIMARY),
                     Span::styled(" ──[", *dim),
                     Span::styled(
-                        arc_key.clone(),
+                        (*arc_key).to_string(),
                         Style::default()
                             .fg(family_color)
                             .add_modifier(Modifier::BOLD),
                     ),
                     Span::styled("]──▶ ", *dim),
-                    Span::styled(other_kind.clone(), STYLE_SUCCESS),
+                    Span::styled((*other_kind).to_string(), STYLE_SUCCESS),
                 ]));
             } else {
                 // Incoming: Source ──[ARC]──▶ Kind
                 lines.push(Line::from(vec![
                     Span::styled("    ", *dim),
-                    Span::styled(other_kind.clone(), STYLE_SUCCESS),
+                    Span::styled((*other_kind).to_string(), STYLE_SUCCESS),
                     Span::styled(" ──[", *dim),
                     Span::styled(
-                        arc_key.clone(),
+                        (*arc_key).to_string(),
                         Style::default()
                             .fg(family_color)
                             .add_modifier(Modifier::BOLD),
                     ),
                     Span::styled("]──▶ ", *dim),
-                    Span::styled(kind_label.clone(), STYLE_PRIMARY),
+                    Span::styled(kind_label.to_string(), STYLE_PRIMARY),
                 ]));
             }
         }

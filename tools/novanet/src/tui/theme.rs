@@ -8,7 +8,7 @@
 //! - Icons: packages/core/models/visual-encoding.yaml (icons section)
 
 use ratatui::style::{Color, Modifier, Style};
-use std::collections::HashMap;
+use rustc_hash::FxHashMap;
 
 // =============================================================================
 // COLOR MODE DETECTION
@@ -339,16 +339,17 @@ pub mod arc_family {
 
 /// Terminal icons loaded from visual-encoding.yaml.
 /// Provides Unicode symbols for TUI with fallback defaults.
+/// Uses FxHashMap for ~30% faster string key lookups.
 #[derive(Debug, Clone, Default)]
 pub struct Icons {
-    pub realms: HashMap<String, String>,
-    pub layers: HashMap<String, String>,
-    pub traits: HashMap<String, String>,
-    pub arc_families: HashMap<String, String>,
-    pub states: HashMap<String, String>,
-    pub navigation: HashMap<String, String>,
-    pub quality: HashMap<String, String>,
-    pub modes: HashMap<String, String>,
+    pub realms: FxHashMap<String, String>,
+    pub layers: FxHashMap<String, String>,
+    pub traits: FxHashMap<String, String>,
+    pub arc_families: FxHashMap<String, String>,
+    pub states: FxHashMap<String, String>,
+    pub navigation: FxHashMap<String, String>,
+    pub quality: FxHashMap<String, String>,
+    pub modes: FxHashMap<String, String>,
 }
 
 impl Icons {
@@ -385,11 +386,11 @@ impl Icons {
         icons
     }
 
-    /// Parse a single category from YAML into a HashMap.
+    /// Parse a single category from YAML into a FxHashMap.
     fn parse_category(
         icons_section: &serde_yaml::Value,
         category: &str,
-        map: &mut HashMap<String, String>,
+        map: &mut FxHashMap<String, String>,
     ) {
         if let Some(cat) = icons_section.get(category) {
             if let Some(obj) = cat.as_mapping() {
