@@ -7,7 +7,7 @@
 //! 1. INVARIANT - Structural templates (Page, Entity, Block)
 //! 2. CONTEXT_LOAD - Knowledge atoms loaded into LLM context
 //! 3. LLM_GENERATE - LLM generation process
-//! 4. LOCALIZED - Output generated content (PageL10n, EntityL10n, BlockL10n)
+//! 4. LOCALIZED - Output generated content (PageGenerated, EntityContent, BlockGenerated)
 //! 5. COMPLETE - Generation complete
 //!
 //! Animation:

@@ -1888,7 +1888,7 @@ impl App {
                 // Map Kind to appropriate view
                 match kind.key.as_str() {
                     "Page" | "Block" | "BlockType" | "PageType" => AtlasView::PageComposition,
-                    "Entity" | "EntityL10n" => AtlasView::GenerationPipeline,
+                    "Entity" | "EntityContent" => AtlasView::GenerationPipeline,
                     "SEOKeyword" | "SEOKeywordMetrics" => AtlasView::SpreadingActivation,
                     k if k.contains("Set") || k.contains("Term") || k.contains("Expression") => {
                         AtlasView::KnowledgeAtoms
@@ -1910,7 +1910,7 @@ impl App {
                 // Map Instance's Kind to view
                 match kind.key.as_str() {
                     "Page" | "Block" => AtlasView::PageComposition,
-                    "Entity" | "EntityL10n" => AtlasView::GenerationPipeline,
+                    "Entity" | "EntityContent" => AtlasView::GenerationPipeline,
                     _ => AtlasView::RealmMap,
                 }
             }
