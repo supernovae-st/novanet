@@ -13,7 +13,7 @@ include:
   # Project foundation
   - relation: HAS_BRAND_IDENTITY
     direction: outgoing
-  - relation: HAS_L10N
+  - relation: HAS_CONTENT
     direction: outgoing
   - relation: SUPPORTS_LOCALE
     direction: outgoing
@@ -28,7 +28,7 @@ include:
         direction: outgoing
       - relation: HAS_PROMPT
         direction: outgoing
-      - relation: HAS_OUTPUT
+      - relation: HAS_GENERATED
         direction: outgoing
       - relation: LINKS_TO
         direction: outgoing

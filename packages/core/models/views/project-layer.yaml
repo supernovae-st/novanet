@@ -12,7 +12,7 @@ include:
   # Foundation
   - relation: HAS_BRAND_IDENTITY
     direction: outgoing
-  - relation: HAS_L10N
+  - relation: HAS_CONTENT
     direction: outgoing
   - relation: SUPPORTS_LOCALE
     direction: outgoing
@@ -27,7 +27,7 @@ include:
         direction: outgoing
       - relation: HAS_PROMPT
         direction: outgoing
-      - relation: HAS_OUTPUT
+      - relation: HAS_GENERATED
         direction: outgoing
       - relation: HAS_BLOCK
         direction: outgoing
@@ -36,14 +36,14 @@ include:
             direction: outgoing
           - relation: HAS_PROMPT
             direction: outgoing
-          - relation: HAS_OUTPUT
+          - relation: HAS_GENERATED
             direction: outgoing
 
   # Semantic
   - relation: USES_ENTITY
     direction: outgoing
     include:
-      - relation: HAS_L10N
+      - relation: HAS_CONTENT
         direction: outgoing
       - relation: SEMANTIC_LINK
         direction: outgoing
@@ -134,7 +134,7 @@ docs:
         MATCH (page)-[:HAS_PROMPT]->(pp:PagePrompt)
         OPTIONAL MATCH (page)-[:HAS_BLOCK]->(b:Block)
         OPTIONAL MATCH (b)-[:USES_ENTITY]->(c:Entity)
-        OPTIONAL MATCH (c)-[:HAS_L10N]->(cl:EntityContent)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+        OPTIONAL MATCH (c)-[:HAS_CONTENT]->(cl:EntityContent)-[:FOR_LOCALE]->(l:Locale {key: $locale})
         RETURN page.key AS page,
                pp.instructions AS instructions,
                collect(DISTINCT b.key) AS blocks,

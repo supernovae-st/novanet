@@ -1,13 +1,13 @@
 // ===================================================================
-// EntityL10n fr-FR for QR Code AI (281 entities)
+// EntityContent fr-FR for QR Code AI (281 entities)
 // Generated: 2026-02-08
 // ===================================================================
 
 // -------------------------------------------------------------------
-// Create EntityL10n nodes
+// Create EntityContent nodes
 // -------------------------------------------------------------------
 
-MERGE (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code',
     el.display_name = 'QR Code',
     el.description = 'Code matriciel 2D permettant d\'encoder des données accessibles par scan mobile.',
@@ -18,7 +18,7 @@ SET el.slug = 'qr-code',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'smart-link', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'smart-link', locale_key: 'fr-FR'})
 SET el.slug = 'lien-intelligent',
     el.display_name = 'Lien Intelligent',
     el.description = 'URL intelligente avec règles de routage pour rediriger selon l\'appareil ou la localisation.',
@@ -29,7 +29,7 @@ SET el.slug = 'lien-intelligent',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'barcode', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'barcode', locale_key: 'fr-FR'})
 SET el.slug = 'code-barres',
     el.display_name = 'Code-barres',
     el.description = 'Code-barres linéaire 1D pour l\'identification des produits (EAN, UPC, Code 128).',
@@ -40,7 +40,7 @@ SET el.slug = 'code-barres',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'landing-page', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'landing-page', locale_key: 'fr-FR'})
 SET el.slug = 'page-destination',
     el.display_name = 'Page de Destination',
     el.description = 'Page web de destination créée via un constructeur no-code intégré.',
@@ -51,7 +51,7 @@ SET el.slug = 'page-destination',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'short-link', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'short-link', locale_key: 'fr-FR'})
 SET el.slug = 'lien-court',
     el.display_name = 'Lien Court',
     el.description = 'URL raccourcie avec suivi des clics et statistiques de performance.',
@@ -62,7 +62,7 @@ SET el.slug = 'lien-court',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-style', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-style', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-style',
     el.display_name = 'QR Code Style',
     el.description = 'Catégorie de style visuel pour personnaliser l\'apparence des QR Codes.',
@@ -73,7 +73,7 @@ SET el.slug = 'qr-code-style',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-content', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-content', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-contenu',
     el.display_name = 'QR Code Contenu',
     el.description = 'Catégorie de contenu définissant le type de données encodées dans un QR Code.',
@@ -84,7 +84,7 @@ SET el.slug = 'qr-code-contenu',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-frame', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-frame', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-cadre',
     el.display_name = 'QR Code Cadre',
     el.description = 'Modèle de placement physique optimisé pour l\'impression des QR Codes.',
@@ -95,7 +95,7 @@ SET el.slug = 'qr-code-cadre',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'barcode-format', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'barcode-format', locale_key: 'fr-FR'})
 SET el.slug = 'code-barres-format',
     el.display_name = 'Code-barres Format',
     el.description = 'Format technique de code-barres définissant la structure d\'encodage.',
@@ -106,7 +106,7 @@ SET el.slug = 'code-barres-format',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'landing-page-type', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'landing-page-type', locale_key: 'fr-FR'})
 SET el.slug = 'page-destination-type',
     el.display_name = 'Page de Destination Type',
     el.description = 'Type de page de destination adapté à un cas d\'usage spécifique.',
@@ -117,7 +117,7 @@ SET el.slug = 'page-destination-type',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'custom-qr-code', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'custom-qr-code', locale_key: 'fr-FR'})
 SET el.slug = 'personnalise-qr-code',
     el.display_name = 'QR Code Personnalisé',
     el.description = 'QR Code entièrement personnalisable avec couleurs, formes et logo.',
@@ -128,7 +128,7 @@ SET el.slug = 'personnalise-qr-code',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-image', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-image', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-image',
     el.display_name = 'QR Code avec Image',
     el.description = 'QR Code avec image ou photo en arrière-plan.',
@@ -139,7 +139,7 @@ SET el.slug = 'qr-code-image',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-art', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-art', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-art',
     el.display_name = 'QR Code Art',
     el.description = 'QR Code artistique généré par intelligence artificielle.',
@@ -150,7 +150,7 @@ SET el.slug = 'qr-code-art',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-photo', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-photo', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-photo',
     el.display_name = 'QR Code Photo',
     el.description = 'QR Code intégrant une photographie en fond.',
@@ -161,7 +161,7 @@ SET el.slug = 'qr-code-photo',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-with-logo', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-with-logo', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-avec-logo',
     el.display_name = 'QR Code avec Logo',
     el.description = 'QR Code affichant un logo au centre pour renforcer l\'identité de marque.',
@@ -172,7 +172,7 @@ SET el.slug = 'qr-code-avec-logo',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-with-text', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-with-text', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-avec-texte',
     el.display_name = 'QR Code avec Textee',
     el.description = 'QR Code accompagné d\'un texte d\'appel à l\'action.',
@@ -183,7 +183,7 @@ SET el.slug = 'qr-code-avec-texte',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-color', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-color', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-color',
     el.display_name = 'QR Code Couleurs',
     el.description = 'Personnalisation des couleurs de premier plan et d\'arrière-plan du QR Code.',
@@ -194,7 +194,7 @@ SET el.slug = 'qr-code-color',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-shapes', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-shapes', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-formes',
     el.display_name = 'QR Code Formes',
     el.description = 'Personnalisation des formes des modules et des yeux du QR Code.',
@@ -205,7 +205,7 @@ SET el.slug = 'qr-code-formes',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-transparent-background', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-transparent-background', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-fond-transparent',
     el.display_name = 'Fond Transparent',
     el.description = 'QR Code avec fond transparent pour superposition sur d\'autres visuels.',
@@ -216,7 +216,7 @@ SET el.slug = 'qr-code-fond-transparent',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-background', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-background', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-background',
     el.display_name = 'QR Code Arrière-plan',
     el.description = 'Options de personnalisation de l\'arrière-plan des QR Codes.',
@@ -227,7 +227,7 @@ SET el.slug = 'qr-code-background',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-background-color', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-background-color', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-couleur-fond',
     el.display_name = 'Couleur de Fond',
     el.description = 'Couleur d\'arrière-plan unie pour les QR Codes.',
@@ -238,7 +238,7 @@ SET el.slug = 'qr-code-couleur-fond',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-background-gradient', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-background-gradient', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-fond-degrade',
     el.display_name = 'Fond en Dégradé',
     el.description = 'Dégradé de couleurs en arrière-plan des QR Codes.',
@@ -249,7 +249,7 @@ SET el.slug = 'qr-code-fond-degrade',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-background-image', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-background-image', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-image-fond',
     el.display_name = 'Image de Fond',
     el.description = 'Image ou motif en arrière-plan des QR Codes.',
@@ -260,7 +260,7 @@ SET el.slug = 'qr-code-image-fond',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'dynamic-qr-code', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'dynamic-qr-code', locale_key: 'fr-FR'})
 SET el.slug = 'dynamique-qr-code',
     el.display_name = 'QR Code Dynamique',
     el.description = 'QR Code modifiable après impression dont la destination peut être mise à jour sans régénérer le code.',
@@ -271,7 +271,7 @@ SET el.slug = 'dynamique-qr-code',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'static-qr-code', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'static-qr-code', locale_key: 'fr-FR'})
 SET el.slug = 'statique-qr-code',
     el.display_name = 'QR Code Statique',
     el.description = 'QR Code fixe avec données encodées directement, gratuit et permanent.',
@@ -282,7 +282,7 @@ SET el.slug = 'statique-qr-code',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-light-mode', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-light-mode', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-light-mode',
     el.display_name = 'Light Mode',
     el.description = 'La Light Mode pour vos projets QR Code.',
@@ -293,7 +293,7 @@ SET el.slug = 'qr-code-light-mode',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-dark-mode', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-dark-mode', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-dark-mode',
     el.display_name = 'Dark Mode',
     el.description = 'La Dark Mode pour vos projets QR Code.',
@@ -304,7 +304,7 @@ SET el.slug = 'qr-code-dark-mode',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-carte-visite',
     el.display_name = 'Carte de Visite QR',
     el.description = 'La Carte de Visite QR pour vos projets QR Code.',
@@ -315,7 +315,7 @@ SET el.slug = 'qr-code-carte-visite',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-email-signature', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-email-signature', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-email-signature',
     el.display_name = 'Email Signature QR',
     el.description = 'L\'Email Signature QR pour vos projets QR Code.',
@@ -326,7 +326,7 @@ SET el.slug = 'qr-code-email-signature',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-flyer', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-flyer', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-flyer',
     el.display_name = 'Flyer QR',
     el.description = 'Le Flyer QR pour vos projets QR Code.',
@@ -337,7 +337,7 @@ SET el.slug = 'qr-code-flyer',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-poster', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-poster', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-poster',
     el.display_name = 'Affiche QR',
     el.description = 'L\'Affiche QR pour vos projets QR Code.',
@@ -348,7 +348,7 @@ SET el.slug = 'qr-code-poster',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-table-tent', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-table-tent', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-table-tent',
     el.display_name = 'Table Tent QR',
     el.description = 'La Table Tent QR pour vos projets QR Code.',
@@ -359,7 +359,7 @@ SET el.slug = 'qr-code-table-tent',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-packaging-label', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-packaging-label', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-packaging-label',
     el.display_name = 'Emballage Label QR',
     el.description = 'L\'Emballage Label QR pour vos projets QR Code.',
@@ -370,7 +370,7 @@ SET el.slug = 'qr-code-packaging-label',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'link-in-bio', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'link-in-bio', locale_key: 'fr-FR'})
 SET el.slug = 'lien-en-bio',
     el.display_name = 'Lien en Bio',
     el.description = 'Le Lien en Bio pour vos projets QR Code.',
@@ -381,7 +381,7 @@ SET el.slug = 'lien-en-bio',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'menu-restaurant', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'menu-restaurant', locale_key: 'fr-FR'})
 SET el.slug = 'menu-restaurant',
     el.display_name = 'Menu Digital',
     el.description = 'Le Menu Digital pour vos projets QR Code.',
@@ -392,7 +392,7 @@ SET el.slug = 'menu-restaurant',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'forms', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'forms', locale_key: 'fr-FR'})
 SET el.slug = 'forms',
     el.display_name = 'Forms',
     el.description = 'Les Forms pour vos projets QR Code.',
@@ -403,7 +403,7 @@ SET el.slug = 'forms',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'announcement', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'announcement', locale_key: 'fr-FR'})
 SET el.slug = 'announcement',
     el.display_name = 'Announcement',
     el.description = 'L\'Announcement pour vos projets QR Code.',
@@ -414,7 +414,7 @@ SET el.slug = 'announcement',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'event-rsvp', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'event-rsvp', locale_key: 'fr-FR'})
 SET el.slug = 'event-rsvp',
     el.display_name = 'Événement RSVP',
     el.description = 'Le Événement RSVP pour vos projets QR Code.',
@@ -425,7 +425,7 @@ SET el.slug = 'event-rsvp',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'booking-appointment', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'booking-appointment', locale_key: 'fr-FR'})
 SET el.slug = 'booking-appointment',
     el.display_name = 'Booking/Applicationointment',
     el.description = 'La Booking/Applicationointment pour vos projets QR Code.',
@@ -436,7 +436,7 @@ SET el.slug = 'booking-appointment',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-url', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-url', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-url',
     el.display_name = 'QR Code URL',
     el.description = 'QR Code redirigeant vers une adresse web.',
@@ -447,7 +447,7 @@ SET el.slug = 'qr-code-url',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-wifi', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-wifi', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-wifi',
     el.display_name = 'QR Code WiFi',
     el.description = 'QR Code pour connexion WiFi automatique.',
@@ -458,7 +458,7 @@ SET el.slug = 'qr-code-wifi',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-vcard', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-vcard', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-vcard',
     el.display_name = 'vCard QR Code',
     el.description = 'QR Code contenant une carte de visite électronique.',
@@ -469,7 +469,7 @@ SET el.slug = 'qr-code-vcard',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-mecard', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-mecard', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-mecard',
     el.display_name = 'MeCard QR Code',
     el.description = 'Le MeCard QR Code pour vos projets QR Code.',
@@ -480,7 +480,7 @@ SET el.slug = 'qr-code-mecard',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-pdf', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-pdf', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-pdf',
     el.display_name = 'PDF QR Code',
     el.description = 'QR Code donnant accès à un document PDF.',
@@ -491,7 +491,7 @@ SET el.slug = 'qr-code-pdf',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-text', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-text', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-text',
     el.display_name = 'Texte QR Code',
     el.description = 'QR Code encodant du texte brut.',
@@ -502,7 +502,7 @@ SET el.slug = 'qr-code-text',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-email', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-email', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-email',
     el.display_name = 'Email QR Code',
     el.description = 'QR Code ouvrant un email pré-rédigé.',
@@ -513,7 +513,7 @@ SET el.slug = 'qr-code-email',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-sms', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-sms', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-sms',
     el.display_name = 'SMS QR Code',
     el.description = 'QR Code pré-remplissant un SMS.',
@@ -524,7 +524,7 @@ SET el.slug = 'qr-code-sms',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-phone', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-phone', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-phone',
     el.display_name = 'Téléphone QR Code',
     el.description = 'QR Code pour appel téléphonique direct.',
@@ -535,7 +535,7 @@ SET el.slug = 'qr-code-phone',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-video', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-video', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-video',
     el.display_name = 'Vidéo QR Code',
     el.description = 'QR Code redirigeant vers une vidéo.',
@@ -546,7 +546,7 @@ SET el.slug = 'qr-code-video',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-audio', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-audio', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-audio',
     el.display_name = 'Audio QR Code',
     el.description = 'QR Code donnant accès à un fichier audio.',
@@ -557,7 +557,7 @@ SET el.slug = 'qr-code-audio',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-image-gallery', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-image-gallery', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-image-gallery',
     el.display_name = 'Image Gallery QR Code',
     el.description = 'L\'Image Gallery QR Code pour vos projets QR Code.',
@@ -568,7 +568,7 @@ SET el.slug = 'qr-code-image-gallery',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-coupon', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-coupon', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-coupon',
     el.display_name = 'Coupon QR Code',
     el.description = 'QR Code offrant une réduction ou un bon d\'achat.',
@@ -579,7 +579,7 @@ SET el.slug = 'qr-code-coupon',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-social', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-social', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-social',
     el.display_name = 'Réseaux Sociaux Media QR Code',
     el.description = 'Le Réseaux Sociaux Media QR Code pour vos projets QR Code.',
@@ -590,7 +590,7 @@ SET el.slug = 'qr-code-social',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-instagram', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-instagram', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-instagram',
     el.display_name = 'Instagram QR Code',
     el.description = 'L\'Instagram QR Code pour vos projets QR Code.',
@@ -601,7 +601,7 @@ SET el.slug = 'qr-code-instagram',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-linkedin', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-linkedin', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-linkedin',
     el.display_name = 'LinkedIn QR Code',
     el.description = 'Le LinkedIn QR Code pour vos projets QR Code.',
@@ -612,7 +612,7 @@ SET el.slug = 'qr-code-linkedin',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-facebook', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-facebook', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-facebook',
     el.display_name = 'Facebook QR Code',
     el.description = 'Le Facebook QR Code pour vos projets QR Code.',
@@ -623,7 +623,7 @@ SET el.slug = 'qr-code-facebook',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-twitter', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-twitter', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-twitter',
     el.display_name = 'Twitter/X QR Code',
     el.description = 'Le Twitter/X QR Code pour vos projets QR Code.',
@@ -634,7 +634,7 @@ SET el.slug = 'qr-code-twitter',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-youtube', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-youtube', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-youtube',
     el.display_name = 'YouTube QR Code',
     el.description = 'Le YouTube QR Code pour vos projets QR Code.',
@@ -645,7 +645,7 @@ SET el.slug = 'qr-code-youtube',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-tiktok', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-tiktok', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-tiktok',
     el.display_name = 'TikTok QR Code',
     el.description = 'Le TikTok QR Code pour vos projets QR Code.',
@@ -656,7 +656,7 @@ SET el.slug = 'qr-code-tiktok',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-snapchat', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-snapchat', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-snapchat',
     el.display_name = 'Snapchat QR Code',
     el.description = 'Le Snapchat QR Code pour vos projets QR Code.',
@@ -667,7 +667,7 @@ SET el.slug = 'qr-code-snapchat',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-whatsapp', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-whatsapp', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-whatsapp',
     el.display_name = 'WhatsApplication QR Code',
     el.description = 'La WhatsApplication QR Code pour vos projets QR Code.',
@@ -678,7 +678,7 @@ SET el.slug = 'qr-code-whatsapp',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-telegram', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-telegram', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-telegram',
     el.display_name = 'Telegram QR Code',
     el.description = 'Le Telegram QR Code pour vos projets QR Code.',
@@ -689,7 +689,7 @@ SET el.slug = 'qr-code-telegram',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-pinterest', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-pinterest', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-pinterest',
     el.display_name = 'Pinterest QR Code',
     el.description = 'Le Pinterest QR Code pour vos projets QR Code.',
@@ -700,7 +700,7 @@ SET el.slug = 'qr-code-pinterest',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-spotify', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-spotify', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-spotify',
     el.display_name = 'Spotify QR Code',
     el.description = 'Le Spotify QR Code pour vos projets QR Code.',
@@ -711,7 +711,7 @@ SET el.slug = 'qr-code-spotify',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-apple-music', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-apple-music', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-apple-music',
     el.display_name = 'Applicationle Music QR Code',
     el.description = 'L\'Applicationle Music QR Code pour vos projets QR Code.',
@@ -722,7 +722,7 @@ SET el.slug = 'qr-code-apple-music',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-soundcloud', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-soundcloud', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-soundcloud',
     el.display_name = 'SoundCloud QR Code',
     el.description = 'Le SoundCloud QR Code pour vos projets QR Code.',
@@ -733,7 +733,7 @@ SET el.slug = 'qr-code-soundcloud',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-payment', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-payment', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-payment',
     el.display_name = 'Paiement QR Code',
     el.description = 'Le Paiement QR Code pour vos projets QR Code.',
@@ -744,7 +744,7 @@ SET el.slug = 'qr-code-payment',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-pix', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-pix', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-pix',
     el.display_name = 'PIX QR Code',
     el.description = 'Le PIX QR Code pour vos projets QR Code.',
@@ -755,7 +755,7 @@ SET el.slug = 'qr-code-pix',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-upi', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-upi', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-upi',
     el.display_name = 'UPI QR Code',
     el.description = 'L\'UPI QR Code pour vos projets QR Code.',
@@ -766,7 +766,7 @@ SET el.slug = 'qr-code-upi',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-paypal', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-paypal', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-paypal',
     el.display_name = 'PayPal QR Code',
     el.description = 'Le PayPal QR Code pour vos projets QR Code.',
@@ -777,7 +777,7 @@ SET el.slug = 'qr-code-paypal',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-venmo', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-venmo', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-venmo',
     el.display_name = 'Venmo QR Code',
     el.description = 'Le Venmo QR Code pour vos projets QR Code.',
@@ -788,7 +788,7 @@ SET el.slug = 'qr-code-venmo',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-bitcoin', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-bitcoin', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-bitcoin',
     el.display_name = 'Bitcoin QR Code',
     el.description = 'QR Code pour paiement en Bitcoin.',
@@ -799,7 +799,7 @@ SET el.slug = 'qr-code-bitcoin',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-ethereum', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-ethereum', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-ethereum',
     el.display_name = 'Ethereum QR Code',
     el.description = 'L\'Ethereum QR Code pour vos projets QR Code.',
@@ -810,7 +810,7 @@ SET el.slug = 'qr-code-ethereum',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-crypto', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-crypto', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-crypto',
     el.display_name = 'Crypto QR Code',
     el.description = 'QR Code pour transactions en cryptomonnaie.',
@@ -821,7 +821,7 @@ SET el.slug = 'qr-code-crypto',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-bank-transfer', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-bank-transfer', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-bank-transfer',
     el.display_name = 'Bank Transfer QR Code',
     el.description = 'Le Bank Transfer QR Code pour vos projets QR Code.',
@@ -832,7 +832,7 @@ SET el.slug = 'qr-code-bank-transfer',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-location', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-location', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-location',
     el.display_name = 'Localisation QR Code',
     el.description = 'La Localisation QR Code pour vos projets QR Code.',
@@ -843,7 +843,7 @@ SET el.slug = 'qr-code-location',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-google-maps', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-google-maps', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-google-maps',
     el.display_name = 'Google Maps QR Code',
     el.description = 'Le Google Maps QR Code pour vos projets QR Code.',
@@ -854,7 +854,7 @@ SET el.slug = 'qr-code-google-maps',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-apple-maps', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-apple-maps', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-apple-maps',
     el.display_name = 'Applicationle Maps QR Code',
     el.description = 'L\'Applicationle Maps QR Code pour vos projets QR Code.',
@@ -865,7 +865,7 @@ SET el.slug = 'qr-code-apple-maps',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-waze', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-waze', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-waze',
     el.display_name = 'Waze QR Code',
     el.description = 'Le Waze QR Code pour vos projets QR Code.',
@@ -876,7 +876,7 @@ SET el.slug = 'qr-code-waze',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-coordinates', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-coordinates', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-coordinates',
     el.display_name = 'Coordinates QR Code',
     el.description = 'Le Coordinates QR Code pour vos projets QR Code.',
@@ -887,7 +887,7 @@ SET el.slug = 'qr-code-coordinates',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-app', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-app', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-app',
     el.display_name = 'Application Télécharger QR Code',
     el.description = 'L\'Application Télécharger QR Code pour vos projets QR Code.',
@@ -898,7 +898,7 @@ SET el.slug = 'qr-code-app',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-app-store', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-app-store', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-app-store',
     el.display_name = 'Application Store QR Code',
     el.description = 'L\'Application Store QR Code pour vos projets QR Code.',
@@ -909,7 +909,7 @@ SET el.slug = 'qr-code-app-store',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-play-store', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-play-store', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-play-store',
     el.display_name = 'Play Store QR Code',
     el.description = 'Le Play Store QR Code pour vos projets QR Code.',
@@ -920,7 +920,7 @@ SET el.slug = 'qr-code-play-store',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-app-download', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-app-download', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-app-download',
     el.display_name = 'Smart Application Télécharger QR Code',
     el.description = 'La Smart Application Télécharger QR Code pour vos projets QR Code.',
@@ -931,7 +931,7 @@ SET el.slug = 'qr-code-app-download',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-review', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-review', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-review',
     el.display_name = 'Review QR Code',
     el.description = 'Le Review QR Code pour vos projets QR Code.',
@@ -942,7 +942,7 @@ SET el.slug = 'qr-code-review',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-survey', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-survey', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-survey',
     el.display_name = 'Sondage QR Code',
     el.description = 'QR Code vers un formulaire de sondage.',
@@ -953,7 +953,7 @@ SET el.slug = 'qr-code-survey',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-feedback', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-feedback', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-feedback',
     el.display_name = 'Avis QR Code',
     el.description = 'QR Code pour recueillir des avis clients.',
@@ -964,7 +964,7 @@ SET el.slug = 'qr-code-feedback',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-menu', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-menu', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-menu',
     el.display_name = 'Menu QR Code',
     el.description = 'QR Code affichant un menu de restaurant.',
@@ -975,7 +975,7 @@ SET el.slug = 'qr-code-menu',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-resume', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-resume', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-resume',
     el.display_name = 'Resume QR Code',
     el.description = 'Le Resume QR Code pour vos projets QR Code.',
@@ -986,7 +986,7 @@ SET el.slug = 'qr-code-resume',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-certificate', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-certificate', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-certificate',
     el.display_name = 'Certificate QR Code',
     el.description = 'Le Certificate QR Code pour vos projets QR Code.',
@@ -997,7 +997,7 @@ SET el.slug = 'qr-code-certificate',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-ticket', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-ticket', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-ticket',
     el.display_name = 'Ticket QR Code',
     el.description = 'Le Ticket QR Code pour vos projets QR Code.',
@@ -1008,7 +1008,7 @@ SET el.slug = 'qr-code-ticket',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-attendance', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-attendance', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-attendance',
     el.display_name = 'Attendance QR Code',
     el.description = 'L\'Attendance QR Code pour vos projets QR Code.',
@@ -1019,7 +1019,7 @@ SET el.slug = 'qr-code-attendance',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-pet-tag', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-pet-tag', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-pet-tag',
     el.display_name = 'Pet Tag QR Code',
     el.description = 'Le Pet Tag QR Code pour vos projets QR Code.',
@@ -1030,7 +1030,7 @@ SET el.slug = 'qr-code-pet-tag',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-medical-id', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-medical-id', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-medical-id',
     el.display_name = 'Medical ID QR Code',
     el.description = 'Le Medical ID QR Code pour vos projets QR Code.',
@@ -1041,7 +1041,7 @@ SET el.slug = 'qr-code-medical-id',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-file', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-file', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-file',
     el.display_name = 'File Télécharger QR Code',
     el.description = 'Le File Télécharger QR Code pour vos projets QR Code.',
@@ -1052,7 +1052,7 @@ SET el.slug = 'qr-code-file',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-calendar', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-calendar', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-calendar',
     el.display_name = 'Calendrier Événement QR Code',
     el.description = 'QR Code pour événement calendrier.',
@@ -1063,7 +1063,7 @@ SET el.slug = 'qr-code-calendar',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'ean-13', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'ean-13', locale_key: 'fr-FR'})
 SET el.slug = 'ean-13',
     el.display_name = 'EAN-13',
     el.description = 'L\'EAN-13 pour vos projets QR Code.',
@@ -1074,7 +1074,7 @@ SET el.slug = 'ean-13',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'ean-8', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'ean-8', locale_key: 'fr-FR'})
 SET el.slug = 'ean-8',
     el.display_name = 'EAN-8',
     el.description = 'L\'EAN-8 pour vos projets QR Code.',
@@ -1085,7 +1085,7 @@ SET el.slug = 'ean-8',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'upc-a', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'upc-a', locale_key: 'fr-FR'})
 SET el.slug = 'upc-a',
     el.display_name = 'UPC-A',
     el.description = 'L\'UPC-A pour vos projets QR Code.',
@@ -1096,7 +1096,7 @@ SET el.slug = 'upc-a',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'upc-e', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'upc-e', locale_key: 'fr-FR'})
 SET el.slug = 'upc-e',
     el.display_name = 'UPC-E',
     el.description = 'L\'UPC-E pour vos projets QR Code.',
@@ -1107,7 +1107,7 @@ SET el.slug = 'upc-e',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'code-128', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'code-128', locale_key: 'fr-FR'})
 SET el.slug = 'code-128',
     el.display_name = 'Code 128',
     el.description = 'Le Code 128 pour vos projets QR Code.',
@@ -1118,7 +1118,7 @@ SET el.slug = 'code-128',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'code-39', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'code-39', locale_key: 'fr-FR'})
 SET el.slug = 'code-39',
     el.display_name = 'Code 39',
     el.description = 'Le Code 39 pour vos projets QR Code.',
@@ -1129,7 +1129,7 @@ SET el.slug = 'code-39',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'itf-14', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'itf-14', locale_key: 'fr-FR'})
 SET el.slug = 'itf-14',
     el.display_name = 'ITF-14',
     el.description = 'L\'ITF-14 pour vos projets QR Code.',
@@ -1140,7 +1140,7 @@ SET el.slug = 'itf-14',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'codabar', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'codabar', locale_key: 'fr-FR'})
 SET el.slug = 'codabar',
     el.display_name = 'Codabar',
     el.description = 'Le Codabar pour vos projets QR Code.',
@@ -1151,7 +1151,7 @@ SET el.slug = 'codabar',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'msi-plessey', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'msi-plessey', locale_key: 'fr-FR'})
 SET el.slug = 'msi-plessey',
     el.display_name = 'MSI Plessey',
     el.description = 'Le MSI Plessey pour vos projets QR Code.',
@@ -1162,7 +1162,7 @@ SET el.slug = 'msi-plessey',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'gs1-128', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'gs1-128', locale_key: 'fr-FR'})
 SET el.slug = 'gs1-128',
     el.display_name = 'GS1-128',
     el.description = 'Le GS1-128 pour vos projets QR Code.',
@@ -1173,7 +1173,7 @@ SET el.slug = 'gs1-128',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'data-matrix', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'data-matrix', locale_key: 'fr-FR'})
 SET el.slug = 'data-matrix',
     el.display_name = 'Data Matrix',
     el.description = 'Le Data Matrix pour vos projets QR Code.',
@@ -1184,7 +1184,7 @@ SET el.slug = 'data-matrix',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'pdf417', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'pdf417', locale_key: 'fr-FR'})
 SET el.slug = 'pdf417',
     el.display_name = 'PDF417',
     el.description = 'Le PDF417 pour vos projets QR Code.',
@@ -1195,7 +1195,7 @@ SET el.slug = 'pdf417',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'aztec-code', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'aztec-code', locale_key: 'fr-FR'})
 SET el.slug = 'aztec-code',
     el.display_name = 'Aztec Code',
     el.description = 'L\'Aztec Code pour vos projets QR Code.',
@@ -1206,7 +1206,7 @@ SET el.slug = 'aztec-code',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'maxicode', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'maxicode', locale_key: 'fr-FR'})
 SET el.slug = 'maxicode',
     el.display_name = 'MaxiCode',
     el.description = 'Le MaxiCode pour vos projets QR Code.',
@@ -1217,7 +1217,7 @@ SET el.slug = 'maxicode',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'gs1-datamatrix', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'gs1-datamatrix', locale_key: 'fr-FR'})
 SET el.slug = 'gs1-datamatrix',
     el.display_name = 'GS1 DataMatrix',
     el.description = 'Le GS1 DataMatrix pour vos projets QR Code.',
@@ -1228,7 +1228,7 @@ SET el.slug = 'gs1-datamatrix',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'barcode-generator', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'barcode-generator', locale_key: 'fr-FR'})
 SET el.slug = 'code-barres-generateur',
     el.display_name = 'Code-barres Générateur',
     el.description = 'Générateur de codes-barres 1D en ligne.',
@@ -1239,7 +1239,7 @@ SET el.slug = 'code-barres-generateur',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'barcode-scanner', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'barcode-scanner', locale_key: 'fr-FR'})
 SET el.slug = 'code-barres-scanner',
     el.display_name = 'Code-barres Scannerner',
     el.description = 'Le Code-barres Scannerner pour vos projets QR Code.',
@@ -1250,7 +1250,7 @@ SET el.slug = 'code-barres-scanner',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'analytics', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'analytics', locale_key: 'fr-FR'})
 SET el.slug = 'analytiques',
     el.display_name = 'Analytiques',
     el.description = 'Les Analytiques pour vos projets QR Code.',
@@ -1261,7 +1261,7 @@ SET el.slug = 'analytiques',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'click-tracking', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'click-tracking', locale_key: 'fr-FR'})
 SET el.slug = 'click-suivi',
     el.display_name = 'Click Suivi',
     el.description = 'Le Click Suivi pour vos projets QR Code.',
@@ -1272,7 +1272,7 @@ SET el.slug = 'click-suivi',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'scan-counting', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'scan-counting', locale_key: 'fr-FR'})
 SET el.slug = 'scanner-counting',
     el.display_name = 'Scanner Counting',
     el.description = 'Le Scanner Counting pour vos projets QR Code.',
@@ -1283,7 +1283,7 @@ SET el.slug = 'scanner-counting',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'geo-tracking', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'geo-tracking', locale_key: 'fr-FR'})
 SET el.slug = 'geo-suivi',
     el.display_name = 'Geographic Suivi',
     el.description = 'Le Geographic Suivi pour vos projets QR Code.',
@@ -1294,7 +1294,7 @@ SET el.slug = 'geo-suivi',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'device-detection', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'device-detection', locale_key: 'fr-FR'})
 SET el.slug = 'device-detection',
     el.display_name = 'Device Detection',
     el.description = 'La Device Detection pour vos projets QR Code.',
@@ -1305,7 +1305,7 @@ SET el.slug = 'device-detection',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'time-series', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'time-series', locale_key: 'fr-FR'})
 SET el.slug = 'time-series',
     el.display_name = 'Time Series Analytiques',
     el.description = 'Les Time Series Analytiques pour vos projets QR Code.',
@@ -1316,7 +1316,7 @@ SET el.slug = 'time-series',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'contextual-routing', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'contextual-routing', locale_key: 'fr-FR'})
 SET el.slug = 'contextual-routing',
     el.display_name = 'Contextual Routing',
     el.description = 'Le Contextual Routing pour vos projets QR Code.',
@@ -1327,7 +1327,7 @@ SET el.slug = 'contextual-routing',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'custom-domain-name', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'custom-domain-name', locale_key: 'fr-FR'})
 SET el.slug = 'domaine-personnalise-name',
     el.display_name = 'Domaine Personnalisé',
     el.description = 'Le Domaine Personnalisé pour vos projets QR Code.',
@@ -1338,7 +1338,7 @@ SET el.slug = 'domaine-personnalise-name',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'custom-link-preview', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'custom-link-preview', locale_key: 'fr-FR'})
 SET el.slug = 'personnalise-link-preview',
     el.display_name = 'Personnalisé Link Preview',
     el.description = 'Le Personnalisé Link Preview pour vos projets QR Code.',
@@ -1349,7 +1349,7 @@ SET el.slug = 'personnalise-link-preview',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'utm-builder', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'utm-builder', locale_key: 'fr-FR'})
 SET el.slug = 'utm-builder',
     el.display_name = 'UTM Builder',
     el.description = 'L\'UTM Builder pour vos projets QR Code.',
@@ -1360,7 +1360,7 @@ SET el.slug = 'utm-builder',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'bulk-creation', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'bulk-creation', locale_key: 'fr-FR'})
 SET el.slug = 'masse-creation',
     el.display_name = 'En Masse Creation',
     el.description = 'L\'En Masse Creation pour vos projets QR Code.',
@@ -1371,7 +1371,7 @@ SET el.slug = 'masse-creation',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'team-workspaces', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'team-workspaces', locale_key: 'fr-FR'})
 SET el.slug = 'team-workspaces',
     el.display_name = 'Team Workspaces',
     el.description = 'Les Team Workspaces pour vos projets QR Code.',
@@ -1382,7 +1382,7 @@ SET el.slug = 'team-workspaces',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'api', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'api', locale_key: 'fr-FR'})
 SET el.slug = 'api',
     el.display_name = 'API Access',
     el.description = 'L\'API Access pour vos projets QR Code.',
@@ -1393,7 +1393,7 @@ SET el.slug = 'api',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'webhooks', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'webhooks', locale_key: 'fr-FR'})
 SET el.slug = 'webhooks',
     el.display_name = 'Webhooks',
     el.description = 'Les Webhooks pour vos projets QR Code.',
@@ -1404,7 +1404,7 @@ SET el.slug = 'webhooks',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'white-label', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'white-label', locale_key: 'fr-FR'})
 SET el.slug = 'marque-blanche',
     el.display_name = 'Marque Blanche',
     el.description = 'Solution en marque blanche personnalisable.',
@@ -1415,7 +1415,7 @@ SET el.slug = 'marque-blanche',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'password-protection', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'password-protection', locale_key: 'fr-FR'})
 SET el.slug = 'protection-mot-de-passe',
     el.display_name = 'Protection par Mot de Passe',
     el.description = 'Protection par mot de passe des QR Codes.',
@@ -1426,7 +1426,7 @@ SET el.slug = 'protection-mot-de-passe',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'expiration', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'expiration', locale_key: 'fr-FR'})
 SET el.slug = 'expiration',
     el.display_name = 'Link Expiration',
     el.description = 'La Link Expiration pour vos projets QR Code.',
@@ -1437,7 +1437,7 @@ SET el.slug = 'expiration',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'scan-limit', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'scan-limit', locale_key: 'fr-FR'})
 SET el.slug = 'limite-scans',
     el.display_name = 'Limite de Scanners',
     el.description = 'Limitation du nombre de scans autorisés.',
@@ -1448,7 +1448,7 @@ SET el.slug = 'limite-scans',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'retargeting-pixel', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'retargeting-pixel', locale_key: 'fr-FR'})
 SET el.slug = 'reciblage-pixel',
     el.display_name = 'Reciblage Pixel',
     el.description = 'Le Reciblage Pixel pour vos projets QR Code.',
@@ -1459,7 +1459,7 @@ SET el.slug = 'reciblage-pixel',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-generator', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-generator', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-generateur',
     el.display_name = 'QR Code Générateur',
     el.description = 'Outil en ligne pour créer des QR Codes personnalisés.',
@@ -1470,7 +1470,7 @@ SET el.slug = 'qr-code-generateur',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-scanner', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-scanner', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-scanner',
     el.display_name = 'QR Code Scannerner',
     el.description = 'Application pour lire les QR Codes.',
@@ -1481,7 +1481,7 @@ SET el.slug = 'qr-code-scanner',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-api', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-api', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-api',
     el.display_name = 'QR Code API',
     el.description = 'Le QR Code API pour vos projets QR Code.',
@@ -1492,7 +1492,7 @@ SET el.slug = 'qr-code-api',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'landing-page-builder', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'landing-page-builder', locale_key: 'fr-FR'})
 SET el.slug = 'page-destination-builder',
     el.display_name = 'Page de Destination Builder',
     el.description = 'La Page de Destination Builder pour vos projets QR Code.',
@@ -1503,7 +1503,7 @@ SET el.slug = 'page-destination-builder',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'url-shortener', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'url-shortener', locale_key: 'fr-FR'})
 SET el.slug = 'url-shortener',
     el.display_name = 'URL Shortener',
     el.description = 'L\'URL Shortener pour vos projets QR Code.',
@@ -1514,7 +1514,7 @@ SET el.slug = 'url-shortener',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'link-in-bio-builder', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'link-in-bio-builder', locale_key: 'fr-FR'})
 SET el.slug = 'lien-en-bio-builder',
     el.display_name = 'Lien en Bio Builder',
     el.description = 'Le Lien en Bio Builder pour vos projets QR Code.',
@@ -1525,7 +1525,7 @@ SET el.slug = 'lien-en-bio-builder',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'menu-builder', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'menu-builder', locale_key: 'fr-FR'})
 SET el.slug = 'menu-builder',
     el.display_name = 'Menu Builder',
     el.description = 'Le Menu Builder pour vos projets QR Code.',
@@ -1536,7 +1536,7 @@ SET el.slug = 'menu-builder',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'vcard-generator', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'vcard-generator', locale_key: 'fr-FR'})
 SET el.slug = 'vcard-generateur',
     el.display_name = 'vCard Générateur',
     el.description = 'Le vCard Générateur pour vos projets QR Code.',
@@ -1547,7 +1547,7 @@ SET el.slug = 'vcard-generateur',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'wifi-qr-generator', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'wifi-qr-generator', locale_key: 'fr-FR'})
 SET el.slug = 'wifi-qr-generateur',
     el.display_name = 'WiFi QR Générateur',
     el.description = 'Le WiFi QR Générateur pour vos projets QR Code.',
@@ -1558,7 +1558,7 @@ SET el.slug = 'wifi-qr-generateur',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'batch-qr-generator', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'batch-qr-generator', locale_key: 'fr-FR'})
 SET el.slug = 'batch-qr-generateur',
     el.display_name = 'Batch QR Générateur',
     el.description = 'Le Batch QR Générateur pour vos projets QR Code.',
@@ -1569,7 +1569,7 @@ SET el.slug = 'batch-qr-generateur',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'business-cards', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'business-cards', locale_key: 'fr-FR'})
 SET el.slug = 'carte-visites',
     el.display_name = 'Carte de Visites',
     el.description = 'Les Carte de Visites pour vos projets QR Code.',
@@ -1580,7 +1580,7 @@ SET el.slug = 'carte-visites',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'flyers', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'flyers', locale_key: 'fr-FR'})
 SET el.slug = 'flyers',
     el.display_name = 'Flyers',
     el.description = 'Les Flyers pour vos projets QR Code.',
@@ -1591,7 +1591,7 @@ SET el.slug = 'flyers',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'posters-billboards', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'posters-billboards', locale_key: 'fr-FR'})
 SET el.slug = 'posters-billboards',
     el.display_name = 'Affiches & Panneaus',
     el.description = 'L\'Affiches & Panneaus pour vos projets QR Code.',
@@ -1602,7 +1602,7 @@ SET el.slug = 'posters-billboards',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'brochures', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'brochures', locale_key: 'fr-FR'})
 SET el.slug = 'brochures',
     el.display_name = 'Brochures',
     el.description = 'Les Brochures pour vos projets QR Code.',
@@ -1613,7 +1613,7 @@ SET el.slug = 'brochures',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'catalogs', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'catalogs', locale_key: 'fr-FR'})
 SET el.slug = 'catalogs',
     el.display_name = 'Catalogues',
     el.description = 'Les Catalogues pour vos projets QR Code.',
@@ -1624,7 +1624,7 @@ SET el.slug = 'catalogs',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'magazines', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'magazines', locale_key: 'fr-FR'})
 SET el.slug = 'magazines',
     el.display_name = 'Magazines',
     el.description = 'Les Magazines pour vos projets QR Code.',
@@ -1635,7 +1635,7 @@ SET el.slug = 'magazines',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'newspapers', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'newspapers', locale_key: 'fr-FR'})
 SET el.slug = 'newspapers',
     el.display_name = 'Journals',
     el.description = 'Les Journals pour vos projets QR Code.',
@@ -1646,7 +1646,7 @@ SET el.slug = 'newspapers',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'direct-mail', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'direct-mail', locale_key: 'fr-FR'})
 SET el.slug = 'direct-mail',
     el.display_name = 'Direct Mail',
     el.description = 'Le Direct Mail pour vos projets QR Code.',
@@ -1657,7 +1657,7 @@ SET el.slug = 'direct-mail',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'stickers-labels', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'stickers-labels', locale_key: 'fr-FR'})
 SET el.slug = 'stickers-labels',
     el.display_name = 'Autocollants & Labels',
     el.description = 'Les Autocollants & Labels pour vos projets QR Code.',
@@ -1668,7 +1668,7 @@ SET el.slug = 'stickers-labels',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'banners', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'banners', locale_key: 'fr-FR'})
 SET el.slug = 'banners',
     el.display_name = 'Bannières',
     el.description = 'Les Bannières pour vos projets QR Code.',
@@ -1679,7 +1679,7 @@ SET el.slug = 'banners',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'product-packaging', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'product-packaging', locale_key: 'fr-FR'})
 SET el.slug = 'product-packaging',
     el.display_name = 'Produit Emballage',
     el.description = 'Le Produit Emballage pour vos projets QR Code.',
@@ -1690,7 +1690,7 @@ SET el.slug = 'product-packaging',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'product-labels', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'product-labels', locale_key: 'fr-FR'})
 SET el.slug = 'product-labels',
     el.display_name = 'Produit Labels',
     el.description = 'Les Produit Labels pour vos projets QR Code.',
@@ -1701,7 +1701,7 @@ SET el.slug = 'product-labels',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'receipts', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'receipts', locale_key: 'fr-FR'})
 SET el.slug = 'receipts',
     el.display_name = 'Tickets',
     el.description = 'Les Tickets pour vos projets QR Code.',
@@ -1712,7 +1712,7 @@ SET el.slug = 'receipts',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'table-tents', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'table-tents', locale_key: 'fr-FR'})
 SET el.slug = 'table-tents',
     el.display_name = 'Table Tents',
     el.description = 'Les Table Tents pour vos projets QR Code.',
@@ -1723,7 +1723,7 @@ SET el.slug = 'table-tents',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'menus-printed', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'menus-printed', locale_key: 'fr-FR'})
 SET el.slug = 'menus-printed',
     el.display_name = 'Imprimered Menus',
     el.description = 'L\'Imprimered Menus pour vos projets QR Code.',
@@ -1734,7 +1734,7 @@ SET el.slug = 'menus-printed',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'tickets-physical', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'tickets-physical', locale_key: 'fr-FR'})
 SET el.slug = 'tickets-physical',
     el.display_name = 'Physical Tickets',
     el.description = 'Les Physical Tickets pour vos projets QR Code.',
@@ -1745,7 +1745,7 @@ SET el.slug = 'tickets-physical',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'emails', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'emails', locale_key: 'fr-FR'})
 SET el.slug = 'emails',
     el.display_name = 'Emails',
     el.description = 'Les Emails pour vos projets QR Code.',
@@ -1756,7 +1756,7 @@ SET el.slug = 'emails',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'presentations', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'presentations', locale_key: 'fr-FR'})
 SET el.slug = 'presentations',
     el.display_name = 'Presentations',
     el.description = 'Les Presentations pour vos projets QR Code.',
@@ -1767,7 +1767,7 @@ SET el.slug = 'presentations',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'documents', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'documents', locale_key: 'fr-FR'})
 SET el.slug = 'documents',
     el.display_name = 'Documents',
     el.description = 'Les Documents pour vos projets QR Code.',
@@ -1778,7 +1778,7 @@ SET el.slug = 'documents',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'websites', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'websites', locale_key: 'fr-FR'})
 SET el.slug = 'websites',
     el.display_name = 'Websites',
     el.description = 'Les Websites pour vos projets QR Code.',
@@ -1789,7 +1789,7 @@ SET el.slug = 'websites',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 SET el.slug = 'creer-qr-code',
     el.display_name = 'Créer QR Code',
     el.description = 'Générer un QR Code personnalisé en quelques clics.',
@@ -1800,7 +1800,7 @@ SET el.slug = 'creer-qr-code',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 SET el.slug = 'scanner-qr-code',
     el.display_name = 'Scanner QR Code',
     el.description = 'Lire un QR Code avec la caméra de votre smartphone.',
@@ -1811,7 +1811,7 @@ SET el.slug = 'scanner-qr-code',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'customize-qr-code', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'customize-qr-code', locale_key: 'fr-FR'})
 SET el.slug = 'personnaliser-qr-code',
     el.display_name = 'Personnaliser QR Code',
     el.description = 'Personnaliser l\'apparence de votre QR Code avec vos couleurs et logo.',
@@ -1822,7 +1822,7 @@ SET el.slug = 'personnaliser-qr-code',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'download-qr-code', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'download-qr-code', locale_key: 'fr-FR'})
 SET el.slug = 'telecharger-qr-code',
     el.display_name = 'Télécharger QR Code',
     el.description = 'Télécharger votre QR Code en PNG, SVG ou PDF haute résolution.',
@@ -1833,7 +1833,7 @@ SET el.slug = 'telecharger-qr-code',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'print-qr-code', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'print-qr-code', locale_key: 'fr-FR'})
 SET el.slug = 'imprimer-qr-code',
     el.display_name = 'Imprimer QR Code',
     el.description = 'Imprimer votre QR Code avec les paramètres optimaux.',
@@ -1844,7 +1844,7 @@ SET el.slug = 'imprimer-qr-code',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'add-logo', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'add-logo', locale_key: 'fr-FR'})
 SET el.slug = 'add-logo',
     el.display_name = 'Add Logo',
     el.description = 'L\'Add Logo pour vos projets QR Code.',
@@ -1855,7 +1855,7 @@ SET el.slug = 'add-logo',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'change-colors', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'change-colors', locale_key: 'fr-FR'})
 SET el.slug = 'change-couleurs',
     el.display_name = 'Change Couleurs',
     el.description = 'Les Change Couleurs pour vos projets QR Code.',
@@ -1866,7 +1866,7 @@ SET el.slug = 'change-couleurs',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'edit-destination', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'edit-destination', locale_key: 'fr-FR'})
 SET el.slug = 'modifier-destination',
     el.display_name = 'Modifier Destination',
     el.description = 'La Modifier Destination pour vos projets QR Code.',
@@ -1877,7 +1877,7 @@ SET el.slug = 'modifier-destination',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'share-qr-code', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'share-qr-code', locale_key: 'fr-FR'})
 SET el.slug = 'partager-qr-code',
     el.display_name = 'Partager QR Code',
     el.description = 'Partager votre QR Code par email, réseaux sociaux ou lien direct.',
@@ -1888,7 +1888,7 @@ SET el.slug = 'partager-qr-code',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'track-scans', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'track-scans', locale_key: 'fr-FR'})
 SET el.slug = 'suivre-scans',
     el.display_name = 'Suivre Scanners',
     el.description = 'Les Suivre Scanners pour vos projets QR Code.',
@@ -1899,7 +1899,7 @@ SET el.slug = 'suivre-scans',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'shorten-url', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'shorten-url', locale_key: 'fr-FR'})
 SET el.slug = 'shorten-url',
     el.display_name = 'Shorten URL',
     el.description = 'Le Shorten URL pour vos projets QR Code.',
@@ -1910,7 +1910,7 @@ SET el.slug = 'shorten-url',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'create-smart-link', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'create-smart-link', locale_key: 'fr-FR'})
 SET el.slug = 'creer-lien-intelligent',
     el.display_name = 'Créer Lien Intelligent',
     el.description = 'Le Créer Lien Intelligent pour vos projets QR Code.',
@@ -1921,7 +1921,7 @@ SET el.slug = 'creer-lien-intelligent',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'create-landing-page', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'create-landing-page', locale_key: 'fr-FR'})
 SET el.slug = 'creer-page-destination',
     el.display_name = 'Créer Page de Destination',
     el.description = 'La Créer Page de Destination pour vos projets QR Code.',
@@ -1932,7 +1932,7 @@ SET el.slug = 'creer-page-destination',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'create-barcode', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'create-barcode', locale_key: 'fr-FR'})
 SET el.slug = 'creer-code-barres',
     el.display_name = 'Créer Code-barres',
     el.description = 'Les Créer Code-barres pour vos projets QR Code.',
@@ -1943,7 +1943,7 @@ SET el.slug = 'creer-code-barres',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'scan-barcode', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'scan-barcode', locale_key: 'fr-FR'})
 SET el.slug = 'scanner-code-barres',
     el.display_name = 'Scanner Code-barres',
     el.description = 'Les Scanner Code-barres pour vos projets QR Code.',
@@ -1954,7 +1954,7 @@ SET el.slug = 'scanner-code-barres',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'restaurants', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'restaurants', locale_key: 'fr-FR'})
 SET el.slug = 'restaurants',
     el.display_name = 'Restaurants',
     el.description = 'Solutions QR Code pour la restauration : menus, paiements, avis.',
@@ -1965,7 +1965,7 @@ SET el.slug = 'restaurants',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'retail', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'retail', locale_key: 'fr-FR'})
 SET el.slug = 'commerce-detail',
     el.display_name = 'Commerce de Détail',
     el.description = 'QR Codes pour le commerce de détail : produits, promotions, fidélité.',
@@ -1976,7 +1976,7 @@ SET el.slug = 'commerce-detail',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'hospitality', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'hospitality', locale_key: 'fr-FR'})
 SET el.slug = 'hotellerie',
     el.display_name = 'Hôtellerie',
     el.description = 'QR Codes pour l\'hôtellerie : check-in, services, informations.',
@@ -1987,7 +1987,7 @@ SET el.slug = 'hotellerie',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'healthcare', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'healthcare', locale_key: 'fr-FR'})
 SET el.slug = 'sante',
     el.display_name = 'Santé',
     el.description = 'QR Codes pour la santé : informations patient, médicaments, rendez-vous.',
@@ -1998,7 +1998,7 @@ SET el.slug = 'sante',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'education', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'education', locale_key: 'fr-FR'})
 SET el.slug = 'education',
     el.display_name = 'Éducation',
     el.description = 'QR Codes pour l\'éducation : ressources, cours, examens.',
@@ -2009,7 +2009,7 @@ SET el.slug = 'education',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'real-estate', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'real-estate', locale_key: 'fr-FR'})
 SET el.slug = 'immobilier',
     el.display_name = 'Immobilier',
     el.description = 'QR Codes pour l\'immobilier : visites virtuelles, annonces, contacts.',
@@ -2020,7 +2020,7 @@ SET el.slug = 'immobilier',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'fitness', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'fitness', locale_key: 'fr-FR'})
 SET el.slug = 'fitness',
     el.display_name = 'Fitness',
     el.description = 'QR Codes pour le fitness : programmes, équipements, cours.',
@@ -2031,7 +2031,7 @@ SET el.slug = 'fitness',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'beauty', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'beauty', locale_key: 'fr-FR'})
 SET el.slug = 'beaute',
     el.display_name = 'Beauté',
     el.description = 'QR Codes pour la beauté : tutoriels, ingrédients, achats.',
@@ -2042,7 +2042,7 @@ SET el.slug = 'beaute',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'entertainment', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'entertainment', locale_key: 'fr-FR'})
 SET el.slug = 'divertissement',
     el.display_name = 'Divertissement',
     el.description = 'QR Codes pour le divertissement : billets, contenus exclusifs.',
@@ -2053,7 +2053,7 @@ SET el.slug = 'divertissement',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'transportation', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'transportation', locale_key: 'fr-FR'})
 SET el.slug = 'transportation',
     el.display_name = 'Transportation',
     el.description = 'La Transportation pour vos projets QR Code.',
@@ -2064,7 +2064,7 @@ SET el.slug = 'transportation',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'manufacturing', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'manufacturing', locale_key: 'fr-FR'})
 SET el.slug = 'industrie',
     el.display_name = 'Industrie',
     el.description = 'QR Codes pour l\'industrie : traçabilité, maintenance, inventaire.',
@@ -2075,7 +2075,7 @@ SET el.slug = 'industrie',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'logistics', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'logistics', locale_key: 'fr-FR'})
 SET el.slug = 'logistique',
     el.display_name = 'Logistique',
     el.description = 'QR Codes pour la logistique : suivi colis, inventaire, livraison.',
@@ -2086,7 +2086,7 @@ SET el.slug = 'logistique',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'construction', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'construction', locale_key: 'fr-FR'})
 SET el.slug = 'btp',
     el.display_name = 'BTP',
     el.description = 'QR Codes pour le BTP : plans, sécurité, documentation.',
@@ -2097,7 +2097,7 @@ SET el.slug = 'btp',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'finance', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'finance', locale_key: 'fr-FR'})
 SET el.slug = 'finance',
     el.display_name = 'Finance',
     el.description = 'QR Codes pour la finance : paiements, documents, authentification.',
@@ -2108,7 +2108,7 @@ SET el.slug = 'finance',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'government', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'government', locale_key: 'fr-FR'})
 SET el.slug = 'services-publics',
     el.display_name = 'Services Publics',
     el.description = 'QR Codes pour services publics : formulaires, informations, accès.',
@@ -2119,7 +2119,7 @@ SET el.slug = 'services-publics',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'marketing-agencies', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'marketing-agencies', locale_key: 'fr-FR'})
 SET el.slug = 'marketing-agencies',
     el.display_name = 'Marketing Agencies',
     el.description = 'Les Marketing Agencies pour vos projets QR Code.',
@@ -2130,7 +2130,7 @@ SET el.slug = 'marketing-agencies',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'creative-agencies', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'creative-agencies', locale_key: 'fr-FR'})
 SET el.slug = 'creative-agencies',
     el.display_name = 'Creative Agencies',
     el.description = 'Les Creative Agencies pour vos projets QR Code.',
@@ -2141,7 +2141,7 @@ SET el.slug = 'creative-agencies',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'event-management', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'event-management', locale_key: 'fr-FR'})
 SET el.slug = 'event-management',
     el.display_name = 'Événement Management',
     el.description = 'Le Événement Management pour vos projets QR Code.',
@@ -2152,7 +2152,7 @@ SET el.slug = 'event-management',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'nonprofits', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'nonprofits', locale_key: 'fr-FR'})
 SET el.slug = 'associationss',
     el.display_name = 'Associationss',
     el.description = 'L\'Associationss pour vos projets QR Code.',
@@ -2163,7 +2163,7 @@ SET el.slug = 'associationss',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'consulting', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'consulting', locale_key: 'fr-FR'})
 SET el.slug = 'consulting',
     el.display_name = 'Consulting',
     el.description = 'Le Consulting pour vos projets QR Code.',
@@ -2174,7 +2174,7 @@ SET el.slug = 'consulting',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'developers', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'developers', locale_key: 'fr-FR'})
 SET el.slug = 'developers',
     el.display_name = 'Developers',
     el.description = 'Les Developers pour vos projets QR Code.',
@@ -2185,7 +2185,7 @@ SET el.slug = 'developers',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'enterprise', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'enterprise', locale_key: 'fr-FR'})
 SET el.slug = 'enterprise',
     el.display_name = 'Enterprise',
     el.description = 'L\'Enterprise pour vos projets QR Code.',
@@ -2196,7 +2196,7 @@ SET el.slug = 'enterprise',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'agencies', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'agencies', locale_key: 'fr-FR'})
 SET el.slug = 'agencies',
     el.display_name = 'Agencies',
     el.description = 'Les Agencies pour vos projets QR Code.',
@@ -2207,7 +2207,7 @@ SET el.slug = 'agencies',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'small-business', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'small-business', locale_key: 'fr-FR'})
 SET el.slug = 'small-business',
     el.display_name = 'Small Business',
     el.description = 'Le Small Business pour vos projets QR Code.',
@@ -2218,7 +2218,7 @@ SET el.slug = 'small-business',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'freelancers', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'freelancers', locale_key: 'fr-FR'})
 SET el.slug = 'freelancers',
     el.display_name = 'Gratuitlancers',
     el.description = 'Les Gratuitlancers pour vos projets QR Code.',
@@ -2229,7 +2229,7 @@ SET el.slug = 'freelancers',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'instagram', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'instagram', locale_key: 'fr-FR'})
 SET el.slug = 'instagram',
     el.display_name = 'Instagram',
     el.description = 'QR Code vers votre profil Instagram.',
@@ -2240,7 +2240,7 @@ SET el.slug = 'instagram',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'linkedin', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'linkedin', locale_key: 'fr-FR'})
 SET el.slug = 'linkedin',
     el.display_name = 'LinkedIn',
     el.description = 'QR Code vers votre profil LinkedIn.',
@@ -2251,7 +2251,7 @@ SET el.slug = 'linkedin',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'facebook', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'facebook', locale_key: 'fr-FR'})
 SET el.slug = 'facebook',
     el.display_name = 'Facebook',
     el.description = 'QR Code vers votre page Facebook.',
@@ -2262,7 +2262,7 @@ SET el.slug = 'facebook',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'twitter', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'twitter', locale_key: 'fr-FR'})
 SET el.slug = 'twitter',
     el.display_name = 'Twitter / X',
     el.description = 'QR Code vers votre compte Twitter/X.',
@@ -2273,7 +2273,7 @@ SET el.slug = 'twitter',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'youtube', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'youtube', locale_key: 'fr-FR'})
 SET el.slug = 'youtube',
     el.display_name = 'YouTube',
     el.description = 'QR Code vers votre chaîne YouTube.',
@@ -2284,7 +2284,7 @@ SET el.slug = 'youtube',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'tiktok', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'tiktok', locale_key: 'fr-FR'})
 SET el.slug = 'tiktok',
     el.display_name = 'TikTok',
     el.description = 'QR Code vers votre compte TikTok.',
@@ -2295,7 +2295,7 @@ SET el.slug = 'tiktok',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'snapchat', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'snapchat', locale_key: 'fr-FR'})
 SET el.slug = 'snapchat',
     el.display_name = 'Snapchat',
     el.description = 'QR Code vers votre profil Snapchat.',
@@ -2306,7 +2306,7 @@ SET el.slug = 'snapchat',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'whatsapp', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'whatsapp', locale_key: 'fr-FR'})
 SET el.slug = 'whatsapp',
     el.display_name = 'WhatsApp',
     el.description = 'QR Code pour démarrer une conversation WhatsApp.',
@@ -2317,7 +2317,7 @@ SET el.slug = 'whatsapp',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'telegram', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'telegram', locale_key: 'fr-FR'})
 SET el.slug = 'telegram',
     el.display_name = 'Telegram',
     el.description = 'QR Code vers votre canal Telegram.',
@@ -2328,7 +2328,7 @@ SET el.slug = 'telegram',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'pinterest', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'pinterest', locale_key: 'fr-FR'})
 SET el.slug = 'pinterest',
     el.display_name = 'Pinterest',
     el.description = 'QR Code vers vos tableaux Pinterest.',
@@ -2339,7 +2339,7 @@ SET el.slug = 'pinterest',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'spotify', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'spotify', locale_key: 'fr-FR'})
 SET el.slug = 'spotify',
     el.display_name = 'Spotify',
     el.description = 'QR Code vers votre musique Spotify.',
@@ -2350,7 +2350,7 @@ SET el.slug = 'spotify',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'apple', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'apple', locale_key: 'fr-FR'})
 SET el.slug = 'apple',
     el.display_name = 'Apple',
     el.description = 'L\'Applicationle pour vos projets QR Code.',
@@ -2361,7 +2361,7 @@ SET el.slug = 'apple',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'soundcloud', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'soundcloud', locale_key: 'fr-FR'})
 SET el.slug = 'soundcloud',
     el.display_name = 'SoundCloud',
     el.description = 'Le SoundCloud pour vos projets QR Code.',
@@ -2372,7 +2372,7 @@ SET el.slug = 'soundcloud',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'paypal', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'paypal', locale_key: 'fr-FR'})
 SET el.slug = 'paypal',
     el.display_name = 'PayPal',
     el.description = 'QR Code pour paiement PayPal.',
@@ -2383,7 +2383,7 @@ SET el.slug = 'paypal',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'venmo', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'venmo', locale_key: 'fr-FR'})
 SET el.slug = 'venmo',
     el.display_name = 'Venmo',
     el.description = 'QR Code pour paiement Venmo.',
@@ -2394,7 +2394,7 @@ SET el.slug = 'venmo',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'google', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'google', locale_key: 'fr-FR'})
 SET el.slug = 'google',
     el.display_name = 'Google',
     el.description = 'Le Google pour vos projets QR Code.',
@@ -2405,7 +2405,7 @@ SET el.slug = 'google',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'waze', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'waze', locale_key: 'fr-FR'})
 SET el.slug = 'waze',
     el.display_name = 'Waze',
     el.description = 'QR Code vers une navigation Waze.',
@@ -2416,7 +2416,7 @@ SET el.slug = 'waze',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'zapier', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'zapier', locale_key: 'fr-FR'})
 SET el.slug = 'zapier',
     el.display_name = 'Zapier',
     el.description = 'Le Zapier pour vos projets QR Code.',
@@ -2427,7 +2427,7 @@ SET el.slug = 'zapier',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'make', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'make', locale_key: 'fr-FR'})
 SET el.slug = 'make',
     el.display_name = 'Make (Integromat)',
     el.description = 'Le Make (Integromat) pour vos projets QR Code.',
@@ -2438,7 +2438,7 @@ SET el.slug = 'make',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'n8n', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'n8n', locale_key: 'fr-FR'})
 SET el.slug = 'n8n',
     el.display_name = 'n8n',
     el.description = 'Le n8n pour vos projets QR Code.',
@@ -2449,7 +2449,7 @@ SET el.slug = 'n8n',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'hubspot', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'hubspot', locale_key: 'fr-FR'})
 SET el.slug = 'hubspot',
     el.display_name = 'HubSpot',
     el.description = 'L\'HubSpot pour vos projets QR Code.',
@@ -2460,7 +2460,7 @@ SET el.slug = 'hubspot',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'salesforce', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'salesforce', locale_key: 'fr-FR'})
 SET el.slug = 'salesforce',
     el.display_name = 'Salesforce',
     el.description = 'Le Salesforce pour vos projets QR Code.',
@@ -2471,7 +2471,7 @@ SET el.slug = 'salesforce',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'mailchimp', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'mailchimp', locale_key: 'fr-FR'})
 SET el.slug = 'mailchimp',
     el.display_name = 'Mailchimp',
     el.description = 'Le Mailchimp pour vos projets QR Code.',
@@ -2482,7 +2482,7 @@ SET el.slug = 'mailchimp',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'shopify', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'shopify', locale_key: 'fr-FR'})
 SET el.slug = 'shopify',
     el.display_name = 'Shopify',
     el.description = 'Le Shopify pour vos projets QR Code.',
@@ -2493,7 +2493,7 @@ SET el.slug = 'shopify',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'woocommerce', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'woocommerce', locale_key: 'fr-FR'})
 SET el.slug = 'woocommerce',
     el.display_name = 'WooCommerce',
     el.description = 'Le WooCommerce pour vos projets QR Code.',
@@ -2504,7 +2504,7 @@ SET el.slug = 'woocommerce',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'zapier-integration', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'zapier-integration', locale_key: 'fr-FR'})
 SET el.slug = 'zapier-integration',
     el.display_name = 'Zapier Integration',
     el.description = 'La Zapier Integration pour vos projets QR Code.',
@@ -2515,7 +2515,7 @@ SET el.slug = 'zapier-integration',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'make-integration', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'make-integration', locale_key: 'fr-FR'})
 SET el.slug = 'make-integration',
     el.display_name = 'Make Integration',
     el.description = 'La Make Integration pour vos projets QR Code.',
@@ -2526,7 +2526,7 @@ SET el.slug = 'make-integration',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'n8n-integration', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'n8n-integration', locale_key: 'fr-FR'})
 SET el.slug = 'n8n-integration',
     el.display_name = 'n8n Integration',
     el.description = 'La n8n Integration pour vos projets QR Code.',
@@ -2537,7 +2537,7 @@ SET el.slug = 'n8n-integration',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'hubspot-integration', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'hubspot-integration', locale_key: 'fr-FR'})
 SET el.slug = 'hubspot-integration',
     el.display_name = 'HubSpot Integration',
     el.description = 'L\'HubSpot Integration pour vos projets QR Code.',
@@ -2548,7 +2548,7 @@ SET el.slug = 'hubspot-integration',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'salesforce-integration', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'salesforce-integration', locale_key: 'fr-FR'})
 SET el.slug = 'salesforce-integration',
     el.display_name = 'Salesforce Integration',
     el.description = 'La Salesforce Integration pour vos projets QR Code.',
@@ -2559,7 +2559,7 @@ SET el.slug = 'salesforce-integration',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'mailchimp-integration', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'mailchimp-integration', locale_key: 'fr-FR'})
 SET el.slug = 'mailchimp-integration',
     el.display_name = 'Mailchimp Integration',
     el.description = 'La Mailchimp Integration pour vos projets QR Code.',
@@ -2570,7 +2570,7 @@ SET el.slug = 'mailchimp-integration',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'google-sheets-integration', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'google-sheets-integration', locale_key: 'fr-FR'})
 SET el.slug = 'google-sheets-integration',
     el.display_name = 'Google Sheets Integration',
     el.description = 'La Google Sheets Integration pour vos projets QR Code.',
@@ -2581,7 +2581,7 @@ SET el.slug = 'google-sheets-integration',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'notion-integration', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'notion-integration', locale_key: 'fr-FR'})
 SET el.slug = 'notion-integration',
     el.display_name = 'Notion Integration',
     el.description = 'La Notion Integration pour vos projets QR Code.',
@@ -2592,7 +2592,7 @@ SET el.slug = 'notion-integration',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'slack-integration', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'slack-integration', locale_key: 'fr-FR'})
 SET el.slug = 'slack-integration',
     el.display_name = 'Slack Integration',
     el.description = 'La Slack Integration pour vos projets QR Code.',
@@ -2603,7 +2603,7 @@ SET el.slug = 'slack-integration',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'shopify-integration', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'shopify-integration', locale_key: 'fr-FR'})
 SET el.slug = 'shopify-integration',
     el.display_name = 'Shopify Integration',
     el.description = 'La Shopify Integration pour vos projets QR Code.',
@@ -2614,7 +2614,7 @@ SET el.slug = 'shopify-integration',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'woocommerce-integration', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'woocommerce-integration', locale_key: 'fr-FR'})
 SET el.slug = 'woocommerce-integration',
     el.display_name = 'WooCommerce Integration',
     el.description = 'La WooCommerce Integration pour vos projets QR Code.',
@@ -2625,7 +2625,7 @@ SET el.slug = 'woocommerce-integration',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'wordpress-integration', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'wordpress-integration', locale_key: 'fr-FR'})
 SET el.slug = 'wordpress-integration',
     el.display_name = 'WordPress Integration',
     el.description = 'La WordPress Integration pour vos projets QR Code.',
@@ -2636,7 +2636,7 @@ SET el.slug = 'wordpress-integration',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'quiet-zone', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'quiet-zone', locale_key: 'fr-FR'})
 SET el.slug = 'quiet-zone',
     el.display_name = 'Quiet Zone',
     el.description = 'Le Quiet Zone pour vos projets QR Code.',
@@ -2647,7 +2647,7 @@ SET el.slug = 'quiet-zone',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'error-correction', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'error-correction', locale_key: 'fr-FR'})
 SET el.slug = 'error-correction',
     el.display_name = 'Error Correction',
     el.description = 'L\'Error Correction pour vos projets QR Code.',
@@ -2658,7 +2658,7 @@ SET el.slug = 'error-correction',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'data-capacity', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'data-capacity', locale_key: 'fr-FR'})
 SET el.slug = 'data-capacity',
     el.display_name = 'Data Capacity',
     el.description = 'Le Data Capacity pour vos projets QR Code.',
@@ -2669,7 +2669,7 @@ SET el.slug = 'data-capacity',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-version', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-version', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-version',
     el.display_name = 'QR Code Version',
     el.description = 'La QR Code Version pour vos projets QR Code.',
@@ -2680,7 +2680,7 @@ SET el.slug = 'qr-code-version',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'encoding-mode', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'encoding-mode', locale_key: 'fr-FR'})
 SET el.slug = 'encoding-mode',
     el.display_name = 'Encoding Mode',
     el.description = 'L\'Encoding Mode pour vos projets QR Code.',
@@ -2691,7 +2691,7 @@ SET el.slug = 'encoding-mode',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'module', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'module', locale_key: 'fr-FR'})
 SET el.slug = 'module',
     el.display_name = 'Module',
     el.description = 'Le Module pour vos projets QR Code.',
@@ -2702,7 +2702,7 @@ SET el.slug = 'module',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'finder-pattern', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'finder-pattern', locale_key: 'fr-FR'})
 SET el.slug = 'finder-pattern',
     el.display_name = 'Finder Pattern',
     el.description = 'Le Finder Pattern pour vos projets QR Code.',
@@ -2713,7 +2713,7 @@ SET el.slug = 'finder-pattern',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'timing-pattern', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'timing-pattern', locale_key: 'fr-FR'})
 SET el.slug = 'timing-pattern',
     el.display_name = 'Timing Pattern',
     el.description = 'Le Timing Pattern pour vos projets QR Code.',
@@ -2724,7 +2724,7 @@ SET el.slug = 'timing-pattern',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-messaging', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-messaging', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-messaging',
     el.display_name = 'Messaging QR Codes',
     el.description = 'Les Messaging QR Codes pour vos projets QR Code.',
@@ -2735,7 +2735,7 @@ SET el.slug = 'qr-code-messaging',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-video-platform', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-video-platform', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-video-platform',
     el.display_name = 'Vidéo Platform QR Codes',
     el.description = 'Les Vidéo Platform QR Codes pour vos projets QR Code.',
@@ -2746,7 +2746,7 @@ SET el.slug = 'qr-code-video-platform',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-professional', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-professional', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-professional',
     el.display_name = 'Professional Network QR Codes',
     el.description = 'Les Professional Network QR Codes pour vos projets QR Code.',
@@ -2757,7 +2757,7 @@ SET el.slug = 'qr-code-professional',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-music-platform', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-music-platform', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-music-platform',
     el.display_name = 'Music Platform QR Codes',
     el.description = 'Les Music Platform QR Codes pour vos projets QR Code.',
@@ -2768,7 +2768,7 @@ SET el.slug = 'qr-code-music-platform',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'funny-qr-codes', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'funny-qr-codes', locale_key: 'fr-FR'})
 SET el.slug = 'funny-qr-codes',
     el.display_name = 'Funny QR Codes',
     el.description = 'Les Funny QR Codes pour vos projets QR Code.',
@@ -2779,7 +2779,7 @@ SET el.slug = 'funny-qr-codes',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-tattoo', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-tattoo', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-tattoo',
     el.display_name = 'QR Code Tattoo',
     el.description = 'Le QR Code Tattoo pour vos projets QR Code.',
@@ -2790,7 +2790,7 @@ SET el.slug = 'qr-code-tattoo',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-art-installation', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-art-installation', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-art-installation',
     el.display_name = 'QR Art Installation',
     el.description = 'La QR Art Installation pour vos projets QR Code.',
@@ -2801,7 +2801,7 @@ SET el.slug = 'qr-code-art-installation',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-scavenger-hunt', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-scavenger-hunt', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-scavenger-hunt',
     el.display_name = 'QR Scavenger Hunt',
     el.description = 'Le QR Scavenger Hunt pour vos projets QR Code.',
@@ -2812,7 +2812,7 @@ SET el.slug = 'qr-code-scavenger-hunt',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-reviews', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-reviews', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-reviews',
     el.display_name = 'QR for Reviews',
     el.description = 'Les QR for Reviews pour vos projets QR Code.',
@@ -2823,7 +2823,7 @@ SET el.slug = 'qr-code-reviews',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-contactless-payment', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-contactless-payment', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-contactless-payment',
     el.display_name = 'Contactless Paiement',
     el.description = 'Le Contactless Paiement pour vos projets QR Code.',
@@ -2834,7 +2834,7 @@ SET el.slug = 'qr-code-contactless-payment',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-loyalty-program', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-loyalty-program', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-programme-fidelite',
     el.display_name = 'Programme de Fidélité',
     el.description = 'La Programme de Fidélité pour vos projets QR Code.',
@@ -2845,7 +2845,7 @@ SET el.slug = 'qr-code-programme-fidelite',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-product-authentication', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-product-authentication', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-authentification-produit',
     el.display_name = 'Authentification Produit',
     el.description = 'L\'Authentification Produit pour vos projets QR Code.',
@@ -2856,7 +2856,7 @@ SET el.slug = 'qr-code-authentification-produit',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-event-checkin', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-event-checkin', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-event-checkin',
     el.display_name = 'Événement Check-in',
     el.description = 'Le Événement Check-in pour vos projets QR Code.',
@@ -2867,7 +2867,7 @@ SET el.slug = 'qr-code-event-checkin',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-networking', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-networking', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-networking',
     el.display_name = 'Networking QR',
     el.description = 'Le Networking QR pour vos projets QR Code.',
@@ -2878,7 +2878,7 @@ SET el.slug = 'qr-code-networking',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-wedding', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-wedding', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-wedding',
     el.display_name = 'Wedding QR Codes',
     el.description = 'Les Wedding QR Codes pour vos projets QR Code.',
@@ -2889,7 +2889,7 @@ SET el.slug = 'qr-code-wedding',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-museum-exhibit', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-museum-exhibit', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-museum-exhibit',
     el.display_name = 'Museum Exhibits',
     el.description = 'Les Museum Exhibits pour vos projets QR Code.',
@@ -2900,7 +2900,7 @@ SET el.slug = 'qr-code-museum-exhibit',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
 SET el.slug = 'comment-creer-qr-code',
     el.display_name = 'Comment Créer QR Code',
     el.description = 'Guide complet pour créer votre premier QR Code.',
@@ -2911,7 +2911,7 @@ SET el.slug = 'comment-creer-qr-code',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-design-guide', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-design-guide', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-design-guide',
     el.display_name = 'QR Code Design Guide',
     el.description = 'Le QR Code Design Guide pour vos projets QR Code.',
@@ -2922,7 +2922,7 @@ SET el.slug = 'qr-code-design-guide',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-print-guide', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-print-guide', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-imprimer-guide',
     el.display_name = 'QR Code Imprimer Guide',
     el.description = 'Le QR Code Imprimer Guide pour vos projets QR Code.',
@@ -2933,7 +2933,7 @@ SET el.slug = 'qr-code-imprimer-guide',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'dynamic-vs-static-guide', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'dynamic-vs-static-guide', locale_key: 'fr-FR'})
 SET el.slug = 'dynamique-vs-statique-guide',
     el.display_name = 'Dynamique vs Statique Guide',
     el.description = 'Le Dynamique vs Statique Guide pour vos projets QR Code.',
@@ -2944,7 +2944,7 @@ SET el.slug = 'dynamique-vs-statique-guide',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-marketing-guide', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-marketing-guide', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-marketing-guide',
     el.display_name = 'QR Marketing Guide',
     el.description = 'Le QR Marketing Guide pour vos projets QR Code.',
@@ -2955,7 +2955,7 @@ SET el.slug = 'qr-code-marketing-guide',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-restaurant-guide', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-restaurant-guide', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-restaurant-guide',
     el.display_name = 'Restaurant QR Guide',
     el.description = 'Le Restaurant QR Guide pour vos projets QR Code.',
@@ -2966,7 +2966,7 @@ SET el.slug = 'qr-code-restaurant-guide',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-business-card-guide', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-business-card-guide', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-carte-visite-guide',
     el.display_name = 'Carte de Visite QR Guide',
     el.description = 'La Carte de Visite QR Guide pour vos projets QR Code.',
@@ -2977,7 +2977,7 @@ SET el.slug = 'qr-code-carte-visite-guide',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-api-guide', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-api-guide', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-api-guide',
     el.display_name = 'QR Code API Guide',
     el.description = 'Le QR Code API Guide pour vos projets QR Code.',
@@ -2988,7 +2988,7 @@ SET el.slug = 'qr-code-api-guide',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-analytics-guide', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-analytics-guide', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-analytiques-guide',
     el.display_name = 'Analytiques Guide',
     el.description = 'L\'Analytiques Guide pour vos projets QR Code.',
@@ -2999,7 +2999,7 @@ SET el.slug = 'qr-code-analytiques-guide',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-security-guide', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-security-guide', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-security-guide',
     el.display_name = 'QR Security Guide',
     el.description = 'Le QR Security Guide pour vos projets QR Code.',
@@ -3010,7 +3010,7 @@ SET el.slug = 'qr-code-security-guide',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-vs-barcode', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-vs-barcode', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-vs-code-barres',
     el.display_name = 'QR Code vs Code-barres',
     el.description = 'Différences entre QR Codes et codes-barres traditionnels.',
@@ -3021,7 +3021,7 @@ SET el.slug = 'qr-code-vs-code-barres',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'dynamic-vs-static-qr-code', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'dynamic-vs-static-qr-code', locale_key: 'fr-FR'})
 SET el.slug = 'dynamique-vs-statique-qr-code',
     el.display_name = 'Dynamique vs QR Code Statique',
     el.description = 'Comparatif entre QR Codes dynamiques et statiques.',
@@ -3032,7 +3032,7 @@ SET el.slug = 'dynamique-vs-statique-qr-code',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-vs-nfc', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-vs-nfc', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-vs-nfc',
     el.display_name = 'QR Code vs NFC',
     el.description = 'QR Code vs NFC : quelle technologie choisir ?',
@@ -3043,7 +3043,7 @@ SET el.slug = 'qr-code-vs-nfc',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-vs-data-matrix', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-vs-data-matrix', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-vs-data-matrix',
     el.display_name = 'QR Code vs Data Matrix',
     el.description = 'Le QR Code vs Data Matrix pour vos projets QR Code.',
@@ -3054,7 +3054,7 @@ SET el.slug = 'qr-code-vs-data-matrix',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'free-vs-paid-qr-generator', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'free-vs-paid-qr-generator', locale_key: 'fr-FR'})
 SET el.slug = 'free-vs-paid-qr-generateur',
     el.display_name = 'Gratuit vs Premium QR Générateur',
     el.description = 'Le Gratuit vs Premium QR Générateur pour vos projets QR Code.',
@@ -3065,7 +3065,7 @@ SET el.slug = 'free-vs-paid-qr-generateur',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'qr-code-ai-vs-competitors', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'qr-code-ai-vs-competitors', locale_key: 'fr-FR'})
 SET el.slug = 'qr-code-ai-vs-competitors',
     el.display_name = 'QR Code AI vs Competitors',
     el.description = 'Les QR Code AI vs Competitors pour vos projets QR Code.',
@@ -3076,7 +3076,7 @@ SET el.slug = 'qr-code-ai-vs-competitors',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'short-link-vs-qr-code', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'short-link-vs-qr-code', locale_key: 'fr-FR'})
 SET el.slug = 'lien-court-vs-qr-code',
     el.display_name = 'Lien Court vs QR Code',
     el.description = 'Le Lien Court vs QR Code pour vos projets QR Code.',
@@ -3087,7 +3087,7 @@ SET el.slug = 'lien-court-vs-qr-code',
     el.created_at = datetime(),
     el.updated_at = datetime();
 
-MERGE (el:EntityL10n {entity_key: 'spotify-code-vs-qr-code', locale_key: 'fr-FR'})
+MERGE (el:EntityContent {entity_key: 'spotify-code-vs-qr-code', locale_key: 'fr-FR'})
 SET el.slug = 'spotify-code-vs-qr-code',
     el.display_name = 'Spotify Code vs QR Code',
     el.description = 'Le Spotify Code vs QR Code pour vos projets QR Code.',
@@ -3099,1137 +3099,1137 @@ SET el.slug = 'spotify-code-vs-qr-code',
     el.updated_at = datetime();
 
 // -------------------------------------------------------------------
-// Create relations to parent Entity (HAS_L10N)
+// Create relations to parent Entity (HAS_CONTENT)
 // -------------------------------------------------------------------
 
 MATCH (e:Entity {key: 'qr-code'})
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'smart-link'})
-MATCH (el:EntityL10n {entity_key: 'smart-link', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'smart-link', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'barcode'})
-MATCH (el:EntityL10n {entity_key: 'barcode', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'barcode', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'landing-page'})
-MATCH (el:EntityL10n {entity_key: 'landing-page', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'landing-page', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'short-link'})
-MATCH (el:EntityL10n {entity_key: 'short-link', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'short-link', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-style'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-style', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-style', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-content'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-content', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-content', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-frame'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-frame', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-frame', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'barcode-format'})
-MATCH (el:EntityL10n {entity_key: 'barcode-format', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'barcode-format', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'landing-page-type'})
-MATCH (el:EntityL10n {entity_key: 'landing-page-type', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'landing-page-type', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'custom-qr-code'})
-MATCH (el:EntityL10n {entity_key: 'custom-qr-code', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'custom-qr-code', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-image'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-image', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-image', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-art'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-art', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-art', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-photo'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-photo', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-photo', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-with-logo'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-with-logo', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-with-logo', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-with-text'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-with-text', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-with-text', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-color'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-color', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-color', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-shapes'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-shapes', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-shapes', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-transparent-background'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-transparent-background', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-transparent-background', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-background'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-background', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-background', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-background-color'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-background-color', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-background-color', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-background-gradient'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-background-gradient', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-background-gradient', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-background-image'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-background-image', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-background-image', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'dynamic-qr-code'})
-MATCH (el:EntityL10n {entity_key: 'dynamic-qr-code', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'dynamic-qr-code', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'static-qr-code'})
-MATCH (el:EntityL10n {entity_key: 'static-qr-code', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'static-qr-code', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-light-mode'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-light-mode', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-light-mode', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-dark-mode'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-dark-mode', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-dark-mode', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-business-card'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-email-signature'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-email-signature', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-email-signature', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-flyer'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-flyer', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-flyer', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-poster'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-poster', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-poster', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-table-tent'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-table-tent', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-table-tent', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-packaging-label'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-packaging-label', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-packaging-label', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'link-in-bio'})
-MATCH (el:EntityL10n {entity_key: 'link-in-bio', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'link-in-bio', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'menu-restaurant'})
-MATCH (el:EntityL10n {entity_key: 'menu-restaurant', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'menu-restaurant', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'forms'})
-MATCH (el:EntityL10n {entity_key: 'forms', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'forms', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'announcement'})
-MATCH (el:EntityL10n {entity_key: 'announcement', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'announcement', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'event-rsvp'})
-MATCH (el:EntityL10n {entity_key: 'event-rsvp', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'event-rsvp', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'booking-appointment'})
-MATCH (el:EntityL10n {entity_key: 'booking-appointment', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'booking-appointment', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-url'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-url', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-url', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-wifi'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-wifi', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-wifi', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-vcard'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-vcard', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-vcard', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-mecard'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-mecard', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-mecard', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-pdf'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-pdf', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-pdf', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-text'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-text', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-text', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-email'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-email', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-email', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-sms'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-sms', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-sms', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-phone'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-phone', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-phone', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-video'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-video', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-video', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-audio'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-audio', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-audio', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-image-gallery'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-image-gallery', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-image-gallery', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-coupon'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-coupon', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-coupon', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-social'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-social', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-social', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-instagram'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-instagram', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-instagram', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-linkedin'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-linkedin', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-linkedin', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-facebook'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-facebook', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-facebook', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-twitter'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-twitter', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-twitter', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-youtube'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-youtube', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-youtube', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-tiktok'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-tiktok', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-tiktok', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-snapchat'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-snapchat', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-snapchat', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-whatsapp'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-whatsapp', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-whatsapp', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-telegram'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-telegram', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-telegram', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-pinterest'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-pinterest', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-pinterest', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-spotify'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-spotify', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-spotify', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-apple-music'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-apple-music', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-apple-music', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-soundcloud'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-soundcloud', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-soundcloud', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-payment'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-payment', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-payment', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-pix'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-pix', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-pix', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-upi'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-upi', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-upi', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-paypal'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-paypal', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-paypal', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-venmo'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-venmo', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-venmo', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-bitcoin'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-bitcoin', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-bitcoin', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-ethereum'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-ethereum', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-ethereum', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-crypto'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-crypto', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-crypto', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-bank-transfer'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-bank-transfer', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-bank-transfer', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-location'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-location', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-location', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-google-maps'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-google-maps', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-google-maps', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-apple-maps'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-apple-maps', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-apple-maps', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-waze'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-waze', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-waze', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-coordinates'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-coordinates', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-coordinates', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-app'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-app', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-app', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-app-store'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-app-store', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-app-store', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-play-store'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-play-store', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-play-store', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-app-download'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-app-download', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-app-download', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-review'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-review', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-review', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-survey'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-survey', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-survey', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-feedback'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-feedback', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-feedback', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-menu'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-menu', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-menu', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-resume'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-resume', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-resume', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-certificate'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-certificate', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-certificate', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-ticket'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-ticket', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-ticket', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-attendance'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-attendance', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-attendance', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-pet-tag'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-pet-tag', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-pet-tag', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-medical-id'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-medical-id', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-medical-id', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-file'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-file', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-file', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-calendar'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-calendar', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-calendar', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'ean-13'})
-MATCH (el:EntityL10n {entity_key: 'ean-13', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'ean-13', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'ean-8'})
-MATCH (el:EntityL10n {entity_key: 'ean-8', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'ean-8', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'upc-a'})
-MATCH (el:EntityL10n {entity_key: 'upc-a', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'upc-a', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'upc-e'})
-MATCH (el:EntityL10n {entity_key: 'upc-e', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'upc-e', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'code-128'})
-MATCH (el:EntityL10n {entity_key: 'code-128', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'code-128', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'code-39'})
-MATCH (el:EntityL10n {entity_key: 'code-39', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'code-39', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'itf-14'})
-MATCH (el:EntityL10n {entity_key: 'itf-14', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'itf-14', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'codabar'})
-MATCH (el:EntityL10n {entity_key: 'codabar', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'codabar', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'msi-plessey'})
-MATCH (el:EntityL10n {entity_key: 'msi-plessey', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'msi-plessey', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'gs1-128'})
-MATCH (el:EntityL10n {entity_key: 'gs1-128', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'gs1-128', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'data-matrix'})
-MATCH (el:EntityL10n {entity_key: 'data-matrix', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'data-matrix', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'pdf417'})
-MATCH (el:EntityL10n {entity_key: 'pdf417', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'pdf417', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'aztec-code'})
-MATCH (el:EntityL10n {entity_key: 'aztec-code', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'aztec-code', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'maxicode'})
-MATCH (el:EntityL10n {entity_key: 'maxicode', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'maxicode', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'gs1-datamatrix'})
-MATCH (el:EntityL10n {entity_key: 'gs1-datamatrix', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'gs1-datamatrix', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'barcode-generator'})
-MATCH (el:EntityL10n {entity_key: 'barcode-generator', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'barcode-generator', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'barcode-scanner'})
-MATCH (el:EntityL10n {entity_key: 'barcode-scanner', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'barcode-scanner', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'analytics'})
-MATCH (el:EntityL10n {entity_key: 'analytics', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'analytics', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'click-tracking'})
-MATCH (el:EntityL10n {entity_key: 'click-tracking', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'click-tracking', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'scan-counting'})
-MATCH (el:EntityL10n {entity_key: 'scan-counting', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'scan-counting', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'geo-tracking'})
-MATCH (el:EntityL10n {entity_key: 'geo-tracking', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'geo-tracking', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'device-detection'})
-MATCH (el:EntityL10n {entity_key: 'device-detection', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'device-detection', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'time-series'})
-MATCH (el:EntityL10n {entity_key: 'time-series', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'time-series', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'contextual-routing'})
-MATCH (el:EntityL10n {entity_key: 'contextual-routing', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'contextual-routing', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'custom-domain-name'})
-MATCH (el:EntityL10n {entity_key: 'custom-domain-name', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'custom-domain-name', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'custom-link-preview'})
-MATCH (el:EntityL10n {entity_key: 'custom-link-preview', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'custom-link-preview', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'utm-builder'})
-MATCH (el:EntityL10n {entity_key: 'utm-builder', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'utm-builder', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'bulk-creation'})
-MATCH (el:EntityL10n {entity_key: 'bulk-creation', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'bulk-creation', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'team-workspaces'})
-MATCH (el:EntityL10n {entity_key: 'team-workspaces', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'team-workspaces', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'api'})
-MATCH (el:EntityL10n {entity_key: 'api', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'api', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'webhooks'})
-MATCH (el:EntityL10n {entity_key: 'webhooks', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'webhooks', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'white-label'})
-MATCH (el:EntityL10n {entity_key: 'white-label', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'white-label', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'password-protection'})
-MATCH (el:EntityL10n {entity_key: 'password-protection', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'password-protection', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'expiration'})
-MATCH (el:EntityL10n {entity_key: 'expiration', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'expiration', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'scan-limit'})
-MATCH (el:EntityL10n {entity_key: 'scan-limit', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'scan-limit', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'retargeting-pixel'})
-MATCH (el:EntityL10n {entity_key: 'retargeting-pixel', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'retargeting-pixel', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-generator'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-generator', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-generator', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-scanner'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-scanner', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-scanner', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-api'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-api', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-api', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'landing-page-builder'})
-MATCH (el:EntityL10n {entity_key: 'landing-page-builder', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'landing-page-builder', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'url-shortener'})
-MATCH (el:EntityL10n {entity_key: 'url-shortener', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'url-shortener', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'link-in-bio-builder'})
-MATCH (el:EntityL10n {entity_key: 'link-in-bio-builder', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'link-in-bio-builder', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'menu-builder'})
-MATCH (el:EntityL10n {entity_key: 'menu-builder', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'menu-builder', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'vcard-generator'})
-MATCH (el:EntityL10n {entity_key: 'vcard-generator', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'vcard-generator', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'wifi-qr-generator'})
-MATCH (el:EntityL10n {entity_key: 'wifi-qr-generator', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'wifi-qr-generator', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'batch-qr-generator'})
-MATCH (el:EntityL10n {entity_key: 'batch-qr-generator', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'batch-qr-generator', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'business-cards'})
-MATCH (el:EntityL10n {entity_key: 'business-cards', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'business-cards', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'flyers'})
-MATCH (el:EntityL10n {entity_key: 'flyers', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'flyers', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'posters-billboards'})
-MATCH (el:EntityL10n {entity_key: 'posters-billboards', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'posters-billboards', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'brochures'})
-MATCH (el:EntityL10n {entity_key: 'brochures', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'brochures', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'catalogs'})
-MATCH (el:EntityL10n {entity_key: 'catalogs', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'catalogs', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'magazines'})
-MATCH (el:EntityL10n {entity_key: 'magazines', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'magazines', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'newspapers'})
-MATCH (el:EntityL10n {entity_key: 'newspapers', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'newspapers', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'direct-mail'})
-MATCH (el:EntityL10n {entity_key: 'direct-mail', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'direct-mail', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'stickers-labels'})
-MATCH (el:EntityL10n {entity_key: 'stickers-labels', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'stickers-labels', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'banners'})
-MATCH (el:EntityL10n {entity_key: 'banners', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'banners', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'product-packaging'})
-MATCH (el:EntityL10n {entity_key: 'product-packaging', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'product-packaging', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'product-labels'})
-MATCH (el:EntityL10n {entity_key: 'product-labels', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'product-labels', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'receipts'})
-MATCH (el:EntityL10n {entity_key: 'receipts', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'receipts', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'table-tents'})
-MATCH (el:EntityL10n {entity_key: 'table-tents', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'table-tents', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'menus-printed'})
-MATCH (el:EntityL10n {entity_key: 'menus-printed', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'menus-printed', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'tickets-physical'})
-MATCH (el:EntityL10n {entity_key: 'tickets-physical', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'tickets-physical', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'emails'})
-MATCH (el:EntityL10n {entity_key: 'emails', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'emails', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'presentations'})
-MATCH (el:EntityL10n {entity_key: 'presentations', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'presentations', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'documents'})
-MATCH (el:EntityL10n {entity_key: 'documents', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'documents', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'websites'})
-MATCH (el:EntityL10n {entity_key: 'websites', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'websites', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'create-qr-code'})
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'scan-qr-code'})
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'customize-qr-code'})
-MATCH (el:EntityL10n {entity_key: 'customize-qr-code', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'customize-qr-code', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'download-qr-code'})
-MATCH (el:EntityL10n {entity_key: 'download-qr-code', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'download-qr-code', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'print-qr-code'})
-MATCH (el:EntityL10n {entity_key: 'print-qr-code', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'print-qr-code', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'add-logo'})
-MATCH (el:EntityL10n {entity_key: 'add-logo', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'add-logo', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'change-colors'})
-MATCH (el:EntityL10n {entity_key: 'change-colors', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'change-colors', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'edit-destination'})
-MATCH (el:EntityL10n {entity_key: 'edit-destination', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'edit-destination', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'share-qr-code'})
-MATCH (el:EntityL10n {entity_key: 'share-qr-code', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'share-qr-code', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'track-scans'})
-MATCH (el:EntityL10n {entity_key: 'track-scans', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'track-scans', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'shorten-url'})
-MATCH (el:EntityL10n {entity_key: 'shorten-url', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'shorten-url', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'create-smart-link'})
-MATCH (el:EntityL10n {entity_key: 'create-smart-link', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'create-smart-link', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'create-landing-page'})
-MATCH (el:EntityL10n {entity_key: 'create-landing-page', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'create-landing-page', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'create-barcode'})
-MATCH (el:EntityL10n {entity_key: 'create-barcode', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'create-barcode', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'scan-barcode'})
-MATCH (el:EntityL10n {entity_key: 'scan-barcode', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'scan-barcode', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'restaurants'})
-MATCH (el:EntityL10n {entity_key: 'restaurants', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'restaurants', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'retail'})
-MATCH (el:EntityL10n {entity_key: 'retail', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'retail', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'hospitality'})
-MATCH (el:EntityL10n {entity_key: 'hospitality', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'hospitality', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'healthcare'})
-MATCH (el:EntityL10n {entity_key: 'healthcare', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'healthcare', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'education'})
-MATCH (el:EntityL10n {entity_key: 'education', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'education', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'real-estate'})
-MATCH (el:EntityL10n {entity_key: 'real-estate', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'real-estate', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'fitness'})
-MATCH (el:EntityL10n {entity_key: 'fitness', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'fitness', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'beauty'})
-MATCH (el:EntityL10n {entity_key: 'beauty', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'beauty', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'entertainment'})
-MATCH (el:EntityL10n {entity_key: 'entertainment', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'entertainment', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'transportation'})
-MATCH (el:EntityL10n {entity_key: 'transportation', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'transportation', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'manufacturing'})
-MATCH (el:EntityL10n {entity_key: 'manufacturing', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'manufacturing', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'logistics'})
-MATCH (el:EntityL10n {entity_key: 'logistics', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'logistics', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'construction'})
-MATCH (el:EntityL10n {entity_key: 'construction', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'construction', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'finance'})
-MATCH (el:EntityL10n {entity_key: 'finance', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'finance', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'government'})
-MATCH (el:EntityL10n {entity_key: 'government', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'government', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'marketing-agencies'})
-MATCH (el:EntityL10n {entity_key: 'marketing-agencies', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'marketing-agencies', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'creative-agencies'})
-MATCH (el:EntityL10n {entity_key: 'creative-agencies', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'creative-agencies', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'event-management'})
-MATCH (el:EntityL10n {entity_key: 'event-management', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'event-management', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'nonprofits'})
-MATCH (el:EntityL10n {entity_key: 'nonprofits', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'nonprofits', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'consulting'})
-MATCH (el:EntityL10n {entity_key: 'consulting', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'consulting', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'developers'})
-MATCH (el:EntityL10n {entity_key: 'developers', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'developers', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'enterprise'})
-MATCH (el:EntityL10n {entity_key: 'enterprise', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'enterprise', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'agencies'})
-MATCH (el:EntityL10n {entity_key: 'agencies', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'agencies', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'small-business'})
-MATCH (el:EntityL10n {entity_key: 'small-business', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'small-business', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'freelancers'})
-MATCH (el:EntityL10n {entity_key: 'freelancers', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'freelancers', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'instagram'})
-MATCH (el:EntityL10n {entity_key: 'instagram', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'instagram', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'linkedin'})
-MATCH (el:EntityL10n {entity_key: 'linkedin', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'linkedin', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'facebook'})
-MATCH (el:EntityL10n {entity_key: 'facebook', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'facebook', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'twitter'})
-MATCH (el:EntityL10n {entity_key: 'twitter', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'twitter', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'youtube'})
-MATCH (el:EntityL10n {entity_key: 'youtube', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'youtube', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'tiktok'})
-MATCH (el:EntityL10n {entity_key: 'tiktok', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'tiktok', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'snapchat'})
-MATCH (el:EntityL10n {entity_key: 'snapchat', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'snapchat', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'whatsapp'})
-MATCH (el:EntityL10n {entity_key: 'whatsapp', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'whatsapp', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'telegram'})
-MATCH (el:EntityL10n {entity_key: 'telegram', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'telegram', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'pinterest'})
-MATCH (el:EntityL10n {entity_key: 'pinterest', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'pinterest', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'spotify'})
-MATCH (el:EntityL10n {entity_key: 'spotify', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'spotify', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'apple'})
-MATCH (el:EntityL10n {entity_key: 'apple', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'apple', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'soundcloud'})
-MATCH (el:EntityL10n {entity_key: 'soundcloud', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'soundcloud', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'paypal'})
-MATCH (el:EntityL10n {entity_key: 'paypal', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'paypal', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'venmo'})
-MATCH (el:EntityL10n {entity_key: 'venmo', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'venmo', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'google'})
-MATCH (el:EntityL10n {entity_key: 'google', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'google', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'waze'})
-MATCH (el:EntityL10n {entity_key: 'waze', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'waze', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'zapier'})
-MATCH (el:EntityL10n {entity_key: 'zapier', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'zapier', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'make'})
-MATCH (el:EntityL10n {entity_key: 'make', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'make', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'n8n'})
-MATCH (el:EntityL10n {entity_key: 'n8n', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'n8n', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'hubspot'})
-MATCH (el:EntityL10n {entity_key: 'hubspot', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'hubspot', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'salesforce'})
-MATCH (el:EntityL10n {entity_key: 'salesforce', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'salesforce', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'mailchimp'})
-MATCH (el:EntityL10n {entity_key: 'mailchimp', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'mailchimp', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'shopify'})
-MATCH (el:EntityL10n {entity_key: 'shopify', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'shopify', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'woocommerce'})
-MATCH (el:EntityL10n {entity_key: 'woocommerce', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'woocommerce', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'zapier-integration'})
-MATCH (el:EntityL10n {entity_key: 'zapier-integration', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'zapier-integration', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'make-integration'})
-MATCH (el:EntityL10n {entity_key: 'make-integration', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'make-integration', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'n8n-integration'})
-MATCH (el:EntityL10n {entity_key: 'n8n-integration', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'n8n-integration', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'hubspot-integration'})
-MATCH (el:EntityL10n {entity_key: 'hubspot-integration', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'hubspot-integration', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'salesforce-integration'})
-MATCH (el:EntityL10n {entity_key: 'salesforce-integration', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'salesforce-integration', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'mailchimp-integration'})
-MATCH (el:EntityL10n {entity_key: 'mailchimp-integration', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'mailchimp-integration', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'google-sheets-integration'})
-MATCH (el:EntityL10n {entity_key: 'google-sheets-integration', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'google-sheets-integration', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'notion-integration'})
-MATCH (el:EntityL10n {entity_key: 'notion-integration', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'notion-integration', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'slack-integration'})
-MATCH (el:EntityL10n {entity_key: 'slack-integration', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'slack-integration', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'shopify-integration'})
-MATCH (el:EntityL10n {entity_key: 'shopify-integration', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'shopify-integration', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'woocommerce-integration'})
-MATCH (el:EntityL10n {entity_key: 'woocommerce-integration', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'woocommerce-integration', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'wordpress-integration'})
-MATCH (el:EntityL10n {entity_key: 'wordpress-integration', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'wordpress-integration', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'quiet-zone'})
-MATCH (el:EntityL10n {entity_key: 'quiet-zone', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'quiet-zone', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'error-correction'})
-MATCH (el:EntityL10n {entity_key: 'error-correction', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'error-correction', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'data-capacity'})
-MATCH (el:EntityL10n {entity_key: 'data-capacity', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'data-capacity', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-version'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-version', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-version', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'encoding-mode'})
-MATCH (el:EntityL10n {entity_key: 'encoding-mode', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'encoding-mode', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'module'})
-MATCH (el:EntityL10n {entity_key: 'module', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'module', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'finder-pattern'})
-MATCH (el:EntityL10n {entity_key: 'finder-pattern', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'finder-pattern', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'timing-pattern'})
-MATCH (el:EntityL10n {entity_key: 'timing-pattern', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'timing-pattern', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-messaging'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-messaging', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-messaging', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-video-platform'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-video-platform', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-video-platform', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-professional'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-professional', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-professional', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-music-platform'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-music-platform', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-music-platform', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'funny-qr-codes'})
-MATCH (el:EntityL10n {entity_key: 'funny-qr-codes', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'funny-qr-codes', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-tattoo'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-tattoo', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-tattoo', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-art-installation'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-art-installation', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-art-installation', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-scavenger-hunt'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-scavenger-hunt', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-scavenger-hunt', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-reviews'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-reviews', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-reviews', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-contactless-payment'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-contactless-payment', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-contactless-payment', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-loyalty-program'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-loyalty-program', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-loyalty-program', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-product-authentication'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-product-authentication', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-product-authentication', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-event-checkin'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-event-checkin', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-event-checkin', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-networking'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-networking', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-networking', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-wedding'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-wedding', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-wedding', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-museum-exhibit'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-museum-exhibit', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-museum-exhibit', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'how-to-create-qr-code'})
-MATCH (el:EntityL10n {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-design-guide'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-design-guide', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-design-guide', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-print-guide'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-print-guide', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-print-guide', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'dynamic-vs-static-guide'})
-MATCH (el:EntityL10n {entity_key: 'dynamic-vs-static-guide', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'dynamic-vs-static-guide', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-marketing-guide'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-marketing-guide', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-marketing-guide', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-restaurant-guide'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-restaurant-guide', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-restaurant-guide', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-business-card-guide'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-business-card-guide', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-business-card-guide', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-api-guide'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-api-guide', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-api-guide', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-analytics-guide'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-analytics-guide', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-analytics-guide', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-security-guide'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-security-guide', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-security-guide', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-vs-barcode'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-vs-barcode', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-vs-barcode', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'dynamic-vs-static-qr-code'})
-MATCH (el:EntityL10n {entity_key: 'dynamic-vs-static-qr-code', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'dynamic-vs-static-qr-code', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-vs-nfc'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-vs-nfc', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-vs-nfc', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-vs-data-matrix'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-vs-data-matrix', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-vs-data-matrix', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'free-vs-paid-qr-generator'})
-MATCH (el:EntityL10n {entity_key: 'free-vs-paid-qr-generator', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'free-vs-paid-qr-generator', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'qr-code-ai-vs-competitors'})
-MATCH (el:EntityL10n {entity_key: 'qr-code-ai-vs-competitors', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'qr-code-ai-vs-competitors', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'short-link-vs-qr-code'})
-MATCH (el:EntityL10n {entity_key: 'short-link-vs-qr-code', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'short-link-vs-qr-code', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 MATCH (e:Entity {key: 'spotify-code-vs-qr-code'})
-MATCH (el:EntityL10n {entity_key: 'spotify-code-vs-qr-code', locale_key: 'fr-FR'})
-MERGE (e)-[:HAS_L10N]->(el);
+MATCH (el:EntityContent {entity_key: 'spotify-code-vs-qr-code', locale_key: 'fr-FR'})
+MERGE (e)-[:HAS_CONTENT]->(el);
 
 // -------------------------------------------------------------------
 // Create relations to Locale (FOR_LOCALE)
 // -------------------------------------------------------------------
 
 MATCH (l:Locale {key: 'fr-FR'})
-MATCH (el:EntityL10n {locale_key: 'fr-FR'})
+MATCH (el:EntityContent {locale_key: 'fr-FR'})
 MERGE (el)-[:FOR_LOCALE]->(l);

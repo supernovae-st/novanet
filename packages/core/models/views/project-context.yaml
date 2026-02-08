@@ -12,7 +12,7 @@ include:
   - relation: HAS_BRAND_IDENTITY
     direction: outgoing
 
-  - relation: HAS_L10N
+  - relation: HAS_CONTENT
     direction: outgoing
     include:
       - relation: FOR_LOCALE

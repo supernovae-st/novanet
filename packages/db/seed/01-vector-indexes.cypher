@@ -26,9 +26,9 @@ OPTIONS {
   }
 };
 
-// EntityL10n embeddings (v10.3: replaces ConceptL10n, localized layer)
+// EntityContent embeddings (v10.3: replaces ConceptL10n, localized layer)
 CREATE VECTOR INDEX entity_l10n_embedding IF NOT EXISTS
-FOR (el:EntityL10n) ON (el.embedding)
+FOR (el:EntityContent) ON (el.embedding)
 OPTIONS {
   indexConfig: {
     `vector.dimensions`: 1536,
@@ -60,9 +60,9 @@ OPTIONS {
 CREATE FULLTEXT INDEX entity_fulltext IF NOT EXISTS
 FOR (e:Entity) ON EACH [e.key, e.display_name, e.description, e.llm_context];
 
-// EntityL10n fulltext (v10.3: replaces ConceptL10n, localized content)
+// EntityContent fulltext (v10.3: replaces ConceptL10n, localized content)
 CREATE FULLTEXT INDEX entity_l10n_fulltext IF NOT EXISTS
-FOR (el:EntityL10n) ON EACH [el.title, el.definition, el.summary];
+FOR (el:EntityContent) ON EACH [el.title, el.definition, el.summary];
 
 // ---------------------------------------------------------------------------
 // VERIFICATION

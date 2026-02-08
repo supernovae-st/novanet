@@ -83,7 +83,7 @@ docs:
     - name: Entity keyword coverage (v10.1)
       description: Which concepts target which keywords (via EntityContent)
       query: |
-        MATCH (c:Entity)-[:HAS_L10N]->(cl:EntityContent)-[:EXPRESSES]->(kw:SEOKeyword)
+        MATCH (c:Entity)-[:HAS_CONTENT]->(cl:EntityContent)-[:EXPRESSES]->(kw:SEOKeyword)
         WHERE (cl)-[:FOR_LOCALE]->(:Locale {key: $locale})
         RETURN c.key AS concept,
                cl.title AS localizedTitle,
@@ -95,8 +95,8 @@ docs:
     - name: Internal linking opportunities
       description: Pages that could link based on shared SEO targets
       query: |
-        MATCH (p1:Page)-[:USES_ENTITY]->(c1:Entity)-[:HAS_L10N]->(cl1:EntityContent)-[:EXPRESSES]->(kw:SEOKeyword)
-        MATCH (p2:Page)-[:USES_ENTITY]->(c2:Entity)-[:HAS_L10N]->(cl2:EntityContent)-[:EXPRESSES]->(kw)
+        MATCH (p1:Page)-[:USES_ENTITY]->(c1:Entity)-[:HAS_CONTENT]->(cl1:EntityContent)-[:EXPRESSES]->(kw:SEOKeyword)
+        MATCH (p2:Page)-[:USES_ENTITY]->(c2:Entity)-[:HAS_CONTENT]->(cl2:EntityContent)-[:EXPRESSES]->(kw)
         WHERE p1 <> p2
         AND NOT EXISTS { (p1)-[:LINKS_TO]->(p2) }
         RETURN p1.key AS sourcePage,
