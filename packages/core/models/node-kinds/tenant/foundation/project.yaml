@@ -103,7 +103,7 @@ node:
       cardinality: "N:1"
       description: "Organization that owns this project (v10.5)"
 
-    HAS_L10N:
+    HAS_CONTENT:
       to: ProjectL10n
       cardinality: "1:N"
       description: "Localized project identity and messaging"

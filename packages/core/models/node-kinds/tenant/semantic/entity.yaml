@@ -10,16 +10,16 @@
 #
 # ARCHITECTURE (Full Hierarchy):
 #
-#   Organization ──[:HAS_PROJECT]──> Project ──[:HAS_ENTITY]──> Entity (invariant)
-#                                                                     │
-#                                                                     └──[:HAS_L10N]──> EntityL10n
-#                                                                                            │
-#                                                                                            └──[:FOR_LOCALE]──> Locale
+#   Tenant ──[:HAS_ENTITY]──> Entity (invariant)
+#                                   │
+#                                   └──[:HAS_CONTENT]──> EntityContent
+#                                                            │
+#                                                            └──[:FOR_LOCALE]──> Locale
 #
 #   • Organization = Multi-tenant isolation (e.g., SuperNovae Studio)
 #   • Project = Product container (e.g., QR Code AI) - holds all entities
 #   • Entity = INVARIANT: defined once, same structure for all locales
-#   • EntityL10n = LOCALIZED: generated natively per locale (NOT translated)
+#   • EntityContent = LOCALIZED: generated natively per locale (NOT translated)
 #
 # KEY PRINCIPLE:
 #   Generation, NOT Translation. Content is generated natively per locale,
@@ -318,29 +318,66 @@ node:
   # RELATIONS (FROM this node)
   # ═══════════════════════════════════════════════════════════════════════════════
   #
-  # Entity has 3 relation types:
-  #   1. HAS_L10N      → Links to localized versions (EntityL10n)
-  #   2. SUBTOPIC_OF   → Hierarchical parent (pillar/cluster structure)
-  #   3. SEMANTIC_LINK → Spreading activation (weighted cross-references)
+  # Entity has 4 relation types:
+  #   1. HAS_CONTENT   → Links to localized content (EntityContent) - v10.9.0
+  #   2. HAS_CHILD     → URL hierarchy (Entity children) - v10.9.0
+  #   3. SUBTOPIC_OF   → Hierarchical parent (pillar/cluster structure)
+  #   4. SEMANTIC_LINK → Spreading activation (weighted cross-references)
   #
   # ═══════════════════════════════════════════════════════════════════════════════
 
   relations:
 
     # ─────────────────────────────────────────────────────────────────────────────
-    # HAS_L10N: Localization relation
+    # HAS_CONTENT: Localization relation (v10.9.0: renamed from HAS_L10N)
     # ─────────────────────────────────────────────────────────────────────────────
     # PURPOSE:
-    #   Links invariant Entity to its localized versions.
-    #   One EntityL10n per locale (fr-FR, en-US, ja-JP, etc.)
+    #   Links invariant Entity to its localized content.
+    #   One EntityContent per locale (fr-FR, en-US, ja-JP, etc.)
     #
     # PATTERN:
-    #   Entity ──[:HAS_L10N]──> EntityL10n ──[:FOR_LOCALE]──> Locale
+    #   Entity ──[:HAS_CONTENT]──> EntityContent ──[:FOR_LOCALE]──> Locale
     # ─────────────────────────────────────────────────────────────────────────────
-    HAS_L10N:
-      to: EntityL10n
+    HAS_CONTENT:
+      to: EntityContent
       cardinality: "1:N"
       description: "Localized content for this entity (one per locale)"
+
+    # ─────────────────────────────────────────────────────────────────────────────
+    # HAS_CHILD: URL hierarchy (v10.9.0)
+    # ─────────────────────────────────────────────────────────────────────────────
+    # PURPOSE:
+    #   Creates parent/child hierarchy for URL structure.
+    #   URL path = parent.slug + "/" + child.slug
+    #
+    # PATTERN:
+    #   Entity (blog) ──[:HAS_CHILD]──> Entity (article)
+    #   URL: /fr/blog/article
+    #
+    # PROPERTIES:
+    #   • position: Sort order among siblings
+    #   • visibility: public | draft | internal
+    #   • featured: Highlight in parent's featured section
+    #
+    # CONSTRAINTS:
+    #   • Max depth = 3 (enforced by validation)
+    #   • Cycle protection: prevents A → B → A
+    # ─────────────────────────────────────────────────────────────────────────────
+    HAS_CHILD:
+      to: Entity
+      cardinality: "N:N"
+      props:
+        position:
+          type: int
+          description: "Sort order among siblings"
+        visibility:
+          type: string
+          enum: [public, draft, internal]
+          description: "Content visibility status"
+        featured:
+          type: boolean
+          description: "Highlight in parent's featured section"
+      description: "Child entities forming URL hierarchy (max depth 3)"
 
     # ─────────────────────────────────────────────────────────────────────────────
     # SUBTOPIC_OF: Hierarchical parent
@@ -558,11 +595,11 @@ node:
   # ─────────────────────────────────────────────────────────────────────────────
 
   cypher:
-    # Get entity with all localizations
-    get_with_l10n: |
+    # Get entity with all content (v10.9.0: renamed)
+    get_with_content: |
       MATCH (t:Tenant)-[:HAS_ENTITY]->(e:Entity {key: $key})
-      OPTIONAL MATCH (e)-[:HAS_L10N]->(el:EntityL10n)-[:FOR_LOCALE]->(l:Locale)
-      RETURN e, collect({locale: l.key, title: el.display_name}) AS localizations
+      OPTIONAL MATCH (e)-[:HAS_CONTENT]->(ec:EntityContent)-[:FOR_LOCALE]->(l:Locale)
+      RETURN e, collect({locale: l.key, title: ec.display_name}) AS content
 
     # Get pillar with all subtopics
     get_pillar_cluster: |

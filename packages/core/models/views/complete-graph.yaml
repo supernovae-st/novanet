@@ -65,7 +65,7 @@ docs:
       description: 6 atomic knowledge elements
 
     - name: Global - Semantic
-      nodes: [Entity, EntityL10n]
+      nodes: [Entity, EntityContent]
       color: purple
       description: "v10.3 Entity-Centric Architecture (replaces Concept/ConceptL10n)"
 
@@ -83,7 +83,7 @@ docs:
     - name: Project - Semantic
       nodes: [AudiencePersona, ChannelSurface]
       color: green
-      description: "Audience and channel targeting (v10.3: Entity/EntityL10n moved to Global)"
+      description: "Audience and channel targeting (v10.3: Entity/EntityContent moved to Global)"
 
     - name: Project - Instruction
       nodes: [PagePrompt, BlockPrompt, BlockRules, BlockInstruction, PromptArtifact]
@@ -91,7 +91,7 @@ docs:
       description: "Generation instructions (v10.3: added BlockInstruction)"
 
     - name: Project - Output
-      nodes: [PageL10n, BlockL10n, GenerationJob, OutputArtifact, EvaluationSignal]
+      nodes: [PageGenerated, BlockGenerated, GenerationJob, OutputArtifact, EvaluationSignal]
       color: orange
       description: Generated content outputs
 

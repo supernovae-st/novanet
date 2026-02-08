@@ -1,16 +1,16 @@
 # packages/core/models/arc-kinds/generation/assembles.yaml
-# ArcKind: ASSEMBLES — PageL10n assembles BlockL10ns with position for ordering
+# ArcKind: ASSEMBLES — PageGenerated assembles BlockGenerateds with position for ordering
 
 arc:
   name: ASSEMBLES
   family: generation
   scope: intra_realm
-  source: PageL10n
-  target: BlockL10n
+  source: PageGenerated
+  target: BlockGenerated
   cardinality: one_to_many
   properties:
     - name: position
       type: string
       required: false
-  llm_context: PageL10n assembles BlockL10ns with position for ordering.
-  cypher_pattern: (PageL10n)-[:ASSEMBLES {position}]->(BlockL10n)
+  llm_context: PageGenerated assembles BlockGenerateds with position for ordering.
+  cypher_pattern: (PageGenerated)-[:ASSEMBLES {position}]->(BlockGenerated)

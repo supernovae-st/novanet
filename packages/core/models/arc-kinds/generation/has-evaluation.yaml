@@ -6,8 +6,8 @@ arc:
   family: generation
   scope: intra_realm
   source:
-    - PageL10n
-    - BlockL10n
+    - PageGenerated
+    - BlockGenerated
     - OutputArtifact
   target: EvaluationSignal
   cardinality: one_to_many
@@ -16,4 +16,4 @@ arc:
       type: string
       required: false
   llm_context: Content has quality evaluation signals. Not traversed in spreading activation.
-  cypher_pattern: (PageL10n)-[:HAS_EVALUATION {evaluated_at}]->(EvaluationSignal)
+  cypher_pattern: (PageGenerated)-[:HAS_EVALUATION {evaluated_at}]->(EvaluationSignal)

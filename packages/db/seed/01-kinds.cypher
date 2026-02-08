@@ -158,6 +158,36 @@ ON MATCH SET
   k_Block.generation_count = 0,
   k_Block.updated_at = datetime();
 
+MERGE (k_BlockGenerated:Meta:Kind {label: 'BlockGenerated'})
+ON CREATE SET
+  k_BlockGenerated.key = 'block-generated',
+  k_BlockGenerated.realm = 'tenant',
+  k_BlockGenerated.layer = 'output',
+  k_BlockGenerated.trait = 'derived',
+  k_BlockGenerated.display_name = 'BlockGenerated',
+  k_BlockGenerated.llm_context = 'LLM-generated content for a block (derived from source content)',
+  k_BlockGenerated.yaml_path = 'node-kinds/tenant/output/block-generated.yaml',
+  k_BlockGenerated.properties = ['key', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'generated', 'generated_at', 'generator_version', 'status', 'version', 'published_at', 'replaced_at'],
+  k_BlockGenerated.required_properties = ['key', 'display_name', 'description', 'created_at', 'updated_at', 'generated', 'generated_at', 'generator_version', 'status', 'version'],
+  k_BlockGenerated.schema_hint = 'created_at (req), description (req), display_name (req), generated (req), generated_at (req), generator_version (req), key (req), llm_context, published_at, replaced_at, status (req), updated_at (req), version (req)',
+  k_BlockGenerated.context_budget = 'low',
+  k_BlockGenerated.generation_count = 0,
+  k_BlockGenerated.created_at = datetime()
+ON MATCH SET
+  k_BlockGenerated.key = 'block-generated',
+  k_BlockGenerated.realm = 'tenant',
+  k_BlockGenerated.layer = 'output',
+  k_BlockGenerated.trait = 'derived',
+  k_BlockGenerated.display_name = 'BlockGenerated',
+  k_BlockGenerated.llm_context = 'LLM-generated content for a block (derived from source content)',
+  k_BlockGenerated.yaml_path = 'node-kinds/tenant/output/block-generated.yaml',
+  k_BlockGenerated.properties = ['key', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'generated', 'generated_at', 'generator_version', 'status', 'version', 'published_at', 'replaced_at'],
+  k_BlockGenerated.required_properties = ['key', 'display_name', 'description', 'created_at', 'updated_at', 'generated', 'generated_at', 'generator_version', 'status', 'version'],
+  k_BlockGenerated.schema_hint = 'created_at (req), description (req), display_name (req), generated (req), generated_at (req), generator_version (req), key (req), llm_context, published_at, replaced_at, status (req), updated_at (req), version (req)',
+  k_BlockGenerated.context_budget = 'low',
+  k_BlockGenerated.generation_count = 0,
+  k_BlockGenerated.updated_at = datetime();
+
 MERGE (k_BlockInstruction:Meta:Kind {label: 'BlockInstruction'})
 ON CREATE SET
   k_BlockInstruction.key = 'block-instruction',
@@ -187,36 +217,6 @@ ON MATCH SET
   k_BlockInstruction.context_budget = 'medium',
   k_BlockInstruction.generation_count = 0,
   k_BlockInstruction.updated_at = datetime();
-
-MERGE (k_BlockL10n:Meta:Kind {label: 'BlockL10n'})
-ON CREATE SET
-  k_BlockL10n.key = 'block-l10n',
-  k_BlockL10n.realm = 'tenant',
-  k_BlockL10n.layer = 'output',
-  k_BlockL10n.trait = 'localized',
-  k_BlockL10n.display_name = 'BlockL10n',
-  k_BlockL10n.llm_context = 'LLM-generated localized content for a block',
-  k_BlockL10n.yaml_path = 'node-kinds/tenant/output/block-l10n.yaml',
-  k_BlockL10n.properties = ['display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'generated', 'generated_at', 'generator_version', 'status', 'version', 'published_at', 'replaced_at'],
-  k_BlockL10n.required_properties = ['display_name', 'description', 'created_at', 'updated_at', 'generated', 'generated_at', 'generator_version', 'status', 'version'],
-  k_BlockL10n.schema_hint = 'created_at (req), description (req), display_name (req), generated (req), generated_at (req), generator_version (req), llm_context, published_at, replaced_at, status (req), updated_at (req), version (req)',
-  k_BlockL10n.context_budget = 'high',
-  k_BlockL10n.generation_count = 0,
-  k_BlockL10n.created_at = datetime()
-ON MATCH SET
-  k_BlockL10n.key = 'block-l10n',
-  k_BlockL10n.realm = 'tenant',
-  k_BlockL10n.layer = 'output',
-  k_BlockL10n.trait = 'localized',
-  k_BlockL10n.display_name = 'BlockL10n',
-  k_BlockL10n.llm_context = 'LLM-generated localized content for a block',
-  k_BlockL10n.yaml_path = 'node-kinds/tenant/output/block-l10n.yaml',
-  k_BlockL10n.properties = ['display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'generated', 'generated_at', 'generator_version', 'status', 'version', 'published_at', 'replaced_at'],
-  k_BlockL10n.required_properties = ['display_name', 'description', 'created_at', 'updated_at', 'generated', 'generated_at', 'generator_version', 'status', 'version'],
-  k_BlockL10n.schema_hint = 'created_at (req), description (req), display_name (req), generated (req), generated_at (req), generator_version (req), llm_context, published_at, replaced_at, status (req), updated_at (req), version (req)',
-  k_BlockL10n.context_budget = 'high',
-  k_BlockL10n.generation_count = 0,
-  k_BlockL10n.updated_at = datetime();
 
 MERGE (k_BlockPrompt:Meta:Kind {label: 'BlockPrompt'})
 ON CREATE SET
@@ -638,35 +638,35 @@ ON MATCH SET
   k_Entity.generation_count = 0,
   k_Entity.updated_at = datetime();
 
-MERGE (k_EntityL10n:Meta:Kind {label: 'EntityL10n'})
+MERGE (k_EntityContent:Meta:Kind {label: 'EntityContent'})
 ON CREATE SET
-  k_EntityL10n.key = 'entity-l10n',
-  k_EntityL10n.realm = 'tenant',
-  k_EntityL10n.layer = 'semantic',
-  k_EntityL10n.trait = 'localized',
-  k_EntityL10n.display_name = 'EntityL10n',
-  k_EntityL10n.llm_context = 'Locale-native content for a Tenant Entity',
-  k_EntityL10n.yaml_path = 'node-kinds/tenant/semantic/entity-l10n.yaml',
-  k_EntityL10n.properties = ['entity_key', 'locale_key', 'slug', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'definition', 'purpose', 'benefits', 'usage_examples', 'audience_segment', 'cultural_notes', 'version'],
-  k_EntityL10n.required_properties = ['entity_key', 'locale_key', 'slug', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'version'],
-  k_EntityL10n.schema_hint = 'audience_segment, benefits, created_at (req), cultural_notes, definition, description (req), display_name (req), entity_key (req), llm_context (req), locale_key (req), purpose, slug (req), updated_at (req), usage_examples, version (req)',
-  k_EntityL10n.context_budget = 'high',
-  k_EntityL10n.generation_count = 0,
-  k_EntityL10n.created_at = datetime()
+  k_EntityContent.key = 'entity-content',
+  k_EntityContent.realm = 'tenant',
+  k_EntityContent.layer = 'semantic',
+  k_EntityContent.trait = 'localized',
+  k_EntityContent.display_name = 'EntityContent',
+  k_EntityContent.llm_context = 'Locale-native content for an Entity',
+  k_EntityContent.yaml_path = 'node-kinds/tenant/semantic/entity-content.yaml',
+  k_EntityContent.properties = ['key', 'entity_key', 'locale_key', 'slug', 'full_path', 'parent_slug', 'depth', 'slug_history', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'curation_status', 'definition', 'purpose', 'benefits', 'usage_examples', 'audience_segment', 'cultural_notes', 'version'],
+  k_EntityContent.required_properties = ['key', 'entity_key', 'locale_key', 'slug', 'full_path', 'depth', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'curation_status', 'version'],
+  k_EntityContent.schema_hint = 'audience_segment, benefits, created_at (req), cultural_notes, curation_status (req), definition, depth (req), description (req), display_name (req), entity_key (req), full_path (req), key (req), llm_context (req), locale_key (req), parent_slug, purpose, slug (req), slug_history, updated_at (req), usage_examples, version (req)',
+  k_EntityContent.context_budget = 'high',
+  k_EntityContent.generation_count = 0,
+  k_EntityContent.created_at = datetime()
 ON MATCH SET
-  k_EntityL10n.key = 'entity-l10n',
-  k_EntityL10n.realm = 'tenant',
-  k_EntityL10n.layer = 'semantic',
-  k_EntityL10n.trait = 'localized',
-  k_EntityL10n.display_name = 'EntityL10n',
-  k_EntityL10n.llm_context = 'Locale-native content for a Tenant Entity',
-  k_EntityL10n.yaml_path = 'node-kinds/tenant/semantic/entity-l10n.yaml',
-  k_EntityL10n.properties = ['entity_key', 'locale_key', 'slug', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'definition', 'purpose', 'benefits', 'usage_examples', 'audience_segment', 'cultural_notes', 'version'],
-  k_EntityL10n.required_properties = ['entity_key', 'locale_key', 'slug', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'version'],
-  k_EntityL10n.schema_hint = 'audience_segment, benefits, created_at (req), cultural_notes, definition, description (req), display_name (req), entity_key (req), llm_context (req), locale_key (req), purpose, slug (req), updated_at (req), usage_examples, version (req)',
-  k_EntityL10n.context_budget = 'high',
-  k_EntityL10n.generation_count = 0,
-  k_EntityL10n.updated_at = datetime();
+  k_EntityContent.key = 'entity-content',
+  k_EntityContent.realm = 'tenant',
+  k_EntityContent.layer = 'semantic',
+  k_EntityContent.trait = 'localized',
+  k_EntityContent.display_name = 'EntityContent',
+  k_EntityContent.llm_context = 'Locale-native content for an Entity',
+  k_EntityContent.yaml_path = 'node-kinds/tenant/semantic/entity-content.yaml',
+  k_EntityContent.properties = ['key', 'entity_key', 'locale_key', 'slug', 'full_path', 'parent_slug', 'depth', 'slug_history', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'curation_status', 'definition', 'purpose', 'benefits', 'usage_examples', 'audience_segment', 'cultural_notes', 'version'],
+  k_EntityContent.required_properties = ['key', 'entity_key', 'locale_key', 'slug', 'full_path', 'depth', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'curation_status', 'version'],
+  k_EntityContent.schema_hint = 'audience_segment, benefits, created_at (req), cultural_notes, curation_status (req), definition, depth (req), description (req), display_name (req), entity_key (req), full_path (req), key (req), llm_context (req), locale_key (req), parent_slug, purpose, slug (req), slug_history, updated_at (req), usage_examples, version (req)',
+  k_EntityContent.context_budget = 'high',
+  k_EntityContent.generation_count = 0,
+  k_EntityContent.updated_at = datetime();
 
 MERGE (k_EvaluationSignal:Meta:Kind {label: 'EvaluationSignal'})
 ON CREATE SET
@@ -1238,35 +1238,35 @@ ON MATCH SET
   k_Page.generation_count = 0,
   k_Page.updated_at = datetime();
 
-MERGE (k_PageL10n:Meta:Kind {label: 'PageL10n'})
+MERGE (k_PageGenerated:Meta:Kind {label: 'PageGenerated'})
 ON CREATE SET
-  k_PageL10n.key = 'page-l10n',
-  k_PageL10n.realm = 'tenant',
-  k_PageL10n.layer = 'output',
-  k_PageL10n.trait = 'localized',
-  k_PageL10n.display_name = 'PageL10n',
-  k_PageL10n.llm_context = 'Assembled BlockL10n content for a page in a specific locale',
-  k_PageL10n.yaml_path = 'node-kinds/tenant/output/page-l10n.yaml',
-  k_PageL10n.properties = ['display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'assembled', 'assembled_at', 'assembler_version', 'status', 'version', 'published_at', 'replaced_at'],
-  k_PageL10n.required_properties = ['display_name', 'description', 'created_at', 'updated_at', 'assembled', 'assembled_at', 'assembler_version', 'status', 'version'],
-  k_PageL10n.schema_hint = 'assembled (req), assembled_at (req), assembler_version (req), created_at (req), description (req), display_name (req), llm_context, published_at, replaced_at, status (req), updated_at (req), version (req)',
-  k_PageL10n.context_budget = 'high',
-  k_PageL10n.generation_count = 0,
-  k_PageL10n.created_at = datetime()
+  k_PageGenerated.key = 'page-generated',
+  k_PageGenerated.realm = 'tenant',
+  k_PageGenerated.layer = 'output',
+  k_PageGenerated.trait = 'derived',
+  k_PageGenerated.display_name = 'PageGenerated',
+  k_PageGenerated.llm_context = 'Assembled BlockGenerated content for a page (derived from source content)',
+  k_PageGenerated.yaml_path = 'node-kinds/tenant/output/page-generated.yaml',
+  k_PageGenerated.properties = ['key', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'assembled', 'assembled_at', 'assembler_version', 'status', 'version', 'published_at', 'replaced_at'],
+  k_PageGenerated.required_properties = ['key', 'display_name', 'description', 'created_at', 'updated_at', 'assembled', 'assembled_at', 'assembler_version', 'status', 'version'],
+  k_PageGenerated.schema_hint = 'assembled (req), assembled_at (req), assembler_version (req), created_at (req), description (req), display_name (req), key (req), llm_context, published_at, replaced_at, status (req), updated_at (req), version (req)',
+  k_PageGenerated.context_budget = 'low',
+  k_PageGenerated.generation_count = 0,
+  k_PageGenerated.created_at = datetime()
 ON MATCH SET
-  k_PageL10n.key = 'page-l10n',
-  k_PageL10n.realm = 'tenant',
-  k_PageL10n.layer = 'output',
-  k_PageL10n.trait = 'localized',
-  k_PageL10n.display_name = 'PageL10n',
-  k_PageL10n.llm_context = 'Assembled BlockL10n content for a page in a specific locale',
-  k_PageL10n.yaml_path = 'node-kinds/tenant/output/page-l10n.yaml',
-  k_PageL10n.properties = ['display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'assembled', 'assembled_at', 'assembler_version', 'status', 'version', 'published_at', 'replaced_at'],
-  k_PageL10n.required_properties = ['display_name', 'description', 'created_at', 'updated_at', 'assembled', 'assembled_at', 'assembler_version', 'status', 'version'],
-  k_PageL10n.schema_hint = 'assembled (req), assembled_at (req), assembler_version (req), created_at (req), description (req), display_name (req), llm_context, published_at, replaced_at, status (req), updated_at (req), version (req)',
-  k_PageL10n.context_budget = 'high',
-  k_PageL10n.generation_count = 0,
-  k_PageL10n.updated_at = datetime();
+  k_PageGenerated.key = 'page-generated',
+  k_PageGenerated.realm = 'tenant',
+  k_PageGenerated.layer = 'output',
+  k_PageGenerated.trait = 'derived',
+  k_PageGenerated.display_name = 'PageGenerated',
+  k_PageGenerated.llm_context = 'Assembled BlockGenerated content for a page (derived from source content)',
+  k_PageGenerated.yaml_path = 'node-kinds/tenant/output/page-generated.yaml',
+  k_PageGenerated.properties = ['key', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'assembled', 'assembled_at', 'assembler_version', 'status', 'version', 'published_at', 'replaced_at'],
+  k_PageGenerated.required_properties = ['key', 'display_name', 'description', 'created_at', 'updated_at', 'assembled', 'assembled_at', 'assembler_version', 'status', 'version'],
+  k_PageGenerated.schema_hint = 'assembled (req), assembled_at (req), assembler_version (req), created_at (req), description (req), display_name (req), key (req), llm_context, published_at, replaced_at, status (req), updated_at (req), version (req)',
+  k_PageGenerated.context_budget = 'low',
+  k_PageGenerated.generation_count = 0,
+  k_PageGenerated.updated_at = datetime();
 
 MERGE (k_PagePrompt:Meta:Kind {label: 'PagePrompt'})
 ON CREATE SET
@@ -1947,10 +1947,10 @@ MERGE (l)-[:HAS_KIND]->(k);
 MATCH (l:Layer {key: 'structure'}), (k:Kind {label: 'Block'})
 MERGE (l)-[:HAS_KIND]->(k);
 
-MATCH (l:Layer {key: 'instruction'}), (k:Kind {label: 'BlockInstruction'})
+MATCH (l:Layer {key: 'output'}), (k:Kind {label: 'BlockGenerated'})
 MERGE (l)-[:HAS_KIND]->(k);
 
-MATCH (l:Layer {key: 'output'}), (k:Kind {label: 'BlockL10n'})
+MATCH (l:Layer {key: 'instruction'}), (k:Kind {label: 'BlockInstruction'})
 MERGE (l)-[:HAS_KIND]->(k);
 
 MATCH (l:Layer {key: 'instruction'}), (k:Kind {label: 'BlockPrompt'})
@@ -1995,7 +1995,7 @@ MERGE (l)-[:HAS_KIND]->(k);
 MATCH (l:Layer {key: 'semantic'}), (k:Kind {label: 'Entity'})
 MERGE (l)-[:HAS_KIND]->(k);
 
-MATCH (l:Layer {key: 'semantic'}), (k:Kind {label: 'EntityL10n'})
+MATCH (l:Layer {key: 'semantic'}), (k:Kind {label: 'EntityContent'})
 MERGE (l)-[:HAS_KIND]->(k);
 
 MATCH (l:Layer {key: 'output'}), (k:Kind {label: 'EvaluationSignal'})
@@ -2055,7 +2055,7 @@ MERGE (l)-[:HAS_KIND]->(k);
 MATCH (l:Layer {key: 'structure'}), (k:Kind {label: 'Page'})
 MERGE (l)-[:HAS_KIND]->(k);
 
-MATCH (l:Layer {key: 'output'}), (k:Kind {label: 'PageL10n'})
+MATCH (l:Layer {key: 'output'}), (k:Kind {label: 'PageGenerated'})
 MERGE (l)-[:HAS_KIND]->(k);
 
 MATCH (l:Layer {key: 'instruction'}), (k:Kind {label: 'PagePrompt'})
@@ -2143,10 +2143,10 @@ MERGE (k)-[:IN_REALM]->(r);
 MATCH (k:Kind {label: 'Block'}), (r:Realm {key: 'tenant'})
 MERGE (k)-[:IN_REALM]->(r);
 
-MATCH (k:Kind {label: 'BlockInstruction'}), (r:Realm {key: 'tenant'})
+MATCH (k:Kind {label: 'BlockGenerated'}), (r:Realm {key: 'tenant'})
 MERGE (k)-[:IN_REALM]->(r);
 
-MATCH (k:Kind {label: 'BlockL10n'}), (r:Realm {key: 'tenant'})
+MATCH (k:Kind {label: 'BlockInstruction'}), (r:Realm {key: 'tenant'})
 MERGE (k)-[:IN_REALM]->(r);
 
 MATCH (k:Kind {label: 'BlockPrompt'}), (r:Realm {key: 'tenant'})
@@ -2191,7 +2191,7 @@ MERGE (k)-[:IN_REALM]->(r);
 MATCH (k:Kind {label: 'Entity'}), (r:Realm {key: 'tenant'})
 MERGE (k)-[:IN_REALM]->(r);
 
-MATCH (k:Kind {label: 'EntityL10n'}), (r:Realm {key: 'tenant'})
+MATCH (k:Kind {label: 'EntityContent'}), (r:Realm {key: 'tenant'})
 MERGE (k)-[:IN_REALM]->(r);
 
 MATCH (k:Kind {label: 'EvaluationSignal'}), (r:Realm {key: 'tenant'})
@@ -2251,7 +2251,7 @@ MERGE (k)-[:IN_REALM]->(r);
 MATCH (k:Kind {label: 'Page'}), (r:Realm {key: 'tenant'})
 MERGE (k)-[:IN_REALM]->(r);
 
-MATCH (k:Kind {label: 'PageL10n'}), (r:Realm {key: 'tenant'})
+MATCH (k:Kind {label: 'PageGenerated'}), (r:Realm {key: 'tenant'})
 MERGE (k)-[:IN_REALM]->(r);
 
 MATCH (k:Kind {label: 'PagePrompt'}), (r:Realm {key: 'tenant'})
@@ -2339,10 +2339,10 @@ MERGE (k)-[:IN_LAYER]->(l);
 MATCH (k:Kind {label: 'Block'}), (l:Layer {key: 'structure'})
 MERGE (k)-[:IN_LAYER]->(l);
 
-MATCH (k:Kind {label: 'BlockInstruction'}), (l:Layer {key: 'instruction'})
+MATCH (k:Kind {label: 'BlockGenerated'}), (l:Layer {key: 'output'})
 MERGE (k)-[:IN_LAYER]->(l);
 
-MATCH (k:Kind {label: 'BlockL10n'}), (l:Layer {key: 'output'})
+MATCH (k:Kind {label: 'BlockInstruction'}), (l:Layer {key: 'instruction'})
 MERGE (k)-[:IN_LAYER]->(l);
 
 MATCH (k:Kind {label: 'BlockPrompt'}), (l:Layer {key: 'instruction'})
@@ -2387,7 +2387,7 @@ MERGE (k)-[:IN_LAYER]->(l);
 MATCH (k:Kind {label: 'Entity'}), (l:Layer {key: 'semantic'})
 MERGE (k)-[:IN_LAYER]->(l);
 
-MATCH (k:Kind {label: 'EntityL10n'}), (l:Layer {key: 'semantic'})
+MATCH (k:Kind {label: 'EntityContent'}), (l:Layer {key: 'semantic'})
 MERGE (k)-[:IN_LAYER]->(l);
 
 MATCH (k:Kind {label: 'EvaluationSignal'}), (l:Layer {key: 'output'})
@@ -2447,7 +2447,7 @@ MERGE (k)-[:IN_LAYER]->(l);
 MATCH (k:Kind {label: 'Page'}), (l:Layer {key: 'structure'})
 MERGE (k)-[:IN_LAYER]->(l);
 
-MATCH (k:Kind {label: 'PageL10n'}), (l:Layer {key: 'output'})
+MATCH (k:Kind {label: 'PageGenerated'}), (l:Layer {key: 'output'})
 MERGE (k)-[:IN_LAYER]->(l);
 
 MATCH (k:Kind {label: 'PagePrompt'}), (l:Layer {key: 'instruction'})
@@ -2535,10 +2535,10 @@ MERGE (k)-[:EXHIBITS]->(t);
 MATCH (k:Kind {label: 'Block'}), (t:Trait {key: 'invariant'})
 MERGE (k)-[:EXHIBITS]->(t);
 
-MATCH (k:Kind {label: 'BlockInstruction'}), (t:Trait {key: 'invariant'})
+MATCH (k:Kind {label: 'BlockGenerated'}), (t:Trait {key: 'derived'})
 MERGE (k)-[:EXHIBITS]->(t);
 
-MATCH (k:Kind {label: 'BlockL10n'}), (t:Trait {key: 'localized'})
+MATCH (k:Kind {label: 'BlockInstruction'}), (t:Trait {key: 'invariant'})
 MERGE (k)-[:EXHIBITS]->(t);
 
 MATCH (k:Kind {label: 'BlockPrompt'}), (t:Trait {key: 'invariant'})
@@ -2583,7 +2583,7 @@ MERGE (k)-[:EXHIBITS]->(t);
 MATCH (k:Kind {label: 'Entity'}), (t:Trait {key: 'invariant'})
 MERGE (k)-[:EXHIBITS]->(t);
 
-MATCH (k:Kind {label: 'EntityL10n'}), (t:Trait {key: 'localized'})
+MATCH (k:Kind {label: 'EntityContent'}), (t:Trait {key: 'localized'})
 MERGE (k)-[:EXHIBITS]->(t);
 
 MATCH (k:Kind {label: 'EvaluationSignal'}), (t:Trait {key: 'derived'})
@@ -2643,7 +2643,7 @@ MERGE (k)-[:EXHIBITS]->(t);
 MATCH (k:Kind {label: 'Page'}), (t:Trait {key: 'invariant'})
 MERGE (k)-[:EXHIBITS]->(t);
 
-MATCH (k:Kind {label: 'PageL10n'}), (t:Trait {key: 'localized'})
+MATCH (k:Kind {label: 'PageGenerated'}), (t:Trait {key: 'derived'})
 MERGE (k)-[:EXHIBITS]->(t);
 
 MATCH (k:Kind {label: 'PagePrompt'}), (t:Trait {key: 'invariant'})

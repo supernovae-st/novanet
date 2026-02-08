@@ -52,7 +52,7 @@ docs:
       description: Directly linked concepts (USES_ENTITY)
 
     - name: Semantic Network
-      nodes: [Entity, EntityL10n]
+      nodes: [Entity, EntityContent]
       color: orange
       description: Related concepts via SEMANTIC_LINK
 
@@ -78,7 +78,7 @@ docs:
         WHERE ALL(r IN sl WHERE r.temperature >= $minTemp)
         WITH related, reduce(a = 1.0, r IN sl | a * r.temperature) AS activation
         WHERE activation >= $minActivation
-        MATCH (related)-[:HAS_L10N]->(rl:EntityL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+        MATCH (related)-[:HAS_L10N]->(rl:EntityContent)-[:FOR_LOCALE]->(l:Locale {key: $locale})
         RETURN related.key AS concept,
                rl.title AS title,
                rl.definition AS definition,

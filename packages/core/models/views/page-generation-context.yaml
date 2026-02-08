@@ -50,12 +50,12 @@ docs:
       description: Page blocks in position order
 
     - name: Entity Layer
-      nodes: [Entity, EntityL10n]
+      nodes: [Entity, EntityContent]
       color: orange
       description: Semantic concepts used by the page
 
     - name: Output Layer
-      nodes: [PageL10n]
+      nodes: [PageGenerated]
       color: purple
       description: Generated page output
 
@@ -67,7 +67,7 @@ docs:
         MATCH (p)-[:HAS_PROMPT]->(pp:PagePrompt)
         OPTIONAL MATCH (p)-[:HAS_BLOCK]->(b:Block)
         OPTIONAL MATCH (p)-[:USES_ENTITY]->(c:Entity)
-        OPTIONAL MATCH (c)-[:HAS_L10N]->(cl:EntityL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+        OPTIONAL MATCH (c)-[:HAS_L10N]->(cl:EntityContent)-[:FOR_LOCALE]->(l:Locale {key: $locale})
         RETURN p, pp,
                collect(DISTINCT b) AS blocks,
                collect(DISTINCT {concept: c.key, title: cl.title}) AS concepts

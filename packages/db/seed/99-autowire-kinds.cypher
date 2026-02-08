@@ -230,8 +230,8 @@ MATCH (k:Kind {label: 'PromptArtifact'})
 MERGE (n)-[:OF_KIND]->(k);
 
 // Tenant > Output (5 types)
-MATCH (n:BlockL10n)
-MATCH (k:Kind {label: 'BlockL10n'})
+MATCH (n:BlockGenerated)
+MATCH (k:Kind {label: 'BlockGenerated'})
 MERGE (n)-[:OF_KIND]->(k);
 
 MATCH (n:EvaluationSignal)
@@ -246,8 +246,8 @@ MATCH (n:OutputArtifact)
 MATCH (k:Kind {label: 'OutputArtifact'})
 MERGE (n)-[:OF_KIND]->(k);
 
-MATCH (n:PageL10n)
-MATCH (k:Kind {label: 'PageL10n'})
+MATCH (n:PageGenerated)
+MATCH (k:Kind {label: 'PageGenerated'})
 MERGE (n)-[:OF_KIND]->(k);
 
 // Tenant > Semantic (4 types)
@@ -263,8 +263,8 @@ MATCH (n:Entity)
 MATCH (k:Kind {label: 'Entity'})
 MERGE (n)-[:OF_KIND]->(k);
 
-MATCH (n:EntityL10n)
-MATCH (k:Kind {label: 'EntityL10n'})
+MATCH (n:EntityContent)
+MATCH (k:Kind {label: 'EntityContent'})
 MERGE (n)-[:OF_KIND]->(k);
 
 // Tenant > Structure (3 types)

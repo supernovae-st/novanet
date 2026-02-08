@@ -7,12 +7,12 @@ arc:
   scope: intra_realm
   source: GenerationJob
   target:
-    - PageL10n
-    - BlockL10n
+    - PageGenerated
+    - BlockGenerated
   cardinality: one_to_many
   properties:
     - name: created_at
       type: string
       required: false
   llm_context: Generation job creates localized content nodes.
-  cypher_pattern: (GenerationJob)-[:CREATES_CONTENT {created_at}]->(PageL10n)
+  cypher_pattern: (GenerationJob)-[:CREATES_CONTENT {created_at}]->(PageGenerated)
