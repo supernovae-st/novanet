@@ -6,7 +6,7 @@
 #        - More specific than ANSWERS (for comparisons and use cases)
 
 arc:
-  type: ADDRESSES
+  name: ADDRESSES
   family: semantic
   scope: cross_realm
   temperature_threshold: 0.5

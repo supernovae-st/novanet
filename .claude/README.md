@@ -175,7 +175,7 @@ IMPORTANT: Regenerate artifacts with:
 
 **Output:** Reminds to verify against YAML sources:
 - Node counts match `node-kinds/` (64 files)
-- Arc counts match `arc-kinds/` (116 files)
+- Arc counts match `arc-kinds/` (121 files)
 - Paths use `node-kinds/` not `nodes/`
 - Paths use `taxonomy.yaml` not `organizing-principles.yaml`
 
@@ -329,7 +329,7 @@ Master command for schema management.
 
 **Example:**
 ```bash
-/schema status     # Show current schema stats (64 Kinds, 116 ArcKinds, 2 Realms, 9 Layers)
+/schema status     # Show current schema stats (64 Kinds, 121 ArcKinds, 2 Realms, 9 Layers)
 ```
 
 ---
@@ -635,7 +635,7 @@ Architecture Decision Records (ADRs):
 | Metric | Value |
 |--------|-------|
 | Kind (node types) | 64 |
-| ArcKind (relations) | 116 |
+| ArcKind (relations) | 121 |
 | Realms | 2 (global, tenant) |
 | Layers | 9 |
 | Traits | 5 |
@@ -715,11 +715,11 @@ pnpm doc:generate
 - Outdated version references (current: v10.9.0)
 - Deprecated terminology (EntityL10n → EntityContent, PageL10n → PageGenerated, BlockL10n → BlockGenerated)
 - Deprecated arcs (HAS_L10N → HAS_CONTENT, HAS_OUTPUT → HAS_GENERATED)
-- Incorrect node/arc counts (64 nodes, 116 arcs expected)
+- Incorrect node/arc counts (64 nodes, 121 arcs expected)
 
 **`pnpm skill:audit` checks:**
 - Deprecated paths (`nodes/` → `node-kinds/`, `organizing-principles.yaml` → `taxonomy.yaml`)
-- Node/arc counts match YAML sources (64 node-kinds, 116 arc-kinds)
+- Node/arc counts match YAML sources (64 node-kinds, 121 arc-kinds)
 - Deprecated terminology in skills/commands/rules
 
 **Auto-sync reminders:**

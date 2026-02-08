@@ -6,7 +6,7 @@
 #        - Each comparison links to two Entities (COMPARES_A, COMPARES_B)
 
 arc:
-  type: HAS_COMPARISONS
+  name: HAS_COMPARISONS
   family: ownership
   scope: intra_realm
   source: SEOKeyword

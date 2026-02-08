@@ -8,7 +8,7 @@
 #        - Cross-realm: tenant (EntityContent) → global (GEOQuery)
 
 arc:
-  type: MONITORS_GEO
+  name: MONITORS_GEO
   family: semantic
   scope: cross_realm
   temperature_threshold: 0.6

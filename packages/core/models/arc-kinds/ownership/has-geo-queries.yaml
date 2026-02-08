@@ -6,7 +6,7 @@
 #        - GEO queries are locale-specific knowledge
 
 arc:
-  type: HAS_GEO_QUERIES
+  name: HAS_GEO_QUERIES
   family: ownership
   scope: intra_realm
   source: Locale
