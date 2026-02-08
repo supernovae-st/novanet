@@ -504,7 +504,7 @@ impl GuideState {
     }
 
     /// Get breadcrumb for current Guide mode state.
-    /// Returns path like "Guide > Traits > localized > EntityL10n"
+    /// Returns path like "Guide > Traits > localized > EntityContent"
     pub fn breadcrumb(&self, trait_stats: &[traits::TraitStats]) -> String {
         let tab_name = self.tab.label();
         match self.tab {

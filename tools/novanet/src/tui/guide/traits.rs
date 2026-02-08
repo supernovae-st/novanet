@@ -414,10 +414,11 @@ fn render_detail_panel(f: &mut Frame, app: &App, area: Rect) {
         let localized_color = theme.trait_color("localized");
 
         // Show invariant -> localized patterns
+        // v10.9: Renamed L10n → Generated/Content
         let patterns = [
-            ("Page", "PageL10n"),
-            ("Entity", "EntityL10n"),
-            ("Block", "BlockL10n"),
+            ("Page", "PageGenerated"),
+            ("Entity", "EntityContent"),
+            ("Block", "BlockGenerated"),
         ];
 
         for (inv, loc) in patterns {
