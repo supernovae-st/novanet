@@ -21,9 +21,9 @@ struct Cli {
     #[arg(long, env = "NEO4J_USER", default_value = "neo4j")]
     user: String,
 
-    /// Neo4j password
-    #[arg(long, env = "NEO4J_PASSWORD", default_value = "novanetpassword")]
-    password: String,
+    /// Neo4j password (required for database commands, set via NEO4J_PASSWORD env var)
+    #[arg(long, env = "NEO4J_PASSWORD")]
+    password: Option<String>,
 
     #[command(subcommand)]
     command: Commands,
@@ -818,7 +818,12 @@ async fn main() -> color_eyre::Result<()> {
 
 /// Connect to Neo4j (shared by all commands that need database access).
 async fn connect_db(cli: &Cli) -> color_eyre::Result<novanet::db::Db> {
+    let password = cli.password.as_ref().ok_or_else(|| {
+        color_eyre::eyre::eyre!(
+            "Neo4j password required. Set NEO4J_PASSWORD environment variable or use --password flag."
+        )
+    })?;
     eprintln!("Connecting to Neo4j at {}...", cli.uri);
-    let db = novanet::db::Db::connect(&cli.uri, &cli.user, &cli.password).await?;
+    let db = novanet::db::Db::connect(&cli.uri, &cli.user, password).await?;
     Ok(db)
 }
