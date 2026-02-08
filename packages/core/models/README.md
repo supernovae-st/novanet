@@ -1,4 +1,4 @@
-# 🪽 NovaNet Models v10.4.0
+# 🪽 NovaNet Models v10.9.0
 
 YAML schema definitions for Neo4j graph database.
 
@@ -15,14 +15,14 @@ models/
 ├── nodes/                   # ONE FILE PER NODE TYPE (42 files)
 │   ├── global/              # 🌍 GLOBAL realm (19 nodes)
 │   │   ├── config/          #    Locale
-│   │   ├── knowledge/       #    Entity, EntityL10n, Knowledge Atoms
+│   │   ├── knowledge/       #    Entity, EntityContent, Knowledge Atoms
 │   │   └── seo/             #    SEOKeyword, SEOKeywordMetrics, SEOMiningRun
 │   └── project/             # 📦 PROJECT realm (23 nodes)
 │       ├── foundation/      #    Project, ProjectL10n, BrandIdentity
 │       ├── structure/       #    Page, Block, ContentSlot
 │       ├── semantic/        #    AudiencePersona, ChannelSurface
 │       ├── instruction/     #    PagePrompt, BlockPrompt, BlockType, PageType, BlockRules, BlockInstruction, PromptArtifact
-│       └── output/          #    PageL10n, BlockL10n, GenerationJob, OutputArtifact, EvaluationSignal
+│       └── output/          #    PageGenerated, BlockGenerated, GenerationJob, OutputArtifact, EvaluationSignal
 ├── views/                   # View definitions (YAML)
 │   ├── _registry.yaml
 │   └── *.yaml
@@ -39,25 +39,26 @@ NovaNet uses a **2-realm architecture** (v10.2 merged SHARED into GLOBAL):
 
 | Realm | Count | Description | Examples |
 |-------|-------|-------------|----------|
-| 🌍 **GLOBAL** | 19 | Locale knowledge + shared data | Locale, Entity, EntityL10n, Knowledge Atoms, SEOKeyword |
-| 📦 **PROJECT** | 23 | Per-project content | Project, Page, Block, PageL10n, BlockL10n, GenerationJob |
+| 🌍 **GLOBAL** | 19 | Locale knowledge + shared data | Locale, Entity, EntityContent, Knowledge Atoms, SEOKeyword |
+| 📦 **PROJECT** | 23 | Per-project content | Project, Page, Block, PageGenerated, BlockGenerated, GenerationJob |
 
 ## Locale Behavior Classification
 
 | Behavior | Icon | Description | Nodes |
 |----------|------|-------------|-------|
 | **INVARIANT** | 🔵 | Defined once, language-independent | Project, Entity, Page, Block, Locale |
-| **LOCALIZED** | 🟢 | Per-locale, has `:FOR_LOCALE` | ProjectL10n, EntityL10n, PageL10n, BlockL10n |
+| **LOCALIZED** | 🟢 | Per-locale, has `:FOR_LOCALE` | ProjectL10n, EntityContent, PageGenerated, BlockGenerated |
 | **LOCALE_KNOWLEDGE** | 🟣 | Knowledge ABOUT a locale | LocaleIdentity, LocaleVoice, LocaleCulture, Expression |
 | **DERIVED** | ⚪ | Inherits locale from parent | SEOKeywordMetrics, GEOSeedMetrics |
 | **JOB** | ⚙️ | Background jobs, no locale | SEOMiningRun, GEOMiningRun |
 
-## Nomenclature v10.4.0
+## Nomenclature v10.9.0
 
 ```
-*L10n suffix    = ALL localized content (human OR LLM generated)
-:HAS_L10N       = human-curated content (EntityL10n, ProjectL10n)
-:HAS_OUTPUT     = LLM-generated content (PageL10n, BlockL10n)
+*Content suffix = Localized content for invariant nodes (EntityContent)
+*Generated      = LLM-generated output (PageGenerated, BlockGenerated)
+:HAS_CONTENT    = human-curated content (EntityContent, ProjectL10n)
+:HAS_GENERATED  = LLM-generated content (PageGenerated, BlockGenerated)
 *Set            = Container nodes (TermSet, ExpressionSet, PatternSet, etc.)
 Atoms           = Granular knowledge (Term, Expression, Pattern, Taboo, CultureRef, AudienceTrait)
 *Metrics        = Time-series observations (SEOKeywordMetrics)
@@ -68,9 +69,9 @@ Atoms           = Granular knowledge (Term, Expression, Pattern, Taboo, CultureR
 ```
 Invariant (EN)              Localized (generated natively)
 ──────────────              ────────────────────────────────
-Entity.key                 EntityL10n.title (per locale)
-Page.instructions           PageL10n.assembled (per locale)
-Block.instructions          BlockL10n.generated (per locale)
+Entity.key                 EntityContent.title (per locale)
+Page.instructions           PageGenerated.assembled (per locale)
+Block.instructions          BlockGenerated.generated (per locale)
 ```
 
 ## Locale Knowledge Hierarchy
@@ -112,7 +113,7 @@ Locale ──[:HAS_IDENTITY]──> LocaleIdentity
 | `SEMANTIC_LINK` | `type, temperature` | Entity relationships |
 | `HAS_SEO_TARGET` | `role, priority` | locale-aligned: primary/secondary/long-tail |
 | `HAS_GEO_TARGET` | `role, priority` | locale-aligned: primary/contextual |
-| `PREVIOUS_VERSION` | (none) | History chain: BlockL10n/PageL10n → previous |
+| `PREVIOUS_VERSION` | (none) | History chain: BlockGenerated/PageGenerated → previous |
 | `LINKS_TO` | `concept_key, context, seo_weight` | Explicit internal link (Page → Page) |
 | `SUBTOPIC_OF` | (none) | Pillar-cluster hierarchy (Page → Page) |
 
