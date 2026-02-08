@@ -494,7 +494,7 @@ pub fn render(f: &mut Frame, app: &mut App) {
         overlays::render_search(f, app);
     }
     if app.help_active {
-        overlays::render_help(f);
+        overlays::render_help(f, app);
     }
     if app.legend_active {
         overlays::render_legend(f, app);
@@ -505,7 +505,7 @@ pub fn render(f: &mut Frame, app: &mut App) {
 }
 
 /// Header: Logo + Mode tabs.
-/// Only shows: [1]Meta, [2]Data, [3]Atlas, [4]Audit
+/// Shows: [1]Meta, [2]Data, [3]Atlas, [4]Audit, [5]Guide
 /// (Overlay and Query modes removed - not useful for now)
 fn render_header(f: &mut Frame, area: Rect, app: &App) {
     let tabs: Vec<Span> = [
@@ -513,6 +513,7 @@ fn render_header(f: &mut Frame, area: Rect, app: &App) {
         NavMode::Data,
         NavMode::Atlas,
         NavMode::Audit,
+        NavMode::Guide,
     ]
     .iter()
     .enumerate()
@@ -550,6 +551,11 @@ fn render_header(f: &mut Frame, area: Rect, app: &App) {
     let right_side = if app.mode == NavMode::Atlas {
         vec![Span::styled(
             "  a-r:views  d:demo  l:locale  ?:help  q:quit",
+            theme::ui::muted_style(),
+        )]
+    } else if app.mode == NavMode::Guide {
+        vec![Span::styled(
+            "  1-4:tabs  jk:nav  Enter:drill  Esc:back  ?:help  q:quit",
             theme::ui::muted_style(),
         )]
     } else if app.mode == NavMode::Data {
@@ -608,6 +614,12 @@ fn render_main(f: &mut Frame, area: Rect, app: &mut App) {
     // Audit mode has its own rendering (Feature 6)
     if app.mode == NavMode::Audit {
         render_audit(f, area, app);
+        return;
+    }
+
+    // Guide mode has its own rendering (Batch 3+)
+    if app.mode == NavMode::Guide {
+        super::guide::render_guide(f, area, app);
         return;
     }
 

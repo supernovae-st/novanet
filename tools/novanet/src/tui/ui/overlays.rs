@@ -120,123 +120,261 @@ pub fn render_search(f: &mut Frame, app: &App) {
 }
 
 /// Help overlay: keyboard shortcuts.
-pub fn render_help(f: &mut Frame) {
+/// Shows Guide-specific shortcuts when in Guide mode.
+pub fn render_help(f: &mut Frame, app: &App) {
+    use super::super::app::NavMode;
+
     let area = f.area();
     let width = POPUP_BOX_WIDTH.min(area.width.saturating_sub(4));
-    let height = 32.min(area.height.saturating_sub(4)); // Taller for many shortcuts
+
+    // Check if we're in Guide mode
+    let is_guide_mode = app.mode == NavMode::Guide;
+
+    let lines: Vec<Line> = if is_guide_mode {
+        // Guide mode specific help
+        vec![
+            Line::from(Span::styled(
+                " Guide Mode — Keyboard Shortcuts",
+                Style::default()
+                    .fg(Color::Magenta)
+                    .add_modifier(Modifier::BOLD),
+            )),
+            Line::from(""),
+            Line::from(vec![Span::styled("  Tab Navigation", STYLE_HIGHLIGHT)]),
+            Line::from(vec![
+                Span::styled("    1        ", STYLE_PRIMARY),
+                Span::styled("Traits tab", STYLE_DIM),
+            ]),
+            Line::from(vec![
+                Span::styled("    2        ", STYLE_PRIMARY),
+                Span::styled("Layers tab", STYLE_DIM),
+            ]),
+            Line::from(vec![
+                Span::styled("    3        ", STYLE_PRIMARY),
+                Span::styled("Arcs tab", STYLE_DIM),
+            ]),
+            Line::from(vec![
+                Span::styled("    4        ", STYLE_PRIMARY),
+                Span::styled("Pipeline tab", STYLE_DIM),
+            ]),
+            Line::from(vec![
+                Span::styled("    Tab      ", STYLE_PRIMARY),
+                Span::styled("Next tab", STYLE_DIM),
+            ]),
+            Line::from(vec![
+                Span::styled("    Shift+Tab", STYLE_PRIMARY),
+                Span::styled("Previous tab", STYLE_DIM),
+            ]),
+            Line::from(""),
+            Line::from(vec![Span::styled("  Navigation", STYLE_HIGHLIGHT)]),
+            Line::from(vec![
+                Span::styled("    j/k ↑↓   ", STYLE_PRIMARY),
+                Span::styled("Move cursor up/down", STYLE_DIM),
+            ]),
+            Line::from(vec![
+                Span::styled("    h/l ←→   ", STYLE_PRIMARY),
+                Span::styled("Drill up/down (or switch realm)", STYLE_DIM),
+            ]),
+            Line::from(vec![
+                Span::styled("    Enter    ", STYLE_PRIMARY),
+                Span::styled("Drill down into selection", STYLE_DIM),
+            ]),
+            Line::from(vec![
+                Span::styled("    Esc      ", STYLE_PRIMARY),
+                Span::styled("Drill up / back", STYLE_DIM),
+            ]),
+            Line::from(""),
+            Line::from(vec![Span::styled("  Pipeline Tab", STYLE_HIGHLIGHT)]),
+            Line::from(vec![
+                Span::styled("    Space    ", STYLE_PRIMARY),
+                Span::styled("Play/pause animation", STYLE_DIM),
+            ]),
+            Line::from(""),
+            Line::from(vec![Span::styled("  Layers Tab", STYLE_HIGHLIGHT)]),
+            Line::from(vec![
+                Span::styled("    h/←      ", STYLE_PRIMARY),
+                Span::styled("Switch to Global realm", STYLE_DIM),
+            ]),
+            Line::from(vec![
+                Span::styled("    l/→      ", STYLE_PRIMARY),
+                Span::styled("Switch to Tenant realm", STYLE_DIM),
+            ]),
+            Line::from(""),
+            Line::from(vec![Span::styled("  Quick Jump (Traits)", STYLE_HIGHLIGHT)]),
+            Line::from(vec![
+                Span::styled("    gi       ", STYLE_PRIMARY),
+                Span::styled("Jump to invariant trait", STYLE_DIM),
+            ]),
+            Line::from(vec![
+                Span::styled("    gl       ", STYLE_PRIMARY),
+                Span::styled("Jump to localized trait", STYLE_DIM),
+            ]),
+            Line::from(vec![
+                Span::styled("    gk       ", STYLE_PRIMARY),
+                Span::styled("Jump to knowledge trait", STYLE_DIM),
+            ]),
+            Line::from(vec![
+                Span::styled("    gd       ", STYLE_PRIMARY),
+                Span::styled("Jump to derived trait", STYLE_DIM),
+            ]),
+            Line::from(vec![
+                Span::styled("    gj       ", STYLE_PRIMARY),
+                Span::styled("Jump to job trait", STYLE_DIM),
+            ]),
+            Line::from(vec![
+                Span::styled("    gg       ", STYLE_PRIMARY),
+                Span::styled("Go to top (reset cursors)", STYLE_DIM),
+            ]),
+            Line::from(""),
+            Line::from(vec![Span::styled("  Tips", STYLE_HIGHLIGHT)]),
+            Line::from(vec![
+                Span::styled("    n        ", STYLE_PRIMARY),
+                Span::styled("Next tip (Did you know?)", STYLE_DIM),
+            ]),
+            Line::from(""),
+            Line::from(vec![Span::styled("  Exit", STYLE_HIGHLIGHT)]),
+            Line::from(vec![
+                Span::styled("    5-7      ", STYLE_PRIMARY),
+                Span::styled("Switch to other modes", STYLE_DIM),
+            ]),
+            Line::from(vec![
+                Span::styled("    N        ", STYLE_PRIMARY),
+                Span::styled("Cycle modes (exit Guide)", STYLE_DIM),
+            ]),
+            Line::from(vec![
+                Span::styled("    q        ", STYLE_PRIMARY),
+                Span::styled("Quit TUI", STYLE_DIM),
+            ]),
+            Line::from(""),
+            Line::from(Span::styled("  Press any key to close", STYLE_DIM)),
+        ]
+    } else {
+        // Default help (non-Guide modes)
+        vec![
+            Line::from(Span::styled(
+                " NovaNet TUI — Keyboard Shortcuts",
+                Style::default()
+                    .fg(Color::Cyan)
+                    .add_modifier(Modifier::BOLD),
+            )),
+            Line::from(""),
+            Line::from(vec![Span::styled("  Navigation", STYLE_HIGHLIGHT)]),
+            Line::from(vec![
+                Span::styled("    Tab      ", STYLE_PRIMARY),
+                Span::styled("Cycle: Tree→Info→Graph→YAML", STYLE_DIM),
+            ]),
+            Line::from(vec![
+                Span::styled("    ←→       ", STYLE_PRIMARY),
+                Span::styled("Quick panel switch", STYLE_DIM),
+            ]),
+            Line::from(vec![
+                Span::styled("    j/k ↑↓   ", STYLE_PRIMARY),
+                Span::styled("Move cursor / scroll", STYLE_DIM),
+            ]),
+            Line::from(""),
+            Line::from(vec![Span::styled("  Tree (vim-style)", STYLE_HIGHLIGHT)]),
+            Line::from(vec![
+                Span::styled("    h/l      ", STYLE_PRIMARY),
+                Span::styled("Collapse/expand node", STYLE_DIM),
+            ]),
+            Line::from(vec![
+                Span::styled("    H/L      ", STYLE_PRIMARY),
+                Span::styled("Collapse/expand all", STYLE_DIM),
+            ]),
+            Line::from(vec![
+                Span::styled("    g/G      ", STYLE_PRIMARY),
+                Span::styled("Jump to first/last", STYLE_DIM),
+            ]),
+            Line::from(""),
+            Line::from(vec![Span::styled("  Graph panel", STYLE_ACCENT)]),
+            Line::from(vec![
+                Span::styled("    j/k ↑↓   ", STYLE_PRIMARY),
+                Span::styled("Select neighbor node", STYLE_DIM),
+            ]),
+            Line::from(vec![
+                Span::styled("    h/l ←→   ", STYLE_PRIMARY),
+                Span::styled("Navigate incoming/outgoing", STYLE_DIM),
+            ]),
+            Line::from(vec![
+                Span::styled("    Enter    ", STYLE_PRIMARY),
+                Span::styled("Jump to selected node", STYLE_DIM),
+            ]),
+            Line::from(""),
+            Line::from(vec![Span::styled("  Scrolling", STYLE_HIGHLIGHT)]),
+            Line::from(vec![
+                Span::styled("    d/u      ", STYLE_PRIMARY),
+                Span::styled("Page down/up", STYLE_DIM),
+            ]),
+            Line::from(""),
+            Line::from(vec![Span::styled("  Modes", STYLE_HIGHLIGHT)]),
+            Line::from(vec![
+                Span::styled("    1-4      ", STYLE_PRIMARY),
+                Span::styled("Meta/Data/Atlas/Audit", STYLE_DIM),
+            ]),
+            Line::from(vec![
+                Span::styled("    5        ", STYLE_PRIMARY),
+                Span::styled("Guide mode (educational)", STYLE_DIM),
+            ]),
+            Line::from(vec![
+                Span::styled("    N        ", STYLE_PRIMARY),
+                Span::styled("Cycle through modes", STYLE_DIM),
+            ]),
+            Line::from(""),
+            Line::from(vec![Span::styled("  Search & Help", STYLE_HIGHLIGHT)]),
+            Line::from(vec![
+                Span::styled("    /        ", STYLE_PRIMARY),
+                Span::styled("Search (vim-style)", STYLE_DIM),
+            ]),
+            Line::from(vec![
+                Span::styled("    ?        ", STYLE_PRIMARY),
+                Span::styled("Show this help", STYLE_DIM),
+            ]),
+            Line::from(vec![
+                Span::styled("    F1       ", STYLE_PRIMARY),
+                Span::styled("Color legend", STYLE_DIM),
+            ]),
+            Line::from(""),
+            Line::from(vec![Span::styled("  Actions", STYLE_HIGHLIGHT)]),
+            Line::from(vec![
+                Span::styled("    r        ", STYLE_PRIMARY),
+                Span::styled("Refresh data", STYLE_DIM),
+            ]),
+            Line::from(vec![
+                Span::styled("    y        ", STYLE_PRIMARY),
+                Span::styled("Yank (copy key)", STYLE_DIM),
+            ]),
+            Line::from(vec![
+                Span::styled("    Ctrl+o   ", STYLE_PRIMARY),
+                Span::styled("Go back in history", STYLE_DIM),
+            ]),
+            Line::from(vec![
+                Span::styled("    Ctrl+i   ", STYLE_PRIMARY),
+                Span::styled("Go forward in history", STYLE_DIM),
+            ]),
+            Line::from(vec![
+                Span::styled("    q        ", STYLE_PRIMARY),
+                Span::styled("Quit", STYLE_DIM),
+            ]),
+            Line::from(""),
+            Line::from(Span::styled("  Press any key to close", STYLE_DIM)),
+        ]
+    };
+
+    let height = (lines.len() as u16 + 2).min(area.height.saturating_sub(4));
     let x = (area.width.saturating_sub(width)) / 2;
     let y = (area.height.saturating_sub(height)) / 2;
 
     let help_area = Rect::new(x, y, width, height);
     f.render_widget(Clear, help_area);
 
-    let lines = vec![
-        Line::from(Span::styled(
-            " NovaNet TUI — Keyboard Shortcuts",
-            Style::default()
-                .fg(Color::Cyan)
-                .add_modifier(Modifier::BOLD),
-        )),
-        Line::from(""),
-        Line::from(vec![Span::styled("  Navigation", STYLE_HIGHLIGHT)]),
-        Line::from(vec![
-            Span::styled("    Tab      ", STYLE_PRIMARY),
-            Span::styled("Cycle: Tree→Info→Graph→YAML", STYLE_DIM),
-        ]),
-        Line::from(vec![
-            Span::styled("    ←→       ", STYLE_PRIMARY),
-            Span::styled("Quick panel switch", STYLE_DIM),
-        ]),
-        Line::from(vec![
-            Span::styled("    j/k ↑↓   ", STYLE_PRIMARY),
-            Span::styled("Move cursor / scroll", STYLE_DIM),
-        ]),
-        Line::from(""),
-        Line::from(vec![Span::styled("  Tree (vim-style)", STYLE_HIGHLIGHT)]),
-        Line::from(vec![
-            Span::styled("    h/l      ", STYLE_PRIMARY),
-            Span::styled("Collapse/expand node", STYLE_DIM),
-        ]),
-        Line::from(vec![
-            Span::styled("    H/L      ", STYLE_PRIMARY),
-            Span::styled("Collapse/expand all", STYLE_DIM),
-        ]),
-        Line::from(vec![
-            Span::styled("    g/G      ", STYLE_PRIMARY),
-            Span::styled("Jump to first/last", STYLE_DIM),
-        ]),
-        Line::from(""),
-        Line::from(vec![Span::styled("  Graph panel", STYLE_ACCENT)]),
-        Line::from(vec![
-            Span::styled("    j/k ↑↓   ", STYLE_PRIMARY),
-            Span::styled("Select neighbor node", STYLE_DIM),
-        ]),
-        Line::from(vec![
-            Span::styled("    h/l ←→   ", STYLE_PRIMARY),
-            Span::styled("Navigate incoming/outgoing", STYLE_DIM),
-        ]),
-        Line::from(vec![
-            Span::styled("    Enter    ", STYLE_PRIMARY),
-            Span::styled("Jump to selected node", STYLE_DIM),
-        ]),
-        Line::from(""),
-        Line::from(vec![Span::styled("  Scrolling", STYLE_HIGHLIGHT)]),
-        Line::from(vec![
-            Span::styled("    d/u      ", STYLE_PRIMARY),
-            Span::styled("Page down/up", STYLE_DIM),
-        ]),
-        Line::from(""),
-        Line::from(vec![Span::styled("  Modes", STYLE_HIGHLIGHT)]),
-        Line::from(vec![
-            Span::styled("    1-4      ", STYLE_PRIMARY),
-            Span::styled("Meta/Data/Atlas/Audit", STYLE_DIM),
-        ]),
-        Line::from(vec![
-            Span::styled("    N        ", STYLE_PRIMARY),
-            Span::styled("Cycle through modes", STYLE_DIM),
-        ]),
-        Line::from(""),
-        Line::from(vec![Span::styled("  Search & Help", STYLE_HIGHLIGHT)]),
-        Line::from(vec![
-            Span::styled("    /        ", STYLE_PRIMARY),
-            Span::styled("Search (vim-style)", STYLE_DIM),
-        ]),
-        Line::from(vec![
-            Span::styled("    ?        ", STYLE_PRIMARY),
-            Span::styled("Show this help", STYLE_DIM),
-        ]),
-        Line::from(vec![
-            Span::styled("    F1       ", STYLE_PRIMARY),
-            Span::styled("Color legend", STYLE_DIM),
-        ]),
-        Line::from(""),
-        Line::from(vec![Span::styled("  Actions", STYLE_HIGHLIGHT)]),
-        Line::from(vec![
-            Span::styled("    r        ", STYLE_PRIMARY),
-            Span::styled("Refresh data", STYLE_DIM),
-        ]),
-        Line::from(vec![
-            Span::styled("    y        ", STYLE_PRIMARY),
-            Span::styled("Yank (copy key)", STYLE_DIM),
-        ]),
-        Line::from(vec![
-            Span::styled("    Ctrl+o   ", STYLE_PRIMARY),
-            Span::styled("Go back in history", STYLE_DIM),
-        ]),
-        Line::from(vec![
-            Span::styled("    Ctrl+i   ", STYLE_PRIMARY),
-            Span::styled("Go forward in history", STYLE_DIM),
-        ]),
-        Line::from(vec![
-            Span::styled("    q        ", STYLE_PRIMARY),
-            Span::styled("Quit", STYLE_DIM),
-        ]),
-        Line::from(""),
-        Line::from(Span::styled("  Press any key to close", STYLE_DIM)),
-    ];
+    let title = if is_guide_mode {
+        " Guide Help "
+    } else {
+        " Help "
+    };
 
     let block = Block::default()
-        .title(Span::styled(" Help ", STYLE_ACCENT))
+        .title(Span::styled(title, STYLE_ACCENT))
         .borders(Borders::ALL)
         .border_style(STYLE_ACCENT)
         .style(Style::default().bg(COLOR_OVERLAY_BG));
