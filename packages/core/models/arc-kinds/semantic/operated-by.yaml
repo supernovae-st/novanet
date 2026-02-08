@@ -1,0 +1,42 @@
+# packages/core/models/arc-kinds/semantic/operated-by.yaml
+# ArcKind: OPERATED_BY - Entity is operated on by an action
+# v11.0: Inverse of ACTS_ON arc
+
+arc:
+  name: OPERATED_BY
+  family: semantic
+  scope: intra_realm
+  temperature_threshold: 0.15
+
+  source: Entity
+  target: Entity
+  cardinality: many_to_many
+  is_self_referential: false
+
+  properties:
+    - name: strength
+      type: float
+      required: false
+      default: 0.8
+      description: "Relationship strength (0.0-1.0)"
+
+    - name: temperature
+      type: float
+      required: false
+      default: 0.85
+      description: "Spreading activation weight"
+
+    - name: operation_type
+      type: string
+      required: false
+      enum: [create, read, update, delete, scan, download, print, customize, track]
+      description: "Type of operation performed"
+
+  inverse: ACTS_ON
+
+  llm_context: |
+    Inverse of ACTS_ON: THING is operated on by ACTION.
+    Use for qr-code OPERATED_BY create-qr-code, qr-code OPERATED_BY scan-qr-code.
+    Enables traversal from entity to actions that can operate on it.
+
+  cypher_pattern: "(Entity)-[:OPERATED_BY {strength, temperature, operation_type}]->(Entity)"

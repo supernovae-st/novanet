@@ -110,7 +110,7 @@ Major architectural cleanup with 30-sniper comprehensive audit.
 | **Arc Coherence** | Fixed 22 arc scopes (cross_realm → intra_realm) |
 | **Docs Refactor** | 30-sniper audit of CLAUDE.md, DX, skills, agents, roadmap |
 
-**Schema counts:** 64 NodeKinds, 120 ArcKinds, 2 Realms, 9 Layers (2 global + 7 tenant)
+**Schema counts:** 64 NodeKinds, 123 ArcKinds, 2 Realms, 9 Layers (2 global + 7 tenant)
 
 ---
 
@@ -124,7 +124,7 @@ Semantic renaming for clearer architecture. Three ADRs implemented:
 | **ADR-015** | Unidirectional ownership | All `IS_*` arcs reversed to `HAS_*` (parent → child) |
 | **ADR-016** | CONTAINS → 6 typed arcs | `CONTAINS_TERM`, `CONTAINS_EXPRESSION`, `CONTAINS_PATTERN`, `CONTAINS_CULTURE_REF`, `CONTAINS_TABOO`, `CONTAINS_AUDIENCE_TRAIT` |
 
-**Schema counts:** 64 NodeKinds, 120 ArcKinds, 2 Realms (global/tenant), 9 Layers
+**Schema counts:** 64 NodeKinds, 123 ArcKinds, 2 Realms (global/tenant), 9 Layers
 
 ---
 
