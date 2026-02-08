@@ -1,0 +1,463 @@
+# Phase 8: Brands — 25 Entities
+# QR Code AI Entity Data for NovaNet
+# v11 Schema with Typed Semantic Arcs
+
+project: qrcode-ai
+phase: 8
+name: Brands
+description: Third-party brands and platforms that integrate with QR codes
+
+entities:
+  # =============================================================================
+  # SOCIAL PLATFORMS (10)
+  # =============================================================================
+  - key: instagram
+    type: BRAND
+    display_name: Instagram
+    description: Photo and video social network
+    entity_summary: |
+      Instagram is a visual social media platform owned by Meta.
+      QR codes link to profiles, posts, and Reels. Essential for
+      influencer marketing and brand presence.
+
+  - key: linkedin
+    type: BRAND
+    display_name: LinkedIn
+    description: Professional networking platform
+    entity_summary: |
+      LinkedIn is the leading professional social network.
+      QR codes on business cards link to LinkedIn profiles for
+      easy professional connections and networking.
+
+  - key: facebook
+    type: BRAND
+    display_name: Facebook
+    description: Social networking platform
+    entity_summary: |
+      Facebook is the largest social media platform globally.
+      QR codes link to pages, events, and groups. Important for
+      local business marketing and community building.
+
+  - key: twitter
+    type: BRAND
+    display_name: Twitter / X
+    description: Microblogging social platform
+    entity_summary: |
+      Twitter (now X) is a microblogging platform for real-time updates.
+      QR codes link to profiles and tweets. Used for event hashtags
+      and customer service channels.
+
+  - key: youtube
+    type: BRAND
+    display_name: YouTube
+    description: Video sharing platform
+    entity_summary: |
+      YouTube is the largest video platform, owned by Google.
+      QR codes link to channels, videos, and playlists. Essential
+      for video marketing and educational content.
+
+  - key: tiktok
+    type: BRAND
+    display_name: TikTok
+    description: Short-form video platform
+    entity_summary: |
+      TikTok is a short-form video platform popular with Gen Z.
+      QR codes link to profiles and videos. Growing importance for
+      brand marketing and viral content.
+
+  - key: snapchat
+    type: BRAND
+    display_name: Snapchat
+    description: Ephemeral messaging and AR platform
+    entity_summary: |
+      Snapchat is a messaging app with AR features and Stories.
+      Snapcodes are native QR codes for adding friends and unlocking
+      filters. Pioneer in branded QR experiences.
+
+  - key: whatsapp
+    type: BRAND
+    display_name: WhatsApp
+    description: Messaging application
+    entity_summary: |
+      WhatsApp is the world's most popular messaging app.
+      QR codes enable click-to-chat links for customer support
+      and sales inquiries. Essential for business communication.
+
+  - key: telegram
+    type: BRAND
+    display_name: Telegram
+    description: Secure messaging platform
+    entity_summary: |
+      Telegram is a cloud-based messaging platform with channels.
+      QR codes link to user profiles, groups, and channels.
+      Popular for community building and announcements.
+
+  - key: pinterest
+    type: BRAND
+    display_name: Pinterest
+    description: Visual discovery platform
+    entity_summary: |
+      Pinterest is a visual discovery and bookmarking platform.
+      QR codes link to boards and pins. Effective for product
+      discovery and inspiration-driven marketing.
+
+  # =============================================================================
+  # MUSIC PLATFORMS (3)
+  # =============================================================================
+  - key: spotify
+    type: BRAND
+    display_name: Spotify
+    description: Music streaming service
+    entity_summary: |
+      Spotify is the leading music streaming platform with Spotify Codes.
+      Native QR-like codes link to songs, albums, playlists, and artists.
+      Essential for music marketing and promotion.
+
+  - key: apple
+    type: BRAND
+    display_name: Apple
+    description: Technology company with music and app platforms
+    entity_summary: |
+      Apple provides Apple Music streaming and the App Store ecosystem.
+      QR codes link to music content and apps. Essential for iOS app
+      distribution and music marketing.
+
+  - key: soundcloud
+    type: BRAND
+    display_name: SoundCloud
+    description: Audio streaming and sharing platform
+    entity_summary: |
+      SoundCloud is an audio platform for independent artists.
+      QR codes link to tracks, playlists, and artist profiles.
+      Popular with DJs and emerging musicians.
+
+  # =============================================================================
+  # PAYMENT BRANDS (2)
+  # =============================================================================
+  - key: paypal
+    type: BRAND
+    display_name: PayPal
+    description: Digital payment platform
+    entity_summary: |
+      PayPal is a global online payment system.
+      QR codes enable PayPal.me links and in-store payments.
+      Essential for e-commerce and peer-to-peer transactions.
+
+  - key: venmo
+    type: BRAND
+    display_name: Venmo
+    description: Mobile payment service
+    entity_summary: |
+      Venmo is a mobile payment service owned by PayPal.
+      QR codes enable quick peer-to-peer payments.
+      Popular in the US for splitting bills and tips.
+
+  # =============================================================================
+  # TECH BRANDS (2)
+  # =============================================================================
+  - key: google
+    type: BRAND
+    display_name: Google
+    description: Technology company with maps, reviews, and business tools
+    entity_summary: |
+      Google provides Maps, Business Profile, and Reviews.
+      QR codes link to Google Maps locations, reviews, and business
+      listings. Essential for local SEO and customer feedback.
+
+  - key: waze
+    type: BRAND
+    display_name: Waze
+    description: Community-driven navigation app
+    entity_summary: |
+      Waze is a community-based GPS navigation app owned by Google.
+      QR codes open specific locations in Waze for navigation.
+      Popular for businesses with complex access routes.
+
+  # =============================================================================
+  # AUTOMATION PLATFORMS (3)
+  # =============================================================================
+  - key: zapier
+    type: BRAND
+    display_name: Zapier
+    description: Workflow automation platform
+    entity_summary: |
+      Zapier connects apps and automates workflows without code.
+      Integrates with QR code platforms to automate scan responses,
+      data collection, and multi-step workflows.
+
+  - key: make
+    type: BRAND
+    display_name: Make (Integromat)
+    description: Visual automation platform
+    entity_summary: |
+      Make (formerly Integromat) is a visual workflow automation platform.
+      Creates complex automation scenarios with QR code triggers
+      and multi-app integrations.
+
+  - key: n8n
+    type: BRAND
+    display_name: n8n
+    description: Open-source automation tool
+    entity_summary: |
+      n8n is a self-hostable workflow automation tool.
+      Enables privacy-conscious automation with QR code data.
+      Popular with developers and enterprises.
+
+  # =============================================================================
+  # CRM/MARKETING BRANDS (3)
+  # =============================================================================
+  - key: hubspot
+    type: BRAND
+    display_name: HubSpot
+    description: CRM and marketing platform
+    entity_summary: |
+      HubSpot is a CRM and marketing automation platform.
+      QR code integrations sync leads and track offline-to-online
+      conversions for marketing campaigns.
+
+  - key: salesforce
+    type: BRAND
+    display_name: Salesforce
+    description: Enterprise CRM platform
+    entity_summary: |
+      Salesforce is the leading enterprise CRM platform.
+      QR code integrations connect physical touchpoints to customer
+      records and sales workflows.
+
+  - key: mailchimp
+    type: BRAND
+    display_name: Mailchimp
+    description: Email marketing platform
+    entity_summary: |
+      Mailchimp is an email marketing and automation platform.
+      QR codes in emails and print link to landing pages and
+      signup forms for list building.
+
+  # =============================================================================
+  # E-COMMERCE BRANDS (2)
+  # =============================================================================
+  - key: shopify
+    type: BRAND
+    display_name: Shopify
+    description: E-commerce platform
+    entity_summary: |
+      Shopify is a leading e-commerce platform for online stores.
+      QR codes link to product pages, checkout, and order tracking.
+      Essential for retail and D2C brands.
+
+  - key: woocommerce
+    type: BRAND
+    display_name: WooCommerce
+    description: WordPress e-commerce plugin
+    entity_summary: |
+      WooCommerce is the most popular WordPress e-commerce plugin.
+      QR codes link to products and integrate with WordPress sites.
+      Popular with small businesses on WordPress.
+
+# =============================================================================
+# SEMANTIC ARCS (~50 connections)
+# =============================================================================
+
+arcs:
+  # ---------------------------------------------------------------------------
+  # SOCIAL → QR CODE CONTENT TYPES
+  # ---------------------------------------------------------------------------
+  - from: instagram
+    to: qr-code-instagram
+    type: ENABLES
+    strength: 0.95
+
+  - from: linkedin
+    to: qr-code-linkedin
+    type: ENABLES
+    strength: 0.95
+
+  - from: facebook
+    to: qr-code-facebook
+    type: ENABLES
+    strength: 0.95
+
+  - from: twitter
+    to: qr-code-twitter
+    type: ENABLES
+    strength: 0.95
+
+  - from: youtube
+    to: qr-code-youtube
+    type: ENABLES
+    strength: 0.95
+
+  - from: tiktok
+    to: qr-code-tiktok
+    type: ENABLES
+    strength: 0.95
+
+  - from: snapchat
+    to: qr-code-snapchat
+    type: ENABLES
+    strength: 0.95
+
+  - from: whatsapp
+    to: qr-code-whatsapp
+    type: ENABLES
+    strength: 0.95
+
+  - from: telegram
+    to: qr-code-telegram
+    type: ENABLES
+    strength: 0.95
+
+  - from: pinterest
+    to: qr-code-pinterest
+    type: ENABLES
+    strength: 0.95
+
+  # ---------------------------------------------------------------------------
+  # MUSIC → QR CODE CONTENT TYPES
+  # ---------------------------------------------------------------------------
+  - from: spotify
+    to: qr-code-spotify
+    type: ENABLES
+    strength: 0.95
+
+  - from: apple
+    to: qr-code-apple-music
+    type: ENABLES
+    strength: 0.90
+
+  - from: apple
+    to: qr-code-app-store
+    type: ENABLES
+    strength: 0.90
+
+  - from: soundcloud
+    to: qr-code-soundcloud
+    type: ENABLES
+    strength: 0.95
+
+  # ---------------------------------------------------------------------------
+  # PAYMENT → QR CODE CONTENT TYPES
+  # ---------------------------------------------------------------------------
+  - from: paypal
+    to: qr-code-paypal
+    type: ENABLES
+    strength: 0.95
+
+  - from: venmo
+    to: qr-code-venmo
+    type: ENABLES
+    strength: 0.95
+
+  # ---------------------------------------------------------------------------
+  # TECH → QR CODE CONTENT TYPES
+  # ---------------------------------------------------------------------------
+  - from: google
+    to: qr-code-google-maps
+    type: ENABLES
+    strength: 0.90
+
+  - from: google
+    to: qr-code-google-review
+    type: ENABLES
+    strength: 0.90
+
+  - from: google
+    to: qr-code-play-store
+    type: ENABLES
+    strength: 0.90
+
+  - from: waze
+    to: qr-code-waze
+    type: ENABLES
+    strength: 0.95
+
+  # ---------------------------------------------------------------------------
+  # BRAND SIMILARITIES
+  # ---------------------------------------------------------------------------
+  - from: instagram
+    to: facebook
+    type: SIMILAR_TO
+    strength: 0.80
+
+  - from: instagram
+    to: tiktok
+    type: SIMILAR_TO
+    strength: 0.70
+
+  - from: youtube
+    to: tiktok
+    type: SIMILAR_TO
+    strength: 0.60
+
+  - from: whatsapp
+    to: telegram
+    type: SIMILAR_TO
+    strength: 0.75
+
+  - from: spotify
+    to: apple
+    type: SIMILAR_TO
+    strength: 0.70
+
+  - from: spotify
+    to: soundcloud
+    type: SIMILAR_TO
+    strength: 0.65
+
+  - from: paypal
+    to: venmo
+    type: SIMILAR_TO
+    strength: 0.80
+
+  - from: google
+    to: waze
+    type: SIMILAR_TO
+    strength: 0.60
+
+  - from: zapier
+    to: make
+    type: SIMILAR_TO
+    strength: 0.85
+
+  - from: zapier
+    to: n8n
+    type: SIMILAR_TO
+    strength: 0.80
+
+  - from: make
+    to: n8n
+    type: SIMILAR_TO
+    strength: 0.85
+
+  - from: hubspot
+    to: salesforce
+    type: SIMILAR_TO
+    strength: 0.70
+
+  - from: hubspot
+    to: mailchimp
+    type: SIMILAR_TO
+    strength: 0.60
+
+  - from: shopify
+    to: woocommerce
+    type: SIMILAR_TO
+    strength: 0.80
+
+  # ---------------------------------------------------------------------------
+  # AUTOMATION → FEATURES
+  # ---------------------------------------------------------------------------
+  - from: zapier
+    to: api
+    type: ENABLES
+    strength: 0.80
+
+  - from: make
+    to: api
+    type: ENABLES
+    strength: 0.80
+
+  - from: n8n
+    to: api
+    type: ENABLES
+    strength: 0.80

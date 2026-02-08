@@ -1,0 +1,291 @@
+# Phase 9: Integrations — 12 Entities
+# QR Code AI Entity Data for NovaNet
+# v11 Schema with Typed Semantic Arcs
+
+project: qrcode-ai
+phase: 9
+name: Integrations
+description: Third-party integrations connecting QR Code AI with external services
+
+entities:
+  # =============================================================================
+  # AUTOMATION INTEGRATIONS (3)
+  # =============================================================================
+  - key: zapier-integration
+    type: INTEGRATION
+    display_name: Zapier Integration
+    description: Workflow automation via Zapier
+    entity_summary: |
+      Zapier integration connects QR Code AI with 5,000+ apps.
+      Automate actions when QR codes are scanned - create leads,
+      send notifications, update spreadsheets, and more.
+
+  - key: make-integration
+    type: INTEGRATION
+    display_name: Make Integration
+    description: Visual automation via Make (Integromat)
+    entity_summary: |
+      Make integration enables complex visual automation workflows.
+      Create multi-step scenarios triggered by QR scans with
+      advanced logic, filters, and data transformation.
+
+  - key: n8n-integration
+    type: INTEGRATION
+    display_name: n8n Integration
+    description: Self-hosted automation via n8n
+    entity_summary: |
+      n8n integration for self-hosted automation workflows.
+      Privacy-focused option for enterprises requiring data
+      to stay on-premises while automating QR workflows.
+
+  # =============================================================================
+  # CRM INTEGRATIONS (3)
+  # =============================================================================
+  - key: hubspot-integration
+    type: INTEGRATION
+    display_name: HubSpot Integration
+    description: CRM and marketing automation via HubSpot
+    entity_summary: |
+      HubSpot integration syncs QR scan data to HubSpot CRM.
+      Create contacts, log activities, and trigger marketing
+      automation based on QR code interactions.
+
+  - key: salesforce-integration
+    type: INTEGRATION
+    display_name: Salesforce Integration
+    description: Enterprise CRM via Salesforce
+    entity_summary: |
+      Salesforce integration connects QR codes to enterprise CRM.
+      Log scan events, create leads, and track customer journeys
+      from physical touchpoints to digital engagement.
+
+  - key: mailchimp-integration
+    type: INTEGRATION
+    display_name: Mailchimp Integration
+    description: Email marketing via Mailchimp
+    entity_summary: |
+      Mailchimp integration adds QR code contacts to email lists.
+      Automate welcome sequences, segment by scan location, and
+      track offline-to-email conversion rates.
+
+  # =============================================================================
+  # PRODUCTIVITY INTEGRATIONS (3)
+  # =============================================================================
+  - key: google-sheets-integration
+    type: INTEGRATION
+    display_name: Google Sheets Integration
+    description: Spreadsheet sync via Google Sheets
+    entity_summary: |
+      Google Sheets integration logs QR scan data to spreadsheets.
+      Create batch QR codes from sheet data and track scan
+      analytics in real-time within Google Workspace.
+
+  - key: notion-integration
+    type: INTEGRATION
+    display_name: Notion Integration
+    description: Workspace sync via Notion
+    entity_summary: |
+      Notion integration connects QR codes to Notion databases.
+      Log scans, create pages, and manage QR campaigns alongside
+      other project documentation.
+
+  - key: slack-integration
+    type: INTEGRATION
+    display_name: Slack Integration
+    description: Team notifications via Slack
+    entity_summary: |
+      Slack integration sends notifications when QR codes are scanned.
+      Real-time alerts for sales opportunities, event check-ins,
+      and campaign milestones to team channels.
+
+  # =============================================================================
+  # E-COMMERCE INTEGRATIONS (3)
+  # =============================================================================
+  - key: shopify-integration
+    type: INTEGRATION
+    display_name: Shopify Integration
+    description: E-commerce QR codes via Shopify
+    entity_summary: |
+      Shopify integration creates QR codes for products and orders.
+      Link product packaging to reviews, add QR to receipts for
+      reordering, and track physical-to-digital conversions.
+
+  - key: woocommerce-integration
+    type: INTEGRATION
+    display_name: WooCommerce Integration
+    description: WordPress e-commerce via WooCommerce
+    entity_summary: |
+      WooCommerce integration connects QR codes to WordPress stores.
+      Generate product QR codes, embed in pages, and track scans
+      within the WordPress admin dashboard.
+
+  - key: wordpress-integration
+    type: INTEGRATION
+    display_name: WordPress Integration
+    description: CMS integration via WordPress
+    entity_summary: |
+      WordPress integration embeds QR codes directly in posts and pages.
+      Plugin or shortcode access for content creators. Works with
+      page builders and the block editor.
+
+# =============================================================================
+# SEMANTIC ARCS (~35 connections)
+# =============================================================================
+
+arcs:
+  # ---------------------------------------------------------------------------
+  # INTEGRATION → BRAND RELATIONSHIPS
+  # ---------------------------------------------------------------------------
+  - from: zapier-integration
+    to: zapier
+    type: APPLIES_TO
+    strength: 0.95
+
+  - from: make-integration
+    to: make
+    type: APPLIES_TO
+    strength: 0.95
+
+  - from: n8n-integration
+    to: n8n
+    type: APPLIES_TO
+    strength: 0.95
+
+  - from: hubspot-integration
+    to: hubspot
+    type: APPLIES_TO
+    strength: 0.95
+
+  - from: salesforce-integration
+    to: salesforce
+    type: APPLIES_TO
+    strength: 0.95
+
+  - from: mailchimp-integration
+    to: mailchimp
+    type: APPLIES_TO
+    strength: 0.95
+
+  - from: google-sheets-integration
+    to: google
+    type: APPLIES_TO
+    strength: 0.90
+
+  - from: shopify-integration
+    to: shopify
+    type: APPLIES_TO
+    strength: 0.95
+
+  - from: woocommerce-integration
+    to: woocommerce
+    type: APPLIES_TO
+    strength: 0.95
+
+  # ---------------------------------------------------------------------------
+  # INTEGRATION → FEATURE RELATIONSHIPS
+  # ---------------------------------------------------------------------------
+  - from: zapier-integration
+    to: api
+    type: REQUIRES
+    strength: 0.85
+
+  - from: zapier-integration
+    to: bulk-creation
+    type: ENABLES
+    strength: 0.80
+
+  - from: make-integration
+    to: api
+    type: REQUIRES
+    strength: 0.85
+
+  - from: n8n-integration
+    to: api
+    type: REQUIRES
+    strength: 0.85
+
+  - from: hubspot-integration
+    to: analytics
+    type: ENABLES
+    strength: 0.75
+
+  - from: salesforce-integration
+    to: analytics
+    type: ENABLES
+    strength: 0.75
+
+  - from: google-sheets-integration
+    to: bulk-creation
+    type: ENABLES
+    strength: 0.85
+
+  - from: google-sheets-integration
+    to: batch-qr-generator
+    type: ENABLES
+    strength: 0.80
+
+  - from: slack-integration
+    to: webhooks
+    type: REQUIRES
+    strength: 0.85
+
+  # ---------------------------------------------------------------------------
+  # INTEGRATION → INDUSTRY RELATIONSHIPS
+  # ---------------------------------------------------------------------------
+  - from: hubspot-integration
+    to: marketing-agencies
+    type: ENABLES
+    strength: 0.85
+
+  - from: salesforce-integration
+    to: enterprise
+    type: ENABLES
+    strength: 0.85
+
+  - from: shopify-integration
+    to: retail
+    type: ENABLES
+    strength: 0.80
+
+  - from: woocommerce-integration
+    to: small-business
+    type: ENABLES
+    strength: 0.80
+
+  # ---------------------------------------------------------------------------
+  # INTEGRATION SIMILARITIES
+  # ---------------------------------------------------------------------------
+  - from: zapier-integration
+    to: make-integration
+    type: SIMILAR_TO
+    strength: 0.85
+
+  - from: zapier-integration
+    to: n8n-integration
+    type: SIMILAR_TO
+    strength: 0.80
+
+  - from: make-integration
+    to: n8n-integration
+    type: SIMILAR_TO
+    strength: 0.85
+
+  - from: hubspot-integration
+    to: salesforce-integration
+    type: SIMILAR_TO
+    strength: 0.75
+
+  - from: hubspot-integration
+    to: mailchimp-integration
+    type: SIMILAR_TO
+    strength: 0.65
+
+  - from: shopify-integration
+    to: woocommerce-integration
+    type: SIMILAR_TO
+    strength: 0.85
+
+  - from: woocommerce-integration
+    to: wordpress-integration
+    type: SIMILAR_TO
+    strength: 0.70
