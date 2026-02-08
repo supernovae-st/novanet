@@ -176,7 +176,10 @@ mod tests {
         assert!(output.contains("Project: '🔷'"), "should have Project icon");
         assert!(output.contains("Locale: '🔷'"), "should have Locale icon");
         assert!(output.contains("Entity: '"), "should have Entity entry");
-        assert!(output.contains("PageGenerated: '"), "should have PageGenerated entry"); // v10.9: renamed from PageL10n
+        assert!(
+            output.contains("PageGenerated: '"),
+            "should have PageGenerated entry"
+        ); // v10.9: renamed from PageL10n
 
         // Helper functions present
         assert!(output.contains("export function getNodeIcon"));
