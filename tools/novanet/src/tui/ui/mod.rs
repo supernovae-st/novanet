@@ -4026,6 +4026,7 @@ fn render_status(f: &mut Frame, area: Rect, app: &App) {
     let shortcuts = match app.mode {
         NavMode::Atlas => "j/k:nav  1-4:modes  ?:help",
         NavMode::Audit => "j/k:nav  1-4:modes  ?:help",
+        NavMode::Guide => "j/k:nav  Enter:select  q:back  ?:help",
         NavMode::Data => {
             // Check if on an Instance (can navigate to Kind with '1')
             if matches!(
@@ -6011,6 +6012,7 @@ fn render_recent_items_overlay(f: &mut Frame, app: &App) {
                 crate::tui::app::NavMode::Query => "[Q]",
                 crate::tui::app::NavMode::Atlas => "[A]",
                 crate::tui::app::NavMode::Audit => "[!]",
+                crate::tui::app::NavMode::Guide => "[G]",
             };
 
             let prefix = if is_selected { "› " } else { "  " };
