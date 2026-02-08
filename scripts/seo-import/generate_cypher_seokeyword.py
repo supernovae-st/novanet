@@ -1,192 +1,96 @@
 #!/usr/bin/env python3
-"""Generate Cypher seed file for SEOKeyword nodes and TARGETS relationships.
-
-Task 2.3 from implementation plan:
-- Input: scripts/seo-import/output/keywords_mapped.json (1,519 keywords)
-- Output: packages/db/seed/12-seokeyword-fr-fr.cypher
-
-Key generation:
-- Sanitize keyword to lowercase ASCII
-- Replace spaces with hyphens
-- Add 'seo-' prefix and '-fr' suffix
-- Example: "créer qr code gratuit" → "seo-creer-qr-code-gratuit-fr"
-"""
+"""Generate Cypher seed file for SEOKeyword nodes and TARGETS relationships."""
 
 import json
-import unicodedata
-import re
+import hashlib
 from pathlib import Path
 from datetime import datetime
 
-
-def remove_accents(text: str) -> str:
-    """Remove accents from text (créer → creer)."""
-    # Normalize to decomposed form (é → e + combining accent)
-    normalized = unicodedata.normalize('NFD', text)
-    # Remove combining diacritical marks
-    return ''.join(c for c in normalized if unicodedata.category(c) != 'Mn')
-
-
-def keyword_to_key(keyword: str) -> str:
-    """Convert keyword to SEOKeyword key.
-
-    Example: "créer qr code gratuit" → "seo-creer-qr-code-gratuit-fr"
-    """
-    # Remove accents
-    key = remove_accents(keyword.lower())
-
-    # Replace spaces and special chars with hyphens
-    key = re.sub(r'[^a-z0-9]+', '-', key)
-
-    # Remove leading/trailing hyphens
-    key = key.strip('-')
-
-    # Collapse multiple hyphens
-    key = re.sub(r'-+', '-', key)
-
-    # Truncate to reasonable length (max 60 chars for key body)
-    key = key[:60]
-
-    # Add prefix and suffix
-    return f"seo-{key}-fr"
-
-
 def escape_cypher(s: str) -> str:
-    """Escape string for Cypher single-quoted strings."""
+    """Escape string for Cypher."""
     if not s:
         return ""
-    # Escape backslashes first, then single quotes
-    return s.replace("\\", "\\\\").replace("'", "\\'")
+    return s.replace("\\", "\\\\").replace('"', '\\"').replace("'", "\\'")
 
+def keyword_to_key(keyword: str, locale: str) -> str:
+    """Generate unique key for SEOKeyword."""
+    # Create a slug from the keyword
+    slug = keyword.lower()
+    slug = slug.replace(" ", "-").replace("'", "")
+    slug = "".join(c for c in slug if c.isalnum() or c == "-")
+    slug = slug[:50]  # Truncate
 
-def generate_cypher(keywords: list) -> str:
-    """Generate Cypher for SEOKeyword nodes and TARGETS relationships."""
+    # Add hash suffix for uniqueness
+    hash_suffix = hashlib.md5(keyword.encode()).hexdigest()[:6]
 
-    # Count stats
-    total = len(keywords)
-    with_entity = sum(1 for k in keywords if k.get('entity_key'))
+    return f"seo-{slug}-{locale.lower()}-{hash_suffix}"
 
+def generate_cypher(mappings: list, batch_size: int = 500) -> str:
+    """Generate Cypher statements for SEOKeyword nodes and TARGETS relationships."""
     lines = [
-        f"// SEOKeyword fr-FR for QR Code AI ({total} keywords)",
-        f"// Generated: {datetime.now().strftime('%Y-%m-%d')}",
-        "//",
-        f"// Keywords with entity mapping: {with_entity}",
-        f"// Keywords without entity mapping: {total - with_entity}",
-        "",
         "// ═══════════════════════════════════════════════════════════════════════════════",
-        "// INDEXES",
+        f"// SEOKeyword fr-FR — {len(mappings)} keywords",
+        "// Generated: " + datetime.now().isoformat(),
         "// ═══════════════════════════════════════════════════════════════════════════════",
         "",
-        "CREATE INDEX seokeyword_key IF NOT EXISTS FOR (kw:SEOKeyword) ON (kw.key);",
+        "// Create index for fast lookup",
         "CREATE INDEX seokeyword_value IF NOT EXISTS FOR (kw:SEOKeyword) ON (kw.value);",
         "CREATE INDEX seokeyword_volume IF NOT EXISTS FOR (kw:SEOKeyword) ON (kw.volume);",
         "",
-        "// ═══════════════════════════════════════════════════════════════════════════════",
-        "// SECTION 1: CREATE SEOKeyword NODES",
-        "// ═══════════════════════════════════════════════════════════════════════════════",
-        "",
     ]
 
-    # Track unique keys to avoid duplicates
-    seen_keys = set()
+    # Group by entity for batching
+    by_entity = {}
+    for m in mappings:
+        key = m["entity_key"]
+        if key not in by_entity:
+            by_entity[key] = []
+        by_entity[key].append(m)
 
-    for kw in keywords:
-        key = keyword_to_key(kw['keyword'])
-
-        # Handle duplicate keys by appending a counter
-        original_key = key
-        counter = 1
-        while key in seen_keys:
-            key = f"{original_key}-{counter}"
-            counter += 1
-        seen_keys.add(key)
-
-        value = escape_cypher(kw['keyword'])
-        volume = kw.get('volume', 0)
-        difficulty = kw.get('difficulty', 0)
-        cpc = kw.get('cpc', 0.0)
-        intent = escape_cypher(kw.get('intent', ''))
-        traffic_potential = kw.get('traffic_potential', 0)
-
-        lines.append(f"MERGE (kw:SEOKeyword {{key: '{key}'}})")
-        lines.append(f"SET kw.value = '{value}',")
-        lines.append(f"    kw.volume = {volume},")
-        lines.append(f"    kw.difficulty = {difficulty},")
-        lines.append(f"    kw.cpc = {cpc},")
-        lines.append(f"    kw.intent = '{intent}',")
-        lines.append(f"    kw.traffic_potential = {traffic_potential},")
-        lines.append(f"    kw.source = 'ahrefs',")
-        lines.append(f"    kw.created_at = datetime(),")
-        lines.append(f"    kw.updated_at = datetime();")
-        lines.append("")
-
-    lines.append("// ═══════════════════════════════════════════════════════════════════════════════")
-    lines.append("// SECTION 2: CREATE TARGETS RELATIONS (EntityL10n -> SEOKeyword)")
-    lines.append("// ═══════════════════════════════════════════════════════════════════════════════")
+    lines.append("// ───────────────────────────────────────────────────────────────────────────────")
+    lines.append("// SEOKeyword Nodes + TARGETS relationships (grouped by Entity)")
+    lines.append("// ───────────────────────────────────────────────────────────────────────────────")
     lines.append("")
 
-    # Reset for second pass
-    seen_keys = set()
-    relation_count = 0
-
-    for kw in keywords:
-        entity_key = kw.get('entity_key')
-        if not entity_key:
-            continue
-
-        key = keyword_to_key(kw['keyword'])
-
-        # Handle duplicate keys consistently
-        original_key = key
-        counter = 1
-        while key in seen_keys:
-            key = f"{original_key}-{counter}"
-            counter += 1
-        seen_keys.add(key)
-
-        lines.append(f"MATCH (el:EntityL10n {{entity_key: '{entity_key}', locale_key: 'fr-FR'}})")
-        lines.append(f"MATCH (kw:SEOKeyword {{key: '{key}'}})")
-        lines.append("MERGE (el)-[:TARGETS]->(kw);")
+    for entity_key, entity_keywords in sorted(by_entity.items()):
+        lines.append(f"// --- {entity_key} ({len(entity_keywords)} keywords) ---")
         lines.append("")
-        relation_count += 1
 
-    return "\n".join(lines), total, relation_count
+        for m in entity_keywords:
+            kw_key = keyword_to_key(m["keyword"], m["locale_key"])
 
+            # Create SEOKeyword node
+            lines.append(f'MERGE (kw:SEOKeyword {{key: "{kw_key}"}})')
+            lines.append("ON CREATE SET")
+            lines.append(f'  kw.value = "{escape_cypher(m["keyword"])}",')
+            lines.append(f'  kw.volume = {m["volume"]},')
+            lines.append(f'  kw.difficulty = {m["difficulty"]},')
+            lines.append(f'  kw.cpc = {m["cpc"]},')
+            lines.append(f'  kw.intent = "{escape_cypher(m["intent"])}",')
+            lines.append("  kw.created_at = datetime(),")
+            lines.append("  kw.updated_at = datetime();")
+            lines.append("")
 
-def main():
-    # Paths
-    input_path = Path("scripts/seo-import/output/keywords_mapped.json")
-    output_path = Path("packages/db/seed/12-seokeyword-fr-fr.cypher")
+            # Create TARGETS relationship
+            lines.append(f'MATCH (el:EntityL10n {{entity_key: "{m["entity_key"]}", locale_key: "{m["locale_key"]}"}})')
+            lines.append(f'MATCH (kw:SEOKeyword {{key: "{kw_key}"}})')
+            lines.append("MERGE (el)-[:TARGETS]->(kw);")
+            lines.append("")
 
-    # Load keywords
-    with open(input_path, "r", encoding="utf-8") as f:
-        keywords = json.load(f)
-
-    print(f"Loaded {len(keywords)} keywords from {input_path}")
-
-    # Generate Cypher
-    cypher, keyword_count, relation_count = generate_cypher(keywords)
-
-    # Write output
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    with open(output_path, "w", encoding="utf-8") as f:
-        f.write(cypher)
-
-    # Stats
-    line_count = cypher.count('\n') + 1
-    file_size = len(cypher) / 1024
-
-    print(f"\nOutput: {output_path}")
-    print(f"  Lines: {line_count:,}")
-    print(f"  Keywords: {keyword_count:,}")
-    print(f"  TARGETS relations: {relation_count:,}")
-    print(f"  File size: {file_size:.1f} KB")
-
-    # Sample output
-    print("\n--- Sample output (first 30 lines) ---")
-    for line in cypher.split('\n')[:30]:
-        print(line)
-
+    return "\n".join(lines)
 
 if __name__ == "__main__":
-    main()
+    # Load mappings
+    with open("scripts/seo-import/output/keyword_mappings.json", "r") as f:
+        mappings = json.load(f)
+
+    # Generate Cypher
+    cypher = generate_cypher(mappings)
+
+    # Save to seed file
+    output_path = Path("packages/db/seed/41-seokeywords-fr-fr.cypher")
+    with open(output_path, "w") as f:
+        f.write(cypher)
+
+    print(f"Generated Cypher for {len(mappings)} SEOKeywords to {output_path}")
+    print(f"File size: {len(cypher) / 1024:.1f} KB")
