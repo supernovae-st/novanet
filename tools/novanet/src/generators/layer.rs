@@ -251,7 +251,7 @@ fn render_layers(nodes: &[yaml_node::ParsedNode]) -> crate::Result<String> {
 mod tests {
     use super::*;
     use crate::generators::Generator;
-    use crate::parsers::yaml_node::{LocaleBehavior, NodeDef, ParsedNode};
+    use crate::parsers::yaml_node::{NodeDef, NodeTrait, ParsedNode};
 
     /// Build a minimal ParsedNode for testing.
     fn make_node(name: &str, realm: &str, layer: &str) -> ParsedNode {
@@ -260,7 +260,7 @@ mod tests {
                 name: name.to_string(),
                 realm: realm.to_string(),
                 layer: layer.to_string(),
-                node_trait: LocaleBehavior::Invariant,
+                node_trait: NodeTrait::Invariant,
                 knowledge_tier: None,
                 icon: None,
                 description: "test".to_string(),

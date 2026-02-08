@@ -185,7 +185,7 @@ mod tests {
 
     #[test]
     fn render_icons_basic() {
-        use crate::parsers::yaml_node::{LocaleBehavior, NodeDef, ParsedNode};
+        use crate::parsers::yaml_node::{NodeDef, NodeTrait, ParsedNode};
         use std::path::PathBuf;
 
         let nodes = vec![
@@ -194,7 +194,7 @@ mod tests {
                     name: "TestNode".to_string(),
                     realm: "tenant".to_string(),
                     layer: "foundation".to_string(),
-                    node_trait: LocaleBehavior::Invariant,
+                    node_trait: NodeTrait::Invariant,
                     knowledge_tier: None,
                     icon: Some("🚀".to_string()),
                     description: "Test".to_string(),
@@ -212,7 +212,7 @@ mod tests {
                     name: "NoIconNode".to_string(),
                     realm: "global".to_string(),
                     layer: "config".to_string(),
-                    node_trait: LocaleBehavior::Invariant,
+                    node_trait: NodeTrait::Invariant,
                     knowledge_tier: None,
                     icon: None, // No icon - should use default
                     description: "Test".to_string(),

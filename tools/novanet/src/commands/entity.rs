@@ -118,8 +118,7 @@ const VALID_ARC_TYPES: &[&str] = &[
     "COMPETES_WITH",
     "APPLIES_TO",
     "HAS_APPLICATION",
-    // Legacy (for compatibility)
-    "SUBTOPIC_OF",
+    // Removed: "SUBTOPIC_OF" (v10 legacy, replaced by VARIANT_OF/TYPE_OF in v11)
 ];
 
 /// Validate entity type.
