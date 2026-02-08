@@ -1,0 +1,960 @@
+# Phase 2: Content Types — 58 Entities
+# QR Code AI Entity Data for NovaNet
+# v11 Schema with Typed Semantic Arcs
+
+project: qrcode-ai
+phase: 2
+name: Content Types
+description: QR code content types - what data is encoded (URLs, WiFi, vCards, social, payment, etc.)
+
+entities:
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BASIC CONTENT TYPES (13)
+  # ═══════════════════════════════════════════════════════════════════════════
+  - key: qr-code-url
+    type: CONTENT_TYPE
+    display_name: URL QR Code
+    description: QR code that redirects to any URL
+    entity_summary: |
+      A URL QR code encodes a web address, allowing users to visit any website
+      by scanning. This is the most common QR code type, supporting both static
+      (fixed URL) and dynamic (editable destination) modes.
+
+  - key: qr-code-wifi
+    type: CONTENT_TYPE
+    display_name: WiFi QR Code
+    description: QR code with WiFi credentials (SSID, password, encryption)
+    entity_summary: |
+      A WiFi QR code stores network credentials (SSID, password, encryption type).
+      When scanned, devices can automatically connect to the network without
+      manual password entry. Always static since credentials are encoded directly.
+
+  - key: qr-code-vcard
+    type: CONTENT_TYPE
+    display_name: vCard QR Code
+    description: Digital business card in vCard format
+    entity_summary: |
+      A vCard QR code contains contact information in the standard vCard format.
+      Scanning adds the contact directly to the phone's address book with name,
+      phone, email, company, and address. Static encoding using vCard 3.0/4.0.
+
+  - key: qr-code-mecard
+    type: CONTENT_TYPE
+    display_name: MeCard QR Code
+    description: Japanese contact format (more compact than vCard)
+    entity_summary: |
+      MeCard is a compact contact data format developed in Japan. It encodes
+      similar information to vCard but with a more efficient syntax, resulting
+      in smaller QR codes. Popular for business cards in Asia.
+
+  - key: qr-code-pdf
+    type: CONTENT_TYPE
+    display_name: PDF QR Code
+    description: Links to PDF document for viewing or download
+    entity_summary: |
+      A PDF QR code links to a PDF document, allowing instant access to
+      brochures, menus, manuals, or any document. Typically dynamic to enable
+      document updates after printing the QR code.
+
+  - key: qr-code-text
+    type: CONTENT_TYPE
+    display_name: Text QR Code
+    description: Plain text content encoded directly
+    entity_summary: |
+      A text QR code encodes plain text directly in the pattern. Used for
+      short messages, product codes, serial numbers, or any static text.
+      Always static since the text is embedded in the QR pattern itself.
+
+  - key: qr-code-email
+    type: CONTENT_TYPE
+    display_name: Email QR Code
+    description: Opens email composer with prefilled fields
+    entity_summary: |
+      An email QR code opens the user's email app with prefilled recipient,
+      subject, and body. Used for support requests, feedback, and customer
+      contact. Can be dynamic to update email content.
+
+  - key: qr-code-sms
+    type: CONTENT_TYPE
+    display_name: SMS QR Code
+    description: Opens SMS with prefilled phone number and message
+    entity_summary: |
+      An SMS QR code opens the messaging app with a prefilled phone number
+      and optional message text. Used for quick opt-ins, support, and
+      marketing campaigns. Can be static or dynamic.
+
+  - key: qr-code-phone
+    type: CONTENT_TYPE
+    display_name: Phone QR Code
+    description: Phone number for direct calling
+    entity_summary: |
+      A phone QR code encodes a phone number in tel: format. Scanning
+      initiates a call to the number. Simple, static encoding ideal for
+      business cards, signs, and customer service.
+
+  - key: qr-code-video
+    type: CONTENT_TYPE
+    display_name: Video QR Code
+    description: Links to video content (YouTube, Vimeo, hosted)
+    entity_summary: |
+      A video QR code links to video content on platforms like YouTube,
+      Vimeo, or self-hosted servers. Used for product demos, tutorials,
+      and marketing videos. Typically dynamic for analytics.
+
+  - key: qr-code-audio
+    type: CONTENT_TYPE
+    display_name: Audio QR Code
+    description: Links to audio or podcast content
+    entity_summary: |
+      An audio QR code links to audio content like podcasts, music tracks,
+      or voice messages. Used for audio guides, museum tours, and podcast
+      promotion. Dynamic for tracking listens.
+
+  - key: qr-code-image-gallery
+    type: CONTENT_TYPE
+    display_name: Image Gallery QR Code
+    description: Links to image gallery or photo album
+    entity_summary: |
+      An image gallery QR code opens a collection of photos or images.
+      Used for event photos, product catalogs, portfolios, and real estate
+      listings. Dynamic to update gallery contents.
+
+  - key: qr-code-coupon
+    type: CONTENT_TYPE
+    display_name: Coupon QR Code
+    description: Digital coupon or discount code
+    entity_summary: |
+      A coupon QR code contains a discount code or promotional offer.
+      Can link to a landing page with the offer or encode the code directly.
+      Dynamic for tracking redemptions and expiration.
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # SOCIAL CATEGORY + PLATFORMS (15)
+  # ═══════════════════════════════════════════════════════════════════════════
+  - key: qr-code-social
+    type: THING
+    display_name: Social Media QR Code
+    description: Category for social media platform QR codes
+    entity_summary: |
+      Social media QR codes link to profiles, pages, or posts on social
+      platforms. They make it easy to gain followers by scanning instead
+      of searching. Always dynamic for profile tracking.
+
+  - key: qr-code-instagram
+    type: CONTENT_TYPE
+    display_name: Instagram QR Code
+    description: Links to Instagram profile or post
+    entity_summary: |
+      An Instagram QR code links to an Instagram profile, post, or Reel.
+      Used by influencers, businesses, and creators to grow followers.
+      Dynamic to track scans and update linked content.
+
+  - key: qr-code-linkedin
+    type: CONTENT_TYPE
+    display_name: LinkedIn QR Code
+    description: Links to LinkedIn profile or company page
+    entity_summary: |
+      A LinkedIn QR code links to a professional profile or company page.
+      Popular on business cards and at networking events. Dynamic to
+      track professional connections.
+
+  - key: qr-code-facebook
+    type: CONTENT_TYPE
+    display_name: Facebook QR Code
+    description: Links to Facebook page or profile
+    entity_summary: |
+      A Facebook QR code links to a Facebook page, profile, group, or
+      event. Used for business promotion and community building.
+      Dynamic for engagement tracking.
+
+  - key: qr-code-twitter
+    type: CONTENT_TYPE
+    display_name: Twitter/X QR Code
+    description: Links to Twitter/X profile or tweet
+    entity_summary: |
+      A Twitter/X QR code links to a profile, tweet, or list. Used for
+      news, updates, and brand engagement. Dynamic to track follows
+      and interactions.
+
+  - key: qr-code-youtube
+    type: CONTENT_TYPE
+    display_name: YouTube QR Code
+    description: Links to YouTube channel or video
+    entity_summary: |
+      A YouTube QR code links to a channel, video, or playlist. Used for
+      content promotion, tutorials, and brand channels. Dynamic for
+      view tracking.
+
+  - key: qr-code-tiktok
+    type: CONTENT_TYPE
+    display_name: TikTok QR Code
+    description: Links to TikTok profile or video
+    entity_summary: |
+      A TikTok QR code links to a profile or specific video. Popular with
+      creators and brands targeting younger audiences. Dynamic for
+      follower tracking.
+
+  - key: qr-code-snapchat
+    type: CONTENT_TYPE
+    display_name: Snapchat QR Code
+    description: Links to Snapchat profile
+    entity_summary: |
+      A Snapchat QR code links to a Snapchat profile or lens. Snapchat
+      has native Snapcodes, but standard QR codes can link to profiles.
+      Used for friend adds and AR experiences.
+
+  - key: qr-code-whatsapp
+    type: CONTENT_TYPE
+    display_name: WhatsApp QR Code
+    description: Opens WhatsApp chat with prefilled message
+    entity_summary: |
+      A WhatsApp QR code opens a chat with a specific number using
+      wa.me links. Can include a prefilled message. Used for customer
+      support and direct communication.
+
+  - key: qr-code-telegram
+    type: CONTENT_TYPE
+    display_name: Telegram QR Code
+    description: Links to Telegram channel, group, or bot
+    entity_summary: |
+      A Telegram QR code links to a channel, group, or bot. Used for
+      community building, news channels, and customer support bots.
+      Dynamic for subscriber tracking.
+
+  - key: qr-code-pinterest
+    type: CONTENT_TYPE
+    display_name: Pinterest QR Code
+    description: Links to Pinterest profile or board
+    entity_summary: |
+      A Pinterest QR code links to a profile, board, or pin. Used for
+      visual inspiration, product catalogs, and recipe collections.
+      Dynamic for engagement tracking.
+
+  - key: qr-code-spotify
+    type: CONTENT_TYPE
+    display_name: Spotify QR Code
+    description: Links to Spotify artist, album, or playlist
+    entity_summary: |
+      A Spotify QR code links to an artist, album, playlist, or podcast.
+      Used for music promotion and playlist sharing. Dynamic for
+      stream tracking.
+
+  - key: qr-code-apple-music
+    type: CONTENT_TYPE
+    display_name: Apple Music QR Code
+    description: Links to Apple Music artist, album, or playlist
+    entity_summary: |
+      An Apple Music QR code links to music content on Apple Music.
+      Used alongside Spotify codes for cross-platform music promotion.
+      Dynamic for stream tracking.
+
+  - key: qr-code-soundcloud
+    type: CONTENT_TYPE
+    display_name: SoundCloud QR Code
+    description: Links to SoundCloud artist or track
+    entity_summary: |
+      A SoundCloud QR code links to an artist page, track, or playlist.
+      Popular with independent musicians and DJs. Dynamic for
+      play tracking.
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # PAYMENT CATEGORY + TYPES (9)
+  # ═══════════════════════════════════════════════════════════════════════════
+  - key: qr-code-payment
+    type: THING
+    display_name: Payment QR Code
+    description: Category for payment-related QR codes
+    entity_summary: |
+      Payment QR codes enable financial transactions via scanning. This
+      category includes regional systems (PIX, UPI), digital wallets
+      (PayPal, Venmo), and cryptocurrency payments.
+
+  - key: qr-code-pix
+    type: CONTENT_TYPE
+    display_name: PIX QR Code
+    description: Brazil instant payment system
+    entity_summary: |
+      PIX is Brazil's instant payment system launched in 2020. PIX QR
+      codes enable real-time bank transfers. Extremely popular in Brazil
+      for both retail and P2P payments.
+
+  - key: qr-code-upi
+    type: CONTENT_TYPE
+    display_name: UPI QR Code
+    description: India Unified Payments Interface
+    entity_summary: |
+      UPI (Unified Payments Interface) is India's real-time payment
+      system. UPI QR codes are ubiquitous in India, used by street
+      vendors to large retailers for instant bank transfers.
+
+  - key: qr-code-paypal
+    type: CONTENT_TYPE
+    display_name: PayPal QR Code
+    description: PayPal payment or money request
+    entity_summary: |
+      A PayPal QR code links to PayPal.me for payments or money requests.
+      Used for donations, invoices, and peer-to-peer payments. Works
+      globally where PayPal is available.
+
+  - key: qr-code-venmo
+    type: CONTENT_TYPE
+    display_name: Venmo QR Code
+    description: Venmo payment (US only)
+    entity_summary: |
+      A Venmo QR code enables payments through the Venmo app (US only).
+      Popular for splitting bills, small business payments, and tips.
+      Social payment features included.
+
+  - key: qr-code-bitcoin
+    type: CONTENT_TYPE
+    display_name: Bitcoin QR Code
+    description: Bitcoin wallet address for payments
+    entity_summary: |
+      A Bitcoin QR code encodes a wallet address for receiving Bitcoin
+      payments. Standard format across all Bitcoin wallets. Can include
+      amount and message parameters.
+
+  - key: qr-code-ethereum
+    type: CONTENT_TYPE
+    display_name: Ethereum QR Code
+    description: Ethereum wallet address for payments
+    entity_summary: |
+      An Ethereum QR code encodes an ETH wallet address. Used for
+      receiving Ether and ERC-20 tokens. Standard EIP-681 format
+      supported by most wallets.
+
+  - key: qr-code-crypto
+    type: CONTENT_TYPE
+    display_name: Crypto QR Code
+    description: Generic cryptocurrency payment
+    entity_summary: |
+      A generic crypto QR code can link to payment pages or encode
+      wallet addresses for various cryptocurrencies. Used when
+      supporting multiple crypto payment options.
+
+  - key: qr-code-bank-transfer
+    type: CONTENT_TYPE
+    display_name: Bank Transfer QR Code
+    description: SEPA or domestic bank transfer
+    entity_summary: |
+      A bank transfer QR code encodes IBAN and payment details for
+      SEPA (Europe) or domestic transfers. Can include amount,
+      reference, and beneficiary information.
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # LOCATION CATEGORY + TYPES (5)
+  # ═══════════════════════════════════════════════════════════════════════════
+  - key: qr-code-location
+    type: THING
+    display_name: Location QR Code
+    description: Category for location and maps QR codes
+    entity_summary: |
+      Location QR codes link to map services or encode coordinates.
+      Used for navigation to stores, events, parking, and points of
+      interest. Can target specific map applications.
+
+  - key: qr-code-google-maps
+    type: CONTENT_TYPE
+    display_name: Google Maps QR Code
+    description: Opens location in Google Maps
+    entity_summary: |
+      A Google Maps QR code opens a location in Google Maps app or web.
+      Uses maps.google.com links with coordinates or place ID.
+      Supports directions, place search, and saved locations.
+
+  - key: qr-code-apple-maps
+    type: CONTENT_TYPE
+    display_name: Apple Maps QR Code
+    description: Opens location in Apple Maps
+    entity_summary: |
+      An Apple Maps QR code opens a location in Apple Maps on iOS
+      devices. Uses maps.apple.com links. Falls back to web on
+      non-Apple devices.
+
+  - key: qr-code-waze
+    type: CONTENT_TYPE
+    display_name: Waze QR Code
+    description: Opens navigation in Waze
+    entity_summary: |
+      A Waze QR code opens the Waze app for navigation. Uses waze.com
+      links with coordinates. Popular for businesses with parking
+      or complex access routes.
+
+  - key: qr-code-coordinates
+    type: CONTENT_TYPE
+    display_name: Coordinates QR Code
+    description: "Raw GPS coordinates (geo: URI)"
+    entity_summary: |
+      A coordinates QR code encodes raw GPS coordinates using the
+      geo: URI scheme. Device-agnostic - opens in the default maps
+      application. Pure latitude/longitude encoding.
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # APP CATEGORY + TYPES (4)
+  # ═══════════════════════════════════════════════════════════════════════════
+  - key: qr-code-app
+    type: THING
+    display_name: App Download QR Code
+    description: Category for app store download QR codes
+    entity_summary: |
+      App download QR codes link to app stores for easy installation.
+      Can be platform-specific (iOS, Android) or smart links that
+      detect the device and redirect appropriately.
+
+  - key: qr-code-app-store
+    type: CONTENT_TYPE
+    display_name: App Store QR Code
+    description: iOS App Store download link
+    entity_summary: |
+      An App Store QR code links directly to an iOS app on the Apple
+      App Store. Uses apps.apple.com links. Only works on iOS devices
+      or redirects to web preview.
+
+  - key: qr-code-play-store
+    type: CONTENT_TYPE
+    display_name: Play Store QR Code
+    description: Google Play Store download link
+    entity_summary: |
+      A Play Store QR code links to an Android app on Google Play.
+      Uses play.google.com links. Works on Android devices and
+      provides web preview on other platforms.
+
+  - key: qr-code-app-download
+    type: CONTENT_TYPE
+    display_name: Smart App Download QR Code
+    description: Auto-detects OS and redirects to correct store
+    entity_summary: |
+      A smart app download QR code detects the user's device and
+      redirects to the appropriate app store. Uses dynamic links
+      or smart link services for cross-platform support.
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # SPECIALIZED CONTENT TYPES (12)
+  # ═══════════════════════════════════════════════════════════════════════════
+  - key: qr-code-review
+    type: CONTENT_TYPE
+    display_name: Review QR Code
+    description: Links to Google, TripAdvisor, or other review platform
+    entity_summary: |
+      A review QR code links directly to a review form on Google,
+      TripAdvisor, Yelp, or other platforms. Used by restaurants,
+      hotels, and businesses to collect customer feedback.
+
+  - key: qr-code-survey
+    type: CONTENT_TYPE
+    display_name: Survey QR Code
+    description: Links to online survey or form
+    entity_summary: |
+      A survey QR code links to an online survey (Google Forms,
+      Typeform, SurveyMonkey). Used for customer feedback, market
+      research, and event evaluations.
+
+  - key: qr-code-feedback
+    type: CONTENT_TYPE
+    display_name: Feedback QR Code
+    description: Links to feedback collection form
+    entity_summary: |
+      A feedback QR code opens a form for collecting customer opinions.
+      Often simpler than full surveys, focusing on ratings or quick
+      comments. Used in retail, hospitality, and service industries.
+
+  - key: qr-code-menu
+    type: CONTENT_TYPE
+    display_name: Menu QR Code
+    description: Restaurant or cafe digital menu
+    entity_summary: |
+      A menu QR code links to a digital restaurant menu. Became
+      ubiquitous during COVID-19 for contactless dining. Can be a
+      PDF, landing page, or ordering system.
+
+  - key: qr-code-resume
+    type: CONTENT_TYPE
+    display_name: Resume QR Code
+    description: Links to digital resume or CV
+    entity_summary: |
+      A resume QR code links to an online CV or professional profile.
+      Used on printed resumes, business cards, and portfolios. Can
+      link to LinkedIn, personal website, or PDF.
+
+  - key: qr-code-certificate
+    type: CONTENT_TYPE
+    display_name: Certificate QR Code
+    description: Verifies authenticity of certificates and credentials
+    entity_summary: |
+      A certificate QR code enables verification of diplomas, licenses,
+      and credentials. Links to issuer database for authenticity
+      check. Used in education, healthcare, and professional fields.
+
+  - key: qr-code-ticket
+    type: CONTENT_TYPE
+    display_name: Ticket QR Code
+    description: Event or transport ticket
+    entity_summary: |
+      A ticket QR code encodes event entry or transport ticket data.
+      Scanned at entry for validation. Used for concerts, flights,
+      trains, and venues. Can be static or dynamic.
+
+  - key: qr-code-attendance
+    type: CONTENT_TYPE
+    display_name: Attendance QR Code
+    description: Check-in for events, classes, or meetings
+    entity_summary: |
+      An attendance QR code enables quick check-in by scanning.
+      Used in schools, conferences, gyms, and offices. Links to
+      attendance tracking system with timestamp.
+
+  - key: qr-code-pet-tag
+    type: CONTENT_TYPE
+    display_name: Pet Tag QR Code
+    description: Pet identification with owner contact info
+    entity_summary: |
+      A pet tag QR code links to owner contact information if a
+      pet is lost. Can include pet name, medical info, and multiple
+      contact methods. Always dynamic for updates.
+
+  - key: qr-code-medical-id
+    type: CONTENT_TYPE
+    display_name: Medical ID QR Code
+    description: Emergency medical information
+    entity_summary: |
+      A medical ID QR code provides emergency access to critical
+      health information (blood type, allergies, medications,
+      emergency contacts). Worn as bracelet or necklace.
+
+  - key: qr-code-file
+    type: CONTENT_TYPE
+    display_name: File Download QR Code
+    description: Links to any downloadable file
+    entity_summary: |
+      A file download QR code links to any downloadable file (ZIP,
+      DOC, XLS, etc.). Used for sharing documents, software, and
+      media. Dynamic for download tracking and updates.
+
+  - key: qr-code-calendar
+    type: CONTENT_TYPE
+    display_name: Calendar Event QR Code
+    description: Adds event to calendar
+    entity_summary: |
+      A calendar event QR code encodes event details (date, time,
+      location, description) in iCal format. Scanning adds the event
+      directly to the user's calendar app.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# SEMANTIC ARCS (~180 connections)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+arcs:
+  # ─────────────────────────────────────────────────────────────────────────────
+  # CONTENT CATEGORY TO QR-CODE
+  # ─────────────────────────────────────────────────────────────────────────────
+  # Note: qr-code-content was defined in Phase 1
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # BASIC CONTENT TYPES → QR-CODE-CONTENT
+  # ─────────────────────────────────────────────────────────────────────────────
+  - from: qr-code-content
+    to: qr-code-url
+    type: INCLUDES
+    strength: 0.80
+
+  - from: qr-code-content
+    to: qr-code-wifi
+    type: INCLUDES
+    strength: 0.80
+
+  - from: qr-code-content
+    to: qr-code-vcard
+    type: INCLUDES
+    strength: 0.80
+
+  - from: qr-code-content
+    to: qr-code-mecard
+    type: INCLUDES
+    strength: 0.80
+
+  - from: qr-code-content
+    to: qr-code-pdf
+    type: INCLUDES
+    strength: 0.80
+
+  - from: qr-code-content
+    to: qr-code-text
+    type: INCLUDES
+    strength: 0.80
+
+  - from: qr-code-content
+    to: qr-code-email
+    type: INCLUDES
+    strength: 0.80
+
+  - from: qr-code-content
+    to: qr-code-sms
+    type: INCLUDES
+    strength: 0.80
+
+  - from: qr-code-content
+    to: qr-code-phone
+    type: INCLUDES
+    strength: 0.80
+
+  - from: qr-code-content
+    to: qr-code-video
+    type: INCLUDES
+    strength: 0.80
+
+  - from: qr-code-content
+    to: qr-code-audio
+    type: INCLUDES
+    strength: 0.80
+
+  - from: qr-code-content
+    to: qr-code-image-gallery
+    type: INCLUDES
+    strength: 0.80
+
+  - from: qr-code-content
+    to: qr-code-coupon
+    type: INCLUDES
+    strength: 0.80
+
+  - from: qr-code-content
+    to: qr-code-calendar
+    type: INCLUDES
+    strength: 0.80
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # CONTENT CATEGORIES
+  # ─────────────────────────────────────────────────────────────────────────────
+  - from: qr-code-content
+    to: qr-code-social
+    type: INCLUDES
+    strength: 0.80
+
+  - from: qr-code-content
+    to: qr-code-payment
+    type: INCLUDES
+    strength: 0.80
+
+  - from: qr-code-content
+    to: qr-code-location
+    type: INCLUDES
+    strength: 0.80
+
+  - from: qr-code-content
+    to: qr-code-app
+    type: INCLUDES
+    strength: 0.80
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # SOCIAL PLATFORMS
+  # ─────────────────────────────────────────────────────────────────────────────
+  - from: qr-code-social
+    to: qr-code-instagram
+    type: INCLUDES
+    strength: 0.85
+
+  - from: qr-code-social
+    to: qr-code-linkedin
+    type: INCLUDES
+    strength: 0.85
+
+  - from: qr-code-social
+    to: qr-code-facebook
+    type: INCLUDES
+    strength: 0.85
+
+  - from: qr-code-social
+    to: qr-code-twitter
+    type: INCLUDES
+    strength: 0.85
+
+  - from: qr-code-social
+    to: qr-code-youtube
+    type: INCLUDES
+    strength: 0.85
+
+  - from: qr-code-social
+    to: qr-code-tiktok
+    type: INCLUDES
+    strength: 0.85
+
+  - from: qr-code-social
+    to: qr-code-snapchat
+    type: INCLUDES
+    strength: 0.85
+
+  - from: qr-code-social
+    to: qr-code-whatsapp
+    type: INCLUDES
+    strength: 0.85
+
+  - from: qr-code-social
+    to: qr-code-telegram
+    type: INCLUDES
+    strength: 0.85
+
+  - from: qr-code-social
+    to: qr-code-pinterest
+    type: INCLUDES
+    strength: 0.85
+
+  - from: qr-code-social
+    to: qr-code-spotify
+    type: INCLUDES
+    strength: 0.85
+
+  - from: qr-code-social
+    to: qr-code-apple-music
+    type: INCLUDES
+    strength: 0.85
+
+  - from: qr-code-social
+    to: qr-code-soundcloud
+    type: INCLUDES
+    strength: 0.85
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # PAYMENT TYPES
+  # ─────────────────────────────────────────────────────────────────────────────
+  - from: qr-code-payment
+    to: qr-code-pix
+    type: INCLUDES
+    strength: 0.85
+
+  - from: qr-code-payment
+    to: qr-code-upi
+    type: INCLUDES
+    strength: 0.85
+
+  - from: qr-code-payment
+    to: qr-code-paypal
+    type: INCLUDES
+    strength: 0.85
+
+  - from: qr-code-payment
+    to: qr-code-venmo
+    type: INCLUDES
+    strength: 0.85
+
+  - from: qr-code-payment
+    to: qr-code-bitcoin
+    type: INCLUDES
+    strength: 0.85
+
+  - from: qr-code-payment
+    to: qr-code-ethereum
+    type: INCLUDES
+    strength: 0.85
+
+  - from: qr-code-payment
+    to: qr-code-crypto
+    type: INCLUDES
+    strength: 0.85
+
+  - from: qr-code-payment
+    to: qr-code-bank-transfer
+    type: INCLUDES
+    strength: 0.85
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # LOCATION TYPES
+  # ─────────────────────────────────────────────────────────────────────────────
+  - from: qr-code-location
+    to: qr-code-google-maps
+    type: INCLUDES
+    strength: 0.85
+
+  - from: qr-code-location
+    to: qr-code-apple-maps
+    type: INCLUDES
+    strength: 0.85
+
+  - from: qr-code-location
+    to: qr-code-waze
+    type: INCLUDES
+    strength: 0.85
+
+  - from: qr-code-location
+    to: qr-code-coordinates
+    type: INCLUDES
+    strength: 0.85
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # APP TYPES
+  # ─────────────────────────────────────────────────────────────────────────────
+  - from: qr-code-app
+    to: qr-code-app-store
+    type: INCLUDES
+    strength: 0.85
+
+  - from: qr-code-app
+    to: qr-code-play-store
+    type: INCLUDES
+    strength: 0.85
+
+  - from: qr-code-app
+    to: qr-code-app-download
+    type: INCLUDES
+    strength: 0.85
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # SPECIALIZED → CONTENT
+  # ─────────────────────────────────────────────────────────────────────────────
+  - from: qr-code-content
+    to: qr-code-review
+    type: INCLUDES
+    strength: 0.80
+
+  - from: qr-code-content
+    to: qr-code-survey
+    type: INCLUDES
+    strength: 0.80
+
+  - from: qr-code-content
+    to: qr-code-feedback
+    type: INCLUDES
+    strength: 0.80
+
+  - from: qr-code-content
+    to: qr-code-menu
+    type: INCLUDES
+    strength: 0.80
+
+  - from: qr-code-content
+    to: qr-code-resume
+    type: INCLUDES
+    strength: 0.80
+
+  - from: qr-code-content
+    to: qr-code-certificate
+    type: INCLUDES
+    strength: 0.80
+
+  - from: qr-code-content
+    to: qr-code-ticket
+    type: INCLUDES
+    strength: 0.80
+
+  - from: qr-code-content
+    to: qr-code-attendance
+    type: INCLUDES
+    strength: 0.80
+
+  - from: qr-code-content
+    to: qr-code-pet-tag
+    type: INCLUDES
+    strength: 0.80
+
+  - from: qr-code-content
+    to: qr-code-medical-id
+    type: INCLUDES
+    strength: 0.80
+
+  - from: qr-code-content
+    to: qr-code-file
+    type: INCLUDES
+    strength: 0.80
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # SIMILAR_TO RELATIONSHIPS
+  # ─────────────────────────────────────────────────────────────────────────────
+  - from: qr-code-vcard
+    to: qr-code-mecard
+    type: SIMILAR_TO
+    strength: 0.90
+
+  - from: qr-code-email
+    to: qr-code-sms
+    type: SIMILAR_TO
+    strength: 0.70
+
+  - from: qr-code-phone
+    to: qr-code-sms
+    type: SIMILAR_TO
+    strength: 0.60
+
+  - from: qr-code-video
+    to: qr-code-audio
+    type: SIMILAR_TO
+    strength: 0.70
+
+  - from: qr-code-survey
+    to: qr-code-feedback
+    type: SIMILAR_TO
+    strength: 0.85
+
+  - from: qr-code-google-maps
+    to: qr-code-apple-maps
+    type: SIMILAR_TO
+    strength: 0.90
+
+  - from: qr-code-google-maps
+    to: qr-code-waze
+    type: SIMILAR_TO
+    strength: 0.80
+
+  - from: qr-code-app-store
+    to: qr-code-play-store
+    type: SIMILAR_TO
+    strength: 0.90
+
+  - from: qr-code-bitcoin
+    to: qr-code-ethereum
+    type: SIMILAR_TO
+    strength: 0.85
+
+  - from: qr-code-pix
+    to: qr-code-upi
+    type: SIMILAR_TO
+    strength: 0.80
+
+  - from: qr-code-paypal
+    to: qr-code-venmo
+    type: SIMILAR_TO
+    strength: 0.85
+
+  - from: qr-code-spotify
+    to: qr-code-apple-music
+    type: SIMILAR_TO
+    strength: 0.90
+
+  - from: qr-code-spotify
+    to: qr-code-soundcloud
+    type: SIMILAR_TO
+    strength: 0.80
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # ENABLES RELATIONSHIPS
+  # ─────────────────────────────────────────────────────────────────────────────
+  - from: qr-code-url
+    to: dynamic-qr-code
+    type: ENABLES
+    strength: 0.95
+
+  - from: qr-code-app-download
+    to: qr-code-app-store
+    type: ENABLES
+    strength: 0.90
+
+  - from: qr-code-app-download
+    to: qr-code-play-store
+    type: ENABLES
+    strength: 0.90
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # REQUIRES RELATIONSHIPS
+  # ─────────────────────────────────────────────────────────────────────────────
+  - from: qr-code-instagram
+    to: short-link
+    type: REQUIRES
+    strength: 0.90
+
+  - from: qr-code-youtube
+    to: short-link
+    type: REQUIRES
+    strength: 0.90
+
+  - from: qr-code-tiktok
+    to: short-link
+    type: REQUIRES
+    strength: 0.90

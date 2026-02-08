@@ -1,0 +1,359 @@
+# Phase 3: Barcode Types — 18 Entities
+# QR Code AI Entity Data for NovaNet
+# v11 Schema with Typed Semantic Arcs
+
+project: qrcode-ai
+phase: 3
+name: Barcode Types
+description: 1D linear and 2D matrix barcode formats (EAN, UPC, Code 128, Data Matrix, etc.)
+
+entities:
+  # ═══════════════════════════════════════════════════════════════════════════
+  # CATEGORY NODE (already defined in Phase 1, referenced here for arcs)
+  # barcode-format is defined in Phase 1
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # 1D LINEAR BARCODES (10)
+  # ═══════════════════════════════════════════════════════════════════════════
+  - key: ean-13
+    type: THING
+    display_name: EAN-13
+    description: European Article Number, 13 digits for retail products
+    entity_summary: |
+      EAN-13 (European Article Number) is the most widely used barcode format
+      for retail products globally. It encodes 13 digits including a country
+      code, manufacturer ID, product code, and check digit.
+
+  - key: ean-8
+    type: THING
+    display_name: EAN-8
+    description: Compact 8-digit barcode for small products
+    entity_summary: |
+      EAN-8 is a shorter version of EAN-13, using only 8 digits. Designed for
+      small products where full EAN-13 barcodes won't fit. Contains country
+      code, item code, and check digit.
+
+  - key: upc-a
+    type: THING
+    display_name: UPC-A
+    description: Universal Product Code, 12 digits for US/Canada retail
+    entity_summary: |
+      UPC-A (Universal Product Code) is the standard retail barcode in North
+      America. 12 digits encode manufacturer and product IDs. Compatible with
+      EAN-13 (add leading zero for conversion).
+
+  - key: upc-e
+    type: THING
+    display_name: UPC-E
+    description: Compressed 6-digit UPC for small packages
+    entity_summary: |
+      UPC-E is a compressed version of UPC-A using 6 digits. Zero suppression
+      algorithm removes unnecessary zeros. Used on small retail items where
+      space is limited.
+
+  - key: code-128
+    type: THING
+    display_name: Code 128
+    description: High-density alphanumeric barcode for logistics
+    entity_summary: |
+      Code 128 is a high-density barcode supporting the full ASCII character
+      set. Widely used in logistics, shipping, and supply chain. Three code
+      sets (A, B, C) for different character ranges.
+
+  - key: code-39
+    type: THING
+    display_name: Code 39
+    description: Full alphanumeric barcode for industrial use
+    entity_summary: |
+      Code 39 (Code 3 of 9) is a variable-length alphanumeric barcode.
+      Self-checking without required check digit. Common in automotive,
+      defense, and healthcare industries.
+
+  - key: itf-14
+    type: THING
+    display_name: ITF-14
+    description: Interleaved 2 of 5 for shipping cartons
+    entity_summary: |
+      ITF-14 (Interleaved 2 of 5) is used for shipping cartons and pallets.
+      Encodes 14 digits including GTIN-14. Highly readable even on corrugated
+      cardboard surfaces.
+
+  - key: codabar
+    type: THING
+    display_name: Codabar
+    description: Numeric barcode for libraries and blood banks
+    entity_summary: |
+      Codabar is a linear barcode for numeric data plus special characters.
+      Used in libraries, blood banks, and overnight delivery services.
+      Self-checking with start/stop characters.
+
+  - key: msi-plessey
+    type: THING
+    display_name: MSI Plessey
+    description: Inventory control barcode with check digits
+    entity_summary: |
+      MSI Plessey (Modified Plessey) is used for inventory and warehouse
+      management. Numeric-only with optional check digits. Popular in
+      grocery and retail inventory systems.
+
+  - key: gs1-128
+    type: THING
+    display_name: GS1-128
+    description: Supply chain barcode with Application Identifiers
+    entity_summary: |
+      GS1-128 (formerly EAN-128/UCC-128) extends Code 128 with GS1 Application
+      Identifiers. Encodes batch numbers, expiry dates, serial numbers for
+      traceability. Standard for supply chain logistics.
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # 2D MATRIX BARCODES (5)
+  # ═══════════════════════════════════════════════════════════════════════════
+  - key: data-matrix
+    type: THING
+    display_name: Data Matrix
+    description: 2D code for electronics and pharmaceutical marking
+    entity_summary: |
+      Data Matrix is a 2D barcode for high-density data on small items.
+      Common in electronics, pharmaceuticals, and component marking. Can
+      encode up to 2,335 alphanumeric characters.
+
+  - key: pdf417
+    type: THING
+    display_name: PDF417
+    description: Stacked 2D barcode for IDs and tickets
+    entity_summary: |
+      PDF417 (Portable Data File) is a stacked 2D barcode holding large
+      amounts of data. Used on driver's licenses, travel documents, and
+      shipping labels. Can encode up to 1,850 characters.
+
+  - key: aztec-code
+    type: THING
+    display_name: Aztec Code
+    description: 2D code for tickets and transport
+    entity_summary: |
+      Aztec Code is a 2D barcode requiring no quiet zone around it.
+      Popular for transport tickets (boarding passes, train tickets).
+      Can encode up to 3,832 digits or 3,067 characters.
+
+  - key: maxicode
+    type: THING
+    display_name: MaxiCode
+    description: Fixed-size 2D code for high-speed package sorting
+    entity_summary: |
+      MaxiCode is a fixed-size 2D barcode developed by UPS for package
+      tracking. Hexagonal dot pattern enables high-speed scanning on
+      conveyor belts. Primary/secondary message structure.
+
+  - key: gs1-datamatrix
+    type: THING
+    display_name: GS1 DataMatrix
+    description: Data Matrix with GS1 Application Identifiers
+    entity_summary: |
+      GS1 DataMatrix combines Data Matrix with GS1 Application Identifiers.
+      Standard for pharmaceutical serialization, medical devices, and
+      food traceability. Enables product authentication.
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # BARCODE TOOLS (2)
+  # ═══════════════════════════════════════════════════════════════════════════
+  - key: barcode-generator
+    type: TOOL
+    display_name: Barcode Generator
+    description: Tool to create barcode images
+    entity_summary: |
+      A barcode generator creates barcode images in various formats (EAN,
+      UPC, Code 128, etc.). Outputs images for printing on products,
+      labels, and packaging. Validates check digits automatically.
+
+  - key: barcode-scanner
+    type: TOOL
+    display_name: Barcode Scanner
+    description: Tool to read barcode data
+    entity_summary: |
+      A barcode scanner reads barcode data using cameras or laser scanners.
+      Mobile apps can scan using smartphone cameras. Decodes data and
+      optionally looks up product information.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# SEMANTIC ARCS (~45 connections)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+arcs:
+  # ─────────────────────────────────────────────────────────────────────────────
+  # BARCODE-FORMAT INCLUDES
+  # ─────────────────────────────────────────────────────────────────────────────
+  - from: barcode-format
+    to: ean-13
+    type: INCLUDES
+    strength: 0.85
+
+  - from: barcode-format
+    to: ean-8
+    type: INCLUDES
+    strength: 0.85
+
+  - from: barcode-format
+    to: upc-a
+    type: INCLUDES
+    strength: 0.85
+
+  - from: barcode-format
+    to: upc-e
+    type: INCLUDES
+    strength: 0.85
+
+  - from: barcode-format
+    to: code-128
+    type: INCLUDES
+    strength: 0.85
+
+  - from: barcode-format
+    to: code-39
+    type: INCLUDES
+    strength: 0.85
+
+  - from: barcode-format
+    to: itf-14
+    type: INCLUDES
+    strength: 0.85
+
+  - from: barcode-format
+    to: codabar
+    type: INCLUDES
+    strength: 0.85
+
+  - from: barcode-format
+    to: msi-plessey
+    type: INCLUDES
+    strength: 0.85
+
+  - from: barcode-format
+    to: gs1-128
+    type: INCLUDES
+    strength: 0.85
+
+  - from: barcode-format
+    to: data-matrix
+    type: INCLUDES
+    strength: 0.85
+
+  - from: barcode-format
+    to: pdf417
+    type: INCLUDES
+    strength: 0.85
+
+  - from: barcode-format
+    to: aztec-code
+    type: INCLUDES
+    strength: 0.85
+
+  - from: barcode-format
+    to: maxicode
+    type: INCLUDES
+    strength: 0.85
+
+  - from: barcode-format
+    to: gs1-datamatrix
+    type: INCLUDES
+    strength: 0.85
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # 1D BARCODE SIMILARITIES
+  # ─────────────────────────────────────────────────────────────────────────────
+  - from: ean-13
+    to: ean-8
+    type: SIMILAR_TO
+    strength: 0.95
+
+  - from: ean-13
+    to: upc-a
+    type: SIMILAR_TO
+    strength: 0.90
+
+  - from: upc-a
+    to: upc-e
+    type: SIMILAR_TO
+    strength: 0.95
+
+  - from: code-128
+    to: code-39
+    type: SIMILAR_TO
+    strength: 0.75
+
+  - from: code-128
+    to: gs1-128
+    type: SIMILAR_TO
+    strength: 0.90
+
+  - from: data-matrix
+    to: gs1-datamatrix
+    type: SIMILAR_TO
+    strength: 0.90
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # 2D CODE SIMILARITIES
+  # ─────────────────────────────────────────────────────────────────────────────
+  - from: data-matrix
+    to: qr-code
+    type: SIMILAR_TO
+    strength: 0.70
+
+  - from: aztec-code
+    to: qr-code
+    type: SIMILAR_TO
+    strength: 0.65
+
+  - from: pdf417
+    to: aztec-code
+    type: SIMILAR_TO
+    strength: 0.60
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # VARIANT_OF (compression)
+  # ─────────────────────────────────────────────────────────────────────────────
+  - from: ean-8
+    to: ean-13
+    type: VARIANT_OF
+    strength: 0.95
+
+  - from: upc-e
+    to: upc-a
+    type: VARIANT_OF
+    strength: 0.95
+
+  - from: gs1-128
+    to: code-128
+    type: VARIANT_OF
+    strength: 0.90
+
+  - from: gs1-datamatrix
+    to: data-matrix
+    type: VARIANT_OF
+    strength: 0.90
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # TOOLS
+  # ─────────────────────────────────────────────────────────────────────────────
+  - from: barcode-generator
+    to: barcode
+    type: APPLIES_TO
+    strength: 0.95
+
+  - from: barcode-scanner
+    to: barcode
+    type: APPLIES_TO
+    strength: 0.95
+
+  - from: barcode-generator
+    to: barcode-scanner
+    type: SIMILAR_TO
+    strength: 0.60
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # ALL BARCODES ARE STATIC
+  # ─────────────────────────────────────────────────────────────────────────────
+  - from: barcode
+    to: static-qr-code
+    type: SIMILAR_TO
+    strength: 0.70
