@@ -39,7 +39,7 @@ export const RELATIONSHIP_CATEGORIES: Record<RelationshipCategory, RelationType[
   ],
   // Localization: Locale assignment (6 relations)
   localization: [
-    'HAS_L10N',
+    'HAS_CONTENT',
     'FOR_LOCALE',
     'SUPPORTS_LOCALE',
     'DEFAULT_LOCALE',
@@ -78,7 +78,7 @@ export const RELATIONSHIP_CATEGORIES: Record<RelationshipCategory, RelationType[
   ],
   // Generation: Content generation (6 relations)
   generation: [
-    'HAS_OUTPUT',
+    'HAS_GENERATED',
     'ASSEMBLES',
     'GENERATED',
     'OUTPUT_OF',
@@ -161,9 +161,9 @@ export const relationshipTypeConfigs: Record<RelationType, RelationshipTypeConfi
   // ==========================================================================
   // LOCALIZATION CATEGORY (6 relations) - emerald
   // ==========================================================================
-  HAS_L10N: {
-    type: 'HAS_L10N',
-    label: 'Has L10n',
+  HAS_CONTENT: {
+    type: 'HAS_CONTENT',
+    label: 'Has Content',
     color: '#10b981',
     category: 'localization',
   },
@@ -339,9 +339,9 @@ export const relationshipTypeConfigs: Record<RelationType, RelationshipTypeConfi
   // ==========================================================================
   // GENERATION CATEGORY (6 relations) - orange
   // ==========================================================================
-  HAS_OUTPUT: {
-    type: 'HAS_OUTPUT',
-    label: 'Has Output',
+  HAS_GENERATED: {
+    type: 'HAS_GENERATED',
+    label: 'Has Generated',
     color: '#f97316',
     category: 'generation',
   },

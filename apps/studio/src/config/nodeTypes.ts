@@ -92,9 +92,9 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     size: 20,
     layer: 'semantic',
   },
-  EntityL10n: {
-    type: 'EntityL10n',
-    label: 'Entity L10n',
+  EntityContent: {
+    type: 'EntityContent',
+    label: 'Entity Content',
     icon: '💬',
     color: '#fbbf24',
     colorClass: 'bg-yellow-400',
@@ -259,7 +259,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   },
 
   // ==========================================================================
-  // TENANT REALM — CONFIG LAYER (1 node) — v10.6
+  // TENANT REALM — CONFIG LAYER (2 nodes) — v10.6
   // ==========================================================================
   Organization: {
     type: 'Organization',
@@ -267,6 +267,15 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     icon: '🏢',
     color: '#0ea5e9',
     colorClass: 'bg-sky-500',
+    size: 22,
+    layer: 'config',
+  },
+  Tenant: {
+    type: 'Tenant',
+    label: 'Tenant',
+    icon: '🏠',
+    color: '#0284c7',
+    colorClass: 'bg-sky-600',
     size: 22,
     layer: 'config',
   },
@@ -528,18 +537,18 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   // ==========================================================================
   // OUTPUT LAYER (5 nodes — LLM-generated content + jobs + signals)
   // ==========================================================================
-  PageL10n: {
-    type: 'PageL10n',
-    label: 'Page L10n',
+  PageGenerated: {
+    type: 'PageGenerated',
+    label: 'Page Generated',
     icon: '📃',
     color: '#f97316',
     colorClass: 'bg-orange-500',
     size: 16,
     layer: 'output',
   },
-  BlockL10n: {
-    type: 'BlockL10n',
-    label: 'Block L10n',
+  BlockGenerated: {
+    type: 'BlockGenerated',
+    label: 'Block Generated',
     icon: '📝',
     color: '#fb923c',
     colorClass: 'bg-orange-400',

@@ -67,10 +67,11 @@ const NODE_LABELS: Record<NodeType, string> = {
   GEOMetrics: 'GEO Metrics',
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // TENANT REALM (23 nodes)
+  // TENANT REALM (24 nodes)
   // ═══════════════════════════════════════════════════════════════════════════
-  // config (1)
+  // config (2)
   Organization: 'Organization',
+  Tenant: 'Tenant',
 
   // foundation (3)
   Project: 'Project',
