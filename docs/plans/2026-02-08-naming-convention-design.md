@@ -226,6 +226,105 @@ Entity ──[:HAS_CONTENT]──► EntityContent ──[:FOR_LOCALE]──► 
 
 ---
 
+## Page Architecture (Option C - Approved)
+
+### Invariant Level (Structure)
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  INVARIANT LEVEL (structure, defined once)                                  │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  Entity ◄──────────[:FOR_ENTITY]────────── Page ──[:HAS_BLOCK]──► Block     │
+│    │                                         │                       │      │
+│    │ key: "create-qr-code"                   │ key: "create-qr-code" │      │
+│    │                                         │ (same as entity)      │      │
+│    │                                         │                       │      │
+│    │                                         └── defines structure   │      │
+│    │                                             (which blocks)      │      │
+│    │                                                                 │      │
+│    └── semantic concept                      Block = template        │      │
+│        (what this page is about)             (hero, features, cta)   │      │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Localized Level (Content)
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  LOCALIZED LEVEL (content, generated per locale)                            │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  EntityContent ◄──[:REPRESENTS]── PageGenerated ──[:ASSEMBLES]──► BlockGen  │
+│       │                                 │                            │      │
+│       │ slug: "créer-qr-code"           │ no own slug!               │      │
+│       │       (PUBLIC URL)              │ uses EntityContent.slug    │      │
+│       │                                 │                            │      │
+│       └── source of URL                 └── assembles blocks for     │      │
+│                                             this entity in fr-FR     │      │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Complete Graph Flow
+
+```
+Entity (invariant)           Page (invariant)              Block (invariant)
+key: "create-qr-code"   ◄────[:FOR_ENTITY]────   key: "create-qr-code"   ──[:HAS_BLOCK]──►   key: "hero"
+        │                                                │
+        │ [:HAS_CONTENT]                                 │ [:HAS_GENERATED]
+        ▼                                                ▼
+EntityContent (fr-FR)        PageGenerated (fr-FR)       BlockGenerated (fr-FR)
+slug: "créer-qr-code"   ◄────[:REPRESENTS]────   key: "page:create-qr-code@fr-FR"   ──[:ASSEMBLES]──►
+        │
+        ▼
+  PUBLIC URL
+  /fr/créer-qr-code
+```
+
+### New Arcs Required
+
+| Arc | Direction | Purpose |
+|-----|-----------|---------|
+| `FOR_ENTITY` | Page → Entity | "This page is about this entity" (invariant) |
+| `REPRESENTS` | PageGenerated → EntityContent | "This generated page represents this content" (locale) |
+| `HAS_BLOCK` | Page → Block | "This page includes this block template" (invariant) |
+| `ASSEMBLES` | PageGenerated → BlockGenerated | "This page assembles these blocks" (locale) |
+
+### Why This Architecture?
+
+1. **Separation of concerns**:
+   - Page = structure (which blocks, in what order)
+   - Entity = meaning (what this page is about)
+   - EntityContent = URL source (slug)
+
+2. **URL routing clarity**:
+   - PageGenerated does NOT have its own slug
+   - URL comes from EntityContent.slug (single source of truth)
+   - Query: `MATCH (pg:PageGenerated)-[:REPRESENTS]->(ec:EntityContent) RETURN ec.slug`
+
+3. **Extensibility**:
+   - Same Page structure → multiple locales
+   - Entity can have multiple Pages (landing, detail, comparison)
+   - Block reuse across Pages
+
+### Open Questions (To Brainstorm)
+
+1. **Generic pages (blog, pricing, about)**:
+   - Option A: Create an Entity for each ("pricing" Entity, "about" Entity)
+   - Option B: PageGenerated has optional `slug` property for pages without Entity
+   - Option C: Special "utility" Entity type for non-semantic pages
+   - **Decision**: TBD
+
+2. **Multiple pages per Entity**:
+   - Landing page: `/fr/créer-qr-code`
+   - Comparison page: `/fr/créer-qr-code-vs-...`
+   - How to differentiate? Arc properties? Page.type?
+   - **Decision**: TBD
+
+---
+
 ## Migration Impact
 
 ### Files to Update
