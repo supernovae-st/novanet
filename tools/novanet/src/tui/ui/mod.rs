@@ -1076,6 +1076,31 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                             String::new()
                                         };
 
+                                        // Arc count badge: [->N <-M] (only if has arcs)
+                                        let out_count = instance.outgoing_arcs.len();
+                                        let in_count = instance.incoming_arcs.len();
+                                        let arc_badge = if out_count > 0 || in_count > 0 {
+                                            format!(" [->{}|<-{}]", out_count, in_count)
+                                        } else {
+                                            String::new()
+                                        };
+
+                                        // Completeness bar: [====--] (4 chars, proportional)
+                                        let completeness_badge = if instance.total_properties > 0 {
+                                            let filled = instance.filled_properties;
+                                            let total = instance.total_properties;
+                                            let ratio = (filled as f32 / total as f32).min(1.0);
+                                            let filled_chars = (ratio * 4.0).round() as usize;
+                                            let empty_chars = 4 - filled_chars;
+                                            format!(
+                                                " [{}{}]",
+                                                "=".repeat(filled_chars),
+                                                "-".repeat(empty_chars)
+                                            )
+                                        } else {
+                                            String::new()
+                                        };
+
                                         let tree_prefix = format!(
                                             "{}{}{}{}",
                                             cont(realm_is_last),
@@ -1088,18 +1113,20 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                             // Selected: single span with highlight bg
                                             all_lines.push(Line::from(Span::styled(
                                                 format!(
-                                                    "{}{}{} {}{}{}",
+                                                    "{}{}{} {}{}{}{}{}",
                                                     cursor_char,
                                                     tree_prefix,
                                                     icon,
                                                     instance.display_name,
                                                     suffix,
+                                                    completeness_badge,
+                                                    arc_badge,
                                                     missing_badge
                                                 ),
                                                 style,
                                             )));
                                         } else {
-                                            // Not selected: split into spans for colored tree lines
+                                            // Not selected: split into spans for colored badges
                                             let mut spans = vec![
                                                 Span::styled(cursor_char, Style::default()),
                                                 Span::styled(
@@ -1114,7 +1141,28 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                                     style,
                                                 ),
                                             ];
-                                            // Add red badge for missing required
+                                            // Completeness bar (green gradient based on fill)
+                                            if !completeness_badge.is_empty() {
+                                                let color = if instance.filled_properties == instance.total_properties {
+                                                    Color::Green
+                                                } else if instance.filled_properties > instance.total_properties / 2 {
+                                                    Color::Yellow
+                                                } else {
+                                                    Color::Red
+                                                };
+                                                spans.push(Span::styled(
+                                                    completeness_badge.clone(),
+                                                    Style::default().fg(color),
+                                                ));
+                                            }
+                                            // Arc count (cyan)
+                                            if !arc_badge.is_empty() {
+                                                spans.push(Span::styled(
+                                                    arc_badge.clone(),
+                                                    Style::default().fg(Color::Cyan),
+                                                ));
+                                            }
+                                            // Missing required (red)
                                             if !missing_badge.is_empty() {
                                                 spans.push(Span::styled(
                                                     missing_badge,
@@ -3915,9 +3963,9 @@ fn render_status(f: &mut Frame, area: Rect, app: &App) {
                 app.current_item(),
                 Some(crate::tui::data::TreeItem::Instance(..))
             ) {
-                "j/k:nav  1:→Kind  h/l:toggle  ?:help"
+                "j/k:nav  y/Y:copy  1:Kind  ?:help"
             } else {
-                "j/k:nav  h/l:toggle  0:hide∅  ?:help"
+                "j/k:nav  y:copy  h/l:toggle  0:hide  ?:help"
             }
         }
         NavMode::Query => "j/k:nav  f:filter  ?:help",
@@ -3928,14 +3976,27 @@ fn render_status(f: &mut Frame, area: Rect, app: &App) {
                     app.current_item(),
                     Some(crate::tui::data::TreeItem::Kind(..))
                 ) {
-                    "j/k:nav  2:→Data  h/l:toggle  ?:help"
+                    "j/k:nav  y:copy  2:Data  h/l:toggle  ?:help"
                 } else {
-                    "j/k:nav  h/l:toggle  H/L:all  ?:help"
+                    "j/k:nav  y:copy  h/l:toggle  ?:help"
                 }
             }
             Focus::Yaml | Focus::Info => "j/k:scroll  d/u:page  g/G:jump",
             Focus::Graph => "Tab:panel  1-6:modes",
         },
+    };
+
+    // Filter indicator (show when filter is active)
+    let filter_indicator = if app.is_filtered_data_mode() {
+        if let Some(kind_key) = app.get_filter_kind() {
+            format!(" [{}]", kind_key)
+        } else {
+            String::new()
+        }
+    } else if app.hide_empty {
+        " [hide-empty]".to_string()
+    } else {
+        String::new()
     };
 
     // Build status line spans
@@ -3946,10 +4007,16 @@ fn render_status(f: &mut Frame, area: Rect, app: &App) {
             format!("{} {}", mode_icon, mode_label.to_uppercase()),
             mode_style,
         ),
-        Span::styled(" │ ", STYLE_SEPARATOR),
-        // Breadcrumb
-        Span::styled(breadcrumb_display, STYLE_HINT),
     ];
+
+    // Add filter indicator if active
+    if !filter_indicator.is_empty() {
+        spans.push(Span::styled(filter_indicator, Style::default().fg(Color::Yellow)));
+    }
+
+    spans.push(Span::styled(" │ ", STYLE_SEPARATOR));
+    // Breadcrumb
+    spans.push(Span::styled(breadcrumb_display, STYLE_HINT));
 
     // Loading spinner (if pending load)
     if app.has_pending_load() {

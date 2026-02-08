@@ -725,6 +725,8 @@ LIMIT 500
                 outgoing_arcs,
                 incoming_arcs,
                 missing_required_count: 0, // Calculated later in set_instances
+                filled_properties: 0,      // Calculated later in set_instances
+                total_properties: 0,       // Calculated later in set_instances
             });
         }
 
@@ -1481,14 +1483,17 @@ RETURN kw.keyword as keyword,
     /// Calculates missing_required_count for each instance based on Kind schema.
     #[allow(dead_code)]
     pub fn set_instances(&mut self, kind_key: &str, mut instances: Vec<InstanceInfo>, total: usize) {
-        // Get required properties from Kind schema
-        let required_props: Vec<String> = self
+        // Get schema info from Kind
+        let (required_props, all_props) = self
             .find_kind(kind_key)
-            .map(|(_, _, kind)| kind.required_properties.clone())
+            .map(|(_, _, kind)| (kind.required_properties.clone(), kind.properties.clone()))
             .unwrap_or_default();
 
-        // Calculate missing_required_count for each instance
+        let total_props = all_props.len();
+
+        // Calculate stats for each instance
         for instance in &mut instances {
+            // Missing required count
             let missing = required_props
                 .iter()
                 .filter(|prop| {
@@ -1502,6 +1507,15 @@ RETURN kw.keyword as keyword,
                 })
                 .count();
             instance.missing_required_count = missing;
+
+            // Filled properties count (non-null, non-empty)
+            let filled = instance
+                .properties
+                .values()
+                .filter(|v| !matches!(v, JsonValue::Null) && !matches!(v, JsonValue::String(s) if s.is_empty()))
+                .count();
+            instance.filled_properties = filled;
+            instance.total_properties = total_props;
         }
 
         self.instances.insert(kind_key.to_string(), instances);
@@ -2097,6 +2111,10 @@ pub struct InstanceInfo {
     pub incoming_arcs: Vec<InstanceArc>,
     /// Count of missing required properties (for tree badge).
     pub missing_required_count: usize,
+    /// Count of filled (non-null/non-empty) properties.
+    pub filled_properties: usize,
+    /// Total properties in schema for this Kind.
+    pub total_properties: usize,
 }
 
 /// An actual arc connection from/to an instance.
@@ -2306,6 +2324,8 @@ mod tests {
             outgoing_arcs: vec![],
             incoming_arcs: vec![],
             missing_required_count: 0,
+            filled_properties: 0,
+            total_properties: 0,
         };
 
         assert_eq!(instance.key, "fr-FR");
@@ -2331,6 +2351,8 @@ mod tests {
             }],
             incoming_arcs: vec![],
             missing_required_count: 0,
+            filled_properties: 0,
+            total_properties: 0,
         };
 
         let schema_arcs = vec![
