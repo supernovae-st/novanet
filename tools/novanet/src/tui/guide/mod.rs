@@ -861,7 +861,7 @@ mod tests {
         let state = GuideState::new();
         assert_eq!(state.tab, GuideTab::Traits);
         assert_eq!(state.trait_cursor, 0);
-        assert_eq!(state.pending_g, false);
+        assert!(!state.pending_g);
         assert_eq!(state.tip_index, 0);
     }
 

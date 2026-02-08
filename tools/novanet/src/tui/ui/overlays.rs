@@ -285,6 +285,10 @@ pub fn render_help(f: &mut Frame, app: &App) {
                 Span::styled("    g/G      ", STYLE_PRIMARY),
                 Span::styled("Jump to first/last", STYLE_DIM),
             ]),
+            Line::from(vec![
+                Span::styled("    y        ", STYLE_PRIMARY),
+                Span::styled("Copy current item key", STYLE_DIM),
+            ]),
             Line::from(""),
             Line::from(vec![Span::styled("  Graph panel", STYLE_ACCENT)]),
             Line::from(vec![

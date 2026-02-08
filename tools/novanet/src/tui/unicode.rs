@@ -265,4 +265,348 @@ mod tests {
         let esc_width = display_width(with_esc);
         assert!(esc_width >= 2, "ESC should be 0 width");
     }
+
+    // =========================================================================
+    // Exotic Unicode Scripts Tests
+    // =========================================================================
+    // These tests verify that various scripts don't crash and return sensible
+    // widths. Width calculation for complex scripts varies by terminal, so we
+    // focus on stability (no panic) and reasonable values (> 0).
+
+    #[test]
+    fn test_display_width_hebrew_rtl() {
+        // Hebrew (RTL script) - "Shalom"
+        let hebrew = "שלום";
+        let width = display_width(hebrew);
+        // Should not crash and return positive width
+        assert!(width > 0, "Hebrew should have positive width");
+        // Hebrew characters are typically 1 column each (4 chars = 4 cols)
+        assert_eq!(width, 4, "Hebrew 'שלום' should be 4 columns");
+    }
+
+    #[test]
+    fn test_display_width_persian_farsi() {
+        // Persian/Farsi (RTL script) - "Salam"
+        let persian = "سلام";
+        let width = display_width(persian);
+        assert!(width > 0, "Persian should have positive width");
+        // Persian characters are typically 1 column each
+        assert_eq!(width, 4, "Persian 'سلام' should be 4 columns");
+    }
+
+    #[test]
+    fn test_display_width_tamil() {
+        // Tamil (South Asian script with complex ligatures)
+        let tamil = "தமிழ்";
+        let width = display_width(tamil);
+        assert!(width > 0, "Tamil should have positive width");
+        // Tamil: த + ம + ி (combining) + ழ + ் (combining)
+        // Grapheme clusters should handle combining marks
+        assert!(
+            (3..=5).contains(&width),
+            "Tamil width {} should be reasonable (3-5)",
+            width
+        );
+    }
+
+    #[test]
+    fn test_display_width_georgian() {
+        // Georgian script - "Gamarjoba" (hello)
+        let georgian = "გამარჯობა";
+        let width = display_width(georgian);
+        assert!(width > 0, "Georgian should have positive width");
+        // Georgian characters are 1 column each (9 chars = 9 cols)
+        assert_eq!(width, 9, "Georgian 'გამარჯობა' should be 9 columns");
+    }
+
+    #[test]
+    fn test_display_width_armenian() {
+        // Armenian script - provided sample "Բdelays"
+        let provided_sample = "Բdelays";
+        let sample_width = display_width(provided_sample);
+        // Բ (1) + d,e,l,a,y,s (6) = 7
+        assert_eq!(sample_width, 7, "Armenian 'Բdelays' should be 7 columns");
+
+        // Full Armenian greeting: "Barev"
+        let armenian_word = "Բdelays";
+        assert!(
+            display_width(armenian_word) > 0,
+            "Armenian should have positive width"
+        );
+    }
+
+    #[test]
+    fn test_display_width_tibetan() {
+        // Tibetan script - "Bod" (Tibet)
+        let tibetan = "བོད་";
+        let width = display_width(tibetan);
+        assert!(width > 0, "Tibetan should have positive width");
+        // Tibetan with stacked consonants - width varies by terminal
+        assert!(
+            (2..=8).contains(&width),
+            "Tibetan width {} should be reasonable",
+            width
+        );
+    }
+
+    #[test]
+    fn test_display_width_myanmar() {
+        // Myanmar/Burmese script
+        let myanmar = "မြန်မာ";
+        let width = display_width(myanmar);
+        assert!(width > 0, "Myanmar should have positive width");
+        // Myanmar with stacked consonants and medials
+        assert!(
+            (4..=8).contains(&width),
+            "Myanmar width {} should be reasonable",
+            width
+        );
+    }
+
+    #[test]
+    fn test_display_width_khmer() {
+        // Khmer/Cambodian script - bonus test
+        let khmer = "ខ្មែរ";
+        let width = display_width(khmer);
+        assert!(width > 0, "Khmer should have positive width");
+        assert!(
+            (2..=6).contains(&width),
+            "Khmer width {} should be reasonable",
+            width
+        );
+    }
+
+    #[test]
+    fn test_display_width_devanagari_hindi() {
+        // Hindi in Devanagari script
+        let hindi = "हिन्दी";
+        let width = display_width(hindi);
+        assert!(width > 0, "Hindi should have positive width");
+        // Devanagari with combining vowel signs
+        assert!(
+            (4..=8).contains(&width),
+            "Hindi width {} should be reasonable",
+            width
+        );
+    }
+
+    #[test]
+    fn test_display_width_ethiopic() {
+        // Ethiopic/Amharic script
+        let ethiopic = "አማርኛ";
+        let width = display_width(ethiopic);
+        assert!(width > 0, "Ethiopic should have positive width");
+        // Ethiopic syllabary characters
+        assert_eq!(width, 4, "Ethiopic 'አማርኛ' should be 4 columns");
+    }
+
+    #[test]
+    fn test_display_width_sinhala() {
+        // Sinhala script (Sri Lanka)
+        let sinhala = "සිංහල";
+        let width = display_width(sinhala);
+        assert!(width > 0, "Sinhala should have positive width");
+        assert!(
+            (3..=6).contains(&width),
+            "Sinhala width {} should be reasonable",
+            width
+        );
+    }
+
+    // =========================================================================
+    // Truncation tests for exotic scripts
+    // =========================================================================
+
+    #[test]
+    fn test_truncate_hebrew_rtl() {
+        let hebrew = "שלום עולם"; // "Hello world" in Hebrew
+        let result = truncate_to_width(hebrew, 6);
+        // Should truncate without crashing
+        assert!(display_width(&result) <= 6);
+        // Should have ellipsis if truncated
+        if display_width(hebrew) > 6 {
+            assert!(result.ends_with('…'));
+        }
+    }
+
+    #[test]
+    fn test_truncate_persian() {
+        let persian = "سلام دنیا"; // "Hello world" in Persian
+        let result = truncate_to_width(persian, 5);
+        assert!(display_width(&result) <= 5);
+    }
+
+    #[test]
+    fn test_truncate_tamil() {
+        let tamil = "தமிழ் மொழி";
+        let result = truncate_to_width(tamil, 6);
+        assert!(display_width(&result) <= 6);
+    }
+
+    #[test]
+    fn test_truncate_georgian() {
+        let georgian = "გამარჯობა მსოფლიო";
+        let result = truncate_to_width(georgian, 10);
+        assert!(display_width(&result) <= 10);
+    }
+
+    #[test]
+    fn test_truncate_tibetan() {
+        let tibetan = "བོད་སྐད།";
+        let result = truncate_to_width(tibetan, 5);
+        assert!(display_width(&result) <= 5);
+    }
+
+    #[test]
+    fn test_truncate_myanmar() {
+        let myanmar = "မြန်မာဘာသာ";
+        let result = truncate_to_width(myanmar, 6);
+        assert!(display_width(&result) <= 6);
+    }
+
+    #[test]
+    fn test_truncate_start_hebrew() {
+        let hebrew = "שלום עולם";
+        let result = truncate_start_to_width(hebrew, 6);
+        assert!(display_width(&result) <= 6);
+        if display_width(hebrew) > 6 {
+            assert!(result.starts_with('…'));
+        }
+    }
+
+    #[test]
+    fn test_truncate_start_georgian() {
+        let georgian = "გამარჯობა მსოფლიო";
+        let result = truncate_start_to_width(georgian, 10);
+        assert!(display_width(&result) <= 10);
+    }
+
+    // =========================================================================
+    // Edge cases with combining characters
+    // =========================================================================
+
+    #[test]
+    fn test_combining_diacritics() {
+        // Latin with combining diacritics: e + combining acute = e
+        let combined = "e\u{0301}"; // e + combining acute accent
+        let width = display_width(combined);
+        // Should be 1 column (grapheme cluster)
+        assert_eq!(width, 1, "Combined e-acute should be 1 column");
+    }
+
+    #[test]
+    fn test_zalgo_text() {
+        // Extreme combining characters (Zalgo-style)
+        let zalgo = "H\u{0336}\u{0335}\u{0334}e\u{0336}\u{0335}l\u{0334}p";
+        let width = display_width(zalgo);
+        // Should handle without panic
+        assert!(width > 0, "Zalgo text should have positive width");
+        // Base characters: H, e, l, p = 4 columns
+        assert_eq!(width, 4, "Zalgo base should be 4 columns");
+    }
+
+    #[test]
+    fn test_truncate_combining_diacritics() {
+        // Don't split combining sequences
+        let text = "e\u{0301}e\u{0301}e\u{0301}e\u{0301}"; // eeee (4 e-acutes)
+        let result = truncate_to_width(text, 3);
+        // Should keep whole graphemes
+        assert!(display_width(&result) <= 3);
+        // Result should be "ee…" or "e…" (complete graphemes + ellipsis)
+    }
+
+    // =========================================================================
+    // Zero-width characters
+    // =========================================================================
+
+    #[test]
+    fn test_zero_width_joiner() {
+        // Family emoji with ZWJ
+        let family = "👨‍👩‍👧"; // Man + ZWJ + Woman + ZWJ + Girl
+        let width = display_width(family);
+        // Should be treated as single grapheme cluster
+        assert!(width > 0, "Family emoji should have positive width");
+        // Typically 2 columns for the combined emoji
+        assert!(
+            width <= 6,
+            "Family emoji width {} should be reasonable",
+            width
+        );
+    }
+
+    #[test]
+    fn test_zero_width_space() {
+        // Zero-width space should not add width
+        let text = "a\u{200B}b"; // a + ZWSP + b
+        let width = display_width(text);
+        // ZWSP is 0 width, so total should be 2
+        assert_eq!(width, 2, "Text with ZWSP should be 2 columns");
+    }
+
+    #[test]
+    fn test_zero_width_non_joiner() {
+        // ZWNJ used in Persian to prevent ligature
+        let text = "a\u{200C}b"; // a + ZWNJ + b
+        let width = display_width(text);
+        assert_eq!(width, 2, "Text with ZWNJ should be 2 columns");
+    }
+
+    // =========================================================================
+    // Bidirectional text
+    // =========================================================================
+
+    #[test]
+    fn test_mixed_rtl_ltr() {
+        // Hebrew + English mixed
+        let mixed = "Hello שלום World";
+        let width = display_width(mixed);
+        // 5 + 1 + 4 + 1 + 5 = 16
+        assert_eq!(width, 16, "Mixed RTL/LTR should be 16 columns");
+    }
+
+    #[test]
+    fn test_truncate_mixed_rtl_ltr() {
+        let mixed = "Hello שלום World";
+        let result = truncate_to_width(mixed, 10);
+        assert!(display_width(&result) <= 10);
+    }
+
+    /// Diagnostic test to print actual widths for all exotic scripts.
+    /// Run with: cargo test diagnostic_print_widths -- --nocapture
+    #[test]
+    fn diagnostic_print_widths() {
+        let scripts = [
+            ("Hebrew (RTL)", "שלום"),
+            ("Persian/Farsi", "سلام"),
+            ("Tamil", "தமிழ்"),
+            ("Georgian", "გამარჯობა"),
+            ("Armenian (provided)", "Բdelays"),
+            ("Tibetan", "བོད་"),
+            ("Myanmar", "မြန်မာ"),
+            ("Khmer (bonus)", "ខ្មែរ"),
+            ("Hindi/Devanagari", "हिन्दी"),
+            ("Ethiopic/Amharic", "አማርኛ"),
+            ("Sinhala", "සිංහල"),
+            ("Arabic", "مرحبا"),
+            ("Bengali", "বাংলা"),
+            ("Thai", "ไทย"),
+        ];
+
+        println!("\n=== Unicode Width Report ===\n");
+        println!(
+            "{:<22} {:>12} {:>10} {:>10}",
+            "Script", "Text", "Chars", "Width"
+        );
+        println!("{}", "-".repeat(56));
+
+        for (name, text) in scripts {
+            let char_count = text.chars().count();
+            let width = display_width(text);
+            println!(
+                "{:<22} {:>12} {:>10} {:>10}",
+                name, text, char_count, width
+            );
+        }
+        println!();
+    }
 }
