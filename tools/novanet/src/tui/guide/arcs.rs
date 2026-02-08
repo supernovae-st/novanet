@@ -19,6 +19,7 @@ use ratatui::widgets::{Block, Borders, Paragraph, Wrap};
 use crate::tui::app::App;
 use crate::tui::data::TaxonomyTree;
 use crate::tui::theme::Theme;
+use crate::tui::unicode::truncate_to_width;
 
 // =============================================================================
 // ARC FAMILY DEFINITIONS
@@ -268,18 +269,10 @@ fn render_family_card(
         Span::styled(card.display_name.clone(), title_style),
     ]));
 
-    // Row 2: Example arc types
+    // Row 2: Example arc types (unicode-aware truncation)
     let examples_str = card.examples.join(", ");
-    let truncated = if examples_str.len() > (inner.width as usize).saturating_sub(2) {
-        format!(
-            "{}...",
-            &examples_str[..(inner.width as usize)
-                .saturating_sub(5)
-                .min(examples_str.len())]
-        )
-    } else {
-        examples_str
-    };
+    let max_width = (inner.width as usize).saturating_sub(2);
+    let truncated = truncate_to_width(&examples_str, max_width);
     lines.push(Line::from(Span::styled(truncated, content_style)));
 
     // Row 3: Arc count
