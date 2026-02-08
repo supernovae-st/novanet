@@ -309,18 +309,75 @@ slug: "créer-qr-code"   ◄────[:REPRESENTS]────   key: "page:c
    - Entity can have multiple Pages (landing, detail, comparison)
    - Block reuse across Pages
 
-### Open Questions (To Brainstorm)
+### Resolved: Generic Pages Strategy
 
-1. **Generic pages (blog, pricing, about)**:
-   - Option A: Create an Entity for each ("pricing" Entity, "about" Entity)
-   - Option B: PageGenerated has optional `slug` property for pages without Entity
-   - Option C: Special "utility" Entity type for non-semantic pages
+**Decision**: Entity pour chaque page, type = sémantique (pas type=PAGE)
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  Entity.type = SÉMANTIQUE (ce que c'est)                                    │
+│  Page existence = OPTIONNELLE (via [:FOR_ENTITY])                           │
+│                                                                             │
+│  Ces deux concepts sont ORTHOGONAUX !                                       │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+Entity           type            Has Page?    URL
+───────────────────────────────────────────────────────────────
+pricing          FEATURE         ✅ oui       /fr/tarifs
+about            THING           ✅ oui       /fr/a-propos
+blog             FEATURE         ✅ oui       /fr/blog (listing)
+contact          FEATURE         ✅ oui       /fr/contact
+terms            THING           ✅ oui       /fr/conditions-generales
+create-qr-code   ACTION          ✅ oui       /fr/créer-qr-code
+qr-code          PRODUCT         ✅ oui       /fr/qr-code
+error-correction CONCEPT         ❌ non       (pas de page dédiée)
+```
+
+**Key insight**: Pas besoin de type=PAGE. N'importe quelle Entity peut avoir une Page.
+
+### Resolved: Blog & Hierarchical URLs
+
+**Decision**: Option 1 - URL hierarchy via [:CONTAINS]
+
+```
+Entity: "blog" (type: FEATURE)
+├── Page: oui (listing page) → /fr/blog
+└── [:CONTAINS] →
+       ├── Entity: "how-to-create-qr-code" (type: GUIDE)
+       │      └── Page: oui → /fr/blog/comment-créer-qr-code
+       └── Entity: "qr-code-best-practices" (type: GUIDE)
+              └── Page: oui → /fr/blog/bonnes-pratiques-qr-code
+```
+
+**URL Construction**:
+```
+parent EntityContent.slug + "/" + child EntityContent.slug
+= "blog" + "/" + "comment-créer-qr-code"
+= /fr/blog/comment-créer-qr-code
+```
+
+**Why Option 1?**
+- Graph already encodes hierarchy via [:CONTAINS]
+- No redundancy (slug stored once per EntityContent)
+- Query: traverse [:CONTAINS] to build full path
+- Flexible: same Entity could appear in multiple parents (symlinks)
+
+### Open Questions (To Explore)
+
+1. **Multiple pages per Entity**:
+   - Landing page: `/fr/créer-qr-code`
+   - Comparison page: `/fr/créer-qr-code-vs-barcode`
+   - How to differentiate? Page.type? Separate Entity?
    - **Decision**: TBD
 
-2. **Multiple pages per Entity**:
-   - Landing page: `/fr/créer-qr-code`
-   - Comparison page: `/fr/créer-qr-code-vs-...`
-   - How to differentiate? Arc properties? Page.type?
+2. **Depth limits for [:CONTAINS]**:
+   - Max nesting? /blog/category/subcategory/article?
+   - Performance implications of deep traversal?
+   - **Decision**: TBD
+
+3. **Circular references**:
+   - What if Entity A [:CONTAINS] B and B [:CONTAINS] A?
+   - Need constraint? Or handle in URL builder?
    - **Decision**: TBD
 
 ---
