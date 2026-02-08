@@ -3529,19 +3529,51 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                                         }
                                     })
                                     .unwrap_or_default();
-                                let truncated =
-                                    truncate_str(&format!("\"{}\"", value_str), truncate_limit);
                                 // Feature 3: Highlight focused property row
                                 let name_style = if is_focused {
                                     STYLE_HIGHLIGHT
                                 } else {
                                     STYLE_INFO
                                 };
-                                lines.push(Line::from(vec![
-                                    Span::styled(format!("{}[{:4}] ", prefix, badge), STYLE_DIM),
-                                    Span::styled(format!("{:<15}", prop.schema.name), name_style),
-                                    Span::styled(truncated, STYLE_SUCCESS),
-                                ]));
+
+                                // Feature 3b: Expand text with Enter toggle
+                                if is_focused && app.expanded_property {
+                                    // Expanded: show full value with word-wrap
+                                    // First line with property name and expand indicator
+                                    lines.push(Line::from(vec![
+                                        Span::styled(format!("{}[{:4}] ", prefix, badge), STYLE_DIM),
+                                        Span::styled(
+                                            format!("{:<15}", prop.schema.name),
+                                            name_style,
+                                        ),
+                                        Span::styled("▼ ", STYLE_HINT), // Expanded indicator
+                                    ]));
+                                    // Wrap value text to multiple lines (50 chars per line)
+                                    let full_value = format!("\"{}\"", value_str);
+                                    for chunk in full_value.chars().collect::<Vec<_>>().chunks(50) {
+                                        let line: String = chunk.iter().collect();
+                                        lines.push(Line::from(vec![
+                                            Span::styled("                        ", STYLE_DIM), // Indent
+                                            Span::styled(line, STYLE_SUCCESS),
+                                        ]));
+                                    }
+                                } else {
+                                    // Collapsed: truncate as before
+                                    let truncated = truncate_str(
+                                        &format!("\"{}\"", value_str),
+                                        truncate_limit,
+                                    );
+                                    let indicator = if is_focused { "▶ " } else { "" };
+                                    lines.push(Line::from(vec![
+                                        Span::styled(format!("{}[{:4}] ", prefix, badge), STYLE_DIM),
+                                        Span::styled(
+                                            format!("{:<15}", prop.schema.name),
+                                            name_style,
+                                        ),
+                                        Span::styled(indicator, STYLE_HINT),
+                                        Span::styled(truncated, STYLE_SUCCESS),
+                                    ]));
+                                }
                             }
                             PropertyStatus::EmptyOptional => {
                                 // Optional, empty: dim with type badge + example
