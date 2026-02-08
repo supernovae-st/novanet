@@ -1,7 +1,7 @@
 //! NovaNet TUI v2 — rebuilt from scratch for stability.
 //!
 //! Phase 1: Exploration (MVP)
-//! - Header with mode tabs [1-5]
+//! - Header with mode tabs [1-4]
 //! - Taxonomy tree navigation
 //! - Detail panel with edges
 //! - Status bar with stats
