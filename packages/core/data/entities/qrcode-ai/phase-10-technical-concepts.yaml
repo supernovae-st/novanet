@@ -1,0 +1,178 @@
+# Phase 10: Technical Concepts — 8 Entities
+# QR Code AI Entity Data for NovaNet
+# v11 Schema with Typed Semantic Arcs
+
+project: qrcode-ai
+phase: 10
+name: Technical Concepts
+description: Educational concepts for understanding QR code structure and encoding
+
+entities:
+  # =============================================================================
+  # QR CODE STRUCTURE (4)
+  # =============================================================================
+  - key: quiet-zone
+    type: CONCEPT
+    display_name: Quiet Zone
+    description: White margin around QR (minimum 4 modules)
+    entity_summary: |
+      The quiet zone is the white border around a QR code. It must be at
+      least 4 modules wide to ensure scanners can detect the code's edges.
+      Removing or reducing the quiet zone causes scan failures.
+
+  - key: error-correction
+    type: CONCEPT
+    display_name: Error Correction
+    description: Reed-Solomon encoding (L/M/Q/H levels)
+    entity_summary: |
+      Error correction allows QR codes to be readable even when partially
+      damaged. Four levels exist: L (7%), M (15%), Q (25%), H (30%).
+      Higher correction enables logos but reduces data capacity.
+
+  - key: data-capacity
+    type: CONCEPT
+    display_name: Data Capacity
+    description: Maximum characters based on version and error correction
+    entity_summary: |
+      Data capacity determines how much information a QR code can hold.
+      Version 1 (21x21) holds ~25 alphanumeric characters. Version 40
+      (177x177) holds ~4,296. Higher error correction reduces capacity.
+
+  - key: qr-code-version
+    type: CONCEPT
+    display_name: QR Code Version
+    description: Size grid (21x21 v1 to 177x177 v40)
+    entity_summary: |
+      QR code version determines the physical size and capacity.
+      40 versions exist: Version 1 is 21x21 modules, Version 40 is
+      177x177 modules. Larger versions store more data but need larger print.
+
+  # =============================================================================
+  # QR CODE ENCODING (4)
+  # =============================================================================
+  - key: encoding-mode
+    type: CONCEPT
+    display_name: Encoding Mode
+    description: Numeric/Alphanumeric/Byte/Kanji modes
+    entity_summary: |
+      Encoding mode determines how data is stored in a QR code.
+      Numeric (0-9) is most efficient. Alphanumeric adds letters.
+      Byte mode handles UTF-8. Kanji mode optimizes for Japanese.
+
+  - key: module
+    type: CONCEPT
+    display_name: Module
+    description: Single black or white square unit
+    entity_summary: |
+      A module is the smallest unit in a QR code - a single square.
+      Modules can be black (dark) or white (light). The pattern of
+      modules encodes the data and error correction information.
+
+  - key: finder-pattern
+    type: CONCEPT
+    display_name: Finder Pattern
+    description: Three corner squares for orientation
+    entity_summary: |
+      Finder patterns are the three large squares in QR code corners.
+      They help scanners locate and orient the code regardless of
+      rotation or angle. Critical for fast, reliable scanning.
+
+  - key: timing-pattern
+    type: CONCEPT
+    display_name: Timing Pattern
+    description: Alternating modules for alignment
+    entity_summary: |
+      Timing patterns are alternating black/white lines connecting
+      finder patterns. They help scanners determine module coordinates
+      and compensate for distortion in larger codes.
+
+# =============================================================================
+# SEMANTIC ARCS (~20 connections)
+# =============================================================================
+
+arcs:
+  # ---------------------------------------------------------------------------
+  # CONCEPT → QR CODE RELATIONSHIPS
+  # ---------------------------------------------------------------------------
+  - from: quiet-zone
+    to: qr-code
+    type: APPLIES_TO
+    strength: 0.85
+
+  - from: error-correction
+    to: qr-code
+    type: APPLIES_TO
+    strength: 0.90
+
+  - from: data-capacity
+    to: qr-code
+    type: APPLIES_TO
+    strength: 0.85
+
+  - from: qr-code-version
+    to: qr-code
+    type: APPLIES_TO
+    strength: 0.85
+
+  - from: encoding-mode
+    to: qr-code
+    type: APPLIES_TO
+    strength: 0.85
+
+  - from: module
+    to: qr-code
+    type: APPLIES_TO
+    strength: 0.90
+
+  - from: finder-pattern
+    to: qr-code
+    type: APPLIES_TO
+    strength: 0.90
+
+  - from: timing-pattern
+    to: qr-code
+    type: APPLIES_TO
+    strength: 0.85
+
+  # ---------------------------------------------------------------------------
+  # CONCEPT RELATIONSHIPS
+  # ---------------------------------------------------------------------------
+  - from: error-correction
+    to: qr-code-with-logo
+    type: ENABLES
+    strength: 0.90
+
+  - from: error-correction
+    to: data-capacity
+    type: SIMILAR_TO
+    strength: 0.70
+
+  - from: data-capacity
+    to: qr-code-version
+    type: SIMILAR_TO
+    strength: 0.80
+
+  - from: qr-code-version
+    to: data-capacity
+    type: ENABLES
+    strength: 0.85
+
+  - from: finder-pattern
+    to: timing-pattern
+    type: SIMILAR_TO
+    strength: 0.70
+
+  - from: module
+    to: finder-pattern
+    type: ENABLES
+    strength: 0.75
+
+  - from: module
+    to: timing-pattern
+    type: ENABLES
+    strength: 0.75
+
+  - from: quiet-zone
+    to: print-qr-code
+    type: ENABLES
+    strength: 0.80

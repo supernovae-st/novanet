@@ -1,0 +1,275 @@
+# Phase 12: Use Cases — 12 Entities
+# QR Code AI Entity Data for NovaNet
+# v11 Schema with Typed Semantic Arcs
+
+project: qrcode-ai
+phase: 12
+name: Use Cases
+description: Specific applications and scenarios for QR code usage
+
+entities:
+  # =============================================================================
+  # CREATIVE USE CASES (4)
+  # =============================================================================
+  - key: funny-qr-codes
+    type: USE_CASE
+    display_name: Funny QR Codes
+    description: Humorous and creative QR code applications
+    entity_summary: |
+      Funny QR codes are creative, humorous applications of QR technology.
+      Include rickrolling, prank redirects, Easter egg content, and
+      unexpected meme destinations. Popular for viral marketing.
+
+  - key: qr-code-tattoo
+    type: USE_CASE
+    display_name: QR Code Tattoo
+    description: Permanent QR codes as body art
+    entity_summary: |
+      QR code tattoos are permanent body art containing scannable codes.
+      Must use dynamic QR codes to allow destination changes. Popular
+      for personal links, memorial tributes, and identity statements.
+
+  - key: qr-code-art-installation
+    type: USE_CASE
+    display_name: QR Art Installation
+    description: Large-scale artistic QR code displays
+    entity_summary: |
+      QR art installations are large-scale creative displays using QR codes.
+      Include murals, building projections, and interactive exhibits.
+      Blend technology with visual art for public engagement.
+
+  - key: qr-code-scavenger-hunt
+    type: USE_CASE
+    display_name: QR Scavenger Hunt
+    description: Interactive treasure hunts using QR codes
+    entity_summary: |
+      QR scavenger hunts use multiple QR codes for interactive games.
+      Each code reveals clues or unlocks content. Popular for team
+      building, education, and event engagement.
+
+  # =============================================================================
+  # BUSINESS USE CASES (4)
+  # =============================================================================
+  - key: qr-code-reviews
+    type: USE_CASE
+    display_name: QR for Reviews
+    description: Collecting customer reviews via QR
+    entity_summary: |
+      QR codes for reviews make leaving feedback easy for customers.
+      Place on receipts, table tents, or packaging. Direct link to
+      Google, Yelp, or feedback forms increases review collection.
+
+  - key: qr-code-contactless-payment
+    type: USE_CASE
+    display_name: Contactless Payment
+    description: Touch-free payments via QR codes
+    entity_summary: |
+      QR contactless payment enables touch-free transactions.
+      Customer scans merchant QR to pay via app. Popular in Asia,
+      growing globally post-COVID for hygiene and convenience.
+
+  - key: qr-code-loyalty-program
+    type: USE_CASE
+    display_name: Loyalty Program
+    description: Customer loyalty via QR scanning
+    entity_summary: |
+      QR loyalty programs digitize punch cards and rewards.
+      Customers scan to earn points, redeem rewards, and track
+      progress. Reduces fraud and paper waste.
+
+  - key: qr-code-product-authentication
+    type: USE_CASE
+    display_name: Product Authentication
+    description: Anti-counterfeit verification via QR
+    entity_summary: |
+      QR product authentication fights counterfeiting with unique codes.
+      Customers scan to verify authenticity. Used for luxury goods,
+      pharmaceuticals, and electronics. Builds consumer trust.
+
+  # =============================================================================
+  # EVENT USE CASES (4)
+  # =============================================================================
+  - key: qr-code-event-checkin
+    type: USE_CASE
+    display_name: Event Check-in
+    description: Attendee registration via QR
+    entity_summary: |
+      QR event check-in streamlines attendee registration.
+      Scan ticket QR for instant verification. Eliminates queues
+      and provides real-time attendance tracking.
+
+  - key: qr-code-networking
+    type: USE_CASE
+    display_name: Networking QR
+    description: Contact exchange at events
+    entity_summary: |
+      QR networking enables quick contact exchange at events.
+      Scan to add contacts, LinkedIn profiles, or digital business
+      cards. Replaces manual entry and paper cards.
+
+  - key: qr-code-wedding
+    type: USE_CASE
+    display_name: Wedding QR Codes
+    description: QR applications for weddings
+    entity_summary: |
+      Wedding QR codes simplify event management. Use for RSVPs,
+      digital invitations, photo sharing, and gift registry links.
+      Modern alternative to traditional wedding stationery.
+
+  - key: qr-code-museum-exhibit
+    type: USE_CASE
+    display_name: Museum Exhibits
+    description: Interactive museum experiences via QR
+    entity_summary: |
+      QR museum exhibits enhance visitor experiences with digital content.
+      Scan for audio guides, videos, 3D models, and detailed information.
+      Reduces printed materials and updates content easily.
+
+# =============================================================================
+# SEMANTIC ARCS (~30 connections)
+# =============================================================================
+
+arcs:
+  # ---------------------------------------------------------------------------
+  # USE CASE → PRODUCT RELATIONSHIPS
+  # ---------------------------------------------------------------------------
+  - from: funny-qr-codes
+    to: qr-code
+    type: APPLIES_TO
+    strength: 0.85
+
+  - from: qr-code-tattoo
+    to: qr-code
+    type: APPLIES_TO
+    strength: 0.85
+
+  - from: qr-code-tattoo
+    to: dynamic-qr-code
+    type: REQUIRES
+    strength: 0.95
+
+  - from: qr-code-art-installation
+    to: qr-code
+    type: APPLIES_TO
+    strength: 0.80
+
+  - from: qr-code-art-installation
+    to: qr-code-art
+    type: ENABLES
+    strength: 0.85
+
+  - from: qr-code-scavenger-hunt
+    to: qr-code
+    type: APPLIES_TO
+    strength: 0.85
+
+  - from: qr-code-reviews
+    to: qr-code-google-review
+    type: ENABLES
+    strength: 0.90
+
+  - from: qr-code-contactless-payment
+    to: qr-code-payment
+    type: ENABLES
+    strength: 0.95
+
+  - from: qr-code-loyalty-program
+    to: dynamic-qr-code
+    type: REQUIRES
+    strength: 0.85
+
+  - from: qr-code-product-authentication
+    to: dynamic-qr-code
+    type: REQUIRES
+    strength: 0.90
+
+  - from: qr-code-event-checkin
+    to: qr-code-event
+    type: ENABLES
+    strength: 0.90
+
+  - from: qr-code-networking
+    to: qr-code-vcard
+    type: ENABLES
+    strength: 0.85
+
+  - from: qr-code-wedding
+    to: qr-code-event
+    type: ENABLES
+    strength: 0.80
+
+  - from: qr-code-museum-exhibit
+    to: qr-code-url
+    type: ENABLES
+    strength: 0.80
+
+  # ---------------------------------------------------------------------------
+  # USE CASE → INDUSTRY RELATIONSHIPS
+  # ---------------------------------------------------------------------------
+  - from: qr-code-reviews
+    to: restaurants
+    type: APPLIES_TO
+    strength: 0.85
+
+  - from: qr-code-reviews
+    to: small-business
+    type: APPLIES_TO
+    strength: 0.85
+
+  - from: qr-code-contactless-payment
+    to: retail
+    type: APPLIES_TO
+    strength: 0.85
+
+  - from: qr-code-contactless-payment
+    to: restaurants
+    type: APPLIES_TO
+    strength: 0.85
+
+  - from: qr-code-product-authentication
+    to: manufacturing
+    type: APPLIES_TO
+    strength: 0.85
+
+  - from: qr-code-product-authentication
+    to: retail
+    type: APPLIES_TO
+    strength: 0.80
+
+  - from: qr-code-event-checkin
+    to: event-management
+    type: APPLIES_TO
+    strength: 0.90
+
+  - from: qr-code-wedding
+    to: event-management
+    type: APPLIES_TO
+    strength: 0.85
+
+  - from: qr-code-museum-exhibit
+    to: entertainment
+    type: APPLIES_TO
+    strength: 0.75
+
+  - from: qr-code-museum-exhibit
+    to: education
+    type: APPLIES_TO
+    strength: 0.80
+
+  # ---------------------------------------------------------------------------
+  # USE CASE SIMILARITIES
+  # ---------------------------------------------------------------------------
+  - from: funny-qr-codes
+    to: qr-code-art-installation
+    type: SIMILAR_TO
+    strength: 0.60
+
+  - from: qr-code-event-checkin
+    to: qr-code-networking
+    type: SIMILAR_TO
+    strength: 0.70
+
+  - from: qr-code-contactless-payment
+    to: qr-code-loyalty-program
+    type: SIMILAR_TO
+    strength: 0.65
