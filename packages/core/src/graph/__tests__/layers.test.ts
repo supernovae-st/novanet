@@ -25,9 +25,9 @@ describe('graph/layers', () => {
     expect(NODE_LAYERS.ChannelSurface).toBe('semantic');
     // Entity-Centric in tenant.semantic
     expect(NODE_LAYERS.Entity).toBe('semantic');
-    expect(NODE_LAYERS.EntityL10n).toBe('semantic');
-    expect(NODE_LAYERS.PageL10n).toBe('output');
-    expect(NODE_LAYERS.BlockL10n).toBe('output');
+    expect(NODE_LAYERS.EntityContent).toBe('semantic');
+    expect(NODE_LAYERS.PageGenerated).toBe('output');
+    expect(NODE_LAYERS.BlockGenerated).toBe('output');
   });
 
   it('should map global realm nodes correctly', () => {
@@ -64,7 +64,7 @@ describe('graph/layers', () => {
     expect(semantic).toContain('AudiencePersona');
     expect(semantic).toContain('ChannelSurface');
     expect(semantic).toContain('Entity');
-    expect(semantic).toContain('EntityL10n');
+    expect(semantic).toContain('EntityContent');
     expect(semantic).toHaveLength(4);
 
     // locale-knowledge layer has 12 nodes (Sets + Atoms only)

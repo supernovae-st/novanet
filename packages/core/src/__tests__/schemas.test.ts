@@ -179,8 +179,8 @@ describe('Relation Registry', () => {
       expect(RelationType.HAS_LEXICON).toBe('HAS_LEXICON');
 
       // v7.0.0 unified relations
-      expect(RelationType.HAS_L10N).toBe('HAS_L10N');
-      expect(RelationType.HAS_OUTPUT).toBe('HAS_OUTPUT');
+      expect(RelationType.HAS_CONTENT).toBe('HAS_CONTENT');
+      expect(RelationType.HAS_GENERATED).toBe('HAS_GENERATED');
       expect(RelationType.USES_ENTITY).toBe('USES_ENTITY');
 
       // SEO/GEO
@@ -217,8 +217,8 @@ describe('Relation Registry', () => {
       // v10.3: HAS_CONCEPT removed — Entity in global realm
       expect(hasRelations).toContain('HAS_PAGE');
       expect(hasRelations).toContain('HAS_BLOCK');
-      expect(hasRelations).toContain('HAS_L10N');
-      expect(hasRelations).toContain('HAS_OUTPUT');
+      expect(hasRelations).toContain('HAS_CONTENT');
+      expect(hasRelations).toContain('HAS_GENERATED');
       expect(hasRelations).toContain('HAS_IDENTITY');
       expect(hasRelations).toContain('HAS_VOICE');
       expect(hasRelations.length).toBeGreaterThan(10);
@@ -256,8 +256,8 @@ describe('Relation Naming Conventions', () => {
     // v10.3: HAS_CONCEPT removed — Entity in global realm
     expect(hasRelations).toContain('HAS_PAGE');
     expect(hasRelations).toContain('HAS_BLOCK');
-    expect(hasRelations).toContain('HAS_L10N');
-    expect(hasRelations).toContain('HAS_OUTPUT');
+    expect(hasRelations).toContain('HAS_CONTENT');
+    expect(hasRelations).toContain('HAS_GENERATED');
     expect(hasRelations).toContain('HAS_IDENTITY');
     expect(hasRelations).toContain('HAS_VOICE');
   });
@@ -496,12 +496,12 @@ describe('Relations v7.2.0', () => {
       expect(RelationRegistry[RelationType.GENERATED]).toBeDefined();
     });
 
-    it('links PagePrompt/BlockPrompt to PageL10n/BlockL10n', () => {
+    it('links PagePrompt/BlockPrompt to PageGenerated/BlockGenerated', () => {
       const rel = RelationRegistry[RelationType.GENERATED];
       expect(rel.from).toContain('PagePrompt');
       expect(rel.from).toContain('BlockPrompt');
-      expect(rel.to).toContain('PageL10n');
-      expect(rel.to).toContain('BlockL10n');
+      expect(rel.to).toContain('PageGenerated');
+      expect(rel.to).toContain('BlockGenerated');
     });
 
     it('has N:M cardinality for provenance', () => {

@@ -190,23 +190,23 @@ export class NovaNetFilter {
   }
 
   /**
-   * Includes PageL10n/BlockL10n nodes via HAS_OUTPUT.
+   * Includes PageGenerated/BlockGenerated nodes via HAS_GENERATED.
    * @param _opts - Reserved for future options (e.g., latestOnly)
    */
   includeOutputs(_opts?: { latestOnly?: boolean }): this {
     this.state.includes.push({
-      relation: 'HAS_OUTPUT',
+      relation: 'HAS_GENERATED',
       direction: 'outgoing',
     });
     return this;
   }
 
   /**
-   * Includes localized content nodes via HAS_L10N.
+   * Includes localized content nodes via HAS_CONTENT.
    */
   includeL10n(): this {
     this.state.includes.push({
-      relation: 'HAS_L10N',
+      relation: 'HAS_CONTENT',
       direction: 'outgoing',
     });
     return this;

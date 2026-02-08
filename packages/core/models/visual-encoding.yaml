@@ -11,7 +11,7 @@
 # - apps/studio/src/design/visual-encoding.json (runtime config)
 # - tools/novanet/src/generated/visual_encoding.rs (TUI compile-time)
 
-version: "10.6.0"
+version: "10.9.0"
 
 # =============================================================================
 # CHANNEL MAPPING — Which visual channel encodes which facet
@@ -194,7 +194,7 @@ kind_icons:
 
   # Global / Semantic — v10.3 Entity-Centric Architecture
   Entity: lightbulb
-  EntityL10n: globe
+  EntityContent: globe
 
   # Project / Foundation
   Project: folder
@@ -221,8 +221,8 @@ kind_icons:
   PromptArtifact: file-code
 
   # Project / Output
-  PageL10n: file-check
-  BlockL10n: check-square
+  PageGenerated: file-check
+  BlockGenerated: check-square
   GenerationJob: play-circle
   OutputArtifact: package
   EvaluationSignal: activity

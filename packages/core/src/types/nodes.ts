@@ -31,11 +31,11 @@ export const NODE_TYPES = [
   // structure (3)
   'Page', 'Block', 'ContentSlot',
   // semantic (4)
-  'Entity', 'EntityL10n', 'AudiencePersona', 'ChannelSurface',
+  'Entity', 'EntityContent', 'AudiencePersona', 'ChannelSurface',
   // instruction (7)
   'PageType', 'BlockType', 'PagePrompt', 'BlockPrompt', 'BlockRules', 'BlockInstruction', 'PromptArtifact',
   // output (5)
-  'PageL10n', 'BlockL10n', 'GenerationJob', 'OutputArtifact', 'EvaluationSignal',
+  'PageGenerated', 'BlockGenerated', 'GenerationJob', 'OutputArtifact', 'EvaluationSignal',
 ] as const;
 
 export type NodeType = typeof NODE_TYPES[number];
@@ -129,7 +129,7 @@ export const KIND_META: Record<NodeType, KindMeta> = {
 
   // TENANT REALM — semantic (4)
   Entity:          { realm: 'tenant', layer: 'semantic', trait: 'invariant' },
-  EntityL10n:      { realm: 'tenant', layer: 'semantic', trait: 'localized' },
+  EntityContent:      { realm: 'tenant', layer: 'semantic', trait: 'localized' },
   AudiencePersona: { realm: 'tenant', layer: 'semantic', trait: 'invariant' },
   ChannelSurface:  { realm: 'tenant', layer: 'semantic', trait: 'invariant' },
 
@@ -143,8 +143,8 @@ export const KIND_META: Record<NodeType, KindMeta> = {
   PromptArtifact:  { realm: 'tenant', layer: 'instruction', trait: 'derived' },
 
   // TENANT REALM — output (5)
-  PageL10n:         { realm: 'tenant', layer: 'output', trait: 'localized' },
-  BlockL10n:        { realm: 'tenant', layer: 'output', trait: 'localized' },
+  PageGenerated:         { realm: 'tenant', layer: 'output', trait: 'localized' },
+  BlockGenerated:        { realm: 'tenant', layer: 'output', trait: 'localized' },
   GenerationJob:    { realm: 'tenant', layer: 'output', trait: 'job' },
   OutputArtifact:   { realm: 'tenant', layer: 'output', trait: 'derived' },
   EvaluationSignal: { realm: 'tenant', layer: 'output', trait: 'derived' },

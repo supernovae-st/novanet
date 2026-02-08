@@ -1,19 +1,19 @@
 # packages/core/models/arc-kinds/_index.yaml
-# Arc Kinds Index - v10.7.0
+# Arc Kinds Index - v10.9.0
 #
 # This directory contains one YAML file per ArcKind (relationship type).
 # Organization: arc-kinds/{family}/{arc-name}.yaml
 #
 # See: meta/arc-families/ for ArcFamily definitions
 
-version: "10.7.0"
+version: "10.9.0"
 
 # Arc count by family
 summary:
   ownership: 39
-  localization: 17
-  semantic: 19          # +2: for-channel, targets-persona
-  generation: 15        # +1: includes-style
+  localization: 15      # v10.9.0: -2 (has-l10n→has-content, l10n-of→content-of, removed has-output/output-of)
+  semantic: 19
+  generation: 17        # v10.9.0: +2 (has-generated, generated-for)
   mining: 2
   total: 92
 
@@ -61,21 +61,19 @@ structure:
     - supports-locale.yaml
 
   localization:
+    - content-of.yaml          # v10.9.0: renamed from l10n-of.yaml
     - fallback-to.yaml
     - for-locale.yaml
+    - has-content.yaml         # v10.9.0: renamed from has-l10n.yaml
     - has-income-level.yaml    # Geographic: country → income group
     - has-internal-link.yaml
-    - has-l10n.yaml
     - has-lending-type.yaml    # Geographic: country → lending category
     - has-localized-content.yaml
-    - has-output.yaml
     - has-population.yaml      # Geographic: locale → population cluster
     - has-primary-population.yaml  # Geographic: locale primary population
     - in-cultural-subrealm.yaml    # Geographic: locale → cultural sub-realm
     - in-economic-region.yaml  # Geographic: country → economic region
     - in-subregion.yaml        # Geographic: country → geo sub-region
-    - l10n-of.yaml
-    - output-of.yaml
     - speaks-branch.yaml       # Geographic: locale → language branch
     - variant-of.yaml
 
@@ -105,9 +103,11 @@ structure:
     - compiled-from.yaml
     - creates-content.yaml
     - evaluated-by-job.yaml
+    - generated-for.yaml       # v10.9.0: inverse of has-generated (replaces output-of)
     - generated-from.yaml
     - generated.yaml
     - has-evaluation.yaml
+    - has-generated.yaml       # v10.9.0: renamed from has-output, moved from localization
     - includes-entity.yaml
     - includes-style.yaml      # Prompt includes style directives
     - includes.yaml

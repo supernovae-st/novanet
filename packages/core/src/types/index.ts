@@ -59,7 +59,7 @@ export interface StandardNodeProperties {
 
 /**
  * Base interface for nodes that support vector embeddings.
- * Used by Entity, EntityL10n, and Page for semantic search.
+ * Used by Entity, EntityContent, and Page for semantic search.
  */
 export interface EmbeddableNode {
   /** OpenAI text-embedding-3-small vector (1536 dimensions) */
@@ -110,13 +110,13 @@ export interface Entity extends StandardNodeProperties, EmbeddableNode {
   search_intent?: 'transactional' | 'informational' | 'navigational';
 }
 
-export interface EntityL10n extends EmbeddableNode {
+export interface EntityContent extends EmbeddableNode {
   // Standard properties (v8.2.0 - L10n nodes don't have key, no icon/priority/freshness)
   display_name: string;
   description: string;
   llm_context: string;
 
-  // EntityL10n-specific (same as former EntityL10n)
+  // EntityContent-specific (same as former EntityContent)
   title: string;
   definition: string;
   purpose?: string;
@@ -178,13 +178,13 @@ export interface PageType extends StandardNodeProperties {
   validation_rules?: Record<string, unknown>;
 }
 
-export interface PageL10n {
+export interface PageGenerated {
   // Standard properties (v8.2.0 - L10n nodes don't have key, no icon/priority/freshness)
   display_name: string;
   description: string;
   llm_context: string;
 
-  // PageL10n-specific (v7.6.0: renamed from PageOutput)
+  // PageGenerated-specific (v7.6.0: renamed from PageOutput)
   assembled: Record<string, unknown>;
   assembled_at: Date;
   assembler_version: string;
@@ -221,13 +221,13 @@ export interface BlockType extends StandardNodeProperties {
  */
 export type Block = StandardNodeProperties;
 
-export interface BlockL10n {
+export interface BlockGenerated {
   // Standard properties (v8.2.0 - L10n nodes don't have key, no icon/priority/freshness)
   display_name: string;
   description: string;
   llm_context: string;
 
-  // BlockL10n-specific (v7.6.0: renamed from BlockOutput)
+  // BlockGenerated-specific (v7.6.0: renamed from BlockOutput)
   generated: Record<string, unknown>;
   generated_at: Date;
   generator_version: string;
@@ -362,7 +362,7 @@ export interface UsesEntityProps {
   temperature: number;
 }
 
-// v10.3: ExpressesProps (EntityL10n -[:EXPRESSES]-> SEOKeyword)
+// v10.3: ExpressesProps (EntityContent -[:EXPRESSES]-> SEOKeyword)
 export interface ExpressesProps {
   status: 'active' | 'paused' | 'archived';
   priority: number;
@@ -379,7 +379,7 @@ export interface InfluencedByProps {
 
 /**
  * Anchor text optimization strategy (v8.0.0)
- * - exact_match: anchor = EntityL10n.title exactly (5× traffic, use sparingly max 10%)
+ * - exact_match: anchor = EntityContent.title exactly (5× traffic, use sparingly max 10%)
  * - partial_match: anchor includes concept keywords
  * - branded: anchor = brand name (QR Code AI)
  * - generic: anchor = "click here", "learn more" (low SEO value)
@@ -388,10 +388,10 @@ export type AnchorType = 'exact_match' | 'partial_match' | 'branded' | 'generic'
 
 /**
  * LinksToProps - Properties for Page-to-Page internal links (v7.12.0, extended v8.0.0)
- * Anchor text is derived from EntityL10n.title at generation time.
+ * Anchor text is derived from EntityContent.title at generation time.
  */
 export interface LinksToProps {
-  /** Concept key - anchor text derived from EntityL10n.title for the target locale */
+  /** Concept key - anchor text derived from EntityContent.title for the target locale */
   concept_key: string;
   /** Where the link appears in the content */
   context: 'cta' | 'body' | 'related' | 'nav';
