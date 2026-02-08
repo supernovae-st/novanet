@@ -1151,14 +1151,14 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                                     Color::Red
                                                 };
                                                 spans.push(Span::styled(
-                                                    completeness_badge.clone(),
+                                                    completeness_badge,
                                                     Style::default().fg(color),
                                                 ));
                                             }
                                             // Arc count (cyan)
                                             if !arc_badge.is_empty() {
                                                 spans.push(Span::styled(
-                                                    arc_badge.clone(),
+                                                    arc_badge,
                                                     Style::default().fg(Color::Cyan),
                                                 ));
                                             }
