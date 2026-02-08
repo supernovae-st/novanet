@@ -715,11 +715,11 @@ pnpm doc:generate
 - Outdated version references (current: v10.9.0)
 - Deprecated terminology (EntityL10n → EntityContent, PageL10n → PageGenerated, BlockL10n → BlockGenerated)
 - Deprecated arcs (HAS_L10N → HAS_CONTENT, HAS_OUTPUT → HAS_GENERATED)
-- Incorrect node/arc counts (64 nodes, 120 arcs expected)
+- Incorrect node/arc counts (76 nodes, 123 arcs expected)
 
 **`pnpm skill:audit` checks:**
 - Deprecated paths (`nodes/` → `node-kinds/`, `organizing-principles.yaml` → `taxonomy.yaml`)
-- Node/arc counts match YAML sources (64 node-kinds, 120 arc-kinds)
+- Node/arc counts match YAML sources (76 node-kinds, 123 arc-kinds)
 - Deprecated terminology in skills/commands/rules
 
 **Auto-sync reminders:**
