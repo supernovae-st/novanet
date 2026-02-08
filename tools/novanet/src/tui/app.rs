@@ -272,6 +272,8 @@ pub struct App {
     // ==========================================================================
     /// Index of focused property in Info panel (for truncate intelligent)
     pub focused_property_idx: usize,
+    /// Whether the focused property text is expanded (Enter toggle)
+    pub expanded_property: bool,
     // ==========================================================================
     // JSON Pretty-Print State (Feature 4)
     // ==========================================================================
@@ -341,6 +343,7 @@ impl App {
             validation_stats: None,
             // Property focus (Feature 3)
             focused_property_idx: 0,
+            expanded_property: false,
             // JSON pretty-print (Feature 4)
             json_pretty: false,
             // Audit mode (Feature 6)
@@ -1033,7 +1036,7 @@ impl App {
                 true
             }
 
-            // Enter: toggle collapse/expand (Tree) or toggle peek (YAML)
+            // Enter: toggle collapse/expand (Tree), toggle peek (YAML), or expand property (Info)
             KeyCode::Enter => {
                 match self.focus {
                     Focus::Tree => {
@@ -1047,7 +1050,13 @@ impl App {
                             self.yaml_peek = !self.yaml_peek;
                         }
                     }
-                    _ => {}
+                    Focus::Info => {
+                        // Toggle expanded property text (word-wrap on multiple lines)
+                        self.expanded_property = !self.expanded_property;
+                    }
+                    Focus::Graph => {
+                        // No-op for Graph focus (future: could activate selected node)
+                    }
                 }
                 true
             }
@@ -1297,6 +1306,7 @@ impl App {
                     if let Some(matched) = &self.matched_properties {
                         let max_idx = matched.len().saturating_sub(1);
                         self.focused_property_idx = (self.focused_property_idx + 1).min(max_idx);
+                        self.expanded_property = false; // Collapse when changing property
                     }
                 }
                 true
@@ -1304,6 +1314,7 @@ impl App {
             KeyCode::Char('-') | KeyCode::Char('_') => {
                 if self.is_data_mode() && self.schema_overlay_enabled {
                     self.focused_property_idx = self.focused_property_idx.saturating_sub(1);
+                    self.expanded_property = false; // Collapse when changing property
                 }
                 true
             }
@@ -1688,8 +1699,9 @@ impl App {
     /// Update schema match for the current instance (if any).
     /// Called after navigation or schema overlay toggle.
     pub fn update_schema_match_for_current(&mut self) {
-        // Reset focused property index when navigating to new instance
+        // Reset focused property state when navigating to new instance
         self.focused_property_idx = 0;
+        self.expanded_property = false;
 
         // Only relevant in Data mode with schema overlay enabled
         if !self.is_data_mode() || !self.schema_overlay_enabled {
