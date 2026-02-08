@@ -724,6 +724,7 @@ LIMIT 500
                 properties: props,
                 outgoing_arcs,
                 incoming_arcs,
+                missing_required_count: 0, // Calculated later in set_instances
             });
         }
 
@@ -1477,8 +1478,32 @@ RETURN kw.keyword as keyword,
 
     /// Set instances for a Kind (used in Data mode).
     /// Also stores the total count for "X of Y" display.
+    /// Calculates missing_required_count for each instance based on Kind schema.
     #[allow(dead_code)]
-    pub fn set_instances(&mut self, kind_key: &str, instances: Vec<InstanceInfo>, total: usize) {
+    pub fn set_instances(&mut self, kind_key: &str, mut instances: Vec<InstanceInfo>, total: usize) {
+        // Get required properties from Kind schema
+        let required_props: Vec<String> = self
+            .find_kind(kind_key)
+            .map(|(_, _, kind)| kind.required_properties.clone())
+            .unwrap_or_default();
+
+        // Calculate missing_required_count for each instance
+        for instance in &mut instances {
+            let missing = required_props
+                .iter()
+                .filter(|prop| {
+                    // Property is missing if not present or is null/empty
+                    match instance.properties.get(*prop) {
+                        None => true,
+                        Some(JsonValue::Null) => true,
+                        Some(JsonValue::String(s)) => s.is_empty(),
+                        Some(_) => false,
+                    }
+                })
+                .count();
+            instance.missing_required_count = missing;
+        }
+
         self.instances.insert(kind_key.to_string(), instances);
         self.instance_totals.insert(kind_key.to_string(), total);
     }
@@ -2070,6 +2095,8 @@ pub struct InstanceInfo {
     pub outgoing_arcs: Vec<InstanceArc>,
     /// Incoming arcs to this instance.
     pub incoming_arcs: Vec<InstanceArc>,
+    /// Count of missing required properties (for tree badge).
+    pub missing_required_count: usize,
 }
 
 /// An actual arc connection from/to an instance.
@@ -2278,6 +2305,7 @@ mod tests {
             ]),
             outgoing_arcs: vec![],
             incoming_arcs: vec![],
+            missing_required_count: 0,
         };
 
         assert_eq!(instance.key, "fr-FR");
@@ -2302,6 +2330,7 @@ mod tests {
                 exists: true,
             }],
             incoming_arcs: vec![],
+            missing_required_count: 0,
         };
 
         let schema_arcs = vec![

@@ -2142,6 +2142,7 @@ mod tests {
                 properties: BTreeMap::new(),
                 outgoing_arcs: vec![],
                 incoming_arcs: vec![],
+                missing_required_count: 0,
             },
             InstanceInfo {
                 key: "en-US".to_string(),
@@ -2150,6 +2151,7 @@ mod tests {
                 properties: BTreeMap::new(),
                 outgoing_arcs: vec![],
                 incoming_arcs: vec![],
+                missing_required_count: 0,
             },
         ];
         app.tree
@@ -2195,6 +2197,7 @@ mod tests {
             properties: BTreeMap::new(),
             outgoing_arcs: vec![],
             incoming_arcs: vec![],
+            missing_required_count: 0,
         }];
         app.tree
             .set_instances("Locale", instances.clone(), instances.len());
@@ -2267,6 +2270,7 @@ mod tests {
                 properties: BTreeMap::new(),
                 outgoing_arcs: vec![],
                 incoming_arcs: vec![],
+                missing_required_count: 0,
             },
             InstanceInfo {
                 key: "en-US".to_string(),
@@ -2275,6 +2279,7 @@ mod tests {
                 properties: BTreeMap::new(),
                 outgoing_arcs: vec![],
                 incoming_arcs: vec![],
+                missing_required_count: 0,
             },
         ];
         app.tree
@@ -2374,6 +2379,7 @@ mod tests {
                 properties: BTreeMap::new(),
                 outgoing_arcs: vec![],
                 incoming_arcs: vec![],
+                missing_required_count: 0,
             },
             InstanceInfo {
                 key: "en-US".to_string(),
@@ -2382,6 +2388,7 @@ mod tests {
                 properties: BTreeMap::new(),
                 outgoing_arcs: vec![],
                 incoming_arcs: vec![],
+                missing_required_count: 0,
             },
         ];
         app.tree

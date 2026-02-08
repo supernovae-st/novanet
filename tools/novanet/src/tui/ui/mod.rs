@@ -1069,6 +1069,13 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                             String::new()
                                         };
 
+                                        // Badge for missing required properties: (✗N!)
+                                        let missing_badge = if instance.missing_required_count > 0 {
+                                            format!(" (✗{}!)", instance.missing_required_count)
+                                        } else {
+                                            String::new()
+                                        };
+
                                         let tree_prefix = format!(
                                             "{}{}{}{}",
                                             cont(realm_is_last),
@@ -1081,18 +1088,19 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                             // Selected: single span with highlight bg
                                             all_lines.push(Line::from(Span::styled(
                                                 format!(
-                                                    "{}{}{} {}{}",
+                                                    "{}{}{} {}{}{}",
                                                     cursor_char,
                                                     tree_prefix,
                                                     icon,
                                                     instance.display_name,
-                                                    suffix
+                                                    suffix,
+                                                    missing_badge
                                                 ),
                                                 style,
                                             )));
                                         } else {
                                             // Not selected: split into spans for colored tree lines
-                                            all_lines.push(Line::from(vec![
+                                            let mut spans = vec![
                                                 Span::styled(cursor_char, Style::default()),
                                                 Span::styled(
                                                     tree_prefix,
@@ -1105,7 +1113,15 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                                     ),
                                                     style,
                                                 ),
-                                            ]));
+                                            ];
+                                            // Add red badge for missing required
+                                            if !missing_badge.is_empty() {
+                                                spans.push(Span::styled(
+                                                    missing_badge,
+                                                    Style::default().fg(Color::Red),
+                                                ));
+                                            }
+                                            all_lines.push(Line::from(spans));
                                         }
                                         idx += 1;
                                     }
