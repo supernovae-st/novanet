@@ -140,8 +140,10 @@ if [ $exit_code -ne 0 ]; then
   echo "To fix terminology issues:"
   echo "  - Concept -> Entity"
   echo "  - USES_CONCEPT -> USES_ENTITY"
-  echo "  - ConceptL10n -> EntityL10n"
-  echo "  - shared realm removed (use global or project)"
+  echo "  - EntityL10n -> EntityContent (v10.9)"
+  echo "  - PageL10n -> PageGenerated (v10.9)"
+  echo "  - BlockL10n -> BlockGenerated (v10.9)"
+  echo "  - shared realm removed (use global or tenant)"
   echo ""
   echo "Expected counts: $NODE_COUNT nodes, $ARC_COUNT arcs, $REALM_COUNT realms, $LAYER_COUNT layers"
 fi

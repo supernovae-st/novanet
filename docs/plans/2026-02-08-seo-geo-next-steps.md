@@ -8,9 +8,9 @@
 
 ## Completed Today
 
-- [x] Schema updates: EntityL10n + SEOKeyword simplified
+- [x] Schema updates: EntityContent + SEOKeyword simplified
 - [x] 281 Entity nodes imported to Neo4j
-- [x] 281 EntityL10n fr-FR imported to Neo4j
+- [x] 281 EntityContent fr-FR imported to Neo4j
 - [x] 1,519 SEOKeyword fr-FR imported to Neo4j
 - [x] Architecture documented: SEO + GEO layer design
 
@@ -68,7 +68,7 @@ properties:
 - [ ] Parse ATP CSV file
 - [ ] Create SEOQuestion nodes
 - [ ] Link to parent SEOKeyword via [:HAS_QUESTIONS]
-- [ ] Link EntityL10n [:ANSWERS] for content coverage tracking
+- [ ] Link EntityContent [:ANSWERS] for content coverage tracking
 
 **SEOQuestion schema**:
 ```yaml
@@ -95,8 +95,8 @@ properties:
 
 **Relations**:
 ```
-EntityL10n ──[:ANSWERS]──────► GEOPrompt
-EntityL10n ◄─[:MENTIONS]───── GEOMention
+EntityContent ──[:ANSWERS]──────► GEOPrompt
+EntityContent ◄─[:MENTIONS]───── GEOMention
 GEOPrompt ──[:HAS_RESPONSE]─► GEOResponse
 GEOResponse ─[:HAS_CITATION]► GEOCitation
 GEOResponse ─[:HAS_MENTION]─► GEOMention
@@ -130,7 +130,7 @@ GEO* ───────[:HAS_METRICS]──► GEOMetrics
 │                                     │                                       │
 └─────────────────────────────────────┴─────────────────────────────────────────┘
 
-EntityL10n connections:
+EntityContent connections:
   - [:TARGETS] ──► SEOKeyword
   - [:ANSWERS] ──► SEOQuestion, GEOPrompt
   - [:MENTIONED_IN] ◄── GEOMention
@@ -140,10 +140,10 @@ EntityL10n connections:
 
 ## Open Question: Naming Convention
 
-**Issue**: Both EntityL10n and SEOKeyword are locale-specific, but only EntityL10n has the `L10n` suffix.
+**Issue**: Both EntityContent and SEOKeyword are locale-specific, but only EntityContent has the `L10n` suffix.
 
 **Current convention**: `*L10n` = "localization OF a parent invariant node"
-- EntityL10n has parent Entity (invariant) → L10n suffix
+- EntityContent has parent Entity (invariant) → L10n suffix
 - SEOKeyword has no parent invariant → no L10n suffix
 
 **Options to consider**:
