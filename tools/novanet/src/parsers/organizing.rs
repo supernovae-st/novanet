@@ -166,7 +166,7 @@ arc_families:
         let doc = load_organizing(root).expect("should load from taxonomy.yaml");
 
         // Version now comes from taxonomy.yaml (10.6.0)
-        assert_eq!(doc.version, "10.6.0");
+        assert_eq!(doc.version, "11.0.0");
         assert_eq!(doc.realms.len(), 2); // v10.6: 2 realms (global, tenant)
         assert_eq!(doc.traits.len(), 5);
         assert_eq!(doc.arc_families.len(), 5);
