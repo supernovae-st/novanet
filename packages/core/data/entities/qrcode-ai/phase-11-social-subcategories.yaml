@@ -1,0 +1,146 @@
+# Phase 11: Social Subcategories — 4 Entities
+# QR Code AI Entity Data for NovaNet
+# v11 Schema with Typed Semantic Arcs
+
+project: qrcode-ai
+phase: 11
+name: Social Subcategories
+description: Semantic groupings within qr-code-social for better organization
+
+entities:
+  # ═══════════════════════════════════════════════════════════════════════════
+  # SOCIAL SUBCATEGORIES (4)
+  # ═══════════════════════════════════════════════════════════════════════════
+  - key: qr-code-messaging
+    type: THING
+    display_name: Messaging QR Codes
+    description: Subcategory for messaging app QR codes
+    entity_summary: |
+      Messaging QR codes link to chat apps like WhatsApp and Telegram.
+      They enable direct communication channels for customer support,
+      sales inquiries, and community engagement.
+
+  - key: qr-code-video-platform
+    type: THING
+    display_name: Video Platform QR Codes
+    description: Subcategory for video platform QR codes
+    entity_summary: |
+      Video platform QR codes link to video content on YouTube, TikTok,
+      and Snapchat. Used for content promotion, tutorials, and
+      entertainment sharing.
+
+  - key: qr-code-professional
+    type: THING
+    display_name: Professional Network QR Codes
+    description: Subcategory for professional networking QR codes
+    entity_summary: |
+      Professional network QR codes link to business profiles on LinkedIn.
+      Popular on business cards and at networking events for quick
+      professional connections.
+
+  - key: qr-code-music-platform
+    type: THING
+    display_name: Music Platform QR Codes
+    description: Subcategory for music streaming QR codes
+    entity_summary: |
+      Music platform QR codes link to artists, playlists, and tracks on
+      Spotify, Apple Music, and SoundCloud. Used by musicians and
+      playlist curators for promotion.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# SEMANTIC ARCS (~20 connections)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+arcs:
+  # ─────────────────────────────────────────────────────────────────────────────
+  # SUBCATEGORIES TYPE_OF SOCIAL
+  # ─────────────────────────────────────────────────────────────────────────────
+  - from: qr-code-messaging
+    to: qr-code-social
+    type: TYPE_OF
+    strength: 0.95
+
+  - from: qr-code-video-platform
+    to: qr-code-social
+    type: TYPE_OF
+    strength: 0.95
+
+  - from: qr-code-professional
+    to: qr-code-social
+    type: TYPE_OF
+    strength: 0.95
+
+  - from: qr-code-music-platform
+    to: qr-code-social
+    type: TYPE_OF
+    strength: 0.95
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # MESSAGING INCLUDES
+  # ─────────────────────────────────────────────────────────────────────────────
+  - from: qr-code-messaging
+    to: qr-code-whatsapp
+    type: INCLUDES
+    strength: 0.85
+
+  - from: qr-code-messaging
+    to: qr-code-telegram
+    type: INCLUDES
+    strength: 0.85
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # VIDEO INCLUDES
+  # ─────────────────────────────────────────────────────────────────────────────
+  - from: qr-code-video-platform
+    to: qr-code-youtube
+    type: INCLUDES
+    strength: 0.85
+
+  - from: qr-code-video-platform
+    to: qr-code-tiktok
+    type: INCLUDES
+    strength: 0.85
+
+  - from: qr-code-video-platform
+    to: qr-code-snapchat
+    type: INCLUDES
+    strength: 0.85
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # PROFESSIONAL INCLUDES
+  # ─────────────────────────────────────────────────────────────────────────────
+  - from: qr-code-professional
+    to: qr-code-linkedin
+    type: INCLUDES
+    strength: 0.85
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # MUSIC INCLUDES
+  # ─────────────────────────────────────────────────────────────────────────────
+  - from: qr-code-music-platform
+    to: qr-code-spotify
+    type: INCLUDES
+    strength: 0.85
+
+  - from: qr-code-music-platform
+    to: qr-code-apple-music
+    type: INCLUDES
+    strength: 0.85
+
+  - from: qr-code-music-platform
+    to: qr-code-soundcloud
+    type: INCLUDES
+    strength: 0.85
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # CROSS-CATEGORY RELATIONSHIPS
+  # ─────────────────────────────────────────────────────────────────────────────
+  - from: qr-code-music-platform
+    to: qr-code-audio
+    type: SIMILAR_TO
+    strength: 0.80
+
+  - from: qr-code-video-platform
+    to: qr-code-video
+    type: SIMILAR_TO
+    strength: 0.80
