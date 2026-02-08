@@ -1,6 +1,6 @@
 // ============================================================================
 // MARKET SEED - Generated from ATH 5-market
-// Generated: 2026-02-06 13:07:28
+// Generated: 2026-02-08 00:48:57
 // Source: /Users/thibaut/Projects/traduction_ai/ath-know-l10n/outputs/localization-data/5-market/
 // Locales: 200
 // ============================================================================
