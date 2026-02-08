@@ -226,7 +226,7 @@ pub struct PageCompositionData {
     /// Page prompt text.
     pub page_prompt: Option<String>,
     /// Page L10n for selected locale.
-    pub page_l10n: Option<PageL10nData>,
+    pub page_l10n: Option<PageGeneratedData>,
     /// Blocks in order.
     pub blocks: Vec<BlockData>,
     /// Entities used by blocks.
@@ -244,19 +244,19 @@ pub struct BlockData {
     pub block_type: Option<String>,
     pub prompt: Option<String>,
     pub rules: Option<String>,
-    pub l10n: Option<BlockL10nData>,
+    pub l10n: Option<BlockGeneratedData>,
 }
 
-/// Block L10n data.
+/// Block generated data (v10.9.0: renamed from BlockGeneratedData).
 #[derive(Debug, Clone)]
-pub struct BlockL10nData {
+pub struct BlockGeneratedData {
     pub locale: String,
     pub content_preview: String,
 }
 
-/// Page L10n data.
+/// Page generated data (v10.9.0: renamed from PageGeneratedData).
 #[derive(Debug, Clone)]
-pub struct PageL10nData {
+pub struct PageGeneratedData {
     pub locale: String,
     pub title: Option<String>,
     pub slug: Option<String>,
@@ -268,13 +268,13 @@ pub struct PageL10nData {
 pub struct EntityData {
     pub key: String,
     pub display_name: String,
-    pub l10n: Option<EntityL10nData>,
+    pub l10n: Option<EntityContentData>,
     pub connected_blocks: Vec<String>,
 }
 
-/// Entity L10n data.
+/// Entity content data (v10.9.0: renamed from EntityContentData).
 #[derive(Debug, Clone)]
-pub struct EntityL10nData {
+pub struct EntityContentData {
     pub locale: String,
     pub name: Option<String>,
     pub description_preview: Option<String>,

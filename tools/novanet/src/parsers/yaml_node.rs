@@ -476,12 +476,16 @@ node:
             );
         }
 
-        // v10.8: Verify trait distribution (2 realms: global + tenant)
-        // v10.8 added 6 invariant (Continent, GeoRegion, GeoSubRegion, IncomeGroup, LendingCategory, EconomicRegion)
-        // v10.9: GEOQuery (+1 knowledge), GEOAnswer + GEOMetrics (+2 derived)
+        // v10.9: Verify trait distribution (2 realms: global + tenant)
+        // v10.9 renames: EntityL10n→EntityContent, BlockL10n→BlockGenerated, PageL10n→PageGenerated
+        // v10.9 trait changes: BlockGenerated + PageGenerated are now "derived" instead of "localized"
         let count = |t: NodeTrait| nodes.iter().filter(|n| n.def.node_trait == t).count();
         assert_eq!(count(NodeTrait::Invariant), 23, "invariant count");
-        assert_eq!(count(NodeTrait::Localized), 4, "localized count");
+        assert_eq!(
+            count(NodeTrait::Localized),
+            2,
+            "localized count (ProjectL10n + EntityContent)"
+        ); // v10.9: was 4, now 2 (BlockGenerated + PageGenerated moved to derived)
         assert_eq!(
             count(NodeTrait::Knowledge),
             29,
@@ -489,9 +493,9 @@ node:
         );
         assert_eq!(
             count(NodeTrait::Derived),
-            6,
-            "derived count (4 base + 2 GEO)"
-        );
+            8,
+            "derived count (4 base + 2 GEO + 2 from localized: BlockGenerated, PageGenerated)"
+        ); // v10.9: was 6, now 8
         assert_eq!(count(NodeTrait::Job), 2, "job count");
 
         // v10.9: Verify realm distribution (2 realms)
