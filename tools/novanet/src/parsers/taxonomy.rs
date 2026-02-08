@@ -391,7 +391,7 @@ arc_families:
 
         let doc = load_taxonomy(root).expect("should load taxonomy.yaml");
 
-        assert_eq!(doc.version, "10.6.0");
+        assert_eq!(doc.version, "11.0.0");
         assert_eq!(doc.node_realms.len(), 2); // v10.6: 2 realms (global, tenant)
         assert_eq!(doc.node_traits.len(), 5);
         assert_eq!(doc.arc_families.len(), 5);

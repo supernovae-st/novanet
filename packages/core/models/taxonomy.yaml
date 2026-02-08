@@ -1,6 +1,6 @@
 # packages/core/models/taxonomy.yaml
 # Source of truth for NovaNet taxonomy structure
-# v10.6.0 — 2-Realm Architecture (GLOBAL / TENANT)
+# v11.0.0 — 2-Realm Architecture with SEO in Tenant
 #
 # This file defines:
 # - 2 NodeRealms (GLOBAL, TENANT) with nested NodeLayers
@@ -10,11 +10,11 @@
 # - 5 ArcCardinalities (zero_to_one / one_to_one / one_to_many / many_to_one / many_to_many)
 # - Terminal palette for TUI graceful degradation
 #
-# v10.6 Changes:
-# - Simplified from 3 realms to 2 realms: GLOBAL + TENANT
-# - TENANT = merged organization + project (same isolation boundary)
-# - Entity lives at Organization level, referenced by Page/Block via USES_ENTITY
-# - Organization → HAS_ENTITY → Entity (direct ownership)
+# v11.0 Changes:
+# - SEO moved from global to tenant (business-specific, not universal)
+# - GLOBAL: 2 layers (config, locale-knowledge)
+# - TENANT: 7 layers (config, semantic, seo, foundation, structure, instruction, output)
+# - All SEO arcs now intra_realm (ADR-012 compliance)
 # - Multi-tenant isolation at TENANT boundary (Tenant A cannot see Tenant B)
 #
 # Generated artifacts:
@@ -24,7 +24,7 @@
 # All meta-nodes receive double-label :Meta (e.g., :Meta:Realm)
 # Query all meta-nodes: MATCH (n:Meta) RETURN n
 
-version: "10.6.0"
+version: "11.0.0"
 
 # =============================================================================
 # NODE REALMS (2) — WHERE does the node live?

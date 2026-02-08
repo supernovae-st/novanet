@@ -453,8 +453,8 @@ mod tests {
         assert!(cypher.contains("as_intra_realm:Meta:ArcScope {key: 'intra_realm'}"));
         assert!(cypher.contains("ac_one_to_many:Meta:ArcCardinality {key: 'one_to_many'}"));
 
-        // Header mentions v10.6.0
-        assert!(cypher.contains("v10.6.0"));
+        // Header mentions v11.0.0
+        assert!(cypher.contains("v11.0.0"));
 
         // HAS_LAYER wiring — specific pairs (v10.6)
         assert!(cypher.contains("(r:Realm {key: 'global'}), (l:Layer {key: 'config'})"));
