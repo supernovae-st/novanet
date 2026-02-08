@@ -31,6 +31,9 @@ mod ui;
 pub mod unicode;
 mod yaml;
 
+#[cfg(test)]
+pub mod testing;
+
 use std::io::{self, Write};
 use std::panic;
 use std::time::Duration;
