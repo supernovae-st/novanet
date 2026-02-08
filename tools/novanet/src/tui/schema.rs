@@ -519,4 +519,129 @@ node:
         assert_eq!(stats.missing_required, 0);
         assert_eq!(stats.percent, 66); // 4/6 = 66%
     }
+
+    // =========================================================================
+    // PropertyStatus Tests
+    // =========================================================================
+
+    /// Helper to create a SchemaProperty for testing.
+    fn make_schema_property(name: &str, required: bool) -> SchemaProperty {
+        SchemaProperty {
+            name: name.to_string(),
+            prop_type: "string".to_string(),
+            required,
+            example: Some("example_value".to_string()),
+            description: Some("Test property".to_string()),
+            enum_values: None,
+        }
+    }
+
+    #[test]
+    fn test_property_status_filled() {
+        let schema = make_schema_property("test_prop", true);
+        let matched = MatchedProperty {
+            schema,
+            value: Some("actual_value".to_string()),
+            status: PropertyStatus::Filled,
+        };
+
+        assert_eq!(matched.status, PropertyStatus::Filled);
+        assert!(matched.value.is_some());
+        assert_eq!(matched.value.as_ref().unwrap(), "actual_value");
+        assert!(matched.schema.required);
+    }
+
+    #[test]
+    fn test_property_status_empty_optional() {
+        let schema = make_schema_property("optional_prop", false);
+        let matched = MatchedProperty {
+            schema,
+            value: None,
+            status: PropertyStatus::EmptyOptional,
+        };
+
+        assert_eq!(matched.status, PropertyStatus::EmptyOptional);
+        assert!(matched.value.is_none());
+        assert!(!matched.schema.required);
+    }
+
+    #[test]
+    fn test_property_status_missing_required() {
+        let schema = make_schema_property("required_prop", true);
+        let matched = MatchedProperty {
+            schema,
+            value: None,
+            status: PropertyStatus::MissingRequired,
+        };
+
+        assert_eq!(matched.status, PropertyStatus::MissingRequired);
+        assert!(matched.value.is_none());
+        assert!(matched.schema.required);
+    }
+
+    // =========================================================================
+    // CoverageStats Unit Tests (Task 4.2)
+    // =========================================================================
+
+    /// Helper to create a MatchedProperty with given status for CoverageStats tests.
+    fn make_matched_for_coverage(name: &str, status: PropertyStatus) -> MatchedProperty {
+        MatchedProperty {
+            schema: SchemaProperty {
+                name: name.to_string(),
+                prop_type: "string".to_string(),
+                required: status == PropertyStatus::MissingRequired,
+                example: None,
+                description: None,
+                enum_values: None,
+            },
+            value: if status == PropertyStatus::Filled {
+                Some("value".to_string())
+            } else {
+                None
+            },
+            status,
+        }
+    }
+
+    #[test]
+    fn test_coverage_stats_all_filled() {
+        let props = vec![
+            make_matched_for_coverage("prop1", PropertyStatus::Filled),
+            make_matched_for_coverage("prop2", PropertyStatus::Filled),
+        ];
+
+        let stats = CoverageStats::from_matched(&props);
+
+        assert_eq!(stats.total, 2);
+        assert_eq!(stats.filled, 2);
+        assert_eq!(stats.missing_required, 0);
+        assert_eq!(stats.percent, 100);
+    }
+
+    #[test]
+    fn test_coverage_stats_partial() {
+        let props = vec![
+            make_matched_for_coverage("prop1", PropertyStatus::Filled),
+            make_matched_for_coverage("prop2", PropertyStatus::MissingRequired),
+        ];
+
+        let stats = CoverageStats::from_matched(&props);
+
+        assert_eq!(stats.total, 2);
+        assert_eq!(stats.filled, 1);
+        assert_eq!(stats.missing_required, 1);
+        assert_eq!(stats.percent, 50);
+    }
+
+    #[test]
+    fn test_coverage_stats_empty_list() {
+        let props: Vec<MatchedProperty> = vec![];
+
+        let stats = CoverageStats::from_matched(&props);
+
+        assert_eq!(stats.total, 0);
+        assert_eq!(stats.filled, 0);
+        assert_eq!(stats.missing_required, 0);
+        assert_eq!(stats.percent, 100); // Convention: empty = 100%
+    }
 }
