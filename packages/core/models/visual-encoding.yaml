@@ -11,7 +11,7 @@
 # - apps/studio/src/design/visual-encoding.json (runtime config)
 # - tools/novanet/src/generated/visual_encoding.rs (TUI compile-time)
 
-version: "10.9.0"
+version: "11.0.0"
 
 # =============================================================================
 # CHANNEL MAPPING — Which visual channel encodes which facet
@@ -199,7 +199,7 @@ kind_icons:
   # Project / Foundation
   Project: folder
   BrandIdentity: palette
-  ProjectL10n: languages
+  ProjectContent: languages
 
   # Project / Structure
   Page: file-text

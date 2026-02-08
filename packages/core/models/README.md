@@ -18,7 +18,7 @@ models/
 │   │   ├── knowledge/       #    Entity, EntityContent, Knowledge Atoms
 │   │   └── seo/             #    SEOKeyword, SEOKeywordMetrics, SEOMiningRun
 │   └── project/             # 📦 PROJECT realm (23 nodes)
-│       ├── foundation/      #    Project, ProjectL10n, BrandIdentity
+│       ├── foundation/      #    Project, ProjectContent, BrandIdentity
 │       ├── structure/       #    Page, Block, ContentSlot
 │       ├── semantic/        #    AudiencePersona, ChannelSurface
 │       ├── instruction/     #    PagePrompt, BlockPrompt, BlockType, PageType, BlockRules, BlockInstruction, PromptArtifact
@@ -47,7 +47,7 @@ NovaNet uses a **2-realm architecture** (v10.2 merged SHARED into GLOBAL):
 | Behavior | Icon | Description | Nodes |
 |----------|------|-------------|-------|
 | **INVARIANT** | 🔵 | Defined once, language-independent | Project, Entity, Page, Block, Locale |
-| **LOCALIZED** | 🟢 | Per-locale, has `:FOR_LOCALE` | ProjectL10n, EntityContent, PageGenerated, BlockGenerated |
+| **LOCALIZED** | 🟢 | Per-locale, has `:FOR_LOCALE` | ProjectContent, EntityContent, PageGenerated, BlockGenerated |
 | **LOCALE_KNOWLEDGE** | 🟣 | Knowledge ABOUT a locale | LocaleIdentity, LocaleVoice, LocaleCulture, Expression |
 | **DERIVED** | ⚪ | Inherits locale from parent | SEOKeywordMetrics, GEOSeedMetrics |
 | **JOB** | ⚙️ | Background jobs, no locale | SEOMiningRun, GEOMiningRun |
@@ -57,7 +57,7 @@ NovaNet uses a **2-realm architecture** (v10.2 merged SHARED into GLOBAL):
 ```
 *Content suffix = Localized content for invariant nodes (EntityContent)
 *Generated      = LLM-generated output (PageGenerated, BlockGenerated)
-:HAS_CONTENT    = human-curated content (EntityContent, ProjectL10n)
+:HAS_CONTENT    = human-curated content (EntityContent, ProjectContent)
 :HAS_GENERATED  = LLM-generated content (PageGenerated, BlockGenerated)
 *Set            = Container nodes (TermSet, ExpressionSet, PatternSet, etc.)
 Atoms           = Granular knowledge (Term, Expression, Pattern, Taboo, CultureRef, AudienceTrait)

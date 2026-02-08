@@ -7,7 +7,7 @@ arc:
   scope: intra_realm
   source:
     - EntityContent  # v10.9.0: renamed from EntityContent
-    - ProjectL10n
+    - ProjectContent
   target:
     - Entity
     - Project

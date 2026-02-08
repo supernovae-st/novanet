@@ -46,11 +46,11 @@ flowchart TB
   end
 
   %% Additional reachable nodes
-  ProjectL10n["🟢 ProjectL10n"]
+  ProjectContent["🟢 ProjectContent"]
 
   %% Relationships (styled by arc family)
   Entity -.->|HAS_CONTENT| EntityContent
-  Entity -.->|HAS_CONTENT| ProjectL10n
+  Entity -.->|HAS_CONTENT| ProjectContent
   Entity -.->|SEMANTIC_LINK| Entity
 
   %% Arc colors by family
@@ -60,7 +60,7 @@ flowchart TB
   %% Class assignments
   class Entity invariant
   class EntityContent localized
-  class ProjectL10n localized
+  class ProjectContent localized
 ```
 
 ## Notes

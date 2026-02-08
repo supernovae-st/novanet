@@ -1,10 +1,19 @@
-# models/nodes/project/foundation/project-l10n.yaml
-# ProjectL10n - Localized identity and messaging for Project
+# models/node-kinds/tenant/foundation/project-content.yaml
+# ProjectContent - Localized identity and messaging for Project (v11.0.0)
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+# v11.0.0 CHANGES (Naming Convention Refactor)
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+#   RENAMED: ProjectL10n → ProjectContent
+#   - Clearer semantics: this is CONTENT, not just "localization"
+#   - Consistent with EntityContent pattern (v10.9)
+#   - Arc renamed: BELONGS_TO_PROJECT_L10N → BELONGS_TO_PROJECT_CONTENT
 #
 # GRAPH POSITION:
-#   Project ──[:HAS_CONTENT]──> ProjectL10n ──[:FOR_LOCALE]──> Locale
+#   Project ──[:HAS_CONTENT]──> ProjectContent ──[:FOR_LOCALE]──> Locale
 #                                │
-#                                └──[:L10N_OF]──> Project (inverse, v7.8.0)
+#                                └──[:CONTENT_OF]──> Project (inverse)
 #
 # NOTE: BrandL10n fields (CTAs, meta, SEO keywords) merged here in v7.2.2
 #
@@ -14,10 +23,10 @@
 #
 # IDENTIFICATION:
 #   No key property - identified by relation chain:
-#   (Project)--[:HAS_CONTENT]-->(ProjectL10n)--[:FOR_LOCALE]-->(Locale)
+#   (Project)--[:HAS_CONTENT]-->(ProjectContent)--[:FOR_LOCALE]-->(Locale)
 
 node:
-  name: ProjectL10n
+  name: ProjectContent
   realm: tenant
   layer: foundation
   trait: localized
@@ -25,7 +34,7 @@ node:
   description: "Localized identity and messaging for a Project"
 
   # ===========================================================================
-  # STANDARD PROPERTIES (L10n nodes - no key, relation-identified)
+  # STANDARD PROPERTIES (Content nodes - no key, relation-identified)
   # ===========================================================================
 
   standard_properties:
@@ -56,7 +65,7 @@ node:
       required: true
 
   # ===========================================================================
-  # PROJECTL10N-SPECIFIC PROPERTIES
+  # PROJECTCONTENT-SPECIFIC PROPERTIES
   # ===========================================================================
 
   properties:
@@ -223,7 +232,7 @@ node:
       cardinality: "1:N"
       description: "Parent project that owns this localization"
 
-    - relation: BELONGS_TO_PROJECT_L10N
+    - relation: BELONGS_TO_PROJECT_CONTENT
       from: PageGenerated
       cardinality: "1:N"
       description: "PageGenerated nodes generated for this project locale"

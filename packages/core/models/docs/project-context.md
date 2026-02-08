@@ -40,7 +40,7 @@ flowchart TB
   end
 
   subgraph LOCALIZATION_CONFIG["Localization Config"]
-    ProjectL10n["🟢 ProjectL10n"]
+    ProjectContent["🟢 ProjectContent"]
     Locale["🔵 Locale"]
   end
 
@@ -56,10 +56,10 @@ flowchart TB
   Project -->|DEFAULT_LOCALE| Locale
   Project -->|HAS_BRAND_IDENTITY| BrandIdentity
   Project -.->|HAS_CONTENT| EntityContent
-  Project -.->|HAS_CONTENT| ProjectL10n
+  Project -.->|HAS_CONTENT| ProjectContent
   Project -->|HAS_PAGE| Page
   Project -->|SUPPORTS_LOCALE| Locale
-  ProjectL10n -.->|FOR_LOCALE| Locale
+  ProjectContent -.->|FOR_LOCALE| Locale
 
   %% Arc colors by family
   linkStyle 0,3,4,7 stroke:#22c55e,stroke-width:2px
@@ -71,14 +71,14 @@ flowchart TB
   class Locale invariant
   class Page invariant
   class Project invariant
-  class ProjectL10n localized
+  class ProjectContent localized
 ```
 
 ## Notes
 
 - Each Project has a unique key used for routing and identification
 - BrandIdentity contains visual identity (colors, logos, typography)
-- ProjectL10n contains localized project metadata (tagline, description)
+- ProjectContent contains localized project metadata (tagline, description)
 
 ---
 

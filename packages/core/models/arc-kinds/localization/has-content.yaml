@@ -2,7 +2,7 @@
 # ArcKind: HAS_CONTENT — Invariant node has localized content (v10.9.0)
 #
 # v10.9.0: Renamed from HAS_L10N → HAS_CONTENT
-#          Target: EntityContent → EntityContent, ProjectL10n unchanged
+#          Target: EntityContent → EntityContent, ProjectContent unchanged
 
 arc:
   name: HAS_CONTENT
@@ -14,7 +14,7 @@ arc:
     - Project
   target:
     - EntityContent  # v10.9.0: renamed from EntityContent
-    - ProjectL10n
+    - ProjectContent
 
   cardinality: one_to_many
 

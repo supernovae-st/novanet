@@ -59,7 +59,7 @@ flowchart TB
   Locale["🔵 Locale"]
   OutputArtifact["⚪ OutputArtifact"]
   PageGenerated["⚪ PageGenerated"]
-  ProjectL10n["🟢 ProjectL10n"]
+  ProjectContent["🟢 ProjectContent"]
 
   %% Relationships (styled by arc family)
   BlockGenerated -.->|FOR_LOCALE| Locale
@@ -67,7 +67,7 @@ flowchart TB
   GenerationJob -.->|FOR_LOCALE| Locale
   OutputArtifact -.->|FOR_LOCALE| Locale
   PageGenerated -.->|FOR_LOCALE| Locale
-  ProjectL10n -.->|FOR_LOCALE| Locale
+  ProjectContent -.->|FOR_LOCALE| Locale
 
   %% Arc colors by family
   linkStyle 0,1,2,3,4,5 stroke:#22c55e,stroke-width:2px
@@ -79,7 +79,7 @@ flowchart TB
   class Locale invariant
   class OutputArtifact derived
   class PageGenerated derived
-  class ProjectL10n localized
+  class ProjectContent localized
 ```
 
 ## Notes
