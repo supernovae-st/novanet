@@ -4,7 +4,7 @@
 arc:
   name: INCLUDES_ENTITY
   family: generation
-  scope: cross_realm
+  scope: intra_realm
   source: PromptArtifact
   target: Entity
   cardinality: one_to_many

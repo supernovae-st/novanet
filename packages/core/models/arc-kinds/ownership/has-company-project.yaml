@@ -4,7 +4,7 @@
 arc:
   name: HAS_COMPANY_PROJECT
   family: ownership
-  scope: cross_realm
+  scope: intra_realm
   source: Organization
   target: Project
   cardinality: one_to_one

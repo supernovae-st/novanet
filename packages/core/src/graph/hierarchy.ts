@@ -16,12 +16,12 @@ import { getNodeTypesByRealmAndLayer } from './layers.js';
  * This is the single source of truth for the ontology structure.
  *
  * 2 Realms (9 layers):
- * - Global: Shared across ALL tenants. (3 layers)
- * - Tenant: Multi-tenant isolated realm. (6 layers)
+ * - Global: Shared across ALL tenants. (2 layers)
+ * - Tenant: Multi-tenant isolated realm. (7 layers)
  */
 export const REALM_HIERARCHY: Record<Realm, RealmDefinition> = {
   // ═══════════════════════════════════════════════════════════════════════════
-  // GLOBAL (3 layers)
+  // GLOBAL (2 layers)
   // ═══════════════════════════════════════════════════════════════════════════
   global: {
     realm: 'global',
@@ -41,16 +41,10 @@ export const REALM_HIERARCHY: Record<Realm, RealmDefinition> = {
         icon: '📚',
         nodeTypes: getNodeTypesByRealmAndLayer('global', 'locale-knowledge'),
       },
-      'seo': {
-        label: 'SEO Intelligence',
-        description: 'Search engine optimization data.',
-        icon: '🔍',
-        nodeTypes: getNodeTypesByRealmAndLayer('global', 'seo'),
-      },
     } as Record<Layer, LayerMeta>,
   },
   // ═══════════════════════════════════════════════════════════════════════════
-  // TENANT (6 layers)
+  // TENANT (7 layers)
   // ═══════════════════════════════════════════════════════════════════════════
   tenant: {
     realm: 'tenant',
@@ -69,6 +63,12 @@ export const REALM_HIERARCHY: Record<Realm, RealmDefinition> = {
         description: 'Invariant entities (Entity) and their localizations (EntityContent).',
         icon: '💡',
         nodeTypes: getNodeTypesByRealmAndLayer('tenant', 'semantic'),
+      },
+      'seo': {
+        label: 'SEO Intelligence',
+        description: 'Search engine optimization data per tenant.',
+        icon: '🔍',
+        nodeTypes: getNodeTypesByRealmAndLayer('tenant', 'seo'),
       },
       'foundation': {
         label: 'Foundation',

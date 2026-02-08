@@ -8,13 +8,13 @@
 #        - Added: EXPRESSES relation to Entity
 #
 # v10.2: Merged SHARED → GLOBAL realm
-#        - realm: global (was shared)
+#        - realm: tenant (was shared)
 #        - trait: knowledge (was localized)
 #        - Owned by Locale via HAS_SEO_KEYWORDS
 
 node:
   name: SEOKeyword
-  realm: global
+  realm: tenant
   layer: seo
   trait: knowledge
   icon: "🔍"

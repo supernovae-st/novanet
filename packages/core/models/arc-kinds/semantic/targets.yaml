@@ -9,7 +9,7 @@
 arc:
   name: TARGETS
   family: semantic
-  scope: cross_realm
+  scope: intra_realm
   temperature_threshold: 0.6
 
   source: EntityContent

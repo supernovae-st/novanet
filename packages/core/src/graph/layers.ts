@@ -16,12 +16,12 @@ import { KIND_META } from '../types/nodes.js';
  * AUTO-GENERATED from models/node-kinds/ folder structure.
  *
  * Layers by realm:
- * - Global: config, locale-knowledge, seo
- * - Tenant: config, foundation, instruction, output, semantic, structure
+ * - Global: config, locale-knowledge
+ * - Tenant: config, foundation, instruction, output, semantic, seo, structure
  */
 export const NODE_LAYERS: Record<NodeType, Layer> = {
   // ═══════════════════════════════════════════════════════════════════════════
-  // GLOBAL REALM (40 nodes)
+  // GLOBAL REALM (31 nodes)
   // ═══════════════════════════════════════════════════════════════════════════
 
   // config (13 nodes) - matches models/node-kinds/global/config/
@@ -59,19 +59,8 @@ export const NODE_LAYERS: Record<NodeType, Layer> = {
   Term: 'locale-knowledge',
   TermSet: 'locale-knowledge',
 
-  // seo (9 nodes) - matches models/node-kinds/global/seo/
-  GEOAnswer: 'seo',
-  GEOMetrics: 'seo',
-  GEOQuery: 'seo',
-  SEOComparison: 'seo',
-  SEOKeyword: 'seo',
-  SEOKeywordMetrics: 'seo',
-  SEOMiningRun: 'seo',
-  SEOPreposition: 'seo',
-  SEOQuestion: 'seo',
-
   // ═══════════════════════════════════════════════════════════════════════════
-  // TENANT REALM (24 nodes)
+  // TENANT REALM (33 nodes)
   // ═══════════════════════════════════════════════════════════════════════════
 
   // config (2 nodes) - matches models/node-kinds/tenant/config/
@@ -104,6 +93,17 @@ export const NODE_LAYERS: Record<NodeType, Layer> = {
   ChannelSurface: 'semantic',
   Entity: 'semantic',
   EntityContent: 'semantic',
+
+  // seo (9 nodes) - matches models/node-kinds/tenant/seo/
+  GEOAnswer: 'seo',
+  GEOMetrics: 'seo',
+  GEOQuery: 'seo',
+  SEOComparison: 'seo',
+  SEOKeyword: 'seo',
+  SEOKeywordMetrics: 'seo',
+  SEOMiningRun: 'seo',
+  SEOPreposition: 'seo',
+  SEOQuestion: 'seo',
 
   // structure (3 nodes) - matches models/node-kinds/tenant/structure/
   Block: 'structure',

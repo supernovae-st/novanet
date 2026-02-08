@@ -1,19 +1,19 @@
-# models/node-kinds/global/seo/geo-metrics.yaml
-# GEOMetrics - Time-series visibility metrics (immutable snapshot)
+# models/node-kinds/global/seo/seo-question.yaml
+# SEOQuestion - Question-form keyword from Answer The Public
 #
-# v10.7: GEO Schema v1
-#        - Historical visibility data for trend analysis
-#        - Immutable snapshot: once created, never updated
-#        - Tracks visibility changes and citation trends
-#        - Owned by GEOQuery via HAS_GEO_METRICS (mining arc)
+# v10.6: SEO Schema v2 - New NodeKind
+#        - Captures question keywords with their own volume/difficulty
+#        - Derived from Answer The Public "questions" category
+#        - Links to parent SEOKeyword via HAS_QUESTIONS
+#        - Can be answered by EntityContent via ANSWERS arc
 
 node:
-  name: GEOMetrics
-  realm: global
+  name: SEOQuestion
+  realm: tenant
   layer: seo
-  trait: derived
-  icon: "📊"
-  description: "Time-series visibility metrics for GEO trend analysis (immutable snapshot)"
+  trait: knowledge
+  icon: "❓"
+  description: "Question-form keyword derived from Answer The Public"
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # STANDARD PROPERTIES (v7.1.0)
@@ -24,13 +24,13 @@ node:
       type: string
       required: true
       description: "Unique identifier"
-      example: "geo-metrics-20260208-abc123"
+      example: "seoq-comment-creer-qr-code-fr"
 
     display_name:
       type: string
       required: true
       description: "Human-readable name"
-      example: "GEO Metrics 2026-02-08"
+      example: "comment créer un qr code"
 
     description:
       type: string
@@ -40,7 +40,7 @@ node:
     llm_context:
       type: string
       required: false
-      description: "Format: USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]."
+      description: "Context for LLM generation: what answer format is expected"
 
     created_at:
       type: datetime
@@ -55,60 +55,78 @@ node:
   # ═══════════════════════════════════════════════════════════════════════════════
 
   properties:
-    # --- Timestamp ---
-    observed_at:
-      type: datetime
+    # --- Core keyword data ---
+    value:
+      type: string
       required: true
-      description: "Timestamp when these metrics were captured"
-      example: "2026-02-08T00:00:00Z"
+      description: "The question keyword string"
+      example: "comment créer un qr code"
 
-    # --- Visibility score ---
-    ai_visibility_score:
-      type: float
-      required: true
-      description: "Weighted average visibility across all AI engines (0-100)"
-      example: 72.5
+    volume:
+      type: int
+      required: false
+      description: "Monthly search volume"
+      example: 8000
 
-    # --- Change metrics ---
-    visibility_change_7d:
+    difficulty:
+      type: int
+      required: false
+      description: "SEO difficulty score (0-100)"
+      example: 28
+
+    cpc:
       type: float
       required: false
-      description: "Visibility change over last 7 days (percentage points)"
-      example: 5.2
+      description: "Cost per click (USD)"
+      example: 0.45
 
-    visibility_change_30d:
-      type: float
-      required: false
-      description: "Visibility change over last 30 days (percentage points)"
-      example: 12.8
+    # --- Question-specific properties ---
+    question_word:
+      type: string
+      required: true
+      description: "Question word: what | how | why | when | where | who | can | is | does | are | will | should"
+      example: "how"
 
-    # --- Trend analysis ---
-    citation_trend:
+    answer_type:
       type: string
       required: false
-      description: "Citation trend direction: rising | stable | declining"
-      example: "rising"
+      description: "Expected answer format: explanation | list | yes_no | steps | comparison | definition"
+      example: "steps"
+
+    featured_snippet:
+      type: bool
+      required: false
+      description: "Has Featured Snippet opportunity in SERP"
+      example: true
+
+    paa_position:
+      type: int
+      required: false
+      description: "Position in People Also Ask box (1-indexed, null if not present)"
+      example: 2
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # RELATIONS
   # ═══════════════════════════════════════════════════════════════════════════════
 
   relations:
-    # Incoming: GEOQuery --[:HAS_GEO_METRICS]--> GEOMetrics (mining)
-    # This is a leaf node - no outgoing relations
+    # Incoming: SEOKeyword --[:HAS_QUESTIONS]--> SEOQuestion (ownership)
+    # Incoming: EntityContent --[:ANSWERS]--> SEOQuestion (coverage tracking)
+    []
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # EXAMPLE
   # ═══════════════════════════════════════════════════════════════════════════════
 
   example:
-    description: "Get visibility trend for a query over 30 days"
+    description: "Get unanswered questions for a keyword (content gap analysis)"
     cypher: |
-      // v10.7: GEOMetrics time-series for trend analysis
-      MATCH (q:GEOQuery {key: $query_key})-[:HAS_GEO_METRICS]->(m:GEOMetrics)
-      WHERE m.observed_at >= datetime() - duration('P30D')
-      RETURN m.observed_at,
-             m.ai_visibility_score,
-             m.visibility_change_7d,
-             m.citation_trend
-      ORDER BY m.observed_at ASC
+      // Find questions that no EntityContent has answered yet
+      MATCH (kw:SEOKeyword {key: $keyword_key})-[:HAS_QUESTIONS]->(q:SEOQuestion)
+      WHERE NOT EXISTS { MATCH (ec:EntityContent)-[:ANSWERS]->(q) }
+      RETURN q.value AS question,
+             q.volume,
+             q.question_word,
+             q.featured_snippet
+      ORDER BY q.volume DESC
+      LIMIT 10

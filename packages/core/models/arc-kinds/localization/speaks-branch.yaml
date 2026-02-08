@@ -5,7 +5,7 @@
 arc:
   name: SPEAKS_BRANCH
   family: localization
-  scope: cross_realm
+  scope: intra_realm
 
   source: Locale
   target: LanguageBranch

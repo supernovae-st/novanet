@@ -4,7 +4,7 @@
 arc:
   name: EXPRESSES
   family: semantic
-  scope: cross_realm
+  scope: intra_realm
   temperature_threshold: 0.5  # v10.3: Keyword→entity mapping (moderate priority)
 
   source: SEOKeyword

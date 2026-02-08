@@ -5,7 +5,7 @@
 arc:
   name: IN_ECONOMIC_REGION
   family: localization
-  scope: cross_realm
+  scope: intra_realm
 
   source: Locale
   target: EconomicRegion
