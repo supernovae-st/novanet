@@ -741,6 +741,7 @@ pub mod ui {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use proptest::prelude::*;
 
     #[test]
     fn test_hex_to_rgb() {
@@ -748,6 +749,172 @@ mod tests {
         assert_eq!(hex_to_rgb("6c71c4"), Some((108, 113, 196)));
         assert_eq!(hex_to_rgb("#fff"), None); // Too short
         assert_eq!(hex_to_rgb("invalid"), None);
+    }
+
+    // =========================================================================
+    // Task 5.2: Property-based tests for hex_to_rgb
+    // =========================================================================
+
+    proptest! {
+        /// Property: Any valid 6-digit hex color with # prefix should round-trip correctly.
+        /// Given r, g, b values in 0..=255, formatting as "#rrggbb" and parsing
+        /// should return the original (r, g, b) tuple.
+        #[test]
+        fn test_hex_to_rgb_valid_format(r in 0u8..=255, g in 0u8..=255, b in 0u8..=255) {
+            let hex = format!("#{:02x}{:02x}{:02x}", r, g, b);
+            let result = hex_to_rgb(&hex);
+            prop_assert!(result.is_some(), "valid hex '{}' should parse successfully", hex);
+            let (rr, gg, bb) = result.unwrap();
+            prop_assert_eq!(rr, r, "red component mismatch for '{}'", hex);
+            prop_assert_eq!(gg, g, "green component mismatch for '{}'", hex);
+            prop_assert_eq!(bb, b, "blue component mismatch for '{}'", hex);
+        }
+
+        /// Property: Uppercase hex should also parse correctly.
+        #[test]
+        fn test_hex_to_rgb_uppercase(r in 0u8..=255, g in 0u8..=255, b in 0u8..=255) {
+            let hex = format!("#{:02X}{:02X}{:02X}", r, g, b);
+            let result = hex_to_rgb(&hex);
+            prop_assert!(result.is_some(), "uppercase hex '{}' should parse successfully", hex);
+            let (rr, gg, bb) = result.unwrap();
+            prop_assert_eq!(rr, r, "red component mismatch for '{}'", hex);
+            prop_assert_eq!(gg, g, "green component mismatch for '{}'", hex);
+            prop_assert_eq!(bb, b, "blue component mismatch for '{}'", hex);
+        }
+
+        /// Property: Valid hex without # prefix should also parse correctly.
+        #[test]
+        fn test_hex_to_rgb_no_prefix(r in 0u8..=255, g in 0u8..=255, b in 0u8..=255) {
+            let hex = format!("{:02x}{:02x}{:02x}", r, g, b);
+            let result = hex_to_rgb(&hex);
+            prop_assert!(result.is_some(), "hex without prefix '{}' should parse successfully", hex);
+            let (rr, gg, bb) = result.unwrap();
+            prop_assert_eq!(rr, r, "red component mismatch for '{}'", hex);
+            prop_assert_eq!(gg, g, "green component mismatch for '{}'", hex);
+            prop_assert_eq!(bb, b, "blue component mismatch for '{}'", hex);
+        }
+    }
+
+    // =========================================================================
+    // Task 5.2: Edge case unit tests for hex_to_rgb
+    // =========================================================================
+
+    /// Test that hex strings with invalid length return None.
+    #[test]
+    fn test_hex_to_rgb_invalid_length() {
+        // Too short (CSS shorthand not supported)
+        assert_eq!(hex_to_rgb("#fff"), None, "3-char hex should be rejected");
+        assert_eq!(hex_to_rgb("fff"), None, "3-char hex without # should be rejected");
+        assert_eq!(hex_to_rgb("#12"), None, "2-char hex should be rejected");
+        assert_eq!(hex_to_rgb("#1"), None, "1-char hex should be rejected");
+
+        // Too long
+        assert_eq!(
+            hex_to_rgb("#fffffff"),
+            None,
+            "7-char hex should be rejected"
+        );
+        assert_eq!(
+            hex_to_rgb("#ffffffff"),
+            None,
+            "8-char hex (with alpha) should be rejected"
+        );
+        assert_eq!(
+            hex_to_rgb("#ffffffffff"),
+            None,
+            "10-char hex should be rejected"
+        );
+
+        // Empty
+        assert_eq!(hex_to_rgb(""), None, "empty string should be rejected");
+        assert_eq!(hex_to_rgb("#"), None, "only # should be rejected");
+    }
+
+    /// Test that hex strings with invalid characters return None.
+    #[test]
+    fn test_hex_to_rgb_invalid_chars() {
+        // Invalid hex characters
+        assert_eq!(
+            hex_to_rgb("#gggggg"),
+            None,
+            "'g' is not a valid hex character"
+        );
+        assert_eq!(
+            hex_to_rgb("#zzzzzz"),
+            None,
+            "'z' is not a valid hex character"
+        );
+        assert_eq!(
+            hex_to_rgb("#ghijkl"),
+            None,
+            "letters after 'f' are not valid hex"
+        );
+
+        // Mixed valid/invalid
+        assert_eq!(
+            hex_to_rgb("#ff00gg"),
+            None,
+            "partially invalid hex should be rejected"
+        );
+        assert_eq!(
+            hex_to_rgb("#0g0000"),
+            None,
+            "single invalid char should cause rejection"
+        );
+
+        // Special characters
+        assert_eq!(hex_to_rgb("#ff-fff"), None, "dash is not valid in hex");
+        assert_eq!(hex_to_rgb("#ff fff"), None, "space is not valid in hex");
+        assert_eq!(hex_to_rgb("#ff.fff"), None, "dot is not valid in hex");
+
+        // Non-ASCII
+        assert_eq!(
+            hex_to_rgb("#ffffff\u{00e9}"),
+            None,
+            "non-ASCII should be rejected (length check)"
+        );
+    }
+
+    /// Test boundary values for hex_to_rgb.
+    #[test]
+    fn test_hex_to_rgb_boundary_values() {
+        // Minimum values (all zeros)
+        assert_eq!(
+            hex_to_rgb("#000000"),
+            Some((0, 0, 0)),
+            "black should parse correctly"
+        );
+
+        // Maximum values (all 255)
+        assert_eq!(
+            hex_to_rgb("#ffffff"),
+            Some((255, 255, 255)),
+            "white should parse correctly"
+        );
+
+        // Single channel max
+        assert_eq!(
+            hex_to_rgb("#ff0000"),
+            Some((255, 0, 0)),
+            "pure red should parse correctly"
+        );
+        assert_eq!(
+            hex_to_rgb("#00ff00"),
+            Some((0, 255, 0)),
+            "pure green should parse correctly"
+        );
+        assert_eq!(
+            hex_to_rgb("#0000ff"),
+            Some((0, 0, 255)),
+            "pure blue should parse correctly"
+        );
+
+        // Mid values
+        assert_eq!(
+            hex_to_rgb("#808080"),
+            Some((128, 128, 128)),
+            "gray should parse correctly"
+        );
     }
 
     #[test]
