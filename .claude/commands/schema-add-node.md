@@ -32,15 +32,17 @@ Add a new node type to the NovaNet ontology using Socratic discovery.
 
 ## Naming Requirements
 
-- **Node names**: PascalCase (e.g., `LocaleHumor`, `EntityL10n`)
-- **YAML filename**: kebab-case (e.g., `locale-humor.yaml`, `entity-l10n.yaml`)
+- **Node names**: PascalCase (e.g., `LocaleHumor`, `EntityContent`)
+- **YAML filename**: kebab-case (e.g., `locale-humor.yaml`, `entity-content.yaml`)
 - **Property names**: snake_case (e.g., `display_name`, `llm_context`)
 
-## Nomenclature Rules
+## Nomenclature Rules (v10.9.0)
 
 | Pattern | Use For | Examples |
 |---------|---------|----------|
-| `*L10n` | Localized content | EntityL10n, PageL10n, BlockL10n, ProjectL10n |
+| `*Content` | Human-curated localized content | EntityContent |
+| `*Generated` | LLM-generated output content | PageGenerated, BlockGenerated |
+| `*L10n` | Other localized content | ProjectL10n |
 | `Locale*` | Locale knowledge | LocaleVoice, LocaleCulture, LocaleLexicon |
 | `*Metrics` | Time-series data | SEOKeywordMetrics |
 | `*MiningRun` | Batch operations | SEOMiningRun |
