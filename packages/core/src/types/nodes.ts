@@ -142,9 +142,9 @@ export const KIND_META: Record<NodeType, KindMeta> = {
   BlockInstruction:{ realm: 'tenant', layer: 'instruction', trait: 'invariant' },
   PromptArtifact:  { realm: 'tenant', layer: 'instruction', trait: 'derived' },
 
-  // TENANT REALM — output (5)
-  PageGenerated:         { realm: 'tenant', layer: 'output', trait: 'localized' },
-  BlockGenerated:        { realm: 'tenant', layer: 'output', trait: 'localized' },
+  // TENANT REALM — output (5) — v10.9.0: derived trait for LLM-generated outputs
+  PageGenerated:         { realm: 'tenant', layer: 'output', trait: 'derived' },
+  BlockGenerated:        { realm: 'tenant', layer: 'output', trait: 'derived' },
   GenerationJob:    { realm: 'tenant', layer: 'output', trait: 'job' },
   OutputArtifact:   { realm: 'tenant', layer: 'output', trait: 'derived' },
   EvaluationSignal: { realm: 'tenant', layer: 'output', trait: 'derived' },
