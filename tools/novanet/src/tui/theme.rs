@@ -864,4 +864,106 @@ mod tests {
         assert_eq!(icons.state("loading"), "◐");
         assert_eq!(icons.nav("expanded"), "▼");
     }
+
+    // =========================================================================
+    // Task 2.1: Realm color resolution tests
+    // =========================================================================
+
+    #[test]
+    fn test_realm_color_global_truecolor() {
+        let color = realm::color("global", ColorMode::TrueColor);
+        assert!(
+            matches!(color, Color::Rgb(..)),
+            "global realm should return RGB color in TrueColor mode"
+        );
+    }
+
+    #[test]
+    fn test_realm_color_tenant_truecolor() {
+        let color = realm::color("tenant", ColorMode::TrueColor);
+        assert!(
+            matches!(color, Color::Rgb(..)),
+            "tenant realm should return RGB color in TrueColor mode"
+        );
+    }
+
+    #[test]
+    fn test_realm_color_unknown_returns_white() {
+        let color = realm::color("unknown_realm", ColorMode::TrueColor);
+        assert_eq!(
+            color,
+            Color::White,
+            "unknown realm should return White as fallback"
+        );
+    }
+
+    // =========================================================================
+    // Task 2.4: Arc family color resolution tests
+    // =========================================================================
+
+    #[test]
+    fn test_arc_family_color_all_families() {
+        // Test all 5 arc families return RGB colors in TrueColor mode
+        let mode = ColorMode::TrueColor;
+
+        // ownership: #3b82f6 -> RGB(59, 130, 246)
+        let ownership = arc_family::color("ownership", mode);
+        assert!(
+            matches!(ownership, Color::Rgb(..)),
+            "ownership should return RGB color"
+        );
+        assert_eq!(ownership, Color::Rgb(59, 130, 246));
+
+        // localization: #22c55e -> RGB(34, 197, 94)
+        let localization = arc_family::color("localization", mode);
+        assert!(
+            matches!(localization, Color::Rgb(..)),
+            "localization should return RGB color"
+        );
+        assert_eq!(localization, Color::Rgb(34, 197, 94));
+
+        // semantic: #f97316 -> RGB(249, 115, 22)
+        let semantic = arc_family::color("semantic", mode);
+        assert!(
+            matches!(semantic, Color::Rgb(..)),
+            "semantic should return RGB color"
+        );
+        assert_eq!(semantic, Color::Rgb(249, 115, 22));
+
+        // generation: #8b5cf6 -> RGB(139, 92, 246)
+        let generation = arc_family::color("generation", mode);
+        assert!(
+            matches!(generation, Color::Rgb(..)),
+            "generation should return RGB color"
+        );
+        assert_eq!(generation, Color::Rgb(139, 92, 246));
+
+        // mining: #ec4899 -> RGB(236, 72, 153)
+        let mining = arc_family::color("mining", mode);
+        assert!(
+            matches!(mining, Color::Rgb(..)),
+            "mining should return RGB color"
+        );
+        assert_eq!(mining, Color::Rgb(236, 72, 153));
+    }
+
+    #[test]
+    fn test_arc_family_color_unknown() {
+        // Unknown arc family should return White fallback in all color modes
+        assert_eq!(
+            arc_family::color("unknown", ColorMode::TrueColor),
+            Color::White,
+            "unknown family should return White in TrueColor"
+        );
+        assert_eq!(
+            arc_family::color("invalid", ColorMode::Color256),
+            Color::White,
+            "invalid family should return White in Color256"
+        );
+        assert_eq!(
+            arc_family::color("nonexistent", ColorMode::Color16),
+            Color::White,
+            "nonexistent family should return White in Color16"
+        );
+    }
 }
