@@ -1,6 +1,6 @@
 // NovaNet Core - Type Tests v10.3.0
 // TDD: Verify type exports and structure
-// v10.3.0: Entity-Centric Architecture (Concept → Entity, ConceptL10n → EntityL10n)
+// v10.3.0: Entity-Centric Architecture (Concept → Entity, ConceptL10n → EntityContent)
 // v8.2.0: Removed icon, priority, freshness from all interfaces (YAML v7.11.0 alignment)
 
 import { describe, it, expect } from 'vitest';
@@ -10,9 +10,9 @@ import type {
 
   // Core entities (v10.3: Entity replaces Concept)
   Entity,
-  EntityL10n,
-  PageL10n,
-  BlockL10n,
+  EntityContent,
+  PageGenerated,
+  BlockGenerated,
 
   // Locale
   Locale,
@@ -68,9 +68,9 @@ describe('Type Exports', () => {
       expect(entity.is_core).toBe(true);
     });
 
-    it('EntityL10n should have required localization fields (v10.3)', () => {
-      // v10.3: EntityL10n replaces ConceptL10n (global realm, knowledge layer)
-      const l10n: EntityL10n = {
+    it('EntityContent should have required localization fields (v10.3)', () => {
+      // v10.3: EntityContent replaces ConceptL10n (global realm, knowledge layer)
+      const l10n: EntityContent = {
         display_name: 'QR Code',
         description: 'Localized entity',
         llm_context: 'USE: French QR code content. TRIGGERS: fr-FR. NOT: translation.',
@@ -87,9 +87,9 @@ describe('Type Exports', () => {
       expect(l10n.definition).toBe('Un code-barres 2D');
     });
 
-    it('PageL10n should have version (v8.2.0 - no icon/priority/freshness)', () => {
+    it('PageGenerated should have version (v8.2.0 - no icon/priority/freshness)', () => {
       // v8.2.0: Removed icon, priority, freshness (YAML v7.11.0 alignment)
-      const output: PageL10n = {
+      const output: PageGenerated = {
         display_name: 'Pricing Output',
         description: 'Generated pricing page',
         llm_context: 'USE: assembled page content. TRIGGERS: render. NOT: regeneration.',
@@ -106,9 +106,9 @@ describe('Type Exports', () => {
       expect(output.assembler_version).toBe('1.0.0');
     });
 
-    it('BlockL10n should have version (v8.2.0 - no icon/priority/freshness)', () => {
+    it('BlockGenerated should have version (v8.2.0 - no icon/priority/freshness)', () => {
       // v8.2.0: Removed icon, priority, freshness (YAML v7.11.0 alignment)
-      const output: BlockL10n = {
+      const output: BlockGenerated = {
         display_name: 'Hero Output',
         description: 'Generated hero block',
         llm_context: 'USE: hero section content. TRIGGERS: render hero. NOT: regeneration.',

@@ -139,19 +139,19 @@ describe('NovaNetFilter', () => {
       expect(rulesRule?.filters?.active).toBe(true);
     });
 
-    it('includeOutputs() adds HAS_OUTPUT include rule', () => {
+    it('includeOutputs() adds HAS_GENERATED include rule', () => {
       const filter = NovaNetFilter.create().fromPage('page-pricing').includeOutputs();
       const criteria = filter.getCriteria();
       expect(criteria.includes).toContainEqual(
-        expect.objectContaining({ relation: 'HAS_OUTPUT', direction: 'outgoing' })
+        expect.objectContaining({ relation: 'HAS_GENERATED', direction: 'outgoing' })
       );
     });
 
-    it('includeL10n() adds HAS_L10N include rule (v10.3: from Entity)', () => {
+    it('includeL10n() adds HAS_CONTENT include rule (v10.3: from Entity)', () => {
       const filter = NovaNetFilter.create().fromEntity('tier-pro').includeL10n();
       const criteria = filter.getCriteria();
       expect(criteria.includes).toContainEqual(
-        expect.objectContaining({ relation: 'HAS_L10N', direction: 'outgoing' })
+        expect.objectContaining({ relation: 'HAS_CONTENT', direction: 'outgoing' })
       );
     });
 

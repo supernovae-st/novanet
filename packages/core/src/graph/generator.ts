@@ -84,7 +84,7 @@ const NODE_LABELS: Record<NodeType, string> = {
 
   // semantic (4)
   Entity: 'Entity',
-  EntityL10n: 'Entity L10n',
+  EntityContent: 'Entity L10n',
   AudiencePersona: 'Audience Persona',
   ChannelSurface: 'Channel Surface',
 
@@ -98,8 +98,8 @@ const NODE_LABELS: Record<NodeType, string> = {
   PromptArtifact: 'Prompt Artifact',
 
   // output (5)
-  PageL10n: 'Page L10n',
-  BlockL10n: 'Block L10n',
+  PageGenerated: 'Page L10n',
+  BlockGenerated: 'Block L10n',
   GenerationJob: 'Generation Job',
   OutputArtifact: 'Output Artifact',
   EvaluationSignal: 'Evaluation Signal',
