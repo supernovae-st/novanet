@@ -2462,9 +2462,106 @@ mod tests {
         assert_eq!(tree.item_count(), 10);
     }
 
+    #[test]
+    fn test_item_count_collapsed() {
+        let mut tree = create_test_tree();
+
+        // Collapse everything
+        tree.collapse_all();
+
+        // When all collapsed: 1 (Kinds header) + 1 (Arcs header) = 2
+        assert_eq!(tree.item_count(), 2);
+    }
+
+    #[test]
+    fn test_toggle_expands_realm() {
+        let mut tree = create_test_tree();
+
+        // Start with everything collapsed
+        tree.collapse_all();
+        let collapsed_count = tree.item_count();
+        assert_eq!(collapsed_count, 2); // Just Kinds + Arcs headers
+
+        // Expand Kinds section
+        tree.toggle("kinds");
+
+        // Now we see: Kinds + global + tenant + Arcs = 4
+        // (realms are still collapsed, so we don't see layers/kinds)
+        assert_eq!(tree.item_count(), 4);
+
+        // Expand global realm
+        tree.toggle("realm:global");
+
+        // Now we see: Kinds + global + locale-knowledge + tenant + Arcs = 5
+        // Note: collapse_all() also collapsed the layer, so we don't see Locale yet
+        assert_eq!(tree.item_count(), 5);
+    }
+
+    #[test]
+    fn test_toggle_twice_collapses() {
+        let mut tree = create_test_tree();
+
+        // Get initial count (everything expanded)
+        let initial_count = tree.item_count();
+        assert_eq!(initial_count, 10);
+
+        // Toggle global realm to collapse it
+        tree.toggle("realm:global");
+
+        // Now: Kinds + global (collapsed) + tenant + structure + Page + semantic + Entity + Arcs
+        // = 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 = 8
+        let after_collapse = tree.item_count();
+        assert_eq!(after_collapse, 8);
+
+        // Toggle again to expand
+        tree.toggle("realm:global");
+
+        // Should return to original count
+        assert_eq!(tree.item_count(), initial_count);
+    }
+
     // NOTE: Data View tests (item_count_for_mode, item_at_for_mode, set_instances)
     // were removed as these methods were never implemented.
     // Data View feature is planned for v10.7+
+
+    // ========================================================================
+    // Tree structure navigation tests
+    // ========================================================================
+
+    #[test]
+    fn test_mock_tree_has_two_realms() {
+        let tree = create_test_tree();
+        assert_eq!(tree.realms.len(), 2, "Tree should have exactly 2 realms");
+    }
+
+    #[test]
+    fn test_mock_tree_global_realm() {
+        let tree = create_test_tree();
+        let global = tree.realms.iter().find(|r| r.key == "global");
+        assert!(global.is_some(), "Tree should have a global realm");
+    }
+
+    #[test]
+    fn test_mock_tree_tenant_realm() {
+        let tree = create_test_tree();
+        let tenant = tree.realms.iter().find(|r| r.key == "tenant");
+        assert!(tenant.is_some(), "Tree should have a tenant realm");
+    }
+
+    #[test]
+    fn test_mock_tree_global_has_locale_knowledge_layer() {
+        let tree = create_test_tree();
+        let global = tree
+            .realms
+            .iter()
+            .find(|r| r.key == "global")
+            .expect("Global realm should exist");
+        let has_locale_knowledge = global.layers.iter().any(|l| l.key == "locale-knowledge");
+        assert!(
+            has_locale_knowledge,
+            "Global realm should have locale-knowledge layer"
+        );
+    }
 
     // ========================================================================
     // YAML path validation tests
