@@ -5,7 +5,7 @@
 arc:
   name: HAS_POPULATION
   family: localization
-  scope: cross_realm
+  scope: intra_realm
 
   source: Locale
   target: PopulationSubCluster

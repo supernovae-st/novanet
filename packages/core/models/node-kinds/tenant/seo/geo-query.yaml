@@ -9,7 +9,7 @@
 
 node:
   name: GEOQuery
-  realm: global
+  realm: tenant
   layer: seo
   trait: knowledge
   icon: "🤖"

@@ -5,7 +5,7 @@
 arc:
   name: HAS_LENDING_TYPE
   family: localization
-  scope: cross_realm
+  scope: intra_realm
 
   source: Locale
   target: LendingCategory

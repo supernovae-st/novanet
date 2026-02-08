@@ -1,19 +1,20 @@
-# models/node-kinds/global/seo/seo-question.yaml
-# SEOQuestion - Question-form keyword from Answer The Public
+# models/node-kinds/global/seo/seo-comparison.yaml
+# SEOComparison - Comparison keyword linking two entities
 #
 # v10.6: SEO Schema v2 - New NodeKind
-#        - Captures question keywords with their own volume/difficulty
-#        - Derived from Answer The Public "questions" category
-#        - Links to parent SEOKeyword via HAS_QUESTIONS
-#        - Can be answered by EntityContent via ANSWERS arc
+#        - Captures comparison keywords (X vs Y) with their own volume/difficulty
+#        - Derived from Answer The Public "comparisons" category
+#        - Links to parent SEOKeyword via HAS_COMPARISONS
+#        - Links to TWO Entities via COMPARES_A and COMPARES_B arcs
+#        - Can be addressed by PageGenerated/BlockGenerated via ADDRESSES arc
 
 node:
-  name: SEOQuestion
-  realm: global
+  name: SEOComparison
+  realm: tenant
   layer: seo
   trait: knowledge
-  icon: "❓"
-  description: "Question-form keyword derived from Answer The Public"
+  icon: "⚖️"
+  description: "Comparison keyword linking two entities (X vs Y)"
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # STANDARD PROPERTIES (v7.1.0)
@@ -24,13 +25,13 @@ node:
       type: string
       required: true
       description: "Unique identifier"
-      example: "seoq-comment-creer-qr-code-fr"
+      example: "seoc-qr-code-vs-barcode-fr"
 
     display_name:
       type: string
       required: true
       description: "Human-readable name"
-      example: "comment créer un qr code"
+      example: "qr code vs barcode"
 
     description:
       type: string
@@ -40,7 +41,7 @@ node:
     llm_context:
       type: string
       required: false
-      description: "Context for LLM generation: what answer format is expected"
+      description: "Context for LLM: key differentiators, winner criteria"
 
     created_at:
       type: datetime
@@ -59,74 +60,88 @@ node:
     value:
       type: string
       required: true
-      description: "The question keyword string"
-      example: "comment créer un qr code"
+      description: "The comparison keyword string"
+      example: "qr code vs barcode"
 
     volume:
       type: int
       required: false
       description: "Monthly search volume"
-      example: 8000
+      example: 2000
 
     difficulty:
       type: int
       required: false
       description: "SEO difficulty score (0-100)"
-      example: 28
+      example: 22
 
     cpc:
       type: float
       required: false
       description: "Cost per click (USD)"
-      example: 0.45
+      example: 0.30
 
-    # --- Question-specific properties ---
-    question_word:
+    # --- Comparison-specific properties ---
+    comparison_type:
       type: string
       required: true
-      description: "Question word: what | how | why | when | where | who | can | is | does | are | will | should"
-      example: "how"
+      description: "Comparison type: vs | or | versus | compared_to | better_than | like | similar_to"
+      example: "vs"
 
-    answer_type:
+    entity_a_key:
+      type: string
+      required: true
+      description: "Key of left-side Entity in comparison"
+      example: "qr-code"
+
+    entity_b_key:
+      type: string
+      required: true
+      description: "Key of right-side Entity in comparison"
+      example: "barcode"
+
+    winner:
       type: string
       required: false
-      description: "Expected answer format: explanation | list | yes_no | steps | comparison | definition"
-      example: "steps"
-
-    featured_snippet:
-      type: bool
-      required: false
-      description: "Has Featured Snippet opportunity in SERP"
-      example: true
-
-    paa_position:
-      type: int
-      required: false
-      description: "Position in People Also Ask box (1-indexed, null if not present)"
-      example: 2
+      description: "If known, which side wins: a | b | tie | depends | null"
+      example: "a"
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # RELATIONS
   # ═══════════════════════════════════════════════════════════════════════════════
 
   relations:
-    # Incoming: SEOKeyword --[:HAS_QUESTIONS]--> SEOQuestion (ownership)
-    # Incoming: EntityContent --[:ANSWERS]--> SEOQuestion (coverage tracking)
-    []
+    # Incoming: SEOKeyword --[:HAS_COMPARISONS]--> SEOComparison (ownership)
+    # Incoming: PageGenerated/BlockGenerated --[:ADDRESSES]--> SEOComparison (coverage)
+
+    - relation: COMPARES_A
+      to: Entity
+      direction: outgoing
+      description: "Left side of comparison (entity_a_key)"
+
+    - relation: COMPARES_B
+      to: Entity
+      direction: outgoing
+      description: "Right side of comparison (entity_b_key)"
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # EXAMPLE
   # ═══════════════════════════════════════════════════════════════════════════════
 
   example:
-    description: "Get unanswered questions for a keyword (content gap analysis)"
+    description: "Find all comparisons involving an Entity"
     cypher: |
-      // Find questions that no EntityContent has answered yet
-      MATCH (kw:SEOKeyword {key: $keyword_key})-[:HAS_QUESTIONS]->(q:SEOQuestion)
-      WHERE NOT EXISTS { MATCH (ec:EntityContent)-[:ANSWERS]->(q) }
-      RETURN q.value AS question,
-             q.volume,
-             q.question_word,
-             q.featured_snippet
-      ORDER BY q.volume DESC
-      LIMIT 10
+      // Get all comparisons where Entity is on either side
+      MATCH (e:Entity {key: $entity_key})
+      OPTIONAL MATCH (c:SEOComparison)-[:COMPARES_A]->(e)
+      OPTIONAL MATCH (c2:SEOComparison)-[:COMPARES_B]->(e)
+      WITH coalesce(c, c2) AS comparison
+      WHERE comparison IS NOT NULL
+      MATCH (comparison)-[:COMPARES_A]->(ea:Entity)
+      MATCH (comparison)-[:COMPARES_B]->(eb:Entity)
+      RETURN comparison.value AS comparison,
+             comparison.volume,
+             ea.key AS entity_a,
+             eb.key AS entity_b,
+             comparison.winner
+      ORDER BY comparison.volume DESC

@@ -5,7 +5,7 @@
 arc:
   name: HAS_INCOME_LEVEL
   family: localization
-  scope: cross_realm
+  scope: intra_realm
 
   source: Locale
   target: IncomeGroup

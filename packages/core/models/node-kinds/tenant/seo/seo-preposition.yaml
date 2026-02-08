@@ -1,34 +1,37 @@
-# models/node-kinds/global/seo/seo-mining-run.yaml
-# SEOMiningRun - SEO mining job orchestration
+# models/node-kinds/global/seo/seo-preposition.yaml
+# SEOPreposition - Preposition keyword indicating use case
 #
-# v10.2: Merged SHARED → GLOBAL realm
-#        - realm: global (was shared)
-#        - trait: job (unchanged)
+# v10.6: SEO Schema v2 - New NodeKind
+#        - Captures preposition keywords (X for Y) with their own volume/difficulty
+#        - Derived from Answer The Public "prepositions" category
+#        - Links to parent SEOKeyword via HAS_PREPOSITIONS
+#        - Optionally links to use_case Entity via USE_CASE_ENTITY arc
+#        - Can be addressed by BlockGenerated via ADDRESSES arc
 
 node:
-  name: SEOMiningRun
-  realm: global
+  name: SEOPreposition
+  realm: tenant
   layer: seo
-  trait: job
-  icon: "⚙️"
-  description: "Mining job for SEO keyword discovery"
+  trait: knowledge
+  icon: "🔗"
+  description: "Preposition keyword indicating use case (X for Y)"
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  # STANDARD PROPERTIES (v7.1.0 - UUID-identified, no key)
+  # STANDARD PROPERTIES (v7.1.0)
   # ═══════════════════════════════════════════════════════════════════════════════
 
   standard_properties:
     key:
       type: string
-      required: false
-      description: "Optional - UUID-identified"
+      required: true
+      description: "Unique identifier"
+      example: "seop-qr-code-pour-wifi-fr"
 
     display_name:
       type: string
       required: true
       description: "Human-readable name"
-      example: "SEO Mining 2024-01-15 10:00"
-
+      example: "qr code pour wifi"
 
     description:
       type: string
@@ -38,9 +41,7 @@ node:
     llm_context:
       type: string
       required: false
-      description: "Job metadata for debugging/auditing"
-
-
+      description: "Context for LLM: use case details, target audience"
 
     created_at:
       type: datetime
@@ -55,68 +56,79 @@ node:
   # ═══════════════════════════════════════════════════════════════════════════════
 
   properties:
-    status:
+    # --- Core keyword data ---
+    value:
       type: string
       required: true
-      description: "pending | running | completed | failed"
-      example: "completed"
+      description: "The preposition keyword string"
+      example: "qr code pour wifi"
 
-    sources:
-      type: "string[]"
-      required: false
-      description: "Data sources used"
-      example: '["ahrefs", "semrush"]'
-
-    seed_terms:
-      type: "string[]"
-      required: false
-      description: "Initial seed terms for mining"
-      example: '["qr code", "qr generator"]'
-
-    locale:
-      type: string
-      required: true
-      description: "Target locale for this mining run"
-      example: "en-US"
-
-    started_at:
-      type: datetime
-      required: false
-      description: "Job start time"
-
-    completed_at:
-      type: datetime
-      required: false
-      description: "Job completion time"
-
-    keywords_found:
+    volume:
       type: int
       required: false
-      description: "Total keywords discovered"
+      description: "Monthly search volume"
+      example: 3000
 
-    error:
+    difficulty:
+      type: int
+      required: false
+      description: "SEO difficulty score (0-100)"
+      example: 18
+
+    cpc:
+      type: float
+      required: false
+      description: "Cost per click (USD)"
+      example: 0.55
+
+    # --- Preposition-specific properties ---
+    preposition:
+      type: string
+      required: true
+      description: "Preposition used: for | with | without | near | to | like | in | on | at"
+      example: "for"
+
+    use_case:
+      type: string
+      required: true
+      description: "The use case or context (what it's for/with)"
+      example: "wifi"
+
+    use_case_type:
       type: string
       required: false
-      description: "Error message if failed"
+      description: "Category of use case: feature | industry | audience | integration | location | event"
+      example: "feature"
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # RELATIONS
   # ═══════════════════════════════════════════════════════════════════════════════
 
   relations:
-    - relation: SEO_MINES
-      to: SEOKeyword
+    # Incoming: SEOKeyword --[:HAS_PREPOSITIONS]--> SEOPreposition (ownership)
+    # Incoming: BlockGenerated --[:ADDRESSES]--> SEOPreposition (coverage)
+
+    - relation: USE_CASE_ENTITY
+      to: Entity
       direction: outgoing
-      description: "Keywords discovered by this mining run"
+      description: "Optional: if use_case corresponds to an Entity"
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # EXAMPLE
   # ═══════════════════════════════════════════════════════════════════════════════
 
   example:
-    description: "Get recent SEO mining runs"
+    description: "Get preposition keywords grouped by use case type"
     cypher: |
-      MATCH (smr:SEOMiningRun)
-      RETURN smr.display_name, smr.status, smr.keywords_found, smr.locale
-      ORDER BY smr.started_at DESC
-      LIMIT 10
+      // Analyze use cases for a keyword
+      MATCH (kw:SEOKeyword {key: $keyword_key})-[:HAS_PREPOSITIONS]->(p:SEOPreposition)
+      OPTIONAL MATCH (p)-[:USE_CASE_ENTITY]->(e:Entity)
+      RETURN p.use_case_type AS type,
+             collect({
+               value: p.value,
+               volume: p.volume,
+               use_case: p.use_case,
+               entity: e.key
+             }) AS prepositions,
+             sum(p.volume) AS total_volume
+      ORDER BY total_volume DESC

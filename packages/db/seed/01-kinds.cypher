@@ -791,12 +791,12 @@ ON MATCH SET
 MERGE (k_GEOAnswer:Meta:Kind {label: 'GEOAnswer'})
 ON CREATE SET
   k_GEOAnswer.key = 'geo-answer',
-  k_GEOAnswer.realm = 'global',
+  k_GEOAnswer.realm = 'tenant',
   k_GEOAnswer.layer = 'seo',
   k_GEOAnswer.trait = 'derived',
   k_GEOAnswer.display_name = 'GEOAnswer',
   k_GEOAnswer.llm_context = 'LLM response sample for GEO analysis (immutable snapshot)',
-  k_GEOAnswer.yaml_path = 'node-kinds/global/seo/geo-answer.yaml',
+  k_GEOAnswer.yaml_path = 'node-kinds/tenant/seo/geo-answer.yaml',
   k_GEOAnswer.properties = ['key', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'engine', 'engine_version', 'observed_at', 'answer_text', 'cited_domains', 'brand_mentions', 'relevance_score'],
   k_GEOAnswer.required_properties = ['key', 'display_name', 'engine', 'observed_at', 'answer_text'],
   k_GEOAnswer.schema_hint = 'answer_text (req), brand_mentions, cited_domains, created_at, description, display_name (req), engine (req), engine_version, key (req), llm_context, observed_at (req), relevance_score, updated_at',
@@ -805,12 +805,12 @@ ON CREATE SET
   k_GEOAnswer.created_at = datetime()
 ON MATCH SET
   k_GEOAnswer.key = 'geo-answer',
-  k_GEOAnswer.realm = 'global',
+  k_GEOAnswer.realm = 'tenant',
   k_GEOAnswer.layer = 'seo',
   k_GEOAnswer.trait = 'derived',
   k_GEOAnswer.display_name = 'GEOAnswer',
   k_GEOAnswer.llm_context = 'LLM response sample for GEO analysis (immutable snapshot)',
-  k_GEOAnswer.yaml_path = 'node-kinds/global/seo/geo-answer.yaml',
+  k_GEOAnswer.yaml_path = 'node-kinds/tenant/seo/geo-answer.yaml',
   k_GEOAnswer.properties = ['key', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'engine', 'engine_version', 'observed_at', 'answer_text', 'cited_domains', 'brand_mentions', 'relevance_score'],
   k_GEOAnswer.required_properties = ['key', 'display_name', 'engine', 'observed_at', 'answer_text'],
   k_GEOAnswer.schema_hint = 'answer_text (req), brand_mentions, cited_domains, created_at, description, display_name (req), engine (req), engine_version, key (req), llm_context, observed_at (req), relevance_score, updated_at',
@@ -821,12 +821,12 @@ ON MATCH SET
 MERGE (k_GEOMetrics:Meta:Kind {label: 'GEOMetrics'})
 ON CREATE SET
   k_GEOMetrics.key = 'geo-metrics',
-  k_GEOMetrics.realm = 'global',
+  k_GEOMetrics.realm = 'tenant',
   k_GEOMetrics.layer = 'seo',
   k_GEOMetrics.trait = 'derived',
   k_GEOMetrics.display_name = 'GEOMetrics',
   k_GEOMetrics.llm_context = 'Time-series visibility metrics for GEO trend analysis (immutable snapshot)',
-  k_GEOMetrics.yaml_path = 'node-kinds/global/seo/geo-metrics.yaml',
+  k_GEOMetrics.yaml_path = 'node-kinds/tenant/seo/geo-metrics.yaml',
   k_GEOMetrics.properties = ['key', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'observed_at', 'ai_visibility_score', 'visibility_change_7d', 'visibility_change_30d', 'citation_trend'],
   k_GEOMetrics.required_properties = ['key', 'display_name', 'observed_at', 'ai_visibility_score'],
   k_GEOMetrics.schema_hint = 'ai_visibility_score (req), citation_trend, created_at, description, display_name (req), key (req), llm_context, observed_at (req), updated_at, visibility_change_30d, visibility_change_7d',
@@ -835,12 +835,12 @@ ON CREATE SET
   k_GEOMetrics.created_at = datetime()
 ON MATCH SET
   k_GEOMetrics.key = 'geo-metrics',
-  k_GEOMetrics.realm = 'global',
+  k_GEOMetrics.realm = 'tenant',
   k_GEOMetrics.layer = 'seo',
   k_GEOMetrics.trait = 'derived',
   k_GEOMetrics.display_name = 'GEOMetrics',
   k_GEOMetrics.llm_context = 'Time-series visibility metrics for GEO trend analysis (immutable snapshot)',
-  k_GEOMetrics.yaml_path = 'node-kinds/global/seo/geo-metrics.yaml',
+  k_GEOMetrics.yaml_path = 'node-kinds/tenant/seo/geo-metrics.yaml',
   k_GEOMetrics.properties = ['key', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'observed_at', 'ai_visibility_score', 'visibility_change_7d', 'visibility_change_30d', 'citation_trend'],
   k_GEOMetrics.required_properties = ['key', 'display_name', 'observed_at', 'ai_visibility_score'],
   k_GEOMetrics.schema_hint = 'ai_visibility_score (req), citation_trend, created_at, description, display_name (req), key (req), llm_context, observed_at (req), updated_at, visibility_change_30d, visibility_change_7d',
@@ -851,12 +851,12 @@ ON MATCH SET
 MERGE (k_GEOQuery:Meta:Kind {label: 'GEOQuery'})
 ON CREATE SET
   k_GEOQuery.key = 'geo-query',
-  k_GEOQuery.realm = 'global',
+  k_GEOQuery.realm = 'tenant',
   k_GEOQuery.layer = 'seo',
   k_GEOQuery.trait = 'knowledge',
   k_GEOQuery.display_name = 'GEOQuery',
   k_GEOQuery.llm_context = 'Query tracked across AI engines for generative engine optimization (GEO)',
-  k_GEOQuery.yaml_path = 'node-kinds/global/seo/geo-query.yaml',
+  k_GEOQuery.yaml_path = 'node-kinds/tenant/seo/geo-query.yaml',
   k_GEOQuery.properties = ['key', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'value', 'query_type', 'gemini_visibility', 'gpt_visibility', 'perplexity_visibility', 'claude_visibility', 'ai_visibility_score', 'share_of_voice', 'citation_frequency'],
   k_GEOQuery.required_properties = ['key', 'display_name', 'value'],
   k_GEOQuery.schema_hint = 'ai_visibility_score, citation_frequency, claude_visibility, created_at, description, display_name (req), gemini_visibility, gpt_visibility, key (req), llm_context, perplexity_visibility, query_type, share_of_voice, updated_at, value (req)',
@@ -865,12 +865,12 @@ ON CREATE SET
   k_GEOQuery.created_at = datetime()
 ON MATCH SET
   k_GEOQuery.key = 'geo-query',
-  k_GEOQuery.realm = 'global',
+  k_GEOQuery.realm = 'tenant',
   k_GEOQuery.layer = 'seo',
   k_GEOQuery.trait = 'knowledge',
   k_GEOQuery.display_name = 'GEOQuery',
   k_GEOQuery.llm_context = 'Query tracked across AI engines for generative engine optimization (GEO)',
-  k_GEOQuery.yaml_path = 'node-kinds/global/seo/geo-query.yaml',
+  k_GEOQuery.yaml_path = 'node-kinds/tenant/seo/geo-query.yaml',
   k_GEOQuery.properties = ['key', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'value', 'query_type', 'gemini_visibility', 'gpt_visibility', 'perplexity_visibility', 'claude_visibility', 'ai_visibility_score', 'share_of_voice', 'citation_frequency'],
   k_GEOQuery.required_properties = ['key', 'display_name', 'value'],
   k_GEOQuery.schema_hint = 'ai_visibility_score, citation_frequency, claude_visibility, created_at, description, display_name (req), gemini_visibility, gpt_visibility, key (req), llm_context, perplexity_visibility, query_type, share_of_voice, updated_at, value (req)',
@@ -1541,12 +1541,12 @@ ON MATCH SET
 MERGE (k_SEOComparison:Meta:Kind {label: 'SEOComparison'})
 ON CREATE SET
   k_SEOComparison.key = 'seo-comparison',
-  k_SEOComparison.realm = 'global',
+  k_SEOComparison.realm = 'tenant',
   k_SEOComparison.layer = 'seo',
   k_SEOComparison.trait = 'knowledge',
   k_SEOComparison.display_name = 'SEOComparison',
   k_SEOComparison.llm_context = 'Comparison keyword linking two entities (X vs Y)',
-  k_SEOComparison.yaml_path = 'node-kinds/global/seo/seo-comparison.yaml',
+  k_SEOComparison.yaml_path = 'node-kinds/tenant/seo/seo-comparison.yaml',
   k_SEOComparison.properties = ['key', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'value', 'volume', 'difficulty', 'cpc', 'comparison_type', 'entity_a_key', 'entity_b_key', 'winner'],
   k_SEOComparison.required_properties = ['key', 'display_name', 'value', 'comparison_type', 'entity_a_key', 'entity_b_key'],
   k_SEOComparison.schema_hint = 'comparison_type (req), cpc, created_at, description, difficulty, display_name (req), entity_a_key (req), entity_b_key (req), key (req), llm_context, updated_at, value (req), volume, winner',
@@ -1555,12 +1555,12 @@ ON CREATE SET
   k_SEOComparison.created_at = datetime()
 ON MATCH SET
   k_SEOComparison.key = 'seo-comparison',
-  k_SEOComparison.realm = 'global',
+  k_SEOComparison.realm = 'tenant',
   k_SEOComparison.layer = 'seo',
   k_SEOComparison.trait = 'knowledge',
   k_SEOComparison.display_name = 'SEOComparison',
   k_SEOComparison.llm_context = 'Comparison keyword linking two entities (X vs Y)',
-  k_SEOComparison.yaml_path = 'node-kinds/global/seo/seo-comparison.yaml',
+  k_SEOComparison.yaml_path = 'node-kinds/tenant/seo/seo-comparison.yaml',
   k_SEOComparison.properties = ['key', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'value', 'volume', 'difficulty', 'cpc', 'comparison_type', 'entity_a_key', 'entity_b_key', 'winner'],
   k_SEOComparison.required_properties = ['key', 'display_name', 'value', 'comparison_type', 'entity_a_key', 'entity_b_key'],
   k_SEOComparison.schema_hint = 'comparison_type (req), cpc, created_at, description, difficulty, display_name (req), entity_a_key (req), entity_b_key (req), key (req), llm_context, updated_at, value (req), volume, winner',
@@ -1571,12 +1571,12 @@ ON MATCH SET
 MERGE (k_SEOKeyword:Meta:Kind {label: 'SEOKeyword'})
 ON CREATE SET
   k_SEOKeyword.key = 'seo-keyword',
-  k_SEOKeyword.realm = 'global',
+  k_SEOKeyword.realm = 'tenant',
   k_SEOKeyword.layer = 'seo',
   k_SEOKeyword.trait = 'knowledge',
   k_SEOKeyword.display_name = 'SEOKeyword',
   k_SEOKeyword.llm_context = 'Target keyword with metrics for SEO optimization (locale-specific knowledge)',
-  k_SEOKeyword.yaml_path = 'node-kinds/global/seo/seo-keyword.yaml',
+  k_SEOKeyword.yaml_path = 'node-kinds/tenant/seo/seo-keyword.yaml',
   k_SEOKeyword.properties = ['key', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'value', 'volume', 'difficulty', 'cpc', 'intent', 'platform', 'source', 'traffic_potential', 'clicks', 'clicks_per_search', 'serp_features', 'competition', 'trend', 'seasonality'],
   k_SEOKeyword.required_properties = ['key', 'display_name', 'value'],
   k_SEOKeyword.schema_hint = 'clicks, clicks_per_search, competition, cpc, created_at, description, difficulty, display_name (req), intent, key (req), llm_context, platform, seasonality, serp_features, source, traffic_potential, trend, updated_at, value (req), volume',
@@ -1585,12 +1585,12 @@ ON CREATE SET
   k_SEOKeyword.created_at = datetime()
 ON MATCH SET
   k_SEOKeyword.key = 'seo-keyword',
-  k_SEOKeyword.realm = 'global',
+  k_SEOKeyword.realm = 'tenant',
   k_SEOKeyword.layer = 'seo',
   k_SEOKeyword.trait = 'knowledge',
   k_SEOKeyword.display_name = 'SEOKeyword',
   k_SEOKeyword.llm_context = 'Target keyword with metrics for SEO optimization (locale-specific knowledge)',
-  k_SEOKeyword.yaml_path = 'node-kinds/global/seo/seo-keyword.yaml',
+  k_SEOKeyword.yaml_path = 'node-kinds/tenant/seo/seo-keyword.yaml',
   k_SEOKeyword.properties = ['key', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'value', 'volume', 'difficulty', 'cpc', 'intent', 'platform', 'source', 'traffic_potential', 'clicks', 'clicks_per_search', 'serp_features', 'competition', 'trend', 'seasonality'],
   k_SEOKeyword.required_properties = ['key', 'display_name', 'value'],
   k_SEOKeyword.schema_hint = 'clicks, clicks_per_search, competition, cpc, created_at, description, difficulty, display_name (req), intent, key (req), llm_context, platform, seasonality, serp_features, source, traffic_potential, trend, updated_at, value (req), volume',
@@ -1601,12 +1601,12 @@ ON MATCH SET
 MERGE (k_SEOKeywordMetrics:Meta:Kind {label: 'SEOKeywordMetrics'})
 ON CREATE SET
   k_SEOKeywordMetrics.key = 'seo-keyword-metrics',
-  k_SEOKeywordMetrics.realm = 'global',
+  k_SEOKeywordMetrics.realm = 'tenant',
   k_SEOKeywordMetrics.layer = 'seo',
   k_SEOKeywordMetrics.trait = 'derived',
   k_SEOKeywordMetrics.display_name = 'SEOKeywordMetrics',
   k_SEOKeywordMetrics.llm_context = 'Historical metrics snapshot for an SEO keyword (time-series)',
-  k_SEOKeywordMetrics.yaml_path = 'node-kinds/global/seo/seo-keyword-metrics.yaml',
+  k_SEOKeywordMetrics.yaml_path = 'node-kinds/tenant/seo/seo-keyword-metrics.yaml',
   k_SEOKeywordMetrics.properties = ['key', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'observed_at', 'source', 'volume', 'difficulty', 'cpc', 'clicks', 'traffic_potential', 'position', 'best_position', 'url', 'impressions', 'clicks_gsc', 'ctr'],
   k_SEOKeywordMetrics.required_properties = ['key', 'display_name', 'observed_at', 'source'],
   k_SEOKeywordMetrics.schema_hint = 'best_position, clicks, clicks_gsc, cpc, created_at, ctr, description, difficulty, display_name (req), impressions, key (req), llm_context, observed_at (req), position, source (req), traffic_potential, updated_at, url, volume',
@@ -1615,12 +1615,12 @@ ON CREATE SET
   k_SEOKeywordMetrics.created_at = datetime()
 ON MATCH SET
   k_SEOKeywordMetrics.key = 'seo-keyword-metrics',
-  k_SEOKeywordMetrics.realm = 'global',
+  k_SEOKeywordMetrics.realm = 'tenant',
   k_SEOKeywordMetrics.layer = 'seo',
   k_SEOKeywordMetrics.trait = 'derived',
   k_SEOKeywordMetrics.display_name = 'SEOKeywordMetrics',
   k_SEOKeywordMetrics.llm_context = 'Historical metrics snapshot for an SEO keyword (time-series)',
-  k_SEOKeywordMetrics.yaml_path = 'node-kinds/global/seo/seo-keyword-metrics.yaml',
+  k_SEOKeywordMetrics.yaml_path = 'node-kinds/tenant/seo/seo-keyword-metrics.yaml',
   k_SEOKeywordMetrics.properties = ['key', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'observed_at', 'source', 'volume', 'difficulty', 'cpc', 'clicks', 'traffic_potential', 'position', 'best_position', 'url', 'impressions', 'clicks_gsc', 'ctr'],
   k_SEOKeywordMetrics.required_properties = ['key', 'display_name', 'observed_at', 'source'],
   k_SEOKeywordMetrics.schema_hint = 'best_position, clicks, clicks_gsc, cpc, created_at, ctr, description, difficulty, display_name (req), impressions, key (req), llm_context, observed_at (req), position, source (req), traffic_potential, updated_at, url, volume',
@@ -1631,12 +1631,12 @@ ON MATCH SET
 MERGE (k_SEOMiningRun:Meta:Kind {label: 'SEOMiningRun'})
 ON CREATE SET
   k_SEOMiningRun.key = 'seo-mining-run',
-  k_SEOMiningRun.realm = 'global',
+  k_SEOMiningRun.realm = 'tenant',
   k_SEOMiningRun.layer = 'seo',
   k_SEOMiningRun.trait = 'job',
   k_SEOMiningRun.display_name = 'SEOMiningRun',
   k_SEOMiningRun.llm_context = 'Mining job for SEO keyword discovery',
-  k_SEOMiningRun.yaml_path = 'node-kinds/global/seo/seo-mining-run.yaml',
+  k_SEOMiningRun.yaml_path = 'node-kinds/tenant/seo/seo-mining-run.yaml',
   k_SEOMiningRun.properties = ['key', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'status', 'sources', 'seed_terms', 'locale', 'started_at', 'completed_at', 'keywords_found', 'error'],
   k_SEOMiningRun.required_properties = ['display_name', 'status', 'locale'],
   k_SEOMiningRun.schema_hint = 'completed_at, created_at, description, display_name (req), error, key, keywords_found, llm_context, locale (req), seed_terms, sources, started_at, status (req), updated_at',
@@ -1645,12 +1645,12 @@ ON CREATE SET
   k_SEOMiningRun.created_at = datetime()
 ON MATCH SET
   k_SEOMiningRun.key = 'seo-mining-run',
-  k_SEOMiningRun.realm = 'global',
+  k_SEOMiningRun.realm = 'tenant',
   k_SEOMiningRun.layer = 'seo',
   k_SEOMiningRun.trait = 'job',
   k_SEOMiningRun.display_name = 'SEOMiningRun',
   k_SEOMiningRun.llm_context = 'Mining job for SEO keyword discovery',
-  k_SEOMiningRun.yaml_path = 'node-kinds/global/seo/seo-mining-run.yaml',
+  k_SEOMiningRun.yaml_path = 'node-kinds/tenant/seo/seo-mining-run.yaml',
   k_SEOMiningRun.properties = ['key', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'status', 'sources', 'seed_terms', 'locale', 'started_at', 'completed_at', 'keywords_found', 'error'],
   k_SEOMiningRun.required_properties = ['display_name', 'status', 'locale'],
   k_SEOMiningRun.schema_hint = 'completed_at, created_at, description, display_name (req), error, key, keywords_found, llm_context, locale (req), seed_terms, sources, started_at, status (req), updated_at',
@@ -1661,12 +1661,12 @@ ON MATCH SET
 MERGE (k_SEOPreposition:Meta:Kind {label: 'SEOPreposition'})
 ON CREATE SET
   k_SEOPreposition.key = 'seo-preposition',
-  k_SEOPreposition.realm = 'global',
+  k_SEOPreposition.realm = 'tenant',
   k_SEOPreposition.layer = 'seo',
   k_SEOPreposition.trait = 'knowledge',
   k_SEOPreposition.display_name = 'SEOPreposition',
   k_SEOPreposition.llm_context = 'Preposition keyword indicating use case (X for Y)',
-  k_SEOPreposition.yaml_path = 'node-kinds/global/seo/seo-preposition.yaml',
+  k_SEOPreposition.yaml_path = 'node-kinds/tenant/seo/seo-preposition.yaml',
   k_SEOPreposition.properties = ['key', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'value', 'volume', 'difficulty', 'cpc', 'preposition', 'use_case', 'use_case_type'],
   k_SEOPreposition.required_properties = ['key', 'display_name', 'value', 'preposition', 'use_case'],
   k_SEOPreposition.schema_hint = 'cpc, created_at, description, difficulty, display_name (req), key (req), llm_context, preposition (req), updated_at, use_case (req), use_case_type, value (req), volume',
@@ -1675,12 +1675,12 @@ ON CREATE SET
   k_SEOPreposition.created_at = datetime()
 ON MATCH SET
   k_SEOPreposition.key = 'seo-preposition',
-  k_SEOPreposition.realm = 'global',
+  k_SEOPreposition.realm = 'tenant',
   k_SEOPreposition.layer = 'seo',
   k_SEOPreposition.trait = 'knowledge',
   k_SEOPreposition.display_name = 'SEOPreposition',
   k_SEOPreposition.llm_context = 'Preposition keyword indicating use case (X for Y)',
-  k_SEOPreposition.yaml_path = 'node-kinds/global/seo/seo-preposition.yaml',
+  k_SEOPreposition.yaml_path = 'node-kinds/tenant/seo/seo-preposition.yaml',
   k_SEOPreposition.properties = ['key', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'value', 'volume', 'difficulty', 'cpc', 'preposition', 'use_case', 'use_case_type'],
   k_SEOPreposition.required_properties = ['key', 'display_name', 'value', 'preposition', 'use_case'],
   k_SEOPreposition.schema_hint = 'cpc, created_at, description, difficulty, display_name (req), key (req), llm_context, preposition (req), updated_at, use_case (req), use_case_type, value (req), volume',
@@ -1691,12 +1691,12 @@ ON MATCH SET
 MERGE (k_SEOQuestion:Meta:Kind {label: 'SEOQuestion'})
 ON CREATE SET
   k_SEOQuestion.key = 'seo-question',
-  k_SEOQuestion.realm = 'global',
+  k_SEOQuestion.realm = 'tenant',
   k_SEOQuestion.layer = 'seo',
   k_SEOQuestion.trait = 'knowledge',
   k_SEOQuestion.display_name = 'SEOQuestion',
   k_SEOQuestion.llm_context = 'Question-form keyword derived from Answer The Public',
-  k_SEOQuestion.yaml_path = 'node-kinds/global/seo/seo-question.yaml',
+  k_SEOQuestion.yaml_path = 'node-kinds/tenant/seo/seo-question.yaml',
   k_SEOQuestion.properties = ['key', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'value', 'volume', 'difficulty', 'cpc', 'question_word', 'answer_type', 'featured_snippet', 'paa_position'],
   k_SEOQuestion.required_properties = ['key', 'display_name', 'value', 'question_word'],
   k_SEOQuestion.schema_hint = 'answer_type, cpc, created_at, description, difficulty, display_name (req), featured_snippet, key (req), llm_context, paa_position, question_word (req), updated_at, value (req), volume',
@@ -1705,12 +1705,12 @@ ON CREATE SET
   k_SEOQuestion.created_at = datetime()
 ON MATCH SET
   k_SEOQuestion.key = 'seo-question',
-  k_SEOQuestion.realm = 'global',
+  k_SEOQuestion.realm = 'tenant',
   k_SEOQuestion.layer = 'seo',
   k_SEOQuestion.trait = 'knowledge',
   k_SEOQuestion.display_name = 'SEOQuestion',
   k_SEOQuestion.llm_context = 'Question-form keyword derived from Answer The Public',
-  k_SEOQuestion.yaml_path = 'node-kinds/global/seo/seo-question.yaml',
+  k_SEOQuestion.yaml_path = 'node-kinds/tenant/seo/seo-question.yaml',
   k_SEOQuestion.properties = ['key', 'display_name', 'description', 'llm_context', 'created_at', 'updated_at', 'value', 'volume', 'difficulty', 'cpc', 'question_word', 'answer_type', 'featured_snippet', 'paa_position'],
   k_SEOQuestion.required_properties = ['key', 'display_name', 'value', 'question_word'],
   k_SEOQuestion.schema_hint = 'answer_type, cpc, created_at, description, difficulty, display_name (req), featured_snippet, key (req), llm_context, paa_position, question_word (req), updated_at, value (req), volume',
@@ -2206,13 +2206,13 @@ MERGE (k)-[:IN_REALM]->(r);
 MATCH (k:Kind {label: 'Formatting'}), (r:Realm {key: 'global'})
 MERGE (k)-[:IN_REALM]->(r);
 
-MATCH (k:Kind {label: 'GEOAnswer'}), (r:Realm {key: 'global'})
+MATCH (k:Kind {label: 'GEOAnswer'}), (r:Realm {key: 'tenant'})
 MERGE (k)-[:IN_REALM]->(r);
 
-MATCH (k:Kind {label: 'GEOMetrics'}), (r:Realm {key: 'global'})
+MATCH (k:Kind {label: 'GEOMetrics'}), (r:Realm {key: 'tenant'})
 MERGE (k)-[:IN_REALM]->(r);
 
-MATCH (k:Kind {label: 'GEOQuery'}), (r:Realm {key: 'global'})
+MATCH (k:Kind {label: 'GEOQuery'}), (r:Realm {key: 'tenant'})
 MERGE (k)-[:IN_REALM]->(r);
 
 MATCH (k:Kind {label: 'GenerationJob'}), (r:Realm {key: 'tenant'})
@@ -2281,22 +2281,22 @@ MERGE (k)-[:IN_REALM]->(r);
 MATCH (k:Kind {label: 'PromptArtifact'}), (r:Realm {key: 'tenant'})
 MERGE (k)-[:IN_REALM]->(r);
 
-MATCH (k:Kind {label: 'SEOComparison'}), (r:Realm {key: 'global'})
+MATCH (k:Kind {label: 'SEOComparison'}), (r:Realm {key: 'tenant'})
 MERGE (k)-[:IN_REALM]->(r);
 
-MATCH (k:Kind {label: 'SEOKeyword'}), (r:Realm {key: 'global'})
+MATCH (k:Kind {label: 'SEOKeyword'}), (r:Realm {key: 'tenant'})
 MERGE (k)-[:IN_REALM]->(r);
 
-MATCH (k:Kind {label: 'SEOKeywordMetrics'}), (r:Realm {key: 'global'})
+MATCH (k:Kind {label: 'SEOKeywordMetrics'}), (r:Realm {key: 'tenant'})
 MERGE (k)-[:IN_REALM]->(r);
 
-MATCH (k:Kind {label: 'SEOMiningRun'}), (r:Realm {key: 'global'})
+MATCH (k:Kind {label: 'SEOMiningRun'}), (r:Realm {key: 'tenant'})
 MERGE (k)-[:IN_REALM]->(r);
 
-MATCH (k:Kind {label: 'SEOPreposition'}), (r:Realm {key: 'global'})
+MATCH (k:Kind {label: 'SEOPreposition'}), (r:Realm {key: 'tenant'})
 MERGE (k)-[:IN_REALM]->(r);
 
-MATCH (k:Kind {label: 'SEOQuestion'}), (r:Realm {key: 'global'})
+MATCH (k:Kind {label: 'SEOQuestion'}), (r:Realm {key: 'tenant'})
 MERGE (k)-[:IN_REALM]->(r);
 
 MATCH (k:Kind {label: 'Slugification'}), (r:Realm {key: 'global'})

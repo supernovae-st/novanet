@@ -137,43 +137,6 @@ MATCH (n:TermSet)
 MATCH (k:Kind {label: 'TermSet'})
 MERGE (n)-[:OF_KIND]->(k);
 
-// Global > Seo (9 types)
-MATCH (n:GEOAnswer)
-MATCH (k:Kind {label: 'GEOAnswer'})
-MERGE (n)-[:OF_KIND]->(k);
-
-MATCH (n:GEOMetrics)
-MATCH (k:Kind {label: 'GEOMetrics'})
-MERGE (n)-[:OF_KIND]->(k);
-
-MATCH (n:GEOQuery)
-MATCH (k:Kind {label: 'GEOQuery'})
-MERGE (n)-[:OF_KIND]->(k);
-
-MATCH (n:SEOComparison)
-MATCH (k:Kind {label: 'SEOComparison'})
-MERGE (n)-[:OF_KIND]->(k);
-
-MATCH (n:SEOKeyword)
-MATCH (k:Kind {label: 'SEOKeyword'})
-MERGE (n)-[:OF_KIND]->(k);
-
-MATCH (n:SEOKeywordMetrics)
-MATCH (k:Kind {label: 'SEOKeywordMetrics'})
-MERGE (n)-[:OF_KIND]->(k);
-
-MATCH (n:SEOMiningRun)
-MATCH (k:Kind {label: 'SEOMiningRun'})
-MERGE (n)-[:OF_KIND]->(k);
-
-MATCH (n:SEOPreposition)
-MATCH (k:Kind {label: 'SEOPreposition'})
-MERGE (n)-[:OF_KIND]->(k);
-
-MATCH (n:SEOQuestion)
-MATCH (k:Kind {label: 'SEOQuestion'})
-MERGE (n)-[:OF_KIND]->(k);
-
 // ─────────────────────────────────────────────────────────────────────────────
 // TENANT REALM
 // ─────────────────────────────────────────────────────────────────────────────
@@ -265,6 +228,43 @@ MERGE (n)-[:OF_KIND]->(k);
 
 MATCH (n:EntityContent)
 MATCH (k:Kind {label: 'EntityContent'})
+MERGE (n)-[:OF_KIND]->(k);
+
+// Tenant > Seo (9 types)
+MATCH (n:GEOAnswer)
+MATCH (k:Kind {label: 'GEOAnswer'})
+MERGE (n)-[:OF_KIND]->(k);
+
+MATCH (n:GEOMetrics)
+MATCH (k:Kind {label: 'GEOMetrics'})
+MERGE (n)-[:OF_KIND]->(k);
+
+MATCH (n:GEOQuery)
+MATCH (k:Kind {label: 'GEOQuery'})
+MERGE (n)-[:OF_KIND]->(k);
+
+MATCH (n:SEOComparison)
+MATCH (k:Kind {label: 'SEOComparison'})
+MERGE (n)-[:OF_KIND]->(k);
+
+MATCH (n:SEOKeyword)
+MATCH (k:Kind {label: 'SEOKeyword'})
+MERGE (n)-[:OF_KIND]->(k);
+
+MATCH (n:SEOKeywordMetrics)
+MATCH (k:Kind {label: 'SEOKeywordMetrics'})
+MERGE (n)-[:OF_KIND]->(k);
+
+MATCH (n:SEOMiningRun)
+MATCH (k:Kind {label: 'SEOMiningRun'})
+MERGE (n)-[:OF_KIND]->(k);
+
+MATCH (n:SEOPreposition)
+MATCH (k:Kind {label: 'SEOPreposition'})
+MERGE (n)-[:OF_KIND]->(k);
+
+MATCH (n:SEOQuestion)
+MATCH (k:Kind {label: 'SEOQuestion'})
 MERGE (n)-[:OF_KIND]->(k);
 
 // Tenant > Structure (3 types)

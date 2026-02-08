@@ -5,10 +5,10 @@ key: seo
 display_name: SEO Intelligence
 emoji: "🔍"
 color: "#ec4899"
-realm: global
+realm: tenant
 
 llm_context: |
-  Search engine optimization data. Keywords with their localized
-  forms, search volume metrics, and mining run history. Used to
-  inject relevant keywords into generated content for organic
-  search visibility.
+  Search engine optimization data per tenant. Keywords, comparisons,
+  prepositions, questions, and GEO monitoring. Each tenant manages its
+  own SEO strategy. Keywords link to Entity via EXPRESSES, content
+  targets keywords via TARGETS.
