@@ -19,6 +19,7 @@ use super::app::{App, Focus, NavMode};
 use super::data::{ArcDirection, TreeItem};
 use super::schema::{PropertyStatus, ValidationStatus};
 use super::theme::{self, hex_to_color};
+use super::unicode::{truncate_start_to_width, truncate_to_width};
 use super::yaml::YamlViewSection;
 
 // =============================================================================
@@ -440,29 +441,16 @@ fn render_empty_state(f: &mut Frame, area: Rect, kind: EmptyStateKind, tick: u16
     f.render_widget(paragraph, box_area);
 }
 
-/// Safely truncate a UTF-8 string to N characters (not bytes).
-/// Appends "..." if truncated.
-fn truncate_str(s: &str, max_chars: usize) -> String {
-    let char_count = s.chars().count();
-    if char_count > max_chars {
-        let truncated: String = s.chars().take(max_chars).collect();
-        format!("{}...", truncated)
-    } else {
-        s.to_string()
-    }
+/// Safely truncate a UTF-8 string to N terminal columns (not chars).
+/// Appends "…" if truncated. Handles CJK, emoji, and combining characters.
+fn truncate_str(s: &str, max_width: usize) -> String {
+    truncate_to_width(s, max_width)
 }
 
-/// Safely truncate a UTF-8 string from the START, keeping last N characters.
+/// Safely truncate a UTF-8 string from the START, keeping last N columns.
 /// Prepends "…" if truncated. Used for breadcrumbs where the end is most relevant.
-fn truncate_start(s: &str, max_chars: usize) -> String {
-    let char_count = s.chars().count();
-    if char_count > max_chars {
-        let skip = char_count.saturating_sub(max_chars);
-        let truncated: String = s.chars().skip(skip).collect();
-        format!("…{}", truncated)
-    } else {
-        s.to_string()
-    }
+fn truncate_start(s: &str, max_width: usize) -> String {
+    truncate_start_to_width(s, max_width)
 }
 
 /// Animated spinner for loading states.
@@ -6078,7 +6066,8 @@ mod tests {
 
     #[test]
     fn test_truncate_str_ascii_over_limit() {
-        assert_eq!(truncate_str("hello world", 5), "hello...");
+        // Width-based: "hell" (4 cols) + "…" (1 col) = 5 cols
+        assert_eq!(truncate_str("hello world", 5), "hell…");
     }
 
     #[test]
@@ -6087,23 +6076,27 @@ mod tests {
         let bengali = "বাংলা (বাংলাদেশ)";
         // Should not panic even when truncating in the middle of multi-byte chars
         let result = truncate_str(bengali, 5);
-        assert_eq!(result.chars().count(), 8); // 5 chars + "..."
-        assert!(result.ends_with("..."));
+        // Width-based truncation with "…" suffix
+        assert!(result.ends_with('…'));
     }
 
     #[test]
     fn test_truncate_str_utf8_emoji() {
         let emoji = "Hello 👋🏻 World 🌍";
         let result = truncate_str(emoji, 8);
-        // "Hello 👋🏻" = 8 chars (emoji with skin tone is 2 chars)
-        assert!(result.ends_with("..."));
+        // Width-based truncation uses "…" (single char ellipsis)
+        assert!(result.ends_with('…'));
     }
 
     #[test]
     fn test_truncate_str_chinese() {
+        // Chinese chars are 2 columns each: 你(2) + …(1) = 3 cols fits in 4
+        // But 你(2) + 好(2) = 4, which equals max, so we can fit "你好" if exact
+        // Actually: max_width=4, 你好 = 4 cols, fits exactly without truncation
+        // Let's use max_width=3: 你(2) + …(1) = 3 cols
         let chinese = "你好世界这是中文测试";
-        let result = truncate_str(chinese, 4);
-        assert_eq!(result, "你好世界...");
+        let result = truncate_str(chinese, 3);
+        assert_eq!(result, "你…"); // 你(2) + …(1) = 3 cols
     }
 
     #[test]
@@ -6127,8 +6120,8 @@ mod tests {
 
     #[test]
     fn test_truncate_start_over_limit() {
-        // "hello world" has 11 chars, limit 5 → keep last 5 → "world"
-        assert_eq!(truncate_start("hello world", 5), "…world");
+        // Width-based: "…" (1 col) + "orld" (4 cols) = 5 cols
+        assert_eq!(truncate_start("hello world", 5), "…orld");
     }
 
     #[test]
