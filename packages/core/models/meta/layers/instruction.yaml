@@ -5,7 +5,7 @@ key: instruction
 display_name: Instructions
 emoji: "📝"
 color: "#eab308"
-realm: project
+realm: tenant
 
 llm_context: |
   Generation directives. Prompts and rules that guide the LLM during

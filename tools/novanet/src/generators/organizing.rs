@@ -413,8 +413,8 @@ mod tests {
         assert_eq!(count_merges("ArcScope"), 2, "expected 2 ArcScope nodes");
         assert_eq!(
             count_merges("ArcCardinality"),
-            4,
-            "expected 4 ArcCardinality nodes"
+            5,
+            "expected 5 ArcCardinality nodes"
         );
 
         // HAS_LAYER relationships

@@ -5,9 +5,9 @@ key: semantic
 display_name: Semantic Layer
 emoji: "💡"
 color: "#f97316"
-realm: project
+realm: tenant
 
 llm_context: |
-  Meaning and semantics. For project realm: AudiencePersona and ChannelSurface
-  for targeting. For global realm: Entity and EntityContent provide semantic
-  building blocks. Entities link via SEMANTIC_LINK for spreading activation.
+  Meaning and semantics. For tenant realm: Entity, EntityContent, AudiencePersona,
+  and ChannelSurface. Entity is the invariant semantic building block, EntityContent
+  is its locale-specific content. Entities link via SEMANTIC_LINK for spreading activation.
