@@ -73,20 +73,20 @@ const COLOR_ACTIVE_KIND_BG: Color = Color::Rgb(25, 35, 45);
 // -----------------------------------------------------------------------------
 
 /// Wide layout: Tree panel percentage.
-const LAYOUT_WIDE_TREE_PCT: u16 = 20;
+const LAYOUT_WIDE_TREE_PCT: u16 = 30;
 /// Wide layout: Info+Graph panel percentage.
-const LAYOUT_WIDE_INFO_PCT: u16 = 40;
+const LAYOUT_WIDE_INFO_PCT: u16 = 35;
 /// Wide layout: YAML panel percentage.
-const LAYOUT_WIDE_YAML_PCT: u16 = 40;
+const LAYOUT_WIDE_YAML_PCT: u16 = 35;
 /// Wide layout: Info section percentage (within Info+Graph).
 const LAYOUT_WIDE_INFO_SECTION_PCT: u16 = 60;
 /// Wide layout: Graph section percentage (within Info+Graph).
 const LAYOUT_WIDE_GRAPH_SECTION_PCT: u16 = 40;
 
 /// Narrow layout: Tree panel percentage.
-const LAYOUT_NARROW_TREE_PCT: u16 = 20;
+const LAYOUT_NARROW_TREE_PCT: u16 = 30;
 /// Narrow layout: Detail panel percentage.
-const LAYOUT_NARROW_DETAIL_PCT: u16 = 80;
+const LAYOUT_NARROW_DETAIL_PCT: u16 = 70;
 /// Narrow layout: Info section percentage.
 const LAYOUT_NARROW_INFO_PCT: u16 = 35;
 /// Narrow layout: Graph section percentage.
@@ -346,7 +346,7 @@ impl EmptyStateKind {
                 "",
                 "Try:",
                 "  • Remove filters with 'c'",
-                "  • Switch modes with 1-5",
+                "  • Switch modes with 1-4",
             ],
             EmptyStateKind::NoInstances => &[
                 "This Kind has no data instances yet.",
@@ -505,13 +505,14 @@ pub fn render(f: &mut Frame, app: &mut App) {
 }
 
 /// Header: Logo + Mode tabs.
+/// Only shows: [1]Meta, [2]Data, [3]Atlas, [4]Audit
+/// (Overlay and Query modes removed - not useful for now)
 fn render_header(f: &mut Frame, area: Rect, app: &App) {
     let tabs: Vec<Span> = [
         NavMode::Meta,
         NavMode::Data,
-        NavMode::Overlay,
-        NavMode::Query,
         NavMode::Atlas,
+        NavMode::Audit,
     ]
     .iter()
     .enumerate()
@@ -4018,8 +4019,8 @@ fn render_status(f: &mut Frame, area: Rect, app: &App) {
 
     // Contextual shortcuts based on mode, focus, and selection
     let shortcuts = match app.mode {
-        NavMode::Atlas => "j/k:nav  1-6:modes  ?:help",
-        NavMode::Audit => "j/k:nav  1-6:modes  ?:help",
+        NavMode::Atlas => "j/k:nav  1-4:modes  ?:help",
+        NavMode::Audit => "j/k:nav  1-4:modes  ?:help",
         NavMode::Data => {
             // Check if on an Instance (can navigate to Kind with '1')
             if matches!(
@@ -4045,7 +4046,7 @@ fn render_status(f: &mut Frame, area: Rect, app: &App) {
                 }
             }
             Focus::Yaml | Focus::Info => "j/k:scroll  d/u:page  g/G:jump",
-            Focus::Graph => "Tab:panel  1-6:modes",
+            Focus::Graph => "Tab:panel  1-4:modes",
         },
     };
 
@@ -4272,7 +4273,7 @@ fn render_audit(f: &mut Frame, area: Rect, app: &mut App) {
         Span::styled("[j/k] Navigate  ", STYLE_DIM),
         Span::styled("[Enter] Drill down  ", STYLE_DIM),
         Span::styled("[r] Refresh  ", STYLE_DIM),
-        Span::styled("[1-5] Switch mode", STYLE_DIM),
+        Span::styled("[1-4] Switch mode", STYLE_DIM),
     ]));
     f.render_widget(footer, chunks[3]);
 }

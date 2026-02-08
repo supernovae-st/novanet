@@ -450,11 +450,11 @@ node:
         // CulturalRealm, CulturalSubRealm, IncomeGroup, LendingCategory, EconomicRegion,
         // PopulationCluster, PopulationSubCluster (+12)
         // v10.9 added: GEOQuery, GEOAnswer, GEOMetrics (+3)
-        let nodes = load_all_nodes(root).expect("should parse all 63 nodes");
+        let nodes = load_all_nodes(root).expect("should parse all 64 nodes");
         assert_eq!(
             nodes.len(),
-            63,
-            "expected 63 YAML node files (v10.9: 40 global + 23 tenant)"
+            64,
+            "expected 64 YAML node files (v10.9: 40 global + 24 tenant)"
         );
 
         // Every node has a non-empty name, realm, and layer
@@ -480,7 +480,7 @@ node:
         // v10.8 added 6 invariant (Continent, GeoRegion, GeoSubRegion, IncomeGroup, LendingCategory, EconomicRegion)
         // v10.9: GEOQuery (+1 knowledge), GEOAnswer + GEOMetrics (+2 derived)
         let count = |t: NodeTrait| nodes.iter().filter(|n| n.def.node_trait == t).count();
-        assert_eq!(count(NodeTrait::Invariant), 22, "invariant count");
+        assert_eq!(count(NodeTrait::Invariant), 23, "invariant count");
         assert_eq!(count(NodeTrait::Localized), 4, "localized count");
         assert_eq!(
             count(NodeTrait::Knowledge),
@@ -501,7 +501,7 @@ node:
             40,
             "global realm count (13 config + 18 locale-knowledge + 9 SEO)"
         );
-        assert_eq!(realm_count("tenant"), 23, "tenant realm count");
+        assert_eq!(realm_count("tenant"), 24, "tenant realm count");
 
         // Spot-check known nodes
         let project = nodes.iter().find(|n| n.def.name == "Project").unwrap();

@@ -188,8 +188,8 @@ pub fn render_help(f: &mut Frame) {
         Line::from(""),
         Line::from(vec![Span::styled("  Modes", STYLE_HIGHLIGHT)]),
         Line::from(vec![
-            Span::styled("    1-6      ", STYLE_PRIMARY),
-            Span::styled("Meta/Data/Overlay/Query/Atlas/Audit", STYLE_DIM),
+            Span::styled("    1-4      ", STYLE_PRIMARY),
+            Span::styled("Meta/Data/Atlas/Audit", STYLE_DIM),
         ]),
         Line::from(vec![
             Span::styled("    N        ", STYLE_PRIMARY),

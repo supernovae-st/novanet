@@ -765,7 +765,7 @@ impl App {
             }
         }
 
-        // Atlas mode delegates to atlas state (except mode switching 1-6)
+        // Atlas mode delegates to atlas state (except mode switching 1-4)
         if self.mode == NavMode::Atlas {
             match key.code {
                 // Mode switching exits Atlas mode (with cursor memory)
@@ -784,24 +784,10 @@ impl App {
                     return true;
                 }
                 KeyCode::Char('3') => {
-                    self.save_mode_cursor();
-                    self.mode = NavMode::Overlay;
-                    self.restore_mode_cursor(NavMode::Overlay);
-                    self.load_yaml_for_current();
-                    return true;
-                }
-                KeyCode::Char('4') => {
-                    self.save_mode_cursor();
-                    self.mode = NavMode::Query;
-                    self.restore_mode_cursor(NavMode::Query);
-                    self.load_yaml_for_current();
-                    return true;
-                }
-                KeyCode::Char('5') => {
                     // Already in Atlas, no-op
                     return false;
                 }
-                KeyCode::Char('6') => {
+                KeyCode::Char('4') => {
                     self.save_mode_cursor();
                     self.mode = NavMode::Audit;
                     self.restore_mode_cursor(NavMode::Audit);
@@ -845,25 +831,11 @@ impl App {
                 }
                 KeyCode::Char('3') => {
                     self.save_mode_cursor();
-                    self.mode = NavMode::Overlay;
-                    self.restore_mode_cursor(NavMode::Overlay);
-                    self.load_yaml_for_current();
-                    return true;
-                }
-                KeyCode::Char('4') => {
-                    self.save_mode_cursor();
-                    self.mode = NavMode::Query;
-                    self.restore_mode_cursor(NavMode::Query);
-                    self.load_yaml_for_current();
-                    return true;
-                }
-                KeyCode::Char('5') => {
-                    self.save_mode_cursor();
                     self.mode = NavMode::Atlas;
                     self.restore_mode_cursor(NavMode::Atlas);
                     return true;
                 }
-                KeyCode::Char('6') => {
+                KeyCode::Char('4') => {
                     // Already in Audit, no-op
                     return false;
                 }
@@ -926,7 +898,7 @@ impl App {
                 true
             }
 
-            // Mode switching: 1-4 direct (1=Meta, 2=Data, 3=Overlay, 4=Query)
+            // Mode switching: 1-4 direct (1=Meta, 2=Data, 3=Atlas, 4=Audit)
             KeyCode::Char('1') => {
                 // Switch to Meta mode, restoring saved cursor position
                 self.exit_filtered_data_mode();
@@ -967,29 +939,13 @@ impl App {
             KeyCode::Char('3') => {
                 self.exit_filtered_data_mode();
                 self.save_mode_cursor();
-                self.mode = NavMode::Overlay;
-                self.restore_mode_cursor(NavMode::Overlay);
-                self.load_yaml_for_current();
-                true
-            }
-            KeyCode::Char('4') => {
-                self.exit_filtered_data_mode();
-                self.save_mode_cursor();
-                self.mode = NavMode::Query;
-                self.restore_mode_cursor(NavMode::Query);
-                self.load_yaml_for_current();
-                true
-            }
-            KeyCode::Char('5') => {
-                self.exit_filtered_data_mode();
-                self.save_mode_cursor();
                 self.mode = NavMode::Atlas;
                 self.restore_mode_cursor(NavMode::Atlas);
                 // Initialize atlas with context from current selection
                 self.init_atlas_from_current();
                 true
             }
-            KeyCode::Char('6') => {
+            KeyCode::Char('4') => {
                 self.exit_filtered_data_mode();
                 self.save_mode_cursor();
                 self.mode = NavMode::Audit;
