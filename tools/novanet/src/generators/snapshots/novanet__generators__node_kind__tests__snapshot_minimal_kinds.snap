@@ -72,35 +72,35 @@ ON MATCH SET
   k_Page.generation_count = 0,
   k_Page.updated_at = datetime();
 
-MERGE (k_PageL10n:Meta:Kind {label: 'PageL10n'})
+MERGE (k_PageGenerated:Meta:Kind {label: 'PageGenerated'})
 ON CREATE SET
-  k_PageL10n.key = 'page-l10n',
-  k_PageL10n.realm = 'tenant',
-  k_PageL10n.layer = 'structure',
-  k_PageL10n.trait = 'localized',
-  k_PageL10n.display_name = 'PageL10n',
-  k_PageL10n.llm_context = 'PageL10n description.',
-  k_PageL10n.yaml_path = 'node-kinds/tenant/structure/pagel10n.yaml',
-  k_PageL10n.properties = [],
-  k_PageL10n.required_properties = [],
-  k_PageL10n.schema_hint = '',
-  k_PageL10n.context_budget = 'high',
-  k_PageL10n.generation_count = 0,
-  k_PageL10n.created_at = datetime()
+  k_PageGenerated.key = 'page-generated',
+  k_PageGenerated.realm = 'tenant',
+  k_PageGenerated.layer = 'output',
+  k_PageGenerated.trait = 'derived',
+  k_PageGenerated.display_name = 'PageGenerated',
+  k_PageGenerated.llm_context = 'PageGenerated description.',
+  k_PageGenerated.yaml_path = 'node-kinds/tenant/output/pagegenerated.yaml',
+  k_PageGenerated.properties = [],
+  k_PageGenerated.required_properties = [],
+  k_PageGenerated.schema_hint = '',
+  k_PageGenerated.context_budget = 'low',
+  k_PageGenerated.generation_count = 0,
+  k_PageGenerated.created_at = datetime()
 ON MATCH SET
-  k_PageL10n.key = 'page-l10n',
-  k_PageL10n.realm = 'tenant',
-  k_PageL10n.layer = 'structure',
-  k_PageL10n.trait = 'localized',
-  k_PageL10n.display_name = 'PageL10n',
-  k_PageL10n.llm_context = 'PageL10n description.',
-  k_PageL10n.yaml_path = 'node-kinds/tenant/structure/pagel10n.yaml',
-  k_PageL10n.properties = [],
-  k_PageL10n.required_properties = [],
-  k_PageL10n.schema_hint = '',
-  k_PageL10n.context_budget = 'high',
-  k_PageL10n.generation_count = 0,
-  k_PageL10n.updated_at = datetime();
+  k_PageGenerated.key = 'page-generated',
+  k_PageGenerated.realm = 'tenant',
+  k_PageGenerated.layer = 'output',
+  k_PageGenerated.trait = 'derived',
+  k_PageGenerated.display_name = 'PageGenerated',
+  k_PageGenerated.llm_context = 'PageGenerated description.',
+  k_PageGenerated.yaml_path = 'node-kinds/tenant/output/pagegenerated.yaml',
+  k_PageGenerated.properties = [],
+  k_PageGenerated.required_properties = [],
+  k_PageGenerated.schema_hint = '',
+  k_PageGenerated.context_budget = 'low',
+  k_PageGenerated.generation_count = 0,
+  k_PageGenerated.updated_at = datetime();
 
 MERGE (k_Concept:Meta:Kind {label: 'Concept'})
 ON CREATE SET
@@ -172,7 +172,7 @@ MERGE (l)-[:HAS_KIND]->(k);
 MATCH (l:Layer {key: 'structure'}), (k:Kind {label: 'Page'})
 MERGE (l)-[:HAS_KIND]->(k);
 
-MATCH (l:Layer {key: 'structure'}), (k:Kind {label: 'PageL10n'})
+MATCH (l:Layer {key: 'output'}), (k:Kind {label: 'PageGenerated'})
 MERGE (l)-[:HAS_KIND]->(k);
 
 MATCH (l:Layer {key: 'semantic'}), (k:Kind {label: 'Concept'})
@@ -191,7 +191,7 @@ MERGE (k)-[:IN_REALM]->(r);
 MATCH (k:Kind {label: 'Page'}), (r:Realm {key: 'tenant'})
 MERGE (k)-[:IN_REALM]->(r);
 
-MATCH (k:Kind {label: 'PageL10n'}), (r:Realm {key: 'tenant'})
+MATCH (k:Kind {label: 'PageGenerated'}), (r:Realm {key: 'tenant'})
 MERGE (k)-[:IN_REALM]->(r);
 
 MATCH (k:Kind {label: 'Concept'}), (r:Realm {key: 'tenant'})
@@ -210,7 +210,7 @@ MERGE (k)-[:IN_LAYER]->(l);
 MATCH (k:Kind {label: 'Page'}), (l:Layer {key: 'structure'})
 MERGE (k)-[:IN_LAYER]->(l);
 
-MATCH (k:Kind {label: 'PageL10n'}), (l:Layer {key: 'structure'})
+MATCH (k:Kind {label: 'PageGenerated'}), (l:Layer {key: 'output'})
 MERGE (k)-[:IN_LAYER]->(l);
 
 MATCH (k:Kind {label: 'Concept'}), (l:Layer {key: 'semantic'})
@@ -229,7 +229,7 @@ MERGE (k)-[:EXHIBITS]->(t);
 MATCH (k:Kind {label: 'Page'}), (t:Trait {key: 'invariant'})
 MERGE (k)-[:EXHIBITS]->(t);
 
-MATCH (k:Kind {label: 'PageL10n'}), (t:Trait {key: 'localized'})
+MATCH (k:Kind {label: 'PageGenerated'}), (t:Trait {key: 'derived'})
 MERGE (k)-[:EXHIBITS]->(t);
 
 MATCH (k:Kind {label: 'Concept'}), (t:Trait {key: 'invariant'})

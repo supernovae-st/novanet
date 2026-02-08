@@ -190,9 +190,9 @@ Show: SEOKeyword, SEOKeywordMetrics, SEOMiningRun and their relationships.
 
 **Required reads:**
 - `packages/core/models/node-kinds/global/locale-knowledge/*.yaml`
-- `packages/core/models/node-kinds/tenant/semantic/*.yaml` (Entity, EntityL10n)
+- `packages/core/models/node-kinds/tenant/semantic/*.yaml` (Entity, EntityContent)
 
-Show: All Sets (TermSet, etc.), all Atoms (Term, etc.), Entity/EntityL10n from tenant realm.
+Show: All Sets (TermSet, etc.), all Atoms (Term, etc.), Entity/EntityContent from tenant realm.
 
 ---
 

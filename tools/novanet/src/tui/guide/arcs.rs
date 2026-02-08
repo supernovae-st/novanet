@@ -376,7 +376,7 @@ fn render_arc_scope(f: &mut Frame, app: &App, area: Rect) {
             " \u{254c}\u{254c}\u{254c}[\u{21e2}]\u{254c}\u{254c}\u{254c} ",
             Style::default().fg(Color::Magenta),
         ),
-        Span::styled("PageL10n", Style::default().fg(tenant_color)),
+        Span::styled("PageGenerated", Style::default().fg(tenant_color)),
         Span::styled("  (global -> tenant)", Style::default().fg(Color::DarkGray)),
     ]));
 

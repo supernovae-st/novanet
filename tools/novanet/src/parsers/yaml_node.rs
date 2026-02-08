@@ -84,7 +84,7 @@ pub struct NodeDocument {
 /// Core node definition from YAML.
 #[derive(Debug, Deserialize)]
 pub struct NodeDef {
-    /// Neo4j label (PascalCase), e.g. "Project", "PageL10n".
+    /// Neo4j label (PascalCase), e.g. "Project", "PageGenerated".
     pub name: String,
 
     /// Realm classification (global, tenant) — explicit in YAML.
@@ -476,9 +476,7 @@ node:
             );
         }
 
-        // v10.9: Verify trait distribution (2 realms: global + tenant)
-        // v10.9 renames: EntityL10n→EntityContent, BlockL10n→BlockGenerated, PageL10n→PageGenerated
-        // v10.9 trait changes: BlockGenerated + PageGenerated are now "derived" instead of "localized"
+        // Verify trait distribution (2 realms: global + tenant)
         let count = |t: NodeTrait| nodes.iter().filter(|n| n.def.node_trait == t).count();
         assert_eq!(count(NodeTrait::Invariant), 23, "invariant count");
         assert_eq!(
