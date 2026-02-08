@@ -13,7 +13,7 @@ Turborepo monorepo for NovaNet - knowledge graph localization orchestrator.
 NovaNet uses Neo4j to orchestrate **native content generation** (NOT translation) across 200+ locales.
 
 **Target Application**: QR Code AI (https://qrcode-ai.com)
-**Current Version**: v10.9.0
+**Current Version**: v11.0.0
 **Roadmap**: `ROADMAP.md` | **Changelog**: `CHANGELOG.md`
 
 ```
@@ -25,9 +25,9 @@ Entity (invariant) -> Generate natively -> EntityContent (local)  <-- RIGHT
 
 ---
 
-## v10.9 Nomenclature
+## v11.0 Nomenclature
 
-v10.9 establishes semantic naming conventions and composite keys:
+v11.0 establishes 2-Realm Architecture with SEO in tenant realm:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -43,7 +43,7 @@ v10.9 establishes semantic naming conventions and composite keys:
 ├─────────────────────────────────────────────────────────────────────────────┤
 │  NodeKind:                                                                  │
 │    WHERE?  NodeRealm  (global / tenant)                                     │
-│    WHAT?   NodeLayer  (9 functional layers across 2 realms)                 │
+│    WHAT?   NodeLayer  (9 layers: 2 global + 7 tenant)                       │
 │    HOW?    NodeTrait  (invariant / localized / knowledge / derived / job)   │
 │                                                                             │
 │  ArcKind:                                                                   │
@@ -53,18 +53,17 @@ v10.9 establishes semantic naming conventions and composite keys:
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-**Key changes in v10.9:**
-- **Node naming**: `*L10n` → semantic suffixes (`EntityContent`, `PageGenerated`, `BlockGenerated`)
-- **Arc naming**: `HAS_L10N` → `HAS_CONTENT` (localization), `HAS_OUTPUT` → `HAS_GENERATED` (generation)
+**Key changes in v11.0:**
+- **SEO → Tenant**: Moved 9 SEO/GEO nodes from `global/seo` to `tenant/seo` (ADR-012 fix)
+- **Arc coherence**: Fixed 22 arc scopes (cross_realm → intra_realm)
+- **Node naming** (v10.9): `*L10n` → semantic suffixes (`EntityContent`, `PageGenerated`, `BlockGenerated`)
+- **Arc naming** (v10.9): `HAS_L10N` → `HAS_CONTENT`, `HAS_OUTPUT` → `HAS_GENERATED`
 - **Composite keys**: `entity:{entity_key}@{locale_key}` pattern for locale-specific nodes
-- **UTF-8 slugs**: `^[\p{Ll}\p{N}\-]+$` — lowercase letters (any script) + digits + hyphens
-- **Curation status**: `human_authored | machine_translated | ai_generated | ai_generated_reviewed`
-- **Denormalized props**: `full_path`, `depth` for efficient hierarchy queries
 
-**Architecture (from v10.6):**
+**Architecture (v11.0):**
 - 2 realms: GLOBAL + TENANT
-- GLOBAL (3 layers): config, locale-knowledge, seo — universal, READ-ONLY
-- TENANT (6 layers): config, foundation, structure, semantic, instruction, output
+- GLOBAL (2 layers): config, locale-knowledge — universal, READ-ONLY
+- TENANT (7 layers): config, foundation, structure, semantic, instruction, seo, output
 
 **Rust binary:** `tools/novanet/` — single crate for CLI + TUI (neo4rs, ratatui, clap).
 All commands implemented: data/meta/overlay/query, node/arc CRUD, search, locale, db,
@@ -72,9 +71,9 @@ schema generate/validate, doc generate, filter build, Galaxy-themed TUI with boo
 
 **YAML-first architecture:** Each Kind YAML has explicit `realm:` and `layer:` fields (source of truth).
 Path validation ensures `models/node-kinds/{realm}/{layer}/{name}.yaml` matches YAML content.
-v10.9: 2 realms (global, tenant), 9 layers total.
+v11.0: 2 realms (global, tenant), 9 layers total (2 global + 7 tenant).
 
-**Icons source of truth (v10.9):** `visual-encoding.yaml` → `icons:` section provides dual-format icons:
+**Icons source of truth (v11.0):** `visual-encoding.yaml` → `icons:` section provides dual-format icons:
 - `web`: Lucide icon name for Studio
 - `terminal`: Unicode symbol for TUI
 Categories: realms, layers, traits, arc_families, states, navigation, quality, modes.
@@ -125,7 +124,7 @@ Categories: realms, layers, traits, arc_families, states, navigation, quality, m
 │  Containers (6): TermSet, ExpressionSet, PatternSet,                        │
 │                  CultureSet, TabooSet, AudienceSet                          │
 │  Atoms (6):      Term, Expression, Pattern, CultureRef, Taboo, AudienceTrait│
-│  Total:          46 nodes, 72 arcs                                          │
+│  Total:          64 nodes, 121 arcs                                         │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -299,7 +298,7 @@ PATCH  = Bug fixes, documentation, refactoring
 
 **Files**: `CHANGELOG.md`, `ROADMAP.md`, `.github/RELEASE_TEMPLATE.md`
 
-**GitHub Milestones**: v9.0.0, v10.0.0, v10.5.0, v10.6.0, v10.9.0
+**GitHub Milestones**: v9.0.0, v10.0.0, v10.5.0, v10.6.0, v10.9.0, v11.0.0
 
 ---
 
@@ -339,7 +338,7 @@ See `.claude/README.md` for full documentation.
 node:
   name: LocaleVoice
   realm: global               # Source of truth (must match path)
-  layer: locale-knowledge     # v10.9: 2 realms (global, tenant)
+  layer: locale-knowledge     # v11.0: 2 realms (global, tenant)
   trait: knowledge
   description: "..."
   properties:

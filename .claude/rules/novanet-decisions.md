@@ -1,4 +1,4 @@
-# NovaNet Architecture Decisions (v10.9)
+# NovaNet Architecture Decisions (v11.0)
 
 This file documents key architecture decisions for NovaNet. Reference these when making implementation choices.
 
@@ -199,15 +199,16 @@ v10.5 (3 realms):  global / organization / project
 v10.6 (2 realms):  global / tenant
 ```
 
-**Architecture**:
-- **GLOBAL** (3 layers): config, locale-knowledge, seo — Universal, READ-ONLY
-- **TENANT** (6 layers): config, foundation, structure, semantic, instruction, output — Business-specific
+**Architecture** (updated v11.0):
+- **GLOBAL** (2 layers): config, locale-knowledge — Universal, READ-ONLY
+- **TENANT** (7 layers): config, foundation, structure, semantic, instruction, seo, output — Business-specific
 
 **Rationale**:
 - Organization + Project distinction added unnecessary complexity
 - Tenant is the natural isolation boundary for multi-tenant SaaS
 - Single realm for all business content simplifies queries and permissions
-- 9 total layers (3 global + 6 tenant) provides sufficient granularity
+- 9 total layers (2 global + 7 tenant) provides sufficient granularity
+- v11.0: SEO moved to tenant (business-specific keywords, not universal knowledge)
 
 **Migration path**:
 - `organization` -> `tenant` (rename)

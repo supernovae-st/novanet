@@ -1,4 +1,4 @@
-# NovaNet Terminology (v10.9)
+# NovaNet Terminology (v11.0)
 
 This file defines the canonical terminology for NovaNet. All code, documentation, and UI must use these terms consistently.
 
@@ -24,17 +24,17 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 | 2 | WHAT? | `NodeLayer` | `layer` | `config`, `locale-knowledge`, `seo`, `foundation`, `structure`, `semantic`, `instruction`, `output` |
 | 3 | HOW? | `NodeTrait` | `trait` | `invariant`, `localized`, `knowledge`, `derived`, `job` |
 
-### v10.6 Realm Architecture
+### v11.0 Realm Architecture
 
 | Realm | Layers | Description |
 |-------|--------|-------------|
-| `global` | config, locale-knowledge, seo | Universal locale knowledge (READ-ONLY) |
-| `tenant` | config, foundation, structure, semantic, instruction, output | Business-specific content |
+| `global` | config, locale-knowledge | Universal locale knowledge (READ-ONLY) |
+| `tenant` | config, foundation, structure, semantic, instruction, seo, output | Business-specific content |
 
-> **v10.6 Changes:**
-> - 3 realms -> 2 realms: GLOBAL + TENANT (merged organization + project)
-> - GLOBAL (3 layers): config, locale-knowledge, seo
-> - TENANT (6 layers): config, foundation, structure, semantic, instruction, output
+> **v11.0 Changes:**
+> - SEO moved from global to tenant (ADR-012 fix)
+> - GLOBAL (2 layers): config, locale-knowledge
+> - TENANT (7 layers): config, foundation, structure, semantic, instruction, seo, output
 
 ### Arc Classification (Faceted)
 
@@ -44,11 +44,11 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 | 2 | FUNCTION? | `ArcFamily` | `family` | `ownership`, `localization`, `semantic`, `generation`, `mining` |
 | 3 | MULTIPLICITY? | `ArcCardinality` | `cardinality` | `zero_to_one`, `one_to_one`, `one_to_many`, `many_to_many` |
 
-## YAML Source Files (v10.6)
+## YAML Source Files (v11.0)
 
 | File | Content |
 |------|---------|
-| `taxonomy.yaml` | Realm/Layer/Trait/ArcFamily/ArcScope definitions (v10.6: 2 realms) |
+| `taxonomy.yaml` | Realm/Layer/Trait/ArcFamily/ArcScope definitions (v11.0: 2 realms, 9 layers) |
 | `node-kinds/` | 1 file per NodeKind, organized by Realm/Layer |
 | `arc-kinds/` | 1 file per ArcKind, organized by ArcFamily |
 | `relations.yaml` | Legacy format (deprecated, kept for parser compatibility) |
@@ -174,7 +174,7 @@ These terms are deprecated and should NOT be used:
 | Arc stroke | ArcFamily | `taxonomy.yaml` arc_families[].color |
 | Arc dash | ArcScope | solid (intra) / dashed (cross) |
 
-## Icons (v10.6)
+## Icons (v11.0)
 
 Source of truth: `packages/core/models/visual-encoding.yaml` → `icons:` section
 

@@ -1,6 +1,6 @@
 # NovaNet Roadmap
 
-Current version: **v10.9.2** | Last release: v9.7.1 | Target: QR Code AI (https://qrcode-ai.com)
+Current version: **v11.0.0** | Last release: v10.9.2 | Target: QR Code AI (https://qrcode-ai.com)
 
 ## Milestones Overview
 
@@ -23,8 +23,10 @@ v10.7 Geographic Taxonomy              █████████████�
       Population clusters, economic regions, cultural realms
 v10.8 Icons Source of Truth            ████████████████████  100%  RELEASED
       visual-encoding.yaml icons (web+terminal), ADR-013
-v10.9 Naming Convention Refactor       ████████████████████  100%  <- CURRENT
+v10.9 Naming Convention Refactor       ████████████████████  100%  RELEASED
       ADR-014 (L10n→Content/Generated), ADR-015 (unidirectional arcs), ADR-016 (CONTAINS→6 typed)
+v11.0 SEO Tenant + Docs Refactor       ████████████████████  100%  <- CURRENT
+      SEO→tenant (ADR-012 fix), arc coherence, 30-sniper doc audit
 
 ═══════════════════════════════════════════════════════════════════════════════
 IDEAS (no timeline)
@@ -97,7 +99,22 @@ Will be reimplemented on stable v2 foundation when prioritized.
 | 7.8k | Command palette + UX | DEFERRED |
 | 7.8l | Wow effects (CRT, shake, glitch, pulse) | DEFERRED |
 
-## v10.9.0 — Naming Convention Refactor ← CURRENT
+## v11.0.0 — SEO Tenant + Docs Refactor ← CURRENT
+
+Major architectural cleanup with 30-sniper comprehensive audit.
+
+| Change | Description |
+|--------|-------------|
+| **SEO → Tenant** | Moved 9 SEO/GEO nodes from `global/seo` to `tenant/seo` |
+| **ADR-012 Fix** | Eliminated all global→tenant arc violations |
+| **Arc Coherence** | Fixed 22 arc scopes (cross_realm → intra_realm) |
+| **Docs Refactor** | 30-sniper audit of CLAUDE.md, DX, skills, agents, roadmap |
+
+**Schema counts:** 64 NodeKinds, 120 ArcKinds, 2 Realms, 9 Layers (2 global + 7 tenant)
+
+---
+
+## v10.9.0 — Naming Convention Refactor
 
 Semantic renaming for clearer architecture. Three ADRs implemented:
 
@@ -107,7 +124,7 @@ Semantic renaming for clearer architecture. Three ADRs implemented:
 | **ADR-015** | Unidirectional ownership | All `IS_*` arcs reversed to `HAS_*` (parent → child) |
 | **ADR-016** | CONTAINS → 6 typed arcs | `CONTAINS_TERM`, `CONTAINS_EXPRESSION`, `CONTAINS_PATTERN`, `CONTAINS_CULTURE_REF`, `CONTAINS_TABOO`, `CONTAINS_AUDIENCE_TRAIT` |
 
-**Schema counts:** 64 NodeKinds, 120 ArcKinds, 2 Realms (global/tenant), 8 Layers
+**Schema counts:** 64 NodeKinds, 120 ArcKinds, 2 Realms (global/tenant), 9 Layers
 
 ---
 
@@ -188,3 +205,4 @@ release/v*      Release preparation (optional, for complex releases)
 | v10.7.0 | 2026-02-06 | Geographic taxonomy, population clusters |
 | v10.8.0 | 2026-02-07 | Icons source of truth (ADR-013), visual-encoding.yaml |
 | v10.9.0 | 2026-02-08 | Naming refactor (ADR-014/015/016), 64 Kinds, 120 ArcKinds |
+| v11.0.0 | 2026-02-08 | SEO → tenant migration, arc coherence (22 fixes), docs refactor |
