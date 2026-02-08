@@ -1,0 +1,335 @@
+# Phase 6: Actions — 15 Entities
+# QR Code AI Entity Data for NovaNet
+# v11 Schema with Typed Semantic Arcs
+
+project: qrcode-ai
+phase: 6
+name: Actions
+description: User actions and verbs (create, scan, customize, download, etc.)
+
+entities:
+  # =============================================================================
+  # QR CODE ACTIONS (10)
+  # =============================================================================
+  - key: create-qr-code
+    type: ACTION
+    display_name: Create QR Code
+    description: Generate a new QR code
+    entity_summary: |
+      Creating a QR code is the primary action of encoding data into a
+      scannable 2D barcode. Users input content (URL, text, vCard) and
+      the generator produces a QR code image.
+
+  - key: scan-qr-code
+    type: ACTION
+    display_name: Scan QR Code
+    description: Read QR code data
+    entity_summary: |
+      Scanning a QR code uses a camera to decode the data stored within.
+      Modern smartphones have built-in QR scanning in the camera app.
+      Returns the encoded content for the user to act upon.
+
+  - key: customize-qr-code
+    type: ACTION
+    display_name: Customize QR Code
+    description: Design and style a QR code
+    entity_summary: |
+      Customizing a QR code involves changing colors, adding logos,
+      modifying patterns, and applying design elements while maintaining
+      scannability. Includes sub-actions like adding logos and colors.
+
+  - key: download-qr-code
+    type: ACTION
+    display_name: Download QR Code
+    description: Export QR as image file
+    entity_summary: |
+      Downloading a QR code exports it as an image file (PNG, SVG, PDF).
+      Different formats serve different purposes - PNG for web, SVG for
+      print, PDF for professional documents.
+
+  - key: print-qr-code
+    type: ACTION
+    display_name: Print QR Code
+    description: Print for physical use
+    entity_summary: |
+      Printing a QR code produces physical copies for real-world use.
+      Requires consideration of size, contrast, and quiet zone to
+      ensure scannability on the chosen medium.
+
+  - key: add-logo
+    type: ACTION
+    display_name: Add Logo
+    description: Add logo to QR center
+    entity_summary: |
+      Adding a logo places a brand image in the center of a QR code.
+      Requires higher error correction to maintain scannability.
+      Popular for branded marketing materials.
+
+  - key: change-colors
+    type: ACTION
+    display_name: Change Colors
+    description: Customize QR colors
+    entity_summary: |
+      Changing colors customizes the foreground and background of a QR code.
+      Requires sufficient contrast for scanning. Dark foreground on
+      light background works best.
+
+  - key: edit-destination
+    type: ACTION
+    display_name: Edit Destination
+    description: Change QR target URL
+    entity_summary: |
+      Editing destination changes where a dynamic QR code redirects.
+      Only possible with dynamic QR codes that use short links.
+      Enables updating content without reprinting.
+
+  - key: share-qr-code
+    type: ACTION
+    display_name: Share QR Code
+    description: Share via link or email
+    entity_summary: |
+      Sharing a QR code distributes it to others via email, messaging,
+      or social media. Can share the image file or a link to view/scan.
+
+  - key: track-scans
+    type: ACTION
+    display_name: Track Scans
+    description: Monitor scan analytics
+    entity_summary: |
+      Tracking scans monitors who, when, and where QR codes are scanned.
+      Requires dynamic QR codes with short links. Provides data for
+      campaign optimization and ROI measurement.
+
+  # =============================================================================
+  # LINK ACTIONS (3)
+  # =============================================================================
+  - key: shorten-url
+    type: ACTION
+    display_name: Shorten URL
+    description: Create short URL
+    entity_summary: |
+      Shortening a URL creates a compact link that redirects to the
+      original. Short URLs are easier to share, track, and encode in
+      QR codes with smaller data requirements.
+
+  - key: create-smart-link
+    type: ACTION
+    display_name: Create Smart Link
+    description: Create intelligent link
+    entity_summary: |
+      Creating a smart link adds intelligence to URL shortening.
+      Smart links can route based on device, location, or time,
+      and include analytics and retargeting capabilities.
+
+  - key: create-landing-page
+    type: ACTION
+    display_name: Create Landing Page
+    description: Build destination page
+    entity_summary: |
+      Creating a landing page builds a destination for QR codes and links.
+      No-code builders enable creating bio pages, menus, forms, and
+      campaign pages without technical skills.
+
+  # =============================================================================
+  # BARCODE ACTIONS (2)
+  # =============================================================================
+  - key: create-barcode
+    type: ACTION
+    display_name: Create Barcode
+    description: Generate barcode
+    entity_summary: |
+      Creating a barcode generates a 1D or 2D barcode image. Different
+      formats (EAN, UPC, Code 128) serve different industries. Primarily
+      used for inventory and product identification.
+
+  - key: scan-barcode
+    type: ACTION
+    display_name: Scan Barcode
+    description: Read barcode data
+    entity_summary: |
+      Scanning a barcode reads the encoded data using a scanner or camera.
+      Returns product information, prices, or inventory codes. Essential
+      for retail and logistics operations.
+
+# =============================================================================
+# SEMANTIC ARCS (~45 connections)
+# =============================================================================
+
+arcs:
+  # ---------------------------------------------------------------------------
+  # QR CODE ACTION HIERARCHY
+  # ---------------------------------------------------------------------------
+  - from: create-qr-code
+    to: qr-code
+    type: APPLIES_TO
+    strength: 0.95
+
+  - from: scan-qr-code
+    to: qr-code
+    type: APPLIES_TO
+    strength: 0.95
+
+  - from: customize-qr-code
+    to: qr-code
+    type: APPLIES_TO
+    strength: 0.95
+
+  - from: download-qr-code
+    to: qr-code
+    type: APPLIES_TO
+    strength: 0.95
+
+  - from: print-qr-code
+    to: qr-code
+    type: APPLIES_TO
+    strength: 0.95
+
+  - from: share-qr-code
+    to: qr-code
+    type: APPLIES_TO
+    strength: 0.90
+
+  - from: add-logo
+    to: custom-qr-code
+    type: APPLIES_TO
+    strength: 0.95
+
+  - from: change-colors
+    to: custom-qr-code
+    type: APPLIES_TO
+    strength: 0.95
+
+  - from: edit-destination
+    to: dynamic-qr-code
+    type: APPLIES_TO
+    strength: 0.95
+
+  - from: track-scans
+    to: analytics
+    type: APPLIES_TO
+    strength: 0.90
+
+  # ---------------------------------------------------------------------------
+  # ACTION SEQUENCES (requires/enables)
+  # ---------------------------------------------------------------------------
+  - from: create-qr-code
+    to: customize-qr-code
+    type: ENABLES
+    strength: 0.85
+
+  - from: customize-qr-code
+    to: create-qr-code
+    type: REQUIRES
+    strength: 0.85
+
+  - from: customize-qr-code
+    to: add-logo
+    type: INCLUDES
+    strength: 0.80
+
+  - from: customize-qr-code
+    to: change-colors
+    type: INCLUDES
+    strength: 0.80
+
+  - from: create-qr-code
+    to: download-qr-code
+    type: ENABLES
+    strength: 0.90
+
+  - from: download-qr-code
+    to: create-qr-code
+    type: REQUIRES
+    strength: 0.90
+
+  - from: download-qr-code
+    to: print-qr-code
+    type: ENABLES
+    strength: 0.85
+
+  - from: print-qr-code
+    to: download-qr-code
+    type: REQUIRES
+    strength: 0.85
+
+  # ---------------------------------------------------------------------------
+  # ACTION CONTRASTS
+  # ---------------------------------------------------------------------------
+  - from: scan-qr-code
+    to: create-qr-code
+    type: SIMILAR_TO
+    strength: 0.40
+
+  - from: scan-barcode
+    to: create-barcode
+    type: SIMILAR_TO
+    strength: 0.40
+
+  # ---------------------------------------------------------------------------
+  # LINK ACTIONS
+  # ---------------------------------------------------------------------------
+  - from: shorten-url
+    to: short-link
+    type: APPLIES_TO
+    strength: 0.95
+
+  - from: create-smart-link
+    to: smart-link
+    type: APPLIES_TO
+    strength: 0.95
+
+  - from: create-landing-page
+    to: landing-page
+    type: APPLIES_TO
+    strength: 0.95
+
+  - from: shorten-url
+    to: create-smart-link
+    type: ENABLES
+    strength: 0.80
+
+  # ---------------------------------------------------------------------------
+  # BARCODE ACTIONS
+  # ---------------------------------------------------------------------------
+  - from: create-barcode
+    to: barcode
+    type: APPLIES_TO
+    strength: 0.95
+
+  - from: scan-barcode
+    to: barcode
+    type: APPLIES_TO
+    strength: 0.95
+
+  # ---------------------------------------------------------------------------
+  # TOOL → ACTION CONNECTIONS
+  # ---------------------------------------------------------------------------
+  - from: qr-code-generator
+    to: create-qr-code
+    type: ENABLES
+    strength: 0.95
+
+  - from: qr-code-scanner
+    to: scan-qr-code
+    type: ENABLES
+    strength: 0.95
+
+  - from: url-shortener
+    to: shorten-url
+    type: ENABLES
+    strength: 0.95
+
+  - from: landing-page-builder
+    to: create-landing-page
+    type: ENABLES
+    strength: 0.95
+
+  - from: barcode-generator
+    to: create-barcode
+    type: ENABLES
+    strength: 0.95
+
+  - from: barcode-scanner
+    to: scan-barcode
+    type: ENABLES
+    strength: 0.95

@@ -1,0 +1,530 @@
+# Phase 4: Features & Tools — 29 Entities
+# QR Code AI Entity Data for NovaNet
+# v11 Schema with Typed Semantic Arcs
+
+project: qrcode-ai
+phase: 4
+name: Features & Tools
+description: Platform features (analytics, tracking, etc.) and tools (generators, builders)
+
+entities:
+  # =============================================================================
+  # PLATFORM FEATURES (19)
+  # =============================================================================
+  - key: analytics
+    type: FEATURE
+    display_name: Analytics
+    description: Umbrella feature for all tracking and statistics
+    entity_summary: |
+      Analytics is the comprehensive tracking and reporting system for QR codes
+      and smart links. Includes click tracking, scan counting, geographic data,
+      device detection, and time-series reporting.
+
+  - key: click-tracking
+    type: FEATURE
+    display_name: Click Tracking
+    description: Tracks link click events
+    entity_summary: |
+      Click tracking records every click on short links and smart links.
+      Captures timestamp, referrer, and conversion data for marketing analysis.
+
+  - key: scan-counting
+    type: FEATURE
+    display_name: Scan Counting
+    description: Counts QR code scans
+    entity_summary: |
+      Scan counting tracks the number of times a QR code is scanned.
+      Essential for measuring campaign performance and ROI.
+
+  - key: geo-tracking
+    type: FEATURE
+    display_name: Geographic Tracking
+    description: Geographic location of scans
+    entity_summary: |
+      Geographic tracking identifies the location of QR code scans and link
+      clicks. Uses IP geolocation for country, region, and city data.
+
+  - key: device-detection
+    type: FEATURE
+    display_name: Device Detection
+    description: OS/browser/device information
+    entity_summary: |
+      Device detection identifies the operating system, browser, and device
+      type of users who scan QR codes. Enables device-specific optimization.
+
+  - key: time-series
+    type: FEATURE
+    display_name: Time Series Analytics
+    description: Historical data over time
+    entity_summary: |
+      Time series analytics provides historical scan and click data over time.
+      Enables trend analysis, peak time identification, and forecasting.
+
+  - key: contextual-routing
+    type: FEATURE
+    display_name: Contextual Routing
+    description: OS/device/location-based redirect
+    entity_summary: |
+      Contextual routing redirects users to different destinations based on
+      their device, operating system, or location. Essential for app download
+      links that need to route to App Store or Play Store.
+
+  - key: custom-domain-name
+    type: FEATURE
+    display_name: Custom Domain
+    description: Branded short domains
+    entity_summary: |
+      Custom domains allow using your own branded domain for short links
+      instead of the platform's default. Improves trust and brand recognition.
+
+  - key: custom-link-preview
+    type: FEATURE
+    display_name: Custom Link Preview
+    description: OG meta customization
+    entity_summary: |
+      Custom link preview lets you control how links appear when shared on
+      social media. Customize title, description, and image for better CTR.
+
+  - key: utm-builder
+    type: FEATURE
+    display_name: UTM Builder
+    description: Campaign parameter builder
+    entity_summary: |
+      UTM builder helps create tracking parameters for marketing campaigns.
+      Automatically appends utm_source, utm_medium, utm_campaign to URLs.
+
+  - key: bulk-creation
+    type: FEATURE
+    display_name: Bulk Creation
+    description: Mass QR code generation
+    entity_summary: |
+      Bulk creation enables generating hundreds or thousands of QR codes at
+      once. Essential for enterprise use cases like product packaging or
+      event ticketing.
+
+  - key: team-workspaces
+    type: FEATURE
+    display_name: Team Workspaces
+    description: Multi-user collaboration
+    entity_summary: |
+      Team workspaces allow multiple users to collaborate on QR code and
+      link management. Includes roles, permissions, and shared assets.
+
+  - key: api
+    type: FEATURE
+    display_name: API Access
+    description: Developer API access
+    entity_summary: |
+      API access provides programmatic control over QR code and link creation.
+      RESTful endpoints for integration with custom applications and workflows.
+
+  - key: webhooks
+    type: FEATURE
+    display_name: Webhooks
+    description: Event notifications
+    entity_summary: |
+      Webhooks send real-time notifications to external systems when events
+      occur. Useful for triggering workflows, updating CRMs, or logging.
+
+  - key: white-label
+    type: FEATURE
+    display_name: White Label
+    description: Remove platform branding
+    entity_summary: |
+      White label removes all platform branding, allowing agencies and
+      enterprises to present QR Code AI as their own product.
+
+  - key: password-protection
+    type: FEATURE
+    display_name: Password Protection
+    description: Require password to access
+    entity_summary: |
+      Password protection adds a password gate before revealing QR code
+      destinations. Useful for private content or limited access links.
+
+  - key: expiration
+    type: FEATURE
+    display_name: Link Expiration
+    description: Time-limited QR codes
+    entity_summary: |
+      Expiration sets a date/time after which the QR code or link stops
+      working. Perfect for time-sensitive promotions or temporary access.
+
+  - key: scan-limit
+    type: FEATURE
+    display_name: Scan Limit
+    description: Maximum scan count
+    entity_summary: |
+      Scan limit restricts the number of times a QR code can be scanned.
+      Useful for limited offers, exclusive content, or contest entries.
+
+  - key: retargeting-pixel
+    type: FEATURE
+    display_name: Retargeting Pixel
+    description: Facebook/Google pixel integration
+    entity_summary: |
+      Retargeting pixel integration adds tracking pixels from Facebook,
+      Google, or other ad platforms to link destinations for remarketing.
+
+  # =============================================================================
+  # TOOLS (10)
+  # =============================================================================
+  - key: qr-code-generator
+    type: TOOL
+    display_name: QR Code Generator
+    description: Primary QR code creation tool
+    entity_summary: |
+      A QR code generator is a tool that creates QR code images from data.
+      Supports various content types (URL, text, vCard, WiFi) and allows
+      customization of colors, size, and design.
+
+  - key: qr-code-scanner
+    type: TOOL
+    display_name: QR Code Scanner
+    description: QR code reader application
+    entity_summary: |
+      A QR code scanner reads and decodes QR codes using a camera.
+      Available as mobile apps or integrated into smartphone cameras.
+      Returns the encoded data for the user.
+
+  - key: qr-code-api
+    type: TOOL
+    display_name: QR Code API
+    description: API for QR generation
+    entity_summary: |
+      A QR code API provides programmatic access to QR code generation.
+      Developers can create QR codes via HTTP requests without UI interaction.
+
+  - key: landing-page-builder
+    type: TOOL
+    display_name: Landing Page Builder
+    description: No-code page builder
+    entity_summary: |
+      A landing page builder creates destination pages without coding.
+      Drag-and-drop interface for creating bio pages, menus, forms, and more.
+
+  - key: url-shortener
+    type: TOOL
+    display_name: URL Shortener
+    description: Link shortening tool
+    entity_summary: |
+      A URL shortener creates compact links from long URLs. Short links are
+      easier to share and look cleaner in QR codes. Includes tracking.
+
+  - key: link-in-bio-builder
+    type: TOOL
+    display_name: Link in Bio Builder
+    description: Social bio page builder
+    entity_summary: |
+      A link in bio builder creates one-page link hubs for social media
+      profiles. Perfect for Instagram, TikTok, and other platforms with
+      single-link limitations.
+
+  - key: menu-builder
+    type: TOOL
+    display_name: Menu Builder
+    description: Restaurant menu builder
+    entity_summary: |
+      A menu builder creates digital restaurant menus accessible via QR code.
+      Supports categories, items, prices, images, and dietary information.
+
+  - key: vcard-generator
+    type: TOOL
+    display_name: vCard Generator
+    description: Digital business card creator
+    entity_summary: |
+      A vCard generator creates digital business cards in VCF format.
+      When scanned, automatically adds contact to phone. Includes name,
+      phone, email, company, and social links.
+
+  - key: wifi-qr-generator
+    type: TOOL
+    display_name: WiFi QR Generator
+    description: WiFi credential QR creator
+    entity_summary: |
+      A WiFi QR generator creates QR codes that connect devices to WiFi
+      networks automatically. Encodes SSID, password, and security type.
+
+  - key: batch-qr-generator
+    type: TOOL
+    display_name: Batch QR Generator
+    description: Bulk QR creation tool
+    entity_summary: |
+      A batch QR generator creates multiple QR codes at once from
+      spreadsheet data. Essential for mass production of product labels,
+      asset tags, or event badges.
+
+# =============================================================================
+# SEMANTIC ARCS (~65 connections)
+# =============================================================================
+
+arcs:
+  # ---------------------------------------------------------------------------
+  # ANALYTICS HIERARCHY
+  # ---------------------------------------------------------------------------
+  - from: analytics
+    to: smart-link
+    type: APPLIES_TO
+    strength: 0.85
+
+  - from: analytics
+    to: click-tracking
+    type: INCLUDES
+    strength: 0.85
+
+  - from: analytics
+    to: scan-counting
+    type: INCLUDES
+    strength: 0.85
+
+  - from: analytics
+    to: geo-tracking
+    type: INCLUDES
+    strength: 0.85
+
+  - from: analytics
+    to: device-detection
+    type: INCLUDES
+    strength: 0.85
+
+  - from: analytics
+    to: time-series
+    type: INCLUDES
+    strength: 0.85
+
+  - from: click-tracking
+    to: analytics
+    type: TYPE_OF
+    strength: 0.90
+
+  - from: scan-counting
+    to: analytics
+    type: TYPE_OF
+    strength: 0.90
+
+  - from: geo-tracking
+    to: analytics
+    type: TYPE_OF
+    strength: 0.90
+
+  - from: device-detection
+    to: analytics
+    type: TYPE_OF
+    strength: 0.90
+
+  - from: time-series
+    to: analytics
+    type: TYPE_OF
+    strength: 0.90
+
+  - from: geo-tracking
+    to: device-detection
+    type: SIMILAR_TO
+    strength: 0.60
+
+  # ---------------------------------------------------------------------------
+  # SMART LINK FEATURES
+  # ---------------------------------------------------------------------------
+  - from: contextual-routing
+    to: smart-link
+    type: APPLIES_TO
+    strength: 0.85
+
+  - from: contextual-routing
+    to: short-link
+    type: REQUIRES
+    strength: 0.90
+
+  - from: custom-domain-name
+    to: smart-link
+    type: APPLIES_TO
+    strength: 0.80
+
+  - from: custom-domain-name
+    to: short-link
+    type: APPLIES_TO
+    strength: 0.80
+
+  - from: custom-link-preview
+    to: smart-link
+    type: APPLIES_TO
+    strength: 0.80
+
+  - from: custom-link-preview
+    to: short-link
+    type: REQUIRES
+    strength: 0.90
+
+  - from: utm-builder
+    to: smart-link
+    type: APPLIES_TO
+    strength: 0.80
+
+  - from: utm-builder
+    to: analytics
+    type: ENABLES
+    strength: 0.85
+
+  - from: retargeting-pixel
+    to: smart-link
+    type: APPLIES_TO
+    strength: 0.80
+
+  # ---------------------------------------------------------------------------
+  # DYNAMIC QR FEATURES
+  # ---------------------------------------------------------------------------
+  - from: password-protection
+    to: dynamic-qr-code
+    type: APPLIES_TO
+    strength: 0.70
+
+  - from: password-protection
+    to: short-link
+    type: REQUIRES
+    strength: 0.90
+
+  - from: expiration
+    to: dynamic-qr-code
+    type: APPLIES_TO
+    strength: 0.70
+
+  - from: expiration
+    to: short-link
+    type: REQUIRES
+    strength: 0.90
+
+  - from: scan-limit
+    to: dynamic-qr-code
+    type: APPLIES_TO
+    strength: 0.70
+
+  - from: scan-limit
+    to: short-link
+    type: REQUIRES
+    strength: 0.90
+
+  # ---------------------------------------------------------------------------
+  # ENTERPRISE FEATURES
+  # ---------------------------------------------------------------------------
+  - from: bulk-creation
+    to: qr-code
+    type: APPLIES_TO
+    strength: 0.70
+
+  - from: bulk-creation
+    to: smart-link
+    type: APPLIES_TO
+    strength: 0.70
+
+  - from: team-workspaces
+    to: qr-code
+    type: APPLIES_TO
+    strength: 0.60
+
+  - from: team-workspaces
+    to: smart-link
+    type: APPLIES_TO
+    strength: 0.60
+
+  - from: api
+    to: qr-code
+    type: APPLIES_TO
+    strength: 0.60
+
+  - from: api
+    to: smart-link
+    type: APPLIES_TO
+    strength: 0.60
+
+  - from: webhooks
+    to: api
+    type: SIMILAR_TO
+    strength: 0.70
+
+  # ---------------------------------------------------------------------------
+  # TOOL RELATIONSHIPS
+  # ---------------------------------------------------------------------------
+  - from: qr-code-generator
+    to: qr-code
+    type: APPLIES_TO
+    strength: 0.95
+
+  - from: qr-code-scanner
+    to: qr-code
+    type: APPLIES_TO
+    strength: 0.95
+
+  - from: qr-code-generator
+    to: qr-code-scanner
+    type: SIMILAR_TO
+    strength: 0.50
+
+  - from: qr-code-api
+    to: qr-code
+    type: APPLIES_TO
+    strength: 0.90
+
+  - from: qr-code-api
+    to: api
+    type: TYPE_OF
+    strength: 0.85
+
+  - from: landing-page-builder
+    to: landing-page
+    type: APPLIES_TO
+    strength: 0.95
+
+  - from: url-shortener
+    to: short-link
+    type: APPLIES_TO
+    strength: 0.95
+
+  - from: link-in-bio-builder
+    to: link-in-bio
+    type: APPLIES_TO
+    strength: 0.95
+
+  - from: link-in-bio-builder
+    to: landing-page-builder
+    type: TYPE_OF
+    strength: 0.85
+
+  - from: menu-builder
+    to: menu-restaurant
+    type: APPLIES_TO
+    strength: 0.95
+
+  - from: menu-builder
+    to: landing-page-builder
+    type: TYPE_OF
+    strength: 0.85
+
+  - from: vcard-generator
+    to: qr-code-vcard
+    type: APPLIES_TO
+    strength: 0.95
+
+  - from: vcard-generator
+    to: qr-code-generator
+    type: TYPE_OF
+    strength: 0.85
+
+  - from: wifi-qr-generator
+    to: qr-code-wifi
+    type: APPLIES_TO
+    strength: 0.95
+
+  - from: wifi-qr-generator
+    to: qr-code-generator
+    type: TYPE_OF
+    strength: 0.85
+
+  - from: batch-qr-generator
+    to: bulk-creation
+    type: APPLIES_TO
+    strength: 0.95
+
+  - from: batch-qr-generator
+    to: qr-code-generator
+    type: TYPE_OF
+    strength: 0.85
