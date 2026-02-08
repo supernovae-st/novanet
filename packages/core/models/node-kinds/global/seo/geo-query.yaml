@@ -118,7 +118,7 @@ node:
 
   relations:
     # Incoming: Locale --[:HAS_GEO_QUERIES]--> GEOQuery (ownership)
-    # Incoming: EntityL10n --[:MONITORS_GEO]--> GEOQuery (targeting)
+    # Incoming: EntityContent --[:MONITORS_GEO]--> GEOQuery (targeting)
 
     - relation: HAS_GEO_ANSWERS
       to: GEOAnswer

@@ -6,7 +6,7 @@
 #        - Derived from Answer The Public "comparisons" category
 #        - Links to parent SEOKeyword via HAS_COMPARISONS
 #        - Links to TWO Entities via COMPARES_A and COMPARES_B arcs
-#        - Can be addressed by PageL10n/BlockL10n via ADDRESSES arc
+#        - Can be addressed by PageGenerated/BlockGenerated via ADDRESSES arc
 
 node:
   name: SEOComparison
@@ -112,7 +112,7 @@ node:
 
   relations:
     # Incoming: SEOKeyword --[:HAS_COMPARISONS]--> SEOComparison (ownership)
-    # Incoming: PageL10n/BlockL10n --[:ADDRESSES]--> SEOComparison (coverage)
+    # Incoming: PageGenerated/BlockGenerated --[:ADDRESSES]--> SEOComparison (coverage)
 
     - relation: COMPARES_A
       to: Entity

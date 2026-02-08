@@ -5,7 +5,7 @@
 #        - Captures question keywords with their own volume/difficulty
 #        - Derived from Answer The Public "questions" category
 #        - Links to parent SEOKeyword via HAS_QUESTIONS
-#        - Can be answered by EntityL10n via ANSWERS arc
+#        - Can be answered by EntityContent via ANSWERS arc
 
 node:
   name: SEOQuestion
@@ -111,7 +111,7 @@ node:
 
   relations:
     # Incoming: SEOKeyword --[:HAS_QUESTIONS]--> SEOQuestion (ownership)
-    # Incoming: EntityL10n --[:ANSWERS]--> SEOQuestion (coverage tracking)
+    # Incoming: EntityContent --[:ANSWERS]--> SEOQuestion (coverage tracking)
     []
 
   # ═══════════════════════════════════════════════════════════════════════════════
@@ -121,9 +121,9 @@ node:
   example:
     description: "Get unanswered questions for a keyword (content gap analysis)"
     cypher: |
-      // Find questions that no EntityL10n has answered yet
+      // Find questions that no EntityContent has answered yet
       MATCH (kw:SEOKeyword {key: $keyword_key})-[:HAS_QUESTIONS]->(q:SEOQuestion)
-      WHERE NOT EXISTS { MATCH (el:EntityL10n)-[:ANSWERS]->(q) }
+      WHERE NOT EXISTS { MATCH (ec:EntityContent)-[:ANSWERS]->(q) }
       RETURN q.value AS question,
              q.volume,
              q.question_word,

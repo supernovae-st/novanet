@@ -109,8 +109,8 @@ node:
     incoming:
       - type: HAS_EVALUATION
         from:
-          - PageL10n
-          - BlockL10n
+          - PageGenerated
+          - BlockGenerated
           - OutputArtifact
         description: "Content being evaluated"
 

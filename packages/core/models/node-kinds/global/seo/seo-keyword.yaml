@@ -151,8 +151,8 @@ node:
   # ═══════════════════════════════════════════════════════════════════════════════
 
   relations:
-    # Incoming: EntityL10n --[:TARGETS]--> SEOKeyword (targeting)
-    # NOTE: Locale is inferred via EntityL10n --[:FOR_LOCALE]--> Locale
+    # Incoming: EntityContent --[:TARGETS]--> SEOKeyword (targeting)
+    # NOTE: Locale is inferred via EntityContent --[:FOR_LOCALE]--> Locale
 
     - relation: HAS_METRICS
       to: SEOKeywordMetrics
@@ -175,8 +175,8 @@ node:
       direction: outgoing
       description: "Preposition keywords (X for Y) from Answer The Public"
 
-    # v10.8: Removed EXPRESSES (redundant - use TARGETS inverse from EntityL10n)
-    # Query: MATCH (kw:SEOKeyword)<-[:TARGETS]-(el:EntityL10n) RETURN el.entity_key
+    # v10.8: Removed EXPRESSES (redundant - use TARGETS inverse from EntityContent)
+    # Query: MATCH (kw:SEOKeyword)<-[:TARGETS]-(ec:EntityContent) RETURN ec.entity_key
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # EXAMPLE
@@ -185,8 +185,8 @@ node:
   example:
     description: "Get top keywords by traffic potential for a locale"
     cypher: |
-      // v10.8: SEOKeyword via EntityL10n (locale inferred)
-      MATCH (el:EntityL10n {locale_key: $locale})-[:TARGETS]->(kw:SEOKeyword)
+      // v10.8: SEOKeyword via EntityContent (locale inferred)
+      MATCH (ec:EntityContent {locale_key: $locale})-[:TARGETS]->(kw:SEOKeyword)
       OPTIONAL MATCH (kw)-[:HAS_QUESTIONS]->(q:SEOQuestion)
       RETURN kw.value AS keyword,
              kw.volume,
