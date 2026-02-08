@@ -1,5 +1,5 @@
 # arc-kinds/semantic/answers.yaml
-# ANSWERS - EntityL10n answers an SEO question (v10.6)
+# ANSWERS - EntityContent answers an SEO question (v10.6)
 #
 # v10.6: SEO Schema v2
 #        - Tracks which questions are answered by which content
@@ -11,7 +11,7 @@ arc:
   scope: cross_realm
   temperature_threshold: 0.6
 
-  source: EntityL10n
+  source: EntityContent
   target: SEOQuestion
   cardinality: many_to_many
 
@@ -27,9 +27,9 @@ arc:
       description: "Which section/block answers this question"
 
   llm_context: |
-    EntityL10n answers SEO questions for content coverage tracking.
+    EntityContent answers SEO questions for content coverage tracking.
     Use to find unanswered questions (content gaps).
     coverage: full = dedicated answer, partial = mentioned, brief = touched on.
-    Pattern: EntityL10n(qr-code-guide-fr) → ANSWERS → SEOQuestion(comment créer)
+    Pattern: EntityContent(qr-code-guide-fr) → ANSWERS → SEOQuestion(comment créer)
 
-  cypher_pattern: "(EntityL10n)-[:ANSWERS {coverage, section}]->(SEOQuestion)"
+  cypher_pattern: "(EntityContent)-[:ANSWERS {coverage, section}]->(SEOQuestion)"

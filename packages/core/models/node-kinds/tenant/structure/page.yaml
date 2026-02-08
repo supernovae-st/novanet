@@ -118,10 +118,10 @@ node:
           description: "Block position within the page (1-based)"
       description: "Content blocks within this page"
 
-    HAS_OUTPUT:
-      to: PageL10n
+    HAS_GENERATED:  # v10.9.0: renamed from HAS_OUTPUT
+      to: PageGenerated  # v10.9.0: renamed from PageL10n
       cardinality: "1:N"
-      description: "Assembled outputs for this page (one per locale)"
+      description: "Generated outputs for this page (one per locale)"
 
     HAS_PROMPT:
       to: PagePrompt
@@ -192,16 +192,16 @@ node:
       RETURN pt.required_block_types AS required,
              [rbt IN pt.required_block_types WHERE NOT rbt IN page_block_types] AS missing
 
-      // Get page with latest output for locale
-      MATCH (p:Page {key: $key})-[:HAS_OUTPUT]->(pl:PageL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
-      RETURN p, pl
-      ORDER BY pl.assembled_at DESC
+      // Get page with latest generated output for locale (v10.9.0)
+      MATCH (p:Page {key: $key})-[:HAS_GENERATED]->(pg:PageGenerated)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+      RETURN p, pg
+      ORDER BY pg.assembled_at DESC
       LIMIT 1
 
-      // v7.12.0: Get internal links with localized anchors (v10.3: Entity-centric)
+      // v7.12.0: Get internal links with localized anchors (v10.9.0: EntityContent)
       MATCH (p:Page {key: $key})-[link:LINKS_TO]->(target:Page)
-      MATCH (e:Entity {key: link.entity_key})-[:HAS_L10N]->(el:EntityL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
-      RETURN target.key AS target_page, el.title AS anchor_text, link.context, link.seo_weight
+      MATCH (e:Entity {key: link.entity_key})-[:HAS_CONTENT]->(ec:EntityContent)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+      RETURN target.key AS target_page, ec.display_name AS anchor_text, link.context, link.seo_weight
       ORDER BY link.seo_weight DESC
 
       // v7.12.0: Get pillar page with its cluster pages

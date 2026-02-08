@@ -1,5 +1,5 @@
 # arc-kinds/semantic/addresses.yaml
-# ADDRESSES - PageL10n/BlockL10n addresses SEO comparison or preposition (v10.6)
+# ADDRESSES - PageGenerated/BlockGenerated addresses SEO comparison or preposition (v10.6)
 #
 # v10.6: SEO Schema v2
 #        - Tracks which comparisons/prepositions are covered by content
@@ -11,11 +11,11 @@ arc:
   scope: cross_realm
   temperature_threshold: 0.5
 
-  source: PageL10n
+  source: PageGenerated
   target: SEOComparison
   cardinality: many_to_many
 
-  # Note: Also valid for BlockL10n → SEOComparison and both → SEOPreposition
+  # Note: Also valid for BlockGenerated → SEOComparison and both → SEOPreposition
   # Parser should allow multiple source/target combinations
 
   properties:
@@ -30,6 +30,6 @@ arc:
     Use to find content coverage for competitive comparisons.
     Use to find coverage for use case/feature content.
     depth: dedicated = whole page, section = h2/block, mention = brief reference.
-    Pattern: PageL10n(qr-vs-barcode-fr) → ADDRESSES → SEOComparison(qr code vs barcode)
+    Pattern: PageGenerated(qr-vs-barcode-fr) → ADDRESSES → SEOComparison(qr code vs barcode)
 
-  cypher_pattern: "(PageL10n|BlockL10n)-[:ADDRESSES {depth}]->(SEOComparison|SEOPreposition)"
+  cypher_pattern: "(PageGenerated|BlockGenerated)-[:ADDRESSES {depth}]->(SEOComparison|SEOPreposition)"

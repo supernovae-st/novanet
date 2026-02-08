@@ -1,0 +1,29 @@
+# packages/core/models/arc-kinds/generation/has-generated.yaml
+# ArcKind: HAS_GENERATED — Structure node links to its LLM-generated output (v10.9.0)
+#
+# v10.9.0: Renamed from HAS_OUTPUT → HAS_GENERATED
+#          Moved from localization family → generation family
+#          Target: PageGenerated → PageGenerated, BlockGenerated → BlockGenerated
+
+arc:
+  name: HAS_GENERATED
+  family: generation
+  scope: intra_realm
+
+  source:
+    - Page
+    - Block
+  target:
+    - PageGenerated   # v10.9.0: renamed from PageGenerated
+    - BlockGenerated  # v10.9.0: renamed from BlockGenerated
+
+  cardinality: one_to_many
+
+  inverse: GENERATED_FOR
+
+  llm_context: |
+    Links structure to its LLM-generated localized output (one per locale).
+    This is DERIVED content (computed), not SOURCE content.
+    Use: MATCH (p:Page)-[:HAS_GENERATED]->(pg:PageGenerated)-[:FOR_LOCALE]->(l:Locale)
+
+  cypher_pattern: "(Page)-[:HAS_GENERATED]->(PageGenerated)"

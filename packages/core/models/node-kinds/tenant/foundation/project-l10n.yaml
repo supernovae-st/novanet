@@ -2,7 +2,7 @@
 # ProjectL10n - Localized identity and messaging for Project
 #
 # GRAPH POSITION:
-#   Project ──[:HAS_L10N]──> ProjectL10n ──[:FOR_LOCALE]──> Locale
+#   Project ──[:HAS_CONTENT]──> ProjectL10n ──[:FOR_LOCALE]──> Locale
 #                                │
 #                                └──[:L10N_OF]──> Project (inverse, v7.8.0)
 #
@@ -14,7 +14,7 @@
 #
 # IDENTIFICATION:
 #   No key property - identified by relation chain:
-#   (Project)--[:HAS_L10N]-->(ProjectL10n)--[:FOR_LOCALE]-->(Locale)
+#   (Project)--[:HAS_CONTENT]-->(ProjectL10n)--[:FOR_LOCALE]-->(Locale)
 
 node:
   name: ProjectL10n
@@ -218,15 +218,15 @@ node:
   # ===========================================================================
 
   incoming_relations:
-    - relation: HAS_L10N
+    - relation: HAS_CONTENT
       from: Project
       cardinality: "1:N"
       description: "Parent project that owns this localization"
 
     - relation: BELONGS_TO_PROJECT_L10N
-      from: PageL10n
+      from: PageGenerated
       cardinality: "1:N"
-      description: "PageL10n nodes generated for this project locale"
+      description: "PageGenerated nodes generated for this project locale"
 
   # ===========================================================================
   # EXAMPLE

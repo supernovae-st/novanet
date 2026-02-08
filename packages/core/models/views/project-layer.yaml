@@ -58,13 +58,13 @@ docs:
     **14 nodes organized by category:**
     - **Foundation (3)**: Project, BrandIdentity, ProjectL10n
     - **Structure (2)**: Page, Block
-    - **Semantic (2)**: Entity, EntityL10n
+    - **Semantic (2)**: Entity, EntityContent
     - **Instruction (5)**: PageType, PagePrompt, BlockType, BlockPrompt, BlockRules
-    - **Output (2)**: PageL10n, BlockL10n
+    - **Output (2)**: PageGenerated, BlockGenerated
 
     **Key insight:**
     The Project layer is where invariant structure meets localized output.
-    Pages and Blocks are invariant scaffolding; PageL10n and BlockL10n are generated.
+    Pages and Blocks are invariant scaffolding; PageGenerated and BlockGenerated are generated.
 
   layers:
     - name: Foundation
@@ -78,7 +78,7 @@ docs:
       description: Content scaffolding (invariant)
 
     - name: Semantic
-      nodes: [Entity, EntityL10n]
+      nodes: [Entity, EntityContent]
       color: green
       description: Meaning and knowledge (invariant + localized)
 
@@ -88,7 +88,7 @@ docs:
       description: AI generation directives (invariant)
 
     - name: Output
-      nodes: [PageL10n, BlockL10n]
+      nodes: [PageGenerated, BlockGenerated]
       color: purple
       description: LLM-generated content (localized)
 
@@ -134,7 +134,7 @@ docs:
         MATCH (page)-[:HAS_PROMPT]->(pp:PagePrompt)
         OPTIONAL MATCH (page)-[:HAS_BLOCK]->(b:Block)
         OPTIONAL MATCH (b)-[:USES_ENTITY]->(c:Entity)
-        OPTIONAL MATCH (c)-[:HAS_L10N]->(cl:EntityL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+        OPTIONAL MATCH (c)-[:HAS_L10N]->(cl:EntityContent)-[:FOR_LOCALE]->(l:Locale {key: $locale})
         RETURN page.key AS page,
                pp.instructions AS instructions,
                collect(DISTINCT b.key) AS blocks,
@@ -164,4 +164,4 @@ docs:
     - "Invariant nodes (Page, Block, Entity) are defined once per project"
     - "Localized nodes (*L10n) are generated for each supported locale"
     - "The orchestrator uses this view to coordinate generation"
-    - "Output nodes (PageL10n, BlockL10n) are LLM-generated, not human-written"
+    - "Output nodes (PageGenerated, BlockGenerated) are LLM-generated, not human-written"

@@ -6,14 +6,14 @@ arc:
   family: generation
   scope: intra_realm
   source:
-    - BlockL10n
-    - PageL10n
+    - BlockGenerated
+    - PageGenerated
     - OutputArtifact
   target:
-    - BlockL10n
-    - PageL10n
+    - BlockGenerated
+    - PageGenerated
     - OutputArtifact
   cardinality: one_to_one
   is_self_referential: true
   llm_context: "Links to previous version in history chain. Query: (current)-[:PREVIOUS_VERSION*]->(old)."
-  cypher_pattern: (BlockL10n)-[:PREVIOUS_VERSION]->(BlockL10n)
+  cypher_pattern: (BlockGenerated)-[:PREVIOUS_VERSION]->(BlockGenerated)

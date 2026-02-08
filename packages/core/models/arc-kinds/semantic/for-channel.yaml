@@ -6,13 +6,13 @@ arc:
   scope: intra_realm
 
   source:
-    - PageL10n
-    - BlockL10n
+    - PageGenerated
+    - BlockGenerated
   target: ChannelSurface
   cardinality: many_to_one
 
   llm_context: |
     Localized content is tailored for a specific channel surface.
-    Use to filter content: MATCH (c:BlockL10n)-[:FOR_CHANNEL]->(ch:ChannelSurface {key: "mobile"})
+    Use to filter content: MATCH (c:BlockGenerated)-[:FOR_CHANNEL]->(ch:ChannelSurface {key: "mobile"})
 
-  cypher_pattern: "(PageL10n, BlockL10n)-[:FOR_CHANNEL]->(ChannelSurface)"
+  cypher_pattern: "(PageGenerated, BlockGenerated)-[:FOR_CHANNEL]->(ChannelSurface)"

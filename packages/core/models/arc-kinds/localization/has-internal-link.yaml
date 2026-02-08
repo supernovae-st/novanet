@@ -1,13 +1,13 @@
 # packages/core/models/arc-kinds/localization/has-internal-link.yaml
-# ArcKind: HAS_INTERNAL_LINK — BlockL10n contains link to PageL10n (v10.3)
+# ArcKind: HAS_INTERNAL_LINK — BlockGenerated contains link to PageGenerated (v10.3)
 
 arc:
   name: HAS_INTERNAL_LINK
   family: localization
   scope: intra_realm
 
-  source: BlockL10n
-  target: PageL10n
+  source: BlockGenerated
+  target: PageGenerated
   cardinality: many_to_many
 
   properties:
@@ -25,8 +25,8 @@ arc:
       description: "Whether the link has rel=nofollow"
 
   llm_context: |
-    BlockL10n contains an actual HTML internal link to PageL10n.
+    BlockGenerated contains an actual HTML internal link to PageGenerated.
     Links are extracted from generated content for SEO analysis.
-    Use: MATCH (bl:BlockL10n)-[:HAS_INTERNAL_LINK]->(pl:PageL10n)
+    Use: MATCH (bl:BlockGenerated)-[:HAS_INTERNAL_LINK]->(pl:PageGenerated)
 
-  cypher_pattern: "(BlockL10n)-[:HAS_INTERNAL_LINK {anchor_text, position, nofollow}]->(PageL10n)"
+  cypher_pattern: "(BlockGenerated)-[:HAS_INTERNAL_LINK {anchor_text, position, nofollow}]->(PageGenerated)"

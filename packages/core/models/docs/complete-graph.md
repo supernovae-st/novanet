@@ -96,7 +96,7 @@ flowchart TB
       AudiencePersona["🔵 AudiencePersona"]
       ChannelSurface["🔵 ChannelSurface"]
       Entity["🔵 Entity"]
-      EntityL10n["🟢 EntityL10n"]
+      EntityContent["🟢 EntityContent"]
     end
     subgraph TENANT_foundation["Foundation"]
       BrandIdentity["🔵 BrandIdentity"]
@@ -118,11 +118,11 @@ flowchart TB
       PromptArtifact["⚪ PromptArtifact"]
     end
     subgraph TENANT_output["Generated Output"]
-      BlockL10n["🟢 BlockL10n"]
+      BlockGenerated["⚪ BlockGenerated"]
       EvaluationSignal["⚪ EvaluationSignal"]
       GenerationJob["⚙️ GenerationJob"]
       OutputArtifact["⚪ OutputArtifact"]
-      PageL10n["🟢 PageL10n"]
+      PageGenerated["⚪ PageGenerated"]
     end
   end
 
@@ -135,24 +135,24 @@ flowchart TB
   AudienceSet -->|CONTAINS| Term
   Block -->|BLOCK_OF| Page
   Block -.->|FILLS_SLOT| ContentSlot
-  Block -.->|HAS_OUTPUT| BlockL10n
-  Block -.->|HAS_OUTPUT| PageL10n
+  Block -.->|HAS_OUTPUT| BlockGenerated
+  Block -.->|HAS_OUTPUT| PageGenerated
   Block -->|HAS_PROMPT| BlockPrompt
   Block -->|HAS_PROMPT| PagePrompt
   Block -->|OF_TYPE| BlockType
   Block -->|OF_TYPE| PageType
   Block -.->|USES_ENTITY| Entity
-  BlockL10n -.->|FOR_LOCALE| Locale
-  BlockL10n ==>|GENERATED_FROM| BlockType
-  BlockL10n ==>|HAS_EVALUATION| EvaluationSignal
-  BlockL10n ==>|INFLUENCED_BY| EntityL10n
-  BlockL10n -.->|OUTPUT_OF| Block
-  BlockL10n -.->|OUTPUT_OF| Page
-  BlockL10n ==>|PREVIOUS_VERSION| BlockL10n
-  BlockL10n ==>|PREVIOUS_VERSION| OutputArtifact
-  BlockL10n ==>|PREVIOUS_VERSION| PageL10n
-  BlockPrompt ==>|GENERATED| BlockL10n
-  BlockPrompt ==>|GENERATED| PageL10n
+  BlockGenerated -.->|FOR_LOCALE| Locale
+  BlockGenerated ==>|GENERATED_FROM| BlockType
+  BlockGenerated ==>|HAS_EVALUATION| EvaluationSignal
+  BlockGenerated ==>|INFLUENCED_BY| EntityContent
+  BlockGenerated -.->|OUTPUT_OF| Block
+  BlockGenerated -.->|OUTPUT_OF| Page
+  BlockGenerated ==>|PREVIOUS_VERSION| BlockGenerated
+  BlockGenerated ==>|PREVIOUS_VERSION| OutputArtifact
+  BlockGenerated ==>|PREVIOUS_VERSION| PageGenerated
+  BlockPrompt ==>|GENERATED| BlockGenerated
+  BlockPrompt ==>|GENERATED| PageGenerated
   BlockType -->|HAS_RULES| BlockRules
   ContentSlot -->|ACCEPTS_BLOCK_TYPE| BlockType
   CultureSet -->|CONTAINS| AudienceTrait
@@ -161,14 +161,14 @@ flowchart TB
   CultureSet -->|CONTAINS| Pattern
   CultureSet -->|CONTAINS| Taboo
   CultureSet -->|CONTAINS| Term
-  Entity -.->|HAS_L10N| EntityL10n
+  Entity -.->|HAS_L10N| EntityContent
   Entity -.->|HAS_L10N| ProjectL10n
   Entity -.->|SEMANTIC_LINK| Entity
   Entity -.->|USED_BY| Block
   Entity -.->|USED_BY| Page
-  EntityL10n -.->|FOR_LOCALE| Locale
-  EntityL10n -.->|L10N_OF| Entity
-  EntityL10n -.->|L10N_OF| Project
+  EntityContent -.->|FOR_LOCALE| Locale
+  EntityContent -.->|L10N_OF| Entity
+  EntityContent -.->|L10N_OF| Project
   EvaluationSignal ==>|EVALUATED_BY_JOB| GenerationJob
   ExpressionSet -->|CONTAINS| AudienceTrait
   ExpressionSet -->|CONTAINS| CultureRef
@@ -176,8 +176,8 @@ flowchart TB
   ExpressionSet -->|CONTAINS| Pattern
   ExpressionSet -->|CONTAINS| Taboo
   ExpressionSet -->|CONTAINS| Term
-  GenerationJob ==>|CREATES_CONTENT| BlockL10n
-  GenerationJob ==>|CREATES_CONTENT| PageL10n
+  GenerationJob ==>|CREATES_CONTENT| BlockGenerated
+  GenerationJob ==>|CREATES_CONTENT| PageGenerated
   GenerationJob -.->|FOR_LOCALE| Locale
   GenerationJob ==>|PRODUCES| OutputArtifact
   GenerationJob ==>|TRIGGERED_BY| Project
@@ -189,9 +189,9 @@ flowchart TB
   Locale -->|HAS_CULTURE_SET| CultureSet
   Locale -->|HAS_EXPRESSIONS| ExpressionSet
   Locale -->|HAS_FORMATTING| Formatting
-  Locale -.->|HAS_LOCALIZED_CONTENT| BlockL10n
-  Locale -.->|HAS_LOCALIZED_CONTENT| EntityL10n
-  Locale -.->|HAS_LOCALIZED_CONTENT| PageL10n
+  Locale -.->|HAS_LOCALIZED_CONTENT| BlockGenerated
+  Locale -.->|HAS_LOCALIZED_CONTENT| EntityContent
+  Locale -.->|HAS_LOCALIZED_CONTENT| PageGenerated
   Locale -.->|HAS_LOCALIZED_CONTENT| ProjectL10n
   Locale -->|HAS_MARKET| Market
   Locale -->|HAS_PATTERNS| PatternSet
@@ -203,15 +203,15 @@ flowchart TB
   Locale -.->|VARIANT_OF| Locale
   OutputArtifact -.->|FOR_LOCALE| Locale
   OutputArtifact ==>|HAS_EVALUATION| EvaluationSignal
-  OutputArtifact ==>|INCLUDES| BlockL10n
-  OutputArtifact ==>|INCLUDES| PageL10n
-  OutputArtifact ==>|PREVIOUS_VERSION| BlockL10n
+  OutputArtifact ==>|INCLUDES| BlockGenerated
+  OutputArtifact ==>|INCLUDES| PageGenerated
+  OutputArtifact ==>|PREVIOUS_VERSION| BlockGenerated
   OutputArtifact ==>|PREVIOUS_VERSION| OutputArtifact
-  OutputArtifact ==>|PREVIOUS_VERSION| PageL10n
+  OutputArtifact ==>|PREVIOUS_VERSION| PageGenerated
   Page -.->|FOR_CHANNEL| ChannelSurface
   Page -->|HAS_BLOCK| Block
-  Page -.->|HAS_OUTPUT| BlockL10n
-  Page -.->|HAS_OUTPUT| PageL10n
+  Page -.->|HAS_OUTPUT| BlockGenerated
+  Page -.->|HAS_OUTPUT| PageGenerated
   Page -->|HAS_PROMPT| BlockPrompt
   Page -->|HAS_PROMPT| PagePrompt
   Page -->|HAS_SLOT| ContentSlot
@@ -221,17 +221,17 @@ flowchart TB
   Page -.->|SUBTOPIC_OF| Page
   Page -.->|TARGETS_PERSONA| AudiencePersona
   Page -.->|USES_ENTITY| Entity
-  PageL10n ==>|ASSEMBLES| BlockL10n
-  PageL10n -->|BELONGS_TO_PROJECT_L10N| ProjectL10n
-  PageL10n -.->|FOR_LOCALE| Locale
-  PageL10n ==>|HAS_EVALUATION| EvaluationSignal
-  PageL10n -.->|OUTPUT_OF| Block
-  PageL10n -.->|OUTPUT_OF| Page
-  PageL10n ==>|PREVIOUS_VERSION| BlockL10n
-  PageL10n ==>|PREVIOUS_VERSION| OutputArtifact
-  PageL10n ==>|PREVIOUS_VERSION| PageL10n
-  PagePrompt ==>|GENERATED| BlockL10n
-  PagePrompt ==>|GENERATED| PageL10n
+  PageGenerated ==>|ASSEMBLES| BlockGenerated
+  PageGenerated -->|BELONGS_TO_PROJECT_L10N| ProjectL10n
+  PageGenerated -.->|FOR_LOCALE| Locale
+  PageGenerated ==>|HAS_EVALUATION| EvaluationSignal
+  PageGenerated -.->|OUTPUT_OF| Block
+  PageGenerated -.->|OUTPUT_OF| Page
+  PageGenerated ==>|PREVIOUS_VERSION| BlockGenerated
+  PageGenerated ==>|PREVIOUS_VERSION| OutputArtifact
+  PageGenerated ==>|PREVIOUS_VERSION| PageGenerated
+  PagePrompt ==>|GENERATED| BlockGenerated
+  PagePrompt ==>|GENERATED| PageGenerated
   PatternSet -->|CONTAINS| AudienceTrait
   PatternSet -->|CONTAINS| CultureRef
   PatternSet -->|CONTAINS| Expression
@@ -240,7 +240,7 @@ flowchart TB
   PatternSet -->|CONTAINS| Term
   Project -->|DEFAULT_LOCALE| Locale
   Project -->|HAS_BRAND_IDENTITY| BrandIdentity
-  Project -.->|HAS_L10N| EntityL10n
+  Project -.->|HAS_L10N| EntityContent
   Project -.->|HAS_L10N| ProjectL10n
   Project -->|HAS_PAGE| Page
   Project -->|SUPPORTS_LOCALE| Locale
@@ -279,8 +279,8 @@ flowchart TB
   class AudienceSet knowledge
   class AudienceTrait knowledge
   class Block invariant
+  class BlockGenerated derived
   class BlockInstruction invariant
-  class BlockL10n localized
   class BlockPrompt invariant
   class BlockRules invariant
   class BlockType invariant
@@ -295,7 +295,7 @@ flowchart TB
   class CultureSet knowledge
   class EconomicRegion invariant
   class Entity invariant
-  class EntityL10n localized
+  class EntityContent localized
   class EvaluationSignal derived
   class Expression knowledge
   class ExpressionSet knowledge
@@ -315,7 +315,7 @@ flowchart TB
   class Organization invariant
   class OutputArtifact derived
   class Page invariant
-  class PageL10n localized
+  class PageGenerated derived
   class PagePrompt invariant
   class PageType invariant
   class Pattern knowledge
