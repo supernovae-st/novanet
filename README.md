@@ -35,7 +35,7 @@ Generate culturally-native content across 200+ locales — not translation, but 
 |  |  |  |  |
 |:---:|:---:|:---:|:---:|
 | **Knowledge Graph** | **200+ Locales** | **Graph Studio** | **AI-Powered** |
-| 46 node types, 72 arcs | Native generation per locale | Interactive 2D visualization | Claude API for natural language queries |
+| 64 node types, 120 arcs | Native generation per locale | Interactive 2D visualization | Claude API for natural language queries |
 | Neo4j with APOC | Locale knowledge layer | React Flow + ELK.js layouts | Cypher generation from text |
 
 ---

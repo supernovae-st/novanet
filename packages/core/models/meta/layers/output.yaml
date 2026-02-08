@@ -5,7 +5,7 @@ key: output
 display_name: Generated Output
 emoji: "✨"
 color: "#22c55e"
-realm: project
+realm: tenant
 
 llm_context: |
   LLM-generated content. The final localized pages and blocks ready

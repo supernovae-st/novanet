@@ -129,7 +129,7 @@ fn bolt_to_json(bolt: &neo4rs::BoltType) -> JsonValue {
 /// Arc type for a Kind (from schema).
 #[derive(Debug, Clone)]
 pub struct ArcInfo {
-    pub rel_type: String,
+    pub arc_type: String,
     pub direction: ArcDirection,
     pub target_kind: String,
 }
@@ -554,14 +554,14 @@ ORDER BY realm_key, layer_key, kind_key
         let cypher = r#"
 MATCH (ak:ArcKind:Meta)-[:FROM_KIND]->(fromKind:Kind:Meta)
 MATCH (ak)-[:TO_KIND]->(toKind:Kind:Meta)
-RETURN fromKind.label AS kind_key, ak.key AS rel_type, 'outgoing' AS direction, toKind.label AS target_kind
+RETURN fromKind.label AS kind_key, ak.key AS arc_type, 'outgoing' AS direction, toKind.label AS target_kind
 ORDER BY fromKind.label, ak.key
 
 UNION
 
 MATCH (ak:ArcKind:Meta)-[:FROM_KIND]->(fromKind:Kind:Meta)
 MATCH (ak)-[:TO_KIND]->(toKind:Kind:Meta)
-RETURN toKind.label AS kind_key, ak.key AS rel_type, 'incoming' AS direction, fromKind.label AS target_kind
+RETURN toKind.label AS kind_key, ak.key AS arc_type, 'incoming' AS direction, fromKind.label AS target_kind
 ORDER BY toKind.label, ak.key
 "#;
 
@@ -570,11 +570,11 @@ ORDER BY toKind.label, ak.key
 
         for row in rows {
             let kind_key: String = row.get("kind_key").unwrap_or_default();
-            let rel_type: String = row.get("rel_type").unwrap_or_default();
+            let arc_type: String = row.get("arc_type").unwrap_or_default();
             let direction_str: String = row.get("direction").unwrap_or_default();
             let target_kind: String = row.get("target_kind").unwrap_or_default();
 
-            if kind_key.is_empty() || rel_type.is_empty() {
+            if kind_key.is_empty() || arc_type.is_empty() {
                 continue;
             }
 
@@ -585,7 +585,7 @@ ORDER BY toKind.label, ak.key
             };
 
             arc_map.entry(kind_key).or_default().push(ArcInfo {
-                rel_type,
+                arc_type,
                 direction,
                 target_kind,
             });
@@ -2197,10 +2197,10 @@ impl InstanceInfo {
                 let actual = self
                     .outgoing_arcs
                     .iter()
-                    .find(|a| a.arc_type == schema_arc.rel_type);
+                    .find(|a| a.arc_type == schema_arc.arc_type);
 
                 comparisons.push(ArcComparison {
-                    arc_type: schema_arc.rel_type.clone(),
+                    arc_type: schema_arc.arc_type.clone(),
                     target_kind: schema_arc.target_kind.clone(),
                     exists: actual.is_some(),
                     target_key: actual.map(|a| a.target_key.clone()),
@@ -2416,12 +2416,12 @@ mod tests {
 
         let schema_arcs = vec![
             ArcInfo {
-                rel_type: "HAS_TERMS".to_string(),
+                arc_type: "HAS_TERMS".to_string(),
                 direction: ArcDirection::Outgoing,
                 target_kind: "TermSet".to_string(),
             },
             ArcInfo {
-                rel_type: "HAS_CULTURE".to_string(),
+                arc_type: "HAS_CULTURE".to_string(),
                 direction: ArcDirection::Outgoing,
                 target_kind: "CultureSet".to_string(),
             },
