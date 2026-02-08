@@ -1146,18 +1146,23 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                             String::new()
                                         };
 
-                                        // Completeness bar: [====--] (4 chars, proportional)
+                                        // Completeness bar: [==--] only shown if incomplete
                                         let completeness_badge = if instance.total_properties > 0 {
                                             let filled = instance.filled_properties;
                                             let total = instance.total_properties;
-                                            let ratio = (filled as f32 / total as f32).min(1.0);
-                                            let filled_chars = (ratio * 4.0).round() as usize;
-                                            let empty_chars = 4 - filled_chars;
-                                            format!(
-                                                " [{}{}]",
-                                                "=".repeat(filled_chars),
-                                                "-".repeat(empty_chars)
-                                            )
+                                            if filled >= total {
+                                                // 100% complete - hide badge
+                                                String::new()
+                                            } else {
+                                                let ratio = filled as f32 / total as f32;
+                                                let filled_chars = (ratio * 4.0).round() as usize;
+                                                let empty_chars = 4 - filled_chars;
+                                                format!(
+                                                    " [{}{}]",
+                                                    "=".repeat(filled_chars),
+                                                    "-".repeat(empty_chars)
+                                                )
+                                            }
                                         } else {
                                             String::new()
                                         };
