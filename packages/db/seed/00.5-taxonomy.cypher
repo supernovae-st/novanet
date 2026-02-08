@@ -115,13 +115,13 @@ ON CREATE SET
   l_semantic.display_name = 'Semantic Layer',
   l_semantic.emoji = '💡',
   l_semantic.color = '#f97316',
-  l_semantic.llm_context = 'Invariant entities (Entity) and their localizations (EntityL10n). Entity lives at Organization level but can be referenced by 0-N projects via USES_ENTITY. Entities link via SEMANTIC_LINK for spreading activation during generation.',
+  l_semantic.llm_context = 'Invariant entities (Entity) and their localizations (EntityContent). Entity lives at Organization level but can be referenced by 0-N projects via USES_ENTITY. Entities link via SEMANTIC_LINK for spreading activation during generation.',
   l_semantic.created_at = datetime()
 ON MATCH SET
   l_semantic.display_name = 'Semantic Layer',
   l_semantic.emoji = '💡',
   l_semantic.color = '#f97316',
-  l_semantic.llm_context = 'Invariant entities (Entity) and their localizations (EntityL10n). Entity lives at Organization level but can be referenced by 0-N projects via USES_ENTITY. Entities link via SEMANTIC_LINK for spreading activation during generation.',
+  l_semantic.llm_context = 'Invariant entities (Entity) and their localizations (EntityContent). Entity lives at Organization level but can be referenced by 0-N projects via USES_ENTITY. Entities link via SEMANTIC_LINK for spreading activation during generation.',
   l_semantic.updated_at = datetime();
 
 MATCH (r:Realm {key: 'tenant'}), (l:Layer {key: 'semantic'})
@@ -297,7 +297,7 @@ SET
   af_localization.stroke_style = 'dashed',
   af_localization.stroke_width = 2,
   af_localization.default_traversal = 'eager',
-  af_localization.llm_context = 'Links between invariant nodes and their locale-specific content. Includes locale knowledge edges (Locale → LocaleVoice, etc.) and content localization edges (Entity → EntityL10n, etc.).';
+  af_localization.llm_context = 'Links between invariant nodes and their locale-specific content. Includes locale knowledge edges (Locale → LocaleVoice, etc.) and content localization edges (Entity → EntityContent, etc.).';
 
 MERGE (af_semantic:Meta:ArcFamily {key: 'semantic'})
 ON CREATE SET

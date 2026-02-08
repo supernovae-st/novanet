@@ -140,7 +140,7 @@ node:
       props:
         entity_key:
           type: string
-          description: "Entity key - anchor text derived from EntityL10n.title at generation time"
+          description: "Entity key - anchor text derived from EntityContent.display_name at generation time"
         context:
           type: string
           enum: [cta, body, related, nav]
@@ -157,7 +157,7 @@ node:
           type: boolean
           default: false
           description: "Set true for login/legal pages to prevent link equity flow (v7.12.1)"
-      description: "Explicit internal link for SEO. Anchor text is localized via Entity → EntityL10n"
+      description: "Explicit internal link for SEO. Anchor text is localized via Entity → EntityContent"
 
     SUBTOPIC_OF:
       to: Page

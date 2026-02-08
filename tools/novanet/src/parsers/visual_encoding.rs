@@ -304,8 +304,8 @@ mod tests {
 
         let doc = load_visual_encoding(root).expect("should load visual-encoding.yaml");
 
-        // Version (v10.6: 2-Realm Architecture)
-        assert_eq!(doc.version, "10.6.0");
+        // Version (v10.9: EntityContent + BlockGenerated + PageGenerated renames)
+        assert_eq!(doc.version, "10.9.0");
 
         // Channel mapping
         assert_eq!(doc.channel_mapping.node.fill_color, "layer");

@@ -734,9 +734,9 @@ mod tests {
         assert!(output.contains("Page["));
         assert!(output.contains("Block["));
         assert!(output.contains("Entity["));
-        assert!(output.contains("EntityL10n["));
-        assert!(output.contains("PageL10n["));
-        assert!(output.contains("BlockL10n["));
+        assert!(output.contains("EntityContent[")); // v10.9: renamed from EntityL10n
+        assert!(output.contains("PageGenerated[")); // v10.9: renamed from PageL10n
+        assert!(output.contains("BlockGenerated[")); // v10.9: renamed from BlockL10n
 
         // Edges exist (at least some)
         assert!(output.contains("|HAS_PAGE|"));
@@ -749,7 +749,7 @@ mod tests {
         // Class assignments
         assert!(output.contains("class Locale invariant"));
         assert!(output.contains("class Project invariant"));
-        assert!(output.contains("class PageL10n localized"));
+        assert!(output.contains("class PageGenerated derived")); // v10.9: renamed + trait changed to derived
 
         // No v8 terms
         assert!(!output.contains("SCOPE_HIERARCHY"));
