@@ -4,7 +4,8 @@ node:
   layer: output
   trait: derived
   icon: "📦"
-  description: "Generated content bundle aggregating PageL10n and BlockL10n for a specific locale version."
+  # v10.9.0: Renamed from PageL10n/BlockL10n to PageGenerated/BlockGenerated
+  description: "Generated content bundle aggregating PageGenerated and BlockGenerated for a specific locale version."
   llm_context: "USE: when bundling generated content. TRIGGERS: bundle, artifact, deployment. NOT: individual content, drafts."
 
   standard_properties:
@@ -97,8 +98,8 @@ node:
     outgoing:
       - type: INCLUDES
         to:
-          - PageL10n
-          - BlockL10n
+          - PageGenerated
+          - BlockGenerated
         description: "Content nodes included in this bundle"
 
       - type: FOR_LOCALE

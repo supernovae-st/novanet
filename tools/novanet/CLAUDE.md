@@ -7,11 +7,11 @@ This file provides guidance to Claude Code when working in the `tools/novanet/` 
 `novanet` is a unified Rust CLI + TUI binary for managing the NovaNet context graph.
 It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 
-**Version**: v10.8.0 (Geographic taxonomy + locale knowledge architecture)
+**Version**: v10.9.0 (Naming convention refactor: EntityContent, PageGenerated, BlockGenerated)
 
 ## Current Status
 
-**Phase 7B Batch 7 complete** — Galaxy-themed mission control TUI with search, detail, arc explorer, CRUD dialogs, dashboard stats, ASCII logo, breadcrumb navigation, command palette, help overlay, boot animation (matrix rain + logo reveal), effects engine (CRT scanlines, glitch transitions, nebula pulse, screen shake), typewriter effect, and first-run onboarding (welcome screen + guided tour).
+**v10.9.0 naming refactor** — Renamed localized/output nodes for clarity: `EntityL10n` -> `EntityContent`, `PageL10n` -> `PageGenerated`, `BlockL10n` -> `BlockGenerated`. Updated arc types: `HAS_L10N` -> `HAS_CONTENT`, `HAS_OUTPUT` -> `HAS_GENERATED`. Galaxy-themed mission control TUI with search, detail, arc explorer, CRUD dialogs, dashboard stats, ASCII logo, breadcrumb navigation, command palette, help overlay, boot animation, effects engine, and onboarding.
 
 | Area | Commands | Status |
 |------|----------|--------|
@@ -209,8 +209,8 @@ src/
 - **YAML-first architecture**: Each Kind YAML has explicit `realm:` and `layer:` fields (source of truth)
   - Path validation: file must be at `models/node-kinds/{realm}/{layer}/{name}.yaml`
   - Generators read realm/layer from YAML content, validate against path
-  - v10.8: 2 realms (global, tenant), 8 layers, 63 node types total
-- **Icons source of truth (v10.8)**: `visual-encoding.yaml` → `icons:` section
+  - v10.9: 2 realms (global, tenant), 8 layers, 63 node types total
+- **Icons source of truth (v10.9)**: `visual-encoding.yaml` → `icons:` section
   - Dual format: `web` (Lucide for Studio) + `terminal` (Unicode for TUI)
   - Categories: realms, layers, traits, arc_families, states, navigation, quality, modes
   - TypeScript generated: `packages/core/src/graph/visual-encoding.ts` (ICONS export)
@@ -238,7 +238,7 @@ and writes to `packages/db/seed/` (Cypher), `packages/core/src/` (TypeScript),
 `packages/core/models/docs/` (Mermaid), and `tools/novanet/src/tui/icons.rs` (Rust).
 It does NOT depend on any npm packages at build time.
 
-**v10.8 visual encoding**: The `taxonomy.yaml` file is the source of truth for:
+**v10.9 visual encoding**: The `taxonomy.yaml` file is the source of truth for:
 - Colors (realms, layers, traits, arc families)
 - Border styles (traits: solid/dashed/dotted/double/none)
 - Stroke styles (arc families: solid/dashed)

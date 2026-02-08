@@ -13,21 +13,21 @@ Turborepo monorepo for NovaNet - knowledge graph localization orchestrator.
 NovaNet uses Neo4j to orchestrate **native content generation** (NOT translation) across 200+ locales.
 
 **Target Application**: QR Code AI (https://qrcode-ai.com)
-**Current Version**: v10.6.0
+**Current Version**: v10.9.0
 **Roadmap**: `ROADMAP.md` | **Changelog**: `CHANGELOG.md`
 
 ```
 CRITICAL: Generation, NOT Translation
 
 Source -> Translate -> Target        <-- WRONG
-Entity (invariant) -> Generate natively -> EntityL10n (local)  <-- RIGHT
+Entity (invariant) -> Generate natively -> EntityContent (local)  <-- RIGHT
 ```
 
 ---
 
-## v10.6 Nomenclature
+## v10.9 Nomenclature
 
-v10.6 establishes 2-Realm Architecture with simplified tenant isolation:
+v10.9 establishes semantic naming conventions and composite keys:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -53,8 +53,16 @@ v10.6 establishes 2-Realm Architecture with simplified tenant isolation:
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-**Key changes from v10.5:**
-- 3 realms → 2 realms: GLOBAL + TENANT (merged organization + project)
+**Key changes in v10.9:**
+- **Node naming**: `*L10n` → semantic suffixes (`EntityContent`, `PageGenerated`, `BlockGenerated`)
+- **Arc naming**: `HAS_L10N` → `HAS_CONTENT` (localization), `HAS_OUTPUT` → `HAS_GENERATED` (generation)
+- **Composite keys**: `entity:{entity_key}@{locale_key}` pattern for locale-specific nodes
+- **UTF-8 slugs**: `^[\p{Ll}\p{N}\-]+$` — lowercase letters (any script) + digits + hyphens
+- **Curation status**: `human_authored | machine_translated | ai_generated | ai_generated_reviewed`
+- **Denormalized props**: `full_path`, `depth` for efficient hierarchy queries
+
+**Architecture (from v10.6):**
+- 2 realms: GLOBAL + TENANT
 - GLOBAL (3 layers): config, locale-knowledge, seo — universal, READ-ONLY
 - TENANT (6 layers): config, foundation, structure, semantic, instruction, output
 
@@ -64,9 +72,9 @@ schema generate/validate, doc generate, filter build, Galaxy-themed TUI with boo
 
 **YAML-first architecture:** Each Kind YAML has explicit `realm:` and `layer:` fields (source of truth).
 Path validation ensures `models/node-kinds/{realm}/{layer}/{name}.yaml` matches YAML content.
-v10.6: 2 realms (global, tenant), 9 layers total.
+v10.9: 2 realms (global, tenant), 9 layers total.
 
-**Icons source of truth (v10.6):** `visual-encoding.yaml` → `icons:` section provides dual-format icons:
+**Icons source of truth (v10.9):** `visual-encoding.yaml` → `icons:` section provides dual-format icons:
 - `web`: Lucide icon name for Studio
 - `terminal`: Unicode symbol for TUI
 Categories: realms, layers, traits, arc_families, states, navigation, quality, modes.
@@ -101,7 +109,7 @@ Categories: realms, layers, traits, arc_families, states, navigation, quality, m
 │     └─ All data lives in atoms                                              │
 │                                                                             │
 │  2. ATOMS ARE LOCALE-NATIVE                                                 │
-│     └─ Unlike Entities (invariant + L10n for ALL locales)                   │
+│     └─ Unlike Entities (invariant + Content for ALL locales)                │
 │     └─ Atoms exist only where needed: fr-FR may have 20K Terms              │
 │     └─ sw-KE may have 500 Terms - no translation, native generation         │
 │                                                                             │
@@ -291,7 +299,7 @@ PATCH  = Bug fixes, documentation, refactoring
 
 **Files**: `CHANGELOG.md`, `ROADMAP.md`, `.github/RELEASE_TEMPLATE.md`
 
-**GitHub Milestones**: v9.0.0, v10.0.0, v10.5.0, v10.6.0
+**GitHub Milestones**: v9.0.0, v10.0.0, v10.5.0, v10.6.0, v10.9.0
 
 ---
 
@@ -331,7 +339,7 @@ See `.claude/README.md` for full documentation.
 node:
   name: LocaleVoice
   realm: global               # Source of truth (must match path)
-  layer: locale-knowledge     # v10.6: 2 realms (global, tenant)
+  layer: locale-knowledge     # v10.9: 2 realms (global, tenant)
   trait: knowledge
   description: "..."
   properties:
