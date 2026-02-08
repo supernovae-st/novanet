@@ -1450,6 +1450,8 @@ dependencies = [
  "tokio-test",
  "tracing",
  "tracing-subscriber",
+ "unicode-segmentation",
+ "unicode-width",
  "walkdir",
 ]
 
