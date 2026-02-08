@@ -15,6 +15,7 @@ entities:
     type: INDUSTRY
     display_name: Restaurants
     description: Food service, cafes, bars
+    llm_context: "USE: when discussing QR codes for restaurants, food service, cafes, bars, or digital menus. TRIGGERS: restaurant qr, cafe qr, bar qr, food service qr, dine-in qr, table qr. NOT: retail (shopping), hospitality (hotels)."
     entity_summary: |
       Restaurants use QR codes for digital menus, ordering, and payments.
       The COVID-19 pandemic accelerated adoption. QR codes on tables link
@@ -24,6 +25,7 @@ entities:
     type: INDUSTRY
     display_name: Retail
     description: Shops, stores, e-commerce
+    llm_context: "USE: when discussing QR codes for retail, shops, stores, or e-commerce product labeling. TRIGGERS: retail qr, store qr, shop qr, product qr, e-commerce qr, shopping qr. NOT: restaurants (food), hospitality (hotels)."
     entity_summary: |
       Retail uses QR codes on products for information, promotions, and
       loyalty programs. Links product packaging to reviews, tutorials,
@@ -33,6 +35,7 @@ entities:
     type: INDUSTRY
     display_name: Hospitality
     description: Hotels, resorts, tourism
+    llm_context: "USE: when discussing QR codes for hotels, resorts, tourism, or guest services. TRIGGERS: hotel qr, resort qr, hospitality qr, tourism qr, guest qr, room qr. NOT: restaurants (food), retail (shopping)."
     entity_summary: |
       Hospitality uses QR codes for check-in, room service, concierge info,
       and guest feedback. Hotels display QR codes in rooms for WiFi access,
@@ -42,6 +45,7 @@ entities:
     type: INDUSTRY
     display_name: Healthcare
     description: Hospitals, clinics, pharma
+    llm_context: "USE: when discussing QR codes for healthcare, hospitals, clinics, or pharmaceutical applications. TRIGGERS: healthcare qr, hospital qr, clinic qr, pharma qr, medical qr, patient qr. NOT: fitness (gyms), beauty (spas)."
     entity_summary: |
       Healthcare uses QR codes for patient identification, medication
       tracking, and appointment scheduling. Pharma uses QR codes for
@@ -51,6 +55,7 @@ entities:
     type: INDUSTRY
     display_name: Education
     description: Schools, universities, training
+    llm_context: "USE: when discussing QR codes for schools, universities, education, or training materials. TRIGGERS: education qr, school qr, university qr, student qr, classroom qr, learning qr. NOT: entertainment (events), government (public)."
     entity_summary: |
       Education uses QR codes for attendance tracking, resource sharing,
       and interactive learning. Teachers link printed materials to
@@ -60,6 +65,7 @@ entities:
     type: INDUSTRY
     display_name: Real Estate
     description: Property sales and rentals
+    llm_context: "USE: when discussing QR codes for real estate, property listings, or virtual tours. TRIGGERS: real estate qr, property qr, house qr, listing qr, virtual tour qr, for sale qr. NOT: construction (building), hospitality (hotels)."
     entity_summary: |
       Real estate uses QR codes on property signs and listings for virtual
       tours, detailed information, and agent contact. Streamlines property
@@ -69,6 +75,7 @@ entities:
     type: INDUSTRY
     display_name: Fitness
     description: Gyms, sports, wellness
+    llm_context: "USE: when discussing QR codes for gyms, fitness centers, sports, or wellness applications. TRIGGERS: gym qr, fitness qr, sports qr, wellness qr, workout qr, exercise qr. NOT: healthcare (medical), beauty (cosmetics)."
     entity_summary: |
       Fitness uses QR codes for gym check-ins, workout instructions, and
       equipment tutorials. Wellness centers use them for class schedules,
@@ -78,6 +85,7 @@ entities:
     type: INDUSTRY
     display_name: Beauty
     description: Salons, spas, cosmetics
+    llm_context: "USE: when discussing QR codes for salons, spas, cosmetics, or beauty products. TRIGGERS: beauty qr, salon qr, spa qr, cosmetics qr, skincare qr, makeup qr. NOT: fitness (gyms), healthcare (medical)."
     entity_summary: |
       Beauty uses QR codes for appointment booking, product information,
       and loyalty programs. Cosmetics brands link to tutorials, ingredient
@@ -87,6 +95,7 @@ entities:
     type: INDUSTRY
     display_name: Entertainment
     description: Movies, games, events
+    llm_context: "USE: when discussing QR codes for entertainment, movies, games, or live events. TRIGGERS: entertainment qr, movie qr, event qr, concert qr, theater qr, gaming qr. NOT: education (learning), hospitality (hotels)."
     entity_summary: |
       Entertainment uses QR codes for tickets, event access, and interactive
       experiences. Movie theaters, concerts, and theme parks use QR codes
@@ -96,6 +105,7 @@ entities:
     type: INDUSTRY
     display_name: Transportation
     description: Airlines, transit, logistics
+    llm_context: "USE: when discussing QR codes for airlines, transit, or transportation ticketing. TRIGGERS: airline qr, transit qr, transportation qr, boarding pass qr, train qr, bus qr. NOT: logistics (warehouse), manufacturing (production)."
     entity_summary: |
       Transportation uses QR codes for boarding passes, ticketing, and
       package tracking. Airlines, trains, and buses enable mobile tickets
@@ -108,6 +118,7 @@ entities:
     type: INDUSTRY
     display_name: Manufacturing
     description: Production and assembly
+    llm_context: "USE: when discussing QR codes for manufacturing, production, or assembly lines. TRIGGERS: manufacturing qr, factory qr, production qr, assembly qr, industrial qr, parts qr. NOT: logistics (shipping), construction (building)."
     entity_summary: |
       Manufacturing uses QR codes for inventory tracking, work instructions,
       and quality control. Links parts to specifications, assembly guides,
@@ -117,6 +128,7 @@ entities:
     type: INDUSTRY
     display_name: Logistics
     description: Shipping and warehousing
+    llm_context: "USE: when discussing QR codes for logistics, shipping, or warehouse management. TRIGGERS: logistics qr, shipping qr, warehouse qr, delivery qr, supply chain qr, tracking qr. NOT: manufacturing (production), retail (stores)."
     entity_summary: |
       Logistics uses QR codes for package tracking, warehouse management,
       and proof of delivery. Essential for supply chain visibility and
@@ -126,6 +138,7 @@ entities:
     type: INDUSTRY
     display_name: Construction
     description: Building and infrastructure
+    llm_context: "USE: when discussing QR codes for construction sites, building projects, or infrastructure. TRIGGERS: construction qr, building qr, site qr, contractor qr, blueprint qr, safety qr. NOT: real estate (sales), manufacturing (production)."
     entity_summary: |
       Construction uses QR codes for site safety information, equipment
       inspection, and material tracking. Links to blueprints, safety
@@ -135,6 +148,7 @@ entities:
     type: INDUSTRY
     display_name: Finance
     description: Banking and insurance
+    llm_context: "USE: when discussing QR codes for banking, finance, insurance, or financial services. TRIGGERS: finance qr, banking qr, insurance qr, payment qr, atm qr, fintech qr. NOT: retail (shopping), government (public sector)."
     entity_summary: |
       Finance uses QR codes for payments, account access, and document
       verification. Banks use them for ATM-less cash withdrawal and
@@ -144,6 +158,7 @@ entities:
     type: INDUSTRY
     display_name: Government
     description: Public sector and administration
+    llm_context: "USE: when discussing QR codes for government, public sector, or citizen services. TRIGGERS: government qr, public sector qr, citizen qr, municipal qr, civic qr, id card qr. NOT: nonprofit (charity), enterprise (business)."
     entity_summary: |
       Government uses QR codes for citizen services, document verification,
       and public information. Used for vaccine certificates, ID cards,
@@ -156,6 +171,7 @@ entities:
     type: INDUSTRY
     display_name: Marketing Agencies
     description: Digital marketing firms
+    llm_context: "USE: when discussing QR codes for marketing agencies, digital marketing, or advertising campaigns. TRIGGERS: marketing agency qr, digital marketing qr, campaign qr, advertising qr, agency qr. NOT: creative agencies (design), consulting (business)."
     entity_summary: |
       Marketing agencies use QR codes for client campaigns, print-to-digital
       conversion, and campaign tracking. Essential for measuring offline
@@ -165,6 +181,7 @@ entities:
     type: INDUSTRY
     display_name: Creative Agencies
     description: Design and branding
+    llm_context: "USE: when discussing QR codes for creative agencies, design firms, or branding work. TRIGGERS: creative agency qr, design agency qr, branding qr, designer qr, creative qr. NOT: marketing agencies (advertising), consulting (business)."
     entity_summary: |
       Creative agencies design custom QR codes that match brand aesthetics.
       Create visually stunning QR codes for advertising campaigns while
@@ -174,6 +191,7 @@ entities:
     type: INDUSTRY
     display_name: Event Management
     description: Conferences, weddings, events
+    llm_context: "USE: when discussing QR codes for event management, conferences, weddings, or event planning. TRIGGERS: event management qr, conference qr, wedding qr, event planner qr, venue qr. NOT: entertainment (movies), hospitality (hotels)."
     entity_summary: |
       Event management uses QR codes for registration, check-in, and
       information sharing. Conferences use them for session access,
@@ -183,6 +201,7 @@ entities:
     type: INDUSTRY
     display_name: Nonprofits
     description: Charities and NGOs
+    llm_context: "USE: when discussing QR codes for nonprofits, charities, NGOs, or donation collection. TRIGGERS: nonprofit qr, charity qr, ngo qr, donation qr, fundraising qr, volunteer qr. NOT: government (public sector), small business (commercial)."
     entity_summary: |
       Nonprofits use QR codes for donation collection, volunteer sign-up,
       and campaign awareness. Low-cost way to connect physical outreach
@@ -192,6 +211,7 @@ entities:
     type: INDUSTRY
     display_name: Consulting
     description: Business consulting
+    llm_context: "USE: when discussing QR codes for consulting firms, business consulting, or professional services. TRIGGERS: consulting qr, consultant qr, advisory qr, professional services qr, firm qr. NOT: agencies (marketing), enterprise (large corp)."
     entity_summary: |
       Consulting firms use QR codes for business cards, presentations,
       and report sharing. Enable easy contact saving and document access
@@ -204,6 +224,7 @@ entities:
     type: INDUSTRY
     display_name: Developers
     description: API users and integrators
+    llm_context: "USE: when discussing developers, API integration, or programmatic QR code generation. TRIGGERS: developer qr, api user, programmer qr, integrator, coder qr, tech qr. NOT: enterprise (organization), agencies (marketing)."
     entity_summary: |
       Developers integrate QR code generation via APIs. Build custom
       applications that create, manage, and track QR codes programmatically
@@ -213,6 +234,7 @@ entities:
     type: INDUSTRY
     display_name: Enterprise
     description: Large organizations
+    llm_context: "USE: when discussing QR codes for enterprise, large organizations, or corporate deployments. TRIGGERS: enterprise qr, corporate qr, large organization qr, company-wide qr, sso qr. NOT: small business (smb), freelancers (individual)."
     entity_summary: |
       Enterprise organizations need bulk creation, team management, and
       advanced security features. Require SSO, audit logs, and white-label
@@ -222,6 +244,7 @@ entities:
     type: INDUSTRY
     display_name: Agencies
     description: Marketing and creative agencies
+    llm_context: "USE: when discussing agencies managing QR codes for multiple clients. TRIGGERS: agency qr, multi-client qr, client management qr, agency workspaces. NOT: enterprise (internal), small business (single owner)."
     entity_summary: |
       Agencies manage QR codes for multiple clients. Need white-label,
       bulk creation, and client workspaces to deliver branded solutions
@@ -231,6 +254,7 @@ entities:
     type: INDUSTRY
     display_name: Small Business
     description: SMBs and local businesses
+    llm_context: "USE: when discussing QR codes for small businesses, SMBs, or local businesses. TRIGGERS: small business qr, smb qr, local business qr, shop owner qr, mom and pop qr. NOT: enterprise (large), freelancers (individual)."
     entity_summary: |
       Small businesses use QR codes for menus, social media, and Google
       reviews. Cost-effective marketing tool that bridges physical presence
@@ -240,6 +264,7 @@ entities:
     type: INDUSTRY
     display_name: Freelancers
     description: Independent professionals
+    llm_context: "USE: when discussing QR codes for freelancers, independent professionals, or solo entrepreneurs. TRIGGERS: freelancer qr, independent qr, solo qr, self-employed qr, contractor qr. NOT: small business (employees), agencies (teams)."
     entity_summary: |
       Freelancers use QR codes on business cards, portfolios, and invoices.
       Link to work samples, calendars for booking, and payment links for

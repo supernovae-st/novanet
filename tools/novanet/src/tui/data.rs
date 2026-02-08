@@ -3,7 +3,7 @@
 use crate::db::Db;
 use ratatui::style::{Color, Style};
 use ratatui::text::{Line, Span};
-use rustc_hash::FxHashSet;
+use rustc_hash::{FxHashMap, FxHashSet};
 use serde_json::Value as JsonValue;
 use std::collections::BTreeMap;
 use tokio::join;
@@ -319,6 +319,9 @@ pub struct TaxonomyTree {
     /// Total instance counts in Neo4j (may be > loaded instances due to LIMIT).
     /// Used to show "3/500 of 847" when results are truncated.
     pub instance_totals: BTreeMap<String, usize>,
+    /// Cache: kind_key -> (realm_idx, layer_idx, kind_idx) for O(1) lookups.
+    /// Built once on load, never mutated (tree structure is immutable).
+    pub(crate) kind_index: FxHashMap<String, (usize, usize, usize)>,
 }
 
 impl TaxonomyTree {
@@ -480,6 +483,16 @@ ORDER BY realm_key, layer_key, kind_key
         // Apply arcs to kinds
         let realms = Self::apply_arcs_to_realms(realms, arc_map);
 
+        // Build kind_index for O(1) lookups (replaces O(n*m*k) find_kind)
+        let mut kind_index = FxHashMap::default();
+        for (r_idx, realm) in realms.iter().enumerate() {
+            for (l_idx, layer) in realm.layers.iter().enumerate() {
+                for (k_idx, kind) in layer.kinds.iter().enumerate() {
+                    kind_index.insert(kind.key.clone(), (r_idx, l_idx, k_idx));
+                }
+            }
+        }
+
         Ok(Self {
             realms,
             arc_families,
@@ -487,6 +500,7 @@ ORDER BY realm_key, layer_key, kind_key
             collapsed: FxHashSet::default(),
             instances: BTreeMap::new(),
             instance_totals: BTreeMap::new(),
+            kind_index,
         })
     }
 
@@ -1967,17 +1981,13 @@ RETURN kw.keyword as keyword,
     }
 
     /// Find a Kind by key, returns (Realm, Layer, Kind) refs.
+    /// O(1) lookup using cached index (built once on load).
     pub fn find_kind(&self, kind_key: &str) -> Option<(&RealmInfo, &LayerInfo, &KindInfo)> {
-        for realm in &self.realms {
-            for layer in &realm.layers {
-                for kind in &layer.kinds {
-                    if kind.key == kind_key {
-                        return Some((realm, layer, kind));
-                    }
-                }
-            }
-        }
-        None
+        let (r_idx, l_idx, k_idx) = self.kind_index.get(kind_key)?;
+        let realm = self.realms.get(*r_idx)?;
+        let layer = realm.layers.get(*l_idx)?;
+        let kind = layer.kinds.get(*k_idx)?;
+        Some((realm, layer, kind))
     }
 
     /// Find cursor position for a Kind in Meta mode tree view.
@@ -2297,13 +2307,26 @@ mod tests {
         let global = create_test_realm("global", vec![locale_knowledge]);
         let tenant = create_test_realm("tenant", vec![structure, semantic]);
 
+        let realms = vec![global, tenant];
+
+        // Build kind_index (mirrors load() behavior)
+        let mut kind_index = FxHashMap::default();
+        for (r_idx, realm) in realms.iter().enumerate() {
+            for (l_idx, layer) in realm.layers.iter().enumerate() {
+                for (k_idx, kind) in layer.kinds.iter().enumerate() {
+                    kind_index.insert(kind.key.clone(), (r_idx, l_idx, k_idx));
+                }
+            }
+        }
+
         TaxonomyTree {
-            realms: vec![global, tenant],
+            realms,
             arc_families: Vec::new(),
             stats: GraphStats::default(),
             collapsed: FxHashSet::default(),
             instances: BTreeMap::new(),
             instance_totals: BTreeMap::new(),
+            kind_index,
         }
     }
 

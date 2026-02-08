@@ -15,6 +15,7 @@ entities:
     type: BRAND
     display_name: Instagram
     description: Photo and video social network
+    llm_context: "USE: when discussing Instagram QR codes, Instagram profiles, or Meta social sharing. TRIGGERS: instagram, ig, instagram qr, instagram profile, instagram link. NOT: facebook (separate platform), tiktok (competitor)."
     entity_summary: |
       Instagram is a visual social media platform owned by Meta.
       QR codes link to profiles, posts, and Reels. Essential for
@@ -24,6 +25,7 @@ entities:
     type: BRAND
     display_name: LinkedIn
     description: Professional networking platform
+    llm_context: "USE: when discussing LinkedIn QR codes, professional networking, or business profiles. TRIGGERS: linkedin, linkedin qr, linkedin profile, professional network, business network. NOT: facebook (social), twitter (microblog)."
     entity_summary: |
       LinkedIn is the leading professional social network.
       QR codes on business cards link to LinkedIn profiles for
@@ -33,6 +35,7 @@ entities:
     type: BRAND
     display_name: Facebook
     description: Social networking platform
+    llm_context: "USE: when discussing Facebook QR codes, Facebook pages, or Meta social networking. TRIGGERS: facebook, fb, facebook qr, facebook page, facebook group. NOT: instagram (visual), linkedin (professional)."
     entity_summary: |
       Facebook is the largest social media platform globally.
       QR codes link to pages, events, and groups. Important for
@@ -42,6 +45,7 @@ entities:
     type: BRAND
     display_name: Twitter / X
     description: Microblogging social platform
+    llm_context: "USE: when discussing Twitter/X QR codes, tweets, or microblogging. TRIGGERS: twitter, x, twitter qr, tweet, x platform, twitter profile. NOT: facebook (social network), linkedin (professional)."
     entity_summary: |
       Twitter (now X) is a microblogging platform for real-time updates.
       QR codes link to profiles and tweets. Used for event hashtags
@@ -51,6 +55,7 @@ entities:
     type: BRAND
     display_name: YouTube
     description: Video sharing platform
+    llm_context: "USE: when discussing YouTube QR codes, YouTube channels, or video linking. TRIGGERS: youtube, yt, youtube qr, youtube channel, youtube video, video platform. NOT: tiktok (short-form), spotify (audio)."
     entity_summary: |
       YouTube is the largest video platform, owned by Google.
       QR codes link to channels, videos, and playlists. Essential
@@ -60,6 +65,7 @@ entities:
     type: BRAND
     display_name: TikTok
     description: Short-form video platform
+    llm_context: "USE: when discussing TikTok QR codes, short-form video, or Gen Z marketing. TRIGGERS: tiktok, tik tok, tiktok qr, tiktok profile, short video. NOT: youtube (long-form), instagram (photos)."
     entity_summary: |
       TikTok is a short-form video platform popular with Gen Z.
       QR codes link to profiles and videos. Growing importance for
@@ -69,6 +75,7 @@ entities:
     type: BRAND
     display_name: Snapchat
     description: Ephemeral messaging and AR platform
+    llm_context: "USE: when discussing Snapchat QR codes, Snapcodes, or AR filters. TRIGGERS: snapchat, snapcode, snapchat qr, snap, snapchat filter, ar filter. NOT: instagram (stories), tiktok (video)."
     entity_summary: |
       Snapchat is a messaging app with AR features and Stories.
       Snapcodes are native QR codes for adding friends and unlocking
@@ -78,6 +85,7 @@ entities:
     type: BRAND
     display_name: WhatsApp
     description: Messaging application
+    llm_context: "USE: when discussing WhatsApp QR codes, click-to-chat, or WhatsApp business. TRIGGERS: whatsapp, wa, whatsapp qr, whatsapp chat, click to chat, whatsapp business. NOT: telegram (alternative), messenger (facebook)."
     entity_summary: |
       WhatsApp is the world's most popular messaging app.
       QR codes enable click-to-chat links for customer support
@@ -87,6 +95,7 @@ entities:
     type: BRAND
     display_name: Telegram
     description: Secure messaging platform
+    llm_context: "USE: when discussing Telegram QR codes, Telegram channels, or secure messaging. TRIGGERS: telegram, telegram qr, telegram channel, telegram group, secure chat. NOT: whatsapp (alternative), signal (privacy)."
     entity_summary: |
       Telegram is a cloud-based messaging platform with channels.
       QR codes link to user profiles, groups, and channels.
@@ -96,6 +105,7 @@ entities:
     type: BRAND
     display_name: Pinterest
     description: Visual discovery platform
+    llm_context: "USE: when discussing Pinterest QR codes, pins, or visual discovery. TRIGGERS: pinterest, pin, pinterest qr, pinterest board, visual discovery, pincode. NOT: instagram (social), etsy (commerce)."
     entity_summary: |
       Pinterest is a visual discovery and bookmarking platform.
       QR codes link to boards and pins. Effective for product
@@ -108,6 +118,7 @@ entities:
     type: BRAND
     display_name: Spotify
     description: Music streaming service
+    llm_context: "USE: when discussing Spotify QR codes, Spotify Codes, or music streaming links. TRIGGERS: spotify, spotify code, spotify qr, music streaming, playlist qr, spotify playlist. NOT: apple music (competitor), soundcloud (indie)."
     entity_summary: |
       Spotify is the leading music streaming platform with Spotify Codes.
       Native QR-like codes link to songs, albums, playlists, and artists.
@@ -117,6 +128,7 @@ entities:
     type: BRAND
     display_name: Apple
     description: Technology company with music and app platforms
+    llm_context: "USE: when discussing Apple Music QR codes, App Store links, or Apple ecosystem. TRIGGERS: apple, apple music, app store, itunes, ios app, apple qr. NOT: spotify (music streaming), google play (android)."
     entity_summary: |
       Apple provides Apple Music streaming and the App Store ecosystem.
       QR codes link to music content and apps. Essential for iOS app
@@ -126,6 +138,7 @@ entities:
     type: BRAND
     display_name: SoundCloud
     description: Audio streaming and sharing platform
+    llm_context: "USE: when discussing SoundCloud QR codes, indie music, or audio sharing. TRIGGERS: soundcloud, soundcloud qr, indie music, dj music, audio platform, music upload. NOT: spotify (mainstream), apple music (apple)."
     entity_summary: |
       SoundCloud is an audio platform for independent artists.
       QR codes link to tracks, playlists, and artist profiles.
@@ -138,6 +151,7 @@ entities:
     type: BRAND
     display_name: PayPal
     description: Digital payment platform
+    llm_context: "USE: when discussing PayPal QR codes, PayPal.me links, or PayPal payments. TRIGGERS: paypal, paypal qr, paypal.me, paypal payment, online payment. NOT: venmo (p2p), stripe (developer)."
     entity_summary: |
       PayPal is a global online payment system.
       QR codes enable PayPal.me links and in-store payments.
@@ -147,6 +161,7 @@ entities:
     type: BRAND
     display_name: Venmo
     description: Mobile payment service
+    llm_context: "USE: when discussing Venmo QR codes, Venmo payments, or peer-to-peer US payments. TRIGGERS: venmo, venmo qr, venmo payment, split bill, peer payment, p2p payment. NOT: paypal (parent), zelle (bank)."
     entity_summary: |
       Venmo is a mobile payment service owned by PayPal.
       QR codes enable quick peer-to-peer payments.
@@ -159,6 +174,7 @@ entities:
     type: BRAND
     display_name: Google
     description: Technology company with maps, reviews, and business tools
+    llm_context: "USE: when discussing Google QR codes, Google Maps, Google Reviews, or Google Business. TRIGGERS: google, google maps, google review, google business, google qr, play store. NOT: apple (competitor), waze (navigation)."
     entity_summary: |
       Google provides Maps, Business Profile, and Reviews.
       QR codes link to Google Maps locations, reviews, and business
@@ -168,6 +184,7 @@ entities:
     type: BRAND
     display_name: Waze
     description: Community-driven navigation app
+    llm_context: "USE: when discussing Waze QR codes, Waze navigation, or community GPS. TRIGGERS: waze, waze qr, waze navigation, waze directions, community navigation. NOT: google maps (google), apple maps (apple)."
     entity_summary: |
       Waze is a community-based GPS navigation app owned by Google.
       QR codes open specific locations in Waze for navigation.
@@ -180,6 +197,7 @@ entities:
     type: BRAND
     display_name: Zapier
     description: Workflow automation platform
+    llm_context: "USE: when discussing Zapier, workflow automation, or app integrations. TRIGGERS: zapier, zap, zapier automation, workflow automation, app connector. NOT: make (integromat), n8n (self-hosted)."
     entity_summary: |
       Zapier connects apps and automates workflows without code.
       Integrates with QR code platforms to automate scan responses,
@@ -189,6 +207,7 @@ entities:
     type: BRAND
     display_name: Make (Integromat)
     description: Visual automation platform
+    llm_context: "USE: when discussing Make/Integromat, visual automation, or complex workflows. TRIGGERS: make, integromat, make automation, visual automation, scenario builder. NOT: zapier (simpler), n8n (self-hosted)."
     entity_summary: |
       Make (formerly Integromat) is a visual workflow automation platform.
       Creates complex automation scenarios with QR code triggers
@@ -198,6 +217,7 @@ entities:
     type: BRAND
     display_name: n8n
     description: Open-source automation tool
+    llm_context: "USE: when discussing n8n, self-hosted automation, or open-source workflows. TRIGGERS: n8n, self-hosted automation, open source automation, privacy automation. NOT: zapier (hosted), make (hosted)."
     entity_summary: |
       n8n is a self-hostable workflow automation tool.
       Enables privacy-conscious automation with QR code data.
@@ -210,6 +230,7 @@ entities:
     type: BRAND
     display_name: HubSpot
     description: CRM and marketing platform
+    llm_context: "USE: when discussing HubSpot, CRM integration, or marketing automation with QR codes. TRIGGERS: hubspot, hubspot crm, hubspot marketing, inbound marketing, hubspot integration. NOT: salesforce (enterprise), mailchimp (email only)."
     entity_summary: |
       HubSpot is a CRM and marketing automation platform.
       QR code integrations sync leads and track offline-to-online
@@ -219,6 +240,7 @@ entities:
     type: BRAND
     display_name: Salesforce
     description: Enterprise CRM platform
+    llm_context: "USE: when discussing Salesforce, enterprise CRM, or sales automation. TRIGGERS: salesforce, salesforce crm, enterprise crm, salesforce integration, sales cloud. NOT: hubspot (smb), zoho (alternative)."
     entity_summary: |
       Salesforce is the leading enterprise CRM platform.
       QR code integrations connect physical touchpoints to customer
@@ -228,6 +250,7 @@ entities:
     type: BRAND
     display_name: Mailchimp
     description: Email marketing platform
+    llm_context: "USE: when discussing Mailchimp, email marketing, or newsletter QR codes. TRIGGERS: mailchimp, email marketing, mailchimp integration, newsletter qr, email list qr. NOT: hubspot (full crm), sendgrid (api)."
     entity_summary: |
       Mailchimp is an email marketing and automation platform.
       QR codes in emails and print link to landing pages and
@@ -240,6 +263,7 @@ entities:
     type: BRAND
     display_name: Shopify
     description: E-commerce platform
+    llm_context: "USE: when discussing Shopify, e-commerce QR codes, or online store integration. TRIGGERS: shopify, shopify qr, shopify store, e-commerce platform, shopify product. NOT: woocommerce (wordpress), amazon (marketplace)."
     entity_summary: |
       Shopify is a leading e-commerce platform for online stores.
       QR codes link to product pages, checkout, and order tracking.
@@ -249,6 +273,7 @@ entities:
     type: BRAND
     display_name: WooCommerce
     description: WordPress e-commerce plugin
+    llm_context: "USE: when discussing WooCommerce, WordPress e-commerce, or open-source stores. TRIGGERS: woocommerce, woo commerce, wordpress store, woocommerce qr, wordpress e-commerce. NOT: shopify (hosted), magento (enterprise)."
     entity_summary: |
       WooCommerce is the most popular WordPress e-commerce plugin.
       QR codes link to products and integrate with WordPress sites.

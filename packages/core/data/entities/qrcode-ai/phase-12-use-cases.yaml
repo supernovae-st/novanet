@@ -15,6 +15,7 @@ entities:
     type: USE_CASE
     display_name: Funny QR Codes
     description: Humorous and creative QR code applications
+    llm_context: "USE: when discussing humorous, prank, or creative QR code applications like rickrolling. TRIGGERS: funny qr, prank qr, rickroll qr, meme qr, easter egg qr, joke qr. NOT: art installation (serious art), tattoo (permanent)."
     entity_summary: |
       Funny QR codes are creative, humorous applications of QR technology.
       Include rickrolling, prank redirects, Easter egg content, and
@@ -24,6 +25,7 @@ entities:
     type: USE_CASE
     display_name: QR Code Tattoo
     description: Permanent QR codes as body art
+    llm_context: "USE: when discussing QR code tattoos, permanent body art QR codes, or skin-based QR. TRIGGERS: qr tattoo, tattoo qr code, body art qr, permanent qr, skin qr, inked qr. NOT: temporary (sticker), art installation (public)."
     entity_summary: |
       QR code tattoos are permanent body art containing scannable codes.
       Must use dynamic QR codes to allow destination changes. Popular
@@ -33,6 +35,7 @@ entities:
     type: USE_CASE
     display_name: QR Art Installation
     description: Large-scale artistic QR code displays
+    llm_context: "USE: when discussing large-scale QR art, public installations, or artistic QR displays. TRIGGERS: qr art, art installation qr, mural qr, public art qr, interactive art qr, projection qr. NOT: tattoo (body), funny qr (humor)."
     entity_summary: |
       QR art installations are large-scale creative displays using QR codes.
       Include murals, building projections, and interactive exhibits.
@@ -42,6 +45,7 @@ entities:
     type: USE_CASE
     display_name: QR Scavenger Hunt
     description: Interactive treasure hunts using QR codes
+    llm_context: "USE: when discussing QR scavenger hunts, treasure hunts, or gamified QR experiences. TRIGGERS: scavenger hunt qr, treasure hunt qr, qr game, interactive qr hunt, clue qr, quest qr. NOT: event check-in (registration), museum (educational)."
     entity_summary: |
       QR scavenger hunts use multiple QR codes for interactive games.
       Each code reveals clues or unlocks content. Popular for team
@@ -54,6 +58,7 @@ entities:
     type: USE_CASE
     display_name: QR for Reviews
     description: Collecting customer reviews via QR
+    llm_context: "USE: when discussing QR codes for collecting reviews, feedback, or ratings. TRIGGERS: review qr, feedback qr, rating qr, google review qr, yelp qr, customer feedback qr. NOT: loyalty program (rewards), payment (transaction)."
     entity_summary: |
       QR codes for reviews make leaving feedback easy for customers.
       Place on receipts, table tents, or packaging. Direct link to
@@ -63,6 +68,7 @@ entities:
     type: USE_CASE
     display_name: Contactless Payment
     description: Touch-free payments via QR codes
+    llm_context: "USE: when discussing QR-based contactless payments, touch-free transactions, or scan-to-pay. TRIGGERS: contactless payment qr, scan to pay, touch-free payment, qr payment, mobile payment qr. NOT: loyalty program (points), reviews (feedback)."
     entity_summary: |
       QR contactless payment enables touch-free transactions.
       Customer scans merchant QR to pay via app. Popular in Asia,
@@ -72,6 +78,7 @@ entities:
     type: USE_CASE
     display_name: Loyalty Program
     description: Customer loyalty via QR scanning
+    llm_context: "USE: when discussing QR-based loyalty programs, digital punch cards, or rewards via QR. TRIGGERS: loyalty qr, punch card qr, rewards qr, points qr, member qr, stamp card qr. NOT: payment (transaction), reviews (feedback)."
     entity_summary: |
       QR loyalty programs digitize punch cards and rewards.
       Customers scan to earn points, redeem rewards, and track
@@ -81,6 +88,7 @@ entities:
     type: USE_CASE
     display_name: Product Authentication
     description: Anti-counterfeit verification via QR
+    llm_context: "USE: when discussing QR codes for product authentication, anti-counterfeiting, or verification. TRIGGERS: authentication qr, anti-counterfeit qr, verify product qr, genuine qr, counterfeit detection qr. NOT: loyalty (rewards), payment (transaction)."
     entity_summary: |
       QR product authentication fights counterfeiting with unique codes.
       Customers scan to verify authenticity. Used for luxury goods,
@@ -93,6 +101,7 @@ entities:
     type: USE_CASE
     display_name: Event Check-in
     description: Attendee registration via QR
+    llm_context: "USE: when discussing QR codes for event check-in, registration, or attendee verification. TRIGGERS: event check-in qr, registration qr, attendee qr, ticket scan, conference check-in, entry qr. NOT: networking (contact exchange), wedding (personal event)."
     entity_summary: |
       QR event check-in streamlines attendee registration.
       Scan ticket QR for instant verification. Eliminates queues
@@ -102,6 +111,7 @@ entities:
     type: USE_CASE
     display_name: Networking QR
     description: Contact exchange at events
+    llm_context: "USE: when discussing QR codes for professional networking, contact exchange, or event connections. TRIGGERS: networking qr, contact exchange qr, meet and greet qr, business card qr, connection qr. NOT: event check-in (registration), wedding (personal)."
     entity_summary: |
       QR networking enables quick contact exchange at events.
       Scan to add contacts, LinkedIn profiles, or digital business
@@ -111,6 +121,7 @@ entities:
     type: USE_CASE
     display_name: Wedding QR Codes
     description: QR applications for weddings
+    llm_context: "USE: when discussing QR codes for weddings, wedding invitations, or wedding RSVPs. TRIGGERS: wedding qr, wedding invitation qr, rsvp qr, wedding registry qr, wedding photo qr, marriage qr. NOT: event check-in (corporate), networking (business)."
     entity_summary: |
       Wedding QR codes simplify event management. Use for RSVPs,
       digital invitations, photo sharing, and gift registry links.
@@ -120,6 +131,7 @@ entities:
     type: USE_CASE
     display_name: Museum Exhibits
     description: Interactive museum experiences via QR
+    llm_context: "USE: when discussing QR codes for museums, exhibits, galleries, or educational displays. TRIGGERS: museum qr, exhibit qr, gallery qr, audio guide qr, art museum qr, exhibition qr. NOT: scavenger hunt (game), art installation (creative)."
     entity_summary: |
       QR museum exhibits enhance visitor experiences with digital content.
       Scan for audio guides, videos, 3D models, and detailed information.
