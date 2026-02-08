@@ -16,9 +16,11 @@ Complete keyboard shortcuts reference for the NovaNet Terminal UI.
 | `3` | Switch to Overlay mode |
 | `4` | Switch to Query mode |
 | `5` | Switch to Atlas mode |
+| `6` | Switch to Audit mode |
 | `N` | Cycle through all modes |
 | `Tab` | Cycle focus: Tree → Info → Graph → YAML |
 | `Shift+Tab` | Cycle focus backwards |
+| `` ` `` | Open recent items popup (navigation history) |
 
 ---
 
@@ -32,10 +34,11 @@ Complete keyboard shortcuts reference for the NovaNet Terminal UI.
 | `l` | Expand node |
 | `Space` | Toggle collapse/expand |
 | `Enter` | Toggle collapse/expand |
-| `e` | Expand subtree under cursor |
+| `e` / `E` | Expand subtree under cursor |
 | `c` | Collapse subtree under cursor |
 | `H` | Collapse all (global) |
 | `L` | Expand all (global) |
+| `p` | Jump to parent node |
 | `0` | Toggle hide empty (Data mode only) |
 | `d` | Page down (half screen) |
 | `u` | Page up (half screen) |
@@ -93,8 +96,20 @@ Scrollbars are displayed when content exceeds visible area.
 |-----|--------|
 | `r` | Refresh data from Neo4j |
 | `y` | Yank (copy current item's key to clipboard) |
+| `Y` | Yank JSON (copy current item's properties as JSON) |
+| `J` | Toggle JSON pretty-print / compact mode |
 | `Ctrl+o` | Navigate back in history |
 | `Ctrl+i` | Navigate forward in history |
+
+---
+
+## Schema Overlay (Data Mode)
+
+| Key | Action |
+|-----|--------|
+| `s` | Toggle schema overlay (show property match) |
+| `+` / `=` | Focus next property in schema overlay |
+| `-` / `_` | Focus previous property in schema overlay |
 
 ---
 
@@ -121,12 +136,13 @@ The status bar shows context-aware hints:
 ## Vim-Style Summary
 
 ```
-Navigation:  j/k (up/down)  h/l (toggle)  d/u (page)  g/G (top/bottom)
+Navigation:  j/k (up/down)  h/l (toggle)  d/u (page)  g/G (top/bottom)  p (parent)
 Expand:      e (subtree)    c (collapse)  H/L (global collapse/expand)
 Filter:      0 (hide empty in Data mode)
-Modes:       1-5 (direct)   N (cycle)
+Modes:       1-6 (direct)   N (cycle)   ` (recent items)
 Focus:       Tab (cycle panels)
 Search:      / or f (search)  ? (help)  F1 (legend)
-Actions:     r (refresh)  y (yank key)  Ctrl+o/i (back/forward)
+Actions:     r (refresh)  y/Y (yank key/JSON)  J (JSON toggle)  Ctrl+o/i (back/forward)
+Schema:      s (overlay)  +/- (focus property)
 Exit:        q or Esc
 ```

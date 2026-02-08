@@ -2039,7 +2039,7 @@ mod tests {
         GraphStats, InstanceInfo, KindInfo, LayerInfo, RealmInfo, TaxonomyTree, TreeItem,
     };
     use super::*;
-    use rustc_hash::FxHashSet;
+    use rustc_hash::{FxHashMap, FxHashSet};
     use std::collections::BTreeMap;
 
     // Helper: Create test taxonomy tree
@@ -2110,13 +2110,26 @@ mod tests {
             layers: vec![structure],
         };
 
+        let realms = vec![global, tenant];
+
+        // Build kind_index (mirrors load() behavior)
+        let mut kind_index = FxHashMap::default();
+        for (r_idx, realm) in realms.iter().enumerate() {
+            for (l_idx, layer) in realm.layers.iter().enumerate() {
+                for (k_idx, kind) in layer.kinds.iter().enumerate() {
+                    kind_index.insert(kind.key.clone(), (r_idx, l_idx, k_idx));
+                }
+            }
+        }
+
         TaxonomyTree {
-            realms: vec![global, tenant],
+            realms,
             arc_families: Vec::new(),
             stats: GraphStats::default(),
             collapsed: FxHashSet::default(),
             instances: BTreeMap::new(),
             instance_totals: BTreeMap::new(),
+            kind_index,
         }
     }
 
