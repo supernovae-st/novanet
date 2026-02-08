@@ -627,14 +627,14 @@ mod tests {
             .generate(root)
             .expect("should generate arc schema cypher");
 
-        // v10.9: Count non-inverse relations (111 total: +14 typed semantic arcs, +4 GEO arcs, +monitors-geo)
+        // v10.10: Count non-inverse relations (114 total: +3 new arcs since v10.9)
         let ak_merges = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains(":Meta:ArcKind"))
             .count();
         assert_eq!(
-            ak_merges, 111,
-            "expected 111 ArcKind MERGE statements (v10.9: typed semantic arcs + GEO layer)"
+            ak_merges, 114,
+            "expected 114 ArcKind MERGE statements (v10.10)"
         );
 
         // HAS_ARC_KIND relationships match ArcKind count
@@ -642,14 +642,14 @@ mod tests {
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:HAS_ARC_KIND]"))
             .count();
-        assert_eq!(has_ak, 111, "expected 111 HAS_ARC_KIND relationships");
+        assert_eq!(has_ak, 114, "expected 114 HAS_ARC_KIND relationships");
 
         // IN_FAMILY relationships match ArcKind count
         let in_family = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_FAMILY]"))
             .count();
-        assert_eq!(in_family, 111, "expected 111 IN_FAMILY relationships");
+        assert_eq!(in_family, 114, "expected 114 IN_FAMILY relationships");
 
         // Family distribution (non-inverse counts)
         // Section 2 MATCH lines have ArcFamily first: "MATCH (af:ArcFamily ..."
@@ -669,10 +669,10 @@ mod tests {
         let generation = count_family("generation");
         let mining = count_family("mining");
 
-        // v10.9: Total non-inverse arcs = 111 (ownership=43, semantic=34, localization=17, generation=15, mining=2)
+        // v10.10: Total non-inverse arcs = 114 (ownership=41, semantic=38, localization=17, generation=15, mining=3)
         assert!(
-            ownership + localization + semantic + generation + mining == 111,
-            "family counts should sum to 111: o={ownership} l={localization} s={semantic} g={generation} m={mining}"
+            ownership + localization + semantic + generation + mining == 114,
+            "family counts should sum to 114: o={ownership} l={localization} s={semantic} g={generation} m={mining}"
         );
 
         // Spot checks — specific ArcKinds
@@ -702,8 +702,8 @@ mod tests {
             }
         }
 
-        // v10.9: Header reflects count (111 after typed semantic arcs + GEO layer)
-        assert!(cypher.contains("111 ArcKind nodes"));
+        // v10.10: Header reflects count (114 total)
+        assert!(cypher.contains("114 ArcKind nodes"));
     }
 
     /// Snapshot test for a minimal ArcSchema generator output.
