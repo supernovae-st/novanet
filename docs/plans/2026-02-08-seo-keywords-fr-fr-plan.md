@@ -93,30 +93,76 @@ Objectif: les lier aux EntityL10n pour alimenter le SEO de QR Code AI.
 
 ---
 
-## Architecture de connexion
+## Architecture de connexion (v2 - simplifié)
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  CONNEXION NODES                                                            │
+│  ARCHITECTURE SIMPLIFIÉE (2026-02-08)                                       │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
-│  Entity (invariant)                                                         │
+│  Entity (invariant, semantic layer)                                         │
 │    │ key: "create-qr-code"                                                  │
 │    │ type: ACTION                                                           │
+│    │ display_name: "Create QR Code"                                         │
 │    │                                                                        │
-│    └── [:HAS_L10N] ──> EntityL10n (localized)         <── À CRÉER FIRST     │
-│                          │ key: "create-qr-code"                            │
-│                          │ locale: "fr-FR"                                  │
-│                          │ display_name: "Créer un QR Code"                 │
-│                          │ description: "Générer un nouveau..."            │
-│                          │                                                  │
-│                          └── [:TARGETS] <── SEOKeyword                      │
-│                                              │ keyword: "créer qr code"     │
-│                                              │ volume: 7300                 │
-│                                              │ locale: "fr-FR"              │
+│    └──[:HAS_L10N]──> EntityL10n (localized, semantic layer)                 │
+│                        │                                                    │
+│                        │ # Identity (denormalized)                          │
+│                        │ entity_key: "create-qr-code"                       │
+│                        │ locale_key: "fr-FR"                                │
+│                        │ slug: "creer-qr-code"                              │
+│                        │                                                    │
+│                        │ # Content                                          │
+│                        │ display_name: "Créer un QR Code"                   │
+│                        │ description: "Générer un nouveau..."               │
+│                        │ llm_context: "USE: ... TRIGGERS: ..."              │
+│                        │                                                    │
+│                        ├──[:FOR_LOCALE]──> Locale {key: "fr-FR"}            │
+│                        │                                                    │
+│                        └──[:TARGETS]──> SEOKeyword (knowledge, seo layer)   │
+│                                           │ key: "creer-qr-code-fr"         │
+│                                           │ value: "créer qr code"          │
+│                                           │ volume: 7300                    │
+│                                           │ difficulty: 35                  │
+│                                           │ intent: "transactional"         │
+│                                           │                                 │
+│                                           └──[:HAS_QUESTIONS]──> SEOQuestion│
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  SIMPLIFICATIONS vs v1:                                                     │
+│                                                                             │
+│  1. ✓ Supprimé [:EXPRESSES] (redondant - utiliser [:TARGETS] inverse)       │
+│  2. ✓ Supprimé Locale --[:HAS_SEO_KEYWORDS]--> SEOKeyword                   │
+│       (locale déduite via EntityL10n --[:FOR_LOCALE]--> Locale)             │
+│  3. ✓ Ajouté entity_key, locale_key, slug sur EntityL10n                    │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  QUERIES UTILES:                                                            │
+│                                                                             │
+│  # Tous les keywords fr-FR                                                  │
+│  MATCH (el:EntityL10n {locale_key: "fr-FR"})-[:TARGETS]->(kw:SEOKeyword)    │
+│  RETURN kw.value, kw.volume ORDER BY kw.volume DESC                         │
+│                                                                             │
+│  # Keywords pour une Entity                                                 │
+│  MATCH (el:EntityL10n {entity_key: "create-qr-code", locale_key: "fr-FR"})  │
+│        -[:TARGETS]->(kw:SEOKeyword)                                         │
+│  RETURN kw.value, kw.volume                                                 │
+│                                                                             │
+│  # Quelle EntityL10n pour un keyword? (inverse de TARGETS)                  │
+│  MATCH (kw:SEOKeyword {value: "créer qr code"})<-[:TARGETS]-(el:EntityL10n) │
+│  RETURN el.entity_key, el.display_name                                      │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
+
+### Naming discussion (TODO)
+
+Le nom `EntityL10n` peut créer confusion avec `BlockL10n`/`PageL10n` (output layer).
+Alternatives à considérer:
+- `EntityLocale` - "l'entity pour cette locale"
+- `SemanticL10n` - référence au layer
+- `ConceptL10n` - plus descriptif
+- Garder `EntityL10n` - techniquement correct (L10n = localized)
 
 ---
 

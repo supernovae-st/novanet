@@ -1141,6 +1141,11 @@ impl App {
             KeyCode::Char('0') => {
                 if self.is_data_mode() {
                     self.hide_empty = !self.hide_empty;
+                    self.set_status(if self.hide_empty {
+                        "Hide empty: ON"
+                    } else {
+                        "Hide empty: OFF"
+                    });
                     // Reset cursor to avoid pointing to hidden item
                     self.tree_cursor = 0;
                     self.tree_scroll = 0;
@@ -1535,7 +1540,7 @@ impl App {
     /// Clear status message if expired (called by UI tick).
     pub fn clear_expired_status(&mut self) {
         if let Some((_, instant)) = &self.status_message {
-            if instant.elapsed().as_secs() >= 3 {
+            if instant.elapsed().as_secs() >= 5 {
                 self.status_message = None;
             }
         }
@@ -3449,7 +3454,8 @@ mod tests {
         }
 
         // Should handle wrapping without panic
-        assert!(app.tick > 0 || app.tick == 0); // Always true, just exercises the code
+        // tick is u16 - after 1000 increments from 0, should be 1000
+        assert_eq!(app.tick, 1000);
     }
 
     #[test]

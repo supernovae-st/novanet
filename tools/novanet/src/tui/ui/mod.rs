@@ -329,11 +329,11 @@ impl EmptyStateKind {
     fn description(&self) -> &'static [&'static str] {
         match self {
             EmptyStateKind::NoConnection => &[
-                "Unable to reach bolt://localhost:7687",
+                "Unable to connect to Neo4j",
                 "",
                 "Try:",
                 "  • pnpm infra:up",
-                "  • Check Neo4j credentials",
+                "  • Check NEO4J_URI environment variable",
             ],
             EmptyStateKind::NoKinds => &[
                 "The taxonomy tree is empty.",
@@ -2574,7 +2574,7 @@ fn render_yaml_panel(f: &mut Frame, area: Rect, app: &App) {
 /// Render YAML panel with contextual view (Kind vs Instance sections).
 fn render_yaml_content(f: &mut Frame, area: Rect, app: &App, focused: bool, visible_height: usize) {
     let border_color = if focused {
-        Color::Green
+        Color::Cyan // Consistent with Tree/Info panels
     } else {
         COLOR_UNFOCUSED_BORDER
     };
@@ -6277,8 +6277,8 @@ mod tests {
         let desc = EmptyStateKind::NoConnection.description();
         assert!(!desc.is_empty(), "description should not be empty");
         assert!(
-            desc.iter().any(|s| s.contains("bolt://")),
-            "should mention bolt URL"
+            desc.iter().any(|s| s.contains("Neo4j")),
+            "should mention Neo4j"
         );
         assert!(
             desc.iter().any(|s| s.contains("infra:up")),
