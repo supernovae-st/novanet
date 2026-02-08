@@ -1,0 +1,44 @@
+# packages/core/models/arc-kinds/semantic/reads.yaml
+# ArcKind: READS - Tool reads/decodes/scans entity
+# v10.7: New semantic arc for scanner TOOL → Entity relationships
+
+arc:
+  name: READS
+  family: semantic
+  scope: intra_realm
+  temperature_threshold: 0.15  # Direct read operation - high precision
+
+  source: Entity
+  target: Entity
+  cardinality: many_to_many
+  is_self_referential: false
+
+  properties:
+    - name: strength
+      type: float
+      required: false
+      default: 0.9
+      description: "Read strength (0.0-1.0)"
+
+    - name: temperature
+      type: float
+      required: false
+      default: 0.85
+      description: "Spreading activation weight"
+
+    - name: read_type
+      type: string
+      required: false
+      enum: [scan, decode, parse, extract, verify]
+      description: "Type of read operation"
+
+  inverse: READ_BY
+
+  llm_context: |
+    Read/decode relationship: TOOL entity reads/scans THING.
+    Use for qr-code-scanner READS qr-code, barcode-scanner READS barcode.
+    Different from PRODUCES (creation) or ACTS_ON (general action).
+    read_type: scan (optical), decode (interpret), parse (structure),
+      extract (content), verify (validate)
+
+  cypher_pattern: "(Entity)-[:READS {strength, temperature, read_type}]->(Entity)"
