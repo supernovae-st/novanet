@@ -9,5 +9,5 @@ realm: project
 
 llm_context: |
   Meaning and semantics. For project realm: AudiencePersona and ChannelSurface
-  for targeting. For global realm: Entity and EntityL10n provide semantic
+  for targeting. For global realm: Entity and EntityContent provide semantic
   building blocks. Entities link via SEMANTIC_LINK for spreading activation.

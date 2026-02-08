@@ -97,7 +97,7 @@ node_realms:
         emoji: "💡"
         color: "#f97316"
         llm_context: |
-          Invariant entities (Entity) and their localizations (EntityL10n).
+          Invariant entities (Entity) and their localizations (EntityContent).
           Entity lives at Organization level but can be referenced by 0-N
           projects via USES_ENTITY. Entities link via SEMANTIC_LINK for
           spreading activation during generation.
@@ -253,7 +253,7 @@ arc_families:
     llm_context: |
       Links between invariant nodes and their locale-specific content.
       Includes locale knowledge edges (Locale → LocaleVoice, etc.) and
-      content localization edges (Entity → EntityL10n, etc.).
+      content localization edges (Entity → EntityContent, etc.).
 
   - key: semantic
     display_name: Semantic

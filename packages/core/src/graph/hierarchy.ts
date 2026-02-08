@@ -66,7 +66,7 @@ export const REALM_HIERARCHY: Record<Realm, RealmDefinition> = {
       },
       'semantic': {
         label: 'Semantic Layer',
-        description: 'Invariant entities (Entity) and their localizations (EntityL10n).',
+        description: 'Invariant entities (Entity) and their localizations (EntityContent).',
         icon: '💡',
         nodeTypes: getNodeTypesByRealmAndLayer('tenant', 'semantic'),
       },

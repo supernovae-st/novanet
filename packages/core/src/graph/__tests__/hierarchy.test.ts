@@ -33,9 +33,9 @@ describe('graph/hierarchy', () => {
     // config layer has Organization
     expect(tenant.layers.config.nodeTypes).toContain('Organization');
     expect(tenant.layers.foundation.nodeTypes).toContain('Project');
-    // Entity/EntityL10n are in tenant/semantic
+    // Entity/EntityContent are in tenant/semantic
     expect(tenant.layers.semantic.nodeTypes).toContain('Entity');
-    expect(tenant.layers.semantic.nodeTypes).toContain('EntityL10n');
+    expect(tenant.layers.semantic.nodeTypes).toContain('EntityContent');
   });
 
   it('getRealmDefinition should return realm metadata', () => {
@@ -76,7 +76,7 @@ describe('graph/hierarchy', () => {
     expect(REALM_HIERARCHY.tenant.layers.config.nodeTypes).toHaveLength(1);  // Organization
     expect(REALM_HIERARCHY.tenant.layers.foundation.nodeTypes).toHaveLength(3);
     expect(REALM_HIERARCHY.tenant.layers.structure.nodeTypes).toHaveLength(3);
-    expect(REALM_HIERARCHY.tenant.layers.semantic.nodeTypes).toHaveLength(4);  // Entity, EntityL10n, AudiencePersona, ChannelSurface
+    expect(REALM_HIERARCHY.tenant.layers.semantic.nodeTypes).toHaveLength(4);  // Entity, EntityContent, AudiencePersona, ChannelSurface
     expect(REALM_HIERARCHY.tenant.layers.instruction.nodeTypes).toHaveLength(7);
     expect(REALM_HIERARCHY.tenant.layers.output.nodeTypes).toHaveLength(5);
   });

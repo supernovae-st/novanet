@@ -71,7 +71,7 @@ export const NODE_ICONS: Record<NodeType, string> = {
 
   // TENANT — semantic (4)
   Entity: '🏷️',
-  EntityL10n: '🌐',
+  EntityContent: '🌐',
   AudiencePersona: '👤',
   ChannelSurface: '📡',
 
@@ -85,8 +85,8 @@ export const NODE_ICONS: Record<NodeType, string> = {
   PromptArtifact: '📋',
 
   // TENANT — output (5)
-  PageL10n: '📃',
-  BlockL10n: '📝',
+  PageGenerated: '📃',
+  BlockGenerated: '📝',
   GenerationJob: '🚀',
   OutputArtifact: '📦',
   EvaluationSignal: '📊',

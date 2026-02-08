@@ -34,8 +34,8 @@ const RELATION_ALIAS_MAP: Record<string, string> = {
   HAS_PROMPT: 'prompt',
   HAS_RULES: 'rules',
   // Output
-  HAS_OUTPUT: 'output',
-  HAS_L10N: 'l10n',
+  HAS_GENERATED: 'output',
+  HAS_CONTENT: 'l10n',
   // Locale knowledge
   HAS_IDENTITY: 'identity',
   HAS_VOICE: 'voice',
@@ -75,8 +75,8 @@ const RELATION_TARGET_TYPE_MAP: Record<string, string> = {
   HAS_PROMPT: 'PagePrompt',
   HAS_RULES: 'BlockRules',
   // Output
-  HAS_OUTPUT: 'PageL10n',
-  HAS_L10N: 'EntityL10n',
+  HAS_GENERATED: 'PageGenerated',
+  HAS_CONTENT: 'EntityContent',
   // Locale knowledge
   HAS_IDENTITY: 'LocaleIdentity',
   HAS_VOICE: 'LocaleVoice',
@@ -92,10 +92,10 @@ const RELATION_TARGET_TYPE_MAP: Record<string, string> = {
   FOR_LOCALE: 'Locale',
   // Metrics & Assembly
   HAS_METRICS: 'PageMetrics',
-  ASSEMBLES: 'BlockL10n',
+  ASSEMBLES: 'BlockGenerated',
   // Provenance
-  GENERATED: 'PageL10n',
-  INFLUENCED_BY: 'EntityL10n',  // v10.3: was ConceptL10n
+  GENERATED: 'PageGenerated',
+  INFLUENCED_BY: 'EntityContent',  // v10.3: was ConceptL10n
   GENERATED_FROM: 'BlockType',
   BELONGS_TO_PROJECT_L10N: 'ProjectL10n',
   // SEO Mining

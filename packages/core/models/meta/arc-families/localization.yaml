@@ -16,4 +16,4 @@ retrieval:
 llm_context: |
   Links between invariant nodes and their locale-specific content.
   Includes locale knowledge edges (Locale -> LocaleVoice, etc.) and
-  content localization edges (Entity -> EntityL10n, etc.).
+  content localization edges (Entity -> EntityContent, etc.).

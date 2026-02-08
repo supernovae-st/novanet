@@ -224,11 +224,11 @@ export class ViewLoader {
         filter.includeRules({ activeOnly });
         break;
 
-      case 'HAS_OUTPUT':
+      case 'HAS_GENERATED':
         filter.includeOutputs();
         break;
 
-      case 'HAS_L10N':
+      case 'HAS_CONTENT':
         filter.includeL10n();
         break;
 
