@@ -602,10 +602,7 @@ mod tests {
         for (name, text) in scripts {
             let char_count = text.chars().count();
             let width = display_width(text);
-            println!(
-                "{:<22} {:>12} {:>10} {:>10}",
-                name, text, char_count, width
-            );
+            println!("{:<22} {:>12} {:>10} {:>10}", name, text, char_count, width);
         }
         println!();
     }

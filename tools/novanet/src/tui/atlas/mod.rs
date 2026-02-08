@@ -14,8 +14,8 @@ mod state;
 const ATLAS_LOCALES: &[&str] = &["en-US", "fr-FR", "es-ES", "de-DE", "ja-JP", "ar-SA"];
 
 pub use state::{
-    ActivationTask, AtlasState, AtlasView, BlockData, BlockGeneratedData, EntityData, EntityContentData,
-    PageCompositionData, PageGeneratedData, SeoKeywordData,
+    ActivationTask, AtlasState, AtlasView, BlockData, BlockGeneratedData, EntityContentData,
+    EntityData, PageCompositionData, PageGeneratedData, SeoKeywordData,
 };
 
 use crossterm::event::{KeyCode, KeyEvent};

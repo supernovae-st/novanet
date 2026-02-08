@@ -3,6 +3,7 @@
 //! This module contains all functions related to rendering the Info panel,
 //! which displays details about the currently selected tree item.
 
+use ratatui::Frame;
 use ratatui::layout::{Constraint, Direction, Layout, Rect};
 use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
@@ -10,7 +11,6 @@ use ratatui::widgets::{
     Bar, BarChart, BarGroup, Block, Borders, Paragraph, Scrollbar, ScrollbarOrientation,
     ScrollbarState, Sparkline,
 };
-use ratatui::Frame;
 use std::collections::BTreeMap;
 
 use crate::tui::app::{App, Focus};
@@ -22,9 +22,9 @@ use crate::tui::unicode::{display_width, truncate_to_width};
 use serde_json::Value as JsonValue;
 
 use super::{
-    scroll_indicator, trait_icon, wrap_text, COLOR_UNFOCUSED_BORDER, STYLE_ACCENT, STYLE_DESC,
-    STYLE_DIM, STYLE_ERROR, STYLE_HIGHLIGHT, STYLE_HINT, STYLE_INFO, STYLE_MUTED, STYLE_PRIMARY,
-    STYLE_SUCCESS, STYLE_WARNING,
+    COLOR_UNFOCUSED_BORDER, STYLE_ACCENT, STYLE_DESC, STYLE_DIM, STYLE_ERROR, STYLE_HIGHLIGHT,
+    STYLE_HINT, STYLE_INFO, STYLE_MUTED, STYLE_PRIMARY, STYLE_SUCCESS, STYLE_WARNING,
+    scroll_indicator, trait_icon, wrap_text,
 };
 
 // =============================================================================
@@ -352,7 +352,6 @@ fn get_detail_title(app: &App) -> String {
 // =============================================================================
 // BUILD INFO LINES
 // =============================================================================
-
 
 /// Build info lines for detail panel.
 fn build_info_lines(app: &App) -> Vec<Line<'static>> {
@@ -1387,4 +1386,3 @@ fn json_value_to_display(value: &JsonValue) -> String {
         JsonValue::Object(obj) => serde_json::to_string(obj).unwrap_or_else(|_| "{}".to_string()),
     }
 }
-

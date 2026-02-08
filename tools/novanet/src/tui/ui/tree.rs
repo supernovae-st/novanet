@@ -11,14 +11,16 @@ use ratatui::Frame;
 use ratatui::layout::Rect;
 use ratatui::style::{Color, Style};
 use ratatui::text::{Line, Span};
-use ratatui::widgets::{Block, Borders, Paragraph, Scrollbar, ScrollbarOrientation, ScrollbarState};
+use ratatui::widgets::{
+    Block, Borders, Paragraph, Scrollbar, ScrollbarOrientation, ScrollbarState,
+};
 use rustc_hash::FxHashSet;
 
 use super::{
-    render_empty_state, spinner, trait_icon, truncate_start, EmptyStateKind,
     COLOR_ACTIVE_KIND_BG, COLOR_ARC_FAMILY, COLOR_CONNECTED, COLOR_DESC_TEXT, COLOR_HIGHLIGHT_BG,
-    COLOR_HINT_TEXT, COLOR_MUTED_TEXT, COLOR_UNFOCUSED_BORDER, STYLE_DIM, STYLE_HIGHLIGHT,
-    STYLE_PRIMARY, STYLE_UNFOCUSED,
+    COLOR_HINT_TEXT, COLOR_MUTED_TEXT, COLOR_UNFOCUSED_BORDER, EmptyStateKind, STYLE_DIM,
+    STYLE_HIGHLIGHT, STYLE_PRIMARY, STYLE_UNFOCUSED, render_empty_state, spinner, trait_icon,
+    truncate_start,
 };
 use crate::tui::app::{App, Focus};
 use crate::tui::theme::hex_to_color;

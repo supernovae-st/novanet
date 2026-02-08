@@ -436,7 +436,10 @@ mod tests {
             "HAS_GENERATED",
             ArcFamily::Localization,
             NodeRef::Multiple(vec!["Page".to_string(), "Block".to_string()]),
-            NodeRef::Multiple(vec!["PageGenerated".to_string(), "BlockGenerated".to_string()]),
+            NodeRef::Multiple(vec![
+                "PageGenerated".to_string(),
+                "BlockGenerated".to_string(),
+            ]),
             Cardinality::OneToMany,
         );
         assert_eq!(
@@ -563,7 +566,10 @@ mod tests {
                 "HAS_GENERATED",
                 ArcFamily::Localization,
                 NodeRef::Multiple(vec!["Page".to_string(), "Block".to_string()]),
-                NodeRef::Multiple(vec!["PageGenerated".to_string(), "BlockGenerated".to_string()]),
+                NodeRef::Multiple(vec![
+                    "PageGenerated".to_string(),
+                    "BlockGenerated".to_string(),
+                ]),
                 Cardinality::OneToMany,
             )],
             semantic_link_types: None,
