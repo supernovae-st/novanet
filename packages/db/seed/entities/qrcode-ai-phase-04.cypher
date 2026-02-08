@@ -8,11 +8,8 @@
 // PROJECT NODE
 // ─────────────────────────────────────────────────────────────────────────────
 
-MERGE (proj:Project:Meta {key: "qrcode-ai"})
-ON CREATE SET proj.display_name = "qrcode-ai",
-             proj.created_at = datetime(),
-             proj.updated_at = datetime()
-ON MATCH SET proj.updated_at = datetime();
+MATCH (proj:Project {key: "qrcode-ai"})
+SET proj.updated_at = datetime();
 
 // ─────────────────────────────────────────────────────────────────────────────
 // ENTITIES (29)
@@ -25,6 +22,7 @@ ON CREATE SET
   e.type = "FEATURE",
   e.is_pillar = false,
   e.entity_summary = "Analytics is the comprehensive tracking and reporting system for QR codes\nand smart links. Includes click tracking, scan counting, geographic data,\ndevice detection, and time-series reporting.",
+  e.llm_context = "USE: when discussing QR code analytics, scan tracking, click statistics, or performance metrics. TRIGGERS: analytics, statistics, tracking, metrics, reports, data, insights, performance. NOT: specific analytics types (use click-tracking, geo-tracking, etc.).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -41,6 +39,7 @@ ON CREATE SET
   e.type = "FEATURE",
   e.is_pillar = false,
   e.entity_summary = "Click tracking records every click on short links and smart links.\nCaptures timestamp, referrer, and conversion data for marketing analysis.",
+  e.llm_context = "USE: when discussing link click tracking, click events, referrer data, or conversion tracking. TRIGGERS: click tracking, track clicks, click events, link clicks, click data, referrer tracking. NOT: scan counting (QR specific), analytics (umbrella term).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -57,6 +56,7 @@ ON CREATE SET
   e.type = "FEATURE",
   e.is_pillar = false,
   e.entity_summary = "Scan counting tracks the number of times a QR code is scanned.\nEssential for measuring campaign performance and ROI.",
+  e.llm_context = "USE: when discussing QR code scan counts, scan statistics, or scan volume metrics. TRIGGERS: scan counting, count scans, scan stats, scan volume, scan numbers, how many scans. NOT: click tracking (links), geo-tracking (location).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -73,6 +73,7 @@ ON CREATE SET
   e.type = "FEATURE",
   e.is_pillar = false,
   e.entity_summary = "Geographic tracking identifies the location of QR code scans and link\nclicks. Uses IP geolocation for country, region, and city data.",
+  e.llm_context = "USE: when discussing geographic tracking, location data, country/city analytics, or IP geolocation for scans. TRIGGERS: geo tracking, geographic, location tracking, country data, city data, ip location, where scanned. NOT: device detection (what device), time-series (when).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -89,6 +90,7 @@ ON CREATE SET
   e.type = "FEATURE",
   e.is_pillar = false,
   e.entity_summary = "Device detection identifies the operating system, browser, and device\ntype of users who scan QR codes. Enables device-specific optimization.",
+  e.llm_context = "USE: when discussing device detection, OS tracking, browser detection, or mobile vs desktop analytics. TRIGGERS: device detection, os detection, browser detection, device type, mobile or desktop, what device, user agent. NOT: geo-tracking (location), contextual routing (redirect).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -105,6 +107,7 @@ ON CREATE SET
   e.type = "FEATURE",
   e.is_pillar = false,
   e.entity_summary = "Time series analytics provides historical scan and click data over time.\nEnables trend analysis, peak time identification, and forecasting.",
+  e.llm_context = "USE: when discussing time-series analytics, historical scan data, trend analysis, or scans over time. TRIGGERS: time series, historical data, trends, over time, date range, peak times, daily scans, weekly stats. NOT: real-time (immediate), analytics (umbrella).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -121,6 +124,7 @@ ON CREATE SET
   e.type = "FEATURE",
   e.is_pillar = false,
   e.entity_summary = "Contextual routing redirects users to different destinations based on\ntheir device, operating system, or location. Essential for app download\nlinks that need to route to App Store or Play Store.",
+  e.llm_context = "USE: when discussing contextual routing, device-based redirects, OS-specific destinations, or smart link routing rules. TRIGGERS: contextual routing, smart routing, device redirect, os redirect, app store redirect, conditional redirect, dynamic destination. NOT: device detection (analytics only), edit destination (manual change).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -137,6 +141,7 @@ ON CREATE SET
   e.type = "FEATURE",
   e.is_pillar = false,
   e.entity_summary = "Custom domains allow using your own branded domain for short links\ninstead of the platform's default. Improves trust and brand recognition.",
+  e.llm_context = "USE: when discussing custom domains, branded short links, white-label URLs, or vanity domains. TRIGGERS: custom domain, branded domain, own domain, vanity url, white label domain, custom short url. NOT: url shortener (action), white label (full branding).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -153,6 +158,7 @@ ON CREATE SET
   e.type = "FEATURE",
   e.is_pillar = false,
   e.entity_summary = "Custom link preview lets you control how links appear when shared on\nsocial media. Customize title, description, and image for better CTR.",
+  e.llm_context = "USE: when discussing custom link previews, Open Graph meta tags, social media previews, or thumbnail customization. TRIGGERS: link preview, og tags, open graph, social preview, thumbnail, share preview, meta tags. NOT: landing page (full page), custom domain (url).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -169,6 +175,7 @@ ON CREATE SET
   e.type = "FEATURE",
   e.is_pillar = false,
   e.entity_summary = "UTM builder helps create tracking parameters for marketing campaigns.\nAutomatically appends utm_source, utm_medium, utm_campaign to URLs.",
+  e.llm_context = "USE: when discussing UTM parameters, campaign tracking, Google Analytics parameters, or marketing attribution. TRIGGERS: utm builder, utm parameters, campaign tracking, utm source, utm medium, utm campaign, google analytics tracking. NOT: analytics (viewing data), retargeting (ads).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -185,6 +192,7 @@ ON CREATE SET
   e.type = "FEATURE",
   e.is_pillar = false,
   e.entity_summary = "Bulk creation enables generating hundreds or thousands of QR codes at\nonce. Essential for enterprise use cases like product packaging or\nevent ticketing.",
+  e.llm_context = "USE: when discussing bulk QR code creation, mass generation, spreadsheet import, or enterprise-scale QR codes. TRIGGERS: bulk creation, bulk generate, mass create, batch qr, spreadsheet import, csv upload, multiple qr codes at once. NOT: batch-qr-generator (tool), api (programmatic).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -201,6 +209,7 @@ ON CREATE SET
   e.type = "FEATURE",
   e.is_pillar = false,
   e.entity_summary = "Team workspaces allow multiple users to collaborate on QR code and\nlink management. Includes roles, permissions, and shared assets.",
+  e.llm_context = "USE: when discussing team collaboration, multi-user access, shared QR code management, or role-based permissions. TRIGGERS: team workspace, collaboration, multi-user, shared access, team members, roles, permissions, organization. NOT: white-label (branding), api (integration).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -217,6 +226,7 @@ ON CREATE SET
   e.type = "FEATURE",
   e.is_pillar = false,
   e.entity_summary = "API access provides programmatic control over QR code and link creation.\nRESTful endpoints for integration with custom applications and workflows.",
+  e.llm_context = "USE: when discussing API access, developer integration, programmatic QR code creation, or RESTful endpoints. TRIGGERS: api, api access, developer api, rest api, integration, programmatic, endpoints. NOT: webhooks (events), qr-code-api (specific tool).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -233,6 +243,7 @@ ON CREATE SET
   e.type = "FEATURE",
   e.is_pillar = false,
   e.entity_summary = "Webhooks send real-time notifications to external systems when events\noccur. Useful for triggering workflows, updating CRMs, or logging.",
+  e.llm_context = "USE: when discussing webhooks, event notifications, real-time callbacks, or scan event triggers. TRIGGERS: webhooks, webhook, event notification, callback, trigger, real-time event, scan webhook. NOT: api (request/response), analytics (viewing).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -249,6 +260,7 @@ ON CREATE SET
   e.type = "FEATURE",
   e.is_pillar = false,
   e.entity_summary = "White label removes all platform branding, allowing agencies and\nenterprises to present QR Code AI as their own product.",
+  e.llm_context = "USE: when discussing white-label solutions, removing platform branding, reseller programs, or agency branding. TRIGGERS: white label, whitelabel, remove branding, no branding, agency solution, reseller, own branding. NOT: custom domain (url only), team workspaces (collaboration).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -265,6 +277,7 @@ ON CREATE SET
   e.type = "FEATURE",
   e.is_pillar = false,
   e.entity_summary = "Password protection adds a password gate before revealing QR code\ndestinations. Useful for private content or limited access links.",
+  e.llm_context = "USE: when discussing password-protected QR codes, gated content, secure access, or password-required links. TRIGGERS: password protection, password protected, require password, gated content, secure qr, locked qr, access code. NOT: expiration (time limit), scan limit (count limit).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -281,6 +294,7 @@ ON CREATE SET
   e.type = "FEATURE",
   e.is_pillar = false,
   e.entity_summary = "Expiration sets a date/time after which the QR code or link stops\nworking. Perfect for time-sensitive promotions or temporary access.",
+  e.llm_context = "USE: when discussing link expiration, time-limited QR codes, expiry dates, or temporary access. TRIGGERS: expiration, expire, time limit, temporary qr, expiry date, auto-disable, limited time. NOT: scan limit (count), password protection (access control).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -297,6 +311,7 @@ ON CREATE SET
   e.type = "FEATURE",
   e.is_pillar = false,
   e.entity_summary = "Scan limit restricts the number of times a QR code can be scanned.\nUseful for limited offers, exclusive content, or contest entries.",
+  e.llm_context = "USE: when discussing scan limits, maximum scans, limited-use QR codes, or scan quotas. TRIGGERS: scan limit, max scans, limited scans, scan quota, one-time scan, single use, limited use. NOT: expiration (time), password protection (access).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -313,6 +328,7 @@ ON CREATE SET
   e.type = "FEATURE",
   e.is_pillar = false,
   e.entity_summary = "Retargeting pixel integration adds tracking pixels from Facebook,\nGoogle, or other ad platforms to link destinations for remarketing.",
+  e.llm_context = "USE: when discussing retargeting pixels, Facebook pixel, Google pixel, remarketing, or ad tracking integration. TRIGGERS: retargeting pixel, facebook pixel, google pixel, remarketing, ad tracking, pixel integration, audience building. NOT: utm-builder (attribution), analytics (internal).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -329,6 +345,7 @@ ON CREATE SET
   e.type = "TOOL",
   e.is_pillar = false,
   e.entity_summary = "A QR code generator is a tool that creates QR code images from data.\nSupports various content types (URL, text, vCard, WiFi) and allows\ncustomization of colors, size, and design.",
+  e.llm_context = "USE: when discussing QR code creation tools, generating QR codes, or QR maker software. TRIGGERS: qr code generator, qr generator, qr maker, create qr, generate qr, make qr code, qr code creator. NOT: barcode generator (1D), qr code scanner (reading), qr code api (programmatic).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -345,6 +362,7 @@ ON CREATE SET
   e.type = "TOOL",
   e.is_pillar = false,
   e.entity_summary = "A QR code scanner reads and decodes QR codes using a camera.\nAvailable as mobile apps or integrated into smartphone cameras.\nReturns the encoded data for the user.",
+  e.llm_context = "USE: when discussing QR code scanning, reading QR codes, QR reader apps, or camera-based scanning. TRIGGERS: qr code scanner, qr scanner, qr reader, scan qr, read qr code, qr code app, camera scan. NOT: barcode scanner (1D), qr code generator (creation).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -361,6 +379,7 @@ ON CREATE SET
   e.type = "TOOL",
   e.is_pillar = false,
   e.entity_summary = "A QR code API provides programmatic access to QR code generation.\nDevelopers can create QR codes via HTTP requests without UI interaction.",
+  e.llm_context = "USE: when discussing QR code APIs, programmatic QR generation, developer QR tools, or REST QR endpoints. TRIGGERS: qr code api, qr api, programmatic qr, developer qr, rest qr, api qr generation. NOT: api access (general feature), qr code generator (ui tool).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -377,6 +396,7 @@ ON CREATE SET
   e.type = "TOOL",
   e.is_pillar = false,
   e.entity_summary = "A landing page builder creates destination pages without coding.\nDrag-and-drop interface for creating bio pages, menus, forms, and more.",
+  e.llm_context = "USE: when discussing landing page builders, no-code page creation, drag-and-drop page editors, or destination page tools. TRIGGERS: landing page builder, page builder, no-code page, drag and drop, page editor, bio page builder. NOT: link-in-bio builder (social specific), menu builder (restaurant).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -393,6 +413,7 @@ ON CREATE SET
   e.type = "TOOL",
   e.is_pillar = false,
   e.entity_summary = "A URL shortener creates compact links from long URLs. Short links are\neasier to share and look cleaner in QR codes. Includes tracking.",
+  e.llm_context = "USE: when discussing URL shorteners, link shortening, creating short links, or compact URLs. TRIGGERS: url shortener, link shortener, short url, short link, shorten url, compact link, tiny url. NOT: smart link (intelligent routing), custom domain (branded).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -409,6 +430,7 @@ ON CREATE SET
   e.type = "TOOL",
   e.is_pillar = false,
   e.entity_summary = "A link in bio builder creates one-page link hubs for social media\nprofiles. Perfect for Instagram, TikTok, and other platforms with\nsingle-link limitations.",
+  e.llm_context = "USE: when discussing link-in-bio pages, Instagram bio links, social media link hubs, or bio page tools. TRIGGERS: link in bio, bio link, instagram bio, tiktok bio, linktree alternative, bio page, social link hub. NOT: landing page builder (general), menu builder (restaurant).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -425,6 +447,7 @@ ON CREATE SET
   e.type = "TOOL",
   e.is_pillar = false,
   e.entity_summary = "A menu builder creates digital restaurant menus accessible via QR code.\nSupports categories, items, prices, images, and dietary information.",
+  e.llm_context = "USE: when discussing digital menu builders, restaurant menu creation, or QR menu tools. TRIGGERS: menu builder, restaurant menu, digital menu, qr menu, menu creator, food menu builder, cafe menu. NOT: landing page builder (general), link-in-bio builder (social).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -441,6 +464,7 @@ ON CREATE SET
   e.type = "TOOL",
   e.is_pillar = false,
   e.entity_summary = "A vCard generator creates digital business cards in VCF format.\nWhen scanned, automatically adds contact to phone. Includes name,\nphone, email, company, and social links.",
+  e.llm_context = "USE: when discussing vCard generators, digital business card creators, contact QR tools, or VCF file creation. TRIGGERS: vcard generator, vcard creator, digital business card, contact qr, vcf generator, electronic business card. NOT: business cards (medium), qr code generator (general).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -457,6 +481,7 @@ ON CREATE SET
   e.type = "TOOL",
   e.is_pillar = false,
   e.entity_summary = "A WiFi QR generator creates QR codes that connect devices to WiFi\nnetworks automatically. Encodes SSID, password, and security type.",
+  e.llm_context = "USE: when discussing WiFi QR generators, WiFi password sharing via QR, or wireless network QR tools. TRIGGERS: wifi qr generator, wifi qr code, share wifi password, wifi qr, wireless qr, network qr code. NOT: qr code generator (general), qr code wifi (content type).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -473,6 +498,7 @@ ON CREATE SET
   e.type = "TOOL",
   e.is_pillar = false,
   e.entity_summary = "A batch QR generator creates multiple QR codes at once from\nspreadsheet data. Essential for mass production of product labels,\nasset tags, or event badges.",
+  e.llm_context = "USE: when discussing batch QR generation, bulk QR creation tools, spreadsheet QR generation, or mass QR production. TRIGGERS: batch qr generator, bulk qr tool, mass qr, spreadsheet qr, csv qr, multiple qr generator. NOT: bulk creation (feature), qr code generator (single).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET

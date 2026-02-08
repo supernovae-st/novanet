@@ -8,11 +8,8 @@
 // PROJECT NODE
 // ─────────────────────────────────────────────────────────────────────────────
 
-MERGE (proj:Project:Meta {key: "qrcode-ai"})
-ON CREATE SET proj.display_name = "qrcode-ai",
-             proj.created_at = datetime(),
-             proj.updated_at = datetime()
-ON MATCH SET proj.updated_at = datetime();
+MATCH (proj:Project {key: "qrcode-ai"})
+SET proj.updated_at = datetime();
 
 // ─────────────────────────────────────────────────────────────────────────────
 // ENTITIES (25)
@@ -25,6 +22,7 @@ ON CREATE SET
   e.type = "INDUSTRY",
   e.is_pillar = false,
   e.entity_summary = "Restaurants use QR codes for digital menus, ordering, and payments.\nThe COVID-19 pandemic accelerated adoption. QR codes on tables link\nto menus, reducing physical contact and printing costs.",
+  e.llm_context = "USE: when discussing QR codes for restaurants, food service, cafes, bars, or digital menus. TRIGGERS: restaurant qr, cafe qr, bar qr, food service qr, dine-in qr, table qr. NOT: retail (shopping), hospitality (hotels).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -41,6 +39,7 @@ ON CREATE SET
   e.type = "INDUSTRY",
   e.is_pillar = false,
   e.entity_summary = "Retail uses QR codes on products for information, promotions, and\nloyalty programs. Links product packaging to reviews, tutorials,\nand warranty registration.",
+  e.llm_context = "USE: when discussing QR codes for retail, shops, stores, or e-commerce product labeling. TRIGGERS: retail qr, store qr, shop qr, product qr, e-commerce qr, shopping qr. NOT: restaurants (food), hospitality (hotels).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -57,6 +56,7 @@ ON CREATE SET
   e.type = "INDUSTRY",
   e.is_pillar = false,
   e.entity_summary = "Hospitality uses QR codes for check-in, room service, concierge info,\nand guest feedback. Hotels display QR codes in rooms for WiFi access,\namenity booking, and local recommendations.",
+  e.llm_context = "USE: when discussing QR codes for hotels, resorts, tourism, or guest services. TRIGGERS: hotel qr, resort qr, hospitality qr, tourism qr, guest qr, room qr. NOT: restaurants (food), retail (shopping).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -73,6 +73,7 @@ ON CREATE SET
   e.type = "INDUSTRY",
   e.is_pillar = false,
   e.entity_summary = "Healthcare uses QR codes for patient identification, medication\ntracking, and appointment scheduling. Pharma uses QR codes for\ndrug authenticity verification and dosage instructions.",
+  e.llm_context = "USE: when discussing QR codes for healthcare, hospitals, clinics, or pharmaceutical applications. TRIGGERS: healthcare qr, hospital qr, clinic qr, pharma qr, medical qr, patient qr. NOT: fitness (gyms), beauty (spas).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -89,6 +90,7 @@ ON CREATE SET
   e.type = "INDUSTRY",
   e.is_pillar = false,
   e.entity_summary = "Education uses QR codes for attendance tracking, resource sharing,\nand interactive learning. Teachers link printed materials to\nvideos, quizzes, and supplementary content.",
+  e.llm_context = "USE: when discussing QR codes for schools, universities, education, or training materials. TRIGGERS: education qr, school qr, university qr, student qr, classroom qr, learning qr. NOT: entertainment (events), government (public).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -105,6 +107,7 @@ ON CREATE SET
   e.type = "INDUSTRY",
   e.is_pillar = false,
   e.entity_summary = "Real estate uses QR codes on property signs and listings for virtual\ntours, detailed information, and agent contact. Streamlines property\nviewing scheduling and lead capture.",
+  e.llm_context = "USE: when discussing QR codes for real estate, property listings, or virtual tours. TRIGGERS: real estate qr, property qr, house qr, listing qr, virtual tour qr, for sale qr. NOT: construction (building), hospitality (hotels).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -121,6 +124,7 @@ ON CREATE SET
   e.type = "INDUSTRY",
   e.is_pillar = false,
   e.entity_summary = "Fitness uses QR codes for gym check-ins, workout instructions, and\nequipment tutorials. Wellness centers use them for class schedules,\nbooking, and membership management.",
+  e.llm_context = "USE: when discussing QR codes for gyms, fitness centers, sports, or wellness applications. TRIGGERS: gym qr, fitness qr, sports qr, wellness qr, workout qr, exercise qr. NOT: healthcare (medical), beauty (cosmetics).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -137,6 +141,7 @@ ON CREATE SET
   e.type = "INDUSTRY",
   e.is_pillar = false,
   e.entity_summary = "Beauty uses QR codes for appointment booking, product information,\nand loyalty programs. Cosmetics brands link to tutorials, ingredient\nlists, and virtual try-on experiences.",
+  e.llm_context = "USE: when discussing QR codes for salons, spas, cosmetics, or beauty products. TRIGGERS: beauty qr, salon qr, spa qr, cosmetics qr, skincare qr, makeup qr. NOT: fitness (gyms), healthcare (medical).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -153,6 +158,7 @@ ON CREATE SET
   e.type = "INDUSTRY",
   e.is_pillar = false,
   e.entity_summary = "Entertainment uses QR codes for tickets, event access, and interactive\nexperiences. Movie theaters, concerts, and theme parks use QR codes\nfor entry and enhanced experiences.",
+  e.llm_context = "USE: when discussing QR codes for entertainment, movies, games, or live events. TRIGGERS: entertainment qr, movie qr, event qr, concert qr, theater qr, gaming qr. NOT: education (learning), hospitality (hotels).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -169,6 +175,7 @@ ON CREATE SET
   e.type = "INDUSTRY",
   e.is_pillar = false,
   e.entity_summary = "Transportation uses QR codes for boarding passes, ticketing, and\npackage tracking. Airlines, trains, and buses enable mobile tickets\nvia QR codes for faster boarding.",
+  e.llm_context = "USE: when discussing QR codes for airlines, transit, or transportation ticketing. TRIGGERS: airline qr, transit qr, transportation qr, boarding pass qr, train qr, bus qr. NOT: logistics (warehouse), manufacturing (production).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -185,6 +192,7 @@ ON CREATE SET
   e.type = "INDUSTRY",
   e.is_pillar = false,
   e.entity_summary = "Manufacturing uses QR codes for inventory tracking, work instructions,\nand quality control. Links parts to specifications, assembly guides,\nand maintenance records.",
+  e.llm_context = "USE: when discussing QR codes for manufacturing, production, or assembly lines. TRIGGERS: manufacturing qr, factory qr, production qr, assembly qr, industrial qr, parts qr. NOT: logistics (shipping), construction (building).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -201,6 +209,7 @@ ON CREATE SET
   e.type = "INDUSTRY",
   e.is_pillar = false,
   e.entity_summary = "Logistics uses QR codes for package tracking, warehouse management,\nand proof of delivery. Essential for supply chain visibility and\nlast-mile delivery confirmation.",
+  e.llm_context = "USE: when discussing QR codes for logistics, shipping, or warehouse management. TRIGGERS: logistics qr, shipping qr, warehouse qr, delivery qr, supply chain qr, tracking qr. NOT: manufacturing (production), retail (stores).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -217,6 +226,7 @@ ON CREATE SET
   e.type = "INDUSTRY",
   e.is_pillar = false,
   e.entity_summary = "Construction uses QR codes for site safety information, equipment\ninspection, and material tracking. Links to blueprints, safety\nmanuals, and maintenance schedules.",
+  e.llm_context = "USE: when discussing QR codes for construction sites, building projects, or infrastructure. TRIGGERS: construction qr, building qr, site qr, contractor qr, blueprint qr, safety qr. NOT: real estate (sales), manufacturing (production).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -233,6 +243,7 @@ ON CREATE SET
   e.type = "INDUSTRY",
   e.is_pillar = false,
   e.entity_summary = "Finance uses QR codes for payments, account access, and document\nverification. Banks use them for ATM-less cash withdrawal and\nquick insurance claim submissions.",
+  e.llm_context = "USE: when discussing QR codes for banking, finance, insurance, or financial services. TRIGGERS: finance qr, banking qr, insurance qr, payment qr, atm qr, fintech qr. NOT: retail (shopping), government (public sector).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -249,6 +260,7 @@ ON CREATE SET
   e.type = "INDUSTRY",
   e.is_pillar = false,
   e.entity_summary = "Government uses QR codes for citizen services, document verification,\nand public information. Used for vaccine certificates, ID cards,\nand municipal service access.",
+  e.llm_context = "USE: when discussing QR codes for government, public sector, or citizen services. TRIGGERS: government qr, public sector qr, citizen qr, municipal qr, civic qr, id card qr. NOT: nonprofit (charity), enterprise (business).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -265,6 +277,7 @@ ON CREATE SET
   e.type = "INDUSTRY",
   e.is_pillar = false,
   e.entity_summary = "Marketing agencies use QR codes for client campaigns, print-to-digital\nconversion, and campaign tracking. Essential for measuring offline\nmarketing effectiveness.",
+  e.llm_context = "USE: when discussing QR codes for marketing agencies, digital marketing, or advertising campaigns. TRIGGERS: marketing agency qr, digital marketing qr, campaign qr, advertising qr, agency qr. NOT: creative agencies (design), consulting (business).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -281,6 +294,7 @@ ON CREATE SET
   e.type = "INDUSTRY",
   e.is_pillar = false,
   e.entity_summary = "Creative agencies design custom QR codes that match brand aesthetics.\nCreate visually stunning QR codes for advertising campaigns while\nmaintaining scannability.",
+  e.llm_context = "USE: when discussing QR codes for creative agencies, design firms, or branding work. TRIGGERS: creative agency qr, design agency qr, branding qr, designer qr, creative qr. NOT: marketing agencies (advertising), consulting (business).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -297,6 +311,7 @@ ON CREATE SET
   e.type = "INDUSTRY",
   e.is_pillar = false,
   e.entity_summary = "Event management uses QR codes for registration, check-in, and\ninformation sharing. Conferences use them for session access,\nnetworking, and feedback collection.",
+  e.llm_context = "USE: when discussing QR codes for event management, conferences, weddings, or event planning. TRIGGERS: event management qr, conference qr, wedding qr, event planner qr, venue qr. NOT: entertainment (movies), hospitality (hotels).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -313,6 +328,7 @@ ON CREATE SET
   e.type = "INDUSTRY",
   e.is_pillar = false,
   e.entity_summary = "Nonprofits use QR codes for donation collection, volunteer sign-up,\nand campaign awareness. Low-cost way to connect physical outreach\nto digital engagement.",
+  e.llm_context = "USE: when discussing QR codes for nonprofits, charities, NGOs, or donation collection. TRIGGERS: nonprofit qr, charity qr, ngo qr, donation qr, fundraising qr, volunteer qr. NOT: government (public sector), small business (commercial).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -329,6 +345,7 @@ ON CREATE SET
   e.type = "INDUSTRY",
   e.is_pillar = false,
   e.entity_summary = "Consulting firms use QR codes for business cards, presentations,\nand report sharing. Enable easy contact saving and document access\nduring client meetings.",
+  e.llm_context = "USE: when discussing QR codes for consulting firms, business consulting, or professional services. TRIGGERS: consulting qr, consultant qr, advisory qr, professional services qr, firm qr. NOT: agencies (marketing), enterprise (large corp).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -345,6 +362,7 @@ ON CREATE SET
   e.type = "INDUSTRY",
   e.is_pillar = false,
   e.entity_summary = "Developers integrate QR code generation via APIs. Build custom\napplications that create, manage, and track QR codes programmatically\nfor specialized use cases.",
+  e.llm_context = "USE: when discussing developers, API integration, or programmatic QR code generation. TRIGGERS: developer qr, api user, programmer qr, integrator, coder qr, tech qr. NOT: enterprise (organization), agencies (marketing).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -361,6 +379,7 @@ ON CREATE SET
   e.type = "INDUSTRY",
   e.is_pillar = false,
   e.entity_summary = "Enterprise organizations need bulk creation, team management, and\nadvanced security features. Require SSO, audit logs, and white-label\nsolutions for company-wide deployment.",
+  e.llm_context = "USE: when discussing QR codes for enterprise, large organizations, or corporate deployments. TRIGGERS: enterprise qr, corporate qr, large organization qr, company-wide qr, sso qr. NOT: small business (smb), freelancers (individual).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -377,6 +396,7 @@ ON CREATE SET
   e.type = "INDUSTRY",
   e.is_pillar = false,
   e.entity_summary = "Agencies manage QR codes for multiple clients. Need white-label,\nbulk creation, and client workspaces to deliver branded solutions\nat scale.",
+  e.llm_context = "USE: when discussing agencies managing QR codes for multiple clients. TRIGGERS: agency qr, multi-client qr, client management qr, agency workspaces. NOT: enterprise (internal), small business (single owner).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -393,6 +413,7 @@ ON CREATE SET
   e.type = "INDUSTRY",
   e.is_pillar = false,
   e.entity_summary = "Small businesses use QR codes for menus, social media, and Google\nreviews. Cost-effective marketing tool that bridges physical presence\nto digital engagement.",
+  e.llm_context = "USE: when discussing QR codes for small businesses, SMBs, or local businesses. TRIGGERS: small business qr, smb qr, local business qr, shop owner qr, mom and pop qr. NOT: enterprise (large), freelancers (individual).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -409,6 +430,7 @@ ON CREATE SET
   e.type = "INDUSTRY",
   e.is_pillar = false,
   e.entity_summary = "Freelancers use QR codes on business cards, portfolios, and invoices.\nLink to work samples, calendars for booking, and payment links for\nquick professional connections.",
+  e.llm_context = "USE: when discussing QR codes for freelancers, independent professionals, or solo entrepreneurs. TRIGGERS: freelancer qr, independent qr, solo qr, self-employed qr, contractor qr. NOT: small business (employees), agencies (teams).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET

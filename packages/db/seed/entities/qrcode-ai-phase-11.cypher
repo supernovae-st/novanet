@@ -8,11 +8,8 @@
 // PROJECT NODE
 // ─────────────────────────────────────────────────────────────────────────────
 
-MERGE (proj:Project:Meta {key: "qrcode-ai"})
-ON CREATE SET proj.display_name = "qrcode-ai",
-             proj.created_at = datetime(),
-             proj.updated_at = datetime()
-ON MATCH SET proj.updated_at = datetime();
+MATCH (proj:Project {key: "qrcode-ai"})
+SET proj.updated_at = datetime();
 
 // ─────────────────────────────────────────────────────────────────────────────
 // ENTITIES (4)
@@ -25,6 +22,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "Messaging QR codes link to chat apps like WhatsApp and Telegram.\nThey enable direct communication channels for customer support,\nsales inquiries, and community engagement.",
+  e.llm_context = "USE: when discussing QR codes for messaging apps like WhatsApp, Telegram, or chat platforms. TRIGGERS: messaging qr, chat qr, whatsapp category, telegram category, direct message qr. NOT: video platform (video content), professional (business networking).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -41,6 +39,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "Video platform QR codes link to video content on YouTube, TikTok,\nand Snapchat. Used for content promotion, tutorials, and\nentertainment sharing.",
+  e.llm_context = "USE: when discussing QR codes for video platforms like YouTube, TikTok, or Snapchat. TRIGGERS: video platform qr, youtube category, tiktok category, video content qr, streaming qr. NOT: messaging (chat), music platform (audio).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -57,6 +56,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "Professional network QR codes link to business profiles on LinkedIn.\nPopular on business cards and at networking events for quick\nprofessional connections.",
+  e.llm_context = "USE: when discussing QR codes for professional networking like LinkedIn. TRIGGERS: professional qr, linkedin category, business networking qr, career qr, professional network. NOT: messaging (chat), video platform (content).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -73,6 +73,7 @@ ON CREATE SET
   e.type = "THING",
   e.is_pillar = false,
   e.entity_summary = "Music platform QR codes link to artists, playlists, and tracks on\nSpotify, Apple Music, and SoundCloud. Used by musicians and\nplaylist curators for promotion.",
+  e.llm_context = "USE: when discussing QR codes for music platforms like Spotify, Apple Music, or SoundCloud. TRIGGERS: music platform qr, spotify category, apple music category, music streaming qr, playlist category. NOT: video platform (video), audio file (direct file).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET

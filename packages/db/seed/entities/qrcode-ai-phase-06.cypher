@@ -8,11 +8,8 @@
 // PROJECT NODE
 // ─────────────────────────────────────────────────────────────────────────────
 
-MERGE (proj:Project:Meta {key: "qrcode-ai"})
-ON CREATE SET proj.display_name = "qrcode-ai",
-             proj.created_at = datetime(),
-             proj.updated_at = datetime()
-ON MATCH SET proj.updated_at = datetime();
+MATCH (proj:Project {key: "qrcode-ai"})
+SET proj.updated_at = datetime();
 
 // ─────────────────────────────────────────────────────────────────────────────
 // ENTITIES (15)
@@ -25,6 +22,7 @@ ON CREATE SET
   e.type = "ACTION",
   e.is_pillar = false,
   e.entity_summary = "Creating a QR code is the primary action of encoding data into a\nscannable 2D barcode. Users input content (URL, text, vCard) and\nthe generator produces a QR code image.",
+  e.llm_context = "USE: when discussing QR code creation, making QR codes, or generating new QR codes. TRIGGERS: create qr code, make qr, generate qr, new qr code, create qr, make qr code. NOT: customize qr (design), scan qr (reading), edit destination (update).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -41,6 +39,7 @@ ON CREATE SET
   e.type = "ACTION",
   e.is_pillar = false,
   e.entity_summary = "Scanning a QR code uses a camera to decode the data stored within.\nModern smartphones have built-in QR scanning in the camera app.\nReturns the encoded content for the user to act upon.",
+  e.llm_context = "USE: when discussing scanning QR codes, reading QR codes, or decoding QR content. TRIGGERS: scan qr code, read qr, decode qr, scan qr, qr scan, use camera to scan. NOT: create qr (making), track scans (analytics).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -57,6 +56,7 @@ ON CREATE SET
   e.type = "ACTION",
   e.is_pillar = false,
   e.entity_summary = "Customizing a QR code involves changing colors, adding logos,\nmodifying patterns, and applying design elements while maintaining\nscannability. Includes sub-actions like adding logos and colors.",
+  e.llm_context = "USE: when discussing QR code customization, styling QR codes, or designing QR appearance. TRIGGERS: customize qr, design qr, style qr, qr design, qr customization, personalize qr. NOT: create qr (initial), add logo (specific), change colors (specific).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -73,6 +73,7 @@ ON CREATE SET
   e.type = "ACTION",
   e.is_pillar = false,
   e.entity_summary = "Downloading a QR code exports it as an image file (PNG, SVG, PDF).\nDifferent formats serve different purposes - PNG for web, SVG for\nprint, PDF for professional documents.",
+  e.llm_context = "USE: when discussing downloading QR codes, exporting QR images, or saving QR files. TRIGGERS: download qr, export qr, save qr, qr download, get qr image, qr file. NOT: print qr (physical), share qr (distribute).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -89,6 +90,7 @@ ON CREATE SET
   e.type = "ACTION",
   e.is_pillar = false,
   e.entity_summary = "Printing a QR code produces physical copies for real-world use.\nRequires consideration of size, contrast, and quiet zone to\nensure scannability on the chosen medium.",
+  e.llm_context = "USE: when discussing printing QR codes, physical QR output, or QR print requirements. TRIGGERS: print qr, qr printing, physical qr, print qr code, qr for print, printable qr. NOT: download qr (digital), qr size (specification).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -105,6 +107,7 @@ ON CREATE SET
   e.type = "ACTION",
   e.is_pillar = false,
   e.entity_summary = "Adding a logo places a brand image in the center of a QR code.\nRequires higher error correction to maintain scannability.\nPopular for branded marketing materials.",
+  e.llm_context = "USE: when discussing adding logos to QR codes, branded QR codes, or logo placement in QR. TRIGGERS: add logo, logo qr, branded qr, qr with logo, center logo, embed logo. NOT: customize qr (general), change colors (different aspect).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -121,6 +124,7 @@ ON CREATE SET
   e.type = "ACTION",
   e.is_pillar = false,
   e.entity_summary = "Changing colors customizes the foreground and background of a QR code.\nRequires sufficient contrast for scanning. Dark foreground on\nlight background works best.",
+  e.llm_context = "USE: when discussing QR code color customization, changing QR colors, or colored QR codes. TRIGGERS: change colors, qr colors, colored qr, custom color qr, qr color scheme. NOT: add logo (different aspect), customize qr (general).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -137,6 +141,7 @@ ON CREATE SET
   e.type = "ACTION",
   e.is_pillar = false,
   e.entity_summary = "Editing destination changes where a dynamic QR code redirects.\nOnly possible with dynamic QR codes that use short links.\nEnables updating content without reprinting.",
+  e.llm_context = "USE: when discussing editing QR destinations, changing where QR points, or updating QR URLs. TRIGGERS: edit destination, change url, update link, modify destination, redirect qr, change qr target. NOT: create qr (initial), dynamic qr (code type).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -153,6 +158,7 @@ ON CREATE SET
   e.type = "ACTION",
   e.is_pillar = false,
   e.entity_summary = "Sharing a QR code distributes it to others via email, messaging,\nor social media. Can share the image file or a link to view/scan.",
+  e.llm_context = "USE: when discussing sharing QR codes, distributing QR images, or sending QR codes to others. TRIGGERS: share qr, send qr, distribute qr, qr sharing, email qr, share qr code. NOT: download qr (save), print qr (physical).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -169,6 +175,7 @@ ON CREATE SET
   e.type = "ACTION",
   e.is_pillar = false,
   e.entity_summary = "Tracking scans monitors who, when, and where QR codes are scanned.\nRequires dynamic QR codes with short links. Provides data for\ncampaign optimization and ROI measurement.",
+  e.llm_context = "USE: when discussing scan tracking, monitoring QR performance, or viewing scan analytics. TRIGGERS: track scans, scan analytics, monitor scans, scan statistics, scan tracking, qr tracking. NOT: scan qr (action), analytics (feature).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -185,6 +192,7 @@ ON CREATE SET
   e.type = "ACTION",
   e.is_pillar = false,
   e.entity_summary = "Shortening a URL creates a compact link that redirects to the\noriginal. Short URLs are easier to share, track, and encode in\nQR codes with smaller data requirements.",
+  e.llm_context = "USE: when discussing URL shortening, creating short links, or compacting long URLs. TRIGGERS: shorten url, short link, short url, url shortener, compact link, tiny url. NOT: create smart link (intelligent), custom domain (branding).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -201,6 +209,7 @@ ON CREATE SET
   e.type = "ACTION",
   e.is_pillar = false,
   e.entity_summary = "Creating a smart link adds intelligence to URL shortening.\nSmart links can route based on device, location, or time,\nand include analytics and retargeting capabilities.",
+  e.llm_context = "USE: when discussing smart link creation, intelligent links, or advanced short links with routing. TRIGGERS: create smart link, smart link, intelligent link, routing link, conditional link. NOT: shorten url (basic), contextual routing (feature).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -217,6 +226,7 @@ ON CREATE SET
   e.type = "ACTION",
   e.is_pillar = false,
   e.entity_summary = "Creating a landing page builds a destination for QR codes and links.\nNo-code builders enable creating bio pages, menus, forms, and\ncampaign pages without technical skills.",
+  e.llm_context = "USE: when discussing landing page creation, building destination pages, or creating bio pages. TRIGGERS: create landing page, build page, make landing page, destination page, bio page creation. NOT: landing page builder (tool), link in bio (specific type).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -233,6 +243,7 @@ ON CREATE SET
   e.type = "ACTION",
   e.is_pillar = false,
   e.entity_summary = "Creating a barcode generates a 1D or 2D barcode image. Different\nformats (EAN, UPC, Code 128) serve different industries. Primarily\nused for inventory and product identification.",
+  e.llm_context = "USE: when discussing barcode creation, generating 1D barcodes, or making EAN/UPC codes. TRIGGERS: create barcode, generate barcode, make barcode, barcode creation, ean barcode, upc barcode. NOT: create qr (2D), scan barcode (reading).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -249,6 +260,7 @@ ON CREATE SET
   e.type = "ACTION",
   e.is_pillar = false,
   e.entity_summary = "Scanning a barcode reads the encoded data using a scanner or camera.\nReturns product information, prices, or inventory codes. Essential\nfor retail and logistics operations.",
+  e.llm_context = "USE: when discussing barcode scanning, reading 1D barcodes, or decoding product barcodes. TRIGGERS: scan barcode, read barcode, barcode scan, decode barcode, barcode reader. NOT: scan qr (2D), create barcode (making).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET

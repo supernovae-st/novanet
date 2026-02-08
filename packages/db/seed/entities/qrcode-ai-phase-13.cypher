@@ -8,11 +8,8 @@
 // PROJECT NODE
 // ─────────────────────────────────────────────────────────────────────────────
 
-MERGE (proj:Project:Meta {key: "qrcode-ai"})
-ON CREATE SET proj.display_name = "qrcode-ai",
-             proj.created_at = datetime(),
-             proj.updated_at = datetime()
-ON MATCH SET proj.updated_at = datetime();
+MATCH (proj:Project {key: "qrcode-ai"})
+SET proj.updated_at = datetime();
 
 // ─────────────────────────────────────────────────────────────────────────────
 // ENTITIES (10)
@@ -25,6 +22,7 @@ ON CREATE SET
   e.type = "GUIDE",
   e.is_pillar = false,
   e.entity_summary = "A comprehensive guide to creating QR codes. Covers choosing content\ntype, designing appearance, generating the code, and downloading\nfor use. Suitable for beginners.",
+  e.llm_context = "USE: when discussing how to create QR codes, QR creation tutorials, or step-by-step QR generation. TRIGGERS: how to create qr, make qr code, qr tutorial, create qr guide, generate qr how to. NOT: design guide (aesthetics), print guide (physical output).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -41,6 +39,7 @@ ON CREATE SET
   e.type = "GUIDE",
   e.is_pillar = false,
   e.entity_summary = "Design guide for creating visually appealing QR codes. Covers color\ntheory, logo placement, contrast requirements, and balancing\naesthetics with scannability.",
+  e.llm_context = "USE: when discussing QR code design, styling, customization best practices, or visual aesthetics. TRIGGERS: qr design, qr styling, qr aesthetics, beautiful qr, custom qr design, qr appearance. NOT: creation guide (basic), print guide (output).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -57,6 +56,7 @@ ON CREATE SET
   e.type = "GUIDE",
   e.is_pillar = false,
   e.entity_summary = "Printing guide for QR codes on physical materials. Covers minimum\nsize requirements, resolution, quiet zones, material considerations,\nand testing before production runs.",
+  e.llm_context = "USE: when discussing QR code printing, print requirements, or physical QR production. TRIGGERS: qr print, print qr guide, qr printing tips, physical qr, qr size for print, print quality qr. NOT: design guide (digital), creation guide (generation).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -73,6 +73,7 @@ ON CREATE SET
   e.type = "GUIDE",
   e.is_pillar = false,
   e.entity_summary = "Decision guide for choosing between dynamic and static QR codes.\nExplains trade-offs: editability, tracking, cost, and use cases\nfor each type.",
+  e.llm_context = "USE: when discussing choosing between dynamic and static QR codes or comparing QR types. TRIGGERS: dynamic vs static, which qr type, qr type comparison, editable qr, trackable qr choice. NOT: comparison entity (detailed), creation guide (how-to).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -89,6 +90,7 @@ ON CREATE SET
   e.type = "GUIDE",
   e.is_pillar = false,
   e.entity_summary = "Marketing guide for QR code campaigns. Covers placement strategies,\ncall-to-action design, tracking setup, and measuring ROI on\nprint-to-digital conversions.",
+  e.llm_context = "USE: when discussing QR codes for marketing, campaign strategies, or print-to-digital marketing. TRIGGERS: qr marketing, marketing qr guide, campaign qr, advertising qr, roi qr, print to digital. NOT: restaurant guide (industry), business card guide (specific use).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -105,6 +107,7 @@ ON CREATE SET
   e.type = "GUIDE",
   e.is_pillar = false,
   e.entity_summary = "Restaurant guide for QR code implementation. Covers digital menus,\nordering systems, payment integration, and table tent placement\nfor optimal customer experience.",
+  e.llm_context = "USE: when discussing QR codes specifically for restaurants, cafes, or food service. TRIGGERS: restaurant qr guide, menu qr, cafe qr, food service qr, dining qr, table qr guide. NOT: marketing guide (general), business card guide (networking).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -121,6 +124,7 @@ ON CREATE SET
   e.type = "GUIDE",
   e.is_pillar = false,
   e.entity_summary = "Business card guide for QR code integration. Covers vCard encoding,\nplacement options, size considerations, and connecting physical\ncards to digital profiles.",
+  e.llm_context = "USE: when discussing QR codes on business cards, networking cards, or professional contact sharing. TRIGGERS: business card qr guide, vcard qr, networking card qr, professional qr, contact card qr. NOT: restaurant guide (food), marketing guide (campaigns).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -137,6 +141,7 @@ ON CREATE SET
   e.type = "GUIDE",
   e.is_pillar = false,
   e.entity_summary = "API integration guide for developers. Covers authentication,\nendpoint documentation, code examples, rate limits, and\nbuilding QR code features into applications.",
+  e.llm_context = "USE: when discussing QR code API documentation, developer integration, or programmatic QR generation. TRIGGERS: qr api guide, developer qr, api integration qr, programmatic qr, qr api docs. NOT: analytics guide (tracking), security guide (safety).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -153,6 +158,7 @@ ON CREATE SET
   e.type = "GUIDE",
   e.is_pillar = false,
   e.entity_summary = "Analytics guide for QR code tracking. Covers metrics interpretation,\ngeographic data, device analytics, time-series analysis, and\nusing data for campaign optimization.",
+  e.llm_context = "USE: when discussing QR scan analytics, tracking interpretation, or campaign measurement. TRIGGERS: qr analytics guide, scan tracking guide, qr metrics, analytics interpretation, campaign analytics. NOT: api guide (development), marketing guide (strategy).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -169,6 +175,7 @@ ON CREATE SET
   e.type = "GUIDE",
   e.is_pillar = false,
   e.entity_summary = "Security guide for QR code safety. Covers phishing risks, URL\nverification, secure short links, and protecting both creators\nand scanners from malicious codes.",
+  e.llm_context = "USE: when discussing QR code security, phishing prevention, or safe QR practices. TRIGGERS: qr security, safe qr, qr phishing, qr safety, malicious qr, secure qr. NOT: api guide (development), analytics guide (tracking).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET

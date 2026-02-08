@@ -8,11 +8,8 @@
 // PROJECT NODE
 // ─────────────────────────────────────────────────────────────────────────────
 
-MERGE (proj:Project:Meta {key: "qrcode-ai"})
-ON CREATE SET proj.display_name = "qrcode-ai",
-             proj.created_at = datetime(),
-             proj.updated_at = datetime()
-ON MATCH SET proj.updated_at = datetime();
+MATCH (proj:Project {key: "qrcode-ai"})
+SET proj.updated_at = datetime();
 
 // ─────────────────────────────────────────────────────────────────────────────
 // ENTITIES (8)
@@ -25,6 +22,7 @@ ON CREATE SET
   e.type = "CONCEPT",
   e.is_pillar = false,
   e.entity_summary = "The quiet zone is the white border around a QR code. It must be at\nleast 4 modules wide to ensure scanners can detect the code's edges.\nRemoving or reducing the quiet zone causes scan failures.",
+  e.llm_context = "USE: when discussing QR code margins, white border requirements, or scan failures due to cropping. TRIGGERS: quiet zone, qr margin, white border, qr padding, module margin, quiet area. NOT: finder pattern (corners), timing pattern (lines).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -41,6 +39,7 @@ ON CREATE SET
   e.type = "CONCEPT",
   e.is_pillar = false,
   e.entity_summary = "Error correction allows QR codes to be readable even when partially\ndamaged. Four levels exist: L (7%), M (15%), Q (25%), H (30%).\nHigher correction enables logos but reduces data capacity.",
+  e.llm_context = "USE: when discussing QR code damage tolerance, logo placement, or error correction levels L/M/Q/H. TRIGGERS: error correction, qr damage, reed solomon, correction level, damaged qr, logo error correction. NOT: data capacity (size), encoding mode (character type).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -57,6 +56,7 @@ ON CREATE SET
   e.type = "CONCEPT",
   e.is_pillar = false,
   e.entity_summary = "Data capacity determines how much information a QR code can hold.\nVersion 1 (21x21) holds ~25 alphanumeric characters. Version 40\n(177x177) holds ~4,296. Higher error correction reduces capacity.",
+  e.llm_context = "USE: when discussing how much data a QR code can hold, character limits, or QR size requirements. TRIGGERS: data capacity, qr capacity, character limit, qr data size, how much data, qr storage. NOT: error correction (damage), encoding mode (format).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -73,6 +73,7 @@ ON CREATE SET
   e.type = "CONCEPT",
   e.is_pillar = false,
   e.entity_summary = "QR code version determines the physical size and capacity.\n40 versions exist: Version 1 is 21x21 modules, Version 40 is\n177x177 modules. Larger versions store more data but need larger print.",
+  e.llm_context = "USE: when discussing QR code size, version numbers 1-40, or module grid dimensions. TRIGGERS: qr version, qr size, version 1, version 40, module grid, qr dimensions. NOT: data capacity (characters), error correction (damage).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -89,6 +90,7 @@ ON CREATE SET
   e.type = "CONCEPT",
   e.is_pillar = false,
   e.entity_summary = "Encoding mode determines how data is stored in a QR code.\nNumeric (0-9) is most efficient. Alphanumeric adds letters.\nByte mode handles UTF-8. Kanji mode optimizes for Japanese.",
+  e.llm_context = "USE: when discussing QR encoding efficiency, character types, or numeric vs alphanumeric modes. TRIGGERS: encoding mode, numeric mode, alphanumeric mode, byte mode, kanji mode, qr encoding. NOT: error correction (damage), data capacity (size).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -105,6 +107,7 @@ ON CREATE SET
   e.type = "CONCEPT",
   e.is_pillar = false,
   e.entity_summary = "A module is the smallest unit in a QR code - a single square.\nModules can be black (dark) or white (light). The pattern of\nmodules encodes the data and error correction information.",
+  e.llm_context = "USE: when discussing QR code pixels, individual squares, or module-level design. TRIGGERS: module, qr pixel, qr square, black module, white module, qr unit. NOT: finder pattern (corner squares), quiet zone (border).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -121,6 +124,7 @@ ON CREATE SET
   e.type = "CONCEPT",
   e.is_pillar = false,
   e.entity_summary = "Finder patterns are the three large squares in QR code corners.\nThey help scanners locate and orient the code regardless of\nrotation or angle. Critical for fast, reliable scanning.",
+  e.llm_context = "USE: when discussing QR code corner squares, orientation markers, or why QR codes have three big squares. TRIGGERS: finder pattern, corner squares, qr orientation, position detection, three squares, qr corners. NOT: timing pattern (lines), alignment pattern (small squares).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -137,6 +141,7 @@ ON CREATE SET
   e.type = "CONCEPT",
   e.is_pillar = false,
   e.entity_summary = "Timing patterns are alternating black/white lines connecting\nfinder patterns. They help scanners determine module coordinates\nand compensate for distortion in larger codes.",
+  e.llm_context = "USE: when discussing QR code alignment, alternating black/white lines, or grid calibration. TRIGGERS: timing pattern, alignment lines, alternating modules, grid calibration, qr timing. NOT: finder pattern (corners), module (single square).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET

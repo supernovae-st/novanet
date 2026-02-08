@@ -807,7 +807,7 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                      bg_color: Option<Color>|
      -> Line {
         let is_cursor = idx == cursor;
-        let cursor_char = if is_cursor { "›" } else { " " };
+        let cursor_char = if is_cursor { ">" } else { " " };
         let icon_space = if icon.is_empty() { "" } else { " " };
 
         if is_cursor && focused {
@@ -1122,7 +1122,7 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                             Style::default().fg(base_color)
                                         };
 
-                                        let cursor_char = if is_cursor { "›" } else { " " };
+                                        let cursor_char = if is_cursor { ">" } else { " " };
                                         let suffix = if is_primary && fallback_count > 0 {
                                             format!(" [{}↓]", fallback_count)
                                         } else {

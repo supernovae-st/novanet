@@ -92,27 +92,39 @@ pub async fn run_reset(db: &Db, root: &Path) -> crate::Result<()> {
     run_seed(db, root).await
 }
 
-/// Collect `.cypher` files from a directory, sorted alphabetically.
+/// Collect `.cypher` files from a directory recursively, sorted alphabetically.
 fn collect_cypher_files(dir: &Path) -> crate::Result<Vec<PathBuf>> {
     if !dir.exists() {
         return Ok(Vec::new());
     }
 
-    let mut files: Vec<PathBuf> = std::fs::read_dir(dir)
-        .map_err(crate::NovaNetError::Io)?
-        .filter_map(|entry| {
-            let entry = entry.ok()?;
-            let path = entry.path();
-            if path.extension().and_then(|e| e.to_str()) == Some("cypher") {
-                Some(path)
-            } else {
-                None
-            }
-        })
-        .collect();
-
+    let mut files: Vec<PathBuf> = Vec::new();
+    collect_cypher_files_recursive(dir, &mut files)?;
     files.sort();
     Ok(files)
+}
+
+/// Helper to recursively collect cypher files.
+/// Skips directories starting with underscore (e.g., `_legacy`).
+fn collect_cypher_files_recursive(dir: &Path, files: &mut Vec<PathBuf>) -> crate::Result<()> {
+    for entry in std::fs::read_dir(dir).map_err(crate::NovaNetError::Io)? {
+        let entry = entry.map_err(crate::NovaNetError::Io)?;
+        let path = entry.path();
+
+        // Skip directories starting with underscore (e.g., _legacy)
+        if let Some(name) = path.file_name().and_then(|n| n.to_str()) {
+            if name.starts_with('_') {
+                continue;
+            }
+        }
+
+        if path.is_dir() {
+            collect_cypher_files_recursive(&path, files)?;
+        } else if path.extension().and_then(|e| e.to_str()) == Some("cypher") {
+            files.push(path);
+        }
+    }
+    Ok(())
 }
 
 /// Read a Cypher file, split into statements, execute each one.
