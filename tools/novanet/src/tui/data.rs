@@ -2562,12 +2562,8 @@ mod tests {
         match result {
             Ok((instances, total)) => {
                 // Should return some data (at least empty vec with count)
-                assert!(total >= 0, "Total should be non-negative");
-                assert_eq!(
-                    instances.len(),
-                    total as usize,
-                    "Instance count should match"
-                );
+                // total is usize, always non-negative
+                assert_eq!(instances.len(), total, "Instance count should match");
             }
             Err(e) => {
                 panic!("load_instances failed: {}", e);
@@ -2589,10 +2585,8 @@ mod tests {
             Ok(arcs_data) => {
                 // Page should have some outgoing arcs (HAS_BLOCK, etc.)
                 // Even if empty, the call should succeed
-                assert!(
-                    arcs_data.outgoing.len() >= 0,
-                    "Should return arcs (even if empty)"
-                );
+                // (len() is usize, always >= 0, so just verify call succeeded)
+                let _ = arcs_data.outgoing.len();
             }
             Err(e) => {
                 panic!("load_kind_arcs failed: {}", e);
