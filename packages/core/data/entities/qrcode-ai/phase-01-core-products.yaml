@@ -1,0 +1,677 @@
+# Phase 1: Core Products — 39 Entities
+# QR Code AI Entity Data for NovaNet
+# v11 Schema with Typed Semantic Arcs
+
+project: qrcode-ai
+phase: 1
+name: Core Products
+description: Pillars, infrastructure, categories, styles, design specs, concepts, frames, landing types
+
+entities:
+  # ═══════════════════════════════════════════════════════════════════════════
+  # PILLARS (4) — is_pillar: true
+  # ═══════════════════════════════════════════════════════════════════════════
+  - key: qr-code
+    type: THING
+    is_pillar: true
+    display_name: QR Code
+    description: 2D matrix barcode for encoding data
+    entity_summary: |
+      A QR Code (Quick Response Code) is a two-dimensional barcode that stores
+      information in a machine-readable format. QR codes can encode URLs, text,
+      contact information, WiFi credentials, and more. They are widely used for
+      marketing, payments, and contactless interactions.
+
+  - key: smart-link
+    type: THING
+    is_pillar: true
+    display_name: Smart Link
+    description: Intelligent shortened URL with routing rules
+    entity_summary: |
+      A Smart Link is an intelligent URL shortener that routes users based on
+      device type, geographic location, time of day, or other contextual factors.
+      Used for A/B testing, geo-targeting, retargeting, and advanced analytics.
+
+  - key: barcode
+    type: THING
+    is_pillar: true
+    display_name: Barcode
+    description: 1D linear barcode (EAN, UPC, Code 128)
+    entity_summary: |
+      A barcode is a one-dimensional representation of data using parallel lines
+      of varying widths. Common formats include EAN-13, UPC-A, and Code 128.
+      Used primarily in retail, logistics, and inventory management.
+
+  - key: landing-page
+    type: THING
+    is_pillar: true
+    display_name: Landing Page
+    description: Destination page created via page builder
+    entity_summary: |
+      A landing page is a standalone web page designed for a specific marketing
+      or conversion goal. QR Code AI provides a no-code builder for creating
+      mobile-optimized landing pages like link-in-bio, digital menus, and forms.
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # INFRASTRUCTURE (1)
+  # ═══════════════════════════════════════════════════════════════════════════
+  - key: short-link
+    type: THING
+    is_pillar: false
+    display_name: Short Link
+    description: Shortened URL, shared technology layer
+    entity_summary: |
+      A short link is a condensed URL that redirects to a longer destination.
+      It serves as the foundational technology for both Smart Links and Dynamic
+      QR Codes, enabling tracking, analytics, and link management.
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # CATEGORIES (5)
+  # ═══════════════════════════════════════════════════════════════════════════
+  - key: qr-code-style
+    type: THING
+    display_name: QR Code Style
+    description: Visual style category for QR codes
+    entity_summary: |
+      QR Code styles define the visual approach to generating QR codes.
+      Options include custom (parametric design), image (photo overlay),
+      and art (AI-generated artistic fusion).
+
+  - key: qr-code-content
+    type: THING
+    display_name: QR Code Content
+    description: Content type category for QR codes
+    entity_summary: |
+      QR Code content types define what data is encoded in the QR code.
+      Common types include URLs, WiFi credentials, vCards, social profiles,
+      app store links, payment information, and more.
+
+  - key: qr-code-frame
+    type: THING
+    display_name: QR Code Frame
+    description: Physical placement category for QR codes
+    entity_summary: |
+      QR Code frames are pre-designed templates optimized for specific
+      physical placements like business cards, posters, table tents,
+      and product packaging.
+
+  - key: barcode-format
+    type: THING
+    display_name: Barcode Format
+    description: Technical format category for barcodes
+    entity_summary: |
+      Barcode formats define the encoding standard used. 1D formats include
+      EAN-13, UPC-A, and Code 128. 2D formats include Data Matrix, PDF417,
+      and Aztec codes.
+
+  - key: landing-page-type
+    type: THING
+    display_name: Landing Page Type
+    description: Template category for landing pages
+    entity_summary: |
+      Landing page types are pre-built templates for common use cases like
+      link-in-bio pages, digital restaurant menus, contact forms, event RSVPs,
+      and booking/appointment pages.
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # STYLES (3 + 1 alias)
+  # ═══════════════════════════════════════════════════════════════════════════
+  - key: custom-qr-code
+    type: THING
+    display_name: Custom QR Code
+    description: Parametric QR code with user-configured elements
+    entity_summary: |
+      A custom QR code allows full control over visual elements including
+      colors, shapes, logos, text, and backgrounds. Users configure each
+      element individually for maximum design flexibility.
+
+  - key: qr-code-image
+    type: THING
+    display_name: QR Code with Image
+    description: QR code with photo/image background overlay
+    entity_summary: |
+      A QR code with image uses a two-layer approach where a photo or image
+      serves as the background with the QR code pattern overlaid on top.
+      Ideal for branded or visually striking codes.
+
+  - key: qr-code-art
+    type: THING
+    display_name: QR Code Art
+    description: AI-generated artistic QR code
+    entity_summary: |
+      QR Code Art uses AI to generate a unified artistic image that seamlessly
+      incorporates the QR code pattern. The result is a visually stunning
+      artwork that remains scannable.
+
+  - key: qr-code-photo
+    type: THING
+    display_name: QR Code Photo
+    description: Alias for QR Code with Image
+    entity_summary: |
+      QR Code Photo is an alternative name for QR Code with Image. Both terms
+      refer to the same product where a photo serves as the QR code background.
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # DESIGN SPECS (9)
+  # ═══════════════════════════════════════════════════════════════════════════
+  - key: qr-code-with-logo
+    type: THING
+    display_name: QR Code with Logo
+    description: QR code featuring a centered logo
+    entity_summary: |
+      A QR code with logo places a brand logo or image in the center of the
+      QR code. Error correction ensures the code remains scannable despite
+      the logo covering part of the pattern.
+
+  - key: qr-code-with-text
+    type: THING
+    display_name: QR Code with Text
+    description: QR code with call-to-action text
+    entity_summary: |
+      A QR code with text includes a call-to-action message like "Scan Me"
+      or custom text below or around the QR code to encourage user engagement.
+
+  - key: qr-code-color
+    type: THING
+    display_name: QR Code Colors
+    description: Custom foreground and background colors
+    entity_summary: |
+      QR code colors allow customization of the foreground (dark modules)
+      and background colors. Supports solid colors, gradients, and ensures
+      sufficient contrast for scannability.
+
+  - key: qr-code-shapes
+    type: THING
+    display_name: QR Code Shapes
+    description: Custom module and eye shapes
+    entity_summary: |
+      QR code shapes customize the appearance of modules (dots, squares, rounded)
+      and finder pattern eyes (square, circle, leaf, etc.) for unique designs.
+
+  - key: qr-code-transparent-background
+    type: THING
+    display_name: Transparent Background
+    description: QR code with transparent background for overlays
+    entity_summary: |
+      A transparent background QR code removes the background color, allowing
+      the code to be placed over any surface or image. Exported as PNG with
+      alpha channel.
+
+  - key: qr-code-background
+    type: THING
+    display_name: QR Code Background
+    description: Background customization category
+    entity_summary: |
+      QR code background options include solid colors, gradients, and images.
+      The background appears behind the QR code pattern and affects overall
+      visual appearance.
+
+  - key: qr-code-background-color
+    type: THING
+    display_name: Background Color
+    description: Solid color background
+    entity_summary: |
+      A solid color background provides a clean, uniform backdrop for the
+      QR code. Light backgrounds with dark foregrounds ensure optimal contrast.
+
+  - key: qr-code-background-gradient
+    type: THING
+    display_name: Background Gradient
+    description: Gradient color background
+    entity_summary: |
+      A gradient background transitions between two or more colors, creating
+      a modern, dynamic look while maintaining scannability.
+
+  - key: qr-code-background-image
+    type: THING
+    display_name: Background Image
+    description: Image or pattern background
+    entity_summary: |
+      A background image places a photo, pattern, or texture behind the
+      QR code. Requires careful contrast management to ensure scannability.
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # CONCEPTS (4)
+  # ═══════════════════════════════════════════════════════════════════════════
+  - key: dynamic-qr-code
+    type: CONCEPT
+    display_name: Dynamic QR Code
+    description: Editable QR code that uses a short link
+    entity_summary: |
+      A dynamic QR code encodes a short link that redirects to the destination.
+      The destination can be changed after printing, and all scans are tracked.
+      Requires an active subscription.
+
+  - key: static-qr-code
+    type: CONCEPT
+    display_name: Static QR Code
+    description: Fixed QR code with data encoded directly
+    entity_summary: |
+      A static QR code encodes data directly in the pattern. Once printed,
+      the content cannot be changed and scans cannot be tracked. Free to
+      generate but less flexible.
+
+  - key: qr-code-light-mode
+    type: CONCEPT
+    display_name: Light Mode
+    description: QR code optimized for light backgrounds
+    entity_summary: |
+      Light mode QR codes use a dark foreground on a light background,
+      following the traditional QR code appearance for maximum compatibility.
+
+  - key: qr-code-dark-mode
+    type: CONCEPT
+    display_name: Dark Mode
+    description: QR code optimized for dark backgrounds
+    entity_summary: |
+      Dark mode QR codes invert the colors, using a light foreground on a
+      dark background. Ideal for dark-themed designs and night mode interfaces.
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # FRAMES (6)
+  # ═══════════════════════════════════════════════════════════════════════════
+  - key: qr-code-business-card
+    type: THING
+    display_name: Business Card QR
+    description: QR code template for business cards
+    entity_summary: |
+      A business card QR code template is sized and designed for standard
+      business cards. Typically links to a vCard, LinkedIn profile, or
+      digital business card landing page.
+
+  - key: qr-code-email-signature
+    type: THING
+    display_name: Email Signature QR
+    description: QR code template for email signatures
+    entity_summary: |
+      An email signature QR code is a small, unobtrusive code designed to
+      fit in email signatures. Links to contact information or scheduling pages.
+
+  - key: qr-code-flyer
+    type: THING
+    display_name: Flyer QR
+    description: QR code template for flyers
+    entity_summary: |
+      A flyer QR code template is optimized for standard flyer sizes with
+      appropriate margins and call-to-action text. Used for promotions and events.
+
+  - key: qr-code-poster
+    type: THING
+    display_name: Poster QR
+    description: QR code template for posters and billboards
+    entity_summary: |
+      A poster QR code template is designed for large-format printing with
+      high resolution and appropriate sizing for viewing distance.
+
+  - key: qr-code-table-tent
+    type: THING
+    display_name: Table Tent QR
+    description: QR code template for table tents
+    entity_summary: |
+      A table tent QR code template is designed for restaurant and event
+      table displays. Typically links to menus, feedback forms, or promotions.
+
+  - key: qr-code-packaging-label
+    type: THING
+    display_name: Packaging Label QR
+    description: QR code template for product packaging
+    entity_summary: |
+      A packaging label QR code template is sized for product labels and
+      packaging. Links to product information, instructions, or registration.
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # LANDING PAGE TYPES (6)
+  # ═══════════════════════════════════════════════════════════════════════════
+  - key: link-in-bio
+    type: THING
+    display_name: Link in Bio
+    description: Social media bio link page
+    entity_summary: |
+      A link-in-bio page is a mobile-optimized landing page that aggregates
+      multiple links for social media profiles. Used by creators, businesses,
+      and influencers to share multiple destinations from one link.
+
+  - key: menu-restaurant
+    type: THING
+    display_name: Digital Menu
+    description: Restaurant digital menu page
+    entity_summary: |
+      A digital menu is a mobile-friendly restaurant menu page. Supports
+      categories, item descriptions, prices, images, and dietary information.
+      Reduces printing costs and enables real-time updates.
+
+  - key: forms
+    type: THING
+    display_name: Forms
+    description: Contact and lead capture forms
+    entity_summary: |
+      Form landing pages collect user information through customizable fields.
+      Used for contact forms, lead generation, surveys, and registrations.
+
+  - key: announcement
+    type: THING
+    display_name: Announcement
+    description: Message or announcement page
+    entity_summary: |
+      An announcement page displays a single message or notification.
+      Used for promotions, updates, alerts, or temporary information.
+
+  - key: event-rsvp
+    type: THING
+    display_name: Event RSVP
+    description: Event registration and RSVP page
+    entity_summary: |
+      An event RSVP page allows guests to register for events, confirm
+      attendance, and provide additional information. Includes calendar
+      integration and reminder functionality.
+
+  - key: booking-appointment
+    type: THING
+    display_name: Booking/Appointment
+    description: Scheduling and booking page
+    entity_summary: |
+      A booking page allows users to schedule appointments or reservations.
+      Integrates with calendars and provides availability management.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# SEMANTIC ARCS (~85 connections)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+arcs:
+  # ─────────────────────────────────────────────────────────────────────────────
+  # PILLAR RELATIONSHIPS
+  # ─────────────────────────────────────────────────────────────────────────────
+  # QR Code pillar includes categories
+  - from: qr-code
+    to: qr-code-style
+    type: INCLUDES
+    strength: 0.70
+
+  - from: qr-code
+    to: qr-code-content
+    type: INCLUDES
+    strength: 0.70
+
+  - from: qr-code
+    to: qr-code-frame
+    type: INCLUDES
+    strength: 0.70
+
+  - from: qr-code
+    to: dynamic-qr-code
+    type: INCLUDES
+    strength: 0.80
+
+  - from: qr-code
+    to: static-qr-code
+    type: INCLUDES
+    strength: 0.80
+
+  # Cross-pillar relationships
+  - from: qr-code
+    to: barcode
+    type: SIMILAR_TO
+    strength: 0.40
+
+  - from: qr-code
+    to: smart-link
+    type: SIMILAR_TO
+    strength: 0.50
+
+  - from: smart-link
+    to: short-link
+    type: TYPE_OF
+    strength: 0.90
+
+  - from: smart-link
+    to: landing-page
+    type: SIMILAR_TO
+    strength: 0.40
+
+  - from: barcode
+    to: barcode-format
+    type: INCLUDES
+    strength: 0.70
+
+  - from: landing-page
+    to: landing-page-type
+    type: INCLUDES
+    strength: 0.70
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # STYLE RELATIONSHIPS
+  # ─────────────────────────────────────────────────────────────────────────────
+  - from: qr-code-style
+    to: custom-qr-code
+    type: INCLUDES
+    strength: 0.85
+
+  - from: qr-code-style
+    to: qr-code-image
+    type: INCLUDES
+    strength: 0.85
+
+  - from: qr-code-style
+    to: qr-code-art
+    type: INCLUDES
+    strength: 0.85
+
+  # Style variants
+  - from: custom-qr-code
+    to: qr-code-image
+    type: SIMILAR_TO
+    strength: 0.60
+
+  - from: qr-code-image
+    to: qr-code-art
+    type: SIMILAR_TO
+    strength: 0.50
+
+  - from: qr-code-photo
+    to: qr-code-image
+    type: SIMILAR_TO
+    strength: 0.95
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # DESIGN SPEC RELATIONSHIPS (ENABLES)
+  # ─────────────────────────────────────────────────────────────────────────────
+  # Custom QR Code enables all design specs
+  - from: custom-qr-code
+    to: qr-code-with-logo
+    type: ENABLES
+    strength: 0.90
+
+  - from: custom-qr-code
+    to: qr-code-with-text
+    type: ENABLES
+    strength: 0.90
+
+  - from: custom-qr-code
+    to: qr-code-color
+    type: ENABLES
+    strength: 0.95
+
+  - from: custom-qr-code
+    to: qr-code-shapes
+    type: ENABLES
+    strength: 0.95
+
+  - from: custom-qr-code
+    to: qr-code-transparent-background
+    type: ENABLES
+    strength: 0.90
+
+  - from: custom-qr-code
+    to: qr-code-background
+    type: ENABLES
+    strength: 0.90
+
+  # QR Code Image enables subset
+  - from: qr-code-image
+    to: qr-code-with-logo
+    type: ENABLES
+    strength: 0.85
+
+  - from: qr-code-image
+    to: qr-code-with-text
+    type: ENABLES
+    strength: 0.85
+
+  - from: qr-code-image
+    to: qr-code-color
+    type: ENABLES
+    strength: 0.80
+
+  # QR Code Art enables only color
+  - from: qr-code-art
+    to: qr-code-color
+    type: ENABLES
+    strength: 0.70
+
+  # Background hierarchy
+  - from: qr-code-background
+    to: qr-code-background-color
+    type: INCLUDES
+    strength: 0.90
+
+  - from: qr-code-background
+    to: qr-code-background-gradient
+    type: INCLUDES
+    strength: 0.90
+
+  - from: qr-code-background
+    to: qr-code-background-image
+    type: INCLUDES
+    strength: 0.90
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # CONCEPT RELATIONSHIPS
+  # ─────────────────────────────────────────────────────────────────────────────
+  - from: dynamic-qr-code
+    to: short-link
+    type: REQUIRES
+    strength: 0.95
+
+  - from: dynamic-qr-code
+    to: static-qr-code
+    type: ALTERNATIVE_TO
+    strength: 0.90
+
+  - from: qr-code-light-mode
+    to: qr-code-dark-mode
+    type: ALTERNATIVE_TO
+    strength: 0.95
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # FRAME RELATIONSHIPS
+  # ─────────────────────────────────────────────────────────────────────────────
+  - from: qr-code-frame
+    to: qr-code-business-card
+    type: INCLUDES
+    strength: 0.85
+
+  - from: qr-code-frame
+    to: qr-code-email-signature
+    type: INCLUDES
+    strength: 0.85
+
+  - from: qr-code-frame
+    to: qr-code-flyer
+    type: INCLUDES
+    strength: 0.85
+
+  - from: qr-code-frame
+    to: qr-code-poster
+    type: INCLUDES
+    strength: 0.85
+
+  - from: qr-code-frame
+    to: qr-code-table-tent
+    type: INCLUDES
+    strength: 0.85
+
+  - from: qr-code-frame
+    to: qr-code-packaging-label
+    type: INCLUDES
+    strength: 0.85
+
+  # Frame similarities
+  - from: qr-code-flyer
+    to: qr-code-poster
+    type: SIMILAR_TO
+    strength: 0.70
+
+  - from: qr-code-business-card
+    to: qr-code-email-signature
+    type: SIMILAR_TO
+    strength: 0.60
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # LANDING PAGE RELATIONSHIPS
+  # ─────────────────────────────────────────────────────────────────────────────
+  - from: landing-page-type
+    to: link-in-bio
+    type: INCLUDES
+    strength: 0.85
+
+  - from: landing-page-type
+    to: menu-restaurant
+    type: INCLUDES
+    strength: 0.85
+
+  - from: landing-page-type
+    to: forms
+    type: INCLUDES
+    strength: 0.85
+
+  - from: landing-page-type
+    to: announcement
+    type: INCLUDES
+    strength: 0.85
+
+  - from: landing-page-type
+    to: event-rsvp
+    type: INCLUDES
+    strength: 0.85
+
+  - from: landing-page-type
+    to: booking-appointment
+    type: INCLUDES
+    strength: 0.85
+
+  # Landing page similarities
+  - from: event-rsvp
+    to: booking-appointment
+    type: SIMILAR_TO
+    strength: 0.65
+
+  - from: forms
+    to: event-rsvp
+    type: SIMILAR_TO
+    strength: 0.50
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # CROSS-CATEGORY RELATIONSHIPS
+  # ─────────────────────────────────────────────────────────────────────────────
+  # Frames apply to styles
+  - from: qr-code-business-card
+    to: custom-qr-code
+    type: APPLIES_TO
+    strength: 0.80
+
+  - from: qr-code-poster
+    to: qr-code-art
+    type: APPLIES_TO
+    strength: 0.85
+
+  # Landing pages connect to frames
+  - from: qr-code-table-tent
+    to: menu-restaurant
+    type: ENABLES
+    strength: 0.80
+
+  # Short link enables features
+  - from: short-link
+    to: dynamic-qr-code
+    type: ENABLES
+    strength: 0.95

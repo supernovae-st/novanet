@@ -102,6 +102,11 @@ enum Commands {
         #[command(subcommand)]
         action: KnowledgeAction,
     },
+    /// Entity data operations (seed, list, validate)
+    Entity {
+        #[command(subcommand)]
+        action: EntityAction,
+    },
     /// Interactive terminal UI
     #[cfg(feature = "tui")]
     Tui {
@@ -286,6 +291,34 @@ enum KnowledgeAction {
     },
     /// List available knowledge tiers and their status
     List,
+}
+
+#[derive(Subcommand)]
+enum EntityAction {
+    /// Seed entity data from phase YAML files
+    Seed {
+        /// Project name (e.g., qrcode-ai)
+        #[arg(long)]
+        project: String,
+        /// Specific phase number (seeds all phases if omitted)
+        #[arg(long)]
+        phase: Option<u32>,
+        /// Dry-run: generate Cypher without writing files
+        #[arg(long)]
+        dry_run: bool,
+    },
+    /// List available phases for a project
+    List {
+        /// Project name (e.g., qrcode-ai)
+        #[arg(long)]
+        project: String,
+    },
+    /// Validate entity data without generating
+    Validate {
+        /// Project name (e.g., qrcode-ai)
+        #[arg(long)]
+        project: String,
+    },
 }
 
 #[tokio::main]
@@ -625,6 +658,111 @@ async fn main() -> color_eyre::Result<()> {
                         }
                     }
                     eprintln!("\n  {} tier(s)", tiers.len());
+                }
+            }
+        }
+        Commands::Entity { ref action } => {
+            let root = root?;
+            match action {
+                EntityAction::Seed {
+                    project,
+                    phase,
+                    dry_run,
+                } => {
+                    eprintln!(
+                        "novanet entity seed --project={}{}{}",
+                        project,
+                        phase.map(|p| format!(" --phase={}", p)).unwrap_or_default(),
+                        if *dry_run { " --dry-run" } else { "" }
+                    );
+
+                    let results = novanet::commands::entity::entity_seed(
+                        &root,
+                        project,
+                        *phase,
+                        *dry_run,
+                    )?;
+
+                    for r in &results {
+                        eprintln!(
+                            "  {} {} (phase {}: {}, {} entities, {} arcs, {} bytes, {}ms)",
+                            if *dry_run { "would write" } else { "wrote" },
+                            r.output_path,
+                            r.phase,
+                            r.phase_name,
+                            r.entity_count,
+                            r.arc_count,
+                            r.bytes,
+                            r.duration_ms,
+                        );
+                        for w in &r.warnings {
+                            eprintln!("    ⚠️  {}", w);
+                        }
+                    }
+
+                    let total_entities: usize = results.iter().map(|r| r.entity_count).sum();
+                    let total_arcs: usize = results.iter().map(|r| r.arc_count).sum();
+
+                    eprintln!(
+                        "\n{} {} phase(s), {} entities, {} arcs",
+                        if *dry_run {
+                            "Would generate"
+                        } else {
+                            "Generated"
+                        },
+                        results.len(),
+                        total_entities,
+                        total_arcs
+                    );
+                }
+                EntityAction::List { project } => {
+                    eprintln!("novanet entity list --project={}\n", project);
+
+                    let phases = novanet::commands::entity::entity_list(&root, project)?;
+
+                    if phases.is_empty() {
+                        eprintln!("  No phases found for project '{}'", project);
+                    } else {
+                        eprintln!("  {:>5}  {:<25}  {:>8}  {:>6}  FILE", "PHASE", "NAME", "ENTITIES", "ARCS");
+                        eprintln!("  {:>5}  {:<25}  {:>8}  {:>6}  ────", "─────", "────────────────────────", "────────", "────");
+                        for p in &phases {
+                            eprintln!(
+                                "  {:>5}  {:<25}  {:>8}  {:>6}  {}",
+                                p.phase,
+                                p.name,
+                                p.entity_count,
+                                p.arc_count,
+                                p.file
+                            );
+                        }
+                        eprintln!("\n  {} phase(s)", phases.len());
+                    }
+                }
+                EntityAction::Validate { project } => {
+                    eprintln!("novanet entity validate --project={}\n", project);
+
+                    let results = novanet::commands::entity::entity_validate(&root, project)?;
+
+                    let mut has_errors = false;
+                    for r in &results {
+                        let status = if r.valid { "✓" } else { "✗" };
+                        eprintln!("  {} Phase {}: {}", status, r.phase, r.file);
+
+                        for e in &r.errors {
+                            eprintln!("    ❌ {}", e);
+                            has_errors = true;
+                        }
+                        for w in &r.warnings {
+                            eprintln!("    ⚠️  {}", w);
+                        }
+                    }
+
+                    let valid_count = results.iter().filter(|r| r.valid).count();
+                    eprintln!("\n  {}/{} phase(s) valid", valid_count, results.len());
+
+                    if has_errors {
+                        std::process::exit(1);
+                    }
                 }
             }
         }
