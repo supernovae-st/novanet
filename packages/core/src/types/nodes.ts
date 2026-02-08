@@ -1,9 +1,9 @@
 // src/types/nodes.ts
-// Single source of truth for all 63 NovaNet node types
+// Single source of truth for all 64 NovaNet node types
 // v10.9.0 — Typed semantic arcs + GEO layer (GLOBAL / TENANT)
 
 // =============================================================================
-// NODE TYPES (63 nodes across 2 realms)
+// NODE TYPES (64 nodes across 2 realms)
 // =============================================================================
 
 export const NODE_TYPES = [
@@ -22,10 +22,10 @@ export const NODE_TYPES = [
   'GEOQuery', 'GEOAnswer', 'GEOMetrics',
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // TENANT REALM (23 nodes) — v10.6: merged organization + project
+  // TENANT REALM (24 nodes) — v10.6: merged organization + project
   // ═══════════════════════════════════════════════════════════════════════════
-  // config (1)
-  'Organization',
+  // config (2)
+  'Organization', 'Tenant',
   // foundation (3)
   'Project', 'BrandIdentity', 'ProjectL10n',
   // structure (3)
@@ -53,7 +53,7 @@ export type Layer =
 export type Trait = 'invariant' | 'localized' | 'knowledge' | 'derived' | 'job';
 
 // =============================================================================
-// KIND_META — unified classification for all 63 node types
+// KIND_META — unified classification for all 64 node types
 // v10.9.0 — Typed semantic arcs + GEO layer
 // =============================================================================
 
@@ -113,9 +113,10 @@ export const KIND_META: Record<NodeType, KindMeta> = {
   GEOMetrics:       { realm: 'global', layer: 'seo', trait: 'derived' },
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // TENANT REALM — config (1)
+  // TENANT REALM — config (2)
   // ═══════════════════════════════════════════════════════════════════════════
   Organization: { realm: 'tenant', layer: 'config',      trait: 'invariant' },
+  Tenant:       { realm: 'tenant', layer: 'config',      trait: 'invariant' },
 
   // TENANT REALM — foundation (3)
   Project:      { realm: 'tenant', layer: 'foundation',  trait: 'invariant' },
