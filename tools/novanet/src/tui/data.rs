@@ -2774,6 +2774,62 @@ mod tests {
     }
 
     // ========================================================================
+    // Cypher label validation tests (SQL/Cypher injection prevention)
+    // ========================================================================
+
+    #[test]
+    fn test_validate_cypher_label_valid() {
+        // Valid labels: alphanumeric, underscore, dash
+        assert!(super::validate_cypher_label("Entity").is_ok());
+        assert!(super::validate_cypher_label("locale-knowledge").is_ok());
+        assert!(super::validate_cypher_label("Page_L10n").is_ok());
+    }
+
+    #[test]
+    fn test_validate_cypher_label_empty() {
+        // Empty labels are rejected
+        let result = super::validate_cypher_label("");
+        assert!(result.is_err());
+        let err_msg = result.unwrap_err().to_string();
+        assert!(
+            err_msg.contains("Empty label"),
+            "Error should mention empty label: {}",
+            err_msg
+        );
+    }
+
+    #[test]
+    fn test_validate_cypher_label_invalid_chars() {
+        // Injection attempts with dangerous characters
+        let injection_attempts = [
+            "Entity;DROP",   // SQL/Cypher injection attempt
+            "Page'",         // Quote injection
+            "Node\"",        // Double quote injection
+            "Entity{",       // Cypher clause injection
+            "Kind}",         // Cypher clause end
+            "Node:Label",    // Additional label injection
+            "A()",           // Function call injection
+            "A[0]",          // Index access injection
+        ];
+
+        for label in &injection_attempts {
+            let result = super::validate_cypher_label(label);
+            assert!(
+                result.is_err(),
+                "Label '{}' should be rejected as invalid",
+                label
+            );
+            let err_msg = result.unwrap_err().to_string();
+            assert!(
+                err_msg.contains("Invalid characters"),
+                "Error for '{}' should mention invalid characters: {}",
+                label,
+                err_msg
+            );
+        }
+    }
+
+    // ========================================================================
     // Neo4j Integration Tests (require running Neo4j)
     // Run with: cargo test -- --ignored
     // ========================================================================
