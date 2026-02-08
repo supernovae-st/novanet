@@ -23,13 +23,14 @@ Add a new arc type (directed relationship) between nodes in the NovaNet ontology
 
 2. **Classification**: Determine ArcFamily:
    - **ownership**: Structural containment (HAS_PAGE, HAS_BLOCK, OF_TYPE)
-   - **localization**: Locale-specific variants (HAS_L10N, FOR_LOCALE)
+   - **localization**: Locale-specific content (HAS_CONTENT, FOR_LOCALE)
    - **semantic**: Content relationships (USES_ENTITY, SEMANTIC_LINK)
-   - **generation**: AI-generated content (HAS_OUTPUT, HAS_PROMPT)
+   - **generation**: AI-generated content (HAS_GENERATED, HAS_PROMPT)
    - **mining**: SEO/GEO data (HAS_SEO_TARGET, HAS_GEO_TARGET)
 
 3. **Bidirectionality Check**: Does it need an inverse?
-   - HAS_L10N needs L10N_OF
+   - HAS_CONTENT needs CONTENT_OF
+   - HAS_GENERATED needs GENERATED_OF
    - HAS_BLOCK needs BLOCK_OF
    - Not all arcs need inverses
 
@@ -48,27 +49,27 @@ Add a new arc type (directed relationship) between nodes in the NovaNet ontology
 | Family | Purpose | Arrow Style | Examples |
 |--------|---------|-------------|----------|
 | `ownership` | Structural containment | `-->` | HAS_PAGE, HAS_BLOCK, OF_TYPE |
-| `localization` | Locale variants | `-.->` | HAS_L10N, FOR_LOCALE |
+| `localization` | Locale variants | `-.->` | HAS_CONTENT, FOR_LOCALE |
 | `semantic` | Content relationships | `-.->` | USES_ENTITY, SEMANTIC_LINK |
-| `generation` | AI-generated | `==>` | HAS_OUTPUT, HAS_PROMPT |
+| `generation` | AI-generated | `==>` | HAS_GENERATED, HAS_PROMPT |
 | `mining` | SEO/GEO data | `--o` | HAS_SEO_TARGET, HAS_GEO_TARGET |
 
-## Naming Conventions
+## Naming Conventions (v10.9.0)
 
 | Pattern | Use For | Examples |
 |---------|---------|----------|
 | `HAS_*` | Ownership/containment | HAS_PAGE, HAS_BLOCK |
-| `HAS_L10N` | Localized content (human-curated) | Entity→EntityL10n |
-| `HAS_OUTPUT` | Localized content (LLM-generated) | Page→PageL10n |
-| `*_OF` | Inverse of HAS_* | L10N_OF, BLOCK_OF, OUTPUT_OF |
+| `HAS_CONTENT` | Localized content (human-curated) | Entity→EntityContent |
+| `HAS_GENERATED` | Localized content (LLM-generated) | Page→PageGenerated, Block→BlockGenerated |
+| `*_OF` | Inverse of HAS_* | CONTENT_OF, BLOCK_OF, GENERATED_OF |
 | `FOR_*` | Target association | FOR_LOCALE |
 | `USES_*` | Reference/usage | USES_ENTITY |
-| `EXPRESSES` | SEO targeting | EntityL10n→SEOKeyword |
+| `EXPRESSES` | SEO targeting | EntityContent→SEOKeyword |
 
 ## Naming Requirements
 
 - **Arc names**: UPPER_SNAKE_CASE (e.g., `HAS_HUMOR`, `FOR_LOCALE`)
-- **Node names in source/target**: PascalCase (e.g., `LocaleLexicon`, `EntityL10n`)
+- **Node names in source/target**: PascalCase (e.g., `LocaleLexicon`, `EntityContent`)
 
 ## Example
 

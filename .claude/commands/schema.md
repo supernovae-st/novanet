@@ -66,17 +66,17 @@ Redirect to `/schema:edit-node <name>`
 
 Redirect to `/schema:add-arc <NAME>`
 
-## Current Schema (v10.6.0)
+## Current Schema (v10.9.0)
 
-**60 Kind Types** across 2 Realms:
-- **Global (37)**: Locale, Knowledge Atoms (Sets + Atoms), SEO nodes
-- **Tenant (23)**: Organization, Project structure, Entity, prompts, outputs, generation
+**64 Kind Types** across 2 Realms:
+- **Global (40)**: Locale, Knowledge Atoms (Sets + Atoms), SEO/GEO nodes
+- **Tenant (24)**: Organization, Tenant, Project structure, Entity, prompts, outputs, generation
 
-**90 Arcs** in 5 ArcFamilies:
+**116 Arcs** in 5 ArcFamilies:
 - **Ownership**: HAS_PAGE, HAS_BLOCK, OF_TYPE
-- **Localization**: HAS_L10N, FOR_LOCALE
+- **Localization**: HAS_CONTENT, FOR_LOCALE (Entity→EntityContent)
 - **Semantic**: SEMANTIC_LINK, USES_ENTITY
-- **Generation**: HAS_OUTPUT, HAS_PROMPT
+- **Generation**: HAS_GENERATED, HAS_PROMPT (Page→PageGenerated, Block→BlockGenerated)
 - **Mining**: HAS_SEO_TARGET
 
 ## Validation Commands
