@@ -243,17 +243,12 @@ fn generate_cypher(phase: &EntityPhaseFile) -> String {
     cypher.push_str(
         "// ─────────────────────────────────────────────────────────────────────────────\n\n",
     );
+    // Use MATCH since Project must exist (created in 30-tenant-config.cypher)
     cypher.push_str(&format!(
-        "MERGE (proj:Project:Meta {{key: \"{}\"}})\n",
+        "MATCH (proj:Project {{key: \"{}\"}})\n",
         escape_cypher(&phase.project)
     ));
-    cypher.push_str(&format!(
-        "ON CREATE SET proj.display_name = \"{}\",\n",
-        escape_cypher(&phase.project)
-    ));
-    cypher.push_str("             proj.created_at = datetime(),\n");
-    cypher.push_str("             proj.updated_at = datetime()\n");
-    cypher.push_str("ON MATCH SET proj.updated_at = datetime();\n\n");
+    cypher.push_str("SET proj.updated_at = datetime();\n\n");
 
     // Entity nodes
     if !phase.entities.is_empty() {

@@ -8,11 +8,8 @@
 // PROJECT NODE
 // ─────────────────────────────────────────────────────────────────────────────
 
-MERGE (proj:Project:Meta {key: "qrcode-ai"})
-ON CREATE SET proj.display_name = "qrcode-ai",
-             proj.created_at = datetime(),
-             proj.updated_at = datetime()
-ON MATCH SET proj.updated_at = datetime();
+MATCH (proj:Project {key: "qrcode-ai"})
+SET proj.updated_at = datetime();
 
 // ─────────────────────────────────────────────────────────────────────────────
 // ENTITIES (25)
@@ -25,6 +22,7 @@ ON CREATE SET
   e.type = "BRAND",
   e.is_pillar = false,
   e.entity_summary = "Instagram is a visual social media platform owned by Meta.\nQR codes link to profiles, posts, and Reels. Essential for\ninfluencer marketing and brand presence.",
+  e.llm_context = "USE: when discussing Instagram QR codes, Instagram profiles, or Meta social sharing. TRIGGERS: instagram, ig, instagram qr, instagram profile, instagram link. NOT: facebook (separate platform), tiktok (competitor).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -41,6 +39,7 @@ ON CREATE SET
   e.type = "BRAND",
   e.is_pillar = false,
   e.entity_summary = "LinkedIn is the leading professional social network.\nQR codes on business cards link to LinkedIn profiles for\neasy professional connections and networking.",
+  e.llm_context = "USE: when discussing LinkedIn QR codes, professional networking, or business profiles. TRIGGERS: linkedin, linkedin qr, linkedin profile, professional network, business network. NOT: facebook (social), twitter (microblog).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -57,6 +56,7 @@ ON CREATE SET
   e.type = "BRAND",
   e.is_pillar = false,
   e.entity_summary = "Facebook is the largest social media platform globally.\nQR codes link to pages, events, and groups. Important for\nlocal business marketing and community building.",
+  e.llm_context = "USE: when discussing Facebook QR codes, Facebook pages, or Meta social networking. TRIGGERS: facebook, fb, facebook qr, facebook page, facebook group. NOT: instagram (visual), linkedin (professional).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -73,6 +73,7 @@ ON CREATE SET
   e.type = "BRAND",
   e.is_pillar = false,
   e.entity_summary = "Twitter (now X) is a microblogging platform for real-time updates.\nQR codes link to profiles and tweets. Used for event hashtags\nand customer service channels.",
+  e.llm_context = "USE: when discussing Twitter/X QR codes, tweets, or microblogging. TRIGGERS: twitter, x, twitter qr, tweet, x platform, twitter profile. NOT: facebook (social network), linkedin (professional).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -89,6 +90,7 @@ ON CREATE SET
   e.type = "BRAND",
   e.is_pillar = false,
   e.entity_summary = "YouTube is the largest video platform, owned by Google.\nQR codes link to channels, videos, and playlists. Essential\nfor video marketing and educational content.",
+  e.llm_context = "USE: when discussing YouTube QR codes, YouTube channels, or video linking. TRIGGERS: youtube, yt, youtube qr, youtube channel, youtube video, video platform. NOT: tiktok (short-form), spotify (audio).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -105,6 +107,7 @@ ON CREATE SET
   e.type = "BRAND",
   e.is_pillar = false,
   e.entity_summary = "TikTok is a short-form video platform popular with Gen Z.\nQR codes link to profiles and videos. Growing importance for\nbrand marketing and viral content.",
+  e.llm_context = "USE: when discussing TikTok QR codes, short-form video, or Gen Z marketing. TRIGGERS: tiktok, tik tok, tiktok qr, tiktok profile, short video. NOT: youtube (long-form), instagram (photos).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -121,6 +124,7 @@ ON CREATE SET
   e.type = "BRAND",
   e.is_pillar = false,
   e.entity_summary = "Snapchat is a messaging app with AR features and Stories.\nSnapcodes are native QR codes for adding friends and unlocking\nfilters. Pioneer in branded QR experiences.",
+  e.llm_context = "USE: when discussing Snapchat QR codes, Snapcodes, or AR filters. TRIGGERS: snapchat, snapcode, snapchat qr, snap, snapchat filter, ar filter. NOT: instagram (stories), tiktok (video).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -137,6 +141,7 @@ ON CREATE SET
   e.type = "BRAND",
   e.is_pillar = false,
   e.entity_summary = "WhatsApp is the world's most popular messaging app.\nQR codes enable click-to-chat links for customer support\nand sales inquiries. Essential for business communication.",
+  e.llm_context = "USE: when discussing WhatsApp QR codes, click-to-chat, or WhatsApp business. TRIGGERS: whatsapp, wa, whatsapp qr, whatsapp chat, click to chat, whatsapp business. NOT: telegram (alternative), messenger (facebook).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -153,6 +158,7 @@ ON CREATE SET
   e.type = "BRAND",
   e.is_pillar = false,
   e.entity_summary = "Telegram is a cloud-based messaging platform with channels.\nQR codes link to user profiles, groups, and channels.\nPopular for community building and announcements.",
+  e.llm_context = "USE: when discussing Telegram QR codes, Telegram channels, or secure messaging. TRIGGERS: telegram, telegram qr, telegram channel, telegram group, secure chat. NOT: whatsapp (alternative), signal (privacy).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -169,6 +175,7 @@ ON CREATE SET
   e.type = "BRAND",
   e.is_pillar = false,
   e.entity_summary = "Pinterest is a visual discovery and bookmarking platform.\nQR codes link to boards and pins. Effective for product\ndiscovery and inspiration-driven marketing.",
+  e.llm_context = "USE: when discussing Pinterest QR codes, pins, or visual discovery. TRIGGERS: pinterest, pin, pinterest qr, pinterest board, visual discovery, pincode. NOT: instagram (social), etsy (commerce).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -185,6 +192,7 @@ ON CREATE SET
   e.type = "BRAND",
   e.is_pillar = false,
   e.entity_summary = "Spotify is the leading music streaming platform with Spotify Codes.\nNative QR-like codes link to songs, albums, playlists, and artists.\nEssential for music marketing and promotion.",
+  e.llm_context = "USE: when discussing Spotify QR codes, Spotify Codes, or music streaming links. TRIGGERS: spotify, spotify code, spotify qr, music streaming, playlist qr, spotify playlist. NOT: apple music (competitor), soundcloud (indie).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -201,6 +209,7 @@ ON CREATE SET
   e.type = "BRAND",
   e.is_pillar = false,
   e.entity_summary = "Apple provides Apple Music streaming and the App Store ecosystem.\nQR codes link to music content and apps. Essential for iOS app\ndistribution and music marketing.",
+  e.llm_context = "USE: when discussing Apple Music QR codes, App Store links, or Apple ecosystem. TRIGGERS: apple, apple music, app store, itunes, ios app, apple qr. NOT: spotify (music streaming), google play (android).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -217,6 +226,7 @@ ON CREATE SET
   e.type = "BRAND",
   e.is_pillar = false,
   e.entity_summary = "SoundCloud is an audio platform for independent artists.\nQR codes link to tracks, playlists, and artist profiles.\nPopular with DJs and emerging musicians.",
+  e.llm_context = "USE: when discussing SoundCloud QR codes, indie music, or audio sharing. TRIGGERS: soundcloud, soundcloud qr, indie music, dj music, audio platform, music upload. NOT: spotify (mainstream), apple music (apple).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -233,6 +243,7 @@ ON CREATE SET
   e.type = "BRAND",
   e.is_pillar = false,
   e.entity_summary = "PayPal is a global online payment system.\nQR codes enable PayPal.me links and in-store payments.\nEssential for e-commerce and peer-to-peer transactions.",
+  e.llm_context = "USE: when discussing PayPal QR codes, PayPal.me links, or PayPal payments. TRIGGERS: paypal, paypal qr, paypal.me, paypal payment, online payment. NOT: venmo (p2p), stripe (developer).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -249,6 +260,7 @@ ON CREATE SET
   e.type = "BRAND",
   e.is_pillar = false,
   e.entity_summary = "Venmo is a mobile payment service owned by PayPal.\nQR codes enable quick peer-to-peer payments.\nPopular in the US for splitting bills and tips.",
+  e.llm_context = "USE: when discussing Venmo QR codes, Venmo payments, or peer-to-peer US payments. TRIGGERS: venmo, venmo qr, venmo payment, split bill, peer payment, p2p payment. NOT: paypal (parent), zelle (bank).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -265,6 +277,7 @@ ON CREATE SET
   e.type = "BRAND",
   e.is_pillar = false,
   e.entity_summary = "Google provides Maps, Business Profile, and Reviews.\nQR codes link to Google Maps locations, reviews, and business\nlistings. Essential for local SEO and customer feedback.",
+  e.llm_context = "USE: when discussing Google QR codes, Google Maps, Google Reviews, or Google Business. TRIGGERS: google, google maps, google review, google business, google qr, play store. NOT: apple (competitor), waze (navigation).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -281,6 +294,7 @@ ON CREATE SET
   e.type = "BRAND",
   e.is_pillar = false,
   e.entity_summary = "Waze is a community-based GPS navigation app owned by Google.\nQR codes open specific locations in Waze for navigation.\nPopular for businesses with complex access routes.",
+  e.llm_context = "USE: when discussing Waze QR codes, Waze navigation, or community GPS. TRIGGERS: waze, waze qr, waze navigation, waze directions, community navigation. NOT: google maps (google), apple maps (apple).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -297,6 +311,7 @@ ON CREATE SET
   e.type = "BRAND",
   e.is_pillar = false,
   e.entity_summary = "Zapier connects apps and automates workflows without code.\nIntegrates with QR code platforms to automate scan responses,\ndata collection, and multi-step workflows.",
+  e.llm_context = "USE: when discussing Zapier, workflow automation, or app integrations. TRIGGERS: zapier, zap, zapier automation, workflow automation, app connector. NOT: make (integromat), n8n (self-hosted).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -313,6 +328,7 @@ ON CREATE SET
   e.type = "BRAND",
   e.is_pillar = false,
   e.entity_summary = "Make (formerly Integromat) is a visual workflow automation platform.\nCreates complex automation scenarios with QR code triggers\nand multi-app integrations.",
+  e.llm_context = "USE: when discussing Make/Integromat, visual automation, or complex workflows. TRIGGERS: make, integromat, make automation, visual automation, scenario builder. NOT: zapier (simpler), n8n (self-hosted).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -329,6 +345,7 @@ ON CREATE SET
   e.type = "BRAND",
   e.is_pillar = false,
   e.entity_summary = "n8n is a self-hostable workflow automation tool.\nEnables privacy-conscious automation with QR code data.\nPopular with developers and enterprises.",
+  e.llm_context = "USE: when discussing n8n, self-hosted automation, or open-source workflows. TRIGGERS: n8n, self-hosted automation, open source automation, privacy automation. NOT: zapier (hosted), make (hosted).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -345,6 +362,7 @@ ON CREATE SET
   e.type = "BRAND",
   e.is_pillar = false,
   e.entity_summary = "HubSpot is a CRM and marketing automation platform.\nQR code integrations sync leads and track offline-to-online\nconversions for marketing campaigns.",
+  e.llm_context = "USE: when discussing HubSpot, CRM integration, or marketing automation with QR codes. TRIGGERS: hubspot, hubspot crm, hubspot marketing, inbound marketing, hubspot integration. NOT: salesforce (enterprise), mailchimp (email only).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -361,6 +379,7 @@ ON CREATE SET
   e.type = "BRAND",
   e.is_pillar = false,
   e.entity_summary = "Salesforce is the leading enterprise CRM platform.\nQR code integrations connect physical touchpoints to customer\nrecords and sales workflows.",
+  e.llm_context = "USE: when discussing Salesforce, enterprise CRM, or sales automation. TRIGGERS: salesforce, salesforce crm, enterprise crm, salesforce integration, sales cloud. NOT: hubspot (smb), zoho (alternative).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -377,6 +396,7 @@ ON CREATE SET
   e.type = "BRAND",
   e.is_pillar = false,
   e.entity_summary = "Mailchimp is an email marketing and automation platform.\nQR codes in emails and print link to landing pages and\nsignup forms for list building.",
+  e.llm_context = "USE: when discussing Mailchimp, email marketing, or newsletter QR codes. TRIGGERS: mailchimp, email marketing, mailchimp integration, newsletter qr, email list qr. NOT: hubspot (full crm), sendgrid (api).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -393,6 +413,7 @@ ON CREATE SET
   e.type = "BRAND",
   e.is_pillar = false,
   e.entity_summary = "Shopify is a leading e-commerce platform for online stores.\nQR codes link to product pages, checkout, and order tracking.\nEssential for retail and D2C brands.",
+  e.llm_context = "USE: when discussing Shopify, e-commerce QR codes, or online store integration. TRIGGERS: shopify, shopify qr, shopify store, e-commerce platform, shopify product. NOT: woocommerce (wordpress), amazon (marketplace).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -409,6 +430,7 @@ ON CREATE SET
   e.type = "BRAND",
   e.is_pillar = false,
   e.entity_summary = "WooCommerce is the most popular WordPress e-commerce plugin.\nQR codes link to products and integrate with WordPress sites.\nPopular with small businesses on WordPress.",
+  e.llm_context = "USE: when discussing WooCommerce, WordPress e-commerce, or open-source stores. TRIGGERS: woocommerce, woo commerce, wordpress store, woocommerce qr, wordpress e-commerce. NOT: shopify (hosted), magento (enterprise).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET

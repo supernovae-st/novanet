@@ -8,11 +8,8 @@
 // PROJECT NODE
 // ─────────────────────────────────────────────────────────────────────────────
 
-MERGE (proj:Project:Meta {key: "qrcode-ai"})
-ON CREATE SET proj.display_name = "qrcode-ai",
-             proj.created_at = datetime(),
-             proj.updated_at = datetime()
-ON MATCH SET proj.updated_at = datetime();
+MATCH (proj:Project {key: "qrcode-ai"})
+SET proj.updated_at = datetime();
 
 // ─────────────────────────────────────────────────────────────────────────────
 // ENTITIES (12)
@@ -25,6 +22,7 @@ ON CREATE SET
   e.type = "INTEGRATION",
   e.is_pillar = false,
   e.entity_summary = "Zapier integration connects QR Code AI with 5,000+ apps.\nAutomate actions when QR codes are scanned - create leads,\nsend notifications, update spreadsheets, and more.",
+  e.llm_context = "USE: when discussing Zapier integration with QR Code AI, automated QR workflows, or zap connections. TRIGGERS: zapier integration, qr zapier, zap qr, automate qr, zapier connection. NOT: make integration (different platform), direct api (not integration).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -41,6 +39,7 @@ ON CREATE SET
   e.type = "INTEGRATION",
   e.is_pillar = false,
   e.entity_summary = "Make integration enables complex visual automation workflows.\nCreate multi-step scenarios triggered by QR scans with\nadvanced logic, filters, and data transformation.",
+  e.llm_context = "USE: when discussing Make/Integromat integration with QR Code AI or visual scenario automation. TRIGGERS: make integration, integromat integration, qr make, qr integromat, visual automation integration. NOT: zapier integration (different platform), n8n integration (self-hosted).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -57,6 +56,7 @@ ON CREATE SET
   e.type = "INTEGRATION",
   e.is_pillar = false,
   e.entity_summary = "n8n integration for self-hosted automation workflows.\nPrivacy-focused option for enterprises requiring data\nto stay on-premises while automating QR workflows.",
+  e.llm_context = "USE: when discussing n8n integration with QR Code AI or self-hosted privacy-first automation. TRIGGERS: n8n integration, qr n8n, self-hosted qr automation, privacy qr automation. NOT: zapier integration (hosted), make integration (hosted).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -73,6 +73,7 @@ ON CREATE SET
   e.type = "INTEGRATION",
   e.is_pillar = false,
   e.entity_summary = "HubSpot integration syncs QR scan data to HubSpot CRM.\nCreate contacts, log activities, and trigger marketing\nautomation based on QR code interactions.",
+  e.llm_context = "USE: when discussing HubSpot integration with QR Code AI or QR-to-CRM lead syncing. TRIGGERS: hubspot integration, qr hubspot, crm qr integration, hubspot qr sync, marketing automation qr. NOT: salesforce integration (enterprise), mailchimp integration (email).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -89,6 +90,7 @@ ON CREATE SET
   e.type = "INTEGRATION",
   e.is_pillar = false,
   e.entity_summary = "Salesforce integration connects QR codes to enterprise CRM.\nLog scan events, create leads, and track customer journeys\nfrom physical touchpoints to digital engagement.",
+  e.llm_context = "USE: when discussing Salesforce integration with QR Code AI or enterprise CRM QR connections. TRIGGERS: salesforce integration, qr salesforce, enterprise crm qr, salesforce qr sync. NOT: hubspot integration (smb), dynamics integration (microsoft).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -105,6 +107,7 @@ ON CREATE SET
   e.type = "INTEGRATION",
   e.is_pillar = false,
   e.entity_summary = "Mailchimp integration adds QR code contacts to email lists.\nAutomate welcome sequences, segment by scan location, and\ntrack offline-to-email conversion rates.",
+  e.llm_context = "USE: when discussing Mailchimp integration with QR Code AI or QR-to-email list building. TRIGGERS: mailchimp integration, qr mailchimp, email qr integration, newsletter qr signup, list building qr. NOT: hubspot integration (full crm), sendgrid (api only).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -121,6 +124,7 @@ ON CREATE SET
   e.type = "INTEGRATION",
   e.is_pillar = false,
   e.entity_summary = "Google Sheets integration logs QR scan data to spreadsheets.\nCreate batch QR codes from sheet data and track scan\nanalytics in real-time within Google Workspace.",
+  e.llm_context = "USE: when discussing Google Sheets integration with QR Code AI or spreadsheet QR data sync. TRIGGERS: google sheets integration, qr google sheets, spreadsheet qr, sheets qr sync, batch qr from sheets. NOT: notion integration (workspace), airtable (database).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -137,6 +141,7 @@ ON CREATE SET
   e.type = "INTEGRATION",
   e.is_pillar = false,
   e.entity_summary = "Notion integration connects QR codes to Notion databases.\nLog scans, create pages, and manage QR campaigns alongside\nother project documentation.",
+  e.llm_context = "USE: when discussing Notion integration with QR Code AI or workspace QR management. TRIGGERS: notion integration, qr notion, notion qr sync, workspace qr, notion database qr. NOT: google sheets integration (spreadsheet), coda (alternative).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -153,6 +158,7 @@ ON CREATE SET
   e.type = "INTEGRATION",
   e.is_pillar = false,
   e.entity_summary = "Slack integration sends notifications when QR codes are scanned.\nReal-time alerts for sales opportunities, event check-ins,\nand campaign milestones to team channels.",
+  e.llm_context = "USE: when discussing Slack integration with QR Code AI or QR scan notifications. TRIGGERS: slack integration, qr slack, slack notifications qr, team alert qr, slack channel qr. NOT: teams integration (microsoft), discord (community).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -169,6 +175,7 @@ ON CREATE SET
   e.type = "INTEGRATION",
   e.is_pillar = false,
   e.entity_summary = "Shopify integration creates QR codes for products and orders.\nLink product packaging to reviews, add QR to receipts for\nreordering, and track physical-to-digital conversions.",
+  e.llm_context = "USE: when discussing Shopify integration with QR Code AI or e-commerce product QR codes. TRIGGERS: shopify integration, qr shopify, shopify product qr, e-commerce qr integration, shopify store qr. NOT: woocommerce integration (wordpress), amazon (marketplace).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -185,6 +192,7 @@ ON CREATE SET
   e.type = "INTEGRATION",
   e.is_pillar = false,
   e.entity_summary = "WooCommerce integration connects QR codes to WordPress stores.\nGenerate product QR codes, embed in pages, and track scans\nwithin the WordPress admin dashboard.",
+  e.llm_context = "USE: when discussing WooCommerce integration with QR Code AI or WordPress e-commerce QR codes. TRIGGERS: woocommerce integration, qr woocommerce, wordpress qr store, woo qr integration. NOT: shopify integration (hosted), magento (enterprise).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -201,6 +209,7 @@ ON CREATE SET
   e.type = "INTEGRATION",
   e.is_pillar = false,
   e.entity_summary = "WordPress integration embeds QR codes directly in posts and pages.\nPlugin or shortcode access for content creators. Works with\npage builders and the block editor.",
+  e.llm_context = "USE: when discussing WordPress integration with QR Code AI or embedding QR codes in WordPress. TRIGGERS: wordpress integration, qr wordpress, wordpress qr plugin, wp qr shortcode, cms qr integration. NOT: woocommerce integration (e-commerce), squarespace (different cms).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET

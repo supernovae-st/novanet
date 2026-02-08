@@ -8,11 +8,8 @@
 // PROJECT NODE
 // ─────────────────────────────────────────────────────────────────────────────
 
-MERGE (proj:Project:Meta {key: "qrcode-ai"})
-ON CREATE SET proj.display_name = "qrcode-ai",
-             proj.created_at = datetime(),
-             proj.updated_at = datetime()
-ON MATCH SET proj.updated_at = datetime();
+MATCH (proj:Project {key: "qrcode-ai"})
+SET proj.updated_at = datetime();
 
 // ─────────────────────────────────────────────────────────────────────────────
 // ENTITIES (8)
@@ -25,6 +22,7 @@ ON CREATE SET
   e.type = "COMPARISON",
   e.is_pillar = false,
   e.entity_summary = "Comparison between QR codes and traditional barcodes. QR codes hold\nmore data (4,000+ chars vs 20), work at any angle, and support\nerror correction. Barcodes are simpler for basic inventory.",
+  e.llm_context = "USE: when discussing differences between QR codes and traditional barcodes or 1D vs 2D codes. TRIGGERS: qr vs barcode, barcode vs qr, 1d vs 2d, qr or barcode, qr code barcode difference. NOT: qr vs nfc (wireless), qr vs data matrix (both 2D).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -41,6 +39,7 @@ ON CREATE SET
   e.type = "COMPARISON",
   e.is_pillar = false,
   e.entity_summary = "Comparison between dynamic and static QR codes. Dynamic codes are\neditable after printing and trackable, but require subscriptions.\nStatic codes are free and permanent but cannot be changed.",
+  e.llm_context = "USE: when discussing differences between dynamic and static QR codes or editable vs permanent QR. TRIGGERS: dynamic vs static qr, editable qr, trackable qr, static vs dynamic, permanent qr vs editable. NOT: guide (how-to), qr vs barcode (different formats).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -57,6 +56,7 @@ ON CREATE SET
   e.type = "COMPARISON",
   e.is_pillar = false,
   e.entity_summary = "Comparison between QR codes and NFC (Near Field Communication).\nQR codes work universally with cameras, are visible, and free.\nNFC requires special hardware but enables seamless tap interactions.",
+  e.llm_context = "USE: when discussing differences between QR codes and NFC or visual vs tap technology. TRIGGERS: qr vs nfc, nfc vs qr, scan vs tap, qr or nfc, contactless comparison. NOT: qr vs barcode (both visual), qr vs data matrix (both 2D).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -73,6 +73,7 @@ ON CREATE SET
   e.type = "COMPARISON",
   e.is_pillar = false,
   e.entity_summary = "Comparison between QR codes and Data Matrix codes. Both are 2D,\nbut Data Matrix is better for small items (electronics, pharma).\nQR codes are better for consumer-facing applications.",
+  e.llm_context = "USE: when discussing differences between QR codes and Data Matrix or consumer vs industrial 2D codes. TRIGGERS: qr vs data matrix, data matrix vs qr, which 2d code, qr or datamatrix. NOT: qr vs barcode (1D), qr vs nfc (wireless).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -89,6 +90,7 @@ ON CREATE SET
   e.type = "COMPARISON",
   e.is_pillar = false,
   e.entity_summary = "Comparison between free and paid QR generators. Free tools have\nlimited customization and no tracking. Paid tools offer analytics,\ndynamic codes, bulk creation, and custom branding.",
+  e.llm_context = "USE: when discussing free vs paid QR generators, pricing tiers, or premium QR features. TRIGGERS: free vs paid qr, qr generator pricing, premium qr, free qr limitations, paid qr benefits. NOT: platform comparison (specific tools), dynamic vs static (code types).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -105,6 +107,7 @@ ON CREATE SET
   e.type = "COMPARISON",
   e.is_pillar = false,
   e.entity_summary = "Comparison of QR Code AI with other QR platforms. Evaluates\nfeatures, pricing, ease of use, design options, and analytics\ncapabilities across major QR code generators.",
+  e.llm_context = "USE: when discussing QR Code AI platform comparisons or competitive analysis. TRIGGERS: qr code ai vs, compare qr platforms, qr code ai alternative, qr generator comparison, best qr platform. NOT: free vs paid (pricing), dynamic vs static (code types).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -121,6 +124,7 @@ ON CREATE SET
   e.type = "COMPARISON",
   e.is_pillar = false,
   e.entity_summary = "Comparison between short links and QR codes. Short links work\nfor digital sharing and typing. QR codes work for physical media\nand instant mobile access. Often used together for best results.",
+  e.llm_context = "USE: when discussing short links vs QR codes or when to use each technology. TRIGGERS: short link vs qr, url vs qr, link or qr, bitly vs qr, when to use qr. NOT: dynamic vs static (both QR), qr vs nfc (hardware).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
@@ -137,6 +141,7 @@ ON CREATE SET
   e.type = "COMPARISON",
   e.is_pillar = false,
   e.entity_summary = "Comparison between Spotify Codes and standard QR codes. Spotify\nCodes use proprietary format requiring the Spotify app. Standard\nQR codes work universally but lack Spotify's visual branding.",
+  e.llm_context = "USE: when discussing Spotify Codes vs standard QR codes or proprietary vs universal codes. TRIGGERS: spotify code vs qr, spotify qr, spotify code difference, proprietary qr, music qr comparison. NOT: qr vs barcode (format), platform comparison (generators).",
   e.created_at = datetime(),
   e.updated_at = datetime()
 ON MATCH SET
