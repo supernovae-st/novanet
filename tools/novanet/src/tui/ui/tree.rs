@@ -967,4 +967,42 @@ mod tests {
         assert_eq!(spans.len(), 1);
         assert_eq!(spans[0].content, "hi");
     }
+
+    // Task 5.1: Additional explicit tests for highlight_matches
+    #[test]
+    fn test_highlight_matches_no_match() {
+        // When matches is None, return single span with base style
+        let spans = highlight_matches_with_bg("hello", None, Color::White, None);
+        assert_eq!(spans.len(), 1);
+        assert_eq!(spans[0].content, "hello");
+        // Verify base color is applied
+        assert_eq!(spans[0].style.fg, Some(Color::White));
+        assert_eq!(spans[0].style.bg, None);
+    }
+
+    #[test]
+    fn test_highlight_matches_with_positions() {
+        // Match positions 0 and 2: 'h' and 'l' in "hello"
+        let spans = highlight_matches_with_bg("hello", Some(&[0, 2]), Color::White, None);
+        // Expected: [h(yellow)], [e(white)], [l(yellow)], [lo(white)]
+        assert!(spans.len() >= 3, "Expected at least 3 spans, got {}", spans.len());
+
+        // First span should be 'h' highlighted (yellow bg)
+        assert_eq!(spans[0].content, "h");
+        assert_eq!(spans[0].style.bg, Some(Color::Yellow));
+        assert_eq!(spans[0].style.fg, Some(Color::Black));
+
+        // Second span should be 'e' with base color
+        assert_eq!(spans[1].content, "e");
+        assert_eq!(spans[1].style.fg, Some(Color::White));
+
+        // Third span should be 'l' highlighted
+        assert_eq!(spans[2].content, "l");
+        assert_eq!(spans[2].style.bg, Some(Color::Yellow));
+        assert_eq!(spans[2].style.fg, Some(Color::Black));
+
+        // Fourth span should be 'lo' with base color
+        assert_eq!(spans[3].content, "lo");
+        assert_eq!(spans[3].style.fg, Some(Color::White));
+    }
 }
