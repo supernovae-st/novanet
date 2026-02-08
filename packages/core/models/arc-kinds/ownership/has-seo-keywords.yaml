@@ -6,7 +6,7 @@
 #        - Replaces FOR_LOCALE (which was localization, not ownership)
 
 arc:
-  type: HAS_SEO_KEYWORDS
+  name: HAS_SEO_KEYWORDS
   family: ownership
   source: Locale
   target: SEOKeyword

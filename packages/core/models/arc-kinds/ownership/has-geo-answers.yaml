@@ -6,7 +6,7 @@
 #        - One query can have many answers (one per engine, per observation)
 
 arc:
-  type: HAS_GEO_ANSWERS
+  name: HAS_GEO_ANSWERS
   family: ownership
   scope: intra_realm
   source: GEOQuery

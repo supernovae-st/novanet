@@ -6,7 +6,7 @@
 #        - "qr code for wifi" → wifi might be an Entity
 
 arc:
-  type: USE_CASE_ENTITY
+  name: USE_CASE_ENTITY
   family: semantic
   scope: cross_realm
   temperature_threshold: 0.4
