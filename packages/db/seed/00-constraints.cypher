@@ -1,10 +1,11 @@
-// NovaNet Constraints v10.4.0
+// NovaNet Constraints v10.9.0
 //
 // Schema definitions for Neo4j graph database.
 // Uses IF NOT EXISTS for idempotent execution.
 //
 // NOTE: Locale-based filtering uses :FOR_LOCALE relation traversal (not property indexes).
 // v10.4: Entity-Centric Architecture (Entity/EntityContent), GEO layer removed, 2 realms (global, project)
+// v10.9: Naming convention refactor (EntityL10n→EntityContent, HAS_L10N→HAS_CONTENT, etc.)
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // LOCALE
@@ -30,7 +31,15 @@ CREATE CONSTRAINT entity_key IF NOT EXISTS FOR (e:Entity) REQUIRE e.key IS UNIQU
 CREATE INDEX entity_type IF NOT EXISTS FOR (e:Entity) ON (e.type);
 // v11: Pillar filtering for content hierarchy navigation
 CREATE INDEX entity_is_pillar IF NOT EXISTS FOR (e:Entity) ON (e.is_pillar);
-CREATE INDEX entity_content_version IF NOT EXISTS FOR (el:EntityContent) ON (el.version);
+
+// v10.9.0: EntityContent indexes (Decision 11 - naming convention refactor)
+CREATE CONSTRAINT entity_content_key IF NOT EXISTS FOR (ec:EntityContent) REQUIRE ec.key IS UNIQUE;
+CREATE CONSTRAINT entity_content_slug_unique IF NOT EXISTS FOR (ec:EntityContent) REQUIRE (ec.locale_key, ec.slug) IS UNIQUE;
+CREATE INDEX entity_content_entity_key IF NOT EXISTS FOR (ec:EntityContent) ON (ec.entity_key);
+CREATE INDEX entity_content_locale_key IF NOT EXISTS FOR (ec:EntityContent) ON (ec.locale_key);
+CREATE INDEX entity_content_full_path IF NOT EXISTS FOR (ec:EntityContent) ON (ec.full_path);
+CREATE INDEX entity_content_slug IF NOT EXISTS FOR (ec:EntityContent) ON (ec.slug);
+CREATE INDEX entity_content_version IF NOT EXISTS FOR (ec:EntityContent) ON (ec.version);
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // PROJECT NODES (v7.2.5)
