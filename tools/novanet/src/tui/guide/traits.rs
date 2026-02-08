@@ -70,7 +70,7 @@ fn trait_llm_context(key: &str) -> &str {
             "Nodes that do not change between locales. Structural definitions, configuration, and invariant business logic. Examples: Page, Entity, Block."
         }
         "localized" => {
-            "OUTPUT - Generated content per locale. Has invariant parent (e.g., PageL10n -> Page). Created by LLM generation, not translation."
+            "OUTPUT - Generated content per locale. Has invariant parent (e.g., PageGenerated -> Page). Created by LLM generation, not translation."
         }
         "knowledge" => {
             "INPUT - Native locale knowledge (savoir). Loaded INTO the LLM as context. Exists only where needed (fr-FR may have 20K Terms, sw-KE may have 500)."

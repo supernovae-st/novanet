@@ -37,7 +37,7 @@ fn display_name(rel_type: &str) -> String {
 }
 
 /// Build a Cypher-ready traversal pattern from source/target labels.
-/// e.g. "(Project)-[:HAS_PAGE]->(Page)" or "(Page, Block)-[:HAS_OUTPUT]->(BlockL10n, PageL10n)"
+/// e.g. "(Project)-[:HAS_PAGE]->(Page)" or "(Page, Block)-[:HAS_GENERATED]->(PageGenerated, BlockGenerated)"
 fn cypher_pattern(rel: &ArcDef) -> String {
     let sources = rel.source.labels().join(", ");
     let targets = rel.target.labels().join(", ");
@@ -396,8 +396,8 @@ mod tests {
         m.insert("Page".to_string(), "tenant".to_string());
         m.insert("Block".to_string(), "tenant".to_string());
         m.insert("Entity".to_string(), "tenant".to_string());
-        m.insert("PageL10n".to_string(), "tenant".to_string());
-        m.insert("BlockL10n".to_string(), "tenant".to_string());
+        m.insert("PageGenerated".to_string(), "tenant".to_string());
+        m.insert("BlockGenerated".to_string(), "tenant".to_string());
         // Locale is in global realm (cross_realm test)
         m.insert("Locale".to_string(), "global".to_string());
         m
@@ -433,15 +433,15 @@ mod tests {
     #[test]
     fn cypher_pattern_multi_source_target() {
         let rel = make_rel(
-            "HAS_OUTPUT",
+            "HAS_GENERATED",
             ArcFamily::Localization,
             NodeRef::Multiple(vec!["Page".to_string(), "Block".to_string()]),
-            NodeRef::Multiple(vec!["PageL10n".to_string(), "BlockL10n".to_string()]),
+            NodeRef::Multiple(vec!["PageGenerated".to_string(), "BlockGenerated".to_string()]),
             Cardinality::OneToMany,
         );
         assert_eq!(
             cypher_pattern(&rel),
-            "(Page, Block)-[:HAS_OUTPUT]->(PageL10n, BlockL10n)"
+            "(Page, Block)-[:HAS_GENERATED]->(PageGenerated, BlockGenerated)"
         );
     }
 
@@ -560,10 +560,10 @@ mod tests {
     fn generate_multi_source_target_from_to() {
         let doc = ArcsDocument {
             arcs: vec![make_rel(
-                "HAS_OUTPUT",
+                "HAS_GENERATED",
                 ArcFamily::Localization,
                 NodeRef::Multiple(vec!["Page".to_string(), "Block".to_string()]),
-                NodeRef::Multiple(vec!["PageL10n".to_string(), "BlockL10n".to_string()]),
+                NodeRef::Multiple(vec!["PageGenerated".to_string(), "BlockGenerated".to_string()]),
                 Cardinality::OneToMany,
             )],
             semantic_link_types: None,
@@ -579,7 +579,7 @@ mod tests {
             .count();
         assert_eq!(from_kind, 2, "should have 2 FROM_KIND for multi-source");
 
-        // 2 TO_KIND (PageL10n, BlockL10n)
+        // 2 TO_KIND (PageGenerated, BlockGenerated)
         let to_kind = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:TO_KIND]"))
@@ -587,7 +587,7 @@ mod tests {
         assert_eq!(to_kind, 2, "should have 2 TO_KIND for multi-target");
 
         // cypher_pattern includes all sources and targets
-        assert!(cypher.contains("(Page, Block)-[:HAS_OUTPUT]->(PageL10n, BlockL10n)"));
+        assert!(cypher.contains("(Page, Block)-[:HAS_GENERATED]->(PageGenerated, BlockGenerated)"));
     }
 
     #[test]
@@ -733,7 +733,7 @@ mod tests {
                 make_rel(
                     "FOR_LOCALE",
                     ArcFamily::Localization,
-                    NodeRef::Single("PageL10n".to_string()),
+                    NodeRef::Single("PageGenerated".to_string()),
                     NodeRef::Single("Locale".to_string()),
                     Cardinality::ManyToOne,
                 ),

@@ -2120,7 +2120,7 @@ fn realm_icon(key: &str) -> &'static str {
     }
 }
 
-/// Convert PascalCase to kebab-case (e.g., "BlockL10n" -> "block-l10n").
+/// Convert PascalCase to kebab-case (e.g., "BlockGenerated" -> "block-generated").
 /// Pre-allocates capacity to avoid reallocations.
 fn to_kebab_case(s: &str) -> String {
     let mut result = String::with_capacity(s.len() + 4); // +4 for potential dashes

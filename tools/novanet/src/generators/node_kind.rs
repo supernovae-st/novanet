@@ -108,7 +108,7 @@ fn required_properties(node: &ParsedNode) -> Vec<&str> {
 /// Examples:
 /// - `"LocaleVoice"` → `"locale-voice"`
 /// - `"SEOKeyword"` → `"seo-keyword"`
-/// - `"EntityL10n"` → `"entity-l10n"`
+/// - `"EntityContent"` → `"entity-content"`
 fn to_kebab_case(s: &str) -> String {
     let chars: Vec<char> = s.chars().collect();
     let mut result = String::with_capacity(s.len() + 4);
@@ -479,15 +479,15 @@ mod tests {
             )),
             "high"
         );
-        // output layer + localized → high
+        // output layer + derived → low (derived trait takes precedence)
         assert_eq!(
             context_budget(&make_node(
-                "PageL10n",
+                "PageGenerated",
                 "tenant",
                 "output",
-                NodeTrait::Localized
+                NodeTrait::Derived
             )),
-            "high"
+            "low"
         );
     }
 
@@ -511,10 +511,10 @@ mod tests {
     }
 
     #[test]
-    fn to_kebab_case_l10n() {
-        assert_eq!(to_kebab_case("EntityL10n"), "entity-l10n");
-        assert_eq!(to_kebab_case("PageL10n"), "page-l10n");
-        assert_eq!(to_kebab_case("BlockL10n"), "block-l10n");
+    fn to_kebab_case_content_generated() {
+        assert_eq!(to_kebab_case("EntityContent"), "entity-content");
+        assert_eq!(to_kebab_case("PageGenerated"), "page-generated");
+        assert_eq!(to_kebab_case("BlockGenerated"), "block-generated");
     }
 
     #[test]
@@ -692,7 +692,7 @@ mod tests {
                     ("slug", "string", false),
                 ],
             ),
-            make_node("PageL10n", "tenant", "structure", NodeTrait::Localized),
+            make_node("PageGenerated", "tenant", "output", NodeTrait::Derived),
             make_node("Concept", "tenant", "semantic", NodeTrait::Invariant),
             make_node("GenerationJob", "tenant", "output", NodeTrait::Job),
         ];

@@ -562,10 +562,10 @@ mod tests {
     #[test]
     fn expand_arcs_multi_source_target() {
         let rel = ArcDef {
-            arc_type: "HAS_OUTPUT".to_string(),
+            arc_type: "HAS_GENERATED".to_string(),
             family: ArcFamily::Generation,
             source: NodeRef::Multiple(vec!["Page".to_string(), "Block".to_string()]),
-            target: NodeRef::Multiple(vec!["PageL10n".to_string(), "BlockL10n".to_string()]),
+            target: NodeRef::Multiple(vec!["PageGenerated".to_string(), "BlockGenerated".to_string()]),
             cardinality: Cardinality::OneToMany,
             llm_context: "output".to_string(),
             properties: None,
