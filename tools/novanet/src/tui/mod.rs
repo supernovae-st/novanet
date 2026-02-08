@@ -28,6 +28,7 @@ pub mod guide;
 mod schema;
 pub mod theme;
 mod ui;
+pub mod unicode;
 mod yaml;
 
 use std::io::{self, Write};
