@@ -74,6 +74,42 @@ node:
   # ═══════════════════════════════════════════════════════════════════════════════
 
   standard_properties:
+    # ─────────────────────────────────────────────────────────────────────────────
+    # IDENTITY PROPERTIES (denormalized for fast lookup)
+    # ─────────────────────────────────────────────────────────────────────────────
+    entity_key:
+      type: string
+      required: true
+      pattern: "^[a-z][a-z0-9-]*$"
+      description: "Parent Entity key (denormalized). Combined with locale_key forms unique identity."
+      examples:
+        - "create-qr-code"
+        - "qr-code-wifi"
+        - "dynamic-qr-code"
+
+    locale_key:
+      type: string
+      required: true
+      pattern: "^[a-z]{2}-[A-Z]{2}$"
+      description: "Target Locale key (denormalized). BCP 47 format."
+      examples:
+        - "fr-FR"
+        - "en-US"
+        - "ja-JP"
+
+    slug:
+      type: string
+      required: true
+      pattern: "^[a-z0-9-]+$"
+      description: "URL-safe localized identifier for routing"
+      examples:
+        - "creer-qr-code"        # fr-FR for "create-qr-code"
+        - "qr-code-wifi"         # same in many locales
+        - "qr-code-dynamique"    # fr-FR for "dynamic-qr-code"
+
+    # ─────────────────────────────────────────────────────────────────────────────
+    # CONTENT PROPERTIES
+    # ─────────────────────────────────────────────────────────────────────────────
     display_name:
       type: string
       required: true
@@ -275,10 +311,15 @@ node:
     # Example 1: French localization for Dynamic QR Code (CONCEPT)
     fr_fr_dynamic_qr:
       data:
-        display_name: "Code QR Dynamique"
-        description: "Code QR modifiable après création, avec suivi des scans en temps réel"
-        llm_context: "USE: Contenu français pour Code QR dynamique. TRIGGERS: fr-FR, modification, suivi. NOT: Québec (utiliser fr-CA)."
-        definition: "Un Code QR dynamique permet de modifier la destination après impression, avec statistiques de scan."
+        # Identity (denormalized)
+        entity_key: "dynamic-qr-code"
+        locale_key: "fr-FR"
+        slug: "qr-code-dynamique"
+        # Content
+        display_name: "QR Code Dynamique"
+        description: "QR Code modifiable après création, avec suivi des scans en temps réel"
+        llm_context: "USE: Contenu français pour QR Code dynamique. TRIGGERS: fr-FR, modification, suivi. NOT: Québec (utiliser fr-CA)."
+        definition: "Un QR Code dynamique permet de modifier la destination après impression, avec statistiques de scan."
         purpose: "Permet de corriger les erreurs et mettre à jour le contenu sans réimprimer."
         benefits:
           - "Modifiable après impression"
@@ -291,13 +332,18 @@ node:
         audience_segment: "professional"
         version: 1
       # SEO keywords are linked via TARGETS relation to SEOKeyword nodes:
-      # EntityL10n --[:TARGETS]--> SEOKeyword {value: "Code QR dynamique", volume: 8100}
-      # EntityL10n --[:TARGETS]--> SEOKeyword {value: "créer Code QR", volume: 12000}
-      # EntityL10n --[:TARGETS]--> SEOKeyword {value: "générateur Code QR gratuit", volume: 5400}
+      # EntityL10n --[:TARGETS]--> SEOKeyword {value: "qr code dynamique", volume: 8100}
+      # EntityL10n --[:TARGETS]--> SEOKeyword {value: "créer qr code", volume: 12000}
+      # EntityL10n --[:TARGETS]--> SEOKeyword {value: "générateur qr code gratuit", volume: 5400}
 
     # Example 2: Japanese localization for QR Code (THING pillar)
     ja_jp_qr_code:
       data:
+        # Identity (denormalized)
+        entity_key: "qr-code"
+        locale_key: "ja-JP"
+        slug: "qr-code"  # romanized for URL compatibility
+        # Content
         display_name: "QRコード"
         description: "スマートフォンでスキャンできる2次元マトリックスバーコード"
         llm_context: "USE: 日本語コンテンツ。TRIGGERS: ja-JP、スキャン、バーコード。NOT: 中国語（zh-CN使用）。"
