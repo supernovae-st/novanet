@@ -898,6 +898,131 @@ mod tests {
     }
 
     // =========================================================================
+    // Task 2.2: Layer color resolution tests
+    // =========================================================================
+
+    #[test]
+    fn test_layer_color_all_layers_truecolor() {
+        // Test all 8 layers return RGB colors in TrueColor mode.
+        // Note: "knowledge" is the key for locale-knowledge layer in the color function.
+        // The task specifies "locale-knowledge" but the implementation uses "knowledge".
+        let layers = [
+            ("config", layer::CONFIG_HEX),
+            ("knowledge", layer::KNOWLEDGE_HEX), // locale-knowledge
+            ("seo", layer::SEO_HEX),
+            ("foundation", layer::FOUNDATION_HEX),
+            ("structure", layer::STRUCTURE_HEX),
+            ("semantic", layer::SEMANTIC_HEX),
+            ("instruction", layer::INSTRUCTION_HEX),
+            ("output", layer::OUTPUT_HEX),
+        ];
+
+        for (layer_key, _expected_hex) in layers {
+            let color = layer::color(layer_key, ColorMode::TrueColor);
+            assert!(
+                matches!(color, Color::Rgb(..)),
+                "Layer '{}' should return RGB color in TrueColor mode, got {:?}",
+                layer_key,
+                color
+            );
+        }
+    }
+
+    #[test]
+    fn test_layer_color_256_mode() {
+        // Verify config returns Indexed color in 256 mode.
+        let color = layer::color("config", ColorMode::Color256);
+        assert!(
+            matches!(color, Color::Indexed(_)),
+            "config layer should return Indexed color in Color256 mode, got {:?}",
+            color
+        );
+        assert_eq!(
+            color,
+            Color::Indexed(layer::CONFIG_256),
+            "config layer should use CONFIG_256 index"
+        );
+    }
+
+    #[test]
+    fn test_layer_color_16_mode() {
+        // Verify config doesn't return RGB in 16-color mode.
+        let color = layer::color("config", ColorMode::Color16);
+        assert!(
+            !matches!(color, Color::Rgb(..)),
+            "config layer should NOT return RGB in Color16 mode"
+        );
+        assert_eq!(
+            color, layer::CONFIG_16,
+            "config layer should return CONFIG_16 in Color16 mode"
+        );
+    }
+
+    // =========================================================================
+    // Task 2.3: Trait border style tests (ADR-005)
+    // =========================================================================
+
+    /// Test trait border styles for all 5 traits (ADR-005).
+    /// Maps CSS border styles to Unicode box-drawing characters:
+    /// - invariant: solid -> "─" (U+2500 BOX DRAWINGS LIGHT HORIZONTAL)
+    /// - localized: dashed -> "┄" (U+2504 BOX DRAWINGS LIGHT TRIPLE DASH HORIZONTAL)
+    /// - knowledge: double -> "┈" (U+2508 BOX DRAWINGS LIGHT QUADRUPLE DASH HORIZONTAL)
+    /// - derived: dotted -> "═" (U+2550 BOX DRAWINGS DOUBLE HORIZONTAL)
+    /// - job: none -> " " (space - no border)
+    #[test]
+    fn test_trait_border_all_traits() {
+        assert_eq!(
+            traits::border_char("invariant"),
+            "─",
+            "invariant: solid border"
+        );
+        assert_eq!(
+            traits::border_char("localized"),
+            "┄",
+            "localized: dashed border"
+        );
+        assert_eq!(
+            traits::border_char("knowledge"),
+            "┈",
+            "knowledge: double border"
+        );
+        assert_eq!(
+            traits::border_char("derived"),
+            "═",
+            "derived: dotted border"
+        );
+        assert_eq!(traits::border_char("job"), " ", "job: no border (thin)");
+    }
+
+    /// Test trait border fallback for unknown traits.
+    #[test]
+    fn test_trait_border_fallback() {
+        // Unknown traits should fallback to invariant border (solid)
+        assert_eq!(
+            traits::border_char("unknown"),
+            "─",
+            "unknown trait should fallback to invariant border"
+        );
+        assert_eq!(
+            traits::border_char(""),
+            "─",
+            "empty trait should fallback to invariant border"
+        );
+    }
+
+    /// Test trait border via Theme instance.
+    #[test]
+    fn test_trait_border_via_theme() {
+        let theme = Theme::with_mode(ColorMode::TrueColor);
+
+        assert_eq!(theme.trait_border("invariant"), "─");
+        assert_eq!(theme.trait_border("localized"), "┄");
+        assert_eq!(theme.trait_border("knowledge"), "┈");
+        assert_eq!(theme.trait_border("derived"), "═");
+        assert_eq!(theme.trait_border("job"), " ");
+    }
+
+    // =========================================================================
     // Task 2.4: Arc family color resolution tests
     // =========================================================================
 
