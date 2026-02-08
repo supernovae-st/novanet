@@ -8,6 +8,34 @@ use serde_json::Value as JsonValue;
 use std::collections::BTreeMap;
 use tokio::join;
 
+// =============================================================================
+// SECURITY: Label validation for Cypher injection prevention
+// =============================================================================
+
+/// Validates that a Neo4j label is safe for interpolation into Cypher queries.
+/// Labels must be alphanumeric (with underscores allowed) and non-empty.
+///
+/// While our data comes from the meta-graph (not direct user input), this provides
+/// defense-in-depth against potential injection if the database were compromised.
+fn validate_cypher_label(label: &str) -> crate::Result<()> {
+    if label.is_empty() {
+        return Err(crate::error::NovaNetError::Validation(
+            "Empty label not allowed in Cypher queries".into(),
+        ));
+    }
+    // Allow alphanumeric, underscore, and dash (common in NovaNet labels like "locale-knowledge")
+    if !label
+        .chars()
+        .all(|c| c.is_alphanumeric() || c == '_' || c == '-')
+    {
+        return Err(crate::error::NovaNetError::Validation(format!(
+            "Invalid characters in label '{}' - only alphanumeric, underscore, and dash allowed",
+            label
+        )));
+    }
+    Ok(())
+}
+
 /// Clean up Bolt debug output by removing wrapper type names.
 /// E.g., "DateTime(BoltDateTime { seconds: BoltInteger { value: 123 }, ... })" -> "123"
 fn clean_bolt_debug(debug: &str) -> String {
@@ -633,6 +661,9 @@ ORDER BY family_key, arc_key
         db: &Db,
         kind_label: &str,
     ) -> crate::Result<(Vec<InstanceInfo>, usize)> {
+        // Security: Validate label before interpolation into Cypher
+        validate_cypher_label(kind_label)?;
+
         // First, get the total count (fast query with index)
         let count_cypher = format!(
             "MATCH (n:{kind_label}) WHERE NOT n:Meta RETURN count(n) AS total",

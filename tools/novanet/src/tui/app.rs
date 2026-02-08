@@ -1432,9 +1432,13 @@ impl App {
             }
 
             // Type character (j/k are handled above for navigation)
+            // Security: Limit search query length to prevent memory exhaustion
             KeyCode::Char(c) => {
-                self.search.query.push(c);
-                self.update_search();
+                const MAX_SEARCH_LEN: usize = 256;
+                if self.search.query.len() < MAX_SEARCH_LEN {
+                    self.search.query.push(c);
+                    self.update_search();
+                }
                 true
             }
 
