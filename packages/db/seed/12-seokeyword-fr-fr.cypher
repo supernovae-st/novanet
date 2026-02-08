@@ -16726,6081 +16726,6081 @@ SET kw.value = 'qr code chronopost non reçu',
     kw.updated_at = datetime();
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// SECTION 2: CREATE TARGETS RELATIONS (EntityL10n -> SEOKeyword)
+// SECTION 2: CREATE TARGETS RELATIONS (EntityContent -> SEOKeyword)
 // ═══════════════════════════════════════════════════════════════════════════════
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-generator-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generer-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scan-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generer-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-scanner-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generateur-de-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-qr-code-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generateur-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creation-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-un-qr-code-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generateur-qr-code-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-ai-vs-competitors', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-ai-vs-competitors', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-monkey-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lecteur-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-code-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-un-qr-code-gratuitement-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-creer-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generer-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-gratuit-illimite-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-un-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lecteur-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generer-qr-code-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generator-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lire-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generateur-de-qr-code-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'restaurants', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'restaurants', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-restaurant-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-generator-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-un-qr-code-sur-son-propre-telephone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-application-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-lire-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-flasher-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creation-qr-code-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-png-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creation-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-linkedin', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-linkedin', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-linkedin-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-faire-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generateur-de-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-adobe-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generer-un-qr-code-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-ai-vs-competitors', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-ai-vs-competitors', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-monkey-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-ai-vs-competitors', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-ai-vs-competitors', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-monkey-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-canva-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-qr-code-en-ligne-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lire-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-scanner-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generateur-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lecture-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-en-ligne-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-generator-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-generator-free-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-canva-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-show-your-qr-on-the-reader-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-code-qr-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-adobe-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-application-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-faire-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-creator-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generator-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-un-qr-code-sur-iphone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-un-qr-code-sur-android-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lecteur-qr-code-en-ligne-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-generer-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-review', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-review', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-avis-google-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generate-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-un-qr-code-sur-samsung-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generer-un-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-point-relais-colis-amazon-retour-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-free-qr-code-generator-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-un-qr-code-a-partir-d-un-lien-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-carte-de-visite-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-muestra-tu-qr-en-el-lector-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-un-qr-code-gratuit-sans-inscription-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lecteur-de-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-reader-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-flasher-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scan-qr-code-en-ligne-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-create-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-ai-vs-competitors', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-ai-vs-competitors', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-tiger-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-un-qr-code-avec-un-lien-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creation-de-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-instagram', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-instagram', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-instagram-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-brawl-star-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-ai-vs-competitors', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-ai-vs-competitors', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-me-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-faire-pour-scanner-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-how-to-create-a-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-gratuit-sans-inscription-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-qr-code-photo-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-appli-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-photo-mariage-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-transformer-un-lien-en-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-flasher-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-https-messages-google-com-web-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-google-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-carte-de-visite-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-creer-un-qr-code-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-gratuit-sans-abonnement-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-how-to-scan-qr-code-on-android-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-maker-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-carte-de-visite-avec-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-dbl-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-faux-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-createur-de-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lecteur-de-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-scanner-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-facebook', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-facebook', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-facebook-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-link-to-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-application-scanner-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scan-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-la-digitale-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-ticket', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-ticket', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-verifier-ticket-pmu-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-dbl-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-de-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-installer-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-qr-code-gratuit-android-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lien-en-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-qr-code-android-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generateur-qr-code-gratuit-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-pdf', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-pdf', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-pdf-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-faire-un-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lecteur-qr-code-gratuit-sans-pub-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-enter-your-qr-code-content-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-pmu-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-scan-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanneur-de-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scan-qr-code-pmu-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'download-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'download-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-telecharger-qr-code-gratuit-pour-android-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'download-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'download-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-telecharger-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-google-lens-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generer-un-qr-code-a-partir-d-un-lien-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-qr-code-iphone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scan-qr-code-online-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-blanc-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-generator-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-appli-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-un-qr-code-gratuit-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-exemple-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-online-qr-generator-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-outlook-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-scanner-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-generateur-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-ai-vs-competitors', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-ai-vs-competitors', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-me-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-application-pour-scanner-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'dynamic-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'dynamic-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-dynamique-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-generateur-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-adobe-express-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creation-d-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-code-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-https-tf1-fr-tv-pairing-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-un-qr-code-avec-mon-telephone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-wifi', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-wifi', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-wifi-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-installer-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-utiliser-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lire-qr-code-photo-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-dechetterie-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-qr-code-gratuit-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generation-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-image-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-lecteur-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-samsung-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scan-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-mii-tomodachi-life-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-adobe-qr-code-generator-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-faire-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-fdj-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-flash-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-faire-un-qr-code-avec-un-lien-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'print-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'print-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-vistaprint-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-free-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-test-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-application-qr-code-gratuite-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-codes-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-code-qr-generator-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-io-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-roborock-qr-598-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-un-qr-code-gratuit-pdf-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'custom-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'custom-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-personnalise-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-exemple-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-le-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-transformer-lien-en-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-whatsapp', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-whatsapp', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-whatsapp-web-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-reader-online-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-clash-royal-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-image-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-scanner-scanner-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-scanner-online-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generer-un-qr-code-gratuitement-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-ai-vs-competitors', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-ai-vs-competitors', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-me-qr-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-android-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'fitness', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'fitness', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-parions-sport-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-mo-co-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-chimp-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-un-code-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-verifier-euromillion-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-un-qr-code-avec-canva-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lire-qr-code-sur-pc-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scannez-le-code-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lecteur-carte-vitale-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-sushi-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-google-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lecteur-qr-code-android-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'download-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'download-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-telecharger-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-whatsapp', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-whatsapp', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-whatsapp-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-un-qr-code-gratuitement-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-cree-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creation-de-qr-code-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-dechetterie-amiens-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-un-qr-code-sur-son-propre-telephone-samsung-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-mariage-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-url', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-url', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-url-to-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scan-qr-code-android-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-le-grand-quiz-du-qi-tf1-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-un-qr-code-sur-son-propre-telephone-iphone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lire-un-qr-code-sur-pc-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-honda-qr-50-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-video', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-video', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-video-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-un-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-bs-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generateur-de-qr-code-gratuit-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'print-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'print-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-vistaprint-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creation-qr-code-gratuit-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-spotify', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-spotify', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-spotify-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-qr-code-samsung-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-youtube', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-youtube', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-youtube-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scan-qr-code-fdj-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-fdj-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-creer-un-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-photo-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-online-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-un-qr-code-avec-google-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lire-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-gratuit-en-ligne-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-creer-un-qr-code-sur-canva-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-free-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creation-de-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-generator-fr-2'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-flasher-un-qr-code-sur-son-telephone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-adidas-qr-code-verification-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-signification-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-promo-burger-king-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-mariage-photo-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-son-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-que-veut-dire-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-genrator-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-application-fdj-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-vcard', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-vcard', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-vcard-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-qr-code-canva-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-createur-de-qr-code-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-un-qr-code-sur-une-photo-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-application-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-vin-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-un-qr-code-sur-pc-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scan-qr-code-pc-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generer-qr-code-gratuit-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-vcard', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-vcard', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-vcard-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-un-qr-code-avec-mon-portable-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-un-qr-code-sur-ordinateur-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generateur-de-qr-code-gratuit-et-illimite-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-lidl-plus-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-un-qr-code-iphone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-qr-code-pc-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-lire-un-qr-code-sur-son-telephone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-meilleur-lecteur-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-un-qr-code-sur-un-samsung-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-https-tf1-fr-tv-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-code-qr-scan-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-phone', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-phone', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-iphone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-clash-royal-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-poster', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-poster', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-affiche-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-pdf', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-pdf', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-pdf-en-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-db-legends-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generation-qr-code-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-lire-un-code-qr-sur-android-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-loto-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-rond-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-esim-free-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-createur-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-en-ligne-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-appli-scan-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-createur-qr-code-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-poster', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-poster', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-affiche-avec-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lecteur-qr-code-carte-vitale-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-musique-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lire-qr-code-en-ligne-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-ai-vs-competitors', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-ai-vs-competitors', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-monkey-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-numerisation-des-codes-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-dragon-ball-legends-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-steam-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-qr-code-gratuit-samsung-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-prendre-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-ai-vs-competitors', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-ai-vs-competitors', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-io-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-carte-de-visite-code-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-brawl-star-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-insta-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-linkedin', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-linkedin', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-linkedin-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-lidl-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-scanner-reader-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'dynamic-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'dynamic-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-dynamique-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-lire-un-qr-code-sur-son-propre-telephone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-qr-code-sur-iphone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-blanc-png-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-faire-un-code-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-ou-se-trouve-le-qr-code-sur-samsung-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-phone', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-phone', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-ou-trouver-le-qr-code-d-un-telephone-samsung-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-crer-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-mon-profil-aftral-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-comment-ca-marche-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-with-logo', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-with-logo', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-logo-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-faire-un-qr-code-a-partir-d-un-lien-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-euromillions-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-imprimante-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-retour-box-bouygues-relais-colis-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-payment', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-payment', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-paiement-par-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-installer-qr-code-gratuit-samsung-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lecture-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-generator-adobe-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-barcode-generator-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-creation-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-facebook', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-facebook', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-page-facebook-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-convertisseur-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-fonctionne-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-barcode-maker-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-fait-on-pour-scanner-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-flasher-un-qr-code-avec-son-telephone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-fake-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-tiger-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-tombe-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-canva-qr-code-generator-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-reader-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generer-un-qr-code-gratuit-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'stickers-labels', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'stickers-labels', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-sticker-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-code-qr-creator-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-installer-le-qr-code-sur-samsung-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-un-qr-code-pour-un-pdf-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-photo-mariage-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-retour-amazon-mondial-relay-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-carte-visite-avec-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-pour-carte-de-visite-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generer-qr-code-canva-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-online-qr-code-generator-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-google-form-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-telecharger-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-mo-co-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-url', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-url', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-multi-url-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-le-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-visit-japan-web-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-generator', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-generator', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-gen-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-google-form-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-carte-de-visite-virtuelle-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-appareil-photo-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-my-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-lien-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-un-qr-code-pour-une-video-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-carte-visite-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lire-un-qr-code-sur-une-photo-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-svg-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-un-qr-code-sans-application-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-lire-un-qr-code-sur-iphone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-code-generator-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-lire-un-qr-code-sur-samsung-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-generator-online-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-un-qr-code-sur-une-capture-d-ecran-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lecture-qr-code-en-ligne-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-review', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-review', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-avis-google-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-review', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-review', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-google-avis-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lien-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-pour-scanner-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-generateur-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lire-qr-code-a-partir-d-une-photo-iphone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-discord-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-generator-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-installer-scanner-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-un-code-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'print-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'print-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-vista-print-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-menu', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-menu', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-menu-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'fitness', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'fitness', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-fitness-park-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-bracelet-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-contact-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-moco-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-indesign-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-zebulon-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-create-qr-code-free-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-entreprise-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-un-qr-code-sur-canva-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'stickers-labels', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'stickers-labels', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-stickers-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-payer-avec-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-builder-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-fait-on-pour-scanner-un-qr-code-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-chimp-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-scanner-google-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-un-qr-code-gratuit-et-illimite-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lire-qr-code-iphone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-generator-pro-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-video-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creation-qr-code-gratuit-illimite-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-qr-code-carte-de-visite-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-with-logo', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-with-logo', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-avec-logo-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-faire-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-un-code-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-test-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-50-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-enregistrer-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-un-qr-code-avec-samsung-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-mii-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-site-internet-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-carte-de-visite-avec-code-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generer-des-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-lego-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-cree-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-review', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-review', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-avis-google-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-utiliser-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-payment', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-payment', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-paiement-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-url', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-url', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generate-qr-code-from-url-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lecteur-code-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-convertir-lien-en-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-site-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-appli-qr-code-gratuit-android-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-menu', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-menu', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-menu-restaurant-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-barcode-code-generator-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-rick-roll-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-app-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-taille-minimale-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-code-qr-en-ligne-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-creer-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-photographier-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-gen-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-que-signifie-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lire-un-qr-code-en-ligne-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lecteur-qr-code-pc-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-son-qr-code-carte-de-visite-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-wifi', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-wifi', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-wifi-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-creator-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-free-qr-code-trimrly-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-qr-codes-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-payer-avec-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generer-un-qr-code-canva-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-review', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-review', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-pour-avis-google-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-scanner-en-ligne-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lecteur-de-qr-code-en-ligne-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-creation-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'barcode', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'barcode', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generate-qr-barcode-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generateur-code-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-un-qr-code-carte-de-visite-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-douchette-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creation-qr-code-carte-de-visite-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-un-qr-code-avec-un-iphone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-support-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creation-qr-code-carte-de-visite-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-creer-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-un-qr-code-gratuitement-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-application-pour-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-codigo-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-ai-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-facture-castorama-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-brawl-pass-gratuit-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-https-tf1-fr-tv-pairing-qr-code-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-un-qr-code-sur-samsung-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-generator-gratuit-illimite-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generate-a-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-exemple-de-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-payer-par-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-pickup-ne-fonctionne-pas-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-taille-minimum-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-generer-un-qr-code-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-pour-photo-mariage-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-hay-day-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generateur-qr-code-gratuit-illimite-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-transformer-un-lien-en-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-stuff-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-50-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-tatouage-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-illimite-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-design-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-faire-un-qr-code-avec-un-lien-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-google-qr-code-generator-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-le-grand-quiz-tf1-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-tomodachi-life-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-mp3-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-beyblade-burst-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-carte-de-visite-qr-code-personnalise-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-instagram', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-instagram', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-instagram-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-code-qr-sur-carte-de-visite-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-whatsapp', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-whatsapp', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-groupe-whatsapp-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-pdf', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-pdf', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-pdf-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-genere-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-partage-photo-mariage-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-cide-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-ralph-lauren-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-payment', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-payment', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-paiement-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-basic-fit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-cod-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-createur-de-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-jeu-aldi-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-code-qr-scanner-code-barres-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creation-d-un-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-etiquette-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-phone', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-phone', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-ou-se-trouve-le-qr-code-de-mon-telephone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-des-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-spotify', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-spotify', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-spotify-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-menu', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-menu', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-menu-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-create-a-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-carte-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-prix-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-appli-pour-scanner-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-on-scanne-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-generator-google-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-instagram', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-instagram', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-instagram-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scan-qr-code-iphone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'make-integration', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'make-integration', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-make-a-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-phone', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-phone', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-ou-trouver-le-qr-code-sur-iphone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-plaque-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-installation-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generer-un-code-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-revolut-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-carte-de-visite-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-io-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lire-qr-code-sans-application-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-installer-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lire-qr-code-en-ligne-sans-application-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-review', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-review', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-roborock-qr-598-avis-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-un-qr-code-en-ligne-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-code-qr-carte-de-visite-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-qr-code-avec-samsung-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-creer-un-qr-code-a-partir-d-un-lien-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-pdf', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-pdf', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-pdf-to-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-code-qr-carte-de-visite-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-basic-fit-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'download-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'download-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-telecharger-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-qr-code-a-partir-d-un-lien-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-hi-i-am-a-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-un-qr-code-carte-de-visite-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-snap-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-lire-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-appli-qr-code-gratuite-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-on-fait-pour-scanner-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-un-qr-code-avec-un-samsung-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-un-qr-code-canva-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-un-qr-code-sur-son-propre-telephone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scan-qr-codes-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-france-identite-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-installer-lecteur-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-carte-de-visite-avec-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-gratuit-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-generator-dbl-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'make-integration', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'make-integration', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-make-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-permanent-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-lire-un-qr-code-sur-une-photo-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-carte-vitale-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-netanyahu-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-carte-de-visite-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-installation-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scannable-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-un-qr-code-sur-iphone-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-le-grand-quiz-tf1-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-scan-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-ouvrir-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-faux-courriers-assurance-maladie-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-generer-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-steam-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-google-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-application-scanner-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-application-qr-code-gratuit-android-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generateur-de-code-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-reseaux-sociaux-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-utiliser-le-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-phone', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-phone', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-telephone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-pdf', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-pdf', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-transformer-un-pdf-en-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-cree-un-qr-code-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-url', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-url', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-url-en-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-scanner-app-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-url', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-url', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-url-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-mondial-relay-qr-code-amazon-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lire-un-qr-code-en-photo-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-code-qr-imprimante-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-faire-pour-flasher-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-gratuit-sans-pub-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-arret-de-travail-sans-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lecteur-de-code-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-39-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-creer-un-qr-code-gratuitement-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-payer-par-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-creer-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-the-qr-code-generator-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-a-scanner-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lecteur-qr-code-samsung-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'shopify-integration', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'shopify-integration', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-shopify-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-application-pour-scanner-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-def-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-creer-un-qr-code-pour-une-video-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-xiaomi-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-db-legends-2025-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-mon-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-escanear-codigo-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-loto-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-code-qr-et-scanner-code-barres-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-meaning-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-un-qr-code-a-partir-d-un-pdf-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-tf1-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-new-balance-qr-code-scanner-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'stickers-labels', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'stickers-labels', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-stickers-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-payer-avec-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-installer-scanner-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-code-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-fr-2'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-t-shirt-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generateur-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-fictif-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lecteur-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-generator-with-logo-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lecteur-qr-code-iphone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-50-honda-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-lire-un-qr-code-sur-pc-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lecteur-qr-code-gratuit-sans-pub-android-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-vcard', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-vcard', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-vcard-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-facebook', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-facebook', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-facebook-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-ai-vs-competitors', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-ai-vs-competitors', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-bitly-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-qr-code-gratuit-en-ligne-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-black-mirror-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-carte-visite-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-lire-un-qr-code-sur-mon-portable-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-ia-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scan-qr-code-scanner-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-app-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-original-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-genere-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-monkey-qr-code-generator-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-pc-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-lire-un-qr-code-sur-mon-telephone-samsung-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-exemple-carte-de-visite-avec-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-wifi', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-wifi', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-wifi-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-ne-fonctionne-pas-samsung-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scan-de-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-generator-free-online-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-installer-le-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-dechetterie-amiens-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-pourquoi-mon-qr-code-ne-fonctionne-pas-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-installer-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'download-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'download-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-telecharger-application-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lecture-qr-code-samsung-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-visit-japan-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-code-qr-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-generator-monkey-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lecture-qr-code-android-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-ai-vs-competitors', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-ai-vs-competitors', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-monkey-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scannez-le-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-arret-de-travail-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'dynamic-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'dynamic-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-dynamic-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-installer-lecteur-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creation-d-un-qr-code-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-create-free-ai-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-coe-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-browser-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-transformer-une-video-en-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-sur-samsung-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-impression-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-papier-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generate-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-createur-de-code-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generate-qr-code-free-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-read-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-samsung-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creation-qr-code-canva-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-menu', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-menu', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-menu-qr-code-restaurant-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-gratuit-a-vie-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-background', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-background', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-sans-fond-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-japon-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-linktree-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lire-qr-code-android-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-tiktok', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-tiktok', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-tiktok-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generer-qr-code-gratuit-sans-inscription-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lire-un-qr-code-iphone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-paypal', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-paypal', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-paypal-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-sur-carte-de-visite-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-wifi', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-wifi', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-decoder-qr-code-wifi-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-installer-un-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-me-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-un-qr-code-avec-samsung-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-faire-un-code-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-with-logo', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-with-logo', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-logo-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-whatsapp', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-whatsapp', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-whatsapp-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-digitale-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-instagram', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-instagram', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-compte-instagram-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-mii-speciaux-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-illustrator-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-faire-un-qr-code-sur-canva-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-relais-colis-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'stickers-labels', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'stickers-labels', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-autocollant-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lecteur-de-qr-code-gratuit-pour-android-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-telecharger-scanner-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-esim-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-test-qi-tf1-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-this-is-a-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-grattez-action-com-ref-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-decode-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-google-authenticator-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-convertir-un-lien-en-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-to-link-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-gratuit-et-illimite-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scan-this-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-erstellen-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'static-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'static-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-statique-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-url', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-url', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-create-qr-code-from-url-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-application-lecture-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-read-qr-code-online-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-generator-free-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-lire-un-qr-code-sur-android-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-qr-code-avec-samsung-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lire-un-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-fiche-contact-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-wifi', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-wifi', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-code-qr-wifi-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-payer-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-un-code-qr-sans-application-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-canada-goose-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-qr-code-video-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generer-qr-code-instagram-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-unitag-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-decoder-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-flasher-un-qr-code-avec-samsung-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-pierre-tombale-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-signification-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generation-de-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-creer-un-qr-code-pour-un-lien-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-nike-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-partage-photo-mariage-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-flashez-le-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-types-de-codes-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-example-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-app-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-dragon-ball-legends-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-review', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-review', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-plaque-qr-code-avis-google-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-cr2er-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-scannen-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-ordonnance-securisee-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-text', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-text', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-text-to-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-flasher-un-qr-code-sur-iphone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-la-poste-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-un-qr-code-pour-carte-de-visite-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-site-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-cree-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-generer-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-excel-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-un-qr-code-video-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lien-to-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-dbl-qr-code-generator-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-application-qr-code-samsung-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generateur-code-qr-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generer-qr-code-illustrator-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-snapchat', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-snapchat', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-snapchat-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-phone', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-phone', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-retrouver-un-qr-code-sur-smartphone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-microsoft-authenticator-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scan-qr-code-from-image-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-adobe-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-fabriquer-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-badge-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scan-qr-code-parions-sport-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-generator-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creation-d-un-qr-code-fr-2'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-phone', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-phone', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-de-mon-telephone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-dolce-gusto-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-japan-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-facebook', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-facebook', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-facebook-ou-le-trouver-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-ordonnance-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-scanner-online-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-google-lens-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-un-qr-code-avec-son-telephone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-co-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-des-qr-codes-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-payment', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-payment', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-paiement-par-code-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'static-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'static-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-statique-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-flasher-un-qr-code-avec-iphone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-phone', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-phone', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-application-qr-code-gratuit-iphone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-site-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-facebook', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-facebook', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-facebook-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-generation-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-honda-50-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-codes-generator-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-faire-un-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-get-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-https-tf1-fr-tv-qr-code-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-le-grand-quiz-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-son-qr-code-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-business-card-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-phone', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-phone', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-ou-trouver-le-qr-code-de-mon-telephone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-fdj-scanner-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-crer-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lien-vers-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-kod-generator-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-hay-day-2025-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-db-legends-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-application-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generer-un-qr-code-sur-canva-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-a-partir-d-un-lien-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-un-qr-code-sur-son-ecran-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-application-pour-lire-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-phone', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-phone', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-sur-iphone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-permanent-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-telecharger-lecteur-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generer-un-qr-code-gratuit-illimite-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-url', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-url', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-transformer-url-en-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-qr-code-avec-iphone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-reinitialiser-camera-netatmo-sans-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-ouvrir-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-flyer', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-flyer', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-flyer-avec-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generer-un-qr-code-pour-un-lien-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'download-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'download-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-telecharger-le-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-honor-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-cv-avec-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-image-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-un-qr-code-pour-une-video-mp4-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-appli-scanner-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-de-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-v-bucks-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'gs1-128', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'gs1-128', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-augmente-gs1-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-payment', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-payment', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-application-paiement-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-honda-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-payer-en-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-meilleur-lecteur-qr-code-iphone-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lire-code-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-adobe-express-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-mo-co-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-photo-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-review', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-review', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-avis-google-my-business-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-apple-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-generateur-gratuit-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-flyer', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-flyer', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-flyer-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-phone', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-phone', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-installer-qr-code-gratuit-sur-smartphone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-rick-roll-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-tiger-qr-code-generator-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-cv-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-lecteur-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-qr-code-ordinateur-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-pizza-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-pdf', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-pdf', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-gratuit-pdf-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-exemple-qr-code-test-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-de-codes-qr-francais-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-un-qr-code-sur-pc-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-how-to-make-a-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-appli-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-retrouver-un-qr-code-deja-scanner-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-dernier-instant-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-moncler-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-creer-un-code-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-esim-orange-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-faire-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-qr-code-gratuit-illimite-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-questionnaire-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-db-legend-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-microsoft-authenticator-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-generator-free-no-expiration-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generateur-codes-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-ouvrir-un-qr-code-sur-pc-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-scanner-pc-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-createur-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scannez-moi-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-thailande-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-free-generator-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-de-qr-code-en-ligne-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-pdf', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-pdf', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-pdf-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-c-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-un-qr-code-sur-huawei-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-discord-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-creer-son-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-c-est-quoi-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-un-qr-code-sur-son-propre-iphone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-generator-canva-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-scanner-app-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'fitness', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'fitness', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-parions-sport-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-pdf', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-pdf', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-pour-pdf-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-menu', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-menu', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-restaurant-menu-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-art', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-art', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-art-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-obtenir-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-menu', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-menu', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-menu-restaurant-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-qr-code-avec-un-lien-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'custom-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'custom-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-custom-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generation-de-qr-code-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-code-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-ode-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-tee-shirt-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scaner-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-gen-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-euromillion-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-un-qr-code-sur-un-ordinateur-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-historique-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-le-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-me-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-sushi-brawl-star-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-lire-les-qr-codes-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scan-qr-code-photo-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-creator-free-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-tiger-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-payment', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-payment', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-paiement-par-qr-code-comment-ca-marche-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scan-me-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-qr-code-avec-lien-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-google-forms-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-packaging-label', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-packaging-label', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-imprimer-etiquette-mondial-relay-avec-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-les-qr-codes-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-japan-web-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-qr-code-sur-ordinateur-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generer-qr-code-linkedin-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-carte-pvc-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-spotify', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-spotify', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-musique-spotify-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-plusieurs-liens-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-sushi-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-wero-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-text', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-text', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-to-text-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-qr-code-android-samsung-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-bouteille-de-vin-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-un-qr-code-sur-mon-telephone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-qr-code-avis-google-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-application-gratuite-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-avoir-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-best-free-qr-code-generator-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-moco-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-un-qr-code-avec-iphone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-application-gratuite-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-genrateur-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-fonctionne-le-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-lire-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generateur-de-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-transparent-background', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-transparent-background', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-fond-transparent-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-carte-de-visite-digitale-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-un-qr-code-sur-android-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-with-logo', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-with-logo', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-with-logo-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-ticket', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-ticket', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-billet-sncf-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-link-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generer-qr-code-fr-2'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-maker-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-se-servir-d-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scan-the-qr-code-from-your-receipt-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-un-qr-code-avec-iphone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-un-qr-code-avec-un-lien-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-telecharger-scanner-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-youtube', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-youtube', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-youtube-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-pornhub-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-augmente-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generer-un-qr-code-instagram-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-codes-gratuits-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-brawl-star-2025-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-wifi', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-wifi', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-partager-wifi-iphone-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-un-qr-code-avec-android-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-code-qr-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-your-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-wifi', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-wifi', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-afficher-mot-de-passe-wifi-code-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-telegram', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-telegram', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-telegram-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generador-de-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lector-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-tax-free-qr-code-japan-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'gs1-128', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'gs1-128', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-gs1-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-wix-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-un-qr-code-pour-partager-des-photos-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-fr-2'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-pierre-tombale-prix-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-online-qr-code-reader-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-connecter-une-camera-sans-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'stickers-labels', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'stickers-labels', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-autocollant-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-instagram', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-instagram', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-je-ne-trouve-pas-mon-qr-code-instagram-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-ai-vs-competitors', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-ai-vs-competitors', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-monkey-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-un-qr-code-contact-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-dragon-ball-legends-2025-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-fr-3'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-maker-free-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-code-qr-samsung-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-cimetiere-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'stickers-labels', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'stickers-labels', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-imprimante-qr-code-autocollant-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-ouvrir-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-definition-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-url', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-url', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-url-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-euromillion-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-qr-code-fdj-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-steam-guard-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-scanner-android-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-vinted-go-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-euromillions-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-mon-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanne-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creation-de-qr-code-gratuit-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-ferrero-rocher-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generer-un-qr-code-gratuitement-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-snapseed-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-iscanner-com-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-flasher-un-qr-code-sur-son-propre-telephone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lecture-de-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-edu-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-cv-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-video-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-telegram', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-telegram', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-telegram-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-video', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-video', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-video-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-steam-guard-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-generer-un-qr-code-sur-canva-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-freebox-revolution-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-ami-paris-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lecteur-qr-code-gratuit-en-ligne-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-recherche-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-code-db-legends-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-transparent-background', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-transparent-background', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-transparent-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lecture-qr-code-pc-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-fdj-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-random-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-esim-sfr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-a-scanner-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-mii-tomodachi-life-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-applications-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-meilleur-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-039-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-mmmbook-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-mii-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-doigt-d-honneur-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-quiz-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-phone', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-phone', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-utiliser-un-qr-code-sur-iphone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-a-quoi-sert-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-faire-un-qr-code-carte-de-visite-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-wero-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-installer-application-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-pdf', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-pdf', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-vers-pdf-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-netanyahu-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generateur-qr-code-canva-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-application-pour-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-ou-se-trouve-le-lecteur-qr-code-sur-samsung-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'custom-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'custom-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-t-shirt-qr-code-personnalise-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-application-pour-lire-les-qr-codes-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-jeu-concours-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-versailles-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'fitness', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'fitness', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-fitness-park-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-37-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-burger-king-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-whatsapp', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-whatsapp', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-whatsapp-groupe-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-phone', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-phone', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lecture-qr-code-iphone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scan-qr-code-samsung-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-creer-un-qr-code-de-paiement-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-en-anglais-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-adidas-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'data-matrix', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'data-matrix', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-datamatrix-vs-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-ou-se-trouve-le-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'bulk-creation', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'bulk-creation', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-syded-lot-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-appareil-photo-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-text', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-text', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-texte-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generator-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-un-qr-code-pour-une-photo-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-fr-4'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-rickroll-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-flasher-un-qr-code-avec-un-iphone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-quelle-application-pour-scanner-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-prendre-un-qr-code-en-photo-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-questionnaire-avec-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-gratuit-sans-limite-de-temps-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-generatir-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-ordonnance-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-qr-code-gratuitement-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-wwe-supercard-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-fr-3'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-wifi', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-wifi', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-wifi-iphone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-fonctionnement-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-retrouver-un-qr-code-sur-samsung-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-restore-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-chronopost-pickup-qr-code-ne-fonctionne-pas-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-pdf', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-pdf', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-vers-pdf-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-le-code-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-url', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-url', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-create-a-qr-code-for-a-url-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generer-code-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-carte-vitale-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-installer-le-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-menu', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-menu', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-menu-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-logiciel-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-qr-code-sur-pc-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-color', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-color', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-couleur-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-https-messages-google-com-web-code-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generateur-gratuit-de-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-video', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-video', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-video-en-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-link-to-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'stickers-labels', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'stickers-labels', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-sticker-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-application-pour-scanner-les-qr-codes-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-cree-qr-code-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-qr-code-sur-photo-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-application-photo-mariage-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-linkedin', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-linkedin', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-linkedin-cv-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-audio', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-audio', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-audio-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-esim-red-sfr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-genere-un-qr-code-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-how-to-scan-a-qr-code-on-your-screen-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-son-qr-code-gratuitement-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-un-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-paypal', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-paypal', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-paypal-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-linkedin', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-linkedin', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-profil-linkedin-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-un-qr-code-sur-son-telephone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-ouvrir-qr-code-sur-pc-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-online-qr-code-scanner-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-qr-code-xiaomi-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-qr-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generateur-de-qr-code-canva-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-facebook', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-facebook', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-facebook-page-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-menu', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-menu', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-restaurant-menu-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-mii-3ds-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-ins-non-signe-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-qr-code-sur-samsung-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generer-qr-code-wifi-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'restaurants', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'restaurants', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-carte-restaurant-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-beyblade-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-fr-4'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-poster', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-poster', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-affiche-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'restaurants', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'restaurants', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-table-restaurant-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-https-tf1-fr-tv-scanner-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-hay-day-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-orange-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-authenticator-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-smart-switch-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanning-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-mettre-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generer-qr-code-canva-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-un-qr-code-avec-canva-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-magearna-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-google-lens-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-tui-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-singe-doigt-d-honneur-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-40-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-tomodachi-life-mii-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-japan-douane-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-generator-open-source-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'download-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'download-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-telecharger-un-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generer-qr-code-avis-google-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-a-quoi-sert-le-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-huawei-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-partage-photo-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generateur-de-code-qr-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-application-qr-code-android-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-un-qr-code-samsung-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-relais-colis-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-code-qr-clash-royal-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-drole-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-photos-mariage-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-un-qr-code-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scannez-moi-qr-code-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'api', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'api', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-api-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'restaurants', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'restaurants', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-carte-restaurant-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-vin-reglementation-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-digital-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-netflix-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-icone-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-tomodachi-life-qr-codes-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'print-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'print-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-vista-print-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-vectoriel-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-roborock-qr-598-test-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-bois-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generateur-gratuit-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-vcard', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-vcard', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-vcard-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-un-qr-code-instagram-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-creer-un-qr-code-avec-un-lien-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lire-qr-code-pc-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lens-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-un-qr-code-sur-mac-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-appli-lecteur-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lecteur-qr-code-gratuit-android-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lire-un-qr-code-sur-son-propre-telephone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'share-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'share-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-pour-partager-des-photos-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-japan-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-camera-ne-reconnait-pas-le-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-installer-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-esim-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qu-est-ce-qu-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generer-qr-code-adobe-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-xiaomi-scanner-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanneur-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-resultat-loto-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-mp3-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-comment-faire-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-qr-code-mac-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-linktree-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-numerisation-code-qr-samsung-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-activer-esim-sans-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-taille-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-qr-code-canva-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-how-to-create-a-qr-code-for-a-link-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'print-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'print-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-imprimer-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lecteur-de-qr-code-pour-pc-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-funeraire-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-png-blanc-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-factice-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-jeu-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanette-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-youtube', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-youtube', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-video-youtube-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lire-qr-code-samsung-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-fr-5'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generer-un-qr-code-gratuit-sans-inscription-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-vector-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-codes-for-apps-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-new-balance-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-telechargement-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lien-en-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-installer-un-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-scrabble-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-un-qr-code-facebook-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-qr-code-pour-avis-google-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-art', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-art', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-artistique-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-gratuits-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-avec-lien-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-formule-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-code-qr-scanner-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'barcode', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'barcode', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-code-barre-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-qr-code-huawei-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-inpost-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-mail-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-create-free-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-generate-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-lecteur-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-un-qr-code-sans-appareil-photo-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-fr-6'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-qr-code-instagram-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-dessin-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-clash-of-clans-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-how-to-scan-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'restaurants', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'restaurants', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-pour-restaurant-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-faux-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'stickers-labels', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'stickers-labels', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-imprimer-qr-code-autocollant-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'bulk-creation', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'bulk-creation', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-syded-du-lot-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'gs1-128', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'gs1-128', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-gs1-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generer-qr-code-gratuitement-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'barcode', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'barcode', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-code-barre-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-photo-avec-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'data-matrix', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'data-matrix', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-data-matrix-vs-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-samsung-scanner-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'track-scans', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'track-scans', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-tracking-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-stylise-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-faire-pour-lire-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-generator-svg-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-stone-island-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creation-qr-code-lien-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-creer-un-qr-code-instagram-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-kod-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-generer-un-qr-code-gratuitement-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-retour-mondial-relay-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-prendre-en-photo-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-lecture-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-vinted-go-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-ticket', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-ticket', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-composter-un-billet-de-train-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-photos-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-google-scan-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-poster', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-poster', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-exemple-affiche-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-acheter-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-commande-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-fabriquer-un-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-cree-un-qr-code-fr-2'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lire-les-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-fr-7'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generateur-de-qr-codes-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-obtenir-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-instagram', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-instagram', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-ou-trouver-le-qr-code-instagram-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-phone', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-phone', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-historique-qr-code-iphone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-honda-qr-50-prix-neuf-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generer-qr-code-gratuit-illimite-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-maxi-blackjack-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-google-authenticator-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-codes-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-fabriquer-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-creer-un-qr-code-pour-un-pdf-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generator-qr-code-dragon-ball-legends-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-cree-un-qr-code-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-beyblade-burst-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-signification-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-google-scanner-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generateur-qr-code-gratuit-sans-inscription-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-tshirt-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-wifi-generator-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-tomodachi-life-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-generator-ai-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-how-to-generate-a-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-impossible-de-connecter-camera-xiaomi-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-un-code-qr-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generer-un-qr-code-fr-2'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qui-a-invente-le-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-icon-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-application-lecteur-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'barcode', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'barcode', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-barre-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-generator-pdf-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-amazon-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-mii-qr-codes-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-transformer-un-lien-en-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generateur-de-qr-code-gratuit-sans-inscription-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-carte-lidl-plus-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-des-qr-codes-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-qr-code-online-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-inventaire-par-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-simple-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-colissimo-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-3d-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lecteur-de-qr-code-samsung-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-50-qr-honda-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-phone', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-phone', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-www-aka-ms-phonelinkqrc-qr-code-windows-10-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-qr-code-sur-android-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-instagram', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-instagram', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-ou-trouver-qr-code-instagram-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-transformer-une-video-en-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-how-to-make-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-mariage-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-kodawari-ramen-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-un-qr-code-sur-la-tele-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creation-code-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-maken-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-create-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-qr-code-sur-son-propre-telephone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-g2n2rateur-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-firefox-com-pair-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generar-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-vode-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-0040-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lego-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-enregistrer-un-qr-code-sur-samsung-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-recuperer-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-genrateur-de-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-utiliser-le-qr-code-sur-samsung-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lecteur-code-qr-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generer-un-qr-code-avec-un-lien-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-how-to-scan-a-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-analyse-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-tablette-samsung-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-telecharger-lecteur-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-wifi', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-wifi', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-connexion-wifi-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-sans-pub-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-verifier-loto-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-micro-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-telegram', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-telegram', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-getdesktop-telegram-org-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-createur-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-coee-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-faire-son-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-pingid-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generer-code-qr-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-love-tsonit-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-qr-code-sur-samsung-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-41-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-evenement-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-qr-code-lien-internet-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-packaging-label', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-packaging-label', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-etiquette-qr-code-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-jo-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-quiz-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-jeux-3ds-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-sur-pc-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-sample-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-autocollants-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generateur-de-qr-code-en-ligne-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-modifiable-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-flasher-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-realiser-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-3ds-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-dpd-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-photo-scanner-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-pdf', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-pdf', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-transformer-un-pdf-en-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-que-veut-dire-scanner-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-lire-un-qr-code-en-photo-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-quiz-avec-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-genere-qr-code-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-image-to-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-moza-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-smart-switch-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-un-qr-code-avis-google-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-beyblade-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'print-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'print-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-imprimer-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-ou-est-le-qr-code-sur-samsung-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-review', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-review', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-monkey-avis-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-snapchat', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-snapchat', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-snapchat-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-kbis-avec-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generer-un-qr-code-pour-un-pdf-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-phone', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-phone', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-contact-telephone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-acnl-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-online-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-io-fr-2'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-crear-codigo-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-le-grand-quiz-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-application-scan-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-quinte-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-faux-qr-code-png-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-g2n2rer-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-faire-qr-code-avec-lien-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-instagram', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-instagram', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-instagram-ou-trouver-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-generator-wifi-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-cigarette-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-mini-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-criar-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-dragon-ball-legends-qr-code-chrono-crystals-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-bs-2025-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-review', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-review', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-tiger-avis-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-philippines-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generer-un-qr-code-google-form-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-fr-5'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-qr-code-honor-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-netflix-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-rickroll-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-de-code-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-vierge-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-exemple-exemple-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-black-mirror-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-fc-mobile-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-un-qr-code-avis-google-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-la-poste-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-les-qr-codes-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-ouvrir-qr-code-photo-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-https-firefox-com-pair-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-ouvrir-un-qr-code-en-photo-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generer-qr-code-facebook-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scanner-qr-code-sur-une-photo-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-cpde-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-un-qr-code-avec-un-smartphone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-https-tvee-app-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-from-image-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-simagic-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-francaise-des-jeux-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-telecharger-qr-scanner-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-sur-photo-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-transformer-une-photo-en-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-visite-virtuelle-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'download-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'download-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-telecharger-l-application-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-acnl-qr-code-robe-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-editer-un-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-telecharger-qr-code-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-etiquette-vin-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-mettre-un-lien-en-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-livre-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-reader-online-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-how-to-scan-a-qr-code-on-your-phone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-1-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-nutri-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-bright-tangerine-komodo-leftfield-3-qr-plate-dji-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-fabriquer-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'share-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'share-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-pour-partager-des-photos-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-review', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-review', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creation-qr-code-avis-google-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-photomaton-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-ou-est-le-qr-code-xiaomi-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-ne-fonctionne-pas-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-how-to-scan-qr-code-on-iphone-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'how-to-create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-ouvrir-un-qr-code-sur-pc-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-paris-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-business-card', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-carte-de-visite-numerique-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-definition-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-kod-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-with-logo', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-with-logo', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-avec-logo-integre-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-my-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-with-logo', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-with-logo', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-avec-logo-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lecture-code-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-wifi-qr-code-generator-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-decoder-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-instagram', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-instagram', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-profil-instagram-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lidl-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-les-qr-codes-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-ugg-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-best-qr-code-generator-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-generator-fr-3'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generer-qr-code-wifi-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-panneau-de-chantier-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-free-mobile-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-free-qr-code-scanner-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-ou-trouver-qr-code-samsung-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-douchette-qr-code-sans-fil-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-generator-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generation-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-freebox-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-review', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-review', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-avis-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-packaging-label', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-packaging-label', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-imprimante-etiquette-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creator-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-installer-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-first-24-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-youtube', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-youtube', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-musique-youtube-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-scanner-un-qr-code-sur-une-photo-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creat-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-qr-code-wifi-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-scannez-moi-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-iphone-scanner-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-illimite-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generate-qr-code-online-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-cree-code-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-scanner-moi-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-tiktok', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-tiktok', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-tiktok-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-payment', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-payment', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-systeme-paiement-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qu-est-ce-qu-un-qr-code-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-obtenir-un-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-chimie-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-video', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-video', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-pour-video-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-037-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-gratuitement-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-wooclap-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-dechetterie-saint-etienne-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-robot-aspirateur-laveur-roborock-qr-598-black-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-review', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-review', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-affiche-qr-code-avis-google-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-instagram', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-instagram', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-instagram-profil-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-type-de-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-labubu-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-c-est-quoi-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-open-source-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-gratuit-a-vie-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-taille-minimum-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scan-qr-code-iphone-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-samsung-galaxy-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-reader-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-exemple-de-qr-code-a-scanner-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-chevalet-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comment-creer-un-qr-code-fr-2'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-generation-qr-code-gratuit-fr-1'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-lien-qr-code-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'shopify-integration', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'shopify-integration', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-shopify-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-create-qr-code-from-link-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-scan-me-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-analyser-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-sty-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'create-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-creer-qr-code-page-facebook-gratuit-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-comprobar-euromillones-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-ordinateur-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-barcode-scanner-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code-menu', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code-menu', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-menu-restaurant-qr-code-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'scan-qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-scan-code-qr-fr'})
 MERGE (el)-[:TARGETS]->(kw);
 
-MATCH (el:EntityL10n {entity_key: 'qr-code', locale_key: 'fr-FR'})
+MATCH (el:EntityContent {entity_key: 'qr-code', locale_key: 'fr-FR'})
 MATCH (kw:SEOKeyword {key: 'seo-qr-code-chronopost-non-recu-fr'})
 MERGE (el)-[:TARGETS]->(kw);

@@ -75,7 +75,7 @@ docs:
     - name: Keywords targeted by concept (v10.1)
       description: Find all keywords a concept targets via EntityContent
       query: |
-        MATCH (c:Entity {key: $conceptKey})-[:HAS_L10N]->(cl:EntityContent)-[:EXPRESSES]->(kw:SEOKeyword)
+        MATCH (c:Entity {key: $conceptKey})-[:HAS_CONTENT]->(cl:EntityContent)-[:EXPRESSES]->(kw:SEOKeyword)
         WHERE (cl)-[:FOR_LOCALE]->(:Locale {key: $locale})
         OPTIONAL MATCH (kw)-[:HAS_METRICS]->(m:SEOKeywordMetrics)
         RETURN kw.value AS keyword,

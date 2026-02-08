@@ -4,7 +4,7 @@
 // Uses IF NOT EXISTS for idempotent execution.
 //
 // NOTE: Locale-based filtering uses :FOR_LOCALE relation traversal (not property indexes).
-// v10.4: Entity-Centric Architecture (Entity/EntityL10n), GEO layer removed, 2 realms (global, project)
+// v10.4: Entity-Centric Architecture (Entity/EntityContent), GEO layer removed, 2 realms (global, project)
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // LOCALE
@@ -30,7 +30,7 @@ CREATE CONSTRAINT entity_key IF NOT EXISTS FOR (e:Entity) REQUIRE e.key IS UNIQU
 CREATE INDEX entity_type IF NOT EXISTS FOR (e:Entity) ON (e.type);
 // v11: Pillar filtering for content hierarchy navigation
 CREATE INDEX entity_is_pillar IF NOT EXISTS FOR (e:Entity) ON (e.is_pillar);
-CREATE INDEX el10n_version IF NOT EXISTS FOR (el:EntityL10n) ON (el.version);
+CREATE INDEX entity_content_version IF NOT EXISTS FOR (el:EntityContent) ON (el.version);
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // PROJECT NODES (v7.2.5)
@@ -44,7 +44,7 @@ CREATE INDEX projectl10n_updated IF NOT EXISTS FOR (pl:ProjectL10n) ON (pl.updat
 // ═══════════════════════════════════════════════════════════════════════════════
 
 CREATE CONSTRAINT page_key IF NOT EXISTS FOR (p:Page) REQUIRE p.key IS UNIQUE;
-CREATE INDEX po_date IF NOT EXISTS FOR (po:PageL10n) ON (po.assembled_at);
+CREATE INDEX po_date IF NOT EXISTS FOR (po:PageGenerated) ON (po.assembled_at);
 // v8.1.0 REMOVED: PageMetrics (YAGNI - no time-series metrics needed)
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -53,8 +53,8 @@ CREATE INDEX po_date IF NOT EXISTS FOR (po:PageL10n) ON (po.assembled_at);
 
 CREATE CONSTRAINT blocktype_key IF NOT EXISTS FOR (bt:BlockType) REQUIRE bt.key IS UNIQUE;
 CREATE CONSTRAINT block_key IF NOT EXISTS FOR (b:Block) REQUIRE b.key IS UNIQUE;
-CREATE INDEX bo_date IF NOT EXISTS FOR (bo:BlockL10n) ON (bo.generated_at);
-// v7.8.5: BlockL10n replaces BlockOutput
+CREATE INDEX bo_date IF NOT EXISTS FOR (bo:BlockGenerated) ON (bo.generated_at);
+// v7.8.5: BlockGenerated replaces BlockOutput
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // PROMPTS (v7.2.0)
@@ -94,9 +94,9 @@ CREATE INDEX ue_temp IF NOT EXISTS FOR ()-[r:USES_ENTITY]-() ON (r.temperature);
 // v10.3: EXPRESSES replaces TARGETS_SEO
 CREATE INDEX expresses_status IF NOT EXISTS FOR ()-[r:EXPRESSES]-() ON (r.status);
 // REMOVED v10.3: TARGETS_GEO (GEO layer removed)
-// Correct flow: Page -> Entity -> EntityL10n -> SEOKeyword
+// Correct flow: Page -> Entity -> EntityContent -> SEOKeyword
 CREATE INDEX infl_weight IF NOT EXISTS FOR ()-[r:INFLUENCED_BY]-() ON (r.weight);
-// SEO provenance is implicit via: BlockL10n → INFLUENCED_BY → EntityL10n
+// SEO provenance is implicit via: BlockGenerated → INFLUENCED_BY → EntityContent
 CREATE INDEX gen_date IF NOT EXISTS FOR ()-[r:GENERATED]-() ON (r.generated_at);
 
 // ═══════════════════════════════════════════════════════════════════════════════
