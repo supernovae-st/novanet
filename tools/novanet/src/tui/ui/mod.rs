@@ -1143,9 +1143,13 @@ fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                             ];
                                             // Completeness bar (green gradient based on fill)
                                             if !completeness_badge.is_empty() {
-                                                let color = if instance.filled_properties == instance.total_properties {
+                                                let color = if instance.filled_properties
+                                                    == instance.total_properties
+                                                {
                                                     Color::Green
-                                                } else if instance.filled_properties > instance.total_properties / 2 {
+                                                } else if instance.filled_properties
+                                                    > instance.total_properties / 2
+                                                {
                                                     Color::Yellow
                                                 } else {
                                                     Color::Red
@@ -3604,7 +3608,10 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                                     // Expanded: show full value with word-wrap
                                     // First line with property name and expand indicator
                                     lines.push(Line::from(vec![
-                                        Span::styled(format!("{}[{:4}] ", prefix, badge), STYLE_DIM),
+                                        Span::styled(
+                                            format!("{}[{:4}] ", prefix, badge),
+                                            STYLE_DIM,
+                                        ),
                                         Span::styled(
                                             format!("{:<15}", prop.schema.name),
                                             name_style,
@@ -3622,13 +3629,14 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                                     }
                                 } else {
                                     // Collapsed: truncate as before
-                                    let truncated = truncate_str(
-                                        &format!("\"{}\"", value_str),
-                                        truncate_limit,
-                                    );
+                                    let truncated =
+                                        truncate_str(&format!("\"{}\"", value_str), truncate_limit);
                                     let indicator = if is_focused { "▶ " } else { "" };
                                     lines.push(Line::from(vec![
-                                        Span::styled(format!("{}[{:4}] ", prefix, badge), STYLE_DIM),
+                                        Span::styled(
+                                            format!("{}[{:4}] ", prefix, badge),
+                                            STYLE_DIM,
+                                        ),
                                         Span::styled(
                                             format!("{:<15}", prop.schema.name),
                                             name_style,
@@ -4010,7 +4018,10 @@ fn render_status(f: &mut Frame, area: Rect, app: &App) {
 
     // Add filter indicator if active
     if !filter_indicator.is_empty() {
-        spans.push(Span::styled(filter_indicator, Style::default().fg(Color::Yellow)));
+        spans.push(Span::styled(
+            filter_indicator,
+            Style::default().fg(Color::Yellow),
+        ));
     }
 
     spans.push(Span::styled(" │ ", STYLE_SEPARATOR));
