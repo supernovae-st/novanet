@@ -980,9 +980,14 @@ RETURN l.key as layer_key,
        kind_count
 "#;
 
-        let realm_rows = db
-            .execute_with_params(cypher_realm, [("realmKey", realm_key)])
-            .await?;
+        // Execute both queries in parallel using tokio::join!
+        let (realm_result, layers_result) = tokio::join!(
+            db.execute_with_params(cypher_realm, [("realmKey", realm_key)]),
+            db.execute_with_params(cypher_layers, [("realmKey", realm_key)]),
+        );
+
+        let realm_rows = realm_result?;
+        let layer_rows = layers_result?;
 
         if let Some(row) = realm_rows.into_iter().next() {
             let key: String = row.get("realm_key").unwrap_or_default();
@@ -990,11 +995,6 @@ RETURN l.key as layer_key,
             let description: String = row.get("description").unwrap_or_default();
             let total_kinds: i64 = row.get("total_kinds").unwrap_or(0);
             let total_instances: i64 = row.get("total_instances").unwrap_or(0);
-
-            // Get layers
-            let layer_rows = db
-                .execute_with_params(cypher_layers, [("realmKey", realm_key)])
-                .await?;
 
             let layers: Vec<LayerStats> = layer_rows
                 .into_iter()
@@ -1215,9 +1215,55 @@ RETURN p.key as page_key,
        pg.meta_description as l10n_meta
 "#;
 
-        let page_rows = db
-            .execute_with_params(page_cypher, [("pageKey", page_key), ("locale", locale)])
-            .await?;
+        // Query 2: Blocks with generated output (v10.9.0)
+        let blocks_cypher = r#"
+MATCH (p:Page {key: $pageKey})-[:HAS_BLOCK]->(b:Block)
+OPTIONAL MATCH (b)-[:HAS_GENERATED]->(bg:BlockGenerated)-[:FOR_LOCALE]->(loc:Locale {bcp47: $locale})
+WITH b, bg
+ORDER BY b.order
+RETURN b.key as block_key,
+       coalesce(b.display_name, b.key) as block_name,
+       coalesce(b.order, 0) as block_order,
+       b.block_type as block_type,
+       b.prompt as prompt,
+       b.rules as rules,
+       substring(coalesce(bg.content, ''), 0, 100) as content_preview
+"#;
+
+        // Query 3: Entities used by blocks with content (v10.9.0)
+        let entities_cypher = r#"
+MATCH (p:Page {key: $pageKey})-[:HAS_BLOCK]->(b:Block)-[:USES_ENTITY]->(e:Entity)
+OPTIONAL MATCH (e)-[:HAS_CONTENT]->(ec:EntityContent)-[:FOR_LOCALE]->(loc:Locale {bcp47: $locale})
+WITH e, ec, collect(b.key) as connected_blocks
+RETURN e.key as entity_key,
+       coalesce(e.display_name, e.key) as entity_name,
+       ec.display_name as l10n_name,
+       substring(coalesce(ec.description, ''), 0, 80) as l10n_desc,
+       connected_blocks
+"#;
+
+        // Query 4: SEO Keywords connected to entities
+        let seo_cypher = r#"
+MATCH (p:Page {key: $pageKey})-[:HAS_BLOCK]->(b:Block)-[:USES_ENTITY]->(e:Entity)<-[:EXPRESSES]-(kw:SEOKeyword)
+WITH kw, collect(DISTINCT e.key) as entity_keys
+OPTIONAL MATCH (kw)-[:HAS_METRICS]->(m:SEOKeywordMetrics)
+RETURN kw.keyword as keyword,
+       m.monthly_volume as volume,
+       entity_keys
+"#;
+
+        // Execute all 4 queries in parallel using tokio::join!
+        let (page_result, block_result, entity_result, seo_result) = tokio::join!(
+            db.execute_with_params(page_cypher, [("pageKey", page_key), ("locale", locale)]),
+            db.execute_with_params(blocks_cypher, [("pageKey", page_key), ("locale", locale)]),
+            db.execute_with_params(entities_cypher, [("pageKey", page_key), ("locale", locale)]),
+            db.execute_with_params(seo_cypher, [("pageKey", page_key), ("locale", locale)]),
+        );
+
+        let page_rows = page_result?;
+        let block_rows = block_result?;
+        let entity_rows = entity_result?;
+        let seo_rows = seo_result?;
 
         let Some(page_row) = page_rows.into_iter().next() else {
             return Ok(PageCompositionData::default());
@@ -1238,25 +1284,6 @@ RETURN p.key as page_key,
         } else {
             None
         };
-
-        // Query 2: Blocks with generated output (v10.9.0)
-        let blocks_cypher = r#"
-MATCH (p:Page {key: $pageKey})-[:HAS_BLOCK]->(b:Block)
-OPTIONAL MATCH (b)-[:HAS_GENERATED]->(bg:BlockGenerated)-[:FOR_LOCALE]->(loc:Locale {bcp47: $locale})
-WITH b, bg
-ORDER BY b.order
-RETURN b.key as block_key,
-       coalesce(b.display_name, b.key) as block_name,
-       coalesce(b.order, 0) as block_order,
-       b.block_type as block_type,
-       b.prompt as prompt,
-       b.rules as rules,
-       substring(coalesce(bg.content, ''), 0, 100) as content_preview
-"#;
-
-        let block_rows = db
-            .execute_with_params(blocks_cypher, [("pageKey", page_key), ("locale", locale)])
-            .await?;
 
         let mut blocks = Vec::with_capacity(block_rows.len());
         for row in block_rows {
@@ -1280,22 +1307,6 @@ RETURN b.key as block_key,
                 l10n,
             });
         }
-
-        // Query 3: Entities used by blocks with content (v10.9.0)
-        let entities_cypher = r#"
-MATCH (p:Page {key: $pageKey})-[:HAS_BLOCK]->(b:Block)-[:USES_ENTITY]->(e:Entity)
-OPTIONAL MATCH (e)-[:HAS_CONTENT]->(ec:EntityContent)-[:FOR_LOCALE]->(loc:Locale {bcp47: $locale})
-WITH e, ec, collect(b.key) as connected_blocks
-RETURN e.key as entity_key,
-       coalesce(e.display_name, e.key) as entity_name,
-       ec.display_name as l10n_name,
-       substring(coalesce(ec.description, ''), 0, 80) as l10n_desc,
-       connected_blocks
-"#;
-
-        let entity_rows = db
-            .execute_with_params(entities_cypher, [("pageKey", page_key), ("locale", locale)])
-            .await?;
 
         let mut entities = Vec::with_capacity(entity_rows.len());
         for row in entity_rows {
@@ -1326,20 +1337,6 @@ RETURN e.key as entity_key,
                 connected_blocks,
             });
         }
-
-        // Query 4: SEO Keywords connected to entities
-        let seo_cypher = r#"
-MATCH (p:Page {key: $pageKey})-[:HAS_BLOCK]->(b:Block)-[:USES_ENTITY]->(e:Entity)<-[:EXPRESSES]-(kw:SEOKeyword)
-WITH kw, collect(DISTINCT e.key) as entity_keys
-OPTIONAL MATCH (kw)-[:HAS_METRICS]->(m:SEOKeywordMetrics)
-RETURN kw.keyword as keyword,
-       m.monthly_volume as volume,
-       entity_keys
-"#;
-
-        let seo_rows = db
-            .execute_with_params(seo_cypher, [("pageKey", page_key), ("locale", locale)])
-            .await?;
 
         let mut seo_keywords = Vec::with_capacity(seo_rows.len());
         for row in seo_rows {
