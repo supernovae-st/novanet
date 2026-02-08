@@ -460,7 +460,7 @@ ON CREATE SET
   ak_CONTENT_OF.is_self_referential = false,
   ak_CONTENT_OF.inverse_name = null,
   ak_CONTENT_OF.arc_properties = [],
-  ak_CONTENT_OF.cypher_pattern = '(EntityContent, ProjectL10n)-[:CONTENT_OF]->(Entity, Project)',
+  ak_CONTENT_OF.cypher_pattern = '(EntityContent, ProjectContent)-[:CONTENT_OF]->(Entity, Project)',
   ak_CONTENT_OF.temperature_threshold = null,
   ak_CONTENT_OF.created_at = datetime()
 ON MATCH SET
@@ -472,7 +472,7 @@ ON MATCH SET
   ak_CONTENT_OF.is_self_referential = false,
   ak_CONTENT_OF.inverse_name = null,
   ak_CONTENT_OF.arc_properties = [],
-  ak_CONTENT_OF.cypher_pattern = '(EntityContent, ProjectL10n)-[:CONTENT_OF]->(Entity, Project)',
+  ak_CONTENT_OF.cypher_pattern = '(EntityContent, ProjectContent)-[:CONTENT_OF]->(Entity, Project)',
   ak_CONTENT_OF.temperature_threshold = null,
   ak_CONTENT_OF.updated_at = datetime();
 
@@ -512,7 +512,7 @@ ON CREATE SET
   ak_FOR_LOCALE.is_self_referential = false,
   ak_FOR_LOCALE.inverse_name = null,
   ak_FOR_LOCALE.arc_properties = [],
-  ak_FOR_LOCALE.cypher_pattern = '(EntityContent, ProjectL10n, BlockGenerated, PageGenerated, GenerationJob, OutputArtifact)-[:FOR_LOCALE]->(Locale)',
+  ak_FOR_LOCALE.cypher_pattern = '(EntityContent, ProjectContent, BlockGenerated, PageGenerated, GenerationJob, OutputArtifact)-[:FOR_LOCALE]->(Locale)',
   ak_FOR_LOCALE.temperature_threshold = null,
   ak_FOR_LOCALE.created_at = datetime()
 ON MATCH SET
@@ -524,7 +524,7 @@ ON MATCH SET
   ak_FOR_LOCALE.is_self_referential = false,
   ak_FOR_LOCALE.inverse_name = null,
   ak_FOR_LOCALE.arc_properties = [],
-  ak_FOR_LOCALE.cypher_pattern = '(EntityContent, ProjectL10n, BlockGenerated, PageGenerated, GenerationJob, OutputArtifact)-[:FOR_LOCALE]->(Locale)',
+  ak_FOR_LOCALE.cypher_pattern = '(EntityContent, ProjectContent, BlockGenerated, PageGenerated, GenerationJob, OutputArtifact)-[:FOR_LOCALE]->(Locale)',
   ak_FOR_LOCALE.temperature_threshold = null,
   ak_FOR_LOCALE.updated_at = datetime();
 
@@ -538,7 +538,7 @@ ON CREATE SET
   ak_HAS_CONTENT.is_self_referential = false,
   ak_HAS_CONTENT.inverse_name = 'CONTENT_OF',
   ak_HAS_CONTENT.arc_properties = [],
-  ak_HAS_CONTENT.cypher_pattern = '(Entity, Project)-[:HAS_CONTENT]->(EntityContent, ProjectL10n)',
+  ak_HAS_CONTENT.cypher_pattern = '(Entity, Project)-[:HAS_CONTENT]->(EntityContent, ProjectContent)',
   ak_HAS_CONTENT.temperature_threshold = null,
   ak_HAS_CONTENT.created_at = datetime()
 ON MATCH SET
@@ -550,7 +550,7 @@ ON MATCH SET
   ak_HAS_CONTENT.is_self_referential = false,
   ak_HAS_CONTENT.inverse_name = 'CONTENT_OF',
   ak_HAS_CONTENT.arc_properties = [],
-  ak_HAS_CONTENT.cypher_pattern = '(Entity, Project)-[:HAS_CONTENT]->(EntityContent, ProjectL10n)',
+  ak_HAS_CONTENT.cypher_pattern = '(Entity, Project)-[:HAS_CONTENT]->(EntityContent, ProjectContent)',
   ak_HAS_CONTENT.temperature_threshold = null,
   ak_HAS_CONTENT.updated_at = datetime();
 
@@ -642,7 +642,7 @@ ON CREATE SET
   ak_HAS_LOCALIZED_CONTENT.is_self_referential = false,
   ak_HAS_LOCALIZED_CONTENT.inverse_name = null,
   ak_HAS_LOCALIZED_CONTENT.arc_properties = [],
-  ak_HAS_LOCALIZED_CONTENT.cypher_pattern = '(Locale)-[:HAS_LOCALIZED_CONTENT]->(ProjectL10n, EntityContent, PageGenerated, BlockGenerated)',
+  ak_HAS_LOCALIZED_CONTENT.cypher_pattern = '(Locale)-[:HAS_LOCALIZED_CONTENT]->(ProjectContent, EntityContent, PageGenerated, BlockGenerated)',
   ak_HAS_LOCALIZED_CONTENT.temperature_threshold = null,
   ak_HAS_LOCALIZED_CONTENT.created_at = datetime()
 ON MATCH SET
@@ -654,7 +654,7 @@ ON MATCH SET
   ak_HAS_LOCALIZED_CONTENT.is_self_referential = false,
   ak_HAS_LOCALIZED_CONTENT.inverse_name = null,
   ak_HAS_LOCALIZED_CONTENT.arc_properties = [],
-  ak_HAS_LOCALIZED_CONTENT.cypher_pattern = '(Locale)-[:HAS_LOCALIZED_CONTENT]->(ProjectL10n, EntityContent, PageGenerated, BlockGenerated)',
+  ak_HAS_LOCALIZED_CONTENT.cypher_pattern = '(Locale)-[:HAS_LOCALIZED_CONTENT]->(ProjectContent, EntityContent, PageGenerated, BlockGenerated)',
   ak_HAS_LOCALIZED_CONTENT.temperature_threshold = null,
   ak_HAS_LOCALIZED_CONTENT.updated_at = datetime();
 
@@ -970,31 +970,31 @@ ON MATCH SET
   ak_BELONGS_TO_ORG.temperature_threshold = null,
   ak_BELONGS_TO_ORG.updated_at = datetime();
 
-MERGE (ak_BELONGS_TO_PROJECT_L10N:Meta:ArcKind {key: 'BELONGS_TO_PROJECT_L10N'})
+MERGE (ak_BELONGS_TO_PROJECT_CONTENT:Meta:ArcKind {key: 'BELONGS_TO_PROJECT_CONTENT'})
 ON CREATE SET
-  ak_BELONGS_TO_PROJECT_L10N.display_name = 'Belongs To Project L10n',
-  ak_BELONGS_TO_PROJECT_L10N.llm_context = 'Locale-aligned: PageGenerated (fr-FR) → ProjectL10n (fr-FR). Provides voice, tagline, CTAs.',
-  ak_BELONGS_TO_PROJECT_L10N.family = 'ownership',
-  ak_BELONGS_TO_PROJECT_L10N.scope = 'intra_realm',
-  ak_BELONGS_TO_PROJECT_L10N.cardinality = 'many_to_one',
-  ak_BELONGS_TO_PROJECT_L10N.is_self_referential = false,
-  ak_BELONGS_TO_PROJECT_L10N.inverse_name = null,
-  ak_BELONGS_TO_PROJECT_L10N.arc_properties = [],
-  ak_BELONGS_TO_PROJECT_L10N.cypher_pattern = '(PageGenerated)-[:BELONGS_TO_PROJECT_L10N]->(ProjectL10n)',
-  ak_BELONGS_TO_PROJECT_L10N.temperature_threshold = null,
-  ak_BELONGS_TO_PROJECT_L10N.created_at = datetime()
+  ak_BELONGS_TO_PROJECT_CONTENT.display_name = 'Belongs To Project Content',
+  ak_BELONGS_TO_PROJECT_CONTENT.llm_context = 'Locale-aligned: PageGenerated (fr-FR) → ProjectContent (fr-FR). Provides voice, tagline, CTAs.',
+  ak_BELONGS_TO_PROJECT_CONTENT.family = 'ownership',
+  ak_BELONGS_TO_PROJECT_CONTENT.scope = 'intra_realm',
+  ak_BELONGS_TO_PROJECT_CONTENT.cardinality = 'many_to_one',
+  ak_BELONGS_TO_PROJECT_CONTENT.is_self_referential = false,
+  ak_BELONGS_TO_PROJECT_CONTENT.inverse_name = null,
+  ak_BELONGS_TO_PROJECT_CONTENT.arc_properties = [],
+  ak_BELONGS_TO_PROJECT_CONTENT.cypher_pattern = '(PageGenerated)-[:BELONGS_TO_PROJECT_CONTENT]->(ProjectContent)',
+  ak_BELONGS_TO_PROJECT_CONTENT.temperature_threshold = null,
+  ak_BELONGS_TO_PROJECT_CONTENT.created_at = datetime()
 ON MATCH SET
-  ak_BELONGS_TO_PROJECT_L10N.display_name = 'Belongs To Project L10n',
-  ak_BELONGS_TO_PROJECT_L10N.llm_context = 'Locale-aligned: PageGenerated (fr-FR) → ProjectL10n (fr-FR). Provides voice, tagline, CTAs.',
-  ak_BELONGS_TO_PROJECT_L10N.family = 'ownership',
-  ak_BELONGS_TO_PROJECT_L10N.scope = 'intra_realm',
-  ak_BELONGS_TO_PROJECT_L10N.cardinality = 'many_to_one',
-  ak_BELONGS_TO_PROJECT_L10N.is_self_referential = false,
-  ak_BELONGS_TO_PROJECT_L10N.inverse_name = null,
-  ak_BELONGS_TO_PROJECT_L10N.arc_properties = [],
-  ak_BELONGS_TO_PROJECT_L10N.cypher_pattern = '(PageGenerated)-[:BELONGS_TO_PROJECT_L10N]->(ProjectL10n)',
-  ak_BELONGS_TO_PROJECT_L10N.temperature_threshold = null,
-  ak_BELONGS_TO_PROJECT_L10N.updated_at = datetime();
+  ak_BELONGS_TO_PROJECT_CONTENT.display_name = 'Belongs To Project Content',
+  ak_BELONGS_TO_PROJECT_CONTENT.llm_context = 'Locale-aligned: PageGenerated (fr-FR) → ProjectContent (fr-FR). Provides voice, tagline, CTAs.',
+  ak_BELONGS_TO_PROJECT_CONTENT.family = 'ownership',
+  ak_BELONGS_TO_PROJECT_CONTENT.scope = 'intra_realm',
+  ak_BELONGS_TO_PROJECT_CONTENT.cardinality = 'many_to_one',
+  ak_BELONGS_TO_PROJECT_CONTENT.is_self_referential = false,
+  ak_BELONGS_TO_PROJECT_CONTENT.inverse_name = null,
+  ak_BELONGS_TO_PROJECT_CONTENT.arc_properties = [],
+  ak_BELONGS_TO_PROJECT_CONTENT.cypher_pattern = '(PageGenerated)-[:BELONGS_TO_PROJECT_CONTENT]->(ProjectContent)',
+  ak_BELONGS_TO_PROJECT_CONTENT.temperature_threshold = null,
+  ak_BELONGS_TO_PROJECT_CONTENT.updated_at = datetime();
 
 MERGE (ak_BLOCK_OF:Meta:ArcKind {key: 'BLOCK_OF'})
 ON CREATE SET
@@ -3321,7 +3321,7 @@ MERGE (af)-[:HAS_ARC_KIND]->(ak);
 MATCH (af:ArcFamily {key: 'ownership'}), (ak:ArcKind {key: 'BELONGS_TO_ORG'})
 MERGE (af)-[:HAS_ARC_KIND]->(ak);
 
-MATCH (af:ArcFamily {key: 'ownership'}), (ak:ArcKind {key: 'BELONGS_TO_PROJECT_L10N'})
+MATCH (af:ArcFamily {key: 'ownership'}), (ak:ArcKind {key: 'BELONGS_TO_PROJECT_CONTENT'})
 MERGE (af)-[:HAS_ARC_KIND]->(ak);
 
 MATCH (af:ArcFamily {key: 'ownership'}), (ak:ArcKind {key: 'BLOCK_OF'})
@@ -3694,7 +3694,7 @@ MERGE (ak)-[:IN_FAMILY]->(af);
 MATCH (ak:ArcKind {key: 'BELONGS_TO_ORG'}), (af:ArcFamily {key: 'ownership'})
 MERGE (ak)-[:IN_FAMILY]->(af);
 
-MATCH (ak:ArcKind {key: 'BELONGS_TO_PROJECT_L10N'}), (af:ArcFamily {key: 'ownership'})
+MATCH (ak:ArcKind {key: 'BELONGS_TO_PROJECT_CONTENT'}), (af:ArcFamily {key: 'ownership'})
 MERGE (ak)-[:IN_FAMILY]->(af);
 
 MATCH (ak:ArcKind {key: 'BLOCK_OF'}), (af:ArcFamily {key: 'ownership'})
@@ -4034,7 +4034,7 @@ MERGE (ak)-[:FROM_KIND]->(k);
 MATCH (ak:ArcKind {key: 'CONTENT_OF'}), (k:Kind {label: 'EntityContent'})
 MERGE (ak)-[:FROM_KIND]->(k);
 
-MATCH (ak:ArcKind {key: 'CONTENT_OF'}), (k:Kind {label: 'ProjectL10n'})
+MATCH (ak:ArcKind {key: 'CONTENT_OF'}), (k:Kind {label: 'ProjectContent'})
 MERGE (ak)-[:FROM_KIND]->(k);
 
 MATCH (ak:ArcKind {key: 'FALLBACK_TO'}), (k:Kind {label: 'Locale'})
@@ -4043,7 +4043,7 @@ MERGE (ak)-[:FROM_KIND]->(k);
 MATCH (ak:ArcKind {key: 'FOR_LOCALE'}), (k:Kind {label: 'EntityContent'})
 MERGE (ak)-[:FROM_KIND]->(k);
 
-MATCH (ak:ArcKind {key: 'FOR_LOCALE'}), (k:Kind {label: 'ProjectL10n'})
+MATCH (ak:ArcKind {key: 'FOR_LOCALE'}), (k:Kind {label: 'ProjectContent'})
 MERGE (ak)-[:FROM_KIND]->(k);
 
 MATCH (ak:ArcKind {key: 'FOR_LOCALE'}), (k:Kind {label: 'BlockGenerated'})
@@ -4112,7 +4112,7 @@ MERGE (ak)-[:FROM_KIND]->(k);
 MATCH (ak:ArcKind {key: 'BELONGS_TO_ORG'}), (k:Kind {label: 'Project'})
 MERGE (ak)-[:FROM_KIND]->(k);
 
-MATCH (ak:ArcKind {key: 'BELONGS_TO_PROJECT_L10N'}), (k:Kind {label: 'PageGenerated'})
+MATCH (ak:ArcKind {key: 'BELONGS_TO_PROJECT_CONTENT'}), (k:Kind {label: 'PageGenerated'})
 MERGE (ak)-[:FROM_KIND]->(k);
 
 MATCH (ak:ArcKind {key: 'BLOCK_OF'}), (k:Kind {label: 'Block'})
@@ -4482,7 +4482,7 @@ MERGE (ak)-[:TO_KIND]->(k);
 MATCH (ak:ArcKind {key: 'HAS_CONTENT'}), (k:Kind {label: 'EntityContent'})
 MERGE (ak)-[:TO_KIND]->(k);
 
-MATCH (ak:ArcKind {key: 'HAS_CONTENT'}), (k:Kind {label: 'ProjectL10n'})
+MATCH (ak:ArcKind {key: 'HAS_CONTENT'}), (k:Kind {label: 'ProjectContent'})
 MERGE (ak)-[:TO_KIND]->(k);
 
 MATCH (ak:ArcKind {key: 'HAS_INCOME_LEVEL'}), (k:Kind {label: 'IncomeGroup'})
@@ -4494,7 +4494,7 @@ MERGE (ak)-[:TO_KIND]->(k);
 MATCH (ak:ArcKind {key: 'HAS_LENDING_TYPE'}), (k:Kind {label: 'LendingCategory'})
 MERGE (ak)-[:TO_KIND]->(k);
 
-MATCH (ak:ArcKind {key: 'HAS_LOCALIZED_CONTENT'}), (k:Kind {label: 'ProjectL10n'})
+MATCH (ak:ArcKind {key: 'HAS_LOCALIZED_CONTENT'}), (k:Kind {label: 'ProjectContent'})
 MERGE (ak)-[:TO_KIND]->(k);
 
 MATCH (ak:ArcKind {key: 'HAS_LOCALIZED_CONTENT'}), (k:Kind {label: 'EntityContent'})
@@ -4542,7 +4542,7 @@ MERGE (ak)-[:TO_KIND]->(k);
 MATCH (ak:ArcKind {key: 'BELONGS_TO_ORG'}), (k:Kind {label: 'Organization'})
 MERGE (ak)-[:TO_KIND]->(k);
 
-MATCH (ak:ArcKind {key: 'BELONGS_TO_PROJECT_L10N'}), (k:Kind {label: 'ProjectL10n'})
+MATCH (ak:ArcKind {key: 'BELONGS_TO_PROJECT_CONTENT'}), (k:Kind {label: 'ProjectContent'})
 MERGE (ak)-[:TO_KIND]->(k);
 
 MATCH (ak:ArcKind {key: 'BLOCK_OF'}), (k:Kind {label: 'Page'})

@@ -8,7 +8,7 @@ arc:
   scope: intra_realm
   source:
     - EntityContent
-    - ProjectL10n
+    - ProjectContent
     - BlockGenerated
     - PageGenerated
     - GenerationJob

@@ -71,7 +71,7 @@ docs:
 
     # PROJECT SCOPE (20 nodes)
     - name: Project - Foundation
-      nodes: [Project, BrandIdentity, ProjectL10n]
+      nodes: [Project, BrandIdentity, ProjectContent]
       color: blue
       description: Project foundation and branding
 

@@ -249,12 +249,12 @@ relations:
     cardinality: one_to_many
     llm_context: "BlockType defines generation rules templates."
 
-  - type: BELONGS_TO_PROJECT_L10N
+  - type: BELONGS_TO_PROJECT_CONTENT
     family: ownership
     source: PageGenerated
-    target: ProjectL10n
+    target: ProjectContent
     cardinality: many_to_one
-    llm_context: "Locale-aligned: PageGenerated (fr-FR) → ProjectL10n (fr-FR). Provides voice, tagline, CTAs."
+    llm_context: "Locale-aligned: PageGenerated (fr-FR) → ProjectContent (fr-FR). Provides voice, tagline, CTAs."
 
   # Inverse
   - type: BLOCK_OF
@@ -275,7 +275,7 @@ relations:
     family: localization
     source:
       - EntityContent
-      - ProjectL10n
+      - ProjectContent
       - BlockGenerated
       - PageGenerated
       - GenerationJob
@@ -292,7 +292,7 @@ relations:
       - Project
     target:
       - EntityContent
-      - ProjectL10n
+      - ProjectContent
     cardinality: one_to_many
     llm_context: "Links invariant node to its human-curated localized definitions (one per locale)."
 
@@ -331,7 +331,7 @@ relations:
     family: localization
     source:
       - EntityContent
-      - ProjectL10n
+      - ProjectContent
     target:
       - Entity
       - Project
@@ -355,7 +355,7 @@ relations:
     family: localization
     source: Locale
     target:
-      - ProjectL10n
+      - ProjectContent
       - EntityContent
       - PageGenerated
       - BlockGenerated

@@ -101,7 +101,7 @@ flowchart TB
     subgraph TENANT_foundation["Foundation"]
       BrandIdentity["🔵 BrandIdentity"]
       Project["🔵 Project"]
-      ProjectL10n["🟢 ProjectL10n"]
+      ProjectContent["🟢 ProjectContent"]
     end
     subgraph TENANT_structure["Structure"]
       Block["🔵 Block"]
@@ -162,7 +162,7 @@ flowchart TB
   CultureSet -->|CONTAINS| Taboo
   CultureSet -->|CONTAINS| Term
   Entity -.->|HAS_CONTENT| EntityContent
-  Entity -.->|HAS_CONTENT| ProjectL10n
+  Entity -.->|HAS_CONTENT| ProjectContent
   Entity -.->|SEMANTIC_LINK| Entity
   Entity -.->|USED_BY| Block
   Entity -.->|USED_BY| Page
@@ -192,7 +192,7 @@ flowchart TB
   Locale -.->|HAS_LOCALIZED_CONTENT| BlockGenerated
   Locale -.->|HAS_LOCALIZED_CONTENT| EntityContent
   Locale -.->|HAS_LOCALIZED_CONTENT| PageGenerated
-  Locale -.->|HAS_LOCALIZED_CONTENT| ProjectL10n
+  Locale -.->|HAS_LOCALIZED_CONTENT| ProjectContent
   Locale -->|HAS_MARKET| Market
   Locale -->|HAS_PATTERNS| PatternSet
   Locale -->|HAS_SEO_KEYWORDS| SEOKeyword
@@ -222,7 +222,7 @@ flowchart TB
   Page -.->|TARGETS_PERSONA| AudiencePersona
   Page -.->|USES_ENTITY| Entity
   PageGenerated ==>|ASSEMBLES| BlockGenerated
-  PageGenerated -->|BELONGS_TO_PROJECT_L10N| ProjectL10n
+  PageGenerated -->|BELONGS_TO_PROJECT_CONTENT| ProjectContent
   PageGenerated -.->|FOR_LOCALE| Locale
   PageGenerated -.->|GENERATED_FOR| Block
   PageGenerated -.->|GENERATED_FOR| Page
@@ -241,12 +241,12 @@ flowchart TB
   Project -->|DEFAULT_LOCALE| Locale
   Project -->|HAS_BRAND_IDENTITY| BrandIdentity
   Project -.->|HAS_CONTENT| EntityContent
-  Project -.->|HAS_CONTENT| ProjectL10n
+  Project -.->|HAS_CONTENT| ProjectContent
   Project -->|HAS_PAGE| Page
   Project -->|SUPPORTS_LOCALE| Locale
-  ProjectL10n -.->|CONTENT_OF| Entity
-  ProjectL10n -.->|CONTENT_OF| Project
-  ProjectL10n -.->|FOR_LOCALE| Locale
+  ProjectContent -.->|CONTENT_OF| Entity
+  ProjectContent -.->|CONTENT_OF| Project
+  ProjectContent -.->|FOR_LOCALE| Locale
   PromptArtifact ==>|COMPILED_FROM| BlockPrompt
   PromptArtifact ==>|COMPILED_FROM| PagePrompt
   PromptArtifact ==>|INCLUDES_ENTITY| Entity
@@ -323,7 +323,7 @@ flowchart TB
   class PopulationCluster knowledge
   class PopulationSubCluster knowledge
   class Project invariant
-  class ProjectL10n localized
+  class ProjectContent localized
   class PromptArtifact derived
   class SEOComparison knowledge
   class SEOKeyword knowledge

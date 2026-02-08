@@ -70,7 +70,7 @@ export const NODE_LAYERS: Record<NodeType, Layer> = {
   // foundation (3 nodes) - matches models/node-kinds/tenant/foundation/
   BrandIdentity: 'foundation',
   Project: 'foundation',
-  ProjectL10n: 'foundation',
+  ProjectContent: 'foundation',
 
   // instruction (7 nodes) - matches models/node-kinds/tenant/instruction/
   BlockInstruction: 'instruction',

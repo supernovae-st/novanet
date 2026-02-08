@@ -8,11 +8,11 @@ arc:
   scope: intra_realm
   source: Locale
   target:
-    - ProjectL10n
+    - ProjectContent
     - EntityContent
     - PageGenerated
     - BlockGenerated
   cardinality: one_to_many
   inverse_of: FOR_LOCALE
   llm_context: Inverse of FOR_LOCALE — locale knows all its content.
-  cypher_pattern: (Locale)-[:HAS_LOCALIZED_CONTENT]->(ProjectL10n)
+  cypher_pattern: (Locale)-[:HAS_LOCALIZED_CONTENT]->(ProjectContent)

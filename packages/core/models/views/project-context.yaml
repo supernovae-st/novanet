@@ -46,7 +46,7 @@ docs:
       description: Project definition and brand
 
     - name: Localization Config
-      nodes: [ProjectL10n, Locale]
+      nodes: [ProjectContent, Locale]
       color: purple
       description: Supported locales and project translations
 
@@ -94,4 +94,4 @@ docs:
   notes:
     - Each Project has a unique key used for routing and identification
     - BrandIdentity contains visual identity (colors, logos, typography)
-    - ProjectL10n contains localized project metadata (tagline, description)
+    - ProjectContent contains localized project metadata (tagline, description)

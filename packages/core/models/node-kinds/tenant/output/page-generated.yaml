@@ -134,8 +134,8 @@ node:
         to: BlockGenerated
         description: "BlockGenerated nodes assembled into this page"
 
-      - type: BELONGS_TO_PROJECT_L10N
-        to: ProjectL10n
+      - type: BELONGS_TO_PROJECT_CONTENT
+        to: ProjectContent
         description: "Locale-aligned project context (voice, tagline, CTAs)"
 
       - type: PREVIOUS_VERSION
