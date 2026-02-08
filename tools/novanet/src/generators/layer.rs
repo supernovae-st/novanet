@@ -449,7 +449,7 @@ mod tests {
         assert!(output.contains("Page: 'structure',"));
         assert!(output.contains("Block: 'structure',"));
         assert!(output.contains("Entity: 'semantic',"));
-        assert!(output.contains("PageL10n: 'output',"));
+        assert!(output.contains("PageGenerated: 'output',")); // v10.9: renamed from PageL10n
         assert!(output.contains("Locale: 'config',"));
         assert!(output.contains("Style: 'config',"));
         assert!(output.contains("SEOKeyword: 'seo',"));

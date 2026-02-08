@@ -1195,24 +1195,24 @@ RETURN p.key as page_key,
         locale: &str,
     ) -> crate::Result<super::atlas::PageCompositionData> {
         use super::atlas::{
-            BlockData, BlockL10nData, EntityData, EntityL10nData, PageCompositionData,
-            PageL10nData, SeoKeywordData,
+            BlockData, BlockGeneratedData, EntityData, EntityContentData, PageCompositionData,
+            PageGeneratedData, SeoKeywordData,
         };
 
-        // Query 1: Page info and L10n
+        // Query 1: Page info and generated output (v10.9.0)
         let page_cypher = r#"
 MATCH (p:Page {key: $pageKey})
 OPTIONAL MATCH (p)<-[:HAS_PAGE]-(proj:Project)
-OPTIONAL MATCH (p)-[:HAS_L10N]->(pl:PageL10n)-[:FOR_LOCALE]->(loc:Locale {bcp47: $locale})
+OPTIONAL MATCH (p)-[:HAS_GENERATED]->(pg:PageGenerated)-[:FOR_LOCALE]->(loc:Locale {bcp47: $locale})
 RETURN p.key as page_key,
        coalesce(p.display_name, p.key) as page_name,
        p.page_type as page_type,
        p.prompt as prompt,
        coalesce(proj.key, 'unknown') as project_key,
        coalesce(proj.display_name, proj.key, 'Unknown') as project_name,
-       pl.title as l10n_title,
-       pl.slug as l10n_slug,
-       pl.meta_description as l10n_meta
+       pg.title as l10n_title,
+       pg.slug as l10n_slug,
+       pg.meta_description as l10n_meta
 "#;
 
         let page_rows = db
@@ -1229,7 +1229,7 @@ RETURN p.key as page_key,
             .flatten()
             .is_some()
         {
-            Some(PageL10nData {
+            Some(PageGeneratedData {
                 locale: locale.to_string(),
                 title: page_row.get("l10n_title").ok(),
                 slug: page_row.get("l10n_slug").ok(),
@@ -1239,11 +1239,11 @@ RETURN p.key as page_key,
             None
         };
 
-        // Query 2: Blocks with L10n
+        // Query 2: Blocks with generated output (v10.9.0)
         let blocks_cypher = r#"
 MATCH (p:Page {key: $pageKey})-[:HAS_BLOCK]->(b:Block)
-OPTIONAL MATCH (b)-[:HAS_L10N]->(bl:BlockL10n)-[:FOR_LOCALE]->(loc:Locale {bcp47: $locale})
-WITH b, bl
+OPTIONAL MATCH (b)-[:HAS_GENERATED]->(bg:BlockGenerated)-[:FOR_LOCALE]->(loc:Locale {bcp47: $locale})
+WITH b, bg
 ORDER BY b.order
 RETURN b.key as block_key,
        coalesce(b.display_name, b.key) as block_name,
@@ -1251,7 +1251,7 @@ RETURN b.key as block_key,
        b.block_type as block_type,
        b.prompt as prompt,
        b.rules as rules,
-       substring(coalesce(bl.content, ''), 0, 100) as content_preview
+       substring(coalesce(bg.content, ''), 0, 100) as content_preview
 "#;
 
         let block_rows = db
@@ -1262,7 +1262,7 @@ RETURN b.key as block_key,
         for row in block_rows {
             let content_preview: String = row.get("content_preview").unwrap_or_default();
             let l10n = if !content_preview.is_empty() {
-                Some(BlockL10nData {
+                Some(BlockGeneratedData {
                     locale: locale.to_string(),
                     content_preview,
                 })
@@ -1281,15 +1281,15 @@ RETURN b.key as block_key,
             });
         }
 
-        // Query 3: Entities used by blocks with L10n
+        // Query 3: Entities used by blocks with content (v10.9.0)
         let entities_cypher = r#"
 MATCH (p:Page {key: $pageKey})-[:HAS_BLOCK]->(b:Block)-[:USES_ENTITY]->(e:Entity)
-OPTIONAL MATCH (e)-[:HAS_L10N]->(el:EntityL10n)-[:FOR_LOCALE]->(loc:Locale {bcp47: $locale})
-WITH e, el, collect(b.key) as connected_blocks
+OPTIONAL MATCH (e)-[:HAS_CONTENT]->(ec:EntityContent)-[:FOR_LOCALE]->(loc:Locale {bcp47: $locale})
+WITH e, ec, collect(b.key) as connected_blocks
 RETURN e.key as entity_key,
        coalesce(e.display_name, e.key) as entity_name,
-       el.name as l10n_name,
-       substring(coalesce(el.description, ''), 0, 80) as l10n_desc,
+       ec.display_name as l10n_name,
+       substring(coalesce(ec.description, ''), 0, 80) as l10n_desc,
        connected_blocks
 "#;
 
@@ -1302,7 +1302,7 @@ RETURN e.key as entity_key,
             let l10n_name: Option<String> = row.get("l10n_name").ok();
             let l10n_desc: String = row.get("l10n_desc").unwrap_or_default();
             let l10n = if l10n_name.is_some() || !l10n_desc.is_empty() {
-                Some(EntityL10nData {
+                Some(EntityContentData {
                     locale: locale.to_string(),
                     name: l10n_name,
                     description_preview: if l10n_desc.is_empty() {

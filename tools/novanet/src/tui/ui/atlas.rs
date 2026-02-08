@@ -273,10 +273,10 @@ fn render_realm_map_demo(lines: &mut Vec<String>, cursor: usize) {
         t_prefix
     ));
     lines.push(
-        "║    │  foundation          4 kinds   (Entity, EntityL10n...)  │          ║".to_string(),
+        "║    │  foundation          4 kinds   (Project, BrandIdentity...)│          ║".to_string(),
     );
     lines.push(
-        "║    │  structure           4 kinds   (Page, Block, PageL10n.) │          ║".to_string(),
+        "║    │  structure           3 kinds   (Page, Block, ContentSlot)│          ║".to_string(),
     );
     lines.push(
         "║    │  semantic            3 kinds   (Knowledge atom usage)   │          ║".to_string(),
@@ -285,7 +285,7 @@ fn render_realm_map_demo(lines: &mut Vec<String>, cursor: usize) {
         "║    │  instruction         4 kinds   (Prompt, GenerationJob)  │          ║".to_string(),
     );
     lines.push(
-        "║    │  output              3 kinds   (BlockL10n, PageSEO...)  │          ║".to_string(),
+        "║    │  output              5 kinds   (PageGenerated, BlockGen.)│          ║".to_string(),
     );
     lines.push(
         "║    └──────────────────────────────────────────────────────────┘          ║".to_string(),
@@ -684,7 +684,7 @@ fn render_atlas_generation_pipeline(app: &App) -> String {
                     .to_string(),
             );
             lines.push(
-                "║  • Links to EntityL10n for each locale                                     ║"
+                "║  • Links to EntityContent for each locale                                   ║"
                     .to_string(),
             );
         }
@@ -808,19 +808,19 @@ fn render_atlas_generation_pipeline(app: &App) -> String {
                     .to_string(),
             );
             lines.push(
-                "║  • EntityL10n.name = \"IA pour QR Code\" (fr-FR)                             ║"
+                "║  • EntityContent.display_name = \"IA pour QR Code\" (fr-FR)                 ║"
                     .to_string(),
             );
             lines.push(
-                "║  • EntityL10n.description = \"Créez des QR codes...\" (native French)       ║"
+                "║  • EntityContent.description = \"Créez des QR codes...\" (native French)   ║"
                     .to_string(),
             );
             lines.push(
-                "║  • BlockL10n.content = native locale-specific content                     ║"
+                "║  • BlockGenerated.content = native locale-specific content                ║"
                     .to_string(),
             );
             lines.push(
-                "║  • Links: Entity -[:HAS_L10N]-> EntityL10n -[:FOR_LOCALE]-> Locale        ║"
+                "║  • Links: Entity -[:HAS_CONTENT]-> EntityContent -[:FOR_LOCALE]-> Locale  ║"
                     .to_string(),
             );
         }
@@ -1564,7 +1564,7 @@ fn render_atlas_view_traversal(app: &App) -> String {
                     .to_string(),
             );
             lines.push(
-                "║               ├─[:USES_ENTITY]──────> Entity ─[:HAS_L10N]──> EntityL10n  ║"
+                "║               ├─[:USES_ENTITY]──────> Entity ─[:HAS_CONTENT]> EntityContent║"
                     .to_string(),
             );
             lines.push(
@@ -1572,7 +1572,7 @@ fn render_atlas_view_traversal(app: &App) -> String {
                     .to_string(),
             );
             lines.push(
-                "║               └─[:HAS_OUTPUT]───────> BlockL10n                          ║"
+                "║               └─[:HAS_GENERATED]────> BlockGenerated                     ║"
                     .to_string(),
             );
         }
@@ -1586,7 +1586,7 @@ fn render_atlas_view_traversal(app: &App) -> String {
                     .to_string(),
             );
             lines.push(
-                "║               ├─[:HAS_PAGE_L10N]────> PageL10n                           ║"
+                "║               ├─[:HAS_GENERATED]────> PageGenerated                      ║"
                     .to_string(),
             );
             lines.push(
@@ -1596,7 +1596,7 @@ fn render_atlas_view_traversal(app: &App) -> String {
         }
         "entity-ecosystem" => {
             lines.push(
-                "║    Entity ────┬─[:HAS_L10N]─────────> EntityL10n                         ║"
+                "║    Entity ────┬─[:HAS_CONTENT]──────> EntityContent                      ║"
                     .to_string(),
             );
             lines.push(

@@ -82,7 +82,7 @@ fn arc_family_description(key: &str) -> &str {
             "Hierarchical containment. Parent-child relationships like Page HAS_BLOCK, Tenant HAS_PAGE."
         }
         "localization" => {
-            "Locale-specific content. Links invariant to localized nodes like Page HAS_L10N PageL10n."
+            "Locale-specific content. Links invariant to localized nodes like Entity HAS_CONTENT EntityContent."
         }
         "semantic" => {
             "Semantic relationships. Content uses knowledge atoms like Block USES_TERM, USES_EXPRESSION."
@@ -97,7 +97,7 @@ fn arc_family_description(key: &str) -> &str {
 fn arc_family_examples(key: &str) -> Vec<&'static str> {
     match key {
         "ownership" => vec!["HAS_PAGE", "HAS_BLOCK", "HAS_ENTITY"],
-        "localization" => vec!["HAS_L10N", "FOR_LOCALE"],
+        "localization" => vec!["HAS_CONTENT", "FOR_LOCALE"],
         "semantic" => vec!["USES_TERM", "REFERENCES", "USES_EXPRESSION"],
         "generation" => vec!["GENERATES", "PRODUCES"],
         "mining" => vec!["EXTRACTS", "DERIVES"],
