@@ -62,6 +62,8 @@ CREATE INDEX po_date IF NOT EXISTS FOR (po:PageGenerated) ON (po.assembled_at);
 
 CREATE CONSTRAINT blocktype_key IF NOT EXISTS FOR (bt:BlockType) REQUIRE bt.key IS UNIQUE;
 CREATE CONSTRAINT block_key IF NOT EXISTS FOR (b:Block) REQUIRE b.key IS UNIQUE;
+// v10.9: Block order index for TUI ORDER BY optimization
+CREATE INDEX block_order IF NOT EXISTS FOR (b:Block) ON (b.order);
 CREATE INDEX bo_date IF NOT EXISTS FOR (bo:BlockGenerated) ON (bo.generated_at);
 // v7.8.5: BlockGenerated replaces BlockOutput
 
@@ -115,6 +117,8 @@ CREATE INDEX gen_date IF NOT EXISTS FOR ()-[r:GENERATED]-() ON (r.generated_at);
 
 CREATE CONSTRAINT realm_key IF NOT EXISTS FOR (r:Realm) REQUIRE r.key IS UNIQUE;
 CREATE CONSTRAINT layer_key IF NOT EXISTS FOR (l:Layer) REQUIRE l.key IS UNIQUE;
+// v10.9: Layer order index for TUI ORDER BY optimization
+CREATE INDEX layer_order IF NOT EXISTS FOR (l:Layer) ON (l.order);
 CREATE CONSTRAINT kind_label IF NOT EXISTS FOR (k:Kind) REQUIRE k.label IS UNIQUE;
 CREATE CONSTRAINT trait_key IF NOT EXISTS FOR (t:Trait) REQUIRE t.key IS UNIQUE;
 CREATE CONSTRAINT arcfamily_key IF NOT EXISTS FOR (af:ArcFamily) REQUIRE af.key IS UNIQUE;
