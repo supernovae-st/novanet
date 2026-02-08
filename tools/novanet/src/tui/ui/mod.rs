@@ -2511,16 +2511,15 @@ fn render_yaml_content(f: &mut Frame, area: Rect, app: &App, focused: bool, visi
         COLOR_UNFOCUSED_BORDER
     };
 
-    // Check if we have parsed sections for contextual view
-    let has_sections = app.yaml_sections.as_ref().is_some_and(|s| s.is_valid());
+    // Check if we have valid parsed sections for contextual view
+    let sections_opt = app.yaml_sections.as_ref().filter(|s| s.is_valid());
     let active_section = app.yaml_active_section();
 
     // Build YAML lines with syntax highlighting
     let mut lines: Vec<Line> = Vec::new();
 
-    if has_sections {
+    if let Some(sections) = sections_opt {
         // Contextual view: show active section with ellipsis for hidden section
-        let sections = app.yaml_sections.as_ref().unwrap();
 
         match active_section {
             YamlViewSection::Kind => {
@@ -2632,16 +2631,16 @@ fn render_yaml_content(f: &mut Frame, area: Rect, app: &App, focused: bool, visi
     }
 
     // Build title with tabs and path
+    let has_sections = sections_opt.is_some();
     let title_spans = build_yaml_title_with_tabs(&app.yaml_path, active_section, has_sections);
 
     // Compute total lines for scroll indicator
-    let total_lines = if has_sections {
-        match active_section {
-            YamlViewSection::Kind => app.yaml_sections.as_ref().unwrap().kind_line_count(),
-            YamlViewSection::Instance => app.yaml_sections.as_ref().unwrap().instance_line_count(),
-        }
-    } else {
-        app.yaml_content.lines().count()
+    let total_lines = match sections_opt {
+        Some(sections) => match active_section {
+            YamlViewSection::Kind => sections.kind_line_count(),
+            YamlViewSection::Instance => sections.instance_line_count(),
+        },
+        None => app.yaml_content.lines().count(),
     };
 
     // Build scroll indicator with directional arrows
