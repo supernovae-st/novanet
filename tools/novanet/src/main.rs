@@ -676,12 +676,8 @@ async fn main() -> color_eyre::Result<()> {
                         if *dry_run { " --dry-run" } else { "" }
                     );
 
-                    let results = novanet::commands::entity::entity_seed(
-                        &root,
-                        project,
-                        *phase,
-                        *dry_run,
-                    )?;
+                    let results =
+                        novanet::commands::entity::entity_seed(&root, project, *phase, *dry_run)?;
 
                     for r in &results {
                         eprintln!(
@@ -723,16 +719,18 @@ async fn main() -> color_eyre::Result<()> {
                     if phases.is_empty() {
                         eprintln!("  No phases found for project '{}'", project);
                     } else {
-                        eprintln!("  {:>5}  {:<25}  {:>8}  {:>6}  FILE", "PHASE", "NAME", "ENTITIES", "ARCS");
-                        eprintln!("  {:>5}  {:<25}  {:>8}  {:>6}  ────", "─────", "────────────────────────", "────────", "────");
+                        eprintln!(
+                            "  {:>5}  {:<25}  {:>8}  {:>6}  FILE",
+                            "PHASE", "NAME", "ENTITIES", "ARCS"
+                        );
+                        eprintln!(
+                            "  {:>5}  {:<25}  {:>8}  {:>6}  ────",
+                            "─────", "────────────────────────", "────────", "────"
+                        );
                         for p in &phases {
                             eprintln!(
                                 "  {:>5}  {:<25}  {:>8}  {:>6}  {}",
-                                p.phase,
-                                p.name,
-                                p.entity_count,
-                                p.arc_count,
-                                p.file
+                                p.phase, p.name, p.entity_count, p.arc_count, p.file
                             );
                         }
                         eprintln!("\n  {} phase(s)", phases.len());
