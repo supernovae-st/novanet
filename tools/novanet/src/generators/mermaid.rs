@@ -451,10 +451,10 @@ mod tests {
     use crate::generators::Generator;
     use crate::parsers::arcs::{ArcDef, Cardinality, NodeRef};
     use crate::parsers::organizing::{ArcFamilyDef, LayerDef, RealmDef, TraitDef};
-    use crate::parsers::yaml_node::{LocaleBehavior, NodeDef, ParsedNode};
+    use crate::parsers::yaml_node::{NodeDef, NodeTrait, ParsedNode};
     use std::path::PathBuf;
 
-    fn make_node(name: &str, realm: &str, layer: &str, behavior: LocaleBehavior) -> ParsedNode {
+    fn make_node(name: &str, realm: &str, layer: &str, behavior: NodeTrait) -> ParsedNode {
         ParsedNode {
             def: NodeDef {
                 name: name.to_string(),
@@ -580,14 +580,9 @@ mod tests {
     #[test]
     fn render_small_mermaid() {
         let nodes = vec![
-            make_node("Locale", "global", "config", LocaleBehavior::Invariant),
-            make_node("Project", "tenant", "foundation", LocaleBehavior::Invariant),
-            make_node(
-                "ProjectL10n",
-                "tenant",
-                "foundation",
-                LocaleBehavior::Localized,
-            ),
+            make_node("Locale", "global", "config", NodeTrait::Invariant),
+            make_node("Project", "tenant", "foundation", NodeTrait::Invariant),
+            make_node("ProjectL10n", "tenant", "foundation", NodeTrait::Localized),
         ];
 
         let rels = vec![
@@ -652,9 +647,9 @@ mod tests {
     #[test]
     fn render_edge_families_distinct_arrows() {
         let nodes = vec![
-            make_node("A", "global", "config", LocaleBehavior::Invariant),
-            make_node("B", "global", "config", LocaleBehavior::Localized),
-            make_node("C", "global", "config", LocaleBehavior::Derived),
+            make_node("A", "global", "config", NodeTrait::Invariant),
+            make_node("B", "global", "config", NodeTrait::Localized),
+            make_node("C", "global", "config", NodeTrait::Derived),
         ];
 
         let rels = vec![

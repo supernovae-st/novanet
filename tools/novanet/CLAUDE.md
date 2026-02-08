@@ -18,7 +18,7 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 | Read | `data`, `meta`, `overlay`, `query` | Implemented (faceted Cypher) |
 | Write | `node create/edit/delete`, `arc create/delete` | Implemented (label validation) |
 | Schema | `schema generate`, `schema validate` | Implemented (12 artifacts) |
-| Docs | `doc generate`, `doc generate --list` | Implemented (12 views) |
+| Docs | `doc generate`, `doc generate --list` | Implemented (11 views) |
 | Search | `search --query=... [--kind=...]` | Implemented (fulltext + property) |
 | Locale | `locale list`, `locale import` | Implemented |
 | DB | `db seed`, `db migrate`, `db reset` | Implemented |
@@ -132,7 +132,7 @@ cargo run -- schema validate                      # Validate YAML coherence
 cargo run -- schema validate --strict             # Fail on warnings
 
 # Documentation (YAML, no Neo4j)
-cargo run -- doc generate                         # All 12 view Mermaid diagrams
+cargo run -- doc generate                         # All 11 view Mermaid diagrams
 cargo run -- doc generate --view=block-generation # Single view
 cargo run -- doc generate --dry-run               # Preview without writing
 cargo run -- doc generate --list                  # List available views
@@ -209,7 +209,7 @@ src/
 - **YAML-first architecture**: Each Kind YAML has explicit `realm:` and `layer:` fields (source of truth)
   - Path validation: file must be at `models/node-kinds/{realm}/{layer}/{name}.yaml`
   - Generators read realm/layer from YAML content, validate against path
-  - v10.8: 2 realms (global, tenant), 8 layers, 60 node types total
+  - v10.8: 2 realms (global, tenant), 8 layers, 63 node types total
 - **Icons source of truth (v10.8)**: `visual-encoding.yaml` → `icons:` section
   - Dual format: `web` (Lucide for Studio) + `terminal` (Unicode for TUI)
   - Categories: realms, layers, traits, arc_families, states, navigation, quality, modes

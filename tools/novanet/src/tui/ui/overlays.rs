@@ -10,18 +10,18 @@ use super::super::app::App;
 use super::super::data::TreeItem;
 use super::hex_to_color;
 
-// Re-use shared styles from parent module
+// Re-use shared styles and constants from parent module
 use super::{
-    COLOR_OVERLAY_BG, STYLE_ACCENT, STYLE_DESC, STYLE_DIM, STYLE_HIGHLIGHT, STYLE_INFO,
-    STYLE_PRIMARY,
+    COLOR_OVERLAY_BG, POPUP_BOX_HEIGHT, POPUP_BOX_WIDTH, STYLE_ACCENT, STYLE_DESC, STYLE_DIM,
+    STYLE_HIGHLIGHT, STYLE_INFO, STYLE_PRIMARY,
 };
 
 /// Search overlay: fuzzy search with results list.
 pub fn render_search(f: &mut Frame, app: &App) {
     // Center the search box
     let area = f.area();
-    let width = 50.min(area.width.saturating_sub(4));
-    let height = 12.min(area.height.saturating_sub(4));
+    let width = POPUP_BOX_WIDTH.min(area.width.saturating_sub(4));
+    let height = POPUP_BOX_HEIGHT.min(area.height.saturating_sub(4));
     let x = (area.width.saturating_sub(width)) / 2;
     let y = (area.height.saturating_sub(height)) / 3; // Slightly above center
 
@@ -122,8 +122,8 @@ pub fn render_search(f: &mut Frame, app: &App) {
 /// Help overlay: keyboard shortcuts.
 pub fn render_help(f: &mut Frame) {
     let area = f.area();
-    let width = 50.min(area.width.saturating_sub(4));
-    let height = 32.min(area.height.saturating_sub(4));
+    let width = POPUP_BOX_WIDTH.min(area.width.saturating_sub(4));
+    let height = 32.min(area.height.saturating_sub(4)); // Taller for many shortcuts
     let x = (area.width.saturating_sub(width)) / 2;
     let y = (area.height.saturating_sub(height)) / 2;
 
