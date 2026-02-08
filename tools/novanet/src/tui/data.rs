@@ -1496,7 +1496,12 @@ RETURN kw.keyword as keyword,
     /// Also stores the total count for "X of Y" display.
     /// Calculates missing_required_count for each instance based on Kind schema.
     #[allow(dead_code)]
-    pub fn set_instances(&mut self, kind_key: &str, mut instances: Vec<InstanceInfo>, total: usize) {
+    pub fn set_instances(
+        &mut self,
+        kind_key: &str,
+        mut instances: Vec<InstanceInfo>,
+        total: usize,
+    ) {
         // Get schema info from Kind
         let (required_props, all_props) = self
             .find_kind(kind_key)
@@ -1526,7 +1531,10 @@ RETURN kw.keyword as keyword,
             let filled = instance
                 .properties
                 .values()
-                .filter(|v| !matches!(v, JsonValue::Null) && !matches!(v, JsonValue::String(s) if s.is_empty()))
+                .filter(|v| {
+                    !matches!(v, JsonValue::Null)
+                        && !matches!(v, JsonValue::String(s) if s.is_empty())
+                })
                 .count();
             instance.filled_properties = filled;
             instance.total_properties = total_props;
