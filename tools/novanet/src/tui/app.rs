@@ -13,6 +13,7 @@ use super::audit::GlobalAuditStats;
 use super::data::{
     ArcKindDetails, KindArcsData, LayerDetails, RealmDetails, TaxonomyTree, TreeItem,
 };
+use super::guide::GuideState;
 use super::schema::{CoverageStats, MatchedProperty, ValidatedProperty, ValidationStats};
 use super::theme::Theme;
 use super::yaml::{YamlSections, YamlViewSection};
@@ -34,7 +35,7 @@ pub const INFO_SCROLL_MARGIN: usize = 5;
 pub const DEFAULT_TREE_HEIGHT: usize = 20;
 
 /// Navigation mode (matches Studio).
-/// Order: 1:Meta 2:Data 3:Overlay 4:Query 5:Atlas 6:Audit
+/// Order: 1:Meta 2:Data 3:Overlay 4:Query 5:Atlas 6:Audit 7:Guide
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum NavMode {
     #[default]
@@ -44,6 +45,7 @@ pub enum NavMode {
     Query,
     Atlas,
     Audit,
+    Guide,
 }
 
 impl NavMode {
@@ -55,6 +57,7 @@ impl NavMode {
             NavMode::Query => "Query",
             NavMode::Atlas => "Atlas",
             NavMode::Audit => "Audit",
+            NavMode::Guide => "Guide",
         }
     }
 
@@ -65,11 +68,12 @@ impl NavMode {
             NavMode::Overlay => NavMode::Query,
             NavMode::Query => NavMode::Atlas,
             NavMode::Atlas => NavMode::Audit,
-            NavMode::Audit => NavMode::Meta,
+            NavMode::Audit => NavMode::Guide,
+            NavMode::Guide => NavMode::Meta,
         }
     }
 
-    /// Get array index for mode_cursors (0-5).
+    /// Get array index for mode_cursors (0-6).
     pub fn index(&self) -> usize {
         match self {
             NavMode::Meta => 0,
@@ -78,6 +82,7 @@ impl NavMode {
             NavMode::Query => 3,
             NavMode::Atlas => 4,
             NavMode::Audit => 5,
+            NavMode::Guide => 6,
         }
     }
 }
@@ -185,8 +190,8 @@ pub struct App {
     pub mode: NavMode,
     pub focus: Focus,
     pub tree_cursor: usize,
-    /// Remember cursor position per mode (Meta, Data, Overlay, Query, Atlas, Audit).
-    pub mode_cursors: [usize; 6],
+    /// Remember cursor position per mode (Meta, Data, Overlay, Query, Atlas, Audit, Guide).
+    pub mode_cursors: [usize; 7],
     pub tree_scroll: usize, // Scroll offset for tree
     pub tree_height: usize, // Visible height (set by UI)
     pub tree: TaxonomyTree,
@@ -249,6 +254,8 @@ pub struct App {
     pub hide_empty: bool,
     /// Atlas mode state (architecture visualizations)
     pub atlas: AtlasState,
+    /// Guide mode state (educational taxonomy views)
+    pub guide: GuideState,
     /// Animation tick counter (increments each frame, used for spinners)
     pub tick: u16,
     // ==========================================================================
@@ -297,7 +304,7 @@ impl App {
             mode: NavMode::Meta,
             focus: Focus::Tree,
             tree_cursor: 0,
-            mode_cursors: [0; 6], // Init all modes at cursor 0 (Meta, Data, Overlay, Query, Atlas, Audit)
+            mode_cursors: [0; 7], // Init all modes at cursor 0 (Meta, Data, Overlay, Query, Atlas, Audit, Guide)
             tree_scroll: 0,
             tree_height: DEFAULT_TREE_HEIGHT,
             tree,
@@ -333,6 +340,7 @@ impl App {
             data_cursor_before_filter: 0,
             hide_empty: false,
             atlas: AtlasState::default(),
+            guide: GuideState::default(),
             tick: 0,
             // Schema overlay (Feature 1)
             schema_overlay_enabled: true, // Enabled by default
@@ -794,6 +802,12 @@ impl App {
                     self.pending_audit_load = true;
                     return true;
                 }
+                KeyCode::Char('5') => {
+                    self.save_mode_cursor();
+                    self.mode = NavMode::Guide;
+                    self.restore_mode_cursor(NavMode::Guide);
+                    return true;
+                }
                 KeyCode::Char('?') => {
                     self.help_active = true;
                     return true;
@@ -839,6 +853,12 @@ impl App {
                     // Already in Audit, no-op
                     return false;
                 }
+                KeyCode::Char('5') => {
+                    self.save_mode_cursor();
+                    self.mode = NavMode::Guide;
+                    self.restore_mode_cursor(NavMode::Guide);
+                    return true;
+                }
                 // Navigation in Audit mode
                 KeyCode::Up | KeyCode::Char('k') => {
                     if self.audit_cursor > 0 {
@@ -867,6 +887,59 @@ impl App {
                     return true;
                 }
                 _ => return false, // Ignore other keys in Audit mode
+            }
+        }
+
+        // Guide mode: delegates to guide state (except mode switching 1-5)
+        if self.mode == NavMode::Guide {
+            match key.code {
+                // Mode switching exits Guide mode (with cursor memory)
+                KeyCode::Char('1') => {
+                    self.save_mode_cursor();
+                    self.mode = NavMode::Meta;
+                    self.restore_mode_cursor(NavMode::Meta);
+                    self.load_yaml_for_current();
+                    return true;
+                }
+                KeyCode::Char('2') => {
+                    self.save_mode_cursor();
+                    self.mode = NavMode::Data;
+                    self.restore_mode_cursor(NavMode::Data);
+                    self.request_instance_load_for_current();
+                    return true;
+                }
+                KeyCode::Char('3') => {
+                    self.save_mode_cursor();
+                    self.mode = NavMode::Atlas;
+                    self.restore_mode_cursor(NavMode::Atlas);
+                    self.init_atlas_from_current();
+                    return true;
+                }
+                KeyCode::Char('4') => {
+                    self.save_mode_cursor();
+                    self.mode = NavMode::Audit;
+                    self.restore_mode_cursor(NavMode::Audit);
+                    self.pending_audit_load = true;
+                    return true;
+                }
+                KeyCode::Char('5') => {
+                    // Already in Guide, no-op
+                    return false;
+                }
+                KeyCode::Char('?') => {
+                    self.help_active = true;
+                    return true;
+                }
+                KeyCode::Char('/') | KeyCode::Char('f') => {
+                    self.search.active = true;
+                    return true;
+                }
+                KeyCode::F(1) => {
+                    self.legend_active = true;
+                    return true;
+                }
+                // All other keys handled by guide
+                _ => return self.guide.handle_key(key),
             }
         }
 
@@ -952,6 +1025,13 @@ impl App {
                 self.restore_mode_cursor(NavMode::Audit);
                 // Request audit stats load
                 self.pending_audit_load = true;
+                true
+            }
+            KeyCode::Char('5') => {
+                self.exit_filtered_data_mode();
+                self.save_mode_cursor();
+                self.mode = NavMode::Guide;
+                self.restore_mode_cursor(NavMode::Guide);
                 true
             }
             KeyCode::Char('n') | KeyCode::Char('N') => {
@@ -2242,6 +2322,9 @@ mod tests {
 
         app.mode = app.mode.cycle();
         assert_eq!(app.mode, NavMode::Audit);
+
+        app.mode = app.mode.cycle();
+        assert_eq!(app.mode, NavMode::Guide);
 
         app.mode = app.mode.cycle();
         assert_eq!(app.mode, NavMode::Meta); // Cycle back

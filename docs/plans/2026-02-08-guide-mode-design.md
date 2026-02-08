@@ -303,6 +303,180 @@ Guide Mode Entry
 
 ---
 
+## Ludic & Interactive Elements
+
+### Visual Feedback
+
+1. **Smooth Transitions**
+   - Panel slide animation when switching traits
+   - Highlight pulse on selection
+   - Breadcrumb trail showing navigation path
+
+2. **Color-Coded Everything**
+   - Selected trait has bright border, others dimmed
+   - Progress bars for stats (not just numbers)
+   - Consistent use of taxonomy colors
+
+3. **Discovery Elements**
+   - "Did you know?" tips that rotate
+   - Relationship hints: "INVARIANT nodes always have LOCALIZED pairs"
+   - Count animations when drilling down
+
+### Quick Jump Shortcuts
+
+| Shortcut | Action |
+|----------|--------|
+| `gi` | Go to INVARIANT trait |
+| `gl` | Go to LOCALIZED trait |
+| `gk` | Go to KNOWLEDGE trait |
+| `gd` | Go to DERIVED trait |
+| `gj` | Go to JOB trait |
+
+### Responsiveness Principles
+
+- Instant feedback on every keypress
+- Never feel stuck (always show available actions)
+- Always know where you are (breadcrumbs)
+- Always know what you can do (shortcuts visible)
+
+---
+
+## Full ASCII Mockups
+
+### Main Guide View (Traits Tab)
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════════════╗
+║  NovaNet TUI                   [1]Meta [2]Data [3]Atlas [4]Audit [5]Guide             ║
+╠═══════════════════════════════════════════════════════════════════════════════════════╣
+║                                                                                       ║
+║  GUIDE — NovaNet Taxonomy                                                             ║
+║  ┌────────────────────────────────────────────────────────────────────────────────┐   ║
+║  │  [■ Traits]   [▣ Layers]   [⟷ Arcs]   [⚡ Pipeline]                             │   ║
+║  └────────────────────────────────────────────────────────────────────────────────┘   ║
+║                                                                                       ║
+║  ┌─ CONSTELLATION ──────────────────────────┐  ┌─ DETAIL ──────────────────────────┐  ║
+║  │                                          │  │                                    │  ║
+║  │              ◊ KNOWLEDGE                 │  │  ■ INVARIANT                       │  ║
+║  │                 12 K                     │  │  ════════════════════════════════  │  ║
+║  │                ╱    ╲                    │  │                                    │  ║
+║  │               ╱      ╲                   │  │  "Nodes that do not change         │  ║
+║  │      ■ ════════════════════ □           │  │   between locales. Structural      │  ║
+║  │   INVARIANT       ↔      LOCALIZED      │  │   definitions, configuration,      │  ║
+║  │  ▶  24 K                    15 K        │  │   and invariant business logic."   │  ║
+║  │               ╲      ╱                   │  │                                    │  ║
+║  │                ╲    ╱                    │  │  ┌─ BY LAYER ───────────────────┐  │  ║
+║  │              ═      ○                    │  │  │ config      Tenant            │  │  ║
+║  │           DERIVED   JOB                  │  │  │ semantic    Entity, Audience  │  │  ║
+║  │             8 K     5 K                  │  │  │ foundation  Project, Brand    │  │  ║
+║  │                                          │  │  │ structure   Page, Block       │  │  ║
+║  │  ──────────────────────────────────────  │  │  │ instruction PageType, Prompt  │  │  ║
+║  │                                          │  │  └────────────────────────────────┘  │  ║
+║  │  [■] INVARIANT                           │  │                                    │  ║
+║  │  [ ] LOCALIZED                           │  │  PATTERN:                          │  ║
+║  │  [ ] KNOWLEDGE                           │  │  ■ Page ───────→ □ PageL10n       │  ║
+║  │  [ ] DERIVED                             │  │  ■ Entity ─────→ □ EntityL10n     │  ║
+║  │  [ ] JOB                                 │  │  ■ Block ──────→ □ BlockL10n      │  ║
+║  │                                          │  │                                    │  ║
+║  └──────────────────────────────────────────┘  └────────────────────────────────────┘  ║
+║                                                                                       ║
+╠═══════════════════════════════════════════════════════════════════════════════════════╣
+║  [←→] Trait   [Enter] Drill into Kinds   [Tab] Switch pane   [j/k] Scroll   [?] Help  ║
+╚═══════════════════════════════════════════════════════════════════════════════════════╝
+```
+
+### Drill-Down: Knowledge Trait Detail
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════════════╗
+║  NovaNet TUI                   [1]Meta [2]Data [3]Atlas [4]Audit [5]Guide             ║
+╠═══════════════════════════════════════════════════════════════════════════════════════╣
+║                                                                                       ║
+║  GUIDE › Traits › ◊ KNOWLEDGE                                        ← Back [h]      ║
+║  ═══════════════════════════════════════════════════════════════════════════════════  ║
+║                                                                                       ║
+║  "Cultural and linguistic expertise per locale.                                       ║
+║   INPUT/SAVOIR loaded INTO the LLM as context.                                        ║
+║   Native, not translated. Exists only where needed."                                  ║
+║                                                                                       ║
+║  ┌─ KINDS (12) ────────────────────────────────────────────────────────────────────┐  ║
+║  │                                                                                  │  ║
+║  │   CONTAINERS (empty grouping nodes)           ATOMS (actual data)               │  ║
+║  │   ─────────────────────────────────           ─────────────────────             │  ║
+║  │                                                                                  │  ║
+║  │   ┌────────────────┐                          ┌────────────────┐                │  ║
+║  │   │ ◊ TermSet      │──[:CONTAINS]──────────▶ │ ◊ Term         │                │  ║
+║  │   │   domain       │                          │   key, value   │                │  ║
+║  │   │   12 instances │                          │   8,420 inst   │                │  ║
+║  │   └────────────────┘                          └────────────────┘                │  ║
+║  │                                                                                  │  ║
+║  │   ┌────────────────┐                          ┌────────────────┐                │  ║
+║  │   │ ◊ ExpressionSet│──[:CONTAINS]──────────▶ │ ◊ Expression   │                │  ║
+║  │   │   register     │                          │   phrase, tone │                │  ║
+║  │   │   12 instances │                          │   3,210 inst   │                │  ║
+║  │   └────────────────┘                          └────────────────┘                │  ║
+║  │                                                                                  │  ║
+║  │   ┌────────────────┐                          ┌────────────────┐                │  ║
+║  │   │ ◊ PatternSet   │──[:CONTAINS]──────────▶ │ ◊ Pattern      │                │  ║
+║  │   │   category     │                          │   regex, desc  │                │  ║
+║  │   │   8 instances  │                          │   1,540 inst   │                │  ║
+║  │   └────────────────┘                          └────────────────┘                │  ║
+║  │                                                                                  │  ║
+║  └──────────────────────────────────────────────────────────────────────────────────┘  ║
+║                                                                                       ║
+╠═══════════════════════════════════════════════════════════════════════════════════════╣
+║  [j/k] Navigate   [Enter] View instances   [v] View in Data mode   [h] Back           ║
+╚═══════════════════════════════════════════════════════════════════════════════════════╝
+```
+
+### Pipeline Tab with Animation
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════════════╗
+║  NovaNet TUI                   [1]Meta [2]Data [3]Atlas [4]Audit [5]Guide             ║
+╠═══════════════════════════════════════════════════════════════════════════════════════╣
+║                                                                                       ║
+║  GUIDE › ⚡ PIPELINE — The Generation Flow                                            ║
+║  ═══════════════════════════════════════════════════════════════════════════════════  ║
+║                                                                                       ║
+║   ╭────────────────────────────────────────────────────────────────────────────────╮  ║
+║   │                                                                                │  ║
+║   │    ┌────────────┐                                                              │  ║
+║   │    │ ◊ KNOWLEDGE│                                                              │  ║
+║   │    │   (INPUT)  │                                                              │  ║
+║   │    │            │                                                              │  ║
+║   │    │ Term       │ ─────────╮                                                   │  ║
+║   │    │ Expression │          │                                                   │  ║
+║   │    │ Pattern    │          │  CONTEXT                                          │  ║
+║   │    │ CultureRef │          │                                                   │  ║
+║   │    │ Taboo      │          ▼                                                   │  ║
+║   │    └────────────┘   ╔══════════════════════════════════╗                       │  ║
+║   │                     ║                                  ║                       │  ║
+║   │    ┌────────────┐   ║          LLM GENERATION          ║   ┌────────────┐      │  ║
+║   │    │ ■ INVARIANT│   ║                                  ║   │ □ LOCALIZED│      │  ║
+║   │    │ (STRUCTURE)│   ║  ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈  ║   │  (OUTPUT)  │      │  ║
+║   │    │            │ ─▶║                                  ║──▶│            │      │  ║
+║   │    │ Page       │   ║  Knowledge + Structure           ║   │ PageL10n   │      │  ║
+║   │    │ Entity     │   ║         ↓                        ║   │ EntityL10n │      │  ║
+║   │    │ Block      │   ║  Native content (NOT translation)║   │ BlockL10n  │      │  ║
+║   │    │            │   ║                                  ║   │            │      │  ║
+║   │    └────────────┘   ╚══════════════════════════════════╝   └────────────┘      │  ║
+║   │                             TEMPLATE                                           │  ║
+║   │                                                                                │  ║
+║   ╰────────────────────────────────────────────────────────────────────────────────╯  ║
+║                                                                                       ║
+║   ┌─ PRINCIPLE ────────────────────────────────────────────────────────────────────┐  ║
+║   │   ❌ WRONG:  Source → Translate → Target                                       │  ║
+║   │   ✅ RIGHT:  Knowledge + Structure → Generate natively → Local content         │  ║
+║   └────────────────────────────────────────────────────────────────────────────────┘  ║
+║                                                                                       ║
+╠═══════════════════════════════════════════════════════════════════════════════════════╣
+║  [Space] Play animation   [Enter] Focus stage   [1-4] Jump to stage   [r] Reset       ║
+╚═══════════════════════════════════════════════════════════════════════════════════════╝
+```
+
+---
+
 ## Implementation Notes
 
 1. **Data Source**: Use existing `TaxonomyTree` from `data.rs` for Traits/Layers

@@ -24,6 +24,7 @@ mod app;
 pub mod atlas;
 mod audit;
 mod data;
+pub mod guide;
 mod schema;
 pub mod theme;
 mod ui;
