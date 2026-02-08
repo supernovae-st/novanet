@@ -1,0 +1,15 @@
+# packages/core/models/arc-kinds/localization/locale-variant-of.yaml
+# ArcKind: LOCALE_VARIANT_OF — Regional locale variant: (en-AU)-[:LOCALE_VARIANT_OF]->(en-GB) for inheritance
+# v10.9.2: Renamed from VARIANT_OF to LOCALE_VARIANT_OF to avoid collision with semantic/VARIANT_OF
+
+arc:
+  name: LOCALE_VARIANT_OF
+  family: localization
+  scope: intra_realm
+  source: Locale
+  target: Locale
+  cardinality: many_to_one
+  is_self_referential: true
+  inverse: HAS_LOCALE_VARIANT
+  llm_context: "Regional locale variant: (en-AU)-[:LOCALE_VARIANT_OF]->(en-GB) for inheritance. Use to resolve fallback content."
+  cypher_pattern: (Locale)-[:LOCALE_VARIANT_OF]->(Locale)

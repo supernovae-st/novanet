@@ -34,6 +34,32 @@ ON MATCH SET
   ak_ASSEMBLES.temperature_threshold = null,
   ak_ASSEMBLES.updated_at = datetime();
 
+MERGE (ak_BUNDLES:Meta:ArcKind {key: 'BUNDLES'})
+ON CREATE SET
+  ak_BUNDLES.display_name = 'Bundles',
+  ak_BUNDLES.llm_context = 'Output artifact bundles specific generated nodes for deployment. Use to load all content included in an artifact.',
+  ak_BUNDLES.family = 'generation',
+  ak_BUNDLES.scope = 'intra_realm',
+  ak_BUNDLES.cardinality = 'one_to_many',
+  ak_BUNDLES.is_self_referential = false,
+  ak_BUNDLES.inverse_name = null,
+  ak_BUNDLES.arc_properties = ['position', 'checksum'],
+  ak_BUNDLES.cypher_pattern = '(OutputArtifact)-[:BUNDLES]->(PageGenerated, BlockGenerated)',
+  ak_BUNDLES.temperature_threshold = null,
+  ak_BUNDLES.created_at = datetime()
+ON MATCH SET
+  ak_BUNDLES.display_name = 'Bundles',
+  ak_BUNDLES.llm_context = 'Output artifact bundles specific generated nodes for deployment. Use to load all content included in an artifact.',
+  ak_BUNDLES.family = 'generation',
+  ak_BUNDLES.scope = 'intra_realm',
+  ak_BUNDLES.cardinality = 'one_to_many',
+  ak_BUNDLES.is_self_referential = false,
+  ak_BUNDLES.inverse_name = null,
+  ak_BUNDLES.arc_properties = ['position', 'checksum'],
+  ak_BUNDLES.cypher_pattern = '(OutputArtifact)-[:BUNDLES]->(PageGenerated, BlockGenerated)',
+  ak_BUNDLES.temperature_threshold = null,
+  ak_BUNDLES.updated_at = datetime();
+
 MERGE (ak_COMPILED_FROM:Meta:ArcKind {key: 'COMPILED_FROM'})
 ON CREATE SET
   ak_COMPILED_FROM.display_name = 'Compiled From',
@@ -241,32 +267,6 @@ ON MATCH SET
   ak_HAS_GENERATED.cypher_pattern = '(Page, Block)-[:HAS_GENERATED]->(PageGenerated, BlockGenerated)',
   ak_HAS_GENERATED.temperature_threshold = null,
   ak_HAS_GENERATED.updated_at = datetime();
-
-MERGE (ak_INCLUDES:Meta:ArcKind {key: 'INCLUDES'})
-ON CREATE SET
-  ak_INCLUDES.display_name = 'Includes',
-  ak_INCLUDES.llm_context = 'Output artifact bundles specific L10n nodes for deployment.',
-  ak_INCLUDES.family = 'generation',
-  ak_INCLUDES.scope = 'intra_realm',
-  ak_INCLUDES.cardinality = 'one_to_many',
-  ak_INCLUDES.is_self_referential = false,
-  ak_INCLUDES.inverse_name = null,
-  ak_INCLUDES.arc_properties = ['position', 'checksum'],
-  ak_INCLUDES.cypher_pattern = '(OutputArtifact)-[:INCLUDES]->(PageGenerated, BlockGenerated)',
-  ak_INCLUDES.temperature_threshold = 0.1,
-  ak_INCLUDES.created_at = datetime()
-ON MATCH SET
-  ak_INCLUDES.display_name = 'Includes',
-  ak_INCLUDES.llm_context = 'Output artifact bundles specific L10n nodes for deployment.',
-  ak_INCLUDES.family = 'generation',
-  ak_INCLUDES.scope = 'intra_realm',
-  ak_INCLUDES.cardinality = 'one_to_many',
-  ak_INCLUDES.is_self_referential = false,
-  ak_INCLUDES.inverse_name = null,
-  ak_INCLUDES.arc_properties = ['position', 'checksum'],
-  ak_INCLUDES.cypher_pattern = '(OutputArtifact)-[:INCLUDES]->(PageGenerated, BlockGenerated)',
-  ak_INCLUDES.temperature_threshold = 0.1,
-  ak_INCLUDES.updated_at = datetime();
 
 MERGE (ak_INCLUDES_ENTITY:Meta:ArcKind {key: 'INCLUDES_ENTITY'})
 ON CREATE SET
@@ -788,6 +788,32 @@ ON MATCH SET
   ak_IN_SUBREGION.temperature_threshold = null,
   ak_IN_SUBREGION.updated_at = datetime();
 
+MERGE (ak_LOCALE_VARIANT_OF:Meta:ArcKind {key: 'LOCALE_VARIANT_OF'})
+ON CREATE SET
+  ak_LOCALE_VARIANT_OF.display_name = 'Locale Variant Of',
+  ak_LOCALE_VARIANT_OF.llm_context = 'Regional locale variant: (en-AU)-[:LOCALE_VARIANT_OF]->(en-GB) for inheritance. Use to resolve fallback content.',
+  ak_LOCALE_VARIANT_OF.family = 'localization',
+  ak_LOCALE_VARIANT_OF.scope = 'intra_realm',
+  ak_LOCALE_VARIANT_OF.cardinality = 'many_to_one',
+  ak_LOCALE_VARIANT_OF.is_self_referential = false,
+  ak_LOCALE_VARIANT_OF.inverse_name = 'HAS_LOCALE_VARIANT',
+  ak_LOCALE_VARIANT_OF.arc_properties = [],
+  ak_LOCALE_VARIANT_OF.cypher_pattern = '(Locale)-[:LOCALE_VARIANT_OF]->(Locale)',
+  ak_LOCALE_VARIANT_OF.temperature_threshold = null,
+  ak_LOCALE_VARIANT_OF.created_at = datetime()
+ON MATCH SET
+  ak_LOCALE_VARIANT_OF.display_name = 'Locale Variant Of',
+  ak_LOCALE_VARIANT_OF.llm_context = 'Regional locale variant: (en-AU)-[:LOCALE_VARIANT_OF]->(en-GB) for inheritance. Use to resolve fallback content.',
+  ak_LOCALE_VARIANT_OF.family = 'localization',
+  ak_LOCALE_VARIANT_OF.scope = 'intra_realm',
+  ak_LOCALE_VARIANT_OF.cardinality = 'many_to_one',
+  ak_LOCALE_VARIANT_OF.is_self_referential = false,
+  ak_LOCALE_VARIANT_OF.inverse_name = 'HAS_LOCALE_VARIANT',
+  ak_LOCALE_VARIANT_OF.arc_properties = [],
+  ak_LOCALE_VARIANT_OF.cypher_pattern = '(Locale)-[:LOCALE_VARIANT_OF]->(Locale)',
+  ak_LOCALE_VARIANT_OF.temperature_threshold = null,
+  ak_LOCALE_VARIANT_OF.updated_at = datetime();
+
 MERGE (ak_SPEAKS_BRANCH:Meta:ArcKind {key: 'SPEAKS_BRANCH'})
 ON CREATE SET
   ak_SPEAKS_BRANCH.display_name = 'Speaks Branch',
@@ -813,32 +839,6 @@ ON MATCH SET
   ak_SPEAKS_BRANCH.cypher_pattern = '(Locale)-[:SPEAKS_BRANCH]->(LanguageBranch)',
   ak_SPEAKS_BRANCH.temperature_threshold = null,
   ak_SPEAKS_BRANCH.updated_at = datetime();
-
-MERGE (ak_VARIANT_OF:Meta:ArcKind {key: 'VARIANT_OF'})
-ON CREATE SET
-  ak_VARIANT_OF.display_name = 'Variant Of',
-  ak_VARIANT_OF.llm_context = 'Regional variant: (en-AU)-[:VARIANT_OF]->(en-GB) for inheritance.',
-  ak_VARIANT_OF.family = 'localization',
-  ak_VARIANT_OF.scope = 'intra_realm',
-  ak_VARIANT_OF.cardinality = 'many_to_one',
-  ak_VARIANT_OF.is_self_referential = false,
-  ak_VARIANT_OF.inverse_name = null,
-  ak_VARIANT_OF.arc_properties = [],
-  ak_VARIANT_OF.cypher_pattern = '(Locale)-[:VARIANT_OF]->(Locale)',
-  ak_VARIANT_OF.temperature_threshold = 0.2,
-  ak_VARIANT_OF.created_at = datetime()
-ON MATCH SET
-  ak_VARIANT_OF.display_name = 'Variant Of',
-  ak_VARIANT_OF.llm_context = 'Regional variant: (en-AU)-[:VARIANT_OF]->(en-GB) for inheritance.',
-  ak_VARIANT_OF.family = 'localization',
-  ak_VARIANT_OF.scope = 'intra_realm',
-  ak_VARIANT_OF.cardinality = 'many_to_one',
-  ak_VARIANT_OF.is_self_referential = false,
-  ak_VARIANT_OF.inverse_name = null,
-  ak_VARIANT_OF.arc_properties = [],
-  ak_VARIANT_OF.cypher_pattern = '(Locale)-[:VARIANT_OF]->(Locale)',
-  ak_VARIANT_OF.temperature_threshold = 0.2,
-  ak_VARIANT_OF.updated_at = datetime();
 
 MERGE (ak_HAS_GEO_METRICS:Meta:ArcKind {key: 'HAS_GEO_METRICS'})
 ON CREATE SET
@@ -3135,6 +3135,9 @@ ON MATCH SET
 MATCH (af:ArcFamily {key: 'generation'}), (ak:ArcKind {key: 'ASSEMBLES'})
 MERGE (af)-[:HAS_ARC_KIND]->(ak);
 
+MATCH (af:ArcFamily {key: 'generation'}), (ak:ArcKind {key: 'BUNDLES'})
+MERGE (af)-[:HAS_ARC_KIND]->(ak);
+
 MATCH (af:ArcFamily {key: 'generation'}), (ak:ArcKind {key: 'COMPILED_FROM'})
 MERGE (af)-[:HAS_ARC_KIND]->(ak);
 
@@ -3157,9 +3160,6 @@ MATCH (af:ArcFamily {key: 'generation'}), (ak:ArcKind {key: 'HAS_EVALUATION'})
 MERGE (af)-[:HAS_ARC_KIND]->(ak);
 
 MATCH (af:ArcFamily {key: 'generation'}), (ak:ArcKind {key: 'HAS_GENERATED'})
-MERGE (af)-[:HAS_ARC_KIND]->(ak);
-
-MATCH (af:ArcFamily {key: 'generation'}), (ak:ArcKind {key: 'INCLUDES'})
 MERGE (af)-[:HAS_ARC_KIND]->(ak);
 
 MATCH (af:ArcFamily {key: 'generation'}), (ak:ArcKind {key: 'INCLUDES_ENTITY'})
@@ -3222,10 +3222,10 @@ MERGE (af)-[:HAS_ARC_KIND]->(ak);
 MATCH (af:ArcFamily {key: 'localization'}), (ak:ArcKind {key: 'IN_SUBREGION'})
 MERGE (af)-[:HAS_ARC_KIND]->(ak);
 
-MATCH (af:ArcFamily {key: 'localization'}), (ak:ArcKind {key: 'SPEAKS_BRANCH'})
+MATCH (af:ArcFamily {key: 'localization'}), (ak:ArcKind {key: 'LOCALE_VARIANT_OF'})
 MERGE (af)-[:HAS_ARC_KIND]->(ak);
 
-MATCH (af:ArcFamily {key: 'localization'}), (ak:ArcKind {key: 'VARIANT_OF'})
+MATCH (af:ArcFamily {key: 'localization'}), (ak:ArcKind {key: 'SPEAKS_BRANCH'})
 MERGE (af)-[:HAS_ARC_KIND]->(ak);
 
 MATCH (af:ArcFamily {key: 'mining'}), (ak:ArcKind {key: 'HAS_GEO_METRICS'})
@@ -3499,6 +3499,9 @@ MERGE (af)-[:HAS_ARC_KIND]->(ak);
 MATCH (ak:ArcKind {key: 'ASSEMBLES'}), (af:ArcFamily {key: 'generation'})
 MERGE (ak)-[:IN_FAMILY]->(af);
 
+MATCH (ak:ArcKind {key: 'BUNDLES'}), (af:ArcFamily {key: 'generation'})
+MERGE (ak)-[:IN_FAMILY]->(af);
+
 MATCH (ak:ArcKind {key: 'COMPILED_FROM'}), (af:ArcFamily {key: 'generation'})
 MERGE (ak)-[:IN_FAMILY]->(af);
 
@@ -3521,9 +3524,6 @@ MATCH (ak:ArcKind {key: 'HAS_EVALUATION'}), (af:ArcFamily {key: 'generation'})
 MERGE (ak)-[:IN_FAMILY]->(af);
 
 MATCH (ak:ArcKind {key: 'HAS_GENERATED'}), (af:ArcFamily {key: 'generation'})
-MERGE (ak)-[:IN_FAMILY]->(af);
-
-MATCH (ak:ArcKind {key: 'INCLUDES'}), (af:ArcFamily {key: 'generation'})
 MERGE (ak)-[:IN_FAMILY]->(af);
 
 MATCH (ak:ArcKind {key: 'INCLUDES_ENTITY'}), (af:ArcFamily {key: 'generation'})
@@ -3586,10 +3586,10 @@ MERGE (ak)-[:IN_FAMILY]->(af);
 MATCH (ak:ArcKind {key: 'IN_SUBREGION'}), (af:ArcFamily {key: 'localization'})
 MERGE (ak)-[:IN_FAMILY]->(af);
 
-MATCH (ak:ArcKind {key: 'SPEAKS_BRANCH'}), (af:ArcFamily {key: 'localization'})
+MATCH (ak:ArcKind {key: 'LOCALE_VARIANT_OF'}), (af:ArcFamily {key: 'localization'})
 MERGE (ak)-[:IN_FAMILY]->(af);
 
-MATCH (ak:ArcKind {key: 'VARIANT_OF'}), (af:ArcFamily {key: 'localization'})
+MATCH (ak:ArcKind {key: 'SPEAKS_BRANCH'}), (af:ArcFamily {key: 'localization'})
 MERGE (ak)-[:IN_FAMILY]->(af);
 
 MATCH (ak:ArcKind {key: 'HAS_GEO_METRICS'}), (af:ArcFamily {key: 'mining'})
@@ -3863,6 +3863,9 @@ MERGE (ak)-[:IN_FAMILY]->(af);
 MATCH (ak:ArcKind {key: 'ASSEMBLES'}), (k:Kind {label: 'PageGenerated'})
 MERGE (ak)-[:FROM_KIND]->(k);
 
+MATCH (ak:ArcKind {key: 'BUNDLES'}), (k:Kind {label: 'OutputArtifact'})
+MERGE (ak)-[:FROM_KIND]->(k);
+
 MATCH (ak:ArcKind {key: 'COMPILED_FROM'}), (k:Kind {label: 'PromptArtifact'})
 MERGE (ak)-[:FROM_KIND]->(k);
 
@@ -3900,9 +3903,6 @@ MATCH (ak:ArcKind {key: 'HAS_GENERATED'}), (k:Kind {label: 'Page'})
 MERGE (ak)-[:FROM_KIND]->(k);
 
 MATCH (ak:ArcKind {key: 'HAS_GENERATED'}), (k:Kind {label: 'Block'})
-MERGE (ak)-[:FROM_KIND]->(k);
-
-MATCH (ak:ArcKind {key: 'INCLUDES'}), (k:Kind {label: 'OutputArtifact'})
 MERGE (ak)-[:FROM_KIND]->(k);
 
 MATCH (ak:ArcKind {key: 'INCLUDES_ENTITY'}), (k:Kind {label: 'PromptArtifact'})
@@ -3995,10 +3995,10 @@ MERGE (ak)-[:FROM_KIND]->(k);
 MATCH (ak:ArcKind {key: 'IN_SUBREGION'}), (k:Kind {label: 'Locale'})
 MERGE (ak)-[:FROM_KIND]->(k);
 
-MATCH (ak:ArcKind {key: 'SPEAKS_BRANCH'}), (k:Kind {label: 'Locale'})
+MATCH (ak:ArcKind {key: 'LOCALE_VARIANT_OF'}), (k:Kind {label: 'Locale'})
 MERGE (ak)-[:FROM_KIND]->(k);
 
-MATCH (ak:ArcKind {key: 'VARIANT_OF'}), (k:Kind {label: 'Locale'})
+MATCH (ak:ArcKind {key: 'SPEAKS_BRANCH'}), (k:Kind {label: 'Locale'})
 MERGE (ak)-[:FROM_KIND]->(k);
 
 MATCH (ak:ArcKind {key: 'HAS_GEO_METRICS'}), (k:Kind {label: 'GEOQuery'})
@@ -4290,6 +4290,12 @@ MERGE (ak)-[:FROM_KIND]->(k);
 MATCH (ak:ArcKind {key: 'ASSEMBLES'}), (k:Kind {label: 'BlockGenerated'})
 MERGE (ak)-[:TO_KIND]->(k);
 
+MATCH (ak:ArcKind {key: 'BUNDLES'}), (k:Kind {label: 'PageGenerated'})
+MERGE (ak)-[:TO_KIND]->(k);
+
+MATCH (ak:ArcKind {key: 'BUNDLES'}), (k:Kind {label: 'BlockGenerated'})
+MERGE (ak)-[:TO_KIND]->(k);
+
 MATCH (ak:ArcKind {key: 'COMPILED_FROM'}), (k:Kind {label: 'PagePrompt'})
 MERGE (ak)-[:TO_KIND]->(k);
 
@@ -4327,12 +4333,6 @@ MATCH (ak:ArcKind {key: 'HAS_GENERATED'}), (k:Kind {label: 'PageGenerated'})
 MERGE (ak)-[:TO_KIND]->(k);
 
 MATCH (ak:ArcKind {key: 'HAS_GENERATED'}), (k:Kind {label: 'BlockGenerated'})
-MERGE (ak)-[:TO_KIND]->(k);
-
-MATCH (ak:ArcKind {key: 'INCLUDES'}), (k:Kind {label: 'PageGenerated'})
-MERGE (ak)-[:TO_KIND]->(k);
-
-MATCH (ak:ArcKind {key: 'INCLUDES'}), (k:Kind {label: 'BlockGenerated'})
 MERGE (ak)-[:TO_KIND]->(k);
 
 MATCH (ak:ArcKind {key: 'INCLUDES_ENTITY'}), (k:Kind {label: 'Entity'})
@@ -4416,10 +4416,10 @@ MERGE (ak)-[:TO_KIND]->(k);
 MATCH (ak:ArcKind {key: 'IN_SUBREGION'}), (k:Kind {label: 'GeoRegion'})
 MERGE (ak)-[:TO_KIND]->(k);
 
-MATCH (ak:ArcKind {key: 'SPEAKS_BRANCH'}), (k:Kind {label: 'LanguageBranch'})
+MATCH (ak:ArcKind {key: 'LOCALE_VARIANT_OF'}), (k:Kind {label: 'Locale'})
 MERGE (ak)-[:TO_KIND]->(k);
 
-MATCH (ak:ArcKind {key: 'VARIANT_OF'}), (k:Kind {label: 'Locale'})
+MATCH (ak:ArcKind {key: 'SPEAKS_BRANCH'}), (k:Kind {label: 'LanguageBranch'})
 MERGE (ak)-[:TO_KIND]->(k);
 
 MATCH (ak:ArcKind {key: 'HAS_GEO_METRICS'}), (k:Kind {label: 'GEOMetrics'})

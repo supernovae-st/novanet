@@ -138,6 +138,6 @@ All generators live in `tools/novanet/src/generators/` (Rust-first architecture)
 
 **MermaidGenerator (`generators/mermaid.rs`):**
 - Reads `models/node-kinds/` and `models/arc-kinds/`
-- Generates Mermaid flowchart with all 64 Kinds and 121 arcs
+- Generates Mermaid flowchart with all 64 Kinds and 120 arcs
 - Groups by Realm (Global, Tenant)
 - Colors by Layer (9 distinct colors)
