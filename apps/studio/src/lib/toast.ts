@@ -153,27 +153,6 @@ function queryError(errorMessage?: string) {
 }
 
 /**
- * Toast for filter changes
- */
-function filterApplied(filterName: string) {
-  return success(`Filter applied: ${filterName}`);
-}
-
-/**
- * Toast for view mode changes
- */
-function viewModeChanged(mode: '2d' | '3d') {
-  return info(`Switched to ${mode.toUpperCase()} view`);
-}
-
-/**
- * Toast for keyboard shortcut hints
- */
-function shortcutHint(shortcut: string, action: string) {
-  return info(action, `Press ${shortcut}`);
-}
-
-/**
  * Toast with promise handling
  * Automatically shows loading, then success/error based on promise result
  */
@@ -208,9 +187,6 @@ export const toast = {
   queryResult,
   queryExecuting,
   queryError,
-  filterApplied,
-  viewModeChanged,
-  shortcutHint,
 
   // Direct access to sonner for advanced usage
   raw: sonnerToast,
