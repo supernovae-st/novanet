@@ -8,7 +8,7 @@
 arc:
   name: HAS_GEO_QUERIES
   family: ownership
-  scope: intra_realm
+  scope: cross_realm
   source: Locale
   target: GEOQuery
   cardinality: one_to_many
