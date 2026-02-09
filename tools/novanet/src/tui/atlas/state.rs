@@ -225,8 +225,8 @@ pub struct PageCompositionData {
     pub page_type: Option<String>,
     /// Page prompt text.
     pub page_prompt: Option<String>,
-    /// Page L10n for selected locale.
-    pub page_l10n: Option<PageGeneratedData>,
+    /// Page generated content for selected locale (v10.9: renamed from page_l10n).
+    pub page_generated: Option<PageGeneratedData>,
     /// Blocks in order.
     pub blocks: Vec<BlockData>,
     /// Entities used by blocks.
@@ -244,7 +244,8 @@ pub struct BlockData {
     pub block_type: Option<String>,
     pub prompt: Option<String>,
     pub rules: Option<String>,
-    pub l10n: Option<BlockGeneratedData>,
+    /// Block generated content (v10.9: renamed from l10n).
+    pub generated: Option<BlockGeneratedData>,
 }
 
 /// Block generated data (v10.9.0: renamed from BlockGeneratedData).
@@ -268,7 +269,8 @@ pub struct PageGeneratedData {
 pub struct EntityData {
     pub key: String,
     pub display_name: String,
-    pub l10n: Option<EntityContentData>,
+    /// Entity content for locale (v10.9: renamed from l10n).
+    pub content: Option<EntityContentData>,
     pub connected_blocks: Vec<String>,
 }
 

@@ -43,3 +43,6 @@ export { SegmentedTabs } from './SegmentedTabs';
 // Animation components
 export { MatrixRainOverlay } from './MatrixRainOverlay';
 export { MatrixExplosionOverlay } from './MatrixExplosionOverlay';
+
+// Card components
+export { NodeCard, NodeCardGrid, type NodeCardProps, type NodeCardGridProps } from './NodeCard';

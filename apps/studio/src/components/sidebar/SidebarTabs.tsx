@@ -24,7 +24,6 @@ import { useAnimationStore } from '@/stores/animationStore';
 import { useDatabaseSchema } from '@/hooks';
 import { DatabaseInfoPanel } from './DatabaseInfoPanel';
 import { SchemaFilterPanel } from './SchemaFilterPanel';
-import { FacetFilterPanel } from './FacetFilterPanel';
 
 type TabId = 'schema' | 'data';
 
@@ -47,7 +46,8 @@ export const SidebarTabs = memo(function SidebarTabs() {
   const schemaData = useDatabaseSchema();
   const { schema, isLoading: schemaLoading } = schemaData;
 
-  const activeTab: TabId = navigationMode === 'meta' || navigationMode === 'overlay' ? 'schema' : 'data';
+  // v11.0: Simplified - Meta shows Schema tab, Data shows Data tab
+  const activeTab: TabId = navigationMode === 'meta' ? 'schema' : 'data';
 
   const handleTabClick = useCallback(
     (tabId: TabId) => {
@@ -173,16 +173,10 @@ export const SidebarTabs = memo(function SidebarTabs() {
         <div className="absolute bottom-0 left-0 right-0 h-px bg-white/[0.06]" />
       </div>
 
-      {/* Tab Content */}
+      {/* Tab Content - v11.0: Simplified to Schema and Data only */}
       <div className="flex-1 overflow-hidden" id={`sidebar-panel-${activeTab}`} role="tabpanel">
-        {navigationMode === 'query' ? (
-          <FacetFilterPanel />
-        ) : (
-          <>
-            {activeTab === 'schema' && <SchemaFilterPanel />}
-            {activeTab === 'data' && <DatabaseInfoPanel schemaData={schemaData} />}
-          </>
-        )}
+        {activeTab === 'schema' && <SchemaFilterPanel />}
+        {activeTab === 'data' && <DatabaseInfoPanel schemaData={schemaData} />}
       </div>
     </div>
   );

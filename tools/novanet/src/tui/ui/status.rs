@@ -407,8 +407,9 @@ mod tests {
 
     #[test]
     fn test_filter_indicator_with_special_chars_in_kind() {
-        let result = build_filter_indicator(true, Some("Entity-L10n"), false);
-        assert_eq!(result, " [Entity-L10n]");
+        // Test hyphen handling in kind names
+        let result = build_filter_indicator(true, Some("locale-knowledge"), false);
+        assert_eq!(result, " [locale-knowledge]");
     }
 
     // =========================================================================
@@ -456,9 +457,9 @@ mod tests {
 
     #[test]
     fn test_realm_block_char_unknown() {
-        // Any unknown realm should use solid block
+        // Any unknown realm should use solid block (fallback)
         assert_eq!(realm_block_char("custom"), "█");
-        assert_eq!(realm_block_char("organization"), "█");
+        assert_eq!(realm_block_char("unknown"), "█");
     }
 
     // =========================================================================
@@ -477,9 +478,9 @@ mod tests {
 
     #[test]
     fn test_realm_display_label_unknown() {
-        // Unknown realm returns the key as-is
+        // Unknown realm returns the key as-is (fallback)
         assert_eq!(realm_display_label("custom"), "custom");
-        assert_eq!(realm_display_label("organization"), "organization");
+        assert_eq!(realm_display_label("unknown"), "unknown");
     }
 
     // =========================================================================

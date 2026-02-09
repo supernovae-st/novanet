@@ -235,6 +235,10 @@ pub struct App {
     pub pending_instance_load: Option<String>,
     /// Pending Kind arcs load request (Kind label to load from Neo4j)
     pub pending_arcs_load: Option<String>,
+    /// Pending entity categories load (triggered when Entity Kind expanded)
+    pub pending_entity_categories_load: bool,
+    /// Pending category instances load (category key to load)
+    pub pending_category_instances_load: Option<String>,
     /// Pending ArcKind details load request (Arc key to load from Neo4j)
     pub pending_arc_kind_load: Option<String>,
     /// Pending Realm details load request (Realm key to load from Neo4j)
@@ -331,6 +335,8 @@ impl App {
             arc_kind_details: None,
             pending_instance_load: None,
             pending_arcs_load: None,
+            pending_entity_categories_load: false,
+            pending_category_instances_load: None,
             pending_arc_kind_load: None,
             pending_realm_load: None,
             pending_layer_load: None,
@@ -514,6 +520,12 @@ impl App {
             Some(TreeItem::KindsSection) | Some(TreeItem::ArcsSection) => TreeItemData::Section,
             Some(TreeItem::Instance(_, _, kind, _)) => TreeItemData::Instance {
                 kind_yaml_path: kind.yaml_path.clone(),
+            },
+            // EntityCategory shows parent Entity Kind's YAML
+            Some(TreeItem::EntityCategory(_, _, kind, _)) => TreeItemData::Kind {
+                yaml_path: kind.yaml_path.clone(),
+                key: kind.key.clone(),
+                properties: kind.properties.clone(),
             },
             None => TreeItemData::None,
         }
@@ -890,41 +902,18 @@ impl App {
             }
         }
 
-        // Guide mode: delegates to guide state (except mode switching 1-5)
+        // Guide mode: delegates to guide state
+        // Keys 1-4 switch Guide tabs (Traits/Layers/Arcs/Pipeline), NOT global modes
+        // Use Esc to exit Guide mode back to Meta mode
         if self.mode == NavMode::Guide {
             match key.code {
-                // Mode switching exits Guide mode (with cursor memory)
-                KeyCode::Char('1') => {
+                KeyCode::Esc => {
+                    // Exit Guide mode, return to Meta
                     self.save_mode_cursor();
                     self.mode = NavMode::Meta;
                     self.restore_mode_cursor(NavMode::Meta);
                     self.load_yaml_for_current();
                     return true;
-                }
-                KeyCode::Char('2') => {
-                    self.save_mode_cursor();
-                    self.mode = NavMode::Data;
-                    self.restore_mode_cursor(NavMode::Data);
-                    self.request_instance_load_for_current();
-                    return true;
-                }
-                KeyCode::Char('3') => {
-                    self.save_mode_cursor();
-                    self.mode = NavMode::Atlas;
-                    self.restore_mode_cursor(NavMode::Atlas);
-                    self.init_atlas_from_current();
-                    return true;
-                }
-                KeyCode::Char('4') => {
-                    self.save_mode_cursor();
-                    self.mode = NavMode::Audit;
-                    self.restore_mode_cursor(NavMode::Audit);
-                    self.pending_audit_load = true;
-                    return true;
-                }
-                KeyCode::Char('5') => {
-                    // Already in Guide, no-op
-                    return false;
                 }
                 KeyCode::Char('?') => {
                     self.help_active = true;
@@ -938,7 +927,7 @@ impl App {
                     self.legend_active = true;
                     return true;
                 }
-                // All other keys handled by guide
+                // All keys (including 1-4 for tab switching) handled by guide
                 _ => return self.guide.handle_key(key),
             }
         }
@@ -1076,9 +1065,7 @@ impl App {
             KeyCode::Enter => {
                 match self.focus {
                     Focus::Tree => {
-                        if let Some(key) = self.tree.collapse_key_at(self.tree_cursor) {
-                            self.tree.toggle(&key);
-                        }
+                        self.toggle_tree_item();
                     }
                     Focus::Yaml => {
                         // Toggle peek mode (show/hide other section)
@@ -1100,9 +1087,7 @@ impl App {
             // Toggle collapse/expand: h/l/Space (Tree only)
             KeyCode::Char('h') | KeyCode::Char('l') | KeyCode::Char(' ') => {
                 if self.focus == Focus::Tree {
-                    if let Some(key) = self.tree.collapse_key_at(self.tree_cursor) {
-                        self.tree.toggle(&key);
-                    }
+                    self.toggle_tree_item();
                 }
                 true
             }
@@ -1734,6 +1719,12 @@ impl App {
                     r.display_name, l.display_name, k.display_name, inst.display_name
                 )
             }
+            Some(TreeItem::EntityCategory(r, l, k, cat)) => {
+                format!(
+                    "{} → {} → {} → {}",
+                    r.display_name, l.display_name, k.display_name, cat.display_name
+                )
+            }
             Some(TreeItem::ArcFamily(f)) => format!("Arcs → {}", f.display_name),
             Some(TreeItem::ArcKind(f, ak)) => {
                 format!("Arcs → {} → {}", f.display_name, ak.display_name)
@@ -1773,6 +1764,30 @@ impl App {
 
         // Also update schema match if on an instance
         self.update_schema_match_for_current();
+    }
+
+    /// Toggle collapse/expand of the current tree item.
+    /// Also triggers loading for Entity categories and category instances in Data mode.
+    fn toggle_tree_item(&mut self) {
+        if let Some(key) = self.tree.collapse_key_at(self.tree_cursor) {
+            // Check if expanding (going from collapsed to expanded)
+            let was_collapsed = self.tree.is_collapsed(&key);
+            self.tree.toggle(&key);
+
+            // Only trigger loading when expanding (not collapsing)
+            if was_collapsed && self.is_data_mode() {
+                // When expanding Entity Kind, load categories if not already loaded
+                if key == "kind:Entity" && self.tree.entity_categories.is_empty() {
+                    self.pending_entity_categories_load = true;
+                }
+                // When expanding an EntityCategory, load instances for that category
+                else if let Some(category_key) = key.strip_prefix("category:") {
+                    if !self.tree.entity_category_instances.contains_key(category_key) {
+                        self.pending_category_instances_load = Some(category_key.to_string());
+                    }
+                }
+            }
+        }
     }
 
     /// Update schema match for the current instance (if any).
@@ -1819,6 +1834,18 @@ impl App {
         self.pending_arcs_load.take()
     }
 
+    /// Take the pending entity categories load request.
+    /// Returns true if categories need to be loaded.
+    pub fn take_pending_entity_categories_load(&mut self) -> bool {
+        std::mem::take(&mut self.pending_entity_categories_load)
+    }
+
+    /// Take the pending category instances load request.
+    /// Returns the category key if one was queued.
+    pub fn take_pending_category_instances_load(&mut self) -> Option<String> {
+        self.pending_category_instances_load.take()
+    }
+
     /// Set the loaded Kind arcs data from Neo4j.
     pub fn set_kind_arcs(&mut self, arcs: KindArcsData) {
         self.kind_arcs = Some(arcs);
@@ -1862,6 +1889,8 @@ impl App {
             || self.pending_arc_kind_load.is_some()
             || self.pending_realm_load.is_some()
             || self.pending_layer_load.is_some()
+            || self.pending_entity_categories_load
+            || self.pending_category_instances_load.is_some()
     }
 
     /// Check if any overlay (help, legend, search, recent) is currently open.
@@ -2175,6 +2204,8 @@ mod tests {
             instances: BTreeMap::new(),
             instance_totals: BTreeMap::new(),
             kind_index,
+            entity_categories: Vec::new(),
+            entity_category_instances: BTreeMap::new(),
         }
     }
 

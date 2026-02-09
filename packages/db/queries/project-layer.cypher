@@ -50,7 +50,7 @@ MATCH (p:Project {key: $projectKey})-[:HAS_PAGE]->(page:Page {key: $pageKey})
 MATCH (page)-[:HAS_PROMPT]->(pp:PagePrompt)
 OPTIONAL MATCH (page)-[:HAS_BLOCK]->(b:Block)
 OPTIONAL MATCH (b)-[:USES_ENTITY]->(c:Entity)
-OPTIONAL MATCH (c)-[:HAS_L10N]->(cl:EntityL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+OPTIONAL MATCH (c)-[:HAS_CONTENT]->(cl:EntityContent)-[:FOR_LOCALE]->(l:Locale {key: $locale})
 RETURN page.key AS page,
        pp.instructions AS instructions,
        collect(DISTINCT b.key) AS blocks,

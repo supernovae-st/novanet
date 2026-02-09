@@ -7,11 +7,11 @@ This file provides guidance to Claude Code when working in the `tools/novanet/` 
 `novanet` is a unified Rust CLI + TUI binary for managing the NovaNet context graph.
 It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 
-**Version**: v11.0.0 (SEO tenant migration + v10.9 naming refactor)
+**Version**: v11.1.0 (EntityCategory feature + SEO tenant migration + v10.9 naming refactor)
 
 ## Current Status
 
-**v11.0.0 SEO tenant migration** — Moved 9 SEO/GEO nodes from `global/seo` to `tenant/seo` (ADR-012 fix). Fixed 22 arc scopes (cross_realm → intra_realm). Architecture: GLOBAL (2 layers: config, locale-knowledge), TENANT (7 layers: +seo). Galaxy-themed mission control TUI with search, detail, arc explorer, CRUD dialogs, dashboard stats, ASCII logo, breadcrumb navigation, command palette, help overlay, boot animation, effects engine, and onboarding.
+**v11.1.0 EntityCategory feature** — Added Entity categorization system for semantic grouping (single category assignment). v11.0 SEO tenant migration (moved 9 SEO/GEO nodes from `global/seo` to `tenant/seo`, fixed 22 arc scopes). Architecture: GLOBAL (2 layers: config, locale-knowledge), TENANT (7 layers: +seo). Galaxy-themed mission control TUI with EntityCategory filtering, search, detail, arc explorer, CRUD dialogs, dashboard stats, ASCII logo, breadcrumb navigation, command palette, help overlay, boot animation, effects engine, and onboarding.
 
 | Area | Commands | Status |
 |------|----------|--------|
@@ -24,9 +24,9 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 | DB | `db seed`, `db migrate`, `db reset` | Implemented |
 | Filter | `filter build` | Implemented (JSON stdin, Studio subprocess) |
 | Blueprint | `blueprint [--view=X]` | Implemented (10 views: tree, flow, arcs, stats, glossary, cardinality + 4 analysis) |
-| TUI | `tui` | Galaxy theme, mission control, search, detail, arc explorer, CRUD dialogs, dashboard, logo, command palette, help overlay, boot animation, effects engine, onboarding |
+| TUI | `tui` | Galaxy theme, mission control, EntityCategory filter, search, detail, arc explorer, CRUD dialogs, dashboard, logo, command palette, help overlay, boot animation, effects engine, onboarding |
 
-**929 tests pass** (`cargo test`). Zero clippy warnings.
+**952 tests pass** (`cargo test`). Zero clippy warnings.
 
 **Testing stack:**
 - `insta` — Snapshot testing (5 generator outputs)
@@ -157,7 +157,7 @@ cargo run -- tui                                  # Interactive terminal UI
 # Quality
 cargo clippy -- -D warnings    # Zero warnings policy
 cargo fmt --check              # Formatting check
-cargo nextest run              # 482 tests (fast, parallel)
+cargo nextest run              # 952 tests (fast, parallel)
 cargo test -- --ignored        # Neo4j integration tests (requires running Neo4j)
 
 # Security & auditing
@@ -220,7 +220,7 @@ src/
 - **YAML-first architecture**: Each Kind YAML has explicit `realm:` and `layer:` fields (source of truth)
   - Path validation: file must be at `models/node-kinds/{realm}/{layer}/{name}.yaml`
   - Generators read realm/layer from YAML content, validate against path
-  - v11.0: 2 realms (global, tenant), 9 layers (2 global + 7 tenant), 76 node types total
+  - v11.1: 2 realms (global, tenant), 9 layers (2 global + 7 tenant), 77 node types (added EntityCategory)
 - **Icons source of truth (v11.0)**: `visual-encoding.yaml` → `icons:` section
   - Dual format: `web` (Lucide for Studio) + `terminal` (Unicode for TUI)
   - Categories: realms, layers, traits, arc_families, states, navigation, quality, modes

@@ -1,0 +1,42 @@
+# packages/core/models/arc-kinds/semantic/belongs-to.yaml
+# ArcKind: BELONGS_TO - Entity belongs to a semantic category (tenant -> global)
+#
+# v11.1.0: NEW arc replacing Entity.type property with proper graph relationship
+#          Entity (tenant/semantic) -> EntityCategory (global/config)
+
+arc:
+  name: BELONGS_TO
+  family: semantic
+  scope: cross_realm  # tenant Entity -> global EntityCategory
+
+  source: Entity
+  target: EntityCategory
+
+  cardinality: many_to_one  # Each Entity has exactly one category
+
+  llm_context: |
+    Links Entity to its semantic category (EntityCategory).
+    Replaces the former `type` property with a proper graph relationship.
+    Categories answer: WHAT? (THING, FEATURE, TOOL), HOW? (ACTION, GUIDE),
+    WHY? (USE_CASE), WHO? (INDUSTRY), WHERE? (MEDIUM), ABSTRACT (CONCEPT),
+    EXTERNAL (BRAND, INTEGRATION).
+    Use: MATCH (e:Entity)-[:BELONGS_TO]->(c:EntityCategory)
+
+  cypher_pattern: "(Entity)-[:BELONGS_TO]->(EntityCategory)"
+
+  constraints:
+    required: true           # Every Entity MUST have exactly one BELONGS_TO arc
+    unique_source: true      # Each Entity can only belong to one category
+    target_must_exist: true  # Target must be a valid EntityCategory node
+
+  example:
+    description: "QR Code entity belongs to THING category"
+    cypher: |
+      // Create the relationship
+      MATCH (e:Entity {key: 'qr-code'})
+      MATCH (c:EntityCategory {key: 'THING'})
+      MERGE (e)-[:BELONGS_TO]->(c)
+
+      // Query entities by category
+      MATCH (e:Entity)-[:BELONGS_TO]->(c:EntityCategory {key: 'THING'})
+      RETURN e.key, e.display_name

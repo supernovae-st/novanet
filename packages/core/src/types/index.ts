@@ -323,10 +323,10 @@ export interface SEOMiningRun {
 }
 
 // =============================================================================
-// GEO — REMOVED in v10.3
+// GEO — REINTRODUCED in v10.7
 // =============================================================================
-// GEOSeedL10n, GEOSeedMetrics, GEOMiningRun removed (GEO layer deprecated)
-// Will be reintroduced in future version with different architecture
+// v10.3: GEOSeedL10n, GEOSeedMetrics, GEOMiningRun removed (old GEO layer deprecated)
+// v10.7: New GEO schema: GEOQuery, GEOAnswer, GEOMetrics (AI visibility tracking)
 
 // =============================================================================
 // RELATION PROPS

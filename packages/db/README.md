@@ -141,7 +141,7 @@ MATCH (e:Entity {key: "tier-pro"})-[r:SEMANTIC_LINK*1..2]->(e2:Entity)
 WHERE ALL(rel IN r WHERE rel.temperature >= 0.3)
 WITH e2, reduce(a = 1.0, rel IN r | a * rel.temperature) AS activation
 WHERE activation >= 0.3
-MATCH (e2)-[:HAS_L10N]->(el:EntityL10n)-[:FOR_LOCALE]->(l:Locale {key: $locale})
+MATCH (e2)-[:HAS_CONTENT]->(el:EntityContent)-[:FOR_LOCALE]->(l:Locale {key: $locale})
 RETURN e2.key, el.title, activation
 ORDER BY activation DESC
 ```

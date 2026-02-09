@@ -79,20 +79,20 @@ const COLOR_ACTIVE_KIND_BG: Color = Color::Rgb(25, 35, 45);
 // -----------------------------------------------------------------------------
 
 /// Wide layout: Tree panel percentage.
-const LAYOUT_WIDE_TREE_PCT: u16 = 30;
+const LAYOUT_WIDE_TREE_PCT: u16 = 25;
 /// Wide layout: Info+Graph panel percentage.
-const LAYOUT_WIDE_INFO_PCT: u16 = 35;
+const LAYOUT_WIDE_INFO_PCT: u16 = 38;
 /// Wide layout: YAML panel percentage.
-const LAYOUT_WIDE_YAML_PCT: u16 = 35;
+const LAYOUT_WIDE_YAML_PCT: u16 = 37;
 /// Wide layout: Info section percentage (within Info+Graph).
 const LAYOUT_WIDE_INFO_SECTION_PCT: u16 = 60;
 /// Wide layout: Graph section percentage (within Info+Graph).
 const LAYOUT_WIDE_GRAPH_SECTION_PCT: u16 = 40;
 
 /// Narrow layout: Tree panel percentage.
-const LAYOUT_NARROW_TREE_PCT: u16 = 30;
+const LAYOUT_NARROW_TREE_PCT: u16 = 25;
 /// Narrow layout: Detail panel percentage.
-const LAYOUT_NARROW_DETAIL_PCT: u16 = 70;
+const LAYOUT_NARROW_DETAIL_PCT: u16 = 75;
 /// Narrow layout: Info section percentage.
 const LAYOUT_NARROW_INFO_PCT: u16 = 35;
 /// Narrow layout: Graph section percentage.
@@ -715,6 +715,9 @@ fn render_recent_items_overlay(f: &mut Frame, app: &App) {
                 }
                 Some(crate::tui::data::TreeItem::ArcFamily(f)) => ("↔", f.display_name.clone()),
                 Some(crate::tui::data::TreeItem::ArcKind(_, ak)) => ("→", ak.display_name.clone()),
+                Some(crate::tui::data::TreeItem::EntityCategory(_, _, _, cat)) => {
+                    ("📁", cat.display_name.clone())
+                }
                 None => ("?", format!("(cursor {})", cursor)),
             };
 
