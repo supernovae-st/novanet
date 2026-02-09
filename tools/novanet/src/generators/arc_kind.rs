@@ -362,6 +362,7 @@ mod tests {
         ArcDef {
             arc_type: rel_type.to_string(),
             family,
+            scope: None,
             source,
             target,
             cardinality,
@@ -377,6 +378,7 @@ mod tests {
         ArcDef {
             arc_type: rel_type.to_string(),
             family,
+            scope: None,
             source: NodeRef::Single("B".to_string()),
             target: NodeRef::Single("A".to_string()),
             cardinality: Cardinality::ManyToOne,

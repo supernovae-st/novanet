@@ -103,7 +103,7 @@ fn walk_rules(
 /// Generate a complete Mermaid-in-Markdown document for a single view.
 pub fn generate_view(root: &Path, view: &ViewDef) -> crate::Result<String> {
     let nodes = yaml_node::load_all_nodes(root)?;
-    let rels_doc = arcs::load_arcs(root)?;
+    let rels_doc = arcs::load_arc_kinds_from_files(root)?;
     let org_doc = organizing::load_organizing(root)?;
 
     let view_graph = resolve_view_graph(view, &rels_doc.arcs);
@@ -379,6 +379,7 @@ mod tests {
         ArcDef {
             arc_type: rel_type.to_string(),
             family,
+            scope: None,
             source: NodeRef::Single(source.to_string()),
             target: NodeRef::Single(target.to_string()),
             cardinality: Cardinality::OneToMany,
@@ -522,6 +523,7 @@ mod tests {
         let rel = ArcDef {
             arc_type: "OF_TYPE".to_string(),
             family: ArcFamily::Ownership,
+            scope: None,
             source: NodeRef::Multiple(vec!["Page".to_string(), "Block".to_string()]),
             target: NodeRef::Multiple(vec!["PageType".to_string(), "BlockType".to_string()]),
             cardinality: Cardinality::ManyToOne,

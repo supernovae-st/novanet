@@ -1,6 +1,6 @@
 //! Generate Mermaid flowchart with Realm/Layer/Trait coloring.
 //!
-//! Reads all 48 node YAMLs, `relations.yaml`, and `taxonomy.yaml` (v10.6)
+//! Reads all node YAMLs, arc-kinds/, and `taxonomy.yaml` (v10.9)
 //! to produce a complete graph diagram with:
 //! - Subgraphs grouped by Realm → Layer
 //! - Node styling by node_trait (Trait)
@@ -235,7 +235,7 @@ impl super::Generator for MermaidGenerator {
 
     fn generate(&self, root: &Path) -> crate::Result<String> {
         let nodes = yaml_node::load_all_nodes(root)?;
-        let rels_doc = arcs::load_arcs(root)?;
+        let rels_doc = arcs::load_arc_kinds_from_files(root)?;
         let org_doc = organizing::load_organizing(root)?;
         render_mermaid(&nodes, &rels_doc.arcs, &org_doc)
     }
@@ -278,7 +278,7 @@ fn render_mermaid(
     writeln!(out, "  %% Generated: {node_count} nodes, {arc_count} arcs").unwrap();
     writeln!(
         out,
-        "  %% Source: 42 node YAMLs + relations.yaml + taxonomy.yaml"
+        "  %% Source: node-kinds/ + arc-kinds/ + taxonomy.yaml"
     )
     .unwrap();
     writeln!(out).unwrap();
@@ -479,6 +479,7 @@ mod tests {
         ArcDef {
             arc_type: rel_type.to_string(),
             family,
+            scope: None,
             source: NodeRef::Single(source.to_string()),
             target: NodeRef::Single(target.to_string()),
             cardinality: Cardinality::OneToMany,
@@ -564,6 +565,7 @@ mod tests {
         let rel = ArcDef {
             arc_type: "HAS_GENERATED".to_string(),
             family: ArcFamily::Generation,
+            scope: None,
             source: NodeRef::Multiple(vec!["Page".to_string(), "Block".to_string()]),
             target: NodeRef::Multiple(vec![
                 "PageGenerated".to_string(),

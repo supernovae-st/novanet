@@ -41,10 +41,6 @@ pub fn node_kinds_dir(root: &Path) -> PathBuf {
     root.join("packages/core/models/node-kinds")
 }
 
-pub fn relations_path(root: &Path) -> PathBuf {
-    root.join("packages/core/models/relations.yaml")
-}
-
 /// Path to taxonomy.yaml (v9.5 - realms, layers, traits, arc families)
 pub fn taxonomy_path(root: &Path) -> PathBuf {
     root.join("packages/core/models/taxonomy.yaml")
@@ -112,15 +108,6 @@ mod tests {
         assert_eq!(
             node_kinds_dir(root),
             PathBuf::from("/fake/root/packages/core/models/node-kinds")
-        );
-    }
-
-    #[test]
-    fn relations_path_joins_correctly() {
-        let root = Path::new("/fake/root");
-        assert_eq!(
-            relations_path(root),
-            PathBuf::from("/fake/root/packages/core/models/relations.yaml")
         );
     }
 
