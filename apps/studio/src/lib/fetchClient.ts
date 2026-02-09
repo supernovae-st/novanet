@@ -196,13 +196,6 @@ export async function postJSON<T, B = unknown>(
 }
 
 /**
- * Check if an error is a FetchError
- */
-export function isFetchError(error: unknown): error is FetchError {
-  return error instanceof FetchError;
-}
-
-/**
  * Extract error message from any error type
  */
 export function getErrorMessage(error: unknown): string {
