@@ -182,8 +182,8 @@ pub fn schema_validate(root: &Path) -> crate::Result<Vec<ValidationIssue>> {
     let node_names: std::collections::HashSet<String> =
         nodes.iter().map(|n| n.def.name.clone()).collect();
 
-    // 2. Parse relations
-    let rels_doc = crate::parsers::arcs::load_arcs(root)?;
+    // 2. Parse arc definitions (v10.7+: from arc-kinds/ directory)
+    let rels_doc = crate::parsers::arcs::load_arc_kinds_from_files(root)?;
 
     // 3. Parse organizing principles
     let org_doc = crate::parsers::organizing::load_organizing(root)?;
