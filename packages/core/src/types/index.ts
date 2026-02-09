@@ -83,7 +83,7 @@ export interface EmbeddableNode {
 
 export {
   type Project,
-  type ProjectL10n,
+  type ProjectContent,
   type VoiceTone,
   // v7.2.5: Audience, AudienceL10n, ValuePropL10n, SocialProofL10n removed
   type BrandIdentity,

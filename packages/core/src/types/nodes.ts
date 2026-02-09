@@ -8,7 +8,7 @@
 
 export const NODE_TYPES = [
   // ═══════════════════════════════════════════════════════════════════════════
-  // GLOBAL REALM (40 nodes)
+  // GLOBAL REALM (31 nodes) — v10.9: SEO moved to TENANT
   // ═══════════════════════════════════════════════════════════════════════════
   // config (13) - v10.8: added geographic taxonomy
   'Locale', 'Formatting', 'Slugification', 'Adaptation', 'Style', 'Culture', 'Market',
@@ -17,21 +17,21 @@ export const NODE_TYPES = [
   'TermSet', 'ExpressionSet', 'PatternSet', 'CultureSet', 'TabooSet', 'AudienceSet',
   'Term', 'Expression', 'Pattern', 'CultureRef', 'Taboo', 'AudienceTrait',
   'LanguageFamily', 'LanguageBranch', 'CulturalRealm', 'CulturalSubRealm', 'PopulationCluster', 'PopulationSubCluster',
-  // seo (9) — Keywords, metrics, mining, comparisons, prepositions, questions + GEO
-  'SEOKeyword', 'SEOKeywordMetrics', 'SEOMiningRun', 'SEOComparison', 'SEOPreposition', 'SEOQuestion',
-  'GEOQuery', 'GEOAnswer', 'GEOMetrics',
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // TENANT REALM (24 nodes) — v10.6: merged organization + project
+  // TENANT REALM (33 nodes) — v10.9: includes SEO layer
   // ═══════════════════════════════════════════════════════════════════════════
   // config (2)
   'Organization', 'Tenant',
   // foundation (3)
-  'Project', 'BrandIdentity', 'ProjectL10n',
+  'Project', 'BrandIdentity', 'ProjectContent',
   // structure (3)
   'Page', 'Block', 'ContentSlot',
   // semantic (4)
   'Entity', 'EntityContent', 'AudiencePersona', 'ChannelSurface',
+  // seo (9) — v10.9: in TENANT realm per YAML source
+  'SEOKeyword', 'SEOKeywordMetrics', 'SEOMiningRun', 'SEOComparison', 'SEOPreposition', 'SEOQuestion',
+  'GEOQuery', 'GEOAnswer', 'GEOMetrics',
   // instruction (7)
   'PageType', 'BlockType', 'PagePrompt', 'BlockPrompt', 'BlockRules', 'BlockInstruction', 'PromptArtifact',
   // output (5)
@@ -41,14 +41,14 @@ export const NODE_TYPES = [
 export type NodeType = typeof NODE_TYPES[number];
 
 // =============================================================================
-// v10.6 TAXONOMY TYPES (2 realms, 8 layers)
+// v10.9 TAXONOMY TYPES (2 realms, 9 layers: 2 global + 7 tenant)
 // =============================================================================
 
 export type Realm = 'global' | 'tenant';
 
 export type Layer =
-  | 'config' | 'locale-knowledge' | 'seo'  // global realm layers
-  | 'foundation' | 'structure' | 'semantic' | 'instruction' | 'output';  // tenant realm layers
+  | 'config' | 'locale-knowledge'  // global realm layers (2)
+  | 'foundation' | 'structure' | 'semantic' | 'seo' | 'instruction' | 'output';  // tenant realm layers (7)
 
 export type Trait = 'invariant' | 'localized' | 'knowledge' | 'derived' | 'job';
 
@@ -101,17 +101,6 @@ export const KIND_META: Record<NodeType, KindMeta> = {
   PopulationCluster:   { realm: 'global', layer: 'locale-knowledge', trait: 'knowledge' },
   PopulationSubCluster:{ realm: 'global', layer: 'locale-knowledge', trait: 'knowledge' },
 
-  // GLOBAL REALM — seo (9) — SEO + GEO (Generative Engine Optimization)
-  SEOKeyword:       { realm: 'global', layer: 'seo', trait: 'localized' },
-  SEOKeywordMetrics:{ realm: 'global', layer: 'seo', trait: 'derived' },
-  SEOMiningRun:     { realm: 'global', layer: 'seo', trait: 'job' },
-  SEOComparison:    { realm: 'global', layer: 'seo', trait: 'localized' },
-  SEOPreposition:   { realm: 'global', layer: 'seo', trait: 'localized' },
-  SEOQuestion:      { realm: 'global', layer: 'seo', trait: 'localized' },
-  GEOQuery:         { realm: 'global', layer: 'seo', trait: 'knowledge' },
-  GEOAnswer:        { realm: 'global', layer: 'seo', trait: 'derived' },
-  GEOMetrics:       { realm: 'global', layer: 'seo', trait: 'derived' },
-
   // ═══════════════════════════════════════════════════════════════════════════
   // TENANT REALM — config (2)
   // ═══════════════════════════════════════════════════════════════════════════
@@ -121,7 +110,7 @@ export const KIND_META: Record<NodeType, KindMeta> = {
   // TENANT REALM — foundation (3)
   Project:      { realm: 'tenant', layer: 'foundation',  trait: 'invariant' },
   BrandIdentity:{ realm: 'tenant', layer: 'foundation',  trait: 'invariant' },
-  ProjectL10n:  { realm: 'tenant', layer: 'foundation',  trait: 'localized' },
+  ProjectContent: { realm: 'tenant', layer: 'foundation',  trait: 'localized' },
 
   // TENANT REALM — structure (3)
   Page:         { realm: 'tenant', layer: 'structure',   trait: 'invariant' },
@@ -133,6 +122,17 @@ export const KIND_META: Record<NodeType, KindMeta> = {
   EntityContent:      { realm: 'tenant', layer: 'semantic', trait: 'localized' },
   AudiencePersona: { realm: 'tenant', layer: 'semantic', trait: 'invariant' },
   ChannelSurface:  { realm: 'tenant', layer: 'semantic', trait: 'invariant' },
+
+  // TENANT REALM — seo (9) — v10.9: moved from global, traits per YAML
+  SEOKeyword:       { realm: 'tenant', layer: 'seo', trait: 'knowledge' },
+  SEOKeywordMetrics:{ realm: 'tenant', layer: 'seo', trait: 'derived' },
+  SEOMiningRun:     { realm: 'tenant', layer: 'seo', trait: 'job' },
+  SEOComparison:    { realm: 'tenant', layer: 'seo', trait: 'knowledge' },
+  SEOPreposition:   { realm: 'tenant', layer: 'seo', trait: 'knowledge' },
+  SEOQuestion:      { realm: 'tenant', layer: 'seo', trait: 'knowledge' },
+  GEOQuery:         { realm: 'tenant', layer: 'seo', trait: 'knowledge' },
+  GEOAnswer:        { realm: 'tenant', layer: 'seo', trait: 'derived' },
+  GEOMetrics:       { realm: 'tenant', layer: 'seo', trait: 'derived' },
 
   // TENANT REALM — instruction (7)
   PageType:        { realm: 'tenant', layer: 'instruction', trait: 'invariant' },

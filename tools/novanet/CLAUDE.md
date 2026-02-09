@@ -23,9 +23,10 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 | Locale | `locale list`, `locale import` | Implemented |
 | DB | `db seed`, `db migrate`, `db reset` | Implemented |
 | Filter | `filter build` | Implemented (JSON stdin, Studio subprocess) |
+| Blueprint | `blueprint [--view=X]` | Implemented (10 views: tree, flow, arcs, stats, glossary, cardinality + 4 analysis) |
 | TUI | `tui` | Galaxy theme, mission control, search, detail, arc explorer, CRUD dialogs, dashboard, logo, command palette, help overlay, boot animation, effects engine, onboarding |
 
-**490 tests pass** (`cargo test`). Zero clippy warnings.
+**929 tests pass** (`cargo test`). Zero clippy warnings.
 
 **Testing stack:**
 - `insta` — Snapshot testing (5 generator outputs)
@@ -139,6 +140,16 @@ cargo run -- doc generate --list                  # List available views
 
 # Filter (Studio subprocess, no Neo4j)
 echo '{"realms":["project"]}' | cargo run -- filter build
+
+# Blueprint (YAML, no Neo4j — rich ASCII visualization)
+cargo run -- blueprint                            # Default overview with all sections
+cargo run -- blueprint --view=tree                # Realm > Layer > Kind hierarchy
+cargo run -- blueprint --view=flow                # 6 flow diagrams
+cargo run -- blueprint --view=arcs                # Arc families with relationships
+cargo run -- blueprint --view=stats               # Raw counts (supports --format=json)
+cargo run -- blueprint --view=glossary            # Term definitions
+cargo run -- blueprint --view=cardinality         # 1:1, 1:N, N:M constraints
+cargo run -- blueprint --no-validate              # Skip validation for faster output
 
 # TUI (Neo4j)
 cargo run -- tui                                  # Interactive terminal UI

@@ -76,7 +76,7 @@ const NODE_LABELS: Record<NodeType, string> = {
   // foundation (3)
   Project: 'Project',
   BrandIdentity: 'Brand Identity',
-  ProjectL10n: 'Project L10n',
+  ProjectContent: 'Project Content',
 
   // structure (3)
   Page: 'Page',

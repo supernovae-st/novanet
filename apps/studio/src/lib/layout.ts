@@ -58,7 +58,7 @@ const NODE_DIMENSIONS: Record<string, { width: number; height: number }> = {
   Block: { width: 205, height: 120 },
   BlockType: { width: 195, height: 115 },
   BrandIdentity: { width: 210, height: 120 },
-  ProjectL10n: { width: 210, height: 120 },
+  ProjectContent: { width: 210, height: 120 },
 
   // v10 knowledge nodes - tiered model
   // Technical tier

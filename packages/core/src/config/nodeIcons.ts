@@ -63,7 +63,7 @@ export const NODE_ICONS: Record<NodeType, string> = {
   // TENANT — foundation (3)
   Project: '📦',
   BrandIdentity: '🎨',
-  ProjectL10n: '🌐',
+  ProjectContent: '🌐',
 
   // TENANT — structure (3)
   Page: '📄',
