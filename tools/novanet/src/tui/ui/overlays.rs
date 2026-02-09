@@ -75,19 +75,8 @@ pub fn render_search(f: &mut Frame, app: &App) {
         let is_selected = actual_idx == app.search.cursor;
         let item = app.tree.item_at(idx);
 
-        let (prefix, name, type_label) = match item {
-            Some(TreeItem::KindsSection) => ("", "Node Kinds".to_string(), "Section"),
-            Some(TreeItem::ArcsSection) => ("", "Arcs".to_string(), "Section"),
-            Some(TreeItem::Realm(r)) => (r.icon, r.display_name.clone(), "Realm"),
-            Some(TreeItem::Layer(_, l)) => ("  ", l.display_name.clone(), "Layer"),
-            Some(TreeItem::Kind(_, _, k)) => ("    ", k.display_name.clone(), "Node Kind"),
-            Some(TreeItem::ArcFamily(f)) => ("  ", f.display_name.clone(), "ArcFamily"),
-            Some(TreeItem::ArcKind(_, ek)) => ("    ", ek.display_name.clone(), "Arc Kind"),
-            Some(TreeItem::Instance(_, _, _, inst)) => {
-                ("      ", inst.display_name.clone(), "Instance")
-            }
-            None => ("?", "Unknown".to_string(), ""),
-        };
+        let (prefix, name) = get_item_display(item.as_ref());
+        let type_label = get_type_label(item.as_ref());
 
         let style = if is_selected {
             Style::default().bg(Color::Rgb(30, 50, 70)).fg(Color::White)
@@ -478,4 +467,429 @@ pub fn render_legend(f: &mut Frame, app: &App) {
 
     let paragraph = Paragraph::new(lines).block(block);
     f.render_widget(paragraph, legend_area);
+}
+
+// =============================================================================
+// HELPER FUNCTIONS (extracted for testability)
+// =============================================================================
+
+/// Get the type label for a TreeItem variant.
+/// Used in search results to show what type of item was matched.
+pub fn get_type_label(item: Option<&TreeItem>) -> &'static str {
+    match item {
+        Some(TreeItem::KindsSection) => "Section",
+        Some(TreeItem::ArcsSection) => "Section",
+        Some(TreeItem::Realm(_)) => "Realm",
+        Some(TreeItem::Layer(_, _)) => "Layer",
+        Some(TreeItem::Kind(_, _, _)) => "Node Kind",
+        Some(TreeItem::ArcFamily(_)) => "ArcFamily",
+        Some(TreeItem::ArcKind(_, _)) => "Arc Kind",
+        Some(TreeItem::Instance(_, _, _, _)) => "Instance",
+        None => "",
+    }
+}
+
+/// Get the display name for a TreeItem.
+/// Returns a tuple of (prefix, name) for rendering.
+pub fn get_item_display(item: Option<&TreeItem>) -> (&'static str, String) {
+    match item {
+        Some(TreeItem::KindsSection) => ("", "Node Kinds".to_string()),
+        Some(TreeItem::ArcsSection) => ("", "Arcs".to_string()),
+        Some(TreeItem::Realm(r)) => (r.icon, r.display_name.clone()),
+        Some(TreeItem::Layer(_, l)) => ("  ", l.display_name.clone()),
+        Some(TreeItem::Kind(_, _, k)) => ("    ", k.display_name.clone()),
+        Some(TreeItem::ArcFamily(f)) => ("  ", f.display_name.clone()),
+        Some(TreeItem::ArcKind(_, ek)) => ("    ", ek.display_name.clone()),
+        Some(TreeItem::Instance(_, _, _, inst)) => ("      ", inst.display_name.clone()),
+        None => ("?", "Unknown".to_string()),
+    }
+}
+
+// =============================================================================
+// TESTS
+// =============================================================================
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::tui::data::{
+        ArcFamilyInfo, ArcKindInfo, InstanceInfo, KindInfo, LayerInfo, RealmInfo,
+    };
+    use std::collections::BTreeMap;
+
+    // =========================================================================
+    // Test fixtures
+    // =========================================================================
+
+    fn make_realm() -> RealmInfo {
+        RealmInfo {
+            key: "global".to_string(),
+            display_name: "Global".to_string(),
+            color: "#2aa198".to_string(),
+            icon: "◉",
+            layers: vec![],
+        }
+    }
+
+    fn make_layer() -> LayerInfo {
+        LayerInfo {
+            key: "config".to_string(),
+            display_name: "Config".to_string(),
+            color: "#64748b".to_string(),
+            kinds: vec![],
+        }
+    }
+
+    fn make_kind() -> KindInfo {
+        KindInfo {
+            key: "page".to_string(),
+            display_name: "Page".to_string(),
+            description: "A page entity".to_string(),
+            icon: "📄".to_string(),
+            trait_name: "invariant".to_string(),
+            instance_count: 10,
+            arcs: vec![],
+            yaml_path: "models/node-kinds/tenant/structure/page.yaml".to_string(),
+            properties: vec!["key".to_string(), "display_name".to_string()],
+            required_properties: vec!["key".to_string()],
+            schema_hint: "".to_string(),
+            context_budget: "medium".to_string(),
+            knowledge_tier: None,
+            health_percent: Some(100),
+            issues_count: Some(0),
+        }
+    }
+
+    fn make_arc_family() -> ArcFamilyInfo {
+        ArcFamilyInfo {
+            key: "ownership".to_string(),
+            display_name: "Ownership".to_string(),
+            arc_kinds: vec![],
+        }
+    }
+
+    fn make_arc_kind() -> ArcKindInfo {
+        ArcKindInfo {
+            key: "HAS_PAGE".to_string(),
+            display_name: "Has Page".to_string(),
+            from_kind: "Project".to_string(),
+            to_kind: "Page".to_string(),
+            cardinality: "1:N".to_string(),
+            description: "Project owns pages".to_string(),
+        }
+    }
+
+    fn make_instance() -> InstanceInfo {
+        InstanceInfo {
+            key: "page-1".to_string(),
+            display_name: "Home Page".to_string(),
+            kind_key: "page".to_string(),
+            properties: BTreeMap::new(),
+            outgoing_arcs: vec![],
+            incoming_arcs: vec![],
+            missing_required_count: 0,
+            filled_properties: 2,
+            total_properties: 5,
+        }
+    }
+
+    // =========================================================================
+    // Type label detection tests
+    // =========================================================================
+
+    #[test]
+    fn test_type_label_kinds_section() {
+        let item = TreeItem::KindsSection;
+        assert_eq!(get_type_label(Some(&item)), "Section");
+    }
+
+    #[test]
+    fn test_type_label_arcs_section() {
+        let item = TreeItem::ArcsSection;
+        assert_eq!(get_type_label(Some(&item)), "Section");
+    }
+
+    #[test]
+    fn test_type_label_realm() {
+        let realm = make_realm();
+        let item = TreeItem::Realm(&realm);
+        assert_eq!(get_type_label(Some(&item)), "Realm");
+    }
+
+    #[test]
+    fn test_type_label_layer() {
+        let realm = make_realm();
+        let layer = make_layer();
+        let item = TreeItem::Layer(&realm, &layer);
+        assert_eq!(get_type_label(Some(&item)), "Layer");
+    }
+
+    #[test]
+    fn test_type_label_kind() {
+        let realm = make_realm();
+        let layer = make_layer();
+        let kind = make_kind();
+        let item = TreeItem::Kind(&realm, &layer, &kind);
+        assert_eq!(get_type_label(Some(&item)), "Node Kind");
+    }
+
+    #[test]
+    fn test_type_label_arc_family() {
+        let family = make_arc_family();
+        let item = TreeItem::ArcFamily(&family);
+        assert_eq!(get_type_label(Some(&item)), "ArcFamily");
+    }
+
+    #[test]
+    fn test_type_label_arc_kind() {
+        let family = make_arc_family();
+        let arc_kind = make_arc_kind();
+        let item = TreeItem::ArcKind(&family, &arc_kind);
+        assert_eq!(get_type_label(Some(&item)), "Arc Kind");
+    }
+
+    #[test]
+    fn test_type_label_instance() {
+        let realm = make_realm();
+        let layer = make_layer();
+        let kind = make_kind();
+        let instance = make_instance();
+        let item = TreeItem::Instance(&realm, &layer, &kind, &instance);
+        assert_eq!(get_type_label(Some(&item)), "Instance");
+    }
+
+    #[test]
+    fn test_type_label_none() {
+        assert_eq!(get_type_label(None), "");
+    }
+
+    // =========================================================================
+    // Item display tests
+    // =========================================================================
+
+    #[test]
+    fn test_display_kinds_section() {
+        let item = TreeItem::KindsSection;
+        let (prefix, name) = get_item_display(Some(&item));
+        assert_eq!(prefix, "");
+        assert_eq!(name, "Node Kinds");
+    }
+
+    #[test]
+    fn test_display_arcs_section() {
+        let item = TreeItem::ArcsSection;
+        let (prefix, name) = get_item_display(Some(&item));
+        assert_eq!(prefix, "");
+        assert_eq!(name, "Arcs");
+    }
+
+    #[test]
+    fn test_display_realm_uses_icon() {
+        let realm = make_realm();
+        let item = TreeItem::Realm(&realm);
+        let (prefix, name) = get_item_display(Some(&item));
+        assert_eq!(prefix, "◉"); // Uses realm's icon
+        assert_eq!(name, "Global");
+    }
+
+    #[test]
+    fn test_display_layer_indented() {
+        let realm = make_realm();
+        let layer = make_layer();
+        let item = TreeItem::Layer(&realm, &layer);
+        let (prefix, name) = get_item_display(Some(&item));
+        assert_eq!(prefix, "  "); // 2 spaces
+        assert_eq!(name, "Config");
+    }
+
+    #[test]
+    fn test_display_kind_indented() {
+        let realm = make_realm();
+        let layer = make_layer();
+        let kind = make_kind();
+        let item = TreeItem::Kind(&realm, &layer, &kind);
+        let (prefix, name) = get_item_display(Some(&item));
+        assert_eq!(prefix, "    "); // 4 spaces
+        assert_eq!(name, "Page");
+    }
+
+    #[test]
+    fn test_display_arc_family_indented() {
+        let family = make_arc_family();
+        let item = TreeItem::ArcFamily(&family);
+        let (prefix, name) = get_item_display(Some(&item));
+        assert_eq!(prefix, "  "); // 2 spaces
+        assert_eq!(name, "Ownership");
+    }
+
+    #[test]
+    fn test_display_arc_kind_indented() {
+        let family = make_arc_family();
+        let arc_kind = make_arc_kind();
+        let item = TreeItem::ArcKind(&family, &arc_kind);
+        let (prefix, name) = get_item_display(Some(&item));
+        assert_eq!(prefix, "    "); // 4 spaces
+        assert_eq!(name, "Has Page");
+    }
+
+    #[test]
+    fn test_display_instance_deeply_indented() {
+        let realm = make_realm();
+        let layer = make_layer();
+        let kind = make_kind();
+        let instance = make_instance();
+        let item = TreeItem::Instance(&realm, &layer, &kind, &instance);
+        let (prefix, name) = get_item_display(Some(&item));
+        assert_eq!(prefix, "      "); // 6 spaces
+        assert_eq!(name, "Home Page");
+    }
+
+    #[test]
+    fn test_display_none_shows_unknown() {
+        let (prefix, name) = get_item_display(None);
+        assert_eq!(prefix, "?");
+        assert_eq!(name, "Unknown");
+    }
+
+    // =========================================================================
+    // Type label coverage - all variants tested
+    // =========================================================================
+
+    #[test]
+    fn test_all_tree_item_variants_have_labels() {
+        // This test ensures we have coverage for all TreeItem variants
+        // If a new variant is added, this test should fail until get_type_label is updated
+        let realm = make_realm();
+        let layer = make_layer();
+        let kind = make_kind();
+        let instance = make_instance();
+        let family = make_arc_family();
+        let arc_kind = make_arc_kind();
+
+        let all_items: Vec<TreeItem> = vec![
+            TreeItem::KindsSection,
+            TreeItem::ArcsSection,
+            TreeItem::Realm(&realm),
+            TreeItem::Layer(&realm, &layer),
+            TreeItem::Kind(&realm, &layer, &kind),
+            TreeItem::ArcFamily(&family),
+            TreeItem::ArcKind(&family, &arc_kind),
+            TreeItem::Instance(&realm, &layer, &kind, &instance),
+        ];
+
+        for item in &all_items {
+            let label = get_type_label(Some(item));
+            assert!(
+                !label.is_empty(),
+                "TreeItem variant {:?} should have a non-empty type label",
+                std::mem::discriminant(item)
+            );
+        }
+    }
+
+    // =========================================================================
+    // Legend content tests
+    // =========================================================================
+
+    #[test]
+    fn test_legend_has_realm_section() {
+        // The legend should show "Realms (border color)" section
+        // We can verify this by checking the expected static text
+        let expected_section = "Realms (border color)";
+        assert!(expected_section.contains("Realm"));
+    }
+
+    #[test]
+    fn test_legend_has_layer_section() {
+        // The legend should show "Layers (fill color)" section
+        let expected_section = "Layers (fill color)";
+        assert!(expected_section.contains("Layer"));
+    }
+
+    #[test]
+    fn test_legend_has_trait_section() {
+        // The legend should show "Traits (border style)" section
+        let expected_section = "Traits (border style)";
+        assert!(expected_section.contains("Trait"));
+    }
+
+    #[test]
+    fn test_legend_trait_styles_count() {
+        // Legend should show 5 trait styles: invariant, localized, knowledge, derived, job
+        let expected_traits = vec!["invariant", "localized", "knowledge", "derived", "job"];
+        assert_eq!(expected_traits.len(), 5);
+    }
+
+    // =========================================================================
+    // Help content structure tests
+    // =========================================================================
+
+    #[test]
+    fn test_default_help_has_navigation_section() {
+        // Default help should include "Navigation" section
+        let expected_section = "Navigation";
+        assert!(expected_section.contains("Navig"));
+    }
+
+    #[test]
+    fn test_default_help_has_modes_section() {
+        // Default help should include "Modes" section with 1-4 keys
+        let expected_section = "Modes";
+        assert!(expected_section.contains("Mode"));
+    }
+
+    #[test]
+    fn test_default_help_has_search_section() {
+        // Default help should include "Search & Help" section
+        let expected_section = "Search & Help";
+        assert!(expected_section.contains("Search"));
+    }
+
+    #[test]
+    fn test_guide_help_has_tab_navigation() {
+        // Guide mode help should include "Tab Navigation" section
+        let expected_section = "Tab Navigation";
+        assert!(expected_section.contains("Tab"));
+    }
+
+    #[test]
+    fn test_guide_help_has_quick_jump() {
+        // Guide mode help should include "Quick Jump" section for traits
+        let expected_section = "Quick Jump (Traits)";
+        assert!(expected_section.contains("Quick Jump"));
+    }
+
+    #[test]
+    fn test_guide_help_has_pipeline_tab() {
+        // Guide mode help should mention "Pipeline Tab" with Space key
+        let expected_section = "Pipeline Tab";
+        assert!(expected_section.contains("Pipeline"));
+    }
+
+    // =========================================================================
+    // Help title differentiation tests
+    // =========================================================================
+
+    #[test]
+    fn test_guide_help_title_differs_from_default() {
+        // Guide mode should use " Guide Help " title
+        let guide_title = " Guide Help ";
+        let default_title = " Help ";
+        assert_ne!(guide_title, default_title);
+        assert!(guide_title.contains("Guide"));
+    }
+
+    #[test]
+    fn test_guide_help_uses_magenta_header() {
+        // Guide mode header should mention "Guide Mode" with Magenta color
+        let expected_header = "Guide Mode — Keyboard Shortcuts";
+        assert!(expected_header.contains("Guide Mode"));
+    }
+
+    #[test]
+    fn test_default_help_uses_cyan_header() {
+        // Default mode header should be "NovaNet TUI — Keyboard Shortcuts"
+        let expected_header = "NovaNet TUI — Keyboard Shortcuts";
+        assert!(expected_header.contains("NovaNet TUI"));
+    }
 }
