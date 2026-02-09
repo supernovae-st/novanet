@@ -16,7 +16,6 @@ import {
   GitBranch,
   Database,
   Network,
-  Sparkles,
   Play,
   RefreshCw,
   RotateCcw,
@@ -39,8 +38,6 @@ import {
   Keyboard,
   Command,
   Mouse,
-  Globe,
-  FolderOpen,
   Expand,
   Minimize2,
   Settings,
@@ -52,7 +49,6 @@ import {
   Link2,
   Crosshair,
   Clock,
-  type LucideIcon,
 } from 'lucide-react';
 
 // =============================================================================
@@ -168,19 +164,6 @@ export const CONTENT_ICONS = {
   id: Hash,
 } as const;
 
-/**
- * Domain-Specific Icons
- * NovaNet Core concepts
- */
-export const DOMAIN_ICONS = {
-  /** AI/Magic features */
-  ai: Sparkles,
-  /** Locale/Language */
-  locale: Globe,
-  /** Project/Folder */
-  project: FolderOpen,
-} as const;
-
 // =============================================================================
 // COLOR THEMES
 // =============================================================================
@@ -271,25 +254,3 @@ export const ICON_SIZES = {
   /** Extra large - feature highlights */
   xl: 'w-6 h-6',
 } as const;
-
-// =============================================================================
-// HELPER TYPES
-// =============================================================================
-
-/**
- * Get an icon by category and key
- */
-export function getIcon(
-  category: 'graph' | 'action' | 'status' | 'nav' | 'content' | 'domain',
-  key: string
-): LucideIcon | undefined {
-  const categories = {
-    graph: GRAPH_ICONS,
-    action: ACTION_ICONS,
-    status: STATUS_ICONS,
-    nav: NAV_ICONS,
-    content: CONTENT_ICONS,
-    domain: DOMAIN_ICONS,
-  };
-  return (categories[category] as Record<string, LucideIcon>)[key];
-}

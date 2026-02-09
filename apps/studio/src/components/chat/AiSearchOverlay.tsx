@@ -28,14 +28,14 @@ import { iconSizes, gapTokens, overlayClasses } from '@/design/tokens';
 import { KeyboardKey } from '@/components/ui/KeyboardKey';
 import { Kbd } from '@/components/ui/Kbd';
 import { Modal } from '@/components/ui/Modal';
+import { Sparkles } from 'lucide-react';
 import {
   ACTION_ICONS,
   STATUS_ICONS,
-  DOMAIN_ICONS,
 } from '@/config/iconSystem';
 
 // Design system icons
-const SparklesIcon = DOMAIN_ICONS.ai;
+const SparklesIcon = Sparkles;
 const SendIcon = ACTION_ICONS.send;
 const ResetIcon = ACTION_ICONS.reset;
 const LoaderIcon = STATUS_ICONS.loading;

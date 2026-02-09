@@ -361,12 +361,6 @@ export interface UsesEntityProps {
   temperature: number;
 }
 
-// v10.3: ExpressesProps (EntityContent -[:EXPRESSES]-> SEOKeyword)
-export interface ExpressesProps {
-  status: 'active' | 'paused' | 'archived';
-  priority: number;
-}
-
 export interface InfluencedByProps {
   weight: number;
   entity_version: number;  // v10.3: renamed from concept_version
