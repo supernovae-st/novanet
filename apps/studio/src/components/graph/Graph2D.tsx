@@ -220,7 +220,7 @@ function Graph2DInner({
     clearSelection,
     sidebarOpen,
     focusMode,
-    navigationMode, // Navigation mode (data/meta/overlay/query)
+    navigationMode, // Navigation mode (data/meta)
   } = useUIStore(
     useShallow((state) => ({
       minimapVisible: state.minimapVisible,
@@ -236,7 +236,7 @@ function Graph2DInner({
       clearSelection: state.clearSelection,
       sidebarOpen: state.sidebarOpen,
       focusMode: state.focusMode,
-      navigationMode: state.navigationMode, // Navigation mode (data/meta/overlay/query)
+      navigationMode: state.navigationMode, // Navigation mode (data/meta)
       layoutMode: state.layoutMode, // Magnetic grouping toggle
     }))
   );
@@ -1321,7 +1321,7 @@ function Graph2DInner({
 
   // ==========================================================================
   // Navigation Mode FitView
-  // Refit camera when switching between data/meta/overlay/query modes.
+  // Refit camera when switching between data/meta modes.
   // Triggered after transition completes (reform phase ends).
   // ==========================================================================
   const prevTransitionPhaseRef = useRef(transitionPhase);
