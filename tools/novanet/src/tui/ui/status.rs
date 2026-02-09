@@ -16,6 +16,108 @@ use crate::tui::theme::hex_to_color;
 use crate::tui::unicode::truncate_start_to_width;
 
 // =============================================================================
+// PURE HELPER FUNCTIONS (testable)
+// =============================================================================
+
+/// Get contextual keyboard shortcuts based on mode, focus, and selection.
+///
+/// Returns a static string with the most relevant keyboard hints for the current context.
+pub(crate) fn get_contextual_shortcuts(
+    mode: NavMode,
+    focus: Focus,
+    is_instance: bool,
+    is_kind: bool,
+) -> &'static str {
+    match mode {
+        NavMode::Atlas => "j/k:nav  1-4:modes  ?:help",
+        NavMode::Audit => "j/k:nav  1-4:modes  ?:help",
+        NavMode::Guide => "j/k:nav  Enter:select  q:back  ?:help",
+        NavMode::Data => {
+            if is_instance {
+                "j/k:nav  y/Y:copy  1:Kind  ?:help"
+            } else {
+                "j/k:nav  y:copy  h/l:toggle  0:hide  ?:help"
+            }
+        }
+        NavMode::Query => "j/k:nav  f:filter  ?:help",
+        NavMode::Meta | NavMode::Overlay => match focus {
+            Focus::Tree => {
+                if is_kind {
+                    "j/k:nav  y:copy  2:Data  h/l:toggle  ?:help"
+                } else {
+                    "j/k:nav  y:copy  h/l:toggle  ?:help"
+                }
+            }
+            Focus::Yaml | Focus::Info => "j/k:scroll  d/u:page  g/G:jump",
+            Focus::Graph => "Tab:panel  1-4:modes",
+        },
+    }
+}
+
+/// Build filter indicator string based on app state.
+///
+/// Returns:
+/// - " [KindKey]" if in filtered Data mode
+/// - " [hide-empty]" if hide_empty is enabled
+/// - Empty string otherwise
+pub(crate) fn build_filter_indicator(
+    is_filtered: bool,
+    filter_kind: Option<&str>,
+    hide_empty: bool,
+) -> String {
+    if is_filtered {
+        if let Some(kind_key) = filter_kind {
+            format!(" [{}]", kind_key)
+        } else {
+            String::new()
+        }
+    } else if hide_empty {
+        " [hide-empty]".to_string()
+    } else {
+        String::new()
+    }
+}
+
+/// Format stats string for status bar.
+///
+/// Returns a formatted string like "5 nodes.10 arcs | 3 Kinds.2 ArcKinds"
+pub(crate) fn format_stats(
+    node_count: i64,
+    arc_count: i64,
+    kind_count: i64,
+    arc_kind_count: i64,
+) -> String {
+    format!(
+        "{} nodes.{} arcs | {} Kinds.{} ArcKinds",
+        node_count, arc_count, kind_count, arc_kind_count
+    )
+}
+
+/// Get block character for a realm.
+///
+/// - "global" -> "▓" (lighter block for reference data)
+/// - Other realms -> "█" (solid block for business data)
+pub(crate) fn realm_block_char(realm_key: &str) -> &'static str {
+    match realm_key {
+        "global" => "▓",
+        _ => "█",
+    }
+}
+
+/// Get display label for a realm key.
+///
+/// - "global" -> "Global"
+/// - "tenant" -> "Tenant"
+/// - Other -> returns input as-is
+pub(crate) fn realm_display_label(realm_key: &str) -> &str {
+    match realm_key {
+        "global" => "Global",
+        "tenant" => "Tenant",
+        _ => realm_key,
+    }
+}
+
+// =============================================================================
 // STATUS BAR
 // =============================================================================
 
@@ -61,10 +163,7 @@ fn build_realm_mini_bar(app: &App, bar_width: usize) -> Vec<Span<'static>> {
 
         if width > 0 {
             // Use different block characters for distinction
-            let block = match *key {
-                "global" => "▓", // Lighter block for global (reference data)
-                _ => "█",        // Solid block for tenant (business data)
-            };
+            let block = realm_block_char(key);
             spans.push(Span::styled(
                 block.repeat(width),
                 Style::default().fg(*color),
@@ -75,11 +174,7 @@ fn build_realm_mini_bar(app: &App, bar_width: usize) -> Vec<Span<'static>> {
 
     // Add percentages after the bar: " Global:30% Tenant:70%"
     for (key, percent, color) in percentages {
-        let label = match key {
-            "global" => "Global",
-            "tenant" => "Tenant",
-            _ => key,
-        };
+        let label = realm_display_label(key);
         spans.push(Span::styled(format!(" {}:", label), STYLE_DIM));
         spans.push(Span::styled(
             format!("{}%", percent),
@@ -104,46 +199,20 @@ pub fn render_status(f: &mut Frame, area: Rect, app: &App) {
     let max_breadcrumb_len = (area.width as usize).saturating_sub(60).min(40);
     let breadcrumb_display = truncate_start_to_width(&breadcrumb, max_breadcrumb_len);
 
-    // Contextual shortcuts based on mode, focus, and selection
-    let shortcuts = match app.mode {
-        NavMode::Atlas => "j/k:nav  1-4:modes  ?:help",
-        NavMode::Audit => "j/k:nav  1-4:modes  ?:help",
-        NavMode::Guide => "j/k:nav  Enter:select  q:back  ?:help",
-        NavMode::Data => {
-            // Check if on an Instance (can navigate to Kind with '1')
-            if matches!(app.current_item(), Some(TreeItem::Instance(..))) {
-                "j/k:nav  y/Y:copy  1:Kind  ?:help"
-            } else {
-                "j/k:nav  y:copy  h/l:toggle  0:hide  ?:help"
-            }
-        }
-        NavMode::Query => "j/k:nav  f:filter  ?:help",
-        NavMode::Meta | NavMode::Overlay => match app.focus {
-            Focus::Tree => {
-                // Check if on a Kind (can drill into instances with '2')
-                if matches!(app.current_item(), Some(TreeItem::Kind(..))) {
-                    "j/k:nav  y:copy  2:Data  h/l:toggle  ?:help"
-                } else {
-                    "j/k:nav  y:copy  h/l:toggle  ?:help"
-                }
-            }
-            Focus::Yaml | Focus::Info => "j/k:scroll  d/u:page  g/G:jump",
-            Focus::Graph => "Tab:panel  1-4:modes",
-        },
-    };
+    // Determine if current item is instance or kind for contextual shortcuts
+    let current_item = app.current_item();
+    let is_instance = matches!(current_item, Some(TreeItem::Instance(..)));
+    let is_kind = matches!(current_item, Some(TreeItem::Kind(..)));
 
-    // Filter indicator (show when filter is active)
-    let filter_indicator = if app.is_filtered_data_mode() {
-        if let Some(kind_key) = app.get_filter_kind() {
-            format!(" [{}]", kind_key)
-        } else {
-            String::new()
-        }
-    } else if app.hide_empty {
-        " [hide-empty]".to_string()
-    } else {
-        String::new()
-    };
+    // Get contextual shortcuts using extracted pure function
+    let shortcuts = get_contextual_shortcuts(app.mode, app.focus, is_instance, is_kind);
+
+    // Build filter indicator using extracted pure function
+    let filter_indicator = build_filter_indicator(
+        app.is_filtered_data_mode(),
+        app.get_filter_kind(),
+        app.hide_empty,
+    );
 
     // Build status line spans
     let mut spans = vec![
@@ -188,9 +257,11 @@ pub fn render_status(f: &mut Frame, area: Rect, app: &App) {
     // Stats (full words: nodes.arcs | kinds.arc-kinds)
     let stats = &app.tree.stats;
     spans.push(Span::styled(
-        format!(
-            "{} nodes.{} arcs | {} Kinds.{} ArcKinds",
-            stats.node_count, stats.arc_count, stats.kind_count, stats.arc_kind_count
+        format_stats(
+            stats.node_count,
+            stats.arc_count,
+            stats.kind_count,
+            stats.arc_kind_count,
         ),
         STYLE_MUTED,
     ));
@@ -210,4 +281,291 @@ pub fn render_status(f: &mut Frame, area: Rect, app: &App) {
     let paragraph = Paragraph::new(status).style(Style::default().bg(Color::Rgb(15, 15, 20)));
 
     f.render_widget(paragraph, area);
+}
+
+// =============================================================================
+// TESTS
+// =============================================================================
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use pretty_assertions::assert_eq;
+
+    // =========================================================================
+    // get_contextual_shortcuts tests
+    // =========================================================================
+
+    #[test]
+    fn test_shortcuts_atlas_mode() {
+        let result = get_contextual_shortcuts(NavMode::Atlas, Focus::Tree, false, false);
+        assert_eq!(result, "j/k:nav  1-4:modes  ?:help");
+    }
+
+    #[test]
+    fn test_shortcuts_audit_mode() {
+        let result = get_contextual_shortcuts(NavMode::Audit, Focus::Tree, false, false);
+        assert_eq!(result, "j/k:nav  1-4:modes  ?:help");
+    }
+
+    #[test]
+    fn test_shortcuts_guide_mode() {
+        let result = get_contextual_shortcuts(NavMode::Guide, Focus::Tree, false, false);
+        assert_eq!(result, "j/k:nav  Enter:select  q:back  ?:help");
+    }
+
+    #[test]
+    fn test_shortcuts_query_mode() {
+        let result = get_contextual_shortcuts(NavMode::Query, Focus::Tree, false, false);
+        assert_eq!(result, "j/k:nav  f:filter  ?:help");
+    }
+
+    #[test]
+    fn test_shortcuts_data_mode_on_instance() {
+        let result = get_contextual_shortcuts(NavMode::Data, Focus::Tree, true, false);
+        assert_eq!(result, "j/k:nav  y/Y:copy  1:Kind  ?:help");
+    }
+
+    #[test]
+    fn test_shortcuts_data_mode_not_on_instance() {
+        let result = get_contextual_shortcuts(NavMode::Data, Focus::Tree, false, false);
+        assert_eq!(result, "j/k:nav  y:copy  h/l:toggle  0:hide  ?:help");
+    }
+
+    #[test]
+    fn test_shortcuts_meta_mode_tree_focus_on_kind() {
+        let result = get_contextual_shortcuts(NavMode::Meta, Focus::Tree, false, true);
+        assert_eq!(result, "j/k:nav  y:copy  2:Data  h/l:toggle  ?:help");
+    }
+
+    #[test]
+    fn test_shortcuts_meta_mode_tree_focus_not_on_kind() {
+        let result = get_contextual_shortcuts(NavMode::Meta, Focus::Tree, false, false);
+        assert_eq!(result, "j/k:nav  y:copy  h/l:toggle  ?:help");
+    }
+
+    #[test]
+    fn test_shortcuts_meta_mode_yaml_focus() {
+        let result = get_contextual_shortcuts(NavMode::Meta, Focus::Yaml, false, false);
+        assert_eq!(result, "j/k:scroll  d/u:page  g/G:jump");
+    }
+
+    #[test]
+    fn test_shortcuts_meta_mode_info_focus() {
+        let result = get_contextual_shortcuts(NavMode::Meta, Focus::Info, false, false);
+        assert_eq!(result, "j/k:scroll  d/u:page  g/G:jump");
+    }
+
+    #[test]
+    fn test_shortcuts_meta_mode_graph_focus() {
+        let result = get_contextual_shortcuts(NavMode::Meta, Focus::Graph, false, false);
+        assert_eq!(result, "Tab:panel  1-4:modes");
+    }
+
+    #[test]
+    fn test_shortcuts_overlay_mode_same_as_meta() {
+        // Overlay should behave the same as Meta
+        let meta = get_contextual_shortcuts(NavMode::Meta, Focus::Tree, false, true);
+        let overlay = get_contextual_shortcuts(NavMode::Overlay, Focus::Tree, false, true);
+        assert_eq!(meta, overlay);
+    }
+
+    // =========================================================================
+    // build_filter_indicator tests
+    // =========================================================================
+
+    #[test]
+    fn test_filter_indicator_not_filtered_no_hide() {
+        let result = build_filter_indicator(false, None, false);
+        assert_eq!(result, "");
+    }
+
+    #[test]
+    fn test_filter_indicator_hide_empty() {
+        let result = build_filter_indicator(false, None, true);
+        assert_eq!(result, " [hide-empty]");
+    }
+
+    #[test]
+    fn test_filter_indicator_filtered_with_kind() {
+        let result = build_filter_indicator(true, Some("Page"), false);
+        assert_eq!(result, " [Page]");
+    }
+
+    #[test]
+    fn test_filter_indicator_filtered_no_kind() {
+        let result = build_filter_indicator(true, None, false);
+        assert_eq!(result, "");
+    }
+
+    #[test]
+    fn test_filter_indicator_filtered_takes_precedence_over_hide() {
+        // When filtered, the filter kind should show, not hide-empty
+        let result = build_filter_indicator(true, Some("Entity"), true);
+        assert_eq!(result, " [Entity]");
+    }
+
+    #[test]
+    fn test_filter_indicator_with_special_chars_in_kind() {
+        let result = build_filter_indicator(true, Some("Entity-L10n"), false);
+        assert_eq!(result, " [Entity-L10n]");
+    }
+
+    // =========================================================================
+    // format_stats tests
+    // =========================================================================
+
+    #[test]
+    fn test_format_stats_zeros() {
+        let result = format_stats(0, 0, 0, 0);
+        assert_eq!(result, "0 nodes.0 arcs | 0 Kinds.0 ArcKinds");
+    }
+
+    #[test]
+    fn test_format_stats_typical_values() {
+        let result = format_stats(150, 200, 45, 30);
+        assert_eq!(result, "150 nodes.200 arcs | 45 Kinds.30 ArcKinds");
+    }
+
+    #[test]
+    fn test_format_stats_large_values() {
+        let result = format_stats(10000, 50000, 500, 250);
+        assert_eq!(result, "10000 nodes.50000 arcs | 500 Kinds.250 ArcKinds");
+    }
+
+    #[test]
+    fn test_format_stats_negative_not_expected_but_handles() {
+        // Negative counts shouldn't happen but function handles them
+        let result = format_stats(-1, -1, -1, -1);
+        assert_eq!(result, "-1 nodes.-1 arcs | -1 Kinds.-1 ArcKinds");
+    }
+
+    // =========================================================================
+    // realm_block_char tests
+    // =========================================================================
+
+    #[test]
+    fn test_realm_block_char_global() {
+        assert_eq!(realm_block_char("global"), "▓");
+    }
+
+    #[test]
+    fn test_realm_block_char_tenant() {
+        assert_eq!(realm_block_char("tenant"), "█");
+    }
+
+    #[test]
+    fn test_realm_block_char_unknown() {
+        // Any unknown realm should use solid block
+        assert_eq!(realm_block_char("custom"), "█");
+        assert_eq!(realm_block_char("organization"), "█");
+    }
+
+    // =========================================================================
+    // realm_display_label tests
+    // =========================================================================
+
+    #[test]
+    fn test_realm_display_label_global() {
+        assert_eq!(realm_display_label("global"), "Global");
+    }
+
+    #[test]
+    fn test_realm_display_label_tenant() {
+        assert_eq!(realm_display_label("tenant"), "Tenant");
+    }
+
+    #[test]
+    fn test_realm_display_label_unknown() {
+        // Unknown realm returns the key as-is
+        assert_eq!(realm_display_label("custom"), "custom");
+        assert_eq!(realm_display_label("organization"), "organization");
+    }
+
+    // =========================================================================
+    // NavMode tests (mode display labels)
+    // =========================================================================
+
+    #[test]
+    fn test_nav_mode_labels() {
+        assert_eq!(NavMode::Meta.label(), "Meta");
+        assert_eq!(NavMode::Data.label(), "Data");
+        assert_eq!(NavMode::Overlay.label(), "Overlay");
+        assert_eq!(NavMode::Query.label(), "Query");
+        assert_eq!(NavMode::Atlas.label(), "Atlas");
+        assert_eq!(NavMode::Audit.label(), "Audit");
+        assert_eq!(NavMode::Guide.label(), "Guide");
+    }
+
+    #[test]
+    fn test_nav_mode_cycle() {
+        assert_eq!(NavMode::Meta.cycle(), NavMode::Data);
+        assert_eq!(NavMode::Data.cycle(), NavMode::Overlay);
+        assert_eq!(NavMode::Overlay.cycle(), NavMode::Query);
+        assert_eq!(NavMode::Query.cycle(), NavMode::Atlas);
+        assert_eq!(NavMode::Atlas.cycle(), NavMode::Audit);
+        assert_eq!(NavMode::Audit.cycle(), NavMode::Guide);
+        assert_eq!(NavMode::Guide.cycle(), NavMode::Meta);
+    }
+
+    #[test]
+    fn test_nav_mode_index() {
+        assert_eq!(NavMode::Meta.index(), 0);
+        assert_eq!(NavMode::Data.index(), 1);
+        assert_eq!(NavMode::Overlay.index(), 2);
+        assert_eq!(NavMode::Query.index(), 3);
+        assert_eq!(NavMode::Atlas.index(), 4);
+        assert_eq!(NavMode::Audit.index(), 5);
+        assert_eq!(NavMode::Guide.index(), 6);
+    }
+
+    // =========================================================================
+    // Focus tests
+    // =========================================================================
+
+    #[test]
+    fn test_focus_next() {
+        assert_eq!(Focus::Tree.next(), Focus::Info);
+        assert_eq!(Focus::Info.next(), Focus::Graph);
+        assert_eq!(Focus::Graph.next(), Focus::Yaml);
+        assert_eq!(Focus::Yaml.next(), Focus::Tree);
+    }
+
+    #[test]
+    fn test_focus_prev() {
+        assert_eq!(Focus::Tree.prev(), Focus::Yaml);
+        assert_eq!(Focus::Yaml.prev(), Focus::Graph);
+        assert_eq!(Focus::Graph.prev(), Focus::Info);
+        assert_eq!(Focus::Info.prev(), Focus::Tree);
+    }
+
+    // =========================================================================
+    // Edge cases and combinations
+    // =========================================================================
+
+    #[test]
+    fn test_shortcuts_all_focus_panels_for_meta() {
+        // Ensure all focus panels produce valid shortcuts
+        for focus in [Focus::Tree, Focus::Info, Focus::Graph, Focus::Yaml] {
+            let result = get_contextual_shortcuts(NavMode::Meta, focus, false, false);
+            assert!(!result.is_empty(), "Focus {:?} should have shortcuts", focus);
+        }
+    }
+
+    #[test]
+    fn test_shortcuts_data_mode_ignores_focus() {
+        // Data mode shortcuts don't depend on focus, only on is_instance
+        let tree = get_contextual_shortcuts(NavMode::Data, Focus::Tree, false, false);
+        let yaml = get_contextual_shortcuts(NavMode::Data, Focus::Yaml, false, false);
+        let info = get_contextual_shortcuts(NavMode::Data, Focus::Info, false, false);
+        assert_eq!(tree, yaml);
+        assert_eq!(yaml, info);
+    }
+
+    #[test]
+    fn test_filter_indicator_empty_kind_key() {
+        // Empty kind key in filtered mode
+        let result = build_filter_indicator(true, Some(""), false);
+        assert_eq!(result, " []");
+    }
 }
