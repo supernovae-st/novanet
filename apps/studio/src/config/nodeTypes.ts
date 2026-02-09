@@ -1,7 +1,7 @@
 // =============================================================================
-// NODE TYPE CONFIGURATION (v10.9.0)
+// NODE TYPE CONFIGURATION (v11.1.0)
 // =============================================================================
-// Visual configuration for all 63 NovaNet node types (v10.9: 8 layers, 2 realms: global, tenant)
+// Visual configuration for all 65 NovaNet node types (v11.1: 8 layers, 2 realms: global, tenant, +EntityCategory)
 // NodeType, Layer, KIND_META imported from @novanet/core (Single Source of Truth)
 
 import type { NodeType, Layer } from '@novanet/core/types';
@@ -174,7 +174,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   // ==========================================================================
 
   // ==========================================================================
-  // GLOBAL REALM — CONFIG LAYER (13 nodes) - v10.8: added geographic taxonomy
+  // GLOBAL REALM — CONFIG LAYER (14 nodes) - v11.1: added EntityCategory
   // ==========================================================================
   Locale: {
     type: 'Locale',
@@ -255,6 +255,15 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#059669',
     colorClass: 'bg-emerald-600',
     size: 14,
+    layer: 'config',
+  },
+  EntityCategory: {
+    type: 'EntityCategory',
+    label: 'Entity Category',
+    icon: '🏷️',
+    color: '#0d9488',
+    colorClass: 'bg-teal-600',
+    size: 16,
     layer: 'config',
   },
 

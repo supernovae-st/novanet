@@ -1,5 +1,5 @@
 // packages/core/src/graph/__tests__/generator.test.ts
-// Tests for schema graph generator — v10.9.0 (64 nodes, 2 realms)
+// Tests for schema graph generator — v11.1.0 (65 nodes, 2 realms, +EntityCategory)
 // TDD: Write tests first, then implementation
 
 import { describe, it, expect } from 'vitest';
@@ -8,9 +8,9 @@ import { NODE_TYPES } from '../../types/nodes.js';
 
 describe('graph/generator', () => {
   describe('generateSchemaGraph', () => {
-    it('should generate 64 schema nodes', () => {
+    it('should generate 65 schema nodes', () => {
       const result = generateSchemaGraph();
-      expect(result.nodes).toHaveLength(64);
+      expect(result.nodes).toHaveLength(65);
     });
 
     it('should generate schema arcs from RelationRegistry', () => {
@@ -44,7 +44,7 @@ describe('graph/generator', () => {
       expect(hasPageArc?.cardinality).toBeDefined();
     });
 
-    it('should map all 64 node types', () => {
+    it('should map all 65 node types', () => {
       const result = generateSchemaGraph();
       const nodeTypes = result.nodes.map(n => n.nodeType);
 
@@ -92,14 +92,14 @@ describe('graph/generator', () => {
 
     it('should include stats', () => {
       const result = getSchemaHierarchy();
-      expect(result.stats.totalNodes).toBe(64);
-      expect(result.stats.nodesByRealm.tenant).toBe(33);   // v10.9: 33 tenant nodes (includes SEO)
-      expect(result.stats.nodesByRealm.global).toBe(31);   // v10.9: 31 global nodes (config + locale-knowledge)
+      expect(result.stats.totalNodes).toBe(65);
+      expect(result.stats.nodesByRealm.tenant).toBe(33);   // v11.1: 33 tenant nodes (includes SEO)
+      expect(result.stats.nodesByRealm.global).toBe(32);   // v11.1: 32 global nodes (+EntityCategory)
     });
 
     it('should include all nodes', () => {
       const result = getSchemaHierarchy();
-      expect(result.nodes).toHaveLength(64);
+      expect(result.nodes).toHaveLength(65);
     });
 
     it('should include arcs', () => {

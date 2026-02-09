@@ -7,7 +7,8 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useViewStore } from '@/stores/viewStore';
 import { useUIStore, selectNavigationMode, type NavigationMode } from '@/stores/uiStore';
 
-const VALID_MODES: NavigationMode[] = ['data', 'meta', 'overlay', 'query'];
+// v11.0: Simplified to Meta and Data only
+const VALID_MODES: NavigationMode[] = ['data', 'meta'];
 
 /**
  * Internal hook that uses useSearchParams (requires Suspense boundary)

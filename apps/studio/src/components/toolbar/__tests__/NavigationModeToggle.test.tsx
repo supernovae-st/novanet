@@ -1,7 +1,8 @@
 /**
  * NavigationModeToggle Tests
  *
- * Tests rendering, active state styling, keyboard shortcuts (1-4),
+ * v11.0: Simplified to Meta and Data modes only.
+ * Tests rendering, active state styling, keyboard shortcuts (1-2),
  * and click behavior triggering animationStore transitions.
  */
 
@@ -34,13 +35,13 @@ describe('NavigationModeToggle', () => {
   // ==========================================================================
 
   describe('rendering', () => {
-    it('renders all 4 mode buttons in correct order', () => {
+    it('renders only meta and data mode buttons in correct order', () => {
       render(<NavigationModeToggle mode="data" onModeChange={mockOnModeChange} />);
 
       expect(screen.getByText('meta')).toBeInTheDocument();
       expect(screen.getByText('data')).toBeInTheDocument();
-      expect(screen.getByText('overlay')).toBeInTheDocument();
-      expect(screen.getByText('query')).toBeInTheDocument();
+      expect(screen.queryByText('overlay')).not.toBeInTheDocument();
+      expect(screen.queryByText('query')).not.toBeInTheDocument();
     });
 
     it('renders icons as SVGs', () => {
@@ -49,7 +50,7 @@ describe('NavigationModeToggle', () => {
       );
 
       const svgs = container.querySelectorAll('svg');
-      expect(svgs.length).toBe(4);
+      expect(svgs.length).toBe(2);
     });
 
     it('uses monospace font for labels', () => {
@@ -63,17 +64,15 @@ describe('NavigationModeToggle', () => {
       });
     });
 
-    it('shows kbd shortcuts 1, 2, 3, 4 inline', () => {
+    it('shows kbd shortcuts 1, 2 inline', () => {
       const { container } = render(
         <NavigationModeToggle mode="data" onModeChange={mockOnModeChange} />
       );
 
       const kbds = container.querySelectorAll('kbd');
-      expect(kbds).toHaveLength(4);
+      expect(kbds).toHaveLength(2);
       expect(kbds[0]).toHaveTextContent('1');
       expect(kbds[1]).toHaveTextContent('2');
-      expect(kbds[2]).toHaveTextContent('3');
-      expect(kbds[3]).toHaveTextContent('4');
     });
   });
 
@@ -94,20 +93,6 @@ describe('NavigationModeToggle', () => {
 
       const metaButton = screen.getByText('meta').closest('button');
       expect(metaButton?.className).toContain('blue');
-    });
-
-    it('highlights overlay mode when active', () => {
-      render(<NavigationModeToggle mode="overlay" onModeChange={mockOnModeChange} />);
-
-      const overlayButton = screen.getByText('overlay').closest('button');
-      expect(overlayButton?.className).toContain('violet');
-    });
-
-    it('highlights query mode when active', () => {
-      render(<NavigationModeToggle mode="query" onModeChange={mockOnModeChange} />);
-
-      const queryButton = screen.getByText('query').closest('button');
-      expect(queryButton?.className).toContain('amber');
     });
 
     it('inactive buttons have muted styling', () => {
@@ -161,26 +146,19 @@ describe('NavigationModeToggle', () => {
       expect(mockStartTransition).toHaveBeenCalledWith('data');
     });
 
-    it('switches to overlay on pressing 3', () => {
-      render(<NavigationModeToggle mode="data" onModeChange={mockOnModeChange} />);
-
-      fireEvent.keyDown(window, { key: '3' });
-
-      expect(mockStartTransition).toHaveBeenCalledWith('overlay');
-    });
-
-    it('switches to query on pressing 4', () => {
-      render(<NavigationModeToggle mode="data" onModeChange={mockOnModeChange} />);
-
-      fireEvent.keyDown(window, { key: '4' });
-
-      expect(mockStartTransition).toHaveBeenCalledWith('query');
-    });
-
     it('does not switch when already on target mode', () => {
       render(<NavigationModeToggle mode="meta" onModeChange={mockOnModeChange} />);
 
       fireEvent.keyDown(window, { key: '1' });
+
+      expect(mockStartTransition).not.toHaveBeenCalled();
+    });
+
+    it('ignores keys 3 and 4 (removed modes)', () => {
+      render(<NavigationModeToggle mode="data" onModeChange={mockOnModeChange} />);
+
+      fireEvent.keyDown(window, { key: '3' });
+      fireEvent.keyDown(window, { key: '4' });
 
       expect(mockStartTransition).not.toHaveBeenCalled();
     });

@@ -1,13 +1,13 @@
 // packages/core/src/graph/__tests__/layers.test.ts
-// Tests for NODE_LAYERS — v10.9.0 (64 nodes, 2 realms)
+// Tests for NODE_LAYERS — v11.1.0 (65 nodes, 2 realms, +EntityCategory)
 import { describe, it, expect } from 'vitest';
 import { NODE_LAYERS, getLayer, getNodeTypesByLayer } from '../layers';
 import { NODE_TYPES } from '../../types/nodes';
 
 describe('graph/layers', () => {
-  it('should map all 64 node types to layers', () => {
+  it('should map all 65 node types to layers', () => {
     const mappedTypes = Object.keys(NODE_LAYERS);
-    expect(mappedTypes).toHaveLength(64);
+    expect(mappedTypes).toHaveLength(65);
 
     // Every NODE_TYPE should be mapped
     for (const nodeType of NODE_TYPES) {
@@ -31,8 +31,9 @@ describe('graph/layers', () => {
   });
 
   it('should map global realm nodes correctly', () => {
-    // v10.9: config layer (global) has 13 nodes including geographic taxonomy
+    // v11.1: config layer (global) has 14 nodes including EntityCategory
     expect(NODE_LAYERS.Locale).toBe('config');
+    expect(NODE_LAYERS.EntityCategory).toBe('config');
     expect(NODE_LAYERS.Style).toBe('config');
     expect(NODE_LAYERS.Formatting).toBe('config');
     expect(NODE_LAYERS.Adaptation).toBe('config');
@@ -81,7 +82,7 @@ describe('graph/layers', () => {
     expect(knowledge).toContain('LanguageFamily');
     expect(knowledge).toHaveLength(18);
 
-    // v10.9: config layer has 15 nodes (13 global + 2 tenant)
+    // v11.1: config layer has 16 nodes (14 global + 2 tenant)
     const config = getNodeTypesByLayer('config');
     expect(config).toContain('Locale');
     expect(config).toContain('Style');
@@ -89,6 +90,7 @@ describe('graph/layers', () => {
     expect(config).toContain('Organization');
     expect(config).toContain('Tenant');
     expect(config).toContain('Continent');
-    expect(config).toHaveLength(15);
+    expect(config).toContain('EntityCategory');
+    expect(config).toHaveLength(16);
   });
 });

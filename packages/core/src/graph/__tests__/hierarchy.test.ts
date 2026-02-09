@@ -1,5 +1,5 @@
 // packages/core/src/graph/__tests__/hierarchy.test.ts
-// Tests for REALM_HIERARCHY — v10.9.0 (2 realms, 9 layers)
+// Tests for REALM_HIERARCHY — v11.1.0 (2 realms, 9 layers, +EntityCategory)
 import { describe, it, expect } from 'vitest';
 import { REALM_HIERARCHY, getRealmDefinition, getLayerMeta, getLayersForRealm } from '../hierarchy';
 import type { Realm } from '../../types/nodes';
@@ -70,11 +70,11 @@ describe('graph/hierarchy', () => {
   });
 
   it('should have correct node counts per layer', () => {
-    // v10.9: Global realm: config (13), locale-knowledge (18) = 31
-    expect(REALM_HIERARCHY.global.layers.config.nodeTypes).toHaveLength(13);
+    // v11.1: Global realm: config (14 = 13 + EntityCategory), locale-knowledge (18) = 32
+    expect(REALM_HIERARCHY.global.layers.config.nodeTypes).toHaveLength(14);
     expect(REALM_HIERARCHY.global.layers['locale-knowledge'].nodeTypes).toHaveLength(18);
 
-    // v10.9: Tenant realm: config (2), foundation (3), structure (3), semantic (4), seo (9), instruction (7), output (5) = 33
+    // v11.1: Tenant realm: config (2), foundation (3), structure (3), semantic (4), seo (9), instruction (7), output (5) = 33
     expect(REALM_HIERARCHY.tenant.layers.config.nodeTypes).toHaveLength(2);  // Organization, Tenant
     expect(REALM_HIERARCHY.tenant.layers.foundation.nodeTypes).toHaveLength(3);
     expect(REALM_HIERARCHY.tenant.layers.structure.nodeTypes).toHaveLength(3);
@@ -108,7 +108,7 @@ describe('graph/hierarchy', () => {
     }
   });
 
-  it('should have total of 64 nodes across all realms', () => {
+  it('should have total of 65 nodes across all realms', () => {
     let totalNodes = 0;
 
     for (const realm of ['global', 'tenant'] as Realm[]) {
@@ -118,6 +118,6 @@ describe('graph/hierarchy', () => {
       }
     }
 
-    expect(totalNodes).toBe(64);
+    expect(totalNodes).toBe(65);  // v11.1: +EntityCategory
   });
 });
