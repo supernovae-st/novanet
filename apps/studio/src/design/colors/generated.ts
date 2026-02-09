@@ -125,10 +125,10 @@ export const LAYER_DISPLAY_NAMES: Record<LayerKey, string> = {
 };
 
 // =============================================================================
-// TRAIT COLORS (5)
+// TRAIT COLORS (4)
 // =============================================================================
 
-export type TraitKey = 'invariant' | 'localized' | 'knowledge' | 'derived' | 'job';
+export type TraitKey = 'invariant' | 'localized' | 'knowledge' | 'derived';
 
 export const TRAIT_COLORS: Record<TraitKey, ColorTokens> = {
   'invariant': {
@@ -159,13 +159,6 @@ export const TRAIT_COLORS: Record<TraitKey, ColorTokens> = {
     border: 'border-[#9ca3af]/30',
     bgSolid: 'bg-[#9ca3af]',
   },
-  'job': {
-    color: '#6b7280',
-    bg: 'bg-[#6b7280]/20',
-    text: 'text-[#6b7280]',
-    border: 'border-[#6b7280]/30',
-    bgSolid: 'bg-[#6b7280]',
-  },
 };
 
 export const TRAIT_DISPLAY_NAMES: Record<TraitKey, string> = {
@@ -173,7 +166,6 @@ export const TRAIT_DISPLAY_NAMES: Record<TraitKey, string> = {
   'localized': 'Localized',
   'knowledge': 'Knowledge',
   'derived': 'Derived',
-  'job': 'Job',
 };
 
 // =============================================================================

@@ -11,7 +11,6 @@ arc:
     - ProjectContent
     - BlockGenerated
     - PageGenerated
-    - GenerationJob
     - OutputArtifact
   target: Locale
   cardinality: many_to_one

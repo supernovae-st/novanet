@@ -168,7 +168,7 @@ arc_families:
         // Version now comes from taxonomy.yaml (10.6.0)
         assert_eq!(doc.version, "11.0.0");
         assert_eq!(doc.realms.len(), 2); // v10.6: 2 realms (global, tenant)
-        assert_eq!(doc.traits.len(), 5);
+        assert_eq!(doc.traits.len(), 4); // v11.1: removed job trait
         assert_eq!(doc.arc_families.len(), 5);
 
         let total_layers: usize = doc.realms.iter().map(|r| r.layers.len()).sum();

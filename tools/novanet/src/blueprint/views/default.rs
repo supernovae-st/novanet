@@ -145,7 +145,6 @@ fn render_traits(data: &BlueprintData) -> String {
         (NodeTrait::Localized, "localized", "Native content per locale", "EntityContent, ProjectContent"),
         (NodeTrait::Knowledge, "knowledge", "Locale-specific atoms", "Term, Expression, Taboo"),
         (NodeTrait::Derived, "derived", "Generated from invariants", "PageGenerated, BlockGenerated"),
-        (NodeTrait::Job, "job", "Async processing tasks", "GenerationJob"),
     ];
 
     for (trait_enum, key, description, examples) in trait_info {

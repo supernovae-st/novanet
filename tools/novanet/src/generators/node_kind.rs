@@ -57,7 +57,6 @@ fn build_schema_hint(node: &ParsedNode) -> String {
 /// - Everything else → `high`
 fn context_budget(node: &ParsedNode) -> &'static str {
     match node.def.node_trait {
-        NodeTrait::Job => "minimal",
         NodeTrait::Derived => "low",
         NodeTrait::Knowledge => "medium",
         NodeTrait::Invariant | NodeTrait::Localized => match node.layer.as_str() {
@@ -427,13 +426,9 @@ mod tests {
 
     #[test]
     fn context_budget_by_trait() {
-        // v10.4: SEO layer is in global realm
+        // v11.0: SEO layer is in tenant realm
         assert_eq!(
-            context_budget(&make_node("Run", "global", "seo", NodeTrait::Job)),
-            "minimal"
-        );
-        assert_eq!(
-            context_budget(&make_node("Metrics", "global", "seo", NodeTrait::Derived)),
+            context_budget(&make_node("Metrics", "tenant", "seo", NodeTrait::Derived)),
             "low"
         );
         assert_eq!(
@@ -596,43 +591,43 @@ mod tests {
             .generate(root)
             .expect("should generate kind cypher");
 
-        // v10.6: 48 Kind MERGE statements (2 realms: global + tenant)
+        // v11.2: 62 Kind MERGE statements (removed 3 job nodes)
         let kind_merges = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains(":Meta:Kind"))
             .count();
         assert_eq!(
-            kind_merges, 65,
-            "expected 65 Kind MERGE statements (v11.1: +EntityCategory)"
+            kind_merges, 62,
+            "expected 62 Kind MERGE statements (v11.2: -3 job nodes)"
         );
 
-        // 64 HAS_KIND relationships
+        // 62 HAS_KIND relationships
         let has_kind = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:HAS_KIND]"))
             .count();
-        assert_eq!(has_kind, 65, "expected 65 HAS_KIND relationships");
+        assert_eq!(has_kind, 62, "expected 62 HAS_KIND relationships");
 
-        // 64 IN_REALM relationships
+        // 62 IN_REALM relationships
         let in_realm = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_REALM]"))
             .count();
-        assert_eq!(in_realm, 65, "expected 65 IN_REALM relationships");
+        assert_eq!(in_realm, 62, "expected 62 IN_REALM relationships");
 
-        // 64 IN_LAYER relationships
+        // 62 IN_LAYER relationships
         let in_layer = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:IN_LAYER]"))
             .count();
-        assert_eq!(in_layer, 65, "expected 65 IN_LAYER relationships");
+        assert_eq!(in_layer, 62, "expected 62 IN_LAYER relationships");
 
-        // 64 EXHIBITS relationships
+        // 62 EXHIBITS relationships
         let exhibits = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:EXHIBITS]"))
             .count();
-        assert_eq!(exhibits, 65, "expected 65 EXHIBITS relationships");
+        assert_eq!(exhibits, 62, "expected 62 EXHIBITS relationships");
 
         // Spot checks — specific Kinds
         assert!(cypher.contains("k_Project:Meta:Kind {label: 'Project'}"));
@@ -649,7 +644,7 @@ mod tests {
         // Spot check — facet wiring (v10.6: project → tenant)
         assert!(cypher.contains("(k:Kind {label: 'Page'}), (r:Realm {key: 'tenant'})"));
         assert!(cypher.contains("(k:Kind {label: 'Style'}), (t:Trait {key: 'knowledge'})")); // v10: LocaleVoice → Style
-        assert!(cypher.contains("(k:Kind {label: 'SEOMiningRun'}), (t:Trait {key: 'job'})"));
+        // v11.2: SEOMiningRun removed with job trait
 
         // All context_budget values are valid
         for line in cypher.lines() {
@@ -664,8 +659,8 @@ mod tests {
             }
         }
 
-        // v11.1: Header mentions 65 Kind nodes (+EntityCategory)
-        assert!(cypher.contains("65 Kind nodes"));
+        // v11.2: Header mentions 62 Kind nodes (-3 job nodes)
+        assert!(cypher.contains("62 Kind nodes"));
 
         // v10.1: knowledge_tier removed from all YAMLs (node type is sufficient)
         // Verify no knowledge_tier properties are present in output
@@ -694,7 +689,6 @@ mod tests {
             ),
             make_node("PageGenerated", "tenant", "output", NodeTrait::Derived),
             make_node("Concept", "tenant", "semantic", NodeTrait::Invariant),
-            make_node("GenerationJob", "tenant", "output", NodeTrait::Job),
         ];
 
         let cypher = generate_kind_cypher(&nodes).unwrap();

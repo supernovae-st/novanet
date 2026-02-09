@@ -215,32 +215,29 @@ pub mod traits {
     use super::*;
 
     // Unicode border characters for trait encoding
+    // v11.2: 4 traits (job removed)
     pub const INVARIANT_BORDER: &str = "─";
     pub const LOCALIZED_BORDER: &str = "┄";
     pub const KNOWLEDGE_BORDER: &str = "┈";
     pub const DERIVED_BORDER: &str = "═";
-    pub const JOB_BORDER: &str = " ";
 
     // Trait colors (hex)
     pub const INVARIANT_HEX: &str = "#3b82f6";
     pub const LOCALIZED_HEX: &str = "#22c55e";
     pub const KNOWLEDGE_HEX: &str = "#8b5cf6";
     pub const DERIVED_HEX: &str = "#9ca3af";
-    pub const JOB_HEX: &str = "#6b7280";
 
     // 256-color palette
     pub const INVARIANT_256: u8 = 33;
     pub const LOCALIZED_256: u8 = 41;
     pub const KNOWLEDGE_256: u8 = 141;
     pub const DERIVED_256: u8 = 245;
-    pub const JOB_256: u8 = 240;
 
     // 16-color palette
     pub const INVARIANT_16: Color = Color::Blue;
     pub const LOCALIZED_16: Color = Color::Green;
     pub const KNOWLEDGE_16: Color = Color::Magenta;
     pub const DERIVED_16: Color = Color::DarkGray;
-    pub const JOB_16: Color = Color::DarkGray;
 
     /// Get trait border character.
     pub fn border_char(trait_key: &str) -> &'static str {
@@ -249,7 +246,6 @@ pub mod traits {
             "localized" => LOCALIZED_BORDER,
             "knowledge" => KNOWLEDGE_BORDER,
             "derived" => DERIVED_BORDER,
-            "job" => JOB_BORDER,
             _ => INVARIANT_BORDER,
         }
     }
@@ -262,7 +258,6 @@ pub mod traits {
                 "localized" => hex_to_color(LOCALIZED_HEX),
                 "knowledge" => hex_to_color(KNOWLEDGE_HEX),
                 "derived" => hex_to_color(DERIVED_HEX),
-                "job" => hex_to_color(JOB_HEX),
                 _ => Color::White,
             },
             ColorMode::Color256 => match trait_key {
@@ -270,7 +265,6 @@ pub mod traits {
                 "localized" => Color::Indexed(LOCALIZED_256),
                 "knowledge" => Color::Indexed(KNOWLEDGE_256),
                 "derived" => Color::Indexed(DERIVED_256),
-                "job" => Color::Indexed(JOB_256),
                 _ => Color::White,
             },
             ColorMode::Color16 => match trait_key {
@@ -278,17 +272,15 @@ pub mod traits {
                 "localized" => LOCALIZED_16,
                 "knowledge" => KNOWLEDGE_16,
                 "derived" => DERIVED_16,
-                "job" => JOB_16,
                 _ => Color::White,
             },
         }
     }
 
-    /// Get modifier for trait (bold for invariant, dim for job).
+    /// Get modifier for trait (bold for invariant).
     pub fn modifier(trait_key: &str) -> Modifier {
         match trait_key {
             "invariant" => Modifier::BOLD,
-            "job" => Modifier::DIM,
             _ => Modifier::empty(),
         }
     }
@@ -443,12 +435,11 @@ impl Icons {
         icons.layers.insert("instruction".into(), "▧".into());
         icons.layers.insert("output".into(), "●".into());
 
-        // Traits
+        // Traits (v11.2: 4 traits, job removed)
         icons.traits.insert("invariant".into(), "■".into());
         icons.traits.insert("localized".into(), "□".into());
         icons.traits.insert("knowledge".into(), "◊".into());
         icons.traits.insert("derived".into(), "▪".into());
-        icons.traits.insert("job".into(), "▫".into());
 
         // Arc families
         icons.arc_families.insert("ownership".into(), "→".into());
@@ -979,7 +970,7 @@ mod tests {
     #[test]
     fn test_trait_modifiers() {
         assert_eq!(traits::modifier("invariant"), Modifier::BOLD);
-        assert_eq!(traits::modifier("job"), Modifier::DIM);
+        // v11.2: job trait removed
         assert_eq!(traits::modifier("localized"), Modifier::empty());
     }
 
@@ -1183,7 +1174,7 @@ mod tests {
             "═",
             "derived: dotted border"
         );
-        assert_eq!(traits::border_char("job"), " ", "job: no border (thin)");
+        // v11.2: job trait removed
     }
 
     /// Test trait border fallback for unknown traits.
@@ -1211,7 +1202,7 @@ mod tests {
         assert_eq!(theme.trait_border("localized"), "┄");
         assert_eq!(theme.trait_border("knowledge"), "┈");
         assert_eq!(theme.trait_border("derived"), "═");
-        assert_eq!(theme.trait_border("job"), " ");
+        // v11.2: job trait removed
     }
 
     // =========================================================================
