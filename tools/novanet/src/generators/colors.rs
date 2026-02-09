@@ -516,8 +516,8 @@ mod tests {
             );
         }
 
-        // Should have all 5 traits
-        for tr in ["invariant", "localized", "knowledge", "derived", "job"] {
+        // Should have all 4 traits (v11.2: job trait removed)
+        for tr in ["invariant", "localized", "knowledge", "derived"] {
             assert!(output.contains(&format!("'{tr}'")), "missing trait: {tr}");
         }
 

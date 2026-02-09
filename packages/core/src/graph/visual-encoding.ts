@@ -250,7 +250,7 @@ export const CARDINALITY_ARROWS: Record<CardinalityKey, CardinalityArrowStyle> =
 };
 
 // =============================================================================
-// KIND ICONS (36) — Lucide icon names
+// KIND ICONS (37) — Lucide icon names
 // =============================================================================
 
 export const KIND_ICONS: Record<string, string> = {
@@ -268,6 +268,7 @@ export const KIND_ICONS: Record<string, string> = {
   ContentSlot: 'inbox',
   CultureSet: 'heart',
   Entity: 'lightbulb',
+  EntityCategory: 'tag',
   EntityContent: 'globe',
   EvaluationSignal: 'activity',
   ExpressionSet: 'message-circle',

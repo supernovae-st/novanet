@@ -299,31 +299,30 @@ mod tests {
             .generate(root)
             .expect("should generate autowire cypher");
 
-        // v10.6: 48 OF_KIND statements (2 realms: global + tenant)
+        // v11.2: 62 OF_KIND statements (removed 3 job nodes: GenerationJob, SEOMiningRun, EvaluationSignal)
         let of_kind = cypher
             .lines()
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:OF_KIND]"))
             .count();
         assert_eq!(
-            of_kind, 65,
-            "expected 65 OF_KIND statements (v11.1: +EntityCategory)"
+            of_kind, 62,
+            "expected 62 OF_KIND statements (v11.2: removed 3 job nodes)"
         );
 
         // 2 realms present (v10.6: global + tenant)
         assert!(cypher.contains("GLOBAL REALM"));
         assert!(cypher.contains("TENANT REALM"));
 
-        // Spot checks
+        // Spot checks (v11.2: SEOMiningRun removed with job trait)
         assert!(cypher.contains("MATCH (n:Style)"));
         assert!(cypher.contains("MATCH (k:Kind {label: 'Style'})"));
-        assert!(cypher.contains("MATCH (n:SEOMiningRun)"));
 
-        // v10.8: Layer counts match 60 nodes (37 global, 23 tenant)
+        // v10.8: Layer counts (v11.2: tenant output reduced by 2: GenerationJob, EvaluationSignal)
         assert!(cypher.contains("Global > Config (14 types)")); // Locale + 6 utility + 6 geo/econ + EntityCategory
         assert!(cypher.contains("Global > Locale-knowledge (18 types)")); // Sets + Atoms + 6 knowledge
 
-        // v11.1: Header (+EntityCategory)
-        assert!(cypher.contains("Total: 65 node types"));
+        // v11.2: Header (-3 job nodes)
+        assert!(cypher.contains("Total: 62 node types"));
 
         // Verification query present
         assert!(cypher.contains("VERIFICATION QUERY"));

@@ -23,7 +23,6 @@ pub struct TraitStats {
     pub localized: usize,
     pub knowledge: usize,
     pub derived: usize,
-    pub job: usize,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -70,7 +69,6 @@ fn collect_stats(data: &BlueprintData) -> BlueprintStats {
             localized: by_trait.get(&NodeTrait::Localized).map(|v| v.len()).unwrap_or(0),
             knowledge: by_trait.get(&NodeTrait::Knowledge).map(|v| v.len()).unwrap_or(0),
             derived: by_trait.get(&NodeTrait::Derived).map(|v| v.len()).unwrap_or(0),
-            job: by_trait.get(&NodeTrait::Job).map(|v| v.len()).unwrap_or(0),
         },
         arc_families: ArcFamilyStats {
             ownership: by_family.get(&ArcFamily::Ownership).map(|v| v.len()).unwrap_or(0),
@@ -102,7 +100,6 @@ fn render_table(stats: &BlueprintStats) -> String {
          localized:        {}\n\
          knowledge:        {}\n\
          derived:          {}\n\
-         job:              {}\n\
          \n\
          ARC FAMILIES\n\
          ───────────────────────────────────────\n\
@@ -125,7 +122,6 @@ fn render_table(stats: &BlueprintStats) -> String {
         stats.traits.localized,
         stats.traits.knowledge,
         stats.traits.derived,
-        stats.traits.job,
         stats.arc_families.ownership,
         stats.arc_families.localization,
         stats.arc_families.semantic,

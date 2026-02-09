@@ -17,7 +17,8 @@ use walkdir::WalkDir;
 // NodeTrait — node locale behavior classification
 // ─────────────────────────────────────────────────────────────────────────────
 
-/// The 5 node traits (v10.4): invariant, localized, knowledge, derived, job.
+/// The 4 node traits (v11.2): invariant, localized, knowledge, derived.
+/// Note: job trait removed in v11.2 (defer to v12+).
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum NodeTrait {
@@ -25,7 +26,6 @@ pub enum NodeTrait {
     Localized,
     Knowledge,
     Derived,
-    Job,
 }
 
 /// Type alias for code that uses the v9 name.
@@ -38,7 +38,6 @@ impl std::fmt::Display for NodeTrait {
             Self::Localized => write!(f, "localized"),
             Self::Knowledge => write!(f, "knowledge"),
             Self::Derived => write!(f, "derived"),
-            Self::Job => write!(f, "job"),
         }
     }
 }
@@ -309,7 +308,7 @@ mod tests {
 
     #[test]
     fn node_trait_all_variants() {
-        for variant in ["invariant", "localized", "knowledge", "derived", "job"] {
+        for variant in ["invariant", "localized", "knowledge", "derived"] {
             let yaml = format!(
                 "node:\n  name: T\n  realm: global\n  layer: config\n  trait: {variant}\n  description: d"
             );
@@ -353,9 +352,9 @@ mod tests {
 
     #[test]
     fn optional_fields_default_to_none() {
-        // v10.4: SEO layer is in global realm (shared realm removed)
+        // v11.0: SEO layer is in tenant realm
         let yaml =
-            "node:\n  name: Minimal\n  realm: global\n  layer: seo\n  trait: job\n  description: d";
+            "node:\n  name: Minimal\n  realm: tenant\n  layer: seo\n  trait: derived\n  description: d";
         let doc: NodeDocument = serde_yaml::from_str(yaml).unwrap();
         assert!(doc.node.icon.is_none());
         assert!(doc.node.standard_properties.is_none());
@@ -450,11 +449,12 @@ node:
         // CulturalRealm, CulturalSubRealm, IncomeGroup, LendingCategory, EconomicRegion,
         // PopulationCluster, PopulationSubCluster (+12)
         // v10.9 added: GEOQuery, GEOAnswer, GEOMetrics (+3)
-        let nodes = load_all_nodes(root).expect("should parse all 65 nodes");
+        // v11.1 removed: GenerationJob, SEOMiningRun, EvaluationSignal (-3)
+        let nodes = load_all_nodes(root).expect("should parse all 62 nodes");
         assert_eq!(
             nodes.len(),
-            65,
-            "expected 65 YAML node files (v11.1: +EntityCategory)"
+            62,
+            "expected 62 YAML node files (v11.1: removed job trait nodes)"
         );
 
         // Every node has a non-empty name, realm, and layer
@@ -491,19 +491,18 @@ node:
         );
         assert_eq!(
             count(NodeTrait::Derived),
-            8,
-            "derived count (4 base + 2 GEO + 2 from localized: BlockGenerated, PageGenerated)"
-        ); // v10.9: was 6, now 8
-        assert_eq!(count(NodeTrait::Job), 2, "job count");
+            7,
+            "derived count (v11.1: removed EvaluationSignal)"
+        ); // v11.1: was 8, now 7 (EvaluationSignal removed with job trait)
 
-        // v11.1: Verify realm distribution (+EntityCategory in global)
+        // v11.2: Verify realm distribution (job nodes removed from tenant)
         let realm_count = |r: &str| nodes.iter().filter(|n| n.realm == r).count();
         assert_eq!(
             realm_count("global"),
             32,
             "global realm count (14 config + 18 locale-knowledge)"
         );
-        assert_eq!(realm_count("tenant"), 33, "tenant realm count (+ 9 SEO)");
+        assert_eq!(realm_count("tenant"), 30, "tenant realm count (- 3 job nodes)");
 
         // Spot-check known nodes
         let project = nodes.iter().find(|n| n.def.name == "Project").unwrap();

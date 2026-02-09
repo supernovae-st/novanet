@@ -408,7 +408,7 @@ mod tests {
 
         assert_eq!(count_merges("Realm"), 2, "expected 2 Realm nodes"); // v10.6: global + tenant
         assert_eq!(count_merges("Layer"), 9, "expected 9 Layer nodes"); // v10.6: 3 global + 6 tenant
-        assert_eq!(count_merges("Trait"), 5, "expected 5 Trait nodes");
+        assert_eq!(count_merges("Trait"), 4, "expected 4 Trait nodes"); // v11.1: removed job trait
         assert_eq!(count_merges("ArcFamily"), 5, "expected 5 ArcFamily nodes");
         assert_eq!(count_merges("ArcScope"), 2, "expected 2 ArcScope nodes");
         assert_eq!(
