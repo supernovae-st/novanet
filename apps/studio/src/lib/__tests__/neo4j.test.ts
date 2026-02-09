@@ -153,7 +153,7 @@ describe('neo4j transformations', () => {
         elementId: '5:abc:100',
         startNodeElementId: '4:abc:123',
         endNodeElementId: '4:abc:456',
-        type: 'HAS_L10N',
+        type: 'HAS_CONTENT',
         properties: {
           created_at: '2024-01-01',
         },
@@ -165,7 +165,7 @@ describe('neo4j transformations', () => {
         id: '5:abc:100',
         source: '4:abc:123',
         target: '4:abc:456',
-        type: 'HAS_L10N',
+        type: 'HAS_CONTENT',
         data: { created_at: '2024-01-01' },
       });
     });

@@ -14,84 +14,76 @@ const anthropic = new Anthropic({
 });
 
 /**
- * System prompt for Cypher generation (v10.1.0 schema)
+ * System prompt for Cypher generation (v11.0 schema)
  * Dynamic schema is injected from Neo4j via schemaCache.ts
  */
 const SYSTEM_PROMPT = `You are an AI assistant that helps users explore a Neo4j knowledge graph for a native content generation system called "NovaNet".
 
 ## About NovaNet
 
-NovaNet orchestrates **native content generation** (NOT translation) across 200+ locales. Content is generated natively per locale using Entities (invariant) that produce localized L10n nodes.
+NovaNet orchestrates **native content generation** (NOT translation) across 200+ locales. Content is generated natively per locale using Entities (invariant) that produce EntityContent nodes.
 
 Key principle: Generation, NOT Translation
 - Source → Translate → Target ❌
-- Entity (invariant) → Generate natively → L10n (local) ✅
+- Entity (invariant) → Generate natively → EntityContent (local) ✅
 
-## Graph Schema (v10.1.0 fallback — live schema injected below if available)
+## Graph Schema (v11.0 fallback — live schema injected below if available)
 
 ### Standard Properties (all nodes)
 All nodes have: key, display_name, icon, description, llm_context, created_at, updated_at
 
-### Node Types (43 total, organized by layer)
+### 2-Realm Architecture (v11.0)
+- **GLOBAL** (2 layers): config, locale-knowledge — Universal, READ-ONLY
+- **TENANT** (7 layers): config, foundation, structure, semantic, instruction, seo, output — Business-specific
 
-**Config (3)** — Project-level configuration
-- Project: Root node with brand_name, core_values, category
-- ProjectContent: Localized identity → FOR_LOCALE
-- BrandIdentity: Visual identity (colors, fonts, style)
+### Node Types (65 total, organized by realm/layer)
 
-**Knowledge (7)** — Locale knowledge base
+**Global/Config** — Locale definitions
 - Locale: BCP47 codes (language_code, country_code, fallback_chain)
-- LocaleAdaptation: Formality, emoji policies, tone
-- LocaleAudience: Communication style for locale
-- LocaleCulture: Cultural norms (taboo_topics, positive_triggers)
-- LocaleExpressions: Vocabulary (~17k) per locale
-- LocaleFormatting: Date/number/currency formats
-- LocaleSlugification: URL/slug patterns
+- Formatting: Date/number/currency formats
+- Style: Writing style preferences
+- Slugification: URL/slug patterns
+- Adaptation: Formality, emoji policies, tone
+- Market, Culture: Cultural contexts
 
-**Foundation (9)** — Reusable atoms & rules
-- LocalePatterns: Grammar and style patterns
-- LocaleStyle: Writing style preferences
-- LocaleTaboos: Topics to avoid
-- LocaleTerms: Terminology glossary
-- BlockPrompt: Sub-agent instructions
-- BlockRules: Template generation rules
-- BlockType: Block templates (category, structure)
-- PagePrompt: Orchestrator instructions
-- Slot: Content placeholder definitions
+**Global/Locale-Knowledge** — Knowledge atoms
+- Term, TermSet: Terminology glossary
+- Expression, ExpressionSet: Vocabulary expressions
+- Pattern, PatternSet: Grammar patterns
+- Taboo, TabooSet: Topics to avoid
+- CultureRef, CultureSet: Cultural references
+- AudienceTrait, AudienceSet: Audience characteristics
 
-**Structure (4)** — Content structure
-- Entity: Business entities (feature_category, is_core) — v10.3: was Concept
-- Page: Website pages (instructions)
-- Block: Content blocks (instructions)
-- Intent: User search intents
+**Tenant/Config** — Organization setup
+- Tenant, Organization: Root tenant node
+- Project, ProjectContent: Project with localized identity
+- BrandIdentity: Visual identity
 
-**Semantic (2)** — Localized content
-- EntityL10n: Localized entities (title, definition) → FOR_LOCALE — v10.3: was ConceptL10n
-- BlockL10n: Localized block content → FOR_LOCALE
+**Tenant/Structure** — Content structure
+- Page, Block, ContentSlot: Page and block structure
+- PageType, BlockType: Templates
 
-**Instruction (3)** — Generation jobs
-- PageOutput: Assembled page content → FOR_LOCALE
-- BlockOutput: Generated block content → FOR_LOCALE
-- GenerationJob: Async generation task
+**Tenant/Semantic** — Business content
+- Entity: Invariant business entities
+- EntityContent: Localized entity content → FOR_LOCALE
+- AudiencePersona, ChannelSurface: Targeting
 
-**Output (3)** — Production artifacts
-- OutputArtifact: Final content artifact
-- EvaluationJob: Quality evaluation task
-- EvaluationResult: Evaluation scores
+**Tenant/SEO** — Search optimization (v11.0: moved to tenant)
+- SEOKeyword, SEOQuestion, SEOComparison, SEOPreposition: Keywords
+- GEOQuery, GEOAnswer, GEOMetrics: AI search queries
+- SEOKeywordMetrics, SEOMiningRun: Analytics
 
-**SEO (4)** — Search optimization
-- SEOKeyword: Keywords (value, volume, difficulty, cpc, intent)
-- SEOTarget: Page SEO targeting
-- SEOKeywordMetrics: Performance metrics
-- SEOMiningRun: Mining job metadata
+**Tenant/Output** — Generation results
+- PageGenerated, BlockGenerated: Generated content → FOR_LOCALE
+- GenerationJob, OutputArtifact, EvaluationSignal: Pipeline
 
-### Key Relationships (61 arc types)
+### Key Relationships (124 arc types)
 
-**Ownership**: HAS_CONCEPT, HAS_PAGE, HAS_BLOCK, OF_TYPE, SUPPORTS_LOCALE, HAS_BRAND_IDENTITY
-**Localization**: FOR_LOCALE, HAS_L10N, HAS_OUTPUT, FALLBACK_TO, VARIANT_OF
-**Semantic**: USES_ENTITY, SEMANTIC_LINK, SUBTOPIC_OF, LINKS_TO, SATISFIES_INTENT
-**Generation**: GENERATED, ASSEMBLES, TRIGGERED_BY, USES_PROMPT, COMPILED_FROM
-**Mining**: HAS_SEO_TARGET, HAS_METRICS, SEO_MINES, TARGETS_KEYWORD
+**Ownership**: HAS_PAGE, HAS_BLOCK, HAS_ENTITY, OF_TYPE, SUPPORTS_LOCALE
+**Localization**: FOR_LOCALE, HAS_CONTENT, L10N_OF, FALLBACK_TO
+**Semantic**: USES_ENTITY, SEMANTIC_LINK, SUBTOPIC_OF, TARGETS
+**Generation**: HAS_GENERATED, GENERATED_FOR, USES_PROMPT
+**Mining**: HAS_SEO_KEYWORDS, HAS_GEO_QUERIES, TARGETS
 
 ## Your Task
 1. Understand the user's natural language query
