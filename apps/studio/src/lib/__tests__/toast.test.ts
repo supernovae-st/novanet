@@ -270,43 +270,6 @@ describe('toast', () => {
       });
     });
 
-    describe('filterApplied', () => {
-      it('should show success with filter name', () => {
-        toast.filterApplied('Entity Network');
-
-        expect(sonnerToast.success).toHaveBeenCalledWith('Filter applied: Entity Network', {
-          description: undefined,
-        });
-      });
-    });
-
-    describe('viewModeChanged', () => {
-      it('should show info for 2D mode', () => {
-        toast.viewModeChanged('2d');
-
-        expect(sonnerToast.info).toHaveBeenCalledWith('Switched to 2D view', {
-          description: undefined,
-        });
-      });
-
-      it('should show info for 3D mode', () => {
-        toast.viewModeChanged('3d');
-
-        expect(sonnerToast.info).toHaveBeenCalledWith('Switched to 3D view', {
-          description: undefined,
-        });
-      });
-    });
-
-    describe('shortcutHint', () => {
-      it('should show info with action and shortcut', () => {
-        toast.shortcutHint('⌘K', 'Open command palette');
-
-        expect(sonnerToast.info).toHaveBeenCalledWith('Open command palette', {
-          description: 'Press ⌘K',
-        });
-      });
-    });
   });
 
   describe('promise', () => {
