@@ -5,7 +5,7 @@
 arc:
   name: HAS_LOCALIZED_CONTENT
   family: localization
-  scope: intra_realm
+  scope: cross_realm  # Locale (global) → tenant nodes
   source: Locale
   target:
     - ProjectContent

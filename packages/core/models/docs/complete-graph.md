@@ -26,8 +26,8 @@ This diagram shows the complete NovaNet graph schema with all 42 node types and 
 ```mermaid
 flowchart TB
   %% NovaNet Graph v11.0.0
-  %% Generated: 64 nodes, 138 arcs
-  %% Source: 42 node YAMLs + relations.yaml + taxonomy.yaml
+  %% Generated: 64 nodes, 171 arcs
+  %% Source: node-kinds/ + arc-kinds/ + taxonomy.yaml
 
   %% Trait styling (node_trait)
   classDef invariant fill:#3b82f6,stroke:#1d4ed8,color:#fff
@@ -127,61 +127,86 @@ flowchart TB
   end
 
   %% Relationships (styled by arc family)
-  AudienceSet -->|CONTAINS| AudienceTrait
-  AudienceSet -->|CONTAINS| CultureRef
-  AudienceSet -->|CONTAINS| Expression
-  AudienceSet -->|CONTAINS| Pattern
-  AudienceSet -->|CONTAINS| Taboo
-  AudienceSet -->|CONTAINS| Term
+  AudienceSet -->|CONTAINS_AUDIENCE_TRAIT| AudienceTrait
   Block -->|BLOCK_OF| Page
   Block -.->|FILLS_SLOT| ContentSlot
-  Block -.->|HAS_GENERATED| BlockGenerated
-  Block -.->|HAS_GENERATED| PageGenerated
+  Block ==>|HAS_GENERATED| BlockGenerated
+  Block ==>|HAS_GENERATED| PageGenerated
   Block -->|HAS_PROMPT| BlockPrompt
   Block -->|HAS_PROMPT| PagePrompt
   Block -->|OF_TYPE| BlockType
   Block -->|OF_TYPE| PageType
+  Block -.->|TARGETS_PERSONA| AudiencePersona
   Block -.->|USES_ENTITY| Entity
+  BlockGenerated -.->|FOR_CHANNEL| ChannelSurface
   BlockGenerated -.->|FOR_LOCALE| Locale
-  BlockGenerated -.->|GENERATED_FOR| Block
-  BlockGenerated -.->|GENERATED_FOR| Page
+  BlockGenerated ==>|GENERATED_FOR| Block
+  BlockGenerated ==>|GENERATED_FOR| Page
   BlockGenerated ==>|GENERATED_FROM| BlockType
   BlockGenerated ==>|HAS_EVALUATION| EvaluationSignal
+  BlockGenerated -.->|HAS_INTERNAL_LINK| PageGenerated
   BlockGenerated ==>|INFLUENCED_BY| EntityContent
   BlockGenerated ==>|PREVIOUS_VERSION| BlockGenerated
   BlockGenerated ==>|PREVIOUS_VERSION| OutputArtifact
   BlockGenerated ==>|PREVIOUS_VERSION| PageGenerated
+  BlockInstruction -.->|REFERENCES_ENTITY| Entity
+  BlockInstruction -.->|REFERENCES_PAGE| Page
   BlockPrompt ==>|GENERATED| BlockGenerated
   BlockPrompt ==>|GENERATED| PageGenerated
+  BlockPrompt ==>|INCLUDES_STYLE| Style
   BlockType -->|HAS_RULES| BlockRules
   ContentSlot -->|ACCEPTS_BLOCK_TYPE| BlockType
-  CultureSet -->|CONTAINS| AudienceTrait
-  CultureSet -->|CONTAINS| CultureRef
-  CultureSet -->|CONTAINS| Expression
-  CultureSet -->|CONTAINS| Pattern
-  CultureSet -->|CONTAINS| Taboo
-  CultureSet -->|CONTAINS| Term
+  CulturalSubRealm -->|PART_OF_REALM| CulturalRealm
+  CultureSet -->|CONTAINS_CULTURE_REF| CultureRef
+  Entity -.->|ACTS_ON| Entity
+  Entity -.->|ALTERNATIVE_TO| Entity
+  Entity -.->|APPLIES_TO| Entity
+  Entity -.->|COMPETES_WITH| Entity
+  Entity -.->|ENABLED_BY| Entity
+  Entity -.->|ENABLES| Entity
+  Entity -.->|ENHANCED_BY| Entity
+  Entity -.->|ENHANCES| Entity
+  Entity -.->|HAS_APPLICATION| Entity
+  Entity -->|HAS_CHILD| Entity
   Entity -.->|HAS_CONTENT| EntityContent
   Entity -.->|HAS_CONTENT| ProjectContent
+  Entity -.->|HAS_TYPE| Entity
+  Entity -.->|HAS_VARIANT| Entity
+  Entity -.->|INCLUDED_IN| Entity
+  Entity -.->|INCLUDES| Entity
+  Entity -.->|MATERIALIZES_AS| Page
+  Entity -.->|OPERATED_BY| Entity
+  Entity -.->|READS| Entity
+  Entity -.->|READ_BY| Entity
+  Entity -.->|REQUIRED_BY| Entity
+  Entity -.->|REQUIRES| Entity
   Entity -.->|SEMANTIC_LINK| Entity
+  Entity -.->|SIMILAR_TO| Entity
+  Entity -.->|TARGETS_PERSONA| AudiencePersona
+  Entity -.->|TYPE_OF| Entity
   Entity -.->|USED_BY| Block
   Entity -.->|USED_BY| Page
+  Entity -.->|VARIANT_OF| Entity
+  EntityContent -.->|ANSWERS| SEOQuestion
   EntityContent -.->|CONTENT_OF| Entity
   EntityContent -.->|CONTENT_OF| Project
   EntityContent -.->|FOR_LOCALE| Locale
+  EntityContent -.->|MONITORS_GEO| GEOQuery
+  EntityContent -.->|TARGETS| SEOKeyword
   EvaluationSignal ==>|EVALUATED_BY_JOB| GenerationJob
-  ExpressionSet -->|CONTAINS| AudienceTrait
-  ExpressionSet -->|CONTAINS| CultureRef
-  ExpressionSet -->|CONTAINS| Expression
-  ExpressionSet -->|CONTAINS| Pattern
-  ExpressionSet -->|CONTAINS| Taboo
-  ExpressionSet -->|CONTAINS| Term
+  ExpressionSet -->|CONTAINS_EXPRESSION| Expression
+  GEOQuery -->|HAS_GEO_ANSWERS| GEOAnswer
+  GEOQuery --o|HAS_GEO_METRICS| GEOMetrics
   GenerationJob ==>|CREATES_CONTENT| BlockGenerated
   GenerationJob ==>|CREATES_CONTENT| PageGenerated
   GenerationJob -.->|FOR_LOCALE| Locale
   GenerationJob ==>|PRODUCES| OutputArtifact
   GenerationJob ==>|TRIGGERED_BY| Project
   GenerationJob ==>|USES_PROMPT| PromptArtifact
+  GeoRegion -->|IN_CONTINENT| Continent
+  GeoSubRegion -->|IN_REGION| GeoRegion
+  LanguageBranch -->|BRANCH_OF| LanguageFamily
+  Locale -.->|CULTURALLY_SIMILAR| Locale
   Locale -.->|FALLBACK_TO| Locale
   Locale -->|HAS_ADAPTATION| Adaptation
   Locale -->|HAS_AUDIENCE| AudienceSet
@@ -189,29 +214,41 @@ flowchart TB
   Locale -->|HAS_CULTURE_SET| CultureSet
   Locale -->|HAS_EXPRESSIONS| ExpressionSet
   Locale -->|HAS_FORMATTING| Formatting
+  Locale -->|HAS_GEO_QUERIES| GEOQuery
+  Locale -.->|HAS_INCOME_LEVEL| IncomeGroup
+  Locale -.->|HAS_LENDING_TYPE| LendingCategory
   Locale -.->|HAS_LOCALIZED_CONTENT| BlockGenerated
   Locale -.->|HAS_LOCALIZED_CONTENT| EntityContent
   Locale -.->|HAS_LOCALIZED_CONTENT| PageGenerated
   Locale -.->|HAS_LOCALIZED_CONTENT| ProjectContent
   Locale -->|HAS_MARKET| Market
   Locale -->|HAS_PATTERNS| PatternSet
+  Locale -.->|HAS_POPULATION| PopulationSubCluster
+  Locale -.->|HAS_PRIMARY_POPULATION| PopulationCluster
   Locale -->|HAS_SEO_KEYWORDS| SEOKeyword
   Locale -->|HAS_SLUGIFICATION| Slugification
   Locale -->|HAS_STYLE| Style
   Locale -->|HAS_TABOOS| TabooSet
   Locale -->|HAS_TERMS| TermSet
-  Locale -.->|VARIANT_OF| Locale
+  Locale -.->|IN_CULTURAL_SUBREALM| CulturalSubRealm
+  Locale -.->|IN_ECONOMIC_REGION| EconomicRegion
+  Locale -.->|IN_SUBREGION| GeoRegion
+  Locale -.->|LOCALE_VARIANT_OF| Locale
+  Locale -.->|SPEAKS_BRANCH| LanguageBranch
+  Organization -->|HAS_COMPANY_PROJECT| Project
+  Organization -->|HAS_ENTITY| Entity
+  Organization -->|HAS_PROJECT| Project
+  OutputArtifact ==>|BUNDLES| BlockGenerated
+  OutputArtifact ==>|BUNDLES| PageGenerated
   OutputArtifact -.->|FOR_LOCALE| Locale
   OutputArtifact ==>|HAS_EVALUATION| EvaluationSignal
-  OutputArtifact ==>|INCLUDES| BlockGenerated
-  OutputArtifact ==>|INCLUDES| PageGenerated
   OutputArtifact ==>|PREVIOUS_VERSION| BlockGenerated
   OutputArtifact ==>|PREVIOUS_VERSION| OutputArtifact
   OutputArtifact ==>|PREVIOUS_VERSION| PageGenerated
-  Page -.->|FOR_CHANNEL| ChannelSurface
   Page -->|HAS_BLOCK| Block
-  Page -.->|HAS_GENERATED| BlockGenerated
-  Page -.->|HAS_GENERATED| PageGenerated
+  Page ==>|HAS_GENERATED| BlockGenerated
+  Page ==>|HAS_GENERATED| PageGenerated
+  Page -->|HAS_INSTRUCTION| BlockInstruction
   Page -->|HAS_PROMPT| BlockPrompt
   Page -->|HAS_PROMPT| PagePrompt
   Page -->|HAS_SLOT| ContentSlot
@@ -221,23 +258,23 @@ flowchart TB
   Page -.->|SUBTOPIC_OF| Page
   Page -.->|TARGETS_PERSONA| AudiencePersona
   Page -.->|USES_ENTITY| Entity
+  PageGenerated -.->|ADDRESSES| SEOComparison
   PageGenerated ==>|ASSEMBLES| BlockGenerated
   PageGenerated -->|BELONGS_TO_PROJECT_CONTENT| ProjectContent
+  PageGenerated -.->|FOR_CHANNEL| ChannelSurface
   PageGenerated -.->|FOR_LOCALE| Locale
-  PageGenerated -.->|GENERATED_FOR| Block
-  PageGenerated -.->|GENERATED_FOR| Page
+  PageGenerated ==>|GENERATED_FOR| Block
+  PageGenerated ==>|GENERATED_FOR| Page
   PageGenerated ==>|HAS_EVALUATION| EvaluationSignal
   PageGenerated ==>|PREVIOUS_VERSION| BlockGenerated
   PageGenerated ==>|PREVIOUS_VERSION| OutputArtifact
   PageGenerated ==>|PREVIOUS_VERSION| PageGenerated
   PagePrompt ==>|GENERATED| BlockGenerated
   PagePrompt ==>|GENERATED| PageGenerated
-  PatternSet -->|CONTAINS| AudienceTrait
-  PatternSet -->|CONTAINS| CultureRef
-  PatternSet -->|CONTAINS| Expression
-  PatternSet -->|CONTAINS| Pattern
-  PatternSet -->|CONTAINS| Taboo
-  PatternSet -->|CONTAINS| Term
+  PagePrompt ==>|INCLUDES_STYLE| Style
+  PatternSet -->|CONTAINS_PATTERN| Pattern
+  PopulationSubCluster -->|CLUSTER_OF| PopulationCluster
+  Project -->|BELONGS_TO_ORG| Organization
   Project -->|DEFAULT_LOCALE| Locale
   Project -->|HAS_BRAND_IDENTITY| BrandIdentity
   Project -.->|HAS_CONTENT| EntityContent
@@ -250,28 +287,24 @@ flowchart TB
   PromptArtifact ==>|COMPILED_FROM| BlockPrompt
   PromptArtifact ==>|COMPILED_FROM| PagePrompt
   PromptArtifact ==>|INCLUDES_ENTITY| Entity
-  PromptArtifact ==>|INCLUDES_STYLE| Style
+  SEOComparison -.->|COMPARES_A| Entity
+  SEOComparison -.->|COMPARES_B| Entity
+  SEOKeyword -.->|EXPRESSES| Entity
+  SEOKeyword -->|HAS_COMPARISONS| SEOComparison
   SEOKeyword --o|HAS_METRICS| SEOKeywordMetrics
+  SEOKeyword -->|HAS_PREPOSITIONS| SEOPreposition
+  SEOKeyword -->|HAS_QUESTIONS| SEOQuestion
   SEOMiningRun --o|SEO_MINES| SEOKeyword
-  TabooSet -->|CONTAINS| AudienceTrait
-  TabooSet -->|CONTAINS| CultureRef
-  TabooSet -->|CONTAINS| Expression
-  TabooSet -->|CONTAINS| Pattern
-  TabooSet -->|CONTAINS| Taboo
-  TabooSet -->|CONTAINS| Term
-  TermSet -->|CONTAINS| AudienceTrait
-  TermSet -->|CONTAINS| CultureRef
-  TermSet -->|CONTAINS| Expression
-  TermSet -->|CONTAINS| Pattern
-  TermSet -->|CONTAINS| Taboo
-  TermSet -->|CONTAINS| Term
+  SEOPreposition -.->|USE_CASE_ENTITY| Entity
+  TabooSet -->|CONTAINS_TABOO| Taboo
+  TermSet -->|CONTAINS_TERM| Term
 
   %% Arc colors by family
-  linkStyle 18,19,20,21,22,23,24,25,42,49,50,52,53,54,75,76,77,78,79,80,94,99,100,101,102,103,104,120,121,122,123 stroke:#8b5cf6,stroke-width:2px
-  linkStyle 8,9,15,16,17,34,35,39,40,41,51,55,62,63,64,65,73,74,83,84,96,97,98,113,114,117,118,119 stroke:#22c55e,stroke-width:2px
-  linkStyle 124,125 stroke:#ec4899,stroke-width:2px
-  linkStyle 0,1,2,3,4,5,6,10,11,12,13,26,27,28,29,30,31,32,33,43,44,45,46,47,48,56,57,58,59,60,61,66,67,68,69,70,71,72,82,85,86,87,89,90,95,105,106,107,108,109,110,111,112,115,116,126,127,128,129,130,131,132,133,134,135,136,137 stroke:#3b82f6,stroke-width:2px
-  linkStyle 7,14,36,37,38,81,88,91,92,93 stroke:#f97316,stroke-width:2px
+  linkStyle 3,4,13,14,15,16,18,19,20,21,24,25,26,66,70,71,73,74,75,111,112,114,115,116,117,119,120,132,136,137,138,139,140,141,142,143,144,157,158,159 stroke:#8b5cf6,stroke-width:2px
+  linkStyle 12,17,41,42,61,62,63,72,80,88,89,90,91,92,93,96,97,103,104,105,106,107,113,135,150,151,154,155,156 stroke:#22c55e,stroke-width:2px
+  linkStyle 69,164,167 stroke:#ec4899,stroke-width:2px
+  linkStyle 0,1,5,6,7,8,27,28,29,30,40,67,68,76,77,78,81,82,83,84,85,86,87,94,95,98,99,100,101,102,108,109,110,118,121,122,123,124,126,127,133,145,146,147,148,149,152,153,163,165,166,169,170 stroke:#3b82f6,stroke-width:2px
+  linkStyle 2,9,10,11,22,23,31,32,33,34,35,36,37,38,39,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,64,65,79,125,128,129,130,131,134,160,161,162,168 stroke:#f97316,stroke-width:2px
 
   %% Class assignments
   class Adaptation knowledge
