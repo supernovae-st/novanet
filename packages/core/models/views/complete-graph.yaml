@@ -1,10 +1,10 @@
 # models/views/complete-graph.yaml
-# Complete graph view showing all 43 node types and 64 arc types
-# v10.1.0 — GEO removed, SEO via ConceptL10n
+# Complete graph view showing all 65 node types and 124 arc types
+# v11.0.0 — 2-Realm Architecture (GLOBAL + TENANT)
 id: complete-graph
 name: Complete Graph
 description: Full NovaNet graph with all nodes and relations
-version: "10.1.0"
+version: "11.0.0"
 
 root:
   type: Project
@@ -35,71 +35,63 @@ include:
       - relation: SUBTOPIC_OF
         direction: outgoing
 
-  # v10.3: Entity is in GLOBAL realm, accessed via USES_ENTITY from Page/Block
-  # Removed: HAS_CONCEPT (Entity no longer owned by Project)
+  # v11.0: Entity is in TENANT realm semantic layer, accessed via USES_ENTITY from Page/Block
 
 docs:
   title: "Complete Graph View"
   category: overview
   description: |
-    The complete NovaNet graph showing all 43 node types organized into three realms:
-    - **Global (17 nodes)**: Locale + 10 knowledge containers + 6 atoms
-    - **Shared (3 nodes)**: SEO nodes (SEOKeyword, SEOKeywordMetrics, SEOMiningRun)
-    - **Project (23 nodes)**: Per-project foundation, structure, semantic, instruction, and output nodes
+    The complete NovaNet graph showing all 65 node types organized into two realms:
+    - **GLOBAL (2 layers)**: config, locale-knowledge — Universal, READ-ONLY
+    - **TENANT (7 layers)**: config, foundation, structure, semantic, instruction, seo, output — Business-specific
 
   layers:
-    # GLOBAL SCOPE (17 nodes)
+    # GLOBAL REALM (2 layers)
     - name: Global - Config
-      nodes: [Locale]
+      nodes: [Locale, Formatting, Slugification, Adaptation, Style, Market, Culture]
       color: purple
-      description: Locale configuration (BCP-47)
+      description: Locale configuration (BCP-47) and locale-level settings
 
-    - name: Global - Knowledge Containers
-      nodes: [Formatting, Slugification, Adaptation, Style, TermSet, ExpressionSet, PatternSet, CultureSet, TabooSet, AudienceSet]
+    - name: Global - Locale Knowledge
+      nodes: [TermSet, ExpressionSet, PatternSet, CultureSet, TabooSet, AudienceSet, Term, Expression, Pattern, CultureRef, Taboo, AudienceTrait]
       color: purple
-      description: 10 tiered knowledge containers (Technical, Style, Semantic)
+      description: Knowledge containers and atoms
 
-    - name: Global - Knowledge Atoms
-      nodes: [Term, Expression, Pattern, CultureRef, Taboo, AudienceTrait]
-      color: purple
-      description: 6 atomic knowledge elements
+    # TENANT REALM (7 layers)
+    - name: Tenant - Config
+      nodes: [Tenant, Organization]
+      color: blue
+      description: Organization configuration
 
-    - name: Global - Semantic
-      nodes: [Entity, EntityContent]
-      color: purple
-      description: "v10.3 Entity-Centric Architecture (replaces Concept/ConceptL10n)"
-
-    # PROJECT SCOPE (20 nodes)
-    - name: Project - Foundation
-      nodes: [Project, BrandIdentity, ProjectContent]
+    - name: Tenant - Foundation
+      nodes: [Project, ProjectContent, BrandIdentity]
       color: blue
       description: Project foundation and branding
 
-    - name: Project - Structure
+    - name: Tenant - Structure
       nodes: [Page, Block, ContentSlot, BlockType, PageType]
       color: cyan
       description: Page and block structure
 
-    - name: Project - Semantic
-      nodes: [AudiencePersona, ChannelSurface]
+    - name: Tenant - Semantic
+      nodes: [Entity, EntityContent, AudiencePersona, ChannelSurface]
       color: green
-      description: "Audience and channel targeting (v10.3: Entity/EntityContent moved to Global)"
+      description: Entities and audience targeting
 
-    - name: Project - Instruction
+    - name: Tenant - Instruction
       nodes: [PagePrompt, BlockPrompt, BlockRules, BlockInstruction, PromptArtifact]
       color: orange
-      description: "Generation instructions (v10.3: added BlockInstruction)"
+      description: Generation instructions
 
-    - name: Project - Output
+    - name: Tenant - SEO
+      nodes: [SEOKeyword, SEOQuestion, SEOComparison, SEOPreposition, GEOQuery, GEOAnswer, GEOMetrics, SEOKeywordMetrics, SEOMiningRun]
+      color: gray
+      description: SEO and GEO optimization (v11.0 moved to tenant)
+
+    - name: Tenant - Output
       nodes: [PageGenerated, BlockGenerated, GenerationJob, OutputArtifact, EvaluationSignal]
       color: orange
       description: Generated content outputs
-
-    # SHARED SCOPE (3 nodes)
-    - name: Shared - SEO
-      nodes: [SEOKeyword, SEOKeywordMetrics, SEOMiningRun]
-      color: gray
-      description: SEO keyword mining
 
   examples:
     - name: Count all nodes by type
@@ -133,6 +125,6 @@ docs:
   notes:
     - "This view is for documentation and understanding the full schema"
     - "For generation tasks, use more specific views like page-generation or block-generation"
-    - "The graph follows a scope hierarchy: Global > Shared > Project"
+    - "The graph follows a 2-realm hierarchy: GLOBAL (read-only) > TENANT (business)"
     - "Mermaid diagram is auto-generated from arc-kinds/ via MermaidGenerator"
-    - "v10.1: 43 nodes, 64 arcs (GEO removed)"
+    - "v11.0: 65 nodes, 124 arcs (2-realm architecture)"

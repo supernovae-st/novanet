@@ -34,13 +34,14 @@ fn render_header() -> String {
 }
 
 fn render_ownership_flow() -> String {
+    // v11.0: ProjectL10n → ProjectContent, HAS_L10N → HAS_CONTENT
     "┌──────────────────────────────────────────────────────────────────────────────┐\n\
      │  1. OWNERSHIP FLOW — Who owns what (tenant hierarchy)                        │\n\
      ├──────────────────────────────────────────────────────────────────────────────┤\n\
      │                                                                              │\n\
      │  Tenant                                                                      │\n\
      │    │                                                                         │\n\
-     │    ├──[HAS_PROJECT]──► Project ──[HAS_L10N]──► ProjectL10n                   │\n\
+     │    ├──[HAS_PROJECT]──► Project ──[HAS_CONTENT]──► ProjectContent             │\n\
      │    │                      │                                                  │\n\
      │    │                      ├──[HAS_PAGE]──► Page ──[HAS_BLOCK]──► Block       │\n\
      │    │                      │                                                  │\n\

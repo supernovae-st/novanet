@@ -584,23 +584,24 @@ mod tests {
 
     #[test]
     fn render_small_mermaid() {
+        // v11.0: ProjectL10n → ProjectContent, HAS_L10N → HAS_CONTENT
         let nodes = vec![
             make_node("Locale", "global", "config", NodeTrait::Invariant),
             make_node("Project", "tenant", "foundation", NodeTrait::Invariant),
-            make_node("ProjectL10n", "tenant", "foundation", NodeTrait::Localized),
+            make_node("ProjectContent", "tenant", "foundation", NodeTrait::Localized),
         ];
 
         let rels = vec![
             make_rel(
-                "HAS_L10N",
+                "HAS_CONTENT",
                 ArcFamily::Localization,
                 "Project",
-                "ProjectL10n",
+                "ProjectContent",
             ),
             make_rel(
                 "FOR_LOCALE",
                 ArcFamily::Localization,
-                "ProjectL10n",
+                "ProjectContent",
                 "Locale",
             ),
         ];
@@ -634,11 +635,11 @@ mod tests {
         // Node labels with emoji
         assert!(output.contains("Locale[\"\u{1F535} Locale\"]"));
         assert!(output.contains("Project[\"\u{1F535} Project\"]"));
-        assert!(output.contains("ProjectL10n[\"\u{1F7E2} ProjectL10n\"]"));
+        assert!(output.contains("ProjectContent[\"\u{1F7E2} ProjectContent\"]"));
 
         // Edges
-        assert!(output.contains("Project -.->|HAS_L10N| ProjectL10n"));
-        assert!(output.contains("ProjectL10n -.->|FOR_LOCALE| Locale"));
+        assert!(output.contains("Project -.->|HAS_CONTENT| ProjectContent"));
+        assert!(output.contains("ProjectContent -.->|FOR_LOCALE| Locale"));
 
         // linkStyle
         assert!(output.contains("stroke:#22c55e,stroke-width:2px"));
@@ -646,7 +647,7 @@ mod tests {
         // Class assignments
         assert!(output.contains("class Locale invariant"));
         assert!(output.contains("class Project invariant"));
-        assert!(output.contains("class ProjectL10n localized"));
+        assert!(output.contains("class ProjectContent localized"));
     }
 
     #[test]
