@@ -985,7 +985,11 @@ mod tests {
         // Match positions 0 and 2: 'h' and 'l' in "hello"
         let spans = highlight_matches_with_bg("hello", Some(&[0, 2]), Color::White, None);
         // Expected: [h(yellow)], [e(white)], [l(yellow)], [lo(white)]
-        assert!(spans.len() >= 3, "Expected at least 3 spans, got {}", spans.len());
+        assert!(
+            spans.len() >= 3,
+            "Expected at least 3 spans, got {}",
+            spans.len()
+        );
 
         // First span should be 'h' highlighted (yellow bg)
         assert_eq!(spans[0].content, "h");

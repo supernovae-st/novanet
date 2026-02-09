@@ -2802,14 +2802,14 @@ mod tests {
     fn test_validate_cypher_label_invalid_chars() {
         // Injection attempts with dangerous characters
         let injection_attempts = [
-            "Entity;DROP",   // SQL/Cypher injection attempt
-            "Page'",         // Quote injection
-            "Node\"",        // Double quote injection
-            "Entity{",       // Cypher clause injection
-            "Kind}",         // Cypher clause end
-            "Node:Label",    // Additional label injection
-            "A()",           // Function call injection
-            "A[0]",          // Index access injection
+            "Entity;DROP", // SQL/Cypher injection attempt
+            "Page'",       // Quote injection
+            "Node\"",      // Double quote injection
+            "Entity{",     // Cypher clause injection
+            "Kind}",       // Cypher clause end
+            "Node:Label",  // Additional label injection
+            "A()",         // Function call injection
+            "A[0]",        // Index access injection
         ];
 
         for label in &injection_attempts {
