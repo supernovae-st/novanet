@@ -56,7 +56,7 @@ const RELATION_ALIAS_MAP: Record<string, string> = {
   GENERATED: 'generatedOutput',
   INFLUENCED_BY: 'influencingEntity',  // v10.3: renamed from influencingConcept
   GENERATED_FROM: 'generatedFromType',
-  BELONGS_TO_PROJECT_L10N: 'projectL10n',
+  BELONGS_TO_PROJECT_CONTENT: 'projectContent',
   // SEO Mining
   SEO_MINES: 'minedSeoKeyword',
   // REMOVED v10.3: HAS_CONCEPT, USES_CONCEPT, TARGETS_SEO, TARGETS_GEO, GEO_MINES (GEO removed)
@@ -97,7 +97,7 @@ const RELATION_TARGET_TYPE_MAP: Record<string, string> = {
   GENERATED: 'PageGenerated',
   INFLUENCED_BY: 'EntityContent',  // v10.3: was ConceptL10n
   GENERATED_FROM: 'BlockType',
-  BELONGS_TO_PROJECT_L10N: 'ProjectL10n',
+  BELONGS_TO_PROJECT_CONTENT: 'ProjectContent',
   // SEO Mining
   SEO_MINES: 'SEOKeyword',
   // REMOVED v10.3: HAS_CONCEPT, USES_CONCEPT, TARGETS_SEO, TARGETS_GEO, GEO_MINES (GEO removed)

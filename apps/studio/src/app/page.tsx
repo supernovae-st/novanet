@@ -117,6 +117,7 @@ export default function HomePage() {
   const totalNodes = useGraphStore((state) => state.totalNodes);
   const getNodeById = useGraphStore((state) => state.getNodeById);
   const getEdgeById = useGraphStore((state) => state.getEdgeById);
+  const clearGraph = useGraphStore((state) => state.clearGraph);
 
   // Query Store - state + actions
   const queryState = useQueryStore(
@@ -298,6 +299,7 @@ export default function HomePage() {
   const prevNavigationModeRef = useRef<typeof navigationMode | null>(null);
 
   // Fetch initial data OR re-fetch when navigationMode changes (e.g., from URL sync)
+  // v11.0: Data view shows empty state, only Meta view fetches schema data
   useEffect(() => {
     if (isFetching) return;
 
@@ -310,12 +312,14 @@ export default function HomePage() {
       if (navigationMode === 'meta') {
         fetchSchemaData();
       } else {
-        fetchData({ limit: DEFAULT_FETCH_LIMIT });
+        // v11.0: Data view intentionally shows empty state
+        // Clear the graph to show 0 nodes
+        clearGraph();
       }
     }
 
     prevNavigationModeRef.current = navigationMode;
-  }, [totalNodes, isFetching, fetchData, fetchSchemaData, navigationMode]);
+  }, [totalNodes, isFetching, fetchSchemaData, navigationMode, clearGraph]);
 
   // ═══════════════════════════════════════════════════════════════════════════
   // MATRIX TRANSITION ORCHESTRATION
@@ -419,10 +423,11 @@ export default function HomePage() {
       }
 
       // Cycle navigation mode (N) - triggers Matrix transition
+      // v11.0: Simplified to Meta and Data only
       if (e.key === 'n' && !e.metaKey && !e.ctrlKey && !e.shiftKey) {
         e.preventDefault();
         if (!transitionState.isTransitioning) {
-          const modes: typeof navigationMode[] = ['data', 'meta', 'overlay', 'query'];
+          const modes: typeof navigationMode[] = ['meta', 'data'];
           const idx = modes.indexOf(navigationMode);
           const nextMode = modes[(idx + 1) % modes.length];
           transitionActions.startTransition(nextMode);
@@ -528,13 +533,13 @@ export default function HomePage() {
   // ═══════════════════════════════════════════════════════════════════════════
 
   // Refresh data
+  // v11.0: Only Meta mode has data to refresh
   const handleRefresh = useCallback(() => {
     if (navigationMode === 'meta') {
       fetchSchemaData();
-    } else {
-      fetchData({ limit: DEFAULT_FETCH_LIMIT });
     }
-  }, [fetchData, fetchSchemaData, navigationMode]);
+    // v11.0: Data view intentionally shows empty state - nothing to refresh
+  }, [fetchSchemaData, navigationMode]);
 
   // Note: Data mode changes are handled by the effect above
   // The toggle only updates the store, the effect fetches the data

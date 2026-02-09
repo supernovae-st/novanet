@@ -485,6 +485,7 @@ pub fn get_type_label(item: Option<&TreeItem>) -> &'static str {
         Some(TreeItem::ArcFamily(_)) => "ArcFamily",
         Some(TreeItem::ArcKind(_, _)) => "Arc Kind",
         Some(TreeItem::Instance(_, _, _, _)) => "Instance",
+        Some(TreeItem::EntityCategory(_, _, _, _)) => "Category",
         None => "",
     }
 }
@@ -501,6 +502,7 @@ pub fn get_item_display(item: Option<&TreeItem>) -> (&'static str, String) {
         Some(TreeItem::ArcFamily(f)) => ("  ", f.display_name.clone()),
         Some(TreeItem::ArcKind(_, ek)) => ("    ", ek.display_name.clone()),
         Some(TreeItem::Instance(_, _, _, inst)) => ("      ", inst.display_name.clone()),
+        Some(TreeItem::EntityCategory(_, _, _, cat)) => ("      ", cat.display_name.clone()),
         None => ("?", "Unknown".to_string()),
     }
 }

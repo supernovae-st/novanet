@@ -278,8 +278,12 @@ icons:
 | `EntityL10n` | `EntityContent` | Stores semantic content, not localization metadata |
 | `PageL10n` | `PageGenerated` | Clarifies this is LLM generation output |
 | `BlockL10n` | `BlockGenerated` | Parallel naming with PageGenerated |
+| `ProjectL10n` | `ProjectContent` | v11.0: Consistent with EntityContent pattern |
 | `HAS_L10N` | `HAS_CONTENT` | Content relationship, not localization |
 | `HAS_OUTPUT` | `HAS_GENERATED` | Moved to generation family, clarifies purpose |
+| `BELONGS_TO_PROJECT_L10N` | `BELONGS_TO_PROJECT_CONTENT` | v11.0: Follows ProjectContent rename |
+| `GEOSeedL10n` | `GEOQuery` | v10.7: New GEO schema |
+| `GEOSeedMetrics` | `GEOMetrics` | v10.7: New GEO schema |
 
 **Composite Key Pattern**:
 
@@ -402,6 +406,54 @@ CONTAINS_AUDIENCE_TRAIT: AudienceSet → AudienceTrait
 - All existing CONTAINS arcs must be migrated with correct type suffix
 - Queries must use specific arc type instead of generic CONTAINS
 
+## ADR-017: EntityCategory Classification
+
+**Status**: Approved (v11.1)
+
+**Decision**: Replace Entity.type enum property with EntityCategory nodes and BELONGS_TO arcs.
+
+**Problem**:
+Entity had a `type` enum property with 13 hardcoded values (THING, CONTENT_TYPE, PLACE, PERSON, ORGANIZATION, EVENT, CONCEPT, PRODUCT, SERVICE, RESOURCE, MEDIA, DOCUMENT, ABSTRACT).
+Properties are difficult to query and extend. Moving classification to the graph enables queryable, extensible categorization.
+
+**Solution**:
+- Create EntityCategory node type in `global/config` layer (13 nodes, invariant trait)
+- Add BELONGS_TO arc from Entity (tenant/semantic) to EntityCategory (global/config) — cross_realm, ownership family
+- Remove Entity.type enum property
+
+**Structure**:
+```
+EntityCategory (global/config, invariant, 13 nodes)
+  ├─ category_key: "thing"
+  ├─ category_key: "content-type"
+  ├─ ... (11 more)
+
+Entity (tenant/semantic) ─[:BELONGS_TO]→ EntityCategory (global/config)
+```
+
+**Arc Properties**:
+- Name: `BELONGS_TO`
+- Family: `ownership`
+- Scope: `cross_realm` (tenant/semantic → global/config)
+- Cardinality: `many_to_one` (many Entities can belong to one category)
+- Source: Entity
+- Target: EntityCategory
+
+**Benefits**:
+1. **Queryable**: Find all entities by category with `MATCH (e:Entity)-[:BELONGS_TO]->(c:EntityCategory {category_key: 'person'})`
+2. **Extensible**: Add new categories without code changes (just YAML + Neo4j nodes)
+3. **Uniform**: Classification follows ADR-006 (realm differentiates scope) — universal categories in global, instance relationships in tenant
+4. **Graph-native**: Classification is now part of the knowledge graph, not a buried enum property
+
+**Migration**:
+1. Create EntityCategory YAML definition in `packages/core/models/node-kinds/global/config/entity-category.yaml`
+2. Create BELONGS_TO arc definition in `packages/core/models/arc-kinds/ownership/belongs-to.yaml`
+3. Generate schema artifacts: `cargo run -- schema generate`
+4. Create Neo4j migration to insert 13 EntityCategory nodes and create BELONGS_TO relationships from existing Entity nodes
+5. Remove Entity.type property from Entity node definition
+
+**No breaking changes** — API clients can still categorize entities, just through graph traversal instead of property lookup.
+
 ## Decision Log
 
 | ADR | Version | Summary |
@@ -422,6 +474,7 @@ CONTAINS_AUDIENCE_TRAIT: AudienceSet → AudienceTrait
 | 014 | v10.9 | Naming convention refactor (L10n to Content/Generated) |
 | 015 | v10.9 | Unidirectional ownership arcs |
 | 016 | v10.9 | Type-constrained container arcs |
+| 017 | v11.1 | EntityCategory classification |
 
 ## References
 

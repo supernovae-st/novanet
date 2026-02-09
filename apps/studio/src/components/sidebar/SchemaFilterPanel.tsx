@@ -1,43 +1,17 @@
 'use client';
 
 /**
- * SchemaFilterPanel - Schema Browser using unified Sidebar components
+ * SchemaFilterPanel - Schema Browser with NodeCard display
  *
- * Uses Sidebar.Content for consistent skeleton across all tabs:
- * - Same header structure
- * - Same body padding (p-3)
- * - Same row heights and spacing
- *
- * Now unified with Data Explorer: AI Search + Tabs (Types | Rels)
+ * v11.0: Unified card-based schema browser similar to TUI meta view.
+ * Uses NodeCard components for consistent styling across the app.
  */
 
-import { memo, useCallback, useMemo, useState } from 'react';
-import {
-  Landmark,
-  Layers,
-  Lightbulb,
-  FileText,
-  FileOutput,
-  Settings,
-  Brain,
-  Search,
-  Globe,
-  Building2,
-  type LucideIcon,
-} from 'lucide-react';
-import { useShallow } from 'zustand/react/shallow';
-import { REALM_HIERARCHY } from '@novanet/core/graph';
-import type { Layer } from '@novanet/core/graph';
-import { Realm } from '@novanet/core/types';
+import { memo, useMemo, useState } from 'react';
 import { RelationType } from '@novanet/core/schemas';
-import { useFilterStore } from '@/stores/filterStore';
-import { iconSizes } from '@/design/tokens';
-import { REALM_COLORS } from '@/design/colors';
-import { calculateCheckboxState } from '@/hooks';
-import type { CheckboxState } from '@/components/ui/TriStateCheckbox';
 import { SegmentedTabs } from '@/components/ui/SegmentedTabs';
 import { Sidebar } from './SidebarContent';
-import { AiSearchInput } from './AiSearchInput';
+import { SchemaCardView } from './SchemaCardView';
 
 // Tab definitions
 type SchemaTabId = 'types' | 'rels';

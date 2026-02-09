@@ -450,11 +450,11 @@ node:
         // CulturalRealm, CulturalSubRealm, IncomeGroup, LendingCategory, EconomicRegion,
         // PopulationCluster, PopulationSubCluster (+12)
         // v10.9 added: GEOQuery, GEOAnswer, GEOMetrics (+3)
-        let nodes = load_all_nodes(root).expect("should parse all 64 nodes");
+        let nodes = load_all_nodes(root).expect("should parse all 65 nodes");
         assert_eq!(
             nodes.len(),
-            64,
-            "expected 64 YAML node files (v10.9: 40 global + 24 tenant)"
+            65,
+            "expected 65 YAML node files (v11.1: +EntityCategory)"
         );
 
         // Every node has a non-empty name, realm, and layer
@@ -478,7 +478,7 @@ node:
 
         // Verify trait distribution (2 realms: global + tenant)
         let count = |t: NodeTrait| nodes.iter().filter(|n| n.def.node_trait == t).count();
-        assert_eq!(count(NodeTrait::Invariant), 23, "invariant count");
+        assert_eq!(count(NodeTrait::Invariant), 24, "invariant count"); // +EntityCategory
         assert_eq!(
             count(NodeTrait::Localized),
             2,
@@ -496,12 +496,12 @@ node:
         ); // v10.9: was 6, now 8
         assert_eq!(count(NodeTrait::Job), 2, "job count");
 
-        // v10.10: Verify realm distribution (SEO moved to tenant)
+        // v11.1: Verify realm distribution (+EntityCategory in global)
         let realm_count = |r: &str| nodes.iter().filter(|n| n.realm == r).count();
         assert_eq!(
             realm_count("global"),
-            31,
-            "global realm count (13 config + 18 locale-knowledge)"
+            32,
+            "global realm count (14 config + 18 locale-knowledge)"
         );
         assert_eq!(realm_count("tenant"), 33, "tenant realm count (+ 9 SEO)");
 

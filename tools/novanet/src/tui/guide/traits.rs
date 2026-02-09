@@ -13,7 +13,7 @@ use ratatui::widgets::{Block, Borders, Paragraph, Wrap};
 
 use crate::tui::app::App;
 use crate::tui::data::TaxonomyTree;
-use crate::tui::theme::Theme;
+use crate::tui::theme::{heatmap_color, Theme};
 
 // =============================================================================
 // TRAIT STATS
@@ -82,6 +82,180 @@ fn trait_llm_context(key: &str) -> &str {
             "Background tasks and async processes. Generation jobs, queue items, and batch operations."
         }
         _ => "Unknown trait.",
+    }
+}
+
+// =============================================================================
+// CODE EXAMPLES
+// =============================================================================
+
+/// Code example showing YAML, Neo4j, and Cypher for a concept.
+#[derive(Debug, Clone)]
+pub struct CodeExample {
+    /// Example title (e.g., "Entity definition").
+    pub title: &'static str,
+    /// YAML snippet from model definition.
+    pub yaml: &'static str,
+    /// Neo4j node representation.
+    pub neo4j: &'static str,
+    /// Cypher query example.
+    pub cypher: &'static str,
+}
+
+/// Get code examples for a trait.
+pub fn trait_code_examples(key: &str) -> Vec<CodeExample> {
+    match key {
+        "invariant" => vec![
+            CodeExample {
+                title: "Entity (invariant structure)",
+                yaml: r#"node:
+  name: Entity
+  realm: tenant
+  layer: foundation
+  trait: invariant
+  properties:
+    key: { type: string, required: true }
+    display_name: { type: string }"#,
+                neo4j: r#"(:Entity {
+  key: "qr-code-generator",
+  display_name: "QR Code Generator"
+})"#,
+                cypher: r#"MATCH (e:Entity {key: $key})
+RETURN e.key, e.display_name"#,
+            },
+            CodeExample {
+                title: "Page (structural template)",
+                yaml: r#"node:
+  name: Page
+  realm: tenant
+  layer: structure
+  trait: invariant"#,
+                neo4j: r#"(:Page {
+  key: "homepage",
+  route: "/"
+})"#,
+                cypher: r#"MATCH (p:Page)-[:HAS_BLOCK]->(b:Block)
+RETURN p.key, collect(b.key) AS blocks"#,
+            },
+        ],
+        "localized" => vec![
+            CodeExample {
+                title: "EntityContent (per-locale content)",
+                yaml: r#"node:
+  name: EntityContent
+  realm: tenant
+  layer: semantic
+  trait: localized
+  # Composite key: entity:{key}@{locale}"#,
+                neo4j: r#"(:EntityContent {
+  key: "entity:qr-code@fr-FR",
+  title: "Générateur de QR Code",
+  description: "Créez des QR codes..."
+})"#,
+                cypher: r#"MATCH (e:Entity {key: $entity_key})
+      -[:HAS_CONTENT]->(c:EntityContent)
+WHERE c.key ENDS WITH $locale
+RETURN c.title, c.description"#,
+            },
+            CodeExample {
+                title: "PageGenerated (LLM output)",
+                yaml: r#"node:
+  name: PageGenerated
+  realm: tenant
+  layer: output
+  trait: localized
+  # Derived from Page, NOT translated"#,
+                neo4j: r#"(:PageGenerated {
+  key: "page:homepage@ja-JP",
+  generated_at: datetime(),
+  html_content: "<html>..."
+})"#,
+                cypher: r#"MATCH (p:Page)-[:HAS_GENERATED]->(g:PageGenerated)
+WHERE g.key ENDS WITH $locale
+RETURN g.html_content"#,
+            },
+        ],
+        "knowledge" => vec![
+            CodeExample {
+                title: "Term (vocabulary atom)",
+                yaml: r#"node:
+  name: Term
+  realm: global
+  layer: locale-knowledge
+  trait: knowledge
+  # Native to locale, not translated"#,
+                neo4j: r#"(:Term {
+  key: "term:artificial-intelligence@fr-FR",
+  term: "intelligence artificielle",
+  definition: "Capacité des machines..."
+})"#,
+                cypher: r#"MATCH (l:Locale {key: $locale})
+      -[:HAS_TERMS]->(:TermSet)
+      -[:CONTAINS_TERM]->(t:Term)
+WHERE t.domain = $domain
+RETURN t.term, t.definition"#,
+            },
+            CodeExample {
+                title: "Expression (stylistic pattern)",
+                yaml: r#"node:
+  name: Expression
+  realm: global
+  layer: locale-knowledge
+  trait: knowledge"#,
+                neo4j: r#"(:Expression {
+  key: "expr:greeting-formal@de-DE",
+  pattern: "Sehr geehrte/r {title} {name}",
+  register: "formal"
+})"#,
+                cypher: r#"MATCH (e:Expression)
+WHERE e.key STARTS WITH 'expr:'
+  AND e.key ENDS WITH $locale
+  AND e.register = 'formal'
+RETURN e.pattern"#,
+            },
+        ],
+        "derived" => vec![
+            CodeExample {
+                title: "ContentMetrics (computed stats)",
+                yaml: r#"node:
+  name: ContentMetrics
+  realm: tenant
+  layer: output
+  trait: derived
+  # Aggregated from content nodes"#,
+                neo4j: r#"(:ContentMetrics {
+  key: "metrics:entity:qr-code",
+  word_count: 1500,
+  locale_coverage: 0.85,
+  last_computed: datetime()
+})"#,
+                cypher: r#"MATCH (e:Entity {key: $key})
+      -[:HAS_METRICS]->(m:ContentMetrics)
+RETURN m.word_count, m.locale_coverage"#,
+            },
+        ],
+        "job" => vec![
+            CodeExample {
+                title: "GenerationJob (async task)",
+                yaml: r#"node:
+  name: GenerationJob
+  realm: tenant
+  layer: output
+  trait: job
+  # Background generation task"#,
+                neo4j: r#"(:GenerationJob {
+  key: "job:gen:homepage:fr-FR:abc123",
+  status: "running",
+  progress: 0.75,
+  started_at: datetime()
+})"#,
+                cypher: r#"MATCH (j:GenerationJob)
+WHERE j.status = 'pending'
+RETURN j ORDER BY j.created_at
+LIMIT 10"#,
+            },
+        ],
+        _ => vec![],
     }
 }
 
@@ -203,6 +377,9 @@ fn build_constellation_lines(
 ) -> Vec<Line<'static>> {
     let mut lines: Vec<Line<'static>> = Vec::new();
 
+    // Calculate max count for heatmap scaling
+    let max_count = stats.iter().map(|s| s.kind_count).max().unwrap_or(1);
+
     // Get stats by trait key for easier lookup
     let get_stat = |key: &str| -> Option<&TraitStats> { stats.iter().find(|s| s.key == key) };
 
@@ -223,13 +400,13 @@ fn build_constellation_lines(
             Style::default().fg(base_color)
         };
 
+        // Use heatmap color for count (bright = many kinds, dim = few)
+        let count_color = heatmap_color(count, max_count);
+
         vec![
             Span::styled(format!("{} ", symbol), style),
             Span::styled(name.to_string(), style),
-            Span::styled(
-                format!(" ({} K)", count),
-                Style::default().fg(Color::DarkGray),
-            ),
+            Span::styled(format!(" ({} K)", count), Style::default().fg(count_color)),
         ]
     };
 
@@ -448,7 +625,7 @@ fn render_detail_panel(f: &mut Frame, app: &App, area: Rect) {
                 .add_modifier(Modifier::BOLD),
         )));
         lines.push(Line::from(Span::styled(
-            "Every *L10n node has an invariant parent.",
+            "Content/Generated nodes have invariant parents.",
             Style::default().fg(Color::Rgb(150, 150, 150)),
         )));
         lines.push(Line::from(Span::styled(
@@ -477,6 +654,100 @@ fn render_detail_panel(f: &mut Frame, app: &App, area: Rect) {
                 .fg(Color::Rgb(139, 92, 246))
                 .add_modifier(Modifier::ITALIC),
         )));
+    }
+
+    lines.push(Line::from(""));
+
+    // Code examples section
+    let examples = trait_code_examples(&stat.key);
+    if !examples.is_empty() {
+        lines.push(Line::from(Span::styled(
+            "\u{250c}\u{2500} CODE EXAMPLES \u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2510}",
+            Style::default().fg(Color::Rgb(100, 100, 120)),
+        )));
+
+        // Show first example (others available on drill-down)
+        if let Some(example) = examples.first() {
+            lines.push(Line::from(vec![
+                Span::styled("\u{2502} ", Style::default().fg(Color::Rgb(100, 100, 120))),
+                Span::styled(
+                    example.title,
+                    Style::default()
+                        .fg(Color::Cyan)
+                        .add_modifier(Modifier::BOLD),
+                ),
+            ]));
+            lines.push(Line::from(Span::styled(
+                "\u{2502}",
+                Style::default().fg(Color::Rgb(100, 100, 120)),
+            )));
+
+            // YAML snippet (first 3 lines)
+            lines.push(Line::from(vec![
+                Span::styled("\u{2502} ", Style::default().fg(Color::Rgb(100, 100, 120))),
+                Span::styled("YAML: ", Style::default().fg(Color::Green)),
+            ]));
+            for yaml_line in example.yaml.lines().take(3) {
+                lines.push(Line::from(vec![
+                    Span::styled("\u{2502}   ", Style::default().fg(Color::Rgb(100, 100, 120))),
+                    Span::styled(yaml_line.to_string(), Style::default().fg(Color::Rgb(150, 200, 150))),
+                ]));
+            }
+            if example.yaml.lines().count() > 3 {
+                lines.push(Line::from(vec![
+                    Span::styled("\u{2502}   ", Style::default().fg(Color::Rgb(100, 100, 120))),
+                    Span::styled("...", Style::default().fg(Color::DarkGray)),
+                ]));
+            }
+
+            // Neo4j node (first 2 lines)
+            lines.push(Line::from(vec![
+                Span::styled("\u{2502} ", Style::default().fg(Color::Rgb(100, 100, 120))),
+                Span::styled("Neo4j: ", Style::default().fg(Color::Rgb(0, 150, 255))),
+            ]));
+            for neo_line in example.neo4j.lines().take(2) {
+                lines.push(Line::from(vec![
+                    Span::styled("\u{2502}   ", Style::default().fg(Color::Rgb(100, 100, 120))),
+                    Span::styled(neo_line.to_string(), Style::default().fg(Color::Rgb(150, 180, 220))),
+                ]));
+            }
+            if example.neo4j.lines().count() > 2 {
+                lines.push(Line::from(vec![
+                    Span::styled("\u{2502}   ", Style::default().fg(Color::Rgb(100, 100, 120))),
+                    Span::styled("...", Style::default().fg(Color::DarkGray)),
+                ]));
+            }
+
+            // Cypher query (first 2 lines)
+            lines.push(Line::from(vec![
+                Span::styled("\u{2502} ", Style::default().fg(Color::Rgb(100, 100, 120))),
+                Span::styled("Cypher: ", Style::default().fg(Color::Yellow)),
+            ]));
+            for cypher_line in example.cypher.lines().take(2) {
+                lines.push(Line::from(vec![
+                    Span::styled("\u{2502}   ", Style::default().fg(Color::Rgb(100, 100, 120))),
+                    Span::styled(cypher_line.to_string(), Style::default().fg(Color::Rgb(220, 200, 120))),
+                ]));
+            }
+            if example.cypher.lines().count() > 2 {
+                lines.push(Line::from(vec![
+                    Span::styled("\u{2502}   ", Style::default().fg(Color::Rgb(100, 100, 120))),
+                    Span::styled("...", Style::default().fg(Color::DarkGray)),
+                ]));
+            }
+        }
+
+        lines.push(Line::from(Span::styled(
+            "\u{2514}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2518}",
+            Style::default().fg(Color::Rgb(100, 100, 120)),
+        )));
+
+        if examples.len() > 1 {
+            lines.push(Line::from(Span::styled(
+                format!("  [Enter] for {} more examples", examples.len() - 1),
+                Style::default().fg(Color::DarkGray),
+            )));
+        }
     }
 
     let paragraph = Paragraph::new(lines).wrap(Wrap { trim: false });
@@ -833,5 +1104,70 @@ mod tests {
         let centered = center_text("test", 10);
         assert_eq!(centered.len(), 7); // 3 spaces + 4 chars
         assert!(centered.starts_with("   "));
+    }
+
+    // ==========================================================================
+    // CODE EXAMPLES TESTS
+    // ==========================================================================
+
+    #[test]
+    fn test_code_examples_invariant() {
+        let examples = trait_code_examples("invariant");
+        assert_eq!(examples.len(), 2);
+        assert!(examples[0].title.contains("Entity"));
+        assert!(examples[0].yaml.contains("trait: invariant"));
+        assert!(!examples[0].neo4j.is_empty());
+        assert!(!examples[0].cypher.is_empty());
+    }
+
+    #[test]
+    fn test_code_examples_localized() {
+        let examples = trait_code_examples("localized");
+        assert_eq!(examples.len(), 2);
+        assert!(examples[0].title.contains("EntityContent"));
+        assert!(examples[0].yaml.contains("trait: localized"));
+    }
+
+    #[test]
+    fn test_code_examples_knowledge() {
+        let examples = trait_code_examples("knowledge");
+        assert_eq!(examples.len(), 2);
+        assert!(examples[0].title.contains("Term"));
+        assert!(examples[0].yaml.contains("trait: knowledge"));
+    }
+
+    #[test]
+    fn test_code_examples_derived() {
+        let examples = trait_code_examples("derived");
+        assert_eq!(examples.len(), 1);
+        assert!(examples[0].title.contains("ContentMetrics"));
+        assert!(examples[0].yaml.contains("trait: derived"));
+    }
+
+    #[test]
+    fn test_code_examples_job() {
+        let examples = trait_code_examples("job");
+        assert_eq!(examples.len(), 1);
+        assert!(examples[0].title.contains("GenerationJob"));
+        assert!(examples[0].yaml.contains("trait: job"));
+    }
+
+    #[test]
+    fn test_code_examples_unknown() {
+        let examples = trait_code_examples("unknown");
+        assert!(examples.is_empty());
+    }
+
+    #[test]
+    fn test_code_example_contains_all_fields() {
+        for trait_key in TRAIT_ORDER {
+            let examples = trait_code_examples(trait_key);
+            for example in examples {
+                assert!(!example.title.is_empty(), "Empty title for {}", trait_key);
+                assert!(!example.yaml.is_empty(), "Empty YAML for {}", trait_key);
+                assert!(!example.neo4j.is_empty(), "Empty Neo4j for {}", trait_key);
+                assert!(!example.cypher.is_empty(), "Empty Cypher for {}", trait_key);
+            }
+        }
     }
 }
