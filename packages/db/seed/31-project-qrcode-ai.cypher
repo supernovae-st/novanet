@@ -3,10 +3,11 @@
 //
 // Creates project-specific nodes:
 // - BrandIdentity (invariant)
-// - ProjectL10n (localized identity + CTAs + SEO + target_audience)
+// - ProjectContent (localized identity + CTAs + SEO + target_audience)
 //
 // Removed in v7.2.5: Audience, AudienceL10n, ValuePropL10n, SocialProofL10n
 // Removed in v8.2.0: icon, priority, freshness (now in YAML views)
+// v10.9.0: ProjectL10n renamed to ProjectContent (Decision 11)
 //
 // STANDARD PROPERTIES:
 //   key, display_name, description, llm_context, created_at, updated_at
@@ -19,7 +20,7 @@ MATCH (p:Project {key: "qrcode-ai"})
 MERGE (p)-[:HAS_BRAND_IDENTITY]->(bi:BrandIdentity {key: "brand-qrcode-ai"})
 SET bi.display_name = "QR Code AI Brand",
     bi.description = "Visual identity and design system for QR Code AI",
-    bi.llm_context = "USE: when generating visual content, images, or style decisions. TRIGGERS: brand, colors, fonts, style. NOT: text content (use ProjectL10n).",
+    bi.llm_context = "USE: when generating visual content, images, or style decisions. TRIGGERS: brand, colors, fonts, style. NOT: text content (use ProjectContent).",
     bi.color_primary = "#6366F1",
     bi.color_secondary = "#8B5CF6",
     bi.color_accent = "#F59E0B",
@@ -44,12 +45,13 @@ SET bi.display_name = "QR Code AI Brand",
     bi.updated_at = datetime();
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// PROJECT L10N (localized identity + CTAs + SEO + target_audience) - v7.2.5
+// PROJECT CONTENT (localized identity + CTAs + SEO + target_audience) - v7.2.5
+// v10.9.0: Renamed from ProjectL10n to ProjectContent (Decision 11)
 // ═══════════════════════════════════════════════════════════════════════════════
 
-// ProjectL10n: en-US
+// ProjectContent: en-US
 MATCH (p:Project {key: "qrcode-ai"}), (l:Locale {key: "en-US"})
-MERGE (p)-[:HAS_CONTENT]->(pl:ProjectL10n {key: "qrcode-ai-en-US"})
+MERGE (p)-[:HAS_CONTENT]->(pl:ProjectContent {key: "qrcode-ai-en-US"})
 MERGE (pl)-[:FOR_LOCALE]->(l)
 SET pl.display_name = "QR Code AI",
     pl.description = "English localization for QR Code AI project identity",
@@ -75,9 +77,9 @@ SET pl.display_name = "QR Code AI",
     pl.created_at = coalesce(pl.created_at, datetime()),
     pl.updated_at = datetime();
 
-// ProjectL10n: fr-FR
+// ProjectContent: fr-FR
 MATCH (p:Project {key: "qrcode-ai"}), (l:Locale {key: "fr-FR"})
-MERGE (p)-[:HAS_CONTENT]->(pl:ProjectL10n {key: "qrcode-ai-fr-FR"})
+MERGE (p)-[:HAS_CONTENT]->(pl:ProjectContent {key: "qrcode-ai-fr-FR"})
 MERGE (pl)-[:FOR_LOCALE]->(l)
 SET pl.display_name = "QR Code AI",
     pl.description = "Localisation française de l'identité QR Code AI",
