@@ -8,6 +8,5 @@ export { useFilterStore } from './filterStore';
 export { useUIStore } from './uiStore';
 export { useChatStore } from './chatStore';
 export { useQueryStore } from './queryStore';
-export { useAiQueryStore } from './aiQueryStore';
 export { useViewStore } from './viewStore';
 export { useAnimationStore } from './animationStore';
