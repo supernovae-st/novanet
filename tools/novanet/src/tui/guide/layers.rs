@@ -1,8 +1,8 @@
 //! Layers Tab — Split view showing Global and Tenant realms.
 //!
-//! Layout:
-//! - Left side: GLOBAL realm (3 layers: config, locale-knowledge, seo)
-//! - Right side: TENANT realm (6 layers: config, foundation, structure, semantic, instruction, output)
+//! Layout (v11.0):
+//! - Left side: GLOBAL realm (2 layers: config, locale-knowledge)
+//! - Right side: TENANT realm (7 layers: config, foundation, structure, semantic, instruction, seo, output)
 //!
 //! Each layer card shows:
 //! - Icon (from theme)
@@ -18,6 +18,7 @@ use ratatui::widgets::{Block, Borders, Paragraph, Wrap};
 
 use crate::tui::app::App;
 use crate::tui::data::TaxonomyTree;
+use crate::tui::theme::heatmap_color;
 use crate::tui::theme::Theme;
 
 // =============================================================================
@@ -37,20 +38,20 @@ pub struct LayerCardInfo {
     pub kind_count: usize,
 }
 
-/// Global realm layers (3 layers).
-pub const GLOBAL_LAYERS: [(&str, &str, &str); 3] = [
+/// Global realm layers (2 layers) — v11.0: SEO moved to tenant.
+pub const GLOBAL_LAYERS: [(&str, &str, &str); 2] = [
     ("config", "\u{2699}", "System settings"),           // ⚙
     ("locale-knowledge", "\u{25ca}", "Terms, Patterns"), // ◊
-    ("seo", "\u{1f50d}", "Keywords, URLs"),              // 🔍 (fallback to magnifier)
 ];
 
-/// Tenant realm layers (6 layers).
-pub const TENANT_LAYERS: [(&str, &str, &str); 6] = [
+/// Tenant realm layers (7 layers) — v11.0: SEO added from global.
+pub const TENANT_LAYERS: [(&str, &str, &str); 7] = [
     ("config", "\u{2699}", "Tenant settings"),       // ⚙
     ("foundation", "\u{25c7}", "Entities, Assets"),  // ◇
     ("structure", "\u{25c6}", "Pages, Blocks"),      // ◆
     ("semantic", "\u{25c6}", "Prompts, Context"),    // ◆
     ("instruction", "\u{270e}", "Generation rules"), // ✎
+    ("seo", "\u{1f50d}", "Keywords, Queries"),       // 🔍
     ("output", "\u{25cf}", "Generated content"),     // ●
 ];
 
@@ -124,6 +125,9 @@ fn render_realm_column(
     // Get layer stats for this realm
     let layer_stats = app.tree.get_layer_stats(realm_key);
 
+    // Calculate max count for heatmap scaling
+    let max_count = layer_stats.iter().map(|(_, c)| *c).max().unwrap_or(1);
+
     // Build layer cards
     let layers = if realm_key == "global" {
         &GLOBAL_LAYERS[..]
@@ -150,8 +154,15 @@ fn render_realm_column(
 
         let is_selected = is_selected_realm && app.guide.layer_cursor == idx;
 
-        let card_lines =
-            build_layer_card(layer_key, icon, description, kind_count, is_selected, theme);
+        let card_lines = build_layer_card(
+            layer_key,
+            icon,
+            description,
+            kind_count,
+            max_count,
+            is_selected,
+            theme,
+        );
 
         for line in card_lines {
             lines.push(line);
@@ -178,6 +189,7 @@ fn build_layer_card(
     icon: &str,
     description: &str,
     kind_count: usize,
+    max_count: usize,
     is_selected: bool,
     theme: &Theme,
 ) -> Vec<Line<'static>> {
@@ -245,12 +257,13 @@ fn build_layer_card(
         ),
     ]));
 
-    // Row 3: │   N kinds           │
+    // Row 3: │   N kinds           │ (heatmap color based on density)
     let count_str = format!("{} kinds", kind_count);
+    let count_color = heatmap_color(kind_count, max_count);
     let count_padding = card_width.saturating_sub(count_str.chars().count() + 6);
     lines.push(Line::from(vec![
         Span::styled("\u{2502}   ", border_style),
-        Span::styled(count_str, Style::default().fg(Color::DarkGray)),
+        Span::styled(count_str, Style::default().fg(count_color)),
         Span::styled(
             format!("{} \u{2502}", " ".repeat(count_padding.max(0))),
             border_style,
@@ -277,12 +290,14 @@ mod tests {
 
     #[test]
     fn test_global_layers_count() {
-        assert_eq!(GLOBAL_LAYERS.len(), 3);
+        // v11.0: GLOBAL has 2 layers (config, locale-knowledge), SEO moved to tenant
+        assert_eq!(GLOBAL_LAYERS.len(), 2);
     }
 
     #[test]
     fn test_tenant_layers_count() {
-        assert_eq!(TENANT_LAYERS.len(), 6);
+        // v11.0: TENANT has 7 layers (config, foundation, structure, semantic, instruction, seo, output)
+        assert_eq!(TENANT_LAYERS.len(), 7);
     }
 
     #[test]
@@ -308,14 +323,16 @@ mod tests {
     #[test]
     fn test_build_layer_card() {
         let theme = Theme::new();
-        let lines = build_layer_card("config", "\u{2699}", "System settings", 5, false, &theme);
+        // max_count=20 for heatmap scaling
+        let lines = build_layer_card("config", "\u{2699}", "System settings", 5, 20, false, &theme);
         assert_eq!(lines.len(), 5); // top border + 3 rows + bottom border
     }
 
     #[test]
     fn test_build_layer_card_selected() {
         let theme = Theme::new();
-        let lines = build_layer_card("foundation", "\u{25c7}", "Entities", 10, true, &theme);
+        // max_count=20 for heatmap scaling
+        let lines = build_layer_card("foundation", "\u{25c7}", "Entities", 10, 20, true, &theme);
         assert_eq!(lines.len(), 5);
     }
 }

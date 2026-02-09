@@ -417,7 +417,149 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
 
                             // In Data mode, show instances under Kind (if not collapsed)
                             if is_data_mode && !kind_collapsed {
-                                if let Some(instances) = app.tree.get_instances(&kind.key) {
+                                // Special case: Entity Kind shows categories instead of flat instances
+                                if kind.key == "Entity" && !app.tree.entity_categories.is_empty() {
+                                    let cat_count = app.tree.entity_categories.len();
+                                    for (ci, category) in app.tree.entity_categories.iter().enumerate() {
+                                        let cat_is_last = ci == cat_count - 1;
+                                        let cat_key = format!("category:{}", category.key);
+                                        let cat_collapsed = app.tree.is_collapsed(&cat_key);
+                                        let cat_icon = expand_icon(cat_collapsed);
+                                        let _is_cursor = idx == app.tree_cursor;
+
+                                        let cat_prefix = format!(
+                                            "{}{}{}{}",
+                                            cont(realm_is_last),
+                                            cont(layer_is_last),
+                                            cont(kind_is_last),
+                                            branch(cat_is_last)
+                                        );
+
+                                        // Category display: icon, name, and count
+                                        let cat_display = format!(
+                                            "📁 {} ({})",
+                                            category.display_name,
+                                            category.instance_count
+                                        );
+
+                                        all_lines.push(make_line(
+                                            idx,
+                                            app.tree_cursor,
+                                            focused,
+                                            &cat_prefix,
+                                            cat_icon,
+                                            cat_display,
+                                            layer_color,   // line_color
+                                            Color::Cyan,   // text_color for categories
+                                            app.search.matches.get(&idx).map(|v| v.as_slice()),
+                                            None,          // bg_color
+                                        ));
+                                        idx += 1;
+
+                                        // Show instances under category if not collapsed
+                                        if !cat_collapsed {
+                                            if let Some(instances) = app.tree.entity_category_instances.get(&category.key) {
+                                                let inst_count = instances.len();
+                                                for (ii, instance) in instances.iter().enumerate() {
+                                                    let inst_is_last = ii == inst_count - 1;
+                                                    let is_cursor = idx == app.tree_cursor;
+
+                                                    let style = if is_cursor && focused {
+                                                        Style::default().bg(COLOR_HIGHLIGHT_BG).fg(Color::White)
+                                                    } else {
+                                                        Style::default().fg(COLOR_CONNECTED)
+                                                    };
+
+                                                    let cursor_char = if is_cursor { ">" } else { " " };
+
+                                                    // Badge for missing required properties
+                                                    let missing_badge =
+                                                        format_missing_badge(instance.missing_required_count);
+
+                                                    // Arc count badge
+                                                    let arc_badge = format_arc_badge(
+                                                        instance.outgoing_arcs.len(),
+                                                        instance.incoming_arcs.len(),
+                                                    );
+
+                                                    // Completeness bar
+                                                    let completeness_badge = format_completeness_badge(
+                                                        instance.filled_properties,
+                                                        instance.total_properties,
+                                                    );
+
+                                                    let tree_prefix = format!(
+                                                        "{}{}{}{}{}",
+                                                        cont(realm_is_last),
+                                                        cont(layer_is_last),
+                                                        cont(kind_is_last),
+                                                        cont(cat_is_last),
+                                                        branch(inst_is_last)
+                                                    );
+
+                                                    if is_cursor && focused {
+                                                        all_lines.push(Line::from(Span::styled(
+                                                            format!(
+                                                                "{}{}○ {}{}{}{}",
+                                                                cursor_char,
+                                                                tree_prefix,
+                                                                instance.display_name,
+                                                                completeness_badge,
+                                                                arc_badge,
+                                                                missing_badge
+                                                            ),
+                                                            style,
+                                                        )));
+                                                    } else {
+                                                        let mut spans = vec![
+                                                            Span::styled(cursor_char, Style::default()),
+                                                            Span::styled(
+                                                                tree_prefix,
+                                                                Style::default().fg(layer_color),
+                                                            ),
+                                                            Span::styled(
+                                                                format!("○ {}", instance.display_name),
+                                                                style,
+                                                            ),
+                                                        ];
+                                                        if !completeness_badge.is_empty() {
+                                                            let color = if instance.filled_properties
+                                                                == instance.total_properties
+                                                            {
+                                                                Color::Green
+                                                            } else if instance.filled_properties
+                                                                > instance.total_properties / 2
+                                                            {
+                                                                Color::Yellow
+                                                            } else {
+                                                                Color::Red
+                                                            };
+                                                            spans.push(Span::styled(
+                                                                completeness_badge,
+                                                                Style::default().fg(color),
+                                                            ));
+                                                        }
+                                                        if !arc_badge.is_empty() {
+                                                            spans.push(Span::styled(
+                                                                arc_badge,
+                                                                Style::default().fg(Color::Cyan),
+                                                            ));
+                                                        }
+                                                        if !missing_badge.is_empty() {
+                                                            spans.push(Span::styled(
+                                                                missing_badge,
+                                                                Style::default().fg(Color::Red),
+                                                            ));
+                                                        }
+                                                        all_lines.push(Line::from(spans));
+                                                    }
+                                                    idx += 1;
+                                                }
+                                            }
+                                        }
+                                    }
+                                } else if let Some(instances) = app.tree.get_instances(&kind.key) {
+                                    // Regular kinds: show instances directly
                                     let inst_count = instances.len();
                                     for (ii, instance) in instances.iter().enumerate() {
                                         let inst_is_last = ii == inst_count - 1;

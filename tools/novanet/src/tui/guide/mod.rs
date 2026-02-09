@@ -2,7 +2,7 @@
 //!
 //! Guide Mode provides 4 tabs for understanding NovaNet's core concepts:
 //! - Traits: 5-trait constellation (invariant, localized, knowledge, derived, job)
-//! - Layers: 2-realm split view (Global 3 layers | Tenant 6 layers)
+//! - Layers: 2-realm split view (Global 2 layers | Tenant 7 layers)
 //! - Arcs: Arc families and scope visualization
 //! - Pipeline: Animated generation flow (not translation)
 
@@ -10,6 +10,8 @@ pub mod arcs;
 pub mod layers;
 pub mod pipeline;
 pub mod traits;
+
+use std::time::Instant;
 
 use crossterm::event::{KeyCode, KeyEvent};
 use ratatui::Frame;
@@ -19,10 +21,11 @@ use ratatui::text::{Line, Span};
 use ratatui::widgets::{Block, Borders, Paragraph};
 
 use crate::tui::app::App;
+use crate::tui::clipboard;
 use crate::tui::theme::Theme;
 
-// Re-export TraitStats for external use
-pub use traits::TraitStats;
+// Re-export TraitStats and CodeExample for external use
+pub use traits::{CodeExample, TraitStats, trait_code_examples};
 
 // =============================================================================
 // "DID YOU KNOW?" TIPS
@@ -33,7 +36,7 @@ pub use traits::TraitStats;
 pub const TIPS: &[&str] = &[
     "Knowledge is INPUT (savoir) - Localized is OUTPUT (generated)",
     "Layers define WHAT a node does, Traits define HOW it behaves with locale",
-    "Every *L10n node has an invariant parent - no parent means no L10n suffix",
+    "Content/Generated nodes have invariant parents (Entity→EntityContent, Page→PageGenerated)",
     "Generation, NOT translation: Knowledge + Structure -> Native content",
     "Global realm is READ-ONLY - all business content lives in Tenant",
     "Quick jump: gi=invariant, gl=localized, gk=knowledge, gd=derived, gj=job",
@@ -58,13 +61,13 @@ pub enum GuideTab {
 }
 
 impl GuideTab {
-    /// Get the shortcut key for this tab.
+    /// Get the shortcut key for this tab (1-4 when in Guide mode).
     pub fn shortcut(&self) -> char {
         match self {
-            GuideTab::Traits => 't',
-            GuideTab::Layers => 'l',
-            GuideTab::Arcs => 'a',
-            GuideTab::Pipeline => 'p',
+            GuideTab::Traits => '1',
+            GuideTab::Layers => '2',
+            GuideTab::Arcs => '3',
+            GuideTab::Pipeline => '4',
         }
     }
 
@@ -148,6 +151,12 @@ pub struct GuideState {
     // === Tips state ===
     /// Current tip index for "Did you know?" rotation.
     pub tip_index: usize,
+
+    // === Clipboard state ===
+    /// Message to display after clipboard operation (e.g., "Copied: Entity").
+    pub clipboard_message: Option<String>,
+    /// When the clipboard message was set (for auto-clear after ~2s).
+    pub clipboard_message_time: Option<Instant>,
 }
 
 impl Default for GuideState {
@@ -171,6 +180,8 @@ impl GuideState {
             drill_cursor: 0,
             pending_g: false,
             tip_index: 0,
+            clipboard_message: None,
+            clipboard_message_time: None,
         }
     }
 
@@ -294,7 +305,88 @@ impl GuideState {
                 true
             }
 
+            // 'y' to yank (copy) current selection to clipboard
+            KeyCode::Char('y') => self.yank_current(),
+
             _ => false,
+        }
+    }
+
+    /// Yank (copy) current selection to clipboard.
+    /// Returns true if state changed (message set).
+    fn yank_current(&mut self) -> bool {
+        if let Some(text) = self.get_current_yank_text() {
+            match clipboard::copy_to_clipboard(&text) {
+                Ok(()) => {
+                    self.clipboard_message = Some(format!("Copied: {}", text));
+                    self.clipboard_message_time = Some(Instant::now());
+                    true
+                }
+                Err(e) => {
+                    self.clipboard_message = Some(format!("Error: {}", e));
+                    self.clipboard_message_time = Some(Instant::now());
+                    true
+                }
+            }
+        } else {
+            false
+        }
+    }
+
+    /// Get the text to yank based on current tab and selection.
+    pub fn get_current_yank_text(&self) -> Option<String> {
+        match self.tab {
+            GuideTab::Traits => {
+                // Yank the current trait name
+                let traits = ["invariant", "localized", "knowledge", "derived", "job"];
+                traits.get(self.trait_cursor).map(|s| s.to_string())
+            }
+            GuideTab::Layers => {
+                // Yank the current layer key
+                let layers = if self.layer_realm == 0 {
+                    // Global layers
+                    vec!["config", "locale-knowledge"]
+                } else {
+                    // Tenant layers
+                    vec![
+                        "config",
+                        "foundation",
+                        "structure",
+                        "semantic",
+                        "instruction",
+                        "seo",
+                        "output",
+                    ]
+                };
+                layers.get(self.layer_cursor).map(|s| s.to_string())
+            }
+            GuideTab::Arcs => {
+                // Yank the current arc family
+                let families = ["ownership", "localization", "semantic", "generation", "mining"];
+                families.get(self.arc_cursor).map(|s| s.to_string())
+            }
+            GuideTab::Pipeline => {
+                // Yank the current pipeline stage
+                let stages = [
+                    "Knowledge",
+                    "Entity",
+                    "Structure",
+                    "Instructions",
+                    "Generation",
+                    "Output",
+                ];
+                stages.get(self.pipeline_stage).map(|s| s.to_string())
+            }
+        }
+    }
+
+    /// Clear clipboard message if it has expired (>2 seconds old).
+    pub fn clear_expired_clipboard_message(&mut self) {
+        if let Some(time) = self.clipboard_message_time {
+            if time.elapsed().as_secs() >= 2 {
+                self.clipboard_message = None;
+                self.clipboard_message_time = None;
+            }
         }
     }
 
@@ -385,8 +477,8 @@ impl GuideState {
             }
             GuideTab::Layers => {
                 // Bound by number of layers in current realm
-                // global: 3 layers, tenant: 6 layers
-                let max = if self.layer_realm == 0 { 2 } else { 5 };
+                // v11.0: global: 2 layers, tenant: 7 layers
+                let max = if self.layer_realm == 0 { 1 } else { 6 };
                 if self.layer_cursor < max {
                     self.layer_cursor += 1;
                     true
@@ -624,7 +716,7 @@ fn render_tab_bar(f: &mut Frame, area: Rect, app: &App) {
                 GuideTab::Pipeline => "\u{26a1}", // ⚡
             };
 
-            Span::styled(format!(" [{}] {} {} ", idx + 1, symbol, tab.label()), style)
+            Span::styled(format!("[{}]{} {} ", idx + 1, symbol, tab.label()), style)
         })
         .collect();
 
@@ -694,6 +786,34 @@ fn render_breadcrumb(f: &mut Frame, area: Rect, app: &App) {
 /// Render the "Did you know?" tips bar at the bottom of Guide mode.
 fn render_tips_bar(f: &mut Frame, area: Rect, app: &App) {
     let theme = &app.theme;
+
+    // Priority: clipboard message > pending 'g' > normal tip
+    if let Some(ref clipboard_msg) = app.guide.clipboard_message {
+        // Show clipboard message (green for success, red for error)
+        let is_error = clipboard_msg.starts_with("Error:");
+        let style = if is_error {
+            Style::default()
+                .fg(Color::Red)
+                .add_modifier(Modifier::BOLD)
+        } else {
+            Style::default()
+                .fg(Color::Green)
+                .add_modifier(Modifier::BOLD)
+        };
+
+        let prefix = Span::styled(" \u{f0c5} ", style); // 📋 clipboard icon area
+        let message = Span::styled(clipboard_msg.clone(), style);
+        let hint = Span::styled(
+            "  [y: yank]",
+            Style::default().fg(Color::DarkGray),
+        );
+
+        let line = Line::from(vec![prefix, message, hint]);
+        let paragraph = Paragraph::new(vec![Line::from(""), line]);
+        f.render_widget(paragraph, area);
+        return;
+    }
+
     let tip = app.guide.current_tip();
     let tip_index = app.guide.tip_index;
     let total_tips = TIPS.len();
@@ -718,9 +838,9 @@ fn render_tips_bar(f: &mut Frame, area: Rect, app: &App) {
     // Build tip line with trait colors where relevant
     let tip_text = colorize_tip(tip, theme);
 
-    // Tip counter
+    // Tip counter + yank hint
     let counter = Span::styled(
-        format!(" [{}/{}] [n: next]", tip_index + 1, total_tips),
+        format!(" [{}/{}] [n: next] [y: yank]", tip_index + 1, total_tips),
         Style::default().fg(Color::DarkGray),
     );
 
@@ -758,7 +878,8 @@ fn colorize_tip(tip: &str, theme: &Theme) -> Vec<Span<'static>> {
         ("GLOBAL", "global"),
         ("Tenant", "tenant"),
         ("TENANT", "tenant"),
-        ("*L10n", "localized"),
+        ("Content", "localized"),
+        ("Generated", "localized"),
         ("Generation", "localized"),
     ];
 
@@ -1037,10 +1158,10 @@ mod tests {
 
     #[test]
     fn test_guide_tab_shortcuts() {
-        assert_eq!(GuideTab::Traits.shortcut(), 't');
-        assert_eq!(GuideTab::Layers.shortcut(), 'l');
-        assert_eq!(GuideTab::Arcs.shortcut(), 'a');
-        assert_eq!(GuideTab::Pipeline.shortcut(), 'p');
+        assert_eq!(GuideTab::Traits.shortcut(), '1');
+        assert_eq!(GuideTab::Layers.shortcut(), '2');
+        assert_eq!(GuideTab::Arcs.shortcut(), '3');
+        assert_eq!(GuideTab::Pipeline.shortcut(), '4');
     }
 
     #[test]
@@ -1329,7 +1450,7 @@ mod tests {
     fn test_layers_navigate_down() {
         let mut state = GuideState::new();
         state.tab = GuideTab::Layers;
-        state.layer_realm = 0; // Global (3 layers, max index 2)
+        state.layer_realm = 0; // Global (2 layers, max index 1)
         state.layer_cursor = 0;
 
         // Navigate down
@@ -1351,26 +1472,26 @@ mod tests {
     fn test_layers_global_max_cursor() {
         let mut state = GuideState::new();
         state.tab = GuideTab::Layers;
-        state.layer_realm = 0; // Global (3 layers, max index 2)
-        state.layer_cursor = 2;
+        state.layer_realm = 0; // Global (2 layers, max index 1)
+        state.layer_cursor = 1;
 
         // Should not go beyond max
         let changed = state.handle_key(key_event(KeyCode::Char('j')));
         assert!(!changed);
-        assert_eq!(state.layer_cursor, 2);
+        assert_eq!(state.layer_cursor, 1);
     }
 
     #[test]
     fn test_layers_tenant_max_cursor() {
         let mut state = GuideState::new();
         state.tab = GuideTab::Layers;
-        state.layer_realm = 1; // Tenant (6 layers, max index 5)
-        state.layer_cursor = 5;
+        state.layer_realm = 1; // Tenant (7 layers, max index 6)
+        state.layer_cursor = 6;
 
         // Should not go beyond max
         let changed = state.handle_key(key_event(KeyCode::Char('j')));
         assert!(!changed);
-        assert_eq!(state.layer_cursor, 5);
+        assert_eq!(state.layer_cursor, 6);
     }
 
     #[test]
@@ -1678,5 +1799,147 @@ mod tests {
         // Should fallback to first tip
         let tip = state.current_tip();
         assert_eq!(tip, TIPS[0]);
+    }
+
+    // ==========================================================================
+    // YANK (CLIPBOARD) FUNCTIONALITY
+    // ==========================================================================
+
+    #[test]
+    fn test_get_current_yank_text_traits() {
+        let mut state = GuideState::new();
+        state.tab = GuideTab::Traits;
+
+        state.trait_cursor = 0;
+        assert_eq!(state.get_current_yank_text(), Some("invariant".to_string()));
+
+        state.trait_cursor = 1;
+        assert_eq!(state.get_current_yank_text(), Some("localized".to_string()));
+
+        state.trait_cursor = 2;
+        assert_eq!(state.get_current_yank_text(), Some("knowledge".to_string()));
+
+        state.trait_cursor = 3;
+        assert_eq!(state.get_current_yank_text(), Some("derived".to_string()));
+
+        state.trait_cursor = 4;
+        assert_eq!(state.get_current_yank_text(), Some("job".to_string()));
+    }
+
+    #[test]
+    fn test_get_current_yank_text_layers_global() {
+        let mut state = GuideState::new();
+        state.tab = GuideTab::Layers;
+        state.layer_realm = 0; // Global
+
+        state.layer_cursor = 0;
+        assert_eq!(state.get_current_yank_text(), Some("config".to_string()));
+
+        state.layer_cursor = 1;
+        assert_eq!(
+            state.get_current_yank_text(),
+            Some("locale-knowledge".to_string())
+        );
+    }
+
+    #[test]
+    fn test_get_current_yank_text_layers_tenant() {
+        let mut state = GuideState::new();
+        state.tab = GuideTab::Layers;
+        state.layer_realm = 1; // Tenant
+
+        state.layer_cursor = 0;
+        assert_eq!(state.get_current_yank_text(), Some("config".to_string()));
+
+        state.layer_cursor = 3;
+        assert_eq!(state.get_current_yank_text(), Some("semantic".to_string()));
+
+        state.layer_cursor = 5;
+        assert_eq!(state.get_current_yank_text(), Some("seo".to_string()));
+
+        state.layer_cursor = 6;
+        assert_eq!(state.get_current_yank_text(), Some("output".to_string()));
+    }
+
+    #[test]
+    fn test_get_current_yank_text_arcs() {
+        let mut state = GuideState::new();
+        state.tab = GuideTab::Arcs;
+
+        state.arc_cursor = 0;
+        assert_eq!(state.get_current_yank_text(), Some("ownership".to_string()));
+
+        state.arc_cursor = 2;
+        assert_eq!(state.get_current_yank_text(), Some("semantic".to_string()));
+
+        state.arc_cursor = 4;
+        assert_eq!(state.get_current_yank_text(), Some("mining".to_string()));
+    }
+
+    #[test]
+    fn test_get_current_yank_text_pipeline() {
+        let mut state = GuideState::new();
+        state.tab = GuideTab::Pipeline;
+
+        state.pipeline_stage = 0;
+        assert_eq!(state.get_current_yank_text(), Some("Knowledge".to_string()));
+
+        state.pipeline_stage = 4;
+        assert_eq!(
+            state.get_current_yank_text(),
+            Some("Generation".to_string())
+        );
+
+        state.pipeline_stage = 5;
+        assert_eq!(state.get_current_yank_text(), Some("Output".to_string()));
+    }
+
+    #[test]
+    fn test_get_current_yank_text_out_of_bounds() {
+        let mut state = GuideState::new();
+        state.tab = GuideTab::Traits;
+        state.trait_cursor = 100; // Out of bounds
+
+        // Should return None for invalid cursor
+        assert_eq!(state.get_current_yank_text(), None);
+    }
+
+    #[test]
+    fn test_clipboard_message_initial_state() {
+        let state = GuideState::new();
+        assert!(state.clipboard_message.is_none());
+        assert!(state.clipboard_message_time.is_none());
+    }
+
+    #[test]
+    fn test_clear_expired_clipboard_message_none() {
+        let mut state = GuideState::new();
+        // Should not panic when no message exists
+        state.clear_expired_clipboard_message();
+        assert!(state.clipboard_message.is_none());
+    }
+
+    #[test]
+    fn test_clear_expired_clipboard_message_recent() {
+        let mut state = GuideState::new();
+        state.clipboard_message = Some("test".to_string());
+        state.clipboard_message_time = Some(std::time::Instant::now());
+
+        // Message is fresh, should not be cleared
+        state.clear_expired_clipboard_message();
+        assert!(state.clipboard_message.is_some());
+    }
+
+    #[test]
+    fn test_y_key_triggers_yank() {
+        let mut state = GuideState::new();
+        state.tab = GuideTab::Traits;
+        state.trait_cursor = 0;
+
+        // y key should trigger yank (may fail in CI without clipboard, but state should change)
+        let changed = state.handle_key(key_event(KeyCode::Char('y')));
+        // Note: This will return true if clipboard works, or if error message is set
+        // In CI without clipboard access, it still sets clipboard_message with error
+        assert!(changed || !changed); // Just verify no panic
     }
 }

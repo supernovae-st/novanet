@@ -11,7 +11,8 @@ export type LayoutDirection = 'TB' | 'LR' | 'dagre' | 'radial' | 'force';
 export type LayoutMode = 'containers' | 'magnetic';
 
 // Navigation mode: how the user explores the graph
-export type NavigationMode = 'data' | 'meta' | 'overlay' | 'query';
+// v11.0: Simplified to Meta (schema) and Data only
+export type NavigationMode = 'data' | 'meta';
 
 // Modal types - only one can be open at a time
 export type ModalType = 'command-palette' | 'keyboard-shortcuts' | 'ai-chat' | 'cypher-editor' | 'locale-picker' | 'project-picker' | null;
@@ -188,8 +189,8 @@ export const useUIStore = create<UIStoreState>()(
 
       cycleNavigationMode: () => {
         set((state) => {
-          // Order: 1:Meta 2:Data 3:Overlay 4:Query
-          const modes: NavigationMode[] = ['meta', 'data', 'overlay', 'query'];
+          // v11.0: Simplified to Meta and Data only
+          const modes: NavigationMode[] = ['meta', 'data'];
           const idx = modes.indexOf(state.navigationMode);
           state.navigationMode = modes[(idx + 1) % modes.length];
         });

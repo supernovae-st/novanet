@@ -69,6 +69,26 @@ pub fn hex_to_color(hex: &str) -> Color {
 }
 
 // =============================================================================
+// HEATMAP COLORS
+// =============================================================================
+
+/// Generate a heatmap color based on count relative to max.
+/// Returns cyan spectrum: dim (few) → bright (many).
+///
+/// Used in Guide mode to visualize kind density per layer/trait.
+pub fn heatmap_color(count: usize, max_count: usize) -> Color {
+    if max_count == 0 {
+        return Color::Rgb(60, 60, 70); // No data = dim gray
+    }
+
+    let ratio = (count as f64) / (max_count as f64);
+    let intensity = (ratio * 180.0) as u8 + 60; // Range: 60-240
+
+    // Cyan spectrum: dim gray → bright cyan
+    Color::Rgb(intensity / 3, intensity, intensity)
+}
+
+// =============================================================================
 // REALM COLORS (from taxonomy.yaml node_realms)
 // =============================================================================
 
@@ -1262,5 +1282,50 @@ mod tests {
             Color::White,
             "nonexistent family should return White in Color16"
         );
+    }
+
+    // =========================================================================
+    // Heatmap color tests
+    // =========================================================================
+
+    #[test]
+    fn test_heatmap_color_zero() {
+        let color = heatmap_color(0, 50);
+        // Zero count = dim (intensity = 60)
+        assert!(matches!(color, Color::Rgb(r, _, _) if r < 100));
+    }
+
+    #[test]
+    fn test_heatmap_color_max() {
+        let color = heatmap_color(50, 50);
+        // Max count = bright (intensity = 240)
+        assert!(matches!(color, Color::Rgb(r, _, _) if r > 50));
+    }
+
+    #[test]
+    fn test_heatmap_color_half() {
+        let color = heatmap_color(25, 50);
+        // Half count = medium intensity (ratio 0.5, intensity ~150)
+        assert!(matches!(color, Color::Rgb(_, g, _) if g > 100 && g < 200));
+    }
+
+    #[test]
+    fn test_heatmap_color_zero_max() {
+        let color = heatmap_color(0, 0);
+        // Zero max = dim gray fallback
+        assert_eq!(color, Color::Rgb(60, 60, 70));
+    }
+
+    #[test]
+    fn test_heatmap_color_gradient() {
+        // Verify gradient: lower counts should have lower intensity
+        let color_low = heatmap_color(10, 100);
+        let color_high = heatmap_color(90, 100);
+        if let (Color::Rgb(_, g_low, _), Color::Rgb(_, g_high, _)) = (color_low, color_high) {
+            assert!(
+                g_high > g_low,
+                "higher count should have higher intensity"
+            );
+        }
     }
 }

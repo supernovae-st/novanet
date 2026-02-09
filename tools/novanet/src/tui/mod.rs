@@ -23,6 +23,7 @@
 mod app;
 pub mod atlas;
 mod audit;
+pub mod clipboard;
 mod data;
 pub mod guide;
 mod schema;
@@ -246,6 +247,26 @@ async fn run_app(
                         match TaxonomyTree::load_layer_details(db, &layer_key).await {
                             Ok(details) => app.set_layer_details(details),
                             Err(e) => app.set_status_error(&format!("Load layer: {}", e)),
+                        }
+                    }
+
+                    // Entity category loading (triggered when Entity Kind expanded in Data mode)
+                    if app.take_pending_entity_categories_load() {
+                        match TaxonomyTree::load_entity_categories(db).await {
+                            Ok(categories) => {
+                                app.tree.entity_categories = categories;
+                            }
+                            Err(e) => app.set_status_error(&format!("Load categories: {}", e)),
+                        }
+                    }
+
+                    // Category instances loading (triggered when EntityCategory expanded)
+                    if let Some(category_key) = app.take_pending_category_instances_load() {
+                        match TaxonomyTree::load_entities_by_category(db, &category_key).await {
+                            Ok((instances, _total)) => {
+                                app.tree.entity_category_instances.insert(category_key, instances);
+                            }
+                            Err(e) => app.set_status_error(&format!("Load category instances: {}", e)),
                         }
                     }
 

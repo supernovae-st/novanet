@@ -26,7 +26,7 @@ This diagram shows the complete NovaNet graph schema with all 42 node types and 
 ```mermaid
 flowchart TB
   %% NovaNet Graph v11.0.0
-  %% Generated: 64 nodes, 171 arcs
+  %% Generated: 65 nodes, 172 arcs
   %% Source: node-kinds/ + arc-kinds/ + taxonomy.yaml
 
   %% Trait styling (node_trait)
@@ -43,6 +43,7 @@ flowchart TB
       Continent["🔵 Continent"]
       Culture["🟣 Culture"]
       EconomicRegion["🔵 EconomicRegion"]
+      EntityCategory["🔵 EntityCategory"]
       Formatting["🟣 Formatting"]
       GeoRegion["🔵 GeoRegion"]
       GeoSubRegion["🔵 GeoSubRegion"]
@@ -161,6 +162,7 @@ flowchart TB
   Entity -.->|ACTS_ON| Entity
   Entity -.->|ALTERNATIVE_TO| Entity
   Entity -.->|APPLIES_TO| Entity
+  Entity -.->|BELONGS_TO| EntityCategory
   Entity -.->|COMPETES_WITH| Entity
   Entity -.->|ENABLED_BY| Entity
   Entity -.->|ENABLES| Entity
@@ -237,7 +239,6 @@ flowchart TB
   Locale -.->|SPEAKS_BRANCH| LanguageBranch
   Organization -->|HAS_COMPANY_PROJECT| Project
   Organization -->|HAS_ENTITY| Entity
-  Organization -->|HAS_PROJECT| Project
   OutputArtifact ==>|BUNDLES| BlockGenerated
   OutputArtifact ==>|BUNDLES| PageGenerated
   OutputArtifact -.->|FOR_LOCALE| Locale
@@ -297,14 +298,15 @@ flowchart TB
   SEOMiningRun --o|SEO_MINES| SEOKeyword
   SEOPreposition -.->|USE_CASE_ENTITY| Entity
   TabooSet -->|CONTAINS_TABOO| Taboo
+  Tenant -->|HAS_PROJECT| Project
   TermSet -->|CONTAINS_TERM| Term
 
   %% Arc colors by family
-  linkStyle 3,4,13,14,15,16,18,19,20,21,24,25,26,66,70,71,73,74,75,111,112,114,115,116,117,119,120,132,136,137,138,139,140,141,142,143,144,157,158,159 stroke:#8b5cf6,stroke-width:2px
-  linkStyle 12,17,41,42,61,62,63,72,80,88,89,90,91,92,93,96,97,103,104,105,106,107,113,135,150,151,154,155,156 stroke:#22c55e,stroke-width:2px
-  linkStyle 69,164,167 stroke:#ec4899,stroke-width:2px
-  linkStyle 0,1,5,6,7,8,27,28,29,30,40,67,68,76,77,78,81,82,83,84,85,86,87,94,95,98,99,100,101,102,108,109,110,118,121,122,123,124,126,127,133,145,146,147,148,149,152,153,163,165,166,169,170 stroke:#3b82f6,stroke-width:2px
-  linkStyle 2,9,10,11,22,23,31,32,33,34,35,36,37,38,39,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,64,65,79,125,128,129,130,131,134,160,161,162,168 stroke:#f97316,stroke-width:2px
+  linkStyle 3,4,13,14,15,16,18,19,20,21,24,25,26,67,71,72,74,75,76,111,112,114,115,116,117,119,120,132,136,137,138,139,140,141,142,143,144,157,158,159 stroke:#8b5cf6,stroke-width:2px
+  linkStyle 12,17,42,43,62,63,64,73,81,89,90,91,92,93,94,97,98,104,105,106,107,108,113,135,150,151,154,155,156 stroke:#22c55e,stroke-width:2px
+  linkStyle 70,164,167 stroke:#ec4899,stroke-width:2px
+  linkStyle 0,1,5,6,7,8,27,28,29,30,41,68,69,77,78,79,82,83,84,85,86,87,88,95,96,99,100,101,102,103,109,110,118,121,122,123,124,126,127,133,145,146,147,148,149,152,153,163,165,166,169,170,171 stroke:#3b82f6,stroke-width:2px
+  linkStyle 2,9,10,11,22,23,31,32,33,34,35,36,37,38,39,40,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,65,66,80,125,128,129,130,131,134,160,161,162,168 stroke:#f97316,stroke-width:2px
 
   %% Class assignments
   class Adaptation knowledge
@@ -328,6 +330,7 @@ flowchart TB
   class CultureSet knowledge
   class EconomicRegion invariant
   class Entity invariant
+  class EntityCategory invariant
   class EntityContent localized
   class EvaluationSignal derived
   class Expression knowledge

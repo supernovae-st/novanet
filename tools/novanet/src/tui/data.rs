@@ -253,6 +253,28 @@ pub struct AtlasPageInfo {
 }
 
 // ============================================================================
+// Entity Category Hierarchy (Data mode)
+// ============================================================================
+
+/// EntityCategory for grouping Entity instances by semantic type.
+/// Used in Data mode to show Entity instances organized by category.
+#[derive(Debug, Clone)]
+pub struct EntityCategory {
+    /// Category key in UPPER_SNAKE_CASE (e.g., "THING", "ACTION", "FEATURE")
+    pub key: String,
+    /// Human-readable category name
+    pub display_name: String,
+    /// Display order (lower = first)
+    pub sort_order: i64,
+    /// Category question (WHAT?, HOW?, WHY?, etc.)
+    pub question: String,
+    /// LLM context for generation hints
+    pub llm_context: String,
+    /// Number of Entity instances in this category.
+    pub instance_count: i64,
+}
+
+// ============================================================================
 // Neo4j Arc Data (live query)
 // ============================================================================
 
@@ -350,6 +372,12 @@ pub struct TaxonomyTree {
     /// Cache: kind_key -> (realm_idx, layer_idx, kind_idx) for O(1) lookups.
     /// Built once on load, never mutated (tree structure is immutable).
     pub(crate) kind_index: FxHashMap<String, (usize, usize, usize)>,
+    /// Entity categories for Data mode grouping.
+    /// Loaded on-demand when viewing Entity instances by category.
+    pub entity_categories: Vec<EntityCategory>,
+    /// Entity instances grouped by category (key = category key like "THING", "ACTION").
+    /// Loaded on-demand when Entity categories are expanded.
+    pub entity_category_instances: BTreeMap<String, Vec<InstanceInfo>>,
 }
 
 impl TaxonomyTree {
@@ -529,6 +557,8 @@ ORDER BY realm_key, layer_key, kind_key
             instances: BTreeMap::new(),
             instance_totals: BTreeMap::new(),
             kind_index,
+            entity_categories: Vec::new(), // Loaded on-demand via load_entity_categories
+            entity_category_instances: BTreeMap::new(), // Loaded on-demand when category expanded
         })
     }
 
@@ -657,6 +687,12 @@ ORDER BY family_key, arc_key
 
     /// Load instances of a Kind from Neo4j for Data view.
     /// Returns (instances, total_count) - instances are limited to 500, total is the real count.
+    ///
+    /// Performance: Uses a two-pass query strategy for large datasets:
+    /// 1. Fast index scan to get first 500 keys + total count
+    /// 2. Detailed query with arcs only for those 500 keys
+    ///
+    /// This avoids scanning all nodes (e.g., 9100 SEOKeyword) for arc collection.
     pub async fn load_instances(
         db: &Db,
         kind_label: &str,
@@ -664,32 +700,52 @@ ORDER BY family_key, arc_key
         // Security: Validate label before interpolation into Cypher
         validate_cypher_label(kind_label)?;
 
-        // First, get the total count (fast query with index)
-        let count_cypher = format!(
-            "MATCH (n:{kind_label}) WHERE NOT n:Meta RETURN count(n) AS total",
-            kind_label = kind_label
-        );
-        let count_rows = db.execute(&count_cypher).await?;
-        let total_count: usize = count_rows
-            .first()
-            .and_then(|r| r.get::<i64>("total").ok())
-            .unwrap_or(0) as usize;
-
-        // Query instances of this Kind with their properties and arcs (limited to 500)
-        let cypher = format!(
+        // Pass 1: Get total count AND first 500 keys in a single fast query (index-based)
+        let keys_cypher = format!(
             r#"
 MATCH (n:{kind_label})
 WHERE NOT n:Meta
+WITH count(n) AS total
+MATCH (n:{kind_label})
+WHERE NOT n:Meta
+WITH total, n.key AS key
+ORDER BY key
+LIMIT 500
+RETURN collect(key) AS keys, total
+"#,
+            kind_label = kind_label
+        );
+        let keys_rows = db.execute(&keys_cypher).await?;
+        let (keys, total_count): (Vec<String>, usize) = keys_rows
+            .first()
+            .map(|r| {
+                let keys: Vec<String> = r.get("keys").unwrap_or_default();
+                let total: i64 = r.get("total").unwrap_or(0);
+                (keys, total as usize)
+            })
+            .unwrap_or_default();
+
+        // Early return if no instances
+        if keys.is_empty() {
+            return Ok((Vec::new(), total_count));
+        }
+
+        // Pass 2: Get properties and arcs only for the 500 selected keys
+        // This is much faster than scanning all nodes for arc collection
+        let cypher = format!(
+            r#"
+UNWIND $keys AS k
+MATCH (n:{kind_label} {{key: k}})
 OPTIONAL MATCH (n)-[out]->(target)
 WHERE NOT target:Meta
-WITH n, collect(DISTINCT {{
+WITH n, k, collect(DISTINCT {{
     arc_type: type(out),
     target_key: coalesce(target.key, target.label, id(target)),
     target_kind: head(labels(target))
 }}) AS outgoing
 OPTIONAL MATCH (source)-[inc]->(n)
 WHERE NOT source:Meta
-WITH n, outgoing, collect(DISTINCT {{
+WITH n, k, outgoing, collect(DISTINCT {{
     arc_type: type(inc),
     source_key: coalesce(source.key, source.label, id(source)),
     source_kind: head(labels(source))
@@ -701,12 +757,12 @@ RETURN
     outgoing,
     incoming
 ORDER BY key
-LIMIT 500
 "#,
             kind_label = kind_label
         );
 
-        let rows = db.execute(&cypher).await?;
+        // Execute with parameterized keys (safe from injection)
+        let rows = db.execute_with_params(&cypher, [("keys", keys)]).await?;
         let mut instances = Vec::with_capacity(rows.len());
 
         for row in rows {
@@ -1187,8 +1243,167 @@ RETURN p.key as page_key,
         Ok(pages)
     }
 
+    // ========================================================================
+    // Entity Category Hierarchy (Data mode)
+    // ========================================================================
+
+    /// Load all EntityCategory nodes from Neo4j with instance counts.
+    /// Returns categories sorted by sort_order for display in Data mode.
+    pub async fn load_entity_categories(db: &Db) -> crate::Result<Vec<EntityCategory>> {
+        let cypher = r#"
+MATCH (c:EntityCategory)
+OPTIONAL MATCH (e:Entity)-[:BELONGS_TO]->(c)
+WITH c, count(e) AS instance_count
+RETURN c.key AS key,
+       coalesce(c.display_name, c.key) AS display_name,
+       coalesce(c.sort_order, 0) AS sort_order,
+       coalesce(c.question, '') AS question,
+       coalesce(c.llm_context, '') AS llm_context,
+       instance_count
+ORDER BY c.sort_order, c.key
+"#;
+
+        let rows = db.execute(cypher).await?;
+        let mut categories = Vec::with_capacity(rows.len());
+
+        for row in rows {
+            categories.push(EntityCategory {
+                key: row.get("key").unwrap_or_default(),
+                display_name: row.get("display_name").unwrap_or_default(),
+                sort_order: row.get("sort_order").unwrap_or(0),
+                question: row.get("question").unwrap_or_default(),
+                llm_context: row.get("llm_context").unwrap_or_default(),
+                instance_count: row.get("instance_count").unwrap_or(0),
+            });
+        }
+
+        Ok(categories)
+    }
+
+    /// Load Entity instances that belong to a specific EntityCategory.
+    /// Returns (instances, total_count) for pagination display.
+    ///
+    /// Uses the BELONGS_TO arc: Entity -[:BELONGS_TO]-> EntityCategory
+    /// This enables Data mode to show Entity instances grouped by category.
+    pub async fn load_entities_by_category(
+        db: &Db,
+        category_key: &str,
+    ) -> crate::Result<(Vec<InstanceInfo>, i64)> {
+        // Query with parameterized category key (safe from injection)
+        let cypher = r#"
+MATCH (e:Entity)-[:BELONGS_TO]->(c:EntityCategory {key: $category})
+WITH count(e) AS total
+MATCH (e:Entity)-[:BELONGS_TO]->(c:EntityCategory {key: $category})
+WITH total, e
+ORDER BY e.display_name, e.key
+LIMIT 1000
+WITH total, collect(e) AS entities
+UNWIND entities AS e
+OPTIONAL MATCH (e)-[out]->(target)
+WHERE NOT target:Meta
+WITH total, e, collect(DISTINCT {
+    arc_type: type(out),
+    target_key: coalesce(target.key, target.label, toString(id(target))),
+    target_kind: head(labels(target))
+}) AS outgoing
+OPTIONAL MATCH (source)-[inc]->(e)
+WHERE NOT source:Meta
+WITH total, e, outgoing, collect(DISTINCT {
+    arc_type: type(inc),
+    source_key: coalesce(source.key, source.label, toString(id(source))),
+    source_kind: head(labels(source))
+}) AS incoming
+RETURN total,
+       coalesce(e.key, toString(id(e))) AS key,
+       coalesce(e.display_name, e.key) AS display_name,
+       properties(e) AS props,
+       outgoing,
+       incoming
+"#;
+
+        let rows = db
+            .execute_with_params(cypher, [("category", category_key)])
+            .await?;
+
+        // Get total count from first row (all rows have same total)
+        let total_count: i64 = rows
+            .first()
+            .and_then(|r| r.get("total").ok())
+            .unwrap_or(0);
+
+        let mut instances = Vec::with_capacity(rows.len());
+
+        for row in rows {
+            let key: String = row.get("key").unwrap_or_default();
+            let display_name: String = row.get("display_name").unwrap_or_default();
+
+            // Parse properties as BTreeMap with proper JSON values
+            let props: BTreeMap<String, JsonValue> = row
+                .get::<neo4rs::BoltMap>("props")
+                .map(|m| {
+                    m.value
+                        .iter()
+                        .map(|(k, v)| (k.value.clone(), bolt_to_json(v)))
+                        .collect()
+                })
+                .unwrap_or_default();
+
+            // Parse outgoing arcs
+            let outgoing_arcs: Vec<InstanceArc> = row
+                .get::<Vec<neo4rs::BoltMap>>("outgoing")
+                .unwrap_or_default()
+                .into_iter()
+                .filter_map(|m| {
+                    let arc_type = m.get::<String>("arc_type").ok()?;
+                    if arc_type.is_empty() {
+                        return None;
+                    }
+                    Some(InstanceArc {
+                        arc_type,
+                        target_key: m.get("target_key").unwrap_or_default(),
+                        target_kind: m.get("target_kind").unwrap_or_default(),
+                        exists: true,
+                    })
+                })
+                .collect();
+
+            // Parse incoming arcs
+            let incoming_arcs: Vec<InstanceArc> = row
+                .get::<Vec<neo4rs::BoltMap>>("incoming")
+                .unwrap_or_default()
+                .into_iter()
+                .filter_map(|m| {
+                    let arc_type = m.get::<String>("arc_type").ok()?;
+                    if arc_type.is_empty() {
+                        return None;
+                    }
+                    Some(InstanceArc {
+                        arc_type,
+                        target_key: m.get("source_key").unwrap_or_default(),
+                        target_kind: m.get("source_kind").unwrap_or_default(),
+                        exists: true,
+                    })
+                })
+                .collect();
+
+            instances.push(InstanceInfo {
+                key,
+                display_name,
+                kind_key: "Entity".to_string(),
+                properties: props,
+                outgoing_arcs,
+                incoming_arcs,
+                missing_required_count: 0, // Calculated later if needed
+                filled_properties: 0,      // Calculated later if needed
+                total_properties: 0,       // Calculated later if needed
+            });
+        }
+
+        Ok((instances, total_count))
+    }
+
     /// Load Page Composition data for Atlas mode.
-    /// Returns full anatomy: Page → Blocks → Entities → SEO Keywords with L10n.
+    /// Returns full anatomy: Page → Blocks → Entities → SEO Keywords with Generated/Content.
     pub async fn load_atlas_page_composition(
         db: &Db,
         page_key: &str,
@@ -1269,7 +1484,8 @@ RETURN kw.keyword as keyword,
             return Ok(PageCompositionData::default());
         };
 
-        let page_l10n = if page_row
+        // v10.9: renamed page_l10n → page_generated
+        let page_generated = if page_row
             .get::<Option<String>>("l10n_title")
             .ok()
             .flatten()
@@ -1288,7 +1504,8 @@ RETURN kw.keyword as keyword,
         let mut blocks = Vec::with_capacity(block_rows.len());
         for row in block_rows {
             let content_preview: String = row.get("content_preview").unwrap_or_default();
-            let l10n = if !content_preview.is_empty() {
+            // v10.9: renamed l10n → generated
+            let generated = if !content_preview.is_empty() {
                 Some(BlockGeneratedData {
                     locale: locale.to_string(),
                     content_preview,
@@ -1304,22 +1521,23 @@ RETURN kw.keyword as keyword,
                 block_type: row.get("block_type").ok(),
                 prompt: row.get("prompt").ok(),
                 rules: row.get("rules").ok(),
-                l10n,
+                generated,
             });
         }
 
         let mut entities = Vec::with_capacity(entity_rows.len());
         for row in entity_rows {
-            let l10n_name: Option<String> = row.get("l10n_name").ok();
-            let l10n_desc: String = row.get("l10n_desc").unwrap_or_default();
-            let l10n = if l10n_name.is_some() || !l10n_desc.is_empty() {
+            // v10.9: renamed l10n_* → content_* (db aliases unchanged for compatibility)
+            let content_name: Option<String> = row.get("l10n_name").ok();
+            let content_desc: String = row.get("l10n_desc").unwrap_or_default();
+            let content = if content_name.is_some() || !content_desc.is_empty() {
                 Some(EntityContentData {
                     locale: locale.to_string(),
-                    name: l10n_name,
-                    description_preview: if l10n_desc.is_empty() {
+                    name: content_name,
+                    description_preview: if content_desc.is_empty() {
                         None
                     } else {
-                        Some(l10n_desc)
+                        Some(content_desc)
                     },
                 })
             } else {
@@ -1333,7 +1551,7 @@ RETURN kw.keyword as keyword,
             entities.push(EntityData {
                 key: row.get("entity_key").unwrap_or_default(),
                 display_name: row.get("entity_name").unwrap_or_default(),
-                l10n,
+                content,
                 connected_blocks,
             });
         }
@@ -1354,7 +1572,7 @@ RETURN kw.keyword as keyword,
             project_display_name: page_row.get("project_name").unwrap_or_default(),
             page_type: page_row.get("page_type").ok(),
             page_prompt: page_row.get("prompt").ok(),
-            page_l10n,
+            page_generated,
             blocks,
             entities,
             seo_keywords,
@@ -1584,6 +1802,7 @@ RETURN kw.keyword as keyword,
 
     /// Total number of visible items for a specific mode.
     /// In Data mode (data_mode=true), includes instances under expanded Kinds.
+    /// For Entity Kind, shows category hierarchy: Entity > Category > instances.
     pub fn item_count_for_mode(&self, data_mode: bool) -> usize {
         let mut count = 0;
 
@@ -1628,6 +1847,7 @@ RETURN kw.keyword as keyword,
 
     /// Get item at cursor position for a specific mode.
     /// In Data mode (data_mode=true), includes instances under expanded Kinds.
+    /// For Entity Kind, shows category hierarchy: Entity > Category > instances.
     pub fn item_at_for_mode(&self, cursor: usize, data_mode: bool) -> Option<TreeItem<'_>> {
         let mut idx = 0;
 
@@ -1813,6 +2033,8 @@ RETURN kw.keyword as keyword,
             Some(TreeItem::ArcFamily(f)) => Some(format!("family:{}", f.key)),
             // In Data mode, Kind can be collapsed to hide instances
             Some(TreeItem::Kind(_, _, k)) => Some(format!("kind:{}", k.key)),
+            // EntityCategory can be collapsed to hide its instances
+            Some(TreeItem::EntityCategory(_, _, _, cat)) => Some(format!("category:{}", cat.key)),
             // Leaf nodes can't be collapsed
             Some(TreeItem::ArcKind(_, _)) | Some(TreeItem::Instance(_, _, _, _)) | None => None,
         }
@@ -1820,7 +2042,7 @@ RETURN kw.keyword as keyword,
 
     /// Find the cursor position of the parent item.
     /// Returns None if at root or no parent exists.
-    /// Hierarchy: Instance → Kind → Layer → Realm → KindsSection
+    /// Hierarchy: Instance → EntityCategory → Kind → Layer → Realm → KindsSection
     ///            ArcKind → ArcFamily → ArcsSection
     pub fn find_parent_cursor(&self, cursor: usize, data_mode: bool) -> Option<usize> {
         let current = if data_mode {
@@ -1842,7 +2064,12 @@ RETURN kw.keyword as keyword,
             // Kind's parent is its Layer
             Some(TreeItem::Kind(realm, layer, _)) => self.find_layer_cursor(&realm.key, &layer.key),
 
-            // Instance's parent is its Kind
+            // EntityCategory's parent is its Kind (Entity)
+            Some(TreeItem::EntityCategory(realm, layer, kind, _)) => {
+                self.find_kind_cursor_readonly(&realm.key, &layer.key, &kind.key, data_mode)
+            }
+
+            // Instance's parent is its Kind (or EntityCategory for Entity kind)
             Some(TreeItem::Instance(realm, layer, kind, _)) => {
                 self.find_kind_cursor_readonly(&realm.key, &layer.key, &kind.key, data_mode)
             }
@@ -2106,7 +2333,9 @@ pub enum TreeItem<'a> {
     // Arcs hierarchy
     ArcFamily(&'a ArcFamilyInfo),
     ArcKind(&'a ArcFamilyInfo, &'a ArcKindInfo),
-    // Data view: instances under Kinds
+    // Data view: Entity categories (between Kind and instances for Entity only)
+    EntityCategory(&'a RealmInfo, &'a LayerInfo, &'a KindInfo, &'a EntityCategory),
+    // Data view: instances under Kinds (or under EntityCategory for Entity)
     Instance(&'a RealmInfo, &'a LayerInfo, &'a KindInfo, &'a InstanceInfo),
 }
 
@@ -2388,6 +2617,8 @@ impl TaxonomyTree {
             instances: BTreeMap::new(),
             instance_totals: BTreeMap::new(),
             kind_index,
+            entity_categories: Vec::new(),
+            entity_category_instances: BTreeMap::new(),
         }
     }
 }
@@ -2519,6 +2750,8 @@ mod tests {
             instances: BTreeMap::new(),
             instance_totals: BTreeMap::new(),
             kind_index,
+            entity_categories: Vec::new(),
+            entity_category_instances: BTreeMap::new(),
         }
     }
 
@@ -2782,7 +3015,7 @@ mod tests {
         // Valid labels: alphanumeric, underscore, dash
         assert!(super::validate_cypher_label("Entity").is_ok());
         assert!(super::validate_cypher_label("locale-knowledge").is_ok());
-        assert!(super::validate_cypher_label("Page_L10n").is_ok());
+        assert!(super::validate_cypher_label("PageGenerated").is_ok());
     }
 
     #[test]

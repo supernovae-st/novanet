@@ -869,6 +869,8 @@ mod tests {
             instances: Default::default(),
             instance_totals: Default::default(),
             kind_index: FxHashMap::default(),
+            entity_categories: Vec::new(),
+            entity_category_instances: Default::default(),
         }
     }
 
@@ -891,6 +893,8 @@ mod tests {
             instances: Default::default(),
             instance_totals: Default::default(),
             kind_index,
+            entity_categories: Vec::new(),
+            entity_category_instances: Default::default(),
         }
     }
 
@@ -1327,7 +1331,7 @@ mod tests {
         // Test all 5 arc families: ownership, localization, semantic, generation, mining
         let outgoing = vec![
             create_neo4j_arc("BELONGS_TO", "Project", "ownership"),
-            create_neo4j_arc("LOCALIZES", "EntityL10n", "localization"),
+            create_neo4j_arc("LOCALIZES", "EntityContent", "localization"),
             create_neo4j_arc("USES_ENTITY", "Entity", "semantic"),
             create_neo4j_arc("GENERATES", "Block", "generation"),
             create_neo4j_arc("MINES_DATA", "Source", "mining"),

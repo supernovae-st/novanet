@@ -305,8 +305,8 @@ mod tests {
             .filter(|l: &&str| l.contains("MERGE") && l.contains("[:OF_KIND]"))
             .count();
         assert_eq!(
-            of_kind, 64,
-            "expected 64 OF_KIND statements (v10.9: 2 realms, 40+24 nodes)"
+            of_kind, 65,
+            "expected 65 OF_KIND statements (v11.1: +EntityCategory)"
         );
 
         // 2 realms present (v10.6: global + tenant)
@@ -319,11 +319,11 @@ mod tests {
         assert!(cypher.contains("MATCH (n:SEOMiningRun)"));
 
         // v10.8: Layer counts match 60 nodes (37 global, 23 tenant)
-        assert!(cypher.contains("Global > Config (13 types)")); // Locale + 6 utility + 6 geo/econ
+        assert!(cypher.contains("Global > Config (14 types)")); // Locale + 6 utility + 6 geo/econ + EntityCategory
         assert!(cypher.contains("Global > Locale-knowledge (18 types)")); // Sets + Atoms + 6 knowledge
 
-        // v10.9: Header
-        assert!(cypher.contains("Total: 64 node types"));
+        // v11.1: Header (+EntityCategory)
+        assert!(cypher.contains("Total: 65 node types"));
 
         // Verification query present
         assert!(cypher.contains("VERIFICATION QUERY"));

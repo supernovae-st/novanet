@@ -345,6 +345,10 @@ fn get_detail_title(app: &App) -> String {
             // [I] badge for Instance - instant recognition
             format!("[I] {} ({})", inst.key, inst.kind_key)
         }
+        Some(TreeItem::EntityCategory(_, _, _, cat)) => {
+            // [C] badge for Category
+            format!("[C] {}", cat.display_name)
+        }
         None => "Detail".to_string(),
     }
 }
@@ -1337,6 +1341,35 @@ fn build_info_lines(app: &App) -> Vec<Line<'static>> {
                 }
             }
 
+            lines
+        }
+        Some(TreeItem::EntityCategory(_, _, _, cat)) => {
+            // Show category details
+            let mut lines = vec![
+                Line::from(vec![
+                    Span::styled("Category: ", STYLE_HINT),
+                    Span::styled(cat.display_name.clone(), STYLE_PRIMARY),
+                ]),
+                Line::from(vec![
+                    Span::styled("Key: ", STYLE_HINT),
+                    Span::styled(cat.key.clone(), STYLE_PRIMARY),
+                ]),
+                Line::from(vec![
+                    Span::styled("Question: ", STYLE_HINT),
+                    Span::styled(cat.question.clone(), STYLE_PRIMARY),
+                ]),
+                Line::from(vec![
+                    Span::styled("Entities: ", STYLE_HINT),
+                    Span::styled(cat.instance_count.to_string(), STYLE_PRIMARY),
+                ]),
+            ];
+            if !cat.llm_context.is_empty() {
+                lines.push(Line::from(""));
+                lines.push(Line::from(Span::styled("LLM Context:", STYLE_HINT)));
+                for line in cat.llm_context.lines() {
+                    lines.push(Line::from(Span::styled(format!("  {}", line), STYLE_DIM)));
+                }
+            }
             lines
         }
         None => {

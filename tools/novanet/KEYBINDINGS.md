@@ -113,6 +113,22 @@ Scrollbars are displayed when content exceeds visible area.
 
 ---
 
+## Data Mode Hierarchy (v11.0)
+
+The tree structure in Data mode follows this hierarchy:
+
+```
+Realm → Layer → Kind → EntityCategory (Entity only) → Instance
+```
+
+**Note**: EntityCategory only appears when viewing Entity instances. It groups Entity instances
+by semantic type (THING, ACTION, FEATURE, etc.). Other kinds jump directly from Kind to Instance.
+
+Navigation through EntityCategory uses the same keys as all other tree levels:
+- `h` collapse EntityCategory, `l` expand it
+- `j`/`k` move between categories or instances
+- `Space`/`Enter` toggle expand/collapse
+
 ## Context-Aware Actions
 
 The status bar shows context-aware hints:
@@ -121,6 +137,61 @@ The status bar shows context-aware hints:
 |---------|------|--------|
 | On Kind (Meta mode) | `2:→Data` | Press 2 to drill into instances |
 | On Instance (Data mode) | `1:→Kind` | Press 1 to jump to Kind |
+| On EntityCategory (Data mode) | `l:expand` | Press l to expand and see instances in category |
+
+---
+
+## Guide Mode (Mode 7)
+
+Educational mode for learning NovaNet concepts.
+
+### Tab Switching (within Guide mode)
+
+| Key | Action |
+|-----|--------|
+| `1` | Switch to Traits tab |
+| `2` | Switch to Layers tab |
+| `3` | Switch to Arcs tab |
+| `4` | Switch to Pipeline tab |
+| `Tab` | Cycle to next tab |
+| `Shift+Tab` | Cycle to previous tab |
+
+### Quick Jump (g prefix)
+
+| Key | Action |
+|-----|--------|
+| `gi` | Jump to invariant trait |
+| `gl` | Jump to localized trait |
+| `gk` | Jump to knowledge trait |
+| `gd` | Jump to derived trait |
+| `gj` | Jump to job trait |
+| `gg` | Reset all cursors to top |
+
+### Navigation
+
+| Key | Action |
+|-----|--------|
+| `j` / `Down` | Move cursor down |
+| `k` / `Up` | Move cursor up |
+| `h` | Switch realm (Layers) / drill up (others) |
+| `l` | Switch realm (Layers) / drill down (others) |
+| `Enter` | Drill down into selection |
+| `Esc` | Drill up / cancel pending `g` |
+| `Space` | Toggle animation (Pipeline tab only) |
+
+### Actions
+
+| Key | Action |
+|-----|--------|
+| `y` | Yank (copy current item to clipboard) |
+| `n` | Next "Did you know?" tip |
+
+### Tips Bar
+
+The bottom bar shows educational tips with trait-colored keywords.
+- Press `n` to cycle through tips
+- Press `y` to copy current selection
+- Clipboard feedback shown temporarily (2s)
 
 ---
 
@@ -145,4 +216,9 @@ Search:      / or f (search)  ? (help)  F1 (legend)
 Actions:     r (refresh)  y/Y (yank key/JSON)  J (JSON toggle)  Ctrl+o/i (back/forward)
 Schema:      s (overlay)  +/- (focus property)
 Exit:        q or Esc
+
+Guide Mode (7):
+Tabs:        1-4 (Traits/Layers/Arcs/Pipeline)  Tab (cycle)
+Quick Jump:  gi/gl/gk/gd/gj (traits)  gg (top)
+Actions:     y (yank)  n (next tip)  Enter/Esc (drill)
 ```

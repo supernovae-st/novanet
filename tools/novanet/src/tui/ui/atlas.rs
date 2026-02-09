@@ -136,7 +136,7 @@ fn render_realm_map_live(
         "╔═══════════════════════════════════════════════════════════════════════════╗".to_string(),
     );
     lines.push(format!(
-        "║  2-REALM ARCHITECTURE (v10.6)        {} NodeKinds total        ║",
+        "║  2-REALM ARCHITECTURE (v11.0)        {} NodeKinds total        ║",
         stats.total_kinds
     ));
     lines.push(
@@ -150,7 +150,7 @@ fn render_realm_map_live(
         let realm_style = if realm.key == "global" {
             "READ-ONLY"
         } else {
-            "per-org"
+            "per-tenant"
         };
 
         lines.push(
@@ -232,7 +232,7 @@ fn render_realm_map_demo(lines: &mut Vec<String>, cursor: usize) {
         "╔═══════════════════════════════════════════════════════════════════════════╗".to_string(),
     );
     lines.push(
-        "║  2-REALM ARCHITECTURE (v10.6)             DEMO DATA                       ║".to_string(),
+        "║  2-REALM ARCHITECTURE (v11.0)             DEMO DATA                       ║".to_string(),
     );
     lines.push(
         "╠═══════════════════════════════════════════════════════════════════════════╣".to_string(),
@@ -244,7 +244,7 @@ fn render_realm_map_demo(lines: &mut Vec<String>, cursor: usize) {
     let global_selected = cursor == 0;
     let g_prefix = if global_selected { "▶" } else { " " };
     lines.push(format!(
-        "║  {} ┌─ GLOBAL (READ-ONLY) ───────────────────── 24 kinds ──────┐          ║",
+        "║  {} ┌─ GLOBAL (READ-ONLY) ───────────────────── 14 kinds ──────┐          ║",
         g_prefix
     ));
     lines.push(
@@ -252,9 +252,6 @@ fn render_realm_map_demo(lines: &mut Vec<String>, cursor: usize) {
     );
     lines.push(
         "║    │  locale-knowledge   12 kinds   (Locale, TermSet, Term...)│          ║".to_string(),
-    );
-    lines.push(
-        "║    │  seo                 4 kinds   (SEOKeyword, Metrics...)  │          ║".to_string(),
     );
     lines.push(
         "║    └──────────────────────────────────────────────────────────┘          ║".to_string(),
@@ -269,9 +266,12 @@ fn render_realm_map_demo(lines: &mut Vec<String>, cursor: usize) {
     let tenant_selected = cursor == 1;
     let t_prefix = if tenant_selected { "▶" } else { " " };
     lines.push(format!(
-        "║  {} ┌─ TENANT ─────────────────────────────── 22 kinds ──────┐          ║",
+        "║  {} ┌─ TENANT ─────────────────────────────── 32 kinds ──────┐          ║",
         t_prefix
     ));
+    lines.push(
+        "║    │  config              2 kinds   (TenantConfig, Settings) │          ║".to_string(),
+    );
     lines.push(
         "║    │  foundation          4 kinds   (Project, BrandIdentity...)│          ║".to_string(),
     );
@@ -283,6 +283,9 @@ fn render_realm_map_demo(lines: &mut Vec<String>, cursor: usize) {
     );
     lines.push(
         "║    │  instruction         4 kinds   (Prompt, GenerationJob)  │          ║".to_string(),
+    );
+    lines.push(
+        "║    │  seo                 9 kinds   (SEOKeyword, GeoQuery...)│          ║".to_string(),
     );
     lines.push(
         "║    │  output              5 kinds   (PageGenerated, BlockGen.)│          ║".to_string(),
@@ -575,7 +578,7 @@ fn render_atlas_generation_pipeline(app: &App) -> String {
             "GENERATION",
             "LLM call with assembled context → native content",
         ),
-        ("OUTPUT (L10n)", "Localized content stored as *L10n node"),
+        ("OUTPUT", "Generated/Content nodes per locale"),
     ];
 
     lines.push(
@@ -789,7 +792,7 @@ fn render_atlas_generation_pipeline(app: &App) -> String {
                     .to_string(),
             );
             lines.push(
-                "║  │  Entity + Context → Generate natively → L10n (locale-specific)    │    ║"
+                "║  │  Entity + Context → Generate natively → Content (locale-native)   │    ║"
                     .to_string(),
             );
             lines.push(
@@ -903,16 +906,16 @@ fn render_page_composition_data(
             .to_string(),
     );
 
-    // L10n info
-    if let Some(ref l10n) = data.page_l10n {
+    // Generated content info (v10.9: renamed from L10n)
+    if let Some(ref generated) = data.page_generated {
         lines.push(format!(
-            "║  L10N [{}]:                                                               ║",
+            "║  GENERATED [{}]:                                                          ║",
             locale
         ));
-        if let Some(ref title) = l10n.title {
+        if let Some(ref title) = generated.title {
             lines.push(format!("║    Title: {:<63}║", truncate_str(title, 63)));
         }
-        if let Some(ref slug) = l10n.slug {
+        if let Some(ref slug) = generated.slug {
             lines.push(format!("║    Slug:  /{:<62}║", truncate_str(slug, 62)));
         }
         lines.push(
@@ -946,9 +949,9 @@ fn render_page_composition_data(
             truncate_str(block_type, 12)
         ));
 
-        // Block L10n preview
-        if let Some(ref l10n) = block.l10n {
-            let preview = truncate_str(&l10n.content_preview, 55);
+        // Block generated preview (v10.9: renamed from l10n)
+        if let Some(ref generated) = block.generated {
+            let preview = truncate_str(&generated.content_preview, 55);
             lines.push(format!(
                 "║       └─ \"{}...\"                                 ║",
                 preview
@@ -979,10 +982,11 @@ fn render_page_composition_data(
             truncate_str(&blocks_str, 30)
         ));
 
-        if let Some(ref l10n) = entity.l10n {
-            if let Some(ref name) = l10n.name {
+        // Entity content (v10.9: renamed from l10n)
+        if let Some(ref content) = entity.content {
+            if let Some(ref name) = content.name {
                 lines.push(format!(
-                    "║      L10N: {}                                            ║",
+                    "║      CONTENT: {}                                         ║",
                     truncate_str(name, 45)
                 ));
             }
@@ -1385,7 +1389,7 @@ fn render_atlas_view_traversal(app: &App) -> String {
             "knowledge",
             "Complete locale knowledge",
         ),
-        ("entity-ecosystem", "knowledge", "Entity with L10n and SEO"),
+        ("entity-ecosystem", "knowledge", "Entity with Content and SEO"),
         (
             "project-context",
             "project",

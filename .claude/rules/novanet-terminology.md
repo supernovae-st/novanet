@@ -73,6 +73,7 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 | `FooContent` | localized | semantic | Node has locale-specific content for invariant `Foo` | `EntityContent` (parent: `Entity`) |
 | `FooGenerated` | derived | output | Node is generated output from invariant `Foo` | `PageGenerated` (parent: `Page`) |
 | `FooL10n` | localized | foundation | Node has locale-specific settings for invariant `Foo` | `ProjectL10n` (parent: `Project`) |
+| `FooCategory` | invariant | structure | Categorical grouping for invariant `Foo` | `EntityCategory` (parent: `Entity`) |
 | `Foo` | varies | varies | Node is standalone (no parent invariant) | `SEOKeyword`, `Term`, `Expression` |
 
 **v10.9 Changes:**
@@ -80,6 +81,10 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 - `PageL10n` renamed to `PageGenerated` (output layer, derived trait)
 - `BlockL10n` renamed to `BlockGenerated` (output layer, derived trait)
 - `ProjectL10n` unchanged (foundation layer, localized trait)
+
+**v11.0 Changes:**
+- `EntityCategory` added (structure layer, invariant trait, categorical grouping)
+- `BELONGS_TO` arc added (Entity → EntityCategory, ownership family)
 
 **Arc Changes (v10.9):**
 - `HAS_L10N` renamed to `HAS_CONTENT` (Entity → EntityContent)
@@ -89,22 +94,25 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 
 ```
 ✅ Entity (invariant) → EntityContent (localized)   # Semantic layer content
+✅ Entity (invariant) → EntityCategory (invariant)  # Structure layer categorization
 ✅ Page (invariant) → PageGenerated (derived)       # Output layer generated
 ✅ Block (invariant) → BlockGenerated (derived)     # Output layer generated
-✅ Project (invariant) → ProjectL10n (localized)    # Foundation layer settings
+✅ Project (invariant) → ProjectContent (localized) # Foundation layer content (v11.0)
 ✅ SEOKeyword (localized, no parent)                # Correct: no suffix
 ✅ Term (knowledge atom, no parent)                 # Correct: no suffix
 
 ❌ EntityL10n (deprecated)                          # Use EntityContent
 ❌ PageL10n (deprecated)                            # Use PageGenerated
 ❌ BlockL10n (deprecated)                           # Use BlockGenerated
+❌ ProjectL10n (deprecated)                         # Use ProjectContent (v11.0)
 ```
 
 **Rationale:**
 - `*Content` suffix indicates locale-specific semantic content (localized trait)
 - `*Generated` suffix indicates derived output from generation pipeline (derived trait)
-- `*L10n` suffix reserved for foundation-layer locale settings only
-- Suffix choice reflects both the trait (localized vs derived) and the layer (semantic vs output vs foundation)
+- `*Category` suffix indicates categorical grouping/taxonomy structure (invariant trait)
+- `*L10n` suffix is DEPRECATED - all localized nodes now use `*Content` suffix
+- Suffix choice reflects both the trait (localized vs derived vs invariant) and the layer (semantic vs output vs foundation vs structure)
 
 ## Property Naming
 
@@ -152,8 +160,14 @@ These terms are deprecated and should NOT be used:
 | `EntityL10n` | `EntityContent` | v10.9 renamed (semantic layer) |
 | `PageL10n` | `PageGenerated` | v10.9 renamed (output layer) |
 | `BlockL10n` | `BlockGenerated` | v10.9 renamed (output layer) |
+| `ProjectL10n` | `ProjectContent` | v11.0 renamed (foundation layer) |
 | `HAS_L10N` | `HAS_CONTENT` | v10.9 renamed (Entity → EntityContent) |
 | `HAS_OUTPUT` | `HAS_GENERATED` | v10.9 renamed (Page/Block → *Generated) |
+| `BELONGS_TO_PROJECT_L10N` | `BELONGS_TO_PROJECT_CONTENT` | v11.0 renamed |
+| `BELONGS_TO` | `BELONGS_TO` | v11.0 added (Entity → EntityCategory) |
+| `EntityCategory` | `EntityCategory` | v11.0 added (structure layer, categorical grouping) |
+| `GEOSeedL10n` | `GEOQuery` | v10.7 new GEO schema |
+| `GEOSeedMetrics` | `GEOMetrics` | v10.7 new GEO schema |
 
 ## Navigation Modes
 

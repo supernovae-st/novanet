@@ -91,12 +91,13 @@ Categories: realms, layers, traits, arc_families, states, navigation, quality, m
 │  KNOWLEDGE ARCHITECTURE                                                     │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
-│  Locale ──[:HAS_TERMS]──> TermSet ──[:CONTAINS]──> Term (atom)              │
-│          ──[:HAS_EXPRESSIONS]──> ExpressionSet ──[:CONTAINS]──> Expression  │
-│          ──[:HAS_PATTERNS]──> PatternSet ──[:CONTAINS]──> Pattern           │
-│          ──[:HAS_CULTURE]──> CultureSet ──[:CONTAINS]──> CultureRef         │
-│          ──[:HAS_TABOOS]──> TabooSet ──[:CONTAINS]──> Taboo                 │
-│          ──[:HAS_AUDIENCE]──> AudienceSet ──[:CONTAINS]──> AudienceTrait    │
+│  Locale ──[:HAS_TERMS]──> TermSet ──[:CONTAINS_TERM]──> Term (atom)        │
+│          ──[:HAS_EXPRESSIONS]──> ExpressionSet ──[:CONTAINS_EXPRESSION]──> Expression  │
+│          ──[:HAS_PATTERNS]──> PatternSet ──[:CONTAINS_PATTERN]──> Pattern           │
+│          ──[:HAS_CULTURE]──> CultureSet ──[:CONTAINS_CULTURE_REF]──> CultureRef         │
+│          ──[:HAS_TABOOS]──> TabooSet ──[:CONTAINS_TABOO]──> Taboo                 │
+│          ──[:HAS_AUDIENCE]──> AudienceSet ──[:CONTAINS_AUDIENCE_TRAIT]──> AudienceTrait    │
+│          ──[:HAS_CATEGORIES]──> CategorySet ──[:CONTAINS_CATEGORY]──> EntityCategory     │
 │                                                                             │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │  KEY PRINCIPLES                                                             │
@@ -121,10 +122,10 @@ Categories: realms, layers, traits, arc_families, states, navigation, quality, m
 │  STATISTICS                                                                 │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
-│  Containers (6): TermSet, ExpressionSet, PatternSet,                        │
-│                  CultureSet, TabooSet, AudienceSet                          │
-│  Atoms (6):      Term, Expression, Pattern, CultureRef, Taboo, AudienceTrait│
-│  Total:          64 nodes, 123 arcs                                         │
+│  Containers (7): TermSet, ExpressionSet, PatternSet,                        │
+│                  CultureSet, TabooSet, AudienceSet, CategorySet             │
+│  Atoms (7):      Term, Expression, Pattern, CultureRef, Taboo, AudienceTrait, EntityCategory │
+│  Total:          65 nodes, 124 arcs                                         │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
