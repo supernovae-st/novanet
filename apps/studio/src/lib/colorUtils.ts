@@ -54,24 +54,3 @@ export function hexToRgba(hex: string, alpha: number): string {
   }
   return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
 }
-
-// =============================================================================
-// OPACITY PRESETS (common values used in the app)
-// =============================================================================
-
-export const OPACITY = {
-  /** Very subtle background (5%) */
-  SUBTLE: 0.05,
-  /** Light background (10%) */
-  LIGHT: 0.1,
-  /** Medium background (15%) */
-  MEDIUM: 0.15,
-  /** Border/divider (25%) */
-  BORDER: 0.25,
-  /** Hover state (30%) */
-  HOVER: 0.3,
-  /** Active/pressed state (40%) */
-  ACTIVE: 0.4,
-  /** Semi-transparent (50%) */
-  HALF: 0.5,
-} as const;

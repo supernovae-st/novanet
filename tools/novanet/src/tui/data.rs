@@ -1,8 +1,6 @@
 //! Data loading for TUI — Neo4j queries for taxonomy tree, stats, and detail.
 
 use crate::db::Db;
-use ratatui::style::{Color, Style};
-use ratatui::text::{Line, Span};
 use rustc_hash::{FxHashMap, FxHashSet};
 use serde_json::Value as JsonValue;
 use std::collections::BTreeMap;
@@ -2372,78 +2370,6 @@ impl InstanceInfo {
         }
 
         comparisons
-    }
-
-    /// Convert instance properties to colorized JSON lines for display.
-    /// Colors: keys=cyan, strings=green, numbers/bools=yellow, null=gray
-    pub fn to_colored_json(&self) -> Vec<Line<'static>> {
-        let mut lines: Vec<Line<'static>> = Vec::with_capacity(self.properties.len() + 2);
-
-        // Opening brace
-        lines.push(Line::from(Span::styled(
-            "{".to_string(),
-            Style::default().fg(Color::White),
-        )));
-
-        let prop_count = self.properties.len();
-        for (i, (key, value)) in self.properties.iter().enumerate() {
-            let comma = if i < prop_count - 1 { "," } else { "" };
-
-            // Detect value type and colorize accordingly
-            let (value_str, value_color) = Self::colorize_value(value);
-
-            lines.push(Line::from(vec![
-                Span::raw("  "),
-                Span::styled(format!("\"{}\"", key), Style::default().fg(Color::Cyan)),
-                Span::styled(": ".to_string(), Style::default().fg(Color::White)),
-                Span::styled(value_str, Style::default().fg(value_color)),
-                Span::styled(comma.to_string(), Style::default().fg(Color::White)),
-            ]));
-        }
-
-        // Closing brace
-        lines.push(Line::from(Span::styled(
-            "}".to_string(),
-            Style::default().fg(Color::White),
-        )));
-
-        lines
-    }
-
-    /// Determine color based on JSON value type.
-    fn colorize_value(value: &JsonValue) -> (String, Color) {
-        match value {
-            JsonValue::Null => ("null".to_string(), Color::DarkGray),
-            JsonValue::Bool(b) => (b.to_string(), Color::Yellow),
-            JsonValue::Number(n) => (n.to_string(), Color::Yellow),
-            JsonValue::String(s) => {
-                // Check if it looks like a date/timestamp
-                if s.len() > 10
-                    && s.chars()
-                        .next()
-                        .map(|c| c.is_ascii_digit())
-                        .unwrap_or(false)
-                    && (s.contains('T') || s.chars().filter(|&c| c == '-').count() >= 2)
-                {
-                    (format!("\"{}\"", s), Color::Magenta)
-                } else {
-                    (format!("\"{}\"", s), Color::Green)
-                }
-            }
-            JsonValue::Array(arr) => {
-                // Format arrays compactly
-                let items: Vec<String> = arr.iter().map(|v| Self::colorize_value(v).0).collect();
-                (format!("[{}]", items.join(", ")), Color::Cyan)
-            }
-            JsonValue::Object(obj) => {
-                // Format objects compactly on one line
-                let items: Vec<String> = obj
-                    .iter()
-                    .map(|(k, v)| format!("\"{}\": {}", k, Self::colorize_value(v).0))
-                    .collect();
-                (format!("{{{}}}", items.join(", ")), Color::White)
-            }
-        }
     }
 }
 

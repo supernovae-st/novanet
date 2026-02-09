@@ -7,9 +7,7 @@
  * Replaces inconsistent fetch patterns across:
  * - useGraphData
  * - useNodeExpansion
- * - AiChat
  * - queryStore
- * - aiQueryStore
  * - useDatabaseSchema
  */
 

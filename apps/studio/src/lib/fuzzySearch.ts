@@ -194,30 +194,3 @@ export function fuzzyMatch(
     matchedIndices: isMatch ? matchedIndices : [],
   };
 }
-
-/**
- * Search and rank items by fuzzy match score
- */
-export function fuzzySearch<T>(
-  items: T[],
-  query: string,
-  getText: (item: T) => string,
-  options?: FuzzySearchOptions
-): Array<{ item: T; score: number; matchedIndices: number[] }> {
-  if (!query.trim()) {
-    return items.map((item) => ({ item, score: 0, matchedIndices: [] }));
-  }
-
-  return items
-    .map((item) => {
-      const result = fuzzyMatch(query, getText(item), options);
-      return {
-        item,
-        score: result.score,
-        matchedIndices: result.matchedIndices,
-      };
-    })
-    .filter((result) => result.score > 0)
-    .sort((a, b) => b.score - a.score);
-}
-

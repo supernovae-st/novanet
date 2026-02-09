@@ -77,7 +77,6 @@ export {
 export {
   hexToRgb,
   hexToRgba,
-  OPACITY,
   type HexColor,
 } from './colorUtils';
 
