@@ -188,16 +188,6 @@ node_traits:
       Computed or aggregated data. Time-series metrics, analytics snapshots,
       and other values derived from external sources or calculations.
 
-  - key: job
-    display_name: Job
-    color: "#6b7280"
-    border_style: none
-    border_width: 0
-    unicode_border: " "
-    llm_context: |
-      Background processing tasks. Mining runs, batch operations, and other
-      asynchronous jobs that produce or update data nodes.
-
 # =============================================================================
 # KIND RETRIEVAL DEFAULTS (v9.9) — Context Assembly Properties
 # =============================================================================
@@ -221,10 +211,6 @@ kind_retrieval_defaults:
     traversal_depth: 1
     context_budget: 100
     token_estimate: 30
-  job:
-    traversal_depth: 0      # Never traverse from job nodes
-    context_budget: 0
-    token_estimate: 20
 
 # =============================================================================
 # ARC FAMILIES (5) — WHAT kind of relationship is this?
@@ -355,7 +341,6 @@ terminal:
     localized: 41   # green
     knowledge_trait: 141  # purple (avoid collision with layer)
     derived: 245    # gray
-    job: 240        # dark gray
     # Arc families
     ownership_arc: 33   # blue
     localization_arc: 41  # green
@@ -381,7 +366,6 @@ terminal:
     localized: 2    # green
     knowledge_trait: 5  # magenta
     derived: 8      # bright black
-    job: 8          # bright black
     # Arc families
     ownership_arc: 4    # blue
     localization_arc: 2 # green

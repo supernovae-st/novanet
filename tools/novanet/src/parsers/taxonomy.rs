@@ -393,7 +393,7 @@ arc_families:
 
         assert_eq!(doc.version, "11.0.0");
         assert_eq!(doc.node_realms.len(), 2); // v10.6: 2 realms (global, tenant)
-        assert_eq!(doc.node_traits.len(), 5);
+        assert_eq!(doc.node_traits.len(), 4); // v11.1: removed job trait
         assert_eq!(doc.arc_families.len(), 5);
         assert_eq!(doc.arc_scopes.len(), 2);
         assert_eq!(doc.arc_cardinalities.len(), 5); // zero_to_one, one_to_one, one_to_many, many_to_one, many_to_many

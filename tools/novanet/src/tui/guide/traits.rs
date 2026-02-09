@@ -1,9 +1,11 @@
-//! Traits Tab — Constellation view showing 5 traits connected.
+//! Traits Tab — Constellation view showing 4 traits connected.
 //!
 //! The constellation shows the relationship between traits:
 //! - KNOWLEDGE at top (input to generation)
 //! - INVARIANT and LOCALIZED as core pair (structure -> output)
-//! - DERIVED and JOB at bottom (computed and async)
+//! - DERIVED at bottom (computed/aggregated data)
+//!
+//! Note: job trait removed in v11.2 (deferred to v12+).
 
 use ratatui::Frame;
 use ratatui::layout::{Constraint, Direction, Layout, Rect};
@@ -37,7 +39,8 @@ pub struct TraitStats {
 }
 
 /// Canonical trait order for constellation.
-pub const TRAIT_ORDER: [&str; 5] = ["invariant", "localized", "knowledge", "derived", "job"];
+/// Note: job trait removed in v11.2 (4 traits instead of 5).
+pub const TRAIT_ORDER: [&str; 4] = ["invariant", "localized", "knowledge", "derived"];
 
 /// Get symbol for a trait.
 fn trait_symbol(key: &str) -> &'static str {
@@ -46,7 +49,6 @@ fn trait_symbol(key: &str) -> &'static str {
         "localized" => "\u{25a1}", // □
         "knowledge" => "\u{25ca}", // ◊
         "derived" => "\u{2550}",   // ═
-        "job" => "\u{25cb}",       // ○
         _ => "\u{00b7}",           // ·
     }
 }
@@ -58,7 +60,6 @@ fn trait_display_name(key: &str) -> &str {
         "localized" => "LOCALIZED",
         "knowledge" => "KNOWLEDGE",
         "derived" => "DERIVED",
-        "job" => "JOB",
         _ => key,
     }
 }
@@ -77,9 +78,6 @@ fn trait_llm_context(key: &str) -> &str {
         }
         "derived" => {
             "Computed/aggregated data. Metrics, statistics, and cached computations derived from other nodes."
-        }
-        "job" => {
-            "Background tasks and async processes. Generation jobs, queue items, and batch operations."
         }
         _ => "Unknown trait.",
     }
@@ -234,27 +232,7 @@ RETURN e.pattern"#,
 RETURN m.word_count, m.locale_coverage"#,
             },
         ],
-        "job" => vec![
-            CodeExample {
-                title: "GenerationJob (async task)",
-                yaml: r#"node:
-  name: GenerationJob
-  realm: tenant
-  layer: output
-  trait: job
-  # Background generation task"#,
-                neo4j: r#"(:GenerationJob {
-  key: "job:gen:homepage:fr-FR:abc123",
-  status: "running",
-  progress: 0.75,
-  started_at: datetime()
-})"#,
-                cypher: r#"MATCH (j:GenerationJob)
-WHERE j.status = 'pending'
-RETURN j ORDER BY j.created_at
-LIMIT 10"#,
-            },
-        ],
+        // Note: job trait removed in v11.2 (deferred to v12+)
         _ => vec![],
     }
 }
@@ -436,18 +414,15 @@ fn build_constellation_lines(
     let core_line = center_spans(core_pair, width);
     lines.push(core_line);
 
-    // Row 4: Connection lines to DERIVED and JOB
-    let connector3 = center_text("\u{2572}      \u{2571}", width); // ╲      ╱
+    // Row 4: Connection line to DERIVED
+    let connector3 = center_text("\u{2572}  \u{2571}", width); // ╲  ╱
     lines.push(connector3.into());
-    let connector4 = center_text("\u{2572}    \u{2571}", width); // ╲    ╱
+    let connector4 = center_text("\u{2502}", width); // │
     lines.push(connector4.into());
 
-    // Row 5: DERIVED and JOB at bottom
-    let mut bottom_pair: Vec<Span<'static>> = Vec::new();
-    bottom_pair.extend(trait_span("derived", 3));
-    bottom_pair.push(Span::raw("     "));
-    bottom_pair.extend(trait_span("job", 4));
-    let bottom_line = center_spans(bottom_pair, width);
+    // Row 5: DERIVED at bottom (centered)
+    let bottom_spans = trait_span("derived", 3);
+    let bottom_line = center_spans(bottom_spans, width);
     lines.push(bottom_line);
 
     lines.push(Line::from(""));
@@ -1064,7 +1039,6 @@ mod tests {
         assert_eq!(trait_symbol("localized"), "\u{25a1}");
         assert_eq!(trait_symbol("knowledge"), "\u{25ca}");
         assert_eq!(trait_symbol("derived"), "\u{2550}");
-        assert_eq!(trait_symbol("job"), "\u{25cb}");
         assert_eq!(trait_symbol("unknown"), "\u{00b7}");
     }
 
@@ -1077,10 +1051,12 @@ mod tests {
 
     #[test]
     fn test_trait_order() {
-        assert_eq!(TRAIT_ORDER.len(), 5);
+        // v11.2: job trait removed (4 traits instead of 5)
+        assert_eq!(TRAIT_ORDER.len(), 4);
         assert_eq!(TRAIT_ORDER[0], "invariant");
         assert_eq!(TRAIT_ORDER[1], "localized");
         assert_eq!(TRAIT_ORDER[2], "knowledge");
+        assert_eq!(TRAIT_ORDER[3], "derived");
     }
 
     #[test]
@@ -1144,13 +1120,7 @@ mod tests {
         assert!(examples[0].yaml.contains("trait: derived"));
     }
 
-    #[test]
-    fn test_code_examples_job() {
-        let examples = trait_code_examples("job");
-        assert_eq!(examples.len(), 1);
-        assert!(examples[0].title.contains("GenerationJob"));
-        assert!(examples[0].yaml.contains("trait: job"));
-    }
+    // Note: test_code_examples_job removed in v11.2 (job trait deferred to v12+)
 
     #[test]
     fn test_code_examples_unknown() {

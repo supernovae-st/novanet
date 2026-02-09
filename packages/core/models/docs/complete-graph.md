@@ -26,7 +26,7 @@ This diagram shows the complete NovaNet graph schema with all 42 node types and 
 ```mermaid
 flowchart TB
   %% NovaNet Graph v11.0.0
-  %% Generated: 65 nodes, 172 arcs
+  %% Generated: 62 nodes, 161 arcs
   %% Source: node-kinds/ + arc-kinds/ + taxonomy.yaml
 
   %% Trait styling (node_trait)
@@ -95,7 +95,6 @@ flowchart TB
       SEOComparison["🟣 SEOComparison"]
       SEOKeyword["🟣 SEOKeyword"]
       SEOKeywordMetrics["⚪ SEOKeywordMetrics"]
-      SEOMiningRun["⚙️ SEOMiningRun"]
       SEOPreposition["🟣 SEOPreposition"]
       SEOQuestion["🟣 SEOQuestion"]
     end
@@ -120,8 +119,6 @@ flowchart TB
     end
     subgraph TENANT_output["Generated Output"]
       BlockGenerated["⚪ BlockGenerated"]
-      EvaluationSignal["⚪ EvaluationSignal"]
-      GenerationJob["⚙️ GenerationJob"]
       OutputArtifact["⚪ OutputArtifact"]
       PageGenerated["⚪ PageGenerated"]
     end
@@ -144,7 +141,6 @@ flowchart TB
   BlockGenerated ==>|GENERATED_FOR| Block
   BlockGenerated ==>|GENERATED_FOR| Page
   BlockGenerated ==>|GENERATED_FROM| BlockType
-  BlockGenerated ==>|HAS_EVALUATION| EvaluationSignal
   BlockGenerated -.->|HAS_INTERNAL_LINK| PageGenerated
   BlockGenerated ==>|INFLUENCED_BY| EntityContent
   BlockGenerated ==>|PREVIOUS_VERSION| BlockGenerated
@@ -195,16 +191,9 @@ flowchart TB
   EntityContent -.->|FOR_LOCALE| Locale
   EntityContent -.->|MONITORS_GEO| GEOQuery
   EntityContent -.->|TARGETS| SEOKeyword
-  EvaluationSignal ==>|EVALUATED_BY_JOB| GenerationJob
   ExpressionSet -->|CONTAINS_EXPRESSION| Expression
   GEOQuery -->|HAS_GEO_ANSWERS| GEOAnswer
   GEOQuery --o|HAS_GEO_METRICS| GEOMetrics
-  GenerationJob ==>|CREATES_CONTENT| BlockGenerated
-  GenerationJob ==>|CREATES_CONTENT| PageGenerated
-  GenerationJob -.->|FOR_LOCALE| Locale
-  GenerationJob ==>|PRODUCES| OutputArtifact
-  GenerationJob ==>|TRIGGERED_BY| Project
-  GenerationJob ==>|USES_PROMPT| PromptArtifact
   GeoRegion -->|IN_CONTINENT| Continent
   GeoSubRegion -->|IN_REGION| GeoRegion
   LanguageBranch -->|BRANCH_OF| LanguageFamily
@@ -242,7 +231,6 @@ flowchart TB
   OutputArtifact ==>|BUNDLES| BlockGenerated
   OutputArtifact ==>|BUNDLES| PageGenerated
   OutputArtifact -.->|FOR_LOCALE| Locale
-  OutputArtifact ==>|HAS_EVALUATION| EvaluationSignal
   OutputArtifact ==>|PREVIOUS_VERSION| BlockGenerated
   OutputArtifact ==>|PREVIOUS_VERSION| OutputArtifact
   OutputArtifact ==>|PREVIOUS_VERSION| PageGenerated
@@ -266,7 +254,6 @@ flowchart TB
   PageGenerated -.->|FOR_LOCALE| Locale
   PageGenerated ==>|GENERATED_FOR| Block
   PageGenerated ==>|GENERATED_FOR| Page
-  PageGenerated ==>|HAS_EVALUATION| EvaluationSignal
   PageGenerated ==>|PREVIOUS_VERSION| BlockGenerated
   PageGenerated ==>|PREVIOUS_VERSION| OutputArtifact
   PageGenerated ==>|PREVIOUS_VERSION| PageGenerated
@@ -295,18 +282,17 @@ flowchart TB
   SEOKeyword --o|HAS_METRICS| SEOKeywordMetrics
   SEOKeyword -->|HAS_PREPOSITIONS| SEOPreposition
   SEOKeyword -->|HAS_QUESTIONS| SEOQuestion
-  SEOMiningRun --o|SEO_MINES| SEOKeyword
   SEOPreposition -.->|USE_CASE_ENTITY| Entity
   TabooSet -->|CONTAINS_TABOO| Taboo
   Tenant -->|HAS_PROJECT| Project
   TermSet -->|CONTAINS_TERM| Term
 
   %% Arc colors by family
-  linkStyle 3,4,13,14,15,16,18,19,20,21,24,25,26,67,71,72,74,75,76,111,112,114,115,116,117,119,120,132,136,137,138,139,140,141,142,143,144,157,158,159 stroke:#8b5cf6,stroke-width:2px
-  linkStyle 12,17,42,43,62,63,64,73,81,89,90,91,92,93,94,97,98,104,105,106,107,108,113,135,150,151,154,155,156 stroke:#22c55e,stroke-width:2px
-  linkStyle 70,164,167 stroke:#ec4899,stroke-width:2px
-  linkStyle 0,1,5,6,7,8,27,28,29,30,41,68,69,77,78,79,82,83,84,85,86,87,88,95,96,99,100,101,102,103,109,110,118,121,122,123,124,126,127,133,145,146,147,148,149,152,153,163,165,166,169,170,171 stroke:#3b82f6,stroke-width:2px
-  linkStyle 2,9,10,11,22,23,31,32,33,34,35,36,37,38,39,40,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,65,66,80,125,128,129,130,131,134,160,161,162,168 stroke:#f97316,stroke-width:2px
+  linkStyle 3,4,13,14,15,17,18,19,20,23,24,25,103,104,106,107,108,110,111,123,127,128,129,130,131,132,133,134,147,148,149 stroke:#8b5cf6,stroke-width:2px
+  linkStyle 12,16,41,42,61,62,63,73,81,82,83,84,85,86,89,90,96,97,98,99,100,105,126,140,141,144,145,146 stroke:#22c55e,stroke-width:2px
+  linkStyle 68,154 stroke:#ec4899,stroke-width:2px
+  linkStyle 0,1,5,6,7,8,26,27,28,29,40,66,67,69,70,71,74,75,76,77,78,79,80,87,88,91,92,93,94,95,101,102,109,112,113,114,115,117,118,124,135,136,137,138,139,142,143,153,155,156,158,159,160 stroke:#3b82f6,stroke-width:2px
+  linkStyle 2,9,10,11,21,22,30,31,32,33,34,35,36,37,38,39,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,64,65,72,116,119,120,121,122,125,150,151,152,157 stroke:#f97316,stroke-width:2px
 
   %% Class assignments
   class Adaptation knowledge
@@ -332,14 +318,12 @@ flowchart TB
   class Entity invariant
   class EntityCategory invariant
   class EntityContent localized
-  class EvaluationSignal derived
   class Expression knowledge
   class ExpressionSet knowledge
   class Formatting knowledge
   class GEOAnswer derived
   class GEOMetrics derived
   class GEOQuery knowledge
-  class GenerationJob job
   class GeoRegion invariant
   class GeoSubRegion invariant
   class IncomeGroup invariant
@@ -364,7 +348,6 @@ flowchart TB
   class SEOComparison knowledge
   class SEOKeyword knowledge
   class SEOKeywordMetrics derived
-  class SEOMiningRun job
   class SEOPreposition knowledge
   class SEOQuestion knowledge
   class Slugification knowledge
