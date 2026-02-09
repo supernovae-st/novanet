@@ -804,7 +804,11 @@ mod tests {
     fn test_hex_to_rgb_invalid_length() {
         // Too short (CSS shorthand not supported)
         assert_eq!(hex_to_rgb("#fff"), None, "3-char hex should be rejected");
-        assert_eq!(hex_to_rgb("fff"), None, "3-char hex without # should be rejected");
+        assert_eq!(
+            hex_to_rgb("fff"),
+            None,
+            "3-char hex without # should be rejected"
+        );
         assert_eq!(hex_to_rgb("#12"), None, "2-char hex should be rejected");
         assert_eq!(hex_to_rgb("#1"), None, "1-char hex should be rejected");
 

@@ -1091,10 +1091,7 @@ mod tests {
             all_content.contains("LAYER BREAKDOWN"),
             "should contain layer header"
         );
-        assert!(
-            all_content.contains("100%"),
-            "single realm should be 100%"
-        );
+        assert!(all_content.contains("100%"), "single realm should be 100%");
     }
 
     #[test]
@@ -1167,8 +1164,7 @@ mod tests {
             .iter()
             .filter(|l| {
                 let content: String = l.spans.iter().map(|s| s.content.as_ref()).collect();
-                (content.contains("global") || content.contains("tenant"))
-                    && content.contains('%')
+                (content.contains("global") || content.contains("tenant")) && content.contains('%')
             })
             .collect();
 
