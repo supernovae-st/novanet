@@ -31,7 +31,19 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
-    /// Mode 1: Meta-graph only (MATCH (n:Meta))
+    /// Comprehensive meta-graph visualization and validation (replaces meta)
+    Blueprint {
+        /// Specific view to render
+        #[arg(long, value_enum)]
+        view: Option<novanet::blueprint::views::BlueprintView>,
+        /// Output format
+        #[arg(long, value_enum, default_value_t = OutputFormat::Table)]
+        format: OutputFormat,
+        /// Skip validation for faster output
+        #[arg(long)]
+        no_validate: bool,
+    },
+    /// Mode 1: Meta-graph only (MATCH (n:Meta)) [deprecated: use blueprint]
     Meta {
         #[arg(long, value_enum, default_value_t = OutputFormat::Table)]
         format: OutputFormat,
@@ -345,6 +357,30 @@ async fn main() -> color_eyre::Result<()> {
     let root = novanet::config::resolve_root(cli.root.as_deref());
 
     match cli.command {
+        // ── Blueprint (YAML + optional Neo4j) ────────────────────
+        Commands::Blueprint { view, format, no_validate } => {
+            let root = root?;
+            // Try to connect to Neo4j for full validation, but work without it
+            let db = if cli.password.is_some() {
+                match connect_db(&cli).await {
+                    Ok(db) => Some(db),
+                    Err(_) => {
+                        eprintln!("⚠️  Could not connect to Neo4j, running YAML-only mode");
+                        None
+                    }
+                }
+            } else {
+                None
+            };
+            novanet::commands::blueprint::run_blueprint(
+                db.as_ref(),
+                &root,
+                view,
+                format,
+                no_validate,
+            ).await?;
+        }
+
         // ── Read commands (Neo4j) ────────────────────────────────
         Commands::Data { format } => {
             let db = connect_db(&cli).await?;
@@ -352,6 +388,7 @@ async fn main() -> color_eyre::Result<()> {
             novanet::commands::read::run_data(&db, format).await?;
         }
         Commands::Meta { format } => {
+            eprintln!("⚠️  'meta' is deprecated, use 'blueprint' instead");
             let db = connect_db(&cli).await?;
             eprintln!("novanet meta --format={format:?}");
             novanet::commands::read::run_meta(&db, format).await?;
