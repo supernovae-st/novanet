@@ -115,7 +115,7 @@ export const NODE_SIZES: Record<NodeType, NodeSize> = {
   // foundation (3)
   Project: { width: 280, height: 140 },
   BrandIdentity: { width: 220, height: 110 },
-  ProjectL10n: { width: 220, height: 110 },
+  ProjectContent: { width: 220, height: 110 },
 
   // structure (3)
   Page: { width: 240, height: 120 },
@@ -443,7 +443,7 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
     tertiary: '#8b5cf6',
     glow: '#6d28d940',
   },
-  ProjectL10n: {
+  ProjectContent: {
     primary: '#a78bfa',
     secondary: '#8b5cf6',
     tertiary: '#c4b5fd',

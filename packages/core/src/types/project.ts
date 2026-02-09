@@ -1,7 +1,7 @@
 // novanet-core/src/types/project.ts
 // Project + nodable architecture types (v7.2.2)
 //
-// v7.2.2: BrandL10n merged into ProjectL10n (CTAs, meta, SEO keywords)
+// v7.2.2: BrandL10n merged into ProjectContent (CTAs, meta, SEO keywords)
 // v7.1.0 STANDARD PROPERTIES:
 //   key, display_name, description, llm_context, created_at, updated_at
 
@@ -40,7 +40,7 @@ export interface VoiceTone {
   reserved_enthusiastic: number;
 }
 
-export interface ProjectL10n {
+export interface ProjectContent {
   // Standard properties (v7.1.0 - L10n nodes don't have key)
   display_name: string;
   description: string;
@@ -142,9 +142,9 @@ export interface BrandIdentity {
 }
 
 // Export all types
-// v7.2.5: Audience merged into ProjectL10n.target_audience
+// v7.2.5: Audience merged into ProjectContent.target_audience
 // v7.2.5: ValuePropL10n + SocialProofL10n removed
 export type ProjectNode =
   | Project
-  | ProjectL10n
+  | ProjectContent
   | BrandIdentity;

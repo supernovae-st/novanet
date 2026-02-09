@@ -69,9 +69,9 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     size: 18,
     layer: 'foundation',
   },
-  ProjectL10n: {
-    type: 'ProjectL10n',
-    label: 'Project L10n',
+  ProjectContent: {
+    type: 'ProjectContent',
+    label: 'Project Content',
     icon: '🌐',
     color: '#a78bfa',
     colorClass: 'bg-violet-400',

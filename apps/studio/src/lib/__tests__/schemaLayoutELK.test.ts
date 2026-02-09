@@ -125,7 +125,7 @@ describe('schemaLayoutELK', () => {
               label: 'Foundation',
               description: 'Core project identity',
               icon: '🏛️',
-              nodeTypes: ['Project', 'BrandIdentity', 'ProjectL10n'] as never[],
+              nodeTypes: ['Project', 'BrandIdentity', 'ProjectContent'] as never[],
             },
             structure: {
               label: 'Structure',
@@ -140,7 +140,7 @@ describe('schemaLayoutELK', () => {
         { id: 'schema-Organization', nodeType: 'Organization', realm: 'tenant', layer: 'config', label: 'Organization', description: '', trait: 'invariant' },
         { id: 'schema-Project', nodeType: 'Project', realm: 'tenant', layer: 'foundation', label: 'Project', description: '', trait: 'invariant' },
         { id: 'schema-BrandIdentity', nodeType: 'BrandIdentity', realm: 'tenant', layer: 'foundation', label: 'Brand Identity', description: '', trait: 'invariant' },
-        { id: 'schema-ProjectL10n', nodeType: 'ProjectL10n', realm: 'tenant', layer: 'foundation', label: 'Project L10n', description: '', trait: 'localized' },
+        { id: 'schema-ProjectContent', nodeType: 'ProjectContent', realm: 'tenant', layer: 'foundation', label: 'Project Content', description: '', trait: 'localized' },
         { id: 'schema-Page', nodeType: 'Page', realm: 'tenant', layer: 'structure', label: 'Page', description: '', trait: 'invariant' },
         { id: 'schema-Block', nodeType: 'Block', realm: 'tenant', layer: 'structure', label: 'Block', description: '', trait: 'invariant' },
         { id: 'schema-Locale', nodeType: 'Locale', realm: 'global', layer: 'config', label: 'Locale', description: '', trait: 'invariant' },

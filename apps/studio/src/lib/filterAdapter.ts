@@ -699,7 +699,7 @@ export const VIEW_PRESETS: ViewPreset[] = [
     shortcut: '8',
     filter: () => NovaNetFilter.create()
       .byTypes(
-        'ProjectL10n', 'EntityContent', 'PageGenerated', 'BlockGenerated',
+        'ProjectContent', 'EntityContent', 'PageGenerated', 'BlockGenerated',
         'SEOKeyword',
       ),
   },

@@ -66,7 +66,7 @@ const STRUCTURAL_COLORS: Record<string, GradientColors> = {
   Entity: { primary: '#f59e0b', secondary: '#f97316' },      // Amber -> Orange (v10.3 Entity-Centric)
   Locale: { primary: '#10b981', secondary: '#22c55e' },      // Emerald -> Green
   BrandIdentity: { primary: '#6d28d9', secondary: '#7c3aed' }, // Purple
-  ProjectL10n: { primary: '#a78bfa', secondary: '#8b5cf6' }, // Light Violet
+  ProjectContent: { primary: '#a78bfa', secondary: '#8b5cf6' }, // Light Violet
 };
 
 const DEFAULT_STRUCTURAL_COLORS: GradientColors = { primary: '#6366f1', secondary: '#8b5cf6' };

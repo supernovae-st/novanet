@@ -36,7 +36,7 @@ All nodes have: key, display_name, icon, description, llm_context, created_at, u
 
 **Config (3)** — Project-level configuration
 - Project: Root node with brand_name, core_values, category
-- ProjectL10n: Localized identity → FOR_LOCALE
+- ProjectContent: Localized identity → FOR_LOCALE
 - BrandIdentity: Visual identity (colors, fonts, style)
 
 **Knowledge (7)** — Locale knowledge base
