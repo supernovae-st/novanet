@@ -203,13 +203,13 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
         }
     };
 
-    // Box-drawing helpers
-    let branch = |is_last: bool| if is_last { "└─" } else { "├─" };
-    let cont = |parent_is_last: bool| if parent_is_last { "  " } else { "│ " };
+    // Box-drawing helpers (using extracted pure functions)
+    let branch = branch_char;
+    let cont = cont_char;
 
     // === KINDS SECTION ===
     let kinds_collapsed = app.tree.is_collapsed("kinds");
-    let kinds_icon = if kinds_collapsed { "▶" } else { "▼" };
+    let kinds_icon = expand_icon(kinds_collapsed);
     let kinds_count: usize = app
         .tree
         .realms
@@ -239,7 +239,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
             let realm_is_last = ri == realm_count - 1 && !has_arcs;
             let realm_key = format!("realm:{}", realm.key);
             let realm_collapsed = app.tree.is_collapsed(&realm_key);
-            let realm_icon = if realm_collapsed { "▶" } else { "▼" };
+            let realm_icon = expand_icon(realm_collapsed);
 
             let realm_color = hex_to_color(&realm.color);
             all_lines.push(make_line(
@@ -285,7 +285,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                     let layer_is_empty = layer_instance_count == 0;
 
                     // Show expand icon only if layer has content
-                    let layer_icon = if layer_collapsed { "▶" } else { "▼" };
+                    let layer_icon = expand_icon(layer_collapsed);
 
                     // In Data mode: gray out empty layers, show instance count
                     let layer_color = hex_to_color(&layer.color);
@@ -340,7 +340,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                             let kind_icon = if is_data_mode {
                                 if let Some(instances) = app.tree.get_instances(&kind.key) {
                                     if !instances.is_empty() {
-                                        if kind_collapsed { "▶" } else { "▼" }
+                                        expand_icon(kind_collapsed)
                                     } else {
                                         ""
                                     }
@@ -359,30 +359,9 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                             let icon = trait_icon(&kind.trait_name);
                             let arc_count = kind.arcs.len();
                             let (display_text, kind_text_color) = if is_data_mode {
-                                // Build health badge if data present
-                                let health_badge = if let Some(percent) = kind.health_percent {
-                                    let filled = percent / 10;
-                                    let empty = 10 - filled;
-                                    let issues = kind.issues_count.unwrap_or(0);
-                                    if issues > 0 {
-                                        format!(
-                                            " {}{}{}% ⚠{}",
-                                            "━".repeat(filled as usize),
-                                            "░".repeat(empty as usize),
-                                            percent,
-                                            issues
-                                        )
-                                    } else {
-                                        format!(
-                                            " {}{}{}%",
-                                            "━".repeat(filled as usize),
-                                            "░".repeat(empty as usize),
-                                            percent
-                                        )
-                                    }
-                                } else {
-                                    String::new()
-                                };
+                                // Build health badge using extracted function
+                                let health_badge =
+                                    format_health_badge(kind.health_percent, kind.issues_count);
                                 let text = format!(
                                     "{} {} ({}){}",
                                     icon, kind.display_name, kind.instance_count, health_badge
@@ -482,41 +461,20 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                         };
 
                                         // Badge for missing required properties: (✗N!)
-                                        let missing_badge = if instance.missing_required_count > 0 {
-                                            format!(" (✗{}!)", instance.missing_required_count)
-                                        } else {
-                                            String::new()
-                                        };
+                                        let missing_badge =
+                                            format_missing_badge(instance.missing_required_count);
 
                                         // Arc count badge: [->N <-M] (only if has arcs)
-                                        let out_count = instance.outgoing_arcs.len();
-                                        let in_count = instance.incoming_arcs.len();
-                                        let arc_badge = if out_count > 0 || in_count > 0 {
-                                            format!(" [->{}|<-{}]", out_count, in_count)
-                                        } else {
-                                            String::new()
-                                        };
+                                        let arc_badge = format_arc_badge(
+                                            instance.outgoing_arcs.len(),
+                                            instance.incoming_arcs.len(),
+                                        );
 
                                         // Completeness bar: [==--] only shown if incomplete
-                                        let completeness_badge = if instance.total_properties > 0 {
-                                            let filled = instance.filled_properties;
-                                            let total = instance.total_properties;
-                                            if filled >= total {
-                                                // 100% complete - hide badge
-                                                String::new()
-                                            } else {
-                                                let ratio = filled as f32 / total as f32;
-                                                let filled_chars = (ratio * 4.0).round() as usize;
-                                                let empty_chars = 4 - filled_chars;
-                                                format!(
-                                                    " [{}{}]",
-                                                    "=".repeat(filled_chars),
-                                                    "-".repeat(empty_chars)
-                                                )
-                                            }
-                                        } else {
-                                            String::new()
-                                        };
+                                        let completeness_badge = format_completeness_badge(
+                                            instance.filled_properties,
+                                            instance.total_properties,
+                                        );
 
                                         let tree_prefix = format!(
                                             "{}{}{}{}",
@@ -605,7 +563,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
 
     // === RELATIONS SECTION ===
     let arcs_collapsed = app.tree.is_collapsed("arcs");
-    let arcs_icon = if arcs_collapsed { "▶" } else { "▼" };
+    let arcs_icon = expand_icon(arcs_collapsed);
     let arcs_count: usize = app
         .tree
         .arc_families
@@ -632,7 +590,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
             let family_is_last = fi == family_count - 1;
             let family_key = format!("family:{}", family.key);
             let family_collapsed = app.tree.is_collapsed(&family_key);
-            let family_icon = if family_collapsed { "▶" } else { "▼" };
+            let family_icon = expand_icon(family_collapsed);
 
             all_lines.push(make_line(
                 idx,
@@ -906,9 +864,345 @@ fn render_filtered_instances(
     f.render_widget(paragraph, area);
 }
 
+// =============================================================================
+// PURE HELPER FUNCTIONS (extracted for testability)
+// =============================================================================
+
+/// Get the branch character for tree drawing.
+/// - `└─` for last item (no more siblings)
+/// - `├─` for non-last item (more siblings below)
+#[inline]
+pub(super) fn branch_char(is_last: bool) -> &'static str {
+    if is_last { "└─" } else { "├─" }
+}
+
+/// Get the continuation character for tree drawing.
+/// - `  ` (two spaces) if parent was last (no vertical line needed)
+/// - `│ ` if parent was not last (vertical line continues)
+#[inline]
+pub(super) fn cont_char(parent_is_last: bool) -> &'static str {
+    if parent_is_last { "  " } else { "│ " }
+}
+
+/// Get the expand/collapse icon for a tree node.
+/// - `▶` when collapsed (pointing right, can expand)
+/// - `▼` when expanded (pointing down, can collapse)
+#[inline]
+pub(super) fn expand_icon(is_collapsed: bool) -> &'static str {
+    if is_collapsed { "▶" } else { "▼" }
+}
+
+/// Build a tree prefix string for a given depth and position.
+///
+/// # Arguments
+/// * `parent_is_last` - Slice of booleans indicating whether each ancestor was the last child
+/// * `is_last` - Whether this node is the last child at its level
+///
+/// # Returns
+/// A string like "│ │ └─" for drawing tree structure
+///
+/// NOTE: Currently used only in tests to verify tree prefix logic.
+/// Future refactoring could use this in render_tree to replace inline format!() calls.
+#[allow(dead_code)]
+pub(super) fn build_tree_prefix(parent_is_last: &[bool], is_last: bool) -> String {
+    let mut prefix = String::with_capacity(parent_is_last.len() * 3 + 3);
+    for &was_last in parent_is_last {
+        prefix.push_str(cont_char(was_last));
+    }
+    prefix.push_str(branch_char(is_last));
+    prefix
+}
+
+/// Format a health badge for a Kind node.
+/// Returns empty string if no health data, or a bar like " ━━━░░░░░░░50%"
+pub(super) fn format_health_badge(health_percent: Option<u8>, issues_count: Option<usize>) -> String {
+    let Some(percent) = health_percent else {
+        return String::new();
+    };
+    let filled = percent / 10;
+    let empty = 10 - filled;
+    let issues = issues_count.unwrap_or(0);
+    if issues > 0 {
+        format!(
+            " {}{}{}% ⚠{}",
+            "━".repeat(filled as usize),
+            "░".repeat(empty as usize),
+            percent,
+            issues
+        )
+    } else {
+        format!(
+            " {}{}{}%",
+            "━".repeat(filled as usize),
+            "░".repeat(empty as usize),
+            percent
+        )
+    }
+}
+
+/// Format a completeness badge for an instance.
+/// Returns empty string if 100% complete, or "[==--]" style bar if incomplete.
+pub(super) fn format_completeness_badge(filled: usize, total: usize) -> String {
+    if total == 0 {
+        return String::new();
+    }
+    if filled >= total {
+        // 100% complete - hide badge
+        return String::new();
+    }
+    let ratio = filled as f32 / total as f32;
+    let filled_chars = (ratio * 4.0).round() as usize;
+    let empty_chars = 4 - filled_chars;
+    format!(
+        " [{}{}]",
+        "=".repeat(filled_chars),
+        "-".repeat(empty_chars)
+    )
+}
+
+/// Format an arc count badge for an instance.
+/// Returns empty string if no arcs, or "[->N|<-M]" if has arcs.
+pub(super) fn format_arc_badge(outgoing: usize, incoming: usize) -> String {
+    if outgoing == 0 && incoming == 0 {
+        String::new()
+    } else {
+        format!(" [->{}|<-{}]", outgoing, incoming)
+    }
+}
+
+/// Format a missing required properties badge.
+/// Returns empty string if none missing, or " (✗N!)" if missing.
+pub(super) fn format_missing_badge(missing_count: usize) -> String {
+    if missing_count > 0 {
+        format!(" (✗{}!)", missing_count)
+    } else {
+        String::new()
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    // =============================================================================
+    // Tree structure helpers tests
+    // =============================================================================
+
+    #[test]
+    fn test_branch_char_last() {
+        assert_eq!(branch_char(true), "└─");
+    }
+
+    #[test]
+    fn test_branch_char_not_last() {
+        assert_eq!(branch_char(false), "├─");
+    }
+
+    #[test]
+    fn test_cont_char_parent_was_last() {
+        assert_eq!(cont_char(true), "  ");
+    }
+
+    #[test]
+    fn test_cont_char_parent_was_not_last() {
+        assert_eq!(cont_char(false), "│ ");
+    }
+
+    #[test]
+    fn test_expand_icon_collapsed() {
+        assert_eq!(expand_icon(true), "▶");
+    }
+
+    #[test]
+    fn test_expand_icon_expanded() {
+        assert_eq!(expand_icon(false), "▼");
+    }
+
+    // =============================================================================
+    // Tree prefix building tests
+    // =============================================================================
+
+    #[test]
+    fn test_build_tree_prefix_root_level() {
+        // First level item (no parents), last child
+        assert_eq!(build_tree_prefix(&[], true), "└─");
+        // First level item, not last
+        assert_eq!(build_tree_prefix(&[], false), "├─");
+    }
+
+    #[test]
+    fn test_build_tree_prefix_second_level() {
+        // Second level, parent was not last, this is last
+        assert_eq!(build_tree_prefix(&[false], true), "│ └─");
+        // Second level, parent was not last, this is not last
+        assert_eq!(build_tree_prefix(&[false], false), "│ ├─");
+        // Second level, parent was last, this is last
+        assert_eq!(build_tree_prefix(&[true], true), "  └─");
+        // Second level, parent was last, this is not last
+        assert_eq!(build_tree_prefix(&[true], false), "  ├─");
+    }
+
+    #[test]
+    fn test_build_tree_prefix_third_level() {
+        // Third level: grandparent not last, parent not last, this is last
+        assert_eq!(build_tree_prefix(&[false, false], true), "│ │ └─");
+        // Third level: grandparent last, parent not last, this is not last
+        assert_eq!(build_tree_prefix(&[true, false], false), "  │ ├─");
+        // Third level: all were last
+        assert_eq!(build_tree_prefix(&[true, true], true), "    └─");
+    }
+
+    #[test]
+    fn test_build_tree_prefix_deep_nesting() {
+        // Deep nesting with mixed last states
+        let prefix = build_tree_prefix(&[false, true, false, true], false);
+        assert_eq!(prefix, "│   │   ├─");
+    }
+
+    // =============================================================================
+    // Health badge tests
+    // =============================================================================
+
+    #[test]
+    fn test_format_health_badge_none() {
+        assert_eq!(format_health_badge(None, None), "");
+    }
+
+    #[test]
+    fn test_format_health_badge_zero_percent() {
+        let badge = format_health_badge(Some(0), None);
+        assert!(badge.contains("0%"));
+        assert!(badge.contains("░░░░░░░░░░")); // 10 empty chars
+    }
+
+    #[test]
+    fn test_format_health_badge_fifty_percent() {
+        let badge = format_health_badge(Some(50), None);
+        assert!(badge.contains("50%"));
+        assert!(badge.contains("━━━━━")); // 5 filled chars
+        assert!(badge.contains("░░░░░")); // 5 empty chars
+    }
+
+    #[test]
+    fn test_format_health_badge_hundred_percent() {
+        let badge = format_health_badge(Some(100), None);
+        assert!(badge.contains("100%"));
+        assert!(badge.contains("━━━━━━━━━━")); // 10 filled chars
+    }
+
+    #[test]
+    fn test_format_health_badge_with_issues() {
+        let badge = format_health_badge(Some(70), Some(3));
+        assert!(badge.contains("70%"));
+        assert!(badge.contains("⚠3"));
+    }
+
+    #[test]
+    fn test_format_health_badge_with_zero_issues() {
+        let badge = format_health_badge(Some(80), Some(0));
+        assert!(badge.contains("80%"));
+        assert!(!badge.contains("⚠"));
+    }
+
+    // =============================================================================
+    // Completeness badge tests
+    // =============================================================================
+
+    #[test]
+    fn test_format_completeness_badge_empty() {
+        assert_eq!(format_completeness_badge(0, 0), "");
+    }
+
+    #[test]
+    fn test_format_completeness_badge_complete() {
+        // 100% complete - should hide badge
+        assert_eq!(format_completeness_badge(10, 10), "");
+        assert_eq!(format_completeness_badge(5, 5), "");
+    }
+
+    #[test]
+    fn test_format_completeness_badge_zero_filled() {
+        let badge = format_completeness_badge(0, 8);
+        assert_eq!(badge, " [----]"); // 0/8 = 0%, rounds to 0 filled
+    }
+
+    #[test]
+    fn test_format_completeness_badge_half_filled() {
+        let badge = format_completeness_badge(4, 8);
+        assert_eq!(badge, " [==--]"); // 50% = 2 filled chars
+    }
+
+    #[test]
+    fn test_format_completeness_badge_three_quarters() {
+        let badge = format_completeness_badge(6, 8);
+        // 6/8 = 75% -> 0.75 * 4 = 3 filled chars
+        assert_eq!(badge, " [===-]");
+    }
+
+    #[test]
+    fn test_format_completeness_badge_almost_complete() {
+        // 7/8 = 87.5% rounds to 4 filled chars (but badge shown since not 100%)
+        let badge = format_completeness_badge(7, 8);
+        assert_eq!(badge, " [====]");
+
+        // 9/10 = 90% also rounds to 4 filled chars
+        let badge2 = format_completeness_badge(9, 10);
+        assert_eq!(badge2, " [====]");
+    }
+
+    #[test]
+    fn test_format_completeness_badge_low_fill() {
+        // 1/8 = 12.5% -> 0.5 rounds to 1
+        let badge = format_completeness_badge(1, 8);
+        assert_eq!(badge, " [=---]");
+
+        // 2/8 = 25% -> 1 filled char
+        let badge2 = format_completeness_badge(2, 8);
+        assert_eq!(badge2, " [=---]");
+    }
+
+    // =============================================================================
+    // Arc badge tests
+    // =============================================================================
+
+    #[test]
+    fn test_format_arc_badge_no_arcs() {
+        assert_eq!(format_arc_badge(0, 0), "");
+    }
+
+    #[test]
+    fn test_format_arc_badge_outgoing_only() {
+        assert_eq!(format_arc_badge(5, 0), " [->5|<-0]");
+    }
+
+    #[test]
+    fn test_format_arc_badge_incoming_only() {
+        assert_eq!(format_arc_badge(0, 3), " [->0|<-3]");
+    }
+
+    #[test]
+    fn test_format_arc_badge_both() {
+        assert_eq!(format_arc_badge(2, 7), " [->2|<-7]");
+    }
+
+    // =============================================================================
+    // Missing badge tests
+    // =============================================================================
+
+    #[test]
+    fn test_format_missing_badge_none() {
+        assert_eq!(format_missing_badge(0), "");
+    }
+
+    #[test]
+    fn test_format_missing_badge_one() {
+        assert_eq!(format_missing_badge(1), " (✗1!)");
+    }
+
+    #[test]
+    fn test_format_missing_badge_many() {
+        assert_eq!(format_missing_badge(5), " (✗5!)");
+    }
 
     // =============================================================================
     // Highlight matches tests (fuzzy search highlighting)
