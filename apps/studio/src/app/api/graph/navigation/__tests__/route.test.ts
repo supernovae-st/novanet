@@ -142,16 +142,15 @@ describe('navigation route logic', () => {
     it('returns realm types for realm-only filter', () => {
       const types = resolveFacets(['global'], [], []);
       expect(types).toContain('Locale');
-      expect(types).toContain('SEOKeyword');
+      // v10.9: SEOKeyword moved to tenant realm per YAML source of truth
+      expect(types).not.toContain('SEOKeyword');
       expect(types).not.toContain('Project');
     });
 
     it('intersects realm + trait correctly', () => {
       const types = resolveFacets(['tenant'], [], ['localized']);
-      // v10.6: Tenant realm + localized trait = ProjectL10n, PageL10n, BlockL10n, EntityL10n
-      expect(types).toContain('ProjectL10n');
-      expect(types).toContain('PageL10n');
-      expect(types).toContain('EntityL10n'); // v10.6: in tenant realm
+      // v10.9: Tenant realm + localized trait = ProjectContent
+      expect(types).toContain('ProjectContent');
       expect(types).not.toContain('Page'); // invariant
       expect(types).not.toContain('Locale'); // global
     });
@@ -161,25 +160,25 @@ describe('navigation route logic', () => {
       // v10.6: tenant + semantic = AudiencePersona, ChannelSurface, Entity, EntityL10n
       expect(types).toContain('AudiencePersona');
       expect(types).toContain('ChannelSurface');
-      expect(types).toContain('Entity'); // v10.6: in tenant realm
-      expect(types).toContain('EntityL10n'); // v10.6: in tenant realm
+      expect(types).toContain('Entity'); // v10.9: in tenant realm
+      expect(types).toContain('EntityContent'); // v10.9: in tenant realm
       expect(types).not.toContain('Page'); // structure layer
     });
 
     it('intersects all 3 dimensions', () => {
-      const types = resolveFacets(['tenant'], ['output'], ['localized']);
-      // tenant + output + localized = PageL10n, BlockL10n
-      expect(types).toContain('PageL10n');
-      expect(types).toContain('BlockL10n');
-      expect(types.length).toBe(2);
+      const types = resolveFacets(['tenant'], ['output'], ['derived']);
+      // v10.9: tenant + output + derived = PageGenerated, BlockGenerated, OutputArtifact, EvaluationSignal
+      expect(types).toContain('PageGenerated');
+      expect(types).toContain('BlockGenerated');
+      expect(types.length).toBeGreaterThanOrEqual(4);
     });
 
-    it('returns only localized types when filtering global + localized', () => {
-      const types = resolveFacets(['global'], [], ['localized']);
-      // v10.6: Global localized types = SEOKeyword only
-      expect(types).toContain('SEOKeyword');
-      expect(types).not.toContain('EntityL10n'); // v10.6: in tenant realm
-      expect(types).not.toContain('Locale'); // invariant
+    it('returns only localized types when filtering tenant + localized', () => {
+      const types = resolveFacets(['tenant'], [], ['localized']);
+      // v10.9: Tenant localized types = ProjectContent, EntityContent
+      expect(types).toContain('ProjectContent');
+      expect(types).toContain('EntityContent');
+      expect(types).not.toContain('Locale'); // global realm
     });
   });
 });

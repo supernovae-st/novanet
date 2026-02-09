@@ -25,7 +25,7 @@ export type {
   StandardNodeProperties,
   // Nodes
   Project,
-  ProjectL10n,
+  ProjectContent,
   BrandIdentity,
   Entity,
   EntityContent,

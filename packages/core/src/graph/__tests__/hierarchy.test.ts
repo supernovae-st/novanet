@@ -1,5 +1,5 @@
 // packages/core/src/graph/__tests__/hierarchy.test.ts
-// Tests for REALM_HIERARCHY — v10.6.0 (2-Realm Architecture)
+// Tests for REALM_HIERARCHY — v10.9.0 (2 realms, 9 layers)
 import { describe, it, expect } from 'vitest';
 import { REALM_HIERARCHY, getRealmDefinition, getLayerMeta, getLayersForRealm } from '../hierarchy';
 import type { Realm } from '../../types/nodes';
@@ -16,26 +16,29 @@ describe('graph/hierarchy', () => {
     const global = REALM_HIERARCHY.global;
     expect(global.label).toBe('GLOBAL');
     expect(global.icon).toBe('🌍');
-    expect(Object.keys(global.layers)).toHaveLength(3);  // config, locale-knowledge, seo
+    expect(Object.keys(global.layers)).toHaveLength(2);  // config, locale-knowledge
     expect(global.layers.config.nodeTypes).toContain('Locale');
-    // locale-knowledge layer (12 nodes: 6 Sets + 6 Atoms)
-    expect(global.layers['locale-knowledge'].nodeTypes).toHaveLength(12);
+    // v10.9: locale-knowledge layer has 18 nodes (6 Sets + 6 Atoms + 6 Linguistic)
+    expect(global.layers['locale-knowledge'].nodeTypes).toHaveLength(18);
     expect(global.layers['locale-knowledge'].nodeTypes).toContain('TermSet');
     expect(global.layers['locale-knowledge'].nodeTypes).toContain('Term');
-    expect(global.layers.seo.nodeTypes).toContain('SEOKeyword');
+    expect(global.layers['locale-knowledge'].nodeTypes).toContain('LanguageFamily');
   });
 
   it('should have correct tenant realm structure', () => {
     const tenant = REALM_HIERARCHY.tenant;
     expect(tenant.label).toBe('TENANT');
     expect(tenant.icon).toBe('🏢');
-    expect(Object.keys(tenant.layers)).toHaveLength(6);  // config, foundation, structure, semantic, instruction, output
-    // config layer has Organization
+    expect(Object.keys(tenant.layers)).toHaveLength(7);  // config, foundation, structure, semantic, seo, instruction, output
+    // config layer has Organization + Tenant
     expect(tenant.layers.config.nodeTypes).toContain('Organization');
+    expect(tenant.layers.config.nodeTypes).toContain('Tenant');
     expect(tenant.layers.foundation.nodeTypes).toContain('Project');
     // Entity/EntityContent are in tenant/semantic
     expect(tenant.layers.semantic.nodeTypes).toContain('Entity');
     expect(tenant.layers.semantic.nodeTypes).toContain('EntityContent');
+    // v10.9: SEO is in tenant realm
+    expect(tenant.layers.seo.nodeTypes).toContain('SEOKeyword');
   });
 
   it('getRealmDefinition should return realm metadata', () => {
@@ -51,32 +54,32 @@ describe('graph/hierarchy', () => {
 
   it('getLayersForRealm should return all layers for a realm', () => {
     const globalLayers = getLayersForRealm('global');
-    expect(globalLayers).toHaveLength(3);
+    expect(globalLayers).toHaveLength(2);  // config, locale-knowledge
     expect(globalLayers).toContain('config');
     expect(globalLayers).toContain('locale-knowledge');
-    expect(globalLayers).toContain('seo');
 
     const tenantLayers = getLayersForRealm('tenant');
-    expect(tenantLayers).toHaveLength(6);
+    expect(tenantLayers).toHaveLength(7);  // config, foundation, structure, semantic, seo, instruction, output
     expect(tenantLayers).toContain('config');
     expect(tenantLayers).toContain('foundation');
     expect(tenantLayers).toContain('structure');
     expect(tenantLayers).toContain('semantic');
+    expect(tenantLayers).toContain('seo');
     expect(tenantLayers).toContain('instruction');
     expect(tenantLayers).toContain('output');
   });
 
   it('should have correct node counts per layer', () => {
-    // Global realm: config (5), locale-knowledge (12), seo (3) = 20
-    expect(REALM_HIERARCHY.global.layers.config.nodeTypes).toHaveLength(5);
-    expect(REALM_HIERARCHY.global.layers['locale-knowledge'].nodeTypes).toHaveLength(12);
-    expect(REALM_HIERARCHY.global.layers.seo.nodeTypes).toHaveLength(3);
+    // v10.9: Global realm: config (13), locale-knowledge (18) = 31
+    expect(REALM_HIERARCHY.global.layers.config.nodeTypes).toHaveLength(13);
+    expect(REALM_HIERARCHY.global.layers['locale-knowledge'].nodeTypes).toHaveLength(18);
 
-    // Tenant realm: config (1), foundation (3), structure (3), semantic (4), instruction (7), output (5) = 23
-    expect(REALM_HIERARCHY.tenant.layers.config.nodeTypes).toHaveLength(1);  // Organization
+    // v10.9: Tenant realm: config (2), foundation (3), structure (3), semantic (4), seo (9), instruction (7), output (5) = 33
+    expect(REALM_HIERARCHY.tenant.layers.config.nodeTypes).toHaveLength(2);  // Organization, Tenant
     expect(REALM_HIERARCHY.tenant.layers.foundation.nodeTypes).toHaveLength(3);
     expect(REALM_HIERARCHY.tenant.layers.structure.nodeTypes).toHaveLength(3);
     expect(REALM_HIERARCHY.tenant.layers.semantic.nodeTypes).toHaveLength(4);  // Entity, EntityContent, AudiencePersona, ChannelSurface
+    expect(REALM_HIERARCHY.tenant.layers.seo.nodeTypes).toHaveLength(9);  // SEO + GEO
     expect(REALM_HIERARCHY.tenant.layers.instruction.nodeTypes).toHaveLength(7);
     expect(REALM_HIERARCHY.tenant.layers.output.nodeTypes).toHaveLength(5);
   });
@@ -105,7 +108,7 @@ describe('graph/hierarchy', () => {
     }
   });
 
-  it('should have total of 43 nodes across all realms', () => {
+  it('should have total of 64 nodes across all realms', () => {
     let totalNodes = 0;
 
     for (const realm of ['global', 'tenant'] as Realm[]) {
@@ -115,6 +118,6 @@ describe('graph/hierarchy', () => {
       }
     }
 
-    expect(totalNodes).toBe(43);
+    expect(totalNodes).toBe(64);
   });
 });

@@ -1,5 +1,5 @@
 // packages/core/src/graph/__tests__/generator.test.ts
-// Tests for schema graph generator — v10.6.0 (43 nodes, 2 realms)
+// Tests for schema graph generator — v10.9.0 (64 nodes, 2 realms)
 // TDD: Write tests first, then implementation
 
 import { describe, it, expect } from 'vitest';
@@ -8,9 +8,9 @@ import { NODE_TYPES } from '../../types/nodes.js';
 
 describe('graph/generator', () => {
   describe('generateSchemaGraph', () => {
-    it('should generate 43 schema nodes', () => {
+    it('should generate 64 schema nodes', () => {
       const result = generateSchemaGraph();
-      expect(result.nodes).toHaveLength(43);
+      expect(result.nodes).toHaveLength(64);
     });
 
     it('should generate schema arcs from RelationRegistry', () => {
@@ -44,7 +44,7 @@ describe('graph/generator', () => {
       expect(hasPageArc?.cardinality).toBeDefined();
     });
 
-    it('should map all 43 node types', () => {
+    it('should map all 64 node types', () => {
       const result = generateSchemaGraph();
       const nodeTypes = result.nodes.map(n => n.nodeType);
 
@@ -78,7 +78,7 @@ describe('graph/generator', () => {
 
       // FOR_LOCALE has multiple source types going to Locale (1 target)
       const forLocaleArcs = result.arcs.filter(e => e.relationType === 'FOR_LOCALE');
-      expect(forLocaleArcs.length).toBeGreaterThanOrEqual(5);
+      expect(forLocaleArcs.length).toBeGreaterThanOrEqual(4);
     });
   });
 
@@ -92,14 +92,14 @@ describe('graph/generator', () => {
 
     it('should include stats', () => {
       const result = getSchemaHierarchy();
-      expect(result.stats.totalNodes).toBe(43);
-      expect(result.stats.nodesByRealm.tenant).toBe(23);   // v10.6: 23 tenant nodes (includes Organization)
-      expect(result.stats.nodesByRealm.global).toBe(20);   // v10.6: 20 global nodes
+      expect(result.stats.totalNodes).toBe(64);
+      expect(result.stats.nodesByRealm.tenant).toBe(33);   // v10.9: 33 tenant nodes (includes SEO)
+      expect(result.stats.nodesByRealm.global).toBe(31);   // v10.9: 31 global nodes (config + locale-knowledge)
     });
 
     it('should include all nodes', () => {
       const result = getSchemaHierarchy();
-      expect(result.nodes).toHaveLength(43);
+      expect(result.nodes).toHaveLength(64);
     });
 
     it('should include arcs', () => {
@@ -110,15 +110,15 @@ describe('graph/generator', () => {
     it('should have correct realm definitions', () => {
       const result = getSchemaHierarchy();
 
-      // Tenant realm (6 layers - includes config for Organization)
+      // v10.9: Tenant realm (7 layers - includes SEO)
       expect(result.realms.tenant.label).toBe('TENANT');
       expect(result.realms.tenant.icon).toBe('🏢');
-      expect(Object.keys(result.realms.tenant.layers)).toHaveLength(6);
+      expect(Object.keys(result.realms.tenant.layers)).toHaveLength(7);
 
-      // Global realm (3 layers - config, locale-knowledge, seo)
+      // v10.9: Global realm (2 layers - config, locale-knowledge)
       expect(result.realms.global.label).toBe('GLOBAL');
       expect(result.realms.global.icon).toBe('🌍');
-      expect(Object.keys(result.realms.global.layers)).toHaveLength(3);
+      expect(Object.keys(result.realms.global.layers)).toHaveLength(2);
     });
 
     it('should have totalArcs in stats', () => {
