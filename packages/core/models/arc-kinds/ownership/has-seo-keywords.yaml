@@ -8,6 +8,7 @@
 arc:
   name: HAS_SEO_KEYWORDS
   family: ownership
+  scope: cross_realm
   source: Locale
   target: SEOKeyword
   cardinality: one_to_many
