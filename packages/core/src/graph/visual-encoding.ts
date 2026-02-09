@@ -126,10 +126,10 @@ export const ARC_STATES: Record<ArcStateKey, ArcStateStyle> = {
 };
 
 // =============================================================================
-// TRAIT BORDERS (5) — Studio CSS + TUI Unicode
+// TRAIT BORDERS (4) — Studio CSS + TUI Unicode
 // =============================================================================
 
-export type TraitKey = 'derived' | 'invariant' | 'job' | 'knowledge' | 'localized';
+export type TraitKey = 'derived' | 'invariant' | 'knowledge' | 'localized';
 
 export interface TraitBorderStyle {
   cssStyle: string;
@@ -159,15 +159,6 @@ export const TRAIT_BORDERS: Record<TraitKey, TraitBorderStyle> = {
     unicodeChar: '─',
     unicodeStyle: 'light',
     description: 'Stable, doesn\'t change between locales',
-  },
-  job: {
-    cssStyle: 'solid',
-    cssWidth: '1px',
-    cssDashArray: null,
-    cssCornerRadius: '8px',
-    unicodeChar: '─',
-    unicodeStyle: 'thin',
-    description: 'Processing task / generation job',
   },
   knowledge: {
     cssStyle: 'dotted',
@@ -423,11 +414,10 @@ export const LAYERS_ICONS: Record<string, IconDefinition> = {
   'structure': { web: 'layout', terminal: '▤', description: 'Information architecture' },
 };
 
-// TRAITS ICONS (5)
+// TRAITS ICONS (4)
 export const TRAITS_ICONS: Record<string, IconDefinition> = {
   'derived': { web: 'calculator', terminal: '▪', description: 'Computed from other nodes' },
   'invariant': { web: 'lock', terminal: '■', description: 'Stable across all locales' },
-  'job': { web: 'play', terminal: '▫', description: 'Processing task' },
   'knowledge': { web: 'brain', terminal: '◊', description: 'Locale expertise data' },
   'localized': { web: 'globe', terminal: '□', description: 'Generated natively per locale' },
 };

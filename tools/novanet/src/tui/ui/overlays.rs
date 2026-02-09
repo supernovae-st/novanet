@@ -817,9 +817,10 @@ mod tests {
 
     #[test]
     fn test_legend_trait_styles_count() {
-        // Legend should show 5 trait styles: invariant, localized, knowledge, derived, job
-        let expected_traits = vec!["invariant", "localized", "knowledge", "derived", "job"];
-        assert_eq!(expected_traits.len(), 5);
+        // Legend should show 4 trait styles: invariant, localized, knowledge, derived
+        // v11.2: job trait removed (deferred to v12+)
+        let expected_traits = vec!["invariant", "localized", "knowledge", "derived"];
+        assert_eq!(expected_traits.len(), 4);
     }
 
     // =========================================================================
