@@ -183,7 +183,6 @@ export interface UIState {
   viewMode: ViewMode;
   sidebarOpen: boolean;
   panelOpen: boolean;
-  searchOpen: boolean;
   focusMode: boolean;
 }
 
@@ -243,22 +242,3 @@ export interface AiQuery {
   createdAt: string;
 }
 
-/**
- * A user-saved Cypher query (persisted to localStorage)
- * Note: Uses ISO strings for dates (localStorage serialization)
- */
-export interface SavedQuery {
-  id: string;
-  /** Display name */
-  name: string;
-  /** Optional description */
-  description?: string;
-  /** Emoji icon */
-  icon: string;
-  /** Cypher query */
-  cypher: string;
-  /** Creation timestamp (ISO string for localStorage) */
-  createdAt: string;
-  /** Last modified timestamp (ISO string for localStorage) */
-  updatedAt: string;
-}

@@ -3,15 +3,14 @@
  */
 
 export { useFilteredGraph, type FilteredGraphResult } from './useFilteredGraph';
-export { useNavigationMode, type UseNavigationModeReturn } from './useNavigationMode';
 export { useGraphData, type UseGraphDataReturn, type FetchOptions } from './useGraphData';
+export { useTriStateSelection, calculateCheckboxState, type UseTriStateSelectionReturn } from './useTriStateSelection';
 export { useUrlSync, UrlSyncComponent } from './useUrlSync';
 export { useFocusMode, type FocusModeState } from './useFocusMode';
 export { useHoverHighlight, type HoverHighlightState } from './useHoverHighlight';
 export { useNodeExpansion, type UseNodeExpansionReturn, type ExpansionResult } from './useNodeExpansion';
 export { useCopyFeedback, useCopyFieldFeedback, type UseCopyFeedbackReturn, type UseCopyFieldFeedbackReturn } from './useCopyFeedback';
 export { useDatabaseSchema, type UseDatabaseSchemaReturn, type SchemaData, type NodeLabel, type RelationType } from './useDatabaseSchema';
-export { useTriStateSelection, calculateCheckboxState, type UseTriStateSelectionReturn } from './useTriStateSelection';
 
 // Modal utilities
 export { useBodyScrollLock } from './useBodyScrollLock';
@@ -88,12 +87,6 @@ export {
   type RovingTabindexContextValue,
 } from './useRovingTabindex';
 
-// d3-force magnetic simulation for magnetic grouping layout
-export {
-  useMagneticSimulation,
-  type UseMagneticSimulationOptions,
-} from './useMagneticSimulation';
-
 // Magnetic layout data fetching
 export {
   useMagneticData,
@@ -103,33 +96,3 @@ export {
   type UseMagneticDataReturn,
 } from './useMagneticData';
 
-// Taxonomy data fetching (v9.5)
-export {
-  useTaxonomy,
-  getCachedTaxonomy,
-  clearTaxonomyCache,
-  type UseTaxonomyResult,
-} from './useTaxonomy';
-
-// Visual encoding (v9.5)
-export {
-  useVisualEncoding,
-  getNodeStateStyle,
-  getArcStateStyle,
-  getTraitBorderStyle,
-  getKindIconName,
-  getAnimationPreset,
-  type UseVisualEncodingResult,
-  type NodeStateKey,
-  type NodeStateStyle,
-  type ArcStateKey,
-  type ArcStateStyle,
-  type TraitKey,
-  type TraitBorderStyle,
-  type ScopeKey,
-  type ScopeStrokeStyle,
-  type CardinalityKey,
-  type CardinalityArrowStyle,
-  type AnimationKey,
-  type AnimationPreset,
-} from './useVisualEncoding';

@@ -43,8 +43,6 @@
     "lint": "eslint src --ext .ts"
   },
   "dependencies": {
-    "neo4j-driver": "^5.28.1",
-    "yaml": "^2.7.0",
     "zod": "^3.24.0"
   },
   "devDependencies": {

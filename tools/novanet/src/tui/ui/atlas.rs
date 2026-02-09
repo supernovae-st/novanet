@@ -1233,7 +1233,7 @@ fn render_atlas_spreading_activation(app: &App) -> String {
         "║              ┌───────────────┐ ┌───────────┐ ┌───────────────┐            ║".to_string(),
     );
     lines.push(
-        "║              │   Concept A   │ │ Concept B │ │   Concept C   │            ║".to_string(),
+        "║              │   Entity A    │ │ Entity B  │ │   Entity C    │            ║".to_string(),
     );
     lines.push(format!(
         "║              │ A₁ = {}│ │A₁ = {} │ │ A₁ = {}│            ║",
