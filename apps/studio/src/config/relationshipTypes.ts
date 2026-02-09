@@ -1,7 +1,7 @@
 // =============================================================================
-// RELATIONSHIP TYPE CONFIGURATION (v8.1.0)
+// RELATIONSHIP TYPE CONFIGURATION (v11.1.0)
 // =============================================================================
-// Visual configuration for all 50 NovaNet relationship types
+// Visual configuration for all 51 NovaNet relationship types
 // Mirrors nodeTypes.ts pattern for consistency
 
 import { RelationType } from '@novanet/core/schemas/relations.schema';
@@ -63,17 +63,18 @@ export const RELATIONSHIP_CATEGORIES: Record<RelationshipCategory, RelationType[
     'HAS_PATTERN',
     'HAS_CONSTRAINT',
   ],
-  // Semantic: Entity usage (3 relations)
+  // Semantic: Entity usage (4 relations — v11.1: +BELONGS_TO)
   semantic: [
     'USES_ENTITY',
     'SEMANTIC_LINK',
     'USED_BY',
+    'BELONGS_TO',
   ],
   // Structure: Hierarchical structure (4 relations)
   structure: [
     'OF_TYPE',
     'SUBTOPIC_OF',
-    'BELONGS_TO_PROJECT_L10N',
+    'BELONGS_TO_PROJECT_CONTENT',
     'BLOCK_OF',
   ],
   // Generation: Content generation (6 relations)
@@ -120,8 +121,9 @@ export interface RelationshipTypeConfig {
 }
 
 /**
- * All relationship type configurations (49 relations)
+ * All relationship type configurations (51 relations)
  * v10.3: HAS_CONCEPT removed — Entity in global realm, use USES_ENTITY
+ * v11.1: BELONGS_TO added — Entity → EntityCategory semantic classification
  */
 export const relationshipTypeConfigs: Record<RelationType, RelationshipTypeConfig> = {
   // ==========================================================================
@@ -307,6 +309,12 @@ export const relationshipTypeConfigs: Record<RelationType, RelationshipTypeConfi
     color: '#d97706',
     category: 'semantic',
   },
+  BELONGS_TO: {
+    type: 'BELONGS_TO',
+    label: 'Belongs To',
+    color: '#b45309',
+    category: 'semantic',
+  },
 
   // ==========================================================================
   // STRUCTURE CATEGORY (4 relations) - blue
@@ -323,9 +331,9 @@ export const relationshipTypeConfigs: Record<RelationType, RelationshipTypeConfi
     color: '#60a5fa',
     category: 'structure',
   },
-  BELONGS_TO_PROJECT_L10N: {
-    type: 'BELONGS_TO_PROJECT_L10N',
-    label: 'Belongs To Project L10n',
+  BELONGS_TO_PROJECT_CONTENT: {
+    type: 'BELONGS_TO_PROJECT_CONTENT',
+    label: 'Belongs To Project Content',
     color: '#2563eb',
     category: 'structure',
   },

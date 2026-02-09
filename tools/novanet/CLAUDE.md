@@ -26,7 +26,7 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 | Blueprint | `blueprint [--view=X]` | Implemented (10 views: tree, flow, arcs, stats, glossary, cardinality + 4 analysis) |
 | TUI | `tui` | Galaxy theme, mission control, EntityCategory filter, search, detail, arc explorer, CRUD dialogs, dashboard, logo, command palette, help overlay, boot animation, effects engine, onboarding |
 
-**952 tests pass** (`cargo test`). Zero clippy warnings.
+**949 tests pass** (`cargo test`). Zero clippy warnings.
 
 **Testing stack:**
 - `insta` — Snapshot testing (5 generator outputs)

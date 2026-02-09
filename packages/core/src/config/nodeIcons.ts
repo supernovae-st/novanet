@@ -1,6 +1,6 @@
 // packages/core/src/config/nodeIcons.ts
 // Presentation layer configuration for node icons
-// v10.9.0 — Typed semantic arcs + GEO layer (global + tenant)
+// v11.1.0 — EntityCategory classification system
 
 import type { NodeType } from '../types/nodes.js';
 
@@ -10,8 +10,9 @@ import type { NodeType } from '../types/nodes.js';
  * Icons are now in presentation layer, not data model.
  */
 export const NODE_ICONS: Record<NodeType, string> = {
-  // GLOBAL — config (13) - v10.8: added geographic taxonomy
+  // GLOBAL — config (14) - v11.1: added EntityCategory
   Locale: '🌍',
+  EntityCategory: '🏷️',
   Formatting: '📝',
   Slugification: '🔗',
   Adaptation: '🔄',

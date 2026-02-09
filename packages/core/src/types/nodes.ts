@@ -1,18 +1,19 @@
 // src/types/nodes.ts
-// Single source of truth for all 64 NovaNet node types
-// v10.9.0 — Typed semantic arcs + GEO layer (GLOBAL / TENANT)
+// Single source of truth for all 65 NovaNet node types
+// v11.1.0 — EntityCategory classification system
 
 // =============================================================================
-// NODE TYPES (64 nodes across 2 realms)
+// NODE TYPES (65 nodes across 2 realms)
 // =============================================================================
 
 export const NODE_TYPES = [
   // ═══════════════════════════════════════════════════════════════════════════
-  // GLOBAL REALM (31 nodes) — v10.9: SEO moved to TENANT
+  // GLOBAL REALM (32 nodes) — v11.1: +EntityCategory
   // ═══════════════════════════════════════════════════════════════════════════
-  // config (13) - v10.8: added geographic taxonomy
+  // config (14) - v11.1: added EntityCategory
   'Locale', 'Formatting', 'Slugification', 'Adaptation', 'Style', 'Culture', 'Market',
   'Continent', 'GeoRegion', 'GeoSubRegion', 'IncomeGroup', 'LendingCategory', 'EconomicRegion',
+  'EntityCategory',
   // locale-knowledge (18) — Sets + Atoms + Linguistic/Cultural taxonomy
   'TermSet', 'ExpressionSet', 'PatternSet', 'CultureSet', 'TabooSet', 'AudienceSet',
   'Term', 'Expression', 'Pattern', 'CultureRef', 'Taboo', 'AudienceTrait',
@@ -41,7 +42,7 @@ export const NODE_TYPES = [
 export type NodeType = typeof NODE_TYPES[number];
 
 // =============================================================================
-// v10.9 TAXONOMY TYPES (2 realms, 9 layers: 2 global + 7 tenant)
+// v11.1 TAXONOMY TYPES (2 realms, 9 layers: 2 global + 7 tenant)
 // =============================================================================
 
 export type Realm = 'global' | 'tenant';
@@ -53,8 +54,8 @@ export type Layer =
 export type Trait = 'invariant' | 'localized' | 'knowledge' | 'derived' | 'job';
 
 // =============================================================================
-// KIND_META — unified classification for all 64 node types
-// v10.9.0 — Typed semantic arcs + GEO layer
+// KIND_META — unified classification for all 65 node types
+// v11.1.0 — EntityCategory classification system
 // =============================================================================
 
 export interface KindMeta {
@@ -65,7 +66,7 @@ export interface KindMeta {
 
 export const KIND_META: Record<NodeType, KindMeta> = {
   // ═══════════════════════════════════════════════════════════════════════════
-  // GLOBAL REALM — config (13) - v10.8: added geographic taxonomy
+  // GLOBAL REALM — config (14) - v11.1: added EntityCategory
   // ═══════════════════════════════════════════════════════════════════════════
   Locale:         { realm: 'global', layer: 'config', trait: 'invariant' },
   Formatting:     { realm: 'global', layer: 'config', trait: 'knowledge' },
@@ -80,6 +81,7 @@ export const KIND_META: Record<NodeType, KindMeta> = {
   IncomeGroup:    { realm: 'global', layer: 'config', trait: 'invariant' },
   LendingCategory:{ realm: 'global', layer: 'config', trait: 'invariant' },
   EconomicRegion: { realm: 'global', layer: 'config', trait: 'invariant' },
+  EntityCategory: { realm: 'global', layer: 'config', trait: 'invariant' },
 
   // GLOBAL REALM — locale-knowledge (18) — Sets + Atoms + Linguistic/Cultural taxonomy
   TermSet:             { realm: 'global', layer: 'locale-knowledge', trait: 'knowledge' },

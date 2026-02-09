@@ -174,8 +174,9 @@ cardinality_arrows:
 # =============================================================================
 
 kind_icons:
-  # Global / Config
+  # Global / Config (14 nodes — v11.1: +EntityCategory)
   Locale: globe
+  EntityCategory: tag
 
   # Global / Knowledge — v10 Tiered Model
   # Technical tier

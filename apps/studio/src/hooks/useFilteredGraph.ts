@@ -63,9 +63,9 @@ export function useFilteredGraph(): FilteredGraphResult {
   const selectedLocale = useFilterStore((state) => state.selectedLocale);
   const searchQuery = useFilterStore((state) => state.searchQuery);
 
-  // Navigation mode: meta/overlay modes bypass filters to show all 35 types
+  // Navigation mode: meta mode bypasses filters to show all schema types
   const navigationMode = useUIStore(selectNavigationMode);
-  const isMetaMode = navigationMode === 'meta' || navigationMode === 'overlay';
+  const isMetaMode = navigationMode === 'meta';
 
   // Chained memos for optimal performance:
   // Each filter stage only recalculates when its dependencies change

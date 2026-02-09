@@ -52,11 +52,12 @@ describe('resolveTypesForRealms', () => {
     expect(types).toContain('Entity');
   });
 
-  it('returns 64 types for global + tenant (all node types)', () => {
+  it('returns 65 types for global + tenant (all node types)', () => {
     const types = resolveTypesForRealms(['global', 'tenant']);
-    // v10.9: 2 realms total. global (31) + tenant (33) = 64
-    expect(types.length).toBe(64);
+    // v11.1: 2 realms total. global (32) + tenant (33) = 65 (+EntityCategory)
+    expect(types.length).toBe(65);
     expect(types).toContain('Organization'); // v10.6: Organization in tenant realm
+    expect(types).toContain('EntityCategory'); // v11.1: EntityCategory in global realm
   });
 });
 
