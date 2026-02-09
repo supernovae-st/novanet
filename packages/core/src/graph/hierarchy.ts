@@ -98,37 +98,3 @@ export const REALM_HIERARCHY: Record<Realm, RealmDefinition> = {
   },
 };
 
-// =============================================================================
-// HELPER FUNCTIONS
-// =============================================================================
-
-/**
- * Get realm definition by realm key
- * @param realm - The realm to look up
- * @returns The realm definition
- */
-export function getRealmDefinition(realm: Realm): RealmDefinition {
-  return REALM_HIERARCHY[realm];
-}
-
-/**
- * Get layer metadata within a realm
- * @param realm - The realm to look up
- * @param layer - The layer to look up
- * @returns The layer metadata, or undefined if not found
- */
-export function getLayerMeta(
-  realm: Realm,
-  layer: Layer
-): LayerMeta | undefined {
-  return REALM_HIERARCHY[realm]?.layers[layer];
-}
-
-/**
- * Get all layers for a realm
- * @param realm - The realm to look up
- * @returns Array of layer keys
- */
-export function getLayersForRealm(realm: Realm): Layer[] {
-  return Object.keys(REALM_HIERARCHY[realm].layers) as Layer[];
-}

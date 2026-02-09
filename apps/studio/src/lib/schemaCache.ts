@@ -217,16 +217,6 @@ export async function getSchema(): Promise<SchemaInfo> {
 }
 
 /**
- * Force refresh the schema cache
- * Resets error backoff to allow immediate retry
- */
-export async function refreshSchema(): Promise<SchemaInfo> {
-  cachedSchema = null;
-  lastErrorAt = 0; // Reset backoff on explicit refresh
-  return getSchema();
-}
-
-/**
  * Format schema for AI prompt injection
  */
 export function formatSchemaForPrompt(schema: SchemaInfo): string {

@@ -1,7 +1,7 @@
 // packages/core/src/graph/__tests__/hierarchy.test.ts
 // Tests for REALM_HIERARCHY — v11.1.0 (2 realms, 9 layers, +EntityCategory)
 import { describe, it, expect } from 'vitest';
-import { REALM_HIERARCHY, getRealmDefinition, getLayerMeta, getLayersForRealm } from '../hierarchy';
+import { REALM_HIERARCHY } from '../hierarchy';
 import type { Realm } from '../../types/nodes';
 
 describe('graph/hierarchy', () => {
@@ -39,34 +39,6 @@ describe('graph/hierarchy', () => {
     expect(tenant.layers.semantic.nodeTypes).toContain('EntityContent');
     // v10.9: SEO is in tenant realm
     expect(tenant.layers.seo.nodeTypes).toContain('SEOKeyword');
-  });
-
-  it('getRealmDefinition should return realm metadata', () => {
-    const def = getRealmDefinition('tenant');
-    expect(def.label).toBe('TENANT');
-  });
-
-  it('getLayerMeta should return layer metadata', () => {
-    const meta = getLayerMeta('tenant', 'foundation');
-    expect(meta?.label).toBe('Foundation');
-    expect(meta?.nodeTypes).toHaveLength(3);
-  });
-
-  it('getLayersForRealm should return all layers for a realm', () => {
-    const globalLayers = getLayersForRealm('global');
-    expect(globalLayers).toHaveLength(2);  // config, locale-knowledge
-    expect(globalLayers).toContain('config');
-    expect(globalLayers).toContain('locale-knowledge');
-
-    const tenantLayers = getLayersForRealm('tenant');
-    expect(tenantLayers).toHaveLength(7);  // config, foundation, structure, semantic, seo, instruction, output
-    expect(tenantLayers).toContain('config');
-    expect(tenantLayers).toContain('foundation');
-    expect(tenantLayers).toContain('structure');
-    expect(tenantLayers).toContain('semantic');
-    expect(tenantLayers).toContain('seo');
-    expect(tenantLayers).toContain('instruction');
-    expect(tenantLayers).toContain('output');
   });
 
   it('should have correct node counts per layer', () => {

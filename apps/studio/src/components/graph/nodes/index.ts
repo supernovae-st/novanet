@@ -22,15 +22,6 @@ export { TurboNode, type TurboNodeData, type TurboNodeType } from '../TurboNode'
 // Blueprint overlay for schema mode
 export { BlueprintOverlay, type BlueprintOverlayProps } from './BlueprintOverlay';
 
-// Node effect components
-export { NodeOrbitEffect, type NodeOrbitEffectProps } from './NodeOrbitEffect';
-export {
-  NodeHoverEffect,
-  NodeImpactBounce,
-  type NodeHoverEffectProps,
-  type NodeImpactBounceProps,
-} from './NodeHoverEffect';
-
 // Attractor nodes for magnetic grouping layout
 export { RealmAttractorNode, type RealmAttractorData, type RealmAttractorNodeType } from './RealmAttractorNode';
 export { LayerAttractorNode, type LayerAttractorData, type LayerAttractorNodeType } from './LayerAttractorNode';
