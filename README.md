@@ -35,7 +35,7 @@ Generate culturally-native content across 200+ locales — not translation, but 
 |  |  |  |  |
 |:---:|:---:|:---:|:---:|
 | **Knowledge Graph** | **200+ Locales** | **Graph Studio** | **AI-Powered** |
-| 64 node types, 123 arcs | Native generation per locale | Interactive 2D visualization | Claude API for natural language queries |
+| 65 node types, 124 arcs | Native generation per locale | Interactive 2D visualization | Claude API for natural language queries |
 | Neo4j with APOC | Locale knowledge layer | React Flow + ELK.js layouts | Cypher generation from text |
 
 ---
@@ -249,7 +249,7 @@ See [`packages/core/models/taxonomy.yaml`](packages/core/models/taxonomy.yaml) f
 │ │ ...            │  │   [BlockGenerated]               │  │ [Copy JSON]  │ │
 │ └────────────────┘  └──────────────────────────────────┘  └──────────────┘ │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│  Mode: Data  │  64 nodes  │  123 arcs  │  Zoom: 100%  │  Locale: fr-FR │
+│  Mode: Data  │  65 nodes  │  124 arcs  │  Zoom: 100%  │  Locale: fr-FR │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 *Interactive 2D graph visualization with AI-powered queries (⌘J)*

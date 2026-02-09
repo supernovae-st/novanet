@@ -110,6 +110,7 @@ export const RelationType = {
   // ─────────────────────────────────────────────────────────────────────────────
   USES_ENTITY: 'USES_ENTITY',       // Page|Block → Entity (v10.3: renamed from USES_CONCEPT)
   SEMANTIC_LINK: 'SEMANTIC_LINK',   // Entity → Entity (v10.3: was Concept)
+  BELONGS_TO: 'BELONGS_TO',         // Entity → EntityCategory (v11.1: semantic classification)
 
   // ─────────────────────────────────────────────────────────────────────────────
   // OUTPUT (v7.0.0: unified HAS_GENERATED)
@@ -518,6 +519,13 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
     cardinality: 'N:M',
     props: SemanticLinkPropsSchema,
     description: 'Entities are semantically linked for spreading activation (v10.3: was Concept)',
+  },
+  [RelationType.BELONGS_TO]: {
+    type: RelationType.BELONGS_TO,
+    from: 'Entity',
+    to: 'EntityCategory',
+    cardinality: 'N:1',
+    description: 'Entity belongs to a semantic category (v11.1: cross-realm classification)',
   },
 
   // ─────────────────────────────────────────────────────────────────────────────

@@ -1,11 +1,11 @@
 /**
- * NodeConfig - Pre-computed Lookup Tables for O(1) Access (v10.9.0)
+ * NodeConfig - Pre-computed Lookup Tables for O(1) Access (v11.1.0)
  *
  * Provides instant access to node sizes and colors without runtime computation.
  * This eliminates the performance overhead of computing styles on every render,
  * which is critical when rendering 19k+ nodes.
  *
- * v10.9.0: 63 nodes across 2 realms (GLOBAL / TENANT) — Typed semantic arcs + GEO layer
+ * v11.1.0: 65 nodes across 2 realms (GLOBAL / TENANT) — EntityCategory + BELONGS_TO
  *
  * @example
  * // Fast lookup
@@ -42,11 +42,11 @@ export interface NodeConfig {
 }
 
 // =============================================================================
-// Size Lookup Table (v10.9.0 - 63 nodes)
+// Size Lookup Table (v11.1.0 - 65 nodes)
 // =============================================================================
 
 /**
- * Pre-computed sizes for all 63 node types (v10.9.0)
+ * Pre-computed sizes for all 65 node types (v11.1.0)
  *
  * Size categories:
  * - Large (280x140): Root nodes (Project, Organization)
@@ -58,10 +58,11 @@ export interface NodeConfig {
  */
 export const NODE_SIZES: Record<NodeType, NodeSize> = {
   // ═══════════════════════════════════════════════════════════════════════════
-  // GLOBAL REALM (40 nodes)
+  // GLOBAL REALM (32 nodes)
   // ═══════════════════════════════════════════════════════════════════════════
-  // config (13) - v10.8: added geographic taxonomy
+  // config (14) - v11.1: added EntityCategory
   Locale: { width: 220, height: 110 },
+  EntityCategory: { width: 200, height: 100 },
   Formatting: { width: 160, height: 80 },
   Slugification: { width: 160, height: 80 },
   Adaptation: { width: 160, height: 80 },
@@ -165,14 +166,20 @@ export const NODE_SIZES: Record<NodeType, NodeSize> = {
  */
 export const NODE_COLORS: Record<NodeType, NodeColors> = {
   // ═══════════════════════════════════════════════════════════════════════════
-  // GLOBAL REALM (40 nodes)
+  // GLOBAL REALM (32 nodes)
   // ═══════════════════════════════════════════════════════════════════════════
-  // config (13) — Emerald/Cyan tones - v10.8: added geographic taxonomy
+  // config (14) — Emerald/Cyan tones - v11.1: added EntityCategory
   Locale: {
     primary: '#10b981',
     secondary: '#22c55e',
     tertiary: '#34d399',
     glow: '#10b98140',
+  },
+  EntityCategory: {
+    primary: '#0d9488',
+    secondary: '#14b8a6',
+    tertiary: '#2dd4bf',
+    glow: '#0d948840',
   },
   Formatting: {
     primary: '#06b6d4',

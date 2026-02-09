@@ -56,11 +56,10 @@ const CONFIG = {
   charDelayMs: 45,
 } as const;
 
+// v11.0: Simplified to Meta and Data only
 const THEMES: Record<NavigationMode, { primary: string; rgb: string; name: string }> = {
   data: { primary: '#34d399', rgb: '52, 211, 153', name: 'data' },
   meta: { primary: '#60a5fa', rgb: '96, 165, 250', name: 'meta' },
-  overlay: { primary: '#a78bfa', rgb: '167, 139, 250', name: 'overlay' },
-  query: { primary: '#fbbf24', rgb: '251, 191, 36', name: 'query' },
 };
 
 // ============================================================================

@@ -1,15 +1,15 @@
 'use client';
 
 /**
- * NavigationModeToggle - 4-mode segmented toggle
+ * NavigationModeToggle - 2-mode segmented toggle
  *
- * Order: Meta | Data | Overlay | Query
- * Shortcuts: 1, 2, 3, 4
+ * v11.0: Simplified to Meta | Data only
+ * Shortcuts: 1, 2
  * Design: Matches Pill component (solid dark, rounded-2xl)
  */
 
 import { memo, useCallback, useEffect } from 'react';
-import { Boxes, Database, Layers, Search } from 'lucide-react';
+import { Boxes, Database } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { NavigationMode } from '@/stores/uiStore';
 import { useAnimationStore } from '@/stores/animationStore';
@@ -20,6 +20,7 @@ interface NavigationModeToggleProps {
   className?: string;
 }
 
+// v11.0: Only Meta and Data modes
 const MODES: {
   id: NavigationMode;
   label: string;
@@ -50,26 +51,6 @@ const MODES: {
     glow: 'shadow-[0_0_12px_rgba(16,185,129,0.3)]',
     key: '2',
   },
-  {
-    id: 'overlay',
-    label: 'overlay',
-    icon: Layers,
-    color: 'text-violet-400',
-    bg: 'bg-violet-500/15',
-    border: 'border-violet-500/40',
-    glow: 'shadow-[0_0_12px_rgba(139,92,246,0.3)]',
-    key: '3',
-  },
-  {
-    id: 'query',
-    label: 'query',
-    icon: Search,
-    color: 'text-amber-400',
-    bg: 'bg-amber-500/15',
-    border: 'border-amber-500/40',
-    glow: 'shadow-[0_0_12px_rgba(245,158,11,0.3)]',
-    key: '4',
-  },
 ];
 
 export const NavigationModeToggle = memo(function NavigationModeToggle({
@@ -87,7 +68,7 @@ export const NavigationModeToggle = memo(function NavigationModeToggle({
     [mode, startTransition]
   );
 
-  // Keyboard shortcuts: 1, 2, 3, 4
+  // Keyboard shortcuts: 1, 2
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // Ignore if typing in input/textarea
@@ -99,11 +80,10 @@ export const NavigationModeToggle = memo(function NavigationModeToggle({
         return;
       }
 
+      // v11.0: Only 1 and 2 for Meta and Data
       const keyMap: Record<string, NavigationMode> = {
         '1': 'meta',
         '2': 'data',
-        '3': 'overlay',
-        '4': 'query',
       };
 
       const targetMode = keyMap[e.key];

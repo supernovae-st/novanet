@@ -1,6 +1,6 @@
 // packages/core/src/graph/generator.ts
 // Schema graph generator - Creates flat and hierarchical schema representations
-// v10.9.0 — Typed semantic arcs + GEO layer (global + tenant)
+// v11.1.0 — EntityCategory classification system
 
 import { NODE_TYPES, NODE_REALMS, NODE_TRAITS, type NodeType, type Realm } from '../types/nodes.js';
 import { RelationRegistry } from '../schemas/relations.schema.js';
@@ -18,10 +18,11 @@ import { REALM_HIERARCHY } from './hierarchy.js';
  */
 const NODE_LABELS: Record<NodeType, string> = {
   // ═══════════════════════════════════════════════════════════════════════════
-  // GLOBAL REALM (40 nodes)
+  // GLOBAL REALM (32 nodes)
   // ═══════════════════════════════════════════════════════════════════════════
-  // config (13) - v10.8: added geographic taxonomy
+  // config (14) - v11.1: added EntityCategory
   Locale: 'Locale',
+  EntityCategory: 'Entity Category',
   Formatting: 'Formatting',
   Slugification: 'Slugification',
   Adaptation: 'Adaptation',

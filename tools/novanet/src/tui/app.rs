@@ -1591,6 +1591,7 @@ impl App {
             Some(TreeItem::Kind(_, _, k)) => Some(k.key.clone()),
             Some(TreeItem::ArcFamily(f)) => Some(f.key.clone()),
             Some(TreeItem::ArcKind(_, a)) => Some(a.key.clone()),
+            Some(TreeItem::EntityCategory(_, _, _, cat)) => Some(cat.key.clone()),
             Some(TreeItem::Instance(_, _, _, inst)) => Some(inst.key.clone()),
             _ => None,
         };

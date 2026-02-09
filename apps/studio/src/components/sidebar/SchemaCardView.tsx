@@ -51,7 +51,7 @@ function nodeTypeToGraphNode(nodeType: NodeType): GraphNode {
     type: nodeType,
     key: nodeType,
     displayName: config.label,
-    description: config.description || `${config.layer} layer node`,
+    description: `${config.layer} layer node`,
   };
 }
 
@@ -95,8 +95,7 @@ export const SchemaCardView = memo(function SchemaCardView({
               const config = NODE_TYPE_CONFIG[type];
               return (
                 type.toLowerCase().includes(query) ||
-                config?.label?.toLowerCase().includes(query) ||
-                config?.description?.toLowerCase().includes(query)
+                config?.label?.toLowerCase().includes(query)
               );
             })
           : layerMeta.nodeTypes;
