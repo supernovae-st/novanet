@@ -69,7 +69,7 @@ import { GraphToolbar } from './GraphToolbar';
 import type { GraphNode as GraphNodeType, GraphEdge as GraphEdgeType } from '@/types';
 
 // Schema mode imports (Task 3.2)
-import { RealmGroupNode, LayerGroupNode, SchemaNode, MetaBadgeNode } from './schema';
+import { SchemaNode, MetaBadgeNode } from './schema';
 import { SchemaErrorBoundary } from './SchemaErrorBoundary';
 import { applySchemaLayout } from '@/lib/schemaLayoutELK';
 import { getSchemaHierarchy } from '@novanet/core/graph';
@@ -86,8 +86,6 @@ const nodeTypes = {
   localeKnowledge: LocaleKnowledgeNode,
   project: ProjectNode,
   // Schema mode node types (Task 3.2)
-  realmGroup: RealmGroupNode,
-  layerGroup: LayerGroupNode,
   schemaNode: SchemaNode,
   // v9.5: Compact badge for Realm & Layer in hierarchical view
   metaBadge: MetaBadgeNode,
