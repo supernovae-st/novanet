@@ -1632,3 +1632,699 @@ fn render_atlas_view_traversal(app: &App) -> String {
 
     lines.join("\n")
 }
+
+// =============================================================================
+// TESTS
+// =============================================================================
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::tui::app::App;
+    use crate::tui::atlas::{ActivationTask, AtlasView};
+    use crate::tui::data::{AtlasLayerInfo, AtlasPageInfo, AtlasRealmInfo, AtlasRealmStats};
+    use crate::tui::data::TaxonomyTree;
+
+    /// Create a minimal test App with default AtlasState.
+    fn test_app() -> App {
+        let tree = TaxonomyTree::mock_for_testing();
+        App::new(tree, "/tmp/test".to_string())
+    }
+
+    /// Create test realm stats for live mode testing.
+    fn test_realm_stats() -> AtlasRealmStats {
+        AtlasRealmStats {
+            realms: vec![
+                AtlasRealmInfo {
+                    key: "global".to_string(),
+                    display_name: "Global".to_string(),
+                    color: "#2aa198".to_string(),
+                    layers: vec![
+                        AtlasLayerInfo {
+                            key: "config".to_string(),
+                            display_name: "Config".to_string(),
+                            color: "#6c71c4".to_string(),
+                            kind_count: 2,
+                        },
+                        AtlasLayerInfo {
+                            key: "locale-knowledge".to_string(),
+                            display_name: "Locale Knowledge".to_string(),
+                            color: "#268bd2".to_string(),
+                            kind_count: 12,
+                        },
+                    ],
+                    total_kinds: 14,
+                },
+                AtlasRealmInfo {
+                    key: "tenant".to_string(),
+                    display_name: "Tenant".to_string(),
+                    color: "#d33682".to_string(),
+                    layers: vec![
+                        AtlasLayerInfo {
+                            key: "foundation".to_string(),
+                            display_name: "Foundation".to_string(),
+                            color: "#cb4b16".to_string(),
+                            kind_count: 5,
+                        },
+                    ],
+                    total_kinds: 5,
+                },
+            ],
+            total_kinds: 19,
+        }
+    }
+
+    // =========================================================================
+    // render_atlas_realm_map tests
+    // =========================================================================
+
+    #[test]
+    fn test_render_atlas_realm_map_demo_mode() {
+        let mut app = test_app();
+        app.atlas.demo_mode = true;
+        app.atlas.current_view = AtlasView::RealmMap;
+        app.atlas.realm_cursor = 0;
+
+        let output = render_atlas_realm_map(&app);
+
+        // Should contain demo mode indicator
+        assert!(output.contains("[d] DEMO MODE"), "Should show DEMO MODE label");
+
+        // Should contain the 2-realm architecture header
+        assert!(
+            output.contains("2-REALM ARCHITECTURE"),
+            "Should show architecture title"
+        );
+
+        // Should contain DEMO DATA indicator
+        assert!(output.contains("DEMO DATA"), "Should indicate demo data");
+
+        // Should contain realm names in demo format
+        assert!(output.contains("GLOBAL"), "Should show GLOBAL realm");
+        assert!(output.contains("TENANT"), "Should show TENANT realm");
+
+        // Should have navigation hint
+        assert!(
+            output.contains("j/k: navigate"),
+            "Should show navigation hint"
+        );
+    }
+
+    #[test]
+    fn test_render_atlas_realm_map_live_mode_no_data() {
+        let mut app = test_app();
+        app.atlas.demo_mode = false;
+        app.atlas.realm_stats = None;
+
+        let output = render_atlas_realm_map(&app);
+
+        // Should indicate live mode
+        assert!(
+            output.contains("[d] LIVE MODE"),
+            "Should show LIVE MODE label"
+        );
+
+        // Should show loading message when no data
+        assert!(
+            output.contains("Loading realm statistics"),
+            "Should show loading message"
+        );
+    }
+
+    #[test]
+    fn test_render_atlas_realm_map_live_mode_with_data() {
+        let mut app = test_app();
+        app.atlas.demo_mode = false;
+        app.atlas.realm_stats = Some(test_realm_stats());
+        app.atlas.realm_cursor = 0;
+        app.atlas.realm_zoomed = false;
+
+        let output = render_atlas_realm_map(&app);
+
+        // Should contain live mode indicator
+        assert!(
+            output.contains("[d] LIVE MODE"),
+            "Should show LIVE MODE label"
+        );
+
+        // Should contain realm stats from data
+        assert!(output.contains("19 NodeKinds"), "Should show total kinds");
+
+        // Should contain realm names
+        assert!(output.contains("GLOBAL"), "Should show Global realm");
+        assert!(output.contains("TENANT"), "Should show Tenant realm");
+
+        // Should contain layer names
+        assert!(output.contains("Config"), "Should show Config layer");
+        assert!(
+            output.contains("Locale Knowledge"),
+            "Should show Locale Knowledge layer"
+        );
+        assert!(output.contains("Foundation"), "Should show Foundation layer");
+
+        // Should have cursor indicator on first item
+        assert!(output.contains("▶"), "Should show cursor indicator");
+    }
+
+    #[test]
+    fn test_render_atlas_realm_map_cursor_in_live_mode() {
+        let mut app = test_app();
+        app.atlas.demo_mode = false;
+        app.atlas.realm_stats = Some(test_realm_stats());
+        app.atlas.realm_cursor = 2; // Third item (first layer in global)
+        app.atlas.realm_zoomed = false;
+
+        let output = render_atlas_realm_map(&app);
+
+        // Cursor position should be shown in live mode
+        // Total items = realms (2) + layers (2 in global + 1 in tenant) = 5
+        assert!(
+            output.contains("Cursor: 3/5"),
+            "Should show cursor position 3/5 in live mode"
+        );
+    }
+
+    #[test]
+    fn test_render_atlas_realm_map_zoomed_layer() {
+        let mut app = test_app();
+        app.atlas.demo_mode = false;
+        app.atlas.realm_stats = Some(test_realm_stats());
+        app.atlas.realm_cursor = 1; // First layer in global
+        app.atlas.realm_zoomed = true;
+
+        let output = render_atlas_realm_map(&app);
+
+        // When zoomed, should show expanded indicator
+        assert!(
+            output.contains("[expanded]"),
+            "Should show expanded indicator when zoomed"
+        );
+
+        // Should offer to see Kind list
+        assert!(
+            output.contains("press Enter to see Kind list"),
+            "Should show zoom hint"
+        );
+    }
+
+    // =========================================================================
+    // render_atlas_spreading_activation tests
+    // =========================================================================
+
+    #[test]
+    fn test_render_atlas_spreading_activation_formula() {
+        let mut app = test_app();
+        app.atlas.current_view = AtlasView::SpreadingActivation;
+        app.atlas.activation_step = 0;
+        app.atlas.activation_task = ActivationTask::CTA;
+
+        let output = render_atlas_spreading_activation(&app);
+
+        // Should contain the formula
+        assert!(
+            output.contains("A(t) = A\u{2080} × e^(-λt) × task_boost"),
+            "Should show activation formula"
+        );
+
+        // Should explain formula components
+        assert!(
+            output.contains("A\u{2080}   = Initial activation"),
+            "Should explain A_0"
+        );
+        assert!(output.contains("λ    = Decay rate"), "Should explain lambda");
+        assert!(
+            output.contains("t    = Distance from root"),
+            "Should explain t (distance)"
+        );
+    }
+
+    #[test]
+    fn test_render_atlas_spreading_activation_task_boosts() {
+        let mut app = test_app();
+        app.atlas.current_view = AtlasView::SpreadingActivation;
+        app.atlas.activation_task = ActivationTask::FAQ;
+
+        let output = render_atlas_spreading_activation(&app);
+
+        // Should show all task boosts
+        assert!(output.contains("CTA"), "Should list CTA task");
+        assert!(output.contains("FAQ"), "Should list FAQ task");
+        assert!(output.contains("Hero"), "Should list Hero task");
+        assert!(output.contains("Pricing"), "Should list Pricing task");
+        assert!(output.contains("Features"), "Should list Features task");
+
+        // FAQ should be marked as active
+        assert!(
+            output.contains("FAQ") && output.contains("◄─ ACTIVE"),
+            "FAQ should be marked active"
+        );
+
+        // Should show boost values
+        assert!(output.contains("×1.3"), "Should show 1.3x boost");
+        assert!(output.contains("×1.2"), "Should show 1.2x boost");
+    }
+
+    #[test]
+    fn test_render_atlas_spreading_activation_propagation_step0() {
+        let mut app = test_app();
+        app.atlas.current_view = AtlasView::SpreadingActivation;
+        app.atlas.activation_step = 0;
+
+        let output = render_atlas_spreading_activation(&app);
+
+        // At step 0, only root has activation
+        assert!(output.contains("Step 0"), "Should show Step 0");
+
+        // Root entity should have full activation bar
+        assert!(
+            output.contains("ROOT ENTITY"),
+            "Should show root entity label"
+        );
+    }
+
+    #[test]
+    fn test_render_atlas_spreading_activation_propagation_step3() {
+        let mut app = test_app();
+        app.atlas.current_view = AtlasView::SpreadingActivation;
+        app.atlas.activation_step = 3;
+
+        let output = render_atlas_spreading_activation(&app);
+
+        // At step 3, activation has propagated 3 hops
+        assert!(output.contains("Step 3"), "Should show Step 3");
+        assert!(
+            output.contains("propagated 3 hops"),
+            "Should mention 3 hops propagation"
+        );
+
+        // Should show context assembly section
+        assert!(
+            output.contains("CONTEXT ASSEMBLY"),
+            "Should show context assembly section"
+        );
+        assert!(
+            output.contains("Threshold: 0.40"),
+            "Should show threshold value"
+        );
+    }
+
+    #[test]
+    fn test_render_atlas_spreading_activation_navigation_hints() {
+        let mut app = test_app();
+        app.atlas.current_view = AtlasView::SpreadingActivation;
+        app.atlas.activation_task = ActivationTask::Hero;
+
+        let output = render_atlas_spreading_activation(&app);
+
+        // Should show navigation hints
+        assert!(
+            output.contains("h/l: step activation"),
+            "Should show h/l hint"
+        );
+        assert!(
+            output.contains("t: cycle task [Hero]"),
+            "Should show task cycle hint with current task"
+        );
+        assert!(output.contains("Enter: reset"), "Should show reset hint");
+    }
+
+    // =========================================================================
+    // render_atlas_knowledge_atoms tests
+    // =========================================================================
+
+    #[test]
+    fn test_render_atlas_knowledge_atoms_header() {
+        let mut app = test_app();
+        app.atlas.current_view = AtlasView::KnowledgeAtoms;
+        app.atlas.demo_mode = false;
+
+        let output = render_atlas_knowledge_atoms(&app);
+
+        // Should show mode indicator
+        assert!(output.contains("[LIVE]"), "Should show LIVE mode in header");
+
+        // Should show main title
+        assert!(
+            output.contains("KNOWLEDGE ATOMS ARCHITECTURE"),
+            "Should show architecture title"
+        );
+    }
+
+    #[test]
+    fn test_render_atlas_knowledge_atoms_monolithic_problem() {
+        let app = test_app();
+        let output = render_atlas_knowledge_atoms(&app);
+
+        // Should explain the monolithic problem
+        assert!(
+            output.contains("MONOLITHIC APPROACH"),
+            "Should describe monolithic approach"
+        );
+        assert!(
+            output.contains("20,000 entries"),
+            "Should mention large entry count"
+        );
+        assert!(output.contains("2MB JSON blob"), "Should mention blob size");
+
+        // Should list problems with monolithic approach
+        assert!(
+            output.contains("Load 2MB to use 50 terms"),
+            "Should list wasteful loading problem"
+        );
+    }
+
+    #[test]
+    fn test_render_atlas_knowledge_atoms_solution() {
+        let app = test_app();
+        let output = render_atlas_knowledge_atoms(&app);
+
+        // Should show NovaNet solution
+        assert!(
+            output.contains("KNOWLEDGE ATOMS (NovaNet)"),
+            "Should describe NovaNet solution"
+        );
+
+        // Should show graph relationships
+        assert!(
+            output.contains("[:HAS_TERMS]"),
+            "Should show HAS_TERMS relationship"
+        );
+        assert!(
+            output.contains("[:CONTAINS]"),
+            "Should show CONTAINS relationship"
+        );
+        assert!(
+            output.contains("[:USES_TERM]"),
+            "Should show USES_TERM relationship"
+        );
+
+        // Should show benefits
+        assert!(
+            output.contains("Load 50 relevant terms"),
+            "Should describe selective loading benefit"
+        );
+    }
+
+    #[test]
+    fn test_render_atlas_knowledge_atoms_atom_types_table() {
+        let app = test_app();
+        let output = render_atlas_knowledge_atoms(&app);
+
+        // Should have atom types section
+        assert!(output.contains("ATOM TYPES"), "Should have ATOM TYPES section");
+        assert!(
+            output.contains("6 Sets + 6 Atoms"),
+            "Should mention 6 sets and 6 atoms"
+        );
+
+        // Should list all container/atom pairs
+        let containers = [
+            "TermSet",
+            "ExpressionSet",
+            "PatternSet",
+            "CultureSet",
+            "TabooSet",
+            "AudienceSet",
+        ];
+        let atoms = [
+            "Term",
+            "Expression",
+            "Pattern",
+            "CultureRef",
+            "Taboo",
+            "AudienceTrait",
+        ];
+
+        for container in containers {
+            assert!(
+                output.contains(container),
+                "Should list container: {}",
+                container
+            );
+        }
+
+        for atom in atoms {
+            assert!(output.contains(atom), "Should list atom: {}", atom);
+        }
+    }
+
+    #[test]
+    fn test_render_atlas_knowledge_atoms_key_principle() {
+        let app = test_app();
+        let output = render_atlas_knowledge_atoms(&app);
+
+        // Should emphasize the key principle
+        assert!(
+            output.contains("Containers are EMPTY"),
+            "Should state containers are empty"
+        );
+        assert!(
+            output.contains("all data lives in atoms"),
+            "Should explain data lives in atoms"
+        );
+    }
+
+    #[test]
+    fn test_render_atlas_knowledge_atoms_demo_mode() {
+        let mut app = test_app();
+        app.atlas.demo_mode = true;
+
+        let output = render_atlas_knowledge_atoms(&app);
+
+        // Should show DEMO in header when demo mode enabled
+        assert!(output.contains("[DEMO]"), "Should show DEMO mode in header");
+    }
+
+    // =========================================================================
+    // render_atlas_generation_pipeline tests
+    // =========================================================================
+
+    #[test]
+    fn test_render_atlas_generation_pipeline_all_stages() {
+        let mut app = test_app();
+        app.atlas.current_view = AtlasView::GenerationPipeline;
+
+        // Test stage 0 through 5
+        for stage in 0..=5 {
+            app.atlas.pipeline_stage = stage;
+            let output = render_atlas_generation_pipeline(&app);
+
+            assert!(
+                output.contains(&format!("Stage {}/5", stage + 1)),
+                "Should show Stage {}/5",
+                stage + 1
+            );
+        }
+    }
+
+    #[test]
+    fn test_render_atlas_generation_pipeline_stage0_entity() {
+        let mut app = test_app();
+        app.atlas.pipeline_stage = 0;
+
+        let output = render_atlas_generation_pipeline(&app);
+
+        // Stage 0 is about Entity
+        assert!(output.contains("ENTITY"), "Stage 0 should discuss ENTITY");
+        assert!(
+            output.contains("invariant concept"),
+            "Should describe invariant concept"
+        );
+        assert!(
+            output.contains("Entity.key"),
+            "Should show Entity.key example"
+        );
+    }
+
+    #[test]
+    fn test_render_atlas_generation_pipeline_stage4_generation() {
+        let mut app = test_app();
+        app.atlas.pipeline_stage = 4;
+
+        let output = render_atlas_generation_pipeline(&app);
+
+        // Stage 4 shows WRONG vs RIGHT generation
+        assert!(
+            output.contains("NOT translation"),
+            "Should emphasize not translation"
+        );
+        assert!(output.contains("WRONG"), "Should show WRONG approach");
+        assert!(output.contains("RIGHT"), "Should show RIGHT approach");
+        assert!(
+            output.contains("Generate natively"),
+            "Should describe native generation"
+        );
+    }
+
+    // =========================================================================
+    // render_atlas_view_traversal tests
+    // =========================================================================
+
+    #[test]
+    fn test_render_atlas_view_traversal_12_views() {
+        let mut app = test_app();
+        app.atlas.current_view = AtlasView::ViewTraversal;
+
+        let output = render_atlas_view_traversal(&app);
+
+        // Should mention 12 view definitions
+        assert!(
+            output.contains("12 View Definitions"),
+            "Should mention 12 views"
+        );
+
+        // Should list some view names
+        let view_names = [
+            "complete-graph",
+            "global-layer",
+            "block-generation",
+            "entity-ecosystem",
+        ];
+        for name in view_names {
+            assert!(output.contains(name), "Should list view: {}", name);
+        }
+    }
+
+    #[test]
+    fn test_render_atlas_view_traversal_algorithm() {
+        let mut app = test_app();
+        app.atlas.current_view = AtlasView::ViewTraversal;
+
+        let output = render_atlas_view_traversal(&app);
+
+        // Should describe traversal algorithm
+        assert!(
+            output.contains("TRAVERSAL ALGORITHM"),
+            "Should show algorithm section"
+        );
+        assert!(
+            output.contains("Start at ROOT node"),
+            "Should mention root node"
+        );
+        assert!(
+            output.contains("INCLUDE relations"),
+            "Should mention include relations"
+        );
+        assert!(output.contains("Apply FILTERS"), "Should mention filters");
+    }
+
+    // =========================================================================
+    // render_atlas_page_composition tests
+    // =========================================================================
+
+    #[test]
+    fn test_render_atlas_page_composition_no_pages() {
+        let mut app = test_app();
+        app.atlas.current_view = AtlasView::PageComposition;
+        app.atlas.pages_list = Vec::new();
+
+        let output = render_atlas_page_composition(&app);
+
+        // Should show loading message when no pages
+        assert!(
+            output.contains("Loading pages list"),
+            "Should show loading message"
+        );
+    }
+
+    #[test]
+    fn test_render_atlas_page_composition_with_pages() {
+        let mut app = test_app();
+        app.atlas.current_view = AtlasView::PageComposition;
+        app.atlas.pages_list = vec![
+            AtlasPageInfo {
+                key: "home".to_string(),
+                display_name: "Home Page".to_string(),
+                project_key: "qrcode-ai".to_string(),
+                project_name: "QR Code AI".to_string(),
+            },
+            AtlasPageInfo {
+                key: "pricing".to_string(),
+                display_name: "Pricing".to_string(),
+                project_key: "qrcode-ai".to_string(),
+                project_name: "QR Code AI".to_string(),
+            },
+        ];
+        app.atlas.page_index = 0;
+
+        let output = render_atlas_page_composition(&app);
+
+        // Should show page info
+        assert!(output.contains("Page 1/2"), "Should show page number");
+        assert!(
+            output.contains("Home Page"),
+            "Should show page display name"
+        );
+        assert!(output.contains("QR Code AI"), "Should show project name");
+
+        // Should show navigation hints
+        assert!(
+            output.contains("h/l: prev/next page"),
+            "Should show navigation hint"
+        );
+    }
+
+    // =========================================================================
+    // Edge cases and error handling
+    // =========================================================================
+
+    #[test]
+    fn test_render_empty_realm_stats() {
+        let mut app = test_app();
+        app.atlas.demo_mode = false;
+        app.atlas.realm_stats = Some(AtlasRealmStats {
+            realms: Vec::new(),
+            total_kinds: 0,
+        });
+
+        let output = render_atlas_realm_map(&app);
+
+        // Should handle empty stats gracefully
+        assert!(
+            output.contains("0 NodeKinds"),
+            "Should show 0 kinds for empty stats"
+        );
+    }
+
+    #[test]
+    fn test_render_spreading_activation_high_step() {
+        let mut app = test_app();
+        app.atlas.activation_step = 100;
+
+        let output = render_atlas_spreading_activation(&app);
+
+        // Should handle high step values gracefully
+        assert!(output.contains("Step 100"), "Should display high step value");
+        assert!(
+            output.contains("propagated 100 hops"),
+            "Should show hops for high step"
+        );
+    }
+
+    #[test]
+    fn test_all_activation_tasks_render() {
+        let mut app = test_app();
+        app.atlas.current_view = AtlasView::SpreadingActivation;
+
+        let tasks = [
+            ActivationTask::CTA,
+            ActivationTask::FAQ,
+            ActivationTask::Hero,
+            ActivationTask::Pricing,
+            ActivationTask::Features,
+        ];
+
+        for task in tasks {
+            app.atlas.activation_task = task;
+            let output = render_atlas_spreading_activation(&app);
+
+            // Each task should show its label as active
+            let label = task.label();
+            assert!(
+                output.contains(label),
+                "Should show task {} in output",
+                label
+            );
+        }
+    }
+}
