@@ -1,24 +1,24 @@
 'use client';
 
 /**
- * MetaBadgeNode - Premium nodes for Meta view (Realm & Layer)
+ * MetaBadgeNode - Unified card design for Realm & Layer badges
  *
- * v9.6: Hierarchical visualization with WOW design:
- * - Realm: Large, glowing anchor nodes with neon borders (3 total)
- * - Layer: Medium, prominent category nodes (9 total)
+ * v11.0: Redesigned to match NodeCard style from sidebar:
+ * - Same glow effect with colored border
+ * - Same glassmorphism background
+ * - Same badge + title + subtitle layout
+ * - Consistent with the rest of the UI
  *
- * Features:
- * - Lucide icons (no emojis)
- * - Neon gradient borders with animated glow
- * - Glassmorphism + blueprint grid overlay
- * - Progress bar with count
+ * Two variants:
+ * - Realm (larger): GLOBAL, TENANT
+ * - Layer (smaller): CONFIG, LOCALE KNOWLEDGE, etc.
  */
 
 import { memo, useMemo } from 'react';
 import { type NodeProps, type Node, Handle, Position } from '@xyflow/react';
 import { cn } from '@/lib/utils';
 import { useNodeInteractions } from '@/hooks';
-import { Globe, Package, Building2 } from 'lucide-react';
+import { Globe, Building2 } from 'lucide-react';
 import { LayerIcon } from '@/components/ui/CategoryIcon';
 import type { Realm, Layer } from '@novanet/core/types';
 
@@ -27,7 +27,7 @@ import type { Realm, Layer } from '@novanet/core/types';
 // =============================================================================
 
 export interface MetaBadgeNodeData extends Record<string, unknown> {
-  /** Display label (text only, no emoji) */
+  /** Display label */
   label: string;
   /** Description */
   description: string;
@@ -37,8 +37,6 @@ export interface MetaBadgeNodeData extends Record<string, unknown> {
   color: string;
   /** Count of child types */
   typeCount?: number;
-  /** Count of loaded instances */
-  loadedCount?: number;
   /** Realm key for icon selection (for realms) */
   realmKey?: Realm;
   /** Layer key for icon selection (for layers) */
@@ -48,7 +46,7 @@ export interface MetaBadgeNodeData extends Record<string, unknown> {
 export type MetaBadgeNodeType = Node<MetaBadgeNodeData, 'metaBadge'>;
 
 // =============================================================================
-// Realm Icon Map
+// Realm Icons
 // =============================================================================
 
 const REALM_ICONS: Record<Realm, typeof Globe> = {
@@ -57,7 +55,27 @@ const REALM_ICONS: Record<Realm, typeof Globe> = {
 };
 
 // =============================================================================
-// Realm Node - Premium Neon Design
+// Shared Styles (matching NodeCard)
+// =============================================================================
+
+const getGlowStyle = (color: string, selected: boolean, isHovered: boolean) => ({
+  boxShadow: selected
+    ? `0 0 30px ${color}50, 0 0 60px ${color}25, inset 0 0 20px ${color}10`
+    : isHovered
+      ? `0 0 25px ${color}40, 0 0 50px ${color}20`
+      : `0 0 20px ${color}30, 0 0 40px ${color}15`,
+  borderColor: selected ? color : `${color}60`,
+});
+
+const getBadgeStyle = (color: string) => ({
+  background: `linear-gradient(135deg, ${color}35, ${color}25)`,
+  borderColor: `${color}50`,
+  color: color,
+  boxShadow: `0 0 12px ${color}30`,
+});
+
+// =============================================================================
+// Realm Node - Larger card for GLOBAL, TENANT
 // =============================================================================
 
 const RealmNode = memo(function RealmNode({
@@ -76,8 +94,15 @@ const RealmNode = memo(function RealmNode({
     onMouseUp: () => void;
   };
 }) {
-  const { label, color, typeCount = 0, realmKey = 'tenant' } = data;
-  const RealmIconComponent = REALM_ICONS[realmKey as Realm] || Package;
+  const { label, color, typeCount = 0, realmKey = 'global', description } = data;
+  const RealmIconComponent = REALM_ICONS[realmKey as Realm] || Globe;
+
+  const glowStyle = useMemo(
+    () => getGlowStyle(color, selected, isHovered),
+    [color, selected, isHovered]
+  );
+
+  const badgeStyle = useMemo(() => getBadgeStyle(color), [color]);
 
   return (
     <div
@@ -86,7 +111,7 @@ const RealmNode = memo(function RealmNode({
         selected && 'scale-[1.02]',
         isHovered && !selected && 'scale-[1.01]'
       )}
-      style={{ width: 260 }}
+      style={{ width: 220 }}
       onMouseEnter={handlers.onMouseEnter}
       onMouseLeave={handlers.onMouseLeave}
       onMouseDown={handlers.onMouseDown}
@@ -114,133 +139,63 @@ const RealmNode = memo(function RealmNode({
         }}
       />
 
-      {/* Neon glow effect - outer blur */}
+      {/* Main Card - NodeCard style */}
       <div
         className={cn(
-          'absolute -inset-1 rounded-2xl transition-opacity duration-300',
-          selected ? 'opacity-80' : isHovered ? 'opacity-50' : 'opacity-30'
+          'relative flex flex-col rounded-xl border-2 transition-all duration-300',
+          'bg-[#0d0d12]/90 backdrop-blur-sm',
+          'p-4',
+          selected && 'ring-2 ring-offset-2 ring-offset-[#0d0d12]'
         )}
         style={{
-          background: `linear-gradient(135deg, ${color} 0%, ${color}80 100%)`,
-          filter: 'blur(12px)',
-        }}
-      />
-
-      {/* Main Container - Neon border */}
-      <div
-        className="relative rounded-xl overflow-hidden"
-        style={{
-          background: `linear-gradient(135deg, ${color} 0%, ${color}80 100%)`,
-          padding: selected ? 3 : 2,
+          ...glowStyle,
+          ringColor: selected ? color : undefined,
         }}
       >
-        {/* Inner card - dark glassmorphism */}
+        {/* Badge - Realm type */}
         <div
-          className={cn(
-            'relative rounded-lg overflow-hidden',
-            'backdrop-blur-xl'
-          )}
-          style={{
-            background: 'linear-gradient(135deg, rgba(15,15,20,0.95) 0%, rgba(10,10,15,0.98) 100%)',
-          }}
+          className="inline-flex items-center self-start px-2.5 py-1 rounded-full text-[10px] font-bold border mb-3 gap-1.5"
+          style={badgeStyle}
         >
-          {/* Blueprint grid overlay */}
-          <div
-            className="absolute inset-0 opacity-[0.08]"
-            style={{
-              backgroundImage: `
-                linear-gradient(${color} 1px, transparent 1px),
-                linear-gradient(90deg, ${color} 1px, transparent 1px)
-              `,
-              backgroundSize: '16px 16px',
-            }}
+          <RealmIconComponent
+            size={12}
+            strokeWidth={2.5}
+            style={{ color }}
           />
-
-          {/* Shimmer effect on select */}
-          {selected && (
-            <div
-              className="absolute inset-0 animate-shimmer"
-              style={{
-                background: `linear-gradient(90deg, transparent 0%, ${color}15 50%, transparent 100%)`,
-                backgroundSize: '200% 100%',
-              }}
-            />
-          )}
-
-          {/* Content */}
-          <div className="relative px-5 py-4">
-            {/* Row: Icon + Label + Count */}
-            <div className="flex items-center gap-4">
-              {/* Icon container with glow */}
-              <div
-                className={cn(
-                  'flex items-center justify-center w-12 h-12 rounded-xl transition-all duration-300',
-                  selected && 'scale-110'
-                )}
-                style={{
-                  background: `linear-gradient(135deg, ${color}30 0%, ${color}10 100%)`,
-                  border: `2px solid ${color}50`,
-                  boxShadow: selected
-                    ? `0 0 20px ${color}60, inset 0 0 10px ${color}20`
-                    : `0 0 10px ${color}30`,
-                }}
-              >
-                <RealmIconComponent
-                  size={24}
-                  strokeWidth={2.5}
-                  style={{
-                    color: color,
-                    filter: `drop-shadow(0 0 6px ${color})`,
-                  }}
-                />
-              </div>
-
-              {/* Label + Progress */}
-              <div className="flex-1 min-w-0">
-                {/* Label */}
-                <span
-                  className="block text-lg font-black uppercase tracking-wide truncate"
-                  style={{
-                    color: selected ? 'white' : color,
-                    textShadow: selected ? `0 0 15px ${color}` : 'none',
-                  }}
-                >
-                  {label}
-                </span>
-
-                {/* Progress bar */}
-                <div className="flex items-center gap-2 mt-2">
-                  <div
-                    className="flex-1 h-1.5 rounded-full overflow-hidden"
-                    style={{ backgroundColor: `${color}20` }}
-                  >
-                    <div
-                      className="h-full rounded-full transition-all duration-500"
-                      style={{
-                        width: `${Math.min((typeCount / 15) * 100, 100)}%`,
-                        background: `linear-gradient(90deg, ${color} 0%, ${color}cc 100%)`,
-                        boxShadow: `0 0 8px ${color}`,
-                      }}
-                    />
-                  </div>
-                  <span
-                    className="text-sm font-bold tabular-nums"
-                    style={{ color: `${color}cc` }}
-                  >
-                    {typeCount}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
+          REALM
         </div>
+
+        {/* Title with icon */}
+        <div className="flex items-center gap-3 mb-1">
+          <div
+            className="flex items-center justify-center w-10 h-10 rounded-lg"
+            style={{
+              background: `${color}20`,
+              border: `1.5px solid ${color}40`,
+            }}
+          >
+            <RealmIconComponent
+              size={20}
+              strokeWidth={2}
+              style={{ color }}
+            />
+          </div>
+          <h3 className="text-lg font-bold text-white uppercase tracking-wide">
+            {label}
+          </h3>
+        </div>
+
+        {/* Subtitle - count */}
+        <p className="text-white/50 text-xs">
+          {typeCount} node types
+        </p>
       </div>
     </div>
   );
 });
 
 // =============================================================================
-// Layer Node - Compact Neon Design
+// Layer Node - Compact card for CONFIG, LOCALE KNOWLEDGE, etc.
 // =============================================================================
 
 const LayerNode = memo(function LayerNode({
@@ -261,13 +216,21 @@ const LayerNode = memo(function LayerNode({
 }) {
   const { label, color, typeCount = 0, layerKey = 'foundation' } = data;
 
+  const glowStyle = useMemo(
+    () => getGlowStyle(color, selected, isHovered),
+    [color, selected, isHovered]
+  );
+
+  const badgeStyle = useMemo(() => getBadgeStyle(color), [color]);
+
   return (
     <div
       className={cn(
-        'relative transition-all duration-200',
-        selected && 'scale-[1.02]'
+        'relative transition-all duration-300',
+        selected && 'scale-[1.02]',
+        isHovered && !selected && 'scale-[1.01]'
       )}
-      style={{ width: 200 }}
+      style={{ width: 180 }}
       onMouseEnter={handlers.onMouseEnter}
       onMouseLeave={handlers.onMouseLeave}
       onMouseDown={handlers.onMouseDown}
@@ -295,110 +258,61 @@ const LayerNode = memo(function LayerNode({
         }}
       />
 
-      {/* Subtle glow */}
-      {(selected || isHovered) && (
-        <div
-          className={cn(
-            'absolute -inset-0.5 rounded-lg transition-opacity duration-200',
-            selected ? 'opacity-60' : 'opacity-30'
-          )}
-          style={{
-            background: color,
-            filter: 'blur(8px)',
-          }}
-        />
-      )}
-
-      {/* Main Container - Neon border */}
+      {/* Main Card - NodeCard style */}
       <div
-        className="relative rounded-lg overflow-hidden"
+        className={cn(
+          'relative flex flex-col rounded-xl border-2 transition-all duration-300',
+          'bg-[#0d0d12]/90 backdrop-blur-sm',
+          'p-3',
+          selected && 'ring-2 ring-offset-2 ring-offset-[#0d0d12]'
+        )}
         style={{
-          background: `linear-gradient(135deg, ${color}90 0%, ${color}60 100%)`,
-          padding: selected ? 2 : 1.5,
+          ...glowStyle,
+          ringColor: selected ? color : undefined,
         }}
       >
-        {/* Inner card */}
+        {/* Badge - Layer type */}
         <div
-          className="relative rounded-md overflow-hidden"
-          style={{
-            background: 'linear-gradient(135deg, rgba(15,15,20,0.95) 0%, rgba(10,10,15,0.98) 100%)',
-          }}
+          className="inline-flex items-center self-start px-2 py-0.5 rounded-full text-[9px] font-bold border mb-2 gap-1"
+          style={badgeStyle}
         >
-          {/* Blueprint grid overlay */}
-          <div
-            className="absolute inset-0 opacity-[0.05]"
-            style={{
-              backgroundImage: `
-                linear-gradient(${color} 1px, transparent 1px),
-                linear-gradient(90deg, ${color} 1px, transparent 1px)
-              `,
-              backgroundSize: '12px 12px',
-            }}
+          <LayerIcon
+            layer={layerKey as Layer}
+            size={10}
+            strokeWidth={2.5}
+            style={{ color }}
           />
-
-          {/* Content */}
-          <div className="relative px-3 py-2.5">
-            {/* Row: Icon + Label + Progress + Count */}
-            <div className="flex items-center gap-2.5">
-              {/* Icon with glow */}
-              <div
-                className={cn(
-                  'flex items-center justify-center w-8 h-8 rounded-lg transition-all duration-200',
-                  selected && 'scale-105'
-                )}
-                style={{
-                  background: `${color}20`,
-                  border: `1.5px solid ${color}40`,
-                  boxShadow: `0 0 8px ${color}30`,
-                }}
-              >
-                <LayerIcon
-                  layer={layerKey as Layer}
-                  size={16}
-                  strokeWidth={2}
-                  style={{
-                    color: color,
-                    filter: `drop-shadow(0 0 4px ${color})`,
-                  }}
-                />
-              </div>
-
-              {/* Label */}
-              <span
-                className="text-xs font-bold uppercase tracking-wide flex-shrink-0"
-                style={{
-                  color: selected ? 'white' : color,
-                  textShadow: selected ? `0 0 10px ${color}` : 'none',
-                }}
-              >
-                {label}
-              </span>
-
-              {/* Spacer + Progress bar */}
-              <div
-                className="flex-1 h-1 rounded-full overflow-hidden"
-                style={{ backgroundColor: `${color}15` }}
-              >
-                <div
-                  className="h-full rounded-full transition-all duration-300"
-                  style={{
-                    width: `${Math.min((typeCount / 14) * 100, 100)}%`,
-                    backgroundColor: color,
-                    boxShadow: `0 0 4px ${color}`,
-                  }}
-                />
-              </div>
-
-              {/* Count */}
-              <span
-                className="text-xs font-bold tabular-nums"
-                style={{ color: `${color}99` }}
-              >
-                {typeCount}
-              </span>
-            </div>
-          </div>
+          LAYER
         </div>
+
+        {/* Title with icon */}
+        <div className="flex items-center gap-2 mb-0.5">
+          <div
+            className="flex items-center justify-center w-7 h-7 rounded-md"
+            style={{
+              background: `${color}20`,
+              border: `1px solid ${color}40`,
+            }}
+          >
+            <LayerIcon
+              layer={layerKey as Layer}
+              size={14}
+              strokeWidth={2}
+              style={{ color }}
+            />
+          </div>
+          <h3
+            className="text-sm font-semibold text-white uppercase tracking-wide truncate"
+            style={{ maxWidth: 110 }}
+          >
+            {label}
+          </h3>
+        </div>
+
+        {/* Subtitle - count */}
+        <p className="text-white/50 text-[11px]">
+          {typeCount} types
+        </p>
       </div>
     </div>
   );
