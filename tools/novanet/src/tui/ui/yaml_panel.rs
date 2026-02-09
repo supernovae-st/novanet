@@ -381,3 +381,374 @@ fn highlight_yaml_value(value: &str) -> Span<'static> {
     // String (quoted or unquoted)
     Span::styled(value.to_string(), STYLE_YAML_STRING)
 }
+
+// =============================================================================
+// TESTS
+// =============================================================================
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    // =========================================================================
+    // highlight_yaml_value tests
+    // =========================================================================
+
+    #[test]
+    fn test_highlight_yaml_value_boolean_true() {
+        let span = highlight_yaml_value(" true");
+        assert_eq!(span.content, " true");
+        assert_eq!(span.style, STYLE_YAML_LITERAL);
+    }
+
+    #[test]
+    fn test_highlight_yaml_value_boolean_false() {
+        let span = highlight_yaml_value(" false");
+        assert_eq!(span.content, " false");
+        assert_eq!(span.style, STYLE_YAML_LITERAL);
+    }
+
+    #[test]
+    fn test_highlight_yaml_value_null() {
+        let span = highlight_yaml_value(" null");
+        assert_eq!(span.content, " null");
+        assert_eq!(span.style, STYLE_YAML_LITERAL);
+    }
+
+    #[test]
+    fn test_highlight_yaml_value_tilde_null() {
+        let span = highlight_yaml_value(" ~");
+        assert_eq!(span.content, " ~");
+        assert_eq!(span.style, STYLE_YAML_LITERAL);
+    }
+
+    #[test]
+    fn test_highlight_yaml_value_integer() {
+        let span = highlight_yaml_value(" 42");
+        assert_eq!(span.content, " 42");
+        assert_eq!(span.style, STYLE_YAML_NUMBER);
+    }
+
+    #[test]
+    fn test_highlight_yaml_value_negative_integer() {
+        let span = highlight_yaml_value(" -17");
+        assert_eq!(span.content, " -17");
+        assert_eq!(span.style, STYLE_YAML_NUMBER);
+    }
+
+    #[test]
+    fn test_highlight_yaml_value_float() {
+        let span = highlight_yaml_value(" 3.14");
+        assert_eq!(span.content, " 3.14");
+        assert_eq!(span.style, STYLE_YAML_NUMBER);
+    }
+
+    #[test]
+    fn test_highlight_yaml_value_string() {
+        let span = highlight_yaml_value(" hello world");
+        assert_eq!(span.content, " hello world");
+        assert_eq!(span.style, STYLE_YAML_STRING);
+    }
+
+    #[test]
+    fn test_highlight_yaml_value_quoted_string() {
+        let span = highlight_yaml_value(" \"quoted\"");
+        assert_eq!(span.content, " \"quoted\"");
+        assert_eq!(span.style, STYLE_YAML_STRING);
+    }
+
+    #[test]
+    fn test_highlight_yaml_value_empty() {
+        let span = highlight_yaml_value("");
+        assert_eq!(span.content, "");
+        assert_eq!(span.style, STYLE_YAML_STRING);
+    }
+
+    // =========================================================================
+    // highlight_yaml_line tests
+    // =========================================================================
+
+    #[test]
+    fn test_highlight_yaml_line_comment() {
+        let line = highlight_yaml_line("# This is a comment");
+        assert_eq!(line.spans.len(), 1);
+        assert_eq!(line.spans[0].content, "# This is a comment");
+        assert_eq!(line.spans[0].style, STYLE_YAML_COMMENT);
+    }
+
+    #[test]
+    fn test_highlight_yaml_line_comment_with_indent() {
+        let line = highlight_yaml_line("  # Indented comment");
+        // Indented comments are still treated as full comment lines
+        assert_eq!(line.spans.len(), 1);
+        assert_eq!(line.spans[0].content, "  # Indented comment");
+        assert_eq!(line.spans[0].style, STYLE_YAML_COMMENT);
+    }
+
+    #[test]
+    fn test_highlight_yaml_line_empty() {
+        let line = highlight_yaml_line("");
+        assert_eq!(line.spans.len(), 1);
+        assert_eq!(line.spans[0].content, "");
+    }
+
+    #[test]
+    fn test_highlight_yaml_line_whitespace_only() {
+        let line = highlight_yaml_line("   ");
+        assert_eq!(line.spans.len(), 1);
+        assert_eq!(line.spans[0].content, "   ");
+    }
+
+    #[test]
+    fn test_highlight_yaml_line_key_value() {
+        let line = highlight_yaml_line("name: Page");
+        assert_eq!(line.spans.len(), 4);
+        // spans[0] = "" (empty indent)
+        // spans[1] = "name" (key)
+        // spans[2] = ":" (colon)
+        // spans[3] = " Page" (value)
+        assert_eq!(line.spans[1].content, "name");
+        assert_eq!(line.spans[1].style, STYLE_YAML_KEY);
+        assert_eq!(line.spans[2].content, ":");
+        assert_eq!(line.spans[3].content, " Page");
+        assert_eq!(line.spans[3].style, STYLE_YAML_STRING);
+    }
+
+    #[test]
+    fn test_highlight_yaml_line_key_value_indented() {
+        let line = highlight_yaml_line("  realm: global");
+        assert_eq!(line.spans.len(), 4);
+        assert_eq!(line.spans[0].content, "  "); // indent
+        assert_eq!(line.spans[1].content, "realm"); // key
+        assert_eq!(line.spans[1].style, STYLE_YAML_KEY);
+        assert_eq!(line.spans[2].content, ":"); // colon
+        assert_eq!(line.spans[3].content, " global"); // value
+    }
+
+    #[test]
+    fn test_highlight_yaml_line_key_with_boolean_value() {
+        let line = highlight_yaml_line("enabled: true");
+        assert_eq!(line.spans[3].content, " true");
+        assert_eq!(line.spans[3].style, STYLE_YAML_LITERAL);
+    }
+
+    #[test]
+    fn test_highlight_yaml_line_key_with_number_value() {
+        let line = highlight_yaml_line("count: 42");
+        assert_eq!(line.spans[3].content, " 42");
+        assert_eq!(line.spans[3].style, STYLE_YAML_NUMBER);
+    }
+
+    #[test]
+    fn test_highlight_yaml_line_key_no_value() {
+        let line = highlight_yaml_line("properties:");
+        assert_eq!(line.spans.len(), 3);
+        assert_eq!(line.spans[1].content, "properties");
+        assert_eq!(line.spans[1].style, STYLE_YAML_KEY);
+        assert_eq!(line.spans[2].content, ":");
+    }
+
+    #[test]
+    fn test_highlight_yaml_line_list_item() {
+        let line = highlight_yaml_line("- item");
+        assert_eq!(line.spans.len(), 3);
+        assert_eq!(line.spans[0].content, ""); // empty indent
+        assert_eq!(line.spans[1].content, "-");
+        assert_eq!(line.spans[1].style, STYLE_YAML_PUNCT);
+        assert_eq!(line.spans[2].content, " item");
+        assert_eq!(line.spans[2].style, STYLE_YAML_STRING);
+    }
+
+    #[test]
+    fn test_highlight_yaml_line_list_item_indented() {
+        let line = highlight_yaml_line("  - indented item");
+        assert_eq!(line.spans[0].content, "  "); // indent
+        assert_eq!(line.spans[1].content, "-");
+        assert_eq!(line.spans[1].style, STYLE_YAML_PUNCT);
+    }
+
+    #[test]
+    fn test_highlight_yaml_line_list_item_with_key_value() {
+        let line = highlight_yaml_line("- name: value");
+        assert_eq!(line.spans.len(), 4);
+        assert_eq!(line.spans[1].content, "-");
+        assert_eq!(line.spans[1].style, STYLE_YAML_PUNCT);
+        assert_eq!(line.spans[2].content, " name:");
+        assert_eq!(line.spans[2].style, STYLE_YAML_KEY);
+        assert_eq!(line.spans[3].content, " value");
+        assert_eq!(line.spans[3].style, STYLE_YAML_STRING);
+    }
+
+    #[test]
+    fn test_highlight_yaml_line_plain_text() {
+        let line = highlight_yaml_line("just plain text without colon");
+        assert_eq!(line.spans.len(), 2);
+        assert_eq!(line.spans[0].content, ""); // empty indent
+        assert_eq!(line.spans[1].content, "just plain text without colon");
+        assert_eq!(line.spans[1].style, STYLE_YAML_TEXT);
+    }
+
+    // =========================================================================
+    // highlight_yaml_line_dim tests
+    // =========================================================================
+
+    #[test]
+    fn test_highlight_yaml_line_dim() {
+        let line = highlight_yaml_line_dim("name: value");
+        assert_eq!(line.spans.len(), 1);
+        assert_eq!(line.spans[0].content, "name: value");
+        assert_eq!(line.spans[0].style.fg, Some(Color::DarkGray));
+    }
+
+    #[test]
+    fn test_highlight_yaml_line_dim_empty() {
+        let line = highlight_yaml_line_dim("");
+        assert_eq!(line.spans.len(), 1);
+        assert_eq!(line.spans[0].content, "");
+    }
+
+    // =========================================================================
+    // build_yaml_title_with_tabs tests
+    // =========================================================================
+
+    #[test]
+    fn test_build_yaml_title_no_sections() {
+        let spans = build_yaml_title_with_tabs("path/to/file.yaml", YamlViewSection::Kind, false);
+        // Without sections, should just show the path
+        assert!(!spans.is_empty());
+        // Should not have [Kind] or [Instance] tabs
+        let full_text: String = spans.iter().map(|s| s.content.as_ref()).collect();
+        assert!(!full_text.contains("[Kind"));
+        assert!(!full_text.contains("[Instance"));
+        assert!(full_text.contains("file.yaml"));
+    }
+
+    #[test]
+    fn test_build_yaml_title_with_sections_kind_active() {
+        let spans = build_yaml_title_with_tabs("file.yaml", YamlViewSection::Kind, true);
+        let full_text: String = spans.iter().map(|s| s.content.as_ref()).collect();
+        // Should have tabs
+        assert!(full_text.contains("[Kind"));
+        assert!(full_text.contains("[Instance"));
+        // Kind should be active (*)
+        assert!(full_text.contains("*]")); // active indicator
+    }
+
+    #[test]
+    fn test_build_yaml_title_with_sections_instance_active() {
+        let spans = build_yaml_title_with_tabs("file.yaml", YamlViewSection::Instance, true);
+        let full_text: String = spans.iter().map(|s| s.content.as_ref()).collect();
+        // Should have tabs
+        assert!(full_text.contains("[Kind"));
+        assert!(full_text.contains("[Instance"));
+    }
+
+    #[test]
+    fn test_build_yaml_title_empty_path() {
+        let spans = build_yaml_title_with_tabs("", YamlViewSection::Kind, false);
+        let full_text: String = spans.iter().map(|s| s.content.as_ref()).collect();
+        // Should show "YAML" fallback
+        assert!(full_text.contains("YAML"));
+    }
+
+    #[test]
+    fn test_build_yaml_title_active_indicators() {
+        // When Kind is active
+        let kind_spans = build_yaml_title_with_tabs("f.yaml", YamlViewSection::Kind, true);
+        let kind_text: String = kind_spans.iter().map(|s| s.content.as_ref()).collect();
+
+        // When Instance is active
+        let instance_spans = build_yaml_title_with_tabs("f.yaml", YamlViewSection::Instance, true);
+        let instance_text: String = instance_spans.iter().map(|s| s.content.as_ref()).collect();
+
+        // Both should contain the active indicator somewhere
+        assert!(kind_text.contains("*"));
+        assert!(instance_text.contains("*"));
+    }
+
+    // =========================================================================
+    // Style constant tests
+    // =========================================================================
+
+    #[test]
+    fn test_style_yaml_comment_is_dark_gray() {
+        assert_eq!(STYLE_YAML_COMMENT.fg, Some(Color::DarkGray));
+    }
+
+    #[test]
+    fn test_style_yaml_key_is_yellow() {
+        assert_eq!(STYLE_YAML_KEY.fg, Some(Color::Yellow));
+    }
+
+    #[test]
+    fn test_style_yaml_punct_is_cyan() {
+        assert_eq!(STYLE_YAML_PUNCT.fg, Some(Color::Cyan));
+    }
+
+    #[test]
+    fn test_style_yaml_string_is_green() {
+        assert_eq!(STYLE_YAML_STRING.fg, Some(Color::Green));
+    }
+
+    #[test]
+    fn test_style_yaml_literal_is_magenta() {
+        assert_eq!(STYLE_YAML_LITERAL.fg, Some(Color::Magenta));
+    }
+
+    #[test]
+    fn test_style_yaml_number_is_cyan() {
+        assert_eq!(STYLE_YAML_NUMBER.fg, Some(Color::Cyan));
+    }
+
+    #[test]
+    fn test_style_yaml_text_is_white() {
+        assert_eq!(STYLE_YAML_TEXT.fg, Some(Color::White));
+    }
+
+    // =========================================================================
+    // Edge case tests
+    // =========================================================================
+
+    #[test]
+    fn test_highlight_yaml_line_colon_in_value() {
+        // Value containing a colon (URL, time, etc.)
+        let line = highlight_yaml_line("url: https://example.com");
+        assert_eq!(line.spans[1].content, "url");
+        assert_eq!(line.spans[1].style, STYLE_YAML_KEY);
+        // The value should include the URL with colons
+        assert_eq!(line.spans[3].content, " https://example.com");
+    }
+
+    #[test]
+    fn test_highlight_yaml_line_multiword_key() {
+        let line = highlight_yaml_line("display_name: My Page");
+        assert_eq!(line.spans[1].content, "display_name");
+        assert_eq!(line.spans[1].style, STYLE_YAML_KEY);
+    }
+
+    #[test]
+    fn test_highlight_yaml_line_deeply_indented() {
+        let line = highlight_yaml_line("        nested: value");
+        assert_eq!(line.spans[0].content, "        "); // 8 spaces
+        assert_eq!(line.spans[1].content, "nested");
+        assert_eq!(line.spans[1].style, STYLE_YAML_KEY);
+    }
+
+    #[test]
+    fn test_highlight_yaml_value_scientific_notation() {
+        let span = highlight_yaml_value(" 1.5e10");
+        assert_eq!(span.style, STYLE_YAML_NUMBER);
+    }
+
+    #[test]
+    fn test_highlight_yaml_value_zero() {
+        let span = highlight_yaml_value(" 0");
+        assert_eq!(span.style, STYLE_YAML_NUMBER);
+    }
+
+    #[test]
+    fn test_highlight_yaml_value_negative_float() {
+        let span = highlight_yaml_value(" -0.5");
+        assert_eq!(span.style, STYLE_YAML_NUMBER);
+    }
+}
