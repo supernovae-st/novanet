@@ -934,36 +934,6 @@ fn colorize_tip(tip: &str, theme: &Theme) -> Vec<Span<'static>> {
     result
 }
 
-/// Render a placeholder for tabs not yet implemented.
-#[allow(dead_code)]
-fn render_placeholder(f: &mut Frame, area: Rect, title: &str, message: &str) {
-    let block = Block::default()
-        .title(Span::styled(
-            format!(" {} ", title),
-            Style::default()
-                .fg(Color::Cyan)
-                .add_modifier(Modifier::BOLD),
-        ))
-        .borders(Borders::ALL)
-        .border_style(Style::default().fg(Color::Rgb(60, 60, 70)));
-
-    let inner = block.inner(area);
-    f.render_widget(block, area);
-
-    let lines = vec![
-        Line::from(""),
-        Line::from(Span::styled(message, Style::default().fg(Color::DarkGray))),
-        Line::from(""),
-        Line::from(Span::styled(
-            "Use [1-4] to switch tabs",
-            Style::default().fg(Color::Rgb(100, 100, 120)),
-        )),
-    ];
-
-    let paragraph = Paragraph::new(lines);
-    f.render_widget(paragraph, inner);
-}
-
 // =============================================================================
 // TESTS
 // =============================================================================
