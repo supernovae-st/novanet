@@ -87,7 +87,7 @@ export function useGraphData(options: UseGraphDataOptions = {}): UseGraphDataRet
   const selectedLocale = useFilterStore((state) => state.selectedLocale);
   const searchQuery = useFilterStore((state) => state.searchQuery);
 
-  // Navigation mode (data vs meta vs overlay vs query)
+  // Navigation mode (data vs meta)
   const navigationMode = useUIStore(selectNavigationMode);
 
   /**

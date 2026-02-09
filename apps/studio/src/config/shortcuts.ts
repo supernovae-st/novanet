@@ -110,7 +110,7 @@ export const SHORTCUTS: Shortcut[] = [
     id: 'cycle-navigation-mode',
     keys: 'n',
     label: 'Cycle Navigation Mode',
-    description: 'Cycle through Meta → Data → Overlay → Query',
+    description: 'Cycle through Meta → Data',
     category: 'view',
     icon: 'Compass',
     when: ['input-not-focused'],

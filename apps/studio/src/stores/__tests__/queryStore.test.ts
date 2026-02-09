@@ -53,7 +53,7 @@ describe('queryStore', () => {
 
     it('should handle successful query response', async () => {
       const mockNodes = [{ id: '1', type: 'Entity', key: 'test' }];
-      const mockEdges = [{ id: 'e1', source: '1', target: '2', type: 'HAS_L10N' }];
+      const mockEdges = [{ id: 'e1', source: '1', target: '2', type: 'HAS_CONTENT' }];
 
       mockFetch.mockResolvedValueOnce({
         ok: true,

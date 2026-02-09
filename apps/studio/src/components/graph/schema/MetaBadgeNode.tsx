@@ -149,8 +149,8 @@ const RealmNode = memo(function RealmNode({
         )}
         style={{
           ...glowStyle,
-          ringColor: selected ? color : undefined,
-        }}
+          '--tw-ring-color': selected ? color : undefined,
+        } as React.CSSProperties}
       >
         {/* Badge - Realm type */}
         <div
@@ -268,8 +268,8 @@ const LayerNode = memo(function LayerNode({
         )}
         style={{
           ...glowStyle,
-          ringColor: selected ? color : undefined,
-        }}
+          '--tw-ring-color': selected ? color : undefined,
+        } as React.CSSProperties}
       >
         {/* Badge - Layer type */}
         <div

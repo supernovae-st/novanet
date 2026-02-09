@@ -31,7 +31,7 @@ function useUrlSyncInternal() {
       // Sync viewStore
       syncFromURL(searchParams);
 
-      // Sync navigationMode from URL (?mode=data|meta|overlay|query)
+      // Sync navigationMode from URL (?mode=data|meta)
       const urlMode = searchParams.get('mode');
       if (urlMode && VALID_MODES.includes(urlMode as NavigationMode)) {
         setNavigationMode(urlMode as NavigationMode);

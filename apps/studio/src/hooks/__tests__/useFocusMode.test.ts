@@ -29,8 +29,8 @@ describe('useFocusMode', () => {
 
       // But filtered edges only show 2 connections (e.g., only fr-FR and en-US visible)
       const filteredEdges: GraphEdge[] = [
-        { id: 'e1', source: 'concept-1', target: 'l10n-1', type: 'HAS_L10N' },
-        { id: 'e2', source: 'concept-1', target: 'l10n-2', type: 'HAS_L10N' },
+        { id: 'e1', source: 'concept-1', target: 'l10n-1', type: 'HAS_CONTENT' },
+        { id: 'e2', source: 'concept-1', target: 'l10n-2', type: 'HAS_CONTENT' },
       ];
 
       mockUseGraphStore.mockImplementation((selector) => {
