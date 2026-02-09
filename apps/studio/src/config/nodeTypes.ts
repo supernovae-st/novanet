@@ -695,14 +695,6 @@ export function getNodeTypesByLayer(layer: Layer): NodeType[] {
 export const ALL_NODE_TYPES: readonly NodeType[] = NODE_TYPES;
 
 /**
- * Locale types - config (Locale) + all 14 knowledge nodes
- */
-export const LOCALE_TYPES: NodeType[] = [
-  ...getNodeTypesByLayer('config'),
-  ...getNodeTypesByLayer('locale-knowledge'),
-];
-
-/**
  * Core types for default filter (structure nodes) - v10.3 Entity-Centric
  */
 export const CORE_TYPES: NodeType[] = [
@@ -807,14 +799,6 @@ export const NODE_VISUAL_LAYERS: LayerConfig[] = [
  */
 export function getLayerConfig(layerId: Layer): LayerConfig | undefined {
   return NODE_VISUAL_LAYERS.find((c) => c.id === layerId);
-}
-
-/**
- * Get layer config for a node type
- */
-export function getLayerForNodeType(nodeType: NodeType): LayerConfig | undefined {
-  const config = nodeTypeConfigs[nodeType];
-  return config ? getLayerConfig(config.layer) : undefined;
 }
 
 // =============================================================================
