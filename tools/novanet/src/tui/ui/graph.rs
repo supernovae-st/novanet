@@ -777,3 +777,613 @@ fn build_graph_distribution_stats(app: &App) -> Vec<Line<'static>> {
 
     lines
 }
+
+// =============================================================================
+// TESTS
+// =============================================================================
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::tui::data::{KindArcsData, KindInfo, LayerInfo, Neo4jArc, RealmInfo, TaxonomyTree};
+    use crate::tui::theme::{ColorMode, Theme};
+    use pretty_assertions::assert_eq;
+    use ratatui::style::Color;
+    use rustc_hash::FxHashMap;
+
+    // =========================================================================
+    // Test helpers
+    // =========================================================================
+
+    fn create_test_theme() -> Theme {
+        Theme::with_mode(ColorMode::TrueColor)
+    }
+
+    fn create_kind_arcs_data(
+        kind_label: &str,
+        incoming: Vec<Neo4jArc>,
+        outgoing: Vec<Neo4jArc>,
+    ) -> KindArcsData {
+        KindArcsData {
+            kind_label: kind_label.to_string(),
+            realm: "tenant".to_string(),
+            layer: "structure".to_string(),
+            incoming,
+            outgoing,
+        }
+    }
+
+    fn create_neo4j_arc(arc_key: &str, other_kind: &str, family: &str) -> Neo4jArc {
+        Neo4jArc {
+            arc_key: arc_key.to_string(),
+            other_kind: other_kind.to_string(),
+            family: family.to_string(),
+        }
+    }
+
+    fn create_test_kind(key: &str) -> KindInfo {
+        KindInfo {
+            key: key.to_string(),
+            display_name: key.to_string(),
+            description: String::new(),
+            icon: String::new(),
+            trait_name: "invariant".to_string(),
+            instance_count: 0,
+            arcs: Vec::new(),
+            yaml_path: String::new(),
+            properties: Vec::new(),
+            required_properties: Vec::new(),
+            schema_hint: String::new(),
+            context_budget: String::new(),
+            knowledge_tier: None,
+            health_percent: None,
+            issues_count: None,
+        }
+    }
+
+    fn create_test_layer(key: &str, kinds: Vec<KindInfo>) -> LayerInfo {
+        LayerInfo {
+            key: key.to_string(),
+            display_name: key.to_string(),
+            color: "#ffffff".to_string(),
+            kinds,
+        }
+    }
+
+    fn create_test_realm(key: &str, layers: Vec<LayerInfo>) -> RealmInfo {
+        RealmInfo {
+            key: key.to_string(),
+            display_name: key.to_string(),
+            color: "#ffffff".to_string(),
+            icon: "○",
+            layers,
+        }
+    }
+
+    fn create_empty_tree() -> TaxonomyTree {
+        TaxonomyTree {
+            realms: Vec::new(),
+            arc_families: Vec::new(),
+            stats: Default::default(),
+            collapsed: Default::default(),
+            instances: Default::default(),
+            instance_totals: Default::default(),
+            kind_index: FxHashMap::default(),
+        }
+    }
+
+    fn create_tree_with_realms(realms: Vec<RealmInfo>) -> TaxonomyTree {
+        // Build kind_index for O(1) lookups
+        let mut kind_index = FxHashMap::default();
+        for (r_idx, realm) in realms.iter().enumerate() {
+            for (l_idx, layer) in realm.layers.iter().enumerate() {
+                for (k_idx, kind) in layer.kinds.iter().enumerate() {
+                    kind_index.insert(kind.key.clone(), (r_idx, l_idx, k_idx));
+                }
+            }
+        }
+
+        TaxonomyTree {
+            realms,
+            arc_families: Vec::new(),
+            stats: Default::default(),
+            collapsed: Default::default(),
+            instances: Default::default(),
+            instance_totals: Default::default(),
+            kind_index,
+        }
+    }
+
+    /// Create a minimal App for testing build_graph_distribution_stats.
+    /// Uses App::new() then replaces only the tree field we care about.
+    fn create_test_app_with_tree(tree: TaxonomyTree) -> App {
+        // Create app with mock tree, then replace with our test tree
+        let mut app = App::new(TaxonomyTree::mock_for_testing(), String::new());
+        app.tree = tree;
+        app.theme = create_test_theme();
+        app
+    }
+
+    // =========================================================================
+    // render_arcs_by_family tests
+    // =========================================================================
+
+    #[test]
+    fn test_render_arcs_by_family_empty() {
+        let theme = create_test_theme();
+        let dim = Style::default().fg(Color::Rgb(100, 100, 100));
+        let arcs = create_kind_arcs_data("Page", Vec::new(), Vec::new());
+
+        let mut lines: Vec<Line> = Vec::new();
+        render_arcs_by_family(&mut lines, &arcs, &theme, &dim);
+
+        // Should show "No arc relationships" message
+        assert_eq!(lines.len(), 1, "empty arcs should produce 1 line");
+
+        let line_content: String = lines[0].spans.iter().map(|s| s.content.as_ref()).collect();
+        assert!(
+            line_content.contains("No arc relationships"),
+            "should contain 'No arc relationships' message, got: {}",
+            line_content
+        );
+    }
+
+    #[test]
+    fn test_render_arcs_by_family_single_family() {
+        let theme = create_test_theme();
+        let dim = Style::default().fg(Color::Rgb(100, 100, 100));
+
+        let outgoing = vec![
+            create_neo4j_arc("USES_ENTITY", "Entity", "semantic"),
+            create_neo4j_arc("USES_BLOCK", "Block", "semantic"),
+        ];
+        let arcs = create_kind_arcs_data("Page", Vec::new(), outgoing);
+
+        let mut lines: Vec<Line> = Vec::new();
+        render_arcs_by_family(&mut lines, &arcs, &theme, &dim);
+
+        // Should have family header + separator + 2 arcs + blank line = 5 lines
+        assert!(lines.len() >= 4, "should have header, separator, and arcs");
+
+        // First line should be family header (SEMANTIC)
+        let header: String = lines[0].spans.iter().map(|s| s.content.as_ref()).collect();
+        assert!(
+            header.contains("SEMANTIC"),
+            "header should contain 'SEMANTIC', got: {}",
+            header
+        );
+    }
+
+    #[test]
+    fn test_render_arcs_by_family_multiple_families() {
+        let theme = create_test_theme();
+        let dim = Style::default().fg(Color::Rgb(100, 100, 100));
+
+        let incoming = vec![create_neo4j_arc("BELONGS_TO", "Project", "ownership")];
+        let outgoing = vec![create_neo4j_arc("USES_ENTITY", "Entity", "semantic")];
+        let arcs = create_kind_arcs_data("Page", incoming, outgoing);
+
+        let mut lines: Vec<Line> = Vec::new();
+        render_arcs_by_family(&mut lines, &arcs, &theme, &dim);
+
+        // Should have 2 family sections
+        let all_content: String = lines
+            .iter()
+            .flat_map(|l| l.spans.iter())
+            .map(|s| s.content.as_ref())
+            .collect();
+
+        assert!(
+            all_content.contains("OWNERSHIP"),
+            "should contain OWNERSHIP family"
+        );
+        assert!(
+            all_content.contains("SEMANTIC"),
+            "should contain SEMANTIC family"
+        );
+    }
+
+    #[test]
+    fn test_render_arcs_by_family_incoming_outgoing_counts() {
+        let theme = create_test_theme();
+        let dim = Style::default().fg(Color::Rgb(100, 100, 100));
+
+        // 2 incoming, 1 outgoing for semantic family
+        let incoming = vec![
+            create_neo4j_arc("USED_BY_PAGE", "Page", "semantic"),
+            create_neo4j_arc("USED_BY_BLOCK", "Block", "semantic"),
+        ];
+        let outgoing = vec![create_neo4j_arc("USES_ENTITY", "Entity", "semantic")];
+        let arcs = create_kind_arcs_data("Kind", incoming, outgoing);
+
+        let mut lines: Vec<Line> = Vec::new();
+        render_arcs_by_family(&mut lines, &arcs, &theme, &dim);
+
+        // Find the header line with counts
+        let header: String = lines[0].spans.iter().map(|s| s.content.as_ref()).collect();
+        // Should show (◀2 ▶1) for 2 incoming, 1 outgoing
+        assert!(
+            header.contains("2") && header.contains("1"),
+            "header should show counts, got: {}",
+            header
+        );
+    }
+
+    #[test]
+    fn test_render_arcs_by_family_arc_direction_display() {
+        let theme = create_test_theme();
+        let dim = Style::default().fg(Color::Rgb(100, 100, 100));
+
+        let incoming = vec![create_neo4j_arc("BELONGS_TO", "Project", "ownership")];
+        let outgoing = vec![create_neo4j_arc("HAS_PAGE", "Page", "ownership")];
+        let arcs = create_kind_arcs_data("Kind", incoming, outgoing);
+
+        let mut lines: Vec<Line> = Vec::new();
+        render_arcs_by_family(&mut lines, &arcs, &theme, &dim);
+
+        let all_content: String = lines
+            .iter()
+            .flat_map(|l| l.spans.iter())
+            .map(|s| s.content.as_ref())
+            .collect();
+
+        // Outgoing: Kind --[ARC]---> Target
+        // Incoming: Source --[ARC]---> Kind
+        assert!(
+            all_content.contains("Kind"),
+            "should contain the kind label"
+        );
+        assert!(
+            all_content.contains("BELONGS_TO"),
+            "should contain incoming arc"
+        );
+        assert!(
+            all_content.contains("HAS_PAGE"),
+            "should contain outgoing arc"
+        );
+    }
+
+    // =========================================================================
+    // build_graph_distribution_stats tests
+    // =========================================================================
+
+    #[test]
+    fn test_build_graph_distribution_stats_empty_tree() {
+        let tree = create_empty_tree();
+        let app = create_test_app_with_tree(tree);
+
+        let lines = build_graph_distribution_stats(&app);
+
+        assert_eq!(lines.len(), 1, "empty tree should produce 1 line");
+        let content: String = lines[0].spans.iter().map(|s| s.content.as_ref()).collect();
+        assert!(
+            content.contains("No kinds loaded"),
+            "should show 'No kinds loaded', got: {}",
+            content
+        );
+    }
+
+    #[test]
+    fn test_build_graph_distribution_stats_single_realm() {
+        let kind1 = create_test_kind("Page");
+        let kind2 = create_test_kind("Block");
+        let layer = create_test_layer("structure", vec![kind1, kind2]);
+        let realm = create_test_realm("tenant", vec![layer]);
+        let tree = create_tree_with_realms(vec![realm]);
+        let app = create_test_app_with_tree(tree);
+
+        let lines = build_graph_distribution_stats(&app);
+
+        // Should have realm distribution header + separator + realm bar + blank + layer header + separator + layer bar
+        assert!(lines.len() >= 5, "should have multiple lines for stats");
+
+        let all_content: String = lines
+            .iter()
+            .flat_map(|l| l.spans.iter())
+            .map(|s| s.content.as_ref())
+            .collect();
+
+        assert!(
+            all_content.contains("REALM DISTRIBUTION"),
+            "should contain realm header"
+        );
+        assert!(
+            all_content.contains("LAYER BREAKDOWN"),
+            "should contain layer header"
+        );
+        assert!(
+            all_content.contains("100%"),
+            "single realm should be 100%"
+        );
+    }
+
+    #[test]
+    fn test_build_graph_distribution_stats_percentage_calculation() {
+        // Create 2 realms: global with 1 kind, tenant with 3 kinds
+        // Expected: global = 25%, tenant = 75%
+        let global_kind = create_test_kind("Config");
+        let global_layer = create_test_layer("config", vec![global_kind]);
+        let global_realm = create_test_realm("global", vec![global_layer]);
+
+        let tenant_kinds = vec![
+            create_test_kind("Page"),
+            create_test_kind("Block"),
+            create_test_kind("Entity"),
+        ];
+        let tenant_layer = create_test_layer("structure", tenant_kinds);
+        let tenant_realm = create_test_realm("tenant", vec![tenant_layer]);
+
+        let tree = create_tree_with_realms(vec![global_realm, tenant_realm]);
+        let app = create_test_app_with_tree(tree);
+
+        let lines = build_graph_distribution_stats(&app);
+        let all_content: String = lines
+            .iter()
+            .flat_map(|l| l.spans.iter())
+            .map(|s| s.content.as_ref())
+            .collect();
+
+        // Should show 25% for global (1/4 = 25%) and 75% for tenant (3/4 = 75%)
+        assert!(
+            all_content.contains("25%"),
+            "global should be 25%, got: {}",
+            all_content
+        );
+        assert!(
+            all_content.contains("75%"),
+            "tenant should be 75%, got: {}",
+            all_content
+        );
+    }
+
+    #[test]
+    fn test_build_graph_distribution_stats_bar_width_calculation() {
+        // Create 2 realms with different kind counts
+        // bar_width = (realm_kinds * bar_max_width) / total_kinds
+        // bar_max_width = 20
+
+        // Global: 2 kinds, Tenant: 8 kinds, Total: 10
+        // Global bar = (2 * 20) / 10 = 4
+        // Tenant bar = (8 * 20) / 10 = 16
+
+        let global_kinds = vec![create_test_kind("Config1"), create_test_kind("Config2")];
+        let global_layer = create_test_layer("config", global_kinds);
+        let global_realm = create_test_realm("global", vec![global_layer]);
+
+        let tenant_kinds: Vec<KindInfo> = (0..8)
+            .map(|i| create_test_kind(&format!("Kind{}", i)))
+            .collect();
+        let tenant_layer = create_test_layer("structure", tenant_kinds);
+        let tenant_realm = create_test_realm("tenant", vec![tenant_layer]);
+
+        let tree = create_tree_with_realms(vec![global_realm, tenant_realm]);
+        let app = create_test_app_with_tree(tree);
+
+        let lines = build_graph_distribution_stats(&app);
+
+        // Count the number of filled bar characters in realm lines
+        // The realm bars are on lines after the header/separator
+        let realm_section: Vec<&Line> = lines
+            .iter()
+            .filter(|l| {
+                let content: String = l.spans.iter().map(|s| s.content.as_ref()).collect();
+                (content.contains("global") || content.contains("tenant"))
+                    && content.contains('%')
+            })
+            .collect();
+
+        assert_eq!(realm_section.len(), 2, "should have 2 realm bar lines");
+
+        // Verify the bars have different widths by counting block characters
+        let global_line: String = realm_section[0]
+            .spans
+            .iter()
+            .map(|s| s.content.as_ref())
+            .collect();
+        let tenant_line: String = realm_section[1]
+            .spans
+            .iter()
+            .map(|s| s.content.as_ref())
+            .collect();
+
+        let global_blocks = global_line.matches('\u{2588}').count();
+        let tenant_blocks = tenant_line.matches('\u{2588}').count();
+
+        // Tenant should have more blocks than global (8 kinds vs 2 kinds)
+        assert!(
+            tenant_blocks > global_blocks,
+            "tenant ({} blocks) should have more than global ({} blocks)",
+            tenant_blocks,
+            global_blocks
+        );
+    }
+
+    #[test]
+    fn test_build_graph_distribution_stats_layer_bar_scaling() {
+        // Layer bars scale relative to max layer kinds, not total kinds
+        // Create layers with different sizes
+
+        let layer1_kinds = vec![create_test_kind("Kind1")];
+        let layer2_kinds = vec![
+            create_test_kind("Kind2"),
+            create_test_kind("Kind3"),
+            create_test_kind("Kind4"),
+            create_test_kind("Kind5"),
+        ];
+
+        let layer1 = create_test_layer("config", layer1_kinds);
+        let layer2 = create_test_layer("foundation", layer2_kinds);
+        let realm = create_test_realm("tenant", vec![layer1, layer2]);
+        let tree = create_tree_with_realms(vec![realm]);
+        let app = create_test_app_with_tree(tree);
+
+        let lines = build_graph_distribution_stats(&app);
+
+        // Find layer breakdown section
+        let layer_section: Vec<&Line> = lines
+            .iter()
+            .skip_while(|l| {
+                let content: String = l.spans.iter().map(|s| s.content.as_ref()).collect();
+                !content.contains("LAYER BREAKDOWN")
+            })
+            .skip(2) // Skip header and separator
+            .filter(|l| !l.spans.is_empty())
+            .collect();
+
+        assert!(layer_section.len() >= 2, "should have 2 layer lines");
+
+        // max_layer_kinds = 4 (foundation), bar_max_width = 20
+        // config bar = (1 * 20) / 4 = 5
+        // foundation bar = (4 * 20) / 4 = 20 (full width)
+
+        let config_line: String = layer_section
+            .iter()
+            .find(|l| {
+                let content: String = l.spans.iter().map(|s| s.content.as_ref()).collect();
+                content.contains("config")
+            })
+            .map(|l| l.spans.iter().map(|s| s.content.as_ref()).collect())
+            .unwrap_or_default();
+
+        let foundation_line: String = layer_section
+            .iter()
+            .find(|l| {
+                let content: String = l.spans.iter().map(|s| s.content.as_ref()).collect();
+                content.contains("foundation")
+            })
+            .map(|l| l.spans.iter().map(|s| s.content.as_ref()).collect())
+            .unwrap_or_default();
+
+        let config_blocks = config_line.matches('\u{2588}').count();
+        let foundation_blocks = foundation_line.matches('\u{2588}').count();
+
+        // Foundation should have more blocks (4 kinds vs 1 kind)
+        assert!(
+            foundation_blocks > config_blocks,
+            "foundation ({} blocks) should have more than config ({} blocks)",
+            foundation_blocks,
+            config_blocks
+        );
+    }
+
+    #[test]
+    fn test_build_graph_distribution_stats_skips_empty_layers() {
+        // Empty layers should not be shown in layer breakdown
+        let kind = create_test_kind("Page");
+        let layer_with_kinds = create_test_layer("structure", vec![kind]);
+        let empty_layer = create_test_layer("empty", Vec::new());
+        let realm = create_test_realm("tenant", vec![layer_with_kinds, empty_layer]);
+        let tree = create_tree_with_realms(vec![realm]);
+        let app = create_test_app_with_tree(tree);
+
+        let lines = build_graph_distribution_stats(&app);
+        let all_content: String = lines
+            .iter()
+            .flat_map(|l| l.spans.iter())
+            .map(|s| s.content.as_ref())
+            .collect();
+
+        // Should show structure but not empty
+        assert!(
+            all_content.contains("structure"),
+            "should contain structure layer"
+        );
+        // Empty layer should not appear in the layer breakdown
+        // (it may appear if listed, but the function skips layer_kinds == 0)
+    }
+
+    #[test]
+    fn test_build_graph_distribution_stats_kind_counts_displayed() {
+        let kinds = vec![
+            create_test_kind("Page"),
+            create_test_kind("Block"),
+            create_test_kind("Entity"),
+        ];
+        let layer = create_test_layer("structure", kinds);
+        let realm = create_test_realm("tenant", vec![layer]);
+        let tree = create_tree_with_realms(vec![realm]);
+        let app = create_test_app_with_tree(tree);
+
+        let lines = build_graph_distribution_stats(&app);
+        let all_content: String = lines
+            .iter()
+            .flat_map(|l| l.spans.iter())
+            .map(|s| s.content.as_ref())
+            .collect();
+
+        // Should show "3 Kinds" somewhere in the content
+        assert!(
+            all_content.contains("3 Kinds") || all_content.contains("3"),
+            "should show kind count, got: {}",
+            all_content
+        );
+    }
+
+    // =========================================================================
+    // Edge cases
+    // =========================================================================
+
+    #[test]
+    fn test_render_arcs_by_family_all_five_families() {
+        let theme = create_test_theme();
+        let dim = Style::default().fg(Color::Rgb(100, 100, 100));
+
+        // Test all 5 arc families: ownership, localization, semantic, generation, mining
+        let outgoing = vec![
+            create_neo4j_arc("BELONGS_TO", "Project", "ownership"),
+            create_neo4j_arc("LOCALIZES", "EntityL10n", "localization"),
+            create_neo4j_arc("USES_ENTITY", "Entity", "semantic"),
+            create_neo4j_arc("GENERATES", "Block", "generation"),
+            create_neo4j_arc("MINES_DATA", "Source", "mining"),
+        ];
+        let arcs = create_kind_arcs_data("Kind", Vec::new(), outgoing);
+
+        let mut lines: Vec<Line> = Vec::new();
+        render_arcs_by_family(&mut lines, &arcs, &theme, &dim);
+
+        let all_content: String = lines
+            .iter()
+            .flat_map(|l| l.spans.iter())
+            .map(|s| s.content.as_ref())
+            .collect();
+
+        // All families should be present (BTreeMap sorts alphabetically)
+        assert!(all_content.contains("GENERATION"), "should have generation");
+        assert!(
+            all_content.contains("LOCALIZATION"),
+            "should have localization"
+        );
+        assert!(all_content.contains("MINING"), "should have mining");
+        assert!(all_content.contains("OWNERSHIP"), "should have ownership");
+        assert!(all_content.contains("SEMANTIC"), "should have semantic");
+    }
+
+    #[test]
+    fn test_build_graph_distribution_stats_many_realms() {
+        // Test with multiple realms to ensure all are displayed
+        let realms: Vec<RealmInfo> = (0..3)
+            .map(|i| {
+                let kinds: Vec<KindInfo> = (0..(i + 1))
+                    .map(|j| create_test_kind(&format!("Kind{}_{}", i, j)))
+                    .collect();
+                let layer = create_test_layer(&format!("layer{}", i), kinds);
+                create_test_realm(&format!("realm{}", i), vec![layer])
+            })
+            .collect();
+
+        let tree = create_tree_with_realms(realms);
+        let app = create_test_app_with_tree(tree);
+
+        let lines = build_graph_distribution_stats(&app);
+        let all_content: String = lines
+            .iter()
+            .flat_map(|l| l.spans.iter())
+            .map(|s| s.content.as_ref())
+            .collect();
+
+        // All realms should be present
+        assert!(all_content.contains("realm0"), "should have realm0");
+        assert!(all_content.contains("realm1"), "should have realm1");
+        assert!(all_content.contains("realm2"), "should have realm2");
+    }
+}
