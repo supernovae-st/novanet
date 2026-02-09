@@ -14,7 +14,7 @@ SET k.value = 'qr code',
 // Parent Question 1: Comment scanner un QR code sans application ?
 // -----------------------------------------------------------------------------
 
-CREATE (q1:SEOQuestion {
+MERGE (q1:SEOQuestion {
   key: 'comment-scanner-un-qr-code-sans-application',
   value: 'Comment scanner un QR code sans application ?',
   question_word: 'comment',
@@ -23,7 +23,7 @@ CREATE (q1:SEOQuestion {
 });
 
 // Child questions for Parent 1
-CREATE (q2:SEOQuestion {
+MERGE (q2:SEOQuestion {
   key: 'comment-scanner-un-code-qr-sans-application',
   value: 'Comment scanner un code QR sans application ?',
   question_word: 'comment',
@@ -31,7 +31,7 @@ CREATE (q2:SEOQuestion {
   locale: 'fr-FR'
 });
 
-CREATE (q3:SEOQuestion {
+MERGE (q3:SEOQuestion {
   key: 'comment-scanner-un-code-qr-avec-mon-appareil-photo',
   value: 'Comment scanner un code QR avec mon appareil photo ?',
   question_word: 'comment',
@@ -39,17 +39,17 @@ CREATE (q3:SEOQuestion {
   locale: 'fr-FR'
 });
 
-CREATE (q4:SEOQuestion {
+MERGE (q4:SEOQuestion {
   key: 'pourquoi-je-narrive-pas-a-scanner-un-qr-code-avec-mon-telephone',
-  value: 'Pourquoi je n''arrive pas à scanner un QR Code avec mon téléphone ?',
+  value: "Pourquoi je n'arrive pas à scanner un QR Code avec mon téléphone ?",
   question_word: 'pourquoi',
   is_parent: false,
   locale: 'fr-FR'
 });
 
-CREATE (q5:SEOQuestion {
+MERGE (q5:SEOQuestion {
   key: 'comment-scanner-un-qr-code-sans-telecharger-dapplication',
-  value: 'Comment scanner un QR Code sans télécharger d''application ?',
+  value: "Comment scanner un QR Code sans télécharger d'application ?",
   question_word: 'comment',
   is_parent: false,
   locale: 'fr-FR'
@@ -59,7 +59,7 @@ CREATE (q5:SEOQuestion {
 // Parent Question 2: Comment scanner le QR code avec mon portable ?
 // -----------------------------------------------------------------------------
 
-CREATE (q6:SEOQuestion {
+MERGE (q6:SEOQuestion {
   key: 'comment-scanner-le-qr-code-avec-mon-portable',
   value: 'Comment scanner le QR code avec mon portable ?',
   question_word: 'comment',
@@ -68,7 +68,7 @@ CREATE (q6:SEOQuestion {
 });
 
 // Child questions for Parent 2
-CREATE (q7:SEOQuestion {
+MERGE (q7:SEOQuestion {
   key: 'comment-puis-je-scanner-un-code-qr-avec-mon-telephone-portable',
   value: 'Comment puis-je scanner un code QR avec mon téléphone portable ?',
   question_word: 'comment',
@@ -76,15 +76,15 @@ CREATE (q7:SEOQuestion {
   locale: 'fr-FR'
 });
 
-CREATE (q8:SEOQuestion {
+MERGE (q8:SEOQuestion {
   key: 'pourquoi-je-narrive-pas-a-scanner-un-qr-code-avec-mon-tel',
-  value: 'Pourquoi je n''arrive pas à scanner un QR code avec mon téléphone ?',
+  value: "Pourquoi je n'arrive pas à scanner un QR code avec mon téléphone ?",
   question_word: 'pourquoi',
   is_parent: false,
   locale: 'fr-FR'
 });
 
-CREATE (q9:SEOQuestion {
+MERGE (q9:SEOQuestion {
   key: 'ou-se-trouve-le-lecteur-de-qr-code-sur-mon-telephone',
   value: 'Où se trouve le lecteur de QR code sur mon téléphone ?',
   question_word: 'ou',
@@ -92,7 +92,7 @@ CREATE (q9:SEOQuestion {
   locale: 'fr-FR'
 });
 
-CREATE (q10:SEOQuestion {
+MERGE (q10:SEOQuestion {
   key: 'comment-scanner-un-qr-avec-le-telephone',
   value: 'Comment scanner un QR avec le téléphone ?',
   question_word: 'comment',
@@ -100,7 +100,7 @@ CREATE (q10:SEOQuestion {
   locale: 'fr-FR'
 });
 
-CREATE (q11:SEOQuestion {
+MERGE (q11:SEOQuestion {
   key: 'comment-savoir-si-mon-telephone-peut-scanner-un-qr-code',
   value: 'Comment savoir si mon téléphone peut scanner un QR code ?',
   question_word: 'comment',
@@ -108,7 +108,7 @@ CREATE (q11:SEOQuestion {
   locale: 'fr-FR'
 });
 
-CREATE (q12:SEOQuestion {
+MERGE (q12:SEOQuestion {
   key: 'ou-se-trouve-le-scanner-sur-android',
   value: 'Où se trouve le scanner sur Android ?',
   question_word: 'ou',
@@ -120,7 +120,7 @@ CREATE (q12:SEOQuestion {
 // Parent Question 3: Comment faire un QR code gratuitement ?
 // -----------------------------------------------------------------------------
 
-CREATE (q13:SEOQuestion {
+MERGE (q13:SEOQuestion {
   key: 'comment-faire-un-qr-code-gratuitement',
   value: 'Comment faire un QR code gratuitement ?',
   question_word: 'comment',
@@ -129,7 +129,7 @@ CREATE (q13:SEOQuestion {
 });
 
 // Child questions for Parent 3
-CREATE (q14:SEOQuestion {
+MERGE (q14:SEOQuestion {
   key: 'quel-est-le-meilleur-qr-code-gratuit',
   value: 'Quel est le meilleur QR code gratuit ?',
   question_word: 'quel',
@@ -137,7 +137,7 @@ CREATE (q14:SEOQuestion {
   locale: 'fr-FR'
 });
 
-CREATE (q15:SEOQuestion {
+MERGE (q15:SEOQuestion {
   key: 'comment-creer-mon-propre-code-qr',
   value: 'Comment créer mon propre code QR ?',
   question_word: 'comment',
@@ -145,15 +145,15 @@ CREATE (q15:SEOQuestion {
   locale: 'fr-FR'
 });
 
-CREATE (q16:SEOQuestion {
+MERGE (q16:SEOQuestion {
   key: 'est-ce-quun-qr-code-est-gratuit',
-  value: 'Est-ce qu''un QR code est gratuit ?',
+  value: "Est-ce qu'un QR code est gratuit ?",
   question_word: 'est-ce',
   is_parent: false,
   locale: 'fr-FR'
 });
 
-CREATE (q17:SEOQuestion {
+MERGE (q17:SEOQuestion {
   key: 'comment-puis-je-obtenir-un-code-qr',
   value: 'Comment puis-je obtenir un code QR ?',
   question_word: 'comment',
@@ -161,7 +161,7 @@ CREATE (q17:SEOQuestion {
   locale: 'fr-FR'
 });
 
-CREATE (q18:SEOQuestion {
+MERGE (q18:SEOQuestion {
   key: 'ou-puis-je-creer-un-qr-code-gratuitement-et-en-illimite',
   value: 'Où puis-je créer un QR code gratuitement et en illimité ?',
   question_word: 'ou',
@@ -169,7 +169,7 @@ CREATE (q18:SEOQuestion {
   locale: 'fr-FR'
 });
 
-CREATE (q19:SEOQuestion {
+MERGE (q19:SEOQuestion {
   key: 'existe-t-il-des-codes-qr-veritablement-gratuits',
   value: 'Existe-t-il des codes QR véritablement gratuits ?',
   question_word: 'existe',
@@ -181,7 +181,7 @@ CREATE (q19:SEOQuestion {
 // Parent Question 4: Quelle application pour lire un QR code ?
 // -----------------------------------------------------------------------------
 
-CREATE (q20:SEOQuestion {
+MERGE (q20:SEOQuestion {
   key: 'quelle-application-pour-lire-un-qr-code',
   value: 'Quelle application pour lire un QR code ?',
   question_word: 'quelle',
@@ -190,7 +190,7 @@ CREATE (q20:SEOQuestion {
 });
 
 // Child questions for Parent 4
-CREATE (q21:SEOQuestion {
+MERGE (q21:SEOQuestion {
   key: 'quel-est-le-meilleur-lecteur-de-qr-code-gratuit',
   value: 'Quel est le meilleur lecteur de QR code gratuit ?',
   question_word: 'quel',
@@ -198,7 +198,7 @@ CREATE (q21:SEOQuestion {
   locale: 'fr-FR'
 });
 
-CREATE (q22:SEOQuestion {
+MERGE (q22:SEOQuestion {
   key: 'comment-lire-un-qr-code-avec-son-telephone-portable',
   value: 'Comment lire un QR code avec son téléphone portable ?',
   question_word: 'comment',
@@ -206,7 +206,7 @@ CREATE (q22:SEOQuestion {
   locale: 'fr-FR'
 });
 
-CREATE (q23:SEOQuestion {
+MERGE (q23:SEOQuestion {
   key: 'quelle-appli-gratuite-pour-scanner-un-qr-code',
   value: 'Quelle appli gratuite pour scanner un QR code ?',
   question_word: 'quelle',
@@ -214,7 +214,7 @@ CREATE (q23:SEOQuestion {
   locale: 'fr-FR'
 });
 
-CREATE (q24:SEOQuestion {
+MERGE (q24:SEOQuestion {
   key: 'comment-lire-un-code-qr-avec-mon-telephone',
   value: 'Comment lire un code QR avec mon téléphone ?',
   question_word: 'comment',
@@ -222,7 +222,7 @@ CREATE (q24:SEOQuestion {
   locale: 'fr-FR'
 });
 
-CREATE (q25:SEOQuestion {
+MERGE (q25:SEOQuestion {
   key: 'comment-installer-un-lecteur-qr-gratuit-sur-mon-telephone',
   value: 'Comment installer un lecteur QR gratuit sur mon téléphone ?',
   question_word: 'comment',
@@ -230,7 +230,7 @@ CREATE (q25:SEOQuestion {
   locale: 'fr-FR'
 });
 
-CREATE (q26:SEOQuestion {
+MERGE (q26:SEOQuestion {
   key: 'existe-t-il-des-applications-qr-gratuites',
   value: 'Existe-t-il des applications QR gratuites ?',
   question_word: 'existe',
