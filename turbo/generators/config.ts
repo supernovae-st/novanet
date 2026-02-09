@@ -53,9 +53,9 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
         name: 'realm',
         message: 'Realm (where does this node live?):',
         choices: [
-          // v10.4: 2 realms (SHARED merged into GLOBAL)
-          { name: 'global  - Shared by ALL projects (Locale, Knowledge, SEO)', value: 'global' },
-          { name: 'project - Per-project instances (Page, Block, Entity)', value: 'project' },
+          // v11.0: 2 realms (GLOBAL + TENANT)
+          { name: 'global - Universal locale knowledge (READ-ONLY)', value: 'global' },
+          { name: 'tenant - Business-specific content (Page, Block, Entity)', value: 'tenant' },
         ],
       },
       {
@@ -63,22 +63,23 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
         name: 'layer',
         message: 'Layer:',
         choices: [
-          // Global (v10.4: SEO moved from SHARED)
+          // GLOBAL (2 layers)
           { name: 'config (global)', value: 'config' },
-          { name: 'knowledge (global)', value: 'knowledge' },
-          { name: 'seo (global)', value: 'seo' },
-          // Project
-          { name: 'foundation (project)', value: 'foundation' },
-          { name: 'structure (project)', value: 'structure' },
-          { name: 'semantic (project)', value: 'semantic' },
-          { name: 'instruction (project)', value: 'instruction' },
-          { name: 'output (project)', value: 'output' },
+          { name: 'locale-knowledge (global)', value: 'locale-knowledge' },
+          // TENANT (7 layers)
+          { name: 'config (tenant)', value: 'config' },
+          { name: 'foundation (tenant)', value: 'foundation' },
+          { name: 'structure (tenant)', value: 'structure' },
+          { name: 'semantic (tenant)', value: 'semantic' },
+          { name: 'instruction (tenant)', value: 'instruction' },
+          { name: 'seo (tenant - v11.0)', value: 'seo' },
+          { name: 'output (tenant)', value: 'output' },
         ],
       },
       {
         type: 'confirm',
-        name: 'hasL10n',
-        message: 'Has localized variant (e.g., Concept -> ConceptL10n)?',
+        name: 'hasContent',
+        message: 'Has localized content variant (e.g., Entity -> EntityContent)?',
         default: false,
       },
       {
@@ -97,12 +98,12 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
         templateFile: 'templates/node.yaml.hbs',
       });
 
-      // 2. If hasL10n, create L10n variant
-      if (answers?.hasL10n) {
+      // 2. If hasContent, create Content variant (v11.0: EntityContent pattern)
+      if (answers?.hasContent) {
         actions.push({
           type: 'add',
-          path: 'packages/core/models/nodes/{{realm}}/{{layer}}/{{kebabCase name}}-l10n.yaml',
-          templateFile: 'templates/node-l10n.yaml.hbs',
+          path: 'packages/core/models/nodes/{{realm}}/{{layer}}/{{kebabCase name}}-content.yaml',
+          templateFile: 'templates/node-content.yaml.hbs',
         });
       }
 
@@ -143,7 +144,7 @@ Node created! Next steps:
         type: 'list',
         name: 'rootType',
         message: 'Root node type:',
-        choices: ['Page', 'Block', 'Concept', 'Locale', 'Project'],
+        choices: ['Page', 'Block', 'Entity', 'Locale', 'Project'],
       },
       {
         type: 'input',
@@ -156,11 +157,11 @@ Node created! Next steps:
         message: 'What to include in the view:',
         choices: [
           { name: 'Blocks', value: 'blocks', checked: true },
-          { name: 'Concepts', value: 'concepts', checked: true },
+          { name: 'Entities', value: 'entities', checked: true },
           { name: 'Locale Knowledge', value: 'knowledge', checked: false },
           { name: 'Prompts & Rules', value: 'prompts', checked: false },
           { name: 'SEO Keywords', value: 'seo', checked: false },
-          { name: 'GEO Seeds', value: 'geo', checked: false },
+          { name: 'GEO Queries', value: 'geo', checked: false },
         ],
       },
     ],

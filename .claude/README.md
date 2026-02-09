@@ -2,7 +2,7 @@
 
 Claude Code configuration for the NovaNet monorepo.
 
-**Version**: v10.9.0 | **Docs**: [Claude Code Official](https://docs.anthropic.com/en/docs/claude-code)
+**Version**: v11.0.0 | **Docs**: [Claude Code Official](https://docs.anthropic.com/en/docs/claude-code)
 
 ---
 
@@ -10,7 +10,7 @@ Claude Code configuration for the NovaNet monorepo.
 
 ```
 ╔═══════════════════════════════════════════════════════════════════════════════════════════════════╗
-║                              NOVANET DX - v10.9.0                                                  ║
+║                              NOVANET DX - v11.0.0                                                  ║
 ╠═══════════════════════════════════════════════════════════════════════════════════════════════════╣
 ║                                                                                                   ║
 ║   COMMANDS (slash commands)                                                                       ║
@@ -120,7 +120,7 @@ Automated scripts that run at specific lifecycle events.
 **Output:** Shows project version, git branch, and uncommitted changes count.
 
 ```
-NovaNet v10.9.0 | Branch: main | Uncommitted: 3 files
+NovaNet v11.0.0 | Branch: main | Uncommitted: 3 files
 ```
 
 ### PostToolUse Hook (Write|Edit)
@@ -599,7 +599,7 @@ Located in `apps/studio/.claude/rules/`:
 
 ### `novanet-terminology.md`
 
-Domain vocabulary reference (v10.9.0):
+Domain vocabulary reference (v11.0.0):
 - Core concepts (Project, Entity, Page, Block, Locale, Context Graph)
 - Meta-Graph: 6 meta-node types (Realm, Layer, Kind, Trait, ArcFamily, ArcKind)
 - Full Kind Inventory (64 Kinds across 2 Realms)
@@ -630,12 +630,12 @@ Architecture Decision Records (ADRs):
 
 ---
 
-## Key Numbers (v10.9.0)
+## Key Numbers (v11.0.0)
 
 | Metric | Value |
 |--------|-------|
 | Kind (node types) | 64 |
-| ArcKind (relations) | 121 |
+| ArcKind (relations) | 125 |
 | Realms | 2 (global, tenant) |
 | Layers | 9 |
 | Traits | 5 |
@@ -712,7 +712,7 @@ pnpm doc:generate
 **Source of truth:** `/VERSION` file contains the canonical schema version (10.9.0).
 
 **`pnpm doc:audit` checks:**
-- Outdated version references (current: v10.9.0)
+- Outdated version references (current: v11.0.0)
 - Deprecated terminology (EntityL10n → EntityContent, PageL10n → PageGenerated, BlockL10n → BlockGenerated)
 - Deprecated arcs (HAS_L10N → HAS_CONTENT, HAS_OUTPUT → HAS_GENERATED)
 - Incorrect node/arc counts (76 nodes, 123 arcs expected)

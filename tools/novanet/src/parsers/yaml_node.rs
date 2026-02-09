@@ -482,7 +482,7 @@ node:
         assert_eq!(
             count(NodeTrait::Localized),
             2,
-            "localized count (ProjectL10n + EntityContent)"
+            "localized count (ProjectContent + EntityContent)" // v11.0: ProjectL10n → ProjectContent
         ); // v10.9: was 4, now 2 (BlockGenerated + PageGenerated moved to derived)
         assert_eq!(
             count(NodeTrait::Knowledge),

@@ -46,7 +46,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 │                                                                                                     │
 │   packages/core/models/                                                                             │
 │   ├── _index.yaml                          ← Index du graphe (structure, changelog)                 │
-│   ├── taxonomy.yaml                        ← v10.9: 2 Realms/9 Layers/5 Traits/5 ArcFamilies       │
+│   ├── taxonomy.yaml                        ← v11.0: 2 Realms/9 Layers/5 Traits/5 ArcFamilies       │
 │   ├── node-kinds/                          ← 64 fichiers YAML (1 par Kind)                          │
 │   │   ├── global/                          ← Realm: global (40 nodes)                               │
 │   │   │   ├── config/                      ←   Layer: config (Locale + utilities)                   │
@@ -64,7 +64,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 │   │       ├── instruction/                 ←   Layer: instruction (Prompts, Rules)                  │
 │   │       └── output/                      ←   Layer: output (PageGenerated, BlockGenerated)                  │
 │   │                                                                                                 │
-│   ├── arc-kinds/                           ← 116 fichiers YAML (1 par ArcKind)                       │
+│   ├── arc-kinds/                           ← 125 fichiers YAML (1 par ArcKind)                       │
 │   ├── relations.yaml                       ← Legacy format (kept for parser compatibility)          │
 │   └── views/                               ← Definitions de vues YAML                               │
 │                                                                                                     │
@@ -163,7 +163,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
      │                        📁 YAML (Single Source of Truth)                                     │
      │                        packages/core/models/                                                │
      │                        ├── node-kinds/               ← 64 NodeKind files                     │
-     │                        ├── arc-kinds/                ← 116 ArcKind files                      │
+     │                        ├── arc-kinds/                ← 125 ArcKind files                      │
      │                        └── taxonomy.yaml             ← 2 Realms, 9 Layers, 5 Traits         │
      └─────────────────────────────────────────────┬───────────────────────────────────────────────┘
                                                    │
@@ -370,7 +370,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 │   │  └─────────────────────┘  └─────────────────────┘  └─────────────────────┘                 │   │
 │   │                                                                                             │   │
 │   │  ┌─────────────────────┐                                                                    │   │
-│   │  │  QUERY MODE        │  Visual Encoding (v10.9):                                          │   │
+│   │  │  QUERY MODE        │  Visual Encoding (v11.0):                                          │   │
 │   │  │  Faceted filters   │  ├── Fill color   → Layer (9 colors)                               │   │
 │   │  │                    │  ├── Border style  → Trait (5 styles)                               │   │
 │   │  │  Realm + Layer +   │  ├── Spatial group → Realm (2 zones)                               │   │
@@ -394,7 +394,7 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 ║                    ┌──────────────────┐                                                           ║
 ║                    │  @novanet/core   │  ← Types, schemas, generators, filters                    ║
 ║                    │  (source truth)  │     node-kinds/ + arc-kinds/ + taxonomy.yaml             ║
-║                    └────────┬─────────┘     v10.9: 2 Realms, 9 Layers                           ║
+║                    └────────┬─────────┘     v11.0: 2 Realms, 9 Layers                           ║
 ║                             │                                                                     ║
 ║              ┌──────────────┼──────────────┐                                                      ║
 ║              │              │              │                                                      ║
@@ -463,14 +463,14 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 
 ---
 
-## Key Numbers (v10.9.0)
+## Key Numbers (v11.0.0)
 
 | Metric | Value |
 |--------|-------|
-| Kind (node types) | 64 |
-| ArcKind (arcs) | 121 |
+| Kind (node types) | 65 |
+| ArcKind (arcs) | 125 |
 | Realms | 2 (global, tenant) |
-| Layers | 9 (3 global, 6 tenant) |
+| Layers | 9 (2 global, 7 tenant) |
 | Traits | 5 |
 | ArcFamilies | 5 |
 | Locale Knowledge nodes | 18 |
