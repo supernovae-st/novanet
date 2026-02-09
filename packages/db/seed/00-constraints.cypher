@@ -46,7 +46,8 @@ CREATE INDEX entity_content_version IF NOT EXISTS FOR (ec:EntityContent) ON (ec.
 // ═══════════════════════════════════════════════════════════════════════════════
 
 CREATE CONSTRAINT brandidentity_key IF NOT EXISTS FOR (bi:BrandIdentity) REQUIRE bi.key IS UNIQUE;
-CREATE INDEX projectl10n_updated IF NOT EXISTS FOR (pl:ProjectL10n) ON (pl.updated_at);
+// v10.9.0: ProjectL10n renamed to ProjectContent (Decision 11)
+CREATE INDEX projectcontent_updated IF NOT EXISTS FOR (pc:ProjectContent) ON (pc.updated_at);
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // PAGE STRUCTURE
