@@ -144,7 +144,6 @@ export const useUIStore = create<UIStoreState>()(
       viewMode: '2d',
       sidebarOpen: true,
       panelOpen: false,
-      searchOpen: false,
       focusMode: false,
       minimapVisible: true,
       showEdgeLabels: true,

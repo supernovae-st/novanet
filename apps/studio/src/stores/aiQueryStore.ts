@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import type { AiQuery, SavedQuery } from '@/types';
+import type { AiQuery } from '@/types';
 import { generateId } from '@/lib/utils';
 import { useQueryStore } from './queryStore';
 import { validateCypher } from '@/lib/cypherValidator';
@@ -11,25 +11,11 @@ const MAX_HISTORY_ITEMS = 10;
 interface AiQueryStoreState {
   // AI Query History (recent queries from AI)
   queryHistory: AiQuery[];
-  isProcessing: boolean;
   isExecuting: boolean;
-
-  // Saved Queries (user's custom library)
-  savedQueries: SavedQuery[];
 
   // Actions - AI Query
   submitAiQuery: (question: string) => Promise<void>;
   executeAiQuery: (id: string) => Promise<void>;
-  updateQueryResult: (id: string, result: AiQuery['result']) => void;
-  updateQueryError: (id: string, error: string) => void;
-  removeFromHistory: (id: string) => void;
-  clearHistory: () => void;
-
-  // Actions - Saved Queries
-  saveQuery: (query: Omit<SavedQuery, 'id' | 'createdAt' | 'updatedAt'>) => void;
-  updateSavedQuery: (id: string, updates: Partial<Omit<SavedQuery, 'id' | 'createdAt'>>) => void;
-  deleteSavedQuery: (id: string) => void;
-  saveFromHistory: (historyId: string, name: string, icon?: string) => void;
 }
 
 export const useAiQueryStore = create<AiQueryStoreState>()(
@@ -37,18 +23,14 @@ export const useAiQueryStore = create<AiQueryStoreState>()(
     immer((set, get) => ({
       // Initial state
       queryHistory: [],
-      isProcessing: false,
       isExecuting: false,
-      savedQueries: [],
 
       // Submit a natural language query to AI
       submitAiQuery: async (question: string) => {
         const queryId = generateId();
 
         // Add to history immediately with pending status
-        // Use atomic operation to never exceed MAX_HISTORY_ITEMS
         set((state) => {
-          state.isProcessing = true;
           const newItem = {
             id: queryId,
             question,
@@ -56,7 +38,7 @@ export const useAiQueryStore = create<AiQueryStoreState>()(
             status: 'pending' as const,
             createdAt: new Date().toISOString(),
           };
-          // Prepend new item and keep only MAX items (atomic, never exceeds limit)
+          // Prepend new item and keep only MAX items
           state.queryHistory = [newItem, ...state.queryHistory.slice(0, MAX_HISTORY_ITEMS - 1)];
         });
 
@@ -86,7 +68,6 @@ export const useAiQueryStore = create<AiQueryStoreState>()(
               query.cypher = cypherQuery;
               query.status = 'generated';
             }
-            state.isProcessing = false;
           });
         } catch (error) {
           // Update with error
@@ -96,14 +77,13 @@ export const useAiQueryStore = create<AiQueryStoreState>()(
               query.status = 'error';
               query.error = error instanceof Error ? error.message : 'Unknown error';
             }
-            state.isProcessing = false;
           });
         }
       },
 
       // Execute a generated query manually (Preview → Run flow)
       executeAiQuery: async (id: string) => {
-        // Prevent concurrent execution (race condition fix)
+        // Prevent concurrent execution
         if (get().isExecuting) {
           return;
         }
@@ -136,7 +116,6 @@ export const useAiQueryStore = create<AiQueryStoreState>()(
         try {
           const startTime = Date.now();
           const executeQuery = useQueryStore.getState().executeQuery;
-          // Capture result directly from returned value (avoids race condition)
           const result = await executeQuery(query.cypher);
           const duration = Date.now() - startTime;
 
@@ -167,93 +146,11 @@ export const useAiQueryStore = create<AiQueryStoreState>()(
           });
         }
       },
-
-      updateQueryResult: (id, result) => {
-        set((state) => {
-          const query = state.queryHistory.find((q) => q.id === id);
-          if (query) {
-            query.result = result;
-            query.status = 'success';
-          }
-        });
-      },
-
-      updateQueryError: (id, error) => {
-        set((state) => {
-          const query = state.queryHistory.find((q) => q.id === id);
-          if (query) {
-            query.error = error;
-            query.status = 'error';
-          }
-        });
-      },
-
-      removeFromHistory: (id) => {
-        set((state) => {
-          state.queryHistory = state.queryHistory.filter((q) => q.id !== id);
-        });
-      },
-
-      clearHistory: () => {
-        set((state) => {
-          state.queryHistory = [];
-        });
-      },
-
-      // Save a new query to library
-      saveQuery: (query) => {
-        const now = new Date().toISOString();
-        set((state) => {
-          state.savedQueries.push({
-            ...query,
-            id: generateId(),
-            createdAt: now,
-            updatedAt: now,
-          });
-        });
-      },
-
-      // Update an existing saved query
-      updateSavedQuery: (id, updates) => {
-        set((state) => {
-          const query = state.savedQueries.find((q) => q.id === id);
-          if (query) {
-            Object.assign(query, updates, { updatedAt: new Date().toISOString() });
-          }
-        });
-      },
-
-      // Delete a saved query
-      deleteSavedQuery: (id) => {
-        set((state) => {
-          state.savedQueries = state.savedQueries.filter((q) => q.id !== id);
-        });
-      },
-
-      // Save from history to library
-      saveFromHistory: (historyId, name, icon = '⭐') => {
-        const historyQuery = get().queryHistory.find((q) => q.id === historyId);
-        if (!historyQuery || !historyQuery.cypher) return;
-
-        const now = new Date().toISOString();
-        set((state) => {
-          state.savedQueries.push({
-            id: generateId(),
-            name,
-            description: historyQuery.question,
-            icon,
-            cypher: historyQuery.cypher,
-            createdAt: now,
-            updatedAt: now,
-          });
-        });
-      },
     })),
     {
       name: 'novanet-ai-queries',
       partialize: (state) => ({
         queryHistory: state.queryHistory.slice(0, MAX_HISTORY_ITEMS),
-        savedQueries: state.savedQueries,
       }),
     }
   )
