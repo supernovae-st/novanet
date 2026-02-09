@@ -558,15 +558,6 @@ export function getRelationshipColor(type: string): string {
 }
 
 /**
- * Get category for a relationship type
- */
-export function getRelationshipCategory(type: string): RelationshipCategoryConfig | undefined {
-  const config = relationshipTypeConfigs[type as RelationType];
-  if (!config) return undefined;
-  return RELATIONSHIP_VISUAL_CATEGORIES.find((c) => c.id === config.category);
-}
-
-/**
  * Alias for backwards compatibility with relationshipColors.ts
  */
 export const RELATIONSHIP_TYPE_CONFIG = relationshipTypeConfigs;

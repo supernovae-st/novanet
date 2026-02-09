@@ -74,11 +74,6 @@ export const CATEGORY_ORDER: ViewCategory[] = [
   'mining',
 ];
 
-// Helper to get config by ID
-export function getCategoryConfig(id: ViewCategory): CategoryConfig {
-  return VIEW_CATEGORIES[id];
-}
-
 // Display names map (for API routes)
 export const CATEGORY_NAMES: Record<ViewCategory, string> = Object.fromEntries(
   Object.entries(VIEW_CATEGORIES).map(([id, config]) => [id, config.label])

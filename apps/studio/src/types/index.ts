@@ -137,28 +137,6 @@ export interface NodeDetail {
 }
 
 // -----------------------------------------------------------------------------
-// NEO4J RAW TYPES
-// -----------------------------------------------------------------------------
-
-export interface Neo4jNode {
-  identity: number;
-  labels: string[];
-  properties: Record<string, unknown>;
-  elementId: string;
-}
-
-export interface Neo4jRelationship {
-  identity: number;
-  type: string;
-  start: number;
-  end: number;
-  startNodeElementId: string;
-  endNodeElementId: string;
-  properties: Record<string, unknown>;
-  elementId: string;
-}
-
-// -----------------------------------------------------------------------------
 // FILTER & PRESET TYPES
 // -----------------------------------------------------------------------------
 
@@ -214,31 +192,4 @@ export interface ChatState {
   error: string | null;
 }
 
-// -----------------------------------------------------------------------------
-// AI QUERY TYPES
-// -----------------------------------------------------------------------------
-
-/**
- * A query executed via AI (stored in history)
- * Note: Uses ISO string for createdAt (localStorage serialization)
- */
-export interface AiQuery {
-  id: string;
-  /** Original natural language question */
-  question: string;
-  /** Generated Cypher query */
-  cypher: string;
-  /** Execution result */
-  result?: {
-    nodeCount: number;
-    edgeCount: number;
-    duration: number;
-  };
-  /** Execution status */
-  status: 'pending' | 'generated' | 'executing' | 'success' | 'error';
-  /** Error message if failed */
-  error?: string;
-  /** Timestamp (ISO string for localStorage) */
-  createdAt: string;
-}
 
