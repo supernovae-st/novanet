@@ -518,19 +518,6 @@ export interface LocaleCultureReferences {
   updated_at: Date;
 }
 
-// Semantic field types for type safety
-export type SemanticField =
-  | 'success'
-  | 'speed'
-  | 'simplicity'
-  | 'quality'
-  | 'urgency'
-  | 'trust'
-  | 'innovation'
-  | 'value'
-  | 'exclusivity'
-  | 'community';
-
 // Export all new types
 export type LocaleKnowledgeNode =
   | Locale

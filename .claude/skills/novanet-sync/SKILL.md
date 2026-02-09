@@ -11,25 +11,25 @@ argument-hint: [validate|generate|status]
 
 Synchronize generated artifacts with YAML source of truth.
 
-## Source of Truth (v10.9)
+## Source of Truth (v11.0)
 
 ```
 packages/core/models/
-├── node-kinds/                   ← 64 YAML files (one per NodeKind)
-│   ├── global/                   ← Realm: global (40 nodes)
+├── node-kinds/                   ← 65 YAML files (one per NodeKind)
+│   ├── global/                   ← Realm: global (18 nodes)
 │   │   ├── config/               ←   Layer: config (Locale + utilities)
-│   │   ├── locale-knowledge/     ←   Layer: locale-knowledge (14 Knowledge Atom types)
-│   │   └── seo/                  ←   Layer: seo (6 nodes: SEOKeyword, SEOQuestion, etc.)
-│   └── tenant/                   ← Realm: tenant (24 nodes)
+│   │   └── locale-knowledge/     ←   Layer: locale-knowledge (Knowledge Atom types)
+│   └── tenant/                   ← Realm: tenant (47 nodes)
 │       ├── config/               ←   Layer: config (Organization)
 │       ├── foundation/           ←   Layer: foundation
 │       ├── structure/            ←   Layer: structure
 │       ├── semantic/             ←   Layer: semantic (Entity, EntityContent)
 │       ├── instruction/          ←   Layer: instruction
+│       ├── seo/                  ←   Layer: seo (SEOKeyword, GEO - v11.0 moved from global)
 │       └── output/               ←   Layer: output
-├── arc-kinds/                    ← 116 YAML files (one per ArcKind)
+├── arc-kinds/                    ← 125 YAML files (one per ArcKind)
 ├── relations.yaml                ← Legacy format (kept for parser compatibility)
-└── taxonomy.yaml                 ← v10.9: 2 Realms, 9 Layers, 5 Traits
+└── taxonomy.yaml                 ← v11.0: 2 Realms, 9 Layers, 5 Traits
 ```
 
 ## Generated Artifacts

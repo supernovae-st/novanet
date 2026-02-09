@@ -9,14 +9,17 @@
  * - One icon per layer (9 layers in v10.5)
  * - Consistent styling with glow effects
  *
- * Layers (v10.5 - 9 layers across 3 realms):
- * - config: Settings (global + organization)
- * - locale-knowledge: BookOpen (locale knowledge atoms)
- * - seo: Search (search optimization)
- * - foundation: Package/project structure
+ * Layers (v11.0 - 9 layers across 2 realms):
+ * GLOBAL (2 layers):
+ * - config: Settings (locale configuration)
+ * - locale-knowledge: BookOpen (knowledge atoms)
+ * TENANT (7 layers):
+ * - config: Settings (organization)
+ * - foundation: Package (project structure)
  * - structure: Layout (pages, blocks)
  * - semantic: Lightbulb (entities)
- * - instruction: FileText (prompts, rules, types)
+ * - instruction: FileText (prompts, rules)
+ * - seo: Search (SEO optimization - moved to tenant in v11.0)
  * - output: Sparkles (generated content)
  */
 

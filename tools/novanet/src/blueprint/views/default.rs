@@ -142,7 +142,7 @@ fn render_traits(data: &BlueprintData) -> String {
 
     let trait_info = [
         (NodeTrait::Invariant, "invariant", "Same across all locales", "Entity, Page, Block"),
-        (NodeTrait::Localized, "localized", "Native content per locale", "EntityContent, ProjectL10n"),
+        (NodeTrait::Localized, "localized", "Native content per locale", "EntityContent, ProjectContent"),
         (NodeTrait::Knowledge, "knowledge", "Locale-specific atoms", "Term, Expression, Taboo"),
         (NodeTrait::Derived, "derived", "Generated from invariants", "PageGenerated, BlockGenerated"),
         (NodeTrait::Job, "job", "Async processing tasks", "GenerationJob"),

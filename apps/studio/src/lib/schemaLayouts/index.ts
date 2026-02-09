@@ -8,11 +8,6 @@
  */
 
 export * from './types';
-export { applySwimlaneLayout } from './swimlanes';
-export { applyStackedLayout } from './stacked';
-export { applyTargetLayout } from './target';
-export { applyForceClusterLayout } from './forceClusters';
-export { applyElkLayeredLayout, applyElkLayeredLayoutSync } from './elkLayered';
 export { applyHierarchicalLayout } from './hierarchical';
 
 
