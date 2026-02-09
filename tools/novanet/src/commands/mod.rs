@@ -1,6 +1,7 @@
 //! CLI subcommand implementations.
 
 pub mod arc;
+pub mod blueprint;
 pub mod db;
 pub mod doc;
 pub mod entity;

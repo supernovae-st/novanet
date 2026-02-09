@@ -3,6 +3,7 @@
 //! Public API for the NovaNet CLI and TUI. All core logic lives here;
 //! `main.rs` is a thin entry point that parses CLI args and dispatches.
 
+pub mod blueprint;
 pub mod commands;
 pub mod config;
 pub mod cypher;
