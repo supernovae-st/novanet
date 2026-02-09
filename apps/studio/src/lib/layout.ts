@@ -168,8 +168,3 @@ export function applyDagreLayout<T extends Node>(
     };
   });
 }
-
-/**
- * Export node dimensions for use in other modules
- */
-export { NODE_DIMENSIONS };

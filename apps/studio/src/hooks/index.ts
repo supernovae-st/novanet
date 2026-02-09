@@ -5,7 +5,7 @@
 export { useFilteredGraph, type FilteredGraphResult } from './useFilteredGraph';
 export { useGraphData, type UseGraphDataReturn, type FetchOptions } from './useGraphData';
 export { calculateCheckboxState } from './useTriStateSelection';
-export { useUrlSync, UrlSyncComponent } from './useUrlSync';
+export { UrlSyncComponent } from './useUrlSync';
 export { useFocusMode, type FocusModeState } from './useFocusMode';
 export { useHoverHighlight, type HoverHighlightState } from './useHoverHighlight';
 export { useNodeExpansion, type UseNodeExpansionReturn, type ExpansionResult } from './useNodeExpansion';
