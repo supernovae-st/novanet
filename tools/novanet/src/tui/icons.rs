@@ -39,12 +39,11 @@ pub const LAYERS_SEO: IconDef = IconDef::new("search", "◇", "SEO intelligence 
 pub const LAYERS_STRUCTURE: IconDef = IconDef::new("layout", "▤", "Information architecture");
 
 // =============================================================================
-// TRAITS ICONS (5)
+// TRAITS ICONS (4)
 // =============================================================================
 
 pub const TRAITS_DERIVED: IconDef = IconDef::new("calculator", "▪", "Computed from other nodes");
 pub const TRAITS_INVARIANT: IconDef = IconDef::new("lock", "■", "Stable across all locales");
-pub const TRAITS_JOB: IconDef = IconDef::new("play", "▫", "Processing task");
 pub const TRAITS_KNOWLEDGE: IconDef = IconDef::new("brain", "◊", "Locale expertise data");
 pub const TRAITS_LOCALIZED: IconDef = IconDef::new("globe", "□", "Generated natively per locale");
 
@@ -145,7 +144,6 @@ pub fn trait_icons() -> HashMap<&'static str, IconDef> {
     icon_map! {
         "derived" => TRAITS_DERIVED,
         "invariant" => TRAITS_INVARIANT,
-        "job" => TRAITS_JOB,
         "knowledge" => TRAITS_KNOWLEDGE,
         "localized" => TRAITS_LOCALIZED,
     }
@@ -246,7 +244,6 @@ pub fn trait_terminal_icon(key: &str) -> &'static str {
     match key {
         "derived" => "▪",
         "invariant" => "■",
-        "job" => "▫",
         "knowledge" => "◊",
         "localized" => "□",
         _ => "·",

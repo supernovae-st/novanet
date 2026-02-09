@@ -121,13 +121,7 @@ trait_borders:
     unicode_style: double
     description: "Computed from other nodes"
 
-  job:
-    css_style: solid
-    css_width: 1px
-    css_corner_radius: 8px
-    unicode_char: "─"
-    unicode_style: thin
-    description: "Processing task / generation job"
+  # Note: job trait removed in v11.2 (deferred to v12+)
 
 # =============================================================================
 # SCOPE STROKE STYLES — Intra vs Cross realm arcs
@@ -344,6 +338,7 @@ icons:
   # ---------------------------------------------------------------------------
   # TRAIT ICONS — How does the node behave across locales?
   # ---------------------------------------------------------------------------
+  # Note: v11.2 removed job trait (deferred to v12+)
   traits:
     invariant:
       web: lock
@@ -361,10 +356,6 @@ icons:
       web: calculator
       terminal: "▪"
       description: "Computed from other nodes"
-    job:
-      web: play
-      terminal: "▫"
-      description: "Processing task"
 
   # ---------------------------------------------------------------------------
   # ARC FAMILY ICONS — What kind of relationship?

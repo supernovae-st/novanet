@@ -1,10 +1,12 @@
 //! Guide Mode - Interactive educational views of the NovaNet taxonomy.
 //!
 //! Guide Mode provides 4 tabs for understanding NovaNet's core concepts:
-//! - Traits: 5-trait constellation (invariant, localized, knowledge, derived, job)
+//! - Traits: 4-trait constellation (invariant, localized, knowledge, derived)
 //! - Layers: 2-realm split view (Global 2 layers | Tenant 7 layers)
 //! - Arcs: Arc families and scope visualization
 //! - Pipeline: Animated generation flow (not translation)
+//!
+//! Note: job trait removed in v11.2 (deferred to v12+).
 
 pub mod arcs;
 pub mod layers;
@@ -39,7 +41,7 @@ pub const TIPS: &[&str] = &[
     "Content/Generated nodes have invariant parents (Entity→EntityContent, Page→PageGenerated)",
     "Generation, NOT translation: Knowledge + Structure -> Native content",
     "Global realm is READ-ONLY - all business content lives in Tenant",
-    "Quick jump: gi=invariant, gl=localized, gk=knowledge, gd=derived, gj=job",
+    "Quick jump: gi=invariant, gl=localized, gk=knowledge, gd=derived",
     "Knowledge nodes exist ONLY where needed (fr-FR: 20K Terms, sw-KE: 500)",
     "Arc families: ownership, localization, semantic, generation, mining",
     "Invariant = structure (solid border), Localized = output (dashed border)",
@@ -193,7 +195,8 @@ impl GuideState {
 
     /// Handle key input in Guide mode. Returns true if state changed.
     pub fn handle_key(&mut self, key: KeyEvent) -> bool {
-        // Handle pending 'g' state for quick jump shortcuts (gi, gl, gk, gd, gj)
+        // Handle pending 'g' state for quick jump shortcuts (gi, gl, gk, gd)
+        // Note: v11.2 removed job trait (gj)
         if self.pending_g {
             self.pending_g = false; // Clear pending state
             return match key.code {
@@ -201,7 +204,6 @@ impl GuideState {
                 KeyCode::Char('l') => self.jump_to_trait(1), // localized
                 KeyCode::Char('k') => self.jump_to_trait(2), // knowledge
                 KeyCode::Char('d') => self.jump_to_trait(3), // derived
-                KeyCode::Char('j') => self.jump_to_trait(4), // job
                 KeyCode::Char('g') => {
                     // gg = go to top (reset cursors)
                     self.trait_cursor = 0;
@@ -337,8 +339,8 @@ impl GuideState {
     pub fn get_current_yank_text(&self) -> Option<String> {
         match self.tab {
             GuideTab::Traits => {
-                // Yank the current trait name
-                let traits = ["invariant", "localized", "knowledge", "derived", "job"];
+                // Yank the current trait name (v11.2: 4 traits, job removed)
+                let traits = ["invariant", "localized", "knowledge", "derived"];
                 traits.get(self.trait_cursor).map(|s| s.to_string())
             }
             GuideTab::Layers => {
@@ -856,6 +858,7 @@ fn render_tips_bar(f: &mut Frame, area: Rect, app: &App) {
 /// Colorize tip text, highlighting trait names with their theme colors.
 fn colorize_tip(tip: &str, theme: &Theme) -> Vec<Span<'static>> {
     // Keywords to highlight with their corresponding trait/type colors
+    // v11.2: job trait removed (4 traits: invariant, localized, knowledge, derived)
     let keywords: &[(&str, &str)] = &[
         ("Knowledge", "knowledge"),
         ("KNOWLEDGE", "knowledge"),
@@ -869,9 +872,6 @@ fn colorize_tip(tip: &str, theme: &Theme) -> Vec<Span<'static>> {
         ("Derived", "derived"),
         ("DERIVED", "derived"),
         ("derived", "derived"),
-        ("Job", "job"),
-        ("JOB", "job"),
-        ("job", "job"),
         ("INPUT", "knowledge"),
         ("OUTPUT", "localized"),
         ("Global", "global"),
@@ -1048,16 +1048,7 @@ mod tests {
         assert_eq!(state.trait_cursor, 3); // derived = index 3
     }
 
-    #[test]
-    fn test_quick_jump_gj() {
-        let mut state = GuideState::new();
-
-        state.handle_key(key_event(KeyCode::Char('g')));
-        state.handle_key(key_event(KeyCode::Char('j')));
-
-        assert_eq!(state.tab, GuideTab::Traits);
-        assert_eq!(state.trait_cursor, 4); // job = index 4
-    }
+    // Note: test_quick_jump_gj removed in v11.2 (job trait deferred to v12+)
 
     #[test]
     fn test_quick_jump_gg() {
@@ -1792,8 +1783,9 @@ mod tests {
         state.trait_cursor = 3;
         assert_eq!(state.get_current_yank_text(), Some("derived".to_string()));
 
+        // v11.2: job trait removed (index 4 now returns None)
         state.trait_cursor = 4;
-        assert_eq!(state.get_current_yank_text(), Some("job".to_string()));
+        assert_eq!(state.get_current_yank_text(), None);
     }
 
     #[test]

@@ -319,12 +319,11 @@ mod tests {
         assert!(doc.node_states.contains_key("selected"));
         assert!(doc.node_states.contains_key("filtered"));
 
-        // Trait borders (5)
+        // Trait borders (4) — v11.2: job trait removed
         assert!(doc.trait_borders.contains_key("invariant"));
         assert!(doc.trait_borders.contains_key("localized"));
         assert!(doc.trait_borders.contains_key("knowledge"));
         assert!(doc.trait_borders.contains_key("derived"));
-        assert!(doc.trait_borders.contains_key("job"));
 
         // Kind icons (44+)
         assert!(doc.kind_icons.len() >= 30);
