@@ -341,7 +341,3 @@ export const useAnimationStore = create<AnimationStore>()(
   )
 );
 
-// ===== SELECTORS =====
-export const selectIsTransitioning = (state: AnimationStore) => state.isTransitioning;
-export const selectTransitionPhase = (state: AnimationStore) => state.transitionPhase;
-export const selectTargetMode = (state: AnimationStore) => state.targetMode;
