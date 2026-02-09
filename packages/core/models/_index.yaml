@@ -90,7 +90,7 @@
 #   mining         (7) - Discovery jobs (MINES, HAS_METRICS, etc.)
 #
 #   See taxonomy.yaml for full ArcFamily definitions.
-#   See relations.yaml for all 77 arc types with family assignment.
+#   See arc-kinds/ directory for all arc types with family assignment.
 #
 # ═══════════════════════════════════════════════════════════════════════════════
 # STANDARD NODE PROPERTIES v7.11.0 (simplified from v7.1.0)
@@ -343,8 +343,7 @@ files:
   # REFERENCE FILES
   # ═══════════════════════════════════════════════════════════════════════════
 
-  relations: relations.yaml           # All 73 Neo4j arcs
-  arc_kinds: arc-kinds/               # Arc definitions by family
+  arc_kinds: arc-kinds/               # Arc definitions by family (replaces relations.yaml)
   views: views/                       # YAML view definitions
   schema: schema/nodes.schema.json    # JSON Schema for validation
 
