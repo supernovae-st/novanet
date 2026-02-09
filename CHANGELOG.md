@@ -7,6 +7,43 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [11.0.0] - 2026-02-09
+
+### Breaking Changes
+- **Type renames** (v10.9 naming refactor):
+  - `ProjectL10n` → `ProjectContent`
+  - `EntityL10n` → `EntityContent`
+  - Updated all TypeScript files, tests, and documentation
+- **SEO realm migration** (ADR-012):
+  - Moved 9 SEO/GEO nodes from `global/seo` to `tenant/seo`
+  - SEO is now tenant-scoped per YAML source of truth
+  - Fixed 22 arc scopes (cross_realm → intra_realm)
+
+### Added
+- **TUI test infrastructure**: 929 tests (was 245)
+  - Snapshot testing with `insta`
+  - Property-based testing with `proptest`
+  - Render tests for all UI modules (tree, yaml_panel, atlas, graph, overlays)
+  - `TaxonomyTree::mock_for_testing()` for unit tests
+- **SEO seed data**: 26 French SEO questions from ATP export
+- **Knowledge Atoms**: 18 locale-knowledge nodes (6 Sets + 6 Atoms + 6 Linguistic)
+
+### Changed
+- **Architecture**: 2 realms (global: 31 nodes, tenant: 33 nodes), 9 layers total
+  - Global: config (13), locale-knowledge (18)
+  - Tenant: config (2), foundation (3), structure (3), semantic (4), seo (9), instruction (7), output (5)
+- **Node count**: 46 → 64 nodes
+- **Test count**: 1,632 tests (142 core + 561 studio + 929 Rust)
+
+### Fixed
+- EntityContent seed descriptions (9 corrections)
+- LLM context corruptions and typos in seed data
+- YAML consistency + orphan node cleanup
+
+### Removed
+- Legacy code and backward compatibility shims
+- 3,622 low-volume SEO keywords (volume < 20)
+
 ## [9.7.0] - 2026-02-04
 
 ### Added
