@@ -14,7 +14,7 @@
 import { memo, useMemo, useEffect, useRef } from 'react';
 import { useInternalNode, useStore, type Edge, type EdgeProps } from '@xyflow/react';
 import { useUIStore, selectHoveredEdgeId, selectHoveredNodeId, selectSelectedNodeId, selectSelectedEdgeId } from '@/stores/uiStore';
-import { useEdgeVisibility } from './EdgeVisibilityManager';
+import { useEdgeVisibility, type EffectTier } from './EdgeVisibilityManager';
 
 // New modular system
 import { useEdgeTheme } from './hooks/useEdgeTheme';
@@ -38,8 +38,8 @@ interface InlineEdgeEffectsProps {
   relationType: string;
   colors: { primary: string; secondary: string; glow: string };
   state: EdgeState;
-  /** Use simplified 2-element rendering for performance */
-  simplified?: boolean;
+  /** Effect quality tier based on total edge count */
+  effectTier: EffectTier;
 }
 
 /**
@@ -58,7 +58,7 @@ const SimplifiedEdgeEffect = memo(function SimplifiedEdgeEffect({
   edgePath,
   colors,
   state,
-}: Omit<InlineEdgeEffectsProps, 'relationType' | 'simplified'>) {
+}: Omit<InlineEdgeEffectsProps, 'relationType' | 'effectTier'>) {
   const isHighlighted = state === 'highlighted' || state === 'selected';
   // LARGER particles for visibility
   const size = isHighlighted ? 16 : 12;
@@ -129,48 +129,56 @@ const SimplifiedEdgeEffect = memo(function SimplifiedEdgeEffect({
 });
 
 /**
- * InlineEdgeEffects - ATOM-LIKE animated effects (v2)
+ * InlineEdgeEffects - ADAPTIVE ATOM-LIKE animated effects (v3)
  *
- * REDESIGNED for better visibility and direction perception:
- * - SLOWER: 4-8s duration (was 0.6-1.8s) - easy to track
- * - FEWER: 3-5 particles (was 8-30) - cleaner, less noise
- * - LARGER: 14-20px (was 4-12px) - highly visible atoms
- * - ORGANIC: Perpendicular wobble for natural movement
- * - DIRECTIONAL: Trail decay shows flow direction
+ * TIER-BASED RENDERING - Effect richness scales with graph size:
+ * - ULTRA (0-30 arcs):   Maximum wow - extra trails, richer glows
+ * - HIGH (30-100 arcs):  Full atom effects with all features
+ * - MEDIUM (100-250):    Reduced particles, shorter trails
+ * - LOW (250-500):       SimplifiedEdgeEffect (2-element)
+ * - MINIMAL (500+):      No animation (handled outside)
  *
  * Each arc family has DISTINCT movement patterns:
- * - ownership: ⚡ STEADY PULSE - Consistent flow with trail (data ownership)
- * - localization: 🧬 GENTLE WAVE - Sinusoidal oscillation (content adapts)
- * - semantic: 🔗 ORBITING SPARKS - Slow circular drift (meaning links)
- * - generation: 💻 CASCADE PULSE - Rhythmic bursts (AI processing)
- * - mining: 📡 RADAR PING - Slow sweep + expanding rings (discovery)
+ * - ownership: ⚡ STEADY PULSE - Consistent flow with trail
+ * - localization: 🧬 GENTLE WAVE - Sinusoidal oscillation
+ * - semantic: 🔗 ORBITING SPARKS - Slow circular drift
+ * - generation: 💻 CASCADE PULSE - Rhythmic bursts
+ * - mining: 📡 RADAR PING - Slow sweep + expanding rings
  */
 const InlineEdgeEffects = memo(function InlineEdgeEffects({
   edgePath,
   relationType,
   colors,
   state,
-  simplified = false,
+  effectTier,
 }: InlineEdgeEffectsProps) {
-  // PERFORMANCE: Use simplified atom effect for large graphs
-  if (simplified) {
+  // LOW tier: Use simplified 2-element effect
+  if (effectTier === 'low') {
     return <SimplifiedEdgeEffect edgePath={edgePath} colors={colors} state={state} />;
   }
 
   const family = getArcFamily(relationType);
   const isHighlighted = state === 'highlighted' || state === 'selected';
 
-  // LARGER particles for visibility
-  const baseSize = isHighlighted ? 18 : 14;
-  // SLOWER movement - 4x slower than before for trackability
-  const baseDuration = isHighlighted ? 4 : 6;
+  // TIER-BASED SCALING
+  // ULTRA: biggest, slowest (most visible) | MEDIUM: smaller, faster
+  const sizeMultiplier = effectTier === 'ultra' ? 1.3 : effectTier === 'medium' ? 0.8 : 1.0;
+  const durationMultiplier = effectTier === 'ultra' ? 1.2 : effectTier === 'medium' ? 0.7 : 1.0;
+
+  // Base values scaled by tier
+  const baseSize = Math.round((isHighlighted ? 18 : 14) * sizeMultiplier);
+  const baseDuration = (isHighlighted ? 4 : 6) * durationMultiplier;
+
+  // Trail segment counts by tier (more = richer effect)
+  const trailCount = effectTier === 'ultra' ? 6 : effectTier === 'medium' ? 2 : 4;
+  const showSecondaryAtom = effectTier !== 'medium'; // MEDIUM tier skips secondary atoms
 
 
   switch (family) {
     case 'ownership':
       // ⚡ STEADY PULSE - Consistent energy flow with visible trail
       // Visual: Data ownership flowing from parent to children
-      // OPTIMIZED: 2 atoms + 4 trail = 6 elements (was 13)
+      // TIER-ADAPTIVE: ULTRA=6 trail, HIGH=4 trail, MEDIUM=2 trail + no secondary
       return (
         <g className="effect-ownership-atom">
           {/* === LEADER ATOM === */}
@@ -194,43 +202,49 @@ const InlineEdgeEffects = memo(function InlineEdgeEffects({
             <animateMotion dur={`${baseDuration}s`} repeatCount="indefinite" path={edgePath} />
           </circle>
 
-          {/* === TRAIL (4 segments) - shows direction === */}
-          {[1, 2, 3, 4].map((i) => (
+          {/* === TRAIL (tier-adaptive segments) - shows direction === */}
+          {Array.from({ length: trailCount }, (_, i) => i + 1).map((i) => (
             <circle
               key={`trail-${i}`}
-              r={baseSize * (1 - i * 0.18)}
+              r={baseSize * (1 - i * (0.7 / trailCount))}
               fill={colors.glow}
-              opacity={0.75 - i * 0.15}
-              style={{ filter: `drop-shadow(0 0 ${Math.max(3, baseSize - i * 4)}px ${colors.glow})` }}
+              opacity={0.75 - i * (0.6 / trailCount)}
+              style={{ filter: `drop-shadow(0 0 ${Math.max(3, baseSize - i * 3)}px ${colors.glow})` }}
             >
               <animateMotion
                 dur={`${baseDuration}s`}
                 repeatCount="indefinite"
-                begin={`${i * 0.2}s`}
+                begin={`${i * 0.15}s`}
                 path={edgePath}
               />
             </circle>
           ))}
 
-          {/* === SECONDARY ATOM (offset) === */}
-          <circle r={baseSize * 0.8} fill={colors.secondary} opacity={0.85} style={{ filter: `drop-shadow(0 0 8px ${colors.glow})` }}>
-            <animateMotion dur={`${baseDuration}s`} repeatCount="indefinite" begin={`${baseDuration / 2}s`} path={edgePath} />
-            <animate attributeName="cy" values="3;-3;3" dur="1s" repeatCount="indefinite" />
-          </circle>
-          <circle r={baseSize * 0.3} fill="#ffffff" opacity={0.9}>
-            <animateMotion dur={`${baseDuration}s`} repeatCount="indefinite" begin={`${baseDuration / 2}s`} path={edgePath} />
-          </circle>
+          {/* === SECONDARY ATOM (offset) - skipped in MEDIUM tier === */}
+          {showSecondaryAtom && (
+            <>
+              <circle r={baseSize * 0.8} fill={colors.secondary} opacity={0.85} style={{ filter: `drop-shadow(0 0 8px ${colors.glow})` }}>
+                <animateMotion dur={`${baseDuration}s`} repeatCount="indefinite" begin={`${baseDuration / 2}s`} path={edgePath} />
+                <animate attributeName="cy" values="3;-3;3" dur="1s" repeatCount="indefinite" />
+              </circle>
+              <circle r={baseSize * 0.3} fill="#ffffff" opacity={0.9}>
+                <animateMotion dur={`${baseDuration}s`} repeatCount="indefinite" begin={`${baseDuration / 2}s`} path={edgePath} />
+              </circle>
+            </>
+          )}
         </g>
       );
 
-    case 'localization':
+    case 'localization': {
       // 🧬 GENTLE WAVE - Sinusoidal oscillation for content adaptation
       // Visual: Flowing wave of atoms adapting to locale
-      // OPTIMIZED: 2 strands × 3 atoms + 2 connectors = 8 elements (was 20)
+      // TIER-ADAPTIVE: ULTRA=2×3+3, HIGH=2×3+2, MEDIUM=1×2+1
+      const strandAtomCount = effectTier === 'medium' ? 2 : 3;
+      const connectorCount = effectTier === 'ultra' ? 3 : effectTier === 'medium' ? 1 : 2;
       return (
         <g className="effect-localization-atom">
-          {/* === STRAND 1 (3 atoms) - Primary wave === */}
-          {[0, 1, 2].map((i) => (
+          {/* === STRAND 1 (tier-adaptive atoms) - Primary wave === */}
+          {Array.from({ length: strandAtomCount }, (_, i) => (
             <g key={`strand1-${i}`}>
               {/* Glow field */}
               <circle
@@ -261,8 +275,8 @@ const InlineEdgeEffects = memo(function InlineEdgeEffects({
             </g>
           ))}
 
-          {/* === STRAND 2 (3 atoms) - Secondary wave (opposite phase) === */}
-          {[0, 1, 2].map((i) => (
+          {/* === STRAND 2 (tier-adaptive) - Secondary wave (opposite phase) - skipped in MEDIUM === */}
+          {showSecondaryAtom && Array.from({ length: strandAtomCount }, (_, i) => (
             <g key={`strand2-${i}`}>
               <circle
                 r={baseSize * 1.3}
@@ -285,8 +299,8 @@ const InlineEdgeEffects = memo(function InlineEdgeEffects({
             </g>
           ))}
 
-          {/* === CONNECTORS (2) - white dots between strands === */}
-          {[0, 1].map((i) => (
+          {/* === CONNECTORS (tier-adaptive) - white dots between strands === */}
+          {Array.from({ length: connectorCount }, (_, i) => (
             <circle
               key={`conn-${i}`}
               r={baseSize * 0.35}
@@ -299,15 +313,18 @@ const InlineEdgeEffects = memo(function InlineEdgeEffects({
           ))}
         </g>
       );
+    }
 
-    case 'semantic':
+    case 'semantic': {
       // 🔗 ORBITING SPARKS - Slow circular drift for meaning connections
       // Visual: Atoms orbiting around path showing semantic links
-      // OPTIMIZED: 4 atoms with orbital wobble = 8 elements (was 16)
+      // TIER-ADAPTIVE: ULTRA=5 orbits+3 glow, HIGH=4 orbits+2 glow, MEDIUM=2 orbits+1 glow
+      const orbitCount = effectTier === 'ultra' ? 5 : effectTier === 'medium' ? 2 : 4;
+      const glowTrailCount = effectTier === 'ultra' ? 3 : effectTier === 'medium' ? 1 : 2;
       return (
         <g className="effect-semantic-atom">
-          {/* === ORBITING ATOMS (4) === */}
-          {[0, 1, 2, 3].map((i) => (
+          {/* === ORBITING ATOMS (tier-adaptive) === */}
+          {Array.from({ length: orbitCount }, (_, i) => (
             <g key={`orbit-${i}`}>
               {/* Glow field */}
               <circle
@@ -341,8 +358,8 @@ const InlineEdgeEffects = memo(function InlineEdgeEffects({
             </g>
           ))}
 
-          {/* === SUBTLE GLOW TRAIL (2) === */}
-          {[0, 1].map((i) => (
+          {/* === SUBTLE GLOW TRAIL (tier-adaptive) === */}
+          {Array.from({ length: glowTrailCount }, (_, i) => (
             <circle
               key={`glow-${i}`}
               r={baseSize * 1.2}
@@ -355,15 +372,18 @@ const InlineEdgeEffects = memo(function InlineEdgeEffects({
           ))}
         </g>
       );
+    }
 
-    case 'generation':
+    case 'generation': {
       // 💻 CASCADE PULSE - Rhythmic bursts for AI processing
       // Visual: Data packets cascading through the generation pipeline
-      // OPTIMIZED: 3 cascading atoms + 3 trail = 9 elements (was 19)
+      // TIER-ADAPTIVE: ULTRA=4 cascade+4 trail, HIGH=3 cascade+3 trail, MEDIUM=2 cascade+2 trail
+      const cascadeCount = effectTier === 'ultra' ? 4 : effectTier === 'medium' ? 2 : 3;
+      const cascadeTrailCount = effectTier === 'ultra' ? 4 : effectTier === 'medium' ? 2 : 3;
       return (
         <g className="effect-generation-atom">
-          {/* === CASCADING ATOMS (3) === */}
-          {[0, 1, 2].map((i) => (
+          {/* === CASCADING ATOMS (tier-adaptive) === */}
+          {Array.from({ length: cascadeCount }, (_, i) => (
             <g key={`cascade-${i}`}>
               {/* Wide energy field */}
               <circle
@@ -404,13 +424,13 @@ const InlineEdgeEffects = memo(function InlineEdgeEffects({
             </g>
           ))}
 
-          {/* === TRAIL SEGMENTS (3) === */}
-          {[1, 2, 3].map((i) => (
+          {/* === TRAIL SEGMENTS (tier-adaptive) === */}
+          {Array.from({ length: cascadeTrailCount }, (_, i) => i + 1).map((i) => (
             <circle
               key={`trail-${i}`}
-              r={baseSize * (0.7 - i * 0.15)}
+              r={baseSize * (0.7 - i * (0.45 / cascadeTrailCount))}
               fill={colors.glow}
-              opacity={0.6 - i * 0.15}
+              opacity={0.6 - i * (0.45 / cascadeTrailCount)}
               style={{ filter: `drop-shadow(0 0 ${Math.max(2, baseSize - i * 3)}px ${colors.glow})` }}
             >
               <animateMotion
@@ -423,10 +443,13 @@ const InlineEdgeEffects = memo(function InlineEdgeEffects({
           ))}
         </g>
       );
+    }
 
-    case 'mining':
+    case 'mining': {
       // 📡 RADAR SWEEP - Scanning pulse discovering data
       // Visual: Radar-like sweep with expanding detection rings
+      // TIER-ADAPTIVE: ULTRA=4 rings + secondary, HIGH=3 rings + secondary, MEDIUM=2 rings no secondary
+      const ringCount = effectTier === 'ultra' ? 4 : effectTier === 'medium' ? 2 : 3;
       return (
         <g className="effect-mining">
           {/* Main radar pulse */}
@@ -445,14 +468,14 @@ const InlineEdgeEffects = memo(function InlineEdgeEffects({
             </circle>
           </g>
 
-          {/* Expanding detection rings */}
-          {[0, 1, 2].map((i) => (
+          {/* Expanding detection rings (tier-adaptive) */}
+          {Array.from({ length: ringCount }, (_, i) => (
             <circle
               key={`ring-${i}`}
               r={baseSize}
               fill="none"
               stroke={colors.glow}
-              strokeWidth={2 - i * 0.5}
+              strokeWidth={2 - i * (1.5 / ringCount)}
               opacity={0}
             >
               <animateMotion dur={`${baseDuration * 1.8}s`} repeatCount="indefinite" begin={`${i * 0.4}s`} path={edgePath} />
@@ -463,12 +486,15 @@ const InlineEdgeEffects = memo(function InlineEdgeEffects({
             </circle>
           ))}
 
-          {/* Secondary ping - offset */}
-          <circle r={baseSize * 0.6} fill={colors.secondary} opacity={0.8} style={{ filter: `drop-shadow(0 0 5px ${colors.glow})` }}>
-            <animateMotion dur={`${baseDuration * 1.8}s`} repeatCount="indefinite" begin={`${baseDuration * 0.9}s`} path={edgePath} />
-          </circle>
+          {/* Secondary ping - offset (skipped in MEDIUM tier) */}
+          {showSecondaryAtom && (
+            <circle r={baseSize * 0.6} fill={colors.secondary} opacity={0.8} style={{ filter: `drop-shadow(0 0 5px ${colors.glow})` }}>
+              <animateMotion dur={`${baseDuration * 1.8}s`} repeatCount="indefinite" begin={`${baseDuration * 0.9}s`} path={edgePath} />
+            </circle>
+          )}
         </g>
       );
+    }
 
     default:
       return null;
@@ -589,7 +615,7 @@ export const FloatingEdge = memo(function FloatingEdge({
   });
 
   // Visibility culling and performance mode
-  const { isVisible, registerEdge, unregisterEdge, useSimplifiedEffects, disableAnimations } = useEdgeVisibility();
+  const { isVisible, registerEdge, unregisterEdge, effectTier, disableAnimations } = useEdgeVisibility();
   useEffect(() => {
     const element = pathRef.current;
     if (element) {
@@ -872,7 +898,7 @@ export const FloatingEdge = memo(function FloatingEdge({
           relationType={relationType}
           colors={theme.colors}
           state={edgeState}
-          simplified={useSimplifiedEffects}
+          effectTier={effectTier}
         />
       )}
 
