@@ -752,7 +752,7 @@ mod tests {
         assert!(output.contains("|HAS_PAGE|"));
         assert!(output.contains("|HAS_BLOCK|"));
 
-        // linkStyle with edge family colors
+        // linkStyle with arc family colors
         assert!(output.contains("stroke:#3b82f6")); // ownership
         assert!(output.contains("stroke:#22c55e")); // localization
 
