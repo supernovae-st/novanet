@@ -1,0 +1,167 @@
+# packages/core/models/node-kinds/global/knowledge/atoms/taboo.yaml
+# Taboo — Forbidden term or concept within a TabooSet
+#
+# Locale-native: each locale has its own taboos (no invariant parent)
+# Parent: TabooSet (via CONTAINS arc)
+
+node:
+  name: Taboo
+  realm: shared
+  layer: locale-knowledge
+  trait: knowledge
+  icon: "🚫"
+  description: "Forbidden term, phrase, or concept that should be avoided in a locale"
+
+  standard_properties:
+    key:
+      type: string
+      required: true
+      description: "Unique identifier within the TabooSet"
+      pattern: "^[a-z][a-z0-9_]*$"
+      examples:
+        - "death_direct"
+        - "political_reference"
+        - "religious_imagery"
+
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable name"
+      example: "Direct Death Reference"
+
+    description:
+      type: string
+      required: false
+      description: "Why this is taboo and when to avoid"
+      example: "Direct references to death are considered inappropriate in marketing"
+
+    llm_context:
+      type: string
+      required: false
+      description: "Avoidance context for generation"
+      example: "AVOID: all marketing content. EXCEPTION: healthcare, insurance legal docs."
+
+    created_at:
+      type: datetime
+      required: true
+
+    updated_at:
+      type: datetime
+      required: true
+
+  properties:
+    term:
+      type: string
+      required: true
+      description: "The term or phrase to avoid"
+      examples:
+        - "mort"
+        - "死"
+        - "death"
+
+    type:
+      type: string
+      required: true
+      enum: [word, phrase, concept, imagery, topic, gesture]
+      description: "Type of taboo"
+      example: "word"
+
+    severity:
+      type: string
+      required: true
+      enum: [critical, high, medium, low]
+      description: "How strictly to avoid"
+      example: "high"
+
+    category:
+      type: string
+      required: true
+      enum: [death, religion, politics, sexuality, violence, discrimination, profanity, health, legal]
+      description: "Taboo category"
+      example: "death"
+
+    context_scope:
+      type: json
+      required: false
+      description: "Contexts where this taboo applies"
+      example:
+        - "marketing"
+        - "social_media"
+        - "advertising"
+
+    exceptions:
+      type: json
+      required: false
+      description: "Contexts where taboo doesn't apply"
+      example:
+        - "healthcare"
+        - "legal"
+        - "insurance"
+
+    alternatives:
+      type: json
+      required: true
+      description: "Safe alternative terms to use instead"
+      example:
+        - "décédé"
+        - "disparu"
+        - "qui nous a quittés"
+
+    reason:
+      type: string
+      required: false
+      description: "Cultural or business reason for the taboo"
+      example: "Direct mention considered disrespectful in French marketing culture"
+
+    legal_requirement:
+      type: boolean
+      required: false
+      description: "Is this a legal/compliance requirement?"
+      default: false
+
+  relations:
+    incoming:
+      - type: CONTAINS
+        from: TabooSet
+        cardinality: "1:N"
+        description: "TabooSet contains multiple Taboos"
+
+  example:
+    data:
+      key: "death_direct_fr"
+      display_name: "Direct Death Reference"
+      term: "mort"
+      type: "word"
+      severity: "high"
+      category: "death"
+      context_scope:
+        - "marketing"
+        - "advertising"
+      exceptions:
+        - "healthcare"
+        - "insurance"
+      alternatives:
+        - "décédé"
+        - "disparu"
+      reason: "Direct mention considered insensitive in French marketing"
+
+    cypher: |
+      // Create a taboo
+      MATCH (ts:TabooSet)<-[:HAS_TABOOS]-(l:Locale {key: "fr-FR"})
+      CREATE (t:Taboo {
+        key: "death_direct",
+        display_name: "Direct Death Reference",
+        term: "mort",
+        type: "word",
+        severity: "high",
+        category: "death",
+        created_at: datetime(),
+        updated_at: datetime()
+      })
+      CREATE (ts)-[:CONTAINS]->(t)
+      RETURN t
+
+      // Find all high-severity taboos for content validation
+      MATCH (t:Taboo {severity: "high"})
+      MATCH (t)<-[:CONTAINS]-(ts:TabooSet)<-[:HAS_TABOOS]-(l:Locale {key: $locale})
+      RETURN t.term AS avoid, t.alternatives AS use_instead, t.reason

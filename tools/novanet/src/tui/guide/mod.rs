@@ -2,7 +2,7 @@
 //!
 //! Guide Mode provides 4 tabs for understanding NovaNet's core concepts:
 //! - Traits: 4-trait constellation (invariant, localized, knowledge, derived)
-//! - Layers: 2-realm split view (Global 2 layers | Tenant 7 layers)
+//! - Layers: 2-realm split view (Shared 2 layers | Org 7 layers)
 //! - Arcs: Arc families and scope visualization
 //! - Pipeline: Animated generation flow (not translation)
 //!
@@ -40,7 +40,7 @@ pub const TIPS: &[&str] = &[
     "Layers define WHAT a node does, Traits define HOW it behaves with locale",
     "Content/Generated nodes have invariant parents (Entity→EntityContent, Page→PageGenerated)",
     "Generation, NOT translation: Knowledge + Structure -> Native content",
-    "Global realm is READ-ONLY - all business content lives in Tenant",
+    "Shared realm is READ-ONLY - all business content lives in Org",
     "Quick jump: gi=invariant, gl=localized, gk=knowledge, gd=derived",
     "Knowledge nodes exist ONLY where needed (fr-FR: 20K Terms, sw-KE: 500)",
     "Arc families: ownership, localization, semantic, generation, mining",
@@ -54,7 +54,7 @@ pub enum GuideTab {
     /// Traits constellation (5 traits with detail panel)
     #[default]
     Traits,
-    /// Layers split view (Global | Tenant)
+    /// Layers split view (Shared | Org)
     Layers,
     /// Arc families and scope
     Arcs,
@@ -339,17 +339,17 @@ impl GuideState {
     pub fn get_current_yank_text(&self) -> Option<String> {
         match self.tab {
             GuideTab::Traits => {
-                // Yank the current trait name (v11.2: 4 traits, job removed)
-                let traits = ["invariant", "localized", "knowledge", "derived"];
+                // Yank the current trait name (v11.2: 5 traits, split derived → generated + aggregated)
+                let traits = ["invariant", "localized", "knowledge", "generated", "aggregated"];
                 traits.get(self.trait_cursor).map(|s| s.to_string())
             }
             GuideTab::Layers => {
                 // Yank the current layer key
                 let layers = if self.layer_realm == 0 {
-                    // Global layers
+                    // Shared layers
                     vec!["config", "locale-knowledge"]
                 } else {
-                    // Tenant layers
+                    // Org layers
                     vec![
                         "config",
                         "foundation",
@@ -513,7 +513,7 @@ impl GuideState {
     fn navigate_left(&mut self) -> bool {
         match self.tab {
             GuideTab::Layers => {
-                // Switch to Global realm (0)
+                // Switch to Shared realm (0)
                 if self.layer_realm != 0 {
                     self.layer_realm = 0;
                     self.layer_cursor = 0; // Reset cursor when switching realm
@@ -533,7 +533,7 @@ impl GuideState {
     fn navigate_right(&mut self) -> bool {
         match self.tab {
             GuideTab::Layers => {
-                // Switch to Tenant realm (1)
+                // Switch to Org realm (1)
                 if self.layer_realm != 1 {
                     self.layer_realm = 1;
                     self.layer_cursor = 0; // Reset cursor when switching realm
@@ -620,9 +620,9 @@ impl GuideState {
             }
             GuideTab::Layers => {
                 let realm = if self.layer_realm == 0 {
-                    "Global"
+                    "Shared"
                 } else {
-                    "Tenant"
+                    "Org"
                 };
                 format!("Guide > {} > {}", tab_name, realm)
             }
@@ -858,7 +858,7 @@ fn render_tips_bar(f: &mut Frame, area: Rect, app: &App) {
 /// Colorize tip text, highlighting trait names with their theme colors.
 fn colorize_tip(tip: &str, theme: &Theme) -> Vec<Span<'static>> {
     // Keywords to highlight with their corresponding trait/type colors
-    // v11.2: job trait removed (4 traits: invariant, localized, knowledge, derived)
+    // v11.2: 5 traits (split derived → generated + aggregated)
     let keywords: &[(&str, &str)] = &[
         ("Knowledge", "knowledge"),
         ("KNOWLEDGE", "knowledge"),
@@ -869,18 +869,20 @@ fn colorize_tip(tip: &str, theme: &Theme) -> Vec<Span<'static>> {
         ("Invariant", "invariant"),
         ("INVARIANT", "invariant"),
         ("invariant", "invariant"),
-        ("Derived", "derived"),
-        ("DERIVED", "derived"),
-        ("derived", "derived"),
+        ("Generated", "generated"),
+        ("GENERATED", "generated"),
+        ("generated", "generated"),
+        ("Aggregated", "aggregated"),
+        ("AGGREGATED", "aggregated"),
+        ("aggregated", "aggregated"),
         ("INPUT", "knowledge"),
         ("OUTPUT", "localized"),
-        ("Global", "global"),
-        ("GLOBAL", "global"),
-        ("Tenant", "tenant"),
-        ("TENANT", "tenant"),
+        ("Shared", "shared"),
+        ("SHARED", "shared"),
+        ("Org", "org"),
+        ("ORG", "org"),
         ("Content", "localized"),
-        ("Generated", "localized"),
-        ("Generation", "localized"),
+        ("Generation", "generated"),
     ];
 
     let mut result: Vec<Span<'static>> = Vec::new();
@@ -892,10 +894,10 @@ fn colorize_tip(tip: &str, theme: &Theme) -> Vec<Span<'static>> {
         for (keyword, color_key) in keywords {
             if remaining.starts_with(*keyword) {
                 // Found a keyword - add colored span
-                let color = if *color_key == "global" {
-                    theme.realm_color("global")
-                } else if *color_key == "tenant" {
-                    theme.realm_color("tenant")
+                let color = if *color_key == "shared" {
+                    theme.realm_color("shared")
+                } else if *color_key == "org" {
+                    theme.realm_color("org")
                 } else {
                     theme.trait_color(color_key)
                 };
@@ -1411,7 +1413,7 @@ mod tests {
     fn test_layers_navigate_down() {
         let mut state = GuideState::new();
         state.tab = GuideTab::Layers;
-        state.layer_realm = 0; // Global (2 layers, max index 1)
+        state.layer_realm = 0; // Shared (2 layers, max index 1)
         state.layer_cursor = 0;
 
         // Navigate down
@@ -1433,7 +1435,7 @@ mod tests {
     fn test_layers_global_max_cursor() {
         let mut state = GuideState::new();
         state.tab = GuideTab::Layers;
-        state.layer_realm = 0; // Global (2 layers, max index 1)
+        state.layer_realm = 0; // Shared (2 layers, max index 1)
         state.layer_cursor = 1;
 
         // Should not go beyond max
@@ -1446,7 +1448,7 @@ mod tests {
     fn test_layers_tenant_max_cursor() {
         let mut state = GuideState::new();
         state.tab = GuideTab::Layers;
-        state.layer_realm = 1; // Tenant (7 layers, max index 6)
+        state.layer_realm = 1; // Org (7 layers, max index 6)
         state.layer_cursor = 6;
 
         // Should not go beyond max
@@ -1459,10 +1461,10 @@ mod tests {
     fn test_layers_realm_switch_left() {
         let mut state = GuideState::new();
         state.tab = GuideTab::Layers;
-        state.layer_realm = 1; // Start on Tenant
+        state.layer_realm = 1; // Start on Org
         state.layer_cursor = 3;
 
-        // Switch to Global with 'h'
+        // Switch to Shared with 'h'
         let changed = state.handle_key(key_event(KeyCode::Char('h')));
         assert!(changed);
         assert_eq!(state.layer_realm, 0);
@@ -1473,10 +1475,10 @@ mod tests {
     fn test_layers_realm_switch_right() {
         let mut state = GuideState::new();
         state.tab = GuideTab::Layers;
-        state.layer_realm = 0; // Start on Global
+        state.layer_realm = 0; // Start on Shared
         state.layer_cursor = 1;
 
-        // Switch to Tenant with 'l'
+        // Switch to Org with 'l'
         let changed = state.handle_key(key_event(KeyCode::Char('l')));
         assert!(changed);
         assert_eq!(state.layer_realm, 1);
@@ -1487,7 +1489,7 @@ mod tests {
     fn test_layers_realm_switch_no_change() {
         let mut state = GuideState::new();
         state.tab = GuideTab::Layers;
-        state.layer_realm = 0; // Already on Global
+        state.layer_realm = 0; // Already on Shared
 
         // 'h' should not change anything
         let changed = state.handle_key(key_event(KeyCode::Char('h')));
@@ -1668,7 +1670,7 @@ mod tests {
         let trait_stats = Vec::new();
 
         let breadcrumb = state.breadcrumb(&trait_stats);
-        assert!(breadcrumb.contains("Guide > Layers > Global"));
+        assert!(breadcrumb.contains("Guide > Layers > Shared"));
     }
 
     #[test]
@@ -1679,7 +1681,7 @@ mod tests {
         let trait_stats = Vec::new();
 
         let breadcrumb = state.breadcrumb(&trait_stats);
-        assert!(breadcrumb.contains("Guide > Layers > Tenant"));
+        assert!(breadcrumb.contains("Guide > Layers > Org"));
     }
 
     #[test]
@@ -1780,11 +1782,15 @@ mod tests {
         state.trait_cursor = 2;
         assert_eq!(state.get_current_yank_text(), Some("knowledge".to_string()));
 
+        // v11.2: split derived → generated + aggregated
         state.trait_cursor = 3;
-        assert_eq!(state.get_current_yank_text(), Some("derived".to_string()));
+        assert_eq!(state.get_current_yank_text(), Some("generated".to_string()));
 
-        // v11.2: job trait removed (index 4 now returns None)
         state.trait_cursor = 4;
+        assert_eq!(state.get_current_yank_text(), Some("aggregated".to_string()));
+
+        // Index 5 now returns None
+        state.trait_cursor = 5;
         assert_eq!(state.get_current_yank_text(), None);
     }
 
@@ -1792,7 +1798,7 @@ mod tests {
     fn test_get_current_yank_text_layers_global() {
         let mut state = GuideState::new();
         state.tab = GuideTab::Layers;
-        state.layer_realm = 0; // Global
+        state.layer_realm = 0; // Shared
 
         state.layer_cursor = 0;
         assert_eq!(state.get_current_yank_text(), Some("config".to_string()));
@@ -1808,7 +1814,7 @@ mod tests {
     fn test_get_current_yank_text_layers_tenant() {
         let mut state = GuideState::new();
         state.tab = GuideTab::Layers;
-        state.layer_realm = 1; // Tenant
+        state.layer_realm = 1; // Org
 
         state.layer_cursor = 0;
         assert_eq!(state.get_current_yank_text(), Some("config".to_string()));

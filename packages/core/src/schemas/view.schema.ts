@@ -15,7 +15,7 @@ const FilterCriteriaSchema = z.object({
   locale: z.string().optional(),
   localeFamily: z.string().optional(),
   active: z.boolean().optional(),
-  categories: z.array(z.enum(['global', 'tenant'])).optional(),
+  categories: z.array(z.enum(['shared', 'org'])).optional(),
   maxDepth: z.number().int().positive().optional(),
 }).strict().optional();
 

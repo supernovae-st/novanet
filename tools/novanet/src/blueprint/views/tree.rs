@@ -26,8 +26,8 @@ pub fn render(data: &BlueprintData) -> String {
     for realm_def in &data.taxonomy.node_realms {
         let realm_icon = realm_icon(&realm_def.key);
         let realm_desc = match realm_def.key.as_str() {
-            "global" => "(read-only, universal)",
-            "tenant" => "(business-specific)",
+            "shared" => "(read-only, universal)",
+            "org" => "(business-specific)",
             _ => "",
         };
 
@@ -97,8 +97,8 @@ mod tests {
         let output = render(&data);
 
         assert!(output.contains("NOVANET TREE"), "Should have header");
-        assert!(output.contains("GLOBAL"), "Should have global realm");
-        assert!(output.contains("TENANT"), "Should have tenant realm");
+        assert!(output.contains("SHARED"), "Should have global realm");
+        assert!(output.contains("ORG"), "Should have tenant realm");
         assert!(output.contains("LEGEND"), "Should have legend");
     }
 }

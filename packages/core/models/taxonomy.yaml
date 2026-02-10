@@ -1,21 +1,27 @@
 # packages/core/models/taxonomy.yaml
 # Source of truth for NovaNet taxonomy structure
-# v11.0.0 — 2-Realm Architecture with SEO in Tenant
+# v11.2.0 — Realm Renames (global→shared, tenant→org)
 #
 # This file defines:
-# - 2 NodeRealms (GLOBAL, TENANT) with nested NodeLayers
+# - 2 NodeRealms (SHARED, ORG) with nested NodeLayers
 # - 5 NodeTraits (locale behavior) with visual encoding
 # - 5 ArcFamilies (arc classification) with visual encoding
 # - 2 ArcScopes (intra_realm / cross_realm)
 # - 5 ArcCardinalities (zero_to_one / one_to_one / one_to_many / many_to_one / many_to_many)
 # - Terminal palette for TUI graceful degradation
 #
+# v11.2 Changes:
+# - Realm renames: global→shared, tenant→org (clearer semantics)
+# - Trait split: derived→generated+aggregated (LLM output vs computed metrics)
+# - Container traits: TermSet etc. now invariant (universal categories)
+# - Visibility: derived property (internal/fragment/publishable)
+#
 # v11.0 Changes:
 # - SEO moved from global to tenant (business-specific, not universal)
-# - GLOBAL: 2 layers (config, locale-knowledge)
-# - TENANT: 7 layers (config, semantic, seo, foundation, structure, instruction, output)
+# - SHARED: 2 layers (config, locale-knowledge)
+# - ORG: 7 layers (config, semantic, seo, foundation, structure, instruction, output)
 # - All SEO arcs now intra_realm (ADR-012 compliance)
-# - Multi-tenant isolation at TENANT boundary (Tenant A cannot see Tenant B)
+# - Multi-tenant isolation at ORG boundary (Org A cannot see Org B)
 #
 # Generated artifacts:
 # - packages/db/seed/00.5-taxonomy.cypher (Realm, Layer, Trait, ArcFamily + hierarchy)
@@ -24,7 +30,7 @@
 # All meta-nodes receive double-label :Meta (e.g., :Meta:Realm)
 # Query all meta-nodes: MATCH (n:Meta) RETURN n
 
-version: "11.0.0"
+version: "11.2.0"
 
 # =============================================================================
 # NODE REALMS (2) — WHERE does the node live?
@@ -34,14 +40,14 @@ version: "11.0.0"
 # Isolation: Tenant A cannot see Tenant B (multi-tenant boundary)
 
 node_realms:
-  - key: global
-    display_name: Global
+  - key: shared
+    display_name: Shared
     emoji: "🌍"
     color: "#2aa198"
     llm_context: |
-      Shared across ALL tenants. Universal locale knowledge that applies
+      Shared across ALL organizations. Universal locale knowledge that applies
       everywhere: cultural norms, linguistic patterns, formatting conventions.
-      These nodes are READ-ONLY. No Entity here - Entity lives in TENANT realm.
+      These nodes are READ-ONLY. No Entity here - Entity lives in ORG realm.
     layers:
       - key: config
         display_name: Configuration
@@ -62,13 +68,13 @@ node_realms:
           (Term, Expression, Pattern, etc.). Cultural and linguistic
           expertise that makes content feel NATIVE rather than translated.
 
-  - key: tenant
-    display_name: Tenant
+  - key: org
+    display_name: Organization
     emoji: "🏢"
     color: "#6c71c4"
     llm_context: |
-      Multi-tenant isolated realm. Contains Organization, Projects, Entities,
-      Pages, Blocks, and all generated outputs. Tenant A cannot see Tenant B.
+      Organization-specific realm. Contains Projects, Entities, Pages, Blocks,
+      and all generated outputs. Org A cannot see Org B (multi-tenant isolation).
       Organization owns Entity directly (HAS_ENTITY). Page/Block reference
       Entity via USES_ENTITY (N:M). AI context assembly follows arcs from
       starting point via spreading activation.
@@ -143,6 +149,7 @@ node_realms:
 # NODE TRAITS (5) — HOW does the node behave across locales?
 # =============================================================================
 # Visual encoding: border_style maps to CSS border-style / ratatui border
+# v11.2: Split derived → generated + aggregated (still 5 total: invariant, localized, knowledge, generated, aggregated)
 
 node_traits:
   - key: invariant
@@ -178,15 +185,26 @@ node_traits:
       how a locale communicates: voice, culture, formatting rules, lexicon,
       expressions. The foundation for native content generation.
 
-  - key: derived
-    display_name: Derived
-    color: "#9ca3af"
+  - key: generated
+    display_name: Generated
+    color: "#b58900"
     border_style: double
     border_width: 2
     unicode_border: "═"
     llm_context: |
-      Computed or aggregated data. Time-series metrics, analytics snapshots,
-      and other values derived from external sources or calculations.
+      LLM-generated content output. Pages, blocks, and artifacts produced
+      by the generation pipeline. These are the final outputs ready for
+      rendering or export.
+
+  - key: aggregated
+    display_name: Aggregated
+    color: "#6c71c4"
+    border_style: dotted
+    border_width: 3
+    unicode_border: "┅"
+    llm_context: |
+      Computed metrics and analytics. Time-series data, performance snapshots,
+      and other values aggregated from external sources or calculations.
 
 # =============================================================================
 # KIND RETRIEVAL DEFAULTS (v9.9) — Context Assembly Properties
@@ -207,10 +225,14 @@ kind_retrieval_defaults:
     traversal_depth: 1      # Shallow traversal for knowledge nodes
     context_budget: 200
     token_estimate: 50
-  derived:
-    traversal_depth: 1
-    context_budget: 100
-    token_estimate: 30
+  generated:
+    traversal_depth: 1      # v11.2: Split from derived
+    context_budget: 150
+    token_estimate: 50
+  aggregated:
+    traversal_depth: 1      # v11.2: Split from derived
+    context_budget: 80
+    token_estimate: 20
 
 # =============================================================================
 # ARC FAMILIES (5) — WHAT kind of relationship is this?
@@ -324,9 +346,9 @@ arc_cardinalities:
 
 terminal:
   palette_256:
-    # Realms (v10.6: 2 realms)
-    global: 37       # cyan
-    tenant: 141      # purple
+    # Realms (v11.2: shared + org)
+    shared: 37       # cyan
+    org: 141         # purple
     # Layers (matching 256-color approximations)
     config: 244             # gray
     locale_knowledge: 141   # purple
@@ -336,11 +358,12 @@ terminal:
     structure: 45           # cyan
     instruction: 178        # yellow
     output: 41              # green
-    # Traits
+    # Traits (v11.2: derived → generated + aggregated)
     invariant: 33   # blue
     localized: 41   # green
     knowledge_trait: 141  # purple (avoid collision with layer)
-    derived: 245    # gray
+    generated: 136  # yellow-orange (b58900)
+    aggregated: 141 # violet (6c71c4)
     # Arc families
     ownership_arc: 33   # blue
     localization_arc: 41  # green
@@ -349,9 +372,9 @@ terminal:
     mining_arc: 205     # pink
 
   palette_16:
-    # Realms (v10.6: 2 realms)
-    global: 6        # cyan
-    tenant: 5        # magenta
+    # Realms (v11.2: shared + org)
+    shared: 6        # cyan
+    org: 5           # magenta
     # Layers
     config: 8              # bright black
     locale_knowledge: 5    # magenta
@@ -361,11 +384,12 @@ terminal:
     structure: 6           # cyan
     instruction: 11        # bright yellow
     output: 2              # green
-    # Traits
+    # Traits (v11.2: derived → generated + aggregated)
     invariant: 4    # blue
     localized: 2    # green
     knowledge_trait: 5  # magenta
-    derived: 8      # bright black
+    generated: 3    # yellow
+    aggregated: 5   # magenta
     # Arc families
     ownership_arc: 4    # blue
     localization_arc: 2 # green

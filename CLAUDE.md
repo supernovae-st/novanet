@@ -13,7 +13,7 @@ Turborepo monorepo for NovaNet - knowledge graph localization orchestrator.
 NovaNet uses Neo4j to orchestrate **native content generation** (NOT translation) across 200+ locales.
 
 **Target Application**: QR Code AI (https://qrcode-ai.com)
-**Current Version**: v11.0.0
+**Current Version**: v11.2.0
 **Roadmap**: `ROADMAP.md` | **Changelog**: `CHANGELOG.md`
 
 ```
@@ -25,9 +25,9 @@ Entity (invariant) -> Generate natively -> EntityContent (local)  <-- RIGHT
 
 ---
 
-## v11.0 Nomenclature
+## v11.2 Nomenclature
 
-v11.0 establishes 2-Realm Architecture with SEO in tenant realm:
+v11.2 refines the classification system with clearer realm names and trait precision:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -42,9 +42,9 @@ v11.0 establishes 2-Realm Architecture with SEO in tenant realm:
 │  CLASSIFICATION AXES                                                        │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │  NodeKind:                                                                  │
-│    WHERE?  NodeRealm  (global / tenant)                                     │
-│    WHAT?   NodeLayer  (9 layers: 2 global + 7 tenant)                       │
-│    HOW?    NodeTrait  (invariant / localized / knowledge / derived / job)   │
+│    WHERE?  NodeRealm  (shared / org)                                        │
+│    WHAT?   NodeLayer  (9 layers: 2 shared + 7 org)                          │
+│    HOW?    NodeTrait  (invariant / localized / knowledge / generated / aggregated) │
 │                                                                             │
 │  ArcKind:                                                                   │
 │    SCOPE   ArcScope       (intra_realm / cross_realm)                       │
@@ -53,17 +53,16 @@ v11.0 establishes 2-Realm Architecture with SEO in tenant realm:
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-**Key changes in v11.0:**
-- **SEO → Tenant**: Moved 9 SEO/GEO nodes from `global/seo` to `tenant/seo` (ADR-012 fix)
-- **Arc coherence**: Fixed 22 arc scopes (cross_realm → intra_realm)
-- **Node naming** (v10.9): `*L10n` → semantic suffixes (`EntityContent`, `PageGenerated`, `BlockGenerated`)
-- **Arc naming** (v10.9): `HAS_L10N` → `HAS_CONTENT`, `HAS_OUTPUT` → `HAS_GENERATED`
-- **Composite keys**: `entity:{entity_key}@{locale_key}` pattern for locale-specific nodes
+**Key changes in v11.2:**
+- **Realm renames**: `global` → `shared`, `tenant` → `org` (ADR-018)
+- **Trait split**: `derived` → `generated` (LLM output) + `aggregated` (computed metrics)
+- **Job removal**: 3 job nodes removed (GenerationJob, SEOMiningRun, EvaluationSignal)
+- **62 nodes** total (was 65): 32 shared + 30 org
 
-**Architecture (v11.0):**
-- 2 realms: GLOBAL + TENANT
-- GLOBAL (2 layers): config, locale-knowledge — universal, READ-ONLY
-- TENANT (7 layers): config, foundation, structure, semantic, instruction, seo, output
+**Architecture (v11.2):**
+- 2 realms: SHARED + ORG
+- SHARED (2 layers): config, locale-knowledge — universal, READ-ONLY (32 nodes)
+- ORG (7 layers): config, foundation, structure, semantic, instruction, seo, output (30 nodes)
 
 **Rust binary:** `tools/novanet/` — single crate for CLI + TUI (neo4rs, ratatui, clap).
 All commands implemented: data/meta/overlay/query, node/arc CRUD, search, locale, db,
@@ -71,7 +70,7 @@ schema generate/validate, doc generate, filter build, Galaxy-themed TUI with boo
 
 **YAML-first architecture:** Each Kind YAML has explicit `realm:` and `layer:` fields (source of truth).
 Path validation ensures `models/node-kinds/{realm}/{layer}/{name}.yaml` matches YAML content.
-v11.0: 2 realms (global, tenant), 9 layers total (2 global + 7 tenant).
+v11.2: 2 realms (shared, org), 9 layers total (2 shared + 7 org), 62 nodes.
 
 **Icons source of truth (v11.0):** `visual-encoding.yaml` → `icons:` section provides dual-format icons:
 - `web`: Lucide icon name for Studio
@@ -119,13 +118,13 @@ Categories: realms, layers, traits, arc_families, states, navigation, quality, m
 │     └─ [:USES_TERM], [:USES_EXPRESSION] on Block nodes                      │
 │                                                                             │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│  STATISTICS                                                                 │
+│  STATISTICS (v11.2)                                                         │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
-│  Containers (7): TermSet, ExpressionSet, PatternSet,                        │
-│                  CultureSet, TabooSet, AudienceSet, CategorySet             │
-│  Atoms (7):      Term, Expression, Pattern, CultureRef, Taboo, AudienceTrait, EntityCategory │
-│  Total:          65 nodes, 124 arcs                                         │
+│  Containers (6): TermSet, ExpressionSet, PatternSet,                        │
+│                  CultureSet, TabooSet, AudienceSet                          │
+│  Atoms (6):      Term, Expression, Pattern, CultureRef, Taboo, AudienceTrait│
+│  Total:          62 nodes (32 shared + 30 org)                              │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -335,11 +334,11 @@ See `.claude/README.md` for full documentation.
 ### YAML Kind Structure
 
 ```yaml
-# packages/core/models/node-kinds/global/locale-knowledge/locale-voice.yaml
+# packages/core/models/node-kinds/shared/locale-knowledge/locale-voice.yaml
 node:
   name: LocaleVoice
-  realm: global               # Source of truth (must match path)
-  layer: locale-knowledge     # v11.0: 2 realms (global, tenant)
+  realm: shared               # Source of truth (must match path)
+  layer: locale-knowledge     # v11.2: 2 realms (shared, org)
   trait: knowledge
   description: "..."
   properties:

@@ -4,9 +4,9 @@
  * FacetFilterPanel - Faceted filter panel for Query mode
  *
  * Four facet sections:
- * - Realms (2): global, tenant
- * - Layers (8): config, knowledge, foundation, ...
- * - Traits (5): invariant, localized, knowledge, derived, job
+ * - Realms (2): shared, org
+ * - Layers (8): config, locale-knowledge, foundation, structure, semantic, instruction, output, seo
+ * - Traits (5): invariant, localized, knowledge, generated, aggregated
  * - Arc Families (5): ownership, localization, semantic, generation, mining
  *
  * Reads/writes filterStore facet state.
@@ -56,8 +56,8 @@ import { Sidebar } from './SidebarContent';
 // =============================================================================
 
 const REALMS: { key: Realm; label: string; icon: LucideIcon }[] = [
-  { key: 'global', label: 'Global', icon: Globe },
-  { key: 'tenant', label: 'Tenant', icon: Building2 },
+  { key: 'shared', label: 'Global', icon: Globe },
+  { key: 'org', label: 'Tenant', icon: Building2 },
 ];
 
 const LAYERS: { key: Layer; label: string; icon: LucideIcon }[] = [
@@ -75,8 +75,8 @@ const TRAITS: { key: Trait; label: string; icon: LucideIcon }[] = [
   { key: 'invariant', label: 'Invariant', icon: Lock },
   { key: 'localized', label: 'Localized', icon: Languages },
   { key: 'knowledge', label: 'Knowledge', icon: BookOpen },
-  { key: 'derived', label: 'Derived', icon: Sparkles },
-  { key: 'job', label: 'Job', icon: Cpu },
+  { key: 'generated', label: 'Generated', icon: Sparkles },
+  { key: 'aggregated', label: 'Aggregated', icon: Cpu },
 ];
 
 const ARC_FAMILIES: { key: string; label: string; icon: LucideIcon }[] = [
@@ -227,7 +227,7 @@ export const FacetFilterPanel = memo(function FacetFilterPanel({
           id="facet-realms"
           label="Realms"
           icon={<Globe className={iconSizes.sm} />}
-          color={REALM_COLORS.global.color}
+          color={REALM_COLORS.shared.color}
           checkboxState={realmCheckboxState}
           onCheckboxClick={handleRealmSectionClick}
           count={REALMS.length}

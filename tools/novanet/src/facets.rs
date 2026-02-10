@@ -11,8 +11,8 @@ use serde::{Deserialize, Serialize};
 /// Each field holds zero or more values. Empty = no restriction on that axis.
 /// Multiple values within a facet are OR-combined; facets are AND-combined.
 ///
-/// Example: `realms=["global","tenant"], layers=["knowledge"]`
-///   → Kinds that are (IN_REALM global OR tenant) AND (IN_LAYER knowledge)
+/// Example: `realms=["shared","org"], layers=["knowledge"]`
+///   → Kinds that are (IN_REALM shared OR org) AND (IN_LAYER knowledge)
 #[derive(Debug, Clone, Default, Serialize, Deserialize, PartialEq)]
 pub struct FacetFilter {
     #[serde(default)]
@@ -33,9 +33,9 @@ impl FacetFilter {
     /// ```
     /// use novanet::facets::FacetFilter;
     /// let f = FacetFilter::from_cli(
-    ///     Some("global,tenant"), Some("knowledge"), None, None, None,
+    ///     Some("shared,org"), Some("knowledge"), None, None, None,
     /// );
-    /// assert_eq!(f.realms, vec!["global", "tenant"]);
+    /// assert_eq!(f.realms, vec!["shared", "org"]);
     /// assert_eq!(f.layers, vec!["knowledge"]);
     /// assert!(f.trait_filters.is_empty());
     /// ```
@@ -113,33 +113,33 @@ mod tests {
 
     #[test]
     fn parse_csv_single() {
-        assert_eq!(parse_csv(Some("global")), vec!["global"]);
+        assert_eq!(parse_csv(Some("shared")), vec!["shared"]);
     }
 
     #[test]
     fn parse_csv_multiple_trimmed() {
-        // v10.6: 2 realms (global, tenant)
+        // v10.6: 2 realms (shared, org)
         assert_eq!(
-            parse_csv(Some(" global , tenant ")),
-            vec!["global", "tenant"]
+            parse_csv(Some(" shared , org ")),
+            vec!["shared", "org"]
         );
     }
 
     #[test]
     fn parse_csv_trailing_comma() {
-        assert_eq!(parse_csv(Some("global,")), vec!["global"]);
+        assert_eq!(parse_csv(Some("shared,")), vec!["shared"]);
     }
 
     #[test]
     fn from_cli_mixed() {
         let f = FacetFilter::from_cli(
-            Some("global,tenant"),
+            Some("shared,org"),
             Some("knowledge"),
             None,
             None,
             Some("Locale,Expression"),
         );
-        assert_eq!(f.realms, vec!["global", "tenant"]);
+        assert_eq!(f.realms, vec!["shared", "org"]);
         assert_eq!(f.layers, vec!["knowledge"]);
         assert!(f.trait_filters.is_empty());
         assert!(f.arc_families.is_empty());
@@ -158,14 +158,14 @@ mod tests {
     #[test]
     fn from_json_full() {
         let json = r#"{
-            "realms": ["global"],
+            "realms": ["shared"],
             "layers": ["knowledge", "config"],
             "traits": ["invariant"],
             "arc_families": [],
             "kinds": []
         }"#;
         let f = FacetFilter::from_json(json).unwrap();
-        assert_eq!(f.realms, vec!["global"]);
+        assert_eq!(f.realms, vec!["shared"]);
         assert_eq!(f.layers, vec!["knowledge", "config"]);
         assert_eq!(f.trait_filters, vec!["invariant"]);
         assert!(f.arc_families.is_empty());
@@ -174,9 +174,9 @@ mod tests {
 
     #[test]
     fn from_json_minimal() {
-        let json = r#"{"realms": ["tenant"]}"#;
+        let json = r#"{"realms": ["org"]}"#;
         let f = FacetFilter::from_json(json).unwrap();
-        assert_eq!(f.realms, vec!["tenant"]);
+        assert_eq!(f.realms, vec!["org"]);
         assert!(f.layers.is_empty());
     }
 
@@ -187,9 +187,9 @@ mod tests {
 
     #[test]
     fn roundtrip_json() {
-        // v10.4: global realm has SEO layer
+        // v10.4: shared realm has SEO layer
         let original = FacetFilter::from_cli(
-            Some("global"),
+            Some("shared"),
             Some("seo"),
             Some("derived,job"),
             Some("mining"),

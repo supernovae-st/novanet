@@ -79,7 +79,7 @@ fn arc_family_display_name(key: &str) -> &str {
 fn arc_family_description(key: &str) -> &str {
     match key {
         "ownership" => {
-            "Hierarchical containment. Parent-child relationships like Page HAS_BLOCK, Tenant HAS_PAGE."
+            "Hierarchical containment. Parent-child relationships like Page HAS_BLOCK, Org HAS_PAGE."
         }
         "localization" => {
             "Locale-specific content. Links invariant to localized nodes like Entity HAS_CONTENT EntityContent."
@@ -315,8 +315,8 @@ fn render_arc_scope(f: &mut Frame, app: &App, area: Rect) {
     lines.push(Line::from(""));
 
     // Scope explanations with visual representation
-    let global_color = theme.realm_color("global");
-    let tenant_color = theme.realm_color("tenant");
+    let global_color = theme.realm_color("shared");
+    let tenant_color = theme.realm_color("org");
 
     // intra_realm (solid line)
     lines.push(Line::from(vec![

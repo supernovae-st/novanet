@@ -1,0 +1,121 @@
+# packages/core/models/node-kinds/global/locale-knowledge/population-cluster.yaml
+# PopulationCluster - Macro population cluster for image generation diversity
+#
+# v10.8: Geographic Taxonomy - Phase 5
+# Data: 7 macro clusters (West Eurasian, East Asian, South Asian, etc.)
+# Use case: Generate diverse, representative images for different markets
+
+node:
+  name: PopulationCluster
+  realm: shared
+  layer: locale-knowledge
+  trait: knowledge
+  icon: "👥"
+  description: "Macro population cluster for generating diverse, representative imagery"
+
+  standard_properties:
+    key:
+      type: string
+      required: true
+      description: "Kebab-case cluster key"
+      pattern: "^[a-z-]+$"
+      examples:
+        - "west-eurasian"
+        - "east-asian"
+        - "south-asian"
+        - "southeast-asian"
+        - "sub-saharan"
+        - "native-american"
+        - "oceanian"
+
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable cluster name"
+      example: "West Eurasian"
+
+    description:
+      type: string
+      required: true
+      description: "Short description"
+      example: "European, Middle Eastern, and South Asian populations"
+
+    llm_context:
+      type: string
+      required: true
+      description: "LLM hints for image generation"
+      example: "USE: for European, MENA, South Asian imagery. TRIGGERS: europe, middle east, caucasian. IMAGE: varied skin tones from light to olive, varied hair/eye colors."
+
+    created_at:
+      type: datetime
+      required: true
+
+    updated_at:
+      type: datetime
+      required: true
+
+  properties:
+    visual_traits:
+      type: json
+      required: true
+      description: "General physical traits for image generation prompts"
+      example:
+        - "light to medium skin tone"
+        - "varied hair colors"
+        - "varied eye colors"
+
+    primary_regions:
+      type: json
+      required: false
+      description: "Geographic regions where this cluster is predominant"
+      example:
+        - "Europe"
+        - "Middle East"
+        - "North Africa"
+        - "South Asia (northern)"
+
+    subcluster_count:
+      type: int
+      required: false
+      description: "Number of PopulationSubCluster children"
+      example: 5
+
+  relations:
+    incoming:
+      - type: CLUSTER_OF
+        from: PopulationSubCluster
+        cardinality: "N:1"
+        description: "Sub-clusters within this macro cluster"
+
+      - type: HAS_PRIMARY_POPULATION
+        from: Locale
+        cardinality: "N:1"
+        description: "Locales where this is the primary population"
+
+  example:
+    data:
+      key: "west-eurasian"
+      display_name: "West Eurasian"
+      description: "European, Middle Eastern, and South Asian populations"
+      visual_traits:
+        - "light to medium skin tone"
+        - "varied hair colors (blonde to black)"
+        - "varied eye colors (blue, green, brown)"
+      primary_regions:
+        - "Europe"
+        - "Middle East"
+        - "North Africa"
+        - "South Asia (northern)"
+      subcluster_count: 5
+      llm_context: "USE: for European, MENA, South Asian imagery. TRIGGERS: europe, middle east, mediterranean. IMAGE: skin tones from very light (Nordic) to olive/light brown (Mediterranean/Middle East), diverse hair and eye colors."
+
+    cypher: |
+      // Get all sub-clusters in a macro cluster
+      MATCH (pc:PopulationCluster {key: $key})<-[:CLUSTER_OF]-(ps:PopulationSubCluster)
+      RETURN ps.key, ps.name, ps.visual_traits
+      ORDER BY ps.name
+
+      // Get all locales with this as primary population
+      MATCH (pc:PopulationCluster {key: $key})<-[:HAS_PRIMARY_POPULATION]-(l:Locale)
+      RETURN l.key, l.display_name
+      ORDER BY l.key

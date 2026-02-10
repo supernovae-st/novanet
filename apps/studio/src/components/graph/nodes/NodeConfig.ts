@@ -96,10 +96,9 @@ export const NODE_SIZES: Record<NodeType, NodeSize> = {
   PopulationCluster: { width: 180, height: 90 },
   PopulationSubCluster: { width: 180, height: 90 },
 
-  // seo (9) — SEO + GEO (Generative Engine Optimization)
+  // seo (8) — SEO + GEO (Generative Engine Optimization)
   SEOKeyword: { width: 200, height: 100 },
   SEOKeywordMetrics: { width: 160, height: 80 },
-  SEOMiningRun: { width: 160, height: 80 },
   SEOComparison: { width: 180, height: 90 },
   SEOPreposition: { width: 180, height: 90 },
   SEOQuestion: { width: 180, height: 90 },
@@ -138,12 +137,10 @@ export const NODE_SIZES: Record<NodeType, NodeSize> = {
   BlockInstruction: { width: 180, height: 90 },
   PromptArtifact: { width: 200, height: 100 },
 
-  // output (5)
+  // output (3) — v11.2: job nodes removed
   PageGenerated: { width: 220, height: 110 },
   BlockGenerated: { width: 200, height: 100 },
-  GenerationJob: { width: 200, height: 100 },
   OutputArtifact: { width: 180, height: 90 },
-  EvaluationSignal: { width: 160, height: 80 },
 };
 
 // =============================================================================
@@ -377,12 +374,6 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
     tertiary: '#fca5a5',
     glow: '#f8717140',
   },
-  SEOMiningRun: {
-    primary: '#fca5a5',
-    secondary: '#f87171',
-    tertiary: '#fecaca',
-    glow: '#fca5a540',
-  },
   SEOComparison: {
     primary: '#dc2626',
     secondary: '#ef4444',
@@ -547,7 +538,7 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
     glow: '#1d4ed840',
   },
 
-  // output (5) — Orange/Red tones
+  // output (3) — Orange/Red tones — v11.2: job nodes removed
   PageGenerated: {
     primary: '#f97316',
     secondary: '#ef4444',
@@ -560,23 +551,11 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
     tertiary: '#fdba74',
     glow: '#fb923c40',
   },
-  GenerationJob: {
-    primary: '#ea580c',
-    secondary: '#f97316',
-    tertiary: '#fb923c',
-    glow: '#ea580c40',
-  },
   OutputArtifact: {
     primary: '#c2410c',
     secondary: '#ea580c',
     tertiary: '#f97316',
     glow: '#c2410c40',
-  },
-  EvaluationSignal: {
-    primary: '#9a3412',
-    secondary: '#c2410c',
-    tertiary: '#ea580c',
-    glow: '#9a341240',
   },
 };
 

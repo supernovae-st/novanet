@@ -182,11 +182,11 @@ pub fn render_help(f: &mut Frame, app: &App) {
             Line::from(vec![Span::styled("  Layers Tab", STYLE_HIGHLIGHT)]),
             Line::from(vec![
                 Span::styled("    h/←      ", STYLE_PRIMARY),
-                Span::styled("Switch to Global realm", STYLE_DIM),
+                Span::styled("Switch to Shared realm", STYLE_DIM),
             ]),
             Line::from(vec![
                 Span::styled("    l/→      ", STYLE_PRIMARY),
-                Span::styled("Switch to Tenant realm", STYLE_DIM),
+                Span::styled("Switch to Org realm", STYLE_DIM),
             ]),
             Line::from(""),
             Line::from(vec![Span::styled("  Quick Jump (Traits)", STYLE_HIGHLIGHT)]),
@@ -525,8 +525,8 @@ mod tests {
 
     fn make_realm() -> RealmInfo {
         RealmInfo {
-            key: "global".to_string(),
-            display_name: "Global".to_string(),
+            key: "shared".to_string(),
+            display_name: "Shared".to_string(),
             color: "#2aa198".to_string(),
             icon: "◉",
             layers: vec![],
@@ -551,7 +551,7 @@ mod tests {
             trait_name: "invariant".to_string(),
             instance_count: 10,
             arcs: vec![],
-            yaml_path: "models/node-kinds/tenant/structure/page.yaml".to_string(),
+            yaml_path: "models/node-kinds/org/structure/page.yaml".to_string(),
             properties: vec!["key".to_string(), "display_name".to_string()],
             required_properties: vec!["key".to_string()],
             schema_hint: "".to_string(),
@@ -691,7 +691,7 @@ mod tests {
         let item = TreeItem::Realm(&realm);
         let (prefix, name) = get_item_display(Some(&item));
         assert_eq!(prefix, "◉"); // Uses realm's icon
-        assert_eq!(name, "Global");
+        assert_eq!(name, "Shared");
     }
 
     #[test]
@@ -817,10 +817,9 @@ mod tests {
 
     #[test]
     fn test_legend_trait_styles_count() {
-        // Legend should show 4 trait styles: invariant, localized, knowledge, derived
-        // v11.2: job trait removed (deferred to v12+)
-        let expected_traits = vec!["invariant", "localized", "knowledge", "derived"];
-        assert_eq!(expected_traits.len(), 4);
+        // Legend should show 5 trait styles (v11.2: split derived → generated + aggregated)
+        let expected_traits = vec!["invariant", "localized", "knowledge", "generated", "aggregated"];
+        assert_eq!(expected_traits.len(), 5);
     }
 
     // =========================================================================

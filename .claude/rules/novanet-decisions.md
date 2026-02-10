@@ -1,4 +1,4 @@
-# NovaNet Architecture Decisions (v11.0)
+# NovaNet Architecture Decisions (v11.2)
 
 This file documents key architecture decisions for NovaNet. Reference these when making implementation choices.
 
@@ -24,7 +24,7 @@ This file documents key architecture decisions for NovaNet. Reference these when
 
 ```typescript
 // Types with prefix (globally unique)
-type NodeRealm = 'global' | 'tenant';  // v10.6: 2 realms
+type NodeRealm = 'shared' | 'org';  // v11.2: renamed from global/tenant
 type ArcFamily = 'ownership' | 'localization' | 'semantic' | 'generation' | 'mining';
 
 // Properties without prefix (context is clear)
@@ -72,8 +72,10 @@ TypeScript + Cypher + Mermaid + Rust structs
 ```yaml
 # taxonomy.yaml - Colors defined here
 node_realms:
-  - key: global
+  - key: shared       # v11.2: renamed from global
     color: "#2aa198"
+  - key: org          # v11.2: renamed from tenant
+    color: "#0ea5e9"
 
 # visual-encoding.yaml - References, no hex values
 channel_mapping:
@@ -86,17 +88,19 @@ channel_mapping:
 
 ## ADR-005: Trait-Based Visual Encoding
 
-**Status**: Approved (v9.0)
+**Status**: Approved (v9.0, updated v11.2)
 
-**Decision**: Node trait (invariant/localized/knowledge/derived/job) is encoded via border style, not color.
+**Decision**: Node trait (invariant/localized/knowledge/generated/aggregated) is encoded via border style, not color.
 
 | Trait | Border Style | CSS |
 |-------|--------------|-----|
 | invariant | solid | `border-2 border-solid` |
 | localized | dashed | `border-2 border-dashed` |
 | knowledge | double | `border-[3px] border-double` |
-| derived | dotted | `border-2 border-dotted` |
-| job | solid thin | `border border-solid` |
+| generated | dotted | `border-2 border-dotted` |
+| aggregated | dotted thin | `border border-dotted` |
+
+> **v11.2 Changes**: `derived` → split into `generated` + `aggregated`, `job` removed.
 
 **Rationale**: Colorblind-safe. Layer already uses fill color.
 
@@ -190,34 +194,42 @@ Organization ─[:HAS_COMPANY_PROJECT]→ Project (company project)
 
 ## ADR-012: 2-Realm Architecture
 
-**Status**: Approved (v10.6)
+**Status**: Approved (v10.6, updated v11.2)
 
-**Decision**: Consolidate 3 realms into 2 realms: GLOBAL + TENANT.
+**Decision**: Consolidate 3 realms into 2 realms: SHARED + ORG.
 
 ```
 v10.5 (3 realms):  global / organization / project
 v10.6 (2 realms):  global / tenant
+v11.2 (2 realms):  shared / org  (renamed for clarity)
 ```
 
-**Architecture** (updated v11.0):
-- **GLOBAL** (2 layers): config, locale-knowledge — Universal, READ-ONLY
-- **TENANT** (7 layers): config, foundation, structure, semantic, instruction, seo, output — Business-specific
+**Architecture** (v11.2):
+- **SHARED** (2 layers): config, locale-knowledge — Universal, READ-ONLY (32 nodes)
+- **ORG** (7 layers): config, foundation, structure, semantic, instruction, seo, output — Business-specific (30 nodes)
+
+> **v11.2 Changes**:
+> - `global` → `shared` (describes WHAT: shared resources)
+> - `tenant` → `org` (describes WHO: organization-specific, familiar terminology)
+> - 3 job nodes removed (GenerationJob, SEOMiningRun, EvaluationSignal)
+> - Total: 62 nodes (was 65)
 
 **Rationale**:
 - Organization + Project distinction added unnecessary complexity
-- Tenant is the natural isolation boundary for multi-tenant SaaS
+- Org is the natural isolation boundary for multi-tenant SaaS
 - Single realm for all business content simplifies queries and permissions
-- 9 total layers (2 global + 7 tenant) provides sufficient granularity
-- v11.0: SEO moved to tenant (business-specific keywords, not universal knowledge)
+- 9 total layers (2 shared + 7 org) provides sufficient granularity
+- v11.0: SEO moved to org (business-specific keywords, not universal knowledge)
+- v11.2: `shared` describes purpose, `org` is familiar (GitHub/Slack orgs)
 
 **Migration path**:
-- `organization` -> `tenant` (rename)
-- `project` -> `tenant` (merge into tenant)
-- All node types from both organization and project now live under tenant
+- `global` -> `shared` (rename)
+- `tenant` -> `org` (rename)
+- All node types from both organization and project now live under org
 
 ## ADR-013: Icons Source of Truth
 
-**Status**: Approved (v10.6)
+**Status**: Approved (v10.6, updated v11.2)
 
 **Decision**: Centralize all icons in `visual-encoding.yaml`, providing both web (Lucide) and terminal (Unicode) variants.
 
@@ -226,9 +238,9 @@ v10.6 (2 realms):  global / tenant
 **Structure**:
 ```yaml
 icons:
-  realms:           # global, tenant
+  realms:           # shared, org (v11.2: renamed from global, tenant)
   layers:           # config, locale-knowledge, seo, foundation, structure, semantic, instruction, output
-  traits:           # invariant, localized, knowledge, derived, job
+  traits:           # invariant, localized, knowledge, generated, aggregated (v11.2: derived split, job removed)
   arc_families:     # ownership, localization, semantic, generation, mining
   states:           # no_connection, no_kinds, no_results, no_instances, loading, success, error, warning
   navigation:       # expanded, collapsed, leaf, search, help, back, copy
@@ -257,9 +269,9 @@ icons:
 **Categories explained**:
 | Category | Purpose | Example |
 |----------|---------|---------|
-| realms | Where node lives | ◉ global, ◎ tenant |
+| realms | Where node lives | ◉ shared, ◎ org |
 | layers | Functional category | ⚙ config, ◆ semantic |
-| traits | Locale behavior | ■ invariant, □ localized |
+| traits | Locale behavior | ■ invariant, □ localized, ✦ generated, ⋆ aggregated |
 | states | UI empty states | ◐ loading, ∅ no_kinds |
 | navigation | Tree controls | ▼ expanded, ▶ collapsed |
 | quality | Data completeness | ● complete, ◐ partial |
@@ -408,7 +420,7 @@ CONTAINS_AUDIENCE_TRAIT: AudienceSet → AudienceTrait
 
 ## ADR-017: EntityCategory Classification
 
-**Status**: Approved (v11.1)
+**Status**: Approved (v11.1, updated v11.2 for realm renames)
 
 **Decision**: Replace Entity.type enum property with EntityCategory nodes and BELONGS_TO arcs.
 
@@ -417,24 +429,24 @@ Entity had a `type` enum property with 13 hardcoded values (THING, CONTENT_TYPE,
 Properties are difficult to query and extend. Moving classification to the graph enables queryable, extensible categorization.
 
 **Solution**:
-- Create EntityCategory node type in `global/config` layer (13 nodes, invariant trait)
-- Add BELONGS_TO arc from Entity (tenant/semantic) to EntityCategory (global/config) — cross_realm, ownership family
+- Create EntityCategory node type in `shared/config` layer (13 nodes, invariant trait)
+- Add BELONGS_TO arc from Entity (org/semantic) to EntityCategory (shared/config) — cross_realm, ownership family
 - Remove Entity.type enum property
 
 **Structure**:
 ```
-EntityCategory (global/config, invariant, 13 nodes)
+EntityCategory (shared/config, invariant, 13 nodes)
   ├─ category_key: "thing"
   ├─ category_key: "content-type"
   ├─ ... (11 more)
 
-Entity (tenant/semantic) ─[:BELONGS_TO]→ EntityCategory (global/config)
+Entity (org/semantic) ─[:BELONGS_TO]→ EntityCategory (shared/config)
 ```
 
 **Arc Properties**:
 - Name: `BELONGS_TO`
 - Family: `ownership`
-- Scope: `cross_realm` (tenant/semantic → global/config)
+- Scope: `cross_realm` (org/semantic → shared/config)
 - Cardinality: `many_to_one` (many Entities can belong to one category)
 - Source: Entity
 - Target: EntityCategory
@@ -442,17 +454,119 @@ Entity (tenant/semantic) ─[:BELONGS_TO]→ EntityCategory (global/config)
 **Benefits**:
 1. **Queryable**: Find all entities by category with `MATCH (e:Entity)-[:BELONGS_TO]->(c:EntityCategory {category_key: 'person'})`
 2. **Extensible**: Add new categories without code changes (just YAML + Neo4j nodes)
-3. **Uniform**: Classification follows ADR-006 (realm differentiates scope) — universal categories in global, instance relationships in tenant
+3. **Uniform**: Classification follows ADR-006 (realm differentiates scope) — universal categories in shared, instance relationships in org
 4. **Graph-native**: Classification is now part of the knowledge graph, not a buried enum property
 
 **Migration**:
-1. Create EntityCategory YAML definition in `packages/core/models/node-kinds/global/config/entity-category.yaml`
+1. Create EntityCategory YAML definition in `packages/core/models/node-kinds/shared/config/entity-category.yaml`
 2. Create BELONGS_TO arc definition in `packages/core/models/arc-kinds/ownership/belongs-to.yaml`
 3. Generate schema artifacts: `cargo run -- schema generate`
 4. Create Neo4j migration to insert 13 EntityCategory nodes and create BELONGS_TO relationships from existing Entity nodes
 5. Remove Entity.type property from Entity node definition
 
 **No breaking changes** — API clients can still categorize entities, just through graph traversal instead of property lookup.
+
+## ADR-018: Classification System Refinement
+
+**Status**: Approved (v11.2)
+
+**Decision**: Comprehensive refinement of the NovaNet classification system.
+
+### Changes
+
+| Area | Before | After |
+|------|--------|-------|
+| **Realm names** | `global`, `tenant` | `shared`, `org` |
+| **Trait split** | `derived` (8 nodes) | `generated` (4) + `aggregated` (3) |
+| **Job trait** | `job` (3 nodes) | Removed |
+| **Container traits** | `knowledge` | `invariant` (6 containers) |
+| **Node count** | 65 nodes | 62 nodes |
+
+### Realm Renames
+
+```
+BEFORE (confusing):
+├── global/config      ← "global" sounds like "everywhere"
+└── tenant/config      ← "tenant" is SaaS jargon
+
+AFTER (clear):
+├── shared/config      ← Describes WHAT (shared resources)
+└── org/config         ← Describes WHO (organization owns it)
+```
+
+**Benefits:**
+- `shared` = describes purpose (shared resources), not scope
+- `org` = familiar terminology (GitHub/Slack orgs), avoids SaaS jargon
+- Short: `org` (3 chars) vs `tenant` (6 chars)
+- No collision: `Organization` node exists in `org/config`
+
+### Trait Changes
+
+| Node | v11.1 Trait | v11.2 Trait |
+|------|-------------|-------------|
+| PageGenerated | derived | **generated** |
+| BlockGenerated | derived | **generated** |
+| OutputArtifact | derived | **generated** |
+| PromptArtifact | derived | **generated** |
+| GEOAnswer | derived | **aggregated** |
+| GEOMetrics | derived | **aggregated** |
+| SEOKeywordMetrics | derived | **aggregated** |
+
+**Trait summary (v11.2):**
+- `invariant`: 30 nodes (+6 containers)
+- `localized`: 2 nodes (EntityContent, ProjectContent)
+- `knowledge`: 23 nodes (-6 containers)
+- `generated`: 4 nodes (LLM output)
+- `aggregated`: 3 nodes (computed metrics)
+- ~~`job`~~: REMOVED (0 nodes)
+
+### Removed Nodes (Job Concept)
+
+```
+DELETED:
+- GenerationJob    (org/output)
+- EvaluationSignal (org/output)
+- SEOMiningRun     (org/seo)
+```
+
+**Rationale**: Job concept deferred until generation pipeline is more mature. Clean architecture now, add workflow nodes in v12+ when needed.
+
+### Container Traits
+
+Containers changed from `knowledge` to `invariant`:
+
+```
+TermSet, ExpressionSet, PatternSet, CultureSet, TabooSet, AudienceSet
+```
+
+**Rationale:**
+- Containers are universal categories (pricing, legal, technical) → exist in ALL locales
+- Atoms remain `knowledge` → locale-specific content
+
+### Architecture Summary (v11.2)
+
+```
+REALMS (62 nodes total):
+├── shared/              # Universal locale knowledge (READ-ONLY) — 32 nodes
+│   ├── config/          # 14 nodes (incl. EntityCategory)
+│   └── locale-knowledge/# 18 nodes (6 containers + 12 atoms)
+│
+└── org/                 # Organization-specific content — 30 nodes
+    ├── config/          # 2 nodes (Organization, Tenant)
+    ├── foundation/      # 3 nodes
+    ├── structure/       # 3 nodes
+    ├── semantic/        # 4 nodes
+    ├── seo/             # 8 nodes (SEOMiningRun removed)
+    ├── instruction/     # 7 nodes
+    └── output/          # 3 nodes (job nodes removed)
+```
+
+**Migration**:
+- Directory renames: `node-kinds/global/` → `shared/`, `tenant/` → `org/`
+- YAML realm field updates: 65 files
+- Rust code: 250+ occurrences
+- TypeScript code: 80+ occurrences
+- Test assertions: 20+ updates
 
 ## Decision Log
 
@@ -469,12 +583,13 @@ Entity (tenant/semantic) ─[:BELONGS_TO]→ EntityCategory (global/config)
 | 009 | v9.5 | Terminal color graceful degradation |
 | 010 | v9.5 | Skill-first DX |
 | 011 | v10.5 | Company project pattern (superseded by 012) |
-| 012 | v10.6 | 2-Realm Architecture |
+| 012 | v10.6 | 2-Realm Architecture (updated v11.2: shared/org) |
 | 013 | v10.6 | Icons source of truth |
 | 014 | v10.9 | Naming convention refactor (L10n to Content/Generated) |
 | 015 | v10.9 | Unidirectional ownership arcs |
 | 016 | v10.9 | Type-constrained container arcs |
 | 017 | v11.1 | EntityCategory classification |
+| 018 | v11.2 | Classification system refinement (realm renames, trait split) |
 
 ## References
 

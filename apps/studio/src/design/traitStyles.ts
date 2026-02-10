@@ -59,20 +59,20 @@ function toTraitStyleTokens(trait: Trait): TraitStyleTokens {
 /**
  * 5 Trait border styles (generated from visual-encoding.yaml)
  *
- * | Trait      | Border   | Meaning                          |
- * |-----------|----------|----------------------------------|
+ * | Trait      | Border     | Meaning                          |
+ * |-----------|------------|----------------------------------|
  * | invariant  | solid 2px  | Stable, doesn't change per locale |
  * | localized  | dashed 2px | Generated natively per locale    |
  * | knowledge  | dotted 2px | Locale knowledge reference data  |
- * | derived    | double 3px | Computed/aggregated data         |
- * | job        | solid 1px  | Background processing tasks      |
+ * | generated  | double 3px | LLM-generated content output     |
+ * | aggregated | solid 1px  | Computed metrics and analytics   |
  */
 export const TRAIT_STYLES: Record<Trait, TraitStyleTokens> = {
   invariant: toTraitStyleTokens('invariant'),
   localized: toTraitStyleTokens('localized'),
   knowledge: toTraitStyleTokens('knowledge'),
-  derived: toTraitStyleTokens('derived'),
-  job: toTraitStyleTokens('job'),
+  generated: toTraitStyleTokens('generated'),
+  aggregated: toTraitStyleTokens('aggregated'),
 } as const;
 
 /**

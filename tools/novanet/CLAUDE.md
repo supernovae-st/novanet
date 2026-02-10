@@ -7,11 +7,11 @@ This file provides guidance to Claude Code when working in the `tools/novanet/` 
 `novanet` is a unified Rust CLI + TUI binary for managing the NovaNet context graph.
 It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 
-**Version**: v11.1.0 (EntityCategory feature + SEO tenant migration + v10.9 naming refactor)
+**Version**: v11.2.0 (Realm renames + trait split + job removal)
 
 ## Current Status
 
-**v11.1.0 EntityCategory feature** — Added Entity categorization system for semantic grouping (single category assignment). v11.0 SEO tenant migration (moved 9 SEO/GEO nodes from `global/seo` to `tenant/seo`, fixed 22 arc scopes). Architecture: GLOBAL (2 layers: config, locale-knowledge), TENANT (7 layers: +seo). Galaxy-themed mission control TUI with EntityCategory filtering, search, detail, arc explorer, CRUD dialogs, dashboard stats, ASCII logo, breadcrumb navigation, command palette, help overlay, boot animation, effects engine, and onboarding.
+**v11.2.0 Classification Refinement** — Realm renames (`global` → `shared`, `tenant` → `org`), trait split (`derived` → `generated` + `aggregated`), job removal (3 nodes deleted: GenerationJob, SEOMiningRun, EvaluationSignal). Architecture: SHARED (2 layers: config, locale-knowledge, 32 nodes), ORG (7 layers, 30 nodes). 62 total nodes. Galaxy-themed mission control TUI with EntityCategory filtering, search, detail, arc explorer, CRUD dialogs, dashboard stats, ASCII logo, breadcrumb navigation, command palette, help overlay, boot animation, effects engine, and onboarding.
 
 | Area | Commands | Status |
 |------|----------|--------|
@@ -106,7 +106,7 @@ cargo build --no-default-features                 # CLI-only (no TUI deps)
 cargo run -- meta                                 # Mode 1: Meta-graph only
 cargo run -- data                                 # Mode 2: Data nodes only
 cargo run -- overlay                              # Mode 3: Data + Meta overlay
-cargo run -- query --realm=tenant --format=json   # Mode 4: Faceted query
+cargo run -- query --realm=org --format=json      # Mode 4: Faceted query
 
 # Write operations (Neo4j)
 cargo run -- node create --kind=Page --key=my-page --props='{"display_name":"My Page"}'
@@ -220,8 +220,8 @@ src/
 - **YAML-first architecture**: Each Kind YAML has explicit `realm:` and `layer:` fields (source of truth)
   - Path validation: file must be at `models/node-kinds/{realm}/{layer}/{name}.yaml`
   - Generators read realm/layer from YAML content, validate against path
-  - v11.1: 2 realms (global, tenant), 9 layers (2 global + 7 tenant), 77 node types (added EntityCategory)
-- **Icons source of truth (v11.0)**: `visual-encoding.yaml` → `icons:` section
+  - v11.2: 2 realms (shared, org), 9 layers (2 shared + 7 org), 62 node types
+- **Icons source of truth (v11.2)**: `visual-encoding.yaml` → `icons:` section
   - Dual format: `web` (Lucide for Studio) + `terminal` (Unicode for TUI)
   - Categories: realms, layers, traits, arc_families, states, navigation, quality, modes
   - TypeScript generated: `packages/core/src/graph/visual-encoding.ts` (ICONS export)

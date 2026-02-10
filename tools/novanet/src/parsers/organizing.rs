@@ -117,11 +117,11 @@ mod tests {
         let yaml = r##"
 version: "9.0.0"
 realms:
-  - key: global
-    display_name: Global
+  - key: shared
+    display_name: Shared
     emoji: "🌍"
     color: "#2aa198"
-    llm_context: "Global context."
+    llm_context: "Shared context."
     layers:
       - key: config
         display_name: Configuration
@@ -143,7 +143,7 @@ arc_families:
         let doc: OrganizingDoc = serde_yaml::from_str(yaml).unwrap();
         assert_eq!(doc.version, "9.0.0");
         assert_eq!(doc.realms.len(), 1);
-        assert_eq!(doc.realms[0].key, "global");
+        assert_eq!(doc.realms[0].key, "shared");
         assert_eq!(doc.realms[0].layers.len(), 1);
         assert_eq!(doc.realms[0].layers[0].key, "config");
         assert_eq!(doc.traits.len(), 1);
@@ -165,13 +165,13 @@ arc_families:
 
         let doc = load_organizing(root).expect("should load from taxonomy.yaml");
 
-        // Version now comes from taxonomy.yaml (10.6.0)
-        assert_eq!(doc.version, "11.0.0");
-        assert_eq!(doc.realms.len(), 2); // v10.6: 2 realms (global, tenant)
-        assert_eq!(doc.traits.len(), 4); // v11.1: removed job trait
+        // v11.2: realm renames, trait split, version bump
+        assert_eq!(doc.version, "11.2.0");
+        assert_eq!(doc.realms.len(), 2); // v11.2: 2 realms (shared, org)
+        assert_eq!(doc.traits.len(), 5); // v11.2: split derived → generated + aggregated
         assert_eq!(doc.arc_families.len(), 5);
 
         let total_layers: usize = doc.realms.iter().map(|r| r.layers.len()).sum();
-        assert_eq!(total_layers, 9); // v10.6: 3 global + 6 tenant layers
+        assert_eq!(total_layers, 9); // v11.2: 2 shared + 7 org layers
     }
 }

@@ -2,7 +2,7 @@
 //!
 //! Reads a JSON filter spec from stdin, resolves it to Cypher via the meta-graph
 //! query builder, and writes the result to stdout. Designed for Studio subprocess
-//! integration: `echo '{"realms":["tenant"]}' | novanet filter build`
+//! integration: `echo '{"realms":["org"]}' | novanet filter build`
 
 use std::io::Read;
 
@@ -46,13 +46,14 @@ mod tests {
 
     #[test]
     fn filter_build_with_facets() {
+        // v11.2: org realm (was tenant)
         let filter =
-            FacetFilter::from_json(r#"{"realms":["tenant"],"layers":["structure"]}"#).unwrap();
+            FacetFilter::from_json(r#"{"realms":["org"],"layers":["structure"]}"#).unwrap();
         let stmt = cypher::filter_build_query(&filter);
         assert!(stmt.cypher.contains("IN_REALM"));
         assert!(stmt.cypher.contains("IN_LAYER"));
         let inlined = stmt.render_inline();
-        assert!(inlined.contains("'tenant'"));
+        assert!(inlined.contains("'org'"));
         assert!(inlined.contains("'structure'"));
     }
 }

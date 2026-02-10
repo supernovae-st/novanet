@@ -35,9 +35,9 @@ describe('SchemaFilterPanel', () => {
     it('renders realm sections', () => {
       render(<SchemaFilterPanel />);
 
-      // Realm labels (v11.0: GLOBAL, TENANT - uppercase from REALM_HIERARCHY)
-      expect(screen.getByText('GLOBAL')).toBeInTheDocument();
-      expect(screen.getByText('TENANT')).toBeInTheDocument();
+      // Realm labels (v11.2: SHARED, ORG - uppercase from REALM_HIERARCHY)
+      expect(screen.getByText('SHARED')).toBeInTheDocument();
+      expect(screen.getByText('ORG')).toBeInTheDocument();
     });
   });
 

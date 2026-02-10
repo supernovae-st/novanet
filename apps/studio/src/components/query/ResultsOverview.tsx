@@ -34,24 +34,24 @@ interface TypeCountItem {
   category: Layer | RelationshipCategory;
 }
 
-/** Realm config for breakdown display - colors match Neo4j organizing-principles (v10.6: 2 realms) */
+/** Realm config for breakdown display - colors match Neo4j organizing-principles (v11.2: 2 realms) */
 const REALM_CONFIG = {
-  global: { emoji: '🌍', color: '#2aa198' },   // solarized cyan
-  tenant: { emoji: '🏢', color: '#0ea5e9' },   // sky blue
+  shared: { emoji: '🌍', color: '#2aa198' },   // solarized cyan
+  org: { emoji: '🏢', color: '#0ea5e9' },      // sky blue
 } as const;
 
-/** Layer config - color inherited from parent realm (v10.6: 2 realms) */
+/** Layer config - color inherited from parent realm (v11.2: 2 realms) */
 const LAYER_CONFIG: Record<Layer, { emoji: string; realm: keyof typeof REALM_CONFIG }> = {
-  // Tenant realm (5 layers)
-  foundation: { emoji: '🏛️', realm: 'tenant' },
-  structure: { emoji: '🧱', realm: 'tenant' },
-  semantic: { emoji: '💡', realm: 'tenant' },
-  instruction: { emoji: '📋', realm: 'tenant' },
-  output: { emoji: '📤', realm: 'tenant' },
-  // Global realm (3 layers) — v10.6: locale-knowledge
-  config: { emoji: '⚙️', realm: 'global' },
-  'locale-knowledge': { emoji: '🧠', realm: 'global' },
-  seo: { emoji: '🔍', realm: 'global' },
+  // Org realm (7 layers) — v11.2: seo moved to org
+  foundation: { emoji: '🏛️', realm: 'org' },
+  structure: { emoji: '🧱', realm: 'org' },
+  semantic: { emoji: '💡', realm: 'org' },
+  instruction: { emoji: '📋', realm: 'org' },
+  output: { emoji: '📤', realm: 'org' },
+  seo: { emoji: '🔍', realm: 'org' },
+  // Shared realm (2 layers) — v11.2: config + locale-knowledge
+  config: { emoji: '⚙️', realm: 'shared' },
+  'locale-knowledge': { emoji: '🧠', realm: 'shared' },
 } as const;
 
 interface ResultsOverviewProps {
@@ -273,7 +273,7 @@ export const ExpandedBreakdown = memo(function ExpandedBreakdown({
                 {/* Realms - inline badges (v10.6: 2 realms) */}
                 <SectionHeader icon={NodeIcon} label="realms" count={2} />
                 <div className="flex flex-wrap gap-1.5 mb-3">
-                  {(['global', 'tenant'] as const).map((scope, i) => (
+                  {(['shared', 'org'] as const).map((scope, i) => (
                     <UnifiedBadge
                       key={scope}
                       item={{

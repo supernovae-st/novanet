@@ -640,8 +640,8 @@ pub(super) fn colorize_path_inline(path: &str) -> Vec<Span<'static>> {
             3 => Color::Magenta,             // nodes
             4 => match *part {
                 // realm (v10.6: 2 realms - global + tenant)
-                "global" => Color::Green,
-                "tenant" => Color::Yellow,
+                "shared" => Color::Green,
+                "org" => Color::Yellow,
                 _ => Color::White,
             },
             5 => COLOR_CONNECTED, // layer
@@ -843,8 +843,8 @@ mod tests {
 
     #[test]
     fn test_truncate_start_utf8_arrows() {
-        // This is the actual bug case: "Global → Tenant" with → being 3 bytes
-        let s = "Global → Tenant Configuration → Slugification";
+        // This is the actual bug case: "Shared → Org" with → being 3 bytes
+        let s = "Shared → Org Configuration → Slugification";
         let result = truncate_start(s, 20);
         // Should keep last 20 chars without panicking
         assert!(result.starts_with('…'));

@@ -1,6 +1,6 @@
 // packages/core/src/config/nodeIcons.ts
 // Presentation layer configuration for node icons
-// v11.1.0 — EntityCategory classification system
+// v11.2.0 — Realm renames (shared/org), job nodes removed
 
 import type { NodeType } from '../types/nodes.js';
 
@@ -10,7 +10,7 @@ import type { NodeType } from '../types/nodes.js';
  * Icons are now in presentation layer, not data model.
  */
 export const NODE_ICONS: Record<NodeType, string> = {
-  // GLOBAL — config (14) - v11.1: added EntityCategory
+  // SHARED — config (14)
   Locale: '🌍',
   EntityCategory: '🏷️',
   Formatting: '📝',
@@ -26,7 +26,7 @@ export const NODE_ICONS: Record<NodeType, string> = {
   LendingCategory: '🏦',
   EconomicRegion: '💹',
 
-  // GLOBAL — locale-knowledge (18) — Sets + Atoms + Linguistic/Cultural taxonomy
+  // SHARED — locale-knowledge (18) — Sets + Atoms + Linguistic/Cultural taxonomy
   TermSet: '📚',
   ExpressionSet: '💭',
   PatternSet: '🔣',
@@ -46,10 +46,9 @@ export const NODE_ICONS: Record<NodeType, string> = {
   PopulationCluster: '👨‍👩‍👧‍👦',
   PopulationSubCluster: '👥',
 
-  // GLOBAL — seo (9) — SEO + GEO (Generative Engine Optimization)
+  // ORG — seo (8) — SEO + GEO (Generative Engine Optimization)
   SEOKeyword: '🔍',
   SEOKeywordMetrics: '📊',
-  SEOMiningRun: '⚙️',
   SEOComparison: '⚖️',
   SEOPreposition: '🔗',
   SEOQuestion: '❓',
@@ -57,27 +56,27 @@ export const NODE_ICONS: Record<NodeType, string> = {
   GEOAnswer: '💬',
   GEOMetrics: '📊',
 
-  // TENANT — config (2)
+  // ORG — config (2)
   Organization: '🏢',
   Tenant: '🏠',
 
-  // TENANT — foundation (3)
+  // ORG — foundation (3)
   Project: '📦',
   BrandIdentity: '🎨',
   ProjectContent: '🌐',
 
-  // TENANT — structure (3)
+  // ORG — structure (3)
   Page: '📄',
   Block: '🧱',
   ContentSlot: '🔲',
 
-  // TENANT — semantic (4)
+  // ORG — semantic (4)
   Entity: '🏷️',
   EntityContent: '🌐',
   AudiencePersona: '👤',
   ChannelSurface: '📡',
 
-  // TENANT — instruction (7)
+  // ORG — instruction (7)
   PageType: '📐',
   BlockType: '📋',
   PagePrompt: '📝',
@@ -86,10 +85,8 @@ export const NODE_ICONS: Record<NodeType, string> = {
   BlockInstruction: '📜',
   PromptArtifact: '📋',
 
-  // TENANT — output (5)
+  // ORG — output (3)
   PageGenerated: '📃',
   BlockGenerated: '📝',
-  GenerationJob: '🚀',
   OutputArtifact: '📦',
-  EvaluationSignal: '📊',
 };

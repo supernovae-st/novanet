@@ -95,24 +95,24 @@ pub(crate) fn format_stats(
 
 /// Get block character for a realm.
 ///
-/// - "global" -> "▓" (lighter block for reference data)
+/// - "shared" -> "▓" (lighter block for reference data)
 /// - Other realms -> "█" (solid block for business data)
 pub(crate) fn realm_block_char(realm_key: &str) -> &'static str {
     match realm_key {
-        "global" => "▓",
+        "shared" => "▓",
         _ => "█",
     }
 }
 
 /// Get display label for a realm key.
 ///
-/// - "global" -> "Global"
-/// - "tenant" -> "Tenant"
+/// - "shared" -> "Shared"
+/// - "org" -> "Org"
 /// - Other -> returns input as-is
 pub(crate) fn realm_display_label(realm_key: &str) -> &str {
     match realm_key {
-        "global" => "Global",
-        "tenant" => "Tenant",
+        "shared" => "Shared",
+        "org" => "Org",
         _ => realm_key,
     }
 }
@@ -172,7 +172,7 @@ fn build_realm_mini_bar(app: &App, bar_width: usize) -> Vec<Span<'static>> {
         used_width += width;
     }
 
-    // Add percentages after the bar: " Global:30% Tenant:70%"
+    // Add percentages after the bar: " Shared:30% Org:70%"
     for (key, percent, color) in percentages {
         let label = realm_display_label(key);
         spans.push(Span::styled(format!(" {}:", label), STYLE_DIM));
@@ -447,12 +447,12 @@ mod tests {
 
     #[test]
     fn test_realm_block_char_global() {
-        assert_eq!(realm_block_char("global"), "▓");
+        assert_eq!(realm_block_char("shared"), "▓");
     }
 
     #[test]
     fn test_realm_block_char_tenant() {
-        assert_eq!(realm_block_char("tenant"), "█");
+        assert_eq!(realm_block_char("org"), "█");
     }
 
     #[test]
@@ -468,12 +468,12 @@ mod tests {
 
     #[test]
     fn test_realm_display_label_global() {
-        assert_eq!(realm_display_label("global"), "Global");
+        assert_eq!(realm_display_label("shared"), "Shared");
     }
 
     #[test]
     fn test_realm_display_label_tenant() {
-        assert_eq!(realm_display_label("tenant"), "Tenant");
+        assert_eq!(realm_display_label("org"), "Org");
     }
 
     #[test]
