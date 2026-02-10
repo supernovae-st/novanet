@@ -24,6 +24,7 @@ use super::{
     trait_icon, truncate_start,
 };
 use crate::tui::app::{App, Focus};
+use crate::tui::data::ArcDirection;
 use crate::tui::theme::hex_to_color;
 
 /// Create styled spans with fuzzy match highlighting and optional background.
@@ -374,20 +375,55 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                             // v10.1: Show instance count (always in Data mode)
                             // v10.6: Add trait icon prefix
                             // v11.3: Colored trait icons (from visual-encoding.yaml + taxonomy.yaml)
-                            // QW7: Show arc count in Meta mode
-                            // Feature 2: Health badges in Data mode
+                            // v11.5: Enhanced display with all useful metrics
+                            // Format: Name (instances) →out←in req/tot
                             let kind_is_empty = kind.instance_count == 0;
                             let t_icon = trait_icon(&kind.trait_name);
                             let t_color = trait_color(&kind.trait_name);
-                            let arc_count = kind.arcs.len();
+
+                            // Count arcs by direction
+                            let outgoing = kind
+                                .arcs
+                                .iter()
+                                .filter(|a| a.direction == ArcDirection::Outgoing)
+                                .count();
+                            let incoming = kind
+                                .arcs
+                                .iter()
+                                .filter(|a| a.direction == ArcDirection::Incoming)
+                                .count();
+
+                            // Build arc direction suffix: →2←1 or just →2 or ←1
+                            let arc_suffix = match (outgoing, incoming) {
+                                (0, 0) => String::new(),
+                                (o, 0) => format!(" →{}", o),
+                                (0, i) => format!(" ←{}", i),
+                                (o, i) => format!(" →{}←{}", o, i),
+                            };
+
+                            // Properties count: req/total (compact)
+                            let props_suffix = if !kind.properties.is_empty() {
+                                format!(
+                                    " {}/{}p",
+                                    kind.required_properties.len(),
+                                    kind.properties.len()
+                                )
+                            } else {
+                                String::new()
+                            };
+
+                            // Build display text with all metrics
                             let (display_text, kind_text_color) = if is_data_mode {
-                                // Build health badge using extracted function
+                                // Data mode: instances + arcs + props + health
                                 let health_badge =
                                     format_health_badge(kind.health_percent, kind.issues_count);
-                                // v11.3: Trait icon now passed separately, not in text
                                 let text = format!(
-                                    "{} ({}){}",
-                                    kind.display_name, kind.instance_count, health_badge
+                                    "{} ({}){}{}{}",
+                                    kind.display_name,
+                                    kind.instance_count,
+                                    arc_suffix,
+                                    props_suffix,
+                                    health_badge
                                 );
                                 let color = if kind_is_empty {
                                     COLOR_MUTED_TEXT // Gray for empty kinds
@@ -396,13 +432,11 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                 };
                                 (text, color)
                             } else {
-                                // Meta mode: show arc count inline
-                                // v11.3: Trait icon now passed separately, not in text
-                                let text = if arc_count > 0 {
-                                    format!("{} ↔{}", kind.display_name, arc_count)
-                                } else {
-                                    kind.display_name.clone()
-                                };
+                                // Meta mode: arcs + props (no instance count)
+                                let text = format!(
+                                    "{}{}{}",
+                                    kind.display_name, arc_suffix, props_suffix
+                                );
                                 (text, Color::White)
                             };
 
