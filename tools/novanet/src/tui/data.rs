@@ -6,6 +6,10 @@ use serde_json::Value as JsonValue;
 use std::collections::BTreeMap;
 use tokio::join;
 
+/// Maximum number of instances to load per Kind.
+/// Reduced from 500 to 300 for better performance with large datasets.
+pub const INSTANCE_LIMIT: usize = 300;
+
 // =============================================================================
 // SECURITY: Label validation for Cypher injection prevention
 // =============================================================================
@@ -364,8 +368,8 @@ pub struct TaxonomyTree {
     /// Instances loaded for Data view, keyed by Kind key.
     /// Only populated when in Data mode and a Kind is selected.
     pub instances: BTreeMap<String, Vec<InstanceInfo>>,
-    /// Total instance counts in Neo4j (may be > loaded instances due to LIMIT).
-    /// Used to show "3/500 of 847" when results are truncated.
+    /// Total instance counts in Neo4j (may be > loaded instances due to INSTANCE_LIMIT).
+    /// Used to show "3/300 of 847" when results are truncated.
     pub instance_totals: BTreeMap<String, usize>,
     /// Cache: kind_key -> (realm_idx, layer_idx, kind_idx) for O(1) lookups.
     /// Built once on load, never mutated (tree structure is immutable).
@@ -683,11 +687,11 @@ ORDER BY family_key, arc_key
     }
 
     /// Load instances of a Kind from Neo4j for Data view.
-    /// Returns (instances, total_count) - instances are limited to 500, total is the real count.
+    /// Returns (instances, total_count) - instances are limited to INSTANCE_LIMIT, total is the real count.
     ///
     /// Performance: Uses a two-pass query strategy for large datasets:
-    /// 1. Fast index scan to get first 500 keys + total count
-    /// 2. Detailed query with arcs only for those 500 keys
+    /// 1. Fast index scan to get first INSTANCE_LIMIT keys + total count
+    /// 2. Detailed query with arcs only for those keys
     ///
     /// This avoids scanning all nodes (e.g., 9100 SEOKeyword) for arc collection.
     pub async fn load_instances(
@@ -697,7 +701,7 @@ ORDER BY family_key, arc_key
         // Security: Validate label before interpolation into Cypher
         validate_cypher_label(kind_label)?;
 
-        // Pass 1: Get total count AND first 500 keys in a single fast query (index-based)
+        // Pass 1: Get total count AND first N keys in a single fast query (index-based)
         let keys_cypher = format!(
             r#"
 MATCH (n:{kind_label})
@@ -707,10 +711,11 @@ MATCH (n:{kind_label})
 WHERE NOT n:Meta
 WITH total, n.key AS key
 ORDER BY key
-LIMIT 500
+LIMIT {limit}
 RETURN collect(key) AS keys, total
 "#,
-            kind_label = kind_label
+            kind_label = kind_label,
+            limit = INSTANCE_LIMIT
         );
         let keys_rows = db.execute(&keys_cypher).await?;
         let (keys, total_count): (Vec<String>, usize) = keys_rows
@@ -727,7 +732,7 @@ RETURN collect(key) AS keys, total
             return Ok((Vec::new(), total_count));
         }
 
-        // Pass 2: Get properties and arcs only for the 500 selected keys
+        // Pass 2: Get properties and arcs only for the selected keys
         // This is much faster than scanning all nodes for arc collection
         let cypher = format!(
             r#"
@@ -2249,6 +2254,143 @@ RETURN kw.keyword as keyword,
         let kind = layer.kinds.get(*k_idx)?;
         Some((realm, layer, kind))
     }
+
+    /// Calculate hierarchical position for the current tree item.
+    /// Returns position info: R:realm L:layer K:kind I:instance (all 1-based).
+    pub fn hierarchy_position(&self, cursor: usize, data_mode: bool) -> HierarchyPosition {
+        let item = if data_mode {
+            self.item_at_for_mode(cursor, true)
+        } else {
+            self.item_at(cursor)
+        };
+
+        let total_realms = self.realms.len();
+
+        match item {
+            None | Some(TreeItem::KindsSection) | Some(TreeItem::ArcsSection) => {
+                HierarchyPosition::default()
+            }
+            Some(TreeItem::Realm(realm)) => {
+                let realm_idx = self
+                    .realms
+                    .iter()
+                    .position(|r| r.key == realm.key)
+                    .map(|i| i + 1)
+                    .unwrap_or(1);
+                HierarchyPosition {
+                    realm: Some((realm_idx, total_realms)),
+                    ..Default::default()
+                }
+            }
+            Some(TreeItem::Layer(realm, layer)) => {
+                let realm_idx = self
+                    .realms
+                    .iter()
+                    .position(|r| r.key == realm.key)
+                    .map(|i| i + 1)
+                    .unwrap_or(1);
+                let layer_idx = realm
+                    .layers
+                    .iter()
+                    .position(|l| l.key == layer.key)
+                    .map(|i| i + 1)
+                    .unwrap_or(1);
+                HierarchyPosition {
+                    realm: Some((realm_idx, total_realms)),
+                    layer: Some((layer_idx, realm.layers.len())),
+                    ..Default::default()
+                }
+            }
+            Some(TreeItem::Kind(realm, layer, kind)) => {
+                let realm_idx = self
+                    .realms
+                    .iter()
+                    .position(|r| r.key == realm.key)
+                    .map(|i| i + 1)
+                    .unwrap_or(1);
+                let layer_idx = realm
+                    .layers
+                    .iter()
+                    .position(|l| l.key == layer.key)
+                    .map(|i| i + 1)
+                    .unwrap_or(1);
+                let kind_idx = layer
+                    .kinds
+                    .iter()
+                    .position(|k| k.key == kind.key)
+                    .map(|i| i + 1)
+                    .unwrap_or(1);
+                HierarchyPosition {
+                    realm: Some((realm_idx, total_realms)),
+                    layer: Some((layer_idx, realm.layers.len())),
+                    kind: Some((kind_idx, layer.kinds.len())),
+                    ..Default::default()
+                }
+            }
+            Some(TreeItem::Instance(realm, layer, kind, _)) => {
+                let realm_idx = self
+                    .realms
+                    .iter()
+                    .position(|r| r.key == realm.key)
+                    .map(|i| i + 1)
+                    .unwrap_or(1);
+                let layer_idx = realm
+                    .layers
+                    .iter()
+                    .position(|l| l.key == layer.key)
+                    .map(|i| i + 1)
+                    .unwrap_or(1);
+                let kind_idx = layer
+                    .kinds
+                    .iter()
+                    .position(|k| k.key == kind.key)
+                    .map(|i| i + 1)
+                    .unwrap_or(1);
+                // Calculate instance position within Kind
+                let instances = self.instances.get(&kind.key);
+                let total_instances = self.instance_totals.get(&kind.key).copied().unwrap_or(0);
+                // Find instance index by walking the visible items before cursor
+                // For simplicity, use the loaded count as position indicator
+                let loaded_count = instances.map(|v| v.len()).unwrap_or(0);
+                HierarchyPosition {
+                    realm: Some((realm_idx, total_realms)),
+                    layer: Some((layer_idx, realm.layers.len())),
+                    kind: Some((kind_idx, layer.kinds.len())),
+                    instance: Some((loaded_count.min(INSTANCE_LIMIT), total_instances)),
+                }
+            }
+            Some(TreeItem::EntityCategory(realm, layer, kind, _)) => {
+                let realm_idx = self
+                    .realms
+                    .iter()
+                    .position(|r| r.key == realm.key)
+                    .map(|i| i + 1)
+                    .unwrap_or(1);
+                let layer_idx = realm
+                    .layers
+                    .iter()
+                    .position(|l| l.key == layer.key)
+                    .map(|i| i + 1)
+                    .unwrap_or(1);
+                let kind_idx = layer
+                    .kinds
+                    .iter()
+                    .position(|k| k.key == kind.key)
+                    .map(|i| i + 1)
+                    .unwrap_or(1);
+                HierarchyPosition {
+                    realm: Some((realm_idx, total_realms)),
+                    layer: Some((layer_idx, realm.layers.len())),
+                    kind: Some((kind_idx, layer.kinds.len())),
+                    ..Default::default()
+                }
+            }
+            Some(TreeItem::ArcFamily(_)) | Some(TreeItem::ArcKind(_, _)) => {
+                // Arcs section - no realm/layer/kind hierarchy
+                HierarchyPosition::default()
+            }
+        }
+    }
 }
 
 /// Item type at a tree position.
@@ -2273,6 +2415,40 @@ pub enum TreeItem<'a> {
     ),
     // Data view: instances under Kinds (or under EntityCategory for Entity)
     Instance(&'a RealmInfo, &'a LayerInfo, &'a KindInfo, &'a InstanceInfo),
+}
+
+/// Hierarchical position info for compact display in tree title.
+/// Format: "R:1/2 L:2/4 K:3/7 I:42/300"
+#[derive(Debug, Clone, Default)]
+pub struct HierarchyPosition {
+    /// Current realm index (1-based) and total realms
+    pub realm: Option<(usize, usize)>,
+    /// Current layer index (1-based) within realm and total layers in realm
+    pub layer: Option<(usize, usize)>,
+    /// Current kind index (1-based) within layer and total kinds in layer
+    pub kind: Option<(usize, usize)>,
+    /// Current instance index (1-based) and total instances for this kind
+    pub instance: Option<(usize, usize)>,
+}
+
+impl HierarchyPosition {
+    /// Format as compact string: "R:1/2 L:2/4 K:3/7 I:42/300"
+    pub fn to_compact_string(&self) -> String {
+        let mut parts = Vec::new();
+        if let Some((cur, total)) = self.realm {
+            parts.push(format!("R:{}/{}", cur, total));
+        }
+        if let Some((cur, total)) = self.layer {
+            parts.push(format!("L:{}/{}", cur, total));
+        }
+        if let Some((cur, total)) = self.kind {
+            parts.push(format!("K:{}/{}", cur, total));
+        }
+        if let Some((cur, total)) = self.instance {
+            parts.push(format!("I:{}/{}", cur, total));
+        }
+        parts.join(" ")
+    }
 }
 
 /// Get icon for realm (v11.4: 2 realms - shared + org).
