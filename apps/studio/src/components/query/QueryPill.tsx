@@ -13,9 +13,10 @@
 
 import { useState, useCallback, useRef, useEffect, memo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { Play, Copy, X, Check, Loader2, Expand } from 'lucide-react';
+import { Play, Copy, X, Check, Loader2, Expand, Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useQueryStore } from '@/stores/queryStore';
+import { useViewStore } from '@/stores/viewStore';
 import { useCopyFeedback, useAutoFocus } from '@/hooks';
 import { FOCUS_DELAY_MS } from '@/config/constants';
 import { gapTokens } from '@/design/tokens';
@@ -190,7 +191,8 @@ interface QueryPillProps {
 }
 
 export const QueryPill = memo(function QueryPill({ className, onRun }: QueryPillProps) {
-  const { currentQuery, isExecuting, setQuery, clear } = useQueryStore(
+  // Query store - for display and editing
+  const { currentQuery, isExecuting: queryExecuting, setQuery, clear } = useQueryStore(
     useShallow((state) => ({
       currentQuery: state.currentQuery,
       isExecuting: state.isExecuting,
@@ -198,6 +200,27 @@ export const QueryPill = memo(function QueryPill({ className, onRun }: QueryPill
       clear: state.clear,
     }))
   );
+
+  // View store - v12: for custom query execution and tracking
+  const {
+    isCustomQuery,
+    isExecuting: viewExecuting,
+    executeCustomQuery,
+    activeViewId,
+    executeView,
+  } = useViewStore(
+    useShallow((state) => ({
+      isCustomQuery: state.isCustomQuery,
+      isExecuting: state.isExecuting,
+      executeCustomQuery: state.executeCustomQuery,
+      activeViewId: state.activeViewId,
+      executeView: state.executeView,
+    }))
+  );
+
+  // Combined executing state
+  const isExecuting = queryExecuting || viewExecuting;
+
   const { copied, copy } = useCopyFeedback();
 
   // Matrix animations when executing
@@ -220,6 +243,13 @@ export const QueryPill = memo(function QueryPill({ className, onRun }: QueryPill
   // Focus input when editing (using hook for cleanup)
   useAutoFocus(inputRef, isEditing, FOCUS_DELAY_MS);
 
+  // v12: Run custom query via viewStore
+  const handleRunQuery = useCallback(async (query: string) => {
+    if (!query.trim()) return;
+    // Execute via viewStore - this tracks it as a custom query
+    await executeCustomQuery(query.trim());
+    onRun?.();
+  }, [executeCustomQuery, onRun]);
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -227,13 +257,16 @@ export const QueryPill = memo(function QueryPill({ className, onRun }: QueryPill
       if (editValue.trim()) {
         setQuery(editValue.trim());
         setIsEditing(false);
-        if (e.metaKey || e.ctrlKey) onRun?.();
+        // v12: Execute via viewStore on Cmd+Enter
+        if (e.metaKey || e.ctrlKey) {
+          handleRunQuery(editValue.trim());
+        }
       }
     } else if (e.key === 'Escape') {
       setIsEditing(false);
       setEditValue(currentQuery || '');
     }
-  }, [editValue, currentQuery, setQuery, onRun]);
+  }, [editValue, currentQuery, setQuery, handleRunQuery]);
 
   const startEditing = useCallback(() => {
     setIsEditing(true);
@@ -254,9 +287,26 @@ export const QueryPill = memo(function QueryPill({ className, onRun }: QueryPill
     if (editValue.trim()) {
       setQuery(editValue.trim());
       setIsExpanded(false);
-      onRun?.();
+      handleRunQuery(editValue.trim());
     }
-  }, [editValue, setQuery, onRun]);
+  }, [editValue, setQuery, handleRunQuery]);
+
+  // v12: Handle clear - if in custom query mode, re-execute the current view
+  const handleClear = useCallback(() => {
+    clear();
+    setEditValue('');
+    // If we were showing a custom query, go back to the active view
+    if (isCustomQuery) {
+      executeView(activeViewId);
+    }
+  }, [clear, isCustomQuery, activeViewId, executeView]);
+
+  // v12: Back to view button when in custom query mode
+  const handleBackToView = useCallback(() => {
+    executeView(activeViewId);
+    clear();
+    setEditValue('');
+  }, [activeViewId, executeView, clear]);
 
   const hasQuery = !!currentQuery;
 
@@ -310,11 +360,20 @@ export const QueryPill = memo(function QueryPill({ className, onRun }: QueryPill
         )}
         {/* Prompt with Matrix animation */}
         <div className={cn('flex items-center shrink-0 select-none relative z-10', gapTokens.default)}>
+          {/* v12: Custom query indicator */}
+          {isCustomQuery && !isExecuting && (
+            <span className="flex items-center gap-1 px-2 py-0.5 rounded bg-amber-500/15 border border-amber-500/25">
+              <Zap className="w-3 h-3 text-amber-400" />
+              <span className="text-[10px] font-medium text-amber-400">Custom</span>
+            </span>
+          )}
           <span className={cn(
             'font-mono text-xs font-bold transition duration-300',
             isExecuting
               ? 'text-emerald-300 drop-shadow-[0_0_16px_rgba(52,211,153,0.9)] animate-pulse'
-              : 'text-emerald-500/50'
+              : isCustomQuery
+                ? 'text-amber-400/70'
+                : 'text-emerald-500/50'
           )}>
             {isExecuting ? '>>>' : 'neo4j$'}
           </span>
@@ -381,7 +440,7 @@ export const QueryPill = memo(function QueryPill({ className, onRun }: QueryPill
         <div className="flex items-center gap-0.5 shrink-0">
           <IconButton
             icon={isExecuting ? Loader2 : Play}
-            onClick={() => hasQuery && !isExecuting && onRun?.()}
+            onClick={() => hasQuery && !isExecuting && handleRunQuery(currentQuery)}
             disabled={!hasQuery || isExecuting}
             loading={isExecuting}
             title="Run (Cmd+Enter)"
@@ -399,9 +458,9 @@ export const QueryPill = memo(function QueryPill({ className, onRun }: QueryPill
           />
           <IconButton
             icon={X}
-            onClick={() => { clear(); setEditValue(''); }}
+            onClick={handleClear}
             disabled={!hasQuery}
-            title="Clear"
+            title={isCustomQuery ? "Clear and return to view" : "Clear"}
             variant="danger"
             size="md"
           />

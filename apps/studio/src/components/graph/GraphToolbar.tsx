@@ -225,18 +225,10 @@ const LayoutButton = memo(function LayoutButton({
 // =============================================================================
 
 // =============================================================================
-// Layout Labels - Dynamic based on navigation mode
+// Layout Labels - v12: Single set (no navigation mode)
 // =============================================================================
 
-const META_LABELS = {
-  LR: 'Swimlanes',
-  TB: 'Stacked',
-  dagre: 'Treemap',
-  radial: 'Target',
-  force: 'Force',
-} as const;
-
-const DATA_LABELS = {
+const LAYOUT_LABELS = {
   LR: 'Horizontal',
   TB: 'Vertical',
   dagre: 'Dagre',
@@ -249,17 +241,13 @@ export const GraphToolbar = memo(function GraphToolbar() {
   const { zoomIn, zoomOut } = useReactFlow();
   const { smartFitView } = useSmartFitView();
 
-  const { triggerLayout, navigationMode, layoutMode, toggleLayoutMode } = useUIStore(
+  const { triggerLayout, layoutMode, toggleLayoutMode } = useUIStore(
     useShallow((state) => ({
       triggerLayout: state.triggerLayout,
-      navigationMode: state.navigationMode,
       layoutMode: state.layoutMode,
       toggleLayoutMode: state.toggleLayoutMode,
     }))
   );
-
-  // Pick labels based on current mode
-  const labels = navigationMode === 'meta' ? META_LABELS : DATA_LABELS;
 
   const toggleExpanded = useCallback(() => {
     setIsExpanded((prev) => !prev);
@@ -309,31 +297,31 @@ export const GraphToolbar = memo(function GraphToolbar() {
       >
         <LayoutButton
           icon={<Rows3 size={ICON_SIZE} />}
-          label={labels.LR}
+          label={LAYOUT_LABELS.LR}
           shortcut="⇧H"
           onClick={() => handleSetLayout('LR')}
         />
         <LayoutButton
           icon={<Layers size={ICON_SIZE} />}
-          label={labels.TB}
+          label={LAYOUT_LABELS.TB}
           shortcut="⇧V"
           onClick={() => handleSetLayout('TB')}
         />
         <LayoutButton
           icon={<LayoutGrid size={ICON_SIZE} />}
-          label={labels.dagre}
+          label={LAYOUT_LABELS.dagre}
           shortcut="⇧D"
           onClick={() => handleSetLayout('dagre')}
         />
         <LayoutButton
           icon={<Target size={ICON_SIZE} />}
-          label={labels.radial}
+          label={LAYOUT_LABELS.radial}
           shortcut="⇧R"
           onClick={() => handleSetLayout('radial')}
         />
         <LayoutButton
           icon={<Atom size={ICON_SIZE} />}
-          label={labels.force}
+          label={LAYOUT_LABELS.force}
           shortcut="⇧F"
           onClick={() => handleSetLayout('force')}
         />

@@ -19,7 +19,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { DEFAULT_ANIMATION_BUDGET } from '@/components/graph/edges/system/constants';
-import type { NavigationMode } from '@/stores/uiStore';
 
 /** Animation mode levels */
 export type AnimationMode = 'full' | 'reduced' | 'off';
@@ -123,13 +122,13 @@ interface AnimationStore {
   isTransitioning: boolean;
   /** Current phase of the transition */
   transitionPhase: TransitionPhase;
-  /** Target mode we're transitioning to */
-  targetMode: NavigationMode | null;
+  /** Target mode we're transitioning to (v12: deprecated, kept for animation phases only) */
+  targetMode: string | null;
 
   /**
-   * Start a transition to the specified mode
+   * Start a transition (v12: used for visual transitions only, no mode concept)
    */
-  startTransition: (mode: NavigationMode) => void;
+  startTransition: (target?: string) => void;
 
   /**
    * Update the transition phase
@@ -308,11 +307,11 @@ export const useAnimationStore = create<AnimationStore>()(
       transitionPhase: null,
       targetMode: null,
 
-      startTransition: (mode: NavigationMode) => {
+      startTransition: (target?: string) => {
         set({
           isTransitioning: true,
           transitionPhase: 'dissolve',
-          targetMode: mode,
+          targetMode: target ?? null,
         });
       },
 

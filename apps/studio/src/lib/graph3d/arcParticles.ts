@@ -36,48 +36,48 @@ export interface ArcParticleConfig {
  */
 export const ARC_PARTICLE_CONFIG: Record<ArcFamily, ArcParticleConfig> = {
   ownership: {
-    particles: 40,             // Dense data stream
-    particleSpeed: 0.025,      // Fast, steady flow
-    particleWidth: 3,          // Tiny glowing dots
+    particles: 8,              // Fewer but more visible particles
+    particleSpeed: 0.008,      // Slower for visibility (was 0.025)
+    particleWidth: 6,          // Much larger (was 3)
     particleColor: '#60a5fa',  // Bright blue (blue-400)
     linkWidth: 1.5,            // Thin elegant line
-    linkOpacity: 0.25,         // Subtle base line
+    linkOpacity: 0.35,         // More visible (was 0.25)
     curvature: 0,              // Straight ownership links
   },
   localization: {
-    particles: 35,             // Flowing stream
-    particleSpeed: 0.02,       // Smooth undulating
-    particleWidth: 3.5,        // Slightly larger
+    particles: 6,              // Fewer particles
+    particleSpeed: 0.006,      // Slower (was 0.02)
+    particleWidth: 7,          // Larger (was 3.5)
     particleColor: '#4ade80',  // Bright green (green-400)
     linkWidth: 1.5,            // Thin line
-    linkOpacity: 0.2,          // Subtle
+    linkOpacity: 0.3,          // More visible (was 0.2)
     curvature: 0.2,            // Gentle curve
   },
   semantic: {
-    particles: 50,             // Sparking synapses
-    particleSpeed: 0.035,      // Fast, energetic
-    particleWidth: 2.5,        // Small sparks
+    particles: 10,             // Fewer sparking particles
+    particleSpeed: 0.012,      // Slower (was 0.035)
+    particleWidth: 5,          // Larger (was 2.5)
     particleColor: '#fb923c',  // Bright orange (orange-400)
-    linkWidth: 1,              // Thinner line
-    linkOpacity: 0.2,          // Subtle
+    linkWidth: 1.2,            // Slightly thicker (was 1)
+    linkOpacity: 0.3,          // More visible (was 0.2)
     curvature: 0.1,            // Slight curve
   },
   generation: {
-    particles: 45,             // Fast cascade
-    particleSpeed: 0.045,      // Very fast
-    particleWidth: 3,          // Medium dots
+    particles: 8,              // Fewer cascade particles
+    particleSpeed: 0.015,      // Slower (was 0.045)
+    particleWidth: 6,          // Larger (was 3)
     particleColor: '#a78bfa',  // Bright purple (violet-400)
-    linkWidth: 2,              // Slightly thicker (important)
-    linkOpacity: 0.35,         // More visible
+    linkWidth: 1.8,            // Thicker (was 2)
+    linkOpacity: 0.4,          // More visible (was 0.35)
     curvature: 0,              // Straight generation flow
   },
   mining: {
-    particles: 30,             // Radar pulse
-    particleSpeed: 0.015,      // Slower, scanning
-    particleWidth: 4,          // Larger pings
+    particles: 5,              // Fewer radar pulses
+    particleSpeed: 0.005,      // Much slower (was 0.015)
+    particleWidth: 8,          // Much larger (was 4)
     particleColor: '#f472b6',  // Bright pink (pink-400)
     linkWidth: 1.5,            // Thin line
-    linkOpacity: 0.2,          // Subtle
+    linkOpacity: 0.3,          // More visible (was 0.2)
     curvature: 0.3,            // Curved sweep
   },
 };

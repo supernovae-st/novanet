@@ -21,8 +21,8 @@ import { useShallow } from 'zustand/react/shallow';
 import { X, Loader2, HelpCircle, Layers, Gamepad2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { iconSizes, gapTokens } from '@/design/tokens';
-import { DEFAULT_FETCH_LIMIT } from '@/config/constants';
-import { useUIStore, useFilterStore, useGraphStore, useAnimationStore } from '@/stores';
+// Note: DEFAULT_FETCH_LIMIT not currently used but may be needed for pagination
+import { useUIStore, useFilterStore, useGraphStore, useAnimationStore, useViewStore } from '@/stores';
 import { useGraphData, useFilteredGraph, UrlSyncComponent } from '@/hooks';
 import { ViewPicker } from '@/components/sidebar';
 import { isInputFocused, matchesKeyCombo } from '@/lib/keyboard';
@@ -55,7 +55,7 @@ import { KeyboardHelpPanel } from '@/components/dx/KeyboardHelpPanel';
 import { CommandPalette, useCommandPalette, useCommandPaletteState } from '@/components/ui/CommandPalette';
 import { AiSearchOverlay } from '@/components/chat/AiSearchOverlay';
 import { MacropadVisualizer } from '@/components/macropad';
-import { QueryPill, ResultsOverview, ExpandedBreakdown, TableView, RawView } from '@/components/query';
+import { QueryPill, ExpandedBreakdown, TableView, RawView } from '@/components/query';
 import type { ExpandedViewType } from '@/components/query/ResultsOverview';
 import { useQueryStore, QueryBuilder } from '@/stores/queryStore';
 
@@ -119,10 +119,10 @@ export default function HomePage() {
   const arcFamilyFilter = useFilterStore((s) => s.arcFamilyFilter);
 
   // Graph Store - state + selectors
-  const totalNodes = useGraphStore((state) => state.totalNodes);
+  const _totalNodes = useGraphStore((state) => state.totalNodes);  // May be needed for stats
   const getNodeById = useGraphStore((state) => state.getNodeById);
   const getEdgeById = useGraphStore((state) => state.getEdgeById);
-  const clearGraph = useGraphStore((state) => state.clearGraph);
+  const _clearGraph = useGraphStore((state) => state.clearGraph);  // May be needed for reset
 
   // Query Store - state + actions
   const queryState = useQueryStore(
@@ -140,7 +140,7 @@ export default function HomePage() {
     }))
   );
 
-  // Animation Store - Matrix transition state
+  // Animation Store - Matrix transition state (for visual effects)
   const transitionState = useAnimationStore(
     useShallow((state) => ({
       isTransitioning: state.isTransitioning,
@@ -148,16 +148,22 @@ export default function HomePage() {
       targetMode: state.targetMode,
     }))
   );
-  const transitionActions = useAnimationStore(
+
+  // View Store - v12: Views are the single source of truth for navigation
+  const viewState = useViewStore(
     useShallow((state) => ({
-      startTransition: state.startTransition,
-      setTransitionPhase: state.setTransitionPhase,
-      endTransition: state.endTransition,
+      activeViewId: state.activeViewId,
+      isRegistryLoaded: state.isRegistryLoaded,
+      isExecuting: state.isExecuting,
+    }))
+  );
+  const viewActions = useViewStore(
+    useShallow((state) => ({
+      loadDefaultView: state.loadDefaultView,
+      executeView: state.executeView,
     }))
   );
 
-  // UI action for data mode (used by transition orchestration)
-  const setNavigationMode = useUIStore((state) => state.setNavigationMode);
 
   // ═══════════════════════════════════════════════════════════════════════════
   // DERIVED STATE & HOOKS
@@ -166,8 +172,8 @@ export default function HomePage() {
   // Filtered graph stats (schema mode shows distinct relation types, not edges)
   const { visibleNodeCount, visibleEdgeCount, isMetaMode, distinctRelationTypes } = useFilteredGraph();
 
-  // Graph data fetching
-  const { fetchData, fetchSchemaData, executeQuery, navigationMode, isLoading: isFetching } = useGraphData();
+  // Graph data fetching - v12: Most fetching now goes through viewStore
+  const { executeQuery, isLoading: isFetching } = useGraphData();
 
   // Stats pill expansion (hover nodes/relations to see type breakdown)
   const [expandedView, setExpandedView] = useState<ExpandedViewType>(null);
@@ -209,64 +215,62 @@ export default function HomePage() {
 
   // Macropad configurator (P) - uses uiStore exclusive modal system
   const openMacropad = useCallback(() => uiActions.openModal('macropad-configurator'), [uiActions]);
-  const closeMacropad = useCallback(() => uiActions.closeModal(), [uiActions]);
+  const _closeMacropad = useCallback(() => uiActions.closeModal(), [uiActions]);  // Close via modal callback
   const macropadOpen = uiState.activeModal === 'macropad-configurator';
 
   // Get selected node/edge data (memoized)
-  // Supports both data mode (full node data) and schema mode (synthetic from node id)
+  // Supports both data nodes (full node data) and schema nodes (synthetic from node id)
   const selectedNode = useMemo((): HoverNodeInfo | null => {
     if (!uiState.selectedNodeId) return null;
 
-    // Data mode: look up in graphStore
+    // Data nodes: look up in graphStore
     const node = getNodeById(uiState.selectedNodeId);
     if (node) return node;
 
-    // Schema mode: handle different node id formats
-    if (navigationMode === 'meta') {
-      const nodeId = uiState.selectedNodeId;
+    // Schema nodes: handle different node id formats (based on prefix)
+    const nodeId = uiState.selectedNodeId;
 
-      // Realm containers: realm-{Realm} (e.g., realm-shared, realm-org)
-      if (nodeId.startsWith('realm-')) {
-        const realm = nodeId.replace('realm-', '');
-        const realmEmoji = realm === 'shared' ? '🌍' : realm === 'org' ? '🏢' : '🎯';
-        const realmLabel = realm.charAt(0).toUpperCase() + realm.slice(1);
+    // Realm containers: realm-{Realm} (e.g., realm-shared, realm-org)
+    if (nodeId.startsWith('realm-')) {
+      const realm = nodeId.replace('realm-', '');
+      const realmEmoji = realm === 'shared' ? '🌍' : realm === 'org' ? '🏢' : '🎯';
+      const realmLabel = realm.charAt(0).toUpperCase() + realm.slice(1);
+      return {
+        id: nodeId,
+        type: 'RealmGroup',
+        key: realm,
+        displayName: `${realmEmoji} ${realmLabel} Realm`,
+      } as SchemaGroupNode;
+    }
+
+    // Layer containers: layer-{Realm}-{LayerName}
+    if (nodeId.startsWith('layer-')) {
+      const parts = nodeId.replace('layer-', '').split('-');
+      const layerName = parts.slice(1).join('-');
+      return {
+        id: nodeId,
+        type: 'LayerGroup',
+        key: layerName,
+        displayName: layerName.charAt(0).toUpperCase() + layerName.slice(1),
+      } as SchemaGroupNode;
+    }
+
+    // Schema nodes: schema-{NodeType}
+    if (nodeId.startsWith('schema-')) {
+      const nodeType = nodeId.replace('schema-', '');
+      const config = NODE_TYPE_CONFIG[nodeType as keyof typeof NODE_TYPE_CONFIG];
+      if (config) {
         return {
           id: nodeId,
-          type: 'RealmGroup',
-          key: realm,
-          displayName: `${realmEmoji} ${realmLabel} Realm`,
-        } as SchemaGroupNode;
-      }
-
-      // Layer containers: layer-{Realm}-{LayerName}
-      if (nodeId.startsWith('layer-')) {
-        const parts = nodeId.replace('layer-', '').split('-');
-        const layerName = parts.slice(1).join('-');
-        return {
-          id: nodeId,
-          type: 'LayerGroup',
-          key: layerName,
-          displayName: layerName.charAt(0).toUpperCase() + layerName.slice(1),
-        } as SchemaGroupNode;
-      }
-
-      // Schema nodes: schema-{NodeType}
-      if (nodeId.startsWith('schema-')) {
-        const nodeType = nodeId.replace('schema-', '');
-        const config = NODE_TYPE_CONFIG[nodeType as keyof typeof NODE_TYPE_CONFIG];
-        if (config) {
-          return {
-            id: nodeId,
-            type: nodeType,
-            key: nodeType,
-            displayName: config.label,
-          } as GraphNode;
-        }
+          type: nodeType,
+          key: nodeType,
+          displayName: config.label,
+        } as GraphNode;
       }
     }
 
     return null;
-  }, [uiState.selectedNodeId, getNodeById, navigationMode]);
+  }, [uiState.selectedNodeId, getNodeById]);
   // Use selectedEdgeData from store (supports both data and schema modes)
   // Fallback to getEdgeById for backwards compatibility
   const selectedEdge = useMemo(
@@ -275,60 +279,58 @@ export default function HomePage() {
   );
 
   // Get hovered node/edge data (memoized) for centralized hover info
-  // Supports both data mode (full node data) and schema mode (synthetic from node id)
+  // Supports both data nodes (full node data) and schema nodes (synthetic from node id)
   const hoveredNode = useMemo((): HoverNodeInfo | null => {
     if (!uiState.hoveredNodeId) return null;
 
-    // Data mode: look up in graphStore
+    // Data nodes: look up in graphStore
     const node = getNodeById(uiState.hoveredNodeId);
     if (node) return node;
 
-    // Schema mode: handle different node id formats
-    if (navigationMode === 'meta') {
-      const nodeId = uiState.hoveredNodeId;
+    // Schema nodes: handle different node id formats (based on prefix)
+    const nodeId = uiState.hoveredNodeId;
 
-      // Realm containers: realm-{Realm} (e.g., realm-shared, realm-org)
-      if (nodeId.startsWith('realm-')) {
-        const realm = nodeId.replace('realm-', '');
-        const realmEmoji = realm === 'shared' ? '🌍' : realm === 'org' ? '🏢' : '🎯';
-        const realmLabel = realm.charAt(0).toUpperCase() + realm.slice(1);
+    // Realm containers: realm-{Realm} (e.g., realm-shared, realm-org)
+    if (nodeId.startsWith('realm-')) {
+      const realm = nodeId.replace('realm-', '');
+      const realmEmoji = realm === 'shared' ? '🌍' : realm === 'org' ? '🏢' : '🎯';
+      const realmLabel = realm.charAt(0).toUpperCase() + realm.slice(1);
+      return {
+        id: nodeId,
+        type: 'RealmGroup',
+        key: realm,
+        displayName: `${realmEmoji} ${realmLabel} Realm`,
+      } as SchemaGroupNode;
+    }
+
+    // Layer containers: layer-{Realm}-{LayerName}
+    if (nodeId.startsWith('layer-')) {
+      const parts = nodeId.replace('layer-', '').split('-');
+      const layerName = parts.slice(1).join('-');
+      return {
+        id: nodeId,
+        type: 'LayerGroup',
+        key: layerName,
+        displayName: layerName.charAt(0).toUpperCase() + layerName.slice(1),
+      } as SchemaGroupNode;
+    }
+
+    // Schema nodes: schema-{NodeType}
+    if (nodeId.startsWith('schema-')) {
+      const nodeType = nodeId.replace('schema-', '');
+      const config = NODE_TYPE_CONFIG[nodeType as keyof typeof NODE_TYPE_CONFIG];
+      if (config) {
         return {
           id: nodeId,
-          type: 'RealmGroup',
-          key: realm,
-          displayName: `${realmEmoji} ${realmLabel} Realm`,
-        } as SchemaGroupNode;
-      }
-
-      // Layer containers: layer-{Realm}-{LayerName}
-      if (nodeId.startsWith('layer-')) {
-        const parts = nodeId.replace('layer-', '').split('-');
-        const layerName = parts.slice(1).join('-');
-        return {
-          id: nodeId,
-          type: 'LayerGroup',
-          key: layerName,
-          displayName: layerName.charAt(0).toUpperCase() + layerName.slice(1),
-        } as SchemaGroupNode;
-      }
-
-      // Schema nodes: schema-{NodeType}
-      if (nodeId.startsWith('schema-')) {
-        const nodeType = nodeId.replace('schema-', '');
-        const config = NODE_TYPE_CONFIG[nodeType as keyof typeof NODE_TYPE_CONFIG];
-        if (config) {
-          return {
-            id: nodeId,
-            type: nodeType,
-            key: nodeType,
-            displayName: config.label,
-          } as GraphNode;
-        }
+          type: nodeType,
+          key: nodeType,
+          displayName: config.label,
+        } as GraphNode;
       }
     }
 
     return null;
-  }, [uiState.hoveredNodeId, getNodeById, navigationMode]);
+  }, [uiState.hoveredNodeId, getNodeById]);
   const hoveredEdge = useMemo(
     () => (uiState.hoveredEdgeId ? getEdgeById(uiState.hoveredEdgeId) : null),
     [uiState.hoveredEdgeId, getEdgeById]
@@ -359,78 +361,11 @@ export default function HomePage() {
     }
   }, [filterState.enabledNodeTypes, filterState.activePresetId, filterActions, queryActions]);
 
-  // Track previous navigationMode to detect changes
-  const prevNavigationModeRef = useRef<typeof navigationMode | null>(null);
-
-  // Fetch initial data OR re-fetch when navigationMode changes (e.g., from URL sync)
-  // v11.0: Data view shows empty state, only Meta view fetches schema data
+  // v12.0: Initial data loading via viewStore.loadDefaultView()
+  // Loads the registry and executes the persisted/default view
   useEffect(() => {
-    if (isFetching) return;
-
-    // Check if this is a mode change (vs initial load)
-    const isInitialLoad = totalNodes === 0;
-    const modeChanged = prevNavigationModeRef.current !== null && prevNavigationModeRef.current !== navigationMode;
-
-    // Fetch on initial load OR mode change
-    if (isInitialLoad || modeChanged) {
-      if (navigationMode === 'meta') {
-        fetchSchemaData();
-      } else {
-        // v11.0: Data view intentionally shows empty state
-        // Clear the graph to show 0 nodes
-        clearGraph();
-      }
-    }
-
-    prevNavigationModeRef.current = navigationMode;
-  }, [totalNodes, isFetching, fetchSchemaData, navigationMode, clearGraph]);
-
-  // ═══════════════════════════════════════════════════════════════════════════
-  // MATRIX TRANSITION ORCHESTRATION
-  // ═══════════════════════════════════════════════════════════════════════════
-  //
-  // Phase flow: dissolve (400ms) → fetch (variable) → reform (400ms)
-  // - dissolve: fade out graph, show matrix rain
-  // - fetch: load new data in background
-  // - reform: fade in new graph, hide matrix rain
-  //
-  useEffect(() => {
-    if (!transitionState.isTransitioning) return;
-
-    const { transitionPhase, targetMode } = transitionState;
-
-    // Phase 1: DISSOLVE - wait 400ms, then switch mode and fetch data
-    if (transitionPhase === 'dissolve' && targetMode) {
-      const timer = setTimeout(() => {
-        // Switch to fetch phase and update data mode
-        transitionActions.setTransitionPhase('fetch');
-        setNavigationMode(targetMode);
-        // Data fetch is triggered automatically by the navigationMode change effect above
-      }, 400);
-      return () => clearTimeout(timer);
-    }
-
-    // Phase 2: FETCH - wait for data to load, then move to reform
-    // We detect when fetch completes by watching isFetching go from true to false
-    if (transitionPhase === 'fetch' && !isFetching) {
-      transitionActions.setTransitionPhase('reform');
-    }
-
-    // Phase 3: REFORM - wait 400ms, then end transition
-    if (transitionPhase === 'reform') {
-      const timer = setTimeout(() => {
-        transitionActions.endTransition();
-      }, 400);
-      return () => clearTimeout(timer);
-    }
-  }, [
-    transitionState.isTransitioning,
-    transitionState.transitionPhase,
-    transitionState.targetMode,
-    isFetching,
-    setNavigationMode,
-    transitionActions,
-  ]);
+    viewActions.loadDefaultView();
+  }, [viewActions.loadDefaultView]);
 
   // Global keyboard handler
   useEffect(() => {
@@ -490,19 +425,6 @@ export default function HomePage() {
       if (e.key === 'p' && !e.metaKey && !e.ctrlKey && !e.shiftKey) {
         e.preventDefault();
         openMacropad();
-        return;
-      }
-
-      // Cycle navigation mode (N) - triggers Matrix transition
-      // v11.0: Simplified to Meta and Data only
-      if (e.key === 'n' && !e.metaKey && !e.ctrlKey && !e.shiftKey) {
-        e.preventDefault();
-        if (!transitionState.isTransitioning) {
-          const modes: typeof navigationMode[] = ['meta', 'data'];
-          const idx = modes.indexOf(navigationMode);
-          const nextMode = modes[(idx + 1) % modes.length];
-          transitionActions.startTransition(nextMode);
-        }
         return;
       }
 
@@ -597,20 +519,16 @@ export default function HomePage() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [uiActions, filterActions, shortcutsOpen, closeShortcuts, openPalette, openAiSearch, openMacropad, navigationMode, transitionState.isTransitioning, transitionActions, traitFilter, arcFamilyFilter]);
+  }, [uiActions, filterActions, shortcutsOpen, closeShortcuts, openPalette, openAiSearch, openMacropad, traitFilter, arcFamilyFilter]);
 
   // ═══════════════════════════════════════════════════════════════════════════
   // MEMOIZED HANDLERS
   // ═══════════════════════════════════════════════════════════════════════════
 
-  // Refresh data
-  // v11.0: Only Meta mode has data to refresh
+  // Refresh data - v12.0: Re-executes the current view
   const handleRefresh = useCallback(() => {
-    if (navigationMode === 'meta') {
-      fetchSchemaData();
-    }
-    // v11.0: Data view intentionally shows empty state - nothing to refresh
-  }, [fetchSchemaData, navigationMode]);
+    viewActions.executeView(viewState.activeViewId);
+  }, [viewActions, viewState.activeViewId]);
 
   // Note: Data mode changes are handled by the effect above
   // The toggle only updates the store, the effect fetches the data
@@ -641,10 +559,10 @@ export default function HomePage() {
     uiActions.setSelectedNode(null);
   }, [uiActions]);
 
-  const handleClosePanel = useCallback(() => {
+  const _handleClosePanel = useCallback(() => {
     uiActions.setSelectedNode(null);
     uiActions.setSelectedEdge(null);
-  }, [uiActions]);
+  }, [uiActions]);  // May be needed for panel close button
 
   // Command palette commands
   const commands = useCommandPalette({
@@ -992,7 +910,6 @@ export default function HomePage() {
       <MatrixExplosionOverlay
         isActive={isExplosionActive}
         onComplete={() => setIsExplosionActive(false)}
-        navigationMode={navigationMode}
       />
     </div>
   );

@@ -14,7 +14,6 @@
 import { useMemo } from 'react';
 import { useGraphStore } from '@/stores/graphStore';
 import { useFilterStore } from '@/stores/filterStore';
-import { useUIStore, selectNavigationMode } from '@/stores/uiStore';
 import { ALL_NODE_TYPES } from '@/config/nodeTypes';
 import { NODE_REALMS } from '@novanet/core/types';
 import { NODE_LAYERS, type Layer } from '@novanet/core/graph';
@@ -63,9 +62,14 @@ export function useFilteredGraph(): FilteredGraphResult {
   const selectedLocale = useFilterStore((state) => state.selectedLocale);
   const searchQuery = useFilterStore((state) => state.searchQuery);
 
-  // Navigation mode: meta mode bypasses filters to show all schema types
-  const navigationMode = useUIStore(selectNavigationMode);
-  const isMetaMode = navigationMode === 'meta';
+  // Detect schema mode based on node IDs (schema nodes have 'schema-' prefix)
+  // v12.0: No longer based on navigationMode, now based on loaded data
+  const isMetaMode = useMemo(() => {
+    // If we have nodes and most of them are schema nodes, we're in meta mode
+    if (allNodes.length === 0) return false;
+    const schemaNodeCount = allNodes.filter(n => n.id.startsWith('schema-')).length;
+    return schemaNodeCount > 0 && schemaNodeCount === allNodes.length;
+  }, [allNodes]);
 
   // Chained memos for optimal performance:
   // Each filter stage only recalculates when its dependencies change
