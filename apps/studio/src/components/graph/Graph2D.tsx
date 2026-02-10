@@ -34,11 +34,10 @@ import {
 import '@xyflow/react/dist/style.css';
 
 import { useShallow } from 'zustand/react/shallow';
-import { Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { logger } from '@/lib/logger';
 import { glassClasses, gapTokens } from '@/design/tokens';
-import { EmptyState } from '@/components/ui/EmptyState';
+import { GraphEmptyState } from './GraphEmptyState';
 import { useFilteredGraph, useFocusMode, useHoverHighlight, useNodeExpansion, useCenterOnNode, useSmartFitView, useContainerConstraint, useGraphInteractions, Z_INDEX, useMagneticData } from '@/hooks';
 import { useUIStore } from '@/stores/uiStore';
 import { useAnimationStore } from '@/stores/animationStore';
@@ -1546,12 +1545,7 @@ function Graph2DInner({
   if (graphNodes.length === 0) {
     return (
       <div className={cn('h-full', className)}>
-        <EmptyState
-          icon={Sparkles}
-          title="No nodes to display"
-          description="Try adjusting your filters or fetching data from Neo4j. Use the preset shortcuts (1-9) to quickly filter."
-          accentColor="accent-purple"
-        />
+        <GraphEmptyState />
       </div>
     );
   }
