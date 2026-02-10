@@ -1,0 +1,80 @@
+%%{init: {'theme': 'base', 'themeVariables': {'lineColor': '#64748b'}}}%%
+flowchart TD
+    accTitle: Nexus Game Flow and Reward Loop System
+    accDescr: Complete game flow from boot to rank progression
+
+    %% TAILWIND-SOLARIZED COLORS
+    classDef success fill:#10b981,stroke:#059669,stroke-width:2px,color:#ffffff
+    classDef process fill:#6366f1,stroke:#4f46e5,stroke-width:2px,color:#ffffff
+    classDef decision fill:#f59e0b,stroke:#d97706,stroke-width:2px,color:#ffffff
+    classDef critical fill:#ec4899,stroke:#db2777,stroke-width:2px,color:#ffffff
+    classDef info fill:#8b5cf6,stroke:#7c3aed,stroke-width:2px,color:#ffffff
+    classDef data fill:#06b6d4,stroke:#0891b2,stroke-width:2px,color:#ffffff
+
+    %% BOOT SEQUENCE
+    A[Boot Sequence]:::success --> B[Load Galaxy Theme]:::process
+    B --> C[Initialize Mission Control]:::process
+    C --> D{First Time?}:::decision
+    D -->|Yes| E[Show Onboarding]:::info
+    D -->|No| F[Dashboard]:::critical
+    E --> F
+
+    %% DASHBOARD
+    F --> G{Player Action}:::decision
+
+    %% MISSION PATH
+    G -->|Select Mission| H[Mission Selection]:::process
+    H --> I[Mission Briefing]:::info
+    I --> J[Display Objectives]:::data
+    J --> K[Start Mission]:::success
+
+    %% OBJECTIVE COMPLETION
+    K --> L{Objective Complete?}:::decision
+    L -->|Yes| M[Award XP]:::critical
+    L -->|No| N[Continue Playing]:::process
+    N --> L
+
+    %% XP AND ACHIEVEMENT CHECK
+    M --> O[Calculate XP]:::data
+    O --> P{Level Up?}:::decision
+    P -->|Yes| Q[Rank Progression]:::critical
+    P -->|No| R{Achievement?}:::decision
+
+    %% ACHIEVEMENT SYSTEM
+    R -->|Yes| S[Show Achievement]:::success
+    R -->|No| T{More Objectives?}:::decision
+    S --> T
+
+    T -->|Yes| L
+    T -->|No| U[Mission Complete]:::success
+    U --> V[Summary]:::info
+
+    %% CHALLENGE MODE
+    G -->|Challenge| W[Select Challenge]:::critical
+    W --> X[Challenge Briefing]:::info
+    X --> Y[Start Timer]:::process
+
+    Y --> Z{Complete?}:::decision
+    Z -->|Yes| AA[Calculate Score]:::data
+    Z -->|No| AB[Continue]:::process
+    AB --> Z
+
+    AA --> AC{High Score?}:::decision
+    AC -->|Yes| AD[Leaderboard]:::critical
+    AC -->|No| AE{Streak?}:::decision
+
+    AD --> AE
+    AE -->|Yes| AF[Bonus XP]:::success
+    AE -->|No| AG[Base XP]:::data
+
+    AF --> AH{Level Up?}:::decision
+    AG --> AH
+
+    %% RANK PROGRESSION
+    Q --> AK[New Rank]:::success
+    AK --> AL[Unlock Rewards]:::critical
+    AL --> F
+
+    AH -->|Yes| Q
+    AH -->|No| F
+    V --> F
