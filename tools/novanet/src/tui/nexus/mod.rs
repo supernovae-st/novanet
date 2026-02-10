@@ -1,12 +1,12 @@
-//! Guide Mode - Interactive educational views of the NovaNet taxonomy.
+//! Nexus Mode - Gamified learning hub for NovaNet taxonomy.
 //!
-//! Guide Mode provides 4 tabs for understanding NovaNet's core concepts:
-//! - Traits: 4-trait constellation (invariant, localized, knowledge, derived)
-//! - Layers: 2-realm split view (Shared 2 layers | Org 7 layers)
+//! Nexus Mode provides 4 tabs for understanding NovaNet's core concepts:
+//! - Traits: 5-trait constellation (invariant, localized, knowledge, generated, aggregated)
+//! - Layers: 2-realm split view (Shared 3 layers | Org 8 layers)
 //! - Arcs: Arc families and scope visualization
 //! - Pipeline: Animated generation flow (not translation)
 //!
-//! Note: job trait removed in v11.2 (deferred to v12+).
+//! v11.3: Mode renamed from Guide to Nexus. Trait split: derived → generated + aggregated.
 
 pub mod arcs;
 pub mod layers;
@@ -33,7 +33,7 @@ pub use traits::{CodeExample, TraitStats, trait_code_examples};
 // "DID YOU KNOW?" TIPS
 // =============================================================================
 
-/// Educational tips shown at the bottom of Guide mode.
+/// Educational tips shown at the bottom of Nexus mode.
 /// Rotates through concepts about NovaNet's architecture.
 pub const TIPS: &[&str] = &[
     "Knowledge is INPUT (savoir) - Localized is OUTPUT (generated)",
@@ -41,14 +41,14 @@ pub const TIPS: &[&str] = &[
     "Content/Generated nodes have invariant parents (Entity→EntityContent, Page→PageGenerated)",
     "Generation, NOT translation: Knowledge + Structure -> Native content",
     "Shared realm is READ-ONLY - all business content lives in Org",
-    "Quick jump: gi=invariant, gl=localized, gk=knowledge, gd=derived",
+    "Quick jump: gi=invariant, gl=localized, gk=knowledge, gg=generated, ga=aggregated",
     "Knowledge nodes exist ONLY where needed (fr-FR: 20K Terms, sw-KE: 500)",
     "Arc families: ownership, localization, semantic, generation, mining",
     "Invariant = structure (solid border), Localized = output (dashed border)",
     "Press 'n' to see the next tip!",
 ];
 
-/// Which Guide tab is currently active.
+/// Which Nexus tab is currently active.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum NexusTab {
     /// Traits constellation (5 traits with detail panel)
@@ -63,7 +63,7 @@ pub enum NexusTab {
 }
 
 impl NexusTab {
-    /// Get the shortcut key for this tab (1-4 when in Guide mode).
+    /// Get the shortcut key for this tab (1-4 when in Nexus mode).
     pub fn shortcut(&self) -> char {
         match self {
             NexusTab::Traits => '1',
@@ -114,7 +114,7 @@ impl NexusTab {
     }
 }
 
-/// Main Guide mode state.
+/// Main Nexus mode state.
 #[derive(Debug, Clone)]
 pub struct NexusState {
     /// Currently active tab.
@@ -193,19 +193,20 @@ impl NexusState {
         self.drill_cursor = 0;
     }
 
-    /// Handle key input in Guide mode. Returns true if state changed.
+    /// Handle key input in Nexus mode. Returns true if state changed.
     pub fn handle_key(&mut self, key: KeyEvent) -> bool {
-        // Handle pending 'g' state for quick jump shortcuts (gi, gl, gk, gd)
-        // Note: v11.2 removed job trait (gj)
+        // Handle pending 'g' state for quick jump shortcuts (gi, gl, gk, gg, ga)
+        // v11.3: gd (derived) → gg (generated) + ga (aggregated)
         if self.pending_g {
             self.pending_g = false; // Clear pending state
             return match key.code {
                 KeyCode::Char('i') => self.jump_to_trait(0), // invariant
                 KeyCode::Char('l') => self.jump_to_trait(1), // localized
                 KeyCode::Char('k') => self.jump_to_trait(2), // knowledge
-                KeyCode::Char('d') => self.jump_to_trait(3), // derived
-                KeyCode::Char('g') => {
-                    // gg = go to top (reset cursors)
+                KeyCode::Char('g') => self.jump_to_trait(3), // generated (v11.3: gg)
+                KeyCode::Char('a') => self.jump_to_trait(4), // aggregated (v11.3: ga)
+                KeyCode::Char('0') => {
+                    // g0 = go to top (reset cursors)
                     self.trait_cursor = 0;
                     self.layer_cursor = 0;
                     self.arc_cursor = 0;
@@ -394,7 +395,7 @@ impl NexusState {
     }
 
     /// Jump to a specific trait in the Traits tab.
-    /// Used by quick jump shortcuts (gi, gl, gk, gd, gj).
+    /// Used by quick jump shortcuts (gi, gl, gk, gg, ga).
     fn jump_to_trait(&mut self, trait_index: usize) -> bool {
         self.tab = NexusTab::Traits;
         self.trait_cursor = trait_index.min(4); // Clamp to 0-4
@@ -598,24 +599,24 @@ impl NexusState {
         }
     }
 
-    /// Get breadcrumb for current Guide mode state.
-    /// Returns path like "Guide > Traits > localized > EntityContent"
+    /// Get breadcrumb for current Nexus mode state.
+    /// Returns path like "Nexus > Traits > localized > EntityContent"
     pub fn breadcrumb(&self, trait_stats: &[traits::TraitStats]) -> String {
         let tab_name = self.tab.label();
         match self.tab {
             NexusTab::Traits => {
                 let trait_name = traits::TRAIT_ORDER.get(self.trait_cursor).unwrap_or(&"");
                 if self.drill_depth == 0 {
-                    format!("Guide > {} > {}", tab_name, trait_name)
+                    format!("Nexus > {} > {}", tab_name, trait_name)
                 } else {
                     let kinds = self.get_trait_kinds(trait_stats);
                     if let Some((layer, kind)) = kinds.get(self.drill_cursor) {
                         format!(
-                            "Guide > {} > {} > {} ({})",
+                            "Nexus > {} > {} > {} ({})",
                             tab_name, trait_name, kind, layer
                         )
                     } else {
-                        format!("Guide > {} > {}", tab_name, trait_name)
+                        format!("Nexus > {} > {}", tab_name, trait_name)
                     }
                 }
             }
@@ -625,7 +626,7 @@ impl NexusState {
                 } else {
                     "Org"
                 };
-                format!("Guide > {} > {}", tab_name, realm)
+                format!("Nexus > {} > {}", tab_name, realm)
             }
             NexusTab::Arcs => {
                 let families = [
@@ -636,7 +637,7 @@ impl NexusState {
                     "mining",
                 ];
                 let family = families.get(self.arc_cursor).unwrap_or(&"");
-                format!("Guide > {} > {}", tab_name, family)
+                format!("Nexus > {} > {}", tab_name, family)
             }
             NexusTab::Pipeline => {
                 let stages = [
@@ -648,7 +649,7 @@ impl NexusState {
                     "Output",
                 ];
                 let stage = stages.get(self.pipeline_stage).unwrap_or(&"");
-                format!("Guide > {} > {}", tab_name, stage)
+                format!("Nexus > {} > {}", tab_name, stage)
             }
         }
     }
@@ -667,7 +668,7 @@ impl NexusState {
 // RENDERING
 // =============================================================================
 
-/// Render the Guide mode with tab bar, breadcrumb, content, and tips bar.
+/// Render the Nexus mode with tab bar, breadcrumb, content, and tips bar.
 pub fn render_nexus(f: &mut Frame, area: Rect, app: &App) {
     let chunks = Layout::default()
         .direction(Direction::Vertical)
@@ -697,7 +698,7 @@ pub fn render_nexus(f: &mut Frame, area: Rect, app: &App) {
     render_tips_bar(f, chunks[3], app);
 }
 
-/// Render the tab bar at the top of Guide mode.
+/// Render the tab bar at the top of Nexus mode.
 fn render_tab_bar(f: &mut Frame, area: Rect, app: &App) {
     let tabs: Vec<Span> = NexusTab::all()
         .iter()
@@ -727,7 +728,7 @@ fn render_tab_bar(f: &mut Frame, area: Rect, app: &App) {
 
     let block = Block::default()
         .title(Span::styled(
-            " Guide Mode ",
+            " Nexus Mode ",
             Style::default()
                 .fg(Color::Magenta)
                 .add_modifier(Modifier::BOLD),
@@ -739,7 +740,7 @@ fn render_tab_bar(f: &mut Frame, area: Rect, app: &App) {
     f.render_widget(paragraph, area);
 }
 
-/// Render the breadcrumb bar showing current location in Guide mode.
+/// Render the breadcrumb bar showing current location in Nexus mode.
 fn render_breadcrumb(f: &mut Frame, area: Rect, app: &App) {
     let trait_stats = app.tree.get_trait_stats();
     let breadcrumb = app.nexus.breadcrumb(&trait_stats);
@@ -786,7 +787,7 @@ fn render_breadcrumb(f: &mut Frame, area: Rect, app: &App) {
     f.render_widget(paragraph, area);
 }
 
-/// Render the "Did you know?" tips bar at the bottom of Guide mode.
+/// Render the "Did you know?" tips bar at the bottom of Nexus mode.
 fn render_tips_bar(f: &mut Frame, area: Rect, app: &App) {
     let theme = &app.theme;
 
@@ -1041,28 +1042,37 @@ mod tests {
     }
 
     #[test]
-    fn test_quick_jump_gd() {
+    fn test_quick_jump_gg() {
         let mut state = NexusState::new();
 
         state.handle_key(key_event(KeyCode::Char('g')));
-        state.handle_key(key_event(KeyCode::Char('d')));
+        state.handle_key(key_event(KeyCode::Char('g')));
 
         assert_eq!(state.tab, NexusTab::Traits);
-        assert_eq!(state.trait_cursor, 3); // derived = index 3
+        assert_eq!(state.trait_cursor, 3); // generated = index 3 (v11.3: gg)
     }
 
-    // Note: test_quick_jump_gj removed in v11.2 (job trait deferred to v12+)
+    #[test]
+    fn test_quick_jump_ga() {
+        let mut state = NexusState::new();
+
+        state.handle_key(key_event(KeyCode::Char('g')));
+        state.handle_key(key_event(KeyCode::Char('a')));
+
+        assert_eq!(state.tab, NexusTab::Traits);
+        assert_eq!(state.trait_cursor, 4); // aggregated = index 4 (v11.3: ga)
+    }
 
     #[test]
-    fn test_quick_jump_gg() {
+    fn test_quick_jump_g0() {
         let mut state = NexusState::new();
         state.trait_cursor = 3;
         state.layer_cursor = 2;
         state.arc_cursor = 1;
 
-        // gg should reset all cursors to 0
+        // g0 should reset all cursors to 0 (v11.3: renamed from gg)
         state.handle_key(key_event(KeyCode::Char('g')));
-        state.handle_key(key_event(KeyCode::Char('g')));
+        state.handle_key(key_event(KeyCode::Char('0')));
 
         assert_eq!(state.trait_cursor, 0);
         assert_eq!(state.layer_cursor, 0);
@@ -1660,7 +1670,7 @@ mod tests {
         let trait_stats = Vec::new();
 
         let breadcrumb = state.breadcrumb(&trait_stats);
-        assert!(breadcrumb.starts_with("Guide > Traits > "));
+        assert!(breadcrumb.starts_with("Nexus > Traits > "));
     }
 
     #[test]
@@ -1671,7 +1681,7 @@ mod tests {
         let trait_stats = Vec::new();
 
         let breadcrumb = state.breadcrumb(&trait_stats);
-        assert!(breadcrumb.contains("Guide > Layers > Shared"));
+        assert!(breadcrumb.contains("Nexus > Layers > Shared"));
     }
 
     #[test]
@@ -1682,7 +1692,7 @@ mod tests {
         let trait_stats = Vec::new();
 
         let breadcrumb = state.breadcrumb(&trait_stats);
-        assert!(breadcrumb.contains("Guide > Layers > Org"));
+        assert!(breadcrumb.contains("Nexus > Layers > Org"));
     }
 
     #[test]
@@ -1693,7 +1703,7 @@ mod tests {
         let trait_stats = Vec::new();
 
         let breadcrumb = state.breadcrumb(&trait_stats);
-        assert!(breadcrumb.contains("Guide > Arcs > ownership"));
+        assert!(breadcrumb.contains("Nexus > Arcs > ownership"));
     }
 
     #[test]
@@ -1704,7 +1714,7 @@ mod tests {
         let trait_stats = Vec::new();
 
         let breadcrumb = state.breadcrumb(&trait_stats);
-        assert!(breadcrumb.contains("Guide > Pipeline > Knowledge"));
+        assert!(breadcrumb.contains("Nexus > Pipeline > Knowledge"));
     }
 
     // ==========================================================================

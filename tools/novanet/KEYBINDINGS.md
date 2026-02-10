@@ -2,25 +2,25 @@
 
 Complete keyboard shortcuts reference for the NovaNet Terminal UI.
 
-> **Auto-maintained**: This file is updated via hook when keybindings change in code.
+> **v11.3**: Mode consolidation - 3 modes (Graph, Audit, Nexus) with GraphView toggle.
 > Source of truth: `src/tui/app.rs` (handle_key)
 
 ---
 
-## Navigation Modes
+## Navigation Modes (v11.3)
 
 | Key | Action |
 |-----|--------|
-| `1` | Switch to Meta mode (remembers cursor position) |
-| `2` | Switch to Data mode (drill into instances from Kind) |
-| `3` | Switch to Overlay mode |
-| `4` | Switch to Query mode |
-| `5` | Switch to Atlas mode |
-| `6` | Switch to Audit mode |
-| `N` | Cycle through all modes |
+| `1` | Switch to Graph mode (Taxonomy/Instances toggle with `t`) |
+| `2` | Switch to Audit mode (schema validation) |
+| `3` | Switch to Nexus mode (gamified learning hub) |
+| `t` | Toggle GraphView: Taxonomy ↔ Instances (Graph mode only) |
+| `N` | Cycle through all 3 modes |
 | `Tab` | Cycle focus: Tree → Info → Graph → YAML |
 | `Shift+Tab` | Cycle focus backwards |
 | `` ` `` | Open recent items popup (navigation history) |
+
+**Mode indicator**: Header shows `[T]` for Taxonomy view, `[I]` for Instances view.
 
 ---
 
@@ -39,7 +39,7 @@ Complete keyboard shortcuts reference for the NovaNet Terminal UI.
 | `H` | Collapse all (global) |
 | `L` | Expand all (global) |
 | `p` | Jump to parent node |
-| `0` | Toggle hide empty (Data mode only) |
+| `0` | Toggle hide empty (Instances view only) |
 | `d` | Page down (half screen) |
 | `u` | Page up (half screen) |
 | `g` | Jump to first item |
@@ -103,7 +103,7 @@ Scrollbars are displayed when content exceeds visible area.
 
 ---
 
-## Schema Overlay (Data Mode)
+## Schema Overlay (Instances View)
 
 | Key | Action |
 |-----|--------|
@@ -113,10 +113,16 @@ Scrollbars are displayed when content exceeds visible area.
 
 ---
 
-## Data Mode Hierarchy (v11.0)
+## Graph Mode Hierarchy (v11.3)
 
-The tree structure in Data mode follows this hierarchy:
+The tree structure follows this hierarchy:
 
+**Taxonomy view** (`t` to toggle):
+```
+Realm → Layer → Kind
+```
+
+**Instances view** (`t` to toggle):
 ```
 Realm → Layer → Kind → EntityCategory (Entity only) → Instance
 ```
@@ -135,17 +141,17 @@ The status bar shows context-aware hints:
 
 | Context | Hint | Action |
 |---------|------|--------|
-| On Kind (Meta mode) | `2:→Data` | Press 2 to drill into instances |
-| On Instance (Data mode) | `1:→Kind` | Press 1 to jump to Kind |
-| On EntityCategory (Data mode) | `l:expand` | Press l to expand and see instances in category |
+| On Kind (Taxonomy) | `t:→Instances` | Press t to switch to Instances view |
+| On Instance | `t:→Taxonomy` | Press t to switch to Taxonomy view |
+| On EntityCategory | `l:expand` | Press l to expand and see instances in category |
 
 ---
 
-## Guide Mode (Mode 7)
+## Nexus Mode (Mode 3)
 
-Educational mode for learning NovaNet concepts.
+Gamified learning hub for NovaNet concepts (v11.3: renamed from Guide).
 
-### Tab Switching (within Guide mode)
+### Tab Switching (within Nexus mode)
 
 | Key | Action |
 |-----|--------|
@@ -209,15 +215,15 @@ The bottom bar shows educational tips with trait-colored keywords.
 ```
 Navigation:  j/k (up/down)  h/l (toggle)  d/u (page)  g/G (top/bottom)  p (parent)
 Expand:      e (subtree)    c (collapse)  H/L (global collapse/expand)
-Filter:      0 (hide empty in Data mode)
-Modes:       1-6 (direct)   N (cycle)   ` (recent items)
+Filter:      0 (hide empty in Instances view)
+Modes:       1-3 (direct)   N (cycle)   t (Graph view toggle)   ` (recent items)
 Focus:       Tab (cycle panels)
 Search:      / or f (search)  ? (help)  F1 (legend)
 Actions:     r (refresh)  y/Y (yank key/JSON)  J (JSON toggle)  Ctrl+o/i (back/forward)
 Schema:      s (overlay)  +/- (focus property)
 Exit:        q or Esc
 
-Guide Mode (7):
+Nexus Mode (3):
 Tabs:        1-4 (Traits/Layers/Arcs/Pipeline)  Tab (cycle)
 Quick Jump:  gi/gl/gk/gg/ga (traits)  g0 (top)
 Actions:     y (yank)  n (next tip)  Enter/Esc (drill)
