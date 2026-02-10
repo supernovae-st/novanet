@@ -165,12 +165,12 @@ export const RelationType = {
 
   // ─────────────────────────────────────────────────────────────────────────────
   // INVERSE RELATIONSHIPS (v7.8.0 - bidirectional queries without full scans)
+  // v10.9.0: L10N_OF → CONTENT_OF, HAS_LOCALIZED_CONTENT removed (ADR-014)
   // ─────────────────────────────────────────────────────────────────────────────
-  L10N_OF: 'L10N_OF',                   // EntityContent|ProjectContent → Entity|Project (inverse of HAS_CONTENT)
-  OUTPUT_OF: 'OUTPUT_OF',               // PageGenerated|BlockGenerated → Page|Block (inverse of HAS_GENERATED)
+  CONTENT_OF: 'CONTENT_OF',             // EntityContent|ProjectContent → Entity|Project (inverse of HAS_CONTENT)
+  GENERATED_FOR: 'GENERATED_FOR',       // PageGenerated|BlockGenerated → Page|Block (inverse of HAS_GENERATED)
   BLOCK_OF: 'BLOCK_OF',                 // Block → Page (inverse of HAS_BLOCK)
   USED_BY: 'USED_BY',                   // Entity → Page|Block (inverse of USES_ENTITY)
-  HAS_LOCALIZED_CONTENT: 'HAS_LOCALIZED_CONTENT', // Locale → *L10n nodes (inverse of FOR_LOCALE)
 } as const;
 
 export type RelationType = typeof RelationType[keyof typeof RelationType];
@@ -668,16 +668,17 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
 
   // ─────────────────────────────────────────────────────────────────────────────
   // INVERSE RELATIONSHIPS (v7.8.0 - bidirectional queries without full scans)
+  // v10.9.0: L10N_OF → CONTENT_OF, OUTPUT_OF → GENERATED_FOR, HAS_LOCALIZED_CONTENT removed
   // ─────────────────────────────────────────────────────────────────────────────
-  [RelationType.L10N_OF]: {
-    type: RelationType.L10N_OF,
+  [RelationType.CONTENT_OF]: {
+    type: RelationType.CONTENT_OF,
     from: ['EntityContent', 'ProjectContent'],
     to: ['Entity', 'Project'],
     cardinality: 'N:1',
     description: 'Inverse of HAS_CONTENT - localized content points to parent',
   },
-  [RelationType.OUTPUT_OF]: {
-    type: RelationType.OUTPUT_OF,
+  [RelationType.GENERATED_FOR]: {
+    type: RelationType.GENERATED_FOR,
     from: ['PageGenerated', 'BlockGenerated'],
     to: ['Page', 'Block'],
     cardinality: 'N:1',
@@ -697,12 +698,5 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
     to: ['Page', 'Block'],
     cardinality: '1:N',
     description: 'Inverse of USES_ENTITY - entity knows who uses it',
-  },
-  [RelationType.HAS_LOCALIZED_CONTENT]: {
-    type: RelationType.HAS_LOCALIZED_CONTENT,
-    from: 'Locale',
-    to: ['ProjectContent', 'EntityContent', 'PageGenerated', 'BlockGenerated', 'SEOKeyword', 'GEOQuery'],
-    cardinality: '1:N',
-    description: 'Inverse of FOR_LOCALE - locale knows all its content',
   },
 };

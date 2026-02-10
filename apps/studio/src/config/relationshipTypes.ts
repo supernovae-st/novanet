@@ -37,14 +37,14 @@ export const RELATIONSHIP_CATEGORIES: Record<RelationshipCategory, RelationType[
     'HAS_PROMPT',
     'HAS_RULES',
   ],
-  // Localization: Locale assignment (6 relations)
+  // Localization: Locale assignment (5 relations)
+  // v11.6: L10N_OF, HAS_LOCALIZED_CONTENT removed (deprecated per ADR-014)
   localization: [
     'HAS_CONTENT',
+    'CONTENT_OF',
     'FOR_LOCALE',
     'SUPPORTS_LOCALE',
     'DEFAULT_LOCALE',
-    'L10N_OF',
-    'HAS_LOCALIZED_CONTENT',
   ],
   // Knowledge: Locale knowledge graph (14 relations)
   knowledge: [
@@ -78,11 +78,12 @@ export const RELATIONSHIP_CATEGORIES: Record<RelationshipCategory, RelationType[
     'BLOCK_OF',
   ],
   // Generation: Content generation (6 relations)
+  // v10.9.0: OUTPUT_OF → GENERATED_FOR (ADR-014)
   generation: [
     'HAS_GENERATED',
     'ASSEMBLES',
     'GENERATED',
-    'OUTPUT_OF',
+    'GENERATED_FOR',
     'GENERATED_FROM',
     'INFLUENCED_BY',
   ],
@@ -92,8 +93,6 @@ export const RELATIONSHIP_CATEGORIES: Record<RelationshipCategory, RelationType[
     'HAS_GEO_TARGET',
     'TARGETS_SEO',
     'TARGETS_GEO',
-    'SEO_MINES',
-    'GEO_MINES',
     'HAS_METRICS',
   ],
   // Navigation: Page linking & history (4 relations)
@@ -187,16 +186,10 @@ export const relationshipTypeConfigs: Record<RelationType, RelationshipTypeConfi
     color: '#059669',
     category: 'localization',
   },
-  L10N_OF: {
-    type: 'L10N_OF',
-    label: 'L10n Of',
+  CONTENT_OF: {
+    type: 'CONTENT_OF',
+    label: 'Content Of',
     color: '#047857',
-    category: 'localization',
-  },
-  HAS_LOCALIZED_CONTENT: {
-    type: 'HAS_LOCALIZED_CONTENT',
-    label: 'Has Localized Content',
-    color: '#065f46',
     category: 'localization',
   },
 
@@ -365,9 +358,9 @@ export const relationshipTypeConfigs: Record<RelationType, RelationshipTypeConfi
     color: '#fdba74',
     category: 'generation',
   },
-  OUTPUT_OF: {
-    type: 'OUTPUT_OF',
-    label: 'Output Of',
+  GENERATED_FOR: {
+    type: 'GENERATED_FOR',
+    label: 'Generated For',
     color: '#ea580c',
     category: 'generation',
   },
@@ -409,18 +402,6 @@ export const relationshipTypeConfigs: Record<RelationType, RelationshipTypeConfi
     type: 'TARGETS_GEO',
     label: 'Targets GEO',
     color: '#b91c1c',
-    category: 'optimization',
-  },
-  SEO_MINES: {
-    type: 'SEO_MINES',
-    label: 'SEO Mines',
-    color: '#991b1b',
-    category: 'optimization',
-  },
-  GEO_MINES: {
-    type: 'GEO_MINES',
-    label: 'GEO Mines',
-    color: '#7f1d1d',
     category: 'optimization',
   },
   HAS_METRICS: {

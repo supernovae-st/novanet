@@ -181,7 +181,7 @@ export const RELATION_OVERRIDES: Partial<Record<RelationType, ThemeOverride>> = 
     glowIntensity: 0.9,
     strokeWidth: 3,
   },
-  HAS_L10N: {
+  HAS_CONTENT: {
     speed: 'normal',
     // effects removed: now uses arcFamily 'localization' → 'dnaHelix'
   },
@@ -192,10 +192,10 @@ export const RELATION_OVERRIDES: Partial<Record<RelationType, ThemeOverride>> = 
 
   // ─── Generation Overrides ───
   // v11.6.1: Effects now come from arc family, additional effects can be added
-  HAS_OUTPUT: {
+  HAS_GENERATED: {
     speed: 'ultra',
     glowIntensity: 0.95,
-    // effects removed: now uses arcFamily 'localization' → 'dnaHelix' + category defaults
+    // effects removed: now uses arcFamily 'generation' → 'matrixCode' + category defaults
   },
   HAS_PROMPT: {
     lineStyle: 'zigzag',

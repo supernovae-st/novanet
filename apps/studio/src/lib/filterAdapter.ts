@@ -246,15 +246,15 @@ export class NovaNetFilter {
    
   includeOutputs(_opts?: { latestOnly?: boolean }): this {
     this.state.includes.push({
-      relation: 'HAS_OUTPUT',
+      relation: 'HAS_GENERATED',
       direction: 'outgoing',
     });
     return this;
   }
 
-  includeL10n(): this {
+  includeContent(): this {
     this.state.includes.push({
-      relation: 'HAS_L10N',
+      relation: 'HAS_CONTENT',
       direction: 'outgoing',
     });
     return this;

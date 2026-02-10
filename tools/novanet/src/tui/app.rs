@@ -914,7 +914,9 @@ impl App {
             // Trait filter prefix (f = filter, wait for second key: i/l/k/g/a/f)
             KeyCode::Char('f') => {
                 self.filter_pending = true;
-                self.set_status("Filter: [i]nvariant [l]ocalized [k]nowledge [g]enerated [a]ggregated [f]clear");
+                self.set_status(
+                    "Filter: [i]nvariant [l]ocalized [k]nowledge [g]enerated [a]ggregated [f]clear",
+                );
                 true
             }
 

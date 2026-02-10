@@ -34,7 +34,7 @@ describe('Arc Family Effects Integration', () => {
     });
 
     it('includes arc family signature effect as primary effect for localization relations', () => {
-      const theme = resolveTheme('HAS_L10N');
+      const theme = resolveTheme('HAS_CONTENT');
       expect(theme.arcFamily).toBe('localization');
       expect(theme.effects[0]).toBe('dnaHelix');
     });
