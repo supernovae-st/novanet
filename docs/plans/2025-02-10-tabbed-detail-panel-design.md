@@ -762,6 +762,246 @@ function SpaceDustParticles({ active, color }: Props) {
 }
 ```
 
+## Research-Based Improvements
+
+Basé sur l'analyse de Context7, Magic UI, Motion library et React Flow docs.
+
+### Animation Library: Motion (Score 89.1)
+
+Remplacer les CSS keyframes par Motion pour des animations plus naturelles avec spring physics.
+
+```typescript
+// Motion spring config pour les sélections
+const selectionSpring = {
+  type: 'spring',
+  bounce: 0.25,           // Léger rebond
+  visualDuration: 0.4,    // Durée perçue
+};
+
+// Variants pour les états
+const nodeVariants = {
+  idle: {
+    scale: 1,
+    y: 0,
+    boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+  },
+  selected: {
+    scale: 1.02,
+    y: -8,
+    boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
+    transition: selectionSpring,
+  },
+  hover: {
+    scale: 1.01,
+    transition: { duration: 0.2 },
+  },
+};
+
+// Usage dans le composant
+<motion.div
+  variants={nodeVariants}
+  initial="idle"
+  animate={isSelected ? "selected" : "idle"}
+  whileHover="hover"
+/>
+```
+
+### React Flow Selection Hook
+
+Utiliser `useOnSelectionChange` pour synchroniser l'état de sélection.
+
+```typescript
+import { useOnSelectionChange } from '@xyflow/react';
+import { useCallback, useState } from 'react';
+
+function useNodeSelectionEffects() {
+  const [selectedNode, setSelectedNode] = useState<string | null>(null);
+
+  // IMPORTANT: onChange MUST be memoized
+  const onChange = useCallback(({ nodes }) => {
+    const selected = nodes[0]?.id ?? null;
+    setSelectedNode(selected);
+
+    // Trigger aside open
+    if (selected) {
+      uiStore.openAside(selected);
+    }
+  }, []);
+
+  useOnSelectionChange({ onChange });
+
+  return { selectedNode };
+}
+```
+
+### Automatic Selected Styling (Tailwind CSS)
+
+React Flow 2025 pattern: styling via parent CSS selectors.
+
+```typescript
+// BaseNode sans prop selected explicite
+export const NodeCard = forwardRef<HTMLDivElement, Props>(
+  ({ className, ...props }, ref) => (
+    <motion.div
+      ref={ref}
+      className={cn(
+        // Base styles
+        'relative rounded-lg border-2 bg-card',
+        // Hover state
+        'hover:ring-1 hover:ring-primary/50',
+        // SELECTED via parent selector (automatic!)
+        '[.react-flow__node.selected_&]:border-4',
+        '[.react-flow__node.selected_&]:shadow-glow',
+        '[.react-flow__node.selected_&]:ring-2',
+        className,
+      )}
+      {...props}
+    />
+  ),
+);
+```
+
+### Magic UI: Border Beam Component
+
+Utiliser Border Beam pour l'effet "waouh" au lieu de CSS keyframes.
+
+```bash
+# Installation
+npx shadcn@latest add "https://magicui.design/r/border-beam.json"
+```
+
+```typescript
+import { BorderBeam } from '@/components/ui/border-beam';
+
+function SelectedNodeCard({ children, layerColor }) {
+  return (
+    <div className="relative rounded-lg p-4">
+      {children}
+      <BorderBeam
+        size={50}
+        duration={4}           // Plus rapide que default (6s)
+        colorFrom={layerColor}
+        colorTo={`${layerColor}80`}  // 50% opacity
+        borderWidth={2}
+      />
+    </div>
+  );
+}
+```
+
+### Magic UI: Particles Component
+
+Pour l'effet Space Dust premium.
+
+```bash
+# Installation
+npx shadcn@latest add "https://magicui.design/r/particles.json"
+```
+
+```typescript
+import Particles from '@/components/ui/particles';
+
+function NodeWithParticles({ selected, layerColor }) {
+  return (
+    <div className="relative">
+      <NodeCard />
+      {selected && (
+        <Particles
+          className="absolute inset-[-40px]"
+          quantity={30}
+          staticity={30}      // Plus dynamique
+          ease={80}           // Smooth
+          color={layerColor}
+          size={0.6}
+        />
+      )}
+    </div>
+  );
+}
+```
+
+### Animation Orchestration
+
+Séquencer les effets avec staggerChildren.
+
+```typescript
+const containerVariants = {
+  selected: {
+    transition: {
+      when: 'beforeChildren',      // Container first
+      staggerChildren: 0.05,       // 50ms between each
+      delayChildren: 0.1,          // Wait 100ms
+    },
+  },
+};
+
+const childVariants = {
+  idle: { opacity: 0.6, scale: 0.95 },
+  selected: { opacity: 1, scale: 1 },
+};
+
+// Les enfants s'animent séquentiellement après le parent
+<motion.div variants={containerVariants} animate="selected">
+  <motion.span variants={childVariants}>Badge 1</motion.span>
+  <motion.span variants={childVariants}>Badge 2</motion.span>
+</motion.div>
+```
+
+### Timing Best Practices
+
+| Action | Duration | Easing |
+|--------|----------|--------|
+| Selection feedback | 200-300ms | spring (bounce: 0.25) |
+| Aside open/close | 300ms | ease-out |
+| Border glow pulse | 400ms | spring (bounce: 0.3) |
+| Particle spawn | 100ms | linear |
+| Matrix rain char | 2-4s | linear |
+| Graph re-layout | 500ms | ease-in-out |
+
+**Règles:**
+- Max 3 animations simultanées
+- Toujours respecter `prefers-reduced-motion`
+- Spring physics > linear/ease pour feedback naturel
+
+### AnimatePresence for Exit Animations
+
+```typescript
+import { AnimatePresence, motion } from 'motion/react';
+
+function Aside({ isOpen, nodeId }) {
+  return (
+    <AnimatePresence mode="wait">
+      {isOpen && (
+        <motion.aside
+          key={nodeId}
+          initial={{ x: '100%', opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          exit={{ x: '100%', opacity: 0 }}
+          transition={{ type: 'spring', bounce: 0.2, duration: 0.4 }}
+        >
+          <TabbedDetailPanel nodeId={nodeId} />
+        </motion.aside>
+      )}
+    </AnimatePresence>
+  );
+}
+```
+
+### Dependencies to Install
+
+```bash
+# Motion library (remplace framer-motion)
+pnpm add motion
+
+# Magic UI components
+npx shadcn@latest add "https://magicui.design/r/border-beam.json"
+npx shadcn@latest add "https://magicui.design/r/particles.json"
+npx shadcn@latest add "https://magicui.design/r/shine-border.json"
+
+# Mermaid for diagrams
+pnpm add mermaid react-mermaid
+```
+
 ## Files to Create
 
 | File | Purpose |
@@ -776,10 +1016,11 @@ function SpaceDustParticles({ active, color }: Props) {
 | `components/graph/QueryPanel.tsx` | Cypher editor |
 | `components/graph/CypherPill.tsx` | Persistent query status bar (top) |
 | `components/graph/MatrixRain.tsx` | Matrix rain overlay effect |
-| `components/graph/SpaceDustParticles.tsx` | Selection particle effects |
-| `components/nodes/NodeCard.tsx` | Enhanced node card with waouh effects |
+| `components/ui/border-beam.tsx` | Magic UI Border Beam (via shadcn) |
+| `components/ui/particles.tsx` | Magic UI Particles (via shadcn) |
+| `components/nodes/NodeCard.tsx` | Enhanced node card with Motion + effects |
 | `hooks/useNeo4jQuery.ts` | Neo4j live queries |
-| `hooks/useNodeSelection.ts` | Selection state + effects trigger |
+| `hooks/useNodeSelection.ts` | Selection state via useOnSelectionChange |
 | `hooks/useMatrixRain.ts` | Matrix rain animation state |
 
 ## Files to Modify
