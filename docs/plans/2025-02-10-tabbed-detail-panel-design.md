@@ -117,15 +117,129 @@ flowchart LR
 Position du node dans le pipeline de layers.
 
 ### 4. Context View (NEW - Type-Specific)
-Vue contextuelle selon le type de node:
 
-| Node Type | Context View |
-|-----------|--------------|
-| Page | Construction: Page → Blocks → ContentSlots |
-| Entity | Connections: Entity → EntityContent + SEO Keywords |
-| Block | Hierarchy: Page ← Block → ContentSlot + Entities |
-| Project | Overview: Project → Pages → Entities |
-| SEOKeyword | Network: Keywords → Entities → Pages |
+Vue contextuelle selon le type de node, basée sur l'exploration des patterns de connexion:
+
+#### Page Construction View
+```mermaid
+flowchart TB
+  subgraph Structure
+    Page -->|HAS_BLOCK| Block1[Block: hero]
+    Page -->|HAS_BLOCK| Block2[Block: features]
+    Block1 -->|FILLS_SLOT| CS1[ContentSlot]
+    Block2 -->|FILLS_SLOT| CS2[ContentSlot]
+  end
+  subgraph Generation
+    Page -->|HAS_GENERATED| PG[PageGenerated@fr-FR]
+    Block1 -->|HAS_GENERATED| BG1[BlockGenerated]
+  end
+  subgraph Instructions
+    Page -->|HAS_TYPE| PT[PageType]
+    Block1 -->|HAS_PROMPT| BP[BlockPrompt]
+  end
+```
+
+#### Entity Connections View
+```mermaid
+flowchart LR
+  subgraph Classification
+    Entity -->|BELONGS_TO| EC[EntityCategory]
+  end
+  subgraph Content
+    Entity -->|HAS_CONTENT| ECont[EntityContent@fr-FR]
+  end
+  subgraph SEO
+    Entity -->|TARGETS| SK[SEOKeyword]
+    SK -->|IN_SET| SKS[SEOKeywordSet]
+  end
+  subgraph Usage
+    Block -.->|USES_ENTITY| Entity
+  end
+```
+
+#### Block Hierarchy View
+```mermaid
+flowchart TB
+  subgraph Parent
+    Page -->|HAS_BLOCK| Block
+  end
+  subgraph Block Content
+    Block -->|FILLS_SLOT| CS[ContentSlot]
+    Block -->|USES_ENTITY| Entity
+  end
+  subgraph Instructions
+    Block -->|HAS_TYPE| BT[BlockType]
+    Block -->|HAS_PROMPT| BP[BlockPrompt]
+    BP -->|GENERATES| PA[PromptArtifact]
+  end
+  subgraph Output
+    Block -->|HAS_GENERATED| BG[BlockGenerated@fr-FR]
+  end
+```
+
+#### Project Overview View
+```mermaid
+flowchart TB
+  subgraph Project Config
+    OC[OrgConfig] -->|HAS_PROJECT| Project
+    Project -->|HAS_BRAND| BI[BrandIdentity]
+    Project -->|HAS_CONTENT| PC[ProjectContent@fr-FR]
+  end
+  subgraph Content Structure
+    Project -->|HAS_PAGE| P1[Page: homepage]
+    Project -->|HAS_PAGE| P2[Page: pricing]
+    Project -->|HAS_ENTITY| E1[Entity: qr-code]
+  end
+  subgraph Localization
+    Project -->|SUPPORTS_LOCALE| L1[Locale: fr-FR]
+    Project -->|DEFAULT_LOCALE| L2[Locale: en-US]
+  end
+```
+
+#### SEO/GEO Network View
+```mermaid
+flowchart LR
+  subgraph Knowledge Sets
+    SKS[SEOKeywordSet] -->|CONTAINS_SEO_KEYWORD| SK[SEOKeyword]
+    GQS[GEOQuerySet] -->|CONTAINS_GEO_QUERY| GQ[GEOQuery]
+  end
+  subgraph Metrics
+    SK -->|HAS_METRICS| SKM[SEOKeywordMetrics]
+    GQ -->|HAS_ANSWER| GA[GEOAnswer]
+  end
+  subgraph Connections
+    Entity -->|TARGETS| SK
+    Page -->|MONITORS_GEO| GQ
+  end
+```
+
+#### Layer Flow View (Pipeline)
+```mermaid
+flowchart LR
+  subgraph org[ORG Realm Pipeline]
+    config[config] --> foundation
+    foundation --> structure
+    structure --> semantic
+    semantic --> instruction
+    instruction --> output
+  end
+  subgraph shared[SHARED Realm]
+    locale --> knowledge
+    geography --> knowledge
+  end
+  shared -.->|cross_realm| org
+```
+
+| Node Type | Context View | Key Arcs |
+|-----------|--------------|----------|
+| Page | Construction | HAS_BLOCK, HAS_GENERATED, HAS_TYPE |
+| Entity | Connections | HAS_CONTENT, BELONGS_TO, TARGETS |
+| Block | Hierarchy | FILLS_SLOT, HAS_PROMPT, USES_ENTITY |
+| Project | Overview | HAS_PAGE, HAS_ENTITY, SUPPORTS_LOCALE |
+| SEOKeyword | Network | IN_SET, HAS_METRICS, targeted by TARGETS |
+| GEOQuery | Intelligence | IN_SET, HAS_ANSWER, MONITORS_GEO |
+| Locale | Settings | HAS_STYLE, HAS_FORMATTING, FOR_LOCALE |
+| BrandIdentity | Branding | BRAND_OF (inverse of HAS_BRAND) |
 
 ## Interactive Features
 
@@ -205,9 +319,21 @@ pnpm add mermaid react-x-mermaid
 
 ## Next Steps
 
-1. [ ] Explorer agents pour comprendre les patterns de connexion par type
+1. [x] Explorer agents pour comprendre les patterns de connexion par type ✅
 2. [ ] Implémenter TabbedDetailPanel wrapper
-3. [ ] Créer les 4 tabs
-4. [ ] Intégrer Mermaid avec dark theme
-5. [ ] Ajouter Neo4j live sync
-6. [ ] Implémenter Context Views par type de node
+3. [ ] Créer les 4 tabs (Overview, Data, Graph, Code)
+4. [ ] Intégrer Mermaid avec dark theme (react-x-mermaid)
+5. [ ] Ajouter Neo4j live sync avec Cypher editor
+6. [ ] Implémenter Context Views par type de node (8 types identifiés)
+7. [ ] Ajouter action buttons (Refresh, Load More, Expand, Copy Query, Run)
+
+## Exploration Results Summary
+
+Les 10 agents d'exploration ont identifié:
+
+- **114 arcs** répartis en 5 familles (ownership, localization, semantic, generation, mining)
+- **8 patterns de Context Views** (Page, Entity, Block, Project, SEOKeyword, GEOQuery, Locale, BrandIdentity)
+- **Layer pipeline**: config → foundation → structure → semantic → instruction → output
+- **Cross-realm arcs**: shared/knowledge ↔ org/semantic (FOR_LOCALE, BELONGS_TO)
+- **Composite keys**: `page:homepage@fr-FR`, `entity:qr-code@de-DE`
+- **Studio patterns**: GraphStore avec maps indexées, TurboNode/FloatingEdge, LOD system
