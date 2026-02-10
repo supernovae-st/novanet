@@ -286,7 +286,20 @@ export const FloatingEdge = memo(function FloatingEdge({
       {/* Selection pulse effect - animated glow when edge is selected */}
       {isSelected && (
         <>
-          {/* Outer pulse glow */}
+          {/* Wide outer glow - creates dramatic "energy field" effect */}
+          <path
+            d={edgePath}
+            fill="none"
+            stroke={theme.colors.glow}
+            strokeWidth={finalStrokeWidth + 20}
+            strokeLinecap="round"
+            style={{
+              opacity: 0.25,
+              filter: 'blur(12px)',
+              animation: 'edgeGlowPulse 2s ease-in-out infinite',
+            }}
+          />
+          {/* Main pulse glow */}
           <path
             d={edgePath}
             fill="none"
@@ -294,7 +307,7 @@ export const FloatingEdge = memo(function FloatingEdge({
             strokeWidth={finalStrokeWidth + 12}
             strokeLinecap="round"
             style={{
-              opacity: 0.4,
+              opacity: 0.5,
               filter: 'blur(8px)',
               animation: 'edgePulse 1.5s ease-in-out infinite',
             }}
@@ -307,18 +320,75 @@ export const FloatingEdge = memo(function FloatingEdge({
             strokeWidth={finalStrokeWidth + 4}
             strokeLinecap="round"
             style={{
-              opacity: 0.6,
+              opacity: 0.7,
               filter: 'blur(3px)',
               animation: 'edgePulse 1.5s ease-in-out infinite',
               animationDelay: '0.1s',
+            }}
+          />
+          {/* Source endpoint ring */}
+          <circle
+            cx={sourcePoint.x}
+            cy={sourcePoint.y}
+            r={12}
+            fill="none"
+            stroke={theme.colors.glow}
+            strokeWidth={3}
+            style={{
+              opacity: 0.8,
+              filter: `drop-shadow(0 0 8px ${theme.colors.glow})`,
+              animation: 'endpointPulse 1.5s ease-in-out infinite',
+            }}
+          />
+          {/* Target endpoint ring */}
+          <circle
+            cx={targetPoint.x}
+            cy={targetPoint.y}
+            r={12}
+            fill="none"
+            stroke={theme.colors.glow}
+            strokeWidth={3}
+            style={{
+              opacity: 0.8,
+              filter: `drop-shadow(0 0 8px ${theme.colors.glow})`,
+              animation: 'endpointPulse 1.5s ease-in-out infinite',
+              animationDelay: '0.75s',
+            }}
+          />
+          {/* Source endpoint dot */}
+          <circle
+            cx={sourcePoint.x}
+            cy={sourcePoint.y}
+            r={5}
+            fill={theme.colors.primary}
+            style={{
+              filter: `drop-shadow(0 0 6px ${theme.colors.glow})`,
+            }}
+          />
+          {/* Target endpoint dot */}
+          <circle
+            cx={targetPoint.x}
+            cy={targetPoint.y}
+            r={5}
+            fill={theme.colors.primary}
+            style={{
+              filter: `drop-shadow(0 0 6px ${theme.colors.glow})`,
             }}
           />
           {/* CSS keyframes injected via style tag */}
           <style>
             {`
               @keyframes edgePulse {
-                0%, 100% { opacity: 0.3; }
-                50% { opacity: 0.7; }
+                0%, 100% { opacity: 0.4; }
+                50% { opacity: 0.8; }
+              }
+              @keyframes edgeGlowPulse {
+                0%, 100% { opacity: 0.15; }
+                50% { opacity: 0.35; }
+              }
+              @keyframes endpointPulse {
+                0%, 100% { r: 10; opacity: 0.6; }
+                50% { r: 16; opacity: 1; }
               }
             `}
           </style>

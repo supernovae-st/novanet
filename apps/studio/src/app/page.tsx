@@ -18,7 +18,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { Box, Keyboard, X, Loader2 } from 'lucide-react';
+import { X, Loader2, HelpCircle, Layers } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { iconSizes, gapTokens } from '@/design/tokens';
 import { DEFAULT_FETCH_LIMIT } from '@/config/constants';
@@ -40,12 +40,12 @@ function getHoverNodeConfig(node: HoverNodeInfo): NodeTypeConfig | null {
 }
 
 // Import GraphCanvas for 2D/3D view switching
-import { GraphCanvas } from '@/components/graph';
+import { GraphCanvas, Graph3DLegend } from '@/components/graph';
 import { GraphErrorBoundary } from '@/components/ui/ErrorBoundary';
 import { StatsCounter, Pill, Divider, RefreshButton, LayerIcon, MatrixRainOverlay, MatrixExplosionOverlay } from '@/components/ui';
 import { ViewModeToggle } from '@/components/toolbar/ViewModeToggle';
 import { TabbedDetailPanel } from '@/components/sidebar/TabbedDetailPanel';
-import { ArcDetailsPanel } from '@/components/sidebar/ArcDetailsPanel';
+import { TabbedArcPanel } from '@/components/sidebar/TabbedArcPanel';
 import { KeyboardHelpPanel } from '@/components/dx/KeyboardHelpPanel';
 import { CommandPalette, useCommandPalette, useCommandPaletteState } from '@/components/ui/CommandPalette';
 import { AiSearchOverlay } from '@/components/chat/AiSearchOverlay';
@@ -188,6 +188,10 @@ export default function HomePage() {
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
   const openShortcuts = useCallback(() => setShortcutsOpen(true), []);
   const closeShortcuts = useCallback(() => setShortcutsOpen(false), []);
+
+  // Visual encoding legend
+  const [legendOpen, setLegendOpen] = useState(false);
+  const toggleLegend = useCallback(() => setLegendOpen(prev => !prev), []);
 
   // Command palette (⌘K)
   const { isOpen: paletteOpen, open: openPalette, close: closePalette } = useCommandPaletteState();
@@ -618,7 +622,7 @@ export default function HomePage() {
                   showControls={true}
                   onNodeDoubleClick={handleExpandNode}
                   onPaneClick={handlePaneClick}
-                  showViewToggle={true}
+                  showViewToggle={false}
                 />
               </GraphErrorBoundary>
             )}
@@ -644,10 +648,8 @@ export default function HomePage() {
             {/* Top Bar: Unified layout with 2 rows */}
             {!uiState.focusMode && (
               <div className={cn('absolute top-4 left-4 right-4 z-30 flex flex-col', gapTokens.spacious)}>
-                {/* Row 1: QueryPill (full-width) - only in Data mode */}
-                {navigationMode === 'data' && (
-                  <QueryPill className="w-full" onRun={handleRunQuery} />
-                )}
+                {/* Row 1: QueryPill (full-width) - always visible, query drives data */}
+                <QueryPill className="w-full" onRun={handleRunQuery} />
                 {/* Row 2: Stats (left) + Navigation Mode (center) + Context Picker (right) */}
                 <div className={cn('flex items-start justify-between', gapTokens.large)}>
                   <Pill size="md" className="items-stretch py-3" glow={queryState.isExecuting || transitionState.isTransitioning || isMetaHovered} glowColor={isMetaHovered ? 'novanet' : transitionState.isTransitioning ? 'novanet' : 'emerald'}>
@@ -684,15 +686,40 @@ export default function HomePage() {
               </div>
             )}
 
-            {/* Bottom left - Keyboard shortcuts */}
-            <button
-              onClick={openShortcuts}
-              className={cn('absolute bottom-4 left-4 px-3 py-2 rounded-xl bg-[#0d0d12] border border-white/10 hover:bg-accent-blue/15 hover:border-accent-blue/30 transition-colors text-white/40 hover:text-accent-blue shadow-lg shadow-black/40 flex items-center', gapTokens.default)}
-              title="Keyboard shortcuts (/)"
-            >
-              <Keyboard className={iconSizes.md} />
-              <kbd className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-white/10 border border-white/10">/</kbd>
-            </button>
+            {/* Bottom left - Visual Encoding & Keyboard shortcuts */}
+            <div className={cn('absolute bottom-4 left-4 flex items-center', gapTokens.tight)}>
+              {/* Visual Encoding Legend toggle */}
+              <button
+                onClick={toggleLegend}
+                className={cn(
+                  'px-3 py-2 rounded-xl bg-[#0d0d12] border border-white/10 hover:bg-accent-blue/15 hover:border-accent-blue/30 transition-colors shadow-lg shadow-black/40 flex items-center',
+                  legendOpen ? 'text-accent-blue border-accent-blue/30' : 'text-white/40 hover:text-accent-blue',
+                  gapTokens.default
+                )}
+                title="Visual Encoding (L)"
+              >
+                <Layers className={iconSizes.md} />
+                <kbd className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-white/10 border border-white/10">L</kbd>
+              </button>
+              {/* Keyboard shortcuts */}
+              <button
+                onClick={openShortcuts}
+                className={cn('px-3 py-2 rounded-xl bg-[#0d0d12] border border-white/10 hover:bg-accent-blue/15 hover:border-accent-blue/30 transition-colors text-white/40 hover:text-accent-blue shadow-lg shadow-black/40 flex items-center', gapTokens.default)}
+                title="Keyboard shortcuts (?)"
+              >
+                <HelpCircle className={iconSizes.md} />
+                <kbd className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-white/10 border border-white/10">?</kbd>
+              </button>
+            </div>
+
+            {/* Visual Encoding Legend Panel */}
+            {legendOpen && (
+              <Graph3DLegend
+                className="!absolute !bottom-16 !left-4 !right-auto z-40"
+                collapsed={false}
+                onToggle={toggleLegend}
+              />
+            )}
 
             {/* Bottom center - View controls + hover info + shortcut hint */}
             <div className={cn('absolute bottom-4 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center', gapTokens.tight)}>
@@ -824,24 +851,8 @@ export default function HomePage() {
         {!uiState.focusMode && (selectedNode || selectedEdge) && (
           <aside className="w-[420px] border-l border-white/8 shrink-0 overflow-hidden flex flex-col bg-[#0d0d12] animate-slide-in-right">
             {selectedEdge ? (
-              <>
-                {/* Arc Details Header */}
-                <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.08]">
-                  <span className="text-sm font-semibold text-white/80">
-                    Relationship Details
-                  </span>
-                  <button
-                    onClick={handleClosePanel}
-                    className="p-1.5 rounded-lg hover:bg-white/10 text-white/40 hover:text-white/60 transition-colors"
-                    title="Close (] or Esc)"
-                  >
-                    <X className={iconSizes.md} />
-                  </button>
-                </div>
-                <div className="flex-1 overflow-hidden">
-                  <ArcDetailsPanel arc={selectedEdge} />
-                </div>
-              </>
+              /* Tabbed Arc Details Panel (has its own header) */
+              <TabbedArcPanel arc={selectedEdge} className="h-full" />
             ) : (
               /* Tabbed Node Details Panel (has its own header) */
               <TabbedDetailPanel node={selectedNode ?? null} className="h-full" />
