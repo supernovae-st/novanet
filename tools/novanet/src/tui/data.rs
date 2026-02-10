@@ -2505,29 +2505,29 @@ mod tests {
     }
 
     #[test]
-    fn test_mock_tree_global_structure() {
+    fn test_mock_tree_shared_structure() {
         let tree = TaxonomyTree::mock_for_testing();
-        let global = &tree.realms[0];
+        let shared = &tree.realms[0];
 
-        assert_eq!(global.layers.len(), 1, "global should have 1 layer");
-        assert_eq!(global.layers[0].key, "config");
-        assert_eq!(global.layers[0].kinds.len(), 1, "config should have 1 kind");
-        assert_eq!(global.layers[0].kinds[0].key, "AppConfig");
+        assert_eq!(shared.layers.len(), 1, "shared should have 1 layer");
+        assert_eq!(shared.layers[0].key, "config");
+        assert_eq!(shared.layers[0].kinds.len(), 1, "config should have 1 kind");
+        assert_eq!(shared.layers[0].kinds[0].key, "AppConfig");
     }
 
     #[test]
-    fn test_mock_tree_tenant_structure() {
+    fn test_mock_tree_org_structure() {
         let tree = TaxonomyTree::mock_for_testing();
-        let tenant = &tree.realms[1];
+        let org = &tree.realms[1];
 
-        assert_eq!(tenant.layers.len(), 1, "tenant should have 1 layer");
-        assert_eq!(tenant.layers[0].key, "foundation");
+        assert_eq!(org.layers.len(), 1, "org should have 1 layer");
+        assert_eq!(org.layers[0].key, "foundation");
         assert_eq!(
-            tenant.layers[0].kinds.len(),
+            org.layers[0].kinds.len(),
             1,
             "foundation should have 1 kind"
         );
-        assert_eq!(tenant.layers[0].kinds[0].key, "Entity");
+        assert_eq!(org.layers[0].kinds[0].key, "Entity");
     }
 
     #[test]

@@ -582,13 +582,19 @@ fn render_footer_hints(f: &mut Frame, area: Rect, app: &App) {
 
     let hints = match app.mode {
         NavMode::Graph => match app.focus {
-            Focus::Tree => "Tree: [h/l] Toggle  [j/k] Navigate  [Space] Expand  [g/G] Top/Bottom  [Tab] Panel  [/] Search  [?] Help",
+            Focus::Tree => {
+                "Tree: [h/l] Toggle  [j/k] Navigate  [Space] Expand  [g/G] Top/Bottom  [Tab] Panel  [/] Search  [?] Help"
+            }
             Focus::Info => "Info: [j/k] Scroll  [y] Copy  [Tab] Panel  [/] Search  [?] Help",
             Focus::Graph => "Graph: [Click] Select  [Scroll] Zoom  [Tab] Panel  [?] Help",
             Focus::Yaml => "YAML: [j/k] Scroll  [y] Copy  [Tab] Panel  [/] Search  [?] Help",
         },
-        NavMode::Audit => "[j/k] Navigate  [Enter] Drill down  [r] Refresh  [1-3] Mode  [?] Help  [q] Quit",
-        NavMode::Nexus => "[1-4] Tabs  [j/k] Navigate  [Enter] Select  [Esc] Back  [/] Search  [?] Help",
+        NavMode::Audit => {
+            "[j/k] Navigate  [Enter] Drill down  [r] Refresh  [1-3] Mode  [?] Help  [q] Quit"
+        }
+        NavMode::Nexus => {
+            "[1-4] Tabs  [j/k] Navigate  [Enter] Select  [Esc] Back  [/] Search  [?] Help"
+        }
     };
 
     let line = Line::from(Span::styled(
