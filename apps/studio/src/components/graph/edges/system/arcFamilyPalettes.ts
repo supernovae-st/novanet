@@ -176,8 +176,7 @@ export const RELATION_TO_FAMILY: Record<string, ArcFamily> = {
   HAS_ARC_KIND: 'ownership',
 
   // Localization family
-  HAS_L10N: 'localization',
-  HAS_OUTPUT: 'localization',
+  HAS_CONTENT: 'localization',
   FOR_LOCALE: 'localization',
   PRIMARY_LOCALE: 'localization',
 
@@ -187,6 +186,7 @@ export const RELATION_TO_FAMILY: Record<string, ArcFamily> = {
   RELATED_TO: 'semantic',
 
   // Generation family
+  HAS_GENERATED: 'generation',
   GENERATED_BY: 'generation',
   PREVIOUS_VERSION: 'generation',
   BASED_ON: 'generation',

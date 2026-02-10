@@ -358,7 +358,10 @@ pub fn render_help(f: &mut Frame, app: &App) {
             ]),
             Line::from(""),
             // v11.6.2: Trait Filter
-            Line::from(vec![Span::styled("  Trait Filter (Meta mode)", STYLE_HIGHLIGHT)]),
+            Line::from(vec![Span::styled(
+                "  Trait Filter (Meta mode)",
+                STYLE_HIGHLIGHT,
+            )]),
             Line::from(vec![
                 Span::styled("    fi       ", STYLE_PRIMARY),
                 Span::styled("Filter: invariant (■)", STYLE_DIM),

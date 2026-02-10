@@ -35,16 +35,16 @@ import { getArcFamily, getArcFamilyPalette, getArcFamilyEffect, type ArcFamily }
  */
 const CATEGORY_PATTERNS: Array<{ pattern: RegExp | string; category: RelationCategory }> = [
   // Structural
-  { pattern: /^HAS_(?!L10N|OUTPUT|PROMPT|RULES|VARIATION|SNAPSHOT|CITATION|REFORMULATION)/, category: 'structural' },
+  { pattern: /^HAS_(?!CONTENT|GENERATED|PROMPT|RULES|VARIATION|SNAPSHOT|CITATION|REFORMULATION)/, category: 'structural' },
   { pattern: 'CONTAINS', category: 'structural' },
 
   // Localization
-  { pattern: 'HAS_L10N', category: 'localization' },
+  { pattern: 'HAS_CONTENT', category: 'localization' },
   { pattern: /LOCALE/, category: 'localization' },
   { pattern: 'SUPPORTS', category: 'localization' },
 
   // Generation
-  { pattern: 'HAS_OUTPUT', category: 'generation' },
+  { pattern: 'HAS_GENERATED', category: 'generation' },
   { pattern: 'HAS_PROMPT', category: 'generation' },
   { pattern: 'HAS_RULES', category: 'generation' },
   { pattern: /GENERATED/, category: 'generation' },

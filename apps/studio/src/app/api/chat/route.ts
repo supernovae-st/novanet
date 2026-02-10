@@ -71,11 +71,11 @@ All nodes have: key, display_name, icon, description, llm_context, created_at, u
 **Tenant/SEO** — Search optimization (v11.0: moved to tenant)
 - SEOKeyword, SEOQuestion, SEOComparison, SEOPreposition: Keywords
 - GEOQuery, GEOAnswer, GEOMetrics: AI search queries
-- SEOKeywordMetrics, SEOMiningRun: Analytics
+- SEOKeywordMetrics: Analytics (v11.5: SEO in shared/knowledge)
 
 **Tenant/Output** — Generation results
 - PageGenerated, BlockGenerated: Generated content → FOR_LOCALE
-- GenerationJob, OutputArtifact, EvaluationSignal: Pipeline
+- OutputArtifact: Pipeline output (v11.2: job nodes removed)
 
 ### Key Relationships (124 arc types)
 

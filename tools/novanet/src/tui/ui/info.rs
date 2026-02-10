@@ -129,7 +129,11 @@ pub fn render_info_panel(f: &mut Frame, area: Rect, app: &mut App) {
         // Medium height: bar chart + trait distribution
         let chunks = Layout::default()
             .direction(Direction::Vertical)
-            .constraints([Constraint::Min(6), Constraint::Length(8), Constraint::Length(5)])
+            .constraints([
+                Constraint::Min(6),
+                Constraint::Length(8),
+                Constraint::Length(5),
+            ])
             .split(area);
 
         render_info_text(f, chunks[0], app, focused, border_color);
@@ -394,7 +398,10 @@ fn render_realm_health_sparkline(f: &mut Frame, area: Rect, app: &App) {
         .block(
             Block::default()
                 .title(Span::styled(
-                    format!(" Health Distribution (avg {}%, min {}%, max {}%) ", avg, min, max),
+                    format!(
+                        " Health Distribution (avg {}%, min {}%, max {}%) ",
+                        avg, min, max
+                    ),
                     STYLE_DIM,
                 ))
                 .borders(Borders::ALL)
