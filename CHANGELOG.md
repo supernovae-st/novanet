@@ -7,6 +7,25 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [11.6.0] - 2026-02-10
+
+### Added
+- **Tabbed Detail Panel**: New 4-tab interface for node details in Studio
+  - **Overview Tab**: Type badge, classification grid (realm/layer/trait), description, timestamps
+  - **Data Tab**: Stats bar (in/out arcs, props count), collapsible property sections, coverage progress bar
+  - **Graph Tab**: View switcher (Ego/Arcs/Flow/Context), Mermaid diagram placeholder, relations list with navigation
+  - **Code Tab**: Format switcher (JSON/YAML/Cypher/TypeScript) with syntax-colored preview and copy
+- **CypherPill component**: Displays current Cypher query at top of graph canvas
+- **MatrixRain component**: Visual effect during Neo4j queries
+- **useNodeSelection hook**: Syncs React Flow selection with uiStore
+- **useMatrixRain hook**: Controls matrix rain effect timing
+- **Magic UI components**: border-beam, particles, shine-border for visual effects
+- **Motion animations**: Spring-based tab transitions and indicator animations
+
+### Changed
+- Replaced `NodeDetailsPanel` with `TabbedDetailPanel` in page.tsx
+- Added `DetailPanelTab` type to uiStore for tab state persistence
+
 ## [11.5.0] - 2026-02-10
 
 ### Breaking Changes
