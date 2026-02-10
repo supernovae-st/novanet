@@ -2297,6 +2297,24 @@ mod tests {
     }
 
     #[test]
+    fn test_graph_view_label() {
+        assert_eq!(GraphView::Taxonomy.label(), "Taxonomy");
+        assert_eq!(GraphView::Instances.label(), "Instances");
+    }
+
+    #[test]
+    fn test_graph_view_toggle() {
+        assert_eq!(GraphView::Taxonomy.toggle(), GraphView::Instances);
+        assert_eq!(GraphView::Instances.toggle(), GraphView::Taxonomy);
+    }
+
+    #[test]
+    fn test_graph_view_default() {
+        let view = GraphView::default();
+        assert_eq!(view, GraphView::Taxonomy);
+    }
+
+    #[test]
     fn test_key_1_stays_in_graph_mode() {
         let mut app = create_test_app();
         app.mode = NavMode::Audit; // Start in Audit
@@ -2313,6 +2331,15 @@ mod tests {
         app.handle_key(crossterm::event::KeyEvent::from(KeyCode::Char('2')));
 
         assert_eq!(app.mode, NavMode::Audit);
+    }
+
+    #[test]
+    fn test_key_3_switches_to_nexus() {
+        let mut app = create_test_app();
+
+        app.handle_key(crossterm::event::KeyEvent::from(KeyCode::Char('3')));
+
+        assert_eq!(app.mode, NavMode::Nexus);
     }
 
     #[test]
