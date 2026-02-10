@@ -9,7 +9,7 @@
 
 use ratatui::Frame;
 use ratatui::layout::Rect;
-use ratatui::style::{Color, Style};
+use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
 use ratatui::widgets::{
     Block, Borders, Paragraph, Scrollbar, ScrollbarOrientation, ScrollbarState,
@@ -237,41 +237,55 @@ fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
 }
 
 /// Render sticky breadcrumb at top of tree panel.
-/// Returns the height used (number of lines).
+/// Returns the height used (always 1 line for consistent layout).
 fn render_breadcrumb(f: &mut Frame, area: Rect, app: &App) -> u16 {
     let path = build_breadcrumb_path(app);
 
+    // Always render 1 line for consistent header height
+    let breadcrumb_area = Rect::new(area.x, area.y, area.width, 1);
+
     if path.is_empty() {
-        return 0;
+        // Empty breadcrumb: show subtle placeholder
+        let line = Line::from(Span::styled(
+            " ◇ Select an item",
+            Style::default().fg(Color::Rgb(80, 80, 100)),
+        ));
+        let paragraph = Paragraph::new(line).style(Style::default().bg(Color::Rgb(25, 25, 35)));
+        f.render_widget(paragraph, breadcrumb_area);
+        return 1;
     }
 
-    let mut lines: Vec<Line> = Vec::new();
+    // Build horizontal breadcrumb: ◎ Org → ⚙ Config → ■ Kind
+    let mut spans: Vec<Span> = Vec::with_capacity(path.len() * 3);
+    spans.push(Span::raw(" ")); // Left padding
 
-    for (depth, level) in path.iter().enumerate() {
-        // Build indentation with arrows
-        let indent = if depth == 0 {
-            format!(" {} ", level.icon)
+    for (i, level) in path.iter().enumerate() {
+        if i > 0 {
+            // Arrow separator with subtle color
+            spans.push(Span::styled(
+                " → ",
+                Style::default().fg(Color::Rgb(100, 100, 120)),
+            ));
+        }
+        // Icon
+        spans.push(Span::styled(
+            format!("{} ", level.icon),
+            Style::default().fg(level.color),
+        ));
+        // Label (bold for last item)
+        let label_style = if i == path.len() - 1 {
+            Style::default().fg(level.color).add_modifier(Modifier::BOLD)
         } else {
-            format!(" {}→ {} ", "  ".repeat(depth), level.icon)
+            Style::default().fg(level.color)
         };
-
-        let line = Line::from(vec![
-            Span::styled(indent, Style::default().fg(COLOR_MUTED_TEXT)),
-            Span::styled(level.label.clone(), Style::default().fg(level.color)),
-        ]);
-        lines.push(line);
+        spans.push(Span::styled(level.label.clone(), label_style));
     }
 
-    let height = lines.len() as u16;
-
-    // Render breadcrumb with subtle background
-    let breadcrumb_area = Rect::new(area.x, area.y, area.width, height);
-
-    let paragraph = Paragraph::new(lines).style(Style::default().bg(Color::Rgb(30, 30, 40)));
-
+    let line = Line::from(spans);
+    let paragraph = Paragraph::new(line).style(Style::default().bg(Color::Rgb(25, 25, 35)));
     f.render_widget(paragraph, breadcrumb_area);
 
-    height
+    1 // Always 1 line
 }
 
 // =============================================================================
