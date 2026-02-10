@@ -1,12 +1,5 @@
 'use client';
 
-// DEBUG: Temporary global for logging
-declare global {
-  interface Window {
-    __edgeDebugLogged?: Set<string>;
-  }
-}
-
 /**
  * FloatingEdge - Modular edge component with composable effects
  *
@@ -255,29 +248,9 @@ export const FloatingEdge = memo(function FloatingEdge({
   const baseFontSize = isHovered || isSelected ? 13 : 10;
   const scaledFontSize = baseFontSize * labelScale;
 
-  const shouldAnimate = isEdgeVisible && canAnimate && isAnimated && !effectiveDimmed;
-
-  // DEBUG: Log animation conditions for first few edges
-  if (typeof window !== 'undefined' && !window.__edgeDebugLogged) {
-    window.__edgeDebugLogged = new Set();
-  }
-  if (typeof window !== 'undefined' && window.__edgeDebugLogged && window.__edgeDebugLogged.size < 5 && !window.__edgeDebugLogged.has(id)) {
-    window.__edgeDebugLogged.add(id);
-    console.log(`[Edge ${id}] Animation debug:`, {
-      isEdgeVisible,
-      canAnimate,
-      isAnimated,
-      effectiveDimmed,
-      shouldAnimate,
-      shouldRenderEffects,
-      lodTier,
-      distanceFromCenter: Math.round(distanceFromCenter),
-      zoom: zoom.toFixed(2),
-      viewportWidth,
-      viewportHeight,
-      transform: transform.map(t => Math.round(t)),
-    });
-  }
+  // Simplified: always animate if not dimmed (LOD and budget optimizations can be re-enabled later)
+  // Original: const shouldAnimate = isEdgeVisible && canAnimate && isAnimated && !effectiveDimmed;
+  const shouldAnimate = isAnimated && !effectiveDimmed;
 
   return (
     <g className="floating-edge" style={{ opacity: groupOpacity, transition: 'opacity 0.15s ease-out' }}>
@@ -439,8 +412,62 @@ export const FloatingEdge = memo(function FloatingEdge({
         </>
       )}
 
-      {/* Effect renderer */}
-      {shouldAnimate && shouldRenderEffects && (
+      {/* MINIMAL INLINE ANIMATION - bypassing EffectRenderer for debug */}
+      {/* Version 1: Using mpath reference (SVG 1.1 standard) */}
+      {shouldAnimate && (
+        <>
+          {/* Simple pulse 1 - starts immediately */}
+          <circle r={8} fill={theme.colors.primary} opacity={0.9}>
+            <animateMotion dur="2s" repeatCount="indefinite" begin="0s">
+              <mpath xlinkHref={`#edge-path-${id}`} href={`#edge-path-${id}`} />
+            </animateMotion>
+          </circle>
+          {/* Simple pulse 2 - offset start */}
+          <circle r={6} fill={theme.colors.glow} opacity={0.8}>
+            <animateMotion dur="2s" repeatCount="indefinite" begin="0.5s">
+              <mpath xlinkHref={`#edge-path-${id}`} href={`#edge-path-${id}`} />
+            </animateMotion>
+          </circle>
+          {/* Simple pulse 3 - more offset */}
+          <circle r={5} fill="#ffffff" opacity={0.7}>
+            <animateMotion dur="2s" repeatCount="indefinite" begin="1s">
+              <mpath xlinkHref={`#edge-path-${id}`} href={`#edge-path-${id}`} />
+            </animateMotion>
+          </circle>
+          {/* Simple pulse 4 - even more offset */}
+          <circle r={4} fill={theme.colors.secondary} opacity={0.6}>
+            <animateMotion dur="2s" repeatCount="indefinite" begin="1.5s">
+              <mpath xlinkHref={`#edge-path-${id}`} href={`#edge-path-${id}`} />
+            </animateMotion>
+          </circle>
+        </>
+      )}
+
+      {/* ALTERNATIVE: Using inline path attribute (fallback if mpath doesn't work) */}
+      {shouldAnimate && (
+        <>
+          {/* Bright magenta dot - uses edgePath directly */}
+          <circle r={10} fill="#ff00ff" opacity={1.0}>
+            <animateMotion dur="3s" repeatCount="indefinite" path={edgePath} />
+          </circle>
+          {/* Cyan dot - offset */}
+          <circle r={7} fill="#00ffff" opacity={0.9}>
+            <animateMotion dur="3s" repeatCount="indefinite" begin="1s" path={edgePath} />
+          </circle>
+          {/* Yellow dot - more offset */}
+          <circle r={5} fill="#ffff00" opacity={0.9}>
+            <animateMotion dur="3s" repeatCount="indefinite" begin="2s" path={edgePath} />
+          </circle>
+        </>
+      )}
+
+      {/* DEBUG: Static circles at source and target to verify basic rendering */}
+      {/* These should ALWAYS be visible if the edge is rendered */}
+      <circle cx={sourcePoint.x} cy={sourcePoint.y} r={15} fill="#00ff00" opacity={0.8} />
+      <circle cx={targetPoint.x} cy={targetPoint.y} r={12} fill="#ff0000" opacity={0.8} />
+
+      {/* Effect renderer - DISABLED for now, using inline animations above */}
+      {/* {shouldAnimate && (
         <EffectRenderer
           edgeId={id}
           pathId={`edge-path-${id}`}
@@ -455,7 +482,7 @@ export const FloatingEdge = memo(function FloatingEdge({
           intensityOverride={intensityMultiplier}
           forceLOD={lodTier}
         />
-      )}
+      )} */}
 
       {/* Label */}
       {shouldShowLabel && (
