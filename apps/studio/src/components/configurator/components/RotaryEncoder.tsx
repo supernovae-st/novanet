@@ -1,5 +1,7 @@
 'use client';
 
+/* eslint-disable @typescript-eslint/no-explicit-any -- Three.js/gesture library interop requires any casts */
+
 /**
  * RotaryEncoder - Draggable rotary encoder with knurled texture
  *
@@ -15,7 +17,7 @@
  */
 
 import { useState, useRef, useCallback, useMemo } from 'react';
-import { useFrame, useThree, ThreeEvent } from '@react-three/fiber';
+import { useThree, ThreeEvent } from '@react-three/fiber';
 import { useDrag } from '@use-gesture/react';
 import { Cylinder } from '@react-three/drei';
 import * as THREE from 'three';

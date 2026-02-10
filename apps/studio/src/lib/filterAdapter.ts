@@ -10,7 +10,6 @@
 import type { NodeType, Layer } from '@novanet/core/types';
 import { DEFAULT_FETCH_LIMIT } from '@/config/constants';
 import { NODE_LAYERS } from '@/config/nodeTypes';
-import { ALL_NODE_TYPES } from '@/config/nodeTypes';
 
 // =============================================================================
 // TYPES (aligned with novanet-core v9.0.0)
