@@ -403,8 +403,14 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
 
     if total_kinds == 0 {
         // Render empty tree panel with border
+        // v11.6: Show mode in empty state too
+        let empty_title = if app.is_data_mode() {
+            " ● Data "
+        } else {
+            " ◆ Schema "
+        };
         let block = Block::default()
-            .title(" Taxonomy ")
+            .title(empty_title)
             .borders(Borders::ALL)
             .border_style(Style::default().fg(border_color));
         f.render_widget(block, area);
@@ -1245,16 +1251,23 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
     };
 
     // Show scroll indicator in title (use mode-aware count for Data view)
+    // v11.6: Show mode with icon in title
     let total = app.current_item_count();
+    let mode_prefix = if app.is_data_mode() {
+        "● Data"  // Filled circle = instances/data
+    } else {
+        "◆ Schema" // Diamond = structure/meta
+    };
     let title = if total > visible_height {
         format!(
-            " Taxonomy [{}-{}/{}] ",
+            " {} [{}-{}/{}] ",
+            mode_prefix,
             app.tree_scroll + 1,
             (app.tree_scroll + visible_height).min(total),
             total
         )
     } else {
-        " Taxonomy ".to_string()
+        format!(" {} ", mode_prefix)
     };
 
     // Render block with title

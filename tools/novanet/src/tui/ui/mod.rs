@@ -644,15 +644,6 @@ fn render_header(f: &mut Frame, area: Rect, app: &App) {
         ));
     }
 
-    // Show GraphView indicator in Graph mode
-    if app.mode == NavMode::Graph {
-        let view_label = match app.graph_view {
-            crate::tui::app::GraphView::Taxonomy => " [T] ",
-            crate::tui::app::GraphView::Instances => " [I] ",
-        };
-        header.push(Span::styled(view_label, Style::default().fg(Color::Cyan)));
-    }
-
     // Context-aware shortcuts (v11.3: 3 modes)
     let right_side = if app.mode == NavMode::Nexus {
         vec![Span::styled(
