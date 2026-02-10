@@ -26,10 +26,10 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 | DB | `db seed`, `db migrate`, `db reset` | Implemented |
 | Filter | `filter build` | Implemented (JSON stdin, Studio subprocess) |
 | Blueprint | `blueprint [--view=X]` | Implemented (10 views) |
-| TUI | `tui` | Galaxy theme, effects engine, CRUD dialogs |
+| TUI | `tui` | Galaxy theme, effects engine, CRUD dialogs, Nexus Quiz |
 | System | `completions`, `doctor` | Implemented |
 
-**955 tests pass** (`cargo test`). Zero clippy warnings.
+**985 tests pass** (`cargo test`). Zero clippy warnings.
 
 **Testing stack:**
 - `insta` — Snapshot testing (5 generator outputs)
