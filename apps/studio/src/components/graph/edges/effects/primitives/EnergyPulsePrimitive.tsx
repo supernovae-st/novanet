@@ -104,6 +104,25 @@ export const EnergyPulsePrimitive = memo(function EnergyPulsePrimitive({
 
   return (
     <g className="energy-pulse-primitive">
+      {/* Simple visible animated pulses that we KNOW work */}
+      {pulses.map((pulse) => (
+        <circle
+          key={`simple-pulse-${pulse.id}`}
+          r={pulse.size}
+          fill={colors.primary}
+          opacity={0.9}
+          style={{ filter: `drop-shadow(0 0 ${pulse.size}px ${colors.glow})` }}
+        >
+          <animateMotion
+            dur={`${pulse.duration}s`}
+            repeatCount="indefinite"
+            begin={`${pulse.delay}s`}
+          >
+            <mpath xlinkHref={`#${pathId}`} href={`#${pathId}`} />
+          </animateMotion>
+        </circle>
+      ))}
+
       {/* SVG Filter for intense glow */}
       <defs>
         <filter id={filterId} x="-100%" y="-100%" width="300%" height="300%">
@@ -135,7 +154,7 @@ export const EnergyPulsePrimitive = memo(function EnergyPulsePrimitive({
                 keySplines={spline}
                 keyTimes="0;1"
               >
-                <mpath href={`#${pathId}`} />
+                <mpath xlinkHref={`#${pathId}`} href={`#${pathId}`} />
               </animateMotion>
               <animate
                 attributeName="opacity"
@@ -163,7 +182,7 @@ export const EnergyPulsePrimitive = memo(function EnergyPulsePrimitive({
               keySplines={spline}
               keyTimes="0;1"
             >
-              <mpath href={`#${pathId}`} />
+              <mpath xlinkHref={`#${pathId}`} href={`#${pathId}`} />
             </animateMotion>
             <animate
               attributeName="opacity"
@@ -190,7 +209,7 @@ export const EnergyPulsePrimitive = memo(function EnergyPulsePrimitive({
               keySplines={spline}
               keyTimes="0;1"
             >
-              <mpath href={`#${pathId}`} />
+              <mpath xlinkHref={`#${pathId}`} href={`#${pathId}`} />
             </animateMotion>
             <animate
               attributeName="opacity"
@@ -217,7 +236,7 @@ export const EnergyPulsePrimitive = memo(function EnergyPulsePrimitive({
               keySplines={spline}
               keyTimes="0;1"
             >
-              <mpath href={`#${pathId}`} />
+              <mpath xlinkHref={`#${pathId}`} href={`#${pathId}`} />
             </animateMotion>
             <animate
               attributeName="opacity"
@@ -254,7 +273,7 @@ export const EnergyPulsePrimitive = memo(function EnergyPulsePrimitive({
               keySplines={spline}
               keyTimes="0;1"
             >
-              <mpath href={`#${pathId}`} />
+              <mpath xlinkHref={`#${pathId}`} href={`#${pathId}`} />
             </animateMotion>
             <animate
               attributeName="opacity"

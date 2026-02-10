@@ -12,14 +12,18 @@
  * v11.7 — Enhanced arc experience
  */
 
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import { motion } from 'motion/react';
 import { ArrowRight, Hash, Clock } from 'lucide-react';
+import { KIND_META } from '@novanet/core/types';
+import type { Layer, Realm, Trait } from '@novanet/core/types';
 import { cn } from '@/lib/utils';
 import { useCopyFeedback } from '@/hooks';
 import { CopyButton } from '@/components/dx/CopyButton';
+import { ArcPreview3D } from '@/components/graph/ArcPreview3D';
 import { NodeNavigationCard } from '@/components/ui/detail-panel';
 import { useUIStore } from '@/stores/uiStore';
+import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
 import { gapTokens } from '@/design/tokens';
 import type { GraphEdge, GraphNode } from '@/types';
 
@@ -106,6 +110,26 @@ function PropertyItem({
   );
 }
 
+/**
+ * Get node classification for 3D preview
+ */
+function getNodeClassification(node: GraphNode | null): {
+  layer: Layer;
+  realm: Realm;
+  trait: Trait;
+} {
+  if (!node) {
+    return { layer: 'foundation', realm: 'org', trait: 'invariant' };
+  }
+  const kindMeta = KIND_META[node.type];
+  const config = NODE_TYPE_CONFIG[node.type];
+  return {
+    layer: (config?.layer ?? 'foundation') as Layer,
+    realm: (kindMeta?.realm ?? 'org') as Realm,
+    trait: (kindMeta?.trait ?? 'invariant') as Trait,
+  };
+}
+
 export const ArcOverviewTab = memo(function ArcOverviewTab({
   arc,
   sourceNode,
@@ -122,8 +146,23 @@ export const ArcOverviewTab = memo(function ArcOverviewTab({
   const createdAt = arc.data?.createdAt as string | undefined;
   const updatedAt = arc.data?.updatedAt as string | undefined;
 
+  // Get node classifications for 3D preview
+  const sourceClassification = useMemo(() => getNodeClassification(sourceNode), [sourceNode]);
+  const targetClassification = useMemo(() => getNodeClassification(targetNode), [targetNode]);
+
   return (
     <div className="p-4 space-y-6">
+      {/* 3D Arc Preview */}
+      <div className="flex justify-center">
+        <ArcPreview3D
+          arcType={arcType}
+          source={sourceClassification}
+          target={targetClassification}
+          size={160}
+          className="shadow-2xl"
+        />
+      </div>
+
       {/* Arc type header */}
       <div
         className="p-4 rounded-xl"

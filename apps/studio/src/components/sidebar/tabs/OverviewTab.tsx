@@ -13,9 +13,11 @@
 import { memo } from 'react';
 import { Hash, MapPin, Layers, Sparkles } from 'lucide-react';
 import { KIND_META } from '@novanet/core/types';
+import type { Layer, Realm, Trait } from '@novanet/core/types';
 import { cn } from '@/lib/utils';
 import { useCopyFeedback } from '@/hooks';
 import { CopyButton } from '@/components/dx/CopyButton';
+import { NodePreview3D } from '@/components/graph/NodePreview3D';
 import { gapTokens } from '@/design/tokens';
 import {
   REALM_DISPLAY_NAMES,
@@ -117,46 +119,62 @@ export const OverviewTab = memo(function OverviewTab({
 
   return (
     <div className="p-4 space-y-6">
-      {/* Header with type badge and key */}
+      {/* Header card with side-by-side layout: Info left, 3D right */}
       <div
-        className="p-4 rounded-xl"
+        className="relative p-4 rounded-xl overflow-hidden"
         style={{
-          background: `linear-gradient(135deg, ${colors.primary}15, ${colors.secondary}08)`,
-          border: `1px solid ${colors.primary}25`,
+          background: `linear-gradient(135deg, ${colors.primary}12, ${colors.secondary}06)`,
+          border: `1px solid ${colors.primary}20`,
         }}
       >
-        {/* Type badge */}
-        <div
-          className={cn(
-            'inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold mb-3',
-            gapTokens.tight
-          )}
-          style={{
-            background: `linear-gradient(135deg, ${colors.primary}35, ${colors.secondary}25)`,
-            color: colors.primary,
-            boxShadow: `0 0 12px ${colors.primary}30`,
-          }}
-        >
-          {config?.label || node.type}
-        </div>
+        <div className="flex items-start gap-4">
+          {/* Left side: Text content */}
+          <div className="flex-1 min-w-0">
+            {/* Type badge */}
+            <div
+              className={cn(
+                'inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold mb-3',
+                gapTokens.tight
+              )}
+              style={{
+                background: `linear-gradient(135deg, ${colors.primary}30, ${colors.secondary}20)`,
+                color: colors.primary,
+                boxShadow: `0 0 8px ${colors.primary}25`,
+              }}
+            >
+              {config?.label || node.type}
+            </div>
 
-        {/* Display name */}
-        <h3 className="text-lg font-semibold text-white mb-2">
-          {node.displayName}
-        </h3>
+            {/* Display name */}
+            <h3 className="text-base font-semibold text-white mb-1.5 leading-tight">
+              {node.displayName}
+            </h3>
 
-        {/* Key with copy */}
-        <div className={cn('flex items-center text-sm', gapTokens.default)}>
-          <Hash className="w-3.5 h-3.5 text-white/30" />
-          <span className="font-mono text-white/50 flex-1 truncate">
-            {node.key}
-          </span>
-          <CopyButton
-            onCopy={() => copy(node.key)}
-            isCopied={copied}
-            label="Copy key"
-            size="sm"
-          />
+            {/* Key with copy button */}
+            <div className={cn('flex items-center text-sm', gapTokens.tight)}>
+              <Hash className="w-3 h-3 text-white/25 flex-shrink-0" />
+              <span className="font-mono text-white/40 truncate text-xs">
+                {node.key}
+              </span>
+              <CopyButton
+                onCopy={() => copy(node.key)}
+                isCopied={copied}
+                label="Copy"
+                size="sm"
+              />
+            </div>
+          </div>
+
+          {/* Right side: 3D Preview (rotating) */}
+          <div className="flex-shrink-0">
+            <NodePreview3D
+              layer={layer as Layer}
+              realm={realm as Realm}
+              trait={trait as Trait}
+              size={100}
+              autoRotate
+            />
+          </div>
         </div>
       </div>
 

@@ -24,7 +24,9 @@ export const EmitPrimitive = memo(function EmitPrimitive({
   const ringSize = baseSize * EMIT_CONFIG.ringMultiplier;
 
   // Don't render if intensity too low
-  if (intensity < 0.1) return null;
+  if (intensity < 0.1) {
+    return null;
+  }
 
   const dur = `${timing.duration}s`;
 
