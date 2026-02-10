@@ -20,11 +20,14 @@ It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 | Schema | `schema generate`, `schema validate` | Implemented (12 artifacts) |
 | Docs | `doc generate`, `doc generate --list` | Implemented (11 views) |
 | Search | `search --query=... [--kind=...]` | Implemented (fulltext + property) |
-| Locale | `locale list`, `locale import` | Implemented |
+| Locale | `locale list`, `locale import`, `locale generate` | Implemented |
+| Knowledge | `knowledge generate`, `knowledge list` | Implemented (ATH integration) |
+| Entity | `entity seed`, `entity list`, `entity validate` | Implemented (phase-based) |
 | DB | `db seed`, `db migrate`, `db reset` | Implemented |
 | Filter | `filter build` | Implemented (JSON stdin, Studio subprocess) |
-| Blueprint | `blueprint [--view=X]` | Implemented (10 views: tree, flow, arcs, stats, glossary, cardinality + 4 analysis) |
-| TUI | `tui` | Galaxy theme, mission control, EntityCategory filter, search, detail, arc explorer, CRUD dialogs, dashboard, logo, command palette, help overlay, boot animation, effects engine, onboarding |
+| Blueprint | `blueprint [--view=X]` | Implemented (10 views) |
+| TUI | `tui` | Galaxy theme, effects engine, CRUD dialogs |
+| System | `completions`, `doctor` | Implemented |
 
 **955 tests pass** (`cargo test`). Zero clippy warnings.
 
@@ -120,6 +123,17 @@ cargo run -- search --query="page" --kind=Page --limit=20
 # Locale (Neo4j)
 cargo run -- locale list --format=table
 cargo run -- locale import --file=path/to/locale.cypher
+cargo run -- locale generate --csv=... --output=...  # Generate 20-locales.cypher
+
+# Knowledge (ATH integration)
+cargo run -- knowledge generate --tier=all           # Generate from ATH data
+cargo run -- knowledge list                          # List knowledge tiers
+
+# Entity (Phase-based seeding)
+cargo run -- entity seed --project=qrcode-ai         # Seed all phases
+cargo run -- entity seed --project=qrcode-ai --phase=1  # Seed specific phase
+cargo run -- entity list --project=qrcode-ai         # List available phases
+cargo run -- entity validate --project=qrcode-ai     # Validate phase data
 
 # Database (Neo4j)
 cargo run -- db seed                              # Execute seed Cypher files
@@ -153,6 +167,12 @@ cargo run -- blueprint --no-validate              # Skip validation for faster o
 
 # TUI (Neo4j)
 cargo run -- tui                                  # Interactive terminal UI
+
+# System utilities
+cargo run -- completions bash                     # Generate shell completions
+cargo run -- completions zsh                      # (also: fish, powershell, elvish)
+cargo run -- doctor                               # System health check
+cargo run -- doctor --skip-db                     # Skip Neo4j connectivity check
 
 # Quality
 cargo clippy -- -D warnings    # Zero warnings policy

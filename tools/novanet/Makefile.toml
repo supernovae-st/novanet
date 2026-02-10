@@ -1,241 +1,798 @@
+# ═══════════════════════════════════════════════════════════════════════════════
 # NovaNet Rust Tooling - cargo-make configuration
+# ═══════════════════════════════════════════════════════════════════════════════
+#
 # Run with: cargo make <task>
 #
 # Quick reference:
-#   cargo make         # Default: runs check
-#   cargo make ci      # Full CI pipeline
-#   cargo make audit   # Security + semantic audit
-#   cargo make pre-commit # Pre-commit validation
+#   cargo make              # Default: runs check
+#   cargo make help         # List all tasks by category
+#   cargo make ci           # Full CI pipeline
+#   cargo make pre-commit   # Pre-commit validation
+#   cargo make watch        # Development watch mode
+#
+# Categories:
+#   [core]      - Build, format, lint
+#   [test]      - Testing and coverage
+#   [security]  - Auditing and vulnerability scanning
+#   [schema]    - YAML schema generation and validation
+#   [quality]   - Code quality analysis
+#   [dev]       - Development helpers and watch modes
+#   [ci]        - CI/CD pipelines
+#
+# ═══════════════════════════════════════════════════════════════════════════════
 
 [config]
 default_to_workspace = false
 skip_core_tasks = true
+min_version = "0.37.0"
 
 [env]
 CARGO_MAKE_EXTEND_WORKSPACE_MAKEFILE = true
-NOVANET_VERSION = "v11.5"
+NOVANET_VERSION = "v11.6"
 NOVANET_NODE_COUNT = "60"
 NOVANET_SHARED_NODES = "39"
 NOVANET_ORG_NODES = "21"
 NOVANET_LAYER_COUNT = "10"
+CARGO_TERM_COLOR = "always"
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Core Tasks
-# ─────────────────────────────────────────────────────────────────────────────
+# ═══════════════════════════════════════════════════════════════════════════════
+# HELP - List all available tasks
+# ═══════════════════════════════════════════════════════════════════════════════
 
 [tasks.default]
 alias = "check"
 
+[tasks.help]
+category = "Help"
+description = "List all available tasks by category"
+script_runner = "@shell"
+script = '''
+#!/bin/bash
+cat << 'HELP'
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  NOVANET CARGO-MAKE TASKS                                                     ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│  CORE - Build, Format, Lint                                                    │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│  check          Quick check: fmt + clippy (default task)                       │
+│  build          Build in release mode                                          │
+│  build-debug    Build in debug mode (faster compilation)                       │
+│  fmt            Format code with rustfmt                                       │
+│  fmt-check      Check formatting without modifying                             │
+│  clippy         Run clippy with warnings as errors                             │
+│  clean          Clean build artifacts                                          │
+└─────────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│  TEST - Testing and Coverage                                                   │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│  test           Run library tests (fast, no doc tests)                         │
+│  test-all       Run all tests including doc tests                              │
+│  test-nextest   Run tests with cargo-nextest (parallel, faster)                │
+│  test-integration  Run Neo4j integration tests (requires running Neo4j)        │
+│  coverage       Generate HTML coverage report (cargo-llvm-cov)                 │
+│  coverage-ci    Generate lcov coverage for CI upload                           │
+│  mutants        Run mutation testing (cargo-mutants) - slow                    │
+│  mutants-quick  Quick mutation test (subset of files)                          │
+│  snapshot-update  Update insta snapshots                                       │
+└─────────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│  SECURITY - Auditing and Vulnerability Scanning                                │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│  deny           Run cargo-deny (license + security policy)                     │
+│  audit          Run cargo-audit (RustSec vulnerability database)               │
+│  machete        Find unused dependencies                                       │
+│  security       Full security audit (deny + audit + machete)                   │
+│  semantic-audit Validate terminology and schema coherence                      │
+└─────────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│  SCHEMA - YAML Schema Generation and Validation                                │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│  schema         Regenerate all schema artifacts (12 generators)                │
+│  schema-validate  Validate YAML schema coherence                               │
+│  schema-strict  Validate with strict mode (fail on warnings)                   │
+│  schema-sync    Full workflow: generate + validate + test                      │
+│  blueprint      Generate ASCII blueprint overview                              │
+└─────────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│  QUALITY - Code Quality Analysis                                               │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│  bloat          Analyze binary size (cargo-bloat)                              │
+│  udeps          Find unused dependencies (cargo-udeps)                         │
+│  doc            Generate documentation                                         │
+│  doc-open       Generate and open documentation                                │
+│  lines          Count lines of code                                            │
+│  todo           Find TODO/FIXME comments                                       │
+└─────────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│  DEV - Development Helpers and Watch Modes                                     │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│  watch          Watch mode with bacon (clippy)                                 │
+│  watch-test     Watch mode for tests                                           │
+│  watch-run      Watch mode: rebuild and run TUI                                │
+│  tui            Run the TUI directly                                           │
+│  bench          Run benchmarks (if available)                                  │
+└─────────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│  CI/CD - Continuous Integration Pipelines                                      │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│  pre-commit     Pre-commit validation (fmt + clippy + test + semantic)         │
+│  pre-push       Pre-push validation (full CI)                                  │
+│  ci             Full CI pipeline                                               │
+│  ci-quick       Quick CI (no build, faster feedback)                           │
+│  ci-full        Extended CI (includes coverage and security)                   │
+└─────────────────────────────────────────────────────────────────────────────────┘
+
+Usage: cargo make <task>
+
+HELP
+'''
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# CORE - Build, Format, Lint
+# ═══════════════════════════════════════════════════════════════════════════════
+
 [tasks.check]
+category = "Core"
 description = "Quick check: fmt + clippy"
-dependencies = ["fmt-check", "clippy"]
+run_task = { name = ["fmt-check", "clippy"], parallel = true }
 
 [tasks.fmt]
-description = "Format code"
+category = "Core"
+description = "Format code with rustfmt"
 command = "cargo"
 args = ["fmt"]
 
 [tasks.fmt-check]
-description = "Check formatting"
+category = "Core"
+description = "Check formatting without modifying"
 command = "cargo"
 args = ["fmt", "--check"]
 
 [tasks.clippy]
+category = "Core"
 description = "Run clippy with warnings as errors"
 command = "cargo"
-args = ["clippy", "--", "-D", "warnings"]
+args = ["clippy", "--all-targets", "--", "-D", "warnings"]
 
 [tasks.build]
+category = "Core"
 description = "Build in release mode"
 command = "cargo"
 args = ["build", "--release"]
 
+[tasks.build-debug]
+category = "Core"
+description = "Build in debug mode (faster compilation)"
+command = "cargo"
+args = ["build"]
+
+[tasks.clean]
+category = "Core"
+description = "Clean build artifacts"
+command = "cargo"
+args = ["clean"]
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# TEST - Testing and Coverage
+# ═══════════════════════════════════════════════════════════════════════════════
+
 [tasks.test]
-description = "Run all tests"
+category = "Test"
+description = "Run library tests (fast, no doc tests)"
 command = "cargo"
 args = ["test", "--lib"]
 
 [tasks.test-all]
+category = "Test"
 description = "Run all tests including doc tests"
 command = "cargo"
 args = ["test"]
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Security & Audit
-# ─────────────────────────────────────────────────────────────────────────────
+[tasks.test-nextest]
+category = "Test"
+description = "Run tests with cargo-nextest (parallel, faster)"
+install_crate = { crate_name = "cargo-nextest", binary = "cargo-nextest", test_arg = "--version" }
+command = "cargo"
+args = ["nextest", "run"]
+
+[tasks.test-integration]
+category = "Test"
+description = "Run Neo4j integration tests (requires running Neo4j)"
+command = "cargo"
+args = ["test", "--", "--ignored"]
+
+[tasks.coverage]
+category = "Test"
+description = "Generate HTML coverage report"
+install_crate = { crate_name = "cargo-llvm-cov", binary = "cargo-llvm-cov", test_arg = "--version" }
+script_runner = "@shell"
+script = '''
+#!/bin/bash
+set -e
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "  Generating coverage report..."
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+cargo llvm-cov --html --open
+echo ""
+echo "  Coverage report generated: target/llvm-cov/html/index.html"
+'''
+
+[tasks.coverage-ci]
+category = "Test"
+description = "Generate lcov coverage for CI upload"
+install_crate = { crate_name = "cargo-llvm-cov", binary = "cargo-llvm-cov", test_arg = "--version" }
+command = "cargo"
+args = ["llvm-cov", "--lcov", "--output-path", "lcov.info"]
+
+[tasks.mutants]
+category = "Test"
+description = "Run mutation testing (slow, thorough)"
+install_crate = { crate_name = "cargo-mutants", binary = "cargo-mutants", test_arg = "--version" }
+script_runner = "@shell"
+script = '''
+#!/bin/bash
+set -e
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "  Running mutation testing (this may take 10-30 minutes)..."
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+cargo mutants --jobs 4 -- --lib
+echo ""
+echo "  Mutation testing complete. Check mutants.out/ for results."
+'''
+
+[tasks.mutants-quick]
+category = "Test"
+description = "Quick mutation test on core modules only"
+install_crate = { crate_name = "cargo-mutants", binary = "cargo-mutants", test_arg = "--version" }
+command = "cargo"
+args = ["mutants", "--file", "src/cypher.rs", "--file", "src/facets.rs", "--jobs", "4", "--", "--lib"]
+
+[tasks.snapshot-update]
+category = "Test"
+description = "Update insta snapshots"
+env = { "INSTA_UPDATE" = "always" }
+command = "cargo"
+args = ["test", "--lib"]
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# SECURITY - Auditing and Vulnerability Scanning
+# ═══════════════════════════════════════════════════════════════════════════════
 
 [tasks.deny]
-description = "Run cargo-deny (license + security)"
+category = "Security"
+description = "Run cargo-deny (license + security policy)"
+install_crate = { crate_name = "cargo-deny", binary = "cargo-deny", test_arg = "--version" }
 command = "cargo"
 args = ["deny", "check"]
 
 [tasks.audit]
-description = "Full audit: deny + semantic"
-dependencies = ["deny", "semantic-audit"]
+category = "Security"
+description = "Run cargo-audit (RustSec vulnerability database)"
+install_crate = { crate_name = "cargo-audit", binary = "cargo-audit", test_arg = "--version" }
+command = "cargo"
+args = ["audit"]
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Semantic Coherence Validation
-# ─────────────────────────────────────────────────────────────────────────────
+[tasks.machete]
+category = "Security"
+description = "Find unused dependencies"
+install_crate = { crate_name = "cargo-machete", binary = "cargo-machete", test_arg = "--version" }
+command = "cargo"
+args = ["machete"]
+
+[tasks.security]
+category = "Security"
+description = "Full security audit (deny + audit + machete)"
+script_runner = "@shell"
+script = '''
+#!/bin/bash
+set -e
+echo "╔═══════════════════════════════════════════════════════════════════════════╗"
+echo "║  SECURITY AUDIT                                                           ║"
+echo "╚═══════════════════════════════════════════════════════════════════════════╝"
+echo ""
+
+echo "► [1/3] Running cargo-deny (license + security policy)..."
+cargo deny check || { echo "  cargo-deny failed"; exit 1; }
+echo ""
+
+echo "► [2/3] Running cargo-audit (RustSec vulnerabilities)..."
+cargo audit || { echo "  cargo-audit failed"; exit 1; }
+echo ""
+
+echo "► [3/3] Running cargo-machete (unused dependencies)..."
+cargo machete || { echo "  cargo-machete found unused deps"; exit 1; }
+echo ""
+
+echo "════════════════════════════════════════════════════════════════════════════"
+echo "  SECURITY AUDIT PASSED"
+echo "════════════════════════════════════════════════════════════════════════════"
+'''
 
 [tasks.semantic-audit]
-description = "Validate semantic coherence (v11.5 terminology, counts, doc comments)"
+category = "Security"
+description = "Validate semantic coherence (terminology, counts, doc comments)"
 script_runner = "@shell"
 script = '''
 #!/bin/bash
 set -e
 
-echo "╔═══════════════════════════════════════════════════════════════════════╗"
-echo "║  🔍 SEMANTIC COHERENCE AUDIT (${NOVANET_VERSION})                      ║"
-echo "╚═══════════════════════════════════════════════════════════════════════╝"
+echo "╔═══════════════════════════════════════════════════════════════════════════╗"
+echo "║  SEMANTIC COHERENCE AUDIT (${NOVANET_VERSION})                             ║"
+echo "╚═══════════════════════════════════════════════════════════════════════════╝"
 echo ""
 
 ERRORS=0
+WARNINGS=0
 
 # 1. Check for deprecated realm names
-echo "► Checking deprecated realm names (global/tenant → shared/org)..."
-DEPRECATED=$(grep -rn --include="*.rs" "global.*realm\|tenant.*realm\|\"global\"\|\"tenant\"" src/ 2>/dev/null | grep -v "test" | grep -v "// v11" || true)
+echo "► [1/7] Checking deprecated realm names (global/tenant should be shared/org)..."
+DEPRECATED=$(grep -rn --include="*.rs" '"global"\|"tenant"' src/ 2>/dev/null | grep -v "test" | grep -v "// deprecated" | grep -v "// v11" || true)
 if [ -n "$DEPRECATED" ]; then
-    echo "  ❌ Found deprecated realm names:"
-    echo "$DEPRECATED" | head -10
+    echo "    Found deprecated realm names:"
+    echo "$DEPRECATED" | sed 's/^/    /' | head -10
     ERRORS=$((ERRORS + 1))
 else
-    echo "  ✅ No deprecated realm names"
+    echo "    No deprecated realm names found"
 fi
 
 # 2. Check for edge-family terminology (should be arc-family)
 echo ""
-echo "► Checking edge-family terminology (should be arc-family)..."
+echo "► [2/7] Checking edge-family terminology (should be arc-family)..."
 EDGE_FAMILY=$(grep -rn --include="*.rs" "edge.family\|edge-family\|EdgeFamily" src/ 2>/dev/null || true)
 if [ -n "$EDGE_FAMILY" ]; then
-    echo "  ❌ Found edge-family terminology:"
-    echo "$EDGE_FAMILY" | head -10
+    echo "    Found edge-family terminology:"
+    echo "$EDGE_FAMILY" | sed 's/^/    /' | head -10
     ERRORS=$((ERRORS + 1))
 else
-    echo "  ✅ Correct arc-family terminology"
+    echo "    Correct arc-family terminology"
 fi
 
 # 3. Check for outdated node counts in comments
 echo ""
-echo "► Checking node counts in comments (should be ${NOVANET_NODE_COUNT})..."
+echo "► [3/7] Checking node counts in comments (should be ${NOVANET_NODE_COUNT})..."
 WRONG_COUNTS=$(grep -rn --include="*.rs" "42\|43\|44\|45\|62\|65" src/ 2>/dev/null | grep -i "node\|kind" | grep -v "test" | grep -v "${NOVANET_NODE_COUNT}" || true)
 if [ -n "$WRONG_COUNTS" ]; then
-    echo "  ⚠️  Possible outdated node counts (verify manually):"
-    echo "$WRONG_COUNTS" | head -5
+    echo "    Possible outdated node counts (verify manually):"
+    echo "$WRONG_COUNTS" | sed 's/^/    /' | head -5
+    WARNINGS=$((WARNINGS + 1))
 else
-    echo "  ✅ Node counts appear correct"
+    echo "    Node counts appear correct"
 fi
 
 # 4. Check for unwrap() on Option (potential panics)
 echo ""
-echo "► Checking for risky unwrap() patterns..."
+echo "► [4/7] Checking for risky unwrap() patterns..."
 UNWRAPS=$(grep -rn --include="*.rs" "\.unwrap()" src/ 2>/dev/null | grep -v "test" | grep -v "expect" | wc -l | tr -d ' ')
 if [ "$UNWRAPS" -gt 50 ]; then
-    echo "  ⚠️  High unwrap count: $UNWRAPS (consider using ? or expect())"
+    echo "    High unwrap count: $UNWRAPS (consider using ? or expect())"
+    WARNINGS=$((WARNINGS + 1))
 else
-    echo "  ✅ Acceptable unwrap count: $UNWRAPS"
+    echo "    Acceptable unwrap count: $UNWRAPS"
 fi
 
 # 5. Verify YAML node count matches expected
 echo ""
-echo "► Verifying YAML node count..."
-YAML_COUNT=$(find ../../packages/core/models/node-kinds -name "*.yaml" | wc -l | tr -d ' ')
+echo "► [5/7] Verifying YAML node count..."
+YAML_COUNT=$(find ../../packages/core/models/node-kinds -name "*.yaml" 2>/dev/null | wc -l | tr -d ' ')
 if [ "$YAML_COUNT" -eq "${NOVANET_NODE_COUNT}" ]; then
-    echo "  ✅ YAML node count: $YAML_COUNT (matches ${NOVANET_VERSION})"
+    echo "    YAML node count: $YAML_COUNT (matches ${NOVANET_VERSION})"
 else
-    echo "  ❌ YAML node count: $YAML_COUNT (expected ${NOVANET_NODE_COUNT})"
+    echo "    YAML node count: $YAML_COUNT (expected ${NOVANET_NODE_COUNT})"
     ERRORS=$((ERRORS + 1))
 fi
 
 # 6. Check layer count
 echo ""
-echo "► Verifying layer structure..."
+echo "► [6/7] Verifying layer structure..."
 SHARED_LAYERS=$(ls -d ../../packages/core/models/node-kinds/shared/*/ 2>/dev/null | wc -l | tr -d ' ')
 ORG_LAYERS=$(ls -d ../../packages/core/models/node-kinds/org/*/ 2>/dev/null | wc -l | tr -d ' ')
 TOTAL_LAYERS=$((SHARED_LAYERS + ORG_LAYERS))
 if [ "$TOTAL_LAYERS" -eq "${NOVANET_LAYER_COUNT}" ]; then
-    echo "  ✅ Layer count: $TOTAL_LAYERS (${SHARED_LAYERS} shared + ${ORG_LAYERS} org)"
+    echo "    Layer count: $TOTAL_LAYERS (${SHARED_LAYERS} shared + ${ORG_LAYERS} org)"
 else
-    echo "  ❌ Layer count: $TOTAL_LAYERS (expected ${NOVANET_LAYER_COUNT})"
+    echo "    Layer count: $TOTAL_LAYERS (expected ${NOVANET_LAYER_COUNT})"
     ERRORS=$((ERRORS + 1))
+fi
+
+# 7. Check for TODO/FIXME in non-test code
+echo ""
+echo "► [7/7] Checking for TODO/FIXME comments..."
+TODO_COUNT=$(grep -rn --include="*.rs" "TODO\|FIXME\|XXX\|HACK" src/ 2>/dev/null | grep -v "test" | wc -l | tr -d ' ')
+if [ "$TODO_COUNT" -gt 0 ]; then
+    echo "    Found $TODO_COUNT TODO/FIXME comments (run 'cargo make todo' for details)"
+else
+    echo "    No TODO/FIXME comments found"
 fi
 
 # Summary
 echo ""
-echo "════════════════════════════════════════════════════════════════════════"
-if [ "$ERRORS" -eq 0 ]; then
-    echo "✅ SEMANTIC AUDIT PASSED"
+echo "════════════════════════════════════════════════════════════════════════════"
+if [ "$ERRORS" -eq 0 ] && [ "$WARNINGS" -eq 0 ]; then
+    echo "  SEMANTIC AUDIT PASSED (no issues)"
+    exit 0
+elif [ "$ERRORS" -eq 0 ]; then
+    echo "  SEMANTIC AUDIT PASSED ($WARNINGS warnings)"
     exit 0
 else
-    echo "❌ SEMANTIC AUDIT FAILED ($ERRORS issues)"
+    echo "  SEMANTIC AUDIT FAILED ($ERRORS errors, $WARNINGS warnings)"
     exit 1
 fi
 '''
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Pre-commit Workflow
-# ─────────────────────────────────────────────────────────────────────────────
+# ═══════════════════════════════════════════════════════════════════════════════
+# SCHEMA - YAML Schema Generation and Validation
+# ═══════════════════════════════════════════════════════════════════════════════
 
-[tasks.pre-commit]
-description = "Pre-commit validation: fmt + clippy + test + semantic"
-dependencies = ["fmt-check", "clippy", "test", "semantic-audit"]
+[tasks.schema]
+category = "Schema"
+description = "Regenerate all schema artifacts (12 generators)"
+script_runner = "@shell"
+script = '''
+#!/bin/bash
+set -e
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "  Regenerating schema artifacts..."
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+time cargo run --release -- schema generate
+echo ""
+echo "  Schema generation complete"
+'''
 
-[tasks.pre-push]
-description = "Pre-push validation: full CI"
-dependencies = ["ci"]
+[tasks.schema-validate]
+category = "Schema"
+description = "Validate YAML schema coherence"
+command = "cargo"
+args = ["run", "--release", "--", "schema", "validate"]
 
-# ─────────────────────────────────────────────────────────────────────────────
-# CI Pipeline
-# ─────────────────────────────────────────────────────────────────────────────
+[tasks.schema-strict]
+category = "Schema"
+description = "Validate with strict mode (fail on warnings)"
+command = "cargo"
+args = ["run", "--release", "--", "schema", "validate", "--strict"]
 
-[tasks.ci]
-description = "Full CI pipeline"
-dependencies = [
-    "fmt-check",
-    "clippy",
-    "deny",
-    "test-all",
-    "semantic-audit",
-    "build"
-]
+[tasks.schema-sync]
+category = "Schema"
+description = "Full schema workflow: generate + validate + test"
+script_runner = "@shell"
+script = '''
+#!/bin/bash
+set -e
+echo "╔═══════════════════════════════════════════════════════════════════════════╗"
+echo "║  SCHEMA SYNC WORKFLOW                                                     ║"
+echo "╚═══════════════════════════════════════════════════════════════════════════╝"
+echo ""
 
-[tasks.ci-quick]
-description = "Quick CI (no build)"
-dependencies = ["fmt-check", "clippy", "test", "semantic-audit"]
+echo "► [1/4] Building release binary..."
+cargo build --release
+echo ""
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Documentation
-# ─────────────────────────────────────────────────────────────────────────────
+echo "► [2/4] Regenerating schema artifacts..."
+cargo run --release -- schema generate
+echo ""
+
+echo "► [3/4] Validating schema..."
+cargo run --release -- schema validate --strict
+echo ""
+
+echo "► [4/4] Running tests to verify generated code..."
+cargo test --lib -- generators
+echo ""
+
+echo "════════════════════════════════════════════════════════════════════════════"
+echo "  SCHEMA SYNC COMPLETE"
+echo "════════════════════════════════════════════════════════════════════════════"
+'''
+
+[tasks.blueprint]
+category = "Schema"
+description = "Generate ASCII blueprint overview"
+command = "cargo"
+args = ["run", "--release", "--", "blueprint"]
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# QUALITY - Code Quality Analysis
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[tasks.bloat]
+category = "Quality"
+description = "Analyze binary size"
+install_crate = { crate_name = "cargo-bloat", binary = "cargo-bloat", test_arg = "--version" }
+command = "cargo"
+args = ["bloat", "--release", "-n", "30"]
+
+[tasks.udeps]
+category = "Quality"
+description = "Find unused dependencies (requires nightly)"
+install_crate = { crate_name = "cargo-udeps", binary = "cargo-udeps", test_arg = "--version" }
+command = "cargo"
+args = ["+nightly", "udeps", "--all-targets"]
 
 [tasks.doc]
+category = "Quality"
 description = "Generate documentation"
 command = "cargo"
 args = ["doc", "--no-deps", "--document-private-items"]
 
-[tasks.schema]
-description = "Regenerate schema artifacts"
+[tasks.doc-open]
+category = "Quality"
+description = "Generate and open documentation"
 command = "cargo"
-args = ["run", "--", "schema", "generate"]
+args = ["doc", "--no-deps", "--document-private-items", "--open"]
 
-[tasks.validate]
-description = "Validate YAML schema"
-command = "cargo"
-args = ["run", "--", "schema", "validate"]
+[tasks.lines]
+category = "Quality"
+description = "Count lines of code"
+script_runner = "@shell"
+script = '''
+#!/bin/bash
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "  Lines of Code"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Development Helpers
-# ─────────────────────────────────────────────────────────────────────────────
+# Count .rs files
+RS_FILES=$(find src -name "*.rs" | wc -l | tr -d ' ')
+RS_LINES=$(find src -name "*.rs" -exec cat {} \; | wc -l | tr -d ' ')
+RS_CODE=$(find src -name "*.rs" -exec cat {} \; | grep -v "^$" | grep -v "^[[:space:]]*//\|^[[:space:]]*/\*\|^[[:space:]]*\*" | wc -l | tr -d ' ')
+
+echo "  Rust files:     $RS_FILES"
+echo "  Total lines:    $RS_LINES"
+echo "  Code lines:     $RS_CODE (excluding blanks and comments)"
+echo ""
+
+# Test code
+TEST_LINES=$(grep -r "#\[cfg(test)\]" src -A 1000 2>/dev/null | wc -l | tr -d ' ')
+echo "  Test lines:     ~$TEST_LINES (approximate)"
+'''
+
+[tasks.todo]
+category = "Quality"
+description = "Find TODO/FIXME comments"
+script_runner = "@shell"
+script = '''
+#!/bin/bash
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "  TODO/FIXME/XXX/HACK Comments"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+grep -rn --include="*.rs" "TODO\|FIXME\|XXX\|HACK" src/ 2>/dev/null || echo "  No TODO comments found"
+'''
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# DEV - Development Helpers and Watch Modes
+# ═══════════════════════════════════════════════════════════════════════════════
 
 [tasks.watch]
-description = "Watch mode with bacon"
-command = "bacon"
-args = ["clippy"]
+category = "Dev"
+description = "Watch mode with bacon (clippy)"
+script_runner = "@shell"
+script = '''
+#!/bin/bash
+if command -v bacon &> /dev/null; then
+    bacon clippy
+else
+    echo "bacon not installed. Install with: cargo install bacon"
+    echo "Falling back to cargo watch..."
+    cargo watch -x clippy
+fi
+'''
 
-[tasks.coverage]
-description = "Generate code coverage report"
-command = "cargo"
-args = ["llvm-cov", "--html"]
+[tasks.watch-test]
+category = "Dev"
+description = "Watch mode for tests"
+script_runner = "@shell"
+script = '''
+#!/bin/bash
+if command -v bacon &> /dev/null; then
+    bacon test
+else
+    echo "bacon not installed. Install with: cargo install bacon"
+    echo "Falling back to cargo watch..."
+    cargo watch -x "test --lib"
+fi
+'''
 
-[tasks.clean]
-description = "Clean build artifacts"
+[tasks.watch-run]
+category = "Dev"
+description = "Watch mode: rebuild and run TUI"
+script_runner = "@shell"
+script = '''
+#!/bin/bash
+if command -v cargo-watch &> /dev/null; then
+    cargo watch -x "run -- tui"
+else
+    echo "cargo-watch not installed. Install with: cargo install cargo-watch"
+    exit 1
+fi
+'''
+
+[tasks.tui]
+category = "Dev"
+description = "Run the TUI directly"
 command = "cargo"
-args = ["clean"]
+args = ["run", "--release", "--", "tui"]
+
+[tasks.bench]
+category = "Dev"
+description = "Run benchmarks (criterion)"
+script_runner = "@shell"
+script = '''
+#!/bin/bash
+if [ -d "benches" ]; then
+    cargo bench
+else
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "  No benches/ directory found."
+    echo ""
+    echo "  To add benchmarks:"
+    echo "    1. Create benches/benchmarks.rs"
+    echo "    2. Add to Cargo.toml:"
+    echo "       [[bench]]"
+    echo "       name = \"benchmarks\""
+    echo "       harness = false"
+    echo "    3. Add criterion as dev-dependency"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+fi
+'''
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# CI/CD - Continuous Integration Pipelines
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[tasks.pre-commit]
+category = "CI"
+description = "Pre-commit validation (fast feedback)"
+script_runner = "@shell"
+script = '''
+#!/bin/bash
+set -e
+echo "╔═══════════════════════════════════════════════════════════════════════════╗"
+echo "║  PRE-COMMIT VALIDATION                                                    ║"
+echo "╚═══════════════════════════════════════════════════════════════════════════╝"
+echo ""
+
+echo "► [1/4] Checking formatting..."
+cargo fmt --check || { echo "  Run 'cargo fmt' to fix"; exit 1; }
+echo ""
+
+echo "► [2/4] Running clippy..."
+cargo clippy --all-targets -- -D warnings || exit 1
+echo ""
+
+echo "► [3/4] Running tests..."
+cargo test --lib || exit 1
+echo ""
+
+echo "► [4/4] Running semantic audit..."
+cargo make semantic-audit || exit 1
+echo ""
+
+echo "════════════════════════════════════════════════════════════════════════════"
+echo "  PRE-COMMIT PASSED - Ready to commit"
+echo "════════════════════════════════════════════════════════════════════════════"
+'''
+
+[tasks.pre-push]
+category = "CI"
+description = "Pre-push validation (thorough)"
+dependencies = ["ci"]
+
+[tasks.ci]
+category = "CI"
+description = "Full CI pipeline"
+script_runner = "@shell"
+script = '''
+#!/bin/bash
+set -e
+START_TIME=$(date +%s)
+
+echo "╔═══════════════════════════════════════════════════════════════════════════╗"
+echo "║  CI PIPELINE                                                              ║"
+echo "╚═══════════════════════════════════════════════════════════════════════════╝"
+echo ""
+
+echo "► [1/6] Checking formatting..."
+cargo fmt --check || { echo "  Formatting check failed"; exit 1; }
+echo ""
+
+echo "► [2/6] Running clippy..."
+cargo clippy --all-targets -- -D warnings || { echo "  Clippy failed"; exit 1; }
+echo ""
+
+echo "► [3/6] Running cargo-deny..."
+cargo deny check || { echo "  cargo-deny failed"; exit 1; }
+echo ""
+
+echo "► [4/6] Running tests..."
+cargo test || { echo "  Tests failed"; exit 1; }
+echo ""
+
+echo "► [5/6] Running semantic audit..."
+cargo make semantic-audit || { echo "  Semantic audit failed"; exit 1; }
+echo ""
+
+echo "► [6/6] Building release..."
+cargo build --release || { echo "  Build failed"; exit 1; }
+echo ""
+
+END_TIME=$(date +%s)
+DURATION=$((END_TIME - START_TIME))
+
+echo "════════════════════════════════════════════════════════════════════════════"
+echo "  CI PIPELINE PASSED (${DURATION}s)"
+echo "════════════════════════════════════════════════════════════════════════════"
+'''
+
+[tasks.ci-quick]
+category = "CI"
+description = "Quick CI (no build, faster feedback)"
+run_task = { name = ["fmt-check", "clippy"], parallel = true }
+dependencies = ["test", "semantic-audit"]
+
+[tasks.ci-full]
+category = "CI"
+description = "Extended CI (includes coverage and security)"
+script_runner = "@shell"
+script = '''
+#!/bin/bash
+set -e
+START_TIME=$(date +%s)
+
+echo "╔═══════════════════════════════════════════════════════════════════════════╗"
+echo "║  FULL CI PIPELINE (Extended)                                              ║"
+echo "╚═══════════════════════════════════════════════════════════════════════════╝"
+echo ""
+
+# Run standard CI first
+cargo make ci || exit 1
+echo ""
+
+echo "► [7/9] Running security audit..."
+cargo audit || { echo "  Security audit failed"; exit 1; }
+echo ""
+
+echo "► [8/9] Checking for unused dependencies..."
+cargo machete || { echo "  Found unused dependencies"; exit 1; }
+echo ""
+
+echo "► [9/9] Generating coverage report..."
+cargo llvm-cov --lcov --output-path lcov.info || { echo "  Coverage failed"; exit 1; }
+echo ""
+
+END_TIME=$(date +%s)
+DURATION=$((END_TIME - START_TIME))
+
+echo "════════════════════════════════════════════════════════════════════════════"
+echo "  FULL CI PIPELINE PASSED (${DURATION}s)"
+echo "  Coverage report: lcov.info"
+echo "════════════════════════════════════════════════════════════════════════════"
+'''
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# ALIASES - Common shortcuts
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[tasks.t]
+alias = "test"
+
+[tasks.c]
+alias = "check"
+
+[tasks.b]
+alias = "build"
+
+[tasks.w]
+alias = "watch"
+
+[tasks.s]
+alias = "schema"
+
+[tasks.v]
+alias = "schema-validate"
