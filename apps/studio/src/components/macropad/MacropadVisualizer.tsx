@@ -56,6 +56,25 @@ const SuperNovaePad3D = dynamic(
   }
 );
 
+// Low-poly version with rainbow RGB underglow
+const CreatorBoardLowPoly = dynamic(
+  () => import('./CreatorBoardLowPoly').then((mod) => {
+    console.log('[MacropadVisualizer] Low-poly 3D component loaded');
+    return mod.default;
+  }),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="flex items-center justify-center h-full bg-[#0f172a]">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-8 h-8 border-2 border-cyan-500/30 border-t-cyan-400 rounded-full animate-spin" />
+          <p className="text-white/40 text-xs font-mono">Loading Rainbow RGB...</p>
+        </div>
+      </div>
+    ),
+  }
+);
+
 // =============================================================================
 // Types (matches work-louder-micro.json schema)
 // =============================================================================
@@ -404,7 +423,7 @@ export const MacropadVisualizer = memo(function MacropadVisualizer() {
           {/* 3D Visualization */}
           <div className="flex-1 relative min-h-[400px]">
             <div className="absolute inset-0">
-              <SuperNovaePad3D
+              <CreatorBoardLowPoly
                 selectedKey={selectedKey}
                 activeLayer={activeLayer}
                 layers={config.layers}
