@@ -16,7 +16,7 @@
  * - Stable action references via useShallow
  */
 
-import { useCallback, useEffect, useMemo, useRef, useState, lazy, Suspense } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { Box, Keyboard, X, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -39,10 +39,8 @@ function getHoverNodeConfig(node: HoverNodeInfo): NodeTypeConfig | null {
   return NODE_TYPE_CONFIG[node.type as NodeType] || null;
 }
 
-// Lazy load Graph2D - saves ~400KB from initial bundle
-const Graph2D = lazy(() =>
-  import('@/components/graph').then((mod) => ({ default: mod.Graph2D }))
-);
+// Import GraphCanvas for 2D/3D view switching
+import { GraphCanvas } from '@/components/graph';
 import { GraphErrorBoundary } from '@/components/ui/ErrorBoundary';
 import { StatsCounter, Pill, Divider, RefreshButton, LayerIcon, MatrixRainOverlay, MatrixExplosionOverlay } from '@/components/ui';
 import { NavigationModeToggle } from '@/components/toolbar/NavigationModeToggle';
@@ -610,46 +608,18 @@ export default function HomePage() {
               <div className="absolute inset-0 overflow-auto">
                 <RawView />
               </div>
-            ) : uiState.viewMode === '2d' ? (
-              <GraphErrorBoundary>
-                <Suspense
-                  fallback={
-                    <div className="absolute inset-0 flex items-center justify-center bg-black">
-                      <div className={cn('flex flex-col items-center', gapTokens.large)}>
-                        <Loader2 className={cn('text-novanet-400 animate-spin', 'w-8 h-8')} />
-                        <span className="text-sm text-white/50">Loading graph...</span>
-                      </div>
-                    </div>
-                  }
-                >
-                  <Graph2D
-                    className="absolute inset-0"
-                    showMinimap={uiState.minimapVisible}
-                    showControls={true}
-                    onNodeDoubleClick={handleExpandNode}
-                    onPaneClick={handlePaneClick}
-                  />
-                </Suspense>
-              </GraphErrorBoundary>
             ) : (
-              // 3D view placeholder
-              <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-black via-zinc-950 to-black">
-                <div className="text-center">
-                  <div className="w-20 h-20 rounded-2xl bg-white/5 flex items-center justify-center mx-auto mb-6">
-                    <Box className="w-10 h-10 text-white/40" />
-                  </div>
-                  <h1 className="text-2xl font-semibold text-white/70 mb-2">3D Graph View</h1>
-                  <p className="text-sm text-white/40 mb-6 max-w-md">
-                    Immersive 3D visualization coming soon. Navigate through your knowledge graph in three dimensions.
-                  </p>
-                  <button
-                    onClick={uiActions.toggleViewMode}
-                    className="px-6 py-2.5 bg-novanet-500 text-white rounded-xl hover:bg-novanet-600 transition-colors font-medium"
-                  >
-                    Switch to 2D
-                  </button>
-                </div>
-              </div>
+              /* GraphCanvas handles 2D/3D view switching internally */
+              <GraphErrorBoundary>
+                <GraphCanvas
+                  className="absolute inset-0"
+                  showMinimap={uiState.minimapVisible}
+                  showControls={true}
+                  onNodeDoubleClick={handleExpandNode}
+                  onPaneClick={handlePaneClick}
+                  showViewToggle={true}
+                />
+              </GraphErrorBoundary>
             )}
 
             {/* Matrix Rain Overlay - shows during Data ↔ Schema transitions */}

@@ -5,7 +5,8 @@
  *
  * Features:
  * - View switcher: Ego, Arcs, Flow, Context
- * - Mermaid diagram rendering
+ * - EgoMiniGraph (React Flow) for ego view
+ * - Mermaid diagram rendering for other views
  * - Relations list with navigation
  * - Context view dropdown (type-specific)
  */
@@ -17,6 +18,7 @@ import { cn } from '@/lib/utils';
 import { useCopyFeedback } from '@/hooks';
 import { useUIStore } from '@/stores/uiStore';
 import { RelationNavigationCard } from '@/components/ui/detail-panel';
+import { EgoMiniGraph } from '@/components/graph/mini';
 import { gapTokens } from '@/design/tokens';
 import type { GraphNode } from '@/types';
 import type { Edge } from '@xyflow/react';
@@ -287,8 +289,18 @@ export const GraphTab = memo(function GraphTab({
             transition={{ duration: 0.1 }}
             className="p-4"
           >
-            {/* Mermaid diagram */}
-            <MermaidDiagram code={diagramCode} isLoading={isLoading} />
+            {/* Ego view: React Flow mini-graph */}
+            {activeView === 'ego' ? (
+              <EgoMiniGraph
+                centerNode={node}
+                relatedEdges={relatedEdges}
+                relatedNodes={relatedNodes}
+                onNodeClick={(nodeId) => setSelectedNode(nodeId)}
+              />
+            ) : (
+              /* Other views: Mermaid diagram placeholder */
+              <MermaidDiagram code={diagramCode} isLoading={isLoading} />
+            )}
 
             {/* Relations list */}
             {activeView === 'ego' && relatedEdges.length > 0 && (
