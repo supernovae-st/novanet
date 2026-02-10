@@ -1,0 +1,265 @@
+# models/nodes/project/foundation/brand-identity.yaml
+# BrandIdentity - Visual and artistic direction (invariant, not localized)
+
+node:
+  name: BrandIdentity
+  realm: org
+  layer: foundation
+  trait: invariant
+  icon: "🔷"
+  description: "Visual style, colors, typography, and artistic direction - universal across locales"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # STANDARD PROPERTIES (v7.1.0)
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  standard_properties:
+    key:
+      type: string
+      required: true
+      description: "BrandIdentity identifier. Format: brand-{identifier}"
+      pattern: "^brand-[a-z0-9-]+$"
+      example: "brand-qrcodeai"
+
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable name"
+      example: "QR Code AI Brand Identity"
+
+    description:
+      type: string
+      required: true
+      description: "Short description of the brand identity"
+      example: "Visual and artistic direction for QR Code AI"
+
+    llm_context:
+      type: string
+      required: true
+      description: "LLM generation hints. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation].'"
+      example: "USE: for image generation prompts. TRIGGERS: brand, colors, style. NOT: copywriting aspects."
+
+    created_at:
+      type: datetime
+      required: true
+
+    updated_at:
+      type: datetime
+      required: true
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # BRANDIDENTITY-SPECIFIC PROPERTIES
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  properties:
+    # ─────────────────────────────────────────────────────────────────────────────
+    # Color Palette
+    # ─────────────────────────────────────────────────────────────────────────────
+    color_primary:
+      type: string
+      required: true
+      description: "Main brand color (hex)"
+      example: "#6366F1"
+
+    color_secondary:
+      type: string
+      required: false
+      description: "Secondary brand color (hex)"
+      example: "#EC4899"
+
+    color_accent:
+      type: string
+      required: false
+      description: "Accent color (hex)"
+      example: "#10B981"
+
+    color_background:
+      type: string
+      required: false
+      description: "Background color (hex)"
+      example: "#FFFFFF"
+
+    color_text:
+      type: string
+      required: false
+      description: "Primary text color (hex)"
+      example: "#1F2937"
+
+    color_palette:
+      type: json
+      required: false
+      description: "Full color palette with usage guidelines"
+      example:
+        - { name: "Indigo 500", hex: "#6366F1", usage: "Primary buttons, links" }
+        - { name: "Pink 500", hex: "#EC4899", usage: "Accents, highlights" }
+        - { name: "Emerald 500", hex: "#10B981", usage: "Success states" }
+
+    # ─────────────────────────────────────────────────────────────────────────────
+    # Typography
+    # ─────────────────────────────────────────────────────────────────────────────
+    font_primary:
+      type: string
+      required: true
+      description: "Primary font family"
+      example: "Inter"
+
+    font_secondary:
+      type: string
+      required: false
+      description: "Secondary font family"
+      example: "Space Grotesk"
+
+    font_mono:
+      type: string
+      required: false
+      description: "Monospace font for code"
+      example: "JetBrains Mono"
+
+    typography_scale:
+      type: json
+      required: false
+      description: "Font size scale"
+
+    # ─────────────────────────────────────────────────────────────────────────────
+    # Visual Style (for image generation)
+    # ─────────────────────────────────────────────────────────────────────────────
+    style_keywords:
+      type: string[]
+      required: true
+      description: "Keywords describing the visual style"
+      example: ["modern", "minimal", "tech-forward", "friendly"]
+
+    style_mood:
+      type: string
+      required: false
+      description: "Overall mood description"
+      example: "Professional yet approachable, innovative but not intimidating"
+
+    style_influences:
+      type: string[]
+      required: false
+      description: "Brands that influence the style"
+      example: ["Apple", "Stripe", "Linear"]
+
+    # ─────────────────────────────────────────────────────────────────────────────
+    # Image Generation Hints
+    # ─────────────────────────────────────────────────────────────────────────────
+    image_style:
+      type: string
+      required: false
+      description: "Style description for image generation prompts"
+      example: "flat illustration, soft gradients, geometric shapes, isometric elements"
+
+    image_do:
+      type: string[]
+      required: false
+      description: "What TO do in images"
+      example: ["Use brand colors", "Include abstract tech elements", "Show QR codes creatively"]
+
+    image_dont:
+      type: string[]
+      required: false
+      description: "What NOT to do in images"
+      example: ["No stock photos of people scanning", "No cluttered compositions"]
+
+    photo_style:
+      type: string
+      required: false
+      description: "Photography style guidelines"
+      example: "Bright, natural lighting, diverse people"
+
+    # ─────────────────────────────────────────────────────────────────────────────
+    # Logo & Assets
+    # ─────────────────────────────────────────────────────────────────────────────
+    logo_primary_url:
+      type: string
+      required: false
+      description: "URL to primary logo"
+
+    logo_icon_url:
+      type: string
+      required: false
+      description: "URL to icon/favicon"
+
+    logo_usage_rules:
+      type: string[]
+      required: false
+      description: "Logo usage guidelines"
+      example: ["Minimum size 32px", "Clear space = logo height"]
+
+    # ─────────────────────────────────────────────────────────────────────────────
+    # UI Patterns
+    # ─────────────────────────────────────────────────────────────────────────────
+    border_radius:
+      type: string
+      required: false
+      description: "Default border radius style"
+      example: "12px"
+
+    shadow_style:
+      type: string
+      required: false
+      enum: [subtle, pronounced, none]
+      description: "Shadow style preference"
+      example: "subtle"
+
+    animation_style:
+      type: string
+      required: false
+      enum: [smooth, snappy, playful]
+      description: "Animation style preference"
+      example: "smooth"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # RELATIONS (FROM this node)
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  relations: {}
+    # BrandIdentity has no outgoing relations
+    # It is linked FROM Project via HAS_BRAND_IDENTITY
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # EXAMPLE
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  example:
+    data:
+      key: "brand-qrcodeai"
+      display_name: "QR Code AI Brand Identity"
+      description: "Visual and artistic direction for QR Code AI"
+      llm_context: "USE: for image generation prompts. TRIGGERS: brand, colors, style. NOT: copywriting aspects."
+      color_primary: "#6366F1"
+      color_secondary: "#EC4899"
+      color_accent: "#10B981"
+      color_background: "#FFFFFF"
+      color_text: "#1F2937"
+      font_primary: "Inter"
+      font_secondary: "Space Grotesk"
+      style_keywords: ["modern", "minimal", "tech-forward", "friendly"]
+      style_mood: "Professional yet approachable, innovative but not intimidating"
+      style_influences: ["Apple", "Stripe", "Linear"]
+      image_style: "flat illustration, soft gradients, geometric shapes, isometric elements"
+      image_do: ["Use brand colors", "Include abstract tech elements", "Show QR codes creatively"]
+      image_dont: ["No stock photos of people scanning", "No cluttered compositions"]
+      border_radius: "12px"
+      shadow_style: "subtle"
+      animation_style: "smooth"
+
+    cypher: |
+      // Get brand identity for a project
+      MATCH (p:Project {key: $project})-[:HAS_BRAND_IDENTITY]->(bi:BrandIdentity)
+      RETURN bi
+
+      // Get image generation context
+      MATCH (p:Project {key: $project})-[:HAS_BRAND_IDENTITY]->(bi:BrandIdentity)
+      RETURN {
+        brand_name: p.brand_name,
+        color_primary: bi.color_primary,
+        color_secondary: bi.color_secondary,
+        color_accent: bi.color_accent,
+        style_keywords: bi.style_keywords,
+        style_mood: bi.style_mood,
+        image_style: bi.image_style,
+        image_do: bi.image_do,
+        image_dont: bi.image_dont
+      } AS image_context

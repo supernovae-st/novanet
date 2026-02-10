@@ -82,8 +82,8 @@ function getBaseZIndex(node: ReactFlowNode): number {
   // Realm containers: realm-{Realm}
   if (id.startsWith('realm-')) {
     const realm = id.replace('realm-', '');
-    if (realm === 'global') return Z_INDEX.REALM_GLOBAL;
-    if (realm === 'tenant') return Z_INDEX.REALM_TENANT;
+    if (realm === 'shared') return Z_INDEX.REALM_GLOBAL;
+    if (realm === 'org') return Z_INDEX.REALM_TENANT;
     return Z_INDEX.REALM_GLOBAL; // fallback
   }
 
@@ -91,8 +91,8 @@ function getBaseZIndex(node: ReactFlowNode): number {
   if (id.startsWith('layer-')) {
     const parts = id.replace('layer-', '').split('-');
     const realm = parts[0];
-    if (realm === 'global') return Z_INDEX.LAYER_GLOBAL;
-    if (realm === 'tenant') return Z_INDEX.LAYER_TENANT;
+    if (realm === 'shared') return Z_INDEX.LAYER_GLOBAL;
+    if (realm === 'org') return Z_INDEX.LAYER_TENANT;
     return Z_INDEX.LAYER_GLOBAL; // fallback
   }
 

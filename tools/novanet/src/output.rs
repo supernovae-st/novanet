@@ -121,12 +121,13 @@ mod tests {
     fn format_json_rows() {
         let rows = vec![NodeRow {
             label: "Realm".to_string(),
-            key: "global".to_string(),
-            display_name: "Global".to_string(),
-            description: "Global scope".to_string(),
+            key: "shared".to_string(),
+            display_name: "Shared".to_string(),
+            description: "Shared scope".to_string(),
         }];
         let json = format_json(&rows);
-        assert!(json.contains("\"key\": \"global\""));
+        // v11.2: shared realm (was global)
+        assert!(json.contains("\"key\": \"shared\""));
         assert!(json.contains("\"label\": \"Realm\""));
     }
 

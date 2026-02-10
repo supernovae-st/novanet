@@ -50,8 +50,8 @@ export interface RealmConfig {
 }
 
 export const REALM_CONFIGS: RealmConfig[] = [
-  { realm: 'tenant', color: '#6c71c4', order: 0 },  // Solarized violet (from taxonomy.yaml)
-  { realm: 'global', color: '#2aa198', order: 1 },  // Solarized cyan (from taxonomy.yaml)
+  { realm: 'org', color: '#6c71c4', order: 0 },  // Solarized violet (from taxonomy.yaml)
+  { realm: 'shared', color: '#2aa198', order: 1 },  // Solarized cyan (from taxonomy.yaml)
 ];
 
 // =============================================================================

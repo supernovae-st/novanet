@@ -240,11 +240,11 @@ mod tests {
         let yaml = r##"
 version: "9.5.0"
 node_realms:
-  - key: global
-    display_name: Global
+  - key: shared
+    display_name: Shared
     emoji: "🌍"
     color: "#2aa198"
-    llm_context: "Global context."
+    llm_context: "Shared context."
     layers:
       - key: config
         display_name: Configuration
@@ -284,7 +284,7 @@ terminal:
         let doc: TaxonomyDoc = serde_yaml::from_str(yaml).unwrap();
         assert_eq!(doc.version, "9.5.0");
         assert_eq!(doc.node_realms.len(), 1);
-        assert_eq!(doc.node_realms[0].key, "global");
+        assert_eq!(doc.node_realms[0].key, "shared");
         assert_eq!(doc.node_realms[0].layers.len(), 1);
         assert_eq!(doc.node_realms[0].layers[0].key, "config");
         assert_eq!(doc.node_traits.len(), 1);
@@ -343,11 +343,11 @@ arc_families:
         let yaml = r##"
 version: "9.5.0"
 node_realms:
-  - key: global
-    display_name: Global
+  - key: shared
+    display_name: Shared
     emoji: "🌍"
     color: "#2aa198"
-    llm_context: "Global."
+    llm_context: "Shared."
     layers:
       - key: config
         display_name: Configuration
@@ -371,7 +371,7 @@ arc_families:
 
         assert_eq!(organizing.version, "9.5.0");
         assert_eq!(organizing.realms.len(), 1);
-        assert_eq!(organizing.realms[0].key, "global");
+        assert_eq!(organizing.realms[0].key, "shared");
         assert_eq!(organizing.traits.len(), 1);
         assert_eq!(organizing.traits[0].key, "invariant");
         assert_eq!(organizing.arc_families.len(), 1);
@@ -391,15 +391,16 @@ arc_families:
 
         let doc = load_taxonomy(root).expect("should load taxonomy.yaml");
 
-        assert_eq!(doc.version, "11.0.0");
-        assert_eq!(doc.node_realms.len(), 2); // v10.6: 2 realms (global, tenant)
-        assert_eq!(doc.node_traits.len(), 4); // v11.1: removed job trait
+        // v11.2: realm renames, trait split, version bump
+        assert_eq!(doc.version, "11.2.0");
+        assert_eq!(doc.node_realms.len(), 2); // v11.2: 2 realms (shared, org)
+        assert_eq!(doc.node_traits.len(), 5); // v11.2: split derived → generated + aggregated
         assert_eq!(doc.arc_families.len(), 5);
         assert_eq!(doc.arc_scopes.len(), 2);
         assert_eq!(doc.arc_cardinalities.len(), 5); // zero_to_one, one_to_one, one_to_many, many_to_one, many_to_many
 
         let total_layers: usize = doc.node_realms.iter().map(|r| r.layers.len()).sum();
-        assert_eq!(total_layers, 9); // v10.6: 3 global + 6 tenant layers
+        assert_eq!(total_layers, 9); // v11.2: 2 shared + 7 org layers
 
         // Check border styles
         let invariant = doc
@@ -412,10 +413,10 @@ arc_families:
 
         // Check terminal palette (uses semantic keys like global, tenant, etc.)
         let terminal = doc.terminal.as_ref().expect("should have terminal palette");
-        assert!(terminal.palette_256.contains_key("global"));
-        assert!(terminal.palette_256.contains_key("tenant"));
-        assert!(terminal.palette_16.contains_key("global"));
-        assert!(terminal.palette_16.contains_key("tenant"));
+        assert!(terminal.palette_256.contains_key("shared"));
+        assert!(terminal.palette_256.contains_key("org"));
+        assert!(terminal.palette_16.contains_key("shared"));
+        assert!(terminal.palette_16.contains_key("org"));
 
         // v9.9: Check kind_retrieval_defaults
         let defaults = doc

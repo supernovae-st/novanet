@@ -17,15 +17,17 @@ use walkdir::WalkDir;
 // NodeTrait — node locale behavior classification
 // ─────────────────────────────────────────────────────────────────────────────
 
-/// The 4 node traits (v11.2): invariant, localized, knowledge, derived.
+/// The 5 node traits (v11.2): invariant, localized, knowledge, generated, aggregated.
 /// Note: job trait removed in v11.2 (defer to v12+).
+/// Note: v11.2 split derived → generated (LLM output) + aggregated (computed metrics).
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum NodeTrait {
     Invariant,
     Localized,
     Knowledge,
-    Derived,
+    Generated,
+    Aggregated,
 }
 
 /// Type alias for code that uses the v9 name.
@@ -37,7 +39,8 @@ impl std::fmt::Display for NodeTrait {
             Self::Invariant => write!(f, "invariant"),
             Self::Localized => write!(f, "localized"),
             Self::Knowledge => write!(f, "knowledge"),
-            Self::Derived => write!(f, "derived"),
+            Self::Generated => write!(f, "generated"),
+            Self::Aggregated => write!(f, "aggregated"),
         }
     }
 }
@@ -159,7 +162,7 @@ pub struct PropertyDef {
 pub struct ParsedNode {
     /// The deserialized node definition.
     pub def: NodeDef,
-    /// Realm from directory: "global", "tenant".
+    /// Realm from directory: "shared", "org".
     pub realm: String,
     /// Layer from directory: "config", "knowledge", "foundation", etc.
     pub layer: String,
@@ -290,27 +293,28 @@ mod tests {
     #[test]
     fn node_trait_deserialize() {
         // Test with v9.5 `trait` field
-        let yaml = "node:\n  name: Test\n  realm: tenant\n  layer: foundation\n  trait: invariant\n  description: test";
+        let yaml = "node:\n  name: Test\n  realm: org\n  layer: foundation\n  trait: invariant\n  description: test";
         let doc: NodeDocument = serde_yaml::from_str(yaml).unwrap();
         assert_eq!(doc.node.node_trait, NodeTrait::Invariant);
         assert_eq!(doc.node.name, "Test");
-        assert_eq!(doc.node.realm, "tenant");
+        assert_eq!(doc.node.realm, "org");
         assert_eq!(doc.node.layer, "foundation");
     }
 
     #[test]
     fn locale_behavior_alias_works() {
         // Test backwards compatibility with v9 `locale_behavior` field
-        let yaml = "node:\n  name: Test\n  realm: tenant\n  layer: foundation\n  locale_behavior: localized\n  description: test";
+        let yaml = "node:\n  name: Test\n  realm: org\n  layer: foundation\n  locale_behavior: localized\n  description: test";
         let doc: NodeDocument = serde_yaml::from_str(yaml).unwrap();
         assert_eq!(doc.node.node_trait, NodeTrait::Localized);
     }
 
     #[test]
     fn node_trait_all_variants() {
-        for variant in ["invariant", "localized", "knowledge", "derived"] {
+        // v11.2: 5 traits (split derived → generated + aggregated)
+        for variant in ["invariant", "localized", "knowledge", "generated", "aggregated"] {
             let yaml = format!(
-                "node:\n  name: T\n  realm: global\n  layer: config\n  trait: {variant}\n  description: d"
+                "node:\n  name: T\n  realm: shared\n  layer: config\n  trait: {variant}\n  description: d"
             );
             let doc: NodeDocument = serde_yaml::from_str(&yaml).unwrap();
             assert_eq!(doc.node.node_trait.to_string(), variant);
@@ -319,7 +323,7 @@ mod tests {
 
     #[test]
     fn missing_trait_fails() {
-        let yaml = "node:\n  name: Test\n  realm: tenant\n  layer: foundation\n  description: test";
+        let yaml = "node:\n  name: Test\n  realm: org\n  layer: foundation\n  description: test";
         let result = serde_yaml::from_str::<NodeDocument>(yaml);
         assert!(result.is_err(), "should fail without trait");
         let err_msg = result.unwrap_err().to_string();
@@ -345,16 +349,16 @@ mod tests {
 
     #[test]
     fn invalid_trait_fails() {
-        let yaml = "node:\n  name: Test\n  realm: tenant\n  layer: foundation\n  trait: banana\n  description: test";
+        let yaml = "node:\n  name: Test\n  realm: org\n  layer: foundation\n  trait: banana\n  description: test";
         let result = serde_yaml::from_str::<NodeDocument>(yaml);
         assert!(result.is_err(), "should fail with invalid trait");
     }
 
     #[test]
     fn optional_fields_default_to_none() {
-        // v11.0: SEO layer is in tenant realm
+        // v11.0: SEO layer is in tenant realm, v11.2: use generated trait
         let yaml =
-            "node:\n  name: Minimal\n  realm: tenant\n  layer: seo\n  trait: derived\n  description: d";
+            "node:\n  name: Minimal\n  realm: org\n  layer: seo\n  trait: generated\n  description: d";
         let doc: NodeDocument = serde_yaml::from_str(yaml).unwrap();
         assert!(doc.node.icon.is_none());
         assert!(doc.node.standard_properties.is_none());
@@ -368,7 +372,7 @@ mod tests {
         let yaml = r#"
 node:
   name: Test
-  realm: tenant
+  realm: org
   layer: semantic
   trait: invariant
   description: d
@@ -399,7 +403,7 @@ node:
         let yaml = r#"
 node:
   name: Style
-  realm: global
+  realm: shared
   layer: knowledge
   trait: knowledge
   knowledge_tier: style
@@ -417,7 +421,7 @@ node:
             ("semantic", KnowledgeTier::Semantic),
         ] {
             let yaml = format!(
-                "node:\n  name: T\n  realm: global\n  layer: knowledge\n  trait: knowledge\n  knowledge_tier: {variant}\n  description: d"
+                "node:\n  name: T\n  realm: shared\n  layer: knowledge\n  trait: knowledge\n  knowledge_tier: {variant}\n  description: d"
             );
             let doc: NodeDocument = serde_yaml::from_str(&yaml).unwrap();
             assert_eq!(doc.node.knowledge_tier, Some(expected));
@@ -427,7 +431,7 @@ node:
     #[test]
     fn knowledge_tier_optional() {
         // Non-knowledge nodes don't have knowledge_tier
-        let yaml = "node:\n  name: Project\n  realm: tenant\n  layer: foundation\n  trait: invariant\n  description: d";
+        let yaml = "node:\n  name: Project\n  realm: org\n  layer: foundation\n  trait: invariant\n  description: d";
         let doc: NodeDocument = serde_yaml::from_str(yaml).unwrap();
         assert_eq!(doc.node.knowledge_tier, None);
     }
@@ -478,49 +482,55 @@ node:
 
         // Verify trait distribution (2 realms: global + tenant)
         let count = |t: NodeTrait| nodes.iter().filter(|n| n.def.node_trait == t).count();
-        assert_eq!(count(NodeTrait::Invariant), 24, "invariant count"); // +EntityCategory
+        assert_eq!(count(NodeTrait::Invariant), 30, "invariant count (was 24, +6 container sets now invariant)");
         assert_eq!(
             count(NodeTrait::Localized),
             2,
             "localized count (ProjectContent + EntityContent)" // v11.0: ProjectL10n → ProjectContent
         ); // v10.9: was 4, now 2 (BlockGenerated + PageGenerated moved to derived)
+        // v11.2: containers → invariant, derived → generated + aggregated
         assert_eq!(
             count(NodeTrait::Knowledge),
-            29,
-            "knowledge count (12 config + 18 locale-knowledge + 1 GEO - 2 invariant overlap)"
+            23,
+            "knowledge count (was 29, -6 containers now invariant)"
         );
         assert_eq!(
-            count(NodeTrait::Derived),
-            7,
-            "derived count (v11.1: removed EvaluationSignal)"
-        ); // v11.1: was 8, now 7 (EvaluationSignal removed with job trait)
+            count(NodeTrait::Generated),
+            4,
+            "generated count (PageGenerated, BlockGenerated, OutputArtifact, PromptArtifact)"
+        );
+        assert_eq!(
+            count(NodeTrait::Aggregated),
+            3,
+            "aggregated count (GEOAnswer, GEOMetrics, SEOKeywordMetrics)"
+        );
 
         // v11.2: Verify realm distribution (job nodes removed from tenant)
         let realm_count = |r: &str| nodes.iter().filter(|n| n.realm == r).count();
         assert_eq!(
-            realm_count("global"),
+            realm_count("shared"),
             32,
             "global realm count (14 config + 18 locale-knowledge)"
         );
-        assert_eq!(realm_count("tenant"), 30, "tenant realm count (- 3 job nodes)");
+        assert_eq!(realm_count("org"), 30, "tenant realm count (- 3 job nodes)");
 
         // Spot-check known nodes
         let project = nodes.iter().find(|n| n.def.name == "Project").unwrap();
-        assert_eq!(project.realm, "tenant");
+        assert_eq!(project.realm, "org");
         assert_eq!(project.layer, "foundation");
         assert_eq!(project.def.node_trait, NodeTrait::Invariant);
         assert_eq!(project.def.knowledge_tier, None); // invariant = no tier
 
         // Check Style node (in global/config)
         let style = nodes.iter().find(|n| n.def.name == "Style").unwrap();
-        assert_eq!(style.realm, "global");
+        assert_eq!(style.realm, "shared");
         assert_eq!(style.layer, "config");
         assert_eq!(style.def.node_trait, NodeTrait::Knowledge);
         assert_eq!(style.def.knowledge_tier, None);
 
         // Check one of the knowledge atoms
         let term = nodes.iter().find(|n| n.def.name == "Term").unwrap();
-        assert_eq!(term.realm, "global");
+        assert_eq!(term.realm, "shared");
         assert_eq!(term.layer, "locale-knowledge");
         assert_eq!(term.def.node_trait, NodeTrait::Knowledge);
     }

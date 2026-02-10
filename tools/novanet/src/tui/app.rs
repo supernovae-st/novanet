@@ -9,7 +9,7 @@ use std::path::Path;
 use crossterm::event::{KeyCode, KeyEvent};
 
 use super::atlas::AtlasState;
-use super::audit::GlobalAuditStats;
+use super::audit::SharedAuditStats;
 use super::data::{
     ArcKindDetails, KindArcsData, LayerDetails, RealmDetails, TaxonomyTree, TreeItem,
 };
@@ -294,7 +294,7 @@ pub struct App {
     // Audit Mode State (Feature 6)
     // ==========================================================================
     /// Audit statistics (loaded async when entering Audit mode)
-    pub audit_stats: Option<GlobalAuditStats>,
+    pub audit_stats: Option<SharedAuditStats>,
     /// Pending audit stats load request
     pub pending_audit_load: bool,
     /// Cursor in audit mode (which Kind is selected)
@@ -1691,7 +1691,7 @@ impl App {
     }
 
     /// Get breadcrumb path for the current selection.
-    /// Returns a string like "Tenant > Foundation > Entity (12)"
+    /// Returns a string like "Org > Foundation > Entity (12)"
     pub fn current_breadcrumb(&self) -> String {
         use super::data::TreeItem;
         match self.current_item() {
@@ -2022,7 +2022,7 @@ impl App {
 
     /// Set Audit statistics after async load.
     #[allow(dead_code)] // WIP: Audit mode implementation
-    pub fn set_audit_stats(&mut self, stats: GlobalAuditStats) {
+    pub fn set_audit_stats(&mut self, stats: SharedAuditStats) {
         self.audit_stats = Some(stats);
     }
 
@@ -2170,16 +2170,16 @@ mod tests {
         };
 
         let global = RealmInfo {
-            key: "global".to_string(),
-            display_name: "Global".to_string(),
+            key: "shared".to_string(),
+            display_name: "Shared".to_string(),
             color: "#859900".to_string(),
             icon: "◉",
             layers: vec![locale_knowledge],
         };
 
         let tenant = RealmInfo {
-            key: "tenant".to_string(),
-            display_name: "Tenant".to_string(),
+            key: "org".to_string(),
+            display_name: "Org".to_string(),
             color: "#b58900".to_string(),
             icon: "◎",
             layers: vec![structure],
@@ -2338,7 +2338,7 @@ mod tests {
         // Position 4 should be tenant (not an instance)
         app.tree_cursor = 4;
         match app.current_item() {
-            Some(TreeItem::Realm(r)) => assert_eq!(r.key, "tenant"),
+            Some(TreeItem::Realm(r)) => assert_eq!(r.key, "org"),
             other => panic!("Expected Realm tenant, got {:?}", other),
         }
     }

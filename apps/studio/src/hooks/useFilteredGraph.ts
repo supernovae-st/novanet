@@ -20,10 +20,10 @@ import { NODE_REALMS } from '@novanet/core/types';
 import { NODE_LAYERS, type Layer } from '@novanet/core/graph';
 import type { GraphNode, GraphEdge, NodeType } from '@/types';
 
-/** Realm counts for schema mode breakdown (v10.6: 2 realms) */
+/** Realm counts for schema mode breakdown (v11.2: 2 realms) */
 export interface RealmCounts {
-  global: number;
-  tenant: number;
+  shared: number;
+  org: number;
 }
 
 /** Layer counts for schema mode breakdown */
@@ -144,9 +144,9 @@ export function useFilteredGraph(): FilteredGraphResult {
     return types.size;
   }, [filteredEdges]);
 
-  // Compute scope counts (for schema mode breakdown) - v10.6: 2 realms
+  // Compute scope counts (for schema mode breakdown) - v11.2: 2 realms
   const realmCounts = useMemo((): RealmCounts => {
-    const counts: RealmCounts = { global: 0, tenant: 0 };
+    const counts: RealmCounts = { shared: 0, org: 0 };
     for (const node of filteredNodes) {
       const scope = NODE_REALMS[node.type as NodeType];
       if (scope && scope in counts) {

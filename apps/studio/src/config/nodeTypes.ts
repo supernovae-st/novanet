@@ -564,15 +564,6 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     size: 14,
     layer: 'output',
   },
-  GenerationJob: {
-    type: 'GenerationJob',
-    label: 'Generation Job',
-    icon: '🚀',
-    color: '#ea580c',
-    colorClass: 'bg-orange-600',
-    size: 16,
-    layer: 'output',
-  },
   OutputArtifact: {
     type: 'OutputArtifact',
     label: 'Output Artifact',
@@ -582,18 +573,8 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     size: 12,
     layer: 'output',
   },
-  EvaluationSignal: {
-    type: 'EvaluationSignal',
-    label: 'Evaluation Signal',
-    icon: '📊',
-    color: '#9a3412',
-    colorClass: 'bg-orange-800',
-    size: 10,
-    layer: 'output',
-  },
-
   // ==========================================================================
-  // SEO LAYER (9 nodes) — SEO + GEO (Generative Engine Optimization)
+  // SEO LAYER (8 nodes) — SEO + GEO (Generative Engine Optimization)
   // ==========================================================================
   SEOKeyword: {
     type: 'SEOKeyword',
@@ -610,15 +591,6 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     icon: '📊',
     color: '#f87171',
     colorClass: 'bg-red-400',
-    size: 10,
-    layer: 'seo',
-  },
-  SEOMiningRun: {
-    type: 'SEOMiningRun',
-    label: 'SEO Mining',
-    icon: '⚙️',
-    color: '#fca5a5',
-    colorClass: 'bg-red-300',
     size: 10,
     layer: 'seo',
   },

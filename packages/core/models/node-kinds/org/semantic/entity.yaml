@@ -1,0 +1,568 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# models/node-kinds/tenant/semantic/entity.yaml
+# Entity - Tenant-level semantic unit (v11)
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# PURPOSE:
+#   Entity is the core semantic building block for knowledge graphs.
+#   It represents any concept, product, feature, action, or idea that needs
+#   to be understood, categorized, and localized across 200+ locales.
+#
+# ARCHITECTURE (Full Hierarchy):
+#
+#   Tenant ──[:HAS_ENTITY]──> Entity (invariant)
+#                                   │
+#                                   └──[:HAS_CONTENT]──> EntityContent
+#                                                            │
+#                                                            └──[:FOR_LOCALE]──> Locale
+#
+#   • Organization = Multi-tenant isolation (e.g., SuperNovae Studio)
+#   • Project = Product container (e.g., QR Code AI) - holds all entities
+#   • Entity = INVARIANT: defined once, same structure for all locales
+#   • EntityContent = LOCALIZED: generated natively per locale (NOT translated)
+#
+# KEY PRINCIPLE:
+#   Generation, NOT Translation. Content is generated natively per locale,
+#   preserving cultural nuance rather than losing it through translation.
+#
+# PROPERTY PHILOSOPHY:
+#   • description  = WHAT it IS (readable by humans AND LLM for comprehension)
+#   • llm_context  = HOW to USE it (generation instructions: USE/TRIGGERS/NOT)
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+
+node:
+  name: Entity
+  realm: org
+  layer: semantic
+  trait: invariant
+  icon: "🔷"
+  description: "Semantic unit representing products, features, concepts, actions, and tools"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # STANDARD PROPERTIES
+  # ═══════════════════════════════════════════════════════════════════════════════
+  #
+  # These properties are common to all Entity nodes.
+  # All text content is in ENGLISH (invariant base language).
+  #
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  standard_properties:
+
+    # ─────────────────────────────────────────────────────────────────────────────
+    # key: Unique identifier
+    # ─────────────────────────────────────────────────────────────────────────────
+    # RULES:
+    #   • kebab-case only (lowercase, hyphens)
+    #   • Must be unique within tenant
+    #   • Should be descriptive but concise
+    #   • NO category prefix needed (category via BELONGS_TO relation)
+    # ─────────────────────────────────────────────────────────────────────────────
+    key:
+      type: string
+      required: true
+      pattern: "^[a-z][a-z0-9-]*$"
+      examples:
+        - "qr-code"
+        - "smart-link"
+        - "create-qr-code"
+        - "contextual-routing"
+
+    # ─────────────────────────────────────────────────────────────────────────────
+    # display_name: Human-readable label
+    # ─────────────────────────────────────────────────────────────────────────────
+    # RULES:
+    #   • English, Title Case
+    #   • Used in admin UI, documentation, reports
+    #   • Should match how users naturally refer to this concept
+    # ─────────────────────────────────────────────────────────────────────────────
+    display_name:
+      type: string
+      required: true
+      examples:
+        - "QR Code"
+        - "Smart Link"
+        - "Create QR Code"
+        - "Contextual Routing"
+
+    # ─────────────────────────────────────────────────────────────────────────────
+    # description: What this entity IS
+    # ─────────────────────────────────────────────────────────────────────────────
+    # PURPOSE:
+    #   Explains what the entity is for COMPREHENSION.
+    #   Read by humans (admin, docs) AND by LLM (to understand the concept).
+    #
+    # RULES:
+    #   • English prose, 1-3 sentences
+    #   • Focus on WHAT it is, not WHEN to use it
+    #   • Include key differentiators from similar concepts
+    #   • Technical accuracy over marketing language
+    # ─────────────────────────────────────────────────────────────────────────────
+    description:
+      type: string
+      required: true
+      examples:
+        - "Two-dimensional barcode that encodes data in a scannable visual pattern."
+        - "AI-generated artistic QR code where pattern is fused into artwork, not layered."
+
+    # ─────────────────────────────────────────────────────────────────────────────
+    # llm_context: Generation instructions for LLM
+    # ─────────────────────────────────────────────────────────────────────────────
+    # PURPOSE:
+    #   Tells the LLM WHEN and HOW to use this entity during content generation.
+    #   Used for context selection and disambiguation.
+    #
+    # FORMAT (structured):
+    #   USE: [situations when this entity applies]
+    #   TRIGGERS: [keywords that should activate this entity]
+    #   NOT: [disambiguation - what this is NOT, with alternatives]
+    #
+    # RULES:
+    #   • Always use the USE/TRIGGERS/NOT structure
+    #   • TRIGGERS should include multilingual keywords if relevant
+    #   • NOT should point to alternative entities to avoid confusion
+    # ─────────────────────────────────────────────────────────────────────────────
+    llm_context:
+      type: string
+      required: true
+      examples:
+        - "USE: when discussing QR codes, scanning, 2D barcodes. TRIGGERS: qr, qr code, scan, code qr. NOT: barcode 1D (use Barcode), smart link without QR (use Smart Link)."
+        - "USE: AI QR, artistic QR, generated QR. TRIGGERS: qr art, ai qr, qr artistique. NOT: photo overlay (use QR Code Image), manual design (use Custom QR Code)."
+
+    # ─────────────────────────────────────────────────────────────────────────────
+    # entity_summary: LLM context summary (v11)
+    # ─────────────────────────────────────────────────────────────────────────────
+    # PURPOSE:
+    #   2-3 sentence summary optimized for LLM context loading.
+    #   Used by GraphRAG to provide entity context during retrieval.
+    #
+    # DIFFERENCE FROM OTHER FIELDS:
+    #   • description  = Short, 1 sentence WHAT it is
+    #   • llm_context  = Structured USE/TRIGGERS/NOT for disambiguation
+    #   • entity_summary = Prose summary for LLM reasoning context
+    #
+    # RULES:
+    #   • 2-3 complete sentences
+    #   • Include key relationships to other entities
+    #   • Mention primary use cases
+    #   • Write for LLM comprehension, not SEO
+    # ─────────────────────────────────────────────────────────────────────────────
+    entity_summary:
+      type: string
+      required: false
+      examples:
+        - "A QR Code is a two-dimensional barcode that encodes data in a scannable visual pattern. It is the core product of QR Code AI, enabling users to create dynamic QR codes that redirect to Smart Links. QR Codes can be customized with logos, colors, and AI-generated artistic styles."
+        - "Dynamic QR Code is a variant of QR Code where the destination URL can be changed after printing. It requires a Short Link as the redirect mechanism and enables analytics tracking. This is the most common QR code type for business use cases."
+
+    created_at:
+      type: datetime
+      required: true
+
+    updated_at:
+      type: datetime
+      required: true
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # VECTOR EMBEDDING (Hybrid OntologyRAG)
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  embedding_properties:
+    embedding:
+      type: vector
+      dimensions: 1536
+      required: false
+      description: "OpenAI text-embedding-3-small vector for semantic search"
+
+    embedding_source:
+      type: string
+      required: false
+
+    embedding_updated_at:
+      type: datetime
+      required: false
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # ENTITY-SPECIFIC PROPERTIES
+  # ═══════════════════════════════════════════════════════════════════════════════
+  #
+  # NOTE: Entity classification moved to BELONGS_TO relation (see relations section).
+  #       Entity now links to EntityCategory nodes for semantic categorization.
+  #       See: packages/core/models/node-kinds/tenant/semantic/entity-category.yaml
+  #
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  properties:
+
+    # ─────────────────────────────────────────────────────────────────────────────
+    # is_pillar: Content hierarchy flag
+    # ─────────────────────────────────────────────────────────────────────────────
+    # PURPOSE:
+    #   Identifies top-level entities that anchor content clusters.
+    #   Pillars are the main products/concepts around which subtopics organize.
+    #
+    # RULES:
+    #   • Only THING type entities should be pillars
+    #   • Typically 2-5 pillars per project
+    #   • Other entities link to pillars via SUBTOPIC_OF
+    #
+    # EXAMPLE:
+    #   QR Code (pillar) ← Custom QR Code, QR Code Image, QR Code Art (subtopics)
+    # ─────────────────────────────────────────────────────────────────────────────
+    is_pillar:
+      type: boolean
+      required: false
+      default: false
+
+    # ─────────────────────────────────────────────────────────────────────────────
+    # schema_org_type: SEO structured data
+    # ─────────────────────────────────────────────────────────────────────────────
+    # PURPOSE:
+    #   Maps entity to Schema.org type for rich search results.
+    #   Used in JSON-LD generation for SEO.
+    #
+    # COMMON VALUES:
+    #   • Product, SoftwareApplication, WebApplication
+    #   • HowTo, FAQPage, Article
+    #   • Organization, Service
+    # ─────────────────────────────────────────────────────────────────────────────
+    schema_org_type:
+      type: string
+      required: false
+      examples:
+        - "SoftwareApplication"
+        - "Product"
+        - "HowTo"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # RELATIONS (FROM this node)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  #
+  # Entity has 6 relation types:
+  #   1. HAS_CONTENT   → Links to localized content (EntityContent) - v10.9.0
+  #   2. BELONGS_TO    → Semantic category (EntityCategory) - v11.1.0
+  #   3. HAS_CHILD     → URL hierarchy (Entity children) - v10.9.0
+  #   4. SUBTOPIC_OF   → Hierarchical parent (pillar/cluster structure)
+  #   5. SEMANTIC_LINK → Spreading activation (weighted cross-references)
+  #   6. POPULAR_IN    → Cross-realm geographic targeting
+  #
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  relations:
+
+    # ─────────────────────────────────────────────────────────────────────────────
+    # HAS_CONTENT: Localization relation (v10.9.0: renamed from HAS_L10N)
+    # ─────────────────────────────────────────────────────────────────────────────
+    # PURPOSE:
+    #   Links invariant Entity to its localized content.
+    #   One EntityContent per locale (fr-FR, en-US, ja-JP, etc.)
+    #
+    # PATTERN:
+    #   Entity ──[:HAS_CONTENT]──> EntityContent ──[:FOR_LOCALE]──> Locale
+    # ─────────────────────────────────────────────────────────────────────────────
+    HAS_CONTENT:
+      to: EntityContent
+      cardinality: "1:N"
+      description: "Localized content for this entity (one per locale)"
+
+    # ─────────────────────────────────────────────────────────────────────────────
+    # BELONGS_TO: Semantic category (v11.1.0: replaces type property)
+    # ─────────────────────────────────────────────────────────────────────────────
+    # PURPOSE:
+    #   Links entity to its semantic category (EntityCategory).
+    #   Replaces the former `type` property with a proper graph relationship.
+    #
+    # CATEGORIES (13 types, now as EntityCategory nodes):
+    #   WHAT?     → THING, CONTENT_TYPE, FEATURE, TOOL
+    #   WHERE?    → MEDIUM
+    #   WHY?      → USE_CASE
+    #   WHO?      → INDUSTRY
+    #   HOW?      → ACTION, GUIDE, COMPARISON
+    #   ABSTRACT  → CONCEPT
+    #   EXTERNAL  → BRAND, INTEGRATION
+    #
+    # PATTERN:
+    #   Entity ──[:BELONGS_TO]──> EntityCategory
+    #
+    # EXAMPLES:
+    #   qr-code ──[:BELONGS_TO]──> EntityCategory:thing
+    #   create-qr-code ──[:BELONGS_TO]──> EntityCategory:action
+    #   dynamic-qr-code ──[:BELONGS_TO]──> EntityCategory:concept
+    # ─────────────────────────────────────────────────────────────────────────────
+    BELONGS_TO:
+      to: EntityCategory
+      cardinality: "N:1"
+      scope: cross_realm
+      description: "Semantic category this entity belongs to (replaces type property)"
+
+    # ─────────────────────────────────────────────────────────────────────────────
+    # HAS_CHILD: URL hierarchy (v10.9.0)
+    # ─────────────────────────────────────────────────────────────────────────────
+    # PURPOSE:
+    #   Creates parent/child hierarchy for URL structure.
+    #   URL path = parent.slug + "/" + child.slug
+    #
+    # PATTERN:
+    #   Entity (blog) ──[:HAS_CHILD]──> Entity (article)
+    #   URL: /fr/blog/article
+    #
+    # PROPERTIES:
+    #   • position: Sort order among siblings
+    #   • visibility: public | draft | internal
+    #   • featured: Highlight in parent's featured section
+    #
+    # CONSTRAINTS:
+    #   • Max depth = 3 (enforced by validation)
+    #   • Cycle protection: prevents A → B → A
+    # ─────────────────────────────────────────────────────────────────────────────
+    HAS_CHILD:
+      to: Entity
+      cardinality: "N:N"
+      props:
+        position:
+          type: int
+          description: "Sort order among siblings"
+        visibility:
+          type: string
+          enum: [public, draft, internal]
+          description: "Content visibility status"
+        featured:
+          type: boolean
+          description: "Highlight in parent's featured section"
+      description: "Child entities forming URL hierarchy (max depth 3)"
+
+    # ─────────────────────────────────────────────────────────────────────────────
+    # SUBTOPIC_OF: Hierarchical parent
+    # ─────────────────────────────────────────────────────────────────────────────
+    # PURPOSE:
+    #   Creates pillar/cluster content hierarchy.
+    #   Child entities are subtopics of parent entities.
+    #
+    # RULES:
+    #   • Pillars (is_pillar=true) are roots, have no SUBTOPIC_OF
+    #   • Non-pillars should have exactly one SUBTOPIC_OF
+    #   • Depth property tracks distance from pillar
+    #
+    # EXAMPLE:
+    #   Custom QR Code ──[:SUBTOPIC_OF {depth: 1}]──> QR Code (pillar)
+    #   QR Code Art ──[:SUBTOPIC_OF {depth: 1}]──> QR Code (pillar)
+    # ─────────────────────────────────────────────────────────────────────────────
+    SUBTOPIC_OF:
+      to: Entity
+      cardinality: "N:1"
+      props:
+        depth:
+          type: int
+          description: "Hierarchy depth from pillar (1 = direct child)"
+      description: "Parent entity in pillar/cluster hierarchy"
+
+    # ─────────────────────────────────────────────────────────────────────────────
+    # SEMANTIC_LINK: Spreading activation
+    # ─────────────────────────────────────────────────────────────────────────────
+    # PURPOSE:
+    #   Creates weighted cross-references between entities.
+    #   Used for context loading and content recommendations.
+    #
+    # PROPERTIES:
+    #   temperature (0.0-1.0):
+    #     • 0.9-1.0 = Very strong (core relationship)
+    #     • 0.7-0.8 = Strong (frequently co-occur)
+    #     • 0.5-0.6 = Medium (sometimes related)
+    #     • 0.3-0.4 = Weak (occasionally relevant)
+    #
+    #   link_type (11 types):
+    #
+    #     HIERARCHICAL:
+    #     • type_of        → Child IS A type of parent (QR Code URL type_of QR Code)
+    #     • variant_of     → Style/mode variant (Custom QR variant_of QR Code)
+    #     • includes       → Parent includes child (QR Code includes Dynamic concept)
+    #
+    #     DEPENDENCY:
+    #     • requires       → Cannot function without (Dynamic QR requires Short Link)
+    #     • enables        → Makes possible (Short Link enables Analytics)
+    #
+    #     BEHAVIORAL:
+    #     • exhibits       → Shows behavior pattern (QR Code URL exhibits Dynamic QR)
+    #     • contrasts      → Opposite/alternative (Dynamic contrasts Static)
+    #
+    #     FUNCTIONAL:
+    #     • is_action_on   → ACTION targets THING (Create QR is_action_on QR Code)
+    #     • used_for       → Tool/feature used for (Generator used_for QR Code)
+    #     • part_of        → Component of whole (Frame part_of QR Code)
+    #
+    #     ASSOCIATIVE:
+    #     • related_to     → Generic weak link (QR Code related_to Barcode)
+    #
+    # TEMPERATURE CALIBRATION:
+    #   0.90-1.00 = STRONG   (type_of, is_action_on, used_for)
+    #   0.80-0.90 = MEDIUM+  (variant_of, requires, enables, exhibits)
+    #   0.50-0.70 = MEDIUM   (includes, part_of)
+    #   0.30-0.50 = WEAK     (related_to)
+    #   0.10-0.30 = MINIMAL  (contrasts)
+    #
+    # EXAMPLES:
+    #   Create QR Code ──[:SEMANTIC_LINK {temp: 0.95, type: is_action_on}]──> QR Code
+    #   Dynamic QR Code ──[:SEMANTIC_LINK {temp: 0.90, type: requires}]──> Short Link
+    #   Custom QR Code ──[:SEMANTIC_LINK {temp: 0.85, type: variant_of}]──> QR Code
+    #   QR Code URL ──[:SEMANTIC_LINK {temp: 0.85, type: exhibits}]──> Dynamic QR Code
+    # ─────────────────────────────────────────────────────────────────────────────
+    SEMANTIC_LINK:
+      to: Entity
+      cardinality: "N:N"
+      props:
+        temperature:
+          type: float
+          min: 0.0
+          max: 1.0
+          description: "Activation strength (0.0 = weak, 1.0 = strong)"
+        link_type:
+          type: string
+          enum:
+            # Hierarchical
+            - type_of
+            - variant_of
+            - includes
+            # Dependency
+            - requires
+            - enables
+            # Behavioral
+            - exhibits
+            - contrasts
+            # Functional
+            - is_action_on
+            - used_for
+            - part_of
+            # Associative
+            - related_to
+            # Identity
+            - same_as
+      description: "Spreading activation links to related entities"
+
+    # ─────────────────────────────────────────────────────────────────────────────
+    # POPULAR_IN: Cross-realm geographic targeting
+    # ─────────────────────────────────────────────────────────────────────────────
+    # PURPOSE:
+    #   Links entities to geographic regions where they're especially relevant.
+    #   Uses EXISTING global geographic nodes (no duplication).
+    #
+    # TARGETS (from global realm):
+    #   • GeoRegion      (22 nodes: northern-africa, western-europe, etc.)
+    #   • GeoSubRegion   (50+ nodes: maghreb, gulf-states, indian-subcontinent)
+    #   • Continent      (6 nodes: africa, americas, asia, europe, oceania, antarctica)
+    #
+    # EXAMPLE:
+    #   qr-code-pix ──[:POPULAR_IN {weight: 0.9}]──> GeoSubRegion:brazil
+    #   qr-code-upi ──[:POPULAR_IN {weight: 0.95}]──> GeoSubRegion:indian-subcontinent
+    #   qr-code-twint ──[:POPULAR_IN {weight: 0.85}]──> GeoRegion:western-europe
+    #
+    # NOTE: This is a CROSS-REALM arc (tenant → global).
+    #       Geographic nodes are READ-ONLY global knowledge.
+    # ─────────────────────────────────────────────────────────────────────────────
+    POPULAR_IN:
+      to: [GeoRegion, GeoSubRegion, Continent]
+      cardinality: "N:N"
+      scope: cross_realm
+      props:
+        weight:
+          type: float
+          min: 0.0
+          max: 1.0
+          default: 0.8
+          description: "Regional relevance (0.0 = weak, 1.0 = exclusive to region)"
+      description: "Links entity to geographic regions where it's popular/relevant"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # INCOMING RELATIONS
+  # ═══════════════════════════════════════════════════════════════════════════════
+  #
+  # Entities belong to a Project, which belongs to an Organization.
+  # This is the ownership hierarchy for multi-tenant isolation.
+  #
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  incoming_relations:
+    HAS_ENTITY:
+      from: Project
+      cardinality: "1:N"
+      description: "Project that owns this entity (Organization → Project → Entity)"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # EXAMPLES
+  # ═══════════════════════════════════════════════════════════════════════════════
+  #
+  # Real-world examples from QR Code AI project demonstrating different entity categories.
+  # Category is now a relationship: Entity ──[:BELONGS_TO]──> EntityCategory
+  #
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  examples:
+
+    # Example 1: THING category (pillar)
+    pillar_thing:
+      key: "qr-code"
+      display_name: "QR Code"
+      description: "Two-dimensional barcode that encodes data in a scannable visual pattern. Core product pillar of QR Code AI."
+      llm_context: "USE: when discussing QR codes, scanning, 2D barcodes. TRIGGERS: qr, qr code, scan, code qr. NOT: barcode 1D (use Barcode), smart link without QR (use Smart Link)."
+      is_pillar: true
+      # BELONGS_TO: thing
+
+    # Example 2: THING category (subtopic)
+    subtopic_thing:
+      key: "qr-code-art"
+      display_name: "QR Code Art"
+      description: "AI-generated artistic QR code where pattern is fused into artwork, not layered. The QR becomes part of the art itself."
+      llm_context: "USE: AI QR, artistic QR, generated QR. TRIGGERS: qr art, ai qr, qr artistique. NOT: photo overlay (use QR Code Image), manual design (use Custom QR Code)."
+      is_pillar: false
+      # BELONGS_TO: thing
+      # SUBTOPIC_OF: qr-code
+
+    # Example 3: CONCEPT category (educational)
+    concept:
+      key: "dynamic-qr-code"
+      display_name: "Dynamic QR Code"
+      description: "Educational concept: QR code using Short Link as intermediary. Destination editable after printing, fully trackable."
+      llm_context: "USE: when explaining editable QR, trackable QR. TRIGGERS: dynamic, editable, modifiable. NOT: WiFi/vCard QR (use Static QR Code)."
+      is_pillar: false
+      # BELONGS_TO: concept
+
+    # Example 4: ACTION category
+    action:
+      key: "create-qr-code"
+      display_name: "Create QR Code"
+      description: "Generate a new QR code. Applies to any style (Custom, Image, Art) and content type (URL, WiFi, vCard)."
+      llm_context: "USE: when user wants to generate/make a QR code. TRIGGERS: create qr, generate qr, make qr, creer qr. NOT: scanning (use Scan QR Code)."
+      is_pillar: false
+      # BELONGS_TO: action
+
+    # Example 5: FEATURE category
+    feature:
+      key: "contextual-routing"
+      display_name: "Contextual Routing"
+      description: "Redirect users to different destinations based on device, location, time, or language. Works via Short Link."
+      llm_context: "USE: conditional redirects, smart routing, targeting. TRIGGERS: routing, device targeting, geo targeting. NOT: analytics data (use Analytics)."
+      is_pillar: false
+      # BELONGS_TO: feature
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # CYPHER QUERIES
+  # ─────────────────────────────────────────────────────────────────────────────
+
+  cypher:
+    # Get entity with all content (v10.9.0: renamed)
+    get_with_content: |
+      MATCH (t:Tenant)-[:HAS_ENTITY]->(e:Entity {key: $key})
+      OPTIONAL MATCH (e)-[:HAS_CONTENT]->(ec:EntityContent)-[:FOR_LOCALE]->(l:Locale)
+      RETURN e, collect({locale: l.key, title: ec.display_name}) AS content
+
+    # Get pillar with all subtopics
+    get_pillar_cluster: |
+      MATCH (e:Entity {is_pillar: true, key: $pillar_key})
+      OPTIONAL MATCH (sub:Entity)-[:SUBTOPIC_OF]->(e)
+      RETURN e, collect(sub) AS subtopics
+
+    # Get semantically linked entities
+    get_semantic_links: |
+      MATCH (e:Entity {key: $key})-[r:SEMANTIC_LINK]->(linked:Entity)
+      WHERE r.temperature >= $min_temperature
+      RETURN linked, r.temperature, r.link_type
+      ORDER BY r.temperature DESC

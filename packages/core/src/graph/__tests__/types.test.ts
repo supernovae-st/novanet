@@ -9,7 +9,7 @@ describe('graph/types', () => {
     const node: SchemaNode = {
       id: 'schema-Project',
       nodeType: 'Project',
-      realm: 'tenant',
+      realm: 'org',
       layer: 'foundation',
       label: 'Project',
       description: 'Project node',
@@ -42,13 +42,13 @@ describe('graph/types', () => {
 
   it('should export RealmDefinition interface', () => {
     const realmDef: RealmDefinition = {
-      realm: 'tenant',
+      realm: 'org',
       label: 'TENANT',
       icon: '📦',
       description: 'Tenant-specific content and structure',
       layers: {} as RealmDefinition['layers'],
     };
-    expect(realmDef.realm).toBe('tenant');
+    expect(realmDef.realm).toBe('org');
     expect(realmDef.label).toBe('TENANT');
   });
 
@@ -56,7 +56,7 @@ describe('graph/types', () => {
     const node: SchemaNode = {
       id: 'schema-Locale',
       nodeType: 'Locale',
-      realm: 'global',
+      realm: 'shared',
       layer: 'config',
       label: 'Locale',
       description: 'Locale configuration',

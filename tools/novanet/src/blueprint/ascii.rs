@@ -421,8 +421,8 @@ pub fn arc_family_arrow(family_key: &str) -> &'static str {
 /// Realm icon for display.
 pub fn realm_icon(realm_key: &str) -> &'static str {
     match realm_key {
-        "global" => "◉",
-        "tenant" => "◎",
+        "shared" => "◉",
+        "org" => "◎",
         _ => "○",
     }
 }

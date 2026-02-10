@@ -22,7 +22,8 @@ pub struct TraitStats {
     pub invariant: usize,
     pub localized: usize,
     pub knowledge: usize,
-    pub derived: usize,
+    pub generated: usize,
+    pub aggregated: usize,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -68,7 +69,8 @@ fn collect_stats(data: &BlueprintData) -> BlueprintStats {
             invariant: by_trait.get(&NodeTrait::Invariant).map(|v| v.len()).unwrap_or(0),
             localized: by_trait.get(&NodeTrait::Localized).map(|v| v.len()).unwrap_or(0),
             knowledge: by_trait.get(&NodeTrait::Knowledge).map(|v| v.len()).unwrap_or(0),
-            derived: by_trait.get(&NodeTrait::Derived).map(|v| v.len()).unwrap_or(0),
+            generated: by_trait.get(&NodeTrait::Generated).map(|v| v.len()).unwrap_or(0),
+            aggregated: by_trait.get(&NodeTrait::Aggregated).map(|v| v.len()).unwrap_or(0),
         },
         arc_families: ArcFamilyStats {
             ownership: by_family.get(&ArcFamily::Ownership).map(|v| v.len()).unwrap_or(0),
@@ -99,7 +101,8 @@ fn render_table(stats: &BlueprintStats) -> String {
          invariant:        {}\n\
          localized:        {}\n\
          knowledge:        {}\n\
-         derived:          {}\n\
+         generated:        {}\n\
+         aggregated:       {}\n\
          \n\
          ARC FAMILIES\n\
          ───────────────────────────────────────\n\
@@ -121,7 +124,8 @@ fn render_table(stats: &BlueprintStats) -> String {
         stats.traits.invariant,
         stats.traits.localized,
         stats.traits.knowledge,
-        stats.traits.derived,
+        stats.traits.generated,
+        stats.traits.aggregated,
         stats.arc_families.ownership,
         stats.arc_families.localization,
         stats.arc_families.semantic,

@@ -23,8 +23,8 @@ import dagre from '@dagrejs/dagre';
 // =============================================================================
 
 const REALM_CONFIGS: Record<Realm, { label: string; color: string }> = {
-  global: { label: 'Global', color: '#2aa198' },   // Solarized cyan
-  tenant: { label: 'Tenant', color: '#6c71c4' },   // Solarized violet
+  shared: { label: 'Global', color: '#2aa198' },   // Solarized cyan
+  org: { label: 'Tenant', color: '#6c71c4' },   // Solarized violet
 };
 
 const LAYER_CONFIGS: Record<string, { label: string }> = {

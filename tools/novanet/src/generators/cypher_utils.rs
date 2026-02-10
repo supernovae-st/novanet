@@ -246,11 +246,11 @@ mod tests {
             &mut out,
             "r",
             "Realm",
-            "global",
-            &[("display_name", "Global"), ("emoji", "globe")],
+            "shared",
+            &[("display_name", "Shared"), ("emoji", "globe")],
         );
-        assert!(out.contains("MERGE (r:Meta:Realm {key: 'global'})"));
-        assert!(out.contains("r.display_name = 'Global'"));
+        assert!(out.contains("MERGE (r:Meta:Realm {key: 'shared'})"));
+        assert!(out.contains("r.display_name = 'Shared'"));
         assert!(out.contains("r.emoji = 'globe'"));
         assert!(out.contains("created_at = datetime()"));
         assert!(out.contains("updated_at = datetime()"));

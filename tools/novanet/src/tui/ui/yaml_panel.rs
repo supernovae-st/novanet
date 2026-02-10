@@ -516,13 +516,14 @@ mod tests {
 
     #[test]
     fn test_highlight_yaml_line_key_value_indented() {
-        let line = highlight_yaml_line("  realm: global");
+        // v11.2: shared realm (was global)
+        let line = highlight_yaml_line("  realm: shared");
         assert_eq!(line.spans.len(), 4);
         assert_eq!(line.spans[0].content, "  "); // indent
         assert_eq!(line.spans[1].content, "realm"); // key
         assert_eq!(line.spans[1].style, STYLE_YAML_KEY);
         assert_eq!(line.spans[2].content, ":"); // colon
-        assert_eq!(line.spans[3].content, " global"); // value
+        assert_eq!(line.spans[3].content, " shared"); // value
     }
 
     #[test]

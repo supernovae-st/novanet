@@ -207,9 +207,9 @@ describe('NovaNetFilter', () => {
     });
 
     it('excludeTypes() sets excludeTypes filter', () => {
-      const filter = NovaNetFilter.create().excludeTypes('SEOMiningRun', 'SEOKeywordMetrics');
+      const filter = NovaNetFilter.create().excludeTypes('SEOKeyword', 'SEOKeywordMetrics');
       const criteria = filter.getCriteria();
-      expect(criteria.filters.excludeTypes).toEqual(['SEOMiningRun', 'SEOKeywordMetrics']);
+      expect(criteria.filters.excludeTypes).toEqual(['SEOKeyword', 'SEOKeywordMetrics']);
     });
 
     it('search() sets searchQuery filter', () => {
@@ -301,11 +301,11 @@ describe('CypherGenerator', () => {
     it('generates WHERE for excludeTypes filter', () => {
       const filter = NovaNetFilter.create()
         .fromPage('page-pricing')
-        .excludeTypes('SEOMiningRun', 'SEOKeywordMetrics');
+        .excludeTypes('SEOKeyword', 'SEOKeywordMetrics');
       const result = CypherGenerator.generate(filter);
 
       expect(result.query).toContain('WHERE');
-      expect(result.query).toContain('(NOT root:SEOMiningRun AND NOT root:SEOKeywordMetrics)');
+      expect(result.query).toContain('(NOT root:SEOKeyword AND NOT root:SEOKeywordMetrics)');
     });
 
     it('generates WHERE for search filter with default fields', () => {

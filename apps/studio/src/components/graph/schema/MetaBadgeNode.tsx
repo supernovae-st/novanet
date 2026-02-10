@@ -50,8 +50,8 @@ export type MetaBadgeNodeType = Node<MetaBadgeNodeData, 'metaBadge'>;
 // =============================================================================
 
 const REALM_ICONS: Record<Realm, typeof Globe> = {
-  global: Globe,
-  tenant: Building2,
+  shared: Globe,
+  org: Building2,
 };
 
 // =============================================================================
@@ -94,7 +94,7 @@ const RealmNode = memo(function RealmNode({
     onMouseUp: () => void;
   };
 }) {
-  const { label, color, typeCount = 0, realmKey = 'global', description } = data;
+  const { label, color, typeCount = 0, realmKey = 'shared', description } = data;
   const RealmIconComponent = REALM_ICONS[realmKey as Realm] || Globe;
 
   const glowStyle = useMemo(

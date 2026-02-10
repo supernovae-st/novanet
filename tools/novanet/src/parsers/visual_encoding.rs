@@ -304,8 +304,8 @@ mod tests {
 
         let doc = load_visual_encoding(root).expect("should load visual-encoding.yaml");
 
-        // Version (v11.0: SEO tenant + ProjectContent rename)
-        assert_eq!(doc.version, "11.0.0");
+        // Version (v11.2: realm renames shared/org + trait split)
+        assert_eq!(doc.version, "11.2.0");
 
         // Channel mapping
         assert_eq!(doc.channel_mapping.node.fill_color, "layer");
@@ -319,11 +319,12 @@ mod tests {
         assert!(doc.node_states.contains_key("selected"));
         assert!(doc.node_states.contains_key("filtered"));
 
-        // Trait borders (4) — v11.2: job trait removed
+        // Trait borders (5) — v11.2: split derived → generated + aggregated
         assert!(doc.trait_borders.contains_key("invariant"));
         assert!(doc.trait_borders.contains_key("localized"));
         assert!(doc.trait_borders.contains_key("knowledge"));
-        assert!(doc.trait_borders.contains_key("derived"));
+        assert!(doc.trait_borders.contains_key("generated"));
+        assert!(doc.trait_borders.contains_key("aggregated"));
 
         // Kind icons (44+)
         assert!(doc.kind_icons.len() >= 30);
@@ -338,10 +339,10 @@ mod tests {
         let icons = doc.icons.expect("should have icons section");
 
         // Realms (2)
-        assert!(icons.realms.contains_key("global"));
-        assert!(icons.realms.contains_key("tenant"));
-        assert_eq!(icons.realm_terminal("global"), "◉");
-        assert_eq!(icons.realm_terminal("tenant"), "◎");
+        assert!(icons.realms.contains_key("shared"));
+        assert!(icons.realms.contains_key("org"));
+        assert_eq!(icons.realm_terminal("shared"), "◉");
+        assert_eq!(icons.realm_terminal("org"), "◎");
 
         // Layers (8)
         assert!(icons.layers.contains_key("config"));
@@ -349,10 +350,14 @@ mod tests {
         assert!(icons.layers.contains_key("output"));
         assert_eq!(icons.layer_terminal("config"), "⚙");
 
-        // Traits (5)
+        // Traits (5) — v11.2: split derived → generated + aggregated
         assert!(icons.traits.contains_key("invariant"));
         assert!(icons.traits.contains_key("localized"));
+        assert!(icons.traits.contains_key("knowledge"));
+        assert!(icons.traits.contains_key("generated"));
+        assert!(icons.traits.contains_key("aggregated"));
         assert_eq!(icons.trait_terminal("invariant"), "■");
+        assert_eq!(icons.trait_terminal("generated"), "★");
 
         // States (8)
         assert!(icons.states.contains_key("loading"));

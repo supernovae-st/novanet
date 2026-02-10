@@ -1,0 +1,100 @@
+# packages/core/models/node-kinds/global/config/continent.yaml
+# Continent - UN M49 continental region for geographic hierarchy
+#
+# v10.8: Geographic Taxonomy - Phase 1
+# Data: 6 continents (AF, AM, AN, AS, EU, OC)
+# Source: UN M49 Standard (unstats.un.org)
+
+node:
+  name: Continent
+  realm: shared
+  layer: config
+  trait: invariant
+  icon: "🌍"
+  description: "UN M49 continental region for geographic clustering and LLM retrieval"
+
+  standard_properties:
+    key:
+      type: string
+      required: true
+      description: "Two-letter continent code (UN M49)"
+      pattern: "^[A-Z]{2}$"
+      examples:
+        - "AF"
+        - "AM"
+        - "AS"
+        - "EU"
+        - "OC"
+        - "AN"
+
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable continent name"
+      example: "Europe"
+
+    description:
+      type: string
+      required: true
+      description: "Short description"
+      example: "European continent covering 44 countries"
+
+    llm_context:
+      type: string
+      required: true
+      description: "LLM generation hints for geographic context"
+      example: "USE: for European countries and markets. TRIGGERS: europe, european, eu. NOT: Eurasia (use separate)."
+
+    created_at:
+      type: datetime
+      required: true
+
+    updated_at:
+      type: datetime
+      required: true
+
+  properties:
+    m49_code:
+      type: int
+      required: true
+      description: "UN M49 numeric code"
+      examples:
+        - 2    # Africa
+        - 19   # Americas
+        - 142  # Asia
+        - 150  # Europe
+        - 9    # Oceania
+        - 10   # Antarctica
+
+    region_count:
+      type: int
+      required: false
+      description: "Number of GeoRegion children"
+      example: 4
+
+  relations:
+    incoming:
+      - type: IN_CONTINENT
+        from: GeoRegion
+        cardinality: "N:1"
+        description: "Geographic regions within this continent"
+
+  example:
+    data:
+      key: "EU"
+      display_name: "Europe"
+      description: "European continent covering 44 countries"
+      m49_code: 150
+      region_count: 4
+      llm_context: "USE: for European countries and markets. TRIGGERS: europe, european, eu, western, eastern, northern, southern europe. NOT: Eurasia (use AS for Asian part)."
+
+    cypher: |
+      // Get all regions in a continent
+      MATCH (c:Continent {key: $key})<-[:IN_CONTINENT]-(r:GeoRegion)
+      RETURN r.key, r.name
+      ORDER BY r.name
+
+      // Get all locales in a continent
+      MATCH (c:Continent {key: $key})<-[:IN_CONTINENT]-(r:GeoRegion)<-[:IN_SUBREGION]-(l:Locale)
+      RETURN l.key, r.name AS region
+      ORDER BY r.name, l.key

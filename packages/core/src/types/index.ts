@@ -1,6 +1,6 @@
-// NovaNet Core Types v10.6.0 - 2-Realm Architecture
+// NovaNet Core Types v11.2.0 - 2-Realm Architecture
 //
-// v10.6.0: 2 realms (global, tenant), Organization removed, project → tenant
+// v11.2.0: 2 realms (shared, org), derived → generated + aggregated, job nodes removed
 //
 // STANDARD PROPERTIES (all nodes):
 //   key: string           - Unique identifier (with semantic prefix)

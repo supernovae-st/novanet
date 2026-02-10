@@ -412,87 +412,87 @@ describe('filterStore', () => {
 
     describe('toggleRealmCollapsed', () => {
       it('should add realm to collapsedRealms when not present', () => {
-        useFilterStore.getState().toggleRealmCollapsed('tenant');
+        useFilterStore.getState().toggleRealmCollapsed('org');
 
         const state = useFilterStore.getState();
-        expect(state.collapsedRealms).toContain('tenant');
+        expect(state.collapsedRealms).toContain('org');
       });
 
       it('should remove realm from collapsedRealms when already present', () => {
-        useFilterStore.setState({ collapsedRealms: ['tenant'] });
+        useFilterStore.setState({ collapsedRealms: ['org'] });
 
-        useFilterStore.getState().toggleRealmCollapsed('tenant');
+        useFilterStore.getState().toggleRealmCollapsed('org');
 
         const state = useFilterStore.getState();
-        expect(state.collapsedRealms).not.toContain('tenant');
+        expect(state.collapsedRealms).not.toContain('org');
       });
 
       it('should handle multiple realms independently', () => {
-        useFilterStore.getState().toggleRealmCollapsed('tenant');
-        useFilterStore.getState().toggleRealmCollapsed('global');
+        useFilterStore.getState().toggleRealmCollapsed('org');
+        useFilterStore.getState().toggleRealmCollapsed('shared');
 
         const state = useFilterStore.getState();
-        expect(state.collapsedRealms).toContain('tenant');
-        expect(state.collapsedRealms).toContain('global');
+        expect(state.collapsedRealms).toContain('org');
+        expect(state.collapsedRealms).toContain('shared');
       });
     });
 
     describe('toggleLayerCollapsed', () => {
       it('should add layer key to collapsedLayers when not present', () => {
-        useFilterStore.getState().toggleLayerCollapsed('tenant', 'foundation');
+        useFilterStore.getState().toggleLayerCollapsed('org', 'foundation');
 
         const state = useFilterStore.getState();
-        expect(state.collapsedLayers).toContain('tenant-foundation');
+        expect(state.collapsedLayers).toContain('org-foundation');
       });
 
       it('should remove layer key from collapsedLayers when already present', () => {
-        useFilterStore.setState({ collapsedLayers: ['tenant-foundation'] });
+        useFilterStore.setState({ collapsedLayers: ['org-foundation'] });
 
-        useFilterStore.getState().toggleLayerCollapsed('tenant', 'foundation');
+        useFilterStore.getState().toggleLayerCollapsed('org', 'foundation');
 
         const state = useFilterStore.getState();
-        expect(state.collapsedLayers).not.toContain('tenant-foundation');
+        expect(state.collapsedLayers).not.toContain('org-foundation');
       });
 
       it('should handle multiple layers independently', () => {
-        useFilterStore.getState().toggleLayerCollapsed('tenant', 'foundation');
-        useFilterStore.getState().toggleLayerCollapsed('tenant', 'structure');
-        useFilterStore.getState().toggleLayerCollapsed('global', 'knowledge');
+        useFilterStore.getState().toggleLayerCollapsed('org', 'foundation');
+        useFilterStore.getState().toggleLayerCollapsed('org', 'structure');
+        useFilterStore.getState().toggleLayerCollapsed('shared', 'locale-knowledge');
 
         const state = useFilterStore.getState();
-        expect(state.collapsedLayers).toContain('tenant-foundation');
-        expect(state.collapsedLayers).toContain('tenant-structure');
-        expect(state.collapsedLayers).toContain('global-knowledge');
+        expect(state.collapsedLayers).toContain('org-foundation');
+        expect(state.collapsedLayers).toContain('org-structure');
+        expect(state.collapsedLayers).toContain('shared-locale-knowledge');
       });
     });
 
     describe('isRealmCollapsed', () => {
       it('should return false when realm is not collapsed', () => {
-        expect(useFilterStore.getState().isRealmCollapsed('tenant')).toBe(false);
+        expect(useFilterStore.getState().isRealmCollapsed('org')).toBe(false);
       });
 
       it('should return true when realm is collapsed', () => {
-        useFilterStore.getState().toggleRealmCollapsed('tenant');
+        useFilterStore.getState().toggleRealmCollapsed('org');
 
-        expect(useFilterStore.getState().isRealmCollapsed('tenant')).toBe(true);
+        expect(useFilterStore.getState().isRealmCollapsed('org')).toBe(true);
       });
     });
 
     describe('isLayerCollapsed', () => {
       it('should return false when layer is not collapsed', () => {
-        expect(useFilterStore.getState().isLayerCollapsed('tenant', 'foundation')).toBe(false);
+        expect(useFilterStore.getState().isLayerCollapsed('org', 'foundation')).toBe(false);
       });
 
       it('should return true when layer is collapsed', () => {
-        useFilterStore.getState().toggleLayerCollapsed('tenant', 'foundation');
+        useFilterStore.getState().toggleLayerCollapsed('org', 'foundation');
 
-        expect(useFilterStore.getState().isLayerCollapsed('tenant', 'foundation')).toBe(true);
+        expect(useFilterStore.getState().isLayerCollapsed('org', 'foundation')).toBe(true);
       });
     });
 
     describe('resetSchemaFilters', () => {
       it('should reset collapsedRealms to empty array', () => {
-        useFilterStore.setState({ collapsedRealms: ['tenant', 'global'] });
+        useFilterStore.setState({ collapsedRealms: ['org', 'shared'] });
 
         useFilterStore.getState().resetSchemaFilters();
 
@@ -501,7 +501,7 @@ describe('filterStore', () => {
 
       it('should reset collapsedLayers to empty array', () => {
         useFilterStore.setState({
-          collapsedLayers: ['tenant-foundation', 'global-knowledge'],
+          collapsedLayers: ['org-foundation', 'shared-locale-knowledge'],
         });
 
         useFilterStore.getState().resetSchemaFilters();
@@ -511,8 +511,8 @@ describe('filterStore', () => {
 
       it('should reset both collapsedRealms and collapsedLayers', () => {
         useFilterStore.setState({
-          collapsedRealms: ['tenant', 'global'],
-          collapsedLayers: ['tenant-foundation', 'global-knowledge'],
+          collapsedRealms: ['org', 'shared'],
+          collapsedLayers: ['org-foundation', 'shared-locale-knowledge'],
         });
 
         useFilterStore.getState().resetSchemaFilters();

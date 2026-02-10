@@ -169,7 +169,7 @@ mod tests {
 
 node:
   name: Locale
-  realm: global
+  realm: shared
   layer: config
   trait: invariant
   icon: "🌍"
@@ -201,7 +201,7 @@ node:
         // Kind section should contain name, realm, etc.
         let kind = sections.kind_content();
         assert!(kind.contains("name: Locale"));
-        assert!(kind.contains("realm: global"));
+        assert!(kind.contains("realm: shared"));
 
         // Instance section should contain standard_properties
         let instance = sections.instance_content();
@@ -214,7 +214,7 @@ node:
         // YAML without standard_properties
         let invalid = r#"
 name: Test
-realm: global
+realm: shared
 "#;
         assert!(YamlSections::parse(invalid).is_none());
     }

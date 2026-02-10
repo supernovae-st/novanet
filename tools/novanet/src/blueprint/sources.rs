@@ -194,8 +194,8 @@ mod tests {
         let data = BlueprintData::from_yaml(&root).expect("Failed to load blueprint data");
 
         let by_realm = data.nodes_by_realm();
-        assert!(by_realm.contains_key("global"), "Should have global realm");
-        assert!(by_realm.contains_key("tenant"), "Should have tenant realm");
+        assert!(by_realm.contains_key("shared"), "Should have global realm");
+        assert!(by_realm.contains_key("org"), "Should have tenant realm");
     }
 
     #[test]

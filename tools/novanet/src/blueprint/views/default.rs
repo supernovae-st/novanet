@@ -85,8 +85,8 @@ fn render_realms(data: &BlueprintData) -> String {
         let bar = progress_bar_compact(count, total, 16);
         let icon = realm_icon(&realm_def.key);
         let desc = match realm_def.key.as_str() {
-            "global" => "(read-only, universal knowledge)",
-            "tenant" => "(business-specific content)",
+            "shared" => "(read-only, universal knowledge)",
+            "org" => "(business-specific content)",
             _ => "",
         };
         let _ = writeln!(out,
@@ -144,7 +144,8 @@ fn render_traits(data: &BlueprintData) -> String {
         (NodeTrait::Invariant, "invariant", "Same across all locales", "Entity, Page, Block"),
         (NodeTrait::Localized, "localized", "Native content per locale", "EntityContent, ProjectContent"),
         (NodeTrait::Knowledge, "knowledge", "Locale-specific atoms", "Term, Expression, Taboo"),
-        (NodeTrait::Derived, "derived", "Generated from invariants", "PageGenerated, BlockGenerated"),
+        (NodeTrait::Generated, "generated", "LLM-generated output", "PageGenerated, BlockGenerated"),
+        (NodeTrait::Aggregated, "aggregated", "Computed metrics", "GEOMetrics, SEOKeywordMetrics"),
     ];
 
     for (trait_enum, key, description, examples) in trait_info {
