@@ -615,7 +615,14 @@ export const FloatingEdge = memo(function FloatingEdge({
   });
 
   // Visibility culling and performance mode
-  const { isVisible, registerEdge, unregisterEdge, effectTier, disableAnimations } = useEdgeVisibility();
+  const { isVisible, registerEdge, unregisterEdge, registerEdgeMeta, getEffectiveTier, disableAnimations } = useEdgeVisibility();
+
+  // Register edge metadata for hub node detection
+  useEffect(() => {
+    registerEdgeMeta(id, source, target);
+  }, [id, source, target, registerEdgeMeta]);
+
+  // Register for viewport visibility tracking
   useEffect(() => {
     const element = pathRef.current;
     if (element) {
@@ -623,7 +630,10 @@ export const FloatingEdge = memo(function FloatingEdge({
       return () => unregisterEdge(id, element);
     }
   }, [id, registerEdge, unregisterEdge]);
+
   const isEdgeVisible = isVisible(id);
+  // Get effective tier (may be downgraded if connected to hub node)
+  const effectTier = getEffectiveTier(id);
 
   // Extract node positions
   const sourceX = sourceNode?.internals.positionAbsolute.x ?? 0;
