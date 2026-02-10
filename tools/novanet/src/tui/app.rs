@@ -34,9 +34,9 @@ pub const INFO_SCROLL_MARGIN: usize = 5;
 /// Default tree height (updated by UI on render).
 pub const DEFAULT_TREE_HEIGHT: usize = 20;
 
-/// Navigation mode — 4 independent modes in v11.6 redesign.
-/// Order: 1:Meta 2:Data 3:Audit 4:Nexus
-/// Keys 1-4 switch modes GLOBALLY from anywhere.
+/// Navigation mode — 5 independent modes in v11.6 redesign.
+/// Order: 1:Meta 2:Data 3:Audit 4:Nexus 5:Atlas
+/// Keys 1-5 switch modes GLOBALLY from anywhere.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum NavMode {
     /// Meta mode: Taxonomy view (Realm > Layer > Kind hierarchy, schema-focused)
@@ -48,6 +48,8 @@ pub enum NavMode {
     Audit,
     /// Nexus mode: Gamified learning hub
     Nexus,
+    /// Atlas mode: Interactive architecture visualizations
+    Atlas,
 }
 
 impl NavMode {
@@ -57,16 +59,18 @@ impl NavMode {
             NavMode::Data => "Data",
             NavMode::Audit => "Audit",
             NavMode::Nexus => "Nexus",
+            NavMode::Atlas => "Atlas",
         }
     }
 
-    /// Get array index for mode_cursors (0-3).
+    /// Get array index for mode_cursors (0-4).
     pub fn index(&self) -> usize {
         match self {
             NavMode::Meta => 0,
             NavMode::Data => 1,
             NavMode::Audit => 2,
             NavMode::Nexus => 3,
+            NavMode::Atlas => 4,
         }
     }
 }
@@ -174,8 +178,8 @@ pub struct App {
     pub mode: NavMode,
     pub focus: Focus,
     pub tree_cursor: usize,
-    /// Remember cursor position per mode (Meta, Data, Audit, Nexus).
-    pub mode_cursors: [usize; 4],
+    /// Remember cursor position per mode (Meta, Data, Audit, Nexus, Atlas).
+    pub mode_cursors: [usize; 5],
     pub tree_scroll: usize, // Scroll offset for tree
     pub tree_height: usize, // Visible height (set by UI)
     pub tree: TaxonomyTree,
@@ -299,7 +303,7 @@ impl App {
             mode: NavMode::Meta,
             focus: Focus::Tree,
             tree_cursor: 0,
-            mode_cursors: [0; 4], // Init all modes at cursor 0 (Meta, Data, Audit, Nexus)
+            mode_cursors: [0; 5], // Init all modes at cursor 0 (Meta, Data, Audit, Nexus, Atlas)
             tree_scroll: 0,
             tree_height: DEFAULT_TREE_HEIGHT,
             tree,
@@ -369,7 +373,7 @@ impl App {
     /// - Audit/Nexus → Kind section
     pub fn yaml_active_section(&self) -> YamlViewSection {
         match self.mode {
-            NavMode::Meta | NavMode::Audit | NavMode::Nexus => YamlViewSection::Kind,
+            NavMode::Meta | NavMode::Audit | NavMode::Nexus | NavMode::Atlas => YamlViewSection::Kind,
             NavMode::Data => YamlViewSection::Instance,
         }
     }
@@ -888,11 +892,12 @@ impl App {
                     self.legend_active = true;
                     return true;
                 }
-                // Keys 1-4 fall through to global mode switching below
+                // Keys 1-5 fall through to global mode switching below
                 KeyCode::Char('1')
                 | KeyCode::Char('2')
                 | KeyCode::Char('3')
-                | KeyCode::Char('4') => {}
+                | KeyCode::Char('4')
+                | KeyCode::Char('5') => {}
                 // All other keys handled by nexus ([ ] for tabs, j/k for nav, etc.)
                 _ => return self.nexus.handle_key(key),
             }
@@ -978,6 +983,17 @@ impl App {
                     self.save_mode_cursor();
                     self.mode = NavMode::Nexus;
                     self.restore_mode_cursor(NavMode::Nexus);
+                }
+                true
+            }
+            KeyCode::Char('5') => {
+                // Switch to Atlas mode
+                if self.mode != NavMode::Atlas {
+                    self.exit_filtered_data_mode();
+                    self.save_mode_cursor();
+                    self.mode = NavMode::Atlas;
+                    self.restore_mode_cursor(NavMode::Atlas);
+                    self.init_atlas_from_current();
                 }
                 true
             }

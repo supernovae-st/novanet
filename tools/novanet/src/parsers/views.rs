@@ -375,7 +375,7 @@ include:
         let reg = load_registry(&root).expect("should load registry");
         assert!(reg.views.len() >= 12);
 
-        let valid_cats = ["overview", "generation", "knowledge", "project", "mining"];
+        let valid_cats = ["overview", "generation", "knowledge", "project", "mining", "contextual"];
         for entry in &reg.views {
             assert!(
                 valid_cats.contains(&entry.category.as_str()),
