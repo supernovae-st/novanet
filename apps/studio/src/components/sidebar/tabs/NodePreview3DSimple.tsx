@@ -28,9 +28,12 @@ interface NodePreview3DSimpleProps {
 function CoreMesh({ layer, color }: { layer: Layer; color: string }) {
   const meshRef = useRef<THREE.Mesh>(null);
 
-  useFrame((_, delta) => {
+  useFrame(({ clock }, delta) => {
     if (meshRef.current) {
-      meshRef.current.rotation.y += delta * 0.3;
+      meshRef.current.rotation.y += delta * 0.5;
+      meshRef.current.rotation.x = Math.sin(clock.getElapsedTime() * 0.3) * 0.1;
+      // Subtle floating effect
+      meshRef.current.position.y = Math.sin(clock.getElapsedTime() * 0.8) * 0.15;
     }
   });
 
@@ -76,17 +79,21 @@ function CoreMesh({ layer, color }: { layer: Layer; color: string }) {
 }
 
 // Orbital ring
-function OrbitalRing({ radius, color, rotationX, rotationZ }: {
+function OrbitalRing({ radius, color, rotationX, rotationZ, speed = 1 }: {
   radius: number;
   color: string;
   rotationX: number;
   rotationZ: number;
+  speed?: number;
 }) {
   const ringRef = useRef<THREE.Mesh>(null);
 
-  useFrame((_, delta) => {
+  useFrame(({ clock }, delta) => {
     if (ringRef.current) {
-      ringRef.current.rotation.z += delta * 0.5;
+      ringRef.current.rotation.z += delta * 0.6 * speed;
+      // Pulse effect on opacity
+      const material = ringRef.current.material as THREE.MeshBasicMaterial;
+      material.opacity = 0.4 + Math.sin(clock.getElapsedTime() * 2) * 0.15;
     }
   });
 
@@ -129,6 +136,7 @@ function SceneContent({ layer, realm }: { layer: Layer; realm: Realm }) {
         color={realmColor}
         rotationX={Math.PI / 2}
         rotationZ={0}
+        speed={1}
       />
       {ringCount > 1 && (
         <OrbitalRing
@@ -136,6 +144,7 @@ function SceneContent({ layer, realm }: { layer: Layer; realm: Realm }) {
           color={realmColor}
           rotationX={Math.PI / 3}
           rotationZ={Math.PI / 4}
+          speed={-0.7}
         />
       )}
     </group>
@@ -175,7 +184,9 @@ export const NodePreview3DSimple = memo(function NodePreview3DSimple({
           enableZoom={false}
           enablePan={false}
           autoRotate
-          autoRotateSpeed={1}
+          autoRotateSpeed={1.5}
+          minPolarAngle={Math.PI / 4}
+          maxPolarAngle={Math.PI * 3 / 4}
         />
       </Canvas>
     </div>
