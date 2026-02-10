@@ -35,6 +35,7 @@ import { cn } from '@/lib/utils';
 import { useUIStore } from '@/stores/uiStore';
 import { useWebHID } from '@/hooks/useWebHID';
 import { MacropadTutorial } from './MacropadTutorial';
+import { PAD_LAYERS } from '@/config/keybindings';
 
 // Dynamic import with SSR disabled for Three.js
 const SuperNovaePad3D = dynamic(
@@ -99,6 +100,26 @@ const CONFIG_PATH = '~/Projects/work-louder/studio-integration/configs/work-loud
 type SyncStatus = 'idle' | 'loading' | 'synced' | 'error' | 'modified';
 
 // =============================================================================
+// Convert PAD_LAYERS to LayerConfig format
+// =============================================================================
+
+function convertPadLayersToConfig(): LayerConfig[] {
+  return PAD_LAYERS.map((layer) => ({
+    id: layer.id,
+    name: layer.name,
+    color: layer.color,
+    description: layer.description,
+    keys: Object.fromEntries(
+      layer.keys.map((key) => [
+        key.position,
+        { key: key.key, label: key.label, action: key.action },
+      ])
+    ),
+    encoder: layer.encoder,
+  }));
+}
+
+// =============================================================================
 // Default Configuration (matches work-louder-micro.json structure)
 // =============================================================================
 
@@ -110,80 +131,7 @@ const DEFAULT_CONFIG: DeviceConfig = {
     matrix: { rows: 3, cols: 4 },
     encoder: true,
   },
-  layers: [
-    {
-      id: 0,
-      name: 'Navigation',
-      color: '#00FFFF',
-      description: 'Novanet TUI navigation mode',
-      keys: {
-        '0,0': { key: '1', label: 'Meta', action: 'MODE_META' },
-        '0,1': { key: 'K', label: '↑', action: 'NAV_UP' },
-        '0,2': { key: 'UP', label: '↑', action: 'ARROW_UP' },
-        '0,3': { key: '2', label: 'Data', action: 'MODE_DATA' },
-        '1,0': { key: 'H', label: '←', action: 'NAV_LEFT' },
-        '1,1': { key: 'LEFT', label: '←', action: 'ARROW_LEFT' },
-        '1,2': { key: 'SPACE', label: 'Toggle', action: 'TOGGLE' },
-        '1,3': { key: 'L', label: '→', action: 'NAV_RIGHT' },
-        '2,0': { key: '3', label: 'Overlay', action: 'MODE_OVERLAY' },
-        '2,1': { key: 'J', label: '↓', action: 'NAV_DOWN' },
-        '2,2': { key: 'DOWN', label: '↓', action: 'ARROW_DOWN' },
-        '2,3': { key: '4', label: 'Query', action: 'MODE_QUERY' },
-      },
-      encoder: {
-        cw: { key: 'K', label: 'Scroll Up', action: 'SCROLL_UP' },
-        ccw: { key: 'J', label: 'Scroll Down', action: 'SCROLL_DOWN' },
-      },
-    },
-    {
-      id: 1,
-      name: 'YAML & Overlays',
-      color: '#9945FF',
-      description: 'YAML scrolling and overlay navigation',
-      keys: {
-        '0,0': { key: 'g', label: 'First', action: 'GOTO_FIRST' },
-        '0,1': { key: 'u', label: 'PgUp', action: 'PAGE_UP' },
-        '0,2': { key: 'G', label: 'Last', action: 'GOTO_LAST' },
-        '0,3': { key: 'G', label: 'Last', action: 'GOTO_LAST' },
-        '1,0': { key: '[', label: '←Line', action: 'LINE_LEFT' },
-        '1,1': { key: 'd', label: '½PgDn', action: 'HALF_PAGE_DOWN' },
-        '1,2': { key: 'u', label: '½PgUp', action: 'HALF_PAGE_UP' },
-        '1,3': { key: ']', label: '→Line', action: 'LINE_RIGHT' },
-        '2,0': { key: '[', label: '←Sect', action: 'SECTION_PREV' },
-        '2,1': { key: '/', label: 'Search', action: 'SEARCH' },
-        '2,2': { key: '?', label: 'Help', action: 'HELP' },
-        '2,3': { key: ']', label: '→Sect', action: 'SECTION_NEXT' },
-      },
-      encoder: {
-        cw: { key: ']', label: 'Line Down', action: 'YAML_LINE_DOWN' },
-        ccw: { key: '[', label: 'Line Up', action: 'YAML_LINE_UP' },
-      },
-    },
-    {
-      id: 2,
-      name: 'System',
-      color: '#FF4545',
-      description: 'System controls and RGB',
-      keys: {
-        '0,0': { key: 'r', label: 'Refresh', action: 'REFRESH' },
-        '0,1': { key: 'RGB_VAI', label: 'RGB+', action: 'RGB_BRIGHTNESS_UP' },
-        '0,2': { key: 'q', label: 'Quit', action: 'QUIT' },
-        '0,3': { key: '___', label: '', action: 'NONE' },
-        '1,0': { key: 'RGB_TOG', label: 'Toggle', action: 'RGB_TOGGLE' },
-        '1,1': { key: 'RGB_MOD', label: 'Mode', action: 'RGB_MODE_NEXT' },
-        '1,2': { key: 'RGB_HUI', label: 'Hue', action: 'RGB_HUE_UP' },
-        '1,3': { key: '___', label: '', action: 'NONE' },
-        '2,0': { key: '___', label: '', action: 'NONE' },
-        '2,1': { key: '___', label: '', action: 'NONE' },
-        '2,2': { key: '___', label: '', action: 'NONE' },
-        '2,3': { key: 'QK_BOOT', label: 'Boot', action: 'BOOTLOADER' },
-      },
-      encoder: {
-        cw: { key: 'RGB_VAI', label: 'RGB+', action: 'RGB_BRIGHTNESS_UP' },
-        ccw: { key: 'RGB_VAD', label: 'RGB-', action: 'RGB_BRIGHTNESS_DOWN' },
-      },
-    },
-  ],
+  layers: convertPadLayersToConfig(),
 };
 
 // =============================================================================
