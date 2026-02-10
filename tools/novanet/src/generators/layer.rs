@@ -428,7 +428,7 @@ mod tests {
         assert!(output.contains("SHARED REALM (39 nodes)")); // config (2) + locale (7) + geography (6) + knowledge (24)
         assert!(output.contains("ORG REALM (21 nodes)")); // unchanged in v11.4
 
-        // 8 unique layers present (v11.4: 4 shared + 6 org, config in both)
+        // 9 unique layer names (v11.5: 4 shared + 6 org = 10 total, config in both)
         for layer in [
             "config",
             "locale",
