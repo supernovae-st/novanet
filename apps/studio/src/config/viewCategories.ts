@@ -11,6 +11,7 @@ import {
   BookOpen,
   FolderKanban,
   Pickaxe,
+  Eye,
   type LucideIcon,
 } from 'lucide-react';
 import type { ViewCategory } from '@novanet/core/filters';
@@ -63,6 +64,13 @@ export const VIEW_CATEGORIES: Record<ViewCategory, CategoryConfig> = {
     color: '#fb7185', // rose-400
     description: 'SEO/GEO mining operations',
   },
+  contextual: {
+    id: 'contextual',
+    label: 'Contextual',
+    icon: Eye,
+    color: '#94a3b8', // slate-400
+    description: 'Node-specific views (based on selected node type)',
+  },
 };
 
 // Ordered list for display
@@ -72,6 +80,7 @@ export const CATEGORY_ORDER: ViewCategory[] = [
   'knowledge',
   'project',
   'mining',
+  'contextual',
 ];
 
 // Display names map (for API routes)

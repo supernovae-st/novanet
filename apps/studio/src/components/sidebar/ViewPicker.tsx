@@ -24,6 +24,7 @@ import {
   Brain,
   FolderOpen,
   TrendingUp,
+  Eye,
   type LucideIcon,
 } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
@@ -53,6 +54,7 @@ const CATEGORY_CONFIG: Record<string, { color: string; label: string; icon: Luci
   knowledge: { color: '#60a5fa', label: 'Knowledge', icon: Brain },
   project: { color: '#fbbf24', label: 'Project', icon: FolderOpen },
   mining: { color: '#f472b6', label: 'Mining', icon: TrendingUp },
+  contextual: { color: '#94a3b8', label: 'Contextual', icon: Eye },
 };
 
 interface ViewPickerProps {
@@ -70,7 +72,7 @@ const ViewCard = memo(function ViewCard({
   view: ViewRegistryEntry;
   isSelected: boolean;
   isFocused: boolean;
-  onSelect: () => void;
+  onSelect: (e: React.MouseEvent) => void;
   index: number;
 }) {
   const config = CATEGORY_CONFIG[view.category] || { color: '#a78bfa', label: 'View', icon: Layers };
@@ -139,12 +141,16 @@ const ViewPickerModal = memo(function ViewPickerModal({
   views,
   activeViewId,
   onSelect,
+  onExecute,
 }: {
   isOpen: boolean;
   onClose: () => void;
   views: ViewRegistryEntry[];
   activeViewId: string | null;
+  /** Called when Ctrl+click - just select view without executing */
   onSelect: (viewId: string) => void;
+  /** Called on regular click - select AND execute view */
+  onExecute: (viewId: string) => void;
 }) {
   const [searchInput, setSearchInput] = useState('');
   const search = useDeferredValue(searchInput);
@@ -172,12 +178,23 @@ const ViewPickerModal = memo(function ViewPickerModal({
     );
   }, [views, search]);
 
+  /**
+   * Handle view selection.
+   * - Regular click: execute view (auto-execute)
+   * - Ctrl/Cmd+click: just select view (load query without executing)
+   */
   const handleSelect = useCallback(
-    (viewId: string) => {
-      onSelect(viewId);
+    (viewId: string, ctrlPressed = false) => {
+      if (ctrlPressed) {
+        // Ctrl+click: just select, don't execute
+        onSelect(viewId);
+      } else {
+        // Regular click: execute (auto-execute behavior)
+        onExecute(viewId);
+      }
       delayedClose();
     },
-    [onSelect, delayedClose]
+    [onSelect, onExecute, delayedClose]
   );
 
   // Grid navigation hook
@@ -185,9 +202,10 @@ const ViewPickerModal = memo(function ViewPickerModal({
     columns: GRID_COLUMNS,
     totalItems: filteredViews.length,
     gridRef,
-    onSelect: (index) => {
+    onSelect: (index: number, e?: React.KeyboardEvent) => {
       if (index >= 0 && index < filteredViews.length) {
-        handleSelect(filteredViews[index].id);
+        const ctrlPressed = e?.ctrlKey || e?.metaKey || false;
+        handleSelect(filteredViews[index].id, ctrlPressed);
       }
     },
     onEscape: onClose,
@@ -283,7 +301,7 @@ const ViewPickerModal = memo(function ViewPickerModal({
                 view={view}
                 isSelected={activeViewId === view.id}
                 isFocused={focusedIndex === index}
-                onSelect={() => handleSelect(view.id)}
+                onSelect={(e) => handleSelect(view.id, e.ctrlKey || e.metaKey)}
                 index={index}
               />
             ))}
@@ -310,7 +328,11 @@ const ViewPickerModal = memo(function ViewPickerModal({
               </span>
               <span className={cn('flex items-center', gapTokens.compact)}>
                 <Kbd>↵</Kbd>
-                <span>Select</span>
+                <span>Execute</span>
+              </span>
+              <span className={cn('flex items-center', gapTokens.compact)}>
+                <Kbd>⌘</Kbd><span>+</span><Kbd>Click</Kbd>
+                <span>Load only</span>
               </span>
               <span className={cn('flex items-center', gapTokens.compact)}>
                 <Kbd>Esc</Kbd>
@@ -329,16 +351,23 @@ const ViewPickerModal = memo(function ViewPickerModal({
 export const ViewPicker = memo(function ViewPicker({ className }: ViewPickerProps) {
   const [isOpen, setOpen] = useState(false);
 
-  const { categories, activeViewId, selectView, getActiveView } = useViewStore(
+  const { categories, activeViewId, selectView, executeView, getActiveView, loadRegistry } = useViewStore(
     useShallow((s) => ({
       categories: s.categories,
       activeViewId: s.activeViewId,
       selectView: s.selectView,
+      executeView: s.executeView,
       getActiveView: s.getActiveView,
+      loadRegistry: s.loadRegistry,
     }))
   );
 
   const navigationMode = useUIStore((s) => s.navigationMode);
+
+  // Load registry on mount
+  useEffect(() => {
+    loadRegistry();
+  }, [loadRegistry]);
 
   // Flatten categories and filter by current navigation mode
   const views = useMemo(() => {
@@ -355,11 +384,20 @@ export const ViewPicker = memo(function ViewPicker({ className }: ViewPickerProp
     setOpen(false);
   }, []);
 
+  // Ctrl+click: just select without executing
   const handleSelect = useCallback(
     (viewId: string) => {
       selectView(viewId);
     },
     [selectView]
+  );
+
+  // Regular click: select AND execute
+  const handleExecute = useCallback(
+    (viewId: string) => {
+      executeView(viewId);
+    },
+    [executeView]
   );
 
   return (
@@ -395,6 +433,7 @@ export const ViewPicker = memo(function ViewPicker({ className }: ViewPickerProp
         views={views}
         activeViewId={activeViewId}
         onSelect={handleSelect}
+        onExecute={handleExecute}
       />
     </>
   );

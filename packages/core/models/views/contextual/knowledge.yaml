@@ -1,0 +1,30 @@
+# Contextual View: Knowledge
+# Locale knowledge atoms (Terms, Expressions, Patterns)
+id: knowledge
+description: Locale knowledge atoms (Terms, Expressions, Patterns)
+category: contextual
+contextual: true
+applicable_types: [Locale]
+modes: [data, overlay, query]
+
+cypher: |
+  MATCH (locale:Locale {key: $nodeKey})
+  OPTIONAL MATCH (locale)-[r1:HAS_TERMS|HAS_EXPRESSIONS|HAS_PATTERNS|HAS_CULTURE|HAS_TABOOS|HAS_AUDIENCE]->(container)
+  OPTIONAL MATCH (container)-[r2:CONTAINS_TERM|CONTAINS_EXPRESSION|CONTAINS_PATTERN|CONTAINS_CULTURE_REF|CONTAINS_TABOO|CONTAINS_AUDIENCE_TRAIT]->(atom)
+  WITH locale,
+       collect(DISTINCT container) AS containers,
+       collect(DISTINCT atom)[0..$limit] AS atoms,
+       collect(DISTINCT r1) AS r1s,
+       collect(DISTINCT r2) AS r2s
+  RETURN [locale] + containers + atoms AS nodes,
+         r1s + r2s AS relationships
+
+params:
+  - name: nodeKey
+    type: string
+    required: true
+    description: Key of the Locale
+  - name: limit
+    type: integer
+    default: 50
+    description: Maximum number of atoms to return

@@ -1,0 +1,30 @@
+# Contextual View: Project
+# Project structure (Pages, Entities, Brand)
+id: project
+description: Project structure (Pages, Entities, Brand)
+category: contextual
+contextual: true
+applicable_types: [Project]
+modes: [data, overlay, query]
+
+cypher: |
+  MATCH (project:Project {key: $nodeKey})
+  OPTIONAL MATCH (project)-[r1:HAS_PAGE]->(page:Page)
+  OPTIONAL MATCH (project)-[r2:HAS_ENTITY]->(entity:Entity)
+  OPTIONAL MATCH (project)-[r3:HAS_BRAND]->(brand:BrandIdentity)
+  WITH project,
+       collect(DISTINCT page)[0..$limit] AS pages,
+       collect(DISTINCT entity)[0..$limit] AS entities,
+       collect(DISTINCT brand) AS brands,
+       collect(DISTINCT r1) + collect(DISTINCT r2) + collect(DISTINCT r3) AS rels
+  RETURN [project] + pages + entities + brands AS nodes, rels AS relationships
+
+params:
+  - name: nodeKey
+    type: string
+    required: true
+    description: Key of the Project
+  - name: limit
+    type: integer
+    default: 50
+    description: Maximum number of pages/entities to return

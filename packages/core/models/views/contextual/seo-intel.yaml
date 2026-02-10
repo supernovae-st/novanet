@@ -1,0 +1,32 @@
+# Contextual View: SEO Intel
+# SEO keywords, clusters, and metrics
+id: seo-intel
+description: SEO keywords, clusters, and metrics
+category: contextual
+contextual: true
+applicable_types: [Entity, Page, SEOKeyword]
+modes: [data, overlay, query]
+
+cypher: |
+  MATCH (n {key: $nodeKey})
+  WHERE n:Entity OR n:Page OR n:SEOKeyword
+  OPTIONAL MATCH (n)-[r1:TARGETS]->(keyword:SEOKeyword)
+  OPTIONAL MATCH (keyword)-[r2:IN_CLUSTER]->(cluster:SEOKeywordSet)
+  OPTIONAL MATCH (keyword)-[r3:HAS_METRICS]->(metrics:SEOKeywordMetrics)
+  WITH n,
+       collect(DISTINCT keyword)[0..$limit] AS keywords,
+       collect(DISTINCT cluster) AS clusters,
+       collect(DISTINCT metrics) AS metrics,
+       collect(DISTINCT r1) + collect(DISTINCT r2) + collect(DISTINCT r3) AS rels
+  RETURN [n] + keywords + clusters + metrics AS nodes,
+         rels AS relationships
+
+params:
+  - name: nodeKey
+    type: string
+    required: true
+    description: Key of the Entity, Page, or SEOKeyword
+  - name: limit
+    type: integer
+    default: 50
+    description: Maximum number of keywords to return

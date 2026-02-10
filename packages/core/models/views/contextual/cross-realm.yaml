@@ -1,0 +1,21 @@
+# Contextual View: Cross-Realm
+# Cross-realm connections (org ↔ shared)
+id: cross-realm
+description: Cross-realm connections (org ↔ shared)
+category: contextual
+contextual: true
+applicable_types: [Entity, Page, Block, Project]
+modes: [data, overlay, query]
+
+cypher: |
+  MATCH (n {key: $nodeKey})
+  OPTIONAL MATCH (n)-[r]->(shared)
+  WHERE r.scope = 'cross_realm' OR type(r) IN ['BELONGS_TO', 'TARGETS', 'FOR_LOCALE', 'MONITORS_GEO', 'FOR_COUNTRY']
+  WITH n, collect(DISTINCT shared) AS sharedNodes, collect(DISTINCT r) AS rels
+  RETURN [n] + sharedNodes AS nodes, rels AS relationships
+
+params:
+  - name: nodeKey
+    type: string
+    required: true
+    description: Key of the node
