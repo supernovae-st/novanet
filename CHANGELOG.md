@@ -229,8 +229,8 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - **core/scripts/, core/src/parsers/, core/src/services/, core/src/db/ deleted**: Absorbed into Rust
 
 ### Added
-- **Rust CLI binary** (`tools/novanet/`): 13 commands, 8 generators, 4 parsers, 396 tests
-  - `novanet schema generate` — orchestrates 7 generators (YAML → Cypher/TS/Mermaid)
+- **Rust CLI binary** (`tools/novanet/`): 13 commands, 12 generators, 4 parsers, 950 tests
+  - `novanet schema generate` — orchestrates 12 generators (YAML → Cypher/TS/Mermaid/Rust)
   - `novanet schema validate` — YAML coherence checks
   - `novanet data/meta/overlay/query` — 4 navigation modes
   - `novanet node create/edit/delete` — CRUD with meta-graph validation

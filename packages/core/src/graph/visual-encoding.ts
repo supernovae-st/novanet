@@ -411,18 +411,16 @@ export const REALMS_ICONS: Record<string, IconDefinition> = {
   'shared': { web: 'globe', terminal: '◉', description: 'Universal shared data (read-only)' },
 };
 
-// LAYERS ICONS (11)
+// LAYERS ICONS (9)
 export const LAYERS_ICONS: Record<string, IconDefinition> = {
-  'config': { web: 'settings', terminal: '⚙', description: 'Configuration nodes' },
+  'config': { web: 'settings', terminal: '⚙', description: 'Configuration and definitions' },
   'foundation': { web: 'landmark', terminal: '▣', description: 'Project identity and branding' },
-  'geo': { web: 'bot', terminal: '🤖', description: 'GEO AI visibility' },
-  'geography': { web: 'map', terminal: '🗺', description: 'Geographic classifications' },
+  'geography': { web: 'map', terminal: '⊙', description: 'Geographic classifications' },
   'instruction': { web: 'file-text', terminal: '▧', description: 'Generation directives' },
-  'knowledge': { web: 'book-open', terminal: '📚', description: 'Locale expertise and knowledge atoms' },
-  'locale': { web: 'globe', terminal: '🌐', description: 'Core locale definitions' },
+  'knowledge': { web: 'book-open', terminal: '◈', description: 'Locale expertise and knowledge atoms' },
+  'locale': { web: 'globe', terminal: '⊕', description: 'Locale settings and formatting' },
   'output': { web: 'check-circle', terminal: '●', description: 'Generated content' },
   'semantic': { web: 'lightbulb', terminal: '◆', description: 'Entities and meaning' },
-  'seo': { web: 'search', terminal: '◇', description: 'SEO intelligence and keywords' },
   'structure': { web: 'layout', terminal: '▤', description: 'Information architecture' },
 };
 

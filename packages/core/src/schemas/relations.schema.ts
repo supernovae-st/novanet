@@ -133,16 +133,8 @@ export const RelationType = {
   // Correct flow: Page → Entity → EntityContent → SEOKeyword/GEOQuery
 
   // ─────────────────────────────────────────────────────────────────────────────
-  // SEO MINING (v7.8.5: HAS_SNAPSHOT → HAS_METRICS)
+  // SEO/GEO MINING (v11.2: Mining runs removed, deferred to v12+)
   // ─────────────────────────────────────────────────────────────────────────────
-  SEO_MINES: 'SEO_MINES',               // SEOMiningRun → SEOKeyword
-  // REMOVED v7.8.5: HAS_SNAPSHOT (replaced by HAS_METRICS)
-  // REMOVED v7.8.4: SEO_DISCOVERED_BY, HAS_VARIATION, VARIATES (SEOVariation deleted)
-
-  // ─────────────────────────────────────────────────────────────────────────────
-  // GEO MINING (v7.8.5: HAS_CITATION → HAS_METRICS)
-  // ─────────────────────────────────────────────────────────────────────────────
-  GEO_MINES: 'GEO_MINES',               // GEOMiningRun → GEOQuery
   // REMOVED v7.8.5: HAS_CITATION (replaced by HAS_METRICS)
   // REMOVED v7.8.4: GEO_DISCOVERED_BY, HAS_REFORMULATION, REFORMULATES (GEOReformulation deleted)
 
@@ -599,30 +591,8 @@ export const RelationRegistry: Record<RelationType, RelationDefinition> = {
   // Correct flow: Page → Entity → EntityContent → SEOKeyword/GEOQuery
 
   // ─────────────────────────────────────────────────────────────────────────────
-  // SEO MINING (v7.8.5: HAS_SNAPSHOT → HAS_METRICS)
+  // SEO/GEO MINING (v11.2: Mining runs removed, deferred to v12+)
   // ─────────────────────────────────────────────────────────────────────────────
-  [RelationType.SEO_MINES]: {
-    type: RelationType.SEO_MINES,
-    from: 'SEOMiningRun',
-    to: 'SEOKeyword',
-    cardinality: 'N:M',
-    description: 'Mining run targets SEO keywords (v7.8.2: SEOKeyword → SEOKeyword)',
-  },
-  // REMOVED v7.8.5: HAS_SNAPSHOT (use HAS_METRICS: SEOKeyword → SEOKeywordMetrics)
-  // REMOVED v7.8.4: SEO_DISCOVERED_BY, HAS_VARIATION, VARIATES (SEOVariation deleted)
-
-  // ─────────────────────────────────────────────────────────────────────────────
-  // GEO MINING (v7.8.5: HAS_CITATION → HAS_METRICS)
-  // ─────────────────────────────────────────────────────────────────────────────
-  [RelationType.GEO_MINES]: {
-    type: RelationType.GEO_MINES,
-    from: 'GEOMiningRun',
-    to: 'GEOQuery',
-    cardinality: 'N:M',
-    description: 'Mining run targets GEO seeds (v7.8.3: GEOSeed → GEOQuery)',
-  },
-  // REMOVED v7.8.5: HAS_CITATION (use HAS_METRICS: GEOQuery → GEOMetrics)
-  // REMOVED v7.8.4: GEO_DISCOVERED_BY, HAS_REFORMULATION, REFORMULATES (GEOReformulation deleted)
 
   // ─────────────────────────────────────────────────────────────────────────────
   // PROVENANCE

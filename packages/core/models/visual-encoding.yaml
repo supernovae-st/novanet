@@ -1,6 +1,6 @@
 # packages/core/models/visual-encoding.yaml
 # Visual presentation rules for NovaNet graph elements
-# v11.4.0 — SEO/GEO to Shared Knowledge
+# v11.6.0 — Navigation redesign (4 independent modes)
 #
 # IMPORTANT: Colors are NOT defined here.
 # Colors come from taxonomy.yaml (node_realms, node_layers, node_traits, arc_families)
@@ -11,7 +11,7 @@
 # - apps/studio/src/design/visual-encoding.json (runtime config)
 # - tools/novanet/src/generated/visual_encoding.rs (TUI compile-time)
 
-version: "11.4.0"
+version: "11.6.0"
 
 # =============================================================================
 # CHANNEL MAPPING — Which visual channel encodes which facet
@@ -222,19 +222,14 @@ kind_icons:
   BlockInstruction: clipboard-list
   PromptArtifact: file-code
 
-  # Project / Output
+  # Project / Output (v11.2: GenerationJob, EvaluationSignal removed)
   PageGenerated: file-check
   BlockGenerated: check-square
-  GenerationJob: play-circle
   OutputArtifact: package
-  EvaluationSignal: activity
 
-  # Shared / SEO
+  # Shared / SEO (v11.5: consolidated to shared/knowledge)
   SEOKeyword: search
   SEOKeywordMetrics: bar-chart-2
-  SEOMiningRun: pickaxe
-
-  # v10.1: GEO/Thing nodes removed
 
 # =============================================================================
 # ANIMATION PRESETS (Studio only)
@@ -307,27 +302,28 @@ icons:
 
   # ---------------------------------------------------------------------------
   # LAYER ICONS — What functional category?
-  # v11.3: 11 layers (3 shared + 8 org)
+  # v11.5: 10 layers (4 shared + 6 org)
+  # All terminal icons use single-width Unicode for monospace alignment
   # ---------------------------------------------------------------------------
   layers:
-    # SHARED realm layers (3)
-    locale:
-      web: globe
-      terminal: "🌐"
-      description: "Core locale definitions"
-    geography:
-      web: map
-      terminal: "🗺"
-      description: "Geographic classifications"
-    knowledge:
-      web: book-open
-      terminal: "📚"
-      description: "Locale expertise and knowledge atoms"
-    # ORG realm layers (8)
+    # SHARED realm layers (4)
     config:
       web: settings
       terminal: "⚙"
-      description: "Configuration nodes"
+      description: "Configuration and definitions"
+    locale:
+      web: globe
+      terminal: "⊕"
+      description: "Locale settings and formatting"
+    geography:
+      web: map
+      terminal: "⊙"
+      description: "Geographic classifications"
+    knowledge:
+      web: book-open
+      terminal: "◈"
+      description: "Locale expertise and knowledge atoms"
+    # ORG realm layers (6)
     foundation:
       web: landmark
       terminal: "▣"
@@ -344,14 +340,6 @@ icons:
       web: file-text
       terminal: "▧"
       description: "Generation directives"
-    seo:
-      web: search
-      terminal: "◇"
-      description: "SEO intelligence and keywords"
-    geo:
-      web: bot
-      terminal: "🤖"
-      description: "GEO AI visibility"
     output:
       web: check-circle
       terminal: "●"

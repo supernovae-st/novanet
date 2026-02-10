@@ -84,11 +84,6 @@ node:
       - "CREATE INDEX promptartifact_base IF NOT EXISTS FOR (pa:PromptArtifact) ON (pa.base_prompt_key)"
 
   relations:
-    incoming:
-      - type: USES_PROMPT
-        from: GenerationJob
-        description: "Generation jobs that use this prompt artifact"
-
     outgoing:
       - type: COMPILED_FROM
         to:

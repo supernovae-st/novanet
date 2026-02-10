@@ -28,22 +28,22 @@ pub(crate) fn get_contextual_shortcuts(
     is_instance: bool,
     is_kind: bool,
 ) -> &'static str {
-    // v11.3: 3 modes - Graph, Audit, Nexus
+    // v11.6: 4 independent modes (1-4 global), t toggle removed
     match mode {
-        NavMode::Audit => "j/k:nav  1-3:modes  r:refresh  ?:help",
-        NavMode::Nexus => "j/k:nav  Enter:select  Esc:back  ?:help",
-        NavMode::Graph => match focus {
+        NavMode::Audit => "j/k:nav  1-4:modes  r:refresh  ?:help",
+        NavMode::Nexus => "j/k:nav  []:tabs  Enter:select  Esc:back  1-4:modes  ?:help",
+        NavMode::Meta | NavMode::Data => match focus {
             Focus::Tree => {
                 if is_instance {
-                    "j/k:nav  y/Y:copy  t:toggle view  ?:help"
+                    "j/k:nav  y/Y:copy  1-4:modes  ?:help"
                 } else if is_kind {
-                    "j/k:nav  y:copy  t:toggle view  h/l:expand  ?:help"
+                    "j/k:nav  y:copy  h/l:expand  1-4:modes  ?:help"
                 } else {
-                    "j/k:nav  y:copy  h/l:toggle  t:toggle view  ?:help"
+                    "j/k:nav  y:copy  h/l:toggle  1-4:modes  ?:help"
                 }
             }
             Focus::Yaml | Focus::Info => "j/k:scroll  d/u:page  g/G:jump",
-            Focus::Graph => "Tab:panel  1-3:modes",
+            Focus::Graph => "Tab:panel  1-4:modes",
         },
     }
 }
@@ -287,51 +287,55 @@ mod tests {
     use pretty_assertions::assert_eq;
 
     // =========================================================================
-    // get_contextual_shortcuts tests (v11.3: 3 modes - Graph, Audit, Nexus)
+    // get_contextual_shortcuts tests (v11.6: 4 modes - Meta, Data, Audit, Nexus)
     // =========================================================================
 
     #[test]
     fn test_shortcuts_audit_mode() {
         let result = get_contextual_shortcuts(NavMode::Audit, Focus::Tree, false, false);
-        assert_eq!(result, "j/k:nav  1-3:modes  r:refresh  ?:help");
+        assert_eq!(result, "j/k:nav  1-4:modes  r:refresh  ?:help");
     }
 
     #[test]
     fn test_shortcuts_nexus_mode() {
+        // v11.6: Nexus uses [ ] for tabs, 1-4 for global mode switching
         let result = get_contextual_shortcuts(NavMode::Nexus, Focus::Tree, false, false);
-        assert_eq!(result, "j/k:nav  Enter:select  Esc:back  ?:help");
+        assert_eq!(
+            result,
+            "j/k:nav  []:tabs  Enter:select  Esc:back  1-4:modes  ?:help"
+        );
     }
 
     #[test]
-    fn test_shortcuts_graph_mode_tree_focus_on_kind() {
-        let result = get_contextual_shortcuts(NavMode::Graph, Focus::Tree, false, true);
+    fn test_shortcuts_meta_mode_tree_focus_on_kind() {
+        let result = get_contextual_shortcuts(NavMode::Meta, Focus::Tree, false, true);
         assert!(result.contains("j/k:nav"));
         assert!(result.contains("?:help"));
     }
 
     #[test]
-    fn test_shortcuts_graph_mode_tree_focus_not_on_kind() {
-        let result = get_contextual_shortcuts(NavMode::Graph, Focus::Tree, false, false);
+    fn test_shortcuts_meta_mode_tree_focus_not_on_kind() {
+        let result = get_contextual_shortcuts(NavMode::Meta, Focus::Tree, false, false);
         assert!(result.contains("j/k:nav"));
         assert!(result.contains("?:help"));
     }
 
     #[test]
-    fn test_shortcuts_graph_mode_yaml_focus() {
-        let result = get_contextual_shortcuts(NavMode::Graph, Focus::Yaml, false, false);
+    fn test_shortcuts_meta_mode_yaml_focus() {
+        let result = get_contextual_shortcuts(NavMode::Meta, Focus::Yaml, false, false);
         assert!(result.contains("j/k:scroll"));
     }
 
     #[test]
-    fn test_shortcuts_graph_mode_info_focus() {
-        let result = get_contextual_shortcuts(NavMode::Graph, Focus::Info, false, false);
+    fn test_shortcuts_meta_mode_info_focus() {
+        let result = get_contextual_shortcuts(NavMode::Meta, Focus::Info, false, false);
         assert!(result.contains("j/k:scroll"));
     }
 
     #[test]
-    fn test_shortcuts_graph_mode_graph_focus() {
-        let result = get_contextual_shortcuts(NavMode::Graph, Focus::Graph, false, false);
-        assert!(result.contains("1-3:modes"));
+    fn test_shortcuts_meta_mode_graph_focus() {
+        let result = get_contextual_shortcuts(NavMode::Meta, Focus::Graph, false, false);
+        assert!(result.contains("1-4:modes"));
     }
 
     // =========================================================================
@@ -448,28 +452,23 @@ mod tests {
     }
 
     // =========================================================================
-    // NavMode tests (v11.3: 3 modes - Graph, Audit, Nexus)
+    // NavMode tests (v11.6: 4 modes - Meta, Data, Audit, Nexus)
     // =========================================================================
 
     #[test]
     fn test_nav_mode_labels() {
-        assert_eq!(NavMode::Graph.label(), "Graph");
+        assert_eq!(NavMode::Meta.label(), "Meta");
+        assert_eq!(NavMode::Data.label(), "Data");
         assert_eq!(NavMode::Audit.label(), "Audit");
         assert_eq!(NavMode::Nexus.label(), "Nexus");
     }
 
     #[test]
-    fn test_nav_mode_cycle() {
-        assert_eq!(NavMode::Graph.cycle(), NavMode::Audit);
-        assert_eq!(NavMode::Audit.cycle(), NavMode::Nexus);
-        assert_eq!(NavMode::Nexus.cycle(), NavMode::Graph);
-    }
-
-    #[test]
     fn test_nav_mode_index() {
-        assert_eq!(NavMode::Graph.index(), 0);
-        assert_eq!(NavMode::Audit.index(), 1);
-        assert_eq!(NavMode::Nexus.index(), 2);
+        assert_eq!(NavMode::Meta.index(), 0);
+        assert_eq!(NavMode::Data.index(), 1);
+        assert_eq!(NavMode::Audit.index(), 2);
+        assert_eq!(NavMode::Nexus.index(), 3);
     }
 
     // =========================================================================
@@ -497,10 +496,10 @@ mod tests {
     // =========================================================================
 
     #[test]
-    fn test_shortcuts_all_focus_panels_for_graph() {
-        // Ensure all focus panels produce valid shortcuts for Graph mode
+    fn test_shortcuts_all_focus_panels_for_meta() {
+        // Ensure all focus panels produce valid shortcuts for Meta mode
         for focus in [Focus::Tree, Focus::Info, Focus::Graph, Focus::Yaml] {
-            let result = get_contextual_shortcuts(NavMode::Graph, focus, false, false);
+            let result = get_contextual_shortcuts(NavMode::Meta, focus, false, false);
             assert!(
                 !result.is_empty(),
                 "Focus {:?} should have shortcuts",
@@ -512,7 +511,7 @@ mod tests {
     #[test]
     fn test_shortcuts_all_modes_have_output() {
         // All modes should produce non-empty shortcuts
-        for mode in [NavMode::Graph, NavMode::Audit, NavMode::Nexus] {
+        for mode in [NavMode::Meta, NavMode::Data, NavMode::Audit, NavMode::Nexus] {
             let result = get_contextual_shortcuts(mode, Focus::Tree, false, false);
             assert!(!result.is_empty(), "Mode {:?} should have shortcuts", mode);
         }

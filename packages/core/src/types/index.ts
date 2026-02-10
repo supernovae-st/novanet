@@ -304,22 +304,7 @@ export interface SEOKeywordMetrics {
   updated_at: Date;
 }
 
-export interface SEOMiningRun {
-  // Standard properties (v8.2.0 - no key, UUID-identified, no icon/priority/freshness)
-  display_name: string;    // "SEO Mining 2024-01-15 10:00"
-  description: string;     // "Mining run for keyword variations"
-  llm_context: string;     // "USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]."
-
-  // SEOMiningRun-specific
-  status: 'running' | 'completed' | 'failed';
-  sources: string[];
-  started_at: Date;
-  completed_at?: Date;
-  total_variations: number;
-  unique_variations: number;
-  created_at: Date;
-  updated_at: Date;
-}
+// v11.2: SEOMiningRun removed (job concept deferred to v12+)
 
 // =============================================================================
 // GEO — REINTRODUCED in v10.7

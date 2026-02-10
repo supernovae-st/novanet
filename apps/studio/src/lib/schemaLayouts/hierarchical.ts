@@ -27,20 +27,18 @@ const REALM_CONFIGS: Record<Realm, { label: string; color: string }> = {
   org: { label: 'Org', color: '#6c71c4' },          // Solarized violet
 };
 
-// v11.3: 11 layers (3 shared + 8 org)
+// v11.5: 10 layers (4 shared + 6 org)
 const LAYER_CONFIGS: Record<string, { label: string }> = {
-  // Shared realm (3)
+  // Shared realm (4)
+  config: { label: 'Config' },
   locale: { label: 'Locale' },
   geography: { label: 'Geography' },
   knowledge: { label: 'Knowledge' },
-  // Org realm (8)
-  config: { label: 'Config' },
+  // Org realm (6) - note: seo/geo removed in v11.5, consolidated to shared/knowledge
   foundation: { label: 'Foundation' },
   structure: { label: 'Structure' },
   semantic: { label: 'Semantic' },
   instruction: { label: 'Instructions' },
-  seo: { label: 'SEO' },
-  geo: { label: 'GEO' },
   output: { label: 'Output' },
 };
 

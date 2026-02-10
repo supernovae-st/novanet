@@ -95,6 +95,49 @@ export const ARC_FAMILY_STROKES: Record<ArcFamily, {
 } as const;
 
 // =============================================================================
+// Arc Family Effects Mapping (v11.6.1)
+// =============================================================================
+
+/**
+ * Primary effect primitive for each arc family
+ * These determine the unique visual identity per family.
+ *
+ * @see docs/plans/2026-02-10-arc-animation-system-v2-design.md
+ */
+export type ArcFamilyEffect =
+  | 'energyPulse'    // ownership: power flows to children
+  | 'dnaHelix'       // localization: content DNA adapts
+  | 'zigzag'         // semantic: neural sparks (existing primitive)
+  | 'matrixCode'     // generation: AI processing data
+  | 'radarSweep';    // mining: scanning for intel
+
+/**
+ * Map arc families to their signature effect primitives
+ */
+export const ARC_FAMILY_EFFECTS: Record<ArcFamily, ArcFamilyEffect> = {
+  ownership: 'energyPulse',
+  localization: 'dnaHelix',
+  semantic: 'zigzag',
+  generation: 'matrixCode',
+  mining: 'radarSweep',
+} as const;
+
+/**
+ * Get the signature effect for an arc family
+ */
+export function getArcFamilyEffect(family: ArcFamily): ArcFamilyEffect {
+  return ARC_FAMILY_EFFECTS[family];
+}
+
+/**
+ * Get the signature effect for a relation type
+ */
+export function getRelationEffect(relationType: string): ArcFamilyEffect {
+  const family = getArcFamily(relationType);
+  return ARC_FAMILY_EFFECTS[family];
+}
+
+// =============================================================================
 // Relation Type to Arc Family Mapping
 // =============================================================================
 
