@@ -18,10 +18,9 @@ use rustc_hash::FxHashSet;
 
 use super::{
     COLOR_ACTIVE_KIND_BG, COLOR_ARC_FAMILY, COLOR_CONNECTED, COLOR_DESC_TEXT, COLOR_HIGHLIGHT_BG,
-    COLOR_HINT_TEXT, COLOR_MUTED_TEXT, COLOR_UNFOCUSED_BORDER, EmptyStateKind, STYLE_DIM,
-    STYLE_HIGHLIGHT, STYLE_PRIMARY, STYLE_UNFOCUSED, layer_abbrev, layer_badge_icon, realm_abbrev,
-    realm_badge_icon, render_empty_state, spinner, trait_abbrev, trait_color, trait_icon,
-    truncate_start,
+    COLOR_MUTED_TEXT, COLOR_UNFOCUSED_BORDER, EmptyStateKind, STYLE_DIM, STYLE_HIGHLIGHT,
+    STYLE_PRIMARY, STYLE_UNFOCUSED, layer_abbrev, layer_badge_icon, realm_abbrev, realm_badge_icon,
+    render_empty_state, spinner, trait_abbrev, trait_color, trait_icon,
 };
 use crate::tui::app::{App, Focus};
 use crate::tui::data::ArcDirection;
@@ -83,6 +82,287 @@ fn highlight_matches_with_bg(
 
     spans
 }
+
+// =============================================================================
+// BREADCRUMB RENDERING (v11.6)
+// =============================================================================
+
+/// A single level in the breadcrumb path.
+struct BreadcrumbLevel {
+    icon: &'static str,
+    label: String,
+    color: Color,
+}
+
+/// Build breadcrumb path from current selection.
+/// Returns a vector of levels from root to current item.
+fn build_breadcrumb_path(app: &App) -> Vec<BreadcrumbLevel> {
+    use crate::tui::data::TreeItem;
+
+    let mut path = Vec::new();
+
+    match app.current_item() {
+        Some(TreeItem::Realm(r)) => {
+            path.push(BreadcrumbLevel {
+                icon: realm_badge_icon(&r.key),
+                label: r.display_name.clone(),
+                color: hex_to_color(&r.color),
+            });
+        }
+        Some(TreeItem::Layer(r, l)) => {
+            path.push(BreadcrumbLevel {
+                icon: realm_badge_icon(&r.key),
+                label: r.display_name.clone(),
+                color: hex_to_color(&r.color),
+            });
+            path.push(BreadcrumbLevel {
+                icon: layer_badge_icon(&l.key),
+                label: l.display_name.clone(),
+                color: hex_to_color(&l.color),
+            });
+        }
+        Some(TreeItem::Kind(r, l, k)) => {
+            path.push(BreadcrumbLevel {
+                icon: realm_badge_icon(&r.key),
+                label: r.display_name.clone(),
+                color: hex_to_color(&r.color),
+            });
+            path.push(BreadcrumbLevel {
+                icon: layer_badge_icon(&l.key),
+                label: l.display_name.clone(),
+                color: hex_to_color(&l.color),
+            });
+            let kind_label = if app.is_data_mode() && k.instance_count > 0 {
+                format!("{} ({})", k.display_name, k.instance_count)
+            } else {
+                k.display_name.clone()
+            };
+            path.push(BreadcrumbLevel {
+                icon: trait_icon(&k.trait_name),
+                label: kind_label,
+                color: trait_color(&k.trait_name),
+            });
+        }
+        Some(TreeItem::EntityCategory(r, l, k, cat)) => {
+            path.push(BreadcrumbLevel {
+                icon: realm_badge_icon(&r.key),
+                label: r.display_name.clone(),
+                color: hex_to_color(&r.color),
+            });
+            path.push(BreadcrumbLevel {
+                icon: layer_badge_icon(&l.key),
+                label: l.display_name.clone(),
+                color: hex_to_color(&l.color),
+            });
+            path.push(BreadcrumbLevel {
+                icon: trait_icon(&k.trait_name),
+                label: k.display_name.clone(),
+                color: trait_color(&k.trait_name),
+            });
+            path.push(BreadcrumbLevel {
+                icon: "📂",
+                label: cat.display_name.clone(),
+                color: Color::Gray,
+            });
+        }
+        Some(TreeItem::Instance(r, l, k, inst)) => {
+            path.push(BreadcrumbLevel {
+                icon: realm_badge_icon(&r.key),
+                label: r.display_name.clone(),
+                color: hex_to_color(&r.color),
+            });
+            path.push(BreadcrumbLevel {
+                icon: layer_badge_icon(&l.key),
+                label: l.display_name.clone(),
+                color: hex_to_color(&l.color),
+            });
+            path.push(BreadcrumbLevel {
+                icon: trait_icon(&k.trait_name),
+                label: k.display_name.clone(),
+                color: trait_color(&k.trait_name),
+            });
+            path.push(BreadcrumbLevel {
+                icon: "►",
+                label: inst.display_name.clone(),
+                color: Color::Yellow,
+            });
+        }
+        Some(TreeItem::ArcFamily(f)) => {
+            path.push(BreadcrumbLevel {
+                icon: "⊶",
+                label: "Arcs".to_string(),
+                color: Color::Magenta,
+            });
+            path.push(BreadcrumbLevel {
+                icon: "◇",
+                label: f.display_name.clone(),
+                color: Color::Magenta,
+            });
+        }
+        Some(TreeItem::ArcKind(f, ak)) => {
+            path.push(BreadcrumbLevel {
+                icon: "⊶",
+                label: "Arcs".to_string(),
+                color: Color::Magenta,
+            });
+            path.push(BreadcrumbLevel {
+                icon: "◇",
+                label: f.display_name.clone(),
+                color: Color::Magenta,
+            });
+            path.push(BreadcrumbLevel {
+                icon: "→",
+                label: ak.display_name.clone(),
+                color: Color::White,
+            });
+        }
+        Some(TreeItem::KindsSection) => {
+            path.push(BreadcrumbLevel {
+                icon: "◈",
+                label: "Node Kinds".to_string(),
+                color: Color::Cyan,
+            });
+        }
+        Some(TreeItem::ArcsSection) => {
+            path.push(BreadcrumbLevel {
+                icon: "⊶",
+                label: "Arcs".to_string(),
+                color: Color::Magenta,
+            });
+        }
+        None => {}
+    }
+
+    path
+}
+
+/// Render sticky breadcrumb at top of tree panel.
+/// Returns the height used (number of lines).
+fn render_breadcrumb(f: &mut Frame, area: Rect, app: &App) -> u16 {
+    let path = build_breadcrumb_path(app);
+
+    if path.is_empty() {
+        return 0;
+    }
+
+    let mut lines: Vec<Line> = Vec::new();
+
+    for (depth, level) in path.iter().enumerate() {
+        // Build indentation with arrows
+        let indent = if depth == 0 {
+            format!(" {} ", level.icon)
+        } else {
+            format!(" {}→ {} ", "  ".repeat(depth), level.icon)
+        };
+
+        let line = Line::from(vec![
+            Span::styled(indent, Style::default().fg(COLOR_MUTED_TEXT)),
+            Span::styled(level.label.clone(), Style::default().fg(level.color)),
+        ]);
+        lines.push(line);
+    }
+
+    let height = lines.len() as u16;
+
+    // Render breadcrumb with subtle background
+    let breadcrumb_area = Rect::new(area.x, area.y, area.width, height);
+
+    let paragraph = Paragraph::new(lines).style(Style::default().bg(Color::Rgb(30, 30, 40)));
+
+    f.render_widget(paragraph, breadcrumb_area);
+
+    height
+}
+
+// =============================================================================
+// MINI-MAP RENDERING (v11.6)
+// =============================================================================
+
+/// Information needed to render the mini-map.
+struct MiniMapInfo {
+    /// Total number of items in the tree.
+    total_items: usize,
+    /// Current cursor position (0-indexed).
+    cursor_pos: usize,
+    /// First visible item index.
+    scroll_offset: usize,
+    /// Number of visible items in viewport.
+    visible_count: usize,
+    /// Current realm color (for theming).
+    realm_color: Color,
+}
+
+/// Render mini-map on the right side of tree panel.
+/// Returns the width used (2 chars).
+fn render_minimap(f: &mut Frame, area: Rect, info: &MiniMapInfo) {
+    if area.height == 0 || area.width < 2 || info.total_items == 0 {
+        return;
+    }
+
+    let height = area.height as usize;
+    let mut lines: Vec<Line> = Vec::with_capacity(height);
+
+    // Calculate proportions
+    let total = info.total_items;
+    let viewport_start = info.scroll_offset;
+    let viewport_end = (viewport_start + info.visible_count).min(total);
+    let cursor = info.cursor_pos;
+
+    for row in 0..height {
+        // Map this row to a position in the full tree
+        let tree_start = (row * total) / height;
+        let tree_end = ((row + 1) * total) / height;
+
+        // Determine what's visible in this row's range
+        let cursor_in_range = cursor >= tree_start && cursor < tree_end.max(tree_start + 1);
+        let viewport_overlaps =
+            tree_end > viewport_start && tree_start < viewport_end;
+
+        let (symbol, color) = if cursor_in_range {
+            // Cursor position: solid block with realm color
+            ("██", info.realm_color)
+        } else if viewport_overlaps {
+            // Visible viewport: light shade
+            ("░░", COLOR_MUTED_TEXT)
+        } else {
+            // Outside viewport: medium shade
+            ("▒▒", Color::Rgb(40, 40, 50))
+        };
+
+        lines.push(Line::from(Span::styled(
+            symbol,
+            Style::default().fg(color),
+        )));
+    }
+
+    let paragraph = Paragraph::new(lines);
+    f.render_widget(paragraph, area);
+}
+
+/// Build mini-map info from current app state.
+fn build_minimap_info(app: &App, visible_height: usize) -> MiniMapInfo {
+    // Get current realm color from selection
+    let realm_color = match app.current_item() {
+        Some(crate::tui::data::TreeItem::Realm(r)) => hex_to_color(&r.color),
+        Some(crate::tui::data::TreeItem::Layer(r, _)) => hex_to_color(&r.color),
+        Some(crate::tui::data::TreeItem::Kind(r, _, _)) => hex_to_color(&r.color),
+        Some(crate::tui::data::TreeItem::EntityCategory(r, _, _, _)) => hex_to_color(&r.color),
+        Some(crate::tui::data::TreeItem::Instance(r, _, _, _)) => hex_to_color(&r.color),
+        _ => Color::Cyan, // Default for arc sections
+    };
+
+    MiniMapInfo {
+        total_items: app.current_item_count(),
+        cursor_pos: app.tree_cursor,
+        scroll_offset: app.tree_scroll,
+        visible_count: visible_height,
+        realm_color,
+    }
+}
+
+// =============================================================================
+// TREE RENDERING
+// =============================================================================
 
 /// Tree panel: taxonomy hierarchy with scroll and collapse.
 /// Uses box-drawing characters for visual hierarchy.
@@ -963,39 +1243,96 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
         " Taxonomy ".to_string()
     };
 
-    // Breadcrumb as bottom title (truncate if too long, UTF-8 safe)
-    let breadcrumb = app.current_breadcrumb();
-    let max_breadcrumb_len = area.width.saturating_sub(4) as usize;
-    let breadcrumb_display = truncate_start(&breadcrumb, max_breadcrumb_len);
-
+    // Render block with title
     let block = Block::default()
         .title(Span::styled(title, Style::default().fg(border_color)))
-        .title_bottom(Line::from(Span::styled(
-            format!(" {} ", breadcrumb_display),
-            Style::default().fg(COLOR_HINT_TEXT),
-        )))
         .borders(Borders::ALL)
         .border_style(Style::default().fg(border_color));
 
-    let paragraph = Paragraph::new(lines).block(block);
-    f.render_widget(paragraph, area);
+    let inner_area = block.inner(area);
+    f.render_widget(block, area);
 
-    // Add scrollbar if content exceeds visible area
-    if total > visible_height {
+    // v11.6: Reserve 3 chars on right for mini-map (2 chars + 1 separator)
+    let minimap_width: u16 = 3;
+    let content_width = inner_area.width.saturating_sub(minimap_width);
+
+    // v11.6: Render sticky breadcrumb at top of content area (excluding mini-map)
+    let breadcrumb_area = Rect::new(inner_area.x, inner_area.y, content_width, inner_area.height);
+    let breadcrumb_height = render_breadcrumb(f, breadcrumb_area, app);
+
+    // Calculate tree area below breadcrumb (with separator line)
+    let separator_height = if breadcrumb_height > 0 { 1 } else { 0 };
+    let tree_y = inner_area.y + breadcrumb_height + separator_height;
+    let tree_height = inner_area
+        .height
+        .saturating_sub(breadcrumb_height + separator_height);
+
+    // Render separator line if breadcrumb exists (only in content area, not mini-map)
+    if breadcrumb_height > 0 && content_width > 0 {
+        let separator_area = Rect::new(
+            inner_area.x,
+            inner_area.y + breadcrumb_height,
+            content_width,
+            1,
+        );
+        let separator = Paragraph::new(Line::from(Span::styled(
+            "─".repeat(content_width as usize),
+            Style::default().fg(COLOR_MUTED_TEXT),
+        )));
+        f.render_widget(separator, separator_area);
+    }
+
+    // Render tree content below breadcrumb (excluding mini-map area)
+    let tree_area = Rect::new(inner_area.x, tree_y, content_width, tree_height);
+
+    let paragraph = Paragraph::new(lines);
+    f.render_widget(paragraph, tree_area);
+
+    // v11.6: Render mini-map on right side (full height of inner area)
+    let minimap_area = Rect::new(
+        inner_area.x + content_width + 1, // +1 for separator space
+        inner_area.y,
+        2, // Mini-map is 2 chars wide
+        inner_area.height,
+    );
+    let minimap_info = build_minimap_info(app, tree_height as usize);
+    render_minimap(f, minimap_area, &minimap_info);
+
+    // Render vertical separator between tree and mini-map
+    if inner_area.height > 0 {
+        let sep_area = Rect::new(
+            inner_area.x + content_width,
+            inner_area.y,
+            1,
+            inner_area.height,
+        );
+        let mut sep_lines: Vec<Line> = Vec::with_capacity(inner_area.height as usize);
+        for _ in 0..inner_area.height {
+            sep_lines.push(Line::from(Span::styled("│", Style::default().fg(Color::Rgb(50, 50, 60)))));
+        }
+        let sep_paragraph = Paragraph::new(sep_lines);
+        f.render_widget(sep_paragraph, sep_area);
+    }
+
+    // Add scrollbar if content exceeds visible area (adjust for breadcrumb)
+    // Position scrollbar at the left edge of the mini-map separator
+    let effective_visible_height = tree_height as usize;
+    if total > effective_visible_height {
         let scrollbar = Scrollbar::new(ScrollbarOrientation::VerticalRight)
             .begin_symbol(Some("↑"))
             .end_symbol(Some("↓"))
             .track_symbol(Some("│"))
             .thumb_symbol("█");
 
-        let mut scrollbar_state =
-            ScrollbarState::new(total.saturating_sub(visible_height)).position(app.tree_scroll);
+        let mut scrollbar_state = ScrollbarState::new(total.saturating_sub(effective_visible_height))
+            .position(app.tree_scroll);
 
+        // Place scrollbar between tree content and mini-map separator
         let scrollbar_area = Rect {
-            x: area.x + area.width.saturating_sub(2),
-            y: area.y + 1,
+            x: inner_area.x + content_width.saturating_sub(1),
+            y: tree_y,
             width: 1,
-            height: area.height.saturating_sub(2),
+            height: tree_height,
         };
         f.render_stateful_widget(scrollbar, scrollbar_area, &mut scrollbar_state);
     }
