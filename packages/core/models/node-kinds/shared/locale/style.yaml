@@ -1,4 +1,4 @@
-# packages/core/models/node-kinds/global/config/style.yaml
+# models/node-kinds/shared/locale/style.yaml
 # Style — Communication style for a locale (tone, formality, directness, warmth, humor, identity)
 #
 # v10.7: Added formality properties from Adaptation migration (formality_default, pronoun_preference,

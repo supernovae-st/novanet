@@ -393,14 +393,14 @@ mod tests {
     /// Build a mock kind_realms map for tests.
     fn mock_kind_realms() -> HashMap<String, String> {
         let mut m = HashMap::new();
-        // Common test kinds - all in tenant realm for simplicity
+        // Common test kinds - all in org realm for simplicity
         m.insert("Project".to_string(), "org".to_string());
         m.insert("Page".to_string(), "org".to_string());
         m.insert("Block".to_string(), "org".to_string());
         m.insert("Entity".to_string(), "org".to_string());
         m.insert("PageGenerated".to_string(), "org".to_string());
         m.insert("BlockGenerated".to_string(), "org".to_string());
-        // Locale is in global realm (cross_realm test)
+        // Locale is in shared realm (cross_realm test)
         m.insert("Locale".to_string(), "shared".to_string());
         m
     }

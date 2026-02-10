@@ -21,7 +21,7 @@ import { KIND_META } from '../types/nodes.js';
  *
  * Layers by realm:
  * - Shared: geography, knowledge, locale
- * - Org: config, foundation, geo, semantic, seo, structure
+ * - Org: config, foundation, instruction, output, semantic, structure
  */
 export const NODE_LAYERS: Record<NodeType, Layer> = {
   // ═══════════════════════════════════════════════════════════════════════════
@@ -49,14 +49,14 @@ export const NODE_LAYERS: Record<NodeType, Layer> = {
   // foundation (1 node) - matches models/node-kinds/org/foundation/
   Project: 'foundation',
 
-  // geo (1 node) - matches models/node-kinds/org/geo/
-  GEOQuery: 'geo',
+  // instruction (1 node) - matches models/node-kinds/org/instruction/
+  PagePrompt: 'instruction',
+
+  // output (1 node) - matches models/node-kinds/org/output/
+  PageGenerated: 'output',
 
   // semantic (1 node) - matches models/node-kinds/org/semantic/
   Entity: 'semantic',
-
-  // seo (1 node) - matches models/node-kinds/org/seo/
-  SEOKeyword: 'seo',
 
   // structure (2 nodes) - matches models/node-kinds/org/structure/
   Block: 'structure',

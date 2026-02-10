@@ -4,11 +4,15 @@
 # v10.2: New arc for GLOBAL/seo ownership
 #        - Locale owns SEOKeyword (same pattern as HAS_TERMS, HAS_PATTERNS)
 #        - Replaces FOR_LOCALE (which was localization, not ownership)
+#
+# v11.5: scope fix (cross_realm → intra_realm)
+#        - Locale (shared/config) → SEOKeyword (shared/knowledge)
+#        - Both in shared realm
 
 arc:
   name: HAS_SEO_KEYWORDS
   family: ownership
-  scope: cross_realm
+  scope: intra_realm
   source: Locale
   target: SEOKeyword
   cardinality: one_to_many

@@ -1,4 +1,4 @@
-# models/nodes/project/foundation/brand-identity.yaml
+# models/node-kinds/org/foundation/brand-identity.yaml
 # BrandIdentity - Visual and artistic direction (invariant, not localized)
 
 node:

@@ -1,4 +1,4 @@
-# models/nodes/project/instruction/block-type.yaml
+# models/node-kinds/org/instruction/block-type.yaml
 # BlockType - Template rules and structure for block generation
 
 node:

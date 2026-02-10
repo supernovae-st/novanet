@@ -77,7 +77,7 @@ export interface CypherQuery {
 
 /**
  * View categories for UI grouping.
- * - overview: Layer views (complete, global, shared, project)
+ * - overview: Layer views (complete, shared, org, project)
  * - generation: Orchestrator and sub-agent context views
  * - knowledge: Locale and concept views
  * - project: Project structure views

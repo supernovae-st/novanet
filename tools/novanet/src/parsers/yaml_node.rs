@@ -351,8 +351,8 @@ mod tests {
 
     #[test]
     fn optional_fields_default_to_none() {
-        // v11.0: SEO layer is in tenant realm, v11.2: use generated trait
-        let yaml = "node:\n  name: Minimal\n  realm: org\n  layer: seo\n  trait: generated\n  description: d";
+        // v11.4: use output layer (seo/geo moved to shared/knowledge)
+        let yaml = "node:\n  name: Minimal\n  realm: org\n  layer: output\n  trait: generated\n  description: d";
         let doc: NodeDocument = serde_yaml::from_str(yaml).unwrap();
         assert!(doc.node.icon.is_none());
         assert!(doc.node.standard_properties.is_none());

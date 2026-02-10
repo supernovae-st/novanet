@@ -1,3 +1,4 @@
+# models/node-kinds/org/output/output-artifact.yaml
 node:
   name: OutputArtifact
   realm: org

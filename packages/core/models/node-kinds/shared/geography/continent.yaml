@@ -1,4 +1,4 @@
-# packages/core/models/node-kinds/global/config/continent.yaml
+# models/node-kinds/shared/geography/continent.yaml
 # Continent - UN M49 continental region for geographic hierarchy
 #
 # v10.8: Geographic Taxonomy - Phase 1

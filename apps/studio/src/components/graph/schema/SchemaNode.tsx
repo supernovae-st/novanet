@@ -22,41 +22,11 @@ import { useNodeInteractions } from '@/hooks';
 import { SelectionPulseRing, GlassmorphismEffects } from '../nodes/effects';
 import { glassClasses } from '@/design/tokens';
 import type { Realm, Layer } from '@novanet/core/types';
-
-// =============================================================================
-// Design System Colors (from taxonomy.yaml)
-// =============================================================================
-
-const REALM_COLORS: Record<string, string> = {
-  shared: '#2aa198',
-  org: '#6c71c4',
-};
-
-// v11.4 Layer colors (from taxonomy.yaml)
-// SHARED: config, locale, geography, knowledge
-// ORG: config, semantic, foundation, structure, instruction, output
-// Note: seo/geo layers REMOVED in v11.4 - nodes moved to shared/knowledge
-const LAYER_COLORS: Record<string, string> = {
-  // Shared layers (4)
-  config: '#64748b',
-  locale: '#64748b',
-  geography: '#10b981',
-  knowledge: '#8b5cf6',
-  // Org layers (6)
-  semantic: '#f97316',
-  foundation: '#3b82f6',
-  structure: '#06b6d4',
-  instruction: '#eab308',
-  output: '#22c55e',
-};
-
-const TRAIT_COLORS: Record<string, string> = {
-  invariant: '#3b82f6',
-  localized: '#22c55e',
-  knowledge: '#8b5cf6',
-  generated: '#b58900',
-  aggregated: '#6c71c4',
-};
+import {
+  REALM_COLORS,
+  LAYER_COLORS,
+  TRAIT_COLORS,
+} from '@/design/colors/generated';
 
 // =============================================================================
 // Types
@@ -129,10 +99,10 @@ export const SchemaNode = memo(function SchemaNode({
   const layer = (config?.layer || data.layer || 'foundation') as Layer;
   const trait = (data.trait || 'invariant') as Trait;
 
-  // Use LAYER color as the primary node color (from design system)
-  const layerColor = LAYER_COLORS[layer] || '#64748b';
-  const realmColor = REALM_COLORS[realm] || '#2aa198';
-  const traitColor = TRAIT_COLORS[trait] || '#3b82f6';
+  // Use LAYER color as the primary node color (from generated taxonomy)
+  const layerColor = LAYER_COLORS[layer]?.color || '#64748b';
+  const realmColor = REALM_COLORS[realm]?.color || '#2aa198';
+  const traitColor = TRAIT_COLORS[trait]?.color || '#3b82f6';
 
   const {
     isHovered,
@@ -204,9 +174,10 @@ export const SchemaNode = memo(function SchemaNode({
             minHeight: 160,
             borderRadius: selected ? NODE_DESIGN.radius.innerSelected : NODE_DESIGN.radius.inner,
             backgroundColor: selected ? NODE_DESIGN.selectedBg : NODE_BG.default,
-            ...(selected
-              ? { border: `${NODE_DESIGN.border.innerSelected}px solid ${layerColor}` }
-              : traitBorderStyle),
+            border: selected ? `${NODE_DESIGN.border.innerSelected}px solid ${layerColor}` : undefined,
+            borderStyle: selected ? undefined : (traitBorderStyle.borderStyle as React.CSSProperties['borderStyle']),
+            borderWidth: selected ? undefined : traitBorderStyle.borderWidth,
+            borderColor: selected ? undefined : traitBorderStyle.borderColor,
             boxShadow: selected ? NODE_DESIGN.shadows.skeuomorphic(layerColor) : undefined,
             // CSS variable for animation color
             '--pulse-color': `${layerColor}60`,

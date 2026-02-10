@@ -214,7 +214,7 @@ describe('Relation Registry', () => {
     it('should use HAS_* for ownership/composition', () => {
       const hasRelations = Object.keys(RelationType).filter((r) => r.startsWith('HAS_'));
 
-      // v10.3: HAS_CONCEPT removed — Entity in global realm
+      // v10.3: HAS_CONCEPT removed — Entity in org realm
       expect(hasRelations).toContain('HAS_PAGE');
       expect(hasRelations).toContain('HAS_BLOCK');
       expect(hasRelations).toContain('HAS_CONTENT');
@@ -253,7 +253,7 @@ describe('Relation Naming Conventions', () => {
   it('should use HAS_* for ownership/composition', () => {
     const hasRelations = Object.keys(RelationType).filter((r) => r.startsWith('HAS_'));
 
-    // v10.3: HAS_CONCEPT removed — Entity in global realm
+    // v10.3: HAS_CONCEPT removed — Entity in org realm
     expect(hasRelations).toContain('HAS_PAGE');
     expect(hasRelations).toContain('HAS_BLOCK');
     expect(hasRelations).toContain('HAS_CONTENT');

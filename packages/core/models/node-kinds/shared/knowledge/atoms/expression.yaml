@@ -1,4 +1,4 @@
-# packages/core/models/node-kinds/global/knowledge/atoms/expression.yaml
+# models/node-kinds/shared/knowledge/atoms/expression.yaml
 # Expression — Individual idiom, phrase, or template within an ExpressionSet
 #
 # Locale-native: each locale has its own unique expressions (no invariant parent)

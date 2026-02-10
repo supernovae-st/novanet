@@ -337,8 +337,8 @@ mod tests {
         assert!(output.contains("pub const NAVIGATION_COLLAPSED: IconDef"));
 
         // Terminal icons (spot check)
-        assert!(output.contains("\"◉\"")); // global
-        assert!(output.contains("\"◎\"")); // tenant
+        assert!(output.contains("\"◉\"")); // shared
+        assert!(output.contains("\"◎\"")); // org
         assert!(output.contains("\"■\"")); // invariant
         assert!(output.contains("\"□\"")); // localized
         assert!(output.contains("\"▼\"")); // expanded

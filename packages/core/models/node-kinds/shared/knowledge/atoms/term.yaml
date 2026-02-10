@@ -1,4 +1,4 @@
-# packages/core/models/node-kinds/global/knowledge/atoms/term.yaml
+# models/node-kinds/shared/knowledge/atoms/term.yaml
 # Term — Individual vocabulary item within a TermSet
 #
 # Locale-native: each locale has its own unique terms (no invariant parent)

@@ -1,4 +1,4 @@
-# packages/core/models/node-kinds/global/config/formatting.yaml
+# models/node-kinds/shared/locale/formatting.yaml
 # Formatting — Technical formatting rules for a locale (dates, numbers, currency, time, phone, address)
 #
 # v10.6: Added time_system, percentage_space, raw_markdown (hybrid approach)

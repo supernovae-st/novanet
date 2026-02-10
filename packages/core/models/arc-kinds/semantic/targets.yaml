@@ -5,11 +5,14 @@
 #        - Localized content targets specific keywords for SEO
 #        - Bidirectional with EXPRESSES (keyword → entity)
 #        - Must respect locale alignment (EntityContent.locale == SEOKeyword.locale)
+#
+# v11.5: scope fix (intra_realm → cross_realm)
+#        - EntityContent (org/semantic) → SEOKeyword (shared/knowledge)
 
 arc:
   name: TARGETS
   family: semantic
-  scope: intra_realm
+  scope: cross_realm
   temperature_threshold: 0.6
 
   source: EntityContent

@@ -1,4 +1,4 @@
-# models/nodes/project/structure/block.yaml
+# models/node-kinds/org/structure/block.yaml
 # Block - Page section instance with sub-agent instructions
 
 node:

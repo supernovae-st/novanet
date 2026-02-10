@@ -41,18 +41,16 @@ export interface NodeCardProps {
  */
 function getLayerBadgeLabel(layer: Layer): string {
   const labels: Record<Layer, string> = {
-    // Shared realm (3)
+    // Shared realm (4) — v11.4: includes config
+    config: 'CONFIG',
     locale: 'LOCALE',
     geography: 'GEOGRAPHY',
-    knowledge: 'KNOWLEDGE',
-    // Org realm (8)
-    config: 'CONFIG',
+    knowledge: 'KNOWLEDGE',  // v11.4: includes SEO/GEO nodes
+    // Org realm (6) — v11.4: seo/geo removed
     foundation: 'FOUNDATION',
     structure: 'STRUCTURE',
     semantic: 'SEMANTIC',
     instruction: 'INSTRUCTION',
-    seo: 'SEO',
-    geo: 'GEO',
     output: 'OUTPUT',
   };
   return labels[layer] || layer.toUpperCase();

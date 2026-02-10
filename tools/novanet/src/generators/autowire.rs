@@ -215,9 +215,9 @@ mod tests {
             make_node("Project", "org", "foundation"),
             make_node("Page", "org", "structure"),
             make_node("Block", "org", "structure"),
-            make_node("Locale", "shared", "config"),
-            make_node("SEOKeyword", "shared", "seo"),
-            make_node("Organization", "org", "config"), // v10.6: tenant realm
+            make_node("Locale", "shared", "locale"),
+            make_node("Term", "shared", "knowledge"),
+            make_node("OrgConfig", "org", "config"), // v11.4: org realm
         ];
 
         let cypher = generate_autowire(&nodes).unwrap();
@@ -242,17 +242,17 @@ mod tests {
         assert!(cypher.contains("MATCH (n:Locale)"));
         assert!(cypher.contains("MATCH (k:Kind {label: 'Locale'})"));
 
-        // Realm order: global, tenant (v10.6: 2 realms)
-        let global_pos = cypher.find("SHARED REALM").unwrap();
-        let tenant_pos = cypher.find("ORG REALM").unwrap();
-        assert!(global_pos < tenant_pos);
+        // Realm order: shared, org (v11.4: 2 realms)
+        let shared_pos = cypher.find("SHARED REALM").unwrap();
+        let org_pos = cypher.find("ORG REALM").unwrap();
+        assert!(shared_pos < org_pos);
 
-        // Layer comments with counts
-        assert!(cypher.contains("Shared > Config (1 type)"));
-        assert!(cypher.contains("Org > Config (1 type)")); // Organization
+        // Layer comments with counts (v11.4: no seo/geo layers)
+        assert!(cypher.contains("Shared > Locale (1 type)")); // Locale
+        assert!(cypher.contains("Shared > Knowledge (1 type)")); // Term
+        assert!(cypher.contains("Org > Config (1 type)")); // OrgConfig
         assert!(cypher.contains("Org > Foundation (1 type)"));
         assert!(cypher.contains("Org > Structure (2 types)"));
-        assert!(cypher.contains("Shared > Seo (1 type)"));
 
         // Nodes sorted within layer
         let block_pos = cypher.find("MATCH (n:Block)").unwrap();
@@ -317,9 +317,9 @@ mod tests {
         assert!(cypher.contains("MATCH (n:Style)"));
         assert!(cypher.contains("MATCH (k:Kind {label: 'Style'})"));
 
-        // v11.4: Layer counts (4 shared + 6 org = 10 layers)
-        assert!(cypher.contains("Shared > Config (1 type)")); // EntityCategory (singular!)
-        assert!(cypher.contains("Shared > Locale (7 types)")); // Locale, Formatting, Style, etc.
+        // v11.5: Layer counts (4 shared + 6 org = 10 layers)
+        assert!(cypher.contains("Shared > Config (2 types)")); // EntityCategory + Locale
+        assert!(cypher.contains("Shared > Locale (6 types)")); // Formatting, Style, etc.
         assert!(cypher.contains("Shared > Geography (6 types)")); // Continent, Region, etc.
         assert!(cypher.contains("Shared > Knowledge (26 types)")); // Sets + Atoms + SEO/GEO
 

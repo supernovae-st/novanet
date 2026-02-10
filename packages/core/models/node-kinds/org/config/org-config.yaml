@@ -1,4 +1,4 @@
-# OrgConfig - Organization configuration root node
+# models/node-kinds/org/config/org-config.yaml
 # v11.3: Merged from Organization + Tenant (simpler, unified model)
 
 node:

@@ -1,4 +1,4 @@
-# models/node-kinds/project/instruction/block-instruction.yaml
+# models/node-kinds/org/instruction/block-instruction.yaml
 # BlockInstruction - Per-block generation instructions with entity/page references (v10.3)
 #
 # v10.3.0: NEW NODE

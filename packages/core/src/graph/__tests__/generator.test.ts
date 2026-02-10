@@ -1,5 +1,5 @@
 // packages/core/src/graph/__tests__/generator.test.ts
-// Tests for schema graph generator — v11.3.0 (61 nodes, 2 realms, 11 layers)
+// Tests for schema graph generator — v11.4.0 (61 nodes, 2 realms, 10 layers)
 // TDD: Write tests first, then implementation
 
 import { describe, it, expect } from 'vitest';
@@ -93,8 +93,8 @@ describe('graph/generator', () => {
     it('should include stats', () => {
       const result = getSchemaHierarchy();
       expect(result.stats.totalNodes).toBe(61);
-      expect(result.stats.nodesByRealm.org).toBe(29);     // v11.3: 29 org nodes
-      expect(result.stats.nodesByRealm.shared).toBe(32);  // v11.3: 32 shared nodes
+      expect(result.stats.nodesByRealm.org).toBe(21);     // v11.4: 21 org nodes (SEO/GEO moved)
+      expect(result.stats.nodesByRealm.shared).toBe(40);  // v11.4: 40 shared nodes (includes SEO/GEO)
     });
 
     it('should include all nodes', () => {
@@ -110,15 +110,15 @@ describe('graph/generator', () => {
     it('should have correct realm definitions', () => {
       const result = getSchemaHierarchy();
 
-      // v11.3: Org realm (8 layers)
+      // v11.4: Org realm (6 layers - seo/geo removed)
       expect(result.realms.org.label).toBe('ORG');
       expect(result.realms.org.icon).toBe('🏢');
-      expect(Object.keys(result.realms.org.layers)).toHaveLength(8);
+      expect(Object.keys(result.realms.org.layers)).toHaveLength(6);
 
-      // v11.3: Shared realm (3 layers - locale, geography, knowledge)
+      // v11.4: Shared realm (4 layers - config, locale, geography, knowledge)
       expect(result.realms.shared.label).toBe('SHARED');
       expect(result.realms.shared.icon).toBe('🌍');
-      expect(Object.keys(result.realms.shared.layers)).toHaveLength(3);
+      expect(Object.keys(result.realms.shared.layers)).toHaveLength(4);
     });
 
     it('should have totalArcs in stats', () => {

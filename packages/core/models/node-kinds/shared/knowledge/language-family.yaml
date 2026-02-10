@@ -1,4 +1,4 @@
-# packages/core/models/node-kinds/global/locale-knowledge/language-family.yaml
+# models/node-kinds/shared/knowledge/language-family.yaml
 # LanguageFamily - ISO 639-5 top-level language family
 #
 # v10.8: Geographic Taxonomy - Phase 2

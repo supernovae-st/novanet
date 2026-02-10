@@ -1,4 +1,4 @@
-# packages/core/models/node-kinds/global/knowledge/taboo-set.yaml
+# models/node-kinds/shared/knowledge/taboo-set.yaml
 # TabooSet — Container grouping Taboo atoms by severity
 #
 # v10.1: Pure container (no JSON blobs - data lives in Taboo atoms)
