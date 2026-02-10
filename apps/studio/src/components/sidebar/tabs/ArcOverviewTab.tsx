@@ -14,6 +14,7 @@
  */
 
 import { memo, useMemo } from 'react';
+import dynamic from 'next/dynamic';
 import { motion } from 'motion/react';
 import { ArrowRight, Clock, Hash } from 'lucide-react';
 import { KIND_META } from '@novanet/core/types';
@@ -21,12 +22,24 @@ import type { Layer, Realm, Trait } from '@novanet/core/types';
 import { cn } from '@/lib/utils';
 import { useCopyFeedback } from '@/hooks';
 import { CopyButton } from '@/components/dx/CopyButton';
-import { ArcPreview3D } from '@/components/graph/ArcPreview3D';
 import { NodeNavigationCard } from '@/components/ui/detail-panel';
 import { useUIStore } from '@/stores/uiStore';
 import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
 import { gapTokens } from '@/design/tokens';
 import type { GraphEdge, GraphNode } from '@/types';
+
+// Dynamic import for React Three Fiber component (SSR disabled)
+const ArcPreview3DSimple = dynamic(
+  () => import('./ArcPreview3DSimple').then((mod) => mod.ArcPreview3DSimple),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="w-[100px] h-[100px] rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
+        <div className="w-6 h-6 border-2 border-white/20 border-t-white/60 rounded-full animate-spin" />
+      </div>
+    ),
+  }
+);
 
 interface ArcOverviewTabProps {
   arc: GraphEdge;
@@ -200,7 +213,7 @@ export const ArcOverviewTab = memo(function ArcOverviewTab({
 
           {/* Right side: 3D Arc Preview (rotating) */}
           <div className="flex-shrink-0">
-            <ArcPreview3D
+            <ArcPreview3DSimple
               arcType={arcType}
               source={sourceClassification}
               target={targetClassification}
