@@ -110,12 +110,15 @@ const RELATION_TARGET_TYPE_MAP: Record<string, string> = {
 export class CypherGenerator {
   /**
    * Generate a Cypher query from a NovaNetFilter
+   *
+   * Returns both nodes AND relationships so that graphStore receives edges.
    */
   static generate(filter: NovaNetFilter): CypherQuery {
     const criteria = filter.getCriteria();
     const params: Record<string, unknown> = {};
     const lines: string[] = [];
-    const aliases = new Set<string>(['root']);
+    const nodeAliases = new Set<string>(['root']);
+    const relAliases: string[] = [];
 
     // 1. MATCH root node
     if (criteria.root) {
@@ -129,23 +132,31 @@ export class CypherGenerator {
       }
     }
 
-    // 2. OPTIONAL MATCH for includes
+    // 2. OPTIONAL MATCH for includes (capture both nodes AND relationships)
+    let relIndex = 0;
     for (const include of criteria.includes) {
       const alias = this.relationToAlias(include.relation);
-      aliases.add(alias);
+      nodeAliases.add(alias);
+
+      // Create a unique relationship alias
+      const relAlias = `r${relIndex++}`;
+      relAliases.push(relAlias);
 
       const targetType = this.relationToTargetType(include.relation);
       const arrow = this.directionToArrow(include.direction);
       const activeFilter = include.filters?.active ? ' {active: true}' : '';
-      const matchLine = `OPTIONAL MATCH (root)${arrow.left}[:${include.relation}]${arrow.right}(${alias}:${targetType}${activeFilter})`;
+      // Capture the relationship with a variable (r0, r1, etc.)
+      const matchLine = `OPTIONAL MATCH (root)${arrow.left}[${relAlias}:${include.relation}]${arrow.right}(${alias}:${targetType}${activeFilter})`;
 
       lines.push(matchLine);
 
       // Handle spreading activation for entities (v10.3: USES_ENTITY replaces USES_CONCEPT)
       if (include.relation === 'USES_ENTITY' && include.depth && include.depth > 1) {
         const relatedAlias = `related${this.capitalize(alias)}`;
-        lines.push(`OPTIONAL MATCH (${alias})-[:SEMANTIC_LINK*1..${include.depth - 1}]->(${relatedAlias}:Entity)`);
-        aliases.add(relatedAlias);
+        const spreadRelAlias = `r${relIndex++}`;
+        relAliases.push(spreadRelAlias);
+        lines.push(`OPTIONAL MATCH (${alias})-[${spreadRelAlias}:SEMANTIC_LINK*1..${include.depth - 1}]->(${relatedAlias}:Entity)`);
+        nodeAliases.add(relatedAlias);
       }
     }
 
@@ -180,11 +191,21 @@ export class CypherGenerator {
       lines.push(`WHERE ${whereConditions.join(' AND ')}`);
     }
 
-    // 4. RETURN
-    const returns = Array.from(aliases).map(a => {
-      if (a === 'root') return 'root';
-      return `collect(DISTINCT ${a}) AS ${a}s`;
-    });
+    // 4. RETURN - include both nodes AND relationships
+    const returns: string[] = ['root'];
+
+    // Add node collections
+    for (const alias of nodeAliases) {
+      if (alias !== 'root') {
+        returns.push(`collect(DISTINCT ${alias}) AS ${alias}s`);
+      }
+    }
+
+    // Add relationship collections (crucial for edges in graphStore!)
+    for (const relAlias of relAliases) {
+      returns.push(`collect(DISTINCT ${relAlias}) AS ${relAlias}s`);
+    }
+
     lines.push(`RETURN ${returns.join(', ')}`);
 
     return {
