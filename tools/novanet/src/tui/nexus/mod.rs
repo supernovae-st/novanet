@@ -50,7 +50,7 @@ pub const TIPS: &[&str] = &[
 
 /// Which Guide tab is currently active.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
-pub enum GuideTab {
+pub enum NexusTab {
     /// Traits constellation (5 traits with detail panel)
     #[default]
     Traits,
@@ -62,63 +62,63 @@ pub enum GuideTab {
     Pipeline,
 }
 
-impl GuideTab {
+impl NexusTab {
     /// Get the shortcut key for this tab (1-4 when in Guide mode).
     pub fn shortcut(&self) -> char {
         match self {
-            GuideTab::Traits => '1',
-            GuideTab::Layers => '2',
-            GuideTab::Arcs => '3',
-            GuideTab::Pipeline => '4',
+            NexusTab::Traits => '1',
+            NexusTab::Layers => '2',
+            NexusTab::Arcs => '3',
+            NexusTab::Pipeline => '4',
         }
     }
 
     /// Get the display label for this tab.
     pub fn label(&self) -> &'static str {
         match self {
-            GuideTab::Traits => "Traits",
-            GuideTab::Layers => "Layers",
-            GuideTab::Arcs => "Arcs",
-            GuideTab::Pipeline => "Pipeline",
+            NexusTab::Traits => "Traits",
+            NexusTab::Layers => "Layers",
+            NexusTab::Arcs => "Arcs",
+            NexusTab::Pipeline => "Pipeline",
         }
     }
 
     /// Get all tabs in order.
-    pub fn all() -> &'static [GuideTab] {
+    pub fn all() -> &'static [NexusTab] {
         &[
-            GuideTab::Traits,
-            GuideTab::Layers,
-            GuideTab::Arcs,
-            GuideTab::Pipeline,
+            NexusTab::Traits,
+            NexusTab::Layers,
+            NexusTab::Arcs,
+            NexusTab::Pipeline,
         ]
     }
 
     /// Cycle to next tab.
     pub fn next(&self) -> Self {
         match self {
-            GuideTab::Traits => GuideTab::Layers,
-            GuideTab::Layers => GuideTab::Arcs,
-            GuideTab::Arcs => GuideTab::Pipeline,
-            GuideTab::Pipeline => GuideTab::Traits,
+            NexusTab::Traits => NexusTab::Layers,
+            NexusTab::Layers => NexusTab::Arcs,
+            NexusTab::Arcs => NexusTab::Pipeline,
+            NexusTab::Pipeline => NexusTab::Traits,
         }
     }
 
     /// Cycle to previous tab.
     pub fn prev(&self) -> Self {
         match self {
-            GuideTab::Traits => GuideTab::Pipeline,
-            GuideTab::Layers => GuideTab::Traits,
-            GuideTab::Arcs => GuideTab::Layers,
-            GuideTab::Pipeline => GuideTab::Arcs,
+            NexusTab::Traits => NexusTab::Pipeline,
+            NexusTab::Layers => NexusTab::Traits,
+            NexusTab::Arcs => NexusTab::Layers,
+            NexusTab::Pipeline => NexusTab::Arcs,
         }
     }
 }
 
 /// Main Guide mode state.
 #[derive(Debug, Clone)]
-pub struct GuideState {
+pub struct NexusState {
     /// Currently active tab.
-    pub tab: GuideTab,
+    pub tab: NexusTab,
 
     // === Traits tab state ===
     /// Cursor position in traits constellation (0-4 for 5 traits).
@@ -161,17 +161,17 @@ pub struct GuideState {
     pub clipboard_message_time: Option<Instant>,
 }
 
-impl Default for GuideState {
+impl Default for NexusState {
     fn default() -> Self {
         Self::new()
     }
 }
 
-impl GuideState {
-    /// Create a new GuideState with default values.
+impl NexusState {
+    /// Create a new NexusState with default values.
     pub fn new() -> Self {
         Self {
-            tab: GuideTab::default(),
+            tab: NexusTab::default(),
             trait_cursor: 0,
             layer_cursor: 0,
             layer_realm: 0,
@@ -226,8 +226,8 @@ impl GuideState {
 
             // Tab switching with number keys 1-4
             KeyCode::Char('1') => {
-                if self.tab != GuideTab::Traits {
-                    self.tab = GuideTab::Traits;
+                if self.tab != NexusTab::Traits {
+                    self.tab = NexusTab::Traits;
                     self.reset_drill();
                     true
                 } else {
@@ -235,8 +235,8 @@ impl GuideState {
                 }
             }
             KeyCode::Char('2') => {
-                if self.tab != GuideTab::Layers {
-                    self.tab = GuideTab::Layers;
+                if self.tab != NexusTab::Layers {
+                    self.tab = NexusTab::Layers;
                     self.reset_drill();
                     true
                 } else {
@@ -244,8 +244,8 @@ impl GuideState {
                 }
             }
             KeyCode::Char('3') => {
-                if self.tab != GuideTab::Arcs {
-                    self.tab = GuideTab::Arcs;
+                if self.tab != NexusTab::Arcs {
+                    self.tab = NexusTab::Arcs;
                     self.reset_drill();
                     true
                 } else {
@@ -253,8 +253,8 @@ impl GuideState {
                 }
             }
             KeyCode::Char('4') => {
-                if self.tab != GuideTab::Pipeline {
-                    self.tab = GuideTab::Pipeline;
+                if self.tab != NexusTab::Pipeline {
+                    self.tab = NexusTab::Pipeline;
                     self.reset_drill();
                     true
                 } else {
@@ -293,7 +293,7 @@ impl GuideState {
 
             // Space for pipeline animation toggle
             KeyCode::Char(' ') => {
-                if self.tab == GuideTab::Pipeline {
+                if self.tab == NexusTab::Pipeline {
                     self.pipeline_animating = !self.pipeline_animating;
                     true
                 } else {
@@ -338,12 +338,12 @@ impl GuideState {
     /// Get the text to yank based on current tab and selection.
     pub fn get_current_yank_text(&self) -> Option<String> {
         match self.tab {
-            GuideTab::Traits => {
+            NexusTab::Traits => {
                 // Yank the current trait name (v11.2: 5 traits, split derived → generated + aggregated)
                 let traits = ["invariant", "localized", "knowledge", "generated", "aggregated"];
                 traits.get(self.trait_cursor).map(|s| s.to_string())
             }
-            GuideTab::Layers => {
+            NexusTab::Layers => {
                 // Yank the current layer key
                 let layers = if self.layer_realm == 0 {
                     // Shared layers (v11.3: 3 layers)
@@ -363,12 +363,12 @@ impl GuideState {
                 };
                 layers.get(self.layer_cursor).map(|s| s.to_string())
             }
-            GuideTab::Arcs => {
+            NexusTab::Arcs => {
                 // Yank the current arc family
                 let families = ["ownership", "localization", "semantic", "generation", "mining"];
                 families.get(self.arc_cursor).map(|s| s.to_string())
             }
-            GuideTab::Pipeline => {
+            NexusTab::Pipeline => {
                 // Yank the current pipeline stage
                 let stages = [
                     "Knowledge",
@@ -396,7 +396,7 @@ impl GuideState {
     /// Jump to a specific trait in the Traits tab.
     /// Used by quick jump shortcuts (gi, gl, gk, gd, gj).
     fn jump_to_trait(&mut self, trait_index: usize) -> bool {
-        self.tab = GuideTab::Traits;
+        self.tab = NexusTab::Traits;
         self.trait_cursor = trait_index.min(4); // Clamp to 0-4
         self.reset_drill();
         true
@@ -420,7 +420,7 @@ impl GuideState {
     /// Navigate up (cursor movement).
     fn navigate_up(&mut self) -> bool {
         match self.tab {
-            GuideTab::Traits => {
+            NexusTab::Traits => {
                 if self.drill_depth == 0 {
                     // In constellation, cycle through 5 traits
                     self.trait_cursor = if self.trait_cursor == 0 {
@@ -437,7 +437,7 @@ impl GuideState {
                     true
                 }
             }
-            GuideTab::Layers => {
+            NexusTab::Layers => {
                 if self.layer_cursor > 0 {
                     self.layer_cursor -= 1;
                     true
@@ -445,7 +445,7 @@ impl GuideState {
                     false
                 }
             }
-            GuideTab::Arcs => {
+            NexusTab::Arcs => {
                 if self.arc_cursor > 0 {
                     self.arc_cursor -= 1;
                     true
@@ -453,7 +453,7 @@ impl GuideState {
                     false
                 }
             }
-            GuideTab::Pipeline => {
+            NexusTab::Pipeline => {
                 if self.pipeline_stage > 0 {
                     self.pipeline_stage -= 1;
                     true
@@ -467,7 +467,7 @@ impl GuideState {
     /// Navigate down (cursor movement).
     fn navigate_down(&mut self) -> bool {
         match self.tab {
-            GuideTab::Traits => {
+            NexusTab::Traits => {
                 if self.drill_depth == 0 {
                     // In constellation, cycle through 5 traits
                     self.trait_cursor = (self.trait_cursor + 1) % 5;
@@ -478,7 +478,7 @@ impl GuideState {
                     true
                 }
             }
-            GuideTab::Layers => {
+            NexusTab::Layers => {
                 // Bound by number of layers in current realm
                 // v11.3: shared: 3 layers (0-2), org: 8 layers (0-7)
                 let max = if self.layer_realm == 0 { 2 } else { 7 };
@@ -489,7 +489,7 @@ impl GuideState {
                     false
                 }
             }
-            GuideTab::Arcs => {
+            NexusTab::Arcs => {
                 // 5 arc families
                 if self.arc_cursor < 4 {
                     self.arc_cursor += 1;
@@ -498,7 +498,7 @@ impl GuideState {
                     false
                 }
             }
-            GuideTab::Pipeline => {
+            NexusTab::Pipeline => {
                 // 6 pipeline stages (0-5)
                 if self.pipeline_stage < 5 {
                     self.pipeline_stage += 1;
@@ -513,7 +513,7 @@ impl GuideState {
     /// Navigate left (realm switching in Layers, drill-out elsewhere).
     fn navigate_left(&mut self) -> bool {
         match self.tab {
-            GuideTab::Layers => {
+            NexusTab::Layers => {
                 // Switch to Shared realm (0)
                 if self.layer_realm != 0 {
                     self.layer_realm = 0;
@@ -533,7 +533,7 @@ impl GuideState {
     /// Navigate right (realm switching in Layers, drill-in elsewhere).
     fn navigate_right(&mut self) -> bool {
         match self.tab {
-            GuideTab::Layers => {
+            NexusTab::Layers => {
                 // Switch to Org realm (1)
                 if self.layer_realm != 1 {
                     self.layer_realm = 1;
@@ -553,7 +553,7 @@ impl GuideState {
     /// Drill down into current selection.
     fn drill_down(&mut self) -> bool {
         match self.tab {
-            GuideTab::Traits | GuideTab::Layers | GuideTab::Arcs => {
+            NexusTab::Traits | NexusTab::Layers | NexusTab::Arcs => {
                 if self.drill_depth < 2 {
                     self.drill_depth += 1;
                     self.drill_cursor = 0;
@@ -562,7 +562,7 @@ impl GuideState {
                     false
                 }
             }
-            GuideTab::Pipeline => {
+            NexusTab::Pipeline => {
                 // Pipeline doesn't have drill-down, toggle animation instead
                 self.pipeline_animating = !self.pipeline_animating;
                 true
@@ -603,7 +603,7 @@ impl GuideState {
     pub fn breadcrumb(&self, trait_stats: &[traits::TraitStats]) -> String {
         let tab_name = self.tab.label();
         match self.tab {
-            GuideTab::Traits => {
+            NexusTab::Traits => {
                 let trait_name = traits::TRAIT_ORDER.get(self.trait_cursor).unwrap_or(&"");
                 if self.drill_depth == 0 {
                     format!("Guide > {} > {}", tab_name, trait_name)
@@ -619,7 +619,7 @@ impl GuideState {
                     }
                 }
             }
-            GuideTab::Layers => {
+            NexusTab::Layers => {
                 let realm = if self.layer_realm == 0 {
                     "Shared"
                 } else {
@@ -627,7 +627,7 @@ impl GuideState {
                 };
                 format!("Guide > {} > {}", tab_name, realm)
             }
-            GuideTab::Arcs => {
+            NexusTab::Arcs => {
                 let families = [
                     "ownership",
                     "localization",
@@ -638,7 +638,7 @@ impl GuideState {
                 let family = families.get(self.arc_cursor).unwrap_or(&"");
                 format!("Guide > {} > {}", tab_name, family)
             }
-            GuideTab::Pipeline => {
+            NexusTab::Pipeline => {
                 let stages = [
                     "Knowledge",
                     "Entity",
@@ -668,7 +668,7 @@ impl GuideState {
 // =============================================================================
 
 /// Render the Guide mode with tab bar, breadcrumb, content, and tips bar.
-pub fn render_guide(f: &mut Frame, area: Rect, app: &App) {
+pub fn render_nexus(f: &mut Frame, area: Rect, app: &App) {
     let chunks = Layout::default()
         .direction(Direction::Vertical)
         .constraints([
@@ -686,11 +686,11 @@ pub fn render_guide(f: &mut Frame, area: Rect, app: &App) {
     render_breadcrumb(f, chunks[1], app);
 
     // Render content based on active tab
-    match app.guide.tab {
-        GuideTab::Traits => traits::render_traits_tab(f, app, chunks[2]),
-        GuideTab::Layers => layers::render_layers_tab(f, app, chunks[2]),
-        GuideTab::Arcs => arcs::render_arcs_tab(f, app, chunks[2]),
-        GuideTab::Pipeline => pipeline::render_pipeline_tab(f, app, chunks[2]),
+    match app.nexus.tab {
+        NexusTab::Traits => traits::render_traits_tab(f, app, chunks[2]),
+        NexusTab::Layers => layers::render_layers_tab(f, app, chunks[2]),
+        NexusTab::Arcs => arcs::render_arcs_tab(f, app, chunks[2]),
+        NexusTab::Pipeline => pipeline::render_pipeline_tab(f, app, chunks[2]),
     }
 
     // Render "Did you know?" tips bar
@@ -699,11 +699,11 @@ pub fn render_guide(f: &mut Frame, area: Rect, app: &App) {
 
 /// Render the tab bar at the top of Guide mode.
 fn render_tab_bar(f: &mut Frame, area: Rect, app: &App) {
-    let tabs: Vec<Span> = GuideTab::all()
+    let tabs: Vec<Span> = NexusTab::all()
         .iter()
         .enumerate()
         .map(|(idx, tab)| {
-            let is_selected = *tab == app.guide.tab;
+            let is_selected = *tab == app.nexus.tab;
             let style = if is_selected {
                 Style::default()
                     .fg(Color::Cyan)
@@ -713,10 +713,10 @@ fn render_tab_bar(f: &mut Frame, area: Rect, app: &App) {
             };
 
             let symbol = match tab {
-                GuideTab::Traits => "\u{25a0}",   // ■
-                GuideTab::Layers => "\u{25a3}",   // ▣
-                GuideTab::Arcs => "\u{21c4}",     // ⇄
-                GuideTab::Pipeline => "\u{26a1}", // ⚡
+                NexusTab::Traits => "\u{25a0}",   // ■
+                NexusTab::Layers => "\u{25a3}",   // ▣
+                NexusTab::Arcs => "\u{21c4}",     // ⇄
+                NexusTab::Pipeline => "\u{26a1}", // ⚡
             };
 
             Span::styled(format!("[{}]{} {} ", idx + 1, symbol, tab.label()), style)
@@ -742,7 +742,7 @@ fn render_tab_bar(f: &mut Frame, area: Rect, app: &App) {
 /// Render the breadcrumb bar showing current location in Guide mode.
 fn render_breadcrumb(f: &mut Frame, area: Rect, app: &App) {
     let trait_stats = app.tree.get_trait_stats();
-    let breadcrumb = app.guide.breadcrumb(&trait_stats);
+    let breadcrumb = app.nexus.breadcrumb(&trait_stats);
 
     // Style: dim path segments, bright current segment
     let segments: Vec<&str> = breadcrumb.split(" > ").collect();
@@ -769,12 +769,12 @@ fn render_breadcrumb(f: &mut Frame, area: Rect, app: &App) {
     }
 
     // Add drill hint if at depth 0 and drillable
-    if app.guide.drill_depth == 0 && app.guide.tab != GuideTab::Pipeline {
+    if app.nexus.drill_depth == 0 && app.nexus.tab != NexusTab::Pipeline {
         spans.push(Span::styled(
             "  [Enter: drill down]",
             Style::default().fg(Color::Rgb(80, 80, 100)),
         ));
-    } else if app.guide.drill_depth > 0 {
+    } else if app.nexus.drill_depth > 0 {
         spans.push(Span::styled(
             "  [Esc: back]",
             Style::default().fg(Color::Rgb(80, 80, 100)),
@@ -791,7 +791,7 @@ fn render_tips_bar(f: &mut Frame, area: Rect, app: &App) {
     let theme = &app.theme;
 
     // Priority: clipboard message > pending 'g' > normal tip
-    if let Some(ref clipboard_msg) = app.guide.clipboard_message {
+    if let Some(ref clipboard_msg) = app.nexus.clipboard_message {
         // Show clipboard message (green for success, red for error)
         let is_error = clipboard_msg.starts_with("Error:");
         let style = if is_error {
@@ -817,12 +817,12 @@ fn render_tips_bar(f: &mut Frame, area: Rect, app: &App) {
         return;
     }
 
-    let tip = app.guide.current_tip();
-    let tip_index = app.guide.tip_index;
+    let tip = app.nexus.current_tip();
+    let tip_index = app.nexus.tip_index;
     let total_tips = TIPS.len();
 
     // Show pending 'g' indicator if waiting for second key
-    let prefix = if app.guide.has_pending_g() {
+    let prefix = if app.nexus.has_pending_g() {
         Span::styled(
             " g... ",
             Style::default()
@@ -952,8 +952,8 @@ mod tests {
 
     #[test]
     fn test_guide_state_new() {
-        let state = GuideState::new();
-        assert_eq!(state.tab, GuideTab::Traits);
+        let state = NexusState::new();
+        assert_eq!(state.tab, NexusTab::Traits);
         assert_eq!(state.trait_cursor, 0);
         assert!(!state.pending_g);
         assert_eq!(state.tip_index, 0);
@@ -967,14 +967,14 @@ mod tests {
 
     #[test]
     fn test_current_tip() {
-        let state = GuideState::new();
+        let state = NexusState::new();
         let tip = state.current_tip();
         assert_eq!(tip, TIPS[0]);
     }
 
     #[test]
     fn test_next_tip_cycles() {
-        let mut state = GuideState::new();
+        let mut state = NexusState::new();
         assert_eq!(state.tip_index, 0);
 
         state.next_tip();
@@ -990,7 +990,7 @@ mod tests {
 
     #[test]
     fn test_pending_g_state() {
-        let mut state = GuideState::new();
+        let mut state = NexusState::new();
         assert!(!state.has_pending_g());
 
         // Press 'g' to enter pending state
@@ -1004,8 +1004,8 @@ mod tests {
 
     #[test]
     fn test_quick_jump_gi() {
-        let mut state = GuideState::new();
-        state.tab = GuideTab::Layers; // Start on different tab
+        let mut state = NexusState::new();
+        state.tab = NexusTab::Layers; // Start on different tab
         state.trait_cursor = 3;
 
         // Press 'g' then 'i' for invariant
@@ -1014,40 +1014,40 @@ mod tests {
 
         state.handle_key(key_event(KeyCode::Char('i')));
         assert!(!state.has_pending_g());
-        assert_eq!(state.tab, GuideTab::Traits);
+        assert_eq!(state.tab, NexusTab::Traits);
         assert_eq!(state.trait_cursor, 0); // invariant = index 0
     }
 
     #[test]
     fn test_quick_jump_gl() {
-        let mut state = GuideState::new();
+        let mut state = NexusState::new();
 
         state.handle_key(key_event(KeyCode::Char('g')));
         state.handle_key(key_event(KeyCode::Char('l')));
 
-        assert_eq!(state.tab, GuideTab::Traits);
+        assert_eq!(state.tab, NexusTab::Traits);
         assert_eq!(state.trait_cursor, 1); // localized = index 1
     }
 
     #[test]
     fn test_quick_jump_gk() {
-        let mut state = GuideState::new();
+        let mut state = NexusState::new();
 
         state.handle_key(key_event(KeyCode::Char('g')));
         state.handle_key(key_event(KeyCode::Char('k')));
 
-        assert_eq!(state.tab, GuideTab::Traits);
+        assert_eq!(state.tab, NexusTab::Traits);
         assert_eq!(state.trait_cursor, 2); // knowledge = index 2
     }
 
     #[test]
     fn test_quick_jump_gd() {
-        let mut state = GuideState::new();
+        let mut state = NexusState::new();
 
         state.handle_key(key_event(KeyCode::Char('g')));
         state.handle_key(key_event(KeyCode::Char('d')));
 
-        assert_eq!(state.tab, GuideTab::Traits);
+        assert_eq!(state.tab, NexusTab::Traits);
         assert_eq!(state.trait_cursor, 3); // derived = index 3
     }
 
@@ -1055,7 +1055,7 @@ mod tests {
 
     #[test]
     fn test_quick_jump_gg() {
-        let mut state = GuideState::new();
+        let mut state = NexusState::new();
         state.trait_cursor = 3;
         state.layer_cursor = 2;
         state.arc_cursor = 1;
@@ -1071,7 +1071,7 @@ mod tests {
 
     #[test]
     fn test_pending_g_cancelled_by_escape() {
-        let mut state = GuideState::new();
+        let mut state = NexusState::new();
 
         state.handle_key(key_event(KeyCode::Char('g')));
         assert!(state.has_pending_g());
@@ -1082,7 +1082,7 @@ mod tests {
 
     #[test]
     fn test_n_key_cycles_tips() {
-        let mut state = GuideState::new();
+        let mut state = NexusState::new();
         assert_eq!(state.tip_index, 0);
 
         state.handle_key(key_event(KeyCode::Char('n')));
@@ -1094,46 +1094,46 @@ mod tests {
 
     #[test]
     fn test_tab_cycling() {
-        let mut state = GuideState::new();
-        assert_eq!(state.tab, GuideTab::Traits);
+        let mut state = NexusState::new();
+        assert_eq!(state.tab, NexusTab::Traits);
 
         state.handle_key(key_event(KeyCode::Tab));
-        assert_eq!(state.tab, GuideTab::Layers);
+        assert_eq!(state.tab, NexusTab::Layers);
 
         state.handle_key(key_event(KeyCode::Tab));
-        assert_eq!(state.tab, GuideTab::Arcs);
+        assert_eq!(state.tab, NexusTab::Arcs);
 
         state.handle_key(key_event(KeyCode::Tab));
-        assert_eq!(state.tab, GuideTab::Pipeline);
+        assert_eq!(state.tab, NexusTab::Pipeline);
 
         state.handle_key(key_event(KeyCode::Tab));
-        assert_eq!(state.tab, GuideTab::Traits); // Wraps around
+        assert_eq!(state.tab, NexusTab::Traits); // Wraps around
     }
 
     #[test]
     fn test_guide_tab_all() {
-        let all = GuideTab::all();
+        let all = NexusTab::all();
         assert_eq!(all.len(), 4);
-        assert_eq!(all[0], GuideTab::Traits);
-        assert_eq!(all[1], GuideTab::Layers);
-        assert_eq!(all[2], GuideTab::Arcs);
-        assert_eq!(all[3], GuideTab::Pipeline);
+        assert_eq!(all[0], NexusTab::Traits);
+        assert_eq!(all[1], NexusTab::Layers);
+        assert_eq!(all[2], NexusTab::Arcs);
+        assert_eq!(all[3], NexusTab::Pipeline);
     }
 
     #[test]
     fn test_guide_tab_shortcuts() {
-        assert_eq!(GuideTab::Traits.shortcut(), '1');
-        assert_eq!(GuideTab::Layers.shortcut(), '2');
-        assert_eq!(GuideTab::Arcs.shortcut(), '3');
-        assert_eq!(GuideTab::Pipeline.shortcut(), '4');
+        assert_eq!(NexusTab::Traits.shortcut(), '1');
+        assert_eq!(NexusTab::Layers.shortcut(), '2');
+        assert_eq!(NexusTab::Arcs.shortcut(), '3');
+        assert_eq!(NexusTab::Pipeline.shortcut(), '4');
     }
 
     #[test]
     fn test_guide_tab_labels() {
-        assert_eq!(GuideTab::Traits.label(), "Traits");
-        assert_eq!(GuideTab::Layers.label(), "Layers");
-        assert_eq!(GuideTab::Arcs.label(), "Arcs");
-        assert_eq!(GuideTab::Pipeline.label(), "Pipeline");
+        assert_eq!(NexusTab::Traits.label(), "Traits");
+        assert_eq!(NexusTab::Layers.label(), "Layers");
+        assert_eq!(NexusTab::Arcs.label(), "Arcs");
+        assert_eq!(NexusTab::Pipeline.label(), "Pipeline");
     }
 
     // ==========================================================================
@@ -1142,50 +1142,50 @@ mod tests {
 
     #[test]
     fn test_number_key_1_switches_to_traits() {
-        let mut state = GuideState::new();
-        state.tab = GuideTab::Layers;
+        let mut state = NexusState::new();
+        state.tab = NexusTab::Layers;
 
         let changed = state.handle_key(key_event(KeyCode::Char('1')));
         assert!(changed);
-        assert_eq!(state.tab, GuideTab::Traits);
+        assert_eq!(state.tab, NexusTab::Traits);
 
         // Pressing '1' when already on Traits should return false
         let changed = state.handle_key(key_event(KeyCode::Char('1')));
         assert!(!changed);
-        assert_eq!(state.tab, GuideTab::Traits);
+        assert_eq!(state.tab, NexusTab::Traits);
     }
 
     #[test]
     fn test_number_key_2_switches_to_layers() {
-        let mut state = GuideState::new();
-        assert_eq!(state.tab, GuideTab::Traits);
+        let mut state = NexusState::new();
+        assert_eq!(state.tab, NexusTab::Traits);
 
         let changed = state.handle_key(key_event(KeyCode::Char('2')));
         assert!(changed);
-        assert_eq!(state.tab, GuideTab::Layers);
+        assert_eq!(state.tab, NexusTab::Layers);
     }
 
     #[test]
     fn test_number_key_3_switches_to_arcs() {
-        let mut state = GuideState::new();
+        let mut state = NexusState::new();
 
         let changed = state.handle_key(key_event(KeyCode::Char('3')));
         assert!(changed);
-        assert_eq!(state.tab, GuideTab::Arcs);
+        assert_eq!(state.tab, NexusTab::Arcs);
     }
 
     #[test]
     fn test_number_key_4_switches_to_pipeline() {
-        let mut state = GuideState::new();
+        let mut state = NexusState::new();
 
         let changed = state.handle_key(key_event(KeyCode::Char('4')));
         assert!(changed);
-        assert_eq!(state.tab, GuideTab::Pipeline);
+        assert_eq!(state.tab, NexusTab::Pipeline);
     }
 
     #[test]
     fn test_tab_switch_resets_drill() {
-        let mut state = GuideState::new();
+        let mut state = NexusState::new();
         state.drill_depth = 2;
         state.drill_cursor = 5;
 
@@ -1200,26 +1200,26 @@ mod tests {
 
     #[test]
     fn test_backtab_cycling() {
-        let mut state = GuideState::new();
-        assert_eq!(state.tab, GuideTab::Traits);
+        let mut state = NexusState::new();
+        assert_eq!(state.tab, NexusTab::Traits);
 
         state.handle_key(key_event(KeyCode::BackTab));
-        assert_eq!(state.tab, GuideTab::Pipeline); // Wraps to end
+        assert_eq!(state.tab, NexusTab::Pipeline); // Wraps to end
 
         state.handle_key(key_event(KeyCode::BackTab));
-        assert_eq!(state.tab, GuideTab::Arcs);
+        assert_eq!(state.tab, NexusTab::Arcs);
 
         state.handle_key(key_event(KeyCode::BackTab));
-        assert_eq!(state.tab, GuideTab::Layers);
+        assert_eq!(state.tab, NexusTab::Layers);
 
         state.handle_key(key_event(KeyCode::BackTab));
-        assert_eq!(state.tab, GuideTab::Traits);
+        assert_eq!(state.tab, NexusTab::Traits);
     }
 
     #[test]
     fn test_guide_tab_next_prev_symmetry() {
         // Verify next() and prev() are inverse operations
-        for tab in GuideTab::all() {
+        for tab in NexusTab::all() {
             assert_eq!(tab.next().prev(), *tab);
             assert_eq!(tab.prev().next(), *tab);
         }
@@ -1231,7 +1231,7 @@ mod tests {
 
     #[test]
     fn test_drill_down_enter_key() {
-        let mut state = GuideState::new();
+        let mut state = NexusState::new();
         assert_eq!(state.drill_depth, 0);
 
         // Enter to drill down
@@ -1243,7 +1243,7 @@ mod tests {
 
     #[test]
     fn test_drill_down_max_depth() {
-        let mut state = GuideState::new();
+        let mut state = NexusState::new();
         state.drill_depth = 2;
 
         // Already at max depth, should not drill further
@@ -1254,7 +1254,7 @@ mod tests {
 
     #[test]
     fn test_drill_up_escape_key() {
-        let mut state = GuideState::new();
+        let mut state = NexusState::new();
         state.drill_depth = 2;
         state.drill_cursor = 5;
 
@@ -1267,7 +1267,7 @@ mod tests {
 
     #[test]
     fn test_drill_up_at_zero() {
-        let mut state = GuideState::new();
+        let mut state = NexusState::new();
         assert_eq!(state.drill_depth, 0);
 
         // Already at depth 0, should not change
@@ -1278,8 +1278,8 @@ mod tests {
 
     #[test]
     fn test_drill_down_with_l_key() {
-        let mut state = GuideState::new();
-        state.tab = GuideTab::Traits; // Not Layers
+        let mut state = NexusState::new();
+        state.tab = NexusTab::Traits; // Not Layers
         assert_eq!(state.drill_depth, 0);
 
         // 'l' should drill down (except in Layers tab)
@@ -1290,8 +1290,8 @@ mod tests {
 
     #[test]
     fn test_drill_up_with_h_key() {
-        let mut state = GuideState::new();
-        state.tab = GuideTab::Traits; // Not Layers
+        let mut state = NexusState::new();
+        state.tab = NexusTab::Traits; // Not Layers
         state.drill_depth = 1;
 
         // 'h' should drill up (except in Layers tab)
@@ -1302,8 +1302,8 @@ mod tests {
 
     #[test]
     fn test_drill_right_left_keys() {
-        let mut state = GuideState::new();
-        state.tab = GuideTab::Traits;
+        let mut state = NexusState::new();
+        state.tab = NexusTab::Traits;
         assert_eq!(state.drill_depth, 0);
 
         // Right arrow to drill down
@@ -1319,7 +1319,7 @@ mod tests {
 
     #[test]
     fn test_reset_drill() {
-        let mut state = GuideState::new();
+        let mut state = NexusState::new();
         state.drill_depth = 2;
         state.drill_cursor = 10;
 
@@ -1335,8 +1335,8 @@ mod tests {
 
     #[test]
     fn test_traits_navigate_down() {
-        let mut state = GuideState::new();
-        state.tab = GuideTab::Traits;
+        let mut state = NexusState::new();
+        state.tab = NexusTab::Traits;
         assert_eq!(state.trait_cursor, 0);
 
         // Navigate down with 'j'
@@ -1350,8 +1350,8 @@ mod tests {
 
     #[test]
     fn test_traits_navigate_up() {
-        let mut state = GuideState::new();
-        state.tab = GuideTab::Traits;
+        let mut state = NexusState::new();
+        state.tab = NexusTab::Traits;
         state.trait_cursor = 3;
 
         // Navigate up with 'k'
@@ -1365,8 +1365,8 @@ mod tests {
 
     #[test]
     fn test_traits_cursor_wraps_around() {
-        let mut state = GuideState::new();
-        state.tab = GuideTab::Traits;
+        let mut state = NexusState::new();
+        state.tab = NexusTab::Traits;
         state.trait_cursor = 4; // Last trait (index 0-4)
 
         // Navigate down should wrap to 0
@@ -1380,8 +1380,8 @@ mod tests {
 
     #[test]
     fn test_traits_drilled_navigation() {
-        let mut state = GuideState::new();
-        state.tab = GuideTab::Traits;
+        let mut state = NexusState::new();
+        state.tab = NexusTab::Traits;
         state.drill_depth = 1;
         state.drill_cursor = 5;
 
@@ -1396,8 +1396,8 @@ mod tests {
 
     #[test]
     fn test_traits_drilled_cursor_stops_at_zero() {
-        let mut state = GuideState::new();
-        state.tab = GuideTab::Traits;
+        let mut state = NexusState::new();
+        state.tab = NexusTab::Traits;
         state.drill_depth = 1;
         state.drill_cursor = 0;
 
@@ -1412,8 +1412,8 @@ mod tests {
 
     #[test]
     fn test_layers_navigate_down() {
-        let mut state = GuideState::new();
-        state.tab = GuideTab::Layers;
+        let mut state = NexusState::new();
+        state.tab = NexusTab::Layers;
         state.layer_realm = 0; // Shared (2 layers, max index 1)
         state.layer_cursor = 0;
 
@@ -1424,8 +1424,8 @@ mod tests {
 
     #[test]
     fn test_layers_navigate_up() {
-        let mut state = GuideState::new();
-        state.tab = GuideTab::Layers;
+        let mut state = NexusState::new();
+        state.tab = NexusTab::Layers;
         state.layer_cursor = 2;
 
         state.handle_key(key_event(KeyCode::Char('k')));
@@ -1434,8 +1434,8 @@ mod tests {
 
     #[test]
     fn test_layers_global_max_cursor() {
-        let mut state = GuideState::new();
-        state.tab = GuideTab::Layers;
+        let mut state = NexusState::new();
+        state.tab = NexusTab::Layers;
         state.layer_realm = 0; // Shared (3 layers v11.3, max index 2)
         state.layer_cursor = 2;
 
@@ -1447,8 +1447,8 @@ mod tests {
 
     #[test]
     fn test_layers_tenant_max_cursor() {
-        let mut state = GuideState::new();
-        state.tab = GuideTab::Layers;
+        let mut state = NexusState::new();
+        state.tab = NexusTab::Layers;
         state.layer_realm = 1; // Org (8 layers v11.3, max index 7)
         state.layer_cursor = 7;
 
@@ -1460,8 +1460,8 @@ mod tests {
 
     #[test]
     fn test_layers_realm_switch_left() {
-        let mut state = GuideState::new();
-        state.tab = GuideTab::Layers;
+        let mut state = NexusState::new();
+        state.tab = NexusTab::Layers;
         state.layer_realm = 1; // Start on Org
         state.layer_cursor = 3;
 
@@ -1474,8 +1474,8 @@ mod tests {
 
     #[test]
     fn test_layers_realm_switch_right() {
-        let mut state = GuideState::new();
-        state.tab = GuideTab::Layers;
+        let mut state = NexusState::new();
+        state.tab = NexusTab::Layers;
         state.layer_realm = 0; // Start on Shared
         state.layer_cursor = 1;
 
@@ -1488,8 +1488,8 @@ mod tests {
 
     #[test]
     fn test_layers_realm_switch_no_change() {
-        let mut state = GuideState::new();
-        state.tab = GuideTab::Layers;
+        let mut state = NexusState::new();
+        state.tab = NexusTab::Layers;
         state.layer_realm = 0; // Already on Shared
 
         // 'h' should not change anything
@@ -1504,8 +1504,8 @@ mod tests {
 
     #[test]
     fn test_arcs_navigate() {
-        let mut state = GuideState::new();
-        state.tab = GuideTab::Arcs;
+        let mut state = NexusState::new();
+        state.tab = NexusTab::Arcs;
         assert_eq!(state.arc_cursor, 0);
 
         state.handle_key(key_event(KeyCode::Char('j')));
@@ -1517,8 +1517,8 @@ mod tests {
 
     #[test]
     fn test_arcs_max_cursor() {
-        let mut state = GuideState::new();
-        state.tab = GuideTab::Arcs;
+        let mut state = NexusState::new();
+        state.tab = NexusTab::Arcs;
         state.arc_cursor = 4; // 5 arc families (0-4)
 
         let changed = state.handle_key(key_event(KeyCode::Char('j')));
@@ -1528,8 +1528,8 @@ mod tests {
 
     #[test]
     fn test_arcs_min_cursor() {
-        let mut state = GuideState::new();
-        state.tab = GuideTab::Arcs;
+        let mut state = NexusState::new();
+        state.tab = NexusTab::Arcs;
         state.arc_cursor = 0;
 
         let changed = state.handle_key(key_event(KeyCode::Char('k')));
@@ -1543,8 +1543,8 @@ mod tests {
 
     #[test]
     fn test_pipeline_navigate() {
-        let mut state = GuideState::new();
-        state.tab = GuideTab::Pipeline;
+        let mut state = NexusState::new();
+        state.tab = NexusTab::Pipeline;
         assert_eq!(state.pipeline_stage, 0);
 
         state.handle_key(key_event(KeyCode::Char('j')));
@@ -1556,8 +1556,8 @@ mod tests {
 
     #[test]
     fn test_pipeline_max_stage() {
-        let mut state = GuideState::new();
-        state.tab = GuideTab::Pipeline;
+        let mut state = NexusState::new();
+        state.tab = NexusTab::Pipeline;
         state.pipeline_stage = 5; // 6 stages (0-5)
 
         let changed = state.handle_key(key_event(KeyCode::Char('j')));
@@ -1567,8 +1567,8 @@ mod tests {
 
     #[test]
     fn test_pipeline_min_stage() {
-        let mut state = GuideState::new();
-        state.tab = GuideTab::Pipeline;
+        let mut state = NexusState::new();
+        state.tab = NexusTab::Pipeline;
         state.pipeline_stage = 0;
 
         let changed = state.handle_key(key_event(KeyCode::Char('k')));
@@ -1582,8 +1582,8 @@ mod tests {
 
     #[test]
     fn test_pipeline_space_toggles_animation() {
-        let mut state = GuideState::new();
-        state.tab = GuideTab::Pipeline;
+        let mut state = NexusState::new();
+        state.tab = NexusTab::Pipeline;
         assert!(!state.pipeline_animating);
 
         // Space to start animation
@@ -1599,8 +1599,8 @@ mod tests {
 
     #[test]
     fn test_pipeline_enter_toggles_animation() {
-        let mut state = GuideState::new();
-        state.tab = GuideTab::Pipeline;
+        let mut state = NexusState::new();
+        state.tab = NexusTab::Pipeline;
         assert!(!state.pipeline_animating);
 
         // Enter on Pipeline tab toggles animation (not drill down)
@@ -1611,8 +1611,8 @@ mod tests {
 
     #[test]
     fn test_space_only_works_on_pipeline() {
-        let mut state = GuideState::new();
-        state.tab = GuideTab::Traits;
+        let mut state = NexusState::new();
+        state.tab = NexusTab::Traits;
 
         // Space should not do anything on Traits tab
         let changed = state.handle_key(key_event(KeyCode::Char(' ')));
@@ -1625,7 +1625,7 @@ mod tests {
 
     #[test]
     fn test_clamp_drill_cursor_zero_len() {
-        let mut state = GuideState::new();
+        let mut state = NexusState::new();
         state.drill_cursor = 10;
 
         state.clamp_drill_cursor(0);
@@ -1634,7 +1634,7 @@ mod tests {
 
     #[test]
     fn test_clamp_drill_cursor_over_max() {
-        let mut state = GuideState::new();
+        let mut state = NexusState::new();
         state.drill_cursor = 100;
 
         state.clamp_drill_cursor(10); // max_len = 10, valid indices 0-9
@@ -1643,7 +1643,7 @@ mod tests {
 
     #[test]
     fn test_clamp_drill_cursor_within_range() {
-        let mut state = GuideState::new();
+        let mut state = NexusState::new();
         state.drill_cursor = 5;
 
         state.clamp_drill_cursor(10);
@@ -1656,7 +1656,7 @@ mod tests {
 
     #[test]
     fn test_breadcrumb_traits_overview() {
-        let state = GuideState::new();
+        let state = NexusState::new();
         let trait_stats = Vec::new();
 
         let breadcrumb = state.breadcrumb(&trait_stats);
@@ -1665,8 +1665,8 @@ mod tests {
 
     #[test]
     fn test_breadcrumb_layers() {
-        let mut state = GuideState::new();
-        state.tab = GuideTab::Layers;
+        let mut state = NexusState::new();
+        state.tab = NexusTab::Layers;
         state.layer_realm = 0;
         let trait_stats = Vec::new();
 
@@ -1676,8 +1676,8 @@ mod tests {
 
     #[test]
     fn test_breadcrumb_layers_tenant() {
-        let mut state = GuideState::new();
-        state.tab = GuideTab::Layers;
+        let mut state = NexusState::new();
+        state.tab = NexusTab::Layers;
         state.layer_realm = 1;
         let trait_stats = Vec::new();
 
@@ -1687,8 +1687,8 @@ mod tests {
 
     #[test]
     fn test_breadcrumb_arcs() {
-        let mut state = GuideState::new();
-        state.tab = GuideTab::Arcs;
+        let mut state = NexusState::new();
+        state.tab = NexusTab::Arcs;
         state.arc_cursor = 0;
         let trait_stats = Vec::new();
 
@@ -1698,8 +1698,8 @@ mod tests {
 
     #[test]
     fn test_breadcrumb_pipeline() {
-        let mut state = GuideState::new();
-        state.tab = GuideTab::Pipeline;
+        let mut state = NexusState::new();
+        state.tab = NexusTab::Pipeline;
         state.pipeline_stage = 0;
         let trait_stats = Vec::new();
 
@@ -1713,7 +1713,7 @@ mod tests {
 
     #[test]
     fn test_unhandled_key_returns_false() {
-        let mut state = GuideState::new();
+        let mut state = NexusState::new();
 
         // Arbitrary unhandled keys
         let changed = state.handle_key(key_event(KeyCode::Char('z')));
@@ -1725,21 +1725,21 @@ mod tests {
 
     #[test]
     fn test_default_impl() {
-        let state = GuideState::default();
-        assert_eq!(state.tab, GuideTab::Traits);
+        let state = NexusState::default();
+        assert_eq!(state.tab, NexusTab::Traits);
         assert_eq!(state.trait_cursor, 0);
         assert_eq!(state.drill_depth, 0);
     }
 
     #[test]
     fn test_guide_tab_default() {
-        let tab = GuideTab::default();
-        assert_eq!(tab, GuideTab::Traits);
+        let tab = NexusTab::default();
+        assert_eq!(tab, NexusTab::Traits);
     }
 
     #[test]
     fn test_jump_to_trait_clamps() {
-        let mut state = GuideState::new();
+        let mut state = NexusState::new();
 
         // jump_to_trait clamps to 0-4
         state.jump_to_trait(100);
@@ -1748,7 +1748,7 @@ mod tests {
 
     #[test]
     fn test_get_trait_kinds_empty_stats() {
-        let state = GuideState::new();
+        let state = NexusState::new();
         let empty_stats: Vec<traits::TraitStats> = Vec::new();
 
         let kinds = state.get_trait_kinds(&empty_stats);
@@ -1757,7 +1757,7 @@ mod tests {
 
     #[test]
     fn test_current_tip_fallback() {
-        let mut state = GuideState::new();
+        let mut state = NexusState::new();
         state.tip_index = usize::MAX; // Invalid index
 
         // Should fallback to first tip
@@ -1771,8 +1771,8 @@ mod tests {
 
     #[test]
     fn test_get_current_yank_text_traits() {
-        let mut state = GuideState::new();
-        state.tab = GuideTab::Traits;
+        let mut state = NexusState::new();
+        state.tab = NexusTab::Traits;
 
         state.trait_cursor = 0;
         assert_eq!(state.get_current_yank_text(), Some("invariant".to_string()));
@@ -1797,8 +1797,8 @@ mod tests {
 
     #[test]
     fn test_get_current_yank_text_layers_global() {
-        let mut state = GuideState::new();
-        state.tab = GuideTab::Layers;
+        let mut state = NexusState::new();
+        state.tab = NexusTab::Layers;
         state.layer_realm = 0; // Shared
 
         // v11.3: Shared layers are locale, geography, knowledge
@@ -1820,8 +1820,8 @@ mod tests {
 
     #[test]
     fn test_get_current_yank_text_layers_tenant() {
-        let mut state = GuideState::new();
-        state.tab = GuideTab::Layers;
+        let mut state = NexusState::new();
+        state.tab = NexusTab::Layers;
         state.layer_realm = 1; // Org
 
         // v11.3: Org realm has 8 layers
@@ -1845,8 +1845,8 @@ mod tests {
 
     #[test]
     fn test_get_current_yank_text_arcs() {
-        let mut state = GuideState::new();
-        state.tab = GuideTab::Arcs;
+        let mut state = NexusState::new();
+        state.tab = NexusTab::Arcs;
 
         state.arc_cursor = 0;
         assert_eq!(state.get_current_yank_text(), Some("ownership".to_string()));
@@ -1860,8 +1860,8 @@ mod tests {
 
     #[test]
     fn test_get_current_yank_text_pipeline() {
-        let mut state = GuideState::new();
-        state.tab = GuideTab::Pipeline;
+        let mut state = NexusState::new();
+        state.tab = NexusTab::Pipeline;
 
         state.pipeline_stage = 0;
         assert_eq!(state.get_current_yank_text(), Some("Knowledge".to_string()));
@@ -1878,8 +1878,8 @@ mod tests {
 
     #[test]
     fn test_get_current_yank_text_out_of_bounds() {
-        let mut state = GuideState::new();
-        state.tab = GuideTab::Traits;
+        let mut state = NexusState::new();
+        state.tab = NexusTab::Traits;
         state.trait_cursor = 100; // Out of bounds
 
         // Should return None for invalid cursor
@@ -1888,14 +1888,14 @@ mod tests {
 
     #[test]
     fn test_clipboard_message_initial_state() {
-        let state = GuideState::new();
+        let state = NexusState::new();
         assert!(state.clipboard_message.is_none());
         assert!(state.clipboard_message_time.is_none());
     }
 
     #[test]
     fn test_clear_expired_clipboard_message_none() {
-        let mut state = GuideState::new();
+        let mut state = NexusState::new();
         // Should not panic when no message exists
         state.clear_expired_clipboard_message();
         assert!(state.clipboard_message.is_none());
@@ -1903,7 +1903,7 @@ mod tests {
 
     #[test]
     fn test_clear_expired_clipboard_message_recent() {
-        let mut state = GuideState::new();
+        let mut state = NexusState::new();
         state.clipboard_message = Some("test".to_string());
         state.clipboard_message_time = Some(std::time::Instant::now());
 
@@ -1914,8 +1914,8 @@ mod tests {
 
     #[test]
     fn test_y_key_triggers_yank() {
-        let mut state = GuideState::new();
-        state.tab = GuideTab::Traits;
+        let mut state = NexusState::new();
+        state.tab = NexusTab::Traits;
         state.trait_cursor = 0;
 
         // y key should trigger yank (may fail in CI without clipboard, but state should change)

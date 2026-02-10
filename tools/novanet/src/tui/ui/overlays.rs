@@ -116,14 +116,14 @@ pub fn render_help(f: &mut Frame, app: &App) {
     let area = f.area();
     let width = POPUP_BOX_WIDTH.min(area.width.saturating_sub(4));
 
-    // Check if we're in Guide mode
-    let is_guide_mode = app.mode == NavMode::Guide;
+    // Check if we're in Nexus mode (renamed from Guide in v11.3)
+    let is_nexus_mode = app.mode == NavMode::Nexus;
 
-    let lines: Vec<Line> = if is_guide_mode {
-        // Guide mode specific help
+    let lines: Vec<Line> = if is_nexus_mode {
+        // Nexus mode specific help
         vec![
             Line::from(Span::styled(
-                " Guide Mode — Keyboard Shortcuts",
+                " Nexus Mode — Keyboard Shortcuts",
                 Style::default()
                     .fg(Color::Magenta)
                     .add_modifier(Modifier::BOLD),
@@ -301,12 +301,20 @@ pub fn render_help(f: &mut Frame, app: &App) {
             Line::from(""),
             Line::from(vec![Span::styled("  Modes", STYLE_HIGHLIGHT)]),
             Line::from(vec![
-                Span::styled("    1-4      ", STYLE_PRIMARY),
-                Span::styled("Meta/Data/Atlas/Audit", STYLE_DIM),
+                Span::styled("    1        ", STYLE_PRIMARY),
+                Span::styled("Graph mode (explore taxonomy)", STYLE_DIM),
             ]),
             Line::from(vec![
-                Span::styled("    5        ", STYLE_PRIMARY),
-                Span::styled("Guide mode (educational)", STYLE_DIM),
+                Span::styled("    2        ", STYLE_PRIMARY),
+                Span::styled("Audit mode (validation)", STYLE_DIM),
+            ]),
+            Line::from(vec![
+                Span::styled("    3        ", STYLE_PRIMARY),
+                Span::styled("Nexus mode (gamified learning)", STYLE_DIM),
+            ]),
+            Line::from(vec![
+                Span::styled("    t        ", STYLE_PRIMARY),
+                Span::styled("Toggle Taxonomy/Instances (Graph mode)", STYLE_DIM),
             ]),
             Line::from(vec![
                 Span::styled("    N        ", STYLE_PRIMARY),
@@ -360,8 +368,8 @@ pub fn render_help(f: &mut Frame, app: &App) {
     let help_area = Rect::new(x, y, width, height);
     f.render_widget(Clear, help_area);
 
-    let title = if is_guide_mode {
-        " Guide Help "
+    let title = if is_nexus_mode {
+        " Nexus Help "
     } else {
         " Help "
     };
@@ -848,22 +856,22 @@ mod tests {
     }
 
     #[test]
-    fn test_guide_help_has_tab_navigation() {
-        // Guide mode help should include "Tab Navigation" section
+    fn test_nexus_help_has_tab_navigation() {
+        // Nexus mode help should include "Tab Navigation" section
         let expected_section = "Tab Navigation";
         assert!(expected_section.contains("Tab"));
     }
 
     #[test]
-    fn test_guide_help_has_quick_jump() {
-        // Guide mode help should include "Quick Jump" section for traits
+    fn test_nexus_help_has_quick_jump() {
+        // Nexus mode help should include "Quick Jump" section for traits
         let expected_section = "Quick Jump (Traits)";
         assert!(expected_section.contains("Quick Jump"));
     }
 
     #[test]
-    fn test_guide_help_has_pipeline_tab() {
-        // Guide mode help should mention "Pipeline Tab" with Space key
+    fn test_nexus_help_has_pipeline_tab() {
+        // Nexus mode help should mention "Pipeline Tab" with Space key
         let expected_section = "Pipeline Tab";
         assert!(expected_section.contains("Pipeline"));
     }
@@ -873,19 +881,19 @@ mod tests {
     // =========================================================================
 
     #[test]
-    fn test_guide_help_title_differs_from_default() {
-        // Guide mode should use " Guide Help " title
-        let guide_title = " Guide Help ";
+    fn test_nexus_help_title_differs_from_default() {
+        // Nexus mode should use " Nexus Help " title
+        let nexus_title = " Nexus Help ";
         let default_title = " Help ";
-        assert_ne!(guide_title, default_title);
-        assert!(guide_title.contains("Guide"));
+        assert_ne!(nexus_title, default_title);
+        assert!(nexus_title.contains("Nexus"));
     }
 
     #[test]
-    fn test_guide_help_uses_magenta_header() {
-        // Guide mode header should mention "Guide Mode" with Magenta color
-        let expected_header = "Guide Mode — Keyboard Shortcuts";
-        assert!(expected_header.contains("Guide Mode"));
+    fn test_nexus_help_uses_magenta_header() {
+        // Nexus mode header should mention "Nexus Mode" with Magenta color
+        let expected_header = "Nexus Mode — Keyboard Shortcuts";
+        assert!(expected_header.contains("Nexus Mode"));
     }
 
     #[test]
