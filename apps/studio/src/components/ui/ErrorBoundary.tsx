@@ -207,3 +207,64 @@ export function GraphErrorBoundary({ children }: { children: ReactNode }) {
     </ErrorBoundary>
   );
 }
+
+/**
+ * WebGL-specific error boundary with 2D fallback option
+ *
+ * Catches WebGL errors (context loss, OOM) and offers fallback to 2D view
+ */
+export interface WebGLErrorBoundaryProps {
+  children: ReactNode;
+  /** Callback to switch to 2D view */
+  onFallbackTo2D?: () => void;
+}
+
+export function WebGLErrorBoundary({ children, onFallbackTo2D }: WebGLErrorBoundaryProps) {
+  return (
+    <ErrorBoundary
+      className="h-full w-full"
+      fallback={
+        <div className="flex flex-col items-center justify-center h-full w-full p-8 text-center bg-slate-900">
+          <WarningIcon className="w-16 h-16 text-amber-400 mb-4" />
+          <h2 className="text-xl font-semibold text-white mb-2">
+            3D rendering error
+          </h2>
+          <p className="text-sm text-white/60 mb-6 max-w-md">
+            WebGL encountered a problem. This may be due to GPU memory limits or browser restrictions.
+          </p>
+          <div className={cn('flex', gapTokens.default)}>
+            {onFallbackTo2D && (
+              <button
+                onClick={onFallbackTo2D}
+                className={cn(
+                  'flex items-center px-4 py-2 rounded-lg',
+                  gapTokens.default,
+                  'bg-blue-600 hover:bg-blue-700',
+                  'text-white text-sm font-medium',
+                  'transition-colors'
+                )}
+              >
+                Switch to 2D View
+              </button>
+            )}
+            <button
+              onClick={() => window.location.reload()}
+              className={cn(
+                'flex items-center px-4 py-2 rounded-lg',
+                gapTokens.default,
+                'bg-novanet-500 hover:bg-novanet-600',
+                'text-white text-sm font-medium',
+                'transition-colors'
+              )}
+            >
+              <RefreshIcon className={iconSizes.md} />
+              Reload Page
+            </button>
+          </div>
+        </div>
+      }
+    >
+      {children}
+    </ErrorBoundary>
+  );
+}
