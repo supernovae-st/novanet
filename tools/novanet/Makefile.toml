@@ -1,0 +1,241 @@
+# NovaNet Rust Tooling - cargo-make configuration
+# Run with: cargo make <task>
+#
+# Quick reference:
+#   cargo make         # Default: runs check
+#   cargo make ci      # Full CI pipeline
+#   cargo make audit   # Security + semantic audit
+#   cargo make pre-commit # Pre-commit validation
+
+[config]
+default_to_workspace = false
+skip_core_tasks = true
+
+[env]
+CARGO_MAKE_EXTEND_WORKSPACE_MAKEFILE = true
+NOVANET_VERSION = "v11.5"
+NOVANET_NODE_COUNT = "60"
+NOVANET_SHARED_NODES = "39"
+NOVANET_ORG_NODES = "21"
+NOVANET_LAYER_COUNT = "10"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Core Tasks
+# ─────────────────────────────────────────────────────────────────────────────
+
+[tasks.default]
+alias = "check"
+
+[tasks.check]
+description = "Quick check: fmt + clippy"
+dependencies = ["fmt-check", "clippy"]
+
+[tasks.fmt]
+description = "Format code"
+command = "cargo"
+args = ["fmt"]
+
+[tasks.fmt-check]
+description = "Check formatting"
+command = "cargo"
+args = ["fmt", "--check"]
+
+[tasks.clippy]
+description = "Run clippy with warnings as errors"
+command = "cargo"
+args = ["clippy", "--", "-D", "warnings"]
+
+[tasks.build]
+description = "Build in release mode"
+command = "cargo"
+args = ["build", "--release"]
+
+[tasks.test]
+description = "Run all tests"
+command = "cargo"
+args = ["test", "--lib"]
+
+[tasks.test-all]
+description = "Run all tests including doc tests"
+command = "cargo"
+args = ["test"]
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Security & Audit
+# ─────────────────────────────────────────────────────────────────────────────
+
+[tasks.deny]
+description = "Run cargo-deny (license + security)"
+command = "cargo"
+args = ["deny", "check"]
+
+[tasks.audit]
+description = "Full audit: deny + semantic"
+dependencies = ["deny", "semantic-audit"]
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Semantic Coherence Validation
+# ─────────────────────────────────────────────────────────────────────────────
+
+[tasks.semantic-audit]
+description = "Validate semantic coherence (v11.5 terminology, counts, doc comments)"
+script_runner = "@shell"
+script = '''
+#!/bin/bash
+set -e
+
+echo "╔═══════════════════════════════════════════════════════════════════════╗"
+echo "║  🔍 SEMANTIC COHERENCE AUDIT (${NOVANET_VERSION})                      ║"
+echo "╚═══════════════════════════════════════════════════════════════════════╝"
+echo ""
+
+ERRORS=0
+
+# 1. Check for deprecated realm names
+echo "► Checking deprecated realm names (global/tenant → shared/org)..."
+DEPRECATED=$(grep -rn --include="*.rs" "global.*realm\|tenant.*realm\|\"global\"\|\"tenant\"" src/ 2>/dev/null | grep -v "test" | grep -v "// v11" || true)
+if [ -n "$DEPRECATED" ]; then
+    echo "  ❌ Found deprecated realm names:"
+    echo "$DEPRECATED" | head -10
+    ERRORS=$((ERRORS + 1))
+else
+    echo "  ✅ No deprecated realm names"
+fi
+
+# 2. Check for edge-family terminology (should be arc-family)
+echo ""
+echo "► Checking edge-family terminology (should be arc-family)..."
+EDGE_FAMILY=$(grep -rn --include="*.rs" "edge.family\|edge-family\|EdgeFamily" src/ 2>/dev/null || true)
+if [ -n "$EDGE_FAMILY" ]; then
+    echo "  ❌ Found edge-family terminology:"
+    echo "$EDGE_FAMILY" | head -10
+    ERRORS=$((ERRORS + 1))
+else
+    echo "  ✅ Correct arc-family terminology"
+fi
+
+# 3. Check for outdated node counts in comments
+echo ""
+echo "► Checking node counts in comments (should be ${NOVANET_NODE_COUNT})..."
+WRONG_COUNTS=$(grep -rn --include="*.rs" "42\|43\|44\|45\|62\|65" src/ 2>/dev/null | grep -i "node\|kind" | grep -v "test" | grep -v "${NOVANET_NODE_COUNT}" || true)
+if [ -n "$WRONG_COUNTS" ]; then
+    echo "  ⚠️  Possible outdated node counts (verify manually):"
+    echo "$WRONG_COUNTS" | head -5
+else
+    echo "  ✅ Node counts appear correct"
+fi
+
+# 4. Check for unwrap() on Option (potential panics)
+echo ""
+echo "► Checking for risky unwrap() patterns..."
+UNWRAPS=$(grep -rn --include="*.rs" "\.unwrap()" src/ 2>/dev/null | grep -v "test" | grep -v "expect" | wc -l | tr -d ' ')
+if [ "$UNWRAPS" -gt 50 ]; then
+    echo "  ⚠️  High unwrap count: $UNWRAPS (consider using ? or expect())"
+else
+    echo "  ✅ Acceptable unwrap count: $UNWRAPS"
+fi
+
+# 5. Verify YAML node count matches expected
+echo ""
+echo "► Verifying YAML node count..."
+YAML_COUNT=$(find ../../packages/core/models/node-kinds -name "*.yaml" | wc -l | tr -d ' ')
+if [ "$YAML_COUNT" -eq "${NOVANET_NODE_COUNT}" ]; then
+    echo "  ✅ YAML node count: $YAML_COUNT (matches ${NOVANET_VERSION})"
+else
+    echo "  ❌ YAML node count: $YAML_COUNT (expected ${NOVANET_NODE_COUNT})"
+    ERRORS=$((ERRORS + 1))
+fi
+
+# 6. Check layer count
+echo ""
+echo "► Verifying layer structure..."
+SHARED_LAYERS=$(ls -d ../../packages/core/models/node-kinds/shared/*/ 2>/dev/null | wc -l | tr -d ' ')
+ORG_LAYERS=$(ls -d ../../packages/core/models/node-kinds/org/*/ 2>/dev/null | wc -l | tr -d ' ')
+TOTAL_LAYERS=$((SHARED_LAYERS + ORG_LAYERS))
+if [ "$TOTAL_LAYERS" -eq "${NOVANET_LAYER_COUNT}" ]; then
+    echo "  ✅ Layer count: $TOTAL_LAYERS (${SHARED_LAYERS} shared + ${ORG_LAYERS} org)"
+else
+    echo "  ❌ Layer count: $TOTAL_LAYERS (expected ${NOVANET_LAYER_COUNT})"
+    ERRORS=$((ERRORS + 1))
+fi
+
+# Summary
+echo ""
+echo "════════════════════════════════════════════════════════════════════════"
+if [ "$ERRORS" -eq 0 ]; then
+    echo "✅ SEMANTIC AUDIT PASSED"
+    exit 0
+else
+    echo "❌ SEMANTIC AUDIT FAILED ($ERRORS issues)"
+    exit 1
+fi
+'''
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Pre-commit Workflow
+# ─────────────────────────────────────────────────────────────────────────────
+
+[tasks.pre-commit]
+description = "Pre-commit validation: fmt + clippy + test + semantic"
+dependencies = ["fmt-check", "clippy", "test", "semantic-audit"]
+
+[tasks.pre-push]
+description = "Pre-push validation: full CI"
+dependencies = ["ci"]
+
+# ─────────────────────────────────────────────────────────────────────────────
+# CI Pipeline
+# ─────────────────────────────────────────────────────────────────────────────
+
+[tasks.ci]
+description = "Full CI pipeline"
+dependencies = [
+    "fmt-check",
+    "clippy",
+    "deny",
+    "test-all",
+    "semantic-audit",
+    "build"
+]
+
+[tasks.ci-quick]
+description = "Quick CI (no build)"
+dependencies = ["fmt-check", "clippy", "test", "semantic-audit"]
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Documentation
+# ─────────────────────────────────────────────────────────────────────────────
+
+[tasks.doc]
+description = "Generate documentation"
+command = "cargo"
+args = ["doc", "--no-deps", "--document-private-items"]
+
+[tasks.schema]
+description = "Regenerate schema artifacts"
+command = "cargo"
+args = ["run", "--", "schema", "generate"]
+
+[tasks.validate]
+description = "Validate YAML schema"
+command = "cargo"
+args = ["run", "--", "schema", "validate"]
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Development Helpers
+# ─────────────────────────────────────────────────────────────────────────────
+
+[tasks.watch]
+description = "Watch mode with bacon"
+command = "bacon"
+args = ["clippy"]
+
+[tasks.coverage]
+description = "Generate code coverage report"
+command = "cargo"
+args = ["llvm-cov", "--html"]
+
+[tasks.clean]
+description = "Clean build artifacts"
+command = "cargo"
+args = ["clean"]
