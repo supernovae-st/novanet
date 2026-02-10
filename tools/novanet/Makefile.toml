@@ -69,15 +69,19 @@ cat << 'HELP'
 ┌─────────────────────────────────────────────────────────────────────────────────┐
 │  TEST - Testing and Coverage                                                   │
 ├─────────────────────────────────────────────────────────────────────────────────┤
-│  test           Run library tests (fast, no doc tests)                         │
-│  test-all       Run all tests including doc tests                              │
-│  test-nextest   Run tests with cargo-nextest (parallel, faster)                │
-│  test-integration  Run Neo4j integration tests (requires running Neo4j)        │
-│  coverage       Generate HTML coverage report (cargo-llvm-cov)                 │
-│  coverage-ci    Generate lcov coverage for CI upload                           │
-│  mutants        Run mutation testing (cargo-mutants) - slow                    │
-│  mutants-quick  Quick mutation test (subset of files)                          │
-│  snapshot-update  Update insta snapshots                                       │
+│  test             Run library tests (fast, no doc tests)                       │
+│  test-all         Run all tests including doc tests                            │
+│  test-nextest     Run tests with nextest (parallel, faster)                    │
+│  test-nextest-ci  Run tests with CI profile (retries, JUnit)                   │
+│  test-integration Run Neo4j integration tests (requires running Neo4j)         │
+│  coverage         Generate HTML coverage report (cargo-llvm-cov)               │
+│  coverage-ci      Generate lcov coverage for CI upload                         │
+│  mutants          Run mutation testing (cargo-mutants) - slow                  │
+│  mutants-quick    Quick mutation test (subset of files)                        │
+│  snapshot-update  Update all insta snapshots                                   │
+│  snapshot-review  Review pending snapshot changes interactively                │
+│  snapshot-test    Check for snapshot differences (CI mode)                     │
+│  snapshot-pending List pending snapshot changes                                │
 └─────────────────────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────────────────┐
@@ -202,7 +206,21 @@ category = "Test"
 description = "Run tests with cargo-nextest (parallel, faster)"
 install_crate = { crate_name = "cargo-nextest", binary = "cargo-nextest", test_arg = "--version" }
 command = "cargo"
-args = ["nextest", "run"]
+args = ["nextest", "run", "--lib"]
+
+[tasks.test-nextest-ci]
+category = "Test"
+description = "Run tests with CI profile (retries, JUnit reports)"
+install_crate = { crate_name = "cargo-nextest", binary = "cargo-nextest", test_arg = "--version" }
+command = "cargo"
+args = ["nextest", "run", "--profile", "ci", "--lib"]
+
+[tasks.test-nextest-all]
+category = "Test"
+description = "Run all tests with nextest including doc tests"
+install_crate = { crate_name = "cargo-nextest", binary = "cargo-nextest", test_arg = "--version" }
+command = "cargo"
+args = ["nextest", "run", "--profile", "ci"]
 
 [tasks.test-integration]
 category = "Test"
@@ -258,10 +276,50 @@ args = ["mutants", "--file", "src/cypher.rs", "--file", "src/facets.rs", "--jobs
 
 [tasks.snapshot-update]
 category = "Test"
-description = "Update insta snapshots"
-env = { "INSTA_UPDATE" = "always" }
+description = "Update all insta snapshots (use after intentional changes)"
+install_crate = { crate_name = "cargo-insta", binary = "cargo-insta", test_arg = "--version" }
+script_runner = "@shell"
+script = '''
+#!/bin/bash
+set -e
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "  Updating insta snapshots..."
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+cargo insta test --accept --lib
+echo ""
+echo "  Snapshots updated. Review changes with: git diff src/**/*.snap"
+'''
+
+[tasks.snapshot-review]
+category = "Test"
+description = "Review pending insta snapshot changes interactively"
+install_crate = { crate_name = "cargo-insta", binary = "cargo-insta", test_arg = "--version" }
 command = "cargo"
-args = ["test", "--lib"]
+args = ["insta", "review"]
+
+[tasks.snapshot-test]
+category = "Test"
+description = "Run tests and check for snapshot differences (CI)"
+install_crate = { crate_name = "cargo-insta", binary = "cargo-insta", test_arg = "--version" }
+script_runner = "@shell"
+script = '''
+#!/bin/bash
+set -e
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "  Checking insta snapshots (CI mode)..."
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+# Run tests and fail if any snapshots are pending review
+cargo insta test --lib --check
+echo ""
+echo "  All snapshots match."
+'''
+
+[tasks.snapshot-pending]
+category = "Test"
+description = "List pending snapshot changes"
+install_crate = { crate_name = "cargo-insta", binary = "cargo-insta", test_arg = "--version" }
+command = "cargo"
+args = ["insta", "pending-snapshots"]
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # SECURITY - Auditing and Vulnerability Scanning

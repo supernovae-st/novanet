@@ -420,51 +420,118 @@ fi
 update_cache "$FILE" "issues:$error_count:$warning_count"
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# Output
+# Output - JSON for Claude Code, text for terminal
 # ═══════════════════════════════════════════════════════════════════════════════
 
-echo ""
-echo -e "${BOLD}╭─────────────────────────────────────────────────────────────────────────╮${NC}"
-echo -e "${BOLD}│  SEMANTIC CHECK${NC}                                                          ${BOLD}│${NC}"
-echo -e "${BOLD}╰─────────────────────────────────────────────────────────────────────────╯${NC}"
-echo -e "${DIM}File: $(basename "$FILE")${NC}"
-echo ""
-
-if [[ $error_count -gt 0 ]]; then
-    echo -e "${RED}${BOLD}Errors ($error_count):${NC}"
-    for error in "${ERRORS[@]}"; do
-        echo -e "  ${RED}x${NC} $error"
-    done
-    echo ""
+# Detect if running in Claude Code hook context (stdin has JSON input)
+CLAUDE_HOOK_MODE=false
+if [[ -n "${HOOK_EVENT_NAME:-}" ]] || [[ -n "${CLAUDE_FILE_PATH:-}" ]]; then
+    CLAUDE_HOOK_MODE=true
 fi
 
-if [[ $warning_count -gt 0 ]]; then
-    echo -e "${YELLOW}${BOLD}Warnings ($warning_count):${NC}"
-    for warning in "${WARNINGS[@]}"; do
-        echo -e "  ${YELLOW}!${NC} $warning"
-    done
-    echo ""
-fi
+# Build summary text
+build_summary() {
+    local issues_text=""
 
-# Summary
-echo -e "${DIM}────────────────────────────────────────────────────────────────────────────${NC}"
-if [[ $error_count -gt 0 ]]; then
-    echo -e "${RED}${BOLD}$error_count error(s)${NC}, ${YELLOW}$warning_count warning(s)${NC}"
+    if [[ $error_count -gt 0 ]]; then
+        for error in "${ERRORS[@]}"; do
+            # Strip ANSI codes for JSON
+            local clean_error
+            clean_error=$(echo -e "$error" | sed 's/\x1b\[[0-9;]*m//g')
+            issues_text="${issues_text}ERROR: ${clean_error}\n"
+        done
+    fi
+
+    if [[ $warning_count -gt 0 ]]; then
+        for warning in "${WARNINGS[@]}"; do
+            local clean_warning
+            clean_warning=$(echo -e "$warning" | sed 's/\x1b\[[0-9;]*m//g')
+            issues_text="${issues_text}WARNING: ${clean_warning}\n"
+        done
+    fi
+
+    echo "$issues_text"
+}
+
+# JSON output for Claude Code PostToolUse hooks
+output_json() {
+    local summary
+    summary=$(build_summary | sed 's/"/\\"/g' | tr '\n' ' ')
+
+    if [[ $error_count -gt 0 ]]; then
+        # Provide context about semantic issues to Claude
+        cat << EOF
+{
+  "hookSpecificOutput": {
+    "hookEventName": "PostToolUse",
+    "additionalContext": "SEMANTIC ISSUES DETECTED in $(basename "$FILE"): ${error_count} error(s), ${warning_count} warning(s). ${summary}Fix these before proceeding."
+  }
+}
+EOF
+    else
+        # Just warnings - add as context but don't block
+        cat << EOF
+{
+  "hookSpecificOutput": {
+    "hookEventName": "PostToolUse",
+    "additionalContext": "SEMANTIC WARNINGS in $(basename "$FILE"): ${warning_count} warning(s). ${summary}Consider addressing these."
+  }
+}
+EOF
+    fi
+}
+
+# Text output for terminal
+output_text() {
+    echo ""
+    echo -e "${BOLD}╭─────────────────────────────────────────────────────────────────────────╮${NC}"
+    echo -e "${BOLD}│  SEMANTIC CHECK${NC}                                                          ${BOLD}│${NC}"
+    echo -e "${BOLD}╰─────────────────────────────────────────────────────────────────────────╯${NC}"
+    echo -e "${DIM}File: $(basename "$FILE")${NC}"
+    echo ""
+
+    if [[ $error_count -gt 0 ]]; then
+        echo -e "${RED}${BOLD}Errors ($error_count):${NC}"
+        for error in "${ERRORS[@]}"; do
+            echo -e "  ${RED}x${NC} $error"
+        done
+        echo ""
+    fi
+
+    if [[ $warning_count -gt 0 ]]; then
+        echo -e "${YELLOW}${BOLD}Warnings ($warning_count):${NC}"
+        for warning in "${WARNINGS[@]}"; do
+            echo -e "  ${YELLOW}!${NC} $warning"
+        done
+        echo ""
+    fi
+
+    echo -e "${DIM}────────────────────────────────────────────────────────────────────────────${NC}"
+    if [[ $error_count -gt 0 ]]; then
+        echo -e "${RED}${BOLD}$error_count error(s)${NC}, ${YELLOW}$warning_count warning(s)${NC}"
+    else
+        echo -e "${YELLOW}${BOLD}$warning_count warning(s)${NC}"
+    fi
+
+    echo -e "${DIM}Run 'cargo make semantic-audit' for full codebase validation${NC}"
+
+    if [[ "$FIX_MODE" == "true" ]]; then
+        echo -e "\n${CYAN}Note:${NC} --fix mode is advisory only. Manual fixes required."
+    fi
+
+    echo ""
+}
+
+# Output based on context
+if [[ "$CLAUDE_HOOK_MODE" == "true" ]]; then
+    output_json
 else
-    echo -e "${YELLOW}${BOLD}$warning_count warning(s)${NC}"
+    output_text
 fi
-
-echo -e "${DIM}Run 'cargo make semantic-audit' for full codebase validation${NC}"
-
-if [[ "$FIX_MODE" == "true" ]]; then
-    echo -e "\n${CYAN}Note:${NC} --fix mode is advisory only. Manual fixes required."
-fi
-
-echo ""
 
 # Exit with error in strict mode if there are errors
 if [[ "$STRICT_MODE" == "true" ]] && [[ $error_count -gt 0 ]]; then
-    exit 1
+    exit 2  # Exit 2 = blocking error for Claude Code hooks
 fi
 
 exit 0
