@@ -212,7 +212,7 @@ export const Graph3D = memo(function Graph3D({
     const composer = createEnhancedComposer(renderer, scene, camera, {
       strength: 1.8,      // Strong bloom for hyperspace glow
       radius: 0.6,        // Wide bloom spread
-      threshold: 0.3,     // More elements glow
+      threshold: 0.1,     // LOW threshold so particles glow (was 0.3)
     }, {
       offset: 0.5,        // Cinematic vignette
       darkness: 0.4,      // Darker edges for depth
@@ -697,6 +697,35 @@ export const Graph3D = memo(function Graph3D({
     }
   }, []);
 
+  // Custom emissive particle object for bloom compatibility
+  const getParticleThreeObject = useCallback((link: unknown) => {
+    try {
+      const l = link as ForceGraphLink | undefined;
+      const colorStr = l && typeof l === 'object' && 'type' in l
+        ? getArcParticleConfig(String(l.type || '')).particleColor
+        : '#60a5fa';
+
+      const color = new THREE.Color(colorStr);
+      const geometry = new THREE.SphereGeometry(1.5, 12, 12);
+
+      // MeshStandardMaterial with emissive for bloom glow
+      const material = new THREE.MeshStandardMaterial({
+        color: color,
+        emissive: color,
+        emissiveIntensity: 3.0,  // High intensity to exceed bloom threshold
+        transparent: true,
+        opacity: 0.9,
+      });
+
+      return new THREE.Mesh(geometry, material);
+    } catch {
+      // Fallback: simple sphere
+      const geometry = new THREE.SphereGeometry(1.5, 8, 8);
+      const material = new THREE.MeshBasicMaterial({ color: 0x60a5fa });
+      return new THREE.Mesh(geometry, material);
+    }
+  }, []);
+
   // Empty state - context-aware diagnostics
   if (graphData.nodes.length === 0) {
     return (
@@ -728,13 +757,14 @@ export const Graph3D = memo(function Graph3D({
         onBackgroundClick={handleBackgroundClick}
         onEngineTick={handleEngineTick}
         linkColor={getLinkColor as any}
-        linkWidth={getLinkWidth as any}
-        linkOpacity={getLinkOpacity as any}
-        linkDirectionalParticles={getLinkParticles as any}
-        linkDirectionalParticleSpeed={0.003}
-        linkDirectionalParticleWidth={getLinkParticleWidth as any}
+        linkWidth={0.8}
+        linkOpacity={0.25}
+        linkDirectionalParticles={5}
+        linkDirectionalParticleSpeed={0.004}
+        linkDirectionalParticleWidth={4}
         linkDirectionalParticleColor={getLinkParticleColor as any}
-        linkDirectionalParticleResolution={8}
+        linkDirectionalParticleResolution={32}
+        linkDirectionalParticleThreeObject={getParticleThreeObject as any}
         linkCurvature={getLinkCurvature as any}
         linkCurveRotation={0.5}
         nodeRelSize={8}
