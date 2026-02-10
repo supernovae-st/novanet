@@ -3,6 +3,8 @@
 //! Transforms parsed ATH 3-voice-lexicon data into Neo4j seed file.
 //! Creates ExpressionSet (container) and Expression (atom) nodes per locale.
 
+#![allow(clippy::needless_raw_string_hashes)]
+
 use std::path::PathBuf;
 
 use chrono::Local;
