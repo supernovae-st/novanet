@@ -61,7 +61,11 @@ impl HealthCheck {
 }
 
 /// Run all health checks and print results.
-pub async fn run_doctor(root: &Path, db: Option<&Db>, verbose: bool) -> crate::Result<Vec<HealthCheck>> {
+pub async fn run_doctor(
+    root: &Path,
+    db: Option<&Db>,
+    verbose: bool,
+) -> crate::Result<Vec<HealthCheck>> {
     let mut checks = Vec::new();
 
     eprintln!("Running NovaNet health checks...\n");
@@ -102,7 +106,10 @@ pub async fn run_doctor(root: &Path, db: Option<&Db>, verbose: bool) -> crate::R
     }
 
     // Summary
-    let ok_count = checks.iter().filter(|c| c.status == HealthStatus::Ok).count();
+    let ok_count = checks
+        .iter()
+        .filter(|c| c.status == HealthStatus::Ok)
+        .count();
     let warn_count = checks
         .iter()
         .filter(|c| c.status == HealthStatus::Warning)
@@ -148,10 +155,7 @@ fn check_models_directory(root: &Path) -> HealthCheck {
     }
 
     if missing.is_empty() {
-        HealthCheck::ok(
-            "Models Directory",
-            format!("Found at {}", models.display()),
-        )
+        HealthCheck::ok("Models Directory", format!("Found at {}", models.display()))
     } else {
         HealthCheck::error(
             "Models Directory",
