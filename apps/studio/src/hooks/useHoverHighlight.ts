@@ -11,8 +11,8 @@
  */
 
 import { useMemo, useCallback } from 'react';
-import { shallow } from 'zustand/shallow';
-import { useUIStore, selectHoverState } from '@/stores/uiStore';
+import { useShallow } from 'zustand/react/shallow';
+import { useUIStore } from '@/stores/uiStore';
 import type { GraphEdge } from '@/types';
 
 export interface HoverHighlightState {
@@ -60,8 +60,14 @@ function buildAdjacencyMap(edges: GraphEdge[]): Map<string, Set<string>> {
  * @param filteredEdges - The currently visible edges (from useFilteredGraph)
  */
 export function useHoverHighlight(filteredEdges: GraphEdge[]): HoverHighlightState {
-  // Combined selector with shallow equality (1 subscription instead of 3)
-  const { hoveredNodeId, hoveredEdgeId, selectedNodeId } = useUIStore(selectHoverState, shallow);
+  // Combined selector with useShallow for object comparison (1 subscription instead of 3)
+  const { hoveredNodeId, hoveredEdgeId, selectedNodeId } = useUIStore(
+    useShallow((state) => ({
+      hoveredNodeId: state.hoveredNodeId,
+      hoveredEdgeId: state.hoveredEdgeId,
+      selectedNodeId: state.selectedNodeId,
+    }))
+  );
 
   // Build adjacency map from FILTERED edges only
   const adjacencyMap = useMemo(() => {

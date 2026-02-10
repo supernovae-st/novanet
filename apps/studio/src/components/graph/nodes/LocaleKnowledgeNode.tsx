@@ -1,25 +1,24 @@
 'use client';
 
 /**
- * LocaleKnowledgeNode - Circular nodes for locale knowledge types
+ * LocaleKnowledgeNode - Unified card design for locale/knowledge nodes
  *
- * Category: locale (knowledge nodes within locale category)
- * Types: v10 tiered model - Formatting, Slugification, Adaptation, Style, TermSet, ExpressionSet, PatternSet, CultureSet, TabooSet, AudienceSet
- * Features:
- * - Circular gradient ring design (2px)
- * - Solid/hollow handles for direction indication
- * - Animated ring on selection
- * - Enhanced hover effects (scale, glow)
- * - Press feedback (scale down on mousedown)
- * - Hover info displayed in centralized bottom pill (via uiStore.hoveredNodeId)
+ * v11.6 Design - matches StructuralNode:
+ * - Card design (150-180px width) instead of circular
+ * - 2px gradient border (layer colors)
+ * - Icon + type label header
+ * - Display name + key
+ * - Layer badge
  *
- * Uses shared design system components from effects/ directory.
+ * Types: v11.5 knowledge atoms - Term, Expression, Pattern, CultureRef, Taboo, AudienceTrait
+ * Plus containers: TermSet, ExpressionSet, PatternSet, CultureSet, TabooSet, AudienceSet
+ * And locale/geography nodes: Locale, Culture, Style, Region, Country, etc.
  */
 
 import { memo, useMemo } from 'react';
 import { type Node, type NodeProps } from '@xyflow/react';
 import { cn } from '@/lib/utils';
-import { glassClasses } from '@/design/tokens';
+import { glassClasses, gapTokens } from '@/design/tokens';
 import { NODE_TYPE_CONFIG } from '@/config/nodeTypes';
 import { getLocaleKnowledgeColors } from '@/design/nodeColors';
 import { LayerIcon } from '@/components/ui/CategoryIcon';
@@ -32,46 +31,54 @@ import { SelectionPulseRing, GlassmorphismEffects, NodeHandles } from './effects
 export type LocaleKnowledgeNodeType = Node<BaseNodeData>;
 
 /**
- * Get size based on connection count and type
+ * Get card width based on node type
+ * Slightly smaller than StructuralNode since these are knowledge atoms
  */
-function getCircleSize(type: string, connectionCount?: number): number {
-  const count = connectionCount || 0;
-  // v10 knowledge tier sizes
-  const baseSize: Record<string, number> = {
-    // Technical tier
-    Formatting: 55,
-    Slugification: 55,
-    Adaptation: 55,
-    // Style tier
-    Style: 65,
-    // Semantic tier
-    TermSet: 55,
-    ExpressionSet: 55,
-    PatternSet: 55,
-    CultureSet: 55,
-    TabooSet: 55,
-    AudienceSet: 55,
-  };
-  const base = baseSize[type] || 55;
-  if (count > 10) return base + 20;
-  if (count > 5) return base + 12;
-  if (count > 2) return base + 6;
-  return base;
+function getCardWidth(type: string): number {
+  switch (type) {
+    // Containers (larger)
+    case 'TermSet':
+    case 'ExpressionSet':
+    case 'PatternSet':
+    case 'CultureSet':
+    case 'TabooSet':
+    case 'AudienceSet':
+    case 'CategorySet':
+      return 175;
+    // Locale/geography nodes
+    case 'Locale':
+    case 'Culture':
+    case 'Style':
+    case 'Region':
+    case 'Country':
+    case 'Continent':
+      return 170;
+    // Knowledge atoms (smaller)
+    case 'Term':
+    case 'Expression':
+    case 'Pattern':
+    case 'CultureRef':
+    case 'Taboo':
+    case 'AudienceTrait':
+      return 155;
+    default:
+      return 160;
+  }
 }
 
 /**
- * LocaleKnowledgeNode - Circular Gradient Ring Design
+ * LocaleKnowledgeNode - Gradient Edge Card Design
  */
 export const LocaleKnowledgeNode = memo(function LocaleKnowledgeNode(props: NodeProps<LocaleKnowledgeNodeType>) {
   const { data, selected = false } = props;
-  const config = NODE_TYPE_CONFIG[data.type] || NODE_TYPE_CONFIG.ExpressionSet;
+  const config = NODE_TYPE_CONFIG[data.type] || NODE_TYPE_CONFIG.Term;
   const colors = getLocaleKnowledgeColors(data.type);
-  const size = getCircleSize(data.type, data.connectionCount);
+  const width = getCardWidth(data.type);
   const isDimmed = data.dimmed === true;
   const isHoverDimmed = data.hoverDimmed === true;
   const isMetaMode = data.isMetaMode === true;
 
-  // Shared interaction state management (circular variant)
+  // Shared interaction state management
   const {
     isHovered,
     handleMouseEnter,
@@ -80,26 +87,26 @@ export const LocaleKnowledgeNode = memo(function LocaleKnowledgeNode(props: Node
     handleMouseUp,
     containerClassName,
     containerStyle,
-  } = useNodeInteractions({ selected, isDimmed, isHoverDimmed, isCircular: true });
+  } = useNodeInteractions({ selected, isDimmed, isHoverDimmed });
 
-  // Memoize gradient ring style to prevent re-renders
-  const gradientRingStyle = useMemo(() => ({
+  // Memoize gradient border style to prevent re-renders
+  const gradientBorderStyle = useMemo(() => ({
     background: selected
       ? NODE_DESIGN.gradients.borderSelected(colors.primary, colors.secondary)
       : isHovered
         ? NODE_DESIGN.gradients.borderHover(colors.primary, colors.secondary)
         : NODE_DESIGN.gradients.borderDefault(colors.primary, colors.secondary),
     boxShadow: selected
-      ? `0 0 35px 8px ${colors.primary}70, 0 0 70px 14px ${colors.primary}40, 0 0 100px 20px ${colors.primary}20`
+      ? NODE_DESIGN.shadows.glowSelected(colors.primary)
       : isHovered
-        ? `0 0 25px 5px ${colors.primary}50, 0 0 50px 10px ${colors.primary}25`
-        : `0 0 18px 4px ${colors.primary}45, 0 0 35px 7px ${colors.primary}20`,
+        ? NODE_DESIGN.shadows.glowHover(colors.primary)
+        : NODE_DESIGN.shadows.glow(colors.primary),
   }), [colors.primary, colors.secondary, selected, isHovered]);
 
   // Memoize icon style to prevent re-renders
   const iconStyle = useMemo(() => ({
     color: colors.primary,
-    filter: `drop-shadow(0 0 ${selected ? '10px' : '6px'} ${colors.primary}90)`,
+    filter: `drop-shadow(0 0 ${selected ? '10px' : '6px'} ${colors.primary}80)`,
   }), [colors.primary, selected]);
 
   return (
@@ -114,88 +121,123 @@ export const LocaleKnowledgeNode = memo(function LocaleKnowledgeNode(props: Node
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
     >
-      {/* Selection pulse ring effect - WOW animation (circular) */}
+      {/* Selection pulse ring effect - WOW animation */}
       {selected && (
-        <SelectionPulseRing color={colors.primary} borderRadius={NODE_DESIGN.radius.circular} />
+        <SelectionPulseRing color={colors.primary} borderRadius={16} />
       )}
 
-      {/* Gradient ring wrapper - 2px (3px when selected) */}
+      {/* Gradient border wrapper - 2px (3px when selected) */}
       <div
         className={cn(
-          'relative rounded-full transition-all duration-300',
-          selected && 'animate-spin-slow',
+          'relative transition-all duration-300',
+          selected && 'animate-gradient-rotate',
           isHovered && !selected && 'animate-glow-pulse'
         )}
         style={{
+          borderRadius: NODE_DESIGN.radius.outer,
           padding: selected ? NODE_DESIGN.border.selected : NODE_DESIGN.border.default,
-          ...gradientRingStyle,
+          ...gradientBorderStyle,
         }}
       >
-        {/* Inner circle - Glassmorphism + Skeuomorphism when selected */}
+        {/* Inner card - Glassmorphism + Skeuomorphism when selected */}
         <div
           className={cn(
-            'flex flex-col items-center justify-center rounded-full',
-            selected && glassClasses.modal,
+            'relative overflow-hidden transition-all duration-500 ease-out',
+            selected && glassClasses.medium,
             selected && 'animate-float'
           )}
           style={{
-            width: selected ? size - 2 : size,
-            height: selected ? size - 2 : size,
+            width,
+            borderRadius: selected ? NODE_DESIGN.radius.innerSelected : NODE_DESIGN.radius.inner,
             backgroundColor: selected ? NODE_DESIGN.selectedBg : NODE_BG.default,
-            border: selected ? `2px solid ${colors.primary}` : 'none',
-            boxShadow: selected
-              ? `
-                inset 0 2px 0 0 rgba(255, 255, 255, 0.15),
-                inset 0 -2px 0 0 rgba(0, 0, 0, 0.4),
-                inset 0 0 20px ${colors.primary}25,
-                0 8px 30px rgba(0, 0, 0, 0.5),
-                0 4px 12px rgba(0, 0, 0, 0.4)
-              `
-              : undefined,
+            border: selected ? `${NODE_DESIGN.border.innerSelected}px solid ${colors.primary}` : 'none',
+            boxShadow: selected ? NODE_DESIGN.shadows.skeuomorphic(colors.primary) : undefined,
           }}
         >
-          {/* Glassmorphism effects (circular variant) */}
+          {/* Glassmorphism effects (bevel, reflection, shimmer) */}
           {selected && (
-            <GlassmorphismEffects isCircular />
+            <GlassmorphismEffects borderRadius={NODE_DESIGN.radius.innerSelected} />
           )}
 
-          {/* Blueprint overlay for meta mode (circular) */}
+          {/* Blueprint overlay for meta mode */}
           {isMetaMode && (
             <BlueprintOverlay
               color={colors.primary}
               selected={selected}
-              borderRadius={NODE_DESIGN.radius.circular}
-              showBadge={false}
+              borderRadius={selected ? NODE_DESIGN.radius.innerSelected : NODE_DESIGN.radius.inner}
             />
           )}
 
-          {/* Handles - vertical layout, small size for circular nodes */}
-          <NodeHandles color={colors.primary} selected={selected} layout="vertical" size="small" />
+          {/* Handles - vertical layout (top/bottom) */}
+          <NodeHandles color={colors.primary} selected={selected} layout="vertical" />
 
-          {/* Icon - SVG from Lucide */}
-          <LayerIcon
-            layer={config.layer}
-            size={20}
-            strokeWidth={2}
-            className={cn(
-              'transition-transform duration-200',
-              (isHovered || selected) && 'scale-110'
+          {/* Content */}
+          <div className="relative px-3 py-2.5">
+            {/* Header: Icon + Badge */}
+            <div className="flex items-center justify-between mb-1.5">
+              <div className={cn('flex items-center', gapTokens.default)}>
+                <LayerIcon
+                  layer={config.layer}
+                  size={18}
+                  strokeWidth={2}
+                  className={cn(
+                    'transition-transform duration-200',
+                    (selected || isHovered) && 'scale-110'
+                  )}
+                  style={iconStyle}
+                />
+                <span
+                  className="text-[9px] font-bold uppercase tracking-wider"
+                  style={{ color: colors.primary }}
+                >
+                  {config.label}
+                </span>
+              </div>
+
+              {/* Status dot */}
+              <div
+                className={cn('w-2 h-2 rounded-full', selected && 'animate-pulse')}
+                style={{
+                  background: colors.primary,
+                  boxShadow: `0 0 6px ${colors.primary}`,
+                }}
+              />
+            </div>
+
+            {/* Display Name */}
+            <h3 className="text-sm font-bold text-white truncate">
+              {data.displayName}
+            </h3>
+
+            {/* Key */}
+            {data.key !== data.displayName && (
+              <p
+                className="text-[10px] font-mono truncate mt-0.5"
+                style={{ color: `${colors.primary}70` }}
+              >
+                {data.key}
+              </p>
             )}
-            style={iconStyle}
-          />
 
-          {/* Label */}
-          <span
-            className="text-[9px] font-semibold text-center truncate max-w-[85%] mt-1"
-            style={{
-              color: selected ? 'white' : colors.primary,
-              textShadow: selected ? `0 0 6px ${colors.primary}` : 'none',
-            }}
-          >
-            {data.displayName.length > 10
-              ? data.displayName.slice(0, 8) + '...'
-              : data.displayName}
-          </span>
+            {/* Layer badge */}
+            <div
+              className={cn('mt-2 inline-flex items-center px-1.5 py-0.5 rounded-full text-[8px] font-semibold uppercase tracking-wider border', gapTokens.compact)}
+              style={{
+                background: `${colors.primary}15`,
+                borderColor: `${colors.primary}35`,
+                color: colors.primary,
+              }}
+            >
+              <span
+                className={cn('w-1 h-1 rounded-full', selected && 'animate-pulse')}
+                style={{
+                  background: colors.primary,
+                  boxShadow: `0 0 4px ${colors.primary}`,
+                }}
+              />
+              {config.layer}
+            </div>
+          </div>
         </div>
       </div>
     </div>

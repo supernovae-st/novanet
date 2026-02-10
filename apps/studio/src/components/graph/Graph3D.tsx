@@ -19,10 +19,10 @@
 import { memo, useCallback, useRef, useMemo, useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import * as THREE from 'three';
-import { shallow } from 'zustand/shallow';
+import { useShallow } from 'zustand/react/shallow';
 import { cn } from '@/lib/utils';
 import { useFilteredGraph } from '@/hooks';
-import { useUIStore, selectGraph3DState, selectGraph3DActions } from '@/stores/uiStore';
+import { useUIStore } from '@/stores/uiStore';
 import { GraphEmptyState } from './GraphEmptyState';
 import {
   transformGraphData,
@@ -209,10 +209,22 @@ export const Graph3D = memo(function Graph3D({
   const { nodes, edges } = useFilteredGraph();
 
   // UI store for selection - combined into 2 subscriptions instead of 6
-  // State selector with shallow equality (re-renders only when values change)
-  const { selectedNodeId, hoveredNodeId } = useUIStore(selectGraph3DState, shallow);
-  // Actions selector (stable reference - actions never change, no equality check needed)
-  const { setSelectedNode, setHoveredNode, setSelectedEdge, setHoveredEdge } = useUIStore(selectGraph3DActions);
+  // State selector with useShallow for object comparison (re-renders only when values change)
+  const { selectedNodeId, hoveredNodeId } = useUIStore(
+    useShallow((state) => ({
+      selectedNodeId: state.selectedNodeId,
+      hoveredNodeId: state.hoveredNodeId,
+    }))
+  );
+  // Actions selector (stable reference - actions never change, useShallow ensures stable object)
+  const { setSelectedNode, setHoveredNode, setSelectedEdge, setHoveredEdge } = useUIStore(
+    useShallow((state) => ({
+      setSelectedNode: state.setSelectedNode,
+      setHoveredNode: state.setHoveredNode,
+      setSelectedEdge: state.setSelectedEdge,
+      setHoveredEdge: state.setHoveredEdge,
+    }))
+  );
 
   // Bloom quality from store (persisted user preference)
   const bloomQuality = useUIStore((state) => state.bloomQuality) as BloomQualityLevel;
@@ -316,6 +328,7 @@ export const Graph3D = memo(function Graph3D({
   }, [isGraphReady]);
 
   // Initialize post-processing bloom with WebGL context loss handling
+  // Re-runs when bloomQuality or node count changes significantly
   useEffect(() => {
     if (!isGraphReady || !fgRef.current) return;
 
@@ -327,6 +340,18 @@ export const Graph3D = memo(function Graph3D({
 
     // Get canvas for WebGL context event listeners
     const canvas = renderer.domElement;
+
+    // Calculate adaptive bloom config based on quality setting and node count
+    const nodeCount = graphData.nodes.length;
+    const bloomConfig = getBloomConfigForQuality(bloomQuality, nodeCount);
+
+    // Log performance decision for debugging
+    if (bloomConfig === null) {
+      console.info('[Graph3D] Bloom disabled (quality: %s, nodes: %d)', bloomQuality, nodeCount);
+    } else {
+      console.info('[Graph3D] Bloom enabled (quality: %s, nodes: %d, strength: %.1f)',
+        bloomQuality, nodeCount, bloomConfig.strength);
+    }
 
     // WebGL context loss handler — graceful degradation
     const handleContextLost = (event: Event) => {
@@ -344,16 +369,14 @@ export const Graph3D = memo(function Graph3D({
     const handleContextRestored = () => {
       console.info('[Graph3D] WebGL context restored — recreating resources');
 
-      // Recreate composer after context restore
-      const newComposer = createEnhancedComposer(renderer, scene, camera, {
-        strength: 1.8,
-        radius: 0.6,
-        threshold: 0.1,
-      }, {
-        offset: 0.5,
-        darkness: 0.4,
-      });
-      composerRef.current = newComposer;
+      // Recreate composer after context restore (if bloom is enabled)
+      if (bloomConfig) {
+        const newComposer = createEnhancedComposer(renderer, scene, camera, bloomConfig, {
+          offset: 0.5,
+          darkness: 0.4,
+        });
+        composerRef.current = newComposer;
+      }
 
       // Clear caches - cached meshes have invalid GPU handles after restore
       compositeNodeCacheRef.current.clear();
@@ -362,16 +385,21 @@ export const Graph3D = memo(function Graph3D({
     canvas.addEventListener('webglcontextlost', handleContextLost);
     canvas.addEventListener('webglcontextrestored', handleContextRestored);
 
-    // Create enhanced composer (bloom + vignette) — HYPERSPACE GLOW
-    const composer = createEnhancedComposer(renderer, scene, camera, {
-      strength: 1.8,      // Strong bloom for hyperspace glow
-      radius: 0.6,        // Wide bloom spread
-      threshold: 0.1,     // LOW threshold so particles glow (was 0.3)
-    }, {
-      offset: 0.5,        // Cinematic vignette
-      darkness: 0.4,      // Darker edges for depth
-    });
-    composerRef.current = composer;
+    // Only create composer if bloom is enabled
+    if (bloomConfig) {
+      // Create enhanced composer (bloom + vignette) with adaptive config
+      const composer = createEnhancedComposer(renderer, scene, camera, bloomConfig, {
+        offset: 0.5,        // Cinematic vignette
+        darkness: 0.4,      // Darker edges for depth
+      });
+      composerRef.current = composer;
+    } else {
+      // Bloom disabled - ensure no stale composer
+      if (composerRef.current) {
+        composerRef.current.dispose();
+        composerRef.current = null;
+      }
+    }
 
     // Handle resize
     const handleResize = () => {
@@ -391,7 +419,7 @@ export const Graph3D = memo(function Graph3D({
       }
       composerRef.current = null;
     };
-  }, [isGraphReady]);
+  }, [isGraphReady, bloomQuality, graphData.nodes.length]);
 
   // Configure camera controls for constrained orbit
   useEffect(() => {

@@ -23,7 +23,7 @@ import Image from 'next/image';
 import { Briefcase } from 'lucide-react';
 import type { BaseNodeData } from './BaseNodeWrapper';
 import { BlueprintOverlay } from './BlueprintOverlay';
-import { ICON_COLORS } from '@/config/iconSystem';
+import { getStructuralColors } from '@/design/nodeColors';
 import { NODE_BG, NODE_DESIGN } from '@/config/constants';
 import { useNodeInteractions } from '@/hooks';
 import { SelectionPulseRing, GlassmorphismEffects, NodeHandles } from './effects';
@@ -32,9 +32,10 @@ import { glassClasses, gapTokens } from '@/design/tokens';
 // NovaNet logo URL
 const NOVANET_LOGO_URL = 'https://pbs.twimg.com/profile_images/1788187862883598336/q8u1VSz3_400x400.jpg';
 
-// Premium violet theme - using design system (relationship = violet)
-const PRIMARY = ICON_COLORS.relationship.primary;
-const SECONDARY = ICON_COLORS.relationship.light;
+// Premium violet theme - using unified design system (v11.6)
+const projectColors = getStructuralColors('Project');
+const PRIMARY = projectColors.primary;
+const SECONDARY = projectColors.secondary;
 
 export type ProjectNodeType = Node<BaseNodeData>;
 
