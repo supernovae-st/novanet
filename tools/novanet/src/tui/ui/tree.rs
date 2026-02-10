@@ -19,8 +19,8 @@ use rustc_hash::FxHashSet;
 use super::{
     COLOR_ACTIVE_KIND_BG, COLOR_ARC_FAMILY, COLOR_CONNECTED, COLOR_DESC_TEXT, COLOR_HIGHLIGHT_BG,
     COLOR_HINT_TEXT, COLOR_MUTED_TEXT, COLOR_UNFOCUSED_BORDER, EmptyStateKind, STYLE_DIM,
-    STYLE_HIGHLIGHT, STYLE_PRIMARY, STYLE_UNFOCUSED, render_empty_state, spinner, trait_icon,
-    truncate_start,
+    STYLE_HIGHLIGHT, STYLE_PRIMARY, STYLE_UNFOCUSED, render_empty_state, spinner, trait_color,
+    trait_icon, truncate_start,
 };
 use crate::tui::app::{App, Focus};
 use crate::tui::theme::hex_to_color;
@@ -147,6 +147,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
     // text_color: color for icon and text
     // match_positions: optional fuzzy match positions for highlighting
     // bg_color: optional background color for the line (e.g., active Kind highlight)
+    // trait_icon_opt: optional (trait_icon, trait_color) for colored trait icons
     let make_line = |idx: usize,
                      cursor: usize,
                      focused: bool,
@@ -156,19 +157,25 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                      line_color: Color,
                      text_color: Color,
                      match_positions: Option<&[u32]>,
-                     bg_color: Option<Color>|
+                     bg_color: Option<Color>,
+                     trait_icon_opt: Option<(&str, Color)>|
      -> Line {
         let is_cursor = idx == cursor;
         let cursor_char = if is_cursor { ">" } else { " " };
         let icon_space = if icon.is_empty() { "" } else { " " };
+
+        // Build trait icon string if provided
+        let trait_str = trait_icon_opt
+            .map(|(ti, _)| format!("{} ", ti))
+            .unwrap_or_default();
 
         if is_cursor && focused {
             // When focused/selected, use white on highlight bg for entire line
             let style = Style::default().bg(COLOR_HIGHLIGHT_BG).fg(Color::White);
             Line::from(Span::styled(
                 format!(
-                    "{}{}{}{}{}",
-                    cursor_char, tree_prefix, icon, icon_space, text
+                    "{}{}{}{}{}{}",
+                    cursor_char, tree_prefix, icon, icon_space, trait_str, text
                 ),
                 style,
             ))
@@ -180,7 +187,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
             } else {
                 Style::default()
             };
-            let mut spans = Vec::with_capacity(6);
+            let mut spans = Vec::with_capacity(8);
             spans.push(Span::styled(cursor_char, base_style));
             if !tree_prefix.is_empty() {
                 spans.push(Span::styled(
@@ -192,6 +199,10 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                 format!("{}{}", icon, icon_space),
                 base_style.fg(text_color),
             ));
+            // Add colored trait icon if provided
+            if let Some((ti, tc)) = trait_icon_opt {
+                spans.push(Span::styled(format!("{} ", ti), base_style.fg(tc)));
+            }
             // Apply fuzzy match highlighting to text if positions provided
             spans.extend(highlight_matches_with_bg(
                 &text,
@@ -228,6 +239,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
         Color::Magenta, // text_color
         app.search.matches.get(&idx).map(|v| v.as_slice()),
         None, // bg_color
+        None, // trait_icon_opt
     ));
     idx += 1;
 
@@ -253,6 +265,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                 realm_color,    // text_color
                 app.search.matches.get(&idx).map(|v| v.as_slice()),
                 None, // bg_color
+                None, // trait_icon_opt
             ));
             idx += 1;
 
@@ -313,6 +326,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                         text_color,  // text_color (grayed if empty in Data mode)
                         app.search.matches.get(&idx).map(|v| v.as_slice()),
                         None, // bg_color
+                        None, // trait_icon_opt
                     ));
                     idx += 1;
 
@@ -353,18 +367,21 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
 
                             // v10.1: Show instance count (always in Data mode)
                             // v10.6: Add trait icon prefix
+                            // v11.3: Colored trait icons (from visual-encoding.yaml + taxonomy.yaml)
                             // QW7: Show arc count in Meta mode
                             // Feature 2: Health badges in Data mode
                             let kind_is_empty = kind.instance_count == 0;
-                            let icon = trait_icon(&kind.trait_name);
+                            let t_icon = trait_icon(&kind.trait_name);
+                            let t_color = trait_color(&kind.trait_name);
                             let arc_count = kind.arcs.len();
                             let (display_text, kind_text_color) = if is_data_mode {
                                 // Build health badge using extracted function
                                 let health_badge =
                                     format_health_badge(kind.health_percent, kind.issues_count);
+                                // v11.3: Trait icon now passed separately, not in text
                                 let text = format!(
-                                    "{} {} ({}){}",
-                                    icon, kind.display_name, kind.instance_count, health_badge
+                                    "{} ({}){}",
+                                    kind.display_name, kind.instance_count, health_badge
                                 );
                                 let color = if kind_is_empty {
                                     COLOR_MUTED_TEXT // Gray for empty kinds
@@ -374,10 +391,11 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                 (text, color)
                             } else {
                                 // Meta mode: show arc count inline
+                                // v11.3: Trait icon now passed separately, not in text
                                 let text = if arc_count > 0 {
-                                    format!("{} {} ↔{}", icon, kind.display_name, arc_count)
+                                    format!("{} ↔{}", kind.display_name, arc_count)
                                 } else {
-                                    format!("{} {}", icon, kind.display_name)
+                                    kind.display_name.clone()
                                 };
                                 (text, Color::White)
                             };
@@ -411,7 +429,8 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                 layer_color,     // line_color: parent layer color
                                 kind_text_color, // text_color (grayed if empty)
                                 app.search.matches.get(&idx).map(|v| v.as_slice()),
-                                kind_bg, // bg_color: highlight if instances expanded
+                                kind_bg,                     // bg_color: highlight if instances expanded
+                                Some((t_icon, t_color)),     // v11.3: colored trait icon
                             ));
                             idx += 1;
 
@@ -453,6 +472,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                             Color::Cyan,   // text_color for categories
                                             app.search.matches.get(&idx).map(|v| v.as_slice()),
                                             None,          // bg_color
+                                            None,          // trait_icon_opt (categories don't have traits)
                                         ));
                                         idx += 1;
 
@@ -723,6 +743,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
         Color::Yellow, // text_color
         app.search.matches.get(&idx).map(|v| v.as_slice()),
         None, // bg_color
+        None, // trait_icon_opt
     ));
     idx += 1;
 
@@ -745,6 +766,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                 COLOR_ARC_FAMILY, // text_color
                 app.search.matches.get(&idx).map(|v| v.as_slice()),
                 None, // bg_color
+                None, // trait_icon_opt
             ));
             idx += 1;
 
@@ -764,6 +786,7 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                         COLOR_DESC_TEXT,  // text_color
                         app.search.matches.get(&idx).map(|v| v.as_slice()),
                         None, // bg_color
+                        None, // trait_icon_opt
                     ));
                     idx += 1;
                 }
