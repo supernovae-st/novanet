@@ -80,26 +80,33 @@ describe('FacetFilterPanel', () => {
       // v10.6: organization + project merged into tenant
     });
 
-    it('renders 8 layer items (v10.6: 8 layers)', () => {
+    it('renders 11 layer items (v11.3: 3 shared + 8 org)', () => {
       render(<FacetFilterPanel />);
 
+      // Shared realm (3)
+      expect(screen.getByText('Locale')).toBeInTheDocument();
+      expect(screen.getByText('Geography')).toBeInTheDocument();
+      // "Knowledge" appears in both Layers and Traits sections
+      expect(screen.getAllByText('Knowledge')).toHaveLength(2);
+      // Org realm (8)
       expect(screen.getByText('Configuration')).toBeInTheDocument();
-      expect(screen.getByText('Locale Knowledge')).toBeInTheDocument();
       expect(screen.getByText('Foundation')).toBeInTheDocument();
       expect(screen.getByText('Structure')).toBeInTheDocument();
       // "Semantic" appears in both Layers and Arc Families sections
       expect(screen.getAllByText('Semantic')).toHaveLength(2);
       expect(screen.getByText('Instructions')).toBeInTheDocument();
-      expect(screen.getByText('Generated Output')).toBeInTheDocument();
       expect(screen.getByText('SEO Intelligence')).toBeInTheDocument();
+      expect(screen.getByText('GEO Intelligence')).toBeInTheDocument();
+      expect(screen.getByText('Generated Output')).toBeInTheDocument();
     });
 
-    it('renders 5 trait items (v11.2: generated + aggregated, no derived/job)', () => {
+    it('renders 5 trait items (v11.3: generated + aggregated)', () => {
       render(<FacetFilterPanel />);
 
       expect(screen.getByText('Invariant')).toBeInTheDocument();
       expect(screen.getByText('Localized')).toBeInTheDocument();
-      expect(screen.getByText('Knowledge')).toBeInTheDocument();
+      // "Knowledge" appears in both Layers and Traits sections - tested in layer test above
+      expect(screen.getAllByText('Knowledge')).toHaveLength(2);
       expect(screen.getByText('Generated')).toBeInTheDocument();
       expect(screen.getByText('Aggregated')).toBeInTheDocument();
     });

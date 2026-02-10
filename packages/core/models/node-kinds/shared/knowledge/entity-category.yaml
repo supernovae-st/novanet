@@ -1,0 +1,139 @@
+# packages/core/models/node-kinds/global/config/entity-category.yaml
+# EntityCategory - Semantic classification for Entity nodes
+#
+# v11.0: Global config node for categorizing entities by purpose
+# Enables: filtering, grouping, and LLM context selection by category
+# Source: Universal taxonomy (applies to all tenants)
+
+node:
+  name: EntityCategory
+  realm: shared
+  layer: knowledge
+  trait: invariant
+  icon: "📂"
+  description: "Semantic category for classifying Entity nodes by their purpose"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # STANDARD PROPERTIES
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  standard_properties:
+    key:
+      type: string
+      required: true
+      description: "Category identifier in UPPER_SNAKE_CASE"
+      pattern: "^[A-Z][A-Z_]*$"
+      examples:
+        - "THING"
+        - "CONTENT_TYPE"
+        - "ACTION"
+        - "FEATURE"
+        - "TOOL"
+        - "BENEFIT"
+
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable category name"
+      example: "Thing"
+
+    description:
+      type: string
+      required: true
+      description: "Detailed explanation of what this category represents"
+      example: "Tangible or abstract objects that exist as nouns (products, concepts, entities)"
+
+    llm_context:
+      type: string
+      required: true
+      description: "LLM generation hints. Format: 'USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation].'"
+      example: "USE: for nouns representing products, concepts, or entities. TRIGGERS: thing, product, object, concept, item. NOT: actions (use ACTION), content formats (use CONTENT_TYPE)."
+
+    created_at:
+      type: datetime
+      required: true
+
+    updated_at:
+      type: datetime
+      required: true
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # CATEGORY-SPECIFIC PROPERTIES
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  properties:
+    question:
+      type: string
+      required: true
+      description: "Interrogative that this category answers about an entity"
+      enum:
+        - "WHAT?"
+        - "WHERE?"
+        - "WHY?"
+        - "WHO?"
+        - "HOW?"
+        - "ABSTRACT"
+        - "EXTERNAL"
+      example: "WHAT?"
+
+    sort_order:
+      type: int
+      required: false
+      description: "Display order for UI lists (lower = first)"
+      default: 0
+      example: 1
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # INCOMING RELATIONS (TO this node)
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  incoming_relations:
+    BELONGS_TO:
+      from: Entity
+      cardinality: "N:1"
+      scope: cross_realm
+      description: "Entities classified under this category (tenant Entity -> global EntityCategory)"
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # EXAMPLES
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  example:
+    data:
+      - key: "THING"
+        display_name: "Thing"
+        description: "Tangible or abstract objects that exist as nouns (products, concepts, entities)"
+        question: "WHAT?"
+        sort_order: 1
+        llm_context: "USE: for nouns representing products, concepts, or entities. TRIGGERS: thing, product, object, concept, item, entity. NOT: actions (use ACTION), content formats (use CONTENT_TYPE)."
+
+      - key: "CONTENT_TYPE"
+        display_name: "Content Type"
+        description: "Formats and structures for presenting information (articles, videos, guides)"
+        question: "WHAT?"
+        sort_order: 2
+        llm_context: "USE: for content formats and media types. TRIGGERS: content, format, article, video, guide, tutorial, post. NOT: features (use FEATURE), tools (use TOOL)."
+
+      - key: "ACTION"
+        display_name: "Action"
+        description: "Verbs and operations users can perform (create, scan, customize, share)"
+        question: "HOW?"
+        sort_order: 3
+        llm_context: "USE: for verbs and user operations. TRIGGERS: action, create, generate, scan, share, customize, download. NOT: features (use FEATURE), things (use THING)."
+
+    cypher: |
+      // Get all categories with their entity counts
+      MATCH (c:EntityCategory)
+      OPTIONAL MATCH (e:Entity)-[:BELONGS_TO]->(c)
+      RETURN c.key AS category, c.display_name AS name, c.question AS question, count(e) AS entity_count
+      ORDER BY c.sort_order, c.key
+
+      // Get entities in a specific category
+      MATCH (e:Entity)-[:BELONGS_TO]->(c:EntityCategory {key: $key})
+      RETURN e.key, e.display_name, e.description
+      ORDER BY e.display_name
+
+      // Group entities by category for a tenant
+      MATCH (t:Tenant {key: $tenant_key})-[:HAS_ENTITY]->(e:Entity)-[:BELONGS_TO]->(c:EntityCategory)
+      RETURN c.key AS category, collect(e.key) AS entities
+      ORDER BY c.sort_order

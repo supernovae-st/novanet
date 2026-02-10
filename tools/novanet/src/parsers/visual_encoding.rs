@@ -181,7 +181,7 @@ pub struct Icons {
     /// Realm icons (global, tenant).
     #[serde(default)]
     pub realms: HashMap<String, Icon>,
-    /// Layer icons (config, locale-knowledge, etc.).
+    /// Layer icons (locale, geography, knowledge, config, etc.).
     #[serde(default)]
     pub layers: HashMap<String, Icon>,
     /// Trait icons (invariant, localized, etc.).
@@ -305,7 +305,7 @@ mod tests {
         let doc = load_visual_encoding(root).expect("should load visual-encoding.yaml");
 
         // Version (v11.2: realm renames shared/org + trait split)
-        assert_eq!(doc.version, "11.2.0");
+        assert_eq!(doc.version, "11.3.0");
 
         // Channel mapping
         assert_eq!(doc.channel_mapping.node.fill_color, "layer");
@@ -344,9 +344,12 @@ mod tests {
         assert_eq!(icons.realm_terminal("shared"), "◉");
         assert_eq!(icons.realm_terminal("org"), "◎");
 
-        // Layers (8)
+        // Layers (11) — v11.3: 3 shared + 8 org
         assert!(icons.layers.contains_key("config"));
-        assert!(icons.layers.contains_key("locale-knowledge"));
+        assert!(icons.layers.contains_key("locale"));
+        assert!(icons.layers.contains_key("geography"));
+        assert!(icons.layers.contains_key("knowledge"));
+        assert!(icons.layers.contains_key("geo"));
         assert!(icons.layers.contains_key("output"));
         assert_eq!(icons.layer_terminal("config"), "⚙");
 

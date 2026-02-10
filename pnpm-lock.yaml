@@ -83,9 +83,6 @@ importers:
       d3-force:
         specifier: ^3.0.0
         version: 3.0.0
-      elkjs:
-        specifier: ^0.11.0
-        version: 0.11.0
       geist:
         specifier: ^1.5.1
         version: 1.5.1(next@16.1.6(@babel/core@7.28.6)(@playwright/test@1.58.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))
@@ -186,12 +183,6 @@ importers:
 
   packages/core:
     dependencies:
-      neo4j-driver:
-        specifier: ^5.28.1
-        version: 5.28.3
-      yaml:
-        specifier: ^2.7.0
-        version: 2.8.2
       zod:
         specifier: ^3.24.0
         version: 3.25.76
@@ -2618,9 +2609,6 @@ packages:
 
   electron-to-chromium@1.5.282:
     resolution: {integrity: sha512-FCPkJtpst28UmFzd903iU7PdeVTfY0KAeJy+Lk0GLZRwgwYHn/irRcaCbQQOmr5Vytc/7rcavsYLvTM8RiHYhQ==}
-
-  elkjs@0.11.0:
-    resolution: {integrity: sha512-u4J8h9mwEDaYMqo0RYJpqNMFDoMK7f+pu4GjcV+N8jIC7TRdORgzkfSjTJemhqONFfH6fBI3wpysgWbhgVWIXw==}
 
   emittery@0.13.1:
     resolution: {integrity: sha512-DeWwawk6r5yR9jFgnDKYt4sLS0LmHJJi3ZOnb5/JdbYwj3nW+FxQnHIjhBKz8YLC7oRNPVM9NQ47I3CVx34eqQ==}
@@ -7536,8 +7524,6 @@ snapshots:
 
   electron-to-chromium@1.5.282: {}
 
-  elkjs@0.11.0: {}
-
   emittery@0.13.1: {}
 
   emoji-regex@8.0.0: {}
@@ -10535,7 +10521,8 @@ snapshots:
 
   yallist@3.1.1: {}
 
-  yaml@2.8.2: {}
+  yaml@2.8.2:
+    optional: true
 
   yargs-parser@21.1.1: {}
 

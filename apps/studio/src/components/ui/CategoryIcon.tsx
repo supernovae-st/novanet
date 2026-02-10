@@ -42,17 +42,22 @@ import type { Layer } from '@novanet/core/types';
 // =============================================================================
 
 /**
- * Layer to Lucide icon component mapping (v10.5 - 9 layers)
+ * Layer to Lucide icon component mapping (v11.3 - 11 layers)
  * Each layer has ONE representative icon
  */
 const LAYER_ICONS: Record<Layer, React.ComponentType<LucideProps>> = {
+  // Shared realm (3)
+  locale: Settings,
+  geography: BookOpen,
+  knowledge: BookOpen,
+  // Org realm (8)
   config: Settings,
-  'locale-knowledge': BookOpen,
-  seo: Search,
   foundation: Package,
   structure: LayoutGrid,
   semantic: Lightbulb,
   instruction: FileText,
+  seo: Search,
+  geo: Sparkles,
   output: Sparkles,
 };
 

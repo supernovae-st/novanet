@@ -1,0 +1,67 @@
+# packages/core/models/node-kinds/global/knowledge/culture-set.yaml
+# CultureSet — Container grouping CultureRef atoms by type
+#
+# v10.1: Pure container (no JSON blobs - data lives in CultureRef atoms)
+# Types: values, references, celebrities, calendar
+# Stability: High - structure rarely changes
+
+node:
+  name: CultureSet
+  realm: shared
+  layer: knowledge
+  trait: invariant  # v11.2: Containers are universal categories (invariant), atoms are locale-native (knowledge)
+  icon: "🎭"
+  description: "Container grouping CultureRef atoms by type"
+
+  standard_properties:
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable name"
+      example: "French (France) Cultural Values"
+
+    description:
+      type: string
+      required: true
+      description: "Short description"
+      example: "Core cultural values for fr-FR"
+
+    llm_context:
+      type: string
+      required: true
+      description: "LLM generation hints"
+      example: "USE: to find culture refs by type. TRIGGERS: values, holidays. NOT: individual refs."
+
+    created_at:
+      type: datetime
+      required: true
+      description: "Creation timestamp"
+
+    updated_at:
+      type: datetime
+      required: true
+      description: "Last update timestamp"
+
+  properties:
+    # Type identification (only property - data is in atoms)
+    culture_type:
+      type: string
+      required: true
+      enum: [values, references, celebrities, calendar]
+      description: "Cultural knowledge type this set groups"
+      example: "values"
+
+  relations:
+    outgoing:
+      - type: CONTAINS
+        to: CultureRef
+        cardinality: "1:N"
+        description: "CultureSet contains multiple CultureRef atoms"
+
+    incoming:
+      - type: HAS_CULTURE_SET
+        from: Locale
+        cardinality: "1:N"
+        description: "Locale has culture sets (one per type)"
+        properties:
+          type: string

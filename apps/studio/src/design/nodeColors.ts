@@ -34,14 +34,19 @@ export interface GradientColors {
 // =============================================================================
 
 const LAYER_GRADIENT_COLORS: Record<Layer, GradientColors> = {
-  foundation: { primary: '#6c71c4', secondary: '#6366f1' },   // Solarized violet -> Indigo
+  // v11.3: 3 shared layers (from locale-knowledge split)
+  locale: { primary: '#268bd2', secondary: '#3b82f6' },        // Solarized blue -> Blue
+  geography: { primary: '#2aa198', secondary: '#14b8a6' },     // Solarized cyan -> Teal
+  knowledge: { primary: '#859900', secondary: '#a3e635' },     // Solarized green -> Lime
+  // v11.3: 8 org layers
+  config: { primary: '#6c71c4', secondary: '#8b5cf6' },        // Solarized violet -> Violet
+  foundation: { primary: '#6c71c4', secondary: '#6366f1' },    // Solarized violet -> Indigo
   structure: { primary: '#859900', secondary: '#a3e635' },     // Solarized green -> Lime
   semantic: { primary: '#b58900', secondary: '#f59e0b' },      // Solarized yellow -> Amber
   instruction: { primary: '#d33682', secondary: '#ec4899' },   // Solarized magenta -> Pink
-  output: { primary: '#dc322f', secondary: '#f97316' },        // Solarized red -> Orange
-  config: { primary: '#2aa198', secondary: '#14b8a6' },        // Solarized cyan -> Teal
-  'locale-knowledge': { primary: '#268bd2', secondary: '#3b82f6' }, // Solarized blue -> Blue
   seo: { primary: '#cb4b16', secondary: '#f97316' },           // Solarized orange -> Orange
+  geo: { primary: '#a855f7', secondary: '#c084fc' },           // Purple for GEO
+  output: { primary: '#dc322f', secondary: '#f97316' },        // Solarized red -> Orange
 };
 
 const DEFAULT_LAYER_COLORS: GradientColors = { primary: '#6366f1', secondary: '#8b5cf6' };

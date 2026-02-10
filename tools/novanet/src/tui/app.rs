@@ -1928,8 +1928,9 @@ impl App {
                         match layer.key.as_str() {
                             "structure" | "output" => AtlasView::PageComposition,
                             "semantic" => AtlasView::GenerationPipeline,
-                            "locale-knowledge" => AtlasView::KnowledgeAtoms,
-                            "seo" => AtlasView::SpreadingActivation,
+                            // v11.3: 3 shared layers replace locale-knowledge
+                            "locale" | "geography" | "knowledge" => AtlasView::KnowledgeAtoms,
+                            "seo" | "geo" => AtlasView::SpreadingActivation,
                             _ => AtlasView::RealmMap,
                         }
                     }
@@ -2155,9 +2156,10 @@ mod tests {
             issues_count: None,
         };
 
-        let locale_knowledge = LayerInfo {
-            key: "locale-knowledge".to_string(),
-            display_name: "Locale Knowledge".to_string(),
+        // v11.3: Shared realm has 3 layers (locale, geography, knowledge)
+        let locale_layer = LayerInfo {
+            key: "locale".to_string(),
+            display_name: "Locale".to_string(),
             color: "#2aa198".to_string(),
             kinds: vec![locale_kind],
         };
@@ -2174,7 +2176,7 @@ mod tests {
             display_name: "Shared".to_string(),
             color: "#859900".to_string(),
             icon: "◉",
-            layers: vec![locale_knowledge],
+            layers: vec![locale_layer],
         };
 
         let tenant = RealmInfo {
@@ -2231,7 +2233,7 @@ mod tests {
         let mut app = create_test_app();
 
         // Navigate to Locale kind (index 3)
-        // Kinds (0), global (1), locale-knowledge (2), Locale (3)
+        // Kinds (0), shared (1), locale (2), Locale (3)
         app.tree_cursor = 3;
 
         // Verify we're at Locale in Meta mode
@@ -2289,8 +2291,8 @@ mod tests {
         app.mode = NavMode::Data;
 
         // Item count should include instances
-        // Meta: 1 (Kinds) + 1 (global) + 1 (locale-knowledge) + 1 (Locale)
-        //       + 1 (tenant) + 1 (structure) + 1 (Page) + 1 (Arcs) = 8
+        // Meta: 1 (Kinds) + 1 (shared) + 1 (locale) + 1 (Locale)
+        //       + 1 (org) + 1 (structure) + 1 (Page) + 1 (Arcs) = 8
         // Data: + 2 instances = 10
         assert_eq!(app.current_item_count(), 10);
 
@@ -2792,8 +2794,8 @@ mod tests {
         );
 
         // The result should include the index of "Page" kind
-        // Tree structure: Kinds(0), global(1), locale-knowledge(2), Locale(3),
-        //                 tenant(4), structure(5), Page(6), Arcs(7)
+        // Tree structure: Kinds(0), shared(1), locale(2), Locale(3),
+        //                 org(4), structure(5), Page(6), Arcs(7)
         assert!(
             app.search.results.contains(&6),
             "Should find Page at index 6, got: {:?}",

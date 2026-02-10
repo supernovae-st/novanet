@@ -1,6 +1,6 @@
 # packages/core/models/visual-encoding.yaml
 # Visual presentation rules for NovaNet graph elements
-# v11.2.0 — 2-Realm Architecture (SHARED / ORG)
+# v11.3.0 — 2-Realm Architecture (SHARED / ORG)
 #
 # IMPORTANT: Colors are NOT defined here.
 # Colors come from taxonomy.yaml (node_realms, node_layers, node_traits, arc_families)
@@ -11,7 +11,7 @@
 # - apps/studio/src/design/visual-encoding.json (runtime config)
 # - tools/novanet/src/generated/visual_encoding.rs (TUI compile-time)
 
-version: "11.2.0"
+version: "11.3.0"
 
 # =============================================================================
 # CHANNEL MAPPING — Which visual channel encodes which facet
@@ -307,20 +307,27 @@ icons:
 
   # ---------------------------------------------------------------------------
   # LAYER ICONS — What functional category?
+  # v11.3: 11 layers (3 shared + 8 org)
   # ---------------------------------------------------------------------------
   layers:
+    # SHARED realm layers (3)
+    locale:
+      web: globe
+      terminal: "🌐"
+      description: "Core locale definitions"
+    geography:
+      web: map
+      terminal: "🗺"
+      description: "Geographic classifications"
+    knowledge:
+      web: book-open
+      terminal: "📚"
+      description: "Locale expertise and knowledge atoms"
+    # ORG realm layers (8)
     config:
       web: settings
       terminal: "⚙"
       description: "Configuration nodes"
-    locale-knowledge:
-      web: book-open
-      terminal: "◈"
-      description: "Locale expertise and knowledge atoms"
-    seo:
-      web: search
-      terminal: "◇"
-      description: "SEO intelligence and keywords"
     foundation:
       web: landmark
       terminal: "▣"
@@ -337,6 +344,14 @@ icons:
       web: file-text
       terminal: "▧"
       description: "Generation directives"
+    seo:
+      web: search
+      terminal: "◇"
+      description: "SEO intelligence and keywords"
+    geo:
+      web: bot
+      terminal: "🤖"
+      description: "GEO AI visibility"
     output:
       web: check-circle
       terminal: "●"

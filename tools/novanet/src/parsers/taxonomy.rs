@@ -392,7 +392,7 @@ arc_families:
         let doc = load_taxonomy(root).expect("should load taxonomy.yaml");
 
         // v11.2: realm renames, trait split, version bump
-        assert_eq!(doc.version, "11.2.0");
+        assert_eq!(doc.version, "11.3.0");
         assert_eq!(doc.node_realms.len(), 2); // v11.2: 2 realms (shared, org)
         assert_eq!(doc.node_traits.len(), 5); // v11.2: split derived → generated + aggregated
         assert_eq!(doc.arc_families.len(), 5);
@@ -400,7 +400,7 @@ arc_families:
         assert_eq!(doc.arc_cardinalities.len(), 5); // zero_to_one, one_to_one, one_to_many, many_to_one, many_to_many
 
         let total_layers: usize = doc.node_realms.iter().map(|r| r.layers.len()).sum();
-        assert_eq!(total_layers, 9); // v11.2: 2 shared + 7 org layers
+        assert_eq!(total_layers, 11); // v11.3: 3 shared + 8 org layers
 
         // Check border styles
         let invariant = doc

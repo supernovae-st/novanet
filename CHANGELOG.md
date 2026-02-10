@@ -7,6 +7,36 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [11.3.0] - 2026-02-10
+
+### Breaking Changes
+- **Layer split**: `locale-knowledge` → `locale`, `geography`, `knowledge` (3 shared layers)
+  - `locale` (7 nodes): Locale, Culture, Adaptation, Market, Style, Slugification, Formatting
+  - `geography` (6 nodes): Continent, GeoRegion, GeoSubRegion, EconomicRegion, IncomeGroup, LendingCategory
+  - `knowledge` (19 nodes): TermSet, Term, ExpressionSet, Expression, PatternSet, Pattern, CultureSet, CultureRef, TabooSet, Taboo, AudienceSet, AudienceTrait, EntityCategory, CategorySet, CulturalRealm, CulturalSubRealm, LanguageFamily, LanguageBranch, PopulationCluster, PopulationSubCluster
+- **New layer**: `geo` added to org realm for GEO intelligence
+  - GEOQuery, GEOAnswer, GEOMetrics moved from seo to geo layer
+- **Node merge**: Organization + Tenant → OrgConfig
+  - Single org config entry point replaces redundant nodes
+
+### Added
+- **ADR-019**: Layer Reorganization documentation
+- **11 layers**: 3 shared (locale, geography, knowledge) + 8 org (config, foundation, structure, semantic, instruction, seo, geo, output)
+
+### Changed
+- **Node count**: 62 → 61 nodes (merged Organization + Tenant)
+- **Layer count**: 9 → 11 layers (split locale-knowledge, added geo)
+- **YAML structure**: 32 shared realm files reorganized into new layer directories
+- **Rust tests**: 950 tests passing
+- **TypeScript tests**: 478 tests passing
+
+### Fixed
+- Studio type definitions updated for 11 layers
+- FacetFilterPanel updated for new layer structure
+- NodeConfig updated for OrgConfig (removed Organization, Tenant)
+- ResultsOverview layer config updated
+- hierarchical layout updated for new realm/layer structure
+
 ## [11.2.0] - 2026-02-10
 
 ### Breaking Changes
@@ -284,7 +314,8 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Migrated from git submodules to true monorepo
 - Organization links updated to supernovae-st
 
-[Unreleased]: https://github.com/supernovae-st/novanet-dev/compare/v11.2.0...HEAD
+[Unreleased]: https://github.com/supernovae-st/novanet-dev/compare/v11.3.0...HEAD
+[11.3.0]: https://github.com/supernovae-st/novanet-dev/compare/v11.2.0...v11.3.0
 [11.2.0]: https://github.com/supernovae-st/novanet-dev/compare/v11.0.0...v11.2.0
 [11.0.0]: https://github.com/supernovae-st/novanet-dev/compare/v9.7.0...v11.0.0
 [9.7.0]: https://github.com/supernovae-st/novanet-dev/compare/v9.0.1...v9.7.0

@@ -146,7 +146,9 @@ function toTurboNode(node: GraphNodeType): TurboNodeType {
       case 'config':
         nodeType = 'structural';
         break;
-      case 'locale-knowledge':
+      case 'locale':
+      case 'geography':
+      case 'knowledge':
         nodeType = 'localeKnowledge';
         break;
       // Default to turbo for seo, geo layers

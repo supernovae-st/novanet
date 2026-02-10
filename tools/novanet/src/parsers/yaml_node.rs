@@ -454,11 +454,12 @@ node:
         // PopulationCluster, PopulationSubCluster (+12)
         // v10.9 added: GEOQuery, GEOAnswer, GEOMetrics (+3)
         // v11.1 removed: GenerationJob, SEOMiningRun, EvaluationSignal (-3)
-        let nodes = load_all_nodes(root).expect("should parse all 62 nodes");
+        // v11.3 merged: Organization + Tenant → OrgConfig (-1)
+        let nodes = load_all_nodes(root).expect("should parse all 61 nodes");
         assert_eq!(
             nodes.len(),
-            62,
-            "expected 62 YAML node files (v11.1: removed job trait nodes)"
+            61,
+            "expected 61 YAML node files (v11.3: merged Org+Tenant into OrgConfig)"
         );
 
         // Every node has a non-empty name, realm, and layer
@@ -480,9 +481,9 @@ node:
             );
         }
 
-        // Verify trait distribution (2 realms: global + tenant)
+        // Verify trait distribution (2 realms: shared + org)
         let count = |t: NodeTrait| nodes.iter().filter(|n| n.def.node_trait == t).count();
-        assert_eq!(count(NodeTrait::Invariant), 30, "invariant count (was 24, +6 container sets now invariant)");
+        assert_eq!(count(NodeTrait::Invariant), 29, "invariant count (v11.3: merged Org+Tenant into OrgConfig)");
         assert_eq!(
             count(NodeTrait::Localized),
             2,
@@ -505,14 +506,14 @@ node:
             "aggregated count (GEOAnswer, GEOMetrics, SEOKeywordMetrics)"
         );
 
-        // v11.2: Verify realm distribution (job nodes removed from tenant)
+        // v11.3: Verify realm distribution (merged Org+Tenant into OrgConfig)
         let realm_count = |r: &str| nodes.iter().filter(|n| n.realm == r).count();
         assert_eq!(
             realm_count("shared"),
             32,
-            "global realm count (14 config + 18 locale-knowledge)"
+            "shared realm count (7 locale + 6 geography + 19 knowledge)"
         );
-        assert_eq!(realm_count("org"), 30, "tenant realm count (- 3 job nodes)");
+        assert_eq!(realm_count("org"), 29, "org realm count (v11.3: -1 merged Org+Tenant)");
 
         // Spot-check known nodes
         let project = nodes.iter().find(|n| n.def.name == "Project").unwrap();
@@ -521,17 +522,17 @@ node:
         assert_eq!(project.def.node_trait, NodeTrait::Invariant);
         assert_eq!(project.def.knowledge_tier, None); // invariant = no tier
 
-        // Check Style node (in global/config)
+        // Check Style node (in shared/locale — v11.3)
         let style = nodes.iter().find(|n| n.def.name == "Style").unwrap();
         assert_eq!(style.realm, "shared");
-        assert_eq!(style.layer, "config");
+        assert_eq!(style.layer, "locale");
         assert_eq!(style.def.node_trait, NodeTrait::Knowledge);
         assert_eq!(style.def.knowledge_tier, None);
 
-        // Check one of the knowledge atoms
+        // Check one of the knowledge atoms (in shared/knowledge — v11.3)
         let term = nodes.iter().find(|n| n.def.name == "Term").unwrap();
         assert_eq!(term.realm, "shared");
-        assert_eq!(term.layer, "locale-knowledge");
+        assert_eq!(term.layer, "knowledge");
         assert_eq!(term.def.node_trait, NodeTrait::Knowledge);
     }
 }

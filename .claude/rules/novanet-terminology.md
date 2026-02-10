@@ -1,4 +1,4 @@
-# NovaNet Terminology (v11.2)
+# NovaNet Terminology (v11.3)
 
 This file defines the canonical terminology for NovaNet. All code, documentation, and UI must use these terms consistently.
 
@@ -21,26 +21,26 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 | Axis | Question | Type | Property | Values |
 |------|----------|------|----------|--------|
 | 1 | WHERE? | `NodeRealm` | `realm` | `shared`, `org` |
-| 2 | WHAT? | `NodeLayer` | `layer` | `config`, `locale-knowledge`, `seo`, `foundation`, `structure`, `semantic`, `instruction`, `output` |
+| 2 | WHAT? | `NodeLayer` | `layer` | `locale`, `geography`, `knowledge`, `config`, `foundation`, `structure`, `semantic`, `instruction`, `seo`, `geo`, `output` |
 | 3 | HOW? | `NodeTrait` | `trait` | `invariant`, `localized`, `knowledge`, `generated`, `aggregated` |
 
-### v11.2 Realm Architecture
+### v11.3 Realm Architecture
 
 | Realm | Layers | Nodes | Description |
 |-------|--------|-------|-------------|
-| `shared` | config, locale-knowledge | 32 | Universal locale knowledge (READ-ONLY) |
-| `org` | config, foundation, structure, semantic, instruction, seo, output | 30 | Organization-specific content |
+| `shared` | locale, geography, knowledge | 32 | Universal locale knowledge (READ-ONLY) |
+| `org` | config, foundation, structure, semantic, instruction, seo, geo, output | 29 | Organization-specific content |
+
+> **v11.3 Changes:**
+> - Layer split: `locale-knowledge` → `locale`, `geography`, `knowledge` (3 layers)
+> - New layer: `geo` added to org realm for GEO intelligence
+> - Node merge: Organization + Tenant → OrgConfig
+> - Total: 61 nodes (was 62), 11 layers (was 9)
 
 > **v11.2 Changes:**
 > - Realm renames: `global` → `shared`, `tenant` → `org`
 > - Trait split: `derived` → `generated` + `aggregated`, `job` removed
 > - 3 job nodes removed (GenerationJob, SEOMiningRun, EvaluationSignal)
-> - Total: 62 nodes (was 65)
-
-> **v11.0 Changes:**
-> - SEO moved from global to tenant (ADR-012 fix)
-> - SHARED (2 layers): config, locale-knowledge
-> - ORG (7 layers): config, foundation, structure, semantic, instruction, seo, output
 
 ### Arc Classification (Faceted)
 
@@ -50,13 +50,13 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 | 2 | FUNCTION? | `ArcFamily` | `family` | `ownership`, `localization`, `semantic`, `generation`, `mining` |
 | 3 | MULTIPLICITY? | `ArcCardinality` | `cardinality` | `zero_to_one`, `one_to_one`, `one_to_many`, `many_to_many` |
 
-## YAML Source Files (v11.2)
+## YAML Source Files (v11.3)
 
 | File | Content |
 |------|---------|
-| `taxonomy.yaml` | Realm/Layer/Trait/ArcFamily/ArcScope definitions (v11.2: 2 realms, 9 layers, 5 traits) |
-| `node-kinds/shared/` | 32 NodeKind definitions in shared realm |
-| `node-kinds/org/` | 30 NodeKind definitions in org realm |
+| `taxonomy.yaml` | Realm/Layer/Trait/ArcFamily/ArcScope definitions (v11.3: 2 realms, 11 layers, 5 traits) |
+| `node-kinds/shared/` | 32 NodeKind definitions in shared realm (locale: 7, geography: 6, knowledge: 19) |
+| `node-kinds/org/` | 29 NodeKind definitions in org realm (config: 1, foundation: 3, structure: 3, semantic: 4, instruction: 7, seo: 5, geo: 3, output: 3) |
 | `arc-kinds/` | 1 file per ArcKind, organized by ArcFamily |
 | `relations.yaml` | Legacy format (deprecated, kept for parser compatibility) |
 
@@ -71,7 +71,7 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 | Rust structs | `PascalCase` | `ArcKind`, `NodeRealm` |
 | Rust files | `snake_case.rs` | `arc_schema.rs`, `taxonomy.rs` |
 
-## Node Naming Convention (v11.2)
+## Node Naming Convention (v11.3)
 
 > **RULE: Suffix indicates trait and relationship to parent invariant node**
 
@@ -79,8 +79,14 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 |---------|-------|-------|-------------|---------|
 | `FooContent` | localized | semantic | Node has locale-specific content for invariant `Foo` | `EntityContent` (parent: `Entity`) |
 | `FooGenerated` | generated | output | Node is generated output from invariant `Foo` | `PageGenerated` (parent: `Page`) |
-| `FooCategory` | invariant | config | Categorical grouping for invariant `Foo` | `EntityCategory` |
+| `FooCategory` | invariant | knowledge | Categorical grouping for invariant `Foo` | `EntityCategory` |
 | `Foo` | varies | varies | Node is standalone (no parent invariant) | `SEOKeyword`, `Term`, `Expression` |
+
+**v11.3 Changes:**
+- Layer split: `locale-knowledge` → `locale`, `geography`, `knowledge`
+- New layer: `geo` added to org realm
+- Node merge: Organization + Tenant → OrgConfig
+- 11 layers total (3 shared + 8 org)
 
 **v11.2 Changes:**
 - Trait `derived` split into `generated` (LLM output) and `aggregated` (computed metrics)
@@ -88,7 +94,7 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 - Realms renamed: `global` → `shared`, `tenant` → `org`
 
 **v11.1 Changes:**
-- `EntityCategory` added (shared/config layer, invariant trait, categorical grouping)
+- `EntityCategory` added (shared/knowledge layer, invariant trait, categorical grouping)
 - `BELONGS_TO` arc added (Entity → EntityCategory, ownership family)
 
 **v10.9 Changes:**
@@ -137,7 +143,7 @@ Properties use `snake_case` in YAML and TypeScript:
 node:
   name: LocaleVoice
   realm: shared             # v11.2: renamed from global
-  layer: locale-knowledge   # 2 realms (shared, org)
+  layer: knowledge          # v11.3: 11 layers (3 shared + 8 org)
   trait: knowledge
   display_name: "Locale Voice"
   llm_context: "..."
@@ -187,6 +193,9 @@ These terms are deprecated and should NOT be used:
 | `EvaluationSignal` | (removed) | v11.2 job nodes removed |
 | `GEOSeedL10n` | `GEOQuery` | v10.7 new GEO schema |
 | `GEOSeedMetrics` | `GEOMetrics` | v10.7 new GEO schema |
+| `locale-knowledge` | `locale` / `geography` / `knowledge` | v11.3 layer split |
+| `Organization` | `OrgConfig` | v11.3 node merge |
+| `Tenant` | `OrgConfig` | v11.3 node merge |
 
 ## Navigation Modes
 
@@ -207,7 +216,7 @@ These terms are deprecated and should NOT be used:
 | Arc stroke | ArcFamily | `taxonomy.yaml` arc_families[].color |
 | Arc dash | ArcScope | solid (intra) / dashed (cross) |
 
-## Icons (v11.2)
+## Icons (v11.3)
 
 Source of truth: `packages/core/models/visual-encoding.yaml` → `icons:` section
 
@@ -218,7 +227,7 @@ Each icon has dual format:
 | Category | Purpose | Examples |
 |----------|---------|----------|
 | `realms` | Node ownership | ◉ shared, ◎ org |
-| `layers` | Functional layer | ⚙ config, ◆ semantic, ● output |
+| `layers` | Functional layer | 🌍 locale, 🗺️ geography, 🧠 knowledge, ⚙ config, ◆ semantic, 🤖 geo, ● output |
 | `traits` | Locale behavior | ■ invariant, □ localized, ◊ knowledge, ✦ generated, ⋆ aggregated |
 | `arc_families` | Arc type | → ownership, ⇢ localization |
 | `states` | UI empty states | ◐ loading, ∅ no_kinds, ⚠ error |
