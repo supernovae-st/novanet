@@ -531,6 +531,7 @@ fn truncate_str(s: &str, max_width: usize) -> String {
 
 /// Safely truncate a UTF-8 string from the START, keeping last N columns.
 /// Prepends "…" if truncated. Used for breadcrumbs where the end is most relevant.
+#[allow(dead_code)] // Used by tests
 fn truncate_start(s: &str, max_width: usize) -> String {
     truncate_start_to_width(s, max_width)
 }
