@@ -12,15 +12,15 @@
  */
 
 import { memo } from 'react';
+import dynamic from 'next/dynamic';
 import { Hash, MapPin, Layers, Sparkles } from 'lucide-react';
 import { KIND_META } from '@novanet/core/types';
 import type { Layer, Realm, Trait } from '@novanet/core/types';
 import { cn } from '@/lib/utils';
 import { useCopyFeedback } from '@/hooks';
 import { CopyButton } from '@/components/dx/CopyButton';
-import { NodePreview3D } from '@/components/graph/NodePreview3D';
-import { gapTokens } from '@/design/tokens';
 import {
+  gapTokens,
   REALM_DISPLAY_NAMES,
   LAYER_DISPLAY_NAMES,
   TRAIT_DISPLAY_NAMES,
@@ -33,6 +33,19 @@ import {
 } from '@/design/tokens';
 import type { GraphNode } from '@/types';
 import type { NodeTypeConfig } from '@/config/nodeTypes';
+
+// Dynamic import for React Three Fiber component (SSR disabled)
+const NodePreview3DSimple = dynamic(
+  () => import('./NodePreview3DSimple').then((mod) => mod.NodePreview3DSimple),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="w-[100px] h-[100px] rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
+        <div className="w-6 h-6 border-2 border-white/20 border-t-white/60 rounded-full animate-spin" />
+      </div>
+    ),
+  }
+);
 
 interface OverviewTabProps {
   node: GraphNode;
@@ -168,12 +181,11 @@ export const OverviewTab = memo(function OverviewTab({
 
           {/* Right side: 3D Preview (rotating) */}
           <div className="flex-shrink-0">
-            <NodePreview3D
+            <NodePreview3DSimple
               layer={layer as Layer}
               realm={realm as Realm}
               trait={trait as Trait}
               size={100}
-              autoRotate
             />
           </div>
         </div>
