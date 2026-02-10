@@ -30,6 +30,8 @@ import {
   createGeometryForLayer,
   getArcParticleConfig,
   createStarfield,
+  createBloomComposer,
+  updateComposerSize,
   type ForceGraphNode,
   type ForceGraphLink,
 } from '@/lib/graph3d';
@@ -177,6 +179,7 @@ export const Graph3D = memo(function Graph3D({
 }: Graph3DProps) {
   const fgRef = useRef<ForceGraphMethods | null>(null);
   const starfieldRef = useRef<THREE.Points | null>(null);
+  const composerRef = useRef<ReturnType<typeof createBloomComposer> | null>(null);
   const [legendCollapsed, setLegendCollapsed] = useState(false);
   const [isGraphReady, setIsGraphReady] = useState(false);
 
@@ -214,6 +217,38 @@ export const Graph3D = memo(function Graph3D({
         scene.remove(starfieldRef.current);
         starfieldRef.current = null;
       }
+    };
+  }, [isGraphReady]);
+
+  // Initialize post-processing bloom
+  useEffect(() => {
+    if (!isGraphReady || !fgRef.current) return;
+
+    const renderer = (fgRef.current as any).renderer?.();
+    const scene = fgRef.current.scene?.();
+    const camera = fgRef.current.camera?.();
+
+    if (!renderer || !scene || !camera) return;
+
+    // Create bloom composer
+    const composer = createBloomComposer(renderer, scene, camera, {
+      strength: 1.2,
+      radius: 0.5,
+      threshold: 0.7,
+    });
+    composerRef.current = composer;
+
+    // Handle resize
+    const handleResize = () => {
+      if (composerRef.current) {
+        updateComposerSize(composerRef.current, window.innerWidth, window.innerHeight);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      composerRef.current = null;
     };
   }, [isGraphReady]);
 
