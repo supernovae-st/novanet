@@ -9,6 +9,36 @@ import * as THREE from 'three';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
+import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
+
+// Vignette shader for cinematic edges
+const VignetteShader = {
+  uniforms: {
+    tDiffuse: { value: null },
+    offset: { value: 0.5 },
+    darkness: { value: 0.5 },
+  },
+  vertexShader: `
+    varying vec2 vUv;
+    void main() {
+      vUv = uv;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+  `,
+  fragmentShader: `
+    uniform sampler2D tDiffuse;
+    uniform float offset;
+    uniform float darkness;
+    varying vec2 vUv;
+    void main() {
+      vec4 texel = texture2D(tDiffuse, vUv);
+      vec2 uv = (vUv - vec2(0.5)) * vec2(offset);
+      float vignette = 1.0 - dot(uv, uv);
+      texel.rgb *= mix(1.0 - darkness, 1.0, vignette);
+      gl_FragColor = texel;
+    }
+  `,
+};
 
 // Bloom configuration
 export interface BloomConfig {
@@ -67,6 +97,40 @@ export function updateComposerSize(
   height: number
 ): void {
   composer.setSize(width, height);
+}
+
+/**
+ * Create post-processing composer with bloom + vignette
+ */
+export function createEnhancedComposer(
+  renderer: THREE.WebGLRenderer,
+  scene: THREE.Scene,
+  camera: THREE.Camera,
+  bloomConfig: BloomConfig = DEFAULT_BLOOM_CONFIG,
+  vignetteConfig: { offset: number; darkness: number } = { offset: 0.5, darkness: 0.4 }
+): EffectComposer {
+  const composer = new EffectComposer(renderer);
+
+  // Render pass
+  const renderPass = new RenderPass(scene, camera);
+  composer.addPass(renderPass);
+
+  // Bloom pass
+  const bloomPass = new UnrealBloomPass(
+    new THREE.Vector2(window.innerWidth, window.innerHeight),
+    bloomConfig.strength,
+    bloomConfig.radius,
+    bloomConfig.threshold
+  );
+  composer.addPass(bloomPass);
+
+  // Vignette pass
+  const vignettePass = new ShaderPass(VignetteShader);
+  vignettePass.uniforms['offset'].value = vignetteConfig.offset;
+  vignettePass.uniforms['darkness'].value = vignetteConfig.darkness;
+  composer.addPass(vignettePass);
+
+  return composer;
 }
 
 /**

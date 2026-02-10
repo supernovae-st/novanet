@@ -31,22 +31,25 @@ describe('calculateLODTier', () => {
   });
 
   it('should return appropriate tier based on distance at zoom 1', () => {
-    // Close - high
+    // New thresholds: full=800, reduced=1500, minimal=3000
+    // Close - high (< 800)
     expect(calculateLODTier(100, 1, false, false, false)).toBe('high');
-    // Medium distance - medium
-    expect(calculateLODTier(300, 1, false, false, false)).toBe('medium');
-    // Far - low
-    expect(calculateLODTier(700, 1, false, false, false)).toBe('low');
-    // Very far - minimal
-    expect(calculateLODTier(1500, 1, false, false, false)).toBe('minimal');
+    expect(calculateLODTier(700, 1, false, false, false)).toBe('high');
+    // Medium distance - medium (800 <= d < 1500)
+    expect(calculateLODTier(1000, 1, false, false, false)).toBe('medium');
+    // Far - low (1500 <= d < 3000)
+    expect(calculateLODTier(2000, 1, false, false, false)).toBe('low');
+    // Very far - minimal (>= 3000)
+    expect(calculateLODTier(4000, 1, false, false, false)).toBe('minimal');
   });
 
   it('should adjust effective distance based on zoom', () => {
     // At zoom 2, distance 200 becomes effective distance 100 -> high
     expect(calculateLODTier(200, 2, false, false, false)).toBe('high');
-    // At zoom 0.5, distance 100 becomes effective distance 200 -> still high (at boundary)
-    // At zoom 0.25, distance 100 becomes effective distance 400 -> medium
-    expect(calculateLODTier(100, 0.25, false, false, false)).toBe('medium');
+    // At zoom 0.25, distance 100 becomes effective distance 400 -> still high (< 800 threshold)
+    expect(calculateLODTier(100, 0.25, false, false, false)).toBe('high');
+    // At zoom 0.1, distance 100 becomes effective distance 1000 -> medium (800 < 1000 < 1500)
+    expect(calculateLODTier(100, 0.1, false, false, false)).toBe('medium');
   });
 });
 
@@ -58,33 +61,34 @@ describe('filterEffectsForLOD', () => {
     expect(filtered).toEqual(allEffects);
   });
 
-  it('should return core effects (particles, glow) for medium tier', () => {
+  it('should return all effects for medium tier (updated config)', () => {
     const filtered = filterEffectsForLOD(allEffects, 'medium');
+    // Medium now shows ALL effects for better visual continuity
+    expect(filtered).toEqual(allEffects);
+  });
+
+  it('should return core effects (particles, glow) for low tier', () => {
+    const filtered = filterEffectsForLOD(allEffects, 'low');
     expect(filtered).toContain('particles');
     expect(filtered).toContain('glow');
     expect(filtered).not.toContain('emit');
     expect(filtered).not.toContain('trail');
   });
 
-  it('should return only glow for low tier', () => {
-    const filtered = filterEffectsForLOD(allEffects, 'low');
-    expect(filtered).toEqual(['glow']);
-  });
-
-  it('should return empty array for minimal tier', () => {
+  it('should return only glow for minimal tier', () => {
     const filtered = filterEffectsForLOD(allEffects, 'minimal');
-    expect(filtered).toEqual([]);
+    expect(filtered).toEqual(['glow']);
   });
 });
 
 describe('getLODConfig', () => {
   it('should return config for each tier', () => {
     expect(getLODConfig('high').enableGlow).toBe(true);
-    expect(getLODConfig('high').maxParticles).toBe(6);
+    expect(getLODConfig('high').maxParticles).toBe(8);
 
-    expect(getLODConfig('medium').maxParticles).toBe(3);
-    expect(getLODConfig('low').maxParticles).toBe(1);
-    expect(getLODConfig('minimal').maxParticles).toBe(0);
+    expect(getLODConfig('medium').maxParticles).toBe(4);
+    expect(getLODConfig('low').maxParticles).toBe(2);
+    expect(getLODConfig('minimal').maxParticles).toBe(1);
   });
 });
 

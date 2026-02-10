@@ -1,5 +1,7 @@
 'use client';
 
+/* eslint-disable @typescript-eslint/no-explicit-any -- ReactFlow/dagre library interop requires any casts */
+
 /**
  * Graph2D Component - Beautiful Knowledge Graph Visualization
  *

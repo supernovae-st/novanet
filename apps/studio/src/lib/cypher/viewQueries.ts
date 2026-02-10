@@ -30,7 +30,7 @@ export interface ViewQuery {
  * Get Cypher query for a specific view
  */
 export function getViewQuery(viewId: ViewId, params: ViewQueryParams): ViewQuery {
-  const { nodeId, nodeKey, nodeType, limit = 50 } = params;
+  const { nodeKey, limit = 50 } = params;
 
   switch (viewId) {
     // -------------------------------------------------------------------------
