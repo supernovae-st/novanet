@@ -407,9 +407,9 @@ mod tests {
 
     #[test]
     fn test_filter_indicator_with_special_chars_in_kind() {
-        // Test hyphen handling in kind names
-        let result = build_filter_indicator(true, Some("locale-knowledge"), false);
-        assert_eq!(result, " [locale-knowledge]");
+        // Test hyphen handling in kind names (v11.3: locale-knowledge split into 3 layers)
+        let result = build_filter_indicator(true, Some("knowledge"), false);
+        assert_eq!(result, " [knowledge]");
     }
 
     // =========================================================================

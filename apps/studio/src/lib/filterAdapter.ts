@@ -525,12 +525,12 @@ export const VIEW_PRESETS: ViewPreset[] = [
   },
   {
     id: 'locale-knowledge',
-    name: 'Locale Knowledge',
-    description: 'Locale with all knowledge nodes',
+    name: 'Locale & Knowledge',
+    description: 'Locale, geography, and knowledge nodes',
     icon: '🌍',
     shortcut: '3',
     filter: () => NovaNetFilter.create()
-      .byLayer('config', 'locale-knowledge'),
+      .byLayer('locale', 'geography', 'knowledge'),
   },
   {
     id: 'entity-network',

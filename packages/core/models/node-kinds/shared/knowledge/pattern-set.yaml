@@ -1,0 +1,67 @@
+# packages/core/models/node-kinds/global/knowledge/pattern-set.yaml
+# PatternSet — Container grouping Pattern atoms by usage
+#
+# v10.1: Pure container (no JSON blobs - data lives in Pattern atoms)
+# Usages: cta, headlines, body, social
+# Stability: High - structure rarely changes
+
+node:
+  name: PatternSet
+  realm: shared
+  layer: knowledge
+  trait: invariant  # v11.2: Containers are universal categories (invariant), atoms are locale-native (knowledge)
+  icon: "📋"
+  description: "Container grouping Pattern atoms by usage"
+
+  standard_properties:
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable name"
+      example: "French (France) CTA Patterns"
+
+    description:
+      type: string
+      required: true
+      description: "Short description"
+      example: "Call-to-action patterns for fr-FR"
+
+    llm_context:
+      type: string
+      required: true
+      description: "LLM generation hints"
+      example: "USE: to find patterns by usage. TRIGGERS: CTA, headline. NOT: individual templates."
+
+    created_at:
+      type: datetime
+      required: true
+      description: "Creation timestamp"
+
+    updated_at:
+      type: datetime
+      required: true
+      description: "Last update timestamp"
+
+  properties:
+    # Usage identification (only property - data is in atoms)
+    usage:
+      type: string
+      required: true
+      enum: [cta, headlines, body, social]
+      description: "Pattern usage category this set groups"
+      example: "cta"
+
+  relations:
+    outgoing:
+      - type: CONTAINS
+        to: Pattern
+        cardinality: "1:N"
+        description: "PatternSet contains multiple Pattern atoms"
+
+    incoming:
+      - type: HAS_PATTERNS
+        from: Locale
+        cardinality: "1:N"
+        description: "Locale has multiple pattern sets (one per usage)"
+        properties:
+          usage: string

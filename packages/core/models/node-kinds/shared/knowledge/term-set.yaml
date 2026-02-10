@@ -1,0 +1,67 @@
+# packages/core/models/node-kinds/global/knowledge/term-set.yaml
+# TermSet — Container grouping Term atoms by domain
+#
+# v10.1: Pure container (no JSON blobs - data lives in Term atoms)
+# Domains: pricing, features, technical, marketing, support, general
+# Stability: High - structure rarely changes
+
+node:
+  name: TermSet
+  realm: shared
+  layer: knowledge
+  trait: invariant  # v11.2: Containers are universal categories (invariant), atoms are locale-native (knowledge)
+  icon: "📖"
+  description: "Container grouping Term atoms by domain"
+
+  standard_properties:
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable name"
+      example: "French (France) Pricing Terms"
+
+    description:
+      type: string
+      required: true
+      description: "Short description"
+      example: "Pricing-specific vocabulary for fr-FR"
+
+    llm_context:
+      type: string
+      required: true
+      description: "LLM generation hints"
+      example: "USE: to find terms by domain. TRIGGERS: domain vocabulary. NOT: individual terms."
+
+    created_at:
+      type: datetime
+      required: true
+      description: "Creation timestamp"
+
+    updated_at:
+      type: datetime
+      required: true
+      description: "Last update timestamp"
+
+  properties:
+    # Domain identification (only property - data is in atoms)
+    domain:
+      type: string
+      required: true
+      enum: [pricing, features, technical, marketing, support, general]
+      description: "Vocabulary domain this set groups"
+      example: "pricing"
+
+  relations:
+    outgoing:
+      - type: CONTAINS
+        to: Term
+        cardinality: "1:N"
+        description: "TermSet contains multiple Term atoms"
+
+    incoming:
+      - type: HAS_TERMS
+        from: Locale
+        cardinality: "1:N"
+        description: "Locale has multiple term sets (one per domain)"
+        properties:
+          domain: string

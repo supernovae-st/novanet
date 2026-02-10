@@ -184,8 +184,8 @@ mod tests {
 
         assert!(data.node_kind_count() > 0, "Should have node kinds");
         assert!(data.arc_count() > 0, "Should have arc definitions");
-        assert!(data.realm_count() == 2, "Should have 2 realms (global, tenant)");
-        assert!(data.layer_count() == 9, "Should have 9 layers");
+        assert!(data.realm_count() == 2, "Should have 2 realms (shared, org)");
+        assert!(data.layer_count() == 11, "Should have 11 layers (v11.3: 3 shared + 8 org)");
     }
 
     #[test]

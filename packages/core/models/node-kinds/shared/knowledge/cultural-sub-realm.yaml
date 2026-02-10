@@ -1,0 +1,141 @@
+# packages/core/models/node-kinds/global/locale-knowledge/cultural-sub-realm.yaml
+# CulturalSubRealm - Cultural sub-realm within a major realm
+#
+# v10.8: Geographic Taxonomy - Phase 3
+# Data: ~20 sub-realms (West European, Mediterranean, Anglo-American, etc.)
+# Source: Broek & Webb cultural geography, regional studies
+
+node:
+  name: CulturalSubRealm
+  realm: shared
+  layer: knowledge
+  trait: knowledge
+  icon: "🎨"
+  description: "Cultural sub-realm for fine-grained cultural adaptation"
+
+  standard_properties:
+    key:
+      type: string
+      required: true
+      description: "Kebab-case sub-realm key"
+      pattern: "^[a-z-]+$"
+      examples:
+        - "west-european"
+        - "mediterranean"
+        - "anglo-american"
+        - "islamic-arab"
+        - "east-asian-sinosphere"
+
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable sub-realm name"
+      example: "Mediterranean"
+
+    description:
+      type: string
+      required: true
+      description: "Short description"
+      example: "Mediterranean European culture: France, Italy, Spain, Portugal, Greece"
+
+    llm_context:
+      type: string
+      required: true
+      description: "LLM generation hints for content adaptation"
+      example: "USE: for France, Italy, Spain, Portugal, Greece. TRIGGERS: mediterranean, latin, southern european. STYLE: warm, expressive, relationship-focused."
+
+    created_at:
+      type: datetime
+      required: true
+
+    updated_at:
+      type: datetime
+      required: true
+
+  properties:
+    parent_realm:
+      type: string
+      required: true
+      description: "Parent CulturalRealm key"
+      example: "occidental"
+
+    cultural_traits:
+      type: json
+      required: false
+      description: "Distinguishing cultural traits"
+      example:
+        - "relationship-oriented"
+        - "expressive communication"
+        - "flexible time perception"
+        - "family-centered"
+
+    communication_nuances:
+      type: json
+      required: false
+      description: "Communication style nuances for content generation"
+      example:
+        formality: "moderate to high in business"
+        warmth: "high"
+        directness: "moderate - context matters"
+        humor: "acceptable, often self-deprecating"
+
+    taboo_topics:
+      type: json
+      required: false
+      description: "Topics to avoid or handle carefully"
+      example:
+        - "direct criticism"
+        - "religious comparisons"
+        - "historical conflicts"
+
+  relations:
+    outgoing:
+      - type: PART_OF_REALM
+        to: CulturalRealm
+        cardinality: "N:1"
+        description: "Sub-realm belongs to cultural realm"
+
+    incoming:
+      - type: IN_CULTURAL_SUBREALM
+        from: Locale
+        cardinality: "N:1"
+        description: "Locales within this cultural sub-realm"
+
+  example:
+    data:
+      key: "mediterranean"
+      display_name: "Mediterranean"
+      description: "Mediterranean European culture: France, Italy, Spain, Portugal, Greece"
+      parent_realm: "occidental"
+      cultural_traits:
+        - "relationship-oriented"
+        - "expressive communication"
+        - "flexible time perception"
+        - "family-centered"
+        - "appreciation for aesthetics"
+      communication_nuances:
+        formality: "moderate to high in business"
+        warmth: "high"
+        directness: "moderate - context matters"
+        humor: "acceptable, often self-deprecating or situational"
+      taboo_topics:
+        - "direct public criticism"
+        - "questioning family loyalty"
+        - "historical colonial past"
+      llm_context: "USE: for FR, IT, ES, PT, GR. TRIGGERS: mediterranean, latin, southern european. STYLE: warm, relationship-focused, appreciate beauty and quality. AVOID: cold/transactional tone."
+
+    cypher: |
+      // Get all locales in a sub-realm
+      MATCH (csr:CulturalSubRealm {key: $key})<-[:IN_CULTURAL_SUBREALM]-(l:Locale)
+      RETURN l.key, l.display_name
+      ORDER BY l.key
+
+      // Get sub-realm with its parent realm
+      MATCH (csr:CulturalSubRealm {key: $key})-[:PART_OF_REALM]->(cr:CulturalRealm)
+      RETURN csr.key, csr.name, cr.key AS realm, cr.name AS realm_name
+
+      // Find culturally similar locales
+      MATCH (l:Locale {key: 'fr-FR'})-[:IN_CULTURAL_SUBREALM]->(csr:CulturalSubRealm)
+      MATCH (csr)<-[:IN_CULTURAL_SUBREALM]-(similar:Locale)
+      WHERE similar.key <> 'fr-FR'
+      RETURN similar.key, similar.display_name, csr.name AS shared_culture

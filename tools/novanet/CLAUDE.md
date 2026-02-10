@@ -7,11 +7,11 @@ This file provides guidance to Claude Code when working in the `tools/novanet/` 
 `novanet` is a unified Rust CLI + TUI binary for managing the NovaNet context graph.
 It replaces the TypeScript `@novanet/schema-tools` and `@novanet/cli` packages.
 
-**Version**: v11.2.0 (Realm renames + trait split + job removal)
+**Version**: v11.3.0 (Layer reorganization + geo layer + OrgConfig merge)
 
 ## Current Status
 
-**v11.2.0 Classification Refinement** — Realm renames (`global` → `shared`, `tenant` → `org`), trait split (`derived` → `generated` + `aggregated`), job removal (3 nodes deleted: GenerationJob, SEOMiningRun, EvaluationSignal). Architecture: SHARED (2 layers: config, locale-knowledge, 32 nodes), ORG (7 layers, 30 nodes). 62 total nodes. Galaxy-themed mission control TUI with EntityCategory filtering, search, detail, arc explorer, CRUD dialogs, dashboard stats, ASCII logo, breadcrumb navigation, command palette, help overlay, boot animation, effects engine, and onboarding.
+**v11.3.0 Layer Reorganization** — Split `locale-knowledge` → `locale`, `geography`, `knowledge` (3 shared layers), added `geo` layer to org realm, merged Organization + Tenant → OrgConfig. Architecture: SHARED (3 layers: locale, geography, knowledge, 32 nodes), ORG (8 layers: config, foundation, structure, semantic, instruction, seo, geo, output, 29 nodes). 61 total nodes, 11 layers. Galaxy-themed mission control TUI with EntityCategory filtering, search, detail, arc explorer, CRUD dialogs, dashboard stats, ASCII logo, breadcrumb navigation, command palette, help overlay, boot animation, effects engine, and onboarding.
 
 | Area | Commands | Status |
 |------|----------|--------|
@@ -220,8 +220,8 @@ src/
 - **YAML-first architecture**: Each Kind YAML has explicit `realm:` and `layer:` fields (source of truth)
   - Path validation: file must be at `models/node-kinds/{realm}/{layer}/{name}.yaml`
   - Generators read realm/layer from YAML content, validate against path
-  - v11.2: 2 realms (shared, org), 9 layers (2 shared + 7 org), 62 node types
-- **Icons source of truth (v11.2)**: `visual-encoding.yaml` → `icons:` section
+  - v11.3: 2 realms (shared, org), 11 layers (3 shared + 8 org), 61 node types
+- **Icons source of truth (v11.3)**: `visual-encoding.yaml` → `icons:` section
   - Dual format: `web` (Lucide for Studio) + `terminal` (Unicode for TUI)
   - Categories: realms, layers, traits, arc_families, states, navigation, quality, modes
   - TypeScript generated: `packages/core/src/graph/visual-encoding.ts` (ICONS export)

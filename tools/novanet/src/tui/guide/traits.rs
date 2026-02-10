@@ -185,7 +185,7 @@ RETURN g.html_content"#,
                 yaml: r#"node:
   name: Term
   realm: shared
-  layer: locale-knowledge
+  layer: knowledge
   trait: knowledge
   # Native to locale, not translated"#,
                 neo4j: r#"(:Term {
@@ -204,7 +204,7 @@ RETURN t.term, t.definition"#,
                 yaml: r#"node:
   name: Expression
   realm: shared
-  layer: locale-knowledge
+  layer: knowledge
   trait: knowledge"#,
                 neo4j: r#"(:Expression {
   key: "expr:greeting-formal@de-DE",

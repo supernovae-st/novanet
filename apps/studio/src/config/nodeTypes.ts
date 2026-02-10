@@ -1,19 +1,20 @@
 // =============================================================================
-// NODE TYPE CONFIGURATION (v11.1.0)
+// NODE TYPE CONFIGURATION (v11.3.0)
 // =============================================================================
-// Visual configuration for all 65 NovaNet node types (v11.1: 8 layers, 2 realms: global, tenant, +EntityCategory)
+// Visual configuration for all 61 NovaNet node types
+// v11.3: 11 layers (3 shared + 8 org), 2 realms, OrgConfig consolidation
 // NodeType, Layer, KIND_META imported from @novanet/core (Single Source of Truth)
 
 import type { NodeType, Layer } from '@novanet/core/types';
 import { NODE_TYPES, KIND_META } from '@novanet/core/types';
 
 // =============================================================================
-// NODE LAYERS (v10.9 - 8 layers, 63 nodes)
+// NODE LAYERS (v11.3 - 11 layers, 61 nodes)
 // Derived from KIND_META — single source of truth
 // =============================================================================
 
 /**
- * Node layers with their types (v10.9 - 63 nodes across 8 layers)
+ * Node layers with their types (v11.3 - 61 nodes across 11 layers)
  * Derived from KIND_META in @novanet/core
  */
 export const NODE_LAYERS: Record<Layer, NodeType[]> = Object.entries(KIND_META).reduce(
@@ -44,12 +45,325 @@ export interface NodeTypeConfig {
 }
 
 /**
- * All node type configurations (v10.9 - 63 nodes)
+ * All node type configurations (v11.3 - 61 nodes)
  * Aligned with @novanet/core NODE_TYPES
  */
 export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   // ==========================================================================
-  // FOUNDATION LAYER (3 nodes)
+  // SHARED REALM — LOCALE LAYER (7 nodes)
+  // ==========================================================================
+  Locale: {
+    type: 'Locale',
+    label: 'Locale',
+    icon: '🌍',
+    color: '#10b981',
+    colorClass: 'bg-emerald-500',
+    size: 20,
+    layer: 'locale',
+  },
+  Formatting: {
+    type: 'Formatting',
+    label: 'Formatting',
+    icon: '📝',
+    color: '#06b6d4',
+    colorClass: 'bg-cyan-500',
+    size: 12,
+    layer: 'locale',
+  },
+  Slugification: {
+    type: 'Slugification',
+    label: 'Slugification',
+    icon: '🔗',
+    color: '#0891b2',
+    colorClass: 'bg-cyan-600',
+    size: 12,
+    layer: 'locale',
+  },
+  Adaptation: {
+    type: 'Adaptation',
+    label: 'Adaptation',
+    icon: '🔄',
+    color: '#0e7490',
+    colorClass: 'bg-cyan-700',
+    size: 12,
+    layer: 'locale',
+  },
+  Style: {
+    type: 'Style',
+    label: 'Style',
+    icon: '🎭',
+    color: '#8b5cf6',
+    colorClass: 'bg-violet-500',
+    size: 14,
+    layer: 'locale',
+  },
+  Culture: {
+    type: 'Culture',
+    label: 'Culture',
+    icon: '🏺',
+    color: '#d97706',
+    colorClass: 'bg-amber-600',
+    size: 16,
+    layer: 'locale',
+  },
+  Market: {
+    type: 'Market',
+    label: 'Market',
+    icon: '📊',
+    color: '#059669',
+    colorClass: 'bg-emerald-600',
+    size: 16,
+    layer: 'locale',
+  },
+
+  // ==========================================================================
+  // SHARED REALM — GEOGRAPHY LAYER (6 nodes)
+  // ==========================================================================
+  Continent: {
+    type: 'Continent',
+    label: 'Continent',
+    icon: '🗺️',
+    color: '#2563eb',
+    colorClass: 'bg-blue-600',
+    size: 18,
+    layer: 'geography',
+  },
+  GeoRegion: {
+    type: 'GeoRegion',
+    label: 'Geo Region',
+    icon: '🌐',
+    color: '#3b82f6',
+    colorClass: 'bg-blue-500',
+    size: 16,
+    layer: 'geography',
+  },
+  GeoSubRegion: {
+    type: 'GeoSubRegion',
+    label: 'Geo Sub-Region',
+    icon: '🗾',
+    color: '#60a5fa',
+    colorClass: 'bg-blue-400',
+    size: 14,
+    layer: 'geography',
+  },
+  IncomeGroup: {
+    type: 'IncomeGroup',
+    label: 'Income Group',
+    icon: '💰',
+    color: '#16a34a',
+    colorClass: 'bg-green-600',
+    size: 14,
+    layer: 'geography',
+  },
+  LendingCategory: {
+    type: 'LendingCategory',
+    label: 'Lending Category',
+    icon: '🏦',
+    color: '#0891b2',
+    colorClass: 'bg-cyan-600',
+    size: 14,
+    layer: 'geography',
+  },
+  EconomicRegion: {
+    type: 'EconomicRegion',
+    label: 'Economic Region',
+    icon: '💹',
+    color: '#059669',
+    colorClass: 'bg-emerald-600',
+    size: 14,
+    layer: 'geography',
+  },
+
+  // ==========================================================================
+  // SHARED REALM — KNOWLEDGE LAYER (19 nodes)
+  // ==========================================================================
+  EntityCategory: {
+    type: 'EntityCategory',
+    label: 'Entity Category',
+    icon: '🏷️',
+    color: '#0d9488',
+    colorClass: 'bg-teal-600',
+    size: 16,
+    layer: 'knowledge',
+  },
+  TermSet: {
+    type: 'TermSet',
+    label: 'Term Set',
+    icon: '📚',
+    color: '#22c55e',
+    colorClass: 'bg-green-500',
+    size: 10,
+    layer: 'knowledge',
+  },
+  ExpressionSet: {
+    type: 'ExpressionSet',
+    label: 'Expression Set',
+    icon: '💭',
+    color: '#ec4899',
+    colorClass: 'bg-pink-500',
+    size: 10,
+    layer: 'knowledge',
+  },
+  PatternSet: {
+    type: 'PatternSet',
+    label: 'Pattern Set',
+    icon: '🔣',
+    color: '#f472b6',
+    colorClass: 'bg-pink-400',
+    size: 10,
+    layer: 'knowledge',
+  },
+  CultureSet: {
+    type: 'CultureSet',
+    label: 'Culture Set',
+    icon: '🏛️',
+    color: '#86efac',
+    colorClass: 'bg-green-300',
+    size: 10,
+    layer: 'knowledge',
+  },
+  TabooSet: {
+    type: 'TabooSet',
+    label: 'Taboo Set',
+    icon: '⛔',
+    color: '#ef4444',
+    colorClass: 'bg-red-500',
+    size: 10,
+    layer: 'knowledge',
+  },
+  AudienceSet: {
+    type: 'AudienceSet',
+    label: 'Audience Set',
+    icon: '👥',
+    color: '#f59e0b',
+    colorClass: 'bg-amber-500',
+    size: 10,
+    layer: 'knowledge',
+  },
+  Term: {
+    type: 'Term',
+    label: 'Term',
+    icon: '📖',
+    color: '#22c55e',
+    colorClass: 'bg-green-500',
+    size: 8,
+    layer: 'knowledge',
+  },
+  Expression: {
+    type: 'Expression',
+    label: 'Expression',
+    icon: '💬',
+    color: '#ec4899',
+    colorClass: 'bg-pink-500',
+    size: 8,
+    layer: 'knowledge',
+  },
+  Pattern: {
+    type: 'Pattern',
+    label: 'Pattern',
+    icon: '🔣',
+    color: '#f472b6',
+    colorClass: 'bg-pink-400',
+    size: 8,
+    layer: 'knowledge',
+  },
+  CultureRef: {
+    type: 'CultureRef',
+    label: 'Culture Ref',
+    icon: '🌍',
+    color: '#86efac',
+    colorClass: 'bg-green-300',
+    size: 8,
+    layer: 'knowledge',
+  },
+  Taboo: {
+    type: 'Taboo',
+    label: 'Taboo',
+    icon: '🚫',
+    color: '#ef4444',
+    colorClass: 'bg-red-500',
+    size: 8,
+    layer: 'knowledge',
+  },
+  AudienceTrait: {
+    type: 'AudienceTrait',
+    label: 'Audience Trait',
+    icon: '👤',
+    color: '#f59e0b',
+    colorClass: 'bg-amber-500',
+    size: 8,
+    layer: 'knowledge',
+  },
+  LanguageFamily: {
+    type: 'LanguageFamily',
+    label: 'Language Family',
+    icon: '🗣️',
+    color: '#7c3aed',
+    colorClass: 'bg-violet-600',
+    size: 14,
+    layer: 'knowledge',
+  },
+  LanguageBranch: {
+    type: 'LanguageBranch',
+    label: 'Language Branch',
+    icon: '🌿',
+    color: '#8b5cf6',
+    colorClass: 'bg-violet-500',
+    size: 12,
+    layer: 'knowledge',
+  },
+  CulturalRealm: {
+    type: 'CulturalRealm',
+    label: 'Cultural Realm',
+    icon: '🎪',
+    color: '#db2777',
+    colorClass: 'bg-pink-600',
+    size: 14,
+    layer: 'knowledge',
+  },
+  CulturalSubRealm: {
+    type: 'CulturalSubRealm',
+    label: 'Cultural Sub-Realm',
+    icon: '🎭',
+    color: '#ec4899',
+    colorClass: 'bg-pink-500',
+    size: 12,
+    layer: 'knowledge',
+  },
+  PopulationCluster: {
+    type: 'PopulationCluster',
+    label: 'Population Cluster',
+    icon: '👨‍👩‍👧‍👦',
+    color: '#0284c7',
+    colorClass: 'bg-sky-600',
+    size: 14,
+    layer: 'knowledge',
+  },
+  PopulationSubCluster: {
+    type: 'PopulationSubCluster',
+    label: 'Population Sub-Cluster',
+    icon: '👥',
+    color: '#0ea5e9',
+    colorClass: 'bg-sky-500',
+    size: 12,
+    layer: 'knowledge',
+  },
+
+  // ==========================================================================
+  // ORG REALM — CONFIG LAYER (1 node) — v11.3: Organization + Tenant merged
+  // ==========================================================================
+  OrgConfig: {
+    type: 'OrgConfig',
+    label: 'Org Config',
+    icon: '🏢',
+    color: '#0ea5e9',
+    colorClass: 'bg-sky-500',
+    size: 22,
+    layer: 'config',
+  },
+
+  // ==========================================================================
+  // ORG REALM — FOUNDATION LAYER (3 nodes)
   // ==========================================================================
   Project: {
     type: 'Project',
@@ -80,8 +394,38 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   },
 
   // ==========================================================================
-  // SEMANTIC LAYER (4 nodes) - v10.3 Entity-Centric
-  // Global realm: Entity, EntityL10n; Project realm: AudiencePersona, ChannelSurface
+  // ORG REALM — STRUCTURE LAYER (3 nodes)
+  // ==========================================================================
+  Page: {
+    type: 'Page',
+    label: 'Page',
+    icon: '📄',
+    color: '#3b82f6',
+    colorClass: 'bg-blue-500',
+    size: 20,
+    layer: 'structure',
+  },
+  Block: {
+    type: 'Block',
+    label: 'Block',
+    icon: '🧱',
+    color: '#06b6d4',
+    colorClass: 'bg-cyan-500',
+    size: 16,
+    layer: 'structure',
+  },
+  ContentSlot: {
+    type: 'ContentSlot',
+    label: 'Content Slot',
+    icon: '🔲',
+    color: '#0891b2',
+    colorClass: 'bg-cyan-600',
+    size: 14,
+    layer: 'structure',
+  },
+
+  // ==========================================================================
+  // ORG REALM — SEMANTIC LAYER (4 nodes)
   // ==========================================================================
   Entity: {
     type: 'Entity',
@@ -121,35 +465,8 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   },
 
   // ==========================================================================
-  // STRUCTURE LAYER (5 nodes) - includes PageType, BlockType
+  // ORG REALM — INSTRUCTION LAYER (7 nodes)
   // ==========================================================================
-  Page: {
-    type: 'Page',
-    label: 'Page',
-    icon: '📄',
-    color: '#3b82f6',
-    colorClass: 'bg-blue-500',
-    size: 20,
-    layer: 'structure',
-  },
-  Block: {
-    type: 'Block',
-    label: 'Block',
-    icon: '🧱',
-    color: '#06b6d4',
-    colorClass: 'bg-cyan-500',
-    size: 16,
-    layer: 'structure',
-  },
-  ContentSlot: {
-    type: 'ContentSlot',
-    label: 'Content Slot',
-    icon: '🔲',
-    color: '#0891b2',
-    colorClass: 'bg-cyan-600',
-    size: 14,
-    layer: 'structure',
-  },
   PageType: {
     type: 'PageType',
     label: 'Page Type',
@@ -157,7 +474,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#2563eb',
     colorClass: 'bg-blue-600',
     size: 16,
-    layer: 'structure',
+    layer: 'instruction',
   },
   BlockType: {
     type: 'BlockType',
@@ -166,337 +483,8 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#14b8a6',
     colorClass: 'bg-teal-500',
     size: 16,
-    layer: 'structure',
+    layer: 'instruction',
   },
-
-  // ==========================================================================
-  // INSTRUCTION LAYER (5 nodes — prompts + rules + artifact)
-  // ==========================================================================
-
-  // ==========================================================================
-  // GLOBAL REALM — CONFIG LAYER (14 nodes) - v11.1: added EntityCategory
-  // ==========================================================================
-  Locale: {
-    type: 'Locale',
-    label: 'Locale',
-    icon: '🌍',
-    color: '#10b981',
-    colorClass: 'bg-emerald-500',
-    size: 20,
-    layer: 'config',
-  },
-  Culture: {
-    type: 'Culture',
-    label: 'Culture',
-    icon: '🏺',
-    color: '#d97706',
-    colorClass: 'bg-amber-600',
-    size: 16,
-    layer: 'config',
-  },
-  Market: {
-    type: 'Market',
-    label: 'Market',
-    icon: '📊',
-    color: '#059669',
-    colorClass: 'bg-emerald-600',
-    size: 16,
-    layer: 'config',
-  },
-  Continent: {
-    type: 'Continent',
-    label: 'Continent',
-    icon: '🗺️',
-    color: '#2563eb',
-    colorClass: 'bg-blue-600',
-    size: 18,
-    layer: 'config',
-  },
-  GeoRegion: {
-    type: 'GeoRegion',
-    label: 'Geo Region',
-    icon: '🌐',
-    color: '#3b82f6',
-    colorClass: 'bg-blue-500',
-    size: 16,
-    layer: 'config',
-  },
-  GeoSubRegion: {
-    type: 'GeoSubRegion',
-    label: 'Geo Sub-Region',
-    icon: '🗾',
-    color: '#60a5fa',
-    colorClass: 'bg-blue-400',
-    size: 14,
-    layer: 'config',
-  },
-  IncomeGroup: {
-    type: 'IncomeGroup',
-    label: 'Income Group',
-    icon: '💰',
-    color: '#16a34a',
-    colorClass: 'bg-green-600',
-    size: 14,
-    layer: 'config',
-  },
-  LendingCategory: {
-    type: 'LendingCategory',
-    label: 'Lending Category',
-    icon: '🏦',
-    color: '#0891b2',
-    colorClass: 'bg-cyan-600',
-    size: 14,
-    layer: 'config',
-  },
-  EconomicRegion: {
-    type: 'EconomicRegion',
-    label: 'Economic Region',
-    icon: '💹',
-    color: '#059669',
-    colorClass: 'bg-emerald-600',
-    size: 14,
-    layer: 'config',
-  },
-  EntityCategory: {
-    type: 'EntityCategory',
-    label: 'Entity Category',
-    icon: '🏷️',
-    color: '#0d9488',
-    colorClass: 'bg-teal-600',
-    size: 16,
-    layer: 'config',
-  },
-
-  // ==========================================================================
-  // TENANT REALM — CONFIG LAYER (2 nodes) — v10.6
-  // ==========================================================================
-  Organization: {
-    type: 'Organization',
-    label: 'Organization',
-    icon: '🏢',
-    color: '#0ea5e9',
-    colorClass: 'bg-sky-500',
-    size: 22,
-    layer: 'config',
-  },
-  Tenant: {
-    type: 'Tenant',
-    label: 'Tenant',
-    icon: '🏠',
-    color: '#0284c7',
-    colorClass: 'bg-sky-600',
-    size: 22,
-    layer: 'config',
-  },
-
-  // ==========================================================================
-  // GLOBAL REALM — LOCALE-KNOWLEDGE LAYER (18 nodes — v10.8: added linguistic/cultural taxonomy)
-  // ==========================================================================
-  // Technical tier
-  Formatting: {
-    type: 'Formatting',
-    label: 'Formatting',
-    icon: '📝',
-    color: '#06b6d4',
-    colorClass: 'bg-cyan-500',
-    size: 12,
-    layer: 'locale-knowledge',
-  },
-  Slugification: {
-    type: 'Slugification',
-    label: 'Slugification',
-    icon: '🔗',
-    color: '#0891b2',
-    colorClass: 'bg-cyan-600',
-    size: 12,
-    layer: 'locale-knowledge',
-  },
-  Adaptation: {
-    type: 'Adaptation',
-    label: 'Adaptation',
-    icon: '🔄',
-    color: '#0e7490',
-    colorClass: 'bg-cyan-700',
-    size: 12,
-    layer: 'locale-knowledge',
-  },
-  // Style tier
-  Style: {
-    type: 'Style',
-    label: 'Style',
-    icon: '🎭',
-    color: '#8b5cf6',
-    colorClass: 'bg-violet-500',
-    size: 14,
-    layer: 'locale-knowledge',
-  },
-  // Semantic tier
-  TermSet: {
-    type: 'TermSet',
-    label: 'Term Set',
-    icon: '📚',
-    color: '#22c55e',
-    colorClass: 'bg-green-500',
-    size: 10,
-    layer: 'locale-knowledge',
-  },
-  ExpressionSet: {
-    type: 'ExpressionSet',
-    label: 'Expression Set',
-    icon: '💭',
-    color: '#ec4899',
-    colorClass: 'bg-pink-500',
-    size: 10,
-    layer: 'locale-knowledge',
-  },
-  PatternSet: {
-    type: 'PatternSet',
-    label: 'Pattern Set',
-    icon: '🔣',
-    color: '#f472b6',
-    colorClass: 'bg-pink-400',
-    size: 10,
-    layer: 'locale-knowledge',
-  },
-  CultureSet: {
-    type: 'CultureSet',
-    label: 'Culture Set',
-    icon: '🏛️',
-    color: '#86efac',
-    colorClass: 'bg-green-300',
-    size: 10,
-    layer: 'locale-knowledge',
-  },
-  TabooSet: {
-    type: 'TabooSet',
-    label: 'Taboo Set',
-    icon: '⛔',
-    color: '#ef4444',
-    colorClass: 'bg-red-500',
-    size: 10,
-    layer: 'locale-knowledge',
-  },
-  AudienceSet: {
-    type: 'AudienceSet',
-    label: 'Audience Set',
-    icon: '👥',
-    color: '#f59e0b',
-    colorClass: 'bg-amber-500',
-    size: 10,
-    layer: 'locale-knowledge',
-  },
-  // Knowledge atoms (6)
-  Term: {
-    type: 'Term',
-    label: 'Term',
-    icon: '📖',
-    color: '#22c55e',
-    colorClass: 'bg-green-500',
-    size: 8,
-    layer: 'locale-knowledge',
-  },
-  Expression: {
-    type: 'Expression',
-    label: 'Expression',
-    icon: '💬',
-    color: '#ec4899',
-    colorClass: 'bg-pink-500',
-    size: 8,
-    layer: 'locale-knowledge',
-  },
-  Pattern: {
-    type: 'Pattern',
-    label: 'Pattern',
-    icon: '🔣',
-    color: '#f472b6',
-    colorClass: 'bg-pink-400',
-    size: 8,
-    layer: 'locale-knowledge',
-  },
-  CultureRef: {
-    type: 'CultureRef',
-    label: 'Culture Ref',
-    icon: '🌍',
-    color: '#86efac',
-    colorClass: 'bg-green-300',
-    size: 8,
-    layer: 'locale-knowledge',
-  },
-  Taboo: {
-    type: 'Taboo',
-    label: 'Taboo',
-    icon: '🚫',
-    color: '#ef4444',
-    colorClass: 'bg-red-500',
-    size: 8,
-    layer: 'locale-knowledge',
-  },
-  AudienceTrait: {
-    type: 'AudienceTrait',
-    label: 'Audience Trait',
-    icon: '👤',
-    color: '#f59e0b',
-    colorClass: 'bg-amber-500',
-    size: 8,
-    layer: 'locale-knowledge',
-  },
-  // Linguistic/Cultural taxonomy (6)
-  LanguageFamily: {
-    type: 'LanguageFamily',
-    label: 'Language Family',
-    icon: '🗣️',
-    color: '#7c3aed',
-    colorClass: 'bg-violet-600',
-    size: 14,
-    layer: 'locale-knowledge',
-  },
-  LanguageBranch: {
-    type: 'LanguageBranch',
-    label: 'Language Branch',
-    icon: '🌿',
-    color: '#8b5cf6',
-    colorClass: 'bg-violet-500',
-    size: 12,
-    layer: 'locale-knowledge',
-  },
-  CulturalRealm: {
-    type: 'CulturalRealm',
-    label: 'Cultural Realm',
-    icon: '🎪',
-    color: '#db2777',
-    colorClass: 'bg-pink-600',
-    size: 14,
-    layer: 'locale-knowledge',
-  },
-  CulturalSubRealm: {
-    type: 'CulturalSubRealm',
-    label: 'Cultural Sub-Realm',
-    icon: '🎭',
-    color: '#ec4899',
-    colorClass: 'bg-pink-500',
-    size: 12,
-    layer: 'locale-knowledge',
-  },
-  PopulationCluster: {
-    type: 'PopulationCluster',
-    label: 'Population Cluster',
-    icon: '👨‍👩‍👧‍👦',
-    color: '#0284c7',
-    colorClass: 'bg-sky-600',
-    size: 14,
-    layer: 'locale-knowledge',
-  },
-  PopulationSubCluster: {
-    type: 'PopulationSubCluster',
-    label: 'Population Sub-Cluster',
-    icon: '👥',
-    color: '#0ea5e9',
-    colorClass: 'bg-sky-500',
-    size: 12,
-    layer: 'locale-knowledge',
-  },
-
-  // (PagePrompt, BlockPrompt, BlockRules already in INSTRUCTION LAYER above)
   PagePrompt: {
     type: 'PagePrompt',
     label: 'Page Prompt',
@@ -544,37 +532,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
   },
 
   // ==========================================================================
-  // OUTPUT LAYER (5 nodes — LLM-generated content + jobs + signals)
-  // ==========================================================================
-  PageGenerated: {
-    type: 'PageGenerated',
-    label: 'Page Generated',
-    icon: '📃',
-    color: '#f97316',
-    colorClass: 'bg-orange-500',
-    size: 16,
-    layer: 'output',
-  },
-  BlockGenerated: {
-    type: 'BlockGenerated',
-    label: 'Block Generated',
-    icon: '📝',
-    color: '#fb923c',
-    colorClass: 'bg-orange-400',
-    size: 14,
-    layer: 'output',
-  },
-  OutputArtifact: {
-    type: 'OutputArtifact',
-    label: 'Output Artifact',
-    icon: '📦',
-    color: '#c2410c',
-    colorClass: 'bg-orange-700',
-    size: 12,
-    layer: 'output',
-  },
-  // ==========================================================================
-  // SEO LAYER (8 nodes) — SEO + GEO (Generative Engine Optimization)
+  // ORG REALM — SEO LAYER (5 nodes)
   // ==========================================================================
   SEOKeyword: {
     type: 'SEOKeyword',
@@ -621,7 +579,10 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     size: 12,
     layer: 'seo',
   },
-  // GEO (Generative Engine Optimization) — Violet tones
+
+  // ==========================================================================
+  // ORG REALM — GEO LAYER (3 nodes) — v11.3: split from SEO
+  // ==========================================================================
   GEOQuery: {
     type: 'GEOQuery',
     label: 'GEO Query',
@@ -629,7 +590,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#6366f1',
     colorClass: 'bg-indigo-500',
     size: 16,
-    layer: 'seo',
+    layer: 'geo',
   },
   GEOAnswer: {
     type: 'GEOAnswer',
@@ -638,7 +599,7 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#8b5cf6',
     colorClass: 'bg-violet-500',
     size: 14,
-    layer: 'seo',
+    layer: 'geo',
   },
   GEOMetrics: {
     type: 'GEOMetrics',
@@ -647,9 +608,39 @@ export const nodeTypeConfigs: Record<NodeType, NodeTypeConfig> = {
     color: '#a78bfa',
     colorClass: 'bg-violet-400',
     size: 10,
-    layer: 'seo',
+    layer: 'geo',
   },
 
+  // ==========================================================================
+  // ORG REALM — OUTPUT LAYER (3 nodes)
+  // ==========================================================================
+  PageGenerated: {
+    type: 'PageGenerated',
+    label: 'Page Generated',
+    icon: '📃',
+    color: '#f97316',
+    colorClass: 'bg-orange-500',
+    size: 16,
+    layer: 'output',
+  },
+  BlockGenerated: {
+    type: 'BlockGenerated',
+    label: 'Block Generated',
+    icon: '📝',
+    color: '#fb923c',
+    colorClass: 'bg-orange-400',
+    size: 14,
+    layer: 'output',
+  },
+  OutputArtifact: {
+    type: 'OutputArtifact',
+    label: 'Output Artifact',
+    icon: '📦',
+    color: '#c2410c',
+    colorClass: 'bg-orange-700',
+    size: 12,
+    layer: 'output',
+  },
 };
 
 /**
@@ -684,7 +675,7 @@ export const CORE_TYPES: NodeType[] = [
 export const NODE_TYPE_CONFIG = nodeTypeConfigs;
 
 /**
- * Layer configuration for hierarchical display (v9)
+ * Layer configuration for hierarchical display (v11.3)
  */
 export interface LayerConfig {
   id: Layer;
@@ -697,15 +688,49 @@ export interface LayerConfig {
 
 /**
  * All layers with their configuration (ordered for display)
- * Colors from LAYER_COLORS (Solarized palette, ADR-014)
+ * v11.3: 11 layers (3 shared + 8 org)
  */
 export const NODE_VISUAL_LAYERS: LayerConfig[] = [
+  // SHARED realm (3 layers)
+  {
+    id: 'locale',
+    label: 'Locale',
+    icon: '🌐',
+    color: '#2aa198',
+    colorLight: '#34d399',
+    nodeTypes: getNodeTypesByLayer('locale'),
+  },
+  {
+    id: 'geography',
+    label: 'Geography',
+    icon: '🗺️',
+    color: '#268bd2',
+    colorLight: '#60a5fa',
+    nodeTypes: getNodeTypesByLayer('geography'),
+  },
+  {
+    id: 'knowledge',
+    label: 'Knowledge',
+    icon: '📚',
+    color: '#6c71c4',
+    colorLight: '#a78bfa',
+    nodeTypes: getNodeTypesByLayer('knowledge'),
+  },
+  // ORG realm (8 layers)
+  {
+    id: 'config',
+    label: 'Config',
+    icon: '⚙️',
+    color: '#657b83',
+    colorLight: '#93a1a1',
+    nodeTypes: getNodeTypesByLayer('config'),
+  },
   {
     id: 'foundation',
     label: 'Foundation',
     icon: '🏛️',
-    color: '#6c71c4',
-    colorLight: '#a78bfa',
+    color: '#d33682',
+    colorLight: '#f472b6',
     nodeTypes: getNodeTypesByLayer('foundation'),
   },
   {
@@ -728,33 +753,9 @@ export const NODE_VISUAL_LAYERS: LayerConfig[] = [
     id: 'instruction',
     label: 'Instruction',
     icon: '📝',
-    color: '#d33682',
-    colorLight: '#f472b6',
-    nodeTypes: getNodeTypesByLayer('instruction'),
-  },
-  {
-    id: 'output',
-    label: 'Output',
-    icon: '✨',
-    color: '#dc322f',
-    colorLight: '#f87171',
-    nodeTypes: getNodeTypesByLayer('output'),
-  },
-  {
-    id: 'config',
-    label: 'Config',
-    icon: '⚙️',
     color: '#2aa198',
-    colorLight: '#34d399',
-    nodeTypes: getNodeTypesByLayer('config'),
-  },
-  {
-    id: 'locale-knowledge',
-    label: 'Knowledge',
-    icon: '📚',
-    color: '#268bd2',
-    colorLight: '#60a5fa',
-    nodeTypes: getNodeTypesByLayer('locale-knowledge'),
+    colorLight: '#5eead4',
+    nodeTypes: getNodeTypesByLayer('instruction'),
   },
   {
     id: 'seo',
@@ -763,6 +764,22 @@ export const NODE_VISUAL_LAYERS: LayerConfig[] = [
     color: '#cb4b16',
     colorLight: '#fb923c',
     nodeTypes: getNodeTypesByLayer('seo'),
+  },
+  {
+    id: 'geo',
+    label: 'GEO',
+    icon: '🤖',
+    color: '#6366f1',
+    colorLight: '#818cf8',
+    nodeTypes: getNodeTypesByLayer('geo'),
+  },
+  {
+    id: 'output',
+    label: 'Output',
+    icon: '✨',
+    color: '#dc322f',
+    colorLight: '#f87171',
+    nodeTypes: getNodeTypesByLayer('output'),
   },
 ];
 

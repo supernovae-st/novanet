@@ -1,6 +1,6 @@
 # packages/core/models/taxonomy.yaml
 # Source of truth for NovaNet taxonomy structure
-# v11.2.0 — Realm Renames (global→shared, tenant→org)
+# v11.3.0 — Schema Reorganization
 #
 # This file defines:
 # - 2 NodeRealms (SHARED, ORG) with nested NodeLayers
@@ -10,17 +10,18 @@
 # - 5 ArcCardinalities (zero_to_one / one_to_one / one_to_many / many_to_one / many_to_many)
 # - Terminal palette for TUI graceful degradation
 #
+# v11.3 Changes:
+# - SHARED: 3 layers (locale, geography, knowledge) — was config + locale-knowledge
+# - ORG: 8 layers (+geo for GEO AI visibility) — was 7 layers
+# - OrgConfig: merged Organization + Tenant into single node
+# - GEO: split from SEO (GEOQuery, GEOAnswer, GEOMetrics)
+#
 # v11.2 Changes:
 # - Realm renames: global→shared, tenant→org (clearer semantics)
 # - Trait split: derived→generated+aggregated (LLM output vs computed metrics)
-# - Container traits: TermSet etc. now invariant (universal categories)
-# - Visibility: derived property (internal/fragment/publishable)
 #
 # v11.0 Changes:
 # - SEO moved from global to tenant (business-specific, not universal)
-# - SHARED: 2 layers (config, locale-knowledge)
-# - ORG: 7 layers (config, semantic, seo, foundation, structure, instruction, output)
-# - All SEO arcs now intra_realm (ADR-012 compliance)
 # - Multi-tenant isolation at ORG boundary (Org A cannot see Org B)
 #
 # Generated artifacts:
@@ -30,7 +31,7 @@
 # All meta-nodes receive double-label :Meta (e.g., :Meta:Realm)
 # Query all meta-nodes: MATCH (n:Meta) RETURN n
 
-version: "11.2.0"
+version: "11.3.0"
 
 # =============================================================================
 # NODE REALMS (2) — WHERE does the node live?
@@ -49,24 +50,33 @@ node_realms:
       everywhere: cultural norms, linguistic patterns, formatting conventions.
       These nodes are READ-ONLY. No Entity here - Entity lives in ORG realm.
     layers:
-      - key: config
-        display_name: Configuration
-        emoji: "⚙️"
+      - key: locale
+        display_name: Locale
+        emoji: "🌐"
         color: "#64748b"
         llm_context: |
-          Core configuration nodes. Locale definitions with their properties
-          (language code, region, writing direction). Also includes locale
-          utility nodes: Formatting, Style, Slugification, Adaptation rules.
+          Core locale definitions and configuration. Locale nodes with properties
+          (language code, region, writing direction), plus Formatting, Style,
+          Slugification, Adaptation, Culture, and Market settings.
 
-      - key: locale-knowledge
-        display_name: Locale Knowledge
+      - key: geography
+        display_name: Geography
+        emoji: "🗺️"
+        color: "#10b981"
+        llm_context: |
+          Geographic and economic classifications. Continents, regions, sub-regions,
+          economic zones, income groups, lending categories. World Bank data
+          structure for geographic context.
+
+      - key: knowledge
+        display_name: Knowledge
         emoji: "📚"
         color: "#8b5cf6"
         llm_context: |
           Deep locale-specific knowledge for native content generation.
           Knowledge containers (TermSet, ExpressionSet, etc.) and atoms
-          (Term, Expression, Pattern, etc.). Cultural and linguistic
-          expertise that makes content feel NATIVE rather than translated.
+          (Term, Expression, Pattern, etc.). Language families, cultural realms,
+          population clusters. Expertise that makes content feel NATIVE.
 
   - key: org
     display_name: Organization
@@ -75,18 +85,16 @@ node_realms:
     llm_context: |
       Organization-specific realm. Contains Projects, Entities, Pages, Blocks,
       and all generated outputs. Org A cannot see Org B (multi-tenant isolation).
-      Organization owns Entity directly (HAS_ENTITY). Page/Block reference
-      Entity via USES_ENTITY (N:M). AI context assembly follows arcs from
-      starting point via spreading activation.
+      Project owns Entity (HAS_ENTITY). Page/Block reference Entity via
+      USES_ENTITY (N:M). AI context assembly follows arcs via spreading activation.
     layers:
       - key: config
-        display_name: Tenant Configuration
+        display_name: Config
         emoji: "⚙️"
         color: "#64748b"
         llm_context: |
-          Organization root node. Entry point for tenant-level traversal.
-          Links to Entity (HAS_ENTITY), company project (HAS_COMPANY_PROJECT),
-          and product projects (HAS_PROJECT).
+          Organization configuration root. OrgConfig node is the entry point
+          for org-level traversal. Links to Projects (HAS_PROJECT).
 
       - key: semantic
         display_name: Semantic Layer
@@ -94,19 +102,27 @@ node_realms:
         color: "#f97316"
         llm_context: |
           Invariant entities (Entity) and their localizations (EntityContent).
-          Entity lives at Organization level but can be referenced by 0-N
-          projects via USES_ENTITY. Entities link via SEMANTIC_LINK for
+          Entity belongs to Project (HAS_ENTITY) and can be referenced by
+          Pages/Blocks via USES_ENTITY. Entities link via SEMANTIC_LINK for
           spreading activation during generation.
 
       - key: seo
-        display_name: SEO Intelligence
+        display_name: SEO
         emoji: "🔍"
         color: "#ec4899"
         llm_context: |
-          Search engine optimization data per tenant. Keywords, comparisons,
-          prepositions, questions, and GEO monitoring. Each tenant manages its
-          own SEO strategy. Keywords link to Entity via EXPRESSES, content
-          targets keywords via TARGETS.
+          Search engine optimization. Keywords, comparisons, prepositions,
+          questions. Traditional search visibility tracking. Keywords link
+          to Entity via EXPRESSES, content targets keywords via TARGETS.
+
+      - key: geo
+        display_name: GEO
+        emoji: "🤖"
+        color: "#f59e0b"
+        llm_context: |
+          Generative Engine Optimization. AI visibility tracking for LLM
+          search results. GEOQuery (questions asked), GEOAnswer (AI responses),
+          GEOMetrics (visibility scores). Separate from SEO traditional search.
 
       - key: foundation
         display_name: Foundation
@@ -349,10 +365,13 @@ terminal:
     # Realms (v11.2: shared + org)
     shared: 37       # cyan
     org: 141         # purple
-    # Layers (matching 256-color approximations)
+    # Layers (v11.3: locale, geography, knowledge in shared; +geo in org)
+    locale: 244             # gray (same as old config)
+    geography: 43           # emerald (#10b981)
+    knowledge: 141          # purple
     config: 244             # gray
-    locale_knowledge: 141   # purple
     seo: 205                # pink
+    geo: 178                # amber (#f59e0b)
     semantic: 208           # orange
     foundation: 33          # blue
     structure: 45           # cyan
@@ -375,10 +394,13 @@ terminal:
     # Realms (v11.2: shared + org)
     shared: 6        # cyan
     org: 5           # magenta
-    # Layers
+    # Layers (v11.3: locale, geography, knowledge in shared; +geo in org)
+    locale: 8              # bright black
+    geography: 2           # green
+    knowledge: 5           # magenta
     config: 8              # bright black
-    locale_knowledge: 5    # magenta
     seo: 13                # bright magenta
+    geo: 3                 # yellow
     semantic: 3            # yellow
     foundation: 4          # blue
     structure: 6           # cyan

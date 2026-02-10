@@ -133,73 +133,94 @@ pub mod realm {
 // LAYER COLORS (from taxonomy.yaml node_layers)
 // =============================================================================
 
-/// Layer color definitions.
+/// Layer color definitions (v11.3: 11 layers total).
 pub mod layer {
     use super::*;
 
-    pub const CONFIG_HEX: &str = "#64748b";
+    // Shared realm layers (v11.3)
+    pub const LOCALE_HEX: &str = "#64748b";
+    pub const GEOGRAPHY_HEX: &str = "#10b981";
     pub const KNOWLEDGE_HEX: &str = "#8b5cf6";
+
+    // Org realm layers
+    pub const CONFIG_HEX: &str = "#64748b";
     pub const FOUNDATION_HEX: &str = "#3b82f6";
     pub const STRUCTURE_HEX: &str = "#06b6d4";
     pub const SEMANTIC_HEX: &str = "#f97316";
     pub const INSTRUCTION_HEX: &str = "#eab308";
     pub const OUTPUT_HEX: &str = "#22c55e";
     pub const SEO_HEX: &str = "#ec4899";
+    pub const GEO_HEX: &str = "#f59e0b";
 
     // 256-color palette indices
-    pub const CONFIG_256: u8 = 244;
+    pub const LOCALE_256: u8 = 244;
+    pub const GEOGRAPHY_256: u8 = 43;
     pub const KNOWLEDGE_256: u8 = 141;
+    pub const CONFIG_256: u8 = 244;
     pub const FOUNDATION_256: u8 = 33;
     pub const STRUCTURE_256: u8 = 45;
     pub const SEMANTIC_256: u8 = 208;
     pub const INSTRUCTION_256: u8 = 178;
     pub const OUTPUT_256: u8 = 41;
     pub const SEO_256: u8 = 205;
+    pub const GEO_256: u8 = 178;
 
     // 16-color palette
-    pub const CONFIG_16: Color = Color::DarkGray;
+    pub const LOCALE_16: Color = Color::DarkGray;
+    pub const GEOGRAPHY_16: Color = Color::Green;
     pub const KNOWLEDGE_16: Color = Color::Magenta;
+    pub const CONFIG_16: Color = Color::DarkGray;
     pub const FOUNDATION_16: Color = Color::Blue;
     pub const STRUCTURE_16: Color = Color::Cyan;
     pub const SEMANTIC_16: Color = Color::Yellow;
     pub const INSTRUCTION_16: Color = Color::LightYellow;
     pub const OUTPUT_16: Color = Color::Green;
     pub const SEO_16: Color = Color::LightMagenta;
+    pub const GEO_16: Color = Color::Yellow;
 
     /// Get layer color for a given color mode.
     pub fn color(layer_key: &str, mode: ColorMode) -> Color {
         match mode {
             ColorMode::TrueColor => match layer_key {
-                "config" => hex_to_color(CONFIG_HEX),
+                "locale" => hex_to_color(LOCALE_HEX),
+                "geography" => hex_to_color(GEOGRAPHY_HEX),
                 "knowledge" => hex_to_color(KNOWLEDGE_HEX),
+                "config" => hex_to_color(CONFIG_HEX),
                 "foundation" => hex_to_color(FOUNDATION_HEX),
                 "structure" => hex_to_color(STRUCTURE_HEX),
                 "semantic" => hex_to_color(SEMANTIC_HEX),
                 "instruction" => hex_to_color(INSTRUCTION_HEX),
                 "output" => hex_to_color(OUTPUT_HEX),
                 "seo" => hex_to_color(SEO_HEX),
+                "geo" => hex_to_color(GEO_HEX),
                 _ => Color::White,
             },
             ColorMode::Color256 => match layer_key {
-                "config" => Color::Indexed(CONFIG_256),
+                "locale" => Color::Indexed(LOCALE_256),
+                "geography" => Color::Indexed(GEOGRAPHY_256),
                 "knowledge" => Color::Indexed(KNOWLEDGE_256),
+                "config" => Color::Indexed(CONFIG_256),
                 "foundation" => Color::Indexed(FOUNDATION_256),
                 "structure" => Color::Indexed(STRUCTURE_256),
                 "semantic" => Color::Indexed(SEMANTIC_256),
                 "instruction" => Color::Indexed(INSTRUCTION_256),
                 "output" => Color::Indexed(OUTPUT_256),
                 "seo" => Color::Indexed(SEO_256),
+                "geo" => Color::Indexed(GEO_256),
                 _ => Color::White,
             },
             ColorMode::Color16 => match layer_key {
-                "config" => CONFIG_16,
+                "locale" => LOCALE_16,
+                "geography" => GEOGRAPHY_16,
                 "knowledge" => KNOWLEDGE_16,
+                "config" => CONFIG_16,
                 "foundation" => FOUNDATION_16,
                 "structure" => STRUCTURE_16,
                 "semantic" => SEMANTIC_16,
                 "instruction" => INSTRUCTION_16,
                 "output" => OUTPUT_16,
                 "seo" => SEO_16,
+                "geo" => GEO_16,
                 _ => Color::White,
             },
         }
@@ -433,14 +454,19 @@ impl Icons {
         icons.realms.insert("shared".into(), "◉".into());
         icons.realms.insert("org".into(), "◎".into());
 
-        // Layers
+        // Layers (v11.3: 11 layers - 3 shared + 8 org)
+        // Shared realm
+        icons.layers.insert("locale".into(), "🌐".into());
+        icons.layers.insert("geography".into(), "🗺".into());
+        icons.layers.insert("knowledge".into(), "📚".into());
+        // Org realm
         icons.layers.insert("config".into(), "⚙".into());
-        icons.layers.insert("locale-knowledge".into(), "◈".into());
-        icons.layers.insert("seo".into(), "◇".into());
         icons.layers.insert("foundation".into(), "▣".into());
         icons.layers.insert("structure".into(), "▤".into());
         icons.layers.insert("semantic".into(), "◆".into());
         icons.layers.insert("instruction".into(), "▧".into());
+        icons.layers.insert("seo".into(), "◇".into());
+        icons.layers.insert("geo".into(), "🤖".into());
         icons.layers.insert("output".into(), "●".into());
 
         // Traits (v11.2: 5 traits - derived split into generated + aggregated)
@@ -1096,17 +1122,21 @@ mod tests {
 
     #[test]
     fn test_layer_color_all_layers_truecolor() {
-        // Test all 8 layers return RGB colors in TrueColor mode.
-        // Note: "knowledge" is the key for locale-knowledge layer in the color function.
-        // The task specifies "locale-knowledge" but the implementation uses "knowledge".
+        // Test all 11 layers return RGB colors in TrueColor mode.
+        // v11.3: 3 shared layers (locale, geography, knowledge) + 8 org layers
         let layers = [
+            // Shared realm (3 layers)
+            ("locale", layer::LOCALE_HEX),
+            ("geography", layer::GEOGRAPHY_HEX),
+            ("knowledge", layer::KNOWLEDGE_HEX),
+            // Org realm (8 layers)
             ("config", layer::CONFIG_HEX),
-            ("knowledge", layer::KNOWLEDGE_HEX), // locale-knowledge
-            ("seo", layer::SEO_HEX),
             ("foundation", layer::FOUNDATION_HEX),
             ("structure", layer::STRUCTURE_HEX),
             ("semantic", layer::SEMANTIC_HEX),
             ("instruction", layer::INSTRUCTION_HEX),
+            ("seo", layer::SEO_HEX),
+            ("geo", layer::GEO_HEX),
             ("output", layer::OUTPUT_HEX),
         ];
 

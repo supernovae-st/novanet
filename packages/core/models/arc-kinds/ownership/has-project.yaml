@@ -1,12 +1,12 @@
 # packages/core/models/arc-kinds/ownership/has-project.yaml
-# ArcKind: HAS_PROJECT — Tenant owns projects (v10.6: Organization renamed to Tenant)
+# ArcKind: HAS_PROJECT — OrgConfig owns projects (v11.3: unified from Tenant+Organization)
 
 arc:
   name: HAS_PROJECT
   family: ownership
   scope: intra_realm
-  source: Tenant
+  source: OrgConfig
   target: Project
   cardinality: one_to_many
-  llm_context: Tenant owns product projects. Use to enumerate all projects for a tenant.
-  cypher_pattern: (Tenant)-[:HAS_PROJECT]->(Project)
+  llm_context: OrgConfig owns all projects. Use to enumerate all projects for an organization.
+  cypher_pattern: (OrgConfig)-[:HAS_PROJECT]->(Project)

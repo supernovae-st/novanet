@@ -251,7 +251,7 @@ fn render_realm_map_demo(lines: &mut Vec<String>, cursor: usize) {
         "║    │  config              2 kinds   (Taxonomy, VisualEncoding)│          ║".to_string(),
     );
     lines.push(
-        "║    │  locale-knowledge   12 kinds   (Locale, TermSet, Term...)│          ║".to_string(),
+        "║    │  locale               7 kinds   (Locale, Formatting...)   │          ║".to_string(),
     );
     lines.push(
         "║    └──────────────────────────────────────────────────────────┘          ║".to_string(),
@@ -1671,13 +1671,25 @@ mod tests {
                             kind_count: 2,
                         },
                         AtlasLayerInfo {
-                            key: "locale-knowledge".to_string(),
-                            display_name: "Locale Knowledge".to_string(),
+                            key: "locale".to_string(),
+                            display_name: "Locale".to_string(),
                             color: "#268bd2".to_string(),
-                            kind_count: 12,
+                            kind_count: 7,
+                        },
+                        AtlasLayerInfo {
+                            key: "geography".to_string(),
+                            display_name: "Geography".to_string(),
+                            color: "#2aa198".to_string(),
+                            kind_count: 6,
+                        },
+                        AtlasLayerInfo {
+                            key: "knowledge".to_string(),
+                            display_name: "Knowledge".to_string(),
+                            color: "#859900".to_string(),
+                            kind_count: 19,
                         },
                     ],
-                    total_kinds: 14,
+                    total_kinds: 32,
                 },
                 AtlasRealmInfo {
                     key: "org".to_string(),
@@ -1778,12 +1790,12 @@ mod tests {
         assert!(output.contains("SHARED"), "Should show Shared realm");
         assert!(output.contains("ORG"), "Should show Org realm");
 
-        // Should contain layer names
+        // Should contain layer names (v11.3: 3 shared layers)
         assert!(output.contains("Config"), "Should show Config layer");
-        assert!(
-            output.contains("Locale Knowledge"),
-            "Should show Locale Knowledge layer"
-        );
+        // v11.3: locale-knowledge split into 3 layers
+        assert!(output.contains("Locale"), "Should show Locale layer");
+        assert!(output.contains("Geography"), "Should show Geography layer");
+        assert!(output.contains("Knowledge"), "Should show Knowledge layer");
         assert!(output.contains("Foundation"), "Should show Foundation layer");
 
         // Should have cursor indicator on first item
@@ -1795,16 +1807,16 @@ mod tests {
         let mut app = test_app();
         app.atlas.demo_mode = false;
         app.atlas.realm_stats = Some(test_realm_stats());
-        app.atlas.realm_cursor = 2; // Third item (first layer in global)
+        app.atlas.realm_cursor = 2; // Third item (first layer in shared)
         app.atlas.realm_zoomed = false;
 
         let output = render_atlas_realm_map(&app);
 
         // Cursor position should be shown in live mode
-        // Total items = realms (2) + layers (2 in global + 1 in tenant) = 5
+        // v11.3: Total items = realms (2) + layers (4 in shared + 1 in org) = 7
         assert!(
-            output.contains("Cursor: 3/5"),
-            "Should show cursor position 3/5 in live mode"
+            output.contains("Cursor: 3/7"),
+            "Should show cursor position 3/7 in live mode"
         );
     }
 

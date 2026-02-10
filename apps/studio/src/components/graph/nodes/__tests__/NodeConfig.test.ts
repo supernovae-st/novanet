@@ -18,13 +18,13 @@ import {
 import type { NodeType } from '@novanet/core/types';
 import { NODE_TYPES } from '@novanet/core/types';
 
-// All 62 node types in v11.2.0 (from Core - Single Source of Truth, 3 job nodes removed)
+// All 61 node types in v11.3.0 (from Core - Single Source of Truth, OrgConfig replaces Organization + Tenant)
 const ALL_NODE_TYPES: NodeType[] = [...NODE_TYPES];
 
 describe('NodeConfig', () => {
   describe('NODE_SIZES lookup table', () => {
-    it('should have predefined sizes for all 62 node types', () => {
-      expect(Object.keys(NODE_SIZES)).toHaveLength(62);
+    it('should have predefined sizes for all 61 node types', () => {
+      expect(Object.keys(NODE_SIZES)).toHaveLength(61);
       ALL_NODE_TYPES.forEach((type) => {
         expect(NODE_SIZES[type]).toBeDefined();
         expect(NODE_SIZES[type].width).toBeGreaterThan(0);
@@ -53,8 +53,8 @@ describe('NodeConfig', () => {
   });
 
   describe('NODE_COLORS lookup table', () => {
-    it('should have predefined colors for all 62 node types', () => {
-      expect(Object.keys(NODE_COLORS)).toHaveLength(62);
+    it('should have predefined colors for all 61 node types', () => {
+      expect(Object.keys(NODE_COLORS)).toHaveLength(61);
       ALL_NODE_TYPES.forEach((type) => {
         expect(NODE_COLORS[type]).toBeDefined();
         expect(NODE_COLORS[type].primary).toBeDefined();

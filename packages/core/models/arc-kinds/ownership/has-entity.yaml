@@ -1,12 +1,12 @@
 # packages/core/models/arc-kinds/ownership/has-entity.yaml
-# ArcKind: HAS_ENTITY — Organization/Project owns Entity nodes (v10.5)
+# ArcKind: HAS_ENTITY — Project owns Entity nodes (v11.3: entities belong to projects)
 
 arc:
   name: HAS_ENTITY
   family: ownership
   scope: intra_realm
-  source: Organization
+  source: Project
   target: Entity
   cardinality: one_to_many
-  llm_context: Organization or Project owns entities. Use to get semantic concepts for context.
-  cypher_pattern: (Organization)-[:HAS_ENTITY]->(Entity)
+  llm_context: Project owns entities. Use to get semantic concepts for a project.
+  cypher_pattern: (Project)-[:HAS_ENTITY]->(Entity)

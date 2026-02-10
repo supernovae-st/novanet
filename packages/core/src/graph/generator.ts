@@ -1,6 +1,6 @@
 // packages/core/src/graph/generator.ts
 // Schema graph generator - Creates flat and hierarchical schema representations
-// v11.2.0 — Realm renames (shared/org), job nodes removed, trait split
+// v11.3.0 — 3-layer shared realm, GEO layer, OrgConfig consolidation
 
 import { NODE_TYPES, NODE_REALMS, NODE_TRAITS, type NodeType, type Realm } from '../types/nodes.js';
 import { RelationRegistry } from '../schemas/relations.schema.js';
@@ -18,17 +18,18 @@ import { REALM_HIERARCHY } from './hierarchy.js';
  */
 const NODE_LABELS: Record<NodeType, string> = {
   // ═══════════════════════════════════════════════════════════════════════════
-  // SHARED REALM (32 nodes)
+  // SHARED REALM (32 nodes) — 3 layers: locale, geography, knowledge
   // ═══════════════════════════════════════════════════════════════════════════
-  // config (14)
+  // locale (7)
   Locale: 'Locale',
-  EntityCategory: 'Entity Category',
   Formatting: 'Formatting',
   Slugification: 'Slugification',
   Adaptation: 'Adaptation',
   Style: 'Style',
   Culture: 'Culture',
   Market: 'Market',
+
+  // geography (6)
   Continent: 'Continent',
   GeoRegion: 'Geo Region',
   GeoSubRegion: 'Geo Sub-Region',
@@ -36,7 +37,8 @@ const NODE_LABELS: Record<NodeType, string> = {
   LendingCategory: 'Lending Category',
   EconomicRegion: 'Economic Region',
 
-  // locale-knowledge (18) — Sets + Atoms + Linguistic/Cultural taxonomy
+  // knowledge (19)
+  EntityCategory: 'Entity Category',
   TermSet: 'Term Set',
   ExpressionSet: 'Expression Set',
   PatternSet: 'Pattern Set',
@@ -57,11 +59,10 @@ const NODE_LABELS: Record<NodeType, string> = {
   PopulationSubCluster: 'Population Sub-Cluster',
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // ORG REALM (30 nodes)
+  // ORG REALM (29 nodes) — 8 layers
   // ═══════════════════════════════════════════════════════════════════════════
-  // config (2)
-  Organization: 'Organization',
-  Tenant: 'Tenant',
+  // config (1) — v11.3: Organization + Tenant merged
+  OrgConfig: 'Org Config',
 
   // foundation (3)
   Project: 'Project',
@@ -79,16 +80,6 @@ const NODE_LABELS: Record<NodeType, string> = {
   AudiencePersona: 'Audience Persona',
   ChannelSurface: 'Channel Surface',
 
-  // seo (8) — SEO + GEO (Generative Engine Optimization)
-  SEOKeyword: 'SEO Keyword',
-  SEOKeywordMetrics: 'SEO Metrics',
-  SEOComparison: 'SEO Comparison',
-  SEOPreposition: 'SEO Preposition',
-  SEOQuestion: 'SEO Question',
-  GEOQuery: 'GEO Query',
-  GEOAnswer: 'GEO Answer',
-  GEOMetrics: 'GEO Metrics',
-
   // instruction (7)
   PageType: 'Page Type',
   BlockType: 'Block Type',
@@ -97,6 +88,18 @@ const NODE_LABELS: Record<NodeType, string> = {
   BlockRules: 'Block Rules',
   BlockInstruction: 'Block Instruction',
   PromptArtifact: 'Prompt Artifact',
+
+  // seo (5)
+  SEOKeyword: 'SEO Keyword',
+  SEOKeywordMetrics: 'SEO Metrics',
+  SEOComparison: 'SEO Comparison',
+  SEOPreposition: 'SEO Preposition',
+  SEOQuestion: 'SEO Question',
+
+  // geo (3) — v11.3: new layer split from seo
+  GEOQuery: 'GEO Query',
+  GEOAnswer: 'GEO Answer',
+  GEOMetrics: 'GEO Metrics',
 
   // output (3)
   PageGenerated: 'Page Generated',
@@ -109,7 +112,7 @@ const NODE_LABELS: Record<NodeType, string> = {
 // =============================================================================
 
 const REALM_DESCRIPTIONS: Record<Realm, string> = {
-  shared: 'Shared across all tenants (Locale knowledge)',
+  shared: 'Shared across all organizations (Locale, Geography, Knowledge)',
   org: 'Organization-specific content, structure, Entity nodes',
 };
 
@@ -130,7 +133,7 @@ const TRAIT_DESCRIPTIONS: Record<string, string> = {
 // =============================================================================
 
 /**
- * Generate flat schema graph with all 62 node types and arcs.
+ * Generate flat schema graph with all 61 node types and arcs.
  * This is the canonical representation of the NovaNet ontology.
  *
  * @returns SchemaGraphResult with nodes and arcs
@@ -139,7 +142,7 @@ const TRAIT_DESCRIPTIONS: Record<string, string> = {
  * ```typescript
  * const { nodes, arcs } = generateSchemaGraph();
  * console.log(`${nodes.length} nodes, ${arcs.length} arcs`);
- * // Output: "62 nodes, ~XX arcs"
+ * // Output: "61 nodes, ~XX arcs"
  * ```
  */
 export function generateSchemaGraph(): SchemaGraphResult {
@@ -147,7 +150,7 @@ export function generateSchemaGraph(): SchemaGraphResult {
   const arcs: SchemaArc[] = [];
 
   // ==========================================================================
-  // GENERATE NODES - All 62 node types
+  // GENERATE NODES - All 61 node types
   // ==========================================================================
 
   for (const nodeType of NODE_TYPES) {
@@ -211,7 +214,7 @@ export function generateSchemaGraph(): SchemaGraphResult {
  * ```typescript
  * const hierarchy = getSchemaHierarchy();
  * console.log(hierarchy.stats);
- * // Output: { totalNodes: 62, totalArcs: ~XX, nodesByRealm: { shared: 32, org: 30 } }
+ * // Output: { totalNodes: 61, totalArcs: ~XX, nodesByRealm: { shared: 32, org: 29 } }
  * ```
  */
 export function getSchemaHierarchy(): HierarchicalSchemaData {

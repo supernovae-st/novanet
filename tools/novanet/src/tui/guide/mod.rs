@@ -346,10 +346,10 @@ impl GuideState {
             GuideTab::Layers => {
                 // Yank the current layer key
                 let layers = if self.layer_realm == 0 {
-                    // Shared layers
-                    vec!["config", "locale-knowledge"]
+                    // Shared layers (v11.3: 3 layers)
+                    vec!["locale", "geography", "knowledge"]
                 } else {
-                    // Org layers
+                    // Org layers (v11.3: 8 layers)
                     vec![
                         "config",
                         "foundation",
@@ -357,6 +357,7 @@ impl GuideState {
                         "semantic",
                         "instruction",
                         "seo",
+                        "geo",
                         "output",
                     ]
                 };
@@ -479,8 +480,8 @@ impl GuideState {
             }
             GuideTab::Layers => {
                 // Bound by number of layers in current realm
-                // v11.0: global: 2 layers, tenant: 7 layers
-                let max = if self.layer_realm == 0 { 1 } else { 6 };
+                // v11.3: shared: 3 layers (0-2), org: 8 layers (0-7)
+                let max = if self.layer_realm == 0 { 2 } else { 7 };
                 if self.layer_cursor < max {
                     self.layer_cursor += 1;
                     true
@@ -1435,26 +1436,26 @@ mod tests {
     fn test_layers_global_max_cursor() {
         let mut state = GuideState::new();
         state.tab = GuideTab::Layers;
-        state.layer_realm = 0; // Shared (2 layers, max index 1)
-        state.layer_cursor = 1;
+        state.layer_realm = 0; // Shared (3 layers v11.3, max index 2)
+        state.layer_cursor = 2;
 
         // Should not go beyond max
         let changed = state.handle_key(key_event(KeyCode::Char('j')));
         assert!(!changed);
-        assert_eq!(state.layer_cursor, 1);
+        assert_eq!(state.layer_cursor, 2);
     }
 
     #[test]
     fn test_layers_tenant_max_cursor() {
         let mut state = GuideState::new();
         state.tab = GuideTab::Layers;
-        state.layer_realm = 1; // Org (7 layers, max index 6)
-        state.layer_cursor = 6;
+        state.layer_realm = 1; // Org (8 layers v11.3, max index 7)
+        state.layer_cursor = 7;
 
         // Should not go beyond max
         let changed = state.handle_key(key_event(KeyCode::Char('j')));
         assert!(!changed);
-        assert_eq!(state.layer_cursor, 6);
+        assert_eq!(state.layer_cursor, 7);
     }
 
     #[test]
@@ -1800,13 +1801,20 @@ mod tests {
         state.tab = GuideTab::Layers;
         state.layer_realm = 0; // Shared
 
+        // v11.3: Shared layers are locale, geography, knowledge
         state.layer_cursor = 0;
-        assert_eq!(state.get_current_yank_text(), Some("config".to_string()));
+        assert_eq!(state.get_current_yank_text(), Some("locale".to_string()));
 
         state.layer_cursor = 1;
         assert_eq!(
             state.get_current_yank_text(),
-            Some("locale-knowledge".to_string())
+            Some("geography".to_string())
+        );
+
+        state.layer_cursor = 2;
+        assert_eq!(
+            state.get_current_yank_text(),
+            Some("knowledge".to_string())
         );
     }
 
@@ -1816,6 +1824,9 @@ mod tests {
         state.tab = GuideTab::Layers;
         state.layer_realm = 1; // Org
 
+        // v11.3: Org realm has 8 layers
+        // config(0), foundation(1), structure(2), semantic(3),
+        // instruction(4), seo(5), geo(6), output(7)
         state.layer_cursor = 0;
         assert_eq!(state.get_current_yank_text(), Some("config".to_string()));
 
@@ -1826,6 +1837,9 @@ mod tests {
         assert_eq!(state.get_current_yank_text(), Some("seo".to_string()));
 
         state.layer_cursor = 6;
+        assert_eq!(state.get_current_yank_text(), Some("geo".to_string()));
+
+        state.layer_cursor = 7;
         assert_eq!(state.get_current_yank_text(), Some("output".to_string()));
     }
 

@@ -107,11 +107,10 @@ export const NODE_SIZES: Record<NodeType, NodeSize> = {
   GEOMetrics: { width: 160, height: 80 },
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // TENANT REALM (23 nodes) — v10.6: merged organization + project
+  // ORG REALM (29 nodes) — v11.3: OrgConfig replaces Organization + Tenant
   // ═══════════════════════════════════════════════════════════════════════════
-  // config (2)
-  Organization: { width: 280, height: 140 },
-  Tenant: { width: 280, height: 140 },
+  // config (1)
+  OrgConfig: { width: 280, height: 140 },
   // foundation (3)
   Project: { width: 280, height: 140 },
   BrandIdentity: { width: 220, height: 110 },
@@ -413,20 +412,14 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
   },
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // TENANT REALM (23 nodes) — v10.6: merged organization + project
+  // ORG REALM (29 nodes) — v11.3: OrgConfig replaces Organization + Tenant
   // ═══════════════════════════════════════════════════════════════════════════
-  // config (2) — Sky blue tone
-  Organization: {
+  // config (1) — Sky blue tone
+  OrgConfig: {
     primary: '#0ea5e9',
     secondary: '#38bdf8',
     tertiary: '#7dd3fc',
     glow: '#0ea5e940',
-  },
-  Tenant: {
-    primary: '#0284c7',
-    secondary: '#0ea5e9',
-    tertiary: '#38bdf8',
-    glow: '#0284c740',
   },
   // foundation (3) — Violet tones
   Project: {
