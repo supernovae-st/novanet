@@ -96,3 +96,18 @@ export {
   type UseMagneticDataReturn,
 } from './useMagneticData';
 
+// Node selection with React Flow integration
+export {
+  useNodeSelection,
+  type UseNodeSelectionResult,
+} from './useNodeSelection';
+
+// Matrix rain animation
+export {
+  useMatrixRain,
+  DEFAULT_CHARACTERS as MATRIX_CHARACTERS,
+  type MatrixRainConfig,
+  type MatrixRainState,
+  type UseMatrixRainResult,
+} from './useMatrixRain';
+

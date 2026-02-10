@@ -46,7 +46,7 @@ const Graph2D = lazy(() =>
 import { GraphErrorBoundary } from '@/components/ui/ErrorBoundary';
 import { StatsCounter, Pill, Divider, RefreshButton, LayerIcon, MatrixRainOverlay, MatrixExplosionOverlay } from '@/components/ui';
 import { NavigationModeToggle } from '@/components/toolbar/NavigationModeToggle';
-import { NodeDetailsPanel } from '@/components/sidebar/NodeDetailsPanel';
+import { TabbedDetailPanel } from '@/components/sidebar/TabbedDetailPanel';
 import { ArcDetailsPanel } from '@/components/sidebar/ArcDetailsPanel';
 import { KeyboardHelpPanel } from '@/components/dx/KeyboardHelpPanel';
 import { CommandPalette, useCommandPalette, useCommandPaletteState } from '@/components/ui/CommandPalette';
@@ -852,28 +852,29 @@ export default function HomePage() {
         {/* Right Panel - Node/Edge Details (slides in on selection) */}
         {!uiState.focusMode && (selectedNode || selectedEdge) && (
           <aside className="w-[420px] border-l border-white/8 shrink-0 overflow-hidden flex flex-col bg-[#0d0d12] animate-slide-in-right">
-            {/* Panel Header */}
-            <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.08]">
-              <span className="text-sm font-semibold text-white/80">
-                {selectedEdge ? 'Relationship Details' : 'Node Details'}
-              </span>
-              <button
-                onClick={handleClosePanel}
-                className="p-1.5 rounded-lg hover:bg-white/10 text-white/40 hover:text-white/60 transition-colors"
-                title="Close (] or Esc)"
-              >
-                <X className={iconSizes.md} />
-              </button>
-            </div>
-
-            {/* Node/Arc Details */}
-            <div className="flex-1 overflow-hidden">
-              {selectedEdge ? (
-                <ArcDetailsPanel arc={selectedEdge} />
-              ) : selectedNode ? (
-                <NodeDetailsPanel node={selectedNode} />
-              ) : null}
-            </div>
+            {selectedEdge ? (
+              <>
+                {/* Arc Details Header */}
+                <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.08]">
+                  <span className="text-sm font-semibold text-white/80">
+                    Relationship Details
+                  </span>
+                  <button
+                    onClick={handleClosePanel}
+                    className="p-1.5 rounded-lg hover:bg-white/10 text-white/40 hover:text-white/60 transition-colors"
+                    title="Close (] or Esc)"
+                  >
+                    <X className={iconSizes.md} />
+                  </button>
+                </div>
+                <div className="flex-1 overflow-hidden">
+                  <ArcDetailsPanel arc={selectedEdge} />
+                </div>
+              </>
+            ) : (
+              /* Tabbed Node Details Panel (has its own header) */
+              <TabbedDetailPanel node={selectedNode ?? null} className="h-full" />
+            )}
           </aside>
         )}
       </div>
