@@ -19,7 +19,8 @@ use rustc_hash::FxHashSet;
 use super::{
     COLOR_ACTIVE_KIND_BG, COLOR_ARC_FAMILY, COLOR_CONNECTED, COLOR_DESC_TEXT, COLOR_HIGHLIGHT_BG,
     COLOR_HINT_TEXT, COLOR_MUTED_TEXT, COLOR_UNFOCUSED_BORDER, EmptyStateKind, STYLE_DIM,
-    STYLE_HIGHLIGHT, STYLE_PRIMARY, STYLE_UNFOCUSED, render_empty_state, spinner, trait_color,
+    STYLE_HIGHLIGHT, STYLE_PRIMARY, STYLE_UNFOCUSED, layer_abbrev, layer_badge_icon,
+    realm_abbrev, realm_badge_icon, render_empty_state, spinner, trait_abbrev, trait_color,
     trait_icon, truncate_start,
 };
 use crate::tui::app::{App, Focus};
@@ -350,19 +351,24 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                             let kind_key_str = format!("kind:{}", kind.key);
                             let kind_collapsed = app.tree.is_collapsed(&kind_key_str);
 
-                            // Show collapse icon in Data mode if instances exist
+                            // Show collapse icon based on mode:
+                            // - Data mode: if instances exist
+                            // - Meta mode: if kind has outgoing arcs (can explore schema)
                             let kind_icon = if is_data_mode {
+                                // In Data mode: show chevron if instances exist
                                 if let Some(instances) = app.tree.get_instances(&kind.key) {
                                     if !instances.is_empty() {
                                         expand_icon(kind_collapsed)
                                     } else {
-                                        ""
+                                        " " // Leaf node placeholder for alignment
                                     }
                                 } else {
-                                    ""
+                                    " " // Leaf node placeholder for alignment
                                 }
                             } else {
-                                ""
+                                // In Meta mode: always show chevron (can expand to see arcs)
+                                // This makes the tree consistently interactive
+                                expand_icon(kind_collapsed)
                             };
 
                             // v10.1: Show instance count (always in Data mode)
@@ -419,19 +425,92 @@ pub fn render_tree(f: &mut Frame, area: Rect, app: &mut App) {
                                 None
                             };
 
-                            all_lines.push(make_line(
-                                idx,
-                                app.tree_cursor,
-                                focused,
-                                &prefix,
-                                kind_icon,
-                                display_text,
-                                layer_color,     // line_color: parent layer color
-                                kind_text_color, // text_color (grayed if empty)
-                                app.search.matches.get(&idx).map(|v| v.as_slice()),
-                                kind_bg, // bg_color: highlight if instances expanded
-                                Some((t_icon, t_color)), // v11.3: colored trait icon
-                            ));
+                            // v11.5: Custom Kind line with right-aligned classification badges
+                            // Format: [cursor] [prefix] [chevron] [trait] [name (count)] │ [badges]
+                            let is_cursor = idx == app.tree_cursor;
+                            let cursor_char = if is_cursor { ">" } else { " " };
+
+                            // Build left side content
+                            let left_content = format!(
+                                "{}{}{} {} {}",
+                                cursor_char, prefix, kind_icon, t_icon, display_text
+                            );
+
+                            // Badge format: ◎shd ▣cfg ■inv (approx 18 chars with spaces)
+                            let badge_str = format!(
+                                "{}{} {}{} {}{}",
+                                realm_badge_icon(&realm.key), realm_abbrev(&realm.key),
+                                layer_badge_icon(&layer.key), layer_abbrev(&layer.key),
+                                t_icon, trait_abbrev(&kind.trait_name)
+                            );
+
+                            // Calculate padding for right-alignment
+                            // tree panel is typically 25% of screen, ~40-60 chars
+                            // Leave 2 chars for borders, 20 chars for badges+separator
+                            let tree_width = area.width.saturating_sub(4) as usize; // subtract borders + scrollbar
+                            let left_width = left_content.chars().count();
+                            let right_side = format!(" │ {}", badge_str);
+                            let right_width = right_side.chars().count();
+                            let padding_width = tree_width.saturating_sub(left_width + right_width);
+
+                            if is_cursor && focused {
+                                // Highlighted cursor line - single span with full highlight
+                                let full_line = format!(
+                                    "{}{}{}",
+                                    left_content,
+                                    " ".repeat(padding_width),
+                                    right_side
+                                );
+                                all_lines.push(Line::from(Span::styled(
+                                    full_line,
+                                    Style::default().bg(COLOR_HIGHLIGHT_BG).fg(Color::White),
+                                )));
+                            } else {
+                                // Build multi-span line with colors
+                                let base_style = if let Some(bg) = kind_bg {
+                                    Style::default().bg(bg)
+                                } else {
+                                    Style::default()
+                                };
+
+                                let mut spans: Vec<Span> = vec![
+                                    Span::styled(cursor_char, base_style),
+                                    Span::styled(prefix.clone(), base_style.fg(layer_color)),
+                                    Span::styled(format!("{} ", kind_icon), base_style.fg(kind_text_color)),
+                                    Span::styled(format!("{} ", t_icon), base_style.fg(t_color)),
+                                ];
+
+                                // Apply fuzzy match highlighting to display_text
+                                spans.extend(highlight_matches_with_bg(
+                                    &display_text,
+                                    app.search.matches.get(&idx).map(|v| v.as_slice()),
+                                    kind_text_color,
+                                    kind_bg,
+                                ));
+
+                                // Add padding and right-aligned badges
+                                spans.push(Span::styled(" ".repeat(padding_width), base_style));
+                                spans.push(Span::styled(" │ ", base_style.fg(COLOR_MUTED_TEXT)));
+                                // Realm badge
+                                spans.push(Span::styled(
+                                    format!("{}{}", realm_badge_icon(&realm.key), realm_abbrev(&realm.key)),
+                                    base_style.fg(realm_color),
+                                ));
+                                spans.push(Span::styled(" ", base_style));
+                                // Layer badge
+                                spans.push(Span::styled(
+                                    format!("{}{}", layer_badge_icon(&layer.key), layer_abbrev(&layer.key)),
+                                    base_style.fg(layer_color),
+                                ));
+                                spans.push(Span::styled(" ", base_style));
+                                // Trait badge
+                                spans.push(Span::styled(
+                                    format!("{}{}", t_icon, trait_abbrev(&kind.trait_name)),
+                                    base_style.fg(t_color),
+                                ));
+
+                                all_lines.push(Line::from(spans));
+                            }
                             idx += 1;
 
                             // In Data mode, show instances under Kind (if not collapsed)

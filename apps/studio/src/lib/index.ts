@@ -108,3 +108,13 @@ export {
   type NovaNetFilterCriteria,
   type CypherQuery,
 } from './filterAdapter';
+
+// =============================================================================
+// Additional Utilities
+// =============================================================================
+
+export { formatTime } from './formatters';
+export { buildCypherViaRust, NovanetBridgeError, type FacetFilter } from './novanetBridge';
+export { generateSchemaGraph } from './schemaGenerator';
+export { applySchemaLayout } from './schemaLayoutELK';
+export { toast } from './toast';

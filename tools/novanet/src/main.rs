@@ -126,6 +126,21 @@ enum Commands {
         #[arg(long)]
         fresh: bool,
     },
+    /// Generate shell completions (bash, zsh, fish, powershell, elvish)
+    Completions {
+        /// Shell to generate completions for
+        #[arg(value_enum)]
+        shell: clap_complete::Shell,
+    },
+    /// Run system health checks
+    Doctor {
+        /// Skip Neo4j connection check (for offline/CI use)
+        #[arg(long)]
+        skip_db: bool,
+        /// Show verbose output
+        #[arg(long, short)]
+        verbose: bool,
+    },
 }
 
 #[derive(clap::Args)]
@@ -852,6 +867,28 @@ async fn main() -> color_eyre::Result<()> {
                 let db = connect_db(&cli).await?;
                 novanet::tui::run(&db, &root).await?;
             }
+        }
+
+        // ── Completions (no Neo4j, no root) ──────────────────────────
+        Commands::Completions { shell } => {
+            novanet::commands::completions::run_completions::<Cli>(shell)?;
+        }
+
+        // ── Doctor (YAML + optional Neo4j) ───────────────────────────
+        Commands::Doctor { skip_db, verbose } => {
+            let root = root?;
+            let db = if skip_db {
+                None
+            } else {
+                match connect_db(&cli).await {
+                    Ok(db) => Some(db),
+                    Err(e) => {
+                        eprintln!("⚠️  Could not connect to Neo4j: {}", e);
+                        None
+                    }
+                }
+            };
+            novanet::commands::doctor::run_doctor(&root, db.as_ref(), verbose).await?;
         }
     }
 
