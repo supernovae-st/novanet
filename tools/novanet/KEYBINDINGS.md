@@ -163,9 +163,9 @@ Educational mode for learning NovaNet concepts.
 | `gi` | Jump to invariant trait |
 | `gl` | Jump to localized trait |
 | `gk` | Jump to knowledge trait |
-| `gd` | Jump to derived trait |
-| `gj` | Jump to job trait |
-| `gg` | Reset all cursors to top |
+| `gg` | Jump to generated trait |
+| `ga` | Jump to aggregated trait |
+| `g0` | Reset all cursors to top |
 
 ### Navigation
 
@@ -219,6 +219,6 @@ Exit:        q or Esc
 
 Guide Mode (7):
 Tabs:        1-4 (Traits/Layers/Arcs/Pipeline)  Tab (cycle)
-Quick Jump:  gi/gl/gk/gd/gj (traits)  gg (top)
+Quick Jump:  gi/gl/gk/gg/ga (traits)  g0 (top)
 Actions:     y (yank)  n (next tip)  Enter/Esc (drill)
 ```

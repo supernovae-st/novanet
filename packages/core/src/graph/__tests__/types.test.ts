@@ -34,7 +34,7 @@ describe('graph/types', () => {
   it('should export Layer type with all values', () => {
     // v10.6: 8 layers (no organization-only layers)
     const layers: Layer[] = [
-      'foundation', 'structure', 'semantic', 'instruction', 'output',  // tenant realm
+      'foundation', 'structure', 'semantic', 'instruction', 'output',  // org realm
       'config', 'locale-knowledge', 'seo'  // global realm
     ];
     expect(layers).toHaveLength(8);

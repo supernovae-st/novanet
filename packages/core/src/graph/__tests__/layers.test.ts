@@ -15,7 +15,7 @@ describe('graph/layers', () => {
     }
   });
 
-  it('should map tenant realm nodes correctly', () => {
+  it('should map org realm nodes correctly', () => {
     expect(NODE_LAYERS.Project).toBe('foundation');
     expect(NODE_LAYERS.BrandIdentity).toBe('foundation');
     expect(NODE_LAYERS.ProjectContent).toBe('foundation');

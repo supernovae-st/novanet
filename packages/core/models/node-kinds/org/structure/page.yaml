@@ -37,6 +37,16 @@ node:
         - "page-homepage"
         - "page-features"
 
+    slug:
+      type: string
+      required: true
+      description: "URL-friendly path segment for this page"
+      pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+      examples:
+        - "pricing"
+        - "features"
+        - "qr-code-generator"
+
     display_name:
       type: string
       required: true

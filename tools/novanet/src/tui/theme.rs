@@ -443,11 +443,12 @@ impl Icons {
         icons.layers.insert("instruction".into(), "▧".into());
         icons.layers.insert("output".into(), "●".into());
 
-        // Traits (v11.2: 4 traits, job removed)
+        // Traits (v11.2: 5 traits - derived split into generated + aggregated)
         icons.traits.insert("invariant".into(), "■".into());
         icons.traits.insert("localized".into(), "□".into());
         icons.traits.insert("knowledge".into(), "◊".into());
-        icons.traits.insert("derived".into(), "▪".into());
+        icons.traits.insert("generated".into(), "▪".into());
+        icons.traits.insert("aggregated".into(), "▫".into());
 
         // Arc families
         icons.arc_families.insert("ownership".into(), "→".into());

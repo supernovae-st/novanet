@@ -93,7 +93,7 @@ export {
 } from './project.js';
 
 // =============================================================================
-// ENTITY (v10.3 - replaces Concept, global realm, knowledge layer)
+// ENTITY (v11.2 - org realm, semantic layer, invariant trait)
 // =============================================================================
 
 export interface Entity extends StandardNodeProperties, EmbeddableNode {

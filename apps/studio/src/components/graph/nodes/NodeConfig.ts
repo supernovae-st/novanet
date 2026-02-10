@@ -5,7 +5,7 @@
  * This eliminates the performance overhead of computing styles on every render,
  * which is critical when rendering 19k+ nodes.
  *
- * v11.1.0: 65 nodes across 2 realms (GLOBAL / TENANT) — EntityCategory + BELONGS_TO
+ * v11.1.0: 62 nodes across 2 realms (SHARED / ORG) — EntityCategory + BELONGS_TO
  *
  * @example
  * // Fast lookup
@@ -42,11 +42,11 @@ export interface NodeConfig {
 }
 
 // =============================================================================
-// Size Lookup Table (v11.1.0 - 65 nodes)
+// Size Lookup Table (v11.1.0 - 62 nodes)
 // =============================================================================
 
 /**
- * Pre-computed sizes for all 65 node types (v11.1.0)
+ * Pre-computed sizes for all 62 node types (v11.1.0)
  *
  * Size categories:
  * - Large (280x140): Root nodes (Project, Organization)
