@@ -26,7 +26,7 @@ export interface EffectRendererProps {
   pathId: string;
   /** Reversed path ID for bidirectional effects */
   reversedPathId?: string;
-  /** Relation type string (e.g., 'HAS_CONCEPT', 'HAS_L10N') */
+  /** Relation type string (e.g., 'HAS_PAGE', 'HAS_CONTENT') */
   relationType: string;
   /** Source node position */
   sourcePosition: { x: number; y: number };

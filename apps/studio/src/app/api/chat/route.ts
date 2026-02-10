@@ -80,7 +80,7 @@ All nodes have: key, display_name, icon, description, llm_context, created_at, u
 ### Key Relationships (124 arc types)
 
 **Ownership**: HAS_PAGE, HAS_BLOCK, HAS_ENTITY, OF_TYPE, SUPPORTS_LOCALE
-**Localization**: FOR_LOCALE, HAS_CONTENT, L10N_OF, FALLBACK_TO
+**Localization**: FOR_LOCALE, HAS_CONTENT, CONTENT_OF, FALLBACK_TO
 **Semantic**: USES_ENTITY, SEMANTIC_LINK, SUBTOPIC_OF, TARGETS
 **Generation**: HAS_GENERATED, GENERATED_FOR, USES_PROMPT
 **Mining**: HAS_SEO_KEYWORDS, HAS_GEO_QUERIES, TARGETS
