@@ -163,7 +163,8 @@ describe('NovaNetFilter', () => {
     it('includeKnowledge() adds all knowledge relations', () => {
       const filter = NovaNetFilter.create().fromLocale('fr-FR').includeKnowledge();
       const criteria = filter.getCriteria();
-      const knowledgeRelations = ['HAS_IDENTITY', 'HAS_VOICE', 'HAS_CULTURE', 'HAS_MARKET', 'HAS_LEXICON'];
+      // v11.5: Culture, Market, Formatting, Slugification, ExpressionSet
+      const knowledgeRelations = ['HAS_CULTURE', 'HAS_MARKET', 'HAS_FORMATTING', 'HAS_SLUGIFICATION', 'HAS_EXPRESSIONS'];
       for (const relation of knowledgeRelations) {
         expect(criteria.includes).toContainEqual(
           expect.objectContaining({ relation, direction: 'outgoing' })
@@ -177,8 +178,9 @@ describe('NovaNetFilter', () => {
         .includeKnowledge()
         .includeKnowledge();
       const criteria = filter.getCriteria();
-      const identityRules = criteria.includes.filter(i => i.relation === 'HAS_IDENTITY');
-      expect(identityRules).toHaveLength(1);
+      // v11.5: Check HAS_CULTURE instead of HAS_IDENTITY
+      const cultureRules = criteria.includes.filter(i => i.relation === 'HAS_CULTURE');
+      expect(cultureRules).toHaveLength(1);
     });
   });
 
@@ -457,11 +459,12 @@ describe('CypherGenerator', () => {
       const result = CypherGenerator.generate(filter);
 
       expect(result.query).toContain('MATCH (root:Locale {key: $rootKey})');
-      expect(result.query).toContain('HAS_IDENTITY');
-      expect(result.query).toContain('HAS_VOICE');
+      // v11.5: Culture, Market, Formatting, Slugification, ExpressionSet
       expect(result.query).toContain('HAS_CULTURE');
       expect(result.query).toContain('HAS_MARKET');
-      expect(result.query).toContain('HAS_LEXICON');
+      expect(result.query).toContain('HAS_FORMATTING');
+      expect(result.query).toContain('HAS_SLUGIFICATION');
+      expect(result.query).toContain('HAS_EXPRESSIONS');
       expect(result.params.rootKey).toBe('fr-FR');
     });
   });
