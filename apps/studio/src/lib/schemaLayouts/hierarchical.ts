@@ -45,13 +45,13 @@ const LAYER_CONFIGS: Record<string, { label: string }> = {
 };
 
 // Node sizes for Dagre layout
-// MetaBadge nodes are compact (like relation badges)
-const REALM_NODE_WIDTH = 200;
-const REALM_NODE_HEIGHT = 44;
-const LAYER_NODE_WIDTH = 200;
-const LAYER_NODE_HEIGHT = 44;
-const KIND_NODE_WIDTH = 180;
-const KIND_NODE_HEIGHT = 90;
+// MUST match visual dimensions in MetaBadgeNode and SchemaNode for proper click detection
+const REALM_NODE_WIDTH = 280;
+const REALM_NODE_HEIGHT = 160;
+const LAYER_NODE_WIDTH = 280;
+const LAYER_NODE_HEIGHT = 160;
+const KIND_NODE_WIDTH = 280;
+const KIND_NODE_HEIGHT = 160;
 
 // Dagre layout config
 const DAGRE_CONFIG = {
