@@ -3,6 +3,8 @@
 //! Provides common helper functions used across organizing.rs, kind.rs, and arc_schema.rs
 //! to avoid code duplication.
 
+#![allow(clippy::needless_raw_string_hashes)]
+
 use serde::Serialize;
 use std::fmt::Write;
 

@@ -7,6 +7,8 @@
 //!
 //! Categories: realms, layers, traits, arc_families, states, navigation, quality, modes
 
+#![allow(clippy::needless_raw_string_hashes)]
+
 use crate::parsers::visual_encoding::{self, VisualEncodingDoc};
 use std::path::Path;
 

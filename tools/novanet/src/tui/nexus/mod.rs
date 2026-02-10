@@ -1915,9 +1915,9 @@ mod tests {
         state.trait_cursor = 0;
 
         // y key should trigger yank (may fail in CI without clipboard, but state should change)
-        let changed = state.handle_key(key_event(KeyCode::Char('y')));
         // Note: This will return true if clipboard works, or if error message is set
         // In CI without clipboard access, it still sets clipboard_message with error
-        assert!(changed || !changed); // Just verify no panic
+        // Just verify no panic - we don't assert on the return value as clipboard may fail in CI
+        let _ = state.handle_key(key_event(KeyCode::Char('y')));
     }
 }

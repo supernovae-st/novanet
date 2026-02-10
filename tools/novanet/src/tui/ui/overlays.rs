@@ -879,7 +879,7 @@ mod tests {
     #[test]
     fn test_legend_trait_styles_count() {
         // Legend should show 5 trait styles (v11.2: split derived → generated + aggregated)
-        let expected_traits = vec![
+        let expected_traits = [
             "invariant",
             "localized",
             "knowledge",
