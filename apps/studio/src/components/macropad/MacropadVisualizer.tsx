@@ -24,13 +24,17 @@ import {
   RefreshCw,
   Settings2,
   Layers,
-  Radio,
   Check,
   AlertCircle,
   FolderOpen,
+  Usb,
+  Unplug,
+  Radio,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useUIStore } from '@/stores/uiStore';
+import { useWebHID } from '@/hooks/useWebHID';
+import { MacropadTutorial } from './MacropadTutorial';
 
 // Dynamic import with SSR disabled for Three.js
 const SuperNovaePad3D = dynamic(
@@ -198,6 +202,15 @@ export const MacropadVisualizer = memo(function MacropadVisualizer() {
   const activeModal = useUIStore((s) => s.activeModal);
   const closeModal = useUIStore((s) => s.closeModal);
 
+  // WebHID device connection
+  const {
+    status: connectionStatus,
+    isSupported,
+    connect: connectDevice,
+    disconnect: disconnectDevice,
+    deviceInfo,
+  } = useWebHID();
+
   const isOpen = activeModal === 'macropad-configurator';
 
   // Load config on mount
@@ -350,7 +363,35 @@ export const MacropadVisualizer = memo(function MacropadVisualizer() {
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
+            {/* WebHID connection status */}
+            <div
+              className={cn(
+                'flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors',
+                connectionStatus === 'connected' && 'bg-green-500/15 text-green-400 border-green-500/20',
+                connectionStatus === 'connecting' && 'bg-blue-500/15 text-blue-400 border-blue-500/20',
+                connectionStatus === 'requesting' && 'bg-blue-500/15 text-blue-400 border-blue-500/20',
+                connectionStatus === 'disconnected' && 'bg-white/[0.06] text-white/50 border-white/[0.1]',
+                connectionStatus === 'error' && 'bg-red-500/15 text-red-400 border-red-500/20',
+                connectionStatus === 'unsupported' && 'bg-yellow-500/15 text-yellow-400 border-yellow-500/20'
+              )}
+            >
+              {connectionStatus === 'connected' && <Usb className="w-3.5 h-3.5" />}
+              {connectionStatus === 'connecting' && <RefreshCw className="w-3.5 h-3.5 animate-spin" />}
+              {connectionStatus === 'requesting' && <RefreshCw className="w-3.5 h-3.5 animate-spin" />}
+              {connectionStatus === 'disconnected' && <Unplug className="w-3.5 h-3.5" />}
+              {connectionStatus === 'error' && <AlertCircle className="w-3.5 h-3.5" />}
+              {connectionStatus === 'unsupported' && <AlertCircle className="w-3.5 h-3.5" />}
+              <span>
+                {connectionStatus === 'connected' && (deviceInfo?.name || 'Connected')}
+                {connectionStatus === 'connecting' && 'Connecting...'}
+                {connectionStatus === 'requesting' && 'Requesting...'}
+                {connectionStatus === 'disconnected' && 'Not Connected'}
+                {connectionStatus === 'error' && 'Error'}
+                {connectionStatus === 'unsupported' && 'Unsupported'}
+              </span>
+            </div>
+
             {/* Sync status indicator */}
             <div
               className={cn(
@@ -431,10 +472,18 @@ export const MacropadVisualizer = memo(function MacropadVisualizer() {
             />
           </div>
 
-          {/* Right Panel - Key Details */}
-          <div className="w-72 flex-shrink-0 border-l border-white/[0.08] bg-black/30 flex flex-col">
-            {/* Key Info */}
-            <div className="flex-1 p-4 overflow-y-auto">
+          {/* Right Panel - Tutorial & Key Details */}
+          <div className="w-80 flex-shrink-0 border-l border-white/[0.08] bg-black/30 flex flex-col">
+            {/* Scrollable content */}
+            <div className="flex-1 p-4 overflow-y-auto space-y-4">
+              {/* Connection Tutorial */}
+              <MacropadTutorial
+                connectionStatus={connectionStatus}
+                isSupported={isSupported}
+                onConnect={connectDevice}
+              />
+
+              {/* Key Info */}
               <div className="flex items-center gap-2 mb-4">
                 <Settings2 className="w-4 h-4 text-white/40" />
                 <h3 className="text-sm font-medium text-white/80">Key Details</h3>
@@ -552,6 +601,20 @@ export const MacropadVisualizer = memo(function MacropadVisualizer() {
           </div>
 
           <div className="flex items-center gap-2">
+            {/* Disconnect button (when connected) */}
+            {connectionStatus === 'connected' && (
+              <button
+                onClick={disconnectDevice}
+                className="px-3 py-1.5 rounded-lg text-sm border border-red-500/30 text-red-400 hover:bg-red-500/10 transition-colors flex items-center"
+                title="Disconnect device"
+              >
+                <Unplug className="w-4 h-4 mr-1.5" />
+                Disconnect
+              </button>
+            )}
+
+            <div className="w-px h-6 bg-white/[0.1]" />
+
             <button
               onClick={handleReloadConfig}
               className="px-3 py-1.5 rounded-lg text-sm border border-white/[0.15] text-white/70 hover:bg-white/[0.06] transition-colors flex items-center"
