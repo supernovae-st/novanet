@@ -281,11 +281,6 @@ node:
       cardinality: "N:N"
       description: "SEO keywords this localized entity is targeting for ranking"
 
-    ANSWERS:
-      to: SEOQuestion
-      cardinality: "N:N"
-      description: "SEO question keywords this localized entity answers"
-
   incoming_relations:
     HAS_CONTENT:
       from: Entity

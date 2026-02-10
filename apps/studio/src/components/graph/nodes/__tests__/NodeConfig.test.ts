@@ -1,5 +1,5 @@
 /**
- * NodeConfig Tests (v10.5.0)
+ * NodeConfig Tests (v11.5.0)
  *
  * Tests for pre-computed node configuration lookup tables.
  * These tables provide O(1) access to node sizes and colors,
@@ -18,13 +18,13 @@ import {
 import type { NodeType } from '@novanet/core/types';
 import { NODE_TYPES } from '@novanet/core/types';
 
-// All 61 node types in v11.3.0 (from Core - Single Source of Truth, OrgConfig replaces Organization + Tenant)
+// All 60 node types in v11.5.0 (from Core - Single Source of Truth)
 const ALL_NODE_TYPES: NodeType[] = [...NODE_TYPES];
 
 describe('NodeConfig', () => {
   describe('NODE_SIZES lookup table', () => {
-    it('should have predefined sizes for all 61 node types', () => {
-      expect(Object.keys(NODE_SIZES)).toHaveLength(61);
+    it('should have predefined sizes for all 60 node types', () => {
+      expect(Object.keys(NODE_SIZES)).toHaveLength(60);
       ALL_NODE_TYPES.forEach((type) => {
         expect(NODE_SIZES[type]).toBeDefined();
         expect(NODE_SIZES[type].width).toBeGreaterThan(0);
@@ -53,8 +53,8 @@ describe('NodeConfig', () => {
   });
 
   describe('NODE_COLORS lookup table', () => {
-    it('should have predefined colors for all 61 node types', () => {
-      expect(Object.keys(NODE_COLORS)).toHaveLength(61);
+    it('should have predefined colors for all 60 node types', () => {
+      expect(Object.keys(NODE_COLORS)).toHaveLength(60);
       ALL_NODE_TYPES.forEach((type) => {
         expect(NODE_COLORS[type]).toBeDefined();
         expect(NODE_COLORS[type].primary).toBeDefined();

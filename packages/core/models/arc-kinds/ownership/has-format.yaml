@@ -1,0 +1,28 @@
+# arc-kinds/ownership/has-format.yaml
+# HAS_FORMAT - SEOKeyword has a format classification (v11.4)
+#
+# v11.4: New arc for keyword format classification
+#        - Follows EntityCategory pattern (ADR-017)
+#        - SEOKeyword classifies into SEOKeywordFormat
+
+arc:
+  name: HAS_FORMAT
+  family: ownership
+  scope: intra_realm
+  source: SEOKeyword
+  target: SEOKeywordFormat
+  cardinality: many_to_one
+
+  llm_context: |
+    SEOKeyword has a format classification.
+    7 format types: standard, question, comparison, preposition, long_tail, brand, local.
+    Pattern: (SEOKeyword)-[:HAS_FORMAT]->(SEOKeywordFormat)
+    v11.4: Replaces type enum property with graph relationship.
+
+  cypher_pattern: "(SEOKeyword)-[:HAS_FORMAT]->(SEOKeywordFormat)"
+
+  example:
+    description: "Get all comparison keywords"
+    cypher: |
+      MATCH (kw:SEOKeyword)-[:HAS_FORMAT]->(f:SEOKeywordFormat {key: 'comparison'})
+      RETURN kw.value, kw.entity_a_key, kw.entity_b_key

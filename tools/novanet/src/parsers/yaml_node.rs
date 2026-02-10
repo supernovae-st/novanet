@@ -449,11 +449,13 @@ node:
         // v10.9 added: GEOQuery, GEOAnswer, GEOMetrics (+3)
         // v11.1 removed: GenerationJob, SEOMiningRun, EvaluationSignal (-3)
         // v11.3 merged: Organization + Tenant → OrgConfig (-1)
-        let nodes = load_all_nodes(root).expect("should parse all 61 nodes");
+        // v11.4: SEOKeywordFormat, SEOKeywordSet, GEOQuerySet (+3), removed SEOQuestion,
+        //        SEOComparison, SEOPreposition, GEOMetrics (-4)
+        let nodes = load_all_nodes(root).expect("should parse all 60 nodes");
         assert_eq!(
             nodes.len(),
-            61,
-            "expected 61 YAML node files (v11.3: merged Org+Tenant into OrgConfig)"
+            60,
+            "expected 60 YAML node files (v11.4: +3 new, -4 obsolete)"
         );
 
         // Every node has a non-empty name, realm, and layer
@@ -476,22 +478,24 @@ node:
         }
 
         // Verify trait distribution (2 realms: shared + org)
+        // v11.4: +3 invariant (SEOKeywordFormat, SEOKeywordSet, GEOQuerySet)
+        //        -3 knowledge (SEOQuestion, SEOComparison, SEOPreposition)
+        //        -1 aggregated (GEOMetrics)
         let count = |t: NodeTrait| nodes.iter().filter(|n| n.def.node_trait == t).count();
         assert_eq!(
             count(NodeTrait::Invariant),
-            29,
-            "invariant count (v11.3: merged Org+Tenant into OrgConfig)"
+            32,
+            "invariant count (v11.4: +3 SEO containers/format)"
         );
         assert_eq!(
             count(NodeTrait::Localized),
             2,
-            "localized count (ProjectContent + EntityContent)" // v11.0: ProjectL10n → ProjectContent
-        ); // v10.9: was 4, now 2 (BlockGenerated + PageGenerated moved to derived)
-        // v11.2: containers → invariant, derived → generated + aggregated
+            "localized count (ProjectContent + EntityContent)"
+        );
         assert_eq!(
             count(NodeTrait::Knowledge),
-            23,
-            "knowledge count (was 29, -6 containers now invariant)"
+            20,
+            "knowledge count (v11.4: -3 obsolete SEO types)"
         );
         assert_eq!(
             count(NodeTrait::Generated),
@@ -500,21 +504,22 @@ node:
         );
         assert_eq!(
             count(NodeTrait::Aggregated),
-            3,
-            "aggregated count (GEOAnswer, GEOMetrics, SEOKeywordMetrics)"
+            2,
+            "aggregated count (v11.4: GEOAnswer, SEOKeywordMetrics; GEOMetrics removed)"
         );
 
         // v11.4: Verify realm distribution (SEO/GEO moved to shared/knowledge)
+        // shared: +3 (SEOKeywordFormat, SEOKeywordSet, GEOQuerySet) -4 obsolete = net -1
         let realm_count = |r: &str| nodes.iter().filter(|n| n.realm == r).count();
         assert_eq!(
             realm_count("shared"),
-            40,
-            "shared realm count (1 config + 7 locale + 6 geography + 26 knowledge)"
+            39,
+            "shared realm count (v11.4: +3 new containers, -4 obsolete nodes)"
         );
         assert_eq!(
             realm_count("org"),
             21,
-            "org realm count (v11.4: SEO/GEO moved to shared)"
+            "org realm count (unchanged in v11.4)"
         );
 
         // Spot-check known nodes

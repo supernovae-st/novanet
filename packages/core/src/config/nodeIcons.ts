@@ -1,6 +1,6 @@
 // packages/core/src/config/nodeIcons.ts
 // Presentation layer configuration for node icons
-// v11.3.0 — 3-layer shared realm, GEO layer, OrgConfig consolidation
+// v11.5.0 — SEO/GEO moved to shared/knowledge, Locale to shared/config
 
 import type { NodeType } from '../types/nodes.js';
 
@@ -10,8 +10,12 @@ import type { NodeType } from '../types/nodes.js';
  * Icons are now in presentation layer, not data model.
  */
 export const NODE_ICONS: Record<NodeType, string> = {
-  // SHARED — locale (7)
+  // SHARED — config (3)
+  EntityCategory: '🏷️',
   Locale: '🌍',
+  SEOKeywordFormat: '📋',
+
+  // SHARED — locale (6)
   Formatting: '📝',
   Slugification: '🔗',
   Adaptation: '🔄',
@@ -27,8 +31,7 @@ export const NODE_ICONS: Record<NodeType, string> = {
   LendingCategory: '🏦',
   EconomicRegion: '💹',
 
-  // SHARED — knowledge (19)
-  EntityCategory: '🏷️',
+  // SHARED — knowledge (24) — includes SEO/GEO
   TermSet: '📚',
   ExpressionSet: '💭',
   PatternSet: '🔣',
@@ -48,20 +51,16 @@ export const NODE_ICONS: Record<NodeType, string> = {
   PopulationCluster: '👨‍👩‍👧‍👦',
   PopulationSubCluster: '👥',
 
-  // ORG — config (1) — v11.3: Organization + Tenant merged
-  OrgConfig: '🏢',
-
-  // ORG — seo (5)
+  // SHARED — knowledge (SEO/GEO) — v11.5: moved from org
   SEOKeyword: '🔍',
   SEOKeywordMetrics: '📊',
-  SEOComparison: '⚖️',
-  SEOPreposition: '🔗',
-  SEOQuestion: '❓',
-
-  // ORG — geo (3) — v11.3: new layer split from seo
+  SEOKeywordSet: '📑',
   GEOQuery: '🤖',
+  GEOQuerySet: '🗃️',
   GEOAnswer: '💬',
-  GEOMetrics: '📊',
+
+  // ORG — config (1) — v11.3: Organization + Tenant merged
+  OrgConfig: '🏢',
 
   // ORG — foundation (3)
   Project: '📦',

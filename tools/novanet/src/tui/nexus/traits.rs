@@ -89,7 +89,7 @@ fn trait_llm_context(key: &str) -> &str {
             "LLM-generated content output. Pages, blocks, and artifacts produced by the generation pipeline. Examples: PageGenerated, BlockGenerated, OutputArtifact."
         }
         "aggregated" => {
-            "Computed metrics and analytics. Time-series data, performance snapshots derived from external sources. Examples: GEOMetrics, SEOKeywordMetrics."
+            "Computed metrics and analytics. Time-series data, performance snapshots derived from external sources. Examples: GEOAnswer, SEOKeywordMetrics."
         }
         _ => "Unknown trait.",
     }

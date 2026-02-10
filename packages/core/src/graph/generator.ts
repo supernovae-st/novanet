@@ -1,6 +1,6 @@
 // packages/core/src/graph/generator.ts
 // Schema graph generator - Creates flat and hierarchical schema representations
-// v11.3.0 — 3-layer shared realm, GEO layer, OrgConfig consolidation
+// v11.5.0 — SEO/GEO moved to shared/knowledge, Locale to shared/config
 
 import { NODE_TYPES, NODE_REALMS, NODE_TRAITS, type NodeType, type Realm } from '../types/nodes.js';
 import { RelationRegistry } from '../schemas/relations.schema.js';
@@ -18,10 +18,14 @@ import { REALM_HIERARCHY } from './hierarchy.js';
  */
 const NODE_LABELS: Record<NodeType, string> = {
   // ═══════════════════════════════════════════════════════════════════════════
-  // SHARED REALM (32 nodes) — 3 layers: locale, geography, knowledge
+  // SHARED REALM (39 nodes) — 4 layers: config, locale, geography, knowledge
   // ═══════════════════════════════════════════════════════════════════════════
-  // locale (7)
+  // config (3) — v11.5: Locale + EntityCategory + SEOKeywordFormat
+  EntityCategory: 'Entity Category',
   Locale: 'Locale',
+  SEOKeywordFormat: 'SEO Keyword Format',
+
+  // locale (6)
   Formatting: 'Formatting',
   Slugification: 'Slugification',
   Adaptation: 'Adaptation',
@@ -37,8 +41,7 @@ const NODE_LABELS: Record<NodeType, string> = {
   LendingCategory: 'Lending Category',
   EconomicRegion: 'Economic Region',
 
-  // knowledge (19)
-  EntityCategory: 'Entity Category',
+  // knowledge (24) — includes SEO/GEO
   TermSet: 'Term Set',
   ExpressionSet: 'Expression Set',
   PatternSet: 'Pattern Set',
@@ -58,8 +61,16 @@ const NODE_LABELS: Record<NodeType, string> = {
   PopulationCluster: 'Population Cluster',
   PopulationSubCluster: 'Population Sub-Cluster',
 
+  // knowledge — SEO/GEO (6) — v11.5: moved from org
+  SEOKeyword: 'SEO Keyword',
+  SEOKeywordMetrics: 'SEO Metrics',
+  SEOKeywordSet: 'SEO Keyword Set',
+  GEOQuery: 'GEO Query',
+  GEOQuerySet: 'GEO Query Set',
+  GEOAnswer: 'GEO Answer',
+
   // ═══════════════════════════════════════════════════════════════════════════
-  // ORG REALM (29 nodes) — 8 layers
+  // ORG REALM (21 nodes) — 6 layers
   // ═══════════════════════════════════════════════════════════════════════════
   // config (1) — v11.3: Organization + Tenant merged
   OrgConfig: 'Org Config',
@@ -88,18 +99,6 @@ const NODE_LABELS: Record<NodeType, string> = {
   BlockRules: 'Block Rules',
   BlockInstruction: 'Block Instruction',
   PromptArtifact: 'Prompt Artifact',
-
-  // seo (5)
-  SEOKeyword: 'SEO Keyword',
-  SEOKeywordMetrics: 'SEO Metrics',
-  SEOComparison: 'SEO Comparison',
-  SEOPreposition: 'SEO Preposition',
-  SEOQuestion: 'SEO Question',
-
-  // geo (3) — v11.3: new layer split from seo
-  GEOQuery: 'GEO Query',
-  GEOAnswer: 'GEO Answer',
-  GEOMetrics: 'GEO Metrics',
 
   // output (3)
   PageGenerated: 'Page Generated',

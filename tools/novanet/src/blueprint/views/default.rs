@@ -195,7 +195,7 @@ fn render_traits(data: &BlueprintData) -> String {
             NodeTrait::Aggregated,
             "aggregated",
             "Computed metrics",
-            "GEOMetrics, SEOKeywordMetrics",
+            "GEOAnswer, SEOKeywordMetrics",
         ),
     ];
 

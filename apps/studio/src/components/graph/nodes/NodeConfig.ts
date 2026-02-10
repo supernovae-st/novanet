@@ -96,18 +96,19 @@ export const NODE_SIZES: Record<NodeType, NodeSize> = {
   PopulationCluster: { width: 180, height: 90 },
   PopulationSubCluster: { width: 180, height: 90 },
 
-  // seo (8) — SEO + GEO (Generative Engine Optimization)
+  // knowledge — SEO/GEO (6) — v11.5: moved from org to shared/knowledge
   SEOKeyword: { width: 200, height: 100 },
   SEOKeywordMetrics: { width: 160, height: 80 },
-  SEOComparison: { width: 180, height: 90 },
-  SEOPreposition: { width: 180, height: 90 },
-  SEOQuestion: { width: 180, height: 90 },
+  SEOKeywordSet: { width: 180, height: 90 },
   GEOQuery: { width: 200, height: 100 },
+  GEOQuerySet: { width: 180, height: 90 },
   GEOAnswer: { width: 180, height: 90 },
-  GEOMetrics: { width: 160, height: 80 },
+
+  // config (3) — v11.5: Locale + EntityCategory + SEOKeywordFormat
+  SEOKeywordFormat: { width: 180, height: 90 },
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // ORG REALM (29 nodes) — v11.3: OrgConfig replaces Organization + Tenant
+  // ORG REALM (21 nodes) — v11.5: SEO/GEO moved to shared/knowledge
   // ═══════════════════════════════════════════════════════════════════════════
   // config (1)
   OrgConfig: { width: 280, height: 140 },
@@ -373,23 +374,11 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
     tertiary: '#fca5a5',
     glow: '#f8717140',
   },
-  SEOComparison: {
+  SEOKeywordSet: {
     primary: '#dc2626',
     secondary: '#ef4444',
     tertiary: '#f87171',
     glow: '#dc262640',
-  },
-  SEOPreposition: {
-    primary: '#b91c1c',
-    secondary: '#dc2626',
-    tertiary: '#ef4444',
-    glow: '#b91c1c40',
-  },
-  SEOQuestion: {
-    primary: '#991b1b',
-    secondary: '#b91c1c',
-    tertiary: '#dc2626',
-    glow: '#991b1b40',
   },
   // GEO (Generative Engine Optimization) — Blue/Violet tones
   GEOQuery: {
@@ -398,21 +387,28 @@ export const NODE_COLORS: Record<NodeType, NodeColors> = {
     tertiary: '#a5b4fc',
     glow: '#6366f140',
   },
+  GEOQuerySet: {
+    primary: '#4f46e5',
+    secondary: '#6366f1',
+    tertiary: '#818cf8',
+    glow: '#4f46e540',
+  },
   GEOAnswer: {
     primary: '#8b5cf6',
     secondary: '#a78bfa',
     tertiary: '#c4b5fd',
     glow: '#8b5cf640',
   },
-  GEOMetrics: {
-    primary: '#a78bfa',
-    secondary: '#8b5cf6',
-    tertiary: '#c4b5fd',
-    glow: '#a78bfa40',
+  // config — SEOKeywordFormat
+  SEOKeywordFormat: {
+    primary: '#f97316',
+    secondary: '#fb923c',
+    tertiary: '#fdba74',
+    glow: '#f9731640',
   },
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // ORG REALM (29 nodes) — v11.3: OrgConfig replaces Organization + Tenant
+  // ORG REALM (21 nodes) — v11.5: SEO/GEO moved to shared/knowledge
   // ═══════════════════════════════════════════════════════════════════════════
   // config (1) — Sky blue tone
   OrgConfig: {
