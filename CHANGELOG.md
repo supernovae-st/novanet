@@ -7,6 +7,27 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [11.5.0] - 2026-02-10
+
+### Breaking Changes
+- **Locale moved**: Locale from shared/locale to shared/config (definitions layer pattern)
+  - Locale is a DEFINITION (invariant trait), not a parameter/setting
+  - Follows EntityCategory pattern: definitions go in config layer
+- **SEO/GEO consolidation**: SEO/GEO nodes moved from org realm to shared/knowledge
+  - SEO keywords are universal across organizations (not org-specific)
+  - org/seo and org/geo layers removed
+
+### Changed
+- **Node count**: 61 → 60 nodes (consolidated)
+- **Layer count**: 11 → 10 layers (4 shared + 6 org)
+- **Node distribution**: 39 shared + 21 org (was 32 + 29)
+- **ADR-020**: Schema Refinement documentation added
+
+### Fixed
+- Version mismatch across CLAUDE.md files (synchronized to v11.5.0)
+- VERSION file created as single source of truth
+- Node counts corrected in all documentation
+
 ## [11.3.0] - 2026-02-10
 
 ### Breaking Changes

@@ -9,7 +9,7 @@ user-invocable: true
 
 Display the complete NovaNet architecture diagram showing:
 - Source of truth (YAML models)
-- v11.3 Meta-Graph (faceted classification)
+- v11.5 Meta-Graph (faceted classification)
 - Generators (Mermaid, Layer, Kind, ArcSchema)
 - Neo4j infrastructure
 - Rust binary (`tools/novanet/`)
@@ -21,7 +21,7 @@ Display the complete NovaNet architecture diagram showing:
 Based on the `$ARGUMENTS` provided, display the appropriate section:
 
 - **"source"** or **"yaml"** - Show Source de Verite section only
-- **"meta"** or **"facets"** - Show Meta-Graph (v11.3 faceted classification)
+- **"meta"** or **"facets"** - Show Meta-Graph (v11.5 faceted classification)
 - **"infra"** or **"neo4j"** - Show Infrastructure section only
 - **"studio"** - Show Studio section only
 - **"packages"** or **"deps"** - Show Packages Dependency Graph
@@ -463,18 +463,18 @@ Based on the `$ARGUMENTS` provided, display the appropriate section:
 
 ---
 
-## Key Numbers (v11.3.0)
+## Key Numbers (v11.5.0)
 
 | Metric | Value |
 |--------|-------|
-| Kind (node types) | 61 |
-| ArcKind (arcs) | 125 |
+| Kind (node types) | 60 |
+| ArcKind (arcs) | 116 |
 | Realms | 2 (shared, org) |
-| Layers | 11 (3 shared + 8 org) |
+| Layers | 10 (4 shared + 6 org) |
 | Traits | 5 (invariant, localized, knowledge, generated, aggregated) |
 | ArcFamilies | 5 |
-| Shared nodes | 32 (locale: 7, geography: 6, knowledge: 19) |
-| Org nodes | 29 (config: 1, foundation: 3, structure: 3, semantic: 4, instruction: 7, seo: 5, geo: 3, output: 3) |
+| Shared nodes | 39 (config + locale + geography + knowledge) |
+| Org nodes | 21 (config, foundation, structure, semantic, instruction, output) |
 | Seed files | 11 |
 | Migrations | 6 |
 | Locales supported | 200 |
