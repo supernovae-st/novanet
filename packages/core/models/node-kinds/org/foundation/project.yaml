@@ -1,4 +1,4 @@
-# models/nodes/project/foundation/project.yaml
+# models/node-kinds/org/foundation/project.yaml
 # Project - Multi-tenant root node with brand and project configuration
 
 node:

@@ -156,14 +156,14 @@ export function useFilteredGraph(): FilteredGraphResult {
     return counts;
   }, [filteredNodes]);
 
-  // Compute layer counts (for schema mode breakdown) - v11.3: 11 layers
+  // Compute layer counts (for schema mode breakdown) - v11.4: 10 layers
   const layerCounts = useMemo((): LayerCounts => {
     const counts: LayerCounts = {
-      // Shared realm (3)
-      locale: 0, geography: 0, knowledge: 0,
-      // Org realm (8)
-      config: 0, foundation: 0, structure: 0, semantic: 0,
-      instruction: 0, seo: 0, geo: 0, output: 0,
+      // Shared realm (4) — v11.4: includes config
+      config: 0, locale: 0, geography: 0, knowledge: 0,
+      // Org realm (6) — v11.4: seo/geo removed
+      foundation: 0, structure: 0, semantic: 0,
+      instruction: 0, output: 0,
     };
     for (const node of filteredNodes) {
       const layer = NODE_LAYERS[node.type as NodeType];

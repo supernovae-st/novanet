@@ -122,7 +122,7 @@ describe('NovaNetFilter', () => {
     });
 
     // REMOVED v10.3: includeProjectConcepts tests (HAS_CONCEPT arc removed)
-    // Entity is now in global realm, accessed via USES_ENTITY from Page/Block
+    // Entity is now in org realm, accessed via USES_ENTITY from Page/Block
 
     it('includeRules() adds HAS_RULES include rule', () => {
       const filter = NovaNetFilter.create().fromBlock('block-hero').includeRules();
@@ -416,7 +416,7 @@ describe('CypherGenerator', () => {
 
       expect(result.query).toContain('[:HAS_PAGE]->(page:Page)');
       expect(result.query).toContain('[:HAS_BRAND_IDENTITY]->(brandIdentity:BrandIdentity)');
-      // REMOVED v10.3: HAS_CONCEPT (Entity is in global realm)
+      // REMOVED v10.3: HAS_CONCEPT (Entity is in org realm)
     });
   });
 

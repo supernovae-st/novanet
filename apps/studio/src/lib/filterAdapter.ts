@@ -553,12 +553,12 @@ export const VIEW_PRESETS: ViewPreset[] = [
   },
   {
     id: 'seo-keywords',
-    name: 'SEO Keywords',
-    description: 'Search optimization data',
+    name: 'SEO & GEO Keywords',
+    description: 'Search optimization data (v11.4: in knowledge layer)',
     icon: '🔍',
     shortcut: '6',
     filter: () => NovaNetFilter.create()
-      .byLayer('seo'),
+      .byTypes('SEOKeyword', 'SEOKeywordMetrics', 'SEOComparison', 'SEOPreposition', 'SEOQuestion', 'GEOQuery', 'GEOAnswer', 'GEOMetrics'),
   },
   {
     id: 'invariant-types',

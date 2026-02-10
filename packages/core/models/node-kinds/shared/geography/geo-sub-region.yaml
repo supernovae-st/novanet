@@ -1,4 +1,4 @@
-# packages/core/models/node-kinds/global/config/geo-sub-region.yaml
+# models/node-kinds/shared/geography/geo-sub-region.yaml
 # GeoSubRegion - UN M49 intermediate/sub-region (optional level)
 #
 # v10.8: Geographic Taxonomy - Phase 1

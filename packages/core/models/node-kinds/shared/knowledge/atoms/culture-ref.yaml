@@ -1,4 +1,4 @@
-# packages/core/models/node-kinds/global/knowledge/atoms/culture-ref.yaml
+# models/node-kinds/shared/knowledge/atoms/culture-ref.yaml
 # CultureRef — Cultural reference within a CultureSet
 #
 # Locale-native: each locale has unique cultural references (no invariant parent)

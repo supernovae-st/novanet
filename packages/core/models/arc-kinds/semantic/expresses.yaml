@@ -1,10 +1,13 @@
 # packages/core/models/arc-kinds/semantic/expresses.yaml
 # ArcKind: EXPRESSES — SEOKeyword expresses an Entity (v10.3)
+#
+# v11.5: scope fix (intra_realm → cross_realm)
+#        - SEOKeyword (shared/knowledge) → Entity (org/semantic)
 
 arc:
   name: EXPRESSES
   family: semantic
-  scope: intra_realm
+  scope: cross_realm
   temperature_threshold: 0.5  # v10.3: Keyword→entity mapping (moderate priority)
 
   source: SEOKeyword

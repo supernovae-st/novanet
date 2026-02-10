@@ -1,4 +1,4 @@
-# packages/core/models/node-kinds/global/config/slugification.yaml
+# models/node-kinds/shared/locale/slugification.yaml
 # Slugification — URL slug rules for a locale (transliteration, stop words, URL conventions)
 #
 # v10.6: Added slug_rule enum, preserve_diacritics, unicode_normalization, raw_markdown (hybrid approach)

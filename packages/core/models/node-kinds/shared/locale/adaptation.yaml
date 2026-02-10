@@ -1,4 +1,4 @@
-# packages/core/models/node-kinds/global/config/adaptation.yaml
+# models/node-kinds/shared/locale/adaptation.yaml
 # Adaptation - Content adaptation rules for FACTS vs ILLUSTRATIONS classification
 #
 # v10.7: REFACTORED - Simplified to core FACTS/ILLUSTRATIONS + technical terms

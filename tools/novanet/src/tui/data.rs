@@ -358,7 +358,7 @@ pub struct TaxonomyTree {
     pub realms: Vec<RealmInfo>,
     pub arc_families: Vec<ArcFamilyInfo>,
     pub stats: GraphStats,
-    /// Collapsed state: stores keys of collapsed nodes (e.g., "kinds", "arcs", "realm:global", "layer:structure")
+    /// Collapsed state: stores keys of collapsed nodes (e.g., "kinds", "arcs", "realm:shared", "layer:structure")
     /// Uses FxHashSet for ~30% faster lookups on string keys.
     pub collapsed: FxHashSet<String>,
     /// Instances loaded for Data view, keyed by Kind key.
@@ -442,7 +442,7 @@ ORDER BY realm_key, layer_key, kind_key
             // Get YAML path from Neo4j (with fallback to computed path)
             let yaml_path_raw: String = row.get("yaml_path").unwrap_or_default();
             let yaml_path = if !yaml_path_raw.is_empty() {
-                // Neo4j stores relative path like "node-kinds/tenant/structure/block.yaml"
+                // Neo4j stores relative path like "node-kinds/org/structure/block.yaml"
                 // We need to prefix with "packages/core/models/"
                 format!("packages/core/models/{}", yaml_path_raw)
             } else if realm_key == "unknown" || layer_key == "unknown" {
@@ -2276,7 +2276,7 @@ pub enum TreeItem<'a> {
     Instance(&'a RealmInfo, &'a LayerInfo, &'a KindInfo, &'a InstanceInfo),
 }
 
-/// Get icon for realm (v10.6: 2 realms only - global + tenant).
+/// Get icon for realm (v11.4: 2 realms - shared + org).
 /// Uses unicode symbols instead of emoji for terminal compatibility.
 fn realm_icon(key: &str) -> &'static str {
     match key {

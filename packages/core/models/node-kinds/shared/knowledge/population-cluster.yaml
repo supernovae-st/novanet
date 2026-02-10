@@ -1,4 +1,4 @@
-# packages/core/models/node-kinds/global/locale-knowledge/population-cluster.yaml
+# models/node-kinds/shared/knowledge/population-cluster.yaml
 # PopulationCluster - Macro population cluster for image generation diversity
 #
 # v10.8: Geographic Taxonomy - Phase 5

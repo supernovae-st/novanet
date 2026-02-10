@@ -453,7 +453,7 @@ mod tests {
         assert!(output.contains("Block: 'structure',"));
         assert!(output.contains("Entity: 'semantic',"));
         assert!(output.contains("PageGenerated: 'output',")); // v10.9: renamed from PageL10n
-        assert!(output.contains("Locale: 'locale',")); // v11.3: moved to locale layer
+        assert!(output.contains("Locale: 'config',")); // v11.5: moved to shared/config
         assert!(output.contains("Style: 'locale',")); // v11.3: moved to locale layer
         assert!(output.contains("SEOKeyword: 'knowledge',")); // v11.4: moved to shared/knowledge
 
@@ -481,14 +481,14 @@ mod tests {
             make_node("Continent", "shared", "geography"),
             make_node("Term", "shared", "knowledge"),
             make_node("Expression", "shared", "knowledge"),
-            // Org realm (v11.3: 8 layers including seo + geo)
+            // Org realm (v11.4: 6 layers, no seo/geo)
             make_node("OrgConfig", "org", "config"),
             make_node("Entity", "org", "semantic"),
             make_node("Project", "org", "foundation"),
             make_node("Page", "org", "structure"),
             make_node("Block", "org", "structure"),
-            make_node("SEOKeyword", "org", "seo"),
-            make_node("GEOQuery", "org", "geo"),
+            make_node("PagePrompt", "org", "instruction"),
+            make_node("PageGenerated", "org", "output"),
         ];
 
         let output = render_layers(&nodes).unwrap();

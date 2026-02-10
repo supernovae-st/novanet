@@ -1,4 +1,4 @@
-# packages/core/models/node-kinds/global/config/culture.yaml
+# models/node-kinds/shared/locale/culture.yaml
 # Culture — Cultural context for a locale including calendar, seasons, business norms, communication style, and core values
 #
 # v10.7: NEW node for 7-node locale knowledge architecture

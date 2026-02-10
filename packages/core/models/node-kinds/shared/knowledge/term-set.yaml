@@ -1,4 +1,4 @@
-# packages/core/models/node-kinds/global/knowledge/term-set.yaml
+# models/node-kinds/shared/knowledge/term-set.yaml
 # TermSet — Container grouping Term atoms by domain
 #
 # v10.1: Pure container (no JSON blobs - data lives in Term atoms)

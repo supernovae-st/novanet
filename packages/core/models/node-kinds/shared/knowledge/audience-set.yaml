@@ -1,4 +1,4 @@
-# packages/core/models/node-kinds/global/knowledge/audience-set.yaml
+# models/node-kinds/shared/knowledge/audience-set.yaml
 # AudienceSet — Container grouping AudienceTrait atoms by segment
 #
 # v10.1: Pure container (no JSON blobs - data lives in AudienceTrait atoms)
