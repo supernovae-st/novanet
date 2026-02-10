@@ -1360,9 +1360,9 @@ fn render_atlas_view_traversal(app: &App) -> String {
             "Full NovaNet graph (all nodes)",
         ),
         (
-            "global-layer",
+            "shared-layer",
             "overview",
-            "Locale config and knowledge (15 nodes)",
+            "Locale config and knowledge (39 nodes)",
         ),
         (
             "seo-keywords",
@@ -2207,7 +2207,7 @@ mod tests {
         // Should list some view names
         let view_names = [
             "complete-graph",
-            "global-layer",
+            "shared-layer",
             "block-generation",
             "entity-ecosystem",
         ];
