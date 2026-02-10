@@ -120,7 +120,6 @@ export const Graph3D = memo(function Graph3D({
   const fgRef = useRef<ForceGraphMethods | null>(null);
   const starfieldRef = useRef<THREE.Points | null>(null);
   const composerRef = useRef<ReturnType<typeof createEnhancedComposer> | null>(null);
-  const bootTimeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
   const [legendCollapsed, setLegendCollapsed] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   const [isGraphReady, setIsGraphReady] = useState(false);
@@ -278,48 +277,11 @@ export const Graph3D = memo(function Graph3D({
     fg.d3ReheatSimulation?.();
   }, [isGraphReady]);
 
-  // Galaxy boot animation - nodes spiral in from center
+  // Boot phase - skip animation, go directly to ready
   useEffect(() => {
-    if (!isGraphReady || bootPhase !== 'loading' || graphData.nodes.length === 0) return;
-
-    setBootPhase('spawning');
-
-    // Clear any previous timeouts
-    bootTimeoutsRef.current.forEach(clearTimeout);
-    bootTimeoutsRef.current = [];
-
-    // Animate nodes from center with stagger
-    // fx/fy/fz are D3 force properties added at runtime
-    graphData.nodes.forEach((node, index) => {
-      const n = node as ForceGraphNode & { fx?: number; fy?: number; fz?: number };
-      // Start all nodes at center
-      n.fx = 0;
-      n.fy = 0;
-      n.fz = 0;
-
-      // Release with stagger - track timeout for cleanup
-      const delay = index * 30;  // 30ms stagger
-      const timeoutId = setTimeout(() => {
-        // Check if graph still exists before modifying
-        if (!fgRef.current) return;
-        n.fx = undefined;
-        n.fy = undefined;
-        n.fz = undefined;
-      }, delay);
-      bootTimeoutsRef.current.push(timeoutId);
-    });
-
-    // Mark as ready after all nodes released
-    const totalDelay = graphData.nodes.length * 30 + 1500;
-    const readyTimeoutId = setTimeout(() => setBootPhase('ready'), totalDelay);
-    bootTimeoutsRef.current.push(readyTimeoutId);
-
-    // Cleanup on unmount
-    return () => {
-      bootTimeoutsRef.current.forEach(clearTimeout);
-      bootTimeoutsRef.current = [];
-    };
-  }, [isGraphReady, bootPhase, graphData.nodes]);
+    if (!isGraphReady || bootPhase !== 'loading') return;
+    setBootPhase('ready');
+  }, [isGraphReady, bootPhase]);
 
   // Compute neighbors and highlighted links when selection changes
   useEffect(() => {
@@ -666,77 +628,73 @@ export const Graph3D = memo(function Graph3D({
     }
   }, [isGraphReady]);
 
-  // Link styling callbacks
-  const getLinkColor = useCallback((link: ForceGraphLink) => {
-    if (!link?.type) return '#60a5fa';
-    const config = getArcParticleConfig(link.type);
-    return config.particleColor;
-  }, []);
-
-  const getLinkWidth = useCallback((link: ForceGraphLink) => {
-    if (!link) return 0;
-    const config = getArcParticleConfig(link.type);
-    const baseWidth = config.linkWidth;
-
-    // Highlight connected links
-    const source = link.source as string | { id: string } | undefined;
-    const target = link.target as string | { id: string } | undefined;
-    if (!source || !target) return baseWidth;
-
-    const sourceId = typeof source === 'object' ? source.id : source;
-    const targetId = typeof target === 'object' ? target.id : target;
-    const linkKey = `${sourceId}-${targetId}`;
-
-    if (highlightedLinks.has(linkKey)) {
-      return baseWidth * 2;  // 2x wider when highlighted (reduced from 3x)
+  // Link styling callbacks - ULTRA DEFENSIVE
+  const getLinkColor = useCallback((link: unknown) => {
+    try {
+      const l = link as ForceGraphLink | undefined;
+      if (!l || typeof l !== 'object' || !('type' in l)) return '#1e3a5f';
+      const config = getArcParticleConfig(String(l.type || ''));
+      return config.linkColor;
+    } catch {
+      return '#1e3a5f';
     }
-
-    return selectedNodeId ? baseWidth * 0.5 : baseWidth;  // Dim when selection exists
-  }, [highlightedLinks, selectedNodeId]);
-
-  const getLinkOpacity = useCallback((link: ForceGraphLink) => {
-    if (!link) return 0.3;
-    const source = link.source as string | { id: string } | undefined;
-    const target = link.target as string | { id: string } | undefined;
-    if (!source || !target) return 0.3;
-
-    const sourceId = typeof source === 'object' ? source.id : source;
-    const targetId = typeof target === 'object' ? target.id : target;
-    const linkKey = `${sourceId}-${targetId}`;
-
-    if (!selectedNodeId) return 0.5;  // Default opacity
-    if (highlightedLinks.has(linkKey)) return 0.9;  // Highlighted
-    return 0.1;  // Dimmed
-  }, [highlightedLinks, selectedNodeId]);
-
-  const getLinkParticles = useCallback((link: ForceGraphLink) => {
-    if (!link?.type) return 6;
-    const config = getArcParticleConfig(link.type);
-    return config.particles;
   }, []);
 
-  const getLinkParticleSpeed = useCallback((link: ForceGraphLink) => {
-    if (!link?.type) return 0.005;
-    const config = getArcParticleConfig(link.type);
-    return config.particleSpeed;
+  const getLinkWidth = useCallback((link: unknown) => {
+    try {
+      const l = link as ForceGraphLink | undefined;
+      if (!l || typeof l !== 'object') return 0.3;
+      const config = getArcParticleConfig(String((l as any).type || ''));
+      return config.linkWidth;
+    } catch {
+      return 0.3;
+    }
   }, []);
 
-  const getLinkParticleWidth = useCallback((link: ForceGraphLink) => {
-    if (!link?.type) return 15;
-    const config = getArcParticleConfig(link.type);
-    return config.particleWidth;
+  const getLinkOpacity = useCallback((link: unknown) => {
+    try {
+      const l = link as ForceGraphLink | undefined;
+      if (!l || typeof l !== 'object') return 0.15;
+      const config = getArcParticleConfig(String((l as any).type || ''));
+      return config.linkOpacity;
+    } catch {
+      return 0.15;
+    }
   }, []);
 
-  const getLinkParticleColor = useCallback((link: ForceGraphLink) => {
-    if (!link?.type) return '#60a5fa';
-    const config = getArcParticleConfig(link.type);
-    return config.particleColor;
+  const getLinkParticles = useCallback((_link: unknown) => {
+    // Return fixed number of particles - simple and safe
+    return 4;
   }, []);
 
-  const getLinkCurvature = useCallback((link: ForceGraphLink) => {
-    if (!link?.type) return 0;
-    const config = getArcParticleConfig(link.type);
-    return config.curvature;
+  const getLinkParticleSpeed = useCallback((_link: unknown) => {
+    return 0.003;  // Slow speed so particles are visible
+  }, []);
+
+  const getLinkParticleWidth = useCallback((_link: unknown) => {
+    return 3;  // Fixed width
+  }, []);
+
+  const getLinkParticleColor = useCallback((link: unknown) => {
+    try {
+      const l = link as ForceGraphLink | undefined;
+      if (!l || typeof l !== 'object') return '#60a5fa';
+      const config = getArcParticleConfig(String((l as any).type || ''));
+      return config.particleColor;
+    } catch {
+      return '#60a5fa';
+    }
+  }, []);
+
+  const getLinkCurvature = useCallback((link: unknown) => {
+    try {
+      const l = link as ForceGraphLink | undefined;
+      if (!l || typeof l !== 'object') return 0;
+      const config = getArcParticleConfig(String((l as any).type || ''));
+      return config.curvature;
+    } catch {
+      return 0;
+    }
   }, []);
 
   // Empty state - context-aware diagnostics
@@ -773,10 +731,10 @@ export const Graph3D = memo(function Graph3D({
         linkWidth={getLinkWidth as any}
         linkOpacity={getLinkOpacity as any}
         linkDirectionalParticles={getLinkParticles as any}
-        linkDirectionalParticleSpeed={getLinkParticleSpeed as any}
+        linkDirectionalParticleSpeed={0.003}
         linkDirectionalParticleWidth={getLinkParticleWidth as any}
         linkDirectionalParticleColor={getLinkParticleColor as any}
-        linkDirectionalParticleResolution={16}
+        linkDirectionalParticleResolution={8}
         linkCurvature={getLinkCurvature as any}
         linkCurveRotation={0.5}
         nodeRelSize={8}
@@ -785,8 +743,8 @@ export const Graph3D = memo(function Graph3D({
         enableNodeDrag={true}
         enableNavigationControls={true}
         controlType="orbit"
-        warmupTicks={80}
-        cooldownTicks={150}
+        warmupTicks={0}
+        cooldownTicks={100}
       />
 
       {/* Legend */}
