@@ -513,21 +513,29 @@ export async function executeCustomQuery(
 ): Promise<QueryResult> {
   // Security: Only allow read queries
   // Block write operations and potentially dangerous procedures
+  // Use word boundaries to avoid false positives (e.g., "expressionSet" contains "SET")
   const normalizedCypher = cypher.trim().toUpperCase();
-  const blockedKeywords = [
-    // Write operations
-    'CREATE', 'MERGE', 'SET', 'DELETE', 'REMOVE', 'DETACH',
+  const blockedPatterns = [
+    // Write operations (word boundaries)
+    /\bCREATE\b/,
+    /\bMERGE\b/,
+    /\bSET\b/,
+    /\bDELETE\b/,
+    /\bREMOVE\b/,
+    /\bDETACH\b/,
     // Procedures (APOC, etc. can modify data)
-    'CALL ',
+    /\bCALL\s/,
     // File operations
-    'LOAD CSV',
+    /\bLOAD\s+CSV\b/,
     // Loop constructs (can contain writes)
-    'FOREACH',
+    /\bFOREACH\b/,
     // Schema modifications
-    'DROP', 'INDEX', 'CONSTRAINT',
+    /\bDROP\b/,
+    /\bCREATE\s+INDEX\b/,
+    /\bCREATE\s+CONSTRAINT\b/,
   ];
 
-  if (blockedKeywords.some((keyword) => normalizedCypher.includes(keyword))) {
+  if (blockedPatterns.some((pattern) => pattern.test(normalizedCypher))) {
     throw new Error('Write operations and procedures are not allowed. Use read-only queries.');
   }
 
