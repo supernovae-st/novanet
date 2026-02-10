@@ -4,6 +4,8 @@
 # v11.4: Moved to shared/knowledge (Knowledge Atoms pattern)
 #        - realm: shared (was org)
 #        - layer: knowledge (was geo)
+#        - REMOVED time-series properties (now in GEOAnswer)
+#        - Static query definition only - metrics tracked in GEOAnswer nodes
 #
 # v10.7: GEO Schema v1
 #        - New node type for AI visibility tracking (Gemini, GPT, Perplexity, Claude)
@@ -44,7 +46,7 @@ node:
     llm_context:
       type: string
       required: false
-      description: "Format: USE: [when]. TRIGGERS: [keywords]. NOT: [disambiguation]."
+      description: "GEOQuery represents an AI search query to monitor for visibility. It is DISCOVERED/CONFIGURED data, not generated content. Static query definition - time-series metrics live in GEOAnswer nodes. v11.4: Now in shared/knowledge (Knowledge Atoms pattern). Access: EntityContent --[:MONITORS_GEO]--> GEOQuery --[:HAS_GEO_ANSWER]--> GEOAnswer"
 
     created_at:
       type: datetime
@@ -59,7 +61,7 @@ node:
   # ═══════════════════════════════════════════════════════════════════════════════
 
   properties:
-    # --- Core query data ---
+    # --- Core query data (static definition) ---
     value:
       type: string
       required: true
@@ -68,89 +70,56 @@ node:
 
     query_type:
       type: string
-      required: false
-      description: "Query classification: informational | how_to | comparison | recommendation | factual"
+      required: true
+      description: "Query classification: informational | transactional | navigational | how_to | comparison | recommendation | factual"
       example: "how_to"
 
-    # --- Per-engine visibility scores (0-100) ---
-    gemini_visibility:
-      type: int
+    language_hint:
+      type: string
       required: false
-      description: "Visibility score in Google Gemini responses (0-100)"
-      example: 75
+      description: "Optional language hint for query interpretation (BCP-47 code)"
+      example: "en-US"
 
-    gpt_visibility:
-      type: int
+    platforms:
+      type: string[]
       required: false
-      description: "Visibility score in OpenAI GPT responses (0-100)"
-      example: 60
+      description: "AI platforms to check: gemini | gpt | perplexity | claude"
+      example: ["gemini", "gpt", "perplexity", "claude"]
 
-    perplexity_visibility:
-      type: int
-      required: false
-      description: "Visibility score in Perplexity AI responses (0-100)"
-      example: 85
-
-    claude_visibility:
-      type: int
-      required: false
-      description: "Visibility score in Anthropic Claude responses (0-100)"
-      example: 70
-
-    # --- Aggregate metrics ---
-    ai_visibility_score:
-      type: float
-      required: false
-      description: "Weighted average visibility across all AI engines (0-100)"
-      example: 72.5
-
-    share_of_voice:
-      type: float
-      required: false
-      description: "Percentage of AI responses mentioning brand vs competitors (0-100)"
-      example: 35.2
-
-    citation_frequency:
-      type: float
-      required: false
-      description: "Average number of citations per AI response"
-      example: 2.3
+    # NOTE: Time-series metrics (visibility scores, share_of_voice, citation_frequency)
+    # are tracked in GEOAnswer nodes, not here. This node is static query definition only.
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # RELATIONS
   # ═══════════════════════════════════════════════════════════════════════════════
 
   relations:
-    # Incoming: Locale --[:HAS_GEO_QUERIES]--> GEOQuery (ownership)
-    # Incoming: EntityContent --[:MONITORS_GEO]--> GEOQuery (targeting)
+    # Incoming: EntityContent --[:MONITORS_GEO]--> GEOQuery (targeting, v11.4)
 
-    - relation: HAS_GEO_ANSWERS
+    - relation: HAS_GEO_ANSWER
       to: GEOAnswer
       direction: outgoing
-      description: "LLM response samples for this query"
-
-    - relation: HAS_GEO_METRICS
-      to: GEOMetrics
-      direction: outgoing
-      description: "Historical visibility metrics snapshots (time-series)"
+      cardinality: "1:N"
+      description: "Time-series LLM response samples with visibility metrics (v11.4)"
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # EXAMPLE
   # ═══════════════════════════════════════════════════════════════════════════════
 
   example:
-    description: "Get GEO queries with highest AI visibility for a locale"
+    description: "Get GEO queries monitored by an entity with latest visibility metrics"
     cypher: |
-      // v10.7: GEOQuery with visibility scores and answers
-      MATCH (l:Locale {key: $locale})-[:HAS_GEO_QUERIES]->(q:GEOQuery)
-      OPTIONAL MATCH (q)-[:HAS_GEO_ANSWERS]->(a:GEOAnswer)
+      // v11.4: GEOQuery with time-series answers (metrics in GEOAnswer)
+      MATCH (e:Entity {key: $entity_key})-[:HAS_CONTENT]->(ec:EntityContent)
+      MATCH (ec)-[:MONITORS_GEO]->(q:GEOQuery)
+      OPTIONAL MATCH (q)-[:HAS_GEO_ANSWER]->(a:GEOAnswer)
+      WITH q, a ORDER BY a.captured_at DESC
+      WITH q, collect(a)[0] AS latest_answer
       RETURN q.value AS query,
-             q.ai_visibility_score,
-             q.share_of_voice,
-             q.gemini_visibility,
-             q.gpt_visibility,
-             q.perplexity_visibility,
-             q.claude_visibility,
-             count(a) AS answer_count
-      ORDER BY q.ai_visibility_score DESC
+             q.query_type,
+             q.platforms,
+             latest_answer.ai_visibility_score AS visibility,
+             latest_answer.share_of_voice AS sov,
+             latest_answer.captured_at AS last_check
+      ORDER BY latest_answer.ai_visibility_score DESC
       LIMIT 20

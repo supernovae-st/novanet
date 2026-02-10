@@ -1,0 +1,112 @@
+# models/node-kinds/shared/knowledge/seo-keyword-set.yaml
+# SEOKeywordSet - Container for SEO keywords belonging to a locale (1:1 with Locale)
+#
+# v11.4: SEO Knowledge Atoms refactor
+#        - Pure container (no JSON blobs - data lives in SEOKeyword atoms)
+#        - One set per locale (1:1 cardinality)
+#        - trait=invariant because the container category is universal
+# Stability: High - structure rarely changes
+
+node:
+  name: SEOKeywordSet
+  realm: shared
+  layer: knowledge
+  trait: invariant  # v11.4: Containers are universal categories (invariant), atoms are locale-native (knowledge)
+  icon: "📦"
+  description: "Container for SEO keywords belonging to a locale (1:1 with Locale)"
+
+  standard_properties:
+    key:
+      type: string
+      required: true
+      description: "Set key (format: seo-keywords@{locale_key})"
+      pattern: "^seo-keywords@[a-z]{2}-[A-Z]{2}$"
+      examples:
+        - "seo-keywords@fr-FR"
+        - "seo-keywords@en-US"
+
+    display_name:
+      type: string
+      required: true
+      description: "Human-readable name"
+      example: "SEO Keywords (French - France)"
+
+    description:
+      type: string
+      required: false
+      description: "Short description"
+      example: "French market SEO keywords from DataForSEO"
+
+    llm_context:
+      type: string
+      required: false
+      description: "LLM generation hints"
+      example: "USE: to find SEO keywords for a locale. TRIGGERS: keyword research. NOT: individual terms."
+
+    created_at:
+      type: datetime
+      required: true
+      description: "Creation timestamp"
+
+    updated_at:
+      type: datetime
+      required: true
+      description: "Last update timestamp"
+
+  properties:
+    # Sync metadata
+    last_sync:
+      type: datetime
+      required: false
+      description: "Last DataForSEO sync timestamp"
+      example: "2026-02-10T14:00:00Z"
+
+    data_source:
+      type: string
+      required: false
+      default: "dataforseo"
+      description: "Source of keyword data"
+      example: "dataforseo"
+
+    # Aggregate stats (metadata about contained atoms)
+    total_keywords:
+      type: int
+      required: false
+      description: "Count of keywords in this set"
+      example: 15420
+
+  relations:
+    outgoing:
+      - type: CONTAINS_SEO_KEYWORD
+        to: SEOKeyword
+        cardinality: "1:N"
+        description: "Container owns its keywords"
+
+    incoming:
+      - type: HAS_SEO_KEYWORDS
+        from: Locale
+        cardinality: "1:1"
+        description: "Locale owns this keyword set (1:1)"
+
+  llm_context: |
+    SEOKeywordSet groups all SEO keywords for a locale.
+    One SEOKeywordSet per Locale (1:1 cardinality).
+    Access: (Locale)-[:HAS_SEO_KEYWORDS]->(SEOKeywordSet)
+    Then: (SEOKeywordSet)-[:CONTAINS_SEO_KEYWORD]->(SEOKeyword)
+    trait=invariant because the container category is universal.
+
+  example:
+    description: "Get keyword set with count for a locale"
+    data:
+      key: "seo-keywords@fr-FR"
+      display_name: "SEO Keywords (French - France)"
+      description: "French market SEO keywords from DataForSEO"
+      last_sync: "2026-02-10T14:00:00Z"
+      data_source: "dataforseo"
+      total_keywords: 15420
+
+    cypher: |
+      // Get keyword set with count
+      MATCH (l:Locale {key: 'fr-FR'})-[:HAS_SEO_KEYWORDS]->(ks:SEOKeywordSet)
+      OPTIONAL MATCH (ks)-[:CONTAINS_SEO_KEYWORD]->(kw:SEOKeyword)
+      RETURN ks.key, ks.last_sync, count(kw) AS keyword_count

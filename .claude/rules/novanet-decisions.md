@@ -702,6 +702,83 @@ REALMS (61 nodes total):
 | 017 | v11.1 | EntityCategory classification |
 | 018 | v11.2 | Classification system refinement (realm renames, trait split) |
 | 019 | v11.3 | Layer reorganization (locale-knowledge split, geo layer, OrgConfig) |
+| 020 | v11.5 | Schema refinement (Locale to config, SEO/GEO consolidation) |
+
+## ADR-020: Schema Refinement
+
+**Status**: Approved (v11.5)
+
+**Decision**: Refine the schema with Locale moved to shared/config and SEO/GEO layers consolidated.
+
+### Changes
+
+| Area | Before (v11.4) | After (v11.5) |
+|------|----------------|---------------|
+| **Locale location** | shared/locale | shared/config |
+| **SEO/GEO layers** | org/seo, org/geo (separate) | Removed from org |
+| **SEO/GEO nodes** | In org realm | Moved to shared/knowledge |
+| **Layer count** | 11 (3 shared + 8 org) | 10 (4 shared + 6 org) |
+| **Node distribution** | 32 shared + 29 org | 40 shared + 21 org |
+
+### Locale to Config Layer
+
+```
+BEFORE (v11.4):
+├── shared/
+│   ├── config/          # EntityCategory only
+│   └── locale/          # Locale, Style, Formatting, etc.
+
+AFTER (v11.5):
+├── shared/
+│   ├── config/          # EntityCategory + Locale (definitions)
+│   └── locale/          # Style, Formatting, etc. (settings)
+```
+
+**Rationale:**
+- Locale is a DEFINITION (invariant), not a parameter/setting
+- Follows EntityCategory pattern: definitions go in config layer
+- shared/locale now contains only locale SETTINGS (Culture, Style, etc.)
+- Clean separation: definitions vs settings
+
+### SEO/GEO Consolidation
+
+```
+BEFORE (v11.4):
+└── org/
+    ├── seo/             # 5 nodes (SEOKeyword, etc.)
+    └── geo/             # 3 nodes (GEOQuery, etc.)
+
+AFTER (v11.5):
+├── shared/
+│   └── knowledge/       # Includes SEO + GEO nodes (now 26 nodes)
+└── org/
+    # No seo/geo layers
+```
+
+**Rationale:**
+- SEO/GEO data is universal market intelligence, not org-specific
+- Moving to shared realm enables cross-org analytics
+- Reduces org layers from 8 to 6
+- Knowledge layer becomes the home for all market intelligence
+
+### Architecture Summary (v11.5)
+
+```
+REALMS (61 nodes total):
+├── shared/              # Universal knowledge (READ-ONLY) — 40 nodes
+│   ├── config/          # 2 nodes (EntityCategory, Locale)
+│   ├── locale/          # 6 nodes (Style, Formatting, Slugification, etc.)
+│   ├── geography/       # 6 nodes (Continent, Region, etc.)
+│   └── knowledge/       # 26 nodes (Terms, Expressions, SEO, GEO, etc.)
+│
+└── org/                 # Organization-specific — 21 nodes
+    ├── config/          # 1 node (OrgConfig)
+    ├── foundation/      # 3 nodes (Project, ProjectContent, BrandIdentity)
+    ├── structure/       # 3 nodes (Page, Block, ContentSlot)
+    ├── semantic/        # 4 nodes (Entity, EntityContent, AudiencePersona, ChannelSurface)
+    ├── instruction/     # 7 nodes (PageType, BlockType, prompts, etc.)
+    └── output/          # 3 nodes (PageGenerated, BlockGenerated, OutputArtifact)
+```
 
 ## References
 

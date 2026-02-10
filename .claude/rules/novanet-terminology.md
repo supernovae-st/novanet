@@ -1,4 +1,4 @@
-# NovaNet Terminology (v11.3)
+# NovaNet Terminology (v11.5)
 
 This file defines the canonical terminology for NovaNet. All code, documentation, and UI must use these terms consistently.
 
@@ -21,21 +21,25 @@ This file defines the canonical terminology for NovaNet. All code, documentation
 | Axis | Question | Type | Property | Values |
 |------|----------|------|----------|--------|
 | 1 | WHERE? | `NodeRealm` | `realm` | `shared`, `org` |
-| 2 | WHAT? | `NodeLayer` | `layer` | `locale`, `geography`, `knowledge`, `config`, `foundation`, `structure`, `semantic`, `instruction`, `seo`, `geo`, `output` |
+| 2 | WHAT? | `NodeLayer` | `layer` | `config`, `locale`, `geography`, `knowledge`, `foundation`, `structure`, `semantic`, `instruction`, `output` |
 | 3 | HOW? | `NodeTrait` | `trait` | `invariant`, `localized`, `knowledge`, `generated`, `aggregated` |
 
-### v11.3 Realm Architecture
+### v11.5 Realm Architecture
 
 | Realm | Layers | Nodes | Description |
 |-------|--------|-------|-------------|
-| `shared` | locale, geography, knowledge | 32 | Universal locale knowledge (READ-ONLY) |
-| `org` | config, foundation, structure, semantic, instruction, seo, geo, output | 29 | Organization-specific content |
+| `shared` | config, locale, geography, knowledge | 40 | Universal knowledge (READ-ONLY) |
+| `org` | config, foundation, structure, semantic, instruction, output | 21 | Organization-specific content |
+
+> **v11.5 Changes:**
+> - Locale moved: shared/locale → shared/config (definitions layer)
+> - SEO/GEO consolidation: seo/geo layers removed from org, nodes in shared/knowledge
+> - Total: 61 nodes (40 shared + 21 org), 10 layers (4 shared + 6 org)
 
 > **v11.3 Changes:**
 > - Layer split: `locale-knowledge` → `locale`, `geography`, `knowledge` (3 layers)
 > - New layer: `geo` added to org realm for GEO intelligence
 > - Node merge: Organization + Tenant → OrgConfig
-> - Total: 61 nodes (was 62), 11 layers (was 9)
 
 > **v11.2 Changes:**
 > - Realm renames: `global` → `shared`, `tenant` → `org`
@@ -196,6 +200,9 @@ These terms are deprecated and should NOT be used:
 | `locale-knowledge` | `locale` / `geography` / `knowledge` | v11.3 layer split |
 | `Organization` | `OrgConfig` | v11.3 node merge |
 | `Tenant` | `OrgConfig` | v11.3 node merge |
+| `org/seo` layer | `shared/knowledge` | v11.5 SEO nodes consolidated |
+| `org/geo` layer | `shared/knowledge` | v11.5 GEO nodes consolidated |
+| `Locale` in `shared/locale` | `Locale` in `shared/config` | v11.5 definitions layer pattern |
 
 ## Navigation Modes
 
@@ -216,7 +223,7 @@ These terms are deprecated and should NOT be used:
 | Arc stroke | ArcFamily | `taxonomy.yaml` arc_families[].color |
 | Arc dash | ArcScope | solid (intra) / dashed (cross) |
 
-## Icons (v11.3)
+## Icons (v11.5)
 
 Source of truth: `packages/core/models/visual-encoding.yaml` → `icons:` section
 
@@ -227,7 +234,7 @@ Each icon has dual format:
 | Category | Purpose | Examples |
 |----------|---------|----------|
 | `realms` | Node ownership | ◉ shared, ◎ org |
-| `layers` | Functional layer | 🌍 locale, 🗺️ geography, 🧠 knowledge, ⚙ config, ◆ semantic, 🤖 geo, ● output |
+| `layers` | Functional layer | ⚙ config, 🌍 locale, 🗺️ geography, 🧠 knowledge, ◆ semantic, ● output |
 | `traits` | Locale behavior | ■ invariant, □ localized, ◊ knowledge, ✦ generated, ⋆ aggregated |
 | `arc_families` | Arc type | → ownership, ⇢ localization |
 | `states` | UI empty states | ◐ loading, ∅ no_kinds, ⚠ error |
