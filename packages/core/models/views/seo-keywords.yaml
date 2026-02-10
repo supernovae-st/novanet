@@ -1,9 +1,10 @@
 # models/views/seo-keywords.yaml
-# SEO keywords and metrics (3 nodes in global realm)
-# v10.4.0 — renamed from shared-layer (shared realm removed)
+# SEO keywords and metrics (3 nodes in shared realm)
+# v11.5 — SEO/GEO consolidated to shared/knowledge
+# v11.2 — global → shared realm rename
 id: seo-keywords
 name: SEO Keywords
-description: SEO keywords and metrics (global realm, per-locale)
+description: SEO keywords and metrics (shared realm, per-locale)
 version: "10.4.0"
 
 # Root is Locale since SEO nodes are per-locale
@@ -27,8 +28,8 @@ docs:
   title: "SEO Keywords View"
   category: mining
   description: |
-    SEO nodes in the global realm, organized per-locale.
-    These are reusable across multiple projects.
+    SEO nodes in the shared realm, organized per-locale.
+    These are reusable across multiple projects (v11.2: global → shared).
 
     **3 nodes (v10.4):**
     - SEOKeyword, SEOKeywordMetrics, SEOMiningRun

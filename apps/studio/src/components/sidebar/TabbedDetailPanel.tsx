@@ -204,9 +204,7 @@ export const TabbedDetailPanel = memo(function TabbedDetailPanel({
 
   // Handle "More Views" button
   const handleMoreViews = useCallback(() => {
-    // Open the view selector modal
-    // For now, just log - will integrate with existing modal system
-    console.log('Open more views modal');
+    // TODO: Open the view selector modal - integrate with existing modal system
   }, []);
 
   // Get node config and colors

@@ -1,5 +1,5 @@
 # models/views/complete-graph.yaml
-# Complete graph view showing all 61 node types and 116 arc types
+# Complete graph view showing all 60 node types and 114 arc types
 # v11.3.0 — 2-Realm Architecture (SHARED + ORG)
 id: complete-graph
 name: Complete Graph
@@ -35,7 +35,7 @@ include:
       - relation: SUBTOPIC_OF
         direction: outgoing
 
-  # v11.0: Entity is in TENANT realm semantic layer, accessed via USES_ENTITY from Page/Block
+  # v11.2: Entity is in ORG realm semantic layer, accessed via USES_ENTITY from Page/Block
 
 docs:
   title: "Complete Graph View"
@@ -135,6 +135,6 @@ docs:
   notes:
     - "This view is for documentation and understanding the full schema"
     - "For generation tasks, use more specific views like page-generation or block-generation"
-    - "The graph follows a 2-realm hierarchy: GLOBAL (read-only) > TENANT (business)"
+    - "The graph follows a 2-realm hierarchy: SHARED (read-only) > ORG (business)"
     - "Mermaid diagram is auto-generated from arc-kinds/ via MermaidGenerator"
-    - "v11.0: 65 nodes, 124 arcs (2-realm architecture)"
+    - "v11.6: 60 nodes, 114 arcs (2-realm architecture)"

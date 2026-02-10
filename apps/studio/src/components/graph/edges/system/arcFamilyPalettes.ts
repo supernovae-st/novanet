@@ -218,8 +218,8 @@ export const RELATION_TO_FAMILY: Record<string, ArcFamily> = {
  * Pattern-based family detection for unknown relation types
  */
 const FAMILY_PATTERNS: Array<{ pattern: RegExp | string; family: ArcFamily }> = [
-  // Localization patterns
-  { pattern: 'L10N', family: 'localization' },
+  // Localization patterns (v11.6: L10N → CONTENT per ADR-014)
+  { pattern: 'CONTENT', family: 'localization' },
   { pattern: /LOCALE/, family: 'localization' },
   { pattern: 'FOR_LOCALE', family: 'localization' },
 

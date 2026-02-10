@@ -35,7 +35,7 @@ const RELATION_ALIAS_MAP: Record<string, string> = {
   HAS_RULES: 'rules',
   // Output
   HAS_GENERATED: 'output',
-  HAS_CONTENT: 'l10n',
+  HAS_CONTENT: 'content',
   // Locale knowledge
   HAS_IDENTITY: 'identity',
   HAS_VOICE: 'voice',

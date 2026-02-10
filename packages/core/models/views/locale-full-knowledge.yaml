@@ -93,6 +93,6 @@ docs:
         fields: ["urgency", "value", "trust"]
 
   notes:
-    - "LocaleKnowledge is GLOBAL - shared across all projects"
+    - "LocaleKnowledge is in SHARED realm - read-only, shared across all projects"
     - "Expressions are filtered by semantic_field for relevant context"
     - "Semantic field filters ensure relevant knowledge is included"
