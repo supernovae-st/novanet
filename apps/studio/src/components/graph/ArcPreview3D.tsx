@@ -108,35 +108,73 @@ export const ArcPreview3D = memo(function ArcPreview3D({
     return () => {
       cancelAnimationFrame(animationRef.current);
       setIsInitialized(false);
+
+      // Dispose all objects before renderer
+      if (sceneRef.current) {
+        if (sourceNodeRef.current) {
+          sceneRef.current.remove(sourceNodeRef.current.group);
+          disposeCompositeNode(sourceNodeRef.current);
+          sourceNodeRef.current = null;
+        }
+        if (targetNodeRef.current) {
+          sceneRef.current.remove(targetNodeRef.current.group);
+          disposeCompositeNode(targetNodeRef.current);
+          targetNodeRef.current = null;
+        }
+        if (arcLineRef.current) {
+          sceneRef.current.remove(arcLineRef.current);
+          arcLineRef.current.geometry.dispose();
+          (arcLineRef.current.material as THREE.Material).dispose();
+          arcLineRef.current = null;
+        }
+        if (particlesRef.current) {
+          sceneRef.current.remove(particlesRef.current);
+          particlesRef.current.geometry.dispose();
+          (particlesRef.current.material as THREE.Material).dispose();
+          particlesRef.current = null;
+        }
+      }
+
       renderer.dispose();
-      if (containerRef.current?.contains(renderer.domElement)) {
-        containerRef.current.removeChild(renderer.domElement);
+
+      // Safe DOM cleanup - container may be unmounted
+      try {
+        if (containerRef.current?.contains(renderer.domElement)) {
+          containerRef.current.removeChild(renderer.domElement);
+        }
+      } catch {
+        // Component already unmounted, ignore
       }
     };
   }, [size]);
 
   // Create nodes and arc
   useEffect(() => {
-    if (!sceneRef.current) return;
+    const scene = sceneRef.current;
+    if (!scene) return;
 
-    // Cleanup old objects
+    // Cleanup old objects with explicit null reset
     if (sourceNodeRef.current) {
-      sceneRef.current.remove(sourceNodeRef.current.group);
+      scene.remove(sourceNodeRef.current.group);
       disposeCompositeNode(sourceNodeRef.current);
+      sourceNodeRef.current = null;
     }
     if (targetNodeRef.current) {
-      sceneRef.current.remove(targetNodeRef.current.group);
+      scene.remove(targetNodeRef.current.group);
       disposeCompositeNode(targetNodeRef.current);
+      targetNodeRef.current = null;
     }
     if (arcLineRef.current) {
-      sceneRef.current.remove(arcLineRef.current);
+      scene.remove(arcLineRef.current);
       arcLineRef.current.geometry.dispose();
       (arcLineRef.current.material as THREE.Material).dispose();
+      arcLineRef.current = null;
     }
     if (particlesRef.current) {
-      sceneRef.current.remove(particlesRef.current);
+      scene.remove(particlesRef.current);
       particlesRef.current.geometry.dispose();
       (particlesRef.current.material as THREE.Material).dispose();
+      particlesRef.current = null;
     }
 
     // Node positions
@@ -155,7 +193,7 @@ export const ArcPreview3D = memo(function ArcPreview3D({
     });
     sourceNode.group.position.copy(sourcePos);
     sourceNodeRef.current = sourceNode;
-    sceneRef.current.add(sourceNode.group);
+    scene.add(sourceNode.group);
 
     // Create target node
     const targetNode = createCompositeNode({
@@ -169,7 +207,7 @@ export const ArcPreview3D = memo(function ArcPreview3D({
     });
     targetNode.group.position.copy(targetPos);
     targetNodeRef.current = targetNode;
-    sceneRef.current.add(targetNode.group);
+    scene.add(targetNode.group);
 
     // Get arc config
     const arcConfig = getArcParticleConfig(arcType);
@@ -185,7 +223,7 @@ export const ArcPreview3D = memo(function ArcPreview3D({
     });
     const line = new THREE.Line(lineGeometry, lineMaterial);
     arcLineRef.current = line;
-    sceneRef.current.add(line);
+    scene.add(line);
 
     // Create particles for the arc
     const particleCount = 30;
@@ -211,7 +249,7 @@ export const ArcPreview3D = memo(function ArcPreview3D({
 
     const particles = new THREE.Points(particleGeometry, particleMaterial);
     particlesRef.current = particles;
-    sceneRef.current.add(particles);
+    scene.add(particles);
   }, [arcType, source, target]);
 
   // Animation loop - using performance.now() for reliable timing

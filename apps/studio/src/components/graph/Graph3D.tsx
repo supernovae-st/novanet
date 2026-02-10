@@ -118,6 +118,7 @@ export const Graph3D = memo(function Graph3D({
   const fgRef = useRef<ForceGraphMethods | null>(null);
   const starfieldRef = useRef<THREE.Points | null>(null);
   const composerRef = useRef<ReturnType<typeof createEnhancedComposer> | null>(null);
+  const bootTimeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
   const [legendCollapsed, setLegendCollapsed] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   const [isGraphReady, setIsGraphReady] = useState(false);
@@ -140,6 +141,37 @@ export const Graph3D = memo(function Graph3D({
     const transformed = transformGraphData(nodes, edges);
     return filterValidData(transformed);
   }, [nodes, edges]);
+
+  // Clear global caches when graph data changes to prevent stale references
+  useEffect(() => {
+    // Get current node IDs
+    const currentNodeIds = new Set(graphData.nodes.map((n) => n.id));
+
+    // Remove cached meshes for nodes that no longer exist
+    for (const nodeId of compositeNodeCache.keys()) {
+      if (!currentNodeIds.has(nodeId)) {
+        const mesh = compositeNodeCache.get(nodeId);
+        if (mesh) {
+          mesh.traverse((child) => {
+            if (child instanceof THREE.Mesh) {
+              child.geometry?.dispose();
+              if (child.material instanceof THREE.Material) {
+                child.material.dispose();
+              }
+            }
+          });
+        }
+        compositeNodeCache.delete(nodeId);
+      }
+    }
+
+    // Clear stale hover scales
+    for (const nodeId of hoverScales.keys()) {
+      if (!currentNodeIds.has(nodeId)) {
+        hoverScales.delete(nodeId);
+      }
+    }
+  }, [graphData.nodes]);
 
   // Add starfield to scene when graph is ready
   useEffect(() => {
@@ -239,6 +271,10 @@ export const Graph3D = memo(function Graph3D({
 
     setBootPhase('spawning');
 
+    // Clear any previous timeouts
+    bootTimeoutsRef.current.forEach(clearTimeout);
+    bootTimeoutsRef.current = [];
+
     // Animate nodes from center with stagger
     // fx/fy/fz are D3 force properties added at runtime
     graphData.nodes.forEach((node, index) => {
@@ -248,18 +284,28 @@ export const Graph3D = memo(function Graph3D({
       n.fy = 0;
       n.fz = 0;
 
-      // Release with stagger
+      // Release with stagger - track timeout for cleanup
       const delay = index * 30;  // 30ms stagger
-      setTimeout(() => {
+      const timeoutId = setTimeout(() => {
+        // Check if graph still exists before modifying
+        if (!fgRef.current) return;
         n.fx = undefined;
         n.fy = undefined;
         n.fz = undefined;
       }, delay);
+      bootTimeoutsRef.current.push(timeoutId);
     });
 
     // Mark as ready after all nodes released
     const totalDelay = graphData.nodes.length * 30 + 1500;
-    setTimeout(() => setBootPhase('ready'), totalDelay);
+    const readyTimeoutId = setTimeout(() => setBootPhase('ready'), totalDelay);
+    bootTimeoutsRef.current.push(readyTimeoutId);
+
+    // Cleanup on unmount
+    return () => {
+      bootTimeoutsRef.current.forEach(clearTimeout);
+      bootTimeoutsRef.current = [];
+    };
   }, [isGraphReady, bootPhase, graphData.nodes]);
 
   // Compute neighbors and highlighted links when selection changes
@@ -280,8 +326,10 @@ export const Graph3D = memo(function Graph3D({
       const target = link.target as string | { id: string } | undefined;
       if (!source || !target) return;
 
-      const sourceId = typeof source === 'object' ? source.id : source;
-      const targetId = typeof target === 'object' ? target.id : target;
+      // Handle both string and object forms, with null safety for .id
+      const sourceId = typeof source === 'object' ? (source.id ?? '') : source;
+      const targetId = typeof target === 'object' ? (target.id ?? '') : target;
+      if (!sourceId || !targetId) return;
 
       if (sourceId === selectedNodeId || targetId === selectedNodeId) {
         neighbors.add(sourceId === selectedNodeId ? targetId : sourceId);
