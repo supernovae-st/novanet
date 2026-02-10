@@ -1,9 +1,9 @@
 # models/views/_registry.yaml
-version: "9.9.0"
+version: "11.5.0"
 description: NovaNet Core View Definitions
 
 # Categories for UI grouping:
-# - overview: Layer views (complete, global, project)
+# - overview: Layer views (complete, shared, project)
 # - generation: Orchestrator and sub-agent context views
 # - knowledge: Locale and entity views
 # - project: Project structure views
@@ -13,7 +13,7 @@ description: NovaNet Core View Definitions
 # OVERVIEW LAYER VIEWS (extracted from complete-graph)
 # =============================================================================
 views:
-  # Complete graph (all 35 nodes)
+  # Complete graph (all 60 nodes)
   - id: complete-graph
     file: complete-graph.yaml
     description: Full NovaNet graph with all nodes and relations
@@ -21,15 +21,15 @@ views:
     modes: [data, meta, overlay, query]
 
   # Realm layers (derived from complete-graph)
-  - id: global-layer
-    file: global-layer.yaml
-    description: Locale configuration and knowledge (15 nodes)
+  - id: shared-layer
+    file: shared-layer.yaml
+    description: Locale configuration and knowledge (39 nodes)
     category: overview
     modes: [data, meta, overlay, query]
 
   - id: seo-keywords
     file: seo-keywords.yaml
-    description: SEO keywords and metrics (3 nodes, global realm)
+    description: SEO keywords and metrics (3 nodes, shared realm)
     category: overview
     modes: [data, meta, overlay, query]
 

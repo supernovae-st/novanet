@@ -1,9 +1,10 @@
-# models/views/global-layer.yaml
-# Global scope: Locale configuration and knowledge (15 nodes)
-id: global-layer
-name: Global Layer
-description: Locale configuration and knowledge nodes shared across all projects
-version: "8.0.0"
+# models/views/shared-layer.yaml
+# Shared realm: Locale configuration and knowledge (39 nodes)
+# v11.5: Renamed from global-layer to shared-layer
+id: shared-layer
+name: Shared Layer
+description: Locale configuration and knowledge nodes shared across all organizations
+version: "11.5.0"
 
 root:
   type: Locale
@@ -50,19 +51,21 @@ include:
     direction: outgoing
 
 docs:
-  title: "Global Layer View"
+  title: "Shared Layer View"
   category: localization
   description: |
-    The Global scope contains nodes shared across ALL projects.
+    The Shared realm contains nodes shared across ALL organizations.
     This is the foundation for native content generation.
 
-    **15 nodes organized by category:**
-    - **Config (1)**: Locale - the root configuration node
-    - **Knowledge (14)**: LocaleIdentity, LocaleVoice, LocaleCulture, LocaleMarket,
-      LocaleLexicon, and supporting data nodes (Expression, Reference, etc.)
+    **39 nodes organized by category:**
+    - **Config (3)**: Locale, EntityCategory, CategorySet
+    - **Locale (6)**: LocaleIdentity, LocaleVoice, LocaleCulture, LocaleMarket,
+      LocaleLexicon, LocaleRulesAdaptation, etc.
+    - **Geography (6)**: Region, Country, Subregion, etc.
+    - **Knowledge (24)**: Expression, Term, Pattern, Metaphor, etc.
 
     **Key insight:**
-    Global nodes are NEVER project-specific. They represent knowledge ABOUT locales,
+    Shared nodes are NEVER organization-specific. They represent knowledge ABOUT locales,
     not content IN locales. This knowledge enables LLMs to generate natively.
 
   layers:
@@ -132,7 +135,7 @@ docs:
         locale: "fr-CA"
 
   notes:
-    - "Global nodes are shared across ALL projects - never duplicated"
+    - "Shared nodes are shared across ALL organizations - never duplicated"
     - "LocaleKnowledge enables native generation, not translation"
     - "Expressions are filtered by semantic_field for relevant context"
     - "Fallback chain: fr-CA → fr-FR → en-US (example)"
